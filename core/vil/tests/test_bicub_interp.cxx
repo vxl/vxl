@@ -5,11 +5,11 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_bicub_interp.h>
 
-void test_bicub_interp_byte()
+static void test_bicub_interp_byte()
 {
-  vcl_cout << "***************************\n"
+  vcl_cout << "**************************\n"
            << " Testing vil_bicub_interp\n"
-           << "***************************\n";
+           << "**************************\n";
 
   vil_image_view<vxl_byte> image0;
   image0.set_size(5,5);

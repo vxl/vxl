@@ -31,13 +31,11 @@ template <class T>
 double fill(vil_image_view<T>& image, int n_loops, bool print)
 {
   if (print)
-    vcl_cout << "Time to fill a " << image.ni() << "*" << image.nj()
+    vcl_cout << "Time to fill a " << image.ni() << '*' << image.nj()
              << " vil image of " << vil_pixel_format_of(T()) << vcl_endl;
   vcl_time_t t0=vcl_clock();
   for (int n=0;n<n_loops;++n)
-  {
     image.fill(T(n));
-  }
   vcl_time_t t1=vcl_clock();
   return 1000000*(double(t1)-double(t0))/(n_loops*CLOCKS_PER_SEC);
 }
@@ -46,13 +44,11 @@ template <class T>
 double fill(vil1_memory_image_of<T>& image, int n_loops, bool print)
 {
   if (print)
-    vcl_cout << "Time to fill a " << image.width() << "*" << image.height()
+    vcl_cout << "Time to fill a " << image.width() << '*' << image.height()
              << " vil1 image of " << vil_pixel_format_of(T()) << vcl_endl;
   vcl_time_t t0=vcl_clock();
   for (int n=0;n<n_loops;++n)
-  {
     image.fill(T(n));
-  }
   vcl_time_t t1=vcl_clock();
   return 1000000*(double(t1)-double(t0))/(n_loops*CLOCKS_PER_SEC);
 }
@@ -63,13 +59,11 @@ double copy(vil_image_view<T>& image, int n_loops, bool print)
   vil_image_view<T> dest;
 
   if (print)
-    vcl_cout << "Time to copy a " << image.ni() << "*" << image.nj()
+    vcl_cout << "Time to copy a " << image.ni() << '*' << image.nj()
              << " vil image of " << vil_pixel_format_of(T()) << vcl_endl;
   vcl_time_t t0=vcl_clock();
   for (int n=0;n<n_loops;++n)
-  {
     dest = vil_copy_deep(image);
-  }
   vcl_time_t t1=vcl_clock();
   return 1000000*(double(t1)-double(t0))/(n_loops*CLOCKS_PER_SEC);
 }
@@ -79,13 +73,11 @@ double copy(vil1_memory_image_of<T>& image, int n_loops, bool print)
 {
   vil1_memory_image_of<T> dest;
   if (print)
-    vcl_cout << "Time to copy a " << image.width() << "*" << image.height()
+    vcl_cout << "Time to copy a " << image.width() << '*' << image.height()
              << " vil1 image of " << vil_pixel_format_of(T()) << vcl_endl;
   vcl_time_t t0=vcl_clock();
   for (int n=0;n<n_loops;++n)
-  {
     dest=vil1_copy(image);
-  }
   vcl_time_t t1=vcl_clock();
   return 1000000*(double(t1)-double(t0))/(n_loops*CLOCKS_PER_SEC);
 }
@@ -95,13 +87,11 @@ double force_to_rgb_byte(vil_image_view<T>& image, int n_loops, bool print)
   vil_image_view<vil_rgb<vxl_byte> > dest;
 
   if (print)
-    vcl_cout << "Time to convert to rgb a " << image.ni() << "*" << image.nj()
+    vcl_cout << "Time to convert to rgb a " << image.ni() << '*' << image.nj()
              << " vil image of " << vil_pixel_format_of(T()) << vcl_endl;
   vcl_time_t t0=vcl_clock();
   for (int n=0;n<n_loops;++n)
-  {
     vil_convert_cast(image, dest);
-  }
   vcl_time_t t1=vcl_clock();
   return 1000000*(double(t1)-double(t0))/(n_loops*CLOCKS_PER_SEC);
 }
@@ -111,13 +101,11 @@ double force_to_rgb_byte(vil1_memory_image_of<T>& image, int n_loops, bool print
 {
   vil1_memory_image_of<vil1_rgb<vxl_byte> > dest;
   if (print)
-    vcl_cout << "Time to convert to rgb a " << image.width() << "*" << image.height()
+    vcl_cout << "Time to convert to rgb a " << image.width() << '*' << image.height()
              << " vil1 image of " << vil_pixel_format_of(T()) << vcl_endl;
   vcl_time_t t0=vcl_clock();
   for (int n=0;n<n_loops;++n)
-  {
     dest= vil1_image_as_rgb_byte(image);
-  }
   vcl_time_t t1=vcl_clock();
   return 1000000*(double(t1)-double(t0))/(n_loops*CLOCKS_PER_SEC);
 }
@@ -127,14 +115,12 @@ double conv1d(vil_image_view<vxl_byte>& image, int n_loops, bool print)
   vil_image_view<float> dest;
 
   if (print)
-    vcl_cout << "Time to 1d convolve a " << image.ni() << "*" << image.nj()
+    vcl_cout << "Time to 1d convolve a " << image.ni() << '*' << image.nj()
              << "vil image of vxl_byte\n";
   float kernel[] = {-1.0f, 0.5f, 1.0f, 0.5f, -1.0f};
   vcl_time_t t0=vcl_clock();
   for (int n=0;n<n_loops;++n)
-  {
     vil_convolve_1d(image, dest, kernel+2, -2, 2, float(), vil_convolve_trim, vil_convolve_constant_extend);
-  }
   vcl_time_t t1=vcl_clock();
   return 1000000*(double(t1)-double(t0))/(n_loops*CLOCKS_PER_SEC);
 }
@@ -144,15 +130,12 @@ double conv1d(vil_image_view<float>& image, int n_loops, bool print)
   vil_image_view<float> dest;
 
   if (print)
-    vcl_cout << "Time to 1d convolve a " << image.ni() << "*" << image.nj()
+    vcl_cout << "Time to 1d convolve a " << image.ni() << '*' << image.nj()
              << "vil image of float\n";
   float kernel[] = {-1.0f, 0.5f, 1.0f, 0.5f, -1.0f};
   vcl_time_t t0=vcl_clock();
   for (int n=0;n<n_loops;++n)
-  {
-    vil_convolve_1d(image, dest, kernel+2, -2, 2, float(),
-      vil_convolve_trim, vil_convolve_constant_extend);
-  }
+    vil_convolve_1d(image, dest, kernel+2, -2, 2, float(), vil_convolve_trim, vil_convolve_constant_extend);
   vcl_time_t t1=vcl_clock();
   return 1000000*(double(t1)-double(t0))/(n_loops*CLOCKS_PER_SEC);
 }
@@ -166,7 +149,7 @@ double conv1d(vil1_memory_image_of<vxl_byte>& image, int n_loops, bool print)
 {
   vil1_memory_image_of<float> dest;
   if (print)
-    vcl_cout << "Time to 1d convolve a " << image.width() << "*" << image.height()
+    vcl_cout << "Time to 1d convolve a " << image.width() << '*' << image.height()
              << " vil1 image of vxl_byte\n";
   float kernel[] = {-1.0f, 0.5f, 1.0f, 0.5f, -1.0f};
   vil1_convolve_signal_1d<float const> K(kernel, 0, 2, 4);
@@ -175,10 +158,10 @@ double conv1d(vil1_memory_image_of<vxl_byte>& image, int n_loops, bool print)
   {
     dest.resize(image.width(), image.height());
     vil1_convolve_1d_x(K,
-                      vil1_convolve_signal_2d<vxl_byte const>(image.row_array(), 0, 0, image.width(), 0, 0, image.height()),
-                      (float *)0,
-                      vil1_convolve_signal_2d<float>(dest.row_array(), 0, 0, image.width(), 0, 0, image.height()),
-                      vil1_convolve_trim,  vil1_convolve_constant_extend);
+                       vil1_convolve_signal_2d<vxl_byte const>(image.row_array(), 0, 0, image.width(), 0, 0, image.height()),
+                       (float *)0,
+                       vil1_convolve_signal_2d<float>(dest.row_array(), 0, 0, image.width(), 0, 0, image.height()),
+                       vil1_convolve_trim,  vil1_convolve_constant_extend);
   }
   vcl_time_t t1=vcl_clock();
   return 1000000*(double(t1)-double(t0))/(n_loops*CLOCKS_PER_SEC);
@@ -188,7 +171,7 @@ double conv1d(vil1_memory_image_of<float>& image, int n_loops, bool print)
 {
   vil1_memory_image_of<float> dest;
   if (print)
-    vcl_cout << "Time to 1d convolve a " << image.width() << "*" << image.height()
+    vcl_cout << "Time to 1d convolve a " << image.width() << '*' << image.height()
              << " vil1 image of float\n";
   float kernel[] = {-1.0f, 0.5f, 1.0f, 0.5f, -1.0f};
   vil1_convolve_signal_1d<float const> K(kernel, 0, 2, 4);
@@ -197,10 +180,10 @@ double conv1d(vil1_memory_image_of<float>& image, int n_loops, bool print)
   {
     dest.resize(image.width(), image.height());
     vil1_convolve_1d_x(K,
-                      vil1_convolve_signal_2d<float const>(image.row_array(), 0, 0, image.width(), 0, 0, image.height()),
-                      (float *)0,
-                      vil1_convolve_signal_2d<float>(dest.row_array(), 0, 0, image.width(), 0, 0, image.height()),
-                      vil1_convolve_trim,  vil1_convolve_constant_extend);
+                       vil1_convolve_signal_2d<float const>(image.row_array(), 0, 0, image.width(), 0, 0, image.height()),
+                       (float *)0,
+                       vil1_convolve_signal_2d<float>(dest.row_array(), 0, 0, image.width(), 0, 0, image.height()),
+                       vil1_convolve_trim,  vil1_convolve_constant_extend);
   }
   vcl_time_t t1=vcl_clock();
   return 1000000*(double(t1)-double(t0))/(n_loops*CLOCKS_PER_SEC);
@@ -251,8 +234,8 @@ int main(int argc, char** argv)
   double t = fill(byte_1image,5000,false);
 
   int n_loops = int(200000/t); // Number required for about half a sec running time
-  vcl_cout << "Testing using n_loops = " << n_loops << vcl_endl << vcl_endl;
-  vcl_cout << "Float alignment ";
+  vcl_cout << "Testing using n_loops = " << n_loops << vcl_endl << vcl_endl
+           << "Float alignment ";
   if ((((unsigned long)(void*)float_2image.top_left_ptr()) % 4ul)>0)
     vcl_cout << "not on 4-byte boundary\n";
   else
@@ -277,16 +260,14 @@ int main(int argc, char** argv)
   vcl_cout<<"------------------------------\n";
   compute_stats(2,rgb_1image,1+n_loops/4);
   compute_stats(2,rgb_2image,1+n_loops/2);
-  vcl_cout<<"------------------------------\n";
-  vcl_cout << "\n\n";
+  vcl_cout<<"------------------------------\n\n\n";
 
   compute_stats(3,byte_1image,1+n_loops/20);
   compute_stats(3,byte_2image,1+n_loops/8);
   vcl_cout<<"------------------------------\n";
   compute_stats(3,float_1image,1+n_loops/20);
   compute_stats(3,float_2image,1+n_loops/9);
-  vcl_cout<<"------------------------------\n";
-  vcl_cout << "\n\n";
+  vcl_cout<<"------------------------------\n\n\n";
 
   compute_stats(4,byte_1image,1+n_loops/2);
   compute_stats(4,byte_2image,1+n_loops);
@@ -295,8 +276,8 @@ int main(int argc, char** argv)
   compute_stats(4,float_2image,1+n_loops/12);
   vcl_cout<<"------------------------------\n";
   compute_stats(4,rgb_1image,1+n_loops/2);
-  vcl_cout << "The next one is very fast because vil realises that you are trying \n"
-              "to view an image as its existing type and so does a shallow copy\n";
+  vcl_cout << "The next one is very fast because vil realises that you are trying\n"
+           << "to view an image as its existing type and so does a shallow copy\n";
   compute_stats(4,rgb_2image,1+n_loops);
   vcl_cout<<"------------------------------\n";
 

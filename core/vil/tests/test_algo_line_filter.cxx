@@ -31,11 +31,11 @@ static void print_out(unsigned int n,
   vcl_cout.width(0);
 }
 
-void test_line_filter_byte()
+static void test_line_filter_byte()
 {
-  vcl_cout << "*********************************\n"
+  vcl_cout << "********************************\n"
            << " Testing vil_line_filter (byte)\n"
-           << "*********************************\n";
+           << "********************************\n";
 
   vil_line_filter<unsigned char> filter;
 
@@ -93,7 +93,6 @@ void test_line_filter_byte()
 
   TEST("Reverse Diagonal line",line_dir(5,4),4);
   TEST_NEAR("Reverse line str",line_str(5,4),white,1e-4);
-
 
   // ======================= dark_lines_3x3 ================
   vcl_cout<<"----- dark_lines_3x3() -------\n";

@@ -5,11 +5,11 @@
 #include <vil/algo/vil_greyscale_erode.h>
 #include <vil/vil_print.h>
 
-void test_greyscale_erode_byte()
+static void test_greyscale_erode_byte()
 {
-  vcl_cout << "******************************\n"
+  vcl_cout << "*****************************\n"
            << " Testing vil_greyscale_erode\n"
-           << "******************************\n";
+           << "*****************************\n";
 
   vil_image_view<vxl_byte> image0;
   image0.set_size(10,10);

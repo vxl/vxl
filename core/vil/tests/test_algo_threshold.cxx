@@ -5,11 +5,11 @@
 #include <vil/algo/vil_threshold.h>
 #include <vil/vil_crop.h>
 
-void test_threshold_byte(const vil_image_view<vxl_byte>& image)
+static void test_threshold_byte(const vil_image_view<vxl_byte>& image)
 {
-  vcl_cout << "************************\n"
+  vcl_cout << "***********************\n"
            << " Testing vil_threshold\n"
-           << "************************\n";
+           << "***********************\n";
 
   vil_image_view<bool> bool_im;
 
@@ -35,7 +35,7 @@ void test_threshold_byte(const vil_image_view<vxl_byte>& image)
   TEST("vil_threshold_outside at (3,8)",bool_im(3,8),true);
 }
 
-void test_threshold_byte()
+static void test_threshold_byte()
 {
   vil_image_view<vxl_byte> image(15,15);
   for (unsigned j=0;j<image.nj();++j)

@@ -6,11 +6,11 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_sample_profile_bicub.h>
 
-void test_sample_profile_bicub_byte()
+static void test_sample_profile_bicub_byte()
 {
-  vcl_cout << "***********************************\n"
+  vcl_cout << "**********************************\n"
            << " Testing vil_sample_profile_bicub\n"
-           << "***********************************\n";
+           << "**********************************\n";
 
   vcl_cout<< "One plane image\n";
   vil_image_view<vxl_byte> image1;

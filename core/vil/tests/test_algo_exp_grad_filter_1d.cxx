@@ -6,13 +6,13 @@
 #include <vil/algo/vil_exp_grad_filter_1d.h>
 #include <vil/vil_print.h>
 
-void test_algo_exp_grad_filter_1d_byte_float()
+static void test_algo_exp_grad_filter_1d_byte_float()
 {
-  vcl_cout << "*************************************************\n"
+  vcl_cout << "************************************************\n"
            << " Testing vil_algo_exp_grad_filter_1d byte-float\n"
-           << "*************************************************\n";
+           << "************************************************\n";
 
-  int n = 100;
+  const int n = 100;
   vcl_vector<vxl_byte> src(n);
   for (int i=0;i<n;++i) src[i]=0;
   src[50] = 100;
@@ -38,8 +38,8 @@ void test_algo_exp_grad_filter_1d_byte_float()
 
   for (int i=0;i<10;++i) src[i]=i;
   vil_exp_grad_filter_1d(&src[0],1,&dest[0],1,10,float(k));
-  vcl_cout<<"Applying to 0 1 2 3 .."<<vcl_endl;
-  for (int i=0;i<10;++i) vcl_cout<<" "<<dest[i];
+  vcl_cout<<"Applying to 0 1 2 3 ..\n";
+  for (int i=0;i<10;++i) vcl_cout<<' '<<dest[i];
   vcl_cout<<vcl_endl;
 
   // Test application to whole images
@@ -65,7 +65,6 @@ void test_algo_exp_grad_filter_1d_byte_float()
 
   vil_print_all(vcl_cout,dest_im);
 }
-
 
 MAIN( test_algo_exp_grad_filter_1d )
 {

@@ -5,11 +5,11 @@
 #include <vil/algo/vil_median.h>
 #include <vil/vil_print.h>
 
-void test_median_byte()
+static void test_median_byte()
 {
-  vcl_cout << "**********************\n"
+  vcl_cout << "********************\n"
            << " Testing vil_median\n"
-           << "**********************\n";
+           << "********************\n";
 
   vil_image_view<vxl_byte> image0;
   image0.set_size(10,10);

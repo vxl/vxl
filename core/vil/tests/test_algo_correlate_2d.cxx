@@ -4,13 +4,13 @@
 #include <vxl_config.h> // for vxl_byte
 #include <vil/algo/vil_correlate_2d.h>
 
-void test_algo_correlate_2d_byte()
+static void test_algo_correlate_2d_byte()
 {
-  vcl_cout << "********************************\n"
+  vcl_cout << "*******************************\n"
            << " Testing vil_algo_correlate_2d\n"
-           << "********************************\n";
+           << "*******************************\n";
 
-  unsigned n=10, m=5;
+  const unsigned int n=10, m=5;
 
   vil_image_view<vxl_byte> src_im(n,n,1);
 

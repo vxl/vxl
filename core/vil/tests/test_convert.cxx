@@ -7,13 +7,11 @@
 #include <vil/vil_print.h>
 #include <vil/vil_load.h>
 
-
-static
-void test_convert1(const char * golden_data_dir)
+static void test_convert1(const char * golden_data_dir)
 {
-  vcl_cout << "*********************************************\n"
+  vcl_cout << "*******************************************\n"
            << " Testing vil_convert*(vil_image_view<T>..)\n"
-           << "*********************************************\n";
+           << "*******************************************\n";
 
   vcl_string datadir = golden_data_dir;
   if (*golden_data_dir) datadir += "/";
@@ -31,12 +29,11 @@ void test_convert1(const char * golden_data_dir)
   vil_print_all(vcl_cout, image2);
 }
 
-static
-void test_convert_diff_types(const char * golden_data_dir)
+static void test_convert_diff_types(const char * golden_data_dir)
 {
-  vcl_cout << "**************************************************************\n"
+  vcl_cout << "************************************************************\n"
            << " Testing vil_convert_cast(vil_image_base,vil_image_view<T>)\n"
-           << "**************************************************************\n";
+           << "************************************************************\n";
 
   vcl_string datadir = golden_data_dir;
   if (*golden_data_dir) datadir += "/";
@@ -63,8 +60,7 @@ void test_convert_diff_types(const char * golden_data_dir)
   }
 }
 
-static
-void test_convert_stretch_range()
+static void test_convert_stretch_range()
 {
   vcl_cout<<"testing vil_convert_stretch_range(src,dest):\n";
   vil_image_view<float> f_image(10,10);

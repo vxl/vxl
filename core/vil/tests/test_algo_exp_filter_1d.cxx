@@ -5,13 +5,13 @@
 #include <vxl_config.h> // for vxl_byte
 #include <vil/algo/vil_exp_filter_1d.h>
 
-void test_algo_exp_filter_1d_byte_float()
+static void test_algo_exp_filter_1d_byte_float()
 {
-  vcl_cout << "********************************************\n"
+  vcl_cout << "*******************************************\n"
            << " Testing vil_algo_exp_filter_1d byte-float\n"
-           << "********************************************\n";
+           << "*******************************************\n";
 
-  int n = 100;
+  const int n = 100;
   vcl_vector<vxl_byte> src(n);
   for (int i=0;i<n;++i) src[i]=0;
   src[50] = 100;
@@ -66,9 +66,9 @@ void test_algo_exp_filter_1d_byte_float()
 
 void test_algo_exp_filter_1d_float_float()
 {
-  vcl_cout << "*********************************************\n"
+  vcl_cout << "********************************************\n"
            << " Testing vil_algo_exp_filter_1d float-float\n"
-           << "*********************************************\n";
+           << "********************************************\n";
 
   int n = 100;
   vcl_vector<float> src(n);

@@ -6,11 +6,11 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_resample_bilin.h>
 
-void test_resample_bilin_byte()
+static void test_resample_bilin_byte()
 {
-  vcl_cout << "*****************************\n"
+  vcl_cout << "****************************\n"
            << " Testing vil_resample_bilin\n"
-           << "*****************************\n";
+           << "****************************\n";
 
   vil_image_view<vxl_byte> image0;
   vil_image_view<double> dest_im;
@@ -25,7 +25,6 @@ void test_resample_bilin_byte()
   double x0 = 5.0, y0= 5.0;
   double dx1 = 1.0, dy1 = 0.0;
   double dx2 = 0.0, dy2 = 1.0;
-  vcl_vector<double> vec(12);
 
   vcl_cout<<"Fully in image\n";
   vil_resample_bilin(image0,dest_im,x0,y0,dx1,dy1,dx2,dy2,4,3);

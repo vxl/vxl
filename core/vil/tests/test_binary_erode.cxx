@@ -7,7 +7,7 @@
 #include <vil/algo/vil_binary_opening.h>
 #include <vil/algo/vil_binary_closing.h>
 
-inline void print_binary_image(const vil_image_view<bool>& im)
+static inline void print_binary_image(const vil_image_view<bool>& im)
 {
   for (unsigned j=0;j<im.nj();++j)
   {
@@ -18,11 +18,11 @@ inline void print_binary_image(const vil_image_view<bool>& im)
   }
 }
 
-void test_binary_erode_byte()
+static void test_binary_erode_byte()
 {
-  vcl_cout << "***************************\n"
+  vcl_cout << "**************************\n"
            << " Testing vil_binary_erode\n"
-           << "***************************\n";
+           << "**************************\n";
 
   vil_image_view<bool> image0;
   image0.set_size(10,10);

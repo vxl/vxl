@@ -3,11 +3,11 @@
 #include <vcl_iostream.h>
 #include <vil/vil_memory_chunk.h>
 
-void test_memory_chunk1()
+static void test_memory_chunk1()
 {
-  vcl_cout << "***************************\n"
+  vcl_cout << "**************************\n"
            << " Testing vil_memory_chunk\n"
-           << "***************************\n";
+           << "**************************\n";
 
   vil_memory_chunk chunk1(35,VIL_PIXEL_FORMAT_BYTE);
   TEST("size()",chunk1.size(),35);
@@ -26,7 +26,6 @@ void test_memory_chunk1()
   double* data2 = reinterpret_cast<double*>(chunk2.data());
   TEST_NEAR("Deep Copy",data1[3],data2[3],1e-8);
 }
-
 
 MAIN( test_memory_chunk )
 {

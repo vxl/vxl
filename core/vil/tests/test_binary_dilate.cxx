@@ -3,7 +3,7 @@
 #include <vcl_iostream.h>
 #include <vil/algo/vil_binary_dilate.h>
 
-inline void print_binary_image(const vil_image_view<bool>& im)
+static inline void print_binary_image(const vil_image_view<bool>& im)
 {
   for (unsigned j=0;j<im.nj();++j)
   {
@@ -14,11 +14,11 @@ inline void print_binary_image(const vil_image_view<bool>& im)
   }
 }
 
-void test_binary_dilate_byte()
+static void test_binary_dilate_byte()
 {
-  vcl_cout << "****************************\n"
+  vcl_cout << "***************************\n"
            << " Testing vil_binary_dilate\n"
-           << "****************************\n";
+           << "***************************\n";
 
   vil_image_view<bool> image0;
   image0.set_size(10,10);

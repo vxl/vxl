@@ -5,14 +5,13 @@
 #include <vil/algo/vil_convolve_2d.h>
 #include <vil/vil_print.h>
 
-
-void test_algo_convolve_2d_byte()
+static void test_algo_convolve_2d_byte()
 {
-  vcl_cout << "*******************************\n"
+  vcl_cout << "******************************\n"
            << " Testing vil_algo_convolve_2d\n"
-           << "*******************************\n";
+           << "******************************\n";
 
-  unsigned n=10, m=5;
+  const unsigned int n=10, m=5;
 
   vil_image_view<vxl_byte> src_im(n,n,1);
 
@@ -57,7 +56,7 @@ void test_algo_convolve_2d_byte()
   for (unsigned int j=0;j<kernel3.nj();++j)
     for (unsigned int i=0;i<kernel3.ni();++i)
       kernel3(i,j) = 1.0f+j;
-    vil_print_all(vcl_cout, kernel3);
+  vil_print_all(vcl_cout, kernel3);
 
   vil_convolve_2d(src_im,dest_im,kernel3,double());
 

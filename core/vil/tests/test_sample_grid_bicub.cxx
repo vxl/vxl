@@ -6,11 +6,11 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_sample_grid_bicub.h>
 
-void test_sample_grid_bicub_byte()
+static void test_sample_grid_bicub_byte()
 {
-  vcl_cout << "********************************\n"
+  vcl_cout << "*******************************\n"
            << " Testing vil_sample_grid_bicub\n"
-           << "********************************\n";
+           << "*******************************\n";
 
   vil_image_view<vxl_byte> image0;
   image0.set_size(10,10);

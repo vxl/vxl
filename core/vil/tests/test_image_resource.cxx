@@ -15,9 +15,9 @@
 template <class T>
 void test_image_resource(vcl_string type, vil_pixel_format format, T  /*dummy*/)
 {
-  vcl_cout << "******************************************************************\n"
-           << " Testing vil_image_resource objects with pixel type = " << type << "\n"
-           << "******************************************************************\n";
+  vcl_cout << "*****************************************************************\n"
+           << " Testing vil_image_resource objects with pixel type = " << type << '\n'
+           << "*****************************************************************\n";
 
   vil_image_resource_sptr mem = vil_new_image_resource(10,8,1,format);
 

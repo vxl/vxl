@@ -3,11 +3,11 @@
 #include <vcl_iostream.h>
 #include <vil/algo/vil_suppress_non_max.h>
 
-void test_suppress_non_max_byte()
+static void test_suppress_non_max_byte()
 {
-  vcl_cout << "***************************\n"
+  vcl_cout << "******************************\n"
            << " Testing vil_suppress_non_max\n"
-           << "***************************\n";
+           << "******************************\n";
 
   vil_image_view<vxl_byte> image0,dest_im;
   image0.set_size(10,10);

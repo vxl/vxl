@@ -3,11 +3,11 @@
 #include <vcl_iostream.h>
 #include <vil/algo/vil_grid_merge.h>
 
-void test_grid_merge_byte()
+static void test_grid_merge_byte()
 {
-  vcl_cout << "*************************\n"
+  vcl_cout << "************************\n"
            << " Testing vil_grid_merge\n"
-           << "*************************\n";
+           << "************************\n";
 
   vil_image_view<int> image1,image2, dest_image;
 
@@ -23,7 +23,6 @@ void test_grid_merge_byte()
   TEST("(6,1)",dest_image(6,1),image2(0,0));
   TEST("(6,4)",dest_image(6,4),image1(0,0));
 }
-
 
 MAIN( test_algo_grid_merge )
 {

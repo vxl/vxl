@@ -32,7 +32,7 @@ void test_image_view_rgba(vil_image_view<vxl_byte> &image2, vil_image_view<float
 
   image2 = vil_plane(vil_view_as_planes(image6),1);
   vil_transform(vil_plane(vil_view_as_planes(image6),1), image2,
-                 vcl_bind2nd(vcl_plus<vxl_byte>(),1));
+                vcl_bind2nd(vcl_plus<vxl_byte>(),1));
 
   vil_print_all(vcl_cout, image6);
   image7.clear();
@@ -58,7 +58,7 @@ void test_image_view_rgba(vil_image_view<float> &image2, vil_image_view<double> 
 
   image2 = vil_plane(vil_view_as_planes(image6),1);
   vil_transform(vil_plane(vil_view_as_planes(image6),1), image2,
-                 vcl_bind2nd(vcl_plus<float>(),1));
+                vcl_bind2nd(vcl_plus<float>(),1));
 
   vil_print_all(vcl_cout, image6);
   image7.clear();
@@ -172,9 +172,9 @@ void test_image_view(S /*d1*/, vcl_string s_name, T /*d2*/)
   TEST("Comparison", image2 < image7, true);
   TEST("Comparison", image2 > image7, false);
 
-  vcl_cout << "***********************************\n"
+  vcl_cout << "**********************************\n"
            << " Testing vil_image_view functions\n"
-           << "***********************************\n";
+           << "**********************************\n";
 
   image2.fill(0);
   image_win = vil_crop(image2,2,1,1,2);
@@ -252,13 +252,12 @@ void test_image_view(S /*d1*/, vcl_string s_name, T /*d2*/)
   vil_image_view<S> image8(11,17,9);
   vil_image_view<S> image9 = vil_planes(image8,7,-2,3);
   TEST("vil_planes",
-    vil_plane(image9,0) == vil_plane(image8,7) &&
-    vil_plane(image9,1) == vil_plane(image8,5) &&
-    vil_plane(image9,2) == vil_plane(image8,3), true);
+       vil_plane(image9,0) == vil_plane(image8,7) &&
+       vil_plane(image9,1) == vil_plane(image8,5) &&
+       vil_plane(image9,2) == vil_plane(image8,3), true);
 }
 
-static
-void test_contiguous()
+static void test_contiguous()
 {
   vil_image_view<vxl_byte> im1( 4, 5, 6 );
   TEST( "internal memory: contiguous", im1.is_contiguous(), true );
@@ -278,7 +277,7 @@ void test_contiguous()
         step[d2] = 3;
         step[d3] = 15;
         vcl_ostringstream str;
-        str << "external memory: " << step[0] << "x"<<step[1]<<"x"<<step[2]<<" step contiguous";
+        str << "external memory: " << step[0] << 'x'<<step[1]<<'x'<<step[2]<<" step contiguous";
         vil_image_view<vxl_byte> im( memory, 3, 5, 7, step[d1], step[d2], step[d3] );
         TEST( str.str().c_str(), im.is_contiguous(), true );
       }
@@ -298,7 +297,7 @@ void test_contiguous()
         step[d2] = 3;
         step[d3] = 15;
         vcl_ostringstream str;
-        str << "external memory: " << step[0] << "x"<<step[1]<<"x"<<step[2]<<" step not contiguous";
+        str << "external memory: " << step[0] << 'x'<<step[1]<<'x'<<step[2]<<" step not contiguous";
         vil_image_view<vxl_byte> im( memory, 3, 5, 7, step[d1], step[d2], step[d3] );
         TEST( str.str().c_str(), im.is_contiguous(), false );
       }
@@ -307,10 +306,10 @@ void test_contiguous()
   vil_image_view<float> im2 = vil_new_image_view_plane_i_j(4, 5, 6, float());
   TEST( "vil_new_image_view_plane_i_j is_continuous", im2.is_contiguous(), true );
   vil_image_view<double> im3 = vil_new_image_view_j_i_plane(4, 5, 6, double());
-  TEST( "vil_new_image_view_i_j_plane is_continuous", im2.is_contiguous(), true);
+  TEST( "vil_new_image_view_i_j_plane is_continuous", im3.is_contiguous(), true);
 }
 
-void test_image_view_fill()
+static void test_image_view_fill()
 {
   vil_image_view<vxl_byte> image(10,10,2);
   image.fill(vxl_byte(17));
@@ -338,11 +337,11 @@ void test_image_view_fill()
   TEST("fill (no j over-run) ", image(8,4,0), vxl_byte(11));
 }
 
-void test_complex_image_view()
+static void test_complex_image_view()
 {
-  vcl_cout << "*************************************************\n"
+  vcl_cout << "************************************************\n"
            << " Testing vil_image_view complex image functions\n"
-           << "*************************************************\n";
+           << "************************************************\n";
 
   vil_image_view<vcl_complex<float> > image_cf (10,7,1);
   image_cf.fill (vcl_complex<float> (1.1f, 2.2f));
@@ -378,21 +377,21 @@ void test_complex_image_view()
 MAIN( test_image_view )
 {
   START( "vil_image_view" );
-  vcl_cout << "*****************************************\n"
+  vcl_cout << "****************************************\n"
            << " Testing vil_image_view<byte and float>\n"
-           << "*****************************************\n";
+           << "****************************************\n";
   test_image_view(vxl_byte(), "vxl_byte", float());
-  vcl_cout << "*******************************************\n"
+  vcl_cout << "******************************************\n"
            << " Testing vil_image_view<float and double>\n"
-           << "*******************************************\n";
+           << "******************************************\n";
   test_image_view(float(), "float", double());
-  vcl_cout << "********************************************\n"
+  vcl_cout << "*******************************************\n"
            << " Testing vil_image_view<int_16 and double>\n"
-           << "********************************************\n";
+           << "*******************************************\n";
   test_image_view(vxl_int_16(), "vxl_int_16", float());
-  vcl_cout << "*********************************************\n"
+  vcl_cout << "********************************************\n"
            << " Testing vil_image_view<uint_32 and double>\n"
-           << "*********************************************\n";
+           << "********************************************\n";
   test_image_view(vxl_uint_32(), "vxl_uint_32", float());
   test_contiguous();
   test_image_view_fill();

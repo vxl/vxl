@@ -10,13 +10,13 @@
 #include <vxl_config.h>
 #include <testlib/testlib_test.h>
 
-void test_algo_gaussian_filter_byte_float()
+static void test_algo_gaussian_filter_byte_float()
 {
-  vcl_cout << "*******************************************\n"
+  vcl_cout << "******************************************\n"
            << " Testing vil_gauss_filter_5tap byte float\n"
-           << "*******************************************\n";
+           << "******************************************\n";
 
-  int n = 10;
+  const int n = 10;
 
   vil_image_view<vxl_byte> src(n,n);
   for (int i=0;i<n;++i)
@@ -68,7 +68,6 @@ void test_algo_gaussian_filter_byte_float()
   TEST("response is centre maximum", fail2, false);
   TEST_NEAR("impulse response sums to input", sum, 255.0f, 1e-3);
 }
-
 
 MAIN( test_algo_gauss_filter )
 {

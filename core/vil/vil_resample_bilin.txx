@@ -16,7 +16,7 @@
 #include <vil/vil_bilin_interp.h>
 
 inline bool vil_grid_corner_in_image(double x0, double y0,
-                                      const vil_image_view_base& image)
+                                     const vil_image_view_base& image)
 {
   if (x0<1) return false;
   if (y0<1) return false;
@@ -33,15 +33,15 @@ inline bool vil_grid_corner_in_image(double x0, double y0,
 // \relates vil_image_view
 template <class sType, class dType>
 void vil_resample_bilin(const vil_image_view<sType>& src_image,
-                         vil_image_view<dType>& dest_image,
-                         double x0, double y0, double dx1, double dy1,
-                         double dx2, double dy2, int n1, int n2)
+                        vil_image_view<dType>& dest_image,
+                        double x0, double y0, double dx1, double dy1,
+                        double dx2, double dy2, int n1, int n2)
 {
   bool all_in_image =    vil_grid_corner_in_image(x0,y0,src_image)
                       && vil_grid_corner_in_image(x0+(n1-1)*dx1,y0+(n1-1)*dy1,src_image)
                       && vil_grid_corner_in_image(x0+(n2-1)*dx2,y0+(n2-1)*dy2,src_image)
                       && vil_grid_corner_in_image(x0+(n1-1)*dx1+(n2-1)*dx2,
-                                                   y0+(n1-1)*dy1+(n2-1)*dy2,src_image);
+                                                  y0+(n1-1)*dy1+(n2-1)*dy2,src_image);
 
   const unsigned ni = src_image.ni();
   const unsigned nj = src_image.nj();
@@ -100,7 +100,7 @@ void vil_resample_bilin(const vil_image_view<sType>& src_image,
         dType *dpt = row;
         for (int i=0;i<n1;++i,x+=dx1,y+=dy1,dpt+=d_istep)
           *dpt = (dType) vil_bilin_interp_safe(x,y,plane0,
-                                                ni,nj,istep,jstep);
+                                               ni,nj,istep,jstep);
       }
     }
     else
@@ -114,7 +114,7 @@ void vil_resample_bilin(const vil_image_view<sType>& src_image,
         {
           for (unsigned int p=0;p<np;++p)
             dpt[p*d_pstep] = (dType) vil_bilin_interp_safe(x,y,plane0+p*pstep,
-                                                            ni,nj,istep,jstep);
+                                                           ni,nj,istep,jstep);
         }
       }
     }
@@ -123,8 +123,8 @@ void vil_resample_bilin(const vil_image_view<sType>& src_image,
 
 #define VIL_RESAMPLE_BILIN_INSTANTIATE( sType, dType ) \
 template void vil_resample_bilin(const vil_image_view<sType >& src_image, \
-                         vil_image_view<dType >& dest_image, \
-                         double x0, double y0, double dx1, double dy1, \
-                         double dx2, double dy2, int n1, int n2)
+                                 vil_image_view<dType >& dest_image, \
+                                 double x0, double y0, double dx1, double dy1, \
+                                 double dx2, double dy2, int n1, int n2)
 
 #endif // vil_resample_bilin_txx_

@@ -7,9 +7,9 @@
 
 int test_pixel_format_main( int /*argc*/, char* /*argv*/[] )
 {
-  vcl_cout << "***************************\n"
+  vcl_cout << "**************************\n"
            << " Testing vil_pixel_format\n"
-           << "***************************\n";
+           << "**************************\n";
 
   TEST("vil_pixel_format_of(bool)", vil_pixel_format_of(bool()), VIL_PIXEL_FORMAT_BOOL);
 
