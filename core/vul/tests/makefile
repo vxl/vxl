@@ -12,6 +12,8 @@ TESTS += test_url.cxx
 TESTS += test_temp_filename.cxx
 TESTS += test_regexp.cxx
 TESTS += test_string.cxx
+TESTS += test_sleep_timer.cxx
+TESTS += test_vul_file.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
