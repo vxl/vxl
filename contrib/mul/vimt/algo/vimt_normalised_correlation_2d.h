@@ -6,7 +6,7 @@
 //  \brief 2D Normalised correlation
 //  \author Tim Cootes
 
-#include <vil2/algo/vil2_convolve_2d.h>
+#include <vil2/algo/vil2_normalised_correlation_2d.h>
 #include <vimt/vimt_image_2d_of.h>
 
 //: Evaluate dot product between kernel and (normalised) src_im
