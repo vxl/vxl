@@ -99,6 +99,9 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx;c"
 # Begin Source File
+SOURCE=.\Templates/vcl_map+int.vbl_smart_ptr+vtol_topology_object--.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+vtol_block-.cxx
 # End Source File
 # Begin Source File
