@@ -12,6 +12,8 @@
 #include "rgrl_match_set_sptr.h"
 #include "rgrl_object.h"
 
+#include <vcl_iosfwd.h>
+
 class rgrl_transformation;
 
 // Forward declaration. Used internally by rgrl_match_set.
@@ -68,6 +70,12 @@ class rgrl_match_set
   //: Remove all the matches from this set.
   void clear();
 
+  //: write out a match set
+  void write( vcl_ostream& os ) const;
+  
+  //: read in a match set
+  bool read( vcl_istream& is );
+  
   //: Add from feature, the transformed feature, and its matching "to" features.
   //
   void add_feature_and_matches( rgrl_feature_sptr                      from_feature,
@@ -174,6 +182,13 @@ class rgrl_match_set
   vcl_vector< vcl_vector< match_info > > matches_and_weights_;
 };
 
+//: stream output
+vcl_ostream& 
+operator<< ( vcl_ostream& os, rgrl_match_set const& set );
+
+//: stream input
+vcl_istream& 
+operator>> ( vcl_istream& is, rgrl_match_set& set );
 
 class rgrl_match_set_from_iterator
 {

@@ -256,6 +256,146 @@ set_num_constraints_per_match() const
 }
 
 // ---------------------------------------------------------------------------
+//                                                             stream operator
+//
+
+//: stream output
+void
+rgrl_match_set::
+write( vcl_ostream& os ) const
+{
+  typedef rgrl_match_set::const_from_iterator FIter;
+  typedef FIter::to_iterator TIter;
+
+  // size
+  os << this->from_size() << vcl_endl;
+  
+  for( FIter fi=this->from_begin(); fi!=this->from_end(); ++fi ) {
+
+    // from feature
+    fi.from_feature()->write( os );
+    
+    // mapped feature
+    fi.mapped_from_feature()->write( os );
+    
+    // to size
+    os << fi.size() << vcl_endl;
+    
+    for( TIter ti=fi.begin(); ti!=fi.end(); ++ti )  {
+      os << ti.signature_weight() << ' ' 
+         << ti.geometric_weight() << ' ' 
+         << ti.cumulative_weight() << vcl_endl;
+      
+      // to feature
+      ti.to_feature()->write( os );
+    }
+    os << vcl_endl;
+  }
+  
+  os << "\n\n";
+  //return os;
+} 
+    
+//: stream input
+bool
+rgrl_match_set::
+read( vcl_istream& is )
+{
+  double sig, geo, cum;
+  vcl_vector<double> sig_wgts, geo_wgts, cum_wgts;
+  vcl_vector<rgrl_feature_sptr>  tos;
+  rgrl_feature_sptr from, mapped, one;
+  bool to_set_feature_type = true;
+  
+  // from size
+  int from_size=-1;
+  is >> from_size;
+  if( !is || from_size<0 ) {
+    vcl_cerr << "Error(" << __FILE__ <<"): cannot read from size" << vcl_endl;
+    return false;
+  }
+  
+  for( int i=0; i<from_size; ++i ) {
+    
+    // from feature
+    from = rgrl_feature_reader( is );
+      
+    // mapped feature
+    mapped = rgrl_feature_reader( is );
+    if( !is || !from || !mapped ) {
+      vcl_cerr << "Error(" << __FILE__ <<"): cannot read from feature" << vcl_endl;
+      return false;
+    }
+
+    // to size
+    int to_size=-1;
+    is >> to_size;
+    if( !is || to_size<0 ) {
+      vcl_cerr << "Error(" << __FILE__ <<"): cannot read to feature size" << vcl_endl;
+      return false;
+    }
+    
+    // reset
+    sig_wgts.clear();
+    geo_wgts.clear();
+    cum_wgts.clear();
+    tos.clear();
+    
+    for( int i=0; i<to_size; ++i ) {
+      is >> sig >> geo >> cum;
+      if( !is ) {
+        vcl_cerr << "Error(" << __FILE__ <<"): cannot read wgts" << vcl_endl;
+        return false;
+      }
+      
+      sig_wgts.push_back( sig );
+      geo_wgts.push_back( sig );
+      cum_wgts.push_back( sig );
+      
+      one = rgrl_feature_reader( is );
+      if( !is || !one ) {
+        vcl_cerr << "Error(" << __FILE__ <<"): cannot read to features" << vcl_endl;
+        return false;
+      }
+      tos.push_back( one );
+    }
+    
+    this->add_feature_matches_and_weights( from, mapped, tos, sig_wgts, geo_wgts, cum_wgts );
+
+    // set feature type
+    if( to_set_feature_type && !tos.empty() ) {
+      //set flag
+      to_set_feature_type = false; 
+      
+      from_type_ = &(from->type_id());
+      to_type_ = &(tos[0]->type_id());
+    }
+  }
+  
+  // set num_constraints
+  set_num_constraints_per_match();
+  
+  return true;
+}
+
+//: stream output
+vcl_ostream& 
+operator<< ( vcl_ostream& os, rgrl_match_set const& set )
+{
+  set.write( os );
+  return os;
+}
+
+//: stream input
+vcl_istream& 
+operator>> ( vcl_istream& is, rgrl_match_set& set )
+{
+  bool ret = set.read( is );
+  assert( ret );
+  return is;
+}
+
+// ---------------------------------------------------------------------------
 //                                                                  match info
 //
 
