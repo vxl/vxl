@@ -53,6 +53,16 @@ MANPAGE_SOURCES += vipl_moment.txx
 # Z. Miscellaneous:
 MANPAGE_SOURCES += vipl_histogram.txx
 
+# Support classes
+MANPAGE_SOURCES += filter/vipl_filter.txx
+MANPAGE_SOURCES += filter/vipl_filter_2d.txx
+MANPAGE_SOURCES += section/vipl_section_container.txx
+MANPAGE_SOURCES += section/vipl_section_descriptor.txx
+MANPAGE_SOURCES += section/vipl_section_descriptor_2d.txx
+MANPAGE_SOURCES += section/vipl_section_iterator.txx
+
+MANPAGE_SOURCES += accessors/vipl_accessors_vil_image.txx
+
 ################################
 include ${IUEROOT}/config/top.mk
 ################################
