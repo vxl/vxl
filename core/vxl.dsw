@@ -399,7 +399,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "test_vbl_io"=..\mul\vbl\io\tests\test_vbl_io.dsp - Package Owner=<4>
+Project: "test_vbl_io"=.\vbl\io\tests\test_vbl_io.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -417,7 +417,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "test_vgl_io"=..\mul\vgl\io\tests\test_vgl_io.dsp - Package Owner=<4>
+Project: "test_vgl_io"=.\vgl\io\tests\test_vgl_io.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -435,7 +435,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "test_vil_io"=..\mul\vil\io\tests\test_vil_io.dsp - Package Owner=<4>
+Project: "test_vil_io"=.\vil\io\tests\test_vil_io.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -453,7 +453,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "test_vnl_io"=..\mul\vnl\io\tests\test_vnl_io.dsp - Package Owner=<4>
+Project: "test_vnl_io"=.\vnl\io\tests\test_vnl_io.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -489,7 +489,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "test_vsl_io"=..\mul\vsl\tests\test_vsl_io.dsp - Package Owner=<4>
+Project: "test_vsl_io"=.\vsl\tests\test_vsl_io.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -522,7 +522,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vbl_io"=..\mul\vbl\io\vbl_io.dsp - Package Owner=<4>
+Project: "vbl_io"=.\vbl\io\vbl_io.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -687,7 +687,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vgl_io"=..\mul\vgl\io\vgl_io.dsp - Package Owner=<4>
+Project: "vgl_io"=.\vgl\io\vgl_io.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -828,7 +828,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vil_io"=..\mul\vil\io\vil_io.dsp - Package Owner=<4>
+Project: "vil_io"=.\vil\io\vil_io.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -954,7 +954,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vnl_io"=..\mul\vnl\io\vnl_io.dsp - Package Owner=<4>
+Project: "vnl_io"=.\vnl\io\vnl_io.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -1059,7 +1059,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vsl"=..\mul\vsl\vsl.dsp - Package Owner=<4>
+Project: "vsl"=.\vsl\vsl.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
