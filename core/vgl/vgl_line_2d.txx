@@ -5,10 +5,12 @@
 // \file
 
 #include "vgl_line_2d.h"
+#include <vcl_cmath.h>     // vcl_sqrt()
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_homg_line_2d.h>
+#include <vnl/vnl_numeric_traits.h>
 
 //: line through two given points
 template <class Type>
@@ -24,7 +26,8 @@ template <class Type>
 vgl_line_2d<Type>::vgl_line_2d (vgl_homg_line_2d<Type> const& l)
  : a_(l.a()) , b_(l.b()) , c_(l.c())
 {
-  assert(c_);
+  //JLM I see no reason to prohibit lines through the origin
+  //  assert(c_);
 }
 
 //: Get two points on the line.
@@ -40,6 +43,23 @@ void vgl_line_2d<Type>::get_two_points(vgl_point_2d<Type> &p1, vgl_point_2d<Type
   if (a() == 0)       p2.set(1, -c()/b());
   else if ( c() == 0) p2.set(b(), -a());
   else                p2.set(-c()/a(), 0);
+}
+
+template <class Type>
+bool vgl_line_2d<Type>::normalize()
+{
+  typedef typename vnl_numeric_traits<Type>::abs_t abs_t;
+  typedef typename vnl_numeric_traits<Type>::real_t real_t;
+  real_t mag_sq = a_*a_ + b_*b_;
+  abs_t mag = vcl_sqrt(mag_sq);
+  if(mag)
+    {
+      a_ = a_/mag;
+      b_ = b_/mag;
+      c_ = c_/mag;
+      return true;
+    }
+  return false;
 }
 
 #define vp(os,v,s) { os<<' '; if ((v)>0) os<<'+'; if ((v)&&!s[0]) os<<(v); else { \

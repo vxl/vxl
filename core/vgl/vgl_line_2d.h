@@ -91,6 +91,9 @@ class vgl_line_2d
   inline vgl_vector_2d<double> normal() const
   { return normalized(vgl_vector_2d<double>(a_,b_)); }
 
+  //: normalize the line coefficents s.t. a^2 + b^2 = 1
+  bool normalize();
+
  private: // \deprecated
   //: \deprecated \a x component of unit vector describing direction of line
   inline double dir_x() const { return direction().x(); }
