@@ -10,12 +10,12 @@
 // mouse button over the window) will be dispatched to the associated
 // vgui_tableau in a vgui_event structure. Draw requests will be dispatched
 // to the tableau as vgui_DRAW and vgui_DRAW_OVERLAY events.
-//  
+//
 // Note. When the set_tableau() method is called, the adaptor will attach itself
 // to the tableau as an observer. The tableau may detach that observer if it so
 // chooses, but that would be a bad idea as it would stop post()s from tableaux
 // reaching the adaptor.
-//    
+//
 // .SECTION Author
 //   fsm@robots.ox.ac.uk
 // .SECTION Modifications
@@ -37,9 +37,9 @@
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_observer.h>
 
-class vgui_window; 
+class vgui_window;
 class vgui_tableau;
-struct vgui_tableau_ref;
+struct vgui_tableau_sptr;
 class vgui_popup_params;
 class vgui_adaptor_tableau;
 // see vgui_adaptor.cxx for information about this class.
@@ -50,10 +50,10 @@ public:
   virtual ~vgui_adaptor();
 
   // ---------- mixin methods ----------
-  
+
   // tableau related.
-  vgui_tableau_ref get_tableau() const;
-  void set_tableau(vgui_tableau_ref const& t);
+  vgui_tableau_sptr get_tableau() const;
+  void set_tableau(vgui_tableau_sptr const& t);
 
   // popup related.
   vgui_menu get_total_popup(vgui_popup_params &) const;
@@ -62,7 +62,7 @@ public:
   vgui_menu &get_popup() { return menu; }
   void set_popup(vgui_menu const &m) { get_popup() = m; }
   void include_in_popup(vgui_menu const &m) { get_popup().include(m); }
- 
+
   // event related.
   bool dispatch_to_tableau(vgui_event const &);
 
@@ -73,7 +73,7 @@ public:
   static vgui_DLLDATA vgui_adaptor *current;
 
   // ---------- virtuals ----------
-  // only the pure virtuals need be implemented. 
+  // only the pure virtuals need be implemented.
   // the rest is quality-of-implementation stuff.
 
   // Return width and height of rendering area (*not* the width and height of the
@@ -81,7 +81,7 @@ public:
   virtual unsigned get_width() const =0;
   virtual unsigned get_height() const =0;
 
-  // These methods are called by vgui_adaptor (in its capacity as a base class) 
+  // These methods are called by vgui_adaptor (in its capacity as a base class)
   // when a post arrives.
   virtual int  post_timer(float);
   virtual void post_timer(float, int );
@@ -104,16 +104,16 @@ public:
   // Temporary marko hack.
   // Draw now!
   //  virtual void draw() { }
-  
+
 protected:
-  // Parameters controlling the popup menu style. These are put onto 
+  // Parameters controlling the popup menu style. These are put onto
   // a popup_params object and passed to tableau::get_popup()
   bool nested_popups;
   bool default_items;
 
-private: 
+private:
   vgui_adaptor_tableau *the_tableau;
-  
+
   // this menu is put before the tableau's popup menu.
   vgui_menu menu;
 };

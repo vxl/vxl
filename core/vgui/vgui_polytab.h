@@ -6,7 +6,7 @@
 // .FILE vgui_polytab.cxx
 //
 // .SECTION Description
-// Class polytab_base is a tableau which renders its children into sub-rectangles 
+// Class polytab_base is a tableau which renders its children into sub-rectangles
 // of its given viewport. The subrectangles are given as relative coordinates
 // on [0,1]x[0,1], with (0,0) being the lower left corner and (1,1) the upper
 // right corner. polytab_base has a concept of which child is 'current', meaning
@@ -23,7 +23,7 @@
 // tableau. For example, it is not possible to switch 'current' child without
 // knowing the viewport, because a LEAVE/ENTER pair have to be sent to the old
 // and new child and the viewport must be set correctly before dispatching these
-// events. 
+// events.
 //
 // @author fsm@robots.ox.ac.uk
 
@@ -38,17 +38,17 @@ class vgui_polytab_base : public vgui_tableau {
 public:
   vgui_polytab_base();
 
-  vcl_string type_name() const;    
+  vcl_string type_name() const;
 
-  // "iterator interface"  
+  // "iterator interface"
   struct item {
     vgui_slot tab;
     float x,y,w,h;
     int outline_color[3];
     int id;
-    
+
     item() { } // for stl container
-    item(vgui_tableau* p, vgui_tableau_ref const&c, float x, float y, float w, float h, int id =0);
+    item(vgui_tableau* p, vgui_tableau_sptr const&c, float x, float y, float w, float h, int id =0);
     void set_vp(GLint const vp[4]);
     bool inside(GLint const vp[4], int x, int y) const;
   };
@@ -64,15 +64,15 @@ public:
 
   // "handle interface"
   // -- add new subtableau. returns handle to child.
-  int add(vgui_tableau_ref const&, float x, float y, float w, float h);
+  int add(vgui_tableau_sptr const&, float x, float y, float w, float h);
   // -- remove subtableau, referred to by handle.
   void remove(int id);
   // -- move subtableau.
   void move(int id, float x, float y, float w, float h);
-  // -- 
-  void replace(int id, vgui_tableau_ref const& tab);
+  // --
+  void replace(int id, vgui_tableau_sptr const& tab);
   // -- get pointer to tableau from id.
-  vgui_tableau_ref get(int id) const;
+  vgui_tableau_sptr get(int id) const;
   // -- set color to outline tableau.
   void set_outline_color(const int id, const int r, const int g, const int b);
 
@@ -81,7 +81,7 @@ protected:
   bool handle(vgui_event const &);
   bool handle(GLint const vp[4], vgui_event const &e);
 
-  // misnomer. returns the index of the child currently under 
+  // misnomer. returns the index of the child currently under
   // the pointer's position.
   int get_active(GLint const vp[4], int wx, int wy) const;
 
@@ -95,7 +95,7 @@ protected:
 };
 
 // use this class, not the base class.
-#include "vgui_polytab_ref.h"
+#include "vgui_polytab_sptr.h"
 
 class vgui_polytab : public vgui_polytab_base {
 public:
@@ -110,8 +110,8 @@ protected:
   bool handle(vgui_event const &);
 };
 
-struct vgui_polytab_new : public vgui_polytab_ref {
-  typedef vgui_polytab_ref base;
+struct vgui_polytab_new : public vgui_polytab_sptr {
+  typedef vgui_polytab_sptr base;
   vgui_polytab_new() : base(new vgui_polytab()) { }
 };
 

@@ -35,13 +35,13 @@ vgui_easy2D::vgui_easy2D(char const* n):
   fg[0] = 1.0f;
   fg[1] = 1.0f;
   fg[2] = 0.0f;
-  
+
   line_width = 1;
   point_size = 3;
 }
 
 
-vgui_easy2D::vgui_easy2D(vgui_image_tableau_ref const& i, char const* n) :
+vgui_easy2D::vgui_easy2D(vgui_image_tableau_sptr const& i, char const* n) :
   image_slot(this,i),
   image_image(i),
   name_(n)
@@ -49,7 +49,7 @@ vgui_easy2D::vgui_easy2D(vgui_image_tableau_ref const& i, char const* n) :
   fg[0] = 1.0f;
   fg[1] = 1.0f;
   fg[2] = 0.0f;
-  
+
   line_width = 1;
   point_size = 3;
 }
@@ -70,7 +70,7 @@ bool vgui_easy2D::handle(vgui_event const& e) {
 }
 
 vcl_string vgui_easy2D::file_name() const {
-  if (image_slot) 
+  if (image_slot)
     return type_name() + "[" + name_ + ",i=" + image_slot->file_name() + "]";
   else
     return name_ ;
@@ -78,7 +78,7 @@ vcl_string vgui_easy2D::file_name() const {
 
 
 vcl_string vgui_easy2D::pretty_name() const {
-  if (image_slot) 
+  if (image_slot)
     return type_name() + "[" + name_ + ",i=" + image_slot->file_name() + "]";
   else
     return type_name() + "[" + name_ + ",i=null]";
@@ -93,7 +93,7 @@ void vgui_easy2D::set_image(vcl_string const& fn)
   image_image->set_image(fn.c_str());
 }
 
-void vgui_easy2D::set_child(vgui_tableau_ref const& i) {
+void vgui_easy2D::set_child(vgui_tableau_sptr const& i) {
   if (i->type_name() != "vgui_image_tableau" &&
       i->type_name() != "xcv_image_tableau")
     vgui_macro_warning << "assigning what seems like a non-image to my child : i = " << i << vcl_endl;
@@ -104,7 +104,7 @@ void vgui_easy2D::add(vgui_soview2D* object) {
 
   vgui_style *style = vgui_style_factory::instance()->get_style(fg[0], fg[1], fg[2], point_size, line_width);
   object->set_style(style);
-  
+
   vgui_displaylist2D::add(object);
 }
 
@@ -178,7 +178,7 @@ vgui_soview2D_point* vgui_easy2D::add_point_3dv(double const p[3]) {
 }
 
 vgui_soview2D_lineseg* vgui_easy2D::add_line_3dv_3dv(double const p[3], double const q[3]) {
-  return add_line(p[0]/p[2], p[1]/p[2], 
+  return add_line(p[0]/p[2], p[1]/p[2],
 		  q[0]/q[2], q[1]/q[2]);
 }
 
@@ -204,7 +204,7 @@ vgui_soview2D_polygon* vgui_easy2D::add_polygon(unsigned n, float const *x, floa
   return obj;
 }
 
-vgui_image_tableau_ref vgui_easy2D::get_image_tableau() {
+vgui_image_tableau_sptr vgui_easy2D::get_image_tableau() {
   return image_image;
 }
 
@@ -213,20 +213,20 @@ void vgui_easy2D::print_psfile(vcl_string filename, int reduction_factor, bool p
   typedef vbl_psfile::byte byte;
   byte* data = new byte[img.get_size_bytes()];
   img.get_section(data, 0, 0, img.width(), img.height());
- 
+
   vbl_psfile psfile(filename.c_str());
   psfile.set_parameters(img.width(), img.height());
   psfile.set_reduction_factor(reduction_factor);
-  psfile.postscript_header(); 
+  psfile.postscript_header();
   if (vil_pixel_format(img) == VIL_BYTE)
   {
-    if (debug) vcl_cerr << "vgui_easy2D::print_psfile printing greyscale image to" 
+    if (debug) vcl_cerr << "vgui_easy2D::print_psfile printing greyscale image to"
       <<  filename.c_str() << vcl_endl;
-    psfile.print_greyscale_image(data, img.width(), img.height());  
+    psfile.print_greyscale_image(data, img.width(), img.height());
   }
   else if (vil_pixel_format(img) == VIL_RGB_BYTE)
   {
-    if (debug) vcl_cerr << "vgui_easy2D::print_psfile printing color image to " 
+    if (debug) vcl_cerr << "vgui_easy2D::print_psfile printing color image to "
       << filename.c_str() << vcl_endl;
     psfile.print_color_image(data, img.width(), img.height());
   }
@@ -257,7 +257,7 @@ void vgui_easy2D::print_psfile(vcl_string filename, int reduction_factor, bool p
 	style_point_size = style->point_size;
  	psfile.set_fg_color(style->rgba[0],style->rgba[1],style->rgba[2]);
       }
-      
+
       if (sv->type_name() == "vgui_soview2D_point")
       {
         vgui_soview2D_point* pt = (vgui_soview2D_point*)sv;
@@ -270,14 +270,14 @@ void vgui_easy2D::print_psfile(vcl_string filename, int reduction_factor, bool p
       {
         vgui_soview2D_circle* circ = (vgui_soview2D_circle*)sv;
         psfile.circle(circ->x, circ->y, circ->r);
-        if (debug) vcl_cerr << "  vgui_easy2D: Adding circle, center " << circ->x << ", " 
+        if (debug) vcl_cerr << "  vgui_easy2D: Adding circle, center " << circ->x << ", "
           << circ->y << " radius " << circ->r << vcl_endl;
       }
       else if (sv->type_name() == "vgui_soview2D_lineseg")
       {
         vgui_soview2D_lineseg* line = (vgui_soview2D_lineseg*)sv;
         psfile.line(line->x0, line->y0, line->x1, line->y1);
-        if (debug) vcl_cerr << " vgui_easy2D: Adding line between " << line->x0 << ", " 
+        if (debug) vcl_cerr << " vgui_easy2D: Adding line between " << line->x0 << ", "
           << line->y0 << " and " << line->x1 << ", " << line->y1 << vcl_endl;
       }
       else if(sv->type_name() == "vgui_soview2D_linestrip")

@@ -16,13 +16,13 @@
 #include <vgui/vgui_popup_params.h>
 #include <vgui/vgui_command.h>
 
-// Class polytab_base is a tableau which renders its children into sub-rectangles 
+// Class polytab_base is a tableau which renders its children into sub-rectangles
 // of its given viewport. The subrectangles are given as relative coordinates
 // on [0,1]x[0,1], with (0,0) being the lower left corner and (1,1) the upper
 // right corner. polytab_base has a concept of which child is 'current', meaning
 // roughly which child is getting the mouse events.
 //
-// Class polytab is derived from polytab_base and automatically switches current 
+// Class polytab is derived from polytab_base and automatically switches current
 // child, according to where the pointer is, in a sensible way.
 //
 // This can be used to emulate two adaptors side by side.
@@ -47,10 +47,10 @@ public:
   GLint vp[4];
   GLint sc[4];
   bool sc_was_enabled;
-  
+
   vgui_vp_sc_snapshot() {
     glGetIntegerv(GL_VIEWPORT, vp);
-    
+
     glGetIntegerv(GL_SCISSOR_BOX, sc);
     sc_was_enabled = glIsEnabled(GL_SCISSOR_TEST) == GL_TRUE;
   }
@@ -58,8 +58,8 @@ public:
   ~vgui_vp_sc_snapshot() {
     // restore viewport :
     glViewport(vp[0], vp[1], vp[2], vp[3]);
-    
-    // turn off the scissor test, if it wasn't already on, and 
+
+    // turn off the scissor test, if it wasn't already on, and
     // restore old scissor settings :
     if (sc_was_enabled)
       glEnable(GL_SCISSOR_TEST);
@@ -72,9 +72,9 @@ public:
 //--------------------------------------------------------------------------------
 
 // class vgui_popup_params::item
-vgui_polytab_base::item::item(vgui_tableau* p, vgui_tableau_ref const&c, 
+vgui_polytab_base::item::item(vgui_tableau* p, vgui_tableau_sptr const&c,
 			      float x_, float y_, float w_, float h_,
-			      int id_ VCL_DEFAULT_VALUE(0)) 
+			      int id_ VCL_DEFAULT_VALUE(0))
   : tab(p, c)
   , x(x_), y(y_)
   , w(w_), h(h_)
@@ -100,7 +100,7 @@ bool vgui_polytab_base::item::inside(GLint const vp[4],int vx, int vy) const {
   float ry = float(vy-vp[1])/vp[3];
 
   bool ans = (x<=rx && rx<x+w) && (y<=ry && ry<y+h);
-  
+
   if (ans)
     debug << "Point " << vx << " " << vy << " inside sub-window: " << id << vcl_endl;
 
@@ -124,7 +124,7 @@ vcl_string vgui_polytab_base::type_name() const {
 
 void vgui_polytab_base::erase(iterator i) {
   assert(sub.begin()<=i && i<sub.end()); // wrong iterator for this container.
-  
+
   if (current == i-sub.begin())
     current = -1;
 
@@ -155,9 +155,9 @@ void vgui_polytab_base::move(int id, float x, float y, float w, float h) {
   vgui_macro_warning << "no such id " << id << vcl_endl;
 }
 
-//-- Replace the tableau with the given ID by the given tableau.  
+//-- Replace the tableau with the given ID by the given tableau.
 //   Keep the same ID and do not change the value of 'current'.
-void vgui_polytab_base::replace(int id, vgui_tableau_ref const& tab) {
+void vgui_polytab_base::replace(int id, vgui_tableau_sptr const& tab) {
   for (iterator i=begin(); i!=end(); ++i)
     if (i->id == id) {
       i->tab.assign(tab);
@@ -171,21 +171,21 @@ void vgui_polytab_base::replace(int id, vgui_tableau_ref const& tab) {
 }
 
 //-- Returns the tableau with the given ID.
-vgui_tableau_ref vgui_polytab_base::get(int id) const {
+vgui_tableau_sptr vgui_polytab_base::get(int id) const {
   for (const_iterator i=begin(); i!=end(); ++i)
     if (i->id == id)
       return i->tab;
-  return vgui_tableau_ref();
+  return vgui_tableau_sptr();
 }
 
 //-- Sets the color that the tableau is outlined with .
-void vgui_polytab_base::set_outline_color(const int id, const int r, const int g, 
+void vgui_polytab_base::set_outline_color(const int id, const int r, const int g,
 const int b) {
   for (unsigned i=0; i<sub.size(); ++i) {
     if (sub[i].id == id) {
-      sub[i].outline_color[0] = r; 
-      sub[i].outline_color[1] = g; 
-      sub[i].outline_color[2] = b; 
+      sub[i].outline_color[0] = r;
+      sub[i].outline_color[1] = g;
+      sub[i].outline_color[2] = b;
     }
   }
 }
@@ -193,7 +193,7 @@ const int b) {
 //-- Adds the given tableau to the given proportion of the viewport.
 //   x,y,w,h specify a portion of the polytab's viewport in coordinates
 //   which go from 0 to 1.
-int vgui_polytab_base::add(vgui_tableau_ref const& t, float x, float y, float w, float h) {
+int vgui_polytab_base::add(vgui_tableau_sptr const& t, float x, float y, float w, float h) {
   static int counter = 0;
   assert(counter < 1000000); // a million. FIXME.
   item it(this, t, x, y, w, h, ++counter) ;
@@ -204,7 +204,7 @@ int vgui_polytab_base::add(vgui_tableau_ref const& t, float x, float y, float w,
 	<< "y  = " << sub.back().y << vcl_endl
 	<< "w  = " << sub.back().w << vcl_endl
 	<< "h  = " << sub.back().h << vcl_endl;
-  
+
   return counter;
 }
 
@@ -235,7 +235,7 @@ void vgui_polytab_base::set_current(GLint const vp[4], int index) {
     sub[current].set_vp(vp);
     sub[current].tab->handle(e);
   }
-  
+
   // switch :
   //cerr << "switch from " << current << " to " << index << endl;
   current = index;
@@ -250,7 +250,7 @@ void vgui_polytab_base::set_current(GLint const vp[4], int index) {
 
 //-- Handles all events for this tableau and passes unused ones to the correct child.
 bool vgui_polytab_base::handle(GLint const vp[4], vgui_event const &e) {
-  
+
   // Draw events must go to all children, in the right order.
   if (e.type==vgui_DRAW || e.type==vgui_DRAW_OVERLAY) {
     // save current matrix state so that we can restore it
@@ -261,13 +261,13 @@ bool vgui_polytab_base::handle(GLint const vp[4], vgui_event const &e) {
 
     for (unsigned i=0; i<sub.size(); ++i) {
       PM.restore();
-      
+
       // set viewport for child.
       sub[i].set_vp(vp);
-      
+
       // let child handle the event.
       sub[i].tab && sub[i].tab->handle(e);
-      
+
       if (e.type == vgui_DRAW) {
 	// draw border of child.
 	vgui_matrix_state::identity_gl_matrices();
@@ -286,7 +286,7 @@ bool vgui_polytab_base::handle(GLint const vp[4], vgui_event const &e) {
 	glEnd();
       }
     }
-    
+
     return true;
   }
 
@@ -352,7 +352,7 @@ bool vgui_polytab::handle(vgui_event const &e) {
       if (active!=-1 && active!=get_current())
 	set_current(snap.vp, active);
     }
-    
+
     // pass to base class
     return vgui_polytab_base::handle(snap.vp, e);
   }
@@ -361,11 +361,11 @@ bool vgui_polytab::handle(vgui_event const &e) {
   else if (e.type == vgui_BUTTON_DOWN) {
     // disallow child switch
     may_switch_child = false;
-    
+
     // pass to base class
     return vgui_polytab_base::handle(snap.vp, e);
   }
-  
+
   // button up
   else if (e.type == vgui_BUTTON_UP) {
     // pass to base class first, because the button might be released over
@@ -374,16 +374,16 @@ bool vgui_polytab::handle(vgui_event const &e) {
 
     // allow child switch. (assumes all buttons are released now).
     may_switch_child = true;
-    
+
     // switch child, if necessary
     int active = get_active(snap.vp, e.wx, e.wy);
     if (active!=-1 && active!=get_current())
       set_current(snap.vp, active);
-    
+
     //
     return f;
   }
-  
+
   // Handle in base class (piglet).
   return vgui_polytab_base::handle(snap.vp, e);
 }
@@ -391,7 +391,7 @@ bool vgui_polytab::handle(vgui_event const &e) {
 
 
 void vgui_polytab::get_popup(vgui_popup_params const &params, vgui_menu &menu) {
-  if (params.recurse) { 
+  if (params.recurse) {
     int index = get_current();
     if (index >=0)
       sub[index].tab->get_popup(params, menu);

@@ -50,7 +50,7 @@ const void * const vgui_viewer2D::CENTER_EVENT="x";
 vgui_event_condition c_pan(vgui_MIDDLE, vgui_CTRL);
 //vgui_event_condition c_pan(vgui_LEFT, vgui_modifier(vgui_CTRL + vgui_SHIFT));
 
-vgui_viewer2D::vgui_viewer2D(vgui_tableau_ref const& s) : 
+vgui_viewer2D::vgui_viewer2D(vgui_tableau_sptr const& s) :
   vgui_wrapper_tableau(s),
   nice_points(true),
   nice_lines(true),
@@ -83,11 +83,11 @@ void vgui_viewer2D::setup_gl_matrices()
   glOrtho(0, width,  // left, right
 	  height, 0, // bottom, top
 	  -1,+1);    // near, far
-  
+
   // the modelview matrix applies a tranformation
   // to incoming coordinates before they reach the
   // projection matrix. in this case, it consists
-  // of anisotropic scaling about (0,0) followed 
+  // of anisotropic scaling about (0,0) followed
   // by a translation.
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
@@ -128,12 +128,11 @@ void vgui_viewer2D::center_image(int w, int h) {
   glGetFloatv(GL_VIEWPORT, vp);
   float width = vp[2];
   float height = vp[3];
- 
+
   token.offsetX =  width/2 - token.scaleX*(float(w)/2.0);
   token.offsetY = height/2 - token.scaleY*(float(h)/2.0);
 
   post_redraw();
-  
 }
 
 
@@ -149,7 +148,6 @@ static void draw_rect(float x0, float y0, float x1, float y1) {
   glVertex2f(x1,y1);
   glVertex2f(x1,y0);
   glEnd();
-  
 }
 
 bool vgui_viewer2D::handle(const vgui_event& e) {
@@ -162,11 +160,11 @@ bool vgui_viewer2D::handle(const vgui_event& e) {
     glDisable(GL_TEXTURE_2D);
     glDisable(GL_LIGHTING);
     glShadeModel(GL_FLAT);
-    
-    
+
+
     if (nice_points)
       glEnable(GL_POINT_SMOOTH);
-    else 
+    else
       glDisable(GL_POINT_SMOOTH);
 
     if (nice_lines) {
@@ -174,7 +172,7 @@ bool vgui_viewer2D::handle(const vgui_event& e) {
       glEnable(GL_LINE_SMOOTH);
       glLineWidth (1.5);
     }
-    else 
+    else
       glDisable(GL_LINE_SMOOTH);
 
     if (nice_points || nice_lines) {
@@ -184,9 +182,9 @@ bool vgui_viewer2D::handle(const vgui_event& e) {
     } else {
       glDisable(GL_BLEND);
     }
-    
+
     setup_gl_matrices();
-    
+
     return child->handle(e);
   }
   // -- This deals with horizontal scroll message
@@ -210,7 +208,7 @@ bool vgui_viewer2D::handle(const vgui_event& e) {
 
   if (vgui_drag_mixin::handle(e)) {
     return true;
-  }    
+  }
 
   if (vgui_tableau::handle(e)) {
     return true;
@@ -225,29 +223,29 @@ bool vgui_viewer2D::mouse_down(int x, int y, vgui_button button, vgui_modifier m
   //  "panning" true since button is pressed.
   if (c_pan(button, modifier)) {
     if (debug) vcl_cerr << "vgui_viewer2D_handler::middle " << vcl_endl;
-      
+
     prev_x = x;
     prev_y = y;
     panning = true;
     return true;
-  } 
+  }
   if (this->zoom_type == vgui_viewer2D::normal_zoom && !sweep_next) {
-    if (button == vgui_LEFT && (modifier & vgui_CTRL)) {      
-      if (debug) vcl_cerr << "vgui_viewer2D_handler::left" << vcl_endl;      
+    if (button == vgui_LEFT && (modifier & vgui_CTRL)) {
+      if (debug) vcl_cerr << "vgui_viewer2D_handler::left" << vcl_endl;
       this->zoomin(zoom_factor, int(x), int(y));
       this->post_redraw();
       return true;
     }
     else if (button == vgui_RIGHT && (modifier & vgui_CTRL)) {
-      if (debug) vcl_cerr << "vgui_viewer2D_handler::right" << vcl_endl;      
+      if (debug) vcl_cerr << "vgui_viewer2D_handler::right" << vcl_endl;
       this->zoomout(zoom_factor, int(x), int(y));
       this->post_redraw();
       return true;
     }
   }
   else if (this->zoom_type == vgui_viewer2D::smooth_zoom && !sweep_next) {// if this->smooth_zoom
-    if (button == vgui_LEFT && (modifier & vgui_CTRL)) {      
-      if (debug) vcl_cerr << "vgui_viewer2D_handler::left" << vcl_endl;      
+    if (button == vgui_LEFT && (modifier & vgui_CTRL)) {
+      if (debug) vcl_cerr << "vgui_viewer2D_handler::left" << vcl_endl;
       prev_x = x;
       prev_y = y;
       zoom_x = x;
@@ -258,7 +256,7 @@ bool vgui_viewer2D::mouse_down(int x, int y, vgui_button button, vgui_modifier m
     }
   }
   else {
-    if (button == vgui_LEFT && (sweep_next || (modifier & vgui_CTRL))) {      
+    if (button == vgui_LEFT && (sweep_next || (modifier & vgui_CTRL))) {
       // this is the beginning of the sweep zoom operation. we have to (a) set the
       // state flag 'sweep_zooming', (b) remember the position of the pointer and
       // (c) save the front buffer to the back buffer.
@@ -274,17 +272,17 @@ bool vgui_viewer2D::mouse_down(int x, int y, vgui_button button, vgui_modifier m
       return true;
     }
   }
-    
-    
+
+
   return false;
 }
 
 bool vgui_viewer2D::mouse_drag(int x, int y,  vgui_button /*button*/, vgui_modifier /*modifier*/) {
   if (debug) vcl_cerr << __FILE__ ": vgui_viewer2D_handler::mouse_drag" << vcl_endl;
-  
+
   if (!panning && !smooth_zooming && !sweep_zooming)
     return false;
-        
+
   if (panning) {
     // the mouse events come in viewport coordinates, so the relevant
     // translation in window coordinates is (dx,-dy).
@@ -292,7 +290,7 @@ bool vgui_viewer2D::mouse_drag(int x, int y,  vgui_button /*button*/, vgui_modif
     this->token.offsetY -= (y-prev_y);
     this->post_redraw();
   }
-  
+
   if (smooth_zooming) {
     GLdouble vp[4];
     glGetDoublev(GL_VIEWPORT, vp);
@@ -323,16 +321,16 @@ bool vgui_viewer2D::mouse_drag(int x, int y,  vgui_button /*button*/, vgui_modif
     glGetDoublev(GL_VIEWPORT, vp);
     double width = vp[2];
     double height = vp[3];
-      
+
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluOrtho2D(0, width, 0, height);
-      
+
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
     // get ratio of viewport width to viewport height :
-    double W_H_ratio = width/height; 
+    double W_H_ratio = width/height;
 
     // new method - draws rectangular box of aspect ratio W/H
     new_x = x;
@@ -347,35 +345,35 @@ bool vgui_viewer2D::mouse_drag(int x, int y,  vgui_button /*button*/, vgui_modif
     if (xdiff > ydiff*W_H_ratio) {
       if ((zoom_y - y) > 0)
 	new_y = zoom_y - xdiff/W_H_ratio;
-      else 
+      else
 	new_y = zoom_y + xdiff/W_H_ratio;
     }
     else {
       if ((zoom_x - x) > 0)
 	new_x = zoom_x - ydiff*W_H_ratio;
-      else 
+      else
 	new_x = zoom_x + ydiff*W_H_ratio;
     }
 
     // useful line as it documents the meaning of
     // zoom_? and new_?
     draw_rect(zoom_x - vp[0], zoom_y - vp[1], new_x - vp[0], new_y - vp[1]);
-   
+
     vgui_utils::end_sw_overlay();
   }
-  
+
   // Update last seen mouse position.
   prev_x = x;
   prev_y = y;
   return true;
 }
-  
+
 bool vgui_viewer2D::mouse_up(int /*x*/, int /*y*/,  vgui_button button, vgui_modifier /*modifier*/) {
   if (debug) vcl_cerr << "vgui_viewer2D_handler::mouse_up" << vcl_endl;
 
   if (sweep_zooming && button == vgui_LEFT) {
     // this is the end of the sweepzoom operation.
-    // we have to deduce and set the new parameters in the token 
+    // we have to deduce and set the new parameters in the token
     // from the viewport coordinates (zoom_x, zoom_y) and (new_x, new_y).
     // the safe way to do this is convert the sweep region into pre-modelview
     // coordinates and then deduce the token parameters from that.
@@ -399,15 +397,15 @@ bool vgui_viewer2D::mouse_up(int /*x*/, int /*y*/,  vgui_button button, vgui_mod
     this->token.scaleY = vp[3]/(y2-y1);
     this->token.offsetX = - this->token.scaleX*x1;
     this->token.offsetY = - this->token.scaleY*y1;
-      
+
     this->post_redraw(); // we probably need one now
   }
 
-    
+
   if (smooth_zooming && button == vgui_LEFT) {
     smooth_zooming = false;
   }
-    
+
   if (panning && button == c_pan.button) {
     panning = false;
   }
@@ -443,11 +441,11 @@ void vgui_viewer2D::center_event() {
   eprime.data = (void*) viewer;
   this->handle(eprime);
 #else
-  vgui_tableau_ref t = vgui_find_below_by_type_name(this, "vgui_image_tableau");
+  vgui_tableau_sptr t = vgui_find_below_by_type_name(this, "vgui_image_tableau");
   if (!t)
     t = vgui_find_below_by_type_name(this, "xcv_image_tableau");
   if (t) {
-    vgui_image_tableau_ref im; im.vertical_cast(t);
+    vgui_image_tableau_sptr im; im.vertical_cast(t);
     this->center_image(im->width(), im->height());
   }
   else
@@ -493,7 +491,7 @@ bool vgui_viewer2D::key_press(int /*x*/, int /*y*/, vgui_key key, vgui_modifier 
   case 'd':
     sweep_next = true;;
     return true;
-  case 'z':      
+  case 'z':
     if (this->zoom_type == vgui_viewer2D::normal_zoom) {
       this->zoom_type = vgui_viewer2D::smooth_zoom;
       vgui::out << "viewer2D : smooth" << vcl_endl;

@@ -8,18 +8,18 @@
 */
 
 #include <vcl_string.h>
-#include <vgui/vgui_tableau_ref.h>
+#include <vgui/vgui_tableau_sptr.h>
 
 //: Searching for tableaux in the hierarchy.
 
-vgui_tableau_ref vgui_find_by_type_name(vgui_tableau_ref const& start, vcl_string const &tn, bool direction_down);
+vgui_tableau_sptr vgui_find_by_type_name(vgui_tableau_sptr const& start, vcl_string const &tn, bool direction_down);
 
 inline
-vgui_tableau_ref vgui_find_below_by_type_name(vgui_tableau_ref const& start, vcl_string const &tn)
+vgui_tableau_sptr vgui_find_below_by_type_name(vgui_tableau_sptr const& start, vcl_string const &tn)
 { return vgui_find_by_type_name(start, tn, true); }
 
 inline
-vgui_tableau_ref vgui_find_above_by_type_name(vgui_tableau_ref const& start, vcl_string const &tn)
+vgui_tableau_sptr vgui_find_above_by_type_name(vgui_tableau_sptr const& start, vcl_string const &tn)
 { return vgui_find_by_type_name(start, tn, false); }
 
 #endif

@@ -176,7 +176,7 @@ SOURCE=".\Templates\vcl_vector+vgui_polytab__item-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vcl_vector+vgui_rubberbander_ref-.cxx"
+SOURCE=".\Templates\vcl_vector+vgui_rubberbander_sptr-.cxx"
 # End Source File
 # Begin Source File
 
@@ -204,7 +204,7 @@ SOURCE=".\Templates\vcl_vector+vgui_style~-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vcl_vector+vgui_tableau_ref-.cxx"
+SOURCE=".\Templates\vcl_vector+vgui_tableau_sptr-.cxx"
 # End Source File
 # Begin Source File
 
@@ -872,7 +872,7 @@ SOURCE=.\vgui_image_tableau.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgui_image_tableau_ref.h
+SOURCE=.\vgui_image_tableau_sptr.h
 # End Source File
 # Begin Source File
 
@@ -1076,7 +1076,7 @@ SOURCE=.\vgui_tableau.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgui_tableau_ref.h
+SOURCE=.\vgui_tableau_sptr.h
 # End Source File
 # Begin Source File
 
@@ -1132,7 +1132,7 @@ SOURCE=.\vgui_viewer2D.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgui_viewer2D_ref.h
+SOURCE=.\vgui_viewer2D_sptr.h
 # End Source File
 # Begin Source File
 

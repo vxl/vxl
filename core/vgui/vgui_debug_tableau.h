@@ -19,13 +19,13 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "vgui_debug_tableau_ref.h"
+#include "vgui_debug_tableau_sptr.h"
 #include <vgui/vgui_wrapper_tableau.h>
 
 class vgui_debug_tableau : public vgui_wrapper_tableau {
 public:
   // Public interface at the top
-  vgui_debug_tableau(vgui_tableau_ref const& child);
+  vgui_debug_tableau(vgui_tableau_sptr const& child);
 
   vcl_string type_name() const { return "debug_tableau"; }
 
@@ -36,9 +36,9 @@ protected:
   int verbosity;
 };
 
-struct vgui_debug_tableau_new : public vgui_debug_tableau_ref {
-  typedef vgui_debug_tableau_ref base;
-  vgui_debug_tableau_new(vgui_tableau_ref const& child) : base(new vgui_debug_tableau(child)) { }
+struct vgui_debug_tableau_new : public vgui_debug_tableau_sptr {
+  typedef vgui_debug_tableau_sptr base;
+  vgui_debug_tableau_new(vgui_tableau_sptr const& child) : base(new vgui_debug_tableau(child)) { }
 };
 
 #endif // vgui_debug_tableau_h_

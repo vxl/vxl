@@ -3,7 +3,7 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// 
+//
 // .NAME vgui_viewer3D - Undocumented class FIXME
 // .LIBRARY vgui
 // .HEADER vxl Package
@@ -23,7 +23,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "vgui_viewer3D_ref.h"
+#include "vgui_viewer3D_sptr.h"
 #include <vgui/vgui_wrapper_tableau.h>
 #include <vgui/vgui_drag_mixin.h>
 #include <vgui/vgui_event_condition.h>
@@ -33,7 +33,7 @@ struct vgui_viewer3D_spin;
 
 class vgui_viewer3D : public vgui_wrapper_tableau, public vgui_drag_mixin {
 public:
-  vgui_viewer3D(vgui_tableau_ref const&);
+  vgui_viewer3D(vgui_tableau_sptr const&);
 
   // vgui_tableau methods
   void draw_before_child();
@@ -64,30 +64,30 @@ public:
 
   // Implementation
   void setup_gl_matrices();
-  
-  struct token_t {    
+
+  struct token_t {
     float quat[4];     // quaternion
     float scale;
     float trans[3];
     float fov;
 #if 0 // use compiler generated copy constructors
     token_t(const token_t& that) { operator=(that); }
-    
+
     // CC -n32 doens't like the "token_t::"
     token_t& operator=(const token_t& that) {
       this->quat[0] = that.quat[0];
       this->quat[1] = that.quat[1];
       this->quat[2] = that.quat[2];
       this->quat[3] = that.quat[3];
-      
+
       this->scale = that.scale;
-      
+
       this->trans[0] = that.trans[0];
       this->trans[1] = that.trans[1];
       this->trans[2] = that.trans[2];
-      
+
       this->fov = that.fov;
-      
+
       return *this;
     }
 #endif
@@ -135,9 +135,9 @@ private:
 
 };
 
-struct vgui_viewer3D_new : public vgui_viewer3D_ref {
-  typedef vgui_viewer3D_ref base;
-  vgui_viewer3D_new(vgui_tableau_ref const& a) : base(new vgui_viewer3D(a)) { }
+struct vgui_viewer3D_new : public vgui_viewer3D_sptr {
+  typedef vgui_viewer3D_sptr base;
+  vgui_viewer3D_new(vgui_tableau_sptr const& a) : base(new vgui_viewer3D(a)) { }
 };
 
 #endif // vgui_viewer3D_h_

@@ -15,29 +15,29 @@
 //    which will work even if the slot is empty (returns false).
 //
 // Q: Why does it have such a silly name?
-// A: Because it is a tableau which "wraps" itself around another tableau. 
+// A: Because it is a tableau which "wraps" itself around another tableau.
 //    "vgui_parent" was too vague and it was needed for something else anyway.
 //    I would welcome suggestions for a better name.
 //
 // @author fsm@robots.ox.ac.uk
 
-#include "vgui_wrapper_tableau_ref.h"
+#include "vgui_wrapper_tableau_sptr.h"
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_slot.h>
 
 class vgui_wrapper_tableau : public vgui_tableau {
 public:
   vgui_wrapper_tableau();
-  vgui_wrapper_tableau(vgui_tableau_ref const&);
-  
-  bool add_child(vgui_tableau_ref const&);
-  bool remove_child(vgui_tableau_ref const&);
+  vgui_wrapper_tableau(vgui_tableau_sptr const&);
+
+  bool add_child(vgui_tableau_sptr const&);
+  bool remove_child(vgui_tableau_sptr const&);
 
   vcl_string file_name() const;
   vcl_string pretty_name() const;
   vcl_string type_name() const;
 
-  // It is pointless to derive from vgui_wrapper_tableau 
+  // It is pointless to derive from vgui_wrapper_tableau
   // unless this method is also overridden!
   bool handle(vgui_event const &);
 
@@ -49,10 +49,10 @@ protected:
   ~vgui_wrapper_tableau();
 };
 
-struct vgui_wrapper_tableau_new : public vgui_wrapper_tableau_ref {
-  typedef vgui_wrapper_tableau_ref base;
+struct vgui_wrapper_tableau_new : public vgui_wrapper_tableau_sptr {
+  typedef vgui_wrapper_tableau_sptr base;
   vgui_wrapper_tableau_new() : base(new vgui_wrapper_tableau()) { }
-  vgui_wrapper_tableau_new(vgui_tableau_ref const&b) : base(new vgui_wrapper_tableau(b)) { }
+  vgui_wrapper_tableau_new(vgui_tableau_sptr const&b) : base(new vgui_wrapper_tableau(b)) { }
 };
 
 #endif // vgui_wrapper_tableau_h_

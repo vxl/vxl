@@ -3,7 +3,7 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// 
+//
 // .NAME vgui_easy2D - Undocumented class FIXME
 // .LIBRARY vgui
 // .HEADER vxl Package
@@ -25,7 +25,7 @@
 #include <vgui/vgui_displaylist2D.h>
 #include <vgui/vgui_slot.h>
 #include <vgui/vgui_image_tableau.h>
-#include <vgui/vgui_easy2D_ref.h>
+#include <vgui/vgui_easy2D_sptr.h>
 
 class vgui_soview2D;
 class vgui_soview2D_point;
@@ -35,11 +35,11 @@ class vgui_soview2D_circle;
 class vgui_soview2D_linestrip;
 class vgui_soview2D_polygon;
 
-class vgui_easy2D : public vgui_displaylist2D 
+class vgui_easy2D : public vgui_displaylist2D
 {
 public:
   vgui_easy2D(const char* n="unnamed");
-  vgui_easy2D(vgui_image_tableau_ref const&, const char* n="unnamed");
+  vgui_easy2D(vgui_image_tableau_sptr const&, const char* n="unnamed");
 
   bool handle(const vgui_event& e);
 
@@ -48,12 +48,12 @@ public:
   vcl_string type_name() const;
 
   void set_image(vcl_string const& image);
-  void set_child(vgui_tableau_ref const&);
-  
+  void set_child(vgui_tableau_sptr const&);
+
   void set_foreground(float, float, float);
   void set_line_width(float);
   void set_point_radius(float);
-  
+
   void add(vgui_soview2D*);
 
   vgui_soview2D_point* add_point(float x, float y);
@@ -69,14 +69,14 @@ public:
   vgui_soview2D_linestrip* add_linestrip(unsigned n, float const *x, float const *y);
   vgui_soview2D_polygon* add_polygon(unsigned n, float const *x, float const *y);
 
-  vgui_image_tableau_ref get_image_tableau();
+  vgui_image_tableau_sptr get_image_tableau();
   void print_psfile(vcl_string name, int reduction_factor, bool print_goem_objs);
 
 protected:
   ~vgui_easy2D() { }
 
   vgui_slot image_slot;
-  vgui_image_tableau_ref image_image;
+  vgui_image_tableau_sptr image_image;
 
   vcl_string name_;
   float fg[3];
@@ -84,12 +84,12 @@ protected:
   float point_size;
 };
 
-struct vgui_easy2D_new : public vgui_easy2D_ref {
-  vgui_easy2D_new(char const *n="unnamed") : 
-    vgui_easy2D_ref(new vgui_easy2D(n)) { }
-  
-  vgui_easy2D_new(vgui_image_tableau_ref const& i, char const* n="unnamed") :
-    vgui_easy2D_ref(new vgui_easy2D(i, n)) { }
+struct vgui_easy2D_new : public vgui_easy2D_sptr {
+  vgui_easy2D_new(char const *n="unnamed") :
+    vgui_easy2D_sptr(new vgui_easy2D(n)) { }
+
+  vgui_easy2D_new(vgui_image_tableau_sptr const& i, char const* n="unnamed") :
+    vgui_easy2D_sptr(new vgui_easy2D(i, n)) { }
 };
 
 #endif // vgui_easy2D_h_

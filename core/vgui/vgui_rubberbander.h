@@ -49,8 +49,8 @@ public:
 class vgui_rubberbander_easy2D_client : public vgui_rubberbander_client
 {
   public:
-    vgui_easy2D_ref easy;
-    vgui_rubberbander_easy2D_client(vgui_easy2D_ref const& e): easy(e) { }
+    vgui_easy2D_sptr easy;
+    vgui_rubberbander_easy2D_client(vgui_easy2D_sptr const& e): easy(e) { }
 
     void add_point(float x, float y){easy->add_point(x,y);}
     void add_line(float x0, float y0, float x1, float y1)
@@ -78,10 +78,10 @@ public:
 
   void init (vgui_rubberbander_client* client);
   vgui_rubberbander(vgui_rubberbander_client* client);
-  //vgui_rubberbander(vgui_easy2D_ref const&);
+  //vgui_rubberbander(vgui_easy2D_sptr const&);
   vcl_string type_name() const { return "vgui_rubberbander"; }
 
-  // these describe what the user has to do 
+  // these describe what the user has to do
   // to use the rubberbanding gesture.
   vgui_event_condition gesture0;
   vgui_event_condition gesture1;
@@ -99,8 +99,8 @@ public:
   vgui_rubberbander_client* get_client(){return client_;}
   void set_client(vgui_rubberbander_client *);
 
-  void draw_point(float x0, float y0); 
-  void draw_line(float x0, float y0, float x1, float y1); 
+  void draw_point(float x0, float y0);
+  void draw_line(float x0, float y0, float x1, float y1);
   void draw_infinite_line(float a, float b, float c); // ax + by + c = 0
   void draw_circle(float x0, float y0, float r);
   void draw_linestrip(float x,float y); // u97mb
@@ -122,17 +122,17 @@ private:
   vgui_rubberbander_client *client_;
   enum object_type {none_enum, point_enum, line_enum, infinite_line_enum, circle_enum, polygon_enum, linestrip_enum,box_enum};
   bool active;
-  static object_type obj_type;  
+  static object_type obj_type;
   float lastx, lasty;   // position where mouse was last seen.
   vcl_vector<float>x_coords, y_coords;
 };
 
-typedef vgui_tableau_ref_t<vgui_rubberbander> vgui_rubberbander_ref;
+typedef vgui_tableau_sptr_t<vgui_rubberbander> vgui_rubberbander_sptr;
 
-struct vgui_rubberbander_new : public vgui_rubberbander_ref {
+struct vgui_rubberbander_new : public vgui_rubberbander_sptr {
   vgui_rubberbander_new(vgui_rubberbander_client* client)
-    : vgui_rubberbander_ref(new vgui_rubberbander(client)) { }
-  //vgui_rubberbander_new(vgui_easy2D_ref const&e)   : vgui_rubberbander_ref(new vgui_rubberbander(e)) { }
+    : vgui_rubberbander_sptr(new vgui_rubberbander(client)) { }
+  //vgui_rubberbander_new(vgui_easy2D_sptr const&e)   : vgui_rubberbander_sptr(new vgui_rubberbander(e)) { }
 };
 
 #endif // vgui_rubberbander_h_

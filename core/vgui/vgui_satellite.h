@@ -10,7 +10,7 @@
 // .SECTION Description
 // Purpose: To turn a non-tableau into a multi-tableau.
 //
-// Explanation: Sometimes it is handy to have a tableau with two 
+// Explanation: Sometimes it is handy to have a tableau with two
 // handle methods, or a handle method with an extra argument.
 // For example, if a single object holds some state which is
 // to be manipulated from two windows, it is convenient to have
@@ -23,7 +23,7 @@
 // follows: create an object which has a member signature
 //   bool method(vgui_event const &, T );
 // where the name ('method') is irrelevant. To arrange for your
-// object to receive events as if it were a tableau, simply 
+// object to receive events as if it were a tableau, simply
 // create a vgui_satellite_t<object, T>, using the address of
 // your object, the address of the member function which will
 // handle the event and a piece of "client data" of type T.
@@ -44,7 +44,7 @@
 //      my_object()
 //      : window_0(this, &my_object::handle, 0)
 //      , window_1(this, &my_object::handle, 1) { }
-//    
+//
 //      bool handle(vgui_event const &e, int const &which_window) {
 //        vcl_cerr << "event in window " << which_window << vcl_endl;
 //        ... now use/manipulate common state ...
@@ -85,16 +85,16 @@ struct vgui_satellite_t : public vgui_tableau
   method  m;
   data    d;
 
-  vgui_satellite_t(object *p_, method m_, data const &d_) 
+  vgui_satellite_t(object *p_, method m_, data const &d_)
     : p(p_), m(m_), d(d_) { }
 
   bool handle(vgui_event const &e) { return (p && m) && (p->*m)(e, d); }
-  
-  vcl_string type_name() const { 
-    return 
+
+  vcl_string type_name() const {
+    return
       vcl_string("vgui_satellite_t[") + (p ? p->type_name() : vcl_string("null")) + vcl_string("]");
   }
-  
+
 protected:
   ~vgui_satellite_t() { p = 0; m = 0; }
 };
@@ -108,16 +108,16 @@ struct vgui_satellite : public vgui_tableau
   object *p;
   method  m;
 
-  vgui_satellite(object *p_, method m_) 
+  vgui_satellite(object *p_, method m_)
     : p(p_), m(m_) { }
 
   bool handle(vgui_event const &e) { return (p && m) && (p->*m)(e); }
-  
-  vcl_string type_name() const { 
-    return 
+
+  vcl_string type_name() const {
+    return
       vcl_string("vgui_satellite[") + (p ? p->type_name() : vcl_string("null")) + vcl_string("]");
   }
-  
+
 protected:
   ~vgui_satellite() { p = 0; m = 0; }
 };
@@ -128,21 +128,21 @@ protected:
 # define quirk(x) /* */
 #endif
 template <class object, class data>
-struct vgui_satellite_t_new : vgui_tableau_ref_t<vgui_satellite_t<object, data> quirk(vgui_tableau_ref)>
+struct vgui_satellite_t_new : vgui_tableau_sptr_t<vgui_satellite_t<object, data> quirk(vgui_tableau_sptr)>
 {
-// no vgui_make_ref: this file must be maintained manually.
+// no vgui_make_sptr: this file must be maintained manually.
   typedef vgui_satellite_t<object, data> impl;
-  typedef vgui_tableau_ref_t<impl quirk(vgui_tableau_ref)> base;
+  typedef vgui_tableau_sptr_t<impl quirk(vgui_tableau_sptr)> base;
   typedef impl::method method;
   vgui_satellite_t_new(object *p, method m, data const &d) : base(new impl(p, m, d)) { }
 };
 
 template <class object>
-struct vgui_satellite_new : vgui_tableau_ref_t<vgui_satellite<object> quirk(vgui_tableau_ref)>
+struct vgui_satellite_new : vgui_tableau_sptr_t<vgui_satellite<object> quirk(vgui_tableau_sptr)>
 {
-// no vgui_make_ref: this file must be maintained manually.
+// no vgui_make_sptr: this file must be maintained manually.
   typedef vgui_satellite<object> impl;
-  typedef vgui_tableau_ref_t<impl quirk(vgui_tableau_ref)> base;
+  typedef vgui_tableau_sptr_t<impl quirk(vgui_tableau_sptr)> base;
   typedef impl::method method;
   vgui_satellite_new(object *p, method m) : base(new impl(p, m)) { }
 };

@@ -38,7 +38,7 @@ public:
   ~xcv_twoview_manager();
 
   //: Set the tableau at the given position to be the given tableau.
-  void set_tableau(vgui_tableau_ref const& tab, unsigned tab_position) ;
+  void set_tableau(vgui_tableau_sptr const& tab, unsigned tab_position) ;
   //: Set f_matrix to the given value.
   void set_f_matrix(FMatrix* fm){f_matrix = fm;}
   //: Set h_matrix to the given value.
@@ -60,18 +60,18 @@ public:
   //: Return corner_matches.
   PairMatchSetCorner* get_corner_matches(){return corner_matches;}
 
-  void handle_tjunction_event(vgui_event const& e, vgui_tableau_ref const& child_tab);
+  void handle_tjunction_event(vgui_event const& e, vgui_tableau_sptr const& child_tab);
 
 private:
   FMatrix* f_matrix;
   HMatrix2D* h_matrix;
   PairMatchSetCorner* corner_matches;
   //: The two tableaux managed by this class.
-  vgui_tableau_ref tabs[2];
+  vgui_tableau_sptr tabs[2];
   //: Rubberbanders for the managed tableaux.
-  vgui_rubberbander_ref rubberbands[2];
+  vgui_rubberbander_sptr rubberbands[2];
   //: Easy2Ds for the managed tableaux.
-  vgui_easy2D_ref easys[2];
+  vgui_easy2D_sptr easys[2];
   bool f_matrix_is_displayed;
   bool h_matrix_is_displayed;
   bool corner_matches_are_displayed;
@@ -86,17 +86,17 @@ private:
   bool use_overlays;
 
   //: Draw a point and the transformed epipolar line on the display.
-  void draw_f_matrix(vgui_event const& e, vgui_tableau_ref const& child_tab, bool make_permanent);
+  void draw_f_matrix(vgui_event const& e, vgui_tableau_sptr const& child_tab, bool make_permanent);
   //: Handle overlay redraw event for FMatrix.
-  void draw_overlay_f_matrix(vgui_tableau_ref const& child_tab);
+  void draw_overlay_f_matrix(vgui_tableau_sptr const& child_tab);
   //: Draw the point and corresponding point computed using the HMatrix2D.
-  void draw_h_matrix(vgui_event const& e, vgui_tableau_ref const& child_tab, bool make_permanent);
+  void draw_h_matrix(vgui_event const& e, vgui_tableau_sptr const& child_tab, bool make_permanent);
   //: Handle overlay redraw event for HMatrix2D.
-  void draw_overlay_h_matrix(vgui_tableau_ref const& child_tab);
+  void draw_overlay_h_matrix(vgui_tableau_sptr const& child_tab);
   //: Draw matching corners in two views.
-  void draw_corner_matches(vgui_event const& e, vgui_tableau_ref const& child_tab);
+  void draw_corner_matches(vgui_event const& e, vgui_tableau_sptr const& child_tab);
   //: Handle overlay redraw event for corner matches.
-  void draw_overlay_corner_matches(vgui_tableau_ref const& child_tab);
+  void draw_overlay_corner_matches(vgui_tableau_sptr const& child_tab);
 };
 
 #endif // xcv_twoview_manager_

@@ -3,7 +3,7 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// 
+//
 // .NAME vgui_clear_tableau - tableau performing OpenGL clearing
 // .LIBRARY vgui
 // .INCLUDE vgui/vgui_clear_tableau.h
@@ -11,8 +11,8 @@
 //
 // .SECTION Description:
 //
-// vgui_clear_tableau is a tableau that performs OpenGL clearing upon 
-// receipt of a vgui_DRAW event. It passes all events to its single child. 
+// vgui_clear_tableau is a tableau that performs OpenGL clearing upon
+// receipt of a vgui_DRAW event. It passes all events to its single child.
 //
 // .SECTION Author:
 //              Philip C. Pritchett, 11 Nov 99
@@ -23,7 +23,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "vgui_clear_tableau_ref.h"
+#include "vgui_clear_tableau_sptr.h"
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_wrapper_tableau.h>
 #include <vgui/vgui_slot.h>
@@ -46,10 +46,10 @@ public:
 protected:
   virtual ~vgui_clear_tableau();
   virtual bool handle(const vgui_event&);
-  
+
 private:
   GLbitfield mask;
-  
+
   float colour[4]; // rgba
   float accum[4];  // rgba
   GLclampd depth;
@@ -58,8 +58,8 @@ private:
   bool clearing_;
 };
 
-struct vgui_clear_tableau_new : public vgui_clear_tableau_ref {
-  typedef vgui_clear_tableau_ref base;
+struct vgui_clear_tableau_new : public vgui_clear_tableau_sptr {
+  typedef vgui_clear_tableau_sptr base;
   vgui_clear_tableau_new() : base(new vgui_clear_tableau()) { }
 };
 

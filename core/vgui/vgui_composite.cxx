@@ -44,7 +44,7 @@ vgui_composite::vgui_composite()
 }
 
 // -- Constructor taking two children.   The first is on top, the second below.
-vgui_composite::vgui_composite(vgui_tableau_ref const& child0, vgui_tableau_ref const& child1)
+vgui_composite::vgui_composite(vgui_tableau_sptr const& child0, vgui_tableau_sptr const& child1)
   : c_enable_key_bindings(default_c_enable_key_bindings)
 {
   add(child0);
@@ -53,7 +53,7 @@ vgui_composite::vgui_composite(vgui_tableau_ref const& child0, vgui_tableau_ref 
 }
 
 // -- Three children, top to bottom.
-vgui_composite::vgui_composite(vgui_tableau_ref const& child0, vgui_tableau_ref const& child1, vgui_tableau_ref const& child2)
+vgui_composite::vgui_composite(vgui_tableau_sptr const& child0, vgui_tableau_sptr const& child1, vgui_tableau_sptr const& child2)
   : c_enable_key_bindings(default_c_enable_key_bindings)
 {
   add(child0);
@@ -63,7 +63,7 @@ vgui_composite::vgui_composite(vgui_tableau_ref const& child0, vgui_tableau_ref 
 }
 
 // -- Many children, top to bottom.
-vgui_composite::vgui_composite(vcl_vector<vgui_tableau_ref> const& the_children)
+vgui_composite::vgui_composite(vcl_vector<vgui_tableau_sptr> const& the_children)
   : c_enable_key_bindings(default_c_enable_key_bindings)
 {
   for(unsigned int i = 0; i < the_children.size(); ++i)
@@ -93,8 +93,8 @@ vcl_string vgui_composite::pretty_name() const
 
 bool vgui_composite::handle(const vgui_event& event)
 {
-  // Save current matrix state. Each active child will be 
-  // invoked with this matrix state. 
+  // Save current matrix state. Each active child will be
+  // invoked with this matrix state.
   vgui_matrix_state PM;
   unsigned int n = children.size();
 
@@ -144,7 +144,7 @@ bool vgui_composite::handle(const vgui_event& event)
 	return true;
     }
   }
-  
+
   // Noone was interested....
   return false;
 }
@@ -154,7 +154,7 @@ void vgui_composite::notify() const {
 /*
   for (vcl_vector<vgui_slot>::const_iterator t_iter = children.begin();
        t_iter != children.end(); ++t_iter) {
-    vgui_tableau_ref t = *t_iter;
+    vgui_tableau_sptr t = *t_iter;
     if(t)
       t->notify();
   }
@@ -165,7 +165,7 @@ bool vgui_composite::get_bounding_box(float lo[3], float hi[3]) const {
   // it would be nice if we could return an empty bounding box.
   if (children.empty())
     return false;
-  
+
   // get bbox of first child.
   if (!children[0]->get_bounding_box(lo, hi))
     return false;
@@ -185,25 +185,25 @@ bool vgui_composite::get_bounding_box(float lo[3], float hi[3]) const {
   return true;
 }
 
-void vgui_composite::add(vgui_tableau_ref const& t) {
+void vgui_composite::add(vgui_tableau_sptr const& t) {
   add_child(t);
 }
 
 // virtual
-bool vgui_composite::add_child(vgui_tableau_ref const& t) {
+bool vgui_composite::add_child(vgui_tableau_sptr const& t) {
   children.push_back( vgui_slot(this,t) );
   active.push_back(true);
   notify();
   return true;
 }
 
-void vgui_composite::remove(vgui_tableau_ref const& t) {
+void vgui_composite::remove(vgui_tableau_sptr const& t) {
   if (!remove_child(t))
     vcl_cerr << __FILE__ " : no such child tableau" << vcl_endl;
 }
 
 // virtual
-bool vgui_composite::remove_child(vgui_tableau_ref const &t) {
+bool vgui_composite::remove_child(vgui_tableau_sptr const &t) {
   vcl_vector<bool>::iterator ia = active.begin();
   for (vcl_vector<vgui_slot>::iterator i=children.begin() ; i!=children.end() ; ++i, ++ia)
     if ( (*i) == t ) {

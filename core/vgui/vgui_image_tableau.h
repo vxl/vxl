@@ -12,7 +12,7 @@
 // @bug 15-AUG-2000 Marko Bacic,Oxford RRG -- Removed legacy ROI
 
 #include <vgui/vgui_tableau.h>
-#include <vgui/vgui_image_tableau_ref.h>
+#include <vgui/vgui_image_tableau_sptr.h>
 
 class vgui_image_renderer;
 class vil_image;
@@ -37,12 +37,12 @@ public:
   unsigned height() const;
 
   bool get_bounding_box(float low[3], float high[3]) const;
-  // This method controls whether the coordinate (i, j) is the 
+  // This method controls whether the coordinate (i, j) is the
   // corner of pixel (i, j) or in the middle.
   void center_pixels(bool v = true) { pixels_centered = v; }
 
   bool handle(vgui_event const &e);
-  
+
 protected:
   ~vgui_image_tableau();
 
@@ -52,10 +52,10 @@ private:
   vgui_image_renderer *renderer;
 };
 
-struct vgui_image_tableau_new : public vgui_image_tableau_ref {
-  vgui_image_tableau_new() : vgui_image_tableau_ref(new vgui_image_tableau) { }
-  vgui_image_tableau_new(vil_image const &t) : vgui_image_tableau_ref(new vgui_image_tableau(t)) { }
-  vgui_image_tableau_new(char const *f) : vgui_image_tableau_ref(new vgui_image_tableau(f)) { }
+struct vgui_image_tableau_new : public vgui_image_tableau_sptr {
+  vgui_image_tableau_new() : vgui_image_tableau_sptr(new vgui_image_tableau) { }
+  vgui_image_tableau_new(vil_image const &t) : vgui_image_tableau_sptr(new vgui_image_tableau(t)) { }
+  vgui_image_tableau_new(char const *f) : vgui_image_tableau_sptr(new vgui_image_tableau(f)) { }
 };
 
 #endif // vgui_image_tableau_h_

@@ -7,7 +7,7 @@
 // .INCLUDE vgui/vgui_test.h
 // .FILE vgui_test.cxx
 
-#include "vgui_test_ref.h"
+#include "vgui_test_sptr.h"
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_text.h>
 
@@ -20,8 +20,8 @@ protected:
   ~vgui_test_thingy2d() { }
 };
 
-struct vgui_test_thingy2d_new : public vgui_test_thingy2d_ref {
-  typedef vgui_test_thingy2d_ref base;
+struct vgui_test_thingy2d_new : public vgui_test_thingy2d_sptr {
+  typedef vgui_test_thingy2d_sptr base;
   vgui_test_thingy2d_new() : base(new vgui_test_thingy2d()) { }
 };
 
@@ -36,8 +36,8 @@ protected:
   ~vgui_test_thingy3d() { }
 };
 
-struct vgui_test_thingy3d_new : public vgui_test_thingy3d_ref {
-  typedef vgui_test_thingy3d_ref base;
+struct vgui_test_thingy3d_new : public vgui_test_thingy3d_sptr {
+  typedef vgui_test_thingy3d_sptr base;
   vgui_test_thingy3d_new() : base(new vgui_test_thingy3d()) { }
 };
 
@@ -52,8 +52,8 @@ protected:
   ~vgui_test_credits() { }
 };
 
-struct vgui_test_credits_new : public vgui_test_credits_ref {
-  typedef vgui_test_credits_ref base;
+struct vgui_test_credits_new : public vgui_test_credits_sptr {
+  typedef vgui_test_credits_sptr base;
   vgui_test_credits_new() : base(new vgui_test_credits()) { }
 };
 

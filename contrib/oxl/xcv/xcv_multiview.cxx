@@ -30,12 +30,12 @@
 #include <vgui/vgui_macro.h>
 
 vcl_vector<xcv_twoview_manager*> xcv_multiview::twoview_mgrs;
-vcl_vector<vgui_rubberbander_ref> xcv_multiview::twoview_rubber0;
-vcl_vector<vgui_rubberbander_ref> xcv_multiview::twoview_rubber1;
+vcl_vector<vgui_rubberbander_sptr> xcv_multiview::twoview_rubber0;
+vcl_vector<vgui_rubberbander_sptr> xcv_multiview::twoview_rubber1;
 vcl_vector<xcv_threeview_manager*> xcv_multiview::threeview_mgrs;
-vcl_vector<vgui_rubberbander_ref> xcv_multiview::threeview_rubber0;
-vcl_vector<vgui_rubberbander_ref> xcv_multiview::threeview_rubber1;
-vcl_vector<vgui_rubberbander_ref> xcv_multiview::threeview_rubber2;
+vcl_vector<vgui_rubberbander_sptr> xcv_multiview::threeview_rubber0;
+vcl_vector<vgui_rubberbander_sptr> xcv_multiview::threeview_rubber1;
+vcl_vector<vgui_rubberbander_sptr> xcv_multiview::threeview_rubber2;
 static bool debug = true;
 
 extern vcl_string* get_loadfile();
@@ -43,19 +43,19 @@ extern vcl_string* get_savefile();
 extern void get_current(unsigned*, unsigned*);
 extern bool get_twoviews(vcl_vector<int>*, vcl_vector<int>*);
 extern bool get_threeviews(vcl_vector<int>*, vcl_vector<int>*);
-extern vgui_rubberbander_ref get_rubberbander_at(unsigned, unsigned);
-extern vgui_easy2D_ref get_easy2D_at(unsigned, unsigned);
+extern vgui_rubberbander_sptr get_rubberbander_at(unsigned, unsigned);
+extern vgui_easy2D_sptr get_easy2D_at(unsigned, unsigned);
 extern bool get_image_at(vil_image*, unsigned, unsigned);
 
 //-----------------------------------------------------------------------------
 //-- Gets a twoview_manager between the tableaux at the given positions.
-//   If a manager already exists this manager is returned, otherwise a 
+//   If a manager already exists this manager is returned, otherwise a
 //   new manager is created and returned.
 //-----------------------------------------------------------------------------
 xcv_twoview_manager* xcv_multiview::get_twoview_manager(vcl_vector<int>& col_pos,
   vcl_vector<int>& row_pos)
 {
-  vgui_rubberbander_ref rubbers[2];
+  vgui_rubberbander_sptr rubbers[2];
   rubbers[0] = get_rubberbander_at(col_pos[0], row_pos[0]);
   rubbers[1] = get_rubberbander_at(col_pos[1], row_pos[1]);
   // First check to see if we already have a manager for these two tableaux:
@@ -64,7 +64,7 @@ xcv_twoview_manager* xcv_multiview::get_twoview_manager(vcl_vector<int>& col_pos
     if (rubbers[0] == twoview_rubber0[i] && rubbers[1] == twoview_rubber1[i])
       return twoview_mgrs[i];
     if (rubbers[0] == twoview_rubber1[i] && rubbers[1] == twoview_rubber0[i])
-    {   
+    {
       // Put the vectors of column and row positions into the original order:
       int temp_col = col_pos[0], temp_row = row_pos[0];
       col_pos[0] = col_pos[1]; row_pos[0] = row_pos[1];
@@ -73,8 +73,8 @@ xcv_twoview_manager* xcv_multiview::get_twoview_manager(vcl_vector<int>& col_pos
     }
   }
 
-  // Above the rubberbander for each tableaux, insert a tjunction tableau to 
-  // collect events.  Create a twoview_manager to pass events between these two 
+  // Above the rubberbander for each tableaux, insert a tjunction tableau to
+  // collect events.  Create a twoview_manager to pass events between these two
   // and add it to the list of managers:
   xcv_twoview_manager* mgr = new xcv_twoview_manager();
   twoview_rubber0.push_back(rubbers[0]); twoview_rubber1.push_back(rubbers[1]);
@@ -84,9 +84,9 @@ xcv_twoview_manager* xcv_multiview::get_twoview_manager(vcl_vector<int>& col_pos
   {
     xcv_tjunction* tee = new xcv_tjunction(mgr);
 #if 0 // fsm changed. it was probably broken as a result of the easy2D changes.
-    vgui_tableau_ref old = rubbers[j];
+    vgui_tableau_sptr old = rubbers[j];
 #else
-    vgui_tableau_ref old = vgui_find_above_by_type_name(rubbers[j], "vgui_composite");
+    vgui_tableau_sptr old = vgui_find_above_by_type_name(rubbers[j], "vgui_composite");
 #endif
     vgui_slot::replace_child_everywhere(old, tee);
     tee->set_child(old);
@@ -103,7 +103,7 @@ xcv_twoview_manager* xcv_multiview::get_twoview_manager(vcl_vector<int>& col_pos
 xcv_threeview_manager* xcv_multiview::get_threeview_manager(vcl_vector<int>& col_pos,
   vcl_vector<int>& row_pos)
 {
-  vgui_rubberbander_ref rubbers[3];
+  vgui_rubberbander_sptr rubbers[3];
   for (int i=0; i<3; i++)
     rubbers[i] = get_rubberbander_at(col_pos[i], row_pos[i]);
 
@@ -114,7 +114,7 @@ xcv_threeview_manager* xcv_multiview::get_threeview_manager(vcl_vector<int>& col
   for (unsigned i=0; i<threeview_rubber0.size(); i++)
   {
     if (rubbers[0] == threeview_rubber0[i] && rubbers[1] == threeview_rubber1[i]
-     && rubbers[2] == threeview_rubber2[i]) 
+     && rubbers[2] == threeview_rubber2[i])
     {
       return threeview_mgrs[i];
     }
@@ -151,13 +151,13 @@ xcv_threeview_manager* xcv_multiview::get_threeview_manager(vcl_vector<int>& col
     }
     if (rubbers[0] == threeview_rubber2[i] && rubbers[1] == threeview_rubber1[i]
       && rubbers[2] == threeview_rubber0[i])
-    { 
+    {
       col_pos[0] = col2; row_pos[0] = row2;
       col_pos[2] = col0; row_pos[2] = row0;
-      return threeview_mgrs[i];      
+      return threeview_mgrs[i];
     }
   }
- 
+
   xcv_threeview_manager *mgr = new xcv_threeview_manager;
   threeview_rubber0.push_back(rubbers[0]);
   threeview_rubber1.push_back(rubbers[1]);
@@ -171,7 +171,7 @@ xcv_threeview_manager* xcv_multiview::get_threeview_manager(vcl_vector<int>& col
     tee->set_child(rubbers[j]);
     mgr->set_tableau(tee, j);
   }
-  return mgr; 
+  return mgr;
 }
 
 //-----------------------------------------------------------------------------
@@ -217,9 +217,9 @@ void xcv_multiview::load_h_matrix2d()
 
   HMatrix2D* hmat = new HMatrix2D();
   hmat->read(h_matrix_filename->c_str());
-  
+
   xcv_twoview_manager* mgr = get_twoview_manager(col_pos, row_pos);
-  mgr->set_h_matrix(hmat); 
+  mgr->set_h_matrix(hmat);
 }
 
 //-----------------------------------------------------------------------------
@@ -388,8 +388,8 @@ void xcv_multiview::display_corner_tracks()
     return;
   }
 
-  vgui_easy2D_ref easy0 = get_easy2D_at(col_pos[0], row_pos[0]);
-  vgui_easy2D_ref easy1 = get_easy2D_at(col_pos[1], row_pos[1]);
+  vgui_easy2D_sptr easy0 = get_easy2D_at(col_pos[0], row_pos[0]);
+  vgui_easy2D_sptr easy1 = get_easy2D_at(col_pos[1], row_pos[1]);
 
   vcl_vector<HomgPoint2D> points0, points1;
   corner_matches->extract_matches(points0, points1);
@@ -397,12 +397,12 @@ void xcv_multiview::display_corner_tracks()
   ImageMetric* metric2 = const_cast<ImageMetric*>( corner_matches->get_corners2()->get_conditioner() );
 
   easy0->set_foreground(1,1,0);  // Draw lines in yellow
-  easy1->set_foreground(1,1,0); 
+  easy1->set_foreground(1,1,0);
   for (unsigned i=0; i<points1.size(); i++)
   {
     vnl_double_2 x0 = metric1->homg_to_image(points0[i]);
     vnl_double_2 x1 = metric2->homg_to_image(points1[i]);
-  
+
     easy0->add_line(x0[0], x0[1], x1[0], x1[1]);
     easy1->add_line(x0[0], x0[1], x1[0], x1[1]);
   }
@@ -426,19 +426,19 @@ void xcv_multiview::load_tri_tensor()
   t_dialog.inline_file("File containing TriTensor:", regexp, *tri_tensor_filename);
   if (!t_dialog.ask())
     return;
- 
+
   vcl_ifstream tri_tensor_filestream(tri_tensor_filename->c_str());
   if (!tri_tensor_filestream)
   {
     vcl_cerr << "Unable to open file: " << tri_tensor_filename->c_str() << vcl_endl;
     return;
   }
-  TriTensor* tt = new TriTensor();  
+  TriTensor* tt = new TriTensor();
   tri_tensor_filestream >> *tt;
 
   // Get a threeview_manager and set the TriTensor:
   xcv_threeview_manager* mgr = get_threeview_manager(col_pos, row_pos);
-  mgr->set_tri_tensor(tt); 
+  mgr->set_tri_tensor(tt);
 
   // Get the twoview_managers and set the FMatrices:
   xcv_twoview_manager* mgr12 = get_twoview_manager(col_pos, row_pos);
@@ -450,14 +450,14 @@ void xcv_multiview::load_tri_tensor()
   two_row_pos.push_back(row_pos[0]); two_row_pos.push_back(row_pos[2]);
   xcv_twoview_manager* mgr13 = get_twoview_manager(two_col_pos, two_row_pos);
   FMatrix* f13 = new FMatrix(tt->get_fmatrix_13());
-  mgr13->set_f_matrix(f13); 
+  mgr13->set_f_matrix(f13);
 
   vcl_vector<int> two_col_pos2, two_row_pos2;
   two_col_pos2.push_back(col_pos[1]); two_col_pos2.push_back(col_pos[2]);
   two_row_pos2.push_back(row_pos[1]); two_row_pos2.push_back(row_pos[2]);
   xcv_twoview_manager* mgr23 = get_twoview_manager(two_col_pos2, two_row_pos2);
   FMatrix* f23 = new FMatrix(tt->compute_fmatrix_23());
-  mgr23->set_f_matrix(f23); 
+  mgr23->set_f_matrix(f23);
 }
 
 //-----------------------------------------------------------------------------
@@ -497,7 +497,7 @@ void xcv_multiview::toggle_tri_tensor()
   vcl_vector<int> col_pos, row_pos;
   if (!get_threeviews(&col_pos, &row_pos))
     return;
- 
+
   xcv_threeview_manager* mgr = get_threeview_manager(col_pos, row_pos);
   mgr->toggle_tri_tensor_display();
 
@@ -507,17 +507,17 @@ void xcv_multiview::toggle_tri_tensor()
   two_col_pos[1] = col_pos[1]; two_row_pos[1] = row_pos[1];
   xcv_twoview_manager* mgr2 = get_twoview_manager(two_col_pos, two_row_pos);
   mgr2->toggle_f_matrix_display();
-  
+
   two_col_pos[0] = col_pos[0]; two_row_pos[0] = row_pos[0];
   two_col_pos[1] = col_pos[2]; two_row_pos[1] = row_pos[2];
   xcv_twoview_manager* mgr3 = get_twoview_manager(two_col_pos, two_row_pos);
   mgr3->toggle_f_matrix_display();
-  
+
   two_col_pos[0] = col_pos[1]; two_row_pos[0] = row_pos[1];
   two_col_pos[1] = col_pos[2]; two_row_pos[1] = row_pos[2];
   xcv_twoview_manager* mgr4 = get_twoview_manager(two_col_pos, two_row_pos);
   mgr4->toggle_f_matrix_display();
-  
+
 }
 
 //-----------------------------------------------------------------------------
@@ -532,7 +532,7 @@ void xcv_multiview::transfer_point()
 
   // Go through the view and get the two selected points:
   vgui_soview2D_point* points[3];
-  vgui_easy2D_ref easys[3];
+  vgui_easy2D_sptr easys[3];
   int point_count = 0;
   for (unsigned i=0; i<3; i++)
   {
@@ -541,7 +541,7 @@ void xcv_multiview::transfer_point()
       return;
     vcl_vector<vgui_soview*> sel_objs = easys[i]->get_selected_soviews();
     unsigned j = 0;
-    while (j != sel_objs.size() 
+    while (j != sel_objs.size()
     && sel_objs[j]->type_name() != "vgui_soview2D_point")
     {
       j++;
@@ -552,7 +552,7 @@ void xcv_multiview::transfer_point()
       point_count++;
     }
     else
-      points[i]= 0;  
+      points[i]= 0;
   }
   if (point_count != 2)
   {
@@ -565,7 +565,7 @@ void xcv_multiview::transfer_point()
   }
   int cw = 5; // width of cross
   // Get the TriTensor and transfer the points:
-  TriTensor* tten = mgr->get_tri_tensor(); 
+  TriTensor* tten = mgr->get_tri_tensor();
   if (tten == NULL)
   {
     vgui_dialog dl("Error");
@@ -620,7 +620,7 @@ void xcv_multiview::transfer_line()
 
   // Go through the views and get the two selected lines:
   vgui_soview2D_lineseg* lines[3];
-  vgui_easy2D_ref easys[3];
+  vgui_easy2D_sptr easys[3];
   int line_count = 0;
   for (unsigned i=0; i<3; i++)
   {
@@ -629,7 +629,7 @@ void xcv_multiview::transfer_line()
       return;
     vcl_vector<vgui_soview*> sel_objs = easys[i]->get_selected_soviews();
     unsigned j = 0;
-    while (j != sel_objs.size() 
+    while (j != sel_objs.size()
     && sel_objs[j]->type_name() != "vgui_soview2D_lineseg")
     {
       j++;
@@ -640,7 +640,7 @@ void xcv_multiview::transfer_line()
       line_count++;
     }
     else
-      lines[i]= 0;  
+      lines[i]= 0;
   }
   if (line_count != 2)
   {
@@ -652,7 +652,7 @@ void xcv_multiview::transfer_line()
     return;
   }
   // Get the TriTensor and transfer the lines:
-  TriTensor* tten = mgr->get_tri_tensor(); 
+  TriTensor* tten = mgr->get_tri_tensor();
   if (tten == NULL)
   {
     vgui_dialog dl("Error");

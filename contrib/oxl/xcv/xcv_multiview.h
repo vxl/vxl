@@ -3,7 +3,7 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
- 
+
 //--------------------------------------------------------------------------------
 // .NAME	xcv_multiview - xcv menu and interface for multiview
 // .INCLUDE	xcv/xcv_multiview.h
@@ -26,17 +26,17 @@ class vgui_rubberbander;
 class vgui_easy2D;
 class HomgPoint2D;
 
-class xcv_multiview 
+class xcv_multiview
 {
 public:
   static void load_f_matrix();
   static void load_h_matrix2d();
   static void load_corner_matches();
-  
+
   static void save_f_matrix();
   static void save_h_matrix2d();
   static void save_corner_matches();
- 
+
   static void toggle_f_matrix();
   static void toggle_h_matrix();
   static void display_corner_matches();
@@ -51,13 +51,13 @@ public:
 
 protected:
   static xcv_twoview_manager* get_twoview_manager(vcl_vector<int>& cols, vcl_vector<int>& rows);
-  static vcl_vector<vgui_rubberbander_ref> twoview_rubber0, twoview_rubber1;
+  static vcl_vector<vgui_rubberbander_sptr> twoview_rubber0, twoview_rubber1;
   static vcl_vector<xcv_twoview_manager*> twoview_mgrs;
 
   static xcv_threeview_manager* get_threeview_manager(vcl_vector<int>& cols, vcl_vector<int>& rows);
-  static vcl_vector<vgui_rubberbander_ref> threeview_rubber0, threeview_rubber1, 
+  static vcl_vector<vgui_rubberbander_sptr> threeview_rubber0, threeview_rubber1,
     threeview_rubber2;
   static vcl_vector<xcv_threeview_manager*> threeview_mgrs;
-
 };
+
 #endif // xcv_multiview_h

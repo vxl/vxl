@@ -8,7 +8,7 @@
 // .INCLUDE	xcv/xcv_image_tableau.h
 // .FILE	xcv_image_tableau.cxx
 
-#include "xcv_image_tableau_ref.h"
+#include "xcv_image_tableau_sptr.h"
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_rubberbander.h>
 
@@ -16,16 +16,16 @@ class xcv_image_tableau : public vgui_image_tableau
 {
 public:
   typedef vgui_image_tableau base;
-  
+
   xcv_image_tableau();
   xcv_image_tableau(vil_image const &);
   xcv_image_tableau(char const *);
-  
+
   vcl_string type_name() const;
 
   // get
   vil_image get_image() const;
-  
+
   // set
   void set_image(vil_image const &);
   void set_image(char const *);          // <- convenience
@@ -58,17 +58,17 @@ private:
   bool defined_;
 };
 
-struct xcv_image_tableau_new : public xcv_image_tableau_ref {
-  typedef xcv_image_tableau_ref base;
+struct xcv_image_tableau_new : public xcv_image_tableau_sptr {
+  typedef xcv_image_tableau_sptr base;
   xcv_image_tableau_new() : base(new xcv_image_tableau()) { }
   xcv_image_tableau_new(vil_image const &i) : base(new xcv_image_tableau(i)) { }
   xcv_image_tableau_new(char const *n) : base(new xcv_image_tableau(n)) { }
-  operator vgui_image_tableau_ref () const { vgui_image_tableau_ref tt; tt.vertical_cast(*this); return tt; }
+  operator vgui_image_tableau_sptr () const { vgui_image_tableau_sptr tt; tt.vertical_cast(*this); return tt; }
 };
 
 class vgui_roi_tableau_make_roi : public vgui_rubberbander_client {
 public:
-  vgui_roi_tableau_make_roi(xcv_image_tableau_ref const&);
+  vgui_roi_tableau_make_roi(xcv_image_tableau_sptr const&);
   void add_box(float,float,float,float);
   void add_point(float,float) {}
   void add_line(float,float,float,float) {}
@@ -79,7 +79,7 @@ public:
   {return done_;}
 private:
   bool done_;
-  xcv_image_tableau_ref image_tableau_;
+  xcv_image_tableau_sptr image_tableau_;
 };
 
 #endif // xcv_image_tableau_h_

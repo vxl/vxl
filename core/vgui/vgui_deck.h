@@ -3,7 +3,7 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// 
+//
 // .NAME vgui_deck - A deck of tableaux
 // .LIBRARY vgui
 // .INCLUDE vgui/vgui_deck.h
@@ -12,7 +12,7 @@
 // .SECTION Description
 //
 // vgui_deck holds an ordered collection of child tableaux, only one of which is
-// passed all events that the vgui_deck receives. The effect is a flick-book of 
+// passed all events that the vgui_deck receives. The effect is a flick-book of
 // tableaux where the currently active tableau can be changed using PageUp and PageDown
 //
 // .SECTION Author
@@ -23,7 +23,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "vgui_deck_ref.h"
+#include "vgui_deck_sptr.h"
 #include <vgui/vgui_observable.h>
 #include <vgui/vgui_drag_mixin.h>
 #include <vgui/vgui_slot.h>
@@ -34,26 +34,26 @@ public:
   vgui_deck();
 
   //: Make a deck with two children, listed top to bottom
-  vgui_deck(vgui_tableau_ref const& child0, vgui_tableau_ref const& child1);
+  vgui_deck(vgui_tableau_sptr const& child0, vgui_tableau_sptr const& child1);
 
   //: Make a deck with three children, listed top to bottom
-  vgui_deck(vgui_tableau_ref const& child0, vgui_tableau_ref const& child1, vgui_tableau_ref const& child2);
+  vgui_deck(vgui_tableau_sptr const& child0, vgui_tableau_sptr const& child1, vgui_tableau_sptr const& child2);
 
   // vgui_deck methods
 
   //: Add a tableau to the deck
   // It is placed on top, and made current.
-  void add(vgui_tableau_ref const&);
+  void add(vgui_tableau_sptr const&);
 
   //: Remove the tableau pointed to by P.
   // The one below is then mde current.
-  void remove(vgui_tableau_ref const& p);
+  void remove(vgui_tableau_sptr const& p);
 
   //: Return a pointer to the current tableau
-  vgui_tableau_ref current();
+  vgui_tableau_sptr current();
 
   //: Return a pointer to the tableau at a given location
-  vgui_tableau_ref get_tableau_at(int);
+  vgui_tableau_sptr get_tableau_at(int);
 
   //: Return number of tableaux on deck.
   int size();
@@ -91,22 +91,22 @@ protected:
   virtual ~vgui_deck();
   virtual bool handle(const vgui_event&);
 
-  bool add_child(vgui_tableau_ref const& t);
-  bool remove_child(vgui_tableau_ref const& );
+  bool add_child(vgui_tableau_sptr const& t);
+  bool remove_child(vgui_tableau_sptr const& );
 
   // helper
   bool index_ok(int) const;
-  
+
   // data
   vcl_vector<vgui_slot> children;
   int index_;
 };
 
-struct vgui_deck_new : public vgui_deck_ref {
-  typedef vgui_deck_ref base;
+struct vgui_deck_new : public vgui_deck_sptr {
+  typedef vgui_deck_sptr base;
   vgui_deck_new() : base(new vgui_deck()) { }
-  vgui_deck_new(vgui_tableau_ref const& child0, vgui_tableau_ref const& child1) : base(new vgui_deck(child0, child1)) { }
-  vgui_deck_new(vgui_tableau_ref const& child0, vgui_tableau_ref const& child1, vgui_tableau_ref const& child2) : base(new vgui_deck(child0, child1, child2)) { }
+  vgui_deck_new(vgui_tableau_sptr const& child0, vgui_tableau_sptr const& child1) : base(new vgui_deck(child0, child1)) { }
+  vgui_deck_new(vgui_tableau_sptr const& child0, vgui_tableau_sptr const& child1, vgui_tableau_sptr const& child2) : base(new vgui_deck(child0, child1, child2)) { }
 };
 
 #endif // vgui_deck_h_

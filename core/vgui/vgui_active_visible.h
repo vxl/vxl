@@ -20,12 +20,12 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "vgui_active_visible_ref.h"
+#include "vgui_active_visible_sptr.h"
 #include "vgui_wrapper_tableau.h"
 
 class vgui_active_visible : public vgui_wrapper_tableau {
 public:
-  vgui_active_visible(vgui_tableau_ref const &);
+  vgui_active_visible(vgui_tableau_sptr const &);
 
   vcl_string type_name() const;
 
@@ -46,9 +46,9 @@ protected:
   bool visible_;
 };
 
-struct vgui_active_visible_new : public vgui_active_visible_ref {
-  typedef vgui_active_visible_ref base;
-  vgui_active_visible_new(vgui_tableau_ref const &a) : base(new vgui_active_visible(a)) { }
+struct vgui_active_visible_new : public vgui_active_visible_sptr {
+  typedef vgui_active_visible_sptr base;
+  vgui_active_visible_new(vgui_tableau_sptr const &a) : base(new vgui_active_visible(a)) { }
 };
 
 #endif // vgui_active_visible_h_

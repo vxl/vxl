@@ -28,11 +28,11 @@ extern vcl_string* get_savefile();
 extern void get_current(unsigned*, unsigned*);
 extern void add_image_at(vcl_string, unsigned, unsigned);
 extern bool get_image_at(vil_image*, unsigned, unsigned);
-extern vgui_rubberbander_ref get_rubberbander_at(unsigned, unsigned);
-extern vgui_tableau_ref get_top(unsigned,unsigned);
+extern vgui_rubberbander_sptr get_rubberbander_at(unsigned, unsigned);
+extern vgui_tableau_sptr get_top(unsigned,unsigned);
 extern void remove_image_at(unsigned, unsigned);
-extern vgui_easy2D_ref get_easy2D_at(unsigned, unsigned);
-extern xcv_image_tableau_ref get_image_tableau_at(unsigned col, unsigned row);
+extern vgui_easy2D_sptr get_easy2D_at(unsigned, unsigned);
+extern xcv_image_tableau_sptr get_image_tableau_at(unsigned col, unsigned row);
 
 //-----------------------------------------------------------------------------
 //-- Load the selected image file into the current grid position.
@@ -46,11 +46,11 @@ void xcv_file::load_image()
   vcl_string* image_filename = get_loadfile();
   static vcl_string regexp = "*.*";
   load_image_dl.inline_file("Filename of image:", regexp, *image_filename);
-  
+
   if (!load_image_dl.ask())
     return;
-  
-  if (debug) vcl_cerr << "Loading image file: " << *image_filename << vcl_endl; 
+
+  if (debug) vcl_cerr << "Loading image file: " << *image_filename << vcl_endl;
   add_image_at(*image_filename, col, row);
 }
 
@@ -62,15 +62,15 @@ void xcv_file::save_image()
   vgui_dialog load_image_dl(" Save image");
   unsigned col,row;
   get_current(&col,&row);
-  xcv_image_tableau_ref imt = get_image_tableau_at(col,row);
+  xcv_image_tableau_sptr imt = get_image_tableau_at(col,row);
   static vcl_string* image_filename = get_savefile();
   static vcl_string regexp = "*.*";
   load_image_dl.inline_file("Filename to save image:", regexp, *image_filename);
-  vcl_vector<vcl_string> labels; 
+  vcl_vector<vcl_string> labels;
   labels.push_back(vcl_string("JPEG"));
-  labels.push_back(vcl_string("TIFF")); 
-  labels.push_back(vcl_string("PNM")); 
-  labels.push_back(vcl_string("PNG")); 
+  labels.push_back(vcl_string("TIFF"));
+  labels.push_back(vcl_string("PNM"));
+  labels.push_back(vcl_string("PNG"));
   labels.push_back(vcl_string("IRIS"));
   labels.push_back(vcl_string("MIT"));
   labels.push_back(vcl_string("VIFF"));
@@ -78,7 +78,7 @@ void xcv_file::save_image()
   load_image_dl.choice("File format ",labels,choice_value);
   if (load_image_dl.ask())
   {
-    if (debug) vcl_cerr << "Saving image to file: " << image_filename->c_str() << vcl_endl; 
+    if (debug) vcl_cerr << "Saving image to file: " << image_filename->c_str() << vcl_endl;
     static char *format[] = {
       "jpg","tiff","pnm","png","iris","mit","viff"};
     vil_save(imt->get_image(),image_filename->c_str(),format[choice_value]);
@@ -103,8 +103,8 @@ void xcv_file::save_as_ps()
   ps_dl.checkbox("Save spatial objects?", save_objs);
   if (ps_dl.ask())
   {
-    if (debug) vcl_cerr << "Saving data to postscript file: " << image_filename << vcl_endl; 
-    vgui_easy2D_ref easy = get_easy2D_at(col, row);
+    if (debug) vcl_cerr << "Saving data to postscript file: " << image_filename << vcl_endl;
+    vgui_easy2D_sptr easy = get_easy2D_at(col, row);
     if (easy)
       easy->print_psfile(*image_filename, reduction_factor, save_objs);
   }
@@ -132,12 +132,12 @@ void xcv_file::remove_image()
 //-- Exit XCV.
 //-----------------------------------------------------------------------------
 void xcv_file::exit_xcv()
-{ 
+{
   vgui_dialog quit_dl("Quit");
   quit_dl.message(" ");
   quit_dl.message("   Are you sure you want to quit XCV?   ");
   quit_dl.message(" ");
- 
+
   if (quit_dl.ask())
     vgui::quit();
 }

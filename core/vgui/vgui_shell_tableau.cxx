@@ -15,38 +15,38 @@ vcl_string vgui_shell_tableau::type_name() const {
   return "vgui_shell_tableau";
 }
 
-vgui_shell_tableau::vgui_shell_tableau() { 
+vgui_shell_tableau::vgui_shell_tableau() {
   init();
 }
 
-vgui_shell_tableau::vgui_shell_tableau(vgui_tableau_ref const &t0) { 
+vgui_shell_tableau::vgui_shell_tableau(vgui_tableau_sptr const &t0) {
   init();
   vgui_composite::add(t0);
 }
 
-vgui_shell_tableau::vgui_shell_tableau(vgui_tableau_ref const &t0, 
-				       vgui_tableau_ref const &t1) 
-{ 
+vgui_shell_tableau::vgui_shell_tableau(vgui_tableau_sptr const &t0,
+				       vgui_tableau_sptr const &t1)
+{
   init();
   vgui_composite::add(t0);
   vgui_composite::add(t1);
 }
 
-vgui_shell_tableau::vgui_shell_tableau(vgui_tableau_ref const &t0, 
-				       vgui_tableau_ref const &t1,
-				       vgui_tableau_ref const &t2) 
-{ 
+vgui_shell_tableau::vgui_shell_tableau(vgui_tableau_sptr const &t0,
+				       vgui_tableau_sptr const &t1,
+				       vgui_tableau_sptr const &t2)
+{
   init();
   vgui_composite::add(t0);
   vgui_composite::add(t1);
   vgui_composite::add(t2);
 }
 
-vgui_shell_tableau::vgui_shell_tableau(vgui_tableau_ref const &t0, 
-				       vgui_tableau_ref const &t1,
-				       vgui_tableau_ref const &t2,
-				       vgui_tableau_ref const &t3) 
-{ 
+vgui_shell_tableau::vgui_shell_tableau(vgui_tableau_sptr const &t0,
+				       vgui_tableau_sptr const &t1,
+				       vgui_tableau_sptr const &t2,
+				       vgui_tableau_sptr const &t3)
+{
   init();
   vgui_composite::add(t0);
   vgui_composite::add(t1);
@@ -90,21 +90,21 @@ bool vgui_shell_tableau::handle(vgui_event const &e) {
 
   // save current matrix state :
   //vgui_matrix_state PM;
-  
+
   // "draw" event : return true unless some child returns false.
   if (e.type==vgui_DRAW || e.type==vgui_DRAW_OVERLAY) {
     bool retv = true;
-      
+
     for (unsigned i=0; i<children.size(); ++i) {
       //PM.restore();
       //cerr << "DRAW";
-      if (active[i] && children[i]) 
+      if (active[i] && children[i])
 	if ( !children[i]->handle(e) )
 	  retv=false;
     }
     return retv;
   }
-    
+
   // "normal" event : pass it on till handled.
   for (unsigned i=0; i<children.size(); ++i) {
     //PM.restore();
@@ -113,7 +113,7 @@ bool vgui_shell_tableau::handle(vgui_event const &e) {
       if ( children[i]->handle(e) )
 	return true;
   }
-  
+
   // Noone was interested....
   return false;
 }
@@ -121,7 +121,7 @@ bool vgui_shell_tableau::handle(vgui_event const &e) {
 void vgui_shell_tableau::get_popup(vgui_popup_params const &params, vgui_menu &menu) {
   // add clear tableau
   clear->get_popup(params, menu);
-  
+
   // add graph launcher
   graph->get_popup(params, menu);
 

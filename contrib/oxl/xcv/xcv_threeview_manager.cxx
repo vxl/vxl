@@ -15,7 +15,7 @@
 static bool dragging = false;
 
 //-----------------------------------------------------------------------------
-xcv_threeview_manager::xcv_threeview_manager() 
+xcv_threeview_manager::xcv_threeview_manager()
   : tri_tensor(0)
   , tri_tensor_is_displayed(true)
 { }
@@ -26,7 +26,7 @@ xcv_threeview_manager::~xcv_threeview_manager() { }
 //-----------------------------------------------------------------------------
 //-- Set the tableau at the given position to the given tableau.
 //-----------------------------------------------------------------------------
-void xcv_threeview_manager::set_tableau(vgui_tableau_ref const& tab, unsigned tab_nb)
+void xcv_threeview_manager::set_tableau(vgui_tableau_sptr const& tab, unsigned tab_nb)
 {
   if (tab_nb > 2)
   {
@@ -54,9 +54,9 @@ void xcv_threeview_manager::toggle_tri_tensor_display()
 }
 
 //-----------------------------------------------------------------------------
-//-- 
+//--
 //-----------------------------------------------------------------------------
-void xcv_threeview_manager::draw_tri_tensor(vgui_event const& e, vgui_tableau_ref const& child_tab, 
+void xcv_threeview_manager::draw_tri_tensor(vgui_event const& e, vgui_tableau_sptr const& child_tab,
   bool make_permanent)
 {
   // Get the address of the event and turn it into a HomgPoint2D:
@@ -86,11 +86,11 @@ void xcv_threeview_manager::draw_tri_tensor(vgui_event const& e, vgui_tableau_re
 //-----------------------------------------------------------------------------
 //-- Handle any events we are interested in.
 //-----------------------------------------------------------------------------
-void xcv_threeview_manager::handle_tjunction_event(vgui_event const& e, vgui_tableau_ref const& child_tab)
+void xcv_threeview_manager::handle_tjunction_event(vgui_event const& e, vgui_tableau_sptr const& child_tab)
 {
   if (e.type == vgui_BUTTON_DOWN && e.modifier == vgui_MODIFIER_NULL && e.button == vgui_LEFT)
     dragging = true;
-  if (e.type == vgui_BUTTON_UP || e.type == vgui_LEAVE) 
+  if (e.type == vgui_BUTTON_UP || e.type == vgui_LEAVE)
   {
     dragging = false;
     rubberbands[0]->post_redraw();

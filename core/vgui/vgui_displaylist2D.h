@@ -3,7 +3,7 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// 
+//
 // .NAME vgui_displaylist2D - Undocumented class FIXME
 // .LIBRARY vgui
 // .HEADER vxl Package
@@ -26,9 +26,9 @@
 #include "vgui_displaybase.h"
 
 #include <vgui/vgui_drag_mixin.h>
-#include <vgui/vgui_displaylist2D_ref.h>
+#include <vgui/vgui_displaylist2D_sptr.h>
 
-class vgui_displaylist2D : public vgui_displaybase { 
+class vgui_displaylist2D : public vgui_displaybase {
 public:
   vgui_displaylist2D();
 
@@ -46,9 +46,9 @@ private:
   bool posted_redraw_;
 };
 
-struct vgui_displaylist2D_new : public vgui_displaylist2D_ref {
-  vgui_displaylist2D_new() : 
-    vgui_displaylist2D_ref(new vgui_displaylist2D) { } 
+struct vgui_displaylist2D_new : public vgui_displaylist2D_sptr {
+  vgui_displaylist2D_new() :
+    vgui_displaylist2D_sptr(new vgui_displaylist2D) { }
 };
 
 #endif // vgui_displaylist2D_h_

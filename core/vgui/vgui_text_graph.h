@@ -11,9 +11,9 @@
 // .FILE vgui_text_graph.cxx
 
 #include <vcl_iosfwd.h>
-#include <vgui/vgui_tableau_ref.h>
+#include <vgui/vgui_tableau_sptr.h>
 
 void vgui_text_graph(vcl_ostream &);
-void vgui_text_graph(vcl_ostream &, vgui_tableau_ref const &);
+void vgui_text_graph(vcl_ostream &, vgui_tableau_sptr const &);
 
 #endif // vgui_text_graph_h_

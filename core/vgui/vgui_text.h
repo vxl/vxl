@@ -17,7 +17,7 @@
 // .SECTION Author
 //    Philip C. Pritchett, RRG, University of Oxford
 //    Created: 19 Oct 99
-//              
+//
 // .SECTION Modifications:
 // 30 Dec 1999 fsm@robots. modified to render arbitrary text.
 // 23-FEB-2000 K.Y.McGaul - Handle now remains constant when text is removed.
@@ -26,7 +26,7 @@
 
 #include <vcl_string.h>
 #include <vgui/vgui_tableau.h>
-#include <vgui/vgui_text_ref.h>
+#include <vgui/vgui_text_sptr.h>
 
 //: put the given text at the current raster position.
 void vgui_text_put(char const *s);
@@ -53,12 +53,12 @@ public:
   void change(int handle, vcl_string const &ntext) { change(handle, ntext.c_str()); }
 
   void remove(int handle);
-  
+
 protected:
   ~vgui_text() { }
   bool handle(vgui_event const &);
 
-private:  
+private:
   vcl_vector<float> xs;
   vcl_vector<float> ys;
   vcl_vector<vcl_string> ts;
@@ -66,8 +66,8 @@ private:
   unsigned first_empty;    // Position of the first empty space in the vectors
 };
 
-struct vgui_text_new : public vgui_text_ref {
-  typedef vgui_text_ref base;
+struct vgui_text_new : public vgui_text_sptr {
+  typedef vgui_text_sptr base;
   vgui_text_new() : base(new vgui_text()) { }
 };
 

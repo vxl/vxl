@@ -3,7 +3,7 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// 
+//
 // .NAME vgui_viewer2D - Undocumented class FIXME
 // .LIBRARY vgui
 // .HEADER vxl Package
@@ -25,18 +25,18 @@
 
 #include <vgui/vgui_drag_mixin.h>
 #include <vgui/vgui_wrapper_tableau.h>
-#include <vgui/vgui_viewer2D_ref.h>
+#include <vgui/vgui_viewer2D_sptr.h>
 
 #include "dll.h"
 
 class vgui_viewer2D : public vgui_wrapper_tableau, public vgui_drag_mixin {
 public:
-  vgui_viewer2D(vgui_tableau_ref const&);
+  vgui_viewer2D(vgui_tableau_sptr const&);
 
   // vgui_tableau methods
   virtual bool handle(const vgui_event& event);
   virtual vcl_string type_name() const;
-  
+
   void setup_gl_matrices();
 
   void zoomin(float zoom_factor, int x, int y);
@@ -50,7 +50,7 @@ public:
   bool mouse_up(int x, int y,  vgui_button button, vgui_modifier modifier);
   bool help();
   bool key_press(int x, int y, vgui_key key, vgui_modifier);
-  
+
   // data
   struct token_t {
     float scaleX;
@@ -59,7 +59,7 @@ public:
     float offsetY;
     token_t() : scaleX(1.0f), scaleY(1.0f), offsetX(0.0f), offsetY(0.0f) { }
   } token;
-  
+
   // static data
   static vgui_DLLDATA const void * const CENTER_EVENT;
 
@@ -82,9 +82,9 @@ protected:
  ~vgui_viewer2D();
 };
 
-struct vgui_viewer2D_new : public vgui_viewer2D_ref {
-  vgui_viewer2D_new(vgui_tableau_ref const& that) : 
-    vgui_viewer2D_ref(new vgui_viewer2D(that)) { }
+struct vgui_viewer2D_new : public vgui_viewer2D_sptr {
+  vgui_viewer2D_new(vgui_tableau_sptr const& that) :
+    vgui_viewer2D_sptr(new vgui_viewer2D(that)) { }
 };
 
 #endif // vgui_viewer2D_h_

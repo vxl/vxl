@@ -186,7 +186,7 @@ SOURCE=.\xcv_image_tableau.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\xcv_image_tableau_ref.h
+SOURCE=.\xcv_image_tableau_sptr.h
 # End Source File
 # Begin Source File
 

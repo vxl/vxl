@@ -17,7 +17,7 @@
 // Order of things :
 // 1. Registration. Toolkits available to the application are registered
 //    in a global list. Registration is done by the constructor of vgui_toolkit,
-//    so creating a vgui_toolkit amounts to registration. Sometimes this can be 
+//    so creating a vgui_toolkit amounts to registration. Sometimes this can be
 //    done at library initialization time but sometimes it can't, e.g. for
 //    static builds. In that case, a {\em tag function} must be called
 //    explicitly. See vgui_tag.*
@@ -51,14 +51,14 @@ class vgui_menu;
 class vgui_dialog_impl;
 class vgui_tableau;
 class vgui_toolkit;
-struct vgui_tableau_ref;
+struct vgui_tableau_sptr;
 
 // See vgui.cxx for information about this class.
 class vgui {
 public:
   // Method for determining if a given toolkit is available.
   static bool exists(char const *toolkit);
-  
+
   // Method for selecting a specific toolkit. This will abort()
   // if given a toolkit which is not available.
   static void select(char const *toolkit);
@@ -73,26 +73,26 @@ public:
   // If no such environment variable is set, no toolkit is selected and the
   // function returns false. Else the return value is true.
   static bool select(int &argc, char **argv);
-  
-  
-  // Initialize the selected toolkit, passing it the 
+
+
+  // Initialize the selected toolkit, passing it the
   // given command line.
   static void init(int &argc, char **argv);
-  
-  
-  // Factory methods 
-  static vgui_window* produce_window(int width, int height, 
+
+
+  // Factory methods
+  static vgui_window* produce_window(int width, int height,
 				     vgui_menu const & menubar, vcl_string const &title ="");
   static vgui_window* produce_window(int width, int height, vcl_string const &title ="");
 
   static vgui_dialog_impl* produce_dialog(vcl_string const &name);
 
   // Convenience methods
-  static int run(vgui_tableau_ref const&, int w, int h, vcl_string const &title ="");
-  static int run(vgui_tableau_ref const&, int w, int h, vgui_menu const &menubar, vcl_string const &title ="");
-  static vgui_window *adapt(vgui_tableau_ref const&, int w, int h, vcl_string const &title ="");
-  static vgui_window *adapt(vgui_tableau_ref const&, int w, int h, vgui_menu const &, vcl_string const &title ="");
-  
+  static int run(vgui_tableau_sptr const&, int w, int h, vcl_string const &title ="");
+  static int run(vgui_tableau_sptr const&, int w, int h, vgui_menu const &menubar, vcl_string const &title ="");
+  static vgui_window *adapt(vgui_tableau_sptr const&, int w, int h, vcl_string const &title ="");
+  static vgui_window *adapt(vgui_tableau_sptr const&, int w, int h, vgui_menu const &, vcl_string const &title ="");
+
   // Functions for event-loop management
   static int  run();
   static void run_one_event();
@@ -101,7 +101,7 @@ public:
   static void add_event(vgui_event const &);
   static void quit(); // quit application.
 
-  // statusbar related 
+  // statusbar related
   static vgui_DLLDATA vcl_ostream out;
 
 private:

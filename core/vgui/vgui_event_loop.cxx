@@ -19,7 +19,7 @@ struct vgui_slab_tableau : public vgui_tableau
 {
   vgui_slab *slab;
   vgui_slot slot;
-  vgui_slab_tableau(vgui_slab *slab_, vgui_tableau_ref const& t) : slab(slab_), slot(this, t) { }
+  vgui_slab_tableau(vgui_slab *slab_, vgui_tableau_sptr const& t) : slab(slab_), slot(this, t) { }
   bool handle(vgui_event const &e) { return slot.handle(e); }
   void post_message(char const *, void const *) { }
   void post_redraw() { if (slab) slab->post_redraw(); }
@@ -29,7 +29,7 @@ struct vgui_slab_tableau : public vgui_tableau
 typedef vcl_vector<vgui_tableau*> container;
 static container the_container;
 
-void vgui_event_loop_attach(vgui_slab *slab, vgui_tableau_ref const& tt)
+void vgui_event_loop_attach(vgui_slab *slab, vgui_tableau_sptr const& tt)
 {
   for (unsigned int i=0; i<the_container.size(); ++i) {
     vgui_slab_tableau *st = (vgui_slab_tableau*) the_container[i];
@@ -67,7 +67,7 @@ void vgui_event_loop_service()
     vgui_event_loop_finish();
     return;
   }
-  
+
   for (unsigned int i=0; i<the_container.size(); ++i) {
     vgui_slab_tableau *st = (vgui_slab_tableau*) the_container[i];
 
@@ -78,7 +78,7 @@ void vgui_event_loop_service()
       // get the next event on that slab
       vgui_event e;
       bool ok = st->slab->queue_next(&e);
-      
+
       // despatch it, ...
       if (ok) {
 	if (e.type == vgui_DRAW) {
@@ -101,7 +101,7 @@ void vgui_event_loop_service()
       // ...or discard it.
       else
 	{ /* ??? */ }
-      
+
       // !! FIXME: the iterator might be invalid now !!
       break;
     }

@@ -25,16 +25,16 @@
 //             reset_matrix_state.
 
 template <class T> class vnl_matrix;
-#include <vgui/vgui_load_ref.h>
+#include <vgui/vgui_load_sptr.h>
 #include <vgui/vgui_wrapper_tableau.h>
 
 class vgui_load : public vgui_wrapper_tableau {
 public:
-  
-  vgui_load(vgui_tableau_ref const& child);
+
+  vgui_load(vgui_tableau_sptr const& child);
 
   vcl_string type_name() const;
-  
+
   void set_projection(vnl_matrix<double> const &m);
   void set_modelview(vnl_matrix<double> const &m);
 
@@ -53,7 +53,7 @@ public:
   // unless one wants the image upside down.
   void set_ortho(float x1, float y1, // bottom, left
 		 float x2, float y2);// top, right
-  
+
   void set_ortho(float x1,float y1,float z1, // bottom, left hand, far corner.
 		 float x2,float y2,float z2);// top, right hand, near corner.
 
@@ -75,9 +75,9 @@ protected:
   double modelviewmatrixt[16];
 };
 
-struct vgui_load_new : public vgui_load_ref {
-  typedef vgui_load_ref base;
-  vgui_load_new(vgui_tableau_ref const& child) : base(new vgui_load(child)) { }
+struct vgui_load_new : public vgui_load_sptr {
+  typedef vgui_load_sptr base;
+  vgui_load_new(vgui_tableau_sptr const& child) : base(new vgui_load(child)) { }
 };
 
 #endif // vgui_load_h_

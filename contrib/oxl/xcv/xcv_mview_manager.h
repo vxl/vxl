@@ -14,14 +14,14 @@
 //--------------------------------------------------------------------------------
 
 class vgui_event;
-struct vgui_tableau_ref;
+struct vgui_tableau_sptr;
 
 class xcv_mview_manager
 {
 public:
   virtual ~xcv_mview_manager() { } // default dtor would be non-virtual.
 
-  virtual void handle_tjunction_event(vgui_event const& e, vgui_tableau_ref const& child_tab) = 0;
+  virtual void handle_tjunction_event(vgui_event const& e, vgui_tableau_sptr const& child_tab) = 0;
 };
 
 #endif // xcv_mview_manager_

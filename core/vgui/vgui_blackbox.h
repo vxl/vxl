@@ -22,7 +22,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "vgui_blackbox_ref.h"
+#include "vgui_blackbox_sptr.h"
 #include <vgui/vgui_wrapper_tableau.h>
 #include <vgui/vgui_event.h>
 #include <vcl_vector.h>
@@ -30,7 +30,7 @@
 class vgui_blackbox : public vgui_wrapper_tableau
 {
 public:
-  vgui_blackbox(vgui_tableau_ref const&);
+  vgui_blackbox(vgui_tableau_sptr const&);
 
   virtual bool handle(const vgui_event& event);
   virtual vcl_string type_name() const;
@@ -43,9 +43,9 @@ protected:
   vcl_vector<vgui_event> events;
 };
 
-struct vgui_blackbox_new : public vgui_blackbox_ref {
-  typedef vgui_blackbox_ref base;
-  vgui_blackbox_new(vgui_tableau_ref const& a) : base(new vgui_blackbox(a)) { }
+struct vgui_blackbox_new : public vgui_blackbox_sptr {
+  typedef vgui_blackbox_sptr base;
+  vgui_blackbox_new(vgui_tableau_sptr const& a) : base(new vgui_blackbox(a)) { }
 };
 
 #endif // vgui_blackbox_h_

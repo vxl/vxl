@@ -3,7 +3,7 @@
 #include "easy2D_sequencer.h"
 #include "easy2D_loader.h"
 
-#include <vbl/vbl_sprintf.h> 
+#include <vbl/vbl_sprintf.h>
 
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
@@ -21,10 +21,10 @@
 #include <vidl/vidl_frame.h>
 #include <vidl/vidl_movie.h>
 
-vidl_movie_ref my_movie;
+vidl_movie_sptr my_movie;
 vidl_movie::frame_iterator pframe(my_movie);
 easy2D_sequencer *seq;
-vcl_vector<vgui_easy2D_ref> tableaux_;
+vcl_vector<vgui_easy2D_sptr> tableaux_;
 
 //-----------------------------------------------------------------------------
 //-- Loads a video sequence into memory
@@ -59,9 +59,9 @@ void vplayer_file::load_video_sequence()
     tableaux_.push_back(vgui_easy2D_new(vgui_image_tableau_new(pframe->get_image())));
     ++pframe;
   }
-  tableaux_.push_back(vgui_easy2D_new(vgui_image_tableau_new(pframe->get_image()))); 
+  tableaux_.push_back(vgui_easy2D_new(vgui_image_tableau_new(pframe->get_image())));
   pframe = my_movie->first();
-  vgui_rubberbander_ref r = get_rubberbander_at(col,row);
+  vgui_rubberbander_sptr r = get_rubberbander_at(col,row);
   r->init(new vgui_rubberbander_easy2D_client(tableaux_.front()));
   tableaux_.front()->post_redraw();
 }
@@ -91,9 +91,9 @@ void vplayer_file::load_video_file()
     tableaux_.push_back(vgui_easy2D_new(vgui_image_tableau_new(pframe->get_image())));
     ++pframe;
   }
-  tableaux_.push_back(vgui_easy2D_new(vgui_image_tableau_new(pframe->get_image()))); 
+  tableaux_.push_back(vgui_easy2D_new(vgui_image_tableau_new(pframe->get_image())));
   pframe = my_movie->first();
-  vgui_rubberbander_ref r = get_rubberbander_at(col,row);
+  vgui_rubberbander_sptr r = get_rubberbander_at(col,row);
   r->init(tableaux_.front(),new vgui_rubberbander_easy2D_client(tableaux_.front()));
   tableaux_.front()->post_redraw();
 }
@@ -111,7 +111,7 @@ void vplayer_file::load_geometry_sequence()
   if (!load_image_dl.ask())
     return;
   vcl_vector <vcl_string> img_filenames;
-  vcl_vector <vgui_easy2D_ref>::iterator it = tableaux_.begin();
+  vcl_vector <vgui_easy2D_sptr>::iterator it = tableaux_.begin();
   for(int i = 0;i<n;i++)
   {
     vbl_sprintf name(image_filename.c_str(), i);
@@ -137,10 +137,10 @@ void vplayer_file::save_video_sequence()
 //-- Quit the video player
 //-----------------------------------------------------------------------------
 void vplayer_file::exit_vplayer()
-{ 
+{
   vgui_dialog quit_dl("Quit");
   quit_dl.message("   Are you sure you want to quit the video player?   ");
- 
+
   if (quit_dl.ask())
     vgui::quit();
 }

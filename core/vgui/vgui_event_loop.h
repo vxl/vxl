@@ -9,9 +9,9 @@
 // @author fsm@robots.ox.ac.uk
 
 struct vgui_slab;
-struct vgui_tableau_ref;
+struct vgui_tableau_sptr;
 
-void vgui_event_loop_attach(vgui_slab *s, vgui_tableau_ref const& t);
+void vgui_event_loop_attach(vgui_slab *s, vgui_tableau_sptr const& t);
 
 void vgui_event_loop_detach(vgui_slab *s);
 

@@ -25,7 +25,7 @@
 // the parent.
 //
 // [3]
-// A vgui_tableau_ref could be used to hold the child, but there is no real
+// A vgui_tableau_sptr could be used to hold the child, but there is no real
 // advantage in that.
 //
 // [4]
@@ -56,13 +56,13 @@ struct vgui_slot_impl
   typedef vcl_set<void *> all_t;
   static all_t* all;
   static int all_refs;
-  
+
   inline vgui_slot_impl(vgui_tableau *p_, vgui_tableau *c_);
   inline ~vgui_slot_impl();
-  
+
   // this changes the child, not the parent.
   inline void assign(vgui_tableau *t);
-  
+
   // there's nothing tricky here. we just return the raw pointers.
   vgui_tableau *parent() const { return p; }
   vgui_tableau *child () const { return c; }
@@ -137,7 +137,7 @@ vgui_slot_impl::vgui_slot_impl(vgui_tableau *p_, vgui_tableau *c_)
 
   if (c)
     c->ref();
-  
+
   // register.
   if (all == 0) {
     //vcl_cerr << __FILE__ ": CREATING slot cache\n";
@@ -146,7 +146,7 @@ vgui_slot_impl::vgui_slot_impl(vgui_tableau *p_, vgui_tableau *c_)
   }
   ++all_refs;
   all->insert(this);
-  
+
   // parent and child are not allowed to be equal.
   if (p == c) {
     vgui_macro_warning << "parent and child are equal" << vcl_endl;
@@ -162,7 +162,7 @@ vgui_slot_impl::~vgui_slot_impl()
 
   if (c)
     c->unref();
-  
+
   // deregister.
   vcl_set<void*>::iterator i = all->find(this);
   assert(i != all->end());
@@ -178,7 +178,7 @@ void vgui_slot_impl::assign(vgui_tableau *t)
 {
   if (t == c)
     return;
-  
+
   if (t == p) {
     vgui_macro_warning << "cannot assign() a slot\'s parent to its child" << vcl_endl;
     assert(false);
@@ -188,16 +188,16 @@ void vgui_slot_impl::assign(vgui_tableau *t)
 
   if (t)
     t->ref();
-  
+
   // remember the old 'c' so that it can be unref()fed below.
   // unreffing it here might cause '*this' to be deleted which
   // would be disastrous because we're about to assign to 'this->c'.
   vgui_tableau *old_c = c;
-  
+
   c = t;
-  
+
   link(p, c);
-  
+
   // it's safe(r) to unref() now.
   if (old_c)
     old_c->unref();
@@ -213,7 +213,7 @@ vgui_slot::vgui_slot(vgui_tableau *p)
   pimpl->acquire();
 }
 
-vgui_slot::vgui_slot(vgui_tableau *p, vgui_tableau_ref const &c)
+vgui_slot::vgui_slot(vgui_tableau *p, vgui_tableau_sptr const &c)
 {
   pimpl = new vgui_slot_impl(p, c.operator->());
   pimpl->acquire();
@@ -222,7 +222,7 @@ vgui_slot::vgui_slot(vgui_tableau *p, vgui_tableau_ref const &c)
 vgui_slot::vgui_slot(vgui_slot const &that)
 {
   pimpl = that.pimpl;
-  
+
   if (pimpl)
     pimpl->acquire();
 }
@@ -230,7 +230,7 @@ vgui_slot::vgui_slot(vgui_slot const &that)
 vgui_slot::~vgui_slot()
 {
   if (pimpl)
-    pimpl->release(); 
+    pimpl->release();
 
   pimpl = 0;
 }
@@ -240,35 +240,35 @@ vgui_slot &vgui_slot::operator=(vgui_slot const &that)
   if (pimpl != that.pimpl) {
     if (that.pimpl)
       that.pimpl->acquire();
-    
-    if (pimpl) 
+
+    if (pimpl)
       pimpl->release();
-    
+
     pimpl = that.pimpl;
   }
-  
+
   return *this;
 }
 
-vgui_tableau_ref vgui_slot::parent() const
+vgui_tableau_sptr vgui_slot::parent() const
 {
   return pimpl ? pimpl->parent() : 0;
 }
 
-vgui_tableau_ref vgui_slot::child()  const
+vgui_tableau_sptr vgui_slot::child()  const
 {
   return pimpl ? pimpl->child () : 0;
 }
 
-bool vgui_slot::operator==(vgui_tableau_ref const &t) const
+bool vgui_slot::operator==(vgui_tableau_sptr const &t) const
 {
   return child() == t;
 }
 
-void vgui_slot::assign(vgui_tableau_ref const &t)
+void vgui_slot::assign(vgui_tableau_sptr const &t)
 {
   if (pimpl)
-    pimpl->assign(t.operator->()); 
+    pimpl->assign(t.operator->());
   else {
     vgui_macro_warning << "attempted assign() to empty slot." << vcl_endl;
     vgui_macro_warning << "t = " << t << vcl_endl;
@@ -278,10 +278,10 @@ void vgui_slot::assign(vgui_tableau_ref const &t)
 
 bool vgui_slot::handle(vgui_event const &e)
 {
-  if (!pimpl) return false; 
+  if (!pimpl) return false;
   vgui_tableau* c = pimpl->child();
   if (!c) return false;
-  
+
   return c->handle(e);
 }
 
@@ -290,7 +290,7 @@ vgui_slot::operator bool() const
   return pimpl && (pimpl->child() != 0);
 }
 
-vgui_slot::operator vgui_tableau_ref() const
+vgui_slot::operator vgui_tableau_sptr() const
 {
   return pimpl ? pimpl->child() : 0;
 }
@@ -314,7 +314,7 @@ vcl_ostream & operator<<(vcl_ostream &os, vgui_slot const &s)
 
 //--------------------------------------------------------------------------------
 
-void vgui_slot::get_children_of(vgui_tableau_ref const& tab, vcl_vector<vgui_tableau_ref> *children)
+void vgui_slot::get_children_of(vgui_tableau_sptr const& tab, vcl_vector<vgui_tableau_sptr> *children)
 {
   for (vcl_set<void*>::iterator i=vgui_slot_impl::all->begin(); i!=vgui_slot_impl::all->end(); ++i) {
     vgui_slot_impl *ptr = static_cast<vgui_slot_impl*>(*i);
@@ -323,7 +323,7 @@ void vgui_slot::get_children_of(vgui_tableau_ref const& tab, vcl_vector<vgui_tab
   }
 }
 
-void vgui_slot::get_parents_of (vgui_tableau_ref const& tab, vcl_vector<vgui_tableau_ref> *parents)
+void vgui_slot::get_parents_of (vgui_tableau_sptr const& tab, vcl_vector<vgui_tableau_sptr> *parents)
 {
 #if cache_parents
   vcl_vector<vgui_tableau*> const &vec = tab->vgui_slot_data::parents;
@@ -338,36 +338,36 @@ void vgui_slot::get_parents_of (vgui_tableau_ref const& tab, vcl_vector<vgui_tab
 #endif
 }
 
-void vgui_slot::replace_child_everywhere (vgui_tableau_ref const &old_child, 
-					  vgui_tableau_ref const &new_child) 
+void vgui_slot::replace_child_everywhere (vgui_tableau_sptr const &old_child,
+					  vgui_tableau_sptr const &new_child)
 {
   // the default is 'false'. don't check in 'true'.
   static bool debug = false;
-  
+
   if (debug)
     vcl_cerr << "vgui_slot replace_child_everywhere " << vcl_endl
-	     << "old_child : " << old_child->pretty_name() 
+	     << "old_child : " << old_child->pretty_name()
 	     << "\t"
 	     << "new child : " << new_child->pretty_name() << vcl_endl;
-  
+
   if (old_child == new_child)
     vcl_cerr << "vgui_slot::replace_child_everywhere: old_child == new_child\n";
 
   for (vcl_set<void*>::iterator i=vgui_slot_impl::all->begin(); i!=vgui_slot_impl::all->end(); ++i) {
     vgui_slot_impl *ptr = static_cast<vgui_slot_impl*>(*i);
-    
+
     if (debug) {
       vcl_cerr << "slot  "
 	       << "parent : " << ptr->parent()->pretty_name()
 	       << "\tchild : ";
       if (! ptr->child())
 	vcl_cerr << "0" << vcl_endl;
-      else 
+      else
 	vcl_cerr << ptr->child()->pretty_name() << vcl_endl;
     }
-    
+
     if ( ptr->child() == old_child.operator->() ) {
-      assert(ptr->parent() != new_child.operator->() ); 
+      assert(ptr->parent() != new_child.operator->() );
       if (debug)
 	vcl_cerr << "replace: " << ptr->child() << vcl_endl;
       ptr->parent()->notify_replaced_child(old_child, new_child);

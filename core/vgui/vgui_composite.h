@@ -3,7 +3,7 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// 
+//
 // .NAME vgui_composite - treats it children as a stack of acetates
 // .LIBRARY vgui
 // .HEADER vxl Package
@@ -19,7 +19,7 @@
 //
 // The exceptions to this rule are :
 // [a] key presses '0'-'9', which toggle the activeness of the children and
-// [b] the DRAW, DRAW_OVERLAY events which are sent to all children. 
+// [b] the DRAW, DRAW_OVERLAY events which are sent to all children.
 //
 // .SECTION Author:
 //              Philip C. Pritchett, 15 Sep 99
@@ -33,7 +33,7 @@
 
 #include <vcl_vector.h>
 
-#include <vgui/vgui_composite_ref.h>
+#include <vgui/vgui_composite_sptr.h>
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_slot.h>
 #include <vgui/vgui_event_condition.h>
@@ -44,23 +44,23 @@ class vgui_event;
 class vgui_composite : public vgui_tableau {
 public:
   vgui_composite();
-  vgui_composite(vgui_tableau_ref const& child0, vgui_tableau_ref const& child1);
-  vgui_composite(vgui_tableau_ref const& child0, vgui_tableau_ref const& child1, vgui_tableau_ref const& child2);
-  vgui_composite(vcl_vector<vgui_tableau_ref> const& children);
+  vgui_composite(vgui_tableau_sptr const& child0, vgui_tableau_sptr const& child1);
+  vgui_composite(vgui_tableau_sptr const& child0, vgui_tableau_sptr const& child1, vgui_tableau_sptr const& child2);
+  vgui_composite(vcl_vector<vgui_tableau_sptr> const& children);
 
   virtual bool handle(const vgui_event&);
   virtual bool help();
-  
+
   vcl_string type_name() const;
   vcl_string file_name() const;
   vcl_string pretty_name() const;
   virtual void notify() const;
-  
+
   // conceptually, this is a list on which observers can put themselves.
   vgui_observable observers;
 
-  void add(vgui_tableau_ref const&);
-  void remove(vgui_tableau_ref const&);
+  void add(vgui_tableau_sptr const&);
+  void remove(vgui_tableau_sptr const&);
 
   bool toggle(int);
   bool is_active(int);
@@ -73,24 +73,24 @@ protected:
   virtual ~vgui_composite();
 
   bool get_bounding_box(float low[3], float high[3]) const;
-  bool add_child(vgui_tableau_ref const& t);
-  bool remove_child(vgui_tableau_ref const& );
+  bool add_child(vgui_tableau_sptr const& t);
+  bool remove_child(vgui_tableau_sptr const& );
 
   // helper
   bool index_ok(int);
-  
+
   // data
   vcl_vector<vgui_slot> children;
   vcl_vector<bool> active;
   bool enable_key_bindings;
 };
 
-struct vgui_composite_new : public vgui_composite_ref {
-  typedef vgui_composite_ref base;
+struct vgui_composite_new : public vgui_composite_sptr {
+  typedef vgui_composite_sptr base;
   vgui_composite_new() : base(new vgui_composite()) { }
-  vgui_composite_new(vgui_tableau_ref const& child0, vgui_tableau_ref const& child1) : base(new vgui_composite(child0, child1)) { }
-  vgui_composite_new(vgui_tableau_ref const& child0, vgui_tableau_ref const& child1, vgui_tableau_ref const& child2) : base(new vgui_composite(child0, child1, child2)) { }
-  vgui_composite_new(vcl_vector<vgui_tableau_ref> const& children): base(new vgui_composite(children)) {}
+  vgui_composite_new(vgui_tableau_sptr const& child0, vgui_tableau_sptr const& child1) : base(new vgui_composite(child0, child1)) { }
+  vgui_composite_new(vgui_tableau_sptr const& child0, vgui_tableau_sptr const& child1, vgui_tableau_sptr const& child2) : base(new vgui_composite(child0, child1, child2)) { }
+  vgui_composite_new(vcl_vector<vgui_tableau_sptr> const& children): base(new vgui_composite(children)) {}
 };
 
 #endif // vgui_composite_h_

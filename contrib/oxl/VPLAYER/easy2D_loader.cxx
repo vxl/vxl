@@ -1,6 +1,6 @@
 #include "easy2D_loader.h"
 
-easy2D_loader::easy2D_loader(vgui_easy2D_ref const& e2d)
+easy2D_loader::easy2D_loader(vgui_easy2D_sptr const& e2d)
 {
   easy_ = e2d;
 }

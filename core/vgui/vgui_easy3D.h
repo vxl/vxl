@@ -3,7 +3,7 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// 
+//
 // .NAME vgui_easy3D - Undocumented class FIXME
 // .LIBRARY vgui
 // .HEADER vxl Package
@@ -23,12 +23,12 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "vgui_easy3D_ref.h"
+#include "vgui_easy3D_sptr.h"
 #include "vgui_displaylist3D.h"
 class vgui_point3D;
 class vgui_lineseg3D;
 
-class vgui_easy3D : public vgui_displaylist3D 
+class vgui_easy3D : public vgui_displaylist3D
 {
 public:
   vgui_easy3D();
@@ -39,7 +39,7 @@ public:
 
   vgui_point3D* add_point(float x, float y, float z);
   vgui_lineseg3D* add_line(float x0, float y0, float z0, float x1, float y1, float z1);
-  
+
   void set_foreground(float, float, float);
   void set_line_width(float);
   void set_point_radius(float);
@@ -56,8 +56,8 @@ protected:
   float point_size;
 };
 
-struct vgui_easy3D_new : public vgui_easy3D_ref {
-  typedef vgui_easy3D_ref base;
+struct vgui_easy3D_new : public vgui_easy3D_sptr {
+  typedef vgui_easy3D_sptr base;
   vgui_easy3D_new() : base(new vgui_easy3D()) { }
 };
 

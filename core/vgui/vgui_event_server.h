@@ -33,7 +33,7 @@ class vgui_event_server_interpose_tableau;
 
 class vgui_event_server {
 public:
-  vgui_event_server(vgui_tableau_ref const&);
+  vgui_event_server(vgui_tableau_sptr const&);
 
   void reset();
   bool next();
@@ -49,7 +49,7 @@ private:
 
   friend class vgui_event_server_interpose_tableau;
   vgui_event_server_interpose_tableau* grabber_;
-  vgui_tableau_ref grabber_reference_;
+  vgui_tableau_sptr grabber_reference_;
   vgui_event last_event_;
   bool use_event_;
   vgui_menu menu;

@@ -26,7 +26,7 @@ public:
   vcl_string file_name() const;
   vcl_string pretty_name() const;
 
-  void set_child(vgui_tableau_ref const& new_child);
+  void set_child(vgui_tableau_sptr const& new_child);
   bool handle(const vgui_event&);
 
 private:

@@ -42,7 +42,7 @@ bool vgui_glerrors_are_bad = false;
 static void vgui_remove_arg(unsigned index, int &argc, char **argv)
 {
   // NB ISO says argv[argc] is required to be 0, so argv[i+1] is right.
-  for (int i=index; i<argc; ++i) 
+  for (int i=index; i<argc; ++i)
     argv[i]=argv[i+1];
   --argc;
 }
@@ -93,7 +93,7 @@ bool vgui::select(int &argc, char **argv)
     else
       ++ i;
   }
-  
+
   // if there is no instance set (with --factory), check the environment
   // variable 'vgui' :
   if (! instance_) {
@@ -123,24 +123,24 @@ void vgui::init(int &argc, char **argv)
   for (unsigned i=0; i<vgui_toolkit::registry()->size(); ++i)
     vcl_cerr << "\'" << (*vgui_toolkit::registry())[i]->name() << "\' ";
   vcl_cerr << vcl_endl;
-  
+
   // if no toolkit was selected, try using the command line arguments.
   if (! instance_)
     select(argc, argv);
-  
+
   // if there is still no instance, take the first one registered :
   if (! instance_) {
     if (! vgui_toolkit::registry()->empty())
       instance_ = vgui_toolkit::registry()->front();
   }
-  
+
   // abort if no toolkit has been selected.
   if (! instance_) {
     vgui_macro_warning << "failed to find a toolkit implementation - abort()ing." << vcl_endl;
     vcl_abort();
   }
   assert(instance_); // need an instance.
-  
+
   // Look for command line options.
   for (int i=1; i<argc; ) {
     if (strncmp(argv[i],"--factory=",10) == 0) {            // --factory=<name>
@@ -171,7 +171,7 @@ void vgui::init(int &argc, char **argv)
       vgui_glerrors_are_bad = true;
       vgui_remove_arg(i, argc, argv);
     }
-    else 
+    else
       ++i;
   }
 
@@ -183,9 +183,9 @@ void vgui::init(int &argc, char **argv)
 //-----------------------------------------------------------------------
 
 vgui_window *vgui::produce_window(int width,
-				  int height, 
-				  vgui_menu const &menubar, 
-				  vcl_string const &title VCL_DEFAULT_VALUE("")) 
+				  int height,
+				  vgui_menu const &menubar,
+				  vcl_string const &title VCL_DEFAULT_VALUE(""))
 {
   if (instance_)
     return instance_->produce_window(width, height, menubar, title.c_str());
@@ -196,10 +196,10 @@ vgui_window *vgui::produce_window(int width,
 }
 
 vgui_window *vgui::produce_window(int width,
-				  int height, 
+				  int height,
 				  vcl_string const &title VCL_DEFAULT_VALUE(""))
 {
-  if (instance_) 
+  if (instance_)
     return instance_->produce_window(width, height, title.c_str());
   else {
     vgui_macro_warning << "no toolkit selected" << vcl_endl;
@@ -209,7 +209,7 @@ vgui_window *vgui::produce_window(int width,
 
 vgui_dialog_impl *vgui::produce_dialog(vcl_string const &name)
 {
-  if (instance_) 
+  if (instance_)
     return instance_->produce_dialog(name.c_str());
   else {
     vgui_macro_warning << "no toolkit selected" << vcl_endl;
@@ -275,14 +275,14 @@ void vgui::add_event(vgui_event const& e) {
 // @{ Convenience methods @}
 
 // -- Display this tableau and run till dead.
-int vgui::run(vgui_tableau_ref const& tableau, int width, int height, 
-	      vcl_string const &title VCL_DEFAULT_VALUE("")) 
+int vgui::run(vgui_tableau_sptr const& tableau, int width, int height,
+	      vcl_string const &title VCL_DEFAULT_VALUE(""))
 {
   adapt(tableau, width, height, title);
   return vgui::run();
 }
 
-int vgui::run(vgui_tableau_ref const& tableau, int width, int height, 
+int vgui::run(vgui_tableau_sptr const& tableau, int width, int height,
 	      vgui_menu const &menubar, vcl_string const &title)
 {
   adapt(tableau, width, height, menubar, title);
@@ -290,7 +290,7 @@ int vgui::run(vgui_tableau_ref const& tableau, int width, int height,
 }
 
 //
-vgui_window *vgui::adapt(vgui_tableau_ref const& tableau, int width, int height, 
+vgui_window *vgui::adapt(vgui_tableau_sptr const& tableau, int width, int height,
 			 vcl_string const &title VCL_DEFAULT_VALUE(""))
 {
   vgui_window *win = vgui::produce_window(width, height, title);
@@ -299,8 +299,8 @@ vgui_window *vgui::adapt(vgui_tableau_ref const& tableau, int width, int height,
   return win;
 }
 
-vgui_window *vgui::adapt(vgui_tableau_ref const& tableau, int width, int height, 
-			 vgui_menu const &mb, vcl_string const &title VCL_DEFAULT_VALUE("")) 
+vgui_window *vgui::adapt(vgui_tableau_sptr const& tableau, int width, int height,
+			 vgui_menu const &mb, vcl_string const &title VCL_DEFAULT_VALUE(""))
 {
   vgui_window *win = vgui::produce_window(width, height, mb, title);
   win->get_adaptor()->set_tableau(tableau);

@@ -4,7 +4,7 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// 
+//
 // .NAME vgui_roi_tableau
 // .LIBRARY vgui
 // .HEADER vxl Package
@@ -30,7 +30,7 @@ class vil_crop_image_impl;
 class vil_image;
 class vgui_image_tableau;
 
-#include "vgui_roi_tableau_ref.h"
+#include "vgui_roi_tableau_sptr.h"
 
 class vgui_roi_tableau : public vgui_tableau {
  public:
@@ -48,10 +48,10 @@ class vgui_roi_tableau : public vgui_tableau {
   vcl_string type_name() const;
   vcl_string file_name() const;
   vcl_string pretty_name() const;
-  
+
   // get
   vil_image get_image() const;
-  
+
   // set
   void set_image(vil_image const &);
   void set_image(char const *);          // <- convenience
@@ -71,8 +71,8 @@ class vgui_roi_tableau : public vgui_tableau {
   vcl_string name_;
 };
 
-struct vgui_roi_tableau_new : public vgui_roi_tableau_ref {
-  typedef vgui_roi_tableau_ref base;
+struct vgui_roi_tableau_new : public vgui_roi_tableau_sptr {
+  typedef vgui_roi_tableau_sptr base;
   vgui_roi_tableau_new() : base(new vgui_roi_tableau()) { }
 };
 

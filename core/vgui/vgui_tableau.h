@@ -31,7 +31,7 @@
 
 class vgui_menu;
 class vgui_popup_params;
-struct vgui_tableau_ref;
+struct vgui_tableau_sptr;
 
 class vgui_tableau : public vgui_slot_data {
 public:
@@ -40,30 +40,30 @@ public:
   // name methods.
   virtual vcl_string name() const;
   //: get filename from descendant holding a file (if meaningful).
-  virtual vcl_string file_name() const; 
+  virtual vcl_string file_name() const;
   //: returns name suitable for debugging purposes.
   virtual vcl_string pretty_name() const;
   //: return name of most derived class (for RTTI purposes).
   virtual vcl_string type_name() const;
 
   //: methods to get/set children and parents.
-  void get_parents (vcl_vector<vgui_tableau_ref> *out) const;
-  void get_children(vcl_vector<vgui_tableau_ref> *out) const;
-  vgui_tableau_ref get_child(unsigned i) const;
-  virtual bool add_child(vgui_tableau_ref const &);
-  virtual bool remove_child(vgui_tableau_ref const &);
-  static void get_all(vcl_vector<vgui_tableau_ref> *out);
-  static bool exists(vgui_tableau_ref const &);
-  
+  void get_parents (vcl_vector<vgui_tableau_sptr> *out) const;
+  void get_children(vcl_vector<vgui_tableau_sptr> *out) const;
+  vgui_tableau_sptr get_child(unsigned i) const;
+  virtual bool add_child(vgui_tableau_sptr const &);
+  virtual bool remove_child(vgui_tableau_sptr const &);
+  static void get_all(vcl_vector<vgui_tableau_sptr> *out);
+  static bool exists(vgui_tableau_sptr const &);
+
   // Called whenever a child of this tableau is about to be forcibly replaced
-  virtual bool notify_replaced_child(vgui_tableau_ref const & old_child,
-				     vgui_tableau_ref const & new_child);
+  virtual bool notify_replaced_child(vgui_tableau_sptr const & old_child,
+				     vgui_tableau_sptr const & new_child);
 
   // methods related to popup menus.
   virtual void add_popup(vgui_menu &);
   virtual void get_popup(vgui_popup_params const &, vgui_menu &);
 
-  // redraw and other post() methods. the fact that these are virtual 
+  // redraw and other post() methods. the fact that these are virtual
   // does not imply that you should go and override them.
   virtual void post_message(char const *, void const *);
   virtual void post_redraw();
@@ -88,8 +88,8 @@ public:
   void unref() const;
 
   //
-  void adopt (vgui_tableau_ref const &) const;
-  void disown(vgui_tableau_ref const &) const;
+  void adopt (vgui_tableau_sptr const &) const;
+  void disown(vgui_tableau_sptr const &) const;
 
 protected:
   virtual ~vgui_tableau();
@@ -103,8 +103,8 @@ private:
 };
 
 //: print some indication of what the tableau is.
-vcl_ostream &operator<<(vcl_ostream &os, vgui_tableau_ref const &t);
+vcl_ostream &operator<<(vcl_ostream &os, vgui_tableau_sptr const &t);
 
-#include <vgui/vgui_tableau_ref.h>
+#include <vgui/vgui_tableau_sptr.h>
 
 #endif // vgui_tableau_h_

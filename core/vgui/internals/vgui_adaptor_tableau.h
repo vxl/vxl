@@ -15,15 +15,15 @@ class vgui_adaptor;
 class vgui_adaptor_tableau : private vgui_tableau
 {
   friend class vgui_adaptor;
-  
+
   vgui_adaptor_tableau(vgui_adaptor *a);
   ~vgui_adaptor_tableau();
-  
-  void set_child(vgui_tableau_ref const & t) { slot.assign(t); }
-  vgui_tableau_ref get_child() const { return slot; }
+
+  void set_child(vgui_tableau_sptr const & t) { slot.assign(t); }
+  vgui_tableau_sptr get_child() const { return slot; }
   bool handle(vgui_event const &e) { return slot.handle(e); }
   vcl_string type_name() const { return "vgui_adaptor_tableau"; }
-  
+
 /*even more*/ private:
   vgui_adaptor *adaptor;
   vgui_slot slot;

@@ -26,10 +26,10 @@
 
 //static bool debug = true;
 extern void get_current(unsigned*, unsigned*);
-extern vcl_vector<vgui_easy2D_ref> get_easy2D_list();
-extern vgui_rubberbander_ref get_rubberbander_at(unsigned, unsigned);
-extern vgui_easy2D_ref get_easy2D_at(unsigned, unsigned);
-extern vgui_easy2D_ref get_current_easy2D();
+extern vcl_vector<vgui_easy2D_sptr> get_easy2D_list();
+extern vgui_rubberbander_sptr get_rubberbander_at(unsigned, unsigned);
+extern vgui_easy2D_sptr get_easy2D_at(unsigned, unsigned);
+extern vgui_easy2D_sptr get_current_easy2D();
 
 // Filename for save and load
 static vcl_string filename = "/tmp/temp.gx";
@@ -42,11 +42,11 @@ void xcv_geometry::create_point()
 {
   unsigned col, row;
   get_current(&col, &row);
-  vgui_rubberbander_ref rubber = get_rubberbander_at(col, row);
+  vgui_rubberbander_sptr rubber = get_rubberbander_at(col, row);
   if (rubber)
     rubber->rubberband_point();
 }
- 
+
 //-----------------------------------------------------------------------------
 //-- Rubberband a line on the currently selected tableau.
 //-----------------------------------------------------------------------------
@@ -54,11 +54,11 @@ void xcv_geometry::create_line()
 {
   unsigned col, row;
   get_current(&col, &row);
-  vgui_rubberbander_ref rubber = get_rubberbander_at(col, row);
+  vgui_rubberbander_sptr rubber = get_rubberbander_at(col, row);
   if (rubber)
     rubber->rubberband_line();
 }
- 
+
 //-----------------------------------------------------------------------------
 //-- Rubberband a circle on the currently selected tableau.
 //-----------------------------------------------------------------------------
@@ -66,11 +66,11 @@ void xcv_geometry::create_circle()
 {
   unsigned col, row;
   get_current(&col, &row);
-  vgui_rubberbander_ref rubber = get_rubberbander_at(col, row);
+  vgui_rubberbander_sptr rubber = get_rubberbander_at(col, row);
   if (rubber)
     rubber->rubberband_circle();
 }
- 
+
 //-----------------------------------------------------------------------------
 //-- Rubberband a polygon on the currently selected tableau.
 //-----------------------------------------------------------------------------
@@ -78,7 +78,7 @@ void xcv_geometry::create_polygon()
 {
   unsigned col, row;
   get_current(&col, &row);
-  vgui_rubberbander_ref rubber = get_rubberbander_at(col, row);
+  vgui_rubberbander_sptr rubber = get_rubberbander_at(col, row);
   if (rubber)
     rubber->rubberband_polygon();
 }
@@ -89,7 +89,7 @@ void xcv_geometry::create_linestrip()
 {
   unsigned col, row;
   get_current(&col, &row);
-  vgui_rubberbander_ref rubber = get_rubberbander_at(col, row);
+  vgui_rubberbander_sptr rubber = get_rubberbander_at(col, row);
   if (rubber)
     rubber->rubberband_linestrip();
 }
@@ -100,7 +100,7 @@ void xcv_geometry::create_infinite_line()
 {
   unsigned col, row;
   get_current(&col, &row);
-  vgui_rubberbander_ref rubber = get_rubberbander_at(col, row);
+  vgui_rubberbander_sptr rubber = get_rubberbander_at(col, row);
   if (rubber)
     rubber->rubberband_infinite_line();
 }
@@ -115,11 +115,11 @@ void xcv_geometry::change_sel_color()
   if (!color_dl.ask())
     return;
 
-  vcl_vector<vgui_easy2D_ref> easy_list = get_easy2D_list();
+  vcl_vector<vgui_easy2D_sptr> easy_list = get_easy2D_list();
   for (unsigned i=0; i<easy_list.size(); i++)
   {
-    vcl_vector<vgui_soview*> sel_objs = easy_list[i]->get_selected_soviews(); 
-    for (vcl_vector<vgui_soview*>::iterator iter = sel_objs.begin(); iter != 
+    vcl_vector<vgui_soview*> sel_objs = easy_list[i]->get_selected_soviews();
+    for (vcl_vector<vgui_soview*>::iterator iter = sel_objs.begin(); iter !=
       sel_objs.end(); iter++)
     {
       vgui_soview* sv = (vgui_soview*)(*iter);
@@ -140,10 +140,10 @@ void xcv_geometry::change_sel_radius()
   if (!radius_dl.ask())
     return;
 
-  vcl_vector<vgui_easy2D_ref> easy_list = get_easy2D_list();
+  vcl_vector<vgui_easy2D_sptr> easy_list = get_easy2D_list();
   for (unsigned i=0; i<easy_list.size(); i++)
   {
-    vcl_vector<vgui_soview*> sel_objs = easy_list[i]->get_selected_soviews(); 
+    vcl_vector<vgui_soview*> sel_objs = easy_list[i]->get_selected_soviews();
     for (vcl_vector<vgui_soview*>::iterator it = sel_objs.begin(); it != sel_objs.end(); it++)
     {
       vgui_soview* sv = (vgui_soview*)(*it);
@@ -155,21 +155,21 @@ void xcv_geometry::change_sel_radius()
 }
 
 //-----------------------------------------------------------------------------
-//-- Change the line widths of all the selected geometric objects 
+//-- Change the line widths of all the selected geometric objects
 // (that aren't points).
 //-----------------------------------------------------------------------------
 void xcv_geometry::change_sel_width()
 {
   static float line_width = 1.0;
   vgui_dialog width_dl("Line width");
-  width_dl.field("Line width for selected objects:", line_width); 
+  width_dl.field("Line width for selected objects:", line_width);
   if (!width_dl.ask())
     return;
 
-  vcl_vector<vgui_easy2D_ref> easy_list = get_easy2D_list();
+  vcl_vector<vgui_easy2D_sptr> easy_list = get_easy2D_list();
   for (unsigned i=0; i<easy_list.size(); i++)
   {
-    vcl_vector<vgui_soview*> sel_objs = easy_list[i]->get_selected_soviews(); 
+    vcl_vector<vgui_soview*> sel_objs = easy_list[i]->get_selected_soviews();
     for (vcl_vector<vgui_soview*>::iterator it = sel_objs.begin(); it != sel_objs.end(); it++)
     {
       vgui_soview* sv = (vgui_soview*)(*it);
@@ -186,17 +186,17 @@ void xcv_geometry::change_sel_width()
 void xcv_geometry::delete_sel_objs()
 {
   vgui_dialog del_dl("WARNING");
-  del_dl.message("");  
-  del_dl.message("Are you sure you want to delete all the ");  
+  del_dl.message("");
+  del_dl.message("Are you sure you want to delete all the ");
   del_dl.message("selected geometric objects?");
-  del_dl.message("");  
+  del_dl.message("");
   if (!del_dl.ask())
     return;
 
-  vcl_vector<vgui_easy2D_ref> easy_list = get_easy2D_list();
+  vcl_vector<vgui_easy2D_sptr> easy_list = get_easy2D_list();
   for (unsigned i=0; i<easy_list.size(); i++)
   {
-    vcl_vector<vgui_soview*> sel_objs = easy_list[i]->get_selected_soviews(); 
+    vcl_vector<vgui_soview*> sel_objs = easy_list[i]->get_selected_soviews();
     for (vcl_vector<vgui_soview*>::iterator j = sel_objs.begin(); j != sel_objs.end(); j++)
       easy_list[i]->remove((vgui_soview*)(*j));
   }
@@ -209,21 +209,21 @@ void xcv_geometry::delete_all()
   unsigned col, row;
   get_current(&col, &row);
   vgui_dialog del_dl("WARNING");
-  del_dl.message("");  
-  del_dl.message("Are you sure you want to delete all geometric objects ");  
+  del_dl.message("");
+  del_dl.message("Are you sure you want to delete all geometric objects ");
   del_dl.message("from the selected view?");
-  del_dl.message("");  
+  del_dl.message("");
   if (!del_dl.ask())
     return;
 
-  vgui_easy2D_ref easy_tab = get_easy2D_at(col, row);
+  vgui_easy2D_sptr easy_tab = get_easy2D_at(col, row);
   if (!easy_tab)
   {
     vgui_macro_warning << "Unable to get current easy2D to delete te objects" << vcl_endl;
     return;
   }
 
-  vcl_vector<vgui_soview*> sel_objs = easy_tab->get_all(); 
+  vcl_vector<vgui_soview*> sel_objs = easy_tab->get_all();
   for (vcl_vector<vgui_soview*>::iterator i = sel_objs.begin(); i != sel_objs.end(); i++)
   {
     easy_tab->remove((vgui_soview*)(*i));
@@ -238,13 +238,13 @@ void xcv_geometry::delete_points()
   unsigned col, row;
   get_current(&col, &row);
   vgui_dialog del_dl("WARNING");
-  del_dl.message("");  
-  del_dl.message("Are you sure you want to delete all the points?");  
-  del_dl.message("");  
+  del_dl.message("");
+  del_dl.message("Are you sure you want to delete all the points?");
+  del_dl.message("");
   if (!del_dl.ask())
     return;
 
-  vgui_easy2D_ref easy_tab = get_easy2D_at(col,row);
+  vgui_easy2D_sptr easy_tab = get_easy2D_at(col,row);
   if (!easy_tab)
   {
     vgui_macro_warning << "Unable to get current easy2D to delete  points" << vcl_endl;
@@ -265,13 +265,13 @@ void xcv_geometry::delete_lines()
   unsigned col, row;
   get_current(&col, &row);
   vgui_dialog del_dl("WARNING");
-  del_dl.message("");  
-  del_dl.message("Are you sure you want to delete all the lines?");  
-  del_dl.message("");  
+  del_dl.message("");
+  del_dl.message("Are you sure you want to delete all the lines?");
+  del_dl.message("");
   if (!del_dl.ask())
     return;
 
-  vgui_easy2D_ref easy_tab = get_easy2D_at(col,row);
+  vgui_easy2D_sptr easy_tab = get_easy2D_at(col,row);
   if (!easy_tab)
   {
     vgui_macro_warning << "Unable to get current easy2D to delete lines" << vcl_endl;
@@ -292,13 +292,13 @@ void xcv_geometry::delete_inf_lines()
   unsigned col, row;
   get_current(&col, &row);
   vgui_dialog del_dl("WARNING");
-  del_dl.message("");  
-  del_dl.message("Are you sure you want to delete all the infinite lines?");  
-  del_dl.message("");  
+  del_dl.message("");
+  del_dl.message("Are you sure you want to delete all the infinite lines?");
+  del_dl.message("");
   if (!del_dl.ask())
     return;
 
-  vgui_easy2D_ref easy_tab = get_easy2D_at(col,row);
+  vgui_easy2D_sptr easy_tab = get_easy2D_at(col,row);
   if (!easy_tab)
   {
     vgui_macro_warning << "Unable to get current easy2D to delete infinite lines?" << vcl_endl;
@@ -319,13 +319,13 @@ void xcv_geometry::delete_circles()
   unsigned col, row;
   get_current(&col, &row);
   vgui_dialog del_dl("WARNING");
-  del_dl.message("");  
-  del_dl.message("Are you sure you want to delete all the circles?");  
-  del_dl.message("");  
+  del_dl.message("");
+  del_dl.message("Are you sure you want to delete all the circles?");
+  del_dl.message("");
   if (!del_dl.ask())
     return;
 
-  vgui_easy2D_ref easy_tab = get_easy2D_at(col,row);
+  vgui_easy2D_sptr easy_tab = get_easy2D_at(col,row);
   if (!easy_tab)
   {
     vgui_macro_warning << "Unable to get current easy2D to delete circles?" << vcl_endl;
@@ -346,13 +346,13 @@ void xcv_geometry::delete_linestrips()
   unsigned col, row;
   get_current(&col, &row);
   vgui_dialog del_dl("WARNING");
-  del_dl.message("");  
-  del_dl.message("Are you sure you want to delete all the linestrips?");  
-  del_dl.message("");  
+  del_dl.message("");
+  del_dl.message("Are you sure you want to delete all the linestrips?");
+  del_dl.message("");
   if (!del_dl.ask())
     return;
 
-  vgui_easy2D_ref easy_tab = get_easy2D_at(col,row);
+  vgui_easy2D_sptr easy_tab = get_easy2D_at(col,row);
   if (!easy_tab)
   {
     vgui_macro_warning << "Unable to get current easy2D to delete linestrips" << vcl_endl;
@@ -379,7 +379,7 @@ void xcv_geometry::change_default_color()
   if (!color_dl.ask())
     return;
 
-  vcl_vector<vgui_easy2D_ref> easy_list = get_easy2D_list();
+  vcl_vector<vgui_easy2D_sptr> easy_list = get_easy2D_list();
   for (unsigned i=0; i<easy_list.size(); i++)
   {
     easy_list[i]->set_foreground(red_value(color_value), green_value(color_value),
@@ -389,7 +389,7 @@ void xcv_geometry::change_default_color()
 
 //-----------------------------------------------------------------------------
 //-- Change the default radius for points.
-//   Note, this will apply to points created in the future, not to points 
+//   Note, this will apply to points created in the future, not to points
 //   already on the tableau.
 //-----------------------------------------------------------------------------
 void xcv_geometry::change_default_radius()
@@ -400,10 +400,10 @@ void xcv_geometry::change_default_radius()
   if (!radius_dl.ask())
     return;
 
-  vcl_vector<vgui_easy2D_ref> easy_list = get_easy2D_list();
+  vcl_vector<vgui_easy2D_sptr> easy_list = get_easy2D_list();
   for (unsigned i=0; i<easy_list.size(); i++)
   {
-    easy_list[i]->set_point_radius(point_radius); 
+    easy_list[i]->set_point_radius(point_radius);
   }
 }
 
@@ -416,24 +416,24 @@ void xcv_geometry::change_default_width()
 {
   static int line_width = 1;
   vgui_dialog width_dl("Default line width");
-  width_dl.field("Default line width:", line_width); 
+  width_dl.field("Default line width:", line_width);
   if (!width_dl.ask())
     return;
 
-  vcl_vector<vgui_easy2D_ref> easy_list = get_easy2D_list();
+  vcl_vector<vgui_easy2D_sptr> easy_list = get_easy2D_list();
   for (unsigned i=0; i<easy_list.size(); i++)
     easy_list[i]->set_line_width(line_width);
 }
 //-----------------------------------------------------------------------------
-//-- Write coordinates into a file  
+//-- Write coordinates into a file
 //-----------------------------------------------------------------------------
 void xcv_geometry::save(const char *object_type,const char *dialog_name)
 {
-  
-  
+
+
   unsigned col, row;
   get_current(&col, &row);
-  vgui_easy2D_ref easy_tab = get_easy2D_at(col, row);
+  vgui_easy2D_sptr easy_tab = get_easy2D_at(col, row);
   vgui_dialog save_dl(dialog_name);
   save_dl.inline_file("Filename: ", regexp, filename);
   vcl_ofstream fs;
@@ -485,7 +485,7 @@ void xcv_geometry::save(const char *object_type,const char *dialog_name)
 	for(unsigned int ii = 0; ii<linestrip->n; ++ii)
         {
           fs<<" "<<linestrip->x[ii]<<" "<<linestrip->y[ii];
-	} 
+	}
         fs << vcl_endl;
       }
       else if(svtype == "vgui_soview2D_polygon" && matched)
@@ -495,7 +495,7 @@ void xcv_geometry::save(const char *object_type,const char *dialog_name)
 	for(unsigned int ii = 0; ii<polygon->n; ++ii)
         {
           fs<<" "<<polygon->x[ii]<<" "<<polygon->y[ii];
-	} 
+	}
         fs << vcl_endl;
       }
     }
@@ -523,15 +523,15 @@ void xcv_geometry::save_geometry()
   save(0,"Save geometry");
 }
 //-----------------------------------------------------------------------------
-//-- Load coordinates from a file  
+//-- Load coordinates from a file
 //-----------------------------------------------------------------------------
 void xcv_geometry::load(const char *object_type,const char *dialog_name)
 {
-  
-  
+
+
   unsigned col, row;
   get_current(&col, &row);
-  vgui_easy2D_ref easy_tab = get_easy2D_at(col, row);
+  vgui_easy2D_sptr easy_tab = get_easy2D_at(col, row);
   if (!easy_tab) return;
   vgui_dialog load_dl(dialog_name);
   load_dl.inline_file("Filename: ", regexp, filename);
@@ -607,7 +607,7 @@ void xcv_geometry::load(const char *object_type,const char *dialog_name)
           easy_tab->add_line(x0,y0,x1,y1);
           x0 = x1;
           y0 = y1;
-	} 
+	}
       }
       else if(tag == "y")
       {
@@ -652,11 +652,11 @@ void xcv_geometry::load_linestrips()
 
 //: Add sheets to gui
 static void add(vgl_polygon const& p)
-{    
+{
   unsigned col, row;
   get_current(&col, &row);
-  vgui_easy2D_ref easy_tab = get_easy2D_at(col, row);
- 
+  vgui_easy2D_sptr easy_tab = get_easy2D_at(col, row);
+
   for(int i = 0; i < p.num_sheets(); ++i) {
     vgl_polygon_sheet_as_array sp(p[i]);
     easy_tab->add_polygon(sp.n, sp.x, sp.y);
@@ -668,11 +668,11 @@ void xcv_geometry::polygon_intersect()
 {
   vcl_vector<vgl_polygon> all_polys;
 
-  vcl_vector<vgui_easy2D_ref> easy_list = get_easy2D_list();
+  vcl_vector<vgui_easy2D_sptr> easy_list = get_easy2D_list();
   vcl_vector<vgui_soview*> all_soviews;
   for (unsigned i=0; i<easy_list.size(); i++)
   {
-    vcl_vector<vgui_soview*> sel_objs = easy_list[i]->get_selected_soviews(); 
+    vcl_vector<vgui_soview*> sel_objs = easy_list[i]->get_selected_soviews();
     for (vcl_vector<vgui_soview*>::iterator it = sel_objs.begin(); it != sel_objs.end(); it++)
     {
       vgui_soview* sv = (vgui_soview*)(*it);
@@ -697,7 +697,7 @@ void xcv_geometry::polygon_intersect()
   // Intersect :  a and b
   add(vcgl_polygon_clip_intersect(all_polys[0], all_polys[1]));
 
-  // a - b 
+  // a - b
   add(vcgl_polygon_clip_subtract(all_polys[0], all_polys[1]));
   add(vcgl_polygon_clip_subtract(all_polys[1], all_polys[0]));
 }
@@ -711,7 +711,7 @@ static void xcv_geometry_explode_geometry()
   if (!del_dl.ask())
     return;
 
-  vgui_easy2D_ref easy_tab = get_current_easy2D();
+  vgui_easy2D_sptr easy_tab = get_current_easy2D();
   if (!easy_tab)
   {
     vgui_macro_warning << "Unable to get current easy2D to delete te objects" << vcl_endl;
@@ -722,7 +722,7 @@ static void xcv_geometry_explode_geometry()
   double cx = 0;
   double cy = 0;
   double ca = 0;
-  vcl_vector<vgui_soview*> sel_objs = easy_tab->get_all(); 
+  vcl_vector<vgui_soview*> sel_objs = easy_tab->get_all();
   for (vcl_vector<vgui_soview*>::iterator i = sel_objs.begin(); i != sel_objs.end(); i++)
   {
     vgui_soview2D* sv = (vgui_soview2D*)*i;
@@ -761,7 +761,7 @@ void xcv_geometry::create_box()
 {
   unsigned col, row;
   get_current(&col, &row);
-  vgui_rubberbander_ref rubber = get_rubberbander_at(col, row);
+  vgui_rubberbander_sptr rubber = get_rubberbander_at(col, row);
   if (rubber)
     rubber->rubberband_box();
 }
@@ -781,12 +781,12 @@ vgui_menu xcv_geometry::create_geometry_menu()
   sel_menu.add("Change colour", change_sel_color);
   sel_menu.add("Change point radius", change_sel_radius);
   sel_menu.add("Change line width", change_sel_width);
-  
+
   vgui_menu default_menu;
   default_menu.add("Change colour", change_default_color);
   default_menu.add("Change point radius", change_default_radius);
   default_menu.add("Change line width", change_default_width);
-  
+
   vgui_menu del_menu;
   del_menu.add("Remove points",delete_points);
   del_menu.add("Remove lines",delete_lines);

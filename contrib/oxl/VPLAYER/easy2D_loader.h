@@ -14,9 +14,9 @@
 #include <oxp/GXFileVisitor.h>
 
 class easy2D_loader : public GXFileVisitor {
-  vgui_easy2D_ref easy_;
+  vgui_easy2D_sptr easy_;
 public:
-  easy2D_loader(vgui_easy2D_ref const& easy);
+  easy2D_loader(vgui_easy2D_sptr const& easy);
   bool point(char const* type, float x, float y);
   bool polyline(float const* x, float const* y, int n);
   bool set_color(float r, float g, float b);

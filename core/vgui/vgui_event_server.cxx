@@ -28,24 +28,20 @@ public:
     {
     }
 
-
   bool handle(const vgui_event& event);
-  vcl_string type_name() const {return "vgui_event_server";} 
-  
-
+  vcl_string type_name() const {return "vgui_event_server";}
 };
 
 // -- Interaction (i.e. mouse/kb) events are saved, and said to be consumed.
 bool vgui_event_server_interpose_tableau::handle(const vgui_event& event) {
-    
-//if (debug) 
+
+//if (debug)
 //  cerr << "vgui_event_server::handle type " << event.type << endl;
 
   // Pass draw events down -- we're just grabbing the interactions
-  if (event.type == vgui_DRAW) {
+  if (event.type == vgui_DRAW)
     return child.handle(event);
-  }
-   
+
   // Do not grab TIMERs
   if (event.type == vgui_TIMER)
     return false;
@@ -58,14 +54,14 @@ bool vgui_event_server_interpose_tableau::handle(const vgui_event& event) {
 
 // -- Construct a vgui_event_server, which grabs all events intended for
 // tableau t.
-vgui_event_server::vgui_event_server(vgui_tableau_ref const& t):
+vgui_event_server::vgui_event_server(vgui_tableau_sptr const& t):
   grabber_(0)
 {
   use_event_ = false;
   grabber_ = new vgui_event_server_interpose_tableau(this);
   grabber_reference_ = grabber_;
 
-//if (debug) 
+//if (debug)
 //  cerr << "vgui_event_server::hooking up " << endl;
 
   // link up grabber
@@ -80,12 +76,11 @@ vgui_event_server::~vgui_event_server()
   // Replace the grabber with its child
   vgui_slot::replace_child_everywhere(grabber_, grabber_->child);
 
-//if (debug) 
+//if (debug)
 //  cerr << "vgui_event_server::unhooking" << endl;
 }
 
 void vgui_event_server::reset() {
-  
 }
 
 bool vgui_event_server::next() {
@@ -100,5 +95,4 @@ bool vgui_event_server::next() {
 
 vgui_event vgui_event_server::last_event() {
   return last_event_;
-
 }

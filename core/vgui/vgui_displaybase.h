@@ -3,7 +3,7 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// 
+//
 // .NAME vgui_displaybase - Undocumented class FIXME
 // .LIBRARY vgui
 // .HEADER vxl Package
@@ -44,9 +44,9 @@ struct vgui_displaybase_selection_callback {
 
 //: General display list functionality, can use any type of soview.
 // As long as it's black.
-#include "vgui_displaybase_ref.h"
+#include "vgui_displaybase_sptr.h"
 
-class vgui_displaybase : public vgui_tableau { 
+class vgui_displaybase : public vgui_tableau {
 public:
 
   vgui_displaybase();
@@ -61,7 +61,7 @@ public:
   void draw_soviews_render();
   void draw_soviews_select();
 
-  
+
   // selections
   bool is_selected(unsigned id);
   vcl_vector<unsigned> const & get_selected() const;
@@ -85,11 +85,11 @@ public:
   //: Attach your own selection callback.
   // You are in charge of deleting it later.
   void set_selection_callback(vgui_displaybase_selection_callback* cb);
-  
+
   vcl_vector<vgui_soview*> const &get_all() const;
   vcl_vector<unsigned>     const  get_all_ids() const;
 
-  // 
+  //
   vgui_soview* contains_hit(vcl_vector<unsigned> hit);
 
   unsigned get_id() {return id;}
@@ -97,7 +97,7 @@ public:
 
 protected:
   vcl_vector<vgui_soview*> objects;
-  
+
   vcl_vector<unsigned> groups;
   vcl_vector<unsigned> selections;
   unsigned highlighted;
@@ -110,8 +110,8 @@ private:
   unsigned id;
 };
 
-struct vgui_displaybase_new : public vgui_displaybase_ref {
-  typedef vgui_displaybase_ref base;
+struct vgui_displaybase_new : public vgui_displaybase_sptr {
+  typedef vgui_displaybase_sptr base;
   vgui_displaybase_new() : base(new vgui_displaybase()) { }
 };
 

@@ -20,7 +20,7 @@
 
 #include <qpopupmenu.h>
 
-typedef vbl_smart_ptr<vgui_command> vgui_command_ref;
+typedef vbl_smart_ptr<vgui_command> vgui_command_sptr;
 
 class vgui_qt_menu : public QPopupMenu
 {
@@ -28,12 +28,12 @@ class vgui_qt_menu : public QPopupMenu
 public:
    vgui_qt_menu(const vgui_menu& menuke);
   ~vgui_qt_menu() { delete[] commands_; };
-  
+
 public slots:
    void  upon_activated(int id);
-   
+
 private:
-   vgui_command_ref*  commands_;
+   vgui_command_sptr*  commands_;
 };
 
 #endif // _VGUI_QT_MENU_H_

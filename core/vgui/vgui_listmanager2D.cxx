@@ -45,7 +45,7 @@ vcl_string vgui_listmanager2D::type_name() const {
 }
 
 // -- Add a child to the end of the vcl_list
-void vgui_listmanager2D::add(vgui_displaylist2D_ref const& dl) {
+void vgui_listmanager2D::add(vgui_displaylist2D_sptr const& dl) {
   children.push_back( vgui_slot(this,dl) );
   active.push_back(true);
   visible.push_back(true);
@@ -53,7 +53,7 @@ void vgui_listmanager2D::add(vgui_displaylist2D_ref const& dl) {
 }
 
 // -- Remove the given child from the vcl_list.
-void vgui_listmanager2D::remove(vgui_displaylist2D_ref const& t) {
+void vgui_listmanager2D::remove(vgui_displaylist2D_sptr const& t) {
   vcl_vector<bool>::iterator ia = active.begin();
   vcl_vector<bool>::iterator iv = visible.begin();
   for (vcl_vector<vgui_slot>::iterator i=children.begin() ; i!=children.end() ; ++i, ++ia, ++iv)
@@ -103,14 +103,14 @@ bool vgui_listmanager2D::help() {
   vcl_cerr << vcl_endl;
   return false;
 }
-  
-vgui_displaylist2D_ref vgui_listmanager2D::contains_hit(vcl_vector<unsigned> const& names) {
+
+vgui_displaylist2D_sptr vgui_listmanager2D::contains_hit(vcl_vector<unsigned> const& names) {
   //
   for (vcl_vector<vgui_slot>::iterator i=this->children.begin() ;
        i!=this->children.end() ; ++i) {
     // get id of vcl_list
-    vgui_displaylist2D_ref list;
-    list.vgui_tableau_ref::operator=(i->child());
+    vgui_displaylist2D_sptr list;
+    list.vgui_tableau_sptr::operator=(i->child());
     unsigned list_id = list->get_id();
 
     vcl_vector<unsigned>::const_iterator ni = vcl_find(names.begin(), names.end(), list_id);
@@ -118,17 +118,17 @@ vgui_displaylist2D_ref vgui_listmanager2D::contains_hit(vcl_vector<unsigned> con
       return list;
   }
 
-  return vgui_displaylist2D_ref();
+  return vgui_displaylist2D_sptr();
 }
 
 void vgui_listmanager2D::get_hits(float x, float y, vcl_vector<vcl_vector<unsigned> >* hits) {
   GLuint *ptr = vgui_utils::enter_pick_mode(x,y,100);
-         
+
   int count=0;
   for (vcl_vector<vgui_slot>::iterator i=this->children.begin() ;
        i!=this->children.end() ; ++i, ++count) {
-    vgui_displaylist2D_ref display;
-    display.vgui_tableau_ref::operator=(i->child());
+    vgui_displaylist2D_sptr display;
+    display.vgui_tableau_sptr::operator=(i->child());
 
     if (this->active[count] && this->visible[count]) {
       display->gl_mode = GL_SELECT;
@@ -136,24 +136,24 @@ void vgui_listmanager2D::get_hits(float x, float y, vcl_vector<vcl_vector<unsign
       display->gl_mode = GL_RENDER;
     }
   }
-      
+
   int num_hits = vgui_utils::leave_pick_mode();
-      
+
   // get hits
-  vgui_utils::process_hits(num_hits, ptr, *hits); 
+  vgui_utils::process_hits(num_hits, ptr, *hits);
 }
 
-void vgui_listmanager2D::find_closest(float x, float y, vcl_vector<vcl_vector<unsigned> >* hits, 
-				      vgui_soview2D** closest_so, vgui_displaylist2D_ref* closest_display) {
+void vgui_listmanager2D::find_closest(float x, float y, vcl_vector<vcl_vector<unsigned> >* hits,
+				      vgui_soview2D** closest_so, vgui_displaylist2D_sptr* closest_display) {
 
   float closest_dist = -1; //v*nl_math::maxfloat;
   vcl_vector<unsigned> closest_hit;
-  vgui_displaylist2D_ref display;
+  vgui_displaylist2D_sptr display;
   closest_display = 0;
   closest_so = 0;
 
   if (debug) vcl_cerr << "hits->size() " << hits->size() << vcl_endl;
-  for (vcl_vector<vcl_vector<unsigned> >::iterator h_iter = hits->begin(); 
+  for (vcl_vector<vcl_vector<unsigned> >::iterator h_iter = hits->begin();
        h_iter != hits->end(); ++h_iter) {
 
     vcl_vector<unsigned> names = *h_iter;
@@ -192,13 +192,13 @@ bool vgui_listmanager2D::handle(const vgui_event& event) {
   vgui_matrix_state PM;
 
   // clear event
-  /*
+#if 0 // commented out
   if (event.type==vgui_CLEAR) {
     glClearColor(0.2, 0.1, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
     return true;
   }
-  */
+#endif
 
   // "draw" events
   if (event.type==vgui_DRAW || event.type==vgui_DRAW_OVERLAY) {
@@ -207,7 +207,7 @@ bool vgui_listmanager2D::handle(const vgui_event& event) {
     int ia = 0;
     for ( vcl_vector<vgui_slot>::iterator i = children.begin(); i != children.end(); ++i, ++ia) {
       PM.restore();
-      
+
       if (visible[ia]) {
 	if ( !(*i)->handle(event) )
 	  retv=false;
@@ -215,30 +215,30 @@ bool vgui_listmanager2D::handle(const vgui_event& event) {
     }
     return retv;
   }
-  
+
   // "normal" events -- pass them to the drag_mixin, but
   // remember this one in order that it can be passed on.
   this->saved_event_ = event;
   return vgui_tableau::handle(event);
 }
-  
+
 bool vgui_listmanager2D::motion(int x, int y) {
 
   vgui_projection_inspector pi;
   float ix, iy;
   pi.window_to_image_coordinates(int(x),int(y), ix,iy);
-    
+
   vcl_vector<vcl_vector<unsigned> > hits;
-  get_hits(x,y,&hits);    
+  get_hits(x,y,&hits);
 
   vgui_soview2D* closest_so;
-  vgui_displaylist2D_ref closest_display;
+  vgui_displaylist2D_sptr closest_display;
   find_closest(ix, iy, &hits, &closest_so, &closest_display);
-    
+
   if (closest_so && closest_display)
     if (debug) vcl_cerr << "hit " << closest_so->get_id() << " in vcl_list " << closest_display->get_id() << vcl_endl;
 
-   
+
   vgui_utils::begin_sw_overlay();
 
   if (highlight_so) {
@@ -246,8 +246,8 @@ bool vgui_listmanager2D::motion(int x, int y) {
     vgui_style* style = so->get_style();
     glPointSize(style->point_size);
     glLineWidth(style->line_width);
-      
-    if (highlight_list->is_selected(so->get_id())) 
+
+    if (highlight_list->is_selected(so->get_id()))
       glColor3f(1.0, 0.0, 0.0);
     else {
       glColor3f(style->rgba[0],style->rgba[1],style->rgba[2]);
@@ -265,28 +265,27 @@ bool vgui_listmanager2D::motion(int x, int y) {
     glColor3f(0,1,1);
     so->draw();
   }
-    
+
   vgui_utils::end_sw_overlay();
 
   highlight_list = closest_display;
   highlight_so = closest_so;
-    
 
   return true;
 
-  /*
-    int ia = 0;
-    for ( vcl_vector<vgui_slot>::iterator i = this->children.begin();
-    i != this->children.end(); ++i, ++ia) {
-      
-    if (this->visible[ia] && this->active[ia]) {
-    vgui_displaylist2D* list2D = static_cast<vgui_displaylist2D*>(i->child());
-    vcl_cerr << list2D->file_name() << vcl_endl;
-    }
-    }
-    vcl_cerr << vcl_endl;
-    return false;
-  */
+#if 0 // commented out
+  int ia = 0;
+  for ( vcl_vector<vgui_slot>::iterator i = this->children.begin();
+  i != this->children.end(); ++i, ++ia) {
+
+  if (this->visible[ia] && this->active[ia]) {
+  vgui_displaylist2D* list2D = static_cast<vgui_displaylist2D*>(i->child());
+  vcl_cerr << list2D->file_name() << vcl_endl;
+  }
+  }
+  vcl_cerr << vcl_endl;
+  return false;
+#endif
 }
 
 
@@ -296,8 +295,8 @@ bool vgui_listmanager2D::mouse_down(int x, int y, vgui_button button, vgui_modif
     int count=0;
     for (vcl_vector<vgui_slot>::iterator i=this->children.begin() ;
 	 i!=this->children.end() ; ++i, ++count) {
-      vgui_displaylist2D_ref display;
-      display.vgui_tableau_ref::operator=(i->child());
+      vgui_displaylist2D_sptr display;
+      display.vgui_tableau_sptr::operator=(i->child());
       if (this->active[count] && this->visible[count]) {
 	display->handle(this->saved_event_);
       }
@@ -310,14 +309,14 @@ bool vgui_listmanager2D::mouse_down(int x, int y, vgui_button button, vgui_modif
   vgui_projection_inspector pi;
   float ix, iy;
   pi.window_to_image_coordinates(int(x),int(y), ix,iy);
-    
+
   vcl_vector<vcl_vector<unsigned> > hits;
-  get_hits(x,y,&hits);    
+  get_hits(x,y,&hits);
 
   vgui_soview2D* closest_so;
-  vgui_displaylist2D_ref closest_display;
+  vgui_displaylist2D_sptr closest_display;
   find_closest(ix, iy, &hits, &closest_so, &closest_display);
-    
+
   return closest_display && closest_display->handle(this->saved_event_);
 }
 
@@ -329,20 +328,19 @@ bool vgui_listmanager2D::key_press(int /*x*/, int /*y*/, vgui_key key, vgui_modi
     char text[1];
     text[0] = key;
     int num = atoi(text);
-      
+
     bool active = this->is_active(num-1);
     bool visible = this->is_visible(num-1);
 
     if (active) {
       this->set_active(num-1, false);
       this->set_visible(num-1, false);
-      vgui_displaylist2D_ref list;
-      list.vgui_tableau_ref::operator=(this->children[num-1].child());
+      vgui_displaylist2D_sptr list;
+      list.vgui_tableau_sptr::operator=(this->children[num-1].child());
       if (highlight_list == list) {
-	highlight_list = vgui_displaylist2D_ref();
+	highlight_list = vgui_displaylist2D_sptr();
 	highlight_so = 0;
       }
-
     }
     else if (visible) {
       this->set_active(num-1, true);
@@ -352,14 +350,12 @@ bool vgui_listmanager2D::key_press(int /*x*/, int /*y*/, vgui_key key, vgui_modi
       this->set_active(num-1, false);
       this->set_visible(num-1, true);
 
-      vgui_displaylist2D_ref list; 
-      list.vgui_tableau_ref::operator=(this->children[num-1].child());
+      vgui_displaylist2D_sptr list;
+      list.vgui_tableau_sptr::operator=(this->children[num-1].child());
       if (highlight_list == list) {
-	highlight_list = vgui_displaylist2D_ref();
+	highlight_list = vgui_displaylist2D_sptr();
 	highlight_so = 0;
       }
-
-
     }
 
     this->post_redraw();

@@ -27,9 +27,9 @@ static void DRAW()
 }
 
 bool volatile playing = false;
-extern vidl_movie_ref my_movie;
+extern vidl_movie_sptr my_movie;
 extern vidl_movie::frame_iterator pframe;
-extern vcl_vector<vgui_easy2D_ref> tableaux_;
+extern vcl_vector<vgui_easy2D_sptr> tableaux_;
 int frame_num = 2;
 long delta_t = 30;
 void vplayer_video::play_video(const void *)
@@ -39,9 +39,9 @@ void vplayer_video::play_video(const void *)
    {
      unsigned col,row;
      get_current(&col,&row);
-     vgui_rubberbander_ref r= get_rubberbander_at(col,row);
+     vgui_rubberbander_sptr r= get_rubberbander_at(col,row);
      playing = true;
-     vcl_vector<vgui_easy2D_ref>::iterator it = tableaux_.begin();
+     vcl_vector<vgui_easy2D_sptr>::iterator it = tableaux_.begin();
      vbl_timer t;
      while(playing)
      {
@@ -79,7 +79,7 @@ void vplayer_video::go_to_frame(const void *)
     return;
   unsigned col,row;
   get_current(&col,&row);
-  vgui_rubberbander_ref r= get_rubberbander_at(col,row);
+  vgui_rubberbander_sptr r= get_rubberbander_at(col,row);
   if(frame_num<my_movie->length())
   {
     pframe = my_movie->get_frame(frame_num);
@@ -96,13 +96,13 @@ void vplayer_video::next_frame(const void *)
 {
     unsigned col,row;
     get_current(&col,&row);
-    vgui_rubberbander_ref r= get_rubberbander_at(col,row);
-    
+    vgui_rubberbander_sptr r= get_rubberbander_at(col,row);
+
     if(!playing)
     {
       if (pframe == my_movie->last())
         pframe = my_movie->first();
-      else 
+      else
         ++pframe;
       frame_num++;
       frame_num%=my_movie->length();
@@ -118,13 +118,13 @@ void vplayer_video::prev_frame(const void *)
 {
   unsigned col,row;
   get_current(&col,&row);
-  vgui_rubberbander_ref r= get_rubberbander_at(col,row);
-    
+  vgui_rubberbander_sptr r= get_rubberbander_at(col,row);
+
   if(!playing)
   {
     if (pframe == my_movie->first())
       pframe = my_movie->last();
-      else 
+      else
         --pframe;
       frame_num--;
       if(frame_num<0)
@@ -146,7 +146,7 @@ void vplayer_video::set_speed(const void *)
   if(!dl.ask())
     return;
   delta_t = long(1000.0/double(fr));
-} 
+}
 vgui_menu vplayer_video::create_video_menu()
 {
   vgui_menu video_menu;

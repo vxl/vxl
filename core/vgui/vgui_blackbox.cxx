@@ -20,7 +20,7 @@
 #include <vgui/vgui.h>
 #include <vgui/vgui_utils.h>
 
-vgui_blackbox::vgui_blackbox(vgui_tableau_ref const& t) :
+vgui_blackbox::vgui_blackbox(vgui_tableau_sptr const& t) :
   vgui_wrapper_tableau(t),
   recording(false),
   playback(false)
@@ -80,17 +80,17 @@ bool vgui_blackbox::handle(const vgui_event& event) {
           int t = 0;
 	  vcl_ofstream story("/tmp/vgui_blackbox.story");
 
-	  for (vcl_vector<vgui_event>::iterator e_iter=events.begin(); 
+	  for (vcl_vector<vgui_event>::iterator e_iter=events.begin();
 	       e_iter != events.end(); ++e_iter) {
 
 	    // if first event then don't wait
-	    int dt = 0; 
+	    int dt = 0;
             if (old_e) {
 	      dt = (e_iter->timestamp - old_e->timestamp);
               t += dt;
 	      vpl_usleep(dt * 1000);
             }
-  
+
             if ((*e_iter).type == vgui_DRAW) {
               // Draw events are different: post a redraw and run_till_idle.
               child->post_redraw();
@@ -103,7 +103,7 @@ bool vgui_blackbox::handle(const vgui_event& event) {
 
             // Remember this event, at least for timestamping.
 	    old_e = &(*e_iter);
-	    
+	
             // Save frames
 	    {
               char buf[1024];
@@ -115,10 +115,10 @@ bool vgui_blackbox::handle(const vgui_event& event) {
 		story << "image " << buf << vcl_endl;
 		vgui::out << "blackbox: Saving frame " << buf << ", delay " << dt << vcl_endl;
 	      }
-	      
+	
               ++frame_number;
             }
-	  } 
+	  }
 	}
 	vgui::out << "blackbox: ending playback" << vcl_endl;
       }
@@ -127,7 +127,7 @@ bool vgui_blackbox::handle(const vgui_event& event) {
     case '/':
       if (!recording) {
 	vcl_cerr << "vgui_blackbox EVENTS" << vcl_endl;
-	for (vcl_vector<vgui_event>::iterator e_iter=events.begin(); 
+	for (vcl_vector<vgui_event>::iterator e_iter=events.begin();
 	     e_iter != events.end(); ++e_iter) {
 	  vcl_cerr << *e_iter << vcl_endl;
 	}
@@ -138,7 +138,7 @@ bool vgui_blackbox::handle(const vgui_event& event) {
     case '#':
       if (!recording) {
 	vgui::out << "blackbox: clearing events" << vcl_endl;
-	events.clear(); 
+	events.clear();
 	return true;
       }
       break;
@@ -162,7 +162,6 @@ bool vgui_blackbox::handle(const vgui_event& event) {
     else
       vcl_cerr << "blackbox: Ignoring " << copy << vcl_endl;
   }
-    
 
   return used;
 }

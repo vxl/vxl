@@ -32,7 +32,7 @@ static bool debug = false;
 vcl_string vgui_tview::type_name() const {return "vgui_tview";}
 
 
-vgui_tview::vgui_tview(vgui_tableau_ref const& t)
+vgui_tview::vgui_tview(vgui_tableau_sptr const& t)
   : vgui_wrapper_tableau(t)
   , spacing(10)
   , icon_height(2)
@@ -46,7 +46,6 @@ vgui_tview::vgui_tview(vgui_tableau_ref const& t)
 vgui_tview::~vgui_tview()
 {
 }
-
 
 
 static void draw_rect(float x, float y, float  w, float h) {
@@ -68,10 +67,7 @@ static void draw_border(float x, float y, float  w, float h, int lt) {
   glVertex2f(x+w,y+h);
   glVertex2f(x-w,y+h);
   glEnd();
-
-
 }
-
 
 
 void vgui_tview::draw_tableau_icon(float x, float y) {
@@ -86,10 +82,9 @@ void vgui_tview::draw_tableau_icon(float x, float y) {
 }
 
 
-
 void vgui_tview::draw_tview_icon(float x, float y) {
 
-  
+
   glColor3f(1,0,0);
   draw_rect(x-icon_width/2.0, y-icon_height/2.0, icon_width/2.0, icon_height/2.0);
 
@@ -107,15 +102,12 @@ void vgui_tview::draw_tview_icon(float x, float y) {
   //glLineWidth(2);
 
   draw_border(x,y,icon_width, icon_height, 2);
-
 }
 
 
+void vgui_tview::draw_icons(vgui_tableau_sptr const& parent, float x, float y) {
 
-
-void vgui_tview::draw_icons(vgui_tableau_ref const& parent, float x, float y) {
-
-  vcl_vector<vgui_tableau_ref> children;
+  vcl_vector<vgui_tableau_sptr> children;
   parent->get_children(&children);
 
   if (children.size() > 0) {
@@ -134,21 +126,21 @@ void vgui_tview::draw_icons(vgui_tableau_ref const& parent, float x, float y) {
     glLineWidth(1);
 
     int ia = 0;
-    for (vcl_vector<vgui_tableau_ref>::iterator i = children.begin();
+    for (vcl_vector<vgui_tableau_sptr>::iterator i = children.begin();
 	 i != children.end(); ++i, ++ia) {
 
       glDisable(GL_LINE_STIPPLE);
       glColor3f(1,1,1);
-      
+
       if (parent->type_name() == "vgui_deck") {
-	vgui_deck_ref deck; deck.vertical_cast(parent);
+	vgui_deck_sptr deck; deck.vertical_cast(parent);
 	if (deck->current() != *i) {
 	  glLineStipple (1, 0x1C47);  // dash/dot/dash
 	  glEnable (GL_LINE_STIPPLE);
 	}
       }
       else if (parent->type_name() == "vgui_composite") {
-	vgui_composite_ref comp; comp.vertical_cast(parent);
+	vgui_composite_sptr comp; comp.vertical_cast(parent);
 
 	if (!comp->is_active(ia)) {
 	  glLineStipple (1, 0x1C47);  // dash/dot/dash
@@ -156,18 +148,16 @@ void vgui_tview::draw_icons(vgui_tableau_ref const& parent, float x, float y) {
 	}
       }
       else if (parent->type_name() == "vgui_listmanager2D") {
-	vgui_listmanager2D_ref lman; lman.vertical_cast(parent);
+	vgui_listmanager2D_sptr lman; lman.vertical_cast(parent);
 	if (!lman->is_active(ia)) {
 	  if (!lman->is_visible(ia))
 	    glLineStipple (1, 0x0101); // dotted
-	  else 
-	    glLineStipple (1, 0x1C47);  // dash/dot/dash 
+	  else
+	    glLineStipple (1, 0x1C47);  // dash/dot/dash
 	  glEnable (GL_LINE_STIPPLE);
 	}
-	
       }
 
-      
       glLineWidth(1);
       glBegin(GL_LINES);
       glVertex2f(x,y+icon_height);
@@ -185,27 +175,27 @@ void vgui_tview::draw_icons(vgui_tableau_ref const& parent, float x, float y) {
     draw_tview_icon(x,y);
   }
   else {
-    if (parent->type_name() == "vgui_deck") 
-      glColor3f(0,1,0);  
-    else if (parent->type_name() == "vgui_viewer2D") 
-      glColor3f(1,0,0);  
-    else if (parent->type_name() == "vgui_viewer3D") 
-      glColor3f(0, 0, 1);  
-    else if (parent->type_name() == "vgui_displaylist2D") 
-      glColor3f(0.5, 0, 0);  
-    else if (parent->type_name() == "vgui_displaylist3D") 
-      glColor3f(0, 0, 0.5);  
-    else if (parent->type_name() == "vgui_listmanager2D") 
-      glColor3f(1, 0, 0.5);  
-    else if (parent->type_name() == "vgui_composite") 
-      glColor3f(1, 0, 1);  
-    else if (parent->type_name() == "vgui_image_tableau") 
-      glColor3f(1, 0.5, 0);  
-    else if (parent->type_name() == "vgui_vrml") 
-      glColor3f(0, 1, 1);  
-    else if (parent->type_name() == "vgui_blackbox") 
-      glColor3f(0, 0, 0);  
-    else 
+    if (parent->type_name() == "vgui_deck")
+      glColor3f(0,1,0);
+    else if (parent->type_name() == "vgui_viewer2D")
+      glColor3f(1,0,0);
+    else if (parent->type_name() == "vgui_viewer3D")
+      glColor3f(0, 0, 1);
+    else if (parent->type_name() == "vgui_displaylist2D")
+      glColor3f(0.5, 0, 0);
+    else if (parent->type_name() == "vgui_displaylist3D")
+      glColor3f(0, 0, 0.5);
+    else if (parent->type_name() == "vgui_listmanager2D")
+      glColor3f(1, 0, 0.5);
+    else if (parent->type_name() == "vgui_composite")
+      glColor3f(1, 0, 1);
+    else if (parent->type_name() == "vgui_image_tableau")
+      glColor3f(1, 0.5, 0);
+    else if (parent->type_name() == "vgui_vrml")
+      glColor3f(0, 1, 1);
+    else if (parent->type_name() == "vgui_blackbox")
+      glColor3f(0, 0, 0);
+    else
       glColor3f(1,1,0);
     draw_tableau_icon(x,y);
   }
@@ -217,17 +207,13 @@ void vgui_tview::draw_icons(vgui_tableau_ref const& parent, float x, float y) {
     glColor3f(1,0,0);
     draw_border(x,y,icon_width,icon_height, 2);
   }
-
-
 }
 
 
-
-
-void vgui_tview::add_icons(vcl_vector<vgui_tview::icon>* icons, vgui_tableau_ref const& parent, 
-			   float x, float y) {
-
-  vcl_vector<vgui_tableau_ref> children;
+void vgui_tview::add_icons(vcl_vector<vgui_tview::icon>* icons, vgui_tableau_sptr const& parent,
+			   float x, float y)
+{
+  vcl_vector<vgui_tableau_sptr> children;
   parent->get_children(&children);
 
   if (children.size() > 0) {
@@ -240,7 +226,7 @@ void vgui_tview::add_icons(vcl_vector<vgui_tview::icon>* icons, vgui_tableau_ref
     float offset_x = 0;
 
 
-    for (vcl_vector<vgui_tableau_ref>::iterator i = children.begin();
+    for (vcl_vector<vgui_tableau_sptr>::iterator i = children.begin();
 	 i != children.end(); ++i) {
 
       add_icons(icons, *i, start_x+offset_x, ny);
@@ -249,20 +235,20 @@ void vgui_tview::add_icons(vcl_vector<vgui_tview::icon>* icons, vgui_tableau_ref
   }
 
   // add this icon
-  icon this_icon; 
+  icon this_icon;
   this_icon.tableau = parent;
   this_icon.x = x;
   this_icon.y = y;
   icons->push_back(this_icon);
 }
 
-vgui_tableau_ref vgui_tview::find_closest_icon(vcl_vector<vgui_tview::icon> const& icons, float ix, float iy) {
+vgui_tableau_sptr vgui_tview::find_closest_icon(vcl_vector<vgui_tview::icon> const& icons, float ix, float iy) {
   //cerr << "number of icons " << icons.size() << endl;
-  
-  float closest_dist /*quell SunPro warning*/= -1;
-  vgui_tableau_ref closest;
 
-  for (vcl_vector<icon>::const_iterator i_iter = icons.begin(); 
+  float closest_dist /*quell SunPro warning*/= -1;
+  vgui_tableau_sptr closest;
+
+  for (vcl_vector<icon>::const_iterator i_iter = icons.begin();
        i_iter != icons.end(); ++i_iter) {
     icon i = *i_iter;
     float dist = hypot(i.x - ix, i.y - iy);
@@ -270,26 +256,25 @@ vgui_tableau_ref vgui_tview::find_closest_icon(vcl_vector<vgui_tview::icon> cons
       closest_dist = dist;
       closest = i.tableau;
     }
-
   }
-  
+
   return closest;
 }
 
 
 vcl_string strip_preceeding_numerals(const char* name) {
   vcl_string str(name);
-  
+
   vcl_string::iterator s_iter = str.begin();
   for (; s_iter != str.end(); ++s_iter) {
     if (*s_iter < '0' || *s_iter > '9') {
       break;
     }
-  } 
-  
+  }
+
   if (s_iter != str.end())
     str.erase(str.begin(), s_iter);
-  
+
   return str;
 }
 
@@ -301,19 +286,17 @@ bool vgui_tview::handle(const vgui_event& e) {
   glGetFloatv(GL_VIEWPORT, vp); // ok
   float width = vp[2];
   float height = vp[3];
-  
+
   float startx = width/2;
   float starty = height/3;
 
   if (e.type == vgui_DRAW) {
-    
-    
-    // explicitly clearing colour as we dont want colour of 
+
+    // explicitly clearing colour as we dont want colour of
     // any tableaux this might be embedded within
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
-    
-    
+
     // draw the child
     draw_icons(child, startx, starty);
     return true;
@@ -321,25 +304,25 @@ bool vgui_tview::handle(const vgui_event& e) {
   else if (e.type==vgui_MOTION) {
     vcl_vector<icon> icons;
     add_icons(&icons, child, startx, starty);
-    
+
     vgui_projection_inspector pi;
     float ix, iy;
     pi.window_to_image_coordinates(e.wx, e.wy, ix, iy);
-    
+
     closest_icon = find_closest_icon(icons, ix, iy);
   }
-  
+
   else if (e.type==vgui_BUTTON_DOWN) {
     vcl_vector<icon> icons;
     add_icons(&icons, child, startx, starty);
-    
+
     vgui_projection_inspector pi;
     float ix, iy;
     pi.window_to_image_coordinates(e.wx, e.wy, ix, iy);
-    
-    vgui_tableau_ref t = find_closest_icon(icons, ix, iy);
+
+    vgui_tableau_sptr t = find_closest_icon(icons, ix, iy);
     active_icon = t;
-    
+
     //cerr << "icon is " << (void*) t << endl;
     if (t != 0) {
       vcl_cerr << "---------" << vcl_endl;
@@ -356,7 +339,7 @@ bool vgui_tview::handle(const vgui_event& e) {
     active_icon = 0;
     post_redraw();
   }
- 
+
   else {
     GLint oldbuff;
     glGetIntegerv(GL_DRAW_BUFFER, &oldbuff);
@@ -370,9 +353,7 @@ bool vgui_tview::handle(const vgui_event& e) {
 }
 
 
-
 void vgui_tview::get_popup(const vgui_popup_params& /*params*/, vgui_menu &menu) {
-  
   if (closest_icon) {
     menu.separator();
     vgui_popup_params np;

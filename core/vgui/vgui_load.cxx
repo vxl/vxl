@@ -13,7 +13,7 @@ vcl_string vgui_load::type_name() const {
 }
 
 // Default ctor
-vgui_load::vgui_load( vgui_tableau_ref const&child)
+vgui_load::vgui_load( vgui_tableau_sptr const&child)
   : vgui_wrapper_tableau( child),
     projectionmatrixloaded( false),
     modelviewmatrixloaded( false)
@@ -57,7 +57,7 @@ bool vgui_load::handle( vgui_event const &e)
       glMatrixMode(GL_MODELVIEW);
       glLoadMatrixd( modelviewmatrixt );
     }
-  
+
 #if 0
   if (child) {
     vcl_cerr << "child = " << child << vcl_endl;
@@ -77,7 +77,7 @@ bool vgui_load::handle( vgui_event const &e)
 
 //--------------------------------------------------------------------------------
 
-void vgui_load::set_identity() 
+void vgui_load::set_identity()
 {
   vnl_matrix<double> I(4,4);
   I.set_identity();
@@ -85,23 +85,23 @@ void vgui_load::set_identity()
   set_modelview(I);
 }
 
-void vgui_load::set_ortho(float x1,float y1,float z1, float x2,float y2,float z2) 
+void vgui_load::set_ortho(float x1,float y1,float z1, float x2,float y2,float z2)
 {
   if (x1==x2 || y1==y2 || z1==z2)
     vcl_cerr << __FILE__ " warning in set_ortho() : volume has no extent" << vcl_endl;
-  
+
   vnl_matrix<double> M(4,4);
 
   M.set_identity();
   set_projection(M);
-  
+
   M(0,0) = 2/(x2-x1); M(0,3) = (x1+x2)/(x1-x2);
   M(1,1) = 2/(y2-y1); M(1,3) = (y1+y2)/(y1-y2);
   M(2,2) = 2/(z2-z1); M(2,3) = (z1+z2)/(z1-z2);
   set_modelview(M);
 }
 
-void vgui_load::set_ortho(float x1, float y1, float x2, float y2) 
+void vgui_load::set_ortho(float x1, float y1, float x2, float y2)
 {
   set_ortho(x1,y1, -1, x2,y2, +1);
 }

@@ -67,7 +67,7 @@ vgui_rubberbander::vgui_rubberbander(vgui_rubberbander_client *client)
   init(client);
 }
 
-//vgui_rubberbander::vgui_rubberbander(vgui_easy2D_ref const& easy)
+//vgui_rubberbander::vgui_rubberbander(vgui_easy2D_sptr const& easy)
 //{
 //  init(new vgui_rubberbander_easy2D_client(easy));
 //}
@@ -167,7 +167,7 @@ void vgui_rubberbander::draw_infinite_line(float a, float b, float c)
   vgui_projection_inspector pi;
   float x0, y0, x1, y1;
   pi.image_viewport(x0,y0,x1,y1);
- 
+
   double x3, y3;
   double x4, y4;
   bool f = vgl_clip_line_to_box(a,b,c, x0, y0, x1, y1, x3, y3, x4,y4);
@@ -201,16 +201,16 @@ void vgui_rubberbander::draw_polygon(float px, float py)
   unsigned n=x_coords.size(); assert(n==y_coords.size());
   if (n==0)
     return;
- 
+
   vgui_matrix_state M;
- 
+
   glLineWidth(1);
   glColor3f(1,1,1);
   if (n==1)
     glBegin(GL_LINES);
   else
     glBegin(GL_LINE_LOOP);
- 
+
   for (unsigned i=0; i<n; ++i)
     glVertex2f(x_coords[i], y_coords[i]);
   glVertex2f(px, py);
@@ -224,11 +224,11 @@ void vgui_rubberbander::draw_box(float x0,float y0,float x1,float y1)
   float sy = y0>y1 ? y1:y0;
   float ex = x0>x1 ? x0:x1;
   float ey = y0>y1 ? y0:y1;
- 
+
   glLineWidth(1);
   glColor3f(1,1,1);
   glBegin(GL_LINE_LOOP);
-  
+
   glVertex2f(sx,sy);
   glVertex2f(ex,sy);
   glVertex2f(ex,ey);
@@ -242,9 +242,9 @@ void vgui_rubberbander::draw_linestrip(float px,float py)
  unsigned n=x_coords.size(); assert(n==y_coords.size());
   if (n==0)
     return;
- 
+
   vgui_matrix_state M;
- 
+
   glLineWidth(1);
   glColor3f(1,1,1);
   glBegin(GL_LINE_STRIP);
@@ -257,7 +257,7 @@ void vgui_rubberbander::draw_linestrip(float px,float py)
 
 bool vgui_rubberbander::handle_point(vgui_event const &e, float ix, float iy)
 {
-  if ((use_overlays && e.type == vgui_DRAW_OVERLAY) || (!use_overlays && e.type == vgui_DRAW)) 
+  if ((use_overlays && e.type == vgui_DRAW_OVERLAY) || (!use_overlays && e.type == vgui_DRAW))
   {
     draw_point(lastx, lasty);
     return true;
@@ -276,7 +276,7 @@ bool vgui_rubberbander::handle_point(vgui_event const &e, float ix, float iy)
 
 bool vgui_rubberbander::handle_line(vgui_event const &e, float ix, float iy)
 {
-  if ((use_overlays && e.type == vgui_DRAW_OVERLAY) || (!use_overlays && e.type == vgui_DRAW)) 
+  if ((use_overlays && e.type == vgui_DRAW_OVERLAY) || (!use_overlays && e.type == vgui_DRAW))
   {
     draw_line(x_coords[0], y_coords[0], lastx, lasty);
     return true;
@@ -316,7 +316,7 @@ bool vgui_rubberbander::handle_infinite_line(vgui_event const &e, float ix, floa
 
 bool vgui_rubberbander::handle_circle(vgui_event const &e, float ix, float iy)
 {
-  if ((use_overlays && e.type == vgui_DRAW_OVERLAY) || (!use_overlays && e.type == vgui_DRAW)) 
+  if ((use_overlays && e.type == vgui_DRAW_OVERLAY) || (!use_overlays && e.type == vgui_DRAW))
   {
     float radi = hypot(x_coords[0] - lastx, y_coords[0]-lasty);
     draw_circle(x_coords[0], y_coords[0], radi);
@@ -341,7 +341,7 @@ bool vgui_rubberbander::handle_polygon(vgui_event const &e, float ix, float iy)
   assert(n == y_coords.size());
   assert(n>0);
 
-  if ((use_overlays && e.type == vgui_DRAW_OVERLAY) || (!use_overlays && e.type == vgui_DRAW)) 
+  if ((use_overlays && e.type == vgui_DRAW_OVERLAY) || (!use_overlays && e.type == vgui_DRAW))
   {
     draw_polygon(lastx, lasty);
     return true;
@@ -360,14 +360,14 @@ bool vgui_rubberbander::handle_polygon(vgui_event const &e, float ix, float iy)
     x_coords.push_back(ix);
     y_coords.push_back(iy);
     n++;
-    
+
     // Add the first point in as also the last point:
     x_coords.push_back(x_coords[0]);
     y_coords.push_back(y_coords[0]);
     n++;
-    
+
     client_->add_polygon(n, &x_coords[0], &y_coords[0]); //vector<>::iterator
-    
+
     post_redraw();
     active = false;
     obj_type = none_enum;
@@ -377,7 +377,7 @@ bool vgui_rubberbander::handle_polygon(vgui_event const &e, float ix, float iy)
 }
 bool vgui_rubberbander::handle_box(vgui_event const &e, float ix,float iy)
 {
-  if ((use_overlays && e.type == vgui_DRAW_OVERLAY) || (!use_overlays && e.type == vgui_DRAW)) 
+  if ((use_overlays && e.type == vgui_DRAW_OVERLAY) || (!use_overlays && e.type == vgui_DRAW))
   {
     draw_box(x_coords[0], y_coords[0], lastx, lasty);
     return true;
@@ -398,7 +398,7 @@ bool vgui_rubberbander::handle_linestrip(vgui_event const &e, float ix, float iy
   assert(n == y_coords.size());
   assert(n>0);
 
-  if ((use_overlays && e.type == vgui_DRAW_OVERLAY) || (!use_overlays && e.type == vgui_DRAW)) 
+  if ((use_overlays && e.type == vgui_DRAW_OVERLAY) || (!use_overlays && e.type == vgui_DRAW))
   {
     draw_linestrip(lastx, lasty);
     return true;
@@ -427,13 +427,13 @@ bool vgui_rubberbander::handle(vgui_event const &e)
 {
   float ix, iy;
   vgui_projection_inspector().window_to_image_coordinates(e.wx, e.wy, ix, iy);
-  
+
   if (!active) {
     if (obj_type != none_enum && gesture0(e))
     {
       active = true;
       if (use_overlays) post_overlay_redraw(); else post_redraw();
-      
+
       lastx = ix;
       lasty = iy;
       x_coords.clear();
@@ -445,36 +445,36 @@ bool vgui_rubberbander::handle(vgui_event const &e)
     else
       return false;
   }
-  
+
   // active :
   if (e.type == vgui_MOTION){
     lastx = ix;
     lasty = iy;
     if (use_overlays) post_overlay_redraw(); else post_redraw();
-    
+
     return true;
   }
-  
+
   if (obj_type == point_enum)
     return handle_point(e, ix, iy);
-  
+
   if (obj_type == line_enum)
     return handle_line(e, ix, iy);
-  
+
   if (obj_type == infinite_line_enum)
     return handle_infinite_line(e, ix, iy);
-  
+
   if (obj_type == circle_enum)
     return handle_circle(e, ix, iy);
-  
+
   if (obj_type == polygon_enum)
     return handle_polygon(e, ix, iy);
-  
+
   if (obj_type == linestrip_enum)
     return handle_linestrip(e,ix,iy);
-  
+
   if (obj_type == box_enum)
     return handle_box(e,ix,iy);
-  
+
   return false;
 }

@@ -25,7 +25,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "vgui_tview_launcher_ref.h"
+#include "vgui_tview_launcher_sptr.h"
 #include <vgui/vgui_tableau.h>
 
 class vgui_tview_launcher : public vgui_tableau {
@@ -42,8 +42,8 @@ protected:
   ~vgui_tview_launcher() { }
 };
 
-struct vgui_tview_launcher_new : public vgui_tview_launcher_ref {
-  typedef vgui_tview_launcher_ref base;
+struct vgui_tview_launcher_new : public vgui_tview_launcher_sptr {
+  typedef vgui_tview_launcher_sptr base;
   vgui_tview_launcher_new() : base(new vgui_tview_launcher) { }
 };
 

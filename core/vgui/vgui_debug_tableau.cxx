@@ -18,7 +18,7 @@
 #include <vgui/vgui_slot.h>
 
 // Default ctor
-vgui_debug_tableau::vgui_debug_tableau(vgui_tableau_ref const& child):
+vgui_debug_tableau::vgui_debug_tableau(vgui_tableau_sptr const& child):
   vgui_wrapper_tableau(child)
 {
   verbosity = 1;
@@ -28,14 +28,14 @@ vgui_debug_tableau::~vgui_debug_tableau()
 {
 }
 
-static void print_tableau(vcl_ostream& s, vcl_string indent, vgui_tableau_ref t)
+static void print_tableau(vcl_ostream& s, vcl_string indent, vgui_tableau_sptr t)
 {
   s << indent << t->pretty_name() << vcl_endl;
-  
+
   // Print any children
-  vcl_vector<vgui_tableau_ref> children;
+  vcl_vector<vgui_tableau_sptr> children;
   t->get_children(&children);
-  
+
   if (children.size() > 1)
     indent += "     ";
   else
@@ -45,7 +45,7 @@ static void print_tableau(vcl_ostream& s, vcl_string indent, vgui_tableau_ref t)
     print_tableau(s, indent, children[i]);
 }
 
-static void print_tableau(vgui_tableau_ref t)
+static void print_tableau(vgui_tableau_sptr t)
 {
   print_tableau(vcl_cerr, __FILE__ ": ", t);
 }
@@ -56,7 +56,7 @@ bool vgui_debug_tableau::handle(const vgui_event& e)
 
   // First run the event through the child :
   bool handled = child && child->handle(e);
-  
+
   // Print the event
   bool print = (verbosity > 0);
   if (e.type == vgui_MOTION)
@@ -82,6 +82,6 @@ bool vgui_debug_tableau::handle(const vgui_event& e)
     default:
       break; // quell warning
     }
-  
+
   return handled;
 }

@@ -20,7 +20,7 @@ void vgui_grid_tableau::init(unsigned initial_cols, unsigned initial_rows)
   cond_flip_bwd   = vgui_event_condition(vgui_PAGE_UP);
   cond_select     = vgui_event_condition(vgui_LEFT);
   cond_deselect   = vgui_event_condition(vgui_MIDDLE);
-  
+
   INCREMENT_COLS = 50;
   INCREMENT_ROWS = 50;
 
@@ -45,21 +45,21 @@ void vgui_grid_tableau::init(unsigned initial_cols, unsigned initial_rows)
   }
 }
 
-vgui_grid_tableau::vgui_grid_tableau(unsigned initial_cols, unsigned initial_rows) 
-{ 
+vgui_grid_tableau::vgui_grid_tableau(unsigned initial_cols, unsigned initial_rows)
+{
   init(initial_cols, initial_rows);
 }
 
 //-- Makes a bitab.
-vgui_grid_tableau::vgui_grid_tableau(vgui_tableau_ref const& l, vgui_tableau_ref const& r)
+vgui_grid_tableau::vgui_grid_tableau(vgui_tableau_sptr const& l, vgui_tableau_sptr const& r)
 {
-  init(2, 1);  
+  init(2, 1);
   add_next(l);
   add_next(r);
 }
 
 //-- Makes a tritab.
-vgui_grid_tableau::vgui_grid_tableau(vgui_tableau_ref const& l, vgui_tableau_ref const& m, vgui_tableau_ref const& r)
+vgui_grid_tableau::vgui_grid_tableau(vgui_tableau_sptr const& l, vgui_tableau_sptr const& m, vgui_tableau_sptr const& r)
 {
   init(3, 1);
   add_next(l);
@@ -70,7 +70,7 @@ vgui_grid_tableau::vgui_grid_tableau(vgui_tableau_ref const& l, vgui_tableau_ref
 vgui_grid_tableau::~vgui_grid_tableau() { }
 
 
-vcl_string vgui_grid_tableau::type_name() const 
+vcl_string vgui_grid_tableau::type_name() const
 {
   return "vgui_grid_tableau";
 }
@@ -80,8 +80,8 @@ vcl_string vgui_grid_tableau::type_name() const
 //-- Given the column number, returns the x coord for that column.
 //   Note col_pos is numbered from 0.
 //------------------------------------------------------------------------------
-float vgui_grid_tableau::get_x(unsigned col_pos) 
-{ 
+float vgui_grid_tableau::get_x(unsigned col_pos)
+{
   if (col_pos < nb_cols)
     return (col_pos * get_w());
   else
@@ -89,7 +89,7 @@ float vgui_grid_tableau::get_x(unsigned col_pos)
     vgui_macro_warning << "Error in get_x: col_pos = " << col_pos << ", max = " << nb_cols << vcl_endl;
     return 0;
   }
-}    
+}
 
 //------------------------------------------------------------------------------
 //-- Given the row number, returns the y coord for that row.
@@ -97,8 +97,8 @@ float vgui_grid_tableau::get_x(unsigned col_pos)
 //   Note that polytab coord system starts in the bottom left and we want
 //   rows to be numbered from the top down.
 //------------------------------------------------------------------------------
-float vgui_grid_tableau::get_y(unsigned row_pos) 
-{ 
+float vgui_grid_tableau::get_y(unsigned row_pos)
+{
   if (row_pos < nb_rows)
     return ((nb_rows - row_pos - 1) * get_h());
   else
@@ -106,7 +106,7 @@ float vgui_grid_tableau::get_y(unsigned row_pos)
     vgui_macro_warning << "Error in get_y: row_pos = " << row_pos << ", max = " << nb_rows << vcl_endl;
     return 0;
   }
-}    
+}
 
 //------------------------------------------------------------------------------
 //-- Get the width of each column.
@@ -119,8 +119,8 @@ float vgui_grid_tableau::get_w() { return 1.0/nb_cols; }
 float vgui_grid_tableau::get_h() { return 1.0/nb_rows; }
 
 //------------------------------------------------------------------------------
-//-- Adds the default tableau to the given space in the grid 
-//   (but not to the vcl_list of tableaux).  
+//-- Adds the default tableau to the given space in the grid
+//   (but not to the vcl_list of tableaux).
 //   Note, it is assumed that the given grid position is empty or uninitialized so
 //   nothing is removed from the grid position before the default is added.
 //------------------------------------------------------------------------------
@@ -128,7 +128,7 @@ void vgui_grid_tableau::add_default(unsigned col_pos, unsigned row_pos)
 {
   if (col_pos < nb_cols && row_pos < nb_rows)
   {
-    grid_pos(col_pos, row_pos).handle 
+    grid_pos(col_pos, row_pos).handle
       = this->add(default_tab, get_x(col_pos), get_y(row_pos), get_w(), get_h());
     grid_pos(col_pos, row_pos).tab_pos = -1;
     grid_pos(col_pos, row_pos).is_default = true;
@@ -137,12 +137,12 @@ void vgui_grid_tableau::add_default(unsigned col_pos, unsigned row_pos)
 }
 
 //------------------------------------------------------------------------------
-//-- Adds a tableau to the next free space in the grid 
-//   and to the end of the vcl_list of tableaux.  
-//   If there are no free spaces and the grid size is changeable then it adds a 
+//-- Adds a tableau to the next free space in the grid
+//   and to the end of the vcl_list of tableaux.
+//   If there are no free spaces and the grid size is changeable then it adds a
 //   new column to the RHS of the grid and adds the new tableau to the top of it.
 //------------------------------------------------------------------------------
-void vgui_grid_tableau::add_next(vgui_tableau_ref const& tab)
+void vgui_grid_tableau::add_next(vgui_tableau_sptr const& tab)
 {
   tabs.push_back(tab);
 
@@ -165,8 +165,8 @@ void vgui_grid_tableau::add_next(vgui_tableau_ref const& tab)
   // fsm: this flag should control how events are handled, not whether a client
   // can change the layout of the grid tableau.
   //if (uses_plus_minus_events == true)
- 
-  // kym: only because you gave it that funny name!!!  I'm putting this back in here 
+
+  // kym: only because you gave it that funny name!!!  I'm putting this back in here
   // (with its original name) because I think it is needed. Events are handled seperately
   if (grid_size_changeable == true)
   {
@@ -176,11 +176,11 @@ void vgui_grid_tableau::add_next(vgui_tableau_ref const& tab)
     unsigned col_pos = nb_cols - 1;
     unsigned row_pos = 0;
     this->remove(grid_pos(col_pos, row_pos).handle);
-    grid_pos(col_pos, row_pos).handle 
+    grid_pos(col_pos, row_pos).handle
       = this->add(tab, get_x(col_pos), get_y(row_pos), get_w(), get_h());
     grid_pos(col_pos, row_pos).tab_pos = tabs.size() - 1;
     grid_pos(col_pos, row_pos).is_default = false;
-//  if (debug) 
+//  if (debug)
 //    cerr << "add_next: adding tableau to col = "<< col_pos <<", row = "<< row_pos << endl;
   }
 }
@@ -189,12 +189,12 @@ void vgui_grid_tableau::add_next(vgui_tableau_ref const& tab)
 //-- Add (or replace the tableau at the given position with) the given tableau
 //   and adds the given tableau to the end of the vcl_list of tableaux.
 //------------------------------------------------------------------------------
-void vgui_grid_tableau::add_at(vgui_tableau_ref const& tab, unsigned col_pos, unsigned row_pos)
+void vgui_grid_tableau::add_at(vgui_tableau_sptr const& tab, unsigned col_pos, unsigned row_pos)
 {
   tabs.push_back(tab);
   if (col_pos < nb_cols && row_pos < nb_rows)
   {
-//  if (debug) 
+//  if (debug)
 //    cerr << "add_at: adding tableau at col = "<< col_pos <<", row = "<< row_pos << endl;
     this->remove(grid_pos(col_pos, row_pos).handle);
     grid_pos(col_pos, row_pos).handle = this->add(tab, get_x(col_pos), get_y(row_pos), get_w(), get_h());
@@ -205,19 +205,19 @@ void vgui_grid_tableau::add_at(vgui_tableau_ref const& tab, unsigned col_pos, un
 }
 
 //------------------------------------------------------------------------------
-//-- Removes the tableau at the given grid coordinates from the display 
+//-- Removes the tableau at the given grid coordinates from the display
 //   and from the vcl_list of tableau.  It is replaced in the grid by the default tableau.
 //------------------------------------------------------------------------------
 void vgui_grid_tableau::remove_at(unsigned col_pos, unsigned row_pos)
 {
-//if (debug) 
+//if (debug)
 //  cerr << "remove_at: removing tableau at col = " << col_pos << ", row = " << row_pos << endl;
 
   if (col_pos < nb_cols && row_pos < nb_rows && grid_pos(col_pos, row_pos).is_default == false)
   {
     this->remove(grid_pos(col_pos, row_pos).handle);
     tabs.erase(tabs.begin() + grid_pos(col_pos, row_pos).tab_pos);
-    grid_pos(col_pos, row_pos).handle 
+    grid_pos(col_pos, row_pos).handle
       = this->add(default_tab, get_x(col_pos), get_y(row_pos), get_w(), get_h());
     grid_pos(col_pos, row_pos).tab_pos = -1;
     grid_pos(col_pos, row_pos).is_default = true;
@@ -228,28 +228,28 @@ void vgui_grid_tableau::remove_at(unsigned col_pos, unsigned row_pos)
 //------------------------------------------------------------------------------
 //-- Returns a pointer to the tableau at the given position.
 //------------------------------------------------------------------------------
-vgui_tableau_ref vgui_grid_tableau::get_tableau_at(unsigned col_pos, unsigned row_pos)
+vgui_tableau_sptr vgui_grid_tableau::get_tableau_at(unsigned col_pos, unsigned row_pos)
 {
-  if (col_pos < nb_cols && row_pos < nb_rows 
+  if (col_pos < nb_cols && row_pos < nb_rows
   && grid_pos(col_pos, row_pos).is_default == false)
-    return this->get(grid_pos(col_pos, row_pos).handle); 
+    return this->get(grid_pos(col_pos, row_pos).handle);
 
   if (col_pos >= nb_cols)
-    vgui_macro_warning << "Given column number " << col_pos 
+    vgui_macro_warning << "Given column number " << col_pos
 		       << " is out of range, max value = " << nb_cols-1 << vcl_endl;
   else if ( row_pos >= nb_rows)
-    vgui_macro_warning << "Given row number " << row_pos 
+    vgui_macro_warning << "Given row number " << row_pos
 		       << " is out of range, max value = " << nb_rows-1 << vcl_endl;
   else
-    vgui_macro_warning << "Only default tableau at (" << col_pos << ", " << row_pos 
+    vgui_macro_warning << "Only default tableau at (" << col_pos << ", " << row_pos
     << ")." << vcl_endl;
-  return vgui_tableau_ref();
+  return vgui_tableau_sptr();
 }
 
 //------------------------------------------------------------------------------
 //-- Returns the list of tableaux.
 //------------------------------------------------------------------------------
-vcl_vector<vgui_tableau_ref> vgui_grid_tableau::get_tableau_list()
+vcl_vector<vgui_tableau_sptr> vgui_grid_tableau::get_tableau_list()
 {
   return tabs;
 }
@@ -262,13 +262,13 @@ vcl_vector<vgui_tableau_ref> vgui_grid_tableau::get_tableau_list()
 void vgui_grid_tableau::get_active_position(unsigned* col_pos, unsigned* row_pos)
 {
   *col_pos = nb_cols + 1;
-  *row_pos = nb_rows + 1; 
+  *row_pos = nb_rows + 1;
   int current_handle;
   current_handle = this->get_current_id();
 
   if (current_handle == -1)
-  { 
-    return; 
+  {
+    return;
   }
 
   for (unsigned i = 0; i < nb_cols; i++)
@@ -289,7 +289,7 @@ void vgui_grid_tableau::get_active_position(unsigned* col_pos, unsigned* row_pos
 //-- Returns the most recently selected column and row positions.
 //------------------------------------------------------------------------------
 void vgui_grid_tableau::get_last_selected_position(
-  unsigned* col_pos, unsigned* row_pos) 
+  unsigned* col_pos, unsigned* row_pos)
 {
   *col_pos = last_selected[0];
   *row_pos = last_selected[1];
@@ -311,10 +311,10 @@ void vgui_grid_tableau::set_selected(int r, int c, bool onoff)
 //-- Gets the positions and times of selection of the selected tableaux.
 //   The number of selected tableau is returned.  Their positions are returned
 //   in the vcl_vectors passed in as parameters.
-//   Note, a tableau is selected if it has been clicked on by the left mouse 
+//   Note, a tableau is selected if it has been clicked on by the left mouse
 //   button.  It can be deselected by clicking with the middle mouse button.
 //------------------------------------------------------------------------------
-int vgui_grid_tableau::get_selected_positions(vcl_vector<int>* col_pos, 
+int vgui_grid_tableau::get_selected_positions(vcl_vector<int>* col_pos,
 vcl_vector<int>* row_pos, vcl_vector<int>* times)
 {
   int nb_selected = 0;
@@ -347,7 +347,7 @@ vcl_vector<int>* row_pos, vcl_vector<int>* times)
 
 //------------------------------------------------------------------------------
 //-- If true is passed in then this tableau will use PageUp and PageDown events
-//   to 'flip' through the vcl_list of tableaux it holds (this is the default).  
+//   to 'flip' through the vcl_list of tableaux it holds (this is the default).
 //   Otherwise if false is given then the PageUp and PageDown events will be
 //   passed to the base tableau.  (This might be handy if you wanted to display
 //   2 separate deck tableaux side by side for example.)
@@ -385,7 +385,7 @@ void vgui_grid_tableau::layout_grid()
 
 //------------------------------------------------------------------------------
 //-- Redraw the grid of tableaux packing them in without gaps, filling each
-//   row from top left downwards. 
+//   row from top left downwards.
 //------------------------------------------------------------------------------
 void vgui_grid_tableau::layout_grid2()
 {
@@ -413,7 +413,7 @@ void vgui_grid_tableau::layout_grid2()
 }
 
 //------------------------------------------------------------------------------
-//-- Add an empty column to the RHS of the grid. 
+//-- Add an empty column to the RHS of the grid.
 //------------------------------------------------------------------------------
 void vgui_grid_tableau::add_column()
 {
@@ -424,11 +424,11 @@ void vgui_grid_tableau::add_column()
   {
     // Increase size of max cols - FIXME
   }
-  
+
   for (unsigned j = 0; j < nb_rows; j++)
     add_default(nb_cols-1, j);
 
-  layout_grid(); 
+  layout_grid();
 }
 
 //------------------------------------------------------------------------------
@@ -496,14 +496,14 @@ void vgui_grid_tableau::page_up()
   if (col_pos < nb_cols && row_pos < nb_rows)
   {
     // Get the index of the tableau currently in that position:
-    unsigned tab_index = grid_pos(col_pos, row_pos).tab_pos;  
+    unsigned tab_index = grid_pos(col_pos, row_pos).tab_pos;
 
     if (tab_index < (tabs.size() - 1) && grid_pos(col_pos, row_pos).is_default == false)
     {
       this->replace(grid_pos(col_pos, row_pos).handle, tabs[tab_index + 1]);
       grid_pos(col_pos, row_pos).tab_pos++;
     }
-    else 
+    else
     {
       this->replace(grid_pos(col_pos, row_pos).handle, tabs[0]);
       grid_pos(col_pos, row_pos).tab_pos = 0;
@@ -557,7 +557,7 @@ void vgui_grid_tableau::select_current(int time)
   last_selected[1] = row;
   if (redraw_needed)
   {
-    set_outline_color(grid_pos(col,row).handle, 1,0,0); 
+    set_outline_color(grid_pos(col,row).handle, 1,0,0);
     post_redraw();
   }
 }
@@ -582,7 +582,7 @@ void vgui_grid_tableau::deselect_current()
 //-- Handle any events matching the {vgui_event_condition}s.
 // All other events go to the base class.
 //------------------------------------------------------------------------------
-bool vgui_grid_tableau::handle(const vgui_event &e) 
+bool vgui_grid_tableau::handle(const vgui_event &e)
 {
   //vcl_cout << "KYM grid handle, e =" << e << vcl_endl;
   if (cond_row_add(e))
@@ -607,7 +607,7 @@ bool vgui_grid_tableau::handle(const vgui_event &e)
   }
   else if (cond_flip_fwd(e))
   {
-    page_up();   
+    page_up();
     return true;
   }
   else if (cond_flip_bwd(e))
@@ -627,5 +627,5 @@ bool vgui_grid_tableau::handle(const vgui_event &e)
   }
 
   // We are not interested in other events, so pass event to base class:
-  return vgui_polytab::handle(e);  
+  return vgui_polytab::handle(e);
 }

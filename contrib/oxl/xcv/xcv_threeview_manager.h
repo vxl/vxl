@@ -28,23 +28,23 @@ public:
   xcv_threeview_manager();
   ~xcv_threeview_manager();
 
-  void set_tableau(vgui_tableau_ref const& tab, unsigned tab_position);
+  void set_tableau(vgui_tableau_sptr const& tab, unsigned tab_position);
   void set_tri_tensor(TriTensor* tt){tri_tensor = tt;}
 
   void toggle_tri_tensor_display();
 
   TriTensor* get_tri_tensor(){return tri_tensor;}
 
-  void handle_tjunction_event(vgui_event const& e, vgui_tableau_ref const& child_tab);
+  void handle_tjunction_event(vgui_event const& e, vgui_tableau_sptr const& child_tab);
 
 private:
   TriTensor* tri_tensor;
-  vgui_tableau_ref tabs[3];
-  vgui_rubberbander_ref rubberbands[3];
-  vgui_easy2D_ref easys[3];
+  vgui_tableau_sptr tabs[3];
+  vgui_rubberbander_sptr rubberbands[3];
+  vgui_easy2D_sptr easys[3];
   bool tri_tensor_is_displayed;
 
-  void draw_tri_tensor(vgui_event const& e, vgui_tableau_ref const& child_tab, bool make_permanent);
+  void draw_tri_tensor(vgui_event const& e, vgui_tableau_sptr const& child_tab, bool make_permanent);
 };
 
 #endif // xcv_threeview_manager_

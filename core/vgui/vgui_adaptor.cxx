@@ -27,7 +27,7 @@ vgui_adaptor *vgui_adaptor::current = 0;
 
 static int adaptor_count = 0;
 
-vgui_adaptor::vgui_adaptor() 
+vgui_adaptor::vgui_adaptor()
   : nested_popups(false)
   , default_items(true)
   , the_tableau(0)
@@ -36,13 +36,13 @@ vgui_adaptor::vgui_adaptor()
 
   the_tableau = new vgui_adaptor_tableau(this);
   the_tableau->ref();
-  
+
   vgui_menu sub;
   sub.add("Configure",new vgui_command_simple<vgui_adaptor>(this, &vgui_adaptor::config_dialog));
   menu.add("vgui_adaptor", sub);
 }
 
-vgui_adaptor::~vgui_adaptor() 
+vgui_adaptor::~vgui_adaptor()
 {
   set_tableau(0);
   the_tableau->unref();
@@ -57,12 +57,12 @@ vgui_adaptor::~vgui_adaptor()
 
 //--------------------------------------------------------------------------------
 
-vgui_tableau_ref vgui_adaptor::get_tableau() const
+vgui_tableau_sptr vgui_adaptor::get_tableau() const
 {
   return the_tableau->get_child();
 }
 
-void vgui_adaptor::set_tableau(vgui_tableau_ref const& t)
+void vgui_adaptor::set_tableau(vgui_tableau_sptr const& t)
 {
   the_tableau->set_child(t);
 }
@@ -79,16 +79,16 @@ vgui_menu vgui_adaptor::get_total_popup(vgui_popup_params &params) const
 
   vgui_menu pop(menu);
 
-  if (menu.size()) 
+  if (menu.size())
     pop.separator();
 
-  vgui_tableau_ref tab = get_tableau();
+  vgui_tableau_sptr tab = get_tableau();
   if (tab) {
     vgui_menu tmp;
     tab->get_popup(params, tmp);
     pop.include(tmp);
   }
-  
+
   return pop;
 }
 
@@ -156,7 +156,7 @@ void vgui_adaptor::config_dialog() {
   mydialog.choice("Popup button",   but_labels, but_index);
   mydialog.checkbox("Nested popups", nested_popups);
   mydialog.checkbox("Default popup items", default_items);
-  
+
   if (mydialog.ask()) {
     assert(mod_index < num_mods);
     assert(but_index < num_buts);
@@ -193,9 +193,9 @@ bool vgui_adaptor::dispatch_to_tableau(vgui_event const &e) {
     }
 #endif
   }
-  
+
   vgui_macro_report_errors;
-  
+
   // sanity check the 'origin' field :
   if (e.origin == 0)
     const_cast<vgui_event&>(e).origin = this;
@@ -204,7 +204,7 @@ bool vgui_adaptor::dispatch_to_tableau(vgui_event const &e) {
 
   //
   vgui_adaptor::current = this;
-  
+
   // send the event to the tableau :
   bool f = the_tableau->handle(e);
   vgui_macro_report_errors;

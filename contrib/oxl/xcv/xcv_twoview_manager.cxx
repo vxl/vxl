@@ -18,7 +18,7 @@ static bool debug = false;
 //-----------------------------------------------------------------------------
 //: Constructor.
 //-----------------------------------------------------------------------------
-xcv_twoview_manager::xcv_twoview_manager() 
+xcv_twoview_manager::xcv_twoview_manager()
   : f_matrix(0)
   , h_matrix(0)
   , corner_matches(0)
@@ -49,14 +49,14 @@ xcv_twoview_manager::~xcv_twoview_manager() { }
 //-----------------------------------------------------------------------------
 //: Set the tableau at the given position to be the given tableau.
 //-----------------------------------------------------------------------------
-void xcv_twoview_manager::set_tableau(vgui_tableau_ref const& tab, unsigned tab_nb)
+void xcv_twoview_manager::set_tableau(vgui_tableau_sptr const& tab, unsigned tab_nb)
 {
   if (tab_nb > 1)
   {
     vgui_macro_warning << "Tableau position [" << tab_nb << "] out of range" << vcl_endl;
     return;
   }
-  if (debug) vcl_cerr << "xcv_two_view_manager: Setting tab position [" << tab_nb 
+  if (debug) vcl_cerr << "xcv_two_view_manager: Setting tab position [" << tab_nb
                       << "] to tableau pointer: " << tab << vcl_endl;
   tabs[tab_nb] = tab;
   rubberbands[tab_nb].vertical_cast(vgui_find_below_by_type_name(tab, vcl_string("vgui_rubberbander")));
@@ -105,7 +105,7 @@ void xcv_twoview_manager::toggle_corner_match_display()
 //-----------------------------------------------------------------------------
 //: Draw a point and the transformed epipolar line on the display.
 //-----------------------------------------------------------------------------
-void xcv_twoview_manager::draw_f_matrix(vgui_event const& e, vgui_tableau_ref const& child_tab,
+void xcv_twoview_manager::draw_f_matrix(vgui_event const& e, vgui_tableau_sptr const& child_tab,
   bool make_permanent)
 {
   // Get the address of the event and turn it into a HomgPoint2D:
@@ -125,7 +125,7 @@ void xcv_twoview_manager::draw_f_matrix(vgui_event const& e, vgui_tableau_ref co
     hl = f_matrix->image1_epipolar_line(hp);
     transfer_index = 0;
   }
-  else  
+  else
   {
     vgui_macro_warning << "Unknown child tableau: " << child_tab << vcl_endl;
     return;
@@ -134,7 +134,7 @@ void xcv_twoview_manager::draw_f_matrix(vgui_event const& e, vgui_tableau_ref co
   // Draw the line and points on the appropriate tableau:
   if (make_permanent)
   {
-    if (debug) vcl_cerr << "Drawing the infinite line: " << hl[0] << "x + " 
+    if (debug) vcl_cerr << "Drawing the infinite line: " << hl[0] << "x + "
                         << hl[1] << "y + " << hl[2] << " = 0." << vcl_endl;
     if (easys[transfer_index])
       easys[transfer_index]->add_infinite_line(hl[0], hl[1], hl[2]);
@@ -151,7 +151,7 @@ void xcv_twoview_manager::draw_f_matrix(vgui_event const& e, vgui_tableau_ref co
   }
   else
   {
-    line_coord_a = hl[0]; line_coord_b = hl[1]; line_coord_c = hl[2]; 
+    line_coord_a = hl[0]; line_coord_b = hl[1]; line_coord_c = hl[2];
     event_coord_x = ix; event_coord_y = iy;
 	  if (use_overlays)
       tabs[transfer_index]->post_overlay_redraw();
@@ -163,7 +163,7 @@ void xcv_twoview_manager::draw_f_matrix(vgui_event const& e, vgui_tableau_ref co
 //-----------------------------------------------------------------------------
 //: Handle overlay redraw event for FMatrix.
 //-----------------------------------------------------------------------------
-void xcv_twoview_manager::draw_overlay_f_matrix(vgui_tableau_ref const& child_tab)
+void xcv_twoview_manager::draw_overlay_f_matrix(vgui_tableau_sptr const& child_tab)
 {
   if (child_tab == tabs[transfer_index])
   {
@@ -183,14 +183,14 @@ void xcv_twoview_manager::draw_overlay_f_matrix(vgui_tableau_ref const& child_ta
 //: Draw the point and corresponding point computed using the HMatrix2D.
 //-----------------------------------------------------------------------------
 void xcv_twoview_manager::draw_h_matrix(
-  vgui_event const& e, vgui_tableau_ref const& child_tab, bool make_permanent)
+  vgui_event const& e, vgui_tableau_sptr const& child_tab, bool make_permanent)
 {
   // Get the address of the event and turn it into a HomgPoint2D:
   vgui_projection_inspector p_insp;
   float ix, iy;
   p_insp.window_to_image_coordinates(e.wx, e.wy, ix, iy);
   HomgPoint2D hp(ix, iy);
-  
+
   HomgPoint2D transformed_hp;
   if (child_tab == tabs[0])
   {
@@ -202,7 +202,7 @@ void xcv_twoview_manager::draw_h_matrix(
     transformed_hp = h_matrix->transform_to_plane1(hp);
     transfer_index = 0;
   }
-  else  
+  else
   {
     vgui_macro_warning << "Unknown child tableau: " << child_tab << vcl_endl;
     return;
@@ -234,7 +234,7 @@ void xcv_twoview_manager::draw_h_matrix(
 //-----------------------------------------------------------------------------
 //: Handle overlay redraw event for HMatrix2D.
 //-----------------------------------------------------------------------------
-void xcv_twoview_manager::draw_overlay_h_matrix(vgui_tableau_ref const& child_tab)
+void xcv_twoview_manager::draw_overlay_h_matrix(vgui_tableau_sptr const& child_tab)
 {
   if (child_tab == tabs[transfer_index])
   {
@@ -260,7 +260,7 @@ void xcv_twoview_manager::draw_overlay_h_matrix(vgui_tableau_ref const& child_ta
 //: Draw matching corners in two views.
 //-----------------------------------------------------------------------------
 void xcv_twoview_manager::draw_corner_matches(
-  vgui_event const&, vgui_tableau_ref const&child_tab)
+  vgui_event const&, vgui_tableau_sptr const&child_tab)
 {
   if (child_tab == tabs[0])
   {
@@ -281,10 +281,10 @@ void xcv_twoview_manager::draw_corner_matches(
 //: Handle overlay redraw event for corner matches.
 //  This is not completed yet.... FIXME
 //-----------------------------------------------------------------------------
-void xcv_twoview_manager::draw_overlay_corner_matches(vgui_tableau_ref const&)
+void xcv_twoview_manager::draw_overlay_corner_matches(vgui_tableau_sptr const&)
 {
   // Get the currently highlighted point:
-  /*FIXME
+#if 0 // commented out - FIXME
   vgui_soview* sv = easys[(transfer_index+1)%2]->get_highlighted_soview();
   if (sv->type_name() != "vgui_soview2D_point")
     return;
@@ -297,22 +297,22 @@ void xcv_twoview_manager::draw_overlay_corner_matches(vgui_tableau_ref const&)
   else
     hips = corner_matches->get_corners2();
 
-  int j = -1; 
-  double xx, yy;  
+  int j = -1;
+  double xx, yy;
   do
   {
      j++;
-     hips->get(j)._homg.get_nonhomogeneous(xx, yy); 
-  } 
+     hips->get(j)._homg.get_nonhomogeneous(xx, yy);
+  }
   while (j<corner_matches->size() && sv_point->x != xx & sv_point->y != yy);
 
   if (j == corner_matches->size()) // Corner is not in matched list.
     return;
-  
+
   int index2 = corner_matches->get_match_12(j);
-  if (index2 == MatchSet::NoMatch) 
+  if (index2 == MatchSet::NoMatch)
     return;
- 
+
   HomgPoint2D new_point;
   if (transfer_index == 0)
     new_point = (corner_matches->get_corners1())->get(index2)._homg;
@@ -320,15 +320,15 @@ void xcv_twoview_manager::draw_overlay_corner_matches(vgui_tableau_ref const&)
     new_point = (corner_matches->get_corners2())->get(index2)._homg;
   double new_x, new_y;
   new_point.get_nonhomogeneous(new_x, new_y);
- 
-  rubberbands[transfer_index]->draw_circle(new_x, new_y, 5); 
-  */
+
+  rubberbands[transfer_index]->draw_circle(new_x, new_y, 5);
+#endif
 }
 
 //-----------------------------------------------------------------------------
 //: Handle any events we are interested in.
 //-----------------------------------------------------------------------------
-void xcv_twoview_manager::handle_tjunction_event(vgui_event const& e, vgui_tableau_ref const& child_tab)
+void xcv_twoview_manager::handle_tjunction_event(vgui_event const& e, vgui_tableau_sptr const& child_tab)
 {
   if (e.type == vgui_BUTTON_DOWN && e.modifier == vgui_MODIFIER_NULL && e.button == vgui_LEFT)
     dragging = true;

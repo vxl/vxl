@@ -8,7 +8,7 @@
 // .INCLUDE vgui/vgui_quit_tableau.h
 // .FILE vgui_quit_tableau.cxx
 
-#include "vgui_quit_tableau_ref.h"
+#include "vgui_quit_tableau_sptr.h"
 #include <vgui/vgui_tableau.h>
 
 class vgui_quit_tableau : public vgui_tableau {
@@ -20,8 +20,8 @@ protected:
   ~vgui_quit_tableau() { }
 };
 
-struct vgui_quit_tableau_new : public vgui_quit_tableau_ref {
-  typedef vgui_quit_tableau_ref base;
+struct vgui_quit_tableau_new : public vgui_quit_tableau_sptr {
+  typedef vgui_quit_tableau_sptr base;
 };
 
 #endif // vgui_quit_tableau_h_

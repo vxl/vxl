@@ -27,11 +27,11 @@
 #include <xcv/xcv_image_tableau.h>
 
 vcl_list<vsl_edge*> xcv_segmentation::detected_edges = vcl_list<vsl_edge*>();
- 
+
 extern void get_current(unsigned*, unsigned*);
 extern bool get_image_at(vil_image*, unsigned, unsigned);
-extern xcv_image_tableau_ref get_image_tableau_at(unsigned,unsigned);
-extern vgui_easy2D_ref get_easy2D_at(unsigned, unsigned);
+extern xcv_image_tableau_sptr get_image_tableau_at(unsigned,unsigned);
+extern vgui_easy2D_sptr get_easy2D_at(unsigned, unsigned);
 extern void add_image(vil_image& img);
 
 //-----------------------------------------------------------------------------
@@ -61,8 +61,8 @@ void xcv_segmentation::perform_harris(vsl_harris_params& params,
   bool image_ok = get_image_at(&img, col, row);
   if (image_ok == false)
     return;
-  vgui_easy2D_ref easy_tab = get_easy2D_at(col, row);
-  if (!easy_tab)  
+  vgui_easy2D_sptr easy_tab = get_easy2D_at(col, row);
+  if (!easy_tab)
     return;
   vsl_harris harris(params);
   harris.compute(img);
@@ -75,9 +75,9 @@ void xcv_segmentation::perform_harris(vsl_harris_params& params,
     vgui_macro_warning << "Can't get current easy2D to add Harris corners" << vcl_endl;
     return;
   }
- 
+
   //easy_tab->set_point_radius(3.0);
-  xcv_image_tableau_ref tableau = get_image_tableau_at(col,row);
+  xcv_image_tableau_sptr tableau = get_image_tableau_at(col,row);
   float low[3],high[3];
   tableau->get_bounding_box(low,high);
   for (unsigned i = 0; i < cor.size(); i++)
@@ -91,7 +91,7 @@ void xcv_segmentation::harris()
 {
   unsigned col, row;
   get_current(&col, &row);
- 
+
   vsl_harris_params params;
   if (!get_harris_params(&params))
     return;
@@ -105,7 +105,7 @@ void xcv_segmentation::harris()
 void xcv_segmentation::draw_edges(vcl_list<vsl_edge*> lines, unsigned col,
   unsigned row)
 {
-  vgui_easy2D_ref easy_tab = get_easy2D_at(col, row);
+  vgui_easy2D_sptr easy_tab = get_easy2D_at(col, row);
   if (!easy_tab)
     return;
 
@@ -118,7 +118,7 @@ void xcv_segmentation::draw_edges(vcl_list<vsl_edge*> lines, unsigned col,
       easy_tab->remove((vgui_soview*)(*i));
   }
 
-  xcv_image_tableau_ref tableau = get_image_tableau_at(col,row);
+  xcv_image_tableau_sptr tableau = get_image_tableau_at(col,row);
   float low[3],high[3];
   tableau->get_bounding_box(low,high);
   for (vcl_list<vsl_edge*>::const_iterator i = lines.begin(); i != lines.end(); ++i)
@@ -147,8 +147,8 @@ void xcv_segmentation::draw_edges(vcl_list<vsl_edge*> lines, unsigned col,
 void xcv_segmentation::draw_straight_lines(vcl_vector<float> x1, vcl_vector<float> y1,
   vcl_vector<float> x2, vcl_vector<float> y2, unsigned col, unsigned row)
 {
-  vgui_easy2D_ref easy_tab = get_easy2D_at(col, row);
-  if (!easy_tab)  
+  vgui_easy2D_sptr easy_tab = get_easy2D_at(col, row);
+  if (!easy_tab)
     return;
 
   // Delete old edges and then add the new edges:
@@ -160,7 +160,7 @@ void xcv_segmentation::draw_straight_lines(vcl_vector<float> x1, vcl_vector<floa
       easy_tab->remove((vgui_soview*)(*i));
   }
 
-  xcv_image_tableau_ref tableau = get_image_tableau_at(col,row);
+  xcv_image_tableau_sptr tableau = get_image_tableau_at(col,row);
   float low[3],high[3];
   tableau->get_bounding_box(low,high);
   for (unsigned i=0; i<x1.size(); i++)
@@ -177,12 +177,12 @@ void xcv_segmentation::draw_straight_lines(vcl_vector<float> x1, vcl_vector<floa
 }
 
 //-----------------------------------------------------------------------------
-//-- Display a dialog box to get the parameters needed for Oxford Canny. 
+//-- Display a dialog box to get the parameters needed for Oxford Canny.
 //-----------------------------------------------------------------------------
 bool xcv_segmentation::get_canny_ox_params(vsl_canny_ox_params* params)
 {
   vgui_dialog canny_ox_dialog("Canny - Oxford");
-  
+
   canny_ox_dialog.field("Standard deviation (sigma)", params->sigma);
   canny_ox_dialog.field("Max smoothing kernel width", params->max_width);
   canny_ox_dialog.field("Gauss tail", params->gauss_tail);
@@ -248,7 +248,7 @@ void xcv_segmentation::get_broken_edges(double bk_thresh, vcl_list<vsl_edge*>* b
   {
     // Canny OX finding edges ------
     vsl_canny_ox_params params;
- 
+
     params.sigma = 1.0;
     params.max_width = 50;
     params.gauss_tail = 0.0001f;
@@ -262,7 +262,7 @@ void xcv_segmentation::get_broken_edges(double bk_thresh, vcl_list<vsl_edge*>* b
     params.high = 12.0;
     params.edge_min = 60;
     params.min_length = 60;
- 
+
     vsl_canny_ox cox(params);
     cox.detect_edges(img, &detected_edges);
   }
@@ -283,9 +283,9 @@ void xcv_segmentation::break_lines_ox()
 
   unsigned col, row;
   get_current(&col, &row);
- 
+
   vcl_list<vsl_edge*> broken_edges;
-  get_broken_edges(bk_thresh, &broken_edges);  
+  get_broken_edges(bk_thresh, &broken_edges);
   draw_edges(broken_edges, col, row);
 }
 
@@ -316,11 +316,11 @@ void xcv_segmentation::detect_lines_ox()
 
   unsigned col, row;
   get_current(&col, &row);
- 
+
   double bk_thresh = 0.3;
   vcl_list<vsl_edge*> broken_edges;
-  get_broken_edges(bk_thresh, &broken_edges);  
- 
+  get_broken_edges(bk_thresh, &broken_edges);
+
   // Select straight edges only:
   vcl_vector<float> x1, y1, x2, y2;
   for (vcl_list<vsl_edge*>::iterator iter = broken_edges.begin();
@@ -329,7 +329,7 @@ void xcv_segmentation::detect_lines_ox()
     vsl_edge* e = *iter;
     if (e->size() < min_fit_length)  // Reject edges which are too short
       continue;
- 
+
     // Fit a straight line to the edgel:
     vsl_ortho_regress fitter;
     fitter.reset();
@@ -338,26 +338,26 @@ void xcv_segmentation::detect_lines_ox()
     fitter.fit(&a, &b, &c);
     if (fitter.rms_cost(a,b,c) > 0.7)  // Reject edges which are too bent
       continue;
- 
+
     // Now project the endpoints of the edge onto the fitted line:
     double m = sqrt(a*a + b*b);
     if (m == 0)
       continue;
- 
+
     double la = a/m, lb = b/m, lc = c/m;
- 
+
     double X1 = e->GetStartX();
     double Y1 = e->GetStartY();
     double X2 = e->GetEndX();
     double Y2 = e->GetEndY();
- 
+
     x1.push_back(lb*lb*X1 - la*lb*Y1 - la*lc);
     y1.push_back(la*la*Y1 - la*lb*X1 - lb*lc);
     x2.push_back(lb*lb*X2 - la*lb*Y2 - la*lc);
     y2.push_back(la*la*Y2 - la*lb*X2 - lb*lc);
   }
 
-  draw_straight_lines(y1, x1, y2, x2, col, row); 
+  draw_straight_lines(y1, x1, y2, x2, col, row);
 }
 
 //-----------------------------------------------------------------------------
@@ -372,7 +372,7 @@ vgui_menu xcv_segmentation::create_segmentation_menu()
 //  seg_menu.add("Canny: Van-Duc", canny_vd);
   seg_menu.add("Break lines: Oxford", break_lines_ox);
   seg_menu.add("Detect lines: Oxford", detect_lines_ox);
- 
+
   return seg_menu;
 }
 

@@ -20,7 +20,7 @@ class vgui_event;
 class vgui_menu;
 class vgui_dialog_impl;
 class vgui_tableau;
-struct vgui_tableau_ref;
+struct vgui_tableau_sptr;
 
 //: Base class for toolkit implementations.
 // The toolkit is repsonsible for opening the initial
