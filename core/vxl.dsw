@@ -47,14 +47,35 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name vcgl
     End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vcl
-    End Project Dependency
 }}}
 
 ###############################################################################
 
 Project: "doc"=.\doc\doc.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "example_mfc"=.\vgui\examples\vgui_example_mfc\vgui_example_mfc.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "jpeg"=..\v3p\jpeg\jpeg.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -87,7 +108,19 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name allvxl
+    Project_Dep_Name vbl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name netlib
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vnl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vnl_algo
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vpl
     End Project Dependency
 }}}
 
@@ -102,10 +135,13 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name vcl
+    Project_Dep_Name vil
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name vil
+    Project_Dep_Name vpl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name jpeg
     End Project Dependency
 }}}
 
@@ -136,6 +172,18 @@ Package=<4>
 ###############################################################################
 
 Project: "vcl"=..\vcl\vcl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vcl_tests"=..\vcl\tests\vcl_tests.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -251,15 +299,6 @@ Package=<5>
 
 Package=<4>
 {{{
-    Begin Project Dependency
-    Project_Dep_Name vcl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vnl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vnl_algo
-    End Project Dependency
 }}}
 
 ###############################################################################
@@ -312,6 +351,54 @@ Package=<4>
 
 ###############################################################################
 
+Project: "vxl_vrml_viewer"=.\apps\vxl_vrml_viewer\vxl_vrml_viewer.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name netlib
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vbl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vgl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vgui
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vgui_mfc
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vgui_vrml
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vil
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vnl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vnl_algo
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vpl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vsl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name jpeg
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "xcv"=.\xcv\xcv.dsp - Package Owner=<4>
 
 Package=<5>
@@ -331,9 +418,6 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vcgl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vcl
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vgl
@@ -358,6 +442,9 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vsl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name jpeg
     End Project Dependency
 }}}
 
