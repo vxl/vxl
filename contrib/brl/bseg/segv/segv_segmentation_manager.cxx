@@ -174,9 +174,9 @@ draw_lines(vcl_vector<vsol_line_2d_sptr > const& lines)
     }
   for (vcl_vector<vsol_line_2d_sptr>::const_iterator lit = lines.begin();
        lit != lines.end(); lit++)
-	   {
-			t2D_->add_vsol_line_2d(*lit);
-	   }
+    {
+      t2D_->add_vsol_line_2d(*lit);
+    }
 
   t2D_->post_redraw();
 }
@@ -461,26 +461,26 @@ void segv_segmentation_manager::fit_lines()
   vcl_vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
   if (!edges)
     {
-      vcl_cout << "No edges to fit lines \n";
+      vcl_cout << "No edges to fit lines\n";
       return;
     }
   sdet_fit_lines fl(flp);
   fl.set_edges(*edges);
   fl.fit_lines();
   vcl_vector<vsol_line_2d_sptr> lines = fl.get_line_segs();
-  if(detect_grid)
+  if (detect_grid)
     {
       sdet_grid_finder gf(gfp);
-      if(!gf.set_lines(img_.width(), img_.height(), lines))
+      if (!gf.set_lines(img_.width(), img_.height(), lines))
         {
           vcl_cout << "Less than two dominant groups \n";
           return;
         }
       vcl_vector<vsol_line_2d_sptr> mapped_lines;
       gf.compute_homography();
-      //      if(gf.get_mapped_lines(mapped_lines))
-      if(gf.get_backprojected_grid(mapped_lines))
-        this->draw_lines(mapped_lines);          
+//    if (gf.get_mapped_lines(mapped_lines))
+      if (gf.get_backprojected_grid(mapped_lines))
+        this->draw_lines(mapped_lines);
       return;
     }
   this->draw_lines(lines);
