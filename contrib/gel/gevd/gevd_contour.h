@@ -108,7 +108,7 @@
 //-----------------------------------------------------------------------------
 
 #include <vcl_vector.h>
-#include <vbl\vbl_array_2d.h>
+#include <vbl/vbl_array_2d.h>
 #include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_edge_2d.h>
 #include <gevd/gevd_bufferxy.h>
