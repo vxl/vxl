@@ -15,15 +15,17 @@
 //-----------------------------------------------------------------------------
 #include <vcl_vector.h>
 #include <vcl_map.h>
+#include <mvl/FMatrix.h>
 #include <vil1/vil1_image.h>
 #include <vtol/vtol_intensity_face_sptr.h>
 #include <vgui/vgui_wrapper_tableau.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_grid_tableau_sptr.h>
+#include <mvl/FMatrix.h>
 #include <vgui/vgui_style_sptr.h>
 #include <bgui/bgui_vtol2D_tableau_sptr.h>
 #include <bgui/bgui_picker_tableau_sptr.h>
-#include <brct/brct_corr_sptr.h>
+#include <brct/brct_plane_corr_sptr.h>
 #include <brct/brct_plane_calibrator.h>
 #include <brct/brct_plane_sweeper.h>
 #include <brct/brct_volume_processor.h>
@@ -79,6 +81,10 @@ class bmvv_recon_manager : public vgui_wrapper_tableau
   void read_change_data();
   void write_change_volumes_vrml();
   void compute_change();
+  void display_dense_match();
+  void read_f_matrix();
+  void show_epipolar_line();
+  void show_world_homography();
   //: access to the window
   vgui_window* get_window(){return win_;}
   void set_window(vgui_window* win){win_=win;}
@@ -93,15 +99,21 @@ class bmvv_recon_manager : public vgui_wrapper_tableau
                     bool verts=false);
   void create_point(int& cam, vsol_point_2d_sptr& p);
   int get_cam();
-  brct_corr_sptr get_selected_corr();
+  brct_plane_corr_sptr get_selected_corr();
   void draw_corr_point(const float x, const float y);
   void draw_vsol_points(const int cam,
                         vcl_vector<vsol_point_2d_sptr> const & points,
-                        bool clear = true, const vgui_style_sptr& style = NULL);
+                        bool clear = true,
+                        const float r = 0,
+                        const float g = 1,
+                        const float b = 0);
 
   void draw_vsol_point(const int cam,
                        vsol_point_2d_sptr const & point,
-                       bool clear = false, const vgui_style_sptr& style = NULL);
+                       bool clear = false,
+                       const float r = 0,
+                       const float g = 1,
+                       const float b = 0);
 
 void draw_vsol_3d_points(const int cam,
                          vcl_vector<vsol_point_3d_sptr> const& pts3d,
@@ -127,6 +139,7 @@ void draw_vsol_3d_points(const int cam,
   int plane_;
   vcl_map<int, int> point_3d_map_;
   static bmvv_recon_manager *instance_;
+  FMatrix f_matrix_;
 };
 
 #endif // bmvv_recon_manager_h_

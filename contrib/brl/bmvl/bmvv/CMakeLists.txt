@@ -1,5 +1,6 @@
 # view library for multi-view gui
 # brl/bmvl/bmvv/CMakeLists.txt
+INCLUDE_DIRECTORIES(${OXL_INCLUDE_DIR})
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bmvl )
@@ -29,7 +30,7 @@ IF(HAS_VGUI)
   TARGET_LINK_LIBRARIES(bmvv bxml)
  ENDIF(HAS_XERCES)
 
- TARGET_LINK_LIBRARIES(bmvv btom brct sdet brip bdgl vtol vdgl bgui vgui vsol vgl vnl vil1)
+ TARGET_LINK_LIBRARIES(bmvv brct sdet brip bdgl mvl vtol vdgl bgui vgui vsol vgl vnl vil1)
 
  # the main executable
  SUBDIRS(mvbin)

@@ -207,6 +207,25 @@ void bmvv_recon_menus::compute_change_callback()
   bmvv_recon_manager::instance()->compute_change();
 }
 
+void bmvv_recon_menus::display_dense_match_callback()
+{
+  bmvv_recon_manager::instance()->display_dense_match();
+}
+
+void bmvv_recon_menus::read_f_matrix_callback()
+{
+  bmvv_recon_manager::instance()->read_f_matrix();
+}
+
+void bmvv_recon_menus::show_epipolar_line_callback()
+{
+  bmvv_recon_manager::instance()->show_epipolar_line();
+}
+
+void bmvv_recon_menus::show_world_homography_callback()
+{
+  bmvv_recon_manager::instance()->show_world_homography();
+}
 
 //bmvv_recon_menus definition
 vgui_menu bmvv_recon_menus::get_menu()
@@ -228,6 +247,8 @@ vgui_menu bmvv_recon_menus::get_menu()
   menufile.add( "Write Volumes (VRML)", write_volumes_vrml_callback);
   menufile.add( "Read Change Data (VRML)", read_change_data_callback);
   menufile.add( "Write Change Volumes (VRML)", write_change_volumes_vrml_callback);
+  menufile.add( "Read F Matrix", read_f_matrix_callback);
+
   menufile.add( "Quit", quit_callback,(vgui_key)'q', vgui_CTRL);
 
   //view menu entries
@@ -235,6 +256,8 @@ vgui_menu bmvv_recon_menus::get_menu()
   menuview.add("Clear Selected", clear_selected_callback);
   menuview.add("Initial Model Projection", initial_model_projection_callback);
   menuview.add("Model Projection", model_projection_callback);
+  menuview.add("Show Epipolar Line", show_epipolar_line_callback);
+  menuview.add("Show World Homography", show_world_homography_callback);
 
 
   //edit menu entries
@@ -267,6 +290,7 @@ vgui_menu bmvv_recon_menus::get_menu()
   menudebug.add("Harris Sweep", harris_sweep_callback);
   menudebug.add("Matched Corners at Z", display_matched_corners_callback);
   menudebug.add("Display Harris 3d", display_harris_3d_callback);
+  menudebug.add("Display Dense Match", display_dense_match_callback);
 
 
   //Top level menu layout

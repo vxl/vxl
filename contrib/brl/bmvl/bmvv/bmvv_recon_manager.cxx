@@ -6,15 +6,19 @@
 
 #include <vcl_cstdlib.h> // for vcl_exit()
 #include <vcl_iostream.h>
+#include <vcl_fstream.h>
 #include <vil1/vil1_load.h>
+#include <vil1/vil1_memory_image_of.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_math.h>
+#include <vgl/algo/vgl_h_matrix_2d.h>
+#include <vgl/algo/vgl_p_matrix.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_find.h>
+#include <vgui/vgui_style.h>
 #include <vgui/vgui_macro.h>
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_soview2D.h>
-#include <vgui/vgui_style.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_grid_tableau.h>
@@ -25,6 +29,8 @@
 #include <brip/brip_vil1_float_ops.h>
 #include <brct/brct_plane_sweeper_params.h>
 #include <brct/brct_volume_processor_params.h>
+#include <brct/brct_dense_reconstructor.h>
+#include <brct/brct_algos.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_3d.h>
 //static live_video_manager instance
@@ -325,18 +331,18 @@ void bmvv_recon_manager::model_projection()
   btab->post_redraw();
 }
 
-brct_corr_sptr bmvv_recon_manager::get_selected_corr()
+brct_plane_corr_sptr bmvv_recon_manager::get_selected_corr()
 {
   bgui_vtol2D_tableau_sptr btab = this->get_selected_vtol2D_tableau();
   if (!btab)
-    return (brct_corr*)0;
+    return (brct_plane_corr*)0;
   vcl_vector<unsigned> ids = btab->get_selected();
   //take the last selected
   int n = ids.size();
   if (!n)
   {
     vcl_cout << "Nothing selected\n";
-    return (brct_corr*)0;
+    return (brct_plane_corr*)0;
   }
   int i = point_3d_map_[ids[n-1]];
   return cal_.corr(plane_, i);
@@ -344,7 +350,7 @@ brct_corr_sptr bmvv_recon_manager::get_selected_corr()
 
 void bmvv_recon_manager::print_selected_corr()
 {
-  brct_corr_sptr corr = this->get_selected_corr();
+  brct_plane_corr_sptr corr = this->get_selected_corr();
   vcl_cout << *corr << vcl_endl;
 }
 
@@ -361,7 +367,7 @@ void bmvv_recon_manager::draw_corr_point(const float x, const float y)
 
 void bmvv_recon_manager::pick_corr()
 {
-  brct_corr_sptr corr = this->get_selected_corr();
+  brct_plane_corr_sptr corr = this->get_selected_corr();
   if (!corr)
     return;
   bgui_picker_tableau_sptr ptab = this->get_selected_picker_tableau();
@@ -539,7 +545,7 @@ void bmvv_recon_manager::overlapping_projections_z()
 
 void bmvv_recon_manager::
 draw_vsol_points(const int cam, vcl_vector<vsol_point_2d_sptr> const & points,
-                 bool clear, const vgui_style_sptr& style)
+                 bool clear, const float r, const float g, const float b)
 {
   bgui_vtol2D_tableau_sptr btab = vtol_tabs_[cam];
   if (!btab)
@@ -550,6 +556,7 @@ draw_vsol_points(const int cam, vcl_vector<vsol_point_2d_sptr> const & points,
   }
   if (clear)
     btab->clear_all();
+  vgui_style_sptr style = vgui_style::new_style(r, g, b, 3, 0);
   for (vcl_vector<vsol_point_2d_sptr>::const_iterator pit = points.begin();
       pit != points.end(); pit++)
     btab->add_vsol_point_2d(*pit, style);
@@ -557,7 +564,7 @@ draw_vsol_points(const int cam, vcl_vector<vsol_point_2d_sptr> const & points,
 
 void bmvv_recon_manager::
 draw_vsol_point(const int cam, vsol_point_2d_sptr const & point,
-                bool clear, const vgui_style_sptr& style)
+                bool clear, const float r, const float g, const float b)
 {
   bgui_vtol2D_tableau_sptr btab = vtol_tabs_[cam];
   if (!btab)
@@ -568,7 +575,8 @@ draw_vsol_point(const int cam, vsol_point_2d_sptr const & point,
   }
   if (clear)
     btab->clear_all();
-  btab->add_vsol_point_2d(point, style);
+  vgui_style_sptr style = vgui_style::new_style(r, g, b, 3, 0);
+  btab->add_vsol_point_2d(point,style);
 }
 
 //: color is determined by depth
@@ -601,8 +609,8 @@ draw_vsol_3d_points(const int cam, vcl_vector<vsol_point_3d_sptr> const& pts3d,
     float f = (float)(((*pit)->z()-zmin)*s);
     vcl_cout << "f(" << (*pit)->z() << ")=" << f << vcl_endl;
     vsol_point_2d_sptr p = new vsol_point_2d((*pit)->x(), (*pit)->y());
-    vgui_style_sptr style = vgui_style::new_style(f, 0.0f, 1-f, 3.0f, 1.0f);
-    btab->add_vsol_point_2d(p, style);
+	vgui_style_sptr style = vgui_style::new_style(f, 0, 1-f, 3, 0);
+    btab->add_vsol_point_2d(p,style);
   }
 }
 
@@ -761,8 +769,7 @@ void bmvv_recon_manager::cross_correlate_harris_z()
   itab->set_image(img);
   itab->post_redraw();
   this->draw_vsol_points(0, orig_cnrs0);
-  vgui_style_sptr style = vgui_style::new_style(1.0f, 0.0f, 0.0f, 3.0f, 1.0f);
-  this->draw_vsol_points(0, back_proj_cnrs, false, style);
+  this->draw_vsol_points(0, back_proj_cnrs, false, 1, 0, 0);
   this->draw_vsol_points(1, matched_corners);
 }
 
@@ -960,10 +967,8 @@ void bmvv_recon_manager::map_harris_corners()
   vcl_vector<vsol_point_2d_sptr> mapped_to_points, orig_to_points;
   if (!sweep_.map_harris_corners(from_cam, z, mapped_to_points, orig_to_points))
     return;
-  vgui_style_sptr orig_style = vgui_style::new_style(0.0f, 1.0f, 0.0f, 3.0f, 1.0f);
-  vgui_style_sptr mapped_style = vgui_style::new_style(1.0f, 0.0f, 0.0f, 3.0f, 1.0f);
-  this->draw_vsol_points(0, orig_to_points, true, orig_style);
-  this->draw_vsol_points(0, mapped_to_points, false, mapped_style);
+  this->draw_vsol_points(0, orig_to_points, true, 0, 1, 0);
+  this->draw_vsol_points(0, mapped_to_points, false, 1, 0, 0);
 }
 
 void bmvv_recon_manager::match_harris_corners()
@@ -985,10 +990,8 @@ void bmvv_recon_manager::match_harris_corners()
   if (!sweep_.match_harris_corners(from_cam, z, matched_to_points,
                                    orig_to_points))
     return;
-  vgui_style_sptr orig_style = vgui_style::new_style(0.0f, 1.0f, 0.0f, 3.0f, 1.0f);
-  vgui_style_sptr mapped_style = vgui_style::new_style(1.0f, 0.0f, 0.0f, 3.0f, 1.0f);
-  this->draw_vsol_points(0, orig_to_points, true, orig_style);
-  this->draw_vsol_points(0, matched_to_points, false, mapped_style);
+  this->draw_vsol_points(0, orig_to_points, true, 0, 1, 0);
+  this->draw_vsol_points(0, matched_to_points, false, 1, 0, 0);
 }
 
 void bmvv_recon_manager::harris_sweep()
@@ -1030,8 +1033,7 @@ void bmvv_recon_manager::display_matched_corners()
   if (!n)
     return;
   //for now assume we display on pane 0
-  vgui_style_sptr style = vgui_style::new_style(0.0f, 1.0f, 0.0f, 3.0f, 1.0f);
-  this->draw_vsol_points(0, matched_points, true, style);
+  this->draw_vsol_points(0, matched_points, true, 0, 1, 0);
 }
 
 void bmvv_recon_manager::display_harris_3d()
@@ -1153,4 +1155,247 @@ void bmvv_recon_manager::compute_change()
   if (!change_dlg.ask())
     return;
   vproc_.compute_change();
+}
+//: display a line of the dense match by drawing tokens
+void bmvv_recon_manager::display_dense_match()
+{
+
+  vil1_image img0 = this->get_image_at(0,0);
+  vil1_image img1 = this->get_image_at(1,0);
+  if(!img0||!img1)
+    {
+      vcl_cout << "In bmvv_recon_manager::display_dense_match()"
+               << " - need two images\n";
+      return;
+    }
+  vtol_tabs_[0]->clear_all();
+  vtol_tabs_[1]->clear_all();
+  static int raster = 200;
+  static int range = 10;
+  static int radius = 5;
+  static double inner = 1.0;
+  static double outer = 0.5;
+  static double continuity = 0.1;
+  static bool print_corr = false;
+  vgui_dialog dense_recon_dlg("Dense Reconstruction");
+  dense_recon_dlg.field("Raster No.", raster);
+  dense_recon_dlg.field("Search Range.", range);
+  dense_recon_dlg.field("Corr. Window Radius", radius);
+  dense_recon_dlg.field("Inner Cost", inner);
+  dense_recon_dlg.field("Outer Cost", outer);
+  dense_recon_dlg.field("Continuity", continuity);
+  dense_recon_dlg.checkbox("Print Corr", print_corr);
+  if (!dense_recon_dlg.ask())
+    return;
+
+  brct_dense_reconstructor dr(img0, img1);
+  dr.set_search_range(range);
+  dr.set_correlation_window_radius(radius);
+  dr.set_inner_cost(inner);
+  dr.set_outer_cost(outer);
+  dr.set_continuity_cost(continuity);
+  dr.print_params();
+  dr.initial_calculations();
+  dr.evaluate_raster(raster);
+  vcl_vector<vsol_point_2d_sptr> points0 = dr.points0(raster);
+  vcl_vector<vsol_point_2d_sptr> points1 = dr.points1(raster);
+  int k = 0, ip = 0;
+  for(vcl_vector<vsol_point_2d_sptr>::iterator pit = points0.begin();
+      pit != points0.end(); ++pit, ++ip, ++k)
+    {
+      if(k==3)
+        k = 0;
+      if(points1[ip]->x()<0)
+        {
+          this->draw_vsol_point(0, *pit, false, 0, 0, 0);
+          this->draw_vsol_point(1, points1[ip], false, 1, 1, 1);
+          continue;
+        }
+      if(!k)
+        {
+          this->draw_vsol_point(0, *pit, false, 1, 0, 0);
+          this->draw_vsol_point(1, points1[ip], false, 1, 0, 0);
+        }
+      if(k==1)
+        {
+          this->draw_vsol_point(0, *pit, false, 0, 1, 0);
+          this->draw_vsol_point(1, points1[ip], false, 0, 1, 0);
+        }
+      if(k==2)
+        {
+          this->draw_vsol_point(0, *pit, false, 0, 0, 1);
+          this->draw_vsol_point(1, points1[ip], false, 0, 0, 1);
+        }
+    }
+    vtol_tabs_[0]->post_redraw();
+    vtol_tabs_[1]->post_redraw();
+    if(print_corr)
+      {
+        static double x0 = 100;
+        static double y0 = 200;
+        vgui_dialog corr_dlg("Print Corr");
+        corr_dlg.field("Xlocation", x0);
+        if (!corr_dlg.ask())
+          return;
+        vcl_vector<int> xpos;
+        vcl_vector<double> corr;
+        dr.get_correlation(x0, raster, xpos, corr);
+        vcl_cout << "Correlation \n";
+        int n = xpos.size();
+        for(int i = 0; i<n; ++i)
+          vcl_cout << xpos[i] << "\t" << corr[i] << "\n";
+        vcl_cout << vcl_flush;
+      }
+}
+//===================================================================
+//: read the fundamental matrix
+//  
+//===================================================================
+void bmvv_recon_manager::read_f_matrix()
+{
+  vgui_dialog read_F_dlg("Read F Matrix");
+  static vcl_string filename = "";
+  static vcl_string ext = "*.*";
+  read_F_dlg.file("F Matrix file name", ext, filename);
+  if (!read_F_dlg.ask())
+    return;
+  if (filename == "")
+  {
+    vcl_cout << "Need a file name\n";
+    return;
+  }
+  vcl_ifstream istr(filename.c_str());
+  vnl_matrix<double> fm;
+  istr >> fm;
+  FMatrix F(fm);
+  vcl_cout << "F = \n" << F << '\n';
+  f_matrix_ = F;
+}
+//===================================================================
+//: pick a point in the left image and show the corresponding epipolar
+//  line in the right image
+//===================================================================
+void bmvv_recon_manager::show_epipolar_line()
+{
+  this->clear_display();
+  vgui::out << "pick point in left image\n";
+  unsigned int col=0, row=0;//left image
+  bgui_picker_tableau_sptr pkt = this->get_picker_tableau_at(col, row);
+  if (!pkt)
+  {
+    vcl_cout << "In bmvv_multiview_manager::show_epipolar_line() - null tableau\n";
+    return;
+  }
+  float x = 0, y=0;
+  pkt->pick_point(&x, &y);
+  vgui::out << "p(" << x << ' ' << y << ")\n";
+  vcl_cout << "p(" << x << ' ' << y << ")\n";
+
+  col = 1;//right image
+  bgui_vtol2D_tableau_sptr v2D = this->get_vtol2D_tableau_at(col,row);
+
+  //temporary test for FMatrix
+  vgl_homg_point_2d<double> pl(x,y);
+  vgl_homg_line_2d<double> lr = f_matrix_.image2_epipolar_line(pl);
+  //end test
+  if (v2D)
+  {
+    v2D->add_infinite_line(lr.a(), lr.b(), lr.c());
+    v2D->post_redraw();
+  }
+}
+void bmvv_recon_manager::show_world_homography()
+{
+  vgui_dialog read_homg_dlg("Read Correspondence File");
+  static double mag = 10.0;
+  static vcl_string corr_filename = "";
+  static vcl_string corr_ext = "*.cm";
+  static vcl_string cam_filename = "";
+  static vcl_string cam_ext = "*.cam";
+  read_homg_dlg.file("correspondence file", corr_ext, corr_filename);
+  read_homg_dlg.file("camera file", cam_ext, cam_filename);
+  read_homg_dlg.field("Magnification",mag);
+  if (!read_homg_dlg.ask())
+    return;
+  if (corr_filename == ""||cam_filename == "")
+  {
+    vcl_cout << "Need a file name\n";
+    return;
+  }
+  vcl_ifstream istr(corr_filename.c_str());
+  vcl_ofstream ostr(cam_filename.c_str());
+  vcl_vector<vgl_point_2d<double> > image_points;
+  vcl_vector<vgl_point_3d<double> > world_points;
+  if(!brct_algos::read_target_corrs(istr, image_points, world_points))
+  {
+    vcl_cout << "Failed to read correspondences\n";
+    return;
+  }
+  vgl_h_matrix_2d<double> H, Hs, Hm;
+  brct_algos::homography(world_points, image_points, H);
+  vcl_cout << "H\n" << H << '\n';
+  brct_algos::scale_and_translate_world(-120.4,-8.29, mag, Hs);
+  vnl_double_3x3 M, Ms, Mm;
+  M = H.get_inverse().get_matrix();
+  Ms = Hs.get_matrix();
+  vcl_cout << "Ms\n" << Ms << '\n';
+  Mm = Ms*M;
+  Hm = vgl_h_matrix_2d<double>(Mm);
+  vcl_cout << "Back-projected and scaled world points\n";
+  for(int i = 0; i<world_points.size(); i++)
+    {
+      vgl_point_2d<double>pi = image_points[i];
+      vgl_homg_point_2d<double> hpi(pi.x(), pi.y()), hpw;
+      hpw = Hm(hpi);
+      vgl_point_2d<double> pw(hpw);
+      vcl_cout << pw << '\n';
+    }
+  bgui_vtol2D_tableau_sptr v2d = this->get_selected_vtol2D_tableau();
+  if(!v2d)
+  {
+	vcl_cout << "Null Tableau \n";
+	return;
+  }
+  int cam = this->get_cam();
+  bgui_vtol2D_tableau_sptr other_tab = vtol_tabs_[1-cam]; 
+  if(!other_tab)
+  {
+	vcl_cout << "Null Tableau \n";
+	return;
+  }
+  vil1_image img = v2d->get_image_tableau()->get_image();
+  vil1_memory_image_of<float> fimg = brip_vil1_float_ops::convert_to_float(img);
+  vil1_memory_image_of<float> warped(1600, 450);
+  if(brip_vil1_float_ops::homography(fimg, Hm, warped, true))
+    {
+      vil1_memory_image_of<unsigned char> cimg =
+        brip_vil1_float_ops::convert_to_byte(warped, 0, 255);
+      vgui_image_tableau_sptr itab = other_tab->get_image_tableau();
+      itab->set_image(cimg);
+    }
+  else
+    vcl_cout << "Warping failed \n";
+  vcl_vector<vgl_point_2d<double> > proj_image_points;
+  vgl_p_matrix<double> P =  brct_algos::p_from_h(H);
+  brct_algos::project(world_points, P, proj_image_points);
+  
+  vgui_style_sptr r_style = vgui_style::new_style(1.0, 0.0, 0.0, 5, 0);
+  vgui_style_sptr g_style = vgui_style::new_style(0.0, 1.0, 0.0, 5, 0);
+  for(int i = 0; i<world_points.size(); i++)
+    {
+      vgl_point_2d<double> ip = image_points[i];
+      vgl_point_2d<double> pip = proj_image_points[i];
+      vsol_point_2d_sptr vip = new vsol_point_2d(ip.x(),ip.y());
+      vsol_point_2d_sptr vpip = new vsol_point_2d(pip.x(),pip.y());
+      vcl_cout << ip << " == " << pip << '\n';
+      v2d->add_vsol_point_2d(vip,r_style);  
+      v2d->add_vsol_point_2d(vpip,g_style);  
+    }
+  v2d->post_redraw();
+  //write out the camera 
+  ostr << P;
+  //Also as a target camera for interest sake
+  vcl_string target_file = cam_filename + "-target";
+  vcl_ofstream ostr_tar(target_file.c_str());
+  brct_algos::write_target_camera(ostr_tar, P.get_matrix());
 }
