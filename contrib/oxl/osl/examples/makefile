@@ -11,7 +11,7 @@ MINI_PROG_SOURCES += run_osl_canny.cxx
 MINI_PROG_SOURCES += topology_edges.cxx
 MINI_PROG_SOURCES += break_lines.cxx
 
-ald_libs := osl vbl #vil is deduced from osl.
+ald_libs := osl vbl vul #vil is deduced from osl.
 
 ################################
 include ../client.mk
