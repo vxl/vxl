@@ -10,13 +10,13 @@
 #include <vil1/vil1_load.h>
 
 #include <vgui/vgui.h>
-#include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_load.h>
 #include <vgui/vgui_zoomer.h>
 #include <vgui/vgui_viewer2D.h>
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
   vgui::init(argc, argv); // must come before argparse.
 
   char const *file = argv[1] ? argv[1] : "az32_10.tif";
@@ -33,7 +33,9 @@ int main(int argc, char **argv) {
   vgui_viewer2D viewer(&image);
 #endif
 
-  //vgui_shell_tableau shell(&viewer);
-  //return vgui::run(&shell, I.width(), I.height(), file);
+#if 0
+  vgui_shell_tableau shell(&viewer);
+  return vgui::run(&shell, I.width(), I.height(), file);
+#endif // 0
   return vgui::run(&viewer, I.width(), I.height(), file);
 }

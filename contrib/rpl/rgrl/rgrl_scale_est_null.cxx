@@ -3,8 +3,6 @@
 // \file
 // \author Charlene Tsai
 
-#include <rrel/rrel_objective.h>
-
 #include "rgrl_scale.h"
 #include "rgrl_match_set.h"
 #include "rgrl_util.h"

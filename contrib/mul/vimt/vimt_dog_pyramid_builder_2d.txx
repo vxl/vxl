@@ -17,7 +17,6 @@
 #include <vil/algo/vil_gauss_filter.h>
 #include <vil/vil_resample_bilin.h>
 #include <vil/vil_math.h>
-#include <vimt/vimt_crop.h>
 
 //=======================================================================
 

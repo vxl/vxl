@@ -26,7 +26,7 @@
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_c_vector.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
-#include <vpdfl/vpdfl_gaussian.h>
+#include <vpdfl/vpdfl_gaussian_builder.h>
 #include <vpdfl/vpdfl_pdf_base.h>
 #include <vpdfl/vpdfl_pc_gaussian.h>
 

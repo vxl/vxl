@@ -11,7 +11,7 @@
 #include <vsl/vsl_binary_loader.h>
 #include <vpdfl/vpdfl_gaussian.h>
 #include <vpdfl/vpdfl_gaussian_builder.h>
-#include <vpdfl/vpdfl_gaussian_sampler.h>
+#include <vpdfl/vpdfl_sampler_base.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <mbl/mbl_test.h>
 #include <vnl/io/vnl_io_matrix.h>
@@ -182,7 +182,7 @@ void test_gaussian()
 
   pdf.nearest_plausible(v3,pd);
   vcl_cout << "Nearest plausible of v2(" << v2 << ") = v3("
-    << v3 << ")" << vcl_endl;
+           << v3 << ')' << vcl_endl;
   TEST_NEAR("v3 is on Int(Prob)=0.9 boundary", pdf.log_p(v3), pd, 1e-5);
 
   TEST_NEAR("v3 and v2 have identical directions from mean",
@@ -193,7 +193,6 @@ void test_gaussian()
   delete p_base_pdf_in;
   delete p_base_builder_in;
   vsl_delete_all_loaders();
-
 }
 
 TESTMAIN( test_gaussian );

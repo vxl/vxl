@@ -4,8 +4,6 @@
 // \date  Sept 2003
 
 #include "rgrl_trans_spline.h"
-#include <rgrl/rgrl_trans_affine.h>
-#include <rgrl/rgrl_cast.h>
 #include <rgrl/rgrl_util.h>
 #include <rgrl/rgrl_trans_reader.h>
 #include <vcl_iostream.h>
@@ -186,7 +184,7 @@ read( vcl_istream& is )
 
   // The token should appear at the beginning of line
   if ( str.find( "BSPLINE" ) != 0 ) {
-    WarningMacro( "The tag is not AFFINE. reading is aborted." << vcl_endl );
+    WarningMacro( "The tag is not AFFINE. reading is aborted.\n" );
     vcl_exit(10);
   }
 

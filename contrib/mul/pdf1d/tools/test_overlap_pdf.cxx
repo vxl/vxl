@@ -11,9 +11,7 @@
 #include <pdf1d/pdf1d_flat.h>
 #include <pdf1d/pdf1d_gaussian.h>
 #include <pdf1d/pdf1d_gaussian_builder.h>
-#include <pdf1d/pdf1d_gaussian_kernel_pdf_builder.h>
 #include <pdf1d/pdf1d_epanech_kernel_pdf_builder.h>
-#include <pdf1d/pdf1d_bhat_overlap.h>
 
 // Generate samples with one pdf and test if it matches a particular form
 // Output sent to B_vs_Nsamples.txt file.
@@ -74,8 +72,7 @@ void run_experiment(const pdf1d_pdf& pdf,int n_samples, int n_repeats)
 
   vcl_cout<<"Overall statistics of B(stochastic):"<<vcl_endl;
   B_mean_stats.print_summary(vcl_cout);
-  vcl_cout<<vcl_endl;
-  vcl_cout<<"Average SD: "<<vcl_sqrt(B_var_stats.mean())<<vcl_endl;
+  vcl_cout<<"\nAverage SD: "<<vcl_sqrt(B_var_stats.mean())<<vcl_endl;
 }
 #endif
 
@@ -112,7 +109,7 @@ void graph_results(const pdf1d_pdf& pdf,
   {
     int ns = i*10;
     run_multi_experiments(pdf,test_builder,B_mean,B_var,ns,n_repeats);
-    ofs<<ns<<" "<<B_mean<<" "<<vcl_sqrt(B_var)<<vcl_endl;
+    ofs<<ns<<' '<<B_mean<<' '<<vcl_sqrt(B_var)<<vcl_endl;
   }
 
   ofs.close();

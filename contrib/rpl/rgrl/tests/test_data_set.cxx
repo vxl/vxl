@@ -1,6 +1,5 @@
 #include <testlib/testlib_test.h>
 
-#include <rgrl/rgrl_feature_point.h>
 #include <rgrl/rgrl_feature_set_location.h>
 #include <rgrl/rgrl_data_set.h>
 
@@ -24,11 +23,11 @@ keys_at_res( rgrl_data_set const& ds,
     ds.keys_at_resolution( resolution );
 
   bool okay = true;
-  if( count != keys.size() ) {
+  if ( count != keys.size() ) {
     okay = false;
   } else {
-    for( unsigned int i=0; i < count; ++i ) {
-      if( keys[i].resolution != resolution ) {
+    for ( unsigned int i=0; i < count; ++i ) {
+      if ( keys[i].resolution != resolution ) {
         okay = false;
       }
     }
@@ -102,6 +101,6 @@ MAIN( test_data_set )
   TEST( "!Get boundaries,0", get( *ds, "boundaries", 0 ), rgrl_feature_set_sptr(0) );
   TEST( "!Get vessels,1", get( *ds, "vessels", 1 ), rgrl_feature_set_sptr(0) );
   TEST( "!Get blah,1", get( *ds, "blah", 1 ), rgrl_feature_set_sptr(0) );
-  
+
   SUMMARY();
 }

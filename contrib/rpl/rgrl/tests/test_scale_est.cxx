@@ -9,7 +9,7 @@
 
 #include <rrel/rrel_muset_obj.h>
 
-#include <rgrl/rgrl_feature.h>
+#include <rgrl/rgrl_feature_sptr.h>
 #include <rgrl/rgrl_feature_point.h>
 #include <rgrl/rgrl_scale.h>
 #include <rgrl/rgrl_scale_est_closest.h>

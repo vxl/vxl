@@ -4,7 +4,6 @@
 #include <vgui/vgui.h>
 #include <vgui/vgui_composite.h>
 #include <vgui/vgui_event.h>
-#include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_spinner.h>
 #include <vgui/vgui_load.h>
@@ -49,7 +48,9 @@ int main(int argc,char **argv) {
   vgui_load vs(&man);
   vs.set_ortho(0,256, 256,0);
 
-  //vgui_shell_tableau shell(&vs);
-  //return vgui::run(&shell, 256, 256, "test_texture");
+#if 0
+  vgui_shell_tableau shell(&vs);
+  return vgui::run(&shell, 256, 256, "test_texture");
+#endif // 0
   return vgui::run(&vs, 256, 256, "test_texture");
 }

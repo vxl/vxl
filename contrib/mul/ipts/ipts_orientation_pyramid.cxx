@@ -6,7 +6,7 @@
 // \author Tim Cootes
 
 #include <vil/algo/vil_orientations.h>
-#include <vimt/vimt_scale_pyramid_builder_2d.h>
+#include <vimt/vimt_image_2d_of.h>
 #include <vcl_cassert.h>
 
 //: Compute edge orientations at each level of a scale space pyramid.
@@ -23,7 +23,7 @@ void ipts_orientation_pyramid(const vimt_image_pyramid& smooth_pyramid,
 
   int n_levels = smooth_pyramid.n_levels();
 
-  // Compute entropys for all levels of an image pyramid
+  // Compute entropies for all levels of an image pyramid
   orient_pyramid.resize(n_levels,vimt_image_2d_of<vxl_byte>());
   for (int i=0;i<n_levels;++i)
   {

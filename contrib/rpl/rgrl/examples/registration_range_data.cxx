@@ -25,7 +25,6 @@
 
 #include <rrel/rrel_muset_obj.h>
 #include <rrel/rrel_tukey_obj.h>
-#include <rsdl/rsdl_kd_tree.h>
 
 #include <rgrl/rgrl_feature_based_registration.h>
 #include <rgrl/rgrl_feature_set_location.h>
@@ -35,7 +34,6 @@
 #include <rgrl/rgrl_est_affine.h>
 
 #include <rgrl/rgrl_feature_face_pt.h>
-#include <rgrl/rgrl_feature_point.h>
 #include <rgrl/rgrl_scale_est_all_weights.h>
 #include <rgrl/rgrl_scale_est_closest.h>
 #include <rgrl/rgrl_weighter_m_est.h>
@@ -266,7 +264,7 @@ main( int argc, char* argv[] )
 
   // Output Results
   if ( reg.has_final_transformation() ) {
-    vcl_cout<<"Final xform: "<<vcl_endl;
+    vcl_cout<<"Final xform:"<<vcl_endl;
     rgrl_transformation_sptr final_trans = reg.final_transformation();
     rgrl_trans_affine* a_xform = rgrl_cast<rgrl_trans_affine*>(final_trans);
 

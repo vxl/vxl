@@ -18,8 +18,6 @@
 #include <vnl/vnl_math.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <mbl/mbl_index_sort.h>
-#include <pdf1d/pdf1d_sampler.h>
-#include <pdf1d/pdf1d_prob_chi2.h>
 #include <pdf1d/pdf1d_calc_mean_var.h>
 
 //=======================================================================

@@ -1,12 +1,12 @@
 #include <vgui/vgui.h>
 #include <vgui/vgui_deck_tableau.h>
-#include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_viewer2D.h>
 #include <vgui/vgui_viewer3D.h>
 #include <vrml/vgui_vrml.h>
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
   if (argc < 9) {
     vcl_cerr << "First 6 command line arguments: image files\n"
              << "Next two command line arguments: VRML camera files\n";
@@ -35,7 +35,9 @@ int main(int argc, char **argv) {
 
   deck.notify();
 
-  //vgui_shell_tableau shell(&deck);
-  //return vgui::run(&shell, 512, 512, "test_deck");
+#if 0
+  vgui_shell_tableau shell(&deck);
+  return vgui::run(&shell, 512, 512, "test_deck");
+#endif // 0
   return vgui::run(&deck, 512, 512, "test_deck");
 }

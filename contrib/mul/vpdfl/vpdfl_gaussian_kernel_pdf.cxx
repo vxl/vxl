@@ -17,7 +17,6 @@
 #include <vnl/vnl_math.h>
 #include <vpdfl/vpdfl_gaussian_kernel_pdf_sampler.h>
 #include <vpdfl/vpdfl_sampler_base.h>
-#include <vpdfl/vpdfl_prob_chi2.h>
 
 //=======================================================================
 

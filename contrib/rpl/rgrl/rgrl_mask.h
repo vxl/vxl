@@ -11,7 +11,8 @@
 #include <vil3d/vil3d_image_view.h>
 #include <vil/vil_image_view.h>
 
-#include "rgrl_object.h"
+#include <rgrl/rgrl_object.h>
+#include <rgrl/rgrl_macros.h>
 
 // Defines a ROI (termed mask) which is required by certain feature_set
 // to outline region where operations are performed (e.g. registration).

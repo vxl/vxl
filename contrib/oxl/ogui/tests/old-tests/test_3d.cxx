@@ -1,5 +1,4 @@
 #include <vgui/vgui.h>
-#include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_easy3D.h>
 #include <vgui/vgui_viewer3D.h>
 
@@ -34,8 +33,10 @@ int main(int argc, char **argv)
 
   vgui_viewer3D viewer(&list3D);
 
-  //vgui_shell_tableau shell(&viewer);
-  //return vgui::run(&shell, 512, 512);
+#if 0
+  vgui_shell_tableau shell(&viewer);
+  return vgui::run(&shell, 512, 512);
+#endif // 0
   return vgui::run(&viewer,512,512);
 }
 

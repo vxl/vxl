@@ -8,7 +8,6 @@
 
 #include <vul/vul_arg.h>
 #include <vgui/vgui.h>
-#include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_viewer3D.h>
 #include <vgui/vgui_blackbox.h>
 #include <vrml/vgui_vrml.h>
@@ -24,7 +23,9 @@ int main(int argc, char ** argv)
   vgui_viewer3D viewer(&vrml);
   vgui_blackbox recorder(&viewer);
 
-  //vgui_shell_tableau shell(&recorder);
-  //return vgui::run(&shell, 512, 512, "test_blackbox");
+#if 0
+  vgui_shell_tableau shell(&recorder);
+  return vgui::run(&shell, 512, 512, "test_blackbox");
+#endif // 0
   return vgui::run(&recorder, 512, 512, "test_blackbox");
 }

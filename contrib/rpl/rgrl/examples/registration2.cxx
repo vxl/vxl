@@ -50,21 +50,12 @@
 #include <vcl_iostream.h>
 #include <vnl/vnl_vector_fixed.h>
 
-#include <rrel/rrel_muset_obj.h>
-#include <rrel/rrel_tukey_obj.h>
-
 #include <rgrl/rgrl_feature_based_registration.h>
-#include <rgrl/rgrl_feature_set_location_masked.h>
-#include <rgrl/rgrl_initializer_prior.h>
-#include <rgrl/rgrl_matcher_k_nearest.h>
+#include <rgrl/rgrl_feature_set_location.h>
 #include <rgrl/rgrl_trans_quadratic.h>
 #include <rgrl/rgrl_est_quadratic.h>
 
 #include <rgrl/rgrl_feature_trace_pt.h>
-#include <rgrl/rgrl_scale_est_all_weights.h>
-#include <rgrl/rgrl_scale_est_closest.h>
-#include <rgrl/rgrl_weighter_m_est.h>
-#include <rgrl/rgrl_convergence_on_weighted_error.h>
 
 #include <rgrl/rgrl_cast.h>
 #include <rgrl/rgrl_mask.h>
@@ -137,7 +128,7 @@ int
 main( int argc, char* argv[] )
 {
   if ( argc < 3 ) {
-    vcl_cerr << "Missing Parameters " << vcl_endl
+    vcl_cerr << "Missing Parameters\n"
              << "Usage: " << argv[0]
              << " FixedImageFeatureFile MovingImageFeatureFile\n";
     return 1;

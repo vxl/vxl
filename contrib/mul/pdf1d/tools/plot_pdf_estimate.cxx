@@ -9,16 +9,12 @@
 #include <vcl_iostream.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_random.h>
-#include <pdf1d/pdf1d_compare_to_pdf_ks.h>
-#include <pdf1d/pdf1d_compare_to_pdf_bhat.h>
-#include <pdf1d/pdf1d_calc_mean_var.h>
 #include <pdf1d/pdf1d_flat.h>
 #include <pdf1d/pdf1d_exponential.h>
 #include <pdf1d/pdf1d_gaussian.h>
 #include <pdf1d/pdf1d_gaussian_builder.h>
 #include <pdf1d/pdf1d_epanech_kernel_pdf_builder.h>
 #include <pdf1d/pdf1d_gaussian_kernel_pdf_builder.h>
-#include <pdf1d/pdf1d_bhat_overlap.h>
 
 vnl_random mz_random;
 
@@ -33,7 +29,7 @@ void plot_estimate(const vcl_string& true_pdf_file, const vcl_string& new_pdf_fi
   // Generate n random samples from the pdf
   pdf.get_samples(d);
 
-  vcl_cout<<"Range of values: ["<<d.min_value()<<","<<d.max_value()<<"]"<<vcl_endl;
+  vcl_cout<<"Range of values: ["<<d.min_value()<<','<<d.max_value()<<']'<<vcl_endl;
 
   pdf1d_pdf *new_pdf = builder.new_model();
 

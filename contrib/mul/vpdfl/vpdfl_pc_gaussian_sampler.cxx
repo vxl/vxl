@@ -13,7 +13,6 @@
 #include "vpdfl_pc_gaussian_sampler.h"
 
 #include <vcl_string.h>
-#include <vpdfl/vpdfl_pc_gaussian.h>
 
 //=======================================================================
 // Method: is_a

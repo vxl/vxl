@@ -1,7 +1,6 @@
 // This is rpl/rrel/rrel_mlesac_obj.cxx
 #include "rrel_mlesac_obj.h"
 
-#include <rrel/rrel_util.h>
 #include <vnl/vnl_math.h>
 
 #include <vcl_cstdlib.h>

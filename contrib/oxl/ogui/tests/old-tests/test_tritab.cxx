@@ -2,14 +2,14 @@
   fsm
 */
 #include <vgui/vgui.h>
-#include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_test.h>
 #include <vgui/vgui_manipulator.h>
 #include <vgui/vgui_load.h>
 #include <vgui/vgui_tritab.h>
 #include <vgui/vgui_image_tableau.h>
 
-int main(int argc,char **argv) {
+int main(int argc,char **argv)
+{
   vgui::init(argc,argv);
 
   // 2d
@@ -39,7 +39,9 @@ int main(int argc,char **argv) {
 
   // top
   const unsigned int size = 256;
-  //vgui_shell_tableau shell(&tri);
-  //return vgui::run(&shell, size*3, size, __FILE__);
+#if 0
+  vgui_shell_tableau shell(&tri);
+  return vgui::run(&shell, size*3, size, __FILE__);
+#endif // 0
   return vgui::run(&tri, size*3, size, __FILE__);
 }

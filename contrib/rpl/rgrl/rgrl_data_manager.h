@@ -19,9 +19,6 @@
 #include "rgrl_weighter.h"
 #include "rgrl_object.h"
 
-#include <rrel/rrel_objective.h>
-#include <rrel/rrel_m_est_obj.h>
-
 #include <vcl_vector.h>
 #include <vcl_map.h>
 

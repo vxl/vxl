@@ -2,20 +2,20 @@
   fsm
 */
 #include <vgui/vgui.h>
-#include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_zoomer.h>
 #include <vgui/vgui_proj.h>
 #include <vgui/vgui_tritab.h>
 #include <vgui/vgui_load.h>
 #include <vgui/vgui_test.h>
 
-int main(int argc,char **argv) {
+int main(int argc,char **argv)
+{
   vgui::init(argc,argv);
 
   vgui_test::thingy2d th;
 
   vgui_zoomer zoom(&th);
-  
+
   // adapt the tableau 'tab' into three other tableaux :
   vgui_proj proj(&zoom);
 
@@ -30,7 +30,9 @@ int main(int argc,char **argv) {
   // 3 tableaux in one window
   vgui_tritab tri(&xyw, &ywx, &wxy);
 
-  //vgui_shell_tableau shell(&tri);
-  //return vgui::run(&shell, 3*size, size, __FILE__);
+#if 0
+  vgui_shell_tableau shell(&tri);
+  return vgui::run(&shell, 3*size, size, __FILE__);
+#endif // 0
   return vgui::run(&tri, 3*size, size, __FILE__);
 }

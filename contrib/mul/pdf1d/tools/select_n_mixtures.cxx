@@ -13,12 +13,7 @@
 #include <vcl_iostream.h>
 #include <vnl/vnl_vector.h>
 #include <pdf1d/pdf1d_compare_to_pdf_bhat.h>
-#include <pdf1d/pdf1d_calc_mean_var.h>
 #include <pdf1d/pdf1d_sampler.h>
-#include <pdf1d/pdf1d_flat.h>
-#include <pdf1d/pdf1d_exponential.h>
-#include <pdf1d/pdf1d_gaussian.h>
-#include <pdf1d/pdf1d_mixture.h>
 #include <pdf1d/pdf1d_mixture_builder.h>
 #include <pdf1d/pdf1d_gaussian_builder.h>
 #include <pdf1d/pdf1d_gaussian_kernel_pdf.h>

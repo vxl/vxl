@@ -11,13 +11,13 @@
 #include <rgrl/rgrl_feature_point.h>
 #include <rgrl/rgrl_match_set.h>
 #include <rgrl/rgrl_trans_affine.h>
-#include <rgrl/rgrl_estimator.h>
+#include <rgrl/rgrl_estimator_sptr.h>
 #include <rgrl/rgrl_est_affine.h>
 #include <rgrl/rgrl_initializer_ran_sam.h>
 #include <rgrl/rgrl_mask.h>
 #include <rgrl/rgrl_view.h>
 #include <rgrl/rgrl_scale_est_closest.h>
-#include <rgrl/rgrl_scale.h>
+#include <rgrl/rgrl_scale_sptr.h>
 
 #include "test_util.h"
 

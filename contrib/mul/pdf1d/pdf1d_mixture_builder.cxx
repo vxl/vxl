@@ -12,7 +12,6 @@
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_vector_io.h>
 #include <vsl/vsl_binary_loader.h>
-#include <pdf1d/pdf1d_mixture_sampler.h>
 #include <pdf1d/pdf1d_mixture.h>
 #include <mbl/mbl_data_wrapper.h>
 #include <mbl/mbl_data_array_wrapper.h>

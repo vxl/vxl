@@ -1,12 +1,11 @@
 #include <vgui/vgui.h>
 #include <vgui/vgui_composite.h>
-#include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_easy2D.h>
 #include <vgui/vgui_viewer2D.h>
 
-int main(int argc, char **argv) {
-
+int main(int argc, char **argv)
+{
   if (argc < 2) return 1;
 
   vgui::init(argc, argv);
@@ -40,10 +39,12 @@ int main(int argc, char **argv) {
   lines.add_line(100,100,200,400);
 
   vgui_composite comp(&image, &points, &lines);
-  
+
   vgui_viewer2D viewer(&comp);
 
-  //vgui_shell_tableau shell(&viewer);
-  //return vgui::run(&shell, 512, 512, "test_composite2d");
+#if 0
+  vgui_shell_tableau shell(&viewer);
+  return vgui::run(&shell, 512, 512, "test_composite2d");
+#endif // 0
   return vgui::run(&viewer, 512, 512, "test_composite2d");
 }

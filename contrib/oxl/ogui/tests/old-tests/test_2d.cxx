@@ -2,7 +2,6 @@
 #define FSM 0
 
 #include <vgui/vgui.h>
-#include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_easy2D.h>
 #if FSM
@@ -13,13 +12,14 @@
 #endif
 
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
   vgui::init(argc, argv);
 
   vgui_image_tableau image( argv[1] ? argv[1] : "az32_10.tif" );
 
   vgui_easy2D easy2D(&image);
-  
+
   easy2D.set_point_radius(5);
   easy2D.set_foreground(0,1,0); easy2D.add_point(10, 20);
   easy2D.set_foreground(1,0,1); easy2D.add_point(10, 30);
@@ -39,7 +39,9 @@ int main(int argc, char **argv) {
   vgui_viewer2D viewer(&easy2D);
 #endif
 
-  //vgui_shell_tableau shell(&viewer);
-  //return vgui::run(&shell, 512, 512, "test_2d");
+#if 0
+  vgui_shell_tableau shell(&viewer);
+  return vgui::run(&shell, 512, 512, "test_2d");
+#endif // 0
   return vgui::run(&viewer, 512, 512, "test_2d");
 }

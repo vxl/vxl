@@ -10,7 +10,6 @@
 
 #include <pdf1d/pdf1d_gaussian.h>
 #include <pdf1d/pdf1d_gaussian_builder.h>
-#include <pdf1d/pdf1d_gaussian_sampler.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <vsl/vsl_binary_loader.h>
 

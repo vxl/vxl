@@ -15,7 +15,7 @@
 #include <rgrl/rgrl_feature_trace_pt.h>
 #include <rgrl/rgrl_match_set.h>
 #include <rgrl/rgrl_trans_affine.h>
-#include <rgrl/rgrl_estimator.h>
+#include <rgrl/rgrl_estimator_sptr.h>
 #include <rgrl/rgrl_est_affine.h>
 #include <rgrl/rgrl_spline.h>
 #include <rgrl/rgrl_trans_spline.h>

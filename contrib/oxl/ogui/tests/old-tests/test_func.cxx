@@ -7,11 +7,10 @@
 #include <vcl_iostream.h>
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui.h>
-#include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_function_tableau.h>
 
-bool draw(const vgui_event&) {
-
+bool draw(const vgui_event&)
+{
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   glMatrixMode(GL_MODELVIEW);
@@ -31,27 +30,32 @@ bool draw(const vgui_event&) {
 }
 
 
-bool motion(const vgui_event&) {
+bool motion(const vgui_event&)
+{
   vcl_cerr << "motion\n";
   return true;
 }
 
-bool mouse_down(const vgui_event&) {
+bool mouse_down(const vgui_event&)
+{
   vcl_cerr << "mouse_down\n";
   return true;
 }
 
-bool mouse_up(const vgui_event&) {
+bool mouse_up(const vgui_event&)
+{
   vcl_cerr << "mouse_up\n";
   return true;
 }
 
-bool key_press(const vgui_event&) {
+bool key_press(const vgui_event&)
+{
   vcl_cerr << "key_press\n";
   return true;
 }
 
-bool help(const vgui_event&) {
+bool help(const vgui_event&)
+{
   vcl_cerr << "help\n";
   return true;
 }
@@ -68,7 +72,9 @@ int main(int argc, char ** argv)
   func.key_press(key_press);
   func.help(help);
 
-  //vgui_shell_tableau shell(&func);
-  //return vgui::run(&shell, 512, 512);
+#if 0
+  vgui_shell_tableau shell(&func);
+  return vgui::run(&shell, 512, 512);
+#endif // 0
   return vgui::run(&func,512,512);
 }

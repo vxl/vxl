@@ -12,7 +12,6 @@
 #include <vnl/vnl_vector.h>
 #include <pdf1d/pdf1d_compare_to_pdf_ks.h>
 #include <pdf1d/pdf1d_compare_to_pdf_bhat.h>
-#include <pdf1d/pdf1d_calc_mean_var.h>
 #include <pdf1d/pdf1d_flat.h>
 #include <pdf1d/pdf1d_sampler.h>
 #include <pdf1d/pdf1d_gaussian.h>
@@ -20,7 +19,6 @@
 #include <pdf1d/pdf1d_exponential_builder.h>
 #include <pdf1d/pdf1d_gaussian_builder.h>
 #include <pdf1d/pdf1d_gaussian_kernel_pdf_builder.h>
-#include <pdf1d/pdf1d_epanech_kernel_pdf_builder.h>
 #include <pdf1d/pdf1d_select_pdf.h>
 
 
@@ -77,7 +75,7 @@ void graph_selection_results(const vcl_string& path,
   for (int n_samples=10;n_samples<=200;n_samples+=10)
   {
     double prop_correct = pdf1d_test_pdf_selection(pdf,n_samples,comparator,n_tests);
-    ofs<<n_samples<<" "<<prop_correct<<vcl_endl;
+    ofs<<n_samples<<' '<<prop_correct<<vcl_endl;
   }
 
   ofs.close();
@@ -93,7 +91,7 @@ void graph_bhat_selection_results(const vcl_string& path,
   for (int n_samples=10;n_samples<=200;n_samples+=10)
   {
     double prop_correct = pdf1d_test_bhat_pdf_selection(pdf,n_samples,pdf_builder,n_tests);
-    ofs<<n_samples<<" "<<prop_correct<<vcl_endl;
+    ofs<<n_samples<<' '<<prop_correct<<vcl_endl;
   }
 
   ofs.close();

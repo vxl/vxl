@@ -11,7 +11,7 @@
 
 #include <vpdfl/vpdfl_pc_gaussian.h>
 #include <vpdfl/vpdfl_pc_gaussian_builder.h>
-#include <vpdfl/vpdfl_pc_gaussian_sampler.h>
+#include <vpdfl/vpdfl_sampler_base.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <vsl/vsl_binary_loader.h>
 

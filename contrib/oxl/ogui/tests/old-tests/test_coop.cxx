@@ -1,11 +1,11 @@
 #include <vgui/vgui.h>
 #include <vgui/vgui_load.h>
 #include <vgui/vgui_image_tableau.h>
-#include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_easy2D.h>
 #include <vgui/vgui_manipulator.h>
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
   if (argc < 2) return 1;
 
   vgui::init(argc, argv);
@@ -43,7 +43,9 @@ int main(int argc, char **argv) {
   vgui_load vs(&manip);
   vs.set_ortho(0,256, 256,0);
 
-  //vgui_shell_tableau shell(&vs);
-  //return vgui::run(&shell, 256, 256, __FILE__);
+#if 0
+  vgui_shell_tableau shell(&vs);
+  return vgui::run(&shell, 256, 256, __FILE__);
+#endif // 0
   return vgui::run(&vs, 256, 256, __FILE__);
 }

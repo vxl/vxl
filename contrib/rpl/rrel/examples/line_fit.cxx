@@ -19,7 +19,6 @@
 #include <rrel/rrel_m_est_obj.h>
 #include <rrel/rrel_tukey_obj.h>
 #include <rrel/rrel_muset_obj.h>
-#include <rrel/rrel_muse_table.h>
 
 int
 main( )
@@ -82,13 +81,11 @@ main( )
   {
     vnl_vector<double> ls_params;
     vnl_matrix<double> ls_norm_covar;
-    if ( !lr->weighted_least_squares_fit( ls_params, ls_norm_covar ) ) {
+    if ( !lr->weighted_least_squares_fit( ls_params, ls_norm_covar ) )
       vcl_cout << "Regression failed!!\n";
-    }
-    else {
-      vcl_cout << "Regression succeeded.\n";
-      vcl_cout << "estimate = " << ls_params[0] << " + " << ls_params[1] << " * x" << vcl_endl;
-    }
+    else
+      vcl_cout << "Regression succeeded.\n"
+               << "estimate = " << ls_params[0] << " + " << ls_params[1] << " * x\n";
     vcl_cout << vcl_endl;
   }
 
@@ -104,11 +101,10 @@ main( )
 
     if ( !ransam->estimate( lr, lms) )
       vcl_cout << "LMS failed!!\n";
-    else {
-      vcl_cout << "LMS succeeded.\n";
-      vcl_cout << "estimate = " << ransam->params()[0] << " + " << ransam->params()[1] << " * x" << vcl_endl
+    else
+      vcl_cout << "LMS succeeded.\n"
+               << "estimate = " << ransam->params()[0] << " + " << ransam->params()[1] << " * x\n"
                << "scale = " << ransam->scale() << vcl_endl;
-    }
     vcl_cout << vcl_endl;
 
     delete ransam;
@@ -127,11 +123,10 @@ main( )
 
     if ( !ransam->estimate( lr, ransac) )
       vcl_cout << "RANSAC failed!!\n";
-    else {
-      vcl_cout << "RANSAC succeeded.\n";
-      vcl_cout << "estimate = " << ransam->params()[0] << " + " << ransam->params()[1] << " * x" << vcl_endl
+    else
+      vcl_cout << "RANSAC succeeded.\n"
+               << "estimate = " << ransam->params()[0] << " + " << ransam->params()[1] << " * x\n"
                << "scale = " << ransam->scale() << vcl_endl;
-    }
     vcl_cout << vcl_endl;
 
     delete ransac;
@@ -150,11 +145,10 @@ main( )
 
     if ( !ransam->estimate( lr, msac) )
       vcl_cout << "MSAC failed!!\n";
-    else {
-      vcl_cout << "MSAC succeeded.\n";
-      vcl_cout << "estimate = " << ransam->params()[0] << " + " << ransam->params()[1] << " * x" << vcl_endl
+    else
+      vcl_cout << "MSAC succeeded.\n"
+               << "estimate = " << ransam->params()[0] << " + " << ransam->params()[1] << " * x\n"
                << "scale = " << ransam->scale() << vcl_endl;
-    }
     vcl_cout << vcl_endl;
 
     delete msac;
@@ -178,11 +172,10 @@ main( )
 
     if ( !ransam->estimate( lr, muset) )
       vcl_cout << "MUSE failed!!\n";
-    else {
-      vcl_cout << "MUSE succeeded.\n";
-      vcl_cout << "estimate = " << ransam->params()[0] << " + " << ransam->params()[1] << " * x" << vcl_endl
+    else
+      vcl_cout << "MUSE succeeded.\n"
+               << "estimate = " << ransam->params()[0] << " + " << ransam->params()[1] << " * x\n"
                << "scale = " << ransam->scale() << vcl_endl;
-    }
     vcl_cout << vcl_endl;
 
     delete muset;
@@ -221,14 +214,12 @@ main( )
     irls->set_convergence_test( conv_tolerance );
     irls->set_trace_level(trace_level);
 
-    if ( !irls->estimate( lr, m_est ) ) {
-      vcl_cout << "M-est (IRLS) failed!\n";
-    }
-    else {
-      vcl_cout << "M-est (IRLS) succeeded.\n";
-      vcl_cout << "estimate = " << irls->params()[0] << " + " << irls->params()[1] << " * x" << vcl_endl
+    if ( !irls->estimate( lr, m_est ) )
+      vcl_cout << "M-est (IRLS) failed!" << vcl_endl;
+    else
+      vcl_cout << "M-est (IRLS) succeeded.\n"
+               << "estimate = " << irls->params()[0] << " + " << irls->params()[1] << " * x\n"
                << "scale = " << irls->scale() << vcl_endl;
-    }
 
     delete irls;
     delete m_est;
@@ -245,11 +236,10 @@ main( )
 
     if ( !ransam->estimate( lr, m_est) )
       vcl_cout << "M-est (RANSAM) failed!!\n";
-    else {
-      vcl_cout << "M-est (RANSAM) succeeded.\n";
-      vcl_cout << "estimate = " << ransam->params()[0] << " + " << ransam->params()[1] << " * x" << vcl_endl
+    else
+      vcl_cout << "M-est (RANSAM) succeeded.\n"
+               << "estimate = " << ransam->params()[0] << " + " << ransam->params()[1] << " * x\n"
                << "scale = " << ransam->scale() << vcl_endl;
-    }
     vcl_cout << vcl_endl;
 
     delete m_est;

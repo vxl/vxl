@@ -6,9 +6,7 @@
 // \brief Compute edge orientations at each level of a scale space pyramid
 // \author Tim Cootes
 
-#include <vimt/vimt_image_2d_of.h>
 #include <vimt/vimt_image_pyramid.h>
-
 
 //: Compute edge orientations at each level of a scale space pyramid.
 //  smooth_pyramid must be of type float. orient_pyramid is set to be of type vxl_byte.

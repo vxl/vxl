@@ -2,12 +2,11 @@
 #ifndef vimt3d_trilin_interp_h_
 #define vimt3d_trilin_interp_h_
 //:
-//  \file
-//  \brief Bilinear interpolation functions for 2D images
-//  \author Tim Cootes
+// \file
+// \brief Bilinear interpolation functions for 2D images
+// \author Tim Cootes
 
 #include <vil3d/vil3d_trilin_interp.h>
-#include <vimt/vimt_image_2d_of.h>
 
 //: Compute trilinear interpolation at (x,y,z) in world coordinates
 //  Interpolates given plane of image.image() at image.world2im(p)

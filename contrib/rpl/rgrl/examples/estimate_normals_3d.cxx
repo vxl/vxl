@@ -28,8 +28,6 @@
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/algo/vnl_scatter_3x3.h>
 
-#include <rrel/rrel_muset_obj.h>
-#include <rrel/rrel_tukey_obj.h>
 #include <rsdl/rsdl_kd_tree.h>
 
 typedef vnl_vector_fixed<double,3>       vector_3d;

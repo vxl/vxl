@@ -1,11 +1,10 @@
 //:
 // \file
-// \brief Smart reader function for reading in ASCII transformation file. 
+// \brief Smart reader function for reading in ASCII transformation file.
 // \author Gehua yang, Chia-ling Tsai
 // \date Aug 04 2004
 
 #include "rgrl_trans_reader.h"
-#include <rgrl/rgrl_macros.h>
 #include <rgrl/rgrl_trans_translation.h>
 #include <rgrl/rgrl_trans_similarity.h>
 #include <rgrl/rgrl_trans_affine.h>
@@ -20,7 +19,7 @@
 
 #undef READ_THIS_TRANSFORMATION
 #define READ_THIS_TRANSFORMATION(tag, trans) \
-  if( tag_str.find(tag) == 0 ){ \
+  if ( tag_str.find(tag) == 0 ){ \
     trans* trans_ptr = new trans(0); \
     trans_ptr->read(is); \
     sptr = trans_ptr; \
@@ -32,20 +31,20 @@
 //  The type of transformation depends on the content of the input stream.
 //  NULL smart ptr is returned if reading fails.
 //  Please check the validity of the return smart ptr
-rgrl_transformation_sptr 
+rgrl_transformation_sptr
 rgrl_trans_reader( vcl_istream& is )
 {
   vcl_string tag_str;
   vcl_streampos pos;
 
   rgrl_transformation_sptr sptr;
-  
-  // skip any empty lines  
+
+  // skip any empty lines
   rgrl_util_skip_empty_lines( is );
   // store current reading position
   pos = is.tellg();
   vcl_getline( is, tag_str );
-  
+
   // back to the beginning of the tag line
   is.seekg( pos );
 
@@ -61,17 +60,17 @@ rgrl_trans_reader( vcl_istream& is )
   READ_THIS_TRANSFORMATION("QUADRATIC", rgrl_trans_quadratic)
   READ_THIS_TRANSFORMATION("BSPLINE", rgrl_trans_spline)
 
-  // default, should never reach here      
-  vcl_cout<< "WARNING: " << RGRL_HERE << " ( line " 
-          << __LINE__ << " )\n" 
-          << "       " << "Tag " << tag_str 
-          << " cannot match with any existing transformations.\n" 
+  // default, should never reach here
+  vcl_cout<< "WARNING: " << RGRL_HERE << " ( line "
+          << __LINE__ << " )\n"
+          << "       " << "Tag " << tag_str
+          << " cannot match with any existing transformations.\n"
           << "         Try to open istream in BINARY mode!" << vcl_endl;
   return sptr;
-}                 
-                   
+}
+
 //: stream operator for reading transformation
-vcl_istream& 
+vcl_istream&
 operator>> (vcl_istream& is, rgrl_transformation_sptr& trans_sptr)
 {
   trans_sptr = rgrl_trans_reader( is );

@@ -9,7 +9,6 @@
 #include <vul/vul_arg.h>
 
 #include <vgui/vgui.h>
-#include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_viewer3D.h>
 #include <vrml/vgui_vrml.h>
 
@@ -20,11 +19,13 @@ int main(int argc, char ** argv)
 
   vul_arg<char*> vrml_file(0, "VRML File");
   vul_arg_parse(argc, argv);
-  
+
   vgui_vrml vrml(vrml_file);
   vgui_viewer3D viewer(&vrml);
 
-  //vgui_shell_tableau shell(&viewer);
-  //return vgui::run(&shell, 512, 512, vrml.name());
+#if 0
+  vgui_shell_tableau shell(&viewer);
+  return vgui::run(&shell, 512, 512, vrml.name());
+#endif // 0
   return vgui::run(&viewer,512,512, vrml.name());
 }

@@ -14,7 +14,6 @@
 #include <vcl_string.h>
 
 #include <pdf1d/pdf1d_epanech_kernel_pdf.h>
-#include <pdf1d/pdf1d_calc_mean_var.h>
 
 //=======================================================================
 // Dflt ctor

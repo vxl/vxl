@@ -68,26 +68,16 @@
 #include <vil/vil_load.h>
 #include <vil/vil_image_view.h>
 
-#include <rrel/rrel_muset_obj.h>
-#include <rrel/rrel_tukey_obj.h>
-
 #include <rgrl/rgrl_feature_based_registration.h>
 #include <rgrl/rgrl_feature_set_location_masked.h>
-#include <rgrl/rgrl_matcher_k_nearest.h>
 #include <rgrl/rgrl_trans_quadratic.h>
 #include <rgrl/rgrl_est_quadratic.h>
 #include <rgrl/rgrl_trans_similarity.h>
-#include <rgrl/rgrl_est_similarity2d.h>
 #include <rgrl/rgrl_trans_reduced_quad.h>
-#include <rgrl/rgrl_est_reduced_quad2d.h>
 #include <rgrl/rgrl_initializer_inv_indexing.h>
 #include <rgrl/rgrl_invariant_single_landmark.h>
 
 #include <rgrl/rgrl_feature_trace_pt.h>
-#include <rgrl/rgrl_scale_est_all_weights.h>
-#include <rgrl/rgrl_scale_est_closest.h>
-#include <rgrl/rgrl_weighter_m_est.h>
-#include <rgrl/rgrl_convergence_on_weighted_error.h>
 
 #include <rgrl/rgrl_cast.h>
 #include <rgrl/rgrl_mask.h>

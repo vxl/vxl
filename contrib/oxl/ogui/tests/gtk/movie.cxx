@@ -7,7 +7,6 @@
 #include <vgui/vgui_deck_tableau.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_load.h>
-#include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_zoomer.h>
 
@@ -93,8 +92,11 @@ int main(int argc, char ** argv)
   vgui_load vs(&zr);
   vs.set_image(400, 400);
 
-  //vgui_shell_tableau shell(&vs);
+#if 0
+  vgui_shell_tableau shell(&vs);
+#else
   vgui_tableau &shell(vs);
+#endif // 0
 
   // plug into a GL context :
   vgui_gtk_adaptor *ct = new vgui_gtk_adaptor();

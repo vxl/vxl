@@ -31,7 +31,6 @@
 #include <rgrl/rgrl_data_manager.h>
 #include <rgrl/rgrl_feature_based_registration.h>
 
-#include <rgrl/rgrl_match_set.h>
 #include <rgrl/rgrl_matcher_k_nearest.h>
 #include <rgrl/rgrl_scale_est_all_weights.h>
 #include <rgrl/rgrl_scale_est_closest.h>
@@ -390,7 +389,7 @@ main()
   reg.run( image_roi, estimator, init_transform );
 
   if ( reg.has_final_transformation() ) {
-    vcl_cout<<"Final xform: "<<vcl_endl;
+    vcl_cout<<"Final xform:"<<vcl_endl;
     rgrl_transformation_sptr trans = reg.final_transformation();
     rgrl_trans_affine* a_xform = rgrl_cast<rgrl_trans_affine*>(trans);
     vcl_cout<<"A = "<<a_xform->A()<<vcl_endl

@@ -17,13 +17,8 @@
 #include <vnl/vnl_vector.h>
 #include <pdf1d/pdf1d_compare_to_pdf_bhat.h>
 #include <pdf1d/pdf1d_compare_to_pdf_ks.h>
-#include <pdf1d/pdf1d_calc_mean_var.h>
 #include <pdf1d/pdf1d_sampler.h>
-#include <pdf1d/pdf1d_flat.h>
 #include <pdf1d/pdf1d_exponential.h>
-#include <pdf1d/pdf1d_gaussian.h>
-#include <pdf1d/pdf1d_gaussian_builder.h>
-#include <pdf1d/pdf1d_gaussian_kernel_pdf.h>
 #include <pdf1d/pdf1d_gaussian_kernel_pdf_builder.h>
 
 //: Compute how well data in x matches true pdf using n different comparators
@@ -69,14 +64,15 @@ void test_comparison(int n_samples, int n_trials,
 
   test_comparison(B_stats,n_samples,n_trials,true_pdf,comparator);
 
-  vcl_cout<<"PDF: "<<true_pdf<<vcl_endl;
-  vcl_cout<<"Sampling "<<n_samples;
-  vcl_cout<<" values from pdf and computing overlap with kernel estimate."<<vcl_endl;
-  vcl_cout<<"Averaging over "<<n_trials<<" trials."<<vcl_endl;
+  vcl_cout<<"PDF: "<<true_pdf<<vcl_endl
+          <<"Sampling "<<n_samples
+          <<" values from pdf and computing overlap with kernel estimate.\n"
+          <<"Averaging over "<<n_trials<<" trials."<<vcl_endl;
   for (unsigned int i=0;i<B_stats.size();++i)
   {
-    vcl_cout<<name[i]<<" : "<<vcl_endl;
-    vcl_cout<<"Mean: "<<B_stats[i].mean()<<" Std.Err: "<<B_stats[i].stdError()<<vcl_endl;
+    vcl_cout<<name[i]<<" :\n"
+            <<"Mean: "<<B_stats[i].mean()
+            <<" Std.Err: "<<B_stats[i].stdError()<<vcl_endl;
   }
 }
 
@@ -134,12 +130,13 @@ int main()
   int n_samples = 100;
   int n_trials = 1000;
 
-//  pdf1d_gaussian true_pdf(0,1);
-//  pdf1d_flat true_pdf(0,1);
   pdf1d_exponential true_pdf(1.0);
+#if 0
+  pdf1d_gaussian true_pdf(0,1);
+  pdf1d_flat true_pdf(0,1);
   // Let true pdf be n Gaussians at 0,1,2 with sd of 0.25
-//  pdf1d_gaussian_kernel_pdf true_pdf(2,1,0.25);
-
+  pdf1d_gaussian_kernel_pdf true_pdf(2,1,0.25);
+#endif // 0
   test_comparison(n_samples,n_trials,true_pdf,comparator,name);
 
   return 0;

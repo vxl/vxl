@@ -34,11 +34,9 @@ END_MESSAGE_MAP()
 #include <vgui/vgui_viewer2D.h>
 #include <vgui/vgui_easy3D.h>
 #include <vgui/vgui_viewer3D.h>
-#include <vgui/vgui_polytab.h>
 #include <vgui/vgui_deck_tableau.h>
 #include <vgui/vgui_composite.h>
 #include <vgui/vgui_clear_tableau.h>
-#include <vgui/vgui_blackbox.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vrml/vgui_vrml_tableau.h>
 #include <vgui/vgui_projection_inspector.h>
@@ -87,7 +85,7 @@ void compute_f(vcl_vector<corr>& c) {
   vcl_cerr << "n = " << c.size() << vcl_endl;
   vcl_ofstream f("/tmp/f.txt");
   for (int i = 0; i < c.size(); ++i) {
-    f << c[i].x0 << " " << c[i].y0 << " " << c[i].x1 << " " << c[i].y1 << "\n";
+    f << c[i].x0 << ' ' << c[i].y0 << ' ' << c[i].x1 << ' ' << c[i].y1 << '\n';
   }
 }
 
@@ -200,17 +198,17 @@ void save(vgui_easy3D_sptr dl, char const* fn)
     vgui_soview* so = all[i];
     if (so->type_name() == "vgui_point3D") {
       vgui_point3D* p = (vgui_point3D*)so;
-      f << "p " << p->x << " "  << p->y << " "  << p->z << "\n";
+      f << "p " << p->x << ' '  << p->y << ' '  << p->z << '\n';
     } else if (so->type_name() == "vgui_lineseg3D") {
       vgui_lineseg3D* p = (vgui_lineseg3D*)so;
       int i1 = find(pts, vnl_double_3(p->x0, p->y0, p->z0));
       int i2 = find(pts, vnl_double_3(p->x1, p->y1, p->z1));
       if (i1 != -1 && i2 != -1)
-        f << "il " << i1 << " " << i2 << vcl_endl;
+        f << "il " << i1 << ' ' << i2 << vcl_endl;
       else
         f <<  "l "
-          << p->x0 << " "  << p->y0 << " "  << p->z0 << " "
-          << p->x1 << " "  << p->y1 << " "  << p->z1 << "\n";
+          << p->x0 << ' '  << p->y0 << ' '  << p->z0 << ' '
+          << p->x1 << ' '  << p->y1 << ' '  << p->z1 << '\n';
     }
   }
 }
@@ -268,7 +266,7 @@ my3dvtab::my3dvtab(vgui_easy3D_sptr t):
   // yellow
   dl->set_foreground(1,1,0);
 
-  if (1) {
+  if (true) {
     // load pts
     vnl_file_matrix<double> fm("/tmp/t.X");
     // compute centroid
@@ -335,7 +333,7 @@ my3dvtab::my3dvtab(vgui_easy3D_sptr t):
 
 vgui_tableau_sptr mk3d()
 {
-  if (0)
+  if (false)
     return new my3dvtab(new vgui_easy3D);
   else
     return new vgui_viewer3D(vgui_vrml_tableau_new("/tmp/t.wrl"));
@@ -356,25 +354,24 @@ example_CAwfmfcDoc::example_CAwfmfcDoc()
   pimpl->all[1] = 0;
 
   pimpl->all[0] = new mydata("/awf/images/eccv-nr/f.000.ppm",0,pimpl);
+#if 0
+  pimpl->all[1] = new mydata("/awf/images/eccv-nr/f.004.ppm",1,pimpl);
 
-  //pimpl->all[1] = new mydata("/awf/images/eccv-nr/f.004.ppm",1,pimpl);
+  vgui_poly_tableau* poly = new vgui_poly_tableau;
+  poly->add(pimpl->all[0]->z, 0, 0, .5, 1);
+  poly->add(pimpl->all[1]->z, .5, 0, .5, 1);
 
-  //vgui_polytab* poly = new vgui_polytab;
-  //poly->add(pimpl->all[0]->z, 0, 0, .5, 1);
-  // poly->add(pimpl->all[1]->z, .5, 0, .5, 1);
+  pimpl->vrml.vertical_cast(mk3d());
+  pimpl->v3d = new vgui_viewer3D(pimpl->vrml);
+  vgui_tableau_sptr viewer3d = new vgui_blackbox_tableau(pimpl->v3d);
 
-  //pimpl->vrml.vertical_cast(mk3d());
-  //pimpl->v3d = new vgui_viewer3D(pimpl->vrml);
-  //vgui_tableau_sptr viewer3d = new vgui_blackbox(pimpl->v3d);
-
-
-  //vgui_deck_tableau_sptr deck = new vgui_deck_tableau;
-  //deck->add(poly);
-  //deck->add(viewer3d);
+  vgui_deck_tableau_sptr deck = new vgui_deck_tableau;
+  deck->add(poly);
+  deck->add(viewer3d);
 
   // Put into a viewer2D tableau to get zooming, etc:
-  //vgui_viewer2D* viewer = new vgui_viewer2D(poly);
-
+  vgui_viewer2D* viewer = new vgui_viewer2D(poly);
+#endif // 0
   this->tableau = pimpl->all[0]->z;
 }
 
@@ -386,14 +383,14 @@ example_CAwfmfcDoc::~example_CAwfmfcDoc()
 }
 
 BOOL example_CAwfmfcDoc::OnNewDocument()
-{
-        if (!CDocument::OnNewDocument())
-                return FALSE;
 
-        // TODO: add reinitialization code here
-        // (SDI documents will reuse this document)
+  if (!CDocument::OnNewDocument())
+          return FALSE;
 
-        return TRUE;
+  // TODO: add reinitialization code here
+  // (SDI documents will reuse this document)
+
+  return TRUE;
 }
 
 
@@ -402,14 +399,14 @@ BOOL example_CAwfmfcDoc::OnNewDocument()
 
 void example_CAwfmfcDoc::Serialize(CArchive& ar)
 {
-        if (ar.IsStoring())
-        {
-                // TODO: add storing code here
-        }
-        else
-        {
-                // TODO: add loading code here
-        }
+  if (ar.IsStoring())
+  {
+    // TODO: add storing code here
+  }
+  else
+  {
+    // TODO: add loading code here
+  }
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -418,12 +415,12 @@ void example_CAwfmfcDoc::Serialize(CArchive& ar)
 #ifdef _DEBUG
 void example_CAwfmfcDoc::AssertValid() const
 {
-        CDocument::AssertValid();
+  CDocument::AssertValid();
 }
 
 void example_CAwfmfcDoc::Dump(CDumpContext& dc) const
 {
-        CDocument::Dump(dc);
+  CDocument::Dump(dc);
 }
 #endif //_DEBUG
 
@@ -432,32 +429,32 @@ void example_CAwfmfcDoc::Dump(CDumpContext& dc) const
 
 BOOL example_CAwfmfcDoc::OnOpenDocument(LPCTSTR lpszPathName)
 {
-        // TODO: Add your command handler code here
-        if (IsModified())
-                TRACE0("Warning: OnOpenDocument replaces an unsaved document.\n");
+  // TODO: Add your command handler code here
+  if (IsModified())
+    TRACE0("Warning: OnOpenDocument replaces an unsaved document.\n");
 
-        DeleteContents();
-        SetModifiedFlag(FALSE);
+  DeleteContents();
+  SetModifiedFlag(FALSE);
+#if 0
+  set_tableau(new vgui_vrml_tableau(pFile));
+  pimpl->v3d->remove_child(pimpl->vrml);
+  pimpl->vrml = new vgui_vrml_tableau(lpszPathName);
+  pimpl->v3d->add_child(pimpl->vrml);
+  pimpl->v3d->post_redraw();
+#endif // 0
+  pimpl->all[0]->img->set_image(lpszPathName);
 
-  //set_tableau(new vgui_vrml_tableau(pFile));
-  //      pimpl->v3d->remove_child(pimpl->vrml);
-  //      pimpl->vrml = new vgui_vrml_tableau(lpszPathName);
-  //      pimpl->v3d->add_child(pimpl->vrml);
-  //      pimpl->v3d->post_redraw();
-
-        pimpl->all[0]->img->set_image(lpszPathName);
-
-        return TRUE;
+  return TRUE;
 }
 
 void example_CAwfmfcDoc::Ontool1()
 {
-        // TODO: Add your command handler code here
-        vgui_dialog db("Hello world");
-        static double x = 5;
-        db.field("Point radius", x);
-        if (db.ask()) {
+  // TODO: Add your command handler code here
+  vgui_dialog db("Hello world");
+  static double x = 5;
+  db.field("Point radius", x);
+  if (db.ask()) {
 //  ((my3dvtab*)pimpl->vrml)->dl->set_point_radius(x);
-          vcl_cerr << x << vcl_endl;
-        }
+    vcl_cerr << x << vcl_endl;
+  }
 }

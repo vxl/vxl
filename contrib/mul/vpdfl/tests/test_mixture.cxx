@@ -15,10 +15,9 @@
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vpdfl/vpdfl_mixture.h>
 #include <vpdfl/vpdfl_mixture_builder.h>
-#include <vpdfl/vpdfl_mixture_sampler.h>
 #include <vpdfl/vpdfl_axis_gaussian.h>
 #include <vpdfl/vpdfl_axis_gaussian_builder.h>
-#include <vpdfl/vpdfl_axis_gaussian_sampler.h>
+#include <vpdfl/vpdfl_sampler_base.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <vsl/vsl_binary_loader.h>
 
@@ -147,14 +146,14 @@ void test_mixture()
   vpl_unlink(test_path.c_str());
 #endif
 
-  vcl_cout<<"Original builder: "; vsl_print_summary(vcl_cout, builder);
-  vcl_cout<<"\nLoaded builder: "; vsl_print_summary(vcl_cout, p_builder2);
+  vcl_cout<<"Original builder: "; vsl_print_summary(vcl_cout, builder); vcl_cout << vcl_endl
+          <<"\nLoaded builder: "; vsl_print_summary(vcl_cout, p_builder2); vcl_cout << vcl_endl
 
-  vcl_cout<<"\n\nOriginal PDF: "; vsl_print_summary(vcl_cout, p_pdf);
-  vcl_cout<<"\nMean: " << p_pdf->mean()
+          <<"\n\nOriginal PDF: "; vsl_print_summary(vcl_cout, p_pdf); vcl_cout << vcl_endl
+          <<"\nMean: " << p_pdf->mean()
           <<"\nVar:  " << p_pdf->variance()
-          <<"\nLoaded PDF: "; vsl_print_summary(vcl_cout, p_pdf2);
-  vcl_cout<<"\nMean: " << p_pdf2->mean()
+          <<"\nLoaded PDF: "; vsl_print_summary(vcl_cout, p_pdf2); vcl_cout << vcl_endl
+          <<"\nMean: " << p_pdf2->mean()
           <<"\nVar:  " << p_pdf2->variance()
           <<"\n\n\n";
 

@@ -14,7 +14,6 @@
 #include <mbl/mbl_data_wrapper.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <pdf1d/pdf1d_flat.h>
-#include <pdf1d/pdf1d_calc_mean_var.h>
 
 //=======================================================================
 // Dflt ctor

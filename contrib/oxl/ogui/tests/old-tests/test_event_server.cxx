@@ -5,14 +5,13 @@
 #include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_event_server.h>
-#include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_viewer2D.h>
 
 vgui_image_tableau *image_ptr;
 
-void run_event_server(void const*) {
-
+void run_event_server(void const*)
+{
   vcl_cerr << "starting event server\n";
 
   vgui_event_server eserve(image_ptr);
@@ -61,8 +60,8 @@ void run_event_server(void const*) {
   }
 }
 
-int main(int argc, char **argv) {
-
+int main(int argc, char **argv)
+{
   if (argc < 2) return 1;
 
   vgui::init(argc, argv);
@@ -74,8 +73,10 @@ int main(int argc, char **argv) {
   vgui_menu test_menu;
   test_menu.add("Event Server", run_event_server);
 
-  //vgui_shell_tableau shell(&viewer);
-  //vgui_window *win = vgui::adapt(&shell, 512,512, test_menu);
+#if 0
+  vgui_shell_tableau shell(&viewer);
+  vgui_window *win = vgui::adapt(&shell, 512,512, test_menu);
+#endif // 0
   vgui_window *win = vgui::adapt(&viewer, 512,512, test_menu);
 
   win->get_adaptor()->bind_popups(vgui_MODIFIER_NULL, vgui_RIGHT);

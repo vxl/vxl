@@ -6,16 +6,17 @@
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_menu.h>
-#include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_viewer2D.h>
 
-static void dummy(const void*) {
+static void dummy(const void*)
+{
   vgui::out << "Dummy function called\n";
 }
 
 
-vgui_menu create_menus() {
+vgui_menu create_menus()
+{
   vgui_menu file;
   file.add("Open",dummy);
   file.separator();
@@ -58,7 +59,9 @@ int main(int argc, char ** argv)
   vgui_image_tableau image(argv[1]);
   vgui_viewer2D viewer(&image);
 
-  //vgui_shell_tableau shell(&viewer);
-  //return vgui::run(&shell, 512, 512, create_menus());
+#if 0
+  vgui_shell_tableau shell(&viewer);
+  return vgui::run(&shell, 512, 512, create_menus());
+#endif // 0
   return vgui::run(&viewer,512,512,create_menus());
 }

@@ -8,7 +8,6 @@
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_composite.h>
-#include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_image_blender.h>
 #include <vgui/vgui_viewer2D.h>
@@ -24,7 +23,9 @@ int main(int argc, char ** argv)
 
   vgui_viewer2D viewer(&blend);
 
-  //vgui_shell_tableau tab(&image, &viewer);
+#if 0
+  vgui_shell_tableau tab(&image, &viewer);
+#endif // 0
   vgui_composite tab(&image, &viewer);
   return vgui::run(&tab, 512, 512, "test_blend2");
 }

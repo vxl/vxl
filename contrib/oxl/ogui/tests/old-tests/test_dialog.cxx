@@ -9,11 +9,11 @@
 #include <vgui/vgui.h>
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_dialog.h>
-#include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_viewer2D.h>
 
-static void test_dialog(const void*) {
+static void test_dialog(const void*)
+{
   vcl_cerr << "making dialog\n";
 
   static int int_value = 2;
@@ -43,19 +43,19 @@ static void test_dialog(const void*) {
   mydialog.choice("choice value", labels, choice_value);
 
   if (mydialog.ask()) {
-    vcl_cerr << "int_value : " << int_value << vcl_endl;
-    vcl_cerr << "long_value : " << long_value << vcl_endl;
-    vcl_cerr << "float_value : " << float_value << vcl_endl;
-    vcl_cerr << "double_value : " << double_value << vcl_endl;
-    vcl_cerr << "string_value : " << string_value << vcl_endl;
-    vcl_cerr << "bool_value : " << vbl_bool_ostream::true_false(bool_value) << vcl_endl;
-    vcl_cerr << "choice_value : " << choice_value << " " << labels[choice_value] << vcl_endl;
+    vcl_cerr << "int_value : " << int_value << vcl_endl
+             << "long_value : " << long_value << vcl_endl
+             << "float_value : " << float_value << vcl_endl
+             << "double_value : " << double_value << vcl_endl
+             << "string_value : " << string_value << vcl_endl
+             << "bool_value : " << vbl_bool_ostream::true_false(bool_value) << vcl_endl
+             << "choice_value : " << choice_value << ' ' << labels[choice_value] << vcl_endl;
   }
 }
 
 
-vgui_menu create_menus() {
-
+vgui_menu create_menus()
+{
   vgui_menu test;
   test.add("Dialog",(test_dialog));
 
@@ -75,7 +75,9 @@ int main(int argc, char ** argv)
   vgui_image_tableau image(argv[1]);
   vgui_viewer2D viewer(&image);
 
-  //vgui_shell_tableau shell(&viewer);
-  //return vgui::run(&shell, 512, 512, create_menus());
+#if 0
+  vgui_shell_tableau shell(&viewer);
+  return vgui::run(&shell, 512, 512, create_menus());
+#endif // 0
   return vgui::run(&viewer, 512, 512, create_menus(), "vgui");
 }

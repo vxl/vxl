@@ -8,7 +8,6 @@
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_composite.h>
-#include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_image_blender.h>
 #include <vgui/vgui_viewer2D.h>
@@ -25,7 +24,9 @@ int main(int argc, char ** argv)
   vgui_composite comp(&image, &blend);
 
   vgui_viewer2D viewer(&comp);
-  //vgui_shell_tableau shell(&comp);
-  //return vgui::run(&shell, 512, 512, __FILE__);
+#if 0
+  vgui_shell_tableau shell(&comp);
+  return vgui::run(&shell, 512, 512, __FILE__);
+#endif // 0
   return vgui::run(&comp, 512, 512, __FILE__);
 }

@@ -11,7 +11,6 @@
 #include <vgui/vgui.h>
 #include <vgui/vgui_clear_tableau.h>
 #include <vgui/vgui_composite.h>
-#include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_viewer3D.h>
 #include <vrml/vgui_vrml.h>
 
@@ -23,7 +22,7 @@ int main(int argc, char ** argv)
   vul_arg<char*> vrml_file1(0, "VRML File 1");
   vul_arg<char*> vrml_file2(0, "VRML File 2");
   vul_arg_parse(argc, argv);
-  
+
 
   vgui_vrml vrml1(vrml_file1);
   vgui_viewer3D viewer1(&vrml1);
@@ -37,7 +36,9 @@ int main(int argc, char ** argv)
 
   vgui_composite comp(&viewer1, &clear2, &viewer2);
 
-  //vgui_shell_tableau shell(&comp);
-  //return vgui::run(&shell, 512, 512, "test_clear");
+#if 0
+  vgui_shell_tableau shell(&comp);
+  return vgui::run(&shell, 512, 512, "test_clear");
+#endif // 0
   return vgui::run(&comp, 512, 512, "test_clear");
 }

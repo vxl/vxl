@@ -17,7 +17,6 @@
 #include <vnl/vnl_math.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vsl/vsl_binary_loader.h>
-#include <pdf1d/pdf1d_calc_mean_var.h>
 
 
 //:calc the weighted mean and var of kernels.
@@ -157,7 +156,7 @@ void pdf1d_weighted_kernel_pdf::b_read(vsl_b_istream& bfs)
 
     break;
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_weighted_kernel_pdf&) \n"
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_weighted_kernel_pdf&)\n"
              << "           Unknown version number "<< version << '\n';
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;

@@ -5,7 +5,7 @@
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_vector_fixed.h>
 
-#include <rrel/tests/similarity_from_matches.h>
+#include "similarity_from_matches.h"
 
 #include <rrel/rrel_m_est_obj.h>
 

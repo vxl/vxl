@@ -5,7 +5,10 @@
 // \author Amitha Perera
 // \date   Feb 2003
 
-#include <rsdl/rsdl_fwd.h>
+#include <rsdl/rsdl_bins.h>
+class rsdl_kd_tree;
+#include <vbl/vbl_smart_ptr.h>
+typedef vbl_smart_ptr<rsdl_kd_tree> rsdl_kd_tree_sptr;
 
 #include "rgrl_feature.h"
 #include "rgrl_feature_set.h"

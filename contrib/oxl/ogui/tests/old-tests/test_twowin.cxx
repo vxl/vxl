@@ -9,7 +9,6 @@
 #include <vul/vul_arg.h>
 
 #include <vgui/vgui.h>
-#include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_viewer2D.h>
 #include <vgui/vgui_viewer3D.h>
@@ -32,8 +31,10 @@ int main(int argc, char ** argv)
     vgui_image_tableau *image = new vgui_image_tableau(image_file);
     vgui_viewer2D *viewer = new vgui_viewer2D(image);
 
-    //vgui_shell_tableau *shell = new vgui_shell_tableau(viewer);
-    //vgui::adapt(shell, 256, 256, image_file());
+#if 0
+    vgui_shell_tableau *shell = new vgui_shell_tableau(viewer);
+    vgui::adapt(shell, 256, 256, image_file());
+#endif // 0
     vgui::adapt(viewer, 256,256, image->name());
   }
 
@@ -41,8 +42,10 @@ int main(int argc, char ** argv)
     vgui_vrml *vrml = new vgui_vrml(vrml_file);
     vgui_viewer3D *viewer = new vgui_viewer3D(vrml);
 
-    //vgui_shell_tableau *shell = new vgui_shell_tableau(viewer);
-    //vgui::adapt(shell, 256, 256, vrml_file());
+#if 0
+    vgui_shell_tableau *shell = new vgui_shell_tableau(viewer);
+    vgui::adapt(shell, 256, 256, vrml_file());
+#endif // 0
     vgui::adapt(viewer, 256,256, vrml->name() );
   }
 

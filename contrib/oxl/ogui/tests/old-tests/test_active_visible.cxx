@@ -6,7 +6,6 @@
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_active_visible.h>
-#include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_viewer2D.h>
 
@@ -18,7 +17,9 @@ int main(int argc, char ** argv)
   vgui_viewer2D viewer2D(&image);
   vgui_active_visible actvis(&viewer2D);
 
-  //vgui_shell_tableau shell(&actvis);
-  //return vgui::run(&shell, 512, 512, "test_active_visible");
+#if 0
+  vgui_shell_tableau shell(&actvis);
+  return vgui::run(&shell, 512, 512, "test_active_visible");
+#endif // 0
   return vgui::run(&actvis, 512, 512, "test_active_visible");
 }

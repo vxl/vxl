@@ -3,7 +3,6 @@
 */
 #include <vgui/vgui.h>
 #include <vgui/vgui_deck_tableau.h>
-#include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_test.h>
 #include <vgui/vgui_zoomer.h>
 #include <vgui/vgui_spinner.h>
@@ -12,7 +11,8 @@
 #include <vgui/vgui_print_tableau.h>
 #include <vgui/vgui_gl.h>
 
-bool display(vgui_event const &) {
+bool display(vgui_event const &)
+{
   glColor3f(1,1,1);
   glLineWidth(1);
   glBegin(GL_LINE_LOOP);
@@ -28,7 +28,8 @@ bool display(vgui_event const &) {
   return true;
 }
 
-int main(int argc,char **argv) {
+int main(int argc,char **argv)
+{
   vgui::init(argc,argv);
 
   // 2d
@@ -54,7 +55,9 @@ int main(int argc,char **argv) {
   vgui_print_tableau print(&deck);
 
   // top
-  //vgui_shell_tableau shell(&print);
-  //return vgui::run(&shell, 256, 256, __FILE__);
+#if 0
+  vgui_shell_tableau shell(&print);
+  return vgui::run(&shell, 256, 256, __FILE__);
+#endif // 0
   return vgui::run(&print, 256, 256, __FILE__);
 }

@@ -1,26 +1,5 @@
 #include <testlib/testlib_test.h>
 
-#include <rgrl/rgrl_feature_point.h>
-#include <rgrl/rgrl_feature_trace_pt.h>
-#include <rgrl/rgrl_match_set.h>
-#include <rgrl/rgrl_trans_affine.h>
-#include <rgrl/rgrl_estimator.h>
-#include <rgrl/rgrl_est_affine.h>
-#include <rgrl/rgrl_spline.h>
-#include <rgrl/rgrl_trans_spline.h>
-#include <rgrl/rgrl_est_spline.h>
-#include <rgrl/rgrl_est_quadratic.h>
-#include <rgrl/rgrl_trans_quadratic.h>
-#include <rgrl/rgrl_trans_similarity.h>
-#include <rgrl/rgrl_trans_rigid.h>
-#include <rgrl/rgrl_est_similarity2d.h>
-#include <rgrl/rgrl_est_rigid.h>
-#include <rgrl/rgrl_trans_reduced_quad.h>
-#include <rgrl/rgrl_est_reduced_quad2d.h>
-#include <rgrl/rgrl_mask.h>
-
-#include "test_util.h"
-
 MAIN( test_convergence )
 {
   START( "various convergence objects" );

@@ -15,7 +15,6 @@
 
 #include <pdf1d/pdf1d_weighted_epanech_kernel_sampler.h>
 #include <pdf1d/pdf1d_sampler.h>
-#include <pdf1d/pdf1d_prob_chi2.h>
 
 //=======================================================================
 
