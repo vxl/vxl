@@ -1,3 +1,4 @@
+// This is gel/gevd/gevd_edgel_regions.h
 #ifndef _gevd_edgel_regions_h_
 #define _gevd_edgel_regions_h_
 //:
@@ -78,7 +79,6 @@ public:
   unsigned int BaseLabel(unsigned int label);
   unsigned int GetMaxRegionLabel(){return max_region_label_;}
   void SetMaxRegionLabel(unsigned int label){max_region_label_ = label;}
-  void set_magnification(int m) { magnification_ = m; }
   unsigned int** GetRegionArray(){return region_label_array_;}
   int GetXSize(){return xend_ - xo_ + 1;}
   int GetYSize(){return yend_ - yo_ + 1;}
