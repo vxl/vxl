@@ -29,6 +29,7 @@
 //-----------------------------------------------------------------------------
 #include <vcl_vector.h>
 #include <vcl_map.h>
+#include <vcl_string.h>
 #include <vgui/vgui_style.h>
 #include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_edge_2d.h>
@@ -61,6 +62,8 @@ class bgui_vtol2D_tableau : public bgui_vsol2D_tableau
                       const char* n="unnamed");
 
   ~bgui_vtol2D_tableau();
+
+  virtual vcl_string type_name() const;
 
   //:virtual handle method for events
   virtual bool handle(vgui_event const &);

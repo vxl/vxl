@@ -37,8 +37,7 @@ bgui_image_tableau::bgui_image_tableau(char const *f)
 
 vcl_string bgui_image_tableau::type_name() const
 {
-  return "xcv_image_tableau";//this name is hard coded in the vgui_viewer_tab
-                             //bad arrangement but shouldn't cause problems
+  return "vgui_image_tableau";
 }
 
 //--------------------------------------------------------------------------------

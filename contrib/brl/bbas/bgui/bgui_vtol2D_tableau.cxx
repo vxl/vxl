@@ -46,6 +46,11 @@ static void print_edgels(vtol_edge_2d_sptr const & e)
 }
 #endif
 
+vcl_string bgui_vtol2D_tableau::type_name() const
+{
+  return "bgui_vtol2D_tableau";
+}
+
 void bgui_vtol2D_tableau::init()
 {
   //define default soview styles
