@@ -45,7 +45,7 @@ vtol_edge_3d::vtol_edge_3d(vtol_vertex_3d *vert1,
                            vtol_vertex_3d *vert2,
                            vsol_curve_3d_ref curve) 
 {
-  if(curve==0)
+  if (!curve)
     // _curve =  new ImplicitLine(vert1->get_point(), vert2->get_point());
     // TODO
     _curve=new vsol_line_3d(vert1->get_point(),vert2->get_point());
@@ -76,7 +76,7 @@ vtol_edge_3d::vtol_edge_3d(const vtol_edge_3d&olde)
       link_inferior(zeroch);
     }
   set_vertices_from_zero_chains();
-  if(old_e->_curve!=0)
+  if (old_e->_curve)
     {
       vsol_curve_3d_ref curve=(vsol_curve_3d *)(old_e->_curve->clone().ptr());
       // make sure the geometry and Topology are in sync
@@ -159,7 +159,7 @@ vtol_edge_3d::vtol_edge_3d(vtol_topology_object_3d *newv1,
   vtol_zero_chain_3d *inf;
   if(_v1&&_v2)
     {
-      if(curve==0)
+      if (!curve)
 	// TODO
         // _curve = new ImplicitLine(_v1->GetPoint(), _v2->GetPoint());
 	_curve=new vsol_line_3d(_v1->get_point(),_v2->get_point());
@@ -193,7 +193,7 @@ vtol_edge_3d::vtol_edge_3d(double x1,
 {
   _v1=new vtol_vertex_3d(x1,y1,z1);
   _v2=new vtol_vertex_3d(x2,y2,z1);
-  if(curve==0)
+  if (!curve)
     // TODO
     //_curve = new ImplicitLine(_v1->GetPoint(), _v2->GetPoint());
     _curve=new vsol_line_3d(_v1->get_point(),_v2->get_point());
@@ -223,7 +223,7 @@ vtol_edge_3d::vtol_edge_3d(vsol_curve_3d_ref edgecurve)
   vtol_zero_chain_3d *newzc;
   // _curve = (vsol_curve_3d*)(edgecurve->spatial_copy());
   // _curve->Protect();
-  if(_curve!=0)
+  if (_curve)
     {
       //  _v1 = new vtol_vertex_3d(&_curve->get_start_point());
       // _v2 = new vtol_vertex_3d(&_curve->get_end_point());
@@ -379,7 +379,7 @@ bool vtol_edge_3d::replace_end_point(vtol_vertex_3d *curendpt,
                                      vtol_vertex_3d *newendpt)
 {
   // Some error checking
-  if((curendpt==0)||(newendpt==0))
+  if (!curendpt||!newendpt)
     {
       cerr << "Error in vtol_edge_3d::replace_end_point(): arguments can not be NULL.\n";
       return false;
@@ -511,9 +511,9 @@ bool vtol_edge_3d::operator==(const vtol_edge_3d &e) const
   if(this==&e)
     return true;
 
-  if(_curve!=0&&e._curve==0||_curve==0&&e._curve!=0)
+  if (_curve&&!e._curve||!_curve&&e._curve)
     return false;
-  if(_curve!=0&&e._curve!=0)
+  if(_curve&&e._curve)
     if(*_curve != *(e._curve))
       return false;
   if((_v1==e._v1)&&(_v2==e._v2))    // pointer equivalence.
@@ -792,7 +792,7 @@ bool vtol_edge_3d::add_vertex(vtol_vertex_3d *newvert)
 {
   vtol_zero_chain_3d *zc=get_zero_chain();
 
-  if(zc==0)
+  if(!zc)
     {
       zc=new vtol_zero_chain_3d();
       link_inferior(zc);

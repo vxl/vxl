@@ -231,7 +231,7 @@ vtol_one_chain_2d *vtol_one_chain_2d::cast_to_one_chain(void)
 bool
 vtol_one_chain_2d::valid_inferior_type(const vtol_topology_object_2d &inferior) const
 {
-  return inferior.cast_to_edge()!=0;
+  return inferior.cast_to_edge();
 }
 
 //---------------------------------------------------------------------------
@@ -241,7 +241,7 @@ vtol_one_chain_2d::valid_inferior_type(const vtol_topology_object_2d &inferior) 
 bool
 vtol_one_chain_2d::valid_superior_type(const vtol_topology_object_2d &superior) const
 {
-  return superior.cast_to_face()!=0;
+  return superior.cast_to_face();
 }
 
 //---------------------------------------------------------------------------
@@ -250,7 +250,7 @@ vtol_one_chain_2d::valid_superior_type(const vtol_topology_object_2d &superior) 
 bool
 vtol_one_chain_2d::valid_chain_type(const vtol_chain_2d &chain_inf_sup) const
 {
-  return chain_inf_sup.cast_to_one_chain()!=0;
+  return chain_inf_sup.cast_to_one_chain();
 }
 
 
@@ -640,7 +640,7 @@ void vtol_one_chain_2d::compute_bounding_box(void)
     {
       vtol_edge_2d_ref e=(*eit);
       vsol_box_2d_ref b=e->get_bounding_box();
-      if(b==0)
+      if (!b)
 	{
 	  cout << "In vtol_one_chain_2d::ComputeBoundingBox()"
 	       << " - Edge has null bounding box" 

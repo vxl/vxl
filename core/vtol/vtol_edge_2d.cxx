@@ -34,7 +34,7 @@ vtol_edge_2d::vtol_edge_2d(vtol_vertex_2d &new_v1,
 {
   vtol_topology_object_2d *zc;
   
-  if(new_curve.ptr()==0)
+  if (!new_curve)
     _curve=new vsol_line_2d(new_v1.point(),new_v2.point());
   else
     _curve=new_curve;
@@ -65,16 +65,16 @@ vtol_edge_2d::vtol_edge_2d(const vtol_edge_2d &other)
     link_inferior(*(vtol_zero_chain_2d *)((*i)->clone().ptr()));
 
   set_vertices_from_zero_chains();
-  if(other._curve.ptr()!=0)
+  if (other._curve)
     {
       _curve=(vsol_curve_2d *)(other._curve->clone().ptr());
       // make sure the geometry and Topology are in sync
-      if(_v1.ptr()!=0)
+      if (_v1)
 	{
           _curve->set_p0(_v1->point());
           _curve->touch();
 	}
-      if(_v2.ptr()!=0)
+      if (_v2)
 	{
           _curve->set_p1(_v2->point());
           _curve->touch();
@@ -146,7 +146,7 @@ vtol_edge_2d::vtol_edge_2d(double x1,
 {
   _v1=new vtol_vertex_2d(x1,y1);
   _v2=new vtol_vertex_2d(x2,y2);
-  if(curve==0)
+  if (!curve)
     _curve=new vsol_line_2d(_v1->point(),_v2->point());
   else
     _curve=(vsol_curve_2d*)(curve->clone().ptr());
@@ -165,7 +165,7 @@ vtol_edge_2d::vtol_edge_2d(double x1,
 vtol_edge_2d::vtol_edge_2d(vsol_curve_2d &edgecurve)
 {
   vtol_zero_chain_2d *newzc;
-  if(_curve!=0)
+  if (_curve)
     {
       //  _v1 = new vtol_vertex_2d(&_curve->get_start_point());
       // _v2 = new vtol_vertex_2d(&_curve->get_end_point());
@@ -233,7 +233,7 @@ vtol_edge_2d::~vtol_edge_2d()
 //---------------------------------------------------------------------------
 void vtol_edge_2d::set_v1(vtol_vertex_2d *new_v1)
 {
-  if((_v1!=0)&&(_v1!=_v2))
+  if (_v1&&_v1!=_v2)
     zero_chain()->unlink_inferior(*_v1);
   _v1=new_v1;
   zero_chain()->link_inferior(*_v1);
@@ -246,7 +246,7 @@ void vtol_edge_2d::set_v1(vtol_vertex_2d *new_v1)
 //---------------------------------------------------------------------------
 void vtol_edge_2d::set_v2(vtol_vertex_2d *new_v2)
 {
-  if((_v2!=0)&&(_v2!=_v1))
+  if (_v2&&_v2!=_v1)
     zero_chain()->unlink_inferior(*_v2);
   _v2=new_v2;
   zero_chain()->link_inferior(*_v2);
@@ -295,8 +295,8 @@ void vtol_edge_2d::replace_end_point(vtol_vertex_2d &curendpt,
                                      vtol_vertex_2d &newendpt)
 {
   // require
-  //  assert(curendpt.ptr()!=0);
-  //  assert(newendpt.ptr()!=0);
+  //  assert(curendpt);
+  //  assert(newendpt);
   assert(curendpt==*_v1||curendpt==*_v2);
 
   zero_chain()->unlink_inferior(curendpt);
@@ -350,7 +350,7 @@ void vtol_edge_2d::set_vertices_from_zero_chains(void)
     {
       vertex_list_2d *verts=vertices();
       
-      if(verts!=0)
+      if (verts)
         {
           int numverts=verts->size();
           switch(numverts)
@@ -422,7 +422,7 @@ vtol_edge_2d * vtol_edge_2d::cast_to_edge(void)
 bool
 vtol_edge_2d::valid_inferior_type(const vtol_topology_object_2d &inferior) const
 {
-  return inferior.cast_to_zero_chain()!=0;
+  return inferior.cast_to_zero_chain();
 }
 
 //---------------------------------------------------------------------------
@@ -432,7 +432,7 @@ vtol_edge_2d::valid_inferior_type(const vtol_topology_object_2d &inferior) const
 bool
 vtol_edge_2d::valid_superior_type(const vtol_topology_object_2d &superior) const
 {
-  return superior.cast_to_one_chain()!=0;
+  return superior.cast_to_one_chain();
 }
 
 /*
@@ -448,11 +448,11 @@ bool vtol_edge_2d::operator==(const vtol_edge_2d &other) const
 {
   if (this==&other) return true;
 
-  if ( (_curve.ptr() && other._curve.ptr()==0) ||
-       (_curve.ptr()==0 && other._curve.ptr()) )
+  if ( (_curve && !other._curve) ||
+       (!_curve && other._curve) )
     return false;
 
-  if (_curve.ptr() && (*_curve)!=(*other._curve))
+  if (_curve && (*_curve)!=(*other._curve))
     return false;
 
   if ((*_v1!=*(other._v1)) || (*_v2!=*(other._v2)))
@@ -460,7 +460,7 @@ bool vtol_edge_2d::operator==(const vtol_edge_2d &other) const
 
   vtol_zero_chain_2d_ref zc1=zero_chain();
   vtol_zero_chain_2d_ref zc2=other.zero_chain();
-  if ((zc1.ptr()==0)||(zc2.ptr()==0))
+  if (!zc1||!zc2)
     return false;
   return *zc1==*zc2;
 }
@@ -544,9 +544,9 @@ vcl_vector<vtol_block_2d *> *vtol_edge_2d::compute_blocks(void)
 vertex_list_2d *vtol_edge_2d::endpoints(void)
 {
   vertex_list_2d *newl=new vcl_vector<vtol_vertex_2d_ref>();
-  if(_v1.ptr()!=0)
+  if(_v1)
     newl->push_back(_v1);
-  if(_v2.ptr()!=0)
+  if(_v2)
     newl->push_back(_v2);
   return newl;
 }
@@ -580,7 +580,7 @@ bool vtol_edge_2d::add_vertex(vtol_vertex_2d &newvert)
   vtol_zero_chain_2d_ref zc;
 
   zc=zero_chain();
-  if(zc==0)
+  if (!zc)
     {
       zc=new vtol_zero_chain_2d;
       link_inferior(*zc);
