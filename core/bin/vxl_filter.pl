@@ -647,7 +647,7 @@ sub process_lines {
       s/\bbinary_function\b/vcl_binary_function/g;
       s/\ballocator\s*</vcl_allocator</g;
 
-      # protect certain occurences of 'string':
+      # protect certain occurrences of 'string':
       s/\.string\b/.string_dont_filter/g;                      # .string
       s/\bstring\./string_dont_filter./g;                      # string.
       s/\"string\"/\"string_dont_filter\"/g;                   # "string"
