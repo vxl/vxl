@@ -6,7 +6,7 @@ INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg)
 
 LINK_LIBRARIES(sdet brip btol bdgl vdgl vil1 vnl testlib)
 
-ADD_EXECUTABLE(sdet_test_all
+ADD_EXECUTABLE(bseg_test_all
   test_driver.cxx
   sdet_test_detector.cxx
   sdet_test_region_proc.cxx
@@ -14,7 +14,7 @@ ADD_EXECUTABLE(sdet_test_all
   brip_test_fourier.cxx
 )
 
-ADD_TEST(sdet_test_detector     sdet_test_all sdet_test_detector ${CMAKE_CURRENT_SOURCE_DIR}/jar-closeup.tif)
-ADD_TEST(sdet_test_region_proc  sdet_test_all sdet_test_region_proc ${CMAKE_CURRENT_SOURCE_DIR}/jar-closeup.tif)
-ADD_TEST(brip_test_lucas_kanade sdet_test_all brip_test_lucas_kanade)
-ADD_TEST(brip_test_fourier      sdet_test_all brip_test_fourier)
+ADD_TEST(sdet_test_detector     bseg_test_all sdet_test_detector ${CMAKE_CURRENT_SOURCE_DIR}/jar-closeup.tif)
+ADD_TEST(sdet_test_region_proc  bseg_test_all sdet_test_region_proc ${CMAKE_CURRENT_SOURCE_DIR}/jar-closeup.tif)
+ADD_TEST(brip_test_lucas_kanade bseg_test_all brip_test_lucas_kanade)
+ADD_TEST(brip_test_fourier      bseg_test_all brip_test_fourier)
