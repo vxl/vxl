@@ -182,7 +182,8 @@ bool gevd_clean_edgels::edge_exists(vtol_vertex_2d_sptr v1, vtol_vertex_2d_sptr 
   {
     vtol_edge_2d* e = (*eit)->cast_to_edge_2d();
     if (!e) continue;
-    if ( (e->v1() == v1 && e->v2() == v2) || (e->v1() == v2 && e->v2() == v1) )
+    if ( (e->v1()->cast_to_vertex_2d() == v1 && e->v2()->cast_to_vertex_2d() == v2) ||
+         (e->v1()->cast_to_vertex_2d() == v2 && e->v2()->cast_to_vertex_2d() == v1) )
     {
       intersection.push_back(e);
       found = true;
@@ -216,7 +217,7 @@ void gevd_clean_edgels::remove_connected_edges(vtol_vertex_2d* v, vcl_vector<vto
 bool gevd_clean_edgels::closest_vertex(vtol_edge_2d_sptr e, vsol_point_2d_sptr p, float radius, vtol_vertex_2d_sptr& v)
 {
   vdgl_digital_curve_sptr dc = e->curve()->cast_to_digital_curve();
-  if (!dc){ v = NULL; return false;}
+  if (!dc) { v = NULL; return false; }
   vsol_point_2d_sptr sp = new vsol_point_2d(*p);
   vsol_point_2d_sptr pc = dc->get_interpolator()->closest_point_on_curve( sp );
   double span_sq = p->distance(pc);
@@ -228,21 +229,21 @@ bool gevd_clean_edgels::closest_vertex(vtol_edge_2d_sptr e, vsol_point_2d_sptr p
   double d1 = v1->point()->distance(p);
   double d2 = v2->point()->distance(p);
   if (d1<d2)
+  {
+    if (d1<=span_sq)
     {
-      if (d1<=span_sq)
-        {
-          v = v1;
-          return true;
-        }
+      v = v1;
+      return true;
     }
+  }
   else
-    {
-    if (d2<=span_sq)
-      {
-        v = v2;
-        return true;
-      }
-    }
+  {
+  if (d2<=span_sq)
+  {
+    v = v2;
+    return true;
+  }
+  }
   v = new vtol_vertex_2d(*pc);
   return false;
 }
@@ -315,14 +316,14 @@ bool gevd_clean_edgels::split_edge(vtol_edge_2d_sptr e, vtol_vertex_2d_sptr new_
 
 #if 0
   if (!dc->Split(*(new_v->GetLocation()), dc1, dc2))
-    {
-      e1 = NULL; e2 = NULL;
-      return false;
-    }
+  {
+    e1 = NULL; e2 = NULL;
+    return false;
+  }
+  vtol_vertex_2d *v1 = (vtol_vertex_2d*)e->v1().ptr(), *v2 = (vtol_vertex_2d*)e->v2().ptr();
+  e1 = new vtol_edge_2d(v1, new_v); e2 = new vtol_edge_2d(new_v, v2);
+  e1->SetCurve(dc1) ; e2->SetCurve(dc2);
 #endif
-  // vtol_vertex_2d *v1 = (vtol_vertex_2d*)e->v1().ptr(), *v2 = (vtol_vertex_2d*)e->v2().ptr();
-  // e1 = new vtol_edge_2d(v1, new_v); e2 = new vtol_edge_2d(new_v, v2);
-  // e1->SetCurve(dc1) ; e2->SetCurve(dc2);
   e1 = edge1;
   e2 = edge2;
   //e->unlink_all_inferiors(); // -tpk-
@@ -331,8 +332,7 @@ bool gevd_clean_edgels::split_edge(vtol_edge_2d_sptr e, vtol_vertex_2d_sptr new_
 
 
 //: Jump gaps by finding the nearest edge to a vertex which is not incident on the vertex.
-//    If some point on the digital curve of
-//    edge is within a radius of the vertex, then jump across.
+//  If some point on the digital curve of edge is within a radius of the vertex, then jump across.
 //
 void gevd_clean_edgels::JumpGaps()
 {
