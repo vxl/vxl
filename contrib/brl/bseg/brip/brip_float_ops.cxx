@@ -160,7 +160,7 @@ local_maximum(vbl_array_2d<float> const & neighborhood,
       local_max = local_max&&(neighborhood[y+n][x+n]<=center);
   if(!local_max)
     return false;
-  value = local_max;
+  value = center;
   return true;
 }
 //-------------------------------------------------------------------
@@ -462,6 +462,7 @@ brip_float_ops::harris(vil_memory_image_of<float> const & IxIx,
 
 {
   int w = IxIx.width(), h = IxIx.height();
+  double norm = 1.0e-3;//Scale the output to values in the 10->1000.0 range
   vil_memory_image_of<float> output;
   output.resize(w, h);
   for (int y = 0; y<h; y++)
@@ -469,7 +470,7 @@ brip_float_ops::harris(vil_memory_image_of<float> const & IxIx,
       {
         double xx = IxIx(x,y), xy = IxIy(x,y), yy = IyIy(x,y);
         double det = xx*yy-xy*xy, trace = xx+yy;
-        output(x,y) = (float)(det - scale*trace);
+        output(x,y) = (float)(det - scale*trace)*norm;
       }
   return output;
 }
