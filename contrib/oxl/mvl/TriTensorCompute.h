@@ -47,10 +47,10 @@ class BaseTriTensorCompute
   // Data Members----------------------------------------------------------
 
   // the matched points.
-  vcl_list<HomgMatchPoint2D2D2D*> *_matchpoint_list_ptr;
+  vcl_list<HomgMatchPoint2D2D2D*> *matchpoint_list_ptr_;
 
   // the matched line segments.
-  vcl_list<HomgMatchLineSeg2D2D2D*> *_matchlineseg_list_ptr;
+  vcl_list<HomgMatchLineSeg2D2D2D*> *matchlineseg_list_ptr_;
 };
 
 #endif // BaseTriTensorCompute_h_
