@@ -1,6 +1,5 @@
-#
-# crossge@crd.ge.com
-#
+SUBDIRS := examples # tests
+
 #######################################
 include ${IUEROOT}/config/top-params.mk
 #######################################
