@@ -5,6 +5,7 @@
 #include <gevd/gevd_detector_params.h>
 #include <gevd/gevd_edgel_regions.h>
 #include <gevd/gevd_float_operators.h>
+#include <gevd/gevd_fold.h>
 #include <gevd/gevd_memory_mixin.h>
 #include <gevd/gevd_noise.h>
 #include <gevd/gevd_param_mixin.h>
