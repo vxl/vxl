@@ -13,6 +13,11 @@ ELSE(WIN32)
   OPTION(BUILD_SHARED_LIBS "Should shared libraries be the default?" YES)
 ENDIF(WIN32)
 
+SET(SOLARIS 0)
+IF(CMAKE_SYSTEM MATCHES "SunOS.*")
+  SET(SOLARIS 1)
+ENDIF(CMAKE_SYSTEM MATCHES "SunOS.*")
+
 # Assume no MFC support
 SET(HAS_MFC 0)
 # Add MFC support if win32 and not cygwin and not borland

@@ -6,9 +6,7 @@ IF (NOT UNIX)
   LINK_LIBRARIES(ws2_32.lib)
 ENDIF (NOT UNIX)
 
-# TODO - CMake currently has no such definition "SOLARIS" by default;
-# Use the additional "-DSOLARIS:STRING=1" on the cmake command line,
-# or add the line  "SOLARIS:STRING=1" to your solaris CMakeCache.txt
+# SOLARIS is set in the top level VXL CMakeLists.txt file
 IF (SOLARIS)
   LINK_LIBRARIES(socket)
 ENDIF (SOLARIS)
