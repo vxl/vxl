@@ -52,7 +52,7 @@ SET( vnl_sources
   vnl_matrix_exp.txx           vnl_matrix_exp.h
   vnl_file_matrix.txx          vnl_file_matrix.h
   vnl_sym_matrix.txx           vnl_sym_matrix.h
-                               vnl_util_fixed.h
+
   # matrix operators
   vnl_fortran_copy.txx         vnl_fortran_copy.h
   vnl_det.txx                  vnl_det.h
