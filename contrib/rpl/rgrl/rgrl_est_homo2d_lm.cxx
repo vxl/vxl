@@ -86,7 +86,7 @@ class rgrl_homo2d_func
   rgrl_homo2d_func( rgrl_set_of<rgrl_match_set_sptr> const& matches,
                     int num_res, bool with_grad = true )
   : vnl_least_squares_function( 9, num_res, with_grad ? use_gradient : no_gradient ),
-    matches_ptr_( &matches ), 
+    matches_ptr_( &matches ),
     from_centre_(2, 0.0), to_centre_(2, 0.0)
   {      }
 
@@ -96,7 +96,7 @@ class rgrl_homo2d_func
     from_centre_ = fc;
     to_centre_ = tc;
   }
-  
+
   //: obj func value
   void f(vnl_vector<double> const& x, vnl_vector<double>& fx);
 
@@ -115,24 +115,24 @@ void
 rgrl_homo2d_func::
 f(vnl_vector<double> const& x, vnl_vector<double>& fx)
 {
-  vnl_double_2 mapped, from, to, diff;
-  vnl_matrix_fixed<double, 2, 2 > error_proj;
+  vnl_double_2 mapped;
+  vnl_matrix_fixed<double,2,2> error_proj;
   unsigned int ind = 0;
   for ( unsigned ms = 0; ms<matches_ptr_->size(); ++ms )
     if ( (*matches_ptr_)[ms] != 0 ) { // if pointer is valid
       rgrl_match_set const& one_set = *((*matches_ptr_)[ms]);
       for ( FIter fi=one_set.from_begin(); fi!=one_set.from_end(); ++fi ) {
         // map from point
-        from = fi.from_feature()->location();
+        vnl_double_2 from = fi.from_feature()->location();
         from -= from_centre_;
         map_inhomo_point( mapped, x, from );
 
         for ( TIter ti=fi.begin(); ti!=fi.end(); ++ti ) {
-          to = ti.to_feature()->location();
+          vnl_double_2 to = ti.to_feature()->location();
           to -= to_centre_;
           error_proj = ti.to_feature()->error_projector();
           double const wgt = vcl_sqrt(ti.cumulative_weight());
-          diff = error_proj * (mapped - to);
+          vnl_double_2 diff = error_proj * (mapped - to);
 
           // fill in
           fx(ind) = wgt*diff[0];
@@ -152,19 +152,18 @@ gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian)
 {
   assert( jacobian.rows() == get_number_of_residuals() && jacobian.cols() == 9 );
 
-  vnl_double_2 from, to, diff;
   vnl_double_3 homo;
-  vnl_matrix_fixed<double, 2, 2 > error_proj;
-  vnl_matrix_fixed<double, 2, 9 > base_jac, jac;
-  vnl_matrix_fixed<double, 3, 9 > jf(0.0); // homogeneous coordinate
-  vnl_matrix_fixed<double, 2, 3 > jg(0.0); // inhomo, [u/w, v/w]^T
+  vnl_matrix_fixed<double,2,2> error_proj;
+  vnl_matrix_fixed<double,2,9> base_jac, jac;
+  vnl_matrix_fixed<double,3,9> jf(0.0); // homogeneous coordinate
+  vnl_matrix_fixed<double,2,3> jg(0.0); // inhomo, [u/w, v/w]^T
   unsigned int ind = 0;
   for ( unsigned ms = 0; ms<matches_ptr_->size(); ++ms )
     if ( (*matches_ptr_)[ms] ) { // if pointer is valid
       rgrl_match_set const& one_set = *((*matches_ptr_)[ms]);
       for ( FIter fi=one_set.from_begin(); fi!=one_set.from_end(); ++fi ) {
         // map from point
-        from = fi.from_feature()->location();
+        vnl_double_2 from = fi.from_feature()->location();
         from -= from_centre_;
         map_homo_point( homo, x, from );
         // homogeneous coordinate
@@ -180,7 +179,7 @@ gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian)
         base_jac = jg * jf;
 
         for ( TIter ti=fi.begin(); ti!=fi.end(); ++ti ) {
-          //to = ti.to_feature()->location();
+          //vnl_double_2 to = ti.to_feature()->location();
           error_proj = ti.to_feature()->error_projector();
           double const wgt = vcl_sqrt(ti.cumulative_weight());
           jac = error_proj * base_jac;
@@ -259,7 +258,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
       }
     }
 
-  // Determine the weighted centres for the purpose of computing more stable 
+  // Determine the weighted centres for the purpose of computing more stable
   // covariance matrix of homography parameters
   //
   vnl_vector<double> from_centre( 2, 0.0 );
@@ -284,7 +283,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   }
   from_centre /= sum_wgt;
   to_centre /= sum_wgt;
-  DebugMacro( 3, "From center: " << from_centre 
+  DebugMacro( 3, "From center: " << from_centre
                <<"  To center: " << to_centre << vcl_endl );
   // make the init homography as a CENTERED one
   {
@@ -293,11 +292,11 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     vnl_matrix<double> to_trans( 3, 3, vnl_matrix_identity );
     to_trans(0,2) = -to_centre[0];
     to_trans(1,2) = -to_centre[1];
-    
+
     vnl_matrix<double> from_inv( 3, 3, vnl_matrix_identity );
     from_inv(0,2) = from_centre[0];
     from_inv(1,2) = from_centre[1];
-    
+
     init_H = to_trans * init_H * from_inv;
   }
   // convert to vector form
@@ -307,7 +306,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   // construct least square cost function
   rgrl_homo2d_func homo_func( matches, tot_num, with_grad_ );
   homo_func.set_centres( from_centre, to_centre );
-  
+
   vnl_levenberg_marquardt lm( homo_func );
   //lm.set_trace( true );
   //lm.set_check_derivatives( 10 );
@@ -327,16 +326,16 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   // convert parameters back into matrix form
   h2H( p, init_H );
   vnl_vector<double> centre(2,0.0);
-  
+
   // compute covariance
   // JtJ is INVERSE of jacobian
   // vnl_svd<double> svd( lm.get_JtJ(), 1e-4 );
-  // Cannot use get_JtJ() because it is affected by the 
+  // Cannot use get_JtJ() because it is affected by the
   // scale in homography parameter vector
   // Thus, use the nomalized p vector to compute Jacobian again
   vnl_matrix<double> jac(tot_num, 9), jtj(9, 9);
   homo_func.gradf( p, jac );
-  // 
+  //
   //vnl_matrix<double>  proj(9, 9, vnl_matrix_identity);
   //proj -= outer_product( p, p );
   //jac *= proj;
@@ -349,29 +348,28 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   DebugMacro(3, "SVD of JtJ: " << svd << vcl_endl);
   // the second least singular value shall be greater than 0
   // or Rank 8
-  if( svd.rank() < 8 ) {
+  if ( svd.rank() < 8 ) {
     WarningMacro( "The covariance of homography ranks less than 8! ");
   }
   // pseudo inverse only use first 8 singular values
   vnl_matrix<double> covar ( svd.pinverse(8) );
   DebugMacro(3, "Covariance: " << covar << vcl_endl );
-  
+
   //vnl_vector<double> tmp_f(tot_num,-1.0);
   //homo_func.f( svd.nullvector(), tmp_f );
   //vcl_cout << "using null vector: " << tmp_f.two_norm() << vcl_endl;
   //homo_func.f( p, tmp_f );
   //vcl_cout << "using estimate   : " << tmp_f.two_norm() << vcl_endl;
   double abs_dot = vcl_abs( dot_product( p, svd.nullvector() ) );
-  if( abs_dot < 0.9 ) {
+  if ( abs_dot < 0.9 ) {
     WarningMacro("The null vector of covariance matrix of homography is too DIFFERENT\n"
                  << "compared to estimate of homography: dot_product=" << abs_dot << vcl_endl );
     // it is considered as failure
     return 0;
   }
-  
-  DebugMacro(2, "null vector: " << svd.nullvector() 
-              <<"   estimate: " << p << vcl_endl );
-  
+
+  DebugMacro(2, "null vector: " << svd.nullvector() << "   estimate: " << p << vcl_endl );
+
   return new rgrl_trans_homography2d( init_H, covar, from_centre, to_centre );
 }
 
