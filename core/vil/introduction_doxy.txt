@@ -168,6 +168,12 @@ vil_image_view<vxl_byte> filtered_image = vil_transpose(tmp_image2);
 * - vil_clamp                      : Clamp image pixels to given range
 * - vil_histogram_equalise(image)  : Apply histogram equalisation
 *
+* \subsection vil_image_view_base_sptr
+* These are used internally by vil, and are not intended for users of vil.
+* Anywhere you see a function returning one of
+* these, (e.g. vil_load() ) you can assign it directly to a vil_image_view<T>. If
+* you want a pixel-type independent image container, see vil_memory_image below.
+*
 * \section image_src Image resources
 * The vil_image_resource class is an abstract base class for image data, views
 * of which can be obtained (or changed) with the get_view()/put_view() functions. You
