@@ -29,5 +29,5 @@ AUX_SOURCE_DIRECTORY(Templates bgui_sources)
 
 ADD_LIBRARY(bgui ${bgui_sources})
 
-TARGET_LINK_LIBRARIES(bgui btol vdgl vtol vsol vgui vgl_algo vgl vul vbl)
+TARGET_LINK_LIBRARIES(bgui btol vdgl vtol vsol vgui vgl_algo vgl vul vbl vil vil_algo)
 ENDIF(HAS_VGUI)
