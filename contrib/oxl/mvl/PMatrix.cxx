@@ -204,7 +204,7 @@ bool PMatrix::read_ascii(istream& f)
   clear_svd();
 
   if (!ok(f)) {
-    cerr << "PMatrix::read_ascii: Failed to load P matrix" << endl;
+    //    cerr << "PMatrix::read_ascii: Failed to load P matrix" << endl;
     return false;
   }
   
