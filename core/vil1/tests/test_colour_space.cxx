@@ -4,8 +4,6 @@
 #include <vil/vil_byte.h>
 #include <vcl_cmath.h>
 
-
-
 void test_colour_space()
 {
   double r, g, b, h ,s ,v, nr, ng, nb;
@@ -37,7 +35,6 @@ void test_colour_space()
   vcl_cout<<"d= "<<d<<vcl_endl;
 
   TEST ("test r g b values", d<0.1, true);
-  
 }
 
 TESTMAIN(test_colour_space);
