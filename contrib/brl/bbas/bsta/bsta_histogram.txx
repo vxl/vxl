@@ -26,7 +26,7 @@ template <class T>
 bsta_histogram<T>::bsta_histogram(const T min, const T max,
                                   const unsigned int nbins,
                                   const T min_prob)
-  : area_valid_(false), area_(0), nbins_(nbins), delta_(0),
+  : area_valid_(false), area_(0), nbins_(nbins), delta_(0), min_prob_(min_prob),
     min_ (min), max_(max), range_(max-min)
 {
   if (nbins>0)
