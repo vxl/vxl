@@ -1,10 +1,11 @@
 //
-// test_vbl_basic_relation
+// vbl_test_basic_relation
 // Author: Rupert W. Curwen
 // Created: 22 Jan 98
 //
 //-----------------------------------------------------------------------------
 
+#include <testlib/testlib_test.h>
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vcl_cstdio.h>
@@ -320,8 +321,7 @@ void testDowncasting()
     vcl_cout << "Passed downcast test 4\n";
 }
 
-//extern "C" void test_vbl_basic_relation()
-main()
+static void vbl_test_basic_relation()
 {
   TestType* e1 = new TestType(2);
   vbl_basic_relation<TestType*,int,vcl_string BR_DEFAULT2> rel("my_relation");
@@ -331,10 +331,7 @@ main()
   rel.insert(e1,10,"who is it?");
   rel.insert(e1,10,"why is it?");
   // This insert should fail.
-  if (rel.insert(e1,10,"who is it?"))
-    vcl_cout << "Failed: duplicate tuple inserted.\n";
-  else
-    vcl_cout << "Passed: duplicate tuple was not inserted.\n";
+  TEST("no duplicate tuple inserted", rel.insert(e1,10,"who is it?"), false);
 
   vbl_basic_relation<TestType*,int,vcl_string BR_DEFAULT2>::iterator i;
   int count = 0;
@@ -342,10 +339,7 @@ main()
        i != rel.end();
        i++, count++)
     vcl_cout << "Found tuple where second = 10 : " << *i << vcl_endl;
-  if (count == 2)
-    vcl_cout << "Passed: where_second succeeded.\n";
-  else
-    vcl_cout << "Failed: where_second returned " << count << " tuples, expected 2.\n";
+  TEST("where_second() should return 2 tuples", count, 2)
 
   vbl_basic_relation<TestType*,int,vcl_string BR_DEFAULT2> selected = rel.where_third("what is it?");
   vcl_cout << "Where third = \"what is it?\" :" << selected << vcl_endl;
@@ -355,31 +349,19 @@ main()
        i != selected.end();
        i++, count++)
     vcl_cout << "Found tuple " << *i << vcl_endl;
-  if (count == 2)
-    vcl_cout << "Passed: where_third succeeded.\n";
-  else
-    vcl_cout << "Failed: where_third returned " << count << " tuples, expected 2.\n";
+  TEST("where_third() should return 2 tuples", count, 2)
 
-  if (rel.size() == 4)
-    vcl_cout << "Passed: size succeeded.\n";
-  else
-    vcl_cout << "Failed: size returned " << rel.size() << " tuples, expected 4.\n";
+  TEST("size", rel.size(), 4)
 
   vcl_cout << rel << vcl_endl;
   rel.where_second(10).clear();
 
-  if (rel.size() == 2)
-    vcl_cout << "Passed: clear where second = 10 succeeded.\n";
-  else
-    vcl_cout << "Failed: clear where second = 10 failed, leaving " << rel.size() << " tuples, expected 2.\n";
+  TEST("clear where_second(10)", rel.size(), 2)
 
   vcl_cout << rel << vcl_endl;
   rel.clear();
 
-  if (TestType::ninstances == 0)
-    vcl_cout << "Passed: no leaks found.\n";
-  else
-    vcl_cout << "Failed: " << TestType::ninstances << " instances of T leaked.\n";
+  TEST("no leaks ?", TestType::ninstances, 0)
 
   rel.clear();
 
@@ -390,3 +372,4 @@ main()
   testStringIntString();
 }
 
+TESTMAIN(vbl_test_basic_relation);

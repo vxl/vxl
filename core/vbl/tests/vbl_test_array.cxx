@@ -1,4 +1,5 @@
 // This is vxl/vbl/tests/vbl_test_array.cxx
+#include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #define use_vbl 1
 #if use_vbl
@@ -17,11 +18,11 @@ class X
   X(int a, int b) : x(a + b) { }
   X(float a, float b) : x(a + b) { }
   X(double a, double b) : x(a + b) { }
-  void method() { vcl_cout << '[' << x << ']' << vcl_flush;; }
+  void method() { vcl_cout << '[' << x << ']' << '\n' << vcl_flush;; }
   bool operator==(X const& y) { return x == y.x; }
 };
 
-int main(int, char **)
+static void vbl_test_array()
 {
   container<X> v;
 
@@ -35,12 +36,13 @@ int main(int, char **)
 
   vcl_cout << "size " << v.size() << '\n'
            << "capacity " << v.capacity() << '\n';
+  TEST("size()", v.size(), 4);
 
   for (container<X>::iterator i=v.begin(); i!=v.end(); ++i)
     (*i).method();
-
-  return 0;
 }
+
+TESTMAIN(vbl_test_array);
 
 #if use_vbl
 # include <vbl/vbl_array_1d.txx>

@@ -1,13 +1,7 @@
-#include <vcl_iostream.h>
+#include <testlib/testlib_test.h>
 #include <vbl/vbl_sparse_array_3d.h>
 
-extern "C"
-void Assert(char const* msg, bool expr)
-{
-  vcl_cout << msg << " - " << (expr?"passed":" *** failed") << "." << vcl_endl;
-}
-
-void test_vbl_sparse_array_3d(void)
+static void vbl_test_sparse_array_3d()
 {
   vbl_sparse_array_3d<double> x;
   double d = 1.23;
@@ -15,25 +9,20 @@ void test_vbl_sparse_array_3d(void)
   x(1,2,3) = d;
   x(100,200,300) = 100.2003;
 
-  Assert("Something in (1,2,3)", x.fullp(1,2,3));
-  Assert("get_addr in (1,2,3)", x.get_addr(1,2,3) != 0);
+  TEST("Something in (1,2,3)", x.fullp(1,2,3), true);
+  TEST("get_addr in (1,2,3)", x.get_addr(1,2,3) != 0, true);
 
-  Assert("x(1,2,3) == 1.23", x(1,2,3) == d);
+  TEST("x(1,2,3) == 1.23", x(1,2,3), d);
 
-  Assert("Something in (100,200,300)", x.fullp(100,200,300));
-  Assert("get_addr in (100,200,300)", x.get_addr(100,200,300) != 0);
+  TEST("Something in (100,200,300)", x.fullp(100,200,300), true);
+  TEST("get_addr in (100,200,300)", x.get_addr(100,200,300) != 0, true);
 
-  Assert("Nothing in (2,3,4) yet", !x.fullp(2,3,4));
-  Assert("Still nothing in (2,3,4)", x.get_addr(2,3,4) == 0);
+  TEST("Nothing in (2,3,4) yet", x.fullp(2,3,4), false);
+  TEST("Still nothing in (2,3,4)", x.get_addr(2,3,4), 0);
   x.put(2,3,4, 7);
-  Assert("Something in (2,3,4) now", x.fullp(2,3,4));
+  TEST("Something in (2,3,4) now", x.fullp(2,3,4), true);
 
-  Assert("Thing in (2,3,4) == 7", x(2,3,4) == 7);
+  TEST("Thing in (2,3,4) == 7", x(2,3,4), 7);
 }
 
-int main(int,char**)
-{
-  vcl_cout << "Running" << vcl_endl;
-  test_vbl_sparse_array_3d();
-  return 0;
-}
+TESTMAIN(vbl_test_sparse_array_3d);

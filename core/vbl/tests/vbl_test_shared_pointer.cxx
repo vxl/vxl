@@ -1,6 +1,7 @@
 /*
   fsm@robots.ox.ac.uk
 */
+#include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vbl/vbl_shared_pointer.h>
 
@@ -12,7 +13,7 @@ struct some_class
   ~some_class() { print << "dtor" << vcl_endl; }
 };
 
-int main(int, char **)
+static void vbl_test_shared_pointer()
 {
   {
     typedef vbl_shared_pointer<int> pi;
@@ -56,6 +57,6 @@ int main(int, char **)
     print << "a = " << (void*)a.as_pointer() << vcl_endl;
     print << "b = " << (void*)b.as_pointer() << vcl_endl;
   }
-
-  return 0;
 }
+
+TESTMAIN(vbl_test_shared_pointer);

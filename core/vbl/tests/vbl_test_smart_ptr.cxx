@@ -1,3 +1,4 @@
+#include <testlib/testlib_test.h>
 #include "vbl_test_classes.h"
 #include <vcl_list.h>
 #include <vcl_iostream.h>
@@ -28,15 +29,10 @@ base_sptr newbase_impl (int k)
   return q;
 }
 
-bool doit ()
+static void vbl_test_smart_ptr()
 {
-  bool result_okay = true;
-
   base_sptr p;
-  if (p) {
-    vcl_cout << "FAILED: p is initially not null (true)" << vcl_endl;
-    result_okay = false;
-  }
+  TEST("initial value of base_sptr should be null", bool(p), false);
   if (!p) // This is actually unnecessary - just to demonstrate operator bool()
     p = new base_impl;
   if (p == (base_impl*)0) // identical result - just to demonstrate operator==()
@@ -45,22 +41,10 @@ bool doit ()
   vcl_cout << "operator<< gives : " << p << vcl_endl;
 
   base_sptr a = new base_impl (5);
-  if (p == a) {
-    vcl_cout << "FAILED: p==a (wrong)" << vcl_endl;
-    result_okay = false;
-  }
-  if (p != a) {
-    vcl_cout << "p!=a (correct)" << vcl_endl;
-  } else {
-    vcl_cout << "FAILED: ! p!=a (wrong)" << vcl_endl;
-    result_okay = false;
-  }
-  if (!p) {
-    vcl_cout << "FAILED: !p (wrong)" << vcl_endl;
-    result_okay = false;
-  }
-  if (p)
-    vcl_cout << "p converts to true (correct)" << vcl_endl;
+  TEST("p == a", p == a, false);
+  TEST("p != a", p != a, true);
+  TEST("!p", (!p), false);
+  TEST("bool(p)", bool(p), true);
 
   // Get a smart pointer as the return value of a function :
   base_sptr q = newbase_impl(10);
@@ -72,12 +56,7 @@ bool doit ()
   // These two things are effectively the same now
   p = q;
   // They should be the same
-  if (p == q)
-    vcl_cout << "p and q are the same\n\n";
-  else {
-    vcl_cout << "FAILED: p == q" << vcl_endl;
-    result_okay = false;
-  }
+  TEST("p == q", p, q);
 
   vcl_cout << "value of   p->n : " << p->n << vcl_endl;
   vcl_cout << "value of (*p).n : " << (*p).n << vcl_endl;
@@ -132,39 +111,17 @@ bool doit ()
     base_sptr p = new base_impl( 1 );
     base_sptr q = p;
     base_sptr r = new base_impl( 1 );
-    if ( !( base_impl::checkcount( good_count ) && p->get_references() == 2
-           && r->get_references() == 1 ) ) {
-      vcl_cout << "FAILED: reference counts are wrong." << vcl_endl;
-      result_okay = false;
-    }
+    TEST("reference counts", base_impl::checkcount(good_count) &&
+                             p->get_references() == 2 &&
+                             r->get_references() == 1,            true);
     q.unprotect();
-    if ( p->get_references() != 1 ) {
-      vcl_cout << "FAILED: unprotected didn't unref!" << vcl_endl;
-      result_okay = false;
-    }
+    TEST("unprotect should unref", p->get_references(), 1 );
     q = r;
-    if ( !base_impl::checkcount( good_count ) ) {
-      vcl_cout << "    an object was unexpectedly destroyed" << vcl_endl;
-      result_okay = false;
-    }
-    if ( r->get_references() != 2 ) {
-      vcl_cout << "FAILED: assignment didn't ref" << vcl_endl;
-      result_okay = false;
-    }
+    TEST("object should not be unexpectedly destroyed", base_impl::checkcount(good_count), true);
+    TEST("assignment should ref", r->get_references(), 2);
   }
 
-  return result_okay;
+  TEST("checkcount()", base_impl::checkcount(), 0);
 }
 
-extern "C" int test_vbl_smart_ptr()
-{
-  vcl_cout << "Running" << vcl_endl;
-  return !(doit() && base_impl::checkcount());  // 0 = good, non-zero = bad
-}
-
-int main(int /*argc*/, char ** /*argv*/)
-{
-  return test_vbl_smart_ptr();
-}
-
-//-------------------------------------------------------
+TESTMAIN(vbl_test_smart_ptr);

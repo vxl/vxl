@@ -35,7 +35,8 @@
 #include <vbl/vbl_basic_relation_type.h>
 
 
-void test_bounding_box()
+static
+void vbl_test_bounding_box()
 {
   vcl_cout << "\n\n\n"
            << "***********************\n"
@@ -65,7 +66,8 @@ void test_bounding_box()
   TEST("bounding box volume", bb.volume() ,0.0);
 }
 
-void test_qsort()
+static
+void vbl_test_qsort()
 {
   vcl_cout << "\n\n\n"
            << "****************\n"
@@ -81,7 +83,8 @@ void test_qsort()
     TEST("qsort descending", v[i-1] >= v[i], true);
 }
 
-void test_triple()
+static
+void vbl_test_triple()
 {
   vcl_cout << "\n\n\n"
            << "*****************\n"
@@ -99,7 +102,8 @@ void test_triple()
   TEST("vbl_triple compare", t < t2, true);
 }
 
-void test_quadruple()
+static
+void vbl_test_quadruple()
 {
   vcl_cout << "\n\n\n"
            << "********************\n"
@@ -117,12 +121,7 @@ void test_quadruple()
   TEST("vbl_quadruple compare", t < t2, true);
 }
 
-void vbl_test_all()
-{
-  test_bounding_box();
-  test_quadruple();
-  test_triple();
-  test_qsort();
-}
-
-TESTLIB_DEFINE_MAIN(vbl_test_all);
+TESTMAIN(vbl_test_bounding_box);
+TESTMAIN(vbl_test_quadruple);
+TESTMAIN(vbl_test_triple);
+TESTMAIN(vbl_test_qsort);
