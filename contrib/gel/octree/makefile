@@ -1,6 +1,6 @@
 USES += contrib/gel contrib/oxl core
 include ${IUEROOT}/contrib/oxl/mvl/config.mk
-include ${IUEROOT}/core/vil/config.mk
+include ${IUEROOT}/core/vil1/config.mk
 
 PROGRAM = octree
 
