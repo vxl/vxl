@@ -89,30 +89,22 @@ void vsrl_dynamic_program::set_tokens(token_list &l1,
 void vsrl_dynamic_program::define_search_range()
 {
   for (unsigned int i=0;i<list1_.size();i++)
-    {
-      int low=i*2+1 - 2*search_range_;
-      int high=i*2+1 + 2*search_range_;
-      
-      if (low<0)
-	{
-	  low=0;
-	}
-      if ((unsigned int)low>=list2_.size())
-	{
-	  low=list2_.size()-1;
-	}
-      if (high<0)
-	{
-	  high=0;
-	}
-      if ((unsigned int)high>list2_.size())
-	{
-	  high=list2_.size();
-	}
-      
-      lower_search_range_.push_back(low);
-      upper_search_range_.push_back(high);
-    }
+  {
+    int low=i*2+1 - 2*search_range_;
+    int high=i*2+1 + 2*search_range_;
+
+    if (low<0)
+      low=0;
+    if ((unsigned int)low>=list2_.size())
+      low=list2_.size()-1;
+    if (high<0)
+      high=0;
+    if ((unsigned int)high>list2_.size())
+      high=list2_.size();
+
+    lower_search_range_.push_back(low);
+    upper_search_range_.push_back(high);
+  }
 }
 
 
@@ -149,9 +141,9 @@ bool vsrl_dynamic_program::allocate_cost_matrix()
 {
   // we wish to make a two dimensional of assignement_nodes
   // to keep track of the assignment costs
-  
+
   if (!num_row_ || !num_col_)
-    {
+  {
     vcl_cout << "must set new token lists" << vcl_endl;
     cost_matrix_ = 0;
     return false;
@@ -160,14 +152,11 @@ bool vsrl_dynamic_program::allocate_cost_matrix()
   cost_matrix_ = (assignment_node**)(malloc(num_row_ * sizeof(*cost_matrix_)));
 
   for (int i=0;i<num_row_;i++)
-  {
     cost_matrix_[i]=(assignment_node*)(malloc(num_col_ * sizeof(**cost_matrix_)));
-  }
 
   // initialize the matrix
 
   for (int i=0;i<num_row_;i++)
-  {
     for (int j=0;j<num_col_;j++)
     {
       cost_matrix_[i][j].index1=i;
@@ -177,7 +166,6 @@ bool vsrl_dynamic_program::allocate_cost_matrix()
       cost_matrix_[i][j].cost=1000000;
       cost_matrix_[i][j].num_null1=0;
     }
-  }
   return true;
 }
 
@@ -186,9 +174,7 @@ void vsrl_dynamic_program::deallocate_cost_matrix()
   // free the memory associated with matrix
 
   for (int i=0;i<num_row_;i++)
-  {
     free((char*)(cost_matrix_[i]));
-  }
 
   free((char*)cost_matrix_);
 
@@ -204,9 +190,7 @@ double vsrl_dynamic_program::execute()
   // allocate the cost matrix
 
   if (!allocate_cost_matrix())
-  {
     return 0.0;
-  }
 
 
   // compute the cost matrix that will allow us to
@@ -229,180 +213,171 @@ double vsrl_dynamic_program::execute()
 void vsrl_dynamic_program::compute_cost(int i, int j)
 {
   // we wish to compute the cost between tokens i and j;
-  
+
   // get these tokens
   vsrl_token *tok1 = list1_[i];
   vsrl_token *tok2 = list2_[j];
-  
-  
+
+
   // compute the direct cost of associating these tokens
-  
+
   double direct_cost = tok1->cost(tok2);
-  
+
   // special cases were token i is either the first or last token
-  
+
   if (i==0)
+  {
+    // if j > 1 then we must consider all the unassigned tokens
+    // in list2 that are below j;
+
+    for (int k=0;k<j;k++)
     {
-      // if j > 1 then we must consider all the unassigned tokens
-      // in list2 that are below j;
-      
-      for (int k=0;k<j;k++)
-	{
-	  if (!list2_[k]->null_token())
-	    {
-	      // this is a real token in list2 which must now
-	      // be allocated to the null assignment
-	      direct_cost = direct_cost + outer_cost_;
-	    }
-	}
+      if (!list2_[k]->null_token())
+      {
+        // this is a real token in list2 which must now
+        // be allocated to the null assignment
+        direct_cost = direct_cost + outer_cost_;
+      }
     }
-  
-  
+  }
+
+
   // this is the last token
   if (i+1==int(list1_.size()))
+  {
+    // this is the last token in list 1
+    // so consider the rest of the tokens in list2 which
+    // would now be doomed to a null assignment
+
+    for (unsigned int k=j+1;k<list2_.size();k++)
     {
-      // this is the last token in list 1
-      // so consider the rest of the tokens in list2 which
-      // would now be doomed to a null assignment
-      
-      for (unsigned int k=j+1;k<list2_.size();k++)
-	{
-	  if (!list2_[k]->null_token())
-	    {
-	      // this is a real token in list2 which must now
-	      // be allocated to the null assignment
-	      direct_cost = direct_cost + outer_cost_;
-	    }
-	}
+      if (!list2_[k]->null_token())
+      {
+        // this is a real token in list2 which must now
+        // be allocated to the null assignment
+        direct_cost = direct_cost + outer_cost_;
+      }
     }
-  
+  }
+
   //  we can now compute the minimum prior cost
-  
+
   double new_num_null1 = 0;
   double prior_cost = 0;
-  
+
   int p_i =i-1;
   int p_j =0;
-  
+
   if (i>0)
+  {
+    // determine the upper search limit on list 2
+    // the key is that since the assignements must
+    // be increasing, we must have an assignment below
+    // j there for
+
+    int upper_j = j;
+    if (tok2->null_token())
     {
-      // determine the upper search limit on list 2
-      // the key is that since the assignements must
-      // be increasing, we must have an assignment below
-      // j there for
-      
-      int upper_j = j;
-      if (tok2->null_token())
-	{
-	  // however it appears that token j is the null token
-	  // which can have mulltiple assignments so we will
-	  // increment upper_j;
-	  
-	  upper_j++;
-	}
-      
-      // initiallly set the prior cost really high
-      prior_cost = 100000;
-      
-      // the number of null assignments in a row
-      
-      double num_null1=0;
-      
-      // now compute the prior cost;
-      
-      for (int k=lower_search_range_[p_i];k<upper_j;k++)
-	{
-	
-	  
+      // however it appears that token j is the null token
+      // which can have mulltiple assignments so we will
+      // increment upper_j;
 
-
-	  // this is the cost of the prior assignmentt
-	  
-	  double cost = cost_matrix_[p_i][k].cost;
-
-	  // in some cases the geometry of the prior set of assignments
-	  // is important so we must consider this situation
-
-	  cost = cost + tok1->incremental_cost(tok2,list1_[p_i],list2_[k]);   
-
-	  
-	  // compute the penalty for assigning too many tokens the same null assignment
-	  
-	  if (j==k)
-	    {
-	      // we have yet another null assignment so using the number of
-	      // consecuative null assignmens for the node p_i->k we can compute
-	      // how many consecuative null assignments now exist
-	      
-	      num_null1=cost_matrix_[p_i][k].num_null1 + 1;
-	    }
-	  else
-	    {
-	      // there is no continuity of null assignments but this
-	      // could be the start of a new gap
-	      //
-	      if (list2_[j]->null_token())
-		{
-		  // this is the the start of a new gap
-		  num_null1=1;
-		}
-	      else
-		{
-		  // this is a valid token
-		  num_null1=0;
-		}
-	    }
-	  
-	  
-	  // add the cost for this gap  - note that as the number of
-	  // consecuative null assignments increases, the penalty becomes more
-	  // and more severe
-	  
-	  cost = cost + num_null1 * continuity_cost_;
-	  
-	  
-	  // if there is a gap between k and j then all these
-	  // tokens in list will get the null assignement so  this
-	  // must be compensated for. We must also penalize the second
-	  // kind of gap
-	  
-	  double num_null2=0;
-	  
-	  for (int l=k+1;l<j;l++)
-	    {
-	      if (!list2_[l]->null_token())
-		{
-		  // this is a real token in list2 which must now
-		  // be allocated to the null assignment
-		  cost = cost + inner_cost_;
-		  num_null2++;
-		  cost=cost+num_null2 * continuity_cost_;
-		}
-	    }
-	  
-	  
-	  
-	  
-	  
-	  
-	  if (cost<prior_cost)
-	    {
-	      // we have a new prior cost
-	      prior_cost = cost;
-	      p_j=k;
-	      new_num_null1=num_null1;
-	    }
-	}
+      upper_j++;
     }
-  
-  
+
+    // initiallly set the prior cost really high
+    prior_cost = 100000;
+
+    // the number of null assignments in a row
+
+    double num_null1=0;
+
+    // now compute the prior cost;
+
+    for (int k=lower_search_range_[p_i];k<upper_j;k++)
+    {
+      // this is the cost of the prior assignmentt
+
+      double cost = cost_matrix_[p_i][k].cost;
+
+      // in some cases the geometry of the prior set of assignments
+      // is important so we must consider this situation
+
+      cost = cost + tok1->incremental_cost(tok2,list1_[p_i],list2_[k]);
+
+
+      // compute the penalty for assigning too many tokens the same null assignment
+
+      if (j==k)
+      {
+        // we have yet another null assignment so using the number of
+        // consecuative null assignmens for the node p_i->k we can compute
+        // how many consecuative null assignments now exist
+
+        num_null1=cost_matrix_[p_i][k].num_null1 + 1;
+      }
+      else
+      {
+        // there is no continuity of null assignments but this
+        // could be the start of a new gap
+        //
+        if (list2_[j]->null_token())
+        {
+          // this is the the start of a new gap
+          num_null1=1;
+        }
+        else
+        {
+          // this is a valid token
+          num_null1=0;
+        }
+      }
+
+
+      // add the cost for this gap  - note that as the number of
+      // consecuative null assignments increases, the penalty becomes more
+      // and more severe
+
+      cost = cost + num_null1 * continuity_cost_;
+
+
+      // if there is a gap between k and j then all these
+      // tokens in list will get the null assignement so  this
+      // must be compensated for. We must also penalize the second
+      // kind of gap
+
+      double num_null2=0;
+
+      for (int l=k+1;l<j;l++)
+      {
+        if (!list2_[l]->null_token())
+        {
+          // this is a real token in list2 which must now
+          // be allocated to the null assignment
+          cost = cost + inner_cost_;
+          num_null2++;
+          cost=cost+num_null2 * continuity_cost_;
+        }
+      }
+
+      if (cost<prior_cost)
+      {
+        // we have a new prior cost
+        prior_cost = cost;
+        p_j=k;
+        new_num_null1=num_null1;
+      }
+    }
+  }
+
+
   // we can now determine the cost of assigning node i to node j
-  
+
   cost_matrix_[i][j].cost= direct_cost + prior_cost;
   cost_matrix_[i][j].num_null1 = new_num_null1;
-  
+
   // record the prior assignments used to compute cost
-  
+
   cost_matrix_[i][j].prior_index1=p_i;
   cost_matrix_[i][j].prior_index2=p_j;
 }
@@ -417,14 +392,10 @@ double vsrl_dynamic_program::optimum_assignment()
 
   token_list::iterator ti;
   for (ti=list1_.begin();ti!=list1_.end();ti++)
-  {
     (*ti)->set_assigned_token(0);
-  }
 
   for (ti=list2_.begin();ti!=list2_.end();ti++)
-  {
     (*ti)->set_assigned_token(0);
-  }
 
   // now find the best assignment for token list1
   vsrl_token *tok1;
