@@ -21,7 +21,7 @@
 //    is_signed   -  does the type have negative values
 //    num_bits    -  number of bits required to encode the value range
 //    minval      -  the minimum value of the type (possibly negative).
-//    maxval      -  the maximum value of the type 
+//    maxval      -  the maximum value of the type
 //    real_number_field - is the type an approximation to the field of reals
 //
 //  (Note, functions used rather than static constants for minimal linking issues)
@@ -47,10 +47,10 @@ class vil_pixel_traits<bool>
   //: Size in bits
   static unsigned num_bits() {return 1;}
 
-  //: Minimum value 
+  //: Minimum value
   static bool minval() {return false;}
 
-  //: Maximum value 
+  //: Maximum value
   static bool maxval() {return true;}
 
   //: Real number field
@@ -75,15 +75,14 @@ class vil_pixel_traits<char>
   //: Size in bits
   static unsigned num_bits() {return 8;}
 
-  //: Minimum value 
+  //: Minimum value
   static char minval() {return char(255)<0?-128:0;}
 
-  //: Maximum value 
+  //: Maximum value
   static char maxval() {return char(255)<0?127:255;}
 
   //: Real number field
   static bool real_number_field() {return false;}
-
 };
 
 #if !VCL_CANNOT_SPECIALIZE_CV
@@ -104,15 +103,14 @@ class vil_pixel_traits<unsigned char>
   //: Size in bits
   static unsigned num_bits() {return 8;}
 
-  //: Minimum value 
+  //: Minimum value
   static unsigned char minval() {return 0;}
 
-  //: Maximum value 
+  //: Maximum value
   static unsigned char maxval() {return UCHAR_MAX;}
 
   //: Real number field
   static bool real_number_field() {return false;}
-
 };
 
 #if !VCL_CANNOT_SPECIALIZE_CV
@@ -133,10 +131,10 @@ class vil_pixel_traits<signed char>
   //: Size in bits
   static unsigned num_bits() {return 8;}
 
-  //: Minimum value 
+  //: Minimum value
   static signed char minval() {return SCHAR_MIN;}
 
-  //: Maximum value 
+  //: Maximum value
   static signed char maxval() {return SCHAR_MAX;}
 
   //: Real number field
@@ -161,15 +159,14 @@ class vil_pixel_traits<short>
   //: Size in bits
   static unsigned num_bits() {return 8*sizeof(short);}
 
-  //: Minimum value 
+  //: Minimum value
   static short minval() {return SHRT_MIN;}
 
-  //: Maximum value 
+  //: Maximum value
   static short maxval() {return SHRT_MAX;}
 
   //: Real number field
   static bool real_number_field() {return false;}
-
 };
 
 #if !VCL_CANNOT_SPECIALIZE_CV
@@ -190,15 +187,14 @@ class vil_pixel_traits<unsigned short>
   //: Size in bits
   static unsigned num_bits() {return 16;}
 
-  //: Minimum value 
+  //: Minimum value
   static unsigned short minval() {return 0;}
 
-  //: Maximum value 
+  //: Maximum value
   static unsigned short maxval() {return USHRT_MAX;}
 
   //: Real number field
   static bool real_number_field() {return false;}
-
 };
 
 #if !VCL_CANNOT_SPECIALIZE_CV
@@ -219,10 +215,10 @@ class vil_pixel_traits<int>
   //: Size in bits
   static unsigned num_bits() {return 8*sizeof(int);}
 
-  //: Minimum value 
+  //: Minimum value
   static int minval() {return INT_MIN;}
 
-  //: Maximum value 
+  //: Maximum value
   static int maxval() {return INT_MAX;}
 
   //: Real number field
@@ -247,15 +243,14 @@ class vil_pixel_traits<unsigned int>
   //: Size in bits
   static unsigned num_bits() {return 8*sizeof(unsigned int);}
 
-  //: Minimum value 
+  //: Minimum value
   static unsigned int minval() {return 0;}
 
-  //: Maximum value 
+  //: Maximum value
   static unsigned int maxval() {return UINT_MAX;}
 
   //: Real number field
   static bool real_number_field() {return false;}
-
 };
 
 #if !VCL_CANNOT_SPECIALIZE_CV
@@ -276,15 +271,14 @@ class vil_pixel_traits<long>
   //: Size in bits
   static unsigned num_bits() {return 8*sizeof(long);}
 
-  //: Minimum value 
+  //: Minimum value
   static long minval() {return LONG_MIN;}
 
-  //: Maximum value 
+  //: Maximum value
   static long maxval() {return LONG_MAX;}
 
   //: Real number field
   static bool real_number_field() {return false;}
-
 };
 
 #if !VCL_CANNOT_SPECIALIZE_CV
@@ -305,15 +299,14 @@ class vil_pixel_traits<unsigned long>
   //: Size in bits
   static unsigned num_bits() {return 8*sizeof(unsigned long);}
 
-  //: Minimum value 
+  //: Minimum value
   static unsigned long minval() {return 0;}
 
-  //: Maximum value 
+  //: Maximum value
   static unsigned long maxval() {return ULONG_MAX;}
 
   //: Real number field
   static bool real_number_field() {return false;}
-
 };
 
 #if !VCL_CANNOT_SPECIALIZE_CV
@@ -334,10 +327,10 @@ class vil_pixel_traits<float>
   //: Size in bits
   static unsigned num_bits() {return 8*sizeof(float);}
 
-  //: Minimum value 
+  //: Minimum value
   static float minval() {return -FLT_MAX;}
 
-  //: Maximum value 
+  //: Maximum value
   static float maxval() {return FLT_MAX;}
 
   //: Real number field
@@ -362,10 +355,10 @@ class vil_pixel_traits<double>
   //: Size in bits
   static unsigned num_bits() {return 8*sizeof(double);}
 
-  //: Minmum value 
+  //: Minimum value
   static double minval() {return -DBL_MAX;}
 
-  //: Maximum value 
+  //: Maximum value
   static double maxval() {return DBL_MAX;}
 
   //: Real number field
@@ -390,10 +383,10 @@ class vil_pixel_traits<long double>
   //: Size in bits
   static unsigned num_bits() {return 8*sizeof(long double);}
 
-  //: Minimum value 
+  //: Minimum value
   static long double minval() {return -LDBL_MAX;}
 
-  //: Maximum value 
+  //: Maximum value
   static long double maxval() {return LDBL_MAX;}
 
   //: Real number field
