@@ -1,3 +1,6 @@
+#ifndef vcl_emulation_rbtree_txx_
+#define vcl_emulation_rbtree_txx_
+
 #include "vcl_algorithm.txx"
 #include "vcl_iterator.txx"
 #include "vcl_utility.txx"
@@ -5,7 +8,7 @@
 //-*- c++ -*-
 // --- Feature testing ---
 #ifdef __STL_LOOP_INLINE_PROBLEMS
-#define VCL_INSTANTIATE_INLINE_LOOP(f) template f ;
+#define VCL_INSTANTIATE_INLINE_LOOP(f) template f
 #else
 #define VCL_INSTANTIATE_INLINE_LOOP(f) VCL_INSTANTIATE_INLINE(f)
 #endif
@@ -31,17 +34,19 @@ VCL_INSTANTIATE_INLINE(TAG iterator_category(I const &))
 VCL_OPERATOR_NE_INSTANTIATE(ForwardIterator)\
 VCL_TAGS_INSTANTIATE(ForwardIterator, forward_iterator_tag)
 
-//#define VCL_ITER_BD_Distance_INSTANTIATE(BidirectionalIterator, Distance)\
-//VCL_INSTANTIATE_INLINE(void advance(BidirectionalIterator&,Distance));\
-//VCL_INSTANTIATE_INLINE(void __advance(BidirectionalIterator&,Distance,bidirectional_iterator_tag));\
-//VCL_INSTANTIATE_INLINE(void distance(BidirectionalIterator,BidirectionalIterator,Distance&));\
-//VCL_INSTANTIATE_INLINE(void __distance(BidirectionalIterator,BidirectionalIterator const&,Distance&,bidirectional_iterator_tag))
+#if 0
+#define VCL_ITER_BD_Distance_INSTANTIATE(BidirectionalIterator, Distance)\
+VCL_INSTANTIATE_INLINE(void advance(BidirectionalIterator&,Distance));\
+VCL_INSTANTIATE_INLINE(void __advance(BidirectionalIterator&,Distance,bidirectional_iterator_tag));\
+VCL_INSTANTIATE_INLINE(void distance(BidirectionalIterator,BidirectionalIterator,Distance&));\
+VCL_INSTANTIATE_INLINE(void __distance(BidirectionalIterator,BidirectionalIterator const&,Distance&,bidirectional_iterator_tag))
 
-//#define VCL_ITER_RA_Distance_INSTANTIATE(RandomAccessIterator, Distance)\
-//VCL_INSTANTIATE_INLINE(void advance(RandomAccessIterator&,Distance));\
-//VCL_INSTANTIATE_INLINE(void __advance(RandomAccessIterator&,Distance,random_access_iterator_tag));\
-//VCL_INSTANTIATE_INLINE(void distance(RandomAccessIterator,RandomAccessIterator,Distance&));\
-//VCL_INSTANTIATE_INLINE(void __distance(RandomAccessIterator const&,RandomAccessIterator const&,Distance&,random_access_iterator_tag))
+#define VCL_ITER_RA_Distance_INSTANTIATE(RandomAccessIterator, Distance)\
+VCL_INSTANTIATE_INLINE(void advance(RandomAccessIterator&,Distance));\
+VCL_INSTANTIATE_INLINE(void __advance(RandomAccessIterator&,Distance,random_access_iterator_tag));\
+VCL_INSTANTIATE_INLINE(void distance(RandomAccessIterator,RandomAccessIterator,Distance&));\
+VCL_INSTANTIATE_INLINE(void __distance(RandomAccessIterator const&,RandomAccessIterator const&,Distance&,random_access_iterator_tag))
+#endif
 
 // --- Vcl_List ---
 
@@ -61,14 +66,16 @@ template class __rb_tree_base<Value, vcl_alloc >;\
 template struct __rb_tree_iterator<Value >;\
 template struct __rb_tree_const_iterator<Value >;\
 template class vcl_simple_alloc<__rb_tree_node<Value >, vcl_alloc >;\
-VCL_ITER_BD_Distance_INSTANTIATE(__rb_tree_iterator<Value >, size_t);\
-VCL_ITER_BD_Distance_INSTANTIATE(__rb_tree_const_iterator<Value >, size_t);\
+VCL_ITER_BD_Distance_INSTANTIATE(__rb_tree_iterator<Value >, vcl_size_t);\
+VCL_ITER_BD_Distance_INSTANTIATE(__rb_tree_const_iterator<Value >, vcl_size_t);\
 VCL_OPERATOR_NE_INSTANTIATE(__rb_tree_const_iterator<Value >) \
 VCL_OPERATOR_NE_INSTANTIATE(__rb_tree_iterator<Value >) \
 VCL_PAIR_INSTANTIATE(__rb_tree_iterator<Value >, __rb_tree_iterator<Value > ); \
 VCL_PAIR_INSTANTIATE(__rb_tree_const_iterator<Value >, __rb_tree_const_iterator<Value > ); \
 VCL_PAIR_INSTANTIATE(__rb_tree_const_iterator<Value >, bool ); \
 VCL_PAIR_INSTANTIATE(__rb_tree_iterator<Value >, bool ); \
-template class reverse_bidirectional_iterator<__rb_tree_const_iterator<Value >, Value, Value const &, ptrdiff_t>;\
-template class reverse_bidirectional_iterator<__rb_tree_iterator<Value >, Value, Value &, ptrdiff_t>;\
+template class reverse_bidirectional_iterator<__rb_tree_const_iterator<Value >, Value, Value const &, vcl_ptrdiff_t>;\
+template class reverse_bidirectional_iterator<__rb_tree_iterator<Value >, Value, Value &, vcl_ptrdiff_t>;\
 VCL_SWAP_INSTANTIATE(__rb_tree_node<Value > *)
+
+#endif // vcl_emulation_rbtree_txx_

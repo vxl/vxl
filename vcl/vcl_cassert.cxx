@@ -13,7 +13,7 @@ void vcl_cassert_failure(char const *FILE, int LINE, char const *expr)
   vcl_abort();
 }
 
-#if defined(VCL_SUNPRO_CC) || defined(VCL_KAI)
+#ifndef __GNUC__
 // fsm@robots: This is a silly hack to enable us to link code compiled
 // with SunPro against a library (such as libMesaGL) compiled with gcc.
 // The gcc assert macro uses a function call __eprintf() which is defined
@@ -21,14 +21,12 @@ void vcl_cassert_failure(char const *FILE, int LINE, char const *expr)
 //
 // Note that this is a fixing a problem with *gcc*, not the SunPro or
 // KAI compilers.
-#include <cstdio>
-#include <cstdlib>
 extern "C" void
 __eprintf (char const *string, char const *expression,
            unsigned int line, char const *filename)
 {
-  std::fprintf(stderr, string, expression, line, filename);
-  std::fflush(stderr);
-  std::abort();
+  vcl_fprintf(stderr, string, expression, line, filename);
+  vcl_fflush(stderr);
+  vcl_abort();
 }
 #endif

@@ -1,4 +1,7 @@
 //-*- c++ -*-
+#ifndef vcl_emulation_iterator_txx_
+#define vcl_emulation_iterator_txx_
+
 #include "vcl_iterator.h"
 #include "vcl_algorithm.txx"
 
@@ -27,7 +30,7 @@ VCL_INSTANTIATE_INLINE(void vcl_distance(RandomAccessIterator,RandomAccessIterat
 VCL_INSTANTIATE_INLINE(void __distance(RandomAccessIterator const&,RandomAccessIterator const&,Distance&,random_access_iterator_tag))
 
 #define VCL_ITER_RA_INSTANTIATE(RandomAccessIterator)\
-VCL_ITER_RA_INSTANTIATE_Distance(RandomAccessIterator, ptrdiff_t) \
+VCL_ITER_RA_INSTANTIATE_Distance(RandomAccessIterator, vcl_ptrdiff_t) \
 VCL_OPERATOR_NE_INSTANTIATE(RandomAccessIterator)\
 VCL_TAGS_INSTANTIATE(RandomAccessIterator, random_access_iterator_tag)
 
@@ -36,3 +39,5 @@ VCL_INSTANTIATE_INLINE(void vcl_advance(BidirectionalIterator&,Distance));\
 VCL_INSTANTIATE_INLINE(void __advance(BidirectionalIterator&,Distance,bidirectional_iterator_tag));\
 VCL_INSTANTIATE_INLINE(void vcl_distance(BidirectionalIterator,BidirectionalIterator,Distance&));\
 VCL_INSTANTIATE_INLINE(void __distance(BidirectionalIterator,BidirectionalIterator const&,Distance&,bidirectional_iterator_tag))
+
+#endif // vcl_emulation_iterator_txx_

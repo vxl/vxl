@@ -1,3 +1,5 @@
+#ifndef vcl_emulation_functional_txx_
+#define vcl_emulation_functional_txx_
 /*
   fsm@robots.ox.ac.uk
 */
@@ -18,3 +20,5 @@ VCL_OPERATOR_NE_INSTANTIATE(T);\
 VCL_INSTANTIATE_INLINE(bool operator>(T const &, T const &));\
 VCL_INSTANTIATE_INLINE(bool operator<=(T const &, T const &));\
 VCL_INSTANTIATE_INLINE(bool operator>=(T const &, T const &))
+
+#endif // vcl_emulation_functional_txx_
