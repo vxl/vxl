@@ -44,6 +44,7 @@
 // - vil_convert_stretch_range
 // - vil_convert_to_component_order
 // - vil_convert_to_n_planes
+//
 // In general these functions expect to take scalar pixel images as
 // inputs. Even though many of these functions could return a known
 // pixel-typed image, they all return a vil_image_view_base_sptr,
