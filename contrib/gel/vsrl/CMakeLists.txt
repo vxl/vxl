@@ -1,5 +1,7 @@
 # gel/vsrl/CMakeLists.txt
 
+INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR})
+
 SET(vsrl_sources
  vsrl_3d_output.cxx             vsrl_3d_output.h
                                 vsrl_dense_matcher.h
