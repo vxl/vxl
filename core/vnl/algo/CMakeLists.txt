@@ -13,6 +13,7 @@ IF(NETLIB_FOUND)
 
     # matrix decompositions
     vnl_svd.txx vnl_svd.h
+    vnl_svd_economy.txx vnl_svd_economy.h
     vnl_matrix_inverse.txx vnl_matrix_inverse.h
     vnl_qr.txx vnl_qr.h
     vnl_scatter_3x3.txx vnl_scatter_3x3.h
