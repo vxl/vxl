@@ -711,6 +711,9 @@ SOURCE=.\iso/vcl_vector.txx
 SOURCE=.\sgi/vcl_algorithm.txx
 # End Source File
 # Begin Source File
+SOURCE=.\sgi/vcl_bitset.h
+# End Source File
+# Begin Source File
 SOURCE=.\sgi/vcl_complex.h
 # End Source File
 # Begin Source File
