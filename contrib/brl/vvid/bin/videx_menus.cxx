@@ -69,16 +69,16 @@ vgui_menu videx_menus::get_menu()
   //file menu entries
   menufile.add( "Quit", quit_callback,(vgui_key)'q', vgui_CTRL);
   menufile.add( "Capture(old)", capture_sequence_callback);
-  menufile.add( "Init Capture", init_capture_callback);
-  menufile.add( "Stop Capture", stop_capture_callback);
+  menufile.add( "Init Capture", init_capture_callback, (vgui_key)'i');
+  menufile.add( "Stop Capture", stop_capture_callback, (vgui_key)'e');
 
   //view menu entries
-  menuview.add( "Start Live Video", start_live_video_callback);
-  menuview.add( "Stop Live Video", stop_live_video_callback);
+  menuview.add( "Start Live Video", start_live_video_callback, (vgui_key)'s');
+  menuview.add( "Stop Live Video", stop_live_video_callback, (vgui_key)'s', vgui_CTRL);
   menuview.add( "Toggle Histogram", toggle_histogram_callback, (vgui_key)'h');
 
   //edit menu entries
-  menuedit.add("Camera Settings", set_camera_params_callback);
+  menuedit.add("Camera Settings", set_camera_params_callback, (vgui_key)'p', vgui_CTRL);
   menuedit.add("Edge Detection Settings", set_detection_params_callback);
   menuedit.add("No Live Operation", no_op_callback);
 
