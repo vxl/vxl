@@ -32,7 +32,7 @@ vnl_vector<vcl_complex<T> > vnl_complexify(vnl_vector<T> const &v) {
   return vc;
 }
 
-template <class T> 
+template <class T>
 vnl_vector<vcl_complex<T> > vnl_complexify(vnl_vector<T> const &re, vnl_vector<T> const &im) {
   assert(re.size() == im.size());
   vnl_vector<vcl_complex<T> > vc(re.size());
@@ -161,14 +161,14 @@ template vnl_vector<vcl_complex<T > > vnl_complexify(vnl_vector<T > const &, vnl
 template vnl_matrix<vcl_complex<T > > vnl_complexify(vnl_matrix<T > const &); \
 template vnl_matrix<vcl_complex<T > > vnl_complexify(vnl_matrix<T > const &, vnl_matrix<T > const &); \
 \
-/* template vnl_vector<T> vnl_angle(vnl_vector<vcl_complex<T> > const &); */ \
-/* template vnl_vector<T> vnl_abs  (vnl_vector<vcl_complex<T> > const &); */ \
-template vnl_vector<T> vnl_real (vnl_vector<vcl_complex<T> > const &); \
-template vnl_vector<T> vnl_imag (vnl_vector<vcl_complex<T> > const &); \
+/* template vnl_vector<T > vnl_angle(vnl_vector<vcl_complex<T > > const &); */ \
+/* template vnl_vector<T > vnl_abs  (vnl_vector<vcl_complex<T > > const &); */ \
+template vnl_vector<T > vnl_real (vnl_vector<vcl_complex<T > > const &); \
+template vnl_vector<T > vnl_imag (vnl_vector<vcl_complex<T > > const &); \
 \
-/* template vnl_matrix<T> vnl_angle(vnl_matrix<vcl_complex<T> > const &); */ \
-/* template vnl_matrix<T> vnl_abs  (vnl_matrix<vcl_complex<T> > const &); */ \
-template vnl_matrix<T> vnl_real (vnl_matrix<vcl_complex<T> > const &); \
-template vnl_matrix<T> vnl_imag (vnl_matrix<vcl_complex<T> > const &)
+/* template vnl_matrix<T > vnl_angle(vnl_matrix<vcl_complex<T > > const &); */ \
+/* template vnl_matrix<T > vnl_abs  (vnl_matrix<vcl_complex<T > > const &); */ \
+template vnl_matrix<T > vnl_real (vnl_matrix<vcl_complex<T > > const &); \
+template vnl_matrix<T > vnl_imag (vnl_matrix<vcl_complex<T > > const &)
 
 #endif // vnl_complex_ops_txx_

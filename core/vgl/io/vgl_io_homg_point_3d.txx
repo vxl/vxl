@@ -50,8 +50,8 @@ void vsl_print_summary(vcl_ostream& os,const vgl_homg_point_3d<T> & p)
 }
 
 #define VGL_IO_HOMG_POINT_3D_INSTANTIATE(T) \
-template void vsl_print_summary(vcl_ostream &, const vgl_homg_point_3d<T> &); \
-template void vsl_b_read(vsl_b_istream &, vgl_homg_point_3d<T> &); \
-template void vsl_b_write(vsl_b_ostream &, const vgl_homg_point_3d<T> &)
+template void vsl_print_summary(vcl_ostream &, const vgl_homg_point_3d<T > &); \
+template void vsl_b_read(vsl_b_istream &, vgl_homg_point_3d<T > &); \
+template void vsl_b_write(vsl_b_ostream &, const vgl_homg_point_3d<T > &)
 
 #endif // vgl_io_homg_point_3d_txx_

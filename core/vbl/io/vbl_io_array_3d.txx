@@ -90,8 +90,8 @@ void vsl_print_summary(vcl_ostream & os,const vbl_array_3d<T> & p)
 }
 
 #define VBL_IO_ARRAY_3D_INSTANTIATE(T) \
-template void vsl_print_summary(vcl_ostream &, const vbl_array_3d<T> &); \
-template void vsl_b_read(vsl_b_istream &, vbl_array_3d<T> &); \
-template void vsl_b_write(vsl_b_ostream &, const vbl_array_3d<T> &)
+template void vsl_print_summary(vcl_ostream &, const vbl_array_3d<T > &); \
+template void vsl_b_read(vsl_b_istream &, vbl_array_3d<T > &); \
+template void vsl_b_write(vsl_b_ostream &, const vbl_array_3d<T > &)
 
 #endif // vbl_io_array_3d_txx_

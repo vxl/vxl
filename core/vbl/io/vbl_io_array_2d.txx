@@ -82,8 +82,8 @@ void vsl_print_summary(vcl_ostream & os,const vbl_array_2d<T> & p)
 }
 
 #define VBL_IO_ARRAY_2D_INSTANTIATE(T) \
-template void vsl_print_summary(vcl_ostream &, const vbl_array_2d<T> &); \
-template void vsl_b_read(vsl_b_istream &, vbl_array_2d<T> &); \
-template void vsl_b_write(vsl_b_ostream &, const vbl_array_2d<T> &)
+template void vsl_print_summary(vcl_ostream &, const vbl_array_2d<T > &); \
+template void vsl_b_read(vsl_b_istream &, vbl_array_2d<T > &); \
+template void vsl_b_write(vsl_b_ostream &, const vbl_array_2d<T > &)
 
 #endif // vbl_io_array_2d_txx_

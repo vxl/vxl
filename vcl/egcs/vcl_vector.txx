@@ -19,7 +19,7 @@ template vector<T >::iterator fill_n(vector<T >::iterator, vector<T >::size_type
 VCL_VECTOR_STLINST_uninitialized_copy(vector<T >::iterator, vector<T >::iterator, vector<T >::size_type);\
 VCL_VECTOR_STLINST_uninitialized_copy(vector<T >::const_iterator, vector<T >::iterator, vector<T >::size_type);\
 template \
-void vector<T, __default_alloc_template<true, 0> >::range_insert(T *, T *, T *, forward_iterator_tag); \
-template class vector<T >;
+void vector<T, __default_alloc_template< true, 0 > >::range_insert(T *, T *, T *, forward_iterator_tag); \
+template class vector<T >
 
-#endif
+#endif // vcl_egcs_vector_txx_

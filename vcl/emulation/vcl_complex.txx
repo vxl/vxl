@@ -17,7 +17,7 @@
 #endif
 
 #undef VCL_COMPLEX_INSTANTIATE
-#define VCL_COMPLEX_INSTANTIATE(FLOAT)\
+#define VCL_COMPLEX_INSTANTIATE(FLOAT) \
 template class vcl_complex<FLOAT >; \
 VCL_INSTANTIATE_INLINE(vcl_ostream& operator<<(vcl_ostream&,vcl_complex<FLOAT >const&));\
 VCL_INSTANTIATE_INLINE(bool operator==(vcl_complex<FLOAT >const&,vcl_complex<FLOAT >const&));\
@@ -50,6 +50,6 @@ VCL_INSTANTIATE_INLINE(vcl_complex<FLOAT > log (vcl_complex<FLOAT >const&));\
 VCL_INSTANTIATE_INLINE(FLOAT arg (vcl_complex<FLOAT >const&));\
 VCL_INSTANTIATE_INLINE(FLOAT abs (vcl_complex<FLOAT >const&));\
 VCL_INSTANTIATE_INLINE(FLOAT norm (vcl_complex<FLOAT >const&));\
-VCL_INSTANTIATE_INLINE(vcl_complex<FLOAT> conj (vcl_complex<FLOAT >const&))
+VCL_INSTANTIATE_INLINE(vcl_complex<FLOAT > conj (vcl_complex<FLOAT >const&))
 
-#endif
+#endif // vcl_emulation_complex_txx_

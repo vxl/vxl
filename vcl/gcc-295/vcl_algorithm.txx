@@ -3,7 +3,7 @@
 
 #include <vcl_algorithm.h>
 
-#define VCL_SWAP_INSTANTIATE(T)\
+#define VCL_SWAP_INSTANTIATE(T) \
 VCL_INSTANTIATE_INLINE(void swap(T&, T&))
 
 #define VCL_OPERATOR_NE_INSTANTIATE(T)
@@ -54,9 +54,9 @@ inline _BdIter find_if(_BdIter __first,
 }
 
 #define VCL_FIND_INSTANTIATE(I, T) \
-template <int N> struct fsm_find_tickler; /* empty template */ \
-template <> struct fsm_find_tickler<__LINE__> { void method(I, I, T const &); }; \
-void fsm_find_tickler<__LINE__>::method(I b, I e, T const &v) { find(b, e, v); } \
+template < int N > struct fsm_find_tickler; /* empty template */ \
+template <> struct fsm_find_tickler< __LINE__ > { void method(I, I, T const &); }; \
+void fsm_find_tickler< __LINE__ >::method(I b, I e, T const &v) { find(b, e, v); } \
 template I find<I, T >(I, I, T const&); \
 template I find<I, T >(I, I, T const&, iterator_traits<I >::iterator_category)
 
@@ -68,6 +68,6 @@ template I find_if<I, P >(I, I, P, iterator_traits<I >::iterator_category)
 template I remove(I, I, T const &)
 
 #define VCL_UNIQUE_INSTANTIATE(I) \
-template I unique<I>(I, I)
+template I unique<I >(I, I)
 
 #endif // vcl_gcc_295_algorithm_txx_

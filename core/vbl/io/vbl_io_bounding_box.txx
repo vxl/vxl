@@ -42,7 +42,6 @@ void vsl_b_read(vsl_b_istream &is, vbl_bounding_box_base<T, DIM_> & p)
     vcl_cerr << "vsl_b_read(is, vbl_bounding_box&): Unknown version number "<< v << vcl_endl;
     vcl_abort();
   }
-
 }
 
 
@@ -63,12 +62,11 @@ void vsl_print_summary(vcl_ostream& os,const vbl_bounding_box_base<T, DIM_> & p)
       os << "max_[" << i << "] = " << p.max_[i] << vcl_endl;
     }
     os << vcl_endl;
-
 }
 
 #define VBL_IO_BOUNDING_BOX_INSTANTIATE(T, DIM) \
-template void vsl_print_summary(vcl_ostream&,const vbl_bounding_box_base<T, vbl_bounding_box_DIM<DIM> >&);\
-template void vsl_b_read(vsl_b_istream &, vbl_bounding_box_base<T, vbl_bounding_box_DIM<DIM> > &); \
-template void vsl_b_write(vsl_b_ostream &, const vbl_bounding_box_base<T, vbl_bounding_box_DIM<DIM>  > &)
+template void vsl_print_summary(vcl_ostream&,const vbl_bounding_box_base<T, vbl_bounding_box_DIM<DIM > >&);\
+template void vsl_b_read(vsl_b_istream &, vbl_bounding_box_base<T, vbl_bounding_box_DIM<DIM > > &); \
+template void vsl_b_write(vsl_b_ostream &, const vbl_bounding_box_base<T, vbl_bounding_box_DIM<DIM >  > &)
 
-#endif
+#endif // vbl_io_bounding_box_txx_

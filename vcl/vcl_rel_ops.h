@@ -60,9 +60,9 @@ using std::rel_ops::operator>=;
 
 // instantiation macro for compilers that need it.
 #define VCL_REL_OPS_INSTANTIATE(T) \
-VCL_INSTANTIATE_INLINE(bool operator!=(T const &, T const &)); \
-VCL_INSTANTIATE_INLINE(bool operator> (T const &, T const &)); \
-VCL_INSTANTIATE_INLINE(bool operator<=(T const &, T const &)); \
-VCL_INSTANTIATE_INLINE(bool operator>=(T const &, T const &))
+VCL_INSTANTIATE_INLINE(bool operator != (T const &, T const &)); \
+VCL_INSTANTIATE_INLINE(bool operator >  (T const &, T const &)); \
+VCL_INSTANTIATE_INLINE(bool operator <= (T const &, T const &)); \
+VCL_INSTANTIATE_INLINE(bool operator >= (T const &, T const &))
 
 #endif // vcl_rel_ops_h_

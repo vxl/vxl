@@ -71,8 +71,8 @@ void vsl_print_summary(vcl_ostream& os,const vbl_sparse_array<T> & p)
 }
 
 #define VBL_IO_SPARSE_ARRAY_INSTANTIATE(T) \
-  template void vsl_print_summary(vcl_ostream &, const vbl_sparse_array<T> &); \
-  template void vsl_b_read(vsl_b_istream &, vbl_sparse_array<T> &); \
-  template void vsl_b_write(vsl_b_ostream &, const vbl_sparse_array<T> &)
+  template void vsl_print_summary(vcl_ostream &, const vbl_sparse_array<T > &); \
+  template void vsl_b_read(vsl_b_istream &, vbl_sparse_array<T > &); \
+  template void vsl_b_write(vsl_b_ostream &, const vbl_sparse_array<T > &)
 
 #endif // vbl_io_sparse_array_txx_

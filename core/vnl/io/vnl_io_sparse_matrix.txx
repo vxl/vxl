@@ -157,8 +157,8 @@ void vsl_print_summary(vcl_ostream & os,const vnl_sparse_matrix<T> & p)
 }
 
 #define VNL_IO_SPARSE_MATRIX_INSTANTIATE(T) \
-  template void vsl_print_summary(vcl_ostream &, const vnl_sparse_matrix<T> &); \
-  template void vsl_b_read(vsl_b_istream &, vnl_sparse_matrix<T> &); \
-  template void vsl_b_write(vsl_b_ostream &, const vnl_sparse_matrix<T> &)
+  template void vsl_print_summary(vcl_ostream &, const vnl_sparse_matrix<T > &); \
+  template void vsl_b_read(vsl_b_istream &, vnl_sparse_matrix<T > &); \
+  template void vsl_b_write(vsl_b_ostream &, const vnl_sparse_matrix<T > &)
 
 #endif // vnl_io_sparse_matrix_txx_

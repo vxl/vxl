@@ -53,8 +53,8 @@ void vsl_print_summary(vcl_ostream& os,const vgl_homg_plane_3d<T> & p)
 }
 
 #define VGL_IO_HOMG_PLANE_3D_INSTANTIATE(T) \
-template void vsl_print_summary(vcl_ostream &, const vgl_homg_plane_3d<T> &); \
-template void vsl_b_read(vsl_b_istream &, vgl_homg_plane_3d<T> &); \
-template void vsl_b_write(vsl_b_ostream &, const vgl_homg_plane_3d<T> &)
+template void vsl_print_summary(vcl_ostream &, const vgl_homg_plane_3d<T > &); \
+template void vsl_b_read(vsl_b_istream &, vgl_homg_plane_3d<T > &); \
+template void vsl_b_write(vsl_b_ostream &, const vgl_homg_plane_3d<T > &)
 
 #endif // vgl_io_homg_plane_3d_txx_

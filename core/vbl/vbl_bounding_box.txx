@@ -1,6 +1,6 @@
+// This is vxl/vbl/vbl_bounding_box.txx
 #ifndef vbl_bounding_box_txx_
 #define vbl_bounding_box_txx_
-// This is vxl/vbl/vbl_bounding_box.txx
 
 //-*- c++ -*-------------------------------------------------------------------
 //
@@ -43,9 +43,9 @@ VCL_INSTANTIATE_INLINE(bool meet    (vbl_bounding_box_base<T, vbl_bounding_box_D
                                      vbl_bounding_box_base<T, vbl_bounding_box_DIM<DIM> > const &))
 
 #define VBL_BOUNDING_BOX_INSTANTIATE(T, DIM) \
-template class vbl_bounding_box_base<T , vbl_bounding_box_DIM<DIM> >; \
+template class vbl_bounding_box_base<T , vbl_bounding_box_DIM< DIM > >; \
 template class vbl_bounding_box<T , DIM >; \
-vbl_bbox_inst_inline(vcl_ostream& operator << (vcl_ostream&, vbl_bounding_box_base<T, vbl_bounding_box_DIM<DIM> > const &)); \
+vbl_bbox_inst_inline(vcl_ostream& operator << (vcl_ostream&, vbl_bounding_box_base<T, vbl_bounding_box_DIM< DIM > > const &)); \
 vbl_bbox_inst_functions(T,DIM)
 
-#endif
+#endif // vbl_bounding_box_txx_

@@ -2,7 +2,7 @@
 #ifndef vnl_sparse_matrix_txx_
 #define vnl_sparse_matrix_txx_
 
-#include <vnl/vnl_sparse_matrix.h>
+#include "vnl_sparse_matrix.h"
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h>
 #include <vcl_algorithm.h>
@@ -568,8 +568,7 @@ T vnl_sparse_matrix<T>::value()
   return (*itr_cur).second;
 }
 
-
 #define VNL_SPARSE_MATRIX_INSTANTIATE(T) \
-template class vnl_sparse_matrix<T>
+template class vnl_sparse_matrix<T >
 
 #endif // vnl_sparse_matrix_txx_

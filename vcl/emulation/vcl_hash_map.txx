@@ -17,13 +17,13 @@
 
 // This macro ensures that the type is usable as a key for a hash map.
 #define VCL_HASHKEY_INSTANTIATE(Key) \
-template struct vcl_equal_to<Key>
+template struct vcl_equal_to<Key >
 
 // Then this macro may be used to instantiate the specific hash_maps.
 #undef VCL_HASH_MAP_INSTANTIATE
 #define VCL_HASH_MAP_INSTANTIATE(Key, Value, Hash, Comp) \
-template class vcl_hash_map<Key, Value, Hash, Comp VCL_DFL_TMPL_ARG(vcl_alloc)>; \
-template class vcl_hash_multimap<Key, Value, Hash, Comp VCL_DFL_TMPL_ARG(vcl_alloc)>; \
+template class vcl_hash_map<Key, Value, Hash, Comp VCL_DFL_TMPL_ARG(vcl_alloc) >; \
+template class vcl_hash_multimap<Key, Value, Hash, Comp VCL_DFL_TMPL_ARG(vcl_alloc) >; \
 VCL_HASHTABLE_MAP_PAIR_INSTANTIATE(Key, Value, Hash, Comp, __LINE__)
 
 // This macro uses the TAG to generate unique (within this compilation
@@ -39,7 +39,7 @@ VCL_HASHTABLE_MAP_PAIR_INSTANTIATEx(Key, Value, Hash, Comp, TAG)
 
 // Here is where the pair for the hash_map is instantiated.
 #define VCL_HASHTABLE_MAP_PAIR_INSTANTIATEx(Key, Value, Hash, Comp, TAG) \
-typedef vcl_pair<const Key, Value> HTPairc ## TAG; \
+typedef vcl_pair<const Key, Value > HTPairc ## TAG; \
 VCL_HASHTABLE_PAIR_INSTANTIATE(Key, HTPairc ## TAG, Hash, Comp, TAG)
 
 // And here is where the hashtable of key/value gets instantiated.
@@ -68,9 +68,9 @@ VCL_INSTANTIATE_INLINE(void distance(HTIterc ## TAG, HTIterc ## TAG, vcl_size_t&
 VCL_INSTANTIATE_INLINE(void __distance(HTIterc ## TAG, HTIterc ## TAG const &, vcl_size_t &, forward_iterator_tag)); \
 VCL_PAIR_INSTANTIATE(HTIterc ## TAG, bool); \
 VCL_PAIR_INSTANTIATE(HTIterc ## TAG, HTIterc ## TAG); \
-template struct vcl_hashtable_node<Value> ; \
-typedef vcl_hashtable_node<Value> HTNode ## TAG; \
-typedef vcl_hashtable_node<Value>* HTNodeP ## TAG; \
+template struct vcl_hashtable_node<Value > ; \
+typedef vcl_hashtable_node<Value > HTNode ## TAG; \
+typedef vcl_hashtable_node<Value >* HTNodeP ## TAG; \
 VCL_UNARY_INSTANTIATE(HTNodeP ## TAG); \
 VCL_UNARY_INSTANTIATE(HTNodeP ## TAG *); \
 VCL_CONTAINABLE_INSTANTIATE(HTNodeP ## TAG); \

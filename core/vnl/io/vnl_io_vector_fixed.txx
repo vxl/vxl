@@ -66,8 +66,8 @@ void vsl_print_summary(vcl_ostream & os,const vnl_vector_fixed<T,n> & p)
 }
 
 #define VNL_IO_VECTOR_FIXED_INSTANTIATE(T,n) \
-template void vsl_print_summary(vcl_ostream &, const vnl_vector_fixed<T,n> &); \
-template void vsl_b_read(vsl_b_istream &, vnl_vector_fixed<T,n> &); \
-template void vsl_b_write(vsl_b_ostream &, const vnl_vector_fixed<T,n> &)
+template void vsl_print_summary(vcl_ostream &, const vnl_vector_fixed<T,n > &); \
+template void vsl_b_read(vsl_b_istream &, vnl_vector_fixed<T,n > &); \
+template void vsl_b_write(vsl_b_ostream &, const vnl_vector_fixed<T,n > &)
 
 #endif // vnl_io_vector_fixed_txx_

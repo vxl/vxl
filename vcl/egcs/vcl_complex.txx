@@ -8,7 +8,7 @@
 #define VCL_COMPLEX_INSTANTIATE_INLINE(T) template T
 
 #undef VCL_COMPLEX_INSTANTIATE
-#define VCL_COMPLEX_INSTANTIATE(FLOAT)\
+#define VCL_COMPLEX_INSTANTIATE(FLOAT) \
 VCL_COMPLEX_INSTANTIATE_INLINE(bool operator==(complex<FLOAT >const&,complex<FLOAT >const&));\
 VCL_COMPLEX_INSTANTIATE_INLINE(bool operator==(FLOAT,complex<FLOAT >const&));\
 VCL_COMPLEX_INSTANTIATE_INLINE(bool operator==(complex<FLOAT >const&,FLOAT));\
@@ -37,7 +37,7 @@ VCL_COMPLEX_INSTANTIATE_INLINE(complex<FLOAT > log (complex<FLOAT >const&));\
 VCL_COMPLEX_INSTANTIATE_INLINE(FLOAT arg (complex<FLOAT >const&));\
 VCL_COMPLEX_INSTANTIATE_INLINE(FLOAT abs (complex<FLOAT >const&));\
 VCL_COMPLEX_INSTANTIATE_INLINE(FLOAT norm (complex<FLOAT >const&));\
-template complex<FLOAT>& __doadv (complex<FLOAT>* ths, const complex<FLOAT>& y);\
+template complex<FLOAT >& __doadv (complex<FLOAT >* ths, const complex<FLOAT >& y);\
 template vcl_ostream& operator<<(vcl_ostream &, complex<FLOAT > const &)
 
-#endif
+#endif // vcl_egcs_complex_txx_

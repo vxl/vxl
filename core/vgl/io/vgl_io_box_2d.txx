@@ -61,8 +61,8 @@ void vsl_print_summary(vcl_ostream& os,const vgl_box_2d<T> & p)
 }
 
 #define VGL_IO_BOX_2D_INSTANTIATE(T) \
-template void vsl_print_summary(vcl_ostream &, const vgl_box_2d<T> &); \
-template void vsl_b_read(vsl_b_istream &, vgl_box_2d<T> &); \
-template void vsl_b_write(vsl_b_ostream &, const vgl_box_2d<T> &)
+template void vsl_print_summary(vcl_ostream &, const vgl_box_2d<T > &); \
+template void vsl_b_read(vsl_b_istream &, vgl_box_2d<T > &); \
+template void vsl_b_write(vsl_b_ostream &, const vgl_box_2d<T > &)
 
 #endif // vgl_io_box_2d_txx_

@@ -441,20 +441,20 @@ getline (vcl_istream &is, vcl_basic_string <charT, traits>& s, charT delim)
 // Instantiation macro.
 
 #undef VCL_BASIC_STRING_INSTANTIATE
-#define VCL_BASIC_STRING_INSTANTIATE(charT,traits)\
+#define VCL_BASIC_STRING_INSTANTIATE(charT,traits) \
 typedef vcl_basic_string<charT, traits > charType ; \
 template class vcl_basic_string<charT, traits >;\
-VCL_INSTANTIATE_INLINE(vcl_ostream& operator<<(vcl_ostream &, charType const& s)) \
-template vcl_istream & operator>> (vcl_istream &i, charType & s); \
-VCL_INSTANTIATE_INLINE(charType operator+(charType const &, charType const &))\
-VCL_INSTANTIATE_INLINE(charType operator+(charType const &, charT const *))\
-VCL_INSTANTIATE_INLINE(charType operator+(charType const &, charT))\
-VCL_INSTANTIATE_INLINE(charType operator+(charT const *, charType const &))\
-VCL_INSTANTIATE_INLINE(bool operator==(charType const &, charType const &))\
-VCL_INSTANTIATE_INLINE(bool operator==(charType const &, charT const *))\
-VCL_INSTANTIATE_INLINE(bool operator!=(charType const &, charT const *))\
-VCL_INSTANTIATE_INLINE(bool operator!=(charType const &, charType const &))\
+VCL_INSTANTIATE_INLINE(vcl_ostream& operator<<(vcl_ostream &, charType const& s));\
+template vcl_istream& operator >> (vcl_istream &i, charType & s);\
+VCL_INSTANTIATE_INLINE(charType operator+(charType const &, charType const &));\
+VCL_INSTANTIATE_INLINE(charType operator+(charType const &, charT const *));\
+VCL_INSTANTIATE_INLINE(charType operator+(charType const &, charT));\
+VCL_INSTANTIATE_INLINE(charType operator+(charT const *, charType const &));\
+VCL_INSTANTIATE_INLINE(bool operator==(charType const &, charType const &));\
+VCL_INSTANTIATE_INLINE(bool operator==(charType const &, charT const *));\
+VCL_INSTANTIATE_INLINE(bool operator!=(charType const &, charT const *));\
+VCL_INSTANTIATE_INLINE(bool operator!=(charType const &, charType const &));\
 VCL_INSTANTIATE_INLINE(bool operator<(charType const &, charType const &))
 // End macro
 
-#endif
+#endif // vcl_emulation_string_txx_

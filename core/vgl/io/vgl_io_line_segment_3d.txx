@@ -50,8 +50,8 @@ void vsl_print_summary(vcl_ostream& os,const vgl_line_segment_3d<T> & l)
 }
 
 #define VGL_IO_LINE_SEGMENT_3D_INSTANTIATE(T) \
-template void vsl_print_summary(vcl_ostream &, vgl_line_segment_3d<T>const&); \
-template void vsl_b_read(vsl_b_istream &, vgl_line_segment_3d<T> &); \
-template void vsl_b_write(vsl_b_ostream &, const vgl_line_segment_3d<T> &)
+template void vsl_print_summary(vcl_ostream &, vgl_line_segment_3d<T >const&); \
+template void vsl_b_read(vsl_b_istream &, vgl_line_segment_3d<T > &); \
+template void vsl_b_write(vsl_b_ostream &, const vgl_line_segment_3d<T > &)
 
 #endif // vgl_io_line_segment_3d_txx_

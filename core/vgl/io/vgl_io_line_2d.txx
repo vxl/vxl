@@ -50,8 +50,8 @@ void vsl_print_summary(vcl_ostream &os, const vgl_line_2d<T>& v)
 }
 
 #define VGL_IO_LINE_2D_INSTANTIATE(T) \
-template void vsl_print_summary(vcl_ostream &, const vgl_line_2d<T>&); \
-template void vsl_b_read(vsl_b_istream &, vgl_line_2d<T>&); \
-template void vsl_b_write(vsl_b_ostream &, const vgl_line_2d<T>&)
+template void vsl_print_summary(vcl_ostream &, const vgl_line_2d<T >&); \
+template void vsl_b_read(vsl_b_istream &, vgl_line_2d<T >&); \
+template void vsl_b_write(vsl_b_ostream &, const vgl_line_2d<T >&)
 
 #endif // vgl_io_line_2d_txx_

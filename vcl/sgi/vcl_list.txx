@@ -21,4 +21,4 @@ template class std::list<T,std::__default_alloc_template<true,0> >
 #define VCL_LIST_INSTANTIATE(T)
 #endif
 
-#endif
+#endif // vcl_sgi_list_txx_

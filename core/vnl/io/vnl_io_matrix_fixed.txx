@@ -78,8 +78,8 @@ void vsl_print_summary(vcl_ostream & os,const vnl_matrix_fixed<T,m,n> & p)
 
 
 #define VNL_IO_MATRIX_FIXED_INSTANTIATE(T,m,n) \
-template void vsl_print_summary(vcl_ostream &, const vnl_matrix_fixed<T,m,n> &); \
-template void vsl_b_read(vsl_b_istream &, vnl_matrix_fixed<T,m,n> &); \
-template void vsl_b_write(vsl_b_ostream &, const vnl_matrix_fixed<T,m,n> &)
+template void vsl_print_summary(vcl_ostream &, const vnl_matrix_fixed<T,m,n > &); \
+template void vsl_b_read(vsl_b_istream &, vnl_matrix_fixed<T,m,n > &); \
+template void vsl_b_write(vsl_b_ostream &, const vnl_matrix_fixed<T,m,n > &)
 
 #endif // vnl_io_matrix_fixed_txx_

@@ -16,8 +16,8 @@
 // I've put an #ifdef in there, but it would be nice to avoid that.
 
 #undef VCL_COMPLEX_INSTANTIATE
-#define VCL_COMPLEX_INSTANTIATE(FLOAT)\
-template class complex<FLOAT>; \
+#define VCL_COMPLEX_INSTANTIATE(FLOAT) \
+template class complex<FLOAT >; \
 VCL_COMPLEX_INSTANTIATE_INLINE(bool operator==(complex<FLOAT >const&,complex<FLOAT >const&));\
 VCL_COMPLEX_INSTANTIATE_INLINE(bool operator==(FLOAT,complex<FLOAT >const&));\
 VCL_COMPLEX_INSTANTIATE_INLINE(bool operator==(complex<FLOAT >const&,FLOAT));\
@@ -47,7 +47,7 @@ VCL_COMPLEX_INSTANTIATE_INLINE(FLOAT arg (complex<FLOAT >const&));\
 VCL_COMPLEX_INSTANTIATE_INLINE(FLOAT abs (complex<FLOAT >const&));\
 VCL_COMPLEX_INSTANTIATE_INLINE(FLOAT norm (complex<FLOAT >const&)); \
 /* no doadv */ \
-template vcl_ostream& operator<<(vcl_ostream &, complex<FLOAT > const &); \
-template vcl_istream& operator>>(vcl_istream &, complex<FLOAT >&)
+template vcl_ostream& operator << (vcl_ostream&, complex<FLOAT > const &); \
+template vcl_istream& operator >> (vcl_istream&, complex<FLOAT >&)
 
 #endif // vcl_gcc295_complex_txx_
