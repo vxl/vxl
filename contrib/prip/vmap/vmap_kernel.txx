@@ -8,16 +8,16 @@
 template <class TPermutation>
 void vmap_permutation_kernel<TPermutation>::initialise()
 {
-    clear() ;
-    Base_::initialise() ;
-    representatives_.initialise(p_.nb_cycles()) ;
+  clear() ;
+  Base_::initialise() ;
+  representatives_.initialise(p_.nb_cycles()) ;
 }
 
 template <class TPermutation>
 bool vmap_permutation_kernel<TPermutation>::valid() const
 {
-  vcl_vector<int> v(p_.nb_cycles(), false) ;
-  for (int i=0; i<size(); i++)
+  vcl_vector<bool> v(p_.nb_cycles(), false) ;
+  for (unsigned int i=0; i<size(); ++i)
   {
     dart_iterator d=dart(i) ;
     element_index e1=p_.cycle_index_of(d),
@@ -34,8 +34,8 @@ bool vmap_permutation_kernel<TPermutation>::valid() const
 template <class TPermutation>
 void vmap_permutation_kernel<TPermutation>::add_1_cycles()
 {
-  vcl_vector<int> mark(p_.nb_elements(),false),
-                  markV(p_.nb_cycles(),false) ;
+  vcl_vector<bool> mark(p_.nb_elements(),false),
+                   markV(p_.nb_cycles(),false) ;
 
   element_iterator v ;
 
@@ -65,8 +65,8 @@ void vmap_permutation_kernel<TPermutation>::add_1_cycles()
 template <class TPermutation>
 void vmap_permutation_kernel<TPermutation>::add_2_cycles()
 {
-  vcl_vector<int> mark(p_.nb_elements(),false),
-                  markV(p_.nb_cycles(),false) ;
+  vcl_vector<bool> mark(p_.nb_elements(),false),
+                   markV(p_.nb_cycles(),false) ;
 
   element_iterator v ;
 
