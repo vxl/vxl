@@ -73,6 +73,11 @@ MANPAGE_SOURCES += vipl_with_vnl_matrix/accessors/vipl_accessors_vnl_matrix.txx
 include ${IUEROOT}/config/top-params.mk
 #######################################
 
+ifeq "$(TJ_GCC30)$(optimize)" "1-O2"
+# gcc 3.0 needs too much virtual memory with -O2
+FLAGS_vipl_with_section/Templates/vipl_filter_2d+section+vil_rgb+uchar-.2-.section+vil_rgb+uchar-.2-.vil_rgb+uchar-.vil_rgb+uchar--.cxx += -O1
+endif
+
 # No need to compile the files in Templates when implicitly instantiating:
 ifeq ($(USE_IMPLICIT_TEMPLATES),1)
   TEMPLATE_SOURCES :=
