@@ -4,7 +4,6 @@
 // \author Lee, Ying-Lin (Bess)
 // \date   Sept 2003
 
-
 #include "rgrl_est_spline.h"
 #include "rgrl_spline.h"
 #include "rgrl_match_set.h"
@@ -12,7 +11,7 @@
 #include "rgrl_cast.h"
 #include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_svd.h>
-#include <vnl/vnl_vector_ref.h>
+#include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vnl/vnl_least_squares_function.h>
 //  #include <vnl/vnl_least_squares_cost_function.h>
@@ -39,57 +38,57 @@ namespace{
   // for Levenberg Marquardt
   struct spline_least_squares_func : public vnl_least_squares_function
   {
-    spline_least_squares_func( rgrl_spline_sptr spline,              
+    spline_least_squares_func( rgrl_spline_sptr spline,
                                vcl_vector< vnl_vector< double > > const& pts,
                                vnl_diag_matrix<double> const& wgt,    // ( num of residuals ) x ( num of residuals )
                                vnl_vector<double> const& displacement, // ( num of residuals ) x 1
-                               vcl_vector<unsigned> const& free_control_pt_index ) 
-        : vnl_least_squares_function( free_control_pt_index.size(), pts.size(), use_gradient ), 
+                               vcl_vector<unsigned> const& free_control_pt_index )
+        : vnl_least_squares_function( free_control_pt_index.size(), pts.size(), use_gradient ),
                                 //number of unknowns, number of residuals, has gradient function or not
                                 spline_( spline ),
                                 pts_( pts ), wgt_( wgt ), displacement_( displacement ),
                                 free_control_pt_index_( free_control_pt_index )
-      { 
-        assert( pts.size() == wgt.rows() );
-        assert( displacement.size() == wgt.rows() );
-      }
+    {
+      assert( pts.size() == wgt.rows() );
+      assert( displacement.size() == wgt.rows() );
+    }
 
     // x is the parameters
     void f( vnl_vector< double > const& x, vnl_vector< double > & fx )
-      {
-        // x is the dof-reduced parameters. Convert it back to control points
-        assert( x.size() == free_control_pt_index_.size() );
-        vnl_vector< double > c( spline_->num_of_control_points(), 0.0 );
-        for( unsigned i=0; i< free_control_pt_index_.size(); ++i )
-          c[ free_control_pt_index_[i] ] = x[ i ];
+    {
+      // x is the dof-reduced parameters. Convert it back to control points
+      assert( x.size() == free_control_pt_index_.size() );
+      vnl_vector< double > c( spline_->num_of_control_points(), 0.0 );
+      for ( unsigned i=0; i< free_control_pt_index_.size(); ++i )
+        c[ free_control_pt_index_[i] ] = x[ i ];
 
-        spline_->set_control_points( c );
-        // check the number of residuals
-        assert( fx.size() == pts_.size() );
-        for( unsigned i = 0; i < pts_.size(); ++i ) {
-          fx[ i ] = ( displacement_[ i ] - spline_->f_x( pts_[ i ] ) )
-            * vcl_sqrt( wgt_[ i ] );
-        }
+      spline_->set_control_points( c );
+      // check the number of residuals
+      assert( fx.size() == pts_.size() );
+      for ( unsigned i = 0; i < pts_.size(); ++i ) {
+        fx[ i ] = ( displacement_[ i ] - spline_->f_x( pts_[ i ] ) )
+          * vcl_sqrt( wgt_[ i ] );
       }
+    }
 
     // x is the parameters
     void gradf( vnl_vector< double > const& x, vnl_matrix< double > & jacobian )
-      {
-        assert( x.size() == free_control_pt_index_.size() );
-        vnl_vector< double > c( spline_->num_of_control_points(), 0.0 );
-        for( unsigned i=0; i< free_control_pt_index_.size(); ++i )
-          c[ free_control_pt_index_[i] ] = x[ i ];
+    {
+      assert( x.size() == free_control_pt_index_.size() );
+      vnl_vector< double > c( spline_->num_of_control_points(), 0.0 );
+      for ( unsigned i=0; i< free_control_pt_index_.size(); ++i )
+        c[ free_control_pt_index_[i] ] = x[ i ];
 
-        spline_->set_control_points( c );
-        vnl_vector< double > gr;
-        for( unsigned i = 0; i < pts_.size(); ++i ) {
-          spline_->basis_response( pts_[i], gr );
-          for( unsigned j = 0; j < x.size(); ++j )
-            jacobian[ i ][ j ] = - gr[ free_control_pt_index_[j] ]  * vcl_sqrt( wgt_[ i ] );
-        }
+      spline_->set_control_points( c );
+      vnl_vector< double > gr;
+      for ( unsigned i = 0; i < pts_.size(); ++i ) {
+        spline_->basis_response( pts_[i], gr );
+        for ( unsigned j = 0; j < x.size(); ++j )
+          jacobian[ i ][ j ] = - gr[ free_control_pt_index_[j] ]  * vcl_sqrt( wgt_[ i ] );
       }
+    }
 
-  private:
+   private:
     rgrl_spline_sptr spline_;
     vcl_vector< vnl_vector< double > >  pts_;
     vnl_diag_matrix< double > wgt_;
@@ -100,65 +99,65 @@ namespace{
   // for Conjugate Gradient and other optimizers
   struct spline_cost_function : public vnl_cost_function
   {
-    spline_cost_function( rgrl_spline_sptr spline,              
+    spline_cost_function( rgrl_spline_sptr spline,
                           vcl_vector< vnl_vector< double > >  pts,
                           vnl_diag_matrix<double> wgt,    // ( num of residuals ) x ( num of residuals )
                           vnl_vector<double> displacement ) // ( num of residuals ) x 1
       : vnl_cost_function( spline->num_of_control_points() ),  //number of unknowns
                            spline_( spline ),
                            pts_( pts ), wgt_( wgt ), displacement_( displacement )
-      { 
-        assert( pts.size() == wgt.rows() );
-        assert( displacement.size() == wgt.rows() );
-      }
+    {
+      assert( pts.size() == wgt.rows() );
+      assert( displacement.size() == wgt.rows() );
+    }
 
     // x is the parameters
     double f( vnl_vector< double > const& x )
-      {
-        double fx = 0;
-        spline_->set_control_points( x );
-        for( unsigned i = 0; i < pts_.size(); ++i ) {
-          fx += vnl_math_sqr( displacement_[ i ] - spline_->f_x( pts_[ i ] ) )
-            * wgt_[ i ] ;
-        }
-        return fx;
+    {
+      double fx = 0;
+      spline_->set_control_points( x );
+      for ( unsigned i = 0; i < pts_.size(); ++i ) {
+        fx += vnl_math_sqr( displacement_[ i ] - spline_->f_x( pts_[ i ] ) )
+          * wgt_[ i ] ;
       }
+      return fx;
+    }
 
     void gradf (vnl_vector< double > const &x, vnl_vector< double > &gradient )
-      {
-        gradient.fill( 0.0 );
-        vnl_vector< double > gr;
-        for( unsigned i=0; i<pts_.size(); ++i ) {
-          spline_->basis_response( pts_[i], gr );
-          for( unsigned j=0; j<spline_->num_of_control_points(); ++j ) {
-            gradient[ j ] -= 2 * ( displacement_[i] - spline_->f_x( pts_[i] ) ) * wgt_[i]* gr[j];
-          }
+    {
+      gradient.fill( 0.0 );
+      vnl_vector< double > gr;
+      for ( unsigned i=0; i<pts_.size(); ++i ) {
+        spline_->basis_response( pts_[i], gr );
+        for ( unsigned j=0; j<spline_->num_of_control_points(); ++j ) {
+          gradient[ j ] -= 2 * ( displacement_[i] - spline_->f_x( pts_[i] ) ) * wgt_[i]* gr[j];
         }
       }
+    }
 
-  private:
+   private:
     rgrl_spline_sptr spline_;
     vcl_vector< vnl_vector< double > > pts_;
     vnl_diag_matrix< double > wgt_;
     vnl_vector< double > displacement_;
   };
-};
+} // namespace
 
 rgrl_est_spline::
-rgrl_est_spline( unsigned dof, 
-                 rgrl_mask_box const& roi, vnl_vector<double> const& delta, 
+rgrl_est_spline( unsigned dof,
+                 rgrl_mask_box const& roi, vnl_vector<double> const& delta,
                  vnl_vector< unsigned > const& m,
                  bool use_thin_plate, double lambda )
     : rgrl_estimator( dof ),
-      roi_(roi), delta_(delta), 
+      roi_(roi), delta_(delta),
       m_( m ),
-      use_thin_plate_( use_thin_plate ), 
-      lambda_(lambda), 
+      use_thin_plate_( use_thin_plate ),
+      lambda_(lambda),
       optimize_method_( RGRL_LEVENBERG_MARQUARDT ),
       global_xform_( 0 )
 {
   unsigned num_control = 1;
-  for( unsigned i=0; i<m.size(); ++i )
+  for ( unsigned i=0; i<m.size(); ++i )
     num_control *= m[i] + 3;
 
   assert( num_control == dof );
@@ -167,19 +166,19 @@ rgrl_est_spline( unsigned dof,
 rgrl_est_spline::
 rgrl_est_spline( unsigned dof,
                  rgrl_transformation_sptr global_xform,
-                 rgrl_mask_box const& roi, vnl_vector<double> const& delta, 
+                 rgrl_mask_box const& roi, vnl_vector<double> const& delta,
                  vnl_vector< unsigned > const& m,
                  bool use_thin_plate, double lambda )
   : rgrl_estimator( dof ),
     roi_(roi), delta_(delta),
     m_( m ),
-    use_thin_plate_( use_thin_plate ), 
-    lambda_(lambda), 
+    use_thin_plate_( use_thin_plate ),
+    lambda_(lambda),
     optimize_method_( RGRL_LEVENBERG_MARQUARDT ),
     global_xform_( global_xform )
 {
   unsigned num_control = 1;
-  for( unsigned i=0; i<m.size(); ++i )
+  for ( unsigned i=0; i<m.size(); ++i )
     num_control *= m[i] + 3;
 
   vcl_cerr << "rgrl_est_spline.cxx : number of control points: " << num_control << ", dof=" << dof << vcl_endl;
@@ -191,7 +190,7 @@ rgrl_est_spline::
 point_in_knots( vnl_vector< double > const& point, vnl_vector< double > & spline_pt ) const
 {
   spline_pt.set_size( point.size() );
-  for( unsigned i = 0; i < point.size(); ++i ) {
+  for ( unsigned i = 0; i < point.size(); ++i ) {
     spline_pt[ i ] = point[ i ] / delta_[ i ];
   }
 }
@@ -206,12 +205,12 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
 
   unsigned dim = delta_.size();
 
-  // Find the number of correspondences 
+  // Find the number of correspondences
 //  vnl_vector<int> num( dim, 0 );
   unsigned num_match = 0;
-  for( unsigned ms=0; ms < matches.size(); ++ms ) {
+  for ( unsigned ms=0; ms < matches.size(); ++ms ) {
     rgrl_match_set const& match_set = *matches[ms];
-    for( FIter fi = match_set.from_begin(); fi != match_set.from_end(); ++fi ) {
+    for ( FIter fi = match_set.from_begin(); fi != match_set.from_end(); ++fi ) {
       vnl_vector<double> const& from_pt = fi.from_feature()->location();
       // If the point is not inside the region of interest, skip it.
       if ( roi_.inside( from_pt ) ) {
@@ -221,35 +220,35 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   }
 
   vcl_vector< rgrl_spline_sptr > splines( dim );
-  if( cur_transform.is_type( rgrl_trans_spline::type_id() ) ) {
+  if ( cur_transform.is_type( rgrl_trans_spline::type_id() ) ) {
     rgrl_trans_spline const& cur_trans_spline = dynamic_cast< rgrl_trans_spline const& >(cur_transform);
-    vcl_cerr << "delta_: " << delta_ << vcl_endl;
-    vcl_cerr << "current transformation's delta_: " << cur_trans_spline.get_delta() << vcl_endl;
-    if( ( delta_ - cur_trans_spline.get_delta()/2 ).two_norm() < 1e-5 ) {
-      for( unsigned i=0; i<dim; ++i ) {
+    vcl_cerr << "delta_: " << delta_ << vcl_endl
+             << "current transformation's delta_: " << cur_trans_spline.get_delta() << vcl_endl;
+    if ( ( delta_ - cur_trans_spline.get_delta()/2 ).two_norm() < 1e-5 ) {
+      for ( unsigned i=0; i<dim; ++i ) {
         splines[ i ] = cur_trans_spline.get_spline( i )->refinement( m_ );
       }
       DBG( vcl_cout << "###spline is initialized by refinement\n" );
     }
-     else if( ( delta_ - cur_trans_spline.get_delta() ).two_norm() < 1e-5 ) {
+     else if ( ( delta_ - cur_trans_spline.get_delta() ).two_norm() < 1e-5 ) {
        DBG( vcl_cout << "###spline is initialized by copying\n" );
-      for( unsigned i=0; i<dim; ++i )
+      for ( unsigned i=0; i<dim; ++i )
         splines[ i ] = new rgrl_spline( *(cur_trans_spline.get_spline( i )) );
     }
     else {
-      DBG( vcl_cout << "create spline with m_=" << m_ << "\n" );
-      for( unsigned i=0; i<dim; ++i )
+      DBG( vcl_cout << "create spline with m_=" << m_ << '\n' );
+      for ( unsigned i=0; i<dim; ++i )
         splines[ i ] = new rgrl_spline( m_ );
     }
   }
   else {
-    DBG( vcl_cout << "create spline with m_=" << m_ << "\n" );
-    for( unsigned i=0; i<dim; ++i )
+    DBG( vcl_cout << "create spline with m_=" << m_ << '\n' );
+    for ( unsigned i=0; i<dim; ++i )
       splines[ i ] = new rgrl_spline( m_ );
   }
 
-  int num_control = splines[0]->num_of_control_points();
-  
+  unsigned int num_control = splines[0]->num_of_control_points();
+
   vnl_diag_matrix<double> wgt( num_match, 0 );
   vnl_matrix<double> displacement( num_match, dim );
   vnl_matrix<double> g( num_match, num_control );
@@ -266,9 +265,9 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     unsigned i=0;
     vcl_vector< double > score_constraint( num_control, 0.0 );
     vcl_vector< bool > control_point_constraint( num_control, false );
-    for( unsigned ms=0; ms < matches.size(); ++ms ) {
+    for ( unsigned ms=0; ms < matches.size(); ++ms ) {
       rgrl_match_set const& match_set = *matches[ms];
-      for( FIter fi = match_set.from_begin(); fi != match_set.from_end(); ++fi ) {
+      for ( FIter fi = match_set.from_begin(); fi != match_set.from_end(); ++fi ) {
         vnl_vector<double> const& from_pt = fi.from_feature()->location();
         // If the point is not inside the region of interest, skip it.
         if ( roi_.inside( from_pt ) && fi.size() != 0 ) {
@@ -280,24 +279,32 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
           splines[0]->basis_response( from_pts_in_knots[i], gr );
 
           // see on which control points the point gives constraints
-          for( unsigned j=0; j<num_control; ++j ) {
-//            if( !control_point_constraint[ j ] && gr[j]>1e-4 ) {
-            if( !control_point_constraint[ j ] ) {
+          for ( unsigned j=0; j<num_control; ++j ) {
+//            if ( !control_point_constraint[ j ] && gr[j]>1e-4 ) {
+            if ( !control_point_constraint[ j ] ) {
               score_constraint[ j ] += gr[j];
-              if( score_constraint[j] > 1e-3 )
+              if ( score_constraint[j] > 1e-3 )
                 control_point_constraint[ j ] = true;
             }
           }
 
-//              vcl_cout << "rgrl_est_spline.cxx: from_pt \t to_pt \t displacement\n";
-          for( TIter ti = fi.begin(); ti != fi.end(); ++ti ) {
+#ifdef DEBUG
+          vcl_cout << "rgrl_est_spline.cxx: from_pt \t to_pt \t displacement\n";
+#endif
+          for ( TIter ti = fi.begin(); ti != fi.end(); ++ti ) {
             if ( !global_xform_ ) {
               displacement.set_row( i, ti.to_feature()->location() - from_pt );
-//                  vcl_cout << from_pt << " \t " << ti.to_feature()->location() << " \t " << displacement.get_row( i ) << "\n";
+#ifdef DEBUG
+              vcl_cout << from_pt << " \t " << ti.to_feature()->location() << " \t " << displacement.get_row( i ) << '\n';
+#endif
             }
             else {
               displacement.set_row( i, ti.to_feature()->location() - global_xform_->map_location( from_pt ) );
-//                  vcl_cout << global_xform_->map_location( from_pt ) << " \t " << ti.to_feature()->location() << " \t " << displacement.get_row( i ) << "\n";
+#ifdef DEBUG
+              vcl_cout << global_xform_->map_location( from_pt ) << " \t "
+                       << ti.to_feature()->location() << " \t "
+                       << displacement.get_row( i ) << '\n';
+#endif
             }
             g.set_row( i, gr );
             wgt[i] = ti.cumulative_weight();
@@ -309,8 +316,8 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     }
 
     // recording which control points have constraints.
-    for( unsigned i=0; i<num_control; ++i ) {
-      if( control_point_constraint[ i ] )
+    for ( unsigned i=0; i<num_control; ++i ) {
+      if ( control_point_constraint[ i ] )
         free_control_pt_index.push_back( i );
     }
   }
@@ -318,41 +325,44 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   vcl_cerr << "\nafter reduce dof, dof=" << free_control_pt_index.size() << vcl_endl;
   DBG( vcl_cout << "\nafter reduce dof, dof=" << free_control_pt_index.size() << vcl_endl );
 
-
   DBG( vul_timer timer );
   // Levenberg Marquardt
-  if ( optimize_method_ == RGRL_LEVENBERG_MARQUARDT ) {
-
-    DBG( vcl_cout << "Levenberg marquardt : \n" );
+  if ( optimize_method_ == RGRL_LEVENBERG_MARQUARDT )
+  {
+    DBG( vcl_cout << "Levenberg marquardt :\n" );
     vnl_matrix< double > covar;
 
-//      vcl_cout << "rgrl_est_spline.cxx: displacement \t weight\n";
-//      for( unsigned i=0; i<displacement.rows(); ++i )
-//        vcl_cout << i << "    " << displacement.get_row( i ) << " \t " << wgt[i] << "\n";
+#ifdef DEBUG
+    vcl_cout << "rgrl_est_spline.cxx: displacement \t weight\n";
+    for ( unsigned i=0; i<displacement.rows(); ++i )
+      vcl_cout << i << "    " << displacement.get_row( i ) << " \t " << wgt[i] << '\n';
+#endif
 
-    for( unsigned i = 0; i < dim ; ++i ) {
+    for ( unsigned i = 0; i < dim ; ++i ) {
       spline_least_squares_func f( splines[i], from_pts_in_knots, wgt, displacement.get_column( i ), free_control_pt_index );
       vnl_levenberg_marquardt minimizer( f );
       // initialization of c is important
       vnl_vector< double > x( free_control_pt_index.size(), 0 );
       vnl_vector< double > & c = splines[i]->get_control_points();
-      for( unsigned j=0; j<x.size(); ++j )
+      for ( unsigned j=0; j<x.size(); ++j )
         x[ j ] = c[ free_control_pt_index[ j ] ];
       DBG( timer.mark() );
       minimizer.minimize( x );
       DBG( timer.print( vcl_cout ) );
 
-//        vcl_cout << "computing covariance\n";
-//        DBG( timer.mark() );
-//        if( i==0 )
-//          covar = minimizer.get_JtJ();
-//        DBG( timer.print( vcl_cout ) );
-//        vcl_cout << "covariance " << covar.rows() << "x" << covar.columns() << vcl_endl;
-//  //      vcl_cout << "covariance:\n" << covar << vcl_endl;
+#ifdef DEBUG
+      vcl_cout << "computing covariance\n";
+      DBG( timer.mark() );
+      if ( i==0 )
+        covar = minimizer.get_JtJ();
+      DBG( timer.print( vcl_cout ) );
+      vcl_cout << "covariance " << covar.rows() << 'x' << covar.columns() << vcl_endl;
+//             << covar << vcl_endl;
+#endif
 
       // Convert x back to control points
 //      vnl_vector< double > c( splines[i]->num_of_control_points(), 0.0 );
-      for( unsigned j=0; j<x.size(); ++j )
+      for ( unsigned j=0; j<x.size(); ++j )
         c[ free_control_pt_index[ j ] ] = x[ j ];
       splines[i]->set_control_points( c );
       DBG( vcl_cout << "control points:\n" << c << vcl_endl );
@@ -360,80 +370,80 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     return new rgrl_trans_spline( splines, vnl_vector<double>(dim,0.0), delta_, global_xform_ );
   }
   else if ( optimize_method_ == RGRL_CONJUGATE_GRADIENT ) {
-    
-    DBG( vcl_cout << "Conjugate Gradient \n" );
-    for( unsigned i = 0; i < dim ; ++i ) {
+
+    DBG( vcl_cout << "Conjugate Gradient\n" );
+    for ( unsigned i = 0; i < dim ; ++i ) {
       spline_cost_function f( splines[i], from_pts_in_knots, wgt, displacement.get_column( i ) );
       vnl_conjugate_gradient minimizer( f );
-      
+
       // initialization of c is important
       vnl_vector< double > c( splines[i]->num_of_control_points(), 0 );
       minimizer.minimize( c );
       splines[i]->set_control_points( c );
-      DBG( vcl_cout << "control points:\n" << c << "\n" );
+      DBG( vcl_cout << "control points:\n" << c << '\n' );
       }
     DBG( timer.print( vcl_cout ) );
     return new rgrl_trans_spline( splines, vnl_vector<double>(dim,0.0), delta_, global_xform_ );
   }
   else if ( optimize_method_ == RGRL_AMOEBA ) {
     DBG( vcl_cout << "Nelder-Meade downhill simplex (AMOEBA)\n" );
-    for( unsigned i = 0; i < dim ; ++i ) {
+    for ( unsigned i = 0; i < dim ; ++i ) {
       spline_cost_function f( splines[i], from_pts_in_knots, wgt, displacement.get_column( i ) );
       vnl_amoeba minimizer( f );
-      
+
       // initialization of c is important
       vnl_vector< double > c( splines[i]->num_of_control_points(), 0 );
       minimizer.minimize( c );
       splines[i]->set_control_points( c );
-      DBG( vcl_cout << "control points:\n" << c << "\n" );
+      DBG( vcl_cout << "control points:\n" << c << '\n' );
     }
     DBG( timer.print( vcl_cout ) );
     return new rgrl_trans_spline( splines, vnl_vector<double>(dim,0.0), delta_, global_xform_ );
   }
   else if ( optimize_method_ == RGRL_POWELL ) {
-    DBG( vcl_cout << "Powell's direction-set \n " );
-    for( unsigned i = 0; i < dim ; ++i ) {
+    DBG( vcl_cout << "Powell's direction-set\n " );
+    for ( unsigned i = 0; i < dim ; ++i ) {
       spline_cost_function f( splines[i], from_pts_in_knots, wgt, displacement.get_column( i ) );
       vnl_powell minimizer( &f );
-      
+
       // initialization of c is important
       vnl_vector< double > c( splines[i]->num_of_control_points(), 0 );
       minimizer.minimize( c );
       splines[i]->set_control_points( c );
-      DBG( vcl_cout << "control points:\n" << c << "\n" );
+      DBG( vcl_cout << "control points:\n" << c << '\n' );
     }
     DBG( timer.print( vcl_cout ) );
     return new rgrl_trans_spline( splines, vnl_vector<double>(dim,0.0), delta_, global_xform_ );
   }
   else if ( optimize_method_ == RGRL_LBFGS ) {
-    DBG( vcl_cout << "LBFGS \n" );
-    for( unsigned i = 0; i < dim ; ++i ) {
+    DBG( vcl_cout << "LBFGS\n" );
+    for ( unsigned i = 0; i < dim ; ++i ) {
       spline_cost_function f( splines[i], from_pts_in_knots, wgt, displacement.get_column( i ) );
       vnl_lbfgs minimizer( f );
-      
+
       // initialization of c is important
       vnl_vector< double > c( splines[i]->num_of_control_points(), 0 );
       minimizer.minimize( c );
       splines[i]->set_control_points( c );
-      DBG( vcl_cout << "control points:\n" << c << "\n" );
+      DBG( vcl_cout << "control points:\n" << c << '\n' );
     }
     DBG( timer.print( vcl_cout ) );
     return new rgrl_trans_spline( splines, vnl_vector<double>(dim,0.0), delta_, global_xform_ );
   }
   else {   //    // No approximation
-    // Without thin-plate constraints: 
+    // Without thin-plate constraints:
     // Cost = (Z - G*C)^T * W * (Z - G*C)
-    // => C = (G^T * W * G)^{-1} * G^T * W * Z 
-    // With thin-plate constraints: 
-    // Cost = (Z - G*C)^T * W * (Z - G*C) + C^T * K * C, 
+    // => C = (G^T * W * G)^{-1} * G^T * W * Z
+    // With thin-plate constraints:
+    // Cost = (Z - G*C)^T * W * (Z - G*C) + C^T * K * C,
     // where K is the symmetric thin-plate regularization
     // => C = (G^T * W * G + \lambda * K)^{-1} * G^T * W * Z
-    DBG( vcl_cout << "No approximation \n" );
+    DBG( vcl_cout << "No approximation\n" );
 
     vnl_matrix<double> X0;
     vnl_matrix<double> covar;
     // get the covariance
-    if( use_thin_plate_ ) {
+    if ( use_thin_plate_ ) {
       vnl_matrix<double> X1 = g.transpose() * wgt.asMatrix();
       vnl_matrix<double> X3;
       // covariance = sigma^2 * (G^T * W * G + \lambda * K)^{-1} * G^T * W^2 * G * (G^T *  W * G + \lambda * K)^{-T}
@@ -458,17 +468,16 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
       }
       X0 = X3 * X1;
       covar = X0 * X1.transpose() * X3.transpose();
-    }  
-    
+    }
+
     // Calculate the parameters of splines
-    for( unsigned j = 0; j < dim ; ++j ) {
+    for ( unsigned j = 0; j < dim ; ++j ) {
       vnl_vector<double> c = displacement.get_column( j ).pre_multiply( X0 );
       splines[j]->set_control_points(c);
     }
     DBG( timer.print( vcl_cout ) );
     return new rgrl_trans_spline( splines, vnl_vector<double>(dim,0.0), delta_, covar, global_xform_ );
   }
-  
 }
 
 rgrl_transformation_sptr
