@@ -1,4 +1,4 @@
-// This is contrib/prip/vmap/vmap_types.h
+// This is prip/vmap/vmap_types.h
 #ifndef vmap_types_h_
 #define vmap_types_h_
 //:
@@ -66,24 +66,24 @@ inline vmap_level_index vmap_top_level_index()
 template <class D>
 struct vmap_at_level
 {
-		vmap_level_index level ;
-		vmap_at_level(vmap_level_index arg) : level(arg) {}
-		bool operator()(const D* arg)
-   	{
-				return arg->last_level()==level ;
-   	}
+    vmap_level_index level ;
+    vmap_at_level(vmap_level_index arg) : level(arg) {}
+    bool operator()(const D* arg)
+    {
+      return arg->last_level()==level ;
+    }
 } ;
 
 //: 
 template <class D>
 struct vmap_sequence_index_not_equal
 {
-		int index ;
-		vmap_sequence_index_not_equal(int arg) : index(arg) {}
-		bool operator()(const D* arg)
-   	{
-				return arg->sequence_index()!=index ;
-   	}
+    int index ;
+    vmap_sequence_index_not_equal(int arg) : index(arg) {}
+    bool operator()(const D* arg)
+    {
+      return arg->sequence_index()!=index ;
+    }
 } ;
 
 //: The tag class to mark the classes that respect the tmap interface.

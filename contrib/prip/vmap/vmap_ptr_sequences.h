@@ -1,4 +1,4 @@
-// This is contrib/prip/vmap/vmap_ptr_sequences.h
+// This is prip/vmap/vmap_ptr_sequences.h
 #ifndef vmap_ptr_sequences_h_
 #define vmap_ptr_sequences_h_
 //:
@@ -14,81 +14,81 @@
 #include "vmap_types.h"
 #include "vcl_vector.h"
 
-//: 
+//:
 template< typename F, typename Ref, typename Ptr, typename It >
 class vmap_ptr_iterator_wrapper
 {
-public:
-    //: 
+ public:
+    //:
     typedef vmap_ptr_iterator_wrapper< F,Ref,Ptr,It > self_type ;
-    
-    //: 
+
+    //:
     typedef F element_type ;
 
-    //: 
+    //:
     vmap_ptr_iterator_wrapper()
     {}
 
-    //: 
+    //:
     vmap_ptr_iterator_wrapper(const self_type &right)
             :_it(right._it)
     {}
 
-    //: 
+    //:
     ~vmap_ptr_iterator_wrapper()
     {}
 
-    //: 
+    //:
     self_type & operator=(const self_type &right)
     {
         _it=right._it ;
         return *this ;
     }
 
-    //: 
+    //:
     bool operator==(const self_type &right) const
     {
         return _it==right._it ;
     }
 
-    //: 
+    //:
     bool operator!=(const self_type &right) const
     {
         return _it!=right._it ;
     }
 
-    //: 
+    //:
     Ref operator * () const
     {
         return (Ref)**_it ;
     }
 
-    //: 
+    //:
     Ptr operator->() const
     {
         return (Ptr) *_it;
     }
 
-    //: 
+    //:
     self_type & operator++ ()
     {
         ++_it;
         return *this ;
     }
-    
+
     //////////////////////private :
-    //: 
+    //:
     vmap_ptr_iterator_wrapper(It arg)
             :_it(arg)
     {}
-    
-    //: 
+
+    //:
     It reference() const
     {
         return _it ;
     }
-private :
-    //: 
+ private :
+    //:
     It _it ;
 };
 
@@ -96,77 +96,77 @@ private :
 template <typename DPtr>
 int offset(DPtr arg1,DPtr arg2)
 {
-  return (arg1->sequence_index()-arg2->sequence_index()) ;
+  return arg1->sequence_index()-arg2->sequence_index() ;
 }
 
-//: 
+//:
 template <class D>
 class vmap_ptr_sequence
 {
-protected:
+ protected:
 
-  //: 
+  //:
   typedef D element_type ;
-  
-  //: 
+
+  //:
   typedef element_type** iterator ;
-  
-  //: 
+
+  //:
   typedef element_type*const* const_iterator ;
-  
-  //: 
+
+  //:
   typedef element_type* pointer ;
 
-public:
-  //: 
+ public:
+  //:
   vmap_ptr_sequence()
       : _begin(NULL), _end(NULL)
   {}
-  
-  //: 
+
+  //:
   vmap_ptr_sequence(const vmap_ptr_sequence<D> & arg )
       : _begin(arg._begin), _end(arg._end)
   {}
 
-  //: 
+  //:
   int size () const
   {
     return _end-_begin;
   }
 
-  //: 
+  //:
   bool empty() const
   {
     return size()==0 ;
   }
 
-protected:
+ protected:
 
-  //: 
+  //:
   iterator begin()
   {
     return _begin ;
   }
-  
-  //: 
+
+  //:
   iterator end()
   {
     return _end ;
   }
-  
-  //: 
+
+  //:
   const_iterator begin() const
   {
     return _begin;
   }
-  
-  //: 
+
+  //:
   const_iterator end() const
   {
     return _end ;
   }
 
-  //: 
+  //:
   template <class _Predicate>
   iterator reorder(const _Predicate & arg)
   {
@@ -176,19 +176,19 @@ protected:
     return middle ;
   }
 
-  //: 
+  //:
   pointer & get_pointer(int arg)
   {
     return _begin[arg] ;
   }
 
-  //: 
+  //:
   const pointer & get_pointer(int arg) const
   {
     return _begin[arg] ;
   }
 
-  //: 
+  //:
   void swap(int i, int j)
   {
     vcl_swap(get_pointer(i),get_pointer(j)) ;
@@ -196,69 +196,69 @@ protected:
     get_pointer(j)->set_sequence_index(j) ;
   }
 
-  //: 
+  //:
   void pop_back()
   {
     delete_dart(*(--_end)) ;
   }
 
-  //: 
+  //:
   void set_begin(iterator arg)
   {
     _begin=arg;
   }
 
-  //: 
+  //:
   void resize(int arg_size)
   {
     _end=_begin+arg_size ;
   }
-  
-  //: 
+
+  //:
   void clear()
   {
     _begin=_end=NULL ;
   }
 
-private:
+ private:
 
-  //: 
+  //:
   iterator _begin, _end ;
 };
 
-//: 
+//:
 template <class D>
 class vmap_owning_sequence: public vmap_ptr_sequence<D>
 {
-protected:
+ protected:
 
-  //: 
+  //:
   typedef vmap_owning_sequence<D> self_type ;
-  
-  //: 
+
+  //:
   typedef D element_type ;
-  
-  //: 
+
+  //:
   typedef element_type** iterator ;
-  
-  //: 
+
+  //:
   typedef element_type*const* const_iterator ;
-  
-  //: 
+
+  //:
   typedef element_type* pointer ;
 
-public:
-  //: 
+ public:
+  //:
   vmap_owning_sequence()
   {}
-  
-  //: 
+
+  //:
   vmap_owning_sequence(const self_type & arg )
   {
     operator=( arg ) ;
   }
 
-  //: 
+  //:
   self_type & operator=(const self_type & arg )
   {
     if (&arg!=this)
@@ -275,21 +275,21 @@ public:
     return *this ;
   }
 
-	//:
-	int position(const element_type & arg) const
-	{
-		return &arg - &_storage.front() ;
-	}
-	
-protected:
+  //:
+  int position(const element_type & arg) const
+  {
+    return &arg - &_storage.front() ;
+  }
 
-  //: 
+ protected:
+
+  //:
   void pop_back()
   {
     vmap_ptr_sequence<D>::resize(size()-1) ; ;
   }
 
-  //: 
+  //:
   void resize(int arg_size)
   {
     clear() ;
@@ -303,8 +303,8 @@ protected:
       _storage[i].set_sequence_index(i) ;
     }
   }
-  
-  //: 
+
+  //:
   void clear()
   {
     if (begin()!=NULL)
@@ -313,9 +313,9 @@ protected:
     _storage.clear();
   }
 
-private:
+ private:
 
-  //: 
+  //:
   vcl_vector<element_type> _storage ;
 };
 

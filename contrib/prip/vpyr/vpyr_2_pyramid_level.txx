@@ -1,4 +1,7 @@
-// This is contrib/prip/vpyr/vpyr_2_pyramid_level.txx
+// This is prip/vpyr/vpyr_2_pyramid_level.txx
+#ifndef vpyr_2_pyramid_level_txx_
+#define vpyr_2_pyramid_level_txx_
+
 #include "vpyr_2_pyramid_level.h"
 
 template <class D>
@@ -6,21 +9,21 @@ vmap_2_map_tag vpyr_2_pyramid_level<D>::tag ;
 
 template <class D>
 vpyr_2_pyramid_level<D>::vpyr_2_pyramid_level(vmap_level_index arg_level, pyramid_type & pyramid)
-    	: dart_sequence(pyramid.base_map()),
-    		_level_index(arg_level),
+      : dart_sequence(pyramid.base_map()),
+        _level_index(arg_level),
         _pyramid(&pyramid)
 {
-	dart_sequence_iterator d=begin_dart_sequence() ;
+  dart_sequence_iterator d=begin_dart_sequence() ;
   for (;d!=end_dart_sequence() ;++d)
   {
-		(*d)->set_last_level(vmap_top_level_index()) ;
+    (*d)->set_last_level(vmap_top_level_index()) ;
   }
 }
 
 template <class D>
 void vpyr_2_pyramid_level<D>::contraction(const contraction_kernel &arg_kernel)
 {
-	self_type * l=pyramid().level_below(vmap_contraction_type,*this) ;
+  self_type * l=pyramid().level_below(vmap_contraction_type,*this) ;
   if (l!=NULL)
   {
     int level=l->index() ;
@@ -71,3 +74,4 @@ void vpyr_2_pyramid_level<D>::removal(const removal_kernel &arg_kernel)
   }
 }
 
+#endif // vpyr_2_pyramid_level_txx_

@@ -1,24 +1,26 @@
 #include "my_pyramid.h"
 #include "my_pyramid_functions.txx"
-#include "vmap/tests/my_map.h"
-#include "vmap/vmap_set_grid_structure.h"
+#include <vmap/tests/my_map.h>
+#include <vmap/vmap_set_grid_structure.h>
 
 void build_base_grid(my_tpyramid & p)
 {
   vcl_cout<<"Initialization of a 2X2 grid."<<vcl_endl ;
   my_tmap map ;
-  
-	vmap_set_grid_structure(map,2,2) ;
+
+  vmap_set_grid_structure(map,2,2) ;
 
   vcl_cout<<"Set the base of the pyramid."<<vcl_endl ;
   p.set_base_structure(map) ;
   // write its structure to cout
 
   // setting its elements
-  /*cout<<p.nb_vertices(p.base_level())<<" vertices,"
-      <<p.nb_faces(p.base_level())<<" faces and "
-      <<p.nb_edges(p.base_level())<<" edges."<<endl ;
-  */
+#if 0
+  vcl_cout<<p.nb_vertices(p.base_level())<<" vertices,"
+          <<p.nb_faces(p.base_level())<<" faces and "
+          <<p.nb_edges(p.base_level())<<" edges."<<vcl_endl ;
+#endif // 0
+
   // Value inits
   int i=1 ;
   for (my_pyramid_level::vertex_iterator v=p.base_level().begin_vertex(); v!=p.base_level().end_vertex(); ++v)

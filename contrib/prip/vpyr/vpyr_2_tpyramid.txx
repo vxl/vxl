@@ -1,33 +1,36 @@
-// This is contrib/prip/vpyr/vpyr_2_tpyramid.txx
-#include "vpyr_2_tpyramid.h"
-#include "vmap/vbl_controlled_partition.h"
-#include "vcl_iostream.h"
+// This is prip/vpyr/vpyr_2_tpyramid.txx
+#ifndef vpyr_2_tpyramid_txx_
+#define vpyr_2_tpyramid_txx_
 
+#include "vpyr_2_tpyramid.h"
+#include <vmap/vbl_controlled_partition.h>
+#include <vcl_iostream.h>
 
 template <class TLevel>
 vpyr_2_tpyramid<TLevel>::vpyr_2_tpyramid()
 {
 }
 
-/*
+#if 0
 template <class TLevel>
 vpyr_2_tpyramid<TLevel>::vpyr_2_tpyramid(const self_type &right)
 {
- 	operator=(right) ;
-}*/
+   operator=(right) ;
+}
+#endif // 0
 
 template <class TLevel>
 vpyr_2_tpyramid<TLevel>::~vpyr_2_tpyramid()
 {
 }
 
-/*
+#if 0
 template <class TLevel>
 vpyr_2_tpyramid<TLevel> & vpyr_2_tpyramid<TLevel>::operator=(const self_type &right)
 {
-		if (this!=&rigth)
+    if (this!=&rigth)
     {
-    	_Base::operator=(right) ;
+      _Base::operator=(right) ;
       vertex_sequence_iterator first_vertex=base_map().begin_vertex_sequence(), last_vertex=base_map().end_vertex_sequence();
       edge_sequence_iterator firstEdge=base_map().begin_edge_sequence(), lastEdge=base_map().end_edge_sequence();
       face_sequence_iterator firstFace=base_map().begin_face_sequence(), lastFace=base_map().end_face_sequence();
@@ -43,9 +46,10 @@ vpyr_2_tpyramid<TLevel> & vpyr_2_tpyramid<TLevel>::operator=(const self_type &ri
         lastFace=base_map().begin_face_sequence()+(right.level(i).endbase_type()-right.base_map().begin_face_sequence()) ;
         level(i).set_face_sequence(firstFace,lastFace) ;
       }
-		}
-		return *this ;
-}*/
+    }
+    return *this ;
+}
+#endif // 0
 
 template <class TLevel>
 bool vpyr_2_tpyramid<TLevel>::valid()
@@ -55,7 +59,7 @@ bool vpyr_2_tpyramid<TLevel>::valid()
 template <class TLevel>
 void vpyr_2_tpyramid<TLevel>::clear()
 {
-	_Base::clear() ;
+  _Base::clear() ;
 }
 
 template <class TLevel>
@@ -77,7 +81,7 @@ void vpyr_2_tpyramid<TLevel>::down_projection_vertices(vmap_level_index arg_leve
    res.resize(base_map().nb_vertices()) ;
    for (v=0; v<base_map().nb_vertices(); v++)
    {
-			const base_vertex_type & rv=base_map().vertex(v) ;
+      const base_vertex_type & rv=base_map().vertex(v) ;
       if (rv.last_level()<arg_level)
       {
          vmap_2_map_dart_base_iterator d=rv.begin(), end=d ;
@@ -96,7 +100,6 @@ void vpyr_2_tpyramid<TLevel>::down_projection_vertices(vmap_level_index arg_leve
                else
                {
                   h.union_of(av,representativev) ;
-
                }
             }
             d.sigma() ;
@@ -118,7 +121,7 @@ void vpyr_2_tpyramid<TLevel>::down_projection_faces(vmap_level_index arg_level,v
    res.resize(base_map().nb_faces()) ;
    for (v=0; v<base_map().nb_faces(); v++)
    {
-			const base_face_type & rv=base_map().face(v) ;
+      const base_face_type & rv=base_map().face(v) ;
       if (rv.last_level()<arg_level)
       {
          vmap_2_map_dart_base_iterator d=rv.begin(), end=d ;
@@ -137,7 +140,6 @@ void vpyr_2_tpyramid<TLevel>::down_projection_faces(vmap_level_index arg_level,v
                else
                {
                   h.union_of(av,representativev) ;
-
                }
             }
             d.phi() ;
@@ -149,3 +151,5 @@ void vpyr_2_tpyramid<TLevel>::down_projection_faces(vmap_level_index arg_level,v
       res[v]=h.representative(v) ;
    }
 }
+
+#endif // vpyr_2_tpyramid_txx_

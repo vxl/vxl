@@ -1,4 +1,4 @@
-// This is contrib/prip/vdtop/vil_clamp.h
+// This is prip/vdtop/vil_clamp.h
 #ifndef vil_clamp_h_
 #define vil_clamp_h_
 
@@ -18,11 +18,11 @@ template<class srcT>
 void vil_clamp_below(vil_image_view<srcT>& src, srcT t, srcT value)
 {
    unsigned ni = src.ni(),nj = src.nj(),np = src.nplanes();
-   
+
    vcl_ptrdiff_t istepA=src.istep(),jstepA=src.jstep(),pstepA = src.planestep();
    srcT* planeA = src.top_left_ptr();
-   
-	 for (unsigned p=0;p<np;++p,planeA += pstepA)
+
+   for (unsigned p=0;p<np;++p,planeA += pstepA)
    {
      srcT* rowA   = planeA;
      for (unsigned j=0;j<nj;++j,rowA += jstepA)
@@ -31,7 +31,7 @@ void vil_clamp_below(vil_image_view<srcT>& src, srcT t, srcT value)
        for (unsigned i=0;i<ni;++i,pixelA+=istepA)
          if (*pixelA<=t) *pixelA=value ;
      }
-	}
+  }
 }
 
 #endif

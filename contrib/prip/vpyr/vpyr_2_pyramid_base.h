@@ -1,4 +1,4 @@
-// This is contrib/prip/vpyr/vpyr_2_pyramid_base.h
+// This is prip/vpyr/vpyr_2_pyramid_base.h
 #ifndef vpyr_2_pyramid_base_h_
 #define vpyr_2_pyramid_base_h_
 
@@ -18,7 +18,7 @@
 //   Here goes a chronological list of file modifications (with author and date)
 // \endverbatim
 
-#include "vmap/vmap_2_map.h"
+#include <vmap/vmap_2_map.h>
 
 class vpyr_2_pyramid_base_dart ;
 
@@ -27,31 +27,37 @@ inline DPtr vpyr_2_pyramid_base_alpha(DPtr arg, vmap_level_index l)
 {
   return (DPtr) arg->vpyr_2_pyramid_base_dart::alpha(l) ;
 }
+
 template <typename DPtr>
 inline DPtr vpyr_2_pyramid_base_sigma(DPtr arg, vmap_level_index l)
 {
   return (DPtr) arg->vpyr_2_pyramid_base_dart::sigma(l) ;
 }
+
 template <typename DPtr>
 inline DPtr vpyr_2_pyramid_base_phi(DPtr arg, vmap_level_index l)
 {
   return (DPtr) arg->vpyr_2_pyramid_base_dart::phi(l) ;
 }
+
 template <typename DPtr>
 inline DPtr vpyr_2_pyramid_base_ialpha(DPtr arg, vmap_level_index l)
 {
   return (DPtr) arg->vpyr_2_pyramid_base_dart::ialpha(l) ;
 }
+
 template <typename DPtr>
 inline DPtr vpyr_2_pyramid_base_isigma(DPtr arg, vmap_level_index l)
 {
   return (DPtr) arg->vpyr_2_pyramid_base_dart::isigma(l) ;
 }
+
 template <typename DPtr>
 inline DPtr vpyr_2_pyramid_base_iphi(DPtr arg, vmap_level_index l)
 {
   return (DPtr) arg->vpyr_2_pyramid_base_dart::iphi(l) ;
 }
+
 template <typename DPtr>
 DPtr vpyr_2_pyramid_base_ancestor(DPtr arg, vmap_level_index l)
 {
@@ -76,8 +82,7 @@ struct vmap_simple_data
   }
   void set_level(vmap_level_index l)
   {}
-}
-;
+};
 
 //: Data associated to each element duplicated at level.
 template <class D>
@@ -107,7 +112,7 @@ struct vmap_replicated_data
 //: the dart class of a 2-pyramid base level.
 class vpyr_2_pyramid_base_dart : public vmap_2_map_dart
 {
-public:
+ public:
   //vpyr_2_pyramid_base_dart() ;
 
   //: The last level.
@@ -119,7 +124,7 @@ public:
   //: Returns true if the dart has been contracted or removed at level "arg".
   bool modified_at_level(vmap_level_index arg) const
   {
-    return (_last_level== (arg*2));
+    return _last_level == (arg*2);
   }
 
   //: Returns true if the dart has been contracted or removed at its last level.
@@ -211,22 +216,23 @@ public:
   {
     return vmap_2_map_iphi(this)->ancestor(level) ;
   }
-protected :
+ protected :
   //: Return the direct ancestor of this dart.
   //vpyr_2_pyramid_base_dart* directAncestor() ;
   vmap_level_index _last_level ;
 
-  /*private :
-  		vpyr_2_pyramid_base_dart* _toplevel_typeAncestor ;
-  		vpyr_2_pyramid_base_dart* _directAncestor ;
-  */
+#if 0
+ private :
+      vpyr_2_pyramid_base_dart* _toplevel_typeAncestor ;
+      vpyr_2_pyramid_base_dart* _directAncestor ;
+#endif // 0
 };
 
 //: The public vmap_2_tmap_dart class.
 template <class D>
 class vmap_2_pd_dart : public vpyr_2_pyramid_base_dart
 {
-public:
+ public:
 
   typename D::value_type & data(vmap_level_index arg_level)
   {
@@ -238,7 +244,7 @@ public:
     return _d.data(arg_level) ;
   }
 
-protected :
+ protected :
   D _d ;
 };
 

@@ -6,14 +6,14 @@
 * \section intro Topological and Combinatorial Maps
 *
 * A topological 2-map is the decomposition of the plane into three kind of cells :
-* - vertices, which are points of the planes, 
-* - edges, which are jordan arcs, and which extremities are the vertices of the map, 
+* - vertices, which are points of the planes,
+* - edges, which are jordan arcs, and which extremities are the vertices of the map,
 * - faces, which are connected regions, and which boundaries consist of edges and vertices of the map.
 * \image html topo.jpg A topological map with different embeddings
-*  
+*
 * Typically, a topological 2-map structure represents the different elements together
 * with the bounding relations. It is then possible to access efficiently all
-* the edges and the faces bounded by a given vertex, the faces and vertices 
+* the edges and the faces bounded by a given vertex, the faces and vertices
 * adjacent to a given edge, or the vertices and edges bounding a given face.
 *
 * Several structures encoding a topological 2-map exist. vmap library is based
@@ -30,13 +30,13 @@
 * It has been shown that there exits a bijection between the set of combinatorial maps
 * and the set of topological maps (up to an isomorphism). A code for a topological map
 * can then be given from a combinatorial map by associating to each dart the triplet
-* of cells \f$ (V, E, F) \f$ where \f$ V \f$ is the vertex corresponding to the begining
+* of cells \f$ (V, E, F) \f$ where \f$ V \f$ is the vertex corresponding to the beginning
 * of a dart, \f$ E \f$ is its underlying edge, and \f$ F \f$ is its left face.
 *
 * \section map Handling Combinatorial Maps
 *
 * The class vmap_2_map<D> enable to handle the structure of a combinatorial map.
-* It is the basic structure of vmap and vpyr libraries. 
+* It is the basic structure of vmap and vpyr libraries.
 * D must inherit from vmap_2_map_dart, which provides useful functionalities.
 * Among other things, iterators (including const_iterators) on darts are defined
 * and enable to iterate on the set of darts of the encoded 2-map using the
@@ -48,10 +48,10 @@
 * - set_sigma (arg, arg_sigma), which sets sigma for the dart of index arg,
 * - set_alpha (arg, arg_alpha), which sets alpha,
 * - set_phi (arg, arg_phi), replacing set_sigma, provided that the pemutation alpha is set.
-* 
+*
 * Other functionalities assumes that the permutations are correctly set.
 *
-* Modifying operations, contration and removal, are outlined below. 
+* Modifying operations, contration and removal, are outlined below.
 *
 * \section tmap Handling Topological Maps
 *
@@ -70,39 +70,39 @@ my_map m;
 
 for (my_map::vertex_iterator v=m.begin_vertex(); v!=m.end_vertex(); ++v) // iterates on all vertices
 {
-	my_map::dart_iterator d=v->begin(), // gives the iterator on a dart of *v
-		e=d ;
-	do
-	{
-		my_map::dart_iterator a=d ; a.alpha() ;
-		
-		//do something with a->vertex() ;
-		
-		//do something with d->edge() ;
-		
-		//do something with d->face() ;
-		
-		d->sigma() ; // next dart turning clocwise around a vertex
-	} while (d!=e) ;
+  my_map::dart_iterator d=v->begin(), // gives the iterator on a dart of *v
+                        e=d ;
+  do
+  {
+    my_map::dart_iterator a=d ; a.alpha() ;
+
+    //do something with a->vertex() ;
+
+    //do something with d->edge() ;
+
+    //do something with d->face() ;
+
+    d->sigma() ; // next dart turning clocwise around a vertex
+  } while (d!=e) ;
 }
 \endverbatim
 * Similarly, for retrieving all elements adjacent to a face:\verbatim
 for (my_map::face_iterator f=m.begin_face(); f!=m.end_face(); ++f) // iterates on all faces
 {
-	my_map::dart_iterator d=f->begin(), // gives the iterator on a dart of *f
-		e=d ;
-	do
-	{
-		//do something with d->vertex() ;
-		
-		//do something with d->edge() ;
-		
-		my_map::dart_iterator a=d ; a.alpha() ;
-		
-		//do something with a->face() ;
-		
-		d->phi() ; // next dart turning clocwise around a vertex
-	} while (d!=e) ;
+  my_map::dart_iterator d=f->begin(), // gives the iterator on a dart of *f
+                        e=d ;
+  do
+  {
+    //do something with d->vertex() ;
+
+    //do something with d->edge() ;
+
+    my_map::dart_iterator a=d ; a.alpha() ;
+
+    //do something with a->face() ;
+
+    d->phi() ; // next dart turning clocwise around a vertex
+  } while (d!=e) ;
 }
 \endverbatim
 *
@@ -118,13 +118,13 @@ for (my_map::face_iterator f=m.begin_face(); f!=m.end_face(); ++f) // iterates o
 * Two dual operations defined on combinatorial maps can be used. These operations are conraction and removal of edges (pair of darts).
 * When a dart is removed from a topological map its left face is being identified with its right face. It is a way to implement
 * the fusion operation.
-* When a dart is being contracted, its begining vertex is identified with its end vertex (for details, see Marchadier Jocelyn,
+* When a dart is being contracted, its beginning vertex is identified with its end vertex (for details, see Marchadier Jocelyn,
 * Luc Brun, Walter Kropatsch « Rooted Kernels and Labeled Combinatorial Pyramids », CVWW 2004, page 59-68).
 * Removal and contraction can be used respectively to merge regions and simply the boundaries resulting from merging.
 * Note that it is not possible (for now) to remove darts adjacent to a single face (i.e. isthmus and pendant darts), or to contract
 * loops.
 *
-* The class vmap_kernel<M> can be used to build sets of darts satisfying the required constraints for contraction/removal. It is 
+* The class vmap_kernel<M> can be used to build sets of darts satisfying the required constraints for contraction/removal. It is
 * implemented in the maps classes under two forms:
 * - contraction_kernel enable to build a set of darts which can be viewed as a forest of vertices. It is the class used to contract a whole set of darts.
 * - removal_kernel enable to build a set of darts which can be viewed as a forest of faces. This class is used for simultaneously removing the darts of the sets.
@@ -132,7 +132,7 @@ for (my_map::face_iterator f=m.begin_face(); f!=m.end_face(); ++f) // iterates o
 * Using kernel classes and associated functions is much more efficient than performing the operations dart per dart.
 *
 * Two extra classes are provided: vmap_oriented_kernel<K> and vmap_non_oriented_kernel<K>. Both template parameters must be either
-* contraction_kernel or removal_kernel from the class they are defined on. vmap_oriented_kernel<K> ensures that darts included 
+* contraction_kernel or removal_kernel from the class they are defined on. vmap_oriented_kernel<K> ensures that darts included
 * in the kernel form a rooted tree, whereas vmap_non_oriente_kernel<K> ensure that the kernel built is a non-rooted tree.
 * Usually, the second class is needed, although certain uses may require the first one.
 *

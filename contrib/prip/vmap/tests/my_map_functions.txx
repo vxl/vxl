@@ -10,12 +10,12 @@ void display_tmap(const M & map)
   for (typename M::const_vertex_iterator v=map.begin_vertex(); v!=map.end_vertex(); ++v)
   {
     vcl_cout<<'\t'//<<map.index(*v)<<'/'
-    <<v->id()<<":" ;
+            <<v->id()<<':' ;
     d=v->begin(); end=d ;
     do
     {
       vcl_cout//<<map.index(d->edge())<<'/'
-      	<<d->id()<<"|"<<M::cast(d->edge()).id()<<" " ;
+              <<d->id()<<'|'<<M::cast(d->edge()).id()<<' ' ;
       d.sigma() ;
     }
     while (d!=end) ;
@@ -26,27 +26,27 @@ void display_tmap(const M & map)
   for (typename M::const_edge_iterator e=map.begin_edge(); e!=map.end_edge(); ++e)
   {
     vcl_cout<<'\t'//<<map.index(*e)<<'/'
-    	<<e->id()<<":" ;
+            <<e->id()<<':' ;
     d=e->begin() ;
     vcl_cout//<<map.index((*d).vertex())<<'/'
-    	<<d->id()<<"|"<<M::cast((*d).vertex()).id()<<"|"<<M::cast((*e).first_vertex()).id()<<" " ;
+            <<d->id()<<'|'<<M::cast((*d).vertex()).id()<<'|'<<M::cast((*e).first_vertex()).id()<<' ' ;
     d.alpha() ;
     vcl_cout//<<map.index((*d).vertex())<<'/'
-    	<<d->id()<<"|"<<M::cast((*d).vertex()).id()<<"|"<<M::cast((*e).last_vertex()).id()<<vcl_endl ;
+            <<d->id()<<'|'<<M::cast((*d).vertex()).id()<<'|'<<M::cast((*e).last_vertex()).id()<<vcl_endl ;
   }
 
   vcl_cout<<"face_types :"<<vcl_endl ;
   for (typename M::const_face_iterator f=map.begin_face(); f!=map.end_face(); ++f)
   {
     vcl_cout<<'\t'//<<map.index(*f)<<'/'
-    <<f->id()<<":" ;
+            <<f->id()<<':' ;
     d=f->begin();
     end=d ;
     do
     {
       vcl_cout//<<map.index(d->edge())<<'/'
-      <<d->id()<<"|"
-      <<M::cast(d->edge()).id()<<" " ;
+              <<d->id()<<'|'
+      <<M::cast(d->edge()).id()<<' ' ;
       d.phi() ;
     }
     while (d!=end) ;
@@ -69,14 +69,14 @@ template <class K>
 void display_kernel(K & kernel)
 {
   int i ;
-  vcl_cout<<"{" ; vcl_cout.flush() ;
+  vcl_cout<<'{' ; vcl_cout.flush() ;
   if (kernel.size()>0)
   {
     for (i=0; i<kernel.size()-1; ++i)
     {
       vcl_cout<<kernel.dart(i)->id()<<',' ;vcl_cout.flush() ;
     }
-    vcl_cout<<kernel.dart(i)->id()<<"}" ;
+    vcl_cout<<kernel.dart(i)->id()<<'}' ;
   }
 }
 

@@ -1,4 +1,4 @@
-// This is contrib/prip/vpyr/vpyr_2_pyramid.h
+// This is prip/vpyr/vpyr_2_pyramid.h
 #ifndef vpyr_2_pyramid_h_
 #define vpyr_2_pyramid_h_
 //:
@@ -12,47 +12,49 @@
 // \endverbatim
 
 #include "vpyr_2_pyramid_level.h"
-#include "vcl_map.h"
-#include "vmap/vmap_map_iterator_wrapper.h"
+#include <vcl_iosfwd.h>
+#include <vcl_map.h>
+#include <vmap/vmap_map_iterator_wrapper.h>
 
 //: enables to handle combinatorial pyramids.
 template <class TLevel=vpyr_2_pyramid_level<vpyr_2_pyramid_level_dart> >
 class vpyr_2_pyramid
 {
-public:
+ public:
 
-  //: 
+  //:
   typedef vpyr_2_pyramid< TLevel > self_type ;
 
   //: the structure on top of which the pyramid is built.
   typedef typename TLevel::base_map_type base_map_type ;
-  
+
   //: the type of a dart on the base map.
   typedef typename base_map_type::dart_type base_dart_type ;
-  
+
   //: the class for handling levels of the pyramid.
   typedef TLevel level_type ;
-  
+
   friend class vpyr_2_pyramid_level< typename TLevel::dart_type> ;
-  
+
   //: the type of a dart in one level of the pyramid.
   typedef typename level_type::dart_type level_dart_type ;
 
-protected:
+ protected:
 
-  //: 
+  //:
   typedef vcl_map<vmap_level_index, level_type> level_array_type ;
 
-public:
+ public:
 
   //: iterator on the level sequence of the pyramid.
   typedef vmap_map_iterator_wrapper<level_type&, level_type*, typename level_array_type::iterator > level_iterator ;
-  
+
   //: const_iterator on the level sequence of the pyramid.
-  typedef vmap_map_iterator_wrapper<const level_type&, const level_type*, typename level_array_type::const_iterator > const_level_iterator ;
+  typedef vmap_map_iterator_wrapper<const level_type&, const level_type*, typename level_array_type::const_iterator >
+          const_level_iterator ;
   //typedef typename level_array_type::iterator level_iterator ;
   //typedef typename level_array_type::const_iterator const_level_iterator ;
-  
+
   //: kernel for contraction of darts on a level.
   typedef typename level_type::contraction_kernel contraction_kernel ;
 
@@ -71,7 +73,7 @@ public:
   ~vpyr_2_pyramid();
 
   //vpyr_2_pyramid & operator=(const vpyr_2_pyramid &right);
-	
+
   //: Erases everything and sets the base level of the pyramid .
   template <class M>
   void set_base_structure(const M & arg) ;
@@ -122,18 +124,18 @@ public:
   level_type & level(vmap_level_index arg)
   {
     typename level_array_type::iterator i=_level.lower_bound(arg) ;
-	if (i->first==arg) return i->second ;
-	if (i==_level.begin()) return _level.end()->second ;
-	return (--i)->second ;
+  if (i->first==arg) return i->second ;
+  if (i==_level.begin()) return _level.end()->second ;
+  return (--i)->second ;
   }
 
   //: Returns an intermediate level of the pyramid.
   const level_type & level(vmap_level_index arg) const
   {
     typename level_array_type::iterator i=_level.lower_bound(arg) ;
-	if (i->first==arg) return i->second ;
-	if (i==_level.begin()) return _level.end()->second ;
-	return (--i)->second ;
+  if (i->first==arg) return i->second ;
+  if (i==_level.begin()) return _level.end()->second ;
+  return (--i)->second ;
   }
 
   //: Returns the first iterator on the level sequence.
@@ -162,8 +164,8 @@ public:
 
   /*//: Initialises nb_levels.
   virtual void initialise_levels(int nb_levels) ;
-	*/
-	
+  */
+
   //: Returns true if all the permutations are valid, false otherwise.
   // May be usefull for testing permutations set by hand...
   virtual bool valid() ;
@@ -190,14 +192,14 @@ public:
     return _base_map.dart(index) ;
   }
 
-protected:
+ protected:
 
   //: Returns the first level below the level "above" being of type "type".
   level_type* level_below(vmap_level_type type, const level_type& above) ;
-  
+
   //: the base map of the pyramid.
   base_map_type _base_map ;
-  
+
   //:  all the levels of the pyramid.
   level_array_type _level ;
 };

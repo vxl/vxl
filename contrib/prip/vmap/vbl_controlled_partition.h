@@ -1,4 +1,4 @@
-// This is contrib/prip/vmap/vbl_controlled_partition.h
+// This is prip/vmap/vbl_controlled_partition.h
 #ifndef vbl_controlled_partition_h_
 #define vbl_controlled_partition_h_
 //:
@@ -15,7 +15,7 @@
 
 #include "vcl_vector.h"
 //: enables to handle partitions with actually choosing the representative for each set.
-// vbl_controlled_partition provides a way to choose while merging the representative for each set. It can be used 
+// vbl_controlled_partition provides a way to choose while merging the representative for each set. It can be used
 // when the representative plays a special role.
 class vbl_controlled_partition
 {
@@ -32,7 +32,7 @@ class vbl_controlled_partition
         _nb_sets-- ;
     }
 
-public:
+ public:
     vbl_controlled_partition() ;
     ~vbl_controlled_partition() ;
 
@@ -41,8 +41,8 @@ public:
     //   of a single element.
     void initialise(int size) ;
 
-		vbl_controlled_partition & operator=(const vbl_controlled_partition & arg) ;
-		
+    vbl_controlled_partition & operator=(const vbl_controlled_partition & arg) ;
+
     //: The representative of "root" is the new representative of the set to which "j" is the representative.
     void union_of(int root, int j)
     {

@@ -1,4 +1,4 @@
-// This is contrib/prip/vpyr/vpyr_2_tpyramid_elts.cxx
+// This is prip/vpyr/vpyr_2_tpyramid_base.cxx
 #include "vpyr_2_tpyramid_base.h"
 
 //////////////////////////////////////// inline
@@ -37,30 +37,31 @@ void vpyr_2_tpyramid_base_dart::set_sequence_index(vmap_dart_index arg)
 {
    int offset =arg-sequence_index() ;
 
-	vpyr_2_pyramid_base_dart::set_sequence_index(arg) ;  
-	
-	vmap_2_tmap_dart_iterator it ;
-	if (_edge!=NULL)
-	{
-		it = _edge->begin()+offset ;
-		if (&*it==(vmap_2_tmap_dart*)this)
-    	_edge->set_begin(it) ;
-	}
-  if (_vertex!=NULL)
-	{
-		it = _vertex->begin()+offset ;
-		if (&*it==(vmap_2_tmap_dart*)this)
-    	_vertex->set_begin(it) ;
-	}
-  if (_face!=NULL)
-	{
-		it = _face->begin()+offset ;
-		if (&*it==(vmap_2_tmap_dart*)this)
-    	_face->set_begin(it) ;
-	}
-	/*int offset =arg-sequence_index() ;
+  vpyr_2_pyramid_base_dart::set_sequence_index(arg) ;
 
- if (_edge!=NULL && (vpyr_2_tpyramid_base_dart*)&*(((vmap_2_tmap_edge*)_edge)->begin()+offset)==this)
+  vmap_2_tmap_dart_iterator it ;
+  if (_edge!=NULL)
+  {
+    it = _edge->begin()+offset ;
+    if (&*it==(vmap_2_tmap_dart*)this)
+      _edge->set_begin(it) ;
+  }
+  if (_vertex!=NULL)
+  {
+    it = _vertex->begin()+offset ;
+    if (&*it==(vmap_2_tmap_dart*)this)
+      _vertex->set_begin(it) ;
+  }
+  if (_face!=NULL)
+  {
+    it = _face->begin()+offset ;
+    if (&*it==(vmap_2_tmap_dart*)this)
+      _face->set_begin(it) ;
+  }
+#if 0
+  int offset =arg-sequence_index() ;
+
+  if (_edge!=NULL && (vpyr_2_tpyramid_base_dart*)&*(((vmap_2_tmap_edge*)_edge)->begin()+offset)==this)
   {
     _edge->set_begin(((vmap_2_tmap_edge*)_edge)->begin()+offset) ;
   }
@@ -72,7 +73,8 @@ void vpyr_2_tpyramid_base_dart::set_sequence_index(vmap_dart_index arg)
   {
     _face->set_begin(((vmap_2_tmap_face*)_face)->begin()+offset) ;
   }
-  vpyr_2_pyramid_base_dart::set_sequence_index(arg) ;*/
+  vpyr_2_pyramid_base_dart::set_sequence_index(arg) ;
+#endif // 0
 }
 
 ////////////////
@@ -93,7 +95,7 @@ vpyr_2_tpyramid_const_base_dart_iterator vpyr_2_tpyramid_base_vertex::begin(vmap
 vpyr_2_tpyramid_base_dart_iterator vpyr_2_tpyramid_base_face::begin(vmap_level_index level)
 {
   vpyr_2_tpyramid_base_dart* tmp=*begin().reference() ;
-  return dart_iterator(begin().reference()+::offset(vpyr_2_pyramid_base_ancestor(tmp,level),tmp)) ;  
+  return dart_iterator(begin().reference()+::offset(vpyr_2_pyramid_base_ancestor(tmp,level),tmp)) ;
 }
 
 vpyr_2_tpyramid_const_base_dart_iterator vpyr_2_tpyramid_base_face::begin(vmap_level_index level) const
@@ -184,10 +186,13 @@ vmap_level_index vpyr_2_tpyramid_base_edge::last_level() const
   return ((const vpyr_2_tpyramid_base_dart&)vmap_2_tmap_edge::direct_dart()).last_level() ;
 }
 
-/*		void vpyr_2_tpyramid_base_edge::set_last_level(vmap_level_index arg)
+#if 0
+    void vpyr_2_tpyramid_base_edge::set_last_level(vmap_level_index arg)
     {
-			((vpyr_2_tpyramid_base_dart&)vmap_2_tmap_edge::direct_dart()).set_last_level(arg) ;
-    }*/
+      ((vpyr_2_tpyramid_base_dart&)vmap_2_tmap_edge::direct_dart()).set_last_level(arg) ;
+    }
+#endif // 0
+
 ////////////////////////////////////////
 
 const vpyr_2_tpyramid_base_vertex* vpyr_2_tpyramid_base_vertex::ancestor(vmap_level_index level) const
@@ -208,7 +213,7 @@ vpyr_2_tpyramid_base_vertex* vpyr_2_tpyramid_base_vertex::ancestor(vmap_level_in
     {
       d=vpyr_2_pyramid_base_sigma(d,l) ;
     }
-    while(!d->modified_at_level(l)); // d!=end) ; there is a father !
+    while (!d->modified_at_level(l)); // d!=end) ; there is a father !
     v=&vpyr_2_pyramid_base_alpha(d,l)->vertex(l) ;
     l=v->last_level() ;
   }
@@ -258,7 +263,7 @@ vpyr_2_tpyramid_base_face* vpyr_2_tpyramid_base_face::ancestor(vmap_level_index 
     {
       d=vpyr_2_pyramid_base_phi(d,l) ;
     }
-    while(!d->modified_at_level(l)); // d!=end) ; there is a father !
+    while (!d->modified_at_level(l)); // d!=end) ; there is a father !
     v=&vpyr_2_pyramid_base_alpha(d,l)->face(l) ;
     l=v->last_level() ;
   }
@@ -267,7 +272,7 @@ vpyr_2_tpyramid_base_face* vpyr_2_tpyramid_base_face::ancestor(vmap_level_index 
 
 int vpyr_2_tpyramid_base_face::degree(vmap_level_index l) const
 {
-	const vpyr_2_tpyramid_base_dart* d=*begin(l).reference(), *end=d ;
+  const vpyr_2_tpyramid_base_dart* d=*begin(l).reference(), *end=d ;
   int count=0;
   do
   {

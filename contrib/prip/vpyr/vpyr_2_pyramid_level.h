@@ -1,4 +1,4 @@
-// This is contrib/prip/vpyr/vpyr_2_pyramid_level.h
+// This is prip/vpyr/vpyr_2_pyramid_level.h
 #ifndef vpyr_2_pyramid_level_h_
 #define vpyr_2_pyramid_level_h_
 
@@ -11,7 +11,7 @@
 //  06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
-#include "vmap/vmap_kernel.h"
+#include <vmap/vmap_kernel.h>
 #include "vpyr_2_pyramid_level_elts.h"
 
 template <class _level_type>
@@ -21,32 +21,32 @@ class vpyr_2_pyramid ;
 template <class D>
 class vpyr_2_pyramid_level : public vmap_ptr_sequence< typename D::base_type >
 {
-public:
-  
-  //: 
-  typedef vpyr_2_pyramid_level<D> self_type;
-	//: 
-  static vmap_2_map_tag tag ;  
-	//: 
-  typedef vpyr_2_pyramid<self_type> pyramid_type ;
-  //: 
-  typedef vmap_2_map< typename D::base_type > base_map_type ;  
-	//: 
-  typedef typename base_map_type::dart_type base_dart_type;
-  
-protected:
+ public:
 
-	//:
-	typedef vmap_ptr_sequence< typename D::base_type > dart_sequence ;
-	//: 
+  //:
+  typedef vpyr_2_pyramid_level<D> self_type;
+  //:
+  static vmap_2_map_tag tag ;
+  //:
+  typedef vpyr_2_pyramid<self_type> pyramid_type ;
+  //:
+  typedef vmap_2_map< typename D::base_type > base_map_type ;
+  //:
+  typedef typename base_map_type::dart_type base_dart_type;
+
+ protected:
+
+  //:
+  typedef vmap_ptr_sequence< typename D::base_type > dart_sequence ;
+  //:
   typedef typename dart_sequence::iterator dart_sequence_iterator;
-  //: 
+  //:
   typedef typename dart_sequence::const_iterator const_dart_sequence_iterator;
-  //: 
+  //:
   typedef typename dart_sequence::pointer dart_pointer ;
 
-public:
-  // -- Dart tyes --
+ public:
+  // --- Dart tyes ---
 
   //: dart_type class.
   typedef D dart_type ;
@@ -56,8 +56,9 @@ public:
   typedef const dart_type const_dart_reference ;
   //: An iterator iterates on a sequence of darts.
   typedef vpyr_2_pyramid_level_dart_base_iterator<dart_type,dart_type&,dart_type*, dart_sequence_iterator> dart_iterator ;
-  //: 
-  typedef vpyr_2_pyramid_level_dart_base_iterator<dart_type,const dart_type&,const dart_type*, const_dart_sequence_iterator> const_dart_iterator ;
+  //:
+  typedef vpyr_2_pyramid_level_dart_base_iterator<dart_type,const dart_type&,const dart_type*, const_dart_sequence_iterator>
+          const_dart_iterator ;
 
   //: Kernel class for contraction.
   typedef vmap_kernel<self_type> contraction_kernel ;
@@ -66,24 +67,24 @@ public:
   typedef vmap_kernel<self_type> removal_kernel ;
 
   friend class vmap_kernel<self_type> ;
-	
-	//: 
+
+  //:
   static dart_type& cast(vpyr_2_pyramid_level_dart & a)
   {
     return (dart_type&) (a) ;
   }
-  
-  //: 
+
+  //:
   static const dart_type& cast(const vpyr_2_pyramid_level_dart & a)
   {
     return (const dart_type&) (a) ;
   }
 
 
-  //: 
+  //:
   vpyr_2_pyramid_level(vmap_level_index arg_level, pyramid_type & pyramid) ;
 
-  //: 
+  //:
   vpyr_2_pyramid_level(const self_type & arg)
       : dart_sequence(arg),
       _level_index(arg._level_index),
@@ -91,7 +92,7 @@ public:
 
   {}
 
-  //: 
+  //:
   ~vpyr_2_pyramid_level()
   {}
 
@@ -137,7 +138,7 @@ public:
   {
     return const_dart_iterator(begin_dart_sequence(),index()) ;
   }
-  
+
   //: Returns an iterator on the first dart.
   dart_iterator begin_dart()
   {
@@ -149,7 +150,7 @@ public:
   {
     return const_dart_iterator(end_dart_sequence(),index()) ;
   }
-  
+
   //: Returns an iterator after the last dart.
   dart_iterator end_dart()
   {
@@ -176,75 +177,75 @@ public:
 
   //virtual bool valid()const ;
 
-  //: 
+  //:
   virtual void contraction(const contraction_kernel &arg_kernel) ;
-  
-  //: 
+
+  //:
   virtual void removal(const removal_kernel &arg_kernel) ;
 
-  //: 
+  //:
   void set_level_index(vmap_level_index arg)
   {
     _level_index=arg ;
   }
 
-  //: 
+  //:
   void set_nb_darts(int arg)
   {
     dart_sequence::resize(arg,false) ;
   }
 
-protected:
+ protected:
 
-  //: 
+  //:
   pyramid_type & pyramid()
   {
     return (pyramid_type &)*_pyramid ;
   }
 
-protected:
+ protected:
 
-  //: 
+  //:
   dart_sequence_iterator begin_dart_sequence()
   {
     return dart_sequence::begin() ;
   }
 
-  //: 
+  //:
   dart_sequence_iterator end_dart_sequence()
   {
     return dart_sequence::end() ;
   }
 
-  //: 
+  //:
   const_dart_sequence_iterator begin_dart_sequence() const
   {
     return dart_sequence::begin() ;
   }
 
-  //: 
+  //:
   const_dart_sequence_iterator end_dart_sequence() const
   {
     return dart_sequence::end() ;
   }
 
-  //: 
+  //:
   dart_pointer & get_dart_pointer(int arg)
   {
     return dart_sequence::get_pointer(arg) ;
   }
 
-  //: 
+  //:
   const dart_pointer & get_dart_pointer(int arg) const
   {
     return dart_sequence::get_pointer(arg) ;
   }
 
-protected:
-  
+ protected:
+
   //: the index of the level.
   vmap_level_index _level_index ;
-  
+
   //: The pyramid for which it is a level.
   pyramid_type * _pyramid ;
 };
