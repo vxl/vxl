@@ -1,4 +1,3 @@
-//this-sets-emacs-to-*-c++-*-mode
 #ifndef segv_segmentation_manager_h_
 #define segv_segmentation_manager_h_
 //--------------------------------------------------------------------------------
@@ -100,6 +99,13 @@ class segv_segmentation_manager : public vgui_wrapper_tableau
   bgui_picker_tableau_sptr selected_picker_tab();
   vgui_rubberband_tableau_sptr selected_rubber_tab();
   vtol_face_2d_sptr face_at(const int col, const int row);
+
+  void compute_background_info();
+  void set_foreground_face();
+  void set_background_face();
+  void compute_parallel_coverage();
+  void compute_watershed_regions();
+  void find_vehicle();
  private:
   //flags
   bool first_; //first image load
