@@ -86,7 +86,8 @@ T vgl_homg_operators_1d<T>::distance (const vgl_homg_point_1d<T>& a,
     vcl_cerr << "vgl_homg_operators_1d<T>::distance() -- point at infinity";
     return vgl_homg<T>::infinity;
   }
-  return (x1 / w1 - x2 / w2);
+  x1 /= w1; x2 /= w2;
+  return (x1 > x2) ? x1-x2 : x2-x1;
 }
 
 //: Get the square of the distance between the two points.
