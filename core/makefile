@@ -8,14 +8,14 @@ MANPAGE_SOURCES += vxl_config.h.in
 # common test executable
 SUBDIRS += testlib
 
-# utilities
-SUBDIRS += vul
+# POSIX layer
+SUBDIRS += vpl
 
 # stream I/O
 SUBDIRS += vsl
 
-# POSIX layer
-SUBDIRS += vpl
+# utilities
+SUBDIRS += vul
 
 # "basics" (templates)
 SUBDIRS += vbl
