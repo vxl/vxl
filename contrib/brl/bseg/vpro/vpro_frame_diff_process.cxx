@@ -2,7 +2,8 @@
 #include <brip/brip_float_ops.h>
 #include <vpro/vpro_frame_diff_process.h>
 
-vpro_frame_diff_process::vpro_frame_diff_process()
+vpro_frame_diff_process::vpro_frame_diff_process(vpro_frame_diff_params fdp):
+  vpro_frame_diff_params(fdp)
 {
   first_frame_ = true;
 }
@@ -35,11 +36,12 @@ bool vpro_frame_diff_process::execute()
   //compute difference
   vil1_memory_image_of<float> dif = brip_float_ops::difference(img0_,fimg);
 
+    
   // push back buffer
-  img0_=fimg;
+    img0_=fimg;
 
   //convert output back to unsigned char
-  output_image_ = brip_float_ops::convert_to_byte(dif, -50, 50);
+  output_image_ = brip_float_ops::convert_to_byte(dif, -range_, range_);
   return true;
 }
 

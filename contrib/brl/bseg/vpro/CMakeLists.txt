@@ -10,6 +10,7 @@ SET(vpro_sources
     vpro_region_process.cxx          vpro_region_process.h
     vpro_capture_process.cxx         vpro_capture_process.h
     vpro_curve_tracking_process.cxx  vpro_curve_tracking_process.h
+    vpro_frame_diff_params.cxx       vpro_frame_diff_params.h
     vpro_frame_diff_process.cxx      vpro_frame_diff_process.h
     vpro_motion_params.cxx           vpro_motion_params.h
     vpro_motion_process.cxx          vpro_motion_process.h
@@ -20,9 +21,11 @@ SET(vpro_sources
     vpro_line_fit_process.cxx        vpro_line_fit_process.h
     vpro_edge_line_process.cxx       vpro_edge_line_process.h
     vpro_grid_finder_process.cxx     vpro_grid_finder_process.h
-    vpro_corr_tracker_process.cxx    vpro_corr_tracker_process.h
-    vpro_info_tracker_process.cxx    vpro_info_tracker_process.h
-    vpro_track_display_process.cxx   vpro_track_display_process.h	
+    vpro_basis_generator_process.cxx vpro_basis_generator_process.h	
+    vpro_fourier_params.cxx          vpro_fourier_params.h	
+    vpro_fourier_process.cxx         vpro_fourier_process.h	
+    vpro_spatial_filter_params.cxx   vpro_spatial_filter_params.h	
+    vpro_spatial_filter_process.cxx  vpro_spatial_filter_process.h	
 )
 
 AUX_SOURCE_DIRECTORY(Templates vpro_sources)
