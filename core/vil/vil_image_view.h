@@ -18,8 +18,8 @@
 #include <vil2/vil2_pixel_format.h>
 
 //: Concrete view of image data of type T held in memory
-//  Each plane is nx() x ny() Ts, with the (x,y) element
-//  of the p'th plane accessable using
+//  Views nplanes() planes of data each of size nx() x ny().
+//  The with the (x,y) element of the p'th plane is given by
 //  im.top_left_ptr()[x*im.xstep() + y*im.ystep() + p*im.planestep]
 //  The actual image data is either allocated by the class
 //  (using resize), in which case it is deleted

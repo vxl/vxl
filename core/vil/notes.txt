@@ -75,7 +75,9 @@ Should resize allow definition of assumed format? (eg RGBRGB or RRR BBB GGG etc)
 Should deep_copy allow similar definition and thus possible re-ordering?
 Should we have void set_to_window(im,...) functions, or just the image_view window(..) function.
 Which of the following should really be member functions:
-  print_all, transpose, window, deep_copy, set_to_window  flipupdown, flip_leftright ...
+  print_all, window, deep_copy, set_to_window
+The following are currently external functions:
+  vil2_transpose, vil2_reflect_x, vil2_reflect_y, vil2_print_all
 
 Pointers to data are often passed in as const, but may have the const removed.
 This is because it is rather complicated to keep track of whether the data is going to be
@@ -89,6 +91,7 @@ between various view formats.
 There is now now way to get a bit-compressed pbm into memory efficiently. Is this a problem?
 We could solve it by providing a vil2_image_view_of_compressed_bits, or somesuch.
 
+deep_copy: Should it reformat, or should we have a separate function to do it?
 
 
 Notes:

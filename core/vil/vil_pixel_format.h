@@ -5,8 +5,8 @@
 // \file
 // \author Ian Scott.
 
-#include <vil/vil_byte.h>
 #include <vil/vil_rgb.h>
+#include <vil/vil_byte.h>
 
 //: Describes the type of the concrete data.
 enum vil2_pixel_format {

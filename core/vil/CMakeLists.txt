@@ -36,7 +36,7 @@ ADD_LIBRARY(vil2 ${vil2_sources})
 TARGET_LINK_LIBRARIES( vil2 vil vcl )
 
 
-#SUBDIRS(io)
+SUBDIRS(algo)
 
 IF( BUILD_EXAMPLES )
   SUBDIRS( examples )

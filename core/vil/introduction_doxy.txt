@@ -120,7 +120,7 @@ vil2_image_view<vil2_byte> filtered_image = vil2_transpose(tmp_image2);
 // and disconnected from filtered_image itself, which would remain unchanged.
 \endverbatim
 *
-* \section Image sources
+* \section image_src Image sources
 * The vil2_image_data class is an abstract base class for image data, views of which can be
 * obtained (or changed) with the get_view()/set_view() functions.
 * The two main derived classes are
@@ -130,7 +130,7 @@ vil2_image_view<vil2_byte> filtered_image = vil2_transpose(tmp_image2);
 * Most instances of vil2_image_data objecst will be through smart pointers. So expect to see
 * lots of references to vil2_image_data_sptr types.
 *
-* \section Registered images
+* \section reg_im Registered images
 * These meet two needs, a common base class for 2D and 3D images, and a means of
 * associating a world to image transform with an image.
 *
