@@ -11,6 +11,7 @@
 USES += contrib/gel core
 include ../config.mk
 include ${IUEROOT}/core/testlib/config.mk
+include ${IUEROOT}/core/vpl/config.mk
 
 TESTMAIN := test_driver.cxx
 
@@ -29,6 +30,8 @@ TESTS += test_vsol_triangle_3d.cxx
 TESTS += test_vsol_rectangle_3d.cxx
 TESTS += test_vsol_polygon_3d.cxx
 TESTS += test_vsol_tetrahedron.cxx
+
+TESTS += test_vsol_io.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
