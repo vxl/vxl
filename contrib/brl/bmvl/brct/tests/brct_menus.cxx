@@ -28,7 +28,6 @@ vgui_menu brct_menus::get_menu()
   file_menu.add( "Quit", quit_callback,(vgui_key)'q', vgui_CTRL);
 
   action_menu.add("create line", create_line, (vgui_key)'n', vgui_CTRL);
-  action_menu.add("init epipole", init_epipole, (vgui_key)'o', vgui_CTRL);
   action_menu.add("init", init_kalman_callback, (vgui_key)'i', vgui_CTRL);
   action_menu.add("go", kalman_go_callback, (vgui_key)'g', vgui_CTRL);
 
@@ -80,11 +79,6 @@ void brct_menus::load_image()
 void brct_menus::show_epipole()
 {
   brct_windows_frame::instance()->show_epipole();
-}
-
-void brct_menus::init_epipole()
-{
-  brct_windows_frame::instance()->init_epipole();
 }
 
 void brct_menus::create_line()

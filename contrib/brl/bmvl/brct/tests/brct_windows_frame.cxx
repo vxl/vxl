@@ -207,7 +207,10 @@ void brct_windows_frame::remove_curve3d()
 void brct_windows_frame::init_kalman()
 {
   vcl_vector<vgl_point_2d<double> > c2d;
-
+  
+  assert(lines_.size()>=2);
+  init_epipole();
+  
   if (kalman_ == 0)
     vcl_cout<<"brct_windows_frame::kalman_ not created yet\n";
   else {

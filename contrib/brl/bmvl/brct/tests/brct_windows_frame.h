@@ -49,7 +49,6 @@ class brct_windows_frame : public vgui_wrapper_tableau
   void add_curve3d(vcl_vector<vgl_point_3d<double> > &pts);
   void add_next_observes(vcl_vector<vgl_point_2d<double> > &pts);
   void remove_curve3d();
-  void init_epipole();
   void init_kalman();
 
   void init();
@@ -59,6 +58,9 @@ class brct_windows_frame : public vgui_wrapper_tableau
 
  protected:
   //internal utility methods
+
+  //: initialize the epipole from the lines modelled road
+  void init_epipole();
 
   //: it clean the memory allocated by init. it should be called by quit()
   void clean_up();

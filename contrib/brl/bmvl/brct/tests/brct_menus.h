@@ -16,7 +16,6 @@ class brct_menus
 {
  public:
   static void create_line();
-  static void init_epipole();
   static void show_epipole();
   static void load_image();
   static void show_back_projection();
