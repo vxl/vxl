@@ -165,7 +165,11 @@ bool vil_jpeg_image::put_view(const vil_image_view_base &view,
     return false;
   }
 
-  if (view.pixel_format() != VIL_PIXEL_FORMAT_BYTE) return false;
+  if (view.pixel_format() != VIL_PIXEL_FORMAT_BYTE)
+  {
+    vcl_cerr << "vil_jpeg_image::put_view() failed -- can only deal with byte images\n";
+    return false;
+  }
 
   const vil_image_view<vxl_byte>& view2 =
     static_cast<const vil_image_view<vxl_byte>&>(view);
