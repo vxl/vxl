@@ -527,10 +527,10 @@ void osl_edge_detector::Thin_edges() {
     // Now sort the list; this could be slow if we have a lot of potential.
     // edges - surely we have to do number of elements (not -1)?
     //      qsort(edgel_array, edgel_array_len-1, sizeof(osl_edge_detector_xyfloat), &compare);
-    qsort(edgel_array,
-          edgel_array_len,
-          sizeof(osl_edge_detector_xyfloat),
-          (int (*)(const void *, const void *))&compare);
+    vcl_qsort(edgel_array,
+              edgel_array_len,
+              sizeof(osl_edge_detector_xyfloat),
+              (int (*)(const void *, const void *))&compare);
 
     // To assist in setting the thresholds:
     if (  do_output && (edgel_array_len > 0) ) {
