@@ -31,7 +31,9 @@ static void test_robust_util()
   //  rrel_util_weighted_scale
   //
   double wgt_arr[] = { 0.5, 0.75, 0.8,  0,  0.25, 0.4, 0.6, 0.9, 0.8, 0.75 };
+  vcl_vector<double> wgt(10); for (int i=0; i<10; ++i) wgt[i]=wgt_arr[i];
   double rs_arr[] =  { 2,   4,    0.5,  7,  6,    5,   3,   2,   5,   2    };
+  vcl_vector<double> rs(10); for (int i=0; i<10; ++i) rs[i]=rs_arr[i];
   double sum_wr = 0;
   double sum_w = 0;
   for ( int i=0; i<10; ++i ) {
@@ -40,9 +42,9 @@ static void test_robust_util()
   }
   int num = 10;
   int dof = 1;
+  double est_wgted_scale = rrel_util_weighted_scale( rs.begin(), rs.end(), wgt.begin(), dof, (double*)0 );
   double corr_wgted_scale = vcl_sqrt( sum_wr / ( sum_w * (num-dof) / num ) );
-  double est_wgted_scale = rrel_util_weighted_scale( (double*)rs_arr, rs_arr+10, (double*)wgt_arr, dof, (double*)0 );
-  TEST_NEAR("rrel_util_weighted_scale", corr_wgted_scale, est_wgted_scale, 1e-6);
+  TEST_NEAR("rrel_util_weighted_scale", est_wgted_scale, corr_wgted_scale, 1e-6);
 
   //
   //  rrel_util_median_and_scale
