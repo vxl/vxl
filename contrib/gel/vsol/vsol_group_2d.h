@@ -11,10 +11,10 @@
 //
 // \verbatim
 //  Modifications
-//   2000/04/14 François BERTEL Creation
-//   2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
-//   2004/05/14 Peter Vanroose  Added describe()
-//   2004/05/16 Joseph Mundy  Added binary I/0
+//   2000/04/14 François BERTEL   Creation
+//   2000/06/17 Peter Vanroose    Implemented all operator==()s and type info
+//   2004/05/14 Peter Vanroose    Added describe()
+//   2004/05/16 Joseph Mundy      Added binary I/0
 // \endverbatim
 //*****************************************************************************
 

@@ -276,15 +276,15 @@ static double tangent_angle_at_vertex(vtol_vertex_sptr v, vtol_edge_2d_sptr e)
   //Here we assume that the edgel_chain starts at v1 and ends at v2;
   if (v==e->v1())
   {
-    ang = e->curve()->cast_to_digital_curve()->
+    ang = e->curve()->cast_to_vdgl_digital_curve()->
                         get_interpolator()->get_tangent_angle(0);
   }
   else
   {
-    int N = e->curve()->cast_to_digital_curve()->
+    int N = e->curve()->cast_to_vdgl_digital_curve()->
                           get_interpolator()->get_edgel_chain()->size();
 
-    ang = e->curve()->cast_to_digital_curve()->
+    ang = e->curve()->cast_to_vdgl_digital_curve()->
                         get_interpolator()->get_tangent_angle(N-1);
     //reverse the angle since we are at the end rather than the start of the edge?
     ang += 180.0;

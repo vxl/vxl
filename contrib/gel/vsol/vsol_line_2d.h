@@ -99,8 +99,8 @@ class vsol_line_2d : public vsol_curve_2d
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a line_2d, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vsol_line_2d const*cast_to_line_2d(void)const{return this;}
-  virtual vsol_line_2d *cast_to_line_2d(void) {return this;}
+  virtual vsol_line_2d const*cast_to_line(void)const{return this;}
+  virtual vsol_line_2d *cast_to_line(void) {return this;}
 
   //---------------------------------------------------------------------------
   //: Return the curve type

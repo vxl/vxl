@@ -63,30 +63,30 @@ vsol_spatial_object_2d* vsol_polygon_2d::clone(void) const
 // Safe casting
 //***************************************************************************
 
-vsol_polygon_2d* vsol_polygon_2d::cast_to_polygon_2d(void)
+vsol_polygon_2d* vsol_polygon_2d::cast_to_polygon(void)
 {
-  if (!cast_to_triangle_2d()||!cast_to_rectangle_2d())
+  if (!cast_to_triangle()||!cast_to_rectangle())
     return this;
   else
     return 0;
 }
 
-const vsol_polygon_2d* vsol_polygon_2d::cast_to_polygon_2d(void) const
+const vsol_polygon_2d* vsol_polygon_2d::cast_to_polygon(void) const
 {
-  if (!cast_to_triangle_2d()||!cast_to_rectangle_2d())
+  if (!cast_to_triangle()||!cast_to_rectangle())
     return this;
   else
     return 0;
 }
 
-vsol_triangle_2d* vsol_polygon_2d::cast_to_triangle_2d(void){return 0;}
-const vsol_triangle_2d* vsol_polygon_2d::cast_to_triangle_2d(void) const
+vsol_triangle_2d* vsol_polygon_2d::cast_to_triangle(void){return 0;}
+const vsol_triangle_2d* vsol_polygon_2d::cast_to_triangle(void) const
 {
   return 0;
 }
 
-vsol_rectangle_2d* vsol_polygon_2d::cast_to_rectangle_2d(void){return 0;}
-const vsol_rectangle_2d* vsol_polygon_2d::cast_to_rectangle_2d(void) const
+vsol_rectangle_2d* vsol_polygon_2d::cast_to_rectangle(void){return 0;}
+const vsol_rectangle_2d* vsol_polygon_2d::cast_to_rectangle(void) const
 {
   return 0;
 }

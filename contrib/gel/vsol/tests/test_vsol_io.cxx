@@ -593,13 +593,13 @@ void test_vsol_io()
   vsl_b_ofstream grp_out("test_group_2d_io.tmp");
   TEST("Created test_group_2d_io.tmp for writing",(!grp_out), false);
   vsol_group_2d_sptr grp = new vsol_group_2d();
-  grp->add_object(p->cast_to_spatial_object_2d());
-  grp->add_object(l->cast_to_spatial_object_2d());
-  grp->add_object(conic->cast_to_spatial_object_2d());
-  grp->add_object(poly->cast_to_spatial_object_2d());
-  grp->add_object(polyg->cast_to_spatial_object_2d());
-  grp->add_object(triangle->cast_to_spatial_object_2d());
-  grp->add_object(rectangle->cast_to_spatial_object_2d());
+  grp->add_object(p->cast_to_spatial_object());
+  grp->add_object(l->cast_to_spatial_object());
+  grp->add_object(conic->cast_to_spatial_object());
+  grp->add_object(poly->cast_to_spatial_object());
+  grp->add_object(polyg->cast_to_spatial_object());
+  grp->add_object(triangle->cast_to_spatial_object());
+  grp->add_object(rectangle->cast_to_spatial_object());
 
   vcl_cout << "Writing group " << *grp << '\n';
   vsl_b_write(grp_out, grp);

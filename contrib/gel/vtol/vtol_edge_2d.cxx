@@ -389,7 +389,7 @@ void vtol_edge_2d::compute_bounding_box(void) const
   }
   if (c->cast_to_digital_curve())
   {
-    vdgl_digital_curve_sptr dc = c->cast_to_digital_curve();
+    vdgl_digital_curve_sptr dc = c->cast_to_vdgl_digital_curve();
     vsol_box_2d_sptr dc_box = dc->get_bounding_box();
     if (!dc_box)
     {

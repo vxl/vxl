@@ -32,26 +32,35 @@
 //                       more safe set_bounding_box() and add_to_bounding_box().
 //                     (The old setup only worked correctly when (0,0) in bbox.)
 //   2004/09/06 Peter Vanroose  Added safe cast methods to surface_3d
+//   2004/09/17 MingChing Chang  Add cast_to_region().
+//   2004/09/21 Ming-Ching Chang  Make clear distinction between 2D and 3D.
+//                                Add some missing parts to 3D classes.
 // \endverbatim
 //-----------------------------------------------------------------------------
-
-#include <vsol/vsol_spatial_object_3d_sptr.h>
 
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vul/vul_timestamp.h>
 #include <vbl/vbl_ref_count.h>
 #include <vsl/vsl_fwd.h>
-#include <vsol/vsol_box_3d_sptr.h>
 
+#include <vsol/vsol_spatial_object_3d_sptr.h>
+#include <vsol/vsol_box_3d_sptr.h>
+#include <vsol/vsol_spatial_object_3d.h>
+
+class vtol_topology_object_3d;
+
+class vsol_spatial_object_3d;
 class vsol_box_3d;
 class vsol_point_3d;
 class vsol_curve_3d;
 class vsol_surface_3d;
 class vsol_group_3d;
+class vsol_region_3d;
 class vsol_volume_3d;
 class vtol_topology_object;
 class vsol_spatial_object_3d;
+
 extern void iu_delete(vsol_spatial_object_3d *);
 
 #ifndef vsol_spatial_object_flags_
@@ -74,156 +83,158 @@ const unsigned int VSOL_FLAG_BITS      = 0xFF000000;
 
 #endif // vsol_spatial_object_flags_
 
-
 class vsol_spatial_object_3d : public vul_timestamp, public vbl_ref_count
 {
-  // Data Members--------------------------------------------------------------
+protected:
+   // Data Members--------------------------------------------------------------
+   unsigned int tag_;
+   int id_;
+   static int tagcount_;// global count of all spatial objects.
 
- protected:
-  mutable vsol_box_3d_sptr bounding_box_; // rectangular bounding volume
-  unsigned int  tag_;
-  int           id_;
-  static int    tagcount_;    // global count of all spatial objects.
+   mutable vsol_box_3d_sptr bounding_box_; // 3d rectangular bounding area
 
- public:
-  enum vsol_spatial_object_3d_type
-  {
-    SPATIAL_NO_TYPE=0,
-    TOPOLOGYOBJECT,
-    POINT,
-    CURVE,
-    REGION,
-    VOLUME,
-    SPATIALGROUP,
-    NUM_SPATIALOBJECT_TYPES
-  };
-  static const char *SpatialTypes[];
-  static const float eps;
+public:
+   enum vsol_spatial_object_3d_type
+   {
+      SPATIAL_NO_TYPE=0,
+      TOPOLOGYOBJECT,
+      POINT,
+      CURVE,
+      REGION,
+      SPATIALGROUP,
+      VOLUME,
+      NUM_SPATIALOBJECT_TYPES
+   };
 
-  // Constructors/Destructors--------------------------------------------------
+   static const char *SpatialTypes[];
+   static const float eps;
 
-  virtual ~vsol_spatial_object_3d();
+   // Constructors/Destructors--------------------------------------------------
+   virtual ~vsol_spatial_object_3d();
 
- protected:
-  //: constructor initializes basic vsol_spatial_object_3d attributes.
-  //   bounding_box is set to NULL.
-  vsol_spatial_object_3d();
-  vsol_spatial_object_3d(vsol_spatial_object_3d const& other);
-  void not_applicable(vcl_string const& message) const
-  { vcl_cerr<<message<<"() function call not applicable\tfor spatial object "
-            <<get_name()<<" !\n";
-  }
+protected:
+   //: constructor initializes basic vsol_spatial_object_3d attributes.
+   //   bounding_box is set to NULL.
+   vsol_spatial_object_3d();
+   vsol_spatial_object_3d(vsol_spatial_object_3d const& other);
+   void not_applicable(vcl_string const& message) const
+   { 
+      vcl_cerr <<message<<"() function call not applicable\tfor 3d spatial object "
+               <<get_name()<<" !\n";
+   }
 
- public:
-  // Data Access---------------------------------------------------------------
+public:
+   // Data Access---------------------------------------------------------------
 
-  //: get the spatial type
-  virtual vsol_spatial_object_3d_type spatial_type() const=0;
+   //: get the spatial type
+   virtual vsol_spatial_object_3d_type spatial_type() const=0;
 
-  const char *get_name() const; // derived from spatial_type()
+   const char *get_name() const; // derived from spatial_type()
 
-  //: compute bounding box, do nothing in this case except touching the box
-  virtual void compute_bounding_box() const;
+   //: get id of object
+   int get_id() const { return id_; }
+   //: set id of object
+   void set_id(int i) { id_ = i; }
 
-  vsol_box_3d_sptr get_bounding_box() const { check_update_bounding_box(); return bounding_box_; }
+   //: unprotect the object
+   void un_protect() { this->unref(); }
 
-  //: get id of object
-  int get_id() const { return id_; }
-  //: set id of object
-  void set_id(int i) { id_ = i; }
+   //---------------------------------------------------------------------------
+   //: Clone `this': creation of a new object and initialization
+   //  See Prototype pattern
+   //---------------------------------------------------------------------------
+   virtual vsol_spatial_object_3d* clone() const=0;
 
-  //: unprotect the object
-  void un_protect() { this->unref(); }
+   // Binary I/O------------------------------------------------------------------
 
-  //---------------------------------------------------------------------------
-  //: Clone `this': creation of a new object and initialization
-  //  See Prototype pattern
-  //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_3d* clone() const=0;
+   //: Return a platform independent string identifying the class
+   virtual vcl_string is_a() const=0;
 
-  // Binary I/O------------------------------------------------------------------
+   //: Return IO version number;
+   short version() const;
 
-  //: Return a platform independent string identifying the class
-  virtual vcl_string is_a() const=0;
+   //: Binary save self to stream.
+   virtual void b_write(vsl_b_ostream &os) const;
 
-  //: Return IO version number;
-  short version() const;
+   //: Binary load self from stream.
+   virtual void b_read(vsl_b_istream &is);
 
-  //: Binary save self to stream.
-  virtual void b_write(vsl_b_ostream &os) const;
+   // Tag Flag and ID methods
 
-  //: Binary load self from stream.
-  virtual void b_read(vsl_b_istream &is);
+   //: set user flag 1-6
+   inline void set_user_flag(unsigned int flag);
+   inline bool get_user_flag(unsigned int flag);
+   inline void unset_user_flag(unsigned int flag);
+   inline void set_tagged_union_flag();
+   inline bool get_tagged_union_flag();
+   inline void unset_tagged_union_flag();
+   inline int get_tag_id();
+   inline void set_tag_id(int id);
 
-  // Tag Flag and ID methods
+   virtual void print(vcl_ostream &strm=vcl_cout) const { describe(strm); }
+   virtual void describe(vcl_ostream& =vcl_cout, int /*blanking*/=0) const { not_applicable("describe"); }
 
-  //: set user flag 1-6
-  inline void set_user_flag(unsigned int flag);
-  inline bool get_user_flag(unsigned int flag);
-  inline void unset_user_flag(unsigned int flag);
-  inline void set_tagged_union_flag();
-  inline bool get_tagged_union_flag();
-  inline void unset_tagged_union_flag();
-  inline int get_tag_id();
-  inline void set_tag_id(int id);
+   friend inline vcl_ostream &operator<<(vcl_ostream &, vsol_spatial_object_3d const&);
+   friend inline vcl_ostream &operator<<(vcl_ostream &, vsol_spatial_object_3d const*);
 
-  // Data Control--------------------------------------------------------------
+   //Operators
+   virtual bool operator==(vsol_spatial_object_3d const& obj) const { return this==&obj; }
+   bool operator!=(vsol_spatial_object_3d const& obj) { return !(*this==obj); }
 
- public:
-  // bounding box accessors
+public:
 
-  void check_update_bounding_box() const;  // Test consistency of bound
-  //: grow to the largest dim. of this and comp_box, i.e., take the convex union
-  void grow_minmax_bounds(vsol_box_3d & comp_box) const; // mutable const
+   // Data Control--------------------------------------------------------------
 
-  double get_min_x() const;
-  double get_max_x() const;
-  double get_min_y() const;
-  double get_max_y() const;
-  double get_min_z() const;
-  double get_max_z() const;
+   //: compute bounding box, do nothing in this case except touching the box
+   virtual void compute_bounding_box() const;
 
-  //: set the bounding box to a single point, discarding the old bounding box
-  // This is a "const" method since the bounding box is a "mutable" data member:
-  // calculating the bounding box does not change the object.
-  void set_bounding_box(double x, double y, double z) const;
+   vsol_box_3d_sptr get_bounding_box() const { check_update_bounding_box(); return bounding_box_; }
 
-  //: add a point to the bounding box and take the convex union
-  // This is a "const" method since the bounding box is a "mutable" data member:
-  // calculating the bounding box does not change the object.
-  void add_to_bounding_box(double x, double y, double z) const;
+   void check_update_bounding_box() const;  // Test consistency of bound
+   //: grow to the largest dim. of this and comp_box, i.e., take the convex union
+   void grow_minmax_bounds(vsol_box_3d & comp_box) const; // mutable const
 
-  // Operators
+   double get_min_x() const;
+   double get_max_x() const;
+   double get_min_y() const;
+   double get_max_y() const;
+   double get_min_z() const;
+   double get_max_z() const;
 
-  virtual bool operator==(vsol_spatial_object_3d const& obj) const { return this==&obj; }
-  bool operator!=(vsol_spatial_object_3d const& obj) { return !(*this==obj); }
+   //: set the bounding box to a single point, discarding the old bounding box
+   // This is a "const" method since the bounding box is a "mutable" data member:
+   // calculating the bounding box does not change the object.
+   void set_bounding_box(double x, double y, double z) const;
+   
+   //: add a point to the bounding box and take the convex union
+   // This is a "const" method since the bounding box is a "mutable" data member:
+   // calculating the bounding box does not change the object.
+   void add_to_bounding_box(double x, double y, double z) const;
+   
+   //---------------------------------------------------------------------------
+   //: The same behavior than dynamic_cast<>.
+   // Needed because VXL is not necessarily compiled with -frtti
+   //---------------------------------------------------------------------------
+   virtual vsol_spatial_object_3d* cast_to_spatial_object() { return this; }
+   virtual vsol_spatial_object_3d const* cast_to_spatial_object() const{return this;}
 
-  //-------------------------------------------------------------------------
+   virtual vtol_topology_object_3d* cast_to_topology_object() {return 0;}
+   virtual vtol_topology_object_3d const* cast_to_topology_object()const{return 0;}
 
-  //---------------------------------------------------------------------------
-  //: The same behavior than dynamic_cast<>.
-  // Needed because VXL is not necessarily compiled with -frtti
-  //---------------------------------------------------------------------------
-  vsol_spatial_object_3d* cast_to_spatial_object_3d() { return this; }
-  vsol_spatial_object_3d const* cast_to_spatial_object_3d() const{return this;}
-  virtual vtol_topology_object* cast_to_topology_object() {return 0;}
-  virtual vtol_topology_object const* cast_to_topology_object()const{return 0;}
-  virtual vsol_point_3d* cast_to_point() { return 0;}
-  virtual vsol_point_3d const* cast_to_point() const { return 0;}
-  virtual vsol_curve_3d *cast_to_curve() {return 0;}
-  virtual vsol_curve_3d const* cast_to_curve() const {return 0;}
-  virtual vsol_surface_3d* cast_to_surface() { return 0; }
-  virtual vsol_surface_3d const* cast_to_surface() const { return 0; }
-  virtual vsol_volume_3d* cast_to_volume() { return 0;}
-  virtual vsol_volume_3d const* cast_to_volume() const { return 0;}
-  virtual vsol_group_3d *cast_to_group() {return 0;}
-  virtual vsol_group_3d const* cast_to_group() const {return 0;}
-
-  virtual void print(vcl_ostream &strm=vcl_cout) const {describe(strm);}
-  virtual void describe(vcl_ostream& =vcl_cout, int /*blanking*/=0) const { not_applicable("describe"); }
-
-  friend inline vcl_ostream &operator<<(vcl_ostream &,vsol_spatial_object_3d const&);
-  friend inline vcl_ostream &operator<<(vcl_ostream &,vsol_spatial_object_3d const*);
+   virtual vsol_spatial_object_3d* cast_to_vsol_spatial_object() { return 0;}
+   virtual vsol_spatial_object_3d const* cast_to_vsol_spatial_object() const { return 0;}
+   virtual vsol_point_3d* cast_to_point() { return 0;}
+   virtual vsol_point_3d const* cast_to_point() const { return 0;}
+   virtual vsol_curve_3d *cast_to_curve() {return 0;}
+   virtual vsol_curve_3d const* cast_to_curve() const {return 0;}
+   virtual vsol_surface_3d* cast_to_surface() { return 0; }
+   virtual vsol_surface_3d const* cast_to_surface() const { return 0; }
+   virtual vsol_volume_3d* cast_to_volume() { return 0;}
+   virtual vsol_volume_3d const* cast_to_volume() const { return 0;}
+   virtual vsol_region_3d* cast_to_region() { return 0; }
+   virtual vsol_region_3d const* cast_to_region() const { return 0; }
+   virtual vsol_group_3d *cast_to_group() {return 0;}
+   virtual vsol_group_3d const* cast_to_group() const {return 0;}
 };
 
 // inline member functions
@@ -237,13 +248,13 @@ inline void vsol_spatial_object_3d::set_tag_id(int id)
 //: set a flag for a spatial object; flag can be VSOL_FLAG[1-6]
 inline void vsol_spatial_object_3d::set_user_flag(unsigned int flag)
 {
-  tag_=(tag_|flag);
+  tag_ =  (tag_ | flag);
 }
 
 //: check if a flag is set for a spatial object; flag can be VSOL_FLAG[1-6]
 inline bool vsol_spatial_object_3d::get_user_flag(unsigned int flag)
 {
-  return (tag_&flag) != 0;
+  return (tag_ & flag) != 0;
 }
 
 //: un-set a flag for a spatial object; flag can be VSOL_FLAG[1-6]
@@ -277,14 +288,14 @@ inline int vsol_spatial_object_3d::get_tag_id()
 
 inline vcl_ostream &operator<<(vcl_ostream &strm, vsol_spatial_object_3d const& so)
 {
-  ((vsol_spatial_object_3d const *)&so)->print(strm);
+  ((vsol_spatial_object_3d const*)&so)->print(strm);
   return strm;
 }
 
 inline vcl_ostream &operator<<(vcl_ostream &strm, vsol_spatial_object_3d const* so)
 {
   if (so)
-    ((vsol_spatial_object_3d const *)so)->print(strm);
+    ((vsol_spatial_object_3d const*)so)->print(strm);
   else
     strm << "NULL Spatial Object.\n";
   return strm;

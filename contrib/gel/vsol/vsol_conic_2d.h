@@ -29,6 +29,7 @@
 //   2002/04/05 Peter Vanroose  axis() added
 //   2003/01/08 Peter Vanroose  moved static private methods to vsol_conic_2d.cxx
 //   2004/05/11 Joseph Mundy    added binary I/O methods
+//   2004/09/23 Ming-CHing Chang  Change cast_to_conic_2d() to cast_to_conic()
 // \endverbatim
 //*****************************************************************************
 
@@ -371,8 +372,8 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an conic, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vsol_conic_2d const*cast_to_conic_2d(void)const{return this;}
-  virtual vsol_conic_2d *cast_to_conic_2d(void) {return this;}
+  virtual vsol_conic_2d const*cast_to_conic(void)const{return this;}
+  virtual vsol_conic_2d *cast_to_conic(void) {return this;}
 
   // ==== Binary IO methods ======
 

@@ -31,25 +31,29 @@
 //   2003/01/09 Peter Vanroose deprecated set_min_x() etc. and replaced with
 //                       more safe set_bounding_box() and add_to_bounding_box().
 //                     (The old setup only worked correctly when (0,0) in bbox.)
+//   2004/09/21 Ming-Ching Chang  Make clear distinction between 2D and 3D.
+//                                Remove the postfix _2d _3d from the cast_to functions.
 // \endverbatim
 //-----------------------------------------------------------------------------
-
-#include <vsol/vsol_spatial_object_2d_sptr.h>
 
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vul/vul_timestamp.h>
 #include <vbl/vbl_ref_count.h>
 #include <vsl/vsl_fwd.h>
+
+#include <vsol/vsol_spatial_object_2d_sptr.h>
 #include <vsol/vsol_box_2d_sptr.h>
 
+class vtol_topology_object;
+
+class vsol_spatial_object_2d;
 class vsol_box_2d;
 class vsol_point_2d;
 class vsol_curve_2d;
 class vsol_region_2d;
 class vsol_group_2d;
-class vtol_topology_object;
-class vsol_spatial_object_2d;
+
 extern void iu_delete(vsol_spatial_object_2d *);
 
 #ifndef vsol_spatial_object_flags_
@@ -72,150 +76,153 @@ const unsigned int VSOL_FLAG_BITS      = 0xFF000000;
 
 #endif // vsol_spatial_object_flags_
 
-
 class vsol_spatial_object_2d : public vul_timestamp, public vbl_ref_count
 {
-  // Data Members--------------------------------------------------------------
- protected:
-  mutable vsol_box_2d_sptr bounding_box_; // rectangular bounding area
-  unsigned int tag_;
-  int id_;
-  static int tagcount_;// global count of all spatial objects.
+protected:
+   // Data Members--------------------------------------------------------------
+   unsigned int tag_;
+   int id_;
+   static int tagcount_;// global count of all spatial objects.
 
- public:
-  enum vsol_spatial_object_2d_type
-  {
-    SPATIAL_NO_TYPE=0,
-    TOPOLOGYOBJECT,
-    POINT,
-    CURVE,
-    REGION,
-    SPATIALGROUP,
-    NUM_SPATIALOBJECT_TYPES
-  };
-  static const char *SpatialTypes[];
-  static const float eps;
+   mutable vsol_box_2d_sptr bounding_box_; // rectangular bounding area
 
-  // Constructors/Destructors--------------------------------------------------
+public:
+   enum vsol_spatial_object_2d_type
+   {
+      SPATIAL_NO_TYPE=0,
+      TOPOLOGYOBJECT,
+      POINT,
+      CURVE,
+      REGION,
+      SPATIALGROUP,
+      VOLUME,
+      NUM_SPATIALOBJECT_TYPES
+   };
 
-  virtual ~vsol_spatial_object_2d();
+   static const char *SpatialTypes[];
+   static const float eps;
 
- protected:
-  //: constructor initializes basic vsol_spatial_object_2d attributes.
-  //   bounding_box is set to NULL.
-  vsol_spatial_object_2d();
-  vsol_spatial_object_2d(vsol_spatial_object_2d const& other);
-  void not_applicable(vcl_string const& message) const
-  { vcl_cerr<<message<<"() function call not applicable\tfor spatial object "
-            <<get_name()<<" !\n";
-  }
+   // Constructors/Destructors--------------------------------------------------
+   virtual ~vsol_spatial_object_2d();
 
- public:
-  // Data Access---------------------------------------------------------------
+protected:
+   //: constructor initializes basic vsol_spatial_object_2d attributes.
+   //   bounding_box is set to NULL.
+   vsol_spatial_object_2d();
+   vsol_spatial_object_2d(vsol_spatial_object_2d const& other);
+   void not_applicable(vcl_string const& message) const
+   { 
+      vcl_cerr <<message<<"() function call not applicable\tfor 2d spatial object "
+               <<get_name()<<" !\n";
+   }
 
-  //: get the spatial type
-  virtual vsol_spatial_object_2d_type spatial_type() const=0;
+public:
+   // Data Access---------------------------------------------------------------
 
-  const char *get_name() const; // derived from spatial_type()
+   //: get the spatial type
+   virtual vsol_spatial_object_2d_type spatial_type() const=0;
 
-  //: compute bounding box, do nothing in this case except touching the box
-  virtual void compute_bounding_box() const;
+   const char *get_name() const; // derived from spatial_type()
 
-  vsol_box_2d_sptr get_bounding_box() const { check_update_bounding_box(); return bounding_box_; }
+   //: get id of object
+   int get_id() const { return id_; }
+   //: set id of object
+   void set_id(int i) { id_ = i; }
 
-  //: get id of object
-  int get_id() const { return id_; }
-  //: set id of object
-  void set_id(int i) { id_ = i; }
+   //: unprotect the object
+   void un_protect() { this->unref(); }
 
-  //: unprotect the object
-  void un_protect() { this->unref(); }
+   //---------------------------------------------------------------------------
+   //: Clone `this': creation of a new object and initialization
+   //  See Prototype pattern
+   //---------------------------------------------------------------------------
+   virtual vsol_spatial_object_2d* clone() const=0;
 
-  //---------------------------------------------------------------------------
-  //: Clone `this': creation of a new object and initialization
-  //  See Prototype pattern
-  //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d* clone() const=0;
+   // Binary I/O------------------------------------------------------------------
 
-  // Binary I/O------------------------------------------------------------------
+   //: Return a platform independent string identifying the class
+   virtual vcl_string is_a() const=0;
 
-  //: Return a platform independent string identifying the class
-  virtual vcl_string is_a() const=0;
+   //: Return IO version number;
+   short version() const;
 
-  //: Return IO version number;
-  short version() const;
+   //: Binary save self to stream.
+   virtual void b_write(vsl_b_ostream &os) const;
 
-  //: Binary save self to stream.
-  virtual void b_write(vsl_b_ostream &os) const;
+   //: Binary load self from stream.
+   virtual void b_read(vsl_b_istream &is);
 
-  //: Binary load self from stream.
-  virtual void b_read(vsl_b_istream &is);
+   // Tag Flag and ID methods
 
-  // Tag Flag and ID methods
+   //: set user flag 1-6
+   inline void set_user_flag(unsigned int flag);
+   inline bool get_user_flag(unsigned int flag);
+   inline void unset_user_flag(unsigned int flag);
+   inline void set_tagged_union_flag();
+   inline bool get_tagged_union_flag();
+   inline void unset_tagged_union_flag();
+   inline int get_tag_id();
+   inline void set_tag_id(int id);
 
-  //: set user flag 1-6
-  inline void set_user_flag(unsigned int flag);
-  inline bool get_user_flag(unsigned int flag);
-  inline void unset_user_flag(unsigned int flag);
-  inline void set_tagged_union_flag();
-  inline bool get_tagged_union_flag();
-  inline void unset_tagged_union_flag();
-  inline int get_tag_id();
-  inline void set_tag_id(int id);
+   virtual void print(vcl_ostream &strm=vcl_cout) const { describe(strm); }
+   virtual void describe(vcl_ostream& =vcl_cout, int /*blanking*/=0) const { not_applicable("describe"); }
 
-  // Data Control--------------------------------------------------------------
+   friend inline vcl_ostream &operator<<(vcl_ostream &, vsol_spatial_object_2d const&);
+   friend inline vcl_ostream &operator<<(vcl_ostream &, vsol_spatial_object_2d const*);
 
- public:
-  // bounding box accessors
+   //Operators
+   virtual bool operator==(vsol_spatial_object_2d const& obj) const { return this==&obj; }
+   bool operator!=(vsol_spatial_object_2d const& obj) { return !(*this==obj); }
 
-  void check_update_bounding_box() const;  // Test consistency of bound
-  //: grow to the largest dim. of this and comp_box, i.e., take the convex union
-  void grow_minmax_bounds(vsol_box_2d & comp_box) const; // mutable const
+public:
 
-  double get_min_x() const;
-  double get_max_x() const;
-  double get_min_y() const;
-  double get_max_y() const;
+   // Data Control--------------------------------------------------------------
 
-  //: set the bounding box to a single point, discarding the old bounding box
-  // This is a "const" method since the bounding box is a "mutable" data member:
-  // calculating the bounding box does not change the object.
-  void set_bounding_box(double x, double y) const;
+   //: compute bounding box, do nothing in this case except touching the box
+   virtual void compute_bounding_box() const;
 
-  //: add a point to the bounding box and take the convex union
-  // This is a "const" method since the bounding box is a "mutable" data member:
-  // calculating the bounding box does not change the object.
-  void add_to_bounding_box(double x, double y) const;
+   vsol_box_2d_sptr get_bounding_box() const { check_update_bounding_box(); return bounding_box_; }
 
-  // Operators
+   void check_update_bounding_box() const;  // Test consistency of bound
+   //: grow to the largest dim. of this and comp_box, i.e., take the convex union
+   void grow_minmax_bounds(vsol_box_2d & comp_box) const; // mutable const
 
-  virtual bool operator==(vsol_spatial_object_2d const& obj) const { return this==&obj; }
-  bool operator!=(vsol_spatial_object_2d const& obj) { return !(*this==obj); }
+   double get_min_x() const;
+   double get_max_x() const;
+   double get_min_y() const;
+   double get_max_y() const;
 
-  //-------------------------------------------------------------------------
+   //: set the bounding box to a single point, discarding the old bounding box
+   // This is a "const" method since the bounding box is a "mutable" data member:
+   // calculating the bounding box does not change the object.
+   void set_bounding_box(double x, double y) const;
+   
+   //: add a point to the bounding box and take the convex union
+   // This is a "const" method since the bounding box is a "mutable" data member:
+   // calculating the bounding box does not change the object.
+   void add_to_bounding_box(double x, double y) const;
+   
+   //---------------------------------------------------------------------------
+   //: The same behavior than dynamic_cast<>.
+   // Needed because VXL is not necessarily compiled with -frtti
+   //---------------------------------------------------------------------------
+   virtual vsol_spatial_object_2d* cast_to_spatial_object() { return this; }
+   virtual vsol_spatial_object_2d const* cast_to_spatial_object() const{return this;}
 
-  //---------------------------------------------------------------------------
-  //: The same behavior than dynamic_cast<>.
-  // Needed because VXL is not necessarily compiled with -frtti
-  //---------------------------------------------------------------------------
-  vsol_spatial_object_2d* cast_to_spatial_object_2d() {return this;}
-  vsol_spatial_object_2d const* cast_to_spatial_object_2d() const {return this;}
-  virtual vtol_topology_object* cast_to_topology_object() {return 0;}
-  virtual vtol_topology_object const* cast_to_topology_object()const{return 0;}
-  virtual vsol_group_2d *cast_to_group() {return 0;}
-  virtual vsol_group_2d const* cast_to_group() const {return 0;}
-  virtual vsol_curve_2d *cast_to_curve() {return 0;}
-  virtual vsol_curve_2d const* cast_to_curve() const {return 0;}
-  virtual vsol_region_2d* cast_to_region() { return 0; }
-  virtual vsol_region_2d const* cast_to_region() const { return 0; }
-  virtual vsol_point_2d* cast_to_point() { return 0; }
-  virtual vsol_point_2d const* cast_to_point() const { return 0; }
+   // Ming: should be vtol_topology_object_2d
+   virtual vtol_topology_object* cast_to_topology_object() {return 0;}
+   virtual vtol_topology_object const* cast_to_topology_object()const{return 0;}
 
-  virtual void print(vcl_ostream &strm=vcl_cout) const { describe(strm); }
-  virtual void describe(vcl_ostream& =vcl_cout, int /*blanking*/=0) const { not_applicable("describe"); }
-
-  friend inline vcl_ostream &operator<<(vcl_ostream &, vsol_spatial_object_2d const&);
-  friend inline vcl_ostream &operator<<(vcl_ostream &, vsol_spatial_object_2d const*);
+   virtual vsol_spatial_object_2d* cast_to_vsol_spatial_object() { return 0;}
+   virtual vsol_spatial_object_2d const* cast_to_vsol_spatial_object() const { return 0;}
+   virtual vsol_point_2d* cast_to_point() { return 0; }
+   virtual vsol_point_2d const* cast_to_point() const { return 0; }
+   virtual vsol_curve_2d *cast_to_curve() {return 0;}
+   virtual vsol_curve_2d const* cast_to_curve() const {return 0;}
+   virtual vsol_region_2d* cast_to_region() { return 0; }
+   virtual vsol_region_2d const* cast_to_region() const { return 0; }
+   virtual vsol_group_2d *cast_to_group() {return 0;}
+   virtual vsol_group_2d const* cast_to_group() const {return 0;}
 };
 
 // inline member functions

@@ -217,21 +217,21 @@ void vsol_group_2d::b_write(vsl_b_ostream &os) const
     vsol_curve_2d* c = so->cast_to_curve();
     if (c)
     {
-      vsol_line_2d_sptr l = c->cast_to_line_2d();
+      vsol_line_2d_sptr l = c->cast_to_line();
       if (l)
       {
         vsl_b_write(os, l->is_a());
         vsl_b_write(os, l);
         continue;
       }
-      vsol_conic_2d_sptr cn = c->cast_to_conic_2d();
+      vsol_conic_2d_sptr cn = c->cast_to_conic();
       if (cn)
       {
         vsl_b_write(os, cn->is_a());
         vsl_b_write(os, cn);
         continue;
       }
-      vsol_polyline_2d_sptr pl = c->cast_to_polyline_2d();
+      vsol_polyline_2d_sptr pl = c->cast_to_polyline();
       if (pl)
       {
         vsl_b_write(os, pl->is_a());
@@ -242,10 +242,10 @@ void vsol_group_2d::b_write(vsl_b_ostream &os) const
     vsol_region_2d* r = so->cast_to_region();
     if (r)
     {
-      vsol_polygon_2d_sptr pg = r->cast_to_polygon_2d();
+      vsol_polygon_2d_sptr pg = r->cast_to_polygon();
       if (pg)
       {
-        vsol_triangle_2d_sptr tr = pg->cast_to_triangle_2d();
+        vsol_triangle_2d_sptr tr = pg->cast_to_triangle();
         if (tr)
         {
           vsl_b_write(os, tr->is_a());

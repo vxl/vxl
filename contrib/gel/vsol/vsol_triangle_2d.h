@@ -120,8 +120,8 @@ class vsol_triangle_2d : public vsol_polygon_2d
   //---------------------------------------------------------------------------
   void set_p2(const vsol_point_2d_sptr &new_p2);
 
-  virtual vsol_triangle_2d* cast_to_triangle_2d(void) { return this; }
-  virtual vsol_triangle_2d const* cast_to_triangle_2d(void) const { return this; }
+  virtual vsol_triangle_2d* cast_to_triangle(void) { return this; }
+  virtual vsol_triangle_2d const* cast_to_triangle(void) const { return this; }
 
   // ==== Binary IO methods ======
 

@@ -107,6 +107,9 @@ typedef vcl_vector<vtol_chain_sptr>           chain_list;
 //   dec.2002 - Peter Vanroose - added chain_list (typedef) and cast_to_chain()
 //   dec.2002 - Peter Vanroose - link_inferior() now takes smart pointer argument
 // \endverbatim
+
+class vtol_topology_object_2d;
+
 class vtol_topology_object : public vsol_spatial_object_2d
 {
   //***************************************************************************

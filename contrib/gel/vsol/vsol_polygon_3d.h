@@ -73,14 +73,14 @@ class vsol_polygon_3d : public vsol_region_3d
   //---------------------------------------------------------------------------
   //: Safe down-casting methods
   //---------------------------------------------------------------------------
-  virtual vsol_polygon_3d *cast_to_polygon_3d(void) {return this;}
-  virtual vsol_polygon_3d const* cast_to_polygon_3d(void) const {return this;}
+  virtual vsol_polygon_3d *cast_to_polygon(void) {return this;}
+  virtual vsol_polygon_3d const* cast_to_polygon(void) const {return this;}
 
-  virtual vsol_triangle_3d* cast_to_triangle_3d(void) {return 0;}
-  virtual const vsol_triangle_3d* cast_to_triangle_3d(void) const {return 0;}
+  virtual vsol_triangle_3d* cast_to_triangle(void) {return 0;}
+  virtual const vsol_triangle_3d* cast_to_triangle(void) const {return 0;}
 
-  virtual vsol_rectangle_3d* cast_to_rectangle_3d(void) {return 0;}
-  virtual const vsol_rectangle_3d* cast_to_rectangle_3d(void) const {return 0;}
+  virtual vsol_rectangle_3d* cast_to_rectangle(void) {return 0;}
+  virtual const vsol_rectangle_3d* cast_to_rectangle(void) const {return 0;}
 
   //***************************************************************************
   // Access

@@ -1,6 +1,7 @@
 # gel/vsol/CMakeLists.txt
 
 SET(vsol_sources
+
  # embedding dimension 2
  vsol_spatial_object_2d.cxx vsol_spatial_object_2d.h vsol_spatial_object_2d_sptr.h
  vsol_box_2d.cxx            vsol_box_2d.h            vsol_box_2d_sptr.h
@@ -26,12 +27,13 @@ SET(vsol_sources
  # 0-D
  vsol_point_3d.cxx          vsol_point_3d.h          vsol_point_3d_sptr.h
  # 1-D
-                            vsol_curve_3d.h          vsol_curve_3d_sptr.h
+ vsol_curve_3d.cxx          vsol_curve_3d.h          vsol_curve_3d_sptr.h
  vsol_line_3d.cxx           vsol_line_3d.h           vsol_line_3d_sptr.h
  # 2-D
                             vsol_surface_3d.h        vsol_surface_3d_sptr.h
                             vsol_region_3d.h         vsol_region_3d_sptr.h
  vsol_polygon_3d.cxx        vsol_polygon_3d.h        vsol_polygon_3d_sptr.h
+ vsol_polyline_3d.cxx       vsol_polyline_3d.h       vsol_polyline_3d_sptr.h
  vsol_triangle_3d.cxx       vsol_triangle_3d.h       vsol_triangle_3d_sptr.h
  vsol_rectangle_3d.cxx      vsol_rectangle_3d.h      vsol_rectangle_3d_sptr.h
  # 3-D

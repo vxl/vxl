@@ -67,7 +67,7 @@ static void test_cycle_processor()
     vsol_curve_2d_sptr cfb = new vdgl_digital_curve(pf, pb);
     vsol_curve_2d_sptr cfc = new vdgl_digital_curve(pf, pc);
     vsol_curve_2d_sptr cfd = new vdgl_digital_curve(pf, pd);
-    vdgl_interpolator_sptr intp = cfd->cast_to_digital_curve()->get_interpolator();
+    vdgl_interpolator_sptr intp = cfd->cast_to_vdgl_digital_curve()->get_interpolator();
     vdgl_edgel_chain_sptr ec =intp->get_edgel_chain();
     for (unsigned int i=0; i<ec->size(); i++)
       vcl_cout << ec->edgel(i) << vcl_endl;

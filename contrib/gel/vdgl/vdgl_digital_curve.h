@@ -15,6 +15,8 @@
 //   10-Apr-2002 Peter Vanroose - Implemented split()
 //   30-Nov-2002 J.L. Mundy added constructor from end points
 //   18-May-2004 J.L. Mundy added binary I/O methods and equality tests
+//   23-Sep-2004 Ming-Ching Chang Change cast_to_digital_curve() to cast_to_vdgl_digital_curve()
+//                                to distinguish from vsol cast_to_digital_curve()
 // \endverbatim
 
 #include <vcl_iosfwd.h>
@@ -73,8 +75,8 @@ class vdgl_digital_curve : public vsol_curve_2d
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a digital_curve, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vdgl_digital_curve const*cast_to_digital_curve(void)const{return this;}
-  virtual vdgl_digital_curve *cast_to_digital_curve(void) {return this;}
+  virtual vdgl_digital_curve const*cast_to_vdgl_digital_curve(void)const{return this;}
+  virtual vdgl_digital_curve *cast_to_vdgl_digital_curve(void) {return this;}
 
   //: bounding box
   virtual void compute_bounding_box(void) const;

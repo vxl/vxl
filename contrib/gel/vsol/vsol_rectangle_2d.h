@@ -157,8 +157,8 @@ class vsol_rectangle_2d : public vsol_polygon_2d
   //---------------------------------------------------------------------------
   virtual double area(void) const;
 
-  virtual vsol_rectangle_2d* cast_to_rectangle_2d(void) { return this; }
-  virtual vsol_rectangle_2d const* cast_to_rectangle_2d(void) const { return this; }
+  virtual vsol_rectangle_2d* cast_to_rectangle(void) { return this; }
+  virtual vsol_rectangle_2d const* cast_to_rectangle(void) const { return this; }
   // ==== Binary IO methods ======
 
   //: Binary save self to stream.

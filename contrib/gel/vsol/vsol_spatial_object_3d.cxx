@@ -4,11 +4,11 @@
 // \file
 
 #include <vcl_iostream.h>
-#include <vsl/vsl_binary_loader.h>
 #include <vsol/vsol_box_3d.h>
+#include <vsl/vsl_binary_loader.h>
 
-const float vsol_spatial_object_3d::eps = 1.0e-3f;
-int vsol_spatial_object_3d::tagcount_ = 0;
+const float vsol_spatial_object_3d::eps=1.0e-3f;
+int vsol_spatial_object_3d::tagcount_=0;
 
 const char * vsol_spatial_object_3d::SpatialTypes[] =
 {
@@ -17,19 +17,18 @@ const char * vsol_spatial_object_3d::SpatialTypes[] =
   "POINT               ",
   "CURVE               ",
   "REGION              ",
-  "VOLUME              ",
   "SPATIALGROUP        ",
   "NUM_SPATIALOBJECT_TYPES"
 };
 
 vsol_spatial_object_3d::vsol_spatial_object_3d()
-  : vul_timestamp(), vbl_ref_count(), bounding_box_(0), tag_(0), id_(0)
+  : vul_timestamp(), vbl_ref_count(), tag_(0), id_(0), bounding_box_(0)
 {
   set_tag_id(++tagcount_);
 }
 
 vsol_spatial_object_3d::vsol_spatial_object_3d(vsol_spatial_object_3d const &s)
-  : vul_timestamp(), vbl_ref_count(), bounding_box_(0), tag_(0), id_(s.get_id())
+  : vul_timestamp(), vbl_ref_count(), tag_(0), id_(s.get_id()), bounding_box_(0)
 {
   set_tag_id(++tagcount_);
 }
@@ -45,6 +44,12 @@ const char * vsol_spatial_object_3d::get_name() const
 
 vsol_spatial_object_3d::~vsol_spatial_object_3d()
 {
+}
+
+//: Return IO version number;
+short vsol_spatial_object_3d::version() const
+{
+  return 1;
 }
 
 void vsol_spatial_object_3d::compute_bounding_box() const
@@ -121,13 +126,6 @@ double vsol_spatial_object_3d::get_max_z() const
   check_update_bounding_box(); return bounding_box_->get_max_z();
 }
 
-//: Return IO version number;
-short
-vsol_spatial_object_3d::version() const
-{
-  return 1;
-}
-
 //: Binary save self to stream.
 void
 vsol_spatial_object_3d::b_write(vsl_b_ostream &os) const
@@ -136,7 +134,6 @@ vsol_spatial_object_3d::b_write(vsl_b_ostream &os) const
   vsl_b_write(os, this->tag_);
   vsl_b_write(os, this->id_);
 }
-
 
 //: Binary load self from stream.
 void
@@ -160,7 +157,6 @@ vsol_spatial_object_3d::b_read(vsl_b_istream &is)
     return;
   }
 }
-
 
 //==============================================
 //: Allows derived class to be loaded by base-class pointer.

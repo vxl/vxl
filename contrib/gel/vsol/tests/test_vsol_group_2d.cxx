@@ -26,13 +26,13 @@ void test_vsol_group_2d()
   TEST("vsol_group_2d::deep_size()", group1->deep_size(), 0);
 
   vsol_point_2d_sptr p=new vsol_point_2d(10,4);
-  group1->add_object(p->cast_to_spatial_object_2d());
+  group1->add_object(p->cast_to_spatial_object());
 
   TEST("vsol_group_2d::add_object(point)", group1->size(), 1);
   TEST("vsol_group_2d::deep_size()", group1->deep_size(), 1);
 
   vsol_group_2d_sptr group2=new vsol_group_2d;
-  group1->add_object(group2->cast_to_spatial_object_2d());
+  group1->add_object(group2->cast_to_spatial_object());
 
   TEST("vsol_group_2d::add_object(group)", group1->size(), 2);
   TEST("vsol_group_2d::deep_size()", group1->deep_size(), 1);
@@ -40,7 +40,7 @@ void test_vsol_group_2d()
   TEST("vsol_group_2d::object(0)", *(group1->object(0)), *p);
   TEST("vsol_group_2d::object(1)", *(group1->object(1)), *group2);
 
-  group2->add_object(p->cast_to_spatial_object_2d());
+  group2->add_object(p->cast_to_spatial_object());
 
   TEST("object(1)->add_object(point)", group1->size(), 2);
   TEST("vsol_group_2d::deep_size()", group1->deep_size(), 2);
