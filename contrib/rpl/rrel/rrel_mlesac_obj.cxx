@@ -1,10 +1,10 @@
-#include <rrel/rrel_mlesac_obj.h>
+#include "rrel_mlesac_obj.h"
 
 #include <rrel/rrel_util.h>
 #include <vnl/vnl_math.h>
 
 #include <vcl_cstdlib.h>
-#include <vcl_numeric.h>
+//#include <vcl_numeric.h>
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
 
@@ -31,7 +31,7 @@ rrel_mlesac_obj::fcn( vect_const_iter begin, vect_const_iter end,
   vect_const_iter begin0 = begin;
   unsigned int num_residual = end - begin;
   double mult1 = 1.0 / (vcl_sqrt( 2 * vnl_math::pi ));
-  
+
   double inlier_frac = 1.0;
   double new_inlier_frac = 1 - outlier_frac_;
 
@@ -68,14 +68,14 @@ rrel_mlesac_obj::fcn( vect_const_iter begin, vect_const_iter end,
 
 double
 rrel_mlesac_obj::fcn( vect_const_iter begin, vect_const_iter end,
-                             double scale, 
-                             vnl_vector<double>* ) const
+                      double scale,
+                      vnl_vector<double>* ) const
 {
   double value=0;
   double pi,p0,zi;
   vect_const_iter begin0 = begin;
   unsigned int num_residual = end - begin;
-  
+
   double inlier_frac = 1.0;
   double new_inlier_frac = 1 - outlier_frac_;
   double mult1 = 1.0 / (vcl_sqrt( 2 * vnl_math::pi ) * scale);
