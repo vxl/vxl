@@ -36,7 +36,7 @@
 #include <sdet/sdet_detector_params.h>
 #include <sdet/sdet_fit_lines_params.h>
 #include <sdet/sdet_grid_finder_params.h>
-#include <sdet/sdet_tracker_params.h>
+#include <strk/strk_tracker_params.h>
 #include <strk/strk_info_tracker_params.h>
 #include <strk/strk_info_model_tracker_params.h>
 #include <strk/strk_art_info_model.h>

@@ -46,7 +46,9 @@ ELSE(HAS_CMU1394CAMERA)
 ENDIF(HAS_CMU1394CAMERA)
 
 
-LINK_LIBRARIES( vvid vpro strk sdet gevd vtol brip bgui vgui vidl_vil1 vbl vul vil1 bdgl mbl)
+LINK_LIBRARIES( vvid vpro strk sdet gevd vtol brip bgui vgui vidl_vil1 vbl vul vil1 bdgl)
+
+#mbl)
 
 
 # the main executables
