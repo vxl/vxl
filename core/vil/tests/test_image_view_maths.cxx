@@ -1,9 +1,9 @@
 // This is mul/vil2/tests/test_image_view_maths.cxx
-#include <vil2/vil2_math.h>
-#include <vil2/vil2_copy.h>
+#include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
-#include <testlib/testlib_test.h>
+#include <vil2/vil2_math.h>
+#include <vil2/vil2_copy.h>
 
 void test_image_view_maths_byte()
 {
@@ -83,4 +83,3 @@ MAIN( test_image_view_maths )
 
   SUMMARY();
 }
-

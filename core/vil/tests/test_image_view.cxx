@@ -1,15 +1,15 @@
 // This is mul/vil2/tests/test_image_view.cxx
-#include <vil2/vil2_image_view.h>
+#include <testlib/testlib_test.h>
+#include <vcl_iostream.h>
+#include <vcl_functional.h>
+#include <vxl_config.h> // for vxl_byte
 #include <vil2/vil2_crop.h>
 #include <vil2/vil2_copy.h>
 #include <vil2/vil2_print.h>
 #include <vil2/vil2_plane.h>
 #include <vil2/vil2_convert.h>
 #include <vil2/vil2_view_as.h>
-#include <vxl_config.h> // for vxl_byte
-#include <vcl_iostream.h>
-#include <vcl_functional.h>
-#include <testlib/testlib_test.h>
+#include <vil2/vil2_image_view.h>
 
 bool Equal(const vil2_image_view<vxl_byte>& im0,
            const vil2_image_view<vxl_byte>& im1)
@@ -90,8 +90,8 @@ void test_image_view_byte()
   vil2_image_view<vxl_byte> image_win;
   image_win.set_to_window(image0,2,4,3,4);
   TEST("set_to_window size",
-        image_win.ni()==4 && image_win.nj()==4
-        && image_win.nplanes()==image0.nplanes(),true);
+       image_win.ni()==4 && image_win.nj()==4 && image_win.nplanes()==image0.nplanes(),
+       true);
 
   image0(2,3)=222;
   TEST("set_to_window is shallow copy",image_win(0,0),222);
@@ -133,7 +133,7 @@ void test_image_view_byte()
   test_image(2,1,1) = test_image(2,2,1) = 35;
   test_image(2,1,2) = test_image(2,2,2) = 45;
   TEST("vil2_reformat_copy, vil2_window and vil2_deep_equality",
-    vil2_image_view_deep_equality(test_image,image2), true);
+       vil2_image_view_deep_equality(test_image,image2), true);
   test_image(2,2,2) = 44;
   TEST("!vil2_deep_equality", vil2_image_view_deep_equality(test_image,image2), false);
   test_image.resize(5,4,4);
@@ -172,7 +172,6 @@ void test_image_view_byte()
   TEST_NEAR("Conversion rgba to grey", image7(0,0),  1.71540, 1e-5);
   TEST_NEAR("Conversion rgba to grey", image7(2,1), 35.71540, 1e-5);
   vil2_print_all(vcl_cout, image7);
-
 }
 
 #if 0 // commented out
@@ -191,8 +190,7 @@ void test_image_2d_byte_io()
   image_out1 = image_out0;
 
   vsl_b_ofstream bfs_out("test_image_view.bvl.tmp");
-  TEST ("Created test_image_view.bvl.tmp for writing",
-             (!bfs_out), false);
+  TEST ("Created test_image_view.bvl.tmp for writing", (!bfs_out), false);
   vsl_b_write(bfs_out, image_out0);
   vsl_b_write(bfs_out, image_out1);
   bfs_out.close();
@@ -200,8 +198,7 @@ void test_image_2d_byte_io()
   vil2_image_view<vxl_byte> image_in0,image_in1;
 
   vsl_b_ifstream bfs_in("test_image_view.bvl.tmp");
-  TEST ("Opened test_image_view.bvl.tmp for reading",
-           (!bfs_in), false);
+  TEST ("Opened test_image_view.bvl.tmp for reading", (!bfs_in), false);
   vsl_b_read(bfs_in, image_in0);
   vsl_b_read(bfs_in, image_in1);
   TEST ("Finished reading file successfully", (!bfs_in), false);

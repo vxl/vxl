@@ -1,10 +1,10 @@
 // This is mul/vil2/tests/test_sample_profile_bilin.cxx
-#include <vcl_iostream.h>
+#include <testlib/testlib_test.h>
 #include <vcl_vector.h>
-#include <vxl_config.h>
+#include <vcl_iostream.h>
+#include <vxl_config.h> // for vxl_byte
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_sample_profile_bilin.h>
-#include <testlib/testlib_test.h>
 
 void test_sample_profile_bilin_byte()
 {

@@ -1,5 +1,5 @@
 // This is mul/vil2/tests/test_save_load_image.cxx
-
+#include <testlib/testlib_test.h>
 //:
 // \file
 // \author Peter.Vanroose@esat.kuleuven.ac.be
@@ -22,21 +22,21 @@
 //  2 Oct 2002 - Peter Vanroose - replaced image24 tests by image3p
 // \endverbatim
 
-#include <vil2/vil2_save.h>
-#include <vil2/vil2_load.h>
-#include <vil2/vil2_image_view.h>
-#include <vil2/vil2_pixel_format.h>
-#include <vil2/vil2_print.h>
-
-#include <vcl_string.h>
 #include <vcl_cstring.h>
+#include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 
+#include <vxl_config.h> // for vxl_byte
+
 #include <vul/vul_temp_filename.h>
 #include <vpl/vpl.h> // vpl_unlink()
-#include <vxl_config.h> // for vxl_byte
-#include <testlib/testlib_test.h>
+
+#include <vil2/vil2_save.h>
+#include <vil2/vil2_load.h>
+#include <vil2/vil2_print.h>
+#include <vil2/vil2_image_view.h>
+#include <vil2/vil2_pixel_format.h>
 
 #ifndef LEAVE_IMAGES_BEHIND
 #define LEAVE_IMAGES_BEHIND 0

@@ -1,4 +1,6 @@
 // This is mul/vil2/tests/test_image_resource.cxx
+#include <testlib/testlib_test.h>
+#include <vcl_iostream.h>
 #include <vil2/vil2_image_resource.h>
 #include <vil2/vil2_math.h>
 #include <vil2/vil2_new.h>
@@ -7,9 +9,6 @@
 #include <vil2/vil2_transpose.h>
 #include <vil2/vil2_flip.h>
 #include <vil2/vil2_print.h>
-#include <vcl_iostream.h>
-#include <testlib/testlib_test.h>
-
 
 void test_image_resource_1()
 {
@@ -80,8 +79,7 @@ void test_image_resource_1()
   view1 = flip4->get_view(0, flip4->ni(), 0, flip4->nj());
   view2 = clamp->get_view(0, clamp->ni(), 0, clamp->nj());
   TEST("x == flip_lr(flip_ud(flip_lr(flip_ud(x))))",
-    vil2_image_view_deep_equality(view1, view2), true);
-
+       vil2_image_view_deep_equality(view1, view2), true);
 }
 
 MAIN( test_image_resource )

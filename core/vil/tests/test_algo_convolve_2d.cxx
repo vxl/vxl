@@ -1,8 +1,8 @@
 // This is mul/vil2/tests/test_algo_convolve_2d.cxx
-#include <vil2/algo/vil2_algo_convolve_2d.h>
+#include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
-#include <testlib/testlib_test.h>
+#include <vil2/algo/vil2_algo_convolve_2d.h>
 
 void test_algo_convolve_2d_byte()
 {
@@ -74,4 +74,3 @@ MAIN( test_algo_convolve_2d )
 
   SUMMARY();
 }
-

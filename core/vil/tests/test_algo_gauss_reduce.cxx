@@ -1,10 +1,10 @@
 // This is mul/vil2/tests/test_algo_gauss_reduce.cxx
-#include <vil2/algo/vil2_algo_gauss_reduce.h>
-#include <vil2/vil2_image_view.h>
-#include <vil2/vil2_print.h>
+#include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
-#include <testlib/testlib_test.h>
+#include <vil2/vil2_print.h>
+#include <vil2/vil2_image_view.h>
+#include <vil2/algo/vil2_algo_gauss_reduce.h>
 
 void test_algo_gauss_reduce_byte(int nx)
 {
@@ -211,4 +211,3 @@ MAIN( test_algo_gauss_reduce )
 
   SUMMARY();
 }
-

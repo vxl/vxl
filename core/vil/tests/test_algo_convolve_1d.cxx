@@ -1,10 +1,11 @@
 // This is mul/vil2/tests/test_algo_convolve_1d.cxx
-#include <vil2/algo/vil2_algo_convolve_1d.h>
+#include <testlib/testlib_test.h>
+#include <vcl_vector.h>
+#include <vcl_iostream.h>
+#include <vxl_config.h> // for vxl_byte
 #include <vil2/vil2_new.h>
 #include <vil2/vil2_crop.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
-#include <testlib/testlib_test.h>
+#include <vil2/algo/vil2_algo_convolve_1d.h>
 
 void test_algo_convolve_1d_double()
 {

@@ -4,14 +4,14 @@
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
 
-#include <vxl_config.h> // for vxl_uint_8 etc.
+#include <vxl_config.h> // for vxl_uint_16 etc.
 
 #include <testlib/testlib_test.h>
 
+#include <vil/vil_rgb.h>
+#include <vil2/vil2_load.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_image_resource.h>
-#include <vil2/vil2_load.h>
-#include <vil/vil_rgb.h>
 
 
 // Amitha Perera
@@ -112,11 +112,11 @@ private:
   vil2_image_view< T > img_;
 };
 
-template class CheckRGB< vxl_uint_8 >;
+template class CheckRGB< vxl_byte >;
 template class CheckRGB< vxl_uint_16 >;
-template class CheckColourPlanes< vxl_uint_8 >;
+template class CheckColourPlanes< vxl_byte >;
 template class CheckGrey< vxl_uint_16 >;
-template class CheckGrey< vxl_uint_8 >;
+template class CheckGrey< vxl_byte >;
 template class CheckGrey< bool >;
 
 
@@ -184,21 +184,21 @@ test_file_format_read_main( int argc, char* argv[] )
   testlib_test_begin( "  1-bit pbm raw" );
   testlib_test_perform( test( "ff_grey1bit_true.txt", CheckGrey<bool>( "ff_grey1bit_raw.pbm" ) ) );
   testlib_test_begin( "  8-bit pgm ascii" );
-  testlib_test_perform( test( "ff_grey8bit_true.txt", CheckGrey<vxl_uint_8>( "ff_grey8bit_ascii.pgm" ) ) );
+  testlib_test_perform( test( "ff_grey8bit_true.txt", CheckGrey<vxl_byte>( "ff_grey8bit_ascii.pgm" ) ) );
   testlib_test_begin( "  8-bit pgm raw" );
-  testlib_test_perform( test( "ff_grey8bit_true.txt", CheckGrey<vxl_uint_8>( "ff_grey8bit_raw.pgm" ) ) );
+  testlib_test_perform( test( "ff_grey8bit_true.txt", CheckGrey<vxl_byte>( "ff_grey8bit_raw.pgm" ) ) );
   testlib_test_begin( " 16-bit pgm ascii" );
   testlib_test_perform( test( "ff_grey16bit_true.txt", CheckGrey<vxl_uint_16>( "ff_grey16bit_ascii.pgm" ) ) );
   testlib_test_begin( " 16-bit pgm raw" );
   testlib_test_perform( test( "ff_grey16bit_true.txt", CheckGrey<vxl_uint_16>( "ff_grey16bit_raw.pgm" ) ) );
   testlib_test_begin( "  8-bit ppm ascii" );
-  testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_ascii.ppm" ) ) );
+  testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_byte>( "ff_rgb8bit_ascii.ppm" ) ) );
   testlib_test_begin( "  8-bit ppm ascii as planar" );
-  testlib_test_perform( test( "ff_planar8bit_true.txt", CheckColourPlanes<vxl_uint_8>( "ff_rgb8bit_ascii.ppm" ) ) );
+  testlib_test_perform( test( "ff_planar8bit_true.txt", CheckColourPlanes<vxl_byte>( "ff_rgb8bit_ascii.ppm" ) ) );
   testlib_test_begin( "  8-bit ppm raw" );
-  testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_raw.ppm" ) ) );
+  testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_byte>( "ff_rgb8bit_raw.ppm" ) ) );
   testlib_test_begin( "  8-bit ppm raw as planar" );
-  testlib_test_perform( test( "ff_planar8bit_true.txt", CheckColourPlanes<vxl_uint_8>( "ff_rgb8bit_raw.ppm" ) ) );
+  testlib_test_perform( test( "ff_planar8bit_true.txt", CheckColourPlanes<vxl_byte>( "ff_rgb8bit_raw.ppm" ) ) );
   testlib_test_begin( " 16-bit ppm ascii" );
   testlib_test_perform( test( "ff_rgb16bit_true.txt", CheckRGB<vxl_uint_16>( "ff_rgb16bit_ascii.ppm" ) ) );
   testlib_test_begin( " 16-bit ppm raw" );
@@ -207,31 +207,31 @@ test_file_format_read_main( int argc, char* argv[] )
 #if 0
   vcl_cout << "Sun raster [ras]\n";
   testlib_test_begin( "  8-bit grey, no colourmap" );
-  testlib_test_perform( test( "ff_grey8bit_true.txt", CheckGrey<vxl_uint_8>( "ff_grey8bit_nocol.ras" ) ) );
+  testlib_test_perform( test( "ff_grey8bit_true.txt", CheckGrey<vxl_byte>( "ff_grey8bit_nocol.ras" ) ) );
   testlib_test_begin( "  8-bit RGB, no colourmap" );
-  testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_raw.ras" ) ) );
+  testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_byte>( "ff_rgb8bit_raw.ras" ) ) );
   testlib_test_begin( "  8-bit indexed RGB" );
-  testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_indexed.ras" ) ) );
+  testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_byte>( "ff_rgb8bit_indexed.ras" ) ) );
 
    vcl_cout << "Windows bitmap [bmp]\n";
    testlib_test_begin( "  8-bit RGB (xv created)" );
-   testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_xv.bmp" ) ) );
+   testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_byte>( "ff_rgb8bit_xv.bmp" ) ) );
 
   vcl_cout << "TIFF [tiff]\n";
   testlib_test_begin( "  8-bit RGB uncompressed" );
-  testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_uncompressed.tif" ) ) );
+  testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_byte>( "ff_rgb8bit_uncompressed.tif" ) ) );
   testlib_test_begin( "  8-bit RGB packbits" );
-  testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_packbits.tif" ) ) );
+  testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_byte>( "ff_rgb8bit_packbits.tif" ) ) );
 
    vcl_cout << "SGI IRIS [iris]\n";
    testlib_test_begin( "  8-bit RGB rle" );
-   testlib_test_perform( test( "ff_planar8bit_true.txt", CheckColourPlanes<vxl_uint_8>( "ff_rgb8bit.iris" ) ) );
+   testlib_test_perform( test( "ff_planar8bit_true.txt", CheckColourPlanes<vxl_byte>( "ff_rgb8bit.iris" ) ) );
 
   vcl_cout << "Portable Network Graphics [png]\n";
   testlib_test_begin( "  8-bit RGB uncompressed" );
-  testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_uncompressed.png" ) ) );
+  testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_byte>( "ff_rgb8bit_uncompressed.png" ) ) );
   testlib_test_begin( "  8-bit RGB compressed" );
-  testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_compressed.png" ) ) );
+  testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_byte>( "ff_rgb8bit_compressed.png" ) ) );
 #endif
   return testlib_test_summary();
 }
