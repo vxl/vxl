@@ -5,7 +5,7 @@
 // \file
 // \brief Gamma function object
 // \author Matt Leotta (mleotta@lems.brown.edu)
-// \date 02/24/04
+// \date 03/11/04
 //
 // This file contains a base class for the gamma function object
 // and several specific functions derived from it.  These functions are used
