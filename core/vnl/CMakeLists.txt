@@ -1,4 +1,4 @@
-# vxl/vnl/CMakeLists.txt
+# ./vxl/vnl/CMakeLists.txt
 
 ADD_LIBRARY(vnl vnl_sources)
 
