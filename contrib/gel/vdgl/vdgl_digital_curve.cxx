@@ -6,18 +6,15 @@
 // \file
 
 #include "vdgl_digital_curve.h"
+#include <vcl_cassert.h>
 #include <vsol/vsol_point_2d.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_interpolator_linear.h>
 
 vdgl_digital_curve::vdgl_digital_curve( vdgl_interpolator_sptr interpolator)
-  : interpolator_( interpolator)
+  : interpolator_(interpolator)
 {
-  int i = 0;
-  int j = 0;
-  // AGAP: What is this doing? Should this just be
-  //   assert( interpolator != 0 )  ?
-  if (!interpolator) { i = i / j; }
+  assert(interpolator);
 }
 
 vdgl_digital_curve::vdgl_digital_curve(vsol_point_2d_sptr const& p0,
