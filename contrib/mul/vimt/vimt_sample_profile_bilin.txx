@@ -16,20 +16,14 @@ inline bool vimt_profile_in_image(const vgl_point_2d<double>& p0,
                                   const vgl_point_2d<double>& p1,
                                   const vil2_image_view_base& image)
 {
-  if (p0.x()<1) return false;
-  if (p0.y()<1) return false;
-  if (p0.x()+2>image.ni()) return false;
-  if (p0.y()+2>image.nj()) return false;
-  if (p1.x()<1) return false;
-  if (p1.y()<1) return false;
-  if (p1.x()+2>image.ni()) return false;
-  if (p1.y()+2>image.nj()) return false;
-
-  return true;
+  return p0.x()>=0 && p0.x()<=image.ni()-1 &&
+         p0.y()>=0 && p0.y()<=image.nj()-1 &&
+         p1.x()>=0 && p1.x()<=image.ni()-1 &&
+         p1.y()>=0 && p1.y()<=image.nj()-1;
 }
 
-//: Sample along profile, using bilinear interpolation
-//  Profile points are p+iu, where i=[0..n-1].
+//: Sample along profile, using bilinear interpolation.
+//  Profile points are p+i*u, where i=[0..n-1].
 //  Vector v is resized to n*np elements, where np=image.n_planes().
 //  v[0]..v[np-1] are the values from point p
 template <class imType, class vecType>
@@ -59,10 +53,6 @@ void vimt_sample_profile_bilin(vnl_vector<vecType>& vec,
 
   // Otherwise do more fiddly projective calculations
 
-  int istep = image.image().istep();
-  int jstep = image.image().jstep();
-  int pstep = image.image().planestep();
-  const imType* plane0 = image.image().top_left_ptr();
   vgl_point_2d<double> im_p, p=p0;
   const vimt_transform_2d& w2i = image.world2im();
 
@@ -73,7 +63,7 @@ void vimt_sample_profile_bilin(vnl_vector<vecType>& vec,
       for (int i=0;i<n;++i,p+=u)
       {
         im_p = w2i(p);
-        v[i] = vil2_bilin_interp(im_p.x(),im_p.y(),plane0,istep,jstep);
+        v[i] = vil2_bilin_interp(image.image(),im_p.x(),im_p.y());
       }
     }
     else
@@ -81,22 +71,19 @@ void vimt_sample_profile_bilin(vnl_vector<vecType>& vec,
       for (int i=0;i<n;++i,p+=u)
       {
         im_p = w2i(p);
-        for (int j=0;j<np;++j,++v)
-          *v = vil2_bilin_interp(im_p.x(),im_p.y(),plane0+j*pstep,istep,jstep);
+        for (int plane=0;plane<np;++plane,++v)
+          *v = vil2_bilin_interp(image.image(),im_p.x(),im_p.y(),plane);
       }
     }
   }
-  else
+  else // Use safe interpolation, setting v to zero if outside the image:
   {
-    // Use safe interpolation
-    int ni = image.image().ni();
-    int nj = image.image().nj();
     if (np==1)
     {
       for (int i=0;i<n;++i,p+=u)
       {
         im_p = w2i(p);
-        v[i] = vil2_safe_bilin_interp(im_p.x(),im_p.y(),plane0,ni,nj,istep,jstep);
+        v[i] = vil2_bilin_interp_safe(image.image(),im_p.x(),im_p.y());
       }
     }
     else
@@ -104,8 +91,8 @@ void vimt_sample_profile_bilin(vnl_vector<vecType>& vec,
       for (int i=0;i<n;++i,p+=u)
       {
         im_p = w2i(p);
-        for (int j=0;j<np;++j,++v)
-          *v = vil2_safe_bilin_interp(im_p.x(),im_p.y(),plane0+j*pstep,ni,nj,istep,jstep);
+        for (int plane=0;plane<np;++plane,++v)
+          *v = vil2_bilin_interp_safe(image.image(),im_p.x(),im_p.y(),plane);
       }
     }
   }
