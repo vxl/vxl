@@ -100,7 +100,6 @@ add_one_flipped_match( rgrl_match_set_sptr&      inv_set,
   rgrl_feature_sptr from = begin_iter->to_;
   rgrl_feature_sptr mapped = from->transform( *inverse_xform );
 
-  internal_dist_node one;
   // compute the distance
   // REMEMBER: the to is from, from is to. Everything is inversed
   //

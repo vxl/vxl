@@ -110,7 +110,6 @@ add_one_flipped_match( rgrl_match_set_sptr&      inv_set,
   // and then pick the one with highest similarity
   //
 
-  internal_dist_node one;
   // compute the distance
   // REMEMBER: the to is from, from is to. Everything is inversed
   //
