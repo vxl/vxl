@@ -13,7 +13,7 @@ list_test_names( vcl_ostream& ostr )
   ostr << "The registered test names are:\n";
   for ( unsigned int i = 0; i < testlib_test_name_.size(); ++i )
     ostr << "   " << testlib_test_name_[i] << "\n";
-  ostr << "\n\nOmitting a test name, or specifying the name \"all\" "
+  ostr << "\nOmitting a test name, or specifying the name \"all\" "
        << "will run all the tests.\n";
 }
 
@@ -58,6 +58,8 @@ testlib_main( int argc, char* argv[] )
   else
   {
     vcl_cout << "No test name provided.  Attempting to run all tests.\n";
+    list_test_names( vcl_cout );
+    vcl_cout << "If you want to run a single test, specify one of the above on the command line.\n\n";
 
     bool all_pass = true;
     for ( vec_size_t i = 0; i < testlib_test_name_.size(); ++i ) {
