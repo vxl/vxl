@@ -4,10 +4,10 @@
 
 #include "vcl_string.h"
 
-#if VCL_USE_IMPLICIT_TEMPLATES
-# include "iso/vcl_string.txx"
-#elif !VCL_USE_NATIVE_STL
+#if !VCL_USE_NATIVE_STL
 # include "emulation/vcl_string.txx"
+#elif VCL_USE_IMPLICIT_TEMPLATES
+# include "iso/vcl_string.txx"
 #elif defined(VCL_EGCS)
 # include "egcs/vcl_string.txx"
 #elif defined(VCL_GCC_295) && !defined(GNU_LIBSTDCXX_V3)
