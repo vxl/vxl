@@ -183,6 +183,70 @@ Method 3) Mean: 1289us  +/-117us
 Method 4) Mean: 477us  +/-78us
 Method 5) Mean: 898us  +/-39us
 
+Linux-2.4-gcc-3.1.1-O3
+----------------------
+Using -O3:
+Images of BYTE
+Method 1) Mean: 7030us  +/-50us
+Method 2) Mean: 7030us  +/-50us
+Method 3) Mean: 3520us  +/-50us
+Method 4) Mean: 3530us  +/-50us
+Method 5) Mean: 3390us  +/-50us
+Method 6) Mean: 2980us  +/-50us
+Method 7) Mean: 3540us  +/-50us
+Method 8) Mean: 3520us  +/-50us
+Images of FLOAT
+Method 1) Mean: 8470us  +/-50us
+Method 2) Mean: 8200us  +/-0us
+Method 3) Mean: 6350us  +/-50us
+Method 4) Mean: 6150us  +/-50us
+Method 5) Mean: 6140us  +/-50us
+Method 6) Mean: 6140us  +/-50us
+Method 7) Mean: 6350us  +/-50us
+Method 8) Mean: 6150us  +/-50us
+
+
+OSF1-V4.0-gcc-3.2-O3
+--------------------
+Images of BYTE
+Method 1) Mean: 12949us  +/-417us
+Method 2) Mean: 12416us  +/-667us
+Method 3) Mean: 2633us  +/-83us
+Method 4) Mean: 2617us  +/-83us
+Method 5) Mean: 2633us  +/-167us
+Method 6) Mean: 2783us  +/-167us
+Method 7) Mean: 2767us  +/-167us
+Method 8) Mean: 2900us  +/-83us
+Images of FLOAT
+Method 1) Mean: 10500us  +/-0us
+Method 2) Mean: 11283us  +/-417us
+Method 3) Mean: 21666us  +/-833us
+Method 4) Mean: 21332us  +/-250us
+Method 5) Mean: 21166us  +/-250us
+Method 6) Mean: 20633us  +/-167us
+Method 7) Mean: 21016us  +/-833us
+Method 8) Mean: 22516us  +/-1250us
+
+Win32-DotNET-devenv
+-------------------
+Images of BYTE
+Method 1) Mean: 3364us  +/-55us
+Method 2) Mean: 2905us  +/-105us
+Method 3) Mean: 1351us  +/-50us
+Method 4) Mean: 1122us  +/-55us
+Method 5) Mean: 701us  +/-5us
+Method 6) Mean: 681us  +/-55us
+Method 7) Mean: 681us  +/-100us
+Method 8) Mean: 731us  +/-50us
+Images of FLOAT
+Method 1) Mean: 3445us  +/-105us
+Method 2) Mean: 3335us  +/-50us
+Method 3) Mean: 3024us  +/-250us
+Method 4) Mean: 2864us  +/-105us
+Method 5) Mean: 2894us  +/-105us
+Method 6) Mean: 2855us  +/-55us
+Method 7) Mean: 2924us  +/-55us
+Method 8) Mean: 2864us  +/-55us
 
 
 ----------------------------------------------------------------------------
