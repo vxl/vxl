@@ -13,6 +13,7 @@
 #include <gevd/gevd_detector_params.h>
 #include <vcl_iostream.h>
 
+class gevd_region_proc_params;
 vcl_ostream& operator<<(vcl_ostream& os, const gevd_region_proc_params& rpp);
 
 class gevd_region_proc_params : public gevd_param_mixin
