@@ -17,29 +17,9 @@
 // \endverbatim
 //
 
-#include <vbl/vbl_sparse_array_base.h>
 #include <vcl_iosfwd.h>
-
-
-
-
-//: An index for 2d arrays
-// Used specifically with vbl_sparse_array_2d, but can be used
-// for other things.
-struct vbl_index_2d
-{
-  vbl_index_2d(unsigned index_i, unsigned index_j): i(index_i), j(index_j) {} 
-  unsigned i;
-  unsigned j;
-};
-
-//: Defines an ordering on vbl_index_2d
-inline bool operator< (const vbl_index_2d &a, const vbl_index_2d &other)
-{
-  if (a.i == other.i) return (a.j < other.j);
-  else return (a.i < other.i);
-}
-
+#include <vbl/vbl_sparse_array_base.h>
+#include <vbl/vbl_index_2d.h>
 
 //: Sparse 2D array allowing space efficient access of the form  s(300,700) =2
 template <class T>
