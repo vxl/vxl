@@ -1,4 +1,4 @@
-// This is vxl/vgl/algo/vgl_homg_operators_3d.h
+// This is core/vgl/algo/vgl_homg_operators_3d.h
 #ifndef vgl_homg_operators_3d_h
 #define vgl_homg_operators_3d_h
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -7,12 +7,13 @@
 //:
 // \file
 // \author Don Hamilton, Peter Tu
-
+// \date Feb 16 2000
 //
-// Created: Feb 16 2000
-// Modifications
+// \verbatim
+//  Modifications
 //   31-oct-00 Peter Vanroose - implementations fixed, and vgl_homg_line_3d typedef'd
 //   16-Mar-01 Tim Cootes - Tidied up documentation
+// \endverbatim
 
 #include <vcl_vector.h>
 #include <vnl/vnl_fwd.h>
@@ -26,7 +27,7 @@ template <class Type> class vgl_homg_plane_3d;
 template <class Type>
 class vgl_homg_operators_3d
 {
-  typedef vgl_homg_line_3d_2_points<Type > vgl_homg_line_3d;
+  typedef vgl_homg_line_3d_2_points<Type> vgl_homg_line_3d;
 
  public:
 
@@ -37,38 +38,42 @@ class vgl_homg_operators_3d
   //: Get vnl_vector rep of a homogeneous object
   static vnl_vector<Type> get_vector(vgl_homg_plane_3d<Type> const& p);
 
-  static double angle_between_oriented_lines (const vgl_homg_line_3d& line1,
-                                              const vgl_homg_line_3d& line2);
-  static Type distance (const vgl_homg_point_3d<Type >& point1,
-                        const vgl_homg_point_3d<Type >& point2);
-  static Type distance_squared (const vgl_homg_point_3d<Type >& point1,
-                                const vgl_homg_point_3d<Type >& point2);
-  static vgl_homg_point_3d<Type > intersect_line_and_plane (const vgl_homg_line_3d&,
-                                                           const vgl_homg_plane_3d<Type >&);
-  static vgl_homg_point_3d<Type > lines_to_point (const vgl_homg_line_3d& line1,
-                                                 const vgl_homg_line_3d& line2);
-  static vgl_homg_point_3d<Type > lines_to_point (const vcl_vector<vgl_homg_line_3d >& line_list);
-  static double perp_distance_squared (const vgl_homg_line_3d& line,
-                                       const vgl_homg_point_3d<Type >& point);
-  static vgl_homg_line_3d perp_line_through_point (const vgl_homg_line_3d& line,
-                                                   const vgl_homg_point_3d<Type >& point);
-  static vgl_homg_point_3d<Type > perp_projection (const vgl_homg_line_3d& line,
-                                                   const vgl_homg_point_3d<Type >& point);
-  static vgl_homg_line_3d planes_to_line(const vgl_homg_plane_3d<Type >&plane1,
-                                         const vgl_homg_plane_3d<Type >&plane2);
-  static vgl_homg_line_3d planes_to_line(const vcl_vector<vgl_homg_plane_3d<Type > >& plane_list);
-  static vgl_homg_line_3d points_to_line(const vgl_homg_point_3d<Type >&point1,
-                                         const vgl_homg_point_3d<Type >&point2);
-  static vgl_homg_line_3d points_to_line(const vcl_vector<vgl_homg_point_3d<Type > >& point_list);
+  static double angle_between_oriented_lines(const vgl_homg_line_3d& line1,
+                                             const vgl_homg_line_3d& line2);
+  static Type distance(const vgl_homg_point_3d<Type>& point1,
+                       const vgl_homg_point_3d<Type>& point2);
+  static Type distance_squared(const vgl_homg_point_3d<Type>& point1,
+                               const vgl_homg_point_3d<Type>& point2);
+  static vgl_homg_point_3d<Type> intersect_line_and_plane(const vgl_homg_line_3d&,
+                                                          const vgl_homg_plane_3d<Type>&);
+ private: // not yet implemented
+  static vgl_homg_point_3d<Type> lines_to_point(const vgl_homg_line_3d& line1,
+                                                const vgl_homg_line_3d& line2);
+  static vgl_homg_point_3d<Type> lines_to_point(const vcl_vector<vgl_homg_line_3d>& line_list);
+ public:
+  static double perp_distance_squared(const vgl_homg_line_3d& line,
+                                      const vgl_homg_point_3d<Type>& point);
+  static vgl_homg_line_3d perp_line_through_point(const vgl_homg_line_3d& line,
+                                                  const vgl_homg_point_3d<Type>& point);
+  static vgl_homg_point_3d<Type> perp_projection(const vgl_homg_line_3d& line,
+                                                 const vgl_homg_point_3d<Type>& point);
+  static vgl_homg_line_3d planes_to_line(const vgl_homg_plane_3d<Type>& plane1,
+                                         const vgl_homg_plane_3d<Type>& plane2);
+ private: // not yet implemented
+  static vgl_homg_line_3d planes_to_line(const vcl_vector<vgl_homg_plane_3d<Type> >& plane_list);
+  static vgl_homg_line_3d points_to_line(const vgl_homg_point_3d<Type>& point1,
+                                         const vgl_homg_point_3d<Type>& point2);
+  static vgl_homg_line_3d points_to_line(const vcl_vector<vgl_homg_point_3d<Type> >& point_list);
 
-  static vgl_homg_plane_3d<Type > points_to_plane (const vgl_homg_point_3d<Type >&,
-                                                   const vgl_homg_point_3d<Type >&,
-                                                   const vgl_homg_point_3d<Type >& );
-  static vgl_homg_plane_3d<Type > points_to_plane (const vcl_vector<vgl_homg_point_3d<Type > >& point_list);
-  static vgl_homg_point_3d<Type > intersection_point (const vgl_homg_plane_3d<Type >&,
-                                                      const vgl_homg_plane_3d<Type >&,
-                                                      const vgl_homg_plane_3d<Type >&);
-  static vgl_homg_point_3d<Type > intersection_point (const vcl_vector<vgl_homg_plane_3d<Type > >&);
+  static vgl_homg_plane_3d<Type> points_to_plane(const vgl_homg_point_3d<Type>&,
+                                                 const vgl_homg_point_3d<Type>&,
+                                                 const vgl_homg_point_3d<Type>& );
+  static vgl_homg_plane_3d<Type> points_to_plane(const vcl_vector<vgl_homg_point_3d<Type> >& point_list);
+ public:
+  static vgl_homg_point_3d<Type> intersection_point(const vgl_homg_plane_3d<Type>&,
+                                                    const vgl_homg_plane_3d<Type>&,
+                                                    const vgl_homg_plane_3d<Type>&);
+  static vgl_homg_point_3d<Type> intersection_point(const vcl_vector<vgl_homg_plane_3d<Type> >&);
 
   //-----------------------------------------------------------------------------
   //: Calculates the cross ratio of four collinear points p1, p2, p3 and p4.
@@ -97,7 +102,7 @@ class vgl_homg_operators_3d
   static double cross_ratio(const vgl_homg_plane_3d<Type >& p1,
                             const vgl_homg_plane_3d<Type >& p2,
                             const vgl_homg_plane_3d<Type >& p3,
-                            const vgl_homg_point_3d<Type >& p4);
+                            const vgl_homg_plane_3d<Type >& p4);
 };
 
 template <class T>
