@@ -37,7 +37,6 @@ extern "C" {
 #include <mpeg2dec/video_out.h>
 #include <mpeg2dec/mpeg2.h>
 #include <mpeg2dec/mm_accel.h>
-#include <../libvo/video_out_internal.h>
 #undef this
 }
 
