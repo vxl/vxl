@@ -47,7 +47,7 @@ public:
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
-  virtual ~vsol_polyhedron() { storage_.clear(); }
+  virtual ~vsol_polyhedron();
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
@@ -63,7 +63,7 @@ public:
   //: Return vertex `i'
   //  REQUIRE: valid_index(i)
   //---------------------------------------------------------------------------
-  vsol_point_3d_sptr vertex(int i) const { return valid_index(i)?storage_[i]:(vsol_point_3d_sptr)0; }
+  vsol_point_3d_sptr vertex(int i) const;
 
   //***************************************************************************
   // Comparison

@@ -1,6 +1,5 @@
-// This is ./gel/vsol/vsol_polyhedron.cxx
+// This is gel/vsol/vsol_polyhedron.cxx
 #include "vsol_polyhedron.h"
-
 //:
 // \file
 
@@ -143,4 +142,22 @@ bool vsol_polyhedron::in(vsol_point_3d const& p) const
   // TODO
   vcl_cerr << "Warning: vsol_polyhedron::in() has not been implemented yet\n";
   return false;
+}
+
+//---------------------------------------------------------------------------
+//: Destructor
+//---------------------------------------------------------------------------
+vsol_polyhedron::~vsol_polyhedron()
+{
+  storage_.clear();
+}
+
+//---------------------------------------------------------------------------
+//: Return vertex `i'
+//  REQUIRE: valid_index(i)
+//---------------------------------------------------------------------------
+vsol_point_3d_sptr vsol_polyhedron::vertex(int i) const
+{
+  assert(valid_index(i));
+  return storage_[i];
 }
