@@ -715,7 +715,7 @@ empty() const
 }
 
 
-rgrl_feature_sptr
+rgrl_feature_sptr const&
 rgrl_match_set_const_from_iterator::
 from_feature() const
 {
@@ -723,7 +723,7 @@ from_feature() const
 }
 
 
-rgrl_feature_sptr
+rgrl_feature_sptr const&
 rgrl_match_set_const_from_iterator::
 mapped_from_feature() const
 {
@@ -782,7 +782,7 @@ operator!=( const self_type& other ) const
 }
 
 
-rgrl_feature_sptr
+rgrl_feature_sptr const&
 rgrl_match_set_const_from_to_iterator::
 to_feature() const
 {

@@ -274,10 +274,10 @@ class rgrl_match_set_const_from_iterator
   bool empty() const;
 
   //:
-  rgrl_feature_sptr from_feature() const;
+  rgrl_feature_sptr const& from_feature() const;
 
   //:
-  rgrl_feature_sptr mapped_from_feature() const;
+  rgrl_feature_sptr const& mapped_from_feature() const;
 
  private:
   friend class rgrl_match_set;
@@ -359,7 +359,7 @@ class rgrl_match_set_const_from_to_iterator
   bool operator!=( const self_type& other ) const;
 
   //:
-  rgrl_feature_sptr to_feature() const;
+  rgrl_feature_sptr const& to_feature() const;
 
   //:
   double geometric_weight() const;
