@@ -18,17 +18,14 @@ bool gtrl_polygon::inside( const gtrl_vertex_ref point) const
 {
     bool c = false;   
 
-    cerr << "start" << endl;
     for (int i = 0, j = ps_.size()-1; i < ps_.size(); j = i++)
       {
-	cerr << i << " " << j << endl;
         if ((((ps_[i]->y()<=point->y()) && (point->y()<ps_[j]->y())) || 
              ((ps_[j]->y()<=point->y()) && (point->y()<ps_[i]->y()))) &&
 	  (point->x() < (ps_[j]->x() - ps_[i]->x()) * (point->y() - ps_[i]->y()) 
 	  / (ps_[j]->y() - ps_[i]->y()) + ps_[i]->x()))
           c = !c;    
       }
-    cerr << "stop" << endl;
 
   return c;
 }

@@ -17,6 +17,9 @@ class gtrl_triangle : public vbl_ref_count
 public:
   gtrl_triangle( gtrl_vertex_ref p1, gtrl_vertex_ref p2, gtrl_vertex_ref p3);
 
+  gtrl_vertex_ref p1() const { return p1_; }
+  gtrl_vertex_ref p2() const { return p2_; }
+  gtrl_vertex_ref p3() const { return p3_; }
   gtrl_vertex_ref mid_point() const { return midpoint_; }
 
 protected:
