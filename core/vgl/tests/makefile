@@ -15,6 +15,8 @@ TESTS += test_triangle_scan_iterator.cxx
 TESTS += test_ellipse_scan_iterator.cxx
 TESTS += test_area.cxx
 TESTS += test_clip.cxx
+TESTS += test_h_matrix_2d.cxx
+TESTS += test_h_matrix_3d.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
