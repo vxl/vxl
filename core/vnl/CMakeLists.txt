@@ -110,6 +110,7 @@ SET( vnl_sources
   vnl_transpose.cxx            vnl_transpose.h
 
   # Special functions
+                               vnl_cross.h
   vnl_gamma.cxx                vnl_gamma.h
 )
 

@@ -18,6 +18,8 @@ SET(vnl_io_sources
   vnl_io_sym_matrix.txx           vnl_io_sym_matrix.h
   vnl_io_vector.txx               vnl_io_vector.h
   vnl_io_vector_fixed.txx         vnl_io_vector_fixed.h
+
+  vnl_io_matrix_fixed.txx         vnl_io_matrix_fixed.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates vnl_io_sources)
