@@ -19,20 +19,21 @@ However, it is recommended that I/O for other libraries be provided by writing
 
 @subsection Supported Platforms
 
-The binary I/O code is known to work across the following hardware/OS/compiler combinations:
+The binary I/O code is known to work across the following hardware/OS/compiler
+combinations, but probably also works on most other platform/compiler combinations:
 
 @enumerate
-@item  Intel - Linux - gcc-2.95.2
+@item  Intel - Linux - gcc-2.95 and gcc-3.0
 @item  Intel - WindowsNT - vc++
-@item  SGI (Native compiler)
-@item  Sun - Solaris - gcc-2.95.2
-@item  DEC alpha - gcc-2.95.2  (64 bit!)
+@item  SGI - MIPS - MipsPRO CC
+@item  Sun - Solaris - gcc-2.95
+@item  DEC alpha - OSF - gcc-2.95 and gcc 3.0 (64 bit!)
 @end enumerate
 
 Thus
 binary files produced by any of the above should be readable by any other of the above.
-There is of-course an exception; large numbers saved on a 64-bit platform cannot
-be read on a 32-bit platform.
+There is of course a minor exception: large numbers (like integers larger than 4294967295)
+saved on a 64-bit platform cannot be read on a 32-bit platform.
 
 @subsubsection caveats
 The code has been designed to work on as many platforms as possible. However if your
