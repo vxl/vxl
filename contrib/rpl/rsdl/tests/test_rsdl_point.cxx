@@ -1,4 +1,3 @@
-
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vnl/vnl_vector.h>
@@ -7,13 +6,13 @@
 
 #include <rsdl/rsdl_point.h>
 
-bool close( double x, double y ) { return vnl_math_abs(x-y) < 1.0e-6; }
+static bool close( double x, double y ) { return vnl_math_abs(x-y) < 1.0e-6; }
 
 int
 main()
 {
   vbl_test_start( "rsdl_point" );
-  
+
   const unsigned int Nc = 2;
   const unsigned int Na = 3;
 
@@ -27,19 +26,19 @@ main()
 
   bool ok=true;
   unsigned int i;
-  
-  vcl_vector<double> cart(Nc); 
+
+  vcl_vector<double> cart(Nc);
   cart[0] = 2.5; cart[1] = -3.0;
-  vcl_vector<double> ang(Na); 
+  vcl_vector<double> ang(Na);
   ang[0] = -vnl_math::pi/2; ang[1] = vnl_math::pi/4; ang[2] = vnl_math::pi;
-
-//    vbl_test_begin( "ctor from two arrays" );
-//    rsdl_point pt2( cart, cart+Nc, ang, ang+Na );
-//    ok=true;
-//    for ( i=0; ok && i<Nc; ++i ) ok = ok && close(pt2.cartesian(i), cart[i]);
-//    for ( i=0; ok && i<Na; ++i ) ok = ok && close(pt2.angular(i), ang[i]);
-//    vbl_test_perform( ok );
-
+#if 0
+  vbl_test_begin( "ctor from two arrays" );
+  rsdl_point pt2( cart, cart+Nc, ang, ang+Na );
+  ok=true;
+  for ( i=0; ok && i<Nc; ++i ) ok = ok && close(pt2.cartesian(i), cart[i]);
+  for ( i=0; ok && i<Na; ++i ) ok = ok && close(pt2.angular(i), ang[i]);
+  vbl_test_perform( ok );
+#endif
   vbl_test_begin( "ctor from two vnl_vectors" );
   vnl_vector<double> cv(2);  cv[0] = 1.5; cv[1] = 2.1;
   vnl_vector<double> av(3);  av[0] = -3; av[1] = -1.5; av[2] = 3.1;
@@ -103,7 +102,7 @@ main()
 
   vnl_vector<double> new_c(2);
   new_c.x() = -7;  new_c.y() = 3;
-  
+
   cart[0] = 3.5; cart[1] = -5.5;
   ang[0] = -vnl_math::pi/4; ang[1] = vnl_math::pi/4; ang[2] = vnl_math::pi;
   rsdl_point q( cart.begin(), cart.end(), ang.begin(), ang.end() );

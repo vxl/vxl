@@ -1,4 +1,3 @@
-
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vnl/vnl_vector.h>
@@ -7,19 +6,19 @@
 
 #include <rsdl/rsdl_bounding_box.h>
 
-bool close( double x, double y ) { return vnl_math_abs(x-y) < 1.0e-6; }
+static bool close( double x, double y ) { return vnl_math_abs(x-y) < 1.0e-6; }
 
 int
 main()
 {
   vbl_test_start( "rsdl_bounding_box" );
-  
+
   const int Nc = 2;
   const int Na = 3;
 
   rsdl_point min_point(Nc,Na), max_point(Nc,Na);
-  min_point.cartesian(0) = 15;               max_point.cartesian(0) = 8; 
-  min_point.cartesian(1) = 11;               max_point.cartesian(1) = 89.5; 
+  min_point.cartesian(0) = 15;               max_point.cartesian(0) = 8;
+  min_point.cartesian(1) = 11;               max_point.cartesian(1) = 89.5;
   min_point.angular(0) = -vnl_math::pi/2;    max_point.angular(0) =  vnl_math::pi;
   min_point.angular(1) = -vnl_math::pi/4;    max_point.angular(1) = -vnl_math::pi;
   min_point.angular(2) = 3*vnl_math::pi/2;   max_point.angular(2) = vnl_math::pi;
@@ -62,10 +61,10 @@ main()
   rsdl_bounding_box box2( box1 );
   bool ok = true;
   int i;
-  for ( i=0; ok && i<Nc; ++i ) 
+  for ( i=0; ok && i<Nc; ++i )
     ok = close( box1.min_cartesian(i), box2.min_cartesian(i) )
       && close( box1.max_cartesian(i), box2.max_cartesian(i) );
-  for ( i=0; ok && i<Na; ++i ) 
+  for ( i=0; ok && i<Na; ++i )
     ok = close( box1.min_angular(i), box2.min_angular(i) )
       && close( box1.max_angular(i), box2.max_angular(i) );
   vbl_test_perform( ok );
@@ -73,7 +72,3 @@ main()
   vbl_test_summary();
   return 0;
 }
-
-
-
-
