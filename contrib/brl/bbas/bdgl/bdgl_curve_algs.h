@@ -13,12 +13,11 @@
 //
 //-----------------------------------------------------------------------------
 #include <btol/dll.h>
-#include <vcl_map.h>
-#include <vnl/vnl_matrix.h>
 #include <vgl/vgl_line_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vdgl/vdgl_edgel_chain_sptr.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
+
 class bdgl_curve_algs
 {
  public:
@@ -101,7 +100,7 @@ class bdgl_curve_algs
 
   static vdgl_digital_curve_sptr
     create_digital_curves(vcl_vector<vgl_point_2d<double> > & curve);
-  
+
  private:
   bdgl_curve_algs();
 };
