@@ -140,10 +140,10 @@ inline double bilin_interp2(double x, double y, const T** data)
 }
 
 template <class imT>
-double bilin_method1(vil2_image_view<imT>& image, int n_pts, int n_loops)
+double bilin_method1(vil2_image_view<imT>& image, int n_pts, int n_loops, double& sum)
 {
   vcl_time_t t0=vcl_clock();
-  double sum=0.0;
+  sum=0.0;
   for (int n=0;n<n_loops;++n)
   {
      double x = 1.3,y=1.7;
@@ -157,10 +157,10 @@ double bilin_method1(vil2_image_view<imT>& image, int n_pts, int n_loops)
 }
 
 template <class imT>
-double bilin_method2(vil2_image_view<imT>& image, int n_pts, int n_loops)
+double bilin_method2(vil2_image_view<imT>& image, int n_pts, int n_loops, double& sum)
 {
   vcl_time_t t0=vcl_clock();
-  double sum=0.0;
+  sum=0.0;
   for (int n=0;n<n_loops;++n)
   {
     double x = 1.3,y=1.7;
@@ -172,7 +172,7 @@ double bilin_method2(vil2_image_view<imT>& image, int n_pts, int n_loops)
 }
 
 template <class imT>
-double bilin_method3(vil2_image_view<imT>& image, int n_pts, int n_loops)
+double bilin_method3(vil2_image_view<imT>& image, int n_pts, int n_loops, double& sum)
 {
   assert (image.istep() == 1);
   // Uses row[i] to simulate lookup type access used in original vil images
@@ -186,7 +186,7 @@ double bilin_method3(vil2_image_view<imT>& image, int n_pts, int n_loops)
   }
 
   vcl_time_t t0=vcl_clock();
-  double sum=0.0;
+  sum=0.0;
   for (int n=0;n<n_loops;++n)
   {
     double x = 1.3,y=1.7;
@@ -200,12 +200,12 @@ double bilin_method3(vil2_image_view<imT>& image, int n_pts, int n_loops)
 template <class imT>
 double bilin_method(int i, vil2_image_view<imT>& image, int n_pts, int n_loops)
 {
-  double t;
+  double t,sum;
   switch (i)
   {
-    case 1 : t=bilin_method1(image,n_pts,n_loops); break;
-    case 2 : t=bilin_method2(image,n_pts,n_loops); break;
-    case 3 : t=bilin_method3(image,n_pts,n_loops); break;
+    case 1 : t=bilin_method1(image,n_pts,n_loops,sum); break;
+    case 2 : t=bilin_method2(image,n_pts,n_loops,sum); break;
+    case 3 : t=bilin_method3(image,n_pts,n_loops,sum); break;
     default: t=-1;
   }
   return t;
@@ -234,7 +234,7 @@ int main(int argc, char** argv)
   }
 
   n_pts = 100;
-  n_loops = 100000;
+  n_loops = 10000;
   vcl_cout<<"Times to randomly access image (in nanosecs) [Range= 0.5(max-min)]"<<vcl_endl;
   vcl_cout<<"Images of BYTE"<<vcl_endl;
   for (int i=1;i<=3;++i)
