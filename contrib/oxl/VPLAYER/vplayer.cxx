@@ -1,3 +1,5 @@
+// This is oxl/VPLAYER/vplayer.cxx
+#include "vplayer.h"
 //:
 //  \file
 
