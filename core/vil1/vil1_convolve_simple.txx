@@ -27,8 +27,8 @@
 template <class I1, class I2, class AC, class O>
 void vil_convolve_simple(I1 const* const* input1, unsigned w1, unsigned h1,
 			 I2 const* const* input2, unsigned w2, unsigned h2,
-			 O       * const* out,
-			 AC *)
+			 AC *,
+			 O       * const* out)
 {
   typedef typename vil_ip_traits<O* const*>::pixel_type OutType;
 
@@ -71,9 +71,9 @@ void vil_convolve_simple(vil_memory_image_of<I1> const &input1,    // input 1
 			 int x1, int y1, unsigned w1, unsigned h1,
 			 vil_memory_image_of<I2> const &input2,    // input 2
 			 int x2, int y2, unsigned w2, unsigned h2,
+			 AC *,
 			 vil_memory_image_of<O>        &output,    // ouput
-			 int xo, int yo,
-			 AC *)
+			 int xo, int yo)
 {
   // assert that the memory to be touched may be touched :
   assert( input1.in_range(x1, y1, w1, h1) );
@@ -101,32 +101,34 @@ void vil_convolve_simple(vil_memory_image_of<I1> const &input1,    // input 1
   // call the even simpler routine (see comment above for explanation of hack).
   static void (*f)(I1 const * const *, unsigned, unsigned,
 		   I2 const * const *, unsigned, unsigned,
-		   O        * const *, AC *) = 0;
+		   AC *,
+		   O        * const *) = 0;
   if (!f)
     f = vil_convolve_simple;
   (*f)(const_cast<I1 const * const *>(in1.begin()), w1, h1,
        const_cast<I2 const * const *>(in2.begin()), w2, h2,
-       const_cast<O        * const *>(out.begin()),
-       (AC*)0);
+       (AC*)0,
+       const_cast<O        * const *>(out.begin()));
 }
 
 // out_{off+k} = \sum_{i+j = k} a_{off+i} b_{off+j}
 template <class I1, class I2, class AC, class O>
 void vil_convolve_simple(vil_memory_image_of<I1> const &in1,
 			 vil_memory_image_of<I2> const &in2,
-			 vil_memory_image_of<O>        &out,
-			 AC *)
+			 AC *,
+			 vil_memory_image_of<O>        &out)
 {
   // see comment above for explanation of hack.
   static void (*f)(I1 const * const *, unsigned, unsigned,
 		   I2 const * const *, unsigned, unsigned,
-		   O        * const *, AC *) = 0;
+		   AC *,
+		   O        * const *) = 0;
   if (!f)
     f = vil_convolve_simple;
   (*f)(in1.row_array(), in1.width(), in1.height(),
        in2.row_array(), in2.width(), in2.height(),
-       out.row_array(),
-       (AC*)0);
+       (AC*)0,
+       out.row_array());
 }
  
 
@@ -135,23 +137,23 @@ void vil_convolve_simple(vil_memory_image_of<I1> const &in1,
 #define VIL_CONVOLVE_SIMPLE_INSTANTIATE0(I1, I2, AC, O) \
 template void vil_convolve_simple/*<I1, I2, AC, O >*/(I1 const * const *, unsigned, unsigned,  \
                                                       I2 const * const *, unsigned, unsigned,  \
-                                                      O * const *, \
-                                                      AC *);
+                                                      AC *, \
+                                                      O * const *)
 
 #define VIL_CONVOLVE_SIMPLE_INSTANTIATE1(I1, I2, AC, O) \
 template void vil_convolve_simple/*<I1, I2, AC, O >*/(vil_memory_image_of<I1> const &, \
                                                       int, int, unsigned, unsigned,    \
                                                       vil_memory_image_of<I2> const &, \
                                                       int, int, unsigned, unsigned,    \
+                                                      AC *, \
                                                       vil_memory_image_of<O>        &, \
-                                                      int, int, \
-                                                      AC *);
+                                                      int, int)
 
 #define VIL_CONVOLVE_SIMPLE_INSTANTIATE2(I1, I2, AC, O) \
 template void vil_convolve_simple/*<I1, I2, AC, O >*/(vil_memory_image_of<I1> const &, \
                                                       vil_memory_image_of<I2> const &, \
-                                                      vil_memory_image_of<O>        &, \
-                                                      AC *);
+                                                      AC *, \
+                                                      vil_memory_image_of<O>        &)
 
 // at last, the macro we've all been waiting for :
 #define VIL_CONVOLVE_SIMPLE_INSTANTIATE(I1, I2, AC, O) \
