@@ -54,6 +54,7 @@ class ofstream;
 #ifdef vcl_iosfwd_STD
 # define vcl_ostream  vcl_iosfwd_STD ostream
 # define vcl_istream  vcl_iosfwd_STD istream
+# define vcl_fstream  vcl_iosfwd_STD fstream
 # define vcl_ofstream vcl_iosfwd_STD ofstream
 # define vcl_ifstream vcl_iosfwd_STD ifstream
 #endif

@@ -6,9 +6,9 @@
 #if !VCL_USE_NATIVE_STL
 # include <vcl/emulation/vcl_deque.h>
 
-#elif defined(VCL_GCC_WITH_LIBSTDCXX_V2)
-# include <deque.h>
-# define vcl_deque deque
+//#elif defined(VCL_GCC_WITH_LIBSTDCXX_V2)
+//# include <deque.h>
+//# define vcl_deque deque
 
 #else
 # include <vcl/iso/vcl_deque.h>

@@ -2,8 +2,15 @@
 include ${IUEROOT}/config/top-params.mk
 #######################################
 
+# This rule will not actually get updated
+# until after dependencies have been made
+# but that will probably be OK as the .h
+# files in ./iso are now under cvs.
+# The || true is to make sure the build
+# doesn't fail for systems where perl is
+# not available.
 xall::
-	cd ./iso && $(MAKE)
+	( cd ./iso && $(MAKE) ) || true
 
 USES := vxl
 
