@@ -9,8 +9,6 @@
 #include <vil1/vil1_load.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_math.h>
-#include <vgl/vgl_homg_point_2d.h>
-#include <vgl/vgl_homg_line_2d.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_find.h>
 #include <vgui/vgui_macro.h>
@@ -158,7 +156,7 @@ int bmvv_recon_manager::get_cam()
 {
   unsigned int row =0, col=0;
   grid_->get_last_selected_position(&col, &row);
-  if(!row&&!col)
+  if (!row&&!col)
     return 0;
   return 1;
 }
@@ -271,11 +269,11 @@ void bmvv_recon_manager::read_3d_points()
     return;
   cal_.read_data(points_filename);
 }
-  
+
 void bmvv_recon_manager::initial_model_projection()
 {
   bgui_vtol2D_tableau_sptr btab = this->get_selected_vtol2D_tableau();
-  if(!btab)
+  if (!btab)
     return;
   vgui_dialog initial_project_dlg("Project Model (Inital)");
   initial_project_dlg.field("World Plane", plane_);
@@ -283,22 +281,21 @@ void bmvv_recon_manager::initial_model_projection()
     return;
   vgui_image_tableau_sptr itab = btab->get_image_tableau();
   vil1_image image = itab->get_image();
-  if(!image)
+  if (!image)
     return;
   int width = image.width(), height = image.height();
   cal_.set_image_size(brct_plane_calibrator::LEFT, width, height);
   cal_.set_image_size(brct_plane_calibrator::RIGHT, width, height);
-  if(!cal_.compute_initial_homographies())
-    {
-      vcl_cout << "In initial_model_projection() - problem computing initial"
-               << " homographies \n";
-      return;
-    }
-  vcl_vector<vgl_point_2d<double> > pts_2d = 
+  if (!cal_.compute_initial_homographies())
+  {
+    vcl_cout << "In initial_model_projection() - problem computing initial homographies\n";
+    return;
+  }
+  vcl_vector<vgl_point_2d<double> > pts_2d =
     cal_.projected_3d_points_initial(plane_, this->get_cam());
   btab->set_point_radius(5.0f);
   int i = 0;
-  for(vcl_vector<vgl_point_2d<double> >::iterator pit = pts_2d.begin();
+  for (vcl_vector<vgl_point_2d<double> >::iterator pit = pts_2d.begin();
       pit != pts_2d.end(); pit++, i++)
     {
       vgui_soview2D_point* sov = btab->add_point((*pit).x(), (*pit).y());
@@ -311,17 +308,17 @@ void bmvv_recon_manager::initial_model_projection()
 void bmvv_recon_manager::model_projection()
 {
  bgui_vtol2D_tableau_sptr btab = this->get_selected_vtol2D_tableau();
-  if(!btab)
+  if (!btab)
     return;
  vgui_dialog initial_project_dlg("Project Model");
   initial_project_dlg.field("World Plane", plane_);
   if (!initial_project_dlg.ask())
     return;
-  vcl_vector<vgl_point_2d<double> > pts_2d = 
+  vcl_vector<vgl_point_2d<double> > pts_2d =
     cal_.projected_3d_points(plane_, this->get_cam());
   btab->set_point_radius(5.0f);
   int i = 0;
-  for(vcl_vector<vgl_point_2d<double> >::iterator pit = pts_2d.begin();
+  for (vcl_vector<vgl_point_2d<double> >::iterator pit = pts_2d.begin();
       pit != pts_2d.end(); pit++, i++)
     {
       vgui_soview2D_point* sov = btab->add_point((*pit).x(), (*pit).y());
@@ -334,16 +331,16 @@ void bmvv_recon_manager::model_projection()
 brct_corr_sptr bmvv_recon_manager::get_selected_corr()
 {
   bgui_vtol2D_tableau_sptr btab = this->get_selected_vtol2D_tableau();
-  if(!btab)
+  if (!btab)
     return (brct_corr*)0;
   vcl_vector<unsigned> ids = btab->get_selected();
   //take the last selected
   int n = ids.size();
-  if(!n)
-    {
-      vcl_cout << "Nothing selected \n";
-      return (brct_corr*)0;
-    }
+  if (!n)
+  {
+    vcl_cout << "Nothing selected\n";
+    return (brct_corr*)0;
+  }
   int i = point_3d_map_[ids[n-1]];
   return cal_.corr(plane_, i);
 }
@@ -351,32 +348,34 @@ brct_corr_sptr bmvv_recon_manager::get_selected_corr()
 void bmvv_recon_manager::print_selected_corr()
 {
   brct_corr_sptr corr = this->get_selected_corr();
-  vcl_cout << *corr << "\n";
+  vcl_cout << *corr << vcl_endl;
 }
 
 void bmvv_recon_manager::draw_corr_point(const float x, const float y)
 {
  bgui_vtol2D_tableau_sptr btab = this->get_selected_vtol2D_tableau();
- if(!btab)
+ if (!btab)
     return;
  btab->set_point_radius(3.0f);
  btab->set_foreground(0.0f, 1.0f, 0.0f);
  btab->add_point(x, y);
  btab->post_redraw();
 }
+
 void bmvv_recon_manager::pick_corr()
 {
   brct_corr_sptr corr = this->get_selected_corr();
-  if(!corr)
+  if (!corr)
     return;
   bgui_picker_tableau_sptr ptab = this->get_selected_picker_tableau();
-  if(!ptab)
+  if (!ptab)
     return;
   float x=0, y=0;
   ptab->pick_point(&x,&y);
   corr->set_match(this->get_cam(), x, y);
   this->draw_corr_point(x, y);
 }
+
 void bmvv_recon_manager::write_corrs()
 {
   vgui_dialog corr_dlg("Write Correspondences");
@@ -385,9 +384,10 @@ void bmvv_recon_manager::write_corrs()
   corr_dlg.file("Correspondence File", ext, corr_file);
   if (!corr_dlg.ask())
     return;
-  if(!cal_.write_corrs(corr_file))
+  if (!cal_.write_corrs(corr_file))
     vcl_cout << "In bmvv_recon_manager::write_corrs() - failed write\n";
 }
+
 void bmvv_recon_manager::read_corrs()
 {
   vgui_dialog corr_dlg("Read Correspondences");
@@ -396,13 +396,13 @@ void bmvv_recon_manager::read_corrs()
   corr_dlg.file("Correspondence File", ext, corr_file);
   if (!corr_dlg.ask())
     return;
-  if(!cal_.read_corrs(corr_file))
+  if (!cal_.read_corrs(corr_file))
     vcl_cout << "In bmvv_recon_manager::read_corrs() - failed read\n";
 }
 
 void bmvv_recon_manager::compute_homographies()
 {
-  if(!cal_.compute_homographies())
+  if (!cal_.compute_homographies())
     vcl_cout << "In bmvv_recon_manager::compute_homographies() - failed\n";
 }
 
@@ -414,9 +414,10 @@ void bmvv_recon_manager::write_homographies()
   homg_dlg.file("Homgraphy File", ext, homg_file);
   if (!homg_dlg.ask())
     return;
-  if(!cal_.write_homographies(homg_file))
+  if (!cal_.write_homographies(homg_file))
     vcl_cout << "In bmvv_recon_manager::write_homgraphies() - failed\n";
 }
+
 void bmvv_recon_manager::read_homographies()
 {
   vgui_dialog homg_dlg("Read Homographies");
@@ -425,115 +426,118 @@ void bmvv_recon_manager::read_homographies()
   homg_dlg.file("Homgraphy File", ext, homg_file);
   if (!homg_dlg.ask())
     return;
-  if(!sweep_.read_homographies(homg_file))
+  if (!sweep_.read_homographies(homg_file))
     vcl_cout << "In bmvv_recon_manager::read_homgraphies() - failed\n";
 }
 
 void bmvv_recon_manager::project_image()
 {
  bgui_vtol2D_tableau_sptr btab = this->get_selected_vtol2D_tableau();
- if(!btab)
+ if (!btab)
    return;
  vgui_image_tableau_sptr itab = btab->get_image_tableau();
  vil1_image image = itab->get_image();
- if(!image)
-   {
-     vcl_cout << "In bmvv_recon_manager::project_image() -"
-              << " no image loaded in selected pane\n";
-     return;
-   }
+ if (!image)
+ {
+   vcl_cout << "In bmvv_recon_manager::project_image() -"
+            << " no image loaded in selected pane\n";
+   return;
+ }
  vgui_dialog image_project_dlg("Project Image");
   image_project_dlg.field("World Plane", plane_);
   if (!image_project_dlg.ask())
     return;
   int cam = this->get_cam();
   sweep_.set_image(cam, image);
-  vil1_memory_image_of<unsigned char> pimg = 
+  vil1_memory_image_of<unsigned char> pimg =
     sweep_.project_image_to_plane(plane_, cam);
   itab->set_image(pimg);
   itab->post_redraw();
 }
+
 void bmvv_recon_manager::set_images()
 {
-  for(int cam = 0; cam<2; cam++)
+  for (int cam = 0; cam<2; cam++)
+  {
+    bgui_vtol2D_tableau_sptr btab = vtol_tabs_[cam];
+    vgui_image_tableau_sptr itab = btab->get_image_tableau();
+    vil1_image image = itab->get_image();
+    if (!image)
     {
-      bgui_vtol2D_tableau_sptr btab = vtol_tabs_[cam];
-      vgui_image_tableau_sptr itab = btab->get_image_tableau();
-      vil1_image image = itab->get_image();
-      if(!image)
-        {
-          vcl_cout << "In bmvv_recon_manager::set_images()-"
-                   << " not enought images\n";
-          return;
-        }
-      if(!sweep_.set_image(cam, image))
-        {
-          vcl_cout << "In bmvv_recon_manager::set_images()-"
-                   << " can't set image "<< cam << "\n";
-          return;
-        }
+      vcl_cout << "In bmvv_recon_manager::set_images()-"
+               << " not enought images\n";
+      return;
     }
+    if (!sweep_.set_image(cam, image))
+    {
+      vcl_cout << "In bmvv_recon_manager::set_images()-"
+               << " can't set image "<< cam << vcl_endl;
+      return;
+    }
+  }
   images_set_ = true;
   harris_set_ = false;
 }
+
 void bmvv_recon_manager::overlapping_projections()
 {
-  if(!images_set_)
-    {
-      vcl_cout << "In bmvv_recon_manager::overlapping_projections() -"
-               << " images not set\n";
-      return;
-    }
+  if (!images_set_)
+  {
+    vcl_cout << "In bmvv_recon_manager::overlapping_projections() -"
+             << " images not set\n";
+    return;
+  }
   vgui_dialog image_project_dlg("Overlapping Projections");
   image_project_dlg.field("World Plane", plane_);
   if (!image_project_dlg.ask())
     return;
   vcl_vector<vil1_memory_image_of<float> > imgs;
-  if(!sweep_.overlapping_projections(plane_, imgs))
-    {
-      vcl_cout << "In bmvv_recon_manager::overlapping_projections()-"
-               << " overlap failed\n";
-          return;
-    }
-  for(int cam = 0; cam<2; cam++)
-    {
-      bgui_vtol2D_tableau_sptr btab = vtol_tabs_[cam];
-      vgui_image_tableau_sptr itab = btab->get_image_tableau();
-      vil1_memory_image_of<unsigned char> temp =
-        brip_vil1_float_ops::convert_to_byte(imgs[cam], 0, 255);
-      itab->set_image(temp);
-      itab->post_redraw();
-    }
+  if (!sweep_.overlapping_projections(plane_, imgs))
+  {
+    vcl_cout << "In bmvv_recon_manager::overlapping_projections()-"
+             << " overlap failed\n";
+        return;
+  }
+  for (int cam = 0; cam<2; cam++)
+  {
+    bgui_vtol2D_tableau_sptr btab = vtol_tabs_[cam];
+    vgui_image_tableau_sptr itab = btab->get_image_tableau();
+    vil1_memory_image_of<unsigned char> temp =
+      brip_vil1_float_ops::convert_to_byte(imgs[cam], 0, 255);
+    itab->set_image(temp);
+    itab->post_redraw();
+  }
 }
+
 void bmvv_recon_manager::overlapping_projections_z()
 {
-  if(!images_set_)
-    {
-      vcl_cout << "In bmvv_recon_manager::overlapping_projections_z() -"
-               << " images not set\n";
-      return;
-    }
+  if (!images_set_)
+  {
+    vcl_cout << "In bmvv_recon_manager::overlapping_projections_z() -"
+             << " images not set\n";
+    return;
+  }
   double static z;
   vgui_dialog image_project_dlg("Overlapping Projections at Z");
   image_project_dlg.field("Depth z value", z);
   if (!image_project_dlg.ask())
     return;
   vcl_vector<vil1_memory_image_of<float> > imgs;
-  if(!sweep_.overlapping_projections(z, imgs))
-    {
-      vcl_cout << "In bmvv_recon_manager::overlapping_projections()-"
-               << " overlap failed\n";
-          return;
-    }
-  for(int cam = 0; cam<2; cam++)
-    {
-      bgui_vtol2D_tableau_sptr btab = vtol_tabs_[cam];
-      vgui_image_tableau_sptr itab = btab->get_image_tableau();
-      vil1_memory_image_of<unsigned char> temp =
-        brip_vil1_float_ops::convert_to_byte(imgs[cam], 0, 255);
-      itab->set_image(temp);
-      itab->post_redraw();
-    }
+  if (!sweep_.overlapping_projections(z, imgs))
+  {
+    vcl_cout << "In bmvv_recon_manager::overlapping_projections()-"
+             << " overlap failed\n";
+        return;
+  }
+  for (int cam = 0; cam<2; cam++)
+  {
+    bgui_vtol2D_tableau_sptr btab = vtol_tabs_[cam];
+    vgui_image_tableau_sptr itab = btab->get_image_tableau();
+    vil1_memory_image_of<unsigned char> temp =
+      brip_vil1_float_ops::convert_to_byte(imgs[cam], 0, 255);
+    itab->set_image(temp);
+    itab->post_redraw();
+  }
 }
 
 void bmvv_recon_manager::
@@ -541,30 +545,31 @@ draw_vsol_points(const int cam, vcl_vector<vsol_point_2d_sptr> const & points,
                  bool clear, const float r, const float g, const float b)
 {
   bgui_vtol2D_tableau_sptr btab = vtol_tabs_[cam];
-  if(!btab)
-    {
-      vcl_cout << "In bmvv_recon_manager::draw_vsol_points(..) -"
-               << " null btol tableau for pane " << cam << "\n";
-      return;
-    }
-  if(clear)
+  if (!btab)
+  {
+    vcl_cout << "In bmvv_recon_manager::draw_vsol_points(..) -"
+             << " null btol tableau for pane " << cam << vcl_endl;
+    return;
+  }
+  if (clear)
     btab->clear_all();
-  for(vcl_vector<vsol_point_2d_sptr>::const_iterator pit = points.begin();
+  for (vcl_vector<vsol_point_2d_sptr>::const_iterator pit = points.begin();
       pit != points.end(); pit++)
     btab->add_vsol_point_2d(*pit, r, g, b, 3);
 }
+
 void bmvv_recon_manager::
 draw_vsol_point(const int cam, vsol_point_2d_sptr const & point,
                 bool clear, const float r, const float g, const float b)
 {
   bgui_vtol2D_tableau_sptr btab = vtol_tabs_[cam];
-  if(!btab)
-    {
-      vcl_cout << "In bmvv_recon_manager::draw_vsol_point(..) -"
-               << " null btol tableau for pane " << cam << "\n";
-      return;
-    }
-  if(clear)
+  if (!btab)
+  {
+    vcl_cout << "In bmvv_recon_manager::draw_vsol_point(..) -"
+             << " null btol tableau for pane " << cam << vcl_endl;
+    return;
+  }
+  if (clear)
     btab->clear_all();
   btab->add_vsol_point_2d(point, r, g, b, 3);
 }
@@ -575,42 +580,42 @@ draw_vsol_3d_points(const int cam, vcl_vector<vsol_point_3d_sptr> const& pts3d,
                     bool clear)
 {
   bgui_vtol2D_tableau_sptr btab = vtol_tabs_[cam];
-  if(!btab)
-    {
-      vcl_cout << "In bmvv_recon_manager::draw_vsol_3d_points(..) -"
-               << " null btol tableau for pane " << cam << "\n";
-      return;
-    }
-  if(clear)
+  if (!btab)
+  {
+    vcl_cout << "In bmvv_recon_manager::draw_vsol_3d_points(..) -"
+             << " null btol tableau for pane " << cam << vcl_endl;
+    return;
+  }
+  if (clear)
     btab->clear_all();
-  double zmin = vnl_numeric_traits<double>::maxval, zmax = -zmin; 
-  for(vcl_vector<vsol_point_3d_sptr>::const_iterator pit = pts3d.begin();
+  double zmin = vnl_numeric_traits<double>::maxval, zmax = -zmin;
+  for (vcl_vector<vsol_point_3d_sptr>::const_iterator pit = pts3d.begin();
       pit != pts3d.end(); pit++)
-    {
-      zmin = vnl_math_min(zmin, (*pit)->z());
-      zmax = vnl_math_max(zmax, (*pit)->z());
-    }
+  {
+    zmin = vnl_math_min(zmin, (*pit)->z());
+    zmax = vnl_math_max(zmax, (*pit)->z());
+  }
   double d = zmax-zmin, s = 1;
-  if(d)
+  if (d)
     s = 1/d;
-  for(vcl_vector<vsol_point_3d_sptr>::const_iterator pit = pts3d.begin();
+  for (vcl_vector<vsol_point_3d_sptr>::const_iterator pit = pts3d.begin();
       pit != pts3d.end(); pit++)
-    {
-      float f = (float)(((*pit)->z()-zmin)*s);
-      vcl_cout << "f(" << (*pit)->z() << ")=" << f << "\n" << vcl_flush;
-	  vsol_point_2d_sptr p = new vsol_point_2d((*pit)->x(), (*pit)->y());
-      btab->add_vsol_point_2d(p, f, 0, 1-f, 3);
-    }
+  {
+    float f = (float)(((*pit)->z()-zmin)*s);
+    vcl_cout << "f(" << (*pit)->z() << ")=" << f << vcl_endl;
+    vsol_point_2d_sptr p = new vsol_point_2d((*pit)->x(), (*pit)->y());
+    btab->add_vsol_point_2d(p, f, 0, 1-f, 3);
+  }
 }
 
 void bmvv_recon_manager::compute_harris_corners()
 {
-if(!images_set_)
-    {
-      vcl_cout << "In bmvv_recon_manager::compute_harris_corners() -"
-               << " images not set\n";
-      return;
-    }
+  if (!images_set_)
+  {
+    vcl_cout << "In bmvv_recon_manager::compute_harris_corners() -"
+             << " images not set\n";
+    return;
+  }
   vgui_dialog harris_dialog("Compute Harris Corners");
   harris_dialog.field("sigma", sweep_.hdp_.sigma_);
   harris_dialog.field("thresh", sweep_.hdp_.thresh_);
@@ -619,23 +624,24 @@ if(!images_set_)
   harris_dialog.field("scale_factor", sweep_.hdp_.scale_factor_);
   if (!harris_dialog.ask())
     return;
-  if(!sweep_.compute_harris())
+  if (!sweep_.compute_harris())
     return;
-  for(int cam = 0; cam<2; cam++)
-    {
-      vcl_vector<vsol_point_2d_sptr> points = sweep_.harris_corners(cam);
-      this->draw_vsol_points(cam, points);
-    }
+  for (int cam = 0; cam<2; cam++)
+  {
+    vcl_vector<vsol_point_2d_sptr> points = sweep_.harris_corners(cam);
+    this->draw_vsol_points(cam, points);
+  }
   harris_set_ = true;
 }
+
 void bmvv_recon_manager::overlapping_harris_proj_z()
 {
-  if(!images_set_||!harris_set_)
-    {
-      vcl_cout << "In bmvv_recon_manager::overlapping_projections_z() -"
-               << " images not set or harris not ready\n";
-      return;
-    }
+  if (!images_set_||!harris_set_)
+  {
+    vcl_cout << "In bmvv_recon_manager::overlapping_projections_z() -"
+             << " images not set or harris not ready\n";
+    return;
+  }
   double static z;
   vgui_dialog image_project_dlg("Overlapping Harris Projections at Z");
   image_project_dlg.field("Depth z value", z);
@@ -643,32 +649,32 @@ void bmvv_recon_manager::overlapping_harris_proj_z()
     return;
   vcl_vector<vil1_memory_image_of<float> > imgs;
   vcl_vector<vcl_vector<vsol_point_2d_sptr> > harris_corners;
-  if(!sweep_.overlapping_projections(z, imgs, harris_corners))
-    {
-      vcl_cout << "In bmvv_recon_manager::overlapping_projections()-"
-               << " overlap failed\n";
-          return;
-    }
-  for(int cam = 0; cam<2; cam++)
-    {
-      bgui_vtol2D_tableau_sptr btab = vtol_tabs_[cam];
-      vgui_image_tableau_sptr itab = btab->get_image_tableau();
-      vil1_memory_image_of<unsigned char> temp =
-        brip_vil1_float_ops::convert_to_byte(imgs[cam], 0, 255);
-      itab->set_image(temp);
-      itab->post_redraw();
-      this->draw_vsol_points(cam, harris_corners[cam]);
-    }
+  if (!sweep_.overlapping_projections(z, imgs, harris_corners))
+  {
+    vcl_cout << "In bmvv_recon_manager::overlapping_projections()-"
+             << " overlap failed\n";
+        return;
+  }
+  for (int cam = 0; cam<2; cam++)
+  {
+    bgui_vtol2D_tableau_sptr btab = vtol_tabs_[cam];
+    vgui_image_tableau_sptr itab = btab->get_image_tableau();
+    vil1_memory_image_of<unsigned char> temp =
+      brip_vil1_float_ops::convert_to_byte(imgs[cam], 0, 255);
+    itab->set_image(temp);
+    itab->post_redraw();
+    this->draw_vsol_points(cam, harris_corners[cam]);
+  }
 }
 
 void bmvv_recon_manager::cross_correlate_plane()
 {
-  if(!images_set_)
-    {
-      vcl_cout << "In bmvv_recon_manager::overlapping_projections() -"
-               << " images not set\n";
-      return;
-    }
+  if (!images_set_)
+  {
+    vcl_cout << "In bmvv_recon_manager::overlapping_projections() -"
+             << " images not set\n";
+    return;
+  }
  vgui_dialog cc_plane_dlg("Cross Correlate Plane");
   cc_plane_dlg.field("World Plane", plane_);
   cc_plane_dlg.field("Corr Display Range (min)", sweep_.corr_min_);
@@ -677,14 +683,14 @@ void bmvv_recon_manager::cross_correlate_plane()
 
   if (!cc_plane_dlg.ask())
     return;
-  vil1_memory_image_of<unsigned char> cc = 
+  vil1_memory_image_of<unsigned char> cc =
     sweep_.cross_correlate_projections(plane_);
-  if(!cc)
-    {
-      vcl_cout << "In bmvv_recon_manager::cross_correlate_plane()-"
-               << " correlation failed\n";
-      return;
-    }
+  if (!cc)
+  {
+    vcl_cout << "In bmvv_recon_manager::cross_correlate_plane()-"
+             << " correlation failed\n";
+    return;
+  }
   bgui_vtol2D_tableau_sptr btab = vtol_tabs_[0];
   vgui_image_tableau_sptr itab = btab->get_image_tableau();
   itab->set_image(cc);
@@ -693,12 +699,12 @@ void bmvv_recon_manager::cross_correlate_plane()
 
 void bmvv_recon_manager::cross_correlate_z()
 {
-  if(!images_set_)
-    {
-      vcl_cout << "In bmvv_recon_manager::overlapping_projections() -"
-               << " images not set\n";
-      return;
-    }
+  if (!images_set_)
+  {
+    vcl_cout << "In bmvv_recon_manager::overlapping_projections() -"
+             << " images not set\n";
+    return;
+  }
   static double z = 0;
   vgui_dialog cc_z_dlg("Cross Correlate Z");
   cc_z_dlg.field("World Plane", z);
@@ -707,27 +713,28 @@ void bmvv_recon_manager::cross_correlate_z()
   cc_z_dlg.field("Corr Sigma", sweep_.corr_sigma_);
   if (!cc_z_dlg.ask())
     return;
-  vil1_memory_image_of<unsigned char> cc = 
+  vil1_memory_image_of<unsigned char> cc =
     sweep_.cross_correlate_projections(z);
-  if(!cc)
-    {
-      vcl_cout << "In bmvv_recon_manager::cross_correlate_z()-"
-               << " correlation failed\n";
-      return;
-    }
+  if (!cc)
+  {
+    vcl_cout << "In bmvv_recon_manager::cross_correlate_z()-"
+             << " correlation failed\n";
+    return;
+  }
   bgui_vtol2D_tableau_sptr btab = vtol_tabs_[0];
   vgui_image_tableau_sptr itab = btab->get_image_tableau();
   itab->set_image(cc);
   itab->post_redraw();
 }
+
 void bmvv_recon_manager::cross_correlate_harris_z()
 {
-  if(!images_set_||!harris_set_)
-    {
-      vcl_cout << "In bmvv_recon_manager::overlapping_projections() -"
-               << " images or harris corners not set\n";
-      return;
-    }
+  if (!images_set_||!harris_set_)
+  {
+    vcl_cout << "In bmvv_recon_manager::overlapping_projections() -"
+             << " images or harris corners not set\n";
+    return;
+  }
   static double z = 0;
   static bool reset = true;
   vgui_dialog cc_z_harris_dlg("Cross Correlate Harris Corners at Z");
@@ -740,8 +747,8 @@ void bmvv_recon_manager::cross_correlate_harris_z()
     return;
   vil1_image img;
   vcl_vector<vsol_point_2d_sptr> matched_corners, back_proj_cnrs, orig_cnrs0;
-  
-  if(!sweep_.cross_correlate_proj_corners(z, img,
+
+  if (!sweep_.cross_correlate_proj_corners(z, img,
                                           matched_corners,
                                           back_proj_cnrs,
                                           orig_cnrs0,
@@ -762,12 +769,12 @@ void bmvv_recon_manager::cross_correlate_harris_z()
 
 void bmvv_recon_manager::depth_image()
 {
-  if(!images_set_)
-    {
-      vcl_cout << "In bmvv_recon_manager::overlapping_projections() -"
-               << " images not set\n";
-      return;
-    }
+  if (!images_set_)
+  {
+    vcl_cout << "In bmvv_recon_manager::overlapping_projections() -"
+             << " images not set\n";
+    return;
+  }
   vgui_dialog depth_dlg("Compute Depth Image");
   depth_dlg.field("Min Z", sweep_.zmin_);
   depth_dlg.field("Max Z", sweep_.zmax_);
@@ -780,12 +787,12 @@ void bmvv_recon_manager::depth_image()
   if (!depth_dlg.ask())
     return;
   vil1_memory_image_of<unsigned char> depth, max_corr;
-  if(!sweep_.depth_image(depth, max_corr))
-    {
-      vcl_cout << "In bmvv_recon_manager::depth_image()-"
-               << " depth image failed\n";
-      return;
-    }
+  if (!sweep_.depth_image(depth, max_corr))
+  {
+    vcl_cout << "In bmvv_recon_manager::depth_image()-"
+             << " depth image failed\n";
+    return;
+  }
   bgui_vtol2D_tableau_sptr btab = vtol_tabs_[0];
   vgui_image_tableau_sptr itab = btab->get_image_tableau();
   itab->set_image(depth);
@@ -794,12 +801,12 @@ void bmvv_recon_manager::depth_image()
   itab = btab->get_image_tableau();
   itab->set_image(max_corr);
   itab->post_redraw();
-}  
+}
 
 void bmvv_recon_manager::z_corr_image()
 {
  bgui_vtol2D_tableau_sptr btab = this->get_selected_vtol2D_tableau();
- if(!btab)
+ if (!btab)
    return;
  vgui_image_tableau_sptr itab = btab->get_image_tableau();
  static int z = 0;
@@ -811,22 +818,23 @@ void bmvv_recon_manager::z_corr_image()
     return;
 
   vil1_memory_image_of<unsigned char> z_image = sweep_.z_corr_image(z);
-  if(!z_image)
-    {
-      vcl_cout << "No Z_corr_images available\n";
-      return;
-    }
+  if (!z_image)
+  {
+    vcl_cout << "No Z_corr_images available\n";
+    return;
+  }
   itab->set_image(z_image);
   itab->post_redraw();
 }
+
 void bmvv_recon_manager::harris_depth_match()
 {
- if(!images_set_||!harris_set_)
-    {
-      vcl_cout << "In bmvv_recon_manager::harris_depth_match() -"
-               << " images or harris corners not set\n";
-      return;
-    }
+  if (!images_set_||!harris_set_)
+  {
+    vcl_cout << "In bmvv_recon_manager::harris_depth_match() -"
+             << " images or harris corners not set\n";
+    return;
+  }
   vgui_dialog depth_dlg("Compute Harris Depth Match");
   depth_dlg.field("Min Z", sweep_.zmin_);
   depth_dlg.field("Max Z", sweep_.zmax_);
@@ -842,78 +850,81 @@ void bmvv_recon_manager::harris_depth_match()
     return;
   vcl_vector<vsol_point_3d_sptr> points_3d;
   vcl_vector<vsol_point_2d_sptr> proj_points;
-  if(!sweep_.harris_depth_match(points_3d, proj_points))
-    {
-      vcl_cout << "In bmvv_recon_manager::depth_image()-"
-               << " depth image failed\n";
-      return;
-    }
+  if (!sweep_.harris_depth_match(points_3d, proj_points))
+  {
+    vcl_cout << "In bmvv_recon_manager::depth_image()-"
+             << " depth image failed\n";
+    return;
+  }
   this->draw_vsol_points(1, proj_points);
 }
+
 void bmvv_recon_manager::corr_plot()
 {
   bgui_picker_tableau_sptr ptab = this->get_selected_picker_tableau();
-  if(!ptab)
+  if (!ptab)
     return;
   float x=0, y=0;
   ptab->pick_point(&x,&y);
   vcl_vector<float> z, corr;
   sweep_.corr_vals(x, y, z, corr);
   int n = z.size();
-  if(!n)
+  if (!n)
     return;
   vcl_cout << "C(z)[" << x << "][" << y << "]\n";
-  for(int i = 0; i<n; i++)
-    vcl_cout << z[i] << "\t" << corr[i] << "\n";
-  vcl_cout << "\n" << vcl_flush;
+  for (int i = 0; i<n; i++)
+    vcl_cout << z[i] << '\t' << corr[i] << '\n';
+  vcl_cout << vcl_endl;
 }
+
 //: create a point in the pane corresponding to cam
 void bmvv_recon_manager::create_point(int& cam, vsol_point_2d_sptr& p)
 {
   cam = this->get_cam();
   bgui_picker_tableau_sptr ptab = this->get_selected_picker_tableau();
-  if(!ptab)
+  if (!ptab)
     return;
   float x=0, y=0;
   ptab->pick_point(&x,&y);
   this->draw_corr_point(x, y);
   p = new vsol_point_2d(x, y);
 }
+
 //: map a point from cam a to cam b at depth z
 void bmvv_recon_manager::map_point()
 {
- static double z = 0;
- vgui_dialog z_map_dlg("Map Point at Z");
- z_map_dlg.field("Depth value (z)", z);
- if (!z_map_dlg.ask())
-   return;
- vcl_cout << "Waiting to pick a point\n";
- int cam = 0;
- vsol_point_2d_sptr p, q;
- this->create_point(cam, p); 
- if(!p)
-   {
-     vcl_cout << "Pick Failed\n";
-     return;
-   }
- vcl_cout << "got point at " << p->x() << " " << p->y() << "\n";
- q = sweep_.map_point(p, cam, z);
- if(!q)
-   {
-     vcl_cout << "Map Failed\n";
-     return;
-   }
- int camb = 1-cam;
- this->draw_vsol_point(camb, q);
+  static double z = 0;
+  vgui_dialog z_map_dlg("Map Point at Z");
+  z_map_dlg.field("Depth value (z)", z);
+  if (!z_map_dlg.ask())
+    return;
+  vcl_cout << "Waiting to pick a point\n";
+  int cam = 0;
+  vsol_point_2d_sptr p, q;
+  this->create_point(cam, p);
+  if (!p)
+  {
+    vcl_cout << "Pick Failed\n";
+    return;
+  }
+  vcl_cout << "got point at " << p->x() << ' ' << p->y() << vcl_endl;
+  q = sweep_.map_point(p, cam, z);
+  if (!q)
+  {
+    vcl_cout << "Map Failed\n";
+    return;
+  }
+  int camb = 1-cam;
+  this->draw_vsol_point(camb, q);
 }
 
 void bmvv_recon_manager::map_image()
 {
-  if(!images_set_)
-    {
-      vcl_cout << " Images not set \n";
-      return;
-    }
+  if (!images_set_)
+  {
+    vcl_cout << "Images not set\n";
+    return;
+  }
  static double z = 0;
  vgui_dialog z_map_dlg("Image to image Mapping");
  z_map_dlg.field("Depth value (z)", z);
@@ -921,7 +932,7 @@ void bmvv_recon_manager::map_image()
    return;
  int from_cam = this->get_cam(), to_cam = 1-from_cam;
  vil1_memory_image_of<unsigned char> mapped_to_image, orig_to_image;
- if(!sweep_.map_image_to_image(from_cam, z, mapped_to_image, orig_to_image))
+ if (!sweep_.map_image_to_image(from_cam, z, mapped_to_image, orig_to_image))
    return;
  bgui_vtol2D_tableau_sptr btab = vtol_tabs_[0];
  vgui_image_tableau_sptr itab = btab->get_image_tableau();
@@ -932,60 +943,60 @@ void bmvv_recon_manager::map_image()
  itab->set_image(mapped_to_image);
  itab->post_redraw();
 }
- 
+
 void bmvv_recon_manager::map_harris_corners()
 {
-  if(!harris_set_)
-    {
-      vcl_cout << " No Harris corners \n";
-      return;
-    }
- static double z = 0;
- vgui_dialog z_map_dlg("Harris corner Mapping");
- z_map_dlg.field("Depth value (z)", z);
- if (!z_map_dlg.ask())
-   return;
- int from_cam = this->get_cam(), to_cam = 1-from_cam;
- vcl_vector<vsol_point_2d_sptr> mapped_to_points, orig_to_points;
- if(!sweep_.map_harris_corners(from_cam, z, mapped_to_points, orig_to_points))
-   return;
- this->draw_vsol_points(0, orig_to_points, true, 0, 1, 0);
- this->draw_vsol_points(0, mapped_to_points, false, 1, 0, 0);
+  if (!harris_set_)
+  {
+    vcl_cout << "No Harris corners\n";
+    return;
+  }
+  static double z = 0;
+  vgui_dialog z_map_dlg("Harris corner Mapping");
+  z_map_dlg.field("Depth value (z)", z);
+  if (!z_map_dlg.ask())
+    return;
+  int from_cam = this->get_cam(), to_cam = 1-from_cam;
+  vcl_vector<vsol_point_2d_sptr> mapped_to_points, orig_to_points;
+  if (!sweep_.map_harris_corners(from_cam, z, mapped_to_points, orig_to_points))
+    return;
+  this->draw_vsol_points(0, orig_to_points, true, 0, 1, 0);
+  this->draw_vsol_points(0, mapped_to_points, false, 1, 0, 0);
 }
 
 void bmvv_recon_manager::match_harris_corners()
 {
-  if(!harris_set_)
-    {
-      vcl_cout << " No Harris corners \n";
-      return;
-    }
- static double z = 0;
- vgui_dialog z_match_dlg("Harris corner Matching");
- z_match_dlg.field("Depth value (z)", z);
- z_match_dlg.field("Point Radiuus", sweep_.point_radius_);
- if (!z_match_dlg.ask())
-   return;
- int from_cam = this->get_cam(), to_cam = 1-from_cam;
- vcl_vector<vsol_point_2d_sptr> matched_to_points, orig_to_points;
- sweep_.init_harris_match(from_cam);
- if(!sweep_.match_harris_corners(from_cam, z, matched_to_points,
-                                 orig_to_points))
-   return;
- this->draw_vsol_points(0, orig_to_points, true, 0, 1, 0);
- this->draw_vsol_points(0, matched_to_points, false, 1, 0, 0);
+  if (!harris_set_)
+  {
+    vcl_cout << "No Harris corners\n";
+    return;
+  }
+  static double z = 0;
+  vgui_dialog z_match_dlg("Harris corner Matching");
+  z_match_dlg.field("Depth value (z)", z);
+  z_match_dlg.field("Point Radiuus", sweep_.point_radius_);
+  if (!z_match_dlg.ask())
+    return;
+  int from_cam = this->get_cam(), to_cam = 1-from_cam;
+  vcl_vector<vsol_point_2d_sptr> matched_to_points, orig_to_points;
+  sweep_.init_harris_match(from_cam);
+  if (!sweep_.match_harris_corners(from_cam, z, matched_to_points,
+                                   orig_to_points))
+    return;
+  this->draw_vsol_points(0, orig_to_points, true, 0, 1, 0);
+  this->draw_vsol_points(0, matched_to_points, false, 1, 0, 0);
 }
 
 void bmvv_recon_manager::harris_sweep()
 
 {
   static int from_cam=1;
-  if(!images_set_||!harris_set_)
-    {
-      vcl_cout << "In bmvv_recon_manager::harris_sweep() -"
-               << " images or harris corners not set\n";
-      return;
-    }
+  if (!images_set_||!harris_set_)
+  {
+    vcl_cout << "In bmvv_recon_manager::harris_sweep() -"
+             << " images or harris corners not set\n";
+    return;
+  }
   vgui_dialog harris_sweep_dlg("Harris Sweep");
   harris_sweep_dlg.field("From CAM", from_cam);
   harris_sweep_dlg.field("Min Z", sweep_.zmin_);
@@ -996,11 +1007,11 @@ void bmvv_recon_manager::harris_sweep()
   harris_sweep_dlg.field("Correlation Radius", sweep_.corr_radius_);
   if (!harris_sweep_dlg.ask())
     return;
-  if(!sweep_.harris_sweep(from_cam))
-    {
-      vcl_cout << "Sweep failed\n"<< vcl_flush;
-      return;
-    }
+  if (!sweep_.harris_sweep(from_cam))
+  {
+    vcl_cout << "Sweep failed\n"<< vcl_flush;
+    return;
+  }
 }
 
 void bmvv_recon_manager::display_matched_corners()
@@ -1010,26 +1021,26 @@ void bmvv_recon_manager::display_matched_corners()
   hmatch_dlg.field("Zindex", z_index);
   if (!hmatch_dlg.ask())
     return;
-  vcl_vector<vsol_point_2d_sptr> matched_points = 
+  vcl_vector<vsol_point_2d_sptr> matched_points =
     sweep_.matched_points_at_z_index(z_index);
   int n = matched_points.size();
-  if(!n)
+  if (!n)
     return;
   //for now assume we display on pane 0
-  this->draw_vsol_points(0, matched_points, true, 0, 1, 0);  
-}  
+  this->draw_vsol_points(0, matched_points, true, 0, 1, 0);
+}
 
 void bmvv_recon_manager::display_harris_3d()
 {
-  if(!harris_set_)
+  if (!harris_set_)
     return;
   vcl_vector<vsol_point_3d_sptr> points = sweep_.proj_points_3d();
   int n = points.size();
-  if(!n)
+  if (!n)
     return;
   //for now assume we display on pane 0
-  this->draw_vsol_3d_points(0, points, true);  
-}  
+  this->draw_vsol_3d_points(0, points, true);
+}
 
 void bmvv_recon_manager::write_points_vrml()
 {
@@ -1039,35 +1050,36 @@ void bmvv_recon_manager::write_points_vrml()
   save_vrml_dlg.file("VRML file name", ext, filename);
   if (!save_vrml_dlg.ask())
     return;
-  if(filename == "")
-    {
-      vcl_cout << "Need a file name\n";
-      return;
-    }
-  if(!sweep_.save_world_points(filename))
-    {
-      vcl_cout << "VRML Save Failed\n";
-      return;
-    }
+  if (filename == "")
+  {
+    vcl_cout << "Need a file name\n";
+    return;
+  }
+  if (!sweep_.save_world_points(filename))
+  {
+    vcl_cout << "VRML Save Failed\n";
+    return;
+  }
 }
+
 void bmvv_recon_manager::read_points_vrml()
 {
-	vgui_dialog read_vrml_dlg("Read VRML points File");
+  vgui_dialog read_vrml_dlg("Read VRML points File");
   static vcl_string filename = "";
   static vcl_string ext = "*.*";
   read_vrml_dlg.file("VRML file name", ext, filename);
   if (!read_vrml_dlg.ask())
     return;
-  if(filename == "")
-    {
-      vcl_cout << "Need a file name\n";
-      return;
-    }
-  if(!vproc_.read_points_3d_vrml(filename))
-    {
-      vcl_cout << "VRML read failed\n";
-      return;
-    }
+  if (filename == "")
+  {
+    vcl_cout << "Need a file name\n";
+    return;
+  }
+  if (!vproc_.read_points_3d_vrml(filename))
+  {
+    vcl_cout << "VRML read failed\n";
+    return;
+  }
 }
 
 void bmvv_recon_manager::write_volumes_vrml()
@@ -1078,17 +1090,18 @@ void bmvv_recon_manager::write_volumes_vrml()
   write_volumes_dlg.file("VRML file name", ext, filename);
   if (!write_volumes_dlg.ask())
     return;
-  if(filename == "")
-    {
-      vcl_cout << "Need a file name\n";
-      return;
-    }
-  if(!vproc_.write_prob_volumes_vrml(filename))
-    {
-      vcl_cout << "VRML volume write failed\n";
-      return;
-    }
+  if (filename == "")
+  {
+    vcl_cout << "Need a file name\n";
+    return;
+  }
+  if (!vproc_.write_prob_volumes_vrml(filename))
+  {
+    vcl_cout << "VRML volume write failed\n";
+    return;
+  }
 }
+
 void bmvv_recon_manager::read_change_data()
 {
   static vcl_string filename = "";
@@ -1097,17 +1110,18 @@ void bmvv_recon_manager::read_change_data()
   change_vrml_dlg.file("Change data file name (VRML)", ext, filename);
   if (!change_vrml_dlg.ask())
     return;
-  if(filename == "")
-    {
-      vcl_cout << "Need a file name\n";
-      return;
-    }
-  if(!vproc_.read_change_data_vrml(filename))
-    {
-      vcl_cout << "VRML read failed\n";
-      return;
-    }
+  if (filename == "")
+  {
+    vcl_cout << "Need a file name\n";
+    return;
+  }
+  if (!vproc_.read_change_data_vrml(filename))
+  {
+    vcl_cout << "VRML read failed\n";
+    return;
+  }
 }
+
 void bmvv_recon_manager::write_change_volumes_vrml()
 {
   vgui_dialog write_change_volumes_dlg("Write Change Volumes(VRML)");
@@ -1116,17 +1130,18 @@ void bmvv_recon_manager::write_change_volumes_vrml()
   write_change_volumes_dlg.file("VRML file name", ext, filename);
   if (!write_change_volumes_dlg.ask())
     return;
-  if(filename == "")
-    {
-      vcl_cout << "Need a file name\n";
-      return;
-    }
-  if(!vproc_.write_changed_volumes_vrml(filename))
-    {
-      vcl_cout << "VRML volume write failed\n";
-      return;
-    }
+  if (filename == "")
+  {
+    vcl_cout << "Need a file name\n";
+    return;
+  }
+  if (!vproc_.write_changed_volumes_vrml(filename))
+  {
+    vcl_cout << "VRML volume write failed\n";
+    return;
+  }
 }
+
 void bmvv_recon_manager::compute_change()
 {
   vgui_dialog change_dlg("Change Detection");
