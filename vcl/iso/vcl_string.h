@@ -1,31 +1,16 @@
 #ifndef vcl_iso_string_h_
 #define vcl_iso_string_h_
 
+// This is a generated file. DO NOT EDIT! Not even a little bit.
+
 #include <string>
 
-// char_traits
-#ifndef vcl_char_traits
-#define vcl_char_traits std::char_traits
+#ifdef vcl_generic_string_STD
+  ** error **
+#else
+# define vcl_generic_string_STD std
 #endif
-// basic_string
-#ifndef vcl_basic_string
-#define vcl_basic_string std::basic_string
-#endif
-// string
-#ifndef vcl_string
-#define vcl_string std::string
-#endif
-// wstring
-#ifndef vcl_wstring
-#define vcl_wstring std::wstring
-#endif
-// swap
-#ifndef vcl_swap
-#define vcl_swap std::swap
-#endif
-// getline
-#ifndef vcl_getline
-#define vcl_getline std::getline
-#endif
+
+#include "../generic/vcl_string.h"
 
 #endif // vcl_iso_string_h_
