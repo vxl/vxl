@@ -11,8 +11,9 @@
 //
 //\verbatim
 //  Modifications
-//  3 October 2001 Peter Vanroose - Implemented get_property and set_property
-//  5 Jan 2002     Ian Scott      - Converted to vil
+//  3 Oct 2001 Peter Vanroose - Implemented get_property and set_property
+//  5 Jan 2002 Ian Scott      - Converted to vil
+//  9 Dec 2003 Peter Vanroose - Added support for 1-bit pixel (bitmapped) images
 //\endverbatim
 
 #include <vil/vil_file_format.h>
@@ -62,9 +63,9 @@ class vil_tiff_image : public vil_image_resource
 
 
   //: Dimensions:  planes x width x height x components
-  virtual unsigned nplanes() const {return components_;}
-  virtual unsigned ni() const {return width_;}
-  virtual unsigned nj() const {return height_;}
+  virtual unsigned nplanes() const { return components_; }
+  virtual unsigned ni() const { return width_; }
+  virtual unsigned nj() const { return height_; }
 
   virtual enum vil_pixel_format pixel_format() const;
 
@@ -80,6 +81,11 @@ class vil_tiff_image : public vil_image_resource
   //: Put the data in this view back into the image source.
   virtual bool put_view(const vil_image_view_base& im, unsigned i0, unsigned j0);
 
+  //: Return true if the property given in the first argument has been set.
+  //  Currently, only "quantisation_depth" returns true;
+  //  if the second argument is given in that case, and if it is a valid
+  //  "unsigned int" pointer, the actual quantisation depth (number of relevant
+  //  bits per pixel) is written into that memory location.
   bool get_property(char const *tag, void *prop = 0) const;
 };
 

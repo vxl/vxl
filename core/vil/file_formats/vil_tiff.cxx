@@ -146,14 +146,14 @@ struct vil_tiff_structures {
   unsigned short photometric;
 
   unsigned long stripsize;
-  unsigned long scanlinesize;
+  long scanlinesize;
   unsigned long numberofstrips;
 
   bool tiled;
   bool compressed;
   bool jumbo_strips;
 
-  unsigned char* buf;
+  vxl_byte* buf;
 };
 
 #if 0 // commented out
@@ -244,8 +244,8 @@ bool vil_tiff_image::get_property(char const * tag, void * value) const
 {
   if (vcl_strcmp(vil_property_quantisation_depth, tag)==0)
   {
-    unsigned* depth =  static_cast<unsigned*>(value);
-    *depth = bits_per_component_;
+    if (value)
+      *static_cast<unsigned int*>(value) = bits_per_component_;
     return true;
   }
 
@@ -263,20 +263,23 @@ vil_tiff_image::vil_tiff_image(vil_stream* is,
   width_ = ni;
   height_ = nj;
   components_ = nplanes;
-  bits_per_component_ = vil_pixel_format_sizeof_components(format)*8;
+  bits_per_component_ = format==VIL_PIXEL_FORMAT_BOOL ? 1 : vil_pixel_format_sizeof_components(format)*8;
 
   write_header();
 }
 
 vil_pixel_format vil_tiff_image::pixel_format() const
 {
-  switch (bits_per_component_)
-  {
-  case 8: return VIL_PIXEL_FORMAT_BYTE;
-  case 16: return VIL_PIXEL_FORMAT_UINT_16;
-  case 32: return VIL_PIXEL_FORMAT_UINT_32;
-  default: return VIL_PIXEL_FORMAT_UNKNOWN;
-  }
+  if (bits_per_component_ <= 1)
+    return VIL_PIXEL_FORMAT_BOOL;
+  else if (bits_per_component_ <= 8)
+    return VIL_PIXEL_FORMAT_BYTE;
+  else if (bits_per_component_ <= 16)
+    return VIL_PIXEL_FORMAT_UINT_16;
+  else if (bits_per_component_ <= 32)
+    return VIL_PIXEL_FORMAT_UINT_32;
+  else
+    return VIL_PIXEL_FORMAT_UNKNOWN;
 }
 
 vil_tiff_image::~vil_tiff_image()
@@ -306,7 +309,7 @@ bool vil_tiff_image::read_header()
     return problem("TIFFClientOpen");
   }
 
-#if defined(RIH_DEBUG)
+#ifdef DEBUG
   TIFFPrintDirectory(p->tif, stderr);
 #endif
 
@@ -361,7 +364,7 @@ bool vil_tiff_image::read_header()
     {
       if (!TIFFIsTiled(p->tif)) {
         // section_tiff_image = new ForeignImage(GetDescription(), 'r', GetSizeX(), GetSizeY(), GetBitsPixel(), 8);
-#ifdef RIH_DEBUG
+#ifdef DEBUG
         vcl_cerr << "vil_tiff: Treating Tiff image as uncompressed ForeignImage\n";
 #endif
       }
@@ -372,7 +375,7 @@ bool vil_tiff_image::read_header()
       if (!TIFFIsTiled(p->tif))
         {
           // section_tiff_image = new ForeignImage(GetDescription(), 'r', GetSizeX(), GetSizeY(), GetBitsPixel(), 8);
-#ifdef RIH_DEBUG
+#ifdef DEBUG
           vcl_cerr << "Treating Tiff image as uncompressed ForeignImage\n";
 #endif
         }
@@ -466,11 +469,14 @@ bool vil_tiff_image::read_header()
   p->numberofstrips = TIFFNumberOfStrips(p->tif);
 
 
-#if defined(RIH_DEBUG)
-  vcl_printf("vil_tiff: size %dx%d, components %d of %d bits, tiled %d, compressed %d,"
-             " rows per strip %ld, photometric code %d, stripsize %ld, scanlinesize %ld\n",
-             this->width(), this->height(), this->components(), this->bits_per_component(),
-             p->tiled, p->compressed, p->rows_per_strip, p->photometric, p->stripsize, p->scanlinesize);
+#ifdef DEBUG
+  vcl_cerr << "vil_tiff: size " << ni() << 'x' << nj() << 'x' << nplanes()
+           << " of " << bits_per_component_ << " bits, tiled " << p->tiled
+           << ", compressed " << p->compressed
+           << ", rows per strip " << p->rows_per_strip
+           << ", photometric code " << p->photometric
+           << ", stripsize " << p->stripsize
+           << ", scanlinesize " << p->scanlinesize << '\n';
 #endif
 
   static const int MB = 1024 * 1024;
@@ -480,9 +486,9 @@ bool vil_tiff_image::read_header()
   delete [] p->buf;
   if (p->jumbo_strips)
     // only ever use a scan line
-    p->buf = new unsigned char[width_ * components_ * bits_per_component_ / 8];
+    p->buf = new vxl_byte[(7 + width_ * components_ * bits_per_component_) / 8];
   else
-    p->buf = new unsigned char[p->stripsize];
+    p->buf = new vxl_byte[p->stripsize];
 
   return true;
 }
@@ -579,10 +585,14 @@ bool vil_tiff_image::write_header()
   p->compressed = (p->compression != COMPRESSION_NONE);
 
   // TIFFSetField(p->tif, TIFFTAG_IMAGEDESCRIPTION, GetDescription());
-  TIFFSetField(p->tif, TIFFTAG_SOFTWARE, "vxl/vil/file_formats/vil_tiff.cxx");
+  TIFFSetField(p->tif, TIFFTAG_SOFTWARE, "vxl vil_tiff");
 
   p->numberofstrips = TIFFNumberOfStrips(p->tif);
-  p->scanlinesize = width_ * bitspersample * samplesperpixel / 8;
+  p->scanlinesize = (width_ * bitspersample * samplesperpixel + 7) / 8;
+  if (p->scanlinesize != TIFFScanlineSize(p->tif))
+    vcl_cerr << "WARNING: vil_tiff_image::write_header() -\n"
+             << "\tscan line size is incorrect: "
+             << p->scanlinesize << " != " << TIFFScanlineSize(p->tif) << '\n';
   p->scanlinesize = TIFFScanlineSize(p->tif);
   p->stripsize = p->rows_per_strip * p->scanlinesize;
   p->tiled = false;
@@ -602,13 +612,16 @@ bool vil_tiff_image::write_header()
 
   // Allocate tmp buf
   delete [] p->buf;
-  p->buf = new unsigned char[p->stripsize];
+  p->buf = new vxl_byte[p->stripsize];
 
-#ifdef RIH_DEBUG
-  vcl_printf("vil_tiff: size %dx%d, components %d of %d bits, tiled %d, compressed %d,"
-             " rows per strip %ld, photometric code %d, stripsize %ld, scanlinesize %ld\n",
-             this->width(), this->height(), this->components(), this->bits_per_component(),
-             p->tiled, p->compressed, p->rows_per_strip, p->photometric, p->stripsize, p->scanlinesize);
+#ifdef DEBUG
+  vcl_cerr << "vil_tiff: size " << ni() << 'x' << nj() << 'x' << nplanes()
+           << " of " << bits_per_component_ << " bits, tiled " << p->tiled
+           << ", compressed " << p->compressed
+           << ", rows per strip " << p->rows_per_strip
+           << ", photometric code " << p->photometric
+           << ", stripsize " << p->stripsize
+           << ", scanlinesize " << p->scanlinesize << '\n';
 #endif
 
   return true;
@@ -638,10 +651,9 @@ vil_image_view_base_sptr vil_tiff_image::get_copy_view(unsigned i0,
     if (p->tiled)
       vcl_cerr << "vil_tiff_image: TILED TIFF: may be wrongly read?\n";
 
-
-    if (bits_per_component_%8 != 0)
+    if (components_ > 1 && bits_per_component_%8 != 0)
     {
-      vcl_cerr << "vil_tiff_image: Can't deal with bits per component that isn not a multiple of 8\n";
+      vcl_cerr << "vil_tiff_image: Can't deal with bits per component that is not a multiple of 8\n";
       return 0;
     }
 
@@ -653,7 +665,8 @@ vil_image_view_base_sptr vil_tiff_image::get_copy_view(unsigned i0,
     assert(strip_max <= p->numberofstrips);
     // Get each strip
     unsigned int pixel_bit_size = components_ * bits_per_component_;
-    vil_memory_chunk_sptr buf = new vil_memory_chunk(pixel_bit_size*nj*ni, pixel_format());
+    unsigned int pixel_byte_size = components_ * ((bits_per_component_+7)/8);
+    vil_memory_chunk_sptr buf = new vil_memory_chunk(pixel_byte_size*nj*ni, pixel_format());
     {
       for (unsigned long strip_id = strip_min; strip_id <= strip_max; ++strip_id) {
         TIFFReadEncodedStrip(p->tif, strip_id, p->buf, (tsize_t) -1);
@@ -666,22 +679,57 @@ vil_image_view_base_sptr vil_tiff_image::get_copy_view(unsigned i0,
         unsigned long ymax = strip_max_row;
         if (ymax > (unsigned)j1) ymax = j1;
 
-        // printf("reading strip %d, y  = %d .. %d\n", strip_id, ymin, ymax);
-        for (unsigned long y = ymin; y <= ymax; ++y) {
-          unsigned char* in_row = p->buf + (y - strip_min_row) * p->scanlinesize;
-          unsigned char* out_row = (unsigned char*)buf->data() + ((y - j0) * ni * pixel_bit_size + 7) / 8;
-          vcl_memcpy(out_row, in_row + (i0 * pixel_bit_size + 7) / 8, (ni * pixel_bit_size + 7) / 8);
+#ifdef DEBUG
+        vcl_cerr << "reading strip " << strip_id << ", y  = " << ymin << " .. " << ymax << '\n';
+#endif
+        for (unsigned long y = ymin; y <= ymax; ++y)
+        {
+          vxl_byte* in_row = p->buf + (y - strip_min_row) * p->scanlinesize;
+          if (bits_per_component_%8 == 0) {
+            vxl_byte* out_row = reinterpret_cast<vxl_byte*>(buf->data()) + ((y - j0) * ni * pixel_bit_size + 7) / 8;
+            vcl_memcpy(out_row, in_row + (i0 * pixel_bit_size + 7) / 8, (ni * pixel_bit_size + 7) / 8);
+          }
+          else
+          {
+            vxl_byte* out_row = reinterpret_cast<vxl_byte*>(buf->data()) + (y - j0) * ni * pixel_byte_size;
+            for (unsigned int x=0, bit=0; x < ni; ++x, bit+=pixel_bit_size)
+            {
+              // read the correct number of bits from the TIFF file buffer:
+              unsigned int in_byte = bit/8;
+              // Assuming most-significant-bit-first fill order (which is the default)
+              unsigned long out_data = in_row[in_byte] & vxl_byte(0xff >> (bit%8));
+              for (unsigned int s=in_byte+1; s<=(bit+pixel_bit_size-1)/8; ++s)
+              {
+                out_data <<= 8;
+                out_data |= in_row[s];
+              }
+              out_data >>= 7-((bit+pixel_bit_size-1)%8);
+              if (bits_per_component_ == 1)
+                // assuming min-is-black in case of 1-bit pixels
+                *reinterpret_cast<bool*>(out_row+x) = out_data==0;
+              else
+#if VXL_BIG_ENDIAN
+                vcl_memcpy(out_row+x*pixel_byte_size, &out_data, pixel_byte_size);
+#else
+                vcl_memcpy(out_row+x*pixel_byte_size, &out_data+sizeof(long)-pixel_byte_size, pixel_byte_size);
+#endif
+            }
+          }
         }
       }
     }
-    if (bits_per_component_ == 8)
-      return new vil_image_view<vxl_byte>(buf, (const vxl_byte*)buf->data(), ni, nj,
+    if (bits_per_component_ <= 1) {
+      return new vil_image_view<bool>(buf, reinterpret_cast<bool*>(buf->data()), ni, nj,
+                                      components_, components_, components_*ni, 1);
+    }
+    else if (bits_per_component_ <= 8)
+      return new vil_image_view<vxl_byte>(buf, reinterpret_cast<vxl_byte*>(buf->data()), ni, nj,
                                           components_, components_, components_*ni, 1);
-    else if (bits_per_component_ == 16)
-      return new vil_image_view<vxl_uint_16>(buf, (const vxl_uint_16*)buf->data(), ni, nj,
+    else if (bits_per_component_ <= 16)
+      return new vil_image_view<vxl_uint_16>(buf, reinterpret_cast<vxl_uint_16*>(buf->data()), ni, nj,
                                              components_, components_, components_*ni, 1);
-    else if (bits_per_component_ == 32)
-      return new vil_image_view<vxl_uint_32>(buf, (const vxl_uint_32*)buf->data(), ni, nj,
+    else if (bits_per_component_ <= 32)
+      return new vil_image_view<vxl_uint_32>(buf, reinterpret_cast<vxl_uint_32*>(buf->data()), ni, nj,
                                              components_, components_, components_*ni, 1);
     else {
       // not compressed, and jumbo strips. dig it out manually in case ReadScanLine pulls in all the image
@@ -707,10 +755,11 @@ bool vil_tiff_image::put_view(const vil_image_view_base &im,
              << ", tiff_image is " << pixel_format() << vcl_endl;
     return false;
   }
-  if (bits_per_component_ != vil_pixel_format_sizeof_components(pixel_format())*8)
+  unsigned int depth = pixel_format()==VIL_PIXEL_FORMAT_BOOL ? 1 : vil_pixel_format_sizeof_components(pixel_format())*8;
+  if (bits_per_component_ != depth)
   {
-    vcl_cerr << "WARNING: vil_tiff_image::put_view\n"
-             << "Failed because TIFF image has incorrect component size.\n";
+    vcl_cerr << "WARNING: vil_tiff_image::put_view() failed - TIFF image has incorrect component size:\n"
+             << "pixel format = " << pixel_format() << ", #bits = " << bits_per_component_ << '\n';
     return false;
   }
   if (im.nplanes() != components_)
@@ -727,8 +776,9 @@ bool vil_tiff_image::put_view(const vil_image_view_base &im,
   unsigned strip_max = jend / p->rows_per_strip;
   assert(strip_max <= p->numberofstrips);
   // Put each strip
-  unsigned int pixel_byte_size = components_ * bits_per_component_ / 8;
-  for (unsigned long strip_id = strip_min; strip_id <= strip_max; ++strip_id) {
+  unsigned int pixel_byte_size = (7 + components_ * bits_per_component_ ) / 8;
+  for (unsigned long strip_id = strip_min; strip_id <= strip_max; ++strip_id)
+  {
     // Strip contains some rows...
     unsigned long strip_min_row = strip_id * p->rows_per_strip;
     unsigned long strip_max_row = strip_min_row + p->rows_per_strip - 1;
@@ -738,35 +788,48 @@ bool vil_tiff_image::put_view(const vil_image_view_base &im,
     unsigned long ymax = strip_max_row;
     if (ymax > (unsigned)jend) ymax = jend;
 
-    // printf("writing strip %d, y  = %d .. %d\n", strip_id, ymin, ymax);
+#ifdef DEBUG
+    vcl_cerr << "writing strip " << strip_id << ", y  = " << ymin << " .. " << ymax << '\n';
+#endif
     for (unsigned long y = ymin; y <= ymax; ++y) {
-      unsigned char* file_row = p->buf + (y - strip_min_row) * p->scanlinesize + i0 * pixel_byte_size;
+      vxl_byte* file_row = p->buf + (y - strip_min_row) * p->scanlinesize;
 
-
-      if (im.pixel_format() == VIL_PIXEL_FORMAT_BYTE)
+      if (im.pixel_format() == VIL_PIXEL_FORMAT_BOOL && im.nplanes() == 1)
+      {
+        // fill one raster with data.
+        for (unsigned i=0; i<im.ni(); ++i)
+          // Assuming most-significant-bit-first fill order (which is the default)
+          // and assuming min-is-black pixels
+          if (static_cast<const vil_image_view<bool>&>(im)(i,y,0))
+            file_row[(i+i0)/8] &= vxl_byte(~(1<<(7-((i+i0)%8))));
+          else
+            file_row[(i+i0)/8] |= vxl_byte(1<<(7-((i+i0)%8)));
+      }
+      else if (im.pixel_format() == VIL_PIXEL_FORMAT_BYTE)
       {
         // fill one raster with data, component-wise.
         for (unsigned i=0; i<im.ni(); ++i)
           for (unsigned plane=0; plane<im.nplanes(); ++plane)
-            *reinterpret_cast<vxl_byte*>(file_row + i*pixel_byte_size + plane) =
+            file_row[i*pixel_byte_size + plane] =
               static_cast<const vil_image_view<vxl_byte>&>(im)(i,y,plane);
-      } else
-      if (im.pixel_format() == VIL_PIXEL_FORMAT_UINT_16)
+      }
+      else if (im.pixel_format() == VIL_PIXEL_FORMAT_UINT_16)
       {
         // fill one raster with data, component-wise.
         for (unsigned i=0; i<im.ni(); ++i)
           for (unsigned plane=0; plane<im.nplanes(); ++plane)
             *reinterpret_cast<vxl_uint_16*>(file_row + i*pixel_byte_size + plane*2) =
               static_cast<const vil_image_view<vxl_uint_16>&>(im)(i,y,plane);
-      } else
-      if (im.pixel_format() == VIL_PIXEL_FORMAT_UINT_32)
+      }
+      else if (im.pixel_format() == VIL_PIXEL_FORMAT_UINT_32)
       {
         // fill one raster with data, component-wise.
         for (unsigned i=0; i<im.ni(); ++i)
           for (unsigned plane=0; plane<im.nplanes(); ++plane)
             *reinterpret_cast<vxl_uint_32*>(file_row + i*pixel_byte_size + plane*4) =
               static_cast<const vil_image_view<vxl_uint_32>&>(im)(i,y,plane);
-      } else
+      }
+      else
       {
         vcl_cerr << "WARNING: vil_tiff_image::put_view\n"
                  << "Can't deal with this pixel depth.\n";
