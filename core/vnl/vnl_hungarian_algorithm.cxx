@@ -4,13 +4,14 @@
 #include <vcl_limits.h>
 #include <vcl_algorithm.h>
 #include <vnl/vnl_matrix.h>
+#include <vcl_cassert.h>
 
 // set all the elements of v to false.
 static void clear_vector( vcl_vector<bool>& v )
 {
   typedef vcl_vector<bool>::iterator iter;
   iter end = v.end();
-  for( iter i = v.begin(); i != end; ++i ) {
+  for ( iter i = v.begin(); i != end; ++i ) {
     *i = false;
   }
 }
@@ -29,8 +30,8 @@ vcl_vector<unsigned> vnl_hungarian_algorithm( vnl_matrix<double> const& cost_in 
   vnl_matrix<double> cost( N, N, *vcl_max_element( cost_in.begin(), cost_in.end() ) );
 
   // Copy in the pieces of the original matrix
-  for( unsigned i = 0; i < cost_in.rows(); ++i ) {
-    for( unsigned j = 0; j < cost_in.cols(); ++j ) {
+  for ( unsigned i = 0; i < cost_in.rows(); ++i ) {
+    for ( unsigned j = 0; j < cost_in.cols(); ++j ) {
       cost(i,j) = cost_in(i,j);
     }
   }
@@ -59,12 +60,12 @@ vcl_vector<unsigned> vnl_hungarian_algorithm( vnl_matrix<double> const& cost_in 
   // For each row of the matrix, find the smallest element and subtract
   // it from every element in its row.  Go to Step 2.
   {
-    for( unsigned i = 0; i < N; ++i ) {
+    for ( unsigned i = 0; i < N; ++i ) {
       double mn = cost(i,0);
-      for( unsigned j = 1; j < N; ++j ) {
-        if( mn > cost(i,j) ) mn = cost(i,j);
+      for ( unsigned j = 1; j < N; ++j ) {
+        if ( mn > cost(i,j) ) mn = cost(i,j);
       }
-      for( unsigned j = 0; j < N; ++j ) {
+      for ( unsigned j = 0; j < N; ++j ) {
         cost(i,j) -= mn;
       }
     }
@@ -79,10 +80,10 @@ vcl_vector<unsigned> vnl_hungarian_algorithm( vnl_matrix<double> const& cost_in 
   {
     // We'll use C_cov and R_cov to indicate if there is a starred
     // zero in that column or row, respectively
-    for( unsigned i = 0; i < N; ++i ) {
-      if( ! R_cov[i] ) {
-        for( unsigned j = 0; j < N; ++j ) {
-          if( cost(i,j) == 0.0 && ! C_cov[j] ) {
+    for ( unsigned i = 0; i < N; ++i ) {
+      if ( ! R_cov[i] ) {
+        for ( unsigned j = 0; j < N; ++j ) {
+          if ( cost(i,j) == 0.0 && ! C_cov[j] ) {
             M(i,j) = 1; // star it
             R_cov[i] = true; // and update the row & col status.
             C_cov[j] = true;
@@ -104,16 +105,16 @@ vcl_vector<unsigned> vnl_hungarian_algorithm( vnl_matrix<double> const& cost_in 
   step_three:
   {
     unsigned count = 0;
-    for( unsigned j = 0; j < N; ++j ) {
-      for( unsigned i = 0; i < N; ++i ) {
-        if( M(i,j) == 1 ) {
+    for ( unsigned j = 0; j < N; ++j ) {
+      for ( unsigned i = 0; i < N; ++i ) {
+        if ( M(i,j) == 1 ) {
           C_cov[j] = true;
           ++count;
           break; // to the next column
         }
       }
     }
-    if( count == N )
+    if ( count == N )
       goto step_done;
 
     // otherwise, on to step 4.
@@ -131,13 +132,14 @@ vcl_vector<unsigned> vnl_hungarian_algorithm( vnl_matrix<double> const& cost_in 
     Z0_c = -1u;
     // Find an uncovered zero
     // This loop will exit with a goto step_five or step_six.
-    while( 1 ) {
+    while ( true )
+    {
       unsigned i, j; // row and column of the uncovered zero, if any.
       bool uncovered_zero_found = false;
-      for( i = 0; i < N; ++i ) {
-        if( ! R_cov[i] ) {
-          for( j = 0; j < N; ++j ) {
-            if( cost(i,j) == 0.0 && ! C_cov[j] ) {
+      for ( i = 0; i < N; ++i ) {
+        if ( ! R_cov[i] ) {
+          for ( j = 0; j < N; ++j ) {
+            if ( cost(i,j) == 0.0 && ! C_cov[j] ) {
               M(i,j) = 2; // prime it
               uncovered_zero_found = true;
               goto exit_loop;
@@ -146,24 +148,24 @@ vcl_vector<unsigned> vnl_hungarian_algorithm( vnl_matrix<double> const& cost_in 
         }
       }
       exit_loop:
-      if( ! uncovered_zero_found ) 
-        // We should find the smallest uncovered value, but it's more
-        // convenient to find it when we get to step six. We only need
-        // it there anyway.
+      // We should find the smallest uncovered value, but it's more
+      // convenient to find it when we get to step six. We only need
+      // it there anyway.
+      if ( ! uncovered_zero_found )
         goto step_six;
 
       // Check if there is a starred zero in the row.
       bool star_in_row = false;
       unsigned j2; // column containing the starred zero, if any.
-      for( j2 = 0; j2 < N; ++j2 ) {
-        if( M(i,j2) == 1 ) {
+      for ( j2 = 0; j2 < N; ++j2 ) {
+        if ( M(i,j2) == 1 ) {
           star_in_row = true;
           break; // out of searching for stars
         }
       }
 
       // If there isn't go to step 5
-      if( ! star_in_row ) {
+      if ( ! star_in_row ) {
         Z0_r = i;
         Z0_c = j;
         break; // out to go to step 5
@@ -190,18 +192,19 @@ vcl_vector<unsigned> vnl_hungarian_algorithm( vnl_matrix<double> const& cost_in 
     unsigned i = Z0_r;
     unsigned j = Z0_c;
     vcl_vector<unsigned> rows, cols;
-    while( 1 ) {
+    while ( true )
+    {
       // This is the primed zero
       assert( M(i,j) == 2 );
       rows.push_back( i );
       cols.push_back( j );
 
       // Look for a starred zero in this column
-      for( i = 0; i < N; ++i ) {
-        if( M(i,j) == 1 )  break;
+      for ( i = 0; i < N; ++i ) {
+        if ( M(i,j) == 1 )  break;
       }
 
-      if( i == N ) {
+      if ( i == N ) {
         // we didn't find a starred zero. Stop the loop
         break;
       }
@@ -211,8 +214,8 @@ vcl_vector<unsigned> vnl_hungarian_algorithm( vnl_matrix<double> const& cost_in 
       cols.push_back( j );
 
       // Look for the primed zero in the row of the starred zero
-      for( j = 0; j < N; ++j ) {
-        if( M(i,j) == 2 )  break;
+      for ( j = 0; j < N; ++j ) {
+        if ( M(i,j) == 2 )  break;
       }
       assert( j < N ); // there should always be one
 
@@ -221,10 +224,10 @@ vcl_vector<unsigned> vnl_hungarian_algorithm( vnl_matrix<double> const& cost_in 
 
     // Series has terminated. Unstar each star and star each prime in
     // the series.
-    for( unsigned idx = 0; idx < rows.size(); ++idx ) {
+    for ( unsigned idx = 0; idx < rows.size(); ++idx ) {
       unsigned i = rows[idx];
       unsigned j = cols[idx];
-      if( M(i,j) == 1 ) {
+      if ( M(i,j) == 1 ) {
         M(i,j) = 0; // unstar each starred zero
       } else {
         assert( M(i,j) == 2 );
@@ -233,9 +236,9 @@ vcl_vector<unsigned> vnl_hungarian_algorithm( vnl_matrix<double> const& cost_in 
     }
 
     // Erase all primes.
-    for( unsigned i = 0; i < N; ++i ) {
-      for( unsigned j = 0; j < N; ++j ) {
-        if( M(i,j) == 2 )  M(i,j) = 0;
+    for ( unsigned i = 0; i < N; ++i ) {
+      for ( unsigned j = 0; j < N; ++j ) {
+        if ( M(i,j) == 2 )  M(i,j) = 0;
       }
     }
 
@@ -254,10 +257,10 @@ vcl_vector<unsigned> vnl_hungarian_algorithm( vnl_matrix<double> const& cost_in 
   {
     // The value found in step 4 is the smallest uncovered value. Find it now.
     double minval = vcl_numeric_limits<double>::infinity();
-    for( unsigned i = 0; i < N; ++i ) {
-      if( ! R_cov[i] ) {
-        for( unsigned j = 0; j < N; ++j ) {
-          if( ! C_cov[j] && cost(i,j) < minval ) {
+    for ( unsigned i = 0; i < N; ++i ) {
+      if ( ! R_cov[i] ) {
+        for ( unsigned j = 0; j < N; ++j ) {
+          if ( ! C_cov[j] && cost(i,j) < minval ) {
             minval = cost(i,j);
           }
         }
@@ -265,10 +268,10 @@ vcl_vector<unsigned> vnl_hungarian_algorithm( vnl_matrix<double> const& cost_in 
     }
 
     // Modify the matrix as instructed.
-    for( unsigned i = 0; i < N; ++i ) {
-      for( unsigned j = 0; j < N; ++j ) {
-        if( R_cov[i] )    cost(i,j) += minval;
-        if( ! C_cov[j] )  cost(i,j) -= minval;
+    for ( unsigned i = 0; i < N; ++i ) {
+      for ( unsigned j = 0; j < N; ++j ) {
+        if ( R_cov[i] )    cost(i,j) += minval;
+        if ( ! C_cov[j] )  cost(i,j) -= minval;
       }
     }
 
@@ -286,9 +289,9 @@ vcl_vector<unsigned> vnl_hungarian_algorithm( vnl_matrix<double> const& cost_in 
     // Find the stars and generate the resulting assignment. Only
     // check the sub-matrix of cost that corresponds to the input cost
     // matrix. The remaining rows and columns are unassigned.
-    for( unsigned j = 0; j < cost_in.cols(); ++j ) {
-      for( unsigned i = 0; i < cost_in.rows(); ++i ) {
-        if( M(i,j) == 1 ) {
+    for ( unsigned j = 0; j < cost_in.cols(); ++j ) {
+      for ( unsigned i = 0; i < cost_in.rows(); ++i ) {
+        if ( M(i,j) == 1 ) {
           assign[i] = j;
         }
       }
