@@ -62,7 +62,7 @@ public:
 
   //: The inverse cdf.
   // The value of x: P(x'<x) = P for x' drawn from distribution pdf.
-  // Uses Newton-Ralphson.
+  // Uses Newton-Raphson.
   virtual double inverse_cdf(double P) const;
 
     //: Version number for I/O

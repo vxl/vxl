@@ -71,7 +71,7 @@ public:
   //: The inverse cdf.
   // The value of x: P(x'<x) = P for x' drawn from distribution pdf.
   // The default verson of this algorithm uses sampling if !cdf_is_analytic(),
-  // and Newton-Ralphson root finding otherwise.
+  // and Newton-Raphson root finding otherwise.
   virtual double inverse_cdf(double P) const;
 
   //: Gradient and value of PDF at x

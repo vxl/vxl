@@ -124,7 +124,7 @@ double pdf1d_kernel_pdf::inverse_cdf(double P) const
   }
   return (x_above + x_below) / 2;
 #endif
-  // bracketed Newton Ralphson.
+  // bracketed Newton-Raphson.
 
 
   double x_middle=0.5*(x_above+x_below);
@@ -137,11 +137,11 @@ double pdf1d_kernel_pdf::inverse_cdf(double P) const
     if ( !((x_above - x_middle)*df_middle + f_middle > 0.0 &&
            (x_below - x_middle)*df_middle + f_middle < 0.0   ) ||
       (vnl_math_abs((2.0*f_middle)) > vnl_math_abs(dxold*df_middle)))
-    { // Bisect if Nexton Ralphson isn't working
+    { // Bisect if Newton-Raphson isn't working
       x_middle=0.5*(x_above+x_below);
       dxold=dx;
       dx=x_above-x_middle;
-    } else // Newton Ralphson step
+    } else // Newton-Raphson step
     {
       dxold=dx;
       dx=f_middle/df_middle;
