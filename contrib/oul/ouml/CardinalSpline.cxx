@@ -1,5 +1,6 @@
 #include "CardinalSpline.h"
 #include <vsl/vsl_vector_io.txx>
+#include <vcl_cassert.h>
 
 // Return a list of points on the boundary of the curve. This is
 // intended for drawing the curve as a list of line segments.
@@ -7,15 +8,15 @@
 // \return vcl_vector<Vector3D>: a list of points.
 vcl_vector<CardinalSpline::Vector3D> CardinalSpline::getPoints(int num_points) const
 {
-    assert(num_points!=0);
-    vcl_vector<Vector3D> points;
-    Vector3D current_point;
-    for (int i=0; i<num_points; i++)
-    {
-        current_point = getPoint((double)i/(double)num_points);
-        points.push_back(current_point);
-    }
-    return points;
+  assert(num_points!=0);
+  vcl_vector<Vector3D> points;
+  Vector3D current_point;
+  for (int i=0; i<num_points; i++)
+  {
+    current_point = getPoint((double)i/(double)num_points);
+    points.push_back(current_point);
+  }
+  return points;
 }
 
 // Internal helper function. This is a commonly computed value which
@@ -49,61 +50,61 @@ CardinalSpline::Vector3D CardinalSpline::getVal(
 // firstDeriv etc work near t=0.0 and t=1.0
 CardinalSpline::Vector3D CardinalSpline::getPoint(double t) const
 {
-    assert(t>=0.0);
-    assert(t<=1.0);
-	// first find the relevant control points associated with t
-	int n = controlPoints.size();
-    assert(n!=0);
-	int pk = ((int)(t*n))%n;
-	// calculate the parameter u which indicates how far between pk
-	// and pk1 the wanted point is.
-	double u = t*n-(int)(t*n);
-	vnl_matrix<double> uvec(1, 4);
-	uvec(0,3) = 1;
-	for (int i=2; i>=0; i--) uvec(0,i) = uvec(0,i+1)*u;
-	return getVal(uvec, pk);
+  assert(t>=0.0);
+  assert(t<=1.0);
+  // first find the relevant control points associated with t
+  int n = controlPoints.size();
+  assert(n!=0);
+  int pk = ((int)(t*n))%n;
+  // calculate the parameter u which indicates how far between pk
+  // and pk1 the wanted point is.
+  double u = t*n-(int)(t*n);
+  vnl_matrix<double> uvec(1, 4);
+  uvec(0,3) = 1;
+  for (int i=2; i>=0; i--) uvec(0,i) = uvec(0,i+1)*u;
+  return getVal(uvec, pk);
 }
 
 // Gradient of the spline functions - ie [d_c(x)/du d_c(y)/du d_c(z)/du]^T.
 CardinalSpline::Vector3D CardinalSpline::firstDerivative(double t) const
 {
-    assert(t>=0.0);
-    assert(t<=1.0);
-    // first find the relevant control points associated with t
-    int n = controlPoints.size();
-    int pk = ((int)(t*n))%n;
-    // calculate the parameter u which indicates how far between pk
-    // and pk1 the wanted point is.
-    double u = t*n-(int)(t*n);
+  assert(t>=0.0);
+  assert(t<=1.0);
+  // first find the relevant control points associated with t
+  int n = controlPoints.size();
+  int pk = ((int)(t*n))%n;
+  // calculate the parameter u which indicates how far between pk
+  // and pk1 the wanted point is.
+  double u = t*n-(int)(t*n);
 
-    vnl_matrix<double> uvec(1, 4);
-    uvec(0,3) = 0;
-    uvec(0,2) = 1;
-    uvec(0,1) = 2*u;
-    uvec(0,0) = 3*u*u;
-    //for (int i=1; i>=0; i--) uvec(0,i) = uvec(0,i+1)*u;
-    return ((double)n)*getVal(uvec, pk);
+  vnl_matrix<double> uvec(1, 4);
+  uvec(0,3) = 0;
+  uvec(0,2) = 1;
+  uvec(0,1) = 2*u;
+  uvec(0,0) = 3*u*u;
+  //for (int i=1; i>=0; i--) uvec(0,i) = uvec(0,i+1)*u;
+  return ((double)n)*getVal(uvec, pk);
 }
 
 // Second derivative of the spline functions -
 // ie [d^2_c(x)/du^2 d^2_c(y)/du^2 d^2_c(z)/du^2]^T.
 CardinalSpline::Vector3D CardinalSpline::secondDerivative(double t) const
 {
-    assert(t>=0.0);
-    assert(t<=1.0);
-	// first find the relevant control points associated with t
-	int n = controlPoints.size();
-	int pk = ((int)(t*n))%n;
-	// calculate the parameter u which indicates how far between pk
-	// and pk1 the wanted point is.
-	double u = t*n-(int)(t*n);
+  assert(t>=0.0);
+  assert(t<=1.0);
+  // first find the relevant control points associated with t
+  int n = controlPoints.size();
+  int pk = ((int)(t*n))%n;
+  // calculate the parameter u which indicates how far between pk
+  // and pk1 the wanted point is.
+  double u = t*n-(int)(t*n);
 
-	vnl_matrix<double> uvec(1, 4);
-	uvec(0,3) = 0;
-	uvec(0,2) = 0;
-	uvec(0,1) = 2;
-	uvec(0,0) = 6*u;
-	return ((double)(n*n))*getVal(uvec, pk);
+  vnl_matrix<double> uvec(1, 4);
+  uvec(0,3) = 0;
+  uvec(0,2) = 0;
+  uvec(0,1) = 2;
+  uvec(0,0) = 6*u;
+  return ((double)(n*n))*getVal(uvec, pk);
 }
 
 // This is the derivative of the distance function from a point to the
@@ -120,12 +121,12 @@ double CardinalSpline::distanceFunctionFirstDerivative(double t,
 double CardinalSpline::distanceFunctionSecondDerivative(double t,
                                                         const Vector3D &point) const
 {
-    Vector3D curvePt = getPoint(t);
-    Vector3D diff = curvePt-point;
-    Vector3D firstDeriv = firstDerivative(t);
-    Vector3D secondDeriv = secondDerivative(t);
-    return 2*dot_product(secondDeriv, diff)
-        + 2*dot_product(firstDeriv, firstDeriv);
+  Vector3D curvePt = getPoint(t);
+  Vector3D diff = curvePt-point;
+  Vector3D firstDeriv = firstDerivative(t);
+  Vector3D secondDeriv = secondDerivative(t);
+  return 2*dot_product(secondDeriv, diff)
+       + 2*dot_product(firstDeriv, firstDeriv);
 }
 
 // Return the t value of the closest point to the input point. This is
@@ -133,87 +134,87 @@ double CardinalSpline::distanceFunctionSecondDerivative(double t,
 // bracketed using the control points of the spline.
 double CardinalSpline::closest_point_t(const Vector3D &point) const
 {
-    // first bracket the t value
-    // do 10 steps per spline segment
-    int n = controlPoints.size()*10;
-    double delta = 1.0/(double)n;
-    double t1=0.0;
-    double d1 = (point-getPoint(t1)).magnitude();
-    for (double t=delta; t<1.0; t+=delta)
+  // first bracket the t value
+  // do 10 steps per spline segment
+  int n = controlPoints.size()*10;
+  double delta = 1.0/(double)n;
+  double t1=0.0;
+  double d1 = (point-getPoint(t1)).magnitude();
+  for (double t=delta; t<1.0; t+=delta)
+  {
+    double dist = (point-getPoint(t)).magnitude();
+    // replace d1
+    if (dist<d1)
     {
-        double dist = (point-getPoint(t)).magnitude();
-        // replace d1
-        if (dist<d1)
-        {
-            d1 = dist; t1 = t;
-        }
+      d1 = dist; t1 = t;
     }
+  }
 
-    // now we need to find the second closest neighbouring pt
-    double t2 = t1+delta;
-    if (t2>1.0) t2 = 0.0; // wraparound
-    double t3 = t1-delta;
-    if (t3<0.0) t3 = 1.0-delta;
+  // now we need to find the second closest neighbouring pt
+  double t2 = t1+delta;
+  if (t2>1.0) t2 = 0.0; // wraparound
+  double t3 = t1-delta;
+  if (t3<0.0) t3 = 1.0-delta;
 
-    // find closest neighbour
-    double d2 = (point-getPoint(t2)).magnitude();
-    double d3 = (point-getPoint(t3)).magnitude();
-    if (d3<d2)
+  // find closest neighbour
+  double d2 = (point-getPoint(t2)).magnitude();
+  double d3 = (point-getPoint(t3)).magnitude();
+  if (d3<d2)
+  {
+    t2 = t3; d2 = d3;
+  }
+
+  // now if the neighbours happen to be pt 0 and pt 1-delta, then
+  // set pt 0 to pt 1
+  // can only happen if there's a wraparound
+  if (vcl_fabs(t2-t1)>2.0*delta)
+  {
+    if (t2>t1) t1 = 1.0;
+    else t2 = 1.0;
+  }
+
+  // now do a newton's iteration until we converge
+  // do a simple interpolation
+  double totaldist = d1+d2;
+  double t = t1; //(d2*t1+d1*t2)/totaldist;
+  delta = 1.0;
+  int numloops=0;
+  delta = distanceFunctionFirstDerivative(t, point)/
+          distanceFunctionSecondDerivative(t, point);
+  while (vcl_fabs(delta)>1e-8)
+  {
+    t -= delta;
+    if (t<0.0) t += 1.0;
+    if (t>1.0) t -= 1.0;
+    // if the following condition is true, then the newton's
+    // method is not converging (or at least not my
+    // implementation), so just return the closest point found so far
+    double dist = (point-getPoint(t)).magnitude();
+    if (dist>d1)
     {
-        t2 = t3; d2 = d3;
+      t = t1;
+      vcl_cerr << "Closest point not converging:\n"
+               << " t = " << t
+               << ", dist = " << dist << ", d1 = " << d1
+               << ", delta = " << delta << vcl_endl;
+      break;
     }
-
-    // now if the neighbours happen to be pt 0 and pt 1-delta, then
-    // set pt 0 to pt 1
-    // can only happen if there's a wraparound
-    if (fabs(t2-t1)>2.0*delta)
+    if (dist<d1)
     {
-        if (t2>t1) t1 = 1.0;
-        else t2 = 1.0;
+      t1 = t; d1 = dist;
     }
-
-    // now do a newton's iteration until we converge
-    // do a simple interpolation
-    double totaldist = d1+d2;
-    double t = t1; //(d2*t1+d1*t2)/totaldist;
-    delta = 1.0;
-    int numloops=0;
+    if (++numloops>50)
+      assert(false);
     delta = distanceFunctionFirstDerivative(t, point)/
-        distanceFunctionSecondDerivative(t, point);
-    while (fabs(delta)>1e-8)
-    {
-        t -= delta;
-        if (t<0.0) t += 1.0;
-        if (t>1.0) t -= 1.0;
-        // if the following condition is true, then the newton's
-        // method is not converging (or at least not my
-        // implementation), so just return the closest point found so far
-        double dist = (point-getPoint(t)).magnitude();
-        if (dist>d1)
-        {
-            t = t1;
-            vcl_cerr << "Closest point not converging:";
-            vcl_cerr << " t = " << t;
-            vcl_cerr << " dist = " << dist << ", d1 = " << d1;
-            vcl_cerr << " delta = " << delta << vcl_endl;
-            break;
-        }
-        if (dist<d1)
-        {
-            t1 = t; d1 = dist;
-        }
-        if (++numloops>50)
-            assert(false);
-        delta = distanceFunctionFirstDerivative(t, point)/
             distanceFunctionSecondDerivative(t, point);
-    }
+  }
 
-    return t;
+  return t;
 }
 
-/*
- * binary I/O
- */
+//
+// binary I/O
+//
 
 VSL_VECTOR_IO_INSTANTIATE(CardinalSpline::Vector3D);
 

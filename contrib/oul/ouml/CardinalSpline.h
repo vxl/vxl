@@ -6,6 +6,7 @@
 #include <vnl/vnl_matrix_fixed.h>
 #include <vcl_vector.h>
 #include <vcl_string.h>
+#include <vcl_cassert.h>
 #include <vnl/io/vnl_io_vector_fixed.txx>
 #include <vnl/io/vnl_io_matrix.txx>
 #include <vsl/vsl_binary_io.h>
@@ -29,15 +30,15 @@
 
 class CardinalSpline
 {
-public:
+ public:
     typedef vnl_vector_fixed<double, 3> Vector3D;
     CardinalSpline(): Mc(4,4,0.0), s(0.25){};
-	CardinalSpline(vcl_vector<Vector3D> &cPoints): 
-		controlPoints(cPoints), Mc(4,4,0.0), s(0.25)
-	{
-		setMc(s);
-	};
-    CardinalSpline(const CardinalSpline &cs): 
+    CardinalSpline(vcl_vector<Vector3D> &cPoints):
+        controlPoints(cPoints), Mc(4,4,0.0), s(0.25)
+    {
+        setMc(s);
+    };
+    CardinalSpline(const CardinalSpline &cs):
         controlPoints(cs.controlPoints), Mc(cs.Mc), s(cs.s) {};
     CardinalSpline &operator =(const CardinalSpline &cs){
         if (&cs != this)
@@ -48,21 +49,21 @@ public:
         }
         return *this;
     };
-	~CardinalSpline(){};
+    ~CardinalSpline(){};
 
-	Vector3D getPoint(double t) const;
-	vcl_vector<Vector3D> getPoints(int num_points) const;
-	vcl_vector<Vector3D> getControlPoints() const {return controlPoints;};
-	void setT(double t){setMc((1-t)/2.0);};
+    Vector3D getPoint(double t) const;
+    vcl_vector<Vector3D> getPoints(int num_points) const;
+    vcl_vector<Vector3D> getControlPoints() const {return controlPoints;};
+    void setT(double t){setMc((1-t)/2.0);};
     Vector3D closest_point(const Vector3D &point) const {
         double t = closest_point_t(point);
         assert(t>=0.0);
         assert(t<=1.0);
         return getPoint(t);
     };
-	double closest_point_t(const Vector3D &point) const;
-	Vector3D firstDerivative(double t) const;
-	Vector3D secondDerivative(double t) const;
+    double closest_point_t(const Vector3D &point) const;
+    Vector3D firstDerivative(double t) const;
+    Vector3D secondDerivative(double t) const;
     // return the mean of the control pts
     Vector3D mean_control_pts() const {
         Vector3D mean(0.0);
@@ -77,8 +78,8 @@ public:
     void b_read(vsl_b_istream &os);
     short version() const {return 1;};
     void print_summary(vcl_ostream &os) const {
-        os << "Cardinal Spline:\n";
-        os << "\tcontrolPts = \n";
+        os << "Cardinal Spline:\n"
+           << "\tcontrolPts =\n";
         for (unsigned i=0; i<controlPoints.size(); i++)
             os << "\t\t" << controlPoints[i] << vcl_endl;
     };
@@ -93,7 +94,7 @@ public:
 
     bool operator==(const CardinalSpline &c){
         return (controlPoints==c.controlPoints) && (Mc==c.Mc) && (s==c.s);
-    }; 
+    };
 
     bool operator!=(const CardinalSpline &c){
         return !(*this==c);
@@ -103,32 +104,32 @@ public:
         for (unsigned i=0; i<controlPoints.size(); i++)
             controlPoints[i] += t;
     };
-        
-private:
-	double distanceFunctionFirstDerivative(double t, 
+
+ private:
+    double distanceFunctionFirstDerivative(double t,
                                            const Vector3D &point) const;
-	double distanceFunctionSecondDerivative(double t, 
+    double distanceFunctionSecondDerivative(double t,
                                             const Vector3D &point) const;
-	Vector3D getVal(const vnl_matrix_fixed<double, 1, 4> &uvec, int pk) const;
-	double convert_t(double t) const{
-		if (t<0.0) 
-			while (t<0.0) t+=1.0;
-		else if (t>1.0)
-			while (t>1.0) t-=1.0;
-		return t;
-	};
-		
-	void setMc(double _s)
-	{
-		s = _s;
-		Mc(0,0)=-s; Mc(0,1)=2-s; Mc(0,2)=s-2; Mc(0,3)=s;
-		Mc(1,0)=2*s; Mc(1,1)=s-3; Mc(1,2)=3-2*s; Mc(1,3)=-s;
-		Mc(2,0)=-s; Mc(2,1)=0; Mc(2,2)=s; Mc(2,3)=0;
-		Mc(3,0)=0; Mc(3,1)=1; Mc(3,2)=0; Mc(3,3)=0;
-	};
-	vcl_vector<Vector3D> controlPoints;
-	vnl_matrix<double> Mc;
-	double s;
+    Vector3D getVal(const vnl_matrix_fixed<double, 1, 4> &uvec, int pk) const;
+    double convert_t(double t) const{
+        if (t<0.0)
+            while (t<0.0) t+=1.0;
+        else if (t>1.0)
+            while (t>1.0) t-=1.0;
+        return t;
+    };
+
+    void setMc(double s_)
+    {
+        s = s_;
+        Mc(0,0)=-s; Mc(0,1)=2-s; Mc(0,2)=s-2; Mc(0,3)=s;
+        Mc(1,0)=2*s; Mc(1,1)=s-3; Mc(1,2)=3-2*s; Mc(1,3)=-s;
+        Mc(2,0)=-s; Mc(2,1)=0; Mc(2,2)=s; Mc(2,3)=0;
+        Mc(3,0)=0; Mc(3,1)=1; Mc(3,2)=0; Mc(3,3)=0;
+    };
+    vcl_vector<Vector3D> controlPoints;
+    vnl_matrix<double> Mc;
+    double s;
 };
 
 void vsl_b_write(vsl_b_ostream &os, const CardinalSpline &e);
