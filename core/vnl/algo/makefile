@@ -55,3 +55,8 @@ MANPAGE_SOURCES += vnl_orthogonal_complement.txx
 ################################
 include ${IUEROOT}/config/top.mk
 ################################
+
+ifeq "HP-UX" "$(findstring HP-UX,$(OS))"
+FLAGS_Templates/vnl_determinant+vcl_complex+long_double--.cxx := -O0
+FLAGS_Templates/vnl_svd+vcl_complex+long_double--.cxx := -O0
+endif
