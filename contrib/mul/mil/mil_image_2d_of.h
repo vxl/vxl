@@ -23,8 +23,10 @@
 //  destruction).  This allows external images to be accessed
 //  without a deep copy.
 //
+//
 //  Note that copying one mil_image_of<T> to another takes a shallow
 //  copy by default.  Use the explicit deepCopy() call to take a deep copy.
+//
 //
 //  format() returns a vcl_string describing the format.
 //  Formats currently include:
