@@ -81,7 +81,7 @@ SOURCES += vnl_unary_function.cxx
 SOURCES += vnl_transpose.cxx
 
 FLAGS_Templates/vnl_c_vector+float-.cxx += $(optimize)
-FLAGS_Templates/vnl_c_vector+double-.cxx += $(optimize
+FLAGS_Templates/vnl_c_vector+double-.cxx += $(optimize)
 FLAGS_Templates/vnl_c_vector+float_complex-.cxx += $(optimize)
 FLAGS_Templates/vnl_c_vector+double_complex-.cxx += $(optimize)
 FLAGS_Templates/vnl_sparse_matrix_instances.cxx += $(optimize)
