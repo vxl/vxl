@@ -113,9 +113,9 @@ public:
 
   // CONSTRUCTORS AND RELATED STUFF
 
-#if 0 // The compiler defaults for these are all right
   // default constructor
   vgl_conic() : type_(no_type) {}
+#if 0 // The compiler defaults for these are all right
   // copy constructor
   vgl_conic(vgl_conic<T> const& c)
     : type_(c.type()), a_(c.a()), b_(c.b()), c_(c.c()), d_(c.d()), e_(c.e()), f_(c.f()) {}
