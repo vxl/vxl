@@ -14,7 +14,6 @@
 #include <vgl/io/vgl_io_point_2d.h>
 #include <vsl/vsl_vector_io.h>
 #include <vnl/algo/vnl_svd.h>
-#include <vnl/algo/vnl_cholesky.h>
 
 //=======================================================================
 
@@ -369,26 +368,10 @@ void mbl_thin_plate_spline_2d::build(const vcl_vector<vgl_point_2d<double> >& so
   set_up_rhs(Bx,By,dest_pts);
 
   // Solve LW = B for W1 and W2 :
-  // Attempt to use Cholesky:
-  // ***** Cholesky seems to fail, producing NaNs despite
-  //       sensible condition numbers
-
-//   vnl_cholesky chol(L,vnl_cholesky::estimate_condition);
-//   vcl_cout<<"rcond: "<<chol.rcond()<<vcl_endl;
-//   vcl_cout<<"Det: "<<chol.determinant()<<vcl_endl;
-//   vcl_cout<<"L: "<<chol.lower_triangle()<<vcl_endl;
-//   vcl_cout<<L-(chol.lower_triangle()*chol.upper_triangle())<<vcl_endl;
-//   if (chol.rcond()>1e-8)
-//   {
-//     chol.solve(Bx,&W1);
-//     chol.solve(By,&W2);
-//     vcl_cout<<"Chol OK!"<<vcl_endl;
-//   }
-//   else
+  // Note that both Cholesky and QR decompositions fail, apparently because of the
+  // zeroes on the diagonal.  Use SVD to be safe.
   {
     vnl_svd<double> svd(L);
-//  vcl_cout<<"Singular values: "<<svd.W()<<vcl_endl;
-//  vcl_cout<<"Det:"<<svd.W().determinant()<<vcl_endl;
     svd.solve(Bx.data_block(),W1.data_block());
     svd.solve(By.data_block(),W2.data_block());
   }
@@ -415,14 +398,9 @@ void mbl_thin_plate_spline_2d::set_source_pts(const vcl_vector<vgl_point_2d<doub
   vnl_matrix<double> L;
   build_L(L,source_pts);
 
-  // Cholesky fails despite L being symmetric, +ive definite
-//   vnl_cholesky chol(L,vnl_cholesky::estimate_condition);
-//   vcl_cout<<"rcond: "<<chol.rcond()<<vcl_endl;
-//   if (chol.rcond()>1e-8)
-//   {
-//       L_inv_ = chol.inverse();
-//   }
-//   else
+  // Compute inverse of L
+  // Note that both Cholesky and QR decompositions fail, apparently because of the
+  // zeroes on the diagonal.  Use SVD to be safe.
   {
     vnl_svd<double> svd(L);
     L_inv_ = svd.inverse();
