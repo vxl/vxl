@@ -2,9 +2,9 @@
 #ifndef mil_image_2d_of_txx_
 #define mil_image_2d_of_txx_
 //:
-//  \file
-//  \brief Represent images of one or more planes of Ts.
-//  \author Tim Cootes
+// \file
+// \brief Represent images of one or more planes of Ts.
+// \author Tim Cootes
 
 #include "mil_image_2d_of.h"
 
@@ -388,15 +388,6 @@ void mil_image_2d_of<T>::getRange(T& min_f, T& max_f) const
   }
 }
 
-#if 0 // This is specialised in mil_image_2d_of.cxx
-//=======================================================================
-template<class T>
-vcl_string mil_image_2d_of<T>::is_a() const
-{
-  return vcl_string("mil_image_2d_of<T>");
-}
-#endif
-
 //=======================================================================
 
 template<class T>
@@ -493,8 +484,8 @@ void mil_image_2d_of<T>::b_write(vsl_b_ostream& bfs) const
   vsl_b_write(bfs,version_no());
   if (!data_)
   {
-    vcl_cerr << "template<class T> mil_image_2d_of<T>::b_write() "
-             << "This image refers to external data and "
+    vcl_cerr << "template<class T> mil_image_2d_of<T>::b_write() :\n"
+             << "  This image refers to external data and "
              << "cannot be restored correctly if saved like this.\n";
     vcl_abort();
   }
@@ -571,7 +562,11 @@ bool mil_image_2d_of<T>::operator==(const mil_image_2d_of<T> &other) const
 }
 
 
+#undef MIL_IMAGE_2D_OF_INSTANTIATE
 #define MIL_IMAGE_2D_OF_INSTANTIATE(T) \
+VCL_DEFINE_SPECIALIZATION vcl_string mil_image_2d_of<T >::is_a() const \
+{ return vcl_string("mil_image_2d_of<" #T ">"); } \
 template class mil_image_2d_of<T >
+
 
 #endif // mil_image_2d_of_txx_

@@ -2,11 +2,12 @@
 #ifndef mil_sample_grid_2d_txx_
 #define mil_sample_grid_2d_txx_
 //:
-//  \file
-//  \brief Profile sampling functions for 2D images
-//  \author Tim Cootes
+// \file
+// \brief Profile sampling functions for 2D images
+// \author Tim Cootes
 
 #include "mil_sample_grid_2d.h"
+
 #include <mil/mil_bilin_interp_2d.h>
 #include <vnl/vnl_vector.h>
 
@@ -312,6 +313,7 @@ void mil_sample_grid_2d_ic_no_checks(vnl_vector<vecType>& vec,
   }
 }
 
+#undef MIL_SAMPLE_GRID_2D_INSTANTIATE
 #define MIL_SAMPLE_GRID_2D_INSTANTIATE( imType, vecType ) \
 template void mil_sample_grid_2d(vnl_vector<vecType >& vec, \
                                  const mil_image_2d_of<imType >& image, \

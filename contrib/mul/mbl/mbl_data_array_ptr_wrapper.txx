@@ -5,6 +5,7 @@
 // \file
 
 #include "mbl_data_array_ptr_wrapper.h"
+
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h>
 #include <vcl_cassert.h>
@@ -105,18 +106,12 @@ void mbl_data_array_ptr_wrapper<T>::set_index(unsigned long n)
   assert(n != ((unsigned)-1));
   if (n>=n_)
   {
-    vcl_cerr<<"mbl_data_array_ptr_wrapper<T>::set_index(n) "
-            <<"n = "<<n<<" not in range 0<=n<"<<size()<<vcl_endl;
+    vcl_cerr<<"mbl_data_array_ptr_wrapper<T>::set_index(n) :\n"
+            <<"  n = "<<n<<" not in range 0<=n<"<<size()<<vcl_endl;
     vcl_abort();
   }
 
   index_=n;
-}
-
-template <class T>
-vcl_string mbl_data_array_ptr_wrapper<T>::is_a() const
-{
-  return vcl_string("mbl_data_array_ptr_wrapper<T>");
 }
 
 template <class T>
@@ -127,6 +122,8 @@ bool mbl_data_array_ptr_wrapper<T>::is_class(vcl_string const& s) const
 
 
 #define MBL_DATA_ARRAY_PTR_WRAPPER_INSTANTIATE(T) \
+VCL_DEFINE_SPECIALIZATION vcl_string mbl_data_array_ptr_wrapper<T >::is_a() const \
+{ return vcl_string("mbl_data_array_ptr_wrapper<" #T ">"); } \
 template class mbl_data_array_ptr_wrapper< T >
 
 #endif // mbl_data_array_ptr_wrapper_txx_

@@ -2,9 +2,9 @@
 #ifndef mil3d_image_3d_of_txx_
 #define mil3d_image_3d_of_txx_
 //:
-//  \file
-//  \brief Represent 3D images of one or more planes of Ts.
-//  \author Graham Vincent (extended from mil_image_2d_of by Tim Cootes)
+// \file
+// \brief Represent 3D images of one or more planes of Ts.
+// \author Graham Vincent (extended from mil_image_2d_of by Tim Cootes)
 
 #include "mil3d_image_3d_of.h"
 
@@ -314,17 +314,6 @@ void mil3d_image_3d_of<T>::getRange(T& min_f, T& max_f) const
     }
 }
 
-#if 0 // This is specialised in mil3d_image_3d_of.cxx
-//=======================================================================
-// Method: is_a
-//=======================================================================
-template<class T>
-vcl_string mil3d_image_3d_of<T>::is_a() const
-{
-  return vcl_string("mil3d_image_3d_of<T>");
-}
-#endif
-
 //=======================================================================
 // Method: is_class
 //=======================================================================
@@ -412,8 +401,8 @@ void mil3d_image_3d_of<T>::b_write(vsl_b_ostream& bfs) const
     vsl_b_write(bfs,version_no());
     if (!data_)
     {
-      vcl_cerr << "template<class T> mil3d_image_3d_of<T>::b_write()\n"
-               << " This image refers to external data and"
+      vcl_cerr << "template<class T> mil3d_image_3d_of<T>::b_write() :\n"
+               << "  This image refers to external data and"
                << " cannot be restored correctly if saved like this.\n";
       vcl_abort();
     }
@@ -463,8 +452,8 @@ void mil3d_image_3d_of<T>::b_read(vsl_b_istream& bfs)
             vsl_b_read(bfs,plane_offsets);
             break;
         default:
-            vcl_cerr << "template<class T> mil3d_image_3d_of<T>::b_read()\n"
-                     << " Unexpected version number " << version << '\n';
+            vcl_cerr << "template<class T> mil3d_image_3d_of<T>::b_read() :\n"
+                     << "  Unexpected version number " << version << '\n';
             vcl_abort();
     }
 
@@ -536,5 +525,11 @@ bool mil3d_image_3d_of<T>::deepSlice(Axis axis,int slice_number, mil_image_2d_of
 
     return result;
 }
+
+#undef MIL3D_IMAGE_3D_OF_INSTANTIATE
+#define MIL3D_IMAGE_3D_OF_INSTANTIATE(T) \
+VCL_DEFINE_SPECIALIZATION vcl_string mil3d_image_3d_of<T >::is_a() const \
+{ return vcl_string("mil3d_image_3d_of<" #T ">"); } \
+template class mil3d_image_3d_of<T >
 
 #endif // mil3d_image_3d_of_txx_

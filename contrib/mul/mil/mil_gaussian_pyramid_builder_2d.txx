@@ -2,9 +2,9 @@
 #ifndef mil_gaussian_pyramid_builder_2d_txx_
 #define mil_gaussian_pyramid_builder_2d_txx_
 //:
-//  \file
-//  \brief Class to build Gaussian pyramids of mil_image_2d_of<T>
-//  \author Tim Cootes
+// \file
+// \brief Class to build Gaussian pyramids of mil_image_2d_of<T>
+// \author Tim Cootes
 
 #include "mil_gaussian_pyramid_builder_2d.h"
 
@@ -323,16 +323,6 @@ void mil_gaussian_pyramid_builder_2d<T>::extend(mil_image_pyramid& image_pyr) co
 
 //=======================================================================
 
-#if 0 // This is specialised in mil_gaussian_pyramid_builder_2d.cxx
-template<class T>
-vcl_string mil_gaussian_pyramid_builder_2d<T>::is_a() const
-{
-  return vcl_string("mil_gaussian_pyramid_builder_2d<T>");
-}
-#endif
-
-//=======================================================================
-
 template<class T>
 bool mil_gaussian_pyramid_builder_2d<T>::is_class(vcl_string const& s) const
 {
@@ -398,5 +388,11 @@ void mil_gaussian_pyramid_builder_2d<T>::b_read(vsl_b_istream& bfs)
     return;
   }
 }
+
+#undef MIL_GAUSSIAN_PYRAMID_BUILDER_2D_INSTANTIATE
+#define MIL_GAUSSIAN_PYRAMID_BUILDER_2D_INSTANTIATE(T) \
+VCL_DEFINE_SPECIALIZATION vcl_string mil_gaussian_pyramid_builder_2d<T >::is_a() const \
+{ return vcl_string("mil_gaussian_pyramid_builder_2d<" #T ">"); } \
+template class mil_gaussian_pyramid_builder_2d<T >
 
 #endif // mil_gaussian_pyramid_builder_2d_txx_

@@ -2,9 +2,9 @@
 #ifndef vimt3d_gaussian_pyramid_builder_3d_h_
 #define vimt3d_gaussian_pyramid_builder_3d_h_
 //:
-//  \file
-//  \brief Build Gaussian pyramids of vimt3d_image_3d_of<T>
-//  \author Tim Cootes
+// \file
+// \brief Build Gaussian pyramids of vimt3d_image_3d_of<T>
+// \author Tim Cootes
 
 #include <vsl/vsl_binary_io.h>
 #include <vcl_string.h>
@@ -149,5 +149,8 @@ class vimt3d_gaussian_pyramid_builder_3d : public vimt_image_pyramid_builder
   //: Load class from binary file stream
   virtual void b_read(vsl_b_istream& bfs);
 };
+
+#define VIMT3D_GAUSSIAN_PYRAMID_BUILDER_3D_INSTANTIATE(T) \
+extern "please #include vimt3d/vimt3d_gaussian_pyramid_builder_3d.txx instead"
 
 #endif // vimt3d_gaussian_pyramid_builder_3d_h_

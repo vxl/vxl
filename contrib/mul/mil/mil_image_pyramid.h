@@ -5,9 +5,9 @@
 #pragma interface
 #endif
 //:
-//  \file
-//  \brief Pyramid of images of arbitrary type
-//  \author Tim Cootes
+// \file
+// \brief Pyramid of images of arbitrary type
+// \author Tim Cootes
 
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
@@ -95,5 +95,8 @@ vcl_ostream& operator<<(vcl_ostream& os, const mil_image_pyramid& im_pyr);
 vcl_ostream& operator<<(vcl_ostream& os, const mil_image_pyramid* im_pyr);
 void vsl_print_summary(vcl_ostream& os, const mil_image_pyramid& im_pyr);
 void vsl_print_summary(vcl_ostream& os, const mil_image_pyramid* im_pyr);
+
+#define MIL_IMAGE_PYRAMID_INSTANTIATE(T) \
+extern "please #include mil/mil_image_pyramid.txx instead"
 
 #endif // mil_image_pyramid_h_

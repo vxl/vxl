@@ -1,9 +1,10 @@
+// This is mul/mil/mil_sample_profile_2d.h
 #ifndef mil_sample_profile_2d_h_
 #define mil_sample_profile_2d_h_
 //:
-//  \file
-//  \brief Profile sampling functions for 2D images
-//  \author Tim Cootes
+// \file
+// \brief Profile sampling functions for 2D images
+// \author Tim Cootes
 
 #include <mil/mil_image_2d_of.h>
 #include <vnl/vnl_fwd.h>
@@ -55,5 +56,8 @@ void mil_sample_profile_2d_ic(vnl_vector<vecType>& v,
                               const vgl_point_2d<double>& p0,
                               const vgl_point_2d<double>& p1,
                               int n);
+
+#define MIL_SAMPLE_PROFILE_2D_INSTANTIATE(imType, vecType) \
+extern "please #include mil/mil_sample_profile_2d.txx instead"
 
 #endif // mil_sample_profile_2d_h_

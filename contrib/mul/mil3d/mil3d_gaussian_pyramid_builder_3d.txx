@@ -2,9 +2,9 @@
 #ifndef mil3d_gaussian_pyramid_builder_3d_txx_
 #define mil3d_gaussian_pyramid_builder_3d_txx_
 //:
-//  \file
-//  \brief Class to build Gaussian pyramids of mil3d_image_3d_of<T>
-//  \author Tim Cootes
+// \file
+// \brief Class to build Gaussian pyramids of mil3d_image_3d_of<T>
+// \author Tim Cootes
 
 #include "mil3d_gaussian_pyramid_builder_3d.h"
 
@@ -501,15 +501,6 @@ void mil3d_gaussian_pyramid_builder_3d<T>::extend(mil_image_pyramid& image_pyr) 
     }
   }
 }
-//=======================================================================
-
-#if 0 // This is specialised in mil3d_gaussian_pyramid_builder_3d.cxx
-template<class T>
-vcl_string mil3d_gaussian_pyramid_builder_3d<T>::is_a() const
-{
-  return vcl_string("mil3d_gaussian_pyramid_builder_3d<T>");
-}
-#endif
 
 //=======================================================================
 
@@ -576,5 +567,11 @@ void mil3d_gaussian_pyramid_builder_3d<T>::b_read(vsl_b_istream& bfs)
     return;
   }
 }
+
+#undef MIL3D_GAUSSIAN_PYRAMID_BUILDER_3D_INSTANTIATE
+#define MIL3D_GAUSSIAN_PYRAMID_BUILDER_3D_INSTANTIATE(T) \
+VCL_DEFINE_SPECIALIZATION vcl_string mil3d_gaussian_pyramid_builder_3d<T >::is_a() const \
+{ return vcl_string("mil3d_gaussian_pyramid_builder_3d<" #T ">"); } \
+template class mil3d_gaussian_pyramid_builder_3d<T >
 
 #endif // mil3d_gaussian_pyramid_builder_3d_txx_

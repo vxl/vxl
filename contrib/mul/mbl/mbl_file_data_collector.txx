@@ -138,12 +138,6 @@ mbl_data_wrapper<T >& mbl_file_data_collector<T>::data_wrapper()
 }
 
 template <class T>
-vcl_string mbl_file_data_collector<T>::is_a() const
-{
-  return vcl_string("mbl_file_data_collector<T>");
-}
-
-template <class T>
 bool mbl_file_data_collector<T>::is_class(vcl_string const& s) const
 {
   return s==mbl_file_data_collector<T>::is_a() || mbl_data_collector<T>::is_class(s);
@@ -191,6 +185,8 @@ void mbl_file_data_collector<T>::b_read(vsl_b_istream& /*bfs*/)
 
 
 #define MBL_FILE_DATA_COLLECTOR_INSTANTIATE(T) \
+VCL_DEFINE_SPECIALIZATION vcl_string mbl_file_data_collector<T >::is_a() const \
+{ return vcl_string("mbl_file_data_collector<" #T ">"); } \
 template class mbl_file_data_collector<T >
 
 #endif // mbl_file_data_collector_txx_

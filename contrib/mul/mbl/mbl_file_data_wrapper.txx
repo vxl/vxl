@@ -5,6 +5,7 @@
 // \file
 
 #include "mbl_file_data_wrapper.h"
+
 #include <vcl_ios.h>
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h>
@@ -181,12 +182,6 @@ mbl_data_wrapper< T >* mbl_file_data_wrapper<T>::clone() const
 }
 
 template <class T>
-vcl_string mbl_file_data_wrapper<T>::is_a() const
-{
-  return vcl_string("mbl_file_data_wrapper<T>");
-}
-
-template <class T>
 bool mbl_file_data_wrapper<T>::is_class(vcl_string const& s) const
 {
   return s==is_a(); // no ref to parent's is_class() since that is pure virtual
@@ -194,6 +189,8 @@ bool mbl_file_data_wrapper<T>::is_class(vcl_string const& s) const
 
 
 #define MBL_FILE_DATA_WRAPPER_INSTANTIATE(T) \
+VCL_DEFINE_SPECIALIZATION vcl_string mbl_file_data_wrapper<T >::is_a() const \
+{ return vcl_string("mbl_file_data_wrapper<" #T ">"); } \
 template class mbl_file_data_wrapper<T >
 
 #endif // mbl_file_data_wrapper_txx_

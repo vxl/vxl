@@ -2,9 +2,9 @@
 #ifndef mil3d_image_3d_of_h_
 #define mil3d_image_3d_of_h_
 //:
-//  \file
-//  \brief Represent 3D images of one or more planes of type T.
-//  \author Graham Vincent (following design of mil_image_2d_of by Tim Cootes)
+// \file
+// \brief Represent 3D images of one or more planes of type T.
+// \author Graham Vincent (following design of mil_image_2d_of by Tim Cootes)
 
 #include <mil/mil_image_2d_of.h>
 #include <mil/mil_image_data.h>
@@ -40,7 +40,6 @@
 template<class T>
 class mil3d_image_3d_of : public mil3d_image_3d
 {
- private:
   //: Pointer to image data
   vbl_smart_ptr<mil_image_data<T> > data_;
 
@@ -241,5 +240,8 @@ class mil3d_image_3d_of : public mil3d_image_3d
   //: Load class from binary file stream
   virtual void b_read(vsl_b_istream& bfs);
 };
+
+#define MIL3D_IMAGE_3D_OF_INSTANTIATE(T) \
+extern "please #include mil3d/mil3d_image_3d_of.txx instead"
 
 #endif // mil3d_image_3d_of_h_

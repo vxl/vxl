@@ -15,15 +15,12 @@ SET(mil_sources
     mil_invert_image_2d.cxx         mil_invert_image_2d.h
 
     mil_image_2d.h
-    mil_image_2d_of.txx             mil_image_2d_of.h          mil_image_2d_of.cxx
-    mil_image_data.txx              mil_image_data.h           mil_image_data.cxx
+    mil_image_2d_of.txx             mil_image_2d_of.h
+    mil_image_data.txx              mil_image_data.h
     mil_image_pyramid.txx           mil_image_pyramid.h        mil_image_pyramid.cxx
-    mil_gaussian_pyramid_builder_2d_general.txx                mil_gaussian_pyramid_builder_2d_general.cxx
-                                    mil_gaussian_pyramid_builder_2d_general.h
-
-    mil_gaussian_pyramid_builder_2d.txx                        mil_gaussian_pyramid_builder_2d.cxx
-                                    mil_gaussian_pyramid_builder_2d.h
-    mil_scale_pyramid_builder_2d.txx mil_scale_pyramid_builder_2d.h mil_scale_pyramid_builder_2d.cxx
+    mil_gaussian_pyramid_builder_2d_general.txx mil_gaussian_pyramid_builder_2d_general.h
+    mil_gaussian_pyramid_builder_2d.txx         mil_gaussian_pyramid_builder_2d.h
+    mil_scale_pyramid_builder_2d.txx            mil_scale_pyramid_builder_2d.h
     mil_sample_profile_2d.txx       mil_sample_profile_2d.h
     mil_sample_grid_2d.txx          mil_sample_grid_2d.h
 

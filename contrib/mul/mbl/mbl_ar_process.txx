@@ -1,9 +1,11 @@
+// This is mul/mbl/mbl_ar_process.txx
 #ifndef mbl_ar_process_txx_
 #define mbl_ar_process_txx_
 //:
 // \file
 
 #include "mbl_ar_process.h"
+
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vnl/algo/vnl_qr.h>
 #include <vnl/algo/vnl_matrix_inverse.h>
@@ -27,13 +29,6 @@ template<class T>
 short mbl_ar_process<T>::version_no() const
 {
     return 1;
-}
-
-//: Name of the class
-template<class T>
-vcl_string mbl_ar_process<T>::is_a() const
-{
-    return vcl_string("mbl_ar_process");
 }
 
 //: Print class to os
@@ -269,6 +264,8 @@ void vsl_print_summary(vcl_ostream& os, const mbl_ar_process<T>* p)
 
 #undef MBL_AR_PROCESS_INSTANTIATE
 #define MBL_AR_PROCESS_INSTANTIATE(T) \
+VCL_DEFINE_SPECIALIZATION vcl_string mbl_ar_process<T >::is_a() const \
+{ return vcl_string("mbl_ar_process<" #T ">"); } \
 template class mbl_ar_process<T >; \
 template void vsl_b_write(vsl_b_ostream& s, const mbl_ar_process<T >* arp); \
 template void vsl_b_read(vsl_b_istream& s, mbl_ar_process<T >* & arp); \

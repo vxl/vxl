@@ -111,4 +111,7 @@ class mil_scale_pyramid_builder_2d : public mil_image_pyramid_builder
   virtual void b_read(vsl_b_istream& bfs);
 };
 
+#define MIL_SCALE_PYRAMID_BUILDER_2D_INSTANTIATE(T) \
+extern "please #include mil/mil_scale_pyramid_builder_2d.txx instead"
+
 #endif // mil_scale_pyramid_builder_2d_h_

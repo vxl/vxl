@@ -1,9 +1,11 @@
+// This is mul/mbl/mbl_data_wrapper_mixer.txx
 #ifndef mbl_data_wrapper_mixer_txx_
 #define mbl_data_wrapper_mixer_txx_
 //:
 // \file
 
 #include "mbl_data_wrapper_mixer.h"
+
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h>
 #include <vcl_cassert.h>
@@ -129,8 +131,8 @@ void mbl_data_wrapper_mixer<T>::set_index(unsigned long n)
   assert(n != ((unsigned)-1));
   if (n>=n_)
   {
-    vcl_cerr<<"mbl_data_wrapper_mixer<T>::set_index(n) "
-            <<"n = "<<n<<" not in range 0<=n<"<<size()<<vcl_endl;
+    vcl_cerr<<"mbl_data_wrapper_mixer<T>::set_index(n) :\n"
+            <<"  n = "<<n<<" not in range 0<=n<"<<size()<<vcl_endl;
     vcl_abort();
   }
 
@@ -146,12 +148,6 @@ void mbl_data_wrapper_mixer<T>::set_index(unsigned long n)
 }
 
 template <class T>
-vcl_string mbl_data_wrapper_mixer<T>::is_a() const
-{
-  return vcl_string("mbl_data_wrapper_mixer<T>");
-}
-
-template <class T>
 bool mbl_data_wrapper_mixer<T>::is_class(vcl_string const& s) const
 {
   return s==is_a(); // no ref to parent's is_class() since that is pure virtual
@@ -160,6 +156,8 @@ bool mbl_data_wrapper_mixer<T>::is_class(vcl_string const& s) const
 
 #undef MBL_DATA_WRAPPER_MIXER_INSTANTIATE
 #define MBL_DATA_WRAPPER_MIXER_INSTANTIATE(T) \
+VCL_DEFINE_SPECIALIZATION vcl_string mbl_data_wrapper_mixer<T >::is_a() const \
+{ return vcl_string("mbl_data_wrapper_mixer<" #T ">"); } \
 template class mbl_data_wrapper_mixer< T >
 
 #endif // mbl_data_wrapper_mixer_txx_

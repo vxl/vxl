@@ -1,3 +1,2 @@
 #include <mil3d/mil3d_gaussian_pyramid_builder_3d.txx>
-
-template class mil3d_gaussian_pyramid_builder_3d<float>;
+MIL3D_GAUSSIAN_PYRAMID_BUILDER_3D_INSTANTIATE(float);

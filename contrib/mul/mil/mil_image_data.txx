@@ -2,11 +2,12 @@
 #ifndef mil_image_data_txx_
 #define mil_image_data_txx_
 //:
-//  \file
-//  \brief Ref. counted block of data on the heap
-//  \author Tim Cootes
+// \file
+// \brief Ref. counted block of data on the heap
+// \author Tim Cootes
 
 #include "mil_image_data.h"
+
 #include <vsl/vsl_binary_io.h>
 #include <vcl_iostream.h>
 #include <vcl_cstring.h>
@@ -81,15 +82,6 @@ short mil_image_data<T>::version_no() const
 {
   return 1;
 }
-
-#if 0 // This is specialised in mil_image_data.cxx
-//: Name of the class
-template<class T>
-vcl_string mil_image_data<T>::is_a() const
-{
-  return vcl_string("mil_image_data<T>");
-}
-#endif
 
 //: Does the name of the class match the argument?
 template<class T>
@@ -205,11 +197,11 @@ void vsl_print_summary(vcl_ostream& os, const mil_image_data<T>* p)
 
 #undef MIL_IMAGE_DATA_INSTANTIATE
 #define MIL_IMAGE_DATA_INSTANTIATE(T) \
-  template class mil_image_data<T >; \
-  /* template void vsl_b_write(vsl_b_ostream&s, const mil_image_data<T >&v); */ \
-  template void vsl_b_write(vsl_b_ostream&s, const mil_image_data<T >*v); \
-  /* template void vsl_b_read(vsl_b_istream& s, mil_image_data<T >  & v); */ \
-  template void vsl_b_read(vsl_b_istream& s, mil_image_data<T >* & v); \
+VCL_DEFINE_SPECIALIZATION vcl_string mil_image_data<T >::is_a() const \
+{ return vcl_string("mil_image_data<" #T ">"); } \
+template class mil_image_data<T >; \
+template void vsl_b_write(vsl_b_ostream&s, const mil_image_data<T >*v); \
+template void vsl_b_read(vsl_b_istream& s, mil_image_data<T >* & v); \
 template void vsl_print_summary(vcl_ostream& s, const mil_image_data<T >* p)
 
 

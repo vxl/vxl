@@ -7,6 +7,7 @@
 // \author Ian Scott
 
 #include "mil_scale_pyramid_builder_2d.h"
+
 #include <vcl_cstdlib.h>
 #include <vcl_cassert.h>
 #include <vcl_string.h>
@@ -327,15 +328,6 @@ mil_image_pyramid* mil_scale_pyramid_builder_2d<T>::newImagePyramid() const
 
 
 //=======================================================================
-#if 0 // This is specialised in mil_scale_pyramid_builder_2d.cxx
-template <class T>
-vcl_string mil_scale_pyramid_builder_2d<T>::is_a() const
-{
-  return vcl_string("mil_scale_pyramid_builder_2d<T>");
-}
-#endif
-
-//=======================================================================
 
 template <class T>
 bool mil_scale_pyramid_builder_2d<T>::is_class(vcl_string const& s) const
@@ -400,5 +392,11 @@ void mil_scale_pyramid_builder_2d<T>::b_read(vsl_b_istream& bfs)
     return;
   }
 }
+
+#undef MIL_SCALE_PYRAMID_BUILDER_2D_INSTANTIATE
+#define MIL_SCALE_PYRAMID_BUILDER_2D_INSTANTIATE(T) \
+VCL_DEFINE_SPECIALIZATION vcl_string mil_scale_pyramid_builder_2d<T >::is_a() const \
+{ return vcl_string("mil_scale_pyramid_builder_2d<" #T ">"); } \
+template class mil_scale_pyramid_builder_2d<T >
 
 #endif // mil_scale_pyramid_builder_2d_txx_

@@ -2,9 +2,9 @@
 #ifndef mil_gaussian_pyramid_builder_2d_h_
 #define mil_gaussian_pyramid_builder_2d_h_
 //:
-//  \file
-//  \brief Build Gaussian pyramids of mil_image_2d_of<T>
-//  \author Tim Cootes
+// \file
+// \brief Build Gaussian pyramids of mil_image_2d_of<T>
+// \author Tim Cootes
 
 #include <vsl/vsl_binary_io.h>
 #include <vcl_string.h>
@@ -126,5 +126,8 @@ class mil_gaussian_pyramid_builder_2d : public mil_image_pyramid_builder
   //: Load class from binary file stream
   virtual void b_read(vsl_b_istream& bfs);
 };
+
+#define MIL_GAUSSIAN_PYRAMID_BUILDER_2D_INSTANTIATE(T) \
+extern "please #include mil/mil_gaussian_pyramid_builder_2d.txx instead"
 
 #endif // mil_gaussian_pyramid_builder_2d_h_

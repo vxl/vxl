@@ -2,9 +2,9 @@
 #ifndef vimt3d_gaussian_pyramid_builder_3d_txx_
 #define vimt3d_gaussian_pyramid_builder_3d_txx_
 //:
-//  \file
-//  \brief Class to build Gaussian pyramids of vimt3d_image_3d_of<T>
-//  \author Tim Cootes
+// \file
+// \brief Class to build Gaussian pyramids of vimt3d_image_3d_of<T>
+// \author Tim Cootes
 
 #include "vimt3d_gaussian_pyramid_builder_3d.h"
 
@@ -340,15 +340,6 @@ void vimt3d_gaussian_pyramid_builder_3d<T>::extend(vimt_image_pyramid& image_pyr
     }
   }
 }
-//=======================================================================
-
-#if 0 // This is specialised in vimt3d_gaussian_pyramid_builder_3d.cxx
-template<class T>
-vcl_string vimt3d_gaussian_pyramid_builder_3d<T>::is_a() const
-{
-  return vcl_string("vimt3d_gaussian_pyramid_builder_3d<T>");
-}
-#endif
 
 //=======================================================================
 
@@ -416,7 +407,10 @@ void vimt3d_gaussian_pyramid_builder_3d<T>::b_read(vsl_b_istream& bfs)
   }
 }
 
+#undef VIMT3D_GAUSSIAN_PYRAMID_BUILDER_3D_INSTANTIATE
 #define VIMT3D_GAUSSIAN_PYRAMID_BUILDER_3D_INSTANTIATE(T) \
+VCL_DEFINE_SPECIALIZATION vcl_string vimt3d_gaussian_pyramid_builder_3d<T >::is_a() const \
+{ return vcl_string("vimt3d_gaussian_pyramid_builder_3d<" #T ">"); } \
 template class vimt3d_gaussian_pyramid_builder_3d<T >
 
 #endif // vimt3d_gaussian_pyramid_builder_3d_txx_
