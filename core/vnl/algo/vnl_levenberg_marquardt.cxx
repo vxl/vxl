@@ -117,11 +117,11 @@ int vnl_levenberg_marquardt::lmdif_lsqfun(int* n,          // I    Number of res
 
 
 //
-bool vnl_levenberg_marquardt::minimize(vnl_vector<double>& x)
+bool vnl_levenberg_marquardt::minimize_without_gradient(vnl_vector<double>& x)
 {
   //fsm
   if (f_->has_gradient()) {
-    vcl_cerr << __FILE__ " : WARNING. calling minimize(), but f_ has gradient." << vcl_endl;
+    vcl_cerr << __FILE__ " : WARNING. calling minimize_without_gradient(), but f_ has gradient." << vcl_endl;
   }
 
   // e04fcf
@@ -365,10 +365,6 @@ void vnl_levenberg_marquardt::diagnose_outcome(vcl_ostream& s) const
 /*         of fjac contains an upper triangular matrix r with */
 /*         diagonal elements of nonincreasing magnitude such that */
 
-/*                t     t           t */
-/*               p *(jac *jac)*p = r *r, */
-
-// (awf) so:
 /*                t     t           t */
 /*               p *(jac *jac)*p = r *r, */
 
