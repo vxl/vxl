@@ -559,13 +559,13 @@ public:
   }
 //template <class Iterator> vcl_deque(Iterator first, Iterator last);
   vcl_deque(const T* first, const T* last) {
-    vcl_copy(first, last, back_inserter(*this));
+    vcl_copy(first, last, vcl_back_inserter(*this));
   }
   vcl_deque(const_iterator first, const_iterator last) {
-    vcl_copy(first, last, back_inserter(*this));
+    vcl_copy(first, last, vcl_back_inserter(*this));
   }
   vcl_deque(const self& x)  {
-    vcl_copy(x.begin(), x.end(), back_inserter(*this));
+    vcl_copy(x.begin(), x.end(), vcl_back_inserter(*this));
   }
   self& operator=(const self& x) {
     if (this != &x) {

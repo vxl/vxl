@@ -190,7 +190,7 @@ iterator_category(const vcl_back_insert_iterator<Container>&)
 
 template <class Container>
 inline vcl_back_insert_iterator<Container>
-back_inserter(Container& x)  {
+vcl_back_inserter(Container& x)  {
     return vcl_back_insert_iterator<Container>(x);
 }
 
