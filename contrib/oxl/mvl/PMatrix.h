@@ -29,6 +29,7 @@
 
 #include <vnl/algo/vnl_algo_fwd.h>
 #include <vnl/vnl_double_3x4.h>
+#include <vbl/vbl_ref_count.h>
 
 class HomgPoint2D;
 class HomgLine2D;
@@ -41,7 +42,7 @@ class HomgLineSeg3D;
 class HMatrix3D;
 class HMatrix2D;
 
-class PMatrix {
+class PMatrix : public vbl_ref_count {
 public:
 
   // Constructors/Initializers/Destructors-------------------------------------
