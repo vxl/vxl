@@ -1,11 +1,9 @@
 #ifndef brct_windows_frame_h_
 #define brct_windows_frame_h_
-
 //:
 // \file
 // \brief Manager for multiview 3d reconstruction gui applications
 // \author Kongbin Kang
-//
 
 #include <vgui/vgui_wrapper_tableau.h>
 #include <vgui/vgui_easy3D_tableau.h>
@@ -16,16 +14,11 @@
 #include <vgui/vgui_composite_tableau_sptr.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_grid_tableau_sptr.h>
-#include <vgui/vgui_menu.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
-#include <vgui/vgui_soview3D.h>
 #include <vgui/vgui_soview2D.h>
 #include <bmvl/brct/kalman_filter.h>
 #include <vil1/vil1_image.h>
-
-
-class vgui_window;
 
 //: A manager for displaying segmentation results.
 class brct_windows_frame : public vgui_wrapper_tableau
@@ -33,7 +26,7 @@ class brct_windows_frame : public vgui_wrapper_tableau
  public:
   //: methods for debug menu callbacks
   void show_epipole();
-	void load_image();
+  void load_image();
   void show_back_projection();
   void show_next_observes();
   void add_predicted_curve2d(vcl_vector<vgl_point_2d<double> > &pts);
