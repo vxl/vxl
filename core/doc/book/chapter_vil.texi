@@ -5,7 +5,7 @@ Load images using @code{vil_load}. Access them
 
 The @vxl{} image library has evolved from the TargetJr and Manchester Image
 libraries.
-As with its predecessors, its primary goals is to provide flexible
+As with its predecessors, its primary goals is to provide flexible access
 to all 2D images, including those too large to fit in
 the address space of a single program or process, and very powerful and
 fast access to images in memory. In fact, both cases need similar
@@ -334,7 +334,7 @@ and using vil, and some of the implications for converting existing code.
 The first and most obvious difference is that whilst there is a broad equivalent to
 vil1_image, and its descendants, this class tree has been split in two. The abstract
 @code{vil1_image} is now replaced with a smart pointer to a @code{vil_image_resource}.
-The concrete @code{vil1_memory_image_of} is now a @code{vil_image_view<>}
+The concrete @code{vil1_memory_image_of<>} is now a @code{vil_image_view<>}
 Previously where as you might have written code in terms of vil1_image, it now
 usually makes sense to have most image manipulations working on
 @code{vil_image_view}s. This is because whilst with the old vil1_image, you had to
@@ -342,7 +342,7 @@ do a @code{get_section}, and operate on raw memory, in vil, the @code{vil_image_
 provides a powerful view directly onto your image in memory.
 
 The @code{vil_image_view} provides such facilities
-as compile-time type safety as switchable bounds checking. It also acts as a
+as compile-time type safety and switchable bounds checking. It also acts as a
 sort of canonicaliser. A wide range of actual memory layouts can all be treated
 identically and transparently while working through the @code{vil_image_view}.
 Previously, in vil1, the image loader often needed to have several filters placed
