@@ -24,15 +24,15 @@
 
 class vvid_video_process : public vbl_ref_count
 {
-public:
+ public:
   enum process_data_type {NOTYPE=0, IMAGE, SPATIAL_OBJECT, TOPOLOGY};
-  
+
   vvid_video_process();
   ~vvid_video_process();
   void clear_input();
   void clear_output();
 
-  void add_input_image(vil_image&  im){input_images_.push_back(im);}
+  void add_input_image(vil_image const& im){input_images_.push_back(im);}
 
   void add_input_spatial_objects(vcl_vector<vsol_spatial_object_2d_sptr> const& spat_objs);
 
@@ -48,7 +48,7 @@ public:
   get_input_spatial_objects(){return input_spat_objs_;}
 
   int get_N_input_topo_objs(){return input_topo_objs_.size();}
-  vcl_vector<vtol_topology_object_sptr> const & 
+  vcl_vector<vtol_topology_object_sptr> const &
   get_input_topology(){return input_topo_objs_;}
 
   //:output handling may depend on the specific process
@@ -57,9 +57,9 @@ public:
 
   virtual process_data_type get_input_type(){return NOTYPE;}
   virtual process_data_type get_output_type(){return NOTYPE;}
-  virtual bool execute()=0;  
-  virtual bool finish()=0;  
-protected: 
+  virtual bool execute()=0;
+  virtual bool finish()=0;
+ protected:
   //members
   vcl_vector<vil_image> input_images_;
   vcl_vector<vsol_spatial_object_2d_sptr> input_spat_objs_;
