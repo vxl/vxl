@@ -14,6 +14,7 @@
 
 VIL_WARP_INSTANTIATE(unsigned char, vil_warp_mapping);
 VIL_WARP_INSTANTIATE(vil_rgb<unsigned char>, vil_warp_mapping);
+VIL_WARP_INSTANTIATE(double, vil_warp_mapping);
 
 vil_image vil_warp(vil_image const& in, vil_warp_mapping const& mapper,
                    vil_warp_interpolation_type i,
@@ -31,6 +32,12 @@ vil_image vil_warp(vil_image const& in, vil_warp_mapping const& mapper,
   } else if (vil_pixel_format(in) == VIL_RGB_BYTE) {
     vil_memory_image_of<vil_rgb<unsigned char> > inimg(in);
     vil_memory_image_of<vil_rgb<unsigned char> > outimg(ow, oh);
+    vil_warp_output_driven(inimg, outimg, mapper, i);
+    return outimg;
+
+  } else if (vil_pixel_format(in) == VIL_DOUBLE) {
+    vil_memory_image_of<double> inimg(in);
+    vil_memory_image_of<double> outimg(ow, oh);
     vil_warp_output_driven(inimg, outimg, mapper, i);
     return outimg;
 
