@@ -39,11 +39,6 @@ vcl_deprecated.h
   Including this causes a preprocessor or compiler warning to be emitted. So
   include <vcl/vcl_deprecated.h> in header files that are to be deprecated.
 
-vcl_alloc.h
-  No ISO <alloc>. Use vcl_memory.h for vcl_allocator<>. *Don't* use 
-  vcl_memory.h for memcpy(), memset() etc. These live in vcl_cstring.h; 
-  whether we like it or not there is *no* ISO C header called <memory.h>
-
 
 tests directory
 ---------------

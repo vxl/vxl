@@ -54,6 +54,18 @@ AC_ARG_ENABLE(emulation-stl,
 [VCL_USE_NATIVE_STL=0],
 [VCL_USE_NATIVE_STL=1])
 
+# use native complex<>? default is yes.
+AC_ARG_ENABLE(emulation-complex,
+[  --enable-emulation-complex  use the complex<> that comes with vcl],
+[VCL_USE_NATIVE_COMPLEX=0],
+[VCL_USE_NATIVE_COMPLEX=1])
+
+# use double instead of long double? default is no.
+AC_ARG_ENABLE(long-double,
+[  --disable-long-double  use double instead of long double],
+[VCL_USE_LONG_DOUBLE=0],
+[VCL_USE_LONG_DOUBLE=1])
+
 #--------------------------------------------------------------------------------
 # COMPILER CHARACTERISTICS
 
@@ -90,7 +102,8 @@ AC_CXX_ALLOWS_INLINE_INSTANTIATION
 if test "$VCL_ALLOWS_INLINE_INSTANTIATION" = "1"; then
 AC_CXX_NEEDS_INLINE_INSTANTIATION
 else
-VCL_NEEDS_INLINE_INSTANTIATION="0"; export VCL_NEEDS_INLINE_INSTANTIATION
+VCL_NEEDS_INLINE_INSTANTIATION="0";
+export VCL_NEEDS_INLINE_INSTANTIATION;
 fi
 
 #AC_SUBST(VCL_DO_NOT_INSTANTIATE)
@@ -111,12 +124,20 @@ AC_CXX_NULL_TMPL_ARGS
 
 AC_CXX_HAS_TEMPLATE_SYMBOLS
 
-AC_CXX_DEFAULT_TMPL_ARG
+
 #VCL_DFL_TYPE_PARAM_STLDECL
 #VCL_DFL_TMPL_PARAM_STLDECL
 #VCL_DFL_TMPL_ARG
+AC_CXX_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER
+if test "$VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER" = "1"; then
+AC_CXX_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER
+else
+VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER="0";
+export VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER;
+fi
+#AC_CXX_DEFAULT_TMPL_ARG
 
-AC_CXX_SUNPRO_ALLOCATOR_HACK
+AC_CXX_SUNPRO_CLASS_SCOPE_HACK
 
 AC_CXX_HAS_NAMESPACES
 
@@ -204,6 +225,8 @@ AC_CXX_HAS_HEADER(strstream,VCL_CXX_HAS_HEADER_STRSTREAM)
 
 # manual
 AC_SUBST(VCL_USE_NATIVE_STL)
+AC_SUBST(VCL_USE_NATIVE_COMPLEX)
+AC_SUBST(VCL_USE_LONG_DOUBLE)
 
 # compiler
 AC_SUBST(VCL_HAS_BOOL)
@@ -230,11 +253,16 @@ AC_SUBST(VCL_NULL_TMPL_ARGS)
 AC_SUBST(VCL_DEFAULT_VALUE)
 #AC_SUBST(VCL_NO_STATIC_DATA_MEMBERS)
 AC_SUBST(VCL_HAS_TEMPLATE_SYMBOLS)
-AC_SUBST(VCL_DEFAULT_TMPL_ARG)
-AC_SUBST(VCL_SUNPRO_ALLOCATOR_HACK)
+#
+#AC_SUBST(VCL_DEFAULT_TMPL_ARG)
+AC_SUBST(VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER)
+AC_SUBST(VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER)
+AC_SUBST(VCL_SUNPRO_CLASS_SCOPE_HACK)
+#
 AC_SUBST(VCL_HAS_NAMESPACES)
 AC_SUBST(VCL_ALLOWS_NAMESPACE_STD)
 AC_SUBST(VCL_NEEDS_NAMESPACE_STD)
+#
 AC_SUBST(VCL_BIG_ENDIAN)
 AC_SUBST(VCL_LITTLE_ENDIAN)
 
@@ -295,7 +323,23 @@ AC_SUBST(VCL_CXX_HAS_HEADER_STRSTREAM)
 # OUTPUT
 
 AC_OUTPUT(
-vcl_config.h:vcl_config.h.in
-vcl_config_compiler.h:vcl_config_compiler.h.in
-vcl_config_headers.h:vcl_config_headers.h.in
+vcl_config.h~:vcl_config.h.in
+vcl_config_compiler.h~:vcl_config_compiler.h.in
+vcl_config_headers.h~:vcl_config_headers.h.in
 )
+
+# only touch files that actually change.
+for f in "vcl_config.h" "vcl_config_compiler.h" "vcl_config_headers.h"; do
+  if test -f $f; then
+    if diff ${f} ${f}~ 2>&1 >/dev/null ; then
+      echo "no change to ${f}"
+      rm -f ${f}~
+    else
+      echo "replacing old ${f}"
+      mv -f ${f}~ ${f}
+    fi
+  else
+    echo "creating new ${f}"
+    mv -f ${f}~ ${f}
+  fi
+done

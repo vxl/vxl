@@ -24,7 +24,7 @@ dnl
 
 ### Check whether the compiler understands `bool'
 AC_DEFUN(AC_CXX_HAS_BOOL,[
-AC_CACHE_CHECK(whether the C++ compiler supports the keyword 'bool',ac_cxx_has_bool,
+AC_CACHE_CHECK([whether the C++ compiler supports the keyword 'bool'],ac_cxx_has_bool,
 [AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 AC_TRY_COMPILE([
@@ -44,7 +44,7 @@ dnl
 
 ### Check whether the compiler supports dynamic_cast
 AC_DEFUN(AC_CXX_HAS_DYNAMIC_CAST,[
-AC_CACHE_CHECK(whether the C++ compiler supports dynamic_cast,ac_cxx_has_dynamic_cast,[
+AC_CACHE_CHECK([whether the C++ compiler supports the keyword 'dynamic_cast'],ac_cxx_has_dynamic_cast,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 AC_TRY_COMPILE(
@@ -66,7 +66,7 @@ export VCL_HAS_DYNAMIC_CAST
 
 ### Check whether the compiler supports "typename"
 AC_DEFUN(AC_CXX_HAS_TYPENAME,[
-AC_CACHE_CHECK(whether the C++ compiler supports the keyword 'typename',ac_cxx_has_typename,[
+AC_CACHE_CHECK([whether the C++ compiler supports the keyword 'typename'],ac_cxx_has_typename,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 AC_TRY_COMPILE(
@@ -92,7 +92,7 @@ export VCL_HAS_TYPENAME
 
 ### Check whether the compiler supports "mutable"
 AC_DEFUN(AC_CXX_HAS_MUTABLE,[
-AC_CACHE_CHECK(whether the C++ compiler supports the keyword 'mutable',ac_cxx_has_mutable,[
+AC_CACHE_CHECK([whether the C++ compiler supports the keyword 'mutable'],ac_cxx_has_mutable,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 AC_TRY_COMPILE(
@@ -117,7 +117,7 @@ export VCL_HAS_MUTABLE
 
 ### Check whether the compiler supports "explicit"
 AC_DEFUN(AC_CXX_HAS_EXPLICIT,[
-AC_CACHE_CHECK(whether the C++ compiler supports the keyword 'explicit',ac_cxx_has_explicit,[
+AC_CACHE_CHECK([whether the C++ compiler supports the keyword 'explicit'],ac_cxx_has_explicit,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 AC_TRY_COMPILE(
@@ -306,7 +306,7 @@ dnl
 
 ### Check whether the compiler supports partial specialization
 AC_DEFUN(AC_CXX_CAN_DO_PARTIAL_SPECIALIZATION,[
-AC_CACHE_CHECK(whether the C++ compiler supports partial specialization,ac_cxx_can_do_partial_specialization,[
+AC_MSG_CHECKING(whether the C++ compiler supports partial specialization)
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 AC_TRY_COMPILE([
@@ -343,16 +343,16 @@ template <class T>
 struct foo<int *, T> {
   void baz() { }
 };
-
-],,ac_cxx_can_do_partial_specialization=yes,ac_cxx_can_do_partial_specialization=no)
-AC_LANG_RESTORE
+],[
+],[
+VCL_CAN_DO_PARTIAL_SPECIALIZATION="1";
+AC_MSG_RESULT("yes")
+],[
+VCL_CAN_DO_PARTIAL_SPECIALIZATION="0";
+AC_MSG_RESULT("no")
 ])
-if test "$ac_cxx_can_do_partial_specialization" = "yes" ; then
-  VCL_CAN_DO_PARTIAL_SPECIALIZATION=1;
-else
-  VCL_CAN_DO_PARTIAL_SPECIALIZATION=0;
-fi;
 export VCL_CAN_DO_PARTIAL_SPECIALIZATION
+AC_LANG_RESTORE
 ])
 dnl
 
@@ -399,7 +399,7 @@ dnl
 AC_DEFUN(AC_CXX_DEFINE_SPECIALIZATION,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
-AC_MSG_CHECKING(whether the C++ compiler allows template <> for (complete) specializations)
+AC_MSG_CHECKING([whether the C++ compiler understands the 'template <>' specialization syntax])
 AC_TRY_COMPILE([
 // declaration
 template <class T>
@@ -577,7 +577,7 @@ AC_DEFUN(AC_CXX_NULL_TMPL_ARGS,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 AC_MSG_CHECKING(whether the C++ compiler requires <> in templated forward/friend declarations)
-AC_TRY_COMPILE([
+AC_TRY_LINK([
 template <class T> class victor;
 
 template <class T> T dot(victor<T> const &u, victor<T> const &v);
@@ -586,7 +586,7 @@ template <class T> class victor {
 public:
   // Without -fguiding-decls, egcs and 2.95 will rightly think
   // this declares a non-template and so the program will fail
-  // due to access violation below and missing symbols at link time.
+  // due to access violation below (and missing symbols at link time).
   friend T dot /* <> */ (victor<T> const &, victor<T> const &);
 
 private:
@@ -595,18 +595,21 @@ private:
 
 template <class T> T dot(victor<T> const &u, victor<T> const &v)
 {
-  return 
+  return  // access violation here:
     u.data[0] * v.data[0] +
     u.data[1] * v.data[1] +
     u.data[2] * v.data[2];
 }
 
-#include <math.h>
+template double dot(victor<double> const &, victor<double> const &);
 
 double function(victor<double> const &u,
 		victor<double> const &v)
 {
-  return dot(u, v)/sqrt(dot(u, u) * dot(v, v));
+  double uu = dot(u, u);
+  double uv = dot(u, v);
+  double vv = dot(v, v);
+  return (uv*uv)/(uu*vv);
 }
 ],,[
 VCL_NULL_TMPL_ARGS="/* <> */";
@@ -795,24 +798,24 @@ dnl
 
 
 
-### Check whether the compiler needs the SunPro allocator hack.
-AC_DEFUN(AC_CXX_SUNPRO_ALLOCATOR_HACK,[
-AC_MSG_CHECKING(whether the C++ compiler needs the SunPro allocator hack)
+### Check whether the compiler needs the SunPro class scope hack.
+AC_DEFUN(AC_CXX_SUNPRO_CLASS_SCOPE_HACK,[
+AC_MSG_CHECKING(whether the C++ compiler needs the SunPro class scope hack)
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 AC_TRY_COMPILE([
 template < class T > 
 struct allocator 
 { 
-  allocator ( ) ;
-  allocator ( const allocator < T > & ) ;
+  allocator ( ) { } ;
+  allocator ( const allocator < T > & ) { } ;
 } ; 
 
 template < class T , class Allocator = allocator < T > > 
 struct vector 
 { 
-  vector ();
-  ~ vector ( ) ;
+  vector ( ) { } ;
+  ~ vector ( ) { } ;
 } ; 
 
 template < class T > 
@@ -822,7 +825,7 @@ struct spoof
 } ; 
 
 template < class T > 
-void spoof < T > :: set_row ( unsigned , vector < T > const & ) 
+void spoof < T > :: set_row ( unsigned , vector < T /*, allocator<T>*/ > const & ) 
 { 
 } 
 
@@ -830,14 +833,14 @@ template class spoof < double > ;
 
 // If the program compiles, we don't need the hack
 ],,[
-VCL_SUNPRO_ALLOCATOR_HACK="/* no need */";
+VCL_SUNPRO_CLASS_SCOPE_HACK="/* , A */";
 AC_MSG_RESULT(no)
 ],[
-VCL_SUNPRO_ALLOCATOR_HACK="T, allocator<T >";
+VCL_SUNPRO_CLASS_SCOPE_HACK=", A";
 AC_MSG_RESULT(yes)
 ])
 AC_LANG_RESTORE
-export VCL_SUNPRO_ALLOCATOR_HACK
+export VCL_SUNPRO_CLASS_SCOPE_HACK
 ])
 dnl
 
@@ -877,3 +880,84 @@ AC_LANG_RESTORE
 export VCL_DEFAULT_TMPL_ARG
 ])
 dnl
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Check whether the compiler accepts (complete) default template type parameters.
+AC_DEFUN(AC_CXX_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER,[
+AC_MSG_CHECKING([whether the C++ compiler accepts complete types as default template parameters])
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
+AC_TRY_COMPILE([
+template <class T> struct less { };
+
+template <class T, class C=less<int> >
+struct X
+{
+  typedef X<T,C> self;
+  self foo (self const & t) {
+    if ( t.a == 0 )
+      return *this;
+    else
+      return t;
+  }
+private:
+  int a;
+};
+
+X<int> a;
+X<int, less<short> > b;
+],[
+],[
+AC_MSG_RESULT("yes")
+VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER="1"
+],[
+AC_MSG_RESULT("no")
+VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER="0"
+])
+export VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER
+])
+
+
+
+
+
+### Check whether the default template type parameters can be templated over earlier parameters.
+AC_DEFUN(AC_CXX_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER,[
+AC_MSG_CHECKING(whether the C++ compiler accepts default template type parameters templated over earlier parameters)
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
+AC_TRY_COMPILE([
+template <class T> struct less { };
+
+template <class T, class C=less<T> >
+struct X { 
+  C t1; 
+};
+X<int> a;
+X<int, less<short> > b;
+],[
+],[
+AC_MSG_RESULT("yes")
+VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER="1"
+],[
+AC_MSG_RESULT("no")
+VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER="0"
+])
+export VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER
+])

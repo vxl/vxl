@@ -144,9 +144,6 @@
 //#define VCL_NULL_TMPL_ARGS <>
 #define VCL_NULL_TMPL_ARGS @VCL_NULL_TMPL_ARGS@
 
-// backwards compatibility (this macro is nothing to do with stl).
-#define VCL_STL_NULL_TMPL_ARGS VCL_NULL_TMPL_ARGS
-
 
 //----------------------------------------------------------------------
 // template instantiation
@@ -271,9 +268,9 @@ text { return ret; }
 //
 // True if the compiler needs this hack.
 //
-//#define VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD(symbol) 0
-//#define VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD(symbol) 1
-#define VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD(symbol) @VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD@
+//#define VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD 0
+//#define VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD 1
+#define VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD @VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD@
 
 
 // -- VCL_OVERLOAD_CAST
@@ -337,7 +334,9 @@ text { return ret; }
 //#define VCL_DEFAULT_TMPL_ARG(arg) arg
 #define VCL_DEFAULT_TMPL_ARG(arg) @VCL_DEFAULT_TMPL_ARG@
 
-
+// 
+#define VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER @VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER@
+#define VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER @VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER@
 
 // -- VCL_DFL_TYPE_PARAM_STLDECL(A, a)
 // -- VCL_DFL_TMPL_PARAM_STLDECL(A, a)
@@ -372,20 +371,20 @@ text { return ret; }
 //FIXME #define VCL_DFL_TMPL_ARG(classname) @VCL_DFL_TMPL_ARG@
 
 
-// -- VCL_SUNPRO_ALLOCATOR_HACK(T)
+// -- VCL_SUNPRO_CLASS_SCOPE_HACK(A)
 //
-// Nice one.  Can't use vector<T> in a class on SunPro 5, must use
-// vector<T, allocator<T> >.  Of course, we cannot expect that other
-// compilers call the default allocator allocator<T>, so we must use
+// Nice one.  Can't use std::vector<T> in a class on SunPro 5, must use
+// std::vector<T, std::allocator<T> >.  Of course, we cannot expect that other
+// compilers call the default allocator std::allocator<T>, so we must use
 // a macro.  I could call it something generic, like 
-// VCL_DEFAULT_ALLOCATOR, but to be honest, it's a sunpro problem, 
+// VCL_CLASS_SCOPE_HACK, but to be honest, it's a sunpro problem, 
 // they deserve the blame.
-// Usage:
-//    vector<VCL_SUNPRO_ALLOCATOR_HACK(T)>
+// Usage (the comma is inside the macro) :
+//    vector<T VCL_SUNPRO_CLASS_SCOPE_HACK(std::allocator<T >)>
 //
-//#define VCL_SUNPRO_ALLOCATOR_HACK(T) T /* no need */
-//#define VCL_SUNPRO_ALLOCATOR_HACK(T) T, allocator<T >
-#define VCL_SUNPRO_ALLOCATOR_HACK(T) @VCL_SUNPRO_ALLOCATOR_HACK@
+//#define VCL_SUNPRO_CLASS_SCOPE_HACK(A) /* , A */
+//#define VCL_SUNPRO_CLASS_SCOPE_HACK(A) , A
+#define VCL_SUNPRO_CLASS_SCOPE_HACK(A) @VCL_SUNPRO_CLASS_SCOPE_HACK@
 
 
 //----------------------------------------------------------------------
