@@ -345,7 +345,7 @@ void vgl_polygon_scan_iterator::get_next_vert( vertind v, vertind & nextvert )
             nextvert.vertnum = 0; // wrap around to first vertex
 }
 
-//: Returns the vertex preceeding v in v's chain.
+//: Returns the vertex preceding v in v's chain.
 //  The vertex is returned through the parameter prevvert.
 //  I get a syntax error when I tried to return an object of type vertind.
 //  Compiler error says the default return type is int???
@@ -371,7 +371,7 @@ void vgl_polygon_scan_iterator::display_chains()
         for (unsigned int v = 0; v < poly_[ c ].size(); v++ )
         {
             vcl_cout << "  [ " << poly_[ c ][ v ].x()
-            << " " << poly_[ c ][ v ].y() << " ]\n";
+                     << ' ' << poly_[ c ][ v ].y() << " ]\n";
         }
     }
     vcl_cout << vcl_flush;
