@@ -100,7 +100,7 @@ void testlib_test_assert_near(const vcl_string& msg, double expr, double target,
   double diff = vcl_abs(expr - target);
   if (target != 0.0 && diff != 0.0)
     vcl_cout << "difference " << diff << ", ";
-  testlib_test_perform(diff < tol);
+  testlib_test_perform(diff <= tol);
 }
 
 void testlib_test_assert_near(const vcl_string& msg, vcl_complex<double> expr, vcl_complex<double> target, double tol)
@@ -109,7 +109,7 @@ void testlib_test_assert_near(const vcl_string& msg, vcl_complex<double> expr, v
   double diff = vcl_abs(expr - target);
   if (target != vcl_complex<double>(0,0) && diff != 0.0)
     vcl_cout << "difference " << diff << ", ";
-  testlib_test_perform(diff < tol);
+  testlib_test_perform(diff <= tol);
 }
 
 void testlib_test_assert_far(const vcl_string& msg, double expr, double target, double tol)
