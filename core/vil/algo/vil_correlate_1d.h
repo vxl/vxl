@@ -142,7 +142,7 @@ class vil2_correlate_1d_resource : public vil2_image_resource
                                                   unsigned j0, unsigned nj) const
   {
     if (i0 + ni > src_->ni() || j0 + nj > src_->nj())  return 0;
-    const unsigned lsrc = (unsigned) vcl_max(0L,(vcl_ptrdiff_t)i0 + klo_); // lhs of input window
+    const unsigned lsrc = (unsigned) vcl_max(0,i0 + klo_); // lhs of input window
     const unsigned hsrc = vcl_min(src_->ni(),i0 + ni - klo_ + khi_); // 1+rhs of input window.
     const unsigned lboundary = vcl_min((unsigned) -klo_, i0); // width of lhs boundary area.
     assert (hsrc > lsrc);
