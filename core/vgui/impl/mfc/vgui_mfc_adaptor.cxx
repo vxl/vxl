@@ -308,7 +308,7 @@ BOOL vgui_mfc_adaptor::OnEraseBkgnd(CDC* pDC)
 void vgui_mfc_adaptor::service_redraws()
 {
   if (redraw_posted) {
-    if(!double_buffered)
+    if(double_buffered)  // kym - changed from if(!double_buffered) - why change the buffer otherwise?
       glDrawBuffer(GL_BACK);
     dispatch_to_tableau(vgui_DRAW);
     if(!double_buffered)
