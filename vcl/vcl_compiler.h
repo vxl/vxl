@@ -86,6 +86,13 @@
 #  else
 #   define VCL_VC50 1
 #  endif
+# elif defined(__BORLANDC__)
+#  define VCL_BORLAND
+#  if __BORLANDC__ >= 0x0560
+#   define VCL_BORLAND_56
+#  elif __BORLANDC__ >= 0x0550
+#   define VCL_BORLAND_55
+#  endif
 # endif
 #endif
 

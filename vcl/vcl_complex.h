@@ -45,6 +45,10 @@
 #elif defined(VCL_GCC_295)
 #include  "gcc-295/vcl_complex.h"
 
+// ---------- Borland 5.6
+#elif defined(VCL_BORLAND_56)
+#include  "borland56/vcl_complex.h"
+
 // ---------- ISO
 #else
 # include "iso/vcl_complex.h"

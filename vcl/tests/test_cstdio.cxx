@@ -23,7 +23,7 @@ int test_cstdio_main(int argc,char* argv[])
   ASSERT(rc==EOF, "std::getchar() read a value from a closed stream")
 
   ASSERT(argc>=2, "no file name given as the first command line argument")
-  FILE* fh = vcl_fopen( argv[1], "rw" );
+  vcl_FILE* fh = vcl_fopen( argv[1], "rw" );
   ASSERT1(fh, "couldn't open %s\n      (skipping file tests)", argv[1])
 
   if (fh)
@@ -56,7 +56,7 @@ int test_cstdio_main(int argc,char* argv[])
 
 // Return 0 on success, non-zero on error.
 
-#ifdef VCL_VC
+#if defined(VCL_WIN32)
 # include <io.h>
 int close_stdin() { return _close(0); }
 #else
