@@ -160,6 +160,8 @@ class vvid_file_manager : public vgui_wrapper_tableau
   vgui_grid_tableau_sptr grid_;
   vvid_frame_trail frame_trail_;
   static vvid_file_manager *instance_;
+  vcl_vector<vcl_vector<vsol_spatial_object_2d_sptr> > cached_spat_objs_;
+
 };
 
 #endif // vvid_file_manager_h_
