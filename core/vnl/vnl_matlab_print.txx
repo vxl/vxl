@@ -13,6 +13,8 @@
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
+#include <vnl/vnl_vector_fixed.h>
+#include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_diag_matrix.h>
 #include <vnl/vnl_matlab_print_scalar.h>
 
@@ -72,7 +74,7 @@ vcl_ostream& vnl_matlab_print(vcl_ostream& s,
   if (variable_name)
     s << variable_name << " = [ ...\n";
 
-  if (M.rows() == 0)
+  if (variable_name && M.rows() == 0)
     return s << "];\n";
 
   for (unsigned int i=0; i<M.rows(); i++ ) {
@@ -104,14 +106,59 @@ vcl_ostream& vnl_matlab_print(vcl_ostream& s,
   return s;
 }
 
+template <class T, unsigned int n, unsigned int m>
+vcl_ostream& vnl_matlab_print(vcl_ostream& s,
+                              vnl_matrix_fixed<T,n,m> const& M,
+                              char const* variable_name,
+                              vnl_matlab_print_format format)
+{
+  if (variable_name)
+    s << variable_name << " = [ ...\n";
+
+  if (variable_name && M.rows() == 0)
+    return s << "];\n";
+
+  for (unsigned int i=0; i<n; ++i ) {
+    vnl_matlab_print(s, M[i], m, format);
+
+    if (variable_name && (i == n-1))
+      s << " ]";
+
+    s << '\n';
+  }
+
+  return s;
+}
+
+template <class T, unsigned int n>
+vcl_ostream& vnl_matlab_print(vcl_ostream& s,
+                              vnl_vector_fixed<T,n> const & v,
+                              char const* variable_name,
+                              vnl_matlab_print_format format)
+{
+  if (variable_name)
+    s << variable_name << " = [ ";
+
+  vnl_matlab_print(s, v.begin(), n, format);
+
+  if (variable_name)
+    s << " ]\n";
+
+  return s;
+}
+
 //--------------------------------------------------------------------------------
 
 #undef  VNL_MATLAB_PRINT_INSTANTIATE
 #define VNL_MATLAB_PRINT_INSTANTIATE(T) \
-template vcl_ostream &vnl_matlab_print(vcl_ostream &, T const *, unsigned, vnl_matlab_print_format); \
-template vcl_ostream &vnl_matlab_print(vcl_ostream &, T const * const *, unsigned, unsigned, vnl_matlab_print_format); \
-template vcl_ostream &vnl_matlab_print(vcl_ostream &, vnl_diag_matrix<T > const &, char const *, vnl_matlab_print_format); \
-template vcl_ostream &vnl_matlab_print(vcl_ostream &, vnl_matrix<T > const &, char const *, vnl_matlab_print_format); \
-template vcl_ostream &vnl_matlab_print(vcl_ostream &, vnl_vector<T > const &, char const *, vnl_matlab_print_format)
+template vcl_ostream &vnl_matlab_print(vcl_ostream &, T const*, unsigned, vnl_matlab_print_format); \
+template vcl_ostream &vnl_matlab_print(vcl_ostream &, T const* const*, unsigned, unsigned, vnl_matlab_print_format); \
+template vcl_ostream &vnl_matlab_print(vcl_ostream &, vnl_diag_matrix<T > const&, char const *, vnl_matlab_print_format); \
+template vcl_ostream &vnl_matlab_print(vcl_ostream &, vnl_matrix<T > const&, char const*, vnl_matlab_print_format); \
+template vcl_ostream &vnl_matlab_print(vcl_ostream &, vnl_vector<T > const&, char const*, vnl_matlab_print_format); \
+template vcl_ostream &vnl_matlab_print(vcl_ostream &, vnl_matrix_fixed<T,3,3> const&, char const*, vnl_matlab_print_format); \
+template vcl_ostream &vnl_matlab_print(vcl_ostream &, vnl_matrix_fixed<T,6,8> const&, char const*, vnl_matlab_print_format); \
+template vcl_ostream &vnl_matlab_print(vcl_ostream &, vnl_vector_fixed<T,3> const&, char const*, vnl_matlab_print_format); \
+template vcl_ostream &vnl_matlab_print(vcl_ostream &, vnl_vector_fixed<T,7> const&, char const*, vnl_matlab_print_format)
 
 #endif // vnl_matlab_print_txx_

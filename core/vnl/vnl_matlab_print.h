@@ -9,10 +9,8 @@
 //  \brief Print matrices and vectors in nice MATLAB format.
 //  \author fsm@robots.ox.ac.uk, from awf's MatOps code.
 
-template <class T> class vnl_vector;
-template <class T> class vnl_matrix;
-template <class T> class vnl_diag_matrix;
 #include <vcl_iosfwd.h>
+#include <vnl/vnl_fwd.h>
 
 #include <vnl/vnl_matlab_print_format.h>
 
@@ -44,14 +42,21 @@ vcl_ostream &vnl_matlab_print(vcl_ostream &,
 //: print a vnl_diagonal_matrix<>.
 template <class T>
 vcl_ostream &vnl_matlab_print(vcl_ostream &,
-                              vnl_diag_matrix<T> const &,
+                              vnl_diag_matrix<T> const&,
                               char const *variable_name =0,
                               vnl_matlab_print_format =vnl_matlab_print_format_default);
 
 //: print a vnl_matrix<>.
 template <class T>
 vcl_ostream &vnl_matlab_print(vcl_ostream &,
-                              vnl_matrix<T> const &,
+                              vnl_matrix<T> const&,
+                              char const *variable_name =0,
+                              vnl_matlab_print_format =vnl_matlab_print_format_default);
+
+//: print a vnl_matrix_fixed<>.
+template <class T, unsigned int n, unsigned int m>
+vcl_ostream &vnl_matlab_print(vcl_ostream &,
+                              vnl_matrix_fixed<T,n,m> const&,
                               char const *variable_name =0,
                               vnl_matlab_print_format =vnl_matlab_print_format_default);
 
@@ -59,6 +64,13 @@ vcl_ostream &vnl_matlab_print(vcl_ostream &,
 template <class T>
 vcl_ostream &vnl_matlab_print(vcl_ostream &,
                               vnl_vector<T> const &,
+                              char const *variable_name =0,
+                              vnl_matlab_print_format =vnl_matlab_print_format_default);
+
+//: print a vnl_vector_fixed<>.
+template <class T, unsigned int n>
+vcl_ostream &vnl_matlab_print(vcl_ostream &,
+                              vnl_vector_fixed<T,n> const &,
                               char const *variable_name =0,
                               vnl_matlab_print_format =vnl_matlab_print_format_default);
 

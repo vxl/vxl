@@ -11,6 +11,8 @@
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
+#include <vnl/vnl_vector_fixed.h>
+#include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_matlab_print.h>
 #include <vnl/vnl_matlab_write.h>
 #include <vnl/vnl_matlab_read.h>
@@ -23,22 +25,31 @@ static void fsm_assert_(int lineno, bool pass, char const *expr) {
 }
 #define fsm_assert(c) fsm_assert_(__LINE__, c, #c);
 
-void test_matlab() {
+void test_matlab()
+{
   vnl_vector<float> v(7);
+  vnl_vector_fixed<float,7> vf;
   for (unsigned i=0; i<v.size(); ++i)
-    v[i] = 0.1f*i;
+    vf[i] = v[i] = 0.1f*i;
 
   vnl_matrix<double> M(6,8);
+  vnl_matrix_fixed<double,6,8> Mf;
   for (unsigned i=0; i<M.rows(); ++i)
     for (unsigned j=0; j<M.cols(); ++j)
-      M(i,j) = 0.1*i*j;
+      Mf(i,j) = M(i,j) = 0.1*i*j;
 
   { // vnl_matlab_print
     vcl_cout << v << vcl_endl;
     vnl_matlab_print(vcl_cout, v, "v");
 
+    vcl_cout << vf << vcl_endl;
+    vnl_matlab_print(vcl_cout, vf, "vf");
+
     vcl_cout << M << vcl_endl;
     vnl_matlab_print(vcl_cout, M, "M") << vcl_endl;
+
+    vcl_cout << Mf << vcl_endl;
+    vnl_matlab_print(vcl_cout, Mf, "Mf") << vcl_endl;
   }
 
   // vnl_matlab_write, vnl_matlab_read
