@@ -59,12 +59,12 @@ void vgui_range_map<Type>::compute_table()
   else
   {
     //The values have to be shifted by min
-    int min = vil_pixel_traits<Type>::minval();
-    int max = vil_pixel_traits<Type>::maxval();
-    for (int i = min; i <= max; i++)
+    Type min = vil_pixel_traits<Type>::minval();
+    Type max = vil_pixel_traits<Type>::maxval();
+    for (int i = 0; i <= max-min; ++i)
     {
-      Type arg = (Type)i;//eliminate warnings
-      map_[i-min] = map_pixel(arg);
+      Type arg = (Type)(min+i);
+      map_[i] = map_pixel(arg);
     }
   }
 }
@@ -72,7 +72,7 @@ void vgui_range_map<Type>::compute_table()
 template <class Type>
 vgui_range_map<Type>::vgui_range_map(vgui_range_map_params const& rmp)
   :   vgui_range_map_params(rmp.min_val_, rmp.max_val_,
-                        rmp.gamma_, rmp.invert_)
+                            rmp.gamma_, rmp.invert_)
 {
   map_ = 0;
   this->init_map_domain();
