@@ -171,13 +171,14 @@ bool vil1_gen_generic_image::get_property(char const *tag, void *prop) const
   return false;
 }
 
+// TODO - x0,y0 are unused
 bool vil1_gen_generic_image::get_section(void* buf, int x0, int y0, int xs, int ys) const
 {
   if (type_ == vil1_gen_gray) {
     vcl_memset(buf, params_[0], xs*ys);
     return true;
   }
-  if (type_ == vil1_gen_rgb) {
+  else if (type_ == vil1_gen_rgb) {
     int n = xs*ys;
     unsigned char* p = (unsigned char*)buf;
     unsigned char r = (unsigned char)(params_[0]);
@@ -190,7 +191,8 @@ bool vil1_gen_generic_image::get_section(void* buf, int x0, int y0, int xs, int 
     }
     return true;
   }
-  return false;
+  else
+    return false;
 }
 
 bool vil1_gen_generic_image::put_section(void const* /*buf*/, int /*x0*/, int /*y0*/, int /*xs*/, int /*ys*/)
