@@ -241,12 +241,6 @@ ifneq ($(strip $(ald_libs)),)
   IULIBS += $(aldtmp:%=-l%)
 endif
 
-# Switch to ifndef so LDLIBS = $(VAR) is seen as NON empty
-ifndef LDLIBS
-  lib_tmp := $(shell $(IUE_PERL) $(sys_or_iu_Scripts)/Perl/remove_duplicates.pl $(IULIBS))
-  LDLIBS = $(LOCAL_LIBS) $(lib_tmp)
-endif
-
 #############################################################################
 ## 2. Build STDLIBS and LIBDIRS.
 
@@ -567,6 +561,12 @@ endif
 endif # HAS_SH_LINK
 endif # VXL
 
+# Switch to ifndef so LDLIBS = $(VAR) is seen as NON empty
+ifndef LDLIBS
+  lib_tmp := $(shell $(IUE_PERL) $(sys_or_iu_Scripts)/Perl/remove_duplicates.pl $(IULIBS))
+  LDLIBS = $(LOCAL_LIBS) $(lib_tmp)
+endif
+
 
 ifneq (,$(strip $(filter gcc,$(COMPILER))$(filter gcc-3.0,$(COMPILER))))
 # gcc should never be given an include path to /usr/include as that
@@ -663,13 +663,6 @@ LOADLIBES := $(LDPATH)
 # the inclusion of rules.mk will be ignored.
 LDLIBS := $(LDLIBS)
 STDLIBS := $(STDLIBS)
-
-# Backward-compatibilty hacks on LDLIBS
-ifneq (,$(findstring -lCOOL,$(LDLIBS)))
-xall::
-	@echo "rules.mk WARNING: -lCOOL should be changed to -lTJCOOL"
-endif
-LDLIBS := $(subst -lCOOL,-lTJCOOL,$(LDLIBS))
 
 # Variable: IMMEDIATE_LIBS
 # Users can set this in a makefile which creates a (shared) library.
