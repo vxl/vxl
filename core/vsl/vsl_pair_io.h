@@ -11,6 +11,7 @@
 // \brief   binary IO functions for vcl_pair<S, T>
 // \author  Ian Scott
 
+#include <vcl_iosfwd.h>
 #include <vcl_utility.h>
 
 class vsl_b_ostream;
