@@ -19,6 +19,37 @@
 //
 class test_vtol_extract_topology;
 
+//: Controls the behaviour of vtol_extract_topology
+struct vtol_extract_topology_params
+{
+  //: The number of pixels used in smoothing.
+  //
+  // The edgel curves will be smoothed by fitting a line at each edgel
+  // point to the \a num_for_smooth neighbouring edgel points and
+  // projecting onto that line. A value of 0 means no smoothing will
+  // occur.
+  //
+  // Default: 0 (no smoothing)
+  //
+  unsigned num_for_smooth;
+
+  vtol_extract_topology_params&
+  set_smooth( unsigned s ) { num_for_smooth = s; return *this; }
+
+  // Please don't add a constructor that takes arguments.
+
+  //: Construct with the default values for the parameters.
+  //
+  // The constructor does not take parameters by design. Use the
+  // explicit set_* functions to set the parameters you wish to
+  // change. This will make code more robust against changes to the
+  // code and parameter set, because we don't have a bunch of unnamed
+  // arguments to change or worry about.
+  vtol_extract_topology_params()
+    : num_for_smooth( 0 )
+    { }
+};
+
 //: Extracts the topology from a segmentation label image.
 //
 // This class contains the functionality to extract a set of regions
@@ -38,13 +69,19 @@ class vtol_extract_topology
 {
  public: // public types
 
-  //: Input image type
+  //: Input label image type
   typedef vil_image_view< vxl_byte > label_image_type;
 
- public: // public methods
+  typedef vxl_byte  data_pixel_type;
+
+  //: Input data image type
+  typedef vil_image_view< data_pixel_type > data_image_type;
+
+public: // public methods
 
   //: Prepare to extract the topology from \a image.
-  vtol_extract_topology( label_image_type const& image );
+  vtol_extract_topology( label_image_type const& image,
+                         vtol_extract_topology_params const& params = vtol_extract_topology_params() );
 
   //: List of vertices in the segmentation
   //
@@ -53,10 +90,22 @@ class vtol_extract_topology
 
   //: List of all the faces in the segmentation
   //
+  // These will be intensity faces without a digital region. This
+  // function should probably return vtol_face_2d objects, not
+  // vtol_intensity_face objects.
+  //
   vcl_vector< vtol_intensity_face_sptr >
   faces() const;
 
- private:   // internal classes and constants
+  //: List of all the faces in the segmentation
+  //
+  // The faces will have digital regions formed using \a data_img.
+  // \a data_img must have the same size as the label image.
+  //
+  vcl_vector< vtol_intensity_face_sptr >
+  faces( data_image_type const& data_img ) const;
+
+private:   // internal classes and constants
 
   //: Image of indices into the vertex node list
   typedef vil_image_view< unsigned > index_image_type;
@@ -133,6 +182,10 @@ class vtol_extract_topology
   // for through testing.
   //
   friend class test_vtol_extract_topology;
+
+  //: Determine the max and min labels in the label image
+  void
+  compute_label_range();
 
   //: The label at pixel position (i,j).
   //
@@ -236,16 +289,34 @@ class vtol_extract_topology
 
   //: Trace the boundary of a region starting at vertex \a index going \a dir.
   //
-  // This will return, in \a chain, the one chain of edges
-  // corresponding to the closed contour bounding a region. It will
-  // also return the label of the enclosed region.
+  // It will output, in \a chain, the one chain of edges corresponding
+  // to the closed contour bounding a region. It will also return the
+  // label of the enclosed region.
   //
-  void
+  // It will only trace regions interior to the image. That is, it
+  // will not trace a "face" containing the region outside the image
+  // boundaries. The return value will indicate this. A return value
+  // of "true" indicates that the a region was successfully extracted,
+  // and that \a chain_list and \a region_label are valid. A return
+  // value of "false" indicates that a region was not traaced.
+  //
+  bool
   trace_face_boundary( vcl_vector<unsigned>& markers,
                        unsigned index,
                        unsigned dir,
                        region_type& chain,
                        int& region_label ) const;
+
+  typedef vcl_vector< vcl_vector< region_type_sptr > > region_collection;
+
+  //: Trace the boundary curves and collect up a set of regions.
+  //
+  // The output in \a out_region_list is a set of regions indexed by
+  // the label of the region. So, out_region_list[x] will be a set of
+  // closed boundaries bounding regions with label x.
+  //
+  void
+  collect_regions( region_collection& out_region_list ) const;
 
   //: Create a set of faces given a set of boundary chains.
   //
@@ -256,14 +327,21 @@ class vtol_extract_topology
   //
   // Each face so added will form a single connected component.
   //
+  // If data_img is not null, each face will have a digital region
+  // (vdgl_digital_region).
+  //
   void
   compute_faces( vcl_vector< region_type_sptr > const& chains,
-                 vcl_vector< vtol_intensity_face_sptr >& faces ) const;
+                 vcl_vector< vtol_intensity_face_sptr >& faces,
+                 data_image_type const* data_img ) const;
 
  private: // internal data
 
   //: The input label image
   label_image_type const& img_;
+
+  //: Parameters
+  vtol_extract_topology_params params_;
 
   //: The label ranges in the image
   int min_label_, max_label_;
