@@ -1753,11 +1753,6 @@ SOURCE=.\vnl_T_n.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vnl_binary.h
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\vnl_config.h
 
 # End Source File
@@ -1828,7 +1823,7 @@ SOURCE=.\vnl_vector_dereference.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vnl_finite_field_number.h
+SOURCE=.\vnl_finite.h
 
 # End Source File
 # Begin Source File
