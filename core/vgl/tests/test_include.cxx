@@ -36,5 +36,16 @@
 #include <vgl/algo/vgl_homg_operators_2d.h>
 #include <vgl/algo/vgl_homg_operators_3d.h>
 #include <vgl/algo/vgl_rtree.h>
+#include <vgl/algo/vgl_h_matrix_1d.h>
+#include <vgl/algo/vgl_h_matrix_1d_compute.h>
+#include <vgl/algo/vgl_h_matrix_1d_compute_3point.h>
+#include <vgl/algo/vgl_h_matrix_1d_compute_linear.h>
+#include <vgl/algo/vgl_h_matrix_1d_compute_optimize.h>
+#include <vgl/algo/vgl_h_matrix_2d.h>
+#include <vgl/algo/vgl_h_matrix_2d_compute.h>
+#include <vgl/algo/vgl_h_matrix_2d_compute_4point.h>
+#include <vgl/algo/vgl_h_matrix_2d_compute_linear.h>
+#include <vgl/algo/vgl_h_matrix_3d.h>
+#include <vgl/algo/vgl_norm_trans_2d.h>
 
 int main() { return 0; }
