@@ -4,9 +4,9 @@ include ../config.mk
 include $(IUEROOT)/core/testlib/config.mk
 
 LIBRARY := rrel_tests
-SOURCES := similarity_from_matches.cxx
 
 TESTMAIN := test_driver.cxx
+SOURCES += similarity_from_matches.cxx
 TESTS += test_include.cxx
 TESTS += test_homography2d_est.cxx
 TESTS += test_irls.cxx

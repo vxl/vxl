@@ -54,6 +54,8 @@ TESTS += test_cholesky.cxx
 
 MANPAGE_SOURCES += test_arithmetic_body.h
 
+MINI_PROG_SOURCES += basic_operation_timings.cxx
+
 #########################################
 include ${IUEROOT}/config/static-tests.mk
 #########################################
