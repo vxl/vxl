@@ -126,7 +126,7 @@ test_base_class* test_derived_class::clone() const
   return new test_derived_class(*this);
 }
 
-//: Return a platform independent string identifying the class as a vnl_matrix
+//: Return a platform independent string identifying the class
 vcl_string test_derived_class::is_a() const
 {
   return "test_derived_class";
