@@ -20,7 +20,7 @@
 
 template<class T>
 mil3d_image_3d_of<T>::mil3d_image_3d_of()
-    : data_(0),nx_(0),ny_(0),xstep_(1),ystep_(0)
+    : data_(0),nx_(0),ny_(0), nz_(0), xstep_(1),ystep_(0), zstep_(0)
 {
     planes_.resize(1);
     planes_[0] = 0;
@@ -30,7 +30,7 @@ mil3d_image_3d_of<T>::mil3d_image_3d_of()
 
 template<class T>
 mil3d_image_3d_of<T>::mil3d_image_3d_of(int nx, int ny, int nz,int n_planes)
-    : data_(0),nx_(0),ny_(0),nz_(0), xstep_(1),ystep_(0)
+    : data_(0),nx_(0),ny_(0),nz_(0), xstep_(1),ystep_(0), zstep_(0)
 {
     set_n_planes(n_planes);
     resize(nx,ny,nz);
