@@ -1,3 +1,5 @@
+#include <vxl_copyright.h>
+#include <vxl_version.h>
 #include <vcl_iostream.h>
 
 int main (int argc, char * argv[])
