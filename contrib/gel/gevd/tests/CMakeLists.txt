@@ -1,6 +1,6 @@
 # gel/gevd/tests/CMakeLists.txt
 
-LINK_LIBRARIES( gevd testlib )
+LINK_LIBRARIES( gevd testlib vpl )
 
 ADD_EXECUTABLE(test_gevd_param_mixin  test_gevd_param_mixin.cxx)
 ADD_TEST(      test_gevd_param_mixin  test_gevd_param_mixin)

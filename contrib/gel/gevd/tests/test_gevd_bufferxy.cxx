@@ -10,6 +10,7 @@
 
 #include <vcl_iostream.h>
 #include <vcl_cstring.h> // memcpy
+#include <vpl/vpl.h>
 #include <testlib/testlib_test.h>
 #include <gevd/gevd_bufferxy.h>
 
@@ -66,7 +67,9 @@ test_gevd_bufferxy()
   strdat = dat;
   TEST("GetElementAddr3",strdat,"n");
 
-  gbxy1->dump("gevd_bufferxy_dump_file");
+  const char * fn = "gevd_bufferxy_dump_file.tmp";
+  gbxy1->dump(fn);
+  vpl_unlink (fn);
   vcl_cout << "the following is a dump of a bufferxy." << (*gbxy1) << vcl_endl;
 
   delete gbxy1;
