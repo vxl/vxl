@@ -17,6 +17,6 @@ class vsol_tetrahedron;
 // External declarations for values
 //*****************************************************************************
 #include <vbl/vbl_smart_ptr.h>
-typedef vbl_smart_ptr<vsol_tetrahedron> vsol_triangle_3d_ref;
+typedef vbl_smart_ptr<vsol_tetrahedron> vsol_tetrahedron_ref;
 
 #endif // vsol_tetrahedron_ref_h_
