@@ -14,6 +14,7 @@ SOURCES += vgl_clip.cxx
 SOURCES += vgl_lineseg_test.cxx
 SOURCES += vgl_triangle_test.cxx
 SOURCES += vgl_polygon_test.cxx
+SOURCES += vgl_test.cxx
 
 SOURCES += vgl_region_scan_iterator.cxx
 SOURCES += vgl_triangle_scan_iterator.cxx
