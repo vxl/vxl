@@ -60,7 +60,8 @@ SOURCES += osl_easy_canny.cxx
 
 SOURCES += osl_ortho_regress.cxx
 SOURCES += osl_OrthogRegress.cxx # to be deprecated.
-SOURCES += $(wildcard osl_fit_lines*.cxx)
+SOURCES += osl_fit_lines.cxx
+SOURCES += osl_fit_lines_params.cxx
 SOURCES += osl_break_edge.cxx
 
 #######################################
