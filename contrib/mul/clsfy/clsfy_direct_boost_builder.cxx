@@ -85,7 +85,7 @@ double clsfy_direct_boost_builder::calc_threshold(
   unsigned long n = inputs.size();
   vcl_vector<double> scores(n);
   inputs.reset();
-  for (unsigned i=0;i<n;++i)
+  for (unsigned long i=0;i<n;++i)
   {
     scores[i]= strong_classifier.log_l( inputs.current() );
     inputs.next();
@@ -93,7 +93,7 @@ double clsfy_direct_boost_builder::calc_threshold(
 
   // calc number of negative examples
   unsigned int tot_pos=0;
-  for (unsigned i=0;i<n;++i)
+  for (unsigned long i=0;i<n;++i)
     if ( outputs[i] == 1 ) ++tot_pos;
 
   // then find threshold that gives min_error over training set
@@ -102,7 +102,7 @@ double clsfy_direct_boost_builder::calc_threshold(
 
   unsigned int n_pos=0;
   unsigned int n_neg=0;
-  int min_error= n+1;
+  unsigned long min_error= n+1;
   double min_thresh= -1;
   for (unsigned long i=0;i<n;++i)
   {
@@ -124,7 +124,7 @@ double clsfy_direct_boost_builder::calc_threshold(
 #ifdef DEBUG
     vcl_cout<<"n = "<<n<<", n_pos= "<<n_pos<<", n_neg= "<<n_neg<<'\n';
 #endif
-    int error= n_neg+(tot_pos-n_pos);
+    unsigned int error= n_neg+(tot_pos-n_pos);
 
     if ( error<= min_error )
     {
@@ -210,12 +210,12 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
   // then sort all data once, then build the classifier
 
   // number of examples
-  unsigned n = inputs.size();
+  unsigned long n = inputs.size();
   //vcl_cout<<"n = "<<n<<vcl_endl;
 
   // Dimensionality of data
   inputs.reset();
-  int d = inputs.current().size();
+  unsigned int d = inputs.current().size();
 
   //need file data wrapper instead of old vector
   //data stored on disk NOT ram
@@ -250,10 +250,10 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
   vcl_vector< vnl_vector< double > >vec(bs_);
 
   vcl_cout<<"d= "<<d<<vcl_endl;
-  int b=0;
+  unsigned int b=0;
   while ( b+1<d )
   {
-    int r= vcl_min ( bs_, (d-b) );
+    int r= vcl_min ( bs_, int(d-b) );
     assert(r>0);
 
     vcl_cout<<"arranging weak classifier data = "<<b<<" to "
@@ -265,7 +265,7 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
 
     // add data for both classes
     inputs.reset();
-    for (unsigned int j=0;j<n;++j)
+    for (unsigned long j=0;j<n;++j)
     {
       for (int i=0; i< r; ++i)
         vec[i](j)=( inputs.current()[b+i] );
@@ -294,7 +294,7 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
   // now actually apply direct boost algorithm
   wrapper.reset();
   assert ( wrapper.current().size() == n );
-  assert ( d == (int)wrapper.size() );
+  assert ( d == wrapper.size() );
 
 
   // nb have to set builder as a member variable elsewhere
@@ -310,14 +310,14 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
   vcl_vector< clsfy_classifier_1d* > classifiers(0);
 
   wrapper.reset();
-  for (int i=0; i<d; ++i )
+  for (unsigned int i=0; i<d; ++i )
   {
     const vnl_vector<double>& vec= wrapper.current();
     double error= weak_builder_->build(*c1d, vec, wts, outputs);
 
     vcl_vector<bool> resp_vec(n);
     // now get responses
-    for (int k=0; k<n;++k)
+    for (unsigned long k=0; k<n;++k)
     {
       unsigned int r= c1d->classify( vec(k) );
       if (r==0)
@@ -382,9 +382,9 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
     // classifier i
     vcl_vector<int> new_index(0);
     vcl_vector<bool>& i_vec=responses[ind];
-    int n=index.size();
-    int n_rejects=0;
-    for (int j=0; j<n; ++j)
+    unsigned int m=index.size();
+    unsigned int n_rejects=0;
+    for (unsigned int j=0; j<m; ++j)
     {
       vcl_vector<bool>& j_vec=responses[ index[j] ];
       double prop_same= calc_prop_same(i_vec,j_vec);
@@ -392,7 +392,7 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
       if ( prop_same < prop_ )
         new_index.push_back( index[j] );
       else
-        n_rejects++;
+        ++n_rejects;
     }
 
     vcl_cout<<"number of rejects due to similarity= "<<n_rejects<<vcl_endl;
@@ -431,17 +431,17 @@ clsfy_classifier_base* clsfy_direct_boost_builder::new_classifier() const
 //=======================================================================
 
 #if 0
-    // required if data stored on the heap is present in this derived class
+
+// required if data stored on the heap is present in this derived class
 clsfy_direct_boost_builder::clsfy_direct_boost_builder(const clsfy_direct_boost_builder& new_b):
   data_ptr_(0)
 {
   *this = new_b;
 }
 
-
 //=======================================================================
 
-    // required if data stored on the heap is present in this derived class
+// required if data stored on the heap is present in this derived class
 clsfy_direct_boost_builder& clsfy_direct_boost_builder::operator=(const clsfy_direct_boost_builder& new_b)
 {
   if (&new_b==this) return *this;
@@ -457,6 +457,7 @@ clsfy_direct_boost_builder& clsfy_direct_boost_builder::operator=(const clsfy_di
 
   return *this;
 }
+
 #endif // 0
 
 
@@ -469,7 +470,7 @@ clsfy_builder_base* clsfy_direct_boost_builder::clone() const
 
 //=======================================================================
 
-    // required if data is present in this base class
+// required if data is present in this base class
 void clsfy_direct_boost_builder::print_summary(vcl_ostream& os) const
 {
   // clsfy_builder_base::print_summary(os); // Uncomment this line if it has one.
@@ -480,7 +481,7 @@ void clsfy_direct_boost_builder::print_summary(vcl_ostream& os) const
 
 //=======================================================================
 
-  // required if data is present in this base class
+// required if data is present in this base class
 void clsfy_direct_boost_builder::b_write(vsl_b_ostream& bfs) const
 {
   //vsl_b_write(bfs, version_no());
@@ -491,7 +492,7 @@ void clsfy_direct_boost_builder::b_write(vsl_b_ostream& bfs) const
 
 //=======================================================================
 
-  // required if data is present in this base class
+// required if data is present in this base class
 void clsfy_direct_boost_builder::b_read(vsl_b_istream& bfs)
 {
   vcl_cerr << "clsfy_direct_boost_builder::b_read() NYI\n";
