@@ -5,9 +5,8 @@
 // .NAME vcsl_spherical - 3D coordinate system specified by distance rho,
 //                          angle theta and phi.
 // .LIBRARY vcsl
-// .HEADER  vcsl/vcsl_spherical.h
-// .INCLUDE vcsl/vcsl_spherical_ref.h
-// .INCLUDE vcsl/vcsl_spatial.h
+// .HEADER  vxl Package
+// .INCLUDE vcsl/vcsl_spherical.h
 // .FILE    vcsl/vcsl_spherical.cxx
 //
 // .SECTION Author

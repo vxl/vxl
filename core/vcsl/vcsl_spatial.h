@@ -4,13 +4,8 @@
 //
 // .NAME vcsl_spatial - A spatial coordinate system
 // .LIBRARY vcsl
-// .HEADER  vcsl/vcsl_spatial.h
-// .INCLUDE vcsl/vcsl_spatial_ref.h
-// .INCLUDE vcsl/vcsl_coordinate_system.h
-// .INCLUDE vnl/vnl_vector.h
-// .INCLUDE vcl/vcl_vector.h
-// .INCLUDE vcsl/vcsl_spatial_transformation_ref.h
-// .INCLUDE vcsl/vcsl_graph_ref.h
+// .HEADER  vxl Package
+// .INCLUDE vcsl/vcsl_spatial.h
 // .FILE    vcsl/vcsl_spatial.cxx
 //
 // .SECTION Author

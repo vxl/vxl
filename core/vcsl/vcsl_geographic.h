@@ -4,10 +4,8 @@
 //
 // .NAME vcsl_geographic - Represent a location relative to the earth
 // .LIBRARY vcsl
-// .HEADER  vcsl/vcsl_geographic.h
-// .INCLUDE vcsl/vcsl_geographic_ref.h
-// .INCLUDE vcsl/vcsl_spatial.h
-// .INCLUDE vcsl/vcsl_spheroid_ref.h
+// .HEADER  vxl Package
+// .INCLUDE vcsl/vcsl_geographic.h
 // .FILE    vcsl/vcsl_geographic.cxx
 //
 // .SECTION Description

@@ -4,9 +4,8 @@
 //
 // .NAME vcsl_unit - Abstract unit associated to a dimension
 // .LIBRARY vcsl
-// .HEADER  vcsl/vcsl_unit.h
-// .INCLUDE vcsl/vcsl_unit_ref.h
-// .INCLUDE vbl/vbl_ref_count.h
+// .HEADER  vxl Package
+// .INCLUDE vcsl/vcsl_unit.h
 // .FILE    vcsl/vcsl_unit.cxx
 //
 // .SECTION Description

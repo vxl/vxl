@@ -4,7 +4,7 @@
 //
 // .NAME vbl_protection_traits - Template to standardize protection of classes
 // .LIBRARY vbl
-// .HEADER Basics Package
+// .HEADER vxl package
 // .INCLUDE vbl/vbl_protection_traits.h
 // .FILE vbl/vbl_protection_traits.cxx
 //

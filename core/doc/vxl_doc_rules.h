@@ -5,11 +5,10 @@
 // .NAME	vxl_doc_rules - Example file of how documentation should look
 // everything from the '-' in the previous line is the 'brief' documentation in
 // Doxygen
-// .LIBRARY	None (not used by Doxygen)
-// .HEADER      None (not used by Doxygen)
+// .LIBRARY	vxl_doc (not used by Doxygen)
+// .HEADER      vxl Package (not used by Doxygen)
 // .INCLUDE	doc/vxl_doc_rules.h (not used by Doxygen)
-// .FILE	vxl_doc_rules.h (not used by Doxygen)
-// .FILE	vxl_doc_rules.h (not used by Doxygen)
+// .FILE	vxl_doc_rules.cxx (not used by Doxygen)
 //
 // .SECTION Description
 // Here you can write the long description of what's in this file

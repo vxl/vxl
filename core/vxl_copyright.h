@@ -1,10 +1,6 @@
 #ifndef vxl_copyright_h_
 #define vxl_copyright_h_
 
-/*
-  fsm@robots.ox.ac.uk
-*/
-
 // <begin copyright notice>
 // ---------------------------------------------------------------------------
 //

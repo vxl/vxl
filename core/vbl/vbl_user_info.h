@@ -5,7 +5,7 @@
 #endif
 //
 // .LIBRARY     vbl
-// .HEADER	Basics Package
+// .HEADER	vxl package
 // .INCLUDE     vbl/vbl_user_info.h
 // .FILE        vbl/vbl_user_info.cxx
 // .SECTION Author

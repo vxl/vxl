@@ -4,9 +4,8 @@
 //
 // .NAME vcsl_angle_unit - Abstract unit associated to the angle dimension
 // .LIBRARY vcsl
-// .HEADER  vcsl/vcsl_angle_unit.h
-// .INCLUDE vcsl/vcsl_angle_unit_ref.h
-// .INCLUDE vcsl/vcsl_unit.h
+// .HEADER  vxl Package
+// .INCLUDE vcsl/vcsl_angle_unit.h
 // .FILE    vcsl/vcsl_angle_unit.cxx
 //
 // .SECTION Author

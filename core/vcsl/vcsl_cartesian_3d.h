@@ -4,9 +4,8 @@
 //
 // .NAME vcsl_cartesian_3d - 3D Cartesian coordinate system
 // .LIBRARY vcsl
-// .HEADER  vcsl/vcsl_cartesian_3d.h
-// .INCLUDE vcsl/vcsl_cartesian_3d_ref.h
-// ,INCLUDE vcsl/vcsl_spatial.h
+// .HEADER  vxl Package
+// .INCLUDE vcsl/vcsl_cartesian_3d.h
 // .FILE    vcsl/vcsl_cartesian_3d.cxx
 //
 // .SECTION Author

@@ -1,9 +1,12 @@
 #ifndef vcl_iostream_h_
 #define vcl_iostream_h_
 
-// Author: awf@robots.ox.ac.uk
-// Summary: include compiler's <iostream.h> in a uniform way.
-//          in particular, define the following
+// .SECTION Author
+//    awf@robots.ox.ac.uk
+// .SECTION Description
+//  include compiler's <iostream.h> in a uniform way.
+//  in particular, define the following
+// \verbatim
 //   vcl_ostream
 //   vcl_ios_X (as in ios::X)
 //   operator>>(vcl_ostream &, T &) for T in {signed char, bool}
@@ -17,6 +20,7 @@
 //   vcl_cin
 //   vcl_cout
 //   vcl_cerr
+// \endverbatim
 //
 
 // Include this to ensure the two are consistent.

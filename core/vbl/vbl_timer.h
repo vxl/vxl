@@ -13,7 +13,7 @@
 //
 // .NAME vbl_timer - A timing facility for C++.
 // .LIBRARY vbl
-// .HEADER Basics package
+// .HEADER vxl package
 // .INCLUDE vbl/vbl_timer.h
 // .FILE vbl_timer.cxx
 // .EXAMPLE examples/vbl_timer.cxx

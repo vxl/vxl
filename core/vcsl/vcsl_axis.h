@@ -4,12 +4,8 @@
 //
 // .NAME vcsl_axis - Axis descriptor: a dimension, a unit, a label
 // .LIBRARY vcsl
-// .HEADER  vcsl/vcsl_axis.h
-// .INCLUDE vcsl/vcsl_axis_ref.h
-// .INCLUDE vbl/vbl_ref_count.h
-// .INCLUDE vcsl/vcsl_dimension_ref.h
-// .INCLUDE vcsl/vcsl_unit_ref.h
-// .INCLUDE vcl/vcl_string.h
+// .HEADER  vxl Package
+// .INCLUDE vcsl/vcsl_axis.h
 // .FILE    vcsl/vcsl_axis.cxx
 //
 // .SECTION Description

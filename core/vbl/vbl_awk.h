@@ -5,7 +5,7 @@
 #endif
 //
 // .LIBRARY     vbl
-// .HEADER	Basics Package
+// .HEADER	vxl package
 // .INCLUDE     vbl/vbl_awk.h
 // .FILE        vbl/vbl_awk.cxx
 // .SECTION Author

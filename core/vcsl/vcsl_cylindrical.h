@@ -5,9 +5,8 @@
 // .NAME vcsl_cylindrical - 3D coordinate system specified by distance rho,
 //                          angle theta and distance z.
 // .LIBRARY vcsl
-// .HEADER  vcsl/vcsl_cylindrical.h
-// .INCLUDE vcsl/vcsl_cylindrical_ref.h
-// .INCLUDE vcsl/vcsl_spatial.h
+// .HEADER  vxl Package
+// .INCLUDE vcsl/vcsl_cylindrical.h
 // .FILE    vcsl/vcsl_cylindrical.cxx
 //
 // .SECTION Author

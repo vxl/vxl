@@ -4,9 +4,8 @@
 //
 // .NAME vcsl_length_unit - Abstract unit associated to the length dimension
 // .LIBRARY vcsl
-// .HEADER  vcsl/vcsl_length_unit.h
-// .INCLUDE vcsl/vcsl_length_unit_ref.h
-// .INCLUDE vcsl/vcsl_unit.h
+// .HEADER  vxl Package
+// .INCLUDE vcsl/vcsl_length_unit.h
 // .FILE    vcsl/vcsl_length_unit.cxx
 //
 // .SECTION Author

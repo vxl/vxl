@@ -5,9 +5,8 @@
 // .NAME vcsl_spheroid - Reference sphere or ellipse for a geographic
 //                       coordinate system
 // .LIBRARY vcsl
-// .HEADER  vcsl/vcsl__spheroid.h
-// .INCLUDE vcsl/vcsl_spheroid_ref.h
-// .INCLUDE vbl/vbl_ref_count.h
+// .HEADER  vxl Package
+// .INCLUDE vcsl/vcsl_spheroid.h
 // .FILE    vcsl/vcsl_spheroid.cxx
 //
 // The default value for a reference ellipsoid is the Clarke 1866 model, but

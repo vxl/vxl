@@ -4,9 +4,10 @@
 #ifdef __GNUC__
 #pragma interface "vbl_redirector"
 #endif
-// Author: awf@robots.ox.ac.uk
+// .SECTION Author
+//    awf@robots.ox.ac.uk
 // Created: 05 Jul 00
-// Modifications:
+// .SECTION Modifications:
 //   21-JUL-00  M.Bacic, Oxford RRG -- fixed 'pubsync' on gcc. 
 //               See vbl_redirector.cxx 
 #include <vcl/vcl_iostream.h>

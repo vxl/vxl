@@ -4,9 +4,8 @@
 //
 // .NAME vcsl_perspective - Perspective projection transformation
 // .LIBRARY vcsl
-// .HEADER  vcsl/vcsl_perspective.h
-// .INCLUDE vcsl/vcsl_perspective_ref.h
-// .INCLUDE vcsl/vcsl_spatial_transformation.h
+// .HEADER  vxl Package
+// .INCLUDE vcsl/vcsl_perspective.h
 // .FILE    vcsl/vcsl_perspective.cxx
 //
 // .SECTION Description

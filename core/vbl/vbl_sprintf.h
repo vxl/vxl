@@ -7,7 +7,7 @@
 //
 // .NAME        vbl_sprintf - creates a formatted ANSI C++ string
 // .LIBRARY     vbl
-// .HEADER	Basics Package
+// .HEADER	vxl package
 // .INCLUDE     vbl/vbl_sprintf.h
 // .FILE        vbl/vbl_sprintf.cxx
 //

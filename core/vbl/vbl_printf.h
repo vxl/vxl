@@ -7,7 +7,7 @@
 
 // .NAME        vbl_printf - vbl_printf to ostream
 // .LIBRARY     vbl
-// .HEADER	Basics Package
+// .HEADER	vxl package
 // .INCLUDE     vbl/vbl_printf.h
 // .FILE        vbl/vbl_printf.cxx
 //

@@ -4,9 +4,8 @@
 //
 // .NAME vcsl_angle - Angle dimension
 // .LIBRARY vcsl
-// .HEADER  vcsl/vcsl_angle.h
-// .INCLUDE vcsl/vcsl_angle_ref.h
-// .INCLUDE vcsl/vcsl_dimension.h
+// .HEADER  vxl Package
+// .INCLUDE vcsl/vcsl_angle.h
 // .FILE    vcsl/vcsl_angle.cxx
 //
 // .SECTION Author

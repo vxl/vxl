@@ -5,7 +5,7 @@
 #endif
 
 // .LIBRARY vbl
-// .HEADER Basics package
+// .HEADER vxl package
 // .INCLUDE vbl/vbl_array_3d.h
 // .FILE vbl/vbl_array_3d.cxx
 //

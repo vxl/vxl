@@ -4,9 +4,7 @@
 //
 // .NAME vgl_line_2d - Represents an euclidian 2D line.
 // .LIBRARY vgl
-// .HEADER  vgl/vgl_line_2d.h
-// .INCLUDE vcl/vcl_iostream.h
-// .INCLUDE vcl/vcl_cmath.h
+// .INCLUDE vgl/vgl_line_2d.h
 // .FILE    vgl/vgl_line_2d.txx
 //
 // .SECTION Description

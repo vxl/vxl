@@ -5,9 +5,7 @@
 // .NAME vgl_homg_line_3d_2_points - Represents a homogeneous 3D line using
 // two points
 // .LIBRARY vgl
-// .HEADER  vgl/vgl_homg_line_3d_2_points.h
-// .INCLUDE vcl/vcl_iostream.h
-// .INCLUDE vgl/vgl_homg_point_3d.h
+// .INCLUDE vgl/vgl_homg_line_3d_2_points.h
 // .FILE    vgl/vgl_homg_line_3d_2_points.txx
 //
 // .SECTION Description

@@ -6,7 +6,7 @@
 #endif
 //
 // .LIBRARY     vbl
-// .HEADER	Basics Package
+// .HEADER	vxl package
 // .INCLUDE     vbl/vbl_file.h
 // .FILE        vbl/vbl_file.cxx
 // .SECTION Author

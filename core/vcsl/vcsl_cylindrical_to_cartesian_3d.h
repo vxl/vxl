@@ -4,9 +4,8 @@
 //
 // .NAME vcsl_cylindrical_to_cartesian_3d
 // .LIBRARY vcsl
-// .HEADER  vcsl/vcsl_cylindrical_to_cartesian_3d.h
-// .INCLUDE vcsl/vcsl_cylindrical_to_cartesian_3d_ref.h
-// .INCLUDE vcsl/vcsl_spatial_transformation
+// .HEADER  vxl Package
+// .INCLUDE vcsl/vcsl_cylindrical_to_cartesian_3d.h
 // .FILE    vcsl/vcsl_cylindrical_to_cartesian_3d.cxx
 //
 // .SECTION Description

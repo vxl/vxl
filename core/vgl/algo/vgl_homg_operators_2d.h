@@ -5,10 +5,9 @@
 #endif
 
 
-// Author: Don Hamilton, Peter Tu
-// Copyright:
+// .SECTION Author
+//   Don Hamilton, Peter Tu
 // Created: Feb 16 2000
-//: 2D homogeneous operations
 
 #include <vnl/vnl_vector.h>
 template <class Type> class vgl_homg_point_2d;
@@ -16,6 +15,7 @@ template <class Type> class vgl_homg_line_2d;
 template <class Type> class vgl_homg_point_2d;
 #include <vcl/vcl_vector.h>
 
+//: 2D homogeneous operations
 template <class Type>
 class vgl_homg_operators_2d {
 public:
@@ -88,5 +88,3 @@ public:
 };
 
 #endif
-
-

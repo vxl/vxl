@@ -6,7 +6,7 @@
 
 // .KEYWORDS    command-line arguments options switches getopt
 // .LIBRARY     vbl
-// .HEADER      Basics Package
+// .HEADER      vxl package
 // .INCLUDE     vbl/vbl_arg.h
 // .FILE        vbl/vbl_arg.cxx
 // .SECTION Author

@@ -4,9 +4,8 @@
 //
 // .NAME vcsl_utm - Universal Transverse Mercator projection
 // .LIBRARY vcsl
-// .HEADER  vcsl/vcsl_utm.h
-// .INCLUDE vcsl/vcsl_utm_ref.h
-// .INCLUDE vcsl/vcsl_geographic.h
+// .HEADER  vxl Package
+// .INCLUDE vcsl/vcsl_utm.h
 // .FILE    vcsl/vcsl_utm.cxx
 //
 // .SECTION Description

@@ -10,7 +10,7 @@
 // express or implied warranty.
 //
 // .LIBRARY vbl
-// .HEADER Basics Package
+// .HEADER vxl package
 // .INCLUDE vbl/vbl_reg_exp.h
 // .FILE vbl_reg_exp.cxx
 // .EXAMPLE examples/vbl_reg_exp_example.cxx

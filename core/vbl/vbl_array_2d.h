@@ -5,7 +5,7 @@
 #endif
 //
 // .LIBRARY     vbl
-// .HEADER	Basics Package
+// .HEADER	vxl package
 // .INCLUDE     vbl/vbl_array_2d.h
 // .FILE        vbl/vbl_array_2d.cxx
 // .SECTION Author

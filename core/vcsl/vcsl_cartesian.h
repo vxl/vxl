@@ -4,9 +4,8 @@
 //
 // .NAME vcsl_cartesian - Cartesian coordinate system
 // .LIBRARY vcsl
-// .HEADER  vcsl/vcsl_cartesian.h
-// .INCLUDE vcsl/vcsl_cartesian_ref.h
-// .INCLUDE vcsl/vcsl_coordinate_system.h
+// .HEADER  vxl Package
+// .INCLUDE vcsl/vcsl_cartesian.h
 // .FILE    vcsl/vcsl_cartesian.cxx
 //
 // .SECTION Description

@@ -4,10 +4,8 @@
 //
 // .NAME vcsl_composition - Composition of transformations
 // .LIBRARY vcsl
-// .HEADER  vcsl/vcsl_composition.h
-// .INCLUDE vcsl/vcsl_composition_ref.h
-// .INCLUDE vcsl/vcsl_spatial_transformation.h
-// .INCLUDE vcl/vcl_vector.h
+// .HEADER  vxl Package
+// .INCLUDE vcsl/vcsl_composition.h
 // .FILE    vcsl/vcsl_composition.cxx
 //
 // .SECTION Description

@@ -5,7 +5,7 @@
 //-----------------------------------------------------------------------------
 //
 // .LIBRARY vbl
-// .HEADER Basics Package
+// .HEADER vxl package
 // .INCLUDE vbl/vbl_br_default.h
 // .FILE vbl/vbl_br_default.cxx
 //

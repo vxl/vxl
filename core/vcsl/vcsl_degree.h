@@ -4,9 +4,8 @@
 //
 // .NAME vcsl_degree - A unit associated to the angle dimension
 // .LIBRARY vcsl
-// .HEADER  vcsl/vcsl_degree.h
-// .INCLUDE vcsl/vcsl_degree_ref.h
-// .INCLUDE vcsl/vcsl_angle_unit.h
+// .HEADER  vxl Package
+// .INCLUDE vcsl/vcsl_degree.h
 // .FILE    vcsl/vcsl_degree.cxx
 //
 // .SECTION Author

@@ -4,9 +4,8 @@
 //
 // .NAME vcsl_radian - Standard unit associated to the angle dimension
 // .LIBRARY vcsl
-// .HEADER  vcsl/vcsl_radian.h
-// .INCLUDE vcsl/vcsl_radian_ref.h
-// .INCLUDE vcsl/vcsl_angle_unit.h
+// .HEADER  vxl Package
+// .INCLUDE vcsl/vcsl_radian.h
 // .FILE    vcsl/vcsl_radian.cxx
 //
 // .SECTION Author

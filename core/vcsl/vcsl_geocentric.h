@@ -5,9 +5,8 @@
 // .NAME vcsl_geocentric - Intended to represent a location relative to the
 //                         earth
 // .LIBRARY vcsl
-// .HEADER  vcsl/vcsl_geocentric.h
-// .INCLUDE vcsl/vcsl_geocentric_ref.h
-// .INCLUDE vcsl/vcsl_geographic.h
+// .HEADER  vxl Package
+// .INCLUDE vcsl/vcsl_geocentric.h
 // .FILE    vcsl/vcsl_geocentric.cxx
 //
 // .SECTION Description

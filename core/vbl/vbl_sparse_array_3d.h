@@ -6,7 +6,7 @@
 //
 // .NAME        vbl_sparse_array_3d - Sparse 3D array.
 // .LIBRARY     vbl
-// .HEADER	Basics Package
+// .HEADER	vxl package
 // .INCLUDE     vbl/vbl_sparse_array_3d.h
 // .FILE        vbl/vbl_sparse_array_3d.cxx
 //

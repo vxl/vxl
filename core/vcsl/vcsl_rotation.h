@@ -4,9 +4,8 @@
 //
 // .NAME vcsl_rotation - Rotation transformation
 // .LIBRARY vcsl
-// .HEADER  vcsl/vcsl_rotation.h
-// .INCLUDE vcsl/vcsl_rotation_ref.h
-// .INCLUDE vcsl/vcsl_spatial_transformation.h
+// .HEADER  vxl Package
+// .INCLUDE vcsl/vcsl_rotation.h
 // .FILE    vcsl/vcsl_rotation.cxx
 //
 // .SECTION Description 

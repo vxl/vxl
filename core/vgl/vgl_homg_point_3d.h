@@ -4,10 +4,7 @@
 //
 // .NAME vgl_homg_point_3d - Represents a homogeneous 3D point
 // .LIBRARY vgl
-// .HEADER  vgl/vgl_homg_point_3d.h
-// .INCLUDE vcl/vcl_iostream.h
-// .INCLUDE vcl/vcl_algorithm.h
-// .INCLUDE vcl/vcl_cmath.h
+// .INCLUDE vgl/vgl_homg_point_3d.h
 // .FILE    vgl/vgl_homg_point_3d.txx
 //
 // .SECTION Author

@@ -4,8 +4,8 @@
 #pragma interface
 #endif
 
-// Author: Don Hamilton, Peter Tu
-// Copyright:
+// .SECTION Author
+//    Don Hamilton, Peter Tu
 // Created: Feb 15 2000
 // .SECTION Modifications:
 //  Peter Vanroose,  9 May 2000: added intersection constructor

@@ -4,9 +4,8 @@
 //
 // .NAME vcsl_meter - Standard unit associated to the length dimension
 // .LIBRARY vcsl
-// .HEADER  vcsl/vcsl_meter.h
-// .INCLUDE vcsl/vcsl_meter_ref.h
-// .INCLUDE vcsl/vcsl_length_unit.h
+// .HEADER  vxl Package
+// .INCLUDE vcsl/vcsl_meter.h
 // .FILE    vcsl/vcsl_meter.cxx
 //
 // .SECTION Author

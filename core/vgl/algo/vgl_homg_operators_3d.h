@@ -4,10 +4,9 @@
 #pragma interface
 #endif
 
-// Author: Don Hamilton, Peter Tu
-// Copyright:
+// .SECTION Author
+//    Don Hamilton, Peter Tu
 // Created: Feb 16 2000
-//: 3D homogeneous operations
 
 #include <vcl/vcl_vector.h>
 #include <vnl/vnl_vector.h>
@@ -17,6 +16,7 @@ template <class Type> class vgl_homg_point_3d;
 template <class Type> class vgl_homg_line_3d;
 template <class Type> class vgl_homg_plane_3d;
 
+//: 3D homogeneous operations
 template <class Type>
 class vgl_homg_operators_3d {
 

@@ -5,12 +5,8 @@
 // .NAME vcsl_spatial_transformation - Transformation between 2 spatial
 //                                     coordinate systems
 // .LIBRARY vcsl
-// .HEADER  vcsl/vcsl_spatial_transformation.h
-// .INCLUDE vcsl/vcsl_spatial_transformation_ref.h
-// .INCLUDE vbl/vbl_ref_count.h
-// .INCLUDE vcl/vcl_vector.h
-// .INCLUDE vnl/vnl_vector.h
-// .INCLUDE vnl/vnl_quaternion.h
+// .HEADER  vxl Package
+// .INCLUDE vcsl/vcsl_spatial_transformation.h
 // .FILE    vcsl/vcsl_spatial_transformation.cxx
 //
 // .SECTION Description 

@@ -4,15 +4,12 @@
 #pragma interface
 #endif
 
-
-// Author: Don Hamilton, Peter Tu
-// Copyright:
-// Created: Feb 15 2000
-//: Represents a 2D box
-//  Description A 2d box with sides aligned with the x and y axes.
+// .NAME vgl_box_2d - Represents a 2D box
+// .SECTION Description
+//  A 2d box with sides aligned with the x and y axes.
 //  Also supports operations required of a bounding box for geometric region
 //  tests.
-//
+//  \verbatim
 //                                  MaxPosition
 //                    O------------O
 //                    |            |
@@ -25,8 +22,11 @@
 //        |           O------------O
 //        |       MinPosition
 //        O------X
+// \endverbatim
 
-
+// .SECTION Author
+//    Don Hamilton, Peter Tu
+// Created: Feb 15 2000
 
 #include <vcl/vcl_iostream.h>
 

@@ -4,7 +4,7 @@
 //-----------------------------------------------------------------------------
 //
 // .LIBRARY vbl
-// .HEADER Basics Package
+// .HEADER vxl package
 // .INCLUDE vbl/vbl_basic_relation_type.h
 // .FILE vbl/vbl_basic_relation_type.cxx
 //

@@ -4,7 +4,7 @@
 //
 // .NAME vcsl_translation - Translation transformation
 // .LIBRARY vcsl
-// .HEADER  vxl package
+// .HEADER  vxl Package
 // .INCLUDE vcsl/vcsl_translation.h
 // .FILE    vcsl/vcsl_translation.cxx
 //

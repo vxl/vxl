@@ -2,12 +2,10 @@
 #define VCSL_POLAR_H
 //*****************************************************************************
 //
-// .NAME vcsl_polar - Planar coordinate system specified by the parameters rho
-//                    and theta
+// .NAME vcsl_polar - Planar coordinate system specified by the parameters rho and theta
 // .LIBRARY vcsl
-// .HEADER  vcsl/vcsl_polar.h
-// .INCLUDE vcsl/vcsl_polar_ref.h
-// .INCLUDE vcsl/vcsl_spatial.h
+// .HEADER  vxl Package
+// .INCLUDE vcsl/vcsl_polar.h
 // .FILE    vcsl/vcsl_polar.cxx
 //
 // .SECTION Author

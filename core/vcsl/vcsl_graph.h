@@ -4,11 +4,8 @@
 //
 // .NAME vcsl_graph - Spatial coordinate system graph
 // .LIBRARY vcsl
-// .HEADER  vcsl/vcsl_graph.h
-// .INCLUDE vcsl/vcsl_graph_ref.h
-// .INCLUDE vbl/vbl_ref_count.h
-// .INCLUDE vcl/vcl_vector.h
-// .INCLUDE vcsl/vcsl_spatial_ref.h
+// .HEADER  vxl Package
+// .INCLUDE vcsl/vcsl_graph.h
 // .FILE    vcsl/vcsl_graph.cxx
 //
 // .SECTION Description

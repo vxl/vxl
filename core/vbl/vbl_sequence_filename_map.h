@@ -20,7 +20,7 @@
 // If not specified, the image directory is probed to determine the sequence start/end frames.
 //
 // .LIBRARY     vbl
-// .HEADER	Basics Package
+// .HEADER	vxl package
 // .INCLUDE     vbl/vbl_sequence_filename_map.h
 // .FILE        vbl/vbl_sequence_filename_map.cxx
 // .SECTION Author

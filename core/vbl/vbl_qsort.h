@@ -4,7 +4,8 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// Author: awf@robots.ox.ac.uk
+// .SECTION Author
+//    awf@robots.ox.ac.uk
 // Created: 15 Mar 00
 
 #include <vxl_misc_config.h> // VXL_HAS_QSORT

@@ -4,11 +4,10 @@
 #pragma interface
 #endif
 
-
-// Author: Don Hamilton, Peter Tu
-// Copyright:
+// .SECTION Author
+//    Don Hamilton, Peter Tu
 // Created: Feb 15 2000
-// Modifications:
+// .SECTION Modifications:
 //  Peter Vanroose, 29 Feb 2000: several minor fixes
 
 #include <vcl/vcl_iostream.h>

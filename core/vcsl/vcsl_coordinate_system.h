@@ -4,11 +4,8 @@
 //
 // .NAME vcsl_coordinate_system - Abstract coordinate system
 // .LIBRARY vcsl
-// .HEADER  vcsl/vcsl_coordinate_system.h
-// .INCLUDE vcsl/vcsl_coordinate_system_ref.h
-// .INCLUDE vbl/vbl_ref_count.h
-// .INCLUDE vcsl/vcsl_axis_ref.h
-// .INCLUDE vcl/vcl_list.h
+// .HEADER  vxl Package
+// .INCLUDE vcsl/vcsl_coordinate_system.h
 // .FILE    vcsl/vcsl_coordinate_system.cxx
 //
 // .SECTION Description

@@ -4,16 +4,16 @@
 #pragma interface
 #endif
 
-// Author: Don Hamilton, Peter Tu
-// Copyright:
+// .SECTION Author
+//    Don Hamilton, Peter Tu
 // Created: Feb 15 2000
-//: Represents a cartesian 3D point
 
 #include <vcl/vcl_iostream.h>
 
 template <class Type>
 class vgl_plane_3d;
 
+//: Represents a cartesian 3D point
 template <class Type>
 class vgl_point_3d {
   

@@ -4,9 +4,8 @@
 //
 // .NAME vcsl_lambertian - Lambert Conformal Conic Projection
 // .LIBRARY vcsl
-// .HEADER  vcsl/vcsl_lambertian.h
-// .INCLUDE vcsl/vcsl_lambertian_ref.h
-// .INCLUDE vcsl/vcsl_geographic.h
+// .HEADER  vxl Package
+// .INCLUDE vcsl/vcsl_lambertian.h
 // .FILE    vcsl/vcsl_lambertian.cxx
 //
 // .SECTION Description

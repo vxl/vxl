@@ -4,10 +4,8 @@
 //
 // .NAME vcsl_displacement - Affine rotation
 // .LIBRARY vcsl
-// .HEADER  vcsl/vcsl_displacement.h
-// .INCLUDE vcsl/vcsl_displacement_ref.h
-// .INCLUDE vcsl/vcsl_rotation.h
-// .INCLUDE vnl/vnl_quaternion.h
+// .HEADER  vxl Package
+// .INCLUDE vcsl/vcsl_displacement.h
 // .FILE    vcsl/vcsl_displacement.cxx
 //
 // .SECTION Description

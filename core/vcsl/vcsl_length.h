@@ -4,9 +4,8 @@
 //
 // .NAME vcsl_length - Length dimension
 // .LIBRARY vcsl
-// .HEADER  vcsl/vcsl_length.h
-// .INCLUDE vcsl/vcsl_length_ref.h
-// .INCLUDE vcsl/vcsl_dimension.h
+// .HEADER  vxl Package
+// .INCLUDE vcsl/vcsl_length.h
 // .FILE    vcsl/vcsl_length.cxx
 //
 // .SECTION Author

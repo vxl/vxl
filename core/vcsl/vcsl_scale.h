@@ -4,9 +4,8 @@
 //
 // .NAME vcsl_scale - Scale transformation
 // .LIBRARY vcsl
-// .HEADER  vcsl/vcsl_scale.h
-// .INCLUDE vcsl/vcsl_scale_ref.h
-// .INCLUDE vcsl/vcsl_spatial_transformation.h
+// .HEADER  vxl Package
+// .INCLUDE vcsl/vcsl_scale.h
 // .FILE    vcsl/vcsl_scale.cxx
 //
 // .SECTION Description 

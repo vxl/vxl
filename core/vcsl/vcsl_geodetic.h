@@ -4,9 +4,8 @@
 //
 // .NAME vcsl_geodetic - Intended to represent a location relative to the earth
 // .LIBRARY vcsl
-// .HEADER  vcsl/vcsl_geodetic.h
-// .INCLUDE vcsl/vcsl_geodetic_ref.h
-// .INCLUDE vcsl/vcsl_geographic.h
+// .HEADER  vxl Package
+// .INCLUDE vcsl/vcsl_geodetic.h
 // .FILE    vcsl/vcsl_geodetic.cxx
 //
 // .SECTION Description

@@ -6,7 +6,7 @@
 
 // .NAME        vbl_sort - Collection of common predicates for sorting.
 // .LIBRARY     vbl
-// .HEADER	Basics Package
+// .HEADER	vxl package
 // .INCLUDE     vbl/vbl_sort.h
 // .FILE        vbl/vbl_sort.cxx
 // .SECTION Author

@@ -4,10 +4,8 @@
 //
 // .NAME vcsl_dimension - Abstract dimension
 // .LIBRARY vcsl
-// .HEADER  vcsl/vcsl_dimension.h
-// .INCLUDE vcsl/vcsl_dimension_ref.h
-// .INCLUDE vbl/vbl_ref_count.h
-// .INCLUDE vcsl/vcsl_unit_ref.h
+// .HEADER  vxl Package
+// .INCLUDE vcsl/vcsl_dimension.h
 // .FILE    vcsl/vcsl_dimension.cxx
 //
 // .SECTION Description

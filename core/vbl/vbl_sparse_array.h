@@ -6,7 +6,7 @@
 #endif
 //
 // .LIBRARY     vbl
-// .HEADER	Basics Package
+// .HEADER	vxl package
 // .INCLUDE     vbl/vbl_sparse_array.h
 // .FILE        vbl/vbl_sparse_array.cxx
 // .SECTION Author
