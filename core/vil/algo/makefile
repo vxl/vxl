@@ -33,6 +33,8 @@ MANPAGE_SOURCES += vil2_threshold.txx
 MANPAGE_SOURCES += vil2_grid_merge.h
 MANPAGE_SOURCES += vil2_find_4con_boundary.h
 MANPAGE_SOURCES += vil2_fft.txx
+MANPAGE_SOURCES += vil2_exp_filter_2d.h
+MANPAGE_SOURCES += vil2_suppress_non_max.h
 
 ################################
 include ${IUEROOT}/config/top.mk
