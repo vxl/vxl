@@ -5,6 +5,7 @@ IMMEDIATE_LIBS := -lvnl-algo -lvnl
 
 SOURCES += vgl_algo.cxx # need at least one file for SunPro
 MANPAGE_SOURCES += vgl_rtree.txx
+MANPAGE_SOURCES += vgl_homg_operators_1d.txx
 MANPAGE_SOURCES += vgl_homg_operators_2d.txx
 MANPAGE_SOURCES += vgl_homg_operators_3d.txx
 

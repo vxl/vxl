@@ -7,6 +7,8 @@ USES := vxl
 LIBRARY := vgl
 VERSION := 1.0
 
+MANPAGE_SOURCES += vgl_fwd.h
+
 # General
 MANPAGE_SOURCES += vgl_box_2d.txx
 MANPAGE_SOURCES += vgl_box_3d.txx
@@ -14,6 +16,7 @@ MANPAGE_SOURCES += vgl_vector_2d.txx
 MANPAGE_SOURCES += vgl_vector_3d.txx
 SOURCES += vgl_1d_basis.cxx
 MANPAGE_SOURCES += vgl_1d_basis.txx
+SOURCES += vgl_homg.cxx
 
 # Points
 MANPAGE_SOURCES += vgl_homg_point_1d.txx
