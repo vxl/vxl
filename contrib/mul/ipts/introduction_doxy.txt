@@ -1,0 +1,6 @@
+// The following text is included in the main documentation page by doxygen
+/*! \mainpage ipts : Interesting Points - Find interesting/salient image points
+* Provides a set of functions and classes for computing interesting
+* or salient points (eg points with useful invariants which are 
+* in some sense distinctive and likely to be easily found in other images)
+*/
