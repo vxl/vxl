@@ -520,7 +520,7 @@ class vnl_matrix_fixed  VNL_MATRIX_FIXED_VCL60_WORKAROUND
 
 
   //----------------------------------------------------------------------
-  // Conversion to vnl_vector_ref.
+  // Conversion to vnl_matrix_ref.
 
   // The const version of as_ref should return a const vnl_matrix_ref
   // so that the vnl_matrix_ref::non_const() cannot be used on
@@ -547,8 +547,10 @@ class vnl_matrix_fixed  VNL_MATRIX_FIXED_VCL60_WORKAROUND
   // explicit as_ref() method instead.
   operator const vnl_matrix_ref<T>() const { return vnl_matrix_ref<T>( num_rows, num_cols, const_cast<T*>(data_block()) ); }
 
-  //----------------------------------------------------------------------
+  //: Convert to a vnl_matrix.
+  const vnl_matrix<T> as_matrix() const { return vnl_matrix<T>(const_cast<T*>(data_block()),num_rows,num_cols); }
 
+  //----------------------------------------------------------------------
 
   typedef T element_type;
 
