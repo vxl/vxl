@@ -28,9 +28,11 @@
 #endif
 
 # if defined(VCL_SUNPRO) || defined(VCL_WIN32)
+#  ifdef VCL_USE_NATIVE_STL // because this is already in emulation/vcl_algobase.h
 // SunPro 5.0 <algorithm> does not supply destroy() - sigh...
 // vc 6.0 supplies allocator<T>::destroy(T *) - groan...
 template <class T> inline void destroy(T *p) { p->~T(); }
+#  endif
 # endif
 
 // Enforce definition of vcl_algorithm_h_std
