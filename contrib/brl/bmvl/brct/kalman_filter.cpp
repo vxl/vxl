@@ -115,7 +115,7 @@ void kalman_filter::init_state_vector()
   E2[1][0] = 0;       E2[1][1] = 1;        E2[1][2] = 0;          E2[1][3] = T[1];
   E2[2][0] = 0;       E2[2][1] = 0;        E2[2][2] = 1;          E2[2][3] = T[2];
 
-  vnl_double_3x4 P1 = M_in_*E1, P2 = M_in_*E2;
+  vnl_double_3x4 P1 = K_*E1, P2 = K_*E2;
 
   // save the motion
   vnl_double_3 C0;
@@ -124,7 +124,7 @@ void kalman_filter::init_state_vector()
   motions_[1] = T;
 
   // compute epipole from velocity
-  vnl_double_3 e = M_in_*T;
+  vnl_double_3 e = K_*T;
 
   // construct fundamental matrix between the first and second views.
   vnl_double_3x3 F;
@@ -286,9 +286,9 @@ void kalman_filter::init_covariant_matrix()
 void kalman_filter::init_cam_intrinsic()
 {
   // set up the intrinsic matrix of the camera
-  M_in_[0][0] = 841.3804; M_in_[0][1] = 0;        M_in_[0][2] = 331.0916;
-  M_in_[1][0] = 0;        M_in_[1][1] = 832.7951; M_in_[1][2] = 221.5451;
-  M_in_[2][0] = 0;        M_in_[2][1] = 0;        M_in_[2][2] = 1;
+  K_[0][0] = 841.3804; K_[0][1] = 0;        K_[0][2] = 331.0916;
+  K_[1][0] = 0;        K_[1][1] = 832.7951; K_[1][2] = 221.5451;
+  K_[2][0] = 0;        K_[2][1] = 0;        K_[2][2] = 1;
 }
 
 void kalman_filter::prediction()
@@ -310,7 +310,7 @@ vnl_double_3x4 kalman_filter::get_projective_matrix(vnl_double_3& v )
   for (int i=0; i<3; i++)
     M_ex[i][3] = v[i];
 
-  return M_in_*M_ex;
+  return K_*M_ex;
 }
 
 vnl_matrix_fixed<double, 2, 6> kalman_filter::get_H_matrix(vnl_double_3x4 &P, vnl_double_3 &X)
@@ -320,8 +320,8 @@ vnl_matrix_fixed<double, 2, 6> kalman_filter::get_H_matrix(vnl_double_3x4 &P, vn
   // compute \sum {P_{4k} X_k } + P_{44}
   double temp = 0;
   for (int k = 0; k<3; k++)
-    temp += P[3][k]*X[k];
-  temp += P[3][3];
+    temp += P[2][k]*X[k];
+  temp += P[2][3];
 
   for (int i=0; i<2; i++)
   {
@@ -332,7 +332,7 @@ vnl_matrix_fixed<double, 2, 6> kalman_filter::get_H_matrix(vnl_double_3x4 &P, vn
     t += P[i][3];
 
     for (int j=0; j<3; j++)
-      H[i][j] = P[i][j] / temp - t * P[3][j] / (temp*temp);
+      H[i][j] = K_[i][j] / temp - t * K_[2][j] / (temp*temp);
 
     for (int j=3; j<6; j++)
         H[i][j] = 0;
@@ -415,7 +415,7 @@ void kalman_filter::inc()
     
 #endif
     
-    K_ = Qpred*H.transpose()*vnl_inverse(H*Qpred*H.transpose()+R_);
+    G_ = Qpred*H.transpose()*vnl_inverse(H*Qpred*H.transpose()+R_);
 #if 0  
     vcl_cout<<"K is \n";
     for(int l=0; l<6; l++){
@@ -435,12 +435,12 @@ void kalman_filter::inc()
     //
     // go to the correction step
     //
-    //Xpred = Xpred +  K_*(z - z_pred)*prob_[i];
-    Xpred = Xpred +  K_*(z - z_pred);
+    //Xpred = Xpred +  G_*(z - z_pred)*prob_[i];
+    Xpred = Xpred +  G_*(z - z_pred);
 
     vnl_matrix_fixed<double, 6, 6> I;
     I.set_identity();
-    Q_ = (I - K_*H)*Qpred;
+    Q_ = (I - G_*H)*Qpred;
 
 
   }
@@ -594,7 +594,7 @@ void kalman_filter::init_velocity()
 
   // get translation
   double trans_dist = 1.0; // 105mm
-  vnl_double_3 T = vnl_inverse(M_in_) * e;
+  vnl_double_3 T = vnl_inverse(K_) * e;
   T /= vcl_sqrt(T[0]*T[0] + T[1]*T[1] + T[2]*T[2]);
   T *= trans_dist;
 

@@ -98,8 +98,8 @@ class kalman_filter
   //: covariant matrix of state vector
   vnl_matrix_fixed<double, 6, 6> Q_;
 
-  //: constrain weighting matrix
-  vnl_matrix_fixed<double, 6, 2> K_;
+  //: constrain kalman gain matrix
+  vnl_matrix_fixed<double, 6, 2> G_;
 
   //: initial covariant matrix of state vector
   vnl_matrix_fixed<double, 2, 2> R_;
@@ -108,7 +108,7 @@ class kalman_filter
   vnl_matrix_fixed<double, 6, 6> Q0_;
 
   //: camera intrinsic parameters
-  vnl_double_3x3 M_in_;
+  vnl_double_3x3 K_;
   double dt_;
 };
 
