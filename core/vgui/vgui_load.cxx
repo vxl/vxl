@@ -3,6 +3,7 @@
 #pragma implementation
 #endif
 //:
+// \file
 // \author Geoffrey Cross, Oxford RRG
 // \date   03 Nov 99
 // \brief  See vgui_load.h for a description of this file.
