@@ -26,4 +26,7 @@ struct vcl_vector_sunpro_50 : public std::vector<T, std::allocator<T> >
   explicit vcl_vector_sunpro_50(base const &that) : base(that) { }
 };
 
+#undef  vcl_vector
+#define vcl_vector vcl_vector_sunpro_50
+
 #endif // vcl_sunpro_vector_h_
