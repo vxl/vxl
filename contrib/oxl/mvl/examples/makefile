@@ -1,14 +1,11 @@
 USES = v3p vxl oxl
+include ${IUEROOT}/vxl/vil/config.mk
+include ${IUEROOT}/vxl/vnl/algo/config.mk
 
-## vil_stream_url uses tcp sockets
-USE_SOCKETS := 1
-
-IULIBS += -lmvl -lvgl -lvil -lvnl-algo -lnetlib -lvnl -lvbl -lvpl -lvcl
+IULIBS += -lmvl -lvgl -lvil -lvnl-algo -lvnl -lvbl -lvpl
 
 MINI_PROG_SOURCES += mvl_multi_view_matches_example.cxx
 MINI_PROG_SOURCES += $(wildcard six_point_structure.cxx)
-
-include ${IUEROOT}/vxl/vil/vil_config.mk
 
 ################################
 include ${IUEROOT}/config/top.mk
