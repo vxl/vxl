@@ -66,6 +66,7 @@ public:
     cond_row_remove.enable(v);
     cond_col_add   .enable(v);
     cond_col_remove.enable(v);
+    grid_size_changeable = v;
   }
   void set_uses_paging_events(bool v) {
     cond_flip_fwd.enable(v);
@@ -114,6 +115,8 @@ private:
   
   int INCREMENT_COLS;          // Amount to increase the number of columns
   int INCREMENT_ROWS;          // Amount to increase the number of rows.
+
+  bool grid_size_changeable;  // Whether the grid size is allowed to change.
 
   unsigned nb_cols;
   unsigned max_cols;
