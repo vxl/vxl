@@ -441,7 +441,6 @@ void bmvv_multiview_manager::select_curve_corres()
   this->clear_selected();
 }
 
-
 // do the edge matching/tracking
 // [PLB]
 //-----------------------------------------------------------
@@ -545,21 +544,24 @@ void bmvv_multiview_manager::track_edges()
 
   //display the edges
   // frame 0
-  for (int i=0;i<tracker.get_output_size_at(0);++i) {
+  for (int i=0;i<tracker.get_output_size_at(0);++i)
+  {
     //vcl_cout<<".";
-		vdgl_interpolator_sptr  intp = new vdgl_interpolator_linear( tracker.get_output_curve_at(0,i) );
-		vdgl_digital_curve_sptr dc = new vdgl_digital_curve(intp);
+    vdgl_interpolator_sptr  intp = new vdgl_interpolator_linear( tracker.get_output_curve_at(0,i) );
+    vdgl_digital_curve_sptr dc = new vdgl_digital_curve(intp);
     draw_colored_digital_curve(0,0, dc, tracker.get_output_id_at(0,i) );
   }
   // frame 1
-  for (unsigned int i=0;i<tracker.get_output_size_at(1);i++){
+  for (int i=0;i<tracker.get_output_size_at(1);i++)
+  {
     //vcl_cout<<".";
-		vdgl_interpolator_sptr  intp = new vdgl_interpolator_linear( tracker.get_output_curve_at(1,i) );
-		vdgl_digital_curve_sptr dc = new vdgl_digital_curve(intp);
+    vdgl_interpolator_sptr  intp = new vdgl_interpolator_linear( tracker.get_output_curve_at(1,i) );
+    vdgl_digital_curve_sptr dc = new vdgl_digital_curve(intp);
     draw_colored_digital_curve(1,0, dc, tracker.get_output_id_at(1,i) );
   }
   return;
 }
+
 //-----------------------------------------------------------------------------
 void bmvv_multiview_manager::draw_colored_digital_curve(unsigned col, unsigned row, vdgl_digital_curve_sptr dc, int label)
 {
