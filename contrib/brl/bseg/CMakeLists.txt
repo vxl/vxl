@@ -17,7 +17,7 @@ SUBDIRS(strk)
 # markov random fields
 SUBDIRS(bmrf)
 
-# misc 
+# misc
 #SUBDIRS(bcons)
 
 # segmentation view library
@@ -25,8 +25,3 @@ SUBDIRS(segv)
 
 # segmentation application executables
 SUBDIRS(sbin)
-
-# segmentation tests
-IF (BUILD_TESTING)
-  SUBDIRS(tests)
-ENDIF (BUILD_TESTING)
