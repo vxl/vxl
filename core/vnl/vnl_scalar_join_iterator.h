@@ -116,7 +116,7 @@ protected:
 
 //: Helper class to hold the sorted arrays of indices.
 template <class T>
-struct vnl_scalar_join_iterator_indexed_pair {
+class vnl_scalar_join_iterator_indexed_pair {
 public:
   const T* object;
   int original_index;

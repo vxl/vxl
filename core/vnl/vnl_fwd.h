@@ -9,7 +9,7 @@
   fsm@robots.ox.ac.uk
 */
 
-template <class T> class vnl_complex_traits;
+template <class T> struct vnl_complex_traits;
 template <class T> class vnl_numeric_traits;
 template <class T> class vnl_numeric_limits;
 template <class T> class vnl_c_vector;
