@@ -57,7 +57,7 @@ class vnl_powell_1dfun : public vnl_cost_function
 };
 
 vnl_powell::vnl_powell(vnl_cost_function* functor):
-  functor_(functor),linmin_xtol_(1e-4),initial_step_(1.0)
+  functor_(functor), linmin_xtol_(1e-4), initial_step_(1.0)
 {
 }
 
@@ -88,7 +88,7 @@ vnl_powell::minimize(vnl_vector<double>& p)
   double fret = functor_->f(p);
   report_eval(fret);
   vnl_vector<double> pt = p;
-  for (;;)
+  while (num_iterations_ < unsigned(maxfev))
   {
     double fp = fret;
     int ibig=0;
