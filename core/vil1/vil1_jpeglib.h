@@ -7,7 +7,7 @@
   fsm@robots.ox.ac.uk
 */
 
-#include <stdio.h>
+#include <vcl/vcl_cstdio.h>
 #include <vcl/vcl_cstdlib.h>
 
 // ?
