@@ -22,10 +22,10 @@ void p(vil_image const& m)
 int
 test_memory_image_main(int, char*[])
 {
-  vcl_string tmp_nam = vul_temp_filename() + ".pgm";
-  char const *file1 = tmp_nam!="" ? tmp_nam.c_str() : "vil_test_memory_image_1.pgm";
-  tmp_nam = vul_temp_filename() + ".pgm";
-  char const *file2 = tmp_nam!="" ? tmp_nam.c_str() : "vil_test_memory_image_2.pgm";
+  vcl_string tmp_nam = vul_temp_filename();
+  vcl_string file1 = tmp_nam!="" ? tmp_nam + ".pgm" : "vil_test_memory_image_1.pgm";
+  tmp_nam = vul_temp_filename();
+  vcl_string file2 = tmp_nam!="" ? tmp_nam + ".pgm" : "vil_test_memory_image_2.pgm";
 
   {
     vil_memory_image m(3, 2, VIL_BYTE);
@@ -37,7 +37,7 @@ test_memory_image_main(int, char*[])
     m.put_section(data, 0, 0, 3, 2);
     p(m);
 
-    vil_save(m, file1, "pnm");
+    vil_save(m, file1.c_str(), "pnm");
 #ifdef LEAVE_IMAGES_BEHIND
       vpl_chmod(file1, 0666); // -rw-rw-rw-
 #endif
@@ -45,7 +45,7 @@ test_memory_image_main(int, char*[])
     vil_memory_image n(data, 3, 2, VIL_BYTE);
     p(n);
 
-    vil_save(n, file2, "pnm");
+    vil_save(n, file2.c_str(), "pnm");
 #ifdef LEAVE_IMAGES_BEHIND
       vpl_chmod(file2, 0666); // -rw-rw-rw-
 #endif
@@ -53,8 +53,8 @@ test_memory_image_main(int, char*[])
 
   // don't leave garbage behind by default.
 #ifndef LEAVE_IMAGES_BEHIND
-  vpl_unlink(file1);
-  vpl_unlink(file2);
+  vpl_unlink(file1.c_str());
+  vpl_unlink(file2.c_str());
 #endif
   return 0;
 }
