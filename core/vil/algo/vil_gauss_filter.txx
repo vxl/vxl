@@ -53,12 +53,11 @@ inline float l_round (double x, float )
 template <class srcT, class destT>
 void vil2_gauss_filter_5tap(const srcT* src_im, vcl_ptrdiff_t src_istep, vcl_ptrdiff_t src_jstep,
                             destT* dest_im, vcl_ptrdiff_t dest_istep, vcl_ptrdiff_t dest_jstep,
-                            unsigned nx, unsigned ny, const vil2_gauss_filter_5tap_params& params, destT* work)
+                            unsigned nx, unsigned ny, const vil2_gauss_filter_5tap_params& params,
+                            destT* work, vcl_ptrdiff_t work_jstep)
 {
   // Convolve src with a 5 x 1 Gaussian filter,
   // placing result in work_
-
-  const vcl_ptrdiff_t work_jstep = ny;
 
   // First perform horizontal smoothing
   for (unsigned int y=0;y<ny;y++)
@@ -156,7 +155,6 @@ void vil2_gauss_filter_5tap(const srcT* src_im, vcl_ptrdiff_t src_istep, vcl_ptr
                                             + params.filt_edge1() * work_row_bottom_2[x]
                                             + params.filt_edge0() * work_row_bottom_1[x], (destT)0);
   }
-
 //  dest_im.print_all(vcl_cout);
 }
 
@@ -179,7 +177,7 @@ void vil2_gauss_filter_5tap(
   for (unsigned p=0;p<n_planes;++p)
     vil2_gauss_filter_5tap(&src_im(0,0,p), src_im.istep(), src_im.jstep(),
                            &dest_im(0,0,p), dest_im.istep(), dest_im.jstep(), ni,nj,
-                           params, work.top_left_ptr());
+                           params, work.top_left_ptr(), work.jstep());
 #if 0
   vsl_indent_inc(vcl_cout);
   vcl_cout << vsl_indent() << "Work image B\n";
