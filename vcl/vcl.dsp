@@ -753,6 +753,15 @@ SOURCE=.\sgi/vcl_utility.txx
 SOURCE=.\sgi/vcl_vector.txx
 # End Source File
 # Begin Source File
+SOURCE=.\stlport/vcl_cmath.h
+# End Source File
+# Begin Source File
+SOURCE=.\stlport/vcl_complex.h
+# End Source File
+# Begin Source File
+SOURCE=.\stlport/vcl_cstdlib.h
+# End Source File
+# Begin Source File
 SOURCE=.\sunpro/vcl_algorithm.txx
 # End Source File
 # Begin Source File

@@ -189,6 +189,12 @@ SOURCE=.\Templates/vsl_vector_io+vcl_vector+int--.cxx
 SOURCE=.\Templates/vsl_map_io+vcl_string.vcl_vector+ulong--.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vsl_pair_io+int.int-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_vector_io+vcl_pair+int.int--.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vsl_binary_io.cxx
 # End Source File
 # Begin Source File
