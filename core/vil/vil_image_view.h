@@ -94,8 +94,11 @@ public:
   // If already correct size, this function returns quickly
   void resize(unsigned width, unsigned height, unsigned nplanes);
 
-  //: Make a compy of the underlying data.
-  void deep_copy(const vil2_image_view& src);
+  //: Make a copy of the data in src and set this to view it
+  void deep_copy(const vil2_image_view<T>& src);
+
+  //: Create a copy of the data viewed by this, and return a view of copy.
+  vil2_image_view<T> deep_copy() const;
 
   //: Disconnect this view from the underlying data.
   void release_data();

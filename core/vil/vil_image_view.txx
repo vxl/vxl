@@ -28,7 +28,7 @@ vil2_image_view<T>::vil2_image_view(unsigned nx, unsigned ny, unsigned n_planes)
 
 //: Perform deep copy of this into image
 template<class T>
-void vil2_image_view<T>::deep_copy(const vil2_image_view& src)
+void vil2_image_view<T>::deep_copy(const vil2_image_view<T>& src)
 {
   resize(src.nx(),src.ny(),src.nplanes());
 
@@ -39,6 +39,15 @@ void vil2_image_view<T>::deep_copy(const vil2_image_view& src)
   vil_memory_block new_data = src.ptr_->clone();
   ptr_ = src.ptr_->clone();
   top_left_ = ptr_->data();
+}
+
+//: Create a copy of the data viewed by this, and return a view of copy.
+template<class T>
+vil2_image_view<T> vil2_image_view<T>::deep_copy() const
+{
+ vil2_image_view<T> cpy;
+ cpy.deep_copy(*this);
+ return cpy;
 }
 
 //=======================================================================

@@ -1,25 +1,93 @@
 // The following text is included in the main documentation page by doxygen
-/*! \mainpage vil2 : Proposed modifications of vil
-* Provides a set of image data classes, derived from vil2_image_data, which act like a 
-* restricted version of vil_image. Calling get_view will fill a vil_image_view<> and give it
-* to you.
+/*! \mainpage vil2 : Proposed new core image library
+* A set of classes to represent and manipulate images
 *
-* Provides a set of image view classes, derived from vil2_image_view_base, which are 
-* `views' on actual image data with known type in memory.
+* Broadly there are two sorts of image one is interested in - images in memory
+* (all parts of which can be accessed directly) and external images (eg in files)
+* which can only be accessed indirectly.  In most cases images in files are loaded
+* into memory in one go, where they can then be manipulated.  However, for some
+* very large images this is not possible or desirable.  In this case it is useful
+* to be able to load in a sub-section of the image, manipulate it,and possible
+* write it out again.  vil2 supports both memory images and external images.
 *
-* The image views use pointer arithmetic to get at the pixel values, so store pointers
-* to the start , and integers indicating how to get to neighbours in
-* the x, y and plane directions.
+* The core class is vil2_image_view<T> which gives a view of an image in memory.
+* The only way to get at the pixel data in an image is through a vil2_image_view<T>.
 *
-* You can either have vil2_image_view<vil_rgb<vil_byte> > with nplanes() == 1
-* or vil2_image_view<vil_byte> with nplanes() == 3, both pointing correctly
-* at the same data.
+* Large images (in files) can be accessed through the vil2_file_image class, but
+* one can only get at the data by asking for a view of it, which loads the
+* requested section into memory and creates a suitable vil2_image_view<T>.
+*
+* The vil2_image_view<T> represents a view of a multi-plane image of given type.
+* A pointer is stored to the top-left pixel in the first plane of the image (top_left_ptr())
+* and integers indicating how to get to neighbours in
+* the x (xstep()) y (ystep()) and plane (planestep()) directions.
 *
 * The advantages of this approach are
 * - It is actually faster than pointer indirection on most architectures
 * - It allows one to access non-contiguous data as if it is a single plane
 * - One can use it to wrap up other image classes transparently.
 * - It is simple to extend to 3D images, and avoids huge arrays of pointers
+*
+*
+* Note that the same colour image can either be viewed as a one plane image
+* with RGB pixels (using vil2_image_view<vil_rgb<vil_byte> >) or as a 3 plane
+* byte image (using vil2_image_view<vil_byte> with nplanes() == 3).
+*
+* Since the vil2_image_view<T> is a `view' of the actual image data, copying one
+* only copies the `view', not the image data itself - you get two views looking at
+* the same chunk of memory.  Some cunning smart pointer stuff is used to ensure
+* that the actual data remains as long as a valid view is looking at
+* it.  (Note that this may not always be the case, since the view can be of
+* a chunk of memory that the view does not have direct control of, such as a video
+* buffer).  If you wish to copy the image data itself, then use the deep_copy()
+* function.  This copies the raw data into a newly created space, and returns
+* a new view of it.
+*
+* Example of loading then processing:
+* \verbatim
+* vil2_image_view<vil2_byte> image;
+* vil2_load(image,"test_image.jpg");
+* vil2_image_view<vil2_byte> image2 = image.deep_copy();
+* vil2_invert_image(image2);
+* vil2_save(image2,"output_image.jpg");
+* \endverbatim
+*
+* Example of creating an image in memory
+* \verbatim
+* int nx=256;
+* int ny=256;
+* int nplanes=3;
+* vil2_image_view<vil2_byte> image(nx,ny,nplanes);
+* vil2_byte* plane_data = image.top_left_ptr();
+* for (int i=0;i<nplanes;++i)
+*   for (int y=0;y<ny;++y)
+*     for (int x=0;x<nx;++x)
+*       image(x,y,i) = vil2_byte(x+y+i);
+* \endverbatim
+*
+* Example of creating an image in memory, using fast pointer arithmetic
+* \verbatim
+* int nx=256;
+* int ny=256;
+* int nplanes=3;
+* vil2_image_view<vil2_byte> image(nx,ny,nplanes);
+* vil2_byte* plane_data = image.top_left_ptr();
+* for (int i=0;i<nplanes;++i)
+* {
+*   vil2_byte* row = plane_data;
+*   for (int y=0;y<ny;++y)
+*   {
+*     vil2_byte* p = row;
+*     for (int x=0;x<nx;++x)
+*     {
+*       *p = vil2_byte(x+y+i);
+*       p+=image.xstep();
+*     }
+*     row+=image.ystep();
+*   }
+*   plane_data += image.planestep();
+* }
+* \endverbatim
 *
 * \subsection CAVEAT User
 * vil2 is a proposal. It may replace vil in part. 
