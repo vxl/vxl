@@ -12,7 +12,7 @@ public:
   vpgl_matrix_camera();
   vpgl_matrix_camera(const vnl_matrix<double>& mat);
  // Destructors
-  virtual ~vpgl_matrix_camera();
+  virtual ~vpgl_matrix_camera(){};
 
   // virtual interface for camera classes
 

@@ -1,4 +1,5 @@
-
+#include <vcsl/vcsl_cartesian_3d.h>
+#include <vcsl/vcsl_graph.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vcsl/vcsl_matrix.h>
 //#include <vcsl/vcsl_translation.h>
@@ -12,6 +13,10 @@ vpgl_perspective_camera::vpgl_perspective_camera():
   // First we set the internal camera parameters
   acs= new vcsl_spatial;
   lcs= new vcsl_spatial;
+  graph = new vcsl_graph;
+  acs->set_graph(graph);
+  lcs->set_graph(graph); 
+
   // Focal length is 1 unit of length
   _params[f] = 1.0;
   // Number of pixels per unit of length are 1
@@ -20,13 +25,16 @@ vpgl_perspective_camera::vpgl_perspective_camera():
   _params[uo] = _params[vo] = 0.0;
   // Image coordinate axes are orthogonal
   _params[theta] = vnl_math::pi/2;
-
+ 
   // Now set the external camera parameters
 
   // Camera center is at origin
   _params[XL] = _params[YL] = _params[ZL] = 0.0;
   // Camera is not rotated
   _params[omega] = _params[phi] = _params[kappa] = 0.0;
+  
+  update();
+
   
   
 }
@@ -41,7 +49,7 @@ vcl_vector<double> vpgl_perspective_camera::get_params() {return _params;}
 // -- Set parameter vector
 void vpgl_perspective_camera::set_params(vcl_vector<double> new_params, const vcsl_spatial_ref & acs)
   {_params = new_params;
-    this->acs=acs;
+    
 	update();
 }
    
@@ -54,11 +62,11 @@ void vpgl_perspective_camera::update_intrinsic(){
   M(2,2) = 1.0;
   vcl_cout << "Intrinsic:" << vcl_endl;
   vcl_cout << M;
-  
+  double ge ;
   int row, col;
   for (row = 0; row < 3; row++)
-    for (col = 0; col < 4; col++)
-      (*_mat_cam)(row, col) = (row, col);
+    for (col = 0; col < 3; col++)
+      ge=(*_mat_cam)(row, col) = M(row, col);
 }
 
 void vpgl_perspective_camera::update() {

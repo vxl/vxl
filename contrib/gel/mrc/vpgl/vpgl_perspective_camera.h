@@ -33,7 +33,7 @@
 #include <vpgl/vpgl_matrix_camera_ref.h>
 #include <vcsl/vcsl_matrix.h>
 #include <vcsl/vcsl_cartesian_3d.h>
-
+#include <vcsl/vcsl_graph_ref.h>
 
 class vpgl_perspective_camera : public vpgl_basic_camera
 {
@@ -85,6 +85,7 @@ protected:
   vcsl_spatial_ref lcs;
    //Absolute coordinate system.
   vcsl_spatial_ref acs;
+  vcsl_graph_ref graph;
 };
 
 
