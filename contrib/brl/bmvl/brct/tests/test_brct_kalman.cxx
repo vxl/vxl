@@ -23,5 +23,6 @@ int main(int argc, char **argv)
   win->enable_hscrollbar(true);
   win->show();
   brct_windows_frame::instance()->post_redraw();
-  return vgui::run();
+  vgui::run();
+  return 0;
 }
