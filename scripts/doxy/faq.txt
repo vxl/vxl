@@ -34,4 +34,12 @@ The full error is "Cannot find the file 'gswin32.exe' (or one of its components)
 
 Doxygen is looking for ghostscript to render mathematical equations in the documentation. See http://www.cs.wisc.edu/~ghost/ for more details. You need to make sure that gswin32 is in your search path. For example on my computer I would type
 >set path=c:\progra~1\ghostv~1\gs6.01\bin;%path%
-before running update_webserver.pl 
+before running update_webserver.pl
+
+4) How do I get images into the texi books?
+
+Add the following line to the location in your texi file you want the image to appear
+
+@image{image_name,,1in}
+
+image_name should be the filename (minus the .suffix) of your image. Put your jpeg, png, or eps image (with the correct .suffix) in the same directory as the texi file. The gen_books.pl script in the documentation system will automatically copy and transform the image files to the appropriate place and format for display in the output webpage.
