@@ -57,7 +57,7 @@ public:
   void set_identity();
 
   // Operations----------------------------------------------------------------
-  int count() const { return _match_count; }
+  unsigned int count() const { return match_count_; }
 
   void update_feature_match_data();
   void clear();
@@ -88,10 +88,10 @@ public:
     iterator& operator ++ (int /*postfix*/);// { abort(); return *this; }
 
   private:
-    const PairMatchSet* _c;
-    int _match_index;
+    const PairMatchSet* c_;
+    int match_index_;
     int i1, i2;
-    bool _full_only;
+    bool full_only_;
   };
   // ******* END ITERATOR
 
@@ -109,8 +109,8 @@ public:
   bool get_match(int at, int* i1, int* i2) const;
 protected:
   // Data Members--------------------------------------------------------------
-  vcl_vector<int> _matches;
-  int _match_count;
+  vcl_vector<int> matches_;
+  unsigned int match_count_;
 };
 
 #endif // PairMatchSet_h_

@@ -21,7 +21,7 @@ PairMatchSet::iterator& PairMatchSet::iterator::operator ++ (int /*postfix*/)
 
 //: Construct a PairMatchSet for values of $i_1$ between 0 and size.
 PairMatchSet::PairMatchSet(unsigned size):
-  _matches(size)
+  matches_(size)
 {
   clear();
 }
@@ -33,15 +33,15 @@ PairMatchSet::~PairMatchSet()
 
 // @{ OPERATIONS @}
 PairMatchSet::PairMatchSet(const PairMatchSet& that):
-  _matches(that._matches),
-  _match_count(that._match_count)
+  matches_(that.matches_),
+  match_count_(that.match_count_)
 {
 }
 
 PairMatchSet& PairMatchSet::operator=(const PairMatchSet& that)
 {
-  _matches = that._matches;
-  _match_count = that._match_count;
+  matches_ = that.matches_;
+  match_count_ = that.match_count_;
   return *this;
 }
 
@@ -54,16 +54,16 @@ void PairMatchSet::update_feature_match_data()
 // If i1 had an existing match it is overwritten.
 bool PairMatchSet::add_match(int i1, int i2)
 {
-  if ((unsigned)i1 >= _matches.size()) {
-    vcl_cerr << "PairMatchSet: add_match(" << i1 << ") greater than size " << _matches.size() << vcl_endl;
+  if ((unsigned)i1 >= matches_.size()) {
+    vcl_cerr << "PairMatchSet: add_match(" << i1 << ") greater than size " << matches_.size() << vcl_endl;
     vcl_abort();
     return false;
   }
-  bool had_nomatch = (_matches[i1] == NoMatch);
+  bool had_nomatch = (matches_[i1] == NoMatch);
   bool new_nomatch = (i2 == NoMatch);
-  _matches[i1] = i2;
+  matches_[i1] = i2;
   if (had_nomatch && !new_nomatch)
-    ++_match_count;
+    ++match_count_;
   return true;
 }
 
@@ -71,13 +71,15 @@ bool PairMatchSet::add_match(int i1, int i2)
 //  Specifically, remove tuples whose first element is i1.
 void PairMatchSet::clear_match_1(int i1)
 {
-  if ((unsigned)i1 >= _matches.size()) {
+  if ((unsigned)i1 >= matches_.size()) {
     vcl_cerr << "PairMatchSet: clear squawwk\n";
     return;
   }
-  int& i2 = _matches[i1];
-  if (i2 != MatchSet::NoMatch)
-    --_match_count;
+  int& i2 = matches_[i1];
+  if (i2 != MatchSet::NoMatch) {
+    assert(match_count_ > 0);
+    --match_count_;
+  }
 
   i2 = MatchSet::NoMatch;
 }
@@ -89,13 +91,13 @@ int PairMatchSet::get_match_12(int i1) const
   if (i1 == MatchSet::NoMatch)
     return MatchSet::NoMatch;
 
-  if ((unsigned)i1 >= _matches.size()) {
-    vcl_cerr << "PairMatchSet::get_match_12() -- i1 = " << i1 << " >= _matches.size() = " << _matches.size() << vcl_endl;
+  if ((unsigned)i1 >= matches_.size()) {
+    vcl_cerr << "PairMatchSet::get_match_12() -- i1 = " << i1 << " >= matches_.size() = " << matches_.size() << vcl_endl;
     vcl_abort();
     return -1;
   }
 
-  return _matches[i1];
+  return matches_[i1];
 }
 
 //: Return any match for i2.
@@ -104,8 +106,8 @@ int PairMatchSet::get_match_12(int i1) const
 //  index to this class if you use it a lot.
 int PairMatchSet::get_match_21(int i2) const
 {
-  for(unsigned i = 0; i < _matches.size(); ++i)
-    if (_matches[i] == i2)
+  for (unsigned i = 0; i < matches_.size(); ++i)
+    if (matches_[i] == i2)
       return i;
   return MatchSet::NoMatch;
 }
@@ -125,41 +127,41 @@ bool PairMatchSet::get_match(int c, int* i1, int* i2) const
 //: Empty this match set.
 void PairMatchSet::clear()
 {
-  for(unsigned i = 0; i < _matches.size(); ++i)
-    _matches[i] = MatchSet::NoMatch;
-  _match_count = 0;
+  for (unsigned i = 0; i < matches_.size(); ++i)
+    matches_[i] = MatchSet::NoMatch;
+  match_count_ = 0;
 }
 
 //: Set this match set to contain matches (i,i) for i=0..size
 void PairMatchSet::set_identity()
 {
-  for(unsigned i = 0; i < _matches.size(); ++i)
-    _matches[i] = i;
-  _match_count = _matches.size();
+  for (unsigned i = 0; i < matches_.size(); ++i)
+    matches_[i] = i;
+  match_count_ = matches_.size();
 }
 
 //: Count the number of matches in this set
 int PairMatchSet::compute_match_count()
 {
-  _match_count = 0;
-  for(unsigned i = 0; i < _matches.size(); ++i)
-    if (_matches[i] != MatchSet::NoMatch)
-      ++_match_count;
+  match_count_ = 0;
+  for (unsigned i = 0; i < matches_.size(); ++i)
+    if (matches_[i] != MatchSet::NoMatch)
+      ++match_count_;
 
-  return _match_count;
+  return match_count_;
 }
 
 //: Return the maximum allowed value of i1.
 int PairMatchSet::size() const
 {
-  return _matches.size();
+  return matches_.size();
 }
 
 //: Set the maximum allowed value of i1 to size.
 void PairMatchSet::set_size(unsigned newsize)
 {
-  if (newsize != _matches.size())
-    _matches = vcl_vector<int>(newsize, NoMatch);
+  if (newsize != matches_.size())
+    matches_ = vcl_vector<int>(newsize, NoMatch);
 }
 
 void PairMatchSet::update(const vcl_vector<bool>& inliers)
@@ -170,7 +172,7 @@ void PairMatchSet::update(const vcl_vector<bool>& inliers)
   }
 
   int n = 0;
-  for(PairMatchSet::iterator match (*this); match; match.next(), ++n)
+  for (PairMatchSet::iterator match (*this); match; match.next(), ++n)
     if (!inliers[n])
       clear_match_1(match.get_i1());
 }
@@ -184,8 +186,8 @@ void PairMatchSet::update(const vcl_vector<bool>& inliers)
 //: Write matches in ASCII to stream.
 void PairMatchSet::write_ascii(vcl_ostream& s) const
 {
-  for (unsigned i = 0; i < _matches.size(); ++i) {
-    int to_index = _matches[i];
+  for (unsigned i = 0; i < matches_.size(); ++i) {
+    int to_index = matches_[i];
     if (to_index != NoMatch)
       s << i << " " << to_index << vcl_endl;
   }
@@ -199,7 +201,7 @@ vcl_ostream& operator<<(vcl_ostream& s, const PairMatchSet& cc) {
 bool PairMatchSet::read_ascii(vcl_istream& s)
 {
   clear();
-  for(;;) {
+  for (;;) {
     // Read 2 ints
     int i1, i2;
     s >> i1 >> i2;
@@ -210,20 +212,20 @@ bool PairMatchSet::read_ascii(vcl_istream& s)
     s >> vcl_ws;
 
     // Sanity check
-    if (i1 < 0 || i2 < 0 || i1 >= (int)_matches.size()) {
+    if (i1 < 0 || i2 < 0 || i1 >= (int)matches_.size()) {
       vcl_cerr << "PairMatchSet::read_ascii -- Pair " << i1 << "-" << i2 << " is outside the valid range." << vcl_endl;
       clear();
       return false;
     }
 
     // More sanity checking
-    if (_matches[i1] != NoMatch) {
+    if (matches_[i1] != NoMatch) {
       vcl_cerr << "PairMatchSet::read_ascii() -- Warning:\n";
-      vcl_cerr << "Duplicate matches for " << i1 << ": " << _matches[i1] << " and " << i2 << vcl_endl;
+      vcl_cerr << "Duplicate matches for " << i1 << ": " << matches_[i1] << " and " << i2 << vcl_endl;
       return false;
     }
 
-    _matches[i1] = i2;
+    matches_[i1] = i2;
   }
 
   return compute_match_count() > 0;
@@ -239,24 +241,24 @@ vcl_istream& operator>>(vcl_istream& s, PairMatchSet& cc) {
 void PairMatchSet::print_brief(vcl_ostream& s) const
 {
   s << "PairMatchSet: ";
-  for (unsigned i = 0; i < _matches.size(); i++)
-    s << _matches[i] << " ";
+  for (unsigned i = 0; i < matches_.size(); i++)
+    s << matches_[i] << " ";
   s << vcl_endl;
 }
 
 //: Summarize matches on cout.
 void PairMatchSet::print_brief() const
 {
-  unsigned n = _matches.size();
+  unsigned n = matches_.size();
   char const *c = "";
   if (n > 30) {
     n = 30;
     c = "...";
   }
 
-  for(unsigned i = 0; i < n; ++i)
-    if (_matches[i] != NoMatch)
-      vcl_cout << " " << _matches[i];
+  for (unsigned i = 0; i < n; ++i)
+    if (matches_[i] != NoMatch)
+      vcl_cout << " " << matches_[i];
   vcl_cout << c << vcl_endl;
 }
 
@@ -268,27 +270,27 @@ void PairMatchSet::print_brief() const
 
 //: Construct an empty iterator.
 PairMatchSet::iterator::iterator(bool full_only):
-  _c(0),
-  _match_index(0),
-  _full_only(full_only)
+  c_(0),
+  match_index_(0),
+  full_only_(full_only)
 {
 }
 
 //: Construct an iterator which will enumerate the matches in PairMatchSet cc.
 PairMatchSet::iterator::iterator(const PairMatchSet& cc, bool full_only):
-  _c(&cc),
-  _match_index(0),
-  _full_only(full_only)
+  c_(&cc),
+  match_index_(0),
+  full_only_(full_only)
 {
-  _match_index = -1;
+  match_index_ = -1;
   next();
 }
 
 //: Set an iterator to enumerate the matches in PairMatchSet cc.
 PairMatchSet::iterator& PairMatchSet::iterator::operator =(const PairMatchSet& cc)
 {
-  _c = &cc;
-  _match_index = -1;
+  c_ = &cc;
+  match_index_ = -1;
   next();
   return *this;
 }
@@ -296,13 +298,13 @@ PairMatchSet::iterator& PairMatchSet::iterator::operator =(const PairMatchSet& c
 //: Advance the iterator, returning false if all matches have been enumerated.
 bool PairMatchSet::iterator::next()
 {
-  if (_full_only) {
-    while (_c->get_match(++_match_index, &i1, &i2))
+  if (full_only_) {
+    while (c_->get_match(++match_index_, &i1, &i2))
       if (isfull())
         return true;
     return false;
   }
-  return _c->get_match(++_match_index, &i1, &i2);
+  return c_->get_match(++match_index_, &i1, &i2);
 }
 
 // insert these here for documentation purposes
@@ -331,5 +333,5 @@ bool PairMatchSet::iterator::isfull() const
 //: Return true if the iterator has not yet enumerated all matches.
 PairMatchSet::iterator::operator bool () const
 {
-  return _match_index < _c->size();
+  return match_index_ < c_->size();
 }
