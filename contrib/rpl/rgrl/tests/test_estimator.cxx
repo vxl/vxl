@@ -35,6 +35,8 @@
 #include <rgrl/rgrl_est_homography2d.h>
 #include <rgrl/rgrl_est_homo2d_lm.h>
 #include <rgrl/rgrl_trans_homography2d.h>
+#include <rgrl/rgrl_trans_rad_dis_homo2d.h>
+#include <rgrl/rgrl_est_dis_homo2d_lm.h>
 #include <rgrl/rgrl_cast.h>
 
 #include "test_util.h"
@@ -1870,7 +1872,7 @@ namespace {
     bool homography_is_good = true;
     for ( unsigned int num=12; num<200; num+=4 )
     {
-      vcl_cout << "using # of " << num << " correspondences" << vcl_endl;
+      vcl_cout << "using " << num << " of correspondences" << vcl_endl;
       //reset points
       p.clear();
       q.clear();
@@ -1920,22 +1922,29 @@ namespace {
 
         // check homography transform
         homography_is_good = homography_is_good && (est_H-H).array_two_norm() < tol_xform;
-
+        if( !homography_is_good ) {
+          vcl_cout << "transformation is incorrect!\n" << est_H << "\n" << H << vcl_endl;
+        }
+        
         // test on transfer error on 4 cannonical directions
         vnl_matrix<double> trans_error;
         double ratio;
 
         trans_error = est->transfer_error_covar( p[0] );
         ratio = trans_error(0,0);  // this constant shall be the same
+        vcl_cout << "transfer error(1): \n" << trans_error << vcl_endl;
         cov_is_good = cov_is_good && (ratio*iid_cov-trans_error).array_two_norm() < tol_trans_error;
 
         trans_error = est->transfer_error_covar( p[num/4] );
+        vcl_cout << "transfer error(1): \n" << trans_error << vcl_endl;
         cov_is_good = cov_is_good && (ratio*iid_cov-trans_error).array_two_norm() < tol_trans_error;
 
         trans_error = est->transfer_error_covar( p[num/2] );
+        vcl_cout << "transfer error(1): \n" << trans_error << vcl_endl;
         cov_is_good = cov_is_good && (ratio*iid_cov-trans_error).array_two_norm() < tol_trans_error;
 
         trans_error = est->transfer_error_covar( p[num*3/4] );
+        vcl_cout << "transfer error(1): \n" << trans_error << vcl_endl;
         cov_is_good = cov_is_good && (ratio*iid_cov-trans_error).array_two_norm() < tol_trans_error;
       }
     }
@@ -1945,6 +1954,52 @@ namespace {
   }
 } // end anonymous namespace
 
+void 
+test_rad_dis_homo2d_lm()
+{
+  vnl_matrix<double> H(3, 3, vnl_matrix_identity), initH(H);
+  const double k1_from = -1e-6;
+  const double k1_to = 0;
+  vnl_vector<double> centre(2,0.0);
+  rgrl_transformation_sptr true_xform = new rgrl_trans_rad_dis_homo2d( H, k1_from, k1_to, centre, centre );
+  
+  // add errors
+  initH(1,1) = 0.98;
+  initH(0,2) = -0.005;
+  initH(1,2) = 0.1;
+  rgrl_transformation_sptr init_xform = new rgrl_trans_homography2d( initH );
+  
+  rgrl_match_set_sptr ms = new rgrl_match_set( rgrl_feature_point::type_id() );
+  vnl_vector<double> pt_loc( 2 );
+  for( int i=-10; i<=10; ++i )
+    for( int j=-10; j<=10; ++j ) {
+      
+      pt_loc[0] = double(i)*50;
+      pt_loc[1] = double(j)*40;
+      rgrl_feature_sptr from_sptr = new rgrl_feature_point( pt_loc );
+      rgrl_feature_sptr to_sptr = from_sptr->transform( *true_xform );
+        
+      // add feature
+      ms->add_feature_and_match( from_sptr, 0, to_sptr );
+      
+    }
+    
+  // remap features
+  ms->remap_from_features( *init_xform );
+  
+  // set up estimator
+  rgrl_estimator_sptr est_sptr = new rgrl_est_dis_homo2d_lm(centre, centre);
+  
+  rgrl_transformation_sptr result_sptr = est_sptr->estimate( ms, *init_xform );
+  rgrl_trans_rad_dis_homo2d const& result_xform = static_cast<rgrl_trans_rad_dis_homo2d const&>( *result_sptr );
+  
+  bool is_valid = (result_sptr);
+  TEST( "valid transformation", is_valid, true );
+  
+  
+}
+
+
 MAIN( test_estimator )
 {
   START( "various transformation objects" );
@@ -1953,6 +2008,7 @@ MAIN( test_estimator )
 //  test_est_affine_pt_to_line();
 //  test_similarity_pt_to_pt();
 
+  test_rad_dis_homo2d_lm();
   test_est_spline();
   test_est_spline_reduce_dof();
   test_est_quadratic();

@@ -183,11 +183,11 @@ inverse_transform( ) const
 }
 
 
-vnl_matrix<double>
+void
 rgrl_trans_similarity::
-jacobian( vnl_vector<double> const& /*from_loc*/ ) const
+jacobian_wrt_loc( vnl_matrix<double>& jac, vnl_vector<double> const& /*from_loc*/ ) const
 {
-  return  A_ ;
+  jac = A_;
 }
 
 rgrl_transformation_sptr

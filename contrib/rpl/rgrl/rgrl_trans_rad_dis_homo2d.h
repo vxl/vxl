@@ -88,9 +88,8 @@ class rgrl_trans_rad_dis_homo2d
   //: Return an inverse transformation of the uncentered transform
   rgrl_transformation_sptr inverse_transform() const;
 
-  //: Return the jacobian of the transform w/ respect to inhomogenous coordinate
-  //  This is a 2x2 matrix
-  vnl_matrix<double> jacobian( vnl_vector<double> const& from_loc ) const;
+  //: Compute jacobian w.r.t. location
+  virtual void jacobian_wrt_loc( vnl_matrix<double>& jac, vnl_vector<double> const& from_loc ) const;
 
   //:  transform the transformation for images of different resolution
   rgrl_transformation_sptr scale_by( double scale ) const;

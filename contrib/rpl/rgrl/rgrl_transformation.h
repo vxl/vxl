@@ -139,8 +139,12 @@ class rgrl_transformation
   virtual rgrl_transformation_sptr inverse_transform() const = 0;
 
   //: Return the jacobian of the transform
-  virtual vnl_matrix<double> jacobian( vnl_vector<double> const& from_loc ) const = 0;
-
+  //  use only as backward compatibility
+  vnl_matrix<double> jacobian( vnl_vector<double> const& from_loc ) const;
+                                                                                      
+  //: Compute jacobian w.r.t. location
+  virtual void jacobian_wrt_loc( vnl_matrix<double>& jac, vnl_vector<double> const& from_loc ) const = 0;
+  
   //:  transform the transformation for images of different resolution
   virtual rgrl_transformation_sptr scale_by( double scale ) const = 0;
 

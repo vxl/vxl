@@ -94,22 +94,24 @@ map_dir( vnl_vector<double> const& from_loc,
 }
 
 //: Return the jacobian of the transform
-vnl_matrix<double>
+void
 rgrl_trans_spline::
-jacobian( vnl_vector<double> const& from_loc ) const
+jacobian_wrt_loc( vnl_matrix<double>& spline_jacobian, vnl_vector<double> const& from_loc ) const
 {
   // ???? Don't understand why map_dir is implemented but not this function
   // assert( false );
   // return vnl_matrix<double>(from_loc.size(), from_loc.size(), vnl_matrix_identity);
 
   unsigned dim = x0_.size();
-  vnl_matrix< double > spline_jacobian( dim, dim );
+  spline_jacobian.set_size( dim, dim );
 
   for ( unsigned i=0; i<dim; ++i )
     spline_jacobian.set_row( i, splines_[ i ]->jacobian( from_loc ) );
 
   // add with the jocobian of xform
-  return spline_jacobian + xform_->jacobian( from_loc );
+  vnl_matrix<double> xform_jac;
+  xform_->jacobian_wrt_loc( xform_jac, from_loc );
+  spline_jacobian += xform_jac;
 }
 
 // ??? -Gehua

@@ -230,6 +230,16 @@ covar() const
   return covar_;
 }
 
+vnl_matrix<double> 
+rgrl_transformation::
+jacobian( vnl_vector<double> const& from_loc ) const
+{
+  vnl_matrix<double> jac;
+  this->jacobian_wrt_loc( jac, from_loc );
+  
+  return jac;
+}
+
 //:  set parameter covariance matrix
 void
 rgrl_transformation::

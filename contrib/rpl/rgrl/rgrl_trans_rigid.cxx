@@ -211,11 +211,11 @@ inv_map( const vnl_vector<double>& to,
   }
 }
 
-vnl_matrix<double>
+void
 rgrl_trans_rigid::
-jacobian( vnl_vector<double> const& /*from_loc*/ ) const
+jacobian_wrt_loc( vnl_matrix<double>& jac, vnl_vector<double> const& /*from_loc*/ ) const
 {
-  return R_;
+  jac = R_;
 }
 
 void

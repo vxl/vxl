@@ -138,12 +138,13 @@ inverse_transform( ) const
 }
 
 
-vnl_matrix<double>
+void
 rgrl_trans_translation::
-jacobian(  vnl_vector<double> const& /*from_loc*/ ) const
+jacobian_wrt_loc( vnl_matrix<double>& jac, vnl_vector<double> const& /*from_loc*/ ) const
 {
   unsigned int m = trans_.size();
-  return vnl_matrix<double> (m, m, vnl_matrix_identity);
+  jac.set_size( m, m );
+  jac.set_identity();
 }
 
 rgrl_transformation_sptr

@@ -321,15 +321,15 @@ inv_map( const vnl_vector<double>& to,
 }
 
 //: Return the jacobian of the transform.
-vnl_matrix<double>
+void
 rgrl_trans_rad_dis_homo2d::
-jacobian( vnl_vector<double> const& from ) const
+jacobian_wrt_loc( vnl_matrix<double>& jac, vnl_vector<double> const& from ) const
 {
   // using chain rule:
   // aqd/apd = aqd/aqu * aqu/apu * apu/apd
   //
   
-  vnl_matrix<double> jac(2, 2, 0.0 );
+  jac.set_size(2, 2);
 
   // Step 1. undistorted from coordinate and compute apu/apd
   vnl_double_2 dis_from_loc( from[0]-from_centre_[0], from[1]-from_centre_[1] );
@@ -353,7 +353,6 @@ jacobian( vnl_vector<double> const& from ) const
   // Steop 4. put them together
   jac = qd_qu * qu_pu * pu_pd;
 
-  return jac;
 }
 
 void

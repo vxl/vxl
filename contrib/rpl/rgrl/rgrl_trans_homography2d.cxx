@@ -263,9 +263,9 @@ homo_jacobian( vnl_vector<double> const& from_loc ) const
 }
 
 //: Return the jacobian of the transform.
-vnl_matrix<double>
+void
 rgrl_trans_homography2d::
-jacobian( vnl_vector<double> const& from_loc ) const
+jacobian_wrt_loc( vnl_matrix<double>& jacobian, vnl_vector<double> const& from_loc ) const
 {
   // The jacobian is a 2x2 matrix with entries
   // [d(f_0)/dx   d(f_0)/dy;
@@ -276,7 +276,7 @@ jacobian( vnl_vector<double> const& from_loc ) const
   
   double mapped_w = H_(2,0)*centered_from[0] + H_(2,1)*centered_from[1] + H_(2,2);
 
-  vnl_matrix<double> jacobian(2, 2);
+  jacobian.set_size(2, 2);
   // w/ respect to x
   jacobian(0,0) = H_(0,0)*( H_(2,1)*centered_from[1]+H_(2,2) ) - H_(2,0)*( H_(0,1)*centered_from[1] + H_(0,2) );
   jacobian(1,0) = H_(1,0)*( H_(2,1)*centered_from[1]+H_(2,2) ) - H_(2,0)*( H_(1,1)*centered_from[1] + H_(1,2) );
@@ -285,7 +285,6 @@ jacobian( vnl_vector<double> const& from_loc ) const
   jacobian(1,1) = H_(1,1)*( H_(2,0)*centered_from[0]+H_(2,2) ) - H_(2,1)*( H_(1,0)*centered_from[0] + H_(1,2) );
   
   jacobian *= (1/(mapped_w*mapped_w));
-  return jacobian;
 }
 
 // for output CENTERED transformation

@@ -262,12 +262,12 @@ inv_map( const vnl_vector<double>& to,
   }
 }
 
-vnl_matrix<double>
+void
 rgrl_trans_quadratic::
-jacobian( vnl_vector<double> const& from_loc ) const
+jacobian_wrt_loc( vnl_matrix<double>& jacobian_Q, vnl_vector<double> const& from_loc ) const
 {
   unsigned int m = trans_.size();
-  vnl_matrix<double> jacobian_Q(m, m);
+  jacobian_Q.set_size(m, m);
   if ( m == 2 ) {
     for (unsigned int i = 0; i<m; i++) {
       jacobian_Q(i,0) = 2*Q_(i,0)*from_loc[0] + Q_(i,2)*from_loc[1];
@@ -282,7 +282,8 @@ jacobian( vnl_vector<double> const& from_loc ) const
     }
   }
 
-  return A_ + jacobian_Q;
+  //return A_ + jacobian_Q;
+  jacobian_Q += A_;
 }
 
 rgrl_transformation_sptr

@@ -43,8 +43,8 @@ class rgrl_trans_spline
   rgrl_transformation_sptr get_global_xform( ) const { return xform_; }
   rgrl_spline_sptr get_spline( unsigned i ) const { return splines_[i]; }
 
-  //: Return the jacobian of the transform
-  vnl_matrix<double> jacobian( vnl_vector<double> const& from_loc ) const;
+  //: Compute jacobian w.r.t. location
+  virtual void jacobian_wrt_loc( vnl_matrix<double>& jac, vnl_vector<double> const& from_loc ) const;
 
   // for tester to access the private members
   friend class test_rgrl_trans_spline;
