@@ -33,7 +33,7 @@ SUBDIRS += vcsl
 ifndef NOTEST
 SUBDIRS += examples
 SUBDIRS += test_allvxl
-SUBDIRS += apps/vxl_vrml_viewer
+##needs libvgui-vrml from oxl: SUBDIRS += apps/vxl_vrml_viewer
 endif
 
 ######################################

@@ -14,6 +14,7 @@ SUBDIRS += vgui
 SUBDIRS += xcv
 SUBDIRS += ../Oxford/xcv_ox
 SUBDIRS += VPLAYER
+SUBDIRS += ../vxl/apps/vxl_vrml_viewer
 endif
 
 ######################################
