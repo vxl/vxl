@@ -14,7 +14,6 @@
 #include <mil3d/mil3d_gauss_reduce_3d.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
-#include <vnl/vnl_math.h> // for sqrt2
 
 //=======================================================================
 
@@ -250,7 +249,7 @@ void mil3d_gaussian_pyramid_builder_3d<T>::build(mil_image_pyramid& image_pyr,
   mil3d_transform_3d im2world = base_image.world2im().inverse();
   vgl_vector_3d<double>  dw = im2world(c1) - im2world(c0);
 
-  double base_pixel_width = dw.length()/vcl_sqrt(3);
+  double base_pixel_width = dw.length()/vcl_sqrt(3.0);
   double scale_step = 2.0;
 
   image_pyr.setWidths(base_pixel_width,scale_step);
