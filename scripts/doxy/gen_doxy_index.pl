@@ -187,7 +187,7 @@ if (!$vxlsrc)
   exit(1);
 }
 
-$index = "$doxydir/index.html";
+$index = "$doxydir/html/index.html";
 open(OF, ">$index");
 print_header();
 print_book_index_links($vxlsrc,$book_list);

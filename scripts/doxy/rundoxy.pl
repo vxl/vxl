@@ -72,7 +72,7 @@ sub get_dependencies
       $prefix = $pref;
       last;
     }
-        # Add library to list of those seen
+		# Add library to list of those seen
     @liblist = (@liblist,$packlib);
   }
   close(IN);
@@ -91,9 +91,9 @@ sub  create_doxyfile
   $libname = $library;
   $libname =~ s/\//_/g;
 
-  $tagfile = $doxydir . "/tags/" . $libname . ".tag";
-  $outputdir = $doxydir . "/" . $library ;
-  $abspath   = $outputdir . "/html";
+  $tagfile = "$doxydir/tags/$libname.tag";
+  $outputdir = "$doxydir/html/$library" ;
+  $abspath   = "$outputdir/html";
 
   while (<IN>)
   {
@@ -141,7 +141,12 @@ sub  create_doxyfile
 sub check_havedot
 {
   my ($doxyoutputdir) = @_;
-  `dot --version > $doxyoutputdir/checkdot.out  2>&1`;
+  my $dotfile = "$doxyoutputdir/dotfile.dot";
+  open(DOTOUT, ">$dotfile") || die "can't open file $dotfile\n";
+  print DOTOUT "digraph test {}\n";
+  close(DOTOUT);
+
+  `dot $dotfile > $doxyoutputdir/checkdot.out  2>&1`;
   if ($? != 0)
   {
     return "NO";
@@ -154,8 +159,6 @@ sub check_havedot
 # Main
 #-----------------------------------------------------------
 
-use Env qw(OS);
- 
 my %options;
 getopts('v:s:l:n:o:', \%options);
 
@@ -164,8 +167,6 @@ my $script_dir = $options{s} || "$vxlsrc/scripts/doxy";
 my $library_list_file = $options{l} || "$script_dir/data/library_list.txt";
 my $library = $options{n} || "";
 my $doxydir = $options{o} || "$vxlsrc/Doxy";
-
-if ( !defined($OS) ) {$OS = "Unix";}
 
 if ( ! $vxlsrc || !$library_list_file || !$library)
 {
@@ -210,6 +211,15 @@ if (! -e $doxyoutputdir)
   mkdir $doxyoutputdir,0777 || die "Can't create directory $doxyoutputdir\n";
 }
 
+$doxyhtmldir = $doxydir . "/html";
+
+# Check that a subdirectory called Doxy/html exists
+if (! -e $doxyhtmldir)
+{
+  print "Creating $doxyhtmldir\n";
+  mkdir $doxyhtmldir,0777 || die "Can't create directory $doxyhtmldir\n";
+}
+
 $tagsdir = $doxydir . "/tags";
 
 # Check that a subdirectory called Doxy/tags exists
@@ -252,10 +262,7 @@ $relpath =~ s/[^\/]+/\.\./g;
 
 # create the command to install the docs
 
-if ($OS =~ /Windows/)
-{ $command = "installdox.pl "; }
-else 
-{ $command = "./installdox.pl "; }
+$command = "./installdox.pl ";
 foreach $dep (@deps)
 {
   # Deduce tag file name  (vnl -> vnl.tag,  vnl/algo -> vnl_algo.tag etc)
@@ -275,7 +282,8 @@ $doxyoutfile2 = $doxyoutputdir . "/" . $libname . "_install.doxy_out";
 
 $here = cwd();
 xec("doxygen $opfile > $doxyoutfile 2>&1 ");
-chdir "$doxydir/$library/html" || die "can't cd to $doxydir/$library/html";
+chdir "$doxydir/html/$library/html" || die "can't cd to $doxydir/html/$library/html";
+#chdir "$doxydir/$library/html" || die "can't cd to $doxydir/$library/html";
 
 if (! -e "installdox")
 {

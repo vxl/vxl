@@ -108,8 +108,16 @@ sub update_library
     $buildit = "true";
   }
 
+  if (! -e "$doxydir/html")
+  {
+    print "Creating $doxydir/html\n";
+    mkdir "$doxydir/html",0777 || die "Can't create directory $doxydir/html\n";
+    $buildit = "true";
+  }
+
   # Check that package directory exists in documentation area
-  chdir $doxydir || die "Unable to chdir to $doxydir\n";
+  chdir "$doxydir/html" || die "Unable to chdir to $doxydir/html\n";
+#  chdir "$doxydir" || die "Unable to chdir to $doxydir\n";
   if (! -e $package)
   {
     print "Creating package directory: $package\n";
