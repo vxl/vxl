@@ -12,3 +12,4 @@
 
 VCL_VECTOR_INSTANTIATE(unsigned int);
 VCL_FIND_INSTANTIATE(vcl_vector<unsigned>::iterator, unsigned);
+VCL_FIND_INSTANTIATE(vcl_vector<unsigned>::const_iterator, unsigned);
