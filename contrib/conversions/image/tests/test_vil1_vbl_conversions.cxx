@@ -5,7 +5,7 @@
 #include <vcl_fstream.h>
 #include <vpl/vpl.h> // for vpl_unlink()
 #include <vil/vil_load.h>
-#include <vil/vil_test.h>
+#include <testlib/testlib_test.h>
 #include <vul/vul_temp_filename.h>
 
 static void create_image(const char* name)
@@ -51,4 +51,9 @@ void test_image_conversions()
   delete[] buf1;
 }
 
-TESTMAIN(test_image_conversions);
+MAIN( test_vil_vbl_conversions )
+{
+  START("vil to vbl conversions");
+  test_image_conversions();
+  SUMMARY();
+}
