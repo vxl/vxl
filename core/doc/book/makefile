@@ -61,7 +61,7 @@ rosenbrock.png: rosenbrock.eps
 
 # TeX for paper printing
 book.dvi: $(SOURCEFILES) atexinfo.tex
-	$(TEX) book.texi || touch -t 197001010000 book.dvi
+	$(TEX) book.texi || touch -t 200001010000 book.dvi
 
 
 # Windows help files. Process hpj the help compiler 
