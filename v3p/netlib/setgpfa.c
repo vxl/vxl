@@ -3,9 +3,6 @@
         -lf2c -lm   (in that order)
 */
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 #include "f2c.h"
 
 /* Table of constant values */
@@ -40,12 +37,60 @@ static integer c__5 = 5;
 /* ---------------------------------------------------------------------- */
 
 /*<       SUBROUTINE SETGPFA(TRIGS,N,IRES,INFO) >*/
-/* Subroutine */ void setgpfa_(real *trigs, integer *n, integer *ires, integer
-        *info)
-{
-    /* System generated locals */
-    integer i__1;
+/*<       DIMENSION TRIGS(*) >*/
+/*<       DIMENSION NJ(3) >*/
+/*<       DIMENSION IRES(3) >*/
+/*     DECOMPOSE N INTO FACTORS 2,3,5 */
+/*     ------------------------------ */
+/*<       NN = N >*/
+/*<       IFAC = 2 >*/
+/*<       DO 30 LL = 1 , 3 >*/
+/*<       KK = 0 >*/
+/*<    10 CONTINUE >*/
+/*<       IF (MOD(NN,IFAC).NE.0) GO TO 20 >*/
+/*<       KK = KK + 1 >*/
+/*<       NN = NN / IFAC >*/
+/*<       GO TO 10 >*/
+/*<    20 CONTINUE >*/
+/*<       NJ(LL) = KK >*/
+/*<       IFAC = IFAC + LL >*/
+/*<    30 CONTINUE >*/
+/*<       IF (NN.NE.1) THEN >*/
+/*<          INFO = -1 >*/
+/*<       ENDIF >*/
+/*<       IP = NJ(1) >*/
+/*<       IQ = NJ(2) >*/
+/*<       IR = NJ(3) >*/
+/*<       IRES(1) = IP >*/
+/*<       IRES(2) = IQ >*/
+/*<       IRES (3) = IR >*/
+/*     COMPUTE LIST OF ROTATED TWIDDLE FACTORS */
+/*     --------------------------------------- */
+/*<       NJ(1) = 2**IP >*/
+/*<       NJ(2) = 3**IQ >*/
+/*<       NJ(3) = 5**IR >*/
+/*<       TWOPI = 4.0 * ASIN(1.0) >*/
+/*<       I = 1 >*/
+/*<       DO 60 LL = 1 , 3 >*/
+/*<       NI = NJ(LL) >*/
+/*<       IF (NI.EQ.1) GO TO 60 >*/
+/*<       DEL = TWOPI / FLOAT(NI) >*/
+/*<       IROT = N / NI >*/
+/*<       KINK = MOD(IROT,NI) >*/
+/*<       KK = 0 >*/
+/*<       DO 50 K = 1 , NI >*/
+/*<       ANGLE = FLOAT(KK) * DEL >*/
+/*<       TRIGS(I) = COS(ANGLE) >*/
+/*<       TRIGS(I+1) = SIN(ANGLE) >*/
+/*<       I = I + 2 >*/
+/*<       KK = KK + KINK >*/
+/*<       IF (KK.GT.NI) KK = KK - NI >*/
+/*<    60 CONTINUE >*/
+/*<       INFO = 0 >*/
 
+/* Subroutine */
+void setgpfa_(real *trigs, integer *n, integer *ires, integer *info)
+{
     /* Builtin functions */
     integer pow_ii(integer *, integer *);
     double asin(doublereal), cos(doublereal), sin(doublereal);
@@ -53,133 +98,64 @@ static integer c__5 = 5;
     /* Local variables */
     static integer ifac, kink, irot, i__, k;
     static real angle, twopi;
-    static integer kk, ni, nj[3], ll, ip, iq, nn, ir;
+    static integer kk, ni, nj[3], ll, nn;
     static real del;
 
-
-/*<       DIMENSION TRIGS(*) >*/
-/*<       DIMENSION NJ(3) >*/
-/*<       DIMENSION IRES(3) >*/
+    /* Function Body */
 
 /*     DECOMPOSE N INTO FACTORS 2,3,5 */
 /*     ------------------------------ */
-/*<       NN = N >*/
-    /* Parameter adjustments */
-    --ires;
-    --trigs;
-
-    /* Function Body */
     nn = *n;
-/*<       IFAC = 2 >*/
     ifac = 2;
 
-/*<       DO 30 LL = 1 , 3 >*/
-    for (ll = 1; ll <= 3; ++ll) {
-/*<       KK = 0 >*/
+    for (ll = 0; ll < 3; ++ll) {
         kk = 0;
-/*<    10 CONTINUE >*/
-L10:
-/*<       IF (MOD(NN,IFAC).NE.0) GO TO 20 >*/
-        if (nn % ifac != 0) {
-            goto L20;
+        while (nn % ifac == 0) {
+            ++kk;
+            nn /= ifac;
         }
-/*<       KK = KK + 1 >*/
-        ++kk;
-/*<       NN = NN / IFAC >*/
-        nn /= ifac;
-/*<       GO TO 10 >*/
-        goto L10;
-/*<    20 CONTINUE >*/
-L20:
-/*<       NJ(LL) = KK >*/
-        nj[ll - 1] = kk;
-/*<       IFAC = IFAC + LL >*/
-        ifac += ll;
-/*<    30 CONTINUE >*/
-/* L30: */
+        ires[ll] = kk;
+        ifac += ll; /* which makes ifac 3 and 5 on the next 2 runs */
     }
 
-/*<       IF (NN.NE.1) THEN >*/
     if (nn != 1) {
-/*<          INFO = -1 >*/
         *info = -1;
         return;
-/*<       ENDIF >*/
     }
-
-/*<       IP = NJ(1) >*/
-    ip = nj[0];
-/*<       IQ = NJ(2) >*/
-    iq = nj[1];
-/*<       IR = NJ(3) >*/
-    ir = nj[2];
-/*<       IRES(1) = IP >*/
-    ires[1] = ip;
-/*<       IRES(2) = IQ >*/
-    ires[2] = iq;
-/*<       IRES (3) = IR >*/
-    ires[3] = ir;
 
 /*     COMPUTE LIST OF ROTATED TWIDDLE FACTORS */
 /*     --------------------------------------- */
-/*<       NJ(1) = 2**IP >*/
-    nj[0] = pow_ii(&c__2, &ip);
-/*<       NJ(2) = 3**IQ >*/
-    nj[1] = pow_ii(&c__3, &iq);
-/*<       NJ(3) = 5**IR >*/
-    nj[2] = pow_ii(&c__5, &ir);
+    nj[0] = pow_ii(&c__2, ires);
+    nj[1] = pow_ii(&c__3, ires+1);
+    nj[2] = pow_ii(&c__5, ires+2);
 
-/*<       TWOPI = 4.0 * ASIN(1.0) >*/
     twopi = (float) asin((float)1.) * (float)4.;
-/*<       I = 1 >*/
-    i__ = 1;
+    i__ = 0;
 
-/*<       DO 60 LL = 1 , 3 >*/
-    for (ll = 1; ll <= 3; ++ll) {
-/*<       NI = NJ(LL) >*/
-        ni = nj[ll - 1];
-/*<       IF (NI.EQ.1) GO TO 60 >*/
+    for (ll = 0; ll < 3; ++ll) {
+        ni = nj[ll];
         if (ni == 1) {
-            goto L60;
+            continue; /* next ll */
         }
 
-/*<       DEL = TWOPI / FLOAT(NI) >*/
         del = twopi / (real) ni;
-/*<       IROT = N / NI >*/
         irot = *n / ni;
-/*<       KINK = MOD(IROT,NI) >*/
         kink = irot % ni;
-/*<       KK = 0 >*/
         kk = 0;
 
-/*<       DO 50 K = 1 , NI >*/
-        i__1 = ni;
-        for (k = 1; k <= i__1; ++k) {
-/*<       ANGLE = FLOAT(KK) * DEL >*/
+        for (k = 1; k <= ni; ++k) {
             angle = (real) kk * del;
-/*<       TRIGS(I) = COS(ANGLE) >*/
             trigs[i__] = (float)cos(angle);
-/*<       TRIGS(I+1) = SIN(ANGLE) >*/
-            trigs[i__ + 1] = (float)sin(angle);
+            trigs[i__+1] = (float)sin(angle);
 
-/*<       I = I + 2 >*/
             i__ += 2;
-/*<       KK = KK + KINK >*/
             kk += kink;
-/*<       IF (KK.GT.NI) KK = KK - NI >*/
             if (kk > ni) {
                 kk -= ni;
             }
         }
-/*<    60 CONTINUE >*/
-L60:
-        ;
     }
 
-/*<       INFO = 0 >*/
     *info = 0;
 } /* setgpfa_ */
 
-#ifdef __cplusplus
-        }
-#endif
