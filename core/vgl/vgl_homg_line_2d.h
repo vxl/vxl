@@ -12,7 +12,8 @@
 // \author Don Hamilton, Peter Tu
 
 #include <vcl_iostream.h>
-#include <vcl_cmath.h> // for vcl_abs
+#include <vcl_cmath.h> // for vcl_abs(double) etc
+#include <vcl_cstdlib.h> // for vcl_abs(int) etc
 
 template <class Type>
 class vgl_homg_point_2d;
@@ -83,11 +84,12 @@ public:
     pos_[2] = c_;
   }
 
-#if 0 // TODO (win32 fails)
-  //: Return true iff the point is the point at infinity
-  //  This version checks (min(|a|,|b|) < tol * c
-  bool ideal(Type tol) const { return vcl_min(vcl_abs(a()),vcl_abs(b())) < tol * vcl_abs(c()); }
-#endif
+  //: Return true iff this line is the line at infinity
+  //  This version checks (max(|a|,|b|) < tol * c
+  bool ideal(Type tol) const {
+    return vcl_abs(a()) < tol*vcl_abs(c()) &&
+           vcl_abs(b()) < tol*vcl_abs(c());
+  }
 
   //:get two points on the line
   // These two points are normally the intersections
