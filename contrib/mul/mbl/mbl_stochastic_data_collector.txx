@@ -75,7 +75,7 @@ void mbl_stochastic_data_collector<T>::record(const T& v)
     double prob = nSamples * nSamples / (nPresented_ * (nSamples+1));
     nPresented_ ++;
     if (rand.drand64() < prob)
-      samples_[rand.lrand32(nSamples - 1)] = v;
+      samples_[rand.lrand32(samples_.size() - 1)] = v;
   }
 }
 
@@ -127,7 +127,7 @@ bool mbl_stochastic_data_collector<T>::store_next()
 template <class T>
 mbl_data_wrapper<T>& mbl_stochastic_data_collector<T>::data_wrapper()
 {
-  v_data_.set(&samples_[0], vnl_math_min(samples_.size(), nPresented_));
+  v_data_.set(&samples_[0], vnl_math_min((unsigned long) samples_.size(), nPresented_));
   return v_data_;
 }
 
