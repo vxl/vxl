@@ -1,0 +1,27 @@
+#
+# Find the native PNG includes and library
+#
+
+SET( HAS_NATIVE_PNG "NO" )
+
+FIND_PATH( NATIVE_PNG_INCLUDE_PATH png.h
+  /usr/local/include
+  /usr/include
+)
+
+FIND_LIBRARY( NATIVE_PNG_LIBRARY png
+  /usr/lib
+  /usr/local/lib
+)
+
+IF(NATIVE_PNG_INCLUDE_PATH)
+IF(NATIVE_PNG_LIBRARY)
+
+  SET( HAS_NATIVE_PNG "YES" )
+
+  INCLUDE_DIRECTORIES( ${NATIVE_PNG_INCLUDE_PATH} )
+  LINK_LIBRARIES( ${NATIVE_PNG_LIBRARY} )
+
+ENDIF(NATIVE_PNG_LIBRARY)
+ENDIF(NATIVE_PNG_INCLUDE_PATH)
+
