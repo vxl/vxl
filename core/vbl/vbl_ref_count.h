@@ -1,31 +1,26 @@
 #ifndef vbl_ref_count_h
 #define vbl_ref_count_h
 
-class vbl_ref_count
-{
-public:
+#include "dll.h"
 
-  vbl_ref_count();
+class vbl_ref_count {
+public:
+  vbl_ref_count() : ref_count(0) { }
   virtual ~vbl_ref_count();
   
-  // public methods
-  // memory management
-  void ref() { protected_++; }
+  void ref() { ++ref_count; }
+  
+  void unref() { if (--ref_count <= 0) delete this; }
+  
+  int get_references() const { return ref_count; }
 
-  void unref()
-	{ protected_--; if(protected_ <= 0) delete this;}
-
-  int get_references() const
-	{ return protected_ ; }
-
-  bool is_referenced() const
-	{ return (protected_ > 0); }
+  bool is_referenced() const { return ref_count > 0; }
 
 protected:
-  int protected_;		 // reference count
+  int ref_count;
 
 private:
-  static int verbosity_;
+  static VBL_DLL_DATA int verbosity_;
 };
 
 #endif

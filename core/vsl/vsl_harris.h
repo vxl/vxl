@@ -26,7 +26,9 @@
 
 #include <vsl/vsl_harris_params.h>
 #include <vsl/vsl_roi_window.h>
+#include <vcl/vcl_iosfwd.h>
 #include <vcl/vcl_vector.h>
+#include <vcl/vcl_utility.h>
 #include <vil/vil_fwd.h>
 
 //: A vsl_harris object stores the internal buffers used by the harris corner detector.
@@ -35,11 +37,16 @@ public:
   vsl_harris(vsl_harris_params const & params);
   ~vsl_harris();
   
-  void compute(vil_image image);
+  void compute(vil_image const &image);
+  void get_corners(vcl_vector<vcl_pair<float, float> > &) const;
   void get_corners(vcl_vector<float> &, vcl_vector<float> &) const;
+  void save_corners(ostream &stream) const;
   void save_corners(char const *file) const;
 
   //------------------------------ computed things ------------------------------
+
+  // These buffers persist between invocations so that 
+  // unnecessary allocation is not performed (a.stoddart).
 
   // the input image, as a monochrome byte bitmap.
   vil_byte_buffer *image_ptr;
@@ -67,20 +74,20 @@ private:
   //------------------------------ private ------------------------------
 
   vsl_harris_params &_params; // FIXME
-  unsigned image_w, image_h;  // size of input image. ***
+  unsigned image_w, image_h;  // size of input image.
 
   //
-  void init_module (vil_image image);
+  void init_module (vil_image const &image);
   void uninit_module ();
 
   // these routines driven by compute() :
   void compute_response();
 
-  void do_non_adaptive(double* corner_min);
+  void do_non_adaptive(double *corner_min);
   void do_adaptive();
 
   int  dr_store_corners (float corner_min);
-  vcl_vector<float> cx, cy; // 
+  vcl_vector<vcl_pair<float, float> > cc; // corners
 };
 
 #endif

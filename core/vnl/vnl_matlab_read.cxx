@@ -33,8 +33,8 @@ void vnl_matlab_read_data(istream &s, double *p, unsigned n)
 template <class T> 
 void vnl_matlab_read_data(istream &s, vnl_complex<T> *ptr, unsigned n) {
   // complex<float> or complex<double>
-  T *re = new T[n];
-  T *im = new T[n];
+  T *re = vnl_c_vector<T>::allocate_T(n);
+  T *im = vnl_c_vector<T>::allocate_T(n);
   ::vnl_read_bytes(s, re, n*sizeof(T));
   ::vnl_read_bytes(s, im, n*sizeof(T));
   for (unsigned i=0; i<n; ++i)
@@ -145,7 +145,7 @@ bool vnl_matlab_readhdr::read_data(T *p) { \
 bool vnl_matlab_readhdr::read_data(T * const *m) { \
   if (!type_chck(m[0][0])) return false; \
   if (!is_rowwise()) return false; \
-  T *tmp = new T[rows()*cols()]; \
+  T *tmp = vnl_c_vector<T>::allocate_T(rows()*cols()); \
   /*vnl_c_vector<T >::fill(tmp, rows()*cols(), 3.14159);*/ \
   vnl_matlab_read_data(s, tmp, rows()*cols()); \
   for (unsigned i=0; i<rows(); ++i) \
@@ -161,39 +161,52 @@ fsm_define_methods(vnl_double_complex);
 
 //--------------------------------------------------------------------------------
 
+#include <vcl/vcl_cassert.h>
 #include <vcl/vcl_new.h>
 #include <vcl/vcl_algorithm.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 
 template <class T> 
-void vnl_matlab_read_or_die(istream &s, 
+bool vnl_matlab_read_or_die(istream &s, 
 			    vnl_vector<T> &v,
 			    char const *name VCL_DEFAULT_VALUE(0)) 
 {
   vnl_matlab_readhdr h(s);
-  assert(s/*bad stream?*/);
+  if (!s) // eof?
+    return false;
+  //assert(s/*bad stream?*/);
   if (name && *name)
-    assert(strcmp(name, s.name())==0/*wrong name?*/);
+    assert(strcmp(name, h.name())==0/*wrong name?*/);
   if (v.size() != h.rows()*h.cols()) {
     vcl_destroy(&v);
     new (&v) vnl_vector<T>(h.rows()*h.cols());
   }
   assert(h.read_data(v.begin())/*wrong type?*/);
+  return true;
 }
   
-  template <class T> 
-void vnl_matlab_read_or_die(istream &s, 
+template <class T> 
+bool vnl_matlab_read_or_die(istream &s, 
 			    vnl_matrix<T> &M, 
 			    char const *name VCL_DEFAULT_VALUE(0))
 {
   vnl_matlab_readhdr h(s);
-  assert(s/*bad stream?*/);
+  if (!s) // eof?
+    return false;
+  //assert(s/*bad stream?*/);
   if (name && *name)
-    assert(strcmp(name, s.name())==0/*wrong name?*/);
+    assert(strcmp(name, h.name())==0/*wrong name?*/);
   if (M.rows() != h.rows() || M.cols() != h.cols()) {
     vcl_destroy(&M);
     new (&M) vnl_matrix<T>(h.rows(), h.cols());
   }
   assert(h.read_data(M.data_array())/*wrong type?*/);
+  return true;
 }
+
+#define inst(T) \
+template bool vnl_matlab_read_or_die(istream &, vnl_vector<T> &, char const *); \
+template bool vnl_matlab_read_or_die(istream &, vnl_matrix<T> &, char const *); 
+
+inst(double);

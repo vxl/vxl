@@ -14,7 +14,7 @@
 
 #include <vcl/vcl_iostream.h>
 #include <vcl/vcl_algorithm.h> // for vcl_min
-#include <vcl/vcl_cmath.h> // for fabs
+#include <vcl/vcl_cmath.h> // for vcl_abs
 
 template <class Type>
 class vgl_homg_point_2d;
@@ -38,10 +38,10 @@ public:
   // Default copy constructor  
   // vgl_homg_line_2d (const vgl_homg_line_2d<Type>& that) { *this = that; }
 
-  vgl_homg_line_2d<Type> (vgl_line_2d<Type> const& p);
+//unimp  vgl_homg_line_2d<Type> (vgl_line_2d<Type> const& p);
 
   // -- Construct from three Types.
-  vgl_homg_line_2d (Type a, Type b, Type c) { set(a,b,c); }
+  vgl_homg_line_2d (Type const& a_, Type const& b_, Type const& c_) { set(a_,b_,c_); }
 
   // -- Construct from 3-vector.
   vgl_homg_line_2d (const Type v[3]) { set(v[0],v[1],v[2]); }
@@ -63,25 +63,25 @@ public:
   //vcl_vector<Type> get_direction() const;
   //vcl_vector<Type> get_normal() const;
 
-  inline Type dirx() const { return a(); }  // TODO
-  inline Type diry() const {return b(); }  // TODO
-  inline Type nx() const {return -b() ;} // TODO
-  inline Type ny() const {return a(); } // TODO
+  Type dirx() const { return a(); }  // TODO
+  Type diry() const { return b(); }  // TODO
+  Type nx() const { return -b(); } // TODO
+  Type ny() const { return a(); } // TODO
   
-  inline Type a() const {return pos_[0];}
-  inline Type b() const {return pos_[1];}
-  inline Type c() const {return pos_[2];}
+  Type a() const {return pos_[0];}
+  Type b() const {return pos_[1];}
+  Type c() const {return pos_[2];}
 
   // -- Set a b c.
-  void set (Type a, Type b, Type c){
-    pos_[0] = a;
-    pos_[1] = b;
-    pos_[2] = c;
+  void set (Type const& a_, Type const& b_, Type const& c_){
+    pos_[0] = a_;
+    pos_[1] = b_;
+    pos_[2] = c_;
   }
 
   // -- Return true iff the point is the point at infinity
   //    This version checks (min(|a|,|b|) < tol * c
-  inline bool ideal(Type tol) { return vcl_min(fabs(a()),fabs(b())) < tol * fabs(c()); }   
+//win32 fails  bool ideal(Type tol) const { return vcl_min(vcl_abs(a()),vcl_abs(b())) < tol * vcl_abs(c()); }   
   
   // find the distance of the line to the origin
   Type dist_origin() const;

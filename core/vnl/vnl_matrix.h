@@ -88,7 +88,7 @@ public:
   unsigned cols ()    const { return num_cols; }
   unsigned size ()    const { return rows()*cols(); }
 
-  // get/set
+  // get/set with boundary checks if error checking is on.
   void put (unsigned r, unsigned c, T const&);        // Assign value.
   T    get (unsigned r, unsigned c) const;            // Get value.
 
@@ -96,12 +96,15 @@ public:
   inline T       * operator[] (unsigned r) { return data[r]; }
   inline T const * operator[] (unsigned r) const { return data[r]; }
 
-  //
-  T       & operator() (unsigned r);                      // no bounds checks.
-  T const & operator() (unsigned r) const;                //
-  T       & operator() (unsigned r, unsigned c);      // no bounds checks.
-  T const & operator() (unsigned r, unsigned c) const;//
+  // no boundary checks here. meant to be fast.
+protected: // fsm: who uses these?
+  T       & operator() (unsigned r) { return this->data[r][0]; }
+  T const & operator() (unsigned r) const { return this->data[r][0]; }
+public:
+  T       & operator() (unsigned r, unsigned c) { return this->data[r][c]; }
+  T const & operator() (unsigned r, unsigned c) const { return this->data[r][c]; }
 
+  // filling and copying
   void fill (T const&);          // fill with value
   void fill_diagonal (T const&);
   void copy_in(T const *);       // laminate matrix rowwise from an array.
@@ -200,7 +203,7 @@ public:
   bool has_nans() const;
   
   //
-  void assert_size(unsigned rows,unsigned cols) const;
+  void assert_size(unsigned rows, unsigned cols) const;
   void assert_finite() const;
 
   ////----------------------- Input/Output ----------------------------
@@ -227,10 +230,11 @@ public:
   inline T      *      * data_array () { return data; }
 
   // iterators
+  typedef T element_type;
   typedef T       *iterator;
-  typedef T const *const_iterator;
   iterator       begin() { return data[0]; }
   iterator       end() { return data[0]+num_rows*num_cols; }
+  typedef T const *const_iterator;
   const_iterator begin() const { return data[0]; }
   const_iterator end() const { return data[0]+num_rows*num_cols; }
 
@@ -302,40 +306,6 @@ inline void vnl_matrix<T>::put (unsigned row, unsigned column, T const& value) {
   this->data[row][column] = value;              // Assign data value
 }
 
-// operator() -- Returns reference to the element at specified indices. O(1).
-// No range check is performed.
-
-template<class T> 
-inline T& vnl_matrix<T>::operator() (unsigned row) {
-  return this->data[row][0];		// fast access without checks.
-}
-
-// operator() -- Returns reference to the element at specified indices. O(1).
-// No range check is performed.
-
-template<class T> 
-inline T const& vnl_matrix<T>::operator() (unsigned row) const {
-  return this->data[row][0];		// fast access without checks.
-}
-
-// operator() -- Overloads operator() with constant matrix to return 
-// a constant reference to element at specified indexes. O(1).
-// No range check is performed.
-
-template<class T> 
-inline  T& vnl_matrix<T>::operator() (unsigned row, unsigned column)  {
-  return this->data[row][column];		// fast access without checks.
-}
-  
-// operator() -- Overloads operator() with constant matrix to return 
-// a constant reference to element at specified indexes. O(1).
-// No range check is performed.
-
-template<class T> 
-inline T const& vnl_matrix<T>::operator() (unsigned row, unsigned column) const {
-  return this->data[row][column];		// fast access without checks.
-}
-  
 
 // operator-= -- Mutates lhs matrix to substracts in place,
 // its elements with value. O(m*n).

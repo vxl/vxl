@@ -1,4 +1,5 @@
 #include <vcl/vcl_iostream.h>
+#include <vcl/vcl_unistd.h>
 
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_save.h>
@@ -6,6 +7,17 @@
 
 const int W = 768;
 const int H = 256;
+
+void save_writable(vil_image const &m, char const *file) 
+{
+  // (try to) remove old file.
+  vcl_unlink(file);
+  // save.
+  vil_save(m, file);
+  // Make readable/writeable by all. Else the vil_save() will fail 
+  // if the program is run later by another user on the same machine.
+  vcl_chmod(file, 0666);
+}
 
 int main()
 {
@@ -18,7 +30,7 @@ int main()
 	image(x,y) = ((x - W/2) * (y - H/2) / 16) % 256;
       }
     
-    vil_save(image, "/tmp/vil_test_memory_image_of.pgm", "pnm");
+    save_writable(image, "/tmp/vil_test_memory_image_of.pgm");
   }
   
   {
@@ -33,7 +45,7 @@ int main()
 	p.b = y/3;
       }
     
-    vil_save(image, "/tmp/vil_test_memory_image_of.ppm", "pnm");
+    save_writable(image, "/tmp/vil_test_memory_image_of.ppm");
   }
   
   {

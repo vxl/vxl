@@ -7,7 +7,6 @@
   fsm@robots.ox.ac.uk
 */
 
-#include <vcl/vcl_compiler.h>
 #include <vcl/vcl_iosfwd.h>
 #include <vcl/vcl_complex_fwd.h>
 #include <vnl/vnl_matlab_header.h>
@@ -17,12 +16,14 @@
 template <class T> class vnl_vector;
 template <class T> class vnl_matrix;
 
-// Read vector or matrix. If a name is given, and it doesn't match
-// what's in the file, abort(). If the data in the file cannot 
+// Attempt to read vector or matrix. If the MATLAB header cannot be
+// read, return false. Else, if a name is given, and it doesn't 
+// match what's in the file, abort(). If the data in the file cannot 
 // reasonably be read into the destination, abort().
+//
 // The vector/matrix will be resized if necessary.
-template <class T> void vnl_matlab_read_or_die(istream &, vnl_vector<T> &, char const *name =0);
-template <class T> void vnl_matlab_read_or_die(istream &, vnl_matrix<T> &, char const *name =0);
+template <class T> bool vnl_matlab_read_or_die(istream &, vnl_vector<T> &, char const *name =0);
+template <class T> bool vnl_matlab_read_or_die(istream &, vnl_matrix<T> &, char const *name =0);
 
 // ------------------------------ less easy ------------------------------
 

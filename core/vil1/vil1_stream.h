@@ -11,8 +11,6 @@
 // This allows the loaders to be used with any type of stream.
 class vil_stream {
 public:
-  virtual ~vil_stream();
-
   //: Write n bytes from buf. returns number of bytes written.
   //  the return value is less than n only in case of device failure.
   virtual int write(void const* buf, int n) = 0;
@@ -26,6 +24,17 @@ public:
 
   //: Goto file pointer
   virtual void seek(int position) = 0;
+
+  //: up/down the reference count
+  void ref();
+  void unref();
+
+protected:
+  vil_stream();
+  virtual ~vil_stream();
+
+private: // use the methods, Luke!
+  unsigned refcount;
 };
 
 #endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vil_stream.

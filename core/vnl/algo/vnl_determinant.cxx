@@ -9,21 +9,16 @@
 #include <vcl/vcl_cassert.h>
 
 #include <vnl/vnl_matrix.h>
-#include <vnl/vnl_copy.h>
+#include <vnl/vnl_complex.h>
 #include <vnl/algo/vnl_qr.h>
 
 template <class T>
 T vnl_determinant(T const * const * rows, unsigned n) {
   switch (n) {
   case 1: return rows[0][0];
-  case 2: return rows[0][0]*rows[1][1] - rows[0][1]*rows[1][0];
-  case 3: return
-	    + rows[0][0]*rows[1][1]*rows[2][2]
-	    - rows[0][0]*rows[1][2]*rows[2][1]
-	    + rows[1][0]*rows[0][2]*rows[2][1]
-	    - rows[1][0]*rows[0][1]*rows[2][2]
-	    + rows[2][0]*rows[0][1]*rows[1][2]
-	    - rows[2][0]*rows[0][2]*rows[1][1];
+  case 2: return vnl_determinant(rows[0], rows[1]);
+  case 3: return vnl_determinant(rows[0], rows[1], rows[2]);
+  case 4: return vnl_determinant(rows[0], rows[1], rows[2], rows[3]);
   default: 
     { // for largish matrices it's better to use a matrix decomposition.
       vnl_matrix<T> tmp(n,n); // copy, not ref, as we can't assume the rows are contiguous
@@ -34,33 +29,26 @@ T vnl_determinant(T const * const * rows, unsigned n) {
   }
 }
 
-static float qr_det(vnl_matrix<float> const &M) {
-  vnl_matrix<double> dM(M.rows(), M.cols());
-  vnl_copy(M, dM);
-  return float( vnl_qr(dM).determinant() );
-}
-
-static double qr_det(vnl_matrix<double> const &M) {
-  return vnl_qr(M).determinant();
-}
-
 template <class T>
 T vnl_determinant(vnl_matrix<T> const &M) {
   unsigned n = M.rows();
   vcl_assert(M.cols() == n);
-  if (n<4)
+  if (n<=4)
     return vnl_determinant(M.data_array(), n);
-  else {
-    // will work for real types only. FIXME
-    return ::qr_det(M);
-  }
+  else
+    return vnl_qr<T>(M).determinant();
 }
 
 //--------------------------------------------------------------------------------
 
-#define VNL_DETERMINANT_INSTANTIATE(T) \
+// this macro is *not* intended for client use. so 
+// it can be called whatever it likes.
+#define VNL_ALGO_DETERMINANT_INSTANTIATE(T) \
 template T vnl_determinant(T const * const *, unsigned); \
 template T vnl_determinant(vnl_matrix<T> const &);
 
-VNL_DETERMINANT_INSTANTIATE(float);
-VNL_DETERMINANT_INSTANTIATE(double);
+// QR only works for floating point data types.
+VNL_ALGO_DETERMINANT_INSTANTIATE(float);
+VNL_ALGO_DETERMINANT_INSTANTIATE(double);
+VNL_ALGO_DETERMINANT_INSTANTIATE(vnl_float_complex);
+VNL_ALGO_DETERMINANT_INSTANTIATE(vnl_double_complex);

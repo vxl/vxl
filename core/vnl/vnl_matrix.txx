@@ -79,6 +79,7 @@
 #include <vcl/vcl_cstring.h>  // strcpy()
 #include <vcl/vcl_iostream.h>
 #include <vcl/vcl_vector.h>
+#include <vcl/vcl_functional.h> // for the operator!= inline template
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>
@@ -106,14 +107,14 @@ vnl_matrix<T>::vnl_matrix (unsigned rowz, unsigned colz):
   num_cols(colz)
 {
   if (colz && rowz) {
-    this->data = new T*[rowz];                 // Allocate the row memory
-    T* clmns = new T[colz*rowz];               // Allocate the array of elmts
+    this->data = vnl_c_vector<T>::allocate_Tptr(rowz);                 // Allocate the row memory
+    T* clmns = vnl_c_vector<T>::allocate_T(colz*rowz);               // Allocate the array of elmts
     for (unsigned i = 0; i < rowz; i ++)  // For each row in the Matrix
       this->data[i] = &clmns[i*colz];          // Fill in address of row
   } else {
 #define AWF_WANTS_ZERO_BY_N_MATRICES_TO_WORK this->data = 0;
 #undef AWF_WANTS_ZERO_BY_N_MATRICES_TO_WORK
-#define AWF_WANTS_ZERO_BY_N_MATRICES_TO_WORK (this->data = new T*[1])[0] = 0
+#define AWF_WANTS_ZERO_BY_N_MATRICES_TO_WORK (this->data = vnl_c_vector<T>::allocate_Tptr(1))[0] = 0
     AWF_WANTS_ZERO_BY_N_MATRICES_TO_WORK;
   }
 }
@@ -126,8 +127,8 @@ vnl_matrix<T>::vnl_matrix (unsigned rowz, unsigned colz, T const& value) :
   num_rows(rowz), num_cols(colz)
 {
   if (colz && rowz) {
-    this->data = new T*[rowz];                  // Allocate the row memory
-    T* clmns = new T[colz*rowz];                // Allocate the array of elmts
+    this->data = vnl_c_vector<T>::allocate_Tptr(rowz);                  // Allocate the row memory
+    T* clmns = vnl_c_vector<T>::allocate_T(colz*rowz);                // Allocate the array of elmts
     for (unsigned i = 0; i < rowz; i ++) { // For each row in the Matrix
       this->data[i] = &clmns[i*colz];           // Fill in address of row
       for (unsigned j = 0; j < colz; j++)  // For each element in column
@@ -146,8 +147,8 @@ vnl_matrix<T>::vnl_matrix (unsigned rowz, unsigned colz, T const& value) :
 template<class T> 
 vnl_matrix<T>::vnl_matrix (unsigned rowz, unsigned colz, int n, T const values[])
 : num_rows(rowz), num_cols( colz) {
-  this->data = new T*[rowz];                 // Allocate the row memory
-  T* clmns = new T[colz*rowz];               // Allocate the array of elmts
+  this->data = vnl_c_vector<T>::allocate_Tptr(rowz);                 // Allocate the row memory
+  T* clmns = vnl_c_vector<T>::allocate_T(colz*rowz);               // Allocate the array of elmts
   unsigned i = 0, j = 0, k = 0;
   for (i = 0; i < rowz; i ++)                // For each row in the Matrix
     this->data[i] = &clmns[i*colz];          // Fill in address of row
@@ -163,9 +164,9 @@ template<class T>
 vnl_matrix<T>::vnl_matrix (T const* datablck, unsigned rowz, unsigned colz)
 : num_rows(rowz), num_cols(colz) {
   if (colz && rowz) {
-    this->data = new T*[num_rows];             // Allocate the row memory
+    this->data = vnl_c_vector<T>::allocate_Tptr(num_rows);             // Allocate the row memory
     unsigned n = num_rows * num_cols;        // Number of elements 
-    T* clmns = new T[n];                  // Allocate the array of elmts
+    T* clmns = vnl_c_vector<T>::allocate_T(n);                  // Allocate the array of elmts
     for (unsigned i = 0; i < num_rows; i ++) // For each row in the Matrix
       this->data[i] = &clmns[i*num_cols];       // Fill in address of row
     for (unsigned d = 0; d < n; d++)         // Copy all the data elements
@@ -184,8 +185,8 @@ vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const& from)
   this->num_rows = from.num_rows;
   this->num_cols = from.num_cols;
   if (this->num_rows && this->num_cols) {
-    this->data = new T*[this->num_rows];       // Allocate the row memory
-    T* clmns = new T[num_cols*num_rows];  // Allocate the array of elmts
+    this->data = vnl_c_vector<T>::allocate_Tptr(this->num_rows);       // Allocate the row memory
+    T* clmns = vnl_c_vector<T>::allocate_T(num_cols*num_rows);  // Allocate the array of elmts
     for (unsigned i = 0; i < num_rows; i ++) {       // For each row in the Matrix
       this->data[i] = &clmns[i*num_cols];       // Fill in address of row
       for (unsigned j = 0; j < this->num_cols; j++)  // For each element in column
@@ -203,8 +204,12 @@ vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const& from)
 template<class T> 
 vnl_matrix<T>::~vnl_matrix() {
   if (this->data) {
-    delete [] this->data[0];                    // Free up the array of elmts
-    delete [] this->data;                       // Free up the row memory
+    if (num_cols && num_rows) {
+      vnl_c_vector<T>::deallocate(this->data[0], num_cols*num_rows);  // Free up the array of elmts
+      vnl_c_vector<T>::deallocate(this->data, num_rows);              // Free up the row memory
+    } else {
+      vnl_c_vector<T>::deallocate(this->data, 1); 
+    }
   }
 }
 
@@ -265,21 +270,20 @@ void vnl_matrix<T>::print(ostream& os) const {
 
 template<class T> 
 ostream& operator<< (ostream& os, vnl_matrix<T> const& m) {
-  for (unsigned i = 0; i < m.rows(); i++) {        // For each row in m
-    for (unsigned j = 0; j < m.columns(); j++) {   // For each column
-#if 0 // This does not work when T is not a built-in type, e.g. T is complex:
+  for (unsigned i = 0; i < m.rows(); ++i) {        // For each row
+    for (unsigned j = 0; j < m.columns(); ++j) {   // For each column
+      // Output data element
       if (vnl_matrix<T>::print_format_set()) {
 	char buf[1024];
-	sprintf(buf, vnl_matrix<T>::get_print_format(), m.get(i,j));
+	sprintf(buf, vnl_matrix<T>::get_print_format(), m(i, j));
 	os << buf << " ";
       }
       else
-#endif
-	os << m.get(i,j) << " ";          // Output data element
+	os << m(i, j) << " ";
     }
-    os << "\n";                         // Output newline
+    os << endl;
   }
-  return os;                            // Return ostream reference
+  return os;
 }
 
 // -- Read an vnl_matrix from an ascii istream, automatically
@@ -543,38 +547,12 @@ T inner_product (vnl_matrix<T> const& m1, vnl_matrix<T> const& m2) {
 
 template<class T> 
 T cos_angle (vnl_matrix<T> const& a, vnl_matrix<T> const& b) {
-  typedef vnl_numeric_traits<T>::real_t real_t;
+  typedef typename vnl_numeric_traits<T>::real_t real_t;
+  typedef typename vnl_numeric_traits<T>::abs_t abs_t;
   real_t ab = inner_product(a,b);
-  real_t a_b = sqrt( vnl_math_abs(inner_product(a,a) * inner_product(b,b)) );
-  return T( ab / a_b );
+  real_t /*abs_t*/ a_b = sqrt( vnl_math_abs(inner_product(a,a) * inner_product(b,b)) );
+  return T( ab / a_b);
 }
-
-#if 0
-// cross_2d -- Returns the 2X1 cross-product of 2 2d-vectors. O(n).
-
-template<class T> 
-T cross_2d (vnl_matrix<T> const& m1, vnl_matrix<T> const& m2) {
-  if (m1.rows() != m2.rows() || m1.columns() != m2.columns())
-    vnl_error_matrix_dimension ("cross_2d", 
-			m1.rows(), m1.columns(), m2.rows(), m2.columns());
-  return m1.x() * m2.y() - m1.y() * m2.x();
-}
-
-// cross_3d -- Returns the 3X1 cross-product of 2 3d-vectors. 
-
-template<class T> 
-vnl_matrix<T> cross_3d (vnl_matrix<T> const& m1,
-			    vnl_matrix<T> const& m2) {
-  if (m1.rows() != m2.rows() || m1.columns() != m2.columns())
-    vnl_error_matrix_dimension ("cross_3d", 
-			m1.rows(), m1.columns(), m2.rows(), m2.columns());
-  vnl_matrix<T> result(m1.rows(), m1.columns()); 
-  result.x() = m1.y() * m2.z() - m1.z() * m2.y(); // work for both col/row
-  result.y() = m1.z() * m2.x() - m1.x() * m2.z(); // representation
-  result.z() = m1.x() * m2.y() - m1.y() * m2.x();
-  return result;                                 // copy of envelope
-}
-#endif
 
 // element_product -- Returns new matrix whose elements are the products 
 // m1[ij]*m2[ij]. O(m*n).
@@ -833,23 +811,33 @@ void vnl_matrix<T>::set_columns(unsigned starting_column, vnl_matrix<T> const& m
 // resize // Resizes the data arrays of THIS matrix to (rows x cols). O(m*n).
 // Elements are not initialized. Returns true if size is changed.
 
+#if defined(VCL_GCC_295)
+# include <vcl/vcl_new.h>
+#endif
+
 template<class T> 
 bool vnl_matrix<T>::resize (unsigned rowz, unsigned colz) {
   if (this->num_rows != rowz || this->num_cols != colz) {
+#if defined(VCL_GCC_295)
+    // this requires less maintenance -- fsm
+    this->~vnl_matrix();                  // destruct
+    new (this) vnl_matrix<T>(rowz, colz); // construct
+#else
     if (this->data) {
-      delete [] this->data[0];                 // Free up the array of elmts
-      delete [] this->data;                    // Free up the row memory
+      vnl_c_vector<T>::deallocate(this->data[0], num_cols*num_rows);                 // Free up the array of elmts
+      vnl_c_vector<T>::deallocate(this->data, num_rows);                    // Free up the row memory
     }
-    this->num_rows = rowz;                     // Copy rows
-    this->num_cols = colz;                     // Copy columns 
+    this->num_rows = rowz;                     // Copy rowz
+    this->num_cols = colz;                     // Copy colz
     if (rowz && colz) {
-      this->data = new T*[num_rows];           // Allocate the rows
-      T* clmns = new T[num_cols*num_rows];     // Allocate the columns
+      this->data = vnl_c_vector<T>::allocate_Tptr(num_rows);           // Allocate the rows
+      T* clmns = vnl_c_vector<T>::allocate_T(num_cols*num_rows);     // Allocate the columns
       for (unsigned i = 0; i < this->num_rows; i++)   // For each row
 	this->data[i] = &clmns[i*num_cols];    // Fill in address of row
     } else {
       AWF_WANTS_ZERO_BY_N_MATRICES_TO_WORK;
     }
+#endif
     return true;
   } else
     return false;
@@ -872,7 +860,7 @@ bool vnl_matrix<T>::operator_eq(vnl_matrix<T> const& rhs) const {
   
   for (unsigned i = 0; i < this->num_rows; i++)     // For each row
     for (unsigned j = 0; j < this->num_cols; j++)   // For each columne
-      if (this->data[i][j] != rhs.data[i][j])            // different element ?
+      if (!(this->data[i][j] == rhs.data[i][j]))            // different element ?
 	return false;                                    // Then not equal.
 
   return true;                                           // Else same; return true
@@ -1017,14 +1005,14 @@ bool vnl_matrix<T>::read_ascii(istream& s)
   row_vals.reserve(1000);
   {
     // Copy first row.  Can't use first_row_vals, as may be a vector of bool...
-    T* row = new T[colz];
+    T* row = vnl_c_vector<T>::allocate_T(colz);
     for(int k = 0; k < colz; ++k)
       row[k] = first_row_vals[k];
     row_vals.push_back(row);
   }
 
   while (1) {
-    T* row = new T[colz];
+    T* row = vnl_c_vector<T>::allocate_T(colz);
     if (row == 0) {
       cerr << "vnl_matrix<T>::read_ascii: Error, Out of memory on row " << row_vals.size() << endl;
       return false;
@@ -1057,7 +1045,7 @@ bool vnl_matrix<T>::read_ascii(istream& s)
   for(int i = 0; i < rowz; ++i) {
     for(int j = 0; j < colz; ++j)
       *p++ = row_vals[i][j];
-    if (i > 0) delete [] row_vals[i];
+    if (i > 0) vnl_c_vector<T>::deallocate(row_vals[i], colz);
   }
 
   return true;
@@ -1349,15 +1337,10 @@ void vnl_matrix<T>::inplace_transpose()
 
 //--------------------------------------------------------------------------------
 
-// instantiation macros.
-#include <vcl/vcl_compiler.h>
-
-// fsm: I'm not really sure this next piece of logic is necessary.
-// Why not just use VCL_INSTANTIATE_INLINE ?
-#if defined (VCL_SUNPRO_CC) || defined(VCL_GCC_27)
-# define VCL_MATRIX_INSTANTIATE_INLINE(fn_decl)  template  fn_decl
-#else
-# define VCL_MATRIX_INSTANTIATE_INLINE(fn_decl)  
+#if defined (VCL_SUNPRO_CC)
+# undef VCL_INSTANTIATE_INLINE
+# define VCL_INSTANTIATE_INLINE(fn_decl) template  fn_decl
+template <class T> inline bool operator!=(T const &x, T const &y) { return !(x == y); }
 #endif
 
 #define VNL_MATRIX_INSTANTIATE_internal(T) \
@@ -1365,8 +1348,8 @@ VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(char * vnl_matrix<T >::print_format = 0);
 template class vnl_matrix<T >; \
 VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(vnl_matrix<T >::print_format); \
 template vnl_matrix<T > operator-(T const &, vnl_matrix<T > const &); \
-VCL_MATRIX_INSTANTIATE_INLINE(vnl_matrix<T > operator+(T const &, vnl_matrix<T > const &)); \
-VCL_MATRIX_INSTANTIATE_INLINE(vnl_matrix<T > operator*(T const &, vnl_matrix<T > const &)); \
+VCL_INSTANTIATE_INLINE(vnl_matrix<T > operator+(T const &, vnl_matrix<T > const &)); \
+VCL_INSTANTIATE_INLINE(vnl_matrix<T > operator*(T const &, vnl_matrix<T > const &)); \
 template T dot_product(vnl_matrix<T > const &, vnl_matrix<T > const &); \
 template T inner_product(vnl_matrix<T > const &, vnl_matrix<T > const &); \
 template T cos_angle(vnl_matrix<T > const &, vnl_matrix<T > const &); \
@@ -1375,7 +1358,7 @@ template vnl_matrix<T > element_quotient(vnl_matrix<T > const &, vnl_matrix<T > 
 template int vnl_inplace_transpose(T*, int*, int*, int*, int*, int*, int*); \
 template ostream & operator<<(ostream &, vnl_matrix<T > const &); \
 template istream & operator>>(istream &, vnl_matrix<T >       &); \
-VCL_MATRIX_INSTANTIATE_INLINE(bool operator!=(vnl_matrix<T > const &, vnl_matrix<T > const &))
+VCL_INSTANTIATE_INLINE(bool operator!=(vnl_matrix<T > const &, vnl_matrix<T > const &))
 
 // macro for types which have no operator<(), such as bool (on SGI CC).
 #define VNL_MATRIX_INSTANTIATE_no_ordering(T) \

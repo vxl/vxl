@@ -10,6 +10,7 @@
 #include <vcl/vcl_climits.h>
 #include <vcl/vcl_iostream.h>
 
+#if 0
 //   VIL_BYTE,       /*!< 1 x W x H x 1 of UINT x 8*/
 //   VIL_RGB_BYTE,   /*!< 1 x W x H x 3 of UINT x 8*/
 //   VIL_UINT16,     /*!< 1 x W x H x 1 of UINT x 16*/
@@ -34,14 +35,28 @@ vil_pixel_format vil_image::pixel_type() const
 
   return VIL_PIXEL_FORMAT_UNKNOWN;
 }
+#endif
 
 ostream& vil_image::print(ostream& s) const
 {
   s << "[vil_image: size " << width() << " x " << height();
+  char const *fmt = file_format();
+  s << ", file format " << (fmt ? fmt : "unknown");
   s << ", components " << components();
   s << ", bits per component " << bits_per_component();
-  s << ", type " << component_format() << " -- " << pixel_type() << "]";
-  return s;
+#if 0
+  s << ", type " << component_format() << " -- " << pixel_type();
+#else
+  s << ", format "; switch (component_format()) {
+  case VIL_COMPONENT_FORMAT_UNSIGNED_INT: s << "unsigned"; break;
+  case VIL_COMPONENT_FORMAT_SIGNED_INT: s << "signed"; break;
+  case VIL_COMPONENT_FORMAT_IEEE_FLOAT: s<< "float"; break;
+  case VIL_COMPONENT_FORMAT_COMPLEX: s << "complex"; break;
+  case VIL_COMPONENT_FORMAT_UNKNOWN: s << "unknown"; break;
+  default: s << "??"; break;
+  }
+#endif
+  return s << "]";
 }
 
 int vil_image::get_size_bytes() const 

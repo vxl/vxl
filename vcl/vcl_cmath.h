@@ -41,9 +41,11 @@
 // Some compilers may actually have working <cmath> headers, in which
 // case something cleverer ought to be done here.
 #include <math.h>
+extern "C++" {
 inline float       vcl_abs (float  x) { return (x >= 0.0f) ? x : -x; }
 inline double      vcl_abs (double x) { return fabs (x); }
 inline long double vcl_abs (long double x) { return fabs (x); }
+}
 
 // vcl_min/vcl_max do not belong in this file. They should be
 // in vcl_algorithm.h, even for win32.

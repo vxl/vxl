@@ -69,6 +69,7 @@ public:
   
 protected:
   // Data Members--------------------------------------------------------------
+  int sz;
   T *data;
   
 private:

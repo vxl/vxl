@@ -4,8 +4,9 @@
 #include <vcl/vcl_unistd.h> // vcl_unlink()
 #include <vcl/vcl_string.h>
 #include <vcl/vcl_iostream.h>
-#include <vil/vil_rgb_byte.h>
+#include <vcl/vcl_vector.h>
 
+#include <vil/vil_rgb_byte.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vil/vil_memory_image_of.h>
@@ -21,12 +22,15 @@
 
 int all_passed = 0;
 
+#define ww (cout << "reached " __FILE__ ":" << __LINE__ << endl)
+
 // -- this function tests to see if all the pixels in two images are equal
 void test_image_equal(char const* test,
 		      char const* type_name,
 		      vil_image const & image,
 		      vil_image const & image2)
 {
+  ww;
   int sizex = image.width();
   int sizey = image.height();
   int components = image.components();
@@ -39,6 +43,7 @@ void test_image_equal(char const* test,
   int planes2 = image2.planes();
   int cell_bits2 = image2.bits_per_component();
   int num_bits2 = sizex2 * sizey2 * components2 * planes2 * cell_bits2;
+  ww;
 
   if (sizex != sizex2 || sizey != sizey2)
   {
@@ -47,6 +52,7 @@ void test_image_equal(char const* test,
          << sizex2 << " x " << sizey2 << endl;
     return;
   }
+  ww;
 
   if (cell_bits != cell_bits2)
   {
@@ -55,6 +61,7 @@ void test_image_equal(char const* test,
          << cell_bits2 << " instead of " << cell_bits << endl;
     return;
   }
+  ww;
 
   if (image.component_format() != image2.component_format())
   {
@@ -64,6 +71,7 @@ void test_image_equal(char const* test,
 	 << image.component_format() << endl;
     return;
   }
+  ww;
 
   if (image.get_size_bytes() != num_bits/8 ||
       image2.get_size_bytes() != num_bits2/8 )
@@ -73,23 +81,25 @@ void test_image_equal(char const* test,
 	 << num_bits2 << "bits, " << image2.get_size_bytes() << endl;
     return;
   }
+  ww;
 
-  unsigned char *image_buf = new unsigned char [image.get_size_bytes()];
-  if (!image.get_section(image_buf, 0, 0, sizex, sizey))
+  vcl_vector<unsigned char> image_buf(image.get_size_bytes());
+  if (!image.get_section(image_buf.begin(), 0, 0, sizex, sizey))
   {
     cout << "FAILED: test <" << test << "> for " << type_name
          << " -- image::do_get_section() on first image returned false!" << endl;
-    delete [] image_buf;
     return;
   }
-  unsigned char *image_buf2 = new unsigned char [image2.get_size_bytes()];
-  if (!image2.get_section(image_buf2, 0, 0, sizex2, sizey2))
+  ww;
+
+  vcl_vector<unsigned char> image_buf2(image2.get_size_bytes());
+  if (!image2.get_section(image_buf2.begin(), 0, 0, sizex2, sizey2))
   {
     cout << "FAILED: test <" << test << "> for " << type_name
          << " -- image::do_get_section() on second image returned false!" << endl;
-    delete [] image_buf2;
     return;
   }
+  ww;
 
   int bad = 0;
   for (int i=0; i < image.get_size_bytes(); ++i)
@@ -97,14 +107,17 @@ void test_image_equal(char const* test,
     if(image_buf[i] != image_buf2[i])
     {
 #if DEBUG
-      cout << " pixel " << i <<  " differs: " << (int)image_buf[i] << " --> "
+      cerr << " pixel " << i <<  " differs: " << (int)image_buf[i] << " --> "
            << (int) image_buf2[i] << endl;
 #endif
       bad++;
     }
+    if (bad > 100) {
+      cerr << "100 or more pixels differ - ignoring rest" << endl;
+      break;
+    }
   }
-  delete [] image_buf;
-  delete [] image_buf2;
+
   if (bad)
     {
       cout << "FAILED: test <" << test << "> for " << type_name

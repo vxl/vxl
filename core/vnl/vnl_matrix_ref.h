@@ -48,7 +48,7 @@ class vnl_matrix_ref : public vnl_matrix<T> {
 public:
   // Constructors/Destructors--------------------------------------------------
   vnl_matrix_ref(int m, int n, T *datablck) {
-    Base::data = new T* [m];
+    Base::data = vnl_c_vector<T>::allocate_Tptr(m);
     for(int i = 0; i < m; ++i)
       Base::data[i] = datablck + i * n;
     Base::num_rows = m;

@@ -139,6 +139,7 @@ public:
   //
   vnl_matrix<T> solve (vnl_matrix<T> const& rhs) const;
   vnl_vector<T> solve (vnl_vector<T> const& rhs) const;
+  void          solve (T const *rhs, T *lhs) const; // min ||A*lhs - rhs||
   void solve_preinverted(vnl_vector<T> const& rhs, vnl_vector<T>* out) const;
 
   //

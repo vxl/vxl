@@ -7,6 +7,7 @@
 #include <vil/vil_save.h>
 #include <vil/vil_new.h>
 #include <vil/vil_load.h>
+#include <vil/vil_rgb.h>
 
 void vil_scale(vil_image in, int newxsize, int newysize, vil_image out);
 
@@ -353,30 +354,29 @@ void pnmscaleT<T, longT>::go()
  
 template class pnmscaleT<unsigned char, long>;
 
-#include <vbl/vbl_rgb.h>
 #if defined(VCL_SGI_CC) 
 // fsm@robots
 // "vil_scale.cxx", line 263: error(1324): more than one operator "*" matches
 //           these operands:
 //             built-in operator "arithmetic * arithmetic"
-//             function template "operator*(double, const vbl_rgb<T> &)"
-//             operand types are: long * vbl_rgb<unsigned char>
+//             function template "operator*(double, const vil_rgb<T> &)"
+//             operand types are: long * vil_rgb<unsigned char>
 //                   gs[col] += longT(fracrowleft * (*xP));
 //                                                ^
-//           detected during instantiation of "void pnmscaleT<vbl_rgb<unsigned
-//                     char>, vbl_rgb<long>>::go()" 
+//           detected during instantiation of "void pnmscaleT<vil_rgb<unsigned
+//                     char>, vil_rgb<long>>::go()" 
 static inline
-vbl_rgb<long> operator*(long const &a, vbl_rgb<unsigned char> const &b) {
-  return vbl_rgb<long>(a*long(b.R_),
+vil_rgb<long> operator*(long const &a, vil_rgb<unsigned char> const &b) {
+  return vil_rgb<long>(a*long(b.R_),
 		       a*long(b.G_),
 		       a*long(b.B_));
 }
 #endif
-template class pnmscaleT<vbl_rgb<unsigned char>, vbl_rgb<long> >;
+template class pnmscaleT<vil_rgb<unsigned char>, vil_rgb<long> >;
 
 void vil_scale(vil_image in, int newxsize, int newysize, vil_image out)
 {
-  pnmscaleT<vbl_rgb<unsigned char> , vbl_rgb<long> > p;
+  pnmscaleT<vil_rgb<unsigned char> , vil_rgb<long> > p;
   p.set_xsize(newxsize);
   p.set_ysize(newysize);
   p.init(in, out);

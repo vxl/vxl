@@ -30,19 +30,58 @@ static bool xxproblem(char const* linefile, char const* msg)
 
 #define trace if (true) { } else cerr
 
+bool vil_tiff_file_format_probe(vil_stream* is)
+{
+  // The byte ordering in a TIFF image (usually) depends on the byte-order
+  // of the writing host. The header is always 4 bytes.
+#if 0
+  short int hdr[2];
+  int read = is->read(hdr, sizeof hdr);
+  if (read < 2)
+    return 0;
+  // First word specifies the file byte-order (0x4D4D=big, 0x4949=little)
+  if (hdr[0]!=0x4D4D && hdr[0]!=0x4949)
+    return 0;
+  // Second word specifies the TIFF version (we expect v42 for some reason?)
+  if (hdr[1]!=0x002A && hdr[1]!=0x2A00)
+    return 0;
+#else
+  char hdr[4];
+  int read = is->read(hdr, sizeof hdr);
+  if (read < sizeof hdr)
+    return false;
+
+  // First two bytes specify the file byte-order (0x4D4D=big, 0x4949=little).
+  // Second two bytes specify the TIFF version (we expect 0x2A for some reason?).
+  // So,
+  //   0x4D 0x4D 0x2A 0x00
+  // and
+  //   0x49 0x49 0x00 0x2A
+  // are invalid TIFF headers.
+  if      (hdr[0]==0x4D && hdr[1]==0x4D && 
+	   hdr[2]==0x00 && hdr[3]==0x2A) 
+    return true;
+  
+  else if (hdr[0]==0x49 && hdr[1]==0x49 && 
+	   hdr[2]==0x2A && hdr[3]==0x00)
+    return true;
+
+  else if ( ((hdr[0]==0x4D && hdr[1]==0x4D) || (hdr[1]==0x49 && hdr[1]==0x49)) &&
+	    ((hdr[2]==0x00 && hdr[3]==0x2A) || (hdr[2]==0x2A && hdr[3]==0x00)) ) {
+    cerr << __FILE__ ": suspicious TIFF header" << endl;
+    return true; // allow it.
+  }
+  
+  else
+    return false;
+#endif
+}
+
 vil_image_impl* vil_tiff_file_format::make_input_image(vil_stream* is)
 {
-  {
-    short int hdr[2];
-    int read = is->read(hdr, sizeof hdr);
-    if (read < 2)
-      return 0;
-    if (hdr[0]!=0x4D4D && hdr[0]!=0x4949)
-      return 0;
-    if (hdr[1]!=42 && hdr[1]!=0x2A00)
-      return 0;
-  }
-
+  if (!vil_tiff_file_format_probe(is))
+    return 0;
+  
   return new vil_tiff_generic_image(is);
 }
 
@@ -64,15 +103,14 @@ char const* vil_tiff_file_format::tag() const
 /////////////////////////////////////////////////////////////////////////////
 
 struct vil_tiff_structures {
-  vil_tiff_structures():
-    vs(0),
+  vil_tiff_structures(vil_stream *vs_):
+    vs(vs_),
     filesize(0),
     buf(0)
-    {}
+    { if (vs) vs->ref(); }
   ~vil_tiff_structures() { 
     delete [] buf; 
-    if (vs) // close vil_stream, if set
-      delete vs;
+    if (vs) vs->unref();
   }
 
   TIFF* tif;
@@ -89,7 +127,7 @@ struct vil_tiff_structures {
   unsigned long stripsize;
   unsigned long scanlinesize;
   unsigned long numberofstrips;
-  
+
   bool tiled;
   bool compressed;
   bool jumbo_strips;
@@ -154,8 +192,11 @@ static int vil_tiff_closeproc(thandle_t h)
 {
   trace << "vil_tiff_closeproc\n";
   vil_tiff_structures* p = (vil_tiff_structures*)h;
-  delete p->vs;
-  p->vs = 0;
+  //delete p->vs;
+  if (p->vs) {
+    p->vs->unref();
+    p->vs = 0;
+  }
   return 0;
 }
 
@@ -178,11 +219,8 @@ static void vil_tiff_unmapfileproc(thandle_t, tdata_t, toff_t)
 /////////////////////////////////////////////////////////////////////////////
 
 vil_tiff_generic_image::vil_tiff_generic_image(vil_stream* is):
-  is_(is),
-  p(new vil_tiff_structures)
+  p(new vil_tiff_structures(is))
 {
-  p->vs = is;
-
   read_header();
 }
 
@@ -192,15 +230,12 @@ vil_tiff_generic_image::vil_tiff_generic_image(vil_stream* is, int planes,
 					       int components,
 					       int bits_per_component,
 					       vil_component_format format):
-  is_(is),
-  p(new vil_tiff_structures)
+  p(new vil_tiff_structures(is))
 {
   width_ = width;
   height_ = height;
   components_ = components;
   bits_per_component_ = bits_per_component;
-
-  p->vs = is;
 
   // cerr << "\n\n *** \n";
   write_header();
@@ -383,7 +418,6 @@ bool vil_tiff_generic_image::read_header()
   TIFFGetField(p->tif, TIFFTAG_COMPRESSION, &p->compression);
   TIFFGetField(p->tif, TIFFTAG_PLANARCONFIG, &p->planar_config);
 
-
   p->compressed = (p->compression != COMPRESSION_NONE);
 
   p->stripsize = TIFFStripSize(p->tif);
@@ -502,7 +536,6 @@ bool vil_tiff_generic_image::write_header()
   // TIFFSetField(p->tif, TIFFTAG_IMAGEDESCRIPTION, GetDescription());
   TIFFSetField(p->tif, TIFFTAG_SOFTWARE, "vxl/vil/file_formats/vil_tiff.cxx");
 
-
   p->numberofstrips = TIFFNumberOfStrips(p->tif);
   p->scanlinesize = width_ * bitspersample * samplesperpixel / 8;
   p->scanlinesize = TIFFScanlineSize(p->tif);
@@ -532,6 +565,20 @@ bool vil_tiff_generic_image::write_header()
 #endif
 
   return true;
+}
+
+void vil_tiff_generic_image::get_resolution(float& x_res, float& y_res, unsigned short& units)
+{
+  TIFFGetField(p->tif, TIFFTAG_XRESOLUTION, &x_res);
+  TIFFGetField(p->tif, TIFFTAG_YRESOLUTION, &y_res);
+  TIFFGetField(p->tif, TIFFTAG_RESOLUTIONUNIT, &units);
+}
+
+void vil_tiff_generic_image::set_resolution(float x_res, float y_res, unsigned short units)
+{
+  TIFFSetField(p->tif, TIFFTAG_XRESOLUTION, x_res);
+  TIFFSetField(p->tif, TIFFTAG_YRESOLUTION, y_res);
+  TIFFSetField(p->tif, TIFFTAG_RESOLUTIONUNIT, units);
 }
 
 bool vil_tiff_generic_image::get_section(void* buf, int x0, int y0, int xs, int ys) const

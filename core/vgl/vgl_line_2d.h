@@ -63,8 +63,11 @@ public:
   vgl_line_2d (Type a, Type b, Type c) { data_[0]=a; data_[1]=b; data_[2]=c; }
   
   // -- Construct from two distinct points
-  vgl_line_2d (vgl_point_2d<Type> const& p1,
-               vgl_point_2d<Type> const& p2);
+  vgl_line_2d (vgl_point_2d<Type> const& p1, vgl_point_2d<Type> const& p2) {
+    data_[0] = p1.y() - p2.y();
+    data_[1] = p2.x() - p1.x();
+    data_[2] = p1.x() * p2.y() - p1.y() * p2.x();
+  }
     
   //: -- Construct from its equation, a 3-vector.
   vgl_line_2d (const Type v[3]) { data_[0]=v[0];data_[1]=v[1];data_[2]=v[2]; }

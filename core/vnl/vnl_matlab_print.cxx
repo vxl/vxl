@@ -15,9 +15,11 @@
 #include <vcl/vcl_cctype.h>
 #include <vcl/vcl_cassert.h>
 #include <vcl/vcl_iostream.h>
+#include <vcl/vcl_vector.h>
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
+#include <vnl/vnl_diag_matrix.h>
 #include <vnl/vnl_complex.h>
 
 
@@ -28,10 +30,34 @@
 // vnl_matlab_format(vnl_matops::fmt_short) selects 4-digit precision
 // 
 
+//: this variable is the current top of the stack.
 static vnl_matlab_Format the_format = vnl_matlab_fmt_short;
+//: the rest of the stack is stored in this vector.
+static vcl_vector<int> *format_stack = 0;
+//: call this to initialize the format stack.
+static void vnl_matlab_print_format_init() { if (!format_stack) format_stack = new vcl_vector<int>; }
+
+void vnl_matlab_print_format_push(vnl_matlab_Format f)
+{
+  vnl_matlab_print_format_init();
+  format_stack->push_back(the_format);
+  the_format = f;
+}
+
+void vnl_matlab_print_format_pop()
+{
+  vnl_matlab_print_format_init();
+  if (format_stack->empty())
+    cerr << __FILE__ ": format stack empty" << endl;
+  else {
+    the_format = vnl_matlab_Format(format_stack->back());
+    format_stack->pop_back();
+  }
+}
 
 vnl_matlab_Format vnl_matlab_print_format(vnl_matlab_Format f)
 {
+  vnl_matlab_print_format_init();
   vnl_matlab_Format old = the_format;
   the_format = f;
   return old;
@@ -40,9 +66,21 @@ vnl_matlab_Format vnl_matlab_print_format(vnl_matlab_Format f)
 //--------------------------------------------------------------------------------
 
 VCL_DEFINE_SPECIALIZATION
-void vnl_matlab_print_scalar(float const &v, char *buf)
+void vnl_matlab_print_scalar(int const &v, 
+			     char *buf, 
+			     vnl_matlab_Format VCL_DEFAULT_VALUE(vnl_matlab_fmt_default))
 {
-  switch (the_format) {
+  sprintf(buf, "%4d ", v);
+}
+
+VCL_DEFINE_SPECIALIZATION
+void vnl_matlab_print_scalar(float const &v, 
+			     char *buf, 
+			     vnl_matlab_Format format VCL_DEFAULT_VALUE(vnl_matlab_fmt_default))
+{
+  if (format == vnl_matlab_fmt_default)
+    format = the_format;
+  switch (format) {
   case vnl_matlab_fmt_long:
     if (v == 0.0) 
       sprintf(buf, "%8d ", 0);
@@ -61,18 +99,23 @@ void vnl_matlab_print_scalar(float const &v, char *buf)
   case vnl_matlab_fmt_short_e:
     sprintf(buf, "%8.4e ", v);
     break;
+  default:/*vnl_matlab_fmt_default:*/ abort(); break;
   }
 }
 
 VCL_DEFINE_SPECIALIZATION
-void vnl_matlab_print_scalar(double const &v, char *buf)
+void vnl_matlab_print_scalar(double const &v, 
+			     char *buf,
+			     vnl_matlab_Format format VCL_DEFAULT_VALUE(vnl_matlab_fmt_default))
 {
-  switch (the_format) {
+  if (format == vnl_matlab_fmt_default)
+    format = the_format;
+  switch (format) {
   case vnl_matlab_fmt_long:
     if (v == 0.0) 
       sprintf(buf, "%16d ", 0);
     else
-      sprintf(buf, "%16.14f ", v);
+      sprintf(buf, "%16.13f ", v);
     break;
   case vnl_matlab_fmt_short:
     if (v == 0.0)
@@ -86,17 +129,22 @@ void vnl_matlab_print_scalar(double const &v, char *buf)
   case vnl_matlab_fmt_short_e:
     sprintf(buf, "%10.4e ", v);
     break;
+  default:/*vnl_matlab_fmt_default:*/ abort(); break;
   }
 }
 
 VCL_DEFINE_SPECIALIZATION
-void vnl_matlab_print_scalar(vnl_double_complex const &v, char *buf)
+void vnl_matlab_print_scalar(vnl_double_complex const &v, 
+			     char *buf,
+			     vnl_matlab_Format format VCL_DEFAULT_VALUE(vnl_matlab_fmt_default))
 {
+  if (format == vnl_matlab_fmt_default)
+    format = the_format;
   int width = 16;
   int precision = 12;
   char conv = 'f';
 
-  switch (the_format) {
+  switch (format) {
   case vnl_matlab_fmt_long:
   case vnl_matlab_fmt_long_e:
     width = 16;
@@ -107,9 +155,10 @@ void vnl_matlab_print_scalar(vnl_double_complex const &v, char *buf)
     width = 8;
     precision = 4;
     break;
+  default:/*vnl_matlab_fmt_default:*/ abort(); break;
   }
 
-  switch (the_format) {
+  switch (format) {
   case vnl_matlab_fmt_long:
   case vnl_matlab_fmt_short:
     conv = 'f';
@@ -118,6 +167,7 @@ void vnl_matlab_print_scalar(vnl_double_complex const &v, char *buf)
   case vnl_matlab_fmt_short_e:
     conv = 'e';
     break;
+  default:/*vnl_matlab_fmt_default:*/ abort(); break;
   }
   
   double r = v.real();
@@ -152,13 +202,17 @@ void vnl_matlab_print_scalar(vnl_double_complex const &v, char *buf)
 }
 
 VCL_DEFINE_SPECIALIZATION
-void vnl_matlab_print_scalar(vnl_float_complex const &v, char *buf)
+void vnl_matlab_print_scalar(vnl_float_complex const &v, 
+			     char *buf,
+			     vnl_matlab_Format format VCL_DEFAULT_VALUE(vnl_matlab_fmt_default))
 {
+  if (format == vnl_matlab_fmt_default)
+    format = the_format;
   int width = 10;
   int precision = 6;
   char conv = 'f';
 
-  switch (the_format) {
+  switch (format) {
   case vnl_matlab_fmt_long:
   case vnl_matlab_fmt_long_e:
     width = 10;
@@ -169,9 +223,10 @@ void vnl_matlab_print_scalar(vnl_float_complex const &v, char *buf)
     width = 8;
     precision = 4;
     break;
+  default:/*vnl_matlab_fmt_default:*/ abort(); break;
   }
 
-  switch (the_format) {
+  switch (format) {
   case vnl_matlab_fmt_long:
   case vnl_matlab_fmt_short:
     conv = 'f';
@@ -180,6 +235,7 @@ void vnl_matlab_print_scalar(vnl_float_complex const &v, char *buf)
   case vnl_matlab_fmt_short_e:
     conv = 'e';
     break;
+  default:/*vnl_matlab_fmt_default:*/ abort(); break;
   }
   
   float r = v.real();
@@ -216,22 +272,35 @@ void vnl_matlab_print_scalar(vnl_float_complex const &v, char *buf)
 //--------------------------------------------------------------------------------
 
 template <class T>
-ostream& vnl_matlab_print(ostream& s, vnl_matrix<T> const& M, const char* variable_name)
+ostream &vnl_matlab_print(ostream& s, 
+			  T const* row, 
+			  unsigned length,
+			  vnl_matlab_Format format VCL_DEFAULT_VALUE(vnl_matlab_fmt_default))
+{
+  char buf[1024];
+  for (int j=0; j<length; j++ ) {
+    // Format according to selected style
+    // In both cases an exact 0 goes out as such
+    vnl_matlab_print_scalar(row[j], buf, format);
+    s << buf;
+  }
+  
+  return s;
+}
+
+template <class T>
+ostream& vnl_matlab_print(ostream& s, 
+			  vnl_diag_matrix<T> const& D, 
+			  char const* variable_name,
+			  vnl_matlab_Format format VCL_DEFAULT_VALUE(vnl_matlab_fmt_default))
 {
   if (variable_name) 
-    s << variable_name << " = [ ... \n";
+    s << variable_name << " = diag([ ";
   
-  char buf[1024];
-  int m = M.rows();
-  int n = M.columns();
-  for (int i=0; i<m; i++ ) {
-    for (int j=0; j<n; j++ ) {
-      vnl_matlab_print_scalar(M(i,j), buf);
-      s << buf;
-    }
-    
-    if (variable_name && (i == m-1))
-      s << " ]";
+  vnl_matlab_print(s, D.begin(), D.size(), format);
+  
+  if (variable_name) {
+    s << " ])";
     s << endl;
   }
   
@@ -239,19 +308,36 @@ ostream& vnl_matlab_print(ostream& s, vnl_matrix<T> const& M, const char* variab
 }
 
 template <class T>
-ostream& vnl_matlab_print(ostream& s, vnl_vector<T> const & v, const char* variable_name)
+ostream& vnl_matlab_print(ostream& s,
+			  vnl_matrix<T> const& M, 
+			  char const* variable_name,
+			  vnl_matlab_Format format VCL_DEFAULT_VALUE(vnl_matlab_fmt_default))
+{
+  if (variable_name) 
+    s << variable_name << " = [ ... \n";
+  
+  for (int i=0; i<M.rows(); i++ ) {
+    vnl_matlab_print(s, M[i], M.cols(), format);
+    
+    if (variable_name && (i == M.rows()-1))
+      s << " ]";
+    
+    s << endl;
+  }
+  
+  return s;
+}
+
+template <class T>
+ostream& vnl_matlab_print(ostream& s,
+			  vnl_vector<T> const & v, 
+			  char const* variable_name,
+			  vnl_matlab_Format format VCL_DEFAULT_VALUE(vnl_matlab_fmt_default))
 {
   if (variable_name) 
     s << variable_name << " = [ ";
   
-  char buf[1024];
-  int n = v.size();
-  for (int j=0; j<n; j++ ) {
-    // Format according to selected style
-    // In both cases an exact 0 goes out as such
-    vnl_matlab_print_scalar(v[j], buf);
-    s << buf;
-  }
+  vnl_matlab_print(s, v.begin(), v.size(), format);
   
   if (variable_name) {
     s << " ]";
@@ -272,19 +358,23 @@ void vnl_dbprintmx(vnl_matrix<double> const& p)
   //vnl_matlab.cxx: In function `void dbprintmx(const class vnl_matrix<double> &)':
   //336: call of overloaded `vnl_matlab_print' is ambiguous
   //216: candidates are: vnl_matlab_print(ostream &, const vnl_matrix<double> &, const char *)
-  //                 vnl_matlab_print(ostream &, const vnl_matrix<double> &, const char *)
+  //                     vnl_matlab_print(ostream &, const vnl_matrix<double> &, const char *)
   cerr << "[" << endl << p << "]" << endl;
   abort();
 #else
-  vnl_matlab_print(cerr, p, "M");
+  // why the cast? is it a const_cast?
+  vnl_matlab_print(cerr, p, (char const*)"M", vnl_matlab_fmt_default);
 #endif
 }
 
 //--------------------------------------------------------------------------------
 
 #define inst(T) \
-template ostream &vnl_matlab_print(ostream &, vnl_matrix<T> const &, char const *); \
-template ostream &vnl_matlab_print(ostream &, vnl_vector<T> const &, char const *);
+template ostream &vnl_matlab_print(ostream &, T const *, unsigned, vnl_matlab_Format); \
+template ostream &vnl_matlab_print(ostream &, vnl_diag_matrix<T> const &, char const *, vnl_matlab_Format); \
+template ostream &vnl_matlab_print(ostream &, vnl_matrix<T> const &, char const *, vnl_matlab_Format); \
+template ostream &vnl_matlab_print(ostream &, vnl_vector<T> const &, char const *, vnl_matlab_Format);
+inst(int);
 inst(float);
 inst(double);
 inst(vnl_float_complex);

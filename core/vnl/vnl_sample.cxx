@@ -9,6 +9,8 @@
 #include <vcl/vcl_cmath.h>
 #include <vcl/vcl_cstdlib.h>
 
+// yes, I know that rand() is not necessarily a good random number generator.
+
 double vnl_sample_uniform(double a, double b) {
   return a + (b-a)*rand()/double(RAND_MAX);
 }

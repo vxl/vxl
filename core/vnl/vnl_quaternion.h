@@ -18,7 +18,7 @@
 // </math>
 // where theta and k are  respectively the angle and axis of rotation. 
 // 3D vectors can be  thought  of  as  imaginary  quaternions, and  so  a
-// quaternion is represented as a Vector<FLOAT> with the imaginary
+// quaternion is represented as a Vector<T> with the imaginary
 // part before the real part for 1-1 alignment.
 // <skip>
 // Unit quaternion provides a more efficient representation for
@@ -39,85 +39,88 @@
 // <skip>
 // Envelope for envelope-letter scheme that avoids deep copy on
 // return by value in arithmetic expressions like: q1 * q2 * q3 *...
-
+//
+// 20-05-2000 fsm@robots. changed FLOAT to T since gcc will barf at
+//            the very reasonable forward declaration
+//            template <class T> class vnl_quaternion;
 
 #include <vcl/vcl_compiler.h>
 #include <vcl/vcl_functional.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
 
-template <class FLOAT>
-class vnl_quaternion : public vnl_vector_fixed<FLOAT, 4> { // public for IS-A relation
-  typedef vnl_vector_fixed<FLOAT, 4> Base;
+template <class T>
+class vnl_quaternion : public vnl_vector_fixed<T, 4> { // public for IS-A relation
+  typedef vnl_vector_fixed<T, 4> Base;
 public:
-  vnl_quaternion (FLOAT x=0, FLOAT y=0, FLOAT z=0, FLOAT r=1); // null quat
-  vnl_quaternion (const vnl_vector<FLOAT>& axis, FLOAT angle); 
-  vnl_quaternion (const vnl_matrix<FLOAT>& transform); // from 3-4 square row-major
-  vnl_quaternion (const vnl_vector<FLOAT>& vec);     // from 3-4D vector
-  inline vnl_quaternion (const vnl_quaternion<FLOAT>& from);  // copy constructor
+  vnl_quaternion (T x=0, T y=0, T z=0, T r=1); // null quat
+  vnl_quaternion (const vnl_vector<T>& axis, T angle); 
+  vnl_quaternion (const vnl_matrix<T>& transform); // from 3-4 square row-major
+  vnl_quaternion (const vnl_vector<T>& vec);     // from 3-4D vector
+  inline vnl_quaternion (const vnl_quaternion<T>& from);  // copy constructor
   inline ~vnl_quaternion();			       // free internal array
-  inline vnl_quaternion& operator= (const vnl_quaternion<FLOAT>& rhs); // q1 = q2
+  inline vnl_quaternion& operator= (const vnl_quaternion<T>& rhs); // q1 = q2
   
-  inline FLOAT& x ();			// imaginary component
-  inline FLOAT& y ();			// parallel to axis of rotation
-  inline FLOAT& z ();
-  inline FLOAT& r ();			// real component
-  inline FLOAT x () const;
-  inline FLOAT y () const;
-  inline FLOAT z () const;
-  inline FLOAT r () const;
-  inline FLOAT real () const;    
-  inline vnl_vector<FLOAT> imaginary () const; // imaginary vector part
+  inline T& x ();			// imaginary component
+  inline T& y ();			// parallel to axis of rotation
+  inline T& z ();
+  inline T& r ();			// real component
+  inline T x () const;
+  inline T y () const;
+  inline T z () const;
+  inline T r () const;
+  inline T real () const;    
+  inline vnl_vector<T> imaginary () const; // imaginary vector part
 
-  vnl_vector<FLOAT> axis () const;		// Axis of rotation
-  FLOAT angle () const;				// Angle of rotation
+  vnl_vector<T> axis () const;		// Axis of rotation
+  T angle () const;				// Angle of rotation
   
-  vnl_matrix_fixed<FLOAT,3,3> rotation_matrix () const; // to 3 rot matrix
-  vnl_matrix_fixed<FLOAT,4,4> rotation_matrix_4 () const; // to 4 rot matrix
+  vnl_matrix_fixed<T,3,3> rotation_matrix () const; // to 3 rot matrix
+  vnl_matrix_fixed<T,4,4> rotation_matrix_4 () const; // to 4 rot matrix
   
-  vnl_quaternion<FLOAT> conjugate () const;	// same real, opposite img part
-  vnl_quaternion<FLOAT> inverse () const;	// inverse for nonzero quat
+  vnl_quaternion<T> conjugate () const;	// same real, opposite img part
+  vnl_quaternion<T> inverse () const;	// inverse for nonzero quat
   
-  vnl_quaternion<FLOAT> operator* (const vnl_quaternion<FLOAT>&) const; 
-  vnl_vector<FLOAT> rotate (const vnl_vector<FLOAT>& v) const; // rotate 3D v
+  vnl_quaternion<T> operator* (const vnl_quaternion<T>&) const; 
+  vnl_vector<T> rotate (const vnl_vector<T>& v) const; // rotate 3D v
   
-  inline friend ostream& operator<< (ostream& os, const vnl_quaternion<FLOAT>& q);
+  inline friend ostream& operator<< (ostream& os, const vnl_quaternion<T>& q);
 };
 
 
 // Quaternion -- Creates a copy of from quaternion.
-template <class FLOAT>
+template <class T>
 inline
-vnl_quaternion<FLOAT>::vnl_quaternion (const vnl_quaternion<FLOAT>& from) :
+vnl_quaternion<T>::vnl_quaternion (const vnl_quaternion<T>& from) :
   Base(from)
 {			// 1-1 layout between vector&quat
 }
 
 // ~Quaternion -- Frees space allocated for quaternion.
 
-template <class FLOAT>
+template <class T>
 inline
-vnl_quaternion<FLOAT>::~vnl_quaternion () {} // Vector will free data array
+vnl_quaternion<T>::~vnl_quaternion () {} // Vector will free data array
 
 
 // x -- 
 
-template <class FLOAT>
-inline FLOAT& vnl_quaternion<FLOAT>::x () {
+template <class T>
+inline T& vnl_quaternion<T>::x () {
   return this->operator()(0);
 }
 
 // y -- 
 
-template <class FLOAT>
-inline FLOAT& vnl_quaternion<FLOAT>::y () {
+template <class T>
+inline T& vnl_quaternion<T>::y () {
   return this->operator()(1);
 }
 
 // z -- 
 
-template <class FLOAT>
-inline FLOAT& vnl_quaternion<FLOAT>::z () {
+template <class T>
+inline T& vnl_quaternion<T>::z () {
   return this->operator()(2);
 }
 
@@ -125,30 +128,30 @@ inline FLOAT& vnl_quaternion<FLOAT>::z () {
 //      quaternion. Use these accessors to both get
 //      and set the components.
 
-template <class FLOAT>
-inline FLOAT& vnl_quaternion<FLOAT>::r () {
+template <class T>
+inline T& vnl_quaternion<T>::r () {
   return this->operator()(3);
 }
 
 
 // x -- 
 
-template <class FLOAT>
-inline FLOAT vnl_quaternion<FLOAT>::x () const {
+template <class T>
+inline T vnl_quaternion<T>::x () const {
   return this->operator()(0);
 }
 
 // y -- 
 
-template <class FLOAT>
-inline FLOAT vnl_quaternion<FLOAT>::y () const {
+template <class T>
+inline T vnl_quaternion<T>::y () const {
   return this->operator()(1);
 }
 
 // z -- 
 
-template <class FLOAT>
-inline FLOAT vnl_quaternion<FLOAT>::z () const {
+template <class T>
+inline T vnl_quaternion<T>::z () const {
   return this->operator()(2);
 }
 
@@ -156,30 +159,30 @@ inline FLOAT vnl_quaternion<FLOAT>::z () const {
 //      quaternion. Use these accessors to both get
 //      and set the components.
 
-template <class FLOAT>
-inline FLOAT vnl_quaternion<FLOAT>::r () const {
+template <class T>
+inline T vnl_quaternion<T>::r () const {
   return this->operator()(3);
 }
 
 // imaginary -- Copies and returns the imaginary part.
 
-template <class FLOAT>
-inline vnl_vector<FLOAT> vnl_quaternion<FLOAT>::imaginary () const {
+template <class T>
+inline vnl_vector<T> vnl_quaternion<T>::imaginary () const {
   return this->extract(3,0);
 }
 
 // real -- Copies and returns the real part.
 
-template <class FLOAT>
-inline FLOAT vnl_quaternion<FLOAT>::real () const {
+template <class T>
+inline T vnl_quaternion<T>::real () const {
   return this->get(3);
 }
 
 // operator=  -- Overloads assignment operator to  copy rhs quaternion
 //      into lhs quaternion.
 
-template <class FLOAT>
-inline vnl_quaternion<FLOAT>& vnl_quaternion<FLOAT>::operator= (const vnl_quaternion<FLOAT>& rhs) {
+template <class T>
+inline vnl_quaternion<T>& vnl_quaternion<T>::operator= (const vnl_quaternion<T>& rhs) {
   Base::operator=(rhs);		// same as copy vector part
   return *this;
 }
@@ -188,18 +191,18 @@ inline vnl_quaternion<FLOAT>& vnl_quaternion<FLOAT>::operator= (const vnl_quater
 
 // operator<<  --
 
-template <class FLOAT>
-inline ostream& operator<< (ostream& os, const vnl_quaternion<FLOAT>& q) {
-  return os << *((vnl_vector<FLOAT>*) &q);
+template <class T>
+inline ostream& operator<< (ostream& os, const vnl_quaternion<T>& q) {
+  return os << *((vnl_vector<T>*) &q);
 }
 
 // operator<<  -- Print the components of Quaternion.
 //  awf removed : pointers should never be printed dereffed.
-// template <class FLOAT>
-// inline ostream& operator<< (ostream& os, const vnl_quaternion<FLOAT>* q) {
-//   return os << *((vnl_vector<FLOAT>*) q);
+// template <class T>
+// inline ostream& operator<< (ostream& os, const vnl_quaternion<T>* q) {
+//   return os << *((vnl_vector<T>*) q);
 // }
 
-#define VNL_QUATERNION_INSTANTIATE(FLOAT) extern "Error, include vnl/vnl_quaternion.txx";
+#define VNL_QUATERNION_INSTANTIATE(T) extern "Error, include vnl/vnl_quaternion.txx";
 
 #endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vnl_quaternion.

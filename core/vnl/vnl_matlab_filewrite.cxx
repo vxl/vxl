@@ -2,10 +2,8 @@
 #pragma implementation
 #endif
 
-#define dont_warn
 #include "vnl_matlab_filewrite.h"
 
-#include <vcl/vcl_compiler.h>
 #include <vcl/vcl_iostream.h>
 #include <vcl/vcl_fstream.h>
 #include <vcl/vcl_strstream.h>

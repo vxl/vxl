@@ -24,6 +24,7 @@
 #include <vnl/vnl_vector_ref.h>
 #include <vnl/vnl_matrix_ref.h>
 #include <vnl/vnl_least_squares_function.h>
+#include <vnl/algo/vnl_netlib.h>
 
 // ctor
 void vnl_levenberg_marquardt::init(vnl_least_squares_function* f)
@@ -47,7 +48,6 @@ void vnl_levenberg_marquardt::init(vnl_least_squares_function* f)
   covariance_ = new vnl_matrix<double>(n,n);
 }
 
-// Destructor
 vnl_levenberg_marquardt::~vnl_levenberg_marquardt()
 {
   delete covariance_;
@@ -78,77 +78,46 @@ public:
 vnl_levenberg_marquardt* vnl_levenberg_marquardt_Activate::current = 0;
 
 //--------------------------------------------------------------------------------
-//
-// lmdif
-//
 
 #ifdef VCL_SUNPRO_CC
 extern "C"
 #endif
 int vnl_levenberg_marquardt::lmdif_lsqfun(int* n,          // I    Number of residuals
-				     int* p,          // I    Number of unknowns
-				     const double* x, // I    Solution vector, size n
-				     double* fx,      // O    Residual vector f(x)
-				     int* iflag)      // IO   0 ==> print, -1 ==> terminate
+					  int* p,          // I    Number of unknowns
+					  const double* x, // I    Solution vector, size n
+					  double* fx,      // O    Residual vector f(x)
+					  int* iflag)      // IO   0 ==> print, -1 ==> terminate
 {
   vnl_levenberg_marquardt* active = vnl_levenberg_marquardt_Activate::current;
   vnl_least_squares_function* f = active->f_;
   assert(*p == f->get_number_of_unknowns());
   assert(*n == f->get_number_of_residuals());
-  vnl_vector_ref<double> coolx(*p, (double*)x);
-  vnl_vector_ref<double> coolfx(*n, fx);
-
+  vnl_vector_ref<double> ref_x(*p, (double*)x);
+  vnl_vector_ref<double> ref_fx(*n, fx);
   
   if (*iflag == 0) {
     if (active->trace)
       fprintf(stderr, 
 	      "lmdif: iter %3d err [%g, %g, %g, %g, %g, ... ] = %g\n",
-	      active->num_iterations_, x[0], x[1], x[2], x[3], x[4], coolfx.magnitude());
+	      active->num_iterations_, x[0], x[1], x[2], x[3], x[4], ref_fx.magnitude());
     
-    f->trace(active->num_iterations_, coolx, coolfx);
+    f->trace(active->num_iterations_, ref_x, ref_fx);
     ++(active->num_iterations_);
   } else {
-    f->f(coolx, coolfx);
+    f->f(ref_x, ref_fx);
   }
 
   if (active->start_error_ == 0)
-    active->start_error_ = coolfx.rms();
+    active->start_error_ = ref_fx.rms();
+
+  if (f->failure) {
+    f->clear_failure();
+    *iflag = -1; // fsm
+  }
 
   return 0;
 }
 
-// Declare external fortran routine
-extern "C"
-int lmdif_(int fcn(int* m,          // I    Number of residuals
-		   int* n,          // I    Number of unknowns
-		   const double* x, // I    Solution vector, size n
-		   double* fx,      // O    Residual vector f(x)
-		   int* iflag       // IO   0 ==> print, -1 ==> terminate
-		   ),
-	   int *m,          // I     Number of residuals, must be > #unknowns
-	   int *n,          // I     Number of unknowns
-	   double *x,       // IO    Solution vector, size n
-	   double *fvec,    // W m   Storage for residual vector
-	   double *ftol,    // I     Termination tolerance on F (sum of squared residuals)
-	   double *xtol,    // I     Termination tolerance on X (solution vector)
-	   double *gtol,    // I     Termination tolerance on Grad(F)' * F = 0
-	   int    *maxfev,  // I     Termination maximum number of iterations.
-	   double *epsfcn,  // I     Step length for FD Jacobian
-	   double *diag,    // I     Multiplicative scale factors for variables
-	   int    *mode,    // I     1 => Compute diag, 2 => user has set diag
-	   double *factor,  // I     Initial step bound.  Set to 100.
-	   int    *nprint,  // I     +ive => print every nprint iters.
-	   int    *info,    // O     See switch (info) below
-	   int    *nfev,    // O     Number of function evaluations
-	   double *fjac,    // O m*n Upper n*n is P'J'JP = R'R
-	   int    *ldfjac,  // I     Leading dimension of fdjac -- set to m
-	   int    *ipvt,    // O n   Permutation indices P
-	   double *qtf,     // O n   Q'*f(x) 
-	   double *wa1,     // W n
-	   double *wa2,     // W n
-	   double *wa3,     // W n
-	   double *wa4,     // W m
-	   double *errors); // O 2   Start/end RMS errors
 
 //
 bool vnl_levenberg_marquardt::minimize(vnl_vector<double>& x)
@@ -236,87 +205,66 @@ bool vnl_levenberg_marquardt::minimize(vnl_vector<double>& x)
 }
 
 //--------------------------------------------------------------------------------
-//
-// lmder
-//
 
 #ifdef VCL_SUNPRO_CC
 extern "C"
 #endif
 int vnl_levenberg_marquardt::lmder_lsqfun(int* n,          // I    Number of residuals
-				     int* p,          // I    Number of unknowns
-				     const double* x, // I    Solution vector, size n
-				     double* fx,      // O    Residual vector f(x)
-				     double* fJ,      // O    m * n Jacobian f(x)
-				     int&,
-				     int* iflag)      // I    1 -> calc fx, 2 -> calc fjac
+					  int* p,          // I    Number of unknowns
+					  double const* x, // I    Solution vector, size n
+					  double* fx,      // O    Residual vector f(x)
+					  double* fJ,      // O    m * n Jacobian f(x)
+					  int&,
+					  int* iflag)      // I    1 -> calc fx, 2 -> calc fjac
 {
   vnl_levenberg_marquardt* active = vnl_levenberg_marquardt_Activate::current;
   vnl_least_squares_function* f = active->f_;
   assert(*p == f->get_number_of_unknowns());
   assert(*n == f->get_number_of_residuals());
-  vnl_vector_ref<double> coolx(*p, (double*)x);
-  vnl_vector_ref<double> coolfx(*n, fx);
-  vnl_matrix_ref<double> coolfJ(*n, *p, fJ);
-  
+  vnl_vector_ref<double> ref_x(*p, (double*)x);
+  vnl_vector_ref<double> ref_fx(*n, fx);
+  vnl_matrix_ref<double> ref_fJ(*n, *p, fJ);
 
   if (*iflag == 0) {
     if (active->trace)
       fprintf(stderr, 
 	      "lmder: iter %3d err [%g, %g, %g, %g, %g, ... ] = %g\n",
-	      active->num_iterations_, x[0], x[1], x[2], x[3], x[4], coolfx.magnitude());
-    f->trace(active->num_iterations_, coolx, coolfx);
+	      active->num_iterations_, x[0], x[1], x[2], x[3], x[4], ref_fx.magnitude());
+    f->trace(active->num_iterations_, ref_x, ref_fx);
   }
   else if (*iflag == 1) {
-    f->f(coolx, coolfx);
+    f->f(ref_x, ref_fx);
     if (active->start_error_ == 0)
-      active->start_error_ = coolfx.rms();
+      active->start_error_ = ref_fx.rms();
     ++(active->num_iterations_);
   }
   else if (*iflag == 2) {
-    f->gradf(coolx, coolfJ);
-    coolfJ.inplace_transpose();
+    f->gradf(ref_x, ref_fJ);
+    ref_fJ.inplace_transpose();
+  }
+
+  if (f->failure) {
+    f->clear_failure();
+    *iflag = -1; // fsm
   }
 
   return 0;
 }
-
-// declare external fortran routine
-extern "C" 
-int lmder1_(int fcn(int* m,          // I    Number of residuals
-		    int* n,          // I    Number of unknowns
-		    const double* x, // I    Solution vector, size n
-		    double* fx,      // O    Residual vector f(x), size m
-		    double* fJ,      // O    m * n Jacobian f(x)
-		    int&,
-		    int* iflag       // I    1 -> calc fx, 2 -> calc fjac
-    		                     // O    0 ==> print, -1 ==> terminate
-		    ),
-	    const int& m,	// I    Number of residuals         
-	    const int& n,	// I    Number of unknowns          
-	    double*    x,	// I    Solution vector, size n     
-	    double*    fvec,	// O    Residual vector f(x), size m
-	    double*    fjac,	// O    m * n Jacobian f(x)         
-	    const int& ldfjac,	// I    LD of fjac
-	    const double& tol,	// I    x/ftol
-	    int* info,          // O
-	    int* ipvt,		// O length n
-	    double* wa,		// I work, length lwa
-	    const int& lwa);	// I > 5*n+m
 
 //
 bool vnl_levenberg_marquardt::minimize_using_gradient(vnl_vector<double>& x)
 {
   //fsm
   if (! f_->has_gradient()) {
-    cerr << __FILE__ " : WARNING. calling minimize_using_gradient(), but f_ has no gradient." << endl;
+    cerr << __FILE__ ": called method minimize_using_gradient(), but f_ has no gradient." << endl;
+    return false;
   }
 
   int m = f_->get_number_of_residuals();        // I     Number of residuals, must be > #unknowns
   int n = f_->get_number_of_unknowns();         // I     Number of unknowns
 
   if (m < n) {
-    cerr << "vnl_levenberg_marquardt: Number of unknowns("<<n<<") greater than number of data ("<<m<<")\n";
+    cerr << __FILE__ ": Number of unknowns("<<n<<") greater than number of data ("<<m<<")\n";
     failure_code_ = ERROR_DODGY_INPUT;
     return false;
   }
@@ -340,6 +288,8 @@ bool vnl_levenberg_marquardt::minimize_using_gradient(vnl_vector<double>& x)
 	  wa1.data_block(),
 	  wa1.size());
   num_evaluations_ = num_iterations_; // for lmder, these are the same.
+  if (info<0)
+    info = ERROR_FAILURE;
   failure_code_ = (ReturnCodes) info;
   end_error_ = fx.rms();
 
@@ -363,47 +313,55 @@ void vnl_levenberg_marquardt::diagnose_outcome() const
   diagnose_outcome(cerr);
 }
 
+// fsm: should this function be a method on vnl_nonlinear_minimizer?
+// if not, the return codes should be moved into LM.
 void vnl_levenberg_marquardt::diagnose_outcome(ostream& s) const
 {
-  if (!verbose_) return;
+#define whoami "vnl_levenberg_marquardt"
+  //if (!verbose_) return;
   switch (failure_code_) {
-  case 0:
-    s << ("OIOIOI: lmdif dodgy input\n");
-    break;
-  case 1: // ftol
-    s << ("vnl_levenberg_marquardt: converged to ftol\n");
-    break;
-  case 2: // xtol
-    s << ("vnl_levenberg_marquardt: converged to xtol\n");
-    break;
-  case 3: // both
-    s << ("vnl_levenberg_marquardt: converged nicely\n");
-    break;
-  case 4:
-    s << ("vnl_levenberg_marquardt: converged via gtol\n");
-    break;
-  case 5:
-    s << ("vnl_levenberg_marquardt: too many iterations\n");
-    break;
-  case 6:
-    s << ("vnl_levenberg_marquardt: ftol is too small. no further reduction in the sum of squares is possible.\n");
-    break;
-  case 7:
-    s << ("vnl_levenberg_marquardt: xtol is too small. no further improvement in the approximate solution x is possible.\n");
-    break;
-  case 8:
-    s << ("vnl_levenberg_marquardt: gtol is too small. Fx is orthogonal to the columns of the jacobian to machine precision.\n");
-    break;
-  case -1:
+    //  case -1:
     // have already warned.
-    return;
+    //    return;
+  case ERROR_FAILURE:
+    s << (whoami ": OIOIOI -- failure in leastsquares function\n");
+    break;
+  case ERROR_DODGY_INPUT:
+    s << (whoami ": OIOIOI -- lmdif dodgy input\n");
+    break;
+  case CONVERGED_FTOL: // ftol
+    s << (whoami ": converged to ftol\n");
+    break;
+  case CONVERGED_XTOL: // xtol
+    s << (whoami ": converged to xtol\n");
+    break;
+  case CONVERGED_XFTOL: // both
+    s << (whoami ": converged nicely\n");
+    break;
+  case CONVERGED_GTOL:
+    s << (whoami ": converged via gtol\n");
+    break;
+  case FAILED_TOO_MANY_ITERATIONS:
+    s << (whoami ": too many iterations\n");
+    break;
+  case FAILED_FTOL_TOO_SMALL:
+    s << (whoami ": ftol is too small. no further reduction in the sum of squares is possible.\n");
+    break;
+  case FAILED_XTOL_TOO_SMALL:
+    s << (whoami ": xtol is too small. no further improvement in the approximate solution x is possible.\n");
+    break;
+  case FAILED_GTOL_TOO_SMALL:
+    s << (whoami ": gtol is too small. Fx is orthogonal to the columns of the jacobian to machine precision.\n");
+    break;
   default:
-    s << ("vnl_levenberg_marquardt: OIOIOI: unkown info code from lmder.\n");
+    s << (whoami ": OIOIOI: unkown info code from lmder.\n");
+    break;
   }
   int m = f_->get_number_of_residuals();
-  s << "vnl_levenberg_marquardt: " << num_iterations_ << " iterations, "
+  s << whoami ": " << num_iterations_ << " iterations, "
     << num_evaluations_ << " evaluations, "<< m <<" residuals.  RMS error start/end "
     << get_start_error() << "/" << get_end_error() << endl;
+#undef whoami
 }
 
 /* fjac is an output m by n array. the upper n by n submatrix */
@@ -429,7 +387,7 @@ vnl_matrix<double> const& vnl_levenberg_marquardt::get_JtJ()
 {
   
   if (!set_covariance_) {
-    cerr << "vnl_levenberg_marquardt::get_covariance not implemented yet\n";
+    cerr << __FILE__ ": get_covariance() not implemented yet\n";
     set_covariance_ = true;
   }
   return *covariance_;

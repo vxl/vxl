@@ -78,15 +78,15 @@ public:
   inline Type get_min_x() const { return min_pos_[0]; }
   inline Type get_min_y() const { return min_pos_[1]; }
   inline Type get_min_z() const { return min_pos_[2]; }
-  vgl_point_3d<Type> get_min_point() const;
+  //vgl_point_3d<Type> get_min_point() const;
   inline Type get_max_x() const { return max_pos_[0]; }
   inline Type get_max_y() const { return max_pos_[1]; }
   inline Type get_max_z() const { return max_pos_[2]; }
-  vgl_point_3d<Type> get_max_point() const;
+  //vgl_point_3d<Type> get_max_point() const;
   inline Type get_centroid_x() const { return 0.5*(min_pos_[0]+max_pos_[0]); }
   inline Type get_centroid_y() const { return 0.5*(min_pos_[1]+max_pos_[1]); }
   inline Type get_centroid_z() const { return 0.5*(min_pos_[2]+max_pos_[2]); }
-  vgl_point_3d<Type> get_centroid_point() const;
+  //vgl_point_3d<Type> get_centroid_point() const;
 
   // Data Control--------------------------------------------------------------
   inline void set_min_x(Type min_x) {min_pos_[0]=min_x;}

@@ -12,6 +12,8 @@
 //
 //-----------------------------------------------------------------------------
 #include <vcl/vcl_cstdlib.h>
+#include <vcl/vcl_iostream.h>
+
 #include <vnl/vnl_complex.h>
 #include <vnl/vnl_complex_ops.h>
 #include <vnl/vnl_test.h>
@@ -20,8 +22,14 @@
 #include <vnl/algo/vnl_fft2d.h>
 #include <vnl/algo/vnl_fftxd_prime_factors.h>
 
-// what type to use for calculations (double or float)
+// What type to use for calculations (double or float).
+// Believe it or not, the SunPro compiler will emit a differently mangled
+// symbol if 'fsm_real' is a typedef. The result is a linker error.
+#ifndef VCL_SUNPRO_CC
 typedef double fsm_real;
+#else
+# define fsm_real double
+#endif
 
 static fsm_real function(unsigned i, unsigned j) {
   return i * j;

@@ -29,6 +29,8 @@
 
 #include "vbl_timer.h"
 
+#include <vxl_misc_config.h> // VXL_TWO_ARG_GETTIME
+
 #include <vcl/vcl_climits.h>   // for CLK_TCK
 #include <vcl/vcl_ctime.h>
 #include <vcl/vcl_iostream.h>
@@ -54,7 +56,7 @@ void vbl_timer::mark () {
   struct timezone tz;
   gettimeofday(&real0, &tz);		// wall clock time
 #else
-#if TWO_ARG_GETTIME
+#if VXL_TWO_ARG_GETTIME
   gettimeofday(&real0, (void*)0);
 #else
   gettimeofday(&real0);
@@ -70,7 +72,7 @@ void vbl_timer::mark () {
 // -- Returns the number of milliseconds of wall clock time, since last mark().
 
 long vbl_timer::real () {
- long s, ms;
+ long s;
 
 #ifndef WIN32
  struct timeval  real;				// new real time
@@ -78,27 +80,27 @@ long vbl_timer::real () {
  struct timezone tz; 
  gettimeofday(&real, &tz);		// wall clock time
 #else
-#if TWO_ARG_GETTIME
+#if VXL_TWO_ARG_GETTIME
   gettimeofday(&real, (void*)0);
 #else
   gettimeofday(&real);
 #endif
 #endif 
  s  = real.tv_sec    - real0.tv_sec;
- ms = real.tv_usec - real0.tv_usec;
+ long us = real.tv_usec - real0.tv_usec;
 
- if(ms < 0)
-   {ms += 1000000;
+ if(us < 0)
+   {us += 1000000;
     s--;
    }
- return (1000000*s + ms) / 1000;
+ return long(1000.0*s + us / 1000.0 + 0.5);
 
 #else
  // Win32 section
  struct _timeb real;
  _ftime(&real);
  s = real.time - real0.time;
- ms = real.millitm - real0.millitm;
+ long ms = real.millitm - real0.millitm;
 
  if(ms < 0) {
    ms += 1000;

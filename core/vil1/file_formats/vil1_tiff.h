@@ -27,7 +27,6 @@ struct vil_tiff_structures;
 
 //: Generic image interface for TIFF files
 class vil_tiff_generic_image : public vil_image_impl {
-  vil_stream* is_;
   vil_tiff_structures* p;
 
   int width_;
@@ -50,6 +49,10 @@ public:
 					       int bits_per_component,
 					       vil_component_format format);
   ~vil_tiff_generic_image();
+
+  //: TIFF specific fields relating to scanned images
+  void get_resolution(float& x_res, float& y_res, unsigned short& units);
+  void set_resolution(float x_res, float y_res, unsigned short units);
 
   //: Dimensions.  Planes x W x H x Components
   virtual int planes() const { return 1; }

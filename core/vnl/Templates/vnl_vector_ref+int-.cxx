@@ -1,2 +1,2 @@
-#include <vnl/vnl_vector_ref.h>
-template class vnl_vector_ref<int>;
+#include <vnl/vnl_vector_ref.txx>
+VNL_VECTOR_REF_INSTANTIATE(int);

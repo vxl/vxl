@@ -531,20 +531,36 @@ template class vbl_arg<double>;
 //: char *
 void settype(vbl_arg<char *> &arg) { arg.type_ = "string"; }
 void print_value(ostream &s, vbl_arg<char *> const &arg) 
-{ s << '\'' << arg() << '\''; }
+{ s << '\'' << (arg()?arg():"(null)") << '\''; }
 int parse(vbl_arg<char*>* arg, char ** argv) {
   arg->value_ = argv[0]; // argv is valid till the end of the program so 
   return 1;              // it's ok to just grab the pointer.
 }
 template class vbl_arg<char*>;
 
+//: char const *
+void settype(vbl_arg<char const *> &arg) { arg.type_ = "string"; }
+void print_value(ostream &s, vbl_arg<char const *> const &arg) 
+{ s << '\'' << arg() << '\''; }
+int parse(vbl_arg<char const *>* arg, char ** argv) {
+  arg->value_ = argv[0]; // argv is valid till the end of the program so 
+  return 1;              // it's ok to just grab the pointer.
+}
+template class vbl_arg<char const*>;
+
 //: vcl_string
 void settype(vbl_arg<vcl_string> &arg) { arg.type_ = "string"; }
 void print_value(ostream &s, vbl_arg<vcl_string> const &arg) 
 { s << '\'' << arg() << '\''; }
 int parse(vbl_arg<vcl_string>* arg, char ** argv) {
-  arg->value_ = argv[0];
-  return 1;
+  if (argv[0]) {
+    arg->value_ = argv[0];
+    return 1;
+  }
+  else {
+    cerr << __FILE__ ": no argument to string option" << endl;
+    return 0;
+  }
 }
 template class vbl_arg<vcl_string>;
 

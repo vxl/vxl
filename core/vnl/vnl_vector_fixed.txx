@@ -33,8 +33,8 @@ VCL_INSTANTIATE_INLINE(vnl_vector_fixed<T __COMMA__ n> operator+(const T t, cons
 VCL_INSTANTIATE_INLINE(vnl_vector_fixed<T __COMMA__ n> operator-(const T t, const vnl_vector_fixed<T,n>& rhs)); \
 VCL_INSTANTIATE_INLINE(vnl_vector_fixed<T __COMMA__ n> operator*(const T t, const vnl_vector_fixed<T,n>& rhs));\
 VCL_INSTANTIATE_INLINE(vnl_vector_fixed<T __COMMA__ n> element_product  (const vnl_vector_fixed<T,n>& a, const vnl_vector_fixed<T,n>& b)) \
-VCL_INSTANTIATE_INLINE(vnl_vector_fixed<T __COMMA__ n> element_quotient (const vnl_vector_fixed<T,n>& a, const vnl_vector_fixed<T,n>& b));
-// #undef __COMMA__ gcc 272 doesnt see it at inst time
+VCL_INSTANTIATE_INLINE(vnl_vector_fixed<T __COMMA__ n> element_quotient (const vnl_vector_fixed<T,n>& a, const vnl_vector_fixed<T,n>& b)) \
+VCL_INSTANTIATE_INLINE(ostream &operator<<(ostream & __COMMA__ vnl_vector_fixed<T __COMMA__ n> const &))
 
 //--------------------------------------------------------------------------------
 

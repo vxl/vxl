@@ -68,6 +68,13 @@ public:
     { two_nrm2_aux(p,n); return abs_t(sqrt(aux_var)/n); }
   static inline abs_t inf_norm(T const *p, unsigned n) 
     { inf_norm_aux(p,n); return aux_var; }
+
+  // Memory allocation
+  static T** allocate_Tptr(int n);
+  static T*  allocate_T(int n);
+  static void deallocate(T**, int n_when_allocated);
+  static void deallocate(T*, int n_when_allocated);
+
 private:
   static abs_t aux_var;
   static void one_norm_aux(T const *, unsigned );

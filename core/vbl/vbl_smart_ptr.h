@@ -1,12 +1,6 @@
-#ifndef _SMART_PTR_H_
-#define _SMART_PTR_H_
-
-//-----------------------------------------------------------------------------
-//
+#ifndef vbl_smart_ptr_h_
+#define vbl_smart_ptr_h_
 // .NAME vbl_smart_ptr - A templated smart pointer class.
-// .LIBRARY vbl
-// .HEADER  Basics Package
-// .INCLUDE vbl/smart_ptr.h
 // .FILE vbl/smart_ptr.cxx
 // .EXAMPLE vbl/examples/vbl_smart_ptr_example.cxx
 //
@@ -21,6 +15,8 @@
 // .SECTION Author
 //   Richard Hartley (original Macro version), 
 //   William A. Hoffman (current templated version)
+//   fsm@robots: eliminated out-of-date documentation and moved
+//               example to examples directory.
 //
 // .SECTION Modifications
 // 2000.05.15 François BERTEL Added some missing <T>
@@ -34,130 +30,79 @@
 
 //--------------------------------------------------------------------
 
-#ifdef _HERE_IS_AN_EXAMPLE_
-/*
-	// Here is an example of how to make a smart pointer class.
-	// A smart pointer can be made from any class that subclasses off
-	// vbl_ref_count.  For example, image.
-	// Note : This code is just for example, and is commented out
-
-	typedef vbl_smart_ptr<vil_image> vil_image;
-
-	// To instantiate create a .cxx file in the Templates directory of
-	// the class you want the smart pointer of.  In the file do this:
-
-	// start vbl_smart_ptr+vil_image-.C 
-	#include <vil/vil_image.h>
-	#include <vbl/vbl_smart_ptr.h>
-
-	VBL_SMART_PTR_INSTANTIATE(vil_image);
-	// end vbl_smart_ptr+vil_image-.C 
-
-	// If you use smart pointers, then you should not get memory leaks
-*/
-#endif
-
 #include <vcl/vcl_iostream.h>
 
 template <class T>
-class vbl_smart_ptr 
-{
-private:
-
-  bool protected_;	
-  T* ptr_;
-
+class vbl_smart_ptr {
 public:
-
-  vbl_smart_ptr () 
-  {
-    protected_ = true;
-    ptr_ = 0;
-  }
-
-  vbl_smart_ptr (const vbl_smart_ptr<T> &p)
-  { 
-    protected_ = true;
-    ptr_ = p.ptr_; 
-    ref(); 
-  }
+  vbl_smart_ptr () : protected_(true), ptr_(0) { }
+  vbl_smart_ptr (vbl_smart_ptr<T> const &p) : protected_(true), ptr_(p.as_pointer()) { ref(); }
+  vbl_smart_ptr (T *p) : protected_(true), ptr_(p) { ref(); }
+  ~vbl_smart_ptr () { unref(); ptr_ = 0; }
   
-  vbl_smart_ptr (T *p)
-  { 
-    protected_ = true;
-    ptr_ = p; 
-    ref(); 
-  }				
-
-  ~vbl_smart_ptr ()
-  {
-    unref();
-  }
-
-  T *operator -> () const
-  { 
-    return ptr_; 
-  }
-
-  T *ptr () const 
-  { 
-    // This returns the pointer.  
-    return ptr_; 
-  }
-
-  // -- used for getting around circular references
-  void unprotect()
-  {
-    unref();
-  }
-
-  // Comparison of pointers
-  bool operator < (const vbl_smart_ptr<T> &r) const
-  { return (void*)ptr_ < (void*) r.ptr_; }
-
-  bool operator > (const vbl_smart_ptr<T> &r) const
-  { return (void*)ptr_ > (void*) r.ptr_; }
-
-  bool operator <= (const vbl_smart_ptr<T> &r) const
-  { return (void*)ptr_ <= (void*) r.ptr_; }
-
-  bool operator >= (const vbl_smart_ptr<T> &r) const
-  { return (void*)ptr_ >= (void*) r.ptr_; }
-
-  vbl_smart_ptr<T>& operator = (vbl_smart_ptr<T> const& r)
-  { 
-    return this->operator = (r.ptr()); 
-  }
-  
-  vbl_smart_ptr<T> &operator = (T *r)
-  {								 
-    if (ptr_ != r)
-      {
-        unref();
-        ptr_ = r;
-        ref();
-      }
+  //: Assignment  
+  vbl_smart_ptr<T> &operator = (vbl_smart_ptr<T> const &r) { return operator=(r.as_pointer()); }
+  vbl_smart_ptr<T> &operator = (T *r) {
+    if (ptr_ != r) {
+      unref();
+      ptr_ = r;
+      ref();
+    }
     return *this;
   }
+  
+  //: Cast to bool
+  operator bool () const { return ptr_ != 0; }
 
-  // Dereferencing the pointer
+  //: Dereferencing the pointer
   T &operator * () const { return *ptr_; }
 
-  // Cast to T * 
-  operator T * () const { return ptr_; }
+  //: These return the raw/dumb pointer.
+  T *operator -> () const { return ptr_; }
+  T *ptr () const { return ptr_; }
+  T *as_pointer () const { return ptr_; }
+// WARNING : Please do not make an automatic cast to T*.
+//           This is perceived as dangerous.
+  //: Cast to T * 
+  //fsm operator T * () const { return ptr_; }
+
+  //: Used for getting around circular references
+  void unprotect() { unref(); }
+
+  // Comparison of pointers
+  bool operator == (T const *p) const { return ptr_ == p; }
+  bool operator == (vbl_smart_ptr<T> const &p) const { return ptr_ == p.as_pointer(); }
+  //fsm: what's all the void *s for?
+  bool operator <  (vbl_smart_ptr<T> const &r) const { return (void*)ptr_ <  (void*) r.as_pointer(); }
+  bool operator >  (vbl_smart_ptr<T> const &r) const { return (void*)ptr_ >  (void*) r.as_pointer(); }
+  bool operator <= (vbl_smart_ptr<T> const &r) const { return (void*)ptr_ <= (void*) r.as_pointer(); }
+  bool operator >= (vbl_smart_ptr<T> const &r) const { return (void*)ptr_ >= (void*) r.as_pointer(); }
 
 private:
-
   void ref();
   void unref();
+  
+  bool protected_;	
+  T * ptr_;
 };
 
-
+// GCC really *does* need this, even though a member version is provided above.
+#if defined(VCL_GCC_27)
 template <class T>
-inline bool operator == (vbl_smart_ptr<T> const &a, vbl_smart_ptr<T> const &b)
+inline bool operator== (vbl_smart_ptr<T> const& a, vbl_smart_ptr<T> const& b)
 {
-  return a.ptr() == b.ptr();
+  return a.as_pointer() == b.as_pointer();
 }
+#endif
+
+// SGI CC thinks that "base_ref == 0" is a comparison with int.
+#if defined(VCL_SGI_CC)
+template <class T>
+inline bool operator== (vbl_smart_ptr<T> const& a, int p)
+{
+  return a.as_pointer() == (T*)p;
+}
+#endif
 
 // Sunpro and GCC need an ostream operator.
 template <class T>

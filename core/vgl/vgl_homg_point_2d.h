@@ -13,7 +13,7 @@
 
 #include <vcl/vcl_iostream.h>
 #include <vcl/vcl_algorithm.h>
-#include <vcl/vcl_cmath.h> // for fabs()
+#include <vcl/vcl_cmath.h> // for vcl_abs()
 
 template <class Type>
 class vgl_point_2d;
@@ -39,7 +39,7 @@ public:
   //   set(that.x(),that.y(),that.w());
   // }
 
-  vgl_homg_point_2d<Type> (vgl_point_2d<Type> const& p);
+//unimp  vgl_homg_point_2d<Type> (vgl_point_2d<Type> const& p);
 
   // -- Construct from two Types (nonhomogeneous interface)
   vgl_homg_point_2d (Type px, Type py) { set(px,py,1.0); }
@@ -70,7 +70,7 @@ public:
   inline Type w() const {return data_[2];}
 
   // -- Set x,y,w.
-  inline void set (Type px, Type py, Type pw) {
+  void set (Type px, Type py, Type pw) {
     data_[0] = px,
     data_[1] = py,
     data_[2] = pw;
@@ -78,8 +78,8 @@ public:
 
   // -- Return true iff the point is at infinity (an ideal point).
   // The method checks that |w| < tol * min(|x|,|y|)
-  inline bool ideal(Type tol) {
-    return fabs(w()) < tol * vcl_min(fabs(x()),fabs(y()));
+  bool ideal(Type tol) {
+    return vcl_abs(w()) < tol * vcl_min(vcl_abs(x()),vcl_abs(y()));
   }
 
   // INTERNALS---------------------------------------------------------------

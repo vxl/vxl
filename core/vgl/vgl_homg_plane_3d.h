@@ -12,7 +12,8 @@
 
 #include <vcl/vcl_iostream.h>
 #include <vcl/vcl_algorithm.h>
-#include <vcl/vcl_cmath.h> // for fabs()
+#include <vcl/vcl_cmath.h>   // vcl_abs()
+#include <vcl/vcl_cstdlib.h> // vcl_abs()
 
 template <class Type>
 class vgl_plane_3d;
@@ -38,7 +39,7 @@ public:
   //   set(that.nx(),that.ny(),that.nz(),that.d());
   // }
   
-  vgl_homg_plane_3d<Type> (vgl_plane_3d<Type> const& p);
+//unimp  vgl_homg_plane_3d<Type> (vgl_plane_3d<Type> const& p);
 
   // -- Construct from four Types.
   vgl_homg_plane_3d (Type nx, Type ny, Type nz, Type d) { set(nx,ny,nz,d); }
@@ -89,8 +90,8 @@ public:
 
   // -- Return true iff the plane is the plane at infinity.
   // The method checks that max(|nx|,|ny|,|nz|) < tol * |d|
-  inline bool ideal(Type tol) {
-    return vcl_max(vcl_max(fabs(nx()),fabs(ny())),fabs(nz())) < tol * fabs(d());
+  bool ideal(Type tol) const {
+    return vcl_max(vcl_max(vcl_abs(nx()),vcl_abs(ny())),vcl_abs(nz())) < tol * vcl_abs(d());
   }
   
   // INTERNALS---------------------------------------------------------------

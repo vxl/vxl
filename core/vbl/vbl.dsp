@@ -40,8 +40,9 @@ RSC=rc.exe
 # PROP Output_Dir "Release"
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
+MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O2 /I "$(IUEROOT)\vxl\config.win32-VC60" /I "$(IUEROOT)/vxl" /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /D "VCL_USE_NATIVE_STL" /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /Ob2 /I "$(IUEROOT)\vxl\config.win32-VC60" /I "$(IUEROOT)/vxl" /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /D "VCL_USE_NATIVE_STL" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -49,7 +50,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo
+# ADD LIB32 /nologo /out:"..\Release\vbl.lib"
 
 !ELSEIF  "$(CFG)" == "vbl - Win32 Debug"
 
@@ -63,6 +64,7 @@ LIB32=link.exe -lib
 # PROP Output_Dir "Debug"
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
+MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
 # ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "$(IUEROOT)\vxl\config.win32-VC60" /I "$(IUEROOT)/vxl" /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -133,14 +135,6 @@ SOURCE=".\Templates\vbl_bounding_box+int-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vbl_clamp+vbl_rgb+double-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=.\vbl_clamp.cxx
-# End Source File
-# Begin Source File
-
 SOURCE=.\vbl_file.cxx
 # End Source File
 # Begin Source File
@@ -153,6 +147,10 @@ SOURCE=.\vbl_printf.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\vbl_psfile.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=.\vbl_qsort.cxx
 # End Source File
 # Begin Source File
@@ -162,30 +160,6 @@ SOURCE=.\vbl_ref_count.cxx
 # Begin Source File
 
 SOURCE=.\vbl_reg_exp.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\vbl_rgb+double-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\vbl_rgb+float-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\vbl_rgb+long-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\vbl_rgb+unsignedchar-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates\vbl_rgb.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\vbl_rgba+float-.cxx"
 # End Source File
 # Begin Source File
 
@@ -322,6 +296,10 @@ SOURCE=.\vbl_printf.h
 # Begin Source File
 
 SOURCE=.\vbl_protection_traits.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_psfile.h
 # End Source File
 # Begin Source File
 

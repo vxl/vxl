@@ -8,13 +8,13 @@
 #include <vnl/algo/vnl_netlib.h>
 
 // use C++ overloading to call the right linpack routine from the template code :
-#define macro(svd, T) \
+#define macro(p, T) \
 static inline int vnl_linpack_svd(vnl_netlib_svd_proto(T)) \
-{ return svd(vnl_netlib_svd_params); }
-macro(zsvdc_, vnl_double_complex);
-macro(csvdc_, vnl_float_complex);
-macro(dsvdc_, double);
-macro(ssvdc_, float);
+{ return p##svdc_(vnl_netlib_svd_params); }
+macro(s, vnl_netlib::real);
+macro(d, vnl_netlib::doublereal);
+macro(c, vnl_netlib::complex);
+macro(z, vnl_netlib::doublecomplex);
 #undef macro
 
 //--------------------------------------------------------------------------------
@@ -329,7 +329,8 @@ template <class T>
 vnl_vector<T> vnl_svd<T>::solve(const vnl_vector<T>& y)  const
 {
   // fsm sanity check :
-  if (! (y.size() == U_.rows()) ) {
+  if (y.size() != U_.rows()) {
+    cerr << __FILE__ << ": size of rhs is incompatible with no. of rows in U_" << endl;
     cerr << "y =" << y << endl;
     cerr << "m_=" << m_ << endl;
     cerr << "n_=" << n_ << endl;
@@ -337,6 +338,7 @@ vnl_vector<T> vnl_svd<T>::solve(const vnl_vector<T>& y)  const
     cerr << "V_=" << endl << V_;
     cerr << "W_=" << endl << W_;
   }
+  
   vnl_vector<T> x(V_.rows());                   // Solution matrix.
   if (U_.rows() < U_.columns()) {               // Augment y with extra rows of
     vnl_vector<T> yy(U_.rows(), 0);             // zeros, so that it matches
@@ -353,11 +355,16 @@ vnl_vector<T> vnl_svd<T>::solve(const vnl_vector<T>& y)  const
 
   for (unsigned i = 0; i < x.size(); i++) {        // multiply with diagonal 1/W
     T weight = W_(i, i), zero_ = 0.0;
-    if (! (weight == zero_))
-      weight = T(1.0) / weight;
-    x(i) *= weight;
+    if (weight != zero_)
+      x[i] /= weight;
+    else
+      x[i] = zero_;
   }
   return V_ * x;                                // premultiply with v.
+}
+template <class T> // FIXME. this should implement the above, not the other way round.
+void vnl_svd<T>::solve(T const *y, T *x) const {
+  solve(vnl_vector<T>(y, m_)).copy_out(x);
 }
 
 // -- Solve the matrix-vector system M x = y, assuming that
@@ -420,7 +427,7 @@ vnl_matrix<T> vnl_svd<T>::left_nullspace(int /*required_nullspace_dimension*/) c
 //-----------------------------------------------------------------------------
 // -- Return the rightmost column of V.  Does not check to see whether or
 // not the matrix actually was rank-deficient - the caller is assumed to have
-// examined W and decided that to their satisfaction.
+// examined W and decided that to his or her satisfaction.
 template <class T>
 vnl_vector <T> vnl_svd<T>::nullvector()  const
 {

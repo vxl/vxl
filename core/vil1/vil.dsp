@@ -40,8 +40,9 @@ RSC=rc.exe
 # PROP Output_Dir "Release"
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
+MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O2 /I "$(IUEROOT)\vxl\config.win32-VC60" /I "$(IUEROOT)/vxl" /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /D "VCL_USE_NATIVE_STL" /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /Ob2 /I "$(IUEROOT)\vxl\config.win32-VC60" /I "$(IUEROOT)/vxl" /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /D "VCL_USE_NATIVE_STL" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -49,7 +50,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo
+# ADD LIB32 /nologo /out:"..\Release\vil.lib"
 
 !ELSEIF  "$(CFG)" == "vil - Win32 Debug"
 
@@ -63,6 +64,7 @@ LIB32=link.exe -lib
 # PROP Output_Dir "Debug"
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
+MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
 # ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "$(IUEROOT)\vxl\config.win32-VC60" /I "$(IUEROOT)/vxl" /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -72,7 +74,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"D:\target\target\vxl\Debug\vil.lib"
+# ADD LIB32 /nologo /out:"..\Debug\vil.lib"
 
 !ENDIF 
 
@@ -85,7 +87,15 @@ LIB32=link.exe -lib
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=.\vil_block_cache_image.cxx
+SOURCE=".\Templates\vcl_vector+vbl_rgb+uchar--.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+vbl_rgba+uchar--.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_block_cache_image_impl.cxx
 # End Source File
 # Begin Source File
 
@@ -93,7 +103,15 @@ SOURCE=.\file_formats\vil_bmp.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\vil_byte_swap.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=.\vil_convolve.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vil_convolve_1d.cxx
 # End Source File
 # Begin Source File
 
@@ -101,23 +119,15 @@ SOURCE=".\Templates\vil_convolve_simple+byte.byte.int.int-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vil_convolve_simple+byte.float.byte.float-.cxx"
+SOURCE=".\Templates\vil_convolve_simple+byte.float.float.byte-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vil_convolve_simple+byte.float.float.float-.cxx"
+SOURCE=".\Templates\vil_convolve_simple+byte.float.float.int-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vil_convolve_simple+byte.float.int.float-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\vil_convolve_simple+byte.float.short.float-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\vil_convolve_simple+byte.short.short.int-.cxx"
+SOURCE=".\Templates\vil_convolve_simple+byte.float.float.short-.cxx"
 # End Source File
 # Begin Source File
 
@@ -129,7 +139,7 @@ SOURCE=.\vil_crop.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vil_crop_image.cxx
+SOURCE=.\vil_crop_image_impl.cxx
 # End Source File
 # Begin Source File
 
@@ -145,7 +155,19 @@ SOURCE=.\vil_image.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\vil_image_as.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=.\vil_image_impl.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vil_interpolate+float.double-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vil_interpolate+uchar.uchar-.cxx"
 # End Source File
 # Begin Source File
 
@@ -185,10 +207,6 @@ SOURCE=".\Templates\vil_memory_image_of+float_complex-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vil_memory_image_of+rgb+byte--.cxx"
-# End Source File
-# Begin Source File
-
 SOURCE=".\Templates\vil_memory_image_of+rgb_byte-.cxx"
 # End Source File
 # Begin Source File
@@ -217,6 +235,10 @@ SOURCE=".\Templates\vil_memory_image_of+unsigned_short-.cxx"
 # End Source File
 # Begin Source File
 
+SOURCE=".\Templates\vil_memory_image_of+vil_rgb+byte--.cxx"
+# End Source File
+# Begin Source File
+
 SOURCE=.\vil_memory_image_window.cxx
 # End Source File
 # Begin Source File
@@ -229,7 +251,31 @@ SOURCE=.\vil_new.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\vil_pixel.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=.\file_formats\vil_pnm.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vil_rgb+double-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vil_rgb+float-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vil_rgb+long-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vil_rgb+unsignedchar-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vil_rgb.cxx
 # End Source File
 # Begin Source File
 
@@ -237,11 +283,15 @@ SOURCE=.\vil_rgb_byte.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=".\Templates\vil_rgba+float-.cxx"
+# End Source File
+# Begin Source File
+
 SOURCE=.\vil_save.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vil_skip_image.cxx
+SOURCE=.\vil_skip_image_impl.cxx
 # End Source File
 # Begin Source File
 
@@ -281,7 +331,7 @@ SOURCE=.\file_formats\vil_viff_support.c
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=.\vil_block_cache_image.h
+SOURCE=.\vil_block_cache_image_impl.h
 # End Source File
 # Begin Source File
 
@@ -290,6 +340,10 @@ SOURCE=.\file_formats\vil_bmp.h
 # Begin Source File
 
 SOURCE=.\vil_byte.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_byte_swap.h
 # End Source File
 # Begin Source File
 
@@ -305,7 +359,7 @@ SOURCE=.\vil_crop.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vil_crop_image.h
+SOURCE=.\vil_crop_image_impl.h
 # End Source File
 # Begin Source File
 
@@ -325,7 +379,15 @@ SOURCE=.\vil_image.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\vil_image_as.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\vil_image_impl.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_interpolate.h
 # End Source File
 # Begin Source File
 
@@ -373,6 +435,10 @@ SOURCE=.\vil_new.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\vil_pixel.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\file_formats\vil_png.h
 # End Source File
 # Begin Source File
@@ -389,7 +455,7 @@ SOURCE=.\vil_save.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vil_skip_image.h
+SOURCE=.\vil_skip_image_impl.h
 # End Source File
 # Begin Source File
 

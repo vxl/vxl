@@ -7,6 +7,7 @@
 // Author: awf@robots.ox.ac.uk
 // Created: 16 Feb 00
 
+#include <vil/vil_pixel.h>
 #include <vil/vil_image.h>
 
 struct vil_memory_image_format {
@@ -23,6 +24,7 @@ public:
   vil_memory_image(int planes, int w, int h, vil_pixel_format pixel_format);
   vil_memory_image(int w, int h, int components, int bits_per_component, vil_component_format component_format);
   vil_memory_image(int w, int h, vil_pixel_format pixel_format);
+  vil_memory_image(vil_image const &, char const *silly_hack);
   vil_memory_image(vil_memory_image const&);
 
   vil_memory_image& operator=(vil_memory_image const&);

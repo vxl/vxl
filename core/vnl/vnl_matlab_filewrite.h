@@ -4,10 +4,6 @@
 #pragma interface
 #endif
 
-// #if !defined(dont_warn) && defined(__GNUC__)
-// # warning "this class may be deprecated. consider using vnl_matlab_write() instead."
-// #endif
-
 //: code to perform MATLAB binary file operations.
 //
 // .SECTION Description

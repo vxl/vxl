@@ -18,26 +18,22 @@
 //-----------------------------------------------------------------------------
 
 #include <vcl/vcl_map.h>
-#include <vcl/vcl_compiler.h>
+#include <vcl/vcl_memory.h>
+#include <vcl/vcl_utility.h>
 #include <vcl/vcl_iostream.h>
 
 //: Sparse array allowing space efficient access of the form s[3000] = 2;
 //
 template <class T>
 class vbl_sparse_array {
+public:
   typedef vcl_map<unsigned, T, vcl_less<unsigned> 
 #ifdef VCL_SUNPRO_CC
-, allocator<vcl_pair<unsigned,T> >
+  , vcl_allocator<vcl_pair<unsigned const, T> >
 #endif
- > Map;
-public:
-  //#ifdef VCL_SUNPRO_CC
-  typedef typename Map::const_iterator const_iterator;
-  //#else
-  //  typedef vcl_map<unsigned, T, vcl_less<unsigned> >::const_iterator const_iterator;
-  //#endif
+  > Map;
 
-  // Constructors/Destructors--------------------------------------------------
+  typedef typename Map::const_iterator const_iterator;
 
 // -- Construct a vbl_sparse_array which can hold up to MAXINT elements.
   vbl_sparse_array() {}
@@ -46,8 +42,8 @@ public:
   //vbl_sparse_array& operator=(const vbl_sparse_array<T>&);
 
   // Operations----------------------------------------------------------------
-  T& operator [] (unsigned i) { return storage_[i]; }
-  const T& operator [] (unsigned) const;
+  T      & operator [] (unsigned i) { return storage_[i]; }
+  T const& operator [] (unsigned) const;
 
   bool fullp(unsigned) const;
   bool put(unsigned, const T&);

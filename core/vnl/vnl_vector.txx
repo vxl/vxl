@@ -31,6 +31,7 @@
 
 #include <vcl/vcl_vector.h>
 #include <vcl/vcl_iostream.h>
+#include <vcl/vcl_functional.h> // for instantiating inline operator!=
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix.h>
@@ -51,7 +52,7 @@ vnl_vector<T>::vnl_vector ()
 
 template<class T> 
 vnl_vector<T>::vnl_vector (unsigned len)
-: num_elmts(len), data(new T[len])
+: num_elmts(len), data(vnl_c_vector<T>::allocate_T(len))
 {}
 
 
@@ -59,7 +60,7 @@ vnl_vector<T>::vnl_vector (unsigned len)
 
 template<class T> 
 vnl_vector<T>::vnl_vector (unsigned len, T const& value)
-: num_elmts(len), data(new T[len])
+: num_elmts(len), data(vnl_c_vector<T>::allocate_T(len))
 {
   for (unsigned i = 0; i < len; i ++) 		// For each elmt
     this->data[i] = value;			// Assign initial value
@@ -69,7 +70,7 @@ vnl_vector<T>::vnl_vector (unsigned len, T const& value)
 
 template<class T> 
 vnl_vector<T>::vnl_vector (unsigned len, int n, T const values[])
-: num_elmts(len), data(new T[len])
+: num_elmts(len), data(vnl_c_vector<T>::allocate_T(len))
 {
   if (n > 0) {					// If user specified values
     for (unsigned i = 0; i < len && n; i++, n--)	// Initialize first n elements
@@ -81,7 +82,7 @@ vnl_vector<T>::vnl_vector (unsigned len, int n, T const values[])
 
 template<class T> 
 vnl_vector<T>::vnl_vector (T const& px, T const& py, T const& pz)
-: num_elmts(3), data(new T[3])
+: num_elmts(3), data(vnl_c_vector<T>::allocate_T(3))
 {
       this->data[0] = px;
       this->data[1] = py;
@@ -95,7 +96,7 @@ vnl_vector<T>::vnl_vector (T const& px, T const& py, T const& pz)
 
 // template<class T> 
 // vnl_vector<T>::vnl_vector (unsigned len, int n, T v00, ...)
-// : num_elmts(len), data(new T[len])
+// : num_elmts(len), data(vnl_c_vector<T>::allocate_T(len))
 // {
 //   cerr << "Please use automatic arrays instead variable arguments" << endl;
 //   if (n > 0) {					// If user specified values
@@ -115,7 +116,7 @@ vnl_vector<T>::vnl_vector (T const& px, T const& py, T const& pz)
 
 template<class T> 
 vnl_vector<T>::vnl_vector (vnl_vector<T> const& v)
-  : num_elmts(v.num_elmts), data(new T[v.num_elmts])
+  : num_elmts(v.num_elmts), data(vnl_c_vector<T>::allocate_T(v.num_elmts))
 {
   for (unsigned i = 0; i < v.num_elmts; i ++) 	// For each element in v
     this->data[i] = v.data[i];			// Copy value
@@ -126,7 +127,7 @@ vnl_vector<T>::vnl_vector (vnl_vector<T> const& v)
 
 template<class T>
 vnl_vector<T>::vnl_vector (T const* datablck, unsigned len)
-: num_elmts(len), data(new T[len])
+: num_elmts(len), data(vnl_c_vector<T>::allocate_T(len))
 {
   for (unsigned i = 0; i < len; ++i)	// Copy data from datablck
     this->data[i] = datablck[i];
@@ -175,7 +176,7 @@ vnl_vector<T> vnl_vector<T>::read(istream& s)
 
 template<class T> 
 vnl_vector<T>::~vnl_vector() {
-  delete [] this->data;				// Free up the data space
+  vnl_c_vector<T>::deallocate(this->data, this->num_elmts); // Free up the data space
 }
 
 //: Sets all elements of a vector to a specified fill value. O(n).
@@ -209,9 +210,9 @@ template<class T>
 vnl_vector<T>& vnl_vector<T>::operator= (vnl_vector<T> const& rhs) {
   if (this != &rhs) {				// make sure *this != m
     if (this->num_elmts != rhs.num_elmts) {
-      delete [] this->data;			// Free up the data space
+      vnl_c_vector<T>::deallocate(this->data, this->num_elmts);	// Free up the data space
       this->num_elmts = rhs.num_elmts;		// Copy index specification
-      this->data = new T[this->num_elmts];	// Allocate the elements
+      this->data = vnl_c_vector<T>::allocate_T(this->num_elmts);	// Allocate the elements
     }
     for (unsigned i = 0; i < this->num_elmts; i++)	// For each index 
       this->data[i] = rhs.data[i];		// Copy value
@@ -280,14 +281,14 @@ vnl_vector<T>& vnl_vector<T>::pre_multiply (const vnl_matrix<T>& m) {
   if (m.columns() != this->num_elmts)		// dimensions do not match?
     vnl_error_vector_dimension ("operator*=", 
 			   this->num_elmts, m.columns());
-  T* temp= new T[m.rows()];		// Temporary
+  T* temp= vnl_c_vector<T>::allocate_T(m.rows());		// Temporary
   vnl_matrix<T>& mm = (vnl_matrix<T>&) m;	// Drop const for get()
   for (unsigned i = 0; i < m.rows(); i++) {		// For each index
     temp[i] = (T) 0.0;			// Initialize element value
     for (unsigned k = 0; k < this->num_elmts; k++)	// Loop over column values
       temp[i] += (mm.get(i,k) * this->data[k]); // Multiply
   }
-  delete [] this->data;				// Free up the data space
+  vnl_c_vector<T>::deallocate(this->data, this->num_elmts);	// Free up the data space
   num_elmts = m.rows();				// Set new num_elmts
   this->data = temp;				// Pointer to new storage
   return *this;					// Return vector reference
@@ -301,14 +302,14 @@ vnl_vector<T>& vnl_vector<T>::post_multiply (const vnl_matrix<T>& m) {
   if (this->num_elmts != m.rows())		// dimensions do not match?
     vnl_error_vector_dimension ("operator*=", 
 			   this->num_elmts, m.rows());
-  T* temp= new T[m.columns()];		// Temporary
+  T* temp= vnl_c_vector<T>::allocate_T(m.columns());		// Temporary
   vnl_matrix<T>& mm = (vnl_matrix<T>&) m;	// Drop const for get()
   for (unsigned i = 0; i < m.columns(); i++) {	// For each index
     temp[i] = (T) 0.0;			// Initialize element value
     for (unsigned k = 0; k < this->num_elmts; k++)	// Loop over column values
       temp[i] += (this->data[k] * mm.get(k,i)); // Multiply
   }
-  delete [] this->data;				// Free up the data space
+  vnl_c_vector<T>::deallocate(this->data, num_elmts);				// Free up the data space
   num_elmts = m.columns();			// Set new num_elmts
   this->data = temp;				// Pointer to new storage
   return *this;					// Return vector reference
@@ -588,10 +589,11 @@ void vnl_vector<T>::flip() {
 template <class T>
 T cos_angle(vnl_vector<T> const& a, vnl_vector<T> const& b) {
   typedef vnl_numeric_traits<T>::real_t real_t;
+  typedef vnl_numeric_traits<T>::abs_t abs_t;
   
   real_t ab = inner_product(a,b);
-  real_t a_b = sqrt( a.squared_magnitude() * b.squared_magnitude() );
-  return T( ab / a_b );
+  double/*abs_t*/ a_b = sqrt( a.squared_magnitude() * b.squared_magnitude() );
+  return T( ab * (1.0 / a_b) );
 }
 
 //: Returns smallest angle between two non-zero n-dimensional vectors. O(n).
@@ -640,7 +642,7 @@ bool vnl_vector<T>::operator_eq (vnl_vector<T> const& rhs) const {
   if (this->size() != rhs.size())	          // Size different ?
     return false;				  // Then not equal.
   for (unsigned i = 0; i < size(); i++)		  // For each index
-    if (this->data[i] != rhs.data[i])             // Element different ?
+    if (!(this->data[i] == rhs.data[i]))             // Element different ?
       return false;				  // Then not equal.
   
   return true;					  // Else same; return true.
@@ -668,12 +670,11 @@ istream& operator>>(istream& s, vnl_vector<T>& M) {
 
 //--------------------------------------------------------------------------------
 
-// instantiation macros
-
-// fsm: is this really necessary ?
+// fsm: shouldn't this be set in vcl_compiler.h?
 #if defined(VCL_SUNPRO_CC)
 # undef VCL_INSTANTIATE_INLINE
 # define VCL_INSTANTIATE_INLINE(fn_decl)  template  fn_decl
+template <class T> inline bool operator!=(T const &x, T const &y) { return !(x == y); }
 #endif
 
 

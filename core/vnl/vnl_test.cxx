@@ -75,24 +75,12 @@ int vnl_test_summary() {
 
 void vnl_test_assert(const vcl_string& msg, bool expr)
 {
-  if (expr)
-    ++tests_passed;
-  else
-    ++tests_failed;
-
   cout << msg << " - ";
-  cout << (expr?"passed":"failed") << "." << endl;
+  vnl_test_perform(expr);
 }
 
 void vnl_test_assert_near(const vcl_string& msg, double expr, double target, double tol)
 {
   cout << msg << " should be " << target << ", is " << expr << ", ";
-  bool ok = (fabs(expr - target) < tol);
-
-  if (ok)
-    ++tests_passed;
-  else
-    ++tests_failed;
-
-  cout << (ok?"passed":"failed") << "." << endl;
+  vnl_test_perform(fabs(expr - target) < tol);
 }

@@ -35,7 +35,7 @@ vcl_string vbl_file::get_cwd()
 bool vbl_file::make_directory(char const* name)
 {
 #ifdef WIN32
-  return mkdir(name); // awf: what does win32 mkdir return for success?
+  return -1 != mkdir(name);
 #else 
   return -1 != mkdir(name, 0755);
 #endif

@@ -11,28 +11,27 @@
 // Modifications:
 //
 //-----------------------------------------------------------------------------
+#include <vcl/vcl_cstdlib.h> // for abort
+#include <vcl/vcl_iostream.h>
+
 #include <vnl/vnl_complex.h>
 #include <vnl/vnl_test.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_complex_ops.h>
 #include <vnl/algo/vnl_fft1d.h>
 #include <vnl/algo/vnl_fftxd_prime_factors.h>
-#include <vcl/vcl_cstdlib.h> // for abort
 
-// what type to use for calculations (double or float)
+// What type to use for calculations (double or float).
+// Believe it or not, the SunPro compiler will emit a differently mangled
+// symbol if 'fsm_real' is a typedef. The result is a linker error.
+#ifndef VCL_SUNPRO_CC
 typedef double fsm_real;
+#else
+# define fsm_real double
+#endif
 
 const fsm_real maxRealErrorPrecision = 1e-5;
 const fsm_real maxImagErrorPrecision = 1e-5;
-
-// Perhaps this is useful in vcl_compiler.h
-// Does win32 need it too?
-// -- fsm
-#if defined(VCL_GCC_27) // sigh...
-# define VCL_OVERLOAD_CAST(T, expr) (T)(expr)
-#else
-# define VCL_OVERLOAD_CAST(T, expr) /*(T)*/(expr)
-#endif
 
 void test_fft1d () {
   const int ciArraySizeX = 64;

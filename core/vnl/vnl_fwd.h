@@ -14,8 +14,8 @@ template <class T> class vnl_c_vector;
 
 template <class T> class vnl_vector;
 template <class T> class vnl_vector_ref;
-template <class T, int m> class vnl_vector_fixed;
-template <class T, int m> class vnl_vector_fixed_ref;
+template <class T, int n> class vnl_vector_fixed;
+template <class T, int n> class vnl_vector_fixed_ref;
 
 template <class T> class vnl_matrix;
 template <class T> class vnl_matrix_ref;
@@ -23,7 +23,7 @@ template <class T, int m, int n> class vnl_matrix_fixed;
 template <class T, int m, int n> class vnl_matrix_fixed_ref;
 
 template <class T> class vnl_quaternion;
-template <class T> class vnl_unary_function;
+template <class Return, class Argument> class vnl_unary_function;
 template <class T> class vnl_diag_matrix;
 template <class T> class vnl_fortran_copy;
 template <class T> class vnl_identity;
@@ -34,7 +34,7 @@ class vnl_double_2;
 class vnl_double_3;
 class vnl_float_2;
 class vnl_float_3;
-class vnl_identity_3x3;
+struct vnl_identity_3x3;
 class vnl_least_squares_cost_function;
 class vnl_least_squares_function;
 class vnl_matlab_readhdr;

@@ -83,8 +83,8 @@ public:
   void set_centroid_y(Type centroid_y);
   void set_width(Type width);
   void set_height(Type height);
-  void setmin_pos_ition(Type min_position[2]);
-  void setmax_pos_ition(Type max_position[2]);
+  void setmin_position(Type min_position[2]);
+  void setmax_position(Type max_position[2]);
   void set_min_point(vgl_point_2d<Type>& min_point);
   void set_max_point(vgl_point_2d<Type>& max_point);
   void set_centroid(Type centroid[2]);

@@ -245,6 +245,57 @@ return_t vnl_c_vector<T>::inf_norm_aux(T const *src, unsigned n) {
   return_aux max;
 }
 
+// useless... #define vnl_c_vector_use_win32_native_alloc 0
+static const int vnl_c_vector_use_vnl_alloc = 1;
+
+#include <vnl/vnl_alloc.h>
+
+static inline void* alloc(int n, int size)
+{
+  //#if vnl_c_vector_use_win32_native_alloc
+  // native was:  return (T**)std::allocator<T*>().allocate(n, 0);
+  // on windows, it just calls malloc, so is useless....
+  if (vnl_c_vector_use_vnl_alloc)
+    return vnl_alloc::allocate((n == 0) ? 8 : (n * size)); 
+  else
+    return new char[n * size];
+} 
+
+static inline void dealloc(void* v, int n, int size)
+{ 
+  if (vnl_c_vector_use_vnl_alloc) {
+    if (v) 
+      vnl_alloc::deallocate(v, (n == 0) ? 8 : (n * size));
+  } else
+    delete [] static_cast<char*>(v);
+}
+
+
+template<class T> 
+T** vnl_c_vector<T>::allocate_Tptr(int n)
+{
+  return (T**)alloc(n, sizeof (T*));
+}
+
+template<class T> 
+T* vnl_c_vector<T>::allocate_T(int n)
+{
+  return (T*)alloc(n, sizeof (T));
+}
+
+template<class T> 
+void vnl_c_vector<T>::deallocate(T** v, int n)
+{
+  dealloc(v, n, sizeof (T*));
+}
+
+template<class T> 
+void vnl_c_vector<T>::deallocate(T* v, int n)
+{
+  dealloc(v, n, sizeof (T));
+}
+
+
 //--------------------------------------------------------------------------------
 
 #include <vcl/vcl_compiler.h>

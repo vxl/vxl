@@ -1,10 +1,5 @@
-// test_symmetric_eigensystem
 // Author: F. Schaffalitzky, Oxford RRG
 // Created: 7 September 1999
-// Modifications:
-//
-//-----------------------------------------------------------------------------
-
 #include <vnl/vnl_complex.h>
 #include <vnl/vnl_test.h>
 #include <vnl/vnl_matops.h>
@@ -36,7 +31,7 @@ void test_complex_eigensystem()
   vnl_matrix<vnl_double_complex> A(N,N);
   for (unsigned i=0;i<N;i++)
     for (unsigned j=0;j<N;j++)
-      A(i,j) = vnl_double_complex(A_real(i,j),A_imag(i,j));
+      A(i,j) = vnl_double_complex(A_real(i,j), A_imag(i,j));
   
   vnl_complex_eigensystem eig(A,     // compute both
 			      true,  // left and right
@@ -50,16 +45,16 @@ void test_complex_eigensystem()
   for (unsigned i=0;i<N;i++) {
     //cerr << "i=" << i << endl;
     //
-    vnl_double_complex w = eig.W_[i];
+    vnl_double_complex w = eig.W[i];
     vnl_vector<vnl_double_complex> err;
     //cerr << "  w = " << w << endl;
     //
-    vnl_vector<vnl_double_complex> l(eig.L_.get_row(i));
+    vnl_vector<vnl_double_complex> l(eig.left_eigen_vector(i));
     err = (l*A - l*w);
     //cerr << "  " << err << endl;
     Assert("  Left  eigenvalue", err.magnitude() < 1e-10);
     //
-    vnl_vector<vnl_double_complex> r(eig.R_.get_row(i));
+    vnl_vector<vnl_double_complex> r(eig.right_eigen_vector(i));
     err = (A*r - w*r);
     //cerr << "  " << err << endl;
     Assert("  Right eigenvalue", err.magnitude() < 1e-10);

@@ -2,7 +2,8 @@
 #include <vcl/vcl_cassert.h>
 #include <vcl/vcl_cstdlib.h>
 #include <vcl/vcl_iostream.h>
-      
+#include <vcl/vcl_algorithm.h>
+
 // #define DEBUG_SPARSE 1
 
 #ifdef DEBUG_SPARSE
@@ -51,7 +52,7 @@ vnl_sparse_matrix<T>& vnl_sparse_matrix<T>::operator=(const vnl_sparse_matrix<T>
 //------------------------------------------------------------
 // -- Multiply this*rhs, another sparse matrix.
 template <class T>
-void vnl_sparse_matrix<T>::mult(const vnl_sparse_matrix<T>& rhs, vnl_sparse_matrix<T>& result)
+void vnl_sparse_matrix<T>::mult(const vnl_sparse_matrix<T>& rhs, vnl_sparse_matrix<T>& result) const
 {
   assert(rhs.rows() == columns());
   unsigned int result_rows = rows();
@@ -68,7 +69,7 @@ void vnl_sparse_matrix<T>::mult(const vnl_sparse_matrix<T>& rhs, vnl_sparse_matr
   // Now, iterate over non-zero rows of this.
   for (unsigned row_id=0; row_id<elements.size(); ++row_id) {
     // Get the row from this matrix (lhs).
-    row& this_row = elements[row_id];
+    row const& this_row = elements[row_id];
     
     // Skip to next row if empty.
     if (this_row.empty()) 
@@ -78,12 +79,12 @@ void vnl_sparse_matrix<T>::mult(const vnl_sparse_matrix<T>& rhs, vnl_sparse_matr
     row& result_row = result.elements[row_id];
     
     // Iterate over the row.
-    for (row::iterator col_iter = this_row.begin();
+    for (row::const_iterator col_iter = this_row.begin();
 	 col_iter != this_row.end();
 	 ++col_iter)
       {
 	// Get the element from the row.
-	vnl_sparse_matrix_pair<T>& entry = *col_iter;
+	vnl_sparse_matrix_pair<T> const & entry = *col_iter;
 	unsigned const col_id = entry.first;
 	
 	// So we are at (row_id,col_id) = this_val in lhs matrix (this).
@@ -133,7 +134,7 @@ void vnl_sparse_matrix<T>::mult(const vnl_sparse_matrix<T>& rhs, vnl_sparse_matr
 // rows and m columns, and is in fortran order, ie. columns first.
 template <class T>
 void vnl_sparse_matrix<T>::mult(unsigned int prows, unsigned int pcols,
-				T const* p, T* q)
+				T const* p, T* q) const
 {
   assert(prows == columns());
 
@@ -166,19 +167,19 @@ void vnl_sparse_matrix<T>::mult(unsigned int prows, unsigned int pcols,
   // Now, iterate over non-zero rows of this.
   for (unsigned row_id=0; row_id<elements.size(); ++row_id) {
     // Get the row from this matrix (lhs).
-    row& this_row = elements[row_id];
+    row const & this_row = elements[row_id];
     
     // Skip to next row if empty.
     if (this_row.empty()) 
       continue;
     
     // Iterate over the row.
-    for (row::iterator col_iter = this_row.begin();
+    for (row::const_iterator col_iter = this_row.begin();
 	 col_iter != this_row.end();
 	 ++col_iter)
       {
 	// Get the element from the row.
-	vnl_sparse_matrix_pair<T>& entry = *col_iter;
+	vnl_sparse_matrix_pair<T> const & entry = *col_iter;
 	unsigned const col_id = entry.first;
 	
 	// So we are at (row_id,col_id) = this_val in lhs matrix
@@ -217,16 +218,33 @@ void vnl_sparse_matrix<T>::mult(unsigned int prows, unsigned int pcols,
 //------------------------------------------------------------
 // -- Multiply this*rhs, a vector.
 template <class T>
-void vnl_sparse_matrix<T>::mult(const vnl_vector<T>& , vnl_vector<T>& )
+void vnl_sparse_matrix<T>::mult(const vnl_vector<T>& rhs, vnl_vector<T>& result) const
 {
-  cerr << "Warning, vnl_sparse_matrix::mult not implemented...." << endl;
-  abort();
+  assert(rhs.size() == (int)columns());
+  
+  vnl_vector<T> tmp( rows() );
+  result = tmp;
+  result = 0;
+
+  int rhs_row_id =0;
+  for ( vcl_vector<row>::const_iterator lhs_row_iter = elements.begin(); lhs_row_iter != elements.end(); ++lhs_row_iter, rhs_row_id++ ) {
+    row const & lhs_row = *lhs_row_iter;
+    if (lhs_row.empty()) continue;
+    
+    for (row::const_iterator lhs_col_iter = lhs_row.begin(); lhs_col_iter != lhs_row.end(); ++lhs_col_iter) {
+      vnl_sparse_matrix_pair<T> const & entry = *lhs_col_iter;
+      unsigned const lhs_col_id = entry.first;
+      
+      result[ rhs_row_id ] += rhs[ lhs_col_id ] * entry.second;  
+    }
+  }
+  
 }
 
 //------------------------------------------------------------
 // -- Multiply lhs*this, where lhs is a vector
 template <class T>
-void vnl_sparse_matrix<T>::pre_mult(const vnl_vector<T>& lhs, vnl_vector<T>& result)
+void vnl_sparse_matrix<T>::pre_mult(const vnl_vector<T>& lhs, vnl_vector<T>& result) const
 {
   assert(lhs.size() == rows());
 
@@ -237,23 +255,23 @@ void vnl_sparse_matrix<T>::pre_mult(const vnl_vector<T>& lhs, vnl_vector<T>& res
  
   // Now, iterate over lhs values and rows of rhs
   unsigned lhs_col_id = 0;
-  for ( vcl_vector<row>::iterator rhs_row_iter = elements.begin(); 
+  for ( vcl_vector<row>::const_iterator rhs_row_iter = elements.begin(); 
         rhs_row_iter != elements.end();
         ++rhs_row_iter, lhs_col_id++ )
     {
       // Get the row from rhs matrix.
-      row& rhs_row = *rhs_row_iter;
+      row const & rhs_row = *rhs_row_iter;
       
       // Skip to next row if empty.
       if (rhs_row.empty()) continue;
       
       // Iterate over values in rhs row
-      for (row::iterator rhs_col_iter = rhs_row.begin();
+      for (row::const_iterator rhs_col_iter = rhs_row.begin();
 	   rhs_col_iter != rhs_row.end();
 	   ++rhs_col_iter)
 	{
 	  // Get the element from the row.
-	  vnl_sparse_matrix_pair<T>& entry = *rhs_col_iter;
+	  vnl_sparse_matrix_pair<T> const& entry = *rhs_col_iter;
 	  unsigned const rhs_col_id = entry.first;
 
           result[ rhs_col_id ] += lhs[ lhs_col_id ] * entry.second;
@@ -265,7 +283,7 @@ void vnl_sparse_matrix<T>::pre_mult(const vnl_vector<T>& lhs, vnl_vector<T>& res
 // -- Add rhs to this.
 template <class T>
 void vnl_sparse_matrix<T>::add(const vnl_sparse_matrix<T>& rhs,
-			  vnl_sparse_matrix<T>& result)
+			       vnl_sparse_matrix<T>& result) const
 {
   assert((rhs.rows() == rows()) && (rhs.columns() == columns()));
   
@@ -279,12 +297,12 @@ void vnl_sparse_matrix<T>::add(const vnl_sparse_matrix<T>& rhs,
   
   // Now, iterate over non-zero rows of this.
   unsigned int row_id = 0;
-  for (vcl_vector<row>::iterator row_iter = elements.begin(); 
+  for (vcl_vector<row>::const_iterator row_iter = elements.begin(); 
        row_iter != elements.end();
        ++row_iter, ++row_id)
     {
       // Get the row from this matrix (lhs).
-      row& this_row = *row_iter;
+      row const & this_row = *row_iter;
 
       // Get the new row in the result matrix.
       row& result_row = result.elements[row_id];
@@ -318,7 +336,7 @@ void vnl_sparse_matrix<T>::add(const vnl_sparse_matrix<T>& rhs,
 // -- Subtract rhs from this.
 template <class T>
 void vnl_sparse_matrix<T>::subtract(const vnl_sparse_matrix<T>& rhs,
-			       vnl_sparse_matrix<T>& result)
+				    vnl_sparse_matrix<T>& result) const
 {
   assert((rhs.rows() == rows()) && (rhs.columns() == columns()));
   
@@ -332,12 +350,12 @@ void vnl_sparse_matrix<T>::subtract(const vnl_sparse_matrix<T>& rhs,
   
   // Now, iterate over non-zero rows of this.
   unsigned int row_id = 0;
-  for (vcl_vector<row>::iterator row_iter = elements.begin(); 
+  for (vcl_vector<row>::const_iterator row_iter = elements.begin(); 
        row_iter != elements.end();
        ++row_iter, ++row_id)
     {
       // Get the row from this matrix (lhs).
-      row& this_row = *row_iter;
+      row const& this_row = *row_iter;
 
       // Get the new row in the result matrix.
       row& result_row = result.elements[row_id];
@@ -385,6 +403,37 @@ T& vnl_sparse_matrix<T>::operator()(unsigned int r, unsigned int c)
   return (*ri).second;
 }
 
+template <class T>
+void vnl_sparse_matrix<T>::set_row(unsigned int r,
+				   vcl_vector<VCL_SUNPRO_ALLOCATOR_HACK(int)> const& cols, 
+				   vcl_vector<VCL_SUNPRO_ALLOCATOR_HACK(T)> const& vals)
+{
+  assert (r < rows());
+  assert (cols.size() == vals.size());
+
+  row& rw = elements[r];
+  if (rw.size() != cols.size()) rw = row(cols.size());
+  for (int i=0 ; i < cols.size(); ++i)
+    rw[i] = vnl_sparse_matrix_pair<T>(cols[i], vals[i]);
+  vcl_sort(rw.begin(), rw.end(), vnl_sparse_matrix_pair<T>::less());
+}
+
+template <class T>
+vnl_sparse_matrix<T>& vnl_sparse_matrix<T>::vcat(vnl_sparse_matrix<T> const& A)
+{
+  if (rs_ == 0) {
+    rs_ = A.rs_;
+    cs_ = A.cs_;
+    elements = A.elements;
+  }
+  else {
+    assert(cs_ == A.cs_);
+    rs_ += A.rs_;
+    elements.insert(elements.end(), A.elements.begin(), A.elements.end());
+  }
+  return *this;
+}
+
 //------------------------------------------------------------
 // -- This is occasionally useful.  Sums a row of the matrix
 // efficiently.
@@ -398,6 +447,15 @@ double vnl_sparse_matrix<T>::sum_row(unsigned int r)
     sum += (*ri).second;
   
   return sum;
+}
+
+template <class T>
+void vnl_sparse_matrix<T>::scale_row(unsigned int r, T scale)
+{
+  assert(r < rows());
+  row& rw = elements[r];
+  for (row::iterator ri = rw.begin(); ri != rw.end(); ++ri)
+    (*ri).second *= scale;
 }
 
 //------------------------------------------------------------
@@ -417,8 +475,8 @@ void vnl_sparse_matrix<T>::resize( int /*r*/, int /*c*/)
 template <class T>
 void vnl_sparse_matrix<T>::reset()
 {
-    itr_isreset = true;
-    itr_row = 0;
+  itr_isreset = true;
+  itr_row = 0;
 }
 
 //------------------------------------------------------------
@@ -464,7 +522,7 @@ bool vnl_sparse_matrix<T>::next()
 template <class T>
 int vnl_sparse_matrix<T>::getrow()
 {
-    return itr_row;
+  return itr_row;
 }
 
 //------------------------------------------------------------
@@ -473,7 +531,7 @@ int vnl_sparse_matrix<T>::getrow()
 template <class T>
 int vnl_sparse_matrix<T>::getcolumn()
 {
-    return (*itr_cur).first;
+  return (*itr_cur).first;
 }
 
 //------------------------------------------------------------
@@ -482,5 +540,5 @@ int vnl_sparse_matrix<T>::getcolumn()
 template <class T>
 T vnl_sparse_matrix<T>::value()
 {
-    return (*itr_cur).second;
+  return (*itr_cur).second;
 }

@@ -7,7 +7,7 @@
 
 //     We don't want everyone to pay for complex when they don't need it, as
 //     its ratio of expense to frequency of use is high. So we define those 
-//     functions from vnl_math which complex here instead.
+//     functions from vnl_math which use complex here instead.
 //     In a sense, vnl_math should be a namespace, and this file adds to that
 //     namespace.
 

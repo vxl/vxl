@@ -41,7 +41,9 @@ vil_memory_image_impl::vil_memory_image_impl(vil_memory_image_impl const& that)
   init(that.planes_, that.width_, that.height_, that.components_, that.bits_per_component_, that.component_format_);
 }
 
-void vil_memory_image_impl::init(int planes, int w, int h, int components, int bits_per_component, vil_component_format component_format)
+void vil_memory_image_impl::init(int planes, int w, int h, 
+				 int components, int bits_per_component, 
+				 vil_component_format component_format)
 {
   planes_ = planes;
   width_ = w;
@@ -53,45 +55,59 @@ void vil_memory_image_impl::init(int planes, int w, int h, int components, int b
   bytes_per_pixel_ = bits_per_component_ * components_ / 8;
   //assert(bytes_per_pixel_ * 8 == bits_per_component_ * components_); 
   int size = planes_ * height_ * width_ * bytes_per_pixel_;
-  buf_ = new unsigned char[size];
-  rows_ = new void**[planes_];
-  int bytes_per_row = width_ * bytes_per_pixel_;
-
-  unsigned char* ptr = buf_;
-  for(int p = 0; p < planes_; ++p) {
-    rows_[p] = new void*[height_];
-    for(int y = 0; y < height_; ++y) {
-      rows_[p][y] = ptr;
-      ptr += bytes_per_row;
+  if (size) {
+    buf_ = new unsigned char[size];
+    rows_ = new void**[planes_];
+    int bytes_per_row = width_ * bytes_per_pixel_;
+    
+    unsigned char* ptr = buf_;
+    for(int p = 0; p < planes_; ++p) {
+      rows_[p] = new void*[height_];
+      for(int y = 0; y < height_; ++y) {
+	rows_[p][y] = ptr;
+	ptr += bytes_per_row;
+      }
     }
+    rows0_= rows_[0];
   }
-  rows0_= rows_[0];
+  else {
+    buf_ = 0;
+    rows_ = 0;
+    rows0_ = 0;
+  }
 }
 
 void vil_memory_image_impl::init(int planes, int w, int h, vil_pixel_format pixel_format)
 {
   switch (pixel_format) {
-  case VIL_BYTE:     init(planes, w, h, 1, 8, VIL_COMPONENT_FORMAT_UNSIGNED_INT); break;
-  case VIL_RGB_BYTE: init(planes, w, h, 3, 8, VIL_COMPONENT_FORMAT_UNSIGNED_INT); break;
+  case VIL_BYTE:     init(planes, w, h, 1,  8, VIL_COMPONENT_FORMAT_UNSIGNED_INT); break;
+  case VIL_RGB_BYTE: init(planes, w, h, 3,  8, VIL_COMPONENT_FORMAT_UNSIGNED_INT); break;
   case VIL_FLOAT:    init(planes, w, h, 1, 32, VIL_COMPONENT_FORMAT_UNSIGNED_INT); break;
   default:
     cerr << "vil_memory_image_impl: crazy format!\n";
   }
 }
 
+
 vil_memory_image_impl::~vil_memory_image_impl()
 {
+  for(int p = 0; p < planes_; ++p) delete[] rows_[p];
+  delete [] rows_;
   delete [] buf_;
 }
 
 void vil_memory_image_impl::resize(int width, int height)
 {
+  for(int p = 0; p < planes_; ++p) delete[] rows_[p];
+  delete [] rows_;
   delete [] buf_;
   init(planes_, width, height, components_, bits_per_component_, component_format_);
 }
 
 void vil_memory_image_impl::resize(int planes, int width, int height)
 {
+  for(int p = 0; p < planes_; ++p) delete[] rows_[p];
+  delete [] rows_;
   delete [] buf_;
   init(planes, width, height, components_, bits_per_component_, component_format_);
 }

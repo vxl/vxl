@@ -11,6 +11,7 @@
 
 #include <vil/vil_image_impl.h>
 
+#if 0
 //: Convenient descriptions of format combinations.
 // Combinations of component format and bits and planes and components
 enum vil_pixel_format {
@@ -23,6 +24,7 @@ enum vil_pixel_format {
   VIL_DOUBLE,     /*!< 1 x W x H x 1 of IEEE_DOUBLE x 64*/
   VIL_COMPLEX    /*!< 1 x W x H x 1 of COMPLEX x 64*/
 };
+#endif
 
 class vil_image;
 
@@ -78,15 +80,18 @@ public:
 #undef vil_image_delegate
   // -------------------- convenience --------------------
 
+#if 0
   //: Convenience method.
   //  converts (bits_per_component x component_format)
   // to one of the `vil_pixel_format's. 
   // A standard RGB RGB RGB image has pixel_type() == VIL_RGB_BYTE
   enum vil_pixel_format pixel_type() const;
+#endif
 
   //: return size in bytes.
   int get_size_bytes() const;
     
+#if 0
   //: \brief Return the image interpreted as rgb bytes.
   bool get_section_rgb_byte(void *buf, int x0, int y0, int width, int height) const;
 
@@ -95,7 +100,7 @@ public:
 
   //: Return the image interpreted as bytes.
   bool get_section_byte(void *buf, int x0, int y0, int width, int height) const;
-
+#endif
   //: Print a 1-line summary of contents
   ostream& print(ostream&) const;
   
@@ -153,7 +158,7 @@ public:
     return *this;
   }
 
-  // "sptr.impl()" is better than "(vil_image_impl*)sptr"
+  // use "sptr.impl()" to get a pointer to the impl object.
   vil_image_impl *impl() const {
     return ptr;
   }
@@ -184,28 +189,5 @@ inline
 ostream& operator<<(ostream& s, vil_image const& i) {
   return i.print(s);
 }
-
-  //------------------------------ pointer-like ------------------------------
-
-  // fsm@robots: Programmers should think carefully about converting a smart
-  // pointer to a raw pointer. To encourage them to do so, there should not
-  // be an implicit conversion operator to vil_image_impl *. Use as_pointer()
-  // if you really really want a pointer. Using a method makes it easier to grep
-  // for problems too.
-  //   // cast to vil_image_impl *
-  //   operator vil_image_impl * () const {
-  //     return ptr; 
-  //   }
- //   
- //   // operator ->
- //   vil_image_impl *operator -> () const {
- // 	return ptr; 
- //   }
- //   
- //   // dereference
- //   vil_image_impl &operator * () const {
- // 	return *ptr; 
- //   }
-  
 
 #endif

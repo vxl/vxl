@@ -29,6 +29,8 @@ VCL_INSTANTIATE_INLINE(bool operator==(vcl_complex<FLOAT >const&,FLOAT));	\
 VCL_INSTANTIATE_INLINE(FLOAT imag(vcl_complex<FLOAT >const&));		\
 VCL_INSTANTIATE_INLINE(FLOAT real(vcl_complex<FLOAT >const&));		\
 VCL_INSTANTIATE_INLINE(vcl_complex<FLOAT > sqrt (vcl_complex<FLOAT >const& x));\
+VCL_INSTANTIATE_INLINE(vcl_complex<float > operator + (vcl_complex<FLOAT > const &)); \
+VCL_INSTANTIATE_INLINE(vcl_complex<float > operator - (vcl_complex<FLOAT > const &)); \
 VCL_INSTANTIATE_INLINE(vcl_complex<FLOAT > operator + (vcl_complex<FLOAT >const&,vcl_complex<FLOAT >const&));\
 VCL_INSTANTIATE_INLINE(vcl_complex<FLOAT > operator + (vcl_complex<FLOAT >const&,FLOAT));\
 VCL_INSTANTIATE_INLINE(vcl_complex<FLOAT > operator + (FLOAT,vcl_complex<FLOAT >const&));\

@@ -31,7 +31,7 @@ public:
   // Constructors/Initializers/Destructors-----------------------------------
 
   // Default constructor:
-  // vgl_point_2d () {}
+  vgl_point_2d () {}
 
   // Default copy constructor:
   // vgl_point_2d (vgl_point_2d<Type> const& that) {

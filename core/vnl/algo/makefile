@@ -1,23 +1,24 @@
-VXL := 1
 ################################
-include ${IUEROOT}/config/top-params.mk
+include ${IUEROOT}/config/usr_params.mk
 ################################
 
 USES := vxl
-
 LIBRARY := vnl-algo
 VERSION := 1.0
+IULIBS := -lvnl -lvcl -lnetlib
+DEFINES += -DBUILDING_VNL_ALGO_DLL
 
 # matrix decompositions
 MANPAGE_SOURCES += vnl_svd.txx
 MANPAGE_SOURCES += vnl_matrix_inverse.txx
-SOURCES += vnl_qr.cxx
+MANPAGE_SOURCES += vnl_qr.txx
 SOURCES += vnl_cholesky.cxx
 SOURCES += vnl_real_eigensystem.cxx
 SOURCES += vnl_complex_eigensystem.cxx
 SOURCES += vnl_symmetric_eigensystem.cxx
 SOURCES += vnl_generalized_eigensystem.cxx
 SOURCES += vnl_sparse_symmetric_eigensystem.cxx
+SOURCES += $(wildcard vnl_jordan_normal_form.cxx)
 
 # optimization
 SOURCES += vnl_discrete_diff.cxx
@@ -33,19 +34,14 @@ SOURCES += vnl_rnpoly_solve.cxx
 
 # fft
 SOURCES += vnl_fftxd_prime_factors.cxx
-SOURCES += vnl_fft1d.cxx
-SOURCES += vnl_fft2d.cxx
+MANPAGE_SOURCES += vnl_fft1d.cxx
+MANPAGE_SOURCES += vnl_fft2d.cxx
 
 # stuff
 SOURCES += vnl_determinant.cxx
 SOURCES += vnl_chi_squared.cxx
 SOURCES += vnl_gaussian_kernel_1d.cxx
-SOURCES += vnl_affine_approx.cxx       # hmmm.... (fsm)
-
-IULIBS := -lvnl -lvcl -lnetlib
-
-DEFINES += -DBUILDING_VNL_ALGO_DLL
 
 ################################
-include ${IUEROOT}/config/top-rules.mk
+include ${IUEROOT}/config/usr_rules.mk
 ################################

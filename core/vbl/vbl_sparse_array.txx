@@ -11,11 +11,11 @@
 
 #include <vcl/vcl_cassert.h>
 #include <vcl/vcl_iostream.h>
-#include <vcl/vcl_pair.h>
+#include <vcl/vcl_utility.h>
 
 // -- Return contents of (i).  Assertion failure if not yet filled.
 template <class T>
-const T& vbl_sparse_array<T>::operator [] (unsigned i) const
+T const & vbl_sparse_array<T>::operator [] (unsigned i) const
 {
   Map::const_iterator p = storage_.find(i);
   

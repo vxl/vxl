@@ -15,7 +15,7 @@ vnl_fortran_copy<T>::vnl_fortran_copy(vnl_matrix<T> const & M)
   unsigned n = M.rows();
   unsigned p = M.columns();
   
-  data = new T[n*p];
+  data = vnl_c_vector<T>::allocate_T(sz = n*p);
   T *d = data;
   for(unsigned j = 0; j < p; ++j)
     for(unsigned i = 0; i < n; ++i)
@@ -26,7 +26,7 @@ vnl_fortran_copy<T>::vnl_fortran_copy(vnl_matrix<T> const & M)
 template <class T>
 vnl_fortran_copy<T>::~vnl_fortran_copy()
 {
-  delete[] data;
+  vnl_c_vector<T>::deallocate(data, sz);
 }
 
 //--------------------------------------------------------------------------------

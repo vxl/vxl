@@ -56,6 +56,22 @@ vil_memory_image::vil_memory_image(int w, int h, vil_pixel_format pixel_format)
   this->rows0_ = mi->rows0_;
 }
 
+vil_memory_image::vil_memory_image(vil_image const & that, char const * /*silly_hack*/)
+  : vil_image(new vil_memory_image_impl(that.planes(), 
+					that.width(), 
+					that.height(),
+					that.components(),
+					that.bits_per_component(), 
+					that.component_format()))
+{
+  vil_memory_image_impl* mi = (vil_memory_image_impl*)ptr;
+  this->width_ = mi->width_;
+  this->height_ = mi->height_;
+  this->rows0_ = mi->rows0_;
+
+  that.get_section(get_buffer(), 0, 0, width(), height());
+}
+
 vil_memory_image::vil_memory_image(vil_memory_image const& that)
   : vil_image(that)
 {

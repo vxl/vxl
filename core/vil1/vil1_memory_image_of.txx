@@ -14,8 +14,6 @@
 #include "vil_memory_image_of.h"
 #include <vcl/vcl_cassert.h>
 #include <vcl/vcl_cstdlib.h> // abort()
-//#include <vcl/vcl_iostream.h>  
-//#include <vcl/vcl_iterator.h>
 #include <vil/vil_memory_image_of_format.txx>
 
 template <class T>
@@ -78,6 +76,19 @@ vil_memory_image_of<T>& vil_memory_image_of<T>::operator=(vil_memory_image_of<T>
 //  memcpy(buf_, that.buf_, size);
 //  return *this;
 }
+
+template <class T>
+void vil_memory_image_of<T>::fill(T const& v)
+{
+  int w = width();
+  int h = height();
+  for (int y=0; y<h; ++y) {
+    T* raster = (*this)[y];
+    for (int x=0; x<w; ++x)
+      raster[x] = v;
+  }
+}
+
 
 #define VIL_MEMORY_IMAGE_OF_INSTANTIATE(T)\
 template class vil_memory_image_of<T >;

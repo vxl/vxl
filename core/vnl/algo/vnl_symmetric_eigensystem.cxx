@@ -14,18 +14,6 @@
 #include <vnl/vnl_copy.h>
 #include <vnl/algo/vnl_netlib.h> // rs_()
 
-template <class T>
-vnl_vector<T> vnl_symmetric_eigensystem<T>::get_eigenvector(int i) const
-{
-  return vnl_vector<T>(V.extract(n_,1,0,i).data_block(), n_);
-}
-
-template <class T>
-T vnl_symmetric_eigensystem<T>::get_eigenvalue(int i) const
-{
-  return D(i, i);
-}
-
 // - @{ Solve real symmetric eigensystem $A x = \lambda x$ @}
 template <class T>
 vnl_symmetric_eigensystem<T>::vnl_symmetric_eigensystem(const vnl_matrix<T>& A)
@@ -38,6 +26,18 @@ vnl_symmetric_eigensystem<T>::vnl_symmetric_eigensystem(const vnl_matrix<T>& A)
   // Copy Dvec into diagonal of D
   for(int i = 0; i < n_; ++i)
     D(i,i) = Dvec[i];
+}
+
+template <class T>
+vnl_vector<T> vnl_symmetric_eigensystem<T>::get_eigenvector(int i) const
+{
+  return vnl_vector<T>(V.extract(n_,1,0,i).data_block(), n_);
+}
+
+template <class T>
+T vnl_symmetric_eigensystem<T>::get_eigenvalue(int i) const
+{
+  return D(i, i);
 }
 
 template <class T>

@@ -14,9 +14,9 @@
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_complex.h>
 
-#if defined(VCL_SUNPRO_CC)
-# define signed 
-#endif
+//#if defined(VCL_SUNPRO_CC)
+//# define signed 
+//#endif
 
 #if defined(VCL_GCC_27) || defined(VCL_GCC_EGCS)
 # define VCL_STATIC_CONST_REINIT_INT(x)

@@ -24,13 +24,13 @@
 #include <vcl/vcl_iostream.h>
 
 // -- Lookup info from login name
-vbl_user_info::vbl_user_info(const char* name)
+vbl_user_info::vbl_user_info(char const* name_)
 {
-  init(name);
+  init(name_);
 }
 
 // -- Lookup info from login name
-vbl_user_info::vbl_user_info(const vcl_string& name_)
+vbl_user_info::vbl_user_info(vcl_string const & name_)
 {
   init(name_.c_str());
 }

@@ -40,8 +40,8 @@
 //           or  an  identity  transform,  which has undefined
 //           rotation axis.
 
-template <class FLOAT>
-vnl_quaternion<FLOAT>::vnl_quaternion (FLOAT x, FLOAT y, FLOAT z, FLOAT r) 
+template <class T>
+vnl_quaternion<T>::vnl_quaternion (T x, T y, T z, T r) 
 {
   this->operator()(0) = x;			// 3 first elmts are 
   this->operator()(1) = y;			// imaginary parts
@@ -52,8 +52,8 @@ vnl_quaternion<FLOAT>::vnl_quaternion (FLOAT x, FLOAT y, FLOAT z, FLOAT r)
 // Quaternion -- Creates a quaternion from the normalized axis direction
 //           and the angle of rotation in radians.
 
-template <class FLOAT>
-vnl_quaternion<FLOAT>::vnl_quaternion (const vnl_vector<FLOAT>& axis, FLOAT angle)
+template <class T>
+vnl_quaternion<T>::vnl_quaternion (const vnl_vector<T>& axis, T angle)
 {
   double a = angle / 2.0;			// half angle
   double s = sin(a);
@@ -68,8 +68,8 @@ vnl_quaternion<FLOAT>::vnl_quaternion (const vnl_vector<FLOAT>& axis, FLOAT angl
 //           quaternion,  to  provide  casting  between Vector and
 //           Quaternion.
 
-template <class FLOAT>
-vnl_quaternion<FLOAT>::vnl_quaternion (const vnl_vector<FLOAT>& vec)
+template <class T>
+vnl_quaternion<T>::vnl_quaternion (const vnl_vector<T>& vec)
 {			
   unsigned i = 0;
   for (; i < vec.size(); i++)	// 1-1 layout between vector & quaternion
@@ -83,10 +83,10 @@ vnl_quaternion<FLOAT>::vnl_quaternion (const vnl_vector<FLOAT>& vec)
 //           top-left most block. The transform matrix may be any size,
 //           but the rotation matrix must be the upper left 3x3.
 
-template <class FLOAT>
-vnl_quaternion<FLOAT>::vnl_quaternion (const vnl_matrix<FLOAT>& transform) 
+template <class T>
+vnl_quaternion<T>::vnl_quaternion (const vnl_matrix<T>& transform) 
 {
-  vnl_matrix_fixed<FLOAT,3,3> rot = transform.extract(3, 3, 0, 0);
+  vnl_matrix_fixed<T,3,3> rot = transform.extract(3, 3, 0, 0);
   double d0 = rot(0,0), d1 = rot(1,1), d2 = rot(2,2);
   double xx = 1.0 + d0 - d1 - d2;		// from the diagonal of rotation
   double yy = 1.0 - d0 + d1 - d2;		// matrix, find the terms in
@@ -127,8 +127,8 @@ vnl_quaternion<FLOAT>::vnl_quaternion (const vnl_matrix<FLOAT>& transform)
 
 // angle -- 
 
-template <class FLOAT>
-FLOAT vnl_quaternion<FLOAT>::angle () const {
+template <class T>
+T vnl_quaternion<T>::angle () const {
   return (2.0 * 
 	  atan2 (this->imaginary().magnitude(),
 		 this->real()));		// angle is always positive
@@ -138,10 +138,10 @@ FLOAT vnl_quaternion<FLOAT>::angle () const {
 //           axis  of the quaternion.  A null quaternion will return
 //           zero for angle and k direction for axis.
 
-template <class FLOAT>
-vnl_vector<FLOAT> vnl_quaternion<FLOAT>::axis () const {
-  vnl_vector<FLOAT> direc = this->imaginary(); // direc parallel to imag. part
-  FLOAT mag = direc.magnitude();
+template <class T>
+vnl_vector<T> vnl_quaternion<T>::axis () const {
+  vnl_vector<T> direc = this->imaginary(); // direc parallel to imag. part
+  T mag = direc.magnitude();
   if (mag == 0) {
     cout << "Axis not well defined for zero Quaternion. Use (0,0,1) instead."
 	 << endl;
@@ -156,10 +156,10 @@ vnl_vector<FLOAT> vnl_quaternion<FLOAT>::axis () const {
 //           matrix with dimension dim.  This is the reverse counterpart of
 //           constructing a quaternion from a transformation matrix.
 
-template <class FLOAT>
-vnl_matrix_fixed<FLOAT,3,3> vnl_quaternion<FLOAT>::rotation_matrix () const {
-  vnl_matrix_fixed<FLOAT,3,3> rot;
-  vnl_quaternion<FLOAT> const& q = *this;			
+template <class T>
+vnl_matrix_fixed<T,3,3> vnl_quaternion<T>::rotation_matrix () const {
+  vnl_matrix_fixed<T,3,3> rot;
+  vnl_quaternion<T> const& q = *this;			
 
   double x2 = q.x() * q.x();
   double y2 = q.y() * q.y();
@@ -187,18 +187,18 @@ vnl_matrix_fixed<FLOAT,3,3> vnl_quaternion<FLOAT>::rotation_matrix () const {
 // conjugate -- Returns the conjugate of given quaternion, having  same
 //           real and opposite imaginary parts.
 
-template <class FLOAT>
-vnl_quaternion<FLOAT> vnl_quaternion<FLOAT>::conjugate () const {
-  return vnl_quaternion<FLOAT> (-x(), -y(), -z(), r());
+template <class T>
+vnl_quaternion<T> vnl_quaternion<T>::conjugate () const {
+  return vnl_quaternion<T> (-x(), -y(), -z(), r());
 }
 
 // inverse -- Returns the  inverse  of  given  quaternion.  For  unit
 //           quaternion  representing  rotation,  the inverse is the
 //           same as the conjugate.
 
-template <class FLOAT>
-vnl_quaternion<FLOAT> vnl_quaternion<FLOAT>::inverse () const {
-  vnl_quaternion<FLOAT> inv = this->conjugate();
+template <class T>
+vnl_quaternion<T> vnl_quaternion<T>::inverse () const {
+  vnl_quaternion<T> inv = this->conjugate();
   inv /= ::dot_product(*this, *this);
   return inv;
 }
@@ -213,16 +213,16 @@ vnl_quaternion<FLOAT> vnl_quaternion<FLOAT>::inverse () const {
 //           and vectors are represented row-wise.
 
 
-template <class FLOAT>
-vnl_quaternion<FLOAT> vnl_quaternion<FLOAT>::operator* (const vnl_quaternion<FLOAT>& rhs) const {
-  FLOAT r1 = this->real();			// real and img parts of args
-  FLOAT r2 = rhs.real();		
-  vnl_vector<FLOAT> i1 = this->imaginary();
-  vnl_vector<FLOAT> i2 = rhs.imaginary();
-  FLOAT real = (r1 * r2) - ::dot_product(i1, i2); // real&img of product q1*q2
-  vnl_vector<FLOAT> img = cross_3d(i1, i2);
+template <class T>
+vnl_quaternion<T> vnl_quaternion<T>::operator* (const vnl_quaternion<T>& rhs) const {
+  T r1 = this->real();			// real and img parts of args
+  T r2 = rhs.real();		
+  vnl_vector<T> i1 = this->imaginary();
+  vnl_vector<T> i2 = rhs.imaginary();
+  T real = (r1 * r2) - ::dot_product(i1, i2); // real&img of product q1*q2
+  vnl_vector<T> img = cross_3d(i1, i2);
   img += (i2 * r1) + (i1 * r2);
-  vnl_quaternion<FLOAT> prod(img.x(), img.y(), img.z(), real); 
+  vnl_quaternion<T> prod(img.x(), img.y(), img.z(), real); 
   return prod;
 }
 
@@ -232,16 +232,16 @@ vnl_quaternion<FLOAT> vnl_quaternion<FLOAT>::operator* (const vnl_quaternion<FLO
 //           matrix,  then  use matrix multiplication to rotate many
 //           vectors.
 
-template <class FLOAT>
-vnl_vector<FLOAT> vnl_quaternion<FLOAT>::rotate (const vnl_vector<FLOAT>& v) const {
-  FLOAT r = this->real();
-  vnl_vector<FLOAT> i = this->imaginary();
-  vnl_vector<FLOAT> rotated = v+ cross_3d(i, v) * FLOAT(2*r)- cross_3d(cross_3d(i, v), i) * FLOAT(2);
+template <class T>
+vnl_vector<T> vnl_quaternion<T>::rotate (const vnl_vector<T>& v) const {
+  T r = this->real();
+  vnl_vector<T> i = this->imaginary();
+  vnl_vector<T> rotated = v+ cross_3d(i, v) * T(2*r)- cross_3d(cross_3d(i, v), i) * T(2);
   return rotated;
 }
 
 #undef VNL_QUATERNION_INSTANTIATE
-#define VNL_QUATERNION_INSTANTIATE(FLOAT) \
-template class vnl_quaternion<FLOAT>;\
-VCL_INSTANTIATE_INLINE(ostream& operator<< (ostream&, const vnl_quaternion<FLOAT>&));
+#define VNL_QUATERNION_INSTANTIATE(T) \
+template class vnl_quaternion<T >;\
+VCL_INSTANTIATE_INLINE(ostream& operator<< (ostream&, const vnl_quaternion<T >&));
 

@@ -97,6 +97,7 @@ public:
 
 // -- Some generic return codes that apply to all minimizers.
   enum ReturnCodes {
+    ERROR_FAILURE              =-1,
     ERROR_DODGY_INPUT          = 0,
     CONVERGED_FTOL     	       = 1,
     CONVERGED_XTOL     	       = 2,

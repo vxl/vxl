@@ -21,7 +21,7 @@
 template <class T>
 struct vil_memory_image_of_format : public vil_memory_image_format {
 protected:
-  // A protection error here means you haven't subclassed
+  // A protection error here means you haven't derived
   // the vil_memory_image_format<T> for a vil_memory_image_of<T>
   vil_memory_image_of_format();
 };

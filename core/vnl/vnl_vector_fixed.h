@@ -193,6 +193,14 @@ private:
 
 };
 
+#if defined(VCL_GCC_27)
+template <class T, int n>
+inline 
+ostream &operator<<(ostream &os, vnl_vector_fixed<T, n> const &v) {
+  return os << (vnl_vector<T>const&)v;
+}
+#endif
+
 #if !defined (VCL_SUNPRO_CC) || ! defined (_ODI_OSSG_)
 vnl_vector_fixed<double,3> cross_3d (const vnl_vector_fixed<double,3>& vect1, 
 				     const vnl_vector_fixed<double,3>& vect2);

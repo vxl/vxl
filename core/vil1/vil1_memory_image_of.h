@@ -27,7 +27,6 @@ public:
   // -- The pixel type of this image
   typedef T pixel_type;
 
-
 //: Copy given image into a memory buffer.
   vil_memory_image_of(vil_image const& image);
 
@@ -74,8 +73,8 @@ public:
     return (0<=x && x+int(w)<=width_) && (0<=y && y+int(h)<=height_);
   }
 
-//: Fill with all-bits-zero
-  // void clear() { _buffer->Clear(); }
+  //: Fill with given value
+  void fill(T const& );
 
 public:
   vil_memory_image_of(const vil_memory_image_of& that);

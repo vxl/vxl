@@ -25,7 +25,7 @@
 
 vil_image vil_new(int width, int height, vil_image const& prototype)
 {
-  switch (prototype.pixel_type()) {
+  switch (vil_pixel_type(prototype)) {
   case VIL_BYTE: return vil_memory_image_of<unsigned char>(width, height);
   default:
     vcl_assert(!"vil_new");
@@ -43,6 +43,9 @@ vil_image vil_new(vil_stream* os,
 		  vil_component_format format,
 		  char const* file_format VCL_DEFAULT_VALUE(0))
 {
+  if (!file_format) // avoid segfault in strcmp()
+    file_format = "pnm";
+  
   vil_image_impl* outimage = 0;
   for(vil_file_format** p = vil_file_format::all(); *p; ++p) {
     vil_file_format* fmt = *p;

@@ -1,7 +1,23 @@
 #include <vcl/vcl_iostream.h>
+#include <vcl/vcl_unistd.h>
 
 #include <vil/vil_memory_image.h>
 #include <vil/vil_save.h>
+
+
+
+
+
+void save_writable(vil_image const &m, char const *file)
+{
+  // (try to) remove old file.
+  vcl_unlink(file);
+  // save.
+  vil_save(m, file);
+  // Make readable/writeable by all. Else the vil_save() will fail 
+  // if the program is run later by another user on the same machine.
+  vcl_chmod(file, 0666);
+}
 
 void p(vil_image& m)
 {
@@ -26,7 +42,7 @@ int main()
   m.put_section(data, 0, 0, 3, 2);
   p(m);
 
-  vil_save(m, "/tmp/vil_test_memory_image.pgm");
+  save_writable(m, "/tmp/vil_test_memory_image.pgm");
 
   return 0;
 }

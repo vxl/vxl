@@ -9,8 +9,8 @@
 // vectors to be used with the vnl_matrix<T> class. vnl_vector<T>
 // has size fixed by constructor time or changed by assignment
 // operator.
-// For faster, non-mallocing vectors with size know at compile
-// time, use vnl_vector_fixed*.
+// For faster, non-mallocing vectors with size known at compile
+// time, use vnl_vector_fixed* or vnl_T_n (e.g. vnl_double_3).
 
 #include <vcl/vcl_iosfwd.h>
 #include <vnl/vnl_error.h>
@@ -143,6 +143,7 @@ public:
   inline       T* data_block () { return data; }
 
   // iterators
+  typedef T element_type;
   typedef T       *iterator;
   inline iterator begin() { return data; }
   inline iterator end() { return data+num_elmts; }

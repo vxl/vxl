@@ -25,12 +25,23 @@ ostream& vbl_bounding_box<T, DIM>::print(ostream& s) const
   return s;
 }
 
-#ifndef WIN32
+// VC can't do the <<, luckily it inlines it.
+#ifdef WIN32
+# define vbl_bbox_inst_inline(x) /* template x */
+#else
+# define vbl_bbox_inst_inline(x) template x
+#endif
+
+#if defined(VCL_SUNPRO_CC_50)
+# define vbl_bbox_inst_functions(T,DIM) /* */
+#else
+# define vbl_bbox_inst_functions(T,DIM) \
+VCL_INSTANTIATE_INLINE(bool nested  (vbl_bounding_box<T,DIM> const &, vbl_bounding_box<T,DIM> const &)); \
+VCL_INSTANTIATE_INLINE(bool disjoint(vbl_bounding_box<T,DIM> const &, vbl_bounding_box<T,DIM> const &)); \
+VCL_INSTANTIATE_INLINE(bool meet    (vbl_bounding_box<T,DIM> const &, vbl_bounding_box<T,DIM> const &));
+#endif
+
 #define VBL_BOUNDING_BOX_INSTANTIATE(T,DIM) \
 template class vbl_bounding_box<T , DIM >; \
-template ostream& operator << (ostream& s, const vbl_bounding_box<T,DIM>& bbox);
-#else
-// VC can't do the <<, luckily it inlines it.
-#define VBL_BOUNDING_BOX_INSTANTIATE(T,DIM) \
-template class vbl_bounding_box<T , DIM >; 
-#endif
+vbl_bbox_inst_inline(ostream& operator << (ostream&, vbl_bounding_box<T,DIM> const &)); \
+vbl_bbox_inst_functions(T,DIM)

@@ -142,7 +142,7 @@ void vgl_box_2d<Type>::set_height(Type height)
 }
 
 template <class Type>
-void vgl_box_2d<Type>::setmin_pos_ition(Type min_position[2])
+void vgl_box_2d<Type>::setmin_position(Type min_position[2])
 {
   min_pos_[0]=min_position[0];
   min_pos_[1]=min_position[1];
@@ -155,7 +155,7 @@ void vgl_box_2d<Type>::setmin_pos_ition(Type min_position[2])
 }
  
 template <class Type>
-void vgl_box_2d<Type>::setmax_pos_ition(Type max_position[2])
+void vgl_box_2d<Type>::setmax_position(Type max_position[2])
 {
   max_pos_[0]=max_position[0];
   max_pos_[1]=max_position[1];
@@ -235,11 +235,24 @@ istream& vgl_box_2d<Type>::read(istream& s)
 template <class Type>
 vgl_box_2d<Type> intersect(vgl_box_2d<Type> const& a, vgl_box_2d<Type> const& b)
 {
+  Type x0 = vcl_max(a.get_min_x(), b.get_min_x());
+  Type y0 = vcl_max(a.get_min_y(), b.get_min_y());
+  Type x1 = vcl_min(a.get_max_x(), b.get_max_x());
+  Type y1 = vcl_min(a.get_max_y(), b.get_max_y());
+
+  if (x1 > x0 && y1 > y0) 
+    return vgl_box_2d<Type> (x0, x1, y0, y1);
+  else
+    return vgl_box_2d<Type> (0,0,0,0);
+
+  // capes - replaced this wrong code
+  /*
   return vgl_box_2d<Type>(vcl_max(a.get_min_x(), b.get_min_x()),
 			  vcl_min(a.get_max_x(), b.get_max_x()),
 			  vcl_max(a.get_min_y(), b.get_min_y()),
 			  vcl_min(a.get_max_y(), b.get_max_y())
 			  );
+  */
 }
 
 #undef VGL_BOX_2D_INSTANTIATE

@@ -27,7 +27,7 @@ class vgl_point_3d;
 
 #include <vcl/vcl_iostream.h>
 #include <vcl/vcl_algorithm.h>
-#include <vcl/vcl_cmath.h> // for fabs()
+#include <vcl/vcl_cmath.h> // for vcl_abs()
 
 template <class Type>
 class vgl_homg_point_3d
@@ -47,7 +47,7 @@ public:
   //   set(that.x(),that.y(),that.z(),that.w());
   // }
 
-  vgl_homg_point_3d(vgl_point_3d<Type> const& p);
+//unimp  vgl_homg_point_3d(vgl_point_3d<Type> const& p);
 
   //---------------------------------------------------------------------------
   //: Constructor from four Types
@@ -123,7 +123,7 @@ public:
   // Return true when |w| < tol * min(|x|, |y|, |z|)
   bool ideal(Type tol)
   {
-    return fabs(w()) < tol * vcl_min(vcl_min(fabs(x()),fabs(y())),fabs(z()));
+    return vcl_abs(w()) < tol * vcl_min(vcl_min(vcl_abs(x()),vcl_abs(y())),vcl_abs(z()));
   }
   
   //***************************************************************************

@@ -10,7 +10,8 @@
 #include <vcl/vcl_cmath.h>
 
 //: helper routine used by create_gaussian
-static/*FIXME*/ float compute_gauss_weight (float sigma, int mask_index) {
+//static/*FIXME*/
+float vsl_compute_gauss_weight (float sigma, int mask_index) {
   float sum = 0;
   
   for (int repeat = 0; repeat < 6; repeat++) {
@@ -29,12 +30,12 @@ void vsl_create_gaussian (T gauss_sigma, vsl_1d_half_kernel<T> *mask_ptr) {
   
   unsigned mask_index = 0;
 
-  float gauss_weight = compute_gauss_weight (gauss_sigma, mask_index);
+  float gauss_weight = vsl_compute_gauss_weight (gauss_sigma, mask_index);
   while (gauss_weight > CN_GAUSS_CUTOFF_VALUE) {
     mask_ptr->array [mask_index] = gauss_weight;
     ++ mask_index;
     
-    gauss_weight = compute_gauss_weight (gauss_sigma, mask_index);
+    gauss_weight = vsl_compute_gauss_weight (gauss_sigma, mask_index);
     
     if (mask_index == mask_ptr->capacity) {
       cerr << "mask size equal to capacity - must recompile with new mask size";
@@ -45,11 +46,11 @@ void vsl_create_gaussian (T gauss_sigma, vsl_1d_half_kernel<T> *mask_ptr) {
   mask_ptr->count = mask_index;
   
   float total_mask_value = mask_ptr->array [0];
-  for (mask_index = 1; int(mask_index) < mask_ptr->count; mask_index++) {
+  for (mask_index = 1; mask_index < mask_ptr->count; mask_index++) {
     total_mask_value += 2 * mask_ptr->array [mask_index];
   }
   
-  for (mask_index = 0; int(mask_index) < mask_ptr->count; mask_index++) {
+  for (mask_index = 0; mask_index < mask_ptr->count; mask_index++) {
     mask_ptr->array [mask_index] /= total_mask_value;
     
     if (mask_ptr->array [mask_index] < CN_GAUSS_CUTOFF_VALUE)

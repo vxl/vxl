@@ -20,7 +20,7 @@ struct vsl_1d_half_kernel {
   
   unsigned const capacity;
   
-  int count;
+  unsigned count;
   T *array;
 };
 

@@ -1,14 +1,20 @@
 #ifndef vnl_rotation_matrix_h_
 #define vnl_rotation_matrix_h_
 
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_matrix.h>
+template <class T> class vnl_vector;
+template <class T> class vnl_matrix;
+//#include <vnl/vnl_vector.h>
+//#include <vnl/vnl_matrix.h>
 
-class vnl_rotation_matrix {
- public:
-  // returns exp([omega]_x), which is rotation by an angle ||omega||
-  // about the axis given by the 3-vector omega.
-  static vnl_matrix<double> exp_of_skew(const vnl_vector<double> &omega);
-};
+// Functions to compute the exponential of a skew 3x3 matrix [x].
+// The result is a (special) orthogonal 3x3 matrix which is a
+// rotation about the axis x, by an angle equal to ||x||.
+
+bool vnl_rotation_matrix(double const axis[3], double **R);
+bool vnl_rotation_matrix(double const axis[3], double *R0, double *R1, double *R2);
+bool vnl_rotation_matrix(double const axis[3], double R[3][3]);
+bool vnl_rotation_matrix(vnl_vector<double> const &axis, vnl_matrix<double> &R);
+
+vnl_matrix<double> vnl_rotation_matrix(vnl_vector<double> const &axis);
 
 #endif

@@ -24,9 +24,13 @@
 //                            access to non-zero values in matrix.
 //                            Iterator is controlled using reset, next,
 //                            getrow, getcolumn, and value.
+//
+//     David Capel May 2000   Added set_row, scale_row, mult, vcat and const
+//                            methods where appropriate.
 
 #include <vcl/vcl_vector.h>
 #include <vnl/vnl_vector.h>
+#include <vcl/vcl_functional.h>
 
 template <class T>
 class vnl_sparse_matrix_pair {
@@ -46,9 +50,18 @@ public:
     }
     return *this;
   }
+  
+  struct less : public vcl_binary_function<vnl_sparse_matrix_pair, vnl_sparse_matrix_pair, bool> {
+    bool operator() (vnl_sparse_matrix_pair const& p1, vnl_sparse_matrix_pair const& p2) { 
+      return p1.first < p2.first; 
+    }
+  };
 };
 
 //: Simple sparse matrix
+
+//KYM: Added the following so set_row will compile on gcc 2.7.2
+typedef vcl_vector<int> vnl_sparse_matrix_vector_int_gcc272_hack;
 
 template <class T>
 class vnl_sparse_matrix {
@@ -77,26 +90,33 @@ public:
   vnl_sparse_matrix<T>& operator=(const vnl_sparse_matrix<T>& rhs);
 
   //: Multiply this*rhs, another sparse matrix.
-  void mult(const vnl_sparse_matrix<T>& rhs, vnl_sparse_matrix<T>& result);
+  void mult(const vnl_sparse_matrix<T>& rhs, vnl_sparse_matrix<T>& result) const;
 
   //: Multiply this*rhs, where rhs is a vector.
-  //    Currently not implemented.
-  void mult(const vnl_vector<T>& rhs, vnl_vector<T>& result);
+  void mult(const vnl_vector<T>& rhs, vnl_vector<T>& result) const;
 
   //: Multiply this*p, a fortran order matrix.
-  void mult(unsigned int n, unsigned int m, const T* p, T* q);
+  void mult(unsigned int n, unsigned int m, const T* p, T* q) const;
 
   //: Multiplies lhs*this, where lhs is a vector
-  void pre_mult(const vnl_vector<T>& lhs, vnl_vector<T>& result);
+  void pre_mult(const vnl_vector<T>& lhs, vnl_vector<T>& result) const;
 
   //: Add rhs to this.
-  void add(const vnl_sparse_matrix<T>& rhs, vnl_sparse_matrix<T>& result);
+  void add(const vnl_sparse_matrix<T>& rhs, vnl_sparse_matrix<T>& result) const;
 
   //: Subtract rhs from this.
-  void subtract(const vnl_sparse_matrix<T>& rhs, vnl_sparse_matrix<T>& result);
+  void subtract(const vnl_sparse_matrix<T>& rhs, vnl_sparse_matrix<T>& result) const;
 
   //: Get a reference to an entry in the matrix.
   T& operator()(unsigned int row, unsigned int column);
+
+  //: Set a whole row at once. Much faster.
+  void set_row(unsigned int r, 
+	       vcl_vector<VCL_SUNPRO_ALLOCATOR_HACK(int)> const& cols, 
+	       vcl_vector<VCL_SUNPRO_ALLOCATOR_HACK(T)> const& vals);
+
+  //: Laminate matrix A onto the bottom of this one
+  vnl_sparse_matrix<T>& vcat(vnl_sparse_matrix<T> const& A);
 
   //: Get the number of rows in the matrix.
   unsigned int rows() const { return rs_; }
@@ -109,6 +129,9 @@ public:
 
   //: This is occasionally useful.
   double sum_row(unsigned int r);
+
+  //: Useful for normalizing row sums in convolution operators
+  void scale_row(unsigned int r, T scale);
 
   //: Resizes the array to have r rows and c cols
   //    Currently not implemented.

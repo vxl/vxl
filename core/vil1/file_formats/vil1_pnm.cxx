@@ -31,11 +31,11 @@ vil_image_impl* vil_pnm_file_format::make_input_image(vil_stream* vs)
 }
 
 vil_image_impl* vil_pnm_file_format::make_output_image(vil_stream* vs, int planes,
-					       int width,
-					       int height,
-					       int components,
-					       int bits_per_component,
-					       vil_component_format format)
+						       int width,
+						       int height,
+						       int components,
+						       int bits_per_component,
+						       vil_component_format format)
 {
   return new vil_pnm_generic_image(vs, planes, width, height, components, bits_per_component, format);
 }
@@ -50,6 +50,7 @@ char const* vil_pnm_file_format::tag() const
 vil_pnm_generic_image::vil_pnm_generic_image(vil_stream* vs):
   vs_(vs)
 {
+  vs_->ref();
   read_header();
 }
 
@@ -66,6 +67,7 @@ vil_pnm_generic_image::vil_pnm_generic_image(vil_stream* vs, int planes,
 					     vil_component_format format):
   vs_(vs)
 {
+  vs_->ref();
   width_ = width;
   height_ = height;
   
@@ -104,7 +106,8 @@ vil_pnm_generic_image::vil_pnm_generic_image(vil_stream* vs, int planes,
 
 vil_pnm_generic_image::~vil_pnm_generic_image()
 {
-  delete vs_;
+  //delete vs_;
+  vs_->unref();
 }
 
 

@@ -18,6 +18,8 @@
 // enter the correct prototype in here.
 
 #include <vnl/vnl_complex.h>
+
+// xSVDC
 #define vnl_netlib_svd_proto(T) \
 T *x, int const &ldx, int const &m, int const &n, \
 T *sv, \
@@ -29,12 +31,54 @@ int const &job, int *info
 #define vnl_netlib_svd_params \
 x, ldx, m, n, sv, errors, u, ldu, v, ldv, work, job, info
 
-extern "C" {
-  // correct ?
-  typedef vnl_double_complex doublecomplex;
+// xQRDC
+#define vnl_netlib_qrdc_proto(T) \
+T *x, \
+int const& ldx, \
+int const& n, \
+int const& p, \
+T* qraux, \
+int *jpvt, \
+T *work, \
+int const& job
+#define vnl_netlib_qrdc_params \
+x, ldx, n, p, qraux, jpvt, work, job
+
+// xQRSL
+#define vnl_netlib_qrsl_proto(T) \
+T const *x, \
+int &ldx, \
+int &n, \
+int &k, \
+T const *qraux, \
+T const *y, \
+T *qy, \
+T *qty, \
+T *b, \
+T *rsd, \
+T *xb, \
+int &job, \
+int *info
+#define vnl_netlib_qrsl_params \
+x, ldx, n, k, qraux, y, qy, qty, b, rsd, xb, job, info
+
+class vnl_netlib {
+public:
+  // fsm : in the global namespace, 'real' conflicts with function ::real()
+  // and 'complex' conflicts with template complex<T>.
   typedef int integer;
+  typedef float  real;
   typedef double doublereal;
-  
+  typedef vnl_float_complex  complex;
+  typedef vnl_double_complex doublecomplex;
+};
+
+extern "C" {
+#define integer       vnl_netlib::integer
+#define real          vnl_netlib::real
+#define doublereal    vnl_netlib::doublereal
+#define complex       vnl_netlib::complex
+#define doublecomplex vnl_netlib::doublecomplex
   // complex eigensystem
   int zgeev_(char const *jobvl, 
 	     char const *jobvr, 
@@ -51,77 +95,131 @@ extern "C" {
 	     doublereal *rwork, 
 	     integer *info);
 
-  // linpack xsvdc() routines
-  int zsvdc_(vnl_netlib_svd_proto(vnl_double_complex));
-  int csvdc_(vnl_netlib_svd_proto(vnl_float_complex));
-  int dsvdc_(vnl_netlib_svd_proto(double));
-  int ssvdc_(vnl_netlib_svd_proto(float));
+  // linpack xSVDC() routines
+  int ssvdc_(vnl_netlib_svd_proto(real));
+  int dsvdc_(vnl_netlib_svd_proto(doublereal));
+  int csvdc_(vnl_netlib_svd_proto(complex));
+  int zsvdc_(vnl_netlib_svd_proto(doublecomplex));
 
-  // double-precision QR
-  int dqrdc_(double *x, 
-	     int const& ldx, 
-	     int const& n, 
-	     int const& p, 
-	     double* qraux,
-	     int *jpvt, 
-	     double *work, 
-	     int const& job);
+  // linpack xQRDC QR routines
+  int sqrdc_(vnl_netlib_qrdc_proto(real));
+  int dqrdc_(vnl_netlib_qrdc_proto(doublereal));
+  int cqrdc_(vnl_netlib_qrdc_proto(complex));
+  int zqrdc_(vnl_netlib_qrdc_proto(doublecomplex));
+
   // solve A x = b using QR ?
-  int dqrsl_(double const* qrdc, int& ldqrdc, int& n, int& k, double const* qraux,
-	     double const* b, double* qb, double* qtb,
-	     double* x, double* rsd, double* Ax,
-	     int& job, int* info);
+  int sqrsl_(vnl_netlib_qrsl_proto(real));
+  int dqrsl_(vnl_netlib_qrsl_proto(doublereal));
+  int cqrsl_(vnl_netlib_qrsl_proto(complex));
+  int zqrsl_(vnl_netlib_qrsl_proto(doublecomplex));
 
   // real eigensystem
   int rg_(int const& nm, 
 	  int const& n, 
 	  double const* a,
-	  double* wr, 
-	  double* wi, 
+	  doublereal* wr, 
+	  doublereal* wi, 
 	  int const& matz,
-	  double* z,
+	  doublereal* z,
 	  int* iv1, 
-	  double* fv1,
+	  doublereal* fv1,
 	  int* ierr);
 
   // temperton fft routines
-  int gpfa_ (float  *a, float  *b, float  const *triggs, 
+  int gpfa_ (real  *a, real  *b, real  const *triggs, 
 	     int const &inc, int const &jump, int const &n, 
 	     int const &lot, int const &isign, int const *, int *);
-  int setgpfa_ (float  *triggs, const int &, const int *, int *);
-  int dgpfa_(double *a, double *b, double const *triggs, 
+  int setgpfa_ (real  *triggs, const int &, const int *, int *);
+  int dgpfa_(doublereal *a, doublereal *b, doublereal const *triggs, 
 	     int const &inc, int const &jump, int const &n, 
 	     int const &lot, int const &isign, int const *, int *);
-  int dsetgpfa_(double *triggs, const int &, const int *, int *);
+  int dsetgpfa_(doublereal *triggs, const int &, const int *, int *);
 
   // symmetric eigensystem
   int rs_(int const & nm, int const & n,
-	  double const *a, double *w,
-	  int const & matz, double const *z,
-	  double const *fv1, double const *fv2,
+	  doublereal const *a, doublereal *w,
+	  int const & matz, doublereal const *z,
+	  doublereal const *fv1, doublereal const *fv2,
 	  int * ierr);
 
   // generalized eigensystem
-  int rsg_ (int const & nm, int const & n, double const *a, double const *b,
-	    double *w, int const & matz, double *z, double *fv1, double *fv2,
+  int rsg_ (int const & nm, int const & n, doublereal const *a, doublereal const *b,
+	    doublereal *w, int const & matz, doublereal *z, doublereal *fv1, doublereal *fv2,
 	    int *ierr);
   
   // cholesky
-  int dpofa_(double *m, const int& lda, const int& n, int* info);
-  int dposl_(const double *a, const int& lda, const int& n, double *b);
-  int dpoco_(double *a, const int& lda, const int& n, double* rcond, double *z, int *info);
-  int dpodi_(double *a, const int& lda, const int& n, double* det, const int& job);
+  int dpofa_(doublereal *m, const int& lda, const int& n, int* info);
+  int dposl_(const doublereal *a, const int& lda, const int& n, doublereal *b);
+  int dpoco_(doublereal *a, const int& lda, const int& n, doublereal* rcond, doublereal *z, int *info);
+  int dpodi_(doublereal *a, const int& lda, const int& n, doublereal* det, const int& job);
 
   // roots of real polynomial
-  void rpoly_(const double* op, int* degree, double *zeror, double *zeroi, int *fail);
+  void rpoly_(const doublereal* op, int* degree, doublereal *zeror, doublereal *zeroi, int *fail);
 
   //
-  int lmder1_();
   int chscdf_();
   int lbfgs_();
-  int lmdif_();
   int dnlaso_();
   int cg_();
+
+  // lmdif() is used by vnl_levenberg_marquardt
+  int lmdif_(int fcn(int* m,          // I    Number of residuals
+		     int* n,          // I    Number of unknowns
+		     doublereal const* x, // I    Solution vector, size n
+		     doublereal* fx,      // O    Residual vector f(x)
+		     int* iflag       // IO   0 ==> print, -1 ==> terminate
+		     ),
+	     int *m,          // I     Number of residuals, must be > #unknowns
+	     int *n,          // I     Number of unknowns
+	     doublereal *x,       // IO    Solution vector, size n
+	     doublereal *fvec,    // W m   Storage for residual vector
+	     doublereal *ftol,    // I     Termination tolerance on F (sum of squared residuals)
+	     doublereal *xtol,    // I     Termination tolerance on X (solution vector)
+	     doublereal *gtol,    // I     Termination tolerance on Grad(F)' * F = 0
+	     int    *maxfev,  // I     Termination maximum number of iterations.
+	     doublereal *epsfcn,  // I     Step length for FD Jacobian
+	     doublereal *diag,    // I     Multiplicative scale factors for variables
+	     int    *mode,    // I     1 => Compute diag, 2 => user has set diag
+	     doublereal *factor,  // I     Initial step bound.  Set to 100.
+	     int    *nprint,  // I     +ive => print every nprint iters.
+	     int    *info,    // O     See switch (info) below
+	     int    *nfev,    // O     Number of function evaluations
+	     doublereal *fjac,    // O m*n Upper n*n is P'J'JP = R'R
+	     int    *ldfjac,  // I     Leading dimension of fdjac -- set to m
+	     int    *ipvt,    // O n   Permutation indices P
+	     doublereal *qtf,     // O n   Q'*f(x) 
+	     doublereal *wa1,     // W n
+	     doublereal *wa2,     // W n
+	     doublereal *wa3,     // W n
+	     doublereal *wa4,     // W m
+	     doublereal *errors); // O 2   Start/end RMS errors
+
+  // lmder() is used by vnl_levenberg_marquardt
+  int lmder1_(int fcn(int* m,          // I    Number of residuals
+		      int* n,          // I    Number of unknowns
+		      doublereal const* x, // I    Solution vector, size n
+		      doublereal* fx,      // O    Residual vector f(x), size m
+		      doublereal* fJ,      // O    m * n Jacobian f(x)
+		      int&,
+		      int* iflag       // I    1 -> calc fx, 2 -> calc fjac
+		      // O    0 ==> print, -1 ==> terminate
+		      ),
+	      int const& m,	// I    Number of residuals         
+	      int const& n,	// I    Number of unknowns          
+	      doublereal*    x,	// I    Solution vector, size n     
+	      doublereal*    fvec,	// O    Residual vector f(x), size m
+	      doublereal*    fjac,	// O    m * n Jacobian f(x)         
+	      int const& ldfjac,	// I    LD of fjac
+	      doublereal const& tol,	// I    x/ftol
+	      int* info,          // O
+	      int* ipvt,		// O length n
+	      doublereal * wa,		// I work, length lwa
+	      const int& lwa);	// I > 5*n+m
+#undef integer
+#undef real
+#undef doublereal
+#undef complex
+#undef doublecomplex
 };
 
 

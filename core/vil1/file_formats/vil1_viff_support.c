@@ -51,6 +51,9 @@
 
 #define LENGTH 512
 
+int vil_viff_imagesize(struct xvimage *image,int *dsize, int *dcount, int *msize,
+		  int *mcount, int *lsize,int *lcount);
+
 /**************************************************************
 *
 * MODULE NAME: createimage

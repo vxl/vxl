@@ -1,7 +1,4 @@
 #include "vsl_harris.h"
-#include <vsl/vsl_roi_window.h>
-#include <vsl/vsl_convolve.h>
-#include "droid.h"
 
 #include <vcl/vcl_climits.h> // CHAR_BIT
 #include <vcl/vcl_cmath.h>
@@ -15,16 +12,30 @@
 
 #include <vbl/vbl_printf.h>
 
-#include <vil/vil_image_impl.h>
 #include <vil/vil_image.h>
+#include <vil/vil_image_as.h>
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_copy.h>
+
+#include <vsl/vsl_roi_window.h>
+#include <vsl/vsl_convolve.h>
+#include <vsl/internals/droid.h> //name
 
 //--------------------------------------------------------------
 
 vsl_harris::vsl_harris(vsl_harris_params const & params) 
   : vsl_harris_params(params) 
+  , image_ptr(0) 
+  , image_gradx_ptr(0) 
+  , image_grady_ptr(0) 
+  , image_fxx_ptr(0) 
+  , image_fxy_ptr(0) 
+  , image_fyy_ptr(0) 
+  , image_cornerness_ptr(0) 
+  , image_cornermax_ptr(0)
   , _params(*this)
+  , image_w(0)
+  , image_h(0)
 { 
 }
 
@@ -35,10 +46,26 @@ vsl_harris::~vsl_harris() {
 //------------------------------------------------------------
 
 //: initialization of buffers.
-void vsl_harris::init_module (vil_image image) {
-  // store size :
-  image_h = image.height ();
-  image_w = image.width ();
+void vsl_harris::init_module (vil_image const &image) {
+  // only reallocate if the size changes :
+  if ((image_h != image.height ()) || (image_w !=image.width ())) {
+    // store size :
+    image_h = image.height();
+    image_w = image.width();
+    
+    if (image_ptr) 
+      uninit_module();
+    
+    // set up response images etc.
+    image_ptr            = new vil_byte_buffer   (image_w, image_h);
+    image_gradx_ptr      = new vil_int_buffer    (image_w, image_h);
+    image_grady_ptr      = new vil_int_buffer    (image_w, image_h);
+    image_fxx_ptr        = new vil_float_buffer  (image_w, image_h);
+    image_fxy_ptr        = new vil_float_buffer  (image_w, image_h);
+    image_fyy_ptr        = new vil_float_buffer  (image_w, image_h);
+    image_cornerness_ptr = new vil_float_buffer  (image_w, image_h);
+    image_cornermax_ptr  = new vil_bool_buffer   (image_w, image_h);
+  }
   
   /* set up window. */
   window_str.row_start_index = 0;
@@ -46,6 +73,9 @@ void vsl_harris::init_module (vil_image image) {
   window_str.row_end_index = image_h-1;
   window_str.col_end_index = image_w-1;
   
+  // copy input image to byte buffer.
+  //vil_image_as_byte(image).get_section(image_ptr->get_buffer(), 0, 0, image_w, image_h);
+
   // set up response images etc.
   //no longer:
   // we have to explicitly ref() and unref() the buffers
@@ -98,7 +128,7 @@ void vsl_harris::uninit_module() {
 
 //-----------------------------------------------------------------------------
 
-void vsl_harris::compute(vil_image image) {
+void vsl_harris::compute(vil_image const &image) {
   // set up bitmaps etc :
   this->init_module(image);
   
@@ -194,7 +224,7 @@ void vsl_harris::compute_response() {
 //--------------------------------------------------------------------------------
 
 //: internal
-void vsl_harris::do_non_adaptive(double* corner_min) {
+void vsl_harris::do_non_adaptive(double *corner_min) {
   int maxima_count = droid::find_corner_maxima (*corner_min,
 						&window_str,
 						image_cornerness_ptr,
@@ -318,40 +348,39 @@ void vsl_harris::do_adaptive() {
 //-----------------------------------------------------------------------------
 
 int vsl_harris::dr_store_corners (float corner_min) {
-  cx.clear();
-  cy.clear();
-
+  cc.clear();
+  typedef vcl_pair<float, float> pair_ff;
   for (int row = window_str.row_start_index; row < window_str.row_end_index; row++)
     for (int col = window_str.col_start_index; col < window_str.col_end_index; col++)
       if ((*image_cornermax_ptr) [row][col] && (*image_cornerness_ptr) [row][col] > corner_min) {
 	double x, y;
-	if (droid::compute_subpixel_max (image_cornerness_ptr, row, col, x,y, _params.pab_emulate)) {
-	  cx.push_back(col_start_index+x);
-	  cy.push_back(row_start_index+y);
-	}
+	if (droid::compute_subpixel_max (image_cornerness_ptr, row, col, x,y, _params.pab_emulate))
+	  cc.push_back(pair_ff(col_start_index+x, row_start_index+y));
       }
   
-  assert(cx.size() == cy.size());
-  return cx.size();
+  return cc.size();
 }
 
+// ?? should we append, and not assign ??
+void vsl_harris::get_corners(vcl_vector<vcl_pair<float, float> > &cor) const {
+  cor = cc;
+}
 void vsl_harris::get_corners(vcl_vector<float> &corx, vcl_vector<float> &cory) const {
-  assert(cx.size() == cy.size());
-  // ?? should we append, and not assign ??
-  corx = cx;
-  cory = cy;
+  for (unsigned i=0; i<cc.size(); ++i) {
+    corx.push_back(cc[i].first);
+    cory.push_back(cc[i].second);
+  }
 }
 
 //: convenience method
+void vsl_harris::save_corners(ostream &f) const {
+  for (unsigned i=0; i<cc.size(); ++i)
+    f << cc[i].first << ' ' << cc[i].second << endl;
+}
 void vsl_harris::save_corners(char const *filename) const {
   ofstream f(filename);
   assert(f);
-
-  assert(cx.size() == cy.size());
-  unsigned n=cx.size();
-  for (unsigned i=0; i<n; ++i)
-    f << cx[i] << ' ' << cy[i] << endl;
-  
+  save_corners(f);
   f.close();
 }
 

@@ -7,9 +7,7 @@
 // Author: awf@robots.ox.ac.uk
 // Created: 16 Feb 00
 
-#include <vil/vil_fwd.h>
-
-// Must include this, so that users of vil_memory_image cann pass one to a save.
+class vil_stream;
 #include <vil/vil_image.h>
 
 //: Send vil_image_impl to disk, given filename

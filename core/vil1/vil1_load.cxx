@@ -1,5 +1,5 @@
 
-#include <vil/vil_load.h>
+#include "vil_load.h"
 #include <vil/vil_file_format.h>
 #include <vil/vil_stream_fstream.h>
 #include <vil/vil_image.h>
@@ -17,7 +17,7 @@ vil_image vil_load(char const* filename)
     cerr << __FILE__ " : trying \'" << (*p)->tag() << "\'" << endl;
 #endif
     is->seek(0);
-    vil_image/*_impl* */ i = (*p)->make_input_image(is);
+    vil_image i = (*p)->make_input_image(is);
     if (i)
       return i;
   }
@@ -26,7 +26,9 @@ vil_image vil_load(char const* filename)
   cerr << "vil_load: Failed to load [" << filename << "]" << endl
        << "vil_load: Tried";
   for (vil_file_format** p = vil_file_format::all(); *p; ++p)
-    cerr << " \'" << (*p)->tag() << "\'"; // << flush;
+    // 'flush' in case of segfault next time through loop. Else, we
+    // will not see those printed tags still in the stream buffer.
+    cerr << " \'" << (*p)->tag() << "\'" << flush; 
   cerr << endl;
 
   return 0;

@@ -10,12 +10,9 @@
 #if defined(VCL_GCC_27) || defined(VCL_GCC_EGCS)
 // ---------- emulation
 #if !VCL_USE_NATIVE_COMPLEX
-  VCL_COMPLEX_INSTANTIATE(float);
-  VCL_COMPLEX_INSTANTIATE(double);
-# if defined(VCL_GCC_27)
-  VCL_INSTANTIATE_INLINE(vcl_complex<float > operator+(vcl_complex<float > const &));
-  VCL_INSTANTIATE_INLINE(vcl_complex<double> operator+(vcl_complex<double> const &));
-#endif
+// ** make sure gcc 2.7 sees this **
+VCL_COMPLEX_INSTANTIATE(float);
+VCL_COMPLEX_INSTANTIATE(double);
 
 // ---------- egcs and gcc 2.95
 #elif defined(VCL_GCC_295) || defined(VCL_GCC_EGCS)
@@ -81,5 +78,4 @@ namespace {
 #elif defined(VCL_SUNPRO_CC)
 template std::complex<double> std::conj<double>(std::complex<double> const &);
 
-#endif
 #endif

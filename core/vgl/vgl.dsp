@@ -40,8 +40,9 @@ RSC=rc.exe
 # PROP Output_Dir "Release"
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
+MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O2 /I "$(IUEROOT)\vxl\config.win32-VC60" /I "$(IUEROOT)/vxl" /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /D "VCL_USE_NATIVE_STL" /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /Ob2 /I "$(IUEROOT)\vxl\config.win32-VC60" /I "$(IUEROOT)/vxl" /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /D "VCL_USE_NATIVE_STL" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -49,7 +50,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo
+# ADD LIB32 /nologo /out:"..\Release\vgl.lib"
 
 !ELSEIF  "$(CFG)" == "vgl - Win32 Debug"
 
@@ -63,6 +64,7 @@ LIB32=link.exe -lib
 # PROP Output_Dir "Debug"
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
+MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
 # ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "$(IUEROOT)\vxl\config.win32-VC60" /I "$(IUEROOT)/vxl" /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -72,7 +74,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"D:\target\target\vxl\Debug\vgl.lib"
+# ADD LIB32 /nologo /out:"..\Debug\vgl.lib"
 
 !ENDIF 
 
@@ -98,6 +100,14 @@ SOURCE=".\Templates\vgl_box_3d+double-.cxx"
 # Begin Source File
 
 SOURCE=".\Templates\vgl_box_3d+float-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_clip.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_distance.cxx
 # End Source File
 # Begin Source File
 
@@ -143,10 +153,82 @@ SOURCE=".\Templates\vgl_homg_point_3d+float-.cxx"
 
 SOURCE=".\Templates\vgl_line_2d+double-.cxx"
 # End Source File
+# Begin Source File
+
+SOURCE=.\vgl_polygon.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_polygon_scan_iterator.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
+# Begin Source File
+
+SOURCE=.\vgl_box_2d.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_box_3d.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_clip.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_distance.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_homg_line_2d.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_homg_line_3d_2_points.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_homg_plane_3d.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_homg_point_2d.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_homg_point_3d.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_line_2d.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_line_segment_3d.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_plane_3d.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_point_2d.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_point_3d.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_polygon.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_polygon_scan_iterator.h
+# End Source File
 # End Group
 # End Target
 # End Project

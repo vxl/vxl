@@ -1,3 +1,4 @@
+#include <vcl/vcl_iostream.h>
 #include <vnl/vnl_real_npolynomial.h>
 #include <vnl/algo/vnl_rnpoly_solve.h>
 #include <vnl/vnl_test.h>

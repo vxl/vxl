@@ -11,6 +11,7 @@ $vcl = 0;  # convert Config-IUE and standard C/C++ code to vcl
 $vbl = 0;  # convert Basics code to vbl
 $vnl = 0;  # convert Numerics code to vnl
 $vil = 0;  # convert EasyImage to vil
+$vsl = 0;  #
 $vgui = 0; # convert old vgui to new vgui
 $fsm = 0;  # make Fascist Source Modifications
 $lint = 0; # 
@@ -26,6 +27,7 @@ foreach my $arg (@ARGV) {
   elsif ($arg eq "-vbl" ) { $vbl = 1; }
   elsif ($arg eq "-vnl" ) { $vnl = 1; }
   elsif ($arg eq "-vil" ) { $vil = 1; }
+  elsif ($arg eq "-vsl" ) { $vsl = 1; }
   elsif ($arg eq "-vgl" ) { $vgl = 1; }
   elsif ($arg eq "-vxl" ) { $vgl = $vnl = $vil = $vbl = $vcl = 1; }
   elsif ($arg eq "-vgui") { $vgui = 1;}
@@ -52,6 +54,13 @@ if ($tmpl) {
 die unless open(FD, "-");
 
 while(<FD>) {
+  # skip lines preceded by "//vxl_filter:skip"
+  if (m/\/\/vxl_filter:skip/) {
+    print;
+    print <FD>;
+    next;
+  }
+
   if ($vcl) {
     # IUE_compiler.h -> vcl_compiler.h
     s/IUE_GCC/VCL_GCC/g;
@@ -97,16 +106,24 @@ while(<FD>) {
     s/include <assert\.h>/include <vcl\/vcl_cassert.h>/;
     s/include <ctype\.h>/include <vcl\/vcl_cctype.h>/;
     s/include <math\.h>/include <vcl\/vcl_cmath.h>/;
+    s/include <time\.h>/include <vcl\/vcl_ctime.h>/;
+    s/include <limits\.h>/include <vcl\/vcl_climits.h>/;
     s/include <string\.h>/include <vcl\/vcl_cstring.h>/;
     s/include <stdio\.h>/include <vcl\/vcl_cstdio.h>/;
     s/include <stdlib\.h>/include <vcl\/vcl_cstdlib.h>/;
+    s/include <stddef\.h>/include <vcl\/vcl_cstddef.h>/;
+    s/include <setjmp\.h>/include <vcl\/vcl_csetjmp.h>/;
     s/include <stdarg\.h>/include <vcl\/vcl_cstdarg.h>/;
     s/include <iostream\.h>/include <vcl\/vcl_iostream.h>/;
     s/include <iomanip\.h>/include <vcl\/vcl_iomanip.h>/;
+    s/include <fstream>/include <vcl\/vcl_fstream.h>/;
     s/include <fstream\.h>/include <vcl\/vcl_fstream.h>/;
+    s/include <sstream>/include <vcl\/vcl_sstream.h>/;
+    s/include <sstream\.h>/include <vcl\/vcl_sstream.h>/;
+    s/include <strstream>/include <vcl\/vcl_strstream.h>/;
     s/include <strstream\.h>/include <vcl\/vcl_strstream.h>/;
     s/include <complex\.h>/include <vcl\/vcl_complex.h>/;
-    s/include <string>/include <vcl\/vcl_string.h>/; # don't break Arg<string> ....
+    s/include <string>/include <vcl\/vcl_string.h>/;
     s/include <new>/include <vcl\/vcl_new.h>/;
     s/include <new\.h>/include <vcl\/vcl_new.h>/;
     
@@ -125,28 +142,47 @@ while(<FD>) {
     s/include <list\.h>/include <vcl\/vcl_list.h>/;
     s/include <map>/include <vcl\/vcl_map.h>/;
     s/include <map\.h>/include <vcl\/vcl_map.h>/;
-    s/include <multimap>/include <vcl\/vcl_multimap.h>/;
-    s/include <multimap\.h>/include <vcl\/vcl_multimap.h>/;
+    s/include <multimap>/include <vcl\/vcl_map.h>/;
+    s/include <multimap\.h>/include <vcl\/vcl_map.h>/;
+    s/include <set>/include <vcl\/vcl_set.h>/;
     s/include <set\.h>/include <vcl\/vcl_set.h>/;
-    s/include <multiset\.h>/include <vcl\/vcl_multiset.h>/;
+    s/include <multiset>/include <vcl\/vcl_set.h>/;
+    s/include <multiset\.h>/include <vcl\/vcl_set.h>/;
+    s/include <tree>/include <vcl\/vcl_tree.h>/;
     s/include <tree\.h>/include <vcl\/vcl_tree.h>/;
+    s/include <stack>/include <vcl\/vcl_stack.h>/;
     s/include <stack\.h>/include <vcl\/vcl_stack.h>/;
+    s/include <memory>/include <vcl\/vcl_memory.h>/;
+    s/include <memory\.h>/include <vcl\/vcl_memory.h>/;
+
+    # alloc -> memory
+    s/include <alloc>/include <vcl\/vcl_memory.h>/;
+    s/include <alloc\.h>/include <vcl\/vcl_memory.h>/;
+    s/include <vcl\/vcl_alloc\.h>/include <vcl\/vcl_memory.h>/;
+    # pair -> utility
+    s/include <pair>/include <vcl\/vcl_utility.h>/;
+    s/include <pair\.h>/include <vcl\/vcl_utility.h>/;
+    s/include <vcl\/vcl_pair\.(h|txx)>/include <vcl\/vcl_utility.$1>/;
+    # multimap -> map, multiset -> set
+    s/include <vcl\/vcl_multimap\.(h|txx)>/include <vcl\/vcl_map.$1>/;
+    s/include <vcl\/vcl_multiset\.(h|txx)>/include <vcl\/vcl_set.$1>/;
 
     # COOL
     s!<cool/String.h>!<vcl/vcl_string.h>!g;
     
     # classes and functions
+    s/\/\/(.*)\bstring\b/\/\/$1StRiNg/g; # Don't change 'string' to 'vcl_string'
+    s/\bstring\b/vcl_string/g;           # if it appears on the right hand side
+    s/\/\/(.*)\bStRiNg\b/\/\/$1string/g; # of a // C++ comment.
     s/\bvector</vcl_vector</g;
     s/\blist</vcl_list</g;
     s/\bmap</vcl_map</g;
-    s/\bstring\b/vcl_string/g;
-    s/\bCoolString\b/vcl_string/g;
     s/\bmultimap</vcl_multimap</g;
     $saw_less = 1 if s/\bless</vcl_less</g;
     s/\bpair</vcl_pair</g;
     s/\bhash</vcl_hash</g;
     s/\bset</vcl_set</g;
-
+    s/\bCoolString\b/vcl_string/g;
 
 
     # instantiation macros
@@ -171,9 +207,11 @@ while(<FD>) {
     s!Basics/ansi.h!vcl/vcl_compiler.h!;
     s!^\#include.*<Basics/point2d.h>!//$&!; # delete Basics/point2d
 
-    s/<Basics\/RGB\.h>/<vbl\/vbl_rgb.h>/;
-    s/<Basics\/RGBcell\.h>/<vbl\/vbl_rgb.h>/;
-    s/<Basics\/RGBA\.h>/<vbl\/vbl_rgba.h>/;
+    s/<Basics\/RGB\.h>/<vil\/vil_rgb.h>/;
+    s/<Basics\/RGBcell\.h>/<vil\/vil_rgb.h>/;
+    s/<Basics\/RGBA\.h>/<vil\/vil_rgba.h>/;
+    s/<vbl\/vbl_rgb\.h>/<vil\/vil_rgb.h>/;
+    s/<vbl\/vbl_rgba\.h>/<vil\/vil_rgba.h>/;
     s/<Basics\/ArgParse\.h>/<vbl\/vbl_arg.h>/;
     s/<Basics\/ArgInfoList\.h>/<vbl\/vbl_arg.h>/;
     s/<Basics\/IUE_sprintf\.h>/<vbl\/vbl_sprintf.h>/;
@@ -188,7 +226,9 @@ while(<FD>) {
     s/<Basics\/IUE_directory\.h>/<vbl\/vbl_file.h> \/\/ use vbl_file instead of IUE_directory/;
     s/<Basics\/printf\.h>/<vbl\/vbl_printf.h>/;
     s/<Basics\/AWK\.h>/<vbl\/vbl_awk.h>/;
-    s/<Basics\/clamp\.h>/<vbl\/vbl_clamp.h>/;
+    s/<Basics\/clamp\.h>/<vil\/vil_clamp.h>/;
+    s/<vbl\/vbl_clamp\.h>/<vil\/vil_clamp.h>/;
+    s/\bvbl_clamp\b/vil_clamp/g;
     s/<Basics\/QSort\.h>/<vbl\/vbl_qsort.h>/;
     s!Basics/BoundingBox.h!vbl/vbl_bounding_box.h!g;
     s!Basics/BoundingBox.C!vbl/vbl_bounding_box.txx!g;
@@ -211,10 +251,12 @@ while(<FD>) {
     s!\bARRAY2D_INSTANTIATE\b!VBL_ARRAY_2D_INSTANTIATE!g;
   
     # classes and functions
-    s/\bRGB</vbl_rgb</g;
-    s/\bRGBcell\b/vbl_rgb<byte> /g;
-    s/\bRGBA/vbl_rgba/g;
-    s/\bRGBAcell\b/vbl_rgba<byte> /g;
+    s/\bRGB</vil_rgb</g;
+    s/\bRGBcell\b/vil_rgb<byte> /g;
+    s/\bRGBA/vil_rgba/g;
+    s/\bRGBAcell\b/vil_rgba<byte> /g;
+    s/\bvbl_rgb\b/vil_rgb/g;
+    s/\bvbl_rgba\b/vil_rgba/g;
     s/\bArg</vbl_arg</g;
     s/\bArgInfoList\b/vbl_arg_info_list/g;
     s/\bArgBase::Parse/vbl_arg_parse/g;
@@ -339,7 +381,8 @@ while(<FD>) {
     s/RealNPolynomial/vnl_real_npolynomial/g;
     s/RNPolySolve/vnl_rnpoly_solve/g;
     s/\bCholesky\b/vnl_cholesky/g;
-    s/\bQR\b/vnl_qr/g;
+    s/\bQR\b/vnl_qr<double>/g;
+    s/\bvnl_qr(\s*[^<.])/vnl_qr<double>$1/g; #
     s/\bBaseSVD\b/vnl_svd/g;
     s/\bSVD\b/vnl_svd<double>/g;
     s/IUE_numeric_limits/vnl_numeric_limits/g;
@@ -431,7 +474,7 @@ while(<FD>) {
     s!(\.|\-\>)GetSizeY\(\)!$1height()!g;
     s!(\.|\-\>)GetBuffer\(\)!$1get_buffer()!g;
   }
-  
+
   if ($mvl) {
 
     # includes
@@ -453,9 +496,17 @@ while(<FD>) {
     s!\bCoolListP\b!vcl_list!g;
 
   }
+
+  if ($vsl) {
+    s/\bvsl_EdgelChain\b/vsl_edgel_chain/g;
+    s/\bvsl_Edge\b/vsl_edge/g;
+    s/\bvsl_Vertex\b/vsl_vertex/g;
+  }
   
   if ($vgui) {
     s/\bVGUI/vgui/g;
+    s/<vgui\/vgui_image\.h>/<vil\/vil_image.h>/; # header
+    s/\bvgui_image\b/vil_image/g;                # class
     s!tableaux/!vgui/!g;
     s!tableaux_DLLDATA!vgui_DLLDATA!g;
     s!vgui_displaybase.C!vgui_displaybase.txx!g;
@@ -467,6 +518,7 @@ while(<FD>) {
     s!obl_high_low!vbl_bool_ostream::high_low!g;
     s!IUE_glu.h!vgui/vgui_glu.h!g;
     s!IUE_glut.h!vgui/vgui_glut.h!g;
+    s!GL/glx.h!vgui/vgui_glx.h!g;
     s!GL/glu.h!vgui/vgui_glu.h!g;
     s!GL/glut.h!vgui/vgui_glut.h!g;
     s!<IUE_gl!<vgui/vgui_gl!g;

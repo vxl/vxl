@@ -9,7 +9,8 @@ exec perl -w -x $0 ${1+"$@"}
 #
 # usage: vxl_convert.pl [options] [file1 [file2 [...]]]
 #
-# options: -n   dry run (print commands, but don't execute).
+# options: -n     dry run (print commands, but don't execute).
+#          -diff  show diffs.
 
 # Author: Dave Cooper
 # Modification: fsm. various.
@@ -49,7 +50,7 @@ exit &main(@ARGV);
 sub shell {
   my ($arg) = @_;
   #print STDERR "[shell: $arg";
-  system("echo " . $arg);  
+  #system("echo " . $arg);  
   $ok = system($arg) >> 8;
   die "help [$arg]" if $ok != 0;
   #print STDERR "]\n";
@@ -87,7 +88,8 @@ sub main {
     }
     elsif (-f $arg) { 
       #print STDERR "file: $arg\n";
-      if ($arg =~ m/\.bak$/) { print STDERR "ignoring '$arg'\n"; }
+      if ($arg =~ m/\.bak$/ ||
+	  $arg =~ m/\~$/) { print STDERR "ignoring '$arg'\n"; }
       else { push @files, $arg; }
     }
     else {

@@ -21,7 +21,7 @@
 #include <vil/vil_copy.h>
 
 //: Send vil_image to disk.
-bool vil_save(vil_image const& i, char const* filename, char const* file_format)
+bool vil_save(vil_image const& i, char const* filename, char const* file_format VCL_DEFAULT_VALUE("pnm"))
 {
   vil_stream_fstream* os = new vil_stream_fstream(filename, "w");
   return vil_save(i, os, file_format);
@@ -30,7 +30,7 @@ bool vil_save(vil_image const& i, char const* filename, char const* file_format)
 //: Send vil_image_impl to output stream.
 // The possible file_formats are defined by the subclasses of vil_file_format
 // in vil_file_format.cxx
-bool vil_save(vil_image const& i, vil_stream* os, char const* file_format)
+bool vil_save(vil_image const& i, vil_stream* os, char const* file_format VCL_DEFAULT_VALUE("pnm"))
 {
   vil_image out = vil_new(os, i.width(), i.height(), i, file_format);
   

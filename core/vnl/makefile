@@ -1,13 +1,12 @@
-VXL := 1
-
 ################################
-include ${IUEROOT}/config/top-params.mk
+include ${IUEROOT}/config/usr_params.mk
 ################################
 
 USES := vxl
-
 LIBRARY := vnl
 VERSION := 1.0
+IULIBS := -lvcl
+DEFINES += -DBUILDING_VNL_DLL
 
 # template sources
 #MANPAGE_SOURCES += vnl_scalar_join_iterator.txx
@@ -22,8 +21,11 @@ VERSION := 1.0
 #MANPAGE_SOURCES += vnl_file_matrix.txx
 #MANPAGE_SOURCES += vnl_scatter_3x3.txx
 #MANPAGE_SOURCES += vnl_resize.txx
+SOURCES += $(wildcard vnl_block.cxx)
+FLAGS_vnl_block.cxx += $(optimize)
 
 #
+SOURCES += vnl_alloc.cxx
 SOURCES += vnl_math.cxx
 SOURCES += vnl_copy.cxx
 SOURCES += vnl_complex.cxx
@@ -41,7 +43,7 @@ SOURCES += vnl_real_npolynomial.cxx
 SOURCES += vnl_fastops.cxx
 SOURCES += vnl_linear_operators_3.cxx
 #MANPAGE_SOURCES += vnl_complex_ops.txx
-FLAGS_vnl_fastops.cxx = $(optimize_for_all_builds)
+FLAGS_vnl_fastops.cxx = $(optimize)
 
 # traits
 SOURCES += vnl_numeric_limits.cxx
@@ -86,24 +88,23 @@ SUBDIRS += tests
 endif
 
 
-DEFINES += -DBUILDING_VNL_DLL
 ifndef NOTEST
 SUBDIRS += examples
 endif
-IULIBS := -lvcl
 
 ##  Only needed for Templates/vnl_matrix+* and Templates/vnl_c_vector+* :
 ifeq ($(COMPILER),CC-n32)
 PRAGMA_INSTANTIATE_TEMPLATES = 1
 endif
 #optimize := -O3
-FLAGS_Templates/vnl_c_vector+float-.cxx += $(optimize_for_all_builds)
-FLAGS_Templates/vnl_c_vector+double-.cxx += $(optimize_for_all_builds)
-FLAGS_Templates/vnl_c_vector+float_complex-.cxx += $(optimize_for_all_builds)
-FLAGS_Templates/vnl_c_vector+double_complex-.cxx += $(optimize_for_all_builds)
+FLAGS_Templates/vnl_c_vector+float-.cxx += $(optimize)
+FLAGS_Templates/vnl_c_vector+double-.cxx += $(optimize)
+FLAGS_Templates/vnl_c_vector+float_complex-.cxx += $(optimize)
+FLAGS_Templates/vnl_c_vector+double_complex-.cxx += $(optimize)
+FLAGS_Templates/vnl_sparse_matrix_instances.cxx += $(optimize)
 
 ################################
-include ${IUEROOT}/config/top-rules.mk
+include ${IUEROOT}/config/usr_rules.mk
 ################################
 
 # on HP unix, this library has become too big, so it needs -fPIC

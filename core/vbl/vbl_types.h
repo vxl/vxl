@@ -1,7 +1,14 @@
 #ifndef vbl_types_h
 #define vbl_types_h
 
-// .HEADER	Basics Package
+// fsm@robots: - the typedefs should be prefixed.
+//             - there should be no pi, PI, M_PI in this file.
+//             - all mention of menus, interviews, callbacks must go.
+//             - vbl_attribute_value_pair should have its own header file.
+#if defined(__GNUC__) && !defined(vbl_types_nowarn)
+# warning "vbl/vbl_types.h is deprecated"
+#endif
+
 // .LIBRARY	vbl
 // .INCLUDE	vbl/vbl_types.h
 // .FILE	vbl/vbl_types.cxx

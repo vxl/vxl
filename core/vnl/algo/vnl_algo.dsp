@@ -40,8 +40,9 @@ RSC=rc.exe
 # PROP Output_Dir "Release"
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
+MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O2 /I "$(IUEROOT)\vxl\config.win32-VC60" /I "$(IUEROOT)/vxl" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /Ob2 /I "$(IUEROOT)\vxl\config.win32-VC60" /I "$(IUEROOT)/vxl" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -49,7 +50,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo
+# ADD LIB32 /nologo /out:"..\..\Release\vnl_algo.lib"
 
 !ELSEIF  "$(CFG)" == "vnl_algo - Win32 Debug"
 
@@ -63,8 +64,9 @@ LIB32=link.exe -lib
 # PROP Output_Dir "Debug"
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
+MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "$(IUEROOT)/vxl/config.win32-vc60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/Image/JPEG" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FR /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "$(IUEROOT)/vxl/config.win32-vc60" /I "$(IUEROOT)/Image/JPEG" /I "$(IUEROOT)\vxl\config.win32-VC60" /I "$(IUEROOT)/vxl" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FR /FD /GZ /c
 # SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
@@ -73,7 +75,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"D:\target\target\vxl\Debug\vnl_algo.lib"
+# ADD LIB32 /nologo /out:"..\..\Debug\vnl_algo.lib"
 
 !ENDIF 
 
@@ -87,10 +89,6 @@ LIB32=link.exe -lib
 # Begin Source File
 
 SOURCE="..\algo\Templates\vcl_vector+vnl_amoeba_SimplexCorner-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=..\algo\vnl_affine_approx.cxx
 # End Source File
 # Begin Source File
 
@@ -126,11 +124,11 @@ SOURCE=..\algo\vnl_discrete_diff.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\algo\vnl_fft1d.cxx
+SOURCE=".\Templates\vnl_fft1d+double-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=..\algo\vnl_fft2d.cxx
+SOURCE=.\Templates\vnl_fft2d.cxx
 # End Source File
 # Begin Source File
 
@@ -158,7 +156,19 @@ SOURCE="..\algo\Templates\vnl_matrix_inverse+double-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=..\algo\vnl_qr.cxx
+SOURCE=".\Templates\vnl_qr+double-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vnl_qr+double_complex-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vnl_qr+float-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vnl_qr+float_complex-.cxx"
 # End Source File
 # Begin Source File
 

@@ -1,3 +1,5 @@
+#ifndef vbl_timer_h
+#define vbl_timer_h
 //
 // Copyright (C) 1991 Texas Instruments Incorporated.
 //
@@ -36,12 +38,8 @@
 // specific notes.
 //
 
-#ifndef vbl_timer_h
-#define vbl_timer_h
-
 #include <vcl/vcl_sys/time.h>
 #include <vcl/vcl_ctime.h>
-
 #include <vcl/vcl_iosfwd.h>
 
 class vbl_timer {

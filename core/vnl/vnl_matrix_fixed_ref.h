@@ -53,7 +53,7 @@ public:
 // and vice versa.
   vnl_matrix_fixed_ref(T *space = (T*)0) {
     Base::data = rowspace;  // thf. can't derive this from matrixref
-    if (!space) space = new T[m*n];
+    if (!space) space = vnl_c_vector<T>::allocate_T(m*n);
     for(int i = 0; i < m; ++i)
       Base::data[i] = space + i * n;
     Base::num_rows = m;

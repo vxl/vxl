@@ -21,13 +21,18 @@
 //-----------------------------------------------------------------------------
 
 #include <vcl/vcl_map.h>
-#include <vcl/vcl_compiler.h>
+#include <vcl/vcl_memory.h>
+#include <vcl/vcl_utility.h>
 #include <vcl/vcl_iosfwd.h>
 
 template <class T>
 class vbl_sparse_array_3d {
 public:
-  // Constructors/Destructors--------------------------------------------------
+  typedef vcl_map<unsigned, T, vcl_less<unsigned>
+#ifdef VCL_SUNPRO_CC
+  , vcl_allocator<vcl_pair<unsigned const, T> >
+#endif
+  > Map;
 
 // -- Construct a vbl_sparse_array_3d which can hold a maximum of (n1 x n2 x n3) elements.
 // Currently (n1*n2*n3) must be representable in 32 bits, or about 1625 per dimension.
@@ -49,13 +54,6 @@ public:
   ostream& print(ostream&) const;
 
 protected:
-  // Data Members--------------------------------------------------------------
-  typedef vcl_map<unsigned, T, vcl_less<unsigned>
-#ifdef VCL_SUNPRO_CC
-  , allocator<vcl_pair<unsigned,T> >
-#endif
-  > Map;
-
   unsigned n1_;
   unsigned n2_;
   unsigned n3_;
@@ -63,10 +61,9 @@ protected:
   
 public:
   // Helpers-------------------------------------------------------------------
-
   // Potentially clunky
-  vbl_sparse_array_3d(const vbl_sparse_array_3d<T>&);
-  vbl_sparse_array_3d& operator=(const vbl_sparse_array_3d<T>&);
+  vbl_sparse_array_3d(vbl_sparse_array_3d<T> const &);
+  vbl_sparse_array_3d<T> & operator=(vbl_sparse_array_3d<T> const &);
 };
 
 template <class T>

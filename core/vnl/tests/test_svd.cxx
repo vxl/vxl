@@ -1,4 +1,6 @@
 #include <vcl/vcl_cstdlib.h>
+#include <vcl/vcl_iostream.h>
+
 #include <vnl/vnl_test.h>
 #include <vnl/vnl_complex.h>
 #include <vnl/vnl_matrix.h>
@@ -153,11 +155,13 @@ void test_I()
   cout << svd;
 }
 
-static double double_random() { return rand()/double(RAND_MAX); }
-static void fill_random(float &x)  { x = double_random(); }
-static void fill_random(double &x) { x = double_random(); }
-static void fill_random(vnl_float_complex &x)  { x = vnl_float_complex (double_random(), double_random()); }
-static void fill_random(vnl_double_complex &x) { x = vnl_double_complex(double_random(), double_random()); }
+// a templated function may not call a static function.
+#define STATIC /*static*/
+STATIC double double_random() { return rand()/double(RAND_MAX); }
+STATIC void fill_random(float &x)  { x = double_random(); }
+STATIC void fill_random(double &x) { x = double_random(); }
+STATIC void fill_random(vnl_float_complex &x)  { x = vnl_float_complex (double_random(), double_random()); }
+STATIC void fill_random(vnl_double_complex &x) { x = vnl_double_complex(double_random(), double_random()); }
 
 template <class T>
 void test_svd_recomposition(char const *type, double maxres, T */*tag*/)
