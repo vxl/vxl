@@ -392,7 +392,7 @@ inline vnl_rational vnl_math_abs(vnl_rational const& x) { return x<0L ? -x : x; 
 inline vnl_rational vnl_math_squared_magnitude(vnl_rational const& x) { return x*x; }
 inline vnl_rational vnl_math_sqr(vnl_rational const& x) { return x*x; }
 inline bool vnl_math_isnan(vnl_rational const& x){return false;}
-inline bool vnl_math_isfinite(vnl_rational const& x){return x.denominator() != 0L;} \
+inline bool vnl_math_isfinite(vnl_rational const& x){return x.denominator() != 0L;} 
 
 #include <vnl/vnl_complex_traits.h>
 
@@ -427,6 +427,8 @@ class vnl_numeric_traits<vnl_rational const> : public vnl_numeric_traits<vnl_rat
 
 #include <vcl_complex.h>
 
+inline bool vnl_math_isnan(vcl_complex<vnl_rational> const& z){return vnl_math_isnan(vcl_real(z)) || vnl_math_isnan(vcl_imag(z));}
+inline bool vnl_math_isfinite(vcl_complex<vnl_rational> const& z){return vnl_math_isfinite(vcl_real(z)) && vnl_math_isfinite(vcl_imag(z));}
 inline vnl_rational vnl_math_squared_magnitude(vcl_complex<vnl_rational> const& z) { return vcl_norm(z); }
 inline vnl_rational vnl_math_abs(vcl_complex<vnl_rational> const& z) { return sqrt(vcl_norm(z)); }
 inline vcl_complex<vnl_rational> vnl_math_sqr(vcl_complex<vnl_rational> const& z) { return z*z; }
@@ -462,5 +464,8 @@ public:
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<vcl_complex<vnl_rational> const> : public vnl_numeric_traits<vcl_complex<vnl_rational> > {
 };
+
+
+
 
 #endif // vnl_rational_h_
