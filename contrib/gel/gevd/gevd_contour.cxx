@@ -42,7 +42,8 @@
 // #include <cool/ArrayP.h>
 // #include <cool/ListP.h>
 // #include <iostream.h>
-#include <vcl_cmath.h> // for vcl_fabs()
+#include <vcl_cmath.h>     // for vcl_abs()
+#include <vcl_cstdlib.h>   // for vcl_abs()
 #include <vcl_cassert.h>
 #include <vcl_vector.h>
 #include <vcl_algorithm.h> // for vcl_max()
@@ -364,8 +365,8 @@ gevd_contour::FindChains(gevd_bufferxy& edgels, const int njunction,
         // 2.4. Collect both directions & extension points if 1-chain
         while (NextPixel(x, y, edgels)) // trace along first dir, 4-connected
           RecordPixel(x, y, edgels, xloc, yloc); // and stronger first
-        if (vcl_fabs(xloc[0]-x) > 1 || // disjoint first/last pixel
-            vcl_fabs(yloc[0]-y) > 1) { // so must be a 1-chain with end points
+        if (vcl_abs(xloc[0]-x) > 1 || // disjoint first/last pixel
+            vcl_abs(yloc[0]-y) > 1) { // so must be a 1-chain with end points
           if (NextPixel(x, y, *vertexMap)) // search for extra links to
             xloc.push_back(x), yloc.push_back(y); // detected junctions
           x = xloc[0], y = yloc[0]; // start again from first pixel
