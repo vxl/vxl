@@ -129,7 +129,28 @@ SOURCE=.\Templates/vcl_vector+vgl_point_3d+float--.cxx
 SOURCE=.\Templates/vcl_vector+vgl_point_3d+int--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vcl_vector+vgl_polygon-.cxx
+SOURCE=.\Templates/vcl_vector+vgl_polygon+double--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vcl_vector+vgl_polygon+float--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_area+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_area+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_clip+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_clip+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_polygon+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_polygon+float-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vgl_box_2d+double-.cxx
@@ -279,40 +300,7 @@ SOURCE=.\Templates/vgl_vector_3d+int-.cxx
 SOURCE=.\vgl_1d_basis.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vgl_clip.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vgl_distance.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vgl_lineseg_test.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vgl_polygon.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vgl_polygon_scan_iterator.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vgl_polygon_test.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vgl_region_scan_iterator.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\internals/gpc.c
-# End Source File
-# Begin Source File
-SOURCE=.\vgl_area.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vgl_triangle_scan_iterator.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vgl_triangle_test.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vgl_window_scan_iterator.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vgl_conic+float-.cxx
@@ -342,10 +330,58 @@ SOURCE=.\Templates/vgl_vector_2d+uint-.cxx
 SOURCE=.\Templates/vcl_vector+vgl_homg_point_2d+double--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vgl_ellipse_scan_iterator.cxx
+SOURCE=.\Templates/vgl_ellipse_scan_iterator+double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vgl_closest_point.cxx
+SOURCE=.\Templates/vgl_ellipse_scan_iterator+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_polygon_scan_iterator+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_polygon_scan_iterator+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_window_scan_iterator+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_window_scan_iterator+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_polygon_test+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_polygon_test+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_lineseg_test+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_lineseg_test+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_triangle_test+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_triangle_test+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_triangle_scan_iterator+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_triangle_scan_iterator+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_closest_point+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_closest_point+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_distance+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_distance+float-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -372,10 +408,16 @@ SOURCE=.\vgl_box_3d.txx
 SOURCE=.\vgl_clip.h
 # End Source File
 # Begin Source File
+SOURCE=.\vgl_clip.txx
+# End Source File
+# Begin Source File
 SOURCE=.\vgl_conic.h
 # End Source File
 # Begin Source File
 SOURCE=.\vgl_conic.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_distance.txx
 # End Source File
 # Begin Source File
 SOURCE=.\vgl_distance.h
@@ -447,6 +489,9 @@ SOURCE=.\vgl_line_segment_3d.h
 SOURCE=.\vgl_line_segment_3d.txx
 # End Source File
 # Begin Source File
+SOURCE=.\vgl_lineseg_test.txx
+# End Source File
+# Begin Source File
 SOURCE=.\vgl_lineseg_test.h
 # End Source File
 # Begin Source File
@@ -471,7 +516,25 @@ SOURCE=.\vgl_point_3d.txx
 SOURCE=.\vgl_polygon.h
 # End Source File
 # Begin Source File
+SOURCE=.\vgl_polygon.txx
+# End Source File
+# Begin Source File
 SOURCE=.\vgl_polygon_scan_iterator.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_polygon_scan_iterator.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_ellipse_scan_iterator.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_window_scan_iterator.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_triangle_scan_iterator.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_polygon_test.txx
 # End Source File
 # Begin Source File
 SOURCE=.\vgl_polygon_test.h
@@ -486,7 +549,13 @@ SOURCE=.\internals/gpc.h
 SOURCE=.\vgl_area.h
 # End Source File
 # Begin Source File
+SOURCE=.\vgl_area.txx
+# End Source File
+# Begin Source File
 SOURCE=.\vgl_triangle_scan_iterator.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_triangle_test.txx
 # End Source File
 # Begin Source File
 SOURCE=.\vgl_triangle_test.h
@@ -510,7 +579,16 @@ SOURCE=.\vgl_window_scan_iterator.h
 SOURCE=.\vgl_fwd.h
 # End Source File
 # Begin Source File
+SOURCE=.\vgl_closest_point.txx
+# End Source File
+# Begin Source File
 SOURCE=.\vgl_closest_point.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_convex.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_convex.h
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"

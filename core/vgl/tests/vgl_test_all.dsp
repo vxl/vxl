@@ -134,11 +134,8 @@ SOURCE=.\test_fit_lines_2d.cxx
 # Begin Source File
 SOURCE=.\test_closest_point.cxx
 # End Source File
-# End Group
-# Begin Group "Header Files"
-# PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
-SOURCE=.\test_driver.h
+SOURCE=.\test_window_scan_iterator.cxx
 # End Source File
 # End Group
 # End Target
