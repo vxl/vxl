@@ -42,7 +42,7 @@ int vil_stream_core::read (void       *buf, int n)
 int vil_stream_core::write(void const *buf, int n)
 {
   assert(n>=0);
-  int rv = m_transfer((char*)buf, curpos, n, false);
+  int rv = m_transfer((char*)buf, curpos, n, false); // const violation!
   curpos += rv;
   return rv;
 }
