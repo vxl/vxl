@@ -1,6 +1,6 @@
 #include <vsrl/vsrl_parameters.h>
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_fstream.h>
+#include <vcl_iostream.h>
+#include <vcl_fstream.h>
 
 
 // initialize the _instance variable

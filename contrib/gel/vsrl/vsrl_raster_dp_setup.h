@@ -7,7 +7,7 @@
 // the optimal assignments between the two images
 
 
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 #include <vsrl/vsrl_intensity_token.h>
 #include <vsrl/vsrl_image_correlation.h>
 

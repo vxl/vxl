@@ -5,11 +5,11 @@
 // a pair of regions
 
 
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_cmath.h>
-#include <vcl/vcl_cstddef.h>
-#include <vcl/vcl_cstdio.h>
-#include <vcl/vcl_cstdlib.h>
+#include <vcl_iostream.h>
+#include <vcl_cmath.h>
+#include <vcl_cstddef.h>
+#include <vcl_cstdio.h>
+#include <vcl_cstdlib.h>
 
 
 #include <vil/vil_memory_image_of.h>

@@ -2,7 +2,7 @@
 #include<vsrl/vsrl_image_correlation.h>
 #include<vil/vil_image.h>
 #include<vsrl/vsrl_window_accumulator.h>
-#include<vcl/vcl_iostream.h>
+#include<vcl_iostream.h>
 #include<vsrl/vsrl_parameters.h>
 
 

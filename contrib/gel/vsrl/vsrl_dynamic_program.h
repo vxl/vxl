@@ -5,7 +5,7 @@
 // This class will solve a dynamic program which attempts
 // to compute a set of assignments between two sets of tokens
 
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 class vsrl_token;
 class vsrl_null_token;
 

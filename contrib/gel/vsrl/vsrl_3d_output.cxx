@@ -1,7 +1,7 @@
 #include <vsrl/vsrl_3d_output.h>
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_vector.h>
-#include <vcl/vcl_fstream.h>
+#include <vcl_iostream.h>
+#include <vcl_vector.h>
+#include <vcl_fstream.h>
 #include <vsrl/vsrl_step_diffusion.h>
 #include <vsrl/vsrl_token_saliency.h>
 #include <vsrl/vsrl_saliency_diffusion.h>

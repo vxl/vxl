@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 #include "vdgl_ortho_regress.h"
-#include <vcl/vcl_cmath.h>
+#include <vcl_cmath.h>
 
 // convenience methods
 

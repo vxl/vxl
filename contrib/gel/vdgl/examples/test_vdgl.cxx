@@ -1,4 +1,4 @@
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 #include <vsol/vsol_point_2d.h>
 

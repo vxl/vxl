@@ -15,7 +15,7 @@
 //    Geoff Cross
 // Created: xxx xx xxxx
 
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 #include <vgl/vgl_point_2d.h>
 
 class vdgl_edgel {

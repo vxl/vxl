@@ -2,8 +2,8 @@
 // We wish to display two images side by side.
 
 
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_fstream.h>
+#include <vcl_iostream.h>
+#include <vcl_fstream.h>
 #include <vsrl/vsrl_stereo_dense_matcher.h>
 #include <vsrl/vsrl_parameters.h>
 
