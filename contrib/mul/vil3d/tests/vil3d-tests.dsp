@@ -286,6 +286,9 @@ SOURCE=.\test_file_format_read.cxx
 # Begin Source File
 SOURCE=.\test_convert.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_algo_convolve_1d.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
