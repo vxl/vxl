@@ -59,18 +59,18 @@ struct vul_timer_data;
 //: The Timer class provides timing code for performance evaluation.
 class vul_timer {
 public:
-  //: construct and mark
+  //: construct and reset counter to now.
   vul_timer();
   ~vul_timer();
-  //: mark timer
+  //: Reset the counted to now
   void mark();
-  //: real        time (ms) since last mark
+  //: Real        time (ms) since last mark
   long real();
-  //: user        time (ms) since last mark
+  //: User        time (ms) since last mark
   long user();
-  //: system      time (ms) since last mark
+  //: System      time (ms) since last mark
   long system();
-  //: user+system time (ms) since last mark
+  //: User+system time (ms) since last mark
   long all();
 
   //: Display user and real time since the last mark.

@@ -24,7 +24,11 @@
 
 #include <vcl_iosfwd.h>
 
-//: e.g. vul_printf(cout, "%d\n", 12);
+//: Print using printf format specifiers to a ostream
+// \verbatim
+// e.g.
+// vul_printf(cout, "%d\n", 12);
+// \endverbatim
 vcl_ostream& vul_printf(vcl_ostream&, char const* fmt, ...);
 
 #endif // vul_printf_h_
