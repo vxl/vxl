@@ -1,7 +1,7 @@
-#include "ZhangCameraNode.h"
-#include "ZhangLinearCalibrate.h"
-#include "CalibratePlane.h"
-#include "CameraGraph.h"
+#include <bmvl/bcal/bcam/ZhangCameraNode.h>
+#include <bmvl/bcal/bcam/ZhangLinearCalibrate.h>
+#include <bmvl/bcal/bcam/CalibratePlane.h>
+#include <bmvl/bcal/bcam/CameraGraph.h>
 #include <vcsl/vcsl_matrix.h>
 
 int main()
