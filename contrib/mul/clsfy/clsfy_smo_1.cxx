@@ -362,7 +362,7 @@ int clsfy_smo_1_lin::calc()
     else if (numChanged == 0)
       examineAll = true;
 
-#if 0
+#if !defined NDEBUG &&  CLSFY_SMO_BASE_PRINT_PROGRESS >1
     {
       double s = 0.;
       for (int i=0; i<N; i++)
@@ -377,14 +377,14 @@ int clsfy_smo_1_lin::calc()
             t += alph_[i]*alph_[j]*target_[i]*target_[j]*kernel(i,j);
         }
       }
-      vcl_cerr << "Objective function=" << (s - t/2.) << vcl_endl;
+      vcl_cerr << "Objective function=" << (s - t/2.) << '\t';
       for (int i=0; i<N; i++)
         if (alph_[i] < 0)
           vcl_cerr << "alph_[" << i << "]=" << alph_[i] << " < 0" << vcl_endl;
       s = 0.;
       for (int i=0; i<N; i++)
         s += alph_[i] * target_[i];
-      vcl_cerr << "s=" << s << vcl_endl;
+      vcl_cerr << "s=" << s << '\t';
       vcl_cerr << "error_rate=" << error_rate() << '\t';
     }
 #endif
