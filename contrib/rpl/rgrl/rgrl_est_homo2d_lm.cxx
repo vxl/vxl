@@ -125,7 +125,7 @@ f(vnl_vector<double> const& x, vnl_vector<double>& fx)
         // map from point
         vnl_double_2 from = fi.from_feature()->location();
         from -= from_centre_;
-        map_inhomo_point( mapped, x, from );
+        map_inhomo_point( mapped, x, from.as_ref() );
 
         for ( TIter ti=fi.begin(); ti!=fi.end(); ++ti ) {
           vnl_double_2 to = ti.to_feature()->location();
@@ -165,7 +165,7 @@ gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian)
         // map from point
         vnl_double_2 from = fi.from_feature()->location();
         from -= from_centre_;
-        map_homo_point( homo, x, from );
+        map_homo_point( homo, x, from.as_ref() );
         // homogeneous coordinate
         jf(0,0) = jf(1,3) = jf(2,6) = from[0]; // x
         jf(0,1) = jf(1,4) = jf(2,7) = from[1]; // y
