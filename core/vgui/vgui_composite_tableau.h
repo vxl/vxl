@@ -6,17 +6,17 @@
 #endif
 //:
 // \file
+// \brief  Tableau which treats it children as a stack of acetates
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   15 Sep 99
-// \brief  Tableau which treats it children as a stack of acetates
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   18-Sep-2000 capes@robots - Added set_enable_key_bindings.
-//                             Key bindings are OFF by default.
-//   09-Feb-2001 awf@robots - Add Alt-C to re-enable key bindings.
-//   26-APR-2002 K.Y.McGaul - Converted to doxygen style comments.
-//   01-OCT-2002 K.Y.McGaul - Moved vgui_composite to vgui_composite_tableau.
+//                              Key bindings are OFF by default.
+//   09-Feb-2001 awf@robots   - Add Alt-C to re-enable key bindings.
+//   26-APR-2002 K.Y.McGaul   - Converted to doxygen style comments.
+//   01-OCT-2002 K.Y.McGaul   - Moved vgui_composite to vgui_composite_tableau.
 // \endverbatim
 
 #include <vcl_vector.h>

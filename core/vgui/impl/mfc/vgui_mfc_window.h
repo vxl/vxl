@@ -6,20 +6,20 @@
 #endif
 //:
 // \file
+// \brief   The mfc implementation of vgui_window
 // \author  Marko Bacic, Oxford RRG
 // \date    24-JUL-2000
-// \brief   The mfc implementation of vgui_window
 //
-//  Contains classes: vgui_mfc_window.
+//  Contains class vgui_mfc_window
 //
 // \verbatim
-//  Modifications:
-//    24-JUL-2000  Marko Bacic, Oxford RRG - Initial version.
-//    17-AUG-2000  Marko Bacic, Oxford RRG - Now windows can have specified size
-//    23-AUG-2000  Marko Bacic, Oxford RRG - Added support for scrollbars
-//    20-JUL-2001  K.Y.McGaul  Added init_window function carry out common
-//                             functionality from all constructors.
-//    23-DEC-2002  J.L. Mundy added scrollbar positioning methods
+//  Modifications
+//   24-JUL-2000  Marko Bacic, Oxford RRG - Initial version.
+//   17-AUG-2000  Marko Bacic, Oxford RRG - Now windows can have specified size
+//   23-AUG-2000  Marko Bacic, Oxford RRG - Added support for scrollbars
+//   20-JUL-2001  K.Y.McGaul  Added init_window function carry out common
+//                            functionality from all constructors.
+//   23-DEC-2002  J.L. Mundy added scrollbar positioning methods
 // \endverbatim
 
 class vgui_mfc_adaptor;

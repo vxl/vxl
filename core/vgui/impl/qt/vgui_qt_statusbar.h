@@ -3,11 +3,11 @@
 #define VGUI_QT_STATUSBAR_H_
 //:
 // \file
-// \brief hmm untested ?
+// \brief Contains class vgui_qt_statusbar
 // \author Joris Schouteden
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   24.03.2000 JS  Initial Version, adapted from vgui_gtk_statusbar
 // \endverbatim
 

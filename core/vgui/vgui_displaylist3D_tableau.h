@@ -6,12 +6,12 @@
 #endif
 //:
 // \file
+// \brief  Displaying of three-dimensional geometric objects.
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   14 Sep 99
-// \brief  Displaying of three-dimensional geometric objects.
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   14-SEP-1999 P.Pritchett - Initial version.
 //   01-OCT-2002 K.Y.McGaul - Moved displaylist3D to displaylist3D_tableau.
 //   02-OCT-2002 K.Y.McGaul - Added vgui_displaylist3D_tableau_new.

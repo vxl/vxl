@@ -5,13 +5,14 @@
 #pragma interface
 #endif
 //:
-//  \file
-//  \author Andrew W. Fitzgibbon, Oxford RRG
-//  \date   07 Dec 98
+// \file
+// \brief Contains class vnl_identity
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   07 Dec 98
 //
 // \verbatim
-// Modifications:
-// LSB (Manchester) 23/1/01 Tidied documentation
+//  Modifications
+//   LSB (Manchester) 23/1/01 Tidied documentation
 // \endverbatim
 //-----------------------------------------------------------------------------
 

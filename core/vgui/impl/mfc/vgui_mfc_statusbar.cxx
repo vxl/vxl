@@ -4,12 +4,12 @@
 #endif
 //:
 // \file
+// \brief See vgui_mfc_statusbar.h for a description of this file.
 // \author  Marko Bacic, RRG, University of Oxford
 // \date    10 Aug 2000
-// \brief See vgui_mfc_statusbar.h for a description of this file.
 //
 // \verbatim
-// Modifications:
+//  Modifications
 //   13-MAR-2001 K.Y.McGaul   Messages are now cleared when a new message
 //                            appears, not immediately.
 // \endverbatim

@@ -1,5 +1,5 @@
 // This is core/vnl/tests/test_fft1d.cxx
-
+#include <testlib/testlib_test.h>
 //:
 // \file
 // \brief test program for 1D FFT routines.
@@ -11,8 +11,8 @@
 // and computes differences between input and output.
 //
 // \verbatim
-// Modifications:
-// Jan. 2002 - Peter Vanroose - adapted from vnl_fft1d to vnl_fft_1d
+//  Modifications
+//   Jan. 2002 - Peter Vanroose - adapted from vnl_fft1d to vnl_fft_1d
 // \endverbatim
 
 //-----------------------------------------------------------------------------
@@ -21,7 +21,6 @@
 #include <vcl_iostream.h>
 #include <vcl_complex.h>
 
-#include <testlib/testlib_test.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_fft_1d.h>
 

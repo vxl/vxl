@@ -5,13 +5,13 @@
 #pragma interface
 #endif
 //:
-//  \file
-//  \brief A collection of Matrix operations
-//  \author Andrew W. Fitzgibbon, Oxford RRG
-//  \date   05 Aug 96
+// \file
+// \brief A collection of Matrix operations
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   05 Aug 96
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   23 may 97, Peter Vanroose - "NO_COMPLEX" option added
 //   LSB (Manchester) 23/3/01 Documentation tidied
 // \endverbatim

@@ -6,11 +6,12 @@
 #endif
 //:
 // \file
+// \brief Contains class vnl_int_2
 // \author Andrew W. Fitzgibbon, Oxford RRG
 // \date   31 Aug 96
 //
 // \verbatim
-// Modifications:
+//  Modifications
 //   Peter Vanroose, 21 Oct 1999: vnl_vector_fixed<int,2> already instantiated
 // \endverbatim
 

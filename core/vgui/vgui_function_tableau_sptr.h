@@ -3,12 +3,12 @@
 #define vgui_function_tableau_sptr_h
 //:
 // \file
+// \brief  Smart-pointer to a vgui_function_tableau.
 // \author K.Y.McGaul
 // \date   02-OCT-2002
-// \brief  Smart-pointer to a vgui_function_tableau.
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   02-OCT-2002 K.Y.McGaul - Initial version.
 // \endverbatim
 

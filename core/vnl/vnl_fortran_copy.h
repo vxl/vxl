@@ -5,16 +5,15 @@
 #pragma interface
 #endif
 //:
-//  \file
-//  \brief Convert row-stored matrix to column-stored
+// \file
+// \brief Convert row-stored matrix to column-stored
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   29 Aug 96
 //
 // convert C format (row-stored) matrix to fortran format (column-stored) matrix
 //
-//  \author Andrew W. Fitzgibbon, Oxford RRG
-//  \date   29 Aug 96
-//
 // \verbatim
-//   Modifications:
+//  Modifications
 //   LSB (Manchester) 23/3/01 Tidied documentation
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim

@@ -3,15 +3,15 @@
 #define vgui_image_tableau_h_
 //:
 // \file
-// \author fsm
 // \brief  Tableau which renders the given image using an image_renderer.
+// \author fsm
 //
-//  Contains classes:  vgui_image_tableau  vgui_image_tableau_new
+//  Contains classes  vgui_image_tableau  vgui_image_tableau_new
 //
 // \verbatim
-//  Modifications:
-//    15-AUG-2000 Marko Bacic,Oxford RRG -- Removed legacy ROI
-//    09-AUG-2002 K.Y.McGaul - Added Doxygen style comments.
+//  Modifications
+//   15-AUG-2000 Marko Bacic,Oxford RRG -- Removed legacy ROI
+//   09-AUG-2002 K.Y.McGaul - Added Doxygen style comments.
 // \endverbatim
 
 #include <vgui/vgui_tableau.h>

@@ -6,14 +6,14 @@
 #endif
 //:
 // \file
+// \brief  Tableau which pops up tableau tree (tview) on Shift-G
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   21 Oct 99
-// \brief  Tableau which pops up tableau tree (tview) on Shift-G
 //
-// Contains classes:  vgui_tview_launcher_tableau  vgui_tview_launcher_tableau_new
+// Contains classes  vgui_tview_launcher_tableau  vgui_tview_launcher_tableau_new
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   21-OCT-1999 P.Pritchett - Initial version.
 //   10-AUG-2002 K.Y.McGaul - Converted to Doxygen style comments.
 //   01-OCT-2002 K.Y.McGaul - Moved tview_launcher to tview_launcher_tableau.

@@ -4,12 +4,13 @@
 #endif
 //:
 // \file
+// \brief Contains function vil1_copy()
 // \author Andrew W. Fitzgibbon, Oxford RRG
 // \date 16 Feb 00
 //
 // \verbatim
-// Modifications:
-// 7 June 2001 - Peter Vanroose - fixed rowsize_bytes for 1-bit pixel type
+//  Modifications
+//   7 June 2001 - Peter Vanroose - fixed rowsize_bytes for 1-bit pixel type
 // \endverbatim
 //-----------------------------------------------------------------------------
 

@@ -6,16 +6,16 @@
 #endif
 //:
 // \file
+// \brief  Procedural event grabbing from a tableau
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   11 Sep 99
-// \brief  Procedural event grabbing from a tableau
 //
-//  Contains classes:  vgui_event_server
+//  Contains class  vgui_event_server
 //
 // \verbatim
-//  Modifications:
-//    11-SEP-1999 P.Pritchett - Initial version.
-//    26-APR-2002 K.Y.McGaul - Converted to and added doxygen style comments.
+//  Modifications
+//   11-SEP-1999 P.Pritchett - Initial version.
+//   26-APR-2002 K.Y.McGaul - Converted to and added doxygen style comments.
 // \endverbatim
 
 #include <vgui/vgui_event.h>

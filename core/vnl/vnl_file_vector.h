@@ -5,13 +5,13 @@
 #pragma interface
 #endif
 //:
-//  \file
-//  \brief Load vnl_vector<T> from file
-//  \author Andrew W. Fitzgibbon, Oxford RRG
-//  \date   23 Dec 96
+// \file
+// \brief Load vnl_vector<T> from file
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   23 Dec 96
 //
 // \verbatim
-// Modifications:
+//  Modifications
 //   fsm created by modifying class FileMatrix
 //   LSB (Manchester) 23/3/01 Tidied documentation
 // \endverbatim

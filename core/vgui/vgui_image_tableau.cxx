@@ -2,12 +2,12 @@
 #include "vgui_image_tableau.h"
 //:
 // \file
-// \author fsm
 // \brief  See vgui_image_tableau.h for a description of this file.
+// \author fsm
 //
 // \verbatim
-//  Modifications:
-//    15-AUG-2000 Marko Bacic,Oxford RRG -- Removed legacy ROI
+//  Modifications
+//   15-AUG-2000 Marko Bacic,Oxford RRG -- Removed legacy ROI
 // \endverbatim
 
 

@@ -6,14 +6,14 @@
 #endif
 //:
 // \file
+// \brief  Tableau for event record and playback.
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   13 Oct 99
-// \brief  Tableau for event record and playback.
 //
-//  Contains classes:  vgui_blackbox_tableau  vgui_blackbox_tableau_new
+//  Contains classes  vgui_blackbox_tableau  vgui_blackbox_tableau_new
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   13-OCT-1999  P.Pritchett - Initial version.
 //   26-APR-2002  K.Y.McGaul  - Converted to and added doxygen style comments.
 //   01-OCT-2002  K.Y.McGaul  - Moved vgui_blackbox to vgui_blackbox_tableau.

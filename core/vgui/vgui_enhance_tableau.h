@@ -6,14 +6,14 @@
 #endif
 //:
 // \file
+// \brief  Magnify/display another tableau in a region around the mouse pointer.
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   16 Nov 99
-// \brief  Magnify/display another tableau in a region around the mouse pointer.
 //
-//  Contains classes: vgui_enhance_tableau  vgui_enhance_tableau_new
+//  Contains classes vgui_enhance_tableau  vgui_enhance_tableau_new
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   16-NOV-1999 P.Pritchett - Initial version.
 //   26-APR-2002 K.Y.McGaul - Converted to and added doxygen style comments.
 //   01-OCT-2002 K.Y.McGaul - Moved vgui_enhance to vgui_enhance_tableau.

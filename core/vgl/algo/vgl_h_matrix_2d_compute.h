@@ -3,12 +3,13 @@
 #define vgl_h_matrix_2d_compute_h_
 //:
 // \file
+// \brief contains class vgl_h_matrix_2d_compute
 //
 // Abstract interface for classes that compute plane-to-plane
 // projectivities from point and line correspondences.
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   08-02-98 FSM
 //      1. Added virtual compute methods that actually take arguments :
 //         generic estimator using points, lines or both.

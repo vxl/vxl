@@ -11,12 +11,12 @@
 // \date   31 Aug 96
 //
 // \verbatim
-// Modifications:
-//  280697 AWF Changed return type of f from double to void, as it wasn't used, and
-//             people were going to extra trouble to compute it.
-//  20 Apr 1999 FSM Added failure flag so that f() and grad() may signal failure to the caller.
-//  23/3/01 LSB (Manchester) Tidied documentation
-//  Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
+//  Modifications
+//   280697 AWF Changed return type of f from double to void, as it wasn't used, and
+//              people were going to extra trouble to compute it.
+//   20 Apr 1999 FSM Added failure flag so that f() and grad() may signal failure to the caller.
+//   23/3/01 LSB (Manchester) Tidied documentation
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 //
 #include <vcl_string.h>

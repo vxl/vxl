@@ -6,17 +6,17 @@
 #endif
 //:
 // \file
+// \brief  Tableau which manages a set of vgui_displaylist2D_tableau children
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   21 Oct 99
-// \brief  Tableau which manages a set of vgui_displaylist2D_tableau children
 //
-//  Contains classes: vgui_listmanager2D_tableau  vgui_listmanager2D_tableau_new
+//  Contains classes vgui_listmanager2D_tableau  vgui_listmanager2D_tableau_new
 //
 // \verbatim
-//  Modifications:
-//    21-OCT-1999 P.Pritchett - Initial version.
-//    16-SEP-2002 K.Y.McGaul - Changed to and added Doxygen style documentation.
-//    01-OCT-2002 K.Y.McGaul - Moved listmanager2D to listmanager2D_tableau.
+//  Modifications
+//   21-OCT-1999 P.Pritchett - Initial version.
+//   16-SEP-2002 K.Y.McGaul - Changed to and added Doxygen style documentation.
+//   01-OCT-2002 K.Y.McGaul - Moved listmanager2D to listmanager2D_tableau.
 // \endverbatim
 
 #include <vgui/vgui_observable.h>

@@ -3,11 +3,12 @@
 #define vil1_warp_txx_
 //:
 // \file
-// \brief ImageWarp
+// \brief See vil1_warp.h for a description of this file
 // \author Andrew W. Fitzgibbon, Oxford RRG
 // \date   23 Jan 99
+//
 // \verbatim
-//  Modifications:
+//  Modifications
 //   990123 AWF Initial version.
 // \endverbatim
 //
@@ -28,9 +29,9 @@ vil1_warp_inrange_window(vil1_image const& in, int x, int y, int window_size)
 // See vil1_warp.h
 template <class PixelType, class Mapper>
 void vil1_warp_output_driven(vil1_memory_image_of<PixelType> const& in,
-                            vil1_memory_image_of<PixelType>& out,
-                            Mapper const& map,
-                            vil1_warp_interpolation_type interpolation)
+                             vil1_memory_image_of<PixelType>& out,
+                             Mapper const& map,
+                             vil1_warp_interpolation_type interpolation)
 {
   //int w = in.width();
   //int h = in.height();
@@ -68,8 +69,8 @@ void vil1_warp_output_driven(vil1_memory_image_of<PixelType> const& in,
 
 #define VIL1_WARP_INSTANTIATE(PixelType, Mapper) \
 template void vil1_warp_output_driven(vil1_memory_image_of<PixelType > const&, \
-                                     vil1_memory_image_of<PixelType >&,\
-                                     Mapper const&,\
-                                     vil1_warp_interpolation_type)
+                                      vil1_memory_image_of<PixelType >&,\
+                                      Mapper const&,\
+                                      vil1_warp_interpolation_type)
 
 #endif // vil1_warp_txx_

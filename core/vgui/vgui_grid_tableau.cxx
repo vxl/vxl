@@ -2,12 +2,12 @@
 #include "vgui_grid_tableau.h"
 //:
 // \file
+// \brief   See vgui_grid_tableau.h for a description of this file.
 // \author  K.Y.McGaul
 // \date    20-JAN-2000
-// \brief   See vgui_grid_tableau.h for a description of this file.
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   20-JAN-2000 K.Y.McGaul - Initial version.
 // \endverbatim
 

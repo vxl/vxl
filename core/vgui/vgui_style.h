@@ -6,16 +6,16 @@
 #endif
 //:
 // \file
+// \brief   Style (colour, line width, point radius) of a geometric object.
 // \author  Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date    18 Oct 99
-// \brief   Style (colour, line width, point radius) of a geometric object.
 //
-//  Contains classes: vgui_style, vgui_style_equal
+//  Contains classes vgui_style, vgui_style_equal
 //
 // \verbatim
-//  Modifications:
-//    18-OCT-1999 P.Pritchett - Initial version.
-//    07-AUG-2002 K.Y.McGaul - Changed to and added Doxygen style comments.
+//  Modifications
+//   18-OCT-1999 P.Pritchett - Initial version.
+//   07-AUG-2002 K.Y.McGaul - Changed to and added Doxygen style comments.
 // \endverbatim
 
 //: Style (colour, line width, point radius) of a geometric object.

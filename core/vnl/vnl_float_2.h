@@ -5,13 +5,14 @@
 #pragma interface
 #endif
 //:
-//  \file
-//  \author Andrew W. Fitzgibbon, Oxford RRG
-//  \date   05 Aug 96
+// \file
+// \brief Contains class vnl_float_2
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   05 Aug 96
 //
 // \verbatim
-// Modifications:
-//  Peter Vanroose, 25 June 1999: vnl_vector_fixed<float,2> already instantiated
+//  Modifications
+//   Peter Vanroose, 25 June 1999: vnl_vector_fixed<float,2> already instantiated
 // \endverbatim
 
 #include <vnl/vnl_T_n.h>

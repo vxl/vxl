@@ -6,17 +6,17 @@
 #endif
 //:
 // \file
+// \brief  Tableau to blend two images.
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   27 Oct 99
-// \brief  Tableau to blend two images.
 //
-//  Contains classes:  vgui_blender_tableau
+//  Contains class  vgui_blender_tableau
 //
 // \verbatim
-//  Modifications:
-//    01-OCT-2002 K.Y.McGaul - Added Doxygen style comments.
-//                           - Returns the filename when image loaded from file.
-//                           - Moved vgui_image_blender to vgui_blender_tableau.
+//  Modifications
+//   01-OCT-2002 K.Y.McGaul - Added Doxygen style comments.
+//                          - Returns the filename when image loaded from file.
+//                          - Moved vgui_image_blender to vgui_blender_tableau.
 // \endverbatim
 
 #include <vgui/vgui_tableau.h>

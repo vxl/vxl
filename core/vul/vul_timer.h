@@ -1,6 +1,4 @@
 // This is core/vul/vul_timer.h
-#ifndef vul_timer_h
-#define vul_timer_h
 //
 // Copyright (C) 1991 Texas Instruments Incorporated.
 //
@@ -11,10 +9,12 @@
 //
 // Texas Instruments Incorporated provides this software "as is" without
 // express or implied warranty.
-
+#ifndef vul_timer_h
+#define vul_timer_h
 //:
 // \file
 // \brief A timing facility for C++
+// \author This code was originally written by Joe Rahmeh at UT Austin.
 //
 // The vul_timer class provides an interface to system timing.
 // It allows a C++ program to record the time between  a  reference
@@ -38,16 +38,14 @@
 //  - System time: time cpu spends in system mode on behalf of the program.
 //  - Real time:   what you get from a stop watch timer.
 //
-// \author This code was originally written by Joe Rahmeh at UT Austin.
-//
 // \verbatim
-// Modifications:
-// Created: BMK 07/14/89  Initial design and implementation.
-// Updated: LGO 09/23/89  Conform to COOL coding style.
-// Updated: AFM 12/31/89  OS/2 port.
-// Updated: DLS 03/22/91  New lite version.
-// Updated: VDN 10/14/93  ANSI C does not have user/system time.
-// Peter Vanroose   27/05/2001: Corrected the documentation
+//  Modifications
+//   Created: BMK 07/14/89  Initial design and implementation.
+//   Updated: LGO 09/23/89  Conform to COOL coding style.
+//   Updated: AFM 12/31/89  OS/2 port.
+//   Updated: DLS 03/22/91  New lite version.
+//   Updated: VDN 10/14/93  ANSI C does not have user/system time.
+//   Peter Vanroose   27/05/2001: Corrected the documentation
 // \endverbatim
 
 //: struct containing timer data

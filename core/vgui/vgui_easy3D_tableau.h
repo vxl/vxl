@@ -6,14 +6,14 @@
 #endif
 //:
 // \file
+// \brief  Tableau to display three-dimensional geometric objects.
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   24 Sep 99
-// \brief  Tableau to display three-dimensional geometric objects.
 //
-//  Contains classes: vgui_easy3D_tableau  vgui_easy3D_tableau_new
+//  Contains classes vgui_easy3D_tableau  vgui_easy3D_tableau_new
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   24-SEP-1999 P.Pritchett - Initial version.
 //   26-APR-2002 K.Y.McGaul - Added some doxygen-style documentation.
 //   01-OCT-2002 K.Y.McGaul - Moved vgui_easy3D to vgui_easy3D_tableau.

@@ -4,13 +4,13 @@
 #endif
 //:
 // \file
+// \brief  See vgui_drag_tableau.h for a description of this file.
 // \author Andrew W. Fitzgibbon, Oxford RRG
 // \date   11 Jan 00
-// \brief  See vgui_drag_tableau.h for a description of this file.
 //
 // \verbatim
-//  Modifications:
-//    11-JAN-2000 A.Fitzgibbon - Initial version
+//  Modifications
+//   11-JAN-2000 A.Fitzgibbon - Initial version
 // \endverbatim
 
 #include "vgui_drag_tableau.h"

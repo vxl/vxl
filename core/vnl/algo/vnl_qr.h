@@ -11,14 +11,14 @@
 // \date   08 Dec 96
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   081296 AWF Temporarily abandoned as I realized my problem was symmetric...
 //   080697 AWF Recovered, implemented solve().
 //   200897 AWF Added determinant().
 //   071097 AWF Added Q(), R().
 //   Christian Stoecklin, ETH Zurich, added QtB(v)
 //   31-mar-2000 fsm: templated
-//   dac (Manchester) 28/03/2001: tidied up documentation
+//   28/03/2001 - dac (Manchester) - tidied up documentation
 //   13 Jan.2003 - Peter Vanroose - added missing implementation for inverse(),
 //                                tinverse(), solve(matrix), extract_q_and_r().
 // \endverbatim

@@ -4,12 +4,12 @@
 #endif
 //:
 // \file
+// \brief  See vgui_gtk_adaptor.h for a description of this file.
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   19 Dec 99
-// \brief  See vgui_gtk_adaptor.h for a description of this file.
 // 
 // \verbatim
-//  Modifications:
+//  Modifications
 //   04-OCT-2002 K.Y.McGaul - Use event.set_key() to set key for events,
 //                            makes all key chars lower case.
 //                          - Set event.ascii_char to actual key stroke
@@ -31,11 +31,7 @@
 static bool debug = false;
 vgui_menu vgui_gtk_adaptor::last_popup;
 
-extern "C" {
-
-static gint timeout_callback(gpointer);
-
-}
+extern "C" { static gint timeout_callback(gpointer); }
 
 //--------------------------------------------------------------------------------
 //: Constructors
@@ -393,4 +389,4 @@ gint timeout_callback(gpointer data)
   return FALSE;
 }
 
-}
+} // extern "C"

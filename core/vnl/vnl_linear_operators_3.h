@@ -5,19 +5,18 @@
 #pragma interface
 #endif
 //:
-//  \file
-//  \brief 3D linear algebra operations
+// \file
+// \brief 3D linear algebra operations
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   04 Aug 96
 //
-//    Specialized linear operators for 3D vectors and matrices.
-//    Include this file if you're inlining or compiling linear algebra
-//    code for speed.
-//
-//  \author Andrew W. Fitzgibbon, Oxford RRG
-//  \date   04 Aug 96
+//  Specialized linear operators for 3D vectors and matrices.
+//  Include this file if you're inlining or compiling linear algebra
+//  code for speed.
 //
 // \verbatim
-// Modifications:
-// LSB (Manchester) 23/3/01 Tidied documentation
+//  Modifications
+//   LSB (Manchester) 23/3/01 Tidied documentation
 // \endverbatim
 //-----------------------------------------------------------------------------
 

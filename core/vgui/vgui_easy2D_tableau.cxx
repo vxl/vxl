@@ -4,13 +4,13 @@
 #endif
 //:
 // \file
+// \brief  See vgui_easy2D_tableau.h for a description of this file.
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   24 Sep 99
-// \brief  See vgui_easy2D_tableau.h for a description of this file.
 //
 // \verbatim
-//  Modifications:
-//    24-SEP-1999 P.Pritchett - Initial version.
+//  Modifications
+//   24-SEP-1999 P.Pritchett - Initial version.
 // \endverbatim
 
 #include "vgui_easy2D_tableau.h"

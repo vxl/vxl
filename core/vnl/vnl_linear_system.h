@@ -5,14 +5,14 @@
 #pragma interface
 #endif
 //:
-//  \file
-//  \brief Abstraction for a linear system of equations.
-//  \author David Capel, capes@robots
-//  \date   July 2000
+// \file
+// \brief Abstraction for a linear system of equations.
+// \author David Capel, capes@robots
+// \date   July 2000
 //
 // \verbatim
-// Modifications:
-// LSB (Manchester) 23/1/01 Documentation tidied
+//  Modifications
+//   LSB (Manchester) 23/1/01 Documentation tidied
 // \endverbatim
 
 #include <vnl/vnl_vector.h>

@@ -11,8 +11,8 @@
 // \date    02 Oct 96
 //
 // \verbatim
-// Modifications:
-//     Ian Scott (Manchester, ISBE) rewritten to use vbl_sparse_array_base
+//  Modifications
+//   Ian Scott (Manchester, ISBE) rewritten to use vbl_sparse_array_base
 // \endverbatim
 //---------------------------------------------------------------------------
 

@@ -6,17 +6,17 @@
 #endif
 //:
 // \file
+// \brief  Tableau which toggles between visible/invisible and active/inactive.
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   25 Jan 00
-// \brief  Tableau which toggles between visible/invisible and active/inactive.
 //
-//  Contains classes:  vgui_active_tableau  vgui_active_tableau_new
+//  Contains classes  vgui_active_tableau  vgui_active_tableau_new
 //
 // \verbatim
-//  Modifications:
-//    25-JAN-2000 P.Pritchett - Initial version.
-//    07-AUG-2002 K.Y.McGaul - Changed to and added Doxygen style comments.
-//    01-OCT-2002 K.Y.McGaul - Moved vgui_active_visible to vgui_active_tableau.
+//  Modifications
+//   25-JAN-2000 P.Pritchett - Initial version.
+//   07-AUG-2002 K.Y.McGaul - Changed to and added Doxygen style comments.
+//   01-OCT-2002 K.Y.McGaul - Moved vgui_active_visible to vgui_active_tableau.
 // \endverbatim
 
 #include "vgui_active_tableau_sptr.h"

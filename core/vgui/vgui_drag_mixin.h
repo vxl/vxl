@@ -6,12 +6,12 @@
 #endif
 //:
 // \file
+// \brief  Simplifies the handling of drag events.
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   11 Sep 99
-// \brief  Simplifies the handling of drag events.
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   11-SEP-1999 P.Pritchett - Initial version.
 //   26-APR-2002 K.Y.McGaul - Converted to doxygen style comments.
 // \endverbatim

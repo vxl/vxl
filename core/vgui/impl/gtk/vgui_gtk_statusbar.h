@@ -6,15 +6,15 @@
 #endif
 //:
 // \file
+// \brief  The GTK implementation of vgui_statusbar.
 // \author Robotics Research Group, University of Oxford
 // \date   21 Nov 99
-// \brief  The GTK implementation of vgui_statusbar.
 //
-//  Contains  classes:  vgui_gtk_statusbar
+//  Contains class  vgui_gtk_statusbar
 // 
 // \verbatim
-//  Modifications:
-//    13-SEP-2002 K.Y.McGaul - Changed to Doxygen style documentation.
+//  Modifications
+//   13-SEP-2002 K.Y.McGaul - Changed to Doxygen style documentation.
 // \endverbatim
 
 #include <vcl_string.h>

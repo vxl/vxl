@@ -5,35 +5,34 @@
 #pragma interface
 #endif
 //:
-//  \file
-//  \brief  Database join on matrix columns
+// \file
+// \brief  Database join on matrix columns
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   27 Dec 96
 //
-//    vnl_scalar_join_iterator implements a fast database join on columns
-//    of matrices of scalars.  "Scalar" here really means that the
-//    objects have comparison operators.  The cost is O(n log n) where
-//    n is the number of rows, all for the two sorts in the ctor.
+//  vnl_scalar_join_iterator implements a fast database join on columns
+//  of matrices of scalars.  "Scalar" here really means that the
+//  objects have comparison operators.  The cost is O(n log n) where
+//  n is the number of rows, all for the two sorts in the ctor.
 //
-//    CAVEAT: The current implementation fudges multiple occurrences
-//    of the same key in the source column.  For example,
-//  \verbatim
+//  CAVEAT: The current implementation fudges multiple occurrences
+//  of the same key in the source column.  For example,
+// \verbatim
 //    join  1 3 and  3 5 on columns 2 and 1 respectively
 //          2 3      3 6
-//  \endverbatim
-//    should give
-//  \verbatim
+// \endverbatim
+//  should give
+// \verbatim
 //          1 3 3 5
 //          1 3 3 6
 //          2 3 3 5
 //          2 3 3 6
-//  \endverbatim
-//    and it doesn't.  Contact awf if you need this to work.
-//
-//  \author Andrew W. Fitzgibbon, Oxford RRG
-//  \date   27 Dec 96
+// \endverbatim
+//  and it doesn't.  Contact awf if you need this to work.
 //
 // \verbatim
-// Modifications:
-// LSB (Manchester) Documentation Tidied
+//  Modifications
+//   LSB (Manchester) Documentation Tidied
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 //

@@ -6,15 +6,15 @@
 #endif
 //:
 // \file
+// \brief    The MFC implementation of vgui_statusbar.
 // \author   Marko Bacic, Oxford RRG
 // \date     08 Aug 2000
-// \brief    The MFC implementation of vgui_statusbar.
 //
-//  Contains classes: vgui_mfc_statusbar
+//  Contains class vgui_mfc_statusbar
 //
 // \verbatim
-//  Modifications:
-//     08-AUG-2000 Marko Bacic - Initial version.
+//  Modifications
+//   08-AUG-2000 Marko Bacic - Initial version.
 // \endverbatim
 
 #include <vcl_string.h>

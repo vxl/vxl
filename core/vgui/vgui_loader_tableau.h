@@ -6,14 +6,14 @@
 #endif
 //:
 // \file
+// \brief  Tableau where the user can set the projection and modelview matrices.
 // \author Geoffrey Cross, Oxford RRG
 // \date   03 Nov 99
-// \brief  Tableau where the user can set the projection and modelview matrices.
 //
-//  Contains classes:  vgui_loader_tableau   vgui_loader_tableau_new
+//  Contains classes  vgui_loader_tableau   vgui_loader_tableau_new
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   03-Nov-1999 Geoff Initial version.
 //   04-Jan-2000 fsm. added set_ortho(), thereby obsoleting
 //                           view_section and view_volume.

@@ -6,11 +6,13 @@
 #endif
 //:
 // \file
+// \brief contains struct vgui_pixel_rgb<r,g,b> and other similar ones
 // \author fsm
+//
 // \verbatim
-// Modifications:
-//  Jan 2003, Amitha Perera: added functionality used in displaying vil images.
-//     The vil1 and vil functionality could probably be coalesced for a cleaner design.
+//  Modifications
+//   Jan 2003, Amitha Perera: added functionality used in displaying vil images.
+//             The vil1 and vil functionality could probably be coalesced for a cleaner design.
 // \endverbatim
 
 #include <vgui/vgui_gl.h>

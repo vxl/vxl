@@ -4,12 +4,11 @@
 #endif
 //:
 // \file
-// See vil1_tiff.h for a description of this file.
-//
+// \brief See vil1_tiff.h for a description of this file.
 // \author  awf@robots.ox.ac.uk
 //
 // \verbatim
-// Modifications:
+//  Modifications
 //   09-NOV-2001  K.Y.McGaul  Use default value for orientation when it can't be read.
 // \endverbatim
 

@@ -5,13 +5,13 @@
 #pragma interface
 #endif
 //:
-//  \file
-//  \brief To allow templated algorithms to determine appropriate actions of conjugation, complexification etc.
-//  \author fsm, Oxford RRG, 26 Mar 1999
+// \file
+// \brief To allow templated algorithms to determine appropriate actions of conjugation, complexification etc.
+// \author fsm, Oxford RRG, 26 Mar 1999
 //
 // \verbatim
-// Modifications:
-// LSB (Manchester) 26/3/01 Documentation tidied
+//  Modifications
+//   LSB (Manchester) 26/3/01 Documentation tidied
 // \endverbatim
 //-----------------------------------------------------------------------------
 

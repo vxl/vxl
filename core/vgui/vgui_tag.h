@@ -6,17 +6,17 @@
 #endif
 //:
 // \file
-// \author fsm
 // \brief  Allow clients to register 'tag functions' which are called later.
-//
-// Purpose: allow clients to register 'tag functions' which will be
-// called some time later.
+// \author fsm
 //
 // Real Purpose:
+//
 // An impl library "blah" should register a tag function at library
 // initialization time. The old method, where a library had a line
 // something like
+// \code
 //   static vgui_blah *init_dummy = new vgui_blah;
+// \endcode
 // caused problems (segv) if a vgui_blah uses run-time libraries which
 // have not yet been initialized. No particular order of library
 // initialization may be assumed, so static objects in libA might not
@@ -27,15 +27,17 @@
 // registered tag functions near the beginning of vgui::init(); There
 // is no problem with registering function pointers, as these are POD
 // (Plain Old Data). Thus, vgui_blah_tag.cxx now looks like this :
+// \code
 //   static int vgui_blah_function() { new vgui_blah; return 0; }
 //   int vgui_blah_tag = vgui_tag_add(vgui_blah_function, "blah");
+// \endcode
 // Thus, when 'vgui_blah_tag' is initialized, the tag function called
 // 'vgui_blah_tag_function' is registered. There is no instance of
 // vgui_blah created until that tag function is called by vgui::init().
 //
 // \verbatim
-//  Modifications:
-//    07-AUG-2002 K.Y.McGaul - Changed to Doxygen style comments.
+//  Modifications
+//   07-AUG-2002 K.Y.McGaul - Changed to Doxygen style comments.
 // \endverbatim
 
 //: The type of a tag function.

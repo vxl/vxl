@@ -3,22 +3,26 @@
 #define vidl_mpegcodec_helper_h
 //:
 // \file
+// \brief Contains classes vidl_mpegcodec_data and vidl_mpegcodec_helper
 // \author l.e.galup
 // \date July 2002
-//          This is a rewrite of the mpeg2dec program. it has been modified
-//          to work with the video player, i.e., by implementing a get_section
-//          method. this required some buffering, and the ability to decode
-//          a file grab at a time. there is some extra legacy code here.
-//          though some things seem to serve no purpose, i left them there as hooks
-//          for possible evolution of this class.
 //
-//          the mpeg_codec sends a request to this helper via
-//          a decode_request. data is stored in the mpeg_codec_data class, which
-//          holds a frame buffer, owned by the mpeg_codec. decoded frames are
-//          stored in this frame_buffer, and subsequent user requests for frames
-//          just does a memcpy from this frame_buffer into the user supplied buffer.
+//   This is a rewrite of the mpeg2dec program. it has been modified
+//   to work with the video player, i.e., by implementing a get_section
+//   method. this required some buffering, and the ability to decode
+//   a file grab at a time. there is some extra legacy code here.
+//   though some things seem to serve no purpose, i left them there as hooks
+//   for possible evolution of this class.
+//
+//   the mpeg_codec sends a request to this helper via
+//   a decode_request. data is stored in the mpeg_codec_data class, which
+//   holds a frame buffer, owned by the mpeg_codec. decoded frames are
+//   stored in this frame_buffer, and subsequent user requests for frames
+//   just does a memcpy from this frame_buffer into the user supplied buffer.
+//
 // \verbatim
-// Modifications
+//  Modifications
+//   none
 // \endverbatim
 
 #include <vcl_string.h>

@@ -5,15 +5,15 @@
 #pragma interface
 #endif
 //:
-//  \file
-//  \brief vnl_least_squares_function -> vnl_cost_function adaptor
-//  \author Andrew W. Fitzgibbon, Oxford RRG
-//  \date   20 Aug 99
+// \file
+// \brief vnl_least_squares_function -> vnl_cost_function adaptor
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   20 Aug 99
 //
 // \verbatim
-// Modifications:
-//     990820 AWF Initial version.
-//     LSB (Manchester) 23/3/01 Tidied documentation
+//  Modifications
+//   990820 AWF Initial version.
+//   LSB (Manchester) 23/3/01 Tidied documentation
 // \endverbatim
 //
 //-----------------------------------------------------------------------------

@@ -3,13 +3,13 @@
 #define vgui_poly_tableau_h_
 //:
 // \file
-// \author fsm
 // \brief  Tableau which renders its children in sub-rectangles of its viewport.
+// \author fsm
 //
-//  Contains classes: vgui_poly_tableau  vgui_poly_tableau_new
+//  Contains classes vgui_poly_tableau  vgui_poly_tableau_new
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   01-OCT-2002 K.Y.McGaul - Combined vgui_polytab_base with vgui_polytab.
 //                          - Added some Doxygen style comments.
 //                          - Moved vgui_polytab to vgui_poly_tableau.

@@ -4,14 +4,14 @@
 #endif
 //:
 // \file
+// \brief   See vgui_mfc_window.h for a description of this file.
 // \author  Marko Bacic, Oxford RRG
 // \date    24 July 2000
-// \brief   See vgui_mfc_window.h for a description of this file.
 //
 // \verbatim
-//  Modifications:
-//    20-JUL-2001  K.Y.McGaul  Added init_window function carry out common
-//                             functionality from all constructors.
+//  Modifications
+//   20-JUL-2001  K.Y.McGaul  Added init_window function carry out common
+//                            functionality from all constructors.
 // \endverbatim
 
 #include "vgui_mfc_window.h"

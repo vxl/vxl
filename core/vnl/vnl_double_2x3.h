@@ -5,13 +5,13 @@
 #pragma interface
 #endif
 //:
-//  \file
-//  \brief 2x3 matrix of double
-//  \author Andrew W. Fitzgibbon, Oxford RRG
-//  \date   23 Dec 96
+// \file
+// \brief 2x3 matrix of double
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   23 Dec 96
 //
 // \verbatim
-// Modifications:
+//  Modifications
 //   Peter Vanroose, 25 June 1999: no need to use #pragma instantiate anymore
 //   Peter Vanroose, 21 Oct 1999: vnl_matrix_fixed<double,2,3> already instantiated
 // \endverbatim

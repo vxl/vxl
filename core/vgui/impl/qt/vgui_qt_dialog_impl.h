@@ -7,7 +7,7 @@
 // \author Joris Schouteden
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   27.03.2000 JS  Initial Version, adapted from vgui_Fl_dialog_impl
 //   26.10.2000 JS  Added file browser and text message
 //   09.11.2000 JS  Added colour browser

@@ -6,12 +6,12 @@
 #endif
 //:
 // \file
+// \brief  Factory that manufactures vgui_style objects.
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   18 Oct 1999
-// \brief  Factory that manufactures vgui_style objects.
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   18-OCT-1999 P.Pritchett - Initial version.
 // \endverbatim
 

@@ -4,7 +4,7 @@
 //:
 // \file
 // \brief Contains a base class for sparse arrays.
-// \author: Ian Scott
+// \author Ian Scott
 
 #include "vbl_sparse_array_base.h"
 

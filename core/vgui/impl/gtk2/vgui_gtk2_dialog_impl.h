@@ -6,14 +6,14 @@
 #endif
 //:
 // \file
+// \brief  The GTK implementation of vgui_dialog_impl.
 // \author Robotics Research Group, University of Oxford
 // \date   28 Dec 99
-// \brief  The GTK implementation of vgui_dialog_impl.
 //
-//  Contains classes:  vgui_gtk2_dialog_impl
+//  Contains class  vgui_gtk2_dialog_impl
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   K.Y.McGaul  25-JAN-00  Moved all field functions to vgui_dialog_impl.
 //                          Added choice_field_widget function.
 //   Marko Bacic 11-JUL-00  Added support for inline file dialog box

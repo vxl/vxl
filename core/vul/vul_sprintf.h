@@ -11,10 +11,10 @@
 // \date   08 Aug 96
 //
 // \verbatim
-// Modifications:
-// 10 June 1999 fsm removed constructor from 'const vcl_string &' and
-//              changed remaining constructors to use do_vul_sprintf().
-// Peter Vanroose   27/05/2001: Corrected the documentation
+//  Modifications
+//   10 June 1999 fsm removed constructor from 'const vcl_string &' and
+//                    changed remaining constructors to use do_vul_sprintf().
+//   Peter Vanroose   27/05/2001: Corrected the documentation
 // \endverbatim
 //-----------------------------------------------------------------------------
 

@@ -7,6 +7,7 @@
 //:
 // \file
 // \brief Sparse 3D array
+// \author  Andrew W. Fitzgibbon, Oxford RRG, 02 Oct 96
 //
 //  vbl_big_sparse_array_3d is a sparse 3D array allowing space efficient
 //  access of the form    s(300,700,900) = 2;
@@ -30,15 +31,12 @@
 //           << x;
 // \endcode
 //
-// \author
-//     Andrew W. Fitzgibbon, Oxford RRG, 02 Oct 96
-//
 // \verbatim
-// Modifications:
-//  180497 AWF - Moved to Basics
-//  261001 Peter Vanroose - documentation added about implementation
-//  261001 Peter Vanroose - bug fixed in bigencode - had 11,22 instead of 21,42.
-//  271001 Peter Vanroose - ported to vxl from BigSparseArray3; removed n1,n2,n3
+//  Modifications
+//   180497 AWF - Moved to Basics
+//   261001 Peter Vanroose - documentation added about implementation
+//   261001 Peter Vanroose - bug fixed in bigencode - had 11,22 instead of 21,42.
+//   271001 Peter Vanroose - ported to vxl from BigSparseArray3; removed n1,n2,n3
 // \endverbatim
 //-----------------------------------------------------------------------------
 

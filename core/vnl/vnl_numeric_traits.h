@@ -5,24 +5,23 @@
 #pragma interface
 #endif
 //:
-//  \file
-//  \brief Templated zero/one/precision
+// \file
+// \brief Templated zero/one/precision
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   04 Sep 96
 //
 //  To allow templated numerical algorithms to determine appropriate
-//    values for zero, one, maxval, and types for double precision,
-//    maximum product etc.
-//
-//  \author Andrew W. Fitzgibbon, Oxford RRG
-//  \date   04 Sep 96
+//  values for zero, one, maxval, and types for double precision,
+//  maximum product etc.
 //
 // \verbatim
-//     Modifications:
-//     980212 AWF Initial version.
-//     AWF 010498 Moved to math
-//     LSB (Manchester) 23/3/01 Documentation tidied
-//     Peter Vanroose   14/7/01 vnl_rational added
-//     Peter Vanroose   14/10/01 vnl_rational moved to vnl_rational.h
-//     AWF 250202 Add const T specializations for the basic types.
+//  Modifications
+//   980212           AWF      Initial version.
+//   AWF              010498   Moved to math
+//   LSB (Manchester) 23/3/01  Documentation tidied
+//   Peter Vanroose   14/7/01  vnl_rational added
+//   Peter Vanroose   14/10/01 vnl_rational moved to vnl_rational.h
+//   AWF              250202   Add const T specializations for the basic types.
 // \endverbatim
 //
 //-----------------------------------------------------------------------------

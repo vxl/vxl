@@ -3,15 +3,15 @@
 #pragma implementation
 #endif
 //:
-//  \file
-// See vgui_mfc_utils.h for a description of this file.
-//
+// \file
+// \brief See vgui_mfc_utils.h for a description of this file.
 // \author  Marko Bacic, Oxford RRG
 // \date    4 August 2000
+//
 // \verbatim
-//  Modifications:
-//    20-JUL-2001  K.Y.McGaul  Added menu accelerators.
-//    22-AUG-2001  K.Y.McGaul  Added destructor to fix memory leak: all menus now deleted.
+//  Modifications
+//   20-JUL-2001  K.Y.McGaul  Added menu accelerators.
+//   22-AUG-2001  K.Y.McGaul  Added destructor to fix memory leak: all menus now deleted.
 // \endverbatim
 
 #include "vgui_mfc_utils.h"

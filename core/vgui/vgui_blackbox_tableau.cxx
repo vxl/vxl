@@ -4,12 +4,12 @@
 #endif
 //:
 // \file
+// \brief  See vgui_blackbox_tableau.h for a description of this file.
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   13 Oct 99
-// \brief  See vgui_blackbox_tableau.h for a description of this file.
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   13-OCT-1999 P.Pritchett - Initial version
 // \endverbatim
 

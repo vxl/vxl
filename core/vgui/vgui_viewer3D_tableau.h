@@ -6,17 +6,17 @@
 #endif
 //:
 // \file
+// \brief  Tableau with functions to view 3D objects (eg, rotate, zoom, etc).
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   14-SEP-1999
-// \brief  Tableau with functions to view 3D objects (eg, rotate, zoom, etc).
 //
-//  Contains classes:  vgui_viewer3D_tableau  vgui_viewer3D_tableau_new
+//  Contains classes  vgui_viewer3D_tableau  vgui_viewer3D_tableau_new
 //
 // \verbatim
-//  Modifications:
-//    14-SEP-1999 P.Pritchett - Initial version.
-//    07-AUG-2002 K.Y.McGaul - Changed to and added Doxygen style comments.
-//    01-OCT-2002 K.Y.McGaul - Moved vgui_viewer3D to vgui_viewer3D_tableau.
+//  Modifications
+//   14-SEP-1999 P.Pritchett - Initial version.
+//   07-AUG-2002 K.Y.McGaul - Changed to and added Doxygen style comments.
+//   01-OCT-2002 K.Y.McGaul - Moved vgui_viewer3D to vgui_viewer3D_tableau.
 // \endverbatim
 
 #include "vgui_viewer3D_tableau_sptr.h"

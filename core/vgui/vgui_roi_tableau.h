@@ -6,16 +6,16 @@
 #endif
 //:
 // \file
+// \brief  Tableau which makes an ROI of an image act like a whole image.
 // \author Marko Bacic, Robotics Research Group, University of Oxford
 // \date   18 Jul 2000
-// \brief  Tableau which makes an ROI of an image act like a whole image.
 //
 //  ROI means "region of interest".  In this case it can only be
 //  a rectangular region.
-//  Contains classes:  vgui_roi_tableau  vgui_roi_tableau_new
+//  Contains classes  vgui_roi_tableau  vgui_roi_tableau_new
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   18-Jul-2000  Marko Bacic - Initial version.
 //   08-Aug-2002  K.Y.McGaul - Changed to Doxygen style comments.
 // \endverbatim

@@ -4,12 +4,12 @@
 #endif
 //:
 // \file
+// \brief  See vgui_tview_launcher.h for a description of this file.
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   21 Oct 99
-// \brief  See vgui_tview_launcher.h for a description of this file.
 // 
 // \verbatim
-//  Modifications:
+//  Modifications
 //   04-OCT-2002 K.Y.McGaul - Sort out bug in vgui_event_condition.
 //                          - Launch tview in a dialog box instead of window.
 // \endverbatim

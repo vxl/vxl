@@ -2,13 +2,13 @@
 #define vgui_parent_child_link_h_
 //:
 // \file
-// \author fsm
 // \brief  Describes the relationship between a parent and child tableau.
+// \author fsm
 //
-//  Contains classes:  vgui_parent_child_link
+//  Contains class  vgui_parent_child_link
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   17-Sep-2002 K.Y.McGaul - Added doxygen style comments.
 // \endverbatim
 

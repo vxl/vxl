@@ -6,15 +6,15 @@
 #endif
 //:
 // \file
+// \brief  Tableau with display list functionality, can use any type of soview.
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   14 Sep 99
-// \brief  Tableau with display list functionality, can use any type of soview.
 //
-//  Contains classes:  vgui_displaybase_tableau  vgui_displaybase_tableau_new
-//                     vgui_displaybase_tableau_selection_callback
+//  Contains classes  vgui_displaybase_tableau  vgui_displaybase_tableau_new
+//                    vgui_displaybase_tableau_selection_callback
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   14-SEP-1999 P.Pritchett - Initial version.
 //   01-OCT-2002 K.Y.McGaul - Moved displaybase to displaybase_tableau.
 // \endverbatim

@@ -4,13 +4,13 @@
 #endif
 //:
 // \file
+// \brief  See vgui_viewer3D_tableau.h for a description of this file
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   14-SEP-1999
-// \brief  See vgui_viewer3D_tableau.h for a description of this file
 //
 // \verbatim
-//  Modifications:
-//    14-SEP-1999 P.Pritchett - Initial version.
+//  Modifications
+//   14-SEP-1999 P.Pritchett - Initial version.
 // \endverbatim
 
 #include "vgui_viewer3D_tableau.h"

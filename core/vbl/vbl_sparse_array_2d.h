@@ -7,19 +7,18 @@
 //:
 // \file
 // \brief a space efficient 2d array
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   02 Oct 96
 //
 //    vbl_sparse_array_2d is a sparse 2D array allowing space
 //    efficient access of the form s(3000,7000) = 2.
 //
-// \author Andrew W. Fitzgibbon, Oxford RRG
-// \date   02 Oct 96
-//
 // \verbatim
-// Modifications:
-// 26 March 01 cjb updated documentation
-// 10 April 01 IMS (Manchester ISBE) modified to use vbl_sparse_array_base
-// 11 April 01 Peter Vanroose - vbl_index_2d moved to separate file
-// 11 April 01 Ian Scott - replaced used of vbl_index_2d with vcl_pair
+//  Modifications
+//   26 March 01 cjb updated documentation
+//   10 April 01 IMS (Manchester ISBE) modified to use vbl_sparse_array_base
+//   11 April 01 Peter Vanroose - vbl_index_2d moved to separate file
+//   11 April 01 Ian Scott - replaced used of vbl_index_2d with vcl_pair
 // \endverbatim
 //---------------------------------------------------------------------------
 

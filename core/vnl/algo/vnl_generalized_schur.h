@@ -11,7 +11,8 @@
 // \date   2 Oct 2001
 //
 // \verbatim
-// Modifications:
+//  Modifications
+//   none
 // \endverbatim
 
 #include <vnl/vnl_matrix.h>

@@ -6,16 +6,16 @@
 #endif
 //:
 // \file
+// \brief  Tableau performing OpenGL clearing.
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   11 Nov 99
-// \brief  Tableau performing OpenGL clearing.
 //
-//  Contains classes:  vgui_clear tableau   vgui_clear_tableau_new
+//  Contains classes  vgui_clear tableau   vgui_clear_tableau_new
 //
 // \verbatim
-//  Modifications:
-//    11-NOV-1999 P.Pritchett - Initial version.
-//    26-APR-2002 K.Y.McGaul - Added some doxygen style comments.
+//  Modifications
+//   11-NOV-1999 P.Pritchett - Initial version.
+//   26-APR-2002 K.Y.McGaul - Added some doxygen style comments.
 // \endverbatim
 
 #include "vgui_clear_tableau_sptr.h"

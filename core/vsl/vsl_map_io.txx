@@ -7,7 +7,7 @@
 // \author K.Y.McGaul
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   IMS - 22 June 2001 - Added IO for multimap
 // \endverbatim
 

@@ -6,14 +6,14 @@
 #endif
 //:
 // \file
+// \brief  Tableau for rendering text.
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   19 Oct 99
-// \brief  Tableau for rendering text.
 //
-//  Contains classes:  vgui_text_tableau  vgui_text_tableau_new
+//  Contains classes  vgui_text_tableau  vgui_text_tableau_new
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   19-OCT-1999 P.Pritchett - Initial version.
 //   30 Dec 1999 fsm. modified to render arbitrary text.
 //   23-FEB-2000 K.Y.McGaul - Handle now remains constant when text is removed,

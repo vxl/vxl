@@ -4,12 +4,12 @@
 #endif
 //:
 // \file
+// \brief  See vgui_gtk2_adaptor.h for a description of this file.
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   19 Dec 99
-// \brief  See vgui_gtk2_adaptor.h for a description of this file.
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   04-OCT-2002 K.Y.McGaul - Use event.set_key() to set key for events,
 //                            makes all key chars lower case.
 //                          - Set event.ascii_char to actual key stroke

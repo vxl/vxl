@@ -6,14 +6,14 @@
 #endif
 //:
 // \file
+// \brief  Tableau where functions passed in are called for various events.
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   25 Nov 99
-// \brief  Tableau where functions passed in are called for various events.
 //
-//  Contains classes:  vgui_function_tableau
+//  Contains class  vgui_function_tableau
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   25-NOV-1999 P.Pritchett - Initial version.
 //   02-OCT-2002 K.Y.McGaul - Added vgui_function_tableau_new.
 //                          - Added comments for the functions.

@@ -3,12 +3,12 @@
 #define AFX_VGUI_MFC_MAINFRM_H__B3175B74_0F91_44DD_8EFD_41CEA35852A1__INCLUDED_
 //:
 // \file
+// \brief   Defines main window of the application
 // \author  Marko Bacic, Oxford RRG
 // \date    27 July 2000
-// \brief   Defines main window of the application
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   22-AUG-2000 - Marko Bacic, Oxford RRG -- Added support for horizontal and
 //                                            vertical scroll bars
 // \endverbatim

@@ -4,13 +4,13 @@
 #endif
 //:
 // \file
+// \brief  See vgui_style.h for a description of this file.
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   18 Oct 99
-// \brief  See vgui_style.h for a description of this file.
 //
 // \verbatim
-//  Modifications:
-//    18-OCT-1999 P.Pritchett - Initial version.
+//  Modifications
+//   18-OCT-1999 P.Pritchett - Initial version.
 // \endverbatim
 
 #include "vgui_style.h"

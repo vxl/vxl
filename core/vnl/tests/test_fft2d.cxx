@@ -1,5 +1,5 @@
 // This is core/vnl/tests/test_fft2d.cxx
-
+#include <testlib/testlib_test.h>
 //:
 // \file
 // \brief test program for 2D FFT routines.
@@ -11,8 +11,8 @@
 // and computes differences between input and output.
 //
 // \verbatim
-// Modifications:
-// Jan. 2002 - Peter Vanroose - adapted from vnl_fft2d to vnl_fft_2d
+//  Modifications
+//   Jan. 2002 - Peter Vanroose - adapted from vnl_fft2d to vnl_fft_2d
 // \endverbatim
 
 //-----------------------------------------------------------------------------
@@ -21,7 +21,6 @@
 #include <vcl_complex.h>
 
 #include <vnl/vnl_complexify.h>
-#include <testlib/testlib_test.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_fft_2d.h>
 

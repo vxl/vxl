@@ -6,11 +6,11 @@
 #endif
 //:
 // \file
-// \author fsm
 // \brief  An abstract representation of a system window.
+// \author fsm
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   07-AUG-2002 K.Y.McGaul - Changed to and added Doxygen style comments.
 //   23-DEC-2002 J.L. Mundy - added set methods for scroll bars
 // \endverbatim

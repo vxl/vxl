@@ -6,14 +6,14 @@
 #endif
 //:
 // \file
+// \brief  Tableau holding many child tableaux, but only one receives events.
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   13 Sep 99
-// \brief  Tableau holding many child tableaux, but only one receives events.
 //
-//  Contains classes:  vgui_deck_tableau  vgui_deck_tableau_new
+//  Contains classes  vgui_deck_tableau  vgui_deck_tableau_new
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   13-SEP-1999 P.Pritchett - Initial version.
 //   26-APR-2002 K.Y.McGaul - Converted to and added doxygen style comments.
 // \endverbatim

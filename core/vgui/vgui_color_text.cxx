@@ -2,12 +2,13 @@
 #include "vgui_color_text.h"
 //:
 // \file
+// \brief  See vgui_color_text.h for a description of this file.
 // \author K.Y.McGaul
 // \date   25-FEB-2000
 //
 // \verbatim
-//  Modifications:
-//    25-FEB-2000 K.Y.McGaul - Initial version.
+//  Modifications
+//   25-FEB-2000 K.Y.McGaul - Initial version.
 // \endverbatim
 
 #include <vcl_cstdio.h>

@@ -3,12 +3,12 @@
 #define vgui_glut_adaptor_h_
 //:
 // \file
-// \author fsm
 // \brief  The GLUT (OpenGL Utility Toolkit) implementation of vgui_adaptor.
+// \author fsm
 //
 // \verbatim
-//  Modifications:
-//    17-Sep-2002 K.Y.McGaul - Converted to doxygen style documentation.
+//  Modifications
+//   17-Sep-2002 K.Y.McGaul - Converted to doxygen style documentation.
 // \endverbatim
 
 #include <vcl_vector.h>

@@ -7,13 +7,12 @@
 //:
 // \file
 // \brief vnl_matrix reference to user-supplied storage.
-//
 // \author Andrew W. Fitzgibbon, Oxford RRG
 // \date   04 Aug 96
 //
 // \verbatim
-// Modifications:
-//  Documentation updated by Ian Scott 12 Mar 2000
+//  Modifications
+//   Documentation updated by Ian Scott 12 Mar 2000
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 //

@@ -3,10 +3,11 @@
 #define vgui_projection_inspector_h_
 //:
 // \file
+// \brief contains class vgui_projection_inspector
 // \author fsm
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   14-Aug-2002 K.Y.McGaul - Converted to Doxygen style comments.
 // \endverbatim
 

@@ -6,12 +6,12 @@
 #endif
 //:
 // \file
+// \brief   MFC (Microsoft Foundation Classes) implementation of vgui_toolkit.
 // \author  awf@robots.ox.ac.uk
 // \date    July 2000
-// \brief   MFC (Microsoft Foundation Classes) implementation of vgui_toolkit.
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   July 2000   Marko Bacic, Oxford RRG   -- Implemented support for MFC
 //   15-AUG-2000 Marko Bacic, Oxford RRG    -- Implemented run_one_event.
 //   29-AUG-2001 K.Y.McGaul - Added destructor to remove Purify mem leak.

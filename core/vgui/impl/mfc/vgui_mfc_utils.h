@@ -6,14 +6,14 @@
 #endif
 //:
 // \file
+// \brief   MFC support for menus.
 // \author  Marko Bacic, Oxford RRG
 // \date    4 August 2000
-// \brief   MFC support for menus.
 //
-//  Contains classes:  vgui_mfc_utils
+//  Contains class  vgui_mfc_utils
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   04-AUG-2000 Marko Bacic - Initial version.
 //   14-AUG-2000 Marko Bacic - Added support for popup menus
 //   16-MAR-2001 K.Y.McGaul - Added menu accelerators

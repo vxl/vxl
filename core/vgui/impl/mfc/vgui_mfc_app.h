@@ -3,15 +3,15 @@
 #define AFX_VGUIMFCAPP_H__259D1B15_6A52_45B3_B335_8A7C78097A13__INCLUDED_
 //:
 // \file
+// \brief  Defines CWinApp which initialises all the MRC stuff.
 // \author Marko Bacic, Oxford RRG
 // \date   27 July 2000
-// \brief  Defines CWinApp which initialises all the MRC stuff.
 //
-//  Contains classes:  vgui_mfc_app
+//  Contains class  vgui_mfc_app
 //
 // \verbatim
-//  Modifications:
-//    23-AUG-2000 Marko Bacic, Oxford RRG -- Added support for scroll bars
+//  Modifications
+//   23-AUG-2000 Marko Bacic, Oxford RRG -- Added support for scroll bars
 // \endverbatim
 
 #if _MSC_VER > 1000

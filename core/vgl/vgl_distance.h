@@ -13,10 +13,10 @@
 // since e.g. the distance between two vgl_point_2d<int> is not always an int.
 //
 // \verbatim
-// Modifications:
-//  2 July 2001 Peter Vanroose  added vgl_distance(point,line) and (point,plane)
-//  2 July 2001 Peter Vanroose  inlined 4 functions and made return types double
-//  2 Jan. 2003 Peter Vanroose  corrected functions returning negative distance
+//  Modifications
+//   2 July 2001 Peter Vanroose  added vgl_distance(point,line) and (point,plane)
+//   2 July 2001 Peter Vanroose  inlined 4 functions and made return types double
+//   2 Jan. 2003 Peter Vanroose  corrected functions returning negative distance
 // \endverbatim
 
 #include <vgl/vgl_fwd.h> // forward declare various vgl classes

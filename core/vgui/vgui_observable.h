@@ -6,14 +6,14 @@
 #endif
 //:
 // \file
-// \author fsm
 // \brief  Base class for classes that want to broadcast messages to observers.
+// \author fsm
 //
-//  Contains classes:  vgui_observable.
+//  Contains class  vgui_observable.
 //
 // \verbatim
-//  Modifications:
-//    17-Sep-2002 K.Y.McGaul - Added doxygen style comments.
+//  Modifications
+//   17-Sep-2002 K.Y.McGaul - Added doxygen style comments.
 // \endverbatim
 
 #include <vcl_vector.h>

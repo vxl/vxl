@@ -7,7 +7,7 @@
 // \author Joris Schouteden
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   24.03.2000 JS  Initial Version, adapted from vgui_gtk_window
 // \endverbatim
 

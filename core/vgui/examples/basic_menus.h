@@ -8,7 +8,7 @@
 //   J.L. Mundy
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   J.L. Mundy December 26, 2002    Initial version.
 // \endverbatim
 //--------------------------------------------------------------------------------

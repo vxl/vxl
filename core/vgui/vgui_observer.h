@@ -6,16 +6,16 @@
 #endif
 //:
 // \file
+// \brief  Base class for classes that receive messages from observables.
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   11 Sep 99
-// \brief  Base class for classes that receive messages from observables.
 //
-//  Contains classes: vgui_observer
+//  Contains class vgui_observer
 //
 // \verbatim
-//  Modifications:
-//    11-Sep-1999 P.Pritchett - Initial version.
-//    14-Aug-2002 K.Y.McGaul - Converted to Doxygen style comments.
+//  Modifications
+//   11-Sep-1999 P.Pritchett - Initial version.
+//   14-Aug-2002 K.Y.McGaul - Converted to Doxygen style comments.
 // \endverbatim
 
 class vgui_message;

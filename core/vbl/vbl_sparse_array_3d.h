@@ -7,19 +7,18 @@
 //:
 // \file
 // \brief a space efficient 3d array
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   02 Oct 96
 //
 //    vbl_sparse_array_3d is a sparse 3D array allowing space
 //    efficient access of the form s(300,700,900) = 2.
 //
-// \author Andrew W. Fitzgibbon, Oxford RRG
-// \date   02 Oct 96
-//
 // \verbatim
-// Modifications:
-// 26 March 01 cjb updated documentation
-// 10 April 01 IMS (Manchester ISBE) modified to use vbl_sparse_array_base
-// 11 April 01 Peter Vanroose - vbl_index_3d moved to separate file
-// 25 June 01 IMS - vbl_index_3d replaces with vbl_triple
+//  Modifications
+//   26 March 01 cjb updated documentation
+//   10 April 01 IMS (Manchester ISBE) modified to use vbl_sparse_array_base
+//   11 April 01 Peter Vanroose - vbl_index_3d moved to separate file
+//   25 June 01 IMS - vbl_index_3d replaces with vbl_triple
 // \endverbatim
 //---------------------------------------------------------------------------
 

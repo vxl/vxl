@@ -6,15 +6,15 @@
 #endif
 //:
 // \file
+// \brief  Statusbar buffer?
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   21 Nov 99
-// \brief  Statusbar buffer?
 //
-//  Contains classes: vgui_statusbuf
+//  Contains class vgui_statusbuf
 //
 // \verbatim
-//  Modifications:
-//    21-Nov-1999 P.Pritchett - Initial version.
+//  Modifications
+//   21-Nov-1999 P.Pritchett - Initial version.
 // \endverbatim
 
 #include <vcl_streambuf.h>

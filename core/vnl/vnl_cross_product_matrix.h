@@ -5,14 +5,14 @@
 #pragma interface
 #endif
 //:
-//  \file
-//  \brief 3x3 cross-product matrix of vector
-//  \author Andrew W. Fitzgibbon, Oxford RRG
-//  \date   19 Sep 96
+// \file
+// \brief 3x3 cross-product matrix of vector
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   19 Sep 96
 //
 // \verbatim
-// Modifications:
-// 4/4/01 LSB (Manchester) Tidied Documentation
+//  Modifications
+//   4/4/01 LSB (Manchester) Tidied Documentation
 // \endverbatim
 //
 //-----------------------------------------------------------------------------

@@ -3,17 +3,18 @@
 #define vgui_menu_h_
 //:
 // \file
-// \author fsm
 // \brief  Representation of menus and menu items for pop-up and menubar menus.
+// \author fsm
 //
-//  Contains classes:  vgui_menu_item  vgui_menu
+//  Contains classes  vgui_menu_item  vgui_menu
+//
 //  These menu description structures are designed to work for both
 //  pop-up (modal) menus and stay-up (non-modal) menus. They can be
 //  passed by value.
 //
 // \verbatim
-//  Modifications:
-//    07-Aug-1999 K.Y.McGaul - Added Doxygen style comments.
+//  Modifications
+//   07-Aug-1999 K.Y.McGaul - Added Doxygen style comments.
 // \endverbatim
 
 #include <vcl_string.h>

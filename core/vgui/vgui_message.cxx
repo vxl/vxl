@@ -2,8 +2,8 @@
 #include "vgui_message.h"
 //:
 // \file
-// \author fsm
 // \brief  See vgui_message.h for a description of this file.
+// \author fsm
 
 vgui_message::vgui_message()
   : from(0)
@@ -60,4 +60,4 @@ vgui_message::vgui_message()
 //   }
 // };
 // \endcode
-//
+

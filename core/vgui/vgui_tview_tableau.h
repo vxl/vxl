@@ -6,14 +6,14 @@
 #endif
 //:
 // \file
+// \brief  Tableau displaying a tableau tree.
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   12 Oct 99
-// \brief  Tableau displaying a tableau tree.
 //
-//  Contains classes:  vgui_tview_tableau  vgui_tview_tableau_new
+//  Contains classes  vgui_tview_tableau  vgui_tview_tableau_new
 //
 // \verbatim
-//  Modification:
+//  Modifications
 //   12-OCT-2002 P.Pritchett - Initial version.
 //   07-Aug-2002 K.Y.McGaul - Change to Doxygen style comments.
 //   01-OCT-2002 K.Y.McGaul - Moved vgui_tview to vgui_tview_tableau.

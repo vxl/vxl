@@ -2,6 +2,7 @@
 #define vgl_h_matrix_2d_compute_linear_h_
 //:
 // \file
+// \brief contains class vgl_h_matrix_2d_compute_linear
 //
 // vgl_h_matrix_2d_compute_linear contains a linear method to calculate
 // the plane projectivity which relates four 2D point (or line)
@@ -12,7 +13,7 @@
 // $p'_i$ their images.
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   200598 FSM added checks for degenerate or coincident points.
 // \endverbatim
 

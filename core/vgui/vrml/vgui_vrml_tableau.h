@@ -6,14 +6,14 @@
 #endif
 //:
 // \file
+// \brief  Tableau to display VRML.
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   17 Sep 99
-// \brief  Tableau to display VRML.
 //
 // \verbatim
-//  Modifications:
-//    17-SEP-1999 P.Pritchett - Initial version.
-//    13-SEP-1999 K.Y.McGaul - Changed to Doxygen style comments.
+//  Modifications
+//   17-SEP-1999 P.Pritchett - Initial version.
+//   13-SEP-1999 K.Y.McGaul - Changed to Doxygen style comments.
 // \endverbatim
 
 #include <vgui/vgui_tableau.h>

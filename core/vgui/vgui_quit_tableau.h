@@ -3,14 +3,14 @@
 #define vgui_quit_tableau_h_
 //:
 // \file
-// \author fsm
 // \brief  A tableau which quits the application on receiving 'q' or ESC
+// \author fsm
 //
-//  Contains classes:  vgui_quit_tableau  vgui_quit_tableau_new
+//  Contains classes  vgui_quit_tableau  vgui_quit_tableau_new
 //
 // \verbatim
-//  Modifications:
-//    08-Aug-2002 K.Y.McGaul - Changed to Doxygen style comments.
+//  Modifications
+//   08-Aug-2002 K.Y.McGaul - Changed to Doxygen style comments.
 // \endverbatim
 
 #include "vgui_quit_tableau_sptr.h"

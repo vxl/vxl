@@ -3,14 +3,14 @@
 #define vgui_accelerate_mfc_h_
 //:
 // \file
+// \brief  Accelerated OpenGL functions for MFC.
 // \author Marko Bacic, Oxford RRG
 // \date   29 Aug 2000
-// \brief  Accelerated OpenGL functions for MFC.
 //
 // \verbatim
-//  Modifications:
-//    29-AUG-2000 Initial version. Marko Bacic,Oxford RRG
-//    04-AUG-2000 Minor fixes. Introduced mb_glDrawBufferWrapper
+//  Modifications
+//   29-AUG-2000 Initial version. Marko Bacic,Oxford RRG
+//   04-AUG-2000 Minor fixes. Introduced mb_glDrawBufferWrapper
 // \endverbatim
 
 #include <vgui/vgui_gl.h>

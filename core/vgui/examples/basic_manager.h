@@ -1,4 +1,4 @@
-//this-sets-emacs-to-*-c++-*-mode
+// This is core/vgui/examples/basic_manager.h
 #ifndef basic_manager_h_
 #define basic_manager_h_
 //----------------------------------------------------------------------------
@@ -9,7 +9,7 @@
 //   J.L. Mundy
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   J.L. Mundy December 26, 2002    Initial version.
 // \endverbatim
 //-----------------------------------------------------------------------------

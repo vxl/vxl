@@ -7,6 +7,8 @@
 //:
 // \file
 // \brief Fits a contiguous set of line segments to a sampled curve
+// \author J.L. Mundy (reminiscent of Charlie's fit lines)
+// \date April 08, 2003
 //
 //  The parameters are:
 //  -  min_length - the smallest number of points to fit with a line seg
@@ -16,9 +18,8 @@
 //  is exceeded. The line segment is output and a new line fit is started.
 //
 // \verbatim
-//  Author
-//   April 08, 2003 - J.L. Mundy (reminiscent of Charlie's fit lines)
-//  Modifications - none
+//  Modifications
+//   none
 // \endverbatim
 #include <vcl_vector.h>
 #include <vgl/vgl_point_2d.h>

@@ -4,15 +4,14 @@
 #endif
 //:
 // \file
-// See vgui_mfc.h for a description of this file.
-//
+// \brief See vgui_mfc.h for a description of this file.
 // \author awf@robots.ox.ac.uk
 // \date   July 2000
 //
 // \verbatim
-//  Modifications:
-//    K.Y.McGaul  29-AUG-2001  Add destructor to remove Purify mem leak.
-//                             Tidy up indentation and documentation.
+//  Modifications
+//   K.Y.McGaul  29-AUG-2001  Add destructor to remove Purify mem leak.
+//                            Tidy up indentation and documentation.
 // \endverbatim
 //-----------------------------------------------------------------------------
 #include "vgui_mfc.h"

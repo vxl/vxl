@@ -6,12 +6,12 @@
 #endif
 //:
 // \file
+// \brief vgui_dialog_impl is the abstract base class for dialog implementation.
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   25 Oct 99
-// \brief vgui_dialog_impl is the abstract base class for dialog implementation.
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   K.Y.McGaul  25-JAN-00    Moved field functions to this class to save repetition.
 //                            Added virtual ..._widget functions.
 //                            Added text_message function.

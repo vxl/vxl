@@ -6,10 +6,12 @@
 #endif
 //:
 // \file
+// \brief contains classes vbl_bit_array_3d_base and vbl_bit_array_3d
 // \author
 //     Geoffrey Cross, Oxford RRG, 17 Jul 99
+//
 // \verbatim
-// Modifications:
+//  Modifications
 //   990717 Geoff Initial version.
 //   011023 Peter Vanroose - renamed and moved to vbl
 //\endverbatim

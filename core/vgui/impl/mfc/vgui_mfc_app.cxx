@@ -3,13 +3,13 @@
 #include "vgui_mfc_app.h"
 //:
 // \file
+// \brief   See vgui_mfc_app.h for a description of this file.
 // \author  Marko Bacic, Oxford RRG
 // \date    27 July 2000
-// \brief   See vgui_mfc_app.h for a description of this file.
 //
 // \verbatim
-//  Modifications:
-//    K.Y.McGaul  18-SEP-2001   Changed indentation from 8 spaces to 2 spaces.
+//  Modifications
+//   K.Y.McGaul  18-SEP-2001   Changed indentation from 8 spaces to 2 spaces.
 // \endverbatim
 //-----------------------------------------------------------------------------
 

@@ -6,14 +6,15 @@
 #endif
 //:
 // \file
+// \brief Contains classes vil1_jpeg_file_format and vil1_jpeg_generic_image
 // \author    fsm
 // \date 17 Feb 2000
 //
 // Adapted from geoff's code in ImageClasses/JPEGImage.*
 //
 // \verbatim
-//  Modifications:
-//  3 October 2001 Peter Vanroose - Implemented get_property("top_row_first")
+//  Modifications
+//   3 October 2001 Peter Vanroose - Implemented get_property("top_row_first")
 //\endverbatim
 
 #include <vil1/vil1_file_format.h>
@@ -29,12 +30,12 @@ class vil1_jpeg_file_format : public vil1_file_format
   virtual char const *tag() const;
   virtual vil1_image_impl *make_input_image(vil1_stream *vs);
   virtual vil1_image_impl *make_output_image(vil1_stream *vs,
-                                            int planes,
-                                            int width,
-                                            int height,
-                                            int components,
-                                            int bits_per_component,
-                                            vil1_component_format format);
+                                             int planes,
+                                             int width,
+                                             int height,
+                                             int components,
+                                             int bits_per_component,
+                                             vil1_component_format format);
 };
 
 //
@@ -46,12 +47,12 @@ class vil1_jpeg_generic_image : public vil1_image_impl
 {
   vil1_jpeg_generic_image(vil1_stream *is);
   vil1_jpeg_generic_image(vil1_stream *is,
-                         int planes,
-                         int width,
-                         int height,
-                         int components,
-                         int bits_per_component,
-                         vil1_component_format format);
+                          int planes,
+                          int width,
+                          int height,
+                          int components,
+                          int bits_per_component,
+                          vil1_component_format format);
   ~vil1_jpeg_generic_image();
 
   //: implementation of virtual interface.

@@ -6,16 +6,16 @@
 #endif
 //:
 // \file
+// \brief  Templated fields for dialog boxes.
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   23 Oct 99
-// \brief  Templated fields for dialog boxes.
 //
-//  Contains classes:  vgui_simple_field
+//  Contains class  vgui_simple_field
 //
 // \verbatim
-//  Modifications:
-//    23-OCT-1999  P.Pritchett - Initial version.
-//    13-SEP-2002  K.Y.McGaul - Converted to doxygen style comments
+//  Modifications
+//   23-OCT-1999  P.Pritchett - Initial version.
+//   13-SEP-2002  K.Y.McGaul - Converted to doxygen style comments
 // \endverbatim
 
 #include <vcl_string.h>

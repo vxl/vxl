@@ -4,13 +4,13 @@
 #endif
 //:
 // \file
+// \brief   See vgui_enhance_tableau.h for a description of this file.
 // \author  Philip C. Pritchett, RRG, University of Oxford
 // \date    17 Nov 99
-// \brief   See vgui_enhance_tableau.h for a description of this file.
 //
 // \verbatim
-//  Modifications:
-//    17-NOV-1999 P.Pritchett - Initial version.
+//  Modifications
+//   17-NOV-1999 P.Pritchett - Initial version.
 // \endverbatim
 
 #include "vgui_enhance_tableau.h"

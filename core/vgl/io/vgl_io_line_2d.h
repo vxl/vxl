@@ -3,12 +3,13 @@
 #define vgl_io_line_2d_h_
 //:
 // \file
+// \brief contains functions vsl_b_write, vsl_b_read and vsl_print_summary
 // \date 16 Mar 2001
 // \author Franck Bettinger
 //
 // \verbatim
-// Modifications :
-// 2001/03/16 Franck Bettinger    Creation
+//  Modifications
+//   2001/03/16 Franck Bettinger    Creation
 // \endverbatim
 
 #include <vgl/vgl_line_2d.h>

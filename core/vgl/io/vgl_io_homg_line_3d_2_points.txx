@@ -3,7 +3,8 @@
 #define vgl_io_homg_line_3d_2_points_txx_
 //:
 // \file
-// \author: John Kang (Manchester)
+// \brief  See vgl_io_homg_line_3d_2_points.h for a description of this file.
+// \author John Kang (Manchester)
 
 #include "vgl_io_homg_line_3d_2_points.h"
 #include <vgl/io/vgl_io_homg_point_3d.h>
