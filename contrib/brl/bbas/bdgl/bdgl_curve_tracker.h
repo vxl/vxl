@@ -66,9 +66,9 @@ class bdgl_curve_tracker
   void set_output(vcl_vector< vcl_vector< bdgl_curve_tracker_primitive > > curve){ output_curve_=curve; }
 
   void track();
-	void track_frame(int frame);
-	void draw_lines(int frame, bgui_vtol2D_tableau_sptr const& tab);
-	void set_colors(int num, float *r, float *g, float *b);
+  void track_frame(int frame);
+  void draw_lines(int frame, bgui_vtol2D_tableau_sptr const& tab);
+  void set_colors(int num, float *r, float *g, float *b);
 };
 
 //-----------------------------------------------------------------------------
