@@ -172,8 +172,14 @@ gevd_noise::EstimateSensorTexture(float& sensor, float& texture) const
 {
   // 1. Compute derivative of histogram, dh(x)
   float* dhist = new float[nbin];
-  float mag = gevd_float_operators::Slope(hist, dhist, nbin);
-  mag *= gevd_float_operators::RunningSum(dhist, dhist, nbin, KRADIUS);
+#ifdef DEBUG
+  float mag =
+#endif
+              gevd_float_operators::Slope(hist, dhist, nbin);
+#ifdef DEBUG
+  mag *=
+#endif
+         gevd_float_operators::RunningSum(dhist, dhist, nbin, KRADIUS);
 #ifdef DEBUG
   for (int i = 0; i < nbin; i++)        // points of smoothed dh(x)
     vcl_cout << dhist[i]/mag << ' ';
