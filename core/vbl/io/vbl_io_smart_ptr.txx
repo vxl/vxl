@@ -7,6 +7,7 @@
 // \author Ian Scott (Manchester)
 // \date 26-Mar-2001
 
+#include "vbl_io_smart_ptr.h"
 #include <vsl/vsl_binary_io.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <vcl_cstdlib.h> // vcl_abort()

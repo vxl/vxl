@@ -1,15 +1,14 @@
 // This is vxl/vbl/io/vbl_io_array_2d.txx
 #ifndef vbl_io_array_2d_txx_
 #define vbl_io_array_2d_txx_
-
 //:
 // \file
 // \brief  binary IO functions for vbl_array_2d<T>
 // \author K.Y.McGaul
 
+#include "vbl_io_array_2d.h"
 #include <vsl/vsl_binary_io.h>
 #include <vbl/vbl_array_2d.h>
-
 
 //=======================================================================
 //: Binary save self to stream.

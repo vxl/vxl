@@ -1,15 +1,14 @@
 // This is vxl/vbl/io/vbl_io_array_3d.txx
 #ifndef vbl_io_array_3d_txx_
 #define vbl_io_array_3d_txx_
-
 //:
 // \file
 // \brief  binary IO functions for vbl_array_3d<T>
 // \author K.Y.McGaul
 
+#include "vbl_io_array_3d.h"
 #include <vsl/vsl_binary_io.h>
 #include <vbl/vbl_array_3d.h>
-
 
 //====================================================================
 //: Binary save self to stream.
