@@ -1,8 +1,8 @@
 This is vxl/core/doc/meetings/2003-meeting-plan.txt.
 
 http://cvs.sourceforge.net/viewcvs.py/vxl/vxl/core/doc/meetings/2003-meeting-plan.txt?view=markup
-might get you to this file, but it appears that SourceForge WebCVS is
-running off of an older copy of the CVS repository.
+will get you to this file, but SourceForge WebCVS is a few hours
+behind the live CVS.
 
 Thanks to everyone for all the positive responses about the 2003 VXL
 teleconference.  I will be away Tue. (11/4) to Thu. (11/6) of this
