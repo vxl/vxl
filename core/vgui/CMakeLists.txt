@@ -3,6 +3,7 @@
 INCLUDE(${MODULE_PATH}/NewCMake/FindOpenGL.cmake)
 
 # Build here only if OpenGL is available:
+IF (OPENGL_FOUND)
 IF (OPENGL_GLU_FOUND)
 
   INCLUDE(${MODULE_PATH}/NewCMake/FindX11.cmake)
@@ -424,3 +425,4 @@ IF (BUILD_TESTING)
 ENDIF (BUILD_TESTING)
 
 ENDIF (OPENGL_GLU_FOUND)
+ENDIF (OPENGL_FOUND)
