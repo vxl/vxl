@@ -30,50 +30,62 @@
 // of ways to extend the signal outside its original range.
 enum vil_convolve_boundary_option
 {
-  // Do not fill destination edges at all
+  //: Do not fill destination edges at all.
   // i.e. leave them unchanged.
-  vil_convolve_ignore_edge, //!< Do not fill destination edges at all.
-  // Do not to extend the signal, but pad with zeros.
+  vil_convolve_ignore_edge,
+
+  //: Do not to extend the signal, but pad with zeros.
+  // \verbatim     
   //     |                               |
   // K                       ----*-------
   // in   ... ---------------------------
   // out  ... --------------------0000000
-  vil_convolve_no_extend, //!< Do not to extend the signal, but pad with zeros.
+  // \endverbatim
+  vil_convolve_no_extend,
 
-  // Zero-extend the input signal beyond the boundary.
+  //: Zero-extend the input signal beyond the boundary.
+  // \verbatim     
   //     |                               |
   // K                              ----*--------
   // in   ... ---------------------------000000000000...
   // out  ... ---------------------------
-  vil_convolve_zero_extend, //!< Zero-extend the input signal beyond the boundary.
+  // \endverbatim
+  vil_convolve_zero_extend,
 
-  // Extend the signal to be constant beyond the boundary
+  //: Extend the signal to be constant beyond the boundary.
+  // \verbatim     
   //     |                               |
   // K                              ----*--------
   // in   ... --------------------------aaaaaaaaaaaaa...
   // out  ... ---------------------------
-  vil_convolve_constant_extend, //!< Extend the signal to be constant beyond the boundary.
+  // \endverbatim
+  vil_convolve_constant_extend,
 
-  // Extend the signal periodically beyond the boundary.
+  //: Extend the signal periodically beyond the boundary.
+  // \verbatim     
   //     |                               |
   // K                              ----*--------
   // in   abc...-------------------------abc...------..
   // out  ... ---------------------------
-  vil_convolve_periodic_extend, //!< Extend the signal periodically beyond the boundary.
+  // \endverbatim
+  vil_convolve_periodic_extend,
 
-  // Extend the signal by reflection about the boundary.
+  //: Extend the signal by reflection about the boundary.
+  // \verbatim     
   //     |                               |
   // K                               ----*--------
   // in   ... -------------------...edcbabcde...
   // out  ... ---------------------------
-  vil_convolve_reflect_extend, //!< Extend the signal by reflection about the boundary.
+  // \endverbatim
+  vil_convolve_reflect_extend,
 
+  //: Kernel is trimmed and reweighed, to allow convolution up to boundary.
   // This one is slightly different. The input signal is not
   // extended in any way, but the kernel is trimmed to allow
   // convolution to proceed up to the boundary and reweighed
   // to keep the total area the same.
-  // *** may not work with kernels which take negative values.
-  vil_convolve_trim //!< Kernel is trimmed and reweighed, to allow convolution up to boundary.
+  // \note may not work with kernels which take negative values.
+  vil_convolve_trim 
 };
 
 //: Convolve edge with kernel[x*kstep] x in [k_lo,k_hi] (k_hi>=0)
