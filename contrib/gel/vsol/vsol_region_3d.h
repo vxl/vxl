@@ -1,8 +1,8 @@
-#ifndef VSOL_REGION_3D_H
-#define VSOL_REGION_3D_H
+#ifndef vsol_region_3d_h_
+#define vsol_region_3d_h_
 //*****************************************************************************
 //:
-//  \file
+// \file
 // \brief  Region of a 3D space
 //
 // \author
@@ -10,8 +10,9 @@
 //
 // \verbatim
 // Modifications
-// 2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
 // 2000/05/04 François BERTEL Creation
+// 2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
+// 2003/01/08 Peter Vanroose  Added pure virtual is_convex()
 // \endverbatim
 //*****************************************************************************
 
@@ -20,10 +21,9 @@
 //*****************************************************************************
 #include <vsol/vsol_surface_3d.h>
 
-class vsol_region_3d
-  :public vsol_surface_3d
+class vsol_region_3d : public vsol_surface_3d
 {
-public:
+ public:
   enum vsol_region_3d_type
   { REGION_NO_TYPE=0,
     POLYGON,
@@ -43,9 +43,9 @@ public:
   //***************************************************************************
   // Initialization
   //***************************************************************************
-public:
+
   //---------------------------------------------------------------------------
-  //: Destructor
+  // Destructor
   //---------------------------------------------------------------------------
   virtual ~vsol_region_3d();
 
@@ -64,6 +64,11 @@ public:
   //: Return the area of `this'
   //---------------------------------------------------------------------------
   virtual double area(void) const=0;
+
+  //---------------------------------------------------------------------------
+  //: Return true if this region is convex
+  //---------------------------------------------------------------------------
+  virtual bool is_convex(void) const=0;
 };
 
-#endif // #ifndef VSOL_REGION_3D_H
+#endif // #ifndef vsol_region_3d_h_

@@ -12,8 +12,8 @@
 //  used to represent 3-d intensity points
 //
 // \author
-//             Joe Mundy November 27, 1999
-//             GE Corporate Research and Development.
+//   Joe Mundy November 27, 1999
+//   GE Corporate Research and Development.
 //
 // \verbatim
 // Modifications
@@ -21,6 +21,7 @@
 //  15-May-2002 - Peter Vanroose - inconsistency Xi() versus Ix() removed
 //                (There were three pairs of data members both referring to
 //                 intensity information, but only one of them was updated.)
+//   8-Jan-2003 - Peter Vanroose - added is_convex() (virtual of vsol_region_2d)
 // \endverbatim
 //-----------------------------------------------------------------------------
 
@@ -30,9 +31,7 @@
 
 class vdgl_digital_region : public vsol_region_2d
 {
-  // PUBLIC INTERFACE----------------------------------------------------------
-
-public:
+ public:
 
   // Constructors/Initializers/Destructors---------------------------------
   vdgl_digital_region();
@@ -65,36 +64,34 @@ public:
   // Min and Max region intensities
   float get_min() const {return min_;}
   float get_max() const {return max_;}
-  //Access to the pixels interior to the region
+  // Access to the pixels interior to the region
   void reset() const; //!< Reset pixel iterator
   bool next() const;  //!< Increment to next pixel
   float X() const;    //!< The x pixel coordinate
   float Y() const;    //!< The y pixel coordinate
   float Z() const;    //!< The z pixel coordinate
-  unsigned short I() const;//The pixel intensity
-  //: The mean geometric and intensity values of the region
-  float Xo() const;
-  float Yo() const;
-  float Zo() const;
-  float Io() const;
-#if 0
-  //: Histogram of face intensity intensity
-  Histogram_ref GetHistogram(bool force = false);
-  Histogram_ref GetResidualHistogram();
-#endif
-  //: Scatter Matrix Values
-  double X2() const;
-  double Y2() const;
-  double XY() const;
-  double I2() const;
-  double XI() const;
-  double YI() const;
-  //Quantities computable from the region scatter matrix
+  unsigned short I() const;//!< The pixel intensity
+  // The mean geometric and intensity values of the region
+  float Xo() const; //!< The mean X value of the region
+  float Yo() const; //!< The mean Y value of the region
+  float Zo() const; //!< The mean Z value of the region
+  float Io() const; //!< The mean intensity value of the region
+  // Scatter Matrix Values
+  double X2() const; //!< The second order X moment of the region
+  double Y2() const; //!< The second order Y moment of the region
+  double XY() const; //!< The second order X,Y moment of the region
+  double I2() const; //!< The second order intensity moment of the region
+  double XI() const; //!< The second order X,intensity moment of the region
+  double YI() const; //!< The second order Y,intensity moment of the region
+  // Quantities computable from the region scatter matrix
   float Diameter() const;
-  //distinguish from Face::Area()
-  virtual double area() const {return npts_*pixel_size_*pixel_size_;}
-
   float AspectRatio() const;
+  // distinguish from vtol_face::area()
+  virtual double area() const { return npts_*pixel_size_*pixel_size_; }
+
+  //: Return true if this region is convex
+  virtual bool is_convex() const { return false; } // virtual of vsol_region_2d
+
 #if 0
   void PrincipalOrientation(vcl_vector<float>& major_axis);
 #endif
@@ -102,10 +99,7 @@ public:
   double Ix() const;  //!< First derivative of intensity wrt x
   double Iy() const;  //!< First derivative of intensity wrt y
   double Var() const {return sigma_sq_;} //!< The plane fitting error.
-#if 0
-  IntensityCoef_ref GetIntCoef();//!< A package of coefficients
-#endif
-  float Ir() const;        //!< The pixel intensity with the plane subtracted
+  float Ir() const;   //!< The pixel intensity with the plane subtracted
 
   // Utility Methods
   void DoPlaneFit() const; //!< Fit a plane to the region intensities
@@ -129,9 +123,6 @@ public:
   void SolveForPlane() const; // mutable
   double ComputeResidual(vnl_matrix<double> const& pvect) const; // mutable
   double ComputeSampleResidual() const; // mutable
-#if 0
-  bool Transform(CoolTransform const& t);
-#endif
   //members
   mutable bool fit_valid_;           //!< Has a plane fit been done?
   mutable bool scatter_matrix_valid_;//!< Is the scatter matrix current?
@@ -141,9 +132,6 @@ public:
   mutable double X2_,Y2_,I2_,XY_,XI_,YI_;
   mutable double error_, sigma_sq_;      //!< fitting errors
   mutable vnl_matrix<double> *Si_, *pi_; //!< Scatter matrices and etc.
-#if 0
-  Histogram_ref hist_; //!< A histogram of the region intensity
-#endif
 };
 
 #endif // vdgl_digital_region_h_

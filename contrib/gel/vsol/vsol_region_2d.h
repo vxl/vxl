@@ -1,8 +1,8 @@
-#ifndef VSOL_REGION_2D_H
-#define VSOL_REGION_2D_H
+#ifndef vsol_region_2d_h_
+#define vsol_region_2d_h_
 //*****************************************************************************
 //:
-//  \file
+// \file
 // \brief  Region of a 2D space
 //
 // \author
@@ -10,8 +10,9 @@
 //
 // \verbatim
 // Modifications
-// 2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
 // 2000/05/02 François BERTEL Creation
+// 2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
+// 2003/01/08 Peter Vanroose  Added pure virtual is_convex()
 // \endverbatim
 //*****************************************************************************
 
@@ -20,10 +21,9 @@
 //*****************************************************************************
 #include <vsol/vsol_spatial_object_2d.h>
 
-class vsol_region_2d
-  :public vsol_spatial_object_2d
+class vsol_region_2d : public vsol_spatial_object_2d
 {
-public:
+ public:
   enum vsol_region_2d_type
   { REGION_NO_TYPE=0,
     POLYGON,
@@ -43,9 +43,9 @@ public:
   //***************************************************************************
   // Initialization
   //***************************************************************************
-public:
+
   //---------------------------------------------------------------------------
-  //: Destructor
+  // Destructor
   //---------------------------------------------------------------------------
   virtual ~vsol_region_2d();
 
@@ -64,6 +64,11 @@ public:
   //: Return the area of `this'
   //---------------------------------------------------------------------------
   virtual double area(void) const=0;
+
+  //---------------------------------------------------------------------------
+  //: Return true if this region is convex
+  //---------------------------------------------------------------------------
+  virtual bool is_convex(void) const=0;
 };
 
-#endif // #ifndef VSOL_REGION_2D_H
+#endif // #ifndef vsol_region_2d_h_
