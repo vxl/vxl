@@ -78,8 +78,8 @@ int main() { return 0; }
 #ifdef VCL_HAS_RTTI
 
 #include <typeinfo>
-class A { public: virtual ~A(); virtual void f(); };
-class B : public A { public: void f(); };
+class A { public: virtual ~A() {} virtual void f() {} };
+class B : public A { public: void f() {} };
 bool try_rtti() { B*b=0; A*a1=b,*a2=b; return typeid(a1)==typeid(a2); }
 
 int main() { return 0; }
