@@ -391,9 +391,8 @@ intensity_candidates(bmrf_epi_seg_sptr const& seg,
                      vcl_vector<bmrf_epi_seg_sptr>& right_cand)
 {
   if (!seg)
-    return false;
+    return false; 
   vcl_vector<bmrf_epi_seg_sptr>& min_segs = min_epi_segs_;
-  vcl_vector<bmrf_epi_seg_sptr>& max_segs = max_epi_segs_;
   int n = min_segs.size();//same set as max_segs_, different order
   if (n<2)
     return false;//can't get bounds with only one seg
@@ -422,62 +421,6 @@ intensity_candidates(bmrf_epi_seg_sptr const& seg,
         left_cand.push_back(curr_seg);
     }
   }
-
-#if 0 // -- This code is not used for now -- 
-  vcl_set<bmrf_epi_seg_sptr> left_temp, right_temp; 
-
-  //check bounds
-  int min_index = seg->min_index();
-  int max_index = seg->max_index();
-  if (min_index<0||min_index>=n)
-    return false;
-  if (max_index<0||max_index>=n)
-    return false;
-
-  //scan the min index to the right
-  for (int im = min_index+1; im<min_segs.size(); ++im)
-  {
-    if (min_segs[im]->min_s() < s_max)
-      left_temp.insert(min_segs[im]);
-    else
-      break;
-  }
-  for (int im = min_index+1; im<min_segs.size(); ++im)
-  {
-    if (min_segs[im]->min_s() < s_max + r)
-      right_temp.insert(min_segs[im]);
-    else
-      break;
-  }
-
-  //scan the max index to the left
-  for (int im = max_index-1; im>=0; --im)
-  {
-    if (max_segs[im]->max_s() > s_min-r)
-      left_temp.insert(max_segs[im]);
-    else
-      break;
-  }
-  for (int im = max_index-1; im>=0; --im)
-  {
-    if (max_segs[im]->max_s() > s_min)
-      right_temp.insert(max_segs[im]);
-    else
-      break;
-  }
-
-  // At this point we have found all the viable candidates based on the
-  // s dimension. Next we pass candidates based on the alpha range
-  // x_alpha_min < alpha_max and x_alpha_max > alpha_min
-  for (vcl_set<bmrf_epi_seg_sptr>::iterator sit = left_temp.begin();
-       sit != left_temp.end(); ++sit)
-    if ((*sit)->min_alpha()<a_max && (*sit)->max_alpha()> a_min)
-      left_cand.push_back(*sit);
-  for (vcl_set<bmrf_epi_seg_sptr>::iterator sit = right_temp.begin();
-       sit != right_temp.end(); ++sit)
-    if ((*sit)->min_alpha()<a_max && (*sit)->max_alpha()> a_min)
-      right_cand.push_back(*sit);
-#endif
 
   return !right_cand.empty() || !left_cand.empty();
 }
