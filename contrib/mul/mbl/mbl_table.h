@@ -23,11 +23,26 @@
 // Each column of data is stored as a vector of doubles and associated with the column header string.
 class mbl_table
 {
- public:
+public:
 
   //: Constructor
   // \param delim The delimiter character.
   mbl_table(const char delim);
+
+
+  //: Constructor
+  // \param delim The delimiter character.
+  // \param headers The column headers (in order).
+  mbl_table(const char delim,
+            const vcl_vector<vcl_string>& headers);
+
+  
+  //: Return the number of columns
+  unsigned num_cols() const;
+
+  
+  //: Return the number of rows
+  unsigned num_rows() const;
 
 
   //: Get the column of data corresponding to a particular heading.
@@ -38,21 +53,37 @@ class mbl_table
                   vcl_vector<double>& column) const;
   
 
-  //: Add a column of data with its own heading.
+  //: Get a specified row of data.
+  // \param r Index of the desired row.
+  // \return true if there is a row with the specified index.
+  // \retval row A vector containing the values of the requested row.
+  bool get_row(const unsigned& r,
+               vcl_vector<double>& row) const;
+
+  
+  //: Append a column of data with its own heading.
   // \param header String identifying the column.
   // \param column A vector containing the values of the column.
   // \return true If the column was added.
-  bool add_column(const vcl_string& header,
-                  const vcl_vector<double>& column);
+  // \note The new column must be the same length as existing columns.
+  bool append_column(const vcl_string& header,
+                     const vcl_vector<double>& column);
   
 
+  //: Append a row of data.
+  // \return true if the row was added.
+  // \param row A vector containing the values of the new row.
+  // \note The new row must be the same length as existing rows.
+  bool append_row(const vcl_vector<double>& row);
+  
+  
   //: Load this table's data from specified text stream.
   // Any existing data is lost.
   // \return true if table was read successfully from the stream.
   bool read(vcl_istream& is);
 
 
-  //! Save this table's data to specified text stream.
+  //: Save this table's data to specified text stream.
   void write(vcl_ostream& os) const;
 
 
@@ -60,7 +91,7 @@ class mbl_table
   bool operator==(const mbl_table& rhs) const;
 
 
- protected:
+protected:
 
   //: Read a series of characters from the stream until a delimiter character or eol.
   // \param is The input stream.

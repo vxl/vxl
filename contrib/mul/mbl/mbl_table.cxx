@@ -4,25 +4,64 @@
 // \date 05-Aug-2004
 // \brief Container for tabulated data suitable for reading/writing to delimited text files
 
+
 #include "mbl_table.h"
 #include <vcl_cstdlib.h>
 #include <vcl_iostream.h>
 
-//==================================================================================
-//! Constructor
-//==================================================================================
+
+//========================================================================
+// Constructor
+//========================================================================
 mbl_table::mbl_table(const char delim)
   : delimiter_(delim)
 {
 }
 
 
-//==================================================================================
-//! Get the column of data corresponding to a particular heading.
-//! \param header String identifying the desired column.
-//! \return true if there is a column with the specified heading.
-//! \retval values A vector containing the values of the requested column.
-//==================================================================================
+//========================================================================
+//: Constructor
+//========================================================================
+mbl_table::mbl_table(const char delim,
+                     const vcl_vector<vcl_string>& headers)
+  : delimiter_(delim),
+    column_headers_(headers)
+{
+  unsigned ncols = column_headers_.size();
+  
+  // Allocate column vectors
+  columns_.resize(ncols);
+
+  // Map each column header string to column index
+  for (int c=0; c<ncols; ++c)
+  {
+    header_to_column_index_[headers[c]] = c;
+  }
+}
+
+
+//========================================================================
+// Return the number of columns
+//========================================================================
+unsigned mbl_table::num_cols() const
+{
+  return columns_.size();
+}
+
+
+//========================================================================
+// Return the number of rows
+//========================================================================
+unsigned mbl_table::num_rows() const
+{
+  // Assume all columns are the same as the first
+  return columns_[0].size();
+}
+
+
+//========================================================================
+// Get the column of data corresponding to a particular heading.
+//========================================================================
 bool mbl_table::get_column(const vcl_string& header,
                            vcl_vector<double>& column) const
 {
@@ -44,41 +83,102 @@ bool mbl_table::get_column(const vcl_string& header,
 }
 
 
-
-//==================================================================================
-//: Add a column of data with its own heading.
-// \param header String identifying the column.
-// \param column A vector containing the values of the column.
-// \return true If the column was added.
-//==================================================================================
-bool mbl_table::add_column(const vcl_string& header,
-                           const vcl_vector<double>& column)
+//========================================================================
+// Get a specified row of data.
+//========================================================================
+bool mbl_table::get_row(const unsigned& r,
+                        vcl_vector<double>& row) const
 {
-  // Check whether there is already a column with this heading
+  // Clear output data
+  row.clear();
   
-  if (header_to_column_index_.find(header) != header_to_column_index_.end())
+  // Check that the specified row index is valid
+  if (r < num_rows())
   {
-    column_headers_.push_back(header);
-    columns_.push_back(column);
-    header_to_column_index_[header] = columns_.size();
+    int ncols = num_cols();
+    row.resize(ncols);
+    for (unsigned c=0; c<ncols; ++c)
+    {
+      row[c] = columns_[c][r];
+    }
     return true;
   }
   else
   {
-    vcl_cerr << "ERROR: mbl_table::add_column(): a column with header "
-      << header << " already exists.\n"
-      << "Column not added."
+    vcl_cerr << "ERROR: mbl_table::get_row(): row "
+      << r << " does not exist in the table."
       << vcl_endl;
     return false;
   }
 }
 
 
-//==================================================================================
-//! Load this table's data from specified text stream.
-//! Any existing data is lost.
-//! \return true if table was read successfully from the stream.
-//==================================================================================
+//========================================================================
+// Append a column of data with its own heading.
+//========================================================================
+bool mbl_table::append_column(const vcl_string& header,
+                              const vcl_vector<double>& column)
+{
+  // Check whether there is already a column with this heading  
+  if (header_to_column_index_.find(header) != header_to_column_index_.end())
+  {
+    // Check that the length of the new column matches the existing columns
+    if (num_rows()==column.size())
+    {
+      column_headers_.push_back(header);
+      columns_.push_back(column);
+      header_to_column_index_[header] = columns_.size();
+      return true;
+    }
+    else
+    {
+      vcl_cerr << "ERROR: mbl_table::append_column(): "
+        << "new column is different length from existing columns.\n"
+        << "Column not appended."
+        << vcl_endl;
+      return false;
+    }
+  }
+  else
+  {
+    vcl_cerr << "ERROR: mbl_table::append_column(): a column with header "
+      << header << " already exists.\n"
+      << "Column not appended."
+      << vcl_endl;
+    return false;
+  }
+}
+
+
+//========================================================================
+// Append a row of data.
+//========================================================================
+bool mbl_table::append_row(const vcl_vector<double>& row)
+{
+  // Check that the length of the new row matches the existing rows
+  unsigned ncols = num_cols();
+  if (ncols==row.size())
+  {
+    for (unsigned c=0; c<ncols; ++c)
+    {
+      columns_[c].push_back(row[c]);
+    }
+    return true;
+  }
+  else
+  {
+    vcl_cerr << "ERROR: mbl_table::append_row(): "
+      << "new row is different length from existing row.\n"
+      << "Row not appended."
+      << vcl_endl;
+    return false;
+  }
+}
+
+
+//========================================================================
+// Load this table's data from specified text stream.
+//========================================================================
 bool mbl_table::read(vcl_istream& is)
 {
   bool success = false;
@@ -124,8 +224,7 @@ bool mbl_table::read(vcl_istream& is)
 
           // Advance to the next column or back to the first column
           col++;
-          if (col==columns_.size())
-            col = 0;
+          if (col==num_cols()) col = 0;
         }
       }
     }
@@ -137,16 +236,16 @@ bool mbl_table::read(vcl_istream& is)
 }
 
 
-//==================================================================================
-//! Save this table's data to specified text stream.
-//==================================================================================
+//========================================================================
+// Save this table's data to specified text stream.
+//========================================================================
 void mbl_table::write(vcl_ostream& os) const
 {
   // How many columns are there?
-  unsigned int ncols = columns_.size();
+  unsigned int ncols = num_cols();
 
-  // How many rows of data do we expect? Assume all columns are the same as the first.
-  unsigned int nrows = columns_[0].size();
+  // How many rows of data do we expect?
+  unsigned int nrows = num_rows();
 
   // Write column headers row
   for (unsigned c=0; c<ncols; ++c)
@@ -167,10 +266,9 @@ void mbl_table::write(vcl_ostream& os) const
 }
 
 
-//==================================================================================
-//! Read a series of characters from the stream until a delimiter character or eol.
-//! \return true if a non-empty string was successfully read.
-//==================================================================================
+//========================================================================
+// Read a series of characters from the stream until a delimiter character or eol.
+//========================================================================
 bool mbl_table::read_delimited_string(vcl_istream& is,
                                       vcl_string& str,
                                       bool& eol,
@@ -213,9 +311,9 @@ bool mbl_table::read_delimited_string(vcl_istream& is,
 }
 
 
-//==================================================================================
-//! Is another table identical to this one?
-//==================================================================================
+//========================================================================
+// Is another table identical to this one?
+//========================================================================
 bool mbl_table::operator==(const mbl_table& rhs) const
 {
   // Is the delimiter the same?
