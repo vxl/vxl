@@ -122,8 +122,8 @@ char const* vil_tiff_file_format::tag() const
 /////////////////////////////////////////////////////////////////////////////
 
 struct vil_tiff_structures {
-  vil_tiff_structures(vil_stream *vs_) : vs(vs_), filesize(0), buf(0),
-    sample_format( SAMPLEFORMAT_VOID ) { if (vs) vs->ref(); }
+  vil_tiff_structures(vil_stream *vs_) : vs(vs_), filesize(0),
+    sample_format( SAMPLEFORMAT_VOID ), buf(0) { if (vs) vs->ref(); }
 
  ~vil_tiff_structures() { delete[] buf; if (vs) vs->unref(); }
 
