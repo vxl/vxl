@@ -456,7 +456,7 @@ void sdet_info_tracker::fill_face(vtol_intensity_face_sptr const& face,
         continue;
 
       unsigned short v = (unsigned short)image(x, y);
-      face->IncrementMeans(x, y, v);
+      face->IncrementMeans(float(x), float(y), v);
     }
   face->InitPixelArrays();
 
@@ -477,7 +477,7 @@ void sdet_info_tracker::fill_face(vtol_intensity_face_sptr const& face,
         continue;
       unsigned short v = (unsigned short)image(x, y);
       model_intensity_hist_->upcount(v);
-      face->InsertInPixelArrays(x, y, v);
+      face->InsertInPixelArrays(float(x), float(y), v);
       float Ix = Ix_0_(x,y), Iy = Iy_0_(x,y);
       double ang = (deg_rad*vcl_atan2(Iy, Ix))+180.0;
       double mag = vcl_fabs(Ix)+vcl_fabs(Iy); // was: vcl_sqrt(Ix*Ix + Iy*Iy);
@@ -563,8 +563,8 @@ sdet_info_tracker::transform_face(vtol_intensity_face_sptr const& face,
   {
     double x = Xj[i], y = Yj[i];
     double xp =(x-xo)*scale, yp =(y-yo)*scale;
-    X[i] = xp*c - yp*s + xo + tx;
-    Y[i] = xp*s + yp*c + yo + ty;
+    X[i] = float(xp*c - yp*s + xo + tx);
+    Y[i] = float(xp*s + yp*c + yo + ty);
     I[i]=Ij[i];
   }
   vcl_vector<vtol_vertex_sptr> verts, new_verts;
@@ -630,8 +630,8 @@ void sdet_info_tracker::transform_sample_in_place(sdet_augmented_face* sample,
   {
     double x = face->X(), y = face->Y();
     double xp =(x-xo)*scale, yp =(y-yo)*scale;
-    face->set_X(xp*c - yp*s + xo + tx);
-    face->set_Y(xp*s + yp*c + yo + ty);
+    face->set_X(float(xp*c - yp*s + xo + tx));
+    face->set_Y(float(xp*s + yp*c + yo + ty));
   }
 }
 
@@ -795,11 +795,11 @@ double sdet_info_tracker::compute_gradient_mutual_information(sdet_augmented_fac
 
 void sdet_info_tracker::mutual_info_face(sdet_augmented_face* cf)
 {
-  cf->set_int_mutual_info(this->compute_intensity_mutual_information(cf));
+  cf->set_int_mutual_info(float(this->compute_intensity_mutual_information(cf)));
   if (gradient_info_)
-    cf->set_grad_mutual_info(this->compute_gradient_mutual_information(cf));
+    cf->set_grad_mutual_info(float(this->compute_gradient_mutual_information(cf)));
   else
-    cf->set_grad_mutual_info(0.0);
+    cf->set_grad_mutual_info(0.0f);
 }
 
 //--------------------------------------------------------------------------
@@ -807,10 +807,10 @@ void sdet_info_tracker::mutual_info_face(sdet_augmented_face* cf)
 vtol_intensity_face_sptr
 sdet_info_tracker::generate_face(vtol_intensity_face_sptr const& seed)
 {
-  float x = (2.0*search_radius_)*(rand()/(RAND_MAX+1.0)) - search_radius_;
-  float y = (2.0*search_radius_)*(rand()/(RAND_MAX+1.0)) - search_radius_;
-  float theta = (2.0*angle_range_)*(rand()/(RAND_MAX+1.0)) - angle_range_;
-  float s = (2.0*scale_range_)*(rand()/(RAND_MAX+1.0)) - scale_range_;
+  float x = 2.f*search_radius_*float(rand()/(RAND_MAX+1.0)) - search_radius_;
+  float y = 2.f*search_radius_*float(rand()/(RAND_MAX+1.0)) - search_radius_;
+  float theta = 2.f*angle_range_*float(rand()/(RAND_MAX+1.0)) - angle_range_;
+  float s = 2.f*scale_range_*float(rand()/(RAND_MAX+1.0)) - scale_range_;
   float scale = 1+s;
   return this->transform_face(seed, x, y, theta, scale);
 }

@@ -227,9 +227,7 @@ interpolate_center(vbl_array_2d<float> const & neighborhood,
     dy = (Ix*Ixy - Iy*Ixx) / det;
     // more than one pixel away
     if (vcl_fabs(dx) > 1.0 || vcl_fabs(dy) > 1.0)
-    {
       dx = 0; dy = 0;
-    }
   }
 }
 
@@ -387,18 +385,18 @@ brip_float_ops::beaudet(vil1_memory_image_of<float> const & Ixx,
   for (int y = 0; y<h; y++)
     for (int x = 0; x<w; x++)
     {
-      double xx = Ixx(x,y), xy = Ixy(x,y), yy = Iyy(x,y);
+      float xx = Ixx(x,y), xy = Ixy(x,y), yy = Iyy(x,y);
 
      //compute eigenvalues for experimentation
-      double det = xx*yy-xy*xy;
-      double tr = xx+yy;
-      double arg = tr*tr-4.0*det, lambda0 = 0, lambda1=0;
+      float det = xx*yy-xy*xy;
+      float tr = xx+yy;
+      float arg = tr*tr-4.0*det, lambda0 = 0, lambda1=0;
       if (arg>0)
       {
         lambda0 = tr+vcl_sqrt(arg);
         lambda1 = tr-vcl_sqrt(arg);
       }
-      output(x,y)=float(lambda0*lambda1); //just det for now
+      output(x,y) = lambda0*lambda1; //just det for now
     }
   return output;
 }
@@ -438,10 +436,10 @@ brip_float_ops::grad_matrix_NxN(vil1_memory_image_of<float> const & input,
       for (int i = -n; i<=n; i++)
         for (int j = -n; j<=n; j++)
         {
-          double gx = grad_x(x+i, y+j), gy = grad_y(x+i, y+j);
-          xx += float(gx*gx);
-          xy += float(gx*gy);
-          yy += float(gy*gy);
+          float gx = grad_x(x+i, y+j), gy = grad_y(x+i, y+j);
+          xx += gx*gx;
+          xy += gx*gy;
+          yy += gy*gy;
         }
       IxIx(x,y) = xx/N;
       IxIy(x,y) = xy/N;
@@ -470,9 +468,9 @@ brip_float_ops::harris(vil1_memory_image_of<float> const & IxIx,
   for (int y = 0; y<h; y++)
     for (int x = 0; x<w; x++)
     {
-      double xx = IxIx(x,y), xy = IxIy(x,y), yy = IyIy(x,y);
-      double det = xx*yy-xy*xy, trace = xx+yy;
-      output(x,y) = (float)(det - scale*trace*trace)*norm;
+      float xx = IxIx(x,y), xy = IxIy(x,y), yy = IyIy(x,y);
+      float det = xx*yy-xy*xy, trace = xx+yy;
+      output(x,y) = float(det - scale*trace*trace)*norm;
     }
   return output;
 }
@@ -506,17 +504,17 @@ brip_float_ops::sqrt_grad_singular_values(vil1_memory_image_of<float> & input,
   for (int y = n; y<h-n;y++)
     for (int x = n; x<w-n;x++)
     {
-      double IxIx=0, IxIy=0, IyIy=0;
+      float IxIx=0, IxIy=0, IyIy=0;
       for (int i = -n; i<=n; i++)
         for (int j = -n; j<=n; j++)
         {
-          double gx = grad_x(x+i, y+j), gy = grad_y(x+i, y+j);
+          float gx = grad_x(x+i, y+j), gy = grad_y(x+i, y+j);
           IxIx += gx*gx;
           IxIy += gx*gy;
           IyIy += gy*gy;
         }
-      double det = (IxIx*IyIy-IxIy*IxIy)/N;
-      output(x,y)=(float)vcl_sqrt(vcl_fabs(det));
+      float det = (IxIx*IyIy-IxIy*IxIy)/N;
+      output(x,y)=vcl_sqrt(vcl_fabs(det));
     }
   brip_float_ops::fill_x_border(output, n, 0.0f);
   brip_float_ops::fill_y_border(output, n, 0.0f);
@@ -552,12 +550,12 @@ brip_float_ops::Lucas_KanadeMotion(vil1_memory_image_of<float> & current_frame,
   for (int y = n; y<h-n;y++)
     for (int x = n; x<w-n;x++)
     {
-      double IxIx=0, IxIy=0, IyIy=0, IxIt=0, IyIt=0;
+      float IxIx=0, IxIy=0, IyIy=0, IxIt=0, IyIt=0;
       for (int i = -n; i<=n; i++)
         for (int j = -n; j<=n; j++)
         {
-          double gx = grad_x(x+i, y+j), gy = grad_y(x+i, y+j);
-          double dt = diff(x+i, y+j);
+          float gx = grad_x(x+i, y+j), gy = grad_y(x+i, y+j);
+          float dt = diff(x+i, y+j);
           IxIx += gx*gx;
           IxIy += gx*gy;
           IyIy += gy*gy;
@@ -568,8 +566,8 @@ brip_float_ops::Lucas_KanadeMotion(vil1_memory_image_of<float> & current_frame,
       IxIx/=N;  IxIy/=N; IyIy/=N; IxIt/=N; IyIt/=N;
       float det = float(IxIx*IyIy-IxIy*IxIy);
       //Eliminate small motion factors
-      double dif = diff(x,y);
-      double motion_factor = vcl_fabs(det*dif);
+      float dif = diff(x,y);
+      float motion_factor = vcl_fabs(det*dif);
       if (motion_factor<thresh)
       {
         vx(x,y) = 0.0f;
@@ -577,8 +575,8 @@ brip_float_ops::Lucas_KanadeMotion(vil1_memory_image_of<float> & current_frame,
         continue;
       }
       //solve for the motion vector
-      vx(x,y) = float(IyIy*IxIt-IxIy*IyIt)/det;
-      vy(x,y) = float(-IxIy*IxIt + IxIx*IyIt)/det;
+      vx(x,y) = (IyIy*IxIt-IxIy*IyIt)/det;
+      vy(x,y) = (-IxIy*IxIt + IxIx*IyIt)/det;
     }
   brip_float_ops::fill_x_border(vx, n, 0.0f);
   brip_float_ops::fill_y_border(vx, n, 0.0f);
@@ -819,22 +817,19 @@ vbl_array_2d<float> brip_float_ops::load_kernel(vcl_string const & file)
   for (int y = 0; y<N; y++)
   {
     for (int x = 0; x<N; x++)
-    {
-      float t = output[x][y];
-      vcl_cout << ' ' << t;
-    }
+      vcl_cout << ' ' <<  output[x][y];
     vcl_cout << '\n';
   }
   return output;
 }
 
-static void insert_image(vil1_memory_image_of<float> const& image, int col, 
-                         vnl_matrix<double> & I)
+static void insert_image(vil1_memory_image_of<float> const& image, int col,
+                         vnl_matrix<float> & I)
 {
   int width = image.width(), height = image.height(), row=0;
-  for(int y =0; y<height; y++)
-    for(int x = 0; x<width; x++, row++)
-      I.put(row, col, (double)image(x,y));
+  for (int y =0; y<height; y++)
+    for (int x = 0; x<width; x++, row++)
+      I.put(row, col, image(x,y));
 }
 
 void brip_float_ops::
@@ -843,59 +838,58 @@ basis_images(vcl_vector<vil1_memory_image_of<float> > const & input_images,
 {
   basis.clear();
   int n_images = input_images.size();
-  if(!n_images)
-    {
-      vcl_cout << "In brip_float_ops::basis_images(.) - no input images\n";
-      return;
-    }
+  if (!n_images)
+  {
+    vcl_cout << "In brip_float_ops::basis_images(.) - no input images\n";
+    return;
+  }
   int width = input_images[0].width(), height = input_images[0].height();
   int npix = width*height;
 
   //Insert the images into matrix I
-  vnl_matrix<double> I(npix, n_images, 0.0);
-  for(int i = 0; i<n_images; i++)
+  vnl_matrix<float> I(npix, n_images, 0.0);
+  for (int i = 0; i<n_images; i++)
     insert_image(input_images[i], i, I);
 
   //Compute the SVD of matrix I
-  vcl_cout << "Computing Singular values of a " <<  npix << " by " 
-           << n_images << " matrix" << "\n";
+  vcl_cout << "Computing Singular values of a " <<  npix << " by "
+           << n_images << " matrix\n";
   vul_timer t;
-  vnl_svd<double> svd(I);
-  vcl_cout << "SVD Took " << t.real() << " msecs \n";;
-  vcl_cout << "Eigenvalues:\n";
-  for(int i = 0; i<n_images; i++)
-    vcl_cout << svd.W(i) << "\n";
+  vnl_svd<float> svd(I);
+  vcl_cout << "SVD Took " << t.real() << " msecs\n"
+           << "Eigenvalues:\n";
+  for (int i = 0; i<n_images; i++)
+    vcl_cout << svd.W(i) << '\n';
 
   //Extract the Basis images
   int rank = svd.rank();
-  if(!rank)
-    {
-      vcl_cout << "In brip_float_ops::basis_images(.) - I has zero rank\n";
-      return;
-    }
-  vnl_matrix<double> U = svd.U();
+  if (!rank)
+  {
+    vcl_cout << "In brip_float_ops::basis_images(.) - I has zero rank\n";
+    return;
+  }
+  vnl_matrix<float> U = svd.U();
   //Output the basis images
   int rows = U.rows();
-  for(int k = 0; k<rank; k++)
+  for (int k = 0; k<rank; k++)
+  {
+    vil1_memory_image_of<float> out(width, height);
+    int x =0, y = 0;
+    for (int r = 0; r<rows; r++)
     {
-      vil1_memory_image_of<float> out(width, height);
-      int x =0, y = 0;
-      for(int r = 0; r<rows; r++)
-        {
-          out(x, y) = U(r,k);
-          x++;
-          if(x>=width)
-            {
-              y++;
-              x=0;
-            }
-          if(y>=width)
-            {
-              vcl_cout << "In brip_float_ops::basis_images(.)"
-                       <<" shouldn't happen\n";
-              return;
-            }
-        }
-      basis.push_back(out);
+      out(x, y) = U(r,k);
+      x++;
+      if (x>=width)
+      {
+        y++;
+        x=0;
+      }
+      if (y>=width)
+      {
+        vcl_cout << "In brip_float_ops::basis_images(.) - shouldn't happen\n";
+        return;
+      }
     }
+    basis.push_back(out);
+  }
 }
