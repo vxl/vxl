@@ -10,12 +10,14 @@
 // .FILE        vbl/vbl_awk.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 17 May 97
+// .SECTION Modifications
+//     970517 AWF Initial version.
 //
 //-----------------------------------------------------------------------------
 
+#include <vcl/vcl_string.h> // C++ specific includes first
 #include <vcl/vcl_iosfwd.h>
 #include <vcl/vcl_vector.h>
-#include <vcl/vcl_string.h>
 
 //: The core of awk
 // vbl_awk reads lines from an istream and breaks them into whitespace-separated
