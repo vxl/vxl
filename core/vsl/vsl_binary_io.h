@@ -288,6 +288,27 @@ void vsl_b_read(vsl_b_istream& is,char* s );
 inline void vsl_print_summary(vcl_ostream& os, const char* s )
 {  os << s; }
 
+
+// Visual Studio .NET on a 32-bit platform can check for 64-bit
+// portability issues. When these warnings (/Wp64) are turn on,
+// passing a ptrdiff_t as an int triggers a warning. The __w64
+// keyword supresses that warning here, because it's not a problem.
+// On a real 64-bit platform, there will presumably be an overloaded
+// vsl_b_write for the 64-bit integral type. We don't want to supress
+// the warning (C4244) completely, because it is a useful warning.
+
+#if VCL_VC70 && defined(VCL_WIN32)
+
+//: Write  to vsl_b_ostream
+void vsl_b_write(vsl_b_ostream& os, int __w64 n );
+//: Read  from vsl_b_istream
+void vsl_b_read(vsl_b_istream& is, int __w64& n );
+//: Print to a stream
+inline void vsl_print_summary(vcl_ostream& os, int __w64 n )
+{  os << int(n); }
+
+#else  // non-Windows, non-warning, normal code
+
 //: Write  to vsl_b_ostream
 void vsl_b_write(vsl_b_ostream& os, int n );
 //: Read  from vsl_b_istream
@@ -295,6 +316,8 @@ void vsl_b_read(vsl_b_istream& is, int& n );
 //: Print to a stream
 inline void vsl_print_summary(vcl_ostream& os, int n )
 {  os << n; }
+
+#endif // VCL_VC70 && defined(VCL_WIN32)
 
 //: Write  to vsl_b_ostream
 void vsl_b_write(vsl_b_ostream& os,unsigned int n );
@@ -335,27 +358,6 @@ void vsl_b_read(vsl_b_istream& is,unsigned long& n );
 //: Print to a stream
 inline void vsl_print_summary(vcl_ostream& os, unsigned long n )
 {  os << n; }
-
-#if 0
-// When the macro is ready, this test will be
-// #if ! VCL_PTRDIFF_T_IS_A_STANDARD_TYPE
-
-//: Write  to vsl_b_ostream
-void vsl_b_write(vsl_b_ostream& os,vcl_ptrdiff_t n );
-//: Read  from vsl_b_istream
-void vsl_b_read(vsl_b_istream& is,vcl_ptrdiff_t & n );
-//: Print to a stream
-inline void vsl_print_summary(vcl_ostream& os, vcl_ptrdiff_t n )
-{  os << n; }
-
-//: Write  to vsl_b_ostream
-void vsl_b_write(vsl_b_ostream& os,vcl_size_t n );
-//: Read  from vsl_b_istream
-void vsl_b_read(vsl_b_istream& is,vcl_size_t& n );
-//: Print to a stream
-inline void vsl_print_summary(vcl_ostream& os, vcl_size_t n )
-{  os << n; }
-#endif
 
 //: Write  to vsl_b_ostream
 // Number is saved with ANSI/IEEE Standard 754-1985 single precision.
