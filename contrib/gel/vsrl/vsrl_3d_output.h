@@ -61,7 +61,11 @@ class vsrl_3d_output
 
   void write_output(char *filename);
 
+  vil1_memory_image_of<double> get_double_range_image() { return range_image_;}
+  vil1_memory_image_of<unsigned char> get_unsigned_range_image() { return rimage_;}
+
   vil1_memory_image_of<double> range_image_;
+  vil1_memory_image_of<unsigned char> rimage_;
 
  private:
 

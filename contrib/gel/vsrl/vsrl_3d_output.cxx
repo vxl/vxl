@@ -9,6 +9,7 @@
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vil1/vil1_save.h>
+#include <vil1/vil1_scale_intensities.h>
 #include <vsrl/vsrl_parameters.h>
 
 // the constructor
@@ -197,6 +198,7 @@ void vsrl_3d_output::write_output(char *filename)
   vcl_vector<double>::iterator iZ=Z_out.begin();
   vcl_vector<double>::iterator itx=tx_out.begin();
   vcl_vector<double>::iterator ity=ty_out.begin();
+  double maxval=0.0;
 
   for (; iX!=X_out.end(); ++iX, ++iY, ++iZ, ++itx, ++ity)
     {
@@ -204,7 +206,24 @@ void vsrl_3d_output::write_output(char *filename)
       // populate the range image
       int ix = int(*iX+0.5), iy = int(*iY+0.5); // round to nearest integer
       range_image_(ix,height-iy) = *iZ;
+      if (*iZ > maxval) maxval = *iZ; // find the maximum for later scaling
     }
+
+  // Save the range image - scaled to 0->255
+  double scale = 255.0/maxval; double shift=0;
+  vil1_image scaled_image = vil1_scale_intensities(range_image_,scale,shift);
+  rimage_.resize(range_image_.cols(),range_image_.rows());
+  double d_tmp;
+  for (int r=0;r<range_image_.rows();r++) {
+    for (int c=0;c<range_image_.cols();c++) {
+      scaled_image.get_section(&d_tmp,c,r,1,1);
+      rimage_(c,r) = d_tmp;
+    }
+  }
+  static vcl_string range_image_file="range_image.tif";
+  if (!vil1_save(rimage_,range_image_file.c_str())) {
+    vcl_cerr << "vsrl_3d_output::write_output: Error saving range image!" << vcl_endl;
+  }
 
   // OK we can now compute the conectivity between points
 
