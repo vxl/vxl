@@ -45,8 +45,6 @@ void bdgl_curve_matching :: match_prev_tail_curve(bdgl_tracker_curve_sptr parent
                                                   bdgl_tracker_curve_sptr &tail_curve,
                                                   vcl_vector<bdgl_tracker_curve_sptr> * new_curves)
 {
-  vnl_matrix<double> R1,T1,Tbar;
-  double matching_cost;
   for (unsigned int i=0;i<(*new_curves).size();++i)
   {
     match_data_sptr temp;
@@ -64,10 +62,10 @@ void bdgl_curve_matching :: match_prev_tail_curve(bdgl_tracker_curve_sptr parent
     double euc,scale;
     vcl_map<int,int> mapping;
     vcl_vector<int> tail1,tail2;
-
-    matching_cost=match_DP(tail_curve->desc,
-                           tail_curve->next_[i]->match_curve_set[0]->desc,
-                           mapping,euc,R1,T1,Tbar,scale,tail1,tail2);
+    vnl_matrix<double> R1,T1,Tbar;
+    double matching_cost=match_DP(tail_curve->desc,
+                                  tail_curve->next_[i]->match_curve_set[0]->desc,
+                                  mapping,euc,R1,T1,Tbar,scale,tail1,tail2);
 
     tail_curve->next_[i]->cost_=euc;
     tail_curve->next_[i]->energy_=matching_cost;
@@ -85,15 +83,12 @@ void bdgl_curve_matching :: match_next_tail_curve(bdgl_tracker_curve_sptr parent
                                                   bdgl_tracker_curve_sptr &tail_curve,
                                                   vcl_vector<bdgl_tracker_curve_sptr> * old_curves)
 {
-  vnl_matrix<double> R1,T1,Tbar;
-  double matching_cost;
   for (unsigned int i=0;i<(*old_curves).size();++i)
   {
-    match_data_sptr temp;
     if (!(*old_curves)[i]->ismatchednext_)
       if (bounding_box_intersection((*old_curves)[i]->desc->box_, parent_curve->desc->box_))
       {
-        temp=new match_data;
+        match_data_sptr temp=new match_data;
         temp->cost_=0;
         temp->match_curve_set.push_back((*old_curves)[i]);
         tail_curve->prev_.push_back(temp);
@@ -101,12 +96,13 @@ void bdgl_curve_matching :: match_next_tail_curve(bdgl_tracker_curve_sptr parent
   }
   for (unsigned int i=0;i<tail_curve->prev_.size();++i)
   {
-    double euc,scale=1.0;
+    double scale=1.0;
     vcl_map<int,int> mapping;
     vcl_vector<int> tail1,tail2;
-
-    euc=match_DP(tail_curve->prev_[i]->match_curve_set[0]->desc,
-                 tail_curve->desc,mapping,matching_cost,R1,T1,Tbar,scale,tail1,tail2);
+    vnl_matrix<double> R1,T1,Tbar;
+    double matching_cost;
+    double euc=match_DP(tail_curve->prev_[i]->match_curve_set[0]->desc,
+                        tail_curve->desc,mapping,matching_cost,R1,T1,Tbar,scale,tail1,tail2);
 
     tail_curve->prev_[i]->cost_=euc;
     tail_curve->prev_[i]->euc_=euc;
@@ -123,48 +119,32 @@ void bdgl_curve_matching :: match_next_tail_curve(bdgl_tracker_curve_sptr parent
 double bdgl_curve_matching :: coarse_match_DP(bdgl_curve_description * desc1,
                                               bdgl_curve_description * desc2)
 {
-  vcl_pair<double,double> coordinate;
   vcl_vector<vcl_pair<double,double> > v1,v2;
-
-  double dist;
-  double dist1;
-  double dist2;
-
-  double euc1;
-  double euc2;
-  double scale;
-
-  vnl_matrix<double> R1,T1,Tbar1;
-  vnl_matrix<double> R2,T2,Tbar2;
-  vcl_vector<int> tail_old1;
-  vcl_vector<int> tail_old2;
-  vcl_vector<int> tail_new1;
-  vcl_vector<int> tail_new2;
-
-  vcl_map<int,int> alignment1;
-  vcl_map<int,int> alignment2;
 
   vcl_map<int,int>::iterator iter;
   for (unsigned int i=0;i<desc1->points_.size(); i+=5)
-    {
-      coordinate.first=desc1->points_[i].x();
-      coordinate.second=desc1->points_[i].y();
-      v1.push_back(coordinate);
-    }
+  {
+    vcl_pair<double,double> coordinate;
+    coordinate.first=desc1->points_[i].x();
+    coordinate.second=desc1->points_[i].y();
+    v1.push_back(coordinate);
+  }
   for (unsigned int i=0;i<desc2->points_.size(); i+=5)
-    {
-      coordinate.first=desc2->points_[i].x();
-      coordinate.second=desc2->points_[i].y();
-      v2.push_back(coordinate);
-    }
-  dist1 = curveMatch(euc1,v1,v2,alignment1,R1,T1,Tbar1,tail_old1,tail_new1,scale);
+  {
+    vcl_pair<double,double> coordinate;
+    coordinate.first=desc2->points_[i].x();
+    coordinate.second=desc2->points_[i].y();
+    v2.push_back(coordinate);
+  }
+  double euc, scale;
+  vnl_matrix<double> R,T,Tbar;
+  vcl_vector<int> tail_old, tail_new;
+  vcl_map<int,int> alignment;
+  double dist1=curveMatch(euc,v1,v2,alignment,R,T,Tbar,tail_old,tail_new,scale);
   vcl_reverse(v2.begin(),v2.end());
-  dist2 = curveMatch(euc2,v1,v2,alignment2,R2,T2,Tbar2,tail_old2,tail_new2,scale);
-  if (dist1<dist2)
-    dist=dist1;
-  else
-    dist=dist2;
-  return dist;
+  double dist2=curveMatch(euc,v1,v2,alignment,R,T,Tbar,tail_old,tail_new,scale);
+
+  return dist1<dist2 ? dist1 : dist2;
 }
 
 double bdgl_curve_matching :: match_DP(bdgl_curve_description * desc1,
@@ -173,100 +153,87 @@ double bdgl_curve_matching :: match_DP(bdgl_curve_description * desc1,
                                        vnl_matrix<double> & Tbar,double & scale,vcl_vector<int> & tail1,
                                        vcl_vector<int> & tail2)
 {
-  double dist;
-  double dist1;
-  double dist2;
-  double euc1;
-  double euc2;
-  double euc;
+  double dist = -1; // dummy initialisation, to avoid compiler warning
 
-  double scale1,scale2;
-  vnl_matrix<double> R1,T1,Tbar1;
-  vnl_matrix<double> R2,T2,Tbar2;
-
-  vcl_vector<int> tail_old1;
-  vcl_vector<int> tail_old2;
-
-  vcl_vector<int> tail_new1;
-  vcl_vector<int> tail_new2;
-
-  vcl_pair<double,double> coordinate;
   vcl_vector<vcl_pair<double,double> > v1,v2;
-  vcl_map<int,int>::iterator iter;
 
   // getting points from curves into vectors
   for (unsigned int i=0;i<desc1->points_.size();++i)
   {
+    vcl_pair<double,double> coordinate;
     coordinate.first=desc1->points_[i].x();
     coordinate.second=desc1->points_[i].y();
     v1.push_back(coordinate);
   }
   for (unsigned int i=0;i<desc2->points_.size();++i)
-    {
-      coordinate.first=desc2->points_[i].x();
-      coordinate.second=desc2->points_[i].y();
-      v2.push_back(coordinate);
-    }
-  double dx1,dx2,dy1,dy2,theta1,theta2;
-  double sign11,sign12,sign21,sign22;
-  vcl_map<int,int> alignment1;
-  vcl_map<int,int> alignment2;
-  vcl_map<int,int> alignment3;
-  vcl_map<int,int> alignment4;
+  {
+    vcl_pair<double,double> coordinate;
+    coordinate.first=desc2->points_[i].x();
+    coordinate.second=desc2->points_[i].y();
+    v2.push_back(coordinate);
+  }
+  double sign11=0,sign12=0,sign21=0,sign22=0; // initialise to harmless value, to avoid compiler warning
 
   if (v1.size()>3)
   {
-    dx1=v1[1].first-v1[0].first;
-    dy1=v1[1].second-v1[0].second;
-    theta1=desc1->angles_[0]*vnl_math::pi/180;
+    double dx1=v1[1].first-v1[0].first;
+    double dy1=v1[1].second-v1[0].second;
+    double theta1=desc1->angles_[0]*vnl_math::pi/180;
     sign11=dx1*vcl_sin(theta1)-dy1*vcl_cos(theta1);
 
-    dx2=v1[v1.size()-2].first-v1[v1.size()-1].first;
-    dy2=v1[v1.size()-2].second-v1[v1.size()-1].second;
-    theta2=desc1->angles_[v1.size()-1]*vnl_math::pi/180;
+    double dx2=v1[v1.size()-2].first-v1[v1.size()-1].first;
+    double dy2=v1[v1.size()-2].second-v1[v1.size()-1].second;
+    double theta2=desc1->angles_[v1.size()-1]*vnl_math::pi/180;
     sign12=dx2*vcl_sin(theta2)-dy2*vcl_cos(theta2);
   }
   if (v2.size()>3)
   {
-    dx1=v2[1].first-v2[0].first;
-    dy1=v2[1].second-v2[0].second;
-    theta1=desc2->angles_[0]*vnl_math::pi/180;
+    double dx1=v2[1].first-v2[0].first;
+    double dy1=v2[1].second-v2[0].second;
+    double theta1=desc2->angles_[0]*vnl_math::pi/180;
     sign21=dx1*vcl_sin(theta1)-dy1*vcl_cos(theta1);
 
-    dx2=v2[v2.size()-2].first-v2[v2.size()-1].first;
-    dy2=v2[v2.size()-2].second-v2[v2.size()-1].second;
-    theta2=desc2->angles_[v2.size()-1]*vnl_math::pi/180;
+    double dx2=v2[v2.size()-2].first-v2[v2.size()-1].first;
+    double dy2=v2[v2.size()-2].second-v2[v2.size()-1].second;
+    double theta2=desc2->angles_[v2.size()-1]*vnl_math::pi/180;
     sign22=dx2*vcl_sin(theta2)-dy2*vcl_cos(theta2);
     //assert(sign22*sign21<=0);
   }
   if (sign11*sign12<0 && sign21*sign22<0)
   {
-    if (sign11*sign21>0)
+    if (sign11*sign21>0) // hence sign12*sign22>0
     {
-      dist = curveMatch(euc,v1,v2,alignment,R,T,Tbar,tail1,tail2,scale);
+      dist = curveMatch(cost,v1,v2,alignment,R,T,Tbar,tail1,tail2,scale);
     }
-    if (sign11*sign22>0)
+    else // i.e., sign11*sign22>0 && sign12*sign21>0
     {
       vcl_reverse(v2.begin(),v2.end());
-      dist = curveMatch(euc,v1,v2,alignment2,R,T,Tbar,tail1,tail2,scale);
+      vcl_map<int,int> alignment2;
+      dist = curveMatch(cost,v1,v2,alignment2,R,T,Tbar,tail1,tail2,scale);
       unsigned int sizeofv2=v2.size();
+      vcl_map<int,int>::iterator iter;
       for (iter=alignment2.begin();iter!=alignment2.end();iter++)
       {
-        alignment4[(*iter).first]=sizeofv2-(*iter).second-1;
+        alignment[(*iter).first]=sizeofv2-(*iter).second-1;
       }
-      alignment=alignment4;
     }
   }
   else
   {
-    dist1 = curveMatch(euc1,v1,v2,alignment1,R1,T1,Tbar1,tail_old1,tail_new1,scale1);
+    double             euc1,             euc2;
+    vcl_map<int,int>   alignment1,       alignment2;
+    double             scale1,           scale2;
+    vnl_matrix<double> R1,T1,Tbar1,      R2,T2,Tbar2;
+    vcl_vector<int> tail_old1,tail_new1, tail_old2,tail_new2;
+
+    double dist1 = curveMatch(euc1,v1,v2,alignment1,R1,T1,Tbar1,tail_old1,tail_new1,scale1);
     vcl_reverse(v2.begin(),v2.end());
-    dist2 = curveMatch(euc2,v1,v2,alignment2,R2,T2,Tbar2,tail_old2,tail_new2,scale2);
+    double dist2 = curveMatch(euc2,v1,v2,alignment2,R2,T2,Tbar2,tail_old2,tail_new2,scale2);
 
     if (dist1<dist2)
     {
       alignment=alignment1;
-      euc=euc1;
+      cost=euc1;
       dist=dist1;
       R=R1;
       T=T1;
@@ -277,14 +244,14 @@ double bdgl_curve_matching :: match_DP(bdgl_curve_description * desc1,
     }
     else
     {
-      euc=euc2;
+      cost=euc2;
       dist=dist2;
       unsigned int sizeofv2=v2.size();
+      vcl_map<int,int>::iterator iter;
       for (iter=alignment2.begin();iter!=alignment2.end();iter++)
       {
-        alignment4[(*iter).first]=sizeofv2-(*iter).second-1;
+        alignment[(*iter).first]=sizeofv2-(*iter).second-1;
       }
-      alignment=alignment4;
       R=R2;
       T=T2;
       Tbar=Tbar2;
@@ -293,7 +260,6 @@ double bdgl_curve_matching :: match_DP(bdgl_curve_description * desc1,
       scale=scale2;
     }
   }
-  cost=euc;
   vcl_cout<<".";
   return dist;
 }
@@ -331,16 +297,13 @@ bool bdgl_curve_matching :: bounding_box_intersection(vsol_box_2d_sptr box1,
 void bdgl_curve_matching :: match(vcl_vector<bdgl_tracker_curve_sptr> * new_curves,
                                   vcl_vector<bdgl_tracker_curve_sptr> * old_curves)
 {
-  double matching_cost;
-  vcl_vector<bdgl_tracker_curve_sptr> merged_new_curves;
-
   for (unsigned int i=0;i<(*new_curves).size();++i)
   {
     for (unsigned int j=0;j<(*old_curves).size();++j)
     {
       if (bounding_box_intersection((*new_curves)[i]->desc->box_,(*old_curves)[j]->desc->box_))
       {
-        matching_cost=coarse_match_DP((*new_curves)[i]->desc,(*old_curves)[j]->desc);
+        double matching_cost=coarse_match_DP((*new_curves)[i]->desc,(*old_curves)[j]->desc);
         match_data_sptr temp=new match_data;
         temp->cost_=matching_cost;
         temp->match_curve_set.push_back((*old_curves)[j]);
@@ -376,8 +339,8 @@ void bdgl_curve_matching :: match(vcl_vector<bdgl_tracker_curve_sptr> * new_curv
       vcl_vector<match_data_sptr>::iterator piter=(*new_curves)[i]->prev_.begin();
       for (unsigned int j=0;j<(*new_curves)[i]->prev_.size(); ++j,++piter)
       {
-        matching_cost=match_DP((*new_curves)[i]->prev_[j]->match_curve_set[0]->desc,
-                               (*new_curves)[i]->desc,mapping,euc,R1,T1,Tbar,scale,tail_old,tail_new);
+        double matching_cost=match_DP((*new_curves)[i]->prev_[j]->match_curve_set[0]->desc,
+                                      (*new_curves)[i]->desc,mapping,euc,R1,T1,Tbar,scale,tail_old,tail_new);
 
         (*new_curves)[i]->prev_[j]->energy_=matching_cost;
         (*new_curves)[i]->prev_[j]->cost_=matching_cost;
