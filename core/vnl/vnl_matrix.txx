@@ -1060,7 +1060,7 @@ bool vnl_matrix<T>::is_finite() const
 
 //: Abort if any element of M is inf or nan
 template <class T>
-void vnl_matrix<T>::assert_finite() const
+void vnl_matrix<T>::assert_finite1() const
 {
   if (is_finite())
     return;
@@ -1086,7 +1086,7 @@ void vnl_matrix<T>::assert_finite() const
 
 //: Abort unless M has the given size.
 template <class T>
-void vnl_matrix<T>::assert_size(unsigned rs,unsigned cs) const
+void vnl_matrix<T>::assert_size1(unsigned rs,unsigned cs) const
 {
   if (this->rows()!=rs || this->cols()!=cs) {
     vcl_cerr << __FILE__ "vnl_matrix : has size " << this->rows() << 'x' << this->cols()

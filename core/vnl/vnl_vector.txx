@@ -714,7 +714,7 @@ bool vnl_vector<T>::is_finite() const {
 
 //
 template <class T>
-void vnl_vector<T>::assert_finite() const {
+void vnl_vector<T>::assert_finite1() const {
   if (this->is_finite())
     return;
 
@@ -725,7 +725,7 @@ void vnl_vector<T>::assert_finite() const {
 
 //
 template <class T>
-void vnl_vector<T>::assert_size(unsigned sz) const {
+void vnl_vector<T>::assert_size1(unsigned sz) const {
   if (this->size() != sz) {
     vcl_cerr << "vnl_vector : has size " << this->size() << ". Should be " << sz << vcl_endl;
     vcl_abort();

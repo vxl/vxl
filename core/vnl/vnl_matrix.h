@@ -418,9 +418,20 @@ public:
   //: Return true if matrix contains NaNs
   bool has_nans() const;
 
-  //
-  void assert_size(unsigned rows, unsigned cols) const;
-  void assert_finite() const;
+  //: abort if size is not as expected
+  // This function does or tests nothing if NDEBUG is defined
+  void assert_size(unsigned rows, unsigned cols) const {
+#ifndef NDEBUG
+    assert_size1(rows, cols);
+#endif
+  }
+  //: abort if matrix containins any INFs or NANs
+  // This function does or tests nothing if NDEBUG is defined
+  void assert_finite() const {
+#ifndef NDEBUG
+    assert_finite1();
+#endif 
+  }
 
   ////----------------------- Input/Output ----------------------------
 
@@ -493,6 +504,9 @@ protected:
   unsigned num_rows;   // Number of rows
   unsigned num_cols;   // Number of columns
   T** data;            // Pointer to the vnl_matrix
+
+  void assert_size1(unsigned rows, unsigned cols) const;
+  void assert_finite1() const;
 
   //: Delete data
   void destroy();

@@ -304,10 +304,21 @@ public:
   void set_t(T const&tt) { if (size() >= 4) data[3] = tt; }
 #endif
 
-  //: Check that size()==sz - if not, abort();
-  void assert_size(unsigned sz) const;
+  //: Check that size()==sz if not, abort();
+  // This function does or tests nothing if NDEBUG is defined
+  void assert_size(unsigned sz) const {
+#ifndef NDEBUG
+    assert_size1(sz);
+#endif
+  }
+
   //: Check that this is finite if not, abort();
-  void assert_finite() const;
+  // This function does or tests nothing if NDEBUG is defined
+  void assert_finite() const {
+#ifndef NDEBUG
+    assert_finite1();
+#endif
+  }
 
   //: Return true if its finite
   bool is_finite() const;
@@ -340,6 +351,9 @@ public:
 protected:
   unsigned num_elmts;           // Number of elements
   T* data;                      // Pointer to the vnl_vector
+
+  void assert_size1(unsigned sz) const;
+  void assert_finite1() const;
 
   void destroy();
 
