@@ -370,6 +370,27 @@ void vgui_section_buffer::apply(vil_image const& image_in) {
     fsm_macro_end;
   }
 
+	// IEEE double
+  else if (pixel_format == VIL_DOUBLE) {
+    fsm_macro_begin(double, "64 bit double");
+    fsm_macro_magic(GL_RGB,      GL_UNSIGNED_BYTE,        vgui_pixel_rgb888);
+    fsm_macro_magic(GL_BGR,      GL_UNSIGNED_BYTE,        vgui_pixel_bgr888);
+    fsm_macro_magic(GL_RGBA,     GL_UNSIGNED_BYTE,        vgui_pixel_rgba8888);
+#if defined(GL_UNSIGNED_SHORT_5_6_5)
+    fsm_macro_magic(GL_RGB,      GL_UNSIGNED_SHORT_5_6_5, vgui_pixel_rgb565);
+#endif
+#if defined(GL_UNSIGNED_SHORT_5_5_5_1)
+    fsm_macro_magic(GL_RGB,      GL_UNSIGNED_SHORT_5_5_5_1, vgui_pixel_bgra5551);
+#endif
+#if defined(GL_BGRA)
+    fsm_macro_magic(GL_BGRA,     GL_UNSIGNED_BYTE,        vgui_pixel_bgra8888);
+#endif
+#if defined(GL_EXT_abgr) || defined(GL_ABGR_EXT)
+    fsm_macro_magic(GL_ABGR_EXT, GL_UNSIGNED_BYTE,        vgui_pixel_abgr8888);
+#endif
+    fsm_macro_end;
+  }
+
   // dunno.
   else
     {

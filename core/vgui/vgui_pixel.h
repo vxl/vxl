@@ -131,6 +131,14 @@ void vgui_pixel_convert_span(GLfloat const *, vgui_pixel_rgba8888 *, unsigned si
 void vgui_pixel_convert_span(GLfloat const *, vgui_pixel_abgr8888 *, unsigned size);
 void vgui_pixel_convert_span(GLfloat const *, vgui_pixel_bgra8888 *, unsigned size);
 
+void vgui_pixel_convert_span(GLdouble const *, vgui_pixel_rgb888 *, unsigned size);
+void vgui_pixel_convert_span(GLdouble const *, vgui_pixel_bgr888 *, unsigned size);
+void vgui_pixel_convert_span(GLdouble const *, vgui_pixel_rgb565 *, unsigned size);
+void vgui_pixel_convert_span(GLdouble const *, vgui_pixel_bgra5551 *, unsigned size);
+void vgui_pixel_convert_span(GLdouble const *, vgui_pixel_rgba8888 *, unsigned size);
+void vgui_pixel_convert_span(GLdouble const *, vgui_pixel_abgr8888 *, unsigned size);
+void vgui_pixel_convert_span(GLdouble const *, vgui_pixel_bgra8888 *, unsigned size);
+
 void vgui_pixel_convert_span(vgui_pixel_rgb888 const *, vgui_pixel_rgb888 *, unsigned size);
 void vgui_pixel_convert_span(vgui_pixel_rgb888 const *, vgui_pixel_bgr888 *, unsigned size);
 void vgui_pixel_convert_span(vgui_pixel_rgb888 const *, vgui_pixel_rgb565 *, unsigned size);

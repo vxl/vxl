@@ -104,6 +104,14 @@ VGUI_PIXEL_CONVERT_SPAN_DO(float, vgui_pixel_rgba8888, { d.R = d.G = d.B = clamp
 VGUI_PIXEL_CONVERT_SPAN_DO(float, vgui_pixel_abgr8888, { d.R = d.G = d.B = clamp(s); SET_FF(d.A); })
 VGUI_PIXEL_CONVERT_SPAN_DO(float, vgui_pixel_bgra8888, { d.R = d.G = d.B = clamp(s); SET_FF(d.A); })
 
+VGUI_PIXEL_CONVERT_SPAN_DO(double, vgui_pixel_rgb888,   { d.R = d.G = d.B = clamp(s); })
+VGUI_PIXEL_CONVERT_SPAN_DO(double, vgui_pixel_bgr888,   { d.R = d.G = d.B = clamp(s); })
+VGUI_PIXEL_CONVERT_SPAN_DO(double, vgui_pixel_rgb565,   { int v = clamp(s); d.R = d.B = v>>3; d.G = v>>2; })
+VGUI_PIXEL_CONVERT_SPAN_DO(double, vgui_pixel_bgra5551, { d.R = d.G = d.B = clamp(s)>>3; SET_FF(d.A); })
+VGUI_PIXEL_CONVERT_SPAN_DO(double, vgui_pixel_rgba8888, { d.R = d.G = d.B = clamp(s); SET_FF(d.A); })
+VGUI_PIXEL_CONVERT_SPAN_DO(double, vgui_pixel_abgr8888, { d.R = d.G = d.B = clamp(s); SET_FF(d.A); })
+VGUI_PIXEL_CONVERT_SPAN_DO(double, vgui_pixel_bgra8888, { d.R = d.G = d.B = clamp(s); SET_FF(d.A); })
+
 VGUI_PIXEL_CONVERT_SPAN_DO(vgui_pixel_rgbfloat, vgui_pixel_rgb888,  {d.R=clamp(s.R); d.G = clamp(s.G); d.B = clamp(s.B); })
 VGUI_PIXEL_CONVERT_SPAN_DO(vgui_pixel_rgbfloat, vgui_pixel_bgr888,  {d.R=clamp(s.R); d.G = clamp(s.G); d.B = clamp(s.B); })
 VGUI_PIXEL_CONVERT_SPAN_DO(vgui_pixel_rgbfloat, vgui_pixel_rgb565,  {d.R=clamp(s.R)>>3;d.G =clamp(s.G)>>2; d.B = clamp(s.B)>>3; })
