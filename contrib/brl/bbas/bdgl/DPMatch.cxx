@@ -33,10 +33,10 @@ double DPMatch::transformed_euclidean_distance()
   }
 
   double x1_centroid=0,x2_centroid=0,y1_centroid=0,y2_centroid=0;
-  int N=x1.size();
+  unsigned int N=x1.size();
   //computing centroid
 
-  for (int j=0;j<N;j++)
+  for (unsigned int j=0;j<N;++j)
   {
     x1_centroid+=x1[j];
     x2_centroid+=x2[j];
@@ -50,7 +50,7 @@ double DPMatch::transformed_euclidean_distance()
   y2_centroid=y2_centroid/N;
 
   // centering the data
-  for (int j=0;j<N;j++)
+  for (unsigned int j=0;j<N;++j)
   {
     x1[j]-=x1_centroid;
     x2[j]-=x2_centroid;
@@ -59,7 +59,7 @@ double DPMatch::transformed_euclidean_distance()
   }
   double H[4]={0,0,0,0};
   //computing covariance matrix
-  for (int j=0;j<N;j++)
+  for (unsigned int j=0;j<N;++j)
   {
     H[0]+=x1[j]*x2[j];
     H[1]+=x1[j]*y2[j];
@@ -89,7 +89,7 @@ double DPMatch::transformed_euclidean_distance()
   double numerator=0;
   double denominator=0;
 
-  for (int i=0;i<N;i++)
+  for (unsigned int i=0;i<N;++i)
   {
     double p[2];
     p[0]= x1[i];
@@ -148,7 +148,7 @@ void DPMatch::detect_tail(vcl_vector<int> &tail1 , vcl_vector<int> &tail2)
   end1=finalMap_[finalMap_.size()-1].first;
   end2=finalMap_[finalMap_.size()-1].second;
 
-  for (unsigned int i=0;i<finalMap_.size()-1;i++)
+  for (unsigned int i=0;i+1<finalMap_.size();++i)
   {
     int x1=finalMap_[i].first;
     int x2=finalMap_[i].second;
@@ -157,7 +157,7 @@ void DPMatch::detect_tail(vcl_vector<int> &tail1 , vcl_vector<int> &tail2)
       tail_start.push_back(x1);
   }
 
-  for (unsigned int i=finalMap_.size()-1;i>0;i--)
+  for (int i=finalMap_.size()-1;i>0;--i)
   {
     int x1=finalMap_[i].first;
     int x2=finalMap_[i].second;
@@ -172,7 +172,7 @@ void DPMatch::detect_tail(vcl_vector<int> &tail1 , vcl_vector<int> &tail2)
     for (unsigned int i=0;i<tail_start.size();i++)
       tail1.push_back(tail_start[i]);
   }
-  else if (ratio2>0.3 && ratio2> ratio1)
+  else if (ratio2>0.3 && ratio2>ratio1)
   {
     for (unsigned int i=0;i<tail_end.size();i++)
       tail1.push_back(tail_end[i]);
@@ -184,7 +184,7 @@ void DPMatch::detect_tail(vcl_vector<int> &tail1 , vcl_vector<int> &tail2)
   tail_start.clear();
   tail_end.clear();
 
-  for (unsigned int i=0;i<finalMap_.size()-1;i++)
+  for (unsigned int i=0;i+1<finalMap_.size();++i)
   {
     int x1=finalMap_[i].first;
     int x2=finalMap_[i].second;
@@ -509,7 +509,7 @@ void DPMatch::findEndPoint()
   vcl_cout << "In DP Endpoint\n";
 
   finalCost_=1E10;
-  int endIndex;
+  int endIndex = -1;
   for (int i=0;i<m_;i++)
   {
     if (cost_[n_-1][i] < finalCost_)
@@ -519,7 +519,8 @@ void DPMatch::findEndPoint()
       endIndex=i;
     }
   }
-  findDPCorrespondence(n_-1,endIndex);
+  if (endIndex >= 0)
+    findDPCorrespondence(n_-1,endIndex);
 }
 
 void DPMatch::match()
