@@ -24,14 +24,14 @@ doublereal dnrm2_(integer* n, doublereal* x, integer* incx)
     static integer ix;
     static doublereal ssq;
 
-/*  DNRM2 returns the euclidean norm of a vector via the function	*/
-/*  name, so that							*/
-/*									*/
-/*     DNRM2 := sqrt( x'*x )						*/
-/*									*/
-/*  -- This version written on 25-October-1982.				*/
-/*     Modified on 14-October-1993 to inline the call to DLASSQ.	*/
-/*     Sven Hammarling, Nag Ltd.					*/
+/*  DNRM2 returns the euclidean norm of a vector via the function       */
+/*  name, so that                                                       */
+/*                                                                      */
+/*     DNRM2 := sqrt( x'*x )                                            */
+/*                                                                      */
+/*  -- This version written on 25-October-1982.                         */
+/*     Modified on 14-October-1993 to inline the call to DLASSQ.        */
+/*     Sven Hammarling, Nag Ltd.                                        */
 
     if (*n < 1 || *incx < 1) {
         norm = 0.;
