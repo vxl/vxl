@@ -1,4 +1,0 @@
-
-Used vil_stream rather than iostream as iostreams cause 
-too much trouble [from dh]
-

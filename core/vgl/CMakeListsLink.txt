@@ -1,3 +1,0 @@
-LINK_LIBRARIES( vgl )
-
-INCLUDE( ${allvxl_SOURCE_DIR}/vcl/CMakeListsLink.txt )

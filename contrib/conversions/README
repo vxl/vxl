@@ -1,9 +1,0 @@
-This package contains inline functions to convert between
-several datastructures, from both (old) TargetJr and vxl.
-
-There are no compiled libraries here, as users of these
-functions don't want to pay for the dependencies caused
-by the other functions.  The makefiles contain only
-"sample uses" and tests.
-
-Initial author: Peter Vanroose, K.U.Leuven, March 2001.
