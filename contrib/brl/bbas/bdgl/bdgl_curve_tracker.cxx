@@ -37,19 +37,11 @@ void bdgl_curve_tracker::track_frame(unsigned int frame)
   vcl_vector< bdgl_curve_region >             regions;
   bdgl_curve_tracker_primitive                primitive;
   vcl_vector< bdgl_curve_tracker_primitive >  primitive_list;
-  vcl_vector< int >                           is_used;
-  bdgl_curve_matcher                          matcher(params_.match_params_);
-  vcl_map<int,double>                         cost_map;
-  vcl_vector< vcl_map< int,double> >          cost_table;
-  vcl_vector< vcl_map< int,double> >          filtered_cost_table;
-  vcl_map<int,double>:: iterator              iter;
 
   aspects.clear();
-  vcl_vector<int> ctemp;
 
   //declaring two arrays
 //int * first_id, * second_id;
-  vcl_pair<int,int> temp;
 
 
 #ifdef DEBUG
@@ -77,13 +69,17 @@ void bdgl_curve_tracker::track_frame(unsigned int frame)
     // init : duplicate empty primitive lists
     primitive_list.clear();
 
+#if 0 // is_used is not being used ;-)
     // init the used flag
+    vcl_vector<int> is_used;
     is_used.clear();
     for (unsigned int j=0;j<input_curve_[frame].size();j++)
       is_used.insert(is_used.end(), 0);
 
-//  first_id= new int[output_curve_[frame-1].size()];
-//  second_id = new int[input_curve_[frame].size()];
+    first_id= new int[output_curve_[frame-1].size()];
+    second_id = new int[input_curve_[frame].size()];
+#endif // 0
+
     // compute regions
 #ifdef DEBUG
     vcl_cout<<"-> compute regions\n";
@@ -195,6 +191,7 @@ void bdgl_curve_match_tracker::track_match_frame(unsigned int frame)
   vcl_map<int,double>                         cost_map;
   vcl_vector< vcl_map< int,double> >          cost_table;
   vcl_vector< vcl_map< int,double> >          filtered_cost_table;
+  bdgl_curve_matcher                          matcher(params_.match_params_);
   vcl_map<int,double>:: iterator              iter;
   int best_id;
   double best_val, dist;
