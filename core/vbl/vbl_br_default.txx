@@ -21,7 +21,7 @@ vbl_br_default_iter<T1,T2,T3,T4,T5>::vbl_br_default_iter()
 //: Constructor.
 template <class T1, class T2, class T3, class T4, class T5>
 vbl_br_default_iter<T1,T2,T3,T4,T5>::vbl_br_default_iter(vbl_br_default<T1,T2,T3,T4,T5>* impl,
-                                             vbl_basic_relation_where<T1,T2,T3,T4,T5> const* w)
+                                                         vbl_basic_relation_where<T1,T2,T3,T4,T5> const* w)
   : vbl_br_iter_impl<T1,T2,T3,T4,T5>(), where(0), tlist(0)
 {
   assert((impl != 0) && (w != 0));
@@ -72,7 +72,7 @@ vbl_br_default_iter<T1,T2,T3,T4,T5>::vbl_br_default_iter(vbl_br_default<T1,T2,T3
 //------------------------------------------------------------
 //: Copy constructor.
 template <class T1, class T2, class T3, class T4, class T5>
-vbl_br_default_iter<T1,T2,T3,T4,T5>::vbl_br_default_iter(const vbl_br_default_iter<T1,T2,T3,T4,T5>& it)
+vbl_br_default_iter<T1,T2,T3,T4,T5>::vbl_br_default_iter(vbl_br_default_iter<T1,T2,T3,T4,T5> const& it)
   : vbl_br_iter_impl<T1,T2,T3,T4,T5>(it),
     where(0), tlist(it.tlist), iter(it.iter)
 {
@@ -121,7 +121,7 @@ void vbl_br_default_iter<T1,T2,T3,T4,T5>::incr()
 // relation, and tuples are unique within the relation, we can just
 // compare the addresses of tuples.
 template <class T1, class T2, class T3, class T4, class T5>
-bool vbl_br_default_iter<T1,T2,T3,T4,T5>::compare(const vbl_br_iter_impl<T1,T2,T3,T4,T5>& i) const
+bool vbl_br_default_iter<T1,T2,T3,T4,T5>::compare(vbl_br_iter_impl<T1,T2,T3,T4,T5> const& i) const
 {
   return (deref() == i.deref());
 }
@@ -157,7 +157,7 @@ bool vbl_br_default_iter<T1,T2,T3,T4,T5>::AtEnd() const
 //: Constructor.
 template <class T1, class T2, class T3, class T4, class T5>
 vbl_br_default_wild_iter<T1,T2,T3,T4,T5>::vbl_br_default_wild_iter(vbl_br_default<T1,T2,T3,T4,T5>* init_impl,
-                                                     vbl_basic_relation_where<T1,T2,T3,T4,T5> const* w)
+                                                                   vbl_basic_relation_where<T1,T2,T3,T4,T5> const* w)
   : vbl_br_iter_impl<T1,T2,T3,T4,T5>()
 {
   if (w)
@@ -187,7 +187,7 @@ vbl_br_default_wild_iter<T1,T2,T3,T4,T5>::vbl_br_default_wild_iter(vbl_br_defaul
 //------------------------------------------------------------
 //: Copy constructor.
 template <class T1, class T2, class T3, class T4, class T5>
-vbl_br_default_wild_iter<T1,T2,T3,T4,T5>::vbl_br_default_wild_iter(const vbl_br_default_wild_iter<T1,T2,T3,T4,T5>& it)
+vbl_br_default_wild_iter<T1,T2,T3,T4,T5>::vbl_br_default_wild_iter(vbl_br_default_wild_iter<T1,T2,T3,T4,T5> const& it)
   : vbl_br_iter_impl<T1,T2,T3,T4,T5>(it),
     i1(it.i1), impl(it.impl), i2(it.i2), i2_end(it.i2_end)
 {
@@ -251,7 +251,7 @@ void vbl_br_default_wild_iter<T1,T2,T3,T4,T5>::incr()
 //------------------------------------------------------------
 //: Compare two iterators.
 template <class T1, class T2, class T3, class T4, class T5>
-bool vbl_br_default_wild_iter<T1,T2,T3,T4,T5>::compare(const vbl_br_iter_impl<T1,T2,T3,T4,T5>& i) const
+bool vbl_br_default_wild_iter<T1,T2,T3,T4,T5>::compare(vbl_br_iter_impl<T1,T2,T3,T4,T5> const& i) const
 {
   return (deref() == i.deref());
 }
@@ -263,7 +263,7 @@ bool vbl_br_default_wild_iter<T1,T2,T3,T4,T5>::compare(const vbl_br_iter_impl<T1
 //------------------------------------------------------------
 //: Constructor.  Calls the parent constructor.
 template <class T1, class T2, class T3, class T4, class T5>
-vbl_br_default<T1,T2,T3,T4,T5>::vbl_br_default(const vcl_string& n)
+vbl_br_default<T1,T2,T3,T4,T5>::vbl_br_default(vcl_string const& n)
   : vbl_br_impl<T1,T2,T3,T4,T5>(n),
     u1(false), u2(false), u3(false), u4(false), u5(false)
 {
@@ -272,7 +272,7 @@ vbl_br_default<T1,T2,T3,T4,T5>::vbl_br_default(const vcl_string& n)
 //------------------------------------------------------------
 //: Copy constructor.
 template <class T1, class T2, class T3, class T4, class T5>
-vbl_br_default<T1,T2,T3,T4,T5>::vbl_br_default(const vbl_br_default<T1,T2,T3,T4,T5>& i)
+vbl_br_default<T1,T2,T3,T4,T5>::vbl_br_default(vbl_br_default<T1,T2,T3,T4,T5> const& i)
   : vbl_br_impl<T1,T2,T3,T4,T5>(i),
     u1(i.u1), u2(i.u2), u3(i.u3), u4(i.u4), u5(i.u5)
 {
@@ -491,7 +491,7 @@ void* vbl_br_default<T1,T2,T3,T4,T5>::This()
 //: Add a tuple.  This method is used in the constructor hence it is
 // non-virtual.  Return false if tuple is already present.
 template <class T1, class T2, class T3, class T4, class T5>
-bool vbl_br_default<T1,T2,T3,T4,T5>::DoInsert(const vbl_basic_tuple<T1,T2,T3,T4,T5>& t)
+bool vbl_br_default<T1,T2,T3,T4,T5>::DoInsert(vbl_basic_tuple<T1,T2,T3,T4,T5> const& t)
 {
   tuple* tr;
 
