@@ -73,7 +73,7 @@ test_bins_2()
       double radius = (t+1) * bin_sizes.x() / 2;  // increasing size, starting smallest
 
       bool bin_answer = bins.is_any_point_within_radius( q, radius );
-    
+
       vcl_vector< int > all_close_indices;
       for ( int i=0; i<M; ++i ) {
         if ( vnl_vector_ssd( points[ i ], q ) < vnl_math_sqr( radius ) ) {
@@ -83,7 +83,7 @@ test_bins_2()
 
       testlib_test_begin( "is_any_point_within_radius" );
       testlib_test_perform( bin_answer == (all_close_indices.size() > 0) );
-      
+
       vcl_vector< int > bin_close_indices;
       bins.points_within_radius( q, radius, bin_close_indices );
       bool correct = all_close_indices.size() ==  bin_close_indices.size();
@@ -101,60 +101,59 @@ test_bins_2()
 
   { //new test with bin size 5,5
     vnl_double_2 a(0,0), b(100,100), c(5,5), d(4.9,0), e(8.8,0), f(1,0);
-    bin_type  bins(a,b,c);//min, max, size
- 
+    bin_type  bins(a,b,c);//minv, maxv, size
+
     bins.add_point(e, 1);
     bins.add_point(f, 2);
- 
+
     vcl_vector<int> answer;
     bins.n_nearest(d, 1, answer);
- 
+
     testlib_test_begin( "Second bin test bin size 5,5" );
     testlib_test_perform( answer.size() >= 1 && (answer[0] == 1 ||  answer[0] == 2) );
   }
- 
+
   {//same as new test with bin size 2,2
     vnl_double_2 a(0,0), b(100,100), c(2,2), d(4.9,0), e(8.8,0), f(1,0);
-    bin_type  bins(a,b,c);//min, max, size
- 
+    bin_type  bins(a,b,c);//minv, maxv, size
+
     bins.add_point(e, 1);
     bins.add_point(f, 2);
- 
+
     vcl_vector<int> answer;
     bins.n_nearest(d, 1, answer);
- 
+
     testlib_test_begin( "Second bin test bin size 2,2" );
     testlib_test_perform( answer.size() == 1 && (answer[0] == 1 ||  answer[0] == 2) );
   }
 
-  {                                                                             
-      vnl_double_2 size(5,5), min(0,0), max(640,480), query_pt(329.69, 241.57);                                                                        
-      vnl_double_2 data_pt_1(343.10, 225.90), data_pt_2(344.94, 227.06);        
-      bin_type  bins(min,max,size);                            
-                                                                                
-      bins.add_point(data_pt_1, 1);                                             
-      bins.add_point(data_pt_2, 2);                                             
-                                                                                
-      vcl_vector<int> answer;                                                   
+  {
+      vnl_double_2 size(5,5), minv(0,0), maxv(640,480), query_pt(329.69, 241.57);
+      vnl_double_2 data_pt_1(343.10, 225.90), data_pt_2(344.94, 227.06);
+      bin_type  bins(minv,maxv,size);
+
+      bins.add_point(data_pt_1, 1);
+      bins.add_point(data_pt_2, 2);
+
+      vcl_vector<int> answer;
       bins.n_nearest(query_pt, 2, answer);
       testlib_test_begin( "Nearest 2" );
       testlib_test_perform( answer.size() == 2 && answer[0] == 1 && answer[1] == 2 );
-  }             
+  }
 
-  {                                                                             
-      vnl_double_2 size(5,5), min(0,0), max(640,480), query_pt(329.69, 241.57);                                                                        
-      vnl_double_2 data_pt_1(343.10, 225.90), data_pt_2(344.94, 227.06);        
-      bin_type  bins(min,max,size);                            
-                                                                                
-      bins.add_point(data_pt_1, 1);                                             
-      bins.add_point(data_pt_2, 2);                                             
-                                                                                
-      vcl_vector<int> answer;                                                   
+  {
+      vnl_double_2 size(5,5), minv(0,0), maxv(640,480), query_pt(329.69, 241.57);
+      vnl_double_2 data_pt_1(343.10, 225.90), data_pt_2(344.94, 227.06);
+      bin_type  bins(minv,maxv,size);
+
+      bins.add_point(data_pt_1, 1);
+      bins.add_point(data_pt_2, 2);
+
+      vcl_vector<int> answer;
       bins.n_nearest(query_pt, 5, answer);
       testlib_test_begin( "Nearest 5 w/o enough data" );
       testlib_test_perform( answer.size() == 2 && answer[0] == 1 && answer[1] == 2 );
-  }             
-
+  }
 }
 
 
@@ -222,7 +221,7 @@ test_bins_3()
       double radius = (t+1) * bin_sizes.x() / 2;  // increasing size, starting smallest
 
       bool bin_answer = bins.is_any_point_within_radius( q, radius );
-    
+
       vcl_vector< int > all_close_indices;
       for ( int i=0; i<M; ++i ) {
         if ( vnl_vector_ssd( points[ i ], q ) < vnl_math_sqr( radius ) ) {
@@ -232,7 +231,7 @@ test_bins_3()
 
       testlib_test_begin( "is_any_point_within_radius" );
       testlib_test_perform( bin_answer == (all_close_indices.size() > 0) );
-      
+
       vcl_vector< int > bin_close_indices;
       bins.points_within_radius( q, radius, bin_close_indices );
       bool correct = all_close_indices.size() ==  bin_close_indices.size();
@@ -249,10 +248,10 @@ test_bins_3()
   }
 
   {
-    vnl_double_3 min(0.0,0.0,0.0);
-    vnl_double_3 max(4.0,3.0,6.0);
+    vnl_double_3 minv(0.0,0.0,0.0);
+    vnl_double_3 maxv(4.0,3.0,6.0);
     vnl_double_3 size(10.0,10.0,10.0);
-    bin_type bins( min, max, size );
+    bin_type bins( minv, maxv, size );
 
     bins.add_point( vnl_double_3(0.0,0.0,0.0), 0 );
     bins.add_point( vnl_double_3(1.0,0.0,0.0), 1 );
@@ -270,10 +269,10 @@ test_bins_3()
 
   // same test with smaller bin sizes
   {
-    vnl_double_3 min(0.0,0.0,0.0);
-    vnl_double_3 max(4.0,3.0,6.0);
+    vnl_double_3 minv(0.0,0.0,0.0);
+    vnl_double_3 maxv(4.0,3.0,6.0);
     vnl_double_3 size(1.0,1.0,1.0);
-    bin_type bins( min, max, size );
+    bin_type bins( minv, maxv, size );
 
     bins.add_point( vnl_double_3(0.0,0.0,0.0), 0 );
     bins.add_point( vnl_double_3(1.0,0.0,0.0), 1 );
@@ -288,11 +287,9 @@ test_bins_3()
                           ( ( nearest[0] == 4 && nearest[1] == 3 ) ||
                             ( nearest[0] == 3 && nearest[1] == 4 ) ) );
   }
-
 }
 
 
-                    
 MAIN( test_bins )
 {
   START( "rsdl_bins" );
