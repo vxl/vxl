@@ -11,8 +11,8 @@
 // \date   23 Dec 96
 //
 // \verbatim
-// Modifications:
-// LSB (Manchester) 23/3/01 Documenation tidied
+//  Modifications
+//   LSB (Manchester) 23/3/01 Documentation tidied
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
