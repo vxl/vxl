@@ -1,13 +1,12 @@
 #ifndef vcl_map_txx_
 #define vcl_map_txx_
+// -*- c++ -*-
 
 #include "vcl_map.h"
 
-// It's vcl_map<Key, T, Compare = less<Key>, Allocator = allocator<pair<Key const, T> > >
-// The key_type is Key
-// The value_type is pair<Key const, T>
-
-#if !VCL_USE_NATIVE_STL
+#if VCL_USE_IMPLICIT_TEMPLATES
+# include "iso/vcl_map.txx"
+#elif !VCL_USE_NATIVE_STL
 # include "emulation/vcl_map.txx"
 #elif defined(VCL_EGCS)
 # include "egcs/vcl_map.txx"

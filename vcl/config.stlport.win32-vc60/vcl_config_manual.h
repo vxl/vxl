@@ -7,7 +7,9 @@
 
 #define VCL_USE_NATIVE_COMPLEX 1
 
-// Use STL port stl libraries
+#define VCL_USE_IMPLICIT_TEMPLATES 1
+
+// Use STL port stl libraries.
 #define VCL_USE_STLPORT 1
 
 #endif

@@ -520,11 +520,11 @@ fi
 
 
 # blurb
-echo "CC=$CC"
-echo "CCFLAGS=$CCFLAGS"
-echo "CXX=$CXX"
-echo "CXXFLAGS=$CXXFLAGS"
-echo "TXXFLAGS=$TXXFLAGS"
+echo "vxl configure: CC=$CC"
+echo "vxl configure: CCFLAGS=$CCFLAGS"
+echo "vxl configure: CXX=$CXX"
+echo "vxl configure: CXXFLAGS=$CXXFLAGS"
+echo "vxl configure: TXXFLAGS=$TXXFLAGS"
 
 ## we need to use the scripts in ./shell
 #no_we_dont AC_CONFIG_AUX_DIR(Scripts/Shell)

@@ -1,7 +1,12 @@
+#ifndef vcl_algorithm_txx_
+#define vcl_algorithm_txx_
 // -*- c++ -*-
+
 #include "vcl_algorithm.h"
 
-#if !VCL_USE_NATIVE_STL
+#if VCL_USE_IMPLICIT_TEMPLATES
+# include "iso/vcl_algorithm.txx"
+#elif !VCL_USE_NATIVE_STL
 # include "emulation/vcl_algorithm.txx"
 #elif defined(VCL_EGCS)
 # include "egcs/vcl_algorithm.txx"
@@ -17,4 +22,6 @@
 # include "win32/vcl_algorithm.txx"
 #else
 # include "iso/vcl_algorithm.txx"
+#endif
+
 #endif

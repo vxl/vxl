@@ -1286,3 +1286,70 @@ VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER="0"
 ])
 export VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER
 ])
+
+
+
+
+
+
+
+### 
+AC_DEFUN(AC_CXX_CAN_DO_IMPLICIT_TEMPLATES,[
+AC_MSG_CHECKING(whether the C++ compiler instantiates templates implicitly)
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
+
+VCL_COMPILE_CXX
+
+AC_TRY_LINK([
+
+struct fsm_plap_normal { };
+template <class I>
+inline fsm_plap_normal fsm_plap(I) { return fsm_plap_normal(); }
+
+template <class I, class T>
+void fsm_plop(I b, I e, T x, fsm_plap_normal)
+{
+  for (I p=b; p!=e; ++p)
+    *p = x;
+}
+
+
+struct fsm_plap_double_star { };
+inline fsm_plap_double_star fsm_plap(double *) { return fsm_plap_double_star(); }
+
+template <class T>
+void fsm_plop(double *b, double *e, T x, fsm_plap_double_star)
+{
+  for (double *p=b; p<e; ++p)
+    *p = x;
+}
+
+
+template <class I, class T>
+inline void fsm_plip(I b, I e, T x)
+{
+  if (b != e)
+    fsm_plop(b, e, x, fsm_plap(b));
+}
+
+
+void f()
+{
+  int iarray[20];
+  fsm_plip(iarray, iarray+20, 3141);
+
+  double darray[20];
+  fsm_plip(darray, darray+20, 2718);
+}
+
+],[
+],[
+AC_MSG_RESULT("yes")
+VCL_CAN_DO_IMPLICIT_TEMPLATES="1"
+],[
+AC_MSG_RESULT("no")
+VCL_CAN_DO_IMPLICIT_TEMPLATES="0"
+])
+export VCL_CAN_DO_IMPLICIT_TEMPLATES
+])

@@ -1,12 +1,12 @@
-// -*- c++ -*-
 #ifndef vcl_vector_txx_
 #define vcl_vector_txx_
+// -*- c++ -*-
 
 #include "vcl_vector.h"
 
-#undef VCL_VECTOR_INSTANTIATE
-
-#if !VCL_USE_NATIVE_STL
+#if VCL_USE_IMPLICIT_TEMPLATES
+# include "iso/vcl_vector.txx"
+#elif !VCL_USE_NATIVE_STL
 # include "emulation/vcl_vector.txx"
 #elif defined(VCL_EGCS)
 # include "egcs/vcl_vector.txx"

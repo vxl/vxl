@@ -17,4 +17,9 @@
 // If you don't use the stl flag's setting you're on your own.
 // #define VCL_USE_NATIVE_COMPLEX VCL_USE_NATIVE_STL
 
+
+//: VCL_USE_IMPLICIT_TEMPLATES
+// Whether to use implicit template instantiation.
+#define VCL_USE_IMPLICIT_TEMPLATES @VCL_USE_IMPLICIT_TEMPLATES@
+
 #endif

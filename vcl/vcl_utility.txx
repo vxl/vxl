@@ -1,13 +1,12 @@
 #ifndef vcl_utility_txx_
 #define vcl_utility_txx_
-/*
-  fsm@robots.ox.ac.uk
-*/
+// -*- c++ -*-
+
 #include "vcl_utility.h"
 
-#undef VCL_PAIR_INSTANTIATE
-
-#if !VCL_USE_NATIVE_STL
+#if VCL_USE_IMPLICIT_TEMPLATES
+# include "iso/vcl_utility.txx"
+#elif !VCL_USE_NATIVE_STL
 # include "emulation/vcl_utility.txx"
 #elif defined(VCL_EGCS)
 # include "egcs/vcl_utility.txx"

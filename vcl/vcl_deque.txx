@@ -1,10 +1,12 @@
 #ifndef vcl_deque_txx_
 #define vcl_deque_txx_
-
 // -*- c++ -*-
+
 #include "vcl_deque.h"
 
-#if !VCL_USE_NATIVE_STL
+#if VCL_USE_IMPLICIT_TEMPLATES
+# include "iso/vcl_deque.txx"
+#elif !VCL_USE_NATIVE_STL
 # include "emulation/vcl_deque.txx"
 #elif defined(VCL_EGCS)
 # include "egcs/vcl_deque.txx"

@@ -1,11 +1,12 @@
+#ifndef vcl_functional_txx_
+#define vcl_functional_txx_
 // -*- c++ -*-
-/*
-  fsm@robots.ox.ac.uk
-*/
-#include "vcl_compiler.h"
+
 #include "vcl_functional.h"
 
-#if !VCL_USE_NATIVE_STL
+#if VCL_USE_IMPLICIT_TEMPLATES
+# include "iso/vcl_functional.txx"
+#elif !VCL_USE_NATIVE_STL
 # include "emulation/vcl_functional.txx"
 #elif defined(VCL_EGCS)
 # include "egcs/vcl_functional.txx"
@@ -20,5 +21,7 @@
 #elif defined(VCL_WIN32)
 # include "win32/vcl_functional.txx"
 #else
-  error "USE_NATIVE_STL with unknown compiler"
+# include "iso/vcl_functional.txx"
+#endif
+
 #endif

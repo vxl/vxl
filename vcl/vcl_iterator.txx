@@ -1,9 +1,12 @@
+#ifndef vcl_iterator_txx_
+#define vcl_iterator_txx_
 // -*- c++ -*-
+
 #include "vcl_iterator.h"
 
-#include "vcl_compiler.h"
-
-#if !VCL_USE_NATIVE_STL
+#if VCL_USE_IMPLICIT_TEMPLATES
+# include "iso/vcl_functional.txx"
+#elif !VCL_USE_NATIVE_STL
 # include "emulation/vcl_iterator.txx"
 #elif defined(VCL_EGCS)
 # include "egcs/vcl_iterator.txx"
@@ -19,4 +22,6 @@
 # include "win32/vcl_iterator.txx"
 #else
 # include "iso/vcl_iterator.txx"
+#endif
+
 #endif

@@ -1,11 +1,12 @@
 #ifndef vcl_stack_txx_
 #define vcl_stack_txx_
+// -*- c++ -*-
 
 #include "vcl_stack.h"
 
-#undef VCL_STACK_INSTANTIATE
-
-#if !VCL_USE_NATIVE_STL
+#if VCL_USE_IMPLICIT_TEMPLATES
+# include "iso/vcl_stack.txx"
+#elif !VCL_USE_NATIVE_STL
 # include "emulation/vcl_stack.txx"
 #elif defined(VCL_EGCS)
 # include "egcs/vcl_stack.txx"
