@@ -62,13 +62,13 @@ bounding_box(vcl_vector<vsol_point_3d_sptr> const& points)
 //-----------------------------------------------------------------------------
 bool bsol_algs::in(vsol_box_2d_sptr const & b, const double x, const double y)
 {
-  if(!b)
+  if (!b)
     return false;
   double xmin = b->get_min_x(), ymin = b->get_min_y();
   double xmax = b->get_max_x(), ymax = b->get_max_y();
-  if(x<xmin||x>xmax)
+  if (x<xmin||x>xmax)
     return false;
-  if(y<ymin||y>ymax)
+  if (y<ymin||y>ymax)
     return false;
   return true;
 }
@@ -109,10 +109,10 @@ bool bsol_algs::intersection(vsol_box_2d_sptr const & a,
 }
 
 bool bsol_algs::box_union(vsol_box_2d_sptr const & a,
-                                 vsol_box_2d_sptr const & b,
-                                 vsol_box_2d_sptr& a_union_b)
+                          vsol_box_2d_sptr const & b,
+                          vsol_box_2d_sptr& a_union_b)
 {
-  if(!a||!b)
+  if (!a||!b)
     return false;
   double x_min_a = a->get_min_x(), y_min_a = a->get_min_y();
   double x_max_a = a->get_max_x(), y_max_a = a->get_max_y();
@@ -120,13 +120,13 @@ bool bsol_algs::box_union(vsol_box_2d_sptr const & a,
   double x_max_b = b->get_max_x(), y_max_b = b->get_max_y();
   double x_min=x_min_a, y_min = y_min_a;
   double x_max=x_max_a, y_max = y_max_a;
-  if(x_min_b<x_min)
+  if (x_min_b<x_min)
     x_min = x_min_b;
-  if(y_min_b<y_min)
+  if (y_min_b<y_min)
     y_min = y_min_b;
-  if(x_max_b>x_max)
+  if (x_max_b>x_max)
     x_max = x_max_b;
-  if(y_max_b>y_max)
+  if (y_max_b>y_max)
     y_max = y_max_b;
   a_union_b = new vsol_box_2d();
   a_union_b->add_point(x_min, y_min);
@@ -140,15 +140,15 @@ bool bsol_algs::box_union(vsol_box_2d_sptr const & a,
 bool bsol_algs::in(vsol_box_3d_sptr const & b, const double x, const double y,
                    const double z)
 {
-  if(!b)
+  if (!b)
     return false;
   double xmin = b->get_min_x(), ymin = b->get_min_y(), zmin = b->get_min_z();
   double xmax = b->get_max_x(), ymax = b->get_max_y(), zmax = b->get_max_z();
-  if(x<xmin||x>xmax)
+  if (x<xmin||x>xmax)
     return false;
-  if(y<ymin||y>ymax)
+  if (y<ymin||y>ymax)
     return false;
-  if(z<zmin||z>zmax)
+  if (z<zmin||z>zmax)
     return false;
   return true;
 }
@@ -165,28 +165,28 @@ vsol_polygon_2d_sptr bsol_algs::poly_from_box(vsol_box_2d_sptr const& box)
   return new vsol_polygon_2d(pts);
 }
 //:find the closest point to p in a set of points
-vsol_point_2d_sptr 
+vsol_point_2d_sptr
 bsol_algs::closest_point(vsol_point_2d_sptr const& p,
                          vcl_vector<vsol_point_2d_sptr> const& point_set,
                          double& d)
 {
   vsol_point_2d_sptr cp;
   int n = point_set.size();
-  if(!p||!n)
+  if (!p||!n)
     return cp;
   double dmin_sq = vnl_numeric_traits<double>::maxval;
   double x = p->x(), y = p->y();
-  for(vcl_vector<vsol_point_2d_sptr>::const_iterator pit = point_set.begin();
-      pit!=point_set.end(); pit++)
+  for (vcl_vector<vsol_point_2d_sptr>::const_iterator pit = point_set.begin();
+       pit!=point_set.end(); pit++)
+  {
+    double xs = (*pit)->x(), ys = (*pit)->y();
+    double dsq = (x-xs)*(x-xs)+(y-ys)*(y-ys);
+    if (dsq<dmin_sq)
     {
-      double xs = (*pit)->x(), ys = (*pit)->y();
-      double dsq = (x-xs)*(x-xs)+(y-ys)*(y-ys);
-      if(dsq<dmin_sq)
-        {
-          dmin_sq = dsq;
-          cp = *pit;
-        }
+      dmin_sq = dsq;
+      cp = *pit;
     }
+  }
   d = vcl_sqrt(dmin_sq);
   return cp;
 }
@@ -199,21 +199,21 @@ closest_point(vsol_point_3d_sptr const& p,
   d = 0;
   vsol_point_3d_sptr cp;
   int n = point_set.size();
-  if(!p||!n)
+  if (!p||!n)
     return cp;
   double dmin_sq = vnl_numeric_traits<double>::maxval;
   double x = p->x(), y = p->y(), z = p->z();
-  for(vcl_vector<vsol_point_3d_sptr>::const_iterator pit = point_set.begin();
-      pit!=point_set.end(); pit++)
+  for (vcl_vector<vsol_point_3d_sptr>::const_iterator pit = point_set.begin();
+       pit!=point_set.end(); pit++)
+  {
+    double xs = (*pit)->x(), ys = (*pit)->y(), zs = (*pit)->z();
+    double dsq = (x-xs)*(x-xs) + (y-ys)*(y-ys) + (z-zs)*(z-zs);
+    if (dsq<dmin_sq)
     {
-      double xs = (*pit)->x(), ys = (*pit)->y(), zs = (*pit)->z();
-      double dsq = (x-xs)*(x-xs) + (y-ys)*(y-ys) + (z-zs)*(z-zs);
-      if(dsq<dmin_sq)
-        {
-          dmin_sq = dsq;
-          cp = *pit;
-        }
+      dmin_sq = dsq;
+      cp = *pit;
     }
+  }
   d = vcl_sqrt(dmin_sq);
   return cp;
 }
@@ -248,43 +248,43 @@ bool bsol_algs::homography(vsol_box_2d_sptr const& b,
 {
   vsol_polygon_2d_sptr p = bsol_algs::poly_from_box(b);
   vsol_polygon_2d_sptr Hp;
-  if(!homography(p, H, Hp))
-	  return false;
+  if (!homography(p, H, Hp))
+    return false;
   Hb = Hp->get_bounding_box();
   return true;
 }
 
 void bsol_algs::print(vsol_box_2d_sptr const& b)
 {
-  if(!b)
+  if (!b)
     return;
   double xmin = b->get_min_x(), ymin = b->get_min_y();
   double xmax = b->get_max_x(), ymax = b->get_max_y();
-  vcl_cout << "vsol_box_2d[(" << xmin << " " << ymin << ")<("
-           << xmax << " " << ymax << ")]\n";
+  vcl_cout << "vsol_box_2d[(" << xmin << ' ' << ymin << ")<("
+           << xmax << ' ' << ymax << ")]\n";
 }
 
 void bsol_algs::print(vsol_box_3d_sptr const& b)
 {
-  if(!b)
+  if (!b)
     return;
   double xmin = b->get_min_x(), ymin = b->get_min_y(), zmin = b->get_min_z();
   double xmax = b->get_max_x(), ymax = b->get_max_y(), zmax = b->get_max_z();
-  vcl_cout << "vsol_box_2d[(" << xmin << " " << ymin << " " << zmin << ")<("
-           << xmax << " " << ymax << " " << zmax << ")]\n";
+  vcl_cout << "vsol_box_2d[(" << xmin << ' ' << ymin << ' ' << zmin << ")<("
+           << xmax << ' ' << ymax << ' ' << zmax << ")]\n";
 }
 
 void bsol_algs::print(vsol_point_2d_sptr const& p)
 {
-  if(!p)
+  if (!p)
     return;
-  vcl_cout << "vsol_point_2d[ " << p->x() << " " << p->y() <<  " ]\n";
+  vcl_cout << "vsol_point_2d[ " << p->x() << ' ' << p->y() <<  " ]\n";
 }
 
 void bsol_algs::print(vsol_point_3d_sptr const& p)
 {
-  if(!p)
+  if (!p)
     return;
-  vcl_cout << "vsol_point_3d[ " << p->x() << " " << p->y() << " "
+  vcl_cout << "vsol_point_3d[ " << p->x() << ' ' << p->y() << ' '
            << p->z() <<  " ]\n";
 }
