@@ -82,19 +82,19 @@ void vgl_triangle_scan_iterator::reset()
   min_n_max(a.x, b.x, c.x, &min, &max);
   x0 = (int) vcl_ceil (min);
   x1 = (int) vcl_floor(max);
-  //cerr << "x0 x1 = " << x0 << ' ' << x1 << endl;
+  //vcl_cerr << "x0 x1 = " << x0 << ' ' << x1 << vcl_endl;
 
   min_n_max(a.y, b.y, c.y, &min, &max);
   y0 = (int) vcl_ceil (min);
   y1 = (int) vcl_floor(max);
-  //cerr << "y0 y1 = " << y0 << ' ' << y1 << endl;
+  //vcl_cerr << "y0 y1 = " << y0 << ' ' << y1 << vcl_endl;
 
   scany_ = y0 - 1;
 
   // compute centroid
   g.x = vcl_floor((a.x + b.x + c.x)/3);
   g.y = vcl_floor((a.y + b.y + c.y)/3);
-  //cerr << "g = " << g.x << ' ' << g.y << endl;
+  //vcl_cerr << "g = " << g.x << ' ' << g.y << vcl_endl;
 
   //
   pt ag = { a.x - g.x, a.y - g.y };
@@ -116,13 +116,13 @@ void vgl_triangle_scan_iterator::reset()
       data[i][j] *= f;
   }
 
-  //cerr << "data:" << endl;
+  //vcl_cerr << "data:" << vcl_endl;
   //for (int i=0; i<3; ++i) {
   //  for (int j=0; j<3; ++j)
-  //    cerr << ' ' << data[i][j];
-  //  cerr << endl;
+  //    vcl_cerr << ' ' << data[i][j];
+  //  vcl_cerr << vcl_endl;
   //}
-  //cerr << endl;
+  //vcl_cerr << vcl_endl;
 #endif
 }
 
@@ -144,7 +144,7 @@ bool vgl_triangle_scan_iterator::next()
   double minx = x0 - g.x;
   double maxx = x1 - g.x;
 
-  //cerr << "minx maxx = " << minx << ' ' << maxx << endl;
+  //vcl_cerr << "minx maxx = " << minx << ' ' << maxx << vcl_endl;
   for (int i=0; i<3; ++i) {
     double a_ = data[i][0];
     double b_ = data[i][1] * (scany_ - g.y) + data[i][2];
@@ -163,7 +163,7 @@ bool vgl_triangle_scan_iterator::next()
           maxx = x;
       }
     }
-    //cerr << "minx maxx = " << minx << ' ' << maxx << endl;
+    //vcl_cerr << "minx maxx = " << minx << ' ' << maxx << vcl_endl;
   }
 
   startx_ = (int) vcl_ceil (minx + g.x);
