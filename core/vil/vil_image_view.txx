@@ -132,6 +132,8 @@ void vil2_image_view<T>::resize(unsigned nx, unsigned ny, unsigned nplanes)
   xstep_ = 1;
   ystep_ = nx;
   planestep_ = nx*ny;
+
+  top_left_ = (T*) ptr_->data();
 }
 
 
@@ -193,6 +195,21 @@ void vil2_image_view<T>::set_to_window(const vil2_image_view& im,
 }
 
 
+//: Fill view with given value
+template<class T>
+void vil2_image_view<T>::fill(T value)
+{
+  T* plane = top_left_;
+  for (unsigned int i=0;i<nplanes_;++i,plane += planestep_)
+  {
+    T* row = plane;
+    for (int y=0;y<ny_;++y,row += ystep_)
+    {
+      T* p = row;
+      for (int x=0;x<nx_;++x,p+=xstep_) *p = value;
+    }
+  }
+}
 
 //=======================================================================
 
