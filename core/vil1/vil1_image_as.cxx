@@ -119,6 +119,7 @@ bool vil_image_as_impl<int>::get_section(void *buf, int x0, int y0, int width, i
 
 /* START_MANCHESTER_BINARY_IO_CODE */
 
+VCL_DEFINE_SPECIALIZATION
 const vcl_string& vil_image_as_impl<int>::is_a() const 
 { 
   const static vcl_string class_name_="vil_image_as_impl<int>"; 
@@ -195,6 +196,7 @@ bool vil_image_as_impl<vil_byte>::get_section(void *buf, int x0, int y0, int wid
 }
 /* START_MANCHESTER_BINARY_IO_CODE */
 
+VCL_DEFINE_SPECIALIZATION
 const vcl_string& vil_image_as_impl<vil_byte>::is_a() const 
 { 
   const static vcl_string class_name_="vil_image_as_impl<vil_byte>"; 
@@ -274,6 +276,7 @@ bool vil_image_as_impl<float>::get_section(void *buf, int x0, int y0, int width,
 
 /* START_MANCHESTER_BINARY_IO_CODE */
 
+VCL_DEFINE_SPECIALIZATION
 const vcl_string& vil_image_as_impl<float>::is_a() const 
 { 
   const static vcl_string class_name_="vil_image_as_impl<float>"; 
@@ -340,6 +343,7 @@ bool vil_image_as_impl<double>::get_section(void *buf, int x0, int y0, int width
 
 /* START_MANCHESTER_BINARY_IO_CODE */
 
+VCL_DEFINE_SPECIALIZATION
 const vcl_string& vil_image_as_impl<double>::is_a() const 
 { 
   const static vcl_string class_name_="vil_image_as_impl<double>"; 
@@ -423,6 +427,7 @@ bool vil_image_as_impl<vil_rgb<unsigned char> >::get_section(void *buf,
 }
 /* START_MANCHESTER_BINARY_IO_CODE */
 
+VCL_DEFINE_SPECIALIZATION
 const vcl_string& vil_image_as_impl<vil_rgb<unsigned char> >::is_a() const 
 { 
   const static vcl_string class_name_="vil_image_as_impl<vil_rgb<unsigned char> >"; 
@@ -490,6 +495,7 @@ bool vil_image_as_impl<vil_rgb<float> >::get_section(void *buf,
 
 /* START_MANCHESTER_BINARY_IO_CODE */
 
+VCL_DEFINE_SPECIALIZATION
 const vcl_string& vil_image_as_impl<vil_rgb<float> >::is_a() const 
 { 
   const static vcl_string class_name_="vil_image_as_impl<vil_rgb<float> >"; 
