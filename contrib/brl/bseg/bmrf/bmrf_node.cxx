@@ -9,7 +9,9 @@
 #include <vcl_algorithm.h>
 #include <vcl_cmath.h>
 
+#undef MAX
 #define MAX(a,b) ((a)>(b)?(a):(b))
+#undef MIN
 #define MIN(a,b) ((a)<(b)?(a):(b))
 
 //: Constructor
@@ -78,7 +80,7 @@ bmrf_node::purge()
 
 //: Calculate the conditional probability that this node is correct give its neighbors
 double
-bmrf_node::probability(  )
+bmrf_node::probability()
 {
   // Have not yet determined how this will be computed
   return probability_;
