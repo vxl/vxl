@@ -91,7 +91,7 @@ The order in which the inclusion is done will affect the functionality, so if th
 ``zoomer'' tableau contains the ``deck'' tableau then all images will change
 size together.  If however the inclusion is done the other way around and each
 child tableau of the ``deck'' contains its own ``zoomer'' tableau
-then each image will change size independantly.
+then each image will change size independently.
 
 \section{Example}
 
@@ -132,7 +132,7 @@ This interface is abstracted in the obvious manner:
 {\scriptsize \begin{verbawf}
   class tableau
   \{
-  public:
+   public:
     virtual bool handle_event(vgui_event const&) = 0;
   \};
 \end{verbawf}}
@@ -291,7 +291,7 @@ example, this might be written
 
 \subsection{Grouping tableaux}
 \begin{itemize}
-\item {\bf polytab}: Draw several tableaus in order and toggle them on/off.  This is
+\item {\bf polytab}: Draw several tableaux in order and toggle them on/off.  This is
       a ``stack of acetates'' model, like the Parmesan StackManager.
 \end{itemize}
 
@@ -478,7 +478,7 @@ overriding like  FLTK's {\tt Fl\_Gl\_Window::draw} method or just a convenient f
 
 \subsection{vgui\_Foo\_window}
 
-This is the next class to implement and the amount of work is very dependant on the interface
+This is the next class to implement and the amount of work is very dependent on the interface
 system you are using.  Later a menubar widget can be added to this class but to start with
 the only features that need to be implemented are embedding the  vgui\_Foo\_adaptor widget
 and getting the window to display.
@@ -495,10 +495,10 @@ from {\tt vgui\_Xm.h}
 \begin{verbawf}
   class vgui\_Xm : public vgui
   \{
-  public:
+   public:
     static vgui\_Xm* instance();
 
-  protected:
+   protected:
     vgui\_Xm();
     static vgui\_Xm* instance\_;
   \};
