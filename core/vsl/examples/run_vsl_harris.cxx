@@ -16,19 +16,29 @@ int main(int argc,char **argv) {
   vbl_arg<bool>       pab    ("-pab"  ,"emulate pab harris"  ,false);
   vbl_arg_parse(argc,argv);
   
-  if (infile() == "") {
+  vcl_string* in_file = new vcl_string(infile());
+  if (*in_file == "") {
     cout << "input image file: ";
-    cin >> infile().c_str();
+    char tmp[1024];
+    cin >> tmp;
+    delete in_file;
+    in_file = new vcl_string(tmp);
   }
-  assert(infile()  != "");
-  if (outfile() == "") {
+  assert(*in_file != "");
+
+  vcl_string* out_file = new vcl_string(outfile());
+  if (*out_file == "") {
     cout << "output image file: ";
-    cin >> outfile().c_str();
+    char tmp[1024];
+    cin >> tmp;
+    delete out_file;
+    out_file = new vcl_string(tmp);
   }
-  assert(outfile() != "");
+  assert(*out_file != "");
 
   // load image
-  vil_image I = vil_load(infile().c_str());
+  vil_image I = vil_load(in_file->c_str());
+  delete in_file;
 
   // parameters
   vsl_harris_params params;
@@ -41,7 +51,8 @@ int main(int argc,char **argv) {
   H.compute(I);
 
   // save
-  H.save_corners(outfile().c_str());
+  H.save_corners(out_file->c_str());
+  delete out_file;
 
   if (cormap() != "") // cornerness map
     vil_save(*H.image_cornerness_ptr, cormap().c_str(), "pnm");
