@@ -6,12 +6,12 @@
 
 #include <vil/vil_load.h>
 
-vil_file_image::vil_file_image(char const* filename, verbosity v VCL_DEFAULT_VALUE(verbose))
+vil_file_image::vil_file_image(char const* filename, verbosity v)
 {
   load(filename, v);
 }
 
-vil_file_image::vil_file_image(vcl_string const& filename, verbosity v VCL_DEFAULT_VALUE(verbose))
+vil_file_image::vil_file_image(vcl_string const& filename, verbosity v)
 {
   load(filename, v);
 }
@@ -20,12 +20,12 @@ vil_file_image::vil_file_image()
 {
 }
 
-bool vil_file_image::load(vcl_string const& filename, verbosity VCL_DEFAULT_VALUE(verbose))
+bool vil_file_image::load(vcl_string const& filename, verbosity)
 {
   return this->load(filename.c_str());
 }
 
-bool vil_file_image::load(char const* filename, verbosity v VCL_DEFAULT_VALUE(verbose))
+bool vil_file_image::load(char const* filename, verbosity v)
 {
   vil_image i = vil_load(filename);
   if (v == verbose) {

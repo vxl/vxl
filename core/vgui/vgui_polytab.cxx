@@ -74,7 +74,7 @@ public:
 // class vgui_popup_params::item
 vgui_polytab_base::item::item(vgui_tableau* p, vgui_tableau_sptr const&c,
                               float x_, float y_, float w_, float h_,
-                              int id_ VCL_DEFAULT_VALUE(0))
+                              int id_)
   : tab(p, c)
   , x(x_), y(y_)
   , w(w_), h(h_)

@@ -46,7 +46,7 @@ void vnl_cost_function::gradf(const vnl_vector<double>&x, vnl_vector<double>&g)
 // -- Compute fd gradient
 void vnl_cost_function::fdgradf(const vnl_vector<double>& x,
                                 vnl_vector<double>& gradient,
-                                double stepsize VCL_DEFAULT_VALUE( 1e-5) )
+                                double stepsize )
 {
   vnl_vector<double> tx = x;
   double h = stepsize;

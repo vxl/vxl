@@ -8,7 +8,7 @@
 
 #include <vcl_cassert.h>
 
-vil_stream_core::vil_stream_core(unsigned block_size VCL_DEFAULT_VALUE(16384))
+vil_stream_core::vil_stream_core(unsigned block_size)
   : curpos(0)
   , blocksize(block_size)
   , tailpos(0)

@@ -12,7 +12,7 @@
 VCL_DEFINE_SPECIALIZATION
 void vnl_matlab_print_scalar(int const &v,
                              char *buf,
-                             vnl_matlab_print_format VCL_DEFAULT_VALUE(vnl_matlab_print_format_default))
+                             vnl_matlab_print_format)
 {
   sprintf(buf, "%4d ", v);
 }
@@ -20,7 +20,7 @@ void vnl_matlab_print_scalar(int const &v,
 VCL_DEFINE_SPECIALIZATION
 void vnl_matlab_print_scalar(float const &v,
                              char *buf,
-                             vnl_matlab_print_format format VCL_DEFAULT_VALUE(vnl_matlab_print_format_default))
+                             vnl_matlab_print_format format)
 {
   if (format == vnl_matlab_print_format_default)
     format = vnl_matlab_print_format_top();
@@ -50,7 +50,7 @@ void vnl_matlab_print_scalar(float const &v,
 VCL_DEFINE_SPECIALIZATION
 void vnl_matlab_print_scalar(double const &v,
                              char *buf,
-                             vnl_matlab_print_format format VCL_DEFAULT_VALUE(vnl_matlab_print_format_default))
+                             vnl_matlab_print_format format)
 {
   if (format == vnl_matlab_print_format_default)
     format = vnl_matlab_print_format_top();
@@ -80,7 +80,7 @@ void vnl_matlab_print_scalar(double const &v,
 VCL_DEFINE_SPECIALIZATION
 void vnl_matlab_print_scalar(long double const &v,
                              char *buf,
-                             vnl_matlab_print_format format VCL_DEFAULT_VALUE(vnl_matlab_print_format_default))
+                             vnl_matlab_print_format format)
 {
   vnl_matlab_print_scalar(double(v), buf, format); // FIXME
 }
@@ -88,7 +88,7 @@ void vnl_matlab_print_scalar(long double const &v,
 VCL_DEFINE_SPECIALIZATION
 void vnl_matlab_print_scalar(vcl_complex<double> const &v,
                              char *buf,
-                             vnl_matlab_print_format format VCL_DEFAULT_VALUE(vnl_matlab_print_format_default))
+                             vnl_matlab_print_format format)
 {
   if (format == vnl_matlab_print_format_default)
     format = vnl_matlab_print_format_top();
@@ -156,7 +156,7 @@ void vnl_matlab_print_scalar(vcl_complex<double> const &v,
 VCL_DEFINE_SPECIALIZATION
 void vnl_matlab_print_scalar(vcl_complex<float> const &v,
                              char *buf,
-                             vnl_matlab_print_format format VCL_DEFAULT_VALUE(vnl_matlab_print_format_default))
+                             vnl_matlab_print_format format)
 {
   if (format == vnl_matlab_print_format_default)
     format = vnl_matlab_print_format_top();
@@ -224,7 +224,7 @@ void vnl_matlab_print_scalar(vcl_complex<float> const &v,
 VCL_DEFINE_SPECIALIZATION
 void vnl_matlab_print_scalar(vcl_complex<long double> const &v,
                              char *buf,
-                             vnl_matlab_print_format format VCL_DEFAULT_VALUE(vnl_matlab_print_format_default))
+                             vnl_matlab_print_format format)
 {
   vnl_matlab_print_scalar(vcl_complex<double>(v.real(), v.imag()), buf, format); // FIXME
 }

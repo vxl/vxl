@@ -22,7 +22,7 @@ template <class T>
 vcl_ostream &vnl_matlab_print(vcl_ostream& s,
                           T const* array,
                           unsigned length,
-                          vnl_matlab_print_format format VCL_DEFAULT_VALUE(vnl_matlab_print_format_default))
+                          vnl_matlab_print_format format)
 {
   char buf[1024];
   for (unsigned j=0; j<length; j++ ) {
@@ -39,7 +39,7 @@ template <class T>
 vcl_ostream &vnl_matlab_print(vcl_ostream &s,
                           T const * const *array,
                           unsigned rows, unsigned cols,
-                          vnl_matlab_print_format format VCL_DEFAULT_VALUE(vnl_matlab_print_format_default))
+                          vnl_matlab_print_format format)
 {
   for (unsigned i=0; i<rows; ++i)
     vnl_matlab_print(s, array[i], cols, format) << vcl_endl;
@@ -50,7 +50,7 @@ template <class T>
 vcl_ostream& vnl_matlab_print(vcl_ostream& s,
                           vnl_diag_matrix<T> const& D,
                           char const* variable_name,
-                          vnl_matlab_print_format format VCL_DEFAULT_VALUE(vnl_matlab_print_format_default))
+                          vnl_matlab_print_format format)
 {
   if (variable_name)
     s << variable_name << " = diag([ ";
@@ -69,7 +69,7 @@ template <class T>
 vcl_ostream& vnl_matlab_print(vcl_ostream& s,
                           vnl_matrix<T> const& M,
                           char const* variable_name,
-                          vnl_matlab_print_format format VCL_DEFAULT_VALUE(vnl_matlab_print_format_default))
+                          vnl_matlab_print_format format)
 {
   if (variable_name)
     s << variable_name << " = [ ... \n";
@@ -93,7 +93,7 @@ template <class T>
 vcl_ostream& vnl_matlab_print(vcl_ostream& s,
                           vnl_vector<T> const & v,
                           char const* variable_name,
-                          vnl_matlab_print_format format VCL_DEFAULT_VALUE(vnl_matlab_print_format_default))
+                          vnl_matlab_print_format format)
 {
   if (variable_name)
     s << variable_name << " = [ ";

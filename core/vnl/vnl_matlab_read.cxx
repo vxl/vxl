@@ -175,7 +175,7 @@ fsm_define_methods(vcl_complex<double>);
 template <class T>
 bool vnl_matlab_read_or_die(vcl_istream &s,
                             vnl_vector<T> &v,
-                            char const *name VCL_DEFAULT_VALUE(0))
+                            char const *name)
 {
   vnl_matlab_readhdr h(s);
   if (!s) // eof?
@@ -194,7 +194,7 @@ bool vnl_matlab_read_or_die(vcl_istream &s,
 template <class T>
 bool vnl_matlab_read_or_die(vcl_istream &s,
                             vnl_matrix<T> &M,
-                            char const *name VCL_DEFAULT_VALUE(0))
+                            char const *name)
 {
   vnl_matlab_readhdr h(s);
   if (!s) // eof?
