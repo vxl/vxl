@@ -3,8 +3,12 @@ USES += contrib/mul core
 LIBRARY := vil2-algo
 VERSION := 1.0
 
+SOURCES += vil2_sobel_1x3.cxx
+MANPAGE_SOURCES += vil2_sobel_1x3.txx
 SOURCES += vil2_sobel_3x3.cxx
 MANPAGE_SOURCES += vil2_sobel_3x3.txx
+SOURCES += vil2_gauss_filter.cxx
+MANPAGE_SOURCES += vil2_gauss_filter.txx
 SOURCES += vil2_gauss_reduce.cxx
 MANPAGE_SOURCES += vil2_gauss_reduce.txx
 MANPAGE_SOURCES += vil2_convolve_1d.h
