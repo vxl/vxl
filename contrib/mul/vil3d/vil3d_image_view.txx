@@ -78,7 +78,7 @@ vil3d_image_view<T>::vil3d_image_view(const vil_memory_chunk_sptr& mem_chunk,
 template<class T>
 vil3d_image_view<T>::vil3d_image_view(const vil3d_image_view<T>& im)
   : vil3d_image_view_base(im.ni(), im.nj(), im.nk(), im.nplanes()),
-    top_left_(im.origin_ptr()), istep_(im.istep()), jstep_(im.jstep()),
+    top_left_(im.top_left_), istep_(im.istep()), jstep_(im.jstep()),
     kstep_(im.kstep()), planestep_(im.planestep()), ptr_(im.memory_chunk())
 {
   if (static_cast<vil3d_image_view_base const&>(im).pixel_format() != pixel_format())
