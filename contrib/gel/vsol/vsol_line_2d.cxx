@@ -20,9 +20,19 @@
 //---------------------------------------------------------------------------
 vsol_line_2d::vsol_line_2d(const vgl_vector_2d<double> &new_direction,
                            const vsol_point_2d_sptr &new_middle)
+: p0_(new vsol_point_2d(*(new_middle->plus_vector(-(new_direction)/2)))),
+  p1_(new vsol_point_2d(*(new_middle->plus_vector((new_direction)/2))))
 {
-  p0_=new vsol_point_2d(*(new_middle->plus_vector(-(new_direction)/2)));
-  p1_=new vsol_point_2d(*(new_middle->plus_vector((new_direction)/2)));
+}
+
+//---------------------------------------------------------------------------
+//: Constructor from two vgl_point_2d (end points)
+//---------------------------------------------------------------------------
+vsol_line_2d::vsol_line_2d(vgl_point_2d<double> const& p0,
+                           vgl_point_2d<double> const& p1)
+: p0_(new vsol_point_2d(p0)),
+  p1_(new vsol_point_2d(p1))
+{
 }
 
 //---------------------------------------------------------------------------
@@ -30,9 +40,8 @@ vsol_line_2d::vsol_line_2d(const vgl_vector_2d<double> &new_direction,
 //---------------------------------------------------------------------------
 vsol_line_2d::vsol_line_2d(const vsol_point_2d_sptr &new_p0,
                            const vsol_point_2d_sptr &new_p1)
+: p0_(new_p0), p1_(new_p1)
 {
-  p0_=new_p0;
-  p1_=new_p1;
 }
 
 //---------------------------------------------------------------------------
@@ -40,9 +49,8 @@ vsol_line_2d::vsol_line_2d(const vsol_point_2d_sptr &new_p0,
 // Description: no duplication of the points
 //---------------------------------------------------------------------------
 vsol_line_2d::vsol_line_2d(const vsol_line_2d &other)
+: p0_(other.p0_), p1_(other.p1_)
 {
-  p0_=other.p0_;
-  p1_=other.p1_;
 }
 
 //---------------------------------------------------------------------------
