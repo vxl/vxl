@@ -9,8 +9,6 @@
 
 #include "vcl_compiler.h"
 
-//#if defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)
-//# include <stdio.h>
 #if defined(VCL_SGI_CC_720)
 # include <stdio.h>
 # define vcl_generic_cstdio_STD /* */

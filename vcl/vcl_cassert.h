@@ -9,18 +9,18 @@
 
 #include "vcl_compiler.h"
 
-#if defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)
+// This header file should do something like this:
+//   #undef assert
+//   #ifdef NDEBUG
+//   # define assert(x) ((void) 0)
+//   #else
+//   extern void vcl_cassert_failure(char const *, int, char const *);
+//   # define assert(x) do { if (!(x)) vcl_cassert_failure(__FILE__, __LINE__, #x); } while (false)
+//   #endif
+// If the system/compiler version works, use that instead.
+
+#if defined(VCL_SGI_CC_720)
 # include <assert.h>
-#elif defined(VCL_SGI_CC_720)
-# include <assert.h>
-#elif defined(GNU_LIBSTDCXX_V3)
-// The "program"
-//   #include <cassert>
-//   #include <iostream>
-// breaks v3.
-extern void vcl_cassert_failure(char const *, int, char const *);
-# undef assert
-# define assert(x) do { if (!(x)) vcl_cassert_failure(__FILE__, __LINE__, #x); } while (false)
 #else
 # include "iso/vcl_cassert.h"
 #endif

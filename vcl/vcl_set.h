@@ -12,13 +12,6 @@
 # include "emulation/vcl_set.h"
 # include "emulation/vcl_multiset.h"
 
-//// -------------------- gcc with old library
-//#elif defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)
-//# include <set.h>
-//# include <multiset.h>
-//# define vcl_set      set
-//# define vcl_multiset multiset
-
 // -------------------- iso
 #else
 # include "iso/vcl_set.h"
