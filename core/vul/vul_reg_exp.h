@@ -76,8 +76,24 @@ const int vul_reg_exp_nsubexp = 10;
 //  character sequence that does not begin with the characters "a",
 //  "b", or the characters "1" through "9".
 //
-class vul_reg_exp {
-public:
+class vul_reg_exp
+{
+  //: anchor point of start position for n-th matching regular expression
+  const char* startp[vul_reg_exp_nsubexp];
+  //: anchor point of end position for n-th matching regular expression
+  const char* endp[vul_reg_exp_nsubexp];
+  //: Internal use only
+  char  regstart;
+  //: Internal use only
+  char  reganch;
+  //: Internal use only
+  const char* regmust;
+  //: Internal use only
+  int   regmlen;
+  char* program;
+  int   progsize;
+  const char* searchstring;
+ public:
   //: Creates an empty regular expression.
   inline vul_reg_exp() : program(0) { clear_bufs(); }
   //: Creates a regular expression from string s, and compiles s.
@@ -118,25 +134,9 @@ public:
     return this->endp[n] == this->startp[n] ? vcl_string("") :
            vcl_string(this->startp[n], this->endp[n] - this->startp[n]);
   }
-
-private:
-  //: anchor point of start position for n-th matching regular expression
-  const char* startp[vul_reg_exp_nsubexp];
-  //: anchor point of end position for n-th matching regular expression
-  const char* endp[vul_reg_exp_nsubexp];
+ private:
   //: private function to clear startp[] and endp[]
   void clear_bufs() { for (int n=0; n<vul_reg_exp_nsubexp; ++n) startp[n]=endp[n]=0; }
-  //: Internal use only
-  char  regstart;
-  //: Internal use only
-  char  reganch;
-  //: Internal use only
-  const char* regmust;
-  //: Internal use only
-  int   regmlen;
-  char* program;
-  int   progsize;
-  const char* searchstring;
 };
 
 #endif // vul_reg_exph
