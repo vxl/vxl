@@ -2,7 +2,6 @@ SOURCE_FILES( vul_sources
   vul_arg.h
   vul_awk.h
   vul_canonical_path.h
-  vul_deprecated.h
   vul_expand_path.h
   vul_file.h
   vul_file_iterator.h
