@@ -7,9 +7,9 @@
 // \date   10 Sep 00
 // \brief  Smart-pointer to a vgui_easy2D_tableau tableau.
 
-#include <vgui/vgui_tableau_sptr.h>
+#include <vgui/vgui_displaylist2D_tableau_sptr.h>
 
 class vgui_easy2D_tableau;
-typedef vgui_tableau_sptr_t<vgui_easy2D_tableau> vgui_easy2D_tableau_sptr;
+typedef vgui_tableau_sptr_t<vgui_easy2D_tableau,vgui_displaylist2D_tableau_sptr> vgui_easy2D_tableau_sptr;
 
 #endif // vgui_easy2D_tableau_sptr_h_
