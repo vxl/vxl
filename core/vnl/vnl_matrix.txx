@@ -80,6 +80,8 @@
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
+#include <vcl_cassert.h>
+
 // conflicts with operator!= for std::vector<vcl_complex<double> >::iterator.
 // # include <vcl_rel_ops.h>  // inline operator!= function template
 
@@ -89,16 +91,6 @@
 #include <vnl/vnl_numeric_traits.h>
 
 //--------------------------------------------------------------------------------
-
-// Matrix -- Creates an empty matrix which has no array for the elements. O(1).
-// 
-template<class T> 
-vnl_matrix<T>::vnl_matrix () :
-  num_rows(0),
-  num_cols(0),
-  data(0)
-{
-}
 
 // This macro allocates and initializes the dynamic storage used by a vnl_matrix.
 #define vnl_matrix_alloc_blah(rowz_, colz_) \
@@ -154,6 +146,18 @@ vnl_matrix<T>::vnl_matrix (unsigned rowz, unsigned colz, T const& value)
       this->data[i][j] = value;
 }
 
+//: r rows, c cols, special type.  Currently implements "identity"
+template <class T>
+vnl_matrix<T>::vnl_matrix(unsigned r, unsigned c, vnl_matrix_type t)
+{
+  vnl_matrix_alloc_blah(r, c);
+  if (t == vnl_matrix_identity) {
+    assert(r == c);
+    for (unsigned i = 0; i < r; ++ i)
+      for (unsigned j = 0; j < c; ++ j)
+	this->data[i][j] = (i==j) ? T(1) : T(0);
+  }
+}
 
 #if 1 // fsm: who uses this?
 // Matrix -- Creates a matrix with given dimension (rows, cols) and initialize
@@ -322,7 +326,7 @@ vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &A, vnl_matrix<T> const &B, vnl_t
 // O(m*n).
 
 template<class T> 
-vnl_matrix<T>::~vnl_matrix()
+void vnl_matrix<T>::destroy()
 {
   vnl_matrix_free_blah;
 }
@@ -400,7 +404,7 @@ vnl_matrix<T>& vnl_matrix<T>::operator= (vnl_matrix<T> const& rhs) {
 }
 
 template<class T> 
-void vnl_matrix<T>::print(ostream& os) const {
+void vnl_matrix<T>::print(vcl_ostream& os) const {
   for (unsigned i = 0; i < this->rows(); i++) {    // For each row in matrix
     for (unsigned j = 0; j < this->columns(); j++) // For each column in matrix
       os << this->data[i][j] << " ";            // Output data element
@@ -412,7 +416,7 @@ void vnl_matrix<T>::print(ostream& os) const {
 // O(m*n).
 
 template<class T> 
-ostream& operator<< (ostream& os, vnl_matrix<T> const& m) {
+vcl_ostream& operator<< (vcl_ostream& os, vnl_matrix<T> const& m) {
   for (unsigned i = 0; i < m.rows(); ++i) {        // For each row
     for (unsigned j = 0; j < m.columns(); ++j) {   // For each column
       // Output data element
@@ -432,7 +436,7 @@ ostream& operator<< (ostream& os, vnl_matrix<T> const& m) {
 // -- Read an vnl_matrix from an ascii istream, automatically
 // determining file size if the input matrix has zero size.
 template<class T>
-istream& operator>>(istream& s, vnl_matrix<T>& M) {
+vcl_istream& operator>>(vcl_istream& s, vnl_matrix<T>& M) {
   M.read_ascii(s); 
   return s;
 }
@@ -1058,10 +1062,10 @@ void vnl_matrix<T>::assert_size(unsigned rs,unsigned cs) const
 // -- Read a vnl_matrix from an ascii istream, automatically
 // determining file size if the input matrix has zero size.
 template <class T>
-bool vnl_matrix<T>::read_ascii(istream& s)
+bool vnl_matrix<T>::read_ascii(vcl_istream& s)
 {
   if (!s.good()) {
-    vcl_cerr << "vnl_matrix<T>::read_ascii: Called with bad istream\n";
+    vcl_cerr << "vnl_matrix<T>::read_ascii: Called with bad vcl_istream\n";
     return false;
   }
 
@@ -1175,7 +1179,7 @@ bool vnl_matrix<T>::read_ascii(istream& s)
 // </verb>
 // which many people prefer to the ">>" alternative.
 template <class T>
-vnl_matrix<T> vnl_matrix<T>::read(istream& s)
+vnl_matrix<T> vnl_matrix<T>::read(vcl_istream& s)
 {
   vnl_matrix<T> M;
   s >> M;
@@ -1251,11 +1255,45 @@ void vnl_matrix<T>::fliplr()
     int c1 = c;
     int c2 = n - 1 - c;
     for (int r = 0; r < rowz; ++r) {
-      T tmp = (*this)(c1, r);
-      (*this)(c1, r) = (*this)(c2, r);
-      (*this)(c2, r) = tmp;
+      T tmp = (*this)(r, c1);
+      (*this)(r, c1) = (*this)(r, c2);
+      (*this)(r, c2) = tmp;
     }
   }
+}
+
+// || M ||  = \max \sum | M   |
+//        1     j    i     ij
+template <class T>
+typename vnl_matrix<T>::abs_t vnl_matrix<T>::operator_one_norm() const
+{
+  //typedef vnl_numeric_traits<T>::abs_t abs_t;
+  abs_t max = 0;
+  for (int j=0; j<this->num_cols; ++j) {
+    abs_t tmp = 0;
+    for (int i=0; i<this->num_rows; ++i)
+      tmp += vnl_math_abs(this->data[i][j]);
+    if (tmp > max)
+      max = tmp;
+  }
+  return max;
+}
+
+// || M ||   = \max \sum | M   |
+//        oo     i    j     ij
+template <class T>
+typename vnl_matrix<T>::abs_t vnl_matrix<T>::operator_inf_norm() const
+{
+  //typedef vnl_numeric_traits<T>::abs_t abs_t;
+  abs_t max = 0;
+  for (int i=0; i<this->num_rows; ++i) {
+    abs_t tmp = 0;
+    for (int j=0; j<this->num_cols; ++j)
+      tmp += vnl_math_abs(this->data[i][j]);
+    if (tmp > max)
+      max = tmp;
+  }
+  return max;
 }
 
 template <class doublereal>
@@ -1498,6 +1536,6 @@ template T cos_angle(vnl_matrix<T > const &, vnl_matrix<T > const &); \
 template vnl_matrix<T > element_product(vnl_matrix<T > const &, vnl_matrix<T > const &); \
 template vnl_matrix<T > element_quotient(vnl_matrix<T > const &, vnl_matrix<T > const &); \
 template int vnl_inplace_transpose(T*, int*, int*, int*, int*, int*, int*); \
-template ostream & operator<<(ostream &, vnl_matrix<T > const &); \
-template istream & operator>>(istream &, vnl_matrix<T >       &); \
+template vcl_ostream & operator<<(vcl_ostream &, vnl_matrix<T > const &); \
+template vcl_istream & operator>>(vcl_istream &, vnl_matrix<T >       &); \
 VCL_INSTANTIATE_INLINE(bool operator!=(vnl_matrix<T > const &, vnl_matrix<T > const &))
