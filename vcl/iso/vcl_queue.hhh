@@ -1,9 +1,0 @@
-#ifndef vcl_iso_queue_h_
-#define vcl_iso_queue_h_
-
-#include <queue>
-
-@queue
-@priority_queue
-
-#endif
