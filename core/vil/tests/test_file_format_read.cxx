@@ -311,11 +311,12 @@ test_file_format_read_main( int argc, char* argv[] )
   testlib_test_begin( "  8-bit indexed RGB" );
   testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_byte>( "ff_rgb8bit_indexed.ras" ) ) );
 
-#if 0
+
   vcl_cout << "DICOM [dcm]\n";
   testlib_test_begin( "  16-bit greyscale uncompressed" );
-  testlib_test_perform( test( "ff_grey16bit_true.txt", CheckGrey<vxl_int_32>( "ff_grey16bit_uncompressed.dcm" ) ) );
+  testlib_test_perform( test( "ff_grey16bit_true_for_dicom.txt", CheckGrey<vxl_uint_16>( "ff_grey16bit_uncompressed.dcm" ) ) );
 
+#if 0
   vcl_cout << "SGI IRIS [iris]\n";
   testlib_test_begin( "  8-bit RGB rle" );
   testlib_test_perform( test( "ff_planar8bit_true.txt", CheckColourPlanes<vxl_byte>( "ff_rgb8bit.iris" ) ) );

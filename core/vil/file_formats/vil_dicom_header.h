@@ -359,14 +359,14 @@ struct vil_dicom_header_info
   float window_width_;       /*< The actual width of the image window */
 
   // Info from the tags specifically for reading the image data
-  float xsize_;             /*< The pixel spacing in x */
-  float ysize_;             /*< The pixel spacing in y */
-  float slice_spacing_;     /*< The pixel spacing in z */
-  float res_intercept_;     /*< The image rescale intercept */
-  float res_slope_;         /*< The image rescale slope */
-  unsigned short pix_rep_;  /*< The pixel representation (+/-) */
-  float stored_bits_;       /*< The bits stored */
-  float allocated_bits_;    /*< The bits allocated */
+  float xsize_;                   /*< The pixel spacing in x */
+  float ysize_;                   /*< The pixel spacing in y */
+  float slice_spacing_;           /*< The pixel spacing in z */
+  float res_intercept_;           /*< The image rescale intercept */
+  float res_slope_;               /*< The image rescale slope */
+  unsigned short pix_rep_;        /*< The pixel representation (+/-) */
+  float stored_bits_;             /*< The bits stored */
+  unsigned short allocated_bits_; /*< The bits allocated */
 };
 
 

@@ -1222,7 +1222,7 @@ void vil_dicom_header_format::readImageElements(short element,
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
       charSwap(data_p, sizeof(vxl_uint_16));
-      last_read_.dimx_ = *((vxl_uint_16*)data_p);
+      last_read_.dimy_ = *((vxl_uint_16*)data_p);
     } // End of if (data_p)
     break;
 
@@ -1234,7 +1234,7 @@ void vil_dicom_header_format::readImageElements(short element,
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
       charSwap(data_p, sizeof(vxl_uint_16));
-      last_read_.dimy_ = *((vxl_uint_16 *)data_p);
+      last_read_.dimx_ = *((vxl_uint_16 *)data_p);
     } // End of if (data_p)
     break;
 
@@ -1724,7 +1724,6 @@ vil_dicom_header_endian vil_dicom_header_format::determineMetaInfo(vil_stream &f
 
   vxl_uint_16 group, element;
   unsigned int data_block_size;
-  char *tfx_type=0;
   vil_streampos ret_pos = fs.tell(); // Maintain the file position
 
   // The first section of the file header is always little endian,
@@ -1735,10 +1734,11 @@ vil_dicom_header_endian vil_dicom_header_format::determineMetaInfo(vil_stream &f
   // Read the next group
   fs.read((char *)&group,sizeof(vxl_uint_16));
   group = shortSwap(group);
-
+  unsigned i = 0;
   while (fs.ok() && group <= VIL_DICOM_HEADER_METAFILEGROUP)
   {
     // Read the element
+
     fs.read((char *)&element,sizeof(vxl_uint_16));
     element = shortSwap(element);
 
@@ -1751,7 +1751,7 @@ vil_dicom_header_endian vil_dicom_header_format::determineMetaInfo(vil_stream &f
         element == VIL_DICOM_HEADER_MFTRANSFERSYNTAX)
     {
       // This tells us the transfer syntax for the file
-      tfx_type = new char[data_block_size+1]; // Ensure room for 0
+      char * tfx_type = new char[data_block_size+1]; // Ensure room for 0
       if (tfx_type)
       {
         fs.read(tfx_type, data_block_size);
@@ -1760,6 +1760,7 @@ vil_dicom_header_endian vil_dicom_header_format::determineMetaInfo(vil_stream &f
         // Now see what it is
 
         vcl_string temp = tfx_type;
+        delete [] tfx_type; tfx_type=0;
 
         if (temp == VIL_DICOM_HEADER_IMPLICITLITTLE ||
           temp == VIL_DICOM_HEADER_EXPLICITLITTLE)
@@ -1836,6 +1837,7 @@ vil_dicom_header_endian vil_dicom_header_format::determineMetaInfo(vil_stream &f
           image_type_ = VIL_DICOM_HEADER_DITRLE;
         }
       } // End of if (tfx_type)
+       
     } // End of if (group...
     else if (group == VIL_DICOM_HEADER_DELIMITERGROUP &&
              (element == VIL_DICOM_HEADER_DLITEM ||
