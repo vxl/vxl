@@ -61,6 +61,7 @@ SOURCES += rgrl_est_similarity2d.cxx
 SOURCES += rgrl_est_quadratic.cxx
 SOURCES += rgrl_est_reduced_quad2d.cxx
 SOURCES += rgrl_est_homography2d.cxx
+SOURCES += rgrl_est_homo2d_lm.cxx
 
 SOURCES += rgrl_scale.cxx
 MANPAGE_SOURCES += rgrl_scale_sptr.h
