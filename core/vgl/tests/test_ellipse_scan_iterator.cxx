@@ -33,10 +33,10 @@ static void test_ellipse()
   vgl_ellipse_scan_iterator<float> ellipse2( 10, -10, 2, 1, 0 );
   TEST("offset ellipse radius 2,1", ellipse2.count(), 7 );
 
-  vgl_ellipse_scan_iterator<float> ellipse3( 0, 0, 2, 1, 0.1 );
+  vgl_ellipse_scan_iterator<float> ellipse3( 0, 0, 2, 1, 0.1f );
   TEST("centred, rotated ellipse radius 2,1", ellipse3.count(), 5 );
 
-  vgl_ellipse_scan_iterator<float> ellipse4( 0, 0, 2, 3, -3.1415/4.0 );
+  vgl_ellipse_scan_iterator<float> ellipse4( 0, 0, 2, 3, -3.14f/4 );
   TEST("centred, rotated ellipse radius 2,3", ellipse4.count(), 19 );
 }
 
@@ -58,7 +58,7 @@ static void test_sliver()
 
 static void test_degenerate()
 {
-vgl_ellipse_scan_iterator<float> ellipse1( 0.5, 0.5, 0.3, 0.1, 0 );
+  vgl_ellipse_scan_iterator<float> ellipse1( 0.5f, 0.5f, 0.3f, 0.1f, 0 );
   TEST("empty ellipse", ellipse1.count(), 0 );
 
   vgl_ellipse_scan_iterator<float> ellipse2( 0, 0, 2, 0, 0 );
@@ -70,7 +70,7 @@ vgl_ellipse_scan_iterator<float> ellipse1( 0.5, 0.5, 0.3, 0.1, 0 );
   vgl_ellipse_scan_iterator<float> ellipse4( 0, 0, 0, 0, 0 );
   TEST("point at integer coordinates", ellipse4.count(), 1 );
 
-  vgl_ellipse_scan_iterator<float> ellipse5( 0.1, 0.1, 0, 0, 0 );
+  vgl_ellipse_scan_iterator<float> ellipse5( 0.1f, 0.1f, 0, 0, 0 );
   TEST("point at non-integer coordinates", ellipse5.count(), 0 );
 }
 
