@@ -54,6 +54,7 @@
 #endif
 #include <aio.h>
 #include <vcl_csignal.h>
+#include <vcl_cstddef.h> // for size_t
 
 class AsyncIO_Shared_State
 {
