@@ -370,7 +370,7 @@ double ddot_(const int *n, const double *dx, const int *incx, const double *dy, 
                double *tola, double *tolb, int *k, int *l, double *u, int *ldu, double *v, int *ldv, double *q, int *ldq,
                int *iwork, double *tau, double *work, int *info);
 
-  void dhgeqz_(char *job, char *compq, char *compz, int *n, int *ilo, int *ihi,
+  void dhgeqz_(const char *job, const char *compq, const char *compz, int *n, int *ilo, int *ihi,
                double *a, int *lda, double *b, int *ldb, double *alphar, double *alphai, double *beta,
                double *q, int *ldq, double *z, int *ldz, double *work, int *lwork, int *info);
 
