@@ -52,10 +52,12 @@ class segv_segmentation_manager : public vgui_wrapper_tableau
   void test_face();
   void test_digital_lines();
   void display_IHS();
+  void rotate_image();
   void display_epi_region_image();
   void compute_mutual_info();
   void create_box();
   void create_polygon();
+
 #if 0
 #ifdef HAS_XERCES
   void read_xml_edges();

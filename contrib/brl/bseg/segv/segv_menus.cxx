@@ -102,6 +102,11 @@ void segv_menus::display_IHS_callback()
 segv_segmentation_manager::instance()->display_IHS();
 }
 
+void segv_menus::rotate_image_callback()
+{
+segv_segmentation_manager::instance()->rotate_image();
+}
+
 void segv_menus::compute_mutual_info_callback()
 {
 segv_segmentation_manager::instance()->compute_mutual_info();
@@ -142,6 +147,7 @@ vgui_menu segv_menus::get_menu()
   menuview.add("Clear Display", clear_display_callback);
   menuview.add("Display IHS", display_IHS_callback);
   menuview.add("Display Epi Region Image", display_epi_region_image_callback);
+  menuview.add("Rotate", rotate_image_callback);
   //edit menu entries
   menuedit.add("Region Of Interest", roi_callback);
   menuedit.add("Gaussian", gaussian_callback);

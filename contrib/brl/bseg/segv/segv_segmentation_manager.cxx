@@ -1209,6 +1209,28 @@ void segv_segmentation_manager::compute_mutual_info()
   itrk.evaluate_info();
 }
 
+void segv_segmentation_manager::rotate_image()
+{
+  vil1_image img = selected_image();
+  if (!img)
+  {
+    vcl_cout << "In segv_segmentation_manager::rotate_image - no image\n";
+    return;
+  }
+  vil1_memory_image_of<float> flt = 
+    brip_vil1_float_ops::convert_to_float(img);
+  static double angle = 0;
+  vgui_dialog rotate_dialog("Rotate Image");
+  rotate_dialog.field("Rotation Angle (deg)", angle);
+  if (!rotate_dialog.ask())
+    return;
+  
+  vil1_memory_image_of<float> temp = brip_vil1_float_ops::rotate(flt, angle);
+  vil1_memory_image_of<unsigned char> out_image = 
+    brip_vil1_float_ops::convert_to_byte(temp, 0, 255);
+  this->add_image(out_image);
+}
+
 void segv_segmentation_manager::create_box()
 {
   vgui_rubberband_tableau_sptr rubber = this->selected_rubber_tab();
