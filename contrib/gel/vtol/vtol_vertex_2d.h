@@ -50,7 +50,7 @@ class vtol_vertex_2d : public vtol_vertex
   //---------------------------------------------------------------------------
   //: Default constructor
   //---------------------------------------------------------------------------
-  vtol_vertex_2d(void);
+  vtol_vertex_2d();
 
   //---------------------------------------------------------------------------
   //: Constructor from a point (the point is copied, not stored)
@@ -81,23 +81,27 @@ class vtol_vertex_2d : public vtol_vertex
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
-  virtual ~vtol_vertex_2d();
+  virtual ~vtol_vertex_2d() {}
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d* clone(void) const;
-  
+  virtual vsol_spatial_object_2d* clone() const;
+
   //: Return a platform independent string identifying the class
-  vcl_string is_a() const;
+  virtual vcl_string is_a() const { return vcl_string("vtol_vertex_2d"); }
+
+  //: Return true if the argument matches the string identifying the class or any parent class
+  virtual bool is_class(const vcl_string& cls) const
+  { return cls==is_a() || vtol_vertex::is_class(cls); }
 
   // Accessors
 
   //---------------------------------------------------------------------------
   //: Return the point
   //---------------------------------------------------------------------------
-  vsol_point_2d_sptr point(void) const;
+  vsol_point_2d_sptr point() const;
 
   //---------------------------------------------------------------------------
   //: Set the point (the point is not copied)
@@ -113,12 +117,12 @@ class vtol_vertex_2d : public vtol_vertex
   //---------------------------------------------------------------------------
   //: Return the abscissa of the point
   //---------------------------------------------------------------------------
-  virtual double x(void) const;
+  virtual double x() const;
 
   //---------------------------------------------------------------------------
   //: Return the ordinate of the point
   //---------------------------------------------------------------------------
-  virtual double y(void) const;
+  virtual double y() const;
 
   //---------------------------------------------------------------------------
   //: Set the abscissa of the point with `new_x'
@@ -151,12 +155,12 @@ class vtol_vertex_2d : public vtol_vertex
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a vertex, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_vertex_2d *cast_to_vertex_2d(void) const { return this; }
+  virtual const vtol_vertex_2d *cast_to_vertex_2d() const { return this; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a vertex, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_vertex_2d *cast_to_vertex_2d(void) { return this; }
+  virtual vtol_vertex_2d *cast_to_vertex_2d() { return this; }
 
   //---------------------------------------------------------------------------
   //: Create a line edge from `this' and `other' only if this edge does not exist.
@@ -172,7 +176,7 @@ class vtol_vertex_2d : public vtol_vertex
 
   void print(vcl_ostream &strm=vcl_cout) const;
   void describe(vcl_ostream &strm=vcl_cout, int blanking=0) const;
-  virtual void compute_bounding_box(void) const; //A local implementation
+  virtual void compute_bounding_box() const; //A local implementation
 
   //:  copy the geometry
   virtual void copy_geometry(const vtol_vertex &other);

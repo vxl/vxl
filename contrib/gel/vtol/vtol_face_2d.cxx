@@ -12,14 +12,6 @@
 #include <vsol/vsol_point_2d.h>
 
 //---------------------------------------------------------------------------
-// Default constructor
-//---------------------------------------------------------------------------
-vtol_face_2d::vtol_face_2d(void)
-  :surface_(0)
-{
-}
-
-//---------------------------------------------------------------------------
 //: Pseudo copy constructor.  Deep copy.
 //---------------------------------------------------------------------------
 vtol_face_2d::vtol_face_2d(vtol_face_2d_sptr const& other)
@@ -71,28 +63,15 @@ vtol_face_2d::vtol_face_2d(vtol_face_2d_sptr const& other)
 }
 
 //---------------------------------------------------------------------------
-// Destructor
-//---------------------------------------------------------------------------
-vtol_face_2d::~vtol_face_2d()
-{
-}
-
-//---------------------------------------------------------------------------
 //: Clone `this': creation of a new object and initialization.
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_2d* vtol_face_2d::clone(void) const
+vsol_spatial_object_2d* vtol_face_2d::clone() const
 {
   return new vtol_face_2d(vtol_face_2d_sptr(const_cast<vtol_face_2d*>(this)));
 }
 
-//: Return a platform independent string identifying the class
-vcl_string vtol_face_2d::is_a() const
-{
-  return vcl_string("vtol_face_2d");
-}
-
-vsol_region_2d_sptr vtol_face_2d::surface(void) const
+vsol_region_2d_sptr vtol_face_2d::surface() const
 {
   return surface_;
 }
@@ -122,7 +101,7 @@ vtol_face_2d::copy_with_arrays(topology_list &verts,
 //---------------------------------------------------------------------------
 //: Copy with no links. Only copy the surface if it exists
 //---------------------------------------------------------------------------
-vtol_face *vtol_face_2d::shallow_copy_with_no_links(void) const
+vtol_face *vtol_face_2d::shallow_copy_with_no_links() const
 {
   vtol_face_2d *result;
   result=new vtol_face_2d;
@@ -237,21 +216,6 @@ vtol_face_2d::vtol_face_2d(vtol_one_chain_sptr const& edgeloop)
                                     new vsol_point_2d(get_max_x(),get_max_y()),
                                     new vsol_point_2d(get_min_x(),get_max_y())));
 }
-
-
-#if 0 // deprecated
-vtol_face_2d::vtol_face_2d(vtol_one_chain &edgeloop)
-  : surface_(0)
-{
-  vcl_cerr << "Warning: deprecated vtol_face_2d constructor\n";
-  link_inferior(&edgeloop);
-
-  // TODO - surface is set to bounding box rectangle, which is often too large
-  set_surface(new vsol_rectangle_2d(new vsol_point_2d(get_min_x(),get_min_y()),
-                                    new vsol_point_2d(get_max_x(),get_min_y()),
-                                    new vsol_point_2d(get_min_x(),get_max_y())));
-}
-#endif
 
 //: Constructor requiring only the underlying geometric surface
 vtol_face_2d::vtol_face_2d (vsol_region_2d &facesurf)

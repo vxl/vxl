@@ -12,17 +12,15 @@
 //
 // \verbatim
 //  Modifications:
-//   JLM December 1995, Added timeStamp (touch) to
-//                      operations which affect bounds.
-//
+//   JLM December 1995, Added timeStamp(touch) to operations which affect bounds
 //   JLM October 1996,  Added the method EuclideanDistance(vtol_vertex &)
-//      to permit Charlie Rothwell's Polyhedra code to be more
-//      generic.  Note this is distance, NOT squared distance.
+//                      to permit Charlie Rothwell's Polyhedra code to be more
+//                      generic.  Note this is distance, NOT squared distance.
 //   LEG May 2000. ported to vxl
 //   Dec. 2002, Peter Vanroose -interface change: vtol objects -> smart pointers
 // \endverbatim
 
-#include "vtol_topology_object.h"
+#include <vtol/vtol_topology_object.h>
 #include <vcl_iosfwd.h>
 
 class vtol_vertex_2d;
@@ -43,7 +41,7 @@ class vtol_vertex : public vtol_topology_object
   //---------------------------------------------------------------------------
   //: Default constructor
   //---------------------------------------------------------------------------
-  vtol_vertex(void) {}
+  vtol_vertex() {}
 
   //---------------------------------------------------------------------------
   //: Destructor
@@ -52,11 +50,11 @@ class vtol_vertex : public vtol_topology_object
 
   // Accessors
 
-  //---------------------------------------------------------------------------
+ private: // has been superceeded by is_a()
   //: Return the topology type
-  //---------------------------------------------------------------------------
-  virtual vtol_topology_object_type topology_type(void) const { return VERTEX; }
+  virtual vtol_topology_object_type topology_type() const { return VERTEX; }
 
+ public:
   //---------------------------------------------------------------------------
   //: create a list of all connected vertices
   //---------------------------------------------------------------------------
@@ -81,22 +79,22 @@ class vtol_vertex : public vtol_topology_object
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a vertex, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_vertex *cast_to_vertex(void) const { return this; }
+  virtual const vtol_vertex *cast_to_vertex() const { return this; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a vertex, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_vertex *cast_to_vertex(void) { return this; }
+  virtual vtol_vertex *cast_to_vertex() { return this; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a 2D vertex, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_vertex_2d *cast_to_vertex_2d(void) const {return 0;}
+  virtual const vtol_vertex_2d *cast_to_vertex_2d() const {return 0;}
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a 2D vertex, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_vertex_2d *cast_to_vertex_2d(void) {return 0;}
+  virtual vtol_vertex_2d *cast_to_vertex_2d() {return 0;}
 
   //***************************************************************************
   // Status report
@@ -135,7 +133,10 @@ class vtol_vertex : public vtol_topology_object
   void describe(vcl_ostream &strm=vcl_cout, int blanking=0) const;
 
   //: Return a platform independent string identifying the class
-  vcl_string is_a() const;
+  virtual vcl_string is_a() const { return vcl_string("vtol_vertex"); }
+
+  //: Return true if the argument matches the string identifying the class or any parent class
+  virtual bool is_class(const vcl_string& cls) const { return cls==is_a(); }
 
   //: have the inherited classes copy the geometry
   virtual void copy_geometry(const vtol_vertex &other)=0;
@@ -144,13 +145,13 @@ class vtol_vertex : public vtol_topology_object
  protected:
   // \warning these should not be used by clients
 
-  virtual vcl_vector<vtol_vertex*> *compute_vertices(void);
-  virtual vcl_vector<vtol_edge*> *compute_edges(void);
-  virtual vcl_vector<vtol_zero_chain*> *compute_zero_chains(void);
-  virtual vcl_vector<vtol_one_chain*> *compute_one_chains(void);
-  virtual vcl_vector<vtol_face*> *compute_faces(void);
-  virtual vcl_vector<vtol_two_chain*> *compute_two_chains(void);
-  virtual vcl_vector<vtol_block*> *compute_blocks(void);
+  virtual vcl_vector<vtol_vertex*> *compute_vertices();
+  virtual vcl_vector<vtol_edge*> *compute_edges();
+  virtual vcl_vector<vtol_zero_chain*> *compute_zero_chains();
+  virtual vcl_vector<vtol_one_chain*> *compute_one_chains();
+  virtual vcl_vector<vtol_face*> *compute_faces();
+  virtual vcl_vector<vtol_two_chain*> *compute_two_chains();
+  virtual vcl_vector<vtol_block*> *compute_blocks();
 };
 
 #endif // vtol_vertex_h_

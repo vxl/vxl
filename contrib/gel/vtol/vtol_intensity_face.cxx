@@ -18,24 +18,13 @@
 //: Constructors
 //
 //----------------------------------------------------------------
+
 //: A constructor from an existing face
 vtol_intensity_face::vtol_intensity_face(vtol_face_2d_sptr const& f)
   : vtol_face_2d(f),
     region_(new vdgl_digital_region())
 {
 }
-
-#if 0
-// Looks like we don't need this -tpk
-//----------------------------------------------------------------
-//: A constructor from a set of 2-d vtol_edge(s) with DigitalCurve geometry
-//    Here the vtol_edge(s) are constructed from edgel curves formed during
-//    region analysis.
-vtol_intensity_face::vtol_intensity_face(vcl_vector<vtol_edge*>* edges)
-  :Face(edges)
-{
-}
-#endif
 
 //: Copy constructor
 vtol_intensity_face::vtol_intensity_face(vtol_intensity_face_sptr const& f)
@@ -54,14 +43,6 @@ vtol_intensity_face::vtol_intensity_face(one_chain_list & one_chains)
 {
 }
 
-
-#if 0
-//: Uses given 2-d vtol_edges (not deep copy) with intensity information from dr.
-vtol_intensity_face::vtol_intensity_face(vcl_vector<vtol_edge_sptr>* edges, vdgl_digital_region& dr)
-  : vtol_face_2d(edges), vdgl_digital_region(dr.Npix(), dr.Xj(), dr.Yj(), dr.Ij())
-{
-}
-#endif
 //: Uses given 2-d vtol_one_chain(s) (not deep copy) with intensity information from dr.
 vtol_intensity_face::vtol_intensity_face(vcl_vector<vtol_one_chain_sptr>* chains, vdgl_digital_region const& dr)
   : vtol_face_2d(*chains), region_(new vdgl_digital_region(dr.Npix(), dr.Xj(), dr.Yj(), dr.Ij()))
@@ -91,15 +72,9 @@ vtol_intensity_face::~vtol_intensity_face()
 //: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_2d* vtol_intensity_face::clone(void) const
+vsol_spatial_object_2d* vtol_intensity_face::clone() const
 {
   return new vtol_intensity_face(vtol_intensity_face_sptr(const_cast<vtol_intensity_face*>(this)));
-}
-
-//: Return a platform independent string identifying the class
-vcl_string vtol_intensity_face::is_a() const
-{
-  return vcl_string("vtol_intensity_face");
 }
 
 //----------------------------------------------------

@@ -59,7 +59,7 @@ class vtol_one_chain : public vtol_chain
   //---------------------------------------------------------------------------
   //: Default constructor
   //---------------------------------------------------------------------------
-  vtol_one_chain(void) { set_cycle(false); }
+  vtol_one_chain() { set_cycle(false); }
 
   //---------------------------------------------------------------------------
   //: Constructor from an array of edges
@@ -93,18 +93,22 @@ class vtol_one_chain : public vtol_chain
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d* clone(void) const;
-  
+  virtual vsol_spatial_object_2d* clone() const;
+
   //: Return a platform independent string identifying the class
-  vcl_string is_a() const;
+  virtual vcl_string is_a() const { return vcl_string("vtol_one_chain"); }
+
+  //: Return true if the argument matches the string identifying the class or any parent class
+  virtual bool is_class(const vcl_string& cls) const
+  { return cls==is_a() || vtol_chain::is_class(cls); }
 
   // Access methods
 
-  //---------------------------------------------------------------------------
+ private: // has been superceeded by is_a()
   //: Return the topology type
-  //---------------------------------------------------------------------------
-  virtual vtol_topology_object_type topology_type(void) const {return ONECHAIN;}
+  virtual vtol_topology_object_type topology_type() const {return ONECHAIN;}
 
+ public:
   virtual signed char direction(vtol_edge const& e) const;
 
   //***************************************************************************
@@ -114,12 +118,12 @@ class vtol_one_chain : public vtol_chain
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an one_chain, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_one_chain *cast_to_one_chain(void) const { return this; }
+  virtual const vtol_one_chain *cast_to_one_chain() const { return this; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an one_chain, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_one_chain *cast_to_one_chain(void) { return this; }
+  virtual vtol_one_chain *cast_to_one_chain() { return this; }
 
   //***************************************************************************
   // Status report
@@ -147,28 +151,28 @@ class vtol_one_chain : public vtol_chain
 
   //: accessors for outside boundary elements
 
-  virtual vertex_list *outside_boundary_vertices(void);
-  virtual zero_chain_list *outside_boundary_zero_chains(void);
-  virtual edge_list *outside_boundary_edges(void);
-  virtual one_chain_list *outside_boundary_one_chains(void);
+  virtual vertex_list *outside_boundary_vertices();
+  virtual zero_chain_list *outside_boundary_zero_chains();
+  virtual edge_list *outside_boundary_edges();
+  virtual one_chain_list *outside_boundary_one_chains();
 
   //: accessors to inferiors and superiors
-  virtual one_chain_list *inferior_one_chains(void);
-  virtual one_chain_list *superior_one_chains(void);
+  virtual one_chain_list *inferior_one_chains();
+  virtual one_chain_list *superior_one_chains();
 
   // Utilities
 
-  virtual void reverse_directions(void);
+  virtual void reverse_directions();
 
   virtual vtol_one_chain * copy_with_arrays(topology_list &verts,
                                             topology_list &edges) const;
 
-  virtual void compute_bounding_box(void) const; //A local implementation
+  virtual void compute_bounding_box() const; //A local implementation
 
   virtual vtol_edge_sptr edge(int i) const;
-  int num_edges(void) const { return numinf(); }
+  int num_edges() const { return numinf(); }
 
-  virtual void determine_edge_directions(void);
+  virtual void determine_edge_directions();
   virtual void add_edge(vtol_edge_sptr const&, bool);
   virtual void add_edge(vtol_edge_2d_sptr const&, bool);
   virtual void remove_edge(vtol_edge_sptr const&, bool);
@@ -192,19 +196,19 @@ class vtol_one_chain : public vtol_chain
   // \warning clients should not use these methods
   // The returned pointers must be deleted after use.
 
-  virtual vcl_vector<vtol_vertex*> *compute_vertices(void);
-  virtual vcl_vector<vtol_edge*> *compute_edges(void);
-  virtual vcl_vector<vtol_zero_chain*> *compute_zero_chains(void);
-  virtual vcl_vector<vtol_one_chain*> *compute_one_chains(void);
-  virtual vcl_vector<vtol_face*> *compute_faces(void);
-  virtual vcl_vector<vtol_two_chain*> *compute_two_chains(void);
-  virtual vcl_vector<vtol_block*> *compute_blocks(void);
+  virtual vcl_vector<vtol_vertex*> *compute_vertices();
+  virtual vcl_vector<vtol_edge*> *compute_edges();
+  virtual vcl_vector<vtol_zero_chain*> *compute_zero_chains();
+  virtual vcl_vector<vtol_one_chain*> *compute_one_chains();
+  virtual vcl_vector<vtol_face*> *compute_faces();
+  virtual vcl_vector<vtol_two_chain*> *compute_two_chains();
+  virtual vcl_vector<vtol_block*> *compute_blocks();
 
  public:
-  virtual vcl_vector<vtol_vertex*> *outside_boundary_compute_vertices(void);
-  virtual vcl_vector<vtol_zero_chain*> *outside_boundary_compute_zero_chains(void);
-  virtual vcl_vector<vtol_edge*> *outside_boundary_compute_edges(void);
-  virtual vcl_vector<vtol_one_chain*> *outside_boundary_compute_one_chains(void);
+  virtual vcl_vector<vtol_vertex*> *outside_boundary_compute_vertices();
+  virtual vcl_vector<vtol_zero_chain*> *outside_boundary_compute_zero_chains();
+  virtual vcl_vector<vtol_edge*> *outside_boundary_compute_edges();
+  virtual vcl_vector<vtol_one_chain*> *outside_boundary_compute_one_chains();
 };
 
 #endif // vtol_one_chain_h_

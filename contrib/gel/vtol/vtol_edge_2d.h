@@ -68,7 +68,7 @@ class vtol_edge_2d : public vtol_edge
   //---------------------------------------------------------------------------
   //: Default constructor. Empty edge. Not a valid edge.
   //---------------------------------------------------------------------------
-  vtol_edge_2d(void) : vtol_edge(), curve_(0) {}
+  vtol_edge_2d() : vtol_edge(), curve_(0) {}
 
   //---------------------------------------------------------------------------
   //: Constructor from the two endpoints `new_v1', `new_v2' and from a curve `new_curve'.
@@ -118,21 +118,25 @@ class vtol_edge_2d : public vtol_edge
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
-  virtual ~vtol_edge_2d();
+  virtual ~vtol_edge_2d() {}
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d* clone(void) const;
-  
+  virtual vsol_spatial_object_2d* clone() const;
+
   //: Return a platform independent string identifying the class
-  vcl_string is_a() const;
+  virtual vcl_string is_a() const { return vcl_string("vtol_edge_2d"); }
+
+  //: Return true if the argument matches the string identifying the class or any parent class
+  virtual bool is_class(const vcl_string& cls) const
+  { return cls==is_a() || vtol_edge::is_class(cls); }
 
   //---------------------------------------------------------------------------
   //: Return the curve associated to `this'
   //---------------------------------------------------------------------------
-  vsol_curve_2d_sptr curve(void) const { return curve_; }
+  vsol_curve_2d_sptr curve() const { return curve_; }
 
   //---------------------------------------------------------------------------
   //: Set the curve with `new_curve'
@@ -154,14 +158,14 @@ class vtol_edge_2d : public vtol_edge
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an edge, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_edge_2d *cast_to_edge_2d(void) const { return this; }
+  virtual const vtol_edge_2d *cast_to_edge_2d() const { return this; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an edge, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_edge_2d *cast_to_edge_2d(void) { return this; }
+  virtual vtol_edge_2d *cast_to_edge_2d() { return this; }
 
-  virtual void compute_bounding_box(void) const; //A local implementation
+  virtual void compute_bounding_box() const; //A local implementation
 
   virtual void print(vcl_ostream &strm=vcl_cout) const;
   virtual void describe(vcl_ostream &strm=vcl_cout,

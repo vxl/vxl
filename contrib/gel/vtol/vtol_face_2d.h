@@ -61,7 +61,7 @@ class vtol_face_2d : public vtol_face
   //---------------------------------------------------------------------------
   //: Default constructor
   //---------------------------------------------------------------------------
-  vtol_face_2d(void);
+  vtol_face_2d() : surface_(0) {}
 
   //---------------------------------------------------------------------------
   //: Constructor
@@ -100,20 +100,24 @@ class vtol_face_2d : public vtol_face
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
-  virtual ~vtol_face_2d();
+  virtual ~vtol_face_2d() {}
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d* clone(void) const;
+  virtual vsol_spatial_object_2d* clone() const;
 
   //: Return a platform independent string identifying the class
-  vcl_string is_a() const;
+  virtual vcl_string is_a() const { return vcl_string("vtol_face_2d"); }
+
+  //: Return true if the argument matches the string identifying the class or any parent class
+  virtual bool is_class(const vcl_string& cls) const
+  { return cls==is_a() || vtol_face::is_class(cls); }
 
   // Accessors
 
-  virtual vsol_region_2d_sptr surface(void) const;
+  virtual vsol_region_2d_sptr surface() const;
   virtual void set_surface(vsol_region_2d_sptr const& newsurf);
 
   //***************************************************************************
@@ -123,17 +127,17 @@ class vtol_face_2d : public vtol_face
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a 2D face, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_face_2d *cast_to_face_2d(void) const { return this; }
+  virtual const vtol_face_2d *cast_to_face_2d() const { return this; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a 2D face, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_face_2d *cast_to_face_2d(void) { return this; }
+  virtual vtol_face_2d *cast_to_face_2d() { return this; }
 
   //---------------------------------------------------------------------------
   //: Copy with no links. Only copy the surface if it exists
   //---------------------------------------------------------------------------
-  virtual vtol_face *shallow_copy_with_no_links(void) const;
+  virtual vtol_face *shallow_copy_with_no_links() const;
 
   virtual bool operator==(const vtol_face_2d &other)const;
   inline bool operator!=(const vtol_face_2d &other)const{return !operator==(other);}

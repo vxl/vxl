@@ -51,10 +51,19 @@ class vtol_intensity_face : public vtol_face_2d
   vdgl_digital_region* region_;
  public:
   //Constructors---------------------------------------------------------------
+  //: A constructor from an existing face
   vtol_intensity_face(vtol_face_2d_sptr const& face);
+#if 0
+  //: A constructor from a set of 2-d vtol_edge(s) with DigitalCurve geometry
+  //  Here the vtol_edge(s) are constructed from edgel curves formed during
+  //  region analysis.
+  vtol_intensity_face(vcl_vector<vtol_edge_sptr>* edges) : Face(edges) {}
+  //: Uses given 2-d vtol_edges (not deep copy) with intensity information from dr.
+  vtol_intensity_face(vcl_vector<vtol_edge_sptr>* edges, vdgl_digital_region& dr)
+  : vtol_face_2d(edges), vdgl_digital_region(dr.Npix(), dr.Xj(), dr.Yj(), dr.Ij()) {}
+#endif
   vtol_intensity_face(vcl_vector<vtol_edge_sptr>* edges);
   vtol_intensity_face(one_chain_list & one_chains);
-  //  vtol_intensity_face(vcl_vector<vtol_edge_sptr>* edges, vdgl_digital_region& dr);
   vtol_intensity_face(vcl_vector<vtol_one_chain_sptr>* chains, vdgl_digital_region const& dr);
   vtol_intensity_face(vtol_intensity_face_sptr const& iface);
   vtol_intensity_face(vtol_face_2d_sptr const& face, int npts, float const* xp, float const* yp,
@@ -65,19 +74,25 @@ class vtol_intensity_face : public vtol_face_2d
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d* clone(void) const;
+  virtual vsol_spatial_object_2d* clone() const;
 
   //: Return a platform independent string identifying the class
-  vcl_string is_a() const;
+  virtual vcl_string is_a() const { return vcl_string("vtol_intensity_face"); }
 
+  //: Return true if the argument matches the string identifying the class or any parent class
+  virtual bool is_class(const vcl_string& cls) const
+  { return cls==is_a() || vtol_face_2d::is_class(cls); }
+
+ private:
   inline vtol_topology_object::vtol_topology_object_type
     GetTopologyType() const { return vtol_topology_object::INTENSITYFACE; }
 
   // MPP 5/9/2003
   // Added API consistent w/ overloaded vtol method
   virtual vtol_topology_object::vtol_topology_object_type
-  topology_type(void) const { return GetTopologyType(); }
+  topology_type() const { return GetTopologyType(); }
 
+ public:
   //***************************************************************************
   // Replaces dynamic_cast<T>
   //***************************************************************************
@@ -85,12 +100,12 @@ class vtol_intensity_face : public vtol_face_2d
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an intensity face, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_intensity_face* cast_to_intensity_face(void) const { return this; }
+  virtual const vtol_intensity_face* cast_to_intensity_face() const { return this; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an intensity face, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_intensity_face* cast_to_intensity_face(void) { return this; }
+  virtual vtol_intensity_face* cast_to_intensity_face() { return this; }
 
   virtual vdgl_digital_region* cast_to_digital_region() const {return region_;}
   virtual vdgl_digital_region* cast_to_digital_region() {return region_;}

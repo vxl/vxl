@@ -15,7 +15,7 @@
 //---------------------------------------------------------------------------
 // Default constructor
 //---------------------------------------------------------------------------
-vtol_vertex_2d::vtol_vertex_2d(void)
+vtol_vertex_2d::vtol_vertex_2d()
 {
   point_=new vsol_point_2d(0,0);
 }
@@ -54,42 +54,13 @@ vtol_vertex_2d::vtol_vertex_2d(vtol_vertex_2d_sptr const& other)
 {
 }
 
-#if 0 // deprecated
-//---------------------------------------------------------------------------
-//: Copy constructor. Copy the point but not the links.  Deprecated.
-//---------------------------------------------------------------------------
-vtol_vertex_2d::vtol_vertex_2d(const vtol_vertex_2d &other)
-{
-  vcl_cerr << "vtol_vertex_2d copy constructor is deprecated; use vtol_vertex_2d_sptr constructor instead\n";
-  point_=new vsol_point_2d(*other.point_);
-}
-#endif
-
-//---------------------------------------------------------------------------
-//: make a copy of the geometry
-//---------------------------------------------------------------------------
-
-
-//---------------------------------------------------------------------------
-// Destructor
-//---------------------------------------------------------------------------
-vtol_vertex_2d::~vtol_vertex_2d()
-{
-}
-
 //---------------------------------------------------------------------------
 //: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_2d* vtol_vertex_2d::clone(void) const
+vsol_spatial_object_2d* vtol_vertex_2d::clone() const
 {
   return new vtol_vertex_2d(vtol_vertex_2d_sptr(const_cast<vtol_vertex_2d*>(this)));
-}
-
-//: Return a platform independent string identifying the class
-vcl_string vtol_vertex_2d::is_a() const
-{
-  return vcl_string("vtol_vertex_2d");
 }
 
 //*****************************************************
@@ -99,7 +70,7 @@ vcl_string vtol_vertex_2d::is_a() const
 //---------------------------------------------------------------------------
 //: Return the point
 //---------------------------------------------------------------------------
-vsol_point_2d_sptr vtol_vertex_2d::point(void) const
+vsol_point_2d_sptr vtol_vertex_2d::point() const
 {
   return point_;
 }
@@ -116,7 +87,7 @@ void vtol_vertex_2d::set_point(vsol_point_2d_sptr const& new_point)
 //---------------------------------------------------------------------------
 //: Return the abscissa of the point
 //---------------------------------------------------------------------------
-double vtol_vertex_2d::x(void) const
+double vtol_vertex_2d::x() const
 {
   return point_->x();
 }
@@ -124,7 +95,7 @@ double vtol_vertex_2d::x(void) const
 //---------------------------------------------------------------------------
 //: Return the ordinate of the point
 //---------------------------------------------------------------------------
-double vtol_vertex_2d::y(void) const
+double vtol_vertex_2d::y() const
 {
   return point_->y();
 }
@@ -315,7 +286,7 @@ bool vtol_vertex_2d::compare_geometry(const vtol_vertex &other) const
   return other.cast_to_vertex_2d() && (*point_)==(*(other.cast_to_vertex_2d()->point()));
 }
 
-void vtol_vertex_2d::compute_bounding_box(void) const
+void vtol_vertex_2d::compute_bounding_box() const
 {
   set_bounding_box(this->x(), this->y());
 }

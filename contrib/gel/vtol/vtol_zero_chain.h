@@ -46,7 +46,7 @@ class vtol_zero_chain : public vtol_topology_object
   //---------------------------------------------------------------------------
   //: Default constructor. Empty zero-chain
   //---------------------------------------------------------------------------
-  vtol_zero_chain(void) {}
+  vtol_zero_chain() {}
 
   //---------------------------------------------------------------------------
   //: Constructor from two vertices (to make edge creation easier)
@@ -87,20 +87,23 @@ class vtol_zero_chain : public vtol_topology_object
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d* clone(void) const;
+  virtual vsol_spatial_object_2d* clone() const;
 
   //: Return a platform independent string identifying the class
-  vcl_string is_a() const;
+  virtual vcl_string is_a() const { return vcl_string("vtol_zero_chain"); }
 
-  //---------------------------------------------------------------------------
+  //: Return true if the argument matches the string identifying the class or any parent class
+  virtual bool is_class(vcl_string const& cls) const { return cls==is_a(); }
+
+ private: // has been superceeded by is_a()
   //: Return the topology type
-  //---------------------------------------------------------------------------
-  virtual vtol_topology_object_type topology_type(void) const{return ZEROCHAIN;}
+  virtual vtol_topology_object_type topology_type() const{return ZEROCHAIN;}
 
+ public:
   //---------------------------------------------------------------------------
   //: Return the first vertex of `this'. If it does not exist, return 0
   //---------------------------------------------------------------------------
-  virtual vtol_vertex_sptr v0(void) const;
+  virtual vtol_vertex_sptr v0() const;
 
   //***************************************************************************
   // Replaces dynamic_cast<T>
@@ -109,12 +112,12 @@ class vtol_zero_chain : public vtol_topology_object
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a zero_chain, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_zero_chain *cast_to_zero_chain(void) const { return this; }
+  virtual const vtol_zero_chain *cast_to_zero_chain() const { return this; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a zero_chain, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_zero_chain *cast_to_zero_chain(void) { return this; }
+  virtual vtol_zero_chain *cast_to_zero_chain() { return this; }
 
   //***************************************************************************
   // Status report
@@ -137,7 +140,7 @@ class vtol_zero_chain : public vtol_topology_object
   //---------------------------------------------------------------------------
   //: Return the length of the zero-chain
   //---------------------------------------------------------------------------
-  int length(void) const { return numinf(); }
+  int length() const { return numinf(); }
 
   //---------------------------------------------------------------------------
   //: Is `this' equal to `other' ?
@@ -152,13 +155,13 @@ class vtol_zero_chain : public vtol_topology_object
 
   //: \warning these should not be used by clients
  protected:
-  virtual vcl_vector<vtol_vertex*> *compute_vertices(void);
-  virtual vcl_vector<vtol_edge*> *compute_edges(void);
-  virtual vcl_vector<vtol_zero_chain*> *compute_zero_chains(void);
-  virtual vcl_vector<vtol_one_chain*> *compute_one_chains(void);
-  virtual vcl_vector<vtol_face*> *compute_faces(void);
-  virtual vcl_vector<vtol_two_chain*> *compute_two_chains(void);
-  virtual vcl_vector<vtol_block*> *compute_blocks(void);
+  virtual vcl_vector<vtol_vertex*> *compute_vertices();
+  virtual vcl_vector<vtol_edge*> *compute_edges();
+  virtual vcl_vector<vtol_zero_chain*> *compute_zero_chains();
+  virtual vcl_vector<vtol_one_chain*> *compute_one_chains();
+  virtual vcl_vector<vtol_face*> *compute_faces();
+  virtual vcl_vector<vtol_two_chain*> *compute_two_chains();
+  virtual vcl_vector<vtol_block*> *compute_blocks();
 };
 
 #endif // vtol_zero_chain_h_

@@ -53,7 +53,7 @@ class vtol_two_chain : public vtol_chain
   //---------------------------------------------------------------------------
   //: Default constructor
   //---------------------------------------------------------------------------
-  vtol_two_chain(void) { is_cycle_=false; }
+  vtol_two_chain() { is_cycle_=false; }
 
   //---------------------------------------------------------------------------
   //: Constructor
@@ -91,20 +91,24 @@ class vtol_two_chain : public vtol_chain
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d* clone(void) const;
+  virtual vsol_spatial_object_2d* clone() const;
 
   //: Return a platform independent string identifying the class
-  vcl_string is_a() const;
+  virtual vcl_string is_a() const { return vcl_string("vtol_two_chain"); }
+
+  //: Return true if the argument matches the string identifying the class or any parent class
+  virtual bool is_class(const vcl_string& cls) const
+  { return cls==is_a() || vtol_chain::is_class(cls); }
 
   virtual vtol_two_chain * copy_with_arrays(topology_list &verts,
                                             topology_list &edges) const;
   // Accessors
 
-  //---------------------------------------------------------------------------
+ private: // has been superceeded by is_a()
   //: Return the topology type
-  //---------------------------------------------------------------------------
-  virtual vtol_topology_object_type topology_type(void) const {return TWOCHAIN;}
+  virtual vtol_topology_object_type topology_type() const {return TWOCHAIN;}
 
+ public:
   //: get the direction of the face
   signed char direction(vtol_face const& f) const;
 
@@ -113,12 +117,12 @@ class vtol_two_chain : public vtol_chain
   //---------------------------------------------------------------------------
   //: Shallow copy with no links
   //---------------------------------------------------------------------------
-  virtual vtol_topology_object *shallow_copy_with_no_links(void) const;
+  virtual vtol_topology_object *shallow_copy_with_no_links() const;
 
   virtual void add_superiors_from_parent(topology_list &);
   virtual void remove_superiors_of_parent(topology_list &);
-  virtual void remove_superiors(void);
-  virtual void update_superior_list_p_from_hierarchy_parent(void);
+  virtual void remove_superiors();
+  virtual void update_superior_list_p_from_hierarchy_parent();
 
   virtual void add_face(vtol_face_sptr const&, signed char);
   virtual void remove_face(vtol_face_sptr const&);
@@ -134,12 +138,12 @@ class vtol_two_chain : public vtol_chain
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a two_chain, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_two_chain *cast_to_two_chain(void) const { return this; }
+  virtual const vtol_two_chain *cast_to_two_chain() const { return this; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a two_chain, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_two_chain *cast_to_two_chain(void) { return this; }
+  virtual vtol_two_chain *cast_to_two_chain() { return this; }
 
   //***************************************************************************
   // Status report
@@ -166,41 +170,41 @@ class vtol_two_chain : public vtol_chain
 
   // network access methods
 
-  virtual vertex_list *outside_boundary_vertices(void);
-  virtual zero_chain_list *outside_boundary_zero_chains(void);
-  virtual edge_list *outside_boundary_edges(void);
-  virtual one_chain_list *outside_boundary_one_chains(void);
-  virtual face_list *outside_boundary_faces(void);
-  virtual two_chain_list *outside_boundary_two_chains(void);
+  virtual vertex_list *outside_boundary_vertices();
+  virtual zero_chain_list *outside_boundary_zero_chains();
+  virtual edge_list *outside_boundary_edges();
+  virtual one_chain_list *outside_boundary_one_chains();
+  virtual face_list *outside_boundary_faces();
+  virtual two_chain_list *outside_boundary_two_chains();
 
   // The returned pointers must be deleted after use.
-  virtual two_chain_list *inferior_two_chains(void);
+  virtual two_chain_list *inferior_two_chains();
   // The returned pointers must be deleted after use.
-  virtual two_chain_list *superior_two_chains(void);
+  virtual two_chain_list *superior_two_chains();
 
  protected:
   // \warning these methods should not be used by clients
   // The returned pointers must be deleted after use.
 
-  virtual vcl_vector<vtol_vertex*> *compute_vertices(void);
-  virtual vcl_vector<vtol_edge*> *compute_edges(void);
-  virtual vcl_vector<vtol_zero_chain*> *compute_zero_chains(void);
-  virtual vcl_vector<vtol_one_chain*> *compute_one_chains(void);
-  virtual vcl_vector<vtol_face*> *compute_faces(void);
-  virtual vcl_vector<vtol_two_chain*> *compute_two_chains(void);
-  virtual vcl_vector<vtol_block*> *compute_blocks(void);
+  virtual vcl_vector<vtol_vertex*> *compute_vertices();
+  virtual vcl_vector<vtol_edge*> *compute_edges();
+  virtual vcl_vector<vtol_zero_chain*> *compute_zero_chains();
+  virtual vcl_vector<vtol_one_chain*> *compute_one_chains();
+  virtual vcl_vector<vtol_face*> *compute_faces();
+  virtual vcl_vector<vtol_two_chain*> *compute_two_chains();
+  virtual vcl_vector<vtol_block*> *compute_blocks();
 
  public:
-  virtual vcl_vector<vtol_vertex*> *outside_boundary_compute_vertices(void);
-  virtual vcl_vector<vtol_zero_chain*> *outside_boundary_compute_zero_chains(void);
-  virtual vcl_vector<vtol_edge*> *outside_boundary_compute_edges(void);
-  virtual vcl_vector<vtol_one_chain*> *outside_boundary_compute_one_chains(void);
-  virtual vcl_vector<vtol_face*> *outside_boundary_compute_faces(void);
-  virtual vcl_vector<vtol_two_chain*> *outside_boundary_compute_two_chains(void);
+  virtual vcl_vector<vtol_vertex*> *outside_boundary_compute_vertices();
+  virtual vcl_vector<vtol_zero_chain*> *outside_boundary_compute_zero_chains();
+  virtual vcl_vector<vtol_edge*> *outside_boundary_compute_edges();
+  virtual vcl_vector<vtol_one_chain*> *outside_boundary_compute_one_chains();
+  virtual vcl_vector<vtol_face*> *outside_boundary_compute_faces();
+  virtual vcl_vector<vtol_two_chain*> *outside_boundary_compute_two_chains();
 
-  int num_faces(void) const { return numinf(); }
+  int num_faces() const { return numinf(); }
 
-  virtual void correct_chain_directions(void);
+  virtual void correct_chain_directions();
 
   virtual bool operator==(vtol_two_chain const& other) const;
   inline bool operator!=(const vtol_two_chain &other)const{return !operator==(other);}

@@ -16,18 +16,6 @@
 // Initialization
 //***************************************************************************
 
-#if 0
-//---------------------------------------------------------------------------
-//: Copy constructor. Copy the point but not the links
-//---------------------------------------------------------------------------
-vtol_vertex::vtol_vertex(const vtol_vertex &other)
-{
-  copy_geometry(other);
-
-  //point_=new vsol_point(*other.point_);
-}
-#endif
-
 //---------------------------------------------------------------------------
 // Destructor
 //---------------------------------------------------------------------------
@@ -36,61 +24,50 @@ vtol_vertex::~vtol_vertex()
   unlink_all_inferiors();
 }
 
-#if 0
-//---------------------------------------------------------------------------
-//: Clone `this': creation of a new object and initialization
-// See Prototype pattern
-//---------------------------------------------------------------------------
- vsol_spatial_object_2d_sptr vtol_vertex::clone(void) const
-{
-  return new vtol_vertex(this);
-}
-#endif
-
 //******************************************************
 //*
 //*    Accessor Functions
 //*
 
 //: Returns a list of Vertices which only contains a pointer to itself.
-vcl_vector<vtol_vertex*> *vtol_vertex::compute_vertices(void)
+vcl_vector<vtol_vertex*> *vtol_vertex::compute_vertices()
 {
   LIST_SELF(vtol_vertex);
 }
 
 //: Returns a list of ZeroChains that contain the vertex. This is the vertex superiors list.
-vcl_vector<vtol_zero_chain*>* vtol_vertex::compute_zero_chains(void)
+vcl_vector<vtol_zero_chain*>* vtol_vertex::compute_zero_chains()
 {
   SEL_SUP(vtol_zero_chain,compute_zero_chains);
 }
 
 
 //: Returns a list of Edges which contain the vertex.
- vcl_vector<vtol_edge*>* vtol_vertex::compute_edges(void)
+ vcl_vector<vtol_edge*>* vtol_vertex::compute_edges()
 {
   SEL_SUP(vtol_edge,compute_edges);
 }
 
 //: Returns a list of OneChains which contain the vertex.
-vcl_vector<vtol_one_chain*>* vtol_vertex::compute_one_chains(void)
+vcl_vector<vtol_one_chain*>* vtol_vertex::compute_one_chains()
 {
   SEL_SUP(vtol_one_chain,compute_one_chains);
 }
 
 //: Returns a list of Faces which contain the vertex.
- vcl_vector<vtol_face*>* vtol_vertex::compute_faces(void)
+ vcl_vector<vtol_face*>* vtol_vertex::compute_faces()
 {
   SEL_SUP(vtol_face,compute_faces);
 }
 
 //: Returns a list of TwoChains which contain the vertex.
-  vcl_vector<vtol_two_chain*>* vtol_vertex::compute_two_chains(void)
+  vcl_vector<vtol_two_chain*>* vtol_vertex::compute_two_chains()
 {
   SEL_SUP(vtol_two_chain,compute_two_chains);
 }
 
 //: Returns a list of Blocks which contain the vertex.
-vcl_vector<vtol_block*>* vtol_vertex::compute_blocks(void)
+vcl_vector<vtol_block*>* vtol_vertex::compute_blocks()
 {
   SEL_SUP(vtol_block,compute_blocks);
 }
@@ -118,13 +95,6 @@ void vtol_vertex::describe(vcl_ostream &strm,
   describe_superiors(strm, blanking);
 }
 
-
-//: Return a platform independent string identifying the class
-vcl_string vtol_vertex::is_a() const
-{
-  return vcl_string("vtol_vertex");
-}
-
 //******************************************************
 //*
 //*    Implementor Functions
@@ -140,10 +110,10 @@ bool vtol_vertex::is_connected(const vtol_vertex &v2)
   edge_list::const_iterator i;
   for (i=vertedges->begin();i!=vertedges->end();++i)
     if ((*i)->is_endpoint(v2))
-      {
-        delete vertedges;
-        return true;
-      }
+    {
+      delete vertedges;
+      return true;
+    }
   delete vertedges;
   return false;
 }
@@ -165,13 +135,13 @@ bool vtol_vertex::is_endpoint(const vtol_edge &edg)
 vtol_vertex &vtol_vertex::operator=(const vtol_vertex &other)
 {
   if (this!=&other)
-    {
-      this->copy_geometry(other);
-      // point_->set_x(other.point_->x());
-      // point_->set_y(other.point_->y());
+  {
+    this->copy_geometry(other);
+    // point_->set_x(other.point_->x());
+    // point_->set_y(other.point_->y());
 
-      touch();
-    }
+    touch();
+  }
   return *this;
 }
 
@@ -214,25 +184,25 @@ void vtol_vertex::explore_vertex(vertex_list &verts)
 
   edge_list *e_list=this->edges();
   for (edge_list::iterator i=e_list->begin();i!=e_list->end();++i)
+  {
+    vtol_edge_sptr e=*i;
+    vtol_vertex_sptr vv;
+    if (e->v1()==this)
+      vv=e->v2();
+    else if (e->v2()==this)
+      vv=e->v1();
+    else
     {
-      vtol_edge_sptr e=*i;
-      vtol_vertex_sptr vv;
-      if (e->v1()==this)
-        vv=e->v2();
-      else if (e->v2()==this)
-        vv=e->v1();
-      else
-        {
-          vcl_cerr << "Explore vtol_vertex: shouldn't get this\n";
-          assert(false);
-          continue;
-        }
-
-      if (vcl_find(verts.begin(),verts.end(),vv)==verts.end())
-        {
-          verts.push_back(vv);
-          vv->explore_vertex(verts);
-        }
+      vcl_cerr << "Explore vtol_vertex: shouldn't get this\n";
+      assert(false);
+      continue;
     }
+
+    if (vcl_find(verts.begin(),verts.end(),vv)==verts.end())
+    {
+      verts.push_back(vv);
+      vv->explore_vertex(verts);
+    }
+  }
   delete e_list;
 }

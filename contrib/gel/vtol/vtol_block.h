@@ -44,7 +44,7 @@ class vtol_block : public vtol_topology_object
   //---------------------------------------------------------------------------
   //: Default constructor
   //---------------------------------------------------------------------------
-  vtol_block(void) {}
+  vtol_block() {}
 
   //---------------------------------------------------------------------------
   //: Constructor from a two-chain (inferior)
@@ -85,19 +85,22 @@ class vtol_block : public vtol_topology_object
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d* clone(void) const;
+  virtual vsol_spatial_object_2d* clone() const;
 
   //: Return a platform independent string identifying the class
-  vcl_string is_a() const;
+  virtual vcl_string is_a() const { return vcl_string("vtol_block"); }
+
+  //: Return true if the argument matches the string identifying the class or any parent class
+  virtual bool is_class(const vcl_string& cls) const { return cls==is_a(); }
 
   // Accessors
 
-  //---------------------------------------------------------------------------
+ private: // has been superceeded by is_a()
   //: Return the topology type
-  //---------------------------------------------------------------------------
-  virtual vtol_topology_object_type topology_type(void) const { return BLOCK; }
+  virtual vtol_topology_object_type topology_type() const { return BLOCK; }
 
-  virtual vtol_two_chain_sptr get_boundary_cycle(void);
+ public:
+  virtual vtol_two_chain_sptr get_boundary_cycle();
 
   //***************************************************************************
   // Replaces dynamic_cast<T>
@@ -106,12 +109,12 @@ class vtol_block : public vtol_topology_object
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a block, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_block *cast_to_block(void) const { return this; }
+  virtual const vtol_block *cast_to_block() const { return this; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a block, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_block *cast_to_block(void) { return this; }
+  virtual vtol_block *cast_to_block() { return this; }
 
   //***************************************************************************
   // Status report
@@ -127,39 +130,39 @@ class vtol_block : public vtol_topology_object
   { return inferior->cast_to_two_chain()!=0; }
   bool valid_inferior_type(vtol_two_chain_sptr const& ) const { return true; }
 
-  virtual vertex_list *outside_boundary_vertices(void);
-  virtual zero_chain_list *outside_boundary_zero_chains(void);
-  virtual edge_list *outside_boundary_edges(void);
-  virtual one_chain_list *outside_boundary_one_chains(void);
-  virtual face_list *outside_boundary_faces(void);
-  virtual two_chain_list *outside_boundary_two_chains(void);
+  virtual vertex_list *outside_boundary_vertices();
+  virtual zero_chain_list *outside_boundary_zero_chains();
+  virtual edge_list *outside_boundary_edges();
+  virtual one_chain_list *outside_boundary_one_chains();
+  virtual face_list *outside_boundary_faces();
+  virtual two_chain_list *outside_boundary_two_chains();
 
  protected:
   // \warning these methods should not be used by clients
   // The returned pointers must be deleted after use.
 
-  virtual vcl_vector<vtol_vertex *> *compute_vertices(void);
-  virtual vcl_vector<vtol_edge *> *compute_edges(void);
-  virtual vcl_vector<vtol_zero_chain *> *compute_zero_chains(void);
-  virtual vcl_vector<vtol_one_chain *> *compute_one_chains(void);
-  virtual vcl_vector<vtol_face *> *compute_faces(void);
-  virtual vcl_vector<vtol_two_chain *> *compute_two_chains(void);
-  virtual vcl_vector<vtol_block *> *compute_blocks(void);
+  virtual vcl_vector<vtol_vertex *> *compute_vertices();
+  virtual vcl_vector<vtol_edge *> *compute_edges();
+  virtual vcl_vector<vtol_zero_chain *> *compute_zero_chains();
+  virtual vcl_vector<vtol_one_chain *> *compute_one_chains();
+  virtual vcl_vector<vtol_face *> *compute_faces();
+  virtual vcl_vector<vtol_two_chain *> *compute_two_chains();
+  virtual vcl_vector<vtol_block *> *compute_blocks();
 
-  virtual vcl_vector<vtol_vertex *> *outside_boundary_compute_vertices(void);
-  virtual vcl_vector<vtol_zero_chain *> *outside_boundary_compute_zero_chains(void);
-  virtual vcl_vector<vtol_edge *> *outside_boundary_compute_edges(void);
-  virtual vcl_vector<vtol_one_chain *> *outside_boundary_compute_one_chains(void);
-  virtual vcl_vector<vtol_face *> *outside_boundary_compute_faces(void);
-  virtual vcl_vector<vtol_two_chain *> *outside_boundary_compute_two_chains(void);
+  virtual vcl_vector<vtol_vertex *> *outside_boundary_compute_vertices();
+  virtual vcl_vector<vtol_zero_chain *> *outside_boundary_compute_zero_chains();
+  virtual vcl_vector<vtol_edge *> *outside_boundary_compute_edges();
+  virtual vcl_vector<vtol_one_chain *> *outside_boundary_compute_one_chains();
+  virtual vcl_vector<vtol_face *> *outside_boundary_compute_faces();
+  virtual vcl_vector<vtol_two_chain *> *outside_boundary_compute_two_chains();
 
  public:
-  virtual two_chain_list *hole_cycles(void) const;
+  virtual two_chain_list *hole_cycles() const;
 
   //: Utility and Editing Functions
   virtual bool add_hole_cycle(vtol_two_chain_sptr new_hole);
 
-  //  virtual void update(void);
+  //  virtual void update();
   virtual bool operator==(const vtol_block &other) const;
   inline bool operator!=(const vtol_block &other)const{return !operator==(other);}
   virtual bool operator==(const vsol_spatial_object_2d& obj) const; // virtual of vsol_spatial_object_2d

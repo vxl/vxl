@@ -109,45 +109,6 @@ vtol_one_chain::vtol_one_chain(vtol_one_chain_sptr const& other)
   delete verts;
 }
 
-#if 0 // deprecated
-//---------------------------------------------------------------------------
-//: Copy constructor.  Deep copy.  Deprecated.
-//---------------------------------------------------------------------------
-vtol_one_chain::vtol_one_chain(vtol_one_chain const& other)
-{
-  vcl_cerr << "vtol_one_chain copy constructor is deprecated; use vtol_one_chain_sptr constructor instead\n";
-  vtol_one_chain *el=const_cast<vtol_one_chain*>(&other); // const violation
-  vertex_list *verts=el->vertices();
-  topology_list newverts(verts->size());
-
-  int i=0;
-  for (vertex_list::iterator v=verts->begin();v!=verts->end();++v,++i)
-  {
-    vtol_vertex_sptr ve=*v;
-    newverts[i]=ve->clone()->cast_to_topology_object();
-    ve->set_id(i);
-  }
-
-  vcl_vector<signed char>::iterator dir=el->directions_.begin();
-  topology_list::iterator inf=el->inferiors()->begin();
-  for (; dir!=el->directions_.end(); ++dir,++inf)
-  {
-    vtol_edge_sptr e=(*inf)->cast_to_edge();
-
-    vtol_edge_sptr newedge = newverts[e->v1()->get_id()]->cast_to_vertex()->new_edge(
-                             newverts[e->v2()->get_id()]->cast_to_vertex());
-    link_inferior(newedge);
-    directions_.push_back(*dir);
-  }
-  set_cycle(el->is_cycle());
-  const chain_list *hierarchy_infs=el->chain_inferiors();
-
-  for (chain_list::const_iterator h=hierarchy_infs->begin();h!=hierarchy_infs->end();++h)
-    link_chain_inferior((*h)->clone()->cast_to_topology_object()->cast_to_one_chain());
-  delete verts;
-}
-#endif // 0
-
 //---------------------------------------------------------------------------
 // Destructor
 //---------------------------------------------------------------------------
@@ -161,16 +122,9 @@ vtol_one_chain::~vtol_one_chain()
 //: Clone `this': creation of a new object and initialization.
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_2d* vtol_one_chain::clone(void) const
+vsol_spatial_object_2d* vtol_one_chain::clone() const
 {
   return new vtol_one_chain(vtol_one_chain_sptr(const_cast<vtol_one_chain*>(this)));
-}
-
-
-//: Return a platform independent string identifying the class
-vcl_string vtol_one_chain::is_a() const
-{
-  return vcl_string("vtol_one_chain");
 }
 
 vtol_one_chain *
@@ -239,7 +193,7 @@ signed char vtol_one_chain::direction(vtol_edge const &e) const
 //: Get the outside boundary vertices
 //---------------------------------------------------------------------------
 vcl_vector<vtol_vertex*> *
-vtol_one_chain::outside_boundary_compute_vertices(void)
+vtol_one_chain::outside_boundary_compute_vertices()
 {
   vcl_vector<vtol_vertex*> *result=new vcl_vector<vtol_vertex*>;
 
@@ -265,7 +219,7 @@ vtol_one_chain::outside_boundary_compute_vertices(void)
 //---------------------------------------------------------------------------
 //: Get the outside boundary vertices
 //---------------------------------------------------------------------------
-vertex_list *vtol_one_chain::outside_boundary_vertices(void)
+vertex_list *vtol_one_chain::outside_boundary_vertices()
 {
   vcl_vector<vtol_vertex*> *tmp_list=outside_boundary_compute_vertices();
   vertex_list *result=new vertex_list;
@@ -280,7 +234,7 @@ vertex_list *vtol_one_chain::outside_boundary_vertices(void)
 //---------------------------------------------------------------------------
 //: Get the vertices of this object
 //---------------------------------------------------------------------------
-vcl_vector<vtol_vertex*> *vtol_one_chain::compute_vertices(void)
+vcl_vector<vtol_vertex*> *vtol_one_chain::compute_vertices()
 {
   // We must collect vertices from subchains as well as
   // from direct Inferiors...so this function only has
@@ -298,7 +252,7 @@ vcl_vector<vtol_vertex*> *vtol_one_chain::compute_vertices(void)
 //: Get the outside boundary zero chains
 //---------------------------------------------------------------------------
 vcl_vector<vtol_zero_chain *> *
-vtol_one_chain::outside_boundary_compute_zero_chains(void)
+vtol_one_chain::outside_boundary_compute_zero_chains()
 {
   SEL_INF(vtol_zero_chain,compute_zero_chains);
 }
@@ -306,7 +260,7 @@ vtol_one_chain::outside_boundary_compute_zero_chains(void)
 //---------------------------------------------------------------------------
 //: Get the outside boundary zero chains
 //---------------------------------------------------------------------------
-zero_chain_list *vtol_one_chain::outside_boundary_zero_chains(void)
+zero_chain_list *vtol_one_chain::outside_boundary_zero_chains()
 {
   zero_chain_list *result=new zero_chain_list;
   vcl_vector<vtol_zero_chain *> *ptr_list=outside_boundary_compute_zero_chains();
@@ -325,7 +279,7 @@ zero_chain_list *vtol_one_chain::outside_boundary_zero_chains(void)
 //---------------------------------------------------------------------------
 //: Get the zero chains of this object
 //---------------------------------------------------------------------------
-vcl_vector<vtol_zero_chain*> *vtol_one_chain::compute_zero_chains(void)
+vcl_vector<vtol_zero_chain*> *vtol_one_chain::compute_zero_chains()
 {
   vcl_vector<vtol_zero_chain*> *zchs;
   zchs=outside_boundary_compute_zero_chains();
@@ -338,7 +292,7 @@ vcl_vector<vtol_zero_chain*> *vtol_one_chain::compute_zero_chains(void)
 //---------------------------------------------------------------------------
 //: Get the outside boundary edges
 //---------------------------------------------------------------------------
-vcl_vector<vtol_edge*> *vtol_one_chain::outside_boundary_compute_edges(void)
+vcl_vector<vtol_edge*> *vtol_one_chain::outside_boundary_compute_edges()
 {
   COPY_INF(edge);
 }
@@ -347,7 +301,7 @@ vcl_vector<vtol_edge*> *vtol_one_chain::outside_boundary_compute_edges(void)
 //---------------------------------------------------------------------------
 //: Get the outside boundary edges
 //---------------------------------------------------------------------------
-edge_list *vtol_one_chain::outside_boundary_edges(void)
+edge_list *vtol_one_chain::outside_boundary_edges()
 {
   edge_list *new_ref_list = new edge_list;
   vcl_vector<vtol_edge*>* ptr_list = this->outside_boundary_compute_edges();
@@ -363,7 +317,7 @@ edge_list *vtol_one_chain::outside_boundary_edges(void)
 //---------------------------------------------------------------------------
 //: Get the edges
 //---------------------------------------------------------------------------
-vcl_vector<vtol_edge*> *vtol_one_chain::compute_edges(void)
+vcl_vector<vtol_edge*> *vtol_one_chain::compute_edges()
 {
   vcl_vector<vtol_edge*> *edges;
   edges=outside_boundary_compute_edges();
@@ -376,7 +330,7 @@ vcl_vector<vtol_edge*> *vtol_one_chain::compute_edges(void)
 //---------------------------------------------------------------------------
 //: Get the one chains
 //---------------------------------------------------------------------------
-vcl_vector<vtol_one_chain*> *vtol_one_chain::compute_one_chains(void)
+vcl_vector<vtol_one_chain*> *vtol_one_chain::compute_one_chains()
 {
   vcl_vector<vtol_one_chain*> *result=outside_boundary_compute_one_chains();
 
@@ -403,7 +357,7 @@ vcl_vector<vtol_one_chain*> *vtol_one_chain::compute_one_chains(void)
 //---------------------------------------------------------------------------
 //: Get the inferior one chains
 //---------------------------------------------------------------------------
-one_chain_list *vtol_one_chain::inferior_one_chains(void)
+one_chain_list *vtol_one_chain::inferior_one_chains()
 {
   one_chain_list *result=new one_chain_list;
 
@@ -416,7 +370,7 @@ one_chain_list *vtol_one_chain::inferior_one_chains(void)
 //---------------------------------------------------------------------------
 //: Get the superior one chains
 //---------------------------------------------------------------------------
-one_chain_list *vtol_one_chain::superior_one_chains(void)
+one_chain_list *vtol_one_chain::superior_one_chains()
 {
   one_chain_list *result=new one_chain_list;
 
@@ -430,7 +384,7 @@ one_chain_list *vtol_one_chain::superior_one_chains(void)
 //---------------------------------------------------------------------------
 //: Get the outside boundary one chains
 //---------------------------------------------------------------------------
-one_chain_list *vtol_one_chain::outside_boundary_one_chains(void)
+one_chain_list *vtol_one_chain::outside_boundary_one_chains()
 {
   vcl_vector<vtol_one_chain*>* ptr_list= outside_boundary_compute_one_chains();
   one_chain_list *ref_list= new one_chain_list;
@@ -448,7 +402,7 @@ one_chain_list *vtol_one_chain::outside_boundary_one_chains(void)
 //---------------------------------------------------------------------------
 //: Get the outside boundary one chains
 //---------------------------------------------------------------------------
-vcl_vector<vtol_one_chain*> *vtol_one_chain::outside_boundary_compute_one_chains(void)
+vcl_vector<vtol_one_chain*> *vtol_one_chain::outside_boundary_compute_one_chains()
 {
   LIST_SELF(vtol_one_chain);
 }
@@ -456,7 +410,7 @@ vcl_vector<vtol_one_chain*> *vtol_one_chain::outside_boundary_compute_one_chains
 //---------------------------------------------------------------------------
 //: Get the faces
 //---------------------------------------------------------------------------
-vcl_vector<vtol_face*> *vtol_one_chain::compute_faces(void)
+vcl_vector<vtol_face*> *vtol_one_chain::compute_faces()
 {
   if (is_sub_chain())
   {
@@ -483,7 +437,7 @@ vcl_vector<vtol_face*> *vtol_one_chain::compute_faces(void)
 //---------------------------------------------------------------------------
 //: Get the two chains
 //---------------------------------------------------------------------------
-vcl_vector<vtol_two_chain*> *vtol_one_chain::compute_two_chains(void)
+vcl_vector<vtol_two_chain*> *vtol_one_chain::compute_two_chains()
 {
   if (is_sub_chain())
   {
@@ -510,7 +464,7 @@ vcl_vector<vtol_two_chain*> *vtol_one_chain::compute_two_chains(void)
 //---------------------------------------------------------------------------
 //: Get the blocks
 //---------------------------------------------------------------------------
-vcl_vector<vtol_block*> *vtol_one_chain::compute_blocks(void)
+vcl_vector<vtol_block*> *vtol_one_chain::compute_blocks()
 {
   if (is_sub_chain())
   {
@@ -540,7 +494,7 @@ vcl_vector<vtol_block*> *vtol_one_chain::compute_blocks(void)
 //    dimension.
 //---------------------------------------------------------------------------
 
-void vtol_one_chain::compute_bounding_box(void) const
+void vtol_one_chain::compute_bounding_box() const
 {
   if (!this->bounding_box_)
   {
@@ -576,7 +530,7 @@ void vtol_one_chain::compute_bounding_box(void) const
 //: Redetermining the directions of all edges in the onechain.
 // Require: is_cycle()
 //---------------------------------------------------------------------------
-void vtol_one_chain::determine_edge_directions(void)
+void vtol_one_chain::determine_edge_directions()
 {
   // require
   assert(is_cycle());
@@ -801,7 +755,7 @@ bool vtol_one_chain::operator==(vtol_one_chain const &other) const
 //---------------------------------------------------------------------------
 //: Reverse the direction of the one chain
 //---------------------------------------------------------------------------
-void vtol_one_chain::reverse_directions(void)
+void vtol_one_chain::reverse_directions()
 {
   // This function reverses the direction
   // array in the list.
