@@ -9,7 +9,7 @@
 // \file
 // \author fsm@robots.ox.ac.uk
 
-//: Abstract base class for iterating over the pixels in a region of image.
+//: Abstract base class for iterating over the pixels in a pseudo-convex region of an image.
 struct vgl_region_scan_iterator
 {
   inline vgl_region_scan_iterator() { }
@@ -24,14 +24,23 @@ struct vgl_region_scan_iterator
   //  Returns false if there are no more scan lines.
   virtual bool next() =0;
 
-  //: y-coordinate of the current scan line
+  //: y-coordinate of the current scan line.
   virtual int  scany() const =0;
 
   //: Returns starting x-value of the current scan line.
   virtual int  startx() const =0;
 
-  //: Returns starting x-value of the current scan line.
+  //: Returns ending x-value of the current scan line.
   virtual int  endx() const =0;
+
+  // Utility functions
+ 
+  //: Number of image points (= integer grid points) inside the region
+  inline int count() {
+    int cnt = 0; reset();
+    while(next()) { int n = endx() - startx() + 1; if (n > 0) cnt += n; }
+    return cnt;
+  }
 };
 
 #endif // vgl_region_scan_iterator_h_
