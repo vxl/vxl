@@ -360,7 +360,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vsl"=..\vxl\vsl\vsl.dsp - Package Owner=<4>
+Project: "osl"=.\osl\osl.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -411,7 +411,7 @@ Package=<4>
     Project_Dep_Name vpl
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name vsl
+    Project_Dep_Name osl
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name netlib
@@ -585,7 +585,7 @@ Package=<4>
     Project_Dep_Name vrml
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name vsl
+    Project_Dep_Name osl
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vcgl
