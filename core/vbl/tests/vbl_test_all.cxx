@@ -1,12 +1,12 @@
 /*
   fsm@robots.ox.ac.uk
 */
+#include <vbl/vbl_bounding_box.h>
 #include <vbl/vbl_fwd.h>
 #include <vbl/vbl_array_1d.h>
 #include <vbl/vbl_array_2d.h>
 #include <vbl/vbl_array_3d.h>
 #include <vbl/vbl_bool_ostream.h>
-#include <vbl/vbl_bounding_box.h>
 #include <vbl/vbl_protection_traits.h>
 #include <vbl/vbl_qsort.h>
 #include <vbl/vbl_quadruple.h>
