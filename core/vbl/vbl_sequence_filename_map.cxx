@@ -11,13 +11,16 @@
 
 #include "vbl_sequence_filename_map.h"
 
-#include <dirent.h>
+#define xxx 0
 
+#include <vcl_cstdlib.h>
 #include <vcl_iostream.h>
+#include <vcl_string.h>
 
 #include <vbl/vbl_sprintf.h>
 #include <vbl/vbl_file.h>
 #include <vbl/vbl_reg_exp.h>
+#include <vbl/vbl_file_iterator.h>
 
 static bool debug = 1;
 
@@ -157,35 +160,31 @@ void vbl_sequence_filename_map::parse()
   if (image_dir_ == "" && image_extension_ == "") {
     bool found_match = false;
     {    
-      DIR* dir_handle = opendir("./");
-      dirent* de;
-      while (!found_match && (de = readdir(dir_handle)) != NULL)
+      vbl_file_iterator fn("./*");
+      for(;!found_match && fn; ++fn)
 	for (int i=0; i < num_dir_ext_pairs && !found_match; ++i) 
-	  if (filter_dirent(de->d_name, dir_ext_pairs[i].extension)) {
+	  if (filter_dirent(fn(), dir_ext_pairs[i].extension)) {
 	    image_dir_ = "./";
 	    image_extension_ = dir_ext_pairs[i].extension;
 	    found_match = true;
 	  }
-      closedir(dir_handle);
     }
     if (!found_match)
       for (int i=0; i < num_dir_ext_pairs && !found_match; ++i) {
-	DIR* dir_handle = opendir(dir_ext_pairs[i].image_dir);
-	if (dir_handle) {
-	  dirent* de;
-	  while (!found_match && (de = readdir(dir_handle)) != NULL)
-	    if (filter_dirent(de->d_name, dir_ext_pairs[i].extension)) {
+	vcl_string glob(dir_ext_pairs[i].image_dir);
+	glob += "/*";
+        vbl_file_iterator fn(glob);
+	for(;!found_match && fn;++fn)
+	    if (filter_dirent(fn(), dir_ext_pairs[i].extension)) {
 	      image_dir_ = dir_ext_pairs[i].image_dir;
 	      image_extension_ = dir_ext_pairs[i].extension;
 	      found_match = true;
 	    } 
-	  closedir(dir_handle);
-	}
       }
     if (!found_match) {
       vcl_cerr << __FILE__ << " : Can't find files matching " << basename_ << index_format_ << " in common locations with common format!" << vcl_endl;
-      abort();
-    }      
+      vcl_abort();
+    }
   } 
 
   // Only image dir is blank :
@@ -195,45 +194,39 @@ void vbl_sequence_filename_map::parse()
   else if (image_dir_ == "") {
     bool found_match = false;
     {
-      DIR* dir_handle = opendir("./");
-      dirent* de;
-      while (!found_match && (de = readdir(dir_handle)) != NULL)
-	if (filter_dirent(de->d_name, image_extension_)) {
+      for(vbl_file_iterator fn("./*"); !found_match && fn; ++fn)
+      	if (filter_dirent(fn.filename(), image_extension_)) {
 	  image_dir_ = "./";
 	  found_match = true;
 	} 
-      closedir(dir_handle);
     }
-    if (!found_match)
+
+    if (!found_match) {
       for (int i=0; i < num_dir_ext_pairs && !found_match; ++i)
 	if (vcl_string(dir_ext_pairs[i].extension) == image_extension_) {
-	  DIR* dir_handle = opendir(dir_ext_pairs[i].image_dir);
-	  if (dir_handle) {
-	    dirent* de;
-	    while (!found_match && (de = readdir(dir_handle)) != NULL)
-	      if (filter_dirent(de->d_name, image_extension_)) {
+	  vcl_string glob(dir_ext_pairs[i].image_dir); glob += "*";
+          for(vbl_file_iterator fn(glob); !found_match && fn; ++fn)
+	      if (filter_dirent(fn.filename(), image_extension_)) {
 		image_dir_ = dir_ext_pairs[i].image_dir;
 		found_match = true;
 	      } 
-	  }      
-	  closedir(dir_handle);
-	}
-    if (!found_match)
+	  }
+    }
+
+    if (!found_match) {
       for (int i=0; i < num_dir_ext_pairs && !found_match; ++i) {
-	DIR* dir_handle = opendir(dir_ext_pairs[i].image_dir);
-	if (dir_handle) {
-	  dirent* de;
-	  while (!found_match && (de = readdir(dir_handle)) != NULL)
-	    if (filter_dirent(de->d_name, image_extension_)) {
-	      image_dir_ = dir_ext_pairs[i].image_dir;
-	      found_match = true;
-	    } 
-	}
-	closedir(dir_handle);
+	vcl_string glob(dir_ext_pairs[i].image_dir); glob += "*";
+        for(vbl_file_iterator fn(glob); !found_match && fn; ++fn)
+	  if (filter_dirent(fn.filename(), image_extension_)) {
+	    image_dir_ = dir_ext_pairs[i].image_dir;
+	    found_match = true;
+	  }
       }
+    }
+
     if (!found_match) {
       vcl_cerr << __FILE__ << " : Can't find files matching " << basename_ << index_format_ << image_extension_ << " in common locations!" << vcl_endl;
-      abort();
+      vcl_abort();
     }
   }
 
@@ -243,37 +236,36 @@ void vbl_sequence_filename_map::parse()
   else if (image_extension_ == "") {
     bool found_match = false;
     {
-      DIR* dir_handle = opendir(image_dir_.c_str());
-      if (dir_handle) {
+      vcl_string glob(image_dir_ + "*");
+      vbl_file_iterator fn(glob);
+      if (fn) {
 	for (int i=0; i < num_dir_ext_pairs && !found_match; ++i)
 	  if (vcl_string(dir_ext_pairs[i].image_dir) == image_dir_) {
-	    dirent* de;
-	    while (!found_match && (de = readdir(dir_handle)) != NULL)
-	      if (filter_dirent(de->d_name, dir_ext_pairs[i].extension)) {
+	    for(;!found_match && fn;++fn)
+	      if (filter_dirent(fn.filename(), dir_ext_pairs[i].extension)) {
 		image_extension_ = dir_ext_pairs[i].extension;
 		found_match = true;
-	      } 
+	      }
 	  }      
       }
-      closedir(dir_handle);
     }
+
     if (!found_match) {
-      DIR * dir_handle = opendir(image_dir_.c_str());
-      if (dir_handle) {
+      vbl_file_iterator fn(image_dir_);
+      if (fn) {
 	for (int i=0; i < num_dir_ext_pairs && !found_match; ++i) {
-	  dirent* de;
-	  while (!found_match && (de = readdir(dir_handle)) != NULL)
-	    if (filter_dirent(de->d_name, dir_ext_pairs[i].extension)) {
+	  for(;!found_match && fn; ++fn)
+	    if (filter_dirent(fn.filename(), dir_ext_pairs[i].extension)) {
 	      image_extension_ = dir_ext_pairs[i].extension;
 	      found_match = true;
 	    } 
 	}      	  
       }
-      closedir(dir_handle);
     }
+
     if (!found_match) {
       vcl_cerr << __FILE__ << " : Can't find files matching " << image_dir_ << basename_ << index_format_ << " with common extension!" << vcl_endl;
-      abort();
+      vcl_abort();
     }
   }
 
@@ -284,15 +276,15 @@ void vbl_sequence_filename_map::parse()
     if (start_ == -1 || end_ == -1) {
       int max = -1000000;
       int min = 1000000;
-      DIR* dir_handle = opendir(image_dir_.c_str());
-      dirent* de;
-      while ((de = readdir(dir_handle)) != NULL)
-	if (filter_dirent(de->d_name, image_extension_)) {
-	  int index = extract_index(de->d_name);
+      for(vbl_file_iterator fn(image_dir_ + "*");fn;++fn)
+	if (filter_dirent(fn.filename(), image_extension_)) {
+	  int index = extract_index(fn.filename());
 	  max = (index > max) ? index : max;
 	  min = (index < min) ? index : min;
 	}
-      closedir(dir_handle);
+      if (max < min) {
+        vcl_cerr << "vbl_sequence_filename_map: WARNING: no files in " << image_dir_ << vcl_endl;
+      }
 
       if (start_ == -1) start_ = min;
       if (end_ == -1) end_ = max;
@@ -312,7 +304,7 @@ void vbl_sequence_filename_map::parse()
   }
 }
 
-ostream& vbl_sequence_filename_map::print (ostream& s) const
+vcl_ostream& vbl_sequence_filename_map::print (vcl_ostream& s) const
 {
   s << vbl_sprintf("vbl_sequence_filename_map : %s%s%s [%i:%i:%i]",
 		   image_dir_.c_str(), basename_.c_str(), index_format_.c_str(), image_extension_.c_str(),
@@ -344,7 +336,7 @@ int vbl_sequence_filename_map::extract_index(char const* name)
   return atoi(index_str.c_str());
 }
 
-ostream& operator<<(ostream &os, const vbl_sequence_filename_map& s)
+vcl_ostream& operator<<(vcl_ostream &os, const vbl_sequence_filename_map& s)
 {
   return s.print(os);
 }
