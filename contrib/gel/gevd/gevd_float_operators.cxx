@@ -1395,8 +1395,9 @@ gevd_float_operators::SurfaceNormal(const gevd_bufferxy& range, gevd_bufferxy*& 
   const int highx = range.GetSizeX()-frame, highy = range.GetSizeY()-frame;
   normal = gevd_float_operators::Allocate(normal, range, bits_per_ptr);
   normal->Clear();              // NULL vector on border
-  vnl_vector<float> tx(3, 2.f,0.f,0.f), ty(3, 0.f,2.f,0.f); // tangents x-y axes
-
+//  vnl_vector<float> tx(3, 2.f,0.f,0.f), ty(3, 0.f,2.f,0.f); // tangents x-y axes
+  vnl_vector<float> tx(3, 0.0f), ty(3, 0.0f);
+  tx[0]=2.0f; ty[1]=2.0f;
   for (int j = frame; j < highy; j++)
     for (int i = frame; i < highx; i++) { // for all grid points
       tx[3] = floatPixel(range, i+1, j) - floatPixel(range, i-1, j);
@@ -1520,9 +1521,12 @@ gevd_float_operators::SurfaceNormalD(const gevd_bufferxy& range,
       if (_TangentComponents(range, i-1, j, i, j, i+1, j, no_value, d_x, d_z_x) &&
           _TangentComponents(range, i, j-1, i, j, i, j+1, no_value, d_y, d_z_y) )
         {
-          vnl_vector<float> tx(3, d_x*pixel_distance,0.f,d_z_x);
-          vnl_vector<float> ty(3, 0.f,d_y*pixel_distance,d_z_y);
-
+          
+		  //vnl_vector<float> tx(3, d_x*pixel_distance,0.f,d_z_x);
+          //vnl_vector<float> ty(3, 0.f,d_y*pixel_distance,d_z_y);
+	      vnl_vector<float> tx(3,0.0), ty(3,0.0);
+		  tx[0]=d_x*pixel_distance; tx[2]=d_z_x;
+		  ty[1]=d_y*pixel_distance; ty[2]=d_z_y;
           vnl_vector<float>* nz = new vnl_vector<float>(cross_3d(tx, ty));
 
           // vcl_cout << "Tx = " << tx << ",  Ty = " << ty << vcl_endl;
