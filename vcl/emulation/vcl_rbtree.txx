@@ -19,6 +19,7 @@
 #define VCL_OPERATOR_NE_INSTANTIATE(T) \
 VCL_INSTANTIATE_INLINE(bool operator!=(T const&, T const &))
 
+#undef VCL_COMPARISONS_INSTANTIATE
 #define VCL_COMPARISONS_INSTANTIATE(T) \
 VCL_OPERATOR_NE_INSTANTIATE(T) \
 VCL_INSTANTIATE_INLINE(bool operator >  (T const &, T const &)); \
