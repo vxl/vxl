@@ -12,6 +12,7 @@ SOURCES += vbl_arg.cxx  # if this is in a .txx file, gcc 2.95 will not generate 
 SOURCES += vbl_awk.cxx
 SOURCES += vbl_base_array_3d.cxx
 SOURCES += vbl_file.cxx
+SOURCES += vbl_canonical_path.cxx
 SOURCES += vbl_printf.cxx
 SOURCES += vbl_redirector.cxx
 SOURCES += vbl_ref_count.cxx

@@ -9,7 +9,7 @@ IULIBS := -lvbl-examples -lvbl -lvcl
 
 MINI_PROG_SOURCES += vbl_smart_ptr_example.cxx
 MINI_PROG_SOURCES += vbl_sequence_filename_example.cxx
-MINI_PROG_SOURCES += $(wildcard vbl_get_argc_argv_example.cxx)
+MINI_PROG_SOURCES += canonicalize_path.cxx
 
 ######################################
 include ${IUEROOT}/config/top-rules.mk
