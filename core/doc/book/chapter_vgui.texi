@@ -1690,14 +1690,14 @@ itab->post_redraw();
 
 An example of mapping is shown in Figure 13. An example of the inversion mapping for a color image is shown in Figure 14.
 @figure
-@image{range-display,,2in}
+@image{range-display,,4in}
 @caption{13}
 A display of an x-ray image with 16 bit unsigned short pixels. An inline tableauis used to adjust the range by moving the bars via mouse interaction.  The image contrast is displayed simulatanously with the mouse motion.  A histogram is also displayed to guide the user.  Note the mouse position / image intensity display at the lower left indicates the pixel value in the proper units and range.
 @endcaption
 @endfigure
 
 @figure
-@image{lena,,2in}
+@image{lena,,4in}
 @caption{14}
 The use of range maping to invert the image color channels. Note again that the mouse position /pixel intensity display provides the appropriate values corresponding to the original image, not the displayed image.
 @endcaption
