@@ -1,7 +1,6 @@
 // This is vxl/vgl/vgl_box_2d.txx
 #ifndef vgl_box_2d_txx_
 #define vgl_box_2d_txx_
-
 //:
 // \file
 // \brief Represents a cartesian 2D box.
@@ -12,7 +11,6 @@
 
 #include <vcl_iostream.h>
 #include <vcl_algorithm.h>
-#include <vcl_cmath.h>
 #include <vgl/vgl_point_2d.h>
 
 // Constructors/Destructor---------------------------------------------------
@@ -152,10 +150,10 @@ void vgl_box_2d<Type>::setmin_position(Type const min_position[2])
 {
   min_pos_[0]=min_position[0];
   min_pos_[1]=min_position[1];
-  if(max_pos_[0] < min_pos_[0]){
+  if (max_pos_[0] < min_pos_[0]){
     max_pos_[0]=min_pos_[0];
   }
-  if(max_pos_[1] < min_pos_[1]){
+  if (max_pos_[1] < min_pos_[1]){
     max_pos_[1]=min_pos_[1];
   }
 }
@@ -165,10 +163,10 @@ void vgl_box_2d<Type>::setmax_position(Type const max_position[2])
 {
   max_pos_[0]=max_position[0];
   max_pos_[1]=max_position[1];
-  if(max_pos_[0] < min_pos_[0]){
+  if (max_pos_[0] < min_pos_[0]){
     min_pos_[0]=max_pos_[0];
   }
-  if(max_pos_[1] < min_pos_[1]){
+  if (max_pos_[1] < min_pos_[1]){
     min_pos_[1]=max_pos_[1];
   }
 }
@@ -178,10 +176,10 @@ void vgl_box_2d<Type>::set_min_point(vgl_point_2d<Type> const& min_pt)
 {
   min_pos_[0]=min_pt.x();
   min_pos_[1]=min_pt.y();
-  if(max_pos_[0] < min_pos_[0]){
+  if (max_pos_[0] < min_pos_[0]){
     max_pos_[0]=min_pos_[0];
   }
-  if(max_pos_[1] < min_pos_[1]){
+  if (max_pos_[1] < min_pos_[1]){
     max_pos_[1]=min_pos_[1];
   }
 }
@@ -192,10 +190,10 @@ void vgl_box_2d<Type>::set_max_point(vgl_point_2d<Type> const& max_pt)
 {
   max_pos_[0]=max_pt.x();
   max_pos_[1]=max_pt.y();
-  if(max_pos_[0] < min_pos_[0]){
+  if (max_pos_[0] < min_pos_[0]){
     min_pos_[0]=max_pos_[0];
   }
-  if(max_pos_[1] < min_pos_[1]){
+  if (max_pos_[1] < min_pos_[1]){
     min_pos_[1]=max_pos_[1];
   }
 }
@@ -275,11 +273,32 @@ void vgl_box_2d<Type>::add(vgl_point_2d<Type> const& p)
   }
 }
 
+//: Make the convex union of two boxes
+// Do this by possibly enlarging this box so that the corner points of the
+// given box just fall within the box.
+// Adding an empty box does not change the current box.
+template <class Type>
+void vgl_box_2d<Type>::add(vgl_box_2d<Type> const& b)
+{
+  if (b.is_empty()) return;
+  add(b.min_point());
+  add(b.max_point());
+}
+
 //: Return true iff the point p is inside this box
 template <class Type>
 bool vgl_box_2d<Type>::contains(vgl_point_2d<Type> const& p) const
 {
-    return contains(p.x(), p.y());
+  return contains(p.x(), p.y());
+}
+
+//: Return true iff the corner points of b are inside this box
+template <class Type>
+bool vgl_box_2d<Type>::contains(vgl_box_2d<Type> const& b) const
+{
+  return
+    contains(b.min_x(), b.min_y()) &&
+    contains(b.max_x(), b.max_y());
 }
 
 //: Make the box empty

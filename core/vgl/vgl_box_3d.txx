@@ -1,8 +1,6 @@
 // This is vxl/vgl/vgl_box_3d.txx
 #ifndef vgl_box_3d_txx_
 #define vgl_box_3d_txx_
-
-
 //:
 // \file
 
@@ -163,13 +161,13 @@ void vgl_box_3d<Type>::set_min_point(vgl_point_3d<Type> const& min_pt)
   min_pos_[1]=min_pt.y();
   min_pos_[2]=min_pt.z();
 
-  if(max_pos_[0] < min_pos_[0]){
+  if (max_pos_[0] < min_pos_[0]){
     max_pos_[0]=min_pos_[0];
   }
-  if(max_pos_[1] < min_pos_[1]){
+  if (max_pos_[1] < min_pos_[1]){
     max_pos_[1]=min_pos_[1];
   }
-  if(max_pos_[2] < min_pos_[2]){
+  if (max_pos_[2] < min_pos_[2]){
     max_pos_[2]=min_pos_[2];
   }
 }
@@ -181,13 +179,13 @@ void vgl_box_3d<Type>::set_max_point(vgl_point_3d<Type> const& max_pt)
   max_pos_[1]=max_pt.y();
   max_pos_[2]=max_pt.z();
 
-  if(max_pos_[0] < min_pos_[0]){
+  if (max_pos_[0] < min_pos_[0]){
     min_pos_[0]=max_pos_[0];
   }
-  if(max_pos_[1] < min_pos_[1]){
+  if (max_pos_[1] < min_pos_[1]){
     min_pos_[1]=max_pos_[1];
   }
-  if(max_pos_[2] < min_pos_[2]){
+  if (max_pos_[2] < min_pos_[2]){
     min_pos_[2]=max_pos_[2];
   }
 }
@@ -262,11 +260,32 @@ void vgl_box_3d<Type>::add(vgl_point_3d<Type> const& p)
   }
 }
 
+//: Make the convex union of two boxes
+// Do this by possibly enlarging this box so that the corner points of the
+// given box just fall within the box.
+// Adding an empty box does not change the current box.
+template <class Type>
+void vgl_box_3d<Type>::add(vgl_box_3d<Type> const& b)
+{
+  if (b.is_empty()) return;
+  add(b.min_point());
+  add(b.max_point());
+}
+
 //: Return true iff the point p is inside this box
 template <class Type>
 bool vgl_box_3d<Type>::contains(vgl_point_3d<Type> const& p) const
 {
     return contains(p.x(), p.y(), p.z());
+}
+
+//: Return true iff the corner points of b are inside this box
+template <class Type>
+bool vgl_box_3d<Type>::contains(vgl_box_3d<Type> const& b) const
+{
+  return
+    contains(b.min_x(), b.min_y(), b.min_z()) &&
+    contains(b.max_x(), b.max_y(), b.max_z());
 }
 
 //: Make the box empty

@@ -11,13 +11,14 @@
 //
 // \verbatim
 // Modifications
+//  Peter Vanroose  12 Sep.2002: Added method add(vgl_box_3d<T>) to enlarge a box
+//  Peter Vanroose     Feb.2002: brief doxygen comment placed on single line
 //  Peter Vanroose, Oct  7 2001: Removed deprecated get_*() functions
 //  Peter Vanroose, Oct  6 2001: Added method add(vgl_point_3d<T>) to enlarge a box
 //  Peter Vanroose, Oct  5 2001: Added operator==() and methods is_empty() and contains()
 //  Peter Vanroose, Jul 10 2001: Deprecated get_*() in favour of *(), and explicit casts
 //  NPC (Manchester) 14/03/2001: Tidied up the documentation + added binary_io
 //  Peter Vanroose, Feb 28 2000: lots of minor corrections
-//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
 #include <vcl_iosfwd.h>
@@ -154,8 +155,17 @@ class vgl_box_3d
   // Adding a point to an empty box makes it a size zero box only containing p.
   void add(vgl_point_3d<Type> const& p);
 
+  //: Make the convex union of two boxes
+  // Do this by possibly enlarging this box so that the corner points of the
+  // given box just fall within the box.
+  // Adding an empty box does not change the current box.
+  void add(vgl_box_3d<Type> const& b);
+
   //: Return true iff the point p is inside this box
   bool contains(vgl_point_3d<Type> const& p) const;
+
+  //: Return true iff the corner points of b are inside this box
+  bool contains(vgl_box_3d<Type> const& b) const;
 
   //: Return true if \a (x,y,z) is inside this box, ie \a x_min <= \a x <= \a x_max etc
   inline bool contains(Type const& x, Type const& y, Type const& z) const {
@@ -168,18 +178,18 @@ class vgl_box_3d
   void empty();
 
   //: Set min \a x ordinate of box (other sides unchanged)
-  inline void set_min_x(Type min_x) {min_pos_[0]=min_x;}
+  inline void set_min_x(Type m) {min_pos_[0]=m;}
   //: Set min \a y ordinate of box (other sides unchanged)
-  inline void set_min_y(Type min_y) {min_pos_[1]=min_y;}
+  inline void set_min_y(Type m) {min_pos_[1]=m;}
   //: Set min \a z ordinate of box (other sides unchanged)
-  inline void set_min_z(Type min_z) {min_pos_[2]=min_z;}
+  inline void set_min_z(Type m) {min_pos_[2]=m;}
 
   //: Set max \a x ordinate of box (other sides unchanged)
-  inline void set_max_x(Type max_x) {max_pos_[0]=max_x;}
+  inline void set_max_x(Type m) {max_pos_[0]=m;}
   //: Set max \a y ordinate of box (other sides unchanged)
-  inline void set_max_y(Type max_y) {max_pos_[1]=max_y;}
+  inline void set_max_y(Type m) {max_pos_[1]=m;}
   //: Set max \a z ordinate of box (other sides unchanged)
-  inline void set_max_z(Type max_z) {max_pos_[2]=max_z;}
+  inline void set_max_z(Type m) {max_pos_[2]=m;}
 
   //: Move box so centroid lies at cx (size unchanged)
   void set_centroid_x(Type cx);

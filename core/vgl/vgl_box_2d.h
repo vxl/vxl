@@ -18,12 +18,12 @@
 //  Peter Vanroose    5/10/2001: Added operator==() and is_empty()
 //  Peter Vanroose    6/10/2001: Added method add(vgl_point_2d<T>) to enlarge a box
 //  Peter Vanroose    7/10/2001: Removed deprecated get_*() functions
-//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
+//  Peter Vanroose     Feb.2002: brief doxygen comment placed on single line
+//  Peter Vanroose   12Sep.2002: Added method add(vgl_box_2d<T>) to enlarge a box
 // \endverbatim
 
 #include <vcl_iosfwd.h>
 #include <vgl/vgl_fwd.h> // forward declare vgl_point_2d
-#include <vcl_deprecated.h>
 
 //: Represents a 2D box
 //  A 2d box with sides aligned with the \a x and \a y axes.
@@ -147,13 +147,13 @@ class vgl_box_2d
   vgl_point_2d<Type> max_point() const;
 
   //: Set left side of box (other side ordinates unchanged)
-  inline void set_min_x(Type min_x) {min_pos_[0]=min_x;}
+  inline void set_min_x(Type m) {min_pos_[0]=m;}
   //: Set bottom of box (other side ordinates unchanged)
-  inline void set_min_y(Type min_y) {min_pos_[1]=min_y;}
+  inline void set_min_y(Type m) {min_pos_[1]=m;}
   //: Set right side (other side ordinates unchanged)
-  inline void set_max_x(Type max_x) {max_pos_[0]=max_x;}
+  inline void set_max_x(Type m) {max_pos_[0]=m;}
   //: Set top (other side ordinates unchanged)
-  inline void set_max_y(Type max_y) {max_pos_[1]=max_y;}
+  inline void set_max_y(Type m) {max_pos_[1]=m;}
 
   //: Move box so centroid lies at cx (width and height unchanged)
   void set_centroid_x(Type cx);
@@ -192,8 +192,17 @@ class vgl_box_2d
   // Adding a point to an empty box makes it a size zero box only containing p.
   void add(vgl_point_2d<Type> const& p);
 
+  //: Make the convex union of two boxes
+  // Do this by possibly enlarging this box so that the corner points of the
+  // given box just fall within the box.
+  // Adding an empty box does not change the current box.
+  void add(vgl_box_2d<Type> const& b);
+
   //: Return true iff the point p is inside this box
   bool contains(vgl_point_2d<Type> const& p) const;
+
+  //: Return true iff the corner points of b are inside this box
+  bool contains(vgl_box_2d<Type> const& b) const;
 
   //: Return true if \a (x,y) inside box, ie \a x_min <= \a x <= \a x_max etc
   inline bool contains(Type const& x, Type const& y) const {
