@@ -30,5 +30,5 @@ AUX_SOURCE_DIRECTORY(Templates strk_sources)
 
 ADD_LIBRARY(strk ${strk_sources})
 
-TARGET_LINK_LIBRARIES(strk sdet brip bsol btol bdgl gevd vdgl vtol vsol vil1 vgl_algo vnl vbl)
+TARGET_LINK_LIBRARIES(strk sdet brip vpro bsol btol bdgl gevd vdgl vtol vsol vil1 vgl_algo vnl vbl)
 
