@@ -119,10 +119,10 @@ SOURCES += PMatrixComputeLinear.cxx
 include ${IUEROOT}/config/top.mk
 ################################
 
-ifeq ($(OS),hpux10.20)
+ifeq "HP-UX" "$(findstring HP-UX,$(OS))"
 pic = $(PIC)
 endif
 
 ifeq ($(IU_COMPILER),KCC)
-pic := $(PIC)
+pic = $(PIC)
 endif

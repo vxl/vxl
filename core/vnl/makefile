@@ -113,6 +113,6 @@ include ${IUEROOT}/config/top-rules.mk
 debug=$(debug_for_optimize) # needed for using $(optimize) on some files
 
 # on HP unix, this library has become too big, so it needs -fPIC
-ifeq "hpux" "$(findstring hpux,$(OS))"
+ifeq "HP-UX" "$(findstring HP-UX,$(OS))"
 pic = $(PIC)
 endif

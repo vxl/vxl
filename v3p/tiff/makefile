@@ -70,17 +70,17 @@ endif
 
 ####### MAKE SURE THESE STAY IN CORRESPONDENCE WITH config/identify_os.mk #####
 
-ifeq ($(OS),irix5)
+ifeq ($(OS),IRIX5)
 APP_CFLAGS += -DJPEG_SUPPORT \
     -DMMAP_SUPPORT -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1 -DUSE_CONST=1 -ansi
 endif
 
-ifeq ($(OS),irix6)
+ifeq ($(OS),IRIX6)
 APP_CFLAGS += -DJPEG_SUPPORT \
 #    -DMMAP_SUPPORT -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1 -DUSE_CONST=1 -ansi
 endif
 
-ifeq ($(OS),sunos4)
+ifeq ($(OS),SunOS4)
 APP_CFLAGS += -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1
 endif
 
@@ -89,7 +89,7 @@ APP_CFLAGS += -DJPEG_SUPPORT \
     -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1 -DUSE_CONST=1
 endif
 
-ifeq ($(OS),solaris)
+ifeq ($(OS),SunOS5)
 APP_CFLAGS +=  -DJPEG_SUPPORT \
     -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1 -DUSE_CONST=1 -DSYSV
 endif
@@ -100,15 +100,11 @@ APP_CFLAGS +=  -DJPEG_SUPPORT \
 USE_WINAPI := 1
 endif
 
-ifeq "hpux" "$(findstring hpux,$(OS))"
+ifeq "HP-UX" "$(findstring HP-UX,$(OS))"
 APP_CFLAGS += -DUSE_VARARGS=1 -DUSE_PROTOTYPES=0
 endif
 
-ifeq ($(OS),hp)
-APP_CFLAGS += -DUSE_VARARGS=1 -DUSE_PROTOTYPES=0
-endif
-
-ifeq ($(OS),ultrix)
+ifeq ($(OS),ULTRIX)
 APP_CFLAGS += -DUSE_VARARGS=1 -DUSE_PROTOTYPES=0
 endif
 
@@ -121,7 +117,7 @@ ifeq ($(OS), apollo)
 APP_CFLAGS += -DUSE_VARARGS=1 -DUSE_PROTOTYPES=0 -A nansi
 endif
 
-ifeq ($(OS), linux)
+ifeq ($(OS), Linux2)
 APP_CFLAGS += -DJPEG_SUPPORT \
     -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1 -DUSE_CONST=1
 endif
@@ -131,17 +127,17 @@ APP_CFLAGS += -DJPEG_SUPPORT \
     -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1 -DUSE_CONST=1
 endif
 
-ifeq ($(OS),alpha4)
+ifeq ($(OS),OSF1V4)
 APP_CFLAGS +=  -DJPEG_SUPPORT \
     -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1 -DUSE_CONST=1
 endif
 
-ifeq ($(OS),alpha3.0)
+ifeq ($(OS),OSF1V3.0)
 APP_CFLAGS +=  -DJPEG_SUPPORT \
     -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1 -DUSE_CONST=1
 endif
 
-ifeq ($(OS),alpha3.2)
+ifeq ($(OS),OSF1V3.2)
 APP_CFLAGS +=  -DJPEG_SUPPORT \
     -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1 -DUSE_CONST=1
 endif

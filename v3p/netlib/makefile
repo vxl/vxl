@@ -261,7 +261,7 @@ SOURCES += zungqr.c
 include ${IUEROOT}/config/top.mk
 ##########################################
 
-ifeq ($(OS),hpux10.20)
+ifeq ($(OS),HP-UX10.20)
   FLAGS_gpfa5f.c = -O0
   FLAGS_dgpfa5f.c = -O0
 endif
@@ -269,10 +269,6 @@ endif
 ifneq ($(OS),win32)
 #   debug := 
 #   APP_CFLAGS = $(optimize)
-endif
-
-ifeq ($(OS),solaris)
-  pic := $(PIC)
 endif
 
 ifeq ($(OS),SunOS5)
