@@ -7,12 +7,18 @@
 //:
 // \file
 // \author Ian Scott.
+//
+// \verbatim
+//  Modifications
+//   06 May 2004 Jocelyn Marchadier - added vil_clamp_below
+// \endverbatim
 
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_view.h>
 #include <vcl_cassert.h>
 
-
+//: Clamp an image view between two values.
+// \relates vil_image_view
 template <class T>
 inline void vil_clamp(vil_image_view<T >&src, vil_image_view<T >&dest, T lo, T hi)
 {
@@ -72,5 +78,33 @@ class vil_clamp_image_resource : public vil_image_resource
   //: Upper clamp value
   double hi_;
 };
+
+//: Clamp an image view above a given value t, setting it to v if below or on t
+// \relates vil_image_view
+template <class T>
+inline void vil_clamp_below(vil_image_view<T>& src, T t, T v)
+{
+   vcl_ptrdiff_t istepA=src.istep(), jstepA=src.jstep(), pstepA=src.planestep();
+   T* planeA = src.top_left_ptr();
+   for (unsigned int p=0; p<src.nplanes(); ++p,planeA+=pstepA)
+   {
+     T* rowA = planeA;
+     for (unsigned int j=0; j<src.nj(); ++j,rowA+=jstepA)
+     {
+       T* pixelA = rowA;
+       for (unsigned int i=0; i<src.ni(); ++i,pixelA+=istepA)
+         if (*pixelA <= t)
+           *pixelA = v;
+     }
+  }
+}
+
+//: Clamp an image view above a given value t, setting it to this t if below t
+// \relates vil_image_view
+template <class T>
+inline void vil_clamp_below(vil_image_view<T>& src, T t)
+{
+  vil_clamp_below(src, t, t);
+}
 
 #endif // vil_clamp_h_
