@@ -35,8 +35,8 @@ vcl_ostream& operator<< (vcl_ostream& os, vil2_smart_ptr<T> const& r)
 
 //--------------------------------------------------------------------------------
 
-#undef  VIL_SMART_PTR_INSTANTIATE
-#define VIL_SMART_PTR_INSTANTIATE(T) \
+#undef  VIL2_SMART_PTR_INSTANTIATE
+#define VIL2_SMART_PTR_INSTANTIATE(T) \
 template class vil2_smart_ptr<T >; \
 VCL_DEFINE_SPECIALIZATION struct vil2_smart_ptr_T_as_string<T > \
 { static char const *str() { return #T; } }; \

@@ -154,7 +154,7 @@ inline bool operator!= (T const* p, vil2_smart_ptr<T> const& a)
 template <class T>
 vcl_ostream& operator<< (vcl_ostream&, vil2_smart_ptr<T> const&);
 
-#define VIL_SMART_PTR_INSTANTIATE(T) \
+#define VIL2_SMART_PTR_INSTANTIATE(T) \
 extern "please include vil2/vil2_smart_ptr.txx instead"
 
 #endif // vil2_smart_ptr_h_
