@@ -28,8 +28,11 @@ public:
     {
     }
 
+
   bool handle(const vgui_event& event);
   vcl_string type_name() const {return "vgui_event_server";}
+
+
 };
 
 // -- Interaction (i.e. mouse/kb) events are saved, and said to be consumed.
@@ -39,8 +42,9 @@ bool vgui_event_server_interpose_tableau::handle(const vgui_event& event) {
 //  cerr << "vgui_event_server::handle type " << event.type << endl;
 
   // Pass draw events down -- we're just grabbing the interactions
-  if (event.type == vgui_DRAW)
+  if (event.type == vgui_DRAW) {
     return child.handle(event);
+  }
 
   // Do not grab TIMERs
   if (event.type == vgui_TIMER)
@@ -81,6 +85,7 @@ vgui_event_server::~vgui_event_server()
 }
 
 void vgui_event_server::reset() {
+
 }
 
 bool vgui_event_server::next() {
@@ -95,4 +100,5 @@ bool vgui_event_server::next() {
 
 vgui_event vgui_event_server::last_event() {
   return last_event_;
+
 }

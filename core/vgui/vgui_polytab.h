@@ -65,7 +65,7 @@ public:
   // "handle interface"
   // -- add new subtableau. returns handle to child.
   int add(vgui_tableau_sptr const&, float x, float y, float w, float h);
-  // -- remove subtableau, referred to by handle.
+  // -- remove subtableau, sptrerred to by handle.
   void remove(int id);
   // -- move subtableau.
   void move(int id, float x, float y, float w, float h);
