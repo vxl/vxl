@@ -257,6 +257,9 @@ SOURCE=.\brip_test_lucas_kanade.cxx
 # Begin Source File
 SOURCE=.\brip_test_fourier.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\brip_test_homography.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
