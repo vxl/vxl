@@ -18,20 +18,30 @@ enum Binding { goofyBinding };  // confused about QvMaterialBinding/QvNormalBind
 // doesn't break other systems.
 #include "QvBasic.h"
 
-// mpichler, 19950802
-#ifndef WIN32
-#if defined(PMAX) || defined(PMAX_GNU) || defined(__PC__)
-#  include <vcl_cstring.h>
-#  include <malloc.h>
-char* strdup (const char* s)  // strdup not contained in system libraries
+// strdup() is not standard
+// // mpichler, 19950802
+// #ifndef WIN32
+// #if defined(PMAX) || defined(PMAX_GNU) || defined(__PC__)
+// #  include <vcl_cstring.h>
+// #  include <malloc.h>
+// char* strdup (const char* s)  // strdup not contained in system libraries
+// {
+//   char* p = (char*) malloc (vcl_strlen (s) + 1);
+//   if (p)
+//     vcl_strcpy (p, s);
+//   return p;
+// }
+// #endif
+// #endif
+#include <vcl_cstring.h> // strcpy()
+#include <vcl_cstdlib.h> // malloc()
+char* Qv_strdup (const char* s)
 {
-  char* p = (char*) malloc (vcl_strlen (s) + 1);
+  char* p = (char*) vcl_malloc (vcl_strlen (s) + 1);
   if (p)
     vcl_strcpy (p, s);
   return p;
 }
-#endif
-#endif
 
 // changed by Gerbert Orasche 260695
 #ifdef __PC__

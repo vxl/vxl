@@ -1,5 +1,6 @@
 #include "QvString.h"
 #include <vcl_cctype.h>
+#include <vcl_cstring.h>
 
 #define CHUNK_SIZE 4000
 
@@ -54,7 +55,7 @@ QvNameEntry::insert(const char *s)
         int len = vcl_strlen(s) + 1;
 
         if (len >= CHUNK_SIZE)
-            s = strdup(s);
+            s = Qv_strdup(s);
 
         else {
 
