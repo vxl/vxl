@@ -180,10 +180,6 @@ SOURCE=".\Templates\vcl_set+int-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=.\vcl_unistd.cxx
-# End Source File
-# Begin Source File
-
 SOURCE=".\Templates\vcl_vector+bool-.cxx"
 # End Source File
 # Begin Source File
@@ -473,10 +469,6 @@ SOURCE=.\vcl_strstream.h
 # Begin Source File
 
 SOURCE=.\vcl_typeinfo.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vcl_unistd.h
 # End Source File
 # Begin Source File
 

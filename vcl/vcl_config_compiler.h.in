@@ -449,40 +449,7 @@ text { return ret; }
 #define VCL_NEEDS_NAMESPACE_STD @VCL_NEEDS_NAMESPACE_STD@
 
 //----------------------------------------------------------------------
-// architecture issues, like endianness.
 
-// -- VCL_LITTLE_ENDIAN
-// -- VCL_BIG_ENDIAN
-// Set to 0,1 or 1,0 respectively, dependending on the architecture.
-#define VCL_LITTLE_ENDIAN @VCL_LITTLE_ENDIAN@
-#define VCL_BIG_ENDIAN    @VCL_BIG_ENDIAN@
-
-
-// -- VCL_SIZEOF_type
-// These are useful to have as macros since you can't use the
-// preprocessor to conditionalize on the size of a data type.
-//
-//                                                      typical value
-//#define VCL_SIZEOF_bool     @VCL_SIZEOF_bool@         /* 4 */
-//#define VCL_SIZEOF_char     @VCL_SIZEOF_char@         /* 1 */
-//#define VCL_SIZEOF_short    @VCL_SIZEOF_short@        /* 2 */
-//#define VCL_SIZEOF_int      @VCL_SIZEOF_int@          /* 4 */
-//#define VCL_SIZEOF_long     @VCL_SIZEOF_long@         /* 4 */
-//#define VCL_SIZEOF_float    @VCL_SIZEOF_float@        /* 4 */
-//#define VCL_SIZEOF_double   @VCL_SIZEOF_double@       /* 8 */
-//#define VCL_SIZEOF_void_ptr @VCL_SIZEOF_void_ptr@     /* 4 */
-
-// -- VCL_ALIGNMENT_type
-// Alignment requirements of various types.             typical value
-//#define VCL_ALIGNMENT_bool     @VCL_ALIGNMENT_bool@       /* 4 */
-//#define VCL_ALIGNMENT_char     @VCL_ALIGNMENT_char@       /* 1 */
-//#define VCL_ALIGNMENT_short    @VCL_ALIGNMENT_short@      /* 4 */
-//#define VCL_ALIGNMENT_int      @VCL_ALIGNMENT_int@        /* 4 */
-//#define VCL_ALIGNMENT_long     @VCL_ALIGNMENT_long@       /* 4 */
-//#define VCL_ALIGNMENT_float    @VCL_ALIGNMENT_float@      /* 4 */
-//#define VCL_ALIGNMENT_double   @VCL_ALIGNMENT_double@     /* 8 */
-//#define VCL_ALIGNMENT_void_ptr @VCL_ALIGNMENT_void_ptr@   /* 4 */
-
-//--------------------------------------------------------------------------------
+// architecture macros removed -- they're not in the C++ standard
 
 #endif

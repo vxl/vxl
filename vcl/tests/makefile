@@ -16,7 +16,6 @@ TESTS += test_vcl_deque.cxx
 TESTS += test_vcl_complex.cxx
 TESTS += test_vcl_algorithm.cxx
 TESTS += test_vcl_new.cxx
-TESTS += test_vcl_unistd.cxx
 TESTS += $(wildcard test_vcl_rtti.cxx)
 
 IULIBS = -lvcl 

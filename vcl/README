@@ -31,10 +31,6 @@ vcl_rtti.h
 vcl_stlfwd.h
   Forward declare the most commonly used parts of the STL, if possible.
 
-vcl_unistd.h
-  <unistd.h> is part of the POSIX standard, not ISO. Since it's so useful to 
-  have and so broken on most systems, we supply vcl_unistd.h
-
 vcl_deprecated.h
   Including this causes a preprocessor or compiler warning to be emitted. So
   include <vcl/vcl_deprecated.h> in header files that are to be deprecated.

@@ -2,8 +2,6 @@
 #define vcl_gcc_295_set_txx_
 
 #include <vcl/vcl_set.h>
-#include <vcl/vcl_compiler.h>
-
 
 #define VCL_SET_INSTANTIATE_ITERATOR(InputIterator, Distance)\
 template void distance (InputIterator , InputIterator , Distance& ) 

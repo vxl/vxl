@@ -8,7 +8,7 @@
 
 //--------------------------------------------------------------------------------
 
-#include <vxl_compiler_config.h>
+#include <vxl_config.h>
 
 // -- VCL_USE_NATIVE_COMPLEX
 // Use the compiler's complex. Set from VCL_USE_NATIVE_STL at the moment.
