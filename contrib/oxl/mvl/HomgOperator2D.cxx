@@ -66,7 +66,7 @@ void HomgOperator2D::unitize(Homg2D* a)
   }
 
   norm = 1.0/vcl_sqrt(norm);
-  a->set(a->x()*norm, a->w()*norm, a->w()*norm);
+  a->set(a->x()*norm, a->y()*norm, a->w()*norm);
 }
 
 // == DISTANCE MEASUREMENTS IN IMAGE COORDINATES ==
