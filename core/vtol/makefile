@@ -1,20 +1,14 @@
 #   DESCRIPTION:
 #
-#   This is the vbl (Vision Basics) library.
+#   This is the vtol (Vision Topology) library.
 #
-#   DEPENDENCIES:  libvcl
-
-VXL := 1 
+#   DEPENDENCIES:  libvcl libvbl libvsol
 
 USES += vxl
-IULIBS := -lvcl
-IULIBS += -lvbl
-IULIBS += -lvsol
+IMMEDIATE_LIBS += -lvsol -lvbl -lvcl
 
 LIBRARY := vtol
 VERSION := 1.0
-
-
 
 SOURCES += vtol_topology_object_2d.cxx
 SOURCES += vtol_topology_cache_2d.cxx
@@ -44,21 +38,18 @@ SOURCES += vtol_block_3d.cxx
 SOURCES += vtol_face_3d.cxx
 SOURCES += vtol_vertex_3d.cxx
 
-
-# DEFINES += -DBUILDING_VTOL_DLL
-
-##########################################
+#######################################
 include ${IUEROOT}/config/top-params.mk
-##########################################
+#######################################
 
 ifndef NOTEST
 SUBDIRS += tests
 SUBDIRS += examples
 endif
 
-##########################################
+######################################
 include ${IUEROOT}/config/top-rules.mk
-##########################################
+######################################
 
 # on HP unix, this library has become too big, so it needs -fPIC
 ifeq "hpux" "$(findstring hpux,$(OS))"

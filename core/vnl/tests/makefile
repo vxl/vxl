@@ -1,7 +1,5 @@
-VXL := 1
-USE_NETLIB := 1
 USES := vxl
-#v3p/netlib
+USE_NETLIB := 1
 
 TESTS += test_fft1d.cxx
 TESTS += test_fft2d.cxx
@@ -29,8 +27,8 @@ TESTS += test_symmetric_eigensystem.cxx
 TESTS += test_generalized_eigensystem.cxx
 TESTS += $(wildcard test_jordan_normal_form.cxx)
 
-IULIBS += -lvnl-algo -lnetlib -lvnl -lvcl
+IULIBS += -lvnl-algo -lvnl -lnetlib -lvcl
 
-################################
+#########################################
 include ${IUEROOT}/config/static-tests.mk
-################################
+#########################################

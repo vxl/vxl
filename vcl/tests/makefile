@@ -1,5 +1,4 @@
 USES = vxl
-VXL:=1
 
 TESTS += test_vcl_compiler.cxx
 TESTS += test_vcl_rel_ops.cxx
@@ -20,4 +19,6 @@ TESTS += $(wildcard test_vcl_rtti.cxx)
 
 IULIBS = -lvcl 
 
+#########################################
 include ${IUEROOT}/config/static-tests.mk
+#########################################
