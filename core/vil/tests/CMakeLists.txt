@@ -31,6 +31,9 @@ ADD_EXECUTABLE( vil_test_all
   test_sample_profile_bicub.cxx
   test_sample_grid_bicub.cxx
   test_resample_bicub.cxx
+
+  # Math
+  test_math_value_range.cxx
 )
 
 TARGET_LINK_LIBRARIES( vil_test_all vil vpl vul testlib vcl )
@@ -63,6 +66,10 @@ ADD_TEST( vil_test_bicub_interp             vil_test_all test_bicub_interp)
 ADD_TEST( vil_test_sample_profile_bicub     vil_test_all test_sample_profile_bicub)
 ADD_TEST( vil_test_sample_grid_bicub        vil_test_all test_sample_grid_bicub)
 ADD_TEST( vil_test_resample_bicub           vil_test_all test_resample_bicub)
+
+# Math
+ADD_TEST( vil_test_math_value_range         vil_test_all test_math_value_range)
+
 
 # To run timing tests
 #ADD_EXECUTABLE( vil_test_access_timings vil_test_access_timings.cxx)

@@ -21,6 +21,7 @@ DECLARE( test_memory_chunk );
 DECLARE( test_deep_copy_3_plane );
 DECLARE( test_rotate_image );
 DECLARE( test_warp );
+DECLARE( test_math_value_range );
 
 void
 register_tests()
@@ -46,6 +47,7 @@ register_tests()
   REGISTER( test_deep_copy_3_plane );
   REGISTER( test_rotate_image );
   REGISTER( test_warp );
+  REGISTER( test_math_value_range );
 }
 
 DEFINE_MAIN;
