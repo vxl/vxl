@@ -195,7 +195,7 @@ inline void vil_convolve_edge_1d(const srcT* src, unsigned n, vcl_ptrdiff_t s_st
 
 //: Convolve kernel[x] (x in [k_lo,k_hi]) with srcT
 // Assumes dest and src same size (nx)
-// Kernel must not be smaller than nx;
+// Kernel must not be larger than nx;
 template <class srcT, class destT, class kernelT, class accumT>
 inline void vil_convolve_1d(const srcT* src0, unsigned nx, vcl_ptrdiff_t s_step,
                             destT* dest0, vcl_ptrdiff_t d_step,
@@ -205,13 +205,14 @@ inline void vil_convolve_1d(const srcT* src0, unsigned nx, vcl_ptrdiff_t s_step,
                             vil_convolve_boundary_option start_option,
                             vil_convolve_boundary_option end_option)
 {
-  assert(k_hi - k_lo +1 <= (int) nx);
+  assert(k_hi - k_lo < int(nx));
 
   // Deal with start (fill elements 0..1+k_hi of dest)
   vil_convolve_edge_1d(src0,nx,s_step,dest0,d_step,kernel,k_lo,k_hi,1,ac,start_option);
 
   const kernelT* k_rbegin = kernel+k_hi;
   const kernelT* k_rend   = kernel+k_lo-1;
+  assert(k_rbegin >= k_rend);
   const srcT* src = src0;
 
   destT* end_dest = dest0 + d_step*(int(nx)-k_hi);
