@@ -1,7 +1,7 @@
 # ./vxl/vgl/tests/CMakeLists.txt
 
 ADD_EXECUTABLE( vgl_test_driver
-  test_driver.cxx
+  test_driver.cxx    test_driver.h
 
   test_includes.cxx
   test_cartesian.cxx
