@@ -36,6 +36,7 @@ TESTS += test_levenberg_marquardt.cxx
 TESTS += test_minimizers.cxx
 TESTS += test_rational.cxx
 TESTS += test_convolve.cxx
+TESTS += test_real_polynomial.cxx
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
