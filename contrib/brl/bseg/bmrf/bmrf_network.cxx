@@ -54,16 +54,41 @@ bmrf_network::add_arc( const bmrf_node_sptr& n1, const bmrf_node_sptr& n2, neigh
   if (!n1.ptr() || !n2.ptr()) return false;
   if (!n1->epi_seg().ptr() || !n2->epi_seg().ptr()) return false;
 
-  seg_node_map::iterator itr = node_from_seg_.find(n1->epi_seg());
-  if (itr == node_from_seg_.end())
+  const seg_node_map& map1 = nodes_from_frame_[n1->frame_num()];
+  seg_node_map::const_iterator itr = map1.find(n1->epi_seg());
+  if (itr == map1.end())
     if ( !this->add_node(n1) )
       return false;
-  itr = node_from_seg_.find(n2->epi_seg());
-  if (itr == node_from_seg_.end())
+  const seg_node_map& map2 = nodes_from_frame_[n2->frame_num()];
+  itr = map2.find(n2->epi_seg());
+  if (itr == map2.end())
     if ( !this->add_node(n2) )
       return false;
 
   return n1->add_neighbor(n2, type);
+}
+
+
+//: Add an arc \p arc of type \p type
+bool 
+bmrf_network::add_arc( const bmrf_arc_sptr& arc, neighbor_type type )
+{
+  if ( !arc->from().ptr() || !arc->to().ptr() ||
+       !arc->from()->epi_seg().ptr() || !arc->to()->epi_seg().ptr() ) 
+    return false;
+
+  const seg_node_map& map_from = nodes_from_frame_[arc->from()->frame_num()];
+  seg_node_map::const_iterator itr = map_from.find(arc->from()->epi_seg());
+  if (itr == map_from.end())
+    if ( !this->add_node(arc->from()) )
+      return false;
+  const seg_node_map& map_to = nodes_from_frame_[arc->to()->frame_num()];
+  itr = map_to.find(arc->to()->epi_seg());
+  if (itr == map_to.end())
+    if ( !this->add_node(arc->to()) )
+      return false;
+
+  return arc->from()->add_arc(arc, type);
 }
 
 
@@ -215,7 +240,6 @@ bmrf_network::prune_directed()
       seg_node_map::const_iterator next_itr = itr; ++next_itr;
       this->remove_node(itr->second);
       itr = next_itr;
-      vcl_cout << "removing node" << vcl_endl;
     }else
       ++itr;
   }

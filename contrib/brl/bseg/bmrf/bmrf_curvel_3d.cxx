@@ -5,6 +5,7 @@
 #include "bmrf_curvel_3d.h"
 #include "bmrf_node.h"
 #include "bmrf_gamma_func.h"
+#include "bmrf_epi_seg.h"
 #include <vcl_algorithm.h>
 
 

@@ -6,15 +6,12 @@
 #include <bmrf/bmrf_arc.h>
 #include <bmrf/bmrf_epi_transform.h>
 #include <bmrf/bmrf_gamma_func.h>
+#include <bmrf/bmrf_epi_seg_compare.h>
 #include <vsl/vsl_binary_io.h>
 #include <vbl/io/vbl_io_smart_ptr.h>
 #include <vcl_algorithm.h>
 #include <vcl_cmath.h>
 
-#undef MAX
-#define MAX(a,b) ((a)>(b)?(a):(b))
-#undef MIN
-#define MIN(a,b) ((a)<(b)?(a):(b))
 
 //: Constructor
 bmrf_node::bmrf_node( const bmrf_epi_seg_sptr& epi_seg, int frame_num, double probability )
@@ -71,44 +68,6 @@ bmrf_node::purge()
 }
 
 
-// Helper function to compute the average distance ratio in the overlapping alpha
-static double
-avg_distance_ratio( const bmrf_epi_seg_sptr& ep1, const bmrf_epi_seg_sptr& ep2)
-{
-  double min_alpha = MAX(ep1->min_alpha(), ep2->min_alpha());
-  double max_alpha = MIN(ep1->max_alpha(), ep2->max_alpha());
-  double d_alpha =   MIN((ep1->max_alpha() - ep1->min_alpha())/ep1->n_pts() ,
-                         (ep2->max_alpha() - ep2->min_alpha())/ep2->n_pts() );
-
-  double s1 = 0.0, s2 = 0.0;
-  for (double alpha = min_alpha; alpha <= max_alpha; alpha += d_alpha) {
-    s1 += ep1->s(alpha);
-    s2 += ep2->s(alpha);
-  }
-  return s1 / s2;
-}
-
-
-// Helper function to compute match error between to segments
-static double
-bmrf_match_error( const bmrf_epi_seg_sptr& ep1, const bmrf_epi_seg_sptr& ep2 )
-{
-  double min_alpha = MAX(ep1->min_alpha(), ep2->min_alpha());
-  double max_alpha = MIN(ep1->max_alpha(), ep2->max_alpha());
-
-  double d_alpha =   MIN((ep1->max_alpha() - ep1->min_alpha())/ep1->n_pts() ,
-                         (ep2->max_alpha() - ep2->min_alpha())/ep2->n_pts() );
-  // static double d_alpha = 0.0006;
-
-  double s_error = 0.0;
-  for (double alpha = min_alpha; alpha <= max_alpha; alpha += d_alpha) {
-    double ds = ep1->s(alpha) - ep2->s(alpha);
-    s_error += ds*ds;
-  }
-  return s_error * d_alpha / (max_alpha - min_alpha);
-}
-
-
 //: Return the probability of this node
 double
 bmrf_node::probability()
@@ -146,11 +105,7 @@ bmrf_node::compute_probability()
   for ( arc_iterator a_itr = this->begin(TIME);
         a_itr != this->end(TIME); ++a_itr )
   {
-    bmrf_node_sptr neighbor = (*a_itr)->to();
-    double dist_ratio = avg_distance_ratio(this->epi_seg(), neighbor->epi_seg());
-    int time_step = neighbor->frame_num() - this->frame_num();
-    double gamma = (1.0 - dist_ratio) / time_step;
-    bmrf_gamma_func_sptr gamma_func = new bmrf_const_gamma_func(gamma);
+    bmrf_gamma_func_sptr gamma_func = new bmrf_const_gamma_func((*a_itr)->induced_gamma());
     (*a_itr)->probability_ = this->probability(gamma_func);
 
     // select the probability of the best neighbor
@@ -171,12 +126,7 @@ bmrf_node::prune_by_probability(double threshold, bool relative)
   for ( arc_iterator a_itr = this->begin(TIME);
         a_itr != this->end(TIME); ++a_itr )
   {
-    bmrf_node_sptr neighbor = (*a_itr)->to();
-    double dist_ratio = avg_distance_ratio(this->epi_seg(), neighbor->epi_seg());
-    int time_step = neighbor->frame_num() - this->frame_num();
-    double gamma = (1.0 - dist_ratio) / time_step;
-
-    bmrf_gamma_func_sptr gamma_func = new bmrf_const_gamma_func(gamma);
+    bmrf_gamma_func_sptr gamma_func = new bmrf_const_gamma_func((*a_itr)->induced_gamma());
     pmf.push_back(vcl_pair<double,arc_iterator>(this->probability(gamma_func),a_itr));
   }
 
@@ -203,10 +153,7 @@ bmrf_node::prune_by_gamma(double min_gamma, double max_gamma)
   for ( arc_iterator a_itr = this->begin(TIME);
         a_itr != this->end(TIME);)
   {
-    bmrf_node_sptr neighbor = (*a_itr)->to();
-    double dist_ratio = avg_distance_ratio(this->epi_seg(), neighbor->epi_seg());
-    int time_step = neighbor->frame_num() - this->frame_num();
-    double gamma = (1.0 - dist_ratio) / time_step;
+    double gamma = (*a_itr)->induced_gamma();
 
     arc_iterator next_itr = a_itr;
     ++next_itr;
@@ -294,6 +241,29 @@ bmrf_node::add_neighbor( const bmrf_node_sptr& node, neighbor_type type )
   bmrf_arc_sptr new_arc = new bmrf_arc(this, node);
   out_arcs_.insert(boundaries_[type+1], new_arc);
   node->in_arcs_.push_back(new_arc);
+  ++sizes_[type];
+
+  // adjust boundaries if necessary
+  for (int t=type; t>=0 && (boundaries_[type+1] == boundaries_[t]); --t)
+    --boundaries_[t];
+
+  return true;
+}
+
+
+//: Add an arc \p arc of type \p type
+bool 
+bmrf_node::add_arc( const bmrf_arc_sptr& arc, neighbor_type type )
+{
+  if ( !arc.ptr() || arc->from_ != this || arc->to_ == this || type == ALL)
+    return false;
+
+  // verify that this arc is not already present
+  for (arc_iterator itr = boundaries_[type]; itr != boundaries_[type+1]; ++itr)
+    if ((*itr)->to_ == arc->to_) return false;
+
+  out_arcs_.insert(boundaries_[type+1], arc);
+  arc->to_->in_arcs_.push_back(arc);
   ++sizes_[type];
 
   // adjust boundaries if necessary

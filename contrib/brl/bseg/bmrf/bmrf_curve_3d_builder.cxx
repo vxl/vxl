@@ -7,6 +7,7 @@
 #include "bmrf_network.h"
 #include "bmrf_node.h"
 #include "bmrf_arc.h"
+#include "bmrf_epi_seg.h"
 #include "bmrf_epipole.h"
 #include "bmrf_gamma_func.h"
 
@@ -150,15 +151,22 @@ bmrf_curve_3d_builder::compute_bounding_box(double inlier_fraction)
   if (curves_.empty())
     return false;
 
-  vgl_vector_3d<double> base_axis(1.0, 0.0, 0.0);
-  vgl_vector_3d<double> rot_axis = normalized(cross_product(direction_,base_axis));
-  double angle = vcl_acos(dot_product(direction_,base_axis));
-  rot_axis *= angle;
-  vnl_vector<double> v(3);
-  v[0] = rot_axis.x();
-  v[1] = rot_axis.y();
-  v[2] = rot_axis.z();
-  vnl_double_3x3 rot = vnl_rotation_matrix(v);
+  vnl_double_3 base_axis(1.0, 0.0, 0.0);
+  vnl_double_3 rot_axis(0.0, 1.0, 0.0);
+  vnl_double_3 xz_proj(direction_.x(), 0.0, direction_.z());
+  xz_proj.normalize();
+  double ang = angle(xz_proj, base_axis);
+  rot_axis *= ang;
+  vnl_double_3x3 rot_y = vnl_rotation_matrix(rot_axis);
+
+  rot_axis = vnl_double_3(0.0, 0.0, 1.0);
+  vnl_double_3 xy_proj = rot_y * vnl_double_3(direction_.x(), direction_.y(), direction_.z());
+  xy_proj.normalize();
+  ang = angle(xy_proj, base_axis);
+  rot_axis *= ang;
+  vnl_double_3x3 rot_z = vnl_rotation_matrix(rot_axis);
+
+  vnl_double_3x3 rot = rot_z*rot_y;
   vnl_double_3x3 inv_rot = rot.transpose();
 
   vcl_vector<vnl_double_3> pts_x;

@@ -104,6 +104,11 @@ class bmrf_node : public vbl_ref_count
   // \retval false if the neighbor is not valid or already exists
   bool add_neighbor( const bmrf_node_sptr& node, neighbor_type type );
 
+  //: Add an arc \p arc of type \p type
+  // \retval true if the arc was added successfully
+  // \retval false if the arc is not valid or already exists
+  bool add_arc( const bmrf_arc_sptr& arc, neighbor_type type );
+
   //: Remove \p node from the neighborhood
   // \retval true if the node is removed successfully
   // \retval false if the node was not a neighbor

@@ -57,6 +57,9 @@ class bmrf_network : public vbl_ref_count
   //: Add an arc between \p n1 and \p n2 of type \p type
   bool add_arc( const bmrf_node_sptr& n1, const bmrf_node_sptr& n2, neighbor_type type );
 
+  //: Add an arc \p arc of type \p type
+  bool add_arc( const bmrf_arc_sptr& arc, neighbor_type type );
+
   //: Add an arc between \p n1 and \p n2 of type \p type
   bool remove_arc( const bmrf_node_sptr& n1, const bmrf_node_sptr& n2, neighbor_type type = bmrf_node::ALL );
 

@@ -16,10 +16,11 @@
 #include <bmrf/bmrf_epi_point.h>
 #include <bmrf/bmrf_epi_seg.h>
 #include <bmrf/bmrf_node.h>
+#include <bmrf/bmrf_arc.h>
 #include <bmrf/bmrf_network.h>
 #include <bmrf/bmrf_epipole.h>
 
-
+#include <vul/vul_timer.h>
 //---------------------------------------------------------------
 // Constructors
 //
@@ -650,7 +651,8 @@ bool bmrf_network_builder::fill_intensity_values(bmrf_epi_seg_sptr& seg)
 #endif
   //the potential bounding segments
   vcl_vector<bmrf_epi_seg_sptr> left_cand, right_cand;
-  this->intensity_candidates(seg, left_cand, right_cand);
+  //----this->intensity_candidates(seg, left_cand, right_cand);
+  //----vcl_cout << "cands left = " << left_cand.size() << " right = " << right_cand.size() << vcl_endl;
   //scan the segment
   double min_a = seg->min_alpha(), max_a = seg->max_alpha();
   for (double a = min_a; a<=max_a; a+=da_)
@@ -694,7 +696,7 @@ bool bmrf_network_builder::add_frame_nodes()
     return false;
   vcl_vector<bmrf_epi_seg_sptr>& segs = min_epi_segs_;
   for (vcl_vector<bmrf_epi_seg_sptr>::iterator sit = segs.begin();
-       sit != segs.end(); sit++)
+       sit != segs.end(); ++sit)
   {
     //for now, make the node the entire alpha segment.
     bmrf_node_sptr node = new bmrf_node(*sit, frame_);
@@ -723,31 +725,25 @@ time_neighbors(bmrf_node_sptr const& node,
     return false;
 
   //Get the s bounds information for the epi_seg in node
-  double s_min = node->epi_seg()->min_s(), s_max = node->epi_seg()->max_s();
-  //scan the frame for s bounds
+  double s_min = node->epi_seg()->min_s(), 
+         s_max = node->epi_seg()->max_s();
+  //Get the alpha bounds information for the epi_seg in node
+  double a_min = node->epi_seg()->min_alpha(),
+         a_max = node->epi_seg()->max_alpha();
+
+  //scan the frame 
   //the upper bound passes zero velocity
   //the lower bound is extended using the maximum difference of reciprocals in s.
-  vcl_vector<bmrf_node_sptr> temp;
+  bool found_something = false;
   int frame = node->frame_num();
   for (bmrf_network::seg_node_map::const_iterator nit = network_->begin(frame-1);
        nit != network_->end(frame-1); ++nit)
-    if ((nit->first->min_s() <= s_max) &&
-        (nit->first->max_s() > 1.0/(1.0/s_min + max_delta_recip_s_) ))
-      temp.push_back(nit->second);
-
-  //filter out nodes that do not lie within the alpha range of the node
-  //under consideration.
-  double a_min = node->epi_seg()->min_alpha(),
-    a_max = node->epi_seg()->max_alpha();
-
-  bool found_something = false;
-  for (vcl_vector<bmrf_node_sptr>::iterator nit = temp.begin();
-       nit != temp.end(); nit++)
-    if ((*nit)->epi_seg()->min_alpha()<a_max &&
-        (*nit)->epi_seg()->max_alpha()> a_min)
-    {
+    if ( (nit->first->min_alpha() < a_max) &&
+         (nit->first->max_alpha() > a_min) &&
+         (nit->first->min_s() <= s_max) &&
+         (nit->first->max_s() > 1.0/(1.0/s_min + max_delta_recip_s_) )){
+      neighbors.push_back(nit->second);
       found_something = true;
-      neighbors.push_back(*nit);
     }
 
   return found_something;
@@ -776,8 +772,14 @@ bool bmrf_network_builder::assign_neighbors()
     for (vcl_vector<bmrf_node_sptr>::iterator nnit = neighbors.begin();
          nnit != neighbors.end(); nnit++)
     {
-      network_->add_arc(nit->second, *nnit, bmrf_node::TIME);
-      network_->add_arc(*nnit, nit->second, bmrf_node::TIME);
+      const double int_var = 0.001; // intensity variance
+      bmrf_arc_sptr temp_arc = new bmrf_arc(nit->second, *nnit);
+      double total_error = temp_arc->induced_match_error()/2.0 
+                          +temp_arc->avg_intensity_error()/(2.0*int_var);
+      if(total_error < 10.0){   
+        network_->add_arc(temp_arc,            bmrf_node::TIME);
+        network_->add_arc(temp_arc->reverse(), bmrf_node::TIME);
+      }
     }
   }
   return true;
@@ -798,12 +800,16 @@ bool bmrf_network_builder::build_network()
 //=============================================================
 bool bmrf_network_builder::build()
 {
+  vul_timer t;
   if (!this->compute_segments())
     return false;
+  vcl_cout << "compute time = " << t.user() << vcl_endl; t.mark();
   if (!this->set_intensity_info())
     return false;
+  vcl_cout << "stats time = " << t.user() << vcl_endl; t.mark();
   if (!this->build_network())
     return false;
+  vcl_cout << "build time = " << t.user() << vcl_endl; t.mark();
   return true;
 }
 
