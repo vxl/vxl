@@ -246,8 +246,17 @@ SOURCES += zungqr.c
 include ${IUEROOT}/config/top.mk
 ##########################################
 
+# capes
 ifeq ($(OS),Linux2)
   CFLAGS += $(optimize)
+endif
+
+# fsm
+ifeq ($(OS),SunOS5)
+  CFLAGS += $(optimize)
+endif
+ifeq ($(IU_COMPILER),gcc-2.95)
+  CFLAGS += -fstrict-aliasing
 endif
 
 ifeq ($(OS),HP-UX10.20)
