@@ -78,9 +78,11 @@ rrel_orthogonal_regression::fit_from_minimal_set( const vcl_vector<int>& point_i
   }
   else {
     params = svd.nullvector();
-    params /= sqrt( 1 - vnl_math_sqr( params[ params.size()-1 ] ) );
+    params /= vcl_sqrt( 1 - vnl_math_sqr( params[ params.size()-1 ] ) );
   }
+  return true;
 }
+
 
 void
 rrel_orthogonal_regression::compute_residuals( const vnl_vector<double>& params,
