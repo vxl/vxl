@@ -7,6 +7,9 @@
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_4.h>
 #include <vnl/vnl_double_4x4.h>
+#include <vnl/vnl_double_2x3.h>
+#include <vnl/vnl_double_3x3.h>
+#include <vnl/vnl_double_2x2.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vdgl/vdgl_interpolator.h>
@@ -16,6 +19,7 @@
 #include <bbas/bdgl/bdgl_curve_algs.h>
 #include <vsol/vsol_box_3d.h>
 #include <vcl_cassert.h>
+#include "brct_algos.h"
 
 // Construction/Destruction
 
@@ -49,6 +53,43 @@ vgl_point_2d<double> brct_algos::projection_3d_point(const vgl_point_3d<double> 
   vnl_double_4 X(x.x(),x.y(),x.z(),1.0);
   vnl_double_3 t = P*X;
   return vgl_homg_point_2d<double>(t[0],t[1],t[2]);
+}
+
+bugl_gaussian_point_2d<double> brct_algos::project_3d_point(\
+      const vnl_double_3x4 &P, \
+      const bugl_gaussian_point_3d<double> & X)
+{
+  vnl_double_4 Y(X.x(),X.y(),X.z(),1.0);
+  vnl_double_3 u = P*Y;
+
+
+  // compute week prospect matrix
+  vnl_double_2x3 H;
+
+  // sum_{k=1}^{3} {P_{3k}Y_k + P_{34}
+  double t = 0;
+  for (int k=0; k<3; k++)
+    t += P[2][k]*Y[k];
+  t+=P[2][3];
+
+  // 
+  for (int i=0; i<2; i++){
+    double t1 = 0;
+    for (int k = 0; k<3; k++)
+      t1 += P[i][k]*Y[k];
+    t1+= P[i][3];
+
+    for (int j=0; j<3; j++)
+      H[i][j] = P[i][j] / t - P[2][j]* t1 / t/t;
+  }
+
+  vnl_matrix_fixed<double, 3, 3> Sigma3d = X.get_covariant_matrix();
+  vnl_matrix_fixed<double, 2, 2> Sigma2d = H*Sigma3d*H.transpose();
+
+  vgl_homg_point_2d<double> hp2d(u[0], u[1], u[2]);
+  vgl_point_2d<double> p2d(hp2d);
+  return bugl_gaussian_point_2d<double>(p2d, Sigma2d);
+ 
 }
 
 vgl_point_3d<double> brct_algos::bundle_reconstruct_3d_point(vcl_vector<vnl_double_2> &pts, vcl_vector<vnl_double_3x4> &Ps)
@@ -97,7 +138,37 @@ vgl_point_2d<double> brct_algos::closest_point(vdgl_digital_curve_sptr dc, vgl_p
   return (*ec)[i].get_pt();
 }
 
+vgl_point_2d<double> brct_algos::most_possible_point(vdgl_digital_curve_sptr dc, bugl_gaussian_point_2d<double> &pt)
+{
+  vdgl_interpolator_sptr interp = dc->get_interpolator();
+  vdgl_edgel_chain_sptr ec = interp->get_edgel_chain();
 
+  if(!ec)
+  { 
+    vcl_cout<<"In brct_algos::most_possible_point(...) - warning, null chain\n";
+    return vgl_point_2d<double>();
+  }
+
+  double maxd = -100;
+  int N = ec->size();
+  vgl_point_2d<double> pmax;
+
+  for(int i=0; i<N; i++)
+  {
+    vgl_point_2d<double> p = (*ec)[i].get_pt();
+    double d = pt.prob_at(p);
+    if (d>maxd)
+    {
+      maxd = d;
+      pmax = p;
+    }
+
+  }
+
+  return pmax;
+ 
+}
+ 
 vnl_double_2 brct_algos::projection_3d_point(const vnl_double_3x4 &P, const vnl_double_3 &X)
 {
     vnl_double_2 z;

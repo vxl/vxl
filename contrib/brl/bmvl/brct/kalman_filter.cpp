@@ -13,6 +13,7 @@
 #include <mvl/FMatrix.h>
 #include <vnl/vnl_math.h> // for pi
 #include <vnl/vnl_inverse.h>
+#include <vnl/vnl_quaternion.h>
 #include <vdgl/vdgl_edgel.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_edgel_chain_sptr.h>
@@ -57,12 +58,13 @@ void kalman_filter::init()
   init_transit_matrix();
 
   init_cam_intrinsic();
-  // initialize the observe matrix
-  //init_observes();
+  
+  init_velocity();
+  init_covariant_matrix();  
+
   init_state_vector();
   memory_size_ = 2;
 
-  init_covariant_matrix();  
 
   cur_pos_ = (cur_pos_ + 1) % queue_size_;
 }
@@ -82,21 +84,10 @@ void kalman_filter::init_transit_matrix()
 
   for (int i=0; i<3; i++)
     A_[i][i+3] = dt_;
-
-#ifdef DEBUG
-  vcl_cout<<"A is\n";
-  for (int i=0; i<6; i++) {
-    for (int j=0; j<6; j++)
-      vcl_cout<<' '<<A_[i][j];
-    vcl_cout<<'\n';
-  }
-#endif // DEBUG
 }
-
 
 void kalman_filter::init_state_vector()
 {
-  init_velocity();
   vnl_double_3 T(X_[3],X_[4],X_[5]);
 
   // compute camera calibration matrix
@@ -141,6 +132,13 @@ void kalman_filter::init_state_vector()
   int npts = 2* ((size0 < size1) ? size0 : size1); // interpolate 2 times more
 
   vcl_vector<vgl_point_3d<double> > pts_3d;
+
+  vnl_double_3x3 Sigma3d;
+
+  for(int i=0; i<3; i++){
+    for(int j=0; j<3; j++)
+      Sigma3d[i][j] = Q0_[i][j];
+  }
 
   for (int i=0; i<npts; i++)
   {
@@ -189,9 +187,9 @@ void kalman_filter::init_state_vector()
       }
 
       if (flag) { // if have corresponding
-        vnl_double_2x2 sigma2;
-        sigma2.set_identity();
-        bugl_gaussian_point_2d<double> x2(p2, sigma2);
+        vnl_double_2x2 Sigma2d;
+        Sigma2d.set_identity();
+        bugl_gaussian_point_2d<double> x2(p2, Sigma2d);
         vgl_point_3d<double> point_3d = brct_algos::triangulate_3d_point(x1, P1, x2, P2);
         pts_3d.push_back(point_3d);
         observes_[0].push_back(x1);
@@ -207,9 +205,7 @@ void kalman_filter::init_state_vector()
   prob_.resize(num_points_);
   for (int i=0; i<num_points_; i++)
   {
-    vnl_double_3x3 Sigma;
-    Sigma.set_identity();
-    bugl_gaussian_point_3d<double> p3d(pts_3d[i].x(), pts_3d[i].y(), pts_3d[i].z(), Sigma);
+    bugl_gaussian_point_3d<double> p3d(pts_3d[i].x(), pts_3d[i].y(), pts_3d[i].z(), Sigma3d);
     curve_3d_[i] = p3d;
 
     prob_[i] = 1.0/num_points_;
@@ -224,20 +220,29 @@ void kalman_filter::init_state_vector()
 void kalman_filter::init_covariant_matrix()
 {
   // initialize P
-  for (int i=0; i<6; i++)
-    for (int j=0; j<6; j++)
-      Q_[i][j] = 0.0;
+    Q_.set_identity();
 
+  // initialize Q0_ to let the variance on
+  // velocity direction bigger
+  vnl_double_3x3 Sigma;
+
+  Sigma = 0; Sigma[0][0] = 10;
+  Sigma[1][1] = 1; Sigma[2][2] = 1;
+
+  vnl_double_3 xaxis(1, 0, 0);
+  vnl_double_3 T(X_[0], X_[1], X_[2]);
+  vnl_double_3 axis = cross_3d(xaxis, T);
+  axis /= axis.magnitude(); 
+  double theta = angle(T, xaxis);
+
+  vnl_quaternion<double> q(axis, theta);
+  vnl_double_3x3 RT = q.rotation_matrix_transpose();
+  Sigma = RT.transpose()*Sigma*RT;
+  
+  Q0_ = 0.0;
   for (int i=0; i<3; i++)
-    Q_[i][i] = 1;
-
-  // initialize Q
-  for (int i=0; i<6; i++)
-    for (int j=0; j<6; j++)
-      Q0_[i][j] = 0.0;
-
-  for (int i=0; i<3; i++)
-    Q0_[i][i] = 1;
+    for(int j=0; j<3; j++)
+      Q0_[i][j] = Sigma[i][j];
 
   // initialize R
   for (int i=0; i<2; i++)
@@ -334,9 +339,10 @@ void kalman_filter::update_observes(const vnl_double_3x4 &P, int iframe)
 
   for (int i=0; i<num_points_; i++)
   {
-    vgl_point_3d<double> X(curve_3d_[i].x(), curve_3d_[i].y(), curve_3d_[i].z());
-    vgl_point_2d<double> x = brct_algos::projection_3d_point(X, P);
-    vgl_point_2d<double> u = brct_algos::closest_point(curves_[iframe], x);
+    //vgl_point_3d<double> X(curve_3d_[i].x(), curve_3d_[i].y(), curve_3d_[i].z());
+    bugl_gaussian_point_2d<double> x = brct_algos::project_3d_point(P, curve_3d_[i]);
+    //vgl_point_2d<double> u = brct_algos::closest_point(curves_[iframe], x);
+    vgl_point_2d<double> u = brct_algos::most_possible_point(curves_[iframe], x);
     observes_[iframe%queue_size_][i].set_point(u);
     vnl_double_2x2 sigma;
     sigma.set_identity();
@@ -543,18 +549,6 @@ void kalman_filter::init_velocity()
 {
   vcl_vector<vgl_homg_line_2d<double> > lines;
 
-#if 0
-  vnl_matrix<double> &img0 = observes_[0], &img1 = observes_[1];
-
-  for (int i=0; i< num_points_; i++)
-  {
-    vgl_homg_line_2d<double> l(vgl_homg_point_2d<double>(img0[0][i],img0[1][i]),
-                               vgl_homg_point_2d<double>(img1[0][i],img1[1][i]));
-
-    lines.push_back(l);
-  }
-#endif // 0
-
   //
   // This is a temporary solution
   //
@@ -587,10 +581,6 @@ void kalman_filter::init_velocity()
   vnl_double_3 T = vnl_inverse(K_) * e;
   T /= vcl_sqrt(T[0]*T[0] + T[1]*T[1] + T[2]*T[2]);
   T *= trans_dist;
-
-#ifdef DEBUG
-  vcl_cout<<"T is "<<T<<'\n';
-#endif
 
   //initialize the state vector
   X_[0] = X_[3] = T[0];

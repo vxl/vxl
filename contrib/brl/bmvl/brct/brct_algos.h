@@ -23,6 +23,8 @@
 #include <vsol/vsol_box_3d_sptr.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
+#include <bugl/bugl_gaussian_point_2d.h>
+#include <bugl/bugl_gaussian_point_3d.h>
 
 class brct_algos
 {
@@ -38,10 +40,16 @@ class brct_algos
                                                           vcl_vector<vnl_double_3x4> &P);
   static vgl_point_2d<double> projection_3d_point(const vgl_point_3d<double> & x, const vnl_double_3x4& P);
 
+  static bugl_gaussian_point_2d<double> project_3d_point(\
+      const vnl_double_3x4 &P, \
+      const bugl_gaussian_point_3d<double> & X);
+
   static vnl_double_2 projection_3d_point(const vnl_double_3x4& P, const vnl_double_3 & X);
   //: get closet point from a digital curve
   static vgl_point_2d<double>  closest_point(vdgl_digital_curve_sptr dc, vgl_point_2d<double> pt);
-
+  //: get point on a digital curve which is most possible to the guassian pdf
+  static vgl_point_2d<double> most_possible_point(vdgl_digital_curve_sptr dc, bugl_gaussian_point_2d<double> &pt);
+  
   //: pointwise reconstruction
   static vgl_point_3d<double> triangulate_3d_point(const vgl_point_2d<double>& x1, const vnl_double_3x4& P1,
                                                    const vgl_point_2d<double>& x2, const vnl_double_3x4& P2);
