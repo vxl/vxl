@@ -54,6 +54,7 @@ public:
 
   virtual double perp_dist_squared(HomgPoint2D const& p, HomgLine2D const& l);
   virtual double distance_squared(HomgPoint2D const&, HomgPoint2D const&);
+  virtual double distance_squared(HomgLineSeg2D const& segment, HomgLine2D const& line);
 
   virtual bool is_linear() const { return true; }
   virtual const vnl_matrix<double>& get_C() const { return cond_matrix; }

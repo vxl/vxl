@@ -14,6 +14,7 @@
 
 #include <mvl/HomgPoint2D.h>
 #include <mvl/HomgLine2D.h>
+#include <mvl/HomgLineSeg2D.h>
 #include <mvl/HomgOperator2D.h>
 
 //: Default constructor sets parameters for an identity transformation.
@@ -167,6 +168,14 @@ double SimilarityMetric::distance_squared(HomgPoint2D const& p1, HomgPoint2D con
   double y2 = p2.get_y() / p2.get_w();
 
   return vnl_math_sqr (_inv_scale) * (vnl_math_sqr (x1 - x2) + vnl_math_sqr (y1 - y2));
+}
+
+//: Get distance between a line segment and an infinite line.
+//  The metric used is the maximum of the two endpoint perp distances.
+double SimilarityMetric::distance_squared(const HomgLineSeg2D& segment, const HomgLine2D& line)
+{
+  return vnl_math_max(this->perp_dist_squared(segment.get_point1(), line),
+                       this->perp_dist_squared(segment.get_point2(), line));
 }
 
 //: Compute perpendicular distance (in image coordinates) from point to line (supplied in conditioned coordinates).
