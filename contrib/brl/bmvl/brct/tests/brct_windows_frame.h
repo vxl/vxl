@@ -27,7 +27,7 @@
 class brct_windows_frame : public vgui_wrapper_tableau
 {
  public:
-  //: methods for debug menu callbacks
+  // methods for debug menu callbacks
   void show_epipole();
   void load_image();
   void show_back_projection();
@@ -39,8 +39,8 @@ class brct_windows_frame : public vgui_wrapper_tableau
   ~brct_windows_frame();
   static brct_windows_frame *instance();
 
-  //:methods for run menu callbacks
-	void creat_line();
+  // methods for run menu callbacks
+  void creat_line();
   void quit();
   void add_curve2d(vcl_vector<vgl_point_2d<double> > &pts);
   void remove_curve2d();
@@ -58,7 +58,7 @@ class brct_windows_frame : public vgui_wrapper_tableau
   virtual bool handle(const vgui_event&);
 
  protected:
-  //:internal utility methods
+  //internal utility methods
 
   //: it clean the memory allocated by init. it should be called by quit()
   void clean_up();
