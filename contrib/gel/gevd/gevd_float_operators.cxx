@@ -34,6 +34,7 @@
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_algorithm.h>
+#include <vnl/vnl_math.h> // for pi_over_2
 #include <vnl/vnl_vector.h>
 
 #include <vcl_cmath.h>
@@ -875,12 +876,12 @@ LocalHessian(const gevd_bufferxy& smooth, const int i, const int j,
   if (ddx_plus_ddy < 0) {
     mag = - ddx_plus_ddy +      // most negative eigenvalue
       vcl_sqrt((ddx_minus_ddy * ddx_minus_ddy) + (two_dxdy * two_dxdy));
-    theta += M_PI/2;            // angle in range [0 pi]
+    theta += vnl_math::pi_over_2;// angle in range [0 pi]
   } else {
     mag = ddx_plus_ddy +        // most positive eigenvalue
           vcl_sqrt((ddx_minus_ddy * ddx_minus_ddy) + (two_dxdy * two_dxdy));
     if (theta > 0)
-      theta -= M_PI;            // angle in range [-pi 0]
+      theta -= vnl_math::pi;    // angle in range [-pi 0]
   }
   dirx = vcl_cos(theta); // eigenvector corresponding to
   diry = vcl_sin(theta); // largest eigenvalue/curvature
@@ -987,11 +988,11 @@ LocalLaplacian(const gevd_bufferxy& smooth, const int i, const int j,
   float theta = (diag1==diag2 && ddx==ddy) ? 0 : // DOMAIN condition on atan2
                 vcl_atan2((diag1 - diag2) / 2, ddx - ddy) / 2; // modulo PI
   if (mag < 0) {
-    mag = - mag;                // absolute magnitude
-    theta += M_PI/2;            // other eigenvector
+    mag = - mag;                  // absolute magnitude
+    theta += vnl_math::pi_over_2; // other eigenvector
   }
-  dirx = vcl_cos(theta);            // eigenvector corresponding to
-  diry = vcl_sin(theta);            // largest eigenvalue/curvature
+  dirx = vcl_cos(theta);          // eigenvector corresponding to
+  diry = vcl_sin(theta);          // largest eigenvalue/curvature
 }
 
 //: Compute the Laplacian of the intensity surface. O(m*n).
@@ -1142,7 +1143,7 @@ LocalMaximum(const gevd_bufferxy& magnitude,
              float& contour, unsigned char& dir, // response & direction
              float& locx, float& locy)  // subpixel location
 {
-  const float tan_pi_8 = tan(M_PI/8);
+  const float tan_pi_8 = tan(vnl_math::pi_over_4/2);
   float strength = floatPixel(magnitude, i, j);
   if (strength > threshold) { // eliminate noisy responses
     float dx = floatPixel(directionx, i, j);
@@ -1403,8 +1404,8 @@ gevd_float_operators::SupportAngle(const gevd_bufferxy& dirx, const gevd_bufferx
     for (i = 0; i < highx; ++i)
       if (floatPixel(magnitude, i, j) > 0) {
         theta = vcl_atan2(floatPixel(diry, i, j), floatPixel(dirx, i, j));
-        if (theta < 0) theta += M_PI;
-        floatPixel(*angLe, i, j) = theta * 180/M_PI;
+        if (theta < 0) theta += vnl_math::pi;
+        floatPixel(*angLe, i, j) = theta * 180 * vnl_math::one_over_pi;
       }
 }
 
@@ -2187,148 +2188,148 @@ gevd_float_operators::ShrinkBy2(const float* from, const int length,
 
 static float haar2 [] =
 {                                               // Haar wavelet
-  0.70710678119,                                // 1/sqrt(2.0)
-  0.70710678119,
-  0
+  0.7071067811865f,                             // 1/sqrt(2.0)
+  0.7071067811865f,
+  0.f
 };
 
 static float daubechies4 [] =
 {
-  0.4829629131445341,                           // Daubechies wavelet
-  0.8365163037378079,
-  0.2241438680420134,
-  -0.1294095225512604,
+  0.4829629131445341f,                           // Daubechies wavelet
+  0.8365163037378079f,
+  0.2241438680420134f,
+ -0.1294095225512604f,
   0
 };
 
 static float daubechies6 [] =
 {
-  0.3326705529500825,
-  0.8068915093110924,
-  0.4598775021184914,
-  -0.1350110200102546,
-  -0.0854412738820267,
-  0.0352262918857095,
+  0.3326705529500825f,
+  0.8068915093110924f,
+  0.4598775021184914f,
+ -0.1350110200102546f,
+ -0.0854412738820267f,
+  0.0352262918857095f,
   0
 };
 
 static float daubechies8 [] =
 {
-  0.2303778133088964,
-  0.7148465705529154,
-  0.6308807679398587,
-  -0.0279837694168599,
-  -0.1870348117190931,
-  0.0308413818355607,
-  0.0328830116668852,
-  -0.0105974017850690,
+  0.2303778133088964f,
+  0.7148465705529154f,
+  0.6308807679398587f,
+ -0.0279837694168599f,
+ -0.1870348117190931f,
+  0.0308413818355607f,
+  0.0328830116668852f,
+ -0.0105974017850690f,
   0
 };
 
 static float daubechies10 [] =
 {
-  0.1601023979741929,
-  0.6038292697971895,
-  0.7243085284377726,
-  0.1384281459013203,
-  -0.2422948870663823,
-  -0.0322448695846381,
-  0.0775714938400459,
-  -0.0062414902127983,
-  -0.0125807519990820,
-  0.0033357252854738,
+  0.1601023979741929f,
+  0.6038292697971895f,
+  0.7243085284377726f,
+  0.1384281459013203f,
+ -0.2422948870663823f,
+ -0.0322448695846381f,
+  0.0775714938400459f,
+ -0.0062414902127983f,
+ -0.0125807519990820f,
+  0.0033357252854738f,
   0
 };
 
 static float daubechies12 [] =
 {
-  0.111540743350,
-  0.494623890398,
-  0.751133908021,
-  0.315250351709,
-  -0.226264693965,
-  -0.129766867567,
-  0.097501605587,
-  0.027522865530,
-  -0.031582039318,
-  0.000553842201,
-  0.004777257511,
-  -0.001077301085,
+  0.111540743350f,
+  0.494623890398f,
+  0.751133908021f,
+  0.315250351709f,
+ -0.226264693965f,
+ -0.129766867567f,
+  0.097501605587f,
+  0.027522865530f,
+ -0.031582039318f,
+  0.000553842201f,
+  0.004777257511f,
+ -0.001077301085f,
   0
 };
 
 static float daubechies20 [] =
 {
-  0.026670057901,
-  0.188176800078,
-  0.527201188932,
-  0.688459039454,
-  0.281172343661,
-  -0.249846424327,
-  -0.195946274377,
-  0.127369340336,
-  0.093057364604,
-  -0.071394147166,
-  -0.029457536822,
-  0.033212674059,
-  0.003606553567,
-  -0.010733175483,
-  0.001395351747,
-  0.001992405295,
-  -0.000685856695,
-  -0.000116466855,
-  0.000093588670,
-  -0.000013264203,
+  0.026670057901f,
+  0.188176800078f,
+  0.527201188932f,
+  0.688459039454f,
+  0.281172343661f,
+ -0.249846424327f,
+ -0.195946274377f,
+  0.127369340336f,
+  0.093057364604f,
+ -0.071394147166f,
+ -0.029457536822f,
+  0.033212674059f,
+  0.003606553567f,
+ -0.010733175483f,
+  0.001395351747f,
+  0.001992405295f,
+ -0.000685856695f,
+ -0.000116466855f,
+  0.000093588670f,
+ -0.000013264203f,
   0
 };
 
 static float coifman9 [] =
 {
-  0.019849565349356158,                         // ***double-check as Coifman
-  -0.04309091740554781,                         // wavelets ****
-  -0.05188793647806494,
-  0.2932311998087948,
-  0.5637961774509238,
-  0.2932311998087948,
-  -0.05188793647806494,
-  -0.04309091740554781,
-  0.019849565349356158,
+  0.019849565349356158f,                        // ***double-check as Coifman
+ -0.04309091740554781f,                         // wavelets ****
+ -0.05188793647806494f,
+  0.2932311998087948f,
+  0.5637961774509238f,
+  0.2932311998087948f,
+ -0.05188793647806494f,
+ -0.04309091740554781f,
+  0.019849565349356158f,
   0
 };
 
 static float coifman11 [] =
 {
-  0.007987761489921101,
-  0.02011649866148413,
-  -0.05015758257647976,
-  -0.12422330961337678,
-  0.29216982108655865,
-  0.7082136219037853,
-  0.29216982108655865,
-  -0.12422330961337678,
-  -0.05015758257647976,
-  0.02011649866148413,
-  0.007987761489921101,
+  0.007987761489921101f,
+  0.02011649866148413f,
+ -0.05015758257647976f,
+ -0.12422330961337678f,
+  0.29216982108655865f,
+  0.7082136219037853f,
+  0.29216982108655865f,
+ -0.12422330961337678f,
+ -0.05015758257647976f,
+  0.02011649866148413f,
+  0.007987761489921101f,
   0
 };
 
 static float coifman15 [] =
 {
-  -0.0012475221,
-  -0.0024950907,
-  0.0087309530,
-  0.0199579580,
-  -0.0505290000,
-  -0.1205509700,
-  0.2930455800,
-  0.7061761600,
-  0.2930455800,
-  -0.1205509700,
-  -0.0505290000,
-  0.0199579580,
-  0.0087309530,
-  -0.0024950907,
-  -0.0012475221,
+ -0.0012475221f,
+ -0.0024950907f,
+  0.0087309530f,
+  0.0199579580f,
+ -0.0505290000f,
+ -0.1205509700f,
+  0.2930455800f,
+  0.7061761600f,
+  0.2930455800f,
+ -0.1205509700f,
+ -0.0505290000f,
+  0.0199579580f,
+  0.0087309530f,
+ -0.0024950907f,
+ -0.0012475221f,
   0
 };
 
@@ -3272,7 +3273,7 @@ gevd_float_operators::CoarseFineCorrelation(const float* dataPyr, const int dlen
                                             const float overlap,
                                             float* matches)
 {
-  const float NOISE = 0.2;      // valid maximum correlation
+  const float NOISE = 0.2f;      // valid maximum correlation
 
   // 1. Complete search of the best correlation at coarsest level
   // given required minimum overlap.
