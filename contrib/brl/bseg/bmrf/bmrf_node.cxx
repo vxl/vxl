@@ -112,9 +112,6 @@ bmrf_match_error( const bmrf_epi_seg_sptr& ep1, const bmrf_epi_seg_sptr& ep2 )
 double
 bmrf_node::probability()
 {
-  if (this->num_neighbors() < 1)
-    return probability_ = 0.0;
-
   if (probability_ <= 0.0)
     compute_probability();
 
@@ -502,6 +499,10 @@ bmrf_node::bmrf_arc::b_read( vsl_b_istream& )
 void
 bmrf_node::bmrf_arc::time_init()
 {
+  if( from_->epi_seg()->n_pts() <= 0 || 
+      to_->epi_seg()->n_pts() <= 0 )
+    return;
+
   double int_var = 0.001; // intensity variance
 
   bmrf_epi_seg_sptr ep1 = from_->epi_seg();
