@@ -22,6 +22,9 @@ SOURCES += vgl_window_scan_iterator.cxx
 SOURCES += vgl_polygon_scan_iterator.cxx
 # coming soon: vgl_ellipse_scan_iterator.cxx
 
+SOURCES += vgl_1d_basis.cxx
+
+MANPAGE_SOURCES += vgl_homg_point_1d.txx
 MANPAGE_SOURCES += vgl_point_2d.txx
 MANPAGE_SOURCES += vgl_homg_point_2d.txx
 MANPAGE_SOURCES += vgl_point_3d.txx
@@ -37,6 +40,7 @@ MANPAGE_SOURCES += vgl_line_segment_2d.txx
 MANPAGE_SOURCES += vgl_line_segment_3d.txx
 MANPAGE_SOURCES += vgl_vector_2d.txx
 MANPAGE_SOURCES += vgl_vector_3d.txx
+MANPAGE_SOURCES += vgl_1d_basis.txx
 
 SUBDIRS += algo
 
