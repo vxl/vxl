@@ -448,7 +448,7 @@ static structureType _readHeader(
 {
 #define LINELENGTH 100
   char line[LINELENGTH];
-  structureType id;
+  structureType id = FEATURE_LIST;
 
   /* If file is binary, then read data and return */
   fread(line, sizeof(char), BINHEADERLENGTH, fp);
@@ -584,7 +584,6 @@ KLT_FeatureList KLTReadFeatureList(
   FILE *fp;
   KLT_FeatureList fl;
   int nFeatures;
-  structureType id;
   int indx;
   KLT_BOOL binary;      /* whether file is binary or text */
   int i;
@@ -594,11 +593,12 @@ KLT_FeatureList KLTReadFeatureList(
                             "for reading", fname);
   if (KLT_verbose >= 1)
     fprintf(stderr,  "(KLT) Reading feature list from '%s'\n", fname);
-  id = _readHeader(fp, NULL, &nFeatures, &binary);
-  if (id != FEATURE_LIST)
-    KLTError("(KLTReadFeatureList) File '%s' does not contain "
-             "a FeatureList", fname);
-
+  {
+    structureType id = _readHeader(fp, NULL, &nFeatures, &binary);
+    if (id != FEATURE_LIST)
+      KLTError("(KLTReadFeatureList) File '%s' does not contain "
+               "a FeatureList", fname);
+  }
   if (fl_in == NULL)  {
     fl = KLTCreateFeatureList(nFeatures);
     fl->nFeatures = nFeatures;
@@ -637,7 +637,6 @@ KLT_FeatureHistory KLTReadFeatureHistory(
   FILE *fp;
   KLT_FeatureHistory fh;
   int nFrames;
-  structureType id;
   int indx;
   KLT_BOOL binary;      /* whether file is binary or text */
   int i;
@@ -646,10 +645,11 @@ KLT_FeatureHistory KLTReadFeatureHistory(
   if (fp == NULL)  KLTError("(KLTReadFeatureHistory) Can't open file '%s' "
                             "for reading", fname);
   if (KLT_verbose >= 1) fprintf(stderr,  "(KLT) Reading feature history from '%s'\n", fname);
-  id = _readHeader(fp, &nFrames, NULL, &binary);
-  if (id != FEATURE_HISTORY) KLTError("(KLTReadFeatureHistory) File '%s' does not contain "
-                                      "a FeatureHistory", fname);
-
+  {
+    structureType id = _readHeader(fp, &nFrames, NULL, &binary);
+    if (id != FEATURE_HISTORY) KLTError("(KLTReadFeatureHistory) File '%s' does not contain "
+                                        "a FeatureHistory", fname);
+  }
   if (fh_in == NULL)  {
     fh = KLTCreateFeatureHistory(nFrames);
     fh->nFrames = nFrames;
@@ -690,7 +690,6 @@ KLT_FeatureTable KLTReadFeatureTable(
   KLT_FeatureTable ft;
   int nFrames;
   int nFeatures;
-  structureType id;
   int indx;
   KLT_BOOL binary;      /* whether file is binary or text */
   int i, j;
@@ -699,10 +698,11 @@ KLT_FeatureTable KLTReadFeatureTable(
   if (fp == NULL)  KLTError("(KLTReadFeatureTable) Can't open file '%s' "
                             "for reading", fname);
   if (KLT_verbose >= 1) fprintf(stderr,  "(KLT) Reading feature table from '%s'\n", fname);
-  id = _readHeader(fp, &nFrames, &nFeatures, &binary);
-  if (id != FEATURE_TABLE) KLTError("(KLTReadFeatureTable) File '%s' does not contain "
-                                    "a FeatureTable", fname);
-
+  {
+    structureType id = _readHeader(fp, &nFrames, &nFeatures, &binary);
+    if (id != FEATURE_TABLE) KLTError("(KLTReadFeatureTable) File '%s' does not contain "
+                                      "a FeatureTable", fname);
+  }
   if (ft_in == NULL)  {
     ft = KLTCreateFeatureTable(nFrames, nFeatures);
     ft->nFrames = nFrames;

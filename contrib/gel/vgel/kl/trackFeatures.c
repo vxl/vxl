@@ -407,7 +407,7 @@ void KLTTrackFeatures(
     pyramid2, pyramid2_gradx, pyramid2_grady;
   int subsampling = tc->subsampling;
   float xloc, yloc, xlocout, ylocout;
-  int val;
+  int val = 0;
   int indx, r;
   KLT_BOOL floatimg1_created = FALSE;
   int i;
