@@ -28,7 +28,7 @@ REQUIREMENTS  --  REQUIREMENTS  --  REQUIREMENTS  --  REQUIREMENTS
 
   - GTK (GIMP Toolkit).  For this you will need:
        GTK (gtk+-1.2.5 or later) from http://www.gtk.org/
-       GtkGLarea (gtkglearea-1.2.1 or later)
+       GtkGLarea (gtkglarea-1.2.1 or later)
        glib
 
     When you run configure in TargetJr you will need to add these
