@@ -139,6 +139,8 @@ Always write the input and output code in tandem - the output should
 precisely mirror the input.
 @end quotation
 
+
+
 @subsection Binary I/O by baseclass pointer
 
 When using polymorphism, there are frequently times when one needs to
@@ -208,6 +210,58 @@ level-2 library, it might be included in the library itself, e.g. the io functio
 vpdfl_gaussian are declared in the same file as the Gaussian, @code{vpdfl/vpdfl_gaussian.h>}.
 Alternatively, it might be in a clip-on library in the same form as the Level-1 libraries
 above.
+
+@subsection How to save templated objects
+
+The situation for templated objects is the same as above, except that you need to ensure that
+the appropriate (templated) @code{vsl_b_read} and @code{vsl_b_write} functions are explicitly instantiated.
+This instantiation is achieved by placing a file in the relevant "Templates" folder.
+
+An example template file, is shown below. It enables saving of a 2d array of "@code{hjk_model}"s
+(a completely made up plain class).
+
+@example
+// file = my_module/hjk/Templates/vbl_array_2d_io+hjk_model~-.cxx
+#include <vbl/io/vbl_io_array_2d.txx>
+#include <hjk/hjk_model.h>
+VBL_IO_ARRAY_2D_INSTANTIATE(hjk_model);
+@end example
+
+The @code{vbl_io_array_2d.txx} file contains the @code{VBL_IO_ARRAY_2D_INSTANTIATE} macro and the
+@code{hjk_model.h} file contains the io header declarations for a plain class.
+
+Another example template file, allowing the saving of a vector of @code{vgl_point_2d} objects,
+is shown below.
+
+@example
+// file = my_module/hjk/Templates/vsl_vector_io+vgl_point_2d~-.cxx
+#include <vsl/vsl_vector_io.txx>
+#include <vgl/io/vgl_io_point_2d.h>
+VSL_VECTOR_IO_INSTANTIATE(vgl_point_2d<double>);
+@end example
+
+The @code{vsl_vector_io.txx} file contains the @code{VSL_VECTOR_IO_INSTANTIATE} macro and the
+@code{vgl_io_point_2d.h} file contains the io header declarations for @code{vgl_point_2d<double>}.
+
+You should now be able to load and save templated objects with lines such as:-
+
+@example
+vcl_vector<hjk_model> hjk_model_vec;
+vsl_b_ofstream bfs("hjk_model_vec.bvl");
+if (!bfs)
+@{
+    vcl_cerr<<"Failed to open hjk_model_vec.bvl for output."<<vcl_endl;
+@}
+else
+@{
+    vsl_b_write(bfs,hjk_model_vec);
+    bfs.close();
+@}
+@end example
+
+NB, the template instantiation files should be placed in your own libraries (ie here "hjk") to
+avoid creating unnecessary and unused versions of a given templated function.
+
 
 @section Loading by baseclass pointer: Design Overview
 
