@@ -32,6 +32,8 @@ VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<vnl_rational const> : public vnl_numeric_traits<vnl_rational> {
 };
 
+vcl_ostream& operator<<(vcl_ostream&, vcl_complex<vnl_rational>);
+
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<vcl_complex<vnl_rational> > {
 public:
