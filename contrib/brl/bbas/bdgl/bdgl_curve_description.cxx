@@ -57,9 +57,15 @@ void bdgl_curve_description::init(vdgl_edgel_chain_sptr const& ec)
   center_.set( center_.x()/double(N) , center_.y()/double(N) );
   gradient_mean_val_ /= double(N);
   gradient_mean_dir_ /= double(N);
-  static int smooth_=0;
-  if (smooth_)
-    bdgl_curve_algs::smooth_curve(points_,1);
+  bdgl_curve_algs::smooth_curve(points_,1);
+  points_.erase(points_.begin());
+  points_.erase(points_.begin());
+  points_.erase(points_.begin());
+
+  points_.erase(&points_.back());
+  points_.erase(&points_.back());
+  points_.erase(&points_.back());
+
 
   // standard deviations
   gradient_std_val_ = 0.0;
