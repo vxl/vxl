@@ -7,18 +7,20 @@ INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas)
 SET(bugl_sources
     bugl_uncertainty_point_2d.h  bugl_uncertainty_point_2d.txx
     bugl_gaussian_point_2d.h     bugl_gaussian_point_2d.txx
-    bugl_gaussian_point_2d_sptr.h
+    bugl_normal_point_2d.h      
+    bugl_normal_point_2d_sptr.h
     
     bugl_uncertainty_point_3d.h bugl_uncertainty_point_3d.txx
     bugl_gaussian_point_3d.h     bugl_gaussian_point_3d.txx
-    bugl_gaussian_point_3d_sptr.h
+    bugl_normal_point_3d.h
+    bugl_normal_point_3d_sptr.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates bugl_sources)
 
 ADD_LIBRARY(bugl ${bugl_sources})
 
-TARGET_LINK_LIBRARIES(bugl vnl vgl)
+TARGET_LINK_LIBRARIES(bugl vnl vgl vbl vcl)
 
 IF(BUILD_TESTING)
   SUBDIRS(tests)
