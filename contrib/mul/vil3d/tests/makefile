@@ -1,5 +1,5 @@
 USES += contrib/mul core
-include ../config.mk
+include ../algo/config.mk
 include ${IUEROOT}/core/testlib/config.mk
 
 TESTMAIN = test_driver.cxx
@@ -8,6 +8,7 @@ TESTS += test_gauss_reduce.cxx
 TESTS += test_image_view.cxx
 TESTS += test_sample_profile_trilin.cxx
 TESTS += test_trilin_interp.cxx
+TESTS += test_algo_threshold.cxx
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk
