@@ -1,11 +1,9 @@
-USES += v3p/netlib contrib/brl/b3p/netlib
-
 LIBRARY := b3p_netlib
 VERSION := 1.0
 
-SOURCES += simpson.cxx
-SOURCES += adaquad.cxx
-SOURCES += trapezod.cxx
+SOURCES += simpson.c
+SOURCES += adaquad.c
+SOURCES += trapezod.c
 MANPAGE_SOURCES += b3p_netlib.h
 
 #######################################
