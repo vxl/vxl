@@ -8,22 +8,21 @@
 
 #include "vgui_un_project.h"
 
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_matrix.h>
-#include <vnl/algo/vnl_svd.h>
+#include <vnl/vnl_vector_fixed.h>
+#include <vnl/vnl_matrix_fixed.h>
+#include <vnl/vnl_inverse.h>
 
 bool vgui_un_project(double const * const *H,
                      double const X[4],
                      double Y[4])
 {
-  vnl_matrix<double> M(4, 4);
+  vnl_matrix_fixed<double,4,4> M;
   M.set_row(0, H[0]);
   M.set_row(1, H[1]);
   M.set_row(2, H[2]);
   M.set_row(3, H[3]);
-  vnl_svd<double> svd(M);
-  vnl_vector<double> p(X, 4);
-  vnl_vector<double> q = svd.solve(p);
+  vnl_vector_fixed<double,4> p(X);
+  vnl_vector_fixed<double,4> q = vnl_inverse(M)*p;
   q.copy_out(Y);
   return true;
 }

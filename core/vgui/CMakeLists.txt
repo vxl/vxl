@@ -427,7 +427,7 @@ SET( vgui_sources ${vgui_sources}
 ADD_LIBRARY(vgui ${vgui_sources})
 
 # Dependencies on other vxl libraries
-TARGET_LINK_LIBRARIES(vgui vnl_algo vnl vil1 vil vgl vpl vbl vul)
+TARGET_LINK_LIBRARIES(vgui vnl vil1 vil vgl vpl vbl vul)
 
 # Dependencies created by the toolkit implementations
 

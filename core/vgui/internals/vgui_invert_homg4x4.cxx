@@ -25,11 +25,6 @@ static bool is_trans_scale(double const * const *M) {
           M[3][0] == 0 && M[3][1] == 0 && M[3][2] == 0;
 }
 
-#define use_svd 0
-
-#if use_svd
-# include <vnl/algo/vnl_svd.h>
-#else
 // return pointer to static data
 static double const * const * detA_inverseA(double const * const *A/*4x4*/) {
   static double data[4][4]={
@@ -69,7 +64,6 @@ static double const * const * detA_inverseA(double const * const *A/*4x4*/) {
   static double *out[4] = {data[0], data[1], data[2], data[3]};
   return out;
 }
-#endif
 
 bool vgui_invert_homg4x4(double const * const *M, double **Mi) {
   if (is_diagonal(M)) {
@@ -98,21 +92,17 @@ bool vgui_invert_homg4x4(double const * const *M, double **Mi) {
 
   // add more easy cases here....
 
-  // general matrix.
-#if use_svd
-  Mi = vnl_svd<double>(M).inverse();
-#else
   // closed-form inversion.
   // may be much faster.
   // may be less accurate.
   // if the given matrix has rank 0,1 or 2, the computed inverse will be zero.
   // if the given matrix has rank 3, the computed inverse will have rank 1.
   // else, the computed matrix should have rank 4.
-  double const * const *out = detA_inverseA(M);
+  double const * const *out = detA_inverseA(M); // = vnl_inverse(M)
   for (unsigned i=0; i<4; ++i)
     for (unsigned j=0; j<4; ++j)
       Mi[i][j] = out[i][j];
-#endif
+
   return true;
 }
 
