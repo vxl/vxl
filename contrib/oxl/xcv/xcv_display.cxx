@@ -194,14 +194,16 @@ void xcv_display::remove_roi()
 {
   unsigned col, row;
   get_current(&col,&row);
+#if 0
   vgui_rubberbander_sptr rubber = get_rubberbander_at(col, row);
 
-  //if (rubber)
-  //{
-    //rubber->set_client(0);
-    //delete roi_tableau_client_;
-    //roi_tableau_client_ = 0;
-  //}
+  if (rubber)
+  {
+    rubber->set_client(0);
+    delete roi_tableau_client_;
+    roi_tableau_client_ = 0;
+  }
+#endif
   xcv_image_tableau_sptr imt = get_image_tableau_at(col,row);
   imt->unset_roi();
 }
