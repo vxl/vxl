@@ -9,12 +9,14 @@
 #include <vil2/vil2_image_data.h>
 
 //: Explicit overload for bool
+VCL_DEFINE_SPECIALIZATION
 void vil2_print_value(vcl_ostream& os, const bool& value)
 {
   os<<int(value);
 }
 
 //: Explicit overload for unsigned char
+VCL_DEFINE_SPECIALIZATION
 void vil2_print_value(vcl_ostream& os, const unsigned char& value)
 {
   os.width(3);
@@ -22,6 +24,7 @@ void vil2_print_value(vcl_ostream& os, const unsigned char& value)
 }
 
 //: Explicit overload for unsigned short
+VCL_DEFINE_SPECIALIZATION
 void vil2_print_value(vcl_ostream& os, const unsigned short& value)
 {
   if (value<10)    os<<"0";
@@ -32,6 +35,7 @@ void vil2_print_value(vcl_ostream& os, const unsigned short& value)
 }
 
 //: Explicit overload of print for rgb<ubyte>
+VCL_DEFINE_SPECIALIZATION
 void vil2_print_value(vcl_ostream& os, const vil_rgb<unsigned char>& value)
 {
   int r = int(value.r);
@@ -49,6 +53,7 @@ void vil2_print_value(vcl_ostream& os, const vil_rgb<unsigned char>& value)
 }
 
 //: Explicit overload of print for rgb<ushort>
+VCL_DEFINE_SPECIALIZATION
 void vil2_print_value(vcl_ostream& os, const vil_rgb<unsigned short>& value)
 {
   vil2_print_value(os,value.r); os<<"-";
@@ -57,12 +62,14 @@ void vil2_print_value(vcl_ostream& os, const vil_rgb<unsigned short>& value)
 }
 
 //: Explicit overload of print for rgb<float>
+VCL_DEFINE_SPECIALIZATION
 void vil2_print_value(vcl_ostream& os, const vil_rgb<float>& value)
 {
   os<<value.r<<"-"<<value.g<<"-"<<value.b;
 }
 
 //: Compute minimum and maximum values over view
+VCL_DEFINE_SPECIALIZATION
 void vil2_value_range(vil_rgb<unsigned char>& min_value, vil_rgb<unsigned char>& max_value,
                       const vil2_image_view<vil_rgb<unsigned char> >& rgb_view)
 {
@@ -74,6 +81,7 @@ void vil2_value_range(vil_rgb<unsigned char>& min_value, vil_rgb<unsigned char>&
 }
 
 //: Compute minimum and maximum values over view
+VCL_DEFINE_SPECIALIZATION
 void vil2_value_range(vil_rgb<float>& min_value, vil_rgb<float>& max_value,
                       const vil2_image_view<vil_rgb<float> >& rgb_view)
 {
