@@ -72,8 +72,9 @@ template <class T>
 bool vbl_big_sparse_array_3d<T>::put(unsigned i, unsigned j, unsigned k, T const& t)
 {
   typedef typename Map::iterator iter;
+  typedef typename Map::value_type value_type;
   ulonglong v = bigencode(i,j,k);
-  vcl_pair<iter,bool> res = storage_.insert(typename Map::value_type(v,t));
+  vcl_pair<iter,bool> res = storage_.insert(value_type(v,t));
 #ifdef DEBUG
   vcl_cout << "{vbl_big_sparse_array_3d::put(" << i << ',' << j << ',' << k << ") - "
            << res.second << "}\n";

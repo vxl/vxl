@@ -74,9 +74,9 @@ class vbl_sparse_array_2d : public vbl_sparse_array_base<T, vcl_pair<unsigned, u
   //: Print the Array to a stream in "(i,j): value" format.
   vcl_ostream& print(vcl_ostream& out) const
   {
-    for (const_iterator p = storage_.begin(); p != storage_.end(); ++p)
-      out << "(" << (*p).first.first
-          << "," << (*p).first.second
+    for (const_iterator p = this->begin(); p != this->end(); ++p)
+      out << '(' << (*p).first.first
+          << ',' << (*p).first.second
           << "): " << (*p).second << vcl_endl;
     return out;
   }
