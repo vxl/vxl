@@ -6,7 +6,9 @@
 // Most of the specialisations are to do with size priorities. If the sizes
 // do not match for normal linear algebra operations, these functions will
 // for example, only use the first n elements of an >n input vector
+//
 // Modifications
+//
 // \verbatim
 // TFC    Revised version 3-Oct-97
 // TFC    Added TC_MatXVec2
