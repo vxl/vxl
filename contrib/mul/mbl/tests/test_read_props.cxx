@@ -1,4 +1,4 @@
-// This is mul/mbl/tests/test_parse_block.cxx
+// This is mul/mbl/tests/test_read_props.cxx
 #include <vcl_iostream.h>
 #include <vcl_sstream.h>
 
@@ -7,9 +7,9 @@
 
 void test_read_props()
 {
-  vcl_cout << "\n*************************\n"
+  vcl_cout << "\n************************\n"
            <<   " Testing mbl_read_props\n"
-           <<   "*************************\n";
+           <<   "************************\n";
 
   {
     vcl_istringstream ss("{}");
@@ -17,14 +17,13 @@ void test_read_props()
     TEST("Trivial case 1", props[ "a" ] == "" && !ss.fail(), true);
   }
 
-  
-/* This one won't work because the { } should be on their own lines
+#if 0 // This one won't work because the { } should be on their own lines
   {
     vcl_istringstream ss("{ a: a }");
     mbl_read_props_type props = mbl_read_props( ss );
     TEST("Trivial case 2", props[ "a" ] == "a" && !ss.fail(), true);
   }
-*/
+#endif // 0
 
   {
     vcl_istringstream ss("{\n  a: a\n }");
