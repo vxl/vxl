@@ -1,7 +1,7 @@
-USES = vxl rpl mul
-include ${IUEROOT}/rpl/rsdl/config.mk
-include $(IUEROOT)/mul/mbl/config.mk
-include $(IUEROOT)/vxl/testlib/config.mk
+USES += contrib/rpl contrib/mul core
+include ../config.mk
+include $(IUEROOT)/contrib/mul/mbl/config.mk
+include $(IUEROOT)/core/testlib/config.mk
 
 TESTMAIN := test_driver.cxx
 TESTS += test_borgefors.cxx

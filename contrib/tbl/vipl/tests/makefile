@@ -1,11 +1,11 @@
-USES := vxl tbl mul
+USES += contrib/tbl contrib/mul core
 
-IULIBS += -lmil -lmbl
-include ${IUEROOT}/tbl/vipl/config.mk
-include ${IUEROOT}/vxl/vnl/algo/config.mk
-include ${IUEROOT}/vxl/vnl/io/config.mk
-include ${IUEROOT}/vxl/vgl/io/config.mk
-include ${IUEROOT}/vxl/testlib/config.mk
+include ${IUEROOT}/contrib/mul/mil/config.mk
+include ../config.mk
+include ${IUEROOT}/core/vnl/algo/config.mk
+include ${IUEROOT}/core/vnl/io/config.mk
+include ${IUEROOT}/core/vgl/io/config.mk
+include ${IUEROOT}/core/testlib/config.mk
 
 # Do not instantiate templates in the library but implicitly, on use:
 USE_IMPLICIT_TEMPLATES := 1

@@ -1,5 +1,5 @@
-USES := vxl rpl mul
-include ${IUEROOT}/rpl/rrel/config.mk
+USES += contrib/rpl contrib/mul core
+include ../config.mk
 
 MINI_PROG_SOURCES += homography2d_fit.cxx
 MINI_PROG_SOURCES += homography2d_gen.cxx

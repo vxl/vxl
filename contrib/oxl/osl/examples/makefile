@@ -1,7 +1,7 @@
-USES += vxl oxl
+USES += contrib/oxl core
 include ../config.mk
-include ${IUEROOT}/vxl/vul/config.mk
-include ${IUEROOT}/vxl/vil/config.mk
+include ${IUEROOT}/core/vul/config.mk
+include ${IUEROOT}/core/vil/config.mk
 
 # Harris corner detector
 MINI_PROG_SOURCES += run_osl_harris.cxx

@@ -1,5 +1,5 @@
 IULIBS += -lrrel
-include ${IUEROOT}/mul/mbl/config.mk
-include ${IUEROOT}/vxl/vnl/algo/config.mk
-include ${IUEROOT}/vxl/vgl/config.mk
-include ${IUEROOT}/vxl/vbl/config.mk
+include ${IUEROOT}/contrib/mul/mbl/config.mk
+include ${IUEROOT}/core/vnl/algo/config.mk
+include ${IUEROOT}/core/vgl/config.mk
+include ${IUEROOT}/core/vbl/config.mk

@@ -1,3 +1,2 @@
-#USES += oxl
 IULIBS += -lvrml
-include ${IUEROOT}/vxl/vbl/config.mk
+include ${IUEROOT}/core/vbl/config.mk

@@ -1,5 +1,5 @@
 # Packages used by this package
-USES += oxl vxl
+USES += contrib/oxl core
 
 LIBRARY := mvl
 VERSION := 1.0
@@ -148,10 +148,6 @@ MANPAGE_SOURCES += PMatrix_sptr.h
 include ${IUEROOT}/config/top-params.mk
 #######################################
 
-ifeq "$(TJ_GCC30)" "1"
-FLAGS_FMatrixComputeRobust.cxx += -O0 # otherwise gcc 3.0 needs too much virtual memory
-endif
-
 ifndef NOTEST
 SUBDIRS = examples # tests
 endif
@@ -166,4 +162,8 @@ endif
 
 ifeq ($(IU_COMPILER),KCC)
 pic = $(PIC)
+endif
+
+ifeq "$(TJ_GCC30)" "1"# otherwise gcc 3.0 needs too much virtual memory
+FLAGS_FMatrixComputeRobust.cxx := -O0
 endif

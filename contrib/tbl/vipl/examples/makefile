@@ -11,12 +11,11 @@
 #   DEPENDENCIES:  vipl (including template instances for groups B, C, D)
 #                  vil  (for image load/save and for group A)
 
-USES = vxl tbl
-include ${IUEROOT}/tbl/vipl/config.mk
-include ${IUEROOT}/vxl/vpl/config.mk # for all
-include ${IUEROOT}/vxl/vnl/config.mk # for B.
-include $(IUEROOT)/vxl/vbl/config.mk # for C.
-
+USES += contrib/tbl core
+include ../config.mk
+include ${IUEROOT}/core/vpl/config.mk # for all
+include ${IUEROOT}/core/vnl/config.mk # for B.
+include $(IUEROOT)/core/vbl/config.mk # for C.
 
 # Do not instantiate templates in the library but implicitly, on use:
 USE_IMPLICIT_TEMPLATES := 1

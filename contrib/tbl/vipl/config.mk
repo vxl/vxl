@@ -1,2 +1,2 @@
 IULIBS += -lvipl
-include ${IUEROOT}/vxl/vil/config.mk
+include ${IUEROOT}/core/vil/config.mk

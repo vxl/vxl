@@ -1,7 +1,7 @@
-USES = vxl rpl mul
+USES += contrib/rpl contrib/mul core
 IULIBS += -lrrel_tests
-include ${IUEROOT}/rpl/rrel/config.mk
-include $(IUEROOT)/vxl/testlib/config.mk
+include ../config.mk
+include $(IUEROOT)/core/testlib/config.mk
 
 LIBRARY := rrel_tests
 SOURCES := similarity_from_matches.cxx

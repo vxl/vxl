@@ -7,8 +7,8 @@
 #
 # The examples subdirectory contains example programs showing how to use the
 # filter classes with vil images.
-#
-USES += vxl tbl
+
+USES += contrib/tbl core
 # Make sure all template instantiations are available in this library:
 USE_IMPLICIT_TEMPLATES := 1
 
@@ -43,22 +43,6 @@ SOURCES += vepl_histogram.cxx
 include ${IUEROOT}/config/top-params.mk
 #######################################
 
-ifeq "$(TJ_GCC30)$(optimize)" "1-O2"
-# gcc 3.0 needs too much virtual memory with -O2
-FLAGS_vepl_threshold.cxx += -O1
-FLAGS_vepl_add_random_noise.cxx += -O1
-FLAGS_vepl_dyadic.cxx += -O1
-FLAGS_vepl_dilate_disk.cxx += -O1
-FLAGS_vepl_erode_disk.cxx += -O1
-FLAGS_vepl_median.cxx += -O1
-FLAGS_vepl_moment.cxx += -O1
-FLAGS_vepl_histogram.cxx += -O1
-FLAGS_Templates/vepl_convert+uchar-.cxx += -O1
-FLAGS_Templates/vepl_convert+short-.cxx += -O1
-FLAGS_Templates/vepl_convert+float-.cxx += -O1
-FLAGS_Templates/vepl_convert+vil_rgb+uchar--.cxx += -O1
-endif
-
 # No need to compile the files in Templates when implicitly instantiating:
 ifeq ($(USE_IMPLICIT_TEMPLATES),1)
   TEMPLATE_SOURCES :=
@@ -72,3 +56,19 @@ endif
 ######################################
 include ${IUEROOT}/config/top-rules.mk
 ######################################
+
+ifeq "$(TJ_GCC30)$(optimize)" "1-O2"
+# gcc 3.0 needs too much virtual memory with -O2
+FLAGS_vepl_threshold.cxx := -O1
+FLAGS_vepl_add_random_noise.cxx := -O1
+FLAGS_vepl_dyadic.cxx := -O1
+FLAGS_vepl_dilate_disk.cxx := -O1
+FLAGS_vepl_erode_disk.cxx := -O1
+FLAGS_vepl_median.cxx := -O1
+FLAGS_vepl_moment.cxx := -O1
+FLAGS_vepl_histogram.cxx := -O1
+FLAGS_Templates/vepl_convert+uchar-.cxx := -O1
+FLAGS_Templates/vepl_convert+short-.cxx := -O1
+FLAGS_Templates/vepl_convert+float-.cxx := -O1
+FLAGS_Templates/vepl_convert+vil_rgb+uchar--.cxx := -O1
+endif

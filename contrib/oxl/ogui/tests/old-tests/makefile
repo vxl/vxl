@@ -1,4 +1,5 @@
-USES += vxl oxl
+USES += contrib/oxl core
+include $(IUEROOT)/core/vgui/config.mk
 
 #with_vrml += test_vrml.cxx
 #with_vrml += test_deck.cxx
@@ -43,7 +44,6 @@ MINI_PROG_SOURCES += test_tritab.cxx
 MINI_PROG_SOURCES += test_twowin.cxx
 MINI_PROG_SOURCES += test_vrml.cxx
 
-#####################################
-include $(IUEROOT)/oxl/vgui/config.mk
+################################
 include ${IUEROOT}/config/top.mk
 ################################

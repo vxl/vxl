@@ -1,11 +1,6 @@
-#
 # VRML IO library
-#
-# Modifications:
-# 
-# 031197 AWF Initial version
 
-VXL := 1
+USES += core
 
 LIBRARY := vrml
 VERSION := 1.0

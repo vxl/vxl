@@ -1,8 +1,7 @@
-USES += v3p vxl oxl
-
-include $(IUEROOT)/oxl/vgui/config.mk
-include $(IUEROOT)/oxl/osl/config.mk
-include $(IUEROOT)/oxl/mvl/config.mk
+USES += contrib/oxl core
+include $(IUEROOT)/core/vgui/config.mk
+include $(IUEROOT)/contrib/oxl/osl/config.mk
+include $(IUEROOT)/contrib/oxl/mvl/config.mk
 
 PROGRAM = vgui_testbed
 

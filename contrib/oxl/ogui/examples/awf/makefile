@@ -1,15 +1,11 @@
-USES += vxl oxl
-
-USE_OPENGL := 1
-USE_GLUT   := 1
-#USE_GTK   := 1
+USES += contrib/oxl core
+include $(IUEROOT)/core/vgui/config.mk
+include $(IUEROOT)/contrib/oxl/oxp/config.mk
 
 MINI_PROG_SOURCES += glmovie.cxx
 
 SUBDIRS += awfmfc
 
-##########################################
-include $(IUELOCALROOT)/oxl/vgui/config.mk
-include $(IUELOCALROOT)/oxl/oxp/config.mk
+################################
 include ${IUEROOT}/config/top.mk
 ################################

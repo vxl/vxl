@@ -1,7 +1,6 @@
-USES := vxl tbl mul
-
-include ${IUEROOT}/tbl/vepl2/config.mk
-include ${IUEROOT}/vxl/testlib/config.mk
+USES += contrib/tbl contrib/mul core
+include ../config.mk
+include ${IUEROOT}/core/testlib/config.mk
 
 # Do not instantiate templates in the library but implicitly, on use:
 USE_IMPLICIT_TEMPLATES := 1

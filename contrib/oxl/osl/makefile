@@ -1,5 +1,4 @@
-USES += vxl oxl
-include config.mk
+USES += contrib/oxl core
 
 LIBRARY := osl
 VERSION := 1.0
@@ -16,12 +15,9 @@ MANPAGE_SOURCES += osl_1d_half_kernel.txx
 # Harris corner detector
 SOURCES += osl_harris_params.cxx
 SOURCES += osl_harris.cxx
-FLAGS_osl_harris.cxx += $(optimize)
 SOURCES += osl_roi_window.cxx
 SOURCES += osl_convolve.cxx
-FLAGS_osl_convolve.cxx += $(optimize)
 SOURCES += internals/droid.cxx
-FLAGS_internals/droid.cxx += $(optimize)
 
 #----------------------------------------
 # Edge detection
@@ -80,3 +76,7 @@ endif
 ######################################
 include ${IUEROOT}/config/top-rules.mk
 ######################################
+
+FLAGS_osl_harris.cxx := $(optimize)
+FLAGS_osl_convolve.cxx := $(optimize)
+FLAGS_internals/droid.cxx := $(optimize)

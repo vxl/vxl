@@ -9,10 +9,9 @@
 #
 #   DEPENDENCIES:  vepl2 vipl vil2
 
-USES = vxl tbl mul
-
-include ${IUEROOT}/tbl/vepl2/config.mk
-include ${IUEROOT}/vxl/vpl/config.mk
+USES += contrib/tbl contrib/mul core
+include ../config.mk
+include ${IUEROOT}/core/vpl/config.mk
 
 # Do not instantiate templates in the library but implicitly, on use:
 USE_IMPLICIT_TEMPLATES := 1
@@ -38,6 +37,6 @@ include ${IUEROOT}/config/top.mk
 
 ifeq "$(TJ_GCC30)" "1"
 # gcc 3.0 needs too much virtual memory with -O2
-FLAGS_example_convert.cxx += -O0
-FLAGS_example_std_dev.cxx += -O0
+FLAGS_example_convert.cxx := -O0
+FLAGS_example_std_dev.cxx := -O0
 endif

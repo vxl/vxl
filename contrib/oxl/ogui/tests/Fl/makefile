@@ -1,4 +1,5 @@
-USES := vxl oxl
+USES += contrib/oxl core
+include ${IUEROOT}/core/vgui/config.mk
 USE_FLTK := 1
 
 SOURCES += Fl_twowin_ui.cxx
@@ -14,7 +15,6 @@ OBJECTS_test_twowin += $(RELOBJDIR)/Fl_twowin_ui.o
 MINI_PROG_SOURCES += test_blender.cxx
 OBJECTS_test_blender += $(RELOBJDIR)/Fl_blender_ui.o
 
-#####################################
-include ${IUEROOT}/vxl/vgui/config.mk
+################################
 include ${IUEROOT}/config/top.mk
 ################################

@@ -1,5 +1,9 @@
-USES += vxl oxl
-include ${IUEROOT}/oxl/mvl/config.mk
+USES += contrib/oxl core
+include ${IUEROOT}/contrib/oxl/mvl/config.mk
+
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
 
 TESTS += oxltest.cpp
 ifdef WIN32

@@ -1,8 +1,4 @@
-#######################################
-include ${IUEROOT}/config/top-params.mk
-#######################################
-
-USES += vxl rpl mul
+USES += contrib/rpl contrib/mul core
 
 LIBRARY := rrel
 VERSION := 1.0
@@ -28,6 +24,10 @@ SOURCES += rrel_kernel_density_obj.cxx
 MANPAGE_SOURCES += rrel_objective.h
 MANPAGE_SOURCES += rrel_util.txx
 MANPAGE_SOURCES += rrel_wls_obj.h
+
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
 
 ifndef NOTEST
 SUBDIRS += tests

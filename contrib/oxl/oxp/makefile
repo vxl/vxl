@@ -1,7 +1,6 @@
-USES = vxl oxl
-include $(IUEROOT)/vxl/vil/config.mk
-TRY_JPEG := 1
-TRY_MPEG := 1
+USES += contrib/oxl core
+include $(IUEROOT)/core/vil/config.mk
+TRY_MPEG2 := 1
 
 LIBRARY = oxp
 
@@ -31,8 +30,8 @@ ifeq ("$(HAS_JPEG)-$(HAS_BROKEN_AS)","1-")
 SOURCES += SGIMovieFile.cxx
 SOURCES += SGIMovieFilePrivates.cxx
 SOURCES += SGIMovieFileWrite.cxx
-ifeq "$(TJ_GCC30)" "1"
-FLAGS_SGIMovieFile.cxx += -O1 # otherwise gcc 3.0 needs too much virtual memory
+ifeq "$(TJ_GCC30)" "1"# otherwise gcc 3.0 needs too much virtual memory
+FLAGS_SGIMovieFile.cxx := -O1
 endif
 else
 TEMPLATE_SOURCES := $(subst Templates/vcl_vector+SGIMV_FrameIndex-.cxx,,$(TEMPLATE_SOURCES))
@@ -45,7 +44,7 @@ SOURCES += oxp_bunch_of_files.cxx
 SOURCES += oxp_vidl_moviefile.cxx
 SOURCES += oxp_vob_frame_index.cxx
 
-ifeq ($(HAS_MPEG),1)
+ifeq ($(HAS_MPEG2),1)
 SOURCES += oxp_mpeg_codec.cxx
 SOURCES += oxp_vidl_mpeg_codec.cxx
 endif

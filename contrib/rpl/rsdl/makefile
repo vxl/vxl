@@ -1,4 +1,4 @@
-USES += vxl rpl
+USES += contrib/rpl core
 
 LIBRARY := rsdl
 VERSION := 1.0
@@ -16,10 +16,6 @@ MANPAGE_SOURCES += rsdl_borgefors.txx
 include ${IUEROOT}/config/top-params.mk
 #######################################
 
-ifeq ($(OS),OSF1V4) # with optimisation, not enough virtual memory:
-FLAGS_Templates/rsdl_bins_2d+double.int-.cxx := -O1
-endif
-
 ifndef NOTEST
 SUBDIRS += tests
 endif
@@ -27,3 +23,7 @@ endif
 ######################################
 include ${IUEROOT}/config/top-rules.mk
 ######################################
+
+ifeq ($(OS),OSF1V4) # with optimisation, not enough virtual memory:
+FLAGS_Templates/rsdl_bins_2d+double.int-.cxx := -O1
+endif

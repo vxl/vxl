@@ -1,6 +1,5 @@
-#USES += oxl
 IULIBS += -losl
-include ${IUEROOT}/vxl/vnl/algo/config.mk
-include ${IUEROOT}/vxl/vil/config.mk
-include ${IUEROOT}/vxl/vgl/config.mk
-include ${IUEROOT}/vxl/vbl/config.mk
+include ${IUEROOT}/core/vnl/algo/config.mk
+include ${IUEROOT}/core/vil/config.mk
+include ${IUEROOT}/core/vgl/config.mk
+include ${IUEROOT}/core/vbl/config.mk

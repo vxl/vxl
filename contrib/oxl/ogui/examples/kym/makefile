@@ -1,5 +1,5 @@
-USES += vxl oxl
-include ${IUELOCALROOT}/oxl/vgui/config.mk
+USES += contrib/oxl core
+include ${IUEROOT}/core/vgui/config.mk
 
 MINI_PROG_SOURCES += display-image.cxx
 MINI_PROG_SOURCES += draw-line.cxx
@@ -20,9 +20,9 @@ include ${IUEROOT}/config/top-params.mk
 ifeq ($(USE_GTKGLAREA),1)
 MINI_PROG_SOURCES += gtk-display-image.cxx
 MINI_PROG_SOURCES += gtk-movie-player.cxx
-ifneq (,$(strip $(wildcard $(IUELOCALROOT)/vxl/vidl)))
+ifneq (,$(strip $(wildcard $(IUEROOT)/core/vidl/config.mk)))
+include ${IUEROOT}/core/vidl/config.mk
 MINI_PROG_SOURCES += vidl-demo.cxx
-include ${IUELOCALROOT}/vxl/vidl/config.mk
 endif
 endif
 

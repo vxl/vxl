@@ -1,2 +1,2 @@
 IULIBS += -lvepl
-include ${IUEROOT}/tbl/vipl/config.mk
+include ${IUEROOT}/contrib/tbl/vipl/config.mk
