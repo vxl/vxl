@@ -1,6 +1,5 @@
 #ifndef rgrl_object_h_
 #define rgrl_object_h_
-
 //:
 // \file
 // \brief Base class for most rgrl classes
@@ -20,7 +19,7 @@
 //: Observer class to bind a command with an event
 class rgrl_object_observer
 {
-public:
+ public:
   rgrl_object_observer() {}
   rgrl_object_observer(rgrl_command_sptr c,
                        rgrl_event_sptr event )
@@ -32,12 +31,13 @@ public:
   rgrl_event_sptr event_;
 };
 
-//: rgrl_object implements callbacks (via object/observer), and debug flags. 
+//: rgrl_object implements callbacks (via object/observer), and debug flags.
 //
 //  Most rgrl classes should be a subclas of rgrl_object.
-class rgrl_object: public vbl_ref_count
+class rgrl_object
+  : public vbl_ref_count
 {
-public:
+ public:
   //:
   rgrl_object();
 
@@ -45,13 +45,13 @@ public:
   rgrl_object( const rgrl_object& that )
     : vbl_ref_count(), debug_flag_(that.debug_flag_), warning_(that.warning_),
       observers_(that.observers_), observer_count_(that.observer_count_)
-  {    }   //suppress copying of reference count between objects 
-  
-    
+  {    }   //suppress copying of reference count between objects
+
+
   //: assignment operator
-  const rgrl_object& operator=( const rgrl_object& rhs ) 
+  const rgrl_object& operator=( const rgrl_object& rhs )
   {
-    //suppress copying of reference count between objects 
+    //suppress copying of reference count between objects
     debug_flag_     = rhs.debug_flag_;
     warning_        = rhs.warning_;
     observers_      = rhs.observers_;
@@ -75,20 +75,20 @@ public:
 
   //: Set the flag for warning messages
   void set_warning(bool) const;
-  
+
   //: Get the warning flag
   bool warning() const;
-  
-  //: Allow people to add/remove/invoke observers (callbacks) to any rgrl object. 
+
+  //: Allow people to add/remove/invoke observers (callbacks) to any rgrl object.
   //
   // This is an implementation of the subject/observer design
   // pattern. An observer is added by specifying an event to respond
   // to and an rgrl_ommand to execute. It returns an unsigned long tag
   // which can be used later to remove the event or retrieve the
-  // command. 
+  // command.
   unsigned int add_observer( rgrl_event_sptr event, rgrl_command_sptr );
 
-  //: Get the command associated with the given tag.  
+  //: Get the command associated with the given tag.
   rgrl_command_sptr get_command(unsigned int tag);
 
   //: Call \a execute(.) on all the rgrl_commands observing this event id.
@@ -105,12 +105,12 @@ public:
   //: Return true if an observer is registered for this event.
   bool has_observer( const rgrl_event & event ) const;
 
-private:
-  /*
+ private:
+#if 0
   //: copy constructor and =operator are disabled on purpose
   rgrl_object( const rgrl_object& );
   void operator=( const rgrl_object& );
-  */
+#endif
 
   // For debugging
   mutable unsigned int debug_flag_;
