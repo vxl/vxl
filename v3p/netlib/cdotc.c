@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* Complex */ int cdotc_( ret_val, n, cx, incx, cy, incy)
+/* Complex */ void cdotc_( ret_val, n, cx, incx, cy, incy)
 complex * ret_val;
 integer *n;
 complex *cx;

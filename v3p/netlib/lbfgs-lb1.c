@@ -44,7 +44,7 @@ static void write50(double* v, int n)
 //C     AMOUNT OF OUTPUT ARE CONTROLLED BY IPRINT.
 //C     -------------------------------------------------------------
 */
-int lb1_(iprint, iter, nfun, gnorm, n, m, x, f, g, stp, finish)
+void lb1_(iprint, iter, nfun, gnorm, n, m, x, f, g, stp, finish)
 int *iprint, *iter, *nfun;
 double *gnorm;
 int *n, *m;
