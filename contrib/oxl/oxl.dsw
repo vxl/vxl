@@ -33,9 +33,6 @@ Package=<4>
     Project_Dep_Name vgui_mfc
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name vgui_vrml
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name xcv
     End Project Dependency
     Begin Project Dependency
@@ -79,9 +76,6 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vgui_mfc
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vgui_vrml
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vil
@@ -234,18 +228,6 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vgui_vrml"=.\vgui\vrml\vgui_vrml.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
 Project: "vidl"=..\vxl\vidl\vidl.dsp - Package Owner=<4>
 
 Package=<5>
@@ -379,9 +361,6 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vgui_mfc
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vgui_vrml
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vidl
