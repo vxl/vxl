@@ -7,69 +7,50 @@
 // Version |Date      | Author                   |Comment
 // --------+----------+--------------------------+-----------------------------
 // 1.0     |2000/05/02| François BERTEL          |Creation
+// 1.1     |2003/01/08| Peter Vanroose           |Now using testlib macros
 //*****************************************************************************
-
+#include <testlib/testlib_test.h>
 //:
-//  \file
+// \file
 
-#include <vcl_iostream.h>
 #include <vsol/vsol_line_2d.h>
 #include <vsol/vsol_line_2d_sptr.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
 
-#define Assert(x) { vcl_cout << #x "\t\t\t test "; \
-  if (x) { ++success; vcl_cout << "PASSED\n"; } else { ++failures; vcl_cout << "FAILED\n"; } }
-
-//-----------------------------------------------------------------------------
-//: Entry point of the test program
-//-----------------------------------------------------------------------------
-int main(int argc,
-         char *argv[])
+void test_vsol_line_2d()
 {
-  int success=0, failures=0;
-
-  vcl_cout<<"Constructor from extremities"<<vcl_endl;
   vsol_point_2d_sptr p=new vsol_point_2d(10,4);
   vsol_point_2d_sptr q=new vsol_point_2d(5,1);
   vsol_line_2d_sptr a=new vsol_line_2d(p,q);
+  TEST("Constructor from extremities", !a, false);
 
-  Assert(*(a->p0())==*p);
-  Assert(*(a->p1())==*q);
+  TEST("vsol_line_2d::p0()", *(a->p0()), *p);
+  TEST("vsol_line_2d::p1()", *(a->p1()), *q);
 
-  vcl_cout<<"Copy constructor"<<vcl_endl;
   vsol_line_2d_sptr b=new vsol_line_2d(*a);
+  TEST("Copy constructor", !b, false);
 
-  vcl_cout<<"== operator"<<vcl_endl;
-  Assert(*a==*b);
+  TEST("== operator", *a, *b);
 
-  vcl_cout<<"Constructor from direction and middle point"<<vcl_endl;
-  vgl_vector_2d<double> v(10,-5);
+  vgl_vector_2d<double> v(8,-6);
 
   vsol_line_2d_sptr c=new vsol_line_2d(v,p);
+  TEST("Constructor from direction and middle point", !c, false);
 
-  vcl_cout<<"middle()"<<vcl_endl;
-  Assert(*(c->middle())==*p);
-  vcl_cout<<"direction()"<<vcl_endl;
-  Assert(c->direction()==v);
+  TEST("vsol_line_2d::middle()", *(c->middle()), *p);
+  TEST("vsol_line_2d::direction()", c->direction(), v);
+  TEST_NEAR("vsol_line_2d::length()", c->length(), 10, 1e-9);
 
-  vcl_cout<<"length()"<<vcl_endl;
-  vcl_cout<<c->length()<<vcl_endl;
+  c->set_length(90);
+  TEST_NEAR("vsol_line_2d::set_length()", c->length(), 90, 1e-9);
 
-  vcl_cout<<"set_length()"<<vcl_endl;
-  c->set_length(100);
+  TEST("set_length() doesn't change the middle point", *(c->middle()), *p);
 
-  Assert(*(c->middle())==*p); // set_length() doesn't change the middle point
-
-  vcl_cout<<"set_p0()"<<vcl_endl;
   c->set_p0(p);
-  Assert(*(c->p0())==*p);
-
-  vcl_cout<<"set_p1()"<<vcl_endl;
+  TEST("vsol_line_2d::set_p0()", *(c->p0()), *p);
   c->set_p1(q);
-  Assert(*(c->p1())==*q);
-
-  vcl_cout << "Test Summary: " << success << " tests succeeded, "
-           << failures << " tests failed" << (failures?"\t***\n":"\n");
-  return failures;
+  TEST("vsol_line_2d::set_p1()", *(c->p1()), *q);
 }
+
+TESTMAIN(test_vsol_line_2d);

@@ -7,61 +7,39 @@
 // Version |Date      | Author                   |Comment
 // --------+----------+--------------------------+-----------------------------
 // 1.0     |2000/05/02| François BERTEL          |Creation
+// 1.1     |2003/01/08| Peter Vanroose           |Now using testlib macros
 //*****************************************************************************
-
+#include <testlib/testlib_test.h>
 //:
-//  \file
+// \file
 
-#include <vcl_iostream.h>
 #include <vsol/vsol_point_2d.h>
 
-#define Assert(x) { vcl_cout << #x "\t\t\t test "; \
-  if (x) { ++success; vcl_cout << "PASSED\n"; } else { ++failures; vcl_cout << "FAILED\n"; } }
-
-//-----------------------------------------------------------------------------
-//: Entry point of the test program
-//-----------------------------------------------------------------------------
-int main(int argc,
-         char *argv[])
+void test_vsol_point_2d()
 {
-  int success=0, failures=0;
-
-  // Constructor from coordinates
-  vcl_cout<<"Constructor from coordinates"<<vcl_endl;
   vsol_point_2d_sptr p=new vsol_point_2d(10,4);
+  TEST("Constructor from coordinates", !p, false);
 
-  vcl_cout<<"x() and y()"<<vcl_endl;
-  vcl_cout<<"x="<<p->x()<<", y="<<p->y()<<vcl_endl;
-  Assert(p->x()==10);
-  Assert(p->y()==4);
+  TEST("vsol_point_2d::x()", p->x(), 10);
+  TEST("vsol_point_2d::y()", p->y(), 4);
 
-  vcl_cout<<"Copy constructor"<<vcl_endl;
   vsol_point_2d_sptr q=new vsol_point_2d(*p);
+  TEST("Copy constructor", !q, false);
 
-  vcl_cout<<"== operator"<<vcl_endl;
-  Assert((*p)==(*q));
+  TEST("== operator", (*p), (*q));
 
-  vcl_cout<<"set_x()"<<vcl_endl;
-  q->set_x(3);
-  Assert(q->x()==3);
+  q->set_x(6);
+  TEST("vsol_point_2d::set_x()", q->x(), 6);
+  q->set_y(7);
+  TEST("vsol_point_2d::set_y()", q->y(), 7);
 
-  vcl_cout<<"set_y()"<<vcl_endl;
-  q->set_y(5);
-  Assert(q->y()==5);
+  TEST("!= operator", (*p)!=(*q), true);
 
-  vcl_cout<<"!= operator"<<vcl_endl;
-  Assert((*p)!=(*q));
-
-  vcl_cout<<"distance()="<<p->distance(q)<<vcl_endl;
+  TEST_NEAR("vsol_point_2d::distance(point)", p->distance(q), 5, 1e-9);
 
   vsol_point_2d_sptr r=p->middle(*q);
-
-  vcl_cout<<"middle()="<<r->x()<<','<<r->y()<<vcl_endl;
-
-  Assert(r->x()==(p->x()+q->x())/2);
-  Assert(r->y()==(p->y()+q->y())/2);
-
-  vcl_cout << "Test Summary: " << success << " tests succeeded, "
-           << failures << " tests failed" << (failures?"\t***\n":"\n");
-  return failures;
+  TEST("vsol_point_2d::middle()", r->x(), (p->x()+q->x())/2);
+  TEST("vsol_point_2d::middle()", r->y(), (p->y()+q->y())/2);
 }
+
+TESTMAIN(test_vsol_point_2d);

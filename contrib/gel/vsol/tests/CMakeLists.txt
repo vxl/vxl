@@ -1,32 +1,36 @@
 # gel/vsol/tests/CMakeLists.txt
 
-LINK_LIBRARIES( vsol vgl )
+LINK_LIBRARIES( vsol vgl testlib )
 
-ADD_EXECUTABLE(test_vsol_point_2d     test_vsol_point_2d.cxx)
-ADD_TEST(      test_vsol_point_2d     test_vsol_point_2d)
-ADD_EXECUTABLE(test_vsol_group_2d     test_vsol_group_2d.cxx)
-ADD_TEST(      test_vsol_group_2d     test_vsol_group_2d)
-ADD_EXECUTABLE(test_vsol_line_2d      test_vsol_line_2d.cxx)
-ADD_TEST(      test_vsol_line_2d      test_vsol_line_2d)
-ADD_EXECUTABLE(test_vsol_conic_2d     test_vsol_conic_2d.cxx)
-ADD_TEST(      test_vsol_conic_2d     test_vsol_conic_2d)
-ADD_EXECUTABLE(test_vsol_triangle_2d  test_vsol_triangle_2d.cxx)
-ADD_TEST(      test_vsol_triangle_2d  test_vsol_triangle_2d)
-ADD_EXECUTABLE(test_vsol_rectangle_2d test_vsol_rectangle_2d.cxx)
-ADD_TEST(      test_vsol_rectangle_2d test_vsol_rectangle_2d)
-ADD_EXECUTABLE(test_vsol_polygon_2d   test_vsol_polygon_2d.cxx)
-ADD_TEST(      test_vsol_polygon_2d   test_vsol_polygon_2d)
-ADD_EXECUTABLE(test_vsol_point_3d     test_vsol_point_3d.cxx)
-ADD_TEST(      test_vsol_point_3d     test_vsol_point_3d)
-ADD_EXECUTABLE(test_vsol_group_3d     test_vsol_group_3d.cxx)
-ADD_TEST(      test_vsol_group_3d     test_vsol_group_3d)
-ADD_EXECUTABLE(test_vsol_line_3d      test_vsol_line_3d.cxx)
-ADD_TEST(      test_vsol_line_3d      test_vsol_line_3d)
-ADD_EXECUTABLE(test_vsol_triangle_3d  test_vsol_triangle_3d.cxx)
-ADD_TEST(      test_vsol_triangle_3d  test_vsol_triangle_3d)
-ADD_EXECUTABLE(test_vsol_rectangle_3d test_vsol_rectangle_3d.cxx)
-ADD_TEST(      test_vsol_rectangle_3d test_vsol_rectangle_3d)
-ADD_EXECUTABLE(test_vsol_polygon_3d   test_vsol_polygon_3d.cxx)
-ADD_TEST(      test_vsol_polygon_3d   test_vsol_polygon_3d)
-ADD_EXECUTABLE(test_vsol_tetrahedron  test_vsol_tetrahedron.cxx)
-ADD_TEST(      test_vsol_tetrahedron  test_vsol_tetrahedron)
+ADD_EXECUTABLE(vsol_test_all
+  test_driver.cxx
+  test_vsol_point_2d.cxx
+  test_vsol_group_2d.cxx
+  test_vsol_line_2d.cxx
+  test_vsol_conic_2d.cxx
+  test_vsol_triangle_2d.cxx
+  test_vsol_rectangle_2d.cxx
+  test_vsol_polygon_2d.cxx
+  test_vsol_point_3d.cxx
+  test_vsol_group_3d.cxx
+  test_vsol_line_3d.cxx
+  test_vsol_triangle_3d.cxx
+  test_vsol_rectangle_3d.cxx
+  test_vsol_polygon_3d.cxx
+  test_vsol_tetrahedron.cxx
+)
+
+ADD_TEST(test_vsol_point_2d     vsol_test_all test_vsol_point_2d)
+ADD_TEST(test_vsol_group_2d     vsol_test_all test_vsol_group_2d)
+ADD_TEST(test_vsol_line_2d      vsol_test_all test_vsol_line_2d)
+ADD_TEST(test_vsol_conic_2d     vsol_test_all test_vsol_conic_2d)
+ADD_TEST(test_vsol_triangle_2d  vsol_test_all test_vsol_triangle_2d)
+ADD_TEST(test_vsol_rectangle_2d vsol_test_all test_vsol_rectangle_2d)
+ADD_TEST(test_vsol_polygon_2d   vsol_test_all test_vsol_polygon_2d)
+ADD_TEST(test_vsol_point_3d     vsol_test_all test_vsol_point_3d)
+ADD_TEST(test_vsol_group_3d     vsol_test_all test_vsol_group_3d)
+ADD_TEST(test_vsol_line_3d      vsol_test_all test_vsol_line_3d)
+ADD_TEST(test_vsol_triangle_3d  vsol_test_all test_vsol_triangle_3d)
+ADD_TEST(test_vsol_rectangle_3d vsol_test_all test_vsol_rectangle_3d)
+ADD_TEST(test_vsol_polygon_3d   vsol_test_all test_vsol_polygon_3d)
+ADD_TEST(test_vsol_tetrahedron  vsol_test_all test_vsol_tetrahedron)
