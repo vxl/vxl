@@ -30,7 +30,7 @@ public:
     CENTER,
     MAX };
 
-  vul_psfile(char const* filename);
+  vul_psfile(char const* filename, bool debug_output=false);
   ~vul_psfile();
 
   void set_min_max_xy(float x, float y);
