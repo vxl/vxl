@@ -355,7 +355,7 @@ bool gevd_edgel_regions::compute_edgel_regions(vcl_vector<vtol_edge_2d_sptr>& sg
   faces.clear();
   for (vcl_vector<vdgl_intensity_face_sptr>::iterator fit = faces_->begin();
        fit != faces_->end(); fit++)
-      { 
+      {
       faces.push_back(*fit);
         //        faces_->value()->Protect(); //This caused a big leak
       }
