@@ -167,7 +167,7 @@ typedef int saw_VCL_FOR_SCOPE_HACK;
 //: VCL_VOID_RETURN
 //
 // VCL_VOID_RETURN is used as a return type where void is expected,
-// as in return VCL_VOID_RETURN ;
+// as in return VCL_VOID_RETURN;
 #define VCL_VOID_RETURN /*empty*/
 
 #endif // vcl_compiler_h_

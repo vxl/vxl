@@ -46,14 +46,14 @@
 #elif defined(VCL_SGI_CC)
 # include "vcl_utility.h"
 using std::operator!=;
-using std::operator> ;
+using std::operator>;
 using std::operator<=;
 using std::operator>=;
 
 #else // -------------------- ISO
 # include "vcl_utility.h"
 using std::rel_ops::operator!=;
-using std::rel_ops::operator> ;
+using std::rel_ops::operator>;
 using std::rel_ops::operator<=;
 using std::rel_ops::operator>=;
 #endif
