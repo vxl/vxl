@@ -83,12 +83,16 @@ sub update_book
 
     $booksrcdir = "$vxlsrc/$book/doc/book";
 
+    print "Going to open dir: $booksrcdir\n";
+
     opendir(BOOKSRCDIR,$booksrcdir) || die "Cannot open $booksrcdir: $!";
 
 
 # Now copy, or convert all images files in the source directory.
-    while (readdir(BOOKSRCDIR))
+    while ($_ = readdir(BOOKSRCDIR))
     {
+      print "DIR: $_\n";
+
       if (/\.png$/ || /\.jpg$/ || /\.jpeg$/ )
       { copy("$booksrcdir/$_", $_); }
 
@@ -100,10 +104,13 @@ sub update_book
         }
         else
         {
-          xec("ps2pnm $booksrcdir/$_");
+          $ppmfile = $_;
+	  $ppmfile = $ppmfile."001.ppm";
+          xec("pstopnm $booksrcdir/$_");
           $pngfile = $_;
           $pngfile =~ s/eps$/png/;
-          xec("pnm2png $_001.ppm > $pngfile");
+          xec("pnmtopng $ppmfile > $pngfile");
+	  unlink $ppmfile;
         }
       }
     }
@@ -121,21 +128,30 @@ sub update_book
 sub check_pnmutils
 {
   my ($doxyoutputdir) = @_;
-  my $dotfile = "$doxyoutputdir/dotfile.dot";
+  my $psfile = "$doxyoutputdir/psfile.dot";
 
-  `pstopnm > $doxyoutputdir/checkpnmutils.out  2>&1`;
+  
+  open(PSOUT, ">$psfile") || die "can't open file $psfile\n";
+  print PSOUT "\n";
+  close(PSOUT);
+
+  `pstopnm $psfile > $doxyoutputdir/checkpnmutils.out  2>&1`;
   if ($? != 0)
   {
     return "NO";
   }
 
-  `pnmtopng > $doxyoutputdir/checkpnmutils.out  2>&1`;
+  open(PSOUT, ">$psfile") || die "can't open file $psfile\n";
+  print PSOUT "P1\n1 1\n1\n";
+  close(PSOUT);
+
+  `pnmtopng $psfile > $doxyoutputdir/checkpnmutils.out  2>&1`;
   if ($? != 0)
   {
     return "NO";
   }
 
-
+  print "found pnmutils\n";
   return "YES";
 }
 
