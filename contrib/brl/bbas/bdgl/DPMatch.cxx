@@ -10,9 +10,9 @@
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
 #include <bdgl/bdgl_curve_algs.h>
-
 #include <mvl/HMatrix2DAffineCompute.h>
-void DPMatch::detect_tail(vcl_vector<int> &tail1 , vcl_vector<int> &tail2)
+
+void DPMatch::detect_tail(vcl_vector<int> &tail1, vcl_vector<int> &tail2)
 {
   int start1,start2;
   int end1,end2;
@@ -100,22 +100,20 @@ void DPMatch::detect_tail(vcl_vector<int> &tail1 , vcl_vector<int> &tail2)
 }
 
 double DPMatch::normfinalCost()
+{
+  double alpha =0;
+  double R=0;
+  if (curve1_.Tcurvature()>=curve2_.Tcurvature())
+    alpha=curve2_.Tcurvature();
+  if (curve1_.Tcurvature()<curve2_.Tcurvature())
+    alpha=curve1_.Tcurvature();
 
-{   
- 	double alpha =0;
-	double R=0;
-	if(curve1_.Tcurvature()>=curve2_.Tcurvature())
-			alpha=curve2_.Tcurvature();
-	if(curve1_.Tcurvature()<curve2_.Tcurvature())
-			alpha=curve1_.Tcurvature();
-	
-	return finalCost_/((1+R*alpha)*((double)matched_len1+(double)matched_len2))/2;
-
+  return finalCost_/((1+R*alpha)*((double)matched_len1+(double)matched_len2))/2;
 }
 
 vcl_map <int,int> DPMatch::refine_mapping()
 {
-    vcl_map<int,int> one_to_one;
+  vcl_map<int,int> one_to_one;
   int hist1=0;
   int hist2=0;
 
@@ -168,7 +166,7 @@ double DPMatch::euclidean_distance(vnl_matrix<double> R,vnl_matrix<double> T,dou
   double dist=0;
 //double tx=T(0,0),ty=T(1,0);
 
-  for (unsigned int i=0;i<x1.size();i++)
+  for (unsigned int i=0; i<x1.size(); i++)
   {
     x1[i]-=xcen1;
     y1[i]-=ycen1;
@@ -216,7 +214,7 @@ DPMatch::DPMatch(Curve &c1, Curve &c2)
   curve2_.computeProperties();
   n_=curve1_.numPoints();
   m_=curve2_.numPoints();
-  for (int n=0;n<n_;n++)
+  for (int n=0; n<n_; n++)
   {
     vcl_vector<double> tmp1(m_,DP_VERY_LARGE_COST);
     cost_.push_back(tmp1);
@@ -241,7 +239,7 @@ DPMatch::DPMatch(Curve &c1, Curve &c2,vgl_point_2d<double> & e)
   init();
   n_=curve1_.numPoints();
   m_=curve2_.numPoints();
-  for (int n=0;n<n_;n++)
+  for (int n=0; n<n_; n++)
   {
     vcl_vector<double> tmp1(m_,DP_VERY_LARGE_COST);
     cost_.push_back(tmp1);
@@ -256,9 +254,8 @@ DPMatch::DPMatch(Curve &c1, Curve &c2,vgl_point_2d<double> & e)
 }
 
 DPMatch::DPMatch(vcl_vector<vcl_pair<double,double> > v1,
-                  vcl_vector<vcl_pair<double,double> > v2,
+                 vcl_vector<vcl_pair<double,double> > v2,
                  vnl_double_2 & e)
-
 {
   curve1_.readDataFromVector(v1);
   curve2_.readDataFromVector(v2);
@@ -266,7 +263,7 @@ DPMatch::DPMatch(vcl_vector<vcl_pair<double,double> > v1,
     init();
   n_=curve1_.numPoints();
   m_=curve2_.numPoints();
-  for (int n=0;n<n_;n++)
+  for (int n=0; n<n_; n++)
   {
     vcl_vector<double> tmp1(m_,DP_VERY_LARGE_COST);
     cost_.push_back(tmp1);
@@ -291,12 +288,11 @@ void DPMatch::printCost()
   }
 }
 
-
 void DPMatch::initializeDPCosts()
 {
   finalCost_=DP_VERY_LARGE_COST;
-  for (int n=0;n<n_;n++)
-    for (int m=0;m<m_;m++)
+  for (int n=0; n<n_; n++)
+    for (int m=0; m<m_; m++)
       cost_[n][m]=DP_VERY_LARGE_COST;
 
   cost_[0][0]=0.0;
@@ -309,7 +305,7 @@ double DPMatch::transformed_euclidean_distance()
 
   // get the points from refined mapping
   vcl_vector<vgl_homg_point_2d<double> > p1, p2;
-  for (vcl_map<int,int>::iterator iter=alignment.begin();iter!=alignment.end();iter++)
+  for (vcl_map<int,int>::iterator iter=alignment.begin(); iter!=alignment.end(); ++iter)
   {
     x1.push_back(curve1_.x((*iter).first));
     x2.push_back(curve2_.x((*iter).second));
@@ -327,7 +323,7 @@ double DPMatch::transformed_euclidean_distance()
   unsigned int N=x1.size();
   //computing centroid
 
-  for (unsigned int j=0;j<N;++j)
+  for (unsigned int j=0; j<N; ++j)
   {
     x1_centroid+=x1[j];
     x2_centroid+=x2[j];
@@ -342,7 +338,7 @@ double DPMatch::transformed_euclidean_distance()
   // centering the data
   p1.clear();
   p2.clear();
-  for (unsigned int j=0;j<N;++j)
+  for (unsigned int j=0; j<N; ++j)
   {
     x1[j]-=x1_centroid;
     x2[j]-=x2_centroid;
@@ -362,7 +358,7 @@ double DPMatch::transformed_euclidean_distance()
 #endif // 0
   double H[4]={0,0,0,0};
   //computing covariance matrix
-  for (unsigned int j=0;j<N;++j)
+  for (unsigned int j=0; j<N; ++j)
   {
     H[0]+=x1[j]*x2[j];
     H[1]+=x1[j]*y2[j];
@@ -392,7 +388,7 @@ double DPMatch::transformed_euclidean_distance()
   double numerator=0;
   double denominator=0;
 
-  for (unsigned int i=0;i<N;++i)
+  for (unsigned int i=0; i<N; ++i)
   {
     double p[2];
     p[0]= x1[i];
@@ -406,7 +402,7 @@ double DPMatch::transformed_euclidean_distance()
   if (denominator>1e-6)
     scale = numerator/denominator;
 
-  for (unsigned int i=0;i<x1.size();i++)
+  for (unsigned int i=0; i<x1.size(); i++)
   {
     vnl_double_2 X(x1[i],y1[i]);
     //double tempX[2]={x1[i],y1[i]};
@@ -452,7 +448,7 @@ void DPMatch::computeDPCosts()
     for (int i=start; i<n_ && i<sum; ++i)
     {
       int j=sum-i-1;
-      for (int k=0;k<9;k++)
+      for (int k=0; k<9; k++)
       {
         int ip=i+XOFFSET[k];
         int jp=j+YOFFSET[k];
@@ -474,23 +470,23 @@ void DPMatch::computeDPCosts()
 
 void DPMatch::init()
 {
- vcl_vector<vgl_point_2d<double> > points1;
- vcl_vector<vgl_point_2d<double> > points2;
- vgl_point_2d<double> temp;
+  vcl_vector<vgl_point_2d<double> > points1;
+  vcl_vector<vgl_point_2d<double> > points2;
+  vgl_point_2d<double> temp;
 
- for (int i=0;i<curve1_.numPoints();i++)
- {
-  temp.set(curve1_.x(i),curve1_.y(i));
-  points1.push_back(temp);
- }
- for (int i=0;i<curve2_.numPoints();i++)
- {
-  temp.set(curve2_.x(i),curve2_.y(i));
-  points2.push_back(temp);
- }
+  for (int i=0; i<curve1_.numPoints(); i++)
+  {
+    temp.set(curve1_.x(i),curve1_.y(i));
+    points1.push_back(temp);
+  }
+  for (int i=0; i<curve2_.numPoints(); i++)
+  {
+    temp.set(curve2_.x(i),curve2_.y(i));
+    points2.push_back(temp);
+  }
 
- dc1=bdgl_curve_algs::create_digital_curves(points1);
- dc2=bdgl_curve_algs::create_digital_curves(points2);
+  dc1=bdgl_curve_algs::create_digital_curves(points1);
+  dc2=bdgl_curve_algs::create_digital_curves(points2);
 }
 
 double DPMatch::computeEpipolarCost(int i, int /* ip */, int j, int /* jp */)
@@ -559,17 +555,18 @@ double DPMatch::computeIntervalCost(int i, int ip, int j, int jp)
   curve2_.bendCost(j,jp,dt2_);
   double C=0.0;
   double w=0.2;/*0.2;*/
-  if(ep_pt.x()<-1e4)
-	C=0.0;
+  if (ep_pt.x()<-1e4)
+    C=0.0;
   else
-	C=0.4;
+    C=0.4;
 
   double delta=1;
   double dE=computeEpipolarCost(i,ip, j,  jp);
-  double dF = vcl_fabs(ds1_ - ds2_);
-  double dK = vcl_fabs(dt1_ - dt2_);
+//double dF = vcl_fabs(ds1_ - ds2_);
+//double dK = vcl_fabs(dt1_ - dt2_);
 
-  double cost = 0.0*dF + 0.0*R1_*dK +C*R1_*pow(vcl_sqrt(dE)/delta,5)/(1+pow(vcl_sqrt(dE)/delta,5));//C*vcl_
+  double cost = // 0.0*dF + 0.0*R1_*dK +
+                C*R1_*vcl_pow(vcl_sqrt(dE)/delta,5)/(1+vcl_pow(vcl_sqrt(dE)/delta,5));
 
   if (ip==0 || jp==0)
     cost*=w;
@@ -578,7 +575,6 @@ double DPMatch::computeIntervalCost(int i, int ip, int j, int jp)
 
   return cost;
 }
-
 
 void DPMatch::findDPCorrespondence()
 {
@@ -612,7 +608,6 @@ void DPMatch::findDPCorrespondence()
     j=jp;
   }
 }
-
 
 void DPMatch::findDPCorrespondence(int n, int m)
 {
@@ -650,7 +645,7 @@ void DPMatch::findEndPoint()
 
   finalCost_=1E10;
   int endIndex = -1;
-  for (int i=0;i<m_;i++)
+  for (int i=0; i<m_; i++)
   {
     if (cost_[n_-1][i] < finalCost_)
     {
@@ -671,7 +666,6 @@ void DPMatch::match()
   //vcl_cout << "computeDPCosts done\n";
   findDPCorrespondence();
 }
-
 
 void DPMatch::endPointMatch()
 {
