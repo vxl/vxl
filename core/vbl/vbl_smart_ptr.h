@@ -23,7 +23,7 @@
 //   William A. Hoffman (current templated version)
 //
 // .SECTION Modifications
-//   
+// 2000.05.15 François BERTEL Added some missing <T>
 //
 //-----------------------------------------------------------------------------
 
@@ -111,24 +111,24 @@ public:
   }
 
   // Comparison of pointers
-  bool operator < (const vbl_smart_ptr &r)
+  bool operator < (const vbl_smart_ptr<T> &r)
   { return (void*)ptr_ < (void*) r.ptr_; }
 
-  bool operator > (const vbl_smart_ptr &r)
+  bool operator > (const vbl_smart_ptr<T> &r)
   { return (void*)ptr_ > (void*) r.ptr_; }
 
-  bool operator <= (const vbl_smart_ptr &r)
+  bool operator <= (const vbl_smart_ptr<T> &r)
   { return (void*)ptr_ <= (void*) r.ptr_; }
 
-  bool operator >= (const vbl_smart_ptr &r)
+  bool operator >= (const vbl_smart_ptr<T> &r)
   { return (void*)ptr_ >= (void*) r.ptr_; }
 
-  vbl_smart_ptr &operator = (const vbl_smart_ptr &r)
+  vbl_smart_ptr<T> &operator = (const vbl_smart_ptr<T> &r)
   { 
     return this->operator = (r.ptr()); 
   }
   
-  vbl_smart_ptr &operator = (T *r)
+  vbl_smart_ptr<T> &operator = (T *r)
   {								 
     if (ptr_ != r)
       {
