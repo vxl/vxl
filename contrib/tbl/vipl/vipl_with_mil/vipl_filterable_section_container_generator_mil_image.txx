@@ -1,5 +1,8 @@
+// This is tbl/vipl/vipl_with_mil/vipl_filterable_section_container_generator_mil_image.txx
 #ifndef vipl_filterable_section_container_generator_mil_image_txx_
 #define vipl_filterable_section_container_generator_mil_image_txx_
+//:
+// \file
 
 #include <mil/mil_image_2d_of.h>
 
