@@ -193,11 +193,13 @@ aux_neg_log_likelihood( rgrl_scale const&  scale,
 
   int n = 0;
 
-  for ( from_iter fitr = match_set.from_begin(); fitr != match_set.from_end(); ++fitr ){
-    n += fitr.size();
-  }
+  for ( from_iter fitr = match_set.from_begin(); fitr != match_set.from_end(); ++fitr )
+    if( fitr.size() > 0 ) {
+      // multi-match counts as one constraint
+      n ++;
+    }
 
   double sum_rho_values = aux_sum_rho_values(scale, match_set, xform);
   double geometric_scale = scale.geometric_scale();
-  return -( n*vcl_log(geometric_scale) + sum_rho_values );
+  return n*vcl_log(geometric_scale) + sum_rho_values;
 }
