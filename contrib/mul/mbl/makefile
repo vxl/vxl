@@ -14,6 +14,7 @@ SOURCES += mbl_mz_random.cxx
 SOURCES += mbl_matxvec.cxx
 SOURCES += mbl_matrix_products.cxx
 SOURCES += mbl_data_collector_base.cxx
+SOURCES += mbl_k_means.cxx
 
 # Additional files to document:
 MANPAGE_SOURCES += mbl_data_array_wrapper.txx
