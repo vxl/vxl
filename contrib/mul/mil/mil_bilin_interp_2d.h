@@ -91,6 +91,37 @@ inline double mil_safe_bilin_interp_2d(double x, double y, const T* data,
 
 //: Compute bilinear interpolation at (x,y), with bound checks
 //  Image is nx * ny array of Ts. x,y element is data[nx*y+x]
+//  If (x,y) is outside interpolatable image region and NDEBUG is not defined
+//  the code will fail an ASSERT.
+//  The safe interpolatable region is [0,nx)*[0,ny).
+template<class T>
+inline double mil_assert_bilin_interp_2d(double x, double y, const T* data, int nx, int ny, int ystep)
+{
+    assert (x>=0);
+    assert (y>=0);
+    assert (x<nx-1);
+    assert (y<ny-1);
+    return mil_bilin_interp_2d(x,y,data,ystep);
+}
+
+//: Compute bilinear interpolation at (x,y), with bound checks
+//  Image is nx * ny array of Ts. x,y element is data[ystep*y+xstep*x]
+//  If (x,y) is outside interpolatable image region and NDEBUG is not defined
+//  the code will fail an ASSERT.
+//  The safe interpolatable region is [0,nx)*[0,ny).
+template<class T>
+inline double mil_assert_bilin_interp_2d(double x, double y, const T* data,
+                                       int nx, int ny, int xstep, int ystep)
+{
+    assert (x>=0);
+    assert (y>=0);
+    assert (x<nx-1);
+    assert (y<ny-1);
+    return mil_bilin_interp_2d(x,y,data,xstep,ystep);
+}
+
+//: Compute bilinear interpolation at (x,y), with bound checks
+//  Image is nx * ny array of Ts. x,y element is data[nx*y+x]
 //  If (x,y) is outside safe interpolatable image region, nearest pixel value is returned.
 //  The safe interpolatable region is [0,nx)*[0,ny).
 template<class T>
