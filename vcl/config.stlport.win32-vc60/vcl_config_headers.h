@@ -1,11 +1,12 @@
 #ifndef vcl_config_headers_h_config_stlport_win32_vc60_
 #define vcl_config_headers_h_config_stlport_win32_vc60_
-
+//:
+// \file
 // This file either is or was generated from vcl_config_headers.h.in
 
 //--------------------------------------------------------------------------------
 
-// standard header files.
+//: standard header files.
 #define VCL_CXX_HAS_HEADER_CASSERT    1
 #define VCL_CXX_HAS_HEADER_CISO646    1
 #define VCL_CXX_HAS_HEADER_CSETJMP    1
@@ -60,4 +61,4 @@
 
 //--------------------------------------------------------------------------------
 
-#endif
+#endif // vcl_config_headers_h_config_stlport_win32_vc60_
