@@ -13,10 +13,10 @@
 template < class DataType >
   vipl_section_container< DataType > ::vipl_section_container( vipl_section_container< DataType >* pt)
   : hsthe(pt),
-    hsimgsz (1,0),
-    hsimgstart (1,0),
-    hssecsz (1,0),
-    hsoverlap (1,0),
+    hsimgsz (2,0),
+    hsimgstart (2,0),
+    hssecsz (2,0),
+    hsoverlap (2,0),
     hsrawdata (0),
     hsimgptr (0),
     refcount_ (1)
@@ -26,10 +26,10 @@ template < class DataType >
 template < class DataType >
   vipl_section_container< DataType > ::vipl_section_container( const vipl_section_container< DataType >* pt , int t)
   : hsthe(0),
-    hsimgsz (1,0),
-    hsimgstart (1,0),
-    hssecsz (1,0),
-    hsoverlap (1,0),
+    hsimgsz (2,0),
+    hsimgstart (2,0),
+    hssecsz (2,0),
+    hsoverlap (2,0),
     hsrawdata (0),
     hsimgptr (0),
     refcount_ (1)
@@ -47,10 +47,10 @@ template < class DataType >
 template < class DataType >
   vipl_section_container< DataType > ::vipl_section_container()
   : hsthe(this),
-    hsimgsz (1,0),
-    hsimgstart (1,0),
-    hssecsz (1,0),
-    hsoverlap (1,0),
+    hsimgsz (2,0),
+    hsimgstart (2,0),
+    hssecsz (2,0),
+    hsoverlap (2,0),
     hsrawdata (0),
     hsimgptr (0),
     refcount_ (1)
@@ -87,12 +87,12 @@ template < class DataType >
   ptr->ref_i_curr_sec_start()[1] = 0;
   ptr->ref_i_curr_sec_end()[0] = secsz()[0] + overlap()[0];
   ptr->ref_i_curr_sec_end()[1] = secsz()[1] + overlap()[1];
-  if(ptr->ref_i_curr_sec_end()[0] > image_size(0))
+  if (ptr->ref_i_curr_sec_end()[0] > image_size(0))
     ptr->ref_i_curr_sec_end()[0] = image_size(0);
-  if(ptr->ref_i_curr_sec_end()[1] > image_size(1))
+  if (ptr->ref_i_curr_sec_end()[1] > image_size(1))
     ptr->ref_i_curr_sec_end()[1] = image_size(1);
   ptr->ref_i_curr_sec_size()[0] = ptr->ref_i_curr_sec_end()[0];
-  ptr->ref_i_curr_sec_size()[1] = ptr->ref_i_curr_sec_end()[0];
+  ptr->ref_i_curr_sec_size()[1] = ptr->ref_i_curr_sec_end()[1];
   vipl_section_iterator<DataType> i(ptr, virtual_copy());
   return i;
 }
@@ -113,12 +113,12 @@ template < class DataType >
   ptr->put_real_descriptor(ptr);
   ptr->ref_i_curr_sec_start()[0] = 0;
   ptr->ref_i_curr_sec_start()[1] = 0;
-  if(ptr->ref_i_curr_sec_end()[0] > image_size(0))
+  if (ptr->ref_i_curr_sec_end()[0] > image_size(0))
     ptr->ref_i_curr_sec_end()[0] = image_size(0);
-  if(ptr->ref_i_curr_sec_end()[1] > image_size(1))
+  if (ptr->ref_i_curr_sec_end()[1] > image_size(1))
     ptr->ref_i_curr_sec_end()[1] = image_size(1);
   ptr->ref_i_curr_sec_size()[0] = ptr->ref_i_curr_sec_end()[0];
-  ptr->ref_i_curr_sec_size()[1] = ptr->ref_i_curr_sec_end()[0];
+  ptr->ref_i_curr_sec_size()[1] = ptr->ref_i_curr_sec_end()[1];
   vipl_section_iterator<DataType> i(ptr, virtual_copy());
   return i;
 }
@@ -165,8 +165,8 @@ template < class DataType >
 template < class DataType >
   int vipl_section_container< DataType > ::size() const
 {
-  return (imgsz()[0] / secsz()[0]) + ((imgsz()[0] % secsz()[0]) ? 1 : 0) *
-    (imgsz()[1] / secsz()[1]) + ((imgsz()[1] % secsz()[1]) ? 1 : 0);
+  return ((imgsz()[0] / secsz()[0]) + ((imgsz()[0] % secsz()[0]) ? 1 : 0)) *
+    ((imgsz()[1] / secsz()[1]) + ((imgsz()[1] % secsz()[1]) ? 1 : 0));
 }
 
 template < class DataType >
@@ -272,7 +272,7 @@ template < class DataType >
   if (xi > 0) {
     incremented_X = 1;
     // if start != 0 we just increment it by size, else we add overlap
-    if(in_out.ref_i_curr_sec_start()[vipl_filter_abs::X_Axis() > 0 ]){
+    if (in_out.ref_i_curr_sec_start()[vipl_filter_abs::X_Axis()] > 0){
       in_out.ref_i_curr_sec_start()[vipl_filter_abs::X_Axis()]
         += section_size(vipl_filter_abs::X_Axis());
       in_out.ref_i_curr_sec_end()[vipl_filter_abs::X_Axis()]
@@ -287,8 +287,8 @@ template < class DataType >
         + section_size(vipl_filter_abs::X_Axis())
         + 2*overlap()[vipl_filter_abs::X_Axis()];
     }
-    if(in_out.ref_i_curr_sec_end()[vipl_filter_abs::X_Axis()]
-       > image_size(vipl_filter_abs::X_Axis()))
+    if (in_out.ref_i_curr_sec_end()[vipl_filter_abs::X_Axis()]
+        > image_size(vipl_filter_abs::X_Axis()))
       in_out.ref_i_curr_sec_end()[vipl_filter_abs::X_Axis()] =
         image_size(vipl_filter_abs::X_Axis());
     in_out.ref_i_curr_sec_size()[vipl_filter_abs::X_Axis()] =
@@ -302,7 +302,7 @@ template < class DataType >
         = section_size(vipl_filter_abs::X_Axis())
         + overlap()[vipl_filter_abs::X_Axis()];
     // if y != 0 we increment, else we must include overlap as well
-    if(in_out.ref_i_curr_sec_start()[vipl_filter_abs::Y_Axis()] > 0 ){
+    if (in_out.ref_i_curr_sec_start()[vipl_filter_abs::Y_Axis()] > 0 ){
       in_out.ref_i_curr_sec_start()[vipl_filter_abs::Y_Axis()] +=
         section_size(vipl_filter_abs::Y_Axis());
       in_out.ref_i_curr_sec_end()[vipl_filter_abs::Y_Axis()] +=
@@ -323,12 +323,12 @@ template < class DataType >
     in_out.ref_i_curr_sec_size()[vipl_filter_abs::Y_Axis()] =
       in_out.i_curr_sec_end()[vipl_filter_abs::Y_Axis()]
       - in_out.i_curr_sec_start()[vipl_filter_abs::Y_Axis()];
-    if(in_out.ref_i_curr_sec_end()[vipl_filter_abs::X_Axis()]
-       > image_size(vipl_filter_abs::X_Axis()))
+    if (in_out.ref_i_curr_sec_end()[vipl_filter_abs::X_Axis()]
+        > image_size(vipl_filter_abs::X_Axis()))
       in_out.ref_i_curr_sec_end()[vipl_filter_abs::X_Axis()]
         = image_size(vipl_filter_abs::X_Axis());
-    if(in_out.ref_i_curr_sec_end()[vipl_filter_abs::Y_Axis()]
-       > image_size(vipl_filter_abs::Y_Axis()))
+    if (in_out.ref_i_curr_sec_end()[vipl_filter_abs::Y_Axis()]
+        > image_size(vipl_filter_abs::Y_Axis()))
       in_out.ref_i_curr_sec_end()[vipl_filter_abs::Y_Axis()] =
         image_size(vipl_filter_abs::Y_Axis());
   }

@@ -18,14 +18,14 @@ vipl_section_descriptor< DataType > ::vipl_section_descriptor(
   : hsreal_descriptor(desc),
     hsreal_container(container),
     hsi_data_ptr(0),
-    hsi_data_offsets(1,0),
-    hsi_curr_sec_start(1,0),
-    hsi_curr_sec_end(1,0),
-    hsi_curr_sec_size(1,0),
+    hsi_data_offsets(2,0),
+    hsi_curr_sec_start(2,0),
+    hsi_curr_sec_end(2,0),
+    hsi_curr_sec_size(2,0),
     refcount_ (1)
 {
-  if(desc) FILTER_IMPTR_INC_REFCOUNT(desc);
-  if(container) FILTER_IMPTR_INC_REFCOUNT(container);
+  if (desc) FILTER_IMPTR_INC_REFCOUNT(desc);
+  if (container) FILTER_IMPTR_INC_REFCOUNT(container);
 #if 0
   vcl_cerr << "Warning: called unimplemented constructor with signature "
            << "vipl_section_descriptor< DataType >* desc, vipl_section_container< DataType >* container\n";
@@ -41,10 +41,10 @@ vipl_section_descriptor< DataType > ::vipl_section_descriptor(
  : hsreal_descriptor(0),
    hsreal_container(0),
    hsi_data_ptr(0),
-   hsi_data_offsets(1,0),
-   hsi_curr_sec_start(1,0),
-   hsi_curr_sec_end(1,0),
-   hsi_curr_sec_size(1,0),
+   hsi_data_offsets(2,0),
+   hsi_curr_sec_start(2,0),
+   hsi_curr_sec_end(2,0),
+   hsi_curr_sec_size(2,0),
    refcount_ (1)
 {
   hsreal_descriptor = desc->virtual_copy();
@@ -68,10 +68,10 @@ vipl_section_descriptor< DataType > ::vipl_section_descriptor(
   : hsreal_descriptor (0),
     hsreal_container (0),
     hsi_data_ptr (0),
-    hsi_data_offsets (1,0),
-    hsi_curr_sec_start (1,0),
-    hsi_curr_sec_end (1,0),
-    hsi_curr_sec_size (1,0),
+    hsi_data_offsets (2,0),
+    hsi_curr_sec_start (2,0),
+    hsi_curr_sec_end (2,0),
+    hsi_curr_sec_size (2,0),
     refcount_ (1)
 {
   vcl_cerr << "Warning: called unimplemented constructor with sig vcl_vector< int >& startpts, vcl_vector< int >& endpts\n";
@@ -94,10 +94,10 @@ vipl_section_descriptor< DataType > ::vipl_section_descriptor()
   : hsreal_descriptor(this),
     hsreal_container(0),
     hsi_data_ptr(0),
-    hsi_data_offsets(1,0),
-    hsi_curr_sec_start(1,0),
-    hsi_curr_sec_end(1,0),
-    hsi_curr_sec_size(1,0),
+    hsi_data_offsets(2,0),
+    hsi_curr_sec_start(2,0),
+    hsi_curr_sec_end(2,0),
+    hsi_curr_sec_size(2,0),
     refcount_ (1)
 // C++ auto-generated low-level constructor
 {
