@@ -22,6 +22,10 @@ class vgui_dialog_impl;
 class vgui_tableau;
 struct vgui_tableau_ref;
 
+//: Base class for toolkit implementations.
+// The toolkit is repsonsible for opening the initial
+// window, and running the main event loop.
+// An example derived class is vgui_mfc .
 class vgui_toolkit
 {
 public:
