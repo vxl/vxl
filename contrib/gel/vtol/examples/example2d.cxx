@@ -332,7 +332,7 @@ static void test_topology_2d(void)
   delete vl; delete zcl; delete el; delete ocl; delete fl; delete tcl; delete bl;
   
 
-  vcl_cout << "Testing Topology io" << endl;
+  vcl_cout << "Testing Topology io" << vcl_endl;
   
   vtol_topology_io io_writer;
   
