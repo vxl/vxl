@@ -84,7 +84,7 @@ inline vil_image_view<vcl_complex<T> >
 vil_view_as_complex (const vil_image_view<T> & v)
 {
   if ((v.nplanes()%2!=0) || (v.planestep()!=1) || (v.istep()!=2 && v.jstep()!=2))
-      return vil_image_view<vil_rgb<T> >();
+      return vil_image_view<vcl_complex<T> >();
 
   return vil_image_view<vcl_complex<T> > (
       v.memory_chunk(),
