@@ -138,13 +138,9 @@ vsol_point_2d_sptr vsol_line_2d::p1(void) const
 //---------------------------------------------------------------------------
 bool vsol_line_2d::operator==(const vsol_line_2d &other) const
 {
-  bool result;
-
-  result=this==&other;
-  if (!result)
-    result=(((*p0_)==(*(other.p0_)))&&((*p1_)==(*(other.p1_))))
-      ||(((*p0_)==(*(other.p1_)))&&((*p1_)==(*(other.p0_))));
-  return result;
+  return this==&other
+         || (*p0_ == *(other.p0_) && *p1_ == *(other.p1_))
+         || (*p0_ == *(other.p1_) && *p1_ == *(other.p0_));
 }
 
 //: spatial object equality
@@ -152,9 +148,9 @@ bool vsol_line_2d::operator==(const vsol_line_2d &other) const
 bool vsol_line_2d::operator==(const vsol_spatial_object_2d& obj) const
 {
   return
-   obj.spatial_type() == vsol_spatial_object_2d::CURVE &&
-   ((vsol_curve_2d const&)obj).curve_type() == vsol_curve_2d::LINE
-  ? operator== ((vsol_line_2d const&)(vsol_curve_2d const&)obj)
+    obj.spatial_type() == vsol_spatial_object_2d::CURVE &&
+    ((vsol_curve_2d const&)obj).curve_type() == vsol_curve_2d::LINE
+  ? operator==(static_cast<vsol_line_2d const&>(static_cast<vsol_curve_2d const&>(obj)))
   : false;
 }
 
@@ -189,8 +185,8 @@ double vsol_line_2d::length(void) const
 }
 
 //---------------------------------------------------------------------------
-//: Return the tangent angle in degrees  of `this'.  By convention, the 
-//  angle is in degrees and lies on the interval, [0, 360].
+//: Return the tangent angle in degrees  of `this'.
+//  By convention, the angle is in degrees and lies in the interval [0, 360].
 //---------------------------------------------------------------------------
 double vsol_line_2d::tangent_angle(void) const
 {
@@ -200,14 +196,13 @@ double vsol_line_2d::tangent_angle(void) const
 
   double ang = -1;
   // do special cases separately, to avoid rounding errors:
-  if (dx == 0) ang = dy<0 ? -90.0 : 90.0;
-  if (dy == 0) ang = dx<0 ? 180.0 : 0.0;
-  if (dy == dx)ang = dy<0 ? -135.0 : 45.0;
-  if (dy+dx == 0) ang = dy<0 ? -45.0 : 135.0;
+  if      (dx == 0)  ang = dy<0 ? 270.0 : 90.0; // vertical line
+  else if (dy == 0)  ang = dx<0 ? 180.0 :  0.0; // horizontal line
+  else if (dy == dx) ang = dy<0 ? 225.0 : 45.0;
+  else if (dy+dx==0) ang = dy<0 ? 315.0 :135.0;
   // the general case:
-  if(ang == -1)
-    ang = deg_per_rad * vcl_atan2(dy,dx);
-  if(ang<0) ang+= 360.0;
+  else               ang = deg_per_rad * vcl_atan2(dy,dx);
+  if (ang<0) ang+= 360.0;
   return ang;
 }
 
@@ -260,20 +255,17 @@ void vsol_line_2d::set_length(const double new_length)
 //---------------------------------------------------------------------------
 bool vsol_line_2d::in(const vsol_point_2d_sptr &p) const
 {
-  bool result;
-  double dot_product;
-
   // `p' belongs to the straight line
-  result=(p0_->y()-p1_->y())*p->x()+(p1_->x()-p0_->x())*p->y()
-    +p0_->x()*p1_->y()-p0_->y()*p1_->x()==0;
+  bool result=(p0_->y()-p1_->y())*p->x()+(p1_->x()-p0_->x())*p->y()
+              +p0_->x()*p1_->y()         -p0_->y()*p1_->x()        ==0;
 
   if (result) // `p' belongs to the segment
     {
-      dot_product=(p->x()-p0_->x())*(p1_->x()-p0_->x())
-        +(p->y()-p0_->y())*(p1_->y()-p0_->y());
+      double dot_product=(p->x()-p0_->x())*(p1_->x()-p0_->x())
+                        +(p->y()-p0_->y())*(p1_->y()-p0_->y());
       result=(dot_product>=0)&&
         (dot_product<(vnl_math_sqr(p1_->x()-p0_->x())
-                      +vnl_math_sqr(p1_->y()-p0_->y())));
+                     +vnl_math_sqr(p1_->y()-p0_->y())));
     }
   return result;
 }
@@ -288,9 +280,8 @@ vsol_line_2d::tangent_at_point(const vsol_point_2d_sptr &p) const
   // require
   assert(in(p));
 
-   return new vgl_homg_line_2d<double>(p0_->y()-p1_->y(),p1_->x()-p0_->x(),
+  return new vgl_homg_line_2d<double>(p0_->y()-p1_->y(),p1_->x()-p0_->x(),
                                       p0_->x()*p1_->y()-p0_->y()*p1_->x());
-  
 }
 
 //--------------------------------------------------------------------
