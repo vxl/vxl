@@ -18,10 +18,17 @@ template<class T>
 void vsl_b_write(vsl_b_ostream & os, const vbl_smart_ptr<T> &p)
 {
   // write version number
-  const short io_version_no = 1;
+  const short io_version_no = 2;
   vsl_b_write(os, io_version_no);
   vsl_b_write(os, p.is_protected());
 
+  if (p.ptr() == 0)  // Deal with Null pointers first.
+  {
+    vsl_b_write(os, true);
+    vsl_b_write(os, 0ul); // Use 0 to indicate a null pointer.
+                          // True serialisation IDs are always 1 or more.
+    return;
+  }
 
   // Get a serial_number for object being pointed to
   unsigned long id = os.get_serial_number(p.ptr());
@@ -88,6 +95,7 @@ void vsl_b_read(vsl_b_istream &is, vbl_smart_ptr<T> &p)
   switch(ver)
   {
   case 1:
+  case 2:
     {
       bool is_protected; // true if the smart_ptr is to be
                          //responsible for the object
@@ -105,6 +113,12 @@ void vsl_b_read(vsl_b_istream &is, vbl_smart_ptr<T> &p)
       }
       unsigned long id; // Unique serial number indentifying object
       vsl_b_read(is, id);
+
+      if (id == 0) // Deal with Null pointers first.
+      {
+        p = 0;
+        return;
+      }
 
       T * pointer = static_cast<T *>( is.get_serialisation_pointer(id));
       if (first_time != (pointer == 0))
@@ -161,50 +175,6 @@ void vsl_print_summary(vcl_ostream & os,const vbl_smart_ptr<T> & p)
 }
 
 
-#if 0 // commented out
-//===========================================
-// Deal with base class pointers
-template<class T>
-void vsl_b_read(vsl_b_istream& is, vbl_smart_ptr<T> * &p)
-{
-  delete p;
-  bool not_null_ptr;
-  vsl_b_read(is, not_null_ptr);
-  if (not_null_ptr)
-  {
-    p = new vbl_smart_ptr<T>;
-    vsl_b_read(is, *p);
-  }
-  else
-    p = 0;
-}
-
-template<class T>
-void vsl_b_write(vsl_b_ostream& os, const vbl_smart_ptr<T> *p)
-{
-  if (p==0)
-  {
-    vsl_b_write(os, false); // Indicate null pointer stored
-  }
-  else
-  {
-    vsl_b_write(os,true); // Indicate non-null pointer stored
-    vsl_b_write(os,*p);
-  }
-}
-
-template<class T>
-void vsl_print_summary(vcl_ostream, const vbl_smart_ptr<T> *p)
-{
-  if (p==0)
-    os << "NULL PTR";
-  else
-  {
-    os << "vbl_smart_ptr: ";
-    vsl_print_summary(*p);
-  }
-}
-#endif
 
 #undef VBL_IO_SMART_PTR_INSTANTIATE
 #define VBL_IO_SMART_PTR_INSTANTIATE(T) \

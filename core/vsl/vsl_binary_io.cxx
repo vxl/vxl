@@ -470,12 +470,16 @@ void vsl_b_ostream::clear_serialisation_records()
 
 //: Adds an object pointer to the serialisation records.
 // Returns a unique identifier for the object.
+//
+// \a pointer must be non-null, so you should handle null pointers separately.
+//
 // You can optionally add some user-defined integer with each record
-// If error checking is on, and the object pointer is already in the records,
+// If error checking is on, and the object pointer is null or already in the records,
 // this function will abort()
 unsigned long vsl_b_ostream::add_serialisation_record
                     (void *pointer, int other_data /*= 0*/)
 {
+  assert(pointer != 0);
   assert(serialisation_records_.find(pointer) == serialisation_records_.end());
   unsigned long id = serialisation_records_.size() + 1;
   serialisation_records_[pointer] = vcl_make_pair(id, other_data);
@@ -612,8 +616,9 @@ void vsl_b_istream::clear_serialisation_records()
 }
 
 //: Adds record of object's unique serial number, and location in memory.
+// \a pointer must be non-null, so you should handle null pointers separately.
 //
-// Adding a pointer that already exists will cause the function to abort(),
+// Adding a null pointer or one that already exists will cause the function to abort(),
 // if debugging is turned on;
 //
 // You can also store a single integer as other data.
@@ -621,6 +626,7 @@ void vsl_b_istream::clear_serialisation_records()
 void vsl_b_istream::add_serialisation_record(unsigned long serial_number,
                                              void *pointer, int other_data /*= 0*/)
 {
+  assert(pointer != 0);
   assert(serialisation_records_.find(serial_number) == serialisation_records_.end());
   serialisation_records_[serial_number] = vcl_make_pair(pointer, other_data);
 }

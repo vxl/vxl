@@ -16,8 +16,16 @@ template<class T>
 void vsl_b_write(vsl_b_ostream & os, const vil_smart_ptr<T> &p)
 {
   // write version number
-  const short io_version_no = 1;
+  const short io_version_no = 2;
   vsl_b_write(os, io_version_no);
+
+  if (p.ptr() == 0)  // Deal with Null pointers first.
+  {
+    vsl_b_write(os, true);
+    vsl_b_write(os, 0ul); // Use 0 to indicate a null pointer.
+                          // True serialisation IDs are always 1 or more.
+    return;
+  }
 
   // Get a serial_number for object being pointed to
   unsigned long id = os.get_serial_number(p.ptr());
@@ -63,12 +71,19 @@ void vsl_b_read(vsl_b_istream &is, vil_smart_ptr<T> &p)
   switch(ver)
   {
   case 1:
+  case 2:
     {
       bool first_time; // true if the object is about to be loaded
       vsl_b_read(is, first_time);
 
       unsigned long id; // Unique serial number indentifying object
       vsl_b_read(is, id);
+
+      if (id == 0) // Deal with Null pointers first.
+      {
+        p = 0;
+        return;
+      }
 
       T * pointer = static_cast<T *>( is.get_serialisation_pointer(id));
       if (first_time != (pointer == 0))

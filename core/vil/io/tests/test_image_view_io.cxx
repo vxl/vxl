@@ -12,6 +12,31 @@
 #define LEAVE_FILES_BEHIND 0
 #endif
 
+// Check for multiple null pointer loading bug
+void test_image_view_io_as_null()
+{
+  vcl_cout<<"Testing empty image IO "<<vcl_endl;
+  vil_image_view<vxl_byte> im1, im2;
+
+  vsl_b_ofstream bfs_out("vil_image_view_test_io.bvl.tmp");
+  TEST("Created vil_image_view_test_io.bvl.tmp for writing", (!bfs_out), false);
+  vsl_b_write(bfs_out, im1);
+  vsl_b_write(bfs_out, im2);
+  bfs_out.close();
+
+
+  vsl_b_ifstream bfs_in("vil_image_view_test_io.bvl.tmp");
+  TEST("Opened vil_image_view_test_io.bvl.tmp for reading", (!bfs_in), false);
+  vsl_b_read(bfs_in, im1);
+  vsl_b_read(bfs_in, im2);
+  TEST("Finished reading file successfully", (!bfs_in), false);
+  bfs_in.close();
+#if !LEAVE_FILES_BEHIND
+  vpl_unlink("vil_image_view_test_io.bvl.tmp");
+#endif
+}
+
+
 template<class T>
 inline void test_image_view_io_as(T value1, T value2)
 {
@@ -71,6 +96,7 @@ static void test_image_view_io()
   test_image_view_io_as(float(-0.6f),float(13.5f));
   test_image_view_io_as(double(12.1),double(123.456));
   test_image_view_io_as(bool(false),bool(true));
+  test_image_view_io_as_null();
 }
 
 TESTMAIN(test_image_view_io);

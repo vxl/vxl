@@ -56,10 +56,14 @@ class vsl_b_ostream
   // that a second copy of an object may get stored to the stream.
   virtual void clear_serialisation_records();
 
+
   //: Adds an object pointer to the serialisation records.
   // Returns a unique identifier for the object.
+  //
+  // \a pointer must be non-null, so you should handle null pointers separately.
+  //
   // You can optionally add some user-defined integer with each record
-  // If error checking is on, and the object pointer is already in the records,
+  // If error checking is on, and the object pointer is null or already in the records,
   // this function will abort()
   virtual unsigned long add_serialisation_record(void *pointer, int other_data = 0);
 
@@ -171,8 +175,9 @@ class vsl_b_istream
   virtual void clear_serialisation_records();
 
   //: Adds record of object's unique serial number, and location in memory.
+  // \a pointer must be non-null, so you should handle null pointers separately.
   //
-  // Adding a pointer that already exists will cause the function to abort(),
+  // Adding a null pointer or one that already exists will cause the function to abort(),
   // if debugging is turned on;
   //
   // You can also store a single integer as other data.

@@ -797,7 +797,8 @@ the serialising code yourself. There is no language support for serialisation in
 
 The basic algorithm performed by all of the owner objects during saving is
 @itemize @bullet
-@item If object B has not been saved before
+@item If it is a null pointer, save a unique serial number.
+@item else if object B has not been saved before
   @itemize @bullet
   @item generate a unique serial number for object B
   @item save the serial number
@@ -814,7 +815,8 @@ The basic algorithm performed by all of the owner objects during saving is
 The basic algorithm performed by all of the owner objects during loading is
 @itemize @bullet
 @item load unique serial number
-@item if this is the first time we have seen this serial number
+@item if it is the null-pointer id, set my pointer to 0
+@item else if this is the first time we have seen this serial number
   @itemize @bullet
   @item load object B
   @item set my pointer to point to B
@@ -847,6 +849,13 @@ void vsl_b_write(vsl_b_ostream & os, const vbl_smart_ptr<T> &p)
   // write version number
   const short io_version_no = 1;
   vsl_b_write(os, io_version_no);
+
+  if (p.ptr() == 0)  // Deal with Null pointers first.
+  {
+    vsl_b_write(os, 0ul); // Use 0 to indicate a null pointer.
+                          // True serialisation IDs are always 1 or more.
+    return;
+  }
 
   // Get a serial_number for object being pointed to
   unsigned long id = os.get_serial_number(p.ptr());
@@ -885,6 +894,12 @@ void vsl_b_read(vsl_b_istream &is, vbl_smart_ptr<T> &p)
     @{
       unsigned long id; // Unique serial number identifying object
       vsl_b_read(is, id);
+
+      if (id == 0) // Deal with Null pointers first.
+      {
+        p = 0;
+        return;
+      }
 
       T * pointer = (T *) is.get_serialisation_pointer(id);
       if (pointer == 0) // Not loaded before
@@ -939,7 +954,7 @@ void vsl_b_write(vsl_b_ostream& os, const class_B *p)
   else
   @{
     vsl_b_write(os,true); /* Indicate non-null pointer stored */
-      vsl_b_write(os,*p);
+    vsl_b_write(os,*p);
   @}
 @}
 @end example
@@ -963,7 +978,7 @@ Binary IO for the level-1 libraries (@code{vbl},@code{vil},@code{vgl},@code{vnl}
 is implemented using
 `clip-on' libraries, the code for which lives in `io' subdirectories of
 each library.  Thus the code for the IO for @code{vnl_vector<T>} lives in
-@file{vnl/io/vnl_io_vector.h/.txx}.  Binary IO for vcl containers is provided in
+@file{vnl/io/vnl_io_vector.h/.txx}.  Binary IO for @code{vcl} containers is provided in
 the library @code{vsl}.
 
 The `clip-on' libraries provide a set of external functions and classes which
