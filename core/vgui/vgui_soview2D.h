@@ -27,6 +27,12 @@
 #include "vgui_soview.h"
 #include <vcl_iosfwd.h>
 
+#include "vgui_gl.h"
+
+class vil1_image;
+class vil_image_view_base;
+class vgui_section_buffer;
+
 //-----------------------------------------------------------------------------
 //: 2-dimensional spatial object view.
 class vgui_soview2D : public vgui_soview
@@ -355,31 +361,55 @@ class vgui_soview2D_polygon : public vgui_soview2D
 
 //-----------------------------------------------------------------------------
 //: 2-dimensional image.
+//
+// This will store a GL pixel buffer of the input image and display
+// it, on request, with the top left corner at (x,y). It does not keep
+// a reference to the image. Rather, it will create the GL pixel
+// buffer at construction time and store that.
+//
 class vgui_soview2D_image : public vgui_soview2D
 {
- public:
-  //: Constructor - create a 2D image
-  vgui_soview2D_image() {};
+public:
+  //: Create the sprite from a vil1_image.
+  //
+  // If format and type are not specified, the "best" one will be
+  // automatically chosen.  \a blend will set the blend state for
+  // rendering. See draw().
+  //
+  vgui_soview2D_image( float x, float y,
+                       vil1_image const& img,
+                       bool blend = false,
+                       GLenum format = GL_NONE,
+                       GLenum type = GL_NONE );
 
-  void set_image(float x, float y, float w, float h, char *data);
+  //: Create the sprite from a vil_image_view.
+  //
+  // If format and type are not specified, the "best" one will be
+  // automatically chosen.  \a blend will set the blend state for
+  // rendering. See draw().
+  //
+  vgui_soview2D_image( float x, float y,
+                       vil_image_view_base const& img,
+                       bool blend = false,
+                       GLenum format = GL_NONE,
+                       GLenum type = GL_NONE );
 
   //: Destructor - delete this image.
   ~vgui_soview2D_image();
 
   //: Render this image on the display.
+  //
+  // If the blend state is on, then the image will be rendered with
+  // GL_BLEND enabled, and with glBlendFunc(GL_SRC_ALPHA,
+  // GL_ONE_MINUS_SRC_ALPHA)
+  //
   virtual void draw() const;
 
   //: Print details about this image to the given stream.
   virtual vcl_ostream& print(vcl_ostream&) const;
 
-  //: Returns the distance squared from the center of this image to the given position.
+  //: Returns the distance squared from the centroid
   virtual float distance_squared(float x, float y) const;
-
-  //: Sets the openGL format and type of the stored image
-  void set_format_type(unsigned int format, unsigned int type) {
-    img_format_ = format;
-    img_type_ = type;
-  }
 
   //: Returns the type of this class ('vgui_soview2D_image').
   vcl_string type_name() const { return "vgui_soview2D_image"; }
@@ -390,20 +420,18 @@ class vgui_soview2D_image : public vgui_soview2D
   //: Translate this 2D image by the given x and y distances.
   void translate(float x, float y);
 
+private:
   //: Coordinates of the upper lefthand corner of the image
   float x_, y_;
 
   //: Width and height of the image
-  float width_, height_;
+  unsigned w_, h_;
 
-  //: Raw image data
-  char *img_;
+  //: Render with or without blending?
+  bool blend_;
 
-  //: OpenGL format for the image ex.  GL_RGB, GL_COLOR_INDEX, GL_ALPHA,...
-  unsigned int img_format_;
-
-  //: OpenGL type for the image.  ex. GL_UNSIGNED_BYTE, GL_UNSIGNED_SHORT_5_5_5_1,...
-  unsigned int img_type_;
+  //: The OpenGL buffer corresponding to the image
+  vgui_section_buffer* buffer_;
 };
 
 #endif // vgui_soview2D_h_

@@ -14,10 +14,13 @@
 
 #include <vgl/vgl_distance.h>
 #include <vnl/vnl_math.h>
+#include <vil/vil_image_view_base.h>
+#include <vil1/vil1_image.h>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_style.h>
 #include <vgui/vgui_projection_inspector.h>
+#include <vgui/vgui_section_buffer.h>
 #include <vgui/internals/vgui_draw_line.h>
 
 vgui_soview2D::vgui_soview2D() {}
@@ -474,53 +477,82 @@ void vgui_soview2D_polygon::set_size(unsigned nn)
 
 
 //-----------------------------------------------------------
-void vgui_soview2D_image::set_image(float x, float y, float w, float h, char *data)
+
+vgui_soview2D_image::vgui_soview2D_image( float in_x, float in_y,
+                                          vil1_image const& img,
+                                          bool in_blend,
+                                          GLenum format,
+                                          GLenum type )
+  : x_( in_x ),
+    y_( in_y ),
+    w_( img.width() ),
+    h_( img.height() ),
+    blend_( in_blend ),
+    buffer_( new vgui_section_buffer( 0, 0, w_, h_, format, type ) )
 {
-  x_ = x;
-  y_ = y;
-  width_ = w;
-  height_ = h;
+  buffer_->apply( img );
+}
 
-  img_ = data; 
-
-  //defaults
-  img_format_ = GL_RGB;
-  img_type_ = GL_UNSIGNED_BYTE;
-
-  glPixelStorei(GL_UNPACK_ALIGNMENT,1);
+vgui_soview2D_image::vgui_soview2D_image( float in_x, float in_y,
+                                          vil_image_view_base const& img,
+                                          bool in_blend,
+                                          GLenum format,
+                                          GLenum type )
+  : x_( in_x ),
+    y_( in_y ),
+    w_( img.ni() ),
+    h_( img.nj() ),
+    blend_( in_blend ),
+    buffer_( new vgui_section_buffer( 0, 0, w_, h_, format, type ) )
+{
+  buffer_->apply( img );
 }
 
 vgui_soview2D_image::~vgui_soview2D_image()
 {
+  delete buffer_;
 }
 
 void vgui_soview2D_image::draw() const
 {
-  glEnable(GL_BLEND);
-  glRasterPos2i(int(x_),int(y_));
-  glDrawPixels(int(width_),int(height_),img_format_,img_type_,img_);
-  glFlush();
-#if 0
-  vil1_memory_image_of< vil1_rgb< unsigned char > > test;
-  test.resize(int(width_),int(height_));
-  test.put_section(img_,0,0,int(width_),int(height_));
-  vil1_save(test,"shouldwork.jpg","jpeg");
-#endif // 0
+  // Get the current blend state so we can restore it later
+  GLboolean blend_on;
+  glGetBooleanv( GL_BLEND, &blend_on );
+
+  if( blend_ ) {
+    glEnable( GL_BLEND );
+    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+  } else {
+    glDisable( GL_BLEND );
+  }
+
+  glTranslatef(  x_,  y_, 0.0f );
+  buffer_->draw_as_image() || buffer_->draw_as_rectangle();
+  glTranslatef( -x_, -y_, 0.0f );
+
+  if( blend_on ) {
+    glEnable( GL_BLEND );
+  } else {
+    glDisable( GL_BLEND );
+  }
 }
 
-vcl_ostream& vgui_soview2D_image::print(vcl_ostream&s) const { return s << "[a image. FIXME]"; }
+vcl_ostream& vgui_soview2D_image::print(vcl_ostream&s) const
+{
+  return s << "[vgui_soview2D_image "<<w_<<"x"<<h_<<", blend="<<blend_<<"]";
+}
 
 float vgui_soview2D_image::distance_squared(float x, float y) const
 {
-  float dx = (x_ + (width_ / 2)) - x;
-  float dy = (y_ + (height_ / 2)) - y;
+  float dx = (x_ + (w_ / 2.0f)) - x;
+  float dy = (y_ + (h_ / 2.0f)) - y;
   return dx*dx + dy*dy;
 }
 
 void vgui_soview2D_image::get_centroid(float* x, float* y) const
 {
-  float x1 = x_ + (width_ / 2);
-  float y1 = y_ + (height_ / 2);
+  float x1 = x_ + (w_ / 2.0f);
+  float y1 = y_ + (h_ / 2.0f);
 
   *x = x1;
   *y = y1;

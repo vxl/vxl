@@ -166,8 +166,22 @@ class vgui_easy2D_tableau : public vgui_displaylist2D_tableau
   void print_psfile(vcl_string filename, int reduction_factor,
                     bool print_geom_objs, int wd=-1, int ht=-1);
 
-  //: Add a point at the given position to the display.
+  // deprecated. This used to work without a segfault if you were
+  // lucky. The newer versions that take a image parameter will work
+  // more reliably.
   vgui_soview2D_image* add_image(float x, float y, float w, float h, char *data, unsigned int format, unsigned int type);
+
+  //: Add an image at the given position to the display.
+  //
+  // Alpha blending will be turned on iff the view has 4 planes.
+  //
+  vgui_soview2D_image* add_image( float x, float y, vil_image_view_base const& img );
+
+  //: Add an image at the given position to the display.
+  //
+  // Alpha blending will be turned on iff the image has 4 components.
+  //
+  vgui_soview2D_image* add_image( float x, float y, vil1_image const& img );
 
  protected:
   //: Destructor - called by vgui_easy2D_tableau_sptr.

@@ -17,11 +17,16 @@
 
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
+#include <vcl_cstdlib.h> // for abort
+
+#include <vxl_config.h> // for vxl_byte
 
 #include <vul/vul_psfile.h>
 
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_pixel.h>
+
+#include <vil/vil_image_view.h>
 
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_macro.h>
@@ -354,12 +359,54 @@ void vgui_easy2D_tableau::print_psfile(vcl_string filename, int reduction_factor
 }
 
 //: Add an image at the given position to the display.
-vgui_soview2D_image* vgui_easy2D_tableau::add_image(float x, float y, float w, float h,
-                                                    char *data, unsigned int format, unsigned int type)
+vgui_soview2D_image* vgui_easy2D_tableau::add_image( float x, float y,
+                                                     vil1_image const& img )
 {
-  vgui_soview2D_image *obj = new vgui_soview2D_image;
-  obj->set_image(x,y,w,h,data);
-  obj->set_format_type(format,type);
+  // Assume alpha blending is necessary iff there are four components
+  // in the image
+  bool blend = false;
+  if( img.components() == 4 ) {
+    blend = true;
+  }
+  vgui_soview2D_image *obj = new vgui_soview2D_image( x, y, img, blend );
   add(obj);
   return obj;
+}
+
+//: Add an image at the given position to the display.
+vgui_soview2D_image* vgui_easy2D_tableau::add_image( float x, float y,
+                                                     vil_image_view_base const& img )
+{
+  // Assume alpha blending is necessary iff there are four components
+  // in the image
+  bool blend = false;
+  if( img.nplanes() == 4 ) {
+    blend = true;
+  }
+  vgui_soview2D_image *obj = new vgui_soview2D_image( x, y, img, blend );
+  add(obj);
+  return obj;
+}
+
+vgui_soview2D_image* vgui_easy2D_tableau::add_image( float x, float y,
+                                                     float width, float height,
+                                                     char *data,
+                                                     unsigned int format, unsigned int type )
+{
+  if( type != GL_UNSIGNED_BYTE ) {
+    vcl_cerr << "Don't know how to add non-byte sprites using old interface\n";
+    vcl_abort();
+  }
+  unsigned w = unsigned(width);
+  unsigned h = unsigned(height);
+  vil_image_view<vxl_byte> img;
+  if( format == GL_RGB ) {
+    img = vil_image_view<vxl_byte>( reinterpret_cast<vxl_byte*>(data), w, h, 3, 3, w*3, 1 );
+  } else if( format == GL_RGBA ) {
+    img = vil_image_view<vxl_byte>( reinterpret_cast<vxl_byte*>(data), w, h, 3, 3, w*3, 1 );
+  } else {
+    vcl_cerr << "Don't know how to handle format " << format << " with old interface\n";
+    vcl_abort();
+  }
+  return this->add_image( x, y, img );
 }
