@@ -58,7 +58,7 @@ int main(int argc, char ** argv)
   if (argc <= 1)
     for (int i=1; i<10; ++i)
     {
-      vul_sprintf name("/net/tamora/c/awf/images/Basement/tif/bt.%03d.quarter.tif", i);
+      vul_sprintf name("bt.%03d.quarter.tif", i);
       img_filenames.push_back(name);
     }
   else
