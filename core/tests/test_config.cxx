@@ -1455,5 +1455,12 @@ MAIN( test_config )
 #endif
   vcl_cout << vcl_endl;
 
+  vcl_cout << vcl_endl;
+  vcl_cout << "sizeof(char) is " << sizeof(char) << vcl_endl;
+  vcl_cout << "sizeof(short) is " << sizeof(short) << vcl_endl;
+  vcl_cout << "sizeof(int) is " << sizeof(int) << vcl_endl;
+  vcl_cout << "sizeof(long) is " << sizeof(long) << vcl_endl;
+  vcl_cout << "sizeof(float) is " << sizeof(float) << vcl_endl;
+  vcl_cout << "sizeof(double) is " << sizeof(double) << vcl_endl;
   SUMMARY();
 }

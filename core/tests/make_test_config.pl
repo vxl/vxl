@@ -9,7 +9,7 @@ exec perl -w -x $0 ${1+"$@"}
 # Prints test_config.cxx to stdout.
 #
 # Usage:
-#   cd $VXLSRC/vxl/tests
+#   cd $VXLSRC/core/tests
 #   ./make_test_config.pl > test_config.cxx
 
 use strict;
@@ -262,6 +262,29 @@ print <<EOF;
 
 EOF
 
+}
+
+############################################################################
+
+print <<EOF;
+  vcl_cout << vcl_endl;
+EOF
+
+############################################################################
+
+my $type;
+for $type (
+  'char',
+  'short',
+  'int',
+  'long',
+  'float',
+  'double',
+  ) {
+
+print <<EOF;
+  vcl_cout << "sizeof($type) is " << sizeof($type) << vcl_endl;
+EOF
 }
 
 ############################################################################
