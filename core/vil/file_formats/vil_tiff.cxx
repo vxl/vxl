@@ -122,7 +122,8 @@ char const* vil_tiff_file_format::tag() const
 /////////////////////////////////////////////////////////////////////////////
 
 struct vil_tiff_structures {
-  vil_tiff_structures(vil_stream *vs_) : vs(vs_), filesize(0), buf(0) { if (vs) vs->ref(); }
+  vil_tiff_structures(vil_stream *vs_) : vs(vs_), filesize(0), buf(0),
+    sample_format( SAMPLEFORMAT_VOID ) { if (vs) vs->ref(); }
 
  ~vil_tiff_structures() { delete[] buf; if (vs) vs->unref(); }
 
@@ -136,6 +137,7 @@ struct vil_tiff_structures {
   unsigned long rows_per_strip;
   unsigned short planar_config;
   unsigned short photometric;
+  unsigned short sample_format;
 
   unsigned long stripsize;
   long scanlinesize;
@@ -262,16 +264,24 @@ vil_tiff_image::vil_tiff_image(vil_stream* is,
 
 vil_pixel_format vil_tiff_image::pixel_format() const
 {
-  if (bits_per_component_ <= 1)
-    return VIL_PIXEL_FORMAT_BOOL;
-  else if (bits_per_component_ <= 8)
-    return VIL_PIXEL_FORMAT_BYTE;
-  else if (bits_per_component_ <= 16)
-    return VIL_PIXEL_FORMAT_UINT_16;
-  else if (bits_per_component_ <= 32)
-    return VIL_PIXEL_FORMAT_UINT_32;
-  else
+  if( p->sample_format == SAMPLEFORMAT_IEEEFP ) {
+    return VIL_PIXEL_FORMAT_FLOAT;
+  } else if ( p->sample_format == SAMPLEFORMAT_VOID ) {
     return VIL_PIXEL_FORMAT_UNKNOWN;
+  } else {
+    //unsigned if true, signed if false
+    bool isSigned = p->sample_format == SAMPLEFORMAT_INT;
+    if (bits_per_component_ <= 1)
+      return VIL_PIXEL_FORMAT_BOOL;
+    else if (bits_per_component_ <= 8)
+      return VIL_PIXEL_FORMAT_BYTE;
+    else if (bits_per_component_ <= 16)
+      return isSigned ? VIL_PIXEL_FORMAT_INT_16 : VIL_PIXEL_FORMAT_UINT_16;
+    else if (bits_per_component_ <= 32)
+      return isSigned ? VIL_PIXEL_FORMAT_INT_32 : VIL_PIXEL_FORMAT_UINT_32;
+    else
+      return VIL_PIXEL_FORMAT_UNKNOWN;
+  }
 }
 
 vil_tiff_image::~vil_tiff_image()
@@ -443,6 +453,7 @@ bool vil_tiff_image::read_header()
 
   TIFFGetField(p->tif, TIFFTAG_ROWSPERSTRIP, &p->rows_per_strip);
   TIFFGetField(p->tif, TIFFTAG_COMPRESSION, &p->compression);
+  TIFFGetField(p->tif, TIFFTAG_SAMPLEFORMAT, &p->sample_format);
   TIFFGetField(p->tif, TIFFTAG_PLANARCONFIG, &p->planar_config);
 
   p->compressed = (p->compression != COMPRESSION_NONE);
@@ -697,25 +708,31 @@ vil_image_view_base_sptr vil_tiff_image::get_copy_view(unsigned i0,
         }
       }
     }
-    if (bits_per_component_ <= 1) {
-      return new vil_image_view<bool>(buf, reinterpret_cast<bool*>(buf->data()), ni, nj,
-                                      components_, components_, components_*ni, 1);
-    }
-    else if (bits_per_component_ <= 8)
-      return new vil_image_view<vxl_byte>(buf, reinterpret_cast<vxl_byte*>(buf->data()), ni, nj,
-                                          components_, components_, components_*ni, 1);
-    else if (bits_per_component_ <= 16)
-      return new vil_image_view<vxl_uint_16>(buf, reinterpret_cast<vxl_uint_16*>(buf->data()), ni, nj,
-                                             components_, components_, components_*ni, 1);
-    else if (bits_per_component_ <= 32)
-      return new vil_image_view<vxl_uint_32>(buf, reinterpret_cast<vxl_uint_32*>(buf->data()), ni, nj,
-                                             components_, components_, components_*ni, 1);
-    else {
+    switch( pixel_format() ){
+#define macro( F, T ) \
+  case F: { \
+    return new vil_image_view< T >(buf, reinterpret_cast< T* >(buf->data()), ni, nj,  \
+                                   components_, components_, components_*ni, 1 );      \
+          }
+macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )
+macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
+#if VXL_HAS_INT_64
+macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
+macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
+#endif
+macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
+macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
+macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
+macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
+macro(VIL_PIXEL_FORMAT_BOOL , bool )
+macro(VIL_PIXEL_FORMAT_FLOAT , float )
+macro(VIL_PIXEL_FORMAT_DOUBLE , double )
+#undef macro
+    default:
       // not compressed, and jumbo strips. dig it out manually in case ReadScanLine pulls in all the image
       problem("Can't deal with this pixel depth.");
       return 0;
     }
-
   } else {
     // not compressed, and jumbo strips. dig it out manually in case ReadScanLine pulls in all the image
     problem("Jumbo strips, and strip chopping appears to be disabled...");
