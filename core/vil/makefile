@@ -56,6 +56,7 @@ MANPAGE_SOURCES += vil_fill.h
 MANPAGE_SOURCES += vil_transform.h
 MANPAGE_SOURCES += vil_convert.h
 SOURCES += vil_decimate.cxx
+MANPAGE_SOURCES += vil_rotate.txx
 
 SOURCES += vil_load.cxx
 SOURCES += vil_save.cxx

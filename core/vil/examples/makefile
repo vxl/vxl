@@ -20,6 +20,7 @@ MINI_PROG_SOURCES += vil_convolve_tool.cxx
 MINI_PROG_SOURCES += vil_correlate_grad_tool.cxx
 MINI_PROG_SOURCES += vil_exp_grad_filter_tool.cxx
 MINI_PROG_SOURCES += vil_image_copy.cxx
+MINI_PROG_SOURCES += vil_rotate_image.cxx
 MINI_PROG_SOURCES += example_interpolate.cxx
 MINI_PROG_SOURCES += example_complex.cxx
 
