@@ -57,8 +57,8 @@ class bmvv_multiview_manager : public vgui_wrapper_tableau
   virtual bool handle(const vgui_event&);
 
   void load_image_file(vcl_string image_filename, bool greyscale, unsigned col, unsigned row);
-	void draw_colored_edgel_chain(unsigned col, unsigned row, vdgl_edgel_chain_sptr ec, int label);
-	void set_changing_colors(int num, float *r, float *g, float *b);
+  void draw_colored_edgel_chain(unsigned col, unsigned row, vdgl_edgel_chain_sptr ec, int label);
+  void set_changing_colors(int num, float *r, float *g, float *b);
 
  protected:
   //:internal utility methods

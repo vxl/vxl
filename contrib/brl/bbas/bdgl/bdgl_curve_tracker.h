@@ -64,15 +64,15 @@ class bdgl_curve_tracker
   vcl_vector< vcl_vector< bdgl_curve_tracker_primitive > > get_output(){ return output_curve_; }
   void set_output(vcl_vector< vcl_vector< bdgl_curve_tracker_primitive > > curve){ output_curve_=curve; }
 
-	vdgl_edgel_chain_sptr get_output_curve_at( int frame, int num )
-		{ return output_curve_[frame][num].get_curve(); }
-	int get_output_id_at( int frame, int num )
-		{ return output_curve_[frame][num].get_id(); }
-	int get_output_size_at( int frame )
-		{ return output_curve_[frame].size(); }
+  vdgl_edgel_chain_sptr get_output_curve_at( int frame, int num )
+    { return output_curve_[frame][num].get_curve(); }
+  int get_output_id_at( int frame, int num )
+    { return output_curve_[frame][num].get_id(); }
+  int get_output_size_at( int frame )
+    { return output_curve_[frame].size(); }
 
   void track();
-	void track_frame(int frame);
+  void track_frame(int frame);
 };
 
 //-----------------------------------------------------------------------------
