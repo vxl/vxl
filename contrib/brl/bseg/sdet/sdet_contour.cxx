@@ -1193,7 +1193,7 @@ bool sdet_contour::near_border(vtol_vertex_2d_sptr const&  v)
 //  incident edges.
 //
 vtol_vertex_2d_sptr
-sdet_contour::DetectTouch(const vtol_vertex_2d_sptr const& end,
+sdet_contour::DetectTouch(vtol_vertex_2d_sptr const& end,
                           const int maxSpiral)
 {
   const int jx = int(end->x()), jy = int(end->y());
