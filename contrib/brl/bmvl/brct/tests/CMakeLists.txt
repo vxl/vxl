@@ -16,19 +16,20 @@ IF(HAS_VGUI)
 SET(brct_test_sources
   brct_menus.cxx          brct_menus.h
   brct_windows_frame.cxx  brct_windows_frame.h
-  brct_test_compute_P.cxx
   test_brct_kalman.cxx
 )
 
-ADD_EXECUTABLE(brct_test ${brct_test_sources})
-TARGET_LINK_LIBRARIES(brct_test vcl vgui brct bugl bgui)
+ADD_EXECUTABLE(brct_test_kalman ${brct_test_sources})
+TARGET_LINK_LIBRARIES(brct_test_kalman vcl vgui brct bugl bgui)
 
 ENDIF(HAS_VGUI)
 
 ADD_EXECUTABLE(brct_test_synthetic_data brct_test_synthetic_data.cxx)
 TARGET_LINK_LIBRARIES(brct_test_synthetic_data brct)
-
+ADD_TEST(brct_test_synthetic_data brct_test_synthetic_data)
 
 ADD_EXECUTABLE(brct_test_compute_P brct_test_compute_P.cxx)
 TARGET_LINK_LIBRARIES(brct_test_compute_P brct vgl vnl)
+ADD_TEST(brct_test_compute_P brct_test_compute_P)
 
+ADD_EXECUTABLE(bcal_test_include test_include.cxx)
