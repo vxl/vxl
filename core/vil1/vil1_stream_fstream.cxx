@@ -2,8 +2,8 @@
 #pragma implementation
 #endif
 
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_iostream.h>
+#include <vcl_cassert.h>
+#include <vcl_iostream.h>
 #include <vil/vil_stream_fstream.h>
 
 static int modeflags(char const* mode)

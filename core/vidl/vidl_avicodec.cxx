@@ -1,9 +1,9 @@
 #include "vidl_avicodec.h"
 #include <vidl/vidl_movie.h>
 
-#include <vcl/vcl_string.h>
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_cstdio.h>
+#include <vcl_string.h>
+#include <vcl_iostream.h>
+#include <vcl_cstdio.h>
 
 #include <vbl/vbl_file.h>
 

@@ -1,8 +1,8 @@
 // Example: scaling.
 
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_cmath.h>    // sqrt()
-#include <vcl/vcl_cstdlib.h>  // atoi()
+#include <vcl_iostream.h>
+#include <vcl_cmath.h>    // sqrt()
+#include <vcl_cstdlib.h>  // atoi()
 
 #include <vil/vil_save.h>
 #include <vil/vil_new.h>

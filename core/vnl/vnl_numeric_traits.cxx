@@ -10,7 +10,7 @@
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_numeric_traits.h>
-#include <vcl/vcl_complex.h>
+#include <vcl_complex.h>
 
 #if defined(VCL_GCC_27) || defined(VCL_GCC_EGCS)
 # define VCL_STATIC_CONST_REINIT_INT(x)

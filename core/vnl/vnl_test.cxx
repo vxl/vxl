@@ -13,9 +13,9 @@
 //
 
 #include "vnl_test.h"
-#include <vcl/vcl_cmath.h>
-#include <vcl/vcl_cstdlib.h>
-#include <vcl/vcl_iostream.h>
+#include <vcl_cmath.h>
+#include <vcl_cstdlib.h>
+#include <vcl_iostream.h>
 
 static int num_test;
 static int tests_passed;

@@ -7,8 +7,8 @@
   fsm@robots.ox.ac.uk
 */
 
-#include <vcl/vcl_cstdio.h>
-#include <vcl/vcl_cstdlib.h>
+#include <vcl_cstdio.h>
+#include <vcl_cstdlib.h>
 
 // ?
 extern "C" {

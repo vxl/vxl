@@ -3,8 +3,8 @@
 
 #ifndef MACROS_3d_H
 #define MACROS_3d_H
-#include<vcl/vcl_vector.h>
-#include<vcl/vcl_algorithm.h>
+#include<vcl_vector.h>
+#include<vcl_algorithm.h>
 
 #define SEL_SUP_3d(suptype,target) \
   vcl_vector<suptype*> *new_list = new vcl_vector<suptype*>(), *sublist; \

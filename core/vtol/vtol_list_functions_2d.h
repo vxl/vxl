@@ -15,7 +15,7 @@
 #ifndef vtol_list_functions_2d_H
 #define vtol_list_functions_2d_H
 
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 #include <vsol/vsol_spatial_object_2d_ref.h>
 
 //: \brief function used to get rid of duplicate entries

@@ -6,7 +6,7 @@
 #endif
 #include "vil_bmp_core_header.h"
 
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 #include <vil/vil_stream.h>
 #include <vil/vil_16bit.h>

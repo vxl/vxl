@@ -1,7 +1,7 @@
 /*
   fsm@robots.ox.ac.uk
 */
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 #include <vnl/vnl_test.h>
 #include <vnl/vnl_file_matrix.h>

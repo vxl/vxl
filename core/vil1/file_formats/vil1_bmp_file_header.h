@@ -8,7 +8,7 @@
 // .FILE file_formats/vil_bmp_file_header.cxx
 // @author fsm@robots.ox.ac.uk
 
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_iosfwd.h>
 class vil_stream;
 
 struct vil_bmp_file_header

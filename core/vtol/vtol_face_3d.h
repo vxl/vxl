@@ -41,7 +41,7 @@ class vtol_face_3d;
 
 #include <vtol/vtol_face_3d_ref.h>
 #include <vtol/vtol_topology_object_3d.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 
 class vtol_vertex_3d;
 class vtol_edge_3d;

@@ -4,7 +4,7 @@
 // Created: 05 Aug 96
 //
 #include "vnl_vector_fixed.h"
-#include <vcl/vcl_cassert.h>
+#include <vcl_cassert.h>
 
 template<class T, int n>
 vnl_vector<T>& vnl_vector_fixed<T,n>::pre_multiply (vnl_matrix<T> const& ) {

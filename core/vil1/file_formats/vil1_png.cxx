@@ -4,16 +4,16 @@
 
 #include "vil_png.h"
 
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_cstring.h>
-#include <vcl/vcl_iostream.h>
+#include <vcl_cassert.h>
+#include <vcl_cstring.h>
+#include <vcl_iostream.h>
 
 #include <vil/vil_stream.h>
 #include <vil/vil_image_impl.h>
 #include <vil/vil_image.h>
 
 #include <png.h>
-#include <vcl/vcl_cstdlib.h> // for exit()
+#include <vcl_cstdlib.h> // for exit()
 
 // http://www.mirror.ac.uk/sites/ftp.cdrom.com/pub/png/libpng.html
 

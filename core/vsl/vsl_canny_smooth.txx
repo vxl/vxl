@@ -9,9 +9,9 @@
 //    the form "type * const *". hence the 'unpro_const' macro. fsm.
 
 #include "vsl_canny_smooth.h"
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_cmath.h>
-#include <vcl/vcl_iostream.h>
+#include <vcl_cassert.h>
+#include <vcl_cmath.h>
+#include <vcl_iostream.h>
 #include <vil/vil_rgb.h>
 
 

@@ -2,7 +2,7 @@
 //
 // Author: Peter Vanroose, KULeuven/ESAT, December 1999
 
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 #include <vil/vil_rgb.h>
 typedef vil_rgb<unsigned char> vil_rgb_cell;
 

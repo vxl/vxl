@@ -13,7 +13,7 @@
 template <class T> class vnl_vector;
 template <class T> class vnl_matrix;
 template <class T> class vnl_diag_matrix;
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_iosfwd.h>
 
 //: pretty-printing matlab formats
 enum vnl_matlab_print_format {

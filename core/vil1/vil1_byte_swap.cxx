@@ -5,7 +5,7 @@
 #pragma implementation
 #endif
 #include "vil_byte_swap.h"
-#include <vcl/vcl_cassert.h>
+#include <vcl_cassert.h>
 
 // this is not efficient
 void vil_byte_swap(void *b_, void *e_) {

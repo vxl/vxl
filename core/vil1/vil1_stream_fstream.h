@@ -10,7 +10,7 @@
 //    awf@robots.ox.ac.uk
 // Created: 16 Feb 00
 
-#include <vcl/vcl_fstream.h>
+#include <vcl_fstream.h>
 #include <vil/vil_stream.h>
 
 class vil_stream_fstream : public vil_stream {

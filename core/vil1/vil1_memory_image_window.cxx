@@ -10,7 +10,7 @@
 //-----------------------------------------------------------------------------
 
 #include "vil_memory_image_window.h"
-#include <vcl/vcl_cmath.h>
+#include <vcl_cmath.h>
 
 vil_memory_image_window::vil_memory_image_window(const vil_memory_image_of<vil_byte>& image, int centre_x, int centre_y, int mask_size):
   image1_(image)

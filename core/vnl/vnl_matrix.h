@@ -43,7 +43,7 @@
 //   very weird things happen. G++ 2.7.2 compiles it and instantiates it fine,
 //   but barfs when an vnl_vector<int> is declared nearby.
 
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_iosfwd.h>
 #include <vnl/vnl_tag.h>
 #include <vnl/vnl_error.h>
 #include <vnl/vnl_c_vector.h>

@@ -2,7 +2,7 @@
 #pragma implementation
 #endif
 #include "vil_file_image.h"
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 #include <vil/vil_load.h>
 

@@ -18,7 +18,7 @@
 //
 // @author fsm@robots.ox.ac.uk
 
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_iosfwd.h>
 template <class T> class vnl_vector;
 template <class T> class vnl_matrix;
 template <class T> class vnl_diag_matrix;

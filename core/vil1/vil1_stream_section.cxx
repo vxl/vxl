@@ -5,8 +5,8 @@
 #pragma implementation
 #endif
 #include "vil_stream_section.h"
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_iostream.h>
+#include <vcl_cassert.h>
+#include <vcl_iostream.h>
 
 // underlying: pointer to underlying stream.
 // begin     : start of section in the underlying stream.

@@ -43,7 +43,7 @@
 #include <vtol/vtol_edge_2d_ref.h>
 
 #include <vtol/vtol_topology_object_2d.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 #include <vtol/vtol_zero_chain_2d.h>
 #include <vtol/vtol_vertex_2d.h>
 #include <vsol/vsol_curve_2d_ref.h>

@@ -1,7 +1,7 @@
 #include "vsl_fit_lines.h"
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_list.h>
+#include <vcl_cassert.h>
+#include <vcl_iostream.h>
+#include <vcl_list.h>
 
 #include <vnl/vnl_math.h>
 

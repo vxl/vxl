@@ -2,8 +2,8 @@
   capes@robots.ox.ac.uk
 */
 #include "vil_ncc.h"
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_cmath.h> // vcl_sqrt()
+#include <vcl_cassert.h>
+#include <vcl_cmath.h> // vcl_sqrt()
 
 template <class I1, class I2, class O> 
 O vil_ncc(vil_memory_image_of<I1> const &a,

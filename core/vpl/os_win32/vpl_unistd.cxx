@@ -4,10 +4,10 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#include <vcl/vcl_cstdio.h>
-#include <vcl/vcl_cstdarg.h>
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_cstdio.h>
+#include <vcl_cstdarg.h>
+#include <vcl_cassert.h>
+#include <vcl_vector.h>
 
 // Fix broken unistd.h headers.
 

@@ -1,7 +1,7 @@
 /*
   fsm@robots.ox.ac.uk
 */
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 #include <vil/vil_image.h>
 #include <vil/vil_load.h>

@@ -19,7 +19,7 @@
 //-----------------------------------------------------------------------------
 
 
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 
 template <class T>
 class vnl_vector_dereference : public vnl_unary_function<T, int> {

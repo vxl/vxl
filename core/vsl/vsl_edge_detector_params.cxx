@@ -1,6 +1,6 @@
 #include <vsl/vsl_edge_detector_params.h>
-//#include <vcl/vcl_sstream.h>
-//#include <vcl/vcl_fstream.h>
+//#include <vcl_sstream.h>
+//#include <vcl_fstream.h>
 
 
 vsl_edge_detector_params::vsl_edge_detector_params()

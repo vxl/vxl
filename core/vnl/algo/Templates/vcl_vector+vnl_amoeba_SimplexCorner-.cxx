@@ -1,3 +1,3 @@
 #include <vnl/algo/vnl_amoeba.h>
-#include <vcl/vcl_vector.txx>
+#include <vcl_vector.txx>
 VCL_VECTOR_INSTANTIATE(vnl_amoeba_SimplexCorner);

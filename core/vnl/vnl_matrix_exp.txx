@@ -4,9 +4,9 @@
   fsm@robots.ox.ac.uk
 */
 #include "vnl_matrix_exp.h"
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_cmath.h>
-//#include <vcl/vcl_iostream.h>
+#include <vcl_cassert.h>
+#include <vcl_cmath.h>
+//#include <vcl_iostream.h>
 
 template <class T>
 bool vnl_matrix_exp(vnl_matrix<T> const &X, vnl_matrix<T> &expX, double max_err)

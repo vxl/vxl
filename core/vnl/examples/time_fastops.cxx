@@ -1,6 +1,6 @@
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_cmath.h> // for sqrt()
-#include <vcl/vcl_vector.h>
+#include <vcl_iostream.h>
+#include <vcl_cmath.h> // for sqrt()
+#include <vcl_vector.h>
 #include <vbl/vbl_timer.h>
 
 double vnl_fastops_dot(const double* a, const double* b, int n);

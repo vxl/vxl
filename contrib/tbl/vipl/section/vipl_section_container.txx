@@ -3,8 +3,8 @@
 #include <vipl/section/vipl_section_iterator.h>
 #include <vipl/section/vipl_section_descriptor.h>
 #include <vipl/filter/vipl_filter_helper.h>
-#include <vcl/vcl_cstdio.h>
-#include <vcl/vcl_iostream.h>
+#include <vcl_cstdio.h>
+#include <vcl_iostream.h>
 
 #ifndef WIN32 // problems in conjunction with the "deep copy" constructor
 // The pointer ``the'' is just assigned

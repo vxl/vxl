@@ -5,9 +5,9 @@
 #pragma implementation
 #endif
 #include "vnl_matlab_read.h"
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_cstdlib.h> // abort()
-#include <vcl/vcl_cstring.h> // memset()
+#include <vcl_iostream.h>
+#include <vcl_cstdlib.h> // abort()
+#include <vcl_cstring.h> // memset()
 #include <vnl/vnl_c_vector.h>
 #include <vnl/vnl_complex.h>
 #include <vnl/vnl_complex_traits.h>
@@ -166,9 +166,9 @@ fsm_define_methods(vnl_double_complex);
 
 //--------------------------------------------------------------------------------
 
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_new.h>
-#include <vcl/vcl_algorithm.h>
+#include <vcl_cassert.h>
+#include <vcl_new.h>
+#include <vcl_algorithm.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 

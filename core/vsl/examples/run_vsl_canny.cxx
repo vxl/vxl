@@ -1,8 +1,8 @@
 /*
   fsm@robots.ox.ac.uk
 */
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_iostream.h>
+#include <vcl_cassert.h>
+#include <vcl_iostream.h>
 #include <vbl/vbl_arg.h>
 #include <vil/vil_load.h>
 #include <vil/vil_byte.h>

@@ -5,7 +5,7 @@
 #pragma implementation
 #endif
 #include "vsl_canny_gradient.h"
-#include <vcl/vcl_cmath.h>
+#include <vcl_cmath.h>
 
 // _smooth  is the (smoothed, presumably) input image.
 // _dx, _dy are the output x, y gradient images.

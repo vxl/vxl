@@ -6,10 +6,10 @@
 #endif
 #include "vsl_edgel_chain.h"
 
-#include <vcl/vcl_cstdlib.h>
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_iomanip.h>
-#include <vcl/vcl_new.h>
+#include <vcl_cstdlib.h>
+#include <vcl_iostream.h>
+#include <vcl_iomanip.h>
+#include <vcl_new.h>
 
 #include <vsl/vsl_hacks.h>
 

@@ -5,8 +5,8 @@
 #pragma implementation "vil_colour_space"
 #endif
 #include "vil_colour_space.h"
-#include <vcl/vcl_cstdlib.h>
-#include <vcl/vcl_algorithm.h>
+#include <vcl_cstdlib.h>
+#include <vcl_algorithm.h>
 
 template <class T>
 void vil_colour_space_RGB_to_YIQ(T const in[3], T out[3])

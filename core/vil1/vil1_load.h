@@ -10,7 +10,7 @@
 //    awf@robots.ox.ac.uk
 // Created: 16 Feb 00
 
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_iosfwd.h>
 #include <vil/vil_fwd.h>
 #include <vil/vil_image.h>
 

@@ -5,11 +5,11 @@
 
 #include "vil_stream.h"
 
-#include <vcl/vcl_cassert.h>
+#include <vcl_cassert.h>
 
 #define log_xtor 0
 #if log_xtor
-# include <vcl/vcl_iostream.h>
+# include <vcl_iostream.h>
 #endif
 
 vil_stream::vil_stream()

@@ -33,7 +33,7 @@
 #include <vidl/vidl_frame_ref.h>
 #include <vidl/vidl_clip.h>
 #include <vil/vil_image.h>
-#include <vcl/vcl_list.h>
+#include <vcl_list.h>
 
 class vidl_movie : public vbl_ref_count
 {

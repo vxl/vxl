@@ -23,9 +23,9 @@
 //   P.Vanroose  Mar97  corrected memory management (_point_list & *_free_*())
 //   P.Vanroose  Aug97  _point_list now safer (added AddPoint(); SetPointList() out of use now)
 //   J.Mundy     Jan98  slight modified the interface to correspond to new style using parameter blocks and image dispatch
-#include <vcl/vcl_iosfwd.h>
-#include <vcl/vcl_vector.h>
-#include <vcl/vcl_utility.h>
+#include <vcl_iosfwd.h>
+#include <vcl_vector.h>
+#include <vcl_utility.h>
 #include <vil/vil_memory_image_of.h>
 #include <vsl/vsl_harris_params.h>
 #include <vsl/vsl_roi_window.h>

@@ -1,7 +1,7 @@
 #include "vtol_one_chain_2d.h"
 
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_algorithm.h>
+#include <vcl_cassert.h>
+#include <vcl_algorithm.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_macros_2d.h>
 #include <vtol/vtol_list_functions_2d.h>

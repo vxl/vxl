@@ -1,6 +1,6 @@
 #include "vtol_face_2d.h"
 
-#include <vcl/vcl_cassert.h>
+#include <vcl_cassert.h>
 #include <vtol/vtol_macros_2d.h>
 #include <vtol/vtol_two_chain_2d.h>
 #include <vtol/vtol_vertex_2d.h>

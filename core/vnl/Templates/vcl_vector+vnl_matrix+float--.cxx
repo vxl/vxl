@@ -1,7 +1,7 @@
 #include <vnl/vnl_matrix.h>
 
-#include <vcl/vcl_vector.txx>
+#include <vcl_vector.txx>
 VCL_VECTOR_INSTANTIATE(vnl_matrix<float>);
 
-#include <vcl/vcl_algorithm.txx>
+#include <vcl_algorithm.txx>
 VCL_CONTAINABLE_INSTANTIATE(vnl_matrix<float>);

@@ -6,7 +6,7 @@
 #endif
 #include "vil_stream_core.h"
 
-#include <vcl/vcl_cassert.h>
+#include <vcl_cassert.h>
 
 vil_stream_core::vil_stream_core(unsigned block_size VCL_DEFAULT_VALUE(16384))
   : curpos(0)

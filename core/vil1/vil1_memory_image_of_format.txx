@@ -10,8 +10,8 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl/vcl_climits.h>  // for CHAR_BIT, number of bits in a char.
-#include <vcl/vcl_complex_fwd.h>
+#include <vcl_climits.h>  // for CHAR_BIT, number of bits in a char.
+#include <vcl_complex_fwd.h>
 
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_rgb.h>

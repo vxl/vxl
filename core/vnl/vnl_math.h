@@ -34,7 +34,7 @@
 //     210598 AWF Removed conditional VCL_IMPLEMENT_STATIC_CONSTS, sometimes gcc needs them.
 //
 
-#include <vcl/vcl_cmath.h>
+#include <vcl_cmath.h>
 #include "dll.h"
 
 // Type-accessible infinities for use in templates.

@@ -2,7 +2,7 @@
   fsm@robots.ox.ac.uk
 */
 #include "vil_ssd.h"
-#include <vcl/vcl_cassert.h>
+#include <vcl_cassert.h>
 
 template <class I1, class I2, class O> 
 O vil_ssd(vil_memory_image_of<I1> const &a,

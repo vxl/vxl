@@ -18,7 +18,7 @@
 // For faster, non-mallocing vectors with size known at compile
 // time, use vnl_vector_fixed* or vnl_T_n (e.g. vnl_double_3).
 
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_iosfwd.h>
 #include <vnl/vnl_tag.h>
 #include <vnl/vnl_error.h>
 #include <vnl/vnl_c_vector.h>

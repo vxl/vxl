@@ -1,5 +1,5 @@
 #include "vsl_fit_lines_params.h"
-#include <vcl/vcl_strstream.h>
+#include <vcl_strstream.h>
 
 vsl_fit_lines_params::vsl_fit_lines_params(int min_fit_len, 
 					   bool use_sqr, 

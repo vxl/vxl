@@ -4,7 +4,7 @@
 #endif
 
 #include "vnl_sparse_matrix_linear_system.h"
-#include <vcl/vcl_cassert.h>
+#include <vcl_cassert.h>
 #include <vnl/vnl_copy.h>
 
 VCL_DEFINE_SPECIALIZATION

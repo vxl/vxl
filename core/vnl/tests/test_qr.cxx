@@ -1,5 +1,5 @@
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_cstdlib.h>
+#include <vcl_iostream.h>
+#include <vcl_cstdlib.h>
 #include <vnl/vnl_test.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_complex.h>

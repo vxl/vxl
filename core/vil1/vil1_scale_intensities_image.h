@@ -8,7 +8,7 @@
 // .INCLUDE vil/vil_scale_intensities_image.h
 // .FILE vil_scale_intensities_image.cxx
 
-#include <vcl/vcl_compiler.h>
+#include <vcl_compiler.h>
 
 class vil_image;
 

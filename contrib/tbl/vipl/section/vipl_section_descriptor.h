@@ -3,7 +3,7 @@
 #ifdef __GNUG__
 #pragma interface
 #endif
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 
 template < class DataType > class vipl_section_container; //template forward reference
 template < class DataType > class vipl_section_iterator; //template forward reference

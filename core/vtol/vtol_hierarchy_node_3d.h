@@ -21,7 +21,7 @@
 //     Patricia A. Vrobel Peter Tu
 //-----------------------------------------------------------------------------
 
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 
 class vtol_hierarchy_node_3d;
 

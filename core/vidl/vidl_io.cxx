@@ -17,9 +17,9 @@
 #include <vbl/vbl_file.h>
 #include <vbl/vbl_sequence_filename_map.h>
 
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_list.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_iostream.h>
+#include <vcl_list.h>
+#include <vcl_vector.h>
 
 vcl_list<vidl_codec_ref> vidl_io::supported_types_;
 

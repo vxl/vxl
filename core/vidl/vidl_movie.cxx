@@ -1,6 +1,6 @@
 #include "vidl_movie.h"
 
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 #include <vidl/vidl_frame.h>
 #include <vidl/vidl_clip.h>

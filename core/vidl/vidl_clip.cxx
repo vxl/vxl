@@ -1,6 +1,6 @@
 #include "vidl_clip.h"
 
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 #include <vidl/vidl_codec.h>
 #include <vidl/vidl_image_list_codec.h>

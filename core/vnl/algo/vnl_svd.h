@@ -60,7 +60,7 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_diag_matrix.h>
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_iosfwd.h>
 
 template <class T> class vnl_svd;
 // templated friends must be declared to be templated :
@@ -175,7 +175,7 @@ vnl_matrix<T> vnl_svd_inverse(vnl_matrix<T> const& m)
 }
 
 #if 0
-#include <vcl/vcl_complex_fwd.h>
+#include <vcl_complex_fwd.h>
 VCL_DEFINE_SPECIALIZATION
 class vnl_svd<vcl_complex<float> > {
   // This instance should be poisoned because the relevant netlib

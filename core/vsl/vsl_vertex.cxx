@@ -23,7 +23,7 @@ bool operator==(vsl_vertex const &a, vsl_vertex const &b) {
   return a.x==b.x && a.y==b.y && a.id==b.id;
 }
 
-#include <vcl/vcl_list.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_list.h>
+#include <vcl_vector.h>
 VSL_TOPOLOGY_REF_UNREF_INSTANTIATE(vcl_list<vsl_vertex*>);
 VSL_TOPOLOGY_REF_UNREF_INSTANTIATE(vcl_vector<vsl_vertex*>);

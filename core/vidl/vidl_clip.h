@@ -35,8 +35,8 @@
 #include <vidl/vidl_codec_ref.h>
 #include <vil/vil_image.h>
 
-#include <vcl/vcl_vector.h>
-#include <vcl/vcl_list.h>
+#include <vcl_vector.h>
+#include <vcl_list.h>
 
 class vidl_clip : public vbl_ref_count
 {

@@ -6,8 +6,8 @@
 #endif
 #include "vnl_binary.h"
 
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_new.h>
+#include <vcl_iostream.h>
+#include <vcl_new.h>
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>

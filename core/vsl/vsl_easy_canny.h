@@ -8,7 +8,7 @@
 // .FILE vsl_easy_canny.cxx
 // \author fsm@robots.ox.ac.uk
 
-#include <vcl/vcl_list.h>
+#include <vcl_list.h>
 class vsl_edge;
 class vil_image;
 

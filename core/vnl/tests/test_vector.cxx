@@ -1,5 +1,5 @@
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_utility.h>
+#include <vcl_iostream.h>
+#include <vcl_utility.h>
 
 #include <vnl/vnl_test.h>
 #include <vnl/vnl_math.h>

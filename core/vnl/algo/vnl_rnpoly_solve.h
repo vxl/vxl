@@ -27,7 +27,7 @@
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_real_npolynomial.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 
 #ifdef static
 # error "grr!!"

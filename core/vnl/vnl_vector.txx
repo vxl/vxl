@@ -30,9 +30,9 @@
 
 #include "vnl_vector.h"
 
-#include <vcl/vcl_vector.h>
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_algorithm.h>
+#include <vcl_vector.h>
+#include <vcl_iostream.h>
+#include <vcl_algorithm.h>
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix.h>

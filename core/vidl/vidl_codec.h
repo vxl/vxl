@@ -25,7 +25,7 @@
 //-----------------------------------------------------------------------------
 
 
-#include <vcl/vcl_string.h> // C++ specific includes first
+#include <vcl_string.h>
 #include <vidl/vidl_codec_ref.h>
 #include <vbl/vbl_ref_count.h>
 

@@ -11,8 +11,8 @@
 
 #include "vil_save.h"
 
-#include <vcl/vcl_cstring.h>
-#include <vcl/vcl_iostream.h>
+#include <vcl_cstring.h>
+#include <vcl_iostream.h>
 
 #include <vil/vil_new.h>
 #include <vil/vil_stream_fstream.h>

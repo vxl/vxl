@@ -1,8 +1,8 @@
 /*
   fsm@robots.ox.ac.uk
 */
-#include <vcl/vcl_fstream.h>
-#include <vcl/vcl_cmath.h>
+#include <vcl_fstream.h>
+#include <vcl_cmath.h>
 
 #include <vpl/vpl_unistd.h>
 

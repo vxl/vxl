@@ -5,8 +5,8 @@
 //-----------------------------------------------------------------------------
 
 #include "vil_memory_image_of.h"
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_cstdlib.h> // abort()
+#include <vcl_cassert.h>
+#include <vcl_cstdlib.h> // abort()
 #include <vil/vil_memory_image_of_format.txx>
 
 template <class T>

@@ -4,7 +4,7 @@
 #pragma interface
 #endif
 
-#include <vcl/vcl_compiler.h>
+#include <vcl_compiler.h>
 
 // .NAME vil_clamp_image - Support function for vil_clamp_image_impl
 // .INCLUDE vil/vil_clamp_image.h

@@ -11,11 +11,11 @@
 #include "vil_jpeg_destination_mgr.h"
 #include "vil_jpeg_compressor.h"
 
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_cstdio.h>
-#include <vcl/vcl_climits.h> // CHAR_BIT
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_cstring.h> // memcpy()
+#include <vcl_cassert.h>
+#include <vcl_cstdio.h>
+#include <vcl_climits.h> // CHAR_BIT
+#include <vcl_iostream.h>
+#include <vcl_cstring.h> // memcpy()
 
 #include <vil/vil_stream.h>
 #include <vil/vil_image.h>

@@ -17,7 +17,7 @@
 //-----------------------------------------------------------------------------
 
 #include <vtol/vtol_topology_object_3d.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 #include <vbl/vbl_timestamp.h>
 
 class vtol_geometry_object;

@@ -7,7 +7,7 @@
 #include "vil_jpeg_compressor.h"
 #include "vil_jpeg_destination_mgr.h"
 #include <vil/vil_stream.h>
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 vil_jpeg_compressor::vil_jpeg_compressor(vil_stream *s) 
   : stream(s) 

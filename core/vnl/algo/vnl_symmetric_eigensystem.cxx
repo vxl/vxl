@@ -9,7 +9,7 @@
 //-----------------------------------------------------------------------------
 
 #include "vnl_symmetric_eigensystem.h"
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 #include <vnl/vnl_copy.h>
 #include <vnl/algo/vnl_netlib.h> // rs_()
 

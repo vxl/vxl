@@ -14,7 +14,7 @@
 // This is an infinite stream - reads past the last point
 // written will succeed but will return garbage data.
 
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 #include <vil/vil_stream.h>
 
 struct vil_stream_core : vil_stream

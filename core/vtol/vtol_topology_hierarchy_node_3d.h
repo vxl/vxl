@@ -18,8 +18,8 @@
 
 // #include <cool/ListP.h>
 // #include <cool/ArrayP.h>
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_iostream.h>
+#include <vcl_vector.h>
 
 
 class vtol_topology_object_3d;

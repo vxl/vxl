@@ -7,7 +7,7 @@
 #include <vnl/vnl_math.h>
 #include <vtol/vtol_list_functions_2d.h>
 
-#include <vcl/vcl_cassert.h>
+#include <vcl_cassert.h>
 #include <vsol/vsol_point_2d.h>
 
 //***************************************************************************
@@ -459,5 +459,5 @@ void vtol_vertex_2d::explore_vertex(vertex_list_2d &verts)
   delete edges_;
 }
 
-#include <vcl/vcl_rel_ops.h> // gcc 2.7
+#include <vcl_rel_ops.h> // gcc 2.7
 VCL_INSTANTIATE_INLINE(bool operator!=(vtol_vertex_2d const &, vtol_vertex_2d const &));

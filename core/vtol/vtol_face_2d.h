@@ -38,7 +38,7 @@
 #include <vtol/vtol_face_2d_ref.h>
 
 #include <vtol/vtol_topology_object_2d.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 #include <vsol/vsol_region_2d_ref.h>
 
 class vtol_vertex_2d;

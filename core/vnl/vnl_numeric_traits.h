@@ -29,7 +29,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl/vcl_complex_fwd.h>
+#include <vcl_complex_fwd.h>
 
 template <class T>
 class vnl_numeric_traits {

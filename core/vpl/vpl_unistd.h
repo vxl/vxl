@@ -24,11 +24,11 @@
 // and includes also the functions declared in posix sys/stat.h
 
 #include <vxl_config.h>        // must be first!!
-#include <vcl/vcl_compiler.h>
-#include <vcl/vcl_cstddef.h> // size_t
+#include <vcl_compiler.h>
+#include <vcl_cstddef.h> // size_t
 typedef vcl_size_t vpl_size_t;
-#include <vcl/vcl_cstdlib.h>
-#include <vcl/vcl_sys/types.h>
+#include <vcl_cstdlib.h>
+#include <vcl_sys/types.h>
 
 
 // fixme this needs configging

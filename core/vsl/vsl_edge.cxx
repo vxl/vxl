@@ -80,7 +80,7 @@ void vsl_edge::SetEndY(float v) { v2->y = v; }
 
 //--------------------------------------------------------------------------------
 
-#include <vcl/vcl_list.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_list.h>
+#include <vcl_vector.h>
 VSL_TOPOLOGY_REF_UNREF_INSTANTIATE(vcl_list<vsl_edge*>);
 VSL_TOPOLOGY_REF_UNREF_INSTANTIATE(vcl_vector<vsl_edge*>);

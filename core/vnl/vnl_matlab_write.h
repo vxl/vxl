@@ -22,7 +22,7 @@
 // 09 Mar 2000 fsm@robots. changed order of arguments for consistency
 //             with vnl_matlab_read.
 
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_iosfwd.h>
 
 template <class T> // scalar
 bool vnl_matlab_write(ostream &, T const &, char const *);

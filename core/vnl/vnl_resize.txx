@@ -2,7 +2,7 @@
   fsm@robots.ox.ac.uk
 */
 #include "vnl_resize.h"
-#include <vcl/vcl_new.h>  // vcl_destroy()
+#include <vcl_new.h>  // vcl_destroy()
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>

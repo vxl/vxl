@@ -5,7 +5,7 @@
 //-----------------------------------------------------------------------------
 
 #include "vnl_scatter_3x3.h"
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 
 template <class T>

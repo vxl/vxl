@@ -25,7 +25,7 @@
 //  fsm@robots.ox.ac.uk
 //
 
-#include <vcl/vcl_complex.h>
+#include <vcl_complex.h>
 
 // xSVDC
 #define vnl_netlib_svd_proto(T) \

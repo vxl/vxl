@@ -23,7 +23,7 @@
 //
 // .SECTION Modifications:
 
-#include <vcl/vcl_string.h> // C++ specific includes first
+#include <vcl_string.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 

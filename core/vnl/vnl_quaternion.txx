@@ -28,8 +28,8 @@
 
 #include "vnl_quaternion.h"
 
-#include <vcl/vcl_cmath.h>
-#include <vcl/vcl_iostream.h>
+#include <vcl_cmath.h>
+#include <vcl_iostream.h>
 
 // Quaternion -- Creates a quaternion from its ordered components. 
 //           x, y, z denote the imaginary part, which are the  coordinates

@@ -14,8 +14,8 @@ hack(vcl_complex<double>, __LINE__)
 
 #include "vnl_svd.h"
 
-#include <vcl/vcl_fstream.h>
-#include <vcl/vcl_cstdlib.h> // abort()
+#include <vcl_fstream.h>
+#include <vcl_cstdlib.h> // abort()
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_complex.h>

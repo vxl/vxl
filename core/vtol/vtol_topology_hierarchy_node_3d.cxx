@@ -1,6 +1,6 @@
 #include <vtol/vtol_topology_hierarchy_node_3d.h>
 #include <vtol/vtol_topology_object_3d.h>
-#include <vcl/vcl_algorithm.h>
+#include <vcl_algorithm.h>
 
 // constructor
 vtol_topology_hierarchy_node_3d::vtol_topology_hierarchy_node_3d()

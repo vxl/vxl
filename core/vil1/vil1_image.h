@@ -8,7 +8,7 @@
 // .FILE vil_image.cxx
 // @author fsm@robots.ox.ac.uk
 
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_iosfwd.h>
 #include <vil/vil_image_impl.h>
 
 //: A reference-counted image object.

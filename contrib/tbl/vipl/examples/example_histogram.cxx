@@ -26,7 +26,7 @@
 // for I/O:
 #include <vil/vil_load.h>
 #include <vil/vil_image.h>
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 #ifndef WIN32
 typedef unsigned char ubyte;

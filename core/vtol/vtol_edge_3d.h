@@ -42,7 +42,7 @@
 
 
 #include <vtol/vtol_topology_object_3d.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 #include <vtol/vtol_zero_chain_3d.h>
 #include <vtol/vtol_vertex_3d.h>
 #include <vsol/vsol_curve_3d_ref.h>

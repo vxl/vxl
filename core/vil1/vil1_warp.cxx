@@ -1,5 +1,5 @@
 
-#include <vcl/vcl_cassert.h>
+#include <vcl_cassert.h>
 
 #include <vil/vil_warp.h>
 #include <vil/vil_warp.txx>

@@ -11,8 +11,8 @@
 
 #include "vnl_fastops.h"
 
-#include <vcl/vcl_cstdlib.h> // vcl_abort()
-#include <vcl/vcl_iostream.h>
+#include <vcl_cstdlib.h> // vcl_abort()
+#include <vcl_iostream.h>
 
 // -- Compute $A^\top A$.
 void vnl_fastops::AtA(const vnl_matrix<double>& A, vnl_matrix<double>* AtA)

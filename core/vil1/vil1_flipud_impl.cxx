@@ -5,7 +5,7 @@
 #pragma implementation
 #endif
 #include "vil_flipud_impl.h"
-#include <vcl/vcl_climits.h>
+#include <vcl_climits.h>
 
 vil_image vil_flipud_impl::get_plane(int i) const {
   return new vil_flipud_impl(base.get_plane(i));

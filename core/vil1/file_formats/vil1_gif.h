@@ -11,7 +11,7 @@
 // welcome to replace mine with yours.
 
 class vil_stream;
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 #include <vil/vil_file_format.h>
 #include <vil/vil_image_impl.h>
 #include <vil/vil_image.h>

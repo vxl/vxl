@@ -10,7 +10,7 @@
 //    awf@robots.ox.ac.uk
 // Created: 15 Mar 00
 
-#include <vcl/vcl_string.h> // C++ specific includes first
+#include <vcl_string.h>
 #include <vil/vil_image.h>
 
 //: Load an image from disk

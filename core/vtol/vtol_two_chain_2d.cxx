@@ -1,8 +1,8 @@
 
 // 05/13/98  RIH replaced append by insert_after to avoid n^2 behavior
 
-#include <vcl/vcl_vector.h>
-#include <vcl/vcl_algorithm.h>
+#include <vcl_vector.h>
+#include <vcl_algorithm.h>
  
 #include <vtol/vtol_list_functions_2d.h>
 #include <vtol/vtol_two_chain_2d.h>

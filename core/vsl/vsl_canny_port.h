@@ -8,8 +8,8 @@
 // .FILE vsl_canny_port.cxx
 // \author fsm@robots.ox.ac.uk
 
-#include <vcl/vcl_cmath.h>
-#include <vcl/vcl_list.h>
+#include <vcl_cmath.h>
+#include <vcl_list.h>
 #include <vbl/vbl_ref_count.h>
 #include <vil/vil_memory_image_of.h>
 #include <vsl/vsl_topology.h>

@@ -6,8 +6,8 @@
 #endif
 #include "vil_image_as.h"
 
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_iostream.h>
+#include <vcl_cassert.h>
+#include <vcl_iostream.h>
 
 #include <vil/vil_byte.h>
 #include <vil/vil_pixel.h>

@@ -7,7 +7,7 @@
 // Created: July 2000
 
 #include "vnl_linear_system.h"
-#include <vcl/vcl_cassert.h>
+#include <vcl_cassert.h>
 
 vnl_linear_system::~vnl_linear_system()
 {

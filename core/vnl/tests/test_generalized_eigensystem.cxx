@@ -5,8 +5,8 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_cmath.h>
+#include <vcl_iostream.h>
+#include <vcl_cmath.h>
 
 #include <vnl/vnl_test.h>
 #include <vnl/algo/vnl_generalized_eigensystem.h>

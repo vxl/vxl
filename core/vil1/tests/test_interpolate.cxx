@@ -1,9 +1,9 @@
 /*
   fsm@robots.ox.ac.uk
 */
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_cmath.h>
-#include <vcl/vcl_iostream.h>
+#include <vcl_cassert.h>
+#include <vcl_cmath.h>
+#include <vcl_iostream.h>
 #include <vil/vil_interpolate.h>
 
 double f(double i, double j, int d)

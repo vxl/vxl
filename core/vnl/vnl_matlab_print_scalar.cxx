@@ -1,10 +1,10 @@
 #include "vnl_matlab_print.h"
 
-#include <vcl/vcl_cstdio.h>  // sprintf()
-#include <vcl/vcl_cstdlib.h> // abort()
-#include <vcl/vcl_cstring.h> // strlen()
-#include <vcl/vcl_cctype.h>
-#include <vcl/vcl_cassert.h>
+#include <vcl_cstdio.h>  // sprintf()
+#include <vcl_cstdlib.h> // abort()
+#include <vcl_cstring.h> // strlen()
+#include <vcl_cctype.h>
+#include <vcl_cassert.h>
 
 #include <vnl/vnl_complex.h>
 

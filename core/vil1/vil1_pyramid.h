@@ -16,7 +16,7 @@
 // \author fsm@robots.ox.ac.uk
 
 #include <vil/vil_image.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 
 struct vil_pyramid 
 {

@@ -10,9 +10,9 @@
 //-----------------------------------------------------------------------------
 
 #include "vnl_lbfgs.h"
-#include <vcl/vcl_cmath.h>
-#include <vcl/vcl_cstdio.h>   // sprintf()
-#include <vcl/vcl_iostream.h>
+#include <vcl_cmath.h>
+#include <vcl_cstdio.h>   // sprintf()
+#include <vcl_iostream.h>
 
 // -- Default constructor.
 // memory is set to 5, line_search_accuracy to 0.9.

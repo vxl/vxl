@@ -1,8 +1,8 @@
 /*
   fsm@robots.ox.ac.uk
 */
-#include <vcl/vcl_cstdlib.h>  // abort()
-#include <vcl/vcl_iostream.h>
+#include <vcl_cstdlib.h>  // abort()
+#include <vcl_iostream.h>
 
 #include <vil/vil_image.h>
 #include <vil/vil_load.h>

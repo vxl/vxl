@@ -24,13 +24,13 @@
 //-----------------------------------------------------------------------------
 
 
-#include <vcl/vcl_string.h> // C++ specific includes first
+#include <vcl_string.h>
 #include <vbl/vbl_ref_count.h>
 #include <vidl/vidl_image_list_codec_ref.h>
 #include <vidl/vidl_codec.h>
 #include <vil/vil_image.h> 
-#include <vcl/vcl_list.h>  
-#include <vcl/vcl_vector.h> 
+#include <vcl_list.h>  
+#include <vcl_vector.h> 
 
 class vidl_image_list_codec :  public vidl_codec
 {  

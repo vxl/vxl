@@ -3,7 +3,7 @@
 // Created: 23 Jan 96
 //
 //-----------------------------------------------------------------------------
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 #include <vnl/vnl_complex.h>
 #include <vnl/vnl_test.h>

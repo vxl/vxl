@@ -1,8 +1,8 @@
 // Example: convolution
 
-#include <vcl/vcl_cstring.h>
-#include <vcl/vcl_cmath.h>   // fabs()
-#include <vcl/vcl_iostream.h>
+#include <vcl_cstring.h>
+#include <vcl_cmath.h>   // fabs()
+#include <vcl_iostream.h>
 
 #include <vbl/vbl_arg.h>
 

@@ -9,7 +9,7 @@
 // @author fsm@robots.ox.ac.uk
 
 class vil_stream;
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_iosfwd.h>
 
 struct vil_bmp_core_header
 {

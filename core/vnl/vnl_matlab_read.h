@@ -10,8 +10,8 @@
 // .FILE vnl_matlab_read.cxx
 // @author fsm@robots.ox.ac.uk
 
-#include <vcl/vcl_iosfwd.h>
-#include <vcl/vcl_complex_fwd.h>
+#include <vcl_iosfwd.h>
+#include <vcl_complex_fwd.h>
 #include <vnl/vnl_matlab_header.h>
 
 // ------------------------------ easy ------------------------------

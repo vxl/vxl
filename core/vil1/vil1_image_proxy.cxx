@@ -6,8 +6,8 @@
 #endif
 #include "vil_image_proxy.h"
 
-#include <vcl/vcl_string.h> // C++ specific includes first
-#include <vcl/vcl_cstring.h>
+#include <vcl_string.h>
+#include <vcl_cstring.h>
 #include <vil/vil_load.h>
 
 struct vil_image_proxy_impl : public vil_image_impl

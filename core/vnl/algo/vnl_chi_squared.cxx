@@ -3,7 +3,7 @@
 #endif
 #include "vnl_chi_squared.h"
 
-#include <vcl/vcl_cmath.h>
+#include <vcl_cmath.h>
 
 // FORTRAN routine
 extern "C" int chscdf_(float* x, int* nu, float* cdf);

@@ -33,7 +33,7 @@
 // Node that containers built on different allocator instances have
 // different types, limiting the utility of this approach.
 
-#include <vcl/vcl_cstddef.h> // size_t lives here, not in <cstdlib>
+#include <vcl_cstddef.h> // size_t lives here, not in <cstdlib>
 
 const int VNL_ALLOC_ALIGN = 8;
 const int VNL_ALLOC_MAX_BYTES = 256;

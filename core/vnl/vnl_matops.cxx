@@ -9,7 +9,7 @@
 //-----------------------------------------------------------------------------
 
 #include "vnl_matops.h"
-#include <vcl/vcl_cassert.h>
+#include <vcl_cassert.h>
 
 vnl_matrix<double> vnl_matops::cat(vnl_matrix<double> const &A, vnl_matrix<double> const &B) {
   int rowsA = A.rows();

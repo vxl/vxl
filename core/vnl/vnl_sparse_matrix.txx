@@ -1,8 +1,8 @@
 #include <vnl/vnl_sparse_matrix.h>
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_cstdlib.h>
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_algorithm.h>
+#include <vcl_cassert.h>
+#include <vcl_cstdlib.h>
+#include <vcl_iostream.h>
+#include <vcl_algorithm.h>
 
 // #define DEBUG_SPARSE 1
 

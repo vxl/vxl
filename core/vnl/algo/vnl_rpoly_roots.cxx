@@ -10,8 +10,8 @@
 
 #include "vnl_rpoly_roots.h"
 
-#include <vcl/vcl_cstdlib.h>
-#include <vcl/vcl_iostream.h>
+#include <vcl_cstdlib.h>
+#include <vcl_iostream.h>
 #include <vnl/vnl_complex.h>
 #include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_netlib.h> // rpoly_()

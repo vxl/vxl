@@ -10,9 +10,9 @@
 //-----------------------------------------------------------------------------
 
 #include "vnl_lsqr.h"
-#include <vcl/vcl_cstdlib.h>
-#include <vcl/vcl_vector.h>
-#include <vcl/vcl_iostream.h>
+#include <vcl_cstdlib.h>
+#include <vcl_vector.h>
+#include <vcl_iostream.h>
 #include <vnl/vnl_vector_ref.h>
 
 // External f2c function (see netlib/lsqr.f for explanation of parameters)

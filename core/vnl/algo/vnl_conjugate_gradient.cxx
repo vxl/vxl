@@ -12,8 +12,8 @@
 #include <vnl/vnl_cost_function.h>
 #include <vnl/vnl_vector_ref.h>
 #include <vnl/algo/vnl_svd.h>
-#include <vcl/vcl_cstdlib.h>
-#include <vcl/vcl_cassert.h>
+#include <vcl_cstdlib.h>
+#include <vcl_cassert.h>
 
 // external netlib function
 extern "C"

@@ -8,7 +8,7 @@
 // .FILE vsl_edgel_chain.cxx
 // \author fsm@robots.ox.ac.uk
 
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_iosfwd.h>
 
 class vsl_edgel_chain {
 public:

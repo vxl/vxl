@@ -1,5 +1,5 @@
 #include "vipl_gradient_mag.h"
-#include <vcl/vcl_cmath.h> // for sqrt()
+#include <vcl_cmath.h> // for sqrt()
 
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
 bool vipl_gradient_mag <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(){

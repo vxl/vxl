@@ -6,8 +6,8 @@
 #endif
 #include "vnl_matlab_write.h"
 
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_cstring.h>  // strlen()
+#include <vcl_iostream.h>
+#include <vcl_cstring.h>  // strlen()
 #include <vnl/vnl_complex.h>
 #include <vnl/vnl_matlab_header.h>
 

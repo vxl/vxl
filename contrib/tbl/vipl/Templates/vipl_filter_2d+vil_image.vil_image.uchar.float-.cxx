@@ -12,7 +12,7 @@ vipl_filterable_section_container_generator(const vil_image& im, unsigned char*)
 vipl_section_container<float>*
 vipl_filterable_section_container_generator(const vil_image& im, float*);
 
-#include <vcl/vcl_compiler.h> // for the definition of VCL_DFL_TMPL_ARG
+#include <vcl_compiler.h> // for the definition of VCL_DFL_TMPL_ARG
 
 #include <vipl/filter/vipl_filter.h>
 #include <vipl/filter/vipl_filter.txx>

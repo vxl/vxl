@@ -1,6 +1,6 @@
 // Example: format conversion.
 
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 #include <vil/vil_save.h>
 #include <vil/vil_load.h>

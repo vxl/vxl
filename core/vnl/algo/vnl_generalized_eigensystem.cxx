@@ -9,7 +9,7 @@
 
 #include "vnl_generalized_eigensystem.h"
 
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 #include <vnl/vnl_complex.h>
 #include <vnl/vnl_fortran_copy.h>
@@ -113,7 +113,7 @@ void vnl_generalized_eigensystem::compute_eispack(const vnl_matrix<double>& A,
       vcl_cerr << "vnl_generalized_eigensystem: The " <<
 	ierr << "-th eigenvalue has not been determined after 30 iterations.\n";
       vcl_cerr << "The eigenvalues should be correct for indices 1.." << ierr-1;
-      vcl_cerr << ", but no eigenvcl_vcl_vcl_vcl_vectors are computed.\n";
+      vcl_cerr << ", but no eigenvectors are computed.\n";
       vcl_cerr << "A = " << A << vcl_endl;
       vcl_cerr << "singular values(A) = " << vnl_svd<double>(A).W() << vcl_endl;
       vcl_cerr << "B = " << B << vcl_endl;

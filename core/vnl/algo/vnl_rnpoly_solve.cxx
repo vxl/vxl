@@ -1,15 +1,15 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
-#include <vcl/vcl_cmath.h>
+#include <vcl_cmath.h>
 #ifdef DEBUG
-#include <vcl/vcl_cstdio.h>
-#include <vcl/vcl_iostream.h>
+#include <vcl_cstdio.h>
+#include <vcl_iostream.h>
 #endif
 
 #include "vnl_rnpoly_solve.h"
 #include <vnl/vnl_real_npolynomial.h>
-#include <vcl/vcl_cmath.h>
+#include <vcl_cmath.h>
 
 // fsm@robots: moved ::M and ::T into the namespace of vnl_rnpoly_solve, as they
 // were causing multiply defined symbols for static builds. if your compiler cannot

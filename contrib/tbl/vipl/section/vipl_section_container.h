@@ -4,7 +4,7 @@
 #pragma interface
 #endif
 
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 #include <vipl/filter/vipl_filter_abs.h>
 template <  class DataType > class vipl_section_descriptor; //template forward reference
 template <  class DataType > class vipl_section_iterator; //template forward reference

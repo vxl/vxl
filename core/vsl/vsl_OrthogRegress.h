@@ -8,7 +8,7 @@
 // .FILE vsl_OrthogRegress.cxx
 // \author fsm@robots.ox.ac.uk
 
-#include <vcl/vcl_cmath.h>
+#include <vcl_cmath.h>
 #include <vsl/vsl_hacks.h>
 #include <vsl/vsl_ortho_regress.h>
 

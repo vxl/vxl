@@ -18,7 +18,7 @@
 // .INCLUDE vnl/vnl_test.h
 // .FILE vnl_test.cxx
 
-#include <vcl/vcl_string.h>
+#include <vcl_string.h>
 
 void vnl_test_start(const char* name);
 void vnl_test_begin(const char* msg);

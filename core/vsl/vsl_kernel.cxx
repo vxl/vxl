@@ -5,7 +5,7 @@
 #pragma implementation
 #endif
 #include "vsl_kernel.h"
-#include <vcl/vcl_cmath.h>
+#include <vcl_cmath.h>
 
 // Construct one half of a Gaussian convolution kernel.
 //   

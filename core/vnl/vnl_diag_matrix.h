@@ -30,7 +30,7 @@
 //template<class T> bool epsilon_equals
 //        (vnl_diag_matrix<T> const& m1, vnl_diag_matrix<T> const& m2, double alt_epsilon = 0);
 
-#include <vcl/vcl_cassert.h>
+#include <vcl_cassert.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 

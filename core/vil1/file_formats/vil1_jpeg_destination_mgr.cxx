@@ -5,8 +5,8 @@
 #pragma implementation
 #endif
 #include "vil_jpeg_destination_mgr.h"
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_iostream.h>
+#include <vcl_cassert.h>
+#include <vcl_iostream.h>
 #include <vil/vil_stream.h>
 
 #define STATIC /*static*/

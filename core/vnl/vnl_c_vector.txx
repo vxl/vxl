@@ -7,7 +7,7 @@
 //-----------------------------------------------------------------------------
 
 #include "vnl_c_vector.h"
-#include <vcl/vcl_cmath.h>     // sqrt()
+#include <vcl_cmath.h>     // sqrt()
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_complex_traits.h>
 #include <vnl/vnl_numeric_traits.h>
@@ -253,7 +253,7 @@ void vnl_c_vector_inf_norm(T const *p, unsigned n, S *out)
 #define vnl_c_vector_use_vnl_alloc 1
 
 #include <vnl/vnl_alloc.h>
-//#include <vcl/vcl_iostream.h>
+//#include <vcl_iostream.h>
 
 inline void* vnl_c_vector_alloc(int n, int size)
 {

@@ -11,10 +11,10 @@
 
 #include "vnl_amoeba.h"
 
-#include <vcl/vcl_cstdlib.h>
-#include <vcl/vcl_cstdio.h>
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_cstdlib.h>
+#include <vcl_cstdio.h>
+#include <vcl_iostream.h>
+#include <vcl_vector.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_matops.h>
 #include <vnl/vnl_cost_function.h>

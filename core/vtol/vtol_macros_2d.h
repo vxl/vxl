@@ -3,9 +3,9 @@
 
 #ifndef MACROS_2d_H
 #define MACROS_2d_H
-#include <vcl/vcl_vector.h>
-#include <vcl/vcl_list.h>
-#include <vcl/vcl_algorithm.h>
+#include <vcl_vector.h>
+#include <vcl_list.h>
+#include <vcl_algorithm.h>
 
 #define SEL_SUP_2d(suptype,target)\
   vcl_vector<suptype *> *new_list=new vcl_vector<suptype *>();\

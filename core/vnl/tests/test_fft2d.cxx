@@ -10,9 +10,9 @@
 // Created: 20 Mar 1998
 //
 //-----------------------------------------------------------------------------
-#include <vcl/vcl_cstdlib.h>
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_cmath.h>
+#include <vcl_cstdlib.h>
+#include <vcl_iostream.h>
+#include <vcl_cmath.h>
 
 #include <vnl/vnl_complex.h>
 #include <vnl/vnl_complex_ops.h>

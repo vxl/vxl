@@ -5,9 +5,9 @@
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 31 Aug 96
 
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 #include "vnl_least_squares_function.h"
-#include <vcl/vcl_cassert.h>
+#include <vcl_cassert.h>
 
 vnl_least_squares_function::vnl_least_squares_function(int number_of_unknowns,
 						       int number_of_residuals,

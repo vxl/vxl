@@ -4,7 +4,7 @@
 #pragma interface
 #endif
 
-#include <vcl/vcl_cstring.h> // memcpy()
+#include <vcl_cstring.h> // memcpy()
 #include <vnl/vnl_vector_ref.h>
 #include <vnl/vnl_c_vector.h>
 

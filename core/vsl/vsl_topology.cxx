@@ -5,10 +5,10 @@
 #pragma implementation
 #endif
 #include "vsl_topology.h"
-#include <vcl/vcl_new.h>
-#include <vcl/vcl_cstring.h>
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_iomanip.h>
+#include <vcl_new.h>
+#include <vcl_cstring.h>
+#include <vcl_iostream.h>
+#include <vcl_iomanip.h>
 #include <vsl/vsl_hacks.h>
 
 // Set this to 1 if you think it can avoid heap corruption, and

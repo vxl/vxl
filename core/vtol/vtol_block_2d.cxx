@@ -4,8 +4,8 @@
 #include <vtol/vtol_macros_2d.h>
 #include <vtol/vtol_list_functions_2d.h>
 #include <vsol/vsol_box_2d.h>
-#include <vcl/vcl_algorithm.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_algorithm.h>
+#include <vcl_vector.h>
 #include <vtol/vtol_two_chain_2d.h>
 
 //***************************************************************************

@@ -9,8 +9,8 @@
 // \author fsm@robots.ox.ac.uk
 
 class vsl_edge;
-#include <vcl/vcl_list.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_list.h>
+#include <vcl_vector.h>
 
 //: Break the given edge at the positions indicated.
 //

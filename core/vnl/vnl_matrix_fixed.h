@@ -21,7 +21,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl/vcl_cassert.h>
+#include <vcl_cassert.h>
 #include <vnl/vnl_matrix_fixed_ref.h>
 
 template <class T, int m, int n>

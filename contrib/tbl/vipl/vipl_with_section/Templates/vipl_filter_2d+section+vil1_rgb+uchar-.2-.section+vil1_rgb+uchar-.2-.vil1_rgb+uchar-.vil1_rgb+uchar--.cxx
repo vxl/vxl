@@ -24,7 +24,7 @@ vipl_filterable_section_container_generator(const section<rgbcell,2>& im, rgbcel
   return rtn;
 }
 
-#include <vcl/vcl_compiler.h> // for the definition of VCL_DFL_TMPL_ARG
+#include <vcl_compiler.h> // for the definition of VCL_DFL_TMPL_ARG
 
 #include <vipl/filter/vipl_filter.h>
 #include <vipl/filter/vipl_filter.txx>

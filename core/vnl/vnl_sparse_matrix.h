@@ -34,9 +34,9 @@
 //     David Capel May 2000   Added set_row, scale_row, mult, vcat and const
 //                            methods where appropriate.
 
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 #include <vnl/vnl_vector.h>
-#include <vcl/vcl_functional.h>
+#include <vcl_functional.h>
 
 template <class T>
 class vnl_sparse_matrix_pair {

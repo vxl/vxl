@@ -1,8 +1,8 @@
 #include "vtol_one_chain_3d.h"
 
-#include <vcl/vcl_algorithm.h>
+#include <vcl_algorithm.h>
 #ifndef GNU_LIBSTDCXX_V3
-# include <vcl/vcl_rel_ops.h>
+# include <vcl_rel_ops.h>
 #endif
 
 #include <vtol/vtol_edge_3d.h>

@@ -13,7 +13,7 @@
 // .SECTION Modifications
 // 27 May 2000 fsm@robots.ox.ac.uk Numerous endianness and structure-packing bugs fixed.
 
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_iosfwd.h>
 class vil_stream;
 
 //=============================================================================

@@ -1,5 +1,5 @@
 #include <vipl/filter/vipl_filter.h>
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 #ifdef VCL_WIN32
 #pragma warning( disable: 4390 )

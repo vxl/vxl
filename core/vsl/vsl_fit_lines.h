@@ -42,7 +42,7 @@
 //                        before fitting the line. Avoids fitting to the garbage edgels
 //                        which are curving away from the line.
 //-----------------------------------------------------------------------------
-#include <vcl/vcl_list.h>
+#include <vcl_list.h>
 #include <vsl/vsl_fit_lines_params.h>
 #include <vsl/vsl_topology.h>
 #include <vsl/vsl_canny_port.h>

@@ -34,7 +34,7 @@
 //   Peter Vanroose - 30/12/99 - Link_edgelsOX rewritten and documented
 //   F. Schaffaliztky 2-apr-99   converted from Segmentation to vsl
 
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 #include <vsl/vsl_canny_base.h>
 
 class vsl_canny_ox_params;

@@ -22,7 +22,7 @@
 //    Rupert W. Curwen, GE CR&D, 20 Oct 98
 
 #include <vnl/vnl_sparse_matrix.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 
 //: Solve $A x = \lambda x$ using Lanczos algorithm.
 class vnl_sparse_symmetric_eigensystem {

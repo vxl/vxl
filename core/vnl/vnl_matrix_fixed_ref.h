@@ -36,8 +36,8 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_cstring.h> // memcpy()
+#include <vcl_cassert.h>
+#include <vcl_cstring.h> // memcpy()
 #include <vnl/vnl_matrix.h>
 
 template <class T, int m, int n>

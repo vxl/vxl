@@ -7,8 +7,8 @@
 #include <vtol/vtol_macros_3d.h>
 #include <vtol/vtol_list_functions_3d.h>
 #include <vsol/vsol_box_3d.h>
-#include <vcl/vcl_algorithm.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_algorithm.h>
+#include <vcl_vector.h>
 //#include <vtol/some_stubs.h>
 #include <vtol/vtol_two_chain_3d.h>
 // default constructor

@@ -2,7 +2,7 @@
   fsm@robots.ox.ac.uk
 */
 
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 #include <vsl/vsl_topology.h>
 #include <vsl/vsl_load_topology.h>

@@ -6,9 +6,9 @@
 #endif
 #include "vil_smooth.h"
 
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_cmath.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_iostream.h>
+#include <vcl_cmath.h>
+#include <vcl_vector.h>
 
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_image_as.h>

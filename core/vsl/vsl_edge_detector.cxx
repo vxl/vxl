@@ -1,12 +1,12 @@
 #include "vsl_edge_detector.h"
 
-#include <vcl/vcl_cmath.h>
-#include <vcl/vcl_cstdlib.h>
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_list.h>
-//#include <vcl/vcl_memory.h>
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_algorithm.h>
+#include <vcl_cmath.h>
+#include <vcl_cstdlib.h>
+#include <vcl_cassert.h>
+#include <vcl_list.h>
+//#include <vcl_memory.h>
+#include <vcl_iostream.h>
+#include <vcl_algorithm.h>
 
 #include <vsl/vsl_canny_base.h>
 #include <vsl/vsl_kernel.h>

@@ -5,7 +5,7 @@
 #pragma implementation
 #endif
 #include "vsl_canny_nms.h"
-#include <vcl/vcl_cmath.h>
+#include <vcl_cmath.h>
 
 //: returns number of edgels found [?]
 int vsl_canny_nms(int _xsize, int _ysize, 

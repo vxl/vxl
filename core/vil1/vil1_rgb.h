@@ -27,7 +27,7 @@
 //    090600 David Capel made clamping functions inline and removed all that partial specialization
 //           nonsense from the .txx file.
 
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 #include <vil/vil_clamp.h>
 
 #ifdef VCL_SUNPRO_CC

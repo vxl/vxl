@@ -1,8 +1,8 @@
 #include "vsl_canny_base.h"
 #include <vsl/vsl_canny_port.h>
-#include <vcl/vcl_cmath.h>
-#include <vcl/vcl_cstdlib.h>
-#include <vcl/vcl_list.h>
+#include <vcl_cmath.h>
+#include <vcl_cstdlib.h>
+#include <vcl_list.h>
 
 //--------------------------------------------------------------
 

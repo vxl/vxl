@@ -8,9 +8,9 @@
 #include "vil_resample_image.h"
 #include <vil/vil_byte.h>
 #include <vil/vil_pixel.h>
-#include <vcl/vcl_climits.h> // CHAR_BIT
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_cassert.h>
+#include <vcl_climits.h> // CHAR_BIT
+#include <vcl_iostream.h>
+#include <vcl_cassert.h>
 
 vil_resample_image_impl::vil_resample_image_impl(vil_image const &underlying, unsigned nw, unsigned nh)
   : base(underlying)

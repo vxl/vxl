@@ -7,8 +7,8 @@
 
 #include "vil_image.h"
 
-#include <vcl/vcl_climits.h>
-#include <vcl/vcl_iostream.h>
+#include <vcl_climits.h>
+#include <vcl_iostream.h>
 
 ostream& vil_image::print(ostream& s) const
 {

@@ -6,8 +6,8 @@ struct foo : vnl_vector<double> { foo() { } };
 
 #include "vnl_file_vector.h"
 
-#include <vcl/vcl_fstream.h>
-#include <vcl/vcl_cstring.h> // for strcmp()
+#include <vcl_fstream.h>
+#include <vcl_cstring.h> // for strcmp()
 
 // -- Load vector from filename.
 template <class T>

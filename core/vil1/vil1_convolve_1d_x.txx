@@ -3,7 +3,7 @@ croak
 #endif
 
 // include for abort
-#include <vcl/vcl_cstdlib.h>
+#include <vcl_cstdlib.h>
 
 
 template <class I1, class I2, class AC, class O>

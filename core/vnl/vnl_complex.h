@@ -18,8 +18,8 @@
 //     In a sense, vnl_math should be a namespace, and this file adds to that
 //     namespace.
 
-#include <vcl/vcl_cmath.h>
-#include <vcl/vcl_complex.h>
+#include <vcl_cmath.h>
+#include <vcl_complex.h>
 
 // fsm: these three lines will disappear in the future.
 #define vnl_complex vcl_complex

@@ -6,7 +6,7 @@
 #endif
 #include "vsl_break_edge.h"
 
-#include <vcl/vcl_cassert.h>
+#include <vcl_cassert.h>
 #include <vsl/vsl_edge.h>
 #include <vsl/vsl_ortho_regress.h>
 

@@ -5,7 +5,7 @@
 #pragma implementation
 #endif
 #include "vsl_save_topology.h"
-#include <vcl/vcl_fstream.h>
+#include <vcl_fstream.h>
 
 void vsl_save_topology(ostream &f, vcl_list<vsl_edge*> const &es, vcl_list<vsl_vertex*> const &vs) 
 {

@@ -1,11 +1,11 @@
 #include <vpl/vpl_unistd.h>
 
-#include <vcl/vcl_cstdio.h>
-#include <vcl/vcl_cstdarg.h>
-#include <vcl/vcl_cstddef.h>
-#include <vcl/vcl_cstdlib.h>
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_cstdio.h>
+#include <vcl_cstdarg.h>
+#include <vcl_cstddef.h>
+#include <vcl_cstdlib.h>
+#include <vcl_cassert.h>
+#include <vcl_vector.h>
 
 // Include system headers for UNIX-like operating system :
 #include <unistd.h>

@@ -12,7 +12,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
 #include <vipl/section/vipl_section_container.h>
 #include <vipl/section/vipl_section_iterator.h>
 
-#include <vcl/vcl_stlfwd.h> // forward declaration for vcl_vector
+#include <vcl_stlfwd.h> // forward declaration for vcl_vector
 // -- Here is how the get/set macros are used.
 // First note there are 4 types of access:
 // for each of get and set we can do it with or without bounds/cache checking.

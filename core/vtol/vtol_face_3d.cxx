@@ -1,7 +1,7 @@
 #include "vtol_face_3d.h"
 
 #ifndef GNU_LIBSTDCXX_V3
-# include <vcl/vcl_rel_ops.h>
+# include <vcl_rel_ops.h>
 #endif
 
 #include <vtol/vtol_macros_3d.h>

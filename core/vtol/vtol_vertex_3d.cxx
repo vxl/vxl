@@ -8,7 +8,7 @@
 //#include <vtol/some_stubs.h>
 #include <vtol/vtol_list_functions_3d.h>
 
-#include <vcl/vcl_cassert.h>
+#include <vcl_cassert.h>
 #include <vsol/vsol_point_3d.h>
 
 // Default Constructor.

@@ -10,8 +10,8 @@
 // --------+----------+--------------------------+-----------------------------
 // 1.0     |2000/05/01| Peter TU                 |Creation
 //*****************************************************************************
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_iostream.h>
+#include <vcl_vector.h>
 
 #include <vtol/vtol_vertex_3d_ref.h>
 #include <vtol/vtol_zero_chain_3d_ref.h>

@@ -4,8 +4,8 @@
   fsm@robots.ox.ac.uk
 */
 #include "vil_convolve.h"
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_cstdlib.h> // abort()
+#include <vcl_cassert.h>
+#include <vcl_cstdlib.h> // abort()
 
 // Macros to get origin-relative values in signals.
 #define value1d(sig, k)    ( (sig).array[(sig).origin + (k)] )

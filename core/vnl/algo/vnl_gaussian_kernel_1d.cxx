@@ -10,7 +10,7 @@
 //-----------------------------------------------------------------------------
 
 #include "vnl_gaussian_kernel_1d.h"
-#include <vcl/vcl_cmath.h>
+#include <vcl_cmath.h>
 
 // G(x) = 1/(sigma * sqrt(2*pi)) * exp(-0.5 * (x/sigma)^2)
 // x(g) = sigma * sqrt(-2 * log(g * sigma * sqrt(2*pi) ) )

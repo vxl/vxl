@@ -1,6 +1,6 @@
 #include <vtol/vtol_topology_object_2d.h>
 #include <vtol/vtol_topology_cache_2d.h>
-#include <vcl/vcl_cassert.h>
+#include <vcl_cassert.h>
 
 //***************************************************************************
 // Initialization
@@ -632,5 +632,5 @@ vertex_list_2d *vtol_topology_object_2d::vertices(void)
 }
 #endif
 
-#include <vcl/vcl_rel_ops.h> // gcc 2.7
+#include <vcl_rel_ops.h> // gcc 2.7
 VCL_INSTANTIATE_INLINE(bool operator!=(vtol_topology_object_2d const &, vtol_topology_object_2d const &));

@@ -8,7 +8,7 @@
 // .FILE vsl_save_topology.cxx
 // \author fsm@robots.ox.ac.uk
 
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_iosfwd.h>
 #include <vsl/vsl_edge.h>
 
 void vsl_save_topology(char const *, vcl_list<vsl_edge*> const &, vcl_list<vsl_vertex*> const &);

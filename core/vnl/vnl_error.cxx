@@ -16,9 +16,9 @@
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_numeric_traits.h>
-#include <vcl/vcl_cstdio.h> // for printf()
-#include <vcl/vcl_cstdlib.h> // for abort()
-#include <vcl/vcl_cassert.h>
+#include <vcl_cstdio.h> // for printf()
+#include <vcl_cstdlib.h> // for abort()
+#include <vcl_cassert.h>
 
 //: Raise exception for invalid index
 void vnl_error_vector_index (char const* fcn, int index) {

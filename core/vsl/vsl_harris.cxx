@@ -1,14 +1,14 @@
 #include "vsl_harris.h"
 
-#include <vcl/vcl_cmath.h>
-#include <vcl/vcl_cstdlib.h>
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_iomanip.h>
-#include <vcl/vcl_fstream.h>
-#include <vcl/vcl_vector.h>
-#include <vcl/vcl_algorithm.h>
-#include <vcl/vcl_functional.h>
+#include <vcl_cmath.h>
+#include <vcl_cstdlib.h>
+#include <vcl_cassert.h>
+#include <vcl_iostream.h>
+#include <vcl_iomanip.h>
+#include <vcl_fstream.h>
+#include <vcl_vector.h>
+#include <vcl_algorithm.h>
+#include <vcl_functional.h>
 
 #include <vil/vil_image_as.h>
 #include <vil/vil_copy.h>

@@ -1,7 +1,7 @@
-#include <vcl/vcl_cstdlib.h>
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_iomanip.h>
-#include <vcl/vcl_cmath.h>
+#include <vcl_cstdlib.h>
+#include <vcl_iostream.h>
+#include <vcl_iomanip.h>
+#include <vcl_cmath.h>
 
 #include <vnl/vnl_test.h>
 #include <vnl/vnl_matops.h>

@@ -35,7 +35,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl/vcl_list.h>
+#include <vcl_list.h>
 #include <vnl/vnl_matrix.h>
 
 template <class T>

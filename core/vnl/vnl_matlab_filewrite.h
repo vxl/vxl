@@ -17,9 +17,9 @@
 // .SECTION Author
 //    David Capel, Oxford RRG, 17 August 1998
 
-#include <vcl/vcl_string.h> // C++ specific includes first
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_fstream.h>
+#include <vcl_string.h>
+#include <vcl_iostream.h>
+#include <vcl_fstream.h>
 
 #include <vnl/vnl_complex.h>
 #include <vnl/vnl_vector.h>

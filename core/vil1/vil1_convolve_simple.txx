@@ -3,13 +3,13 @@
 */
 #include "vil_convolve_simple.h"
 
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_cmath.h>
-#include <vcl/vcl_algorithm.h>
+#include <vcl_cassert.h>
+#include <vcl_cmath.h>
+#include <vcl_algorithm.h>
 
 #define TRACE 0
 #if TRACE
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 #endif
 
 #include <vil/vil_buffer.h>

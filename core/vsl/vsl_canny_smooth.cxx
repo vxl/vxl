@@ -8,10 +8,10 @@
 // see vsl_canny_smooth.txx for template functions.
 
 #include "vsl_canny_smooth.h"
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_cstdlib.h> // abort()
-#include <vcl/vcl_cmath.h>
-#include <vcl/vcl_iostream.h>
+#include <vcl_cassert.h>
+#include <vcl_cstdlib.h> // abort()
+#include <vcl_cmath.h>
+#include <vcl_iostream.h>
 #include <vil/vil_rgb.h>
 #include <vil/vil_pixel.h>
 

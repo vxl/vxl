@@ -4,13 +4,13 @@
 
 #include "vil_memory_image_impl.h"
 
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_cstring.h>   // strcmp()
-#include <vcl/vcl_iostream.h>
+#include <vcl_cassert.h>
+#include <vcl_cstring.h>   // strcmp()
+#include <vcl_iostream.h>
 // <memory> provides names like std::allocator and std::auto_ptr.
 // it does *not* declare the memcpy() or strcmp() functions. they
 // live in <cstring>
-//#include <vcl/vcl_memory.h>
+//#include <vcl_memory.h>
 
 #include <vil/vil_image.h>
 

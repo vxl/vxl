@@ -1,7 +1,7 @@
 #include "vtol_edge_3d.h"
 
 #ifndef GNU_LIBSTDCXX_V3
-# include <vcl/vcl_rel_ops.h>
+# include <vcl_rel_ops.h>
 #endif
 
 // #include <vtol/vtol_vertex_3d.h>

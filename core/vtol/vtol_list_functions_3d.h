@@ -15,7 +15,7 @@
 #ifndef vtol_list_functions_3d_H
 #define vtol_list_functions_3d_H
 
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 
 class vsol_spatial_object_3d;
 

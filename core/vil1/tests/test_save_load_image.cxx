@@ -1,9 +1,9 @@
 // Author: Peter@Vanroose.esat.kuleuven.ac.be
 // Date: 17 February, 2000
-#include <vcl/vcl_string.h> // C++ specific includes first
-#include <vcl/vcl_cstdio.h> // tmpnam()
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_string.h>
+#include <vcl_cstdio.h> // tmpnam()
+#include <vcl_iostream.h>
+#include <vcl_vector.h>
 
 #include <vpl/vpl_unistd.h> // vpl_unlink()
 

@@ -1,5 +1,5 @@
 #include "vnl_rotation_matrix.h"
-#include <vcl/vcl_cmath.h>
+#include <vcl_cmath.h>
 
 bool vnl_rotation_matrix(double const x[3], double **R)
 {

@@ -5,7 +5,7 @@
 // Converted to vxl by Peter Vanroose, February 2000
 //-----------------------------------------------------------------------------
 
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 #include <vnl/vnl_matops.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>

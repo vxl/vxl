@@ -29,7 +29,7 @@
 //-----------------------------------------------------------------------------
 #include <vtol/vtol_two_chain_2d_ref.h>
 
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 //#include <vtol/vtol_topology_object_2d.h>
 //#include <vtol/vtol_hierarchy_node_2d.h>
 #include <vtol/vtol_chain_2d.h>

@@ -9,8 +9,8 @@
 //-----------------------------------------------------------------------------
 
 #include "vnl_cholesky.h"
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_iostream.h>
+#include <vcl_cassert.h>
+#include <vcl_iostream.h>
 #include <vnl/vnl_math.h> // pow()
 #include <vnl/algo/vnl_netlib.h> // dpofa_(), dposl_(), dpoco_(), dpodi_()
 

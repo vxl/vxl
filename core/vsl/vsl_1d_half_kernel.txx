@@ -5,9 +5,9 @@
 */
 
 #include "vsl_1d_half_kernel.h"
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_cmath.h>
+#include <vcl_iostream.h>
+#include <vcl_cassert.h>
+#include <vcl_cmath.h>
 
 //: helper routine used by create_gaussian
 //static/*FIXME*/

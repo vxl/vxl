@@ -23,7 +23,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl/vcl_compiler.h>
+#include <vcl_compiler.h>
 
 // -- 18.2.1.3  Type float_round_style                     [lib.round.style]
 

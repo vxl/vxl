@@ -5,10 +5,10 @@
 #pragma implementation
 #endif
 #include "vsl_load_topology.h"
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_cstdio.h> // sscanf()
-#include <vcl/vcl_fstream.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_cassert.h>
+#include <vcl_cstdio.h> // sscanf()
+#include <vcl_fstream.h>
+#include <vcl_vector.h>
 
 void vsl_load_topology(char const *f, vcl_list<vsl_edge*> &e, vcl_list<vsl_vertex*> &v) {
   ifstream file(f);

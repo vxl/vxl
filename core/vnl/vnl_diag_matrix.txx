@@ -3,7 +3,7 @@
 
 #include "vnl_diag_matrix.h"
 
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 #include <vnl/vnl_math.h>
 
 #if defined(VCL_SUNPRO_CC) && defined(INSTANTIATE_TEMPLATES)

@@ -43,12 +43,12 @@ public:
 // @}
   vnl_generalized_eigensystem(const vnl_matrix<double>& A, const vnl_matrix<double>& B);
 
-// -- Public eigenvcl_vcl_vcl_vectors.  After construction, this contains the matrix of
-// eigenvcl_vcl_vcl_vectors.
+// -- Public eigenvectors.  After construction, this contains the matrix of
+// eigenvectors.
   vnl_matrix<double> V;
 
 // -- Public eigenvalues.  After construction, this contains the diagonal
-// matrix of eigenvalues, stored as a vcl_vcl_vcl_vector.
+// matrix of eigenvalues, stored as a vector.
   vnl_diag_matrix<double> D;
 
 private:

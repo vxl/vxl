@@ -2,7 +2,7 @@
   fsm@robots.ox.ac.uk
 */
 #include "vnl_cpoly_roots.h"
-#include <vcl/vcl_cassert.h>
+#include <vcl_cassert.h>
 #include <vnl/algo/vnl_complex_eigensystem.h>
 
 void vnl_cpoly_roots::compute(vnl_vector<vnl_double_complex> const &a) {

@@ -1,4 +1,4 @@
-#include <vcl/vcl_compiler.h>
+#include <vcl_compiler.h>
 #include <vipl/filter/vipl_filter_2d.h>
 
 // Main constructor for this abstract class. If dst_image

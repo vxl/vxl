@@ -1,4 +1,4 @@
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 #include <vil/vil_load.h>
 
 int main(int argc, char **argv)

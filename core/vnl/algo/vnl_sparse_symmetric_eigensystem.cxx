@@ -3,9 +3,9 @@
 #endif
 
 #include "vnl_sparse_symmetric_eigensystem.h"
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_cassert.h>
+#include <vcl_iostream.h>
+#include <vcl_vector.h>
 
 // Declare fortran function, and what a magnificent function it is too!
 extern "C" int dnlaso_(int (*op)(const int* n,

@@ -8,7 +8,7 @@
 // .FILE vsl_load_topology.cxx
 // \author fsm@robots.ox.ac.uk
 
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_iosfwd.h>
 #include <vsl/vsl_edge.h>
 
 void vsl_load_topology(char const *f, vcl_list<vsl_edge*> &, vcl_list<vsl_vertex*> &);

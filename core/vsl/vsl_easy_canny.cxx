@@ -6,8 +6,8 @@
 #endif
 #include "vsl_easy_canny.h"
 
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_iostream.h>
+#include <vcl_cassert.h>
+#include <vcl_iostream.h>
 
 #include <vsl/vsl_topology.h>
 

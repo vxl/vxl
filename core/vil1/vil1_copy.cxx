@@ -11,8 +11,8 @@
 
 #include "vil_copy.h"
 
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_climits.h>
+#include <vcl_cassert.h>
+#include <vcl_climits.h>
 
 #include <vil/vil_buffer.h>
 #include <vil/vil_image.h>

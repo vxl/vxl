@@ -74,14 +74,14 @@
 
 #include "vnl_matrix.h"
 
-#include <vcl/vcl_cstdio.h>   // sprintf()
-#include <vcl/vcl_cctype.h>   // isspace()
-#include <vcl/vcl_cstring.h>  // strcpy()
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_vector.h>
-#include <vcl/vcl_algorithm.h>
+#include <vcl_cstdio.h>   // sprintf()
+#include <vcl_cctype.h>   // isspace()
+#include <vcl_cstring.h>  // strcpy()
+#include <vcl_iostream.h>
+#include <vcl_vector.h>
+#include <vcl_algorithm.h>
 // conflicts with operator!= for std::vector<vcl_complex<double> >::iterator.
-// # include <vcl/vcl_rel_ops.h>  // inline operator!= function template
+// # include <vcl_rel_ops.h>  // inline operator!= function template
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>

@@ -4,9 +4,9 @@
 
 #include "vil_memory_image.h"
 
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_cstring.h> // ISO memcpy() lives in <cstring>
-#include <vcl/vcl_iostream.h>
+#include <vcl_cassert.h>
+#include <vcl_cstring.h> // ISO memcpy() lives in <cstring>
+#include <vcl_iostream.h>
 
 #include <vil/vil_image.h>
 #include <vil/vil_memory_image_impl.h>

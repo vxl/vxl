@@ -34,7 +34,7 @@
 //#include <vtol/vtol_hierarchy_node_2d.h>
 #include <vtol/vtol_chain_2d.h>
 
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 
 class vtol_edge_2d;
 class vtol_vertex_2d;

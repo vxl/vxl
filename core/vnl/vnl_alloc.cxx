@@ -1,7 +1,7 @@
 #include "vnl_alloc.h"
 
-#include <vcl/vcl_cstring.h>  // memcpy() lives here.
-#include <vcl/vcl_cstdlib.h>
+#include <vcl_cstring.h>  // memcpy() lives here.
+#include <vcl_cstdlib.h>
 
 char*
 vnl_alloc::chunk_alloc(vcl_size_t size, int& nobjs)
@@ -126,8 +126,8 @@ vnl_alloc::free_list[VNL_ALLOC_NFREELISTS]
 // space for the array.
 
 #ifdef TEST
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_cstring.h>
+#include <vcl_iostream.h>
+#include <vcl_cstring.h>
 int main()
 {
   char* p = (char*)vnl_alloc::allocate(10);

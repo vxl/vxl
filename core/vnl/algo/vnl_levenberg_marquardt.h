@@ -27,7 +27,7 @@
 //    RWMC 001097 Added verbose flag to get rid of all that blathering.
 //    AWF  151197 Added trace flag to increase blather.
 
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_iosfwd.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_nonlinear_minimizer.h>

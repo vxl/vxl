@@ -11,7 +11,7 @@
 // *** This is a temporary conversion hack ***
 // Do not expect that future cannies will provide output in this form.
 
-#include <vcl/vcl_list.h>
+#include <vcl_list.h>
 #include <vbl/vbl_ref_count.h>
 
 template <class T>

@@ -26,13 +26,13 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl/vcl_string.h> // C++ specific includes first
+#include <vcl_string.h>
 #include <vbl/vbl_ref_count.h>
 #include <vidl/vidl_clip_ref.h>
 #include <vidl/vidl_movie_ref.h>
 #include <vidl/vidl_codec_ref.h>
-#include <vcl/vcl_vector.h>
-#include <vcl/vcl_list.h>
+#include <vcl_vector.h>
+#include <vcl_list.h>
 
 class vidl_movie;
 class vidl_codec;
