@@ -85,7 +85,7 @@ bool vidl_file_sequence::open(char const* fmt)
   start_byte.resize(n);
   start_byte[0] = 0;
   for (unsigned int i = 1; i < filenames.size(); ++i)
-    start_byte[i] = (offset_t)start_byte[i-1] + (offset_t)filesizes[i-1];
+    start_byte[i] = start_byte[i-1] + (offset_t)filesizes[i-1];
 
   // Open them all
   fps.resize(n);
@@ -139,7 +139,7 @@ void vidl_file_sequence::seek(offset_t to)
   vcl_fseek(fps[current_file_index], file_ptr, SEEK_SET);
 }
 
-int vidl_file_sequence::tell() const
+vidl_file_sequence::offset_t vidl_file_sequence::tell() const
 {
   return start_byte[current_file_index] + ftell(fps[current_file_index]);
 }

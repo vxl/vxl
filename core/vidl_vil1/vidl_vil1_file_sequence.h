@@ -30,7 +30,7 @@ class vidl_vil1_file_sequence
   void close();
 
   void seek(offset_t to);
-  int tell() const;
+  offset_t tell() const;
   int read(void*, unsigned int);
   bool ok() { return current_file_index != -1; }
 
