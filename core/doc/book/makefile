@@ -1,6 +1,6 @@
 
-# You'll need texi2html from
-# http://www.mathematik.uni-kl.de/~obachman/Texi2Html/Distrib
+# You'll need texi2html version 1.64 from
+# http://www.mathematik.uni-kl.de/~obachman/Texi2html/
 
 
 ifeq ($(OS),Windows_NT)
@@ -28,14 +28,12 @@ all: book.html book.dvi
 
 thelot: book.info book.html book.dvi book.hpj 
 
-ifdef aaa
-book.html: book.texi rosenbrock.png
+ifdef USE_MAKEINFO
+book.html: book.texi chapter_vsl.texi rosenbrock.png
 	$(MAKEINFO) $(MAKEINFOFLAGS) book.texi --html -o $@ --number-sections
 else
-book.html: book.texi rosenbrock.png
-	$(TEXI2HTML) book.texi \
-              -expand info \
-              -number -split chapter -no-section_navigation -frames
+book.html: book.texi chapter_vsl.texi rosenbrock.png
+	$(TEXI2HTML) -expand info -menu -number -split chapter -nosec_nav -frames book.texi
 endif
 
 # Generate figure for HTML
