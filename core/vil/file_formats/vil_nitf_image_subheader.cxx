@@ -334,7 +334,7 @@ vil_nitf_image_subheader::~vil_nitf_image_subheader()
     delete [] IGEOLO;
     delete [] IC;
     delete [] COMRAT;
-    delete XSHD ;
+//    delete XSHD ;
 
     ICOM_.clear();
 
