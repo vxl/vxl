@@ -4,8 +4,8 @@
 #include <mvl/HomgOperator2D.h>
 #include <mvl/HomgInterestPointSet.h>
 #include <mvl/FMatrixCompute7Point.h>
-#include <vnl/vnl_matrix.h>
 #include <vnl/vnl_double_2.h>
+#include <vnl/vnl_double_3x3.h>
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
 

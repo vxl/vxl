@@ -2,8 +2,6 @@
 #include "FMatrixComputeMLESAC.h"
 #include <mvl/FManifoldProject.h>
 #include <mvl/HomgOperator2D.h>
-#include <vnl/vnl_matrix.h>
-#include <vnl/vnl_double_2.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
 
 FMatrixComputeMLESAC::FMatrixComputeMLESAC(bool rank2_truncate, double std)
