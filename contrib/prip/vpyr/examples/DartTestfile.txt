@@ -1,0 +1,13 @@
+# CMake generated Testfile for 
+#	Source directory: /mnt/shared/vxl/contrib/prip/vpyr/examples
+#	Build directory: /mnt/shared/vxl/contrib/prip/vpyr/examples
+# 
+# This file replicates the SUBDIRS() and ADD_TEST() commands from the source
+# tree CMakeLists.txt file, skipping any SUBDIRS() or ADD_TEST() commands
+# that are excluded by CMake control structures, i.e. IF() commands.
+#
+# The next line is critical for Dart to work
+# Duh :-)
+
+SUBDIRS(simple_segmentation)
+
