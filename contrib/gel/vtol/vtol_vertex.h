@@ -28,7 +28,6 @@
 #include <vnl/vnl_double_2.h>
 
 class vtol_vertex_2d;
-class vtol_vertex_3d;
 class vtol_edge;
 class vtol_zero_chain;
 class vtol_one_chain;
@@ -100,17 +99,6 @@ public:
   //: Return `this' if `this' is a 2D vertex, 0 otherwise
   //---------------------------------------------------------------------------
   virtual vtol_vertex_2d *cast_to_vertex_2d(void) {return NULL;}
-
-  //---------------------------------------------------------------------------
-  //: Return `this' if `this' is a 3D vertex, 0 otherwise
-  //---------------------------------------------------------------------------
-  virtual const vtol_vertex_3d *cast_to_vertex_3d(void) const {return NULL;}
-
-  //---------------------------------------------------------------------------
-  //: Return `this' if `this' is a 3D vertex, 0 otherwise
-  //---------------------------------------------------------------------------
-
-  virtual vtol_vertex_3d *cast_to_vertex_3d(void) {return NULL;}
 
 
   //***************************************************************************

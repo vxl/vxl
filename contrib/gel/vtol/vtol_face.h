@@ -45,7 +45,6 @@ class vtol_edge;
 class vtol_one_chain;
 class vtol_two_chain;
 class vtol_face_2d;
-class vtol_face_3d;
 
 
 class vtol_face
@@ -109,15 +108,6 @@ public:
   //---------------------------------------------------------------------------
   virtual vtol_face_2d *cast_to_face_2d(void) {return NULL;}
 
-  //---------------------------------------------------------------------------
-  //: Return `this' if `this' is a face, 0 otherwise
-  //---------------------------------------------------------------------------
-  virtual const vtol_face_3d *cast_to_face_3d(void) const {return NULL;}
-
-  //---------------------------------------------------------------------------
-  //: Return `this' if `this' is a face, 0 otherwise
-  //---------------------------------------------------------------------------
-  virtual vtol_face_3d *cast_to_face_3d(void) {return NULL;}
 
   //***************************************************************************
   // Status report

@@ -47,7 +47,6 @@
 #include <vtol/vtol_vertex.h>
 
 class vtol_edge_2d;
-class vtol_edge_3d;
 
 //: topological edge
 
@@ -147,16 +146,6 @@ public:
   //: Return `this' if `this' is an edge, 0 otherwise
   //---------------------------------------------------------------------------
   virtual vtol_edge_2d *cast_to_edge_2d(void) {return NULL;}
-
-  //---------------------------------------------------------------------------
-  //: Return `this' if `this' is an edge, 0 otherwise
-  //---------------------------------------------------------------------------
-  virtual const vtol_edge_3d *cast_to_edge_3d(void) const {return NULL;}
-
-  //---------------------------------------------------------------------------
-  //: Return `this' if `this' is an edge, 0 otherwise
-  //---------------------------------------------------------------------------
-  virtual vtol_edge_3d *cast_to_edge_3d(void) {return NULL;}
 
 
   //***************************************************************************
