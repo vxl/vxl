@@ -17,11 +17,13 @@
 #include <vnl/vnl_fortran_copy.h>
 #include <vnl/algo/vnl_netlib.h>
 
+#ifndef vnl_svd_fsm
 #define vnl_svd_fsm 0
+#endif
 
 #if vnl_svd_fsm
-template <typename T> int fsm_svdc(vnl_netlib_svd_proto(T));
-# define vnl_linpack_svdc fsm_svdc
+template <typename T> int fsm_svdc_cxx(vnl_netlib_svd_proto(T));
+# define vnl_linpack_svdc fsm_svdc_cxx
 #else
 // use C++ overloading to call the right linpack routine from the template code :
 #define macro(p, T) \
@@ -84,6 +86,7 @@ vnl_svd<T>::vnl_svd(vnl_matrix<T> const& M, double zero_out_tol):
 //       cerr << "*** Warning vnl_svd<T>::vnl_svd<T>() ***\n";
 //       cerr << " About " << info << " singular values are wrong\n";
 //       MatOps::matlab_print(cerr, M, "M");
+      //vcl_cerr << __FILE__ ": suspicious return value (" << info << ") from SVDC" << vcl_endl;
     }
 
     // Copy fortran outputs into our storage
@@ -110,9 +113,10 @@ vnl_svd<T>::vnl_svd(vnl_matrix<T> const& M, double zero_out_tol):
 
   if (test_heavily) {
     // Test that recomposed matrix == M
-    double recomposition_residual = vcl_abs((recompose() - M).fro_norm());
-    double n = vcl_abs(M.fro_norm());
-    double thresh = m_ * vnl_math::eps * n;
+    typedef typename vnl_numeric_traits<T>::abs_t abs_t;
+    abs_t recomposition_residual = vcl_abs((recompose() - M).fro_norm());
+    abs_t n = vcl_abs(M.fro_norm());
+    abs_t thresh = m_ * vnl_math::eps * n;
     if (recomposition_residual > thresh) {
       vcl_cerr << "vnl_svd<T>::vnl_svd<T>() -- Warning, recomposition_residual = "
            << recomposition_residual << vcl_endl;
@@ -126,10 +130,10 @@ vnl_svd<T>::vnl_svd(vnl_matrix<T> const& M, double zero_out_tol):
 
   if (zero_out_tol >= 0)
     // Zero out small sv's and update rank count.
-    zero_out_absolute(zero_out_tol);
+    zero_out_absolute(double(+zero_out_tol));
   else
     // negative tolerance implies relative to max elt.
-    zero_out_relative(-zero_out_tol);
+    zero_out_relative(double(-zero_out_tol));
 }
 
 #if 0
@@ -217,7 +221,7 @@ template <class T>
 vnl_matrix<T> vnl_svd<T>::recompose() const
 {
   vnl_matrix<T> W(W_.rows(),W_.columns());
-  W.fill(0);
+  W.fill(T(0));
   for (unsigned i=0;i<rank_;i++)
     W(i,i)=W_(i,i);
 
@@ -237,7 +241,7 @@ template <class T>
 vnl_matrix<T> vnl_svd<T>::pinverse()  const
 {
   vnl_matrix<T> Winverse(Winverse_.rows(),Winverse_.columns());
-  Winverse.fill(0);
+  Winverse.fill(T(0));
   for (unsigned i=0;i<rank_;i++)
     Winverse(i,i)=Winverse_(i,i);
 
@@ -250,7 +254,7 @@ template <class T>
 vnl_matrix<T> vnl_svd<T>::tinverse()  const
 {
   vnl_matrix<T> Winverse(Winverse_.rows(),Winverse_.columns());
-  Winverse.fill(0);
+  Winverse.fill(T(0));
   for (unsigned i=0;i<rank_;i++)
     Winverse(i,i)=Winverse_(i,i);
 
@@ -264,7 +268,7 @@ vnl_matrix<T> vnl_svd<T>::solve(vnl_matrix<T> const& B)  const
 {
   vnl_matrix<T> x;                                      // solution matrix
   if (U_.rows() < U_.columns()) {                       // augment y with extra rows of
-    vnl_matrix<T> yy(U_.rows(), B.columns(), 0);        // zeros, so that it matches
+    vnl_matrix<T> yy(U_.rows(), B.columns(), T(0));     // zeros, so that it matches
     yy.update(B);                                       // cols of u.transpose. ???
     x = U_.conjugate_transpose() * yy;
   } else
@@ -272,8 +276,8 @@ vnl_matrix<T> vnl_svd<T>::solve(vnl_matrix<T> const& B)  const
   unsigned long i, j;
   for (i = 0; i < x.rows(); i++) {                      // multiply with diagonal 1/W
     T weight = W_(i, i);
-    if ( ! (weight == vnl_numeric_traits<T>::zero) )
-      weight = T(1.0) / weight;
+    if (weight != T(0)); //vnl_numeric_traits<T>::zero)
+      weight = T(1) / weight;
     for (j = 0; j < x.columns(); j++)
       x(i, j) *= weight;
   }
@@ -298,7 +302,7 @@ vnl_vector<T> vnl_svd<T>::solve(vnl_vector<T> const& y)  const
 
   vnl_vector<T> x(V_.rows());                   // Solution matrix.
   if (U_.rows() < U_.columns()) {               // Augment y with extra rows of
-    vnl_vector<T> yy(U_.rows(), 0);             // zeros, so that it matches
+    vnl_vector<T> yy(U_.rows(), T(0));          // zeros, so that it matches
     if (yy.size()<y.size()) { // fsm
       vcl_cerr << "yy=" << yy << vcl_endl;
       vcl_cerr << "y =" << y  << vcl_endl;
@@ -311,8 +315,8 @@ vnl_vector<T> vnl_svd<T>::solve(vnl_vector<T> const& y)  const
     x = U_.conjugate_transpose() * y;
 
   for (unsigned i = 0; i < x.size(); i++) {        // multiply with diagonal 1/W
-    T weight = W_(i, i), zero_ = 0.0;
-    if ( ! (weight == zero_) )
+    T weight = W_(i, i), zero_(0);
+    if (weight != zero_)
       x[i] /= weight;
     else
       x[i] = zero_;
@@ -332,7 +336,7 @@ void vnl_svd<T>::solve_preinverted(vnl_vector<T> const& y, vnl_vector<T>* x_out)
   vnl_vector<T> x;              // solution matrix
   if (U_.rows() < U_.columns()) {               // augment y with extra rows of
     vcl_cout << "vnl_svd<T>::solve_preinverted() -- Augmenting y\n";
-    vnl_vector<T> yy(U_.rows(), 0);     // zeros, so that it match
+    vnl_vector<T> yy(U_.rows(), T(0));     // zeros, so that it match
     yy.update(y);                               // cols of u.transpose. ??
     x = U_.conjugate_transpose() * yy;
   } else
