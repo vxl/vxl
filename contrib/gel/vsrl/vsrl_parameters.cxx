@@ -1,7 +1,7 @@
 #include <vsrl/vsrl_parameters.h>
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
-
+#include <vcl_cstring.h> // for strcmp()
 
 // initialize the _instance variable
 vsrl_parameters* vsrl_parameters::_instance = 0;
