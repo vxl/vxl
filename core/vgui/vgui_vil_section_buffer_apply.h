@@ -29,14 +29,14 @@ vgui_vil2_section_buffer_apply( vgui_vil2_section_buffer& buf,
                                 vil2_image_view<T> const& );
 
 #define sba_macro(T) \
-VCL_DEFINE_SPECIALIZATION void \
+VCL_DEFINE_SPECIALIZATION inline void \
 vgui_vil2_section_buffer_apply( vgui_vil2_section_buffer& sec_buf, \
                                 vil2_image_view< vil2_rgb<T> > const& image_in ) \
 { \
   vil2_image_view<T> planes_view = image_in; \
   vgui_vil2_section_buffer_apply( sec_buf, planes_view ); \
 } \
-VCL_DEFINE_SPECIALIZATION void \
+VCL_DEFINE_SPECIALIZATION inline void \
 vgui_vil2_section_buffer_apply( vgui_vil2_section_buffer& sec_buf, \
                                 vil2_image_view< vil2_rgba<T> > const& image_in ) \
 { \
