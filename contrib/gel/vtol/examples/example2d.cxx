@@ -87,8 +87,7 @@ static void test_topology_2d(void)
 
   vcl_cout << "************** test vertex *************\n";
   vcl_cout << "topology_type: ";
-
-  vcl_cout << v1->topology_type();
+  vcl_cout << (int)(v1->topology_type());
   ASSERT(v1->topology_type() == 1);
 
   vcl_cout << "x() y(): ";
