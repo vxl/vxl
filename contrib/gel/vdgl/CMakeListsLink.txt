@@ -7,6 +7,8 @@ IF (LIBRARY_OUTPUT_PATH MATCHES '^$')
 ENDIF (LIBRARY_OUTPUT_PATH MATCHES '^$')
 
 # Immediate dependencies
+# can't do INCLUDE because of cycle
+LINK_LIBRARIES( vtol )
 INCLUDE( ${allvxl_SOURCE_DIR}/gel/vsol/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vnl/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vnl/algo/CMakeListsLink.txt )

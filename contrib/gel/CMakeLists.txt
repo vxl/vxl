@@ -4,9 +4,6 @@ INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vcl)
 INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vxl)
 INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/gel)
 
-# van-duc region finder (ported from TargetJr)
-SUBDIRS(gevd)
-
 # matcher
 SUBDIRS(geml)
 
@@ -40,6 +37,9 @@ SUBDIRS(vgel gkll)
 
 # Dense matcher
 SUBDIRS(vmal)
+
+# van-duc region finder (ported from TargetJr)
+SUBDIRS(gevd)
 
 # This should *not* be included here since it will cause all programs,
 # also the non-GUI ones, to link against libGL !

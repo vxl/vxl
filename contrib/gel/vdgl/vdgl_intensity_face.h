@@ -97,7 +97,9 @@ public:
   float Ir() { return region_->Ir(); }
   float Diameter() { return region_->Diameter(); }
   float AspectRatio() { return region_->AspectRatio(); }
+#if 0
   void PrincipalOrientation(vcl_vector<float>& axis) { region_->PrincipalOrientation(axis); }
+#endif
   double Var() { return region_->Var(); }
 
   //Accessors

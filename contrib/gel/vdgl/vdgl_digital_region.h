@@ -99,7 +99,9 @@ public:
   virtual double area() const {return npts_*pixel_size_*pixel_size_;}
 
   float AspectRatio();
+#if 0
   void PrincipalOrientation(vcl_vector<float>& major_axis);
+#endif
   //Get Fitted Plane Coefficients
   double Ix();  //First derivative of intensity wrt x
   double Iy();  //First derivative of intensity wrt y
