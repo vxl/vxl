@@ -1,23 +1,16 @@
 #ifndef vcl_iso_numeric_h_
 #define vcl_iso_numeric_h_
 
+// This is a generated file. DO NOT EDIT! Not even a little bit.
+
 #include <numeric>
 
-// accumulate
-#ifndef vcl_accumulate
-#define vcl_accumulate std::accumulate
+#ifdef vcl_generic_numeric_STD
+  ** error **
+#else
+# define vcl_generic_numeric_STD std
 #endif
-// inner_product
-#ifndef vcl_inner_product
-#define vcl_inner_product std::inner_product
-#endif
-// partial_sum
-#ifndef vcl_partial_sum
-#define vcl_partial_sum std::partial_sum
-#endif
-// adjacent_difference
-#ifndef vcl_adjacent_difference
-#define vcl_adjacent_difference std::adjacent_difference
-#endif
+
+#include "../generic/vcl_numeric.h"
 
 #endif // vcl_iso_numeric_h_
