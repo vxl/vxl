@@ -6,7 +6,7 @@
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
-#include <mbl/mbl_matxvec.h>
+#include <mbl/mbl_matrix_products.h>
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h> // for vcl_abort()
 #include <vcl_iostream.h>
@@ -64,11 +64,8 @@ void mbl_matrix_product_a_bt(vnl_matrix<double>& ABt,
                    const vnl_matrix<double>& A,
                    const vnl_matrix<double>& B)
 {
-  int nr1 = A.rows();
   int nc1 = A.columns();
-  int nr2 = B.rows();
   int nc2 = B.columns();
-
 #ifndef NDEBUG
   if( nc2 != nc1 )
   {
@@ -76,6 +73,22 @@ void mbl_matrix_product_a_bt(vnl_matrix<double>& ABt,
     vcl_abort();
   }
 #endif //!NDEBUG
+
+  mbl_matrix_product_a_bt(ABt,A,B,nc1);
+}
+//=======================================================================
+//: Compute product ABt = A * B.transpose(), using only nc cols of A and B
+//=======================================================================
+void mbl_matrix_product_a_bt(vnl_matrix<double>& ABt,
+                   const vnl_matrix<double>& A,
+                   const vnl_matrix<double>& B,
+				   int nc)
+{
+  int nr1 = A.rows();
+  int nr2 = B.rows();
+
+  assert(A.columns()>=nc);
+  assert(B.columns()>=nc);
 
   if ( (ABt.rows()!=nr1) || (ABt.columns()!= nr2) )
     ABt.resize( nr1, nr2 ) ;
@@ -91,7 +104,7 @@ void mbl_matrix_product_a_bt(vnl_matrix<double>& ABt,
     for (int c=0;c<nr2;++c)
     {
       const double* B_row = B_data[c];
-      R_row[c] = vnl_c_vector<double>::dot_product(A_row,B_row,nc1);
+      R_row[c] = vnl_c_vector<double>::dot_product(A_row,B_row,nc);
     }
   }
 }

@@ -21,7 +21,13 @@ void mbl_matrix_product(vnl_matrix<double>& AB, const vnl_matrix<double>& A,
 void mbl_matrix_product_a_bt(vnl_matrix<double>& ABt, const vnl_matrix<double>& A,
                    const vnl_matrix<double>& B);
 
-//: Compute product ABt = A * B.transpose()
+//: Compute ABt = A * B.transpose() using only first n_cols columns of A and B
+void mbl_matrix_product_a_bt(vnl_matrix<double>& ABt,
+                   const vnl_matrix<double>& A,
+                   const vnl_matrix<double>& B,
+				   int n_cols);
+
+//: Compute product AtB = A.transpose() * B
 void mbl_matrix_product_at_b(vnl_matrix<double>& AtB, const vnl_matrix<double>& A,
                    const vnl_matrix<double>& B);
 
