@@ -11,7 +11,9 @@
 #include <vgl/vgl_line_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_homg_point_2d.h>
+#include <vgl/vgl_box_2d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
+#include <vsol/vsol_box_2d.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_interpolator.h>
 #include <vdgl/vdgl_interpolator_linear.h>
@@ -189,7 +191,21 @@ vdgl_digital_curve_sptr bdgl_curve_algs::reverse(vdgl_digital_curve_sptr const& 
   vdgl_digital_curve_sptr rev_dc = new vdgl_digital_curve(rev_intrp);
   return rev_dc;
 }
-
+//: a preliminary test to see if an infinite line intersects the bounding
+//  box of the digital curve.
+bool bdgl_curve_algs::intersect_bounding_box(vdgl_digital_curve_sptr const& dc,
+                                             vgl_line_2d<double> & line)
+{
+  vsol_box_2d_sptr bb = dc->get_bounding_box();
+  if(!bb)
+    return false;
+  vgl_box_2d<double> box(bb->get_min_x(), bb->get_max_x(),
+                         bb->get_min_y(), bb->get_max_y());
+  vgl_point_2d<double> p0, p1;
+  if(box.intersect(line, p0, p1))
+    return true;
+  return false;
+}
 //: Intersect an infinite line with a line formed by the two input points , p0 and p1.
 // It is assumed that the two lines do intersect.
 // If they are parallel, "false" is returned.

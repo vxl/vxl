@@ -54,6 +54,10 @@ class bdgl_curve_algs
   //:Reverses the edgel chain
   static vdgl_digital_curve_sptr reverse(vdgl_digital_curve_sptr const& dc);
 
+  //:Intersect the bounding box of the digital curve with the line as a test
+  static bool intersect_bounding_box(vdgl_digital_curve_sptr const& dc,
+                                     vgl_line_2d<double> & line);
+
   //:Intersect the curve with an infinite line, return the index values
   // This is a recursive implementation for faster computation
   static bool intersect_line_fast(vdgl_digital_curve_sptr const& dc,
