@@ -56,8 +56,8 @@ int main(int argc, char** argv)
   // Arguments
   vul_arg_info_list arg_list;
   vul_arg<double> sigma(arg_list,"-sigma","sigma for Gaussian smoothing",1.0);
-  vul_arg<float> thresh1(arg_list,"-t1","Threshold for truncating motion",0.001);
-  vul_arg<float> thresh2(arg_list,"-t2","Threshold for detecting motion",0.0001);
+  vul_arg<float> thresh1(arg_list,"-t1","Threshold for truncating motion",0.001f);
+  vul_arg<float> thresh2(arg_list,"-t2","Threshold for detecting motion",0.0001f);
   vul_arg<vcl_string> parameter_output_file(arg_list,"-X","parameter output file","");
   vul_arg<vcl_string> input_video_file(arg_list,"-V","video input file","");
   vul_arg<vcl_string> status_block_file(arg_list,"-S","status block file","");
