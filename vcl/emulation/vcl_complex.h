@@ -202,6 +202,7 @@ operator == (FLOAT x, const vcl_complex<FLOAT>& y)
   return x == y.real() && y.imag() == 0;
 }
 
+#ifdef __GNUC__ // these are not necessary (and can cause conflicts) because of vcl_rel_ops.h
 template <class FLOAT> inline bool
 operator != (const vcl_complex<FLOAT>& x, const vcl_complex<FLOAT>& y)
 {
@@ -219,6 +220,7 @@ operator != (FLOAT x, const vcl_complex<FLOAT>& y)
 {
   return x != y.real() || y.imag() != 0;
 }
+#endif
 
 template <class FLOAT> inline FLOAT
 vcl_abs (const vcl_complex<FLOAT>& x)
