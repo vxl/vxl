@@ -94,4 +94,4 @@ private: /*even more*/
   bool exist_objs;
 };
 
-#endif
+#endif // vbl_psfile_h_

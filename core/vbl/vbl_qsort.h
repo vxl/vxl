@@ -7,10 +7,15 @@
 // Author: awf@robots.ox.ac.uk
 // Created: 15 Mar 00
 
+#include <vxl_misc_config.h> // VXL_HAS_QSORT
+
 //: Collection of common predicates for library sort routines
 
 #include <vcl/vcl_cstdlib.h>
 #include <vcl/vcl_algorithm.h>
+#if !VXL_HAS_QSORT
+#include <vcl/vcl_functional.h>
+#endif
 #include <vcl/vcl_vector.h>
 
 int vbl_qsort_double_ascending(double const&, double const&);
@@ -43,7 +48,11 @@ template <class T>
 inline
 void vbl_qsort_ascending(T* base, int n)
 {
+#if VXL_HAS_QSORT
   qsort(base, n, sizeof base[0], vbl_qsort_helper<T>::ascend);
+#else
+  vcl_sort(base, base+n, std::less<T>());
+#endif
 }
 
 // -- Sort a C array into descending order, using the standard comparison
@@ -52,7 +61,11 @@ template <class T>
 inline
 void vbl_qsort_descending(T* base, int n)
 {
+#if VXL_HAS_QSORT
   qsort(base, n, sizeof base[0], vbl_qsort_helper<T>::ascend);
+#else
+  vcl_sort(base, base+n, std::less<T>());
+#endif
 }
 
 // -- Sort an STL vector into ascending order, using the standard comparison
@@ -62,10 +75,10 @@ template <class T>
 inline
 void vbl_qsort_ascending(vcl_vector<T>& v)
 {
-#ifdef WIN32
-  vcl_sort(v.begin(), v.end(), std::less<T>());
-#else
+#if VXL_HAS_QSORT
   qsort(v.begin(), v.size(), sizeof v[0], vbl_qsort_helper<T>::ascend);
+#else
+  vcl_sort(v.begin(), v.end(), std::less<T>());
 #endif
 }
 
@@ -75,10 +88,10 @@ template <class T>
 inline
 void vbl_qsort_descending(vcl_vector<T>& v)
 {
-#ifdef WIN32
-  vcl_sort(v.begin(), v.end(), vcl_greater<T>());
-#else
+#if VXL_HAS_QSORT
   qsort(v.begin(), v.size(), sizeof v[0], vbl_qsort_helper<T>::descend);
+#else
+  vcl_sort(v.begin(), v.end(), vcl_greater<T>());
 #endif
 }
 
@@ -87,7 +100,11 @@ template <class T>
 inline
 void vbl_qsort(vcl_vector<T>& v, int (*compare)(T const& a, T const& b))
 {
+#if VXL_HAS_QSORT
   qsort(v.begin(), v.size(), sizeof v[0], (vbl_qsort_compare_t)compare);
+#else
+  cerr << "Sorry, this type of qsort has not been implemented\n";
+#endif
 }
 
 #define VBL_QSORT_INSTANTIATE(T)\
