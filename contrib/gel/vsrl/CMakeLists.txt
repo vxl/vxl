@@ -31,12 +31,12 @@ IF (HAS_VGUI)
  )
  IF( EXISTS ${vxl_SOURCE_DIR}/contrib/tbl/vepl/CMakeLists.txt )
   INCLUDE_DIRECTORIES(${TBL_INCLUDE_DIR})
-  IF( EXISTS ${vxl_SOURCE_DIR}/contrib/brl/bseg/sdet/CMakeLists.txt )
+  IF( BUILD_BRL )
    INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bseg)
    SET(vsrl_sources ${vsrl_sources}
     vsrl_manager.cxx              vsrl_manager.h
    )
-  ENDIF( EXISTS ${vxl_SOURCE_DIR}/contrib/brl/bseg/sdet/CMakeLists.txt )
+  ENDIF( BUILD_BRL )
  ENDIF( EXISTS ${vxl_SOURCE_DIR}/contrib/tbl/vepl/CMakeLists.txt )
 ENDIF (HAS_VGUI)
 
