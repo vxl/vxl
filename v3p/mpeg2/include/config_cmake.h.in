@@ -154,5 +154,4 @@
 /* We don't support compilers this broken: IMS */
 /* #undef size_t */
 
-#endif //mpeg_config_cmake_h_
-
+#endif /* mpeg_config_cmake_h_ */
