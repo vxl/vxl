@@ -122,14 +122,14 @@ class sdet_grid_finder : public sdet_grid_finder_params
   bool get_mapped_lines(vcl_vector<vsol_line_2d_sptr> & lines);
 
   bool get_backprojected_grid(vcl_vector<vsol_line_2d_sptr> & lines);
-  void set_verbose(){verbose_=true;}//non-params interface
-  void unset_verbose(){verbose_=false;}
+  void set_verbose() { verbose_=true; } //non-params interface
+  void unset_verbose() { verbose_=false; }
 
 
   //:test camera parameter matrices
-  bool sdet_grid_finder::transform_grid_points(vnl_matrix_fixed<double,3,3> & K,
-                                               vnl_matrix_fixed<double,3,4> & M,
-                                               vcl_vector<vsol_point_2d_sptr> & points);
+  bool transform_grid_points(vnl_matrix_fixed<double,3,3> & K,
+                             vnl_matrix_fixed<double,3,4> & M,
+                             vcl_vector<vsol_point_2d_sptr> & points);
   //:write transformed grid points to a file
   bool init_output_file(vcl_ofstream & outstream);
   bool write_image_points(vcl_ofstream & outstream);
