@@ -21,10 +21,10 @@
  *
  *  Purpose: Class for time functions (Source)
  *
- *  Last Update:      $Author: amithaperera $
- *  Update Date:      $Date: 2004/01/14 04:01:11 $
+ *  Last Update:      $Author: peter_vanroose $
+ *  Update Date:      $Date: 2004/08/06 14:11:49 $
  *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.1 $
+ *  CVS/RCS Revision: $Revision: 1.2 $
  *  Status:           $State: Exp $
  *
  *  CVS/RCS Log at end of file
@@ -305,7 +305,7 @@ OFBool OFTime::setCurrentTime()
 OFBool OFTime::setCurrentTime(const time_t &tt)
 {
     OFBool status = OFFalse;
-#if defined(_REENTRANT) && !defined(_WIN32) && !defined(__CYGWIN__)
+#if defined(_REENTRANT) && !defined(_WIN32) && !defined(__CYGWIN__) && !defined(__hpux)
     // use localtime_r instead of localtime
     struct tm ltBuf;
     struct tm *lt = &ltBuf;
@@ -319,7 +319,7 @@ OFBool OFTime::setCurrentTime(const time_t &tt)
         Hour = lt->tm_hour;
         Minute = lt->tm_min;
         Second = lt->tm_sec;
-#if defined(_REENTRANT) && !defined(_WIN32) && !defined(__CYGWIN__)
+#if defined(_REENTRANT) && !defined(_WIN32) && !defined(__CYGWIN__) && !defined(__hpux)
         // use gmtime_r instead of gmtime
         struct tm gtBuf;
         struct tm *gt = &gtBuf;
@@ -562,7 +562,11 @@ ostream& operator<<(ostream& stream, const OFTime &timeVal)
 /*
  *
  * CVS/RCS Log:
- * Log: oftime.cc
+ * Log: oftime.cxx
+ * Revision 1.1  2004/01/14 04:01:11  amithaperera
+ * Add better DICOM support by wrapping DCMTK, and add a stripped down
+ * version of DCMTK to v3p. Add more DICOM test cases.
+ *
  * Revision 1.7  2002/12/04 10:40:50  meichel
  * Changed toolkit to use OFStandard::ftoa instead of sprintf for all
  *   double to string conversions that are supposed to be locale independent
