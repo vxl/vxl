@@ -1,5 +1,8 @@
+// This is ./mul/mbl/mbl_selected_data_wrapper.txx 
 #ifndef mbl_selected_data_wrapper_txx_
 #define mbl_selected_data_wrapper_txx_
+//:
+// \file
 
 #include "mbl_selected_data_wrapper.h"
 #include <vcl_iostream.h>
@@ -93,7 +96,6 @@ const T& mbl_selected_data_wrapper<T>::current()
 template<class T>
 bool mbl_selected_data_wrapper<T>::next()
 {
-
   if (index_ < size()-1)
   {
     index_++;
@@ -131,7 +133,6 @@ void mbl_selected_data_wrapper<T>::set_index(unsigned long n)
     vcl_cerr<<"n = "<<n<<" not in range 0<=n<"<<size()<<vcl_endl;
     vcl_abort();
   }
-
   index_=n;
 }
 
