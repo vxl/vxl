@@ -249,6 +249,41 @@ SOURCES += zung2r.c
 SOURCES += zunghr.c
 SOURCES += zungqr.c
 
+# Added by fsm for generalized chur
+SOURCES += dgecon.c
+SOURCES += dgemm.c
+SOURCES += dgeqrf.c
+SOURCES += dgesc2.c
+SOURCES += dgetc2.c
+SOURCES += dggbak.c
+SOURCES += dggbal.c
+SOURCES += dgges.c
+SOURCES += dgghrd.c
+SOURCES += dhgeqz.c
+SOURCES += dlacon.c
+SOURCES += dlag2.c
+SOURCES += dlagv2.c
+SOURCES += dlanhs.c
+SOURCES += dlarfb.c
+SOURCES += dlarft.c
+SOURCES += dlascl.c
+SOURCES += dlaswp.c
+SOURCES += dlatdf.c
+SOURCES += dlatrs.c
+SOURCES += dorgqr.c
+SOURCES += dorgr2.c
+SOURCES += dormqr.c
+SOURCES += drscl.c
+SOURCES += dtgex2.c
+SOURCES += dtgexc.c
+SOURCES += dtgsen.c
+SOURCES += dtgsy2.c
+SOURCES += dtgsyl.c
+SOURCES += dtrmm.c
+SOURCES += dtrmv.c
+SOURCES += dtrsv.c
+SOURCES += i_dnnt.c
+
 #######################################
 include ${IUEROOT}/config/top-params.mk
 #######################################
