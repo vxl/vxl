@@ -1,7 +1,8 @@
+// This is gel/vtol/vtol_face.h
 #ifndef vtol_face_h
 #define vtol_face_h
 //:
-//  \file
+// \file
 // \brief Represents the basic 2D topological entity
 //
 //  The vtol_face class is used to represent a topological face.
@@ -42,7 +43,6 @@ class vtol_one_chain;
 class vtol_two_chain;
 class vtol_face_2d;
 
-
 class vtol_face
   : public vtol_topology_object
 {
@@ -54,7 +54,7 @@ class vtol_face
   //---------------------------------------------------------------------------
   //: Default constructor
   //---------------------------------------------------------------------------
-  explicit vtol_face(void);
+  explicit vtol_face(void) {}
 
   //---------------------------------------------------------------------------
   //: Destructor
@@ -66,7 +66,7 @@ class vtol_face
   //---------------------------------------------------------------------------
   //: Return the topology type
   //---------------------------------------------------------------------------
-  virtual vtol_topology_object_type topology_type(void) const;
+  virtual vtol_topology_object_type topology_type(void) const { return FACE; }
 
   virtual vtol_one_chain *get_one_chain(int which = 0);
   virtual vtol_one_chain *get_boundary_cycle(void);
@@ -103,7 +103,6 @@ class vtol_face
   //---------------------------------------------------------------------------
   virtual vtol_face_2d *cast_to_face_2d(void) {return 0;}
 
-
   //***************************************************************************
   // Status report
   //***************************************************************************
@@ -112,13 +111,15 @@ class vtol_face
   //: Is `inferior' type valid for `this' ?
   //---------------------------------------------------------------------------
   virtual bool
-  valid_inferior_type(const vtol_topology_object &inferior) const;
+  valid_inferior_type(const vtol_topology_object &inferior) const
+  { return inferior.cast_to_one_chain()!=0; }
 
   //---------------------------------------------------------------------------
   //: Is `superior' type valid for `this' ?
   //---------------------------------------------------------------------------
   virtual bool
-  valid_superior_type(const vtol_topology_object &superior) const;
+  valid_superior_type(const vtol_topology_object &superior) const
+  { return superior.cast_to_two_chain()!=0; }
 
   //: accessors for boundary elements
   virtual vertex_list *outside_boundary_vertices(void);
@@ -142,10 +143,9 @@ class vtol_face
   virtual vcl_vector<vtol_edge*> *outside_boundary_compute_edges(void);
   virtual vcl_vector<vtol_one_chain*> *outside_boundary_compute_one_chains(void);
 
+  // Editing Functions
 
   virtual void add_one_chain(vtol_one_chain &);
-
-  // Editing Functions
 
   //: Utility Functions and overloaded operators
 

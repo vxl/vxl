@@ -47,12 +47,12 @@ class vtol_two_chain
   //---------------------------------------------------------------------------
   //: Default constructor
   //---------------------------------------------------------------------------
-  explicit vtol_two_chain(void);
+  explicit vtol_two_chain(void) { is_cycle_=false; }
 
   //---------------------------------------------------------------------------
   //: Constructor
   //---------------------------------------------------------------------------
-  explicit vtol_two_chain(int num_face);
+  explicit vtol_two_chain(int /*num_faces*/) { is_cycle_=false; }
 
   //---------------------------------------------------------------------------
   //: Constructor
@@ -90,7 +90,7 @@ class vtol_two_chain
   //---------------------------------------------------------------------------
   //: Return the topology type
   //---------------------------------------------------------------------------
-  virtual vtol_topology_object_type topology_type(void) const;
+  virtual vtol_topology_object_type topology_type(void) const {return TWOCHAIN;}
 
   //: get the direction of the face
   signed char direction(vtol_face const& f) const;
@@ -133,17 +133,20 @@ class vtol_two_chain
   //---------------------------------------------------------------------------
   //: Is `inferior' type valid for `this' ?
   //---------------------------------------------------------------------------
-  virtual bool valid_inferior_type(vtol_topology_object const& inferior) const;
+  virtual bool valid_inferior_type(vtol_topology_object const& inferior) const
+  { return inferior.cast_to_face()!=0; }
 
   //---------------------------------------------------------------------------
   //: Is `superior' type valid for `this' ?
   //---------------------------------------------------------------------------
-  virtual bool valid_superior_type(vtol_topology_object const& superior) const;
+  virtual bool valid_superior_type(vtol_topology_object const& superior) const
+  { return superior.cast_to_block()!=0; }
 
   //---------------------------------------------------------------------------
   //: Is `chain_inf_sup' type valid for `this' ?
   //---------------------------------------------------------------------------
-  virtual bool valid_chain_type(vtol_chain const& chain_inf_sup) const;
+  virtual bool valid_chain_type(vtol_chain const& chain_inf_sup) const
+  { return chain_inf_sup.cast_to_two_chain()!=0; }
 
   // network access methods
 
@@ -177,7 +180,7 @@ class vtol_two_chain
   virtual vcl_vector<vtol_face*> *outside_boundary_compute_faces(void);
   virtual vcl_vector<vtol_two_chain*> *outside_boundary_compute_two_chains(void);
 
-  virtual int num_faces(void) const { return numinf(); }
+  int num_faces(void) const { return numinf(); }
 
   virtual void correct_chain_directions(void);
 

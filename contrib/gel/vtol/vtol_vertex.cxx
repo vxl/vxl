@@ -1,7 +1,7 @@
 // This is gel/vtol/vtol_vertex.cxx
 #include "vtol_vertex.h"
 //:
-//  \file
+// \file
 
 #include <vtol/vtol_zero_chain.h>
 #include <vtol/vtol_edge.h>
@@ -12,17 +12,9 @@
 #include <vcl_algorithm.h> // for vcl_find()
 #include <vcl_cassert.h>
 
-
 //***************************************************************************
 // Initialization
 //***************************************************************************
-
-//---------------------------------------------------------------------------
-// Default constructor
-//---------------------------------------------------------------------------
-vtol_vertex::vtol_vertex(void)
-{
-}
 
 #if 0
 //---------------------------------------------------------------------------
@@ -59,15 +51,6 @@ vtol_vertex::~vtol_vertex()
 //*
 //*    Accessor Functions
 //*
-
-//---------------------------------------------------------------------------
-//: Return the topology type
-//---------------------------------------------------------------------------
-vtol_vertex::vtol_topology_object_type
-vtol_vertex::topology_type(void) const
-{
-  return VERTEX;
-}
 
 //: Returns a list of Vertices which only contains a pointer to itself.
 vcl_vector<vtol_vertex*> *vtol_vertex::compute_vertices(void)
@@ -110,29 +93,6 @@ vcl_vector<vtol_one_chain*>* vtol_vertex::compute_one_chains(void)
 vcl_vector<vtol_block*>* vtol_vertex::compute_blocks(void)
 {
   SEL_SUP(vtol_block,compute_blocks);
-}
-
-
-//***************************************************************************
-// Status report
-//***************************************************************************
-
-//---------------------------------------------------------------------------
-//: Is `inferior' type valid for `this' ?
-//---------------------------------------------------------------------------
-bool
-vtol_vertex::valid_inferior_type(const vtol_topology_object &) const
-{
-  return false; // a vertex can never have an inferior
-}
-
-//---------------------------------------------------------------------------
-//: Is `superior' type valid for `this' ?
-//---------------------------------------------------------------------------
-bool
-vtol_vertex::valid_superior_type(const vtol_topology_object &superior) const
-{
-  return superior.cast_to_zero_chain()!=0;
 }
 
 //******************************************************
@@ -214,10 +174,9 @@ vtol_vertex &vtol_vertex::operator=(const vtol_vertex &other)
 bool vtol_vertex::operator==(const vsol_spatial_object_2d& obj) const
 {
   return
-  obj.spatial_type() == vsol_spatial_object_2d::TOPOLOGYOBJECT &&
-   ((vtol_topology_object const&)obj).topology_type() == vtol_topology_object::VERTEX
-  ? *this == (vtol_vertex const&) (vtol_topology_object const&) obj
-  : false;
+   obj.cast_to_topology_object() &&
+   obj.cast_to_topology_object()->cast_to_vertex() &&
+   *this == *obj.cast_to_topology_object()->cast_to_vertex();
 }
 
 
@@ -226,13 +185,7 @@ bool vtol_vertex::operator==(const vsol_spatial_object_2d& obj) const
 //---------------------------------------------------------------------------
 bool vtol_vertex::operator== (const vtol_vertex &other) const
 {
-  bool result;
-
-  result=this==&other;
-  if (!result)
-    result= compare_geometry(other);
-    // (*point_)==(*(other.point_));
-  return result;
+  return this==&other || compare_geometry(other);
 }
 
 // ******************************************************

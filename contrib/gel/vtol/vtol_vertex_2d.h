@@ -1,7 +1,8 @@
+// This is gel/vtol/vtol_vertex_2d.h
 #ifndef vtol_vertex_2d_h
 #define vtol_vertex_2d_h
 //:
-//  \file
+// \file
 // \brief Topological container for a spatial point
 //
 //  The vtol_vertex_2d class is used to represent either a 2D or 2D point on
@@ -27,7 +28,7 @@
 class vtol_vertex_2d
   : public vtol_vertex
 {
-public:
+ public:
   //***************************************************************************
   // Initialization
   //***************************************************************************
@@ -75,7 +76,7 @@ public:
   //---------------------------------------------------------------------------
   //: Return the point
   //---------------------------------------------------------------------------
-  virtual vsol_point_2d_sptr point(void) const;
+  vsol_point_2d_sptr point(void) const;
 
   //---------------------------------------------------------------------------
   //: Set the point (the point is not copied)

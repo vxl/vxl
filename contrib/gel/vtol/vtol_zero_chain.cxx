@@ -1,3 +1,4 @@
+// This is gel/vtol/vtol_zero_chain.cxx
 #include "vtol_zero_chain.h"
 //:
 // \file
@@ -10,13 +11,6 @@
 //***************************************************************************
 // Initialization
 //***************************************************************************
-
-//---------------------------------------------------------------------------
-//: Default constructor. Empty zero-chain
-//---------------------------------------------------------------------------
-vtol_zero_chain::vtol_zero_chain(void)
-{
-}
 
 //---------------------------------------------------------------------------
 //: Constructor from two vertices (to make an edge creation easier)
@@ -72,15 +66,6 @@ vsol_spatial_object_2d_sptr vtol_zero_chain::clone(void) const
 }
 
 //---------------------------------------------------------------------------
-//: Return the topology type
-//---------------------------------------------------------------------------
-vtol_zero_chain::vtol_topology_object_type
-vtol_zero_chain::topology_type(void) const
-{
-  return ZEROCHAIN;
-}
-
-//---------------------------------------------------------------------------
 //: Return the first vertex of `this'. If it does not exist, return 0
 //---------------------------------------------------------------------------
 vtol_vertex_sptr vtol_zero_chain::v0(void) const
@@ -89,36 +74,6 @@ vtol_vertex_sptr vtol_zero_chain::v0(void) const
     return (vtol_vertex*)(inferiors()->begin()->ptr());
   else
     return 0;
-}
-
-//***************************************************************************
-// Status report
-//***************************************************************************
-
-//---------------------------------------------------------------------------
-//: Is `inferior' type valid for `this' ?
-//---------------------------------------------------------------------------
-bool
-vtol_zero_chain::valid_inferior_type(const vtol_topology_object &inferior) const
-{
-   return inferior.cast_to_vertex()!=0;
-}
-
-//---------------------------------------------------------------------------
-//: Is `superior' type valid for `this' ?
-//---------------------------------------------------------------------------
-bool
-vtol_zero_chain::valid_superior_type(const vtol_topology_object &superior) const
-{
-  return superior.cast_to_edge()!=0;
-}
-
-//---------------------------------------------------------------------------
-//: Return the length of the zero-chain
-//---------------------------------------------------------------------------
-int vtol_zero_chain::length(void) const
-{
- return numinf();
 }
 
 //: get list of vertices
@@ -171,20 +126,21 @@ vcl_vector<vtol_block*>* vtol_zero_chain::compute_blocks(void)
 
 bool vtol_zero_chain::operator==(const vtol_zero_chain &other) const
 {
+  if (this==&other) return true;
+
+  // Check to see if the number of vertices is the same
+  if (numinf()!=other.numinf())
+    return false;
+
   const topology_list *inf1=inferiors();
   const topology_list *inf2=other.inferiors();
   topology_list::const_iterator i1;
   topology_list::const_iterator i2;
 
-  bool result=this==&other;
+  for (i1=inf1->begin(),i2=inf2->begin(); i1!=inf1->end(); ++i1,++i2)
+    if (!(*(*i1)==*(*i2))) return false;
 
-  if (!result)
-    {
-      result=inf1->size()==inf2->size();
-      for (i1=inf1->begin(),i2=inf2->begin(); i1!=inf1->end()&&result; ++i1,++i2)
-        result=*(*i1)==*(*i2);
-    }
-  return result;
+  return true;
 }
 
 
@@ -193,20 +149,18 @@ bool vtol_zero_chain::operator==(const vtol_zero_chain &other) const
 bool vtol_zero_chain::operator==(const vsol_spatial_object_2d& obj) const
 {
   return
-   obj.spatial_type() == vsol_spatial_object_2d::TOPOLOGYOBJECT &&
-   ((vtol_topology_object const&)obj).topology_type() == vtol_topology_object::ZEROCHAIN
-  ? *this == (vtol_zero_chain const&) (vtol_topology_object const&) obj
-  : false;
+   obj.cast_to_topology_object() &&
+   obj.cast_to_topology_object()->cast_to_zero_chain() &&
+   *this == *obj.cast_to_topology_object()->cast_to_zero_chain();
 }
 
-
-/*******  Print Methods   *************/
+//*******  Print Methods   *************
 
 //: print the object
 
 void vtol_zero_chain::print(vcl_ostream &strm) const
 {
-  strm << "<vtol_zero_chain " << inferiors()->size() << " " << (void const*)this << ">\n";
+  strm << "<vtol_zero_chain " << inferiors()->size() << ' ' << (void const*)this << ">\n";
 }
 
 void vtol_zero_chain::describe(vcl_ostream &strm,

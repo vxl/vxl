@@ -1,7 +1,8 @@
+// This is gel/vtol/vtol_vertex.h
 #ifndef vtol_vertex_h
 #define vtol_vertex_h
 //:
-//  \file
+// \file
 // \brief Topological container for a spatial point
 //
 //  The vtol_vertex class is used to represent either a 2D or 3D point on
@@ -33,7 +34,7 @@ class vtol_block;
 class vtol_vertex
   : public vtol_topology_object
 {
-public:
+ public:
   //***************************************************************************
   // Initialization
   //***************************************************************************
@@ -41,7 +42,7 @@ public:
   //---------------------------------------------------------------------------
   //: Default constructor
   //---------------------------------------------------------------------------
-  explicit vtol_vertex(void);
+  explicit vtol_vertex(void) {}
 
   //---------------------------------------------------------------------------
   //: Destructor
@@ -53,7 +54,7 @@ public:
   //---------------------------------------------------------------------------
   //: Return the topology type
   //---------------------------------------------------------------------------
-  virtual vtol_topology_object_type topology_type(void) const;
+  virtual vtol_topology_object_type topology_type(void) const { return VERTEX; }
 
   //---------------------------------------------------------------------------
   //: create a list of all connected vertices
@@ -96,7 +97,6 @@ public:
   //---------------------------------------------------------------------------
   virtual vtol_vertex_2d *cast_to_vertex_2d(void) {return 0;}
 
-
   //***************************************************************************
   // Status report
   //***************************************************************************
@@ -105,13 +105,15 @@ public:
   //: Is `inferior' type valid for `this' ?
   //---------------------------------------------------------------------------
   virtual bool
-  valid_inferior_type(const vtol_topology_object &inferior) const;
+  valid_inferior_type(const vtol_topology_object &inferior) const
+  { return false; } // a vertex can never have an inferior
 
   //---------------------------------------------------------------------------
   //: Is `superior' type valid for `this' ?
   //---------------------------------------------------------------------------
   virtual bool
-  valid_superior_type(const vtol_topology_object &superior) const;
+  valid_superior_type(const vtol_topology_object &superior) const
+  { return superior.cast_to_zero_chain()!=0; }
 
   //---------------------------------------------------------------------------
   //: Is `this' connected with `v2' ?
@@ -135,13 +137,13 @@ public:
   void print(vcl_ostream &strm=vcl_cout) const;
   void describe(vcl_ostream &strm=vcl_cout, int blanking=0) const;
 
-protected:
+ protected:
 
   //: have the inherited classes copy the geometry
   virtual void copy_geometry(const vtol_vertex &other)=0;
   virtual bool compare_geometry(const vtol_vertex &other) const =0;
 
-public:
+ public:
 
   // : Warning - should not be used by clients
   virtual vcl_vector<vtol_vertex*> *compute_vertices(void);

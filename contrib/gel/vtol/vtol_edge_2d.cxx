@@ -1,7 +1,7 @@
+// This is gel/vtol/vtol_edge_2d.cxx
+#include "vtol_edge_2d.h"
 //:
 // \file
-
-#include "vtol_edge_2d.h"
 
 #include <vtol/vtol_zero_chain.h>
 #include <vsol/vsol_curve_2d.h>
@@ -11,16 +11,6 @@
 //***************************************************************************
 // Initialization
 //***************************************************************************
-
-//---------------------------------------------------------------------------
-//: Default constructor. Empty edge. Not a valid edge.
-//---------------------------------------------------------------------------
-vtol_edge_2d::vtol_edge_2d(void)
-{
-  curve_=0;
-  v1_=0;
-  v2_=0;
-}
 
 //---------------------------------------------------------------------------
 //: Constructor from the two endpoints `new_v1', `new_v2' and from a curve `new_curve'.
@@ -192,7 +182,6 @@ vtol_edge_2d::~vtol_edge_2d()
 {
 }
 
-
 // ******************************************************
 //
 //    Operators
@@ -222,20 +211,16 @@ bool vtol_edge_2d::operator==(const vtol_edge_2d &other) const
 //: edge equality
 bool vtol_edge_2d::operator==(const vtol_edge &other) const
 {
-  if (other.cast_to_edge_2d())
-    return *this == (vtol_edge_2d const&) other;
-  else
-    return false;
+  return other.cast_to_edge_2d() && *this == *other.cast_to_edge_2d();
 }
 
 //: spatial object equality
 bool vtol_edge_2d::operator==(const vsol_spatial_object_2d& obj) const
 {
   return
-   obj.spatial_type() == vsol_spatial_object_2d::TOPOLOGYOBJECT &&
-   ((vtol_topology_object const&)obj).topology_type() == vtol_topology_object::EDGE
-  ? *this == (vtol_edge_2d const&) (vtol_topology_object const&) obj
-  : false;
+   obj.cast_to_topology_object() &&
+   obj.cast_to_topology_object()->cast_to_edge() &&
+   *this == *obj.cast_to_topology_object()->cast_to_edge();
 }
 
 // ******************************************************

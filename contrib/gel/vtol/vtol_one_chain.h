@@ -1,3 +1,4 @@
+// This is gel/vtol/vtol_one_chain.h
 #ifndef vtol_one_chain_h_
 #define vtol_one_chain_h_
 //-----------------------------------------------------------------------------
@@ -24,8 +25,8 @@
 //     JLM Jan 1998  Added method to get direction of an edge
 //     JLM Feb 1999  Added correct method for ComputeBoundingBox()
 //     PTU May 2000  ported to vxl
-//     JLM Nov 2002  Modified the compute_bounding_box method to use 
-//                   box::grow_minmax_bounds for uniformity and to 
+//     JLM Nov 2002  Modified the compute_bounding_box method to use
+//                   box::grow_minmax_bounds for uniformity and to
 //                   avoid dependence on dimension.  Old method was strictly 2-d.
 // \endverbatim
 //-----------------------------------------------------------------------------
@@ -53,7 +54,7 @@ class vtol_one_chain
   //---------------------------------------------------------------------------
   //: Default constructor
   //---------------------------------------------------------------------------
-  explicit vtol_one_chain(void);
+  explicit vtol_one_chain(void) { set_cycle(false); }
 
   //---------------------------------------------------------------------------
   //: Constructor from an array of edges
@@ -89,7 +90,7 @@ class vtol_one_chain
   //---------------------------------------------------------------------------
   //: Return the topology type
   //---------------------------------------------------------------------------
-  virtual vtol_topology_object_type topology_type(void) const;
+  virtual vtol_topology_object_type topology_type(void) const {return ONECHAIN;}
 
   virtual signed char direction(vtol_edge const& e) const;
 
@@ -115,19 +116,22 @@ class vtol_one_chain
   //: Is `inferior' type valid for `this' ?
   //---------------------------------------------------------------------------
   virtual bool
-  valid_inferior_type(vtol_topology_object const& inferior) const;
+  valid_inferior_type(vtol_topology_object const& inferior) const
+  { return inferior.cast_to_edge() != 0; }
 
   //---------------------------------------------------------------------------
   //: Is `superior' type valid for `this' ?
   //---------------------------------------------------------------------------
   virtual bool
-  valid_superior_type(vtol_topology_object const& superior) const;
+  valid_superior_type(vtol_topology_object const& superior) const
+  { return superior.cast_to_face() != 0; }
 
   //---------------------------------------------------------------------------
   //: Is `chain_inf_sup' type valid for `this' ?
   //---------------------------------------------------------------------------
   virtual bool
-  valid_chain_type(vtol_chain const& chain_inf_sup) const;
+  valid_chain_type(vtol_chain const& chain_inf_sup) const
+  { return chain_inf_sup.cast_to_one_chain() != 0; }
 
   //: accessors for outside boundary elements
 
@@ -150,7 +154,7 @@ class vtol_one_chain
   virtual void compute_bounding_box(void); //A local implementation
 
   virtual vtol_edge_sptr edge(int i) const;
-  virtual int num_edges(void) const { return numinf(); }
+  int num_edges(void) const { return numinf(); }
 
   virtual void determine_edge_directions(void);
   virtual void add_edge(vtol_edge &, bool);

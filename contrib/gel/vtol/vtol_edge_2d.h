@@ -1,7 +1,8 @@
+// This is gel/vtol/vtol_edge_2d.h
 #ifndef vtol_edge_2d_h
 #define vtol_edge_2d_h
 //:
-//  \file
+// \file
 // \brief Represents the basic 1D topological entity
 //
 //  The vtol_edge_2d class is used to represent a topological edge.  An vtol_edge_2d
@@ -46,15 +47,14 @@
 #include <vsol/vsol_curve_2d_sptr.h>
 #include <vtol/vtol_edge.h>
 
-//: \brief topological edge
+//: topological edge
 
 class vtol_edge_2d
   : public vtol_edge
 {
-private:
   vsol_curve_2d_sptr curve_;
 
-public:
+ public:
   //***************************************************************************
   // Initialization
   //***************************************************************************
@@ -62,7 +62,7 @@ public:
   //---------------------------------------------------------------------------
   //: Default constructor. Empty edge. Not a valid edge.
   //---------------------------------------------------------------------------
-  explicit vtol_edge_2d(void);
+  explicit vtol_edge_2d(void) : vtol_edge(), curve_(0) {}
 
   //---------------------------------------------------------------------------
   //: Constructor from the two endpoints `new_v1', `new_v2' and from a curve `new_curve'.
@@ -110,7 +110,7 @@ public:
   //---------------------------------------------------------------------------
   //: Return the curve associated to `this'
   //---------------------------------------------------------------------------
-  virtual vsol_curve_2d_sptr curve(void) const { return curve_; }
+  vsol_curve_2d_sptr curve(void) const { return curve_; }
 
   //---------------------------------------------------------------------------
   //: Set the curve with `new_curve'

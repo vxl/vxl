@@ -15,20 +15,6 @@
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-//: Default constructor. Empty edge. Not a valid edge.
-//---------------------------------------------------------------------------
-vtol_edge::vtol_edge(void)
-{
-  v1_=0;
-  v2_=0;
-  vtol_zero_chain_sptr c = new vtol_zero_chain();
-  // vtol_zero_chain c;
-  // link_inferior ( ( (vtol_topology_object*) new vtol_zero_chain) );
-  link_inferior ( *c );
-}
-
-
-//---------------------------------------------------------------------------
 //: Return the first non-empty zero-chain of `this'
 //---------------------------------------------------------------------------
 vtol_zero_chain_sptr vtol_edge::zero_chain(void) const
@@ -183,28 +169,6 @@ void vtol_edge::remove_edge_loop(vtol_one_chain &doomed_edge_loop)
   doomed_edge_loop.unlink_inferior(*this);
 }
 
-//***************************************************************************
-// Status report
-//***************************************************************************
-
-//---------------------------------------------------------------------------
-//: Is `inferior' type valid for `this' ?
-//---------------------------------------------------------------------------
-bool
-vtol_edge::valid_inferior_type(const vtol_topology_object &inferior) const
-{
-  return inferior.cast_to_zero_chain() != 0;
-}
-
-//---------------------------------------------------------------------------
-//: Is `superior' type valid for `this' ?
-//---------------------------------------------------------------------------
-bool
-vtol_edge::valid_superior_type(const vtol_topology_object &superior) const
-{
-  return superior.cast_to_one_chain() != 0;
-}
-
 // ******************************************************
 //
 //    Operators
@@ -216,11 +180,13 @@ bool vtol_edge::operator==(const vtol_edge &other) const
 {
   if (this==&other) return true;
 
+  if (numinf()!=other.numinf())
+    return false;
 
   if (!compare_geometry(other))
     return false;
 
-  if (!(*v1_==*(other.v1_)) || !(*v2_==*(other.v2_))) // ((*v1_!=*(other.v1_)) || (*v2_!=*(other.v2_)))
+  if (!(*v1_==*(other.v1_)) || !(*v2_==*(other.v2_)))
     return false;
 
   vtol_zero_chain_sptr zc1=zero_chain();
@@ -234,10 +200,10 @@ bool vtol_edge::operator==(const vtol_edge &other) const
 
 bool vtol_edge::operator==(const vsol_spatial_object_2d& obj) const
 {
-  return obj.spatial_type() == vsol_spatial_object_2d::TOPOLOGYOBJECT &&
-   ((vtol_topology_object const&)obj).topology_type() == vtol_topology_object::EDGE
-  ? *this == (vtol_edge const&) (vtol_topology_object const&) obj
-  : false;
+  return
+   obj.cast_to_topology_object() &&
+   obj.cast_to_topology_object()->cast_to_edge() &&
+   *this == *obj.cast_to_topology_object()->cast_to_edge();
 }
 
 // ******************************************************
@@ -401,16 +367,16 @@ void vtol_edge::describe(vcl_ostream &strm,
   print(strm);
   for (int i2=0; i2<blanking; ++i2) strm << ' ';
   if (v1_) v1_->print(strm);
-  else     strm << "Null vertex 1" << vcl_endl;
+  else     strm << "Null vertex 1\n";
 
   for (int i3=0; i3<blanking; ++i3) strm << ' ';
   if (v2_) v2_->print(strm);
-  else     strm << "Null vertex 2" << vcl_endl;
+  else     strm << "Null vertex 2\n";
 }
 
 //:
 // This method outputs a brief vtol_edge info with vtol_edge object address.
 void vtol_edge::print(vcl_ostream &strm) const
 {
-   strm<<"<vtol_edge  "<<"  "<<(void const *)this <<"> with id "<<get_id()<<vcl_endl;
+   strm<<"<vtol_edge "<<(void const *)this <<"> with id "<<get_id()<<'\n';
 }

@@ -1,7 +1,8 @@
+// This is gel/vtol/vtol_face_2d.h
 #ifndef vtol_face_2d_h
 #define vtol_face_2d_h
 //:
-//  \file
+// \file
 // \brief Represents the basic 2D topological entity
 //
 //  The vtol_face_2d class is used to represent a topological face.
@@ -45,6 +46,7 @@ class vtol_face_2d
   : public vtol_face
 {
   vsol_region_2d_sptr surface_;
+
  public:
   //***************************************************************************
   // Initialization
@@ -76,7 +78,6 @@ class vtol_face_2d
   //---------------------------------------------------------------------------
   explicit vtol_face_2d(vsol_region_2d &facesurf);
 
-
   //---------------------------------------------------------------------------
   //: Copy constructor
   //---------------------------------------------------------------------------
@@ -98,7 +99,6 @@ class vtol_face_2d
   virtual vsol_region_2d_sptr surface(void) const;
   virtual void set_surface(vsol_region_2d_sptr const& newsurf);
 
-
   //***************************************************************************
   // Replaces dynamic_cast<T>
   //***************************************************************************
@@ -113,11 +113,6 @@ class vtol_face_2d
   //---------------------------------------------------------------------------
   virtual vtol_face_2d *cast_to_face_2d(void) { return this; }
 
-  //***************************************************************************
-  // Status report
-  //***************************************************************************
-
-
   //---------------------------------------------------------------------------
   //: Copy with no links. Only copy the surface if it exists
   //---------------------------------------------------------------------------
@@ -130,8 +125,7 @@ class vtol_face_2d
 
   virtual void print(vcl_ostream &strm=vcl_cout) const;
 
-  virtual void describe(vcl_ostream &strm=vcl_cout,
-                        int blanking=0) const;
+  virtual void describe(vcl_ostream &strm=vcl_cout, int blanking=0) const;
 
   //: provide a mechanism to compare geometry
   virtual bool compare_geometry(const vtol_face &other) const;

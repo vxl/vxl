@@ -75,11 +75,9 @@ vsol_spatial_object_2d_sptr vtol_vertex_2d::clone(void) const
   return new vtol_vertex_2d(*this);
 }
 
-/*
- ******************************************************
- *
- *    Accessor Functions
- */
+//*****************************************************
+//
+//    Accessor Functions
 
 //---------------------------------------------------------------------------
 //: Return the point
@@ -119,11 +117,9 @@ double vtol_vertex_2d::y(void) const
 //---------------------------------------------------------------------------
 void vtol_vertex_2d::set_x(const double new_x)
 {
-  vsol_point_2d new_point(*point_);
-  new_point.set_x(new_x);
-  this->touch(); //Timestamp update
   // Must allocate here, since this pointer will be unref()ed by destructor
-  point_=new vsol_point_2d(new_point);
+  point_=new vsol_point_2d(new_x,point_->y());
+  this->touch(); //Timestamp update
 }
 
 //---------------------------------------------------------------------------
@@ -131,11 +127,9 @@ void vtol_vertex_2d::set_x(const double new_x)
 //---------------------------------------------------------------------------
 void vtol_vertex_2d::set_y(const double new_y)
 {
-  vsol_point_2d new_point(*point_);
-  new_point.set_y(new_y);
-  this->touch(); //Timestamp update
   // Must allocate here, since this pointer will be unref()ed by destructor
-  point_=new vsol_point_2d(new_point);
+  point_=new vsol_point_2d(point_->x(),new_y);
+  this->touch(); //Timestamp update
 }
 
 //*****************************************************
@@ -145,7 +139,7 @@ void vtol_vertex_2d::set_y(const double new_y)
 //: This method outputs a simple text representation of the vertex including its address in memory.
 void vtol_vertex_2d::print(vcl_ostream &strm) const
 {
-  strm<<"<vtol_vertex_2d "<<x()<<","<<y()<<","<<(void const *)this<<"> with id "
+  strm<<"<vtol_vertex_2d "<<x()<<','<<y()<<','<<(void const *)this<<"> with id "
       <<get_id()<<vcl_endl;
 }
 
@@ -162,11 +156,9 @@ void vtol_vertex_2d::describe(vcl_ostream &strm,
 }
 
 
-/*
- ******************************************************
- *
- *    Implementor Functions
- */
+//*****************************************************
+//
+//    Implementor Functions
 
 //-----------------------------------------------------------------------------
 //: Create a line edge from `this' and `other' only if this edge does not exist.
@@ -175,11 +167,11 @@ void vtol_vertex_2d::describe(vcl_ostream &strm,
 //-----------------------------------------------------------------------------
 vtol_edge_sptr vtol_vertex_2d::new_edge(vtol_vertex &other)
 {
-  vtol_vertex_2d *other2d = other.cast_to_vertex_2d();
-  assert(other2d!=0);
-
   // require
   assert(&other != this);
+
+  vtol_vertex_2d *other2d = other.cast_to_vertex_2d();
+  assert(other2d!=0);
 
   // awf: load vrml speed up by factor of 2 using this loop.
   vtol_edge_sptr result = 0;
@@ -251,10 +243,9 @@ vtol_vertex& vtol_vertex_2d::operator=(const vtol_vertex &other)
 bool vtol_vertex_2d::operator==(const vsol_spatial_object_2d& obj) const
 {
   return
-   obj.spatial_type() == vsol_spatial_object_2d::TOPOLOGYOBJECT &&
-   ((vtol_topology_object const&)obj).topology_type() == vtol_topology_object::VERTEX
-  ? *this == (vtol_vertex_2d const&) (vtol_topology_object const&) obj
-  : false;
+   obj.cast_to_topology_object() &&
+   obj.cast_to_topology_object()->cast_to_vertex() &&
+   *this == *obj.cast_to_topology_object()->cast_to_vertex();
 }
 
 //---------------------------------------------------------------------------
@@ -270,17 +261,12 @@ bool vtol_vertex_2d::operator== (const vtol_vertex &other) const
 //---------------------------------------------------------------------------
 bool vtol_vertex_2d::operator== (const vtol_vertex_2d &other) const
 {
-  bool result = this==&other;
-  if (!result)
-    result=(*point_)==(*(other.point_));
-  return result;
+  return this==&other || *point_==*(other.point_);
 }
 
-/*
- ******************************************************
- *
- *    Functions
- */
+//*****************************************************
+//
+//    Functions
 
 //: copy the geometry
 

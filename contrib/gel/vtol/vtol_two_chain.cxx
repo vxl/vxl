@@ -18,26 +18,9 @@
 #include <vtol/vtol_macros.h>
 #include <vcl_cassert.h>
 
-
 //***************************************************************************
 // Initialization
 //***************************************************************************
-
-//---------------------------------------------------------------------------
-//: Default constructor
-//---------------------------------------------------------------------------
-vtol_two_chain::vtol_two_chain(void)
-{
-  is_cycle_=false;
-}
-
-//---------------------------------------------------------------------------
-//: Constructor
-//---------------------------------------------------------------------------
-vtol_two_chain::vtol_two_chain(int num_faces)
-{
-  is_cycle_=false;
-}
 
 //---------------------------------------------------------------------------
 //: Constructor
@@ -125,9 +108,9 @@ vtol_two_chain::vtol_two_chain(vtol_two_chain const &other)
       vtol_face *f=(*tti)->cast_to_face();
 
       vtol_face_sptr new_f = f->copy_with_arrays(newverts,newedges);
-      vcl_cout << "f" << vcl_endl;
+      vcl_cout << "f\n";
       f->describe();
-      vcl_cout << "new f" << vcl_endl;
+      vcl_cout << "new f\n";
       new_f->describe();
 
       assert(*new_f == *f);
@@ -202,15 +185,6 @@ vtol_two_chain::shallow_copy_with_no_links(void) const
   for (di=directions_.begin();di!=directions_.end();++di)
     result->directions_.push_back((*di));
   return result;
-}
-
-//---------------------------------------------------------------------------
-//: Return the topology type
-//---------------------------------------------------------------------------
-vtol_two_chain::vtol_topology_object_type
-vtol_two_chain::topology_type(void) const
-{
-  return TWOCHAIN;
 }
 
 //***************************************************************************
@@ -397,37 +371,6 @@ void vtol_two_chain::remove_block(vtol_block &doomed_block)
 }
 
 //***************************************************************************
-// Status report
-//***************************************************************************
-
-//---------------------------------------------------------------------------
-//: Is `inferior' type valid for `this' ?
-//---------------------------------------------------------------------------
-bool
-vtol_two_chain::valid_inferior_type(vtol_topology_object const &inferior) const
-{
-  return inferior.cast_to_face()!=0;
-}
-
-//---------------------------------------------------------------------------
-//: Is `superior' type valid for `this' ?
-//---------------------------------------------------------------------------
-bool
-vtol_two_chain::valid_superior_type(vtol_topology_object const &superior) const
-{
-  return superior.cast_to_block()!=0;
-}
-
-//---------------------------------------------------------------------------
-//: Is `chain_inf_sup' type valid for `this' ?
-//---------------------------------------------------------------------------
-bool
-vtol_two_chain::valid_chain_type(vtol_chain const& chain_inf_sup) const
-{
-  return chain_inf_sup.cast_to_two_chain()!=0;
-}
-
-//***************************************************************************
 //    Accessor Functions
 //***************************************************************************
 
@@ -488,7 +431,6 @@ zero_chain_list *vtol_two_chain::outside_boundary_zero_chains(void)
 
   return new_ref_list;
 }
-
 
 vcl_vector<vtol_zero_chain*> *vtol_two_chain::outside_boundary_compute_zero_chains(void)
 {
@@ -553,6 +495,7 @@ vcl_vector<vtol_one_chain*> *vtol_two_chain::outside_boundary_compute_one_chains
 {
  SEL_INF(vtol_one_chain,compute_one_chains);
 }
+
 //: one chains
 vcl_vector<vtol_one_chain*> *vtol_two_chain::compute_one_chains(void)
 {
@@ -672,13 +615,12 @@ bool vtol_two_chain::operator==(vtol_two_chain const& other) const
   if (this==&other)
     return true;
 
-  if (inferiors()->size()!=other.inferiors()->size())
+  if (numinf()!=other.numinf())
     return false;
 
   topology_list::const_iterator ti1,ti2;
   for (ti1=other.inferiors()->begin(),ti2=inferiors()->begin();
-       ti2!=inferiors()->end() && ti1!=other.inferiors()->end();
-       ++ti1,++ti2)
+       ti2!=inferiors()->end(); ++ti1,++ti2)
     {
       vtol_face *f1=(*ti2)->cast_to_face();
       vtol_face *f2=(*ti1)->cast_to_face();
@@ -718,10 +660,10 @@ bool vtol_two_chain::operator==(vtol_two_chain const& other) const
 
 bool vtol_two_chain::operator==(vsol_spatial_object_2d const& obj) const
 {
-  return obj.spatial_type() == vsol_spatial_object_2d::TOPOLOGYOBJECT &&
-   ((vtol_topology_object const&)obj).topology_type() == vtol_topology_object::TWOCHAIN
-  ? *this == (vtol_two_chain const&) (vtol_topology_object const&) obj
-  : false;
+  return
+   obj.cast_to_topology_object() &&
+   obj.cast_to_topology_object()->cast_to_two_chain() &&
+   *this == *obj.cast_to_topology_object()->cast_to_two_chain();
 }
 
 //***************************************************************************
@@ -740,7 +682,7 @@ void vtol_two_chain::correct_chain_directions(void)
 
 void vtol_two_chain::print(vcl_ostream &strm) const
 {
-  strm << "<vtol_two_chain " << inferiors()->size() << "  "  << (void const *)this << ">"  << vcl_endl;
+  strm << "<vtol_two_chain with " << inferiors()->size() << " faces>\n";
 }
 
 void vtol_two_chain::describe_directions(vcl_ostream &strm,

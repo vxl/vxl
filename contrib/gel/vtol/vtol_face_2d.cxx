@@ -60,7 +60,6 @@ vtol_face_2d::vtol_face_2d(const vtol_face_2d &other)
       vtol_edge_sptr newedge=new vtol_edge_2d(*(V1->cast_to_vertex()->cast_to_vertex_2d()),
                                               *(V2->cast_to_vertex()->cast_to_vertex_2d()));
 
-
       newedges[j]=newedge->cast_to_topology_object();
       e->set_id(j);
     }
@@ -260,7 +259,6 @@ vtol_face_2d::vtol_face_2d (vsol_region_2d &facesurf)
   // not much, but at least it's a start...
 }
 
-
 //: Set the underlying geometric surface.
 void vtol_face_2d::set_surface(vsol_region_2d_sptr const& newsurf)
 {
@@ -272,14 +270,14 @@ bool vtol_face_2d::operator==(const vtol_face_2d &other) const
 {
   if (this==&other) return true;
 
+  if (numinf()!=other.numinf())
+    return false;
+
   if ( (surface_ && ! other.surface_)
      ||(other.surface_ && ! surface_))
     return false;
 
   if (surface_ && *surface_!=*(other.surface_))
-    return false;
-
-  if (numinf()!=other.numinf())
     return false;
 
   topology_list::const_iterator ti1;
@@ -305,12 +303,11 @@ bool vtol_face_2d::operator==(const vtol_face &other) const
 bool vtol_face_2d::operator==(const vsol_spatial_object_2d& obj) const
 {
   return
-   obj.spatial_type() == vsol_spatial_object_2d::TOPOLOGYOBJECT &&
-   ((vtol_topology_object const&)obj).topology_type() == vtol_topology_object::FACE
-  ? *this == (vtol_face_2d const&) (vtol_topology_object const&) obj
-  : false;
+   obj.cast_to_topology_object() &&
+   obj.cast_to_topology_object()->cast_to_face() &&
+   obj.cast_to_topology_object()->cast_to_face()->cast_to_face_2d() &&
+   *this == *obj.cast_to_topology_object()->cast_to_face()->cast_to_face_2d();
 }
-
 
 //:
 //  This method describes the data members of the vtol_face_2d including the
@@ -336,12 +333,12 @@ void vtol_face_2d::describe(vcl_ostream &strm,
 // includes its address in memory.
 void vtol_face_2d::print(vcl_ostream &strm) const
 {
-  strm << "<vtol_face_2d  ";
+  strm << "<vtol_face_2d ";
 
   topology_list::const_iterator ii;
   for (ii=inferiors()->begin();ii!= inferiors()->end();++ii)
-    strm << " " << (*ii)->inferiors()->size();
-  strm << "   " << (void const *) this << '>' << vcl_endl;
+    strm << ' ' << (*ii)->inferiors()->size();
+  strm << "   " << (void const *) this << ">\n";
 }
 
 //: provide a mechanism to compare geometry

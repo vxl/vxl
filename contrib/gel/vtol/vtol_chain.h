@@ -83,28 +83,27 @@ class vtol_chain
   //---------------------------------------------------------------------------
   //: Is `superior' already a superior of `this' ?
   //---------------------------------------------------------------------------
-  virtual bool
-  is_chain_superior(const vtol_chain &chain_superior) const;
+  virtual bool is_chain_superior(const vtol_chain &chain_superior) const;
 
   //---------------------------------------------------------------------------
   //: Return the number of superiors
   //---------------------------------------------------------------------------
-  virtual int num_chain_superiors(void) const {return chain_superiors_.size();}
+  int num_chain_superiors(void) const {return chain_superiors_.size();}
 
   //---------------------------------------------------------------------------
   //: Return the number of inferiors
   //---------------------------------------------------------------------------
-  virtual int num_chain_inferiors(void) const {return chain_inferiors_.size();}
+  int num_chain_inferiors(void) const {return chain_inferiors_.size();}
 
   //---------------------------------------------------------------------------
   //: Does `this' contain some sub chains ?
   //---------------------------------------------------------------------------
-  virtual bool contains_sub_chains(void)const{return chain_inferiors_.size()>0;}
+  bool contains_sub_chains(void) const { return chain_inferiors_.size()>0; }
 
   //---------------------------------------------------------------------------
   //: Is `this' a sub chain ?
   //---------------------------------------------------------------------------
-  virtual bool is_sub_chain(void) const { return chain_superiors_.size()>0; }
+  bool is_sub_chain(void) const { return chain_superiors_.size()>0; }
 
   //***************************************************************************
   // Basic operations
@@ -142,22 +141,22 @@ class vtol_chain
   //---------------------------------------------------------------------------
   //: Return the directions
   //---------------------------------------------------------------------------
-  virtual const vcl_vector<signed char> *directions(void) const { return &directions_; }
+  const vcl_vector<signed char> *directions(void) const { return &directions_; }
 
   //---------------------------------------------------------------------------
   //: Return the directions
   //---------------------------------------------------------------------------
-  virtual vcl_vector<signed char> *directions(void) { return &directions_; }
+  vcl_vector<signed char> *directions(void) { return &directions_; }
 
   //---------------------------------------------------------------------------
   //: Return the direction `i'
   //---------------------------------------------------------------------------
-  virtual int dir(int i) const { return directions_[i]; }
+  int dir(int i) const { return directions_[i]; }
 
   //---------------------------------------------------------------------------
   //: Set if `this' is a connected chain
   //---------------------------------------------------------------------------
-  virtual void set_cycle(bool new_is_cycle) { is_cycle_=new_is_cycle; }
+  void set_cycle(bool new_is_cycle) { is_cycle_=new_is_cycle; }
 
   //---------------------------------------------------------------------------
   // Task: Reset the chain

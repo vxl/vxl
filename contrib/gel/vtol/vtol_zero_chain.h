@@ -1,9 +1,10 @@
+// This is gel/vtol/vtol_zero_chain.h
 #ifndef vtol_zero_chain_h
 #define vtol_zero_chain_h
 //-----------------------------------------------------------------------------
 //:
-//  \file
-// \brief Represents a set of Vertices
+// \file
+// \brief Represents a set of vertices
 //
 //  The vtol_zero_chain class is used to represent a set of Vertices on
 //  a topological structure. A vtol_zero_chain maintains only the inferiors and
@@ -42,7 +43,7 @@ class vtol_zero_chain
   //---------------------------------------------------------------------------
   //: Default constructor. Empty zero-chain
   //---------------------------------------------------------------------------
-  explicit vtol_zero_chain(void);
+  explicit vtol_zero_chain(void) {}
 
   //---------------------------------------------------------------------------
   //: Constructor from two vertices (to make an edge creation easier)
@@ -77,7 +78,7 @@ class vtol_zero_chain
   //---------------------------------------------------------------------------
   //: Return the topology type
   //---------------------------------------------------------------------------
-  virtual vtol_topology_object_type topology_type(void) const;
+  virtual vtol_topology_object_type topology_type(void) const{return ZEROCHAIN;}
 
   //---------------------------------------------------------------------------
   //: Return the first vertex of `this'. If it does not exist, return 0
@@ -106,18 +107,20 @@ class vtol_zero_chain
   //: Is `inferior' type valid for `this' ?
   //---------------------------------------------------------------------------
   virtual bool
-  valid_inferior_type(const vtol_topology_object &inferior) const;
+  valid_inferior_type(const vtol_topology_object &inferior) const
+  { return inferior.cast_to_vertex()!=0; }
 
   //---------------------------------------------------------------------------
   //: Is `superior' type valid for `this' ?
   //---------------------------------------------------------------------------
   virtual bool
-  valid_superior_type(const vtol_topology_object &superior) const;
+  valid_superior_type(const vtol_topology_object &superior) const
+  { return superior.cast_to_edge()!=0; }
 
   //---------------------------------------------------------------------------
   //: Return the length of the zero-chain
   //---------------------------------------------------------------------------
-  virtual int length(void) const;
+  int length(void) const { return numinf(); }
 
   //---------------------------------------------------------------------------
   //: Is `this' equal to `other' ?

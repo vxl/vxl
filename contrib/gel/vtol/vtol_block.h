@@ -20,7 +20,7 @@
 //                   and possibly inconsistent polyhedra volume geometry)
 //     JNS Dec 1998, Added is_within functions (used in 2D display of a block,
 //                   these functions must be wrong for 3D use)
-//     \endverbatim
+// \endverbatim
 //-----------------------------------------------------------------------------
 
 #include <vtol/vtol_topology_object.h>
@@ -42,7 +42,7 @@ class vtol_block
   //---------------------------------------------------------------------------
   //: Default constructor
   //---------------------------------------------------------------------------
-  explicit vtol_block(void);
+  explicit vtol_block(void) {}
 
   //---------------------------------------------------------------------------
   //: Constructor from a two-chain (inferior)
@@ -82,7 +82,7 @@ class vtol_block
   //---------------------------------------------------------------------------
   //: Return the topology type
   //---------------------------------------------------------------------------
-  virtual vtol_topology_object_type topology_type(void) const;
+  virtual vtol_topology_object_type topology_type(void) const { return BLOCK; }
 
   virtual vtol_two_chain *get_boundary_cycle(void)
   {
@@ -114,13 +114,15 @@ class vtol_block
   //: Is `inferior' type valid for `this' ?
   //---------------------------------------------------------------------------
   virtual bool
-  valid_inferior_type(const vtol_topology_object &inferior) const;
+  valid_inferior_type(const vtol_topology_object &inferior) const
+  { return inferior.cast_to_two_chain()!=0; }
 
   //---------------------------------------------------------------------------
   //: Is `superior' type valid for `this' ?
   //---------------------------------------------------------------------------
   virtual bool
-  valid_superior_type(const vtol_topology_object &superior) const;
+  valid_superior_type(const vtol_topology_object &superior) const
+  { return false; } // "block" has no possible valid superiors
 
   virtual vertex_list *outside_boundary_vertices(void);
   virtual zero_chain_list *outside_boundary_zero_chains(void);

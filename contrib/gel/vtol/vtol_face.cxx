@@ -11,14 +11,6 @@
 #include <vtol/vtol_one_chain.h>
 #include <vtol/vtol_list_functions.h>
 
-
-//---------------------------------------------------------------------------
-// Default constructor
-//---------------------------------------------------------------------------
-vtol_face::vtol_face(void)
-{
-}
-
 //---------------------------------------------------------------------------
 // Destructor
 //---------------------------------------------------------------------------
@@ -27,30 +19,6 @@ vtol_face::~vtol_face()
   unlink_all_inferiors();
 }
 
-
-//***************************************************************************
-// Status report
-//***************************************************************************
-
-//---------------------------------------------------------------------------
-//: Is `inferior' type valid for `this' ?
-//---------------------------------------------------------------------------
-bool
-vtol_face::valid_inferior_type(const vtol_topology_object &inferior) const
-{
-  return inferior.cast_to_one_chain()!=0;
-}
-
-//---------------------------------------------------------------------------
-//: Is `superior' type valid for `this' ?
-//---------------------------------------------------------------------------
-bool
-vtol_face::valid_superior_type(const vtol_topology_object &superior) const
-{
-  return superior.cast_to_two_chain()!=0;
-}
-
-
 //:
 //  Constructor for a planar vtol_face from an ordered list of vertices.
 // edges are constructed by connecting vtol_vertex[i] to
@@ -58,15 +26,6 @@ vtol_face::valid_superior_type(const vtol_topology_object &superior) const
 // i goes from 0 to L.
 // Require: verts.size()>2
 
-
-//---------------------------------------------------------------------------
-//: Return the topology type
-//---------------------------------------------------------------------------
-vtol_face::vtol_topology_object_type
-vtol_face::topology_type(void) const
-{
-  return FACE;
-}
 
 //:
 // Returns an ordered list of vertices of the outside boundary of the
@@ -261,15 +220,14 @@ bool vtol_face::operator==(const vtol_face &other) const
 {
   if (this==&other) return true;
 
-  if (!compare_geometry(other))
+  if (numinf()!=other.numinf())
     return false;
 
-  if (numinf()!=other.numinf())
+  if (!compare_geometry(other))
     return false;
 
   topology_list::const_iterator ti1;
   topology_list::const_iterator ti2;
-
 
   for (ti1=inferiors()->begin(),ti2=other.inferiors()->begin(); ti1!=inferiors()->end(); ++ti1,++ti2)
       if (!(*(*ti1)== *(*ti2)))
@@ -284,10 +242,9 @@ bool vtol_face::operator==(const vtol_face &other) const
 bool vtol_face::operator==(const vsol_spatial_object_2d& obj) const
 {
   return
-   obj.spatial_type() == vsol_spatial_object_2d::TOPOLOGYOBJECT &&
-   ((vtol_topology_object const&)obj).topology_type() == vtol_topology_object::FACE
-  ? *this == (vtol_face const&) (vtol_topology_object const&) obj
-  : false;
+   obj.cast_to_topology_object() &&
+   obj.cast_to_topology_object()->cast_to_face() &&
+   *this == *obj.cast_to_topology_object()->cast_to_face();
 }
 
 //: Returns the ith inferior vtol_one_chain of the vtol_face.
@@ -298,7 +255,7 @@ vtol_one_chain *vtol_face::get_one_chain(int which)
     return (inferiors_[which])->cast_to_one_chain();
   else
     {
-      vcl_cerr << "Tried to get bad edge_loop from face" << vcl_endl;
+      vcl_cerr << "Tried to get bad edge_loop from face\n";
       return NULL;
     }
 }
@@ -385,7 +342,7 @@ void vtol_face::describe(vcl_ostream &strm,
       if ((inferiors_[i])->cast_to_one_chain()!=0)
         (inferiors_[i])->cast_to_one_chain()->describe(strm,blanking);
       else
-        vcl_cout << "*** Odd inferior for a face" << vcl_endl;
+        vcl_cout << "*** Odd inferior for a face\n";
     }
 }
 
@@ -394,10 +351,10 @@ void vtol_face::describe(vcl_ostream &strm,
 // includes its address in memory.
 void vtol_face::print(vcl_ostream &strm) const
 {
-  strm << "<vtol_face  ";
+  strm << "<vtol_face ";
 
   topology_list::const_iterator ii;
   for (ii=inferiors()->begin();ii!= inferiors()->end();++ii)
-    strm << " " << (*ii)->inferiors()->size();
+    strm << ' ' << (*ii)->inferiors()->size();
   strm << "   " << (void const *) this << ">\n";
 }

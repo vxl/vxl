@@ -20,14 +20,6 @@ vtol_edge_sptr vtol_one_chain::edge(int i) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// Default constructor
-//---------------------------------------------------------------------------
-vtol_one_chain::vtol_one_chain(void)
-{
-  set_cycle(false);
-}
-
-//---------------------------------------------------------------------------
 //: Constructor from an array of edges
 //---------------------------------------------------------------------------
 vtol_one_chain::vtol_one_chain(edge_list &edgs,
@@ -153,15 +145,6 @@ vtol_one_chain::copy_with_arrays(topology_list &verts,
 //
 // **********************************
 
-//---------------------------------------------------------------------------
-//: Return the topology type
-//---------------------------------------------------------------------------
-vtol_one_chain::vtol_topology_object_type
-vtol_one_chain::topology_type(void) const
-{
-  return ONECHAIN;
-}
-
 //: Get the direction of the edge "e" in the onechain.
 signed char vtol_one_chain::direction(vtol_edge const &e) const
 {
@@ -176,38 +159,6 @@ signed char vtol_one_chain::direction(vtol_edge const &e) const
     }
   return (signed char)1;
 }
-
-//***************************************************************************
-// Status report
-//***************************************************************************
-
-//---------------------------------------------------------------------------
-//: Is `inferior' type valid for `this' ?
-//---------------------------------------------------------------------------
-bool
-vtol_one_chain::valid_inferior_type(vtol_topology_object const &inferior) const
-{
-  return inferior.cast_to_edge() != 0;
-}
-
-//---------------------------------------------------------------------------
-//: Is `superior' type valid for `this' ?
-//---------------------------------------------------------------------------
-bool
-vtol_one_chain::valid_superior_type(vtol_topology_object const &superior) const
-{
-  return superior.cast_to_face() != 0;
-}
-
-//---------------------------------------------------------------------------
-//: Is `chain_inf_sup' type valid for `this' ?
-//---------------------------------------------------------------------------
-bool
-vtol_one_chain::valid_chain_type(vtol_chain const &chain_inf_sup) const
-{
-  return chain_inf_sup.cast_to_one_chain() != 0;
-}
-
 
 //---------------------------------------------------------------------------
 //: Get the outside boundary vertices
@@ -648,58 +599,48 @@ void vtol_one_chain::remove_edge(vtol_edge &doomed_edge,
 //---------------------------------------------------------------------------
 bool vtol_one_chain::operator==(vtol_one_chain const &other) const
 {
-  bool result;
+  if (this==&other) return true;
+
+  // Check to see if the number of edges is the same
+  if (numinf()!=other.numinf())
+    return false;
 
   const topology_list *inf1=inferiors();
   const topology_list *inf2=other.inferiors();
 
-  result=this==&other;
-
-  if (!result)
-    {
-      // Check to see if the number of vertices is the same
-
-      result=inf1->size()==inf2->size();
-
-      if (result)
-        {
-          topology_list::const_iterator i1;
-          topology_list::const_iterator i2;
-          for (i1=inf1->begin() , i2 = inf2->begin(); i1 != inf1->end(); ++i1 , ++i2)
-          {
-            if (!( *(*i1) == *(*i2) ))
-              return false;
-
-            // Comparing the directions_
-            const vcl_vector<signed char> *dir1=directions();
-            const vcl_vector<signed char> *dir2=other.directions();
-
-            if ((dir1->size()!=dir2->size())||(is_cycle()!=other.is_cycle()))
-              return false;
-
-            vcl_vector<signed char>::const_iterator d1;
-            vcl_vector<signed char>::const_iterator d2;
-            for (d1=dir1->begin(), d2=dir2->begin(); d1 != dir1->end(); ++d1, ++d2)
-              if (!(*d1 == *d2))
-            return false;
-
-            // compare onechains that make up any holes
-            const chain_list &righth=chain_inferiors_;
-            const chain_list &lefth=other.chain_inferiors_;
-            if (righth.size() != lefth.size())
-              return false;
-
-            chain_list::const_iterator r;
-            chain_list::const_iterator l;
-            for (r=righth.begin(), l=lefth.begin(); r!=righth.end(); ++r, ++l)
-              if ( !(*(*r) == *(*l)) ) // ( *(*r) != *(*l))
-                return false;
-          }
-          return true;
-        }
+  topology_list::const_iterator i1;
+  topology_list::const_iterator i2;
+  for (i1=inf1->begin() , i2 = inf2->begin(); i1 != inf1->end(); ++i1 , ++i2)
+  {
+    if (!( *(*i1) == *(*i2) ))
       return false;
-    }
-  return result;
+
+    // Comparing the directions_
+    const vcl_vector<signed char> *dir1=directions();
+    const vcl_vector<signed char> *dir2=other.directions();
+
+    if ((dir1->size()!=dir2->size())||(is_cycle()!=other.is_cycle()))
+      return false;
+
+    vcl_vector<signed char>::const_iterator d1;
+    vcl_vector<signed char>::const_iterator d2;
+    for (d1=dir1->begin(), d2=dir2->begin(); d1 != dir1->end(); ++d1, ++d2)
+      if (!(*d1 == *d2))
+    return false;
+
+    // compare onechains that make up any holes
+    const chain_list &righth=chain_inferiors_;
+    const chain_list &lefth=other.chain_inferiors_;
+    if (righth.size() != lefth.size())
+      return false;
+
+    chain_list::const_iterator r;
+    chain_list::const_iterator l;
+    for (r=righth.begin(), l=lefth.begin(); r!=righth.end(); ++r, ++l)
+      if ( !(*(*r) == *(*l)) ) // ( *(*r) != *(*l))
+        return false;
+  }
+  return true;
 }
 
 //---------------------------------------------------------------------------
@@ -757,10 +698,9 @@ void vtol_one_chain::reverse_directions(void)
 bool vtol_one_chain::operator==(vsol_spatial_object_2d const& obj) const
 {
   return
-   obj.spatial_type() == vsol_spatial_object_2d::TOPOLOGYOBJECT &&
-   ((vtol_topology_object const&)obj).topology_type() == vtol_topology_object::ONECHAIN
-  ? *this == (vtol_one_chain const&) (vtol_topology_object const&) obj
-  : false;
+   obj.cast_to_topology_object() &&
+   obj.cast_to_topology_object()->cast_to_one_chain() &&
+   *this == *obj.cast_to_topology_object()->cast_to_one_chain();
 }
 
 //---------------------------------------------------------------------------

@@ -1,6 +1,6 @@
+// This is gel/vtol/vtol_edge.h
 #ifndef vtol_edge_h
 #define vtol_edge_h
-
 //:
 // \file
 // \brief Represents the basic 1D topological entity
@@ -50,7 +50,7 @@ class vtol_edge_2d;
 class vtol_edge
   : public vtol_topology_object
 {
-protected:
+ protected:
 
   // Keeping vertex pointers inside of edge
   // for convenience...for now.
@@ -58,7 +58,7 @@ protected:
   vtol_vertex_sptr v1_;
   vtol_vertex_sptr v2_;
 
-public:
+ public:
   //***************************************************************************
   // Initialization
   //***************************************************************************
@@ -66,7 +66,7 @@ public:
   //---------------------------------------------------------------------------
   //: Default constructor. Empty edge. Not a valid edge.
   //---------------------------------------------------------------------------
-  explicit vtol_edge(void);
+  explicit vtol_edge(void):v1_(0),v2_(0){link_inferior(*(new vtol_zero_chain));}
 
   //---------------------------------------------------------------------------
   //: Destructor
@@ -81,12 +81,12 @@ public:
   //---------------------------------------------------------------------------
   //: Return the first endpoint
   //---------------------------------------------------------------------------
-  virtual vtol_vertex_sptr v1(void) const { return v1_; }
+  vtol_vertex_sptr v1(void) const { return v1_; }
 
   //---------------------------------------------------------------------------
   //: Return the second endpoint
   //---------------------------------------------------------------------------
-  virtual vtol_vertex_sptr v2(void) const { return v2_; }
+  vtol_vertex_sptr v2(void) const { return v2_; }
 
   //---------------------------------------------------------------------------
   //: Return the first non-empty zero-chain of `this'
@@ -145,7 +145,6 @@ public:
   //---------------------------------------------------------------------------
   virtual vtol_edge_2d *cast_to_edge_2d(void) {return 0;}
 
-
   //***************************************************************************
   // Status report
   //***************************************************************************
@@ -154,13 +153,15 @@ public:
   //: Is `inferior' type valid for `this' ?
   //---------------------------------------------------------------------------
   virtual bool
-  valid_inferior_type(const vtol_topology_object &inferior) const;
+  valid_inferior_type(const vtol_topology_object &inferior) const
+  { return inferior.cast_to_zero_chain() != 0; }
 
   //---------------------------------------------------------------------------
   //: Is `superior' type valid for `this' ?
   //---------------------------------------------------------------------------
   virtual bool
-  valid_superior_type(const vtol_topology_object &superior) const;
+  valid_superior_type(const vtol_topology_object &superior) const
+  { return superior.cast_to_one_chain() != 0; }
 
   //:
   // Inferior/Superior Accessor Methods

@@ -1,7 +1,7 @@
 // This is gel/vtol/vtol_block.cxx
 #include "vtol_block.h"
 //:
-//  \file
+// \file
 
 #include <vtol/vtol_edge.h>
 #include <vtol/vtol_two_chain.h>
@@ -13,13 +13,6 @@
 //***************************************************************************
 // Initialization
 //***************************************************************************
-
-//---------------------------------------------------------------------------
-// Default constructor
-//---------------------------------------------------------------------------
-vtol_block::vtol_block(void)
-{
-}
 
 //---------------------------------------------------------------------------
 //: Constructor from a two-chain (inferior)
@@ -121,42 +114,6 @@ vtol_block::~vtol_block()
 vsol_spatial_object_2d_sptr vtol_block::clone(void) const
 {
   return new vtol_block(*this);
-}
-
-// ******************************************************
-//
-//    Accessor Functions
-//
-
-//---------------------------------------------------------------------------
-//: Return the topology type
-//---------------------------------------------------------------------------
-vtol_block::vtol_topology_object_type
-vtol_block::topology_type(void) const
-{
-  return BLOCK;
-}
-
-//***************************************************************************
-// Status report
-//***************************************************************************
-
-//---------------------------------------------------------------------------
-//: Is `inferior' type valid for `this' ?
-//---------------------------------------------------------------------------
-bool
-vtol_block::valid_inferior_type(const vtol_topology_object &inferior) const
-{
-  return inferior.cast_to_two_chain()!=0;
-}
-
-//---------------------------------------------------------------------------
-//: Is `superior' type valid for `this' ?
-//---------------------------------------------------------------------------
-bool
-vtol_block::valid_superior_type(const vtol_topology_object &) const
-{
-  return false; // "block" has no possible valid superiors
 }
 
 //: outside boundary vertices
@@ -375,10 +332,9 @@ bool vtol_block::operator==(const vtol_block &other) const
 bool vtol_block::operator==(const vsol_spatial_object_2d& obj) const
 {
   return
-   obj.spatial_type() == vsol_spatial_object_2d::TOPOLOGYOBJECT &&
-   ((vtol_topology_object const&)obj).topology_type() == vtol_topology_object::BLOCK
-  ? *this == (vtol_block const&) (vtol_topology_object const&) obj
-  : false;
+   obj.cast_to_topology_object() &&
+   obj.cast_to_topology_object()->cast_to_block() &&
+   *this == *obj.cast_to_topology_object()->cast_to_block();
 }
 
 //: get a hole cycle
@@ -418,7 +374,7 @@ bool vtol_block::add_hole_cycle(vtol_two_chain &new_hole)
 
 void vtol_block::print(vcl_ostream &strm) const
 {
-  strm<<"<vtol_block "<<inferiors()->size()<<"  "<<(void const*)this<<">"<<vcl_endl;
+  strm<<"<vtol_block "<<inferiors()->size()<<"  "<<(void const*)this<<">\n";
 }
 
 void vtol_block::describe(vcl_ostream &strm,
