@@ -18,12 +18,14 @@
 
 #include <vbl/vbl_sprintf.h>
 
+#include <vgui/vgui.h>
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_matrix_state.h>
 #include <vgui/vgui_projection_inspector.h>
 
 //quell_warning static bool debug=false;
+static vgui_event_condition default_c_enable_key_bindings(vgui_key_CTRL('c'));
 
 bool vgui_composite::help() {
   vcl_cerr << vcl_endl;
@@ -36,12 +38,14 @@ bool vgui_composite::help() {
 }
 
 vgui_composite::vgui_composite()
+  : c_enable_key_bindings(default_c_enable_key_bindings)
 {
   enable_key_bindings = false;
 }
 
 // -- Constructor taking two children.   The first is on top, the second below.
 vgui_composite::vgui_composite(vgui_tableau_ref const& child0, vgui_tableau_ref const& child1)
+  : c_enable_key_bindings(default_c_enable_key_bindings)
 {
   add(child0);
   add(child1);
@@ -50,6 +54,7 @@ vgui_composite::vgui_composite(vgui_tableau_ref const& child0, vgui_tableau_ref 
 
 // -- Three children, top to bottom.
 vgui_composite::vgui_composite(vgui_tableau_ref const& child0, vgui_tableau_ref const& child1, vgui_tableau_ref const& child2)
+  : c_enable_key_bindings(default_c_enable_key_bindings)
 {
   add(child0);
   add(child1);
@@ -59,6 +64,7 @@ vgui_composite::vgui_composite(vgui_tableau_ref const& child0, vgui_tableau_ref 
 
 // -- Many children, top to bottom.
 vgui_composite::vgui_composite(vcl_vector<vgui_tableau_ref> const& the_children)
+  : c_enable_key_bindings(default_c_enable_key_bindings)
 {
   for(int i = 0; i < the_children.size(); ++i)
     add(the_children[i]);
@@ -110,6 +116,12 @@ bool vgui_composite::handle(const vgui_event& event)
   }
 
   // "normal" events :
+  // Alt-C enables / disables key bindings
+  if (c_enable_key_bindings(event)) {
+    vcl_cerr << "Toggle keybindings\n";
+    vgui::out << "Toggle keybindings";
+    enable_key_bindings = !enable_key_bindings;
+  }
 
   // First check if the composite itself wants it :
   if (event.type == vgui_KEY_PRESS && enable_key_bindings) {
