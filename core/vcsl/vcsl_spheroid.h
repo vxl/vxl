@@ -1,18 +1,19 @@
-#ifndef VCSL_SPHEROID_H_
-#define VCSL_SPHEROID_H_
+#ifndef vcsl_spheroid_h_
+#define vcsl_spheroid_h_
 //:
 // \file
+// \brief Reference sphere or ellipse for a geographic coordinate system
 // \author François BERTEL
 //
 // \verbatim
-// Modifications
-// 2000/06/28 François BERTEL Creation. Adapted from IUE
-// 10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
+//  Modifications
+//   2000/06/28 François BERTEL Creation. Adapted from IUE
+//   2001/04/10 Ian Scott (Manchester) Converted perceps header to doxygen
+//   2004/09/17 Peter Vanroose  made a(), b(), e() and f() non-virtual - they just return a member and should not be overloaded
 // \endverbatim
 
-#include <vcsl/vcsl_spheroid_sptr.h>
-
 #include <vbl/vbl_ref_count.h>
+#include <vcsl/vcsl_spheroid_sptr.h>
 
 //: Reference sphere or ellipse for a geographic coordinate system
 // The default value for a reference ellipsoid is the Clarke 1866 model, but
@@ -48,66 +49,66 @@ class vcsl_spheroid
   //***************************************************************************
 
   //: Default constructor. Clark_1866 spheroid
-  explicit vcsl_spheroid(void);
+  vcsl_spheroid() { set_from_std(clarke_1866); }
 
   //: Constructor from a standard spheroid
-  explicit vcsl_spheroid(const vcsl_std_spheroid new_std_spheroid);
+  explicit vcsl_spheroid(const vcsl_std_spheroid s) { set_from_std(s); }
 
-  //: Copy constructor
-  vcsl_spheroid(const vcsl_spheroid &other);
+  // Copy constructor
+  vcsl_spheroid(const vcsl_spheroid &other)
+    : vbl_ref_count(), a_(other.a_), b_(other.b_), e_(other.e_), f_(other.f_) {}
 
-  //: Destructor
-  virtual ~vcsl_spheroid();
+  // Destructor
+  ~vcsl_spheroid() {}
 
   //***************************************************************************
   // Status report
   //***************************************************************************
 
   //: Return the major axis of spheroid
-  virtual double a(void) const;
+  double a() const { return a_; }
 
   //: Return the minor axis of spheroid
-  virtual double b(void) const;
+  double b() const { return b_; }
 
   //: Return the eccentricity of spheroid
-  virtual double e(void) const;
+  double e() const { return e_; }
 
   //: Return the flattening of spheroid
-  virtual double f(void) const;
+  double f() const { return f_; }
 
   //***************************************************************************
   // Status setting
   //***************************************************************************
 
   //: Set from a standard spheroid
-  virtual void set_from_std(const vcsl_std_spheroid new_std_spheroid);
+  void set_from_std(const vcsl_std_spheroid new_std_spheroid);
 
   //: Set the major axis of spheroid
-  virtual void set_a(double new_a);
+  void set_a(double new_a) { a_=new_a; }
 
   //: Set the minor axis of spheroid
-  virtual void set_b(double new_b);
+  void set_b(double new_b) { b_=new_b; }
 
   //: Set the eccentricity of spheroid
-  virtual void set_e(double new_e);
+  void set_e(double new_e) { e_=new_e; }
 
   //: Set the flattening of spheroid
-  virtual void set_f(double new_f);
-
+  void set_f(double new_f) { f_=new_f; }
 
   //***************************************************************************
   // Comparison
   //***************************************************************************
 
   //: Is `this' equal to `other' ?
-  virtual bool operator==(const vcsl_spheroid &other) const;
+  bool operator==(const vcsl_spheroid &other) const;
 
   //***************************************************************************
   // Duplication
   //***************************************************************************
 
-  //: Assignment
-  virtual vcsl_spheroid &operator=(const vcsl_spheroid &other);
+  // Assignment
+  vcsl_spheroid &operator=(const vcsl_spheroid &other);
 
  protected:
   //***************************************************************************
@@ -124,4 +125,4 @@ class vcsl_spheroid
   double f_;
 };
 
-#endif // #ifndef VCSL_SPHEROID_H_
+#endif // vcsl_spheroid_h_
