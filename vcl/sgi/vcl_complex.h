@@ -17,6 +17,12 @@ inline T vcl_log10(std::complex<T> const &z) { return ::log10(z); }
 template <typename T>
 inline std::complex<T> vcl_exp(std::complex<T> const &z) { return vcl_polar(T(exp(z.real())), z.imag()); }
 
+# undef vcl_pow
+# define vcl_pow vcl_pow
+template <typename T>
+inline std::complex<T> vcl_pow(std::complex<T> const &z, T p) { return vcl_polar(T(pow(std::norm(z),p/2)),std::arg(z)*p); }
+// Note that I'm using norm(z)^(p/2) instead of abs(z)^p, to have only one time-consuming operation - PVr
+
 # undef vcl_sqrt
 # define vcl_sqrt vcl_sqrt
 template <typename T>
