@@ -106,7 +106,7 @@ absolute_signature_weight( rgrl_feature_sptr other ) const
 {
   rgrl_feature_face_pt* face_ptr = rgrl_cast<rgrl_feature_face_pt*>(other);
   assert( face_ptr );
-  double dir_wgt = dot_product( this->normal_, face_ptr->normal_ );
+  double dir_wgt = vcl_abs( dot_product( this->normal_, face_ptr->normal_ ) );
  
   double scale_wgt = 1;
   if( this->scale_ ) {
