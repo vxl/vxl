@@ -17,8 +17,8 @@ void test_node()
        node_1->add_neighbor(node_2.ptr(), bmrf_node::TIME) &&
        node_1->add_neighbor(node_3.ptr(), bmrf_node::TIME) &&
        node_2->add_neighbor(node_3.ptr(), bmrf_node::SPACE) &&
-       node_2->add_neighbor(node_3.ptr(), bmrf_node::ALPHA) &&
        node_2->add_neighbor(node_1.ptr(), bmrf_node::TIME) &&
+       node_2->add_neighbor(node_3.ptr(), bmrf_node::ALPHA) &&
        node_2->add_neighbor(node_1.ptr(), bmrf_node::ALPHA) &&
        !node_2->add_neighbor(node_1.ptr(), bmrf_node::ALPHA), // can't add the same thing twice
        true);
@@ -49,23 +49,28 @@ void test_node()
                         
   // binary test output file stream
   vsl_b_ofstream bfs_out("test_node_io.tmp");
-  TEST ("Created test_node_io.tmp for writing",(!bfs_out), false);
-  node_1->b_write(bfs_out);
+  TEST("Created test_node_io.tmp for writing",(!bfs_out), false);
   vsl_b_write(bfs_out, node_1);
   bfs_out.close();
 
-  bmrf_node_sptr node_in_1;
+  bmrf_node_sptr node_in_1, node_in_2, node_in_3;
 
   // binary test input file stream
   vsl_b_ifstream bfs_in("test_node_io.tmp");
-  TEST ("Opened test_node_io.tmp for reading",(!bfs_in), false);
-  bmrf_node * temp = new bmrf_node();
-  temp->b_read(bfs_in);
+  TEST("Opened test_node_io.tmp for reading",(!bfs_in), false);
   vsl_b_read(bfs_in, node_in_1);
   bfs_in.close();
 
+  bool same_neighbor_count = true;
+  for(int i=0; i<=bmrf_node::ALL; ++i)
+    same_neighbor_count = same_neighbor_count &&
+                          ( node_in_1->num_neighbors(bmrf_node::neighbor_type(i))
+                            == node_1->num_neighbors(bmrf_node::neighbor_type(i)) );
   // Compare the original data to the saved/loaded data
-  //TEST ("Compared first saved to original", *node_in_1, *node_out_1);
+  TEST("Compared first saved to original",
+        (node_in_1->probability() == node_1->probability()) &&
+        (node_in_1->frame_num() == node_1->frame_num()) &&
+        same_neighbor_count, true );
 
   // remove the temporary file
   vpl_unlink ("test_node_io.tmp");
