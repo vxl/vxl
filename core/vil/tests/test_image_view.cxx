@@ -1,8 +1,4 @@
 // This is mul/vil2/tests/test_image_view.cxx
-#include <vcl_iostream.h>
-#include <vcl_functional.h>
-#include <vxl_config.h>
-#include <testlib/testlib_test.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_crop.h>
 #include <vil2/vil2_copy.h>
@@ -10,6 +6,10 @@
 #include <vil2/vil2_plane.h>
 #include <vil2/vil2_convert.h>
 #include <vil2/vil2_view_as.h>
+#include <vxl_config.h> // for vxl_byte
+#include <vcl_iostream.h>
+#include <vcl_functional.h>
+#include <testlib/testlib_test.h>
 
 bool Equal(const vil2_image_view<vxl_byte>& im0,
            const vil2_image_view<vxl_byte>& im1)
@@ -114,9 +114,9 @@ void test_image_view_byte()
   vil2_image_view<vil_rgba<vxl_byte> > image6 = image2;
   TEST("Can't assign a 3 plane images to rgba view", image6, false);
 
-  vcl_cout << "***********************************\n";
-  vcl_cout << " Testing vil2_image_view functions\n";
-  vcl_cout << "***********************************\n";
+  vcl_cout << "***********************************\n"
+           << " Testing vil2_image_view functions\n"
+           << "***********************************\n";
 
   image2.fill(0);
   image_win = vil2_crop(image2,2,1,1,2);
@@ -161,9 +161,9 @@ void test_image_view_byte()
   vil2_convert_grey_to_rgba(image7, image6);
   TEST("vil2_convert_grey_to_rgba", image6, true);
 
-  vil2_transform(vil2_plane(vil2_view_as_planes(image6),1),
-    vil2_plane(vil2_view_as_planes(image6),1),
-    vcl_bind2nd(vcl_plus<vxl_byte>(),1));
+  image2 = vil2_plane(vil2_view_as_planes(image6),1);
+  vil2_transform(vil2_plane(vil2_view_as_planes(image6),1), image2,
+                 vcl_bind2nd(vcl_plus<vxl_byte>(),1));
 
   vil2_print_all(vcl_cout, image6);
   image7.clear();
