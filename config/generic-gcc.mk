@@ -28,7 +28,6 @@ MAKE_SHLIB := $(CC) -shared
 IUE_EXPAND_LD_UNDEF = -Wl,-u,"$(symbol)"
 
 
-
 # Use "=" rather than ":=" as PURIFY is not known yet
 ifeq "$(TJ_GCC30)" "1"
 MAKE_EXE = $(PURIFY) $(C++)
@@ -131,5 +130,9 @@ USING_GCC_COMPILER=1
 OS_DEFINES += -DNOREPOS
 
 ifeq ($(OS),"OSF1V4")
+wall :=
+endif
+
+ifeq ($(OS),"OSF1V5")
 wall :=
 endif

@@ -13,7 +13,7 @@
 #   freebsd
 #   freebsd4
 #   HP-UX HP-UX10.20
-#   OSF1V3.0 OSF1V3.2 OSF1V4 ULTRIX
+#   OSF1V3.0 OSF1V3.2 OSF1V4 OSF1V5 ULTRIX
 
 # check for win32
 # gnumake on win32 uses sh.exe as the shell
@@ -125,6 +125,10 @@ endif
 
 ifneq (,$(findstring OSF1 V4,$(uname_output)))
   OS := OSF1V4
+endif
+
+ifneq (,$(findstring OSF1 V5,$(uname_output)))
+  OS := OSF1V5
 endif
 
 ifneq (,$(findstring ULTRIX,$(uname_output)))
