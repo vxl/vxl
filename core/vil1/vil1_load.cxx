@@ -50,6 +50,7 @@ vil_image vil_load_raw(char const* filename)
 
 #if 1
   vil_stream *is = new vil_stream_fstream(filename, "r");
+  is->ref();
 #else
   // unfortunately, the following doesn't work because (note typo)
   //    vil_open("/tmp/foo.jgp")
