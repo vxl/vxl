@@ -4,12 +4,11 @@
 //  These are a set of functions that can be used to process lists
 
 //
-// .NAME        vtol_list_functions - Base class of vtol_topology_object_2d (inferior/superior mechanics)
+// .NAME        vtol_list_functions_2d - Base class of vtol_topology_object_2d (inferior/superior mechanics)
 // .LIBRARY     vtol
-// .HEADER SpatialObjects package
-// .INCLUDE     Topology/vtol_list_functions.h
-// .FILE        vtol_list_functions.h
-// .FILE        vtol_list_functions.cxx
+// .INCLUDE     Topology/vtol_list_functions_2d.h
+// .FILE        vtol_list_functions_2d.h
+// .FILE        vtol_list_functions_2d.cxx
 // .SECTION Author
 //     Patricia A. Vrobel - ported Peter Tu
 //

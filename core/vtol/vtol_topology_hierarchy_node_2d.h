@@ -3,19 +3,16 @@
 
 
 //
-// Class : vtol_topology_hierarchy_node_2D
-//
 // .SECTION Description
-//  The vtol_topology_hierarchy_node is a base class inherited by vtol_topology_object_2d.
+//  The vtol_topology_hierarchy_node_2d is a base class inherited by vtol_topology_object_2d.
 //  It provides the data and methods for creating the doubly linked structure
 //  of inferiors and superiors.
 //
-// .NAME        vtol_topology_hierarchy_node - Base class of vtol_topology_object_2d (inferior/superior mechanics)
+// .NAME        vtol_topology_hierarchy_node_2d - Base class of vtol_topology_object_2d (inferior/superior mechanics)
 // .LIBRARY     vtol
-// .HEADER SpatialObjects package
-// .INCLUDE     Topology/vtol_topology_hierarchy_node.h
-// .FILE        vtol_topology_hierarchy_node.h
-// .FILE        vtol_topology_hierarchy_node.cxx
+// .INCLUDE     Topology/vtol_topology_hierarchy_node_2d.h
+// .FILE        vtol_topology_hierarchy_node_2d.h
+// .FILE        vtol_topology_hierarchy_node_2d.cxx
 // .SECTION Author
 //     Patricia A. Vrobel - ported Peter Tu
 //
