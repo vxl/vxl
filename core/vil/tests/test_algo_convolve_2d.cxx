@@ -2,7 +2,7 @@
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
-#include <vil2/algo/vil2_algo_convolve_2d.h>
+#include <vil2/algo/vil2_convolve_2d.h>
 
 void test_algo_convolve_2d_byte()
 {
@@ -26,7 +26,7 @@ void test_algo_convolve_2d_byte()
 
   vil2_image_view<double> dest_im;
 
-  vil2_algo_convolve_2d(src_im,dest_im,kernel1,double());
+  vil2_convolve_2d(src_im,dest_im,kernel1,double());
 
   vcl_cout<<"Kernel - single row of ones\n";
   TEST("Destination size",dest_im.ni(),1+n-m);
@@ -41,7 +41,7 @@ void test_algo_convolve_2d_byte()
     for (unsigned int i=0;i<kernel2.ni();++i)
       kernel2(i,j) = 1;
 
-  vil2_algo_convolve_2d(src_im,dest_im,kernel2,double());
+  vil2_convolve_2d(src_im,dest_im,kernel2,double());
 
   TEST("Destination size",dest_im.ni(),1+n-m);
   TEST("Destination size",dest_im.nj(),1+n-3);
@@ -56,7 +56,7 @@ void test_algo_convolve_2d_byte()
     for (unsigned int i=0;i<kernel3.ni();++i)
       kernel3(i,j) = 1+j;
 
-  vil2_algo_convolve_2d(src_im,dest_im,kernel3,double());
+  vil2_convolve_2d(src_im,dest_im,kernel3,double());
 
   TEST("Destination size",dest_im.ni(),1+n-m);
   TEST("Destination size",dest_im.nj(),1+n-3);
