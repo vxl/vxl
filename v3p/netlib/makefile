@@ -164,6 +164,11 @@ SOURCES += stgsja.c
 include $(SYS_IUPACKAGES)/config/top.mk
 ##########################################
 
+ifeq ($(OS),hpux10.20)
+  FLAGS_gpfa5f.c = -O0
+  FLAGS_dgpfa5f.c = -O0
+endif
+
 ifneq ($(OS),win32)
   debug := 
   APP_CFLAGS = $(optimize)
