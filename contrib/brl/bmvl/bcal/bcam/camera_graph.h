@@ -118,7 +118,7 @@ class camera_graph
       iterator operator++(int)
       {
         iterator _Tmp = *this;
-        ++*this;
+        ++ *this;
         return (_Tmp); 
       }
       
@@ -131,7 +131,7 @@ class camera_graph
       iterator operator--(int t)
       {
         const_iterator _Tmp = *this;
-        --*this;
+        -- *this;
         return (_Tmp); 
       }
       
@@ -147,7 +147,7 @@ class camera_graph
       vertex_node* node() const
       {return (*_Ptr)[pos]; }
       
-      int node_id() const {return (*_ptr)[pos]->id_;}
+      int get_vertex_id() const {return (*_Ptr)[pos_]->id_;}
       
     protected:
       vcl_vector<vertex_node*>* _Ptr;

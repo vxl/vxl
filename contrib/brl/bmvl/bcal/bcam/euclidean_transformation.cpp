@@ -4,6 +4,7 @@
 
 #include "euclidean_transformation.h"
 #include <vgl/algo/vgl_h_matrix_3d.h>
+#include <vcl_iostream.h>
 #include <vcl_cassert.h>
 
 //////////////////////////////////////////////////////////////////////
@@ -26,24 +27,11 @@ void euclidean_transformation::set_beat(vcl_vector<double> const& new_beat)
   this->remove();
   int nBeats = new_beat.size();
   trans_.resize(nBeats);
-  for (int i=0; i<nBeats; i++){
-    vgl_h_matrix_3d<double> *ptr = new vgl_h_matrix_3d<double>;
-    trans_[i] = ptr;
-  }
 }
 
 int euclidean_transformation::remove()
 {
-  int nBeats = trans_.size();
-  for (int i=0; i<nBeats; i++){
-    if (trans_[i]){
-      delete trans_[i];
-      trans_[i] = 0;
-    }
-  }
-
   trans_.clear();
-
   return 0;
 }
 
@@ -67,5 +55,11 @@ vnl_vector<double> euclidean_transformation::execute(const vnl_vector<double> &v
 vnl_vector<double> euclidean_transformation::inverse(const vnl_vector<double> &v, double time) const
 {
   // not finished yet
+  vcl_cerr<<"\n euclidean_transformation::inverse() ----- not finished yet\n";
   return v;
+}
+
+void euclidean_transformation::set_transformations(vcl_vector<vgl_h_matrix_3d<double> > &trans)
+{
+  trans_ = trans; 
 }

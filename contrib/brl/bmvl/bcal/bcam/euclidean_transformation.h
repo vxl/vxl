@@ -16,13 +16,14 @@
 class euclidean_transformation : public vcsl_spatial_transformation
 {
  private:
-  vcl_vector<vgl_h_matrix_3d<double>*> trans_;
+  vcl_vector<vgl_h_matrix_3d<double> > trans_;
 
  public: // constructor and deconstructor
   euclidean_transformation();
   virtual ~euclidean_transformation();
 
  public: // operators
+	 void set_transformations(vcl_vector<vgl_h_matrix_3d<double> > &trans);
   vnl_vector<double> inverse(const vnl_vector<double> &v, double time) const;
   virtual vnl_vector<double> execute(const vnl_vector<double> &v, double tims) const;
   virtual bool is_invertible(double time) const; // for abstract interface

@@ -2,10 +2,12 @@
 //
 //////////////////////////////////////////////////////////////////////
 #include "zhang_linear_calibrate.h"
+#include <vnl/vnl_inverse.h>
 #include <vgl/algo/vgl_h_matrix_2d_compute_linear.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
 #include <vnl/algo/vnl_svd.h>
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -40,7 +42,7 @@ int zhang_linear_calibrate::compute_homography()
   int size = camGraph_->num_vertice(); 
   h_matrice_.resize(size);
 
-  vcl_vector<vgl_homg_point_2d<double> > &p0 = camGraph_->getSource()->get_points();
+  vcl_vector<vgl_homg_point_2d<double> > &p0 = camGraph_->get_source()->get_points();
 
   camera_graph<calibrate_plane, zhang_camera_node, euclidean_transformation>::iterator iter;
   iter = camGraph_->first();
@@ -123,16 +125,9 @@ int zhang_linear_calibrate::calibrate()
   compute_homography();
 
   // calibrate cameras
-  camera_graph<calibrate_plane, zhang_camera_node, euclidean_transformation>::iterator iter;
-  iter = camGraph_->first();
+  calibrate_intrinsic();
+  calibrate_extrinsic();
 
-  int num_camera = camGraph_->num_vertice();
-  for (int i= 0; i<num_camera; i++){
-    vnl_double_3x3 K = compute_intrinsic(h_matrice_[i], num_views_[i]);
-    iter->set_intrinsic(K);
-    vcl_cerr<<"intrinsic parameters K is: \n"<<iter->get_intrinsic()<<"\n";
-    iter++;
-  }
   return 0;
 }
 
@@ -203,4 +198,151 @@ vnl_double_3x3 zhang_linear_calibrate::compute_intrinsic(vgl_h_matrix_2d<double>
   k[2][2] = 1;
 
   return k;
+}
+
+vgl_h_matrix_3d<double> zhang_linear_calibrate::
+compute_extrinsic(vgl_h_matrix_2d<double> const &H, vnl_double_3x3 const &A)
+{
+  // let A = the intrinsic parameters;
+  // let the Extrinsic parameters = (R | t) where R is a rotion matrix
+  // and t is a translation matrix.
+  // let R = (r1,r2,r3) where ri is the ith column vector
+  //  let H = the homogrhaphy = (h1,h2,h3)
+  // let l = 1/||A^-1 h1||
+  // it turns out that:
+  // r1 = l A^-1 h1
+  // r2 = l A^-1 h2
+  // r3 = r1 x r2
+  // t = l A^-1 h3
+  // Due to noise r1,r2,r3 might not be a pure rotation matrix.
+  // In this case we will have to find the closest pure rotation matrix
+
+
+
+  // compute A_inv which is the inverse of the intrinsic parameters
+
+  vnl_double_3x3 A_inv = vnl_inverse(A);
+  
+  // get h1 h2 h3
+
+  vnl_vector_fixed<double, 3> h1, h2, h3;
+
+  int i;
+  for(i=0;i<3;i++){
+    h1[i] = H.get(i,0);
+    h2[i] = H.get(i,1);
+    h3[i] = H.get(i,2);
+  }
+  
+  // allocate r1 r2 r3 t
+
+  vnl_vector_fixed<double, 3> r1, r2, r3, t;
+ 
+  // compute l = 1.0 / ||(A_inv * h1)||
+
+  vnl_vector_fixed<double, 3> hold;
+  
+  hold = A_inv * h1;
+  
+  
+  double mag;
+  
+  mag = hold.two_norm();
+
+  double l = 1;
+  if(mag){
+    l = 1.0/mag;
+  }
+
+
+  // calcuate r1 = l A_inv h1
+
+  r1 = l * A_inv * h1;
+
+
+  // calcuate r2 = l A_inv h2
+  r2 = l * A_inv * h2;
+ 
+  // note that although r1 will have a unit normal,
+  // r2 is not guaranteed to have a unit normal due 
+  // to noise.
+
+  // caluculate r3 = r1 x r2
+  r3 = cross_3d<double>(r1,r2);
+  
+  vnl_double_3x3 Q;
+  for(i=0; i<3; i++){
+    Q[i][0] = r1[i];
+    Q[i][1] = r2[i];
+    Q[i][2] = r3[i];
+  } 
+  
+  // since due to noise r2 and r3 might not be unit vecotors 
+  // we must find the closest valid rotation matrix
+  vnl_double_3x3 R = get_closest_rotation(Q);
+  
+  // calculate t = l A_inv h3
+  t = l * A_inv * h3;
+
+  // make a transformation matrix to return
+
+  return vgl_h_matrix_3d<double>(R, t);  
+}
+
+vnl_double_3x3 zhang_linear_calibrate::get_closest_rotation(const vnl_double_3x3 &Q)
+{
+  // let Q = U S V^T 
+  // it turns out that R = UV^T is the closest valid rotation matrix;
+  // to Q.
+  vnl_svd<double> svd(Q);
+  
+  vnl_double_3x3 R = svd.U() * svd.V().transpose(); 
+  
+  return R;
+}
+
+void zhang_linear_calibrate::calibrate_intrinsic()
+{
+  camera_graph<calibrate_plane, zhang_camera_node, euclidean_transformation>::iterator iter;
+  iter = camGraph_->first();
+
+  int num_camera = camGraph_->num_vertice();
+  
+  for (int i= 0; i<num_camera; i++){
+    vnl_double_3x3 K = compute_intrinsic(h_matrice_[i], num_views_[i]);
+    iter->set_intrinsic(K);
+    vcl_cerr<<"intrinsic parameters K is: \n"<<iter->get_intrinsic()<<"\n";
+    iter++;
+  }
+
+}
+
+int zhang_linear_calibrate::calibrate_extrinsic()
+{
+  camera_graph<calibrate_plane, zhang_camera_node, euclidean_transformation>::iterator iter;
+  iter = camGraph_->first();
+
+  int num_camera = camGraph_->num_vertice();
+  
+  for (int i= 0; i<num_camera; i++){// for each camera
+    // get edge
+    int source_id = camGraph_->get_source_id();
+    int vertex_id = iter.get_vertex_id();
+    euclidean_transformation *e = camGraph_->get_edge(source_id, vertex_id);
+    assert(e != 0) ;
+
+    // compute and set extrinsic parameter 
+    vnl_double_3x3 K = iter->get_intrinsic();
+    int num_views = iter->num_views();
+    vcl_vector<vgl_h_matrix_3d<double> > trans_list(num_views);
+    for(int j=0; j< num_views; j++){ // for each view
+      trans_list[j] = compute_extrinsic(h_matrice_[i][j], K);   
+    }
+
+    // store it into edge
+    e->set_transformations(trans_list);
+    iter++;
+  }
+
+  return 0;
 }
