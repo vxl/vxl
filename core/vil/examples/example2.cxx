@@ -41,7 +41,7 @@ int main(int argc, char** argv)
   vil2_print_all(vcl_cout,plane);
 
   vcl_cout<<"\nCreate transposed view of plane\n";
-  vil2_image_view<vxl_byte> transpose = vil2_flip_transpose(plane);
+  vil2_image_view<vxl_byte> transpose = vil2_transpose(plane);
   vil2_print_all(vcl_cout,transpose);
 
   vcl_cout<<"\nCreate view of plane reflected along i\n";

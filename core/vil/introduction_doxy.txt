@@ -130,15 +130,15 @@ src_image = *vil2_load("image_file.jpg");
 vil2_image_view<vxl_byte> tmp_image1,tmp_image2;
 vil2_algo_exp_filter_1d(tmp_image1,src_image,k,double());  // Apply filter to rows of src_image
 vil2_algo_exp_filter_1d(tmp_image2,tmp_image1.tranpose(),k,double());  // Apply filter to cols of tmp_image1
-vil2_image_view<vxl_byte> filtered_image = vil2_flip_transpose(tmp_image2);
-// Note that vil2_filter_rows(vil2_flip_transpose(filtered_image),vil2_flip_transpose(tmp_image1))
+vil2_image_view<vxl_byte> filtered_image = vil2_transpose(tmp_image2);
+// Note that vil2_filter_rows(vil2_transpose(filtered_image),vil2_transpose(tmp_image1))
 // would only work correctly if filtered_image was already the correct size.
 // If it isn't, then the view created by vil2_flip_transpose(filtered_image) would be resized,
 // and disconnected from filtered_image itself, which would remain unchanged.
 \endverbatim
 *
 * View manipulations include:
-* - vil2_flip_transpose : Return transposed view
+* - vil2_transpose : Return transposed view
 * - vil2_flip_lr : View which reflects along i (ie i -> (ni-1)-i) (left/right)
 * - vil2_flip_ud : View which reflects along j (ie j -> (nj-1)-j) (up/down)
 * - vil2_view_as_planes : View rgb<T> data as planes of T

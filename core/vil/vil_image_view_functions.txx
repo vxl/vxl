@@ -80,7 +80,7 @@ vil2_image_view<vil_rgb<T> > vil2_view_as_rgb(const vil2_image_view<T>& v)
 //: Create a view which appears as the transpose of this view.
 //  i.e transpose(i,j,p) = view(j,i,p)
 template<class T>
-vil2_image_view<T> vil2_flip_transpose(const vil2_image_view<T>& v)
+vil2_image_view<T> vil2_transpose(const vil2_image_view<T>& v)
 {
   // Create view with i and j switched
   return vil2_image_view<T>(v.memory_chunk(),v.top_left_ptr(),
@@ -237,7 +237,7 @@ template bool vil2_deep_equality(const vil2_image_view<T > &lhs, const vil2_imag
 template vil2_image_view<T > vil2_window(const vil2_image_view<T > &im, \
   unsigned i0, unsigned ni, unsigned j0, unsigned nj); \
 template vil2_image_view<T > vil2_plane(const vil2_image_view<T > &im, unsigned p); \
-template vil2_image_view<T > vil2_flip_transpose(const vil2_image_view<T >& v); \
+template vil2_image_view<T > vil2_transpose(const vil2_image_view<T >& v); \
 template vil2_image_view<T > vil2_flip_lr(const vil2_image_view<T >& view); \
 template vil2_image_view<T > vil2_flip_ud(const vil2_image_view<T >& view); \
 template void vil2_print_all(vcl_ostream& os,const vil2_image_view<T >& view); \
