@@ -1,31 +1,16 @@
 #ifndef vcl_iso_istream_h_
 #define vcl_iso_istream_h_
 
+// This is a generated file. DO NOT EDIT! Not even a little bit.
+
 #include <istream>
 
-// basic_istream
-#ifndef vcl_basic_istream
-#define vcl_basic_istream std::basic_istream
+#ifdef vcl_generic_istream_STD
+  ** error **
+#else
+# define vcl_generic_istream_STD std
 #endif
-// istream
-#ifndef vcl_istream
-#define vcl_istream std::istream
-#endif
-// wistream
-#ifndef vcl_wistream
-#define vcl_wistream std::wistream
-#endif
-// basic_iostream
-#ifndef vcl_basic_iostream
-#define vcl_basic_iostream std::basic_iostream
-#endif
-// iostream
-#ifndef vcl_iostream
-#define vcl_iostream std::iostream
-#endif
-// wiostream
-#ifndef vcl_wiostream
-#define vcl_wiostream std::wiostream
-#endif
+
+#include "../generic/vcl_istream.h"
 
 #endif // vcl_iso_istream_h_
