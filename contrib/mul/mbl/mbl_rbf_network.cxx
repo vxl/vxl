@@ -54,8 +54,9 @@ void mbl_rbf_network::build(const vcl_vector<vnl_vector<double> >& x, double s)
 //  If s<=0 then a suitable s is estimated from the data
 void mbl_rbf_network::build(const vnl_vector<double>* x, int n, double s)
 {
+  assert (n>0);
   // Copy training examples
-  if (x_.size()!=n) x_.resize(n);
+  if (x_.size()!=(unsigned)n) x_.resize(n);
   for (int i=0;i<n;++i)
     x_[i] = x[i];
 
