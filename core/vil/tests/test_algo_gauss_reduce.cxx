@@ -1,16 +1,16 @@
 // This is mul/vil2/tests/test_algo_gauss_reduce.cxx
-#include <vcl_iostream.h>
-#include <vxl_config.h>
-#include <testlib/testlib_test.h>
+#include <vil2/algo/vil2_algo_gauss_reduce.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_print.h>
-#include <vil2/algo/vil2_algo_gauss_reduce.h>
+#include <vcl_iostream.h>
+#include <vxl_config.h> // for vxl_byte
+#include <testlib/testlib_test.h>
 
 void test_algo_gauss_reduce_byte(int nx)
 {
-  vcl_cout << "***********************************************\n";
-  vcl_cout << " Testing vil2_algo_gauss_reduce (byte)(nx="<<nx<<")\n";
-  vcl_cout << "***********************************************\n";
+  vcl_cout << "*********************************************\n"
+           << " Testing vil2_algo_gauss_reduce (byte)(nx="<<nx<<")\n"
+           << "*********************************************\n";
 
   vil2_image_view<vxl_byte> image0;
   image0.resize(nx,3);
@@ -67,9 +67,9 @@ void test_algo_gauss_reduce_byte(int nx)
 
 void test_algo_gauss_reduce_float(int nx)
 {
-  vcl_cout << "*******************************************\n";
-  vcl_cout << " Testing vil2_algo_gauss_reduce (float)(nx="<<nx<<")\n";
-  vcl_cout << "*******************************************\n";
+  vcl_cout << "**********************************************\n"
+           << " Testing vil2_algo_gauss_reduce (float)(nx="<<nx<<")\n"
+           << "**********************************************\n";
 
   vil2_image_view<float> image0;
   image0.resize(nx,3);
@@ -104,9 +104,9 @@ void test_algo_gauss_reduce_float(int nx)
 
 void test_algo_gauss_reduce_121_byte(int nx, int ny)
 {
-  vcl_cout << "**********************************************\n";
-  vcl_cout << " Testing vil2_algo_gauss_reduce_121 (byte)(nx="<<nx<<")\n";
-  vcl_cout << "**********************************************\n";
+  vcl_cout << "*******************************************************\n"
+           << " Testing vil2_algo_gauss_reduce_121 (byte)(nx="<<nx<<", ny="<<ny<<")\n"
+           << "*******************************************************\n";
 
   vil2_image_view<vxl_byte> image0;
   image0.resize(nx,ny);
@@ -150,9 +150,9 @@ void test_algo_gauss_reduce_121_byte(int nx, int ny)
 
 void test_algo_gauss_reduce_121_float(int nx, int ny)
 {
-  vcl_cout << "***********************************************\n";
-  vcl_cout << " Testing vil2_algo_gauss_reduce_121 (float)(nx="<<nx<<")\n";
-  vcl_cout << "***********************************************\n";
+  vcl_cout << "********************************************************\n"
+           << " Testing vil2_algo_gauss_reduce_121 (float)(nx="<<nx<<", ny="<<ny<<")\n"
+           << "********************************************************\n";
 
   vil2_image_view<float> image0;
   image0.resize(nx,ny);
