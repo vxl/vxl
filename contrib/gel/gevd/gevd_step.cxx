@@ -349,7 +349,7 @@ gevd_step::RecoverJunctions(const gevd_bufferxy& image,
                             gevd_bufferxy& locationx, gevd_bufferxy& locationy,
                             int*& junctionx, int*& junctiony)
 {
-#if DEBUG
+#if defined(DEBUG)
   vul_timer t;
 #endif
   if (image.GetBitsPixel() != bits_per_float) {
@@ -448,7 +448,7 @@ gevd_step::RecoverJunctions(const gevd_bufferxy& image,
       junctiony[j] = yloc[i];
       j++;
     }
-#if DEBUG
+#if defined(DEBUG)
   vcl_cout << "Find " << length << " end points, and "
            << njunction << " junctions.\n"
            << "Recover " << 100.0*njunction/length

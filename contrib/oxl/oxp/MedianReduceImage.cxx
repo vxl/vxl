@@ -38,7 +38,7 @@ MedianReduceImage::MedianReduceImage(vil1_memory_image_of<unsigned char> const& 
     }
 }
 
-#if MAKE_EXAMPLE
+#if defined(MAKE_EXAMPLE)
 #include <vil1/vil1_file_image.h>
 int main(int argc, char ** argv)
 {
