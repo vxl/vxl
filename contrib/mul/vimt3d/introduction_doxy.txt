@@ -20,7 +20,7 @@
 vil3d_image_resource_sptr ir = vil3d_load_image_resource("Sequence_A2344_###.dcm");
 vimt3d_image_3d_of<vxl_int_32> image;
 image.image() = ir->get_view(0,ir->ni(),0,ir->nj(),0,ir->nk());
-image.transform() = vimt3d_load_transform(ir);
+image.set_world2im(vimt3d_load_transform(ir));
 \endverbatim
 *
 */
