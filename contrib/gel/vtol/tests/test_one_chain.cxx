@@ -19,7 +19,7 @@ int main(int, char **)
 {
   int success=0, failures=0;
 
-  vcl_cout << "testing one  chain" << vcl_endl;
+  vcl_cout << "testing one_chain" << vcl_endl;
 
   vtol_vertex_2d_sptr v1 = new vtol_vertex_2d(0.0,0.0);
   vtol_vertex_2d_sptr v2 = new vtol_vertex_2d(1.0,1.0);
@@ -48,6 +48,8 @@ int main(int, char **)
 
   vtol_one_chain_sptr oc2 = new vtol_one_chain(e_list,dirs);
 
+  Assert(*oc1==*oc2);
+
   vtol_one_chain_sptr oc3 = new vtol_one_chain(*oc2);
 
   Assert(*oc2==*oc3);
@@ -55,7 +57,7 @@ int main(int, char **)
   vsol_spatial_object_3d_sptr so_oc_clone = oc3->clone();
   vtol_one_chain_sptr oc3_clone = so_oc_clone->cast_to_topology_object()->cast_to_one_chain();
 
-  Assert(*oc2==*oc3);
+  Assert(*oc3_clone==*oc3);
 
   Assert(oc2->direction(*e12)==1);
 
@@ -67,12 +69,17 @@ int main(int, char **)
   Assert(v_list->size()==4);
 
   zero_chain_list *z_list = oc1->outside_boundary_zero_chains();
+#ifdef DEBUG
+  vcl_cout << "z_list->size() = " << z_list->size() << vcl_endl;
+  for (unsigned int i=0; i<z_list->size(); ++i)
+    (*z_list)[i]->describe(vcl_cout,2);
+#endif
   Assert(z_list->size()==4);
 
-  edge_list  *ed_list = oc1->outside_boundary_edges();
+  edge_list *ed_list = oc1->outside_boundary_edges();
   Assert(ed_list->size()==4);
 
-  one_chain_list *o_list =  oc1->outside_boundary_one_chains();
+  one_chain_list *o_list = oc1->outside_boundary_one_chains();
   Assert(o_list->size()==1);
 
   delete v_list;

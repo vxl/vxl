@@ -30,31 +30,36 @@ int main(int, char **)
   vtol_edge_2d_sptr e1a = new vtol_edge_2d(*e1);
 
   Assert(*e1==*e1a);
+  Assert(e1->topology_type()==vtol_topology_object::EDGE);
 
   vtol_zero_chain_sptr zc2 = new vtol_zero_chain(*v2,*v3);
 
   vtol_edge_2d_sptr e2 = new vtol_edge_2d(*zc2);
+  Assert(!(*e2==*e1));
 
   vtol_zero_chain_sptr zc3 = new vtol_zero_chain(*v3,*v4);
 
   zero_chain_list z_list;
 
   z_list.push_back(zc3);
-  z_list.push_back(zc2);
+  z_list.push_back(e1->zero_chain());
 
   vtol_edge_2d_sptr e3 = new vtol_edge_2d(z_list);
-  vtol_edge_2d_sptr e4 = new vtol_edge_2d(3.0,3.0,4.0,4.0);
+  Assert(!(*e3==*e1));
+  Assert(!(*e3==*e2));
 
+  vtol_edge_2d_sptr e4 = new vtol_edge_2d(3.0,3.0,4.0,4.0);
   vtol_edge_2d_sptr e4_clone = e4->clone()->cast_to_topology_object()->cast_to_edge()->cast_to_edge_2d();
 
   Assert(*e4 == *e4_clone);
   Assert(!(*e4==*e1));
+  Assert(!(*e4==*e2));
+  Assert(!(*e4==*e3));
   Assert(*e4==*(e4_clone->cast_to_topology_object()));
   Assert(e4->cast_to_edge_2d()!=0);
   Assert(e4->compare_geometry(*e4_clone));
   Assert(*e4== *(e4_clone->cast_to_topology_object()));
   Assert(!e4->compare_geometry(*e1));
-  Assert(e1->topology_type()==vtol_topology_object::EDGE);
 
   vtol_vertex_sptr e1v1 = e1->v1();
   vtol_vertex_sptr e1v2 = e1->v2();
