@@ -1,8 +1,6 @@
+// This is vxl/vbl/vbl_basic_relation.h
 #ifndef vbl_basic_relation_h
 #define vbl_basic_relation_h
-
-// This is vxl/vbl/vbl_basic_relation.h
-
 //:
 // \file
 // \author Rupert Curwen, GE Corporate Research and Development
@@ -18,7 +16,6 @@
 #include <vcl_string.h>
 #include <vcl_cassert.h>
 #include <vcl_iosfwd.h>
-#include <vcl_functional.h>
 #include <vbl/vbl_basic_optional.h>
 #include <vbl/vbl_basic_tuple.h>
 #include <vbl/vbl_br_impl.h>
