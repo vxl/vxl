@@ -113,7 +113,7 @@ vnl_vector<T> vnl_symmetric_eigensystem<T>::solve(vnl_vector<T> const& b)
 template <class T>
 vnl_matrix<T> vnl_symmetric_eigensystem<T>::pinverse() const
 {
-  unsigned n = D.n();
+  unsigned n = D.rows();
   vnl_diag_matrix<T> invD(n);
   for (unsigned i=0; i<n; ++i)
     if (D(i, i) == 0) {
@@ -128,7 +128,7 @@ vnl_matrix<T> vnl_symmetric_eigensystem<T>::pinverse() const
 template <class T>
 vnl_matrix<T> vnl_symmetric_eigensystem<T>::square_root() const
 {
-  unsigned n = D.n();
+  unsigned n = D.rows();
   vnl_diag_matrix<T> sqrtD(n);
   for (unsigned i=0; i<n; ++i)
     if (D(i, i) < 0) {
@@ -144,7 +144,7 @@ vnl_matrix<T> vnl_symmetric_eigensystem<T>::square_root() const
 template <class T>
 vnl_matrix<T> vnl_symmetric_eigensystem<T>::inverse_square_root() const
 {
-  unsigned n = D.n();
+  unsigned n = D.rows();
   vnl_diag_matrix<T> inv_sqrtD(n);
   for (unsigned i=0; i<n; ++i)
     if (D(i, i) <= 0) {

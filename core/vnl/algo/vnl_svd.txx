@@ -116,21 +116,21 @@ vnl_svd<T>::vnl_svd(vnl_matrix<T> const& M, double zero_out_tol):
     // Copy fortran outputs into our storage
     {
       const T *d = uspace.data_block();
-      for(int j = 0; j < p; ++j)
-        for(int i = 0; i < n; ++i)
+      for (int j = 0; j < p; ++j)
+        for (int i = 0; i < n; ++i)
           U_(i,j) = *d++;
     }
 
-    for(int j = 0; j < mm; ++j)
+    for (int j = 0; j < mm; ++j)
       W_(j, j) = vcl_abs(wspace(j)); // we get rid of complexness here.
 
-    for(int j = mm; j < n_; ++j)
+    for (int j = mm; j < n_; ++j)
       W_(j, j) = 0;
 
     {
       const T *d = vspace.data_block();
-      for(int j = 0; j < p; ++j)
-        for(int i = 0; i < p; ++i)
+      for (int j = 0; j < p; ++j)
+        for (int i = 0; i < p; ++i)
           V_(i,j) = *d++;
     }
   }
@@ -195,8 +195,8 @@ void
 vnl_svd<T>::zero_out_absolute(double tol)
 {
   last_tol_ = tol;
-  rank_ = W_.n();
-  for (unsigned k = 0; k < W_.n(); k++) {
+  rank_ = W_.rows();
+  for (unsigned k = 0; k < W_.rows(); k++) {
     singval_t& weight = W_(k, k);
     if (vcl_abs(weight) <= tol) {
       Winverse_(k,k) = 0;
@@ -428,7 +428,7 @@ template <class T>
 vnl_vector <T> vnl_svd<T>::nullvector()  const
 {
   vnl_vector<T> ret(n_);
-  for(int i = 0; i < n_; ++i)
+  for (int i = 0; i < n_; ++i)
     ret(i) = V_(i, n_-1);
   return ret;
 }
@@ -441,7 +441,7 @@ vnl_vector <T> vnl_svd<T>::left_nullvector()  const
 {
   vnl_vector<T> ret(m_);
   int col = vcl_min(m_, n_) - 1;
-  for(int i = 0; i < m_; ++i)
+  for (int i = 0; i < m_; ++i)
     ret(i) = U_(i, col);
   return ret;
 }
