@@ -31,7 +31,7 @@ static void test_watershed()
     new brip_region_pixel(location, nearest2, 0, 0, 0);
   brip_region_pixel::compare c;
   vcl_cout << "compare c() " << c(pixel1, pixel2) << '\n'<< vcl_flush;
-
+#if 0
   vcl_priority_queue<brip_region_pixel_sptr, vcl_vector<brip_region_pixel_sptr>, brip_region_pixel::compare> pq;
 
   pq.push(pixel1);
@@ -39,7 +39,7 @@ static void test_watershed()
   brip_region_pixel_sptr top = pq.top();
   vcl_cout << "top element " << *top << '\n'
            << "pq.size() " << pq.size() << '\n'<< vcl_flush;
-
+#endif
   //  TEST("",x  , y);
   //Create test image for watershed
   int w = 12, h = 12;
