@@ -87,7 +87,8 @@ SOURCES += QvVrmlFile.cxx
 # SOURCES += QvWWWAnchor.cxx
 # SOURCES += QvWWWInline.cxx
 
-# MINI_SO_TESTS += test-compute-vrml-centroid.cxx
+MINI_PROG_SOURCES += test-compute-vrml-centroid.cxx
+IULIBS += -lQv
 
 # DEFINES += -D__PC__
 
