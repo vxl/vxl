@@ -353,6 +353,33 @@ set_rotation_euler(T rz1, T ry, T rz2)
       t12_matrix_[r][c]=R[c][r];
 }
 
+template <class T>
+vgl_h_matrix_3d<T> 
+vgl_h_matrix_3d<T>::get_upper_3x3() const
+{
+  //only sensible for affine transformations
+  double u = (double)t12_matrix_[3][3];
+  assert(vcl_fabs(u)>1e-9);
+  vnl_matrix_fixed<T,4,4> m(0.0);
+  for(unsigned r = 0; r<3; r++)
+    for(unsigned c = 0; c<3; c++)
+      m[r][c] = t12_matrix_[r][c]/t12_matrix_[3][3];
+  m[3][3]=1.0;
+  return vgl_h_matrix_3d<T>(m);
+}
+
+template <class T>
+vgl_homg_point_3d<T>
+vgl_h_matrix_3d<T>::get_translation() const
+{
+  //only sensible for affine transformations
+  double u = (double)t12_matrix_[3][3];
+  assert(vcl_fabs(u)>1e-9);
+  return vgl_homg_point_3d<T>(t12_matrix_[0][3]/t12_matrix_[3][3],
+                              t12_matrix_[1][3]/t12_matrix_[3][3],
+                              t12_matrix_[2][3]/t12_matrix_[3][3]
+                              ,(T)1.0);
+}
 
 //----------------------------------------------------------------------------
 #undef VGL_H_MATRIX_3D_INSTANTIATE

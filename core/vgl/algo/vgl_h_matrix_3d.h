@@ -48,6 +48,7 @@ class vgl_h_matrix_3d
   vgl_homg_point_3d<T> operator()(vgl_homg_point_3d<T> const& x) const;
   vgl_homg_point_3d<T> operator* (vgl_homg_point_3d<T> const& x) const {return (*this)(x);}
 
+
   vgl_homg_plane_3d<T> preimage(vgl_homg_plane_3d<T> const& p);
 
   //the following require forming an inverse
@@ -69,9 +70,15 @@ class vgl_h_matrix_3d
   bool projective_basis(vcl_vector<vgl_homg_point_3d<T> > const & five_points);
   void set_identity();
   void set_translation(T tx, T ty, T tz);
+  //: rotation angle is in radians
   void set_rotation_about_axis(const vnl_vector_fixed<T,3>& axis, T angle);
   void set_rotation_roll_pitch_yaw(T yaw, T pitch, T roll);
   void set_rotation_euler(T rz1, T ry, T rz2);
+  //: extract components as transformations
+  //: corresponds to rotation for Euclidan transformations
+  vgl_h_matrix_3d<T> get_upper_3x3() const;
+  //: corresponds to translation for affine transformations
+  vgl_homg_point_3d<T> get_translation() const;
 };
 
 // stream I/O
