@@ -139,6 +139,16 @@ bmrf_curvel_3d::node_at_frame(unsigned int frame) const
 }
 
 
+//: Returns the alpha value at the projection into \p frame
+double 
+bmrf_curvel_3d::alpha_at_frame(unsigned int frame) const
+{
+  if( frame >= projs_2d_.size() )
+    return 0.0;
+  return projs_2d_[frame].first;
+}
+
+
 //: Return true if \p a projection of this curvel lies on \p node
 bool 
 bmrf_curvel_3d::is_projection(const bmrf_node_sptr& node) const
@@ -184,6 +194,24 @@ bmrf_curvel_3d::gamma_std() const
 }
 
 
+//: Return the average s value projected into \p frame
+double 
+bmrf_curvel_3d::s_avg(unsigned int frame) const
+{
+  double gamma = this->gamma_avg();
+  int count = 0;
+  double s_sum = 0.0;
+  for (unsigned int f=0; f<projs_2d_.size(); ++f){
+    if( (frame == f) || !projs_2d_[f].second)
+      continue;
+    double s = projs_2d_[f].second->epi_seg()->s(projs_2d_[f].first);
+    s_sum += s * (1.0 - gamma*f) / (1.0 - gamma*frame);
+    ++count;
+  }
+  return s_sum / count;
+}
+
+
 //: Compute the gamma statistics on the current projections
 void 
 bmrf_curvel_3d::compute_statistics()
@@ -203,6 +231,24 @@ bmrf_curvel_3d::compute_statistics()
       double gamma = 1.0 / (((int(ind2) - int(ind1)) / (1.0 - s1/s2)) + double(ind1)); 
       sum_gamma_ += gamma;
       sum_sqr_gamma_ += gamma*gamma;
+    }
+  }
+}
+
+
+void 
+bmrf_curvel_3d::show_stats() const
+{
+  for (unsigned int ind1=0; ind1<projs_2d_.size(); ++ind1){
+    if(!projs_2d_[ind1].second)
+      continue;
+    double s1 = projs_2d_[ind1].second->epi_seg()->s(projs_2d_[ind1].first);
+    for (unsigned int ind2=ind1+1; ind2<projs_2d_.size(); ++ind2){
+      if(!projs_2d_[ind2].second)
+        continue;
+      double s2 = projs_2d_[ind2].second->epi_seg()->s(projs_2d_[ind2].first);
+      double gamma = 1.0 / (((int(ind2) - int(ind1)) / (1.0 - s1/s2)) + double(ind1)); 
+      vcl_cout << " frames " << ind1 << "," << ind2 << " gamma=" << gamma << vcl_endl;
     }
   }
 }

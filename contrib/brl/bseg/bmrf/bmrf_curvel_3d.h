@@ -54,6 +54,9 @@ class bmrf_curvel_3d : public bugl_gaussian_point_3d<double>, public vbl_ref_cou
   //: Returns the smart pointer to the node at the projection into \p frame
   bmrf_node_sptr node_at_frame(unsigned int frame) const;
 
+  //: Returns the alpha value at the projection into \p frame
+  double alpha_at_frame(unsigned int frame) const;
+
   //: Return true if a projection of this curvel lies on \p node
   bool is_projection(const bmrf_node_sptr& node) const;
 
@@ -69,8 +72,13 @@ class bmrf_curvel_3d : public bugl_gaussian_point_3d<double>, public vbl_ref_cou
   //: Return the standard deviation of the gamma values
   double gamma_std() const;
 
+  //: Return the average s value projected into \p frame
+  double s_avg(unsigned int frame) const;
+
   //: Set the projection error
   void set_proj_error(double error) { proj_error_ = error; }
+
+  void show_stats() const;
 
  protected:
   //: Compute the gamma statistics on the current projections
