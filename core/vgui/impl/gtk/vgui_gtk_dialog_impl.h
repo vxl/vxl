@@ -26,10 +26,12 @@
 //   Marko Bacic 14-JUL-00  Fixed misalignment of entry boxes 
 //   Marko Bacic 20-JUL-00  Fixed bug in inline file dialog box. Now returns
 //                          the full pathname
+//   K.Y.McGaul  31-MAY-01  Added set_ok/cancel_button.
 //-----------------------------------------------------------------------------
 
 #include <vgui/internals/vgui_dialog_impl.h>
 #include <gtk/gtk.h>
+class vgui_tableau_sptr;
 
 class vgui_gtk_dialog_impl : public vgui_dialog_impl {
 public:
@@ -37,8 +39,11 @@ public:
   ~vgui_gtk_dialog_impl();
   
   void* choice_field_widget(const char*, const vcl_vector<vcl_string>&, int&);
+  void* inline_tableau_widget(const vgui_tableau_sptr tab, unsigned width, unsigned height);
 
   void modal(const bool);
+  void set_ok_button(const char* txt);
+  void set_cancel_button(const char* txt);
   
   bool ask();
  
