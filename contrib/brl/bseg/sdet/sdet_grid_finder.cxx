@@ -280,7 +280,7 @@ double grid_profile_matcher::calculate_grid_offset(int n_grid_lines, double spac
   double max_value = -vnl_numeric_traits<double>::maxval;
   int max_index = -1;
   //vcl_cout << "__CONVOLUTION__\n";
-  for (int i = 0; i < convolution.size(); i++)
+  for (unsigned int i = 0; i < convolution.size(); i++)
     {
       //vcl_cout << "convolution["<<i-grid_profile_len+spacing+dmin_<<"] = "<<convolution[i]<<"\n";
       if (convolution[i] > max_value)
@@ -938,7 +938,7 @@ compute_homography_linear_chamfer(vgl_h_matrix_2d<double> & H)
 
       if (!h_lines.size())
         continue;
-      for (int j0 = 0; j0<h_lines.size(); j0++)
+      for (unsigned int j0 = 0; j0<h_lines.size(); j0++)
         {
           vsol_line_2d_sptr l0 = h_lines[j0];
 
@@ -978,7 +978,7 @@ compute_homography_linear_chamfer(vgl_h_matrix_2d<double> & H)
       chamf90_.get_lines_in_interval(dx, collection_grid_radius, v_lines);
       if (!v_lines.size())
         continue;
-      for (int j90 = 0; j90<v_lines.size(); j90++)
+      for (unsigned int j90 = 0; j90<v_lines.size(); j90++)
         {
           vsol_line_2d_sptr l90 = v_lines[j90];
           // check y offset
@@ -1112,7 +1112,7 @@ bool sdet_grid_finder::compute_manual_homography(vsol_point_2d_sptr ul,
       direction.set(direction.x()/direction_len,
                     direction.y()/direction_len);
       double max_orthog_component = 0.1;
-      double distance_tolerance = spacing_ / 4.0;
+
       if (vcl_fabs(direction.y()) < max_orthog_component)
         {
           // horizontal line
