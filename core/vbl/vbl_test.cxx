@@ -1,6 +1,7 @@
 // This is vxl/vbl/vbl_test.cxx
 
-//
+//:
+// \file
 // Copyright (C) 1991 Texas Instruments Incorporated.
 //
 // Permission is granted to any individual or institution to use, copy, modify,
