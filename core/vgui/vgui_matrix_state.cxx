@@ -112,10 +112,10 @@ vnl_matrix_fixed<double,4,4> vgui_matrix_state::total_transformation()
 }
 
 //: this premultiplies the given matrix by M
-void vgui_matrix_state::premultiply(vnl_matrix<double> const& M,GLenum matrix)
+void vgui_matrix_state::premultiply(vnl_matrix_fixed<double,4,4> const& M,GLenum matrix)
 {
   // get current (transposed) projection matrix :
-  vnl_matrix<double> P(4,4);
+  vnl_matrix_fixed<double,4,4> P;
   if      (matrix==GL_PROJECTION || matrix==GL_PROJECTION_MATRIX)
     glGetDoublev(GL_PROJECTION_MATRIX,P.data_block());
   else if (matrix==GL_MODELVIEW  || matrix==GL_MODELVIEW_MATRIX )
@@ -134,7 +134,7 @@ void vgui_matrix_state::premultiply(vnl_matrix<double> const& M,GLenum matrix)
 
 
 //: This postmultiplies the given matrix by M
-void vgui_matrix_state::postmultiply(vnl_matrix<double> const& M,GLenum matrix)
+void vgui_matrix_state::postmultiply(vnl_matrix_fixed<double,4,4> const& M,GLenum matrix)
 {
   // set matrix mode :
   if      (matrix==GL_PROJECTION || matrix==GL_PROJECTION_MATRIX)

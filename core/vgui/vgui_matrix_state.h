@@ -55,13 +55,13 @@ class vgui_matrix_state
   static vnl_matrix_fixed<double,4,4> total_transformation();
 
   // Projection matrices
-  static void premultiply(vnl_matrix<double> const &,GLenum );
-  static void premultiply_projection(vnl_matrix<double> const &M) { premultiply(M,GL_PROJECTION); }
-  static void premultiply_modelview (vnl_matrix<double> const &M) { premultiply(M,GL_MODELVIEW); }
+  static void premultiply(vnl_matrix_fixed<double,4,4> const &,GLenum );
+  static void premultiply_projection(vnl_matrix_fixed<double,4,4> const &M) { premultiply(M,GL_PROJECTION); }
+  static void premultiply_modelview (vnl_matrix_fixed<double,4,4> const &M) { premultiply(M,GL_MODELVIEW); }
 
-  static void postmultiply(const vnl_matrix<double> &M,GLenum matrix);
-  static void postmultiply_projection(vnl_matrix<double> const &M) { postmultiply(M,GL_PROJECTION); }
-  static void postmultiply_modelview (vnl_matrix<double> const &M) { postmultiply(M,GL_MODELVIEW); }
+  static void postmultiply(const vnl_matrix_fixed<double,4,4> &M,GLenum matrix);
+  static void postmultiply_projection(vnl_matrix_fixed<double,4,4> const &M) { postmultiply(M,GL_PROJECTION); }
+  static void postmultiply_modelview (vnl_matrix_fixed<double,4,4> const &M) { postmultiply(M,GL_MODELVIEW); }
 };
 
 #endif // vgui_matrix_state_h_
