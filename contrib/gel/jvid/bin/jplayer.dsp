@@ -9,7 +9,7 @@
 #  == override in output directory
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL -DHAS_MPEG2 == compiler defines
 # jplayer  == name of output library
-#  /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\  osl.lib mvl.lib jvid.lib vidl.lib vgui.lib vgl_algo.lib vo.lib vfw32.lib mpeg2.lib vul.lib vpl.lib vnl_algo.lib vnl.lib netlib.lib vil.lib ws2_32.lib tiff.lib png.lib zlib.lib jpeg.lib vgl.lib vbl.lib opengl32.lib glu32.lib Qv.lib vcl.lib /STACK:10000000  == libraries linked in 
+#  /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\  osl.lib mvl.lib jvid.lib vidl_vil1.lib vgui.lib vgl_algo.lib vo.lib vfw32.lib mpeg2.lib vul.lib vpl.lib vnl_algo.lib vnl.lib netlib.lib vil.lib ws2_32.lib tiff.lib png.lib zlib.lib jpeg.lib vgl.lib vbl.lib opengl32.lib glu32.lib Qv.lib vcl.lib /STACK:10000000  == libraries linked in 
 # TARGTYPE "Win32 (x86) Application" 0x0103
 
 CFG=jplayer - Win32 Debug
@@ -69,7 +69,7 @@ LINK32=link.exe
 # ADD LINK32 osl.lib
 # ADD LINK32 mvl.lib
 # ADD LINK32 jvid.lib
-# ADD LINK32 vidl.lib
+# ADD LINK32 vidl_vil1.lib
 # ADD LINK32 vgui.lib
 # ADD LINK32 vgl_algo.lib
 # ADD LINK32 vo.lib
@@ -129,7 +129,7 @@ LINK32=link.exe
 # ADD LINK32 osl.lib
 # ADD LINK32 mvl.lib
 # ADD LINK32 jvid.lib
-# ADD LINK32 vidl.lib
+# ADD LINK32 vidl_vil1.lib
 # ADD LINK32 vgui.lib
 # ADD LINK32 vgl_algo.lib
 # ADD LINK32 vo.lib
@@ -186,7 +186,7 @@ LINK32=link.exe
 # ADD LINK32 osl.lib
 # ADD LINK32 mvl.lib
 # ADD LINK32 jvid.lib
-# ADD LINK32 vidl.lib
+# ADD LINK32 vidl_vil1.lib
 # ADD LINK32 vgui.lib
 # ADD LINK32 vgl_algo.lib
 # ADD LINK32 vo.lib
@@ -244,7 +244,7 @@ LINK32=link.exe
 # ADD LINK32 osl.lib
 # ADD LINK32 mvl.lib
 # ADD LINK32 jvid.lib
-# ADD LINK32 vidl.lib
+# ADD LINK32 vidl_vil1.lib
 # ADD LINK32 vgui.lib
 # ADD LINK32 vgl_algo.lib
 # ADD LINK32 vo.lib

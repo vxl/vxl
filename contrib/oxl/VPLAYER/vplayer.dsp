@@ -73,7 +73,7 @@ LINK32=link.exe
 # ADD LINK32 /libpath:"$(VXLROOT)/core/vnl/algo/$(IntDir)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/netlib/$(IntDir)"
 # ADD LINK32 /libpath:"$(VXLROOT)/core/vil/$(IntDir)"
-# ADD LINK32 /libpath:"$(VXLROOT)/core/vidl/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vidl_vil1/$(IntDir)"
 # ADD LINK32 /libpath:"$(VXLROOT)/core/vpl/$(IntDir)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/jpeg/$(IntDir)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/png/$(IntDir)"
@@ -85,7 +85,7 @@ LINK32=link.exe
 # ADD LINK32 /libpath:"$(VXLROOT)/contrib/oxl/vgui/$(IntDir)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/Qv/$(IntDir)"
 # ADD LINK32 /libpath:"$(VXLROOT)/core/vul/$(IntDir)"
-# ADD LINK32 "opengl32.lib" "glu32.lib" "osl.lib" "mvl.lib" "vnl_algo.lib" "netlib.lib" "vnl.lib" "vgui_mfc.lib" "vgui.lib" "Qv.lib" vidl.lib "vgl.lib" "vbl.lib" "vil.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" "vul.lib" "vpl.lib" "vcl.lib" /STACK:10000000 
+# ADD LINK32 "opengl32.lib" "glu32.lib" "osl.lib" "mvl.lib" "vnl_algo.lib" "netlib.lib" "vnl.lib" "vgui_mfc.lib" "vgui.lib" "Qv.lib" vidl_vil1.lib "vgl.lib" "vbl.lib" "vil.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" "vul.lib" "vpl.lib" "vcl.lib" /STACK:10000000 
 
 
 !ELSEIF  "$(CFG)" == "VPLAYER - Win32 Debug"
@@ -121,7 +121,7 @@ LINK32=link.exe
 # ADD LINK32 /libpath:"$(VXLROOT)/core/vnl/algo/$(IntDir)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/netlib/$(IntDir)"
 # ADD LINK32 /libpath:"$(VXLROOT)/core/vil/$(IntDir)"
-# ADD LINK32 /libpath:"$(VXLROOT)/core/vidl/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vidl_vil1/$(IntDir)"
 # ADD LINK32 /libpath:"$(VXLROOT)/core/vpl/$(IntDir)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/jpeg/$(IntDir)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/png/$(IntDir)"
@@ -133,7 +133,7 @@ LINK32=link.exe
 # ADD LINK32 /libpath:"$(VXLROOT)/contrib/oxl/vgui/$(IntDir)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/Qv/$(IntDir)"
 # ADD LINK32 /libpath:"$(VXLROOT)/core/vul/$(IntDir)"
-# ADD LINK32 "opengl32.lib" "glu32.lib" "osl.lib" "mvl.lib" "vnl_algo.lib" "netlib.lib" "vnl.lib" "vgui_mfc.lib" "vgui.lib" "Qv.lib" vidl.lib "vgl.lib" "vbl.lib" "vil.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" "vul.lib" "vpl.lib" "vcl.lib" /STACK:10000000 
+# ADD LINK32 "opengl32.lib" "glu32.lib" "osl.lib" "mvl.lib" "vnl_algo.lib" "netlib.lib" "vnl.lib" "vgui_mfc.lib" "vgui.lib" "Qv.lib" vidl_vil1.lib "vgl.lib" "vbl.lib" "vil.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" "vul.lib" "vpl.lib" "vcl.lib" /STACK:10000000 
 
 !ENDIF 
 

@@ -14,7 +14,7 @@
 # $(VXLROOT)/bin/ == override in output directory
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF == compiler defines
 # kl_tracker  == name of output library
-# /libpath:"$(VXLROOT)/core/$(OUTDIR)" /libpath:"$(VXLROOT)/contrib/gel/$(OUTDIR)" /libpath:"$(VXLROOT)/contrib/oxl/$(OUTDIR)" /libpath:"$(VXLROOT)/vcl/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/$(OUTDIR)" "opengl32.lib" "glu32.lib" "vidl.lib" "vgel.lib" "vgel_kl.lib" "mvl.lib" "vtol.lib" "vsol.lib" "vgl_algo.lib" "vgl.lib" "vcl.lib" "vnl_algo.lib" "netlib.lib" "vnl.lib" "vbl.lib" "vul.lib" "vil.lib" "vpl.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" "mvl.lib" /STACK:10000000  == libraries linked in 
+# /libpath:"$(VXLROOT)/core/$(OUTDIR)" /libpath:"$(VXLROOT)/contrib/gel/$(OUTDIR)" /libpath:"$(VXLROOT)/contrib/oxl/$(OUTDIR)" /libpath:"$(VXLROOT)/vcl/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/$(OUTDIR)" "opengl32.lib" "glu32.lib" "vidl_vil1.lib" "vgel.lib" "vgel_kl.lib" "mvl.lib" "vtol.lib" "vsol.lib" "vgl_algo.lib" "vgl.lib" "vcl.lib" "vnl_algo.lib" "netlib.lib" "vnl.lib" "vbl.lib" "vul.lib" "vil.lib" "vpl.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" "mvl.lib" /STACK:10000000  == libraries linked in 
 # TARGTYPE "Win32 (x86) Application" 0x0103
 
 CFG=kl_tracker - Win32 Debug
@@ -68,13 +68,13 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
 
-# ADD LINK32 /libpath:"$(VXLROOT)/core/vidl/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vidl_vil1/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/contrib/gel/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/contrib/oxl/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/core/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/vcl/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/$(OUTDIR)"
-# ADD LINK32 "opengl32.lib" "glu32.lib" "vidl.lib" "vgel.lib" "vgel_kl.lib" "mvl.lib" "vtol.lib" "vsol.lib" "vgl_algo.lib" "vgl.lib" "vcl.lib" "vnl_algo.lib" "netlib.lib" "vnl.lib" "vbl.lib" "vul.lib" "vil.lib" "vpl.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" /STACK:10000000 
+# ADD LINK32 "opengl32.lib" "glu32.lib" "vidl_vil1.lib" "vgel.lib" "vgel_kl.lib" "mvl.lib" "vtol.lib" "vsol.lib" "vgl_algo.lib" "vgl.lib" "vcl.lib" "vnl_algo.lib" "netlib.lib" "vnl.lib" "vbl.lib" "vul.lib" "vil.lib" "vpl.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" /STACK:10000000 
 
 
 !ELSEIF  "$(CFG)" == "kl_tracker - Win32 Debug"
@@ -105,13 +105,13 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /IGNORE:4089
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /IGNORE:4089
 
-# ADD LINK32 /libpath:"$(VXLROOT)/core/vidl/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vidl_vil1/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/contrib/gel/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/contrib/oxl/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/core/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/vcl/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/$(OUTDIR)"
-# ADD LINK32 "opengl32.lib" "glu32.lib" "vidl.lib" "vgel.lib" "vgel_kl.lib" "mvl.lib" "vtol.lib" "vsol.lib" "vgl_algo.lib" "vgl.lib" "vcl.lib" "vnl_algo.lib" "netlib.lib" "vnl.lib" "vbl.lib" "vul.lib" "vil.lib" "vpl.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" /STACK:10000000 
+# ADD LINK32 "opengl32.lib" "glu32.lib" "vidl_vil1.lib" "vgel.lib" "vgel_kl.lib" "mvl.lib" "vtol.lib" "vsol.lib" "vgl_algo.lib" "vgl.lib" "vcl.lib" "vnl_algo.lib" "netlib.lib" "vnl.lib" "vbl.lib" "vul.lib" "vil.lib" "vpl.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" /STACK:10000000 
 
 !ENDIF 
 

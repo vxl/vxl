@@ -14,7 +14,7 @@
 # $(VXLROOT)/bin/ == override in output directory
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF == compiler defines
 # triangulate  == name of output library
-# /libpath:"$(VXLROOT)/core/vidl/$(OUTDIR)" /libpath:"$(VXLROOT)/contrib/gel/vgel/$(OUTDIR)" /libpath:"$(VXLROOT)/contrib/gel/vgel/kl/$(OUTDIR)" /libpath:"$(VXLROOT)/contrib/oxl/mvl/$(OUTDIR)" /libpath:"$(VXLROOT)/contrib/gel/vtol/$(OUTDIR)" /libpath:"$(VXLROOT)/contrib/gel/vsol/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vgl/algo/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vgl/$(OUTDIR)" /libpath:"$(VXLROOT)/vcl/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vnl/algo/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/netlib/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vnl/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vbl/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vul/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vil/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vpl/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/jpeg/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/png/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/zlib/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/tiff/$(OUTDIR)" "opengl32.lib" "glu32.lib" "vidl.lib" "vgel.lib" "vgel_kl.lib" "mvl.lib" "vtol.lib" "vsol.lib" "vgl_algo.lib" "vgl.lib" "vcl.lib" "vnl_algo.lib" "netlib.lib" "vnl.lib" "vbl.lib" "vul.lib" "vil.lib" "vpl.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" "mvl.lib" /STACK:10000000  == libraries linked in 
+# /libpath:"$(VXLROOT)/core/vidl_vil1/$(OUTDIR)" /libpath:"$(VXLROOT)/contrib/gel/vgel/$(OUTDIR)" /libpath:"$(VXLROOT)/contrib/gel/vgel/kl/$(OUTDIR)" /libpath:"$(VXLROOT)/contrib/oxl/mvl/$(OUTDIR)" /libpath:"$(VXLROOT)/contrib/gel/vtol/$(OUTDIR)" /libpath:"$(VXLROOT)/contrib/gel/vsol/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vgl/algo/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vgl/$(OUTDIR)" /libpath:"$(VXLROOT)/vcl/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vnl/algo/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/netlib/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vnl/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vbl/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vul/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vil/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vpl/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/jpeg/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/png/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/zlib/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/tiff/$(OUTDIR)" "opengl32.lib" "glu32.lib" "vidl_vil1.lib" "vgel.lib" "vgel_kl.lib" "mvl.lib" "vtol.lib" "vsol.lib" "vgl_algo.lib" "vgl.lib" "vcl.lib" "vnl_algo.lib" "netlib.lib" "vnl.lib" "vbl.lib" "vul.lib" "vil.lib" "vpl.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" "mvl.lib" /STACK:10000000  == libraries linked in 
 # TARGTYPE "Win32 (x86) Application" 0x0103
 
 CFG=triangulate - Win32 Debug
@@ -68,7 +68,7 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
 
-# ADD LINK32 /libpath:"$(VXLROOT)/core/vidl/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vidl_vil1/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/contrib/gel/vgel/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/contrib/gel/vgel/kl/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/contrib/oxl/mvl/$(OUTDIR)"
@@ -88,7 +88,7 @@ LINK32=link.exe
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/png/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/zlib/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/tiff/$(OUTDIR)"
-# ADD LINK32 "opengl32.lib" "glu32.lib" "vidl.lib" "vgel.lib" "vgel_kl.lib" "mvl.lib" "vtol.lib" "vsol.lib" "vgl_algo.lib" "vgl.lib" "vcl.lib" "vnl_algo.lib" "netlib.lib" "vnl.lib" "vbl.lib" "vul.lib" "vil.lib" "vpl.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" /STACK:10000000 
+# ADD LINK32 "opengl32.lib" "glu32.lib" "vidl_vil1.lib" "vgel.lib" "vgel_kl.lib" "mvl.lib" "vtol.lib" "vsol.lib" "vgl_algo.lib" "vgl.lib" "vcl.lib" "vnl_algo.lib" "netlib.lib" "vnl.lib" "vbl.lib" "vul.lib" "vil.lib" "vpl.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" /STACK:10000000 
 
 
 !ELSEIF  "$(CFG)" == "triangulate - Win32 Debug"
@@ -119,7 +119,7 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /IGNORE:4089
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /IGNORE:4089
 
-# ADD LINK32 /libpath:"$(VXLROOT)/core/vidl/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vidl_vil1/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/contrib/gel/vgel/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/contrib/gel/vgel/kl/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/contrib/oxl/mvl/$(OUTDIR)"
@@ -139,7 +139,7 @@ LINK32=link.exe
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/png/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/zlib/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/tiff/$(OUTDIR)"
-# ADD LINK32 "opengl32.lib" "glu32.lib" "vidl.lib" "vgel.lib" "vgel_kl.lib" "mvl.lib" "vtol.lib" "vsol.lib" "vgl_algo.lib" "vgl.lib" "vcl.lib" "vnl_algo.lib" "netlib.lib" "vnl.lib" "vbl.lib" "vul.lib" "vil.lib" "vpl.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" /STACK:10000000 
+# ADD LINK32 "opengl32.lib" "glu32.lib" "vidl_vil1.lib" "vgel.lib" "vgel_kl.lib" "mvl.lib" "vtol.lib" "vsol.lib" "vgl_algo.lib" "vgl.lib" "vcl.lib" "vnl_algo.lib" "netlib.lib" "vnl.lib" "vbl.lib" "vul.lib" "vil.lib" "vpl.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" /STACK:10000000 
 
 !ENDIF 
 

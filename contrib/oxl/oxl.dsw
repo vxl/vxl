@@ -216,7 +216,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vidl"=..\vxl\vidl\vidl.dsp - Package Owner=<4>
+Project: "vidl_vil1"=..\vxl\vidl_vil1\vidl_vil1.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -348,7 +348,7 @@ Package=<4>
     Project_Dep_Name vgui_mfc
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name vidl
+    Project_Dep_Name vidl_vil1
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vil

@@ -8,7 +8,7 @@
 #  == override in output directory
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL == compiler defines
 # vidfpl  == name of output library
-#  /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\  osl.lib mvl.lib oxp.lib vvid.lib vidl.lib vgui.lib gevd.lib vtol.lib vdgl.lib vsol.lib vgl_algo.lib vo.lib vfw32.lib mpeg2.lib vul.lib vpl.lib vnl_algo.lib vnl.lib netlib.lib vil.lib ws2_32.lib tiff.lib png.lib zlib.lib jpeg.lib vgl.lib vbl.lib opengl32.lib glu32.lib Qv.lib vcl.lib /STACK:10000000  == libraries linked in 
+#  /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\  osl.lib mvl.lib oxp.lib vvid.lib vidl_vil1.lib vgui.lib gevd.lib vtol.lib vdgl.lib vsol.lib vgl_algo.lib vo.lib vfw32.lib mpeg2.lib vul.lib vpl.lib vnl_algo.lib vnl.lib netlib.lib vil.lib ws2_32.lib tiff.lib png.lib zlib.lib jpeg.lib vgl.lib vbl.lib opengl32.lib glu32.lib Qv.lib vcl.lib /STACK:10000000  == libraries linked in 
 # TARGTYPE "Win32 (x86) Application" 0x0103
 
 CFG=vidfpl - Win32 Debug
@@ -69,7 +69,7 @@ LINK32=link.exe
 # ADD LINK32 mvl.lib
 # ADD LINK32 oxp.lib
 # ADD LINK32 vvid.lib
-# ADD LINK32 vidl.lib
+# ADD LINK32 vidl_vil1.lib
 # ADD LINK32 vgui.lib
 # ADD LINK32 gevd.lib
 # ADD LINK32 vtol.lib
@@ -134,7 +134,7 @@ LINK32=link.exe
 # ADD LINK32 mvl.lib
 # ADD LINK32 oxp.lib
 # ADD LINK32 vvid.lib
-# ADD LINK32 vidl.lib
+# ADD LINK32 vidl_vil1.lib
 # ADD LINK32 vgui.lib
 # ADD LINK32 gevd.lib
 # ADD LINK32 vtol.lib
@@ -196,7 +196,7 @@ LINK32=link.exe
 # ADD LINK32 mvl.lib
 # ADD LINK32 oxp.lib
 # ADD LINK32 vvid.lib
-# ADD LINK32 vidl.lib
+# ADD LINK32 vidl_vil1.lib
 # ADD LINK32 vgui.lib
 # ADD LINK32 gevd.lib
 # ADD LINK32 vtol.lib
@@ -259,7 +259,7 @@ LINK32=link.exe
 # ADD LINK32 mvl.lib
 # ADD LINK32 oxp.lib
 # ADD LINK32 vvid.lib
-# ADD LINK32 vidl.lib
+# ADD LINK32 vidl_vil1.lib
 # ADD LINK32 vgui.lib
 # ADD LINK32 gevd.lib
 # ADD LINK32 vtol.lib
