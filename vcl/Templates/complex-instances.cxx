@@ -7,7 +7,7 @@
 #include <vcl/vcl_complex.txx> 
 
 //#if 0
-#if defined(VCL_GCC_27) || defined(VCL_GCC_EGCS)
+#if defined(VCL_GCC_27) || defined(VCL_EGCS)
 // ---------- emulation
 #if !VCL_USE_NATIVE_COMPLEX
 // ** make sure gcc 2.7 sees this **
