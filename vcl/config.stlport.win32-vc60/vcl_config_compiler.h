@@ -589,7 +589,6 @@ text { return ret; }
 // Set to true if the compiler needs namespace std:: for the standard library.
 #define VCL_NEEDS_NAMESPACE_STD 0
 
-
 //----------------------------------------------------------------------
 // infinity issues
 
@@ -603,8 +602,8 @@ text { return ret; }
 // numeric_limits<double> imply that there is no infinity, when there is.
 #define VCL_PROCESSOR_HAS_INFINITY 1
 
-//----------------------------------------------------------------------
 
+//----------------------------------------------------------------------
 // architecture macros removed -- they're not in the C++ standard
 
 #endif // vcl_config_compiler_h_config_stlport_win32_vc60_
