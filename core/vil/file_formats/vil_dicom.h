@@ -1,4 +1,4 @@
-// This is mul/vil2/file_formats/vil2_dicom.h
+// This is core/vil2/file_formats/vil2_dicom.h
 #ifndef vil2_dicom_file_format_h_
 #define vil2_dicom_file_format_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -9,10 +9,9 @@
 // \brief Reader/Writer for DICOM format 2D images.
 // \author Chris Wolstenholme, Ian Scott - Manchester
 
-
 #include <vil2/vil2_image_resource.h>
 #include <vil2/vil2_file_format.h>
-#include <vil2/file_formats/vil2_dicom_header.h>
+#include "vil2_dicom_header.h"
 
 class vil2_image_view_base;
 
@@ -39,9 +38,9 @@ class vil2_dicom_image : public vil2_image_resource
 
   friend class vil2_dicom_file_format;
 
-  
+
   vil2_streampos start_of_pixels_;
-  
+
  public:
   vil2_dicom_image(vil2_stream* is, unsigned ni,
                    unsigned nj, unsigned nplanes,
