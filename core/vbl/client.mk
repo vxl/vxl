@@ -6,6 +6,4 @@ vbl_client_mk := 1
 
 include $(IUELOCALROOT)/vcl/client.mk
 
-ald_libdeps += vbl:vpl
-
 endif
