@@ -1239,6 +1239,22 @@ MAIN( test_config )
 #endif
   vcl_cout << vcl_endl;
 
+  vcl_cout << "VCL_VC_DOTNET ";
+#ifdef VCL_VC_DOTNET
+  vcl_cout << "is set to " << quote(VCL_VC_DOTNET);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "VCL_VC71 ";
+#ifdef VCL_VC71
+  vcl_cout << "is set to " << quote(VCL_VC71);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
   vcl_cout << "VCL_VC70 ";
 #ifdef VCL_VC70
   vcl_cout << "is set to " << quote(VCL_VC70);
