@@ -12,12 +12,14 @@
 //
 // \verbatim
 // Modifications
-//    22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
+//    22 Oct 2002 - Peter Vanroose - added vgl_homg_point_3d interface
 //    23 Oct 2002 - Peter Vanroose - using fixed 3x3 matrices throughout
 // \endverbatim
 
 #include <vnl/vnl_double_4x4.h>
 #include <vnl/vnl_fwd.h>
+#include <vgl/vgl_homg_point_3d.h>
+#include <vgl/algo/vgl_homg_operators_3d.h> // matrix * vgl_homg_point_3d
 #include <mvl/HomgPoint3D.h>
 #include <mvl/HomgLine3D.h>
 #include <mvl/HomgLineSeg3D.h>
@@ -39,6 +41,8 @@ class HMatrix3D : public vnl_double_4x4
   // Operations----------------------------------------------------------------
 
   HomgPoint3D transform(const HomgPoint3D& x1) const;
+  vgl_homg_point_3d<double> transform(const vgl_homg_point_3d<double>& x1) const
+    { return (*this) * x1; }
   HomgLine3D transform(const HomgLine3D& l1) const;
 
   bool load(vcl_istream&);
