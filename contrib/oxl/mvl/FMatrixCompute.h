@@ -48,10 +48,10 @@ class FMatrixCompute
   //: Compute fundamental matrix using given matchlist and return an FMatrix object.
   //  This is implemented in terms of compute(MatchList*, FMatrix*)
   inline FMatrix compute(PairMatchSetCorner& matched_points)
-    { FMatrix* ret; compute(matched_points, ret); return *ret; }
+    { FMatrix ret; compute(matched_points, &ret); return ret; }
 
   inline FMatrix compute(vcl_vector<HomgPoint2D>& pts1, vcl_vector<HomgPoint2D>& pts2)
-    { FMatrix* ret; compute(pts1, pts2, ret); return *ret; }
+    { FMatrix ret; compute(pts1, pts2, &ret); return ret; }
 };
 
 #endif // _FMatrixCompute_h
