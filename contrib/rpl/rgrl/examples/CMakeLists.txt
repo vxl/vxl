@@ -1,14 +1,5 @@
 INCLUDE_DIRECTORIES( ${VXL_MUL_INCLUDE_DIR} )
 
-ADD_EXECUTABLE( trace_3d_neurons
-  trace_3d_neurons.cxx
-)
-TARGET_LINK_LIBRARIES( trace_3d_neurons rgrl vnl )
-
-ADD_EXECUTABLE( trace_3d_vessels
-  trace_3d_vessels.cxx
-)
-TARGET_LINK_LIBRARIES( trace_3d_vessels rgrl vnl )
 
 ADD_EXECUTABLE( registration1
   test_util.h                      test_util.cxx  
