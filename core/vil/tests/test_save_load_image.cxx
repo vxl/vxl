@@ -424,6 +424,24 @@ MAIN( test_save_load_image )
   vil_test_image_type("jpeg", image16);
 # endif
   vil_test_image_type("jpeg", image3p, false);
+
+  // Test small image
+  {
+    unsigned ni =30, nj=29;
+    vil2_image_view<vxl_byte> small_greyscale_image(ni,nj);
+    for (unsigned j=0;j<nj;++j)
+      for (unsigned i=0;i<ni;++i) small_greyscale_image(i,j)=(i+j)*4;
+    vil_test_image_type("jpeg", small_greyscale_image, false);
+    vcl_string out_path("test_save_load_jpeg.jpg");
+    TEST("Saving JPEG",vil2_save(small_greyscale_image, out_path.c_str()),true);
+
+	vil2_image_view<vxl_byte> new_image = vil2_load(out_path.c_str());
+	TEST("JPEG Size correct",new_image.ni()==ni && new_image.nj()==nj, true);
+	double sum2 = 0;
+	for (unsigned i=0;i<ni;++i)
+	{ double d=double(small_greyscale_image(i,17))-new_image(i,17); sum2+=d*d; }
+	TEST("Loaded image close to original",sum2<2*ni,true);
+  }
 #endif
 
   // pnm ( = PBM / PGM / PPM )
