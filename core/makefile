@@ -31,6 +31,9 @@ SUBDIRS += vsol
 # topology
 SUBDIRS += vtol
 
+# computational geometry
+SUBDIRS += vcgl
+
 # segmentation
 SUBDIRS += vsl
 
