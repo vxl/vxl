@@ -192,10 +192,16 @@ double vsol_line_2d::length(void) const
 //---------------------------------------------------------------------------
 double vsol_line_2d::tangent_angle(void) const
 {
-  double deg_per_rad = 180/3.14159265358979323846;
+  static const double deg_per_rad = 45.0/vcl_atan2(1.0,1.0);
   double dy = p1_->y()-p0_->y();
   double dx = p1_->x()-p0_->x();
-  return deg_per_rad*vcl_atan2(dy,dx);
+  // do special cases separately, to avoid rounding errors:
+  if (dx == 0) return dy<0 ? -90.0 : 90.0;
+  if (dy == 0) return dx<0 ? 180.0 : 0.0;
+  if (dy == dx) return dy<0 ? -135.0 : 45.0;
+  if (dy+dx == 0) return dy<0 ? -45.0 : 135.0;
+  // general case:
+  return deg_per_rad * vcl_atan2(dy,dx);
 }
 
 //***************************************************************************
