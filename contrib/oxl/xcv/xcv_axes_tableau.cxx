@@ -133,7 +133,7 @@ void xcv_axes_tableau::compute_axes()
     } 
     else 
     {
-      int tmp_number = vcl_ceil(xlimits_.tick_start + (xcounter*xlimits_.tick_spacing));
+      int tmp_number = (int)vcl_ceil(xlimits_.tick_start + (xcounter*xlimits_.tick_spacing));
       vcl_sprintf(tmp_number_string, "%d", tmp_number);
     }
     text_->add(tmp_width-10, top_offset+graph_height+20, tmp_number_string);
@@ -159,7 +159,7 @@ void xcv_axes_tableau::compute_axes()
     }
     else
     {
-      int tmp_number = vcl_ceil(ylimits_.tick_end - (ycounter*ylimits_.tick_spacing)); 
+      int tmp_number = (int)vcl_ceil(ylimits_.tick_end - (ycounter*ylimits_.tick_spacing)); 
       vcl_sprintf(tmp_number_string, "%d", tmp_number); 
     }
     text_->add(left_offset-40, tmp_height+3, tmp_number_string);
