@@ -6,9 +6,12 @@ VERSION := 1.0
 #SOURCES += bmvv_multiview_manager.cxx
 #SOURCES += bmvv_tomography_manager.cxx
 SOURCES += bmvv_recon_manager.cxx
+SOURCES += bmvv_cal_manager.cxx
+
 #SOURCES += bmvv_menus.cxx
 #SOURCES += bmvv_tomg_menus.cxx
 SOURCES += bmvv_recon_menus.cxx
+SOURCES += bmvv_cal_menus.cxx
 
 SUBDIRS += mvbin
 
