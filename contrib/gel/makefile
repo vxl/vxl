@@ -33,6 +33,12 @@ SUBDIRS += gst vtol
 # digital geometry
 SUBDIRS += vdgl
 
+# photogrammetry
+SUBDIRS += mrc/vpgl
+
+# coordinate systems addon
+SUBDIRS += mrc/vcsl
+
 # general examples
 ifndef NOTEST
 SUBDIRS += examples
