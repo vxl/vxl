@@ -533,7 +533,7 @@ int bdgl_curve_algs::closest_end(vdgl_edgel_chain_sptr const & ec,
 void bdgl_curve_algs::
 smooth_curve(vcl_vector<vgl_point_2d<double> > &curve,double sigma)
 {
-  vnl_gaussian_kernel_1d gauss_1d(1);
+  vnl_gaussian_kernel_1d gauss_1d(sigma);
   curve.insert(curve.begin(),curve[0]);
   curve.insert(curve.begin(),curve[0]);
   curve.insert(curve.begin(),curve[0]);
