@@ -50,7 +50,7 @@ PMatrix::PMatrix ():
 // <pre>
 //   PMatrix P(cin);
 // </pre>
-PMatrix::PMatrix (istream& i) :
+PMatrix::PMatrix (vcl_istream& i) :
   _svd(0)
 {
   read_ascii(i);
@@ -120,7 +120,7 @@ PMatrix::~PMatrix()
 // 3D point X
 HomgPoint2D PMatrix::project (const HomgPoint3D& X) const
 { 
-  vnl_vector<double> x = _p_matrix * X.get_vector();
+  vnl_double_3 x = _p_matrix * X.get_vector();
   return HomgPoint2D(x);
 }
 
@@ -176,7 +176,7 @@ HomgPlane3D PMatrix::backproject (const HomgLine2D& l) const
 
 //-----------------------------------------------------------------------------
 // -- Print p on ostream
-ostream& operator<<(ostream& s, const PMatrix& p)
+vcl_ostream& operator<<(vcl_ostream& s, const PMatrix& p)
 {
   if (HomgPrettyPrint::pretty)
     return vnl_matlab_print(s, p.get_matrix(), "");
@@ -186,19 +186,19 @@ ostream& operator<<(ostream& s, const PMatrix& p)
 
 //-----------------------------------------------------------------------------
 // -- Load p from ascii istream
-istream& operator>>(istream& i, PMatrix& p)
+vcl_istream& operator>>(vcl_istream& i, PMatrix& p)
 {
   p.read_ascii(i);
   return i;
 }
 
-static bool ok(istream& f) { return f.good() || f.eof(); }
+static bool ok(vcl_istream& f) { return f.good() || f.eof(); }
 
 // -- Load from file
 // <pre>
 // P.read_ascii("file.P");
 // <pre>
-bool PMatrix::read_ascii(istream& f)
+bool PMatrix::read_ascii(vcl_istream& f)
 {
   f >> (vnl_matrix<double>&)this->_p_matrix;
   clear_svd();
@@ -217,21 +217,21 @@ bool PMatrix::read_ascii(istream& f)
 // </pre>
 PMatrix PMatrix::read(const char* filename)
 {
-  ifstream f(filename);
+  vcl_ifstream f(filename);
   if (!ok(f)) {
-    cerr << "PMatrix::read: Failed to open P matrix file " << filename << endl;    
+    vcl_cerr << "PMatrix::read: Failed to open P matrix file " << filename << vcl_endl;    
     return PMatrix();
   }
   
   PMatrix P;
   if (!P.read_ascii(f))
-    cerr << "PMatrix::read: Failed to read P matrix file " << filename << endl;    
+    vcl_cerr << "PMatrix::read: Failed to read P matrix file " << filename << vcl_endl;    
     
   return P;
 }
 
 // -- Load from istream
-PMatrix PMatrix::read(istream& s)
+PMatrix PMatrix::read(vcl_istream& s)
 {
   PMatrix P;
   s >> P;
@@ -273,16 +273,16 @@ HomgPoint3D PMatrix::get_focal_point() const
 {
   // From st_compute_focal_point
   if (svd()->singularities() > 1) {
-    cerr << "PMatrix::get_focal_point: "
-	 << "  Nullspace dimension is " << svd()->singularities() << endl
-	 << "  Returning a vector of zeros" << endl;
+    vcl_cerr << "PMatrix::get_focal_point: "
+	 << "  Nullspace dimension is " << svd()->singularities() << vcl_endl
+	 << "  Returning a vector of zeros" << vcl_endl;
     return HomgPoint3D(0,0,0,0);
   }
 
   vnl_matrix<double> nullspace = svd()->nullspace();
   
   if (nullspace(3,0) == 0)
-    cerr << "PMatrix::get_focal_point: Focal point at infinity";
+    vcl_cerr << "PMatrix::get_focal_point: Focal point at infinity";
   
   return HomgPoint3D(nullspace(0,0),
 		     nullspace(1,0),
@@ -470,7 +470,7 @@ PMatrix::fix_cheirality()
   // Used to scale by 1/det, but it's a bad idea if det is small
   if (0) {
     if (fabs(det - 1) > 1e-8) {
-      cerr << "PMatrix::fix_cheirality: Flipping, determinant is " << det << endl;
+      vcl_cerr << "PMatrix::fix_cheirality: Flipping, determinant is " << det << vcl_endl;
     }
     
     scale = 1/det;
