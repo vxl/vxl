@@ -1,7 +1,7 @@
 #include <vcl_iostream.h>
 #include<mbl/mbl_gamma.h>
 #include<math.h>
-
+#include <vcl_cstdlib.h> // abort()
 
 const int MAX_ITS = 100;
 const double EPS = 3.0e-7;

@@ -9,7 +9,7 @@
 // \author Aaron Kotcheff
 // \brief A superior random number generator
 
-#include<assert.h>
+#include<vcl_cassert.h>
 // #include<stddef.h>
 
 
@@ -34,7 +34,7 @@ class mbl_mz_random
     unsigned long mz_array[mbl_mz_array_size];
     int mz_array_position;
     int mz_borrow;
-    unsigned long linear_congruential_lrand32() {return (linear_congruential_previous = (linear_congruential_previous*linear_congruential_multiplier + 1));}
+    unsigned long linear_congruential_lrand32();
 
     double mz_previous_normal;
     int mz_previous_normal_flag;
@@ -55,13 +55,13 @@ class mbl_mz_random
       //  generator is used to generate the 37 ulongs needed
       //  as the real seed. The same seed will produce the
       //  same series of random numbers.
-    mbl_mz_random(unsigned long seed) : mz_array_position(0L), mz_borrow(0), mz_previous_normal_flag(0) {reseed(seed);}
+    mbl_mz_random(unsigned long seed);
 
       //: Construct with seed
       //  Initializes the random number generator deterministically
       //  using 37 ulongs as the 'seed'. The same seed will
       //  produce the same series of random numbers.
-    mbl_mz_random(unsigned long seed[mbl_mz_array_size]) : mz_array_position(0L), mz_borrow(0), mz_previous_normal_flag(0) {reseed(seed);}
+    mbl_mz_random(unsigned long seed[mbl_mz_array_size]);
 
       //: Copy constructor
       //  Initializes/sets the random number generator to exactly
@@ -93,17 +93,17 @@ class mbl_mz_random
       //: Generates a random unsigned long.
     unsigned long lrand32();
 
-      //: Generates a random unsigned long in [0,a]
-    int lrand32(int a, int=0);
+      //: Generates a random unsigned long in [a,b]
+    int lrand32(int a, int b);
 
-      //: Generates a random unsigned long in [b,a]
+      //: Generates a random unsigned long in [a,b]
     int lrand32(int a, int b, int&);
 
-      //:  Generates a random double in the range b <= x <= a with 32 bit randomness.
+      //:  Generates a random double in the range a <= x <= ba with 32 bit randomness.
       //   drand32(1,0) is random down to about the 10th decimal place.
     double drand32(double a, double b);
 
-      //: Generates a random double in the range b <= x <= a with 64 bit randomness,
+      //: Generates a random double in the range a <= x <= b with 64 bit randomness,
       //  Completely random down to the accuracy of a double.
     double drand64(double a, double b);
 
@@ -120,59 +120,5 @@ class mbl_mz_random
     double normal64();
   };
 
-inline unsigned long mbl_mz_random::lrand32()
-  {
-  unsigned long p1 = mz_array[(mbl_mz_array_size + mz_array_position - mz_previous1)%mbl_mz_array_size];
-  unsigned long p2 = p1 - mz_array[mz_array_position] - mz_borrow;
-  if (p2 < p1) mz_borrow = 0;
-  if (p2 > p1) mz_borrow = 1;
-  mz_array[mz_array_position] = p2;
-  mz_array_position = (++mz_array_position)%mbl_mz_array_size;
-  return p2;
-  }
-
-inline int mbl_mz_random::lrand32(int upper, int lower)
-  {
-  assert(upper > lower);
-
-  // Note: we have to reject some numbers otherwise we get a very slight bias
-  // towards the lower part of the range lower - upper. See below
-
-  unsigned long range = upper-lower+1;
-  unsigned long denom = 0xffffffff/range;
-  unsigned long ran;
-  while ((ran=lrand32())>=denom*range);
-  return lower + ran/denom;
-  }
-
-
-inline int mbl_mz_random::lrand32(int upper, int lower, int &count)
-  {
-  assert(upper > lower);
-
-  // Note: we have to reject some numbers otherwise we get a very slight bias
-  // towards the lower part of the range lower - upper. Hence this is a "count"
-  // version of the above function that returns the number of lrand32()
-  // calls made.
-
-  unsigned long range = upper-lower+1;
-  unsigned long denom = 0xffffffff/range;
-  unsigned long ran;
-  count = 1;
-  while ((ran=lrand32())>=denom*range) ++count;
-  return lower + ran/denom;
-  }
-
-inline double mbl_mz_random::drand32(double upper = 1.0, double lower = 0.0)
-  {
-  assert(upper > lower);
-  return  (double(lrand32())/0xffffffff)*(upper-lower) + lower;
-  }
-
-inline double mbl_mz_random::drand64(double upper = 1.0, double lower = 0.0)
-  {
-  assert(upper > lower);
-  return  (double(lrand32())/0xffffffff + double(lrand32())/(double(0xffffffff)*double(0xffffffff)))*(upper-lower) + lower;
-  }
 
 #endif // mbl_mz_random_h
