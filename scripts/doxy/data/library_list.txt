@@ -17,21 +17,21 @@ book: vxl : VXL overview documentation
 book: mul : Manchester University Library overview documentation
 book: tbl : The Image Processing Library
 
-package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl vxl Core Vision Libraries
-vxl vsl vsl_ build
-vxl vnl vnl_ build vxl/vsl
-vxl vbl vbl_ build vxl/vsl
-vxl vgl vgl_ build vxl/vsl vxl/vnl
-vxl vil vil_ build vxl/vsl
-vxl vul vul_ build vxl/vsl
-vxl vpl vpl_ build
+package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl core Core Vision Libraries
+core vsl vsl_ build
+core vnl vnl_ build vxl/vsl
+core vbl vbl_ build vxl/vsl
+core vgl vgl_ build vxl/vsl vxl/vnl
+core vil vil_ build vxl/vsl
+core vul vul_ build vxl/vsl
+core vpl vpl_ build
 
-package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl vxl Level-2 Vision Libraries
-vxl vidl vidl_ build vxl/vbl vxl/vul vxl/vil
-vxl vcsl vcsl_ build vxl/vnl vxl/vbl
+package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl core Level-2 Vision Libraries
+core vidl vidl_ build vxl/vbl vxl/vul vxl/vil
+core vcsl vcsl_ build vxl/vnl vxl/vbl
 
-package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl vxl Test Framework
-vxl testlib testlib_ build
+package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl core Test Framework
+core testlib testlib_ build
 
 package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl mul Manchester University Libraries
 mul mbl   mbl_   build vxl/vnl vxl/vgl
