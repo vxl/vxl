@@ -262,7 +262,8 @@ void vsrl_image_correlation::initial_calculations()
 
     int x_offset = i-correlation_range_;
 
-    compute_correlation(x_offset,X,Y,*mean_x_,*mean_y_,*std_x_,*std_y_,*corr);
+    if (x_offset >= 0)
+      compute_correlation(x_offset,X,Y,*mean_x_,*mean_y_,*std_x_,*std_y_,*corr);
   }
 }
 
