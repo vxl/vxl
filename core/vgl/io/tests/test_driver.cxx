@@ -1,6 +1,5 @@
 #include <testlib/testlib_register.h>
 
-DECLARE( test_includes );
 DECLARE( golden_test_vgl_io );
 DECLARE( test_box_2d_io );
 DECLARE( test_box_3d_io );
@@ -24,7 +23,6 @@ DECLARE( test_vector_3d_io );
 void
 register_tests()
 {
-  REGISTER( test_includes );
   REGISTER( golden_test_vgl_io );
   REGISTER( test_box_2d_io );
   REGISTER( test_box_3d_io );

@@ -1,6 +1,5 @@
 #include <testlib/testlib_register.h>
 
-DECLARE( test_includes );
 DECLARE( test_cartesian );
 DECLARE( test_distance );
 DECLARE( test_conic );
@@ -15,7 +14,6 @@ DECLARE( test_clip );
 void
 register_tests()
 {
-  REGISTER( test_includes );
   REGISTER( test_cartesian );
   REGISTER( test_distance );
   REGISTER( test_conic );
