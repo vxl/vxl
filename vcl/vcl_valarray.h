@@ -20,7 +20,7 @@
 # include "iso/vcl_valarray.h"
 # if !VCL_COMPLEX_POW_WORKS
 // deal with corrections to pow(complex...)
-#  undef vcl_pow;
+#  undef vcl_pow
 #  define vcl_pow vcl_pow
 template<class T> inline vcl_valarray<T>
   vcl_pow(const vcl_valarray<T>& x, const vcl_valarray<T>& y)

@@ -60,7 +60,7 @@
 # include "iso/vcl_cmath.h"
 # if !VCL_COMPLEX_POW_WORKS
 // deal with corrections to pow(complex...)
-#  undef vcl_pow;
+#  undef vcl_pow
 #  define vcl_pow vcl_pow
 inline float vcl_pow(float x, float y) { std::pow(x, y); }
 inline double vcl_pow(double x, double y) { std::pow(x, y); }
