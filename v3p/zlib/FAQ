@@ -1,5 +1,5 @@
 
-		Frequently Asked Questions about zlib
+                Frequently Asked Questions about zlib
 
 
 If your question is not there, please check the zlib home page 
@@ -14,7 +14,6 @@ http://www.cdrom.com/pub/infozip/zlib/ which may have more recent information.
 6) Why don't you use GNU autoconf, libtool, etc...?
 7) There is a bug in zlib.
 8) I get "undefined reference to gzputc"
-
 
 
 1) I need a Windows DLL
