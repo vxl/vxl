@@ -256,14 +256,18 @@ MANPAGE_SOURCES += win32-vc60/vcl_cstdarg.h
 MANPAGE_SOURCES += win32-vc60/vcl_cstdlib.h
 MANPAGE_SOURCES += win32-vc60/vcl_memory.h
 MANPAGE_SOURCES += win32-vc60/vcl_string.h
+MANPAGE_SOURCES += win32-vc60/vcl_valarray.h
 
 MANPAGE_SOURCES += win32-vc70/vcl_cmath.h
+MANPAGE_SOURCES += win32-vc70/vcl_complex.h
 MANPAGE_SOURCES += win32-vc70/vcl_cstdlib.h
+MANPAGE_SOURCES += win32-vc70/vcl_valarray.h
 
 MANPAGE_SOURCES += borland55/vcl_cfloat.h
 MANPAGE_SOURCES += borland55/vcl_cmath.h
 MANPAGE_SOURCES += borland55/vcl_complex.h
 MANPAGE_SOURCES += borland55/vcl_cstdlib.h
+MANPAGE_SOURCES += borland55/vcl_memory.h
 MANPAGE_SOURCES += borland56/vcl_complex.h
 
 MANPAGE_SOURCES += mwerks/vcl_cmath.h
@@ -331,6 +335,7 @@ MANPAGE_SOURCES += emulation/stlcomp.h
 endif
 
 DEFINES += -DBUILDING_VCL_DLL
+AUX_SOURCE_DIRECTORY := dummy
 
 ifndef NOTEST
 SUBDIRS = tests
