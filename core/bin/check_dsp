@@ -152,11 +152,8 @@ foreach $dir (@DIRS)
           push @sources, $file;
           push @tests, $file if ($1 eq "TESTS");
           $file =~ s/\.(c|cxx|cc|cpp|C)$/.h/;
-          push @hsources, $file
-            if (-f "$dir/$file"
-              && $file !~ m/\b(vbl_shared_pointer|vbl_sort|vgl_1d_basis|vil_warp|vnl_matlab_print)\.h$/
-              && $file !~ m/\b(mil_gaussian_pyramid_builder_2d(|_general)|mil_image_(2d_of|data|pyramid))\.h$/
-              && $file !~ m/\b(osl_canny_smooth|mil3d_image_3d_of)\.h$/);
+          push @hsources, $file if (-f "$dir/$file" && grep(/^$file$/, @hsources) == 0);
+          # I.e.: .h files which are not explicitly present in makefile are added only once.
         }
       }
       if (m/^\s*(MANPAGE_SOURCES)\s*\+\=\s*(\S+)/) {
@@ -164,7 +161,8 @@ foreach $dir (@DIRS)
         push @hsources, $file;
         if ($file =~ m/\.txx$/) {
           $file =~ s/\.txx$/.h/;
-          push @hsources, $file if (-f "$dir/$file");
+          push @hsources, $file if (-f "$dir/$file" && grep(/^$file$/, @hsources) == 0);
+          # I.e.: .h files which are not explicitly present in makefile are added only once.
         }
       }
       if (m/^\s*SUBDIRS\s*\:?\=\s*(.+)/) {
