@@ -134,7 +134,7 @@ sub main {
     print STDERR "examining ", $f, "... ";
 
     # filter, passing arguments through and redirecting stdout to $f.filt
-    &shell("$perl -x $IUELOCALROOT/vxl/bin/vxl_filter.pl < $f @options > $f.filt");
+    &shell("$perl -x $IUELOCALROOT/core/bin/vxl_filter.pl < $f @options > $f.filt");
 
     # compare and replace if changed
     if (&files_differ("$f", "$f.filt")) {
