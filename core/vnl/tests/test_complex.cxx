@@ -93,14 +93,17 @@ vcl_complex<double> tc_acos(vcl_complex<double> x)
   // special cases:
   if (b==0 && a > 1)
     return vcl_complex<double>(0.0, vcl_log(a+vcl_sqrt(a*a-1))); // == acosh(a)
-  else if (b==0 && a >= -1)
+  else if (b==0 && a >= -1.0)
     return vcl_acos(a);
 
   // the general case:
   // the result c + d*i satisfies a = cos(c)*cosh(d), b = -sin(c)*sinh(d)
   // hence $\frac{a^2}{\cos^2(c)} - \frac{b^2}{\sin^2(c)} = 1$.
-  double t = 0.5*(1+a*a+b*b-vcl_sqrt((a*a-1)*(a*a-1)+b*b*(b*b+2*a*a+2)));
+  double q = (a*a-1)*(a*a-1)+b*b*(b*b+2*a*a+2);
+  double t = 0.5*(1+a*a+b*b-vcl_sqrt(q));
   // this $t = \cos^2(c)$ solves the latter biquadratic equation and lies in [0,1].
   double aa = a/vcl_sqrt(t), bb = b/vcl_sqrt(1-t);
-  return vcl_complex<double>(vcl_acos(vcl_sqrt(t)), vcl_log(vcl_fabs(aa-bb)));
+  double r_real = vcl_acos(vcl_sqrt(t));
+  double r_imag = vcl_log(vcl_fabs(aa-bb));
+  return vcl_complex<double>(r_real, r_imag);
 }
