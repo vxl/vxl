@@ -62,7 +62,6 @@ system_information_print_file (const char * name, vcl_ostream & os,
 
       while( fin ) {
         vcl_getline( fin, buffer );
-        os << "=: ";
         for( unsigned i = 0; i < buffer.size(); ++i ) {
           char const& c = buffer[i];
           // Assume a \r at the end or a \n at the beginning is due to
