@@ -171,8 +171,6 @@ SOURCES += internals/vgui_accelerate_tag.cxx
 MANPAGE_SOURCES += internals/vgui_gl_selection_macros.h
 ifeq (1,$(HAS_X11))
 SOURCES += internals/vgui_accelerate_x11.cxx
-else
-SOURCES += internals/vgui_accelerate_mfc.cxx
 endif
 
 # VRML I/O -- uses Qv
