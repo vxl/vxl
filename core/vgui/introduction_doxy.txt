@@ -11,13 +11,14 @@
 * that provides an interface to an OpenGL rendering area.  This adaptor
 * is plugged into a GUI and produces a rectangular area on which OpenGL
 * can be displayed. The adaptor contains a tableau which is used to draw 
-* the OpenGL (see vgui_tableau).
+* the OpenGL and to receive events from the user (see vgui_tableau).
 * 
 * Some of the most useful tableaux are:
 * - vgui_image_tableau : loads and displays an image.
 * - vgui_easy2D : displays two-dimensional geometric objects.
+* - vgui_text_tableau : displays text
 * - vgui_viewer2D : functions to view 2D objects (eg, zoom, drag, center).
-* - vgui_composite_tableau : holds many children all of whom receive events.
+* - vgui_composite : holds many children all of whom receive events.
 * - vgui_deck_tableau : holds many child tableaux but only one receives events.
 * - vgui_polytab : renders its children in sub-rectangles of its viewport.
 * - vgui_grid_tableau : renders its child tableaux as a rectangular grid.
@@ -55,5 +56,6 @@
 * }
 * \endverbatim
 *
-* There are more examples for VGUI on the VXL webpage and in vgui/examples.
+* There are more examples for VGUI on the VXL webpage and in oxl/vgui/examples.
+* Also xcv uses VGUI and you can find its code in oxl/xcv.
 */
