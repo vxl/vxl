@@ -73,6 +73,7 @@ SOURCE_FILES( vil_sources
   file_formats/vil_mit.h
   file_formats/vil_png.h
   file_formats/vil_pnm.h
+  file_formats/vil_ras.h
   file_formats/vil_tiff.h
   file_formats/vil_viff.h
   file_formats/vil_viffheader.h
