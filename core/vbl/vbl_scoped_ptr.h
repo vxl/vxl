@@ -1,11 +1,10 @@
 #ifndef vbl_scoped_ptr_h_
 #define vbl_scoped_ptr_h_
-
 //:
 // \file
 // \author Amitha Perera
-// Scoped pointer lifted from BOOST.
-
+// \brief Scoped pointer lifted from BOOST.
+//
 //  (C) Copyright Greg Colvin and Beman Dawes 1998, 1999.
 //  Copyright (c) 2001, 2002 Peter Dimov
 //
@@ -20,7 +19,6 @@
 
 #include <vcl_compiler.h>
 #include <vbl/vbl_checked_delete.h>
-
 
 //:
 //  vbl_scoped_ptr mimics a built-in pointer except that it guarantees
@@ -48,12 +46,11 @@
 //    Y::~Y()
 //    { } // causes ~vbl_scoped_ptr<X> to be instantiated and inlined, but X is complete here, so all is well.
 //  \endcode
-//
-template<class T>
+
+template <class T>
 class vbl_scoped_ptr
 {
-private:
-
+ private:
   T* ptr_;
 
   // not copyable, not assignable.
@@ -64,7 +61,7 @@ private:
 
   VCL_SAFE_BOOL_DEFINE;
 
-public:
+ public:
   typedef T element_type;
 
   //:
@@ -74,7 +71,7 @@ public:
   }
 
   //:
-  // T must be complete when this desctructor is instantiated.
+  // T must be complete when this destructor is instantiated.
   ~vbl_scoped_ptr() // never throws
   {
     vbl_checked_delete(ptr_);
