@@ -1,4 +1,4 @@
-// This is mul/vil2/vil2_memory_image.h
+// This is core/vil2/vil2_memory_image.h
 #ifndef vil2_memory_image_h_
 #define vil2_memory_image_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -10,6 +10,8 @@
 
 #include <vil2/vil2_image_resource.h>
 #include <vil2/vil2_image_view_base.h>
+#include <vil2/vil2_property.h>
+#include <vcl_cstring.h>
 
 //: Generic image implementation for PNM files
 // You can't create one of these yourself - use vil2_new() instead.
@@ -57,7 +59,14 @@ class vil2_memory_image : public vil2_image_resource
   //: Put the data in this view back into the image source.
   virtual bool put_view(const vil2_image_view_base& im, unsigned i0, unsigned j0);
 
-  bool get_property(char const * /*tag*/, void * /*prop*/ = 0) const {return false;}
+  //: Declare that this is an in-memory image which is not read-only
+  bool get_property(char const * tag, void * prop = 0) const
+  {
+    if (0==vcl_strcmp(tag, vil2_property_memory))
+      return prop ? (*static_cast<bool*>(prop)) = true : true;
+
+    return false;
+  }
 };
 
 #endif // vil2_memory_image_h_
