@@ -146,7 +146,7 @@ integer *info;
 
 /*     set the maximum number of iterations. */
 
-    maxit = 30;
+    maxit = 1000;
 
 /*     determine what is to be computed. */
 

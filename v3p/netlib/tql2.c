@@ -62,7 +62,7 @@ integer *ierr;
 /*        ierr is set to                                                  */
 /*          zero       for normal return,                                 */
 /*          j          if the j-th eigenvalue has not been                */
-/*                     determined after 30 iterations.                    */
+/*                     determined after 1000 iterations.                  */
 /*                                                                        */
 /*     calls pythag for  sqrt(a*a + b*b) .                                */
 /*                                                                        */
@@ -106,9 +106,9 @@ integer *ierr;
             goto L220;
         }
 L130:
-        if (j == 30) {
+        if (j == 1000) {
 /*     .......... set error -- no convergence to an */
-/*                eigenvalue after 30 iterations .......... */
+/*                eigenvalue after 1000 iterations .......... */
             *ierr = l+1;
             return;
         }
