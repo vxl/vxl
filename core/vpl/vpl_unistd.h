@@ -54,7 +54,14 @@ typedef useconds_t  vpl_useconds_t;
 typedef unsigned    vpl_useconds_t;
 #endif
 #if VXL_UNISTD_HAS_INTPTR_T
+// there is a problem here in that VXL_UNISTD_HAS_INTPTR_T is set
+// using  <unistd.h> but this file (vpl/vpl_unistd.h> doesn't include it
+// and instead uses <sys/types.h>
+# ifndef __intptr_t_defined
+typedef __intptr_t  vpl_intptr_t;
+# else
 typedef intptr_t    vpl_intptr_t;
+# endif
 #else
 typedef int         vpl_intptr_t;
 #endif
