@@ -12,23 +12,6 @@
 #include <vcl/vcl_string.h>
 #include <vcl/vcl_cstdio.h>
 #include <vbl/vbl_basic_relation.h>
-#include <assert.h>
-#include <unistd.h> // for unlink()
-
-//--------------------------------------------------------------------------------
-// various template hacks :
-
-// due to the fact that the sunpro4.2 does not do manual template instantiation correctly
-// we have to do it all here.
-#if defined(__SUNPRO_CC) && !defined(IUE_SUNPRO_CC_5)
-#include <Templates/BRImpl+TestType~.int.vcl_string-.C>
-#include <Templates/vbl_basic_relation+TestType~.int.vcl_string-.C>
-#include <Templates/vbl_basic_relation+vcl_string.double.float.int.CoolString-.C>
-#include <Templates/vbl_basic_relation+vcl_string.int.int.CoolMatrix+float-~-.C>
-#include <Templates/vbl_basic_relation+vcl_string.int.vcl_string-.C>
-#endif
-
-//--------------------------------------------------------------------------------
 
 
 class TestType

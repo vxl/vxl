@@ -1,5 +1,4 @@
 
-#include <stdio.h>
 #include <vcl/vcl_iostream.h>
 #include <vbl/vbl_ref_count.h>
 

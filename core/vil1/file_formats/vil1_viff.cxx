@@ -6,9 +6,6 @@
 
 char const* vil_viff_format_tag = "viff";
 
-//#include <vcl/vcl_cassert.h>
-//#include <vcl/vcl_cstdio.h> // for sprintf
-
 #include <vcl/vcl_iostream.h>
 #include <vcl/vcl_cstring.h>
 

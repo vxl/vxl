@@ -5,7 +5,6 @@
 #include "vil_png.h"
 
 #include <vcl/vcl_cassert.h>
-//#include <vcl/vcl_cstdio.h> // sprintf()
 #include <vcl/vcl_cstring.h>
 #include <vcl/vcl_iostream.h>
 
