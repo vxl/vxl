@@ -11,7 +11,7 @@ vil_image vepl_threshold(vil_image const& image, double threshold, double below,
     typedef unsigned char ubyte;
     vil_memory_image_of<ubyte> mem(image); // load in memory to pass to filter
     vil_memory_image_of<ubyte> out(image);
-    vipl_threshold<vil_image,vil_image,ubyte,ubyte,vipl_trivial_pixeliter> op(threshold, below, above);
+    vipl_threshold<vil_image,vil_image,ubyte,ubyte,vipl_trivial_pixeliter> op((ubyte)threshold, (ubyte)below, (ubyte)above);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();
