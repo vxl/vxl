@@ -1,15 +1,15 @@
 #ifndef rrel_homography2d_est_aff_h_
 #define rrel_homography2d_est_aff_h_
+//:
+// \file
 
 #include <rrel/rrel_homography2d_est.h>
 
-//: Subclass of the generalized 8-DOF homography estimator for affine
-//  transformations (6 DOF).
-
+//: Subclass of the generalized 8-DOF homography estimator for affine transformations (6 DOF).
 
 class rrel_homography2d_est_aff : public rrel_homography2d_est
 {
-public:
+ public:
 
   //: Constructor from vgl_homg_point_2d's
   rrel_homography2d_est_aff( const vcl_vector< vgl_homg_point_2d<double> > & from_pts,
