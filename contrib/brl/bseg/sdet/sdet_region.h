@@ -1,4 +1,3 @@
-//--*-c++-*--
 // This is brl/bseg/sdet/sdet_region.h
 #ifndef sdet_region_h_
 #define sdet_region_h_
@@ -15,7 +14,6 @@
 //
 //-----------------------------------------------------------------------------
 #include <vcl_iostream.h>
-#include <vbl/vbl_ref_count.h>
 #include <sdet/sdet_region_sptr.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <vdgl/vdgl_digital_region.h>
@@ -36,16 +34,16 @@ class sdet_region : public vdgl_digital_region
   vsol_polygon_2d_sptr boundary();
 
   vdgl_digital_region* cast_to_digital_region(){return (vdgl_digital_region*) this;}
-  
+
   //:utilities
   bool compute_boundary();
-  // must implement comparison since containers need this 
+  // must implement comparison since containers need this
   struct compare
   {
     bool operator()(sdet_region_sptr const & l,
                     sdet_region_sptr const & r) const
     {
-      if(!l||!r)
+      if (!l||!r)
         return false;
       return l->Npix() < r->Npix();//Large areas are favored
     }
@@ -55,6 +53,7 @@ class sdet_region : public vdgl_digital_region
   bool boundary_valid_;
   vsol_polygon_2d_sptr boundary_;
 };
+
 vcl_ostream&  operator<<(vcl_ostream& s, sdet_region const& sd);
 
 #endif // sdet_region_h_
