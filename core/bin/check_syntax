@@ -283,7 +283,6 @@ foreach $f (@FILES)
     elsif ($j eq "vsl/vsl_binary_explicit_io.h") { $i="vsl_(convert_[a-z_]+|swap_bytes|swap_bytes_to_buffer|b_(read|write)_[a-z_]+)"; }
     elsif ($j eq "vsl/vsl_complex_io.h") { $i="(VNL_IO_[A-Z]+_INSTANTIATE.vcl_complex|vsl_b_(read|write))"; }
     elsif ($j eq "vsl/vsl_indent.h") { $i="$i(|_inc|_dec|_set_tab|_tab|_clear|_clear_all_data)"; }
-    elsif ($j =~ m"(vsl/vsl_[a-z]+_io|v[bginu]l1?/io/v[bginu]l1?_io_[a-z123_]+)\.h") { $i="vsl_(b_(read|write)|print_summary)"; }
     # VGL
     elsif ($j eq "vgl/vgl_clip.h") { $i="$i(|_type|_line[a-z_]+)"; }
     elsif ($j eq "vgl/vgl_closest_point.h") { $i="$i(|s|_origin|_to_linesegment|_to_(|non_)closed_polygon)"; }
@@ -426,6 +425,7 @@ foreach $f (@FILES)
     elsif ($j eq "mil/mil_bilin_interp_2d.h") { $i="mil(|_safe(|_extend))_bilin_interp_2d"; }
     elsif ($j eq "mil/mil_convert_vil.h") { $i="($i)_[gc][mv]2[gc][mv]"; }
     # SPECIAL CASES
+    if ($j =~ m"(vsl/vsl_[a-z]+_io|v[bginu]l1?/io/v[bginu]l1?_io_[a-z123_]+)\.h") { $i="$i|vsl_(b_(read|write)|print_summary)"; }
     next if ($j eq "vsol/vsol_curve.h" && $f =~ m!Templates/vbl_smart_ptr\+vtol_edge-\.cxx$!);
     next if ($j eq "vsol/vsol_point.h" && $f =~ m!Templates/vbl_smart_ptr\+vtol_edge-\.cxx$!);
     next if ($j eq "vsol/vsol_region.h" && $f =~ m!Templates/vbl_smart_ptr\+vtol_face-\.cxx$!);
