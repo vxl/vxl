@@ -25,16 +25,13 @@ void bdgl_curve_tracking ::track()
 bdgl_tracker_curve_sptr bdgl_curve_tracking ::get_output_curve(int frame_no, int id)
 {
   if (frame_no > output_curves_.size())
-    {
-      vcl_cerr<<"\n frame doesn`t exist";
-      return 0 ;
-    }
+  {
+    vcl_cerr<<"\n frame doesn`t exist";
+    return 0 ;
+  }
   else
-    {
-      return output_curves_[frame_no][id];
-    }
+    return output_curves_[frame_no][id];
 
-  return 0;
 }
 
 void bdgl_curve_tracking ::get_reliable_curves(int frame_no,int window)
