@@ -1,21 +1,22 @@
-//-*-c++-*-
+//:
+// \file
 #include <brip/brip_para_cvrg_params.h>
 #include <vcl_sstream.h>
 
 //------------------------------------------------------------------------
-// -- Constructors
+// Constructors
 //
 
 brip_para_cvrg_params::brip_para_cvrg_params(const brip_para_cvrg_params& pdp)
 {
-  InitParams(pdp.sigma_, pdp.thresh_, pdp.gauss_tail_, 
-             pdp.proj_width_, pdp.proj_height_, 
+  InitParams(pdp.sigma_, pdp.thresh_, pdp.gauss_tail_,
+             pdp.proj_width_, pdp.proj_height_,
              pdp.sup_radius_, pdp.verbose_);
 }
 
-brip_para_cvrg_params::brip_para_cvrg_params(float sigma, float thresh, 
+brip_para_cvrg_params::brip_para_cvrg_params(float sigma, float thresh,
                                        float gauss_tail, int proj_width,
-                                       int proj_height, int sup_radius, 
+                                       int proj_height, int sup_radius,
                                        bool verbose)
 {
   InitParams(sigma, thresh, gauss_tail, proj_width, proj_height,
@@ -23,10 +24,10 @@ brip_para_cvrg_params::brip_para_cvrg_params(float sigma, float thresh,
 }
 
 void brip_para_cvrg_params::InitParams(float sigma, float thresh,
-                                    float gauss_tail, 
+                                    float gauss_tail,
                                     int proj_width, int proj_height,
                                     int sup_radius, bool verbose)
-{			       
+{
   sigma_ = sigma;
   thresh_ = thresh;
   gauss_tail_ = gauss_tail;
@@ -35,48 +36,49 @@ void brip_para_cvrg_params::InitParams(float sigma, float thresh,
   sup_radius_ = sup_radius;
   verbose_ = verbose;
 }
+
 //-----------------------------------------------------------------------------
 //
-// -- Checks that parameters are within acceptable bounds
-// 
+//: Checks that parameters are within acceptable bounds
+//
 bool brip_para_cvrg_params::SanityCheck()
 {
   vcl_stringstream msg;
   bool valid = true;
 
-  if (sigma_ <= 0)  	// Standard deviation of the smoothing kernel
+  if (sigma_ <= 0)  // Standard deviation of the smoothing kernel
   {
     msg << "ERROR: Value of gaussian smoothing sigma is too low <=0" << vcl_ends;
     valid = false;
   }
 
-  if (thresh_ <= 0)  	// Noise weighting factor
+  if (thresh_ <= 0)  // Noise weighting factor
   {
     msg << "ERROR: Value of noise weight must be >0" << vcl_ends;
     valid = false;
   }
 
-  if (gauss_tail_ <= 0)	// Cutoff for gaussian kernel radius
+  if (gauss_tail_ <= 0) // Cutoff for gaussian kernel radius
   {
     msg << "ERROR: Value of gauss tail fraction is too low <= 0" << vcl_ends;
     valid = false;
   }
 
-  if (proj_width_ <= 0)  	//Projection kernel width
+  if (proj_width_ <= 0)  //Projection kernel width
   {
     msg << "ERROR: Value of projection kernel width must be >0" << vcl_ends;
     valid = false;
   }
 
-  if (proj_height_ <= 0)  	//Projection kernel height
+  if (proj_height_ <= 0)  //Projection kernel height
   {
     msg << "ERROR: Value of projection kernel height must be >0" << vcl_ends;
     valid = false;
   }
 
-  if (sup_radius_ <= 0)  	//Max supression radius
+  if (sup_radius_ <= 0)  //Max suppression radius
   {
-    msg << "ERROR: Value of max supression radius must be >0" << vcl_ends;
+    msg << "ERROR: Value of max suppression radius must be >0" << vcl_ends;
     valid = false;
   }
 
@@ -87,14 +89,13 @@ bool brip_para_cvrg_params::SanityCheck()
 
 vcl_ostream& operator<<(vcl_ostream& os, const brip_para_cvrg_params& pcp)
 {
-  os << "brip_para_coverage_params:" << vcl_endl << "[---" << vcl_endl;
-  os << "sigma " << pcp.sigma_ << vcl_endl;
-  os << "thresh " << pcp.thresh_ << vcl_endl;
-  os << "proj half width " << pcp.proj_width_ << vcl_endl;
-  os << "proj half height " << pcp.proj_height_ << vcl_endl;
-  os << "non maximum supression radius " << pcp.sup_radius_ << vcl_endl;
-  os << "verbose " << pcp.verbose_ << vcl_endl;
-  os << "---]" << vcl_endl;
-  return os;
-
+  return
+  os << "brip_para_coverage_params:\n[---\n"
+     << "sigma " << pcp.sigma_ << vcl_endl
+     << "thresh " << pcp.thresh_ << vcl_endl
+     << "proj half width " << pcp.proj_width_ << vcl_endl
+     << "proj half height " << pcp.proj_height_ << vcl_endl
+     << "non maximum suppression radius " << pcp.sup_radius_ << vcl_endl
+     << "verbose " << pcp.verbose_ << vcl_endl
+     << "---]" << vcl_endl;
 }

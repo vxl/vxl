@@ -1,4 +1,3 @@
-//--*-c++-*--
 // This is brl/bseg/brip/brip_region_pixel.h
 #ifndef brip_region_pixel_h_
 #define brip_region_pixel_h_
@@ -21,7 +20,7 @@
 
 class brip_region_pixel : public vbl_ref_count
 {
-public:
+ public:
   vgl_point_2d<int> location_;
   vgl_point_2d<int> nearest_;
   float cost_;
@@ -37,7 +36,7 @@ public:
               float const& cost,
               int const count,
               unsigned int const& label)
-    : location_(location), nearest_(nearest), cost_(cost), 
+    : location_(location), nearest_(nearest), cost_(cost),
       count_(count), label_(label)
   {
     //    vcl_cout << "L " << location_ << "cost " << cost << '\n';
@@ -68,33 +67,32 @@ public:
     bool operator()(brip_region_pixel const & l,
                     brip_region_pixel const & r) const
     {
-      if(r.cost_ == l.cost_)
-        {
-          if(r.dist_ == l.dist_) return r.count_ < l.count_;
+      if (r.cost_ == l.cost_)
+      {
+        if (r.dist_ == l.dist_) return r.count_ < l.count_;
 
-          return r.dist_ < l.dist_;
-        }
+        return r.dist_ < l.dist_;
+      }
 
       return r.cost_ < l.cost_;
     }
-  
+
 
     bool operator()(brip_region_pixel_sptr const & l,
                     brip_region_pixel_sptr const & r) const
     {
-	  if(r->cost_ == l->cost_)
-        {
-          if(r->dist_ == l->dist_) return r->count_ < l->count_;
+      if (r->cost_ == l->cost_)
+      {
+        if (r->dist_ == l->dist_) return r->count_ < l->count_;
 
-          return r->dist_ < l->dist_;
-        }
+        return r->dist_ < l->dist_;
+      }
 
       return r->cost_ < l->cost_;
     }
   };
-
 };
+
 vcl_ostream&  operator<<(vcl_ostream& s, brip_region_pixel const& sd);
 
-#include <brip/brip_region_pixel_sptr.h>
 #endif // brip_region_pixel_h_
