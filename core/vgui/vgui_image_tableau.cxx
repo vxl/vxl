@@ -18,22 +18,22 @@
   
 vgui_image_tableau::vgui_image_tableau()
   : vgui_tableau() 
-  , pixels_centered(false)
+  , pixels_centered(true)
   , renderer(new vgui_image_renderer)
-   { }
+{ }
 
 vgui_image_tableau::vgui_image_tableau(vil_image const &I)
   : vgui_tableau()
-  , pixels_centered(false)
+  , pixels_centered(true)
   , renderer(new vgui_image_renderer)
-  { set_image(I); }
+{ set_image(I); }
 
 vgui_image_tableau::vgui_image_tableau(char const *f)
   : vgui_tableau()
   , name_(f)
-  , pixels_centered(false)
+  , pixels_centered(true)
   , renderer(new vgui_image_renderer)
-  { set_image(f); }
+{ set_image(f); }
 
 
 vgui_image_tableau::~vgui_image_tableau()
