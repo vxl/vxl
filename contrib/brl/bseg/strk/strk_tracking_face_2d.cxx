@@ -1269,8 +1269,7 @@ gradient_histogram(vil1_memory_image_of<float> const& Ix,
   if (intf_->Npix() == 0)
     return grad_dir_hist;
   double deg_rad = 180.0/vnl_math::pi;
-  int i = 0;
-  for (intf_->reset(); intf_->next(); ++i)
+  for (intf_->reset(); intf_->next();)
   {
     int x = int(intf_->X()), y = int(intf_->Y());
     if (x<0||x>=width||y<0||y>=height)
