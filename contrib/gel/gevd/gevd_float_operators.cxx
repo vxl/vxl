@@ -1117,7 +1117,7 @@ LocalMaximum(const gevd_bufferxy& magnitude,
              float& contour, unsigned char& dir, // response & direction
              float& locx, float& locy)  // subpixel location
 {
-  const float tan_pi_8 = (float)tan(vnl_math::pi_over_4/2);
+  const float tan_pi_8 = (float)vcl_tan(vnl_math::pi_over_4/2);
   float strength = floatPixel(magnitude, i, j);
   if (strength > threshold) { // eliminate noisy responses
     float dx = floatPixel(directionx, i, j);
@@ -1127,21 +1127,21 @@ LocalMaximum(const gevd_bufferxy& magnitude,
       dir = DIR4 - DIR0;
     } else
       dir = 0;
-    float _s, s_, r;
+    float sl, sr, r;
     if (dx > 0) {               // which octant?
       if (dx > dy) {    // 0-45 degree
         r = dy / dx;
-        _s = (r*floatPixel(magnitude, i-1, j-1) +
+        sl = (r*floatPixel(magnitude, i-1, j-1) +
               (1-r)*floatPixel(magnitude, i-1, j));
-        s_ = (r*floatPixel(magnitude, i+1, j+1) +
+        sr = (r*floatPixel(magnitude, i+1, j+1) +
               (1-r)*floatPixel(magnitude, i+1, j));
         dx = 1, dy = r; // range in location
         dir += (r < tan_pi_8)? DIR0 : DIR1;
       } else {          // 45-90 degree
         r = dx / dy;
-        _s = (r*floatPixel(magnitude, i-1, j-1) +
+        sl = (r*floatPixel(magnitude, i-1, j-1) +
               (1-r)*floatPixel(magnitude, i, j-1));
-        s_ = (r*floatPixel(magnitude, i+1, j+1) +
+        sr = (r*floatPixel(magnitude, i+1, j+1) +
               (1-r)*floatPixel(magnitude, i, j+1));
         dy = 1, dx = r;
         dir += (r < tan_pi_8)? DIR2 : DIR1;
@@ -1150,25 +1150,25 @@ LocalMaximum(const gevd_bufferxy& magnitude,
       dx = -dx;         // absolute value
       if (dy > dx) {    // 90-135 degree
         r = dx / dy;
-        _s = (r*floatPixel(magnitude, i-1, j+1) +
+        sl = (r*floatPixel(magnitude, i-1, j+1) +
               (1-r)*floatPixel(magnitude, i, j+1));
-        s_ = (r*floatPixel(magnitude, i+1, j-1) +
+        sr = (r*floatPixel(magnitude, i+1, j-1) +
               (1-r)*floatPixel(magnitude, i, j-1));
         dy = -1, dx = r;
         dir += (r < tan_pi_8)? DIR2 : DIR3;
       } else {          // 135-180 degree
         r = dy / dx;
-        _s = (r*floatPixel(magnitude, i+1, j-1) +
+        sl = (r*floatPixel(magnitude, i+1, j-1) +
               (1-r)*floatPixel(magnitude, i+1, j));
-        s_ = (r*floatPixel(magnitude, i-1, j+1) +
+        sr = (r*floatPixel(magnitude, i-1, j+1) +
               (1-r)*floatPixel(magnitude, i-1, j));
         dx = -1, dy = r;
         dir += (r < tan_pi_8)? DIR0 : DIR3;
       }
     }
-    if (_s < strength &&        // usually a strict local maximum
-        strength >= s_) {       // equality is for continuity for b&w images
-      r = gevd_float_operators::InterpolateParabola(_s, strength, s_, // interpolated offset
+    if (sl < strength &&        // usually a strict local maximum
+        strength >= sr) {       // equality is for continuity for b&w images
+      r = gevd_float_operators::InterpolateParabola(sl, strength, sr, // interpolated offset
                                    contour); // interpolated max response
       locx = r*dx;
       locy = r*dy;
