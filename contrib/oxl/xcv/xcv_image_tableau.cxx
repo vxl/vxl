@@ -7,12 +7,16 @@
 
 #include <vcl_string.h>
 #include <vcl_cmath.h>
+#include <vcl_cstdio.h> // sprintf
 
 #include <vil/vil_crop.h>
 #include <vil/vil_image.h>
 
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_gl.h>
+#include <vgui/vgui_projection_inspector.h>
+
+extern void post_to_status_bar(const char*);
 
 //--------------------------------------------------------------------------------
 
@@ -97,6 +101,7 @@ bool xcv_image_tableau::get_bounding_box(float low[3], float high[3]) const
 //: Handle all events for this tableau.
 bool xcv_image_tableau::handle(vgui_event const &e)
 {
+  static bool button_down = false;
   //
   if (e.type == vgui_DRAW) {
     base::handle(e);
@@ -113,7 +118,31 @@ bool xcv_image_tableau::handle(vgui_event const &e)
     }
     return true;
   }
+  else if (e.type == vgui_BUTTON_DOWN)
+  {
+    button_down = true;
+    post_to_status_bar(" ");
+    return base::handle(e);
+  }
+  else if (e.type == vgui_BUTTON_UP)
+  {
+    button_down = false;
+    return base::handle(e);
+  }
+  else if (e.type == vgui_MOTION && button_down == false)
+  {
+    // Display X,Y position on status bar:
+    float pointx, pointy;
+    vgui_projection_inspector p_insp;
+    p_insp.window_to_image_coordinates(e.wx, e.wy, pointx, pointy);
+    int intx = vcl_floor(pointx), inty = vcl_floor(pointy);
 
+    char msg[100];
+    vcl_sprintf(msg, "(%d, %d)", intx, inty);
+    post_to_status_bar(msg);
+
+    return base::handle(e);
+  }
   else
     return base::handle(e);
 }
