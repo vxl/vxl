@@ -46,6 +46,12 @@ public:
   //: Evaluate polynomial at value x
   double evaluate(double x) const;
 
+	//: Evaluate integral at x (assuming constant of integration is zero)
+	double evaluate_integral(double x) const;
+
+	//: Evaluate integral between x1 and x2
+	double evaluate_integral(double x1, double x2) const;
+
   //: Evaluate derivative at value x
 private: // not implemented
   double devaluate(double x) const;
@@ -81,5 +87,19 @@ protected:
   // coeffs_[n] is the coefficient of the x^n term.
   vnl_vector<double> coeffs_;
 };
+
+//: Returns polynomial which is sum of two polynomials f1(x)+f2(x)
+vnl_real_polynomial operator+(const vnl_real_polynomial& f1, const vnl_real_polynomial& f2);
+
+//: Returns polynomial which is different of two polynomials f1(x)-f2(x)
+vnl_real_polynomial operator-(const vnl_real_polynomial& f1, const vnl_real_polynomial& f2);
+
+//: Returns polynomial which is product of two polynomials f1(x)*f2(x)
+vnl_real_polynomial operator*(const vnl_real_polynomial& f1, const vnl_real_polynomial& f2);
+
+//: Returns RMS difference between f1 and f2 over range [x1,x2]
+//  $\sqrt{1/\x2-x1|\int_{x1}^{x2}(f1(x)-f2(x))^2dx}$
+double vnl_rms_difference(const vnl_real_polynomial& f1, const vnl_real_polynomial& f2,
+                          double x1, double x2);
 
 #endif // vnl_real_polynomial_h_
