@@ -64,13 +64,13 @@ ADD_TEST( vil2_test_image_view              vil2_test_all test_image_view)
 ADD_TEST( vil2_test_memory_chunk            vil2_test_all test_memory_chunk)
 
 # file format readers/writers
-ADD_TEST( vil2_test_file_format_read        vil2_test_all test_file_format_read ${VXLCORE_INCLUDE_DIR}/vil/tests/file_read_data)
+ADD_TEST( vil2_test_file_format_read        vil2_test_all test_file_format_read ${VXLCORE_INCLUDE_DIR}/vil2/tests/file_read_data)
 ADD_TEST( vil2_test_save_load_image         vil2_test_all test_save_load_image)
 
 # image operations
 ADD_TEST( vil2_test_deep_copy_3_plane       vil2_test_all test_deep_copy_3_plane )
 ADD_TEST( vil2_test_image_view_maths        vil2_test_all test_image_view_maths)
-ADD_TEST( vil2_test_convert                 vil2_test_all test_convert ${VXLCORE_INCLUDE_DIR}/vil/tests/file_read_data)
+ADD_TEST( vil2_test_convert                 vil2_test_all test_convert ${VXLCORE_INCLUDE_DIR}/vil2/tests/file_read_data)
 
 # Sampling Operations
 ADD_TEST( vil2_test_bilin_interp            vil2_test_all test_bilin_interp)
