@@ -1,6 +1,8 @@
 USES := vxl
 USE_NETLIB := 1
 
+TESTS += test_all.cxx
+TESTS += test_fft.cxx
 TESTS += test_fft1d.cxx
 TESTS += test_fft2d.cxx
 TESTS += test_matlab.cxx
