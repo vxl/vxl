@@ -131,10 +131,10 @@ void vmap_2_map<D>::set_phi (vmap_dart_index arg, vmap_dart_index arg_phi)
 template <class D>
 void vmap_2_map<D>::unchecked_removal(dart_iterator & arg)
 {
-   dart_type* d=&*arg,
-        sd=vmap_2_map_sigma(d),
-        a=vmap_2_map_alpha(d),
-        sa=vmap_2_map_sigma(aa) ;
+  dart_type* d = &*arg,
+           * sd= vmap_2_map_sigma(d),
+           * a = vmap_2_map_alpha(d),
+           * sa= vmap_2_map_sigma(aa) ;
 
   if (sd != d || sa != a) // ! Pendant edges
   {
@@ -165,10 +165,10 @@ void vmap_2_map<D>::unchecked_removal(dart_iterator & arg)
 template <class D>
 void vmap_2_map<D>::unchecked_contraction(dart_iterator & arg)
 {
-  dart_type* d=&*arg,
-        sd=vmap_2_map_sigma(d),
-        a=vmap_2_map_alpha(d),
-        sa=vmap_2_map_sigma(aa) ;
+  dart_type* d = &*arg,
+           * sd= vmap_2_map_sigma(d),
+           * a = vmap_2_map_alpha(d),
+           * sa= vmap_2_map_sigma(aa) ;
 
   if (sa != d || sa != a) // ! Loop
   {
@@ -216,7 +216,7 @@ void vmap_2_map<D>::contraction(contraction_kernel const& arg_kernel)
   typename contraction_kernel::const_iterator itk ;
   for (itk=arg_kernel.begin(); itk!=arg_kernel.end(); ++itk)
   {
-    //((vmap_2_pyramid_base_dart&)(**itk)).set_last_levmap_2_pyramid_base_dart&)_level.last().
+    //((vmap_2_pyramid_base_dart&)(**itk)).set_last_levmap_2_pyramid_base_dart&)level_.last().
     dart_type * d =get_dart_pointer((*itk)->sequence_index()) ;
     id=d->sequence_index() ;
     --ld ;
@@ -247,7 +247,7 @@ void vmap_2_map<D>::contraction(contraction_kernel const& arg_kernel)
   {
     //delete_dart(get_dart_pointer.last()) ;
     //get_dart_pointer.pop_back() ;
-     destroyLastDart() ;
+    destroyLastDart() ;
   }
 }
 
@@ -259,7 +259,7 @@ void vmap_2_map<D>::removal(removal_kernel const& arg_kernel)
   typename contraction_kernel::const_iterator itk ;
   for (itk=arg_kernel.begin(); itk!=arg_kernel.end(); ++itk)
   {
-    //((vmap_2_pyramid_base_dart&)(**itk)).set_last_levmap_2_pyramid_base_dart&)_level.last().
+    //((vmap_2_pyramid_base_dart&)(**itk)).set_last_levmap_2_pyramid_base_dart&)level_.last().
     dart_type * d =get_dart_pointer((*itk)->sequence_index()) ;
     id=d->sequence_index() ;
     --ld ;
@@ -299,22 +299,22 @@ vmap_2_map_tag vmap_2_map<D>::tag ;
 
 #if 0
 template <class V, class E, class F, class D>
-void  vmap_2_map< V,E,F,D >::set_edge(vmap_edge_index arg,
-              vmap_edge_index arg_edge1, vmap_vertex_index arg_vertex1, vmap_face_index arg_face1,
-              vmap_edge_index arg_edge2, vmap_vertex_index arg_vertex2, vmap_face_index arg_face2)
+void vmap_2_map< V,E,F,D >::set_edge(vmap_edge_index arg,
+                                     vmap_edge_index arg_edge1, vmap_vertex_index arg_vertex1, vmap_face_index arg_face1,
+                                     vmap_edge_index arg_edge2, vmap_vertex_index arg_vertex2, vmap_face_index arg_face2)
 {
-    vmap_dart_index tmp1 = edge_first_dart(arg_edge1),
-             tmp2 = edge_first_dart(arg_edge2),
-             tmp12 = edge_first_dart(arg),
-             tmp22 = alpha(tmp12);
-    if (dart_associated_vertex(tmp1)!=arg_vertex1)
-       tmp1=alpha(tmp1) ;
+  vmap_dart_index tmp1 = edge_first_dart(arg_edge1),
+                  tmp2 = edge_first_dart(arg_edge2),
+                  tmp12 = edge_first_dart(arg),
+                  tmp22 = alpha(tmp12);
+  if (dart_associated_vertex(tmp1)!=arg_vertex1)
+    tmp1=alpha(tmp1) ;
 
   if (dart_associated_vertex(tmp2)!=arg_vertex2)
-       tmp1=alpha(tmp2) ;
+      tmp1=alpha(tmp2) ;
 
-    set_dart(tmp12,tmp1, arg_vertex1, arg_face1) ;
-    set_dart(tmp22,tmp2, arg_vertex2, arg_face2) ;
+  set_dart(tmp12,tmp1, arg_vertex1, arg_face1) ;
+  set_dart(tmp22,tmp2, arg_vertex2, arg_face2) ;
 }
 #endif // 0
 
