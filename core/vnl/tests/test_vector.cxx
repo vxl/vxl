@@ -39,7 +39,7 @@ void vnl_vector_test_int()
   TEST("vnl_vector<int> v4(v3)", v3, v4);
   TEST("v0=v2", (v0=v2, v0), v2);
 
-  //// test additions and substractions
+  //// test additions and subtractions
   TEST("v0=v2+3", ((v0=v2+3), (v0.get(0)==5 && v0.get(1)==5)), true);
   TEST("v0=3+v2", ((v0=3+v2), (v0.get(0)==5 && v0.get(1)==5)), true);
   TEST("v0+=(-3)", (v0+=(-3), (v0.get(0)==2 && v0.get(1)==2)), true);
@@ -182,7 +182,7 @@ void vnl_vector_test_float()
   vcl_cout << &v0 << " == " << v0 << vcl_endl;
   TEST("<<", 1, 1);
 
-  //// test additions and substractions
+  //// test additions and subtractions
   TEST("v0=v2+3", ((v0=v2+3), (v0.get(0)==5 && v0.get(1)==5)), true);
   TEST("v0=3+v2", ((v0=3.0f+v2), (v0.get(0)==5 && v0.get(1)==5)), true);
   TEST("v0+=(-3)", (v0+=(-3), (v0.get(0)==2 && v0.get(1)==2)), true);
@@ -300,8 +300,8 @@ void vnl_vector_test_float()
     vcl_cout << "angle(v1,v2) = " << ang << vcl_endl;
     ang *= 180*vnl_math::one_over_pi;
     vcl_cout << "angle(v1,v2) in degrees = " << ang << vcl_endl
-             << "v1.size()=" << v1.size() << "\n"
-             << "v2.size()=" << v2.size() << "\n"
+             << "v1.size()=" << v1.size() << vcl_endl
+             << "v2.size()=" << v2.size() << vcl_endl
              << "vnl_cross_2d(v1,v2) = " << vnl_cross_2d(v1,v2) << vcl_endl
              << "vnl_cross_3d(v1,v2) = " << vnl_cross_3d(v1,v2) << vcl_endl;
     TEST_NEAR("angle(v1,v2)", ang, 90.0, 1e-15);
