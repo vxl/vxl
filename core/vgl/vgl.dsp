@@ -344,6 +344,9 @@ SOURCE=.\Templates/vcl_vector+vgl_homg_point_2d+double--.cxx
 # Begin Source File
 SOURCE=.\vgl_ellipse_scan_iterator.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vgl_closest_point.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -505,6 +508,9 @@ SOURCE=.\vgl_window_scan_iterator.h
 # End Source File
 # Begin Source File
 SOURCE=.\vgl_fwd.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_closest_point.h
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"

@@ -128,6 +128,9 @@ SOURCE=.\test_triangle_scan_iterator.cxx
 # Begin Source File
 SOURCE=.\test_fit_lines_2d.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_closest_point.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
