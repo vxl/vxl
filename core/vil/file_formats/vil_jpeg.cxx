@@ -200,7 +200,7 @@ bool vil2_jpeg_image::put_view(const vil2_image_view_base &view,
   }
   else
   {
-    vil2_image_view<vxl_byte> line = vil2_new_image_view_i_j_plane<vxl_byte>(
+    vil2_image_view<vxl_byte> line = vil2_new_image_view_i_j_plane(
       view2.ni(), 1, view2.nplanes(), vxl_byte());
     JSAMPLE *scanline = line.top_left_ptr();
 
