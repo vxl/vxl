@@ -44,7 +44,7 @@ ADD_TEST( vil2_test_algo_gauss_reduce       vil2_test_driver test_algo_gauss_red
 ADD_TEST( vil2_test_algo_convolve_1d        vil2_test_driver test_algo_convolve_1d )
 ADD_TEST( vil2_test_algo_convolve_2d        vil2_test_driver test_algo_convolve_2d )
 ADD_TEST( vil2_test_algo_exp_filter_1d      vil2_test_driver test_algo_exp_filter_1d )
-ADD_TEST( vil2_test_algo_exp_grad_filter_1d vil2_test_driver vil2_test_algo_exp_grad_filter_1d )
+ADD_TEST( vil2_test_algo_exp_grad_filter_1d vil2_test_driver test_algo_exp_grad_filter_1d )
 ADD_TEST( vil2_test_image_view_maths        vil2_test_driver test_image_view_maths )
 ADD_TEST( vil2_memory_chunk                 vil2_test_driver test_memory_chunk )
 ADD_TEST( vil2_resample_bilin               vil2_test_driver test_resample_bilin )
