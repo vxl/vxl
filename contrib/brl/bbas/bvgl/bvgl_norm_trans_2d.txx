@@ -1,4 +1,3 @@
-//--*-c++-*-------
 // This is brl/bbas/bvgl/bvgl_norm_trans_2d.txx
 #ifndef bvgl_norm_trans_2d_txx_
 #define bvgl_norm_trans_2d_txx_
@@ -58,7 +57,7 @@ bvgl_norm_trans_2d<T>::bvgl_norm_trans_2d(const T* H)
 
 //: Destructor
 template <class T>
-bvgl_norm_trans_2d<T>::~bvgl_norm_trans_2d<T>()
+bvgl_norm_trans_2d<T>::~bvgl_norm_trans_2d()
 {
 }
 
