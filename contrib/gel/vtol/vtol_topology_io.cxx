@@ -30,7 +30,7 @@ vtol_topology_io::~vtol_topology_io()
 // write out a list of topology objects 
 
 void vtol_topology_io::write(vcl_list<vtol_topology_object_ref> &topo_objects,
-			     vcl_ostream &strm=vcl_cout)
+			     vcl_ostream &strm)
 {
   // write out the dtd table 
   
@@ -335,7 +335,7 @@ void vtol_topology_io::write_zero_chain(vtol_zero_chain *zc,
   strm << "</vxl_zero_chain_2d>" << vcl_endl;
 }  
 
-void vtol_topology_io::write_edge_2d(vtol_edge_2d *e, vcl_ostream &strm=vcl_cout)
+void vtol_topology_io::write_edge_2d(vtol_edge_2d *e, vcl_ostream &strm)
 {
   
   strm << "<vxl_edge_2d id=\"e2d" << e->get_id() << "\">" << vcl_endl;
@@ -358,7 +358,7 @@ void vtol_topology_io::write_edge_2d(vtol_edge_2d *e, vcl_ostream &strm=vcl_cout
 }
 
 
-void vtol_topology_io::write_one_chain(vtol_one_chain *oc, vcl_ostream &strm=vcl_cout)
+void vtol_topology_io::write_one_chain(vtol_one_chain *oc, vcl_ostream &strm)
 {
   strm << "<vxl_one_chain_2d id=\"oc_" << oc->get_id() << "\">" << vcl_endl;
 
@@ -393,7 +393,7 @@ void vtol_topology_io::write_one_chain(vtol_one_chain *oc, vcl_ostream &strm=vcl
 
 
 
-void vtol_topology_io::write_face_2d(vtol_face_2d *f, vcl_ostream &strm=vcl_cout)
+void vtol_topology_io::write_face_2d(vtol_face_2d *f, vcl_ostream &strm)
 {
 
   strm << "<vxl_face_2d id=\"f2d" << f->get_id() << "\">" << vcl_endl;
@@ -417,7 +417,7 @@ void vtol_topology_io::write_face_2d(vtol_face_2d *f, vcl_ostream &strm=vcl_cout
 }
 
 
-void vtol_topology_io::write_two_chain(vtol_two_chain *tc, vcl_ostream &strm=vcl_cout)
+void vtol_topology_io::write_two_chain(vtol_two_chain *tc, vcl_ostream &strm)
 {
   strm << "<vxl_two_chain_2d id=\"tc_" << tc->get_id() << "\">" << vcl_endl;
   
@@ -453,7 +453,7 @@ void vtol_topology_io::write_two_chain(vtol_two_chain *tc, vcl_ostream &strm=vcl
 }
 
 
-void vtol_topology_io::write_block(vtol_block *b, vcl_ostream &strm=vcl_cout)
+void vtol_topology_io::write_block(vtol_block *b, vcl_ostream &strm)
 {
 
   strm << "<vxl_block_2d id=\"b__" << b->get_id() << "\">" << vcl_endl;
