@@ -21,9 +21,9 @@ template<class T>
 inline void vil2_print_all(vcl_ostream& os,const vil2_image_view<T>& view)
 {
   os<<view.is_a()<<" "<<view.nplanes()<<" planes, each "<<view.ni()<<" x "<<view.nj()
-    <<" istep: "<<view.istep()<<' '
-    <<" jstep: "<<view.jstep()<<' '
-    <<" planestep: "<<view.planestep()<<'\n' << vcl_flush;
+    <<" istep: "<<(int)view.istep()<<' '
+    <<" jstep: "<<(int)view.jstep()<<' '
+    <<" planestep: "<<(int)view.planestep()<<'\n' << vcl_flush;
   for (unsigned int p=0;p<view.nplanes();++p)
   {
     if (view.nplanes()>1) os<<"Plane "<<p<<":\n" << vcl_flush;

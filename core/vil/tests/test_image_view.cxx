@@ -38,9 +38,9 @@ void test_image_view_rgba(vil2_image_view<vxl_byte> &image2, vil2_image_view<flo
   vil2_convert_rgb_to_grey(image6, image7);
   TEST("vil2_convert_rgb_to_grey(vil2_rgba)", image7, true);
 
-  TEST_NEAR("Conversion rgba to grey", image7(0,0),  0.71540, 1e-5);
+  TEST_NEAR("Conversion rgba to grey", image7(0,0),  0.7154, 1e-5);
 
-  TEST_NEAR("Conversion rgba to grey", image7(2,1), 33.71540, 1e-5);
+  TEST_NEAR("Conversion rgba to grey", image7(2,1),  33.7154, 1e-5);
 
   vil2_print_all(vcl_cout, image7);
 }

@@ -50,6 +50,8 @@ inline void vil2_correlate_1d(const srcT* src0, unsigned nx, vcl_ptrdiff_t s_ste
 
 //: correlate kernel[i] (i in [k_lo,k_hi]) with srcT in i-direction
 // On exit dest_im(i,j) = sum src(i+x,j)*kernel(x)  (x=k_lo..k_hi)
+// \note  This function doen not reverse the kernel. If you want the
+// kernel reversed, use vil2_convolve_1d instead.
 // \param kernel should point to tap 0.
 // \param dest_im will be resized to size of src_im.
 // \relates vil2_image_view
@@ -106,7 +108,7 @@ template <class destT, class kernelT, class accumT>
 inline vil2_image_resource_sptr vil2_correlate_1d(
                const vil2_image_resource_sptr& src_im,
                const destT dt,
-               const kernelT* kernel, int k_lo, int k_hi,
+               const kernelT* kernel, vcl_ptrdiff_t k_lo, vcl_ptrdiff_t k_hi,
                const accumT ac,
                vil2_convolve_boundary_option start_option,
                vil2_convolve_boundary_option end_option);
@@ -118,7 +120,7 @@ class vil2_correlate_1d_resource : public vil2_image_resource
   //: Construct a correlate filter.
   // You can't create one of these directly, use vil2_correlate_1d instead
   vil2_correlate_1d_resource(const vil2_image_resource_sptr& src,
-                             const kernelT* kernel, int k_lo, int k_hi,
+                             const kernelT* kernel, vcl_ptrdiff_t k_lo, vcl_ptrdiff_t k_hi,
                              vil2_convolve_boundary_option start_option,
                              vil2_convolve_boundary_option end_option)  :
       src_(src), kernel_(kernel), klo_(k_lo), khi_(k_hi),
@@ -131,7 +133,7 @@ class vil2_correlate_1d_resource : public vil2_image_resource
 
   friend vil2_image_resource_sptr vil2_correlate_1d VCL_NULL_TMPL_ARGS (
     const vil2_image_resource_sptr& src_im, const destT dt, const kernelT* kernel,
-    int k_lo, int k_hi, const accumT ac,
+    vcl_ptrdiff_t k_lo, vcl_ptrdiff_t k_hi, const accumT ac,
     vil2_convolve_boundary_option start_option,
     vil2_convolve_boundary_option end_option);
 
@@ -140,7 +142,7 @@ class vil2_correlate_1d_resource : public vil2_image_resource
                                                   unsigned j0, unsigned nj) const
   {
     if (i0 + ni > src_->ni() || j0 + nj > src_->nj())  return 0;
-    const unsigned lsrc = (unsigned) vcl_max(0,(int)i0 + klo_); // lhs of input window
+    const unsigned lsrc = (unsigned) vcl_max(0,(vcl_ptrdiff_t)i0 + klo_); // lhs of input window
     const unsigned hsrc = vcl_min(src_->ni(),i0 + ni - klo_ + khi_); // 1+rhs of input window.
     const unsigned lboundary = vcl_min((unsigned) -klo_, i0); // width of lhs boundary area.
     assert (hsrc > lsrc);
@@ -202,13 +204,15 @@ class vil2_correlate_1d_resource : public vil2_image_resource
 };
 
 //: Create an image_resource object which correlate kernel[x] x in [k_lo,k_hi] with srcT
+// \note  This function doen not reverse the kernel. If you want the
+// kernel reversed, use vil2_convolve_1d instead.
 // \param kernel should point to tap 0.
 // \relates vil2_image_resource
 template <class destT, class kernelT, class accumT>
 inline vil2_image_resource_sptr vil2_correlate_1d(
                          const vil2_image_resource_sptr& src_im,
                          const destT dt,
-                         const kernelT* kernel, int k_lo, int k_hi,
+                         const kernelT* kernel, vcl_ptrdiff_t k_lo, vcl_ptrdiff_t k_hi,
                          const accumT,
                          vil2_convolve_boundary_option start_option,
                          vil2_convolve_boundary_option end_option)

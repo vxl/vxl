@@ -15,7 +15,6 @@
 
 
 //: Performs conversion between different pixel types.
-// When the input type is compound\<integer type> a
 template <class In, class Out>
 class vil2_convert_cast_pixel
 {
@@ -87,11 +86,14 @@ macro( vil_rgba<vxl_byte> )
 
 // declare general case in case anyone needs something weird.
 template <class In, class Out>
-inline void vil2_convert_cast_pixel<In, Out>::operator () (In v, Out &d) const { d = static_cast<Out>(v); }
+inline void vil2_convert_cast_pixel<In, Out>::operator () (In v, Out &d) const { d = (Out)(v); }
 
 
 //: Cast one pixel type to another (with rounding).
 // There must be a cast operator from inP to outP
+//
+// If the two pixel types are the same, the destination may only be a shallow copy
+// of the source.
 // \relates vil2_image_view
 template <class inP, class outP>
 inline void vil2_convert_cast(const vil2_image_view<inP >&src, vil2_image_view<outP >&dest)
@@ -100,6 +102,123 @@ inline void vil2_convert_cast(const vil2_image_view<inP >&src, vil2_image_view<o
     dest = src;
   else
     vil2_transform2(src, dest, vil2_convert_cast_pixel<inP, outP>());
+}
+
+
+
+//: Performs rounding between different pixel types.
+template <class In, class Out>
+class vil2_convert_round_pixel
+{
+ public:
+  void operator () (In v, Out &d) const;
+};
+
+// deal with conversions from floating point types to some compounds
+#define macro( in , out )\
+VCL_DEFINE_SPECIALIZATION \
+inline void vil2_convert_round_pixel<in, out >::operator () (in v, out& d) const { \
+  d.r = (out::value_type)(v.r+0.5); \
+  d.g = (out::value_type)(v.g+0.5); \
+  d.b = (out::value_type)(v.b+0.5); }
+
+macro( vil_rgb<vxl_byte> , vil_rgb<float> )
+macro( vil_rgb<vxl_byte> , vil_rgb<double> )
+macro( vil_rgb<vxl_sbyte> , vil_rgb<float> )
+macro( vil_rgb<vxl_sbyte> , vil_rgb<double> )
+macro( vil_rgb<vxl_int_16> , vil_rgb<float> )
+macro( vil_rgb<vxl_int_16> , vil_rgb<double> )
+macro( vil_rgb<vxl_uint_16> , vil_rgb<float> )
+macro( vil_rgb<vxl_uint_16> , vil_rgb<double> )
+macro( vil_rgb<vxl_int_32> , vil_rgb<float> )
+macro( vil_rgb<vxl_int_32> , vil_rgb<double> )
+macro( vil_rgb<vxl_uint_32> , vil_rgb<float> )
+macro( vil_rgb<vxl_uint_32> , vil_rgb<double> )
+#undef macro
+#define macro( in , out )\
+VCL_DEFINE_SPECIALIZATION \
+inline void vil2_convert_round_pixel<in, out >::operator () (in v, out& d) const { \
+  d.r = (out::value_type)(v.r); \
+  d.g = (out::value_type)(v.g); \
+  d.b = (out::value_type)(v.b); }
+macro( vil_rgb<float> , vil_rgb<float> )
+macro( vil_rgb<double> , vil_rgb<double> )
+#undef macro
+#define macro( in , out )\
+VCL_DEFINE_SPECIALIZATION \
+inline void vil2_convert_round_pixel<in, out >::operator () (in v, out& d) const { \
+  d.r = (out::value_type)(v.r+0.5); \
+  d.g = (out::value_type)(v.g+0.5); \
+  d.b = (out::value_type)(v.b+0.5); \
+  d.a = (out::value_type)(v.a+0.5); }
+macro( vil_rgba<vxl_byte> , vil_rgba<float> )
+macro( vil_rgba<vxl_byte> , vil_rgba<double> )
+macro( vil_rgba<vxl_sbyte> , vil_rgba<float> )
+macro( vil_rgba<vxl_sbyte> , vil_rgba<double> )
+macro( vil_rgba<vxl_int_16> , vil_rgba<float> )
+macro( vil_rgba<vxl_int_16> , vil_rgba<double> )
+macro( vil_rgba<vxl_uint_16> , vil_rgba<float> )
+macro( vil_rgba<vxl_uint_16> , vil_rgba<double> )
+macro( vil_rgba<vxl_int_32> , vil_rgba<float> )
+macro( vil_rgba<vxl_int_32> , vil_rgba<double> )
+macro( vil_rgba<vxl_uint_32> , vil_rgba<float> )
+macro( vil_rgba<vxl_uint_32> , vil_rgba<double> )
+#undef macro
+#define macro( in , out )\
+VCL_DEFINE_SPECIALIZATION \
+inline void vil2_convert_round_pixel<in, out >::operator () (in v, out& d) const { \
+  d.r = (out::value_type)(v.r); \
+  d.g = (out::value_type)(v.g); \
+  d.b = (out::value_type)(v.b); \
+  d.a = (out::value_type)(v.a); }
+macro( vil_rgba<float> , vil_rgba<float> )
+macro( vil_rgba<double> , vil_rgba<double> )
+#undef macro
+
+#define macro( in , out )\
+VCL_DEFINE_SPECIALIZATION \
+inline void vil2_convert_round_pixel<in, out >::operator () (in v, out& d) const { \
+  d = (out)(v+0.5); }
+macro( vxl_byte , float )
+macro( vxl_byte , double )
+macro( vxl_sbyte , float )
+macro( vxl_sbyte , double )
+macro( vxl_int_16 , float )
+macro( vxl_int_16 , double )
+macro( vxl_uint_16 , float )
+macro( vxl_uint_16 , double )
+macro( vxl_int_32 , float )
+macro( vxl_int_32 , double )
+macro( vxl_uint_32 , float )
+macro( vxl_uint_32 , double )
+#undef macro
+
+
+// declare general case for scalars
+template <class In, class Out>
+inline void vil2_convert_round_pixel<In, Out>::operator () (In v, Out &d) const
+{
+  d = (Out)(v);
+}
+
+
+
+
+//: Convert one pixel type to another with rounding.
+// This should only be used to convert scalar pixel types to other scalar
+// pixel types, or RGBs to RGBs. This function only rounds in terms of the
+// destination type.
+//
+// If the two pixel types are the same, the destination may only be a shallow copy
+// of the source.
+// \relates vil2_image_view
+template <class inP, class outP>
+inline void vil2_convert_round(const vil2_image_view<inP >&src, vil2_image_view<outP >&dest)
+{
+  if (vil2_pixel_format_of(inP()) == vil2_pixel_format_of(outP()))
+    dest = src;
+  else
+    vil2_transform2(src, dest, vil2_convert_round_pixel<inP, outP>());
 }
 
 
@@ -113,9 +232,9 @@ public:
     rw_(rw), gw_(gw), bw_(bw) {}
 
   void operator() (vil_rgb<inP> v, outP& d) const {
-    vil2_convert_cast_pixel<double,outP>()(rw_*v.r+gw_*v.g+bw_*v.b, d); }
+    vil2_convert_round_pixel<double,outP>()(rw_*v.r+gw_*v.g+bw_*v.b, d); }
   void operator() (vil_rgba<inP> v, outP& d) const {
-    vil2_convert_cast_pixel<double,outP>()(rw_*v.r+gw_*v.g+bw_*v.b, d); }
+    vil2_convert_round_pixel<double,outP>()(rw_*v.r+gw_*v.g+bw_*v.b, d); }
 };
 
 //: Convert single plane rgb (or rgba) images to greyscale.
@@ -156,7 +275,7 @@ inline void vil2_convert_planes_to_grey(const vil2_image_view<inP>&src,
   dest.set_size(src.ni(), src.nj(), 1);
   for (unsigned j = 0; j < src.nj(); ++j)
     for (unsigned i = 0; i < src.ni(); ++i)
-      vil2_convert_cast_pixel<double,outP>()(
+      vil2_convert_round_pixel<double,outP>()(
         src(i,j,0)*rw + src(i,j,1)*gw + src(i,j,2)*bw, dest(i,j));
 }
 
@@ -206,7 +325,7 @@ inline vil2_image_view<outP> vil2_convert_to_grey_using_average(
       vil2_image_view<T > src1 = *src; \
       vil2_image_view<double> dest1; \
       vil2_math_mean_over_planes(src1, dest1); \
-      vil2_convert_cast(dest1,dest); \
+      vil2_convert_round(dest1,dest); \
       break; }
 macro(VIL2_PIXEL_FORMAT_BYTE, vxl_byte )
 macro(VIL2_PIXEL_FORMAT_SBYTE , vxl_sbyte )
@@ -260,7 +379,7 @@ inline vil2_image_view<outP> vil2_convert_to_grey_using_rgb_weighting(
       vil2_image_view<T > src1 = src; \
       vil2_image_view<double> dest1; \
       vil2_convert_planes_to_grey(src1, dest1, rw, gw, bw); \
-      vil2_convert_cast(dest1,dest); \
+      vil2_convert_round(dest1,dest); \
       break; }
 macro(VIL2_PIXEL_FORMAT_BYTE, vxl_byte )
 macro(VIL2_PIXEL_FORMAT_SBYTE , vxl_sbyte )

@@ -17,11 +17,11 @@ void test_algo_exp_grad_filter_1d_byte_float()
   for (int i=0;i<n;++i) src[i]=0;
   src[50] = 100;
 
-  double k = 0.25;
+  float k = 0.25;
   vcl_vector<float> dest_block(n+2);
   float *dest = &dest_block[1];
   dest[-1]=9876; dest[n]=9876;  // Marks to check for over-runs
-  vil2_exp_grad_filter_1d(&src[0],1,&dest[0],1,n,k,float(0));
+  vil2_exp_grad_filter_1d(&src[0],1,&dest[0],1,n,k);
 
   double half_sum = k/(1-k);
   TEST_NEAR("Central value",dest[50],0,1e-6);
@@ -37,7 +37,7 @@ void test_algo_exp_grad_filter_1d_byte_float()
   TEST_NEAR("Sum zero",sum,0,1e-6);
 
   for (int i=0;i<10;++i) src[i]=i;
-  vil2_exp_grad_filter_1d(&src[0],1,&dest[0],1,10,k,float(0));
+  vil2_exp_grad_filter_1d(&src[0],1,&dest[0],1,10,float(k));
   vcl_cout<<"Applying to 0 1 2 3 .."<<vcl_endl;
   for (int i=0;i<10;++i) vcl_cout<<" "<<dest[i];
   vcl_cout<<vcl_endl;
@@ -48,7 +48,7 @@ void test_algo_exp_grad_filter_1d_byte_float()
   src_im.fill(10);
   for (unsigned j=0;j<10;++j)
     for (unsigned i=5;i<10;++i) src_im(i,j)=20;
-  vil2_exp_grad_filter_i(src_im,dest_im,0.25,double());
+  vil2_exp_grad_filter_i(src_im,dest_im,double(0.25));
 
   TEST("Width",dest_im.ni(),src_im.ni());
   TEST("Height",dest_im.nj(),src_im.nj());
@@ -57,7 +57,7 @@ void test_algo_exp_grad_filter_1d_byte_float()
   src_im.fill(10);
   for (unsigned j=0;j<10;++j)
     for (unsigned i=5;i<10;++i) src_im(j,i)=20;
-  vil2_exp_grad_filter_j(src_im,dest_im,0.25,double());
+  vil2_exp_grad_filter_j(src_im,dest_im,double(0.25));
 
   TEST("Width",dest_im.ni(),src_im.ni());
   TEST("Height",dest_im.nj(),src_im.nj());

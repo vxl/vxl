@@ -161,7 +161,7 @@ inline bool convert_components_from_planes(vil2_image_view<T> &lhs,
   {
     const vil2_image_view<comp_type> &rhs = static_cast<const vil2_image_view<comp_type>&>(rhs_base);
     // Check that the steps are suitable for viewing as components
-    if (rhs.planestep() != 1 || vcl_abs(rhs.istep())<ncomp || vcl_abs(rhs.jstep())<ncomp ) return false;
+    if (rhs.planestep() != 1 || vcl_abs((int)rhs.istep())<ncomp || vcl_abs((int)rhs.jstep())<ncomp ) return false;
     lhs = vil2_image_view<T >(rhs.memory_chunk(),
                               reinterpret_cast<T const*>(rhs.top_left_ptr()),
                               rhs.ni(),rhs.nj(),1,
@@ -479,7 +479,7 @@ bool vil2_image_view<T>::is_contiguous() const
   // Sort the step sizes in ascending order, and keep the
   // corresponding widths.
 
-  int s1, s2, s3;
+  vcl_ptrdiff_t s1, s2, s3;
   unsigned n1, n2;
   if ( istep_ < jstep_ )
     if ( jstep_ < planestep_ )

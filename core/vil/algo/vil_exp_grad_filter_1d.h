@@ -15,7 +15,7 @@
 template <class srcT, class destT, class accumT>
 inline void vil2_exp_grad_filter_1d(const srcT* src, vcl_ptrdiff_t sstep,
                                     destT* dest, vcl_ptrdiff_t dstep,
-                                    int n, double k, accumT)
+                                    int n, accumT k)
 {
   const srcT* s = src;
   const srcT* src_end = src + (n-1)*sstep;
@@ -30,7 +30,7 @@ inline void vil2_exp_grad_filter_1d(const srcT* src, vcl_ptrdiff_t sstep,
 
   while (s!=src_end)
   {
-    *dest = rt/k_sum;       // Set value for -ive half of filter
+    *dest = (destT) (rt/k_sum);       // Set value for -ive half of filter
     rt *= k; k_sum *= k;    // Scale sums
     rt -= *s; k_sum += 1.0; // Increment with next element
     s+=sstep; dest+=dstep;  // Move to next element
@@ -57,7 +57,7 @@ inline void vil2_exp_grad_filter_1d(const srcT* src, vcl_ptrdiff_t sstep,
 template <class srcT, class destT, class accumT>
 inline void vil2_exp_grad_filter_i(const vil2_image_view<srcT>& src_im,
                                    vil2_image_view<destT>& dest_im,
-                                   double k, accumT ac)
+                                   accumT k)
 {
   unsigned ni = src_im.ni();
   unsigned nj = src_im.nj();
@@ -71,7 +71,7 @@ inline void vil2_exp_grad_filter_i(const vil2_image_view<srcT>& src_im,
     destT* dest_row = dest_im.top_left_ptr()+p*dest_im.planestep();
     // Filter every row
     for (unsigned j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
-      vil2_exp_grad_filter_1d(src_row,s_istep, dest_row,d_istep,   ni, k, ac);
+      vil2_exp_grad_filter_1d(src_row,s_istep, dest_row,d_istep,   ni, k);
   }
 }
 
@@ -82,7 +82,7 @@ inline void vil2_exp_grad_filter_i(const vil2_image_view<srcT>& src_im,
 template <class srcT, class destT, class accumT>
 inline void vil2_exp_grad_filter_j(const vil2_image_view<srcT>& src_im,
                                    vil2_image_view<destT>& dest_im,
-                                   double k, accumT ac)
+                                   accumT k)
 {
   unsigned ni = src_im.ni();
   unsigned nj = src_im.nj();
@@ -96,7 +96,7 @@ inline void vil2_exp_grad_filter_j(const vil2_image_view<srcT>& src_im,
     destT* dest_col = dest_im.top_left_ptr()+p*dest_im.planestep();
     // Filter every column
     for (unsigned i=0;i<ni;++i,src_col+=s_istep,dest_col+=d_istep)
-      vil2_exp_grad_filter_1d(src_col,s_jstep, dest_col,d_jstep,   nj, k, ac);
+      vil2_exp_grad_filter_1d(src_col,s_jstep, dest_col,d_jstep,   nj, (accumT)k);
   }
 }
 

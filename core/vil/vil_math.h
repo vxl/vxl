@@ -301,7 +301,7 @@ inline void vil2_math_image_abs_difference(const vil2_image_view<aT>& imA,
       const bT* pixelB = rowB;
       sumT* pixelS = rowS;
       for (unsigned i=0;i<ni;++i,pixelA+=istepA,pixelB+=istepB,pixelS+=istepS)
-        *pixelS = vcl_fabs(sumT(*pixelA)-sumT(*pixelB));
+        *pixelS = vcl_abs(sumT(*pixelA)-sumT(*pixelB));
     }
   }
 }
@@ -362,7 +362,7 @@ inline void vil2_math_integral_image(const vil2_image_view<aT>& imA,
     { sum+= *pixelA; *pixelS=sum; }
 
   // For subsequent rows, include sum from row above as well
-  int prev_j = -jstepS;
+  vcl_ptrdiff_t prev_j = -jstepS;
   rowA += jstepA; rowS += jstepS;
   for (unsigned j=1;j<nj;++j,rowA += jstepA,rowS += jstepS)
   {
@@ -414,8 +414,8 @@ inline void vil2_math_integral_sqr_image(const vil2_image_view<aT>& imA,
   }
 
   // For subsequent rows, include sum from row above as well
-  int prev_j = -jstepS;
-  int prev_j2 = -jstepS2;
+  vcl_ptrdiff_t prev_j = -jstepS;
+  vcl_ptrdiff_t prev_j2 = -jstepS2;
   rowA += jstepA; rowS += jstepS; rowS2 += jstepS2;
   for (unsigned j=1;j<nj;++j,rowA += jstepA,rowS += jstepS,rowS2 += jstepS2)
   {

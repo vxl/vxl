@@ -88,18 +88,18 @@ inline void vil2_convolve_edge_1d(const srcT* src, unsigned n, vcl_ptrdiff_t s_s
   if (option==vil2_convolve_no_extend)
   {
     // Initialise first elements of row to zero
-    for (int i=-k_hi;i<0;++i,dest+=d_step)
+    for (vcl_ptrdiff_t i=-k_hi;i<0;++i,dest+=d_step)
       *dest = 0;
   }
   else if (option==vil2_convolve_zero_extend)
   {
     // Assume src[i]==0 for i<0
-    for (int i=-k_hi+1;i<=0;++i,dest+=d_step,src+=s_step)
+    for (vcl_ptrdiff_t i=-k_hi+1;i<=0;++i,dest+=d_step,src+=s_step)
     {
       accumT sum = 0;
       const srcT* s = src;
       const kernelT* k = kernel-i*kstep;
-      for (int j=i;j<=-k_lo;++j,s+=s_step,k-=kstep)
+      for (vcl_ptrdiff_t j=i;j<=-k_lo;++j,s+=s_step,k-=kstep)
         sum+= (accumT)((*s)*(*k));
       *dest=(destT)sum;
     }
@@ -107,11 +107,11 @@ inline void vil2_convolve_edge_1d(const srcT* src, unsigned n, vcl_ptrdiff_t s_s
   else if (option==vil2_convolve_constant_extend)
   {
     // Assume src[i]=src[0] for i<0
-    int i_max = 1+k_hi;
-    for (int i=0;i<=i_max;++i)
+    vcl_ptrdiff_t i_max = 1+k_hi;
+    for (vcl_ptrdiff_t i=0;i<=i_max;++i)
     {
       accumT sum=0;
-      for (int j=-k_hi;j<=-k_lo;++j)
+      for (vcl_ptrdiff_t j=-k_hi;j<=-k_lo;++j)
       {
         if ((i+j)<0) sum+=(accumT)(src[0]*kernel[j*(-kstep)]);
         else         sum+=(accumT)(src[(i+j)*s_step]*kernel[j*(-kstep)]);
@@ -122,11 +122,11 @@ inline void vil2_convolve_edge_1d(const srcT* src, unsigned n, vcl_ptrdiff_t s_s
   else if (option==vil2_convolve_reflect_extend)
   {
     // Assume src[i]=src[0] for i<0
-    int i_max = -1+k_hi;
-    for (int i=0;i<=i_max;++i)
+    vcl_ptrdiff_t i_max = -1+k_hi;
+    for (vcl_ptrdiff_t i=0;i<=i_max;++i)
     {
       accumT sum=0;
-      for (int j=-k_hi;j<=-k_lo;++j)
+      for (vcl_ptrdiff_t j=-k_hi;j<=-k_lo;++j)
       {
         if ((i+j)<0) sum+=(accumT)(src[-(i+j)*s_step]*kernel[j*(-kstep)]);
         else         sum+=(accumT)(src[(i+j)*s_step]*kernel[j*(-kstep)]);
@@ -137,11 +137,11 @@ inline void vil2_convolve_edge_1d(const srcT* src, unsigned n, vcl_ptrdiff_t s_s
   else if (option==vil2_convolve_periodic_extend)
   {
     // Assume src[i]=src[n+i] for i<0
-    int i_max = -1+k_hi;
+    vcl_ptrdiff_t i_max = -1+k_hi;
     for (int i=0;i<=i_max;++i)
     {
       accumT sum=0;
-      for (int j=k_hi;j>=k_lo;--j)
+      for (vcl_ptrdiff_t j=k_hi;j>=k_lo;--j)
         sum+=(accumT)(src[((i-j+n)%n)*s_step]*kernel[j*kstep]);
       dest[i*d_step]=(destT)sum;
     }
@@ -150,16 +150,16 @@ inline void vil2_convolve_edge_1d(const srcT* src, unsigned n, vcl_ptrdiff_t s_s
   {
     // Truncate and reweigh kernel
     accumT k_sum_all=0;
-    for (int j=-k_hi;j<=-k_lo;++j) k_sum_all+=(accumT)(kernel[j*(-kstep)]);
+    for (vcl_ptrdiff_t j=-k_hi;j<=-k_lo;++j) k_sum_all+=(accumT)(kernel[j*(-kstep)]);
 
-    int i_max = -1+k_hi;
-    for (int i=0;i<=i_max;++i)
+    vcl_ptrdiff_t i_max = -1+k_hi;
+    for (vcl_ptrdiff_t i=0;i<=i_max;++i)
     {
       accumT sum=0;
       accumT k_sum=0;
       // Sum elements which overlap src
       // ie i+j>=0  (so j starts at -i)
-      for (int j=-i;j<=-k_lo;++j)
+      for (vcl_ptrdiff_t j=-i;j<=-k_lo;++j)
       {
         sum+=(accumT)(src[(i+j)*s_step]*kernel[j*(-kstep)]);
         k_sum += (accumT)(kernel[j*(-kstep)]);
@@ -210,6 +210,8 @@ inline void vil2_convolve_1d(const srcT* src0, unsigned nx, vcl_ptrdiff_t s_step
 
 //: Convolve kernel[i] (i in [k_lo,k_hi]) with srcT in i-direction
 // On exit dest_im(i,j) = sum src(i-x,j)*kernel(x)  (x=k_lo..k_hi)
+// \note  This function reverses the kernel. If you don't want the
+// kernel reversed, use vil2_correlate_1d instead.
 // \param kernel should point to tap 0.
 // \param dest_im will be resized to size of src_im.
 // \relates vil2_image_view
@@ -363,6 +365,8 @@ class vil2_convolve_1d_resource : public vil2_image_resource
 };
 
 //: Create an image_resource object which convolve kernel[x] x in [k_lo,k_hi] with srcT
+// \note  This function reverses the kernel. If you don't want the
+// kernel reversed, use vil2_correlate_1d instead.
 // \param kernel should point to tap 0.
 // \relates vil2_image_resource
 template <class destT, class kernelT, class accumT>
