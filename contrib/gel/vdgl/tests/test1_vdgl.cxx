@@ -42,7 +42,7 @@ int main(void)
   //
   vsol_point_2d_sptr p0 = new vsol_point_2d(0,0);
   vsol_point_2d_sptr p1 = new vsol_point_2d(5,5);
-  vdgl_digital_curve_sptr dc = new vdgl_digital_curve(*p0, *p1);
+  vdgl_digital_curve_sptr dc = new vdgl_digital_curve(p0, p1);
   vdgl_interpolator_sptr intrp = dc->get_interpolator();
   int Nc = intrp->get_edgel_chain()->size();
   for (double t = 0.1; t<Nc; t++)
