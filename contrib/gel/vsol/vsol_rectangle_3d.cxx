@@ -220,7 +220,7 @@ bool vsol_rectangle_3d::valid_vertices(const vcl_vector<vsol_point_3d_sptr> new_
 //---------------------------------------------------------------------------
 bool vsol_rectangle_3d::in(const vsol_point_3d_sptr &p) const
 {
-  // TO DO
+  // TODO
   vcl_cerr << "Warning: vsol_rectangle_3d::in() has not been implemented yet\n";
   return true;
 }

@@ -172,7 +172,7 @@ void vsol_tetrahedron::set_p3(vsol_point_3d_sptr new_p3)
 //---------------------------------------------------------------------------
 bool vsol_tetrahedron::in(vsol_point_3d const& p) const
 {
-  // TO DO
+  // TODO
   vcl_cerr << "Warning: vsol_tetrahedron::in() has not been implemented yet\n";
   return true;
 }

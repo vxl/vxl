@@ -271,9 +271,9 @@ bool vsol_line_3d::in(const vsol_point_3d_sptr &p) const
 vgl_homg_line_3d_2_points<double> *
 vsol_line_3d::tangent_at_point(const vsol_point_3d_sptr &p) const
 {
-  assert(false); // TO DO
+  assert(false); // TODO
   // require
-  // assert(in(p));
+  assert(in(p));
 
   vgl_homg_line_3d_2_points<double> *result;
   vgl_homg_point_3d<double> a(p0_->x(),p0_->y(),p0_->z());

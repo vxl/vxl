@@ -140,7 +140,7 @@ bool vsol_polyhedron::is_convex(void) const
 //---------------------------------------------------------------------------
 bool vsol_polyhedron::in(vsol_point_3d const& p) const
 {
-  // TO DO
+  // TODO
   vcl_cerr << "Warning: vsol_polyhedron::in() has not been implemented yet\n";
   return false;
 }

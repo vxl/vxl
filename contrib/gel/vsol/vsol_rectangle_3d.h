@@ -93,6 +93,7 @@ public:
   //: Has `this' the same points than `other' in the same order ?
   //---------------------------------------------------------------------------
   virtual bool operator==(const vsol_rectangle_3d &other) const;
+  inline bool operator!=(const vsol_rectangle_3d &other)const{return !operator==(other);}
   virtual bool operator==(const vsol_polygon_3d &other) const; // virtual of vsol_polygon_3d
   virtual bool operator==(const vsol_spatial_object_3d& obj) const; // virtual of vsol_spatial_object_3d
 

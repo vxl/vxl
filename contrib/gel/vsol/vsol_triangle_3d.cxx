@@ -163,7 +163,7 @@ void vsol_triangle_3d::set_p2(const vsol_point_3d_sptr &new_p2)
 //---------------------------------------------------------------------------
 bool vsol_triangle_3d::in(const vsol_point_3d_sptr &p) const
 {
-  // TO DO
+  // TODO
   vcl_cerr << "Warning: vsol_triangle_3d::in() has not been implemented yet\n";
   return true;
 }

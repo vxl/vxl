@@ -82,6 +82,7 @@ public:
   //: Has `this' the same points than `other' and the same orientation ?
   //---------------------------------------------------------------------------
   virtual bool operator==(const vsol_tetrahedron &other) const;
+  inline bool operator!=(const vsol_tetrahedron &other)const{return !operator==(other);}
   virtual bool operator==(const vsol_polyhedron &other) const; // virtual of vsol_polyhedron
   virtual bool operator==(const vsol_spatial_object_3d& obj) const; // virtual of vsol_spatial_object_3d
 
