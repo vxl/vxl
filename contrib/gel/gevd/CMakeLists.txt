@@ -14,6 +14,9 @@ SOURCE_FILES( gevd_sources
   gevd_step.cxx
   gevd_contour.cxx
   gevd_clean_edgels.cxx
+  gevd_edgel_regions.cxx
+  gevd_intensity_face.cxx
+  gevd_region_edge.cxx
 )
 #  gevd_edgel_regions.cxx
 
