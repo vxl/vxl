@@ -48,6 +48,12 @@ The basic 2D classes using homogeneous (3-argument) representations are:
 @item @code{vgl_homg_line_2d<T>}
 @item @code{vgl_conic<T>}
 @end itemize
+Some useful functions can be found in @code{vgl_distance.h} and @code{vgl_closest_point.h}:
+@itemize @bullet
+@item @code{double vgl_distance(vgl_homg_point_2d<T> const& p1, vgl_homg_point_2d<T> const& p2)}
+@item @code{double vgl_distance(vgl_homg_point_2d<T> const& p, vgl_homg_line_2d<T> const& l)}
+@item @code{vgl_homg_point_2d<T> vgl_closest_point(vgl_homg_line_2d<T> const& l, vgl_homg_point_2d<T> const& p)}
+@end itemize
 The most useful static functions in namespace @code{vgl_homg_operators_2d<T>} are:
 @itemize @bullet
 @item @code{double distance_squared(vgl_homg_point_2d<T> const& point1, vgl_homg_point_2d<T> const& point2)}
@@ -61,7 +67,6 @@ The most useful static functions in namespace @code{vgl_homg_operators_2d<T>} ar
 @item @code{double angle_between_oriented_lines(vgl_homg_line_2d<T> const& line1, vgl_homg_line_2d<T> const& line2)}
     Return the angle between the (oriented) lines (in radians).
 @item @code{double perp_distance_squared(vgl_homg_line_2d<T> const& line, vgl_homg_point_2d<T> const& point)}
-@item @code{vgl_homg_point_2d<T> closest_point(vgl_homg_line_2d<T> const &l, vgl_homg_point_2d<T> const &p)}
 @item @code{vgl_homg_line_2d<T> perp_line_through_point(vgl_homg_line_2d<T> const& line, vgl_homg_point_2d<T> const& point)}
 @item @code{vgl_homg_point_2d<T> perp_projection(vgl_homg_line_2d<T> const& line, vgl_homg_point_2d<T> const& point)}
 @item @code{vgl_homg_point_2d<T> midpoint(vgl_homg_point_2d<T> const& p1, vgl_homg_point_2d<T> const& p2)}
@@ -79,7 +84,7 @@ The most useful static functions in namespace @code{vgl_homg_operators_2d<T>} ar
 
 Homogenous projective geometry can be converted to standard Euclidean or Cartesian coordinates by normalizing by the third homogenous coordinate. In general there will be need to convert back and forth between the two geometries to carry out operations efficiently.  For example intersection of lines in homogeneous coordinates can be carried out simply using the cross-product of vectors.
 
-@subsection Cartesian (Euclidean)  2D classes
+@subsection Cartesian (Euclidean) 2D classes
 
 The basic 2D classes using non-homogeneous (2-argument) representations are:
 
@@ -103,6 +108,16 @@ The basic 3D classes using homogeneous (4-argument) representations are:
 @item @code{vgl_homg_point_3d<T>}
 @item @code{vgl_homg_plane_3d<T>}
 @item @code{vgl_homg_line_3d_2_points<T>}
+@end itemize
+Some useful functions can be found in @code{vgl_distance.h} and @code{vgl_closest_point.h}:
+@itemize @bullet
+@item @code{double vgl_distance(vgl_homg_point_3d<T> const& p1, vgl_homg_point_3d<T> const& p2)}
+@item @code{double vgl_distance(vgl_homg_plane_3d<T> const& p1, vgl_homg_point_3d<T> const& p2)}
+@item @code{double vgl_distance(vgl_homg_line_3d_2_points<T> const& p1, vgl_homg_point_3d<T> const& p2)}
+@item @code{double vgl_distance(vgl_homg_line_3d_2_points<T> const& p1, vgl_homg_line_3d_2_points<T> const& p2)}
+@item @code{vgl_homg_point_3d<T> vgl_closest_point(vgl_homg_plane_3d<T> const& l, vgl_homg_point_3d<T> const& p)}
+@item @code{vgl_homg_point_3d<T> vgl_closest_point(vgl_homg_line_3d_2_points<T> const& l, vgl_homg_point_3d<T> const& p)}
+@item @code{std::pair<vgl_homg_point_3d<T>,vgl_homg_point_3d<T> > vgl_closest_points(vgl_homg_line_3d_2_points<T> const& l1, vgl_homg_line_3d_2_points<T> const& l2)}
 @end itemize
 The most useful static functions in namespace @code{vgl_homg_operators_3d<T>} are:
 @itemize @bullet
@@ -187,6 +202,8 @@ vgl_polygon_scan_iterator(vgl_polygon const& face, bool boundaryp,
                           vgl_box_2d<float> const& window)
 @end example
 Note that the boundaryp flag is defined to determine if points on the boundary of the polygon or window are to be included in the scan.
+
+The area of a polygon can be determined with the @code{vgl_area} function.
 
 @section Projective transformations
 One of the goals of vgl is to support the basic operations of
