@@ -1,6 +1,7 @@
 // This is core/vgl/io/tests/test_line_3d_2_points_io.cxx
 #include <vcl_iostream.h>
 #include <vgl/vgl_point_3d.h>
+#include <vsl/vsl_indent.h>
 #include <vgl/io/vgl_io_line_3d_2_points.h>
 #include <testlib/testlib_test.h>
 #include <vpl/vpl.h>
@@ -79,6 +80,7 @@ void test_line_3d_2_points_io()
 {
   test_line_3d_2_points_float_io();
   test_line_3d_2_points_double_io();
+  vsl_indent_clear_all_data();
 }
 
 TESTMAIN(test_line_3d_2_points_io);

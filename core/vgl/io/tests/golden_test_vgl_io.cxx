@@ -17,6 +17,7 @@
 #include <vcl_string.h>
 #include <vcl_cstdlib.h> // for vcl_exit()
 #include <vsl/vsl_binary_io.h>
+#include <vsl/vsl_indent.h>
 #include <testlib/testlib_root_dir.h>
 
 #include <vgl/io/vgl_io_box_2d.h>
@@ -608,4 +609,5 @@ void golden_test_vgl_io(bool save_file)
         almost_equal(double_point_2d_out.x(), double_point_2d_in_bis.x()) &&
         almost_equal(double_point_2d_out.y(), double_point_2d_in_bis.y()),
         true);
+  vsl_indent_clear_all_data ();
 }

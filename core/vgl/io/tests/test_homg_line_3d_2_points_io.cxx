@@ -1,5 +1,6 @@
 // This is vxl/vgl/io/tests/test_homg_line_3d_2_points_io.cxx
 #include <vcl_iostream.h>
+#include <vsl/vsl_indent.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/io/vgl_io_homg_line_3d_2_points.h>
 #include <testlib/testlib_test.h>
@@ -34,6 +35,7 @@ void test_homg_line_3d_2_points_double_io()
 
   vsl_print_summary(vcl_cout, p_out);
   vcl_cout << vcl_endl;
+  vsl_indent_clear_all_data();
 }
 
 

@@ -1,6 +1,7 @@
 // This is vxl/vgl/io/tests/test_polygon_io.cxx
 #include <vcl_iostream.h>
 #include <vgl/vgl_polygon.h>
+#include <vsl/vsl_indent.h>
 #include <vgl/io/vgl_io_polygon.h>
 #include <testlib/testlib_test.h>
 #include <vpl/vpl.h>
@@ -42,6 +43,7 @@ void test_polygon_io()
 
   vsl_print_summary(vcl_cout, p_out);
   vcl_cout << vcl_endl;
+  vsl_indent_clear_all_data();
 }
 
 MAIN( test_polygon_io )

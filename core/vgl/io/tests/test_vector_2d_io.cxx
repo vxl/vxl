@@ -2,6 +2,7 @@
 #include <vcl_iostream.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/io/vgl_io_vector_2d.h>
+#include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_io.h>
 #include <testlib/testlib_test.h>
 #include <vpl/vpl.h>
@@ -101,6 +102,7 @@ void test_vector_2d_io()
   test_vector_2d_double_io();
   test_vector_2d_float_io();
   test_vector_2d_int_io();
+  vsl_indent_clear_all_data();
 }
 
 TESTMAIN(test_vector_2d_io);

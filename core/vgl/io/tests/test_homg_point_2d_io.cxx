@@ -1,6 +1,7 @@
 // This is vxl/vgl/io/tests/test_homg_point_2d_io.cxx
 #include <vcl_iostream.h>
 #include <vgl/vgl_homg_point_2d.h>
+#include <vsl/vsl_indent.h>
 #include <vgl/io/vgl_io_homg_point_2d.h>
 #include <testlib/testlib_test.h>
 #include <vpl/vpl.h>
@@ -34,6 +35,7 @@ void test_homg_point_2d_double_io()
 
   vsl_print_summary(vcl_cout, p_out);
   vcl_cout << vcl_endl;
+  vsl_indent_clear_all_data();
 }
 
 void test_homg_point_2d_io()

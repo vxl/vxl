@@ -1,6 +1,7 @@
 // This is vxl/vgl/io/tests/test_vector_3d_io.cxx
 #include <vcl_iostream.h>
 #include <vgl/vgl_vector_3d.h>
+#include <vsl/vsl_indent.h>
 #include <vgl/io/vgl_io_vector_3d.h>
 #include <testlib/testlib_test.h>
 #include <vpl/vpl.h>
@@ -100,6 +101,7 @@ void test_vector_3d_io()
   test_vector_3d_double_io();
   test_vector_3d_float_io();
   test_vector_3d_int_io();
+  vsl_indent_clear_all_data();
 }
 
 TESTMAIN(test_vector_3d_io);
