@@ -87,6 +87,9 @@ LINK32=link.exe
 # Begin Source File
 SOURCE=.\vbl_smart_ptr_example.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/smartptr-instances.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h"
