@@ -107,9 +107,9 @@ inline void vil_gauss_filter_5tap(const vil_image_view<srcT>& src_im,
 //
 // The taps will be calculated using the itegeral of the above equation over
 // the pixel width. However, aliasing will reduce the meaningfulness of
-// your filter when sd << (diff+1). In most applications there will not
-// be much point in having filter.size() >> sd*3, since the outer taps
-// will be very small.
+// your filter when sd << (diff+1). In most applications you will
+// want filter.size() ~= sd*7, which will avoid significant truncation,
+// without wasting the outer taps on near-zero values.
 void vil_gauss_filter_gen_ntap(double sd, unsigned diff,
                                 vcl_vector<double> &filter_dest);
 

@@ -100,7 +100,7 @@ void test_algo_vil_gauss_filter_gen_ntaps()
     -0.13740317011788,  0.09009370132564,  0.12372451934878 };
   vcl_cout << "filter2 = 7 tap (d/dx)^2 gaussian(sd=1.5)\n";
   vcl_vector<double> filter2(7);
-  vil_gauss_filter_gen_ntap(1.5, 2, filter2);
+  vil_gauss_filter_gen_ntap(1.5, 2, filter2); // This is not a useful filter - it has significant truncation.
   for (unsigned i=0; i<7; ++i)
   {
     TEST_NEAR("filter2", filter2[i], correct_filter2[i], 1e-7);
@@ -124,7 +124,7 @@ void test_algo_vil_gauss_filter_gen_ntaps()
     -0.16222013702815,  -0.18846314959135 };
   vcl_cout << "filter4 = 8 tap (d/dx)^5 gaussian(sd=4.0)\n";
   vcl_vector<double> filter4(8);
-  vil_gauss_filter_gen_ntap(4.0, 1, filter4);
+  vil_gauss_filter_gen_ntap(4.0, 1, filter4); // This is not a useful filter - it has extreme truncation.
   for (unsigned i=0; i<8; ++i)
   {
     TEST_NEAR("filter4", filter4[i], correct_filter4[i], 1e-7);
