@@ -30,8 +30,8 @@ vpgl_matrix_camera::vpgl_matrix_camera(const vnl_matrix<double>& mat):
 }
 
 
-void vpgl_matrix_camera::world_to_image(const vnl_vector<double>& vect3d,
-                                        double& imgu, double& imgv)
+void vpgl_matrix_camera::world_to_image(vnl_vector<double> const& vect3d,
+                                        double &imgu, double &imgv, double)
 {
   double dummy=0;
   // Compute the homogeneous image point
@@ -53,11 +53,11 @@ void vpgl_matrix_camera::world_to_image(const vnl_vector<double>& vect3d,
 //------------------------------------------------------------------------------
 //: projects a 3D point to the image plane with this camera.
 
-void vpgl_matrix_camera::world_to_image(const double& x, const double& y,
-                                        const double& z, double& ix, double& iy)
+void vpgl_matrix_camera::world_to_image(double x, double y, double z,
+                                        double& ix, double& iy, double time)
 {
   vnl_vector<double> vect3d(x, y, z);
-  this->world_to_image(vect3d, ix, iy);
+  this->world_to_image(vect3d, ix, iy, time);
 }
 
 #if 0 // image_to_world() commented out
@@ -152,8 +152,8 @@ void vpgl_matrix_camera::set_matrix(const vnl_matrix<double>& mat)
   else
     _matrix = mat;
 }
-vnl_matrix<double> & vpgl_matrix_camera::get_matrix(){
-  return _matrix;
+void vpgl_matrix_camera::get_matrix(vnl_matrix<double> & m) const {
+  m = _matrix;
 }
 
 // NOTE:  FOLLOWING WILL EVENTUALLY BE MOVED TO THE SOLVER/TARGET INTERFACE

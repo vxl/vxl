@@ -79,10 +79,11 @@ public:
 
   //---------------------------------------
   // Different world-to-image methods
-  virtual void world_to_image(const  vnl_vector<double>&, double&, double&);
+  virtual void world_to_image(vnl_vector<double> const& world_3d_pt,
+                              double& image_u, double& image_v, double time);
 
-  virtual void world_to_image(
-        const double&, const double&, const double&, double&, double&);
+  virtual void world_to_image(double world_x, double world_y, double world_z,
+                              double& image_u, double& image_v, double time);
 
   //-----------------------------------------
   virtual void image_to_world(vnl_vector<double>& ray3d_origin,

@@ -52,15 +52,14 @@ vpgl_basic_camera::~vpgl_basic_camera()
 //  so as to pick up existing virtual routines that use float.
 //
 
-void vpgl_basic_camera::world_to_image(const vnl_vector<double>& xyz, double &u, double &v)
+void vpgl_basic_camera::world_to_image(vnl_vector<double> const& xyz, double &u, double &v, double t)
 {
-  world_to_image (xyz[0], xyz[1], xyz[2], u, v);
+  world_to_image (xyz[0], xyz[1], xyz[2], u, v, t);
 }
 
-void vpgl_basic_camera::world_to_image(const double&,const double&,const double&,
-                                       double&, double&)
+void vpgl_basic_camera::world_to_image(double,double,double, double&, double&, double)
 {
-  vcl_cerr <<" Can't compute " << "world_to_image";
+  vcl_cerr <<" Can't compute world_to_image()\n";
 }
 
 //------------------------------------------------------------------------

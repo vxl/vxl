@@ -45,10 +45,10 @@ public:
 
   // Virtual Casting methods-------------------------
   virtual vpgl_perspective_camera *  get_perspective_camera() { return this;}
-  virtual void world_to_image(const vnl_vector<double>& vect3d,
-                              double& imgu, double& imgv,double time) ;
-  virtual void world_to_image(const double& x, const double& y,
-                              const double& z, double& ix, double& iy,double time);
+  virtual void world_to_image(vnl_vector<double> const& world_3d_pt,
+                              double& image_u, double& image_v, double time);
+  virtual void world_to_image(double world_x, double world_y, double world_z,
+                              double& image_u, double& image_v, double time);
 
   // Data Access---------------------------------------------------------------
   void print_data(vcl_ostream &strm) const;

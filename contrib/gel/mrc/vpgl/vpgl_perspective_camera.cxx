@@ -91,22 +91,20 @@ void vpgl_perspective_camera::update() {
 //------------------------------------------------------------------------------
 //: projects a 3D point to the image plane with this camera.
 
-void vpgl_perspective_camera::world_to_image(const vnl_vector<double>& vect3d,
+void vpgl_perspective_camera::world_to_image(vnl_vector<double> const& vect3d,
                                              double& imgu, double& imgv,
                                              double time)
 {
-  vnl_vector<double> * x;
-  x=acs->from_local_to_cs(vect3d,lcs,time);
-  _mat_cam->world_to_image(*x, imgu, imgv);
+  vnl_vector<double> * x = acs->from_local_to_cs(vect3d,lcs,time);
+  _mat_cam->world_to_image(*x, imgu, imgv, time);
   delete x;
 }
 
 //-------------------------------------------------------------------------------
 //: projects a 3D point to the image plane with this camera.
 
-void vpgl_perspective_camera::world_to_image(const double& x, const double& y,
-                                             const double& z,
-                                             double& ix, double& iy,double time)
+void vpgl_perspective_camera::world_to_image(double x, double y, double z,
+                                             double& ix, double& iy, double time)
 {
   vnl_vector<double> temp(3);
   vnl_vector<double> *transformed;
@@ -114,7 +112,7 @@ void vpgl_perspective_camera::world_to_image(const double& x, const double& y,
   temp(2)=y;
   temp(3)=z;
   transformed=acs->from_local_to_cs(temp,lcs,time);
-  _mat_cam->world_to_image(*transformed,ix, iy);
+  _mat_cam->world_to_image(*transformed, ix, iy, time);
   delete transformed;
 }
 
