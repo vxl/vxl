@@ -189,11 +189,11 @@ class vgui_tableau : public vgui_parent_child_link_data
   //: Called by default handle when it receives a '?' pressed event.
   virtual bool help(); // this is called if '?' is pressed
 
-  //: Called when the application is otherwise idle Override if you
-  // want to do idle processing. Return false once your idle
-  // processing is complete, or if you have no need for more idle
-  // processing. Return true if you need more idle processing time.
-  //
+  //: Called when the application is otherwise idle.
+  // Override if you want to do idle processing.
+  // Return false once your idle processing is complete,
+  // or if you have no need for more idle processing.
+  // Return true if you need more idle processing time.
   virtual bool idle();
 
   //: Increase the reference count by one (for smart pointers).
