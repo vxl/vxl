@@ -15,6 +15,8 @@ TESTS += vtol_test_refcounting.cxx
 TESTS += test_cycle_processor.cxx
 TESTS += vtol_test_timing.cxx
 
+FLAGS_test_cycle_processor.cxx := -O1
+
 #########################################
 include ${IUEROOT}/config/static-tests.mk
 #########################################
