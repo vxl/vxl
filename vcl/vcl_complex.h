@@ -100,8 +100,4 @@ inline complex<double> operator*(double const& b, vcl_complex<float> const& a) {
 typedef vcl_complex<double> vcl_double_complex;
 typedef vcl_complex<float> vcl_float_complex;
 
-
-// bogus instantiation macro.
-# define VCL_COMPLEX_INSTANTIATE(T) extern "you must include vcl_complex.txx instead"
-
 #endif
