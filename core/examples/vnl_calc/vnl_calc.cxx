@@ -1,4 +1,4 @@
-// This is ./vxl/examples/vnl_calc/vnl_calc.cxx
+// This is vxl/examples/vnl_calc/vnl_calc.cxx
 
 //:
 // \file
@@ -22,7 +22,6 @@
 #include <vcl_cstdlib.h>
 #include <vcl_string.h>
 #include <vcl_fstream.h>
-#include <vcl_iomanip.h>
 #include <vcl_vector.h>
 
 #include <vnl/vnl_matrix.h>
@@ -47,7 +46,7 @@ public:
   }
 
   void print() {
-    for(unsigned i = 0; i < size(); ++i)
+    for (unsigned i = 0; i < size(); ++i)
       vcl_cout << (*this)[i] << vcl_endl;
   }
 };
@@ -93,7 +92,7 @@ int main(int argc, char ** argv)
   //Matrix::set_print_format("%20.16e");
   vcl_string print_format = "%20.16e";
 
-  for(int i = 1; i < argc; ++i) {
+  for (int i = 1; i < argc; ++i) {
     vcl_string arg = argv[i];
 #define SHIFT { if (++i >= argc) cantshift(arg); else arg = argv[i]; }
 
@@ -120,7 +119,7 @@ int main(int argc, char ** argv)
     } else if (arg == "X" || arg == "allx") {
       // Multiply everything
       Matrix out = stack[0];
-      for(unsigned k = 1; k < stack.size(); ++k)
+      for (unsigned k = 1; k < stack.size(); ++k)
         out = out * stack[k];
       stack.clear();
       stack.push(out);
@@ -128,7 +127,7 @@ int main(int argc, char ** argv)
     } else if (arg == "all+") {
       // Add everything
       Matrix out = stack[0];
-      for(unsigned k = 1; k < stack.size(); ++k)
+      for (unsigned k = 1; k < stack.size(); ++k)
         out += stack[k];
       stack.clear();
       stack.push(out);
