@@ -13,6 +13,7 @@
 #include <mbl/tests/test_stats_1d.cxx>
 #include <mbl/tests/test_sum_1d.cxx>
 #include <mbl/tests/test_priority_bounded_queue.cxx>
+#include <mbl/tests/test_gamma.cxx>
 
 #undef TESTMAIN
 #define TESTMAIN(x) int main() \
@@ -28,6 +29,7 @@ void run_test_mbl()
   test_matxvec();
   test_stats_1d();
   test_sum_1d();
+  test_gamma();
 }
 
 
