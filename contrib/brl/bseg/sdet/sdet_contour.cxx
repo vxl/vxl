@@ -24,8 +24,13 @@
 #include <gevd/gevd_bufferxy.h>
 #include <gevd/gevd_pixel.h>
 
-bool sdet_contour::talkative_ = false;    // By default contour is not silent.
-bool sdet_contour::debug_ = false;    //Print extensive debug messages
+#ifdef DEBUG
+ bool sdet_contour::talkative_ = true;
+ bool sdet_contour::debug_ = true;      // Print extensive debug messages
+#else
+ bool sdet_contour::talkative_ = false; // By default contour is not silent.
+ bool sdet_contour::debug_ = false;
+#endif
 
 const int INVALID = -1;
 
@@ -151,8 +156,6 @@ sdet_contour::sdet_contour(float min_strength, int min_length,
   for (int i = 0; i < 9; i++)   // find number of neighbors to search
     if (max_gap <= RGS[i])      // for given gap radius
       maxSpiral= i+1;
-
-  //  sdet_contour::debug_  = false;
 }
 
 
@@ -275,9 +278,12 @@ RecordPixel(int i, int j, gevd_bufferxy& edgels,
   //  applications of RecordPixel cannot undo the used state.
   floatPixel(edgels, i, j) = -1;
   iloc.push_back(i), jloc.push_back(j);
-  //   if (sdet_contour::debug_)
-  //     vcl_cout << "Recording (" << i << ' ' << j << ")\n";
+#ifdef DEBUG
+  if (sdet_contour::debug_)
+    vcl_cout << "Recording (" << i << ' ' << j << ")\n";
+#endif
 }
+
 //:
 // Delete the last pixel added to iloc and jloc
 //
@@ -685,6 +691,7 @@ bool sdet_contour:: DetectJunction(vtol_vertex_2d_sptr const& endv, int& index,
 
   return true;
 }
+
 //: Move a junction to lie on the intersecting digital curve
 //  Refine the intersection position to double precision
 bool sdet_contour::move_junction(vtol_vertex_2d_sptr const& junction,
@@ -816,8 +823,9 @@ ConfirmJunctionOnCycle(int index, float threshold,
   if (sdet_contour::debug_)
     vcl_cerr << "ConfirmJunctionOnCycle() not run: returning 'TRUE'\n";
 
-  return true;//JLM
-
+#if 1 // JLM
+  return true;
+#else
   vdgl_digital_curve_sptr dc = cycle.curve()->cast_to_digital_curve();
   const int len = dc->get_interpolator()->get_edgel_chain()->size();
   const int wrap = 10*len;      // for positive index
@@ -837,6 +845,7 @@ ConfirmJunctionOnCycle(int index, float threshold,
       return true;
   }
   return false;
+#endif // 1
 }
 
 
@@ -918,8 +927,9 @@ ConfirmJunctionOnChain(int index, float threshold,
   if (sdet_contour::debug_)
     vcl_cerr << "ConfirmJunctionOnChain() not run: returning 'TRUE'\n";
 
-  return true; //JLM
-
+#if 1 // JLM
+  return true;
+#else
   vdgl_digital_curve_sptr dc = chain.curve()->cast_to_digital_curve();
   const int len = dc->get_interpolator()->get_edgel_chain()->size()-1;
 
@@ -946,6 +956,7 @@ ConfirmJunctionOnChain(int index, float threshold,
     }
   }
   return false;
+#endif // 1
 }
 
 vtol_vertex_2d_sptr get_vertex_at_index(vtol_edge_2d_sptr& e, int index)
@@ -994,6 +1005,7 @@ void print_edge_lookup_table(vcl_vector<vtol_edge_2d_sptr>& edges)
             << ' ' << *((*eit)->v2()->cast_to_vertex_2d()) << '\n';
   }
 }
+
 //: Break the edge at given index, and create two subchains from it.
 //
 //               junction
