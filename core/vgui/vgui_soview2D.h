@@ -226,9 +226,9 @@ class vgui_soview2D_circle : public vgui_soview2D
 
   //: Radius of circle.
   float r;
-  //: x-coordinate of the centre of the cirle.
+  //: x-coordinate of the centre of the circle.
   float x;
-  //: y-coordinate of the centre of the cirle.
+  //: y-coordinate of the centre of the circle.
   float y;
 
   //: Compile the vcl_list
