@@ -115,7 +115,7 @@ CORE_IULIBS += -lIUCameras
 CORE_IULIBS += -lDatabaseDEX -lDatabase -lKnowledgeSourceDEX -lKnowledgeSource
 
 # Numerics package
-CORE_IULIBS += -lNumerics -lnetlib
+CORE_IULIBS += -lvnl-algo -lvnl -lnetlib
 
 # GeneralUtility
 CORE_IULIBS += \
@@ -153,7 +153,7 @@ NO_UI_IULIBS += -lIUCameras
 NO_UI_IULIBS += -lDatabaseDEX -lDatabase -lKnowledgeSourceDEX -lKnowledgeSource
 
 # Numerics package
-NO_UI_IULIBS += -lNumerics -lnetlib
+NO_UI_IULIBS += -lvnl-algo -lvnl -lnetlib
 
 # GeneralUtility
 NO_UI_IULIBS += -lBasics -lSolver -lStat -lDEXTableIO -ldex_generic

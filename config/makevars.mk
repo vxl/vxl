@@ -26,7 +26,6 @@ TJ_CORE_PACKAGES = \
 	SpatialObjects \
 	GeneralUtility \
 	COOL \
-	Numerics \
         core
 endif
 
