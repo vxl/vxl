@@ -10,6 +10,7 @@
 #include <vcl_sstream.h>
 #include <vcl_fstream.h>
 #include <vcl_cassert.h>
+#include <bgui/bgui_picker_tableau.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_adaptor.h>
