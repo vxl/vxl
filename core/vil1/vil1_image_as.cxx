@@ -147,6 +147,30 @@ bool convert_rgba_to_rgb( const vil_image& image, void* buf, int x0, int y0, int
 }
 
 
+template<class Inp, class Out>
+bool convert_rgba_to_grey( const vil_image& image, void* buf, int x0, int y0, int width, int height, Inp* dummy1, Out* dummy2 )
+{
+  vcl_vector<Inp> scan(4*width);
+  for (int j=0; j<height; ++j) {
+    if (!image.get_section(/* xxx */&scan[0], x0, y0+j, width, 1))
+      return false;
+    for (int i=0; i<width; ++i) {
+      Inp r(scan[4*i+0]);
+      Inp g(scan[4*i+1]);
+      Inp b(scan[4*i+2]);
+      // Weights convert from linear RGB to CIE luminance assuming a
+      // modern monitor.  See Charles Pontyon's Colour FAQ
+      // http://www.inforamp.net/~poynton/notes/colour_and_gamma/ColorFAQ.html
+      static_cast<Out*>(buf)[i + width*j] = Out(0.2125*r+0.7154*g+0.072*b);
+      // This are the old NTSC weights.
+      //static_cast<Out*>(buf)[i + width*j] = Out(0.5+r*0.299+0.587*g+0.114*b);
+    }
+  }
+  return true;
+}
+
+
+
 // Explicitly instantiate the ones we use
 
 //template bool convert_grey_to_grey( const vil_image&, void*, int, int, int, int, vil_byte*,vil_byte*);
@@ -158,6 +182,7 @@ template bool convert_rgb_to_grey( const vil_image&, void*, int, int, int, int, 
 template bool convert_rgb_to_grey( const vil_image&, void*, int, int, int, int, vxl_uint_16*,vil_byte*);
 template bool convert_rgb_to_grey( const vil_image&, void*, int, int, int, int, float*,vil_byte*);
 template bool convert_rgb_to_grey( const vil_image&, void*, int, int, int, int, double*,vil_byte*);
+template bool convert_rgba_to_grey( const vil_image&, void*, int, int, int, int, vil_byte*,vil_byte*);
 
 template bool convert_grey_to_grey( const vil_image&, void*, int, int, int, int, vil_byte*,vxl_uint_16*);
 //template bool convert_grey_to_grey( const vil_image&, void*, int, int, int, int, vxl_uint_16*,vxl_uint_16*);
@@ -258,6 +283,8 @@ bool vil_image_as_impl<vil_byte>::get_section(void *buf, int x0, int y0, int wid
     return convert_rgb_to_grey( image, buf, x0, y0, width, height, (float*)0,(Outtype*)0);
   case VIL_RGB_DOUBLE:
     return convert_rgb_to_grey( image, buf, x0, y0, width, height, (double*)0,(Outtype*)0);
+  case VIL_RGBA_BYTE:
+    return convert_rgba_to_grey( image, buf, x0, y0, width, height, (vil_byte*)0,(Outtype*)0);
   default:
     vcl_cerr << __FILE__ ": get_section() not implemented for " << image << vcl_endl;
     assert(false/* implement for your image type as needed */);
