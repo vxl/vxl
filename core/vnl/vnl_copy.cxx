@@ -38,7 +38,9 @@ template void vnl_copy(S const *, T *, unsigned )
 VNL_COPY_INSTANTIATE0(float, double);
 VNL_COPY_INSTANTIATE0(double, float);
 VNL_COPY_INSTANTIATE0(double, long double);
+#ifndef __hppa // assembler bug on HP?
 VNL_COPY_INSTANTIATE0(long double, double);
+#endif
 
 #define macro(S, D) \
 VCL_DEFINE_SPECIALIZATION \
@@ -64,6 +66,8 @@ VNL_COPY_INSTANTIATE(S, T); \
 VNL_COPY_INSTANTIATE(T, S)
 
 VNL_COPY_INSTANTIATE_twoway(float, double);
+#ifndef __hppa // assembler bug on HP?
 VNL_COPY_INSTANTIATE_twoway(double, long double);
+#endif
 VNL_COPY_INSTANTIATE_twoway(vcl_complex<float>, vcl_complex<double>);
 VNL_COPY_INSTANTIATE_twoway(vcl_complex<double>, vcl_complex<long double>);
