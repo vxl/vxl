@@ -82,11 +82,9 @@ void strk_region_info::set_image_i(vil1_image& image)
     vcl_cout <<"In strk_region_info::set_image_i(.) - null input\n";
     return;
   }
-  bool mapi = true;
   vgl_h_matrix_2d<double> H;
-  mapi = this->map_i_to_0(H);
+  bool mapi = this->map_i_to_0(H);
 
-  vil1_memory_image_of<float> in, hue, sat;
   int w = image.width(), h = image.height();
 
   if (!color_info_||image.components()==1)
@@ -103,6 +101,7 @@ void strk_region_info::set_image_i(vil1_image& image)
   if (color_info_&&image.components()==3)
   {
     vil1_memory_image_of<vil1_rgb<unsigned char> > temp(image);
+    vil1_memory_image_of<float> in, hue, sat;
     brip_vil1_float_ops::convert_to_IHS(temp, in, hue, sat);
     vil1_memory_image_of<float> in_out(w, h), hue_out(w,h), sat_out(w,h);
     if (mapi)
