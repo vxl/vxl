@@ -28,6 +28,16 @@ vsol_line_2d::vsol_line_2d(const vgl_vector_2d<double> &new_direction,
 }
 
 //---------------------------------------------------------------------------
+//: Constructor from the direction and the middle point
+//---------------------------------------------------------------------------
+vsol_line_2d::vsol_line_2d(const vgl_vector_2d<double> &new_direction,
+                           const vgl_point_2d<double> &new_middle)
+: p0_(new vsol_point_2d(*(vsol_point_2d(new_middle).plus_vector(-(new_direction)/2)))),
+  p1_(new vsol_point_2d(*(vsol_point_2d(new_middle).plus_vector((new_direction)/2))))
+{
+}
+
+//---------------------------------------------------------------------------
 //: Constructor from two vgl_point_2d (end points)
 //---------------------------------------------------------------------------
 vsol_line_2d::vsol_line_2d(vgl_point_2d<double> const& p0,

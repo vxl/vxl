@@ -56,6 +56,12 @@ class vsol_line_2d : public vsol_curve_2d
                const vsol_point_2d_sptr &new_middle);
 
   //---------------------------------------------------------------------------
+  //: Constructor from the direction and the middle point
+  //---------------------------------------------------------------------------
+  vsol_line_2d(const vgl_vector_2d<double> &new_direction,
+               const vgl_point_2d<double> &new_middle);
+
+  //---------------------------------------------------------------------------
   //: Constructor from the first and the last point of the straight line
   //---------------------------------------------------------------------------
   vsol_line_2d(const vsol_point_2d_sptr &new_p0,
