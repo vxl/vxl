@@ -12,6 +12,12 @@ bugl_gaussian_point_2d<T>::bugl_gaussian_point_2d(T x, T y, vnl_matrix_fixed<T, 
   sigma_inv_ = vnl_inverse(s);
 }
 
+template<class T>
+bugl_gaussian_point_2d<T>::bugl_gaussian_point_2d()
+: bugl_uncertainty_point_2d<T>()
+{
+}
+
 //----------------------------------------------------------------------------
 #undef BUGL_GAUSSIAN_POINT_2D_INSTANTIATE
 #define BUGL_GAUSSIAN_POINT_2D_INSTANTIATE(T) \

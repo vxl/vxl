@@ -12,6 +12,11 @@ bugl_uncertainty_point_3d<T>(x, y, z)
   sigma_inv_ = vnl_inverse(s);
 }
 
+template<class T>
+bugl_gaussian_point_3d<T>::bugl_gaussian_point_3d() :
+bugl_uncertainty_point_3d<T>()
+{
+}
 //----------------------------------------------------------------------------
 #undef BUGL_GAUSSIAN_POINT_3D_INSTANTIATE
 #define BUGL_GAUSSIAN_POINT_3D_INSTANTIATE(T) \
