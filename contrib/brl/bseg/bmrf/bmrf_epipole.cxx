@@ -62,7 +62,7 @@ bmrf_epipole::to_img_coords(const vgl_point_2d<double>& s_a) const
 void
 bmrf_epipole::to_img_coords(double s, double a, double &u, double &v) const
 {
-  vgl_point_2d<double> u_v = this->to_epi_coords(vgl_point_2d<double>(s,a));
+  vgl_point_2d<double> u_v = this->to_img_coords(vgl_point_2d<double>(s,a));
   u = u_v.x();
   v = u_v.y();
 }
