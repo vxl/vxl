@@ -13,7 +13,6 @@
 #include <vil/vil_stream.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_resource_plugin.h>
-//#include <vil/vil_memory_image.h>
 #include <vil/vil_image_view.h>
 
 vil_image_resource_sptr vil_load_image_resource_raw(vil_stream *is)
