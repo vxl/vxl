@@ -62,25 +62,25 @@ while (<>)
     # found start of comment: "//:"  ?
     if ( s!$slashslashcolonpatt!$slashstarstarpatt! )
     {
-        chomp;
-        # escape all dots, and add a dot at the end:
-        s/\./\\\./g; s/(\\\.)?\s*$/.\n/;
-        # Remove that dot again, if the line is empty or only has '\file':
-        s/\.$// if (m!^\s*\/\*\*\s*(\\file)?\s*\.$!);
-        # Replace '\file' with '@file' (Java-style comment)
-        s/\\file\b/\@file/ if (m!^\s*\/\*\*\s*\\file\s*$!);
+        chomp; s/\s*$//;
+        # escape a space following a dot, add a dot at the end,
+#       # and finish brief doc, unless the line is empty or only has '\file':
+        unless (m!^\s*\/\*\*\s*(\\file)?\s*$!) {
+#         s/\. /.\\ /g; s/(\.)?\s*$/. \*\/\n\/\*/;
+          s/\. /.\\ /g; s/(\.)?\s*$/.\n/;
+        }
+        else { s/$/\n/; }
+
         if ($comment)
         {
             # Previous comment hasn't ended--two contiguous comment blocks.
-            # (Happens at the top of .txx files, for example.)
-            print "*\/ \n";
+            # (Should not happen.)
+            print STDERR "Two contiguous comment blocks -- this should not happen\n";
+            print "*/\n";
         }
         $comment = 1;
         print; next;
     }
-
-    # Replace '\file' with '@file' (Java-style comment)
-    s/\\file\b/\@file/ if ($comment);
 
     # Replace '$' with '\f$' (TeX math mode)
     s/(\\f)?\$(.+?)(\\f)?\$/\\f\$$2\\f\$/g if ($comment);
@@ -89,8 +89,8 @@ while (<>)
     if ( m!$slashslashpatt! && $verbatim && $comment)
     {
         s!$slashslashpatt!$spacespacepatt!;
-        # Make 'Modifications' a section title:
-        s!\b(Modifications?)\b\:?!\<H2\>$1\<\/H2\>!;
+#       # Make 'Modifications' a section title:
+#       s!\b(Modifications?)\b\:?!\<H2\>$1\<\/H2\>!;
         print; next;
     }
 
@@ -98,7 +98,7 @@ while (<>)
     if ( m!$slashslashpatt! && $comment )
     {
         s!$slashslashpatt!$starpatt!;
-        print; next;
+        print unless m/^[*=\s-]*$/; next;
     }
 
     # found end of comment -> start line with */
