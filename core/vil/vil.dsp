@@ -97,7 +97,7 @@ LIB32=link.exe -lib
 # Name "vil - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "cxx"
 # Begin Source File
 SOURCE=.\file_formats/vil_pnm.cxx
 # End Source File
@@ -416,9 +416,18 @@ SOURCE=.\file_formats/vil_dicom.cxx
 # Begin Source File
 SOURCE=.\file_formats/vil_dicom_header.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_resample_bilin+float.float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_rotate+byte.byte-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_rotate+float.float-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "h;txx"
 # Begin Source File
 SOURCE=.\file_formats/vil_pnm.h
 # End Source File
@@ -641,8 +650,12 @@ SOURCE=.\file_formats/vil_dicom.h
 # Begin Source File
 SOURCE=.\file_formats/vil_dicom_header.h
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
+# Begin Source File
+SOURCE=.\vil_rotate.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil_rotate.txx
+# End Source File
 # End Group
 # End Target
 # End Project
