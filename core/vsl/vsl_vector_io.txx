@@ -12,17 +12,25 @@
 #include <vsl/vsl_binary_io.h>
 #include <vcl_iostream.h>
 #include <vsl/vsl_binary_explicit_io.h>
+#include <vcl_cassert.h>
 
 //====================================================================================
 //: Write vector to binary stream
 template <class T>
 void vsl_b_write(vsl_b_ostream& s, const vcl_vector<T>& v)
 {
+  // There is nothing in the STL standard that says that vector<> has
+  // to store its data in a contiguous memory block. However, most
+  // implementations do store data this way.
+  // Check this assumption holds.
+  assert(v.size() == 0|| &v[v.size() - 1] - &v[0] + 1 == v.size());
+
+
   const short version_no = 1;
   vsl_b_write(s, version_no);
   unsigned n = v.size();
   vsl_b_write(s,n);
-  vsl_b_write_block(s, &v[0]/*.begin()*/, n);
+  vsl_b_write_block(s, &v[0], n);
 }
 
 //====================================================================================
@@ -38,7 +46,14 @@ void vsl_b_read(vsl_b_istream& s, vcl_vector<T>& v)
   case 1:
     vsl_b_read(s,n);
     v.resize(n);
-    vsl_b_read_block(s, &v[0]/*.begin()*/, n);
+
+    // There is nothing in the STL standard that says that vector<> has
+    // to store its data in a contiguous memory block. However, most
+    // implementations do store data this way.
+    // Check this assumption holds.
+    assert(v.size() == 0|| &v[v.size() - 1] - &v[0] + 1 == v.size());
+
+    vsl_b_read_block(s, &v[0], n);
     break;
   default:
     vcl_cerr << "vsl_b_read(s, vcl_vector<T>&) Unknown version number "<< ver << vcl_endl;

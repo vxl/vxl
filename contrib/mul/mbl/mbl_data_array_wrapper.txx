@@ -4,6 +4,7 @@
 #include <mbl/mbl_data_array_wrapper.h>
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h>
+#include <vcl_cassert.h>
 
 //: Default constructor
 template<class T>
@@ -25,6 +26,11 @@ mbl_data_array_wrapper<T>::mbl_data_array_wrapper(const T* data, unsigned n)
 template<class T>
 mbl_data_array_wrapper<T>::mbl_data_array_wrapper(const vcl_vector<T > &data)
 {
+  // There is nothing in the STL standard that says that vector<> has
+  // to store its data in a contiguous memory block. However, most
+  // implementations do store data this way.
+  // Check this assumption holds.
+  assert(data.size() == 0|| &data[data.size() - 1] - &data[0] + 1 == data.size());
   set(&data[0], data.size());
 }
 
