@@ -1,6 +1,7 @@
 // This is ./vxl/vnl/vnl_sym_matrix.txx
 #ifndef vnl_sym_matrix_txx_
 #define vnl_sym_matrix_txx_
+
 //:
 // \file
 
@@ -9,8 +10,8 @@
 
 
 // ==========================================================================
-//: Replaces the symetric submatrix of THIS matrix, starting at top left corner,
-// by the elements of matrix m. O(m*m).
+//: Replaces the symetric submatrix of THIS matrix, starting at top left corner, by the elements of matrix m.
+// O(m*m).
 template<class T>
 vnl_sym_matrix<T>& vnl_sym_matrix<T>::update (vnl_sym_matrix<T> const& m,
   unsigned diagonal_start)
@@ -49,7 +50,7 @@ template <class T>
 vnl_sym_matrix<T>& vnl_sym_matrix<T>::operator=(vnl_sym_matrix<T> const& that)
 {
   if (&that == this) return *this;
-  
+
   resize(that.rows());
   update(that);
   return *this;
