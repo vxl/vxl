@@ -57,12 +57,12 @@ bool brct_volume_processor::write_prob_volumes_vrml(vcl_string const&  filename)
     return false;
   }
   brct_algos::write_vrml_header(os);
-  int total_pts = (*index_).n_points();
   vcl_vector<vsol_point_3d_sptr> points;
-  float scal = 1.0f;
-  if (total_pts)
-    scal = 1.0f/total_pts;
-  scal=100*scal;
+#if 0 // "scal" is not used !?!
+  float scal = 100.f;
+  if ((*index_).n_points() != 0)
+    scal /= (*index_).n_points();
+#endif
   for (int r = 0; r<nrows_; r++)
     for (int c = 0; c<ncols_; c++)
       for (int s = 0; s<nslabs_; s++)
@@ -94,7 +94,7 @@ bool brct_volume_processor::read_change_data_vrml(vcl_string const&  filename)
   int npts = pts3d.size(),nin = 0;
   for (int i = 0; i<npts; i++)
     if ((*change_index_).add_point(pts3d[i]))
-       nin++;
+      nin++;
   if (!npts||!nin)
   {
     vcl_cout << "In brct_volume_processor::read_change_data_vrml -"
@@ -117,7 +117,7 @@ bool brct_volume_processor::compute_change()
           change_volumes_.push_back((*index_).index_cell(r, c, s));
       }
   vcl_cout << "Found " << change_volumes_.size() << " change cells\n";
- return true;
+  return true;
 }
 
 bool brct_volume_processor::
