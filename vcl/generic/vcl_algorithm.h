@@ -159,7 +159,7 @@
 #ifndef vcl_partition
 #define vcl_partition vcl_generic_algorithm_STD :: partition
 #endif
-// partition
+// stable_partition
 #ifndef vcl_stable_partition
 #define vcl_stable_partition vcl_generic_algorithm_STD :: stable_partition
 #endif
