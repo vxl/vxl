@@ -32,6 +32,15 @@ vgl_polygon::vgl_polygon(vcl_vector<point_t> const& points):
   sheets_[0] = points;
 }
 
+vgl_polygon::vgl_polygon(vgl_polygon const& a)
+{
+  sheets_ = a.sheets_;
+}
+
+vgl_polygon::~vgl_polygon()
+{
+}
+  
 void vgl_polygon::new_sheet()
 {
   sheets_.push_back(sheet_t());
@@ -73,4 +82,23 @@ bool vgl_polygon::contains(float tx, float ty)
 {
   assert(sheets_.size() == 1);
   return point_in_simple_polygon(tx, ty, sheets_[0]);
+}
+
+
+vgl_polygon_sheet_as_array::vgl_polygon_sheet_as_array(vgl_polygon::sheet_t const& p)
+{
+  n = p.size();
+  x = new float[n*2];
+  y = x + n;
+
+  for(int v = 0; v < n; ++v) {
+    x[v] = p[v].x();
+    y[v] = p[v].y();
+  }
+}
+  
+vgl_polygon_sheet_as_array::~vgl_polygon_sheet_as_array()
+{
+  delete [] x;
+  // do not delete [] y; only one alloc in ctor.
 }

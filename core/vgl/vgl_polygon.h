@@ -3,11 +3,7 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vgl_polygon
-// .INCLUDE vgl/vgl_polygon.h
-// .FILE vgl_polygon.cxx
-// .SECTION Author
-//    awf@robots.ox.ac.uk
+// awf@robots.ox.ac.uk
 // Created: 02 Apr 00
 
 #include <vcl/vcl_vector.h>
@@ -34,7 +30,8 @@ public:
   vgl_polygon(float const* x, float const* y, int n);
   vgl_polygon(vcl_vector<point_t> const& points);
   vgl_polygon(vcl_vector<sheet_t> const& sheets);
-  // vgl_polygon(vgl_polygon const&);
+  vgl_polygon(vgl_polygon const&);
+  ~vgl_polygon();
   
   bool contains(float x, float y);
 
@@ -55,6 +52,16 @@ protected:
   vcl_vector<sheet_t> sheets_;
   
   // Helpers-------------------------------------------------------------------
+};
+
+//: A commonly required polygon representation.
+struct vgl_polygon_sheet_as_array {
+  int n;
+  float* x;
+  float* y;
+
+  vgl_polygon_sheet_as_array(vgl_polygon::sheet_t const& p);
+  ~vgl_polygon_sheet_as_array();
 };
 
 #endif // vgl_polygon_h_
