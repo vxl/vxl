@@ -26,8 +26,10 @@
 #include <rgrl/rgrl_cast.h>
 #include <rgrl/rgrl_command.h>
 #include <rgrl/rgrl_converge_status.h>
+#include <rgrl/rgrl_converge_status_nas.h>
 #include <rgrl/rgrl_convergence_on_median_error.h>
 #include <rgrl/rgrl_convergence_on_weighted_error.h>
+#include <rgrl/rgrl_convergence_on_weighted_nas.h>
 #include <rgrl/rgrl_convergence_tester.h>
 #include <rgrl/rgrl_copyright.h>
 #include <rgrl/rgrl_data_manager.h>
@@ -74,6 +76,7 @@
 #include <rgrl/rgrl_matcher_fixed.h>
 #include <rgrl/rgrl_matcher_k_nearest.h>
 #include <rgrl/rgrl_matcher_k_nearest_boundary.h>
+#include <rgrl/rgrl_matcher_k_nearest_random.h>
 #include <rgrl/rgrl_matcher_pseudo.h>
 #include <rgrl/rgrl_matcher_pseudo_3d.h>
 #include <rgrl/rgrl_matcher_pseudo_int_3d.h>
