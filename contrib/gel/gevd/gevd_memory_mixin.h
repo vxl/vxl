@@ -46,8 +46,8 @@
 #define MM_NIL_BUFFER           0x00000001 // buffer is nil buffer
 #define MM_DIRTY                0x00000010 // buffer changed since alloced
 #define MM_FOREIGN_BLOCK        0x00000020 // foreign memory used for buffer
-#define MM_ERROR                0x00000080 // error has occured
-#define MM_WARN                 0x00000100 // warning has occured
+#define MM_ERROR                0x00000080 // error has occurred
+#define MM_WARN                 0x00000100 // warning has occurred
 //
 // Buffer types, usually indicated at creation.  Note that it is important
 // NOT to use the MM_PROTECTED type unless absolutely necessary; this will
