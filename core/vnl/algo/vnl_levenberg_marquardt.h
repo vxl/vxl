@@ -12,6 +12,8 @@
 //
 // \verbatim
 // Modifications
+//  AGAP 160701 Some comments. Changed minimize to call the correct minimization
+//              routine.
 //  RWMC 001097 Added verbose flag to get rid of all that blathering.
 //  AWF  151197 Added trace flag to increase blather.
 // \endverbatim
@@ -37,10 +39,10 @@ class vnl_least_squares_function;
 class vnl_levenberg_marquardt : public vnl_nonlinear_minimizer {
 public:
 
-//: Initialize with the function object that is to be minimized.
+  //: Initialize with the function object that is to be minimized.
   vnl_levenberg_marquardt(vnl_least_squares_function& f) { init(&f); }
 
-//: Initialize as above, and then run minimization.
+  //: Initialize as above, and then run minimization.
   vnl_levenberg_marquardt(vnl_least_squares_function& f,
                           vnl_vector<double>& x)
   {
@@ -50,22 +52,30 @@ public:
 
   ~vnl_levenberg_marquardt();
 
-//: Minimize the function supplied in the constructor until convergence
-// or failure.  On return, x is such that f(x) is the lowest value achieved.
-// Returns true for convergence, false for failure.
+  //: Minimize the function supplied in the constructor until
+  // convergence or failure.  On return, x is such that f(x) is the
+  // lowest value achieved.  Returns true for convergence, false for
+  // failure. Does not use the gradient even if the cost function
+  // provides one.
   bool minimize_without_gradient(vnl_vector<double>& x);
+
+  //: Minimize the function supplied in the constructor until
+  // convergence or failure.  On return, x is such that f(x) is the
+  // lowest value achieved.  Returns true for convergence, false for
+  // failure. The cost function must provide a gradient.
   bool minimize_using_gradient  (vnl_vector<double>& x);
 
-  // use this one if you can remember whether it uses the gradient or not.
-  bool minimize(vnl_vector<double>& x) { return minimize_without_gradient(x); }
+  //: Calls minimize_using_gradient() or minimize_without_gradient()
+  // depending on whether the cost function provides a gradient.
+  bool minimize(vnl_vector<double>& x);
 
   // Coping with failure-------------------------------------------------------
 
-//: Provide an ASCII diagnosis of the last minimization on vcl_ostream.
+  //: Provide an ASCII diagnosis of the last minimization on vcl_ostream.
   void diagnose_outcome(/*vcl_cerr*/) const;
   void diagnose_outcome(vcl_ostream&) const;
 
-//: Return J'*J computed at last minimum.
+  //: Return J'*J computed at last minimum.
   vnl_matrix<double> const& get_JtJ();
 
 protected:

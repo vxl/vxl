@@ -116,6 +116,22 @@ int vnl_levenberg_marquardt::lmdif_lsqfun(int* n,          // I    Number of res
 }
 
 
+// This function shouldn't be inlined, because (1) modification of the
+// body will not cause the timestamp on the header to change, and so
+// others will not be forced to recompile, and (2) the cost of making
+// one more function call is far, far less than the cost of actually
+// performing the minimisation, so the inline doesn't gain you
+// anything.
+//
+bool vnl_levenberg_marquardt::minimize(vnl_vector<double>& x)
+{
+  if( f_->has_gradient() )
+    return minimize_using_gradient(x);
+  else
+    return minimize_without_gradient(x);
+}
+
+
 //
 bool vnl_levenberg_marquardt::minimize_without_gradient(vnl_vector<double>& x)
 {
@@ -247,6 +263,7 @@ int vnl_levenberg_marquardt::lmder_lsqfun(int* n,          // I    Number of res
 
   return 0;
 }
+
 
 //
 bool vnl_levenberg_marquardt::minimize_using_gradient(vnl_vector<double>& x)
