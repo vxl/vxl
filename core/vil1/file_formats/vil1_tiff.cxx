@@ -681,8 +681,7 @@ bool vil_tiff_generic_image::get_section(void* buf, int x0, int y0, int xs, int 
     unsigned strip_max = y1 / p->rows_per_strip;
     assert(strip_max <= p->numberofstrips);
     // Get each strip
-    int pixel_byte_size = components_ * bits_per_component_ / 8;
-    // memset(buf, 100, xs * ys * pixel_byte_size);
+    int pixel_bit_size = components_ * bits_per_component_;
     {
       for (unsigned long strip_id = strip_min; strip_id <= strip_max; ++strip_id) {
         TIFFReadEncodedStrip(p->tif, strip_id, p->buf, (tsize_t) -1);
@@ -698,8 +697,8 @@ bool vil_tiff_generic_image::get_section(void* buf, int x0, int y0, int xs, int 
         // printf("reading strip %d, y  = %d .. %d\n", strip_id, ymin, ymax);
         for (long y = ymin; y <= ymax; ++y) {
           unsigned char* in_row = p->buf + (y - strip_min_row) * p->scanlinesize;
-          unsigned char* out_row = (unsigned char*)buf + (y - y0) * xs * pixel_byte_size;
-          vcl_memcpy(out_row, in_row + x0 * pixel_byte_size, xs * pixel_byte_size);
+          unsigned char* out_row = (unsigned char*)buf + ((y - y0) * xs * pixel_bit_size + 7) / 8;
+          vcl_memcpy(out_row, in_row + (x0 * pixel_bit_size + 7) / 8, (xs * pixel_bit_size + 7) / 8);
         }
       }
     }
