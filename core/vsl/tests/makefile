@@ -1,5 +1,5 @@
 USES += vxl
-IULIBS := -lvsl
+IULIBS := -lvsl -ltestlib
 
 TESTS += vsl_test_all.cxx
 
