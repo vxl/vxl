@@ -56,6 +56,7 @@
 #include <vil/vil_resample_bilin.h>
 #include <vil/vil_rgb.h>
 #include <vil/vil_rgba.h>
+#include <vil/vil_rotate.h>
 #include <vil/vil_sample_grid_bicub.h>
 #include <vil/vil_sample_grid_bilin.h>
 #include <vil/vil_sample_profile_bicub.h>
