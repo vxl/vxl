@@ -112,7 +112,12 @@ IF(NETLIB_FOUND)
   ADD_TEST( vnl_test_rnpoly_roots             vnl_test_all test_rnpoly_roots            )
   ADD_TEST( vnl_test_rpoly_roots              vnl_test_all test_rpoly_roots             )
   ADD_TEST( vnl_test_sample                   vnl_test_all test_sample                  )
-  ADD_TEST( vnl_test_sparse_matrix            vnl_test_all test_sparse_matrix           )
+  IF ( SITE MATCHES "isbe.man.ac.uk" )
+    # For some reason my box (linux-gcc-3.2) has a problem with the optimisation
+    # settings for dnlaso.c in netlib. It cannot be fixed until > CMAKE 1.8.3
+  ELSE ( SITE MATCHES "isbe.man.ac.uk" )
+    ADD_TEST( vnl_test_sparse_matrix            vnl_test_all test_sparse_matrix           )
+  ENDIF ( SITE MATCHES "isbe.man.ac.uk" )
   ADD_TEST( vnl_test_svd                      vnl_test_all test_svd                     )
   ADD_TEST( vnl_test_sym_matrix               vnl_test_all test_sym_matrix              )
   ADD_TEST( vnl_test_symmetric_eigensystem    vnl_test_all test_symmetric_eigensystem   )
