@@ -3,23 +3,18 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+//:
+// \file
 //
-// .NAME vgui_easy2D - Undocumented class FIXME
-// .LIBRARY vgui
-// .HEADER vxl Package
-// .INCLUDE vgui/vgui_easy2D.h
-// .FILE vgui_easy2D.cxx
-//
-// .SECTION Description
-// vgui_easy2D is a class that Phil hasnt documented properly. FIXME
-//
-// .SECTION Author
+// \author
 //              Philip C. Pritchett, 24 Sep 99
 //              Robotics Research Group, University of Oxford
 //
-// .SECTION Modifications
+// \verbatim
+// Modifications
 //    20-JUL-2000   Marko Bacic, Oxford RRG -- Provided support for printing linestrips
-//
+//    25-APR-2002   domi@vision.ee.ethz.ch - make print_psfile work without image tableau
+// \endverbatim
 //-----------------------------------------------------------------------------
 
 #include <vgui/vgui_displaylist2D.h>
@@ -52,9 +47,9 @@ public:
   void set_image(vcl_string const& image);
   void set_child(vgui_tableau_sptr const&);
 
-  void set_foreground(float, float, float);
-  void set_line_width(float);
-  void set_point_radius(float);
+  void set_foreground(float r, float g, float b) { fg[0] = r; fg[1] = g; fg[2] = b; }
+  void set_line_width(float w) { line_width = w; }
+  void set_point_radius(float r) { point_size = r; }
 
   void add(vgui_soview2D*);
 
@@ -71,8 +66,13 @@ public:
   vgui_soview2D_linestrip* add_linestrip(unsigned n, float const *x, float const *y);
   vgui_soview2D_polygon* add_polygon(unsigned n, float const *x, float const *y);
 
-  vgui_image_tableau_sptr get_image_tableau();
-  void print_psfile(vcl_string name, int reduction_factor, bool print_goem_objs);
+  vgui_image_tableau_sptr get_image_tableau() { return image_image; }
+  //: screen dump to postscript file.
+  //  Specify the optional arguments in case this tableau does not contain
+  //  an image tableau, or if you want a smaller part of the image printed.
+  //  If wd or ht are 0, no image is printed at all.
+  void print_psfile(vcl_string filename, int reduction_factor,
+                    bool print_geom_objs, int wd=-1, int ht=-1);
 
 protected:
   ~vgui_easy2D() { }

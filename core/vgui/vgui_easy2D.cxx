@@ -12,6 +12,7 @@
 #include "vgui_easy2D.h"
 
 #include <vcl_vector.h>
+#include <vcl_cassert.h>
 
 #include <vul/vul_psfile.h>
 
@@ -79,14 +80,13 @@ bool vgui_easy2D::handle(vgui_event const& e) {
   }
 
   return vgui_displaylist2D::handle(e);
-
 }
 
 vcl_string vgui_easy2D::file_name() const {
   if (image_slot)
     return type_name() + "[" + name_ + ",i=" + image_slot->file_name() + "]";
   else
-    return name_ ;
+    return name_;
 }
 
 
@@ -120,7 +120,6 @@ void vgui_easy2D::add(vgui_soview2D* object) {
 
   vgui_displaylist2D::add(object);
 }
-
 
 
 vgui_soview2D_point* vgui_easy2D::add_point(float x, float y)
@@ -169,23 +168,6 @@ vgui_soview2D_circle* vgui_easy2D::add_circle(float x, float y, float r) {
 }
 
 
-void vgui_easy2D::set_foreground(float r, float g, float b)
-{
-  fg[0] = r;
-  fg[1] = g;
-  fg[2] = b;
-}
-
-void vgui_easy2D::set_line_width(float w)
-{
-  line_width = w;
-}
-
-void vgui_easy2D::set_point_radius(float r)
-{
-  point_size = r;
-}
-
 vgui_soview2D_point* vgui_easy2D::add_point_3dv(double const p[3]) {
   return add_point(p[0]/p[2], p[1]/p[2]);
 }
@@ -217,101 +199,126 @@ vgui_soview2D_polygon* vgui_easy2D::add_polygon(unsigned n, float const *x, floa
   return obj;
 }
 
-vgui_image_tableau_sptr vgui_easy2D::get_image_tableau() {
-  return image_image;
-}
+void vgui_easy2D::print_psfile(vcl_string filename, int reduction_factor, bool print_geom_objs, int wd, int ht)
+{
+  // Set wd and ht from the image tableau, if not specified as parameters
+  if (wd < 0 || ht < 0)
+  {
+    assert(get_image_tableau());
+    vil_image img = get_image_tableau()->get_image();
+    if (wd < 0) wd = img.width();
+    if (ht < 0) ht = img.height();
+    assert (wd <= img.width());
+    assert (ht <= img.height());
+  }
 
-void vgui_easy2D::print_psfile(vcl_string filename, int reduction_factor, bool print_geom_objs){
-  vil_image img = get_image_tableau()->get_image();
-  typedef vul_psfile::byte byte;
-  byte* data = new byte[img.get_size_bytes()];
-  img.get_section(data, 0, 0, img.width(), img.height());
-
+  // Write PostScript header
   vul_psfile psfile(filename.c_str());
-  psfile.set_parameters(img.width(), img.height());
   psfile.set_reduction_factor(reduction_factor);
+  psfile.set_parameters(wd, ht);
   psfile.postscript_header();
-  if (vil_pixel_format(img) == VIL_BYTE)
-  {
-    if (debug) vcl_cerr << "vgui_easy2D::print_psfile printing greyscale image to"
-      <<  filename.c_str() << vcl_endl;
-    psfile.print_greyscale_image(data, img.width(), img.height());
-  }
-  else if (vil_pixel_format(img) == VIL_RGB_BYTE)
-  {
-    if (debug) vcl_cerr << "vgui_easy2D::print_psfile printing color image to "
-      << filename.c_str() << vcl_endl;
-    psfile.print_color_image(data, img.width(), img.height());
-  }
-  else
-    // urgh
-    vgui_macro_warning << "failed to print image : " << img << vcl_endl;
 
-  if (print_geom_objs)
+  // Write image, if present
+  if (get_image_tableau() && wd*ht > 0)
   {
-    if (debug) vcl_cerr << "vgui_easy2D: Printing geometric objects" << vcl_endl;
-    vcl_vector<vgui_soview*> all_objs = get_all();
-    vgui_style* style = 0;
-    double style_point_size = 0;
-    for (vcl_vector<vgui_soview*>::iterator i = all_objs.begin(); i != all_objs.end(); i++)
+    vil_image img = get_image_tableau()->get_image();
+    typedef vul_psfile::byte byte;
+    byte* data = new byte[img.get_size_bytes()];
+    img.get_section(data, 0, 0, wd, ht);
+    if (vil_pixel_format(img) == VIL_BYTE)
     {
-      vgui_soview* sv = (vgui_soview*)(*i);
-      if (sv == NULL)
-      {
-         vgui_macro_warning << "Object in soview list is null" << vcl_endl;
-         return;
-      }
-      // Send style info if it has changed.
-      vgui_style* svstyle = sv->get_style();
-      if (svstyle != style) {
-        // rgba, line_width, point_size
-        style = svstyle;
-        psfile.set_line_width(style->line_width);
-        style_point_size = style->point_size;
-         psfile.set_fg_color(style->rgba[0],style->rgba[1],style->rgba[2]);
-      }
-
-      if (sv->type_name() == "vgui_soview2D_point")
-      {
-        vgui_soview2D_point* pt = (vgui_soview2D_point*)sv;
-        psfile.point(pt->x, pt->y, style_point_size);
-        if (debug)
-          vcl_cerr << "  vgui_easy2D: Adding a point at " << pt->x << ", " << pt->y << vcl_endl;
-      }
-
-      else if (sv->type_name() == "vgui_soview2D_circle")
-      {
-        vgui_soview2D_circle* circ = (vgui_soview2D_circle*)sv;
-        psfile.circle(circ->x, circ->y, circ->r);
-        if (debug) vcl_cerr << "  vgui_easy2D: Adding circle, center " << circ->x << ", "
-          << circ->y << " radius " << circ->r << vcl_endl;
-      }
-      else if (sv->type_name() == "vgui_soview2D_lineseg")
-      {
-        vgui_soview2D_lineseg* line = (vgui_soview2D_lineseg*)sv;
-        psfile.line(line->x0, line->y0, line->x1, line->y1);
-        if (debug) vcl_cerr << " vgui_easy2D: Adding line between " << line->x0 << ", "
-          << line->y0 << " and " << line->x1 << ", " << line->y1 << vcl_endl;
-      }
-      else if(sv->type_name() == "vgui_soview2D_linestrip")
-      {
-        vgui_soview2D_linestrip *linestrip = (vgui_soview2D_linestrip *)sv;
-        for(unsigned int ii = 1; ii<linestrip->n; ++ii)
-          psfile.line(linestrip->x[ii-1],linestrip->y[ii-1],
-                      linestrip->x[ii  ],linestrip->y[ii  ]);
-        if(debug) vcl_cerr<< " vgui_easy2D: Adding linestrip " <<vcl_endl;
-      }
-      else if(sv->type_name() == "vgui_soview2D_polygon")
-      {
-        vgui_soview2D_polygon *polygon = (vgui_soview2D_polygon *)sv;
-        for(unsigned int ii = 1; ii<polygon->n; ++ii)
-          psfile.line(polygon->x[ii-1],polygon->y[ii-1],
-                      polygon->x[ii  ],polygon->y[ii  ]);
-        psfile.line(polygon->x[polygon->n - 1],polygon->y[polygon->n - 1], polygon->x[0], polygon->y[0]);
-        if(debug) vcl_cerr<< " vgui_easy2D: Adding polygon " <<vcl_endl;
-      }
-      else
-        vgui_macro_warning << "unknown soview typename = " << sv->type_name() << vcl_endl;
+      if (debug)
+        vcl_cerr << "vgui_easy2D::print_psfile printing greyscale image to"
+                 << filename.c_str() << vcl_endl;
+      psfile.print_greyscale_image(data, wd, ht);
     }
+    else if (vil_pixel_format(img) == VIL_RGB_BYTE)
+    {
+      if (debug)
+        vcl_cerr << "vgui_easy2D::print_psfile printing color image to "
+                 << filename.c_str() << vcl_endl;
+      psfile.print_color_image(data, wd, ht);
+    }
+    else
+      // urgh
+      vgui_macro_warning<< "failed to print image of unsupported pixel format: "
+                        << img << vcl_endl;
+    delete[] data;
+  }
+
+  // Skip the rest of this function if no geometry is wanted
+  if (!print_geom_objs) return;
+  if (debug)
+    vcl_cerr << "vgui_easy2D: Printing geometric objects\n";
+
+  vcl_vector<vgui_soview*> all_objs = get_all();
+  vgui_style* style = 0;
+  double style_point_size = 0;
+  for (vcl_vector<vgui_soview*>::iterator i = all_objs.begin(); i != all_objs.end(); ++i)
+  {
+    vgui_soview* sv = *i;
+    if (sv == NULL)
+    {
+       vgui_macro_warning << "An object in soview list is null\n";
+       continue;
+    }
+    // Send style info if it has changed.
+    vgui_style* svstyle = sv->get_style();
+    if (svstyle != style) {
+      // rgba, line_width, point_size
+      style = svstyle;
+      psfile.set_line_width(style->line_width);
+      style_point_size = style->point_size;
+      psfile.set_fg_color(style->rgba[0],style->rgba[1],style->rgba[2]);
+    }
+
+    if (sv->type_name() == "vgui_soview2D_point")
+    {
+      vgui_soview2D_point* pt = (vgui_soview2D_point*)sv;
+      psfile.point(pt->x, pt->y, style_point_size);
+      if (debug)
+        vcl_cerr << "  vgui_easy2D: Adding a point at "
+                 << pt->x << ", " << pt->y << vcl_endl;
+    }
+
+    else if (sv->type_name() == "vgui_soview2D_circle")
+    {
+      vgui_soview2D_circle* circ = (vgui_soview2D_circle*)sv;
+      psfile.circle(circ->x, circ->y, circ->r);
+      if (debug)
+        vcl_cerr << "  vgui_easy2D: Adding circle, center " << circ->x << ", "
+                 << circ->y << " radius " << circ->r << vcl_endl;
+    }
+    else if (sv->type_name() == "vgui_soview2D_lineseg")
+    {
+      vgui_soview2D_lineseg* line = (vgui_soview2D_lineseg*)sv;
+      psfile.line(line->x0, line->y0, line->x1, line->y1);
+      if (debug)
+        vcl_cerr << " vgui_easy2D: Adding line between " << line->x0 << ", "
+                 << line->y0 << " and " << line->x1 << ", " << line->y1 << vcl_endl;
+    }
+    else if (sv->type_name() == "vgui_soview2D_linestrip")
+    {
+      vgui_soview2D_linestrip *linestrip = (vgui_soview2D_linestrip *)sv;
+      for (unsigned int ii = 1; ii<linestrip->n; ++ii)
+        psfile.line(linestrip->x[ii-1],linestrip->y[ii-1],
+                    linestrip->x[ii  ],linestrip->y[ii  ]);
+      if (debug)
+        vcl_cerr<< " vgui_easy2D: Adding linestrip \n";
+    }
+    else if (sv->type_name() == "vgui_soview2D_polygon")
+    {
+      vgui_soview2D_polygon *polygon = (vgui_soview2D_polygon *)sv;
+      for (unsigned int ii = 1; ii<polygon->n; ++ii)
+        psfile.line(polygon->x[ii-1],polygon->y[ii-1],
+                    polygon->x[ii  ],polygon->y[ii  ]);
+      psfile.line(polygon->x[polygon->n - 1],
+                  polygon->y[polygon->n - 1],
+                  polygon->x[0], polygon->y[0]);
+      if (debug)
+        vcl_cerr<< " vgui_easy2D: Adding polygon \n";
+    }
+    else
+      vgui_macro_warning << "unknown soview typename = " << sv->type_name() << vcl_endl;
   }
 }
