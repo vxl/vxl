@@ -8,7 +8,7 @@
 // \file
 
 #include <vcl_iosfwd.h>
-#include <vcl_complex_fwd.h>
+#include <vcl_complex.h>
 #include <vnl/vnl_matlab_print_format.h>
 
 //: print real or complex scalar into character buffer.

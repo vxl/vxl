@@ -12,7 +12,7 @@
 // \endverbatim
 
 #include <vcl_string.h>
-#include <vcl_complex_fwd.h>
+#include <vcl_complex.h>
 
 //: initialise test counters, check test name 'name' exists
 void testlib_test_start(const char* name = 0);

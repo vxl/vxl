@@ -27,8 +27,8 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_complex_fwd.h>
 #include <vxl_config.h> // for type vxl_uint_64
+#include <vcl_complex.h>
 
 // this is an empty class template.
 // only the specializations make sense.
