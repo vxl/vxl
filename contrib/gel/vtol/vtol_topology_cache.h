@@ -6,7 +6,7 @@
 //
 // .NAME        vtol_topology_cache - Cache inferiors of TopologyObject
 // .LIBRARY     vtol
-// .HEADER vxl package
+// .HEADER      gel package
 // .INCLUDE     vtol/vtol_topology_cache.h
 // .FILE        vtol_topology_cache.cxx
 // .SECTION Description
@@ -22,7 +22,14 @@
 #include <vcl_vector.h>
 #include <vbl/vbl_timestamp.h>
 
-class vtol_geometry_object;
+class vtol_vertex;
+class vtol_edge;
+class vtol_zero_chain;
+class vtol_one_chain;
+class vtol_face;
+class vtol_two_chain;
+class vtol_block;
+class vtol_topology_object;
 
 //:
 // This class keeps a cache of various topology object lists

@@ -4,7 +4,7 @@
 //
 // .NAME        vtol_two_chain - Represents a set of vtol_face
 // .LIBRARY     vtol
-// .HEADER      vxl  package
+// .HEADER      gel  package
 // .INCLUDE     vtol/vtol_two_chain.h
 // .FILE        vtol_two_chain.cxx
 //
@@ -33,6 +33,13 @@
 //#include <vtol/vtol_topology_object.h>
 //#include <vtol/vtol_hierarchy_node.h>
 #include <vtol/vtol_chain.h>
+
+class vtol_vertex;
+class vtol_edge;
+class vtol_zero_chain;
+class vtol_one_chain;
+class vtol_face;
+class vtol_block;
 
 class vtol_two_chain
 //: public vtol_topology_object,

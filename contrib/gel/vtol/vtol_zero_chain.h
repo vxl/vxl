@@ -4,7 +4,7 @@
 //
 // .NAME        vtol_zero_chain - Represents a set of Vertices
 // .LIBRARY     vtol
-// .HEADER	vxl package
+// .HEADER	gel package
 // .INCLUDE     vtol/vtol_zero_chain.h
 // .FILE        vtol_zero_chain.cxx
 //
@@ -27,6 +27,12 @@
 #include <vcl_vector.h>
 #include <vtol/vtol_vertex.h>
 
+class vtol_vertex;
+class vtol_edge;
+class vtol_one_chain;
+class vtol_face;
+class vtol_two_chain;
+class vtol_block;
 
 class vtol_zero_chain
   : public vtol_topology_object
