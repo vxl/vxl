@@ -102,6 +102,19 @@ inline double mil_safe_extend_bilin_interp_2d(double x, double y, const T* data,
     if (y>=ny-1) y=(double)ny-1.00000001;
     return mil_bilin_interp_2d(x,y,data,ystep);
 }
+//: Compute bilinear interpolation at (x,y), with bound checks
+//  Image is nx * ny array of Ts. x,y element is data[nx*y+x]
+//  If (x,y) is outside safe interpolatable image region, nearest pixel value is returned.
+//  The safe interpolatable region is [0,nx)*[0,ny).
+template<class T>
+inline double mil_safe_extend_bilin_interp_2d(double x, double y, const T* data, int nx, int ny, int xstep, int ystep)
+{
+    if (x<0) x= 0.0;
+    if (y<0) y= 0.0;
+    if (x>=nx-1) x=(double)nx-1.00000001;
+    if (y>=ny-1) y=(double)ny-1.00000001;
+    return mil_bilin_interp_2d(x,y,data,xstep,ystep);
+}
 
 
 #endif // mil_bilin_interp_2d_h_
