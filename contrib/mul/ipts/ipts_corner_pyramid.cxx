@@ -1,16 +1,16 @@
-//:
-//  \file
-//  \brief Compute corner strength at each level of a scale space pyramid
-//  \author Tim Cootes
-
+// This is mul/ipts/ipts_corner_pyramid.cxx
 #include "ipts_corner_pyramid.h"
+//:
+// \file
+// \brief Compute corner strength at each level of a scale space pyramid
+// \author Tim Cootes
+
 #include <vil/algo/vil_corners.h>
 #include <vimt/vimt_scale_pyramid_builder_2d.h>
 
 //: Compute corner strength at each level of a scale space pyramid
 //  Build smooth gaussian pyramid from the image, then compute corners at each level.
-//  Use ipts_scale_space_peaks() to get the position and scale of
-//  likely corners
+//  Use ipts_scale_space_peaks() to get the position and scale of likely corners
 void ipts_corner_pyramid(const vimt_image_2d_of<float>& image,
                          vimt_image_pyramid& corner_pyramid,
                          vimt_image_pyramid& smooth_pyramid,
@@ -23,7 +23,7 @@ void ipts_corner_pyramid(const vimt_image_2d_of<float>& image,
   ipts_corner_pyramid(smooth_pyramid,corner_pyramid);
 }
 
-//: Compute corner strength at each level of a scale space pyramid
+//: Compute corner strength at each level of a scale space pyramid.
 //  smooth_pyramid assumed to be of type float.
 //  Use ipts_scale_space_peaks() to get the position and scale of
 //  likely corners
@@ -41,7 +41,4 @@ void ipts_corner_pyramid(const vimt_image_pyramid& smooth_pyramid,
     corner_im.set_world2im(smooth_im.world2im());
     vil_corners(smooth_im.image(),corner_im.image());
   }
-
 }
-
-

@@ -1,20 +1,21 @@
-//:
-//  \file
-//  \brief Compute edge orientations at each level of a scale space pyramid
-//  \author Tim Cootes
-
+// This is mul/ipts/ipts_orientation_pyramid.cxx
 #include "ipts_orientation_pyramid.h"
+//:
+// \file
+// \brief Compute edge orientations at each level of a scale space pyramid
+// \author Tim Cootes
+
 #include <vil/algo/vil_orientations.h>
 #include <vimt/vimt_scale_pyramid_builder_2d.h>
 #include <vcl_cassert.h>
 
-//: Compute edge orientations at each level of a scale space pyramid
-//  smooth_pyramid must be of float. orient_pyramid  is set to be of type vxl_byte.
+//: Compute edge orientations at each level of a scale space pyramid.
+//  smooth_pyramid must be of type float. orient_pyramid is set to be of type vxl_byte.
 //  Uses vil_orientations_at_edges() on each level of the pyramid.
 void ipts_orientation_pyramid(const vimt_image_pyramid& smooth_pyramid,
-                         vimt_image_pyramid& orient_pyramid,
-                         float grad_threshold,
-                         unsigned n_orientations)
+                              vimt_image_pyramid& orient_pyramid,
+                              float grad_threshold,
+                              unsigned n_orientations)
 {
   if (smooth_pyramid.n_levels()==0) return;
 
@@ -38,7 +39,4 @@ void ipts_orientation_pyramid(const vimt_image_pyramid& smooth_pyramid,
 
     orient_im.set_world2im(smooth_im.world2im());
   }
-
 }
-
-
