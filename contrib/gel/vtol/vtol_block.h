@@ -23,7 +23,7 @@
 //     JNS Dec 1998, Added is_within functions (used in 2D display of a block,
 //                   these functions must be wrong for 3D use)
 //-----------------------------------------------------------------------------
-#include <vtol/vtol_block_ref.h>
+#include <vtol/vtol_block_sptr.h>
 
 #include <vtol/vtol_topology_object.h>
 
@@ -41,7 +41,7 @@ public:
   //***************************************************************************
   // Initialization
   //***************************************************************************
-  
+
   //---------------------------------------------------------------------------
   //: Default constructor
   //---------------------------------------------------------------------------
@@ -78,7 +78,7 @@ public:
   //: Clone `this': creation of a new object and initialization
   //: See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_3d_ref clone(void) const;
+  virtual vsol_spatial_object_3d_sptr clone(void) const;
 
   //: Accessors
 
@@ -86,7 +86,7 @@ public:
   //: Return the topology type
   //---------------------------------------------------------------------------
   virtual vtol_topology_object_type topology_type(void) const;
-  
+
   virtual vtol_two_chain *get_boundary_cycle(void)
   {
     return
@@ -103,7 +103,7 @@ public:
   //: Return `this' if `this' is a block, 0 otherwise
   //---------------------------------------------------------------------------
   virtual const vtol_block *cast_to_block(void) const;
-  
+
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a block, 0 otherwise
   //---------------------------------------------------------------------------
@@ -132,7 +132,7 @@ public:
   virtual face_list *outside_boundary_faces(void);
   virtual two_chain_list *outside_boundary_two_chains(void);
 
- //: Warning these methods should not be used by clients 
+ //: Warning these methods should not be used by clients
 
   virtual vcl_vector<vtol_vertex *> *compute_vertices(void);
   virtual vcl_vector<vtol_edge *> *compute_edges(void);
@@ -154,7 +154,7 @@ public:
   vcl_vector<vtol_two_chain *> *outside_boundary_compute_two_chains(void);
 
   virtual two_chain_list *hole_cycles(void) const;
-  
+
   //: Utility and Editing Functions
   virtual bool add_hole_cycle(vtol_two_chain &new_hole);
 

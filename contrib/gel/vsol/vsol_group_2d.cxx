@@ -15,7 +15,7 @@
 //---------------------------------------------------------------------------
 vsol_group_2d::vsol_group_2d(void)
 {
-  storage_=new vcl_list<vsol_spatial_object_2d_ref>();
+  storage_=new vcl_list<vsol_spatial_object_2d_sptr>();
 }
 
 //---------------------------------------------------------------------------
@@ -24,9 +24,9 @@ vsol_group_2d::vsol_group_2d(void)
 //---------------------------------------------------------------------------
 vsol_group_2d::vsol_group_2d(const vsol_group_2d &other)
 {
-  storage_=new vcl_list<vsol_spatial_object_2d_ref>(*other.storage_);
+  storage_=new vcl_list<vsol_spatial_object_2d_sptr>(*other.storage_);
 }
-  
+
 //---------------------------------------------------------------------------
 // -- Destructor
 // Description: The objects of the group are not deleted
@@ -40,7 +40,7 @@ vsol_group_2d::~vsol_group_2d()
 // -- Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_2d_ref vsol_group_2d::clone(void) const
+vsol_spatial_object_2d_sptr vsol_group_2d::clone(void) const
 {
   return new vsol_group_2d(*this);
 }
@@ -53,14 +53,14 @@ vsol_spatial_object_2d_ref vsol_group_2d::clone(void) const
 // -- Return the object `i'
 // Require: i>=0 and i<size()
 //---------------------------------------------------------------------------
-vsol_spatial_object_2d_ref vsol_group_2d::object(const int i) const
+vsol_spatial_object_2d_sptr vsol_group_2d::object(const int i) const
 {
   // require
   assert((i>=0)&&(i<size()));
-  
-  vcl_list<vsol_spatial_object_2d_ref>::iterator j;
+
+  vcl_list<vsol_spatial_object_2d_sptr>::iterator j;
   int k;
-  
+
   j=storage_->begin();
   for(k=0;k<i;++k)
     ++j;
@@ -74,7 +74,7 @@ vsol_spatial_object_2d_ref vsol_group_2d::object(const int i) const
 //---------------------------------------------------------------------------
 // -- Return the real type of a group. It is a SPATIALGROUP
 //---------------------------------------------------------------------------
-vsol_spatial_object_2d::vsol_spatial_object_2d_type 
+vsol_spatial_object_2d::vsol_spatial_object_2d_type
 vsol_group_2d::spatial_type(void) const
 {
   return vsol_spatial_object_2d::SPATIALGROUP;
@@ -94,7 +94,7 @@ void vsol_group_2d::compute_bounding_box(void)
   double xmax;
   double ymax;
   vsol_box_2d *b;
-  vcl_list<vsol_spatial_object_2d_ref>::iterator i;
+  vcl_list<vsol_spatial_object_2d_sptr>::iterator i;
 
   for(i=storage_->begin();i!=storage_->end();++i)
     {
@@ -105,7 +105,7 @@ void vsol_group_2d::compute_bounding_box(void)
           ymin=b->get_min_y();
           xmax=b->get_max_x();
           ymax=b->get_max_y();
-          
+
         }
       else
         {
@@ -143,7 +143,7 @@ int vsol_group_2d::deep_size(void) const
 {
   int result;
   vsol_group_2d *g;
-  vcl_list<vsol_spatial_object_2d_ref>::iterator i;
+  vcl_list<vsol_spatial_object_2d_sptr>::iterator i;
 
   result=0;
 
@@ -158,7 +158,7 @@ int vsol_group_2d::deep_size(void) const
     }
   return result;
 }
-  
+
 //***************************************************************************
 // Element change
 //***************************************************************************
@@ -167,11 +167,11 @@ int vsol_group_2d::deep_size(void) const
 // -- Add an object `new_object'to `this'
 // Require: !is_child(new_object)
 //---------------------------------------------------------------------------
-void vsol_group_2d::add_object(const vsol_spatial_object_2d_ref &new_object)
+void vsol_group_2d::add_object(const vsol_spatial_object_2d_sptr &new_object)
 {
   // require
   assert(!is_child(new_object));
-  
+
   storage_->push_back(new_object);
 }
 
@@ -187,10 +187,10 @@ void vsol_group_2d::remove_object(const int i)
 {
   // require
   assert((i>=0)&&(i<size()));
-  
-  vcl_list<vsol_spatial_object_2d_ref>::iterator j;
+
+  vcl_list<vsol_spatial_object_2d_sptr>::iterator j;
   int k;
-  
+
   j=storage_->begin();
   for(k=0;k<i;++k)
     ++j;
@@ -201,12 +201,12 @@ void vsol_group_2d::remove_object(const int i)
 // -- Is `new_object' a child (direct or not) of `this' ?
 //---------------------------------------------------------------------------
 bool
-vsol_group_2d::is_child(const vsol_spatial_object_2d_ref &new_object) const
+vsol_group_2d::is_child(const vsol_spatial_object_2d_sptr &new_object) const
 {
   bool result;
   vsol_group_2d *g;
 
-  vcl_list<vsol_spatial_object_2d_ref>::iterator i;
+  vcl_list<vsol_spatial_object_2d_sptr>::iterator i;
 
   result=false;
   for(i=storage_->begin();(i!=storage_->end())&&!result;++i)

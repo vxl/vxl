@@ -4,7 +4,7 @@
 //
 // .NAME        vtol_topology_object - base class for topology objects
 // .LIBRARY     vtol
-// .HEADER vxl package
+// .HEADER      gel package
 // .INCLUDE     vtol/vtol_topology_object.h
 // .FILE        vtol_topology_object.cxx
 // .SECTION Description
@@ -42,32 +42,32 @@
 //    Patricia A. Vrobel.
 //    ported by Luis E. Galup
 
-#include <vtol/vtol_topology_object_ref.h>
+#include <vtol/vtol_topology_object_sptr.h>
 #include <vsol/vsol_spatial_object_3d.h>
 
 #include <vcl_vector.h>
 #include <vcl_list.h>
 
-#include <vtol/vtol_vertex_ref.h>
-#include <vtol/vtol_zero_chain_ref.h>
-#include <vtol/vtol_edge_ref.h>
-#include <vtol/vtol_one_chain_ref.h>
-#include <vtol/vtol_face_ref.h>
-#include <vtol/vtol_two_chain_ref.h>
-#include <vtol/vtol_block_ref.h>
-class vtol_topology_cache; //#include <vtol/vtol_topology_cache_ref.h>
+#include <vtol/vtol_vertex_sptr.h>
+#include <vtol/vtol_zero_chain_sptr.h>
+#include <vtol/vtol_edge_sptr.h>
+#include <vtol/vtol_one_chain_sptr.h>
+#include <vtol/vtol_face_sptr.h>
+#include <vtol/vtol_two_chain_sptr.h>
+#include <vtol/vtol_block_sptr.h>
+class vtol_topology_cache; //#include <vtol/vtol_topology_cache_sptr.h>
 
 
 // Useful typedefs
 #if 1
-typedef vcl_vector<vtol_topology_object_ref> topology_list;
-typedef vcl_vector<vtol_vertex_ref>          vertex_list;
-typedef vcl_vector<vtol_edge_ref>            edge_list;
-typedef vcl_vector<vtol_one_chain_ref>       one_chain_list;
-typedef vcl_vector<vtol_zero_chain_ref>      zero_chain_list;
-typedef vcl_vector<vtol_face_ref>            face_list;
-typedef vcl_vector<vtol_two_chain_ref>       two_chain_list;
-typedef vcl_vector<vtol_block_ref>           block_list;
+typedef vcl_vector<vtol_topology_object_sptr> topology_list;
+typedef vcl_vector<vtol_vertex_sptr>          vertex_list;
+typedef vcl_vector<vtol_edge_sptr>            edge_list;
+typedef vcl_vector<vtol_one_chain_sptr>       one_chain_list;
+typedef vcl_vector<vtol_zero_chain_sptr>      zero_chain_list;
+typedef vcl_vector<vtol_face_sptr>            face_list;
+typedef vcl_vector<vtol_two_chain_sptr>       two_chain_list;
+typedef vcl_vector<vtol_block_sptr>           block_list;
 #else
 typedef vcl_vector<vtol_topology_object *> topology_list;
 typedef vcl_vector<vtol_vertex *>          vertex_list;
@@ -81,7 +81,7 @@ typedef vcl_vector<vtol_block *>           block_list;
 #endif
 
 //*****************************************************************************
-// ALL THE DERIVED AND NONE ABSTRACT CLASSES OF THIS CLASS MUST CALL
+// ALL THE DERIVED AND NON-ABSTRACT CLASSES OF THIS CLASS MUST CALL
 // unlink_all_inferiors() IN THEIR DESTRUCTOR
 // unlink_all_inferiors() CANT BE CALLED DIRECTLY IN THIS CLASS, OTHERWISE
 // BAD VERSIONS OF METHODS SHOULD BE CALLED (C++ IS STUPID !)
@@ -112,7 +112,7 @@ public:
   //***************************************************************************
   // Initialization
   //***************************************************************************
-  
+
   //---------------------------------------------------------------------------
   //: Default constructor
   //---------------------------------------------------------------------------
@@ -157,17 +157,17 @@ public:
   //: Return `this' if `this' is a zero_chain, 0 otherwise
   //---------------------------------------------------------------------------
   virtual vtol_zero_chain *cast_to_zero_chain(void);
-  
+
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an edge, 0 otherwise
   //---------------------------------------------------------------------------
   virtual const vtol_edge *cast_to_edge(void) const;
-  
+
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an edge, 0 otherwise
   //---------------------------------------------------------------------------
   virtual vtol_edge *cast_to_edge(void);
- 
+
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an one_chain, 0 otherwise
   //---------------------------------------------------------------------------
@@ -182,7 +182,7 @@ public:
   //: Return `this' if `this' is a face, 0 otherwise
   //---------------------------------------------------------------------------
   virtual const vtol_face *cast_to_face(void) const;
-  
+
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a face, 0 otherwise
   //---------------------------------------------------------------------------
@@ -202,12 +202,12 @@ public:
   //: Return `this' if `this' is a block, 0 otherwise
   //---------------------------------------------------------------------------
   virtual const vtol_block *cast_to_block(void) const;
-  
+
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a block, 0 otherwise
   //---------------------------------------------------------------------------
   virtual vtol_block *cast_to_block(void);
- 
+
   //***************************************************************************
   // Status report
   //***************************************************************************
@@ -245,16 +245,16 @@ public:
   //: Number of superiors
   //---------------------------------------------------------------------------
   virtual int numsup(void) const;
-  
+
   //---------------------------------------------------------------------------
   //: Return the superiors list
   //---------------------------------------------------------------------------
-  virtual const vcl_vector<vtol_topology_object_ref> *superiors(void) const;
+  virtual const vcl_vector<vtol_topology_object_sptr> *superiors(void) const;
 
   //---------------------------------------------------------------------------
   //: Return the inferiors list
   //---------------------------------------------------------------------------
-  virtual const vcl_vector<vtol_topology_object_ref> *inferiors(void) const;
+  virtual const vcl_vector<vtol_topology_object_sptr> *inferiors(void) const;
 
   //---------------------------------------------------------------------------
   //: Return the spatial type
@@ -281,7 +281,7 @@ public:
   //: REQUIRE: valid_inferior_type(inferior) and is_inferior(inferior)
   //---------------------------------------------------------------------------
   virtual void unlink_inferior(vtol_topology_object &inferior);
-  
+
   //---------------------------------------------------------------------------
   //: Unlink `this' with all its inferiors
   //---------------------------------------------------------------------------
@@ -292,53 +292,53 @@ public:
   //---------------------------------------------------------------------------
   virtual void unlink(void);
 
-  
+
   //---------------------------------------------------------------------------
-  //: Get lists of vertices 
+  //: Get lists of vertices
   //---------------------------------------------------------------------------
   vertex_list *vertices(void);
   void vertices(vertex_list &list);
 
   //---------------------------------------------------------------------------
-  //: Get lists of zero chains 
+  //: Get lists of zero chains
   //---------------------------------------------------------------------------
-  
+
   zero_chain_list *zero_chains(void);
   void zero_chains(zero_chain_list &list);
-  
-  //---------------------------------------------------------------------------
-  //: Get lists of edges 
-  //---------------------------------------------------------------------------
-  
-  edge_list *edges(void);
-  void edges(edge_list &list);
-  
 
   //---------------------------------------------------------------------------
-  //: Get lists of one chains 
+  //: Get lists of edges
   //---------------------------------------------------------------------------
-  
+
+  edge_list *edges(void);
+  void edges(edge_list &list);
+
+
+  //---------------------------------------------------------------------------
+  //: Get lists of one chains
+  //---------------------------------------------------------------------------
+
   one_chain_list *one_chains(void);
   void one_chains(one_chain_list &list);
 
   //---------------------------------------------------------------------------
-  //: Get lists of faces 
+  //: Get lists of faces
   //---------------------------------------------------------------------------
 
   face_list *faces(void);
   void faces(face_list &list);
 
-  
+
   //---------------------------------------------------------------------------
-  //: Get lists of two chains 
+  //: Get lists of two chains
   //---------------------------------------------------------------------------
 
   two_chain_list *two_chains(void);
   void two_chains(two_chain_list &list);
 
-  
+
   //---------------------------------------------------------------------------
-  //: Get lists of blocks 
+  //: Get lists of blocks
   //---------------------------------------------------------------------------
 
   block_list *blocks(void);
@@ -379,43 +379,43 @@ private:
 public:
 
   //---------------------------------------------------------------------------
-  //: compute lists of vertices 
+  //: compute lists of vertices
   // - Warning should not be used by clients
   //---------------------------------------------------------------------------
   virtual vcl_vector<vtol_vertex*> *compute_vertices(void);
 
   //---------------------------------------------------------------------------
-  //: compute lists of zero chains 
+  //: compute lists of zero chains
   // - Warning should not be used by clients
   //---------------------------------------------------------------------------
   virtual vcl_vector<vtol_zero_chain*> *compute_zero_chains(void);
-  
+
   //---------------------------------------------------------------------------
-  //: compute lists of edges 
+  //: compute lists of edges
   // - Warning should not be used by clients
   //---------------------------------------------------------------------------
   virtual vcl_vector<vtol_edge*> *compute_edges(void);
 
   //---------------------------------------------------------------------------
-  //: compute lists of one chains 
+  //: compute lists of one chains
   // - Warning should not be used by clients
   //---------------------------------------------------------------------------
   virtual vcl_vector<vtol_one_chain*> *compute_one_chains(void);
 
   //---------------------------------------------------------------------------
-  //: compute lists of faces 
+  //: compute lists of faces
   // - Warning should not be used by clients
   //---------------------------------------------------------------------------
   virtual vcl_vector<vtol_face*> *compute_faces(void);
-  
+
   //---------------------------------------------------------------------------
-  //: compute lists of two chains 
+  //: compute lists of two chains
   // - Warning should not be used by clients
   //---------------------------------------------------------------------------
   virtual vcl_vector<vtol_two_chain*> *compute_two_chains(void);
-  
+
   //---------------------------------------------------------------------------
-  //: compute lists of blocks 
+  //: compute lists of blocks
   // - Warning should not be used by clients
   //---------------------------------------------------------------------------
   virtual vcl_vector<vtol_block*> *compute_blocks(void);
@@ -425,20 +425,20 @@ protected:
   //---------------------------------------------------------------------------
   // Description: array of superiors
   //---------------------------------------------------------------------------
-  vcl_list<vtol_topology_object_ref> _superiors;
+  vcl_list<vtol_topology_object_sptr> _superiors;
 
   //---------------------------------------------------------------------------
   // Description: array of inferiors
   //---------------------------------------------------------------------------
-  vcl_vector<vtol_topology_object_ref> _inferiors;
+  vcl_vector<vtol_topology_object_sptr> _inferiors;
 
 private:
   //---------------------------------------------------------------------------
   // Description: cache system
   //---------------------------------------------------------------------------
   vtol_topology_cache *inf_sup_cache;
-  
-  // declare a freind class 
+
+  // declare a freind class
   friend class vtol_topology_cache;
 };
 

@@ -22,15 +22,15 @@ int main(int argc,
   int result=0;
 
   vcl_cout<<"Constructor from extremities"<<vcl_endl;
-  vsol_point_3d_ref p=new vsol_point_3d(10,4,1);
-  vsol_point_3d_ref q=new vsol_point_3d(5,1,-23);
-  vsol_line_3d_ref a=new vsol_line_3d(p,q);
+  vsol_point_3d_sptr p=new vsol_point_3d(10,4,1);
+  vsol_point_3d_sptr q=new vsol_point_3d(5,1,-23);
+  vsol_line_3d_sptr a=new vsol_line_3d(p,q);
 
   assert(*(a->p0())==*p);
   assert(*(a->p1())==*q);
 
   vcl_cout<<"Copy constructor"<<vcl_endl;
-  vsol_line_3d_ref b=new vsol_line_3d(*a);
+  vsol_line_3d_sptr b=new vsol_line_3d(*a);
 
   vcl_cout<<"== operator"<<vcl_endl;
   assert(*a==*b);
@@ -41,7 +41,7 @@ int main(int argc,
   (*v)[1]=-5;
   (*v)[2]=2;
 
-  vsol_line_3d_ref c=new vsol_line_3d(*v,p);
+  vsol_line_3d_sptr c=new vsol_line_3d(*v,p);
 
   vcl_cout<<"middle()"<<vcl_endl;
   assert(*(c->middle())==*p);
@@ -50,7 +50,7 @@ int main(int argc,
 
   vcl_cout<<"length()"<<vcl_endl;
   vcl_cout<<c->length()<<vcl_endl;
-  
+
   vcl_cout<<"set_length()"<<vcl_endl;
   c->set_length(100);
   assert(c->length()==100);

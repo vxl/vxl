@@ -8,21 +8,21 @@
 */
 
 #include <vcl_string.h>
-#include <vtol/vtol_topology_object_ref.h>
+#include <vtol/vtol_topology_object_sptr.h>
 #include <gmvl/gmvl_node.h>
 
 class gmvl_topology_node : public gmvl_node
 {
 public:
 
-  gmvl_topology_node( vtol_topology_object_ref topology);
+  gmvl_topology_node( vtol_topology_object_sptr topology);
   ~gmvl_topology_node();
 
-  vtol_topology_object_ref get() const { return topology_; }
+  vtol_topology_object_sptr get() const { return topology_; }
 
 protected:
 
-  vtol_topology_object_ref topology_;
+  vtol_topology_object_sptr topology_;
 
 };
 

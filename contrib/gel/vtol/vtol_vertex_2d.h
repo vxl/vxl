@@ -2,7 +2,7 @@
 #define VTOL_VERTEX_2D_H
 // .NAME vtol_vertex_2d - Topological container for a spatial point
 // .LIBRARY vtol
-// .HEADER vxl Package
+// .HEADER gel Package
 // .INCLUDE vtol/vtol_vertex_2d.h
 // .FILE vtol_vertex_2d.cxx
 //
@@ -21,10 +21,10 @@
 //     LEG May 2000. ported to vxl
 //
 /// .EXAMPLE vtol_vertex_2d.example
-#include <vtol/vtol_vertex_2d_ref.h>
+#include <vtol/vtol_vertex_2d_sptr.h>
 
 #include <vnl/vnl_double_2.h>
-#include <vsol/vsol_point_2d_ref.h>
+#include <vsol/vsol_point_2d_sptr.h>
 #include <vtol/vtol_vertex.h>
 
 class vtol_vertex_2d
@@ -34,7 +34,7 @@ public:
   //***************************************************************************
   // Initialization
   //***************************************************************************
-  
+
   //---------------------------------------------------------------------------
   //: Default constructor
   //---------------------------------------------------------------------------
@@ -66,26 +66,26 @@ public:
   //: Destructor
   //---------------------------------------------------------------------------
   virtual ~vtol_vertex_2d();
-  
+
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
   //: See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_3d_ref clone(void) const;
+  virtual vsol_spatial_object_3d_sptr clone(void) const;
 
   // Accessors
 
   //---------------------------------------------------------------------------
   //: Return the point
   //---------------------------------------------------------------------------
-  virtual vsol_point_2d_ref point(void) const;
+  virtual vsol_point_2d_sptr point(void) const;
 
   //---------------------------------------------------------------------------
   //: Set the point (the point is not copied)
   //: REQUIRE: new_point.ptr()!=0
   //---------------------------------------------------------------------------
   virtual void set_point(vsol_point_2d &new_point);
- 
+
 
 
   // Methods called on Vertex
@@ -143,14 +143,14 @@ public:
   //: exist. Otherwise it just returns the existing edge
   //: REQUIRE: other.ptr()!=0 and other.ptr()!=this
   //---------------------------------------------------------------------------
- 
+
   virtual vtol_edge *new_edge(vtol_vertex &other);
 
- 
+
   double distance_from(const vnl_double_2 &);
 
   double euclidean_distance(vtol_vertex_2d &v); //actual distance, not squared - JLM
-  
+
   void print(vcl_ostream &strm=vcl_cout) const;
   void describe(vcl_ostream &strm=vcl_cout, int blanking=0) const;
 
@@ -158,13 +158,13 @@ protected:
   //---------------------------------------------------------------------------
   // Description: point associated to the vertex
   //---------------------------------------------------------------------------
-  vsol_point_2d_ref _point;
+  vsol_point_2d_sptr _point;
 
    //:  copy the geometry
 
   virtual void copy_geometry(const vtol_vertex &other);
 
-  // : compare the geometry 
+  // : compare the geometry
 
   virtual bool compare_geometry(const vtol_vertex &other) const;
 

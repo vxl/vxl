@@ -24,12 +24,12 @@ int main(int argc,
 {
   int result=0;
 
-  vsol_point_2d_ref p;
-  vcl_vector<vsol_point_2d_ref> *vertices;
-  vsol_polygon_2d_ref poly;
-  vsol_polygon_2d_ref poly2;
+  vsol_point_2d_sptr p;
+  vcl_vector<vsol_point_2d_sptr> *vertices;
+  vsol_polygon_2d_sptr poly;
+  vsol_polygon_2d_sptr poly2;
 
-  vertices=new vcl_vector<vsol_point_2d_ref>(5);
+  vertices=new vcl_vector<vsol_point_2d_sptr>(5);
 
   p=new vsol_point_2d(0,0);
   (*vertices)[0]=p;
@@ -65,7 +65,7 @@ int main(int argc,
   p=poly->vertex(3);
   assert(p->x()==3);
   assert(p->y()==6);
-  
+
   p=poly->vertex(4);
   assert(p->x()==1);
   assert(p->y()==4);

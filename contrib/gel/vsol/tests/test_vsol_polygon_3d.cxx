@@ -24,12 +24,12 @@ int main(int argc,
 {
   int result=0;
 
-  vsol_point_3d_ref p;
-  vcl_vector<vsol_point_3d_ref> *vertices;
-  vsol_polygon_3d_ref poly;
-  vsol_polygon_3d_ref poly2;
+  vsol_point_3d_sptr p;
+  vcl_vector<vsol_point_3d_sptr> *vertices;
+  vsol_polygon_3d_sptr poly;
+  vsol_polygon_3d_sptr poly2;
 
-  vertices=new vcl_vector<vsol_point_3d_ref>(5);
+  vertices=new vcl_vector<vsol_point_3d_sptr>(5);
 
   p=new vsol_point_3d(0,0,5);
   (*vertices)[0]=p;
@@ -77,11 +77,11 @@ int main(int argc,
 
   vcl_cout<<"is_convex"<<vcl_endl;
   assert(poly->is_convex());
-  
+
   vcl_cout<<"Copy constructor"<<vcl_endl;
   poly2=new vsol_polygon_3d(*poly);
 
-  vcl_cout<<"=="<<vcl_endl;  
+  vcl_cout<<"=="<<vcl_endl;
   assert(*poly2==*poly);
 
   return result;

@@ -18,16 +18,16 @@
 #include <vbl/vbl_timestamp.h>
 #include <vbl/vbl_ref_count.h>
 
-#include <vdgl/vdgl_edgel_chain_ref.h>
+#include <vdgl/vdgl_edgel_chain_sptr.h>
 
 class vdgl_interpolator : public vbl_timestamp,
 			  public vbl_ref_count {
    // PUBLIC INTERFACE----------------------------------------------------------
 public:
-  
+
   // Constructors/Destructors--------------------------------------------------
-  
-  vdgl_interpolator( vdgl_edgel_chain_ref chain) : chain_(chain) {};
+
+  vdgl_interpolator( vdgl_edgel_chain_sptr chain) : chain_(chain) {};
 
   // Operators----------------------------------------------------------------
 
@@ -52,17 +52,17 @@ public:
 
   // Data Access---------------------------------------------------------------
 
-  vdgl_edgel_chain_ref get_edgel_chain() const { return chain_; }
+  vdgl_edgel_chain_sptr get_edgel_chain() const { return chain_; }
 
   // Data Control--------------------------------------------------------------
 
   // Computations--------------------------------------------------------------
-  
+
   // INTERNALS-----------------------------------------------------------------
 protected:
   // Data Members--------------------------------------------------------------
 
-  vdgl_edgel_chain_ref chain_;
+  vdgl_edgel_chain_sptr chain_;
 
 private:
   // Helpers-------------------------------------------------------------------

@@ -15,7 +15,7 @@
 //---------------------------------------------------------------------------
 vsol_group_3d::vsol_group_3d(void)
 {
-  storage_=new vcl_list<vsol_spatial_object_3d_ref>();
+  storage_=new vcl_list<vsol_spatial_object_3d_sptr>();
 }
 
 //---------------------------------------------------------------------------
@@ -24,9 +24,9 @@ vsol_group_3d::vsol_group_3d(void)
 //---------------------------------------------------------------------------
 vsol_group_3d::vsol_group_3d(const vsol_group_3d &other)
 {
-  storage_=new vcl_list<vsol_spatial_object_3d_ref>(*other.storage_);
+  storage_=new vcl_list<vsol_spatial_object_3d_sptr>(*other.storage_);
 }
-  
+
 //---------------------------------------------------------------------------
 // -- Destructor
 // Description: The objects of the group are not deleted
@@ -40,7 +40,7 @@ vsol_group_3d::~vsol_group_3d()
 // -- Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_3d_ref vsol_group_3d::clone(void) const
+vsol_spatial_object_3d_sptr vsol_group_3d::clone(void) const
 {
   return new vsol_group_3d(*this);
 }
@@ -53,14 +53,14 @@ vsol_spatial_object_3d_ref vsol_group_3d::clone(void) const
 // -- Return the object `i'
 // Require: i>=0 and i<size()
 //---------------------------------------------------------------------------
-vsol_spatial_object_3d_ref vsol_group_3d::object(const int i) const
+vsol_spatial_object_3d_sptr vsol_group_3d::object(const int i) const
 {
   // require
   assert((i>=0)&&(i<size()));
-  
-  vcl_list<vsol_spatial_object_3d_ref>::iterator j;
+
+  vcl_list<vsol_spatial_object_3d_sptr>::iterator j;
   int k;
-  
+
   j=storage_->begin();
   for(k=0;k<i;++k)
     ++j;
@@ -74,7 +74,7 @@ vsol_spatial_object_3d_ref vsol_group_3d::object(const int i) const
 //---------------------------------------------------------------------------
 // -- Return the real type of a group. It is a SPATIALGROUP
 //---------------------------------------------------------------------------
-enum  vsol_spatial_object_3d::vsol_spatial_object_3d_type 
+enum  vsol_spatial_object_3d::vsol_spatial_object_3d_type
 vsol_group_3d::spatial_type(void) const
 {
   return vsol_spatial_object_3d::SPATIALGROUP;
@@ -97,7 +97,7 @@ void vsol_group_3d::compute_bounding_box(void)
   double zmax;
 
   vsol_box_3d *b;
-  vcl_list<vsol_spatial_object_3d_ref>::iterator i;
+  vcl_list<vsol_spatial_object_3d_sptr>::iterator i;
 
   for(i=storage_->begin();i!=storage_->end();++i)
     {
@@ -153,7 +153,7 @@ int vsol_group_3d::deep_size(void) const
 {
   int result;
   vsol_group_3d *g;
-  vcl_list<vsol_spatial_object_3d_ref>::iterator i;
+  vcl_list<vsol_spatial_object_3d_sptr>::iterator i;
 
   result=0;
 
@@ -168,7 +168,7 @@ int vsol_group_3d::deep_size(void) const
     }
   return result;
 }
-  
+
 //***************************************************************************
 // Element change
 //***************************************************************************
@@ -177,11 +177,11 @@ int vsol_group_3d::deep_size(void) const
 // -- Add an object `new_object'to `this'
 // Require: !is_child(new_object)
 //---------------------------------------------------------------------------
-void vsol_group_3d::add_object(const vsol_spatial_object_3d_ref &new_object)
+void vsol_group_3d::add_object(const vsol_spatial_object_3d_sptr &new_object)
 {
   // require
   assert(!is_child(new_object));
-  
+
   storage_->push_back(new_object);
 }
 
@@ -197,10 +197,10 @@ void vsol_group_3d::remove_object(const int i)
 {
   // require
   assert((i>=0)&&(i<size()));
-  
-  vcl_list<vsol_spatial_object_3d_ref>::iterator j;
+
+  vcl_list<vsol_spatial_object_3d_sptr>::iterator j;
   int k;
-  
+
   j=storage_->begin();
   for(k=0;k<i;++k)
     ++j;
@@ -211,12 +211,12 @@ void vsol_group_3d::remove_object(const int i)
 // -- Is `new_object' a child (direct or not) of `this' ?
 //---------------------------------------------------------------------------
 bool
-vsol_group_3d::is_child(const vsol_spatial_object_3d_ref &new_object) const
+vsol_group_3d::is_child(const vsol_spatial_object_3d_sptr &new_object) const
 {
   bool result;
   vsol_group_3d *g;
 
-  vcl_list<vsol_spatial_object_3d_ref>::iterator i;
+  vcl_list<vsol_spatial_object_3d_sptr>::iterator i;
 
   result=false;
   for(i=storage_->begin();(i!=storage_->end())&&!result;++i)

@@ -12,7 +12,7 @@
 
 #include <gmvl/gmvl_database.h>
 #include <gmvl/gmvl_image_node.h>
-#include <gmvl/gmvl_node_ref.h>
+#include <gmvl/gmvl_node_sptr.h>
 #include <gmvl/gmvl_tag_node.h>
 #include <gmvl/gmvl_helpers.h>
 
@@ -40,25 +40,25 @@ int main( int argc, char **argv)
 //   cerr << cd << endl;
 //   exit(1);
 
-  gmvl_node_ref image0= gmvl_load_image( "/home/crossge/images/basement/bt.000.pgm");
-  gmvl_node_ref image1= gmvl_load_image( "/home/crossge/images/basement/bt.001.pgm");
-  gmvl_node_ref image2= gmvl_load_image( "/home/crossge/images/basement/bt.002.pgm");
-  gmvl_node_ref image3= gmvl_load_image( "/home/crossge/images/basement/bt.003.pgm");
-  gmvl_node_ref image4= gmvl_load_image( "/home/crossge/images/basement/bt.004.pgm");
-  gmvl_node_ref image5= gmvl_load_image( "/home/crossge/images/basement/bt.005.pgm");
-  gmvl_node_ref image6= gmvl_load_image( "/home/crossge/images/basement/bt.006.pgm");
+  gmvl_node_sptr image0= gmvl_load_image( "/home/crossge/images/basement/bt.000.pgm");
+  gmvl_node_sptr image1= gmvl_load_image( "/home/crossge/images/basement/bt.001.pgm");
+  gmvl_node_sptr image2= gmvl_load_image( "/home/crossge/images/basement/bt.002.pgm");
+  gmvl_node_sptr image3= gmvl_load_image( "/home/crossge/images/basement/bt.003.pgm");
+  gmvl_node_sptr image4= gmvl_load_image( "/home/crossge/images/basement/bt.004.pgm");
+  gmvl_node_sptr image5= gmvl_load_image( "/home/crossge/images/basement/bt.005.pgm");
+  gmvl_node_sptr image6= gmvl_load_image( "/home/crossge/images/basement/bt.006.pgm");
 
-  vcl_vector<gmvl_node_ref> corners0= gmvl_load_raw_corners("/home/crossge/images/basement/bt.000.corners");
-  vcl_vector<gmvl_node_ref> corners1= gmvl_load_raw_corners("/home/crossge/images/basement/bt.001.corners");
-  vcl_vector<gmvl_node_ref> corners2= gmvl_load_raw_corners("/home/crossge/images/basement/bt.002.corners");
-  vcl_vector<gmvl_node_ref> corners3= gmvl_load_raw_corners("/home/crossge/images/basement/bt.003.corners");
-  vcl_vector<gmvl_node_ref> corners4= gmvl_load_raw_corners("/home/crossge/images/basement/bt.004.corners");
-  vcl_vector<gmvl_node_ref> corners5= gmvl_load_raw_corners("/home/crossge/images/basement/bt.005.corners");
-  vcl_vector<gmvl_node_ref> corners6= gmvl_load_raw_corners("/home/crossge/images/basement/bt.006.corners");
+  vcl_vector<gmvl_node_sptr> corners0= gmvl_load_raw_corners("/home/crossge/images/basement/bt.000.corners");
+  vcl_vector<gmvl_node_sptr> corners1= gmvl_load_raw_corners("/home/crossge/images/basement/bt.001.corners");
+  vcl_vector<gmvl_node_sptr> corners2= gmvl_load_raw_corners("/home/crossge/images/basement/bt.002.corners");
+  vcl_vector<gmvl_node_sptr> corners3= gmvl_load_raw_corners("/home/crossge/images/basement/bt.003.corners");
+  vcl_vector<gmvl_node_sptr> corners4= gmvl_load_raw_corners("/home/crossge/images/basement/bt.004.corners");
+  vcl_vector<gmvl_node_sptr> corners5= gmvl_load_raw_corners("/home/crossge/images/basement/bt.005.corners");
+  vcl_vector<gmvl_node_sptr> corners6= gmvl_load_raw_corners("/home/crossge/images/basement/bt.006.corners");
 
-  gmvl_node_ref tagnode1( new gmvl_tag_node( "Input Images"));
-  gmvl_node_ref tagnode2( new gmvl_tag_node( "Harris Corners"));
-  gmvl_node_ref tagnode3( new gmvl_tag_node( "First Corner"));
+  gmvl_node_sptr tagnode1( new gmvl_tag_node( "Input Images"));
+  gmvl_node_sptr tagnode2( new gmvl_tag_node( "Harris Corners"));
+  gmvl_node_sptr tagnode3( new gmvl_tag_node( "First Corner"));
 
   gmvl_database db;
 
@@ -100,10 +100,10 @@ int main( int argc, char **argv)
   ////////////////////////////////////////////////////////////////////////////
   //   cerr << db << endl;
   //
-  //   vcl_vector<gmvl_node_ref> nn= db.get_nodes( "gmvl_tag_node");
+  //   vcl_vector<gmvl_node_sptr> nn= db.get_nodes( "gmvl_tag_node");
   //   for( int i=0; i< nn.size(); i++) cerr << ":" << *nn[i] << ":" << endl;
   //
-  //   vcl_vector<gmvl_node_ref> jj= db.get_nodes( "gmvl_image_node");
+  //   vcl_vector<gmvl_node_sptr> jj= db.get_nodes( "gmvl_image_node");
   //   for( int i=0; i< jj.size(); i++) cerr << ":" << *jj[i] << ":" << endl;
   ////////////////////////////////////////////////////////////////////////////
 
@@ -112,12 +112,12 @@ int main( int argc, char **argv)
 
   //  cout << db << endl;
 
-  //  vcl_vector<gmvl_node_ref> tags;
+  //  vcl_vector<gmvl_node_sptr> tags;
   //  tags.push_back( tagnode2); // "Harris corners"
   //  tags.push_back( image0);   // "Image 0"
   //  tags.push_back( tagnode3); // "First corner"
 
-  vcl_vector<gmvl_node_ref> nn= db.get_connected_nodes( tagnode3);
+  vcl_vector<gmvl_node_sptr> nn= db.get_connected_nodes( tagnode3);
 
   cerr << "Tagnode1 (all images) = " << *tagnode1 << endl;
   cerr << "Tagnode2 (all corners)= " << *tagnode2 << endl;

@@ -22,7 +22,7 @@
 //     LEG May 2000. ported to vxl
 //
 /// .EXAMPLE vtol_vertex.example
-#include <vtol/vtol_vertex_ref.h>
+#include <vtol/vtol_vertex_sptr.h>
 
 #include <vtol/vtol_topology_object.h>
 #include <vnl/vnl_double_2.h>
@@ -43,7 +43,7 @@ public:
   //***************************************************************************
   // Initialization
   //***************************************************************************
-  
+
   //---------------------------------------------------------------------------
   //: Default constructor
   //---------------------------------------------------------------------------
@@ -53,7 +53,7 @@ public:
   //: Destructor
   //---------------------------------------------------------------------------
   virtual ~vtol_vertex();
-  
+
   // Accessors
 
   //---------------------------------------------------------------------------
@@ -62,17 +62,17 @@ public:
   virtual vtol_topology_object_type topology_type(void) const;
 
 
-  
+
   //---------------------------------------------------------------------------
   //: create a list of all connected vertices
   //---------------------------------------------------------------------------
-  
+
   virtual void explore_vertex(vertex_list &);
- 
+
   //---------------------------------------------------------------------------
   //: Is `this' has the same coordinates for its point than `other' ?
   //---------------------------------------------------------------------------
- 
+
   virtual bool operator==(const vtol_vertex &other) const;
   bool operator==(const vsol_spatial_object_3d& obj) const; // virtual of vsol_spatial_object
 
@@ -148,21 +148,21 @@ public:
   //: REQUIRE: other.ptr()!=0 and other.ptr()!=this
   //---------------------------------------------------------------------------
 
-  // methods that will be defined by inherited classes 
+  // methods that will be defined by inherited classes
 
-  //: create a new edge from these two veritces 
+  //: create a new edge from these two veritces
 
   virtual vtol_edge *new_edge(vtol_vertex &other)=0;
 
   //: check to see if the vertex is part of the edge
-  
+
   bool is_endpoint (const vtol_edge &);
- 
+
   void print(vcl_ostream &strm=vcl_cout) const;
   void describe(vcl_ostream &strm=vcl_cout, int blanking=0) const;
 
 protected:
- 
+
   //: have the inherited classes copy the geometry
 
   virtual void copy_geometry(const vtol_vertex &other)=0;
@@ -170,7 +170,7 @@ protected:
 
 
 public:
-  
+
   // : Warning - should not be used by clients
   virtual vcl_vector<vtol_vertex*> *compute_vertices(void);
   virtual vcl_vector<vtol_edge*> *compute_edges(void);

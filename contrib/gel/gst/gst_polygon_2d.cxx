@@ -5,7 +5,7 @@
 #pragma implementation
 #endif
 
-#include "gst_vertex_2d_ref.h"
+#include "gst_vertex_2d_sptr.h"
 #include "gst_polygon_2d.h"
 
 
@@ -16,8 +16,8 @@ bool gst_polygon_2d::check_validity() const
     return false;
 
   // cycle through edges, looking for a completed polygon
-  gst_vertex_2d_ref start= edges_[0]->get_start();
-  gst_vertex_2d_ref end  = edges_[0]->get_end();
+  gst_vertex_2d_sptr start= edges_[0]->get_start();
+  gst_vertex_2d_sptr end  = edges_[0]->get_end();
 
   // length of cycle
   int clen= 1;
@@ -35,7 +35,7 @@ bool gst_polygon_2d::check_validity() const
 	      end= edges_[i]->get_end();
 	    }
 	}
-      
+
       // if !found then the cycle isn't closed
       if( !found) return false;
 
@@ -104,25 +104,25 @@ bool gst_polygon_2d::inside( const double x, const double y) const
 
   for( int i=0, j= edges_.size()-1; i< edges_.size(); j= i++)
     {
-      if ((((edges_[i]->get_start()->get_y()<= y) && 
+      if ((((edges_[i]->get_start()->get_y()<= y) &&
 	    (y< edges_[j]->get_start()->get_y())) ||
-	   ((edges_[j]->get_start()->get_y()<= y) && 
+	   ((edges_[j]->get_start()->get_y()<= y) &&
 	    (y< edges_[i]->get_start()->get_y()))) &&
-	  (x< (edges_[j]->get_start()->get_x() - 
-	       edges_[i]->get_start()->get_x()) * (y - 
-						   edges_[i]->get_start()->get_y()) / 
-	   (edges_[j]->get_start()->get_y() - edges_[i]->get_start()->get_y()) + 
+	  (x< (edges_[j]->get_start()->get_x() -
+	       edges_[i]->get_start()->get_x()) * (y -
+						   edges_[i]->get_start()->get_y()) /
+	   (edges_[j]->get_start()->get_y() - edges_[i]->get_start()->get_y()) +
 	   edges_[i]->get_start()->get_x()))
 	{
 	  c=!c;
 	}
-      
+
     }
-  
+
   return c;
 }
 
-bool gst_polygon_2d::inside( const gst_vertex_2d_ref v) const
+bool gst_polygon_2d::inside( const gst_vertex_2d_sptr v) const
 {
   return inside( v->get_x(), v->get_y());
 }

@@ -10,16 +10,16 @@
 #include <vcl_iostream.h>
 #include <vbl/vbl_ref_count.h>
 
-#include "gst_vertex_2d_ref.h"
+#include "gst_vertex_2d_sptr.h"
 
 class gst_edge_2d : public vbl_ref_count
 {
 public:
 
-  gst_edge_2d( const gst_vertex_2d_ref start, const gst_vertex_2d_ref end);
+  gst_edge_2d( const gst_vertex_2d_sptr start, const gst_vertex_2d_sptr end);
 
-  gst_vertex_2d_ref get_start() const;
-  gst_vertex_2d_ref get_end() const;
+  gst_vertex_2d_sptr get_start() const;
+  gst_vertex_2d_sptr get_end() const;
 
   // operations
   void flip();
@@ -29,8 +29,8 @@ public:
 
 protected:
 
-  gst_vertex_2d_ref start_;
-  gst_vertex_2d_ref end_;
+  gst_vertex_2d_sptr start_;
+  gst_vertex_2d_sptr end_;
 
 };
 

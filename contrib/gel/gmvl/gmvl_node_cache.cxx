@@ -17,14 +17,14 @@ gmvl_node_cache::~gmvl_node_cache()
 }
 
 // trivial accessors
-void gmvl_node_cache::add( const gmvl_node_ref node)
+void gmvl_node_cache::add( const gmvl_node_sptr node)
 {
   node->ref_= nodes_.size();
   nodes_.push_back( node);
 
   // add to cache
   bool found= false;
-  
+
   for( unsigned int j=0; j< typecache_.size() && !found; ++j)
     {
       if( typecache_[j].first== node->type_)
@@ -33,11 +33,11 @@ void gmvl_node_cache::add( const gmvl_node_ref node)
 	  found= true;
 	}
     }
-  
+
   if( !found)
     {
-      vcl_pair<vcl_string,vcl_vector<gmvl_node_ref> > pair;
-      
+      vcl_pair<vcl_string,vcl_vector<gmvl_node_sptr> > pair;
+
       pair.first= node->type_;
       pair.second.push_back( node);
 
@@ -46,9 +46,9 @@ void gmvl_node_cache::add( const gmvl_node_ref node)
 
 }
 
-void gmvl_node_cache::remove( const gmvl_node_ref node)
+void gmvl_node_cache::remove( const gmvl_node_sptr node)
 {
-  vcl_vector<gmvl_node_ref> newnodes;
+  vcl_vector<gmvl_node_sptr> newnodes;
 
   for( unsigned int i=0; i< nodes_.size(); ++i)
     {
@@ -64,7 +64,7 @@ void gmvl_node_cache::remove( const gmvl_node_ref node)
   rebuild();
 }
 
-bool gmvl_node_cache::cached( const gmvl_node_ref node) const
+bool gmvl_node_cache::cached( const gmvl_node_sptr node) const
 {
   if( node->ref_== -1)
     return false;
@@ -74,9 +74,9 @@ bool gmvl_node_cache::cached( const gmvl_node_ref node) const
 
 // clever accessors
 
-vcl_vector<gmvl_node_ref> gmvl_node_cache::get( const vcl_string type) const
+vcl_vector<gmvl_node_sptr> gmvl_node_cache::get( const vcl_string type) const
 {
-  vcl_vector<gmvl_node_ref> empty;
+  vcl_vector<gmvl_node_sptr> empty;
 
   for( unsigned int i=0; i< typecache_.size(); ++i)
     {
@@ -108,7 +108,7 @@ void gmvl_node_cache::rebuild()
 
       if( !found)
 	{
-	  vcl_pair<vcl_string,vcl_vector<gmvl_node_ref> > pair;
+	  vcl_pair<vcl_string,vcl_vector<gmvl_node_sptr> > pair;
 
 	  pair.first= nodes_[i]->type_;
 	  pair.second.push_back( nodes_[i]);

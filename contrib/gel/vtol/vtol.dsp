@@ -155,15 +155,15 @@ SOURCE=.\Templates\vbl_smart_ptr+vtol_zero_chain_3d.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vcl_list+vtol_chain_2d_ref.cxx
+SOURCE=.\Templates\vcl_list+vtol_chain_2d_sptr.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vcl_list+vtol_topology_object_2d_ref.cxx
+SOURCE=.\Templates\vcl_list+vtol_topology_object_2d_sptr.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vcl_vector+vtol_block_2d_ref.cxx
+SOURCE=.\Templates\vcl_vector+vtol_block_2d_sptr.cxx
 # End Source File
 # Begin Source File
 
@@ -175,11 +175,11 @@ SOURCE=.\Templates\vcl_vector+vtol_block_3d~-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vcl_vector+vtol_chain_2d_ref.cxx
+SOURCE=.\Templates\vcl_vector+vtol_chain_2d_sptr.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vcl_vector+vtol_edge_2d_ref.cxx
+SOURCE=.\Templates\vcl_vector+vtol_edge_2d_sptr.cxx
 # End Source File
 # Begin Source File
 
@@ -191,7 +191,7 @@ SOURCE=.\Templates\vcl_vector+vtol_edge_3d~-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vcl_vector+vtol_face_2d_ref.cxx
+SOURCE=.\Templates\vcl_vector+vtol_face_2d_sptr.cxx
 # End Source File
 # Begin Source File
 
@@ -207,7 +207,7 @@ SOURCE=.\Templates\vcl_vector+vtol_hierarchy_node_3d~-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vcl_vector+vtol_one_chain_2d_ref.cxx
+SOURCE=.\Templates\vcl_vector+vtol_one_chain_2d_sptr.cxx
 # End Source File
 # Begin Source File
 
@@ -219,7 +219,7 @@ SOURCE=.\Templates\vcl_vector+vtol_one_chain_3d~-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vcl_vector+vtol_topology_object_2d_ref.cxx
+SOURCE=.\Templates\vcl_vector+vtol_topology_object_2d_sptr.cxx
 # End Source File
 # Begin Source File
 
@@ -231,7 +231,7 @@ SOURCE=.\Templates\vcl_vector+vtol_topology_object_3d~-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vcl_vector+vtol_two_chain_2d_ref.cxx
+SOURCE=.\Templates\vcl_vector+vtol_two_chain_2d_sptr.cxx
 # End Source File
 # Begin Source File
 
@@ -243,7 +243,7 @@ SOURCE=.\Templates\vcl_vector+vtol_two_chain_3d~-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vcl_vector+vtol_vertex_2d_ref.cxx
+SOURCE=.\Templates\vcl_vector+vtol_vertex_2d_sptr.cxx
 # End Source File
 # Begin Source File
 
@@ -255,7 +255,7 @@ SOURCE=.\Templates\vcl_vector+vtol_vertex_3d~-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vcl_vector+vtol_zero_chain_2d_ref.cxx
+SOURCE=.\Templates\vcl_vector+vtol_zero_chain_2d_sptr.cxx
 # End Source File
 # Begin Source File
 

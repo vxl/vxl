@@ -28,7 +28,7 @@
 //     JLM Feb 1999  Added correct method for ComputeBoundingBox()
 //     PTU May 2000  ported to vxl
 //-----------------------------------------------------------------------------
-#include <vtol/vtol_one_chain_ref.h>
+#include <vtol/vtol_one_chain_sptr.h>
 
 //#include <vtol/vtol_topology_object.h>
 //#include <vtol/vtol_hierarchy_node.h>
@@ -86,7 +86,7 @@ public:
   //: Clone `this': creation of a new object and initialization
   //: See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_3d_ref clone(void) const;
+  virtual vsol_spatial_object_3d_sptr clone(void) const;
 
   // Easy access methods
 
@@ -154,11 +154,11 @@ public:
   virtual void reverse_directions(void);
 
   virtual vtol_one_chain *
-  copy_with_arrays(vcl_vector<vtol_topology_object_ref> &verts,
-                   vcl_vector<vtol_topology_object_ref> &edges) const;
-  
+  copy_with_arrays(vcl_vector<vtol_topology_object_sptr> &verts,
+                   vcl_vector<vtol_topology_object_sptr> &edges) const;
+
   virtual void compute_bounding_box(void); //A local implementation
-  
+
   virtual vtol_edge *edge(int i) const;
   virtual int num_edges(void) const
   {
@@ -168,8 +168,8 @@ public:
   virtual void determine_edge_directions(void);
   virtual void add_edge(vtol_edge &, bool);
   virtual void remove_edge(vtol_edge &, bool);
-  
-  
+
+
   // Operators
   //: \brief Operators
 

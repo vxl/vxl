@@ -17,10 +17,10 @@
 
 class vsol_volume_3d;
 
-#include "vsol_volume_3d_ref.h"
+#include "vsol_volume_3d_sptr.h"
 #include "vsol_spatial_object_3d.h"
 
-#include "vsol_point_3d_ref.h"
+#include "vsol_point_3d_sptr.h"
 
 class vsol_volume_3d
   :public vsol_spatial_object_3d

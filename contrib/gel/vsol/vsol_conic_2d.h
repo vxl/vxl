@@ -24,10 +24,10 @@ class vsol_conic_2d;
 //*****************************************************************************
 // External declarations for values
 //*****************************************************************************
-#include <vsol/vsol_conic_2d_ref.h>
+#include <vsol/vsol_conic_2d_sptr.h>
 
 #include <vsol/vsol_curve_2d.h>
-#include <vsol/vsol_point_2d_ref.h>
+#include <vsol/vsol_point_2d_sptr.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_math.h>
 
@@ -88,7 +88,7 @@ public:
   //: Clone `this': creation of a new object and initialization
   //: See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d_ref clone(void) const;
+  virtual vsol_spatial_object_2d_sptr clone(void) const;
 
   //***************************************************************************
   // Access
@@ -127,12 +127,12 @@ public:
   //---------------------------------------------------------------------------
   //: Return the first point of `this'
   //---------------------------------------------------------------------------
-  virtual vsol_point_2d_ref p0(void) const;
+  virtual vsol_point_2d_sptr p0(void) const;
 
   //---------------------------------------------------------------------------
   //: Return the last point of `this'
   //---------------------------------------------------------------------------
-  virtual vsol_point_2d_ref p1(void) const;
+  virtual vsol_point_2d_sptr p1(void) const;
 
   //***************************************************************************
   // Comparison
@@ -167,7 +167,7 @@ public:
   //: Is `this' an real ellipse ?
   //---------------------------------------------------------------------------
   virtual bool is_real_ellipse(void) const;
-  
+
   //---------------------------------------------------------------------------
   //: Is `this' a real circle ?
   //---------------------------------------------------------------------------
@@ -177,7 +177,7 @@ public:
   //: Is `this' a complex ellipse ?
   //---------------------------------------------------------------------------
   virtual bool is_complex_ellipse(void) const;
-  
+
   //---------------------------------------------------------------------------
   //: Is `this' a complex circle ?
   //---------------------------------------------------------------------------
@@ -187,7 +187,7 @@ public:
   //: Is `this' a parabola ?
   //---------------------------------------------------------------------------
   virtual bool is_parabola(void) const;
-  
+
   //---------------------------------------------------------------------------
   //: Is `this' a hyperbola ?
   //---------------------------------------------------------------------------
@@ -202,12 +202,12 @@ public:
   //: Is `this' an complex intersecting lines ?
   //---------------------------------------------------------------------------
   virtual bool is_complex_intersecting_lines(void) const;
-  
+
   //---------------------------------------------------------------------------
   //: Is `this' an coincident lines ?
   //---------------------------------------------------------------------------
   virtual bool is_coincident_lines(void) const;
-  
+
   //---------------------------------------------------------------------------
   //: Return 3 ellipse parameters: centre (`cx',`cy'),
   //:                              orientation `phi',
@@ -249,13 +249,13 @@ public:
   //: Set the first point of the curve
   //: REQUIRE: in(new_p0)
   //---------------------------------------------------------------------------
-  virtual void set_p0(const vsol_point_2d_ref &new_p0);
+  virtual void set_p0(const vsol_point_2d_sptr &new_p0);
 
   //---------------------------------------------------------------------------
   //: Set the last point of the curve
   //: REQUIRE: in(new_p1)
   //---------------------------------------------------------------------------
-  virtual void set_p1(const vsol_point_2d_ref &new_p1);
+  virtual void set_p1(const vsol_point_2d_sptr &new_p1);
 
   //***************************************************************************
   // Basic operations
@@ -264,7 +264,7 @@ public:
   //---------------------------------------------------------------------------
   //: Is `p' in `this' ? (ie `p' verifies the equation)
   //---------------------------------------------------------------------------
-  virtual bool in(const vsol_point_2d_ref &p) const;
+  virtual bool in(const vsol_point_2d_sptr &p) const;
 
 private:
   //***************************************************************************
@@ -298,7 +298,7 @@ private:
   //: Coefficient of x^2
   //---------------------------------------------------------------------------
   double a_;
-  
+
   //---------------------------------------------------------------------------
   //: Coefficient of xy
   //---------------------------------------------------------------------------
@@ -327,12 +327,12 @@ private:
   //---------------------------------------------------------------------------
   //: First point of the curve
   //---------------------------------------------------------------------------
-  vsol_point_2d_ref p0_;
+  vsol_point_2d_sptr p0_;
 
   //---------------------------------------------------------------------------
   //: Last point of the curve
   //---------------------------------------------------------------------------
-  vsol_point_2d_ref p1_;
+  vsol_point_2d_sptr p1_;
 };
 
 #endif // #ifndef VSOL_CONIC_2D_H

@@ -23,7 +23,7 @@ int main(int argc,
 
   // Constructor from coordinates
   vcl_cout<<"Constructor from coordinates"<<vcl_endl;
-  vsol_point_2d_ref p=new vsol_point_2d(10,4);
+  vsol_point_2d_sptr p=new vsol_point_2d(10,4);
 
   vcl_cout<<"x() and y()"<<vcl_endl;
   vcl_cout<<"x="<<p->x()<<", y="<<p->y()<<vcl_endl;
@@ -31,7 +31,7 @@ int main(int argc,
   assert(p->y()==4);
 
   vcl_cout<<"Copy constructor"<<vcl_endl;
-  vsol_point_2d_ref q=new vsol_point_2d(*p);
+  vsol_point_2d_sptr q=new vsol_point_2d(*p);
 
   vcl_cout<<"== operator"<<vcl_endl;
   assert((*p)==(*q));
@@ -49,7 +49,7 @@ int main(int argc,
 
   vcl_cout<<"distance()="<<p->distance(q)<<vcl_endl;
 
-  vsol_point_2d_ref r=p->middle(*q);
+  vsol_point_2d_sptr r=p->middle(*q);
 
   vcl_cout<<"middle()="<<r->x()<<','<<r->y()<<vcl_endl;
 

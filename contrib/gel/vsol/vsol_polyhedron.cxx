@@ -45,7 +45,7 @@ bool vsol_polyhedron::operator==(vsol_polyhedron const &other) const
   if (this==&other) return true;
   if (storage_.size()!=other.storage_.size()) return false;
 
-  vsol_point_3d_ref const& p=storage_[0]; // alias
+  vsol_point_3d_sptr const& p=storage_[0]; // alias
 
   int j=-1;
   while (++j < storage_.size())
@@ -75,7 +75,7 @@ bool vsol_polyhedron::operator==(const vsol_spatial_object_3d& obj) const
 //---------------------------------------------------------------------------
 // -- Compute the bounding box of `this'
 //---------------------------------------------------------------------------
-vsol_box_3d_ref vsol_polyhedron::compute_bounding_box(void) const
+vsol_box_3d_sptr vsol_polyhedron::compute_bounding_box(void) const
 {
   double xmin=storage_[0]->x();
   double ymin=storage_[0]->y();
@@ -124,14 +124,14 @@ bool vsol_polyhedron::is_convex(void) const
 {
   if (storage_.size()<=4) return true; // A tetrahedron is always convex
 
-  vsol_point_3d_ref const& p0 = storage_[0];
-  vsol_point_3d_ref const& p1 = storage_[1];
-  vsol_point_3d_ref const& p2 = storage_[2];
-  vsol_point_3d_ref const& p3 = storage_[3];
+  vsol_point_3d_sptr const& p0 = storage_[0];
+  vsol_point_3d_sptr const& p1 = storage_[1];
+  vsol_point_3d_sptr const& p2 = storage_[2];
+  vsol_point_3d_sptr const& p3 = storage_[3];
 
   for (int i=4;i<storage_.size();++i)
   {
-    vsol_point_3d_ref const& pi = storage_[i];
+    vsol_point_3d_sptr const& pi = storage_[i];
     // TODO
   }
   return false;

@@ -49,9 +49,9 @@
 
 #include <vil/vil_byte.h>
 
-#include <vdgl/vdgl_digital_curve_ref.h>
-#include <vdgl/vdgl_edgel_chain_ref.h>
-#include <vdgl/vdgl_interpolator_ref.h>
+#include <vdgl/vdgl_digital_curve_sptr.h>
+#include <vdgl/vdgl_edgel_chain_sptr.h>
+#include <vdgl/vdgl_interpolator_sptr.h>
 #include <vdgl/vdgl_interpolator.h>
 #include <vdgl/vdgl_interpolator_linear.h>
 
@@ -620,8 +620,8 @@ BreakCycle(vtol_vertex_2d& junction, const int index,
   split = new vtol_edge_2d();
 
   vdgl_edgel_chain *es= new vdgl_edgel_chain;
-  vdgl_interpolator *it= new vdgl_interpolator_linear( vdgl_edgel_chain_ref( es));
-  vdgl_digital_curve *ds = new vdgl_digital_curve( vdgl_interpolator_ref( it));
+  vdgl_interpolator *it= new vdgl_interpolator_linear( vdgl_edgel_chain_sptr( es));
+  vdgl_digital_curve *ds = new vdgl_digital_curve( vdgl_interpolator_sptr( it));
 
   split->set_curve(*( vsol_curve_2d *) ds);
 
@@ -1339,7 +1339,7 @@ static vtol_edge_2d * DigitalEdge(vtol_vertex_2d * vs, vtol_vertex_2d * ve)
   es->add_edgel( vdgl_edgel( xe, ye));
 
 //vdgl_digital_curve * dc = new vdgl_digital_curve(ps, pe);
-  vtol_edge_2d * e = new vtol_edge_2d(*vs, *ve, vsol_curve_2d_ref( dc));
+  vtol_edge_2d * e = new vtol_edge_2d(*vs, *ve, vsol_curve_2d_sptr( dc));
   return e;
 }
 // -- Insert virtual edges and vertices to enforce closure

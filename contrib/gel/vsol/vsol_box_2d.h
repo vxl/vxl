@@ -8,13 +8,13 @@
 // .FILE        vsol_box_2d.cxx
 //
 // .SECTION Description
-//                     Note that the definition of width, depth and 
+//                     Note that the definition of width, depth and
 //                     height are such that the X-Y plane is considered
-//                     as a Rectangle with a "width" and "height" 
+//                     as a Rectangle with a "width" and "height"
 //                     according to the usual definition.
 //
 
-#include <vsol/vsol_box_2d_ref.h>
+#include <vsol/vsol_box_2d_sptr.h>
 
 
 #include <vbl/vbl_timestamp.h>

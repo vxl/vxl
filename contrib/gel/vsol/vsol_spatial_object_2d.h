@@ -10,7 +10,7 @@
 //
 // .SECTION Description
 //   vsol_spatial_object_2d is the base class of all spatial entities: vtol, vsol.
-//   
+//
 // .SECTION Author
 //     Patricia A. Vrobel
 // .SECTION Modifications
@@ -23,7 +23,7 @@
 //           See the discussion in SpatialGroup.h for the rationale.
 //           The bounding volume is updated according to a timestamp
 //           mechanism similar to that used in 3D display. That is,
-//           if the vsol_spatial_object_2d is modified it is "touched" to 
+//           if the vsol_spatial_object_2d is modified it is "touched" to
 //           set the timestamp.  Then, any request to bounding information
 //           automatically updates the bounding volume if necessary.
 //
@@ -34,7 +34,7 @@ class vsol_spatial_object_2d;
 //*****************************************************************************
 // External declarations for values
 //*****************************************************************************
-#include <vsol/vsol_spatial_object_2d_ref.h>
+#include <vsol/vsol_spatial_object_2d_sptr.h>
 
 #include <vcl_string.h>
 #include <vcl_iostream.h>
@@ -42,7 +42,7 @@ class vsol_spatial_object_2d;
 #include <vbl/vbl_ref_count.h>
 #include <vsol/vsol_box_2d.h>
 #include <vcl_vector.h>
-#include <vsol/vsol_group_2d_ref.h>
+#include <vsol/vsol_group_2d_sptr.h>
 
 class vtol_topology_object_2d;
 extern void iu_delete(vsol_spatial_object_2d *);
@@ -141,17 +141,17 @@ public:
     ref_count--;
     iu_delete(this);
   }
-  
+
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
   //: See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d_ref clone(void) const=0;
-#if 0 
+  virtual vsol_spatial_object_2d_sptr clone(void) const=0;
+#if 0
   virtual vsol_spatial_object_2d* SpatialCopy() { return (vsol_spatial_object_2d*) NULL; }
 #endif
   // Tag Flag and ID methods
-  
+
   //: \brief  set user flag 1-6
   inline void set_user_flag(unsigned int flag);
   inline unsigned int get_user_flag(unsigned int flag);
@@ -175,8 +175,8 @@ public:
 // Data Control--------------------------------------------------------------
 
 public:
-  
-  //: \brief  protected destroy 
+
+  //: \brief  protected destroy
   virtual void protected_destroy(void);
 
   //: \brief  Geometry Accessors
@@ -417,7 +417,7 @@ inline void vsol_spatial_object_2d::set_max_y(float ymax)
 }
 
 
-// -- set a flag for a spatial object, flag can be VSOL_FLAG[1-6] 
+// -- set a flag for a spatial object, flag can be VSOL_FLAG[1-6]
 inline void vsol_spatial_object_2d::set_user_flag(unsigned int flag)
 {
   _tag =  (_tag | flag);
@@ -437,13 +437,13 @@ inline void vsol_spatial_object_2d::unset_user_flag(unsigned int flag)
   _tag = ( _tag & (~flag) );
 }
 
-// -- set_ the flag used by TAGGED_UNION. 
+// -- set_ the flag used by TAGGED_UNION.
 inline void vsol_spatial_object_2d::set_tagged_union_flag(void)
 {
   set_user_flag(VSOL_UNIONBIT);
 }
 
-// -- get_ the flag used by TAGGED_UNION. 
+// -- get_ the flag used by TAGGED_UNION.
 inline unsigned int vsol_spatial_object_2d::get_tagged_union_flag(void)
 {
   return get_user_flag(VSOL_UNIONBIT);

@@ -26,7 +26,7 @@ vsol_point_2d::vsol_point_2d(const vsol_point_2d &other)
 {
   p_=new vgl_point_2d<double>(other.x(),other.y());
 }
-  
+
 //---------------------------------------------------------------------------
 // Destructor
 //---------------------------------------------------------------------------
@@ -39,7 +39,7 @@ vsol_point_2d::~vsol_point_2d()
 // -- Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_2d_ref vsol_point_2d::clone(void) const
+vsol_spatial_object_2d_sptr vsol_point_2d::clone(void) const
 {
   return new vsol_point_2d(*this);
 }
@@ -108,7 +108,7 @@ bool vsol_point_2d::operator!=(const vsol_point_2d &other) const
 //---------------------------------------------------------------------------
 // -- Return the real type of a point. It is a POINT
 //---------------------------------------------------------------------------
-vsol_spatial_object_2d::vsol_spatial_object_2d_type 
+vsol_spatial_object_2d::vsol_spatial_object_2d_type
 vsol_point_2d::spatial_type(void) const
 {
   return POINT;
@@ -136,7 +136,7 @@ void vsol_point_2d::compute_bounding_box(void)
 //---------------------------------------------------------------------------
 void vsol_point_2d::set_x(const double new_x)
 {
- 
+
   p_->set_x(new_x);
 }
 
@@ -160,7 +160,7 @@ double vsol_point_2d::distance(const vsol_point_2d &other) const
   return vgl_distance(*p_,*other.p_);
 }
 
-double vsol_point_2d::distance(vsol_point_2d_ref other) const
+double vsol_point_2d::distance(vsol_point_2d_sptr other) const
 {
   return vgl_distance(*p_,*other->p_);
 }
@@ -168,9 +168,9 @@ double vsol_point_2d::distance(vsol_point_2d_ref other) const
 //---------------------------------------------------------------------------
 // -- Return the middle point between `this' and `other'
 //---------------------------------------------------------------------------
-vsol_point_2d_ref vsol_point_2d::middle(const vsol_point_2d &other) const
+vsol_point_2d_sptr vsol_point_2d::middle(const vsol_point_2d &other) const
 {
-  vsol_point_2d_ref result=new vsol_point_2d(*this);
+  vsol_point_2d_sptr result=new vsol_point_2d(*this);
   (*(result->p_))=(*(result->p_)) + (*(other.p_));
   result->set_x(result->x()/2);
   result->set_y(result->y()/2);
@@ -192,10 +192,10 @@ void vsol_point_2d::add_vector(const vnl_double_2 &v)
 //---------------------------------------------------------------------------
 // -- Add `v' and `this'
 //---------------------------------------------------------------------------
-vsol_point_2d_ref
+vsol_point_2d_sptr
 vsol_point_2d::plus_vector(const vnl_double_2 &v) const
 {
-  vsol_point_2d_ref result=new vsol_point_2d(*this);
+  vsol_point_2d_sptr result=new vsol_point_2d(*this);
   result->add_vector(v);
   return result;
 }
@@ -207,7 +207,7 @@ vnl_double_2 *
 vsol_point_2d::to_vector(const vsol_point_2d &other) const
 {
   vnl_double_2 *result = new vnl_double_2;
-   
+
   (*result)(0)=other.x() - x();
   (*result)(1)=other.y() - y();
 

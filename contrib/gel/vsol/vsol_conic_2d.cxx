@@ -43,7 +43,7 @@ vsol_conic_2d::~vsol_conic_2d()
 // -- Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_2d_ref vsol_conic_2d::clone(void) const
+vsol_spatial_object_2d_sptr vsol_conic_2d::clone(void) const
 {
   return new vsol_conic_2d(*this);
 }
@@ -55,7 +55,7 @@ vsol_spatial_object_2d_ref vsol_conic_2d::clone(void) const
 //---------------------------------------------------------------------------
 // -- Return the first point of `this'
 //---------------------------------------------------------------------------
-vsol_point_2d_ref vsol_conic_2d::p0(void) const
+vsol_point_2d_sptr vsol_conic_2d::p0(void) const
 {
   return p0_;
 }
@@ -63,7 +63,7 @@ vsol_point_2d_ref vsol_conic_2d::p0(void) const
 //---------------------------------------------------------------------------
 // -- Return the last point of `this'
 //---------------------------------------------------------------------------
-vsol_point_2d_ref vsol_conic_2d::p1(void) const
+vsol_point_2d_sptr vsol_conic_2d::p1(void) const
 {
   return p1_;
 }
@@ -321,7 +321,7 @@ void vsol_conic_2d::ellipse_parameters(double &cx,
     phi=0; // circle
   else
     phi=atan2(-2*b0,c0-a0)/2; //ellipse
-  
+
   const double cosphi=cos(phi);
   const double sinphi=sin(phi);
   width=vnl_math_sqrt(1/(a0*cosphi*cosphi+2*b0*cosphi*sinphi
@@ -385,7 +385,7 @@ vnl_double_3x3 *vsol_conic_2d::matrix(void) const
   result->put(2,0,d_/2);
   result->put(2,1,e_/2);
   result->put(2,2,f_);
- 
+
   return result;
 }
 
@@ -397,7 +397,7 @@ vnl_double_3x3 *vsol_conic_2d::matrix(void) const
 // -- Set the first point of the curve
 // Require: in(new_p0)
 //---------------------------------------------------------------------------
-void vsol_conic_2d::set_p0(const vsol_point_2d_ref &new_p0)
+void vsol_conic_2d::set_p0(const vsol_point_2d_sptr &new_p0)
 {
   // require
   assert(in(new_p0));
@@ -409,7 +409,7 @@ void vsol_conic_2d::set_p0(const vsol_point_2d_ref &new_p0)
 // -- Set the last point of the curve
 // Require: in(new_p1)
 //---------------------------------------------------------------------------
-void vsol_conic_2d::set_p1(const vsol_point_2d_ref &new_p1)
+void vsol_conic_2d::set_p1(const vsol_point_2d_sptr &new_p1)
 {
   // require
   assert(in(new_p1));
@@ -424,7 +424,7 @@ void vsol_conic_2d::set_p1(const vsol_point_2d_ref &new_p1)
 //---------------------------------------------------------------------------
 // -- Is `p' in `this' ? (ie `p' verifies the equation)
 //---------------------------------------------------------------------------
-bool vsol_conic_2d::in(const vsol_point_2d_ref &p) const
+bool vsol_conic_2d::in(const vsol_point_2d_sptr &p) const
 {
   const double x=p->x();
   const double y=p->y();

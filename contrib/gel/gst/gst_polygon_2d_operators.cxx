@@ -9,13 +9,13 @@
 
 
 
-vcl_vector<gst_polygon_2d_ref> gst_make_polygons_2d( const vcl_vector<gst_edge_2d_ref> edges)
+vcl_vector<gst_polygon_2d_sptr> gst_make_polygons_2d( const vcl_vector<gst_edge_2d_sptr> edges)
 {
   // flags showing edges already used
   vcl_vector<int> used( edges.size(), 0);
-  
+
   // repository of polygons as they are created
-  vcl_vector<gst_polygon_2d_ref> polygons;
+  vcl_vector<gst_polygon_2d_sptr> polygons;
 
   // start a polygon with each edge, and look for a closed cycle
   //  hopefully using a NEW edge
@@ -23,14 +23,14 @@ vcl_vector<gst_polygon_2d_ref> gst_make_polygons_2d( const vcl_vector<gst_edge_2
     {
       bool newface= false;
       bool closed= false;
-      gst_polygon_2d_ref thispoly= new gst_polygon_2d;
+      gst_polygon_2d_sptr thispoly= new gst_polygon_2d;
 
       // flags showing edges already used in this polygon
       vcl_vector<int> pused( edges.size(), 0);
 
       thispoly->add( edges[i]);
 
-      if( !used[i]) 
+      if( !used[i])
 	{
 	  newface= true;
 	}
@@ -38,8 +38,8 @@ vcl_vector<gst_polygon_2d_ref> gst_make_polygons_2d( const vcl_vector<gst_edge_2
       used[i]= 1;
       pused[i]= 1;
 
-      gst_vertex_2d_ref start= edges[i]->get_start();
-      gst_vertex_2d_ref end  = edges[i]->get_end();
+      gst_vertex_2d_sptr start= edges[i]->get_start();
+      gst_vertex_2d_sptr end  = edges[i]->get_end();
 
       // repeatedly look for the next edge in the cycle
       //  until we do a complete pass without finding any further
@@ -58,12 +58,12 @@ vcl_vector<gst_polygon_2d_ref> gst_make_polygons_2d( const vcl_vector<gst_edge_2
 		  added= true;
 
 		  end= edges[j]->get_end();
-		  
+		
 		  if( !used[j]) newface= true;
 
 		  used[j]= 1;
 		  pused[j]= 1;
-		  
+		
 		  if( end.ptr()== start.ptr())
 		    {
 		      closed= true;
@@ -82,13 +82,13 @@ vcl_vector<gst_polygon_2d_ref> gst_make_polygons_2d( const vcl_vector<gst_edge_2
 }
 
 
-vcl_vector<gst_polygon_2d_ref> gst_make_polygons_2d_unoriented( const vcl_vector<gst_edge_2d_ref> edges)
+vcl_vector<gst_polygon_2d_sptr> gst_make_polygons_2d_unoriented( const vcl_vector<gst_edge_2d_sptr> edges)
 {
   // flags showing edges already used
   vcl_vector<int> used( edges.size(), 0);
-  
+
   // repository of polygons as they are created
-  vcl_vector<gst_polygon_2d_ref> polygons;
+  vcl_vector<gst_polygon_2d_sptr> polygons;
 
   // start a polygon with each edge, and look for a closed cycle
   //  hopefully using a NEW edge
@@ -96,21 +96,21 @@ vcl_vector<gst_polygon_2d_ref> gst_make_polygons_2d_unoriented( const vcl_vector
     {
       bool newface= false;
       bool closed= false;
-      gst_polygon_2d_ref thispoly= new gst_polygon_2d;
+      gst_polygon_2d_sptr thispoly= new gst_polygon_2d;
 
 //       cerr << "Starting face by adding edge" << endl;
 //       cerr << *edges[i] << endl;
       thispoly->add( edges[i]);
 
-      if( !used[i]) 
+      if( !used[i])
 	{
 	  newface= true;
 	}
 
       used[i]= 1;
 
-      gst_vertex_2d_ref start= edges[i]->get_start();
-      gst_vertex_2d_ref end  = edges[i]->get_end();
+      gst_vertex_2d_sptr start= edges[i]->get_start();
+      gst_vertex_2d_sptr end  = edges[i]->get_end();
 
       // repeatedly look for the next edge in the cycle
       //  until we do a complete pass without finding any further
@@ -132,17 +132,17 @@ vcl_vector<gst_polygon_2d_ref> gst_make_polygons_2d_unoriented( const vcl_vector
 		  added= true;
 
 		  end= edges[j]->get_end();
-		  
+		
 		  if( !used[j]) newface= true;
 
 		  used[j]= 1;
-		  
+		
 		  if( end.ptr()== start.ptr())
 		    {
 		      closed= true;
 		    }
 		}
-	      else if(( edges[j]->get_end().ptr()== end.ptr()) && ( !used[j])) 
+	      else if(( edges[j]->get_end().ptr()== end.ptr()) && ( !used[j]))
 		{
 // 		  cerr << "Found flip-necessary edge..." << endl;
 // 		  cerr << *edges[j] << " -- ";
@@ -155,11 +155,11 @@ vcl_vector<gst_polygon_2d_ref> gst_make_polygons_2d_unoriented( const vcl_vector
 		  added= true;
 
 		  end= edges[j]->get_end();
-		  
+		
 		  if( !used[j]) newface= true;
 
 		  used[j]= 1;
-		  
+		
 		  if( end.ptr()== start.ptr())
 		    {
 		      closed= true;

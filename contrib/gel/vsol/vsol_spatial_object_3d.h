@@ -23,7 +23,7 @@
 //           See the discussion in SpatialGroup.h for the rationale.
 //           The bounding volume is updated according to a timestamp
 //           mechanism similar to that used in 3D display. That is,
-//           if the vsol_spatial_object_3d is modified it is "touched" to 
+//           if the vsol_spatial_object_3d is modified it is "touched" to
 //           set the timestamp.  Then, any request to bounding information
 //           automatically updates the bounding volume if necessary.
 //-----------------------------------------------------------------------------
@@ -33,7 +33,7 @@ class vsol_spatial_object_3d;
 //*****************************************************************************
 // External declarations for values
 //*****************************************************************************
-#include <vsol/vsol_spatial_object_3d_ref.h>
+#include <vsol/vsol_spatial_object_3d_sptr.h>
 
 #include <vcl_string.h>
 #include <vcl_iostream.h>
@@ -41,7 +41,7 @@ class vsol_spatial_object_3d;
 #include <vbl/vbl_ref_count.h>
 #include <vsol/vsol_box_3d.h>
 #include <vcl_vector.h>
-#include <vsol/vsol_group_3d_ref.h>
+#include <vsol/vsol_group_3d_sptr.h>
 
 class vtol_topology_object_3d;
 class vtol_topology_object;
@@ -120,13 +120,13 @@ public:
   spatial_type(void) const=0;
   const char *get_name(void) const;
 
-  //: \brief bounding box stuff 
+  //: \brief bounding box stuff
 
   inline virtual void compute_bounding_box(void);
 
   vsol_box_3d *get_bounding_box(void);
 
-  //: \brief get set id of objects 
+  //: \brief get set id of objects
 
   int get_id(void) const
   {
@@ -149,7 +149,7 @@ public:
   //: Clone `this': creation of a new object and initialization
   //: See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_3d_ref clone(void) const=0;
+  virtual vsol_spatial_object_3d_sptr clone(void) const=0;
 #if 0
   virtual vsol_spatial_object_3d *SpatialCopy(void)
   {
@@ -497,7 +497,7 @@ inline void vsol_spatial_object_3d::set_max_z(float zmax)
 }
 
 
-// -- set_ a flag for a spatialObject, flag can be VSOL_FLAG[1-6] 
+// -- set_ a flag for a spatialObject, flag can be VSOL_FLAG[1-6]
 inline void vsol_spatial_object_3d::set_user_flag(unsigned int flag)
 {
   _tag=(_tag|flag);
@@ -517,13 +517,13 @@ inline void vsol_spatial_object_3d::unset_user_flag(unsigned int flag)
   _tag = ( _tag & (~flag) );
 }
 
-// -- set_ the flag used by TAGGED_UNION. 
+// -- set_ the flag used by TAGGED_UNION.
 inline void vsol_spatial_object_3d::set_tagged_union_flag()
 {
   set_user_flag(VSOL_UNIONBIT);
 }
 
-// -- get_ the flag used by TAGGED_UNION. 
+// -- get_ the flag used by TAGGED_UNION.
 inline unsigned int vsol_spatial_object_3d::get_tagged_union_flag(void)
 {
   return get_user_flag(VSOL_UNIONBIT);

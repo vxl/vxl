@@ -130,15 +130,15 @@ SOURCE=".\Templates\vbl_smart_ptr+gmvl_node-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vcl_vector+gmvl_connection_ref-.cxx"
+SOURCE=".\Templates\vcl_vector+gmvl_connection_sptr-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vcl_vector+gmvl_node_ref-.cxx"
+SOURCE=".\Templates\vcl_vector+gmvl_node_sptr-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vcl_vector+vcl_pair+vcl_string.vcl_vector+gmvl_node_ref---.cxx"
+SOURCE=".\Templates\vcl_vector+vcl_pair+vcl_string.vcl_vector+gmvl_node_sptr---.cxx"
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -154,7 +154,7 @@ SOURCE=.\gmvl_connection_cache.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\gmvl_connection_ref.h
+SOURCE=.\gmvl_connection_sptr.h
 # End Source File
 # Begin Source File
 
@@ -182,7 +182,7 @@ SOURCE=.\gmvl_node_cache.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\gmvl_node_ref.h
+SOURCE=.\gmvl_node_sptr.h
 # End Source File
 # Begin Source File
 

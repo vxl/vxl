@@ -18,7 +18,6 @@
 //---------------------------------------------------------------------------
 vtol_vertex::vtol_vertex(void)
 {
- 
 }
 
 
@@ -44,7 +43,7 @@ vtol_vertex::~vtol_vertex()
 // -- Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
-// vsol_spatial_object_3d_ref vtol_vertex::clone(void) const
+// vsol_spatial_object_3d_sptr vtol_vertex::clone(void) const
 //{
 //  return new vtol_vertex(*this);
 //}
@@ -104,7 +103,6 @@ vcl_vector<vtol_one_chain*>* vtol_vertex::compute_one_chains(void)
 // -- Returns a list of Blocks which contain the vertex.
 vcl_vector<vtol_block*>* vtol_vertex::compute_blocks(void)
 {
-  
   SEL_SUP(vtol_block,compute_blocks);
 }
 
@@ -202,7 +200,7 @@ bool vtol_vertex::is_connected(const vtol_vertex &v2)
 // -- This method returns true if the Edge, edg, is on the superior list of the vertex.
 bool vtol_vertex::is_endpoint(const vtol_edge &edg)
 {
-  vtol_edge_ref e=(vtol_edge*)(&edg);
+  vtol_edge_sptr e=(vtol_edge*)(&edg);
   const edge_list *edge_list=edges();
   bool result=vcl_find(edge_list->begin(),edge_list->end(),e)!=edge_list->end();
   delete edge_list;
@@ -218,8 +216,8 @@ vtol_vertex &vtol_vertex::operator=(const vtol_vertex &other)
     {
       this->copy_geometry(other);
       // _point->set_x(other._point->x());
-      // _point->set_y(other._point->y()); 
-    
+      // _point->set_y(other._point->y());
+
       touch();
     }
   return *this;
@@ -229,7 +227,7 @@ vtol_vertex &vtol_vertex::operator=(const vtol_vertex &other)
 
 bool vtol_vertex::operator==(const vsol_spatial_object_3d& obj) const
 {
-  return 
+  return
   obj.spatial_type() == vsol_spatial_object_3d::TOPOLOGYOBJECT &&
    ((vtol_topology_object const&)obj).topology_type() == vtol_topology_object::VERTEX
   ? *this == (vtol_vertex const&) (vtol_topology_object const&) obj
@@ -241,7 +239,7 @@ bool vtol_vertex::operator==(const vsol_spatial_object_3d& obj) const
 // -- Is `this' has the same coordinates for its point than `other' ?
 //---------------------------------------------------------------------------
 bool vtol_vertex::operator== (const vtol_vertex &other) const
-{ 
+{
   bool result;
 
   result=this==&other;
@@ -269,8 +267,8 @@ void vtol_vertex::explore_vertex(vertex_list &verts)
 {
   edge_list *edges_;
   edge_list::iterator i;
-  vtol_vertex_ref vv;
-  vtol_edge_ref e;
+  vtol_vertex_sptr vv;
+  vtol_edge_sptr e;
 
   edges_=edges();
   for(i=edges_->begin();i!=edges_->end();++i)
@@ -285,7 +283,7 @@ void vtol_vertex::explore_vertex(vertex_list &verts)
           vcl_cerr << "Explore vtol_vertex: shouldn't get this\n";
           continue;
         }
-      
+
       if(vcl_find(verts.begin(),verts.end(),vv)==verts.end())
         {
           verts.push_back(vv);

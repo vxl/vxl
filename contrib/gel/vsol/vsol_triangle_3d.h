@@ -23,7 +23,7 @@ class vsol_triangle_3d;
 //*****************************************************************************
 // External declarations for values
 //*****************************************************************************
-#include <vsol/vsol_triangle_3d_ref.h>
+#include <vsol/vsol_triangle_3d_sptr.h>
 #include <vsol/vsol_polygon_3d.h>
 
 class vsol_triangle_3d
@@ -36,9 +36,9 @@ public:
   //---------------------------------------------------------------------------
   //: Constructor from its 3 vertices
   //---------------------------------------------------------------------------
-  explicit vsol_triangle_3d(const vsol_point_3d_ref &new_p0,
-                            const vsol_point_3d_ref &new_p1,
-                            const vsol_point_3d_ref &new_p2);
+  explicit vsol_triangle_3d(const vsol_point_3d_sptr &new_p0,
+                            const vsol_point_3d_sptr &new_p1,
+                            const vsol_point_3d_sptr &new_p2);
 
   //---------------------------------------------------------------------------
   //: Copy constructor
@@ -54,7 +54,7 @@ public:
   //: Clone `this': creation of a new object and initialization
   //: See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_3d_ref clone(void) const;
+  virtual vsol_spatial_object_3d_sptr clone(void) const;
 
   //***************************************************************************
   // Access
@@ -63,22 +63,22 @@ public:
   //---------------------------------------------------------------------------
   //: Return the first vertex
   //---------------------------------------------------------------------------
-  virtual vsol_point_3d_ref p0(void) const;
+  virtual vsol_point_3d_sptr p0(void) const;
 
   //---------------------------------------------------------------------------
   //: Return the second vertex
   //---------------------------------------------------------------------------
-  virtual vsol_point_3d_ref p1(void) const;
-  
+  virtual vsol_point_3d_sptr p1(void) const;
+
   //---------------------------------------------------------------------------
   //: Return the last vertex
   //---------------------------------------------------------------------------
-  virtual vsol_point_3d_ref p2(void) const;
-  
+  virtual vsol_point_3d_sptr p2(void) const;
+
   //***************************************************************************
   // Comparison
   //***************************************************************************
-  
+
   //---------------------------------------------------------------------------
   //: Has `this' the same points than `other' in the same order ?
   //---------------------------------------------------------------------------
@@ -102,27 +102,27 @@ public:
   //---------------------------------------------------------------------------
   //: Set the first vertex
   //---------------------------------------------------------------------------
-  virtual void set_p0(const vsol_point_3d_ref &new_p0);
+  virtual void set_p0(const vsol_point_3d_sptr &new_p0);
 
   //---------------------------------------------------------------------------
   //: Set the second vertex
   //---------------------------------------------------------------------------
-  virtual void set_p1(const vsol_point_3d_ref &new_p1);
-  
+  virtual void set_p1(const vsol_point_3d_sptr &new_p1);
+
   //---------------------------------------------------------------------------
   //: Set the last vertex
   //---------------------------------------------------------------------------
-  virtual void set_p2(const vsol_point_3d_ref &new_p2);
+  virtual void set_p2(const vsol_point_3d_sptr &new_p2);
 
   //***************************************************************************
   // Basic operations
   //***************************************************************************
-  
+
   //---------------------------------------------------------------------------
   //: Is `p' in `this' ?
   //---------------------------------------------------------------------------
-  virtual bool in(const vsol_point_3d_ref &p) const;
-  
+  virtual bool in(const vsol_point_3d_sptr &p) const;
+
   //---------------------------------------------------------------------------
   //: Return the unit normal vector at point `p'.
   //: Has to be deleted manually. Depends on the vertices order. If some
@@ -130,7 +130,7 @@ public:
   //: REQUIRE: in(p)
   //---------------------------------------------------------------------------
   virtual vnl_vector_fixed<double,3> *
-  normal_at_point(const vsol_point_3d_ref &p) const;
+  normal_at_point(const vsol_point_3d_sptr &p) const;
 };
 
 #endif // #ifndef VSOL_TRIANGLE_3D_H

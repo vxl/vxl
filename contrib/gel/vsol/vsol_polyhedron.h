@@ -24,10 +24,10 @@ class vsol_polyhedron;
 //*****************************************************************************
 // External declarations for values
 //*****************************************************************************
-#include "vsol_polyhedron_ref.h"
+#include "vsol_polyhedron_sptr.h"
 #include "vsol_volume_3d.h"
 
-#include "vsol_point_3d_ref.h"
+#include "vsol_point_3d_sptr.h"
 #include <vcl_vector.h>
 
 class vsol_polyhedron
@@ -67,7 +67,7 @@ public:
   //: Return vertex `i'
   //: REQUIRE: valid_index(i)
   //---------------------------------------------------------------------------
-  vsol_point_3d_ref vertex(int i) const { return valid_index(i)?storage_[i]:(vsol_point_3d_ref)0; }
+  vsol_point_3d_sptr vertex(int i) const { return valid_index(i)?storage_[i]:(vsol_point_3d_sptr)0; }
 
   //***************************************************************************
   // Comparison
@@ -96,7 +96,7 @@ public:
   //---------------------------------------------------------------------------
   //: Compute the bounding box of `this'
   //---------------------------------------------------------------------------
-  virtual vsol_box_3d_ref compute_bounding_box(void) const;
+  virtual vsol_box_3d_sptr compute_bounding_box(void) const;
 
   //---------------------------------------------------------------------------
   //: Return the number of vertices

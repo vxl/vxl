@@ -20,7 +20,7 @@ class vsol_triangle_2d;
 //*****************************************************************************
 // External declarations for values
 //*****************************************************************************
-#include <vsol/vsol_triangle_2d_ref.h>
+#include <vsol/vsol_triangle_2d_sptr.h>
 #include <vsol/vsol_polygon_2d.h>
 
 class vsol_triangle_2d
@@ -33,9 +33,9 @@ public:
   //---------------------------------------------------------------------------
   //: Constructor from its 3 vertices
   //---------------------------------------------------------------------------
-  explicit vsol_triangle_2d(const vsol_point_2d_ref &new_p0,
-                            const vsol_point_2d_ref &new_p1,
-                            const vsol_point_2d_ref &new_p2);
+  explicit vsol_triangle_2d(const vsol_point_2d_sptr &new_p0,
+                            const vsol_point_2d_sptr &new_p1,
+                            const vsol_point_2d_sptr &new_p2);
 
   //---------------------------------------------------------------------------
   //: Copy constructor
@@ -51,7 +51,7 @@ public:
   //: Clone `this': creation of a new object and initialization
   //: See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d_ref clone(void) const;
+  virtual vsol_spatial_object_2d_sptr clone(void) const;
 
   //***************************************************************************
   // Access
@@ -60,22 +60,22 @@ public:
   //---------------------------------------------------------------------------
   //: Return the first vertex
   //---------------------------------------------------------------------------
-  virtual vsol_point_2d_ref p0(void) const;
+  virtual vsol_point_2d_sptr p0(void) const;
 
   //---------------------------------------------------------------------------
   //: Return the second vertex
   //---------------------------------------------------------------------------
-  virtual vsol_point_2d_ref p1(void) const;
-  
+  virtual vsol_point_2d_sptr p1(void) const;
+
   //---------------------------------------------------------------------------
   //: Return the last vertex
   //---------------------------------------------------------------------------
-  virtual vsol_point_2d_ref p2(void) const;
+  virtual vsol_point_2d_sptr p2(void) const;
 
   //***************************************************************************
   // Comparison
   //***************************************************************************
-  
+
   //---------------------------------------------------------------------------
   //: Has `this' the same points than `other' in the same order ?
   //---------------------------------------------------------------------------
@@ -99,17 +99,17 @@ public:
   //---------------------------------------------------------------------------
   //: Set the first vertex
   //---------------------------------------------------------------------------
-  virtual void set_p0(const vsol_point_2d_ref &new_p0);
+  virtual void set_p0(const vsol_point_2d_sptr &new_p0);
 
   //---------------------------------------------------------------------------
   //: Set the second vertex
   //---------------------------------------------------------------------------
-  virtual void set_p1(const vsol_point_2d_ref &new_p1);
-  
+  virtual void set_p1(const vsol_point_2d_sptr &new_p1);
+
   //---------------------------------------------------------------------------
   //: Set the last vertex
   //---------------------------------------------------------------------------
-  virtual void set_p2(const vsol_point_2d_ref &new_p2);
+  virtual void set_p2(const vsol_point_2d_sptr &new_p2);
 };
 
 #endif // #ifndef VSOL_TRIANGLE_2D_H

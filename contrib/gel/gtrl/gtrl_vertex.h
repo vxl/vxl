@@ -26,6 +26,6 @@ protected:
   double y_;
 };
 
-typedef vbl_smart_ptr<gtrl_vertex> gtrl_vertex_ref;
+typedef vbl_smart_ptr<gtrl_vertex> gtrl_vertex_sptr;
 
 #endif

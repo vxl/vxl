@@ -3,7 +3,7 @@
 
 // .NAME vtol_edge - Represents the basic 1D topological entity
 // .LIBRARY vtol
-// .HEADER vxl package
+// .HEADER gel package
 // .INCLUDE vtol/vtol_edge.h
 // .FILE vtol_edge.cxx
 //
@@ -40,7 +40,7 @@
 //   02-26-97 Added implementation for virtual Transform() - Peter Vanroose
 //   PTU ported to vxl may 2000.
 
-#include <vtol/vtol_edge_ref.h>
+#include <vtol/vtol_edge_sptr.h>
 
 #include <vtol/vtol_topology_object.h>
 #include <vcl_vector.h>
@@ -61,14 +61,14 @@ protected:
   // Keeping vertex pointers inside of edge
   // for convenience...for now.
 
-  vtol_vertex_ref _v1;
-  vtol_vertex_ref _v2;
+  vtol_vertex_sptr _v1;
+  vtol_vertex_sptr _v2;
 
 public:
   //***************************************************************************
   // Initialization
   //***************************************************************************
-  
+
   //---------------------------------------------------------------------------
   //: Default constructor. Empty edge. Not a valid edge.
   //---------------------------------------------------------------------------
@@ -79,28 +79,28 @@ public:
   //---------------------------------------------------------------------------
 
   virtual ~vtol_edge();
-  
+
 
   //---------------------------------------------------------------------------
   //: Return the topology type
   //---------------------------------------------------------------------------
-  virtual vtol_topology_object_type topology_type(void) const { return EDGE; } 
+  virtual vtol_topology_object_type topology_type(void) const { return EDGE; }
 
 
   //---------------------------------------------------------------------------
   //: Return the first endpoint
   //---------------------------------------------------------------------------
-  virtual vtol_vertex_ref v1(void) const { return _v1; }
+  virtual vtol_vertex_sptr v1(void) const { return _v1; }
 
   //---------------------------------------------------------------------------
   //: Return the second endpoint
   //---------------------------------------------------------------------------
-  virtual vtol_vertex_ref v2(void) const { return _v2; }
+  virtual vtol_vertex_sptr v2(void) const { return _v2; }
 
   //---------------------------------------------------------------------------
   //: Return the first zero-chain of `this'
   //---------------------------------------------------------------------------
-  virtual vtol_zero_chain_ref zero_chain(void) const;
+  virtual vtol_zero_chain_sptr zero_chain(void) const;
 
   //---------------------------------------------------------------------------
   //: Set the first endpoint.
@@ -123,7 +123,7 @@ public:
 
   virtual void replace_end_point(vtol_vertex &current_end_point,
                                  vtol_vertex &new_end_point);
- 
+
   virtual bool operator==(const vtol_edge &other) const;
   bool operator==(const vsol_spatial_object_3d& obj) const; // virtual of vsol_spatial_object
 
@@ -138,7 +138,7 @@ public:
   //: Return `this' if `this' is an edge, 0 otherwise
   //---------------------------------------------------------------------------
   virtual const vtol_edge *cast_to_edge(void) const;
-  
+
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an edge, 0 otherwise
   //---------------------------------------------------------------------------
@@ -149,7 +149,7 @@ public:
   //: Return `this' if `this' is an edge, 0 otherwise
   //---------------------------------------------------------------------------
   virtual const vtol_edge_2d *cast_to_edge_2d(void) const {return NULL;}
-  
+
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an edge, 0 otherwise
   //---------------------------------------------------------------------------
@@ -159,7 +159,7 @@ public:
   //: Return `this' if `this' is an edge, 0 otherwise
   //---------------------------------------------------------------------------
   virtual const vtol_edge_3d *cast_to_edge_3d(void) const {return NULL;}
-  
+
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an edge, 0 otherwise
   //---------------------------------------------------------------------------
@@ -200,7 +200,7 @@ public:
 
   //:
   // Utility Functions
- 
+
   virtual bool share_vertex_with(vtol_edge &other);
 
   virtual bool add_vertex(vtol_vertex &);
@@ -210,15 +210,15 @@ public:
   virtual bool is_endpoint1(const vtol_vertex &) const;
   virtual bool is_endpoint2(const vtol_vertex &) const;
 
-  virtual vtol_vertex_ref other_endpoint(const vtol_vertex &) const;
+  virtual vtol_vertex_sptr other_endpoint(const vtol_vertex &) const;
 
- 
+
   virtual void compute_bounding_box(void); // A local implementation
 
   virtual void print(vcl_ostream &strm=vcl_cout) const;
   virtual void describe(vcl_ostream &strm=vcl_cout,
                         int blanking=0) const;
-  
+
   // compare the geometry
 
   virtual bool compare_geometry(const vtol_edge &other) const =0;

@@ -20,10 +20,10 @@
 class vdgl_interpolator_linear : public vdgl_interpolator {
    // PUBLIC INTERFACE----------------------------------------------------------
 public:
-  
+
   // Constructors/Destructors--------------------------------------------------
 
-  vdgl_interpolator_linear( vdgl_edgel_chain_ref chain);
+  vdgl_interpolator_linear( vdgl_edgel_chain_sptr chain);
   ~vdgl_interpolator_linear();
 
   // Operators----------------------------------------------------------------
@@ -52,7 +52,7 @@ public:
   // Data Control--------------------------------------------------------------
 
   // Computations--------------------------------------------------------------
-  
+
   // INTERNALS-----------------------------------------------------------------
 protected:
   // Data Members--------------------------------------------------------------

@@ -22,10 +22,10 @@ class vsol_polygon_3d;
 //*****************************************************************************
 // External declarations for values
 //*****************************************************************************
-#include <vsol/vsol_polygon_3d_ref.h>
+#include <vsol/vsol_polygon_3d_sptr.h>
 #include <vsol/vsol_region_3d.h>
 
-#include <vsol/vsol_point_3d_ref.h>
+#include <vsol/vsol_point_3d_sptr.h>
 #include <vcl_vector.h>
 
 class vsol_polygon_3d
@@ -40,7 +40,7 @@ public:
   //: points)
   //: REQUIRE: new_vertices.size()>=3 and valid_vertices(new_vertices)
   //---------------------------------------------------------------------------
-  explicit vsol_polygon_3d(const vcl_vector<vsol_point_3d_ref> &new_vertices);
+  explicit vsol_polygon_3d(const vcl_vector<vsol_point_3d_sptr> &new_vertices);
 
   //---------------------------------------------------------------------------
   //: Copy constructor
@@ -56,7 +56,7 @@ public:
   //: Clone `this': creation of a new object and initialization
   //: See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_3d_ref clone(void) const;
+  virtual vsol_spatial_object_3d_sptr clone(void) const;
 
   //***************************************************************************
   // Access
@@ -66,7 +66,7 @@ public:
   //: Return vertex `i'
   //: REQUIRE: valid_index(i)
   //---------------------------------------------------------------------------
-  virtual vsol_point_3d_ref vertex(const int i) const;
+  virtual vsol_point_3d_sptr vertex(const int i) const;
 
   //***************************************************************************
   // Comparison
@@ -77,7 +77,7 @@ public:
   //---------------------------------------------------------------------------
   virtual bool operator==(const vsol_polygon_3d &other) const;
   virtual bool operator==(const vsol_spatial_object_3d& obj) const; // virtual of vsol_spatial_object_3d
-  
+
   //---------------------------------------------------------------------------
   //: Has `this' not the same points than `other' in the same order ?
   //---------------------------------------------------------------------------
@@ -101,7 +101,7 @@ public:
   //: Return the number of vertices
   //---------------------------------------------------------------------------
   virtual int size(void) const;
-  
+
   //---------------------------------------------------------------------------
   //: Return the area of `this'
   //---------------------------------------------------------------------------
@@ -111,7 +111,7 @@ public:
   //: Is `this' convex ?
   //---------------------------------------------------------------------------
   virtual bool is_convex(void) const;
- 
+
   //---------------------------------------------------------------------------
   //: Is `i' a valid index for the list of vertices ?
   //---------------------------------------------------------------------------
@@ -121,7 +121,7 @@ public:
   //: Are `new_vertices' valid vertices ? That is are all vertices in the same
   //: plane ?
   //---------------------------------------------------------------------------
-  virtual bool valid_vertices(const vcl_vector<vsol_point_3d_ref> new_vertices) const;
+  virtual bool valid_vertices(const vcl_vector<vsol_point_3d_sptr> new_vertices) const;
 
   //***************************************************************************
   // Basic operations
@@ -130,14 +130,14 @@ public:
   //---------------------------------------------------------------------------
   //: Is `p' in `this' ?
   //---------------------------------------------------------------------------
-  virtual bool in(const vsol_point_3d_ref &p) const;
+  virtual bool in(const vsol_point_3d_sptr &p) const;
 
   //---------------------------------------------------------------------------
   //: Return the unit normal vector at point `p'. Have to be deleted manually
   //: REQUIRE: in(p)
   //---------------------------------------------------------------------------
   virtual vnl_vector_fixed<double,3> *
-  normal_at_point(const vsol_point_3d_ref &p) const;
+  normal_at_point(const vsol_point_3d_sptr &p) const;
 
   //***************************************************************************
   // Implementation
@@ -151,7 +151,7 @@ protected:
   //---------------------------------------------------------------------------
   // Description: List of vertices
   //---------------------------------------------------------------------------
-  vcl_vector<vsol_point_3d_ref> *storage_;
+  vcl_vector<vsol_point_3d_sptr> *storage_;
 };
 
 #endif // #ifndef VSOL_POLYGON_3D_H

@@ -22,15 +22,15 @@ int main(int argc,
   int result=0;
 
   vcl_cout<<"Constructor from extremities"<<vcl_endl;
-  vsol_point_2d_ref p=new vsol_point_2d(10,4);
-  vsol_point_2d_ref q=new vsol_point_2d(5,1);
-  vsol_line_2d_ref a=new vsol_line_2d(p,q);
+  vsol_point_2d_sptr p=new vsol_point_2d(10,4);
+  vsol_point_2d_sptr q=new vsol_point_2d(5,1);
+  vsol_line_2d_sptr a=new vsol_line_2d(p,q);
 
   assert(*(a->p0())==*p);
   assert(*(a->p1())==*q);
 
   vcl_cout<<"Copy constructor"<<vcl_endl;
-  vsol_line_2d_ref b=new vsol_line_2d(*a);
+  vsol_line_2d_sptr b=new vsol_line_2d(*a);
 
   vcl_cout<<"== operator"<<vcl_endl;
   assert(*a==*b);
@@ -40,7 +40,7 @@ int main(int argc,
   (*v)[0]=10;
   (*v)[1]=-5;
 
-  vsol_line_2d_ref c=new vsol_line_2d(*v,p);
+  vsol_line_2d_sptr c=new vsol_line_2d(*v,p);
 
   vcl_cout<<"middle()"<<vcl_endl;
   assert(*(c->middle())==*p);
@@ -49,7 +49,7 @@ int main(int argc,
 
   vcl_cout<<"length()"<<vcl_endl;
   vcl_cout<<c->length()<<vcl_endl;
-  
+
   vcl_cout<<"set_length()"<<vcl_endl;
   c->set_length(100);
 

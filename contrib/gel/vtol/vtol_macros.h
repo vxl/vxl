@@ -10,7 +10,7 @@
 #define SEL_SUP(suptype,target)\
   vcl_vector<suptype *> *new_list=new vcl_vector<suptype *>();\
   vcl_vector<suptype *> *sublist;\
-  vcl_list<vtol_topology_object_ref>::iterator i;\
+  vcl_list<vtol_topology_object_sptr>::iterator i;\
   vcl_vector<suptype*>::iterator m_i;\
   for(i=_superiors.begin();i!=_superiors.end();i++)\
       {\

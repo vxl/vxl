@@ -20,7 +20,7 @@ class vsol_group_3d;
 //*****************************************************************************
 // External declarations for values
 //*****************************************************************************
-#include <vsol/vsol_group_3d_ref.h>
+#include <vsol/vsol_group_3d_sptr.h>
 #include <vsol/vsol_spatial_object_3d.h>
 #include <vcl_list.h>
 
@@ -41,7 +41,7 @@ public:
   //: The objects of the group are not duplicated
   //---------------------------------------------------------------------------
   vsol_group_3d(const vsol_group_3d &other);
-  
+
   //---------------------------------------------------------------------------
   //: Destructor
   //: The objects of the group are not deleted
@@ -52,7 +52,7 @@ public:
   //: Clone `this': creation of a new object and initialization
   //: See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_3d_ref clone(void) const;
+  virtual vsol_spatial_object_3d_sptr clone(void) const;
 
   //***************************************************************************
   // Access
@@ -62,7 +62,7 @@ public:
   //: Return the object `i'
   //: REQUIRE: i>=0 and i<size()
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_3d_ref object(const int i) const;
+  virtual vsol_spatial_object_3d_sptr object(const int i) const;
 
   //***************************************************************************
   // Status report
@@ -92,7 +92,7 @@ public:
   //---------------------------------------------------------------------------
   //: Is `new_object' a child (direct or not) of `this' ?
   //---------------------------------------------------------------------------
-  virtual bool is_child(const vsol_spatial_object_3d_ref &new_object) const;
+  virtual bool is_child(const vsol_spatial_object_3d_sptr &new_object) const;
 
   //***************************************************************************
   // Element change
@@ -101,12 +101,12 @@ public:
   //---------------------------------------------------------------------------
   //: Add an object `new_object'to `this'
   //---------------------------------------------------------------------------
-  virtual void add_object(const vsol_spatial_object_3d_ref &new_object);
+  virtual void add_object(const vsol_spatial_object_3d_sptr &new_object);
 
   //***************************************************************************
   // Removal
   //***************************************************************************
-  
+
   //---------------------------------------------------------------------------
   //: Remove object `i' of `this' (not delete it)
   //: REQUIRE: i>=0 and i<size()
@@ -126,7 +126,7 @@ private:
   //---------------------------------------------------------------------------
   // Description: Set of objects that `this' contains
   //---------------------------------------------------------------------------
-  vcl_list<vsol_spatial_object_3d_ref> *storage_;
+  vcl_list<vsol_spatial_object_3d_sptr> *storage_;
 };
 
 #endif // #ifndef VSOL_GROUP_3D_H

@@ -13,13 +13,13 @@
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 
-#include <vtol/vtol_vertex_3d_ref.h>
-#include <vtol/vtol_zero_chain_3d_ref.h>
-#include <vtol/vtol_edge_3d_ref.h>
-#include <vtol/vtol_one_chain_3d_ref.h>
-#include <vtol/vtol_face_3d_ref.h>
-#include <vtol/vtol_two_chain_3d_ref.h>
-#include <vtol/vtol_block_3d_ref.h>
+#include <vtol/vtol_vertex_3d_sptr.h>
+#include <vtol/vtol_zero_chain_3d_sptr.h>
+#include <vtol/vtol_edge_3d_sptr.h>
+#include <vtol/vtol_one_chain_3d_sptr.h>
+#include <vtol/vtol_face_3d_sptr.h>
+#include <vtol/vtol_two_chain_3d_sptr.h>
+#include <vtol/vtol_block_3d_sptr.h>
 
 #include <vtol/vtol_vertex_3d.h>
 #include <vtol/vtol_zero_chain_3d.h>
@@ -36,7 +36,7 @@ static void test_topology_3d(void);
 static void test_topology_3d(void)
 {
   // OK we want to make two faces and put them into a block
-  
+
   vcl_cout << "Creating vertices" << vcl_endl;
 
   vtol_vertex_3d *v1=new vtol_vertex_3d(0.0,0.0,0.0);
@@ -48,7 +48,7 @@ static void test_topology_3d(void)
   vcl_cout << "Creating faces" << vcl_endl;
 
   vcl_vector<vtol_vertex_3d *> verts;
-  
+
   verts.push_back(v1);
   verts.push_back(v2);
   verts.push_back(v3);
@@ -60,61 +60,61 @@ static void test_topology_3d(void)
   f1->describe(vcl_cout, 8);
 
   verts.clear();
-  
+
   verts.push_back(v3);
   verts.push_back(v4);
   verts.push_back(v1);
 
 
   vtol_face_3d *f2=new vtol_face_3d(&verts);
-  
+
   vcl_cout << "Creating a block" << vcl_endl;
-  
+
   vcl_vector<vtol_face_3d *> faces;
-  
+
   faces.push_back(f1);
   faces.push_back(f2);
   vcl_cout<<"faces filled"<<vcl_endl;
-  
+
   vtol_block_3d *b1=new vtol_block_3d(faces);
   vcl_cout<<"Block b1 created"<<vcl_endl;
   b1->describe(vcl_cout, 8);
 
-  /////////////// begin to test the vertex 
- 
+  /////////////// begin to test the vertex
+
   vcl_cout << "************** test vertex *************" << vcl_endl;
   vcl_cout << "topology_type: ";
-  vcl_cout << v1->topology_type(); 
+  vcl_cout << v1->topology_type();
   ASSERT(v1->topology_type() == 1);
-  
+
   vcl_cout << "x() y() z() : ";
   vcl_cout << '(' << v1->x() << ',' << v1->y() << ',' << v1->z() << ')';
   ASSERT(v1->x() == 0 && v1->y() == 0 && v1->z() == 0);
-   
+
   vcl_cout << "v1 == v1 ";
   ASSERT((*v1) == (*v1));
 
   vcl_cout << "v1 != v2 ";
   ASSERT(! ((*v1) == (*v2)));
-  
+
   vcl_cout << "is_connected v1 & v2";
   ASSERT(v1->is_connected(v2));
 
   vcl_cout << "! is_connected v2 & v4";
   ASSERT(! v2->is_connected(v4));
-  
+
   vcl_cout << "is_endpointp";
   vtol_edge_3d *ed=v1->new_edge(v2);
   ASSERT(v1->is_endpointp(*ed));
 
   vcl_cout << "! is_endpointp";
   ASSERT(! v3->is_endpointp(*ed));
- 
 
-   /////////////// begin to test the zero_chain 
- 
+
+   /////////////// begin to test the zero_chain
+
   vcl_cout << "************** test zero_chain  *************" << vcl_endl;
-  
+
   vtol_zero_chain_3d *zc=ed->get_zero_chain();
 
   vcl_cout << "zc->v0() == v1";
@@ -129,17 +129,17 @@ static void test_topology_3d(void)
 
   vcl_cout << "describe zero_chain" << vcl_endl;
   zc->describe(vcl_cout, 8);
-  
-  
-  /////////////// begin to test the edge 
-  
+
+
+  /////////////// begin to test the edge
+
   vcl_cout << "************** test edge  *************" << vcl_endl;
   vcl_cout << "get_v1 == v1 && get_v2 == v2";
   ASSERT((ed->get_v1() == v1) && (ed->get_v2() == v2));
 
   vcl_cout << "*ed == *ed";
   ASSERT(*ed == *ed);
-  
+
   vcl_cout << "Share vertex with ed2";
   vtol_edge_3d *ed2=v2->new_edge(v3);
   ASSERT(ed->share_vertex_with(ed2));
@@ -147,7 +147,7 @@ static void test_topology_3d(void)
   vcl_cout << "! Share vertex with ed3";
   vtol_edge_3d *ed3=v3->new_edge(v4);
   ASSERT(! ed->share_vertex_with(ed3));
-  
+
   vcl_cout << "is_endpoint v1";
   ASSERT(ed->is_endpoint(v1));
 
@@ -156,23 +156,23 @@ static void test_topology_3d(void)
 
   vcl_cout << "is_endpoint1 v1";
   ASSERT(ed->is_endpoint1(v1));
-  
+
   vcl_cout << "other_endpoint(v1) == v2";
   ASSERT(ed->other_endpoint(v1)==v2);
-  
+
   vcl_cout << "describe edge" << vcl_endl;
   ed->describe(vcl_cout, 8);
 
 
-  /////////////// begin to test the one_chain 
+  /////////////// begin to test the one_chain
   vcl_cout << "************** test one_chain  *************" << vcl_endl;
   vtol_one_chain_3d *oc1=f1->get_one_chain(0);
   vtol_one_chain_3d *oc2=f2->get_one_chain(0);
-  
+
   vcl_cout << "Get number of edges: ";
   vcl_cout << oc1->num_edges();
   ASSERT(oc1->num_edges() == 3);
-  
+
   vcl_cout << "*oc1 == *oc1";
   ASSERT(*oc1 == *oc1);
 
@@ -180,32 +180,32 @@ static void test_topology_3d(void)
   ASSERT(! (*oc1 == *oc2));
 
 
-  /////////////// begin to test the face 
+  /////////////// begin to test the face
   vcl_cout << "************** test face  *************" << vcl_endl;
 
   vcl_cout << "Test the number of edges: ";
   vcl_cout << f1->get_num_edges();
   ASSERT(f1->get_num_edges() == 3);
-  
+
   vcl_cout << "Shared edge with f2";
   ASSERT(f1->shares_edge_with(f2));
-  
-  
-  /////////////// begin to test the two_chain  
+
+
+  /////////////// begin to test the two_chain
   vcl_cout << "************** test two_chain  *************" << vcl_endl;
-  
+
   vtol_two_chain_3d *tc=b1->get_boundary_cycle();
-  
+
   vcl_cout << "num_faces: ";
   vcl_cout << tc->num_faces();
   ASSERT(tc->num_faces() == 2);
-  
-  ///////////////// begin to test the block 
+
+  ///////////////// begin to test the block
 
   vcl_cout << "************** test block  *************" << vcl_endl;
-  b1->describe(vcl_cout, 8); 
+  b1->describe(vcl_cout, 8);
 
-  //////////////////////// Test accessors 
+  //////////////////////// Test accessors
   vcl_cout << "Accessors: vertices, zero_chains ... blocks" << vcl_endl << vcl_endl;
 
   vertex_list_3d *vl;

@@ -10,7 +10,7 @@
 #include <gtrl/gtrl_polygon.h>
 #include <gtrl/gtrl_triangle.h>
 
-//: triangulates holeless polygons 
+//: triangulates holeless polygons
 
 class gtrl_triangulation
 {
@@ -20,14 +20,14 @@ public:
 
   // implementation
   void run();
-  vcl_vector<gtrl_triangle_ref> get_triangles() const { return tris_; }
-  vcl_vector<gtrl_vertex_ref> get_points() const { return pts_; }
+  vcl_vector<gtrl_triangle_sptr> get_triangles() const { return tris_; }
+  vcl_vector<gtrl_vertex_sptr> get_points() const { return pts_; }
 
 protected:
   gtrl_polygon poly_;
-  
-  vcl_vector<gtrl_triangle_ref> tris_;
-  vcl_vector<gtrl_vertex_ref>   pts_;
+
+  vcl_vector<gtrl_triangle_sptr> tris_;
+  vcl_vector<gtrl_vertex_sptr>   pts_;
 };
 
 #endif

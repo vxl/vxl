@@ -7,7 +7,7 @@
 
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_interpolator_linear.h>
-#include <vdgl/vdgl_digital_curve_ref.h>
+#include <vdgl/vdgl_digital_curve_sptr.h>
 //#include <vdgl/vdgl_digital_region.h>
 
 int main()
@@ -43,29 +43,29 @@ int main()
   for( int i=0; data[i]!= -999; i+= 2)
     edgels.push_back( vdgl_edgel( data[i], data[i+1], 0, 1));
 
-  // Create an edgel chain...  
-  vdgl_edgel_chain_ref edgel_chain= new vdgl_edgel_chain( edgels);
+  // Create an edgel chain...
+  vdgl_edgel_chain_sptr edgel_chain= new vdgl_edgel_chain( edgels);
 
   // Define an interpolator (linear interpolation, here)
   vdgl_interpolator_linear interpolator_linear( edgel_chain);
-  vdgl_interpolator_ref    interpolator( &interpolator_linear);
+  vdgl_interpolator_sptr    interpolator( &interpolator_linear);
 
   // And use this to create a digital curve
-  vdgl_digital_curve_ref digital_curve= new vdgl_digital_curve( interpolator);
+  vdgl_digital_curve_sptr digital_curve= new vdgl_digital_curve( interpolator);
 
   // Now we can create an edge (although first we need to define
   //  the starting and edging vertices of this edge---in this case
   //  they are the same)
-  vsol_point_2d_ref pointstart( digital_curve->p0().ptr());
-  vsol_point_2d_ref pointend( digital_curve->p1().ptr());
+  vsol_point_2d_sptr pointstart( digital_curve->p0().ptr());
+  vsol_point_2d_sptr pointend( digital_curve->p1().ptr());
 
   //  vtol_vertex_2d vertexstart( pointstart);
   //  vtol_vertex_2d vertexend( pointend);
-  vtol_vertex_2d_ref vertexstart= new vtol_vertex_2d( 1, 2);
-  vtol_vertex_2d_ref vertexend  = new vtol_vertex_2d( 3, 4);
+  vtol_vertex_2d_sptr vertexstart= new vtol_vertex_2d( 1, 2);
+  vtol_vertex_2d_sptr vertexend  = new vtol_vertex_2d( 3, 4);
 
 
-  //  vtol_edge_2d edge( vertexstart, vertexend, vsol_curve_2d_ref( digital_curve.ptr()));
+  //  vtol_edge_2d edge( vertexstart, vertexend, vsol_curve_2d_sptr( digital_curve.ptr()));
   vtol_edge_2d edge( *(vertexstart.ptr()), *(vertexend.ptr()), digital_curve.ptr());
 
   // Sample 50 points along the curve and print them out

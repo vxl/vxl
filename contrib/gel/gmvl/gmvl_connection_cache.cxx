@@ -21,14 +21,14 @@ gmvl_connection_cache::~gmvl_connection_cache()
 
 // simple accessors
 
-void gmvl_connection_cache::add( const gmvl_node_ref node1, const gmvl_node_ref node2)
+void gmvl_connection_cache::add( const gmvl_node_sptr node1, const gmvl_node_sptr node2)
 {
-  if( node1.ptr()!= node2.ptr()) 
-    { 
-      gmvl_connection_ref c= new gmvl_connection( node1, node2);
+  if( node1.ptr()!= node2.ptr())
+    {
+      gmvl_connection_sptr c= new gmvl_connection( node1, node2);
 
       connections_.push_back( c);
-      
+
       // and add to the cache
       assert( node1->ref_>= 0);
       assert( node2->ref_>= 0);
@@ -54,8 +54,8 @@ void gmvl_connection_cache::add( const gmvl_node_ref node1, const gmvl_node_ref 
 
 // clever accessors
 
-vcl_vector<int> gmvl_connection_cache::get_connected_nodes( const gmvl_node_ref node1,
-							    const gmvl_node_ref node2) const
+vcl_vector<int> gmvl_connection_cache::get_connected_nodes( const gmvl_node_sptr node1,
+							    const gmvl_node_sptr node2) const
 {
   vcl_vector<int> c= get_connected_nodes( node1);
   vcl_vector<int> d;
@@ -67,9 +67,9 @@ vcl_vector<int> gmvl_connection_cache::get_connected_nodes( const gmvl_node_ref 
   return d;
 }
 
-vcl_vector<int> gmvl_connection_cache::get_connected_nodes( const gmvl_node_ref node1,
-							    const gmvl_node_ref node2,
-							    const gmvl_node_ref node3) const
+vcl_vector<int> gmvl_connection_cache::get_connected_nodes( const gmvl_node_sptr node1,
+							    const gmvl_node_sptr node2,
+							    const gmvl_node_sptr node3) const
 {
   vcl_vector<int> c= get_connected_nodes( node1);
   vcl_vector<int> d;
@@ -82,7 +82,7 @@ vcl_vector<int> gmvl_connection_cache::get_connected_nodes( const gmvl_node_ref 
   return d;
 }
 
-vcl_vector<int> gmvl_connection_cache::get_connected_nodes( const vcl_vector<gmvl_node_ref> nodes) const
+vcl_vector<int> gmvl_connection_cache::get_connected_nodes( const vcl_vector<gmvl_node_sptr> nodes) const
 {
   vcl_vector<int> c= get_connected_nodes( nodes[0]);
   vcl_vector<int> d;
@@ -96,7 +96,7 @@ vcl_vector<int> gmvl_connection_cache::get_connected_nodes( const vcl_vector<gmv
 	  if( !cachebool_(nodes[j]->ref_,c[i]))
 	    ok= false;
 	}
-      
+
       if( ok)
 	d.push_back(c[i]);
     }
@@ -113,8 +113,8 @@ void gmvl_connection_cache::rebuild()
 
   for( unsigned int i=0; i< connections_.size(); ++i)
     {
-      gmvl_node_ref node1= connections_[i]->get_node1();
-      gmvl_node_ref node2= connections_[i]->get_node2();
+      gmvl_node_sptr node1= connections_[i]->get_node1();
+      gmvl_node_sptr node2= connections_[i]->get_node2();
 
       assert( node1->ref_>= 0);
       assert( node2->ref_>= 0);
@@ -128,7 +128,7 @@ void gmvl_connection_cache::rebuild()
 	{
 	  gbl_bit_array_2d temp( biggest+1, biggest+1, false);
 
-	  for( int ci=0; ci< cachebool_.rows(); ci++) 
+	  for( int ci=0; ci< cachebool_.rows(); ci++)
 	    for( int cj=0; cj< cachebool_.cols(); cj++)
 	      temp.put(ci,cj, cachebool_(ci,cj));
 
@@ -160,7 +160,7 @@ vcl_ostream &operator<<( vcl_ostream &os, const gmvl_connection_cache &c)
 	  if( j+1 != c.cache_[i].size())
 	    os << ", ";
 	}
-      
+
       os << ">";
     }
 

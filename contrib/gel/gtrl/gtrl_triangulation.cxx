@@ -38,11 +38,11 @@ void gtrl_triangulation::run()
   //   like starting at 0
   const int offset = 100;
 
-  vcl_vector<gtrl_vertex_ref> pointlist;
+  vcl_vector<gtrl_vertex_sptr> pointlist;
 
   for( int i=0; i< poly_.size(); i++)
     {
-      gtrl_vertex_ref p= poly_[i];
+      gtrl_vertex_sptr p= poly_[i];
       pointlist.push_back( p);
 
       points[i*2]  = p->x();
@@ -82,17 +82,17 @@ void gtrl_triangulation::run()
 	  out.pointmarkerlist[i]= pointlist.size()-1+ offset;
 	}
     }
-  
+
   // clean up from previous triangulation
   tris_.clear();
 
   // create the triangles
   for( int i=0; i< out.numberoftriangles; i++)
     {
-      gtrl_triangle_ref triangle= new gtrl_triangle( pointlist[ out.pointmarkerlist[ out.trianglelist[i*3]]- offset],
+      gtrl_triangle_sptr triangle= new gtrl_triangle( pointlist[ out.pointmarkerlist[ out.trianglelist[i*3]]- offset],
 						     pointlist[ out.pointmarkerlist[ out.trianglelist[i*3+1]]- offset],
 						     pointlist[ out.pointmarkerlist[ out.trianglelist[i*3+2]]- offset]);
-      
+
       if (poly_.inside( triangle->mid_point()))
 	tris_.push_back( triangle);
     }

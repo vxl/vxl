@@ -3,7 +3,7 @@
 
 // .NAME vtol_edge_2d - Represents the basic 1D topological entity
 // .LIBRARY vtol
-// .HEADER vxl package
+// .HEADER gel package
 // .INCLUDE vtol/vtol_edge_2d.h
 // .FILE vtol_edge_2d.cxx
 //
@@ -40,13 +40,13 @@
 //   02-26-97 Added implementation for virtual Transform() - Peter Vanroose
 //   PTU ported to vxl may 2000.
 
-#include <vtol/vtol_edge_2d_ref.h>
+#include <vtol/vtol_edge_2d_sptr.h>
 
 #include <vtol/vtol_topology_object.h>
 #include <vcl_vector.h>
 #include <vtol/vtol_zero_chain.h>
 #include <vtol/vtol_vertex_2d.h>
-#include <vsol/vsol_curve_2d_ref.h>
+#include <vsol/vsol_curve_2d_sptr.h>
 #include <vtol/vtol_edge.h>
 
 //: \brief topological edge
@@ -55,13 +55,13 @@ class vtol_edge_2d
   : public vtol_edge
 {
 private:
-  vsol_curve_2d_ref _curve;
+  vsol_curve_2d_sptr _curve;
 
 public:
   //***************************************************************************
   // Initialization
   //***************************************************************************
-  
+
   //---------------------------------------------------------------------------
   //: Default constructor. Empty edge. Not a valid edge.
   //---------------------------------------------------------------------------
@@ -74,7 +74,7 @@ public:
   //---------------------------------------------------------------------------
   explicit vtol_edge_2d(vtol_vertex_2d &new_v1,
                         vtol_vertex_2d &new_v2,
-                        const vsol_curve_2d_ref &new_curve=0);
+                        const vsol_curve_2d_sptr &new_curve=0);
 
   //---------------------------------------------------------------------------
   //: Copy constructor
@@ -94,34 +94,34 @@ public:
   explicit vtol_edge_2d(vsol_curve_2d &);
   explicit vtol_edge_2d(vtol_vertex_2d &,
                         vcl_vector<double> &);
- 
+
   explicit vtol_edge_2d(double,
                         double,
                         double,
                         double,
-                        vsol_curve_2d_ref c=0);
+                        vsol_curve_2d_sptr c=0);
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
   virtual ~vtol_edge_2d();
-  
+
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
   //: See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_3d_ref clone(void) const;
+  virtual vsol_spatial_object_3d_sptr clone(void) const;
 
   //---------------------------------------------------------------------------
   //: Return the curve associated to `this'
   //---------------------------------------------------------------------------
-  virtual vsol_curve_2d_ref curve(void) const; // { return _curve; }
+  virtual vsol_curve_2d_sptr curve(void) const; // { return _curve; }
 
   //---------------------------------------------------------------------------
   //: Set the curve with `new_curve'
   //---------------------------------------------------------------------------
   virtual void set_curve(vsol_curve_2d &new_curve);
 
- 
+
   virtual bool operator==(const vtol_edge_2d &other) const;
   bool operator==(const vsol_spatial_object_3d& obj) const; // virtual of vsol_spatial_object_2d
 
@@ -133,12 +133,12 @@ public:
   //: Return `this' if `this' is an edge, 0 otherwise
   //---------------------------------------------------------------------------
   virtual const vtol_edge_2d *cast_to_edge_2d(void) const;
-  
+
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an edge, 0 otherwise
   //---------------------------------------------------------------------------
   virtual vtol_edge_2d *cast_to_edge_2d(void);
-   
+
 
   virtual void print(vcl_ostream &strm=vcl_cout) const;
   virtual void describe(vcl_ostream &strm=vcl_cout,

@@ -9,7 +9,7 @@
 #include "vdgl_interpolator_linear.h"
 
 
-vdgl_interpolator_linear::vdgl_interpolator_linear( vdgl_edgel_chain_ref chain)
+vdgl_interpolator_linear::vdgl_interpolator_linear( vdgl_edgel_chain_sptr chain)
   : vdgl_interpolator( chain)
 {
   recompute_all();
@@ -62,7 +62,7 @@ double vdgl_interpolator_linear::get_theta( const double index)
 double vdgl_interpolator_linear::get_curvature( const double index)
 {
   int a= int( index);
-  
+
   if (( a-index)== 0)
     {
       return vnl_math::maxdouble;
@@ -77,7 +77,7 @@ double vdgl_interpolator_linear::get_length()
   // length is cached (because it's expensive to compute)
   if ( older( chain_.ptr()))
     recompute_all();
-  
+
   return lengthcache_;
 }
 
@@ -152,7 +152,7 @@ void vdgl_interpolator_linear::recompute_bbox()
   minxcache_= chain_->edgel( 0).get_x();
   maxxcache_= chain_->edgel( 0).get_x();
   minycache_= chain_->edgel( 0).get_y();
-  maxycache_= chain_->edgel( 0).get_y(); 
+  maxycache_= chain_->edgel( 0).get_y();
 
   for( int i=1; i< chain_->size(); i++)
     {

@@ -11,7 +11,7 @@
 #include "vdgl_interpolator_cubic.h"
 
 
-vdgl_interpolator_cubic::vdgl_interpolator_cubic( vdgl_edgel_chain_ref chain)
+vdgl_interpolator_cubic::vdgl_interpolator_cubic( vdgl_edgel_chain_sptr chain)
   : vdgl_interpolator( chain)
 {
   recompute_all();
@@ -34,13 +34,13 @@ double vdgl_interpolator_cubic::get_x( const double index)
   vdgl_edgel ce( chain_->edgel( c));
   vdgl_edgel de( chain_->edgel( d));
 
-  
+
   vnl_matrix<double> A(4,1);
   vnl_matrix<double> M(4,4);
 
 	A(0,0) = ae.get_x(); A(1,0) = be.get_x();
 	A(2,0) = ce.get_x(); A(3,0) = de.get_x();
- 
+
 	M(0,0)=  a*a*a; M(0,1)= a*a; M(0,2)= a; M(0,3)= 1;
 	M(1,0)=  b*b*b; M(1,1)= b*b; M(1,2)= b; M(1,3)= 1;
 	M(2,0)=  c*c*c; M(2,1)= c*c; M(2,2)= c; M(2,3)= 1;
@@ -49,7 +49,7 @@ double vdgl_interpolator_cubic::get_x( const double index)
 
   vnl_svd<double> svd_of_M(M);
 
-//  Solving A = M * P for P 
+//  Solving A = M * P for P
 //  vnl_matrix<double> inv_M(4,4);
 //  inv_M = svd.inverse();
 //  vnl_matrix<double> P(4,1) = inv_M * A;
@@ -74,8 +74,8 @@ double vdgl_interpolator_cubic::get_y( const double index)
   vdgl_edgel ce( chain_->edgel( c));
   vdgl_edgel de( chain_->edgel( d));
 
-   
-  
+
+
 	
 	vnl_matrix<double> A(4,1);
 	vnl_matrix<double> M(4,4);
@@ -83,7 +83,7 @@ double vdgl_interpolator_cubic::get_y( const double index)
 
 	A(0,0) = ae.get_y(); A(1,0) = be.get_y();
 	A(2,0) = ce.get_y(); A(3,0) = de.get_y();
- 
+
 	M(0,0)=  a*a*a; M(0,1)= b*b; M(0,2)= a; M(0,3)= 1;
 	M(1,0)=  b*b*b; M(1,1)= b*b; M(1,2)= b; M(1,3)= 1;
 	M(2,0)=  c*c*c; M(2,1)= c*c; M(2,2)= c; M(2,3)= 1;
@@ -112,15 +112,15 @@ double vdgl_interpolator_cubic::get_theta( const double index)
   vdgl_edgel ce( chain_->edgel( c));
   vdgl_edgel de( chain_->edgel( d));
 
-  
-   
+
+
    vnl_matrix<double> A(4,1);
    vnl_matrix<double> M(4,4);
 
 
 	A(0,0) = ae.get_theta(); A(1,0) = be.get_theta();
 	A(2,0) = ce.get_theta(); A(3,0) = de.get_theta();
- 
+
 	M(0,0)=  a*a*a; M(0,1)= a*a; M(0,2)= a; M(0,3)= 1;
 	M(1,0)=  b*b*b; M(1,1)= b*b; M(1,2)= b; M(1,3)= 1;
 	M(2,0)=  c*c*c; M(2,1)= c*c; M(2,2)= c; M(2,3)= 1;
@@ -149,13 +149,13 @@ double vdgl_interpolator_cubic::get_curvature( const double index)
   vdgl_edgel ce( chain_->edgel( c));
   vdgl_edgel de( chain_->edgel( d));
 
-  
+
   vnl_matrix<double> A(4,1);
   vnl_matrix<double> M(4,4);
 
 	A(0,0) = ae.get_x(); A(1,0) = be.get_x();
 	A(2,0) = ce.get_x(); A(3,0) = de.get_x();
- 
+
 	M(0,0)=  a*a*a; M(0,1)= a*a; M(0,2)= a; M(0,3)= 1;
 	M(1,0)=  b*b*b; M(1,1)= b*b; M(1,2)= b; M(1,3)= 1;
 	M(2,0)=  c*c*c; M(2,1)= c*c; M(2,2)= c; M(2,3)= 1;
@@ -173,7 +173,7 @@ double vdgl_interpolator_cubic::get_curvature( const double index)
 	double t2 = 3 * P(0,0) * x_new * x_new + 2 * P(0,1) * x_new + P(0,2);
 	double t3 = 1 + t2 * t2;
 	double curvature = t1/pow(t3,1.5) ;
- 
+
  return(curvature);
 }
 
@@ -183,7 +183,7 @@ double vdgl_interpolator_cubic::get_length()
   // length is cached (because it's expensive to compute)
   if ( older( chain_.ptr()))
     recompute_all();
-  
+
   return lengthcache_;
 }
 
@@ -258,7 +258,7 @@ void vdgl_interpolator_cubic::recompute_bbox()
   minxcache_= chain_->edgel( 0).get_x();
   maxxcache_= chain_->edgel( 0).get_x();
   minycache_= chain_->edgel( 0).get_y();
-  maxycache_= chain_->edgel( 0).get_y(); 
+  maxycache_= chain_->edgel( 0).get_y();
 
   for( int i=1; i< chain_->size(); i++)
     {

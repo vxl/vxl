@@ -4,7 +4,7 @@
 //
 // .NAME        vtol_chain - Base class for representation of holes
 // .LIBRARY     vtol
-// .HEADER vxl package
+// .HEADER      gel package
 // .INCLUDE     vtol/vtol_chain.h
 // .FILE        vtol_chain.cxx
 //
@@ -20,14 +20,14 @@
 // .SECTION Author
 //     Patricia A. Vrobel Peter Tu
 //-----------------------------------------------------------------------------
-#include <vtol/vtol_chain_ref.h>
+#include <vtol/vtol_chain_sptr.h>
 
 #include <vtol/vtol_topology_object.h>
 #include <vcl_vector.h>
 
 //class vtol_hierarchy_node;
 
-typedef vcl_vector<vtol_chain_ref> chain_list;
+typedef vcl_vector<vtol_chain_sptr> chain_list;
 
 //: Base class of vtol_two_chain and vtol_one_chain (representation of holes)
 
@@ -45,7 +45,7 @@ public:
   //***************************************************************************
   // Initialization
   //***************************************************************************
-  
+
   //---------------------------------------------------------------------------
   //: Default constructor
   //---------------------------------------------------------------------------
@@ -69,7 +69,7 @@ public:
   //: Return a pointer to the superiors (no copy)
   //---------------------------------------------------------------------------
   virtual const chain_list *chain_superiors(void) const;
-  
+
   //***************************************************************************
   // Status report
   //***************************************************************************
@@ -129,7 +129,7 @@ public:
   //:          and is_chain_inferior(chain_inferior)
   //---------------------------------------------------------------------------
   virtual void unlink_chain_inferior(vtol_chain &chain_inferior);
-  
+
   //---------------------------------------------------------------------------
   //: Unlink `this' with all its chain inferiors
   //---------------------------------------------------------------------------
@@ -204,7 +204,7 @@ protected:
   //---------------------------------------------------------------------------
   // Description: array of the superiors
   //---------------------------------------------------------------------------
-  vcl_list<vtol_chain_ref> _chain_superiors;
+  vcl_list<vtol_chain_sptr> _chain_superiors;
 
   bool _is_cycle; // True if `this' is a connected chain
   vcl_vector<signed char> _directions;

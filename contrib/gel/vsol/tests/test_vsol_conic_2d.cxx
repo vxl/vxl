@@ -67,7 +67,7 @@ int main(int argc,
 {
   int result=0;
 
-  vsol_conic_2d_ref p;
+  vsol_conic_2d_sptr p;
   double cx;
   double cy;
   double phi;

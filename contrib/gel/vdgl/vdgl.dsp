@@ -143,7 +143,7 @@ SOURCE=.\vdgl_edgel_chain.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vdgl_edgel_chain_ref.h
+SOURCE=.\vdgl_edgel_chain_sptr.h
 # End Source File
 # Begin Source File
 
@@ -163,7 +163,7 @@ SOURCE=.\vdgl_interpolator_linear.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vdgl_interpolator_ref.h
+SOURCE=.\vdgl_interpolator_sptr.h
 # End Source File
 # End Group
 # End Target

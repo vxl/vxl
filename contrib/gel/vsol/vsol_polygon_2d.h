@@ -22,10 +22,10 @@ class vsol_polygon_2d;
 //*****************************************************************************
 // External declarations for values
 //*****************************************************************************
-#include <vsol/vsol_polygon_2d_ref.h>
+#include <vsol/vsol_polygon_2d_sptr.h>
 #include <vsol/vsol_region_2d.h>
 
-#include <vsol/vsol_point_2d_ref.h>
+#include <vsol/vsol_point_2d_sptr.h>
 #include <vcl_vector.h>
 
 class vsol_polygon_2d
@@ -40,7 +40,7 @@ public:
   //: points)
   //: REQUIRE: new_vertices.size()>=3
   //---------------------------------------------------------------------------
-  explicit vsol_polygon_2d(const vcl_vector<vsol_point_2d_ref> &new_vertices);
+  explicit vsol_polygon_2d(const vcl_vector<vsol_point_2d_sptr> &new_vertices);
 
   //---------------------------------------------------------------------------
   //: Copy constructor
@@ -56,7 +56,7 @@ public:
   //: Clone `this': creation of a new object and initialization
   //: See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d_ref clone(void) const;
+  virtual vsol_spatial_object_2d_sptr clone(void) const;
 
   //***************************************************************************
   // Access
@@ -66,8 +66,8 @@ public:
   //: Return vertex `i'
   //: REQUIRE: valid_index(i)
   //---------------------------------------------------------------------------
-  virtual vsol_point_2d_ref vertex(const int i) const;
-  
+  virtual vsol_point_2d_sptr vertex(const int i) const;
+
   //***************************************************************************
   // Comparison
   //***************************************************************************
@@ -101,7 +101,7 @@ public:
   //: Return the number of vertices
   //---------------------------------------------------------------------------
   virtual int size(void) const;
-  
+
   //---------------------------------------------------------------------------
   //: Return the area of `this'
   //---------------------------------------------------------------------------
@@ -111,7 +111,7 @@ public:
   //: Is `this' convex ?
   //---------------------------------------------------------------------------
   virtual bool is_convex(void) const;
- 
+
   //---------------------------------------------------------------------------
   //: Is `i' a valid index for the list of vertices ?
   //---------------------------------------------------------------------------
@@ -129,7 +129,7 @@ protected:
   //---------------------------------------------------------------------------
   // Description: List of vertices
   //---------------------------------------------------------------------------
-  vcl_vector<vsol_point_2d_ref> *storage_;
+  vcl_vector<vsol_point_2d_sptr> *storage_;
 };
 
 #endif // #ifndef VSOL_POLYGON_2D_H

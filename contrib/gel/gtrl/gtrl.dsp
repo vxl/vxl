@@ -113,11 +113,11 @@ SOURCE=".\Templates\vbl_smart_ptr+gtrl_vertex-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vcl_vector+gtrl_triangle_ref-.cxx"
+SOURCE=".\Templates\vcl_vector+gtrl_triangle_sptr-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vcl_vector+gtrl_vertex_ref-.cxx"
+SOURCE=".\Templates\vcl_vector+gtrl_vertex_sptr-.cxx"
 # End Source File
 # End Group
 # Begin Group "Header Files"

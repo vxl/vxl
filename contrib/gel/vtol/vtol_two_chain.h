@@ -25,9 +25,9 @@
 //                   Should use vtol_face geometry recursively to be proper.
 //                   Currently reverts to bounds on vertices from
 //                   vtol_topology_object::ComputeBoundingBox()
-//               PTU ported to vxl May 2000  
+//               PTU ported to vxl May 2000
 //-----------------------------------------------------------------------------
-#include <vtol/vtol_two_chain_ref.h>
+#include <vtol/vtol_two_chain_sptr.h>
 
 #include <vcl_vector.h>
 //#include <vtol/vtol_topology_object.h>
@@ -49,7 +49,7 @@ public:
   //***************************************************************************
   // Initialization
   //***************************************************************************
-  
+
   //---------------------------------------------------------------------------
   //: Default constructor
   //---------------------------------------------------------------------------
@@ -87,11 +87,11 @@ public:
   //: Clone `this': creation of a new object and initialization
   //: See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_3d_ref clone(void) const;
+  virtual vsol_spatial_object_3d_sptr clone(void) const;
 
   virtual vtol_two_chain *
-  copy_with_arrays(vcl_vector<vtol_topology_object_ref> &verts,
-                   vcl_vector<vtol_topology_object_ref> &edges) const;
+  copy_with_arrays(vcl_vector<vtol_topology_object_sptr> &verts,
+                   vcl_vector<vtol_topology_object_sptr> &edges) const;
   // Accessors
 
   //---------------------------------------------------------------------------
@@ -99,7 +99,7 @@ public:
   //---------------------------------------------------------------------------
   virtual vtol_topology_object_type topology_type(void) const;
 
-  //: get the direction of the face 
+  //: get the direction of the face
 
   signed char direction(const vtol_face &f) const;
 
@@ -171,7 +171,7 @@ public:
   virtual two_chain_list *inferior_two_chains(void);
   virtual two_chain_list *superior_two_chains(void);
 
-  //: Warning these methods should not be used by clients 
+  //: Warning these methods should not be used by clients
 
   virtual vcl_vector<vtol_vertex*> *compute_vertices(void);
   virtual vcl_vector<vtol_edge*> *compute_edges(void);
@@ -187,10 +187,10 @@ public:
   virtual vcl_vector<vtol_one_chain*> *outside_boundary_compute_one_chains(void);
   virtual vcl_vector<vtol_face*> *outside_boundary_compute_faces(void);
   virtual vcl_vector<vtol_two_chain*> *outside_boundary_compute_two_chains(void);
-  
 
 
-  
+
+
 
 
 

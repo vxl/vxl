@@ -21,14 +21,14 @@
 
 #include <vcl_list.h>
 #include <vcl_vector.h>
-#include <vsol/vsol_spatial_object_3d_ref.h>
-#include <vtol/vtol_topology_object_ref.h>
+#include <vsol/vsol_spatial_object_3d_sptr.h>
+#include <vtol/vtol_topology_object_sptr.h>
 
 //: \brief function used to get rid of duplicate entries
 
 void tagged_union(vcl_vector<vsol_spatial_object_3d *> *);
 
-void tagged_union(vcl_list<vtol_topology_object_ref> *);
+void tagged_union(vcl_list<vtol_topology_object_sptr> *);
 
 
 #endif

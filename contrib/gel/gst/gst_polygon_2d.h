@@ -10,7 +10,7 @@
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vbl/vbl_ref_count.h>
-#include "gst_edge_2d_ref.h"
+#include "gst_edge_2d_sptr.h"
 
 class gst_polygon_2d : public vbl_ref_count
 {
@@ -22,8 +22,8 @@ public:
 
   // getters and setters
   int size() const { return edges_.size(); }
-  gst_edge_2d_ref operator[]( const int i) const { return edges_[i]; }
-  void add( const gst_edge_2d_ref edge) { edges_.push_back( edge); }
+  gst_edge_2d_sptr operator[]( const int i) const { return edges_[i]; }
+  void add( const gst_edge_2d_sptr edge) { edges_.push_back( edge); }
 
   //: check closure of edges
   //   returns false if the edges are not closed or
@@ -32,7 +32,7 @@ public:
 
   // useful computational accessors
   bool inside( const double x, const double y) const;
-  bool inside( const gst_vertex_2d_ref v) const;
+  bool inside( const gst_vertex_2d_sptr v) const;
 
   double get_centroid_x() const;
   double get_centroid_y() const;
@@ -45,7 +45,7 @@ public:
 protected:
 
   //: unordered, but oriented, list of edges
-  vcl_vector<gst_edge_2d_ref> edges_;
+  vcl_vector<gst_edge_2d_sptr> edges_;
 
 };
 

@@ -21,9 +21,9 @@ int main(int argc,
          char *argv[])
 {
   int result=0;
-  vsol_group_2d_ref group1=new vsol_group_2d;
-  vsol_point_2d_ref p=new vsol_point_2d(10,4);
-  vsol_group_2d_ref group2;
+  vsol_group_2d_sptr group1=new vsol_group_2d;
+  vsol_point_2d_sptr p=new vsol_point_2d(10,4);
+  vsol_group_2d_sptr group2;
 
   vcl_cout<<"size()"<<vcl_endl;
   vcl_cout<<group1->size()<<vcl_endl;

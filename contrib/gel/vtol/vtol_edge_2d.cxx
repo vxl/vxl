@@ -15,7 +15,7 @@
 //---------------------------------------------------------------------------
 // -- Default constructor. Empty edge. Not a valid edge.
 //---------------------------------------------------------------------------
-vtol_edge_2d::vtol_edge_2d(void) 
+vtol_edge_2d::vtol_edge_2d(void)
 {
   _curve=0;
   _v1=0;
@@ -29,26 +29,26 @@ vtol_edge_2d::vtol_edge_2d(void)
 //---------------------------------------------------------------------------
 vtol_edge_2d::vtol_edge_2d(vtol_vertex_2d &new_v1,
                            vtol_vertex_2d &new_v2,
-                           const vsol_curve_2d_ref &new_curve)
+                           const vsol_curve_2d_sptr &new_curve)
 {
- 
-  
+
+
   vtol_topology_object *zc;
-  
+
   if (!new_curve)
     _curve=new vsol_line_2d(new_v1.point(),new_v2.point());
   else
     _curve=new_curve;
   _v1=&new_v1;
   _v2=&new_v2;
-  
- 
+
+
   zc=new vtol_zero_chain(new_v1,new_v2);
 
-    
+
   link_inferior(*zc);
 
-  
+
 }
 
 //---------------------------------------------------------------------------
@@ -63,24 +63,24 @@ vtol_edge_2d::vtol_edge_2d(vtol_vertex_2d &new_v1,
 vtol_edge_2d::vtol_edge_2d(const vtol_edge_2d &other)
 {
   _curve=0;
-  vsol_curve_2d_ref tmp_curve;
+  vsol_curve_2d_sptr tmp_curve;
 
-  vcl_vector<vtol_topology_object_ref>::const_iterator i;
+  vcl_vector<vtol_topology_object_sptr>::const_iterator i;
 
   for(i=other.inferiors()->begin();i!=other.inferiors()->end();++i){
-   
-    
-  
-    vtol_zero_chain_ref zc = (*i)->clone()->cast_to_topology_object()->cast_to_zero_chain();
-    
-      
+
+
+
+    vtol_zero_chain_sptr zc = (*i)->clone()->cast_to_topology_object()->cast_to_zero_chain();
+
+
     link_inferior(*zc);
   }	
 
   set_vertices_from_zero_chains();
   if (other._curve)
     {
-      vsol_spatial_object_2d_ref sr = other._curve->clone();
+      vsol_spatial_object_2d_sptr sr = other._curve->clone();
       _curve=(vsol_curve_2d *)(sr.ptr());
       // make sure the geometry and Topology are in sync
       if (_v1)
@@ -160,8 +160,8 @@ vtol_edge_2d::vtol_edge_2d(double x1,
                            double y1,
                            double x2,
                            double y2,
-                           vsol_curve_2d_ref curve)
- 
+                           vsol_curve_2d_sptr curve)
+
 {
   _v1=new vtol_vertex_2d(x1,y1);
   _v2=new vtol_vertex_2d(x2,y2);
@@ -205,7 +205,7 @@ vtol_edge_2d::vtol_edge_2d(vsol_curve_2d &edgecurve)
 // -- Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_3d_ref vtol_edge_2d::clone(void) const
+vsol_spatial_object_3d_sptr vtol_edge_2d::clone(void) const
 {
   return new vtol_edge_2d(*this);
 }
@@ -213,12 +213,12 @@ vsol_spatial_object_3d_ref vtol_edge_2d::clone(void) const
 //---------------------------------------------------------------------------
 // -- Return the curve associated to `this'
 //---------------------------------------------------------------------------
-vsol_curve_2d_ref vtol_edge_2d::curve(void) const
+vsol_curve_2d_sptr vtol_edge_2d::curve(void) const
 {
   return _curve;
 }
 
- 
+
 //---------------------------------------------------------------------------
 // -- Set the curve with `new_curve'
 //---------------------------------------------------------------------------
@@ -275,8 +275,8 @@ bool vtol_edge_2d::operator==(const vtol_edge_2d &other) const
   if (!(*_v1==*(other._v1)) || !(*_v2==*(other._v2))) // ((*_v1!=*(other._v1)) || (*_v2!=*(other._v2)))
     return false;
 
-  vtol_zero_chain_ref zc1=zero_chain();
-  vtol_zero_chain_ref zc2=other.zero_chain();
+  vtol_zero_chain_sptr zc1=zero_chain();
+  vtol_zero_chain_sptr zc2=other.zero_chain();
   if (!zc1||!zc2)
     return false;
   return *zc1==*zc2;
@@ -286,7 +286,7 @@ bool vtol_edge_2d::operator==(const vtol_edge_2d &other) const
 
 bool vtol_edge_2d::operator==(const vsol_spatial_object_3d& obj) const
 {
-  return 
+  return
    obj.spatial_type() == vsol_spatial_object_3d::TOPOLOGYOBJECT &&
    ((vtol_topology_object const&)obj).topology_type() == vtol_topology_object::EDGE
   ? *this == (vtol_edge_2d const&) (vtol_topology_object const&) obj
@@ -343,5 +343,5 @@ bool vtol_edge_2d::compare_geometry(const vtol_edge &other) const
     return result;
   }
   return false;
-  
+
 }

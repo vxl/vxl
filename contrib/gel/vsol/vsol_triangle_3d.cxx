@@ -14,11 +14,11 @@
 //---------------------------------------------------------------------------
 // -- Constructor from its 3 vertices
 //---------------------------------------------------------------------------
-vsol_triangle_3d::vsol_triangle_3d(const vsol_point_3d_ref &new_p0,
-                                   const vsol_point_3d_ref &new_p1,
-                                   const vsol_point_3d_ref &new_p2)
+vsol_triangle_3d::vsol_triangle_3d(const vsol_point_3d_sptr &new_p0,
+                                   const vsol_point_3d_sptr &new_p1,
+                                   const vsol_point_3d_sptr &new_p2)
 {
-  storage_=new vcl_vector<vsol_point_3d_ref>(3);
+  storage_=new vcl_vector<vsol_point_3d_sptr>(3);
   (*storage_)[0]=new_p0;
   (*storage_)[1]=new_p1;
   (*storage_)[2]=new_p2;
@@ -43,7 +43,7 @@ vsol_triangle_3d::~vsol_triangle_3d()
 // -- Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_3d_ref vsol_triangle_3d::clone(void) const
+vsol_spatial_object_3d_sptr vsol_triangle_3d::clone(void) const
 {
   return new vsol_triangle_3d(*this);
 }
@@ -55,7 +55,7 @@ vsol_spatial_object_3d_ref vsol_triangle_3d::clone(void) const
 //---------------------------------------------------------------------------
 // -- Return the first vertex
 //---------------------------------------------------------------------------
-vsol_point_3d_ref vsol_triangle_3d::p0(void) const
+vsol_point_3d_sptr vsol_triangle_3d::p0(void) const
 {
   return (*storage_)[0];
 }
@@ -63,7 +63,7 @@ vsol_point_3d_ref vsol_triangle_3d::p0(void) const
 //---------------------------------------------------------------------------
 // -- Return the second vertex
 //---------------------------------------------------------------------------
-vsol_point_3d_ref vsol_triangle_3d::p1(void) const
+vsol_point_3d_sptr vsol_triangle_3d::p1(void) const
 {
   return (*storage_)[1];
 }
@@ -71,7 +71,7 @@ vsol_point_3d_ref vsol_triangle_3d::p1(void) const
 //---------------------------------------------------------------------------
 // -- Return the last vertex
 //---------------------------------------------------------------------------
-vsol_point_3d_ref vsol_triangle_3d::p2(void) const
+vsol_point_3d_sptr vsol_triangle_3d::p2(void) const
 {
   return (*storage_)[2];
 }
@@ -139,7 +139,7 @@ double vsol_triangle_3d::area(void) const
 //---------------------------------------------------------------------------
 // -- Set the first vertex
 //---------------------------------------------------------------------------
-void vsol_triangle_3d::set_p0(const vsol_point_3d_ref &new_p0)
+void vsol_triangle_3d::set_p0(const vsol_point_3d_sptr &new_p0)
 {
   (*storage_)[0]=new_p0;
 }
@@ -147,7 +147,7 @@ void vsol_triangle_3d::set_p0(const vsol_point_3d_ref &new_p0)
 //---------------------------------------------------------------------------
 // -- Set the second vertex
 //---------------------------------------------------------------------------
-void vsol_triangle_3d::set_p1(const vsol_point_3d_ref &new_p1)
+void vsol_triangle_3d::set_p1(const vsol_point_3d_sptr &new_p1)
 {
   (*storage_)[1]=new_p1;
 }
@@ -155,7 +155,7 @@ void vsol_triangle_3d::set_p1(const vsol_point_3d_ref &new_p1)
 //---------------------------------------------------------------------------
 // -- Set the last vertex
 //---------------------------------------------------------------------------
-void vsol_triangle_3d::set_p2(const vsol_point_3d_ref &new_p2)
+void vsol_triangle_3d::set_p2(const vsol_point_3d_sptr &new_p2)
 {
   (*storage_)[2]=new_p2;
 }
@@ -167,7 +167,7 @@ void vsol_triangle_3d::set_p2(const vsol_point_3d_ref &new_p2)
 //---------------------------------------------------------------------------
 // -- Is `p' in `this' ?
 //---------------------------------------------------------------------------
-bool vsol_triangle_3d::in(const vsol_point_3d_ref &p) const
+bool vsol_triangle_3d::in(const vsol_point_3d_sptr &p) const
 {
   // TO DO
   vcl_cerr << "Warning: vsol_triangle_3d::in() has not been implemented yet\n";
@@ -181,7 +181,7 @@ bool vsol_triangle_3d::in(const vsol_point_3d_ref &p) const
 // Require: in(p)
 //---------------------------------------------------------------------------
 vnl_vector_fixed<double,3> *
-vsol_triangle_3d::normal_at_point(const vsol_point_3d_ref &p) const
+vsol_triangle_3d::normal_at_point(const vsol_point_3d_sptr &p) const
 {
   // require
   assert(in(p));

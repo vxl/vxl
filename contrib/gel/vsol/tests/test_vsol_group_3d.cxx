@@ -21,9 +21,9 @@ int main(int argc,
          char *argv[])
 {
   int result=0;
-  vsol_group_3d_ref group1=new vsol_group_3d;
-  vsol_point_3d_ref p=new vsol_point_3d(10,4,5);
-  vsol_group_3d_ref group2;
+  vsol_group_3d_sptr group1=new vsol_group_3d;
+  vsol_point_3d_sptr p=new vsol_point_3d(10,4,5);
+  vsol_group_3d_sptr group2;
 
   vcl_cout<<"size()"<<vcl_endl;
   vcl_cout<<group1->size()<<vcl_endl;
@@ -54,10 +54,10 @@ int main(int argc,
   vcl_cout<<"deep_size()"<<vcl_endl;
   vcl_cout<<group1->deep_size()<<vcl_endl;
   assert(group1->deep_size()==1);
-  
+
   vcl_cout<<"object()"<<vcl_endl;
   assert(*(group1->object(0))==*p);
-  
+
   vcl_cout<<"remove_object()"<<vcl_endl;
   group1->remove_object(0);
   assert(group1->size()==1);

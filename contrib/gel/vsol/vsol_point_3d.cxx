@@ -29,7 +29,7 @@ vsol_point_3d::vsol_point_3d(const vsol_point_3d &other)
 {
   p_=new vgl_point_3d<double>(other.x(),other.y(),other.z());
 }
-  
+
 //---------------------------------------------------------------------------
 // Destructor
 //---------------------------------------------------------------------------
@@ -42,7 +42,7 @@ vsol_point_3d::~vsol_point_3d()
 // -- Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_3d_ref vsol_point_3d::clone(void) const
+vsol_spatial_object_3d_sptr vsol_point_3d::clone(void) const
 {
   return new vsol_point_3d(*this);
 }
@@ -85,7 +85,7 @@ double vsol_point_3d::z(void) const
 bool vsol_point_3d::operator==(const vsol_point_3d &other) const
 {
   bool result;
-  
+
   result=this==&other;
   if(!result)
     result=(*p_)==(*(other.p_));
@@ -119,7 +119,7 @@ bool vsol_point_3d::operator!=(const vsol_point_3d &other) const
 //---------------------------------------------------------------------------
 // -- Return the real type of a point. It is a POINT
 //---------------------------------------------------------------------------
-enum  vsol_spatial_object_3d::vsol_spatial_object_3d_type 
+enum  vsol_spatial_object_3d::vsol_spatial_object_3d_type
 vsol_point_3d::spatial_type(void) const
 {
   return POINT;
@@ -182,7 +182,7 @@ double vsol_point_3d::distance(const vsol_point_3d &other) const
   return vgl_distance(*p_,*other.p_);
 }
 
-double vsol_point_3d::distance(vsol_point_3d_ref other) const
+double vsol_point_3d::distance(vsol_point_3d_sptr other) const
 {
   return vgl_distance(*p_,*other->p_);
 }
@@ -190,10 +190,10 @@ double vsol_point_3d::distance(vsol_point_3d_ref other) const
 //---------------------------------------------------------------------------
 // -- Return the middle point between `this' and `other'
 //---------------------------------------------------------------------------
-vsol_point_3d_ref vsol_point_3d::middle(const vsol_point_3d &other) const
+vsol_point_3d_sptr vsol_point_3d::middle(const vsol_point_3d &other) const
 {
 
-  vsol_point_3d_ref result=new vsol_point_3d(*this);
+  vsol_point_3d_sptr result=new vsol_point_3d(*this);
   (*(result->p_))=(*(result->p_)) + (*(other.p_));
   result->set_x(result->x()/2);
   result->set_y(result->y()/2);
@@ -210,16 +210,16 @@ void vsol_point_3d::add_vector(const vnl_double_3 &v)
   p_->set_x(p_->x() + v[0]);
   p_->set_y(p_->y() + v[1]);
   p_->set_z(p_->z() + v[2]);
-  
+
 }
 
 //---------------------------------------------------------------------------
 // -- Add `v' and `this'
 //---------------------------------------------------------------------------
-vsol_point_3d_ref
+vsol_point_3d_sptr
 vsol_point_3d::plus_vector(const vnl_double_3 &v) const
 {
-  vsol_point_3d_ref result=new vsol_point_3d(*this);
+  vsol_point_3d_sptr result=new vsol_point_3d(*this);
   result->add_vector(v);
   return result;
 }
@@ -232,7 +232,7 @@ vsol_point_3d::to_vector(const vsol_point_3d &other) const
 {
   vnl_double_3 *result = new vnl_double_3;
 
-    
+
   (*result)(0)=other.x() - x();
   (*result)(1)=other.y() - y();
   (*result)(2)=other.z() - z();

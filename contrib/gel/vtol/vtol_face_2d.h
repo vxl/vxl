@@ -2,7 +2,7 @@
 #define vtol_face_2d_H
 // .NAME vtol_face_2d - Represents the basic 2D topological entity
 // .LIBRARY vtol
-// .HEADER vxl Package
+// .HEADER gel Package
 // .INCLUDE vtol/vtol_face_2d.h
 // .FILE vtol_face_2d.cxx
 //
@@ -21,7 +21,7 @@
 //        (Need to decide proper policy for curved surfaces
 //        and possibly inconsistent planar surface geometry)
 //    JSL Computed Area()
-//    JLM Sep 1996: Fixed the face copy constructor which 
+//    JLM Sep 1996: Fixed the face copy constructor which
 //        did not handle the construction of new vtol_edge_2d(s) properly.
 //        The old implementation always constucted ImplicitLine(s)
 //        for the curve of each new edge.  See vtol_edge_2d.h for the required
@@ -35,11 +35,11 @@
 //     PTU ported to vxl may-20
 //
 ///
-#include <vtol/vtol_face_2d_ref.h>
+#include <vtol/vtol_face_2d_sptr.h>
 
 #include <vtol/vtol_topology_object.h>
 #include <vcl_vector.h>
-#include <vsol/vsol_region_2d_ref.h>
+#include <vsol/vsol_region_2d_sptr.h>
 #include <vtol/vtol_face.h>
 
 class vtol_vertex_2d;
@@ -54,7 +54,7 @@ public:
   //***************************************************************************
   // Initialization
   //***************************************************************************
-  
+
   //---------------------------------------------------------------------------
   //: Default constructor
   //---------------------------------------------------------------------------
@@ -81,7 +81,7 @@ public:
   //---------------------------------------------------------------------------
   explicit vtol_face_2d(vsol_region_2d &facesurf);
 
- 
+
   //---------------------------------------------------------------------------
   //: Copy constructor
   //---------------------------------------------------------------------------
@@ -96,15 +96,14 @@ public:
   //: Clone `this': creation of a new object and initialization
   //: See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_3d_ref clone(void) const;
+  virtual vsol_spatial_object_3d_sptr clone(void) const;
 
   //: Accessors
-  
-  virtual vsol_region_2d_ref surface(void) const;
+
+  virtual vsol_region_2d_sptr surface(void) const;
   virtual void set_surface(vsol_region_2d *const newsurf);
 
 
- 
   //***************************************************************************
   // Replaces dynamic_cast<T>
   //***************************************************************************
@@ -113,7 +112,7 @@ public:
   //: Return `this' if `this' is a face, 0 otherwise
   //---------------------------------------------------------------------------
   virtual const vtol_face_2d *cast_to_face_2d(void) const;
-  
+
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a face, 0 otherwise
   //---------------------------------------------------------------------------
@@ -123,7 +122,7 @@ public:
   // Status report
   //***************************************************************************
 
-   
+
   //---------------------------------------------------------------------------
   //: Copy with no links. Only copy the surface if it exists
   //---------------------------------------------------------------------------
@@ -136,22 +135,22 @@ public:
 
   virtual void describe(vcl_ostream &strm=vcl_cout,
                         int blanking=0) const;
-  
-  //: provide a mechanism to compare geometry 
+
+  //: provide a mechanism to compare geometry
 
   virtual bool compare_geometry(const vtol_face &other) const;
 
-  
+
   //: this should not called by a client
 
   virtual vtol_face *
-  copy_with_arrays(vcl_vector<vtol_topology_object_ref> &verts,
-                   vcl_vector<vtol_topology_object_ref> &edges) const;
-  
+  copy_with_arrays(vcl_vector<vtol_topology_object_sptr> &verts,
+                   vcl_vector<vtol_topology_object_sptr> &edges) const;
+
 
 
 private:
-  vsol_region_2d_ref _surface;
+  vsol_region_2d_sptr _surface;
 };
 
 #endif

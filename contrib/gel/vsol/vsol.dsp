@@ -179,19 +179,19 @@ SOURCE=.\Templates\vbl_smart_ptr+vsol_triangle_3d.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vcl_list+vsol_spatial_object_2d_ref.cxx
+SOURCE=.\Templates\vcl_list+vsol_spatial_object_2d_sptr.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vcl_list+vsol_spatial_object_3d_ref.cxx
+SOURCE=.\Templates\vcl_list+vsol_spatial_object_3d_sptr.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vcl_vector+vsol_point_2d_ref.cxx
+SOURCE=.\Templates\vcl_vector+vsol_point_2d_sptr.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vcl_vector+vsol_point_3d_ref.cxx
+SOURCE=.\Templates\vcl_vector+vsol_point_3d_sptr.cxx
 # End Source File
 # Begin Source File
 

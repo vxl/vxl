@@ -24,7 +24,7 @@ int main(int argc,
 
   // Constructor from coordinates
   vcl_cout<<"Constructor from coordinates"<<vcl_endl;
-  vsol_point_3d_ref p=new vsol_point_3d(10,4,1);
+  vsol_point_3d_sptr p=new vsol_point_3d(10,4,1);
 
   vcl_cout<<"x(), y() and z()"<<vcl_endl;
   vcl_cout<<"x="<<p->x()<<", y="<<p->y()<<", z="<<p->z()<<vcl_endl;
@@ -33,7 +33,7 @@ int main(int argc,
   assert(p->z()==1);
 
   vcl_cout<<"Copy constructor"<<vcl_endl;
-  vsol_point_3d_ref q=new vsol_point_3d(*p);
+  vsol_point_3d_sptr q=new vsol_point_3d(*p);
 
   vcl_cout<<"== operator"<<vcl_endl;
   assert((*p)==(*q));
@@ -55,13 +55,13 @@ int main(int argc,
 
   vcl_cout<<"distance()="<<p->distance(q)<<vcl_endl;
 
-  vsol_point_3d_ref r=p->middle(*q);
+  vsol_point_3d_sptr r=p->middle(*q);
 
   vcl_cout<<"middle()="<<r->x()<<','<<r->y()<<vcl_endl;
 
   assert(r->x()==(p->x()+q->x())/2);
   assert(r->y()==(p->y()+q->y())/2);
   assert(r->z()==(p->z()+q->z())/2);
- 
+
   return result;
 }

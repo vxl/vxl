@@ -20,10 +20,10 @@ class vsol_curve_3d;
 //*****************************************************************************
 // External declarations for values
 //*****************************************************************************
-#include <vsol/vsol_curve_3d_ref.h>
+#include <vsol/vsol_curve_3d_sptr.h>
 #include <vsol/vsol_spatial_object_3d.h>
 
-#include <vsol/vsol_point_3d_ref.h>
+#include <vsol/vsol_point_3d_sptr.h>
 
 class vsol_curve_3d
   :public vsol_spatial_object_3d
@@ -62,12 +62,12 @@ public:
   //---------------------------------------------------------------------------
   //: Return the first point of `this'
   //---------------------------------------------------------------------------
-  virtual vsol_point_3d_ref p0(void) const=0;
+  virtual vsol_point_3d_sptr p0(void) const=0;
 
   //---------------------------------------------------------------------------
   //: Return the last point of `this'
   //---------------------------------------------------------------------------
-  virtual vsol_point_3d_ref p1(void) const=0;
+  virtual vsol_point_3d_sptr p1(void) const=0;
 
   //***************************************************************************
   // Status report
@@ -85,12 +85,12 @@ public:
   //---------------------------------------------------------------------------
   //: Set the first point of the curve
   //---------------------------------------------------------------------------
-  virtual void set_p0(const vsol_point_3d_ref &new_p0)=0;
+  virtual void set_p0(const vsol_point_3d_sptr &new_p0)=0;
 
   //---------------------------------------------------------------------------
   //: Set the last point of the curve
   //---------------------------------------------------------------------------
-  virtual void set_p1(const vsol_point_3d_ref &new_p1)=0;
+  virtual void set_p1(const vsol_point_3d_sptr &new_p1)=0;
 };
 
 #endif // #ifndef VSOL_CURVE_3D_H

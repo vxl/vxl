@@ -14,11 +14,11 @@
 //---------------------------------------------------------------------------
 // -- Constructor from its 3 vertices
 //---------------------------------------------------------------------------
-vsol_triangle_2d::vsol_triangle_2d(const vsol_point_2d_ref &new_p0,
-                                   const vsol_point_2d_ref &new_p1,
-                                   const vsol_point_2d_ref &new_p2)
+vsol_triangle_2d::vsol_triangle_2d(const vsol_point_2d_sptr &new_p0,
+                                   const vsol_point_2d_sptr &new_p1,
+                                   const vsol_point_2d_sptr &new_p2)
 {
-  storage_=new vcl_vector<vsol_point_2d_ref>(3);
+  storage_=new vcl_vector<vsol_point_2d_sptr>(3);
   (*storage_)[0]=new_p0;
   (*storage_)[1]=new_p1;
   (*storage_)[2]=new_p2;
@@ -43,7 +43,7 @@ vsol_triangle_2d::~vsol_triangle_2d()
 // -- Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_2d_ref vsol_triangle_2d::clone(void) const
+vsol_spatial_object_2d_sptr vsol_triangle_2d::clone(void) const
 {
   return new vsol_triangle_2d(*this);
 }
@@ -55,7 +55,7 @@ vsol_spatial_object_2d_ref vsol_triangle_2d::clone(void) const
 //---------------------------------------------------------------------------
 // -- Return the first vertex
 //---------------------------------------------------------------------------
-vsol_point_2d_ref vsol_triangle_2d::p0(void) const
+vsol_point_2d_sptr vsol_triangle_2d::p0(void) const
 {
   return (*storage_)[0];
 }
@@ -63,7 +63,7 @@ vsol_point_2d_ref vsol_triangle_2d::p0(void) const
 //---------------------------------------------------------------------------
 // -- Return the second vertex
 //---------------------------------------------------------------------------
-vsol_point_2d_ref vsol_triangle_2d::p1(void) const
+vsol_point_2d_sptr vsol_triangle_2d::p1(void) const
 {
   return (*storage_)[1];
 }
@@ -71,7 +71,7 @@ vsol_point_2d_ref vsol_triangle_2d::p1(void) const
 //---------------------------------------------------------------------------
 // -- Return the last vertex
 //---------------------------------------------------------------------------
-vsol_point_2d_ref vsol_triangle_2d::p2(void) const
+vsol_point_2d_sptr vsol_triangle_2d::p2(void) const
 {
   return (*storage_)[2];
 }
@@ -130,7 +130,7 @@ double vsol_triangle_2d::area(void) const
 //---------------------------------------------------------------------------
 // -- Set the first vertex
 //---------------------------------------------------------------------------
-void vsol_triangle_2d::set_p0(const vsol_point_2d_ref &new_p0)
+void vsol_triangle_2d::set_p0(const vsol_point_2d_sptr &new_p0)
 {
   (*storage_)[0]=new_p0;
 }
@@ -138,7 +138,7 @@ void vsol_triangle_2d::set_p0(const vsol_point_2d_ref &new_p0)
 //---------------------------------------------------------------------------
 // -- Set the second vertex
 //---------------------------------------------------------------------------
-void vsol_triangle_2d::set_p1(const vsol_point_2d_ref &new_p1)
+void vsol_triangle_2d::set_p1(const vsol_point_2d_sptr &new_p1)
 {
   (*storage_)[1]=new_p1;
 }
@@ -146,7 +146,7 @@ void vsol_triangle_2d::set_p1(const vsol_point_2d_ref &new_p1)
 //---------------------------------------------------------------------------
 // -- Set the last vertex
 //---------------------------------------------------------------------------
-void vsol_triangle_2d::set_p2(const vsol_point_2d_ref &new_p2)
+void vsol_triangle_2d::set_p2(const vsol_point_2d_sptr &new_p2)
 {
   (*storage_)[2]=new_p2;
 }

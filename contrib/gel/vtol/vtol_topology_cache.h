@@ -16,7 +16,7 @@
 //     ported by Luis E. Galup
 //
 //-----------------------------------------------------------------------------
-//#include <vtol/vtol_topology_cache_ref.h>
+//#include <vtol/vtol_topology_cache_sptr.h>
 
 #include <vtol/vtol_topology_object.h>
 #include <vcl_vector.h>
@@ -49,7 +49,7 @@ private:
   //: set the source
   void set_source(vtol_topology_object *to_be_cached);
 
-  
+
   //: \brief get the vertices
   void vertices(vertex_list&);
   //: \brief get the zero chains
@@ -66,21 +66,18 @@ private:
   void blocks(block_list&);
 
 
-
-
-
   // cache utilities
 
   //: \brief validate the cache
   void validate_cache();
   //: \brief clear the cache
   void clear_cache();
-  
+
 private:
 
   //members
   vtol_topology_object* source_;
-  
+
   vcl_vector<vtol_vertex*>* vertices_;
   vcl_vector<vtol_zero_chain*>* zerochains_;
   vcl_vector<vtol_edge*>* edges_;
@@ -100,7 +97,5 @@ private:
   friend class vtol_block;
   friend class vtol_topology_object;
 };
-
-
 
 #endif //TOPOLOGY_CACHE_H

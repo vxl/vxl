@@ -22,7 +22,7 @@ class vsol_rectangle_2d;
 //*****************************************************************************
 // External declarations for values
 //*****************************************************************************
-#include <vsol/vsol_rectangle_2d_ref.h>
+#include <vsol/vsol_rectangle_2d_sptr.h>
 #include <vsol/vsol_polygon_2d.h>
 
 class vsol_rectangle_2d
@@ -36,11 +36,11 @@ public:
   //: Constructor from 3 points.
   //: `new_p0' is the origin of the rectangle. `new_p1' defines the abscissa
   //: axis and the width. `new_p2' defines the ordinate axis and the height.
-  //: REQUIRE: valid_vertices(new_p0,new_p1,new_p2) 
+  //: REQUIRE: valid_vertices(new_p0,new_p1,new_p2)
   //---------------------------------------------------------------------------
-  explicit vsol_rectangle_2d(const vsol_point_2d_ref &new_p0,
-                             const vsol_point_2d_ref &new_p1,
-                             const vsol_point_2d_ref &new_p2);
+  explicit vsol_rectangle_2d(const vsol_point_2d_sptr &new_p0,
+                             const vsol_point_2d_sptr &new_p1,
+                             const vsol_point_2d_sptr &new_p2);
 
   //---------------------------------------------------------------------------
   //: Copy constructor
@@ -56,7 +56,7 @@ public:
   //: Clone `this': creation of a new object and initialization
   //: See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d_ref clone(void) const;
+  virtual vsol_spatial_object_2d_sptr clone(void) const;
 
   //***************************************************************************
   // Access
@@ -65,27 +65,27 @@ public:
   //---------------------------------------------------------------------------
   //: Return the first vertex
   //---------------------------------------------------------------------------
-  virtual vsol_point_2d_ref p0(void) const;
+  virtual vsol_point_2d_sptr p0(void) const;
 
   //---------------------------------------------------------------------------
   //: Return the second vertex
   //---------------------------------------------------------------------------
-  virtual vsol_point_2d_ref p1(void) const;
-  
+  virtual vsol_point_2d_sptr p1(void) const;
+
   //---------------------------------------------------------------------------
   //: Return the third vertex
   //---------------------------------------------------------------------------
-  virtual vsol_point_2d_ref p2(void) const;
+  virtual vsol_point_2d_sptr p2(void) const;
 
   //---------------------------------------------------------------------------
   //: Return the last vertex
   //---------------------------------------------------------------------------
-  virtual vsol_point_2d_ref p3(void) const;
+  virtual vsol_point_2d_sptr p3(void) const;
 
   //***************************************************************************
   // Comparison
   //***************************************************************************
-  
+
   //---------------------------------------------------------------------------
   //: Has `this' the same points than `other' in the same order ?
   //---------------------------------------------------------------------------
@@ -111,16 +111,16 @@ public:
   //: Return the height
   //---------------------------------------------------------------------------
   virtual double height(void) const;
-  
+
   //---------------------------------------------------------------------------
   //: Return the area of `this'
   //---------------------------------------------------------------------------
   virtual double area(void) const;
-  
+
   //---------------------------------------------------------------------------
   //: Are `new_vertices' valid to build a rectangle ?
   //---------------------------------------------------------------------------
-  virtual bool valid_vertices(const vcl_vector<vsol_point_2d_ref> new_vertices) const;
+  virtual bool valid_vertices(const vcl_vector<vsol_point_2d_sptr> new_vertices) const;
 };
 
 #endif // #ifndef VSOL_RECTANGLE_2D_H

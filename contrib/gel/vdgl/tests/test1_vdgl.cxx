@@ -22,8 +22,8 @@ int main(void)
   e.add_edgel( e2);
   e.add_edgel( e3);
   e.add_edgel( e4);
-   
-  vsol_line_2d_ref myline;
+
+  vsol_line_2d_sptr myline;
   myline = vdgl_fit_line(e);
 
   //Here check for the length of the line

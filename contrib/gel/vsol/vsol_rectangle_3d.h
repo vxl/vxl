@@ -23,10 +23,10 @@ class vsol_rectangle_3d;
 //*****************************************************************************
 // External declarations for values
 //*****************************************************************************
-#include <vsol/vsol_rectangle_3d_ref.h>
+#include <vsol/vsol_rectangle_3d_sptr.h>
 #include <vsol/vsol_polygon_3d.h>
 
-#include <vsol/vsol_point_3d_ref.h>
+#include <vsol/vsol_point_3d_sptr.h>
 
 class vsol_rectangle_3d
   :public vsol_polygon_3d
@@ -39,11 +39,11 @@ public:
   //: Constructor from 3 points.
   //: `new_p0' is the origin of the rectangle. `new_p1' defines the abscissa
   //: axis and the width. `new_p2' defines the ordinate axis and the height.
-  //: REQUIRE: valid_vertices(new_p0,new_p1,new_p2) 
+  //: REQUIRE: valid_vertices(new_p0,new_p1,new_p2)
   //---------------------------------------------------------------------------
-  explicit vsol_rectangle_3d(const vsol_point_3d_ref &new_p0,
-                             const vsol_point_3d_ref &new_p1,
-                             const vsol_point_3d_ref &new_p2);
+  explicit vsol_rectangle_3d(const vsol_point_3d_sptr &new_p0,
+                             const vsol_point_3d_sptr &new_p1,
+                             const vsol_point_3d_sptr &new_p2);
 
   //---------------------------------------------------------------------------
   //: Copy constructor
@@ -59,7 +59,7 @@ public:
   //: Clone `this': creation of a new object and initialization
   //: See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_3d_ref clone(void) const;
+  virtual vsol_spatial_object_3d_sptr clone(void) const;
 
   //***************************************************************************
   // Access
@@ -68,34 +68,34 @@ public:
   //---------------------------------------------------------------------------
   //: Return the first vertex
   //---------------------------------------------------------------------------
-  virtual vsol_point_3d_ref p0(void) const;
+  virtual vsol_point_3d_sptr p0(void) const;
 
   //---------------------------------------------------------------------------
   //: Return the second vertex
   //---------------------------------------------------------------------------
-  virtual vsol_point_3d_ref p1(void) const;
-  
+  virtual vsol_point_3d_sptr p1(void) const;
+
   //---------------------------------------------------------------------------
   //: Return the third vertex
   //---------------------------------------------------------------------------
-  virtual vsol_point_3d_ref p2(void) const;
+  virtual vsol_point_3d_sptr p2(void) const;
 
   //---------------------------------------------------------------------------
   //: Return the last vertex
   //---------------------------------------------------------------------------
-  virtual vsol_point_3d_ref p3(void) const;
+  virtual vsol_point_3d_sptr p3(void) const;
 
   //***************************************************************************
   // Comparison
   //***************************************************************************
-  
+
   //---------------------------------------------------------------------------
   //: Has `this' the same points than `other' in the same order ?
   //---------------------------------------------------------------------------
   virtual bool operator==(const vsol_rectangle_3d &other) const;
   virtual bool operator==(const vsol_polygon_3d &other) const; // virtual of vsol_polygon_3d
   virtual bool operator==(const vsol_spatial_object_3d& obj) const; // virtual of vsol_spatial_object_3d
-  
+
   //***************************************************************************
   // Status report
   //***************************************************************************
@@ -114,16 +114,16 @@ public:
   //: Return the height
   //---------------------------------------------------------------------------
   virtual double height(void) const;
-  
+
   //---------------------------------------------------------------------------
   //: Return the area of `this'
   //---------------------------------------------------------------------------
   virtual double area(void) const;
-  
+
   //---------------------------------------------------------------------------
   //: Are `new_vertices' valid to build a rectangle ?
   //---------------------------------------------------------------------------
-  virtual bool valid_vertices(const vcl_vector<vsol_point_3d_ref> new_vertices) const;
+  virtual bool valid_vertices(const vcl_vector<vsol_point_3d_sptr> new_vertices) const;
 
   //***************************************************************************
   // Basic operations
@@ -132,14 +132,14 @@ public:
   //---------------------------------------------------------------------------
   //: Is `p' in `this' ?
   //---------------------------------------------------------------------------
-  virtual bool in(const vsol_point_3d_ref &p) const;
+  virtual bool in(const vsol_point_3d_sptr &p) const;
 
   //---------------------------------------------------------------------------
   //: Return the unit normal vector at point `p'. Have to be deleted manually
   //: REQUIRE: in(p)
   //---------------------------------------------------------------------------
   virtual vnl_vector_fixed<double,3> *
-  normal_at_point(const vsol_point_3d_ref &p) const;
+  normal_at_point(const vsol_point_3d_sptr &p) const;
 };
 
 #endif // #ifndef VSOL_RECTANGLE_3D_H

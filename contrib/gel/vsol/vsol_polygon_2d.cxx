@@ -14,12 +14,12 @@
 // -- Constructor from a vcl_vector (not a geometric vector but a list of points)
 // Require: new_vertices.size()>=3
 //---------------------------------------------------------------------------
-vsol_polygon_2d::vsol_polygon_2d(const vcl_vector<vsol_point_2d_ref> &new_vertices)
+vsol_polygon_2d::vsol_polygon_2d(const vcl_vector<vsol_point_2d_sptr> &new_vertices)
 {
   // require
   assert(new_vertices.size()>=3);
 
-  storage_=new vcl_vector<vsol_point_2d_ref>(new_vertices);
+  storage_=new vcl_vector<vsol_point_2d_sptr>(new_vertices);
 }
 
 //---------------------------------------------------------------------------
@@ -27,9 +27,9 @@ vsol_polygon_2d::vsol_polygon_2d(const vcl_vector<vsol_point_2d_ref> &new_vertic
 //---------------------------------------------------------------------------
 vsol_polygon_2d::vsol_polygon_2d(const vsol_polygon_2d &other)
 {
-  //vsol_point_2d_ref p;
+  //vsol_point_2d_sptr p;
 
-  storage_=new vcl_vector<vsol_point_2d_ref>(*other.storage_);
+  storage_=new vcl_vector<vsol_point_2d_sptr>(*other.storage_);
   for(unsigned int i=0;i<storage_->size();++i)
     (*storage_)[i]=new vsol_point_2d(*((*other.storage_)[i]));
 }
@@ -46,7 +46,7 @@ vsol_polygon_2d::~vsol_polygon_2d()
 // -- Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_2d_ref vsol_polygon_2d::clone(void) const
+vsol_spatial_object_2d_sptr vsol_polygon_2d::clone(void) const
 {
   return new vsol_polygon_2d(*this);
 }
@@ -59,7 +59,7 @@ vsol_spatial_object_2d_ref vsol_polygon_2d::clone(void) const
 // -- Return vertex `i'
 // Require: valid_index(i)
 //---------------------------------------------------------------------------
-vsol_point_2d_ref vsol_polygon_2d::vertex(const int i) const
+vsol_point_2d_sptr vsol_polygon_2d::vertex(const int i) const
 {
   // require
   assert(valid_index(i));
@@ -83,8 +83,8 @@ bool vsol_polygon_2d::operator==(const vsol_polygon_2d &other) const
       result = (storage_->size()==other.storage_->size());
       if(result)
         {
-          vsol_point_2d_ref p=(*storage_)[0];
-          
+          vsol_point_2d_sptr p=(*storage_)[0];
+
           result=false;
           unsigned int i=0;
           for(;i<storage_->size()&&!result;++i)
@@ -206,7 +206,7 @@ bool vsol_polygon_2d::is_convex(void) const
       y=(*storage_)[1]->y();
       dx=x-x_old;
       dy=y-y_old;
-      
+
       nz=dx;
       x_old=x;
       x=x=(*storage_)[2]->x();
@@ -244,13 +244,13 @@ bool vsol_polygon_2d::is_convex(void) const
           y=(*storage_)[0]->y();
           dy=y-y_old;
           nz=nz*dy-tmp;
-          result=(nz<0&&nz_old<0)||(nz>0&&nz_old>0); 
+          result=(nz<0&&nz_old<0)||(nz>0&&nz_old>0);
         }
     }
 
   return result;
 }
- 
+
 //---------------------------------------------------------------------------
 // -- Is `i' a valid index for the list of vertices ?
 //---------------------------------------------------------------------------

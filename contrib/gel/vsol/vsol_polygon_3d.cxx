@@ -15,13 +15,13 @@
 // -- Constructor from a vcl_vector (not a geometric vector but a list of points)
 // Require: new_vertices.size()>=3 and valid_vertices(new_vertices)
 //---------------------------------------------------------------------------
-vsol_polygon_3d::vsol_polygon_3d(const vcl_vector<vsol_point_3d_ref> &new_vertices)
+vsol_polygon_3d::vsol_polygon_3d(const vcl_vector<vsol_point_3d_sptr> &new_vertices)
 {
   // require
   assert(new_vertices.size()>=3);
   assert(valid_vertices(new_vertices));
 
-  storage_=new vcl_vector<vsol_point_3d_ref>(new_vertices);
+  storage_=new vcl_vector<vsol_point_3d_sptr>(new_vertices);
 }
 
 //---------------------------------------------------------------------------
@@ -29,9 +29,9 @@ vsol_polygon_3d::vsol_polygon_3d(const vcl_vector<vsol_point_3d_ref> &new_vertic
 //---------------------------------------------------------------------------
 vsol_polygon_3d::vsol_polygon_3d(const vsol_polygon_3d &other)
 {
-  //vsol_point_3d_ref p;
-  
-  storage_=new vcl_vector<vsol_point_3d_ref>(*other.storage_);
+  //vsol_point_3d_sptr p;
+
+  storage_=new vcl_vector<vsol_point_3d_sptr>(*other.storage_);
   for(unsigned int i=0;i<storage_->size();++i)
     (*storage_)[i]=new vsol_point_3d(*((*other.storage_)[i]));
 }
@@ -48,7 +48,7 @@ vsol_polygon_3d::~vsol_polygon_3d()
 // -- Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_3d_ref vsol_polygon_3d::clone(void) const
+vsol_spatial_object_3d_sptr vsol_polygon_3d::clone(void) const
 {
   return new vsol_polygon_3d(*this);
 }
@@ -61,7 +61,7 @@ vsol_spatial_object_3d_ref vsol_polygon_3d::clone(void) const
 // -- Return vertex `i'
 // Require: valid_index(i)
 //---------------------------------------------------------------------------
-vsol_point_3d_ref vsol_polygon_3d::vertex(const int i) const
+vsol_point_3d_sptr vsol_polygon_3d::vertex(const int i) const
 {
   // require
   assert(valid_index(i));
@@ -83,11 +83,11 @@ bool vsol_polygon_3d::operator==(const vsol_polygon_3d &other) const
   if(!result)
     {
       result = (storage_->size()==other.storage_->size());
-      
+
       if(result)
         {
-          vsol_point_3d_ref p=(*storage_)[0];
-          
+          vsol_point_3d_sptr p=(*storage_)[0];
+
           result=false;
           unsigned int i=0;
           for(;i<storage_->size()&&!result;++i)
@@ -176,7 +176,7 @@ int vsol_polygon_3d::size(void) const
 {
   return storage_->size();
 }
-  
+
 //---------------------------------------------------------------------------
 // -- Return the area of `this'
 //---------------------------------------------------------------------------
@@ -196,9 +196,9 @@ bool vsol_polygon_3d::is_convex(void) const
 
    if(!result)
      {
-       vsol_point_3d_ref p0=(*storage_)[0];
-       vsol_point_3d_ref p1=(*storage_)[1];
-       vsol_point_3d_ref p2=(*storage_)[2];
+       vsol_point_3d_sptr p0=(*storage_)[0];
+       vsol_point_3d_sptr p1=(*storage_)[1];
+       vsol_point_3d_sptr p2=(*storage_)[2];
        vnl_vector_fixed<double,3> *v1=p0->to_vector(*p1);
        vnl_vector_fixed<double,3> *v2=p1->to_vector(*p2);
        vnl_vector_fixed<double,3> *n =
@@ -239,19 +239,19 @@ bool vsol_polygon_3d::valid_index(const int i) const
 // -- Are `new_vertices' valid vertices ? That is are all vertices in the
 //    same plane ?
 //---------------------------------------------------------------------------
-bool vsol_polygon_3d::valid_vertices(const vcl_vector<vsol_point_3d_ref> new_vertices) const
+bool vsol_polygon_3d::valid_vertices(const vcl_vector<vsol_point_3d_sptr> new_vertices) const
 {
   if (new_vertices.size() <= 3) return true; // a triangle is always in a plane
 
-  vsol_point_3d_ref p0=new_vertices[0];
-  vsol_point_3d_ref p1=new_vertices[1];
-  vsol_point_3d_ref p2=new_vertices[2];
+  vsol_point_3d_sptr p0=new_vertices[0];
+  vsol_point_3d_sptr p1=new_vertices[1];
+  vsol_point_3d_sptr p2=new_vertices[2];
 
   vnl_vector_fixed<double,3>* v1 =
      new vnl_vector_fixed<double,3>(p1->x()-p0->x(),
                                     p1->y()-p0->y(),
                                     p1->z()-p0->z());
-  
+
   vnl_vector_fixed<double,3>* v2 =
      new vnl_vector_fixed<double,3>(p2->x()-p0->x(),
                                     p2->y()-p0->y(),
@@ -283,7 +283,7 @@ bool vsol_polygon_3d::valid_vertices(const vcl_vector<vsol_point_3d_ref> new_ver
 //---------------------------------------------------------------------------
 // -- Is `p' in `this' ?
 //---------------------------------------------------------------------------
-bool vsol_polygon_3d::in(const vsol_point_3d_ref &p) const
+bool vsol_polygon_3d::in(const vsol_point_3d_sptr &p) const
 {
   // TO DO
   vcl_cerr << "Warning: vsol_polygon_3d::in() has not been implemented yet\n";
@@ -295,15 +295,15 @@ bool vsol_polygon_3d::in(const vsol_point_3d_ref &p) const
 // Require: in(p)
 //---------------------------------------------------------------------------
 vnl_vector_fixed<double,3> *
-vsol_polygon_3d::normal_at_point(const vsol_point_3d_ref &p) const
+vsol_polygon_3d::normal_at_point(const vsol_point_3d_sptr &p) const
 {
   // require
   assert(in(p));
 
   vnl_vector_fixed<double,3> *result;
-  vsol_point_3d_ref p0;
-  vsol_point_3d_ref p1;
-  vsol_point_3d_ref p2;
+  vsol_point_3d_sptr p0;
+  vsol_point_3d_sptr p1;
+  vsol_point_3d_sptr p2;
 
   p0=(*storage_)[0];
   p1=(*storage_)[1];
@@ -315,7 +315,7 @@ vsol_polygon_3d::normal_at_point(const vsol_point_3d_ref &p) const
   vnl_vector_fixed<double,3> v2(p2->x()-p0->x(),
                                 p2->y()-p0->y(),
                                 p2->z()-p0->z());
-  
+
   result=new vnl_vector_fixed<double,3>(cross_3d(v1,v2));
   if((*result)[0]!=0||(*result)[1]!=0||(*result)[2]!=0)
     result->normalize();

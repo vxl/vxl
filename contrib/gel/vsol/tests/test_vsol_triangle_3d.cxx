@@ -23,11 +23,11 @@ int main(int argc,
   int result=0;
 
   vcl_cout<<"Constructor"<<vcl_endl;
-  vsol_point_3d_ref p=new vsol_point_3d(0,0,10);
-  vsol_point_3d_ref q=new vsol_point_3d(1,0,10);
-  vsol_point_3d_ref r=new vsol_point_3d(0,1,10); 
+  vsol_point_3d_sptr p=new vsol_point_3d(0,0,10);
+  vsol_point_3d_sptr q=new vsol_point_3d(1,0,10);
+  vsol_point_3d_sptr r=new vsol_point_3d(0,1,10);
 
-  vsol_triangle_3d_ref t=new vsol_triangle_3d(p,q,r);
+  vsol_triangle_3d_sptr t=new vsol_triangle_3d(p,q,r);
 
   vcl_cout<<"p0()"<<vcl_endl;
   assert(*(t->p0())==*p);
@@ -39,6 +39,6 @@ int main(int argc,
   vcl_cout<<"area()"<<vcl_endl;
   vcl_cout<<t->area()<<vcl_endl;
   assert(t->area()==0.5);
- 
+
   return result;
 }

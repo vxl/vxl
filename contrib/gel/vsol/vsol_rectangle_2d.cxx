@@ -16,13 +16,13 @@
 // Description: `new_p0' is the origin of the rectangle. `new_p1' defines
 //              the abscissa axis and the width. `new_p2' defines the
 //              ordinate axis and the height.
-// Require: valid_vertices(new_p0,new_p1,new_p2) 
+// Require: valid_vertices(new_p0,new_p1,new_p2)
 //---------------------------------------------------------------------------
-vsol_rectangle_2d::vsol_rectangle_2d(const vsol_point_2d_ref &new_p0,
-                                     const vsol_point_2d_ref &new_p1,
-                                     const vsol_point_2d_ref &new_p2)
+vsol_rectangle_2d::vsol_rectangle_2d(const vsol_point_2d_sptr &new_p0,
+                                     const vsol_point_2d_sptr &new_p1,
+                                     const vsol_point_2d_sptr &new_p2)
 {
-  storage_=new vcl_vector<vsol_point_2d_ref>(3);
+  storage_=new vcl_vector<vsol_point_2d_sptr>(3);
   (*storage_)[0]=new_p0;
   (*storage_)[1]=new_p1;
   (*storage_)[2]=new_p2;
@@ -49,7 +49,7 @@ vsol_rectangle_2d::~vsol_rectangle_2d()
 // -- Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_2d_ref vsol_rectangle_2d::clone(void) const
+vsol_spatial_object_2d_sptr vsol_rectangle_2d::clone(void) const
 {
   return new vsol_rectangle_2d(*this);
 }
@@ -61,7 +61,7 @@ vsol_spatial_object_2d_ref vsol_rectangle_2d::clone(void) const
 //---------------------------------------------------------------------------
 // -- Return the first vertex
 //---------------------------------------------------------------------------
-vsol_point_2d_ref vsol_rectangle_2d::p0(void) const
+vsol_point_2d_sptr vsol_rectangle_2d::p0(void) const
 {
   return (*storage_)[0];
 }
@@ -69,15 +69,15 @@ vsol_point_2d_ref vsol_rectangle_2d::p0(void) const
 //---------------------------------------------------------------------------
 // -- Return the second vertex
 //---------------------------------------------------------------------------
-vsol_point_2d_ref vsol_rectangle_2d::p1(void) const
+vsol_point_2d_sptr vsol_rectangle_2d::p1(void) const
 {
   return (*storage_)[1];
 }
-  
+
 //---------------------------------------------------------------------------
 // -- Return the third vertex
 //---------------------------------------------------------------------------
-vsol_point_2d_ref vsol_rectangle_2d::p2(void) const
+vsol_point_2d_sptr vsol_rectangle_2d::p2(void) const
 {
   return (*storage_)[2];
 }
@@ -85,9 +85,9 @@ vsol_point_2d_ref vsol_rectangle_2d::p2(void) const
 //---------------------------------------------------------------------------
 // -- Return the last vertex
 //---------------------------------------------------------------------------
-vsol_point_2d_ref vsol_rectangle_2d::p3(void) const
+vsol_point_2d_sptr vsol_rectangle_2d::p3(void) const
 {
-  vsol_point_2d_ref result;
+  vsol_point_2d_sptr result;
   vnl_vector_fixed<double,2> *v;
 
   result=new vsol_point_2d(*(*storage_)[0]);
@@ -140,7 +140,7 @@ void vsol_rectangle_2d::compute_bounding_box(void)
   double ymin;
   double ymax;
 
-  vsol_point_2d_ref tp3;
+  vsol_point_2d_sptr tp3;
 
   tp3=p3();
 
@@ -157,7 +157,7 @@ void vsol_rectangle_2d::compute_bounding_box(void)
     ymin=(*storage_)[1]->y();
   else if((*storage_)[1]->y()>ymax)
     ymax=(*storage_)[1]->y();
-  
+
   if((*storage_)[2]->x()<xmin)
     xmin=(*storage_)[2]->x();
   else if((*storage_)[2]->x()>xmax)
@@ -200,7 +200,7 @@ double vsol_rectangle_2d::height(void) const
 {
   return (*storage_)[1]->distance((*storage_)[2]);
 }
- 
+
 //---------------------------------------------------------------------------
 // -- Return the area of `this'
 //---------------------------------------------------------------------------
@@ -214,7 +214,7 @@ double vsol_rectangle_2d::area(void) const
 //---------------------------------------------------------------------------
 // -- Are `new_vertices' valid to build a rectangle ?
 //---------------------------------------------------------------------------
-bool vsol_rectangle_2d::valid_vertices(const vcl_vector<vsol_point_2d_ref> new_vertices) const
+bool vsol_rectangle_2d::valid_vertices(const vcl_vector<vsol_point_2d_sptr> new_vertices) const
 {
   if (new_vertices.size() != 3) return false;
   vnl_vector_fixed<double,2>* a=new_vertices[0]->to_vector(*(new_vertices[1]));

@@ -2,7 +2,7 @@
 #define vtol_face_H
 // .NAME vtol_face - Represents the basic 2D topological entity
 // .LIBRARY vtol
-// .HEADER vxl Package
+// .HEADER gel Package
 // .INCLUDE vtol/vtol_face.h
 // .FILE vtol_face.cxx
 //
@@ -21,7 +21,7 @@
 //        (Need to decide proper policy for curved surfaces
 //        and possibly inconsistent planar surface geometry)
 //    JSL Computed Area()
-//    JLM Sep 1996: Fixed the face copy constructor which 
+//    JLM Sep 1996: Fixed the face copy constructor which
 //        did not handle the construction of new vtol_edge(s) properly.
 //        The old implementation always constucted ImplicitLine(s)
 //        for the curve of each new edge.  See vtol_edge.h for the required
@@ -35,7 +35,7 @@
 //     PTU ported to vxl may-20
 //
 ///
-#include <vtol/vtol_face_ref.h>
+#include <vtol/vtol_face_sptr.h>
 
 #include <vtol/vtol_topology_object.h>
 #include <vcl_vector.h>
@@ -55,7 +55,7 @@ public:
   //***************************************************************************
   // Initialization
   //***************************************************************************
-  
+
   //---------------------------------------------------------------------------
   //: Default constructor
   //---------------------------------------------------------------------------
@@ -66,10 +66,10 @@ public:
   //---------------------------------------------------------------------------
   virtual ~vtol_face();
 
-  
+
 
   //: Accessors
-  
+
   //---------------------------------------------------------------------------
   //: Return the topology type
   //---------------------------------------------------------------------------
@@ -78,14 +78,14 @@ public:
   virtual vtol_one_chain *get_one_chain(int which = 0);
   virtual vtol_one_chain *get_boundary_cycle(void);
   virtual bool add_hole_cycle(vtol_one_chain &new_hole);
-  virtual vcl_vector<vtol_one_chain_ref> *get_hole_cycles(void);
+  virtual vcl_vector<vtol_one_chain_sptr> *get_hole_cycles(void);
 
   // Methods that are here for now in transition.. :x
 
   //: Inferior/Superior Accessor Methods
   virtual vtol_face *
-  copy_with_arrays(vcl_vector<vtol_topology_object_ref> &verts,
-                   vcl_vector<vtol_topology_object_ref> &edges) const =0;
+  copy_with_arrays(vcl_vector<vtol_topology_object_sptr> &verts,
+                   vcl_vector<vtol_topology_object_sptr> &edges) const =0;
 
   //***************************************************************************
   // Replaces dynamic_cast<T>
@@ -95,7 +95,7 @@ public:
   //: Return `this' if `this' is a face, 0 otherwise
   //---------------------------------------------------------------------------
   virtual const vtol_face *cast_to_face(void) const;
-  
+
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a face, 0 otherwise
   //---------------------------------------------------------------------------
@@ -107,7 +107,7 @@ public:
   //: Return `this' if `this' is a face, 0 otherwise
   //---------------------------------------------------------------------------
   virtual const vtol_face_2d *cast_to_face_2d(void) const {return NULL;}
-  
+
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a face, 0 otherwise
   //---------------------------------------------------------------------------
@@ -119,7 +119,7 @@ public:
   //: Return `this' if `this' is a face, 0 otherwise
   //---------------------------------------------------------------------------
   virtual const vtol_face_3d *cast_to_face_3d(void) const {return NULL;}
-  
+
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a face, 0 otherwise
   //---------------------------------------------------------------------------
@@ -140,14 +140,14 @@ public:
   //---------------------------------------------------------------------------
   virtual bool
   valid_superior_type(const vtol_topology_object &superior) const;
-  
-  //: accessors for boundary elements 
+
+  //: accessors for boundary elements
   virtual vertex_list *outside_boundary_vertices(void);
   virtual zero_chain_list *outside_boundary_zero_chains(void);
   virtual edge_list *outside_boundary_edges(void);
   virtual one_chain_list *outside_boundary_one_chains(void);
 
-  //: Warning these methods should not be used by clients 
+  //: Warning these methods should not be used by clients
 
   virtual vcl_vector<vtol_vertex*> *compute_vertices(void);
   virtual vcl_vector<vtol_edge*> *compute_edges(void);
@@ -172,7 +172,7 @@ public:
 
   virtual void reverse_normal(void);
   virtual int get_num_edges(void) const;
-   
+
   //---------------------------------------------------------------------------
   //: Copy with no links. Only copy the surface if it exists
   //---------------------------------------------------------------------------
@@ -193,8 +193,8 @@ public:
   //---------------------------------------------------------------------------
   virtual bool shares_edge_with(vtol_face &f);
 
-  //: compare the geomerty 
-  
+  //: compare the geomerty
+
   virtual bool compare_geometry(const vtol_face &other) const =0;
 
 };

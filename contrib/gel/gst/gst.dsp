@@ -117,15 +117,15 @@ SOURCE=".\Templates\vbl_smart_ptr+gst_vertex_2d-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vcl_vector+gst_edge_2d_ref-.cxx"
+SOURCE=".\Templates\vcl_vector+gst_edge_2d_sptr-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vcl_vector+gst_polygon_2d_ref-.cxx"
+SOURCE=".\Templates\vcl_vector+gst_polygon_2d_sptr-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vcl_vector+gst_vertex_2d_ref-.cxx"
+SOURCE=".\Templates\vcl_vector+gst_vertex_2d_sptr-.cxx"
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -137,7 +137,7 @@ SOURCE=.\gst_edge_2d.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\gst_edge_2d_ref.h
+SOURCE=.\gst_edge_2d_sptr.h
 # End Source File
 # Begin Source File
 
@@ -153,7 +153,7 @@ SOURCE=.\gst_polygon_2d_operators.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\gst_polygon_2d_ref.h
+SOURCE=.\gst_polygon_2d_sptr.h
 # End Source File
 # Begin Source File
 
@@ -161,7 +161,7 @@ SOURCE=.\gst_vertex_2d.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\gst_vertex_2d_ref.h
+SOURCE=.\gst_vertex_2d_sptr.h
 # End Source File
 # End Group
 # End Target

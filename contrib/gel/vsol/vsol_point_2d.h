@@ -15,7 +15,7 @@
 // 2000/05/12 François BERTEL Replacement of vnl_vector_fixed<double,2> by
 //                            vnl_double_2
 // 2000/04/14 François BERTEL Creation
-// 2000/09/18 Peter Tu        using vgl_point_2d instead of vnl_vector 
+// 2000/09/18 Peter Tu        using vgl_point_2d instead of vnl_vector
 
 
 //*****************************************************************************
@@ -25,7 +25,7 @@ class vsol_point_2d;
 //*****************************************************************************
 // External declarations for values
 //*****************************************************************************
-#include <vsol/vsol_point_2d_ref.h>
+#include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_spatial_object_2d.h>
 #include <vnl/vnl_double_2.h>
 #include <vgl/vgl_point_2d.h>
@@ -47,22 +47,22 @@ public:
   //: Copy constructor
   //---------------------------------------------------------------------------
   vsol_point_2d(const vsol_point_2d &other);
-  
+
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
   virtual ~vsol_point_2d();
-  
+
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
   //: See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d_ref clone(void) const;
+  virtual vsol_spatial_object_2d_sptr clone(void) const;
 
   //***************************************************************************
   // Access
   //***************************************************************************
-  
+
   //---------------------------------------------------------------------------
   //: Return the abscissa
   //---------------------------------------------------------------------------
@@ -82,7 +82,7 @@ public:
   //---------------------------------------------------------------------------
   virtual bool operator==(const vsol_point_2d &other) const;
   virtual bool operator==(const vsol_spatial_object_2d& obj) const; // virtual of vsol_spatial_object_2d
-  
+
 //  //---------------------------------------------------------------------------
 //  //: Has `this' not the same coordinates than `other' ?
 //  //---------------------------------------------------------------------------
@@ -124,12 +124,12 @@ public:
   //: Return the distance (N2) between `this' and `other'
   //---------------------------------------------------------------------------
   virtual double distance(const vsol_point_2d &other) const;
-  virtual double distance(vsol_point_2d_ref other) const;
+  virtual double distance(vsol_point_2d_sptr other) const;
 
   //---------------------------------------------------------------------------
   //: Return the middle point between `this' and `other'
   //---------------------------------------------------------------------------
-  virtual vsol_point_2d_ref middle(const vsol_point_2d &other) const;
+  virtual vsol_point_2d_sptr middle(const vsol_point_2d &other) const;
 
   //---------------------------------------------------------------------------
   //: Add `v' to `this'
@@ -139,7 +139,7 @@ public:
   //---------------------------------------------------------------------------
   //: Add `v' and `this'
   //---------------------------------------------------------------------------
-  virtual vsol_point_2d_ref
+  virtual vsol_point_2d_sptr
   plus_vector(const vnl_double_2 &v) const;
 
   //---------------------------------------------------------------------------

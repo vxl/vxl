@@ -64,22 +64,19 @@ vtol_vertex_2d::vtol_vertex_2d(const vtol_vertex_2d &other)
 // -- make a copy of the geometry
 //---------------------------------------------------------------------------
 
-  
-
 
 //---------------------------------------------------------------------------
 // Destructor
 //---------------------------------------------------------------------------
 vtol_vertex_2d::~vtol_vertex_2d()
 {
- 
 }
 
 //---------------------------------------------------------------------------
 // -- Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_3d_ref vtol_vertex_2d::clone(void) const
+vsol_spatial_object_3d_sptr vtol_vertex_2d::clone(void) const
 {
   return new vtol_vertex_2d(*this);
 }
@@ -93,7 +90,7 @@ vsol_spatial_object_3d_ref vtol_vertex_2d::clone(void) const
 //---------------------------------------------------------------------------
 // -- Return the point
 //---------------------------------------------------------------------------
-vsol_point_2d_ref vtol_vertex_2d::point(void) const
+vsol_point_2d_sptr vtol_vertex_2d::point(void) const
 {
   return _point;
 }
@@ -201,7 +198,6 @@ void vtol_vertex_2d::describe(vcl_ostream &strm,
 //-----------------------------------------------------------------------------
 vtol_edge *vtol_vertex_2d::new_edge(vtol_vertex &other)
 {
-  
   vtol_vertex_2d *other2d = other.cast_to_vertex_2d();
   assert(other2d!=0);
 
@@ -214,9 +210,9 @@ vtol_edge *vtol_vertex_2d::new_edge(vtol_vertex &other)
   vtol_edge *result;
   bool found;
 
-  vcl_list<vtol_topology_object_ref>::const_iterator zp;
-  const vcl_vector<vtol_topology_object_ref> *sups;
-  vcl_vector<vtol_topology_object_ref>::const_iterator ep;
+  vcl_list<vtol_topology_object_sptr>::const_iterator zp;
+  const vcl_vector<vtol_topology_object_sptr> *sups;
+  vcl_vector<vtol_topology_object_sptr>::const_iterator ep;
   vtol_edge *e;
 
 
@@ -248,7 +244,6 @@ vtol_edge *vtol_vertex_2d::new_edge(vtol_vertex &other)
 double vtol_vertex_2d::distance_from(const vnl_double_2 &v)
 {
   vsol_point_2d point(v(0),v(1));
-  
   return _point->distance(point);
 }
 
@@ -267,7 +262,7 @@ vtol_vertex_2d &vtol_vertex_2d::operator=(const vtol_vertex_2d &other)
   if(this!=&other)
     {
       _point->set_x(other._point->x());
-      _point->set_y(other._point->y()); 
+      _point->set_y(other._point->y());
       touch();
     }
   return *this;
@@ -289,7 +284,7 @@ bool vtol_vertex_2d::operator==(const vsol_spatial_object_3d& obj) const
 // -- Is `this' has the same coordinates for its point than `other' ?
 //---------------------------------------------------------------------------
 bool vtol_vertex_2d::operator== (const vtol_vertex_2d &other) const
-{ 
+{
   bool result;
 
   result=this==&other;

@@ -41,7 +41,7 @@ public:
   //***************************************************************************
   // Initialization
   //***************************************************************************
-  
+
   //---------------------------------------------------------------------------
   //: Default constructor. Empty zero-chain
   //---------------------------------------------------------------------------
@@ -53,13 +53,13 @@ public:
   //---------------------------------------------------------------------------
   explicit vtol_zero_chain(vtol_vertex &v1,
                               vtol_vertex &v2);
-  
+
   //---------------------------------------------------------------------------
   //: Constructor from an array of vertices
   //: REQUIRE: new_vertices.size()>0
   //---------------------------------------------------------------------------
   explicit
-  vtol_zero_chain(const vcl_vector<vtol_vertex_ref> &new_vertices);
+  vtol_zero_chain(const vcl_vector<vtol_vertex_sptr> &new_vertices);
 
   //---------------------------------------------------------------------------
   //: Copy constructor. Copy the vertices and the links
@@ -75,7 +75,7 @@ public:
   //: Clone `this': creation of a new object and initialization
   //: See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_3d_ref clone(void) const;
+  virtual vsol_spatial_object_3d_sptr clone(void) const;
 
   //---------------------------------------------------------------------------
   //: Return the topology type
@@ -85,12 +85,12 @@ public:
   //---------------------------------------------------------------------------
   //: Return the first vertex of `this'. If it does not exist, return 0
   //---------------------------------------------------------------------------
-  virtual vtol_vertex_ref v0(void) const;
+  virtual vtol_vertex_sptr v0(void) const;
 
   //***************************************************************************
   // Replaces dynamic_cast<T>
   //***************************************************************************
-  
+
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a zero_chain, 0 otherwise
   //---------------------------------------------------------------------------
@@ -127,7 +127,7 @@ public:
   //---------------------------------------------------------------------------
   virtual bool operator==(const vtol_zero_chain &other) const;
   bool operator==(const vsol_spatial_object_3d& obj) const; // virtual of vsol_spatial_object_3d
-  
+
   virtual void print(vcl_ostream &strm=vcl_cout) const;
   virtual void describe(vcl_ostream &strm=vcl_cout,
                         int blanking=0) const;

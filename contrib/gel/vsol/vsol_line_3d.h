@@ -23,10 +23,10 @@ class vsol_line_3d;
 //*****************************************************************************
 // External declarations for values
 //*****************************************************************************
-#include <vsol/vsol_line_3d_ref.h>
+#include <vsol/vsol_line_3d_sptr.h>
 
 #include <vsol/vsol_curve_3d.h>
-#include <vsol/vsol_point_3d_ref.h>
+#include <vsol/vsol_point_3d_sptr.h>
 
 #include <vnl/vnl_vector_fixed.h>
 #include <vgl/vgl_homg_line_3d_2_points.h>
@@ -42,13 +42,13 @@ public:
   //: Constructor from the direction and the middle point
   //---------------------------------------------------------------------------
   explicit vsol_line_3d(const vnl_vector_fixed<double,3> &new_direction,
-                        const vsol_point_3d_ref &new_middle);
+                        const vsol_point_3d_sptr &new_middle);
 
   //---------------------------------------------------------------------------
   //: Constructor from the first and the last point of the straight line
   //---------------------------------------------------------------------------
-  explicit vsol_line_3d(const vsol_point_3d_ref &new_p0,
-                        const vsol_point_3d_ref &new_p1);
+  explicit vsol_line_3d(const vsol_point_3d_sptr &new_p0,
+                        const vsol_point_3d_sptr &new_p1);
 
   //---------------------------------------------------------------------------
   //: Copy constructor
@@ -70,7 +70,7 @@ public:
   //: Clone `this': creation of a new object and initialization
   //: See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_3d_ref clone(void) const;
+  virtual vsol_spatial_object_3d_sptr clone(void) const;
 
   //***************************************************************************
   // Access
@@ -79,8 +79,8 @@ public:
   //---------------------------------------------------------------------------
   //: Middle point of the straight line segment
   //---------------------------------------------------------------------------
-  virtual vsol_point_3d_ref middle(void) const;
-  
+  virtual vsol_point_3d_sptr middle(void) const;
+
   //---------------------------------------------------------------------------
   //: direction of the straight line segment. Has to be deleted manually
   //---------------------------------------------------------------------------
@@ -89,12 +89,12 @@ public:
   //---------------------------------------------------------------------------
   //: First point of the straight line segment
   //---------------------------------------------------------------------------
-  virtual vsol_point_3d_ref p0(void) const;
+  virtual vsol_point_3d_sptr p0(void) const;
 
   //---------------------------------------------------------------------------
   //: Last point of the straight line segment
   //---------------------------------------------------------------------------
-  virtual vsol_point_3d_ref p1(void) const;
+  virtual vsol_point_3d_sptr p1(void) const;
 
   //***************************************************************************
   // Comparison
@@ -105,7 +105,7 @@ public:
   //---------------------------------------------------------------------------
   virtual bool operator==(const vsol_line_3d &other) const;
   virtual bool operator==(const vsol_spatial_object_3d& obj) const; // virtual of vsol_spatial_object_3d
-  
+
   //---------------------------------------------------------------------------
   //: Has `this' not the same points than `other' ?
   //---------------------------------------------------------------------------
@@ -124,7 +124,7 @@ public:
   //: Compute the bounding box of `this'
   //---------------------------------------------------------------------------
   virtual void compute_bounding_box(void);
-  
+
   //---------------------------------------------------------------------------
   //: Return the length of `this'
   //---------------------------------------------------------------------------
@@ -137,13 +137,13 @@ public:
   //---------------------------------------------------------------------------
   //: Set the first point of the straight line segment
   //---------------------------------------------------------------------------
-  virtual void set_p0(const vsol_point_3d_ref &new_p0);
+  virtual void set_p0(const vsol_point_3d_sptr &new_p0);
 
   //---------------------------------------------------------------------------
   //: Set the last point of the straight line segment
   //---------------------------------------------------------------------------
-  virtual void set_p1(const vsol_point_3d_ref &new_p1);
- 
+  virtual void set_p1(const vsol_point_3d_sptr &new_p1);
+
   //---------------------------------------------------------------------------
   //: Set the length of `this'. Doesn't change middle point and orientation.
   //: If p0 and p1 are equal then the direction is set to (1,0,0)
@@ -158,14 +158,14 @@ public:
   //---------------------------------------------------------------------------
   //: Is `p' in `this' ?
   //---------------------------------------------------------------------------
-  virtual bool in(const vsol_point_3d_ref &p) const;
+  virtual bool in(const vsol_point_3d_sptr &p) const;
 
   //---------------------------------------------------------------------------
   //: Return the tangent to `this' at `p'. Has to be deleted manually
   //: REQUIRE: in(p)
   //---------------------------------------------------------------------------
   virtual vgl_homg_line_3d_2_points<double> *
-  tangent_at_point(const vsol_point_3d_ref &p) const;
+  tangent_at_point(const vsol_point_3d_sptr &p) const;
 
   //***************************************************************************
   // Implementation
@@ -175,12 +175,12 @@ private:
   //---------------------------------------------------------------------------
   // Description: First point of the straight line segment
   //---------------------------------------------------------------------------
-  vsol_point_3d_ref p0_;
+  vsol_point_3d_sptr p0_;
 
   //---------------------------------------------------------------------------
   // Description: Last point of the straight line segment
   //---------------------------------------------------------------------------
-  vsol_point_3d_ref p1_;
+  vsol_point_3d_sptr p1_;
 };
 
 #endif // #ifndef VSOL_LINE_3D_H

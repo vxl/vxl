@@ -11,7 +11,7 @@
 // François BERTEL
 //
 // .SECTION Modifications
-// 2000/09/18 Peter Tu        connected to vgl 
+// 2000/09/18 Peter Tu        connected to vgl
 // 2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
 // 2000/05/12 François BERTEL Replacement of vnl_vector_fixed<double,3> by
 //                            vnl_double_3
@@ -23,7 +23,7 @@ class vsol_point_3d;
 //*****************************************************************************
 // External declarations for values
 //*****************************************************************************
-#include <vsol/vsol_point_3d_ref.h>
+#include <vsol/vsol_point_3d_sptr.h>
 #include <vsol/vsol_spatial_object_3d.h>
 #include <vnl/vnl_double_3.h>
 #include <vgl/vgl_point_3d.h>
@@ -46,7 +46,7 @@ public:
   //: Copy constructor
   //---------------------------------------------------------------------------
   vsol_point_3d(const vsol_point_3d &other);
-  
+
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
@@ -56,12 +56,12 @@ public:
   //: Clone `this': creation of a new object and initialization
   //: See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_3d_ref clone(void) const;
+  virtual vsol_spatial_object_3d_sptr clone(void) const;
 
   //***************************************************************************
   // Access
   //***************************************************************************
-  
+
   //---------------------------------------------------------------------------
   //: Return the abscissa
   //---------------------------------------------------------------------------
@@ -100,7 +100,7 @@ public:
   //: Return the real type of a point. It is a POINT
   //---------------------------------------------------------------------------
   enum vsol_spatial_object_3d_type spatial_type(void) const;
-  
+
   //---------------------------------------------------------------------------
   //: Compute the bounding box of `this'
   //---------------------------------------------------------------------------
@@ -119,7 +119,7 @@ public:
   //: Set the ordinate
   //---------------------------------------------------------------------------
   virtual void set_y(const double new_y);
-  
+
   //---------------------------------------------------------------------------
   //: Set the cote
   //---------------------------------------------------------------------------
@@ -133,12 +133,12 @@ public:
   //: Return the distance (N2) between `this' and `other'
   //---------------------------------------------------------------------------
   virtual double distance(const vsol_point_3d &other) const;
-  virtual double distance(vsol_point_3d_ref other) const;
+  virtual double distance(vsol_point_3d_sptr other) const;
 
   //---------------------------------------------------------------------------
   //: Return the middle point between `this' and `other'
   //---------------------------------------------------------------------------
-  virtual vsol_point_3d_ref middle(const vsol_point_3d &other) const;
+  virtual vsol_point_3d_sptr middle(const vsol_point_3d &other) const;
 
   //---------------------------------------------------------------------------
   //: Add `v' to `this'
@@ -148,7 +148,7 @@ public:
   //---------------------------------------------------------------------------
   //: Add `v' and `this'
   //---------------------------------------------------------------------------
-  virtual vsol_point_3d_ref
+  virtual vsol_point_3d_sptr
   plus_vector(const vnl_double_3 &v) const;
 
   //---------------------------------------------------------------------------

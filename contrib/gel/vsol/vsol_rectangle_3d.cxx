@@ -17,13 +17,13 @@
 // Description: `new_p0' is the origin of the rectangle. `new_p1' defines
 //              the abscissa axis and the width. `new_p2' defines the
 //              ordinate axis and the height.
-// Require: valid_vertices(new_p0,new_p1,new_p2) 
+// Require: valid_vertices(new_p0,new_p1,new_p2)
 //---------------------------------------------------------------------------
-vsol_rectangle_3d::vsol_rectangle_3d(const vsol_point_3d_ref &new_p0,
-                                     const vsol_point_3d_ref &new_p1,
-                                     const vsol_point_3d_ref &new_p2)
+vsol_rectangle_3d::vsol_rectangle_3d(const vsol_point_3d_sptr &new_p0,
+                                     const vsol_point_3d_sptr &new_p1,
+                                     const vsol_point_3d_sptr &new_p2)
 {
-  storage_=new vcl_vector<vsol_point_3d_ref>(3);
+  storage_=new vcl_vector<vsol_point_3d_sptr>(3);
   (*storage_)[0]=new_p0;
   (*storage_)[1]=new_p1;
   (*storage_)[2]=new_p2;
@@ -50,7 +50,7 @@ vsol_rectangle_3d::~vsol_rectangle_3d()
 // -- Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_3d_ref vsol_rectangle_3d::clone(void) const
+vsol_spatial_object_3d_sptr vsol_rectangle_3d::clone(void) const
 {
   return new vsol_rectangle_3d(*this);
 }
@@ -62,7 +62,7 @@ vsol_spatial_object_3d_ref vsol_rectangle_3d::clone(void) const
 //---------------------------------------------------------------------------
 // -- Return the first vertex
 //---------------------------------------------------------------------------
-vsol_point_3d_ref vsol_rectangle_3d::p0(void) const
+vsol_point_3d_sptr vsol_rectangle_3d::p0(void) const
 {
   return (*storage_)[0];
 }
@@ -70,15 +70,15 @@ vsol_point_3d_ref vsol_rectangle_3d::p0(void) const
 //---------------------------------------------------------------------------
 // -- Return the second vertex
 //---------------------------------------------------------------------------
-vsol_point_3d_ref vsol_rectangle_3d::p1(void) const
+vsol_point_3d_sptr vsol_rectangle_3d::p1(void) const
 {
   return (*storage_)[1];
 }
-  
+
 //---------------------------------------------------------------------------
 // -- Return the third vertex
 //---------------------------------------------------------------------------
-vsol_point_3d_ref vsol_rectangle_3d::p2(void) const
+vsol_point_3d_sptr vsol_rectangle_3d::p2(void) const
 {
   return (*storage_)[2];
 }
@@ -86,9 +86,9 @@ vsol_point_3d_ref vsol_rectangle_3d::p2(void) const
 //---------------------------------------------------------------------------
 // -- Return the last vertex
 //---------------------------------------------------------------------------
-vsol_point_3d_ref vsol_rectangle_3d::p3(void) const
+vsol_point_3d_sptr vsol_rectangle_3d::p3(void) const
 {
-  vsol_point_3d_ref result;
+  vsol_point_3d_sptr result;
   vnl_vector_fixed<double,3> *v;
 
   result=new vsol_point_3d(*(*storage_)[0]);
@@ -136,7 +136,7 @@ bool vsol_rectangle_3d::operator==(const vsol_spatial_object_3d& obj) const
 //---------------------------------------------------------------------------
 void vsol_rectangle_3d::compute_bounding_box(void)
 {
-  vsol_point_3d_ref tp3;
+  vsol_point_3d_sptr tp3;
 
   double xmin;
   double xmax;
@@ -144,7 +144,7 @@ void vsol_rectangle_3d::compute_bounding_box(void)
   double ymax;
   double zmin;
   double zmax;
-  
+
 
   tp3=p3();
 
@@ -167,7 +167,7 @@ void vsol_rectangle_3d::compute_bounding_box(void)
     zmin=(*storage_)[1]->z();
   else if((*storage_)[1]->z()>zmax)
     zmax=(*storage_)[1]->z();
-  
+
   if((*storage_)[2]->x()<xmin)
     xmin=(*storage_)[2]->x();
   else if((*storage_)[2]->x()>xmax)
@@ -219,7 +219,7 @@ double vsol_rectangle_3d::height(void) const
 {
   return (*storage_)[1]->distance((*storage_)[2]);
 }
- 
+
 //---------------------------------------------------------------------------
 // -- Return the area of `this'
 //---------------------------------------------------------------------------
@@ -233,7 +233,7 @@ double vsol_rectangle_3d::area(void) const
 //---------------------------------------------------------------------------
 // -- Are `new_vertices' valid to build a rectangle ?
 //---------------------------------------------------------------------------
-bool vsol_rectangle_3d::valid_vertices(const vcl_vector<vsol_point_3d_ref> new_vertices) const
+bool vsol_rectangle_3d::valid_vertices(const vcl_vector<vsol_point_3d_sptr> new_vertices) const
 {
   vnl_vector_fixed<double,3>* a=new_vertices[0]->to_vector(*(new_vertices[1]));
   vnl_vector_fixed<double,3>* b=new_vertices[1]->to_vector(*(new_vertices[2]));
@@ -250,7 +250,7 @@ bool vsol_rectangle_3d::valid_vertices(const vcl_vector<vsol_point_3d_ref> new_v
 //---------------------------------------------------------------------------
 // -- Is `p' in `this' ?
 //---------------------------------------------------------------------------
-bool vsol_rectangle_3d::in(const vsol_point_3d_ref &p) const
+bool vsol_rectangle_3d::in(const vsol_point_3d_sptr &p) const
 {
   // TO DO
   vcl_cerr << "Warning: vsol_rectangle_3d::in() has not been implemented yet\n";
@@ -262,11 +262,11 @@ bool vsol_rectangle_3d::in(const vsol_point_3d_ref &p) const
 // Require: in(p)
 //---------------------------------------------------------------------------
 vnl_vector_fixed<double,3> *
-vsol_rectangle_3d::normal_at_point(const vsol_point_3d_ref &p) const
+vsol_rectangle_3d::normal_at_point(const vsol_point_3d_sptr &p) const
 {
   // require
   assert(in(p));
-  
+
   vnl_vector_fixed<double,3> *result;
   vnl_vector_fixed<double,3> v1((*storage_)[1]->x()-(*storage_)[0]->x(),
                                 (*storage_)[1]->y()-(*storage_)[0]->y(),
@@ -274,7 +274,7 @@ vsol_rectangle_3d::normal_at_point(const vsol_point_3d_ref &p) const
   vnl_vector_fixed<double,3> v2((*storage_)[2]->x()-(*storage_)[0]->x(),
                                 (*storage_)[2]->y()-(*storage_)[0]->y(),
                                 (*storage_)[2]->z()-(*storage_)[0]->z());
-  
+
   result=new vnl_vector_fixed<double,3>(cross_3d(v1,v2));
   if((*result)[0]!=0||(*result)[1]!=0||(*result)[2]!=0)
     result->normalize();

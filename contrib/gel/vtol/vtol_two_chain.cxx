@@ -3,7 +3,7 @@
 
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
- 
+
 #include <vtol/vtol_list_functions.h>
 #include <vtol/vtol_two_chain.h>
 #include <vtol/vtol_face.h>
@@ -38,9 +38,9 @@ vtol_two_chain::vtol_two_chain(int num_faces)
 // -- Constructor
 //---------------------------------------------------------------------------
 vtol_two_chain::vtol_two_chain(face_list &faces,
-                                     bool new_is_cycle) 
+                                     bool new_is_cycle)
 {
-  
+
   face_list::iterator i;
   for (i=faces.begin(); i!=faces.end();++i)
     {
@@ -56,7 +56,7 @@ vtol_two_chain::vtol_two_chain(face_list &faces,
 //---------------------------------------------------------------------------
 vtol_two_chain::vtol_two_chain(face_list &faces,
                                      vcl_vector<signed char> &dirs,
-                                     bool new_is_cycle) 
+                                     bool new_is_cycle)
 {
   vcl_vector<signed char>::iterator di;
   face_list::iterator fi;
@@ -105,22 +105,22 @@ vtol_two_chain::vtol_two_chain(vtol_two_chain const &other)
 
   i=0;
 
-  // make a copy of the vertices 
+  // make a copy of the vertices
 
   for(vi=verts->begin();vi!=verts->end();++vi,++i)
     {
-      vtol_vertex_ref v = *vi;
+      vtol_vertex_sptr v = *vi;
       newverts[i] = v->clone()->cast_to_topology_object();
       v->set_id(i);
     }
 
-  // make a copy of the edges 
+  // make a copy of the edges
 
   j=0;	
   for(ei=edges->begin();ei!= edges->end();++ei,++j)
     {
-      vtol_edge_ref e = *ei;
-      
+      vtol_edge_sptr e = *ei;
+
       newedges[j]= newverts[e->v1()->get_id()]->cast_to_vertex()->new_edge(*(newverts[e->v2()->get_id()]->cast_to_vertex()));
 
       e->set_id(j);
@@ -128,25 +128,21 @@ vtol_two_chain::vtol_two_chain(vtol_two_chain const &other)
     }
 
   vcl_vector<signed char> &dirs=fl->_directions;
-
-
-  vcl_vector<vtol_topology_object_ref> &infs=fl->_inferiors;
-  
-
+  vcl_vector<vtol_topology_object_sptr> &infs=fl->_inferiors;
 
   for(ddi=dirs.begin(),tti= infs.begin();
       tti!=infs.end()&&ddi!=dirs.end();
       ++ddi,++tti)
     {
       f=(*tti)->cast_to_face();
-      
-      vtol_face_ref new_f = f->copy_with_arrays(newverts,newedges);
+
+      vtol_face_sptr new_f = f->copy_with_arrays(newverts,newedges);
       cout << "f" << endl;
       f->describe();
       cout << "new f" << endl;
       new_f->describe();
 
-      
+
       assert(*new_f == *f);
 
       link_inferior(*new_f);
@@ -155,7 +151,7 @@ vtol_two_chain::vtol_two_chain(vtol_two_chain const &other)
 
   set_cycle(fl->is_cycle());
   hierarchy_infs=fl->chain_inferiors();
-  
+
   for(hhi=hierarchy_infs->begin();hhi!=hierarchy_infs->end();++hhi)
     link_chain_inferior(*(((vtol_two_chain *)(hhi->ptr()))->copy_with_arrays(newverts,newedges)));
   delete edges;
@@ -163,11 +159,11 @@ vtol_two_chain::vtol_two_chain(vtol_two_chain const &other)
 }
 
 vtol_two_chain *
-vtol_two_chain::copy_with_arrays(vcl_vector<vtol_topology_object_ref> &newverts,
-                                    vcl_vector<vtol_topology_object_ref> &newedges) const
+vtol_two_chain::copy_with_arrays(vcl_vector<vtol_topology_object_sptr> &newverts,
+                                    vcl_vector<vtol_topology_object_sptr> &newedges) const
 {
   vtol_two_chain *result;
-  vcl_vector<vtol_topology_object_ref>::const_iterator ti;
+  vcl_vector<vtol_topology_object_sptr>::const_iterator ti;
   vcl_vector<signed char>::const_iterator di;
   vtol_face *f;
   const chain_list *hierarchy_infs;
@@ -175,10 +171,10 @@ vtol_two_chain::copy_with_arrays(vcl_vector<vtol_topology_object_ref> &newverts,
 
   const vcl_vector<signed char> &dirs=_directions;
   //  topology_list& infs = _inferiors;
-  const vcl_vector<vtol_topology_object_ref> &infs=_inferiors;
+  const vcl_vector<vtol_topology_object_sptr> &infs=_inferiors;
 
   result=new vtol_two_chain(infs.size());
- 
+
   //topology_list::iterator ti;
   for(di=dirs.begin(),ti=infs.begin();
       ti!=infs.end()&&di!=dirs.end();
@@ -191,7 +187,7 @@ vtol_two_chain::copy_with_arrays(vcl_vector<vtol_topology_object_ref> &newverts,
 
   result->set_cycle(is_cycle());
   hierarchy_infs=chain_inferiors();
- 
+
   for(hi=hierarchy_infs->begin();hi!=hierarchy_infs->end();++hi)
     result->link_chain_inferior(*(((vtol_two_chain *)(hi->ptr()))->copy_with_arrays(newverts,newedges)));
   return result;
@@ -211,7 +207,7 @@ vtol_two_chain::~vtol_two_chain()
 // -- Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_3d_ref vtol_two_chain::clone(void) const
+vsol_spatial_object_3d_sptr vtol_two_chain::clone(void) const
 {
   return new vtol_two_chain(*this);
 }
@@ -223,10 +219,10 @@ vtol_topology_object *
 vtol_two_chain::shallow_copy_with_no_links(void) const
 {
   vtol_two_chain *result;
-  result=new vtol_two_chain();    
+  result=new vtol_two_chain();
   result->_is_cycle=_is_cycle;
   vcl_vector<signed char>::const_iterator di;
-  
+
   for(di=_directions.begin();di!=_directions.end();++di)
     result->_directions.push_back((*di));
   return result;
@@ -247,9 +243,9 @@ vtol_two_chain::topology_type(void) const
 
 // -- add the superiors from the parent
 
-void vtol_two_chain::add_superiors_from_parent(vcl_vector<vtol_topology_object_ref> &sups)
+void vtol_two_chain::add_superiors_from_parent(vcl_vector<vtol_topology_object_sptr> &sups)
 {
-  vcl_vector<vtol_topology_object_ref>::iterator si;
+  vcl_vector<vtol_topology_object_sptr>::iterator si;
   chain_list::iterator hi;
 
   for(si=sups.begin();si!=sups.end();++si)
@@ -262,9 +258,9 @@ void vtol_two_chain::add_superiors_from_parent(vcl_vector<vtol_topology_object_r
 }
 
 
-void vtol_two_chain::remove_superiors_of_parent(vcl_vector<vtol_topology_object_ref> &sups)
+void vtol_two_chain::remove_superiors_of_parent(vcl_vector<vtol_topology_object_sptr> &sups)
 {
-  vcl_vector<vtol_topology_object_ref>::iterator si;
+  vcl_vector<vtol_topology_object_sptr>::iterator si;
   chain_list::iterator hi;
 
   for(si=sups.begin();si!=sups.end();++si)
@@ -289,28 +285,28 @@ void vtol_two_chain::update_superior_list_p_from_hierarchy_parent(void)
   topology_list::const_iterator ti;
 
   // Check to see if there is a parent node in the tree.
-  
+
   if(_chain_superiors.size()>0)
     hierarchy_parent=(vtol_two_chain *)((*(_chain_superiors.begin())).ptr());
-  
-  
+
+
   // If vtol_two_chain is a child of another vtol_two_chain...the superiors
   // lists are updated.
-  
+
   if(hierarchy_parent!=0)
     {
       parent_superiors=hierarchy_parent->superiors();
-      
+
       // Clear all previous superiors.
       _superiors.clear();
       for(ti=parent_superiors->begin();ti!= parent_superiors->end();++ti)
         if(vcl_find(_superiors.begin(),_superiors.end(),*ti)==_superiors.end())
           _superiors.push_back((*ti));
-      
+
       // Recursively update all children.
-      vcl_vector<vtol_two_chain_ref> *chains=inferior_two_chains();
-   
-      vcl_vector<vtol_two_chain_ref>::iterator ci;
+      vcl_vector<vtol_two_chain_sptr> *chains=inferior_two_chains();
+
+      vcl_vector<vtol_two_chain_sptr>::iterator ci;
       for(ci=chains->begin();ci!=chains->end();++ci)
         ((*ci))->update_superior_list_p_from_hierarchy_parent();
       delete chains;
@@ -386,14 +382,14 @@ vtol_two_chain::break_into_connected_components( vcl_vector<vtol_topology_object
         for ( i = 0; i < numcomps; ++i )
         {
             vcl_vector< vtol_face * > component_faces;
-	    // gather faces belonging to the ith component 
+	    // gather faces belonging to the ith component
             for ( j = 0; j < numfaces; ++j )
-                if ( compnum[ j ] == i ) 
+                if ( compnum[ j ] == i )
                     component_faces.push_back( faces[ j ] );
             // create either a two chain or a face out of the component
-            if ( component_faces.size() == 1 ) 
+            if ( component_faces.size() == 1 )
                 components.push_back( component_faces.get( 0 ) );
-    	    else 
+    	    else
             {
                 vtol_two_chain * newvtol_two_chain = new vtol_two_chain(component_faces, false);
 	        // need to check if it is a cycle??
@@ -422,7 +418,7 @@ void vtol_two_chain::remove_face(vtol_face &doomed_face)
 {
 
   topology_list::const_iterator i;
-  vtol_topology_object_ref t;
+  vtol_topology_object_sptr t;
   t=&doomed_face;
 
   i=vcl_find(_inferiors.begin(),_inferiors.end(),t);
@@ -431,7 +427,7 @@ void vtol_two_chain::remove_face(vtol_face &doomed_face)
     {
       vcl_vector<signed char>::iterator j=_directions.begin();
       j=j+index;
-      
+
       _directions.erase(j);
       touch();
       unlink_inferior(doomed_face);
@@ -512,15 +508,15 @@ vertex_list *vtol_two_chain::outside_boundary_vertices(void)
   vertex_list *new_ref_list = new vertex_list();
   vcl_vector<vtol_vertex*>* ptr_list = this->outside_boundary_compute_vertices();
   // copy the lists
-  
+
   for(vcl_vector<vtol_vertex*>::iterator ti = ptr_list->begin();
       ti != ptr_list->end(); ++ti){
     new_ref_list->push_back(*ti);
   }
   delete ptr_list;
-  
+
   return new_ref_list;
- 
+
 }
 
 vcl_vector<vtol_vertex *> *
@@ -535,10 +531,10 @@ vcl_vector<vtol_vertex *> *vtol_two_chain::compute_vertices(void)
 {
   vcl_vector<vtol_vertex *> *verts;
   verts=outside_boundary_compute_vertices();
-  
+
   // Set current position to the end
   // verts->set_position(verts->size()-1); - not sure what is supposed to happen here
-  
+
   SUBCHAIN_INF(verts,vtol_two_chain,vtol_vertex,compute_vertices);
 }
 
@@ -549,20 +545,20 @@ zero_chain_list *vtol_two_chain::outside_boundary_zero_chains(void)
   zero_chain_list *new_ref_list = new zero_chain_list();
   vcl_vector<vtol_zero_chain*>* ptr_list = this->outside_boundary_compute_zero_chains();
   // copy the lists
-  
+
   for(vcl_vector<vtol_zero_chain*>::iterator ti = ptr_list->begin();
       ti != ptr_list->end(); ++ti){
     new_ref_list->push_back(*ti);
   }
   delete ptr_list;
-  
+
   return new_ref_list;
 }
 
 
 vcl_vector<vtol_zero_chain*> *vtol_two_chain::outside_boundary_compute_zero_chains(void)
 {
- 
+
   SEL_INF(vtol_zero_chain,compute_zero_chains);
 }
 
@@ -571,8 +567,8 @@ vcl_vector<vtol_zero_chain*> *vtol_two_chain::compute_zero_chains(void)
 {
   vcl_vector<vtol_zero_chain*> *zchs;
   zchs=outside_boundary_compute_zero_chains();
-  
-  
+
+
   SUBCHAIN_INF(zchs,vtol_two_chain,vtol_zero_chain,compute_zero_chains);
 }
 
@@ -582,13 +578,13 @@ edge_list *vtol_two_chain::outside_boundary_edges(void)
   edge_list *new_ref_list = new edge_list();
   vcl_vector<vtol_edge*>* ptr_list = this->outside_boundary_compute_edges();
   // copy the lists
-  
+
   for(vcl_vector<vtol_edge*>::iterator ti = ptr_list->begin();
       ti != ptr_list->end(); ++ti){
     new_ref_list->push_back(*ti);
   }
   delete ptr_list;
-  
+
   return new_ref_list;
 }
 
@@ -599,12 +595,12 @@ vcl_vector<vtol_edge*> *vtol_two_chain::outside_boundary_compute_edges(void)
   SEL_INF(vtol_edge,compute_edges);
 }
 
-// -- list of edges 
+// -- list of edges
 vcl_vector<vtol_edge*> *vtol_two_chain::compute_edges(void)
 {
   vcl_vector<vtol_edge*> *edgs;
   edgs=outside_boundary_compute_edges();
- 
+
   SUBCHAIN_INF(edgs, vtol_two_chain, vtol_edge, compute_edges);
 }
 
@@ -613,7 +609,7 @@ one_chain_list *vtol_two_chain::outside_boundary_one_chains(void)
 {
   vcl_vector<vtol_one_chain*>* ptr_list= outside_boundary_compute_one_chains();
   one_chain_list *ref_list= new one_chain_list();
-  
+
   vcl_vector<vtol_one_chain*>::iterator i;
   for(i=ptr_list->begin();i!=ptr_list->end();++i){
     ref_list->push_back(*i);
@@ -634,12 +630,12 @@ vcl_vector<vtol_one_chain*> *vtol_two_chain::compute_one_chains(void)
   SUBCHAIN_INF(onechs, vtol_two_chain, vtol_one_chain, compute_one_chains);
 }
 
-// -- outside faces 
+// -- outside faces
 face_list *vtol_two_chain::outside_boundary_faces(void)
 {
   vcl_vector<vtol_face*>* ptr_list= outside_boundary_compute_faces();
   face_list *ref_list= new face_list();
-  
+
   vcl_vector<vtol_face*>::iterator i;
   for(i=ptr_list->begin();i!=ptr_list->end();++i){
     ref_list->push_back(*i);
@@ -648,13 +644,13 @@ face_list *vtol_two_chain::outside_boundary_faces(void)
   return ref_list;
 }
 
-// outside faces 
+// outside faces
 vcl_vector<vtol_face*> *vtol_two_chain::outside_boundary_compute_faces(void)
 {
  COPY_INF(vtol_face);
 }
 
-// -- faces 
+// -- faces
 vcl_vector<vtol_face*> *vtol_two_chain::compute_faces(void)
 {
   vcl_vector<vtol_face*> *facs;
@@ -694,7 +690,7 @@ vcl_vector<vtol_block*> *vtol_two_chain::compute_blocks(void)
 
 }
 
-// -- list of two chains 
+// -- list of two chains
 
 vcl_vector<vtol_two_chain*> *vtol_two_chain::compute_two_chains(void)
 {
@@ -714,7 +710,7 @@ two_chain_list *vtol_two_chain::inferior_two_chains(void)
   two_chain_list *result;
   chain_list::iterator hi;
 
-  result=new vcl_vector<vtol_two_chain_ref>();
+  result=new vcl_vector<vtol_two_chain_sptr>();
   for(hi=_chain_inferiors.begin();hi!=_chain_inferiors.end();++hi)
     result->push_back((vtol_two_chain *)(hi->ptr()));
   return result;
@@ -724,9 +720,9 @@ two_chain_list *vtol_two_chain::inferior_two_chains(void)
 two_chain_list *vtol_two_chain::superior_two_chains(void)
 {
   two_chain_list *result;
-  vcl_list<vtol_chain_ref>::iterator hi;
+  vcl_list<vtol_chain_sptr>::iterator hi;
 
-  result=new vcl_vector<vtol_two_chain_ref>();
+  result=new vcl_vector<vtol_two_chain_sptr>();
   for(hi=_chain_superiors.begin();hi!=_chain_superiors.end();++hi)
     result->push_back((vtol_two_chain *)((*hi).ptr()));
   return result;
@@ -734,10 +730,10 @@ two_chain_list *vtol_two_chain::superior_two_chains(void)
 
 two_chain_list *vtol_two_chain::outside_boundary_two_chains(void)
 {
- 
+
   vcl_vector<vtol_two_chain*>* ptr_list= outside_boundary_compute_two_chains();
   two_chain_list *ref_list= new two_chain_list();
-  
+
   vcl_vector<vtol_two_chain*>::iterator i;
   for(i=ptr_list->begin();i!=ptr_list->end();++i){
     ref_list->push_back(*i);
@@ -755,20 +751,20 @@ vcl_vector<vtol_two_chain*>  *vtol_two_chain::outside_boundary_compute_two_chain
 //     Operator Functions
 //***************************************************************************
 
-// -- equality operator 
+// -- equality operator
 
 bool vtol_two_chain::operator==(const vtol_two_chain &other) const
 {
-   
+
   if(this==&other){
     return true;
   }
- 
+
 
   if(_inferiors.size()!=other._inferiors.size())
     return false;
-  
-   
+
+
   topology_list::const_iterator ti1,ti2;
   for(ti1=other._inferiors.begin(),ti2=_inferiors.begin();
       ti2!=_inferiors.end() && ti1!=other._inferiors.end();
@@ -779,30 +775,30 @@ bool vtol_two_chain::operator==(const vtol_two_chain &other) const
       if(!(*f1==*f2))
         return false;
     }
-  
+
   // check out the directions
-  
-  
+
+
 
   vcl_vector<signed char>::const_iterator d1;
   vcl_vector<signed char>::const_iterator d2;
-  
+
   const vcl_vector<signed char> *dir1=this->directions();
   const vcl_vector<signed char> *dir2=other.directions();
-  
+
   for(d1=dir1->begin(), d2=dir2->begin(); d1 != dir1->end(); ++d1, ++d2)
     if (!(*d1 == *d2))
       return false;
-  
 
- 
+
+
 
   const chain_list &righth=_chain_inferiors;
   const chain_list &lefth=other._chain_inferiors;
   if(righth.size()!=lefth.size())
     return false;
 
- 
+
   chain_list::const_iterator hi1,hi2;
 
   for(hi1=righth.begin(),hi2=lefth.begin();
@@ -812,7 +808,7 @@ bool vtol_two_chain::operator==(const vtol_two_chain &other) const
     if( !(*(*hi1) == *(*hi2)))
       return false;
 
- 
+
   return true;
 }
 
@@ -852,7 +848,7 @@ void vtol_two_chain::describe_directions(vcl_ostream &strm,
 {
   for (int j=0; j<blanking; ++j) strm << ' ';
   strm << "<Dirs [" << _directions.size() << "]: ";
-  
+
   vcl_vector<signed char>::const_iterator di;
   for (di=_directions.begin();di!=_directions.end();++di)
     strm << (*di) << "  ";
@@ -872,10 +868,10 @@ void vtol_two_chain::describe(vcl_ostream &strm,
 signed char vtol_two_chain::direction(const vtol_face &f) const
 {
   // return the direction of the face
-  
+
   vcl_vector<signed char>::const_iterator dit;
   topology_list::const_iterator toit;
-  
+
   dit=_directions.begin();
   for(toit=_inferiors.begin();toit!=_inferiors.end();++toit)
     {
