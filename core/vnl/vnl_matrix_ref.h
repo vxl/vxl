@@ -19,7 +19,6 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_new.h>
 #include <vnl/vnl_matrix.h>
 
 //: vnl_matrix reference to user-supplied storage
@@ -67,9 +66,10 @@ class vnl_matrix_ref : public vnl_matrix<T>
 //  1. operator new may not return a null pointer.
 //  2. it should be enabled for compilers that need it,
 //     not disabled for compilers that don't need it.
-//#if !defined(VCL_GCC_295)
-//  void* operator new(size_t) { return 0; }
-//#endif
+#if 0
+#include <vcl_new.h>
+  void* operator new(vcl_size_t) { return 0; }
+#endif
 
  private:
   //: Resizing is disallowed
