@@ -15,25 +15,26 @@ integer *incx;
 
     /* Builtin functions */
     double sqrt();
+#define sqrtf(f) ((float)sqrt((double)(f)))
 
     /* Local variables */
     static real norm, scale, absxi;
     static integer ix;
     static real ssq;
 
-/*  SNRM2 returns the euclidean norm of a vector via the function	*/
-/*  name, so that							*/
-/*									*/
-/*     SNRM2 := sqrt( x'*x )						*/
-/*									*/
-/*  -- This version written on 25-October-1982.				*/
-/*     Modified on 14-October-1993 to inline the call to SLASSQ.	*/
-/*     Sven Hammarling, Nag Ltd.					*/
+/*  SNRM2 returns the euclidean norm of a vector via the function       */
+/*  name, so that                                                       */
+/*                                                                      */
+/*     SNRM2 := sqrt( x'*x )                                            */
+/*                                                                      */
+/*  -- This version written on 25-October-1982.                         */
+/*     Modified on 14-October-1993 to inline the call to SLASSQ.        */
+/*     Sven Hammarling, Nag Ltd.                                        */
 
     if (*n < 1 || *incx < 1) {
         norm = 0.0f;
     } else if (*n == 1) {
-        norm = dabs(x[0]);
+        norm = (float)dabs(x[0]);
     } else {
         scale = 0.0f;
         ssq = 1.0f;
@@ -43,7 +44,7 @@ integer *incx;
 
         for (ix = 0; ix < *n * *incx; ix += *incx) {
             if (x[ix] != 0.0f) {
-                absxi = dabs(x[ix]);
+                absxi = (float)dabs(x[ix]);
                 if (scale < absxi) {
                     r__1 = scale / absxi;
                     ssq = ssq * r__1 * r__1 + 1.0f;
@@ -54,10 +55,9 @@ integer *incx;
                 }
             }
         }
-        norm = scale * sqrt(ssq);
+        norm = scale * sqrtf(ssq);
     }
 
     return norm;
 
 } /* snrm2_ */
-

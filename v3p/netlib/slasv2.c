@@ -18,6 +18,7 @@ static real c_b4 = 1.f;
 
     /* Builtin functions */
     double sqrt(doublereal), r_sign(real *, real *);
+#define sqrtf(f) ((float)sqrt((double)(f)))
 
     /* Local variables */
     static integer pmax;
@@ -28,96 +29,75 @@ static real c_b4 = 1.f;
     extern doublereal slamch_(char *);
     static real tt, clt, crt, slt, srt;
 
-
 /*  -- LAPACK auxiliary routine (version 2.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
 /*     Courant Institute, Argonne National Lab, and Rice University */
 /*     October 31, 1992 */
 
-/*     .. Scalar Arguments .. */
-/*     .. */
-
-/*  Purpose */
-/*  ======= */
-
-/*  SLASV2 computes the singular value decomposition of a 2-by-2 */
-/*  triangular matrix */
-/*     [  F   G  ] */
-/*     [  0   H  ]. */
-/*  On return, abs(SSMAX) is the larger singular value, abs(SSMIN) is the
-*/
-/*  smaller singular value, and (CSL,SNL) and (CSR,SNR) are the left and
-*/
-/*  right singular vectors for abs(SSMAX), giving the decomposition */
-
-/*     [ CSL  SNL ] [  F   G  ] [ CSR -SNR ]  =  [ SSMAX   0   ] */
-/*     [-SNL  CSL ] [  0   H  ] [ SNR  CSR ]     [  0    SSMIN ]. */
-
-/*  Arguments */
-/*  ========= */
-
-/*  F       (input) REAL */
-/*          The (1,1) element of the 2-by-2 matrix. */
-
-/*  G       (input) REAL */
-/*          The (1,2) element of the 2-by-2 matrix. */
-
-/*  H       (input) REAL */
-/*          The (2,2) element of the 2-by-2 matrix. */
-
-/*  SSMIN   (output) REAL */
-/*          abs(SSMIN) is the smaller singular value. */
-
-/*  SSMAX   (output) REAL */
-/*          abs(SSMAX) is the larger singular value. */
-
-/*  SNL     (output) REAL */
-/*  CSL     (output) REAL */
-/*          The vector (CSL, SNL) is a unit left singular vector for the
-*/
-/*          singular value abs(SSMAX). */
-
-/*  SNR     (output) REAL */
-/*  CSR     (output) REAL */
-/*          The vector (CSR, SNR) is a unit right singular vector for the
-*/
-/*          singular value abs(SSMAX). */
-
-/*  Further Details */
-/*  =============== */
-
-/*  Any input parameter may be aliased with any output parameter. */
-
-/*  Barring over/underflow and assuming a guard digit in subtraction, all
-*/
-/*  output quantities are correct to within a few units in the last */
-/*  place (ulps). */
-
-/*  In IEEE arithmetic, the code works correctly if one matrix element is
-*/
-/*  infinite. */
-
-/*  Overflow will not occur unless the largest singular value itself */
-/*  overflows or is within a few ulps of overflow. (On machines with */
-/*  partial overflow, like the Cray, overflow may occur if the largest */
-/*  singular value is within a factor of 2 of overflow.) */
-
-/*  Underflow is harmless if underflow is gradual. Otherwise, results */
-/*  may correspond to a matrix modified by perturbations of size near */
-/*  the underflow threshold. */
-
-/* =====================================================================
-*/
-
-/*     .. Parameters .. */
-/*     .. */
-/*     .. Local Scalars .. */
-/*     .. */
-/*     .. Intrinsic Functions .. */
-/*     .. */
-/*     .. External Functions .. */
-/*     .. */
-/*     .. Executable Statements .. */
+/*  Purpose                                                              */
+/*  =======                                                              */
+/*                                                                       */
+/*  SLASV2 computes the singular value decomposition of a 2-by-2         */
+/*  triangular matrix                                                    */
+/*     [  F   G  ]                                                       */
+/*     [  0   H  ].                                                      */
+/*  On return, abs(SSMAX) is the larger singular value, abs(SSMIN) is the*/
+/*  smaller singular value, and (CSL,SNL) and (CSR,SNR) are the left and */
+/*  right singular vectors for abs(SSMAX), giving the decomposition      */
+/*                                                                       */
+/*     [ CSL  SNL ] [  F   G  ] [ CSR -SNR ]  =  [ SSMAX   0   ]         */
+/*     [-SNL  CSL ] [  0   H  ] [ SNR  CSR ]     [  0    SSMIN ].        */
+/*                                                                       */
+/*  Arguments                                                            */
+/*  =========                                                            */
+/*                                                                       */
+/*  F       (input) REAL                                                 */
+/*          The (1,1) element of the 2-by-2 matrix.                      */
+/*                                                                       */
+/*  G       (input) REAL                                                 */
+/*          The (1,2) element of the 2-by-2 matrix.                      */
+/*                                                                       */
+/*  H       (input) REAL                                                 */
+/*          The (2,2) element of the 2-by-2 matrix.                      */
+/*                                                                       */
+/*  SSMIN   (output) REAL                                                */
+/*          abs(SSMIN) is the smaller singular value.                    */
+/*                                                                       */
+/*  SSMAX   (output) REAL                                                */
+/*          abs(SSMAX) is the larger singular value.                     */
+/*                                                                       */
+/*  SNL     (output) REAL                                                */
+/*  CSL     (output) REAL                                                */
+/*          The vector (CSL, SNL) is a unit left singular vector for the */
+/*          singular value abs(SSMAX).                                   */
+/*                                                                       */
+/*  SNR     (output) REAL                                                */
+/*  CSR     (output) REAL                                                */
+/*          The vector (CSR, SNR) is a unit right singular vector for the*/
+/*          singular value abs(SSMAX).                                   */
+/*                                                                       */
+/*  Further Details                                                      */
+/*  ===============                                                      */
+/*                                                                       */
+/*  Any input parameter may be aliased with any output parameter.        */
+/*                                                                       */
+/*  Barring over/underflow and assuming a guard digit in subtraction, all*/
+/*  output quantities are correct to within a few units in the last      */
+/*  place (ulps).                                                        */
+/*                                                                       */
+/*  In IEEE arithmetic, the code works correctly if one matrix element is*/
+/*  infinite.                                                            */
+/*                                                                       */
+/*  Overflow will not occur unless the largest singular value itself     */
+/*  overflows or is within a few ulps of overflow. (On machines with     */
+/*  partial overflow, like the Cray, overflow may occur if the largest   */
+/*  singular value is within a factor of 2 of overflow.)                 */
+/*                                                                       */
+/*  Underflow is harmless if underflow is gradual. Otherwise, results    */
+/*  may correspond to a matrix modified by perturbations of size near    */
+/*  the underflow threshold.                                             */
+/*                                                                       */
+/* ===================================================================== */
 
     ft = *f;
     fa = abs(ft);
@@ -202,14 +182,14 @@ static real c_b4 = 1.f;
 
             mm = m * m;
             tt = t * t;
-            s = sqrt(tt + mm);
+            s = sqrtf(tt + mm);
 
 /*           Note that 1 .le. S .le. 1 + 1/macheps */
 
             if (l == 0.f) {
                 r = abs(m);
             } else {
-                r = sqrt(l * l + mm);
+                r = sqrtf(l * l + mm);
             }
 
 /*           Note that 0 .le. R .le. 1 + 1/macheps */
@@ -225,14 +205,14 @@ static real c_b4 = 1.f;
 /*              Note that M is very tiny */
 
                 if (l == 0.f) {
-                    t = r_sign(&c_b3, &ft) * r_sign(&c_b4, &gt);
+                    t = (float)r_sign(&c_b3, &ft) * (float)r_sign(&c_b4, &gt);
                 } else {
-                    t = gt / r_sign(&d, &ft) + m / t;
+                    t = gt / (float)r_sign(&d, &ft) + m / t;
                 }
             } else {
                 t = (m / (s + t) + m / (r + l)) * (a + 1.f);
             }
-            l = sqrt(t * t + 4.f);
+            l = sqrtf(t * t + 4.f);
             crt = 2.f / l;
             srt = t / l;
             clt = (crt + srt * m) / a;
@@ -254,19 +234,15 @@ static real c_b4 = 1.f;
 /*     Correct signs of SSMAX and SSMIN */
 
     if (pmax == 1) {
-        tsign = r_sign(&c_b4, csr) * r_sign(&c_b4, csl) * r_sign(&c_b4, f);
+        tsign = (float)r_sign(&c_b4, csr) * (float)r_sign(&c_b4, csl) * (float)r_sign(&c_b4, f);
     }
     if (pmax == 2) {
-        tsign = r_sign(&c_b4, snr) * r_sign(&c_b4, csl) * r_sign(&c_b4, g);
+        tsign = (float)r_sign(&c_b4, snr) * (float)r_sign(&c_b4, csl) * (float)r_sign(&c_b4, g);
     }
     if (pmax == 3) {
-        tsign = r_sign(&c_b4, snr) * r_sign(&c_b4, snl) * r_sign(&c_b4, h);
+        tsign = (float)r_sign(&c_b4, snr) * (float)r_sign(&c_b4, snl) * (float)r_sign(&c_b4, h);
     }
-    *ssmax = r_sign(ssmax, &tsign);
-    r__1 = tsign * r_sign(&c_b4, f) * r_sign(&c_b4, h);
-    *ssmin = r_sign(ssmin, &r__1);
-
-/*     End of SLASV2 */
-
+    *ssmax = (float)r_sign(ssmax, &tsign);
+    r__1 = tsign * (float)r_sign(&c_b4, f) * (float)r_sign(&c_b4, h);
+    *ssmin = (float)r_sign(ssmin, &r__1);
 } /* slasv2_ */
-
