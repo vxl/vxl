@@ -3,16 +3,15 @@
 
 #include "QvGroup.h"
 
-class QvUnknownNode : public QvGroup {
+class QvUnknownNode : public QvGroup
+{
+  QV_NODE_HEADER(QvUnknownNode);
 
-    QV_NODE_HEADER(QvUnknownNode);
+  char *       className;
+  QvFieldData *instanceFieldData;
+ public:
 
-  public:
-    const char  *className;
-    QvFieldData *instanceFieldData;
-
-    void setClassName(const char *name);
+  void setClassName(const char *name);
 };
 
-#endif /* _QV_UNKNOWN_NODE_ */
-
+#endif // _QV_UNKNOWN_NODE_
