@@ -388,7 +388,7 @@ bool vgui_mfc_dialog_impl::ask()
            s_iter != ch->names.end(); ++s_iter, ++count)
         combobox->AddString(_T(s_iter->c_str()));
 
-      combobox->SetCurSel(0);
+      combobox->SetCurSel(ch->index);
       combobox->UpdateWindow();
       combobox->ShowWindow(SW_SHOW);
       awlist.push_back(combobox);
