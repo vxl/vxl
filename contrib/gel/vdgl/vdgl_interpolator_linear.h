@@ -47,6 +47,9 @@ public:
   double get_min_y();
   double get_max_y();
 
+  // closest point
+  vsol_point_2d_sptr closest_point_on_curve ( vsol_point_2d_sptr p );
+  
   // Data Access---------------------------------------------------------------
 
   // Data Control--------------------------------------------------------------

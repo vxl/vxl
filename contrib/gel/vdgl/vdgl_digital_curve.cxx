@@ -10,6 +10,8 @@
 vdgl_digital_curve::vdgl_digital_curve( vdgl_interpolator_sptr interpolator)
   : interpolator_( interpolator)
 {
+  int j = 0;
+  if (!interpolator) { int i = i / j; }
 }
 
 vsol_spatial_object_2d_sptr vdgl_digital_curve::clone(void) const
@@ -56,13 +58,19 @@ double vdgl_digital_curve::length() const
   return interpolator_->get_length();
 }
 
-void vdgl_digital_curve::set_p0(const vsol_point_2d_sptr &)
+void vdgl_digital_curve::set_p0(const vsol_point_2d_sptr &p)
 {
+  
   vcl_cerr << "vdgl_digital_curve::set_p0() not allowed and ignored..." << vcl_endl;
+  int i = 0;
+  interpolator_->get_edgel_chain()->set_edgel(i, vdgl_edgel ( p->x(), p->y() ) );
 }
 
-void vdgl_digital_curve::set_p1(const vsol_point_2d_sptr &)
+void vdgl_digital_curve::set_p1(const vsol_point_2d_sptr &p )
 {
   vcl_cerr << "vdgl_digital_curve::set_p1() not allowed and ignored..." << vcl_endl;
+  int i = interpolator_->get_edgel_chain()->size() - 1;
+  interpolator_->get_edgel_chain()->set_edgel(i, vdgl_edgel ( p->x(), p->y() ) );
+
 }
 
