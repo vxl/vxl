@@ -4,7 +4,6 @@
 // \author Ian Scott
 
 #include <vcl_iostream.h>
-#include <vcl_cassert.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vil2/vil2_load.h>
 #include <vil2/vil2_save.h>
