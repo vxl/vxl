@@ -49,6 +49,7 @@ mul vil3d vil3d_ build
 package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl tbl Various Image Processing Libraries
 tbl vipl vipl_ build
 tbl vepl vepl_ build
+tbl vepl2 vepl2_ build
 
 package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl oxl Oxford University Libraries
 # Need to check dependency order
