@@ -502,6 +502,7 @@ bool mbl_table::operator==(const mbl_table& rhs) const
   }
   
   // Is the table data the same (within the current tolerance)?
+  bool values_different = false;
   for (unsigned c=0; c<ncols; ++c)
   {
     // Are the numbers of rows in this column the same?
@@ -521,11 +522,20 @@ bool mbl_table::operator==(const mbl_table& rhs) const
       {
         if (verbosity_>0)
           vcl_cout << "Tables have different values in column " << c 
-            << " (" << column_headers_[c] << "), row " << r << vcl_endl;      
-        return false;
+            << " (" << column_headers_[c] << "), row " << r 
+            << ":  " << columns_[c][r] << ",  " 
+            << rhs.columns_[c][r] 
+            << "  (diff=" << diff << ") "
+            << vcl_endl;      
+        
+        if (verbosity_<=1)
+          return false;     // Don't bother checking any more elements
+        else
+          values_different = true; // Proceed to check all elements
       }
     }
   }
+  if (values_different) return false;
 
   // Passed all tests, table is identical to this one.
   return true;

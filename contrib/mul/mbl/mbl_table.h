@@ -129,10 +129,14 @@ public:
 
 
   //: Is another table identical to this one?
+  // \note The normal behaviour of this function is to return false as soon
+  // as a discrepancy is found. However, if verbosity>=2 this function will
+  // compare all corresponding elements (providing that the table dimensions match).
   bool operator==(const mbl_table& rhs) const;
 
   
   //: Is another table different from this one?
+  // \sa operator==()
   bool operator!=(const mbl_table& rhs) const;
 
 
@@ -145,7 +149,9 @@ public:
   // \param v The verbosity should be a small integer, eg -3 to 3. 
   // Larger values cause more detailed output.
   // Default level is 0. 
-  // \note Currently only level 1 is defined.
+  // \note Currently only levels 1 and 2 are defined: level 1 provides some
+  // feedback for equality testing; level 2 also causes the equality operator
+  // to check all corresponding elements of a table.
   static void set_verbosity(const int& v);
 
 
