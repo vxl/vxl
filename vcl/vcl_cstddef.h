@@ -13,6 +13,8 @@
 # include <stddef.h>
 #elif defined(VCL_VC)
 # include <cstddef>
+#elif defined(VCL_METRO_WERKS)
+# include <cstddef>
 #else
 # undef __size_t // this is a bug fix for HPPA
 # include "iso/vcl_cstddef.h"
