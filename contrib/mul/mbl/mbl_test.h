@@ -10,7 +10,7 @@
 //: Test if the summaries of two objects are the same
 // Both objects \a a and \b must be the same class, and have
 // vsl_print_summary defined for them.
-// \param exceptions is an optional 0 terminated list of c-strings.
+// \param exceptions is an optional, 0 terminated, list of c-strings.
 // Any pair of lines from the two summaries that don't match
 // each other, but do contain one of the exceptions strings will
 // be ignored.
