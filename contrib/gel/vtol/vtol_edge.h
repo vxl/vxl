@@ -66,7 +66,7 @@ class vtol_edge
   //---------------------------------------------------------------------------
   //: Default constructor. Empty edge. Not a valid edge.
   //---------------------------------------------------------------------------
-  explicit vtol_edge(void):v1_(0),v2_(0){link_inferior(*(new vtol_zero_chain));}
+  explicit vtol_edge(void):v1_(0),v2_(0){ link_inferior(new vtol_zero_chain); }
 
   //---------------------------------------------------------------------------
   //: Destructor
@@ -149,19 +149,16 @@ class vtol_edge
   // Status report
   //***************************************************************************
 
+  void link_inferior(vtol_zero_chain_sptr inf);
+  void unlink_inferior(vtol_zero_chain_sptr inf);
+
   //---------------------------------------------------------------------------
   //: Is `inferior' type valid for `this' ?
   //---------------------------------------------------------------------------
-  virtual bool
-  valid_inferior_type(const vtol_topology_object &inferior) const
-  { return inferior.cast_to_zero_chain() != 0; }
-
-  //---------------------------------------------------------------------------
-  //: Is `superior' type valid for `this' ?
-  //---------------------------------------------------------------------------
-  virtual bool
-  valid_superior_type(const vtol_topology_object &superior) const
-  { return superior.cast_to_one_chain() != 0; }
+  virtual bool valid_inferior_type(vtol_topology_object const* inferior) const
+  { return inferior->cast_to_zero_chain() != 0; }
+  bool valid_inferior_type(vtol_zero_chain_sptr ) const { return true; }
+  bool valid_superior_type(vtol_one_chain_sptr ) const { return true; }
 
   //:
   // Inferior/Superior Accessor Methods

@@ -36,7 +36,7 @@ class example_edge_3d : public vtol_edge
 #define V example_vertex_3d
 #define W vtol_vertex
  public:
-  T(V &v1, V &v2) { v1_=(W*)(&v1); v2_=(W*)(&v2); link_inferior(*(new vtol_zero_chain(*(W*)(&v1),*(W*)(&v2)))); }
+  T(V &v1, V &v2) { v1_=(W*)(&v1); v2_=(W*)(&v2); link_inferior(new vtol_zero_chain(*(W*)(&v1),*(W*)(&v2))); }
   virtual vsol_spatial_object_2d_sptr clone() const {return new T(*(V*)(v1_.ptr()),*(V*)(v2_.ptr())); }
 
   bool operator==(T const& v) const { return v1_==v.v1() && v2_==v.v2(); }
@@ -112,7 +112,7 @@ class example_face_3d : public vtol_face
       if (*v02 == *(newedge->v2())) dirs.push_back((signed char)1);
       else                          dirs.push_back((signed char)(-1));
     }
-    link_inferior(*(new vtol_one_chain(elist,dirs,true)));
+    link_inferior(new vtol_one_chain(elist,dirs,true));
   }
   virtual vsol_spatial_object_2d_sptr clone() const {vertex_list* vl=((T*)this)->vertices(); T* f=new T(*vl);delete vl;return f;}
   bool operator==(T const& f) const { return false; }

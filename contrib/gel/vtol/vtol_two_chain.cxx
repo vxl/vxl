@@ -22,6 +22,26 @@
 // Initialization
 //***************************************************************************
 
+void vtol_two_chain::link_inferior(vtol_face_sptr inf)
+{
+  vtol_topology_object::link_inferior(inf->cast_to_topology_object());
+}
+
+void vtol_two_chain::unlink_inferior(vtol_face_sptr inf)
+{
+  vtol_topology_object::unlink_inferior(inf->cast_to_topology_object());
+}
+
+void vtol_two_chain::link_chain_inferior(vtol_two_chain_sptr chain_inferior)
+{
+  vtol_chain::link_chain_inferior(chain_inferior->cast_to_chain());
+}
+
+void vtol_two_chain::unlink_chain_inferior(vtol_two_chain_sptr chain_inferior)
+{
+  vtol_chain::unlink_chain_inferior(chain_inferior->cast_to_chain());
+}
+
 //---------------------------------------------------------------------------
 //: Constructor
 //---------------------------------------------------------------------------
@@ -30,7 +50,7 @@ vtol_two_chain::vtol_two_chain(face_list &faces,
 {
   for (face_list::iterator i=faces.begin(); i!=faces.end();++i)
     {
-      link_inferior(*(*i));
+      link_inferior(*i);
       // all face normals point outward.
       directions_.push_back((signed char)1);
     }
@@ -53,7 +73,7 @@ vtol_two_chain::vtol_two_chain(face_list &faces,
     {
       if ((*di)<0)
         (*fi)->reverse_normal();
-      link_inferior(*(*fi));
+      link_inferior(*fi);
       directions_.push_back(*di);
     }
   is_cycle_=new_is_cycle;
@@ -116,7 +136,7 @@ vtol_two_chain::vtol_two_chain(vtol_two_chain const &other)
 #endif
       assert(*new_f == *f);
 
-      link_inferior(*new_f);
+      link_inferior(new_f);
       directions_.push_back((*ddi));
     }
 
@@ -124,7 +144,7 @@ vtol_two_chain::vtol_two_chain(vtol_two_chain const &other)
   const chain_list *hierarchy_infs=fl->chain_inferiors();
 
   for (chain_list::const_iterator hhi=hierarchy_infs->begin();hhi!=hierarchy_infs->end();++hhi)
-    link_chain_inferior(*((*hhi)->cast_to_two_chain()->copy_with_arrays(newverts,newedges)));
+    link_chain_inferior((*hhi)->cast_to_two_chain()->copy_with_arrays(newverts,newedges));
 }
 
 vtol_two_chain *
@@ -143,7 +163,7 @@ vtol_two_chain::copy_with_arrays(topology_list &newverts,
       ++ti,++di)
     {
       vtol_face *f=(*ti)->cast_to_face();
-      result->link_inferior(*(f->copy_with_arrays(newverts,newedges)));
+      result->link_inferior(f->copy_with_arrays(newverts,newedges));
       result->directions_.push_back((*di));
     }
 
@@ -151,7 +171,7 @@ vtol_two_chain::copy_with_arrays(topology_list &newverts,
   const chain_list *hierarchy_infs=chain_inferiors();
 
   for (chain_list::const_iterator hi=hierarchy_infs->begin();hi!=hierarchy_infs->end();++hi)
-    result->link_chain_inferior(*((*hi)->cast_to_two_chain()->copy_with_arrays(newverts,newedges)));
+    result->link_chain_inferior((*hi)->cast_to_two_chain()->copy_with_arrays(newverts,newedges));
   return result;
 }
 
@@ -197,7 +217,7 @@ vtol_two_chain::shallow_copy_with_no_links(void) const
 void vtol_two_chain::add_superiors_from_parent(topology_list &sups)
 {
   for (topology_list::iterator si=sups.begin();si!=sups.end();++si)
-    (*si)->link_inferior(*this);
+    (*si)->link_inferior(this);
 
   chain_list::iterator hi;
   for (hi=chain_inferiors_.begin();hi!=chain_inferiors_.end();++hi)
@@ -207,7 +227,7 @@ void vtol_two_chain::add_superiors_from_parent(topology_list &sups)
 void vtol_two_chain::remove_superiors_of_parent(topology_list &sups)
 {
   for (topology_list::iterator si=sups.begin();si!=sups.end();++si)
-    (*si)->unlink_inferior(*this);
+    (*si)->unlink_inferior(this);
 
   chain_list::iterator hi;
   for (hi=chain_inferiors_.begin();hi!=chain_inferiors_.end();++hi)
@@ -344,31 +364,32 @@ void vtol_two_chain::add_face(vtol_face &new_face,
                               signed char dir)
 {
   directions_.push_back(dir);
-  link_inferior(new_face);
+  link_inferior(&new_face);
 }
 
 void vtol_two_chain::remove_face(vtol_face &doomed_face)
 {
   vtol_topology_object_sptr t=&doomed_face;
   topology_list::const_iterator i=vcl_find(inferiors()->begin(),inferiors()->end(),t);
-  long index=i-inferiors()->begin();
-  if (index>=0)
+  topology_list::difference_type index=i-inferiors()->begin();
+
+  if (index>=0 && i!= inferiors()->end())
     {
       vcl_vector<signed char>::iterator j = directions_.begin() + index;
       directions_.erase(j);
       touch();
-      unlink_inferior(doomed_face);
+      unlink_inferior(&doomed_face);
     }
 }
 
 void vtol_two_chain::add_block(vtol_block &new_block)
 {
-  new_block.link_inferior(*this);
+  new_block.link_inferior(this);
 }
 
 void vtol_two_chain::remove_block(vtol_block &doomed_block)
 {
-  doomed_block.unlink_inferior(*this);
+  doomed_block.unlink_inferior(this);
 }
 
 //***************************************************************************

@@ -12,6 +12,16 @@
 // Initialization
 //***************************************************************************
 
+void vtol_zero_chain::link_inferior(vtol_vertex_sptr inf)
+{
+  vtol_topology_object::link_inferior(inf->cast_to_topology_object());
+}
+
+void vtol_zero_chain::unlink_inferior(vtol_vertex_sptr inf)
+{
+  vtol_topology_object::unlink_inferior(inf->cast_to_topology_object());
+}
+
 //---------------------------------------------------------------------------
 //: Constructor from two vertices (to make an edge creation easier)
 // Require: v1!=v2
@@ -21,8 +31,8 @@ vtol_zero_chain::vtol_zero_chain(vtol_vertex &v1,
 {
   // require
   assert(&v1!=&v2);
-  link_inferior(v1);
-  link_inferior(v2);
+  link_inferior(&v1);
+  link_inferior(&v2);
 }
 
 //---------------------------------------------------------------------------
@@ -35,7 +45,7 @@ vtol_zero_chain::vtol_zero_chain(const vertex_list &new_vertices)
   assert(new_vertices.size()>0);
 
   for (vertex_list::const_iterator i=new_vertices.begin();i!=new_vertices.end();++i)
-    link_inferior(*(*i));
+    link_inferior(*i);
 }
 
 //---------------------------------------------------------------------------
@@ -45,7 +55,7 @@ vtol_zero_chain::vtol_zero_chain(const vtol_zero_chain &other)
 {
   topology_list::const_iterator i;
   for (i=other.inferiors()->begin();i!=other.inferiors()->end();++i)
-    link_inferior(*((*i)->clone()->cast_to_topology_object()->cast_to_vertex()));
+    link_inferior((*i)->clone()->cast_to_topology_object()->cast_to_vertex());
 }
 
 //---------------------------------------------------------------------------
@@ -71,7 +81,7 @@ vsol_spatial_object_2d_sptr vtol_zero_chain::clone(void) const
 vtol_vertex_sptr vtol_zero_chain::v0(void) const
 {
   if (numinf()>0)
-    return (vtol_vertex*)(inferiors()->begin()->ptr());
+    return inferiors()->front()->cast_to_vertex();
   else
     return 0;
 }

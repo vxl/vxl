@@ -143,10 +143,10 @@ static void test_vertex_2d()
 
   TEST("vtol_vertex::is_endpoint()", v1v->is_endpoint(*new_edge), true);
 
-  TEST("vtol_vertex::valid_superior_type()", v1v->valid_superior_type(*(new_edge->zero_chain())), true);
-  TEST("vtol_vertex::valid_superior_type()", v1v->valid_superior_type(*new_edge), false);
-  TEST("vtol_one_chain::valid_inferior_type()", new_edge->zero_chain()->valid_inferior_type(*v1v), true);
-  TEST("vtol_vertex::valid_inferior_type()", v1v->valid_inferior_type(*new_edge), false);
+  TEST("vtol_vertex::valid_superior_type()", v1v->valid_superior_type(new_edge->zero_chain()), true);
+  TEST("vtol_one_chain::valid_inferior_type()", new_edge->zero_chain()->valid_inferior_type(v1v), true);
+  TEST("vtol_vertex::valid_inferior_type()", v1v->valid_inferior_type(new_edge->cast_to_topology_object()), false);
+  TEST("vtol_edge::valid_inferior_type()", new_edge->valid_inferior_type(v1v->cast_to_topology_object()), false);
 
   vcl_cout << "Testing superiors_list\n";
   vcl_cout << "ve before superiors access " << *ve << vcl_endl;

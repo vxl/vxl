@@ -104,16 +104,9 @@ class vtol_vertex
   //---------------------------------------------------------------------------
   //: Is `inferior' type valid for `this' ?
   //---------------------------------------------------------------------------
-  virtual bool
-  valid_inferior_type(vtol_topology_object const& /*inferior*/) const
+  virtual bool valid_inferior_type(vtol_topology_object const* /*inf*/) const
   { return false; } // a vertex can never have an inferior
-
-  //---------------------------------------------------------------------------
-  //: Is `superior' type valid for `this' ?
-  //---------------------------------------------------------------------------
-  virtual bool
-  valid_superior_type(const vtol_topology_object &superior) const
-  { return superior.cast_to_zero_chain()!=0; }
+  bool valid_superior_type(vtol_zero_chain_sptr ) const { return true; }
 
   //---------------------------------------------------------------------------
   //: Is `this' connected with `v2' ?

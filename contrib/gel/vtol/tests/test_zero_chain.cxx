@@ -4,6 +4,7 @@
 #include <vtol/vtol_zero_chain_sptr.h>
 #include <vtol/vtol_zero_chain.h>
 #include <vtol/vtol_edge_2d.h>
+#include <vtol/vtol_edge_sptr.h>
 
 static void test_zero_chain()
 {
@@ -16,6 +17,9 @@ static void test_zero_chain()
   vtol_zero_chain_sptr zc1 = new vtol_zero_chain(*v1,*v2);
   zc1->describe(vcl_cout,8);
   TEST("vtol_zero_chain equality", *zc1, *zc1);
+  vtol_edge_sptr e1 = new vtol_edge_2d(*v1->cast_to_vertex_2d(),
+                                       *v2->cast_to_vertex_2d());
+  TEST("edge's vtol_zero_chain equality", *zc1, *(e1->zero_chain()));
 
   vtol_zero_chain_sptr zc1_clone = zc1->clone()->cast_to_topology_object()->cast_to_zero_chain();
   TEST("vtol_zero_chain::clone()", *zc1, *zc1_clone);
@@ -32,9 +36,10 @@ static void test_zero_chain()
   zc1a = new vtol_zero_chain(v_list);
   TEST("vtol_zero_chain inequality", *zc1 == *zc1a, false);
 
-  TEST("vtol_zero_chain::valid_inferior_type()", zc1->valid_inferior_type(*v1), true);
-  TEST("vtol_zero_chain::valid_superior_type()", zc1->valid_superior_type(*v1), false);
-  TEST("vtol_zero_chain::valid_superior_type()", zc1->valid_superior_type(vtol_edge_2d()), true);
+  TEST("vtol_zero_chain::valid_inferior_type()", zc1->valid_inferior_type(v1), true);
+  TEST("vtol_zero_chain::valid_superior_type()", zc1->valid_superior_type(e1), true);
+  TEST("vtol_vertex::valid_superior_type()", v1->valid_superior_type(zc1), true);
+  TEST("vtol_vertex::valid_inferior_type()", v1->valid_inferior_type(zc1->cast_to_topology_object()), false);
   TEST("vtol_zero_chain::length()", zc1->length(), 2);
   TEST("vtol_zero_chain::topology_type()", zc1->topology_type(), vtol_topology_object::ZEROCHAIN);
 }

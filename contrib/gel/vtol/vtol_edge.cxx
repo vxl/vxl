@@ -14,6 +14,16 @@
 // Initialization
 //***************************************************************************
 
+void vtol_edge::link_inferior(vtol_zero_chain_sptr inf)
+{
+  vtol_topology_object::link_inferior(inf->cast_to_topology_object());
+}
+
+void vtol_edge::unlink_inferior(vtol_zero_chain_sptr inf)
+{
+  vtol_topology_object::unlink_inferior(inf->cast_to_topology_object());
+}
+
 //---------------------------------------------------------------------------
 //: Return the first non-empty zero-chain of `this'
 //---------------------------------------------------------------------------
@@ -44,9 +54,9 @@ vtol_edge::~vtol_edge()
 void vtol_edge::set_v1(vtol_vertex_sptr new_v1)
 {
   if (v1_&&v1_!=v2_)
-    zero_chain()->unlink_inferior(*v1_);
+    zero_chain()->unlink_inferior(v1_);
   v1_=new_v1;
-  zero_chain()->link_inferior(*v1_);
+  zero_chain()->link_inferior(v1_);
   touch();
 }
 
@@ -56,9 +66,9 @@ void vtol_edge::set_v1(vtol_vertex_sptr new_v1)
 void vtol_edge::set_v2(vtol_vertex_sptr new_v2)
 {
   if (v2_&&v2_!=v1_)
-    zero_chain()->unlink_inferior(*v2_);
+    zero_chain()->unlink_inferior(v2_);
   v2_=new_v2;
-  zero_chain()->link_inferior(*v2_);
+  zero_chain()->link_inferior(v2_);
   touch();
 }
 
@@ -79,16 +89,13 @@ void vtol_edge::set_v2(vtol_vertex_sptr new_v2)
 void vtol_edge::replace_end_point(vtol_vertex &curendpt,
                                   vtol_vertex &newendpt)
 {
-  // require
-  //  assert(curendpt);
-  //  assert(newendpt);
-  assert(curendpt==*v1_||curendpt==*v2_);
+  assert(&curendpt==v1_||&curendpt==v2_);
 
-  zero_chain()->unlink_inferior(curendpt);
-  zero_chain()->link_inferior(newendpt);
-  if (curendpt==*v1_)  // update the appropriate endpoint
-    v1_=&newendpt;
-  else // curendpt == this->get_v2()
+  zero_chain()->unlink_inferior(&curendpt);
+  zero_chain()->link_inferior(&newendpt);
+  if (&curendpt==v1_)
+    v1_=&newendpt;  // update the appropriate endpoint
+  else // &curendpt == v2_
     v2_=&newendpt;
 }
 
@@ -156,7 +163,7 @@ void vtol_edge::set_vertices_from_zero_chains(void)
 
 void vtol_edge::add_edge_loop(vtol_one_chain &new_edge_loop)
 {
-  new_edge_loop.link_inferior(*this);
+  new_edge_loop.link_inferior(this);
 }
 
 //:
@@ -166,7 +173,7 @@ void vtol_edge::add_edge_loop(vtol_one_chain &new_edge_loop)
 
 void vtol_edge::remove_edge_loop(vtol_one_chain &doomed_edge_loop)
 {
-  doomed_edge_loop.unlink_inferior(*this);
+  doomed_edge_loop.unlink_inferior(this);
 }
 
 // ******************************************************
@@ -297,12 +304,9 @@ bool vtol_edge::add_vertex(vtol_vertex &newvert)
 
   zc=zero_chain();
   if (!zc)
-  {
-    zc=new vtol_zero_chain;
-    link_inferior(*zc);
-  }
+    link_inferior(zc = new vtol_zero_chain);
 
-  zc->link_inferior(newvert);
+  zc->link_inferior(&newvert);
   return true;
 }
 

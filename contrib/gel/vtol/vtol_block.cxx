@@ -14,12 +14,22 @@
 // Initialization
 //***************************************************************************
 
+void vtol_block::link_inferior(vtol_two_chain_sptr inf)
+{
+  vtol_topology_object::link_inferior(inf->cast_to_topology_object());
+}
+
+void vtol_block::unlink_inferior(vtol_two_chain_sptr inf)
+{
+  vtol_topology_object::unlink_inferior(inf->cast_to_topology_object());
+}
+
 //---------------------------------------------------------------------------
 //: Constructor from a two-chain (inferior)
 //---------------------------------------------------------------------------
 vtol_block::vtol_block(vtol_two_chain &faceloop)
 {
-  link_inferior(faceloop);
+  link_inferior(&faceloop);
 }
 
 //---------------------------------------------------------------------------
@@ -31,16 +41,14 @@ vtol_block::vtol_block(two_chain_list &faceloops)
 {
   if (faceloops.size()>0)
   {
-    vtol_two_chain_sptr tc = *((faceloops).begin());
-
-    link_inferior(*tc);
+    link_inferior(faceloops.front());
   }
 
   vtol_two_chain *twoch=get_boundary_cycle();
 
   if (twoch!=0)
     for (unsigned int i=1;i<faceloops.size();++i)
-      twoch->link_chain_inferior(*(faceloops[i]));
+      twoch->link_chain_inferior(faceloops[i]);
 }
 
 //---------------------------------------------------------------------------
@@ -48,9 +56,7 @@ vtol_block::vtol_block(two_chain_list &faceloops)
 //---------------------------------------------------------------------------
 vtol_block::vtol_block(face_list &new_face_list)
 {
-  vtol_two_chain_sptr tc = new vtol_two_chain(new_face_list);
-
-  link_inferior(*(tc));
+  link_inferior(new vtol_two_chain(new_face_list));
 }
 
 //---------------------------------------------------------------------------
@@ -93,7 +99,7 @@ vtol_block::vtol_block(const vtol_block &other)
 
       assert(*new2ch == *(*tci));
 
-      link_inferior(*new2ch);
+      link_inferior(new2ch);
     }
   delete edgs;
   delete verts;
@@ -356,7 +362,7 @@ two_chain_list *vtol_block::hole_cycles(void) const
 
 //: add a hole cycle
 
-bool vtol_block::add_hole_cycle(vtol_two_chain &new_hole)
+bool vtol_block::add_hole_cycle(vtol_two_chain_sptr new_hole)
 {
   vtol_two_chain_sptr twoch=get_boundary_cycle();
   if (! twoch) return false;

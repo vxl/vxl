@@ -49,10 +49,10 @@ static void test_one_chain()
   TEST("vtol_one_chain::direction()", oc2->direction(*e12), 1);
 
   TEST("vtol_one_chain::cast_to_one_chain()", oc2->cast_to_one_chain()==0, false);
-  TEST("vtol_one_chain::valid_inferior_type()", oc2->valid_inferior_type(*e12), true);
-  TEST("vtol_one_chain::valid_inferior_type()", oc2->valid_inferior_type(*v1), false);
-  TEST("vtol_one_chain::valid_superior_type()", oc2->valid_superior_type(*e12), false);
-  TEST("vtol_edge::valid_superior_type()", e12->valid_superior_type(*oc2), true);
+  TEST("vtol_one_chain::valid_inferior_type()", oc2->valid_inferior_type(e12), true);
+  TEST("vtol_edge::valid_superior_type()", e12->valid_superior_type(oc2), true);
+  TEST("vtol_one_chain::valid_inferior_type()", oc2->valid_inferior_type(v1->cast_to_topology_object()), false);
+  TEST("vtol_edge::valid_inferior_type()", e12->valid_inferior_type(oc2->cast_to_topology_object()), false);
 
   vertex_list *v_list = oc1->outside_boundary_vertices();
   TEST("vtol_one_chain::outside_boundary_vertices()", v_list->size(), 4);
@@ -89,7 +89,7 @@ static void test_one_chain()
   vtol_edge_sptr eh34 = new vtol_edge_2d(*vh3,*vh4); e_list.push_back(eh34);
   vtol_edge_sptr eh41 = new vtol_edge_2d(*vh4,*vh1); e_list.push_back(eh41);
   vtol_one_chain_sptr och1 = new vtol_one_chain(e_list);
-  oc1->link_chain_inferior(*och1);
+  oc1->link_chain_inferior(och1);
 
   one_chain_list *ic_list = oc1->inferior_one_chains();
   TEST("vtol_one_chain::inferior_one_chains()", ic_list->size(), 1);

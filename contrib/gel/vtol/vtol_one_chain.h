@@ -33,6 +33,8 @@
 
 #include <vtol/vtol_chain.h>
 #include <vcl_vector.h>
+#include <vtol/vtol_edge_2d_sptr.h>
+#include <vtol/vtol_face_2d_sptr.h>
 class vtol_edge;
 class vtol_vertex;
 class vtol_face;
@@ -50,6 +52,9 @@ class vtol_one_chain
   //***************************************************************************
   // Initialization
   //***************************************************************************
+
+  void link_chain_inferior(vtol_one_chain_sptr chain_inferior);
+  void unlink_chain_inferior(vtol_one_chain_sptr chain_inferior);
 
   //---------------------------------------------------------------------------
   //: Default constructor
@@ -112,26 +117,25 @@ class vtol_one_chain
   // Status report
   //***************************************************************************
 
+  void link_inferior(vtol_edge_sptr inf);
+  void unlink_inferior(vtol_edge_sptr inf);
+
   //---------------------------------------------------------------------------
   //: Is `inferior' type valid for `this' ?
   //---------------------------------------------------------------------------
-  virtual bool
-  valid_inferior_type(vtol_topology_object const& inferior) const
-  { return inferior.cast_to_edge() != 0; }
-
-  //---------------------------------------------------------------------------
-  //: Is `superior' type valid for `this' ?
-  //---------------------------------------------------------------------------
-  virtual bool
-  valid_superior_type(vtol_topology_object const& superior) const
-  { return superior.cast_to_face() != 0; }
+  virtual bool valid_inferior_type(vtol_topology_object const* inferior) const
+  { return inferior->cast_to_edge() != 0; }
+  bool valid_inferior_type(vtol_edge_sptr )    const { return true; }
+  bool valid_inferior_type(vtol_edge_2d_sptr ) const { return true; }
+  bool valid_superior_type(vtol_face_sptr )    const { return true; }
+  bool valid_superior_type(vtol_face_2d_sptr ) const { return true; }
 
   //---------------------------------------------------------------------------
   //: Is `chain_inf_sup' type valid for `this' ?
   //---------------------------------------------------------------------------
-  virtual bool
-  valid_chain_type(vtol_chain const& chain_inf_sup) const
-  { return chain_inf_sup.cast_to_one_chain() != 0; }
+  virtual bool valid_chain_type(vtol_chain const* chain_inf_sup) const
+  { return chain_inf_sup->cast_to_one_chain() != 0; }
+  bool valid_chain_type(vtol_one_chain_sptr ) const { return true; }
 
   //: accessors for outside boundary elements
 

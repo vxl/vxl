@@ -24,7 +24,7 @@
 #include <vtol/vtol_topology_object.h>
 #include <vcl_vector.h>
 #include <vtol/vtol_vertex.h>
-
+#include <vtol/vtol_edge_2d_sptr.h>
 class vtol_vertex;
 class vtol_edge;
 class vtol_one_chain;
@@ -103,19 +103,17 @@ class vtol_zero_chain
   // Status report
   //***************************************************************************
 
+  void link_inferior(vtol_vertex_sptr inf);
+  void unlink_inferior(vtol_vertex_sptr inf);
+
   //---------------------------------------------------------------------------
   //: Is `inferior' type valid for `this' ?
   //---------------------------------------------------------------------------
-  virtual bool
-  valid_inferior_type(const vtol_topology_object &inferior) const
-  { return inferior.cast_to_vertex()!=0; }
-
-  //---------------------------------------------------------------------------
-  //: Is `superior' type valid for `this' ?
-  //---------------------------------------------------------------------------
-  virtual bool
-  valid_superior_type(const vtol_topology_object &superior) const
-  { return superior.cast_to_edge()!=0; }
+  virtual bool valid_inferior_type(vtol_topology_object const* inferior) const
+  { return inferior->cast_to_vertex()!=0; }
+  bool valid_inferior_type(vtol_vertex_sptr )  const { return true; }
+  bool valid_superior_type(vtol_edge_sptr )    const { return true; }
+  bool valid_superior_type(vtol_edge_2d_sptr ) const { return true; }
 
   //---------------------------------------------------------------------------
   //: Return the length of the zero-chain

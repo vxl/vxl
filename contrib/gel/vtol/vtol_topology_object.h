@@ -64,6 +64,8 @@
 // \verbatim
 // Modifications
 //  JLM November 2002 - added a local bounding box method
+//  dec.2002 - Peter Vanroose - added chain_list (typedef) and cast_to_chain()
+//  dec.2002 - Peter Vanroose - link_inferior() now takes smart pointer argument
 //\endverbatim
 
 #include <vtol/vtol_topology_object_sptr.h>
@@ -71,6 +73,7 @@
 
 #include <vcl_vector.h>
 #include <vcl_list.h>
+#include <vcl_iostream.h> // to be removed when deprecated methods are removed
 
 #include <vtol/vtol_vertex_sptr.h>
 #include <vtol/vtol_zero_chain_sptr.h>
@@ -79,18 +82,20 @@
 #include <vtol/vtol_face_sptr.h>
 #include <vtol/vtol_two_chain_sptr.h>
 #include <vtol/vtol_block_sptr.h>
+#include <vtol/vtol_chain_sptr.h>
 class vtol_topology_cache;
 
 
 // Useful typedefs
 typedef vcl_vector<vtol_topology_object_sptr> topology_list;
 typedef vcl_vector<vtol_vertex_sptr>          vertex_list;
+typedef vcl_vector<vtol_zero_chain_sptr>      zero_chain_list;
 typedef vcl_vector<vtol_edge_sptr>            edge_list;
 typedef vcl_vector<vtol_one_chain_sptr>       one_chain_list;
-typedef vcl_vector<vtol_zero_chain_sptr>      zero_chain_list;
 typedef vcl_vector<vtol_face_sptr>            face_list;
 typedef vcl_vector<vtol_two_chain_sptr>       two_chain_list;
 typedef vcl_vector<vtol_block_sptr>           block_list;
+typedef vcl_vector<vtol_chain_sptr>           chain_list;
 
 //*****************************************************************************
 // ALL THE DERIVED AND NON-ABSTRACT CLASSES OF THIS CLASS MUST CALL
@@ -179,6 +184,16 @@ class vtol_topology_object
   virtual vtol_edge *cast_to_edge(void) { return 0; }
 
   //---------------------------------------------------------------------------
+  //: Return `this' if `this' is a chain, 0 otherwise
+  //---------------------------------------------------------------------------
+  virtual const vtol_chain *cast_to_chain(void) const { return 0; }
+
+  //---------------------------------------------------------------------------
+  //: Return `this' if `this' is a chain, 0 otherwise
+  //---------------------------------------------------------------------------
+  virtual vtol_chain *cast_to_chain(void) { return 0; }
+
+  //---------------------------------------------------------------------------
   //: Return `this' if `this' is an one_chain, 0 otherwise
   //---------------------------------------------------------------------------
   virtual const vtol_one_chain *cast_to_one_chain(void) const { return 0; }
@@ -225,22 +240,51 @@ class vtol_topology_object
   //---------------------------------------------------------------------------
   //: Is `inferior' type valid for `this' ?
   //---------------------------------------------------------------------------
-  virtual bool valid_inferior_type(vtol_topology_object const&inferior)const=0;
+  virtual bool valid_inferior_type(vtol_topology_object const* inf) const = 0;
+
+  // deprecated form:
+  bool valid_inferior_type(vtol_topology_object const& inf) const
+  {
+    vcl_cerr << "valid_inferior_type(): deprecated syntax\n";
+    return valid_inferior_type(&inf);
+  }
 
   //---------------------------------------------------------------------------
   //: Is `superior' type valid for `this' ?
   //---------------------------------------------------------------------------
-  virtual bool valid_superior_type(vtol_topology_object const&superior)const=0;
+  inline bool valid_superior_type(vtol_topology_object const* sup) const
+  { return sup->valid_superior_type(this); }
+
+  // deprecated form:
+  bool valid_superior_type(vtol_topology_object const& sup) const
+  {
+    vcl_cerr << "valid_superior_type(): deprecated syntax\n";
+    return valid_superior_type(&sup);
+  }
 
   //---------------------------------------------------------------------------
   //: Is `inferior' already an inferior of `this' ?
   //---------------------------------------------------------------------------
-  virtual bool is_inferior(const vtol_topology_object &inferior) const;
+  bool is_inferior(vtol_topology_object_sptr inferior) const;
+
+  // deprecated form:
+  bool is_inferior(vtol_topology_object const& inf) const
+  {
+    vcl_cerr << "is_inferior(): deprecated syntax\n";
+    return is_inferior(const_cast<vtol_topology_object*>(&inf));
+  }
 
   //---------------------------------------------------------------------------
   //: Is `superior' already a superior of `this' ?
   //---------------------------------------------------------------------------
-  virtual bool is_superior(const vtol_topology_object &superior) const;
+  bool is_superior(vtol_topology_object* const& superior) const;
+
+  // deprecated form:
+  bool is_superior(vtol_topology_object const& sup) const
+  {
+    vcl_cerr << "is_superior(): deprecated syntax\n";
+    return is_superior(const_cast<vtol_topology_object*>(&sup));
+  }
 
   //---------------------------------------------------------------------------
   //: Number of inferiors
@@ -283,23 +327,37 @@ class vtol_topology_object
   //: Link `this' with an inferior `inferior'
   //  REQUIRE: valid_inferior_type(inferior) and !is_inferior(inferior)
   //---------------------------------------------------------------------------
-  virtual void link_inferior(vtol_topology_object &inferior);
+  void link_inferior(vtol_topology_object_sptr inferior);
+
+  // deprecated form:
+  void link_inferior(vtol_topology_object & inf)
+  {
+    vcl_cerr << "link_inferior(): deprecated syntax\n";
+    return link_inferior(&inf);
+  }
 
   //---------------------------------------------------------------------------
   //: Unlink `this' from the inferior `inferior'
   //  REQUIRE: valid_inferior_type(inferior) and is_inferior(inferior)
   //---------------------------------------------------------------------------
-  virtual void unlink_inferior(vtol_topology_object &inferior);
+  void unlink_inferior(vtol_topology_object_sptr inferior);
+
+  // deprecated form:
+  void unlink_inferior(vtol_topology_object & inf)
+  {
+    vcl_cerr << "unlink_inferior(): deprecated syntax\n";
+    return unlink_inferior(&inf);
+  }
 
   //---------------------------------------------------------------------------
   //: Unlink `this' from all its inferiors
   //---------------------------------------------------------------------------
-  virtual void unlink_all_inferiors(void);
+  void unlink_all_inferiors(void);
 
   //---------------------------------------------------------------------------
   //: Unlink `this' of the network
   //---------------------------------------------------------------------------
-  virtual void unlink(void);
+  void unlink(void);
 
   //---------------------------------------------------------------------------
   //: Get lists of vertices

@@ -20,8 +20,6 @@ vtol_edge_2d::vtol_edge_2d(vtol_vertex_2d &new_v1,
                            vtol_vertex_2d &new_v2,
                            const vsol_curve_2d_sptr &new_curve)
 {
-  vtol_topology_object *zc;
-
   if (!new_curve)
     curve_=new vsol_line_2d(new_v1.point(),new_v2.point());
   else
@@ -29,9 +27,7 @@ vtol_edge_2d::vtol_edge_2d(vtol_vertex_2d &new_v1,
   v1_=&new_v1;
   v2_=&new_v2;
 
-  zc=new vtol_zero_chain(new_v1,new_v2);
-
-  link_inferior(*zc);
+  link_inferior(new vtol_zero_chain(new_v1,new_v2));
 }
 
 //---------------------------------------------------------------------------
@@ -47,8 +43,7 @@ vtol_edge_2d::vtol_edge_2d(const vtol_edge_2d &other)
   topology_list::const_iterator i;
   for (i=other.inferiors()->begin();i!=other.inferiors()->end();++i)
   {
-    vtol_zero_chain_sptr zc = (*i)->clone()->cast_to_topology_object()->cast_to_zero_chain();
-    link_inferior(*zc);
+    link_inferior((*i)->clone()->cast_to_topology_object()->cast_to_zero_chain());
   }
 
   set_vertices_from_zero_chains();
@@ -87,7 +82,7 @@ vtol_edge_2d::vtol_edge_2d(const vtol_edge_2d &other)
 
 vtol_edge_2d::vtol_edge_2d(vtol_zero_chain &new_zero_chain)
 {
-  link_inferior(new_zero_chain);
+  link_inferior(&new_zero_chain);
   set_vertices_from_zero_chains();
   if (new_zero_chain.numinf()==2 && v1_->cast_to_vertex_2d() && v2_->cast_to_vertex_2d())
     // Safe to assume that it is a vsol_line_2d.
@@ -113,7 +108,7 @@ vtol_edge_2d::vtol_edge_2d(zero_chain_list &newchains)
   // 1) Link the inferiors.
 
   for (zero_chain_list::iterator i=newchains.begin(); i!=newchains.end(); ++i)
-    link_inferior(*(*i));
+    link_inferior(*i);
 
   // 2) Set v1_ and v2_;
 
@@ -139,8 +134,7 @@ vtol_edge_2d::vtol_edge_2d(double x1, double y1,
   else
     curve_=curve->clone()->cast_to_curve();
 
-  vtol_zero_chain *inf=new vtol_zero_chain(*v1_,*v2_);
-  link_inferior(*inf);
+  link_inferior(new vtol_zero_chain(*v1_,*v2_));
 }
 
 //: Constructor for an vtol_edge_2d from a vsol_curve_2d.
@@ -153,8 +147,7 @@ vtol_edge_2d::vtol_edge_2d(vsol_curve_2d &edgecurve)
 {
   v1_ = new vtol_vertex_2d(*(edgecurve.p0()));
   v2_ = new vtol_vertex_2d(*(edgecurve.p1()));
-  vtol_zero_chain *newzc=new vtol_zero_chain(*v1_,*v2_);
-  link_inferior(*newzc);
+  link_inferior(new vtol_zero_chain(*v1_,*v2_));
 }
 
 //---------------------------------------------------------------------------

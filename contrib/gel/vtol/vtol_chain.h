@@ -20,8 +20,6 @@
 #include <vtol/vtol_topology_object.h>
 #include <vcl_vector.h>
 
-typedef vcl_vector<vtol_chain_sptr> chain_list;
-
 //: Base class of vtol_two_chain and vtol_one_chain (representation of holes)
 
 //*****************************************************************************
@@ -65,6 +63,20 @@ class vtol_chain
   virtual const chain_list *chain_superiors(void) const;
 
   //***************************************************************************
+  // Replaces dynamic_cast<T>
+  //***************************************************************************
+
+  //---------------------------------------------------------------------------
+  //: Return `this' if `this' is a chain, 0 otherwise
+  //---------------------------------------------------------------------------
+  virtual const vtol_chain *cast_to_chain(void) const { return this; }
+
+  //---------------------------------------------------------------------------
+  //: Return `this' if `this' is a chain, 0 otherwise
+  //---------------------------------------------------------------------------
+  virtual vtol_chain *cast_to_chain(void) { return this; }
+
+  //***************************************************************************
   // Status report
   //***************************************************************************
 
@@ -72,18 +84,18 @@ class vtol_chain
   //: Is `chain_inf_sup' type valid for `this' ?
   //---------------------------------------------------------------------------
   virtual bool
-  valid_chain_type(const vtol_chain &chain_inf_sup) const=0;
+  valid_chain_type(vtol_chain const* chain_inf_sup) const = 0;
 
   //---------------------------------------------------------------------------
   //: Is `inferior' already an inferior of `this' ?
   //---------------------------------------------------------------------------
   virtual bool
-  is_chain_inferior(const vtol_chain &chain_inferior) const;
+  is_chain_inferior(vtol_chain_sptr chain_inferior) const;
 
   //---------------------------------------------------------------------------
   //: Is `superior' already a superior of `this' ?
   //---------------------------------------------------------------------------
-  virtual bool is_chain_superior(const vtol_chain &chain_superior) const;
+  virtual bool is_chain_superior(vtol_chain const* chain_superior) const;
 
   //---------------------------------------------------------------------------
   //: Return the number of superiors
@@ -114,29 +126,29 @@ class vtol_chain
   //  REQUIRE: valid_chain_type(chain_inferior)
   //           and !is_chain_inferior(chain_inferior)
   //---------------------------------------------------------------------------
-  virtual void link_chain_inferior(vtol_chain &chain_inferior);
+  void link_chain_inferior(vtol_chain_sptr chain_inferior);
 
   //---------------------------------------------------------------------------
   //: Unlink `this' with the chain_inferior `chain_inferior'
   //  REQUIRE: valid_chain_type(chain_inferior)
   //           and is_chain_inferior(chain_inferior)
   //---------------------------------------------------------------------------
-  virtual void unlink_chain_inferior(vtol_chain &chain_inferior);
+  void unlink_chain_inferior(vtol_chain_sptr chain_inferior);
 
   //---------------------------------------------------------------------------
   //: Unlink `this' with all its chain inferiors
   //---------------------------------------------------------------------------
-  virtual void unlink_all_chain_inferiors(void);
+  void unlink_all_chain_inferiors(void);
 
   //---------------------------------------------------------------------------
   //: Unlink `this' of the network
   //---------------------------------------------------------------------------
-  virtual void unlink(void);
+  void unlink(void);
 
   //---------------------------------------------------------------------------
   //: Is `this' a connected chain ?
   //---------------------------------------------------------------------------
-  virtual bool is_cycle(void) const;
+  bool is_cycle(void) const;
 
   //---------------------------------------------------------------------------
   //: Return the directions

@@ -11,6 +11,16 @@
 #include <vtol/vtol_one_chain.h>
 #include <vtol/vtol_list_functions.h>
 
+void vtol_face::link_inferior(vtol_one_chain_sptr inf)
+{
+  vtol_topology_object::link_inferior(inf->cast_to_topology_object());
+}
+
+void vtol_face::unlink_inferior(vtol_one_chain_sptr inf)
+{
+  vtol_topology_object::unlink_inferior(inf->cast_to_topology_object());
+}
+
 //---------------------------------------------------------------------------
 // Destructor
 //---------------------------------------------------------------------------
@@ -210,7 +220,7 @@ void vtol_face::add_one_chain(vtol_one_chain &new_vtol_one_chain)
   // require
   assert(new_vtol_one_chain.contains_sub_chains());
 
-  link_inferior(new_vtol_one_chain);
+  link_inferior(&new_vtol_one_chain);
 }
 
 //: deep equality check on faces.  uses fuzzy equal on vertices.
@@ -273,13 +283,13 @@ vtol_one_chain *vtol_face::get_boundary_cycle(void)
 //---------------------------------------------------------------------------
 //: Adds a new hole to the face
 //---------------------------------------------------------------------------
-bool vtol_face::add_hole_cycle(vtol_one_chain &new_hole)
+bool vtol_face::add_hole_cycle(vtol_one_chain_sptr new_hole)
 {
   vtol_one_chain *onech=get_boundary_cycle();
 
   if (onech!=0)
     {
-      onech->link_chain_inferior(new_hole);
+      onech->link_chain_inferior(new_hole.ptr());
       return true;
     } else
       return false;
@@ -323,7 +333,7 @@ void vtol_face::reverse_normal(void)
 {
   topology_list::iterator ti;
   for (ti=inferiors()->begin();ti!=inferiors()->end();++ti)
-    ((vtol_one_chain *)(ti->ptr()))->reverse_directions();
+    (*ti)->cast_to_one_chain()->reverse_directions();
   // compute_normal();
 }
 

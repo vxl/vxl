@@ -99,9 +99,9 @@ static void test_block()
   TEST("vtol_block::clone()", *b2, *b2_clone);
 
   TEST("vtol_block::cast_to_block()", b2->cast_to_block()==0, false);
-  TEST("vtol_block::valid_inferior_type()",b1->valid_inferior_type(*tc1),true);
-  TEST("vtol_block::valid_superior_type()",b1->valid_superior_type(*b1),false);
-  TEST("vtol_two_chain::valid_superior_type()",tc1->valid_superior_type(*b1),true);
+  TEST("vtol_block::valid_inferior_type()",b1->valid_inferior_type(tc1),true);
+  TEST("vtol_block::valid_superior_type()",b1->valid_superior_type(b1->cast_to_topology_object()),false);
+  TEST("vtol_two_chain::valid_superior_type()",tc1->valid_superior_type(b1),true);
 }
 
 TESTLIB_DEFINE_MAIN(test_block);

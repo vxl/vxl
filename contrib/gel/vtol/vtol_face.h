@@ -70,7 +70,7 @@ class vtol_face
 
   virtual vtol_one_chain *get_one_chain(int which = 0);
   virtual vtol_one_chain *get_boundary_cycle(void);
-  virtual bool add_hole_cycle(vtol_one_chain &new_hole);
+  virtual bool add_hole_cycle(vtol_one_chain_sptr new_hole);
   virtual one_chain_list *get_hole_cycles(void);
 
   // Methods that are here for now in transition.. :x
@@ -107,19 +107,16 @@ class vtol_face
   // Status report
   //***************************************************************************
 
+  void link_inferior(vtol_one_chain_sptr inf);
+  void unlink_inferior(vtol_one_chain_sptr inf);
+
   //---------------------------------------------------------------------------
   //: Is `inferior' type valid for `this' ?
   //---------------------------------------------------------------------------
-  virtual bool
-  valid_inferior_type(const vtol_topology_object &inferior) const
-  { return inferior.cast_to_one_chain()!=0; }
-
-  //---------------------------------------------------------------------------
-  //: Is `superior' type valid for `this' ?
-  //---------------------------------------------------------------------------
-  virtual bool
-  valid_superior_type(const vtol_topology_object &superior) const
-  { return superior.cast_to_two_chain()!=0; }
+  virtual bool valid_inferior_type(vtol_topology_object const* inferior) const
+  { return inferior->cast_to_one_chain()!=0; }
+  bool valid_inferior_type(vtol_one_chain_sptr ) const { return true; }
+  bool valid_superior_type(vtol_two_chain_sptr ) const { return true; }
 
   //: accessors for boundary elements
   virtual vertex_list *outside_boundary_vertices(void);

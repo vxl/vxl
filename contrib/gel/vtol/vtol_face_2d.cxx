@@ -51,9 +51,8 @@ vtol_face_2d::vtol_face_2d(const vtol_face_2d &other)
       vtol_topology_object_sptr V2 = newverts[e->v2()->get_id()];
       if (!V1 || !V2)
         {
-           vcl_cerr << "Inconsistent topology in vtol_face_2d copy constructor\n";
-           vtol_one_chain_sptr inf = new vtol_one_chain();
-          link_inferior(*inf);
+          vcl_cerr << "Inconsistent topology in vtol_face_2d copy constructor\n";
+          link_inferior(new vtol_one_chain);
           return;
          }
       // make the topology and geometry match
@@ -67,10 +66,7 @@ vtol_face_2d::vtol_face_2d(const vtol_face_2d &other)
 
   topology_list::const_iterator ii;
   for (ii=oldf->inferiors()->begin();ii!= oldf->inferiors()->end();++ii)
-    {
-      vtol_one_chain_sptr onech=(*ii)->cast_to_one_chain()->copy_with_arrays(newverts,newedges);
-      link_inferior(*onech);
-    }
+    link_inferior((*ii)->cast_to_one_chain()->copy_with_arrays(newverts,newedges));
   delete edgs;
   delete verts;
   set_surface(0);
@@ -108,16 +104,13 @@ vtol_face_2d::copy_with_arrays(topology_list &verts,
   vtol_face_2d *newface=new vtol_face_2d();
   topology_list::const_iterator i;
   for (i=newface->inferiors()->begin();i!= newface->inferiors()->end();++i )
-    {
-      vtol_topology_object_sptr obj=(*i);
-      newface->unlink_inferior(*obj);
-    }
+    newface->unlink_inferior((*i)->cast_to_one_chain());
   newface->inferiors()->clear();
   for (i=inferiors()->begin();i!=inferiors()->end();++i)
     {
       vtol_one_chain *onech=(*i)->cast_to_one_chain()->copy_with_arrays(verts,edges);
       assert(*onech == *(*i));
-      newface->link_inferior(*onech);
+      newface->link_inferior(onech);
     }
   if (surface_)
     newface->set_surface(surface_->clone()->cast_to_region());
@@ -152,23 +145,17 @@ vtol_face_2d::vtol_face_2d(vertex_list &verts)
   double ymin=0;
   double xmax=1;
   double ymax=1;
-  edge_list elist;
-  vcl_vector<signed char> directions;
-  vtol_edge_sptr newedge;
-  bool done;
-  vertex_list::iterator vi;
-  vtol_vertex_sptr v01;
-  vtol_vertex_sptr v02;
-  vtol_one_chain_sptr eloop;
 
   set_surface(new vsol_rectangle_2d(new vsol_point_2d(xmin,ymin),
                                     new vsol_point_2d(xmax,ymin),
                                     new vsol_point_2d(xmax,ymax)));
 
   //generate a list of edges for edge loop
-  done=false;
-  vi=verts.begin();
-  v01=(*vi);
+  bool done=false;
+  vertex_list::iterator vi=verts.begin();
+  vtol_vertex_sptr v01=(*vi);
+  edge_list elist;
+  vcl_vector<signed char> directions;
 
   while (!done)
     {
@@ -182,9 +169,9 @@ vtol_face_2d::vtol_face_2d(vertex_list &verts)
           done=true;
         }
 
-      v02=(*vi); // get the next vertex (may be first)
+      vtol_vertex_sptr v02=(*vi); // get the next vertex (may be first)
 
-      newedge=v01->new_edge(*v02);
+      vtol_edge_sptr newedge=v01->new_edge(*v02);
       elist.push_back(newedge);
 
       if (*v02 == *(newedge->v2()))
@@ -194,9 +181,7 @@ vtol_face_2d::vtol_face_2d(vertex_list &verts)
       v01=v02; // in the next go around v1 is v2 of the last
     }
 
-  eloop=new vtol_one_chain(elist,directions,true);
-
-  link_inferior(*eloop);
+  link_inferior(new vtol_one_chain(elist,directions,true));
 }
 
 //: Constructor for a planar face from a list of one_chains.
@@ -213,7 +198,7 @@ vtol_face_2d::vtol_face_2d(one_chain_list &onechs)
   //     remaining one_chains are holes.
 
   if (onechs.size()>0)
-    link_inferior(*(onechs[0]));
+    link_inferior(onechs[0]);
 
   vtol_one_chain *onech=get_boundary_cycle();
 
@@ -232,7 +217,7 @@ vtol_face_2d::vtol_face_2d(one_chain_list &onechs)
   if (onech!=0)
     {
       for (unsigned int i = 1; i < onechs.size(); ++i)
-        onech->link_chain_inferior(*(onechs[i]));
+        onech->link_chain_inferior(onechs[i].ptr());
     }
 }
 
@@ -242,7 +227,7 @@ vtol_face_2d::vtol_face_2d(one_chain_list &onechs)
 vtol_face_2d::vtol_face_2d(vtol_one_chain &edgeloop)
   : surface_(0)
 {
-  link_inferior(edgeloop);
+  link_inferior(&edgeloop);
 
   // TODO - surface is set to bounding box rectangle, which is often too large
   set_surface(new vsol_rectangle_2d(new vsol_point_2d(get_min_x(),get_min_y()),

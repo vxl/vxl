@@ -19,6 +19,26 @@ vtol_edge_sptr vtol_one_chain::edge(int i) const
 // Initialization
 //***************************************************************************
 
+void vtol_one_chain::link_inferior(vtol_edge_sptr inf)
+{
+  vtol_topology_object::link_inferior(inf->cast_to_topology_object());
+}
+
+void vtol_one_chain::unlink_inferior(vtol_edge_sptr inf)
+{
+  vtol_topology_object::unlink_inferior(inf->cast_to_topology_object());
+}
+
+void vtol_one_chain::link_chain_inferior(vtol_one_chain_sptr chain_inferior)
+{
+  vtol_chain::link_chain_inferior(chain_inferior->cast_to_chain());
+}
+
+void vtol_one_chain::unlink_chain_inferior(vtol_one_chain_sptr chain_inferior)
+{
+  vtol_chain::unlink_chain_inferior(chain_inferior->cast_to_chain());
+}
+
 //---------------------------------------------------------------------------
 //: Constructor from an array of edges
 //---------------------------------------------------------------------------
@@ -29,7 +49,7 @@ vtol_one_chain::vtol_one_chain(edge_list &edgs,
 
   for (edge_list::iterator i=edgs.begin();i!=edgs.end();++i)
     {
-      link_inferior(*(*i));
+      link_inferior(*i);
       directions_.push_back((signed char)1);
     }
 
@@ -47,7 +67,7 @@ vtol_one_chain::vtol_one_chain(edge_list &edgs,
   set_cycle(new_is_cycle);
 
   for (edge_list::iterator i=edgs.begin();i!=edgs.end();++i)
-    link_inferior(*(*i));
+    link_inferior(*i);
 
   for (vcl_vector<signed char>::iterator j=dirs.begin();j!=dirs.end();++j)
     directions_.push_back(*j);
@@ -79,14 +99,14 @@ vtol_one_chain::vtol_one_chain(vtol_one_chain const& other)
 
       vtol_edge_sptr newedge = newverts[e->v1()->get_id()]->cast_to_vertex()->new_edge(
                                 *(newverts[e->v2()->get_id()]->cast_to_vertex()));
-      link_inferior(*newedge);
+      link_inferior(newedge);
       directions_.push_back(*dir);
     }
   set_cycle(el->is_cycle());
   const chain_list *hierarchy_infs=el->chain_inferiors();
 
   for (chain_list::const_iterator h=hierarchy_infs->begin();h!=hierarchy_infs->end();++h)
-    link_chain_inferior(*((*h)->clone()->cast_to_topology_object()->cast_to_one_chain()));
+    link_chain_inferior((*h)->clone()->cast_to_topology_object()->cast_to_one_chain());
   delete verts;
 }
 
@@ -123,7 +143,7 @@ vtol_one_chain::copy_with_arrays(topology_list &verts,
 
       assert(*e == *newedge);
 
-      result->link_inferior(*newedge);
+      result->link_inferior(newedge);
       result->directions_.push_back((*di));
     }
   result->set_cycle(is_cycle());
@@ -132,7 +152,7 @@ vtol_one_chain::copy_with_arrays(topology_list &verts,
   for (chain_list::const_iterator hi=hierarchy_infs->begin();hi!=hierarchy_infs->end();++hi)
     {
       vtol_one_chain *oldone=(*hi)->clone()->cast_to_topology_object()->cast_to_one_chain();
-      result->link_chain_inferior(*(oldone->copy_with_arrays(verts,edges)));
+      result->link_chain_inferior(oldone->copy_with_arrays(verts,edges));
     }
 
   assert(*result == *this);
@@ -175,13 +195,13 @@ vtol_one_chain::outside_boundary_compute_vertices(void)
       vtol_edge_sptr e=(*inf)->cast_to_edge();
       if ((*dir)< 0)
         {
-          result->push_back(e->v2().ptr());
-          result->push_back(e->v1().ptr());
+          result->push_back(e->v2()->cast_to_vertex());
+          result->push_back(e->v1()->cast_to_vertex());
         }
       else
         {
-          result->push_back(e->v1().ptr());
-          result->push_back(e->v2().ptr());
+          result->push_back(e->v1()->cast_to_vertex());
+          result->push_back(e->v2()->cast_to_vertex());
         }
     }
   return tagged_union(result);
@@ -561,13 +581,13 @@ void vtol_one_chain::determine_edge_directions(void)
 //: Add an edge
 //---------------------------------------------------------------------------
 void vtol_one_chain::add_edge(vtol_edge &new_edge,
-                                 bool dir)
+                              bool dir)
 {
   if (dir)
     directions_.push_back((signed char)1);
   else
     directions_.push_back((signed char)(-1));
-  link_inferior(new_edge);
+  link_inferior(&new_edge);
 }
 
 //---------------------------------------------------------------------------
@@ -580,17 +600,15 @@ void vtol_one_chain::remove_edge(vtol_edge &doomed_edge,
   assert(force_it||!is_cycle());
 
   vtol_topology_object_sptr t=&doomed_edge;
-
-  // int index = inferiors()->position(doomed_edge);
   topology_list::const_iterator i=vcl_find(inferiors()->begin(),inferiors()->end(),t);
-  long index=i-inferiors()->begin();
+  topology_list::difference_type index=i-inferiors()->begin();
 
-  if (index>=0)
+  if (index>=0 && i!= inferiors()->end())
     {
       vcl_vector<signed char>::iterator j = directions_.begin() + index;
       directions_.erase(j);// get rid of the direction associated with the edge
       touch();
-      unlink_inferior(doomed_edge);
+      unlink_inferior(&doomed_edge);
     }
 }
 

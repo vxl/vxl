@@ -29,6 +29,7 @@
 
 #include <vcl_vector.h>
 #include <vtol/vtol_chain.h>
+#include <vtol/vtol_face_2d_sptr.h>
 class vtol_vertex;
 class vtol_edge;
 class vtol_zero_chain;
@@ -43,6 +44,9 @@ class vtol_two_chain
   //***************************************************************************
   // Initialization
   //***************************************************************************
+
+  void link_chain_inferior(vtol_two_chain_sptr chain_inferior);
+  void unlink_chain_inferior(vtol_two_chain_sptr chain_inferior);
 
   //---------------------------------------------------------------------------
   //: Default constructor
@@ -130,23 +134,24 @@ class vtol_two_chain
   // Status report
   //***************************************************************************
 
+  void link_inferior(vtol_face_sptr inf);
+  void unlink_inferior(vtol_face_sptr inf);
+
   //---------------------------------------------------------------------------
   //: Is `inferior' type valid for `this' ?
   //---------------------------------------------------------------------------
-  virtual bool valid_inferior_type(vtol_topology_object const& inferior) const
-  { return inferior.cast_to_face()!=0; }
-
-  //---------------------------------------------------------------------------
-  //: Is `superior' type valid for `this' ?
-  //---------------------------------------------------------------------------
-  virtual bool valid_superior_type(vtol_topology_object const& superior) const
-  { return superior.cast_to_block()!=0; }
+  virtual bool valid_inferior_type(vtol_topology_object const* inferior) const
+  { return inferior->cast_to_face()!=0; }
+  bool valid_inferior_type(vtol_face_sptr )    const { return true; }
+  bool valid_inferior_type(vtol_face_2d_sptr ) const { return true; }
+  bool valid_superior_type(vtol_block_sptr )   const { return true; }
 
   //---------------------------------------------------------------------------
   //: Is `chain_inf_sup' type valid for `this' ?
   //---------------------------------------------------------------------------
-  virtual bool valid_chain_type(vtol_chain const& chain_inf_sup) const
-  { return chain_inf_sup.cast_to_two_chain()!=0; }
+  virtual bool valid_chain_type(vtol_chain const* chain_inf_sup) const
+  { return chain_inf_sup->cast_to_two_chain()!=0; }
+  bool valid_chain_type(vtol_two_chain_sptr ) const { return true; }
 
   // network access methods
 

@@ -78,9 +78,9 @@ static void test_edge_2d()
   TEST("vtol_edge_2d::v1()", *(e1->v1()), *v1);
   TEST("vtol_edge_2d::cast_to_edge()", e1->cast_to_edge()==0, false);
 
-  TEST("vtol_edge_2d::valid_inferior_type()",e1->valid_inferior_type(*zc2),true);
-  TEST("vtol_edge_2d::valid_superior_type()",e1->valid_superior_type(*e1),false);
-  TEST("vtol_zero_chain::valid_superior_type()",zc2->valid_superior_type(*e1),true);
+  TEST("vtol_edge_2d::valid_inferior_type()",e1->valid_inferior_type(zc2),true);
+  TEST("vtol_zero_chain::valid_superior_type()",zc2->valid_superior_type(e1),true);
+  TEST("vtol_edge_2d::valid_inferior_type()",e1->valid_inferior_type(e1->cast_to_topology_object()),false);
 }
 
 TESTLIB_DEFINE_MAIN(test_edge_2d);

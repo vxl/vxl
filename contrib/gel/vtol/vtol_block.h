@@ -110,19 +110,15 @@ class vtol_block
   // Status report
   //***************************************************************************
 
+  void link_inferior(vtol_two_chain_sptr inf);
+  void unlink_inferior(vtol_two_chain_sptr inf);
+
   //---------------------------------------------------------------------------
   //: Is `inferior' type valid for `this' ?
   //---------------------------------------------------------------------------
-  virtual bool
-  valid_inferior_type(const vtol_topology_object &inferior) const
-  { return inferior.cast_to_two_chain()!=0; }
-
-  //---------------------------------------------------------------------------
-  //: Is `superior' type valid for `this' ?
-  //---------------------------------------------------------------------------
-  virtual bool
-  valid_superior_type(const vtol_topology_object &superior) const
-  { return false; } // "block" has no possible valid superiors
+  virtual bool valid_inferior_type(vtol_topology_object const* inferior) const
+  { return inferior->cast_to_two_chain()!=0; }
+  bool valid_inferior_type(vtol_two_chain_sptr ) const { return true; }
 
   virtual vertex_list *outside_boundary_vertices(void);
   virtual zero_chain_list *outside_boundary_zero_chains(void);
@@ -156,7 +152,7 @@ class vtol_block
   virtual two_chain_list *hole_cycles(void) const;
 
   //: Utility and Editing Functions
-  virtual bool add_hole_cycle(vtol_two_chain &new_hole);
+  virtual bool add_hole_cycle(vtol_two_chain_sptr new_hole);
 
   //  virtual void update(void);
   virtual bool operator==(const vtol_block &other) const;

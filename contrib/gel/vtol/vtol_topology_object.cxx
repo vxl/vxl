@@ -50,11 +50,11 @@ vtol_topology_object::~vtol_topology_object()
 //: Is `inferior' already an inferior of `this' ?
 //---------------------------------------------------------------------------
 bool
-vtol_topology_object::is_inferior(const vtol_topology_object &inferior) const
+vtol_topology_object::is_inferior(vtol_topology_object_sptr inferior) const
 {
   topology_list::const_iterator i;
-  for (i=inferiors()->begin(); i!=inferiors()->end(); ++i)
-    if ((*i).ptr()== &inferior)
+  for (i=inferiors_.begin(); i!=inferiors_.end(); ++i)
+    if ((*i) == inferior)
       return true;
 
   return false;
@@ -64,11 +64,11 @@ vtol_topology_object::is_inferior(const vtol_topology_object &inferior) const
 //: Is `superior' already a superior of `this' ?
 //---------------------------------------------------------------------------
 bool
-vtol_topology_object::is_superior(const vtol_topology_object &superior) const
+vtol_topology_object::is_superior(vtol_topology_object* const& superior) const
 {
   vcl_list<vtol_topology_object*>::const_iterator i;
   for (i=superiors_.begin(); i!=superiors_.end(); ++i)
-    if (*i == &superior)
+    if (*i == superior)
       return true;
 
   return false;
@@ -98,19 +98,19 @@ const topology_list * vtol_topology_object::superiors(void) const
 //: Link `this' with an inferior `inferior'
 // Require: valid_inferior_type(inferior) and !is_inferior(inferior)
 //---------------------------------------------------------------------------
-void vtol_topology_object::link_inferior(vtol_topology_object &inferior)
+void vtol_topology_object::link_inferior(vtol_topology_object_sptr inferior)
 {
   // require
-  assert(valid_inferior_type(inferior));
+  assert(valid_inferior_type(inferior->cast_to_topology_object()));
 
   // Do nothing if already an inferior
-  if ( is_inferior (inferior) )  return;
+  if ( is_inferior(inferior) )  return;
 
   assert(!is_inferior(inferior));
-  assert(!inferior.is_superior(*this));
+  assert(!inferior->is_superior(this));
 
-  inferiors_.push_back(&inferior);
-  inferior.superiors_.push_back(this);
+  inferiors_.push_back(inferior);
+  inferior->superiors_.push_back(this);
   touch();
 }
 
@@ -118,24 +118,24 @@ void vtol_topology_object::link_inferior(vtol_topology_object &inferior)
 //: Unlink `this' with the inferior `inferior'
 // Require: valid_inferior_type(inferior) and is_inferior(inferior)
 //---------------------------------------------------------------------------
-void vtol_topology_object::unlink_inferior(vtol_topology_object &inferior)
+void vtol_topology_object::unlink_inferior(vtol_topology_object_sptr inferior)
 {
   // require
-  assert(valid_inferior_type(inferior));
+  assert(valid_inferior_type(inferior->cast_to_topology_object()));
   assert(is_inferior(inferior));
-  assert(inferior.is_superior(*this));
+  assert(inferior->is_superior(this));
 
-  vcl_list<vtol_topology_object*>::iterator i=inferior.superiors_.begin();
-  while ( i!=inferior.superiors_.end() && *i!=this ) ++i;
+  vcl_list<vtol_topology_object*>::iterator i=inferior->superiors_.begin();
+  while ( i!=inferior->superiors_.end() && *i!=this ) ++i;
   // check presence in "superiors_" list of inferior:
   assert(*i==this);
 
-  inferior.superiors_.erase(i); // unlink this from superiors_ list of inferior
+  inferior->superiors_.erase(i); // unlink this from superiors_ list of inferior
 
   topology_list::iterator j=inferiors_.begin();
-  while ( j!=inferiors_.end() && (*j).ptr()!=&inferior) ++j;
+  while ( j!=inferiors_.end() && (*j)!=inferior) ++j;
   // check presence in "inferiors_" list:
-  assert((*j).ptr()==&inferior);
+  assert((*j)==inferior);
 
   inferiors()->erase(j);
   touch();
@@ -148,7 +148,7 @@ void vtol_topology_object::unlink_all_inferiors(void)
 {
   // remove superior-inferior link, running through inferiors list back-to-front
   while (inferiors_.size()>0)
-    unlink_inferior(*(inferiors_.back()));
+    unlink_inferior(inferiors_.back());
 }
 
 //---------------------------------------------------------------------------
@@ -157,7 +157,7 @@ void vtol_topology_object::unlink_all_inferiors(void)
 void vtol_topology_object::unlink(void)
 {
   while (superiors_.size()>0)
-    (*superiors_.begin())->unlink_inferior(*this);
+    superiors_.front()->unlink_inferior(this);
   unlink_all_inferiors();
 }
 
