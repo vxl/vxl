@@ -35,11 +35,11 @@ void test_exp_filter_float(vil3d_image_view<float>& image)
 
 void test_exp_filter_float()
 {
-  vil3d_image_view<float> image(15,15,15);
+  vil3d_image_view<float> image(15,16,17);
   test_exp_filter_float(image);
 
   vcl_cout<<"Test non-contiguous image"<<vcl_endl;
-  vil3d_image_view<float> crop_image = vil3d_crop(image,2,10,3,10,4,10);
+  vil3d_image_view<float> crop_image = vil3d_crop(image,2,10,3,11,4,12);
   test_exp_filter_float(crop_image);
 }
 
