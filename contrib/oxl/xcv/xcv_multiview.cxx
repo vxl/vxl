@@ -34,7 +34,7 @@
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_easy2D_tableau.h>
 #include <vgui/vgui_rubberband_tableau.h>
-#include <vgui/vgui_slot.h>
+#include <vgui/vgui_parent_child_link.h>
 #include <vgui/vgui_soview.h>
 #include <vgui/vgui_soview2D.h>
 
@@ -96,7 +96,7 @@ xcv_twoview_manager* xcv_multiview::get_twoview_manager(vcl_vector<int>& col_pos
 #else
     vgui_tableau_sptr old = vgui_find_above_by_type_name(rubbers[j], "vgui_composite");
 #endif
-    vgui_slot::replace_child_everywhere(old, tee);
+    vgui_parent_child_link::replace_child_everywhere(old, tee);
     tee->set_child(old);
     mgr->set_tableau(tee, j);
   }
@@ -175,7 +175,7 @@ xcv_threeview_manager* xcv_multiview::get_threeview_manager(vcl_vector<int>& col
   for (unsigned j=0; j<3; j++)
   {
     xcv_tjunction* tee = new xcv_tjunction(mgr);
-    vgui_slot::replace_child_everywhere(rubbers[j] , tee);
+    vgui_parent_child_link::replace_child_everywhere(rubbers[j] , tee);
     tee->set_child(rubbers[j]);
     mgr->set_tableau(tee, j);
   }

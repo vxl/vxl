@@ -1,7 +1,6 @@
-// This is ./oxl/xcv/xcv_tjunction.h
+// This is oxl/xcv/xcv_tjunction.h
 #ifndef xcv_tjunction_h_
 #define xcv_tjunction_h_
-
 //:
 // \file
 // \author  K.Y.McGaul
@@ -18,7 +17,7 @@
 //
 
 #include <vgui/vgui_tableau.h>
-#include <vgui/vgui_slot.h>
+#include <vgui/vgui_parent_child_link.h>
 #include "xcv_mview_manager.h"
 
 //:
@@ -41,7 +40,7 @@ public:
 
 private:
   xcv_mview_manager* xcv_mgr;
-  vgui_slot child_tab;
+  vgui_parent_child_link child_tab;
 };
 
 #endif // xcv_tjunction_h_

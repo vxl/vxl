@@ -18,7 +18,7 @@
 
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_event.h>
-#include <vgui/vgui_slot.h>
+#include <vgui/vgui_parent_child_link.h>
 
 // <vgui_make_sptr>
 #include "xcv_picker_tableau_sptr.h"
@@ -43,7 +43,7 @@ public:
 
 
 protected:
-  vgui_slot child_tab;
+  vgui_parent_child_link child_tab;
 
 private:
   //: Draw a line to help the user pick it.
