@@ -13,6 +13,7 @@ SET( vil2_sources
   vil2_load.cxx vil2_load.h
   vil2_reg_image_2d.h
   vil2_reg_image.h
+  vil2_pixel_format.h
 
   # file format readers/writers (see below for conditional ones)
   file_formats/vil2_pnm.cxx file_formats/vil2_pnm.h
