@@ -1,6 +1,5 @@
 // This is ./vxl/vnl/vnl_rational.cxx
 #include <vnl/vnl_rational.h>
-#include <vcl_cmath.h> // for sqrt
 
 //:
 // \file
@@ -24,11 +23,6 @@ vnl_rational::vnl_rational(double d)
   num_ = num; den_ = den;
   if (sign) num_ = -num_;
   // no need to normalize() since prev_num and prev_den have guaranteed a gcd=1
-}
-
-vnl_rational sqrt(vnl_rational x)
-{
-  return vnl_rational(vcl_sqrt(double(x)));
 }
 
 const vnl_rational vnl_numeric_traits<vnl_rational>::zero = vnl_rational(0L,1L);
