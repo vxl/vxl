@@ -1,6 +1,8 @@
-/*
-  awf@robots.ox.ac.uk
-*/
+//
+// This is vgui/impl/mfc/vgui_mfc_tag.cxx
+//
+// \author  awf@robots.ox.ac.uk
+//
 #include "vgui_mfc.h"
 #include <vgui/vgui_tag.h>
 #include <vul/vul_trace.h>

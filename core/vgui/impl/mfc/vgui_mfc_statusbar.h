@@ -4,23 +4,18 @@
 #pragma interface
 #endif
 // 
-// .NAME vgui_mfc_statusbar
-// .LIBRARY vgui-mfc
-// .HEADER vxl Package
-// .INCLUDE vgui/impl/mfc/vgui_mfc_statusbar.h
-// .FILE vgui_mfc_statusbar.cxx
-//
-// .SECTION Description:
-//   
-//
-// .SECTION Author:
-//              Marko Bacic, 08 Aug 2000
-//              Robotics Research Group, University of Oxford
-//
-// .SECTION Modifications:
+// This is vgui/impl/mfc/vgui_mfc_statusbar
+
+//:
+// \file
+// \author   Marko Bacic, Oxford RRG
+// \date     08 Aug 2000
+// \brief    Status bar for the main window of the application.
+// \verbatim
+//  Modifications:
 //     <none yet>
+// \endverbatim
 //
-//-----------------------------------------------------------------------------
 
 #include <vcl_string.h>
 #include <vcl_iosfwd.h>
@@ -37,7 +32,7 @@ public:
 
   //: Append given text (of given length) to the status bar
   int write(const char* text, int n);
-  //: Append given text (of given length) to the status bar
+  //: Append given text to the status bar
   int write(const char* text);
   //: Updates the status bar by calling OnUpdateStatusBar of vgui_mfc_mainfrm
   void update();

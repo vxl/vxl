@@ -3,11 +3,12 @@
 #pragma implementation
 #endif
 //
-// .NAME vgui_mfc_doc
-// Author: Marko Bacic, Oxford RRG
-// Created: 27 July 2000
+// This is vgui/impl/mfc/vgui_mfc_doc.cxx
+// See vgui_mfc_doc.h for a description of this file.
 //
-//-----------------------------------------------------------------------------
+// \author Marko Bacic, Oxford RRG
+// \date   27 July 2000
+//
 
 #include "stdafx.h"
 #include "vgui_mfc.h"

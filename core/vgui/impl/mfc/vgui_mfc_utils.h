@@ -47,6 +47,8 @@ public:
   static vgui_mfc_utils *instance();
   //: Constructor.
   vgui_mfc_utils();
+  //: Destructor.
+  ~vgui_mfc_utils();
   //: Create a MFC sub-menu from the given vgui_menu.
   HMENU add_submenu(const vgui_menu& menu);
   //: Sets the menu of the application window
@@ -57,6 +59,10 @@ public:
   virtual void menu_dispatcher(UINT nID);
   //: Menu accelerator table - this defines menu shortcuts
   HACCEL AccelTable;
+
+private:
+  // List of menus to be deleted when we are finished:
+  vcl_vector<CMenu*> menus_to_be_deleted;
 
 };
 

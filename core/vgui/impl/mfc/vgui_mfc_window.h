@@ -1,28 +1,26 @@
 //-*- c++ -*-------------------------------------------------------------------
+//
+// This is vgui/impl/mfc/vgui_mfc_window.h
+
+//:
+// \file
+// \author  Marko Bacic, Oxford RRG
+// \date    24-JUL-2000
+// \brief   The mfc+ implementation of vgui_window
+//  Based on vgui_glut_win.
+// \verbatim
+//  Modifications:
+//    24-JUL-2000  Marko Bacic, Oxford RRG - Initial version.
+//    17-AUG-2000  Marko Bacic, Oxford RRG - Now windows can have specified size
+//    23-AUG-2000  Marko Bacic, Oxford RRG - Added support for scrollbars
+// \endverbatim
+//
+
 #ifndef vgui_mfc_window_h_
 #define vgui_mfc_window_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// 
-// .NAME vgui_mfc_window - vgui_mfc_window is a the mfc+ implementation of vgui_window
-// .LIBRARY vgui-mfc
-// .HEADER vxl Package
-// .INCLUDE vgui/impl/mfc/vgui_mfc_window.h
-// .FILE vgui_mfc_window.cxx
-//
-// .SECTION Description:
-//
-// vgui_mfc_window is a the mfc+ implementation of vgui_window.
-// Based on vgui_glut_win.
-//
-// .SECTION Author:
-//    24-JUL-2000  Marko Bacic, Oxford RRG
-// .SECTION Modifications:
-//    17-AUG-2000  Marko Bacic, Oxford RRG - Now windows can have specified size
-//    23-AUG-2000  Marko Bacic, Oxford RRG - Added support for scrollbars
-//
-//-----------------------------------------------------------------------------
 
 class vgui_mfc_adaptor;
 class vgui_mfc_statusbar;
@@ -32,6 +30,8 @@ class vgui_mfc_statusbar;
 #include <afxwin.h>
 class vgui_mfc_window : public vgui_window {
 public:
+  init_window(char const *title, vgui_menu const &menubar, bool has_menu, unsigned width, unsigned height,
+               int posx, int posy);
   vgui_mfc_window(char const *title, unsigned w, unsigned h, int posx =-1, int posy=-1);
   vgui_mfc_window(unsigned w,unsigned h,vgui_menu const &menubar,char const *title);
   ~vgui_mfc_window();
@@ -52,6 +52,8 @@ public:
   void reshape(unsigned, unsigned);
   void reposition(int,int);
   void set_title(vcl_string const &);
+
+  POSITION pos1, pos2, pos3;
 };
 
 #endif // vgui_mfc_window_h_

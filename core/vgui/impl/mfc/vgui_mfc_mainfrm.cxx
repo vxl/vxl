@@ -1,6 +1,10 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
+//
+// This is vgui/impl/mfc/vgui_mfc_mainfrm.cxx
+// See vgui_mfc_mainfrm.h for a description of this file.
+//
 
 #include "stdafx.h"
 #include "vgui_mfc.h"

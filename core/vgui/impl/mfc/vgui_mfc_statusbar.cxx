@@ -3,14 +3,18 @@
 #pragma implementation
 #endif
 //
-// Class: vgui_mfc_statusbar
-// Author: Marko Bacic, RRG, University of Oxford
-// Created: 10 Aug 2000
+// This is vgui/impl/mfc/vgui_mfc_statusbar.cxx
+// See vgui_mfc_statusbar.h for a description of this file.
 //
+// \author  Marko Bacic, RRG, University of Oxford
+// \date    10 Aug 2000
+//
+// \verbatim
 // Modifications:
 //   13-MAR-2001 K.Y.McGaul   Messages are now cleared when a new message
 //                            appears, not immediately.
-//-----------------------------------------------------------------------------
+// \endverbatim
+//
 
 #include "vgui_mfc_statusbar.h"
 #include "vgui_mfc_mainfrm.h"

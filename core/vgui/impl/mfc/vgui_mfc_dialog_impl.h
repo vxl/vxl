@@ -4,23 +4,22 @@
 #pragma interface
 #endif
 //
-// .NAME vgui_mfc_dialog_impl - Provides support for a dialog box
-// .LIBRARY vgui-mfc
-// .HEADER vxl Package
-// .INCLUDE vgui/impl/mfc/vgui_mfc_dialog_impl.h
-// .FILE vgui_mfc_dialog_impl.cxx
+// This is vgui/impl/mfc/vgui_mfc_dialog_impl.h
+
+//:
+// \file
+// \author  Marko Bacic, RRG, University of Oxford
+// \date    31 Jul 2000
+// \brief   Provides support for a dialog box
+//  Specialization of vgui_dialog_impl for mfc. Creates a mfc dialog box.
+//  Based on vgui_gtk_dialog_impl
+// \verbatim
+//  Modifications:
+//    Marko Bacic    31-JUL-2000   Initial version.
+// \endverbatim
 //
-// .SECTION Description:
-//
-//   Specialization of vgui_dialog_impl for mfc. Creates a mfc dialog box.
-//   Based on vgui_gtk_dialog_impl
-//
-// .SECTION Author:
-//              Marko Bacic, 31 Jul 2000
-//              Robotics Research Group, University of Oxford
-//
-// .SECTION Modifications:
-//-----------------------------------------------------------------------------
+
+class CFont;
 
 #include <vgui/internals/vgui_dialog_impl.h>
 #include "stdafx.h"
@@ -37,6 +36,7 @@ public:
   ~vgui_mfc_dialog_impl();
 
   void* choice_field_widget(const char*, const vcl_vector<vcl_string>&, int&);
+  void* inline_tableau_widget(const vgui_tableau_sptr tab, unsigned int width, unsigned int height);
   //: Sets the modality of the dialog box.
   void modal(const bool);
   //: Display the dialog box.
@@ -70,6 +70,8 @@ private:
   //: List of created MFC objects (so we can delete them).
   vcl_vector<CWnd *> awlist;
   DECLARE_MESSAGE_MAP()
+  //: Type font.
+  CFont* font;
 };
 
 #endif // vgui_mfc_dialog_impl_h_

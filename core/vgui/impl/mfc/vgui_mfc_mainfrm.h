@@ -1,13 +1,17 @@
 //
-// .NAME vgui_mfc_mainfrm - Defines main window of the application
-// .LIBRARY vgui-mfc
-// .SECTION Author
-//    Marko Bacic, Oxford RRG
-// Created: 27 July 2000
-// .SECTION Modifications:
+// This is vgui/impl/mfc/vgui_mfc_mainfrm.h
+
+//:
+// \file
+// \author  Marko Bacic, Oxford RRG
+// \date    27 July 2000
+// \brief   Defines main window of the application
+// \verbatim
+//  Modifications:
 //   22-AUG-2000 - Marko Bacic, Oxford RRG -- Added support for horizontal and
 //                                            vertical scroll bars
-//-----------------------------------------------------------------------------
+// \endverbatim
+//
 
 #ifndef AFX_VGUI_MFC_MAINFRM_H__B3175B74_0F91_44DD_8EFD_41CEA35852A1__INCLUDED_
 #define AFX_VGUI_MFC_MAINFRM_H__B3175B74_0F91_44DD_8EFD_41CEA35852A1__INCLUDED_

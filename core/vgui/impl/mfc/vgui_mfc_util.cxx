@@ -3,9 +3,10 @@
 #pragma implementation
 #endif
 //
-// .NAME vgui_mfc_util
-// Author: Marko Bacic, Oxford RRG
-// Created: 4 August 2000 
+// This is vgui/impl/mfc/vgui_mfc_util.cxx
+// 
+// \author  Marko Bacic, Oxford RRG
+// \date    4 August 2000 
 //   
 //-----------------------------------------------------------------------------
 

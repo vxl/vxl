@@ -1,7 +1,11 @@
-// awfmfcView.h : interface of the CAwfmfcView class
-// .LIBRARY vgui-mfc
+// 
+// This is vgui/impl/mfc/vgui_mfc_view.h
+
+//:
+// \file
+// \author  Oxford RRG
+// \brief
 //
-/////////////////////////////////////////////////////////////////////////////
 
 #ifndef AFX_VGUIMFCVIEW_H__E03278BF_9B92_4B98_A4EF_43C38014407A__INCLUDED_
 #define AFX_VGUIMFCVIEW_H__E03278BF_9B92_4B98_A4EF_43C38014407A__INCLUDED_

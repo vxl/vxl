@@ -2,7 +2,7 @@
 //
 
 #include "stdafx.h"
-#include "vgui_mfc_app.h"
+//#include "vgui_mfc_app.h"
 
 #include "vgui_mfc_view.h"
 
@@ -18,16 +18,16 @@ static char THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNCREATE(vgui_mfc_view, vgui_mfc_adaptor)
 
 BEGIN_MESSAGE_MAP(vgui_mfc_view, vgui_mfc_adaptor)
-        //{{AFX_MSG_MAP(vgui_mfc_view)
-        ON_WM_CREATE()
-        //}}AFX_MSG_MAP
+  //{{AFX_MSG_MAP(vgui_mfc_view)
+  ON_WM_CREATE()
+  //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
 // vgui_mfc_view construction/destruction
 vgui_mfc_view::vgui_mfc_view()
 {
-        // TODO: add construction code here
+  // TODO: add construction code here
 }
 
 vgui_mfc_view::~vgui_mfc_view()
@@ -36,10 +36,10 @@ vgui_mfc_view::~vgui_mfc_view()
 
 BOOL vgui_mfc_view::PreCreateWindow(CREATESTRUCT& cs)
 {
-        // TODO: Modify the Window class or styles here by modifying
-        //  the CREATESTRUCT cs
+  // TODO: Modify the Window class or styles here by modifying
+  //  the CREATESTRUCT cs
 
-        return vgui_mfc_adaptor::PreCreateWindow(cs);
+  return vgui_mfc_adaptor::PreCreateWindow(cs);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -47,10 +47,10 @@ BOOL vgui_mfc_view::PreCreateWindow(CREATESTRUCT& cs)
 
 void vgui_mfc_view::OnDraw(CDC* pDC)
 {
-        CDocument* pDoc = GetDocument();
-        ASSERT_VALID(pDoc);
-        // TODO: add draw code for native data here
-        vgui_mfc_adaptor::OnDraw(pDC);
+  CDocument* pDoc = GetDocument();
+  ASSERT_VALID(pDoc);
+  // TODO: add draw code for native data here
+  vgui_mfc_adaptor::OnDraw(pDC);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -58,18 +58,18 @@ void vgui_mfc_view::OnDraw(CDC* pDC)
 
 BOOL vgui_mfc_view::OnPreparePrinting(CPrintInfo* pInfo)
 {
-        // default preparation
-        return DoPreparePrinting(pInfo);
+  // default preparation
+  return DoPreparePrinting(pInfo);
 }
 
 void vgui_mfc_view::OnBeginPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
 {
-        // TODO: add extra initialization before printing
+  // TODO: add extra initialization before printing
 }
 
 void vgui_mfc_view::OnEndPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
 {
-        // TODO: add cleanup after printing
+  // TODO: add cleanup after printing
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -78,33 +78,32 @@ void vgui_mfc_view::OnEndPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
 #ifdef _DEBUG
 void vgui_mfc_view::AssertValid() const
 {
-        CView::AssertValid();
+  CView::AssertValid();
 }
 
 void vgui_mfc_view::Dump(CDumpContext& dc) const
 {
-        CView::Dump(dc);
+  CView::Dump(dc);
 }
 
 CDocument* vgui_mfc_view::GetDocument() // non-debug version is inline
 {
-        ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CDocument)));
-        return (CDocument*)m_pDocument;
+  ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CDocument)));
+  return (CDocument*)m_pDocument;
 }
 #endif //_DEBUG
 
 /////////////////////////////////////////////////////////////////////////////
-// vgui_mfc_view message handlers
-
+//: vgui_mfc_view message handlers
 int vgui_mfc_view::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
-        if (vgui_mfc_adaptor::OnCreate(lpCreateStruct) == -1)
-                return -1;
+  if (vgui_mfc_adaptor::OnCreate(lpCreateStruct) == -1)
+    return -1;
 
-        // awf: when this view is created, grab the tableau
-        // from the document, and tell the vgui adaptor about it
-//      set_tableau(GetDocument()->get_tableau());
+  // awf: when this view is created, grab the tableau
+  // from the document, and tell the vgui adaptor about it
+//  set_tableau(GetDocument()->get_tableau());
 
 
-        return 0;
+  return 0;
 }

@@ -11,12 +11,14 @@
 // \verbatim
 //  Modifications:
 //    20-JUL-2001  K.Y.McGaul  Added menu accelerators.
+//    22-AUG-2001  K.Y.McGaul  Added destructor to fix memory leak: all menus now deleted.
 // \endverbatim
 
 #include <vgui/impl/mfc/vgui_mfc_utils.h>
 #include <vgui/vgui_command.h>
 static bool debug = false;
 vgui_mfc_utils *vgui_mfc_utils::instance_ = NULL;
+
 
 //: Called within message service routine of vgui_mfc_mainfrm.
 void vgui_mfc_utils::menu_dispatcher(UINT nID)
@@ -39,6 +41,13 @@ vgui_mfc_utils *vgui_mfc_utils::instance()
 vgui_mfc_utils::vgui_mfc_utils()
 {
   item_count = 0;
+}
+
+//: Destructor.
+vgui_mfc_utils::~vgui_mfc_utils()
+{
+  for (int i=0; i<menus_to_be_deleted.size(); i++)
+    delete menus_to_be_deleted[i];
 }
 
 //: Add keyboard shortcut for this menu item to our accelerator table (accels).
@@ -79,6 +88,7 @@ HMENU vgui_mfc_utils::add_submenu(const vgui_menu& menu)
 
   // Create a new menu
   popdown_menu = new CMenu();
+  menus_to_be_deleted.push_back(popdown_menu);
   popdown_menu->CreatePopupMenu();
 
   for (unsigned i=0;i<menu.size();i++)
@@ -125,6 +135,7 @@ void vgui_mfc_utils::set_menu(const vgui_menu& menu)
   if(window->GetMenu() == NULL)
   {
     menu_bar = new CMenu();
+    menus_to_be_deleted.push_back(menu_bar);
     menu_bar->CreateMenu();
     window->SetMenu(menu_bar);
   }
