@@ -1,13 +1,11 @@
 #ifndef vil2_image_view_txx_
 #define vil2_image_view_txx_
-
 //:
 //  \file
 //  \brief Represent images of one or more planes of Ts.
 //  \author Ian Scott
 
 #include "vil2_image_view.h"
-#include <vcl_cstdlib.h>
 #include <vcl_string.h>
 #include <vcl_cassert.h>
 #include <vil2/vil2_smart_ptr.h>
@@ -72,14 +70,14 @@ void vil2_image_view<T>::deep_copy(const vil2_image_view<T>& src)
       for (int x=0;x<nx_;++x)
       {
         *p = *sp;
-		p+=xstep_;
+        p+=xstep_;
         sp+=s_xstep;
       }
       row += ystep_;
       src_row += s_ystep;
     }
-	src_data += s_planestep;
-	data += planestep_;
+    src_data += s_planestep;
+    data += planestep_;
   }
 }
 
@@ -176,7 +174,6 @@ void vil2_image_view<T>::set_to_memory(const T* top_left,
 }
 
 
-
 //=======================================================================
 //: Arrange that this is window on given image.
 //  I.e. plane(i) points to im.plane(i+p0) + offset
@@ -233,8 +230,8 @@ vil2_image_view<T> vil2_image_view<T>::plane(int p) const
   return p_view;
 }
 
-//: Create a view which appears as the transpose of this view
-//  ie transpose()(x,y,p) = this(y,x,p)
+//: Create a view which appears as the transpose of this view.
+//  I.e transpose()(x,y,p) = this(y,x,p)
 template<class T>
 vil2_image_view<T> vil2_image_view<T>::transpose() const
 {
@@ -294,9 +291,8 @@ void vil2_image_view<T>::print_all(vcl_ostream& os) const
     {
       for (int x=0;x<nx_;++x)
       {
-        int v = int(im_data[ystep_*y+x*xstep_]);
-        if (v<10)  os<<" ";
-        if (v<100) os<<" ";
+        T v = im_data[ystep_*y+x*xstep_];
+        os.width(3);
         os<<v<<" ";
       }
       os<<vcl_endl;
