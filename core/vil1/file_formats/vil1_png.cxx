@@ -69,19 +69,19 @@ char const* vil_png_file_format::tag() const
 
 /////////////////////////////////////////////////////////////////////////////
 
-void user_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
+static void user_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
 {
   vil_stream* f = (vil_stream*)png_get_io_ptr(png_ptr);
   f->read(data, length);
 }
 
-void user_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
+static void user_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
 {
   vil_stream* f = (vil_stream*)png_get_io_ptr(png_ptr);
   f->write(data, length);
 }
 
-void user_flush_data(png_structp png_ptr)
+static void user_flush_data(png_structp png_ptr)
 {
   // IOFile* f = (IOFile*)png_get_io_ptr(png_ptr);
   // urk.  how to flush?
