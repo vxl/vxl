@@ -25,6 +25,13 @@
 #define VCL_HAS_TYPENAME @VCL_HAS_TYPENAME@
 
 
+// -- VCL_HAS_EXPORT
+// 
+// True if the compiler supports the "typename" keyword
+//
+#define VCL_HAS_EXPORT @VCL_HAS_EXPORT@
+
+
 // -- VCL_HAS_MUTABLE
 // 
 // True if the compiler supports the "mutable" keyword
