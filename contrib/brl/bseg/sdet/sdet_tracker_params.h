@@ -1,4 +1,4 @@
-//----*-c++-*----tells emacs to use C++ mode----------
+// This is brl/bseg/sdet/sdet_tracker_params.h
 #ifndef sdet_tracker_params_h_
 #define sdet_tracker_params_h_
 //:
@@ -19,27 +19,26 @@ class sdet_tracker_params : public gevd_param_mixin
   sdet_tracker_params(const int n_samples = 10, 
                       const float search_radius = 10.0,
                       const float match_thresh = 10.0
-                      );
+                     );
 
  sdet_tracker_params(const sdet_tracker_params& old_params);
  ~sdet_tracker_params(){}
 
   bool SanityCheck();
  friend
-   vcl_ostream& operator<<(vcl_ostream& os, const sdet_tracker_params& tp);
+  vcl_ostream& operator<<(vcl_ostream& os, const sdet_tracker_params& tp);
  protected:
- void InitParams(int n_samples, 
-                 float search_radius = 10.0,
-                 float match_thresh = 10.0
+  void InitParams(int n_samples, 
+                  float search_radius = 10.0,
+                  float match_thresh = 10.0
                  );
  public:
   //
   // Parameter blocks and parameters
   //
-  float n_samples_;        // number of samples generated per iteration
+  int n_samples_;          // number of samples generated per iteration
   float search_radius_;    // window size for generating samples
-  int match_thresh_;       // threshold for eliminating active matches
+  float match_thresh_;     // threshold for eliminating active matches
 };
-
 
 #endif // sdet_tracker_params_h_
