@@ -78,16 +78,22 @@ public:
 };
 
 // isnan
-//bool vnl_math_isnan(float);
+template <class T> inline bool vnl_math_isnan(T ) { return false; }
+bool vnl_math_isnan(float);
 bool vnl_math_isnan(double);
+bool vnl_math_isnan(long double);
 
 // isinf
-//bool vnl_math_isinf(float);
+template <class T> inline bool vnl_math_isinf(T ) { return false; }
+bool vnl_math_isinf(float);
 bool vnl_math_isinf(double);
+bool vnl_math_isinf(long double);
 
 // isfinite
-//bool vnl_math_isfinite(float);
+template <class T> inline bool vnl_math_isfinite(T ) { return false; }
+bool vnl_math_isfinite(float);
 bool vnl_math_isfinite(double);
+bool vnl_math_isfinite(long double);
 
 // rnd (rounding; 0.5 rounds up)
 inline long vnl_math_rnd(float x) { return (x>=0.0)?(int)(x + 0.5):(int)(x - 0.5); }
@@ -100,6 +106,7 @@ inline long     vnl_math_abs(long x) { return x < 0 ? -x : x; }
 inline unsigned long vnl_math_abs(unsigned long x) { return x; }
 inline float    vnl_math_abs(float x) { return x < 0.0 ? -x : x; }
 inline double   vnl_math_abs(double x) { return x < 0.0 ? -x : x; }
+inline long double vnl_math_abs(long double x) { return x < 0 ? -x : x; }
 
 // max
 inline int      vnl_math_max(int x, int y) { return (x > y) ? x : y; }
@@ -141,6 +148,7 @@ inline long     vnl_math_squared_magnitude(long x) { return x*x; }
 inline unsigned long vnl_math_squared_magnitude(unsigned long x) { return x*x; }
 inline float    vnl_math_squared_magnitude(float x) { return x*x; }
 inline double   vnl_math_squared_magnitude(double x) { return x*x; }
+inline long double vnl_math_squared_magnitude(long double x) { return x*x; }
 
 // squareroot
 inline float  vnl_math_sqrt(float x) { return float( vcl_sqrt(double(x))); }

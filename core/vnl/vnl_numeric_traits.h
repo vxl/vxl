@@ -183,6 +183,16 @@ public:
 };
 
 VCL_DEFINE_SPECIALIZATION
+class vnl_numeric_traits<long double> {
+public:
+  static const long double zero VCL_STATIC_CONST_INIT_FLOAT(0.0);
+  static const long double one VCL_STATIC_CONST_INIT_FLOAT(1.0);
+  typedef long double abs_t;
+  typedef long double double_t; // ahem
+  typedef long double real_t;
+};
+
+VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits< vcl_complex<float> > {
 public:
   static const vcl_complex<float> zero;
@@ -200,6 +210,16 @@ public:
   typedef double abs_t;
   typedef vcl_complex<vnl_numeric_traits<double>::double_t> double_t;
   typedef vcl_complex<double> real_t;
+};
+
+VCL_DEFINE_SPECIALIZATION
+class vnl_numeric_traits< vcl_complex<long double> > {
+public:
+  static const vcl_complex<long double> zero;
+  static const vcl_complex<long double> one;
+  typedef long double abs_t;
+  typedef vcl_complex<vnl_numeric_traits<long double>::double_t> double_t;
+  typedef vcl_complex<long double> real_t;
 };
 
 #endif // vnl_numeric_traits_h_
