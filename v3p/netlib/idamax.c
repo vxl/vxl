@@ -11,13 +11,13 @@ integer idamax_(integer *n, doublereal *dx, integer *incx)
     integer ret_val = 1;
 
     /* Local variables */
-    static doublereal dmax__;
+    static doublereal dmax;
     static integer i, ix;
 
-/*     finds the index of element having max. absolute value.		*/
-/*     jack dongarra, linpack, 3/11/78.					*/
-/*     modified 3/93 to return if incx .le. 0.				*/
-/*     modified 12/3/93, array(1) declarations changed to array(*)	*/
+/*     finds the index of element having max. absolute value.           */
+/*     jack dongarra, linpack, 3/11/78.                                 */
+/*     modified 3/93 to return if incx .le. 0.                          */
+/*     modified 12/3/93, array(1) declarations changed to array(*)      */
 
     if (*n < 1 || *incx <= 0) {
         return 0;
@@ -25,30 +25,23 @@ integer idamax_(integer *n, doublereal *dx, integer *incx)
     if (*n == 1) {
         return 1;
     }
-    if (*incx == 1) {
-        goto L20;
-    }
-
-/*        code for increment not equal to 1 */
-
-    dmax__ = abs(dx[0]);
-    ix = *incx;
-    for (i = 1; i < *n; ++i, ix += *incx)
-        if (abs(dx[ix]) > dmax__) {
-            ret_val = i+1;
-            dmax__ = abs(dx[ix]);
-        }
-    return ret_val;
-
+    dmax = abs(dx[0]);
 /*        code for increment equal to 1 */
-
-L20:
-    dmax__ = abs(dx[0]);
-    for (i = 1; i < *n; ++i)
-        if (abs(dx[i]) > dmax__) {
-            ret_val = i+1;
-            dmax__ = abs(dx[i]);
-        }
+    if (*incx == 1) {
+        for (i = 1; i < *n; ++i)
+            if (abs(dx[i]) > dmax) {
+                ret_val = i+1;
+                dmax = abs(dx[i]);
+            }
+    }
+/*        code for increment not equal to 1 */
+    else {
+        ix = *incx;
+        for (i = 1; i < *n; ++i, ix += *incx)
+            if (abs(dx[ix]) > dmax) {
+                ret_val = i+1;
+                dmax = abs(dx[ix]);
+            }
+    }
     return ret_val;
-
 } /* idamax_ */

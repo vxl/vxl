@@ -7,56 +7,45 @@
 
 /* Table of constant values */
 
-static real c_b4 = (float)1.;
+static real c_b4 = 1.f;
 
 /* Subroutine */ void srotg_(sa, sb, c, s)
 real *sa, *sb, *c, *s;
 {
-    /* System generated locals */
-    real r__1, r__2;
-
     /* Builtin functions */
     double sqrt(), r_sign();
+#define sqrtf(f) ((float)sqrt((double)(f)))
 
     /* Local variables */
     static real r, scale, z, roe;
 
+/*     construct givens plane rotation.        */
+/*     jack dongarra, linpack, 3/11/78.        */
 
-/*     construct givens plane rotation. */
-/*     jack dongarra, linpack, 3/11/78. */
-
-
-    roe = *sb;
-    if (dabs(*sa) > dabs(*sb)) {
-        roe = *sa;
+    scale = (float)dabs(*sa) + (float)dabs(*sb);
+    if (scale == 0.f) {
+        *c = 1.f; *s = 0.f;
+        *sa = *sb = 0.f;
     }
-    scale = dabs(*sa) + dabs(*sb);
-    if (scale != (float)0.) {
-        goto L10;
+    else {
+        roe = *sb;
+        if (dabs(*sa) > dabs(*sb)) {
+            roe = *sa;
+        }
+        r = *sa / scale;
+        z = *sb / scale;
+        r = scale * sqrtf(r * r + z * z);
+        r *= (float)r_sign(&c_b4, &roe);
+        *c = *sa / r;
+        *s = *sb / r;
+        z = 1.f;
+        if (dabs(*sa) > dabs(*sb)) {
+            z = *s;
+        }
+        if (dabs(*sb) >= dabs(*sa) && *c != 0.f) {
+            z = 1.f / *c;
+        }
+        *sa = r;
+        *sb = z;
     }
-    *c = (float)1.;
-    *s = (float)0.;
-    r = (float)0.;
-    z = (float)0.;
-    goto L20;
-L10:
-/* Computing 2nd power */
-    r__1 = *sa / scale;
-/* Computing 2nd power */
-    r__2 = *sb / scale;
-    r = scale * sqrt(r__1 * r__1 + r__2 * r__2);
-    r = r_sign(&c_b4, &roe) * r;
-    *c = *sa / r;
-    *s = *sb / r;
-    z = (float)1.;
-    if (dabs(*sa) > dabs(*sb)) {
-        z = *s;
-    }
-    if (dabs(*sb) >= dabs(*sa) && *c != (float)0.) {
-        z = (float)1. / *c;
-    }
-L20:
-    *sa = r;
-    *sb = z;
 } /* srotg_ */
-
