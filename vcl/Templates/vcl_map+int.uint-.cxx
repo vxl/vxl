@@ -1,6 +1,3 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
 #include <vcl/vcl_map.txx>
 
 VCL_MULTIMAP_INSTANTIATE(int, unsigned, vcl_less<int>);
