@@ -20,7 +20,7 @@
 # endif
 
 #elif defined(VCL_SGI_CC_720)
-# include <iostream.h>
+# include <stream.h> // this #includes iostream.h, fstream.h and iomanip.h
 # define vcl_generic_iosfwd_STD /* */
 # include "generic/vcl_iosfwd.h"
 
