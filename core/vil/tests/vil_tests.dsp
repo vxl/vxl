@@ -117,6 +117,9 @@ SOURCE=.\test_sample_profile_bicub.cxx
 # Begin Source File
 SOURCE=.\test_suppress_non_max.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_rotate_image.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
