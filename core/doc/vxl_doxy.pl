@@ -56,7 +56,7 @@ while (<>)
 
     # perform this replacement temporarily. Make it permanent in the code
     # when doxygen 1.3.4 is more widely distributed
-    if ($ENV{"REPLACE_RELATES_WITH_RELATESALSO"} ne "")
+    if ( !$ENV{"REPLACE_RELATES_WITH_RELATESALSO"} )
     {
         s/\\relates\b/\\relatesalso/;
     }
