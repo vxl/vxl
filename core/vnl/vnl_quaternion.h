@@ -76,6 +76,9 @@ class vnl_quaternion : public vnl_vector_fixed<T, 4>
   //: Construct quaternion from from from 3-4D vector
   vnl_quaternion (const vnl_vector<T>& vec);
 
+  //: Construct quaternion from from from 4D vector
+  vnl_quaternion (const vnl_vector_fixed<T,4>& vec);
+
   //: Copy constructor -- Creates a copy of from quaternion.
   inline vnl_quaternion (const vnl_quaternion<T>& from) : Base(from) {}
 

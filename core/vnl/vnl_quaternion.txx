@@ -84,6 +84,18 @@ vnl_quaternion<T>::vnl_quaternion (const vnl_vector<T>& vec)
     this->operator[](i) = 0.0;
 }
 
+//: Creates a quaternion from a vector.
+// 4D vector is assumed to be a 4-element quaternion, to 
+// provide casting between vector and quaternion
+
+template <class T>
+vnl_quaternion<T>::vnl_quaternion (const vnl_vector_fixed<T,4>& vec)
+{
+  for (unsigned int i = 0; i < vec.size(); i++)    // 1-1 layout between vector & quaternion
+    this->operator[](i) = vec[i];
+}
+
+
 //: Creates a quaternion from a rotation matrix.
 // Its orthonormal basis vectors are row-wise in the top-left most block.
 // The transform matrix may be any size,
