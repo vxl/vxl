@@ -854,8 +854,8 @@ bool gevd_edgel_regions::InitRegionArray(vcl_vector< vtol_edge_2d_sptr>& sg)
         {
           bool inserted = this->insert_edgel(pex1, pey1, float((*xy)[k].x()), float((*xy)[k].y()), re);
           edge_insert = edge_insert || inserted;
-          pex1 = (*xy)[k].x();
-          pey1 = (*xy)[k].y();
+          pex1 = float((*xy)[k].x());
+          pey1 = float((*xy)[k].y());
         }
       if (!edge_insert)
         {
