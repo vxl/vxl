@@ -177,7 +177,7 @@ static void test_tracking_face_2d(int argc, char* argv[])
                                                               model_image_uni,
                                                               null, null,
                                                               null, null,
-                                                              0, 0);
+                                                              0, 0,0,0,0);
     vcl_cout << "Parzen Sigma = 0\n";
     tf->compute_mutual_information(obs_image_uni, null, null, null, null);
     double jent0 = tf->intensity_entropy();
@@ -200,7 +200,7 @@ static void test_tracking_face_2d(int argc, char* argv[])
                                    model_image_comb,
                                    null, null,
                                    null, null,
-                                   0, 0);
+                                   0, 0,0,0,0);
     vcl_cout << "Parzen Sigma = 0\n";
     tf->compute_mutual_information(obs_image_comb, null, null, null, null);
     jent0 = tf->intensity_entropy();
@@ -209,7 +209,7 @@ static void test_tracking_face_2d(int argc, char* argv[])
                                    model_image_comb,
                                    null, null,
                                    null, null,
-                                   0, 0.5);
+                                   0, 0.5,0,0,0);
     vcl_cout << "Parzen Sigma = 1\n";
     tf->compute_mutual_information(obs_image_comb, null, null, null, null);
     jent1 = tf->intensity_entropy();
@@ -228,13 +228,13 @@ static void test_tracking_face_2d(int argc, char* argv[])
                                                               model_image_uni,
                                                               null, null,
                                                               null, null,
-                                                              0, 0);
+                                                              0, 0,0,0,0);
     //  bf->print_pixels(obs_image_uni);
     strk_tracking_face_2d_sptr obf = new strk_tracking_face_2d(hole_f,
                                    model_image_uni,
                                  null, null,
                                  null, null,
-                                 0, 0);
+                                 0, 0,0,0,0);
      int ob_pix = obf->Npix(), b_pix = bf->Npix();
      vcl_cout << "Nobs = "<< ob_pix << "  Nbk = " << b_pix << '\n';
     obf->intensity_mutual_info_diff(bf, obs_image_uni, true);
