@@ -2,7 +2,7 @@
 # This library contains public domain routines from netlib.att.com
 
 USES = # nothing!
-IULIBS = # automatically added: -lnetlib
+IULIBS = # no dependencies whatsoever
 
 LIBRARY := netlib
 VERSION := 1.0
