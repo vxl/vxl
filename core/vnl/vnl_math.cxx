@@ -12,16 +12,21 @@
 # include <Float.h> // for 'isnan' and 'finite'
 // # define isnan _isnan
 # define finite _finite
+# define finitef _finite
 # define isnan _isnan
 #elif VXL_IEEEFP_HAS_FINITE
 # include <ieeefp.h>
 
 #elif VXL_MATH_HAS_FINITE
 # include <math.h>  // dont_vxl_filter: this is *not* supposed to be <cmath>
+# ifndef __alpha__ // on Alpha, finitef() must be used for float args instead of finite()
+#  define finitef finite
+# endif
 
 #elif defined(SYSV) && !defined(hppa)
 // needed on platforms with finite() declared in strange places, e.g. on alpha
 extern "C" int finite(double);
+extern "C" int finitef(float);
 
 #else
 #warning finite() is not declared on this platform
@@ -125,7 +130,7 @@ bool vnl_math_isnan(long double x) {
 
 #if !defined(VNL_HAS_NO_FINITE)
 //: Return true if x is neither NaN nor Inf.
-bool vnl_math_isfinite(float x) { return finite(x) != 0; }
+bool vnl_math_isfinite(float x) { return finitef(x) != 0; }
 //: Return true if x is neither NaN nor Inf.
 bool vnl_math_isfinite(double x) { return finite(x) != 0; }
 //: Return true if x is neither NaN nor Inf.
@@ -144,7 +149,7 @@ bool vnl_math_isfinite(long double x) {
 
 #if !defined(VNL_HAS_NO_FINITE)
 //: Return true if x is inf
-bool vnl_math_isinf(float x) { return !finite(x) && !isnan(x); }
+bool vnl_math_isinf(float x) { return !finitef(x) && !isnan(x); }
 //: Return true if x is inf
 bool vnl_math_isinf(double x) { return !finite(x) && !isnan(x); }
 //: Return true if x is inf
