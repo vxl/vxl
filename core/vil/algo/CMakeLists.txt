@@ -1,6 +1,7 @@
 # mul/vil2/algo/CMakeLists.txt
 
 SET( vil2_algo_sources
+  vil2_sobel_1x3.cxx           vil2_sobel_1x3.h    vil2_sobel_1x3.txx
   vil2_sobel_3x3.cxx           vil2_sobel_3x3.h    vil2_sobel_3x3.txx
   vil2_gauss_reduce.cxx        vil2_gauss_reduce.h vil2_gauss_reduce.txx
   vil2_median.txx              vil2_median.h
