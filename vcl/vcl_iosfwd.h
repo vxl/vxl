@@ -1,11 +1,14 @@
 //-*- c++ -*-------------------------------------------------------------------
 #ifndef vcl_iosfwd_h_
 #define vcl_iosfwd_h_
+
+/* breaks 2.7
 #include <iosfwd>
  using std::istream;
  using std::ostream;
  using std::ifstream;
  using std::ofstream;
+*/
 
 // ANSI standard iostream forward decls.
 // You can't write "class ostream" and expect it to work

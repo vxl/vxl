@@ -1,5 +1,5 @@
-#ifndef vcl_win32_list_txx_
-#define vcl_win32_list_txx_
+#ifndef vcl_sgi_list_txx_
+#define vcl_sgi_list_txx_
 
 #include <vcl/vcl_list.h>
 

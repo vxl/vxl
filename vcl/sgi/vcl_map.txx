@@ -1,5 +1,5 @@
-#ifndef vcl_win32_map_txx_
-#define vcl_win32_map_txx_
+#ifndef vcl_sgi_map_txx_
+#define vcl_sgi_map_txx_
 
 #undef VCL_MAP_INSTANTIATE
 #define VCL_MAP_INSTANTIATE(K, V, C) \

@@ -7,7 +7,7 @@
 // this is to get the vcl_ios_* macros.
 #include <vcl/vcl_iostream.h>
 
-#if defined(VCL_GCC_27) || defined(VCL_GCC_WITH_LIBSTDCXX_V2)
+#if defined(VCL_GCC_27) || defined(VCL_GCC_WITH_LIBSTDCXX_V2) || defined(VCL_SGI_CC_720)
 # include <fstream.h>
 
 #else  // -------------------- ISO

@@ -13,21 +13,27 @@
 #include <vcl/vcl_compiler.h>
 
 // Include system stdlib.h
-#include <stdlib.h>
-
-// awf added as I can't see where vcl_abs(int) is defined.  Tell me if this is wrong for you.
-inline int vcl_abs(int x) { return x >= 0 ? x : -x; }
-
-
-#if !VCL_USE_NATIVE_STL
-# include <vcl/emulation/vcl_stlconf.h>
+#if defined(VCL_GCC_27) || defined(VCL_SGI_CC_720)
+# include <stdlib.h>
+# define vcl_exit    exit
+# define vcl_abort   abort
+# define vcl_size_t  size_t
 #else
-# if _G_HAS_LABS
-inline long   vcl_abs(long x)         { return labs (x); }
-# else
-inline long   vcl_abs(long x)         { return x >= 0 ? x : -x; }
-# endif
-inline ldiv_t vcl_div(long x, long y) { return ldiv (x, y); }
+# include <vcl/iso/vcl_cstdlib.h>
 #endif
+
+#ifndef vcl_abs
+# if defined(VCL_EGCS) || defined(VCL_GCC_295)
+#  define vcl_abs abs
+
+# elif defined(VCL_GCC_27) || defined(VCL_SGI_CC_720)
+inline int vcl_abs(int x) { return x >= 0 ? x : -x; }
+inline int vcl_abs(long x) { return x >= 0 ? x : -x; }
+# else
+#  define vcl_abs std::abs
+# endif
+#endif
+
+//inline ldiv_t vcl_div(long x, long y) { return ldiv (x, y); }
 
 #endif

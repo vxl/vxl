@@ -66,8 +66,8 @@
 # endif
 #   define __THROW_BAD_ALLOC throw bad_alloc()
 #elif !defined(__THROW_BAD_ALLOC)
-#   include <vcl/vcl_iostream.h>
-#   define __THROW_BAD_ALLOC cerr << "out of memory" << endl; exit(1)
+extern void vcl_alloc_throw_bad_alloc(char const *, int);
+#   define __THROW_BAD_ALLOC vcl_alloc_throw_bad_alloc(__FILE__, __LINE__)
 #endif
 
 # if defined ( __STL_USE_ABBREVS )

@@ -1,5 +1,5 @@
-#ifndef vcl_win32_vector_txx_
-#define vcl_win32_vector_txx_
+#ifndef vcl_sgi_vector_txx_
+#define vcl_sgi_vector_txx_
 
 //#include <vcl/vcl_pair.h>
 #include <vcl/vcl_vector.h>

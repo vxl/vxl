@@ -26,28 +26,58 @@
 // ---------- all emulation
 #if !VCL_USE_NATIVE_COMPLEX 
 # include <vcl/emulation/vcl_complex.h>
+#ifndef vcl_abs
+# define vcl_abs  abs
+#endif
+# define vcl_conj conj
+# define vcl_norm norm
 
 // ---------- native gcc
 #elif defined(VCL_GCC_WITH_GNU_LIBSTDCXX_V2)
 # include <complex>
 # define vcl_complex complex
+#ifndef vcl_abs
+# define vcl_abs     abs
+#endif
+# define vcl_conj    conj
+# define vcl_norm    norm
 
 // ---------- gcc 2.95.2 with libstdc++-v3
 #elif defined(VCL_GCC_295) && defined(GNU_LIBSTDCXX_V3)
 # include <vcl/emulation/vcl_complex.h>
+#ifndef vcl_abs
+# define vcl_abs     abs
+#endif
+# define vcl_conj    conj
+# define vcl_norm    norm
 
 // ---------- native WIN32
 #elif defined(VCL_WIN32)
 # include <vcl/win32/vcl_complex.h>
+#ifndef vcl_abs
+# define vcl_abs     std::abs
+#endif
+# define vcl_conj    std::conj
+# define vcl_norm    std::norm
 
 // ---------- SunPro compiler
 #elif defined(VCL_SUNPRO_CC)
 # include <vcl/sunpro/vcl_complex.h>
+#ifndef vcl_abs
+# define vcl_abs     std::abs
+#endif
+# define vcl_conj    std::conj
+# define vcl_norm    std::norm
 
 // ---------- all other compilers (eg ISO ones... :)
 #else
 # include <complex>
 # define vcl_complex std::complex
+#ifndef vcl_abs
+# define vcl_abs     std::abs
+#endif
+# define vcl_conj    std::conj
+# define vcl_norm    std::norm
 
 #endif
 

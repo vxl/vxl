@@ -1,8 +1,5 @@
 #ifndef vcl_streambuf_h_
 #define vcl_streambuf_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
 /*
   fsm@robots.ox.ac.uk
 */
@@ -21,8 +18,11 @@
 # include <streambuf.h>
 # define vcl_streambuf streambuf
 
+#elif defined(VCL_SGI_CC_720)
+# include <iostream.h>
+# define vcl_streambuf streambuf
 
-#else
+#else // iso
 # include <streambuf>
 # define vcl_streambuf std::streambuf
 #endif

@@ -16,6 +16,6 @@ __eprintf (char const *string, char const *expression,
 {
   fprintf (stderr, string, expression, line, filename);
   fflush (stderr);
-  abort ();
+  vcl_abort ();
 }
 #endif

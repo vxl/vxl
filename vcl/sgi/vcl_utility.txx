@@ -1,5 +1,5 @@
-#ifndef vcl_win32_utility_txx_
-#define vcl_win32_utility_txx_
+#ifndef vcl_sgi_utility_txx_
+#define vcl_sgi_utility_txx_
 /*
   fsm@robots.ox.ac.uk
 */

@@ -37,15 +37,42 @@
 
 #include <vcl/vcl_compiler.h>
 
-// Include system math.h and define some vcl_* inline functions.
-// Some compilers may actually have working <cmath> headers, in which
-// case something cleverer ought to be done here.
-#include <math.h>
-extern "C++" {
+// 1. include system header
+#if defined(VCL_GCC_27) || defined(VCL_SGI_CC_720)
+# include <math.h>
+#else // iso
+# include <vcl/iso/vcl_cmath.h>
+#endif
+
+
+// 1.5 fix system header.
+#if defined(VCL_SUNPRO_CC_50)
+# include <math.h> // for the HUGE_VAL macro.
+# undef M_PI_4     // avoid redef. it's non-iso anyway.
+#endif
+#if defined (linux) && defined (__OPTIMIZE__)
+// * avoid infinite recursion when calling vnl_math::isfinite().
+// * avoid symbol in object file being called vnl_math::_isinf.
+# undef isinf  
+// * avoid that vnl_math::isnan is redefined in <math.h>.
+# undef isnan  
+#endif
+
+
+// 2. define vcl_abs() inline functions.
+#ifndef vcl_abs
+# if defined(VCL_EGCS) || defined(VCL_GCC_295)
+#  define vcl_abs abs
+
+# elif defined(VCL_GCC_27) || defined(VCL_SGI_CC_720)
 inline float       vcl_abs (float  x) { return (x >= 0.0f) ? x : -x; }
 inline double      vcl_abs (double x) { return fabs (x); }
 inline long double vcl_abs (long double x) { return fabs (x); }
-}
+# else
+#  define vcl_abs std::abs
+# endif
+#endif
+
 
 // vcl_min/vcl_max do not belong in this file. They should be
 // in vcl_algorithm.h, even for win32.
@@ -64,12 +91,9 @@ inline T vcl_min(T const& a, T const& b)
 #endif
 
 
-#if defined (linux) && defined (__OPTIMIZE__)
-// * avoid infinite recursion when calling vnl_math::isfinite().
-// * avoid symbol in object file being called vnl_math::_isinf.
-# undef isinf  
-// * avoid that vnl_math::isnan is redefined in <math.h>.
-# undef isnan  
+// 3. extensions.
+#if defined(WIN32) || defined(VCL_SUNPRO_CC_50)
+#define VCL_NO_DRAND48
 #endif
 
 #endif

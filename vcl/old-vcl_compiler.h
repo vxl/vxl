@@ -274,6 +274,11 @@
 #   else
 #     define VCL_SGI_CC_6
 #   endif
+#   if   (_COMPILER_VERSION >= 730)
+#     define VCL_SGI_CC_730
+#   elif (_COMPILER_VERSION >= 720)
+#     define VCL_SGI_CC_720
+#   endif
 #   define VCL_SGI_CC
 #  endif
 #endif

@@ -410,7 +410,12 @@ text { return ret; }
 
 
 //----------------------------------------------------------------------
-// namespace issues
+// exception and namespace issues
+
+
+// -- VCL_HAS_EXCEPTIONS
+// Set to true if the compiler supports the use of exceptions.
+#define VCL_HAS_EXCEPTIONS @VCL_HAS_EXCEPTIONS@
 
 
 // -- VCL_HAS_NAMESPACES

@@ -28,7 +28,7 @@
 
 // ------------------------------------------------------------
 // 1. include the system header.
-#if defined(VCL_GCC) 
+#if defined(VCL_GCC) || defined(VCL_SGI_CC_720)
 # include <iostream.h>
 #else // -------------------- ISO
 // On win32, <iostream.h> contains old crufty iostreams and
@@ -43,7 +43,17 @@
 // Note that the ios::nocreate and ios::noreplace are non-ISO
 // extensions, so don't put them in even though they appear
 // in early versions of "The C++ Programming Language".
-#if defined(VCL_GCC_27)
+#if defined(VCL_SGI_CC_720)
+# define vcl_ios_in     ios::in
+# define vcl_ios_out    ios::out
+# define vcl_ios_ate    ios::ate
+# define vcl_ios_app    ios::app
+# define vcl_ios_trunc  ios::trunc
+// SGI CC has no ios::bin, but since UNIX makes no distinction
+// between binary and non-binary, 0 works just as well.
+# define vcl_ios_binary ios::open_mode(0)/*ios::bin*/
+
+#elif defined(VCL_GCC_27)
 # define vcl_ios_in     ios::in
 # define vcl_ios_out    ios::out
 # define vcl_ios_ate    ios::ate
@@ -82,7 +92,17 @@
 
 // ------------------------------------------------------------
 // 3. define vcl_hex, vcl_dec, vcl_ws and common types.
-#if defined(VCL_GCC)
+#if defined(VCL_SGI_CC_720)
+# define vcl_hex          hex
+# define vcl_dec          dec
+# define vcl_ws           ws
+# define vcl_setprecision setprecision
+# define vcl_endl         endl
+# define vcl_streampos    streampos
+# define vcl_streambuf    streambuf
+# define vcl_streamsize   unsigned
+
+#elif defined(VCL_GCC)
 # define vcl_hex          hex
 # define vcl_dec          dec
 # define vcl_ws           ws
@@ -103,14 +123,23 @@
 # define vcl_streamsize   std::streamsize
 #endif
 
-#define vcl_cin cin
+#define vcl_cin  cin
 #define vcl_cout cout
 #define vcl_cerr cerr
 
 // ------------------------------------------------------------
 // 4. various
 
-#if defined(VCL_GCC)
+#if defined(VCL_SGI_CC_720)
+inline istream& operator>>(istream& s, signed char& c) 
+{
+  char i;
+  s >> i;
+  c = i;
+  return s;
+}
+
+#elif defined(VCL_GCC)
 // Nothing really to do here, except avoid the using 
 // statements for strictly ISO compilers.
 

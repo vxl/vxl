@@ -155,6 +155,61 @@ export VCL_HAS_EXPLICIT
 
 
 
+### Check whether the compiler supports exceptions
+AC_DEFUN(AC_CXX_HAS_EXCEPTIONS,[
+AC_CACHE_CHECK(whether the C++ compiler has working exceptions,ac_cxx_has_exceptions,[
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
+
+VCL_COMPILE_CXX
+
+AC_TRY_COMPILE([
+
+struct bizop { };
+
+int functionella(char const *a, char const *b)
+{
+  if (!a &&  b)
+    throw "a is no good";
+  if ( a && !b)
+    throw "b is no better";
+  if (!a && !b)
+    throw bizop();
+
+  return *a - *b;
+}
+
+void monkeylette()
+{
+  try {
+    functionella(  0,   0);
+    functionella("a",   0);
+    functionella(  0, "b");
+    functionella("a", "b");
+  }
+  catch (char const *s) {
+    // oops.
+  }
+  catch (bizop b) {
+    // outch
+  }
+  catch (...) {
+    // phew
+  }
+}
+],,ac_cxx_has_exceptions=yes,ac_cxx_has_exceptions=no)
+AC_LANG_RESTORE
+])
+if test "$ac_cxx_has_exceptions" = "yes" ; then
+  VCL_HAS_EXCEPTIONS=1;
+else
+  VCL_HAS_EXCEPTIONS=0;
+fi;
+export VCL_HAS_EXCEPTIONS
+])
+dnl
+
+
 ### Check whether the compiler supports namespaces
 AC_DEFUN(AC_CXX_HAS_NAMESPACES,[
 AC_CACHE_CHECK(whether the C++ compiler has working namespaces,ac_cxx_has_namespaces,[

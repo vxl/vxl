@@ -22,3 +22,10 @@ template class __alloc<false, 0>;
 template class __alloc<true, 0>;
 #endif
 #endif
+
+#include <vcl/vcl_iostream.h>
+void vcl_alloc_throw_bad_alloc(char const *FILE, int LINE)
+{
+  cerr << FILE << ":" << LINE << " : out of memory" << endl;
+  exit(1);
+}
