@@ -55,8 +55,6 @@ void vil_corners(const vil_image_view<float>& grad_i,
   const vcl_ptrdiff_t oj1 = grad_j.jstep() - grad_j.istep();
   const vcl_ptrdiff_t oj2 = grad_j.jstep();
   const vcl_ptrdiff_t oj3 = grad_j.istep() + grad_j.jstep();
-  //const vcl_ptrdiff_t oj4 = -grad_j.istep(); // unused
-  //const vcl_ptrdiff_t oj5 = grad_j.istep();  // unused
   const vcl_ptrdiff_t oj6 = -grad_j.istep() - grad_j.jstep();
   const vcl_ptrdiff_t oj7 = -grad_j.jstep();
   const vcl_ptrdiff_t oj8 = grad_j.istep() - grad_j.jstep();
@@ -72,11 +70,11 @@ void vil_corners(const vil_image_view<float>& grad_i,
     const float* pgj = gj_data;
     for (unsigned i=2;i<ni2;++i)
     {
-    // Compute gradient in i
+      // Compute gradient in i
       float dxdx = 0.125f*(pgi[oi3]+pgi[oi8] - (pgi[oi1]+pgi[oi6])) + 0.25f*(pgi[oi5]-pgi[oi4]);
-     // Compute gradient in j
+      // Compute gradient in j
       float dxdy = 0.125f*(pgi[oi1]+pgi[oi3] - (pgi[oi6]+pgi[oi8])) + 0.25f*(pgi[oi2]-pgi[oi7]);
-     // Compute gradient in j
+      // Compute gradient in j
       float dydy = 0.125f*(pgj[oj1]+pgj[oj3] - (pgj[oj6]+pgj[oj8])) + 0.25f*(pgj[oj2]-pgj[oj7]);
 
       float detH = dxdx*dydy + dxdy*dxdy;
