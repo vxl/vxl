@@ -4,7 +4,7 @@
 #   geoff.cross@crd.ge.com
 #
 
-LINK_LIBRARIES(gbl gmvl gst vsol vtol vdgl vsrl)
+LINK_LIBRARIES(gbl gmvl gst vsol vtol vdgl vsrl vgel vgel_kl)
 
 LINK_DIRECTORIES(
 ${allvxl_BINARY_DIR}/gel/gbl
@@ -14,4 +14,7 @@ ${allvxl_BINARY_DIR}/gel/vsol
 ${allvxl_BINARY_DIR}/gel/vtol
 ${allvxl_BINARY_DIR}/gel/vdgl
 ${allvxl_BINARY_DIR}/gel/vsrl
+${allvxl_BINARY_DIR}/gel/vgel
+${allvxl_BINARY_DIR}/gel/vgel
+${allvxl_BINARY_DIR}/gel/vgel_kl
 )
