@@ -14,6 +14,7 @@
 #include <bmrf/bmrf_curvel_3d_sptr.h>
 #include <bmrf/bmrf_network_sptr.h>
 #include <vcl_set.h>
+#include <vcl_list.h>
 
 //: A 3D curve builder
 class bmrf_curve_3d_builder 
@@ -25,8 +26,11 @@ class bmrf_curve_3d_builder
   //: Destructor
   ~bmrf_curve_3d_builder() {}
 
+  //: Set the network
+  void set_network(const bmrf_network_sptr& network);
+
   //: Build The curves
-  vcl_set<bmrf_curvel_3d_sptr> build();
+  vcl_set<vcl_list<bmrf_curvel_3d_sptr> > build();
 
  protected:
   //: The network

@@ -25,39 +25,7 @@ bmrf_curvel_3d::bmrf_curvel_3d(double x, double y, double z, vnl_double_3x3 & s)
 }
 
 
-//: Access the next curvel in the list
-bmrf_curvel_3d_sptr
-bmrf_curvel_3d::next() const
-{
-  return next_;
-}
-
-
-//: Access the previous curvel in the list
-bmrf_curvel_3d_sptr
-bmrf_curvel_3d::prev() const
-{
-  return prev_;
-}
-
-
-//: Set the next curvel in the list
-void
-bmrf_curvel_3d::set_next(const bmrf_curvel_3d_sptr& curvel_3d)
-{
-  next_ = curvel_3d;
-}
-
-
-//: Set the previous curvel in the list
-void
-bmrf_curvel_3d::set_prev(const bmrf_curvel_3d_sptr& curvel_3d)
-{
-  prev_ = curvel_3d;
-}
-
-
-//: Set the projection of this curvel into \p frame as the segment in
+//: Set the projection of this curvel into \p frame as the segment in 
 //  \p node at the value \p alpha
 void
 bmrf_curvel_3d::set_proj_in_frame(unsigned int frame, double alpha, const bmrf_node_sptr& node)

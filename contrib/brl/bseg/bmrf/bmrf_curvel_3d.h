@@ -7,8 +7,6 @@
 // \author Matt Leotta, (mleotta@lems.brown.edu)
 // \date 3/23/04
 //
-//  The curvels are nodes in a doubly-linked list which makes up the curve
-//
 // \verbatim
 //  Modifications
 // \endverbatim
@@ -23,6 +21,7 @@
 #include <vcl_vector.h>
 #include <vcl_utility.h>
 
+
 //: An uncertain 3D curve element
 class bmrf_curvel_3d : public bugl_gaussian_point_3d<double>, public vbl_ref_count
 {
@@ -35,17 +34,8 @@ class bmrf_curvel_3d : public bugl_gaussian_point_3d<double>, public vbl_ref_cou
   //: Destructor
   ~bmrf_curvel_3d() {}
 
-  //: Access the next curvel in the list
-  bmrf_curvel_3d_sptr next() const;
-  //: Access the previous curvel in the list
-  bmrf_curvel_3d_sptr prev() const;
-
-  //: Set the next curvel in the list
-  void set_next(const bmrf_curvel_3d_sptr& curvel_3d);
-  //: Set the previous curvel in the list
-  void set_prev(const bmrf_curvel_3d_sptr& curvel_3d);
-
-  //: Set the projection of this curvel into \p frame as the segment in \p node at the value \p alpha
+  //: Set the projection of this curvel into \p frame as the segment in 
+  //  \p node at the value \p alpha
   void set_proj_in_frame(unsigned int frame, double alpha, const bmrf_node_sptr& node);
 
   //: Returns the 2d position of this curvel in frame \p frame by reference
@@ -54,10 +44,6 @@ class bmrf_curvel_3d : public bugl_gaussian_point_3d<double>, public vbl_ref_cou
   bool pos_in_frame(unsigned int frame, vnl_double_2& pos);
 
  protected:
-  //: The next curvel along the curve
-  bmrf_curvel_3d_sptr next_;
-  //: The previous curvel along the curve
-  bmrf_curvel_3d_sptr prev_;
 
   //: A vector of alpha/node pairs which represent the projection of this curvel into image i.
   vcl_vector<vcl_pair<double,bmrf_node_sptr> > projs_2d_;
