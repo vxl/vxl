@@ -23,4 +23,9 @@ INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vpl/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/vcl/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/oxl/vrml/CMakeListsLink.txt )
 
+# need to list a couple of libs again on the link line
+# this kludge will only be needed until cmake 1.4 link line features are used
+# Cygwin requires libs listed with dependent libs to the right
+LINK_LIBRARIES(png zlib tiff jpeg)
+
 ENDIF(HAS_OPENGL)
