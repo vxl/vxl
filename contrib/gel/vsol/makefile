@@ -20,6 +20,7 @@ SOURCES += vsol_group_2d.cxx
 SOURCES += vsol_point_2d.cxx
 # 1-D
 SOURCES += vsol_curve_2d.cxx
+SOURCES += vsol_digital_curve_2d.cxx
 SOURCES += vsol_line_2d.cxx
 SOURCES += vsol_conic_2d.cxx
 SOURCES += vsol_polyline_2d.cxx
@@ -55,6 +56,7 @@ MANPAGE_SOURCES += vsol_box_3d_sptr.h
 MANPAGE_SOURCES += vsol_conic_2d_sptr.h
 MANPAGE_SOURCES += vsol_curve_2d_sptr.h
 MANPAGE_SOURCES += vsol_curve_3d_sptr.h
+MANPAGE_SOURCES += vsol_digital_curve_2d_sptr.h
 MANPAGE_SOURCES += vsol_group_2d_sptr.h
 MANPAGE_SOURCES += vsol_group_3d_sptr.h
 MANPAGE_SOURCES += vsol_line_2d_sptr.h

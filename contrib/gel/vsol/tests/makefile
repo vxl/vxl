@@ -22,6 +22,7 @@ TESTS += test_vsol_conic_2d.cxx
 TESTS += test_vsol_triangle_2d.cxx
 TESTS += test_vsol_rectangle_2d.cxx
 TESTS += test_vsol_polygon_2d.cxx
+TESTS += test_vsol_digital_curve_2d.cxx
 
 TESTS += test_vsol_point_3d.cxx
 TESTS += test_vsol_group_3d.cxx
