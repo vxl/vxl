@@ -153,9 +153,6 @@ SOURCE=.\vidl_io.cxx
 SOURCE=.\vidl_movie.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vidl_test.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vidl_file_sequence.cxx
 # End Source File
 # Begin Source File
