@@ -156,7 +156,7 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE=.\"$(IUEROOT)/tbl/vipl/CMakeLists.txt"
+SOURCE=.\CMakeLists.txt
 
 !IF  "$(CFG)" == "vipl - Win32 Release"
 USERDEP__HACK=\
@@ -544,6 +544,61 @@ SOURCE=.\vipl_with_vnl_matrix/Templates/vipl_median+vnl_matrix+uchar-.vnl_matrix
 # Begin Source File
 
 SOURCE=.\vipl_with_vnl_matrix/Templates/vipl_threshold+vnl_matrix+uchar-.vnl_matrix+uchar-.uchar.uchar-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_with_section/Templates/vipl_x_gradient+section+vil_rgb+uchar-.2-.section+vil_rgb+uchar-.2-.vil_rgb+uchar-.vil_rgb+uchar--.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_with_section/Templates/vipl_threshold+section+uchar.2-.section+uchar.2-.uchar.uchar-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_with_section/Templates/vipl_histogram+section+uchar.2-.section+int.2-.uchar.int-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_with_section/Templates/vipl_filter_2d+section+vil_rgb+uchar-.2-.section+vil_rgb+uchar-.2-.vil_rgb+uchar-.vil_rgb+uchar--.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_with_section/Templates/vipl_filter_2d+section+uchar.2-.section+uchar.2-.uchar.uchar-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_with_section/Templates/vipl_filter_2d+section+uchar.2-.section+int.2-.uchar.int-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_with_section/Templates/vipl_erode_disk+section+uchar.2-.section+uchar.2-.uchar.uchar-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_with_section/Templates/vipl_dilate_disk+section+vil_rgb+uchar-.2-.section+vil_rgb+uchar-.2-.vil_rgb+uchar-.vil_rgb+uchar--.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_with_section/Templates/vipl_accessors_section+vil_rgb+uchar-.2-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_with_section/Templates/vipl_accessors_section+uchar.2-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vipl_with_section/Templates/vipl_accessors_section+int.2-.cxx
 
 # End Source File
 # End Group

@@ -66,18 +66,18 @@ include ${IUEROOT}/config/top-params.mk
 # No need to compile the files in Templates when implicitly instantiating:
 ifeq ($(USE_IMPLICIT_TEMPLATES),1)
   TEMPLATE_SOURCES :=
+else
+  # These 3 subdirectories are only needed for template instantiation,
+  # used in the examples; leave them out if you don't need those examples,
+  # or if you are using implicit instantiation:
+  ifndef NOTEST
+    AUX_SOURCE_DIRECTORY += vipl_with_vbl_array_2d/Templates
+    AUX_SOURCE_DIRECTORY += vipl_with_vnl_matrix/Templates
+    AUX_SOURCE_DIRECTORY += vipl_with_section/Templates
+  endif
 endif
 
 ifndef NOTEST
-# These three libraries are only needed for template instantiation,
-# used in the examples; leave them out if you don't need those examples,
-# or if you are using implicit instantiation:
-ifneq ($(USE_IMPLICIT_TEMPLATES),1)
-SUBDIRS += vipl_with_section
-SUBDIRS += vipl_with_vnl_matrix
-SUBDIRS += vipl_with_vbl_array_2d
-endif
-
 SUBDIRS += examples
 SUBDIRS += tests
 endif
@@ -88,4 +88,3 @@ include ${IUEROOT}/config/top-rules.mk
 
 # compile with -O2 for efficiency:
 #debug = $(optimize)
-
