@@ -3,7 +3,7 @@ Load images using @code{vil_load}. Access them
  using a @code{vil_image_view<T>}.
 @endchapsummary
 
-The @vxl{} image library has evolved from the TargetJr and Manchester Image
+The @vxl{x} image library has evolved from the TargetJr and Manchester Image
 libraries.
 As with its predecessors, its primary goals is to provide flexible access
 to all 2D images, including those too large to fit in
@@ -32,7 +32,9 @@ optimisations that only a human can apply.
 @end itemize
 
 This vil library is the second VXL image library, and is sometimes referred
-to as vil2. The original  @vxl{} image library vil1 is deprecated.
+to as vil2. The original  @vxl{a} image library vil1 is deprecated.
+
+You can read more about the design philosophy in @code{$VXLSRC/core/vil/notes.html}
 
 @section Loading and saving
 Let's look at an example of vil in use.  This program makes an image from a
@@ -178,32 +180,40 @@ then @var{a} is unchanged after the assignment to @var{b(100,100)}.
 Note again that the actual copying is done in @code{vil_copy_deep}; when the
 return value is assigned to @var{b}, there is an efficient view copy.
 
-@section Large images
+@section Image resources
 
 Broadly there are two sorts of image one is interested in - images
 in memory (all parts of which can be accessed directly) and
-external images (eg in files) which can only be accessed
-indirectly. As we have seen those images in memory are represented
-by @code{vil_image_view}. For some very large images it is not
-possible or desirable to load them into memory. In this case it is
-useful to be able to load in a sub-section of the image,
-manipulate it, and possible write it out again. vil supports this
-approach using @code{vil_image_resource}. There are several types of
-image resource, described below. You cannot create an image
-resource object directly, instead you use a creation function
-which returns a smart pointer to the base class
-@code{vil_image_resource_sptr}.
+images whose pixel-type we do not know, or which can only be accessed
+indirectly (eg image files). As we have seen those images in memory are represented
+by @code{vil_image_view}. You should use a @code{vil_image_view<T>} to
+actually manipulate pixels. If you are new to programming for image processing,
+@code{vil_image_view<T>} is probably all your need.
+
+For some very large images it is not possible or desirable to load
+them into memory. In this case it is useful to be able to load in
+a sub-section of the image, manipulate it, and possible write it
+out again. Alternatively you may want to pass an image around
+without having to worry about its type. vil supports this
+requirement with @code{vil_image_resource}. There are several
+types of image resource, described below. You cannot create an
+image resource object or one of its derivatives directly, instead
+you use a creation function which returns a smart pointer to the
+base class @code{vil_image_resource_sptr}. When manipulating
+@code{vil_image_resource}s it will almost entirely be in terms of
+@code{vil_image_resource_sptr}s.
 
 @itemize @bullet
 @item Representing an image in a file: e.g. @code{vil_pnm_image},
 @code{vil_jpeg_image}. These are created using
-@code{vil_load_image_data()},
+@code{vil_load_image_resource()},
 and @code{vil_new_image_resource()}.
 
 @item @code{vil_memory_image}: Representing an image in memory
-(essentially a
-wrapper around a view.) This is created using
-@code{vil_new_image_resource()}.
+ This is created using
+@code{vil_new_image_resource()}. Alternatively if you want to
+wrap an existing view up as a vil_image_resource you can call
+@code{vil_new_image_resource_of_view()}
 
 @item Representing a filtered version of an
 image in a file (without loading in memory): e.g.
@@ -215,7 +225,7 @@ are created using the equivalent functions: @code{vil_crop()},
 @item Representing the outcome of an image
 processing algorithm (see next section) e.g.
 @code{vil_convolve_1d_resource}.
-These are creates using the equivalent
+These are created using the equivalent
 functions e.g. @code{vil_convolve_1d()}.
 
 @end itemize
@@ -233,6 +243,21 @@ vil_image_view_base_sptr vil_load(const char *file)
   return data -> get_view(0, data->ni(), 0, data->nj());
 @}
 @end example
+
+
+@subsection A rule of thumb
+@quotation
+When developing an image processing algorithm,
+first write your algorithm in terms of a function for @code{vil_image_view<T>}.
+Then, if you need it, write the vil_image_resource_sptr version, using
+the @code{vil_image_view<T>} version to do the actual pixel manipulation.
+@end quotation
+@code{vil_image_view<T>} is designed for playing with actual pixel values.
+@code{vil_image_resource} derivatives are designed to handle all the other stuff
+associated with images, e.g. choosing pixel types at runtime,
+splitting an image into blocks so that it fits in memory,
+dealing with the arbitrary and complex hassles of image IO.
+
 
 @section Planes, components and stepping.
 @cindex image layout
@@ -332,14 +357,17 @@ This section explores the major differences between using the old vil1
 and using vil, and some of the implications for converting existing code.
 
 The first and most obvious difference is that whilst there is a broad equivalent to
-vil1_image, and its descendants, this class tree has been split in two. The abstract
+@code{vil1_image}, and its descendants, this class tree has been split in two. The abstract
 @code{vil1_image} is now replaced with a smart pointer to a @code{vil_image_resource}.
-The concrete @code{vil1_memory_image_of<>} is now a @code{vil_image_view<>}
-Previously where as you might have written code in terms of vil1_image, it now
-usually makes sense to have most image manipulations working on
-@code{vil_image_view}s. This is because whilst with the old vil1_image, you had to
-do a @code{get_section}, and operate on raw memory, in vil, the @code{vil_image_view}
-provides a powerful view directly onto your image in memory.
+The concrete @code{vil1_memory_image_of<T>} is now a @code{vil_image_view<T>}.
+Whereas previously, you might have written code in terms of @code{vil1_image}, it now
+usually makes sense to write most image manipulations in terms of
+@code{vil_image_view<T>}s. With the old @code{vil1_image}, you either had to
+do a @code{get_section} and operate on raw memory, or do a messy switch statement to cast
+it to its underlying @code{vil_memory_image_of<T>} type, or do an expensive
+@code{vil1_view_as()} conversion.
+Now with vil, the @code{vil_image_view<T>} provides a powerful view directly onto
+your image in memory.
 
 The @code{vil_image_view} provides such facilities
 as compile-time type safety and switchable bounds checking. It also acts as a
