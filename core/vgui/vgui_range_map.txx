@@ -38,7 +38,7 @@ map_pixel(const Type pix)
   y *=ratio_;
   // if gamma >0 && !=1 make the gamma correction
   if (gamma_ > 0 && gamma_ !=1) 
-    y = 255.0*pow(y/255.0, 1/gamma_);
+    y = 255.0*vcl_pow((long double)y/255.0, (long double)1/gamma_);
   return (vxl_byte)y;
 }
 
