@@ -2,18 +2,10 @@
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vul/vul_arg.h>
-#include <vidl_vil1/vidl_vil1_io.h>
-#include <vidl_vil1/vidl_vil1_frame.h>
-#include <vidl_vil1/vidl_vil1_movie.h>
-#include <vidl_vil1/vidl_vil1_image_list_codec.h>
+#include <vidl/vidl_io.h>
+#include <vidl/vidl_frame.h>
+#include <vidl/vidl_movie.h>
 
-#ifdef HAS_MPEG2
-# include <vidl_vil1/vidl_vil1_mpegcodec.h>
-#endif
-
-#ifdef VCL_WIN32
-#include <vidl_vil1/vidl_vil1_avicodec.h>
-#endif
 //--------------------------------------------------------------------
 //  This executable describes a video as an xml file
 //  Sample usage is:
@@ -30,22 +22,12 @@
 
 int main(int argc, char** argv)
 {
-  // Register video codecs
-  vidl_vil1_io::register_codec(new vidl_vil1_image_list_codec);
 
-#ifdef VCL_WIN32
-  vidl_vil1_io::register_codec(new vidl_vil1_avicodec);
-#endif
-
-#ifdef HAS_MPEG2
-  vcl_cout << " Has MPEG\n";
-  vidl_vil1_io::register_codec(new vidl_vil1_mpegcodec);
-#endif
   vul_arg<vcl_string> video_file("-video-file", "input video file");
   vul_arg<vcl_string> xml_file("-xml-file", "video description file");
 
   vul_arg_parse(argc, argv);
-  vidl_vil1_movie_sptr my_movie = vidl_vil1_io::load_movie(video_file().c_str());
+  vidl_movie_sptr my_movie = vidl_io::load_movie(video_file().c_str());
   if (!my_movie)
     {
       vcl_cout << "Failed to load movie\n";
