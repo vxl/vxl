@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_displaylist2D.cxx
+// This is oxl/vgui/vgui_displaylist2D_tableau.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -6,10 +6,10 @@
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   14 Sep 99
-// \brief  See vgui_displaylist2D.h for a description of this file.
+// \brief  See vgui_displaylist2D_tableau.h for a description of this file.
 
 
-#include "vgui_displaylist2D.h"
+#include "vgui_displaylist2D_tableau.h"
 
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
@@ -27,16 +27,16 @@
 #include <vgui/vgui_soview2D.h>
 #include <vgui/vgui_style.h>
 
-vgui_displaylist2D::vgui_displaylist2D() :
+vgui_displaylist2D_tableau::vgui_displaylist2D_tableau() :
   posted_redraw_(false)
 {
 }
 
-vgui_displaylist2D::~vgui_displaylist2D()
+vgui_displaylist2D_tableau::~vgui_displaylist2D_tableau()
 {
 }
 
-bool vgui_displaylist2D::handle(const vgui_event& e) {
+bool vgui_displaylist2D_tableau::handle(const vgui_event& e) {
 
   // Send to motion/drag functions
   if (vgui_tableau::handle(e))
@@ -72,11 +72,11 @@ bool vgui_displaylist2D::handle(const vgui_event& e) {
     return true;
   }
 
-  return vgui_displaybase::handle(e);
+  return vgui_displaybase_tableau::handle(e);
 }
 
 //: Return indices of my elements which are near (x,y)
-void vgui_displaylist2D::get_hits(float x, float y, vcl_vector<unsigned>& my_hits) {
+void vgui_displaylist2D_tableau::get_hits(float x, float y, vcl_vector<unsigned>& my_hits) {
   GLuint *ptr = vgui_utils::enter_pick_mode(x,y,100);
 
   this->gl_mode = GL_SELECT;
@@ -111,7 +111,7 @@ void vgui_displaylist2D::get_hits(float x, float y, vcl_vector<unsigned>& my_hit
   }
 }
 
-unsigned vgui_displaylist2D::find_closest(float x, float y, vcl_vector<unsigned>& hits) {
+unsigned vgui_displaylist2D_tableau::find_closest(float x, float y, vcl_vector<unsigned>& hits) {
   unsigned closest = 0;
   float closest_dist = -1; // vnl_numeric_traits<float>::maxval;
 
@@ -132,7 +132,7 @@ unsigned vgui_displaylist2D::find_closest(float x, float y, vcl_vector<unsigned>
   return closest;
 }
 
-bool vgui_displaylist2D::motion(int x, int y) {
+bool vgui_displaylist2D_tableau::motion(int x, int y) {
 
   vgui_projection_inspector pi;
   float ix, iy;
@@ -187,7 +187,7 @@ bool vgui_displaylist2D::motion(int x, int y) {
   return false;
 }
 
-bool vgui_displaylist2D::mouse_down(int x, int y, vgui_button button, vgui_modifier modifier)
+bool vgui_displaylist2D_tableau::mouse_down(int x, int y, vgui_button button, vgui_modifier modifier)
 {
   float ix, iy;
   vgui_projection_inspector().window_to_image_coordinates(x,y, ix,iy);
