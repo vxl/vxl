@@ -31,11 +31,11 @@ vdgl_digital_curve::vdgl_digital_curve(vsol_point_2d_sptr const& p0,
                                        vsol_point_2d_sptr const& p1)
 {
   if (!p0||!p1)
-    {
-      vdgl_edgel_chain_sptr ec = new vdgl_edgel_chain();
-      interpolator_ = new vdgl_interpolator_linear(ec);
-      return;
-    }
+  {
+    vdgl_edgel_chain_sptr ec = new vdgl_edgel_chain();
+    interpolator_ = new vdgl_interpolator_linear(ec);
+    return;
+  }
   vdgl_edgel_chain* ec = new vdgl_edgel_chain(p0->x(), p0->y(),
                                               p1->x(), p1->y());
   interpolator_ = new vdgl_interpolator_linear(ec);
@@ -92,12 +92,20 @@ int vdgl_digital_curve::n_pts() const
 
 vsol_point_2d_sptr vdgl_digital_curve::p0() const
 {
-  return new vsol_point_2d( get_x(0), get_y(0));
+  vdgl_edgel_chain_sptr ec = interpolator_->get_edgel_chain();
+  return new vsol_point_2d(ec->edgel(0).get_pt());
+#if 0 // Note that the following will fail for a cubic interpolator!
+  return new vsol_point_2d(get_x(0), get_y(0));
+#endif // 0
 }
 
 vsol_point_2d_sptr vdgl_digital_curve::p1() const
 {
-  return new vsol_point_2d( get_x(1), get_y(1));
+  vdgl_edgel_chain_sptr ec = interpolator_->get_edgel_chain();
+  return new vsol_point_2d(ec->edgel(ec->size()-1).get_pt());
+#if 0 // Note that the following will fail for a cubic interpolator!
+  return new vsol_point_2d(get_x(1), get_y(1));
+#endif // 0
 }
 
 double vdgl_digital_curve::length() const
@@ -140,10 +148,10 @@ void vdgl_digital_curve::compute_bounding_box(void) const
 
 bool vdgl_digital_curve::operator==(const vdgl_digital_curve &other) const
 {
-  if(this==&other)
+  if (this==&other)
     return true;
   //same order of interpolation?
-  if(this->order() != other.order())
+  if (this->order() != other.order())
     return false;
   //are the edgel chains equal?
   vdgl_edgel_chain_sptr ec = this->get_interpolator()->get_edgel_chain();
@@ -156,9 +164,9 @@ bool vdgl_digital_curve::operator==(const vdgl_digital_curve &other) const
 
 bool vdgl_digital_curve::operator==(const vsol_spatial_object_2d& obj) const
 {
-  if(!(obj.spatial_type() == vsol_spatial_object_2d::CURVE))
+  if (!(obj.spatial_type() == vsol_spatial_object_2d::CURVE))
     return false;
-  if(!(((vsol_curve_2d const&)obj).curve_type() == vsol_curve_2d::DIGITAL_CURVE))
+  if (!(((vsol_curve_2d const&)obj).curve_type() == vsol_curve_2d::DIGITAL_CURVE))
     return false;
   return *this == (vdgl_digital_curve const&)(vsol_curve_2d const&)obj;
 }
@@ -173,58 +181,45 @@ void vdgl_digital_curve::b_write(vsl_b_ostream &os) const
   vsl_b_write(os, version());
   vsl_b_write(os, this->order());
   vsl_b_write(os, this->get_interpolator()->get_edgel_chain());
-  if(this->p0()&&this->p1())
-    vsl_b_write(os, true);
-  else
-    vsl_b_write(os, false);
+  vsl_b_write(os, true);
 }
+
 //: Binary load self from stream (not typically used)
 void vdgl_digital_curve::b_read(vsl_b_istream &is)
 {
-  if(!is)
+  if (!is)
     return;
   short ver;
   vsl_b_read(is, ver);
-  switch(ver)
+  switch (ver)
+  {
+   default:
+    assert(!"vdgl_digital_curve I/O: version should be 1");
+   case 1:
+    short order; 
+    vsl_b_read(is, order);
+    vdgl_edgel_chain_sptr ec;
+    vsl_b_read(is, ec);
+    bool endpoints;
+    vsl_b_read(is, endpoints);
+    assert(endpoints);
+    if (ec)
     {
-    case 1:
+      switch (order)
       {
-        short order; 
-        vsl_b_read(is, order);
-        vdgl_edgel_chain_sptr ec;
-        vsl_b_read(is, ec);
-        bool endpoints;
-        vsl_b_read(is, endpoints);
-        if(ec)
-          {
-            switch(order)
-              {
-              case 1:
-                {
-                  interpolator_ = new vdgl_interpolator_linear(ec);
-                  break;
-                }
-              case 3:
-                {
-                  interpolator_ = new vdgl_interpolator_cubic(ec);
-                  break;
-                }
-              default:
-                return;
-              }
-            if(endpoints)
-              {
-                int n = ec->size();
-                vsol_point_2d_sptr p0=new vsol_point_2d((*ec)[0].x(),(*ec)[0].y());
-                vsol_point_2d_sptr p1 =
-                  new vsol_point_2d((*ec)[n-1].x(),(*ec)[n-1].y());
-                this->set_p0(p0);
-                this->set_p1(p1);
-              }
-          }
+       case 1:
+        interpolator_ = new vdgl_interpolator_linear(ec);
+        break;
+       case 3:
+        interpolator_ = new vdgl_interpolator_cubic(ec);
+        break;
+       default:
+        return;
       }
     }
+  }
 }
+
 //: Return IO version number;
 short vdgl_digital_curve::version() const
 {
