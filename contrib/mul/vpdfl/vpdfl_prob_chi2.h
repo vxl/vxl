@@ -1,0 +1,30 @@
+#ifndef vpdfl_prob_chi2_h
+#define vpdfl_prob_chi2_h
+
+//:
+// \file
+// \author Tim Cootes
+// \date 12-Apr-2001
+// \brief Functions for Chi distribution
+
+//: P(chi<chi2)
+// Calculates the probability that a value generated
+// at random from a chi-square distribution with given
+// degrees of freedom is less than the value chi2
+//!in: n_dof: Number of degrees of freedom
+//!in: chi2: Value of chi-squared
+double vpdfl_cum_prob_chi2(int n_dof, double chi2);
+
+
+
+//: Returns X such that P(chi<X | dof==n)==p
+// The value of Chi-Squared such that the probability
+// that a random variable drawn from a chi-2 distribution
+// is less than Chi_Squared is p.
+//!in: p: Target probability
+//!in: n: Number of dimensions
+//!in: tol: Tolerance of result (default = 0.001)
+double vpdfl_chi2_for_cum_prob(double p, int n, double tol=0.001);
+
+#endif
+
