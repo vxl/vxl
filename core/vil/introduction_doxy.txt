@@ -58,6 +58,7 @@ vil2_image_view<vxl_byte> image2 = vil2_convert_to_grey_using_average<vxl_byte>(
 * There are some conversions that will try a fast view conversion only.
 * - vil2_view_as_planes(view): Create a multi-plane view from a multi-component view.
 * - vil2_view_as_rgb(view): Create an rgb pixel view from a multi-plane view.
+* - vil2_view_as_complex(view): Create a complex pixel view from a multi-plane view.
 *
 * There are some conversions that will process each pixel to do a conversion.
 * - vil2_convert_to_grey_using_average(view, new_pixel_type): Create a greyscale view from any image.
@@ -216,6 +217,8 @@ vil2_image_view<vxl_byte> filtered_image = vil2_transpose(tmp_image2);
 * - vil2_sobel_3x3     - to generate X/Y gradient images using 3x3 Sobel operators
 * - vil2_gauss_reduce  - smooth and sub-sample to produce half sized image
 * - vil2_median        - Compute median over area described by vil2_structuring_element
+* - vil2_fft_2d_fwd,bwd - Perform in-place 2D FFT on an image of a complex type
+*
 * See also the vipl library for a more generic image processing interface and
 * more image processing algorithms.
 *
