@@ -1204,11 +1204,11 @@ bool vnl_matrix<T>::read_ascii(vcl_istream& s)
   if (debug)
     vcl_cerr << __FILE__ ": vnl_matrix<T>::read_ascii: Determining file dimensions: ";
 
-  int c;
   for (;;) {
     // Clear whitespace, looking for a newline
-    while (1) {
-      c = s.get();
+    while (true)
+    {
+      int c = s.get();
       if (c == EOF)
         goto loademup;
       if (!vcl_isspace(c)) {
@@ -1250,7 +1250,8 @@ bool vnl_matrix<T>::read_ascii(vcl_istream& s)
     row_vals.push_back(row);
   }
 
-  while (1) {
+  while (true)
+  {
     T* row = vnl_c_vector<T>::allocate_T(colz);
     if (row == 0) {
       vcl_cerr << "vnl_matrix<T>::read_ascii: Error, Out of memory on row "
@@ -1338,6 +1339,7 @@ void vnl_matrix<T>::flipud()
     }
   }
 }
+
 //: Reverse order of columns.
 template <class T>
 void vnl_matrix<T>::fliplr()
