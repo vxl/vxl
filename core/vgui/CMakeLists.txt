@@ -10,7 +10,7 @@ INCLUDE(${MODULE_PATH}/NewCMake/FindX11.cmake)
 INCLUDE(${MODULE_PATH}/FindQv.cmake)
 # glut optionally used by vgui_text and by the glut toolkit
 # implementation
-INCLUDE(${MODULE_PATH}/FindGLUT.cmake)
+INCLUDE(${MODULE_PATH}/NewCMake/FindGLUT.cmake)
 
 # The following are for the optional toolkit
 # implementations
@@ -19,9 +19,10 @@ INCLUDE(${MODULE_PATH}/NewCMake/FindGTK.cmake)
 INCLUDE(${MODULE_PATH}/NewCMake/FindFLTK.cmake)
 
 INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_PATH})
-IF( HAS_GLUT )
-  INCLUDE_DIRECTORIES(${GLUT_INCLUDE_PATH})
-ENDIF( HAS_GLUT )
+IF( GLUT_FOUND )
+  INCLUDE_DIRECTORIES(${GLUT_INCLUDE_DIR})
+  ADD_DEFINITIONS( -DHAS_GLUT)
+ENDIF( GLUT_FOUND )
 
 SET(vgui_sources
   vgui_fwd.h
@@ -197,7 +198,7 @@ ENDIF (HAS_MFC)
 ##################################################
 
 # Build here only if GLUT is available:
-IF (HAS_GLUT)
+IF (GLUT_FOUND)
 
   OPTION(VGUI_USE_GLUT "Should Glut support be compiled into vgui?" YES)
 
@@ -205,7 +206,7 @@ IF (HAS_GLUT)
 
     ADD_DEFINITIONS( "-DVGUI_USE_GLUT" )
 
-    INCLUDE_DIRECTORIES(${GLUT_INCLUDE_PATH})
+    INCLUDE_DIRECTORIES(${GLUT_INCLUDE_DIR})
 
     SET(vgui_glut_sources
       impl/glut/vgui_glut_adaptor.cxx    impl/glut/vgui_glut_adaptor.h
@@ -234,7 +235,7 @@ IF (HAS_GLUT)
 
   ENDIF(VGUI_USE_GLUT)
 
-ENDIF (HAS_GLUT)
+ENDIF (GLUT_FOUND)
 
 
 ##################################################
@@ -513,9 +514,9 @@ ADD_LIBRARY(vgui ${vgui_sources})
 # Basic vgui dependencies
 
 TARGET_LINK_LIBRARIES(vgui vnl_algo vnl vil vgl vpl vbl vul)
-IF (HAS_GLUT)
+IF (GLUT_FOUND)
   TARGET_LINK_LIBRARIES(vgui ${GLUT_LIBRARIES})
-ENDIF (HAS_GLUT)
+ENDIF (GLUT_FOUND)
 IF (HAS_QV)
   TARGET_LINK_LIBRARIES(vgui ${QV_LIBRARIES})
 ENDIF (HAS_QV)
