@@ -10,51 +10,50 @@
 //  parameters which are defined as follows.
 //  Step Detection:
 //
-//  float contourFactor, junctionFactor: Scale factors for determining the
-//                                       gradient threshold. Nominally 1.0.
-//                                       contourFactor is in effect for edgels
-//                                       on contours (boundaries).
-//                                       junctionFactor is in effect during the
-//                                       extension of contours at endpoints.
-//                                       To extend contours aggressively, use a
-//                                       low value of junctionFactor, i.e., .5.
+// - float contourFactor, junctionFactor: Scale factors for determining the
+//                                        gradient threshold. Nominally 1.0.
+//                                        contourFactor is in effect for edgels
+//                                        on contours (boundaries).
+//                                        junctionFactor is in effect during the
+//                                        extension of contours at endpoints.
+//                                        To extend contours aggressively, use a
+//                                        low value of junctionFactor, i.e., .5.
 //
-//  float noiseThreshold: A weighting factor that determines the relative
-//                        proportion of sensor noise level and texture noise level
-//                        as measured in a ROI in the center of the image. The
-//                        nominal value of -.5 gives equal weight to both. If the
-//                        value is positive, then a default noise threshold of 1.0
-//                        is assigned.
+// - float noiseThreshold: A weighting factor that determines the relative
+//                         proportion of sensor noise level and texture noise level
+//                         as measured in a ROI in the center of the image. The
+//                         nominal value of -.5 gives equal weight to both. If the
+//                         value is positive, then a default noise threshold of 1.0
+//                         is assigned.
 //
-//  float filterFactor:  An overall scale factor for determining gradient threshold.
-//                       Nominally 2.0.
+// - float filterFactor:  An overall scale factor for determining gradient threshold.
+//                        Nominally 2.0.
 //
-//  bool  junctionp:  If true, then recover junctions by extending contours.
-//                    Nominally true.
+// - bool  junctionp:  If true, then recover junctions by extending contours.
+//                     Nominally true.
 //
-//  Contour Following:
-//  float hysteresisFactor:     A scale factor which is multiplied by the
-//                              image noise level to determine the minimum
-//                              gradient threshold in following an edgel contour.
-//                              Nominally 2.0.
+// - Contour Following:
+// - float hysteresisFactor:     A scale factor which is multiplied by the
+//                               image noise level to determine the minimum
+//                               gradient threshold in following an edgel contour.
+//                               Nominally 2.0.
 //
-//  int minLength:              The minimum length contour to constructed.
+// - int minLength:              The minimum length contour to constructed.
 //
-//  float minJump:              A scale factor which is multiplied by the
-//                              image noise level to determine the gradient
-//                              threshold at a junction. Nominally 1.0.
+// - float minJump:              A scale factor which is multiplied by the
+//                               image noise level to determine the gradient
+//                               threshold at a junction. Nominally 1.0.
 //
-//  float maxGap:               The width of a gap which can be crossed in
-//                              forming a junction with another edgel contour.
-//                              Nominally sqrt(5) = 2.24.
+// - float maxGap:               The width of a gap which can be crossed in
+//                               forming a junction with another edgel contour.
+//                               Nominally sqrt(5) = 2.24.
 //
-//  bool spacingp:              If true, then equalize the sub-pixel locations
-//                              of each edgel by averaging the adjacent left
-//                              a right neighbor locations. Nominally true.
+// - bool spacingp:              If true, then equalize the sub-pixel locations
+//                               of each edgel by averaging the adjacent left
+//                               a right neighbor locations. Nominally true.
 //
-//  bool borderp:               If true, insert virtual contours at the border
-//                              to close regions. Nominally false.
-//
+// - bool borderp:               If true, insert virtual contours at the border
+//                               to close regions. Nominally false.
 //
 // \author
 //             Jane S. Liu - 3/27/95
@@ -63,7 +62,7 @@
 // \verbatim
 //  Modifications
 //   JLM - May 1997
-//             Added extra interface for parameters not intitially
+//             Added extra interface for parameters not initially
 //             provided by Jane.These parameters are needed to get
 //             satisfactory boundary closure. Also expanded comments.
 //   JLM - November 1997
