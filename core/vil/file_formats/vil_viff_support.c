@@ -140,7 +140,7 @@ vil_viff_createimage(vxl_uint_32 col_size, vxl_uint_32 row_size,
     strcpy(image->comment, tmp_comment);
     image->row_size = row_size;
     image->col_size = col_size;
-    image->subrow_size = 0; // Don't care, just avoid uninitialised memory.
+    image->subrow_size = 0; /* Don't care, just avoid uninitialised memory. */
     image->startx = VFF_NOTSUB;
     image->starty = VFF_NOTSUB;
     image->pixsizx = 1.0;
