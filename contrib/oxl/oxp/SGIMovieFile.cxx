@@ -308,7 +308,7 @@ bool SGIMovieFile::GetFrame(int frame_index, void* buffer)
 
 bool SGIMovieFile::GetField(int field_index, void* buffer)
 {
-  return false;
+  return false; // NYI
 #if 0
   if (!p->interlaced)
     return GetFrame(field_index, buffer);
