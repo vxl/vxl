@@ -64,10 +64,4 @@ SOURCE_FILES( jpeg_sources
   jmemansi.c
 )
 
-IF (WIN32)
-  IF (NOT CYGWIN)
-    INCLUDE(${allvxl_SOURCE_DIR}/v3p/jpeg/CMakeListsHeaders.txt)
-  ENDIF (NOT CYGWIN)
-ENDIF(WIN32)
-
 ENDIF(NOT HAS_NATIVE_JPEG)

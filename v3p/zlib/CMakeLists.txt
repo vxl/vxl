@@ -27,10 +27,4 @@ SOURCE_FILES( zlib_sources
             inffixed.h
 )
 
-IF (WIN32)
-  IF (NOT CYGWIN)
-    INCLUDE(${allvxl_SOURCE_DIR}/v3p/zlib/CMakeListsHeaders.txt)
-  ENDIF (NOT CYGWIN)
-ENDIF(WIN32)
-
 ENDIF(NOT HAS_NATIVE_ZLIB)

@@ -27,12 +27,6 @@ SOURCE_FILES( png_sources
   pngpread.c
 )
 
-IF (WIN32)
-  IF (NOT CYGWIN)
-    INCLUDE(${allvxl_SOURCE_DIR}/v3p/png/CMakeListsHeaders.txt)
-  ENDIF (NOT CYGWIN)
-ENDIF(WIN32)
-
 IF (CYGWIN)
   # in Cygwin a define is needed by any file including vxl/v3p/png/png.h
   IF(BUILD_SHARED_LIBS)
