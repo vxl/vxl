@@ -40,7 +40,6 @@ ifeq ($(HAS_TIFF),1)
 USE_TIFF := 1
 SOURCES += file_formats/vil2_tiff.cxx
 endif
-DEFINES += -UHAS_TIFF
 
 # image operations
 SOURCES += vil2_crop.cxx
