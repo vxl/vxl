@@ -26,13 +26,13 @@ bool vnl_generalized_schur(vnl_matrix<T> *A,
                            vnl_matrix<T> *R);
 
 VCL_DEFINE_SPECIALIZATION
-bool vnl_generalized_schur<double>(vnl_matrix<double> *A,
-                                   vnl_matrix<double> *B,
-                                   vnl_vector<double> *alphar,
-                                   vnl_vector<double> *alphai,
-                                   vnl_vector<double> *beta,
-                                   vnl_matrix<double> *L,
-                                   vnl_matrix<double> *R);
+bool vnl_generalized_schur(vnl_matrix<double> *A,
+                           vnl_matrix<double> *B,
+                           vnl_vector<double> *alphar,
+                           vnl_vector<double> *alphai,
+                           vnl_vector<double> *beta,
+                           vnl_matrix<double> *L,
+                           vnl_matrix<double> *R);
 
 #include <vcl_algorithm.h>
 
