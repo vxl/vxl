@@ -1,4 +1,4 @@
-// This is vxl/vnl/tests/test_qr.cxx
+// This is core/vnl/tests/test_qr.cxx
 #include <vcl_iostream.h>
 #include <vcl_complex.h>
 #include <testlib/testlib_test.h>
@@ -116,7 +116,6 @@ inst(vcl_complex<float>);
 inst(vcl_complex<double>);
 #undef inst
 
-#include <vcl_cstdio.h>
 void complex_test()
 {
   typedef vcl_complex<double> ct;
@@ -161,18 +160,18 @@ void complex_test()
 //--------------------------------------------------------------------------------
 
 extern "C" void test_qr() {
-  vcl_cout << "-------------------- double_complex" << vcl_endl;
+  vcl_cout << "-------------------- double_complex\n";
   complex_test();
-  vcl_cout << "-------------------- double" << vcl_endl;
+  vcl_cout << "-------------------- double\n";
   double_test();
 
-  vcl_cout << "-------------------- float" << vcl_endl;
+  vcl_cout << "-------------------- float\n";
   new_test((float*)0);
-  vcl_cout << "-------------------- double" << vcl_endl;
+  vcl_cout << "-------------------- double\n";
   new_test((double*)0);
-  vcl_cout << "-------------------- float_complex" << vcl_endl;
+  vcl_cout << "-------------------- float_complex\n";
   new_test((vcl_complex<float>*)0);
-  vcl_cout << "-------------------- double_complex" << vcl_endl;
+  vcl_cout << "-------------------- double_complex\n";
   new_test((vcl_complex<double>*)0);
 }
 
