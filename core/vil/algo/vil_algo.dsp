@@ -99,10 +99,16 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
+SOURCE=.\vil2_sobel_1x3.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vil2_sobel_3x3.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vil2_gauss_reduce.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_gauss_filter.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vil2_structuring_element.cxx
@@ -117,7 +123,22 @@ SOURCE=.\vil2_binary_erode.cxx
 SOURCE=.\Templates/vil2_gauss_reduce+byte-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vil2_gauss_filter+byte.float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_gauss_filter+float.float-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vil2_gauss_reduce+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_sobel_1x3+byte.float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_sobel_1x3+double.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_sobel_1x3+float.float-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vil2_sobel_3x3+byte.float-.cxx
@@ -150,10 +171,22 @@ SOURCE=.\Templates/vil2_sobel_3x3+double.double-.cxx
 # Begin Group "Header Files"
 # PROP Default_Filter ""
 # Begin Source File
+SOURCE=.\vil2_sobel_1x3.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_sobel_1x3.txx
+# End Source File
+# Begin Source File
 SOURCE=.\vil2_sobel_3x3.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil2_sobel_3x3.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_gauss_filter.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_gauss_filter.txx
 # End Source File
 # Begin Source File
 SOURCE=.\vil2_gauss_reduce.h
