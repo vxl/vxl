@@ -57,27 +57,6 @@ FMatrixPlanar::~FMatrixPlanar()
 {
 }
 
-
-//-------------------------------------------------------------------
-//
-//: Null function has already Rank 2.
-
-inline void
-FMatrixPlanar::set_rank2_using_svd (void)
-{
-}
-
-//-----------------------------------------------------------------------------
-//
-//: Returns current matrix which is already Rank 2.
-
-inline  FMatrixPlanar
-FMatrixPlanar::get_rank2_truncated()
-{
-  return *this;
-}
-
-
 //--------------------------------------------------------------
 //
 //: Set the fundamental matrix using the two-dimensional array f_matrix.
@@ -100,7 +79,7 @@ bool FMatrixPlanar::set (const double* f_matrix )
 // both ${\tt F}$ and the symmetric part ({\tt F}+{\tt F}^\top).
 // Otherwise returns false and the matrix is not set.
 
-inline bool
+bool
 FMatrixPlanar::set (const vnl_matrix<double>& f_matrix )
 {
   int row_index, col_index;
@@ -154,30 +133,11 @@ FMatrixPlanar::set (const vnl_matrix<double>& f_matrix )
 
 //----------------------------------------------------------------
 //
-//: Returns the rank2_flag_ which is always true for FMatrixPlanar.
-
-inline bool
-FMatrixPlanar::get_rank2_flag (void) const
-{
-  return true;
-}
-
-//----------------------------------------------------------------
-//
-//: Set the rank2_flag_. Null function as always set true.
-
-inline void
-FMatrixPlanar::set_rank2_flag (bool) const
-{
-}
-
-//----------------------------------------------------------------
-//
-//: Initilises the FMatrixPlanar using a general fundamental matrix F.
+//: Initialises the FMatrixPlanar using a general fundamental matrix F.
 // Does so by finding the nearest planar fundamental matrix to F.
 // This should be used prior to FMPlanarComputeNonLinear to give
 // a initial value for the non-linear minimisation.
-// This function is rreuiqred as trying to set FMatrixPlanar using a
+// This function is required as trying to set FMatrixPlanar using a
 // general fundamental matrix
 // will fail as it does not satisfy the extra constraint of
 // \f$\det ({\tt F} + {\tt F}^\top) = 0\f$.
