@@ -123,14 +123,9 @@ nding
     ret_val = rmach;
     return ret_val;
 
-/*     End of SLAMCH */
-
 } /* slamch_ */
 
-#include "f2c.h"
-
-/* Subroutine */ void slamc1_(integer *beta, integer *t, logical *rnd, logical
-        *ieee1)
+/* Subroutine */ void slamc1_(integer *beta, integer *t, logical *rnd, logical *ieee1)
 {
 /*  -- LAPACK auxiliary routine (version 2.0) --
        Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,
@@ -193,13 +188,10 @@ nding
     static real t1, t2;
     extern doublereal slamc3_(real *, real *);
     static integer lt;
-    static real one, qtr;
-
-
+    static real one = 1.0f;
 
     if (first) {
         first = FALSE_;
-        one = 1.f;
 
 /*        LBETA,  LIEEE1,  LT and  LRND  are the  local values  of  BETA,
           IEEE1, T and RND.
@@ -211,23 +203,19 @@ nding
           Compute  a = 2.0**m  with the  smallest positive integer m such
           that
 
-             fl( a + 1.0 ) = a. */
+             fl( a + 1.0 ) = a.  */
 
         a = 1.f;
         c = 1.f;
 
-/* +       WHILE( C.EQ.ONE )LOOP */
-L10:
-        if (c == one) {
+        while (c == 1.f) {
             a *= 2;
             c = slamc3_(&a, &one);
-            r__1 = -(doublereal)a;
+            r__1 = -a;
             c = slamc3_(&c, &r__1);
-            goto L10;
         }
-/* +       END WHILE
 
-          Now compute  b = 2.0**m  with the smallest positive integer m
+/*        Now compute  b = 2.0**m  with the smallest positive integer m
           such that
 
              fl( a + b ) .gt. a. */
@@ -235,32 +223,27 @@ L10:
         b = 1.f;
         c = slamc3_(&a, &b);
 
-/* +       WHILE( C.EQ.A )LOOP */
-L20:
-        if (c == a) {
+        while (c == a) {
             b *= 2;
             c = slamc3_(&a, &b);
-            goto L20;
         }
-/* +       END WHILE
 
-          Now compute the base.  a and c  are neighbouring floating point
+/*        Now compute the base.  a and c  are neighbouring floating point
           numbers  in the  interval  ( beta**t, beta**( t + 1 ) )  and so
           their difference is beta. Adding 0.25 to c is to ensure that it
           is truncated to beta and not ( beta - 1 ). */
 
-        qtr = one / 4;
         savec = c;
-        r__1 = -(doublereal)a;
+        r__1 = -a;
         c = slamc3_(&c, &r__1);
-        lbeta = c + qtr;
+        lbeta = (int)(c + 0.25f);
 
 /*        Now determine whether rounding or chopping occurs,  by adding a
           bit  less  than  beta/2  and a  bit  more  than  beta/2  to a. */
 
         b = (real) lbeta;
         r__1 = b / 2;
-        r__2 = -(doublereal)b / 100;
+        r__2 = -b / 100;
         f = slamc3_(&r__1, &r__2);
         c = slamc3_(&f, &a);
         if (c == a) {
@@ -299,26 +282,19 @@ L20:
         a = 1.f;
         c = 1.f;
 
-/* +       WHILE( C.EQ.ONE )LOOP */
-L30:
-        if (c == one) {
+        while (c == 1.0f) {
             ++lt;
             a *= lbeta;
             c = slamc3_(&a, &one);
-            r__1 = -(doublereal)a;
+            r__1 = -a;
             c = slamc3_(&c, &r__1);
-            goto L30;
         }
-/* +       END WHILE */
-
     }
 
     *beta = lbeta;
     *t = lt;
     *rnd = lrnd;
     *ieee1 = lieee1;
-
-/*     End of SLAMC1 */
 
 } /* slamc1_ */
 
@@ -389,22 +365,19 @@ L30:
 
    =====================================================================
 */
-    /* Table of constant values */
-    static integer c__1 = 1;
-
     /* Initialized data */
     static logical first = TRUE_;
     static logical iwarn = FALSE_;
     /* System generated locals */
     integer i__1;
-    real r__1, r__2, r__3, r__4, r__5;
+    real r__1, r__2;
     /* Builtin functions */
     doublereal pow_ri(real *, integer *);
     /* Local variables */
     static logical ieee;
-    static real half;
+    static real half = 0.5f;
     static logical lrnd;
-    static real leps, zero, a, b, c;
+    static real leps, zero = 0.0f, a, b, c;
     static integer i, lbeta;
     static real rbase;
     static integer lemin, lemax, gnmin;
@@ -419,15 +392,12 @@ L30:
             slamc5_(integer *, integer *, integer *, logical *, integer *,
             real *);
     static integer lt, ngnmin, ngpmin;
-    static real one, two;
+    static real one = 1.0f;
 
 
 
     if (first) {
         first = FALSE_;
-        zero = 0.f;
-        one = 1.f;
-        two = 2.f;
 
 /*        LBETA, LT, LRND, LEPS, LEMIN and LRMIN  are the local values of
           BETA, T, RND, EPS, EMIN and RMIN.
@@ -450,12 +420,10 @@ L30:
 
 /*        Try some tricks to see whether or not this is the correct  EPS. */
 
-        b = two / 3;
-        half = one / 2;
-        r__1 = -(doublereal)half;
+        b = 2.f / 3;
+        r__1 = -0.5f;
         sixth = slamc3_(&b, &r__1);
         third = slamc3_(&sixth, &sixth);
-        r__1 = -(doublereal)half;
         b = slamc3_(&third, &r__1);
         b = slamc3_(&b, &sixth);
         b = dabs(b);
@@ -465,26 +433,18 @@ L30:
 
         leps = 1.f;
 
-/* +       WHILE( ( LEPS.GT.B ).AND.( B.GT.ZERO ) )LOOP */
-L10:
-        if (leps > b && b > zero) {
+        while (leps > b && b > 0.f) {
             leps = b;
-            r__1 = half * leps;
-/* Computing 5th power */
-            r__3 = two, r__4 = r__3, r__3 *= r__3;
-/* Computing 2nd power */
-            r__5 = leps;
-            r__2 = r__4 * (r__3 * r__3) * (r__5 * r__5);
+            r__1 = 0.5f * leps;
+            r__2 = 32.0f * leps * leps;
             c = slamc3_(&r__1, &r__2);
-            r__1 = -(doublereal)c;
+            r__1 = -c;
             c = slamc3_(&half, &r__1);
             b = slamc3_(&half, &c);
-            r__1 = -(doublereal)b;
+            r__1 = -b;
             c = slamc3_(&half, &r__1);
             b = slamc3_(&half, &c);
-            goto L10;
         }
-/* +       END WHILE */
 
         if (a < leps) {
             leps = a;
@@ -496,19 +456,18 @@ L10:
           Keep dividing  A by BETA until (gradual) underflow occurs. This
           is detected when we cannot recover the previous A. */
 
-        rbase = one / lbeta;
-        small = one;
+        rbase = 1.0f / lbeta;
+        small = 1.0f;
         for (i = 1; i <= 3; ++i) {
             r__1 = small * rbase;
             small = slamc3_(&r__1, &zero);
-/* L20: */
         }
         a = slamc3_(&one, &small);
         slamc4_(&ngpmin, &one, &lbeta);
-        r__1 = -(doublereal)one;
+        r__1 = -1.0f;
         slamc4_(&ngnmin, &r__1, &lbeta);
         slamc4_(&gpmin, &a, &lbeta);
-        r__1 = -(doublereal)a;
+        r__1 = -a;
         slamc4_(&gnmin, &r__1, &lbeta);
         ieee = FALSE_;
 
@@ -529,7 +488,7 @@ L10:
             }
 
         } else if (ngpmin == gpmin && ngnmin == gnmin) {
-            if ((i__1 = ngpmin - ngnmin, abs(i__1)) == 1) {
+            if (abs(ngpmin - ngnmin) == 1) {
                 lemin = max(ngpmin,ngnmin);
 /*            ( Twos-complement machines, no gradual underflow;
                 e.g., CYBER 205 ) */
@@ -539,7 +498,7 @@ L10:
                 iwarn = TRUE_;
             }
 
-        } else if ((i__1 = ngpmin - ngnmin, abs(i__1)) == 1 && gpmin == gnmin)
+        } else if (abs(ngpmin - ngnmin) == 1 && gpmin == gnmin)
                  {
             if (gpmin - min(ngpmin,ngnmin) == 3) {
                 lemin = max(ngpmin,ngnmin) - 1 + lt;
@@ -552,9 +511,7 @@ L10:
             }
 
         } else {
-/* Computing MIN */
-            i__1 = min(ngpmin,ngnmin), i__1 = min(i__1,gpmin);
-            lemin = min(i__1,gnmin);
+            lemin = min(min(min(ngpmin,ngnmin),gpmin),gnmin);
 /*         ( A guess; no known machine ) */
             iwarn = TRUE_;
         }
@@ -583,11 +540,9 @@ L10:
           this computation. */
 
         lrmin = 1.f;
-        i__1 = 1 - lemin;
         for (i = 1; i <= 1-lemin; ++i) {
             r__1 = lrmin * rbase;
             lrmin = slamc3_(&r__1, &zero);
-/* L30: */
         }
 
 /*        Finally, call SLAMC5 to compute EMAX and RMAX. */
@@ -605,9 +560,6 @@ L10:
     *rmax = lrmax;
 
     return;
-
-
-/*     End of SLAMC2 */
 
 } /* slamc2_ */
 
@@ -648,8 +600,6 @@ doublereal slamc3_(real *a, real *b)
 
     return ret_val;
 
-/*     End of SLAMC3 */
-
 } /* slamc3_ */
 
 #include "f2c.h"
@@ -685,21 +635,15 @@ doublereal slamc3_(real *a, real *b)
    =====================================================================
 */
     /* System generated locals */
-    integer i__1;
     real r__1;
     /* Local variables */
-    static real zero, a;
+    static real zero = 0.0f, a;
     static integer i;
     static real rbase, b1, b2, c1, c2, d1, d2;
     extern doublereal slamc3_(real *, real *);
-    static real one;
-
-
 
     a = *start;
-    one = 1.f;
-    rbase = one / *base;
-    zero = 0.f;
+    rbase = 1.0f / *base;
     *emin = 1;
     r__1 = a * rbase;
     b1 = slamc3_(&r__1, &zero);
@@ -707,37 +651,26 @@ doublereal slamc3_(real *a, real *b)
     c2 = a;
     d1 = a;
     d2 = a;
-/* +    WHILE( ( C1.EQ.A ).AND.( C2.EQ.A ).AND.
-      $       ( D1.EQ.A ).AND.( D2.EQ.A )      )LOOP */
-L10:
-    if (c1 == a && c2 == a && d1 == a && d2 == a) {
+    while (c1 == a && c2 == a && d1 == a && d2 == a) {
         --(*emin);
         a = b1;
         r__1 = a / *base;
         b1 = slamc3_(&r__1, &zero);
         r__1 = b1 * *base;
         c1 = slamc3_(&r__1, &zero);
-        d1 = zero;
-        i__1 = *base;
+        d1 = 0.0f;
         for (i = 1; i <= *base; ++i) {
             d1 += b1;
-/* L20: */
         }
         r__1 = a * rbase;
         b2 = slamc3_(&r__1, &zero);
         r__1 = b2 / rbase;
         c2 = slamc3_(&r__1, &zero);
-        d2 = zero;
-        i__1 = *base;
+        d2 = 0.0f;
         for (i = 1; i <= *base; ++i) {
             d2 += b2;
-/* L30: */
         }
-        goto L10;
     }
-/* +    END WHILE */
-
-/*     End of SLAMC4 */
 
 } /* slamc4_ */
 
@@ -788,8 +721,6 @@ L10:
 
    =====================================================================
 
-
-
        First compute LEXP and UEXP, two powers of 2 that bound
        abs(EMIN). We then assume that EMAX + abs(EMIN) will sum
        approximately to the bound that is closest to abs(EMIN).
@@ -798,7 +729,6 @@ L10:
     static real c_b5 = 0.f;
 
     /* System generated locals */
-    integer i__1;
     real r__1;
     /* Local variables */
     static integer lexp;
@@ -809,8 +739,6 @@ L10:
     extern doublereal slamc3_(real *, real *);
     static real recbas;
     static integer exbits, expsum, try__;
-
-
 
     lexp = 1;
     exbits = 1;
@@ -883,14 +811,12 @@ L10:
     recbas = 1.f / *beta;
     z = *beta - 1.f;
     y = 0.f;
-    i__1 = *p;
     for (i = 1; i <= *p; ++i) {
         z *= recbas;
         if (y < 1.f) {
             oldy = y;
         }
         y = slamc3_(&y, &z);
-/* L20: */
     }
     if (y >= 1.f) {
         y = oldy;
@@ -898,16 +824,11 @@ L10:
 
 /*     Now multiply by BETA**EMAX to get RMAX. */
 
-    i__1 = *emax;
     for (i = 1; i <= *emax; ++i) {
         r__1 = y * *beta;
         y = slamc3_(&r__1, &c_b5);
-/* L30: */
     }
 
     *rmax = y;
 
-/*     End of SLAMC5 */
-
 } /* slamc5_ */
-
