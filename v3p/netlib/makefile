@@ -5,8 +5,6 @@ USES = # nothing!
 USE_STDC++ := 0
 IULIBS = # no dependencies whatsoever
 
-SUBDIRS += tests
-
 LIBRARY := netlib
 VERSION := 1.0
 
@@ -251,9 +249,17 @@ SOURCES += zung2r.c
 SOURCES += zunghr.c
 SOURCES += zungqr.c
 
-##########################################
-include ${IUEROOT}/config/top.mk
-##########################################
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+SUBDIRS += tests
+endif
+
+######################################
+include ${IUEROOT}/config/top-rules.mk
+######################################
 
 # capes
 ifeq ($(OS),Linux2)
