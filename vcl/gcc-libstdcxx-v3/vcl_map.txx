@@ -13,6 +13,6 @@ template void vcl_map<Key, T, Comp >::insert(vcl_map<Key, T, Comp >::iterator, v
 // Macro to instantiate a vcl_multimap.
 #undef VCL_MULTIMAP_INSTANTIATE
 #define VCL_MULTIMAP_INSTANTIATE(Key, T, Comp) \
-template class vcl_multimap<Key, T, Comp >;
+template class vcl_multimap<Key, T, Comp >
 
 #endif
