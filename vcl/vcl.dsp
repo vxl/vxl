@@ -232,10 +232,6 @@ SOURCE=".\Templates\fstream-instances.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\min_max.cxx
-# End Source File
-# Begin Source File
-
 SOURCE=".\Templates\stream-instances.cxx"
 # End Source File
 # Begin Source File
@@ -265,10 +261,6 @@ SOURCE=".\Templates\vcl_algorithm+unsigned-.cxx"
 # Begin Source File
 
 SOURCE=.\emulation\vcl_alloc.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\vcl_b+char.vcl_s+char--.cxx"
 # End Source File
 # Begin Source File
 
@@ -661,6 +653,10 @@ SOURCE=.\vcl_ctime.h
 # Begin Source File
 
 SOURCE=.\vcl_deque.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_deprecated.h
 # End Source File
 # Begin Source File
 
