@@ -216,6 +216,21 @@ SOURCE=.\Templates/vil_greyscale_erode+double-.cxx
 SOURCE=.\Templates/vil_median+double-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vil_histogram+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_histogram+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_histogram+short-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_histogram+signed_char-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_histogram+unsigned_short-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vil_histogram.cxx
 # End Source File
 # Begin Source File
