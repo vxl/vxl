@@ -3,7 +3,7 @@
 #
 #   geoff.cross@crd.ge.com
 
-CMAKE_MINIMUM_REQUIRED(VERSION 1.4)
+CMAKE_MINIMUM_REQUIRED(VERSION 1.6)
 
 PROJECT(vxl)
 
@@ -30,10 +30,10 @@ SET( MODULE_PATH ${vxl_SOURCE_DIR}/config/cmake/Modules CACHE STATIC "VXL module
 # For use in client projects that call UseVXL.cmake
 SET (VXL_LIBRARY_PATH ${LIBRARY_OUTPUT_PATH} CACHE STATIC "Where all the vxl libraries are, for clients to use." )
 
-# If using CMake to do platform specific configuration, we should do it right away.
-IF(VXL_USE_CMAKE_CONFIGURE)
+# Do platform-specific configuration.
+IF(NOT VXL_NO_CMAKE_CONFIGURE)
   SUBDIRS(config/cmake/config)
-ENDIF(VXL_USE_CMAKE_CONFIGURE)
+ENDIF(NOT VXL_NO_CMAKE_CONFIGURE)
 
 # Build the core vxl + support libraries
 SUBDIRS(vcl v3p core)
@@ -53,12 +53,13 @@ IF(BUILD_TARGETJR)
   SUBDIRS(COOL GeneralUtility Image SpatialObjects Photogrammetry Database MultiView Segmentation Recognition)
 ENDIF(BUILD_TARGETJR)
 
-IF(NOT VXL_USE_CMAKE_CONFIGURE)
+# Use the old configure script if the cache tells us to do so.
+IF(VXL_NO_CMAKE_CONFIGURE)
   IF(RUN_CONFIGURE)
     EXEC_PROGRAM( ${vxl_SOURCE_DIR}/configure
       ${vxl_BINARY_DIR} )
   ENDIF(RUN_CONFIGURE)
-ENDIF(NOT VXL_USE_CMAKE_CONFIGURE)
+ENDIF(VXL_NO_CMAKE_CONFIGURE)
 
 # Some types of path names can cause havoc with regular expressions,
 # so avoid those.
@@ -82,14 +83,15 @@ ENDIF( ${vxl_BINARY_DIR} MATCHES ${vxl_SOURCE_DIR} )
 SET(VXLCORE_INCLUDE_DIR ${vxl_BINARY_DIR}/core ${vxl_SOURCE_DIR}/core)
 SET(VCL_INCLUDE_DIR ${vxl_BINARY_DIR}/vcl ${vxl_SOURCE_DIR}/vcl)
 
-# Autoconf does not work on windows. Use hardcoded results
-IF(NOT VXL_USE_CMAKE_CONFIGURE)
+# Autoconf does not work on windows.  Use hardcoded results if not using
+# cmake to configure.
+IF(VXL_NO_CMAKE_CONFIGURE)
   IF(WIN32)
     IF(NOT CYGWIN)
       SET(VCL_INCLUDE_DIR ${vxl_SOURCE_DIR}/vcl/config.win32 ${VCL_INCLUDE_DIR})
     ENDIF(NOT CYGWIN)
   ENDIF(WIN32)
-ENDIF(NOT VXL_USE_CMAKE_CONFIGURE)
+ENDIF(VXL_NO_CMAKE_CONFIGURE)
 
 INCLUDE_DIRECTORIES(${VCL_INCLUDE_DIR} ${VXLCORE_INCLUDE_DIR})
 
