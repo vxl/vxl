@@ -1,19 +1,23 @@
+// This is vxl/vgl/vgl_clip.h
 #ifndef vgl_clip_h_
 #define vgl_clip_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// This is vxl/vgl/vgl_clip.h
 
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
 // \verbatim
-// 29 Apr 2002: Amitha Perera: added a polygon clipper (a wrap around
+// Modifications
+// 29 Apr 2002: Amitha Perera: added a polygon clipper (a wrap around for
 //                Alan Murt's Generic Polygon Clipper)
 // \endverbatim
 
-#include "vgl_polygon.h"
+#include <vgl/vgl_box_2d.h>
+#include <vgl/vgl_line_2d.h>
+#include <vgl/vgl_line_segment_2d.h>
+#include <vgl/vgl_polygon.h>
 
 //: Type of "clip" operations.
 enum vgl_clip_type
@@ -39,6 +43,21 @@ bool vgl_clip_line_to_box(double a, double b, double c, // line equation ax+by+c
                           double &bx, double &by,  // clipped line
                           double &ex, double &ey); // segment.
 
+
+//: clip given line to given box, and return resulting line segment
+
+inline
+vgl_line_segment_2d<double> vgl_clip_line_to_box(vgl_line_2d<double> const& l,
+                                                 vgl_box_2d<double> const& b)
+{
+  double sx, sy, ex, ey;
+  bool r = vgl_clip_line_to_box(l.a(), l.b(), l.c(),
+                                b.min_x(), b.min_y(), b.max_x(), b.max_y(),
+                                sx, sy, ex, ey);
+  return r ? vgl_line_segment_2d<double>(vgl_point_2d<double>(sx, sy),
+                                         vgl_point_2d<double>(ex, ey))
+           : vgl_line_segment_2d<double>(); // uninitialised when no intersection
+}
 
 //: Clip a polygon against another polygon.
 // The operation (intersection, union, etc) is given by \param op.
