@@ -55,6 +55,21 @@ inline mbl_stl_pred_index_adapter<T,Pred> mbl_stl_pred_create_index_adapter(cons
   return  mbl_stl_pred_index_adapter<T,Pred>(v,Op);
 };
 
+
+//Order a collection of iterators according to their dereferenced values
+//NB assumes the value type supports operator<
+//Can also be used for collections of pointers or objects supporting
+//dereferencing operator like *p.
+template <class Iter>
+struct mbl_stl_pred_iter_deref_order : public vcl_binary_function<Iter,Iter, bool>
+{
+  inline bool  operator()(const Iter& iter1, const Iter& iter2 ) const
+  {
+    return (*iter1 < *iter2) ? true : false;
+  }
+};
+
+
 //Order a collection of pair iterators according to their dereferenced keys
 //NB assumes the key type supports operator<
 template <class PairIter>
@@ -74,6 +89,25 @@ struct mbl_stl_pred_pair_iter_value_order : public vcl_binary_function<PairIter,
   inline bool  operator()(const PairIter& iter1, const PairIter& iter2 ) const
   {
     return (iter1->second < iter2->second) ? true : false;
+  }
+};
+
+//See if a test pointer is the class type required
+//Note the template type T would normally be of pointer type but might also be
+//something supporting operator->() in a pointer like way 
+//(e.g. auto_ptr mbl_cloneable_ptr etc) 
+template <class T>
+//NB assumes templated class provides is_a to return its typename
+class mbl_stl_pred_is_a : public vcl_unary_function<T, bool>
+{
+  //:const reference to name of required class type
+  const vcl_string& ctype_;
+ public:
+  mbl_stl_pred_is_a(vcl_string const& ctype):ctype_(ctype){}
+
+  inline bool operator()(const T& p) const
+  {
+      return (p->is_a()==ctype_) ? true : false;
   }
 };
 
