@@ -35,7 +35,8 @@ IMPLEMENT_DYNCREATE(vgui_mfc_adaptor, CView)
 
 //: Constructor.
 vgui_mfc_adaptor::vgui_mfc_adaptor( )
-  : win_(0),
+  : m_pDC(0), m_pDC_aux(0),
+    win_(0),
     redraw_posted_(true),
     overlay_redraw_posted_(true),
     idle_request_posted_(false)
@@ -75,6 +76,8 @@ vgui_mfc_adaptor::~vgui_mfc_adaptor()
   // Delete the DC
   if ( m_pDC )
     delete m_pDC;
+  if ( m_pDC_aux )
+    delete m_pDC_aux;
 }
 
 BEGIN_MESSAGE_MAP(vgui_mfc_adaptor, CView)
@@ -292,11 +295,9 @@ HGLRC vgui_mfc_adaptor::setup_for_gl( CDC* pDC, DWORD dwFlags )
 
 
 void vgui_mfc_adaptor::create_bitmap( int cx, int cy,
-                                      CDC*& out_pDC,
+                                      CDC*& pDC,
                                       HBITMAP& out_old_hbmp )
 {
-  out_pDC = 0;
-
   BITMAPINFOHEADER bih;
   ZeroMemory( &bih, sizeof(bih) );
 
@@ -307,9 +308,10 @@ void vgui_mfc_adaptor::create_bitmap( int cx, int cy,
   bih.biBitCount = 24;
   bih.biCompression = BI_RGB;
 
-  CDC* pDC = new CDC();
-  pDC->CreateCompatibleDC(NULL);
-
+  if( !pDC ){
+    pDC = new CDC();
+    pDC->CreateCompatibleDC(NULL);
+  }
 
   void *buffer;
   HBITMAP hbmp = CreateDIBSection( pDC->GetSafeHdc(),
@@ -324,7 +326,6 @@ void vgui_mfc_adaptor::create_bitmap( int cx, int cy,
   }
   pDC->SetStretchBltMode(COLORONCOLOR);
   out_old_hbmp = (HBITMAP)SelectObject( pDC->GetSafeHdc(), hbmp );
-  out_pDC = pDC;
 }
 
 
