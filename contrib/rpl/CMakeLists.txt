@@ -1,0 +1,4 @@
+INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/rpl )
+
+SUBDIRS( rrel )
+SUBDIRS( rsdl )
