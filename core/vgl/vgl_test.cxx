@@ -15,8 +15,7 @@
 //
 
 #include "vgl_test.h"
-#include <vcl_cmath.h>
-#include <vcl_cstdlib.h>
+#include <vcl_cmath.h> // for vcl_abs(double)
 #include <vcl_iostream.h>
 
 static int num_test;

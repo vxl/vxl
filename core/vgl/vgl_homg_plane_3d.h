@@ -17,9 +17,8 @@
 // \endverbatim
 
 #include <vcl_iostream.h>
-#include <vcl_algorithm.h>
-#include <vcl_cmath.h>   // vcl_abs()
-#include <vcl_cstdlib.h> // vcl_abs()
+#include <vcl_cmath.h> // for vcl_abs(double) etc
+#include <vcl_cstdlib.h> // for vcl_abs(int) etc
 #include <vcl_string.h>
 
 template <class Type>
@@ -82,7 +81,9 @@ public:
   //: Return true iff the plane is the plane at infinity.
   // The method checks that max(|nx|,|ny|,|nz|) < tol * |d|
   bool ideal(Type tol) const {
-    return vcl_max(vcl_max(vcl_abs(nx()),vcl_abs(ny())),vcl_abs(nz())) < tol * vcl_abs(d());
+    return vcl_abs(nx()) < tol * vcl_abs(d()) &&
+           vcl_abs(ny()) < tol * vcl_abs(d()) &&
+           vcl_abs(nz()) < tol * vcl_abs(d());
   }
 
 protected:

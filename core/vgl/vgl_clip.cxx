@@ -7,7 +7,7 @@
 #pragma implementation
 #endif
 #include "vgl_clip.h"
-#include <vcl_cmath.h>
+#include <vcl_cmath.h> // for vcl_abs(double)
 #include <vcl_algorithm.h> // for swap
 
 bool vgl_clip_lineseg_to_line(double &x1, double &y1,

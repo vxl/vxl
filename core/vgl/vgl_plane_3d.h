@@ -13,7 +13,6 @@
 //  \date   Feb 15 2000
 
 #include <vcl_iostream.h>
-//#include <vcl_algorithm.h>
 #include <vgl/vgl_point_3d.h> // necessary for some inline functions
 
 template <class Type>
