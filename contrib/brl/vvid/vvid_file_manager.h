@@ -36,7 +36,7 @@
 // to get rid of the points, reload the video
 //
 // It is planned to extend the class to handle multiple panes (grid locations)
-// so that different (or the same) videos can be playing simulataneously
+// so that different (or the same) videos can be playing simultaneously
 // in different zoom states as well as pause states. This extension will
 // the state variables to be changed to vectors as well as having multiple
 // caches.. etc.
@@ -61,7 +61,7 @@ class vvid_file_manager : public vgui_wrapper_tableau
   //: width (in pixels) of the video frame
   unsigned get_width() const { return width_; }
 
-  //: load each frame of the video into a cached vector of overlays if chaching is enabled
+  //: load each frame of the video into a cached vector of overlays if caching is enabled
   void load_video_file();
 
   //: loop through the frames and display
