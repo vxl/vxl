@@ -1,6 +1,7 @@
-// GLUT example.
-
-//: Pure glut + vgui for image drawing in a movie player.
+//:
+// \file
+// GLUT example
+// \brief Pure glut + vgui for image drawing in a movie player.
 // This example shows how all the tableau stuff for drawing
 // (but not mouse or keyboard) can be used with a pure and
 // simple GLUT program.  This means that the really really hairy
