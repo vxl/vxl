@@ -60,6 +60,7 @@
 // ---------- ISO
 #else
 # include "iso/vcl_complex.h"
+#endif
 
 
 # if !VCL_COMPLEX_POW_WORKS
@@ -85,35 +86,23 @@ template <class T> inline vcl_complex<T>
 template <class T> inline vcl_complex<T>
   vcl_pow(const vcl_complex<T>& x, const T& y)
 {
-  if (vcl_imag(x) == 0 && 0 <= vcl_real(x))
-    return vcl_complex<T>(std::pow(vcl_real(x), y), T(0));
-	else
-    return vcl_exp(y * vcl_log(x));
+  return vcl_exp(y * vcl_log(x));
 }
 
 template <class T> inline vcl_complex<T>
   vcl_pow(const T& x, const vcl_complex<T>& y)
 {
-  if (vcl_imag(y) == 0 && 0 <= x)
-    return vcl_complex<T>(std::pow(x, vcl_real(y)), T(0));
-	else
-    return vcl_exp(y * vcl_log(x));
+  return vcl_exp(y * vcl_log(vcl_complex<T>(x, T(0))));
 }
 
 template <class T> inline vcl_complex<T>
   vcl_pow(const vcl_complex<T>& x, const vcl_complex<T>& y)
 {
-  if (vcl_imag(y) == 0)
-    return vcl_pow(x, vcl_real(y));
-  else if (vcl_imag(x) == 0)
-    return vcl_pow(vcl_real(x), y);
-  else
-    return vcl_exp(y * vcl_log(x));
+  return vcl_exp(y * vcl_log(x));
 }
 
 # endif // !VCL_COMPLEX_POW_WORKS
 
-#endif
 
 
 
