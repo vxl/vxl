@@ -69,6 +69,7 @@ foreach $f (@FILES)
                $f !~ m/\bvcl\/emulation\//);
 
 # 1. abnormal characters (tabs, ascii < 32, etc.)
+  $file =~ s/\347/c/g; # treat ç as normal character
   if ($file =~ m/\t/ && $file !~ m/\basm\s*\(\"\t/)
   {
     print "$f\t\# contains tabs\n";
@@ -89,14 +90,14 @@ foreach $f (@FILES)
   $has_end_spaces = ($file =~ m/  +\n/);
 
 # 3. Lines longer than 132 characters
-  if ($file =~ m/[^\n]{133,}/ && $f !~ m/\.dsp$/)
+  if ($file =~ m/.{133,}/ && $f !~ m/\.dsp$/)
   {
     print "$f\t\# has lines of more than 132 characters\n";
     $printed = 1;
   }
 
 # 4. Consecutive comment blocks, separated by blank lines
-  if ($file =~ m!\n\s*//:[^\n]*\n( *// [^\n]*\n)*\s*\n\s*// !)
+  if ($file =~ m!\n\s*//:.*\n( *// .*\n)*\s*\n\s*// !)
   {
     print "$f\t\# contains comment blocks separated by a blank line; consider joining them\n";
     $printed = 1;
@@ -109,12 +110,12 @@ foreach $f (@FILES)
     print "$f\t\# doxygen comments will not be shown without \\file\n";
     $printed = 1;
   }
-  if ($file =~ m!//\s*\\file[ \t]+(\S[^\n]*)!)
+  if ($file =~ m!//\s*\\file[ \t]+(\S.*)!)
   {
     print "$f\t\# doxygen \\file better not have an argument, so remove \"$1\"\n";
     $printed = 1;
   }
-  if ($file =~ m!\n\s*//(:|\s*\\brief\b)([^\n]{40,})\n *// *([a-z]\S*)!)
+  if ($file =~ m!\n\s*//(:|\s*\\brief\b)(.{40,})\n *// *([a-z]\S*)!)
   {
     unless ($2 =~ m/[.?!]$/ || $3 =~ m/^v[bcginpsu]l_/)
     {
@@ -122,7 +123,7 @@ foreach $f (@FILES)
       $printed = 1;
     }
   }
-  elsif ($file =~ m!\n\s*//(:|\s*\\brief\b)([^\n]{40,}\b(and|if|but|since|that|,))\n *//!i)
+  elsif ($file =~ m!\n\s*//(:|\s*\\brief\b)(.{40,}\b(and|if|but|since|that|,))\n *//!i)
   {
     print "$f\t\# brief comment possibly continued on next line: \"$2\\n$3 ...\"\n";
     $printed = 1;
@@ -134,7 +135,7 @@ foreach $f (@FILES)
 #   Missing includes is currently only vcl_cassert.h
   $fl = $file; $fl =~ s!//.*!!g;
   $includes = "\004\n$fl\003";
-  $includes =~ s/\n\s*\#\s*include\s\<([^>]+)\>[^\n]*/\003$1\004/g;
+  $includes =~ s/\n\s*\#\s*include\s\<([^>]+)\>.*/\003$1\004/g;
   $includes =~ s/^[^\003]*\003/\003/; $includes =~ s/\004[^\004]*$/\004/;
   $includes =~ s/\004[^\003]*\003/\n/g; $includes =~ s/[\004\003]//g;
   @includes = sort(split('\n', $includes));
@@ -368,14 +369,14 @@ foreach $f (@FILES)
  #  if ($j eq "vcl_vector.h") { $i="vcl_(vector|swap)"; }
 
 # 6. //: inside a comment block, or \file not after //:
-  if ($file =~ m!\n\s*//[^:][^\n]*\n *// *\\file\b! ||
-      $file =~ m!\n\s*[^\s/][^\n]*\n *// *\\file\b!)
+  if ($file =~ m!\n\s*//[^:].*\n *// *\\file\b! ||
+      $file =~ m!\n\s*[^\s/].*\n *// *\\file\b!)
   {
     print "$f\t\# \\file is not preceeded by //:\n";
     $printed = 1;
   }
   $file =~ s!//\s*[-=_]{40,}\n!//\n!g;
-  if ($file =~ m!\n\s*//[ :][^\n]*\n *//:!)
+  if ($file =~ m!\n\s*//[ :].*\n *//:!)
   {
     print "$f\t\# contains //: inside a comment block\n";
     $printed = 1;
@@ -399,7 +400,7 @@ foreach $f (@FILES)
     print "$f\t\# contains long /*...*/ comments\n";
     $printed = 1;
   }
-  if ($file =~ m/^\s*\/\/\s*vcl_c(out|err)\s*\<\<[^\n]*(\n\s*\/\/[^\n]*){5,}/)
+  if ($file =~ m/^\s*\/\/\s*vcl_c(out|err)\s*\<\<.*(\n\s*\/\/.*){5,}/)
   {
     print "$f\t\# consider commenting out code sections with #if 0 or #ifdef DEBUG\n";
     $printed = 1;
@@ -412,7 +413,7 @@ foreach $f (@FILES)
   }
 
 # 8. spurious #pragma interface or #pragma implementation
-  if ($file !~ m/\#ifdef VCL_NEEDS_PRAGMA_INTERFACE\n(\#pragma (interface|implementation))[^\n]*\n#endif\n/ &&
+  if ($file !~ m/\#ifdef VCL_NEEDS_PRAGMA_INTERFACE\n(\#pragma (interface|implementation)).*\n#endif\n/ &&
       $file =~ m/(\#\s*pragma\s+(interface|implementation))\b/)
   {
     print "$f\t\# contains $1 without #ifdef VCL_NEEDS_PRAGMA_INTERFACE\n";
@@ -429,7 +430,7 @@ foreach $f (@FILES)
   $file_s =~ s/::/\005/g;
   $file_s =~ s/->/\006/g;
   # remove // comments
-  $file_s =~ s/\/\/[^\n]*\n/\n/g;
+  $file_s =~ s/\/\/.*\n/\n/g;
   # remove /* ... */ comments
   $file_s =~ s/(\001|\/\*)[^\001\002]*\002//g;
 # if ($file_s =~ m/[\001\002]/)
@@ -447,7 +448,7 @@ foreach $f (@FILES)
     $printed = 1;
   }
 # 11. Inclusion guard and file name
-  if ($file_s =~ m/^\s*\#ifndef\s+(\S+)\s*\n#define\s+\1\s*(\s[^\n]*)?\n/)
+  if ($file_s =~ m/^\s*\#ifndef\s+(\S+)\s*\n#define\s+\1\s*(\s.*)?\n/)
   {
     $guard = $1;
     if (defined($inclusion_guards{"$guard"}))
@@ -493,7 +494,7 @@ foreach $f (@FILES)
   }
 
 # 13. Instantiation macro stuff
-  if ($file_s =~ m/\#define\s+(\S*INSTANTIATE[^\s\(\)]*)[^\n]+;\s*\n/)
+  if ($file_s =~ m/\#define\s+(\S*INSTANTIATE[^\s\(\)]*).+;\s*\n/)
   {
     print "$f\t\# definition of $1 ends with ;\n";
     $printed = 1;
@@ -503,7 +504,7 @@ foreach $f (@FILES)
     print "$f\t\# definition of $1 does not start with a space\n";
     $printed = 1;
   }
-  if ($file_s =~ m/\#define\s+(\S*INSTANTIATE[^\s\(\)]*)[^\n]+(\<[^<>\n]*[A-Za-z_][A-Za-z_0-9]*\>)/)
+  if ($file_s =~ m/\#define\s+(\S*INSTANTIATE[^\s\(\)]*).+(\<[^<>\n]*[A-Za-z_][A-Za-z_0-9]*\>)/)
   {
     print "$f\t\# definition of $1 has no space before > in $2\n";
     $printed = 1;
@@ -751,12 +752,12 @@ foreach $f (@FILES)
     if ($printed && $file =~ m/\breturn\s*\([^;()]*(\([^;()]*\)[^;()]*)*\)\s*;/);
   print "$f\t\# delete value in brackets\n"
     if ($printed && $file =~ m/\bdelete\s*\([^;()]*(\([^;()]*\)[^;()]*)*\)\s*;/);
-  $file =~ s/^\#[^\n]*//g; $file =~ s/\n\#[^\n]*//g;
+  $file =~ s/^\#.*//g; $file =~ s/\n\#.*//g;
   print "$f\t\# $2 starts with underscore\n"
     if ($cpp_file && $printed && $file_s =~ m/([^\"# ] *\b|^)(_[a-z][a-zA-Z0-9_]*)/);
 
 # 16. no end-of-line at end-of-file
-  $file =~ s/[^\n]*\n//g;
+  $file =~ s/.*\n//g;
   unless ($file eq "")
   {
     print "$f\t\# has no final end-of-line\n";
