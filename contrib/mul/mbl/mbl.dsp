@@ -251,6 +251,9 @@ SOURCE=.\mbl_parse_block.cxx
 # Begin Source File
 SOURCE=.\mbl_add_all_loaders.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\mbl_correspond_points.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -418,6 +421,9 @@ SOURCE=.\mbl_parse_block.h
 # End Source File
 # Begin Source File
 SOURCE=.\mbl_add_all_loaders.h
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_correspond_points.h
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
