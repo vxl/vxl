@@ -2,8 +2,11 @@
 #define vipl_accessors_vil_image_h_
 #include <vil/vil_image.h>
 
+#undef FILTER_IMPTR_DEC_REFCOUNT
 #define FILTER_IMPTR_DEC_REFCOUNT(v) ((v)=0)
+#undef FILTER_IMPTR_INC_REFCOUNT
 #define FILTER_IMPTR_INC_REFCOUNT(v) 
+#undef FILTER_KERNPTR_DEC_REFCOUNT
 #define FILTER_KERNPTR_DEC_REFCOUNT(v) 
 
 template <class DataType> DataType fgetpixel(vil_image const& i, int x, int y, DataType);
