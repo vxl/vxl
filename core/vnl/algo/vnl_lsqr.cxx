@@ -15,20 +15,7 @@
 #include <vcl_iostream.h>
 #include <vnl/vnl_vector_ref.h>
 
-// External f2c function (see netlib/lsqr.f for explanation of parameters)
-extern "C" int
-lsqr_(int* m, int* n,
-      int aprod_(int* mode, int* m, int* n, double* x, double* y, int* leniw, int* lenrw, int* iw, double* rw ),
-      double* damp,
-      int* leniw, int* lenrw, int* iw, double* rw,
-      double* u,
-      double* v, double* w,
-      double* x, double* se,
-      double* atol, double* btol, double* conlim, int* itnlim,
-      int* nout,
-      int* istop,
-      int* itn, double* anorm, double* acond, double* rnorm, double* arnorm, double* xnorm);
-
+#include "vnl_netlib.h" // lsqr_()
 
 class vnl_lsqr_Activate {
 public:
@@ -55,7 +42,7 @@ vnl_lsqr::~vnl_lsqr()
 }
 
 // Requires number_of_residuals() of workspace in rw.
-int vnl_lsqr::aprod_(int* mode, int* m, int* n, double* x, double* y, int* leniw, int* lenrw, int* iw, double* rw )
+void vnl_lsqr::aprod_(int* mode, int* m, int* n, double* x, double* y, int* leniw, int* lenrw, int* iw, double* rw )
 {
   vnl_lsqr* active = vnl_lsqr_Activate::current;
 
@@ -75,7 +62,6 @@ int vnl_lsqr::aprod_(int* mode, int* m, int* n, double* x, double* y, int* leniw
     active->ls_->transpose_multiply(y_ref, tmp);
     x_ref += tmp;
   }
-  return 0; // return value not used
 }
 
 int vnl_lsqr::minimize(vnl_vector<double>& result)
