@@ -1,6 +1,4 @@
 SOURCE_FILES(vgui_mfc_sources
-  StdAfx.h
-  resource.h
   vgui_mfc.h
   vgui_mfc_adaptor.h
   vgui_mfc_app.h

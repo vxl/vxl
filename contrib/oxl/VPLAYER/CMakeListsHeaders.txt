@@ -1,6 +1,4 @@
 SOURCE_FILES( VPLAYER_sources
-  Resource.h
-  StdAfx.h
   easy2D_loader.h
   easy2D_sequencer.h
   vplayer.h
