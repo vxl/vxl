@@ -39,7 +39,7 @@ void vgui_range_map<Type>::init()
 template <class Type>
 vxl_byte vgui_range_map<Type>::
 map_pixel_byte(const Type pix, const Type min, const Type max,
-               const Type gamma, const long double ratio)
+               const float gamma, const long double ratio)
 {
   if (vil_pixel_traits<Type>::num_bits()==1)
     if (pix)
@@ -67,7 +67,7 @@ map_pixel_byte(const Type pix, const Type min, const Type max,
 template <class Type>
 float vgui_range_map<Type>::
 map_pixel_float(const Type pix, const Type min, const Type max,
-               const Type gamma, const long double ratio)
+               const float gamma, const long double ratio)
 {
   if (vil_pixel_traits<Type>::num_bits()==1)
     if (pix)
@@ -92,7 +92,7 @@ map_pixel_float(const Type pix, const Type min, const Type max,
 
 template <class Type>
 vcl_vector<vxl_byte>  vgui_range_map<Type>::
-compute_byte_table(const Type min, const Type max, const Type gamma,
+compute_byte_table(const Type min, const Type max, const float gamma,
                    const long double ratio)
 {
   vcl_vector<vxl_byte> bmap(size_);
@@ -117,7 +117,7 @@ compute_byte_table(const Type min, const Type max, const Type gamma,
 // Hardware mapping cannot support signed Types
 template <class Type>
 vcl_vector<float> vgui_range_map<Type>::
-compute_float_table(const Type min, const Type max, const Type gamma,
+compute_float_table(const Type min, const Type max, const float gamma,
                     const long double ratio)
 {
   vcl_vector<float> null;
