@@ -21,7 +21,17 @@
 #include <vnl/vnl_nonlinear_minimizer.h>
 
 //: Limited memory Broyden Fletcher Goldfarb Shannon minimization
-//  More complete description ???
+// Considered to be the best optimisation algorithm for functions 
+// which are well behaved (i.e. locally smooth
+// without too many local minima,) and have 1st derivatives available. 
+//
+// This limited-memory rank-2 quasi-newton optimisation method
+// maintains an estimate of (the inverse of) the Hessian matrix of f(x).
+// Unlike Newton's method, it doesn't need 2nd derivatives of f(x),
+// has superlinear rather than quadratic convergence and is
+// better behaved away from minima. 2 ranks of this matrix are updated at each
+// step. In order to limit memory use, this limited memory version of BFGS,
+// only maintains a certain number of ranks of the inverse hessian estimate.
 
 class vnl_lbfgs : public vnl_nonlinear_minimizer {
 public:
@@ -31,7 +41,12 @@ public:
   bool minimize(vnl_vector<double>& x);
 
   //: Number of direction vectors to keep.
-  // Sensible values are from about 5 onwards.
+  // Effectively the number of ranks of the inverse hessian estimate that
+  // are kept. Sensible values are start from about 5.
+  // It rarely worth using a value much larger than the dimensionality of
+  // the parameter x.
+  //
+  // Memory requirements will be roughly Const+sizeof(element)*dim(X)*memory;
   int memory;
 
   //: Accuracy of line search.
