@@ -9,6 +9,7 @@
 #include <vcl_cstdio.h>
 
 #include <vul/vul_file.h>
+#include <vil/vil_image_view.h>
 
 // Microsoft files
 #include <windows.h>
