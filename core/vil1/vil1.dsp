@@ -267,6 +267,9 @@ SOURCE=.\Templates/vil1_ssd+float.float.double-.cxx
 SOURCE=.\Templates/vil1_ssd+uchar.uchar.int-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vcl_list+vil1_image-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\file_formats/vil1_bmp.cxx
 # End Source File
 # Begin Source File
