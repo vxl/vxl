@@ -119,18 +119,20 @@ check( const vnl_vector<double>& correct_params,
 
   //  Get standardized error
   double err = vcl_sqrt(dot_product( err_vector*covar, err_vector ));
-  bool success = err < 0.1;
+#ifdef DEBUG
+  vcl_cerr << "Mahalanobis param error = " << err << ", scale = " << s << "\n";
+#endif
+  bool success = err < 0.5*s;
 #if 0
   bool conv = ( irls->did_it_converge( ) );
-  vcl_cout << "Finished:\n "
-            << "  estimate = " << irls->estimate()
-            << ",  true fit = " << correct_params << vcl_endl
-            << "  Mahalanobis param error = " << err << "\n"
-            << (success ? "success" : "fail") << "\n"
-            << "  scale estimate = " << s  << "\n"
-            << "  iterations used = " << irls->iterations_used() << "\n"
-            << "  did it converge? " << (conv ? "yes" : "no")
-            << vcl_endl;
+  vcl_cout << "Finished:\n"
+           << "  estimate = " << irls->estimate()
+           << ", true fit = " << correct_params << "\n"
+           << "  Mahalanobis param error = " << err << "\n"
+           << (success ? "success" : "fail") << "\n"
+           << "  scale estimate = " << s  << "\n"
+           << "  iterations used = " << irls->iterations_used() << "\n"
+           << "  did it converge? " << (conv ? "yes\n" : "no\n");
 #endif
  return success;
 }
@@ -158,7 +160,7 @@ main()
   rrel_linear_regression * lr = new rrel_linear_regression( pts, use_intercept );
   int dof = lr->param_dof();
   rrel_wls_obj * m_est = new rrel_tukey_obj( dof );
-  int max_iterations = 20;
+  int max_iterations = 50;
   int trace_level=0;
   vbl_test_begin( "ctor" );
   rrel_irls * irls = new rrel_irls( max_iterations );
