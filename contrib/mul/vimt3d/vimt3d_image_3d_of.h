@@ -1,10 +1,10 @@
-// This is mul/vimt/vimt3d_image_3d_of.h
+// This is mul/vimt3d/vimt3d_image_3d_of.h
 #ifndef vimt3d_image_3d_of_h_
 #define vimt3d_image_3d_of_h_
 //:
-//  \file
-//  \brief Container for vil3d_image_view<T> + transform
-//  \author Tim Cootes
+// \file
+// \brief Container for vil3d_image_view<T> + transform
+// \author Tim Cootes
 
 #include <vimt3d/vimt3d_image_3d.h>
 #include <vil3d/vil3d_image_view.h>
@@ -52,7 +52,7 @@ class vimt3d_image_3d_of : public vimt3d_image_3d
   //  Specifically, set_valid_region(i0,ni,j0,nj,k0,nk);
   //  world2im() translates by (-i0,-j0,-k0)
   void set_valid_region(int i0, unsigned ni, int j0, unsigned nj,
-	                      int k0, unsigned nk);
+                        int k0, unsigned nk);
 
   //: Take a deep copy of image (copy data, not just pointers)
   void deep_copy(const vimt3d_image_3d_of& image);

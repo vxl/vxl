@@ -1,14 +1,12 @@
 // This is mul/vil2/algo/vil2_gauss_filter.cxx
 #include "vil2_gauss_filter.h"
-#include <vcl_cmath.h>
-#include <vnl/vnl_gamma.h> // for vnl_erf()
-
-
 //:
 // \file
 // \brief Functions to smooth an image
 // \author Ian Scott
-
+#include <vcl_cmath.h>
+#include <vcl_cassert.h>
+#include <vnl/vnl_gamma.h> // for vnl_erf()
 
 vil2_gauss_filter_5tap_params::vil2_gauss_filter_5tap_params(double sigma)
 {

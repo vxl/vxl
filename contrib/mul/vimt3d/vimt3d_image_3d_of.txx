@@ -43,8 +43,8 @@ template<class T> vimt3d_image_3d_of<T>::~vimt3d_image_3d_of()
 //  worldToIm(x,y) is valid for all points in range
 template<class T>
 void vimt3d_image_3d_of<T>::set_valid_region(int i0, unsigned ni,
-                        int j0, unsigned nj,
-	                      int k0, unsigned nk)
+                                             int j0, unsigned nj,
+                                             int k0, unsigned nk)
 {
   image_.set_size(ni,nj,nk);
   world2im_.set_translation(-i0,-j0,-k0);

@@ -139,7 +139,7 @@ void vimt3d_gaussian_pyramid_builder_3d<T>::set_filter_width(unsigned w)
 //  every other pixel.
 template<class T>
 void vimt3d_gaussian_pyramid_builder_3d<T>::gauss_reduce(vimt3d_image_3d_of<T>& dest_im,
-                                                        vimt3d_image_3d_of<T>const& src_im) const
+                                                         vimt3d_image_3d_of<T>const& src_im) const
 {
   // Assume filter width is 5 for the moment.
   if (filter_width_!=5)
@@ -160,7 +160,7 @@ void vimt3d_gaussian_pyramid_builder_3d<T>::gauss_reduce(vimt3d_image_3d_of<T>& 
     scaling.set_zoom_only(0.5,0.5,0.5,0,0,0);
     dest_im.set_world2im(scaling * src_im.world2im());
 
-		return;
+    return;
   }
 
   // If dz is much larger than dx, then don't subsample in that direction
@@ -171,19 +171,19 @@ void vimt3d_gaussian_pyramid_builder_3d<T>::gauss_reduce(vimt3d_image_3d_of<T>& 
     dest_im.set_world2im(scaling * src_im.world2im());
   }
   else if (dy*dy/(dx*dx)>2.0)
-	{
+  {
     vil3d_gauss_reduce_ik(src_im.image(),dest_im.image(),work_im1_);
     scaling.set_zoom_only(0.5,1.0,0.5,0,0,0);
     dest_im.set_world2im(scaling * src_im.world2im());
   }
   else if (dx*dx/(dy*dy)>2.0)
-	{
+  {
     vil3d_gauss_reduce_jk(src_im.image(),dest_im.image(),work_im1_);
     scaling.set_zoom_only(1.0,0.5,0.5,0,0,0);
     dest_im.set_world2im(scaling * src_im.world2im());
   }
   else
-	{
+  {
     vil3d_gauss_reduce(src_im.image(),dest_im.image(),work_im1_,work_im2_);
 
     scaling.set_zoom_only(0.5,0.5,0.5,0,0,0);
@@ -228,15 +228,14 @@ void vimt3d_gaussian_pyramid_builder_3d<T>::checkPyr(vimt_image_pyramid& im_pyr,
 //: Set the minimum size of the top layer of the pyramid
 template<class T>
 void vimt3d_gaussian_pyramid_builder_3d<T>::set_min_size(unsigned X, unsigned Y, unsigned Z)
-{ min_x_size_ = X; min_y_size_ = Y; min_z_size_ = Z;}
+{ min_x_size_ = X; min_y_size_ = Y; min_z_size_ = Z; }
 
 //=======================================================================
 //: Build pyramid
 template<class T>
 void vimt3d_gaussian_pyramid_builder_3d<T>::build(vimt_image_pyramid& image_pyr,
-                                                 vimt_image const& im) const
+                                                  vimt_image const& im) const
 {
-
   // Check that the image is a 3d image
   assert(im.is_class("vimt3d_image_3d"));
 
@@ -289,7 +288,7 @@ void vimt3d_gaussian_pyramid_builder_3d<T>::build(vimt_image_pyramid& image_pyr,
 //: Compute real world size of pixel
 template<class T>
 void vimt3d_gaussian_pyramid_builder_3d<T>::get_pixel_size(double &dx, double& dy, double& dz,
-         const vimt3d_image_3d_of<T>& image) const
+                                                           const vimt3d_image_3d_of<T>& image) const
 {
   // Estimate width of pixels in base image
   vgl_point_3d<double>  c0(0,0,0);
@@ -312,7 +311,7 @@ void vimt3d_gaussian_pyramid_builder_3d<T>::extend(vimt_image_pyramid& image_pyr
 
   assert(image_pyr.scale_step() == scale_step());
 
-	vimt3d_image_3d_of<T>& im_base = (vimt3d_image_3d_of<T>&) image_pyr(0);
+  vimt3d_image_3d_of<T>& im_base = (vimt3d_image_3d_of<T>&) image_pyr(0);
   int ni = im_base.image().ni();
   int nj = im_base.image().nj();
   int nk = im_base.image().nk();

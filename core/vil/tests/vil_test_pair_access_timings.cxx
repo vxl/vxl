@@ -201,7 +201,7 @@ double method7(const vil2_image_view<imT>& src_image,
 
 template <class imT>
 double method(int i, const vil2_image_view<imT>& src_image,
-               vil2_image_view<imT>& dest_image, int n_loops)
+              vil2_image_view<imT>& dest_image, int n_loops)
 {
   double t;
   switch (i)
@@ -220,12 +220,12 @@ double method(int i, const vil2_image_view<imT>& src_image,
 
 template <class imT>
 void compute_stats(int i, const vil2_image_view<imT>& src_image,
-               vil2_image_view<imT>& dest_image, int n_loops)
+                   vil2_image_view<imT>& dest_image, int n_loops)
 {
   mbl_stats_1d stats;
   for (int j=0;j<10;++j) stats.obs(method(i,src_image,dest_image,n_loops));
   vcl_cout<<"Method "<<i<<") Mean: "<<int(stats.mean()+0.5)
-          <<"us  +/-"<<int(0.5*(stats.max()-stats.min())+0.5)<<"us"<<vcl_endl;
+          <<"us  +/-"<<int(0.5*(stats.max()-stats.min())+0.5)<<"us\n";
 }
 
 int main(int argc, char** argv)
@@ -235,13 +235,14 @@ int main(int argc, char** argv)
   int n_loops = 100;
 
   vcl_cout<<"Times to copy and increment a "<<NI<<" x "<<NJ
-          <<" image of "<<NP<<" planes (in microsecs) [Range= 0.5(max-min)]"<<vcl_endl;
-  vcl_cout<<"Images of BYTE"<<vcl_endl;
+          <<" image of "<<NP<<" planes (in microsecs) [Range= 0.5(max-min)]\n\n";
+
+  vcl_cout<<"Images of BYTE\n";
   for (int i=1;i<=7;++i)
   {
     compute_stats(i,src_byte_image,dest_byte_image,n_loops);
   }
-  vcl_cout<<"Images of FLOAT"<<vcl_endl;
+  vcl_cout<<"Images of FLOAT\n";
   for (int i=1;i<=7;++i)
   {
     compute_stats(i,src_float_image,dest_float_image,n_loops);

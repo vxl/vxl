@@ -2,21 +2,16 @@
 #ifndef vil2_gauss_filter_txx_
 #define vil2_gauss_filter_txx_
 //:
-//  \file
-//  \brief smooth images
-//  \author Ian Scott
+// \file
+// \brief smooth images
+// \author Ian Scott
 
 #include "vil2_gauss_filter.h"
 #include <vcl_iostream.h>
-#include <vcl_cmath.h>
+#include <vcl_cassert.h>
 #include <vsl/vsl_indent.h>
-#include <mbl/mbl_gamma.h>
-#include <mil/mil_image_2d_of.h>
 
 //=======================================================================
-
-
-
 
 //: An optimisable rounding function
 inline unsigned char l_round(double x, unsigned char )
@@ -57,13 +52,12 @@ inline float l_round (double x, float )
 
 template <class srcT, class destT>
 void vil2_gauss_filter_5tap(const srcT* src_im, vcl_ptrdiff_t src_istep, vcl_ptrdiff_t src_jstep,
-           destT* dest_im, vcl_ptrdiff_t dest_istep, vcl_ptrdiff_t dest_jstep, 
-           unsigned nx, unsigned ny, const vil2_gauss_filter_5tap_params& params, destT* work)
+                            destT* dest_im, vcl_ptrdiff_t dest_istep, vcl_ptrdiff_t dest_jstep,
+                            unsigned nx, unsigned ny, const vil2_gauss_filter_5tap_params& params, destT* work)
 {
   // Convolve src with a 5 x 1 Gaussian filter,
   // placing result in work_
 
-  
   const vcl_ptrdiff_t work_jstep = ny;
 
   // First perform horizontal smoothing
@@ -80,29 +74,29 @@ void vil2_gauss_filter_5tap(const srcT* src_im, vcl_ptrdiff_t src_istep, vcl_ptr
     int nx2 = nx-2;
     for (x=2;x<nx2;x++)
       work_row[x] = l_round(  params.filt2() * src_col1[x*src_istep]
-                             + params.filt1() * src_col2[x*src_istep]
-                             + params.filt0() * src_col3[x*src_istep]
-                             + params.filt1() * src_col4[x*src_istep]
-                             + params.filt2() * src_col5[x*src_istep], (destT)0);
+                            + params.filt1() * src_col2[x*src_istep]
+                            + params.filt0() * src_col3[x*src_istep]
+                            + params.filt1() * src_col4[x*src_istep]
+                            + params.filt2() * src_col5[x*src_istep], (destT)0);
 
     // Now deal with edge effects :
     work_row[0] = l_round( params.filt_edge0() * src_col3[0]
-                          + params.filt_edge1() * src_col4[0]
-                          + params.filt_edge2() * src_col5[0], (destT)0);
+                         + params.filt_edge1() * src_col4[0]
+                         + params.filt_edge2() * src_col5[0], (destT)0);
 
     work_row[1] = l_round( params.filt_pen_edge_n1() * src_col2[src_istep]
-                          + params.filt_pen_edge0() * src_col3[src_istep]
-                          + params.filt_pen_edge1() * src_col4[src_istep]
-                          + params.filt_pen_edge2() * src_col5[src_istep], (destT)0);
+                         + params.filt_pen_edge0() * src_col3[src_istep]
+                         + params.filt_pen_edge1() * src_col4[src_istep]
+                         + params.filt_pen_edge2() * src_col5[src_istep], (destT)0);
 
     work_row[nx-2] = l_round( params.filt_pen_edge2() * src_col1[(nx-2)*src_istep]
-                             + params.filt_pen_edge1() * src_col2[(nx-2)*src_istep]
-                             + params.filt_pen_edge0() * src_col3[(nx-2)*src_istep]
-                             + params.filt_pen_edge_n1() * src_col4[(nx-2)*src_istep], (destT)0);
+                            + params.filt_pen_edge1() * src_col2[(nx-2)*src_istep]
+                            + params.filt_pen_edge0() * src_col3[(nx-2)*src_istep]
+                            + params.filt_pen_edge_n1() * src_col4[(nx-2)*src_istep], (destT)0);
 
     work_row[nx-1] = l_round( params.filt_edge2() * src_col1[(nx-1)*src_istep]
-                             + params.filt_edge1() * src_col2[(nx-1)*src_istep]
-                             + params.filt_edge0() * src_col3[(nx-1)*src_istep], (destT)0);
+                            + params.filt_edge1() * src_col2[(nx-1)*src_istep]
+                            + params.filt_edge0() * src_col3[(nx-1)*src_istep], (destT)0);
   }
 
 //  work_.print_all(vcl_cout);
@@ -145,22 +139,22 @@ void vil2_gauss_filter_5tap(const srcT* src_im, vcl_ptrdiff_t src_istep, vcl_ptr
   for (unsigned int x=0;x<nx;x++)
   {
     dest_row_top[x*dest_istep] = l_round(  params.filt_edge0() * work_row_top_5[x]
-                              + params.filt_edge1() * work_row_top_4[x]
-                              + params.filt_edge2() * work_row_top_3[x], (destT)0);
+                                         + params.filt_edge1() * work_row_top_4[x]
+                                         + params.filt_edge2() * work_row_top_3[x], (destT)0);
 
     dest_row_next_top[x*dest_istep] = l_round( params.filt_pen_edge2() * work_row_top_2[x]
-                                  + params.filt_pen_edge1() * work_row_top_3[x]
-                                  + params.filt_pen_edge0() * work_row_top_4[x]
-                                  + params.filt_pen_edge_n1() * work_row_top_5[x], (destT)0);
+                                             + params.filt_pen_edge1() * work_row_top_3[x]
+                                             + params.filt_pen_edge0() * work_row_top_4[x]
+                                             + params.filt_pen_edge_n1() * work_row_top_5[x], (destT)0);
 
     dest_row_next_bottom[x*dest_istep] = l_round(  params.filt_pen_edge2() * work_row_bottom_4[x]
-                                      + params.filt_pen_edge1() * work_row_bottom_3[x]
-                                      + params.filt_pen_edge0() * work_row_bottom_2[x]
-                                      + params.filt_pen_edge_n1() * work_row_bottom_1[x], (destT)0); 
+                                                 + params.filt_pen_edge1() * work_row_bottom_3[x]
+                                                 + params.filt_pen_edge0() * work_row_bottom_2[x]
+                                                 + params.filt_pen_edge_n1() * work_row_bottom_1[x], (destT)0);
 
-    dest_row_bottom[x*dest_istep] = l_round(   params.filt_edge2() * work_row_bottom_3[x]
-                                  + params.filt_edge1() * work_row_bottom_2[x]
-                                  + params.filt_edge0() * work_row_bottom_1[x], (destT)0);
+    dest_row_bottom[x*dest_istep] = l_round(  params.filt_edge2() * work_row_bottom_3[x]
+                                            + params.filt_edge1() * work_row_bottom_2[x]
+                                            + params.filt_edge0() * work_row_bottom_1[x], (destT)0);
   }
 
 //  dest_im.print_all(vcl_cout);
@@ -168,10 +162,10 @@ void vil2_gauss_filter_5tap(const srcT* src_im, vcl_ptrdiff_t src_istep, vcl_ptr
 
 template <class srcT, class destT>
 void vil2_gauss_filter_5tap(
-           const vil2_image_view<srcT>& src_im,
-           vil2_image_view<destT>& dest_im,
-           const vil2_gauss_filter_5tap_params& params,
-           vil2_image_view<destT>& work)
+                            const vil2_image_view<srcT>& src_im,
+                            vil2_image_view<destT>& dest_im,
+                            const vil2_gauss_filter_5tap_params& params,
+                            vil2_image_view<destT>& work)
 {
   unsigned ni = src_im.ni();
   unsigned nj = src_im.nj();
@@ -197,10 +191,9 @@ void vil2_gauss_filter_5tap(
 #undef VIL2_GAUSS_FILTER_INSTANTIATE
 #define VIL2_GAUSS_FILTER_INSTANTIATE(srcT, destT) \
 template void vil2_gauss_filter_5tap( \
-           const vil2_image_view<srcT>& src_im, \
-           vil2_image_view<destT>& dest_im, \
+           const vil2_image_view<srcT >& src_im, \
+           vil2_image_view<destT >& dest_im, \
            const vil2_gauss_filter_5tap_params& params, \
-           vil2_image_view<destT>& work); 
-
+           vil2_image_view<destT >& work)
 
 #endif // vil2_gauss_filter_txx_

@@ -2,9 +2,9 @@
 #ifndef vimt3d_sample_grid_trilin_txx_
 #define vimt3d_sample_grid_trilin_txx_
 //:
-//  \file
-//  \brief Profile sampling functions for 3D images
-//  \author Graham Vincent
+// \file
+// \brief Profile sampling functions for 3D images
+// \author Graham Vincent
 
 #include "vimt3d_sample_grid_trilin.h"
 #include <vimt3d/vimt3d_trilin_interp.h>
@@ -27,11 +27,11 @@ inline bool vimt3d_point_in_image(const vgl_point_3d<double>& p, const vil3d_ima
 //  p defines centre of one size.
 template<class T>
 inline bool vimt3d_grid_in_image_ic(const vgl_point_3d<double>& im_p,
-                                  const vgl_vector_3d<double>& im_u,
-                                  const vgl_vector_3d<double>& im_v,
-                                  const vgl_vector_3d<double>& im_w,
-                                  int nu, int nv, int nw,
-                                  const vil3d_image_view<T>& image)
+                                    const vgl_vector_3d<double>& im_u,
+                                    const vgl_vector_3d<double>& im_v,
+                                    const vgl_vector_3d<double>& im_w,
+                                    int nu, int nv, int nw,
+                                    const vil3d_image_view<T>& image)
 {
   vgl_vector_3d<double> u1=(nu-1)*im_u;
   vgl_vector_3d<double> v1=(nv-1)*im_v;
@@ -56,12 +56,12 @@ inline bool vimt3d_grid_in_image_ic(const vgl_point_3d<double>& im_p,
 //  Samples are taken along direction w first
 template <class imType, class vecType>
 void vimt3d_sample_grid_trilin(vnl_vector<vecType>& vec,
-                          const vimt3d_image_3d_of<imType>& image,
-                          const vgl_point_3d<double>& p,
-                          const vgl_vector_3d<double>& u,
-                          const vgl_vector_3d<double>& v,
-                          const vgl_vector_3d<double>& w,
-                          int nu, int nv, int nw)
+                               const vimt3d_image_3d_of<imType>& image,
+                               const vgl_point_3d<double>& p,
+                               const vgl_vector_3d<double>& u,
+                               const vgl_vector_3d<double>& v,
+                               const vgl_vector_3d<double>& w,
+                               int nu, int nv, int nw)
 {
   // convert to image coordinates
   vgl_point_3d<double> im_p0 = image.world2im()(p);
@@ -83,12 +83,12 @@ void vimt3d_sample_grid_trilin(vnl_vector<vecType>& vec,
 //  Samples are taken along direction w first
 template <class imType, class vecType>
 void vimt3d_sample_grid_trilin_ic(vnl_vector<vecType>& vec,
-                             const vil3d_image_view<imType>& image,
-                             const vgl_point_3d<double>& im_p,
-                             const vgl_vector_3d<double>& im_u,
-                             const vgl_vector_3d<double>& im_v,
-                             const vgl_vector_3d<double>& im_w,
-                             int nu, int nv, int nw)
+                                  const vil3d_image_view<imType>& image,
+                                  const vgl_point_3d<double>& im_p,
+                                  const vgl_vector_3d<double>& im_u,
+                                  const vgl_vector_3d<double>& im_v,
+                                  const vgl_vector_3d<double>& im_w,
+                                  int nu, int nv, int nw)
 {
   if (vimt3d_grid_in_image_ic(im_p,im_u,im_v,im_w,nu,nv,nw,image))
     vimt3d_sample_grid_trilin_ic_no_checks(vec,image,im_p,im_u,im_v,im_w,nu,nv,nw);
@@ -106,18 +106,18 @@ void vimt3d_sample_grid_trilin_ic(vnl_vector<vecType>& vec,
 //  Points outside image return zero.
 template <class imType, class vecType>
 void vimt3d_sample_grid_trilin_ic_no_checks(vnl_vector<vecType>& vec,
-                                       const vil3d_image_view<imType>& image,
-                                       const vgl_point_3d<double>& p0,
-                                       const vgl_vector_3d<double>& u,
-                                       const vgl_vector_3d<double>& v,
-                                       const vgl_vector_3d<double>& w,
-                                       int nu, int nv, int nw)
+                                            const vil3d_image_view<imType>& image,
+                                            const vgl_point_3d<double>& p0,
+                                            const vgl_vector_3d<double>& u,
+                                            const vgl_vector_3d<double>& v,
+                                            const vgl_vector_3d<double>& w,
+                                            int nu, int nv, int nw)
 {
   int np = image.nplanes();
   int istep = image.istep();
   int jstep = image.jstep();
   int kstep = image.kstep();
-	int pstep = image.planestep();
+  int pstep = image.planestep();
 
   vec.resize(nu*nv*nw*np);
   vecType* vc = vec.begin();
@@ -136,7 +136,7 @@ void vimt3d_sample_grid_trilin_ic_no_checks(vnl_vector<vecType>& vec,
         // Sample each row (along w)
         for (int k=0;k<nw;++k,p+=w,++vc)
           *vc = vil3d_trilin_interp_raw(p.x(),p.y(),p.z(),
-					                              plane0,istep,jstep,kstep);
+                                        plane0,istep,jstep,kstep);
       }
     }
   }
@@ -152,7 +152,7 @@ void vimt3d_sample_grid_trilin_ic_no_checks(vnl_vector<vecType>& vec,
         for (int l=0;l<nw;++l,p+=w)
           for (int k=0;k<np;++k,++vc)
             *vc = vil3d_trilin_interp_raw(p.x(),p.y(),p.z(),
-						                   image.origin_ptr()+k*pstep,istep,jstep,kstep);
+                                          image.origin_ptr()+k*pstep,istep,jstep,kstep);
       }
     }
   }
@@ -166,12 +166,12 @@ void vimt3d_sample_grid_trilin_ic_no_checks(vnl_vector<vecType>& vec,
 //  Points outside image return zero.
 template <class imType, class vecType>
 void vimt3d_sample_grid_trilin_ic_safe(vnl_vector<vecType>& vec,
-                                  const vil3d_image_view<imType>& image,
-                                  const vgl_point_3d<double>& p0,
-                                  const vgl_vector_3d<double>& u,
-                                  const vgl_vector_3d<double>& v,
-                                  const vgl_vector_3d<double>& w,
-                                  int nu, int nv, int nw)
+                                       const vil3d_image_view<imType>& image,
+                                       const vgl_point_3d<double>& p0,
+                                       const vgl_vector_3d<double>& u,
+                                       const vgl_vector_3d<double>& v,
+                                       const vgl_vector_3d<double>& w,
+                                       int nu, int nv, int nw)
 {
   int np = image.nplanes();
   int ni = image.ni();
@@ -180,7 +180,7 @@ void vimt3d_sample_grid_trilin_ic_safe(vnl_vector<vecType>& vec,
   int istep = image.istep();
   int jstep = image.jstep();
   int kstep = image.kstep();
-	int pstep = image.planestep();
+  int pstep = image.planestep();
 
   vec.resize(nu*nv*nw*np);
   vecType* vc = vec.begin();
@@ -214,7 +214,7 @@ void vimt3d_sample_grid_trilin_ic_safe(vnl_vector<vecType>& vec,
         for (int l=0;l<nw;++l,p+=w)
           for (int k=0;k<np;++k,++vc)
             *vc = vil3d_trilin_interp_safe(p.x(),p.y(),p.z(),
-						                image.origin_ptr()+k*pstep,ni,nj,nk,istep,jstep,kstep);
+                                           image.origin_ptr()+k*pstep,ni,nj,nk,istep,jstep,kstep);
       }
     }
   }
@@ -223,32 +223,32 @@ void vimt3d_sample_grid_trilin_ic_safe(vnl_vector<vecType>& vec,
 
 #define VIMT3D_SAMPLE_GRID_TRILIN_INSTANTIATE( imType, vecType ) \
 template void vimt3d_sample_grid_trilin(vnl_vector<vecType >& vec, \
-                                 const vimt3d_image_3d_of<imType >& image, \
-                                 const vgl_point_3d<double >& p, \
-                                 const vgl_vector_3d<double >& u, \
-                                 const vgl_vector_3d<double >& v, \
-                                 const vgl_vector_3d<double >& w, \
-                                 int nu, int nv, int nw); \
-template void vimt3d_sample_grid_trilin_ic(vnl_vector<vecType>& vec, \
-                             const vil3d_image_view<imType>& image, \
-                             const vgl_point_3d<double>& im_p, \
-                             const vgl_vector_3d<double>& im_u, \
-                             const vgl_vector_3d<double>& im_v, \
-                             const vgl_vector_3d<double>& im_w, \
-                             int nu, int nv, int nw); \
+                                        const vimt3d_image_3d_of<imType >& image, \
+                                        const vgl_point_3d<double >& p, \
+                                        const vgl_vector_3d<double >& u, \
+                                        const vgl_vector_3d<double >& v, \
+                                        const vgl_vector_3d<double >& w, \
+                                        int nu, int nv, int nw); \
+template void vimt3d_sample_grid_trilin_ic(vnl_vector<vecType >& vec, \
+                                           const vil3d_image_view<imType >& image, \
+                                           const vgl_point_3d<double >& im_p, \
+                                           const vgl_vector_3d<double >& im_u, \
+                                           const vgl_vector_3d<double >& im_v, \
+                                           const vgl_vector_3d<double >& im_w, \
+                                           int nu, int nv, int nw); \
 template void vimt3d_sample_grid_trilin_ic_safe(vnl_vector<vecType >& vec, \
-                                         const vil3d_image_view<imType >& image, \
-                                         const vgl_point_3d<double >& p, \
-                                         const vgl_vector_3d<double >& u, \
-                                         const vgl_vector_3d<double >& v, \
-                                         const vgl_vector_3d<double >& w, \
-                                         int nu, int nv, int nw); \
+                                                const vil3d_image_view<imType >& image, \
+                                                const vgl_point_3d<double >& p, \
+                                                const vgl_vector_3d<double >& u, \
+                                                const vgl_vector_3d<double >& v, \
+                                                const vgl_vector_3d<double >& w, \
+                                                int nu, int nv, int nw); \
 template void vimt3d_sample_grid_trilin_ic_no_checks(vnl_vector<vecType >& vec, \
-                                              const vil3d_image_view<imType >& image, \
-                                              const vgl_point_3d<double >& p0, \
-                                              const vgl_vector_3d<double >& u, \
-                                              const vgl_vector_3d<double >& v, \
-                                              const vgl_vector_3d<double >& w, \
-                                              int nu, int nv, int nw)
+                                                     const vil3d_image_view<imType >& image, \
+                                                     const vgl_point_3d<double >& p0, \
+                                                     const vgl_vector_3d<double >& u, \
+                                                     const vgl_vector_3d<double >& v, \
+                                                     const vgl_vector_3d<double >& w, \
+                                                     int nu, int nv, int nw)
 
 #endif // vimt3d_sample_grid_trilin_txx_
