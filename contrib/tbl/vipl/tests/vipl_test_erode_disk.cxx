@@ -1,3 +1,5 @@
+// This is tbl/vipl/tests/vipl_test_erode_disk.cxx
+
 //:
 // \file
 //  Test of the vipl_erode_disk templated IP classes
@@ -11,8 +13,6 @@
 #include <vipl/vipl_erode_disk.h>
 //#include <vil/vil_rgb_byte.h>
 #include <vcl_iostream.h>
-#include <vcl_cmath.h>
-#include <vcl_cstdlib.h>
 #include <vcl_string.h>
 #include "test_driver.h"
 

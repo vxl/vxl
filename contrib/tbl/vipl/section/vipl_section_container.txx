@@ -1,3 +1,4 @@
+// This is tbl/vipl/section/vipl_section_container.txx
 #ifndef vipl_section_container_txx_
 #define vipl_section_container_txx_
 
@@ -5,7 +6,6 @@
 #include <vipl/filter/vipl_filter_abs.h> // for filter_abs::X_Axis()
 #include <vipl/section/vipl_section_iterator.txx>
 #include <vipl/section/vipl_section_descriptor.txx>
-#include <vcl_cstdio.h>
 #include <vcl_iostream.h>
 
 // The pointer ``the'' is just assigned

@@ -1,3 +1,5 @@
+// This is tbl/vepl/tests/vepl_test_threshold.cxx
+
 //:
 // \file
 //  Test of the vepl_threshold templated IP classes
@@ -9,8 +11,6 @@
 
 #include <vepl/vepl_threshold.h>
 //#include <vil/vil_rgb_byte.h>
-#include <vcl_cmath.h>
-#include <vcl_cstdlib.h>
 #include "test_driver.h"
 
 #define ALL_TESTS(x,v,m) \

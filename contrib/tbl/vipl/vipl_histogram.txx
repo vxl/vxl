@@ -1,8 +1,8 @@
+// This is tbl/vipl/vipl_histogram.txx
 #ifndef vipl_histogram_txx_
 #define vipl_histogram_txx_
 
 #include "vipl_histogram.h"
-#include <vcl_algorithm.h>
 
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
 bool vipl_histogram <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(){

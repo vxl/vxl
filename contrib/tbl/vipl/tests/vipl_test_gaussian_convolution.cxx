@@ -1,3 +1,5 @@
+// This is tbl/vipl/tests/vipl_test_gaussian_convolution.cxx
+
 //:
 // \file
 //  Test of the vipl_gaussian_convolution templated IP classes
@@ -10,8 +12,6 @@
 #include <mil/mil_image_2d_of.h>
 #include <vipl/vipl_with_mil/accessors/vipl_accessors_mil_image.h>
 #include <vipl/vipl_gaussian_convolution.h>
-#include <vcl_cmath.h>
-#include <vcl_cstdlib.h>
 #include "test_driver.h"
 typedef unsigned char ubyte;
 
