@@ -1,6 +1,5 @@
-// -*- c++ -*-
-#ifndef vcl_gcc295_v3_list_txx_
-#define vcl_gcc295_v3_list_txx_
+#ifndef vcl_gcc_libstdcxx_v3_list_txx_
+#define vcl_gcc_libstdcxx_v3_list_txx_
 
 #include <vcl_list.h>
 
@@ -17,4 +16,3 @@ template void std::list<T >::_M_insert_dispatch(std::list<T >::iterator, std::li
 //  _Bool<false>)
 
 #endif
-
