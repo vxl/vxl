@@ -20,7 +20,7 @@ template <class T> void mil_image_pyramid_flatten(T& out, const mil_image_pyrami
     for (unsigned i =0; i<in.n_levels(); ++i)
       width += (in(i).nx());
     out.resize(width, in(0).ny(), n_planes);
-    out.fill((T::pixel_type)0);
+    out.fill((typename T::pixel_type)0);
     int offset=0;
     for (unsigned i =0; i<n_levels; ++i)
     {
