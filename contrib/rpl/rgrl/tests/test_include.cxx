@@ -34,7 +34,6 @@
 #include <rgrl/rgrl_feature_sptr.h>
 #include <rgrl/rgrl_feature_trace_pt.h>
 #include <rgrl/rgrl_fwd.h>
-#include <rgrl/rgrl_image_convert.h>
 #include <rgrl/rgrl_initializer.h>
 #include <rgrl/rgrl_initializer_inv_indexing.h>
 #include <rgrl/rgrl_initializer_prior.h>
