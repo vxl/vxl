@@ -1,6 +1,5 @@
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
-#include <vnl/vnl_math.h>
 #include <vil/vil_rgb.h>
 #include <brip/brip_float_ops.h>
 #include <vvid/vvid_lucas_kanade_process.h>
@@ -29,17 +28,17 @@ compute_lucas_kanade(vil_memory_image_of<float>& image)
   vil_memory_image_of< vil_rgb<unsigned char> > output;
   output.resize(w,h);
   vil_rgb<unsigned char> z(0,0,0);
-  for(int y = 0; y<h; y++)
-    for(int x = 0; x<w; x++)
+  for (int y = 0; y<h; y++)
+    for (int x = 0; x<w; x++)
       {
         double  fx = vx(x,y), fy = vy(x,y);
-        if(!fx&&!fy)
+        if (!fx&&!fy)
           {
             output(x,y)= z;
             continue;
           }
-        double ang = atan2(fy, fx);
-        double red = 63*cos(ang), grn = 63*sin(ang);
+        double ang = vcl_atan2(fy, fx);
+        double red = 63*vcl_cos(ang), grn = 63*vcl_sin(ang);
         unsigned char  r = (unsigned char)(red+127);
         unsigned char  g = (unsigned char)(grn+127);
         vil_rgb<unsigned char> v(r,g, 127);
