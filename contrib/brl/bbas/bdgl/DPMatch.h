@@ -1,28 +1,19 @@
 //#include "ShockMatchInclude.h"
 #ifndef __TBS_DPMATCH_DEF__
 #define __TBS_DPMATCH_DEF__
-#include <vcl_iostream.h>
 #include <vcl_map.h>
 #include <vcl_vector.h> 
 
 #include <vcl_utility.h>
 #include <bdgl/utils.h>
 
-#include "vnl/vnl_matrix.h"
-#include "vnl/algo/vnl_svd.h"
-#include "vnl/vnl_det.h"
-#include "mvl/HMatrix2DEuclideanCompute.h"
-#include "mvl/HMatrix2DSimilarityCompute.h"
-#include "mvl/HMatrix2DComputeLinear.h"
-#include "mvl/HomgPoint2D.h"
-#include "mvl/HMatrix2D.h"
-
-
+#include <vnl/vnl_matrix.h>
 
 #define DP_VERY_LARGE_COST 1E10
 #include "curve.h"
 
-class DPMatch{
+class DPMatch
+{
  public:
   DPMatch();
   DPMatch(Curve &c1, Curve &c2);
@@ -93,9 +84,4 @@ class DPMatch{
   double computeIntervalCost(int i, int ip, int j, int jp);
 };
 
-
-
 #endif
-
-
-
