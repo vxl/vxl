@@ -1,4 +1,4 @@
-// This is vxl/vgl/vgl_region_scan_iterator.h
+// This is core/vgl/vgl_region_scan_iterator.h
 #ifndef vgl_region_scan_iterator_h_
 #define vgl_region_scan_iterator_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -33,7 +33,7 @@ struct vgl_region_scan_iterator
   virtual int  endx() const =0;
 
   // Utility functions
- 
+
   //: Number of image points (= integer grid points) inside the region
   inline int count() {
     int cnt = 0; reset();

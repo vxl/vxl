@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_matlab_read.h
+// This is core/vnl/vnl_matlab_read.h
 #ifndef vnl_matlab_read_h_
 #define vnl_matlab_read_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

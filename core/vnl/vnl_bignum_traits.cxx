@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_bignum_traits.cxx
+// This is core/vnl/vnl_bignum_traits.cxx
 #include "vnl_bignum_traits.h"
 //:
 // \file

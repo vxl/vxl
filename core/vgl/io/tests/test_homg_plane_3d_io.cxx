@@ -1,4 +1,4 @@
-// This is vxl/vgl/io/tests/test_homg_plane_3d_io.cxx
+// This is core/vgl/io/tests/test_homg_plane_3d_io.cxx
 #include <vcl_iostream.h>
 #include <vgl/vgl_homg_plane_3d.h>
 #include <vgl/io/vgl_io_homg_plane_3d.h>

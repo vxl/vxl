@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_image.h
+// This is core/vil/vil_image.h
 #ifndef vil_image_h_
 #define vil_image_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -119,7 +119,7 @@ class vil_image
   }
 
   vil_image& operator=(vil_image_impl *p) {
-    if (ptr) 
+    if (ptr)
       ptr->down_ref();
     ptr = p;
     if (ptr)

@@ -1,8 +1,8 @@
-// This is vxl/vbl/io/vbl_io_triple.h
+// This is core/vbl/io/vbl_io_triple.h
 #ifndef vbl_io_triple_h_
 #define vbl_io_triple_h_
 //:
-// \file 
+// \file
 // \brief   binary IO functions for vbl_triple<S, T, U>
 // \author  Ian Scott
 

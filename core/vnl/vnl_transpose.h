@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_transpose.h
+// This is core/vnl/vnl_transpose.h
 #ifndef vnl_transpose_h_
 #define vnl_transpose_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

@@ -1,4 +1,4 @@
-// This is vxl/vgl/vgl_conic.txx
+// This is core/vgl/vgl_conic.txx
 #ifndef vgl_conic_txx_
 #define vgl_conic_txx_
 //:

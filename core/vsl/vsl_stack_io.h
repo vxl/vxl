@@ -1,8 +1,8 @@
-// This is vxl/vsl/vsl_stack_io.h
+// This is core/vsl/vsl_stack_io.h
 #ifndef vsl_stack_io_h_
 #define vsl_stack_io_h_
 //:
-// \file 
+// \file
 // \brief binary IO functions for vcl_stack<T>
 // \author K.Y.McGaul
 

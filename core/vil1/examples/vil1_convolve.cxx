@@ -1,4 +1,4 @@
-// This is vxl/vil/examples/vil_convolve.cxx
+// This is core/vil/examples/vil_convolve.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation "vul_arg.h"//otherwise "unresolved typeinfo vul_arg_base"
 #endif

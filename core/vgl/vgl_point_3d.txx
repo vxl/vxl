@@ -1,4 +1,4 @@
-// This is vxl/vgl/vgl_point_3d.txx
+// This is core/vgl/vgl_point_3d.txx
 #ifndef vgl_point_3d_txx_
 #define vgl_point_3d_txx_
 //:

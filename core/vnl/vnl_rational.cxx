@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_rational.cxx
+// This is core/vnl/vnl_rational.cxx
 #include "vnl_rational.h"
 //:
 // \file

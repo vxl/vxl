@@ -1,4 +1,4 @@
-// This is vxl/vidl/vidl_yuv_2_rgb.h
+// This is core/vidl/vidl_yuv_2_rgb.h
 #ifndef vidl_yuv_2_rgb_h_
 #define vidl_yuv_2_rgb_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -14,13 +14,13 @@
 //
 // \verbatim
 // RGB to YUV Conversion
-// 
+//
 //      Y  =      (0.257 * R) + (0.504 * G) + (0.098 * B) + 16
 //      Cr = V =  (0.439 * R) - (0.368 * G) - (0.071 * B) + 128
 //      Cb = U = -(0.148 * R) - (0.291 * G) + (0.439 * B) + 128
-// 
+//
 // YUV to RGB Conversion
-// 
+//
 //      B = 1.164(Y - 16)                  + 2.018(U - 128)
 //      G = 1.164(Y - 16) - 0.813(V - 128) - 0.391(U - 128)
 //      R = 1.164(Y - 16) + 1.596(V - 128)
@@ -29,9 +29,9 @@
 //      Y = 0.299R + 0.587G + 0.114B
 //      U'= (B-Y)*0.565
 //      V'= (R-Y)*0.713
-// 
+//
 // with reciprocal versions:
-// 
+//
 //      R = Y + 1.403V'
 //      G = Y - 0.344U' - 0.714V'
 //      B = Y + 1.770U'

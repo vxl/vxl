@@ -1,4 +1,4 @@
-// This is vxl/vbl/vbl_array_3d.txx
+// This is core/vbl/vbl_array_3d.txx
 #ifndef vbl_array_3d_txx_
 #define vbl_array_3d_txx_
 

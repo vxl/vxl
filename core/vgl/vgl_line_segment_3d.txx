@@ -1,4 +1,4 @@
-// This is vxl/vgl/vgl_line_segment_3d.txx
+// This is core/vgl/vgl_line_segment_3d.txx
 #ifndef vgl_line_segment_3d_txx_
 #define vgl_line_segment_3d_txx_
 

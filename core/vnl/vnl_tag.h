@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_tag.h
+// This is core/vnl/vnl_tag.h
 #ifndef vnl_tag_h_
 #define vnl_tag_h_
 //:

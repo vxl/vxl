@@ -1,4 +1,4 @@
-// This is vxl/vcsl/vcsl_rotation.cxx
+// This is core/vcsl/vcsl_rotation.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -17,7 +17,7 @@
 //---------------------------------------------------------------------------
 bool vcsl_rotation::is_valid(void) const
 {
-  return 
+  return
        ((beat_.size()==0)&&(interpolator_.size()==0)&&
         (axis_.size()==1)&&(angle_.size()==1)
         )
@@ -124,7 +124,7 @@ vnl_vector<double> vcsl_rotation::execute(const vnl_vector<double> &v,
       result.put(1,result.get(1));
       return tmp;
     }
-  else 
+  else
     return result;
 }
 
@@ -161,7 +161,7 @@ vnl_vector<double> vcsl_rotation::inverse(const vnl_vector<double> &v,
       result.put(1,result.get(1));
       return tmp;
     }
-  else 
+  else
     return result;
 }
 

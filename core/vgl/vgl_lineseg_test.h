@@ -1,4 +1,4 @@
-// This is vxl/vgl/vgl_lineseg_test.h
+// This is core/vgl/vgl_lineseg_test.h
 #ifndef vgl_lineseg_test_h_
 #define vgl_lineseg_test_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

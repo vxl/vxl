@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_rgb.h
+// This is core/vil/vil_rgb.h
 #ifndef vil_rgb_h_
 #define vil_rgb_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -174,7 +174,7 @@ bool vil_rgb<T>::operator== (vil_rgb<T> const& o) const
 
 
 // the following cause compilation errors under Microsoft Visual C++
-// is there some conflict with min and max from the std library ? 
+// is there some conflict with min and max from the std library ?
 #if 0
 template <class T>
 inline

@@ -1,4 +1,4 @@
-// This is vxl/vnl/algo/vnl_fft_2d.h
+// This is core/vnl/algo/vnl_fft_2d.h
 #ifndef vnl_fft_2d_h_
 #define vnl_fft_2d_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

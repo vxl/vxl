@@ -1,4 +1,4 @@
-// This is vxl/vnl/tests/test_gamma.cxx
+// This is core/vnl/tests/test_gamma.cxx
 #include <vnl/vnl_gamma.h>
 #include <testlib/testlib_test.h>
 

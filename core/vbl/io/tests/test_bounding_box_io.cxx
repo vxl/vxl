@@ -1,4 +1,4 @@
-// This is vxl/vbl/io/tests/test_bounding_box_io.cxx
+// This is core/vbl/io/tests/test_bounding_box_io.cxx
 #include <vcl_iostream.h>
 #include <vbl/vbl_bounding_box.h>
 #include <vbl/io/vbl_io_bounding_box.h>

@@ -1,4 +1,4 @@
-// This is vxl/vul/vul_redirector.h
+// This is core/vul/vul_redirector.h
 #ifndef vul_redirector_h_
 #define vul_redirector_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

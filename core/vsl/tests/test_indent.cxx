@@ -1,4 +1,4 @@
-// This is vxl/vsl/tests/test_indent.cxx
+// This is core/vsl/tests/test_indent.cxx
 #include <vcl_iostream.h>
 #include <vsl/vsl_indent.h>
 #include <testlib/testlib_test.h>

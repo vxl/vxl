@@ -1,4 +1,4 @@
-// This is vxl/vnl/algo/Templates/vnl_qr+vcl_complex+float--.cxx
+// This is core/vnl/algo/Templates/vnl_qr+vcl_complex+float--.cxx
 #include <vcl_complex.h>
 #include <vnl/algo/vnl_qr.txx>
 //:

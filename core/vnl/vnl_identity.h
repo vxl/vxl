@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_identity.h
+// This is core/vnl/vnl_identity.h
 #ifndef vnl_identity_h_
 #define vnl_identity_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

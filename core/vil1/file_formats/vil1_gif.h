@@ -1,4 +1,4 @@
-// This is vxl/vil/file_formats/vil_gif.h
+// This is core/vil/file_formats/vil_gif.h
 #ifndef vil_gif_h_
 #define vil_gif_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

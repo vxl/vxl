@@ -1,4 +1,4 @@
-// This is vxl/vbl/vbl_basic_tuple.h
+// This is core/vbl/vbl_basic_tuple.h
 #ifndef vbl_basic_tuple_h
 #define vbl_basic_tuple_h
 

@@ -1,4 +1,4 @@
-// This is vxl/vnl/algo/vnl_matrix_inverse.txx
+// This is core/vnl/algo/vnl_matrix_inverse.txx
 #ifndef vnl_matrix_inverse_txx_
 #define vnl_matrix_inverse_txx_
 // Author: Andrew W. Fitzgibbon, Oxford RRG

@@ -1,4 +1,4 @@
-// This is vxl/vnl/tests/test_complex.cxx
+// This is core/vnl/tests/test_complex.cxx
 
 //:
 // \file

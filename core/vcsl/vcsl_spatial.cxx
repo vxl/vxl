@@ -1,4 +1,4 @@
-// This is vxl/vcsl/vcsl_spatial.cxx
+// This is core/vcsl/vcsl_spatial.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -159,7 +159,7 @@ bool vcsl_spatial::recursive_path_from_local_to_cs_exists(const vcsl_spatial_spt
     result=parent_[i]==other; // true if parent is 'other' (the cs sought)
 
   // If 'this' has no parent or its parent is not 'other':
-  if (!result) 
+  if (!result)
     {
       // Check if 'other' can be reached through parent
       if (!is_absolute(time)) // if 'this' has a parent

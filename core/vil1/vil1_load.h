@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_load.h
+// This is core/vil/vil_load.h
 #ifndef vil_load_h_
 #define vil_load_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

@@ -1,4 +1,4 @@
-// This is vxl/vul/vul_whereami.h
+// This is core/vul/vul_whereami.h
 #ifndef vul_whereami_h_
 #define vul_whereami_h_
 

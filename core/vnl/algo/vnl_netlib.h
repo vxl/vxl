@@ -1,4 +1,4 @@
-// This is vxl/vnl/algo/vnl_netlib.h
+// This is core/vnl/algo/vnl_netlib.h
 #ifndef vnl_netlib_h_
 #define vnl_netlib_h_
 //:

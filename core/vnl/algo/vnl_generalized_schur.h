@@ -1,4 +1,4 @@
-// This is vxl/vnl/algo/vnl_generalized_schur.h
+// This is core/vnl/algo/vnl_generalized_schur.h
 #ifndef vnl_generalized_schur_h_
 #define vnl_generalized_schur_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_c_vector.h
+// This is core/vnl/vnl_c_vector.h
 #ifndef vnl_c_vector_h_
 #define vnl_c_vector_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

@@ -1,4 +1,4 @@
-// This is vxl/vcsl/vcsl_cartesian.cxx
+// This is core/vcsl/vcsl_cartesian.cxx
 #include "vcsl_cartesian.h"
 
 //***************************************************************************

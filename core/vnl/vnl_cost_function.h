@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_cost_function.h
+// This is core/vnl/vnl_cost_function.h
 #ifndef vnl_cost_function_h_
 #define vnl_cost_function_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

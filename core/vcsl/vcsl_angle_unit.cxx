@@ -1,4 +1,4 @@
-// This is vxl/vcsl/vcsl_angle_unit.cxx
+// This is core/vcsl/vcsl_angle_unit.cxx
 #include "vcsl_angle_unit.h"
 
 #include <vcsl/vcsl_radian.h>
@@ -27,7 +27,7 @@ vcsl_angle_unit::~vcsl_angle_unit()
 
 //---------------------------------------------------------------------------
 // Are `this' and `other' compatible units ? (Are they associated to the
-// same dimension ?) 
+// same dimension ?)
 //---------------------------------------------------------------------------
 bool vcsl_angle_unit::compatible_units(const vcsl_unit &other) const
 {

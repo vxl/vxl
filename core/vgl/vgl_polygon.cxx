@@ -1,4 +1,4 @@
-// This is vxl/vgl/vgl_polygon.cxx
+// This is core/vgl/vgl_polygon.cxx
 
 //--------------------------------------------------------------
 //

@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_gamma.h
+// This is core/vnl/vnl_gamma.h
 #ifndef vnl_gamma_h_
 #define vnl_gamma_h_
 //:

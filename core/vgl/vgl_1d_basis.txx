@@ -1,4 +1,4 @@
-// This is vxl/vgl/vgl_1d_basis.txx
+// This is core/vgl/vgl_1d_basis.txx
 #ifndef vgl_1d_basis_txx_
 #define vgl_1d_basis_txx_
 

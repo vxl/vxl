@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_warp.h
+// This is core/vil/vil_warp.h
 #ifndef vil_warp_h_
 #define vil_warp_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

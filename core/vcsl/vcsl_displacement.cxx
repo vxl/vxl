@@ -1,4 +1,4 @@
-// This is vxl/vcsl/vcsl_displacement.cxx
+// This is core/vcsl/vcsl_displacement.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -14,7 +14,7 @@
 //---------------------------------------------------------------------------
 bool vcsl_displacement::is_valid(void) const
 {
-  return 
+  return
        ((beat_.size()==0)&&(interpolator_.size()==0)&&(point_.size()==1)&&
         (axis_.size()==1)&&(angle_.size()==1)
         )
@@ -86,7 +86,7 @@ vnl_vector<double> vcsl_displacement::execute(const vnl_vector<double> &v,
       tmp.put(1,result.get(1)+translation.get(1));
       return tmp;
     }
-  else 
+  else
     return result+translation;
 }
 
@@ -126,7 +126,7 @@ vnl_vector<double> vcsl_displacement::inverse(const vnl_vector<double> &v,
       tmp.put(1,result.get(1)+translation.get(1));
       return tmp;
     }
-  else 
+  else
     return result+translation;
 }
 

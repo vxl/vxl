@@ -1,4 +1,4 @@
-// This is vxl/vidl/dll.h
+// This is core/vidl/dll.h
 #ifndef vidl_dll_h_
 #define vidl_dll_h_
 

@@ -1,4 +1,4 @@
-// This is vxl/vidl/vidl_frame.cxx
+// This is core/vidl/vidl_frame.cxx
 #include "vidl_frame.h"
 //:
 // \file

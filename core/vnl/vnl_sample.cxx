@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_sample.cxx
+// This is core/vnl/vnl_sample.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif

@@ -1,4 +1,4 @@
-// This is vxl/vil/file_formats/vil_jpeg_decompressor.h
+// This is core/vil/file_formats/vil_jpeg_decompressor.h
 #ifndef vil_jpeg_decompressor_h_
 #define vil_jpeg_decompressor_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -35,7 +35,7 @@ class vil_jpeg_decompressor
   // It's not worth the effort using JPEG to allocate the buffer using the
   // jobj.mem->alloc_sarray method, because it would have to be reallocated
   // after each call to jpeg_finish_decompress(). The symptom of not doing
-  // so is a nasty heap corruption which only shows up later in unrelated 
+  // so is a nasty heap corruption which only shows up later in unrelated
   // code.
   JSAMPLE *biffer;   // pointer to scanline buffer.
 };

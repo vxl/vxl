@@ -1,4 +1,4 @@
-// This is vxl/vul/io/vul_io_user_info.h
+// This is core/vul/io/vul_io_user_info.h
 #ifndef vul_io_user_info_h
 #define vul_io_user_info_h
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

@@ -1,4 +1,4 @@
-// This is vxl/vbl/vbl_br_default.txx
+// This is core/vbl/vbl_br_default.txx
 #ifndef vbl_br_default_txx_
 #define vbl_br_default_txx_
 

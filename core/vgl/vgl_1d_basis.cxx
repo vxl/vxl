@@ -1,4 +1,4 @@
-// This is vxl/vgl/vgl_1d_basis.cxx
+// This is core/vgl/vgl_1d_basis.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif

@@ -1,4 +1,4 @@
-// This is vxl/vcsl/vcsl_scale.cxx
+// This is core/vcsl/vcsl_scale.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -96,7 +96,7 @@ vnl_vector<double> vcsl_scale::inverse(const vnl_vector<double> &v,
   for (unsigned int i=0;i<v.size();++i)
     result.put(i,v.get(i)/value);
 
-  return result; 
+  return result;
 }
 
 //---------------------------------------------------------------------------

@@ -1,4 +1,4 @@
-// This is vxl/vcsl/vcsl_rotation.h
+// This is core/vcsl/vcsl_rotation.h
 #ifndef vcsl_rotation_h
 #define vcsl_rotation_h
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_scalar_join_iterator.h
+// This is core/vnl/vnl_scalar_join_iterator.h
 #ifndef vnl_scalar_join_iterator_h_
 #define vnl_scalar_join_iterator_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

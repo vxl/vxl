@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_ssd.txx
+// This is core/vil/vil_ssd.txx
 #ifndef vil_ssd_txx_
 #define vil_ssd_txx_
 

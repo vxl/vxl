@@ -1,4 +1,4 @@
-// This is vxl/vidl/vidl_file_sequence.h
+// This is core/vidl/vidl_file_sequence.h
 #ifndef vidl_file_sequence_h_
 #define vidl_file_sequence_h_
 //:

@@ -1,4 +1,4 @@
-// This is vxl/vgl/vgl_triangle_scan_iterator.h
+// This is core/vgl/vgl_triangle_scan_iterator.h
 #ifndef vgl_triangle_scan_iterator_h_
 #define vgl_triangle_scan_iterator_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

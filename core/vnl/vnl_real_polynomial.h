@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_real_polynomial.h
+// This is core/vnl/vnl_real_polynomial.h
 #ifndef vnl_real_polynomial_h_
 #define vnl_real_polynomial_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

@@ -1,4 +1,4 @@
-// This is vxl/vnl/io/tests/test_sparse_matrix_io.cxx
+// This is core/vnl/io/tests/test_sparse_matrix_io.cxx
 #include <vcl_iostream.h>
 #include <vsl/vsl_binary_io.h>
 #include <vnl/vnl_sparse_matrix.h>

@@ -1,4 +1,4 @@
-// This is vxl/vnl/io/tests/test_bignum_io.cxx
+// This is core/vnl/io/tests/test_bignum_io.cxx
 #include <vcl_iostream.h>
 #include <vnl/vnl_bignum.h>
 #include <vnl/io/vnl_io_bignum.h>

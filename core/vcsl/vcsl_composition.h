@@ -1,4 +1,4 @@
-// This is vxl/vcsl/vcsl_composition.h
+// This is core/vcsl/vcsl_composition.h
 #ifndef vcsl_composition_h
 #define vcsl_composition_h
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

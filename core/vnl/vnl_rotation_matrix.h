@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_rotation_matrix.h
+// This is core/vnl/vnl_rotation_matrix.h
 #ifndef vnl_rotation_matrix_h_
 #define vnl_rotation_matrix_h_
 //:

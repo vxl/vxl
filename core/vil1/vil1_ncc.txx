@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_ncc.txx
+// This is core/vil/vil_ncc.txx
 #ifndef vil_ncc_txx_
 #define vil_ncc_txx_
 

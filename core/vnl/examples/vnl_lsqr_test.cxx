@@ -1,4 +1,4 @@
-// This is vxl/vnl/examples/vnl_lsqr_test.cxx
+// This is core/vnl/examples/vnl_lsqr_test.cxx
 #include <vcl_cstdlib.h>
 #include <vcl_iostream.h>
 #include <vnl/vnl_vector.h>

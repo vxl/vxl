@@ -1,4 +1,4 @@
-// This is vxl/vil/file_formats/vil_gen.cxx
+// This is core/vil/file_formats/vil_gen.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif

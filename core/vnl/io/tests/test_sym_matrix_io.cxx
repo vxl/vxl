@@ -1,4 +1,4 @@
-// This is vxl/vnl/io/tests/test_sym_matrix_io.cxx
+// This is core/vnl/io/tests/test_sym_matrix_io.cxx
 #include <vcl_iostream.h>
 #include <vnl/vnl_sym_matrix.h>
 #include <vnl/io/vnl_io_sym_matrix.h>

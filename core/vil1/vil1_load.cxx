@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_load.cxx
+// This is core/vil/vil_load.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif

@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_image_proxy.h
+// This is core/vil/vil_image_proxy.h
 #ifndef vil_image_proxy_h_
 #define vil_image_proxy_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

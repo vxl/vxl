@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_32bit.h
+// This is core/vil/vil_32bit.h
 #ifndef vil_32bit_h_
 #define vil_32bit_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

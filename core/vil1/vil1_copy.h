@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_copy.h
+// This is core/vil/vil_copy.h
 #ifndef vil_copy_h_
 #define vil_copy_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

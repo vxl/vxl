@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_matlab_header.h
+// This is core/vnl/vnl_matlab_header.h
 #ifndef vnl_matlab_header_h_
 #define vnl_matlab_header_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

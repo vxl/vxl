@@ -1,4 +1,4 @@
-// This is vxl/vnl/algo/vnl_lbfgs.h
+// This is core/vnl/algo/vnl_lbfgs.h
 #ifndef vnl_lbfgs_h_
 #define vnl_lbfgs_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -22,7 +22,7 @@
 #include <vnl/vnl_nonlinear_minimizer.h>
 
 //: Limited memory Broyden Fletcher Goldfarb Shannon minimization
-// Considered to be the best optimisation algorithm for functions 
+// Considered to be the best optimisation algorithm for functions
 // which are well behaved (i.e. locally smooth
 // without too many local minima,) have 1st derivatives available,
 // and do not have a structure that makes them suitable for alternative

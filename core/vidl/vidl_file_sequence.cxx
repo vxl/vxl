@@ -1,4 +1,4 @@
-// This is vxl/vidl/vidl_file_sequence.cxx
+// This is core/vidl/vidl_file_sequence.cxx
 #include "vidl_file_sequence.h"
 
 #include <vcl_cassert.h>

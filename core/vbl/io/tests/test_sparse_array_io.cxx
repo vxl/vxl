@@ -1,4 +1,4 @@
-// This is vxl/vbl/io/tests/test_sparse_array_io.cxx
+// This is core/vbl/io/tests/test_sparse_array_io.cxx
 #include <vcl_iostream.h>
 #include <vbl/io/vbl_io_sparse_array_2d.h>
 #include <vsl/vsl_binary_io.h>

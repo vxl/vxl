@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_open.h
+// This is core/vil/vil_open.h
 #ifndef vil_open_h_
 #define vil_open_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

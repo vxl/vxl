@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_fortran_copy.txx
+// This is core/vnl/vnl_fortran_copy.txx
 #ifndef vnl_fortran_copy_txx_
 #define vnl_fortran_copy_txx_
 //:

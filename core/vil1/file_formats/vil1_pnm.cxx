@@ -1,4 +1,4 @@
-// This is vxl/vil/file_formats/vil_pnm.cxx
+// This is core/vil/file_formats/vil_pnm.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -294,7 +294,7 @@ bool vil_pnm_generic_image::get_section(void* buf, int x0, int y0, int xs, int y
     } else if ( bytes_per_sample > 2 ) {
       vcl_cerr << "ERROR: pnm: reading rawbits format with > 16bit samples\n";
       return false;
-    } 
+    }
   }
   else if (magic_ == 4) // pbm (bitmap) raw image
   {
@@ -388,7 +388,7 @@ bool vil_pnm_generic_image::put_section(void const* buf, int x0, int y0, int xs,
     } else {
       vcl_cerr << "ERROR: pnm: writing rawbits format with > 16bit samples\n";
       return false;
-    } 
+    }
   }
   else if (magic_ == 4) // pbm (bitmap) raw image
   {

@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_jpeglib.h
+// This is core/vil/vil_jpeglib.h
 #ifndef vil_jpeglib_h_
 #define vil_jpeglib_h_
 //:

@@ -1,4 +1,4 @@
-// This is vxl/vnl/algo/vnl_determinant.h
+// This is core/vnl/algo/vnl_determinant.h
 #ifndef vnl_algo_determinant_h_
 #define vnl_algo_determinant_h_
 //:

@@ -1,4 +1,4 @@
-// This is vxl/vgl/vgl_homg_line_3d_2_points.h
+// This is core/vgl/vgl_homg_line_3d_2_points.h
 #ifndef vgl_homg_line_3d_2_points_h_
 #define vgl_homg_line_3d_2_points_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -94,14 +94,14 @@ inline bool is_ideal(l const& line, Type tol=Type(0))
 template <class Type>
 inline bool collinear(l const& l1, vgl_homg_point_3d<Type> const& p) {
   return collinear(l1.point_finite(),l1.point_infinite(),p);
-} 
+}
 
 //: Are two lines coplanar, i.e., do they intersect?
 // \relates vgl_homg_line_3d_2_points
 template <class Type>
 inline bool coplanar(l const& l1, l const& l2) {
   return coplanar(l1.point_finite(),l1.point_infinite(),l2.point_finite(),l2.point_infinite());
-} 
+}
 
 //: Are two lines concurrent, i.e., do they intersect?
 // \relates vgl_homg_line_3d_2_points
@@ -114,7 +114,7 @@ inline bool concurrent(l const& l1, l const& l2) { return coplanar(l1,l2); }
 template <class Type>
 inline bool coplanar(l const& l1, vgl_homg_point_3d<Type> const& p1, vgl_homg_point_3d<Type> const& p2) {
   return coplanar(l1.point_finite(),l1.point_infinite(),p1,p2);
-} 
+}
 
 //: Are three lines coplanar, i.e., are they in a common plane?
 // \relates vgl_homg_line_3d_2_points

@@ -1,8 +1,8 @@
-// This is vxl/vil/io/vil_io_rgb.h
+// This is core/vil/io/vil_io_rgb.h
 #ifndef vil_io_rgb_h_
 #define vil_io_rgb_h_
 //:
-// \file 
+// \file
 // \date 22 Mar 2001
 // \author Franck Bettinger
 //

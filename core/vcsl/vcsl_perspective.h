@@ -1,4 +1,4 @@
-// This is vxl/vcsl/vcsl_perspective.h
+// This is core/vcsl/vcsl_perspective.h
 #ifndef vcsl_perspective_h
 #define vcsl_perspective_h
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

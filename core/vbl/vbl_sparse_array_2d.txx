@@ -1,4 +1,4 @@
-// This is vxl/vbl/vbl_sparse_array_2d.txx
+// This is core/vbl/vbl_sparse_array_2d.txx
 #ifndef vbl_sparse_array_2d_txx_
 #define vbl_sparse_array_2d_txx_
 //:
@@ -20,7 +20,7 @@ vcl_ostream& vbl_sparse_array_2d<T>::print(vcl_ostream& out) const
         << "): " << (*p).second << '\n';
   return out;
 }
-#endif 
+#endif
 
 #undef VBL_SPARSE_ARRAY_2D_INSTANTIATE
 #define VBL_SPARSE_ARRAY_2D_INSTANTIATE(T) \

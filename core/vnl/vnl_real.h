@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_real.h
+// This is core/vnl/vnl_real.h
 #ifndef vnl_real_h_
 #define vnl_real_h_
 //:

@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_sample.h
+// This is core/vnl/vnl_sample.h
 #ifndef vnl_sample_h_
 #define vnl_sample_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

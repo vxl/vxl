@@ -1,4 +1,4 @@
-// This is vxl/vgl/vgl_homg_line_2d.h
+// This is core/vgl/vgl_homg_line_2d.h
 #ifndef vgl_homg_line_2d_h
 #define  vgl_homg_line_2d_h
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -87,7 +87,7 @@ class vgl_homg_line_2d
   inline vgl_vector_2d<double> normal() const { return normalized(vgl_vector_2d<double>(a_,b_)); }
 
   //: divide all coefficients by sqrt(a^2 + b^2)
-  void normalize(); 
+  void normalize();
 
   //: Set a b c.
   //  The three given numbers should not be all 0

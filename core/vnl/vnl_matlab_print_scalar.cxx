@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_matlab_print_scalar.cxx
+// This is core/vnl/vnl_matlab_print_scalar.cxx
 
 #include "vnl_matlab_print_scalar.h"
 

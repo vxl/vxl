@@ -1,4 +1,4 @@
-// This is vxl/vnl/io/tests/golden_test_vnl_io.cxx
+// This is core/vnl/io/tests/golden_test_vnl_io.cxx
 
 //:
 // \file

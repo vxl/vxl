@@ -1,4 +1,4 @@
-// This is vxl/vnl/algo/vnl_orthogonal_complement.txx
+// This is core/vnl/algo/vnl_orthogonal_complement.txx
 #ifndef vnl_orthogonal_complement_txx_
 #define vnl_orthogonal_complement_txx_
 /*

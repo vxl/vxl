@@ -1,4 +1,4 @@
-// This is vxl/vpl/vpl_fdopen.h
+// This is core/vpl/vpl_fdopen.h
 #ifndef vpl_fdopen_h_
 #define vpl_fdopen_h_
 //:

@@ -1,4 +1,4 @@
-// This is vxl/vgl/vgl_triangle_test.h
+// This is core/vgl/vgl_triangle_test.h
 #ifndef vgl_triangle_test_h_
 #define vgl_triangle_test_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

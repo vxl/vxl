@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_float_2.h
+// This is core/vnl/vnl_float_2.h
 #ifndef vnl_float_2_h_
 #define vnl_float_2_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

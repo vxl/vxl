@@ -1,4 +1,4 @@
-// This is vxl/vnl/io/vnl_io_vector.txx
+// This is core/vnl/io/vnl_io_vector.txx
 #ifndef vnl_io_vector_txx_
 #define vnl_io_vector_txx_
 //:

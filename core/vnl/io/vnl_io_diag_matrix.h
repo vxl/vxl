@@ -1,8 +1,8 @@
-// This is vxl/vnl/io/vnl_io_diag_matrix.h
+// This is core/vnl/io/vnl_io_diag_matrix.h
 #ifndef vnl_io_diag_matrix_h
 #define vnl_io_diag_matrix_h
 //:
-// \file 
+// \file
 // \author dac
 // \date 21-Mar-2001
 

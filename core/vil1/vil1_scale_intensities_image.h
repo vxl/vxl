@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_scale_intensities_image.h
+// This is core/vil/vil_scale_intensities_image.h
 #ifndef vil_scale_intensities_image_h_
 #define vil_scale_intensities_image_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

@@ -1,4 +1,4 @@
-// This is vxl/vsl/tests/test_binary_io.cxx
+// This is core/vsl/tests/test_binary_io.cxx
 #include <vcl_iostream.h>
 #include <vcl_cstring.h>
 #include <vcl_cstddef.h>

@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_complex_traits.cxx
+// This is core/vnl/vnl_complex_traits.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif

@@ -1,4 +1,4 @@
-// This is vxl/vbl/vbl_sparse_array_1d.h
+// This is core/vbl/vbl_sparse_array_1d.h
 #ifndef vbl_sparse_array_1d_h_
 #define vbl_sparse_array_1d_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

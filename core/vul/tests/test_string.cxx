@@ -1,4 +1,4 @@
-// This is vxl/vul/tests/test_string.cxx
+// This is core/vul/tests/test_string.cxx
 #include <vcl_iostream.h>
 #include <testlib/testlib_test.h>
 #include <vul/vul_string.h>

@@ -1,4 +1,4 @@
-// This is vxl/vul/vul_expand_path.h
+// This is core/vul/vul_expand_path.h
 #ifndef vul_expand_path_h_
 #define vul_expand_path_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_double_2x3.h
+// This is core/vnl/vnl_double_2x3.h
 #ifndef vnl_double_2x3_h_
 #define vnl_double_2x3_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

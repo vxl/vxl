@@ -1,4 +1,4 @@
-// This is vxl/vil/io/tests/test_memory_image_impl_io.cxx
+// This is core/vil/io/tests/test_memory_image_impl_io.cxx
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vil/vil_memory_image_of.h>

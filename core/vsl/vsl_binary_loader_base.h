@@ -1,4 +1,4 @@
-// This is vxl/vsl/vsl_binary_loader_base.h
+// This is core/vsl/vsl_binary_loader_base.h
 #ifndef vsl_binary_loader_base_h_
 #define vsl_binary_loader_base_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

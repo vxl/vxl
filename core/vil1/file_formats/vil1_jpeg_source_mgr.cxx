@@ -1,4 +1,4 @@
-// This is vxl/vil/file_formats/vil_jpeg_source_mgr.cxx
+// This is core/vil/file_formats/vil_jpeg_source_mgr.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif

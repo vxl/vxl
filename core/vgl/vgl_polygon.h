@@ -1,4 +1,4 @@
-// This is vxl/vgl/vgl_polygon.h
+// This is core/vgl/vgl_polygon.h
 #ifndef vgl_polygon_h_
 #define vgl_polygon_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

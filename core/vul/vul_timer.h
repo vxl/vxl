@@ -1,4 +1,4 @@
-// This is vxl/vul/vul_timer.h
+// This is core/vul/vul_timer.h
 #ifndef vul_timer_h
 #define vul_timer_h
 //

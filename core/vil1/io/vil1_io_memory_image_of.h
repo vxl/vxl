@@ -1,4 +1,4 @@
-// This is vxl/vil/io/vil_io_memory_image_of.h
+// This is core/vil/io/vil_io_memory_image_of.h
 #ifndef vil_io_memory_image_of_h_
 #define vil_io_memory_image_of_h_
 //:

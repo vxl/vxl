@@ -1,4 +1,4 @@
-// This is vxl/testlib/testlib_root_dir.cxx
+// This is core/testlib/testlib_root_dir.cxx
 #include "testlib_root_dir.h"
 //:
 // \file

@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_stream_fstream.cxx
+// This is core/vil/vil_stream_fstream.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif

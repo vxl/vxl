@@ -1,4 +1,4 @@
-// This is vxl/vcsl/vcsl_lambertian.cxx
+// This is core/vcsl/vcsl_lambertian.cxx
 #include "vcsl_lambertian.h"
 
 #include <vcsl/vcsl_axis.h>

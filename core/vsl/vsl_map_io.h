@@ -1,8 +1,8 @@
-// This is vxl/vsl/vsl_map_io.h
+// This is core/vsl/vsl_map_io.h
 #ifndef vsl_map_io_h_
 #define vsl_map_io_h_
 //:
-// \file 
+// \file
 // \brief binary IO functions for vcl_map<Key, T, Compare>
 // \author K.Y.McGaul
 

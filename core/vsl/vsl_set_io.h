@@ -1,8 +1,8 @@
-// This is vxl/vsl/vsl_set_io.h
+// This is core/vsl/vsl_set_io.h
 #ifndef vsl_set_io_h_
 #define vsl_set_io_h_
 //:
-// \file 
+// \file
 // \brief binary IO functions for vcl_set<T>
 // \author K.Y.McGaul
 

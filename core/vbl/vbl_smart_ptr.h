@@ -1,4 +1,4 @@
-// This is vxl/vbl/vbl_smart_ptr.h
+// This is core/vbl/vbl_smart_ptr.h
 #ifndef vbl_smart_ptr_h_
 #define vbl_smart_ptr_h_
 //:

@@ -1,4 +1,4 @@
-// This is vxl/vbl/io/vbl_io_quadruple.txx
+// This is core/vbl/io/vbl_io_quadruple.txx
 #ifndef vbl_io_quadruple_txx_
 #define vbl_io_quadruple_txx_
 //:

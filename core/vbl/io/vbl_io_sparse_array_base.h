@@ -1,4 +1,4 @@
-// This is vxl/vbl/io/vbl_io_sparse_array_base.h
+// This is core/vbl/io/vbl_io_sparse_array_base.h
 #ifndef vbl_io_sparse_array_base_h
 #define vbl_io_sparse_array_base_h
 //:

@@ -1,4 +1,4 @@
-// This is vxl/vil/tests/test_resample.cxx
+// This is core/vil/tests/test_resample.cxx
 // \author Peter Vanroose
 
 #include <vil/vil_resample.h>

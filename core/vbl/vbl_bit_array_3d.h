@@ -1,4 +1,4 @@
-// This is vxl/vbl/vbl_bit_array_3d.h
+// This is core/vbl/vbl_bit_array_3d.h
 #ifndef vbl_bit_array_3d_h_
 #define vbl_bit_array_3d_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

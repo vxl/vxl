@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_double_5.h
+// This is core/vnl/vnl_double_5.h
 #ifndef vnl_double_5_h_
 #define vnl_double_5_h_
 //:

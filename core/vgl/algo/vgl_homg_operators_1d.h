@@ -1,4 +1,4 @@
-// This is vxl/vgl/algo/vgl_homg_operators_1d.h
+// This is core/vgl/algo/vgl_homg_operators_1d.h
 #ifndef vgl_homg_operators_1d_h_
 #define vgl_homg_operators_1d_h_
 //:

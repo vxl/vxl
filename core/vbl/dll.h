@@ -1,4 +1,4 @@
-// This is vxl/vbl/dll.h
+// This is core/vbl/dll.h
 #ifndef vbl_dll_h_
 #define vbl_dll_h_
 

@@ -1,4 +1,4 @@
-// This is vxl/vcsl/vcsl_graph.h
+// This is core/vcsl/vcsl_graph.h
 #ifndef vcsl_graph_h
 #define vcsl_graph_h
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

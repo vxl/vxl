@@ -1,4 +1,4 @@
-// This is vxl/vcsl/vcsl_length.cxx
+// This is core/vcsl/vcsl_length.cxx
 #include "vcsl_length.h"
 
 #include <vcsl/vcsl_meter.h>

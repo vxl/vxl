@@ -1,4 +1,4 @@
-// This is vxl/vgl/vgl_polygon_scan_iterator.h
+// This is core/vgl/vgl_polygon_scan_iterator.h
 #ifndef vgl_polygon_scan_iterator_h
 #define vgl_polygon_scan_iterator_h
 //:

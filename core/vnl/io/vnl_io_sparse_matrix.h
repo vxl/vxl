@@ -1,8 +1,8 @@
-// This is vxl/vnl/io/vnl_io_sparse_matrix.h
+// This is core/vnl/io/vnl_io_sparse_matrix.h
 #ifndef vnl_io_sparse_matrix_h
 #define vnl_io_sparse_matrix_h
 //:
-// \file 
+// \file
 // \author Louise Bucther
 // \date 20-Mar-2001
 

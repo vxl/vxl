@@ -1,4 +1,4 @@
-// This is vxl/vnl/io/tests/test_real_polynomial_io.cxx
+// This is core/vnl/io/tests/test_real_polynomial_io.cxx
 #include <vcl_iostream.h>
 #include <vnl/vnl_real_polynomial.h>
 #include <vnl/io/vnl_io_real_polynomial.h>

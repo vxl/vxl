@@ -1,4 +1,4 @@
-// This is vxl/vul/vul_user_info.cxx
+// This is core/vul/vul_user_info.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif

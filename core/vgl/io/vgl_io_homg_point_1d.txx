@@ -1,4 +1,4 @@
-// This is vxl/vgl/io/vgl_io_homg_point_1d.txx
+// This is core/vgl/io/vgl_io_homg_point_1d.txx
 #ifndef vgl_io_homg_point_1d_txx_
 #define vgl_io_homg_point_1d_txx_
 //:

@@ -1,4 +1,4 @@
-// This is vxl/vgl/io/vgl_io_box_3d.h
+// This is core/vgl/io/vgl_io_box_3d.h
 #ifndef vgl_io_box_3d_h
 #define vgl_io_box_3d_h
 //:

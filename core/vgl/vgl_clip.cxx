@@ -1,4 +1,4 @@
-// This is vxl/vgl/vgl_clip.cxx
+// This is core/vgl/vgl_clip.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif

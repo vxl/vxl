@@ -1,4 +1,4 @@
-// This is vxl/vnl/algo/vnl_brent.h
+// This is core/vnl/algo/vnl_brent.h
 #ifndef vnl_brent_h_
 #define vnl_brent_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_memory_image_window.h
+// This is core/vil/vil_memory_image_window.h
 #ifndef vil_memory_image_window_h_
 #define vil_memory_image_window_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

@@ -1,4 +1,4 @@
-// This is vxl/vgl/vgl_fwd.h
+// This is core/vgl/vgl_fwd.h
 #ifndef vgl_fwd_h_
 #define vgl_fwd_h_
 

@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_trace.h
+// This is core/vnl/vnl_trace.h
 #ifndef vnl_trace_h_
 #define vnl_trace_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

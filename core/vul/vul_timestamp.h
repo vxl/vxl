@@ -1,4 +1,4 @@
-// This is vxl/vul/vul_timestamp.h
+// This is core/vul/vul_timestamp.h
 #ifndef vul_timestamp_h
 #define vul_timestamp_h
 //:

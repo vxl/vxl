@@ -1,4 +1,4 @@
-// This is vxl/vnl/tests/test_numeric_traits.cxx
+// This is core/vnl/tests/test_numeric_traits.cxx
 #include <vnl/vnl_numeric_traits.h>
 #include <testlib/testlib_test.h>
 #include <vcl_complex.h>
@@ -211,7 +211,7 @@ void test_numeric_traits()
       vcl_cout << n;
     }
   vcl_cout << '\n';
-#if 0 // TODO - long double has non-standard length on differnet platforms 
+#if 0 // TODO - long double has non-standard length on differnet platforms
   // there should only be 2 zeros in the representation: the sign bits of mantissa and of exponent:
   TEST("vnl_numeric_traits<long double>::maxval must be the largest possible", nr_of_ones, 8*sizeof(long double)-2);
 #endif

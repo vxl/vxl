@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_pixel.h
+// This is core/vil/vil_pixel.h
 #ifndef vil_pixel_h_
 #define vil_pixel_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

@@ -1,4 +1,4 @@
-// This is vxl/vgl/io/vgl_io_line_3d_2_points.h
+// This is core/vgl/io/vgl_io_line_3d_2_points.h
 #ifndef vgl_io_line_3d_2_points_h_
 #define vgl_io_line_3d_2_points_h_
 //:

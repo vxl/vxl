@@ -1,4 +1,4 @@
-// This is vxl/vgl/vgl_homg_plane_3d.h
+// This is core/vgl/vgl_homg_plane_3d.h
 #ifndef vgl_homg_plane_3d_h
 #define vgl_homg_plane_3d_h
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

@@ -1,4 +1,4 @@
-// This is vxl/vnl/io/tests/test_vector_io.cxx
+// This is core/vnl/io/tests/test_vector_io.cxx
 #include <vcl_iostream.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vsl/vsl_binary_io.h>

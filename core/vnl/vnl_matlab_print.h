@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_matlab_print.h
+// This is core/vnl/vnl_matlab_print.h
 #ifndef vnl_matlab_print_h_
 #define vnl_matlab_print_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

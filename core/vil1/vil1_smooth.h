@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_smooth.h
+// This is core/vil/vil_smooth.h
 #ifndef vil_smooth_h_
 #define vil_smooth_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_imag.h
+// This is core/vnl/vnl_imag.h
 #ifndef vnl_imag_h_
 #define vnl_imag_h_
 //:

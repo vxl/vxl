@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_property.h
+// This is core/vil/vil_property.h
 #ifndef vil_property_h_
 #define vil_property_h_
 //:

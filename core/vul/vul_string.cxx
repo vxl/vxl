@@ -1,4 +1,4 @@
-// This is vxl/vul/vul_string.cxx
+// This is core/vul/vul_string.cxx
 
 #include "vul_string.h"
 
@@ -111,7 +111,7 @@ char* vul_string_c_reverse(char* c)     // Reverse the order of characters
 {
   int length = vcl_strlen(c);           // Number of characters in string
   char temp;
- 
+
   for (int i = 0, j = length-1;         // Counting from front and rear
        i < j; ++i, --j)                 // until we reach the middle
   {
@@ -235,7 +235,7 @@ static bool myequals(IT b1, IT e1,
 bool vul_string_to_bool(const vcl_string &str)
 {
   vcl_string::const_iterator begin = vcl_find_if(str.begin(), str.end(), NotSpace);
-  const vcl_string::const_reverse_iterator rend(begin); 
+  const vcl_string::const_reverse_iterator rend(begin);
   vcl_string::const_iterator end = vcl_find_if(str.rbegin(), rend, NotSpace).base();
   const char *syes = "YES";
   const char *strue = "TRUE";

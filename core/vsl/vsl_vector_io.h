@@ -1,8 +1,8 @@
-// This is vxl/vsl/vsl_vector_io.h
+// This is core/vsl/vsl_vector_io.h
 #ifndef vsl_vector_io_h_
 #define vsl_vector_io_h_
 //:
-// \file 
+// \file
 // \brief binary IO functions for vcl_vector<T>
 // \author Tim Cootes
 

@@ -1,4 +1,4 @@
-// This is vxl/vbl/vbl_basic_relation_type.h
+// This is core/vbl/vbl_basic_relation_type.h
 #ifndef vbl_basic_relation_type_h
 #define vbl_basic_relation_type_h
 //:

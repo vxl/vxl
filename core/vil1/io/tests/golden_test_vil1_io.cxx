@@ -1,4 +1,4 @@
-// This is vxl/vil/io/tests/golden_test_vil_io.cxx
+// This is core/vil/io/tests/golden_test_vil_io.cxx
 
 //:
 // \file

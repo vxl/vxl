@@ -1,4 +1,4 @@
-// This is vxl/vnl/io/vnl_io_nonlinear_minimizer.h
+// This is core/vnl/io/vnl_io_nonlinear_minimizer.h
 #ifndef vnl_io_nonlinear_minimizer_h
 #define vnl_io_nonlinear_minimizer_h
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

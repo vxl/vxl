@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_fastops.h
+// This is core/vnl/vnl_fastops.h
 #ifndef vnl_fastops_h_
 #define vnl_fastops_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

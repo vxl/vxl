@@ -1,4 +1,4 @@
-// This is vxl/vbl/vbl_bit_array_2d.h
+// This is core/vbl/vbl_bit_array_2d.h
 #ifndef vbl_bit_array_2d_h_
 #define vbl_bit_array_2d_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -38,7 +38,7 @@ class vbl_bit_array_2d
 
   //: Comparison
   bool operator==(vbl_bit_array_2d const &a) const;
-  //: 
+  //:
   bool operator!=(vbl_bit_array_2d const &a) const { return ! operator==(a); }
 
   // Operations----------------------------------------------------------------

@@ -1,4 +1,4 @@
-// This is vxl/vsl/vsl_fwd.h
+// This is core/vsl/vsl_fwd.h
 #ifndef vsl_fwd_h_
 #define vsl_fwd_h_
 

@@ -1,4 +1,4 @@
-// This is vxl/vbl/vbl_br_impl.h
+// This is core/vbl/vbl_br_impl.h
 #ifndef vbl_br_impl_h
 #define vbl_br_impl_h
 //:

@@ -1,4 +1,4 @@
-// This is vxl/vcsl/vcsl_geographic.cxx
+// This is core/vcsl/vcsl_geographic.cxx
 #include "vcsl_geographic.h"
 
 #include <vcsl/vcsl_spheroid.h>

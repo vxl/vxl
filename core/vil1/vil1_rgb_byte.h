@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_rgb_byte.h
+// This is core/vil/vil_rgb_byte.h
 #ifndef vil_rgb_byte_h_
 #define vil_rgb_byte_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

@@ -1,4 +1,4 @@
-// This is vxl/vbl/examples/vbl_smart_ptr_example.h
+// This is core/vbl/examples/vbl_smart_ptr_example.h
 #ifndef vbl_smart_ptr_example_h_
 #define vbl_smart_ptr_example_h_
 //:
@@ -25,7 +25,7 @@ class example_sp : public vbl_ref_count
   example_sp(example_sp const&) { vcl_cout << "example_sp copy constructor, refcount=" << get_references() << '\n'; }
 
   friend vcl_ostream& operator<<(vcl_ostream& os, example_sp const& e) {
-    int p = e.get_references(); 
+    int p = e.get_references();
     if (p < 1000) os << "example_sp, refcount=" << p;
     else          os << "example_sp, invalid";
     return os;

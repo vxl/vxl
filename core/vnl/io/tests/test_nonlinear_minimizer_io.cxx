@@ -1,4 +1,4 @@
-// This is vxl/vnl/io/tests/test_nonlinear_minimizer_io.cxx
+// This is core/vnl/io/tests/test_nonlinear_minimizer_io.cxx
 #include <vcl_iostream.h>
 #include <vnl/vnl_nonlinear_minimizer.h>
 #include <vnl/io/vnl_io_nonlinear_minimizer.h>

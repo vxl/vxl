@@ -1,4 +1,4 @@
-// This is vxl/vnl/io/tests/test_rational_io.cxx
+// This is core/vnl/io/tests/test_rational_io.cxx
 #include <vcl_iostream.h>
 #include <vnl/vnl_rational.h>
 #include <vnl/io/vnl_io_rational.h>

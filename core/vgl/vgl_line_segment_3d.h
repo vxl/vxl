@@ -1,4 +1,4 @@
-// This is vxl/vgl/vgl_line_segment_3d.h
+// This is core/vgl/vgl_line_segment_3d.h
 #ifndef vgl_line_segment_3d_h_
 #define vgl_line_segment_3d_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

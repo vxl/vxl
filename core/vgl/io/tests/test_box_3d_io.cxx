@@ -1,4 +1,4 @@
-// This is vxl/vgl/io/tests/test_box_3d_io.cxx
+// This is core/vgl/io/tests/test_box_3d_io.cxx
 #include <vcl_iostream.h>
 #include <vgl/vgl_box_3d.h>
 #include <vsl/vsl_indent.h>

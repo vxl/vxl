@@ -1,8 +1,8 @@
-// This is vxl/vsl/vsl_pair_io.h
+// This is core/vsl/vsl_pair_io.h
 #ifndef vsl_pair_io_h_
 #define vsl_pair_io_h_
 //:
-// \file 
+// \file
 // \brief   binary IO functions for vcl_pair<S, T>
 // \author  Ian Scott
 

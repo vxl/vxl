@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_matlab_header.cxx
+// This is core/vnl/vnl_matlab_header.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif

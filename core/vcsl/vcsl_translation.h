@@ -1,4 +1,4 @@
-// This is vxl/vcsl/vcsl_translation.h
+// This is core/vcsl/vcsl_translation.h
 #ifndef vcsl_translation_h
 #define vcsl_translation_h
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

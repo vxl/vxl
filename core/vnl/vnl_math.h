@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_math.h
+// This is core/vnl/vnl_math.h
 #ifndef vnl_math_h_
 #define vnl_math_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

@@ -1,4 +1,4 @@
-// This is vxl/vul/vul_arg.h
+// This is core/vul/vul_arg.h
 #ifndef vul_arg_h_
 #define vul_arg_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

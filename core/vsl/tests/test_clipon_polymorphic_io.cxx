@@ -1,4 +1,4 @@
-// This is vxl/vsl/tests/test_clipon_polymorphic_io.cxx
+// This is core/vsl/tests/test_clipon_polymorphic_io.cxx
 
 //:
 // \file

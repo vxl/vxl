@@ -1,8 +1,8 @@
-// This is vxl/vnl/io/vnl_io_matrix_fixed.h
+// This is core/vnl/io/vnl_io_matrix_fixed.h
 #ifndef vnl_io_matrix_fixed_h
 #define vnl_io_matrix_fixed_h
 //:
-// \file 
+// \file
 // \author Louise Butcher
 // \date 20-Mar-2001
 

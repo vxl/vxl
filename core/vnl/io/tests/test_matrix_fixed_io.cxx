@@ -1,4 +1,4 @@
-// This is vxl/vnl/io/tests/test_matrix_fixed_io.cxx
+// This is core/vnl/io/tests/test_matrix_fixed_io.cxx
 #include <vcl_iostream.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/io/vnl_io_matrix_fixed.h>

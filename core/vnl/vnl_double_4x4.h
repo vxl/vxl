@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_double_4x4.h
+// This is core/vnl/vnl_double_4x4.h
 #ifndef vnl_double_4x4_h_
 #define vnl_double_4x4_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

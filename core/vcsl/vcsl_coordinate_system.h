@@ -1,4 +1,4 @@
-// This is vxl/vcsl/vcsl_coordinate_system.h
+// This is core/vcsl/vcsl_coordinate_system.h
 #ifndef vcsl_coordinate_system_h
 #define vcsl_coordinate_system_h
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

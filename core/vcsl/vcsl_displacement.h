@@ -1,4 +1,4 @@
-// This is vxl/vcsl/vcsl_displacement.h
+// This is core/vcsl/vcsl_displacement.h
 #ifndef vcsl_displacement_h
 #define vcsl_displacement_h
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

@@ -1,4 +1,4 @@
-// This is vxl/vgl/algo/vgl_rtree.h
+// This is core/vgl/algo/vgl_rtree.h
 #ifndef vgl_rtree_h_
 #define vgl_rtree_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

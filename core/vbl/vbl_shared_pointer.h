@@ -1,4 +1,4 @@
-// This is vxl/vbl/vbl_shared_pointer.h
+// This is core/vbl/vbl_shared_pointer.h
 #ifndef vbl_shared_pointer_h_
 #define vbl_shared_pointer_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

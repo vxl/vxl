@@ -1,4 +1,4 @@
-// This is vxl/vgl/vgl_polygon_scan_iterator.cxx
+// This is core/vgl/vgl_polygon_scan_iterator.cxx
 #include "vgl_polygon_scan_iterator.h"
 //:
 // \file

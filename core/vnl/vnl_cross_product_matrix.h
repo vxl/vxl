@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_cross_product_matrix.h
+// This is core/vnl/vnl_cross_product_matrix.h
 #ifndef vnl_cross_product_matrix_h_
 #define vnl_cross_product_matrix_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

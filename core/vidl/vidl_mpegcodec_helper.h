@@ -1,4 +1,4 @@
-// This is vxl/vidl/vidl_mpegcodec_helper.h
+// This is core/vidl/vidl_mpegcodec_helper.h
 #ifndef vidl_mpegcodec_helper_h
 #define vidl_mpegcodec_helper_h
 //:

@@ -1,4 +1,4 @@
-// This is vxl/vpl/vpl_mutex.h
+// This is core/vpl/vpl_mutex.h
 #ifndef vpl_mutex_h_
 #define vpl_mutex_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

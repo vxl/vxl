@@ -1,4 +1,4 @@
-// This is vxl/vul/vul_sprintf.h
+// This is core/vul/vul_sprintf.h
 #ifndef vul_sprintf_h_
 #define vul_sprintf_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

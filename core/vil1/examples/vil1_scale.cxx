@@ -1,4 +1,4 @@
-// This is vxl/vil/examples/vil_scale.cxx
+// This is core/vil/examples/vil_scale.cxx
 // Example: scaling.
 
 #include <vcl_iostream.h>

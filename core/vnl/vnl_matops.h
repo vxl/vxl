@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_matops.h
+// This is core/vnl/vnl_matops.h
 #ifndef vnl_matops_h_
 #define vnl_matops_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

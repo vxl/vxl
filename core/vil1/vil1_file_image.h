@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_file_image.h
+// This is core/vil/vil_file_image.h
 #ifndef vil_file_image_h_
 #define vil_file_image_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

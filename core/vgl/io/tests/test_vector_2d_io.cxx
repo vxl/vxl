@@ -1,4 +1,4 @@
-// This is vxl/vgl/io/tests/test_vector_2d_io.cxx
+// This is core/vgl/io/tests/test_vector_2d_io.cxx
 #include <vcl_iostream.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/io/vgl_io_vector_2d.h>

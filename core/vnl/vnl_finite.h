@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_finite.h
+// This is core/vnl/vnl_finite.h
 #ifndef vnl_finite_h_
 #define vnl_finite_h_
 //:
@@ -346,7 +346,7 @@ inline vnl_finite_int<N> vnl_math_sqr(vnl_finite_int<N> const& x) { return x*x; 
 template <int N>
 inline bool vnl_math_isnan(vnl_finite_int<N> const& ){return false;}
 template <int N>
-inline bool vnl_math_isfinite(vnl_finite_int<N> const& x){return true;} 
+inline bool vnl_math_isfinite(vnl_finite_int<N> const& x){return true;}
 
 //: finite modulo-N arithmetic with polynomials of degree < M
 //

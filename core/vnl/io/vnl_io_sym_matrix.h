@@ -1,8 +1,8 @@
-// This is vxl/vnl/io/vnl_io_sym_matrix.h
+// This is core/vnl/io/vnl_io_sym_matrix.h
 #ifndef vnl_io_sym_matrix_h
 #define vnl_io_sym_matrix_h
 //:
-// \file 
+// \file
 // \author Ian Scott
 // \date 11 Dec 2001
 

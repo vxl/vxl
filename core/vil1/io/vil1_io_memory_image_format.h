@@ -1,11 +1,11 @@
-// This is vxl/vil/io/vil_io_memory_image_format.h
+// This is core/vil/io/vil_io_memory_image_format.h
 #ifndef vil_io_memory_image_format_h_
 #define vil_io_memory_image_format_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
-// \file 
+// \file
 // \date 22 Mar 2001
 // \author Franck Bettinger
 //

@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_complex_traits.h
+// This is core/vnl/vnl_complex_traits.h
 #ifndef vnl_complex_traits_h_
 #define vnl_complex_traits_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

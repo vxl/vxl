@@ -1,4 +1,4 @@
-// This is vxl/vbl/vbl_protection_traits.txx
+// This is core/vbl/vbl_protection_traits.txx
 #ifndef vbl_protection_traits_txx_
 #define vbl_protection_traits_txx_
 

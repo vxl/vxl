@@ -1,8 +1,8 @@
-// This is vxl/vsl/vsl_string_io.h
+// This is core/vsl/vsl_string_io.h
 #ifndef vsl_string_io_h_
 #define vsl_string_io_h_
 //:
-// \file 
+// \file
 // \brief   binary IO functions for vcl_basic_string<T>
 // \author  K.Y.McGaul
 

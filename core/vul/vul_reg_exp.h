@@ -1,4 +1,4 @@
-// This is vxl/vul/vul_reg_exp.h
+// This is core/vul/vul_reg_exp.h
 #ifndef vul_reg_exph
 #define vul_reg_exph
 //:

@@ -1,4 +1,4 @@
-// This is vxl/vil/file_formats/vil_ras.h
+// This is core/vil/file_formats/vil_ras.h
 #ifndef vil_ras_file_format_h_
 #define vil_ras_file_format_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

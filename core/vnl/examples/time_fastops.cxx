@@ -1,4 +1,4 @@
-// This is vxl/vnl/examples/time_fastops.cxx
+// This is core/vnl/examples/time_fastops.cxx
 #include <vcl_iostream.h>
 #include <vcl_cmath.h> // for vcl_sqrt()
 #include <vcl_vector.h>

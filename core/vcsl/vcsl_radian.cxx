@@ -1,4 +1,4 @@
-// This is vxl/vcsl/vcsl_radian.cxx
+// This is core/vcsl/vcsl_radian.cxx
 #include "vcsl_radian.h"
 
 //***************************************************************************

@@ -1,4 +1,4 @@
-// This is vxl/vnl/algo/vnl_chi_squared.h
+// This is core/vnl/algo/vnl_chi_squared.h
 #ifndef vnl_chi_squared_h_
 #define vnl_chi_squared_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

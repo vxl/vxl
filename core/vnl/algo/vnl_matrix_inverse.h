@@ -1,4 +1,4 @@
-// This is vxl/vnl/algo/vnl_matrix_inverse.h
+// This is core/vnl/algo/vnl_matrix_inverse.h
 #ifndef vnl_matrix_inverse_h_
 #define vnl_matrix_inverse_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

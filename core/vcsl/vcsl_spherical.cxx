@@ -1,4 +1,4 @@
-// This is vxl/vcsl/vcsl_spherical.cxx
+// This is core/vcsl/vcsl_spherical.cxx
 #include "vcsl_spherical.h"
 
 #include <vcsl/vcsl_axis.h>

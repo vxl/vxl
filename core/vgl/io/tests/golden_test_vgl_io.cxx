@@ -1,4 +1,4 @@
-// This is vxl/vgl/io/tests/golden_test_vgl_io.cxx
+// This is core/vgl/io/tests/golden_test_vgl_io.cxx
 
 //:
 // \file

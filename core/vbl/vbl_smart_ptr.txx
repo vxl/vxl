@@ -1,4 +1,4 @@
-// This is vxl/vbl/vbl_smart_ptr.txx
+// This is core/vbl/vbl_smart_ptr.txx
 #ifndef vbl_smart_ptr_txx_
 #define vbl_smart_ptr_txx_
 

@@ -1,4 +1,4 @@
-// This is vxl/vbl/vbl_hash_map.txx
+// This is core/vbl/vbl_hash_map.txx
 #ifndef vbl_hash_map_txx_
 #define vbl_hash_map_txx_
 

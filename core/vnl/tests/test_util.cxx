@@ -1,4 +1,4 @@
-// This is vxl/vnl/tests/test_util.cxx
+// This is core/vnl/tests/test_util.cxx
 #include <vcl_complex.h>
 #include <vnl/vnl_sample.h>
 

@@ -1,4 +1,4 @@
-// This is vxl/vbl/vbl_triple.h
+// This is core/vbl/vbl_triple.h
 #ifndef vbl_triple_h_
 #define vbl_triple_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

@@ -1,4 +1,4 @@
-// This is vxl/vbl/vbl_ref_count.h
+// This is core/vbl/vbl_ref_count.h
 #ifndef vbl_ref_count_h
 #define vbl_ref_count_h
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

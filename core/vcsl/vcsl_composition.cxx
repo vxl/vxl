@@ -1,4 +1,4 @@
-// This is vxl/vcsl/vcsl_composition.cxx
+// This is core/vcsl/vcsl_composition.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif

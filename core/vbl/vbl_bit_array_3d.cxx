@@ -1,4 +1,4 @@
-// This is vxl/vbl/vbl_bit_array_3d.cxx
+// This is core/vbl/vbl_bit_array_3d.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif

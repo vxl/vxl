@@ -1,4 +1,4 @@
-// This is vxl/vul/vul_trace.cxx
+// This is core/vul/vul_trace.cxx
 
 //
 //  fsm

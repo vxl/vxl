@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_byte.h
+// This is core/vil/vil_byte.h
 #ifndef vil_byte_h_
 #define vil_byte_h_
 

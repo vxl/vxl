@@ -1,4 +1,4 @@
-// This is vxl/vnl/algo/vnl_gaussian_kernel_1d.cxx
+// This is core/vnl/algo/vnl_gaussian_kernel_1d.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif

@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_diag_matrix.txx
+// This is core/vnl/vnl_diag_matrix.txx
 #ifndef vnl_diag_matrix_txx_
 #define vnl_diag_matrix_txx_
 //:

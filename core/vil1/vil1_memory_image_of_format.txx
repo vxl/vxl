@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_memory_image_of_format.txx
+// This is core/vil/vil_memory_image_of_format.txx
 #ifndef vil_memory_image_of_format_h_
 #define vil_memory_image_of_format_h_
 //:

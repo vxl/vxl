@@ -1,4 +1,4 @@
-// This is vxl/vcsl/vcsl_dimension.cxx
+// This is core/vcsl/vcsl_dimension.cxx
 #include "vcsl_dimension.h"
 
 //***************************************************************************

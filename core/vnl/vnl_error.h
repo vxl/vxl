@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_error.h
+// This is core/vnl/vnl_error.h
 #ifndef vnl_error_h_
 #define vnl_error_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

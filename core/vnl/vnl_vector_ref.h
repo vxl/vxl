@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_vector_ref.h
+// This is core/vnl/vnl_vector_ref.h
 #ifndef vnl_vector_ref_h_
 #define vnl_vector_ref_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -68,7 +68,7 @@ class vnl_vector_ref : public vnl_vector<T>
 
   //: Copy constructor from vnl_vector<T> is disallowed:
   vnl_vector_ref(vnl_vector<T> const&) {}
- 
+
 #if 0 // NOW COMMENTED OUT - PVR, may 97
   // Private operator new because deleting a pointer to
   // one of these through a baseclass pointer will attempt

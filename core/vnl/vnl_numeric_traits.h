@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_numeric_traits.h
+// This is core/vnl/vnl_numeric_traits.h
 #ifndef vnl_numeric_traits_h_
 #define vnl_numeric_traits_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -35,7 +35,7 @@
 #if !defined(VCL_VC70)
 template <class T>
 class vnl_numeric_traits;
-#else 
+#else
 // However, *some* compilers require the template to be defined
 // under some circumstances...
 // Since the non-specialized template doesn't make any sense, make

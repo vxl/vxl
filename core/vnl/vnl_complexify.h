@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_complexify.h
+// This is core/vnl/vnl_complexify.h
 #ifndef vnl_complexify_h_
 #define vnl_complexify_h_
 //:

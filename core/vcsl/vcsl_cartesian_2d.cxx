@@ -1,4 +1,4 @@
-// This is vxl/vcsl/vcsl_cartesian_2d.cxx
+// This is core/vcsl/vcsl_cartesian_2d.cxx
 #include "vcsl_cartesian_2d.h"
 
 #include <vcsl/vcsl_axis.h>

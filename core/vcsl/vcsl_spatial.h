@@ -1,4 +1,4 @@
-// This is vxl/vcsl/vcsl_spatial.h
+// This is core/vcsl/vcsl_spatial.h
 #ifndef vcsl_spatial_h
 #define vcsl_spatial_h
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

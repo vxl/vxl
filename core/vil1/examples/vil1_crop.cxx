@@ -1,4 +1,4 @@
-// This is vxl/vil/examples/vil_crop.cxx
+// This is core/vil/examples/vil_crop.cxx
 // Example: image cropping
 
 #include <vcl_iostream.h>
@@ -20,7 +20,7 @@ int main(int argc, char ** argv)
   int y0 = vcl_atoi(argv[4]);
   int w = vcl_atoi(argv[5]);
   int h = vcl_atoi(argv[6]);
- 
+
   vil_image in = vil_load(input_filename);
 
   // crop is a generic image whose get_section performs the crop.

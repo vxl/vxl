@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_error.cxx
+// This is core/vnl/vnl_error.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -24,7 +24,7 @@
 //: Raise exception for invalid index
 void vnl_error_vector_index (char const* fcn, int index) {
   //RAISE Error, SYM(vnl_error_vector), SYM(Invalid_Index),
-  vcl_printf ("vnl_error_vector_index:%s: Invalid value %d specified for index.\n", 
+  vcl_printf ("vnl_error_vector_index:%s: Invalid value %d specified for index.\n",
               fcn, index);
   vcl_abort();
 }
@@ -32,7 +32,7 @@ void vnl_error_vector_index (char const* fcn, int index) {
 //: Raise exception for invalid dimensions
 void vnl_error_vector_dimension (char const* fcn, int l1, int l2) {
   //RAISE Error, SYM(vnl_error_vector), SYM(Invalid_Dim),
-  vcl_printf ("vnl_error_vector_dimension:%s: Dimensions [%d] and [%d] do not match.\n", 
+  vcl_printf ("vnl_error_vector_dimension:%s: Dimensions [%d] and [%d] do not match.\n",
               fcn, l1, l2);
   vcl_abort();
 }

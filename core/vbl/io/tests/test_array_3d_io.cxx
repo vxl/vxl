@@ -1,4 +1,4 @@
-// This is vxl/vbl/io/tests/test_array_3d_io.cxx
+// This is core/vbl/io/tests/test_array_3d_io.cxx
 #include <vcl_iostream.h>
 #include <vbl/io/vbl_io_array_3d.h>
 #include <vsl/vsl_binary_io.h>

@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_fwd.h
+// This is core/vil/vil_fwd.h
 #ifndef vil_fwd_h_
 #define vil_fwd_h_
 

@@ -1,4 +1,4 @@
-// This is vxl/vcsl/vcsl_polar.cxx
+// This is core/vcsl/vcsl_polar.cxx
 #include "vcsl_polar.h"
 
 #include <vcsl/vcsl_axis.h>

@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_matrix_exp.txx
+// This is core/vnl/vnl_matrix_exp.txx
 #ifndef vnl_matrix_exp_txx_
 #define vnl_matrix_exp_txx_
 /*
@@ -55,7 +55,7 @@ vnl_matrix<T> vnl_matrix_exp(vnl_matrix<T> const &X)
 {
   vnl_matrix<T> expX(X.rows(), X.cols());
 #ifndef NDEBUG
-  bool retval = 
+  bool retval =
 #endif
   vnl_matrix_exp(X, expX, 1e-10);
 

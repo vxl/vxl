@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_skip.h
+// This is core/vil/vil_skip.h
 #ifndef vil_skip_h_
 #define vil_skip_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

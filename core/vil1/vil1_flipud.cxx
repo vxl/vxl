@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_flipud.cxx
+// This is core/vil/vil_flipud.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif

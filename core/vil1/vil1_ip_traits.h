@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_ip_traits.h
+// This is core/vil/vil_ip_traits.h
 #ifndef vil_ip_traits_h_
 #define vil_ip_traits_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

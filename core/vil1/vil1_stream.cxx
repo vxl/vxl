@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_stream.cxx
+// This is core/vil/vil_stream.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -30,10 +30,10 @@ vil_stream::~vil_stream()
 
 void vil_stream::ref()
 {
-  ++refcount_; 
+  ++refcount_;
 }
 
-void vil_stream::unref() 
+void vil_stream::unref()
 {
   assert(refcount_ >= 0); // negative refcount is very serious
   if (--refcount_ == 0)

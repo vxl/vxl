@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_matrix_exp.h
+// This is core/vnl/vnl_matrix_exp.h
 #ifndef vnl_matrix_exp_h_
 #define vnl_matrix_exp_h_
 //:

@@ -1,4 +1,4 @@
-// This is vxl/vul/vul_get_timestamp.cxx
+// This is core/vul/vul_get_timestamp.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif

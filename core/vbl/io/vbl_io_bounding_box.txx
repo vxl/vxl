@@ -1,4 +1,4 @@
-// This is vxl/vbl/io/vbl_io_bounding_box.txx
+// This is core/vbl/io/vbl_io_bounding_box.txx
 #ifndef vbl_io_bounding_box_txx_
 #define vbl_io_bounding_box_txx_
 //:

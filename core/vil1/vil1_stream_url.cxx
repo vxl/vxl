@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_stream_url.cxx
+// This is core/vil/vil_stream_url.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -305,7 +305,7 @@ vil_stream_url::vil_stream_url(char const *url)
   while (vil_streampos bn = u_->read(btest, 4096L))
     test.write(btest, bn);
   test.close();
-#endif 
+#endif
 
 
   // close connection to server.

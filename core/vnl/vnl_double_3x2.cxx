@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_double_3x2.cxx
+// This is core/vnl/vnl_double_3x2.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif

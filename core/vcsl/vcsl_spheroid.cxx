@@ -1,4 +1,4 @@
-// This is vxl/vcsl/vcsl_spheroid.cxx
+// This is core/vcsl/vcsl_spheroid.cxx
 #include "vcsl_spheroid.h"
 
 #include <vcl_cmath.h> // for sqrt()

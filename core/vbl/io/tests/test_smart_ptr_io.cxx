@@ -1,4 +1,4 @@
-// This is vxl/vbl/io/tests/test_smart_ptr_io.cxx
+// This is core/vbl/io/tests/test_smart_ptr_io.cxx
 #include <vcl_iostream.h>
 #include "vbl_io_test_classes.h"
 #include <testlib/testlib_test.h>

@@ -1,4 +1,4 @@
-// This is vxl/vcsl/vcsl_axis.cxx
+// This is core/vcsl/vcsl_axis.cxx
 #include "vcsl_axis.h"
 
 #include <vcl_cassert.h>

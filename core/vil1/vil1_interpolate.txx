@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_interpolate.txx
+// This is core/vil/vil_interpolate.txx
 
 //-*- c++ -*-------------------------------------------------------------------
 #ifndef vil_interpolate_txx_

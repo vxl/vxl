@@ -1,4 +1,4 @@
-// This is vxl/vcsl/vcsl_angle.cxx
+// This is core/vcsl/vcsl_angle.cxx
 #include "vcsl_angle.h"
 
 #include <vcsl/vcsl_radian.h>

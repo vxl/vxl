@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_crop_image_impl.h
+// This is core/vil/vil_crop_image_impl.h
 #ifndef vil_crop_image_h_
 #define vil_crop_image_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

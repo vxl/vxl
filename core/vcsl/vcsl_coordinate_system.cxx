@@ -1,4 +1,4 @@
-// This is vxl/vcsl/vcsl_coordinate_system.cxx
+// This is core/vcsl/vcsl_coordinate_system.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif

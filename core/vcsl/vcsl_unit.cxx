@@ -1,4 +1,4 @@
-// This is vxl/vcsl/vcsl_unit.cxx
+// This is core/vcsl/vcsl_unit.cxx
 #include "vcsl_unit.h"
 
 //***************************************************************************

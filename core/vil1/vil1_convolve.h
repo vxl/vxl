@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_convolve.h
+// This is core/vil/vil_convolve.h
 #ifndef vil_convolve_h_
 #define vil_convolve_h_
 //:

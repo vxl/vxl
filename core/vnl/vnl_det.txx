@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_det.txx
+// This is core/vnl/vnl_det.txx
 #ifndef vnl_det_txx_
 #define vnl_det_txx_
 

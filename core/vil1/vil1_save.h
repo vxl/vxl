@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_save.h
+// This is core/vil/vil_save.h
 #ifndef vil_save_h_
 #define vil_save_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

@@ -1,4 +1,4 @@
-// This is vxl/vgl/vgl_1d_basis.h
+// This is core/vgl/vgl_1d_basis.h
 #ifndef vgl_1d_basis_h_
 #define vgl_1d_basis_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

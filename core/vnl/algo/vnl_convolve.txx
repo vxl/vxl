@@ -1,4 +1,4 @@
-// This is vxl/vnl/algo/vnl_convolve.txx
+// This is core/vnl/algo/vnl_convolve.txx
 #ifndef vnl_convolve_txx_
 #define vnl_convolve_txx_
 

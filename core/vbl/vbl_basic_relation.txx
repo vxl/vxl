@@ -1,4 +1,4 @@
-// This is vxl/vbl/vbl_basic_relation.txx
+// This is core/vbl/vbl_basic_relation.txx
 #ifndef vbl_basic_relation_txx_
 #define vbl_basic_relation_txx_
 //:

@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_smooth.cxx
+// This is core/vil/vil_smooth.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif

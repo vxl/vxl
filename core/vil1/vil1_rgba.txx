@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_rgba.txx
+// This is core/vil/vil_rgba.txx
 #ifndef vil_rgba_txx_
 #define vil_rgba_txx_
 

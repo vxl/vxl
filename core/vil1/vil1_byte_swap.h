@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_byte_swap.h
+// This is core/vil/vil_byte_swap.h
 #ifndef vil_byte_swap_h_
 #define vil_byte_swap_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

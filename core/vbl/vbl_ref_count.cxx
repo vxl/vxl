@@ -1,4 +1,4 @@
-// This is vxl/vbl/vbl_ref_count.cxx
+// This is core/vbl/vbl_ref_count.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif

@@ -1,4 +1,4 @@
-// This is vxl/vnl/algo/vnl_adjugate.h
+// This is core/vnl/algo/vnl_adjugate.h
 #ifndef vnl_adjugate_h_
 #define vnl_adjugate_h_
 //:

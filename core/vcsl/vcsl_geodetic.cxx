@@ -1,4 +1,4 @@
-// This is vxl/vcsl/vcsl_geodetic.cxx
+// This is core/vcsl/vcsl_geodetic.cxx
 #include "vcsl_geodetic.h"
 
 //***************************************************************************

@@ -1,4 +1,4 @@
-// This is vxl/vgl/io/vgl_io_line_segment_2d.h
+// This is core/vgl/io/vgl_io_line_segment_2d.h
 #ifndef vgl_io_line_segment_2d_h
 #define vgl_io_line_segment_2d_h
 //:

@@ -1,4 +1,4 @@
-// This is vxl/vpl/vpl_fileno.h
+// This is core/vpl/vpl_fileno.h
 #ifndef vpl_fileno_h_
 #define vpl_fileno_h_
 //:

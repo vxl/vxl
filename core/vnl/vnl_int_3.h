@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_int_3.h
+// This is core/vnl/vnl_int_3.h
 #ifndef vnl_int_3_h_
 #define vnl_int_3_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

@@ -1,4 +1,4 @@
-// This is vxl/vgl/io/tests/test_line_segment_3d_io.cxx
+// This is core/vgl/io/tests/test_line_segment_3d_io.cxx
 #include <vcl_iostream.h>
 #include <vsl/vsl_indent.h>
 #include <vgl/io/vgl_io_line_segment_3d.h>

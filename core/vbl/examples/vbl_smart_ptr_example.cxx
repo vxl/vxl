@@ -1,4 +1,4 @@
-// This is vxl/vbl/examples/vbl_smart_ptr_example.cxx
+// This is core/vbl/examples/vbl_smart_ptr_example.cxx
 
 //:
 // \file
@@ -30,7 +30,7 @@ class example_sp : public vbl_ref_count
   }
 
   friend vcl_ostream& operator<<(vcl_ostream& os, example_sp const& e) {
-    int p = e.get_references(); 
+    int p = e.get_references();
     if (p < 1000) os << "example_sp, refcount=" << p;
     else          os << "example_sp, invalid";
     return os;

@@ -1,4 +1,4 @@
-// This is vxl/vul/examples/vul_sequence_filename_example.cxx
+// This is core/vul/examples/vul_sequence_filename_example.cxx
 #include <vcl_iostream.h>
 #include <vul/vul_sequence_filename_map.h>
 

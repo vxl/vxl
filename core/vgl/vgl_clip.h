@@ -1,4 +1,4 @@
-// This is vxl/vgl/vgl_clip.h
+// This is core/vgl/vgl_clip.h
 #ifndef vgl_clip_h_
 #define vgl_clip_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

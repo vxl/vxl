@@ -1,4 +1,4 @@
-// This is vxl/vbl/vbl_sparse_array_1d.txx
+// This is core/vbl/vbl_sparse_array_1d.txx
 #ifndef vbl_sparse_array_1d_txx_
 #define vbl_sparse_array_1d_txx_
 //:

@@ -1,4 +1,4 @@
-// This is vxl/vul/tests/test_regexp.cxx
+// This is core/vul/tests/test_regexp.cxx
 #include <vul/vul_reg_exp.h>
 #include <testlib/testlib_test.h>
 //:

@@ -1,4 +1,4 @@
-// This is vxl/vnl/dll.h
+// This is core/vnl/dll.h
 #ifndef vnl_dll_h_
 #define vnl_dll_h_
 

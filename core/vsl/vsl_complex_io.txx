@@ -1,4 +1,4 @@
-// This is vxl/vsl/vsl_complex_io.txx
+// This is core/vsl/vsl_complex_io.txx
 #ifndef vsl_complex_io_txx_
 #define vsl_complex_io_txx_
 //:

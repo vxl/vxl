@@ -1,4 +1,4 @@
-// This is vxl/vnl/algo/vnl_powell.h
+// This is core/vnl/algo/vnl_powell.h
 #ifndef vnl_powell_h_
 #define vnl_powell_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

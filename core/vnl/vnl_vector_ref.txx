@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_vector_ref.txx
+// This is core/vnl/vnl_vector_ref.txx
 #ifndef vnl_vector_ref_txx_
 #define vnl_vector_ref_txx_
 

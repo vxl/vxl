@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_linear_operators_3.h
+// This is core/vnl/vnl_linear_operators_3.h
 #ifndef vnl_linear_operators_3_h_
 #define vnl_linear_operators_3_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

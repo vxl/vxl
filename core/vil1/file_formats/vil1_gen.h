@@ -1,4 +1,4 @@
-// This is vxl/vil/file_formats/vil_gen.h
+// This is core/vil/file_formats/vil_gen.h
 #ifndef vil_gen_file_format_h_
 #define vil_gen_file_format_h_
 //:

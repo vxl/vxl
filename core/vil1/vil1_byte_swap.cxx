@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_byte_swap.cxx
+// This is core/vil/vil_byte_swap.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif

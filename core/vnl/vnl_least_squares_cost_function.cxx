@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_least_squares_cost_function.cxx
+// This is core/vnl/vnl_least_squares_cost_function.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif

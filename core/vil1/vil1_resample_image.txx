@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_resample_image.txx
+// This is core/vil/vil_resample_image.txx
 #ifndef vil_resample_image_txx_
 #define vil_resample_image_txx_
 
@@ -19,7 +19,7 @@ bool vil_resample_image(vil_image const &base, unsigned new_width, unsigned new_
   // region is [x0, x1) x [y0, y1).
   int x1 = x0 + w;
   int y1 = y0 + h;
- 
+
   // scale factor between the two images
   const double fx = base.width()/(double)new_width;
   const double fy = base.height()/(double)new_height;
@@ -31,14 +31,14 @@ bool vil_resample_image(vil_image const &base, unsigned new_width, unsigned new_
   unsigned base_y0 = int(y0 * fy);
   unsigned base_y1 = int(y1 * fy);
   unsigned base_h = base_y1 - base_y0 + 1;
- 
+
   // make buffer for, and get, region needed from base image.
   vcl_vector<T> base_buf(base_w * base_h);
   if (! base.get_section(/* xxx */&base_buf[0], base_x0, base_y0, base_w, base_h)) {
     vcl_cerr << __FILE__ ": get_section() failed on base image " << base <<'\n';
     return false;
   }
- 
+
   // "e" is as close as possible to 1.
   const double e = 0.999999999999;
 
@@ -46,11 +46,11 @@ bool vil_resample_image(vil_image const &base, unsigned new_width, unsigned new_
   for (int u=0; u<w; ++u) {
     int base_xlo = int((x0+u  ) * fx) - base_x0;
     int base_xhi = int((x0+u+e) * fx) - base_x0;
- 
+
     for (int v=0; v<h; ++v) {
       int base_ylo = int((y0+v  ) * fy) - base_y0;
       int base_yhi = int((y0+v+e) * fy) - base_y0;
- 
+
       A accum = 0;
       unsigned count = 0;
       for (int x=base_xlo; x<=base_xhi; ++x) {

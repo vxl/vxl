@@ -1,8 +1,8 @@
-// This is vxl/vsl/vsl_complex_io.h
+// This is core/vsl/vsl_complex_io.h
 #ifndef vsl_complex_io_h_
 #define vsl_complex_io_h_
 //:
-// \file 
+// \file
 // \brief  binary IO functions for vcl_complex<T>
 // \author K.Y.McGaul
 

@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_interpolate.h
+// This is core/vil/vil_interpolate.h
 #ifndef vil_interpolate_h_
 #define vil_interpolate_h_
 //:

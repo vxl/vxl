@@ -1,4 +1,4 @@
-// This is vxl/vgl/io/tests/test_polygon_io.cxx
+// This is core/vgl/io/tests/test_polygon_io.cxx
 #include <vcl_iostream.h>
 #include <vgl/vgl_polygon.h>
 #include <vsl/vsl_indent.h>

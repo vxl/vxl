@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_pyramid.h
+// This is core/vil/vil_pyramid.h
 #ifndef vil_pyramid_h_
 #define vil_pyramid_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

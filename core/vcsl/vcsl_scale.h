@@ -1,4 +1,4 @@
-// This is vxl/vcsl/vcsl_scale.h
+// This is core/vcsl/vcsl_scale.h
 #ifndef vcsl_scale_h
 #define vcsl_scale_h
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

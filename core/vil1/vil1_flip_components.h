@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_flip_components.h
+// This is core/vil/vil_flip_components.h
 #ifndef vil_flip_components_h_
 #define vil_flip_components_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

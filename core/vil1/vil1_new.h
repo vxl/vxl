@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_new.h
+// This is core/vil/vil_new.h
 #ifndef vil_new_h_
 #define vil_new_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
