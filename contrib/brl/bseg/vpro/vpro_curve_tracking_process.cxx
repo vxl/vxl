@@ -35,7 +35,7 @@ bool vpro_curve_tracking_process::execute()
   // init
   if (this->get_N_input_images()!=1)
   {
-    vcl_cout << "In vpro_curve_tracking_process::execute() -"
+    vcl_cerr << "In vpro_curve_tracking_process::execute() -"
              << " not exactly one input image\n";
     return false;
   }
@@ -127,9 +127,10 @@ bool vpro_curve_tracking_process::write_to_file()
     while (bmn)
     {
       cnt++;
-	  //vcl_cout<<"\nthe euc dist is "<<bmn->match_curve_set[0]->get_best_match_next()->euc_<<"\t";
+#ifdef DEBUG
+      vcl_cout<<"\nthe euc dist is "<<bmn->match_curve_set[0]->get_best_match_next()->euc_<<'\t';
+#endif
       bmn=bmn->match_curve_set[0]->get_best_match_next();
-	  
     }
 
     if (cnt>5)
@@ -151,11 +152,11 @@ bool vpro_curve_tracking_process::write_to_file()
       while (flag)
       {
         f<<"[BEGIN CONTOUR]\n"
-         <<"EDGE_COUNT="<<obj->desc->points_.size()<<"\n";
+         <<"EDGE_COUNT="<<obj->desc->points_.size()<<'\n';
         for (unsigned int i=0; i<obj->desc->points_.size(); ++i)
         {
-          f<<" "<<"["<<obj->desc->points_[i].x()<<", "<<obj->desc->points_[i].y()
-           <<"]"<<"   "<<obj->desc->angles_[i]<<" "<<obj->desc->grad_[i]<<"\n";
+          f<<' '<<'['<<obj->desc->points_[i].x()<<", "<<obj->desc->points_[i].y()
+           <<']'<<"   "<<obj->desc->angles_[i]<<' '<<obj->desc->grad_[i]<<'\n';
         }
         f<<"[END CONTOUR]\n";
 
