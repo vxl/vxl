@@ -252,11 +252,13 @@ void mil_gaussian_pyramid_builder_2d<T>::extend(mil_image_pyramid& image_pyr) co
 
 //=======================================================================
 
+#if 0
 template<class T>
 vcl_string mil_gaussian_pyramid_builder_2d<T>::is_a() const
 {
   return vcl_string("mil_gaussian_pyramid_builder_2d<T>");
 }
+#endif
 
 //=======================================================================
 
