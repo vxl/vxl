@@ -8,11 +8,9 @@
 
 #include <vtol/vtol_topology_object_sptr.h>
 #include <vsol/vsol_spatial_object_2d.h> // parent class
-
 #include <vcl_vector.h>
 #include <vcl_list.h>
 #include <vcl_iosfwd.h>
-
 #include <vtol/vtol_vertex_sptr.h>
 #include <vtol/vtol_zero_chain_sptr.h>
 #include <vtol/vtol_edge_sptr.h>
@@ -104,11 +102,10 @@ typedef vcl_vector<vtol_chain_sptr>           chain_list;
 //  Modifications
 //   ported to vxl by Luis E. Galup
 //   JLM November 2002 - added a local bounding box method
-//   dec.2002 - Peter Vanroose - added chain_list (typedef) and cast_to_chain()
-//   dec.2002 - Peter Vanroose - link_inferior() now takes smart pointer argument
+//   dec.2002 -Peter Vanroose- added chain_list (typedef) and cast_to_chain()
+//   dec.2002 -Peter Vanroose- link_inferior() now takes smart pointer argument
+//   sep.2004 -Peter Vanroose- made methods returning the inf_sup cache "const"
 // \endverbatim
-
-class vtol_topology_object_2d;
 
 class vtol_topology_object : public vsol_spatial_object_2d
 {
@@ -119,7 +116,7 @@ class vtol_topology_object : public vsol_spatial_object_2d
   //---------------------------------------------------------------------------
   // Description: cache system
   //---------------------------------------------------------------------------
-  vtol_topology_cache *inf_sup_cache_;
+  mutable vtol_topology_cache *inf_sup_cache_;
 
  protected:
 
@@ -342,54 +339,69 @@ class vtol_topology_object : public vsol_spatial_object_2d
   //---------------------------------------------------------------------------
   void unlink();
 
-  //---------------------------------------------------------------------------
-  //: Get lists of vertices
-  // returned list must be deleted after use.
-  //---------------------------------------------------------------------------
-  vertex_list *vertices();
-  void vertices(vertex_list &list);
+  //: Get list of vertices
+  void vertices(vertex_list &list) const;
+  //: Get list of zero chains
+  void zero_chains(zero_chain_list &list) const;
+  //: Get list of edges
+  void edges(edge_list &list) const;
+  //: Get list of one chains
+  void one_chains(one_chain_list &list) const;
+  //: Get list of faces
+  void faces(face_list &list) const;
+  //: Get list of two chains
+  void two_chains(two_chain_list &list) const;
+  //: Get list of blocks
+  void blocks(block_list &list) const;
 
   //---------------------------------------------------------------------------
-  //: Get lists of zero chains
+  //: Get list of vertices
   // returned list must be deleted after use.
+  // \deprecated
   //---------------------------------------------------------------------------
-  zero_chain_list *zero_chains();
-  void zero_chains(zero_chain_list &list);
+  vertex_list *vertices() const;
 
   //---------------------------------------------------------------------------
-  //: Get lists of edges
+  //: Get list of zero chains
   // returned list must be deleted after use.
+  // \deprecated
   //---------------------------------------------------------------------------
-  edge_list *edges();
-  void edges(edge_list &list);
+  zero_chain_list *zero_chains() const;
 
   //---------------------------------------------------------------------------
-  //: Get lists of one chains
+  //: Get list of edges
   // returned list must be deleted after use.
+  // \deprecated
   //---------------------------------------------------------------------------
-  one_chain_list *one_chains();
-  void one_chains(one_chain_list &list);
+  edge_list *edges() const;
 
   //---------------------------------------------------------------------------
-  //: Get lists of faces
+  //: Get list of one chains
   // returned list must be deleted after use.
+  // \deprecated
   //---------------------------------------------------------------------------
-  face_list *faces();
-  void faces(face_list &list);
+  one_chain_list *one_chains() const;
 
   //---------------------------------------------------------------------------
-  //: Get lists of two chains
+  //: Get list of faces
   // returned list must be deleted after use.
+  // \deprecated
   //---------------------------------------------------------------------------
-  two_chain_list *two_chains();
-  void two_chains(two_chain_list &list);
+  face_list *faces() const;
 
   //---------------------------------------------------------------------------
-  //: Get lists of blocks
+  //: Get list of two chains
   // returned list must be deleted after use.
+  // \deprecated
   //---------------------------------------------------------------------------
-  block_list *blocks();
-  void blocks(block_list &list);
+  two_chain_list *two_chains() const;
+
+  //---------------------------------------------------------------------------
+  //: Get list of blocks
+  // returned list must be deleted after use.
+  // \deprecated
+  //---------------------------------------------------------------------------
+  block_list *blocks() const;
 
   //---------------------------------------------------------------------------
   //: print and describe the objects
