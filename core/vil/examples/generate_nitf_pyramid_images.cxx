@@ -95,4 +95,6 @@ int main (int argc, char **argv)
     }
 
     input_stream->unref();  // NO NEED TO EXPLICITLY CLOSE vil_stream.  Just call unref.
+
+    return 0;
 }  // end main
