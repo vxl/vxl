@@ -128,6 +128,16 @@ void vgui_soview2D_lineseg::translate(float tx, float ty)
 
 //--------------------------------------------------------------------------//
 
+vgui_soview2D_group::~vgui_soview2D_group()
+{
+  for (unsigned int i=0; i< ls.size(); i++)
+    if( ls[i] )
+      delete ls[i];
+
+  // clear vector
+  ls.clear();
+}
+
 void vgui_soview2D_group::set_style(const vgui_style_sptr& s)
 {
   for (unsigned int i=0; i< ls.size(); i++)

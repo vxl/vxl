@@ -146,6 +146,14 @@ class vgui_soview2D_group : public vgui_soview2D
   //: Constructor - creates a 2D soview group containing the given 2D soviews.
   vgui_soview2D_group( vcl_vector<vgui_soview2D *> ls_) : ls(ls_) {}
 
+  //: Destructor - responsible for deleting 2D soview objects
+  //  In current design, Easy2D tableau is responsible for cleaning up
+  //  soview objects. To avoid memory leak when using this group class, 
+  //  clean up the soview objects in the descructor.
+  //  It is hard to be nice & clean, unless smart ptr is introduced. 
+  //  GY
+  virtual ~vgui_soview2D_group();
+  
   //: Set the style (colour, line width, etc) for this 2D soview group.
   virtual void set_style(const vgui_style_sptr&);
 
