@@ -3,6 +3,8 @@
 
 USES = 
 
+USE_IUTEMPLATES := 0
+
 LIBRARY := netlib
 VERSION := 1.0
 
