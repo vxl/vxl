@@ -85,8 +85,49 @@ LINK32=link.exe
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
-
-SOURCE=.\vnl_io_test_all.cxx
+SOURCE=.\test_driver.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\golden_test_vnl_io.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_bignum_io.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_diag_matrix_io.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_include.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_matrix_fixed_io.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_matrix_io.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_nonlinear_minimizer_io.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_rational_io.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_real_npolynomial_io.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_real_polynomial_io.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_sparse_matrix_io.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_sym_matrix_io.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_vector_fixed_io.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_vector_io.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
