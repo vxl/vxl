@@ -72,6 +72,6 @@ void mil_algo_exp_filter_2d<srcT,destT>::filter_x(destT* dest, const srcT* src,
 
 #undef MIL_ALGO_EXP_FILTER_2D_INSTANTIATE
 #define MIL_ALGO_EXP_FILTER_2D_INSTANTIATE(srcT, destT) \
- template class mil_algo_exp_filter_2d<srcT, destT>
+ template class mil_algo_exp_filter_2d<srcT, destT >
 
-#endif
+#endif // mil_algo_exp_filter_2d_txx_
