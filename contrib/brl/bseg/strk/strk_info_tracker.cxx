@@ -181,12 +181,12 @@ generate_randomly_positioned_sample(strk_tracking_face_2d_sptr const& seed)
   float s = (2.f*scale_range_)*float(vcl_rand()/(RAND_MAX+1.0)) - scale_range_;
   float scale = 1+s;
   strk_tracking_face_2d* tf = new strk_tracking_face_2d(seed);
- 
+
   tf->transform(tx, ty, theta, scale);
   return tf;
 }
 
-static void 
+static void
 print_tracking_bounds(vcl_vector<strk_tracking_face_2d_sptr> const& faces)
 {
   if (!faces.size())
@@ -404,7 +404,7 @@ void strk_info_tracker::evaluate_info()
                               gradient_dir_hist_bins_,
                               color_hist_bins_
                               );
- 
+
   if (renyi_joint_entropy_)
     tf->set_renyi_joint_entropy();
 
@@ -506,7 +506,7 @@ construct_background_faces(vtol_face_2d_sptr const& current_model,
                                      );
     if (!tf->Npix())
       continue;
-   
+
     if (renyi_joint_entropy_)
       tf->set_renyi_joint_entropy();
     tf->compute_mutual_information(image_i_,
@@ -517,7 +517,7 @@ construct_background_faces(vtol_face_2d_sptr const& current_model,
   return true;
 }
 
-bool 
+bool
 strk_info_tracker::get_background_faces(vcl_vector<vtol_face_2d_sptr>& faces)
 {
   if (!background_faces_.size())
@@ -527,6 +527,7 @@ strk_info_tracker::get_background_faces(vcl_vector<vtol_face_2d_sptr>& faces)
     faces.push_back((*fit)->face()->cast_to_face_2d());
   return true;
 }
+
 //: Assemble the intensity, gradient and color histograms into a single vector
 //  |intensity|gradient|color|
 
@@ -539,22 +540,22 @@ vcl_vector<float> strk_info_tracker::histograms()
   unsigned int cbins = color_hist_bins_;
   unsigned int nbins = ibins + gbins + cbins;
   vcl_vector<float> out(nbins, 0.0);
- 
+
   bsta_histogram<float> int_hist = f->intensity_histogram(image_i_);
-  for(unsigned int i = 0; i<ibins; ++i)
+  for (unsigned int i = 0; i<ibins; ++i)
     out[i]=int_hist.p(i);
 
-  if(gradient_info_)
-    { 
-      bsta_histogram<float> grad_hist = f->gradient_histogram(Ix_i_, Iy_i_);
-      for(unsigned int i = 0; i<gbins; ++i)
-	  out[i+ibins]=grad_hist.p(i);
-    }
-  if(color_info_)
-    {
-      bsta_histogram<float> color_hist = f->gradient_histogram(hue_i_, sat_i_);
-      for(unsigned int i = 0; i<cbins; ++i)
+  if (gradient_info_)
+  {
+    bsta_histogram<float> grad_hist = f->gradient_histogram(Ix_i_, Iy_i_);
+    for (unsigned int i = 0; i<gbins; ++i)
+      out[i+ibins]=grad_hist.p(i);
+  }
+  if (color_info_)
+  {
+    bsta_histogram<float> color_hist = f->gradient_histogram(hue_i_, sat_i_);
+    for (unsigned int i = 0; i<cbins; ++i)
       out[i+ibins+gbins]=color_hist.p(i);
-    }
+  }
   return out;
 }
