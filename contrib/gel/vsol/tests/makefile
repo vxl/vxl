@@ -8,8 +8,9 @@
 ###############################################################################
 
 USES := vxl gel
+USE_NETLIB := 1
 
-IULIBS += -lvsol -lvgl -lvnl -lvbl -lvul
+IULIBS += -lvsol -lvgl-algo -lvgl -lvnl-algo -lvnl -lvbl -lvul
 
 TESTS += test_vsol_point_2d.cxx
 TESTS += test_vsol_group_2d.cxx

@@ -1,4 +1,5 @@
 #include <vsol/vsol_conic_2d.h>
+#include <vgl/algo/vgl_homg_operators_2d.h>
 
 //*****************************************************************************
 // External declarations for implementation
@@ -20,7 +21,34 @@ vsol_conic_2d::vsol_conic_2d(double new_a,
                              double new_d,
                              double new_e,
                              double new_f) :
-  a_(new_a), b_(new_b), c_(new_c), d_(new_d), e_(new_e), f_(new_f)
+  vgl_conic<double>(new_a, new_b, new_c, new_d, new_e, new_f)
+{
+}
+
+//---------------------------------------------------------------------------
+//: Ellipse/hyperbola constructor from centre, size and orientation.
+//  This constructor can only be used for non-degenerate, real ellipses and
+//  hyperbolas: if rx and ry have the same sign, an ellipse is defined
+//  (and any ellipse can uniquely be specified this way);
+//  rx is the length of one main axis, ry of the other axis.
+//  Hyperbolas are obtained if rx and ry have opposite sign; the positive
+//  one determines the distance from bots tops to the centre, and the other
+//  one specified the 'minor' axis length.
+//---------------------------------------------------------------------------
+vsol_conic_2d::vsol_conic_2d(vsol_point_2d const& c, double rx, double ry, double theta) :
+  vgl_conic<double>(vgl_homg_point_2d<double>(c.x(),c.y(),1.0), rx, ry, theta)
+{
+}
+
+//---------------------------------------------------------------------------
+//: Parabola constructor from direction, top and excentricity parameter.
+//  This constructor can only be used for non-degenerate parabolas:
+//  specify the direction of the symmetry axis, the top, and an excentricity
+//  parameter theta.
+//---------------------------------------------------------------------------
+vsol_conic_2d::vsol_conic_2d(vgl_vector_2d<double> const& dir,
+                             vsol_point_2d const& top, double theta) :
+  vgl_conic<double>(vgl_homg_point_2d<double>(dir.x(),dir.y(),0.0), top.x(), top.y(), theta)
 {
 }
 
@@ -28,7 +56,7 @@ vsol_conic_2d::vsol_conic_2d(double new_a,
 // Copy constructor
 //---------------------------------------------------------------------------
 vsol_conic_2d::vsol_conic_2d(const vsol_conic_2d &other) :
-  a_(other.a_),b_(other.b_),c_(other.c_),d_(other.d_),e_(other.e_),f_(other.f_)
+  vgl_conic<double>(other)
 {
 }
 
@@ -73,29 +101,13 @@ vsol_point_2d_sptr vsol_conic_2d::p1(void) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-//: Has `this' the same coefficients than `other' ?
+//: Has `this' the same coefficients and the same end points than `other' ?
 //---------------------------------------------------------------------------
 bool vsol_conic_2d::operator==(const vsol_conic_2d &other) const
 {
-  double lambda;
-
-  if (a_!=0)
-    lambda=other.a_/a_;
-  else if (b_!=0)
-    lambda=other.b_/b_;
-  else if (c_!=0)
-    lambda=other.c_/c_;
-  else if (d_!=0)
-    lambda=other.d_/d_;
-  else if (e_!=0)
-    lambda=other.e_/e_;
-  else if (f_!=0)
-    lambda=other.f_/f_;
-  else return false;
-
-  return are_equal(a_*lambda,other.a_)&&are_equal(b_*lambda,other.b_)
-    &&are_equal(c_*lambda,other.c_)&&are_equal(d_*lambda,other.d_)
-    &&are_equal(e_*lambda,other.e_)&&are_equal(f_*lambda,other.f_);
+  // Delegate to both parent classes:
+  return vgl_conic<double>::operator==(other) &&
+         p0() == other.p0() && p1() == other.p1();
 }
 
 //: spatial object equality
@@ -110,7 +122,7 @@ bool vsol_conic_2d::operator==(const vsol_spatial_object_2d& obj) const
 }
 
 //---------------------------------------------------------------------------
-//: Has `this' not the same coefficients than `other' ?
+//: Has `this' not the same coeffs than `other', or different end points ?
 //---------------------------------------------------------------------------
 bool vsol_conic_2d::operator!=(const vsol_conic_2d &other) const
 {
@@ -135,67 +147,29 @@ vsol_conic_2d::spatial_type(void) const
 //---------------------------------------------------------------------------
 vsol_conic_2d::vsol_conic_type vsol_conic_2d::real_type(void) const
 {
-  vsol_conic_type result;
-  double det1; // determinant: det
-  double det2;   // upper 2x2 determinant: j
-  double sum;   // sum of two other 2x2 determinants: k
-  const double tr = a_+c_; // trace of upper 2x2: i
-  const double b2 = b_/2;
-  const double d2 = d_/2;
-  const double e2 = e_/2;
-
-  det1=a_*(c_*f_-e2*e2)-b2*(b2*f_-d2*e2)+d2*(b2*e2-c_*d2);
-  det2=a_*c_-b2*b2;
-  sum=(c_*f_-e2*e2)+(a_*f_-d2*d2);
-
-  if (!is_zero(det1))
-  {
-    if (det2>0)
-    {
-      if (det1*tr<0)
-      {
-        if (are_equal(a_,c_)&&is_zero(b2))
-          result=real_circle;
-        else
-          result=real_ellipse;
-      }
-      else
-      {
-        if (are_equal(a_,c_)&&is_zero(b2))
-          result=complex_circle;
-        else
-          result=complex_ellipse;
-      }
-    }
-    else if (det2<0)
-      result=hyperbola;
-    else
-      result=parabola;
-  }
-  else
-  {    // limiting cases
-    if (det2<0)
-      result=real_intersecting_lines;
-    else if (det2>0)
-      result=complex_intersecting_lines;
-    else
-    {
-      if (is_zero(a_)&&is_zero(b2)&&is_zero(c_))
-      {
-        if (is_zero(d2)&&is_zero(e2))
-          result=degenerate;
-        else
-          result=coincident_lines;
-      }
-      else if (sum<0)
-        result=real_parallel_lines;
-      else if (sum>0)
-        result=complex_parallel_lines;
-      else
-        result=coincident_lines;
-    }
-  }
-  return result;
+  if (type() == vgl_conic<double>::real_circle)
+    return real_circle;
+  else if (type() == vgl_conic<double>::real_ellipse)
+    return real_ellipse;
+  else if (type() == vgl_conic<double>::imaginary_circle)
+    return complex_circle;
+  else if (type() == vgl_conic<double>::imaginary_ellipse)
+    return complex_ellipse;
+  else if (type() == vgl_conic<double>::hyperbola)
+    return hyperbola;
+  else if (type() == vgl_conic<double>::parabola)
+    return parabola;
+  else if (type() == vgl_conic<double>::real_intersecting_lines)
+    return real_intersecting_lines;
+  else if (type() == vgl_conic<double>::complex_intersecting_lines)
+    return complex_intersecting_lines;
+  else if (type() == vgl_conic<double>::coincident_lines)
+    return coincident_lines;
+  else if (type() == vgl_conic<double>::real_parallel_lines)
+    return real_parallel_lines;
+  else if (type() == vgl_conic<double>::complex_parallel_lines)
+    return complex_parallel_lines;
+  else return invalid; // 'degenerate' was is not a good name: some of the above are already degenerate!
 }
 
 //---------------------------------------------------------------------------
@@ -203,10 +177,7 @@ vsol_conic_2d::vsol_conic_type vsol_conic_2d::real_type(void) const
 //---------------------------------------------------------------------------
 bool vsol_conic_2d::is_real_ellipse(void) const
 {
- vsol_conic_type tmp;
-
-  tmp=real_type();
-
+  vsol_conic_type tmp=real_type();
   return (tmp==real_ellipse)||(tmp==real_circle);
 }
 
@@ -223,10 +194,7 @@ bool vsol_conic_2d::is_real_circle(void) const
 //---------------------------------------------------------------------------
 bool vsol_conic_2d::is_complex_ellipse(void) const
 {
-  vsol_conic_type tmp;
-
-  tmp=real_type();
-
+  vsol_conic_type tmp=real_type();
   return (tmp==complex_ellipse)||(tmp==complex_circle);
 }
 
@@ -293,29 +261,29 @@ void vsol_conic_2d::ellipse_parameters(double &cx,
   // require
   assert(is_real_ellipse());
 
-  const double b2=b_/2;
-  const double d2=d_/2;
-  const double e2=e_/2;
-  const double det=a_*c_-b2*b2;
+  const double b2=b()/2;
+  const double d2=d()/2;
+  const double e2=e()/2;
+  const double det=a()*c()-b2*b2;
 
   if (is_zero(b2)) // only for accuracy
   {
-    cx=-d2/a_;
-    cy=-e2/c_;
+    cx=-d2/a();
+    cy=-e2/c();
   }
   else
   {
-    cx=(b2*e2-c_*d2)/det;
-    cy=(b2*d2-a_*e2)/det;
+    cx=(b2*e2-c()*d2)/det;
+    cy=(b2*d2-a()*e2)/det;
   }
 
-  double f0=a_*cx*cx+b_*cx*cy+c_*cy*cy+d_*cx+e_*cy+f_;
+  double f0=a()*cx*cx+b()*cx*cy+c()*cy*cy+d()*cx+e()*cy+f();
 
   if (is_zero(f0)) // avoid dividing by zero
     f0=1;
-  const double a0=-a_/f0;
+  const double a0=-a()/f0;
   const double b0=-b2/f0;
-  const double c0=-c_/f0;
+  const double c0=-c()/f0;
 
   if (are_equal(a0,c0)&&is_zero(b0))
     phi=0; // circle
@@ -326,6 +294,45 @@ void vsol_conic_2d::ellipse_parameters(double &cx,
   const double sinphi=vcl_sin(phi);
   width =vcl_sqrt(1.0/(a0*cosphi*cosphi+2*b0*cosphi*sinphi+c0*sinphi*sinphi));
   height=vcl_sqrt(1.0/(a0*sinphi*sinphi-2*b0*cosphi*sinphi+c0*cosphi*cosphi));
+}
+
+//---------------------------------------------------------------------------
+//: Return 3 hyperbola parameters: centre (`cx',`cy'),
+//                                 orientation `phi',
+//                                 size (`half-axis',`half-secondary-axis')
+// Require: is_hyperbola()
+//---------------------------------------------------------------------------
+void vsol_conic_2d::hyperbola_parameters(double &cx,
+                                       double &cy,
+                                       double &phi,
+                                       double &width,
+                                       double &height) const
+{
+  // require
+  assert(is_hyperbola());
+
+  const double b2=b()/2;
+  const double d2=d()/2;
+  const double e2=e()/2;
+  const double det=a()*c()-b2*b2;
+
+  cx=(b2*e2-c()*d2)/det;
+  cy=(b2*d2-a()*e2)/det;
+
+  double f0=a()*cx*cx+b()*cx*cy+c()*cy*cy+d()*cx+e()*cy+f();
+
+  if (is_zero(f0)) // avoid dividing by zero
+    f0=1;
+  const double a0=-a()/f0;
+  const double b0=-b2/f0;
+  const double c0=-c()/f0;
+
+  phi=vcl_atan2(-2*b0,c0-a0)/2;
+
+  const double cosphi=vcl_cos(phi);
+  const double sinphi=vcl_sin(phi);
+  width =vcl_sqrt(1.0/(a0*cosphi*cosphi+2*b0*cosphi*sinphi+c0*sinphi*sinphi));
+  height=-vcl_sqrt(1.0/(a0*sinphi*sinphi-2*b0*cosphi*sinphi+c0*cosphi*cosphi));
 }
 
 //---------------------------------------------------------------------------
@@ -344,10 +351,10 @@ void vsol_conic_2d::parabola_parameters(double &cx,
   // Note that for a parabola B*B == 4*A*C, hence the quadratic part
   // of the equation is a square: (nX+mY)^2, with n=sqrt(A), m=sqrt(C)
   // Hence norm cannot be zero since the parabola is not degererate:
-  const double norm=a_+c_;
+  const double norm=a()+c();
   // The parabola direction is then (-m,n):
-  cosphi=-vcl_sqrt(c_/norm);
-  sinphi=vcl_sqrt(a_/norm);
+  cosphi=-vcl_sqrt(c()/norm);
+  sinphi=vcl_sqrt(a()/norm);
   // Finally, the top can be found as the point with tangent direction
   // orthogonal to the direction of the axis:
   // TODO
@@ -363,26 +370,24 @@ double vsol_conic_2d::length(void) const
 }
 
 //---------------------------------------------------------------------------
-//: Return the matrix associated to the coefficients. Has to be deleted manually
+//: Return the matrix associated with the coefficients.
 //---------------------------------------------------------------------------
-vnl_double_3x3 *vsol_conic_2d::matrix(void) const
+vnl_double_3x3 vsol_conic_2d::matrix(void) const
 {
-  vnl_double_3x3 *result;
-
-  result=new vnl_double_3x3();
+  vnl_double_3x3 result;
 
   // row 0
-  result->put(0,0,a_);
-  result->put(0,1,b_/2);
-  result->put(0,2,d_/2);
+  result.put(0,0,a());
+  result.put(0,1,b()/2);
+  result.put(0,2,d()/2);
   // row 1
-  result->put(1,0,b_/2);
-  result->put(1,1,c_);
-  result->put(1,2,e_/2);
+  result.put(1,0,b()/2);
+  result.put(1,1,c());
+  result.put(1,2,e()/2);
   // row 2
-  result->put(2,0,d_/2);
-  result->put(2,1,e_/2);
-  result->put(2,2,f_);
+  result.put(2,0,d()/2);
+  result.put(2,1,e()/2);
+  result.put(2,2,f());
 
   return result;
 }
@@ -420,11 +425,178 @@ void vsol_conic_2d::set_p1(const vsol_point_2d_sptr &new_p1)
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-//: Is `p' in `this' ? (ie `p' verifies the equation)
+//: Return the centre or symmetry point of a central conic.
+//---------------------------------------------------------------------------
+vsol_point_2d_sptr vsol_conic_2d::midpoint() const
+{
+  vgl_homg_point_2d<double> p = this->centre();
+  return new vsol_point_2d(p.x()/p.w(), p.y()/p.w());
+}
+
+//---------------------------------------------------------------------------
+//: Is `p' in `this' ? (ie `p' verifies the equation, within some margin)
 //---------------------------------------------------------------------------
 bool vsol_conic_2d::in(const vsol_point_2d_sptr &p) const
 {
   const double x=p->x();
   const double y=p->y();
-  return is_zero(a_*x*x+b_*x*y+c_*y*y+d_*x+e_*y+f_);
+  return is_zero(a()*x*x+b()*x*y+c()*y*y+d()*x+e()*y+f());
+}
+
+//---------------------------------------------------------------------------
+//: Returns the tangent to the conic in the point p, if p is on the conic.
+//  In general, returns the polar line of the point w.r.t. the conic.
+//---------------------------------------------------------------------------
+vgl_homg_line_2d<double> *
+vsol_conic_2d::tangent_at_point(vsol_point_2d_sptr const& p) const
+{
+  return new vgl_homg_line_2d<double>(
+    vgl_conic<double>::tangent_at(vgl_homg_point_2d<double>(p->x(),p->y(),1.0)));
+}
+
+//---------------------------------------------------------------------------
+//: Return the set of (real) intersection points of this conic with a line
+//---------------------------------------------------------------------------
+vcl_list<vsol_point_2d_sptr>
+vsol_conic_2d::intersection(vsol_line_2d const& l) const
+{
+  vgl_homg_point_2d<double> p0(l.p0()->x(), l.p0()->y(), 1.0),
+                            p1(l.p1()->x(), l.p1()->y(), 1.0);
+  vgl_homg_line_2d<double> line(p0,p1);
+  vcl_list<vgl_homg_point_2d<double> > vv =
+    vgl_homg_operators_2d<double>::intersection(*this,line);
+  vcl_list<vsol_point_2d_sptr> v;
+  vcl_list<vgl_homg_point_2d<double> >::iterator it = vv.begin();
+  for (; !(it == vv.end()); ++it) {
+    if ((*it).w() != 0)  v.push_back(new vsol_point_2d((*it)));
+  }
+  return v;
+}
+
+//---------------------------------------------------------------------------
+//: Return the set of (real) intersection points of two conics
+//---------------------------------------------------------------------------
+vcl_list<vsol_point_2d_sptr>
+vsol_conic_2d::intersection(vsol_conic_2d const& c) const
+{
+  vcl_list<vgl_homg_point_2d<double> > vv =
+    vgl_homg_operators_2d<double>::intersection(*this,c);
+  vcl_list<vsol_point_2d_sptr> v;
+  vcl_list<vgl_homg_point_2d<double> >::iterator it = vv.begin();
+  for (; !(it == vv.end()); ++it) {
+    if ((*it).w() != 0)  v.push_back(new vsol_point_2d((*it)));
+  }
+  return v;
+}
+
+//---------------------------------------------------------------------------
+//: Return the point on the conic boundary which is closest to the given point
+//---------------------------------------------------------------------------
+vsol_point_2d_sptr
+vsol_conic_2d::closest_point_on_curve(vsol_point_2d_sptr const& pt) const
+{
+  // The nearest point must have a polar line which is orthogonal to its
+  // connection line with the given point; all points with this property form
+  // a certain conic  (actually a hyperbola) :
+  vcl_list<vsol_point_2d_sptr> candidates; // all intersection points
+  if (b()==0 && a()==c()) {
+    // this ellipse is a circle ==> degenerate hyperbola (line + line at infinity)
+    candidates = intersection(vsol_line_2d(midpoint(),pt));
+  } else {
+    // Non-degenerate hyperbola:
+    vsol_conic_2d conic(b()/2,
+                        c()-a(),
+                        -b()/2,
+                        a()*pt->y()-b()/2*pt->x()+e()/2,
+                        b()/2*pt->y()-c()*pt->x()-d()/2,
+                        d()/2*pt->y()-e()/2*pt->x());
+    // Now it suffices to intersect the hyperbola with "this" ellipse:
+    candidates = conic.intersection(*this);
+  }
+  // And find the intersection point closest to the given location:
+  vsol_point_2d_sptr p = 0; double dist = 1e31; // infinity
+  vcl_list<vsol_point_2d_sptr>::iterator it = candidates.begin();
+  for (; it != candidates.end(); ++it) {
+    double d = (*it)->distance(pt);
+    if (d < dist) { p = (*it); dist = d; }
+  }
+  return p;
+}
+
+//---------------------------------------------------------------------------
+//: Return the shortest distance of the point to the conic boundary
+//---------------------------------------------------------------------------
+double vsol_conic_2d::distance(vsol_point_2d_sptr const& pt) const
+{
+  vsol_point_2d_sptr p = closest_point_on_curve(pt);
+  return p->distance(pt);
+}
+
+//---------------------------------------------------------------------------
+// virtuals of vsol_spatial_object_2d
+//---------------------------------------------------------------------------
+
+//: return reference point.  This is the midpoint for central conics.
+vcl_vector<double> * vsol_conic_2d::GetLocation()
+{
+  if (this->is_central()) {
+    vgl_homg_point_2d<double> c = this->centre();
+    vcl_vector<double>* v = new vcl_vector<double>(2);
+    v->front() = c.x()/c.w(); v->back() = c.y()/c.w();
+    return v;
+  }
+  else return 0;
+}
+
+//: return orientation of the main symmetry axis, if not degenerate.
+vcl_vector<double> * vsol_conic_2d::GetOrientation()
+{
+  double cx, cy, phi, wd, ht;
+  if (this->is_real_ellipse()) {
+    this->ellipse_parameters(cx, cy, phi, wd, ht);
+    vcl_vector<double>* v = new vcl_vector<double>(2);
+    v->front() = vcl_cos(phi); v->back() = vcl_sin(phi);
+    return v;
+  }
+  else if (this->is_hyperbola()) {
+    this->hyperbola_parameters(cx, cy, phi, wd, ht);
+    vcl_vector<double>* v = new vcl_vector<double>(2);
+    v->front() = vcl_cos(phi); v->back() = vcl_sin(phi);
+    return v;
+  }
+  else if (this->is_parabola()) {
+    this->parabola_parameters(cx, cy, wd, ht);
+    vcl_vector<double>* v = new vcl_vector<double>(2);
+    v->front() = wd; v->back() = ht;
+    return v;
+  }
+  else return 0;
+}
+
+//: return 2-dimensional size vector
+vcl_vector<double> * vsol_conic_2d::GetSize()
+{
+  double cx, cy, phi, wd, ht;
+  if (this->is_real_ellipse()) {
+    this->ellipse_parameters(cx, cy, phi, wd, ht);
+    vcl_vector<double>* v = new vcl_vector<double>(2);
+    v->front() = wd; v->back() = ht;
+    return v;
+  }
+  else if (this->is_hyperbola()) {
+    this->hyperbola_parameters(cx, cy, phi, wd, ht);
+    vcl_vector<double>* v = new vcl_vector<double>(2);
+    v->front() = wd; v->back() = ht;
+    return v;
+  }
+  else return 0;
+}
+
+//: move location() to (0,0).
+bool vsol_conic_2d::Translate()
+{
+  vgl_homg_point_2d<double> c = this->centre();
+  if (c.w() == 0) return false;
+  this->translate_by(-c.x()/c.w(),-c.y()/c.w());
+  return true;
 }
