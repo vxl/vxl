@@ -81,8 +81,7 @@ void vgui_image_renderer::reread_image()
 void vgui_image_renderer::render() {
   if (!the_image)
     return;
-  vgui_accelerate::image_width_ = the_image.width();
-  vgui_accelerate::image_height_ = the_image.height();
+
   // Delay sectioning until first render time. This allows the section 
   // buffer to decide on a cache format which depends on the current GL
   // rendering context.
