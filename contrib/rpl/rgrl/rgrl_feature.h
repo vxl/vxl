@@ -70,6 +70,11 @@ class rgrl_feature
   double geometric_error( rgrl_transformation const& xform, 
                           rgrl_feature const& other ) const;
 
+  //:  when computing geometric error, allow only mapping of From location
+  //   Otherwise, a mapped feature will be created, which is much more heavy
+  virtual
+  bool allow_fast_computation_on_error() const { return true; }
+  
   //:  Compute the signature error vector between two features.
   //
   // The result is invalid if signature_error_dimension() is false (0).

@@ -12,7 +12,8 @@
 #include "rgrl_match_set_sptr.h"
 #include "rgrl_object.h"
 
-class rgrl_transformation;
+//#include <rgrl/rgrl_transformation.h>
+#include <rgrl/rgrl_transformation_sptr.h>
 
 // Forward declaration. Used internally by rgrl_match_set.
 class rgrl_match_set_from;
@@ -98,6 +99,9 @@ class rgrl_match_set
   // result in \a mapped_from_feature.
   //
   void remap_from_features( rgrl_transformation const& trans );
+  
+  //: Compute the geometric errors given \a trans
+  void update_geometric_error( rgrl_transformation_sptr const& trans );
 
   //  CS (9/20/2003): I am not at all sure that the idea of a single
   //  feature type in a match set is really a good idea, especially
@@ -135,7 +139,8 @@ class rgrl_match_set
     match_info( rgrl_feature_sptr to_feat,
                 double geometric_wgt,
                 double signature_wgt,
-                double cumulative_wgt = 0);
+                double cumulative_wgt = 0.0,
+                double geometric_err = 0.0);
 
     //:  Initialize the signature weight only
     //
@@ -146,6 +151,7 @@ class rgrl_match_set
     double geometric_weight;
     double signature_weight;
     double cumulative_weight;
+    double geometric_residual;
   };
 
   void set_num_constraints_per_match() const;
@@ -163,6 +169,8 @@ class rgrl_match_set
   vcl_vector< rgrl_feature_sptr > from_features_;
   vcl_vector< rgrl_feature_sptr > xformed_from_features_;
   vcl_vector< vcl_vector< match_info > > matches_and_weights_;
+  
+  rgrl_transformation_sptr prev_xform_cached_;
 };
 
 
@@ -303,6 +311,9 @@ class rgrl_match_set_from_to_iterator
 
   //:
   void set_cumulative_weight( double cum_wgt );
+
+  //:
+  void set_geometric_error( double geom_err );
 
  protected:
 
