@@ -202,7 +202,6 @@ PERFORM_CMAKE_TEST(vxl_platform_tests.cxx vcl_cv_cxx_check_for_scope)
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx vcl_cv_cxx_default_value)
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx vcl_cv_cxx_has_member_templates)
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx vcl_cv_cxx_can_do_partial_specialization)
-PERFORM_CMAKE_TEST(vxl_platform_tests.cxx vcl_cv_cxx_define_specialization)
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_ALLOWS_INLINE_INSTANTIATION)
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_NEEDS_INLINE_INSTANTIATION)
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx vcl_cv_cxx_static_const_init_int)
@@ -230,6 +229,18 @@ PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_MATH_HAS_SQRTF)
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_IEEEFP_HAS_FINITE)
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_STDLIB_HAS_LRAND48)
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_STDLIB_HAS_DRAND48)
+
+# Test how to define a template specialization, and whether
+# specializations can be properly distinguished by top-level
+# cv-qualifiers.
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx vcl_cv_cxx_define_specialization)
+IF(NOT vcl_cv_cxx_define_specialization)
+  SET(CMAKE_REQUIRED_FLAGS "-DNOT_CONFORMING_SPECIALIZATION")
+ENDIF(NOT vcl_cv_cxx_define_specialization)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_CAN_SPECIALIZE_CV)
+SET(CMAKE_REQUIRED_FLAGS)
+
+
 
 #
 # Find header files
@@ -319,6 +330,7 @@ SET(VCL_STATIC_CONST_INIT_INT ${vcl_cv_cxx_static_const_init_int})
 SET_INVERT(VXL_LITTLE_ENDIAN ${VXL_BIG_ENDIAN})
 SET(VXL_STDLIB_HAS_QSORT ${ac_vxl_has_qsort})
 SET(VCL_DEFINE_SPECIALIZATION ${vcl_cv_cxx_define_specialization})
+SET_INVERT(VCL_CANNOT_SPECIALIZE_CV ${VCL_CAN_SPECIALIZE_CV})
 SET_INVERT(VCL_HAS_TEMPLATE_SYMBOLS ${VCL_HAS_TEMPLATE_SYMBOLS})
 
 SET_BOOL(VCL_NULL_TMPL_ARGS "/* <> */" "<>")

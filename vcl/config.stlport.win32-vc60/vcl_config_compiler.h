@@ -179,6 +179,19 @@
 #define VCL_DEFINE_SPECIALIZATION template <>
 
 
+//: VCL_CANNOT_SPECIALIZE_CV
+//
+// Template specialization considers top-level cv-qualifiers of the
+// argument type.  For example, A<int> and A<int const> are distinct
+// types.  Some compilers (eg Borland 5.5) do not make this distinction.
+// Specializations using top-level cv-qualifiers should not be defined
+// in addition to the unqualified equivalents unless
+// VCL_CANNOT_SPECIALIZE_CV is false.
+//#define VCL_CANNOT_SPECIALIZE_CV 1 /* cannot specialize with cv-qualifiers */
+//#define VCL_CANNOT_SPECIALIZE_CV 0 /* can specialize with cv-qualifiers */
+#define VCL_CANNOT_SPECIALIZE_CV 0
+
+
 //: VCL_NULL_TMPL_ARGS
 //
 // Define to <> for compilers that require them in friend template function

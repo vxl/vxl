@@ -853,3 +853,20 @@ int main() { drand48(); return 0; }
 #endif
 
 //-------------------------------------
+
+#ifdef VCL_CAN_SPECIALIZE_CV
+
+template <class T> struct A;
+#if !defined(NOT_CONFORMING_SPECIALIZATION)
+template <> struct A<int> {};
+template <> struct A<int const> {};
+#else
+struct A<int> {};
+struct A<int const> {};
+#endif
+
+int main() { return 0; }
+
+#endif
+
+//-------------------------------------
