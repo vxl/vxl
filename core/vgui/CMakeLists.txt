@@ -28,7 +28,7 @@ IF (OPENGL_FOUND)
 
   # The following are for the optional toolkit
   # implementations
-  INCLUDE(${MODULE_PATH}/NewCMake/FindQt.cmake)
+  INCLUDE(${CMAKE_ROOT}/Modules/FindQt.cmake)
   INCLUDE(${CMAKE_ROOT}/Modules/FindGTK.cmake)
   INCLUDE(${MODULE_PATH}/NewCMake/FindGTK2.cmake)
   INCLUDE(${CMAKE_ROOT}/Modules/FindMFC.cmake)
