@@ -1,6 +1,5 @@
 // This is vcl/tests/test_vector.cxx
 #include <vcl_iostream.h>
-#include <vcl_iterator.h>
 #include <vcl_vector.h>
 
 vcl_ostream &delim(vcl_ostream &os)
@@ -30,8 +29,6 @@ int test_vector_main(int /*argc*/,char* /*argv*/[])
 
     for (container::iterator p = m.begin(); p != m.end(); ++p)
       vcl_cout << (*p) << vcl_endl;
-
-//  copy(m.begin(), m.end(), vcl_ostream_iterator<int>(cerr));
   }
   {
     vcl_vector<double> v;
