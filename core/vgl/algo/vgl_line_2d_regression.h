@@ -8,11 +8,12 @@
 // \file
 // \brief A helper class for line fitting. Holds the 2d_regression data
 //
+// \author
+//   April 08, 2003 - J.L. Mundy, (a port of fsm's osl/osl_ortho_regress class)
+//
 // \verbatim
-// April 08, 2003 - J.L. Mundy, (a port of fsm's osl/osl_ortho_regress class)
-//
-// Modifications - none
-//
+//  Modifications
+//   - none
 // \endverbatim
 
 #include <vgl/vgl_point_2d.h>
