@@ -9,6 +9,10 @@
 // \file
 // \author awf@robots.ox.ac.uk
 // \date 16 Feb 00
+// \verbatim
+// Modifications
+// 7 June 2001 - Peter Vanroose - made pbm (magic P4) working
+// \endverbatim
 
 #include <vil/vil_file_format.h>
 #include <vil/vil_image_impl.h>

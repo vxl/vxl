@@ -15,6 +15,7 @@
 //     010126 BJM (mccane@cs.otago.ac.nz) added constructor from
 //            previously allocated memory. This memory is not deallocated on
 //            destruction.
+// 7 June 2001 - Peter Vanroose - added support for packed 1-bit pixel type
 //\endverbatim
 
 #include <vil/vil_image_impl.h>
