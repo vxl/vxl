@@ -31,6 +31,8 @@
 //
 //  NOTE: This is a reference class, so should be shorter-lived than the
 //  matrix to which it refers.
+//
+//  NOTE: This only works for arguments of type vnl_matrix<double>
 
 class vnl_transpose
 {

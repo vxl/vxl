@@ -407,8 +407,8 @@ class vnl_vector
   static vnl_vector<T> read(vcl_istream& s);
 
  protected:
-  unsigned num_elmts;           // Number of elements
-  T* data;                      // Pointer to the vnl_vector
+  unsigned num_elmts;           // Number of elements (length)
+  T* data;                      // Pointer to the actual data
 
 #if VCL_HAS_SLICED_DESTRUCTOR_BUG
   // Since this bug exists, we need a flag that can be set during
@@ -454,7 +454,8 @@ class vnl_vector
 // Range check is performed.
 
 template <class T>
-inline T vnl_vector<T>::get(unsigned int index) const {
+inline T vnl_vector<T>::get(unsigned int index) const
+{
 #ifdef ERROR_CHECKING
   if (index >= this->num_elmts)     // If invalid index specified
     vnl_error_vector_index("get", index);  // Raise exception
@@ -466,7 +467,8 @@ inline T vnl_vector<T>::get(unsigned int index) const {
 // Range check is performed.
 
 template <class T>
-inline void vnl_vector<T>::put(unsigned int index, T const& value) {
+inline void vnl_vector<T>::put(unsigned int index, T const& value)
+{
 #ifdef ERROR_CHECKING
   if (index >= this->num_elmts)     // If invalid index specified
     vnl_error_vector_index("put", index); // Raise exception
@@ -478,28 +480,32 @@ inline void vnl_vector<T>::put(unsigned int index, T const& value) {
 // \relates vnl_vector
 // \relates vnl_matrix
 template<class T>
-inline vnl_vector<T> operator*(vnl_matrix<T> const& m, vnl_vector<T> const& v) {
+inline vnl_vector<T> operator*(vnl_matrix<T> const& m, vnl_vector<T> const& v)
+{
   return vnl_vector<T>(m, v, vnl_tag_mul());
 }
 
 //: add scalar and vector. O(n).
 // \relates vnl_vector
 template<class T>
-inline vnl_vector<T> operator+(T s, vnl_vector<T> const& v) {
+inline vnl_vector<T> operator+(T s, vnl_vector<T> const& v)
+{
   return vnl_vector<T>(v, s, vnl_tag_add());
 }
 
 //: subtract vector from scalar. O(n).
 // \relates vnl_vector
 template<class T>
-inline vnl_vector<T> operator-(T s, vnl_vector<T> const& v) {
+inline vnl_vector<T> operator-(T s, vnl_vector<T> const& v)
+{
   return vnl_vector<T>(-v, s, vnl_tag_add());
 }
 
 //: multiply scalar and vector. O(n).
 // \relates vnl_vector
 template<class T>
-inline vnl_vector<T> operator*(T s, vnl_vector<T> const& v) {
+inline vnl_vector<T> operator*(T s, vnl_vector<T> const& v)
+{
   return vnl_vector<T>(v, s, vnl_tag_mul());
 }
 
