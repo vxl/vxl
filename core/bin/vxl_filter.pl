@@ -286,14 +286,10 @@ sub process_headers {
       s/(\s)::((sort|find|swap_ranges|copy|fill|find_if)\s*\()/$1vcl_$2/;
 
       # std::cout, std::cerr, std::endl etc
-      s/\b(std::)?cout\b/vcl_cout/g;
-      s/\b(std::)?cerr\b/vcl_cerr/g;
-      s/\b(std::)?endl\b/vcl_endl/g;
-      s/\b(std::)?istream\b/vcl_istream/g;
-      s/\b(std::)?ostream\b/vcl_ostream/g;
-      s/\b(std::)?fstream\b/vcl_fstream/g;
-      s/\b(std::)?ifstream\b/vcl_ifstream/g;
-      s/\b(std::)?ofstream\b/vcl_ofstream/g;
+      s/\b(std::)\s*(cout|cerr|endl|(i|o|f|if|of)stream)\b/vcl_\2/g;
+      s/\b(cout|cerr|endl|(i|o|f|if|of)stream)\b/vcl_\1/g;
+
+      s/\b(assert|abort|exit|sqrt|real|imag|abs)\b/vcl_\1/g;
 
       # remember what we saw
       $saw_functional_h = 1 if m/include <vcl_functional\.h>/;
@@ -905,7 +901,6 @@ sub process_lines {
       s!\bCoolArrayP\b!vcl_vector!g;
       s!\bCoolList\b!vcl_list!g;
       s!\bCoolListP\b!vcl_list!g;
-
     }
 
     #---------------------------------------- osl
