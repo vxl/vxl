@@ -15,6 +15,7 @@
 @ftell
 @perror
 @clearerr
+@rename
 
 // printf() family
 @printf
@@ -31,3 +32,4 @@
 @vscanf
 @vsscanf
 @vfscanf
+

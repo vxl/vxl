@@ -68,6 +68,10 @@
 #ifndef vcl_clearerr
 #define vcl_clearerr vcl_generic_cstdio_STD :: clearerr
 #endif
+// rename
+#ifndef vcl_rename
+#define vcl_rename vcl_generic_cstdio_STD :: rename
+#endif
 
 // printf() family
 // printf
