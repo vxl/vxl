@@ -30,8 +30,8 @@ bugl_gaussian_point_2d<T>::bugl_gaussian_point_2d()
 
 template<class T>
 void bugl_gaussian_point_2d<T>::set_point(vgl_point_2d<T> &p)
-{ 
-    this->set(p.x(), p.y());
+{
+  this->set(p.x(), p.y());
 }
 
 template<class T>
@@ -45,8 +45,8 @@ void bugl_gaussian_point_2d<T>::set_covariant_matrix(vnl_matrix_fixed<T,2,2> &s)
 template<class T>
 T bugl_gaussian_point_2d<T>::prob_at(vgl_point_2d<T> &p)
 {
-  if(!exists_)
-   return 0;	
+  if (!exists_)
+   return 0;
   vnl_vector_fixed<T, 2> v(p.x() - this->x(), p.y() - this->y());
   return vcl_exp(-0.5*(dot_product(v, sigma_inv_*v)))/(2*vnl_math::pi*det_);
 }
