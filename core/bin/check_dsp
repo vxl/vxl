@@ -251,7 +251,7 @@ foreach $dir (@DIRS)
     elsif (-f "$dir/$x.cpp") { push @source_files, "$x.cpp"; }
     else { printf "No source file $x.* found in $dir\n"; }
   }
-  while ($cmakefile =~ s/\bADD_TEST\s*\(\s*\S+\s+(\S+)\s*\)//) {
+  while ($cmakefile =~ s/\bADD_TEST\s*\(\s*\S+\s+(\S+)(\s+[^()]+)?\s*\)//) {
     $name = "$1";
     if (! exists ($names{$name}) ) {
       print STDOUT "ADD_TEST($name) without ADD_EXECUTABLE($name)\tin $cmakef\n";
