@@ -36,7 +36,7 @@ class bmrf_curve_3d_builder
 
   //: Build The curves
   //  Curves with less than \p min_prj projections are removed
-  bool build(int min_prj = 3, int min_len = 10, float smooth = 0.5);
+  bool build(int min_prj = 3, int min_len = 10, float sigma = 0.5);
 
   //: Return the constructed curves
   vcl_set<vcl_list<bmrf_curvel_3d_sptr> > curves() const;
@@ -72,7 +72,7 @@ class bmrf_curve_3d_builder
   void reconstruct_point(bmrf_curvel_3d_sptr curvel) const;
 
   //: Simultaneously reconstruct all points in a 3d curve
-  void reconstruct_curve(vcl_list<bmrf_curvel_3d_sptr>& curve, float smooth = 0.5) const;
+  void reconstruct_curve(vcl_list<bmrf_curvel_3d_sptr>& curve, float sigma = 0.5) const;
 
   //: Match the \p curvels to the ends of the \p growing_curves
   void append_curvels(vcl_list<bmrf_curvel_3d_sptr> curvels,

@@ -88,7 +88,7 @@ bmrf_curve_3d_builder::curves() const
 
 //: Build The curves
 bool
-bmrf_curve_3d_builder::build(int min_prj, int min_len, float smooth)
+bmrf_curve_3d_builder::build(int min_prj, int min_len, float sigma)
 {
   if (!network_)
     return false;
@@ -128,7 +128,7 @@ bmrf_curve_3d_builder::build(int min_prj, int min_len, float smooth)
     if ( itr->size() < min_len )
       curves_.erase(itr);
     else
-      this->reconstruct_curve(const_cast<vcl_list<bmrf_curvel_3d_sptr> &> (*itr), smooth);
+      this->reconstruct_curve(const_cast<vcl_list<bmrf_curvel_3d_sptr> &> (*itr), sigma);
     itr = next_itr;
   }
 
@@ -401,7 +401,7 @@ bmrf_curve_3d_builder::reconstruct_point(bmrf_curvel_3d_sptr curvel) const
 
 //: Simultaneously reconstruct all points in a 3d curve
 void
-bmrf_curve_3d_builder::reconstruct_curve(vcl_list<bmrf_curvel_3d_sptr>& curve, float smooth) const
+bmrf_curve_3d_builder::reconstruct_curve(vcl_list<bmrf_curvel_3d_sptr>& curve, float sigma) const
 {
   unsigned int num_frames = network_->num_frames();
   unsigned int num_pts = curve.size();
@@ -409,8 +409,8 @@ bmrf_curve_3d_builder::reconstruct_curve(vcl_list<bmrf_curvel_3d_sptr>& curve, f
   float kernel[2];
   kernel[0] = 0.0;
   kernel[1] = 1.0;
-  if(smooth > 0.0){   
-    kernel[0] = vcl_exp(-1.0/(2.0*smooth*smooth));
+  if(sigma > 0.0){   
+    kernel[0] = vcl_exp(-1.0/(2.0*sigma*sigma));
     float kernel_sum = 2.0*kernel[0] + kernel[1];
     kernel[0] /= kernel_sum;
     kernel[1] /= kernel_sum;
