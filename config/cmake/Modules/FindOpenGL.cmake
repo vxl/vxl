@@ -16,11 +16,54 @@
 
 IF(NOT HAS_OPENGL)
   IF (WIN32)
+
+    IF (CYGWIN)
   
-    SET (HAS_OPENGL "YES")
-    ADD_DEFINITIONS( -DHAS_OPENGL )
-    LINK_LIBRARIES(opengl32 glu32)
+      SET( HAS_OPENGL "NO" )
   
+      FIND_PATH(OPENGL_INCLUDE_PATH GL/gl.h 
+        /usr/include 
+        /usr/X11R6/include 
+      )
+  
+      FIND_LIBRARY(OPENGL_gl_LIBRARY opengl32
+        /usr/lib 
+        /usr/lib/w32api
+      )
+  
+      FIND_LIBRARY(OPENGL_glu_LIBRARY glu32
+        /usr/lib 
+        /usr/lib/w32api
+      )
+  
+      IF(OPENGL_INCLUDE_PATH)
+      IF(OPENGL_gl_LIBRARY)
+      IF(OPENGL_glu_LIBRARY)
+  
+        SET( HAS_OPENGL "YES" )
+        ADD_DEFINITIONS( -DHAS_OPENGL )
+
+        INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_PATH})
+        LINK_LIBRARIES( ${OPENGL_glu_LIBRARY} ${OPENGL_gl_LIBRARY} )
+
+      ENDIF(OPENGL_glu_LIBRARY)
+      ENDIF(OPENGL_gl_LIBRARY)
+      ENDIF(OPENGL_INCLUDE_PATH)
+
+      ## fixme, search for libraries here, don't assume
+      #SET (HAS_OPENGL "YES")
+      #ADD_DEFINITIONS( -DHAS_OPENGL )
+      ## -I/usr/include must come before -I/usr/X11R6/include for GL/*.h
+      #LINK_LIBRARIES(glu32 opengl32)
+
+    ELSE (CYGWIN)
+
+      SET (HAS_OPENGL "YES")
+      ADD_DEFINITIONS( -DHAS_OPENGL )
+      LINK_LIBRARIES(opengl32 glu32)
+
+    ENDIF (CYGWIN)
+
   ELSE (WIN32)
   
     SET( HAS_OPENGL "NO" )
@@ -66,10 +109,10 @@ IF(NOT HAS_OPENGL)
   
       SET( HAS_OPENGL "YES" )
       ADD_DEFINITIONS( -DHAS_OPENGL )
-  
+
       INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_PATH})
       LINK_LIBRARIES( ${OPENGL_gl_LIBRARY} ${OPENGL_glu_LIBRARY} ${CMAKE_THREAD_LIBS} )
-  
+
     ENDIF(OPENGL_glu_LIBRARY)
     ENDIF(OPENGL_gl_LIBRARY)
     ENDIF(OPENGL_INCLUDE_PATH)
