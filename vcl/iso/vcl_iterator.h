@@ -1,8 +1,5 @@
 #ifndef vcl_iso_iterator_h_
 #define vcl_iso_iterator_h_
-/*
-  fsm@robots.ox.ac.uk
-*/
 
 #include <iterator>
 
@@ -26,6 +23,14 @@
 #ifndef vcl_ostream_iterator
 #define vcl_ostream_iterator std::ostream_iterator
 #endif
+// istreambuf_iterator
+#ifndef vcl_istreambuf_iterator
+#define vcl_istreambuf_iterator std::istreambuf_iterator
+#endif
+// ostreambuf_iterator
+#ifndef vcl_ostreambuf_iterator
+#define vcl_ostreambuf_iterator std::ostreambuf_iterator
+#endif
 // back_insert_iterator
 #ifndef vcl_back_insert_iterator
 #define vcl_back_insert_iterator std::back_insert_iterator
@@ -37,6 +42,10 @@
 // insert_iterator
 #ifndef vcl_insert_iterator
 #define vcl_insert_iterator std::insert_iterator
+#endif
+// inserter
+#ifndef vcl_inserter
+#define vcl_inserter std::inserter
 #endif
 // input_iterator_tag
 #ifndef vcl_input_iterator_tag

@@ -1,9 +1,30 @@
 #ifndef vcl_iso_cwctype_h_
 #define vcl_iso_cwctype_h_
-/*
-  fsm@robots.ox.ac.uk
-*/
 
 #include <cwctype>
+
+@wctrans_t
+@wctype_t
+@wint_t
+@iswalnum
+@iswalpha
+@iswcntrl
+@iswctype
+@iswdigit
+@iswgraph
+@iswlower
+@iswprint
+@iswpunct
+@iswspace
+@iswupper
+@iswxdigit
+@iswctrans
+@iswupper
+@iswxdigit
+@towctrans
+@towlower
+@towupper
+@wctrans
+@wctype
 
 #endif

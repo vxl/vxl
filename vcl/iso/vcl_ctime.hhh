@@ -1,9 +1,20 @@
 #ifndef vcl_iso_ctime_h_
 #define vcl_iso_ctime_h_
-/*
-  fsm@robots.ox.ac.uk
-*/
 
 #include <ctime>
+
+@size_t
+@clock_t
+@time_t
+@tm
+@asctime
+@clock
+@difftime
+@localtime
+@strftime
+@ctime
+@gmtime
+@mktime
+@time
 
 #endif

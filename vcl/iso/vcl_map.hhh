@@ -1,12 +1,10 @@
 #ifndef vcl_iso_map_h_
 #define vcl_iso_map_h_
-/*
-  fsm@robots.ox.ac.uk
-*/
 
 #include <map>
 
 @map
 @multimap
+@swap
 
 #endif

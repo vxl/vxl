@@ -1,8 +1,5 @@
 #ifndef vcl_iso_functional_h_
 #define vcl_iso_functional_h_
-/*
-  fsm@robots.ox.ac.uk
-*/
 
 #include <functional>
 
@@ -74,37 +71,103 @@
 #ifndef vcl_logical_not
 #define vcl_logical_not std::logical_not
 #endif
-// identity
-#ifndef vcl_identity
-#define vcl_identity std::identity
+// unary_negate
+#ifndef vcl_unary_negate
+#define vcl_unary_negate std::unary_negate
 #endif
-// select1st
-#ifndef vcl_select1st
-#define vcl_select1st std::select1st
+// not1
+#ifndef vcl_not1
+#define vcl_not1 std::not1
 #endif
-// select2nd
-#ifndef vcl_select2nd
-#define vcl_select2nd std::select2nd
+// binary_negate
+#ifndef vcl_binary_negate
+#define vcl_binary_negate std::binary_negate
 #endif
-// project1st
-#ifndef vcl_project1st
-#define vcl_project1st std::project1st
+// not2
+#ifndef vcl_not2
+#define vcl_not2 std::not2
 #endif
-// project2nd
-#ifndef vcl_project2nd
-#define vcl_project2nd std::project2nd
+// binder1st
+#ifndef vcl_binder1st
+#define vcl_binder1st std::binder1st
 #endif
-// constant_void_fun
-#ifndef vcl_constant_void_fun
-#define vcl_constant_void_fun std::constant_void_fun
+// bind1st
+#ifndef vcl_bind1st
+#define vcl_bind1st std::bind1st
 #endif
-// constant_unary_fun
-#ifndef vcl_constant_unary_fun
-#define vcl_constant_unary_fun std::constant_unary_fun
+// binder2nd
+#ifndef vcl_binder2nd
+#define vcl_binder2nd std::binder2nd
 #endif
-// constant_binary_fun
-#ifndef vcl_constant_binary_fun
-#define vcl_constant_binary_fun std::constant_binary_fun
+// bind2nd
+#ifndef vcl_bind2nd
+#define vcl_bind2nd std::bind2nd
 #endif
+// pointer_to_unary_function
+#ifndef vcl_pointer_to_unary_function
+#define vcl_pointer_to_unary_function std::pointer_to_unary_function
+#endif
+// ptr_fun
+#ifndef vcl_ptr_fun
+#define vcl_ptr_fun std::ptr_fun
+#endif
+// pointer_to_binary_function
+#ifndef vcl_pointer_to_binary_function
+#define vcl_pointer_to_binary_function std::pointer_to_binary_function
+#endif
+// mem_fun_t
+#ifndef vcl_mem_fun_t
+#define vcl_mem_fun_t std::mem_fun_t
+#endif
+// mem_fun1_t
+#ifndef vcl_mem_fun1_t
+#define vcl_mem_fun1_t std::mem_fun1_t
+#endif
+// mem_fun
+#ifndef vcl_mem_fun
+#define vcl_mem_fun std::mem_fun
+#endif
+// mem_fun_ref_t
+#ifndef vcl_mem_fun_ref_t
+#define vcl_mem_fun_ref_t std::mem_fun_ref_t
+#endif
+// mem_fun1_ref_t
+#ifndef vcl_mem_fun1_ref_t
+#define vcl_mem_fun1_ref_t std::mem_fun1_ref_t
+#endif
+// mem_fun_ref
+#ifndef vcl_mem_fun_ref
+#define vcl_mem_fun_ref std::mem_fun_ref
+#endif
+// const_mem_fun_t
+#ifndef vcl_const_mem_fun_t
+#define vcl_const_mem_fun_t std::const_mem_fun_t
+#endif
+// const_mem_fun1_t
+#ifndef vcl_const_mem_fun1_t
+#define vcl_const_mem_fun1_t std::const_mem_fun1_t
+#endif
+// const_mem_fun_ref_t
+#ifndef vcl_const_mem_fun_ref_t
+#define vcl_const_mem_fun_ref_t std::const_mem_fun_ref_t
+#endif
+// const_mem_fun1_ref_t
+#ifndef vcl_const_mem_fun1_ref_t
+#define vcl_const_mem_fun1_ref_t std::const_mem_fun1_ref_t
+#endif
+// transform
+#ifndef vcl_transform
+#define vcl_transform std::transform
+#endif
+
+//not in the standard:
+//@identity            
+//@select1st           
+//@select2nd           
+//@project1st          
+//@project2nd          
+//@constant_void_fun   
+//@constant_unary_fun  
+//@constant_binary_fun 
 
 #endif

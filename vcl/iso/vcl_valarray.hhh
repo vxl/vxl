@@ -1,11 +1,30 @@
 #ifndef vcl_iso_valarray_h_
 #define vcl_iso_valarray_h_
-/*
-  fsm@robots.ox.ac.uk
-*/
 
 #include <valarray>
 
 @valarray
+@slice
+@slice_array
+@gslice
+@gslice_array
+@mask_array
+@indirect_array
+@abs
+@acos
+@asin
+@atan
+@atan2
+@cos
+@cosh
+@exp
+@log
+@log10
+@pow
+@sin
+@sinh
+@sqrt
+@tan
+@tanh
 
 #endif

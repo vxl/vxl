@@ -1,15 +1,15 @@
 #ifndef vcl_iso_sstream_h_
 #define vcl_iso_sstream_h_
-/*
-  fsm@robots.ox.ac.uk
-*/
 
 #include <sstream>
 
-@isstream
-@osstream
+@basic_stringbuf
+@stringbuf
+@wstringbuf
+@istringstream
+@ostringstream
 
-using std::osstream;
-using std::isstream;
+using std::ostringstream;
+using std::istringstream;
 
 #endif

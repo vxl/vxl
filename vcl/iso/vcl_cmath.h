@@ -1,8 +1,5 @@
 #ifndef vcl_iso_cmath_h_
 #define vcl_iso_cmath_h_
-/*
-  fsm@robots.ox.ac.uk
-*/
 
 #include <cmath>
 
@@ -73,10 +70,6 @@
 // modf
 #ifndef vcl_modf
 #define vcl_modf std::modf
-#endif
-// pow
-#ifndef vcl_pow
-#define vcl_pow std::pow
 #endif
 // pow
 #ifndef vcl_pow

@@ -12,4 +12,5 @@ clean:
 
 $(HEADERS) : %.h : %.hhh
 	@echo "making $@ from $<"
-	@./zap.pl < $< >$@
+	@cat $< | ./zap.pl > $@~
+	@mv $@~ $@

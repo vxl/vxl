@@ -1,11 +1,14 @@
 #ifndef vcl_iso_iostream_h_
 #define vcl_iso_iostream_h_
-/*
-  fsm@robots.ox.ac.uk
-*/
 
 #include <iostream>
 
+@cin
+@cout
+@cerr
+@clog
+// the following are not actually in the
+// <iostream> synopsis:
 @ios
 @ios::in
 @ios::out
@@ -18,17 +21,16 @@
 @ws
 @setprecision
 @endl
+@flush
 @streampos
 @streambuf
 @streamsize
-@cin
-@cout
-@cerr
 
 // allowed for now
 using std::cin;
 using std::cout;
 using std::cerr;
+using std::clog;
 using std::endl;
 using std::flush;
 

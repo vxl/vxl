@@ -1,22 +1,36 @@
 #ifndef vcl_iso_cstdlib_h_
 #define vcl_iso_cstdlib_h_
-/*
-  fsm@robots.ox.ac.uk
-*/
 
 #include <cstdlib>
 
+@abs
+@div
+@labs
+@ldiv
+@srand
+@rand
+@atexit
+@getenv
+@system
 @exit
 @abort
 @size_t
-@abs
-@abort
 @qsort
-@free
+@calloc
 @malloc
+@free
+@realloc
+@atol
+@atof
+@atoi
+@mblen
+@mbstowcs
+@mbtowc
+@strtod
 @strtol
 @strtoul
-@realloc
+@wctomb
+@wcstombs
 
 using std::exit;
 using std::abort;

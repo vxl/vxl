@@ -1,8 +1,6 @@
 #ifndef vcl_iso_algorithm_txx_
 #define vcl_iso_algorithm_txx_
-/*
-  fsm@robots.ox.ac.uk
-*/
+
 #include <vcl/vcl_algorithm.h>
 
 #define VCL_SWAP_INSTANTIATE(T) /* */

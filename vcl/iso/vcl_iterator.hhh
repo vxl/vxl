@@ -1,8 +1,5 @@
 #ifndef vcl_iso_iterator_h_
 #define vcl_iso_iterator_h_
-/*
-  fsm@robots.ox.ac.uk
-*/
 
 #include <iterator>
 
@@ -11,9 +8,12 @@
 @reverse_iterator
 @istream_iterator
 @ostream_iterator
+@istreambuf_iterator
+@ostreambuf_iterator
 @back_insert_iterator
 @front_insert_iterator
 @insert_iterator
+@inserter
 @input_iterator_tag
 @output_iterator_tag
 @forward_iterator_tag

@@ -1,11 +1,36 @@
 #ifndef vcl_iso_ios_h_
 #define vcl_iso_ios_h_
-/*
-  fsm@robots.ox.ac.uk
-*/
 
 #include <ios>
 
+// 27.4
 @ios
+@streamoff
+@streamsize
+@fpos
+@basic_ios
+@boolalpha
+@noboolalpha
+@showbase
+@noshowbase
+@showpoint
+@noshowpoint
+@showpos
+@noshowpos
+@skipws
+@noskipws
+@uppercase
+@nouppercase
+@internal
+@left
+@right
+@dec
+@hex
+@oct
+@fixed
+@scientific
+
+// the std::ios::(in|out|etc) flags should
+// live in this header file (27.4.2).
 
 #endif

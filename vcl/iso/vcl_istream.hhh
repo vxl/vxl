@@ -1,11 +1,13 @@
 #ifndef vcl_iso_istream_h_
 #define vcl_iso_istream_h_
-/*
-  fsm@robots.ox.ac.uk
-*/
 
 #include <istream>
 
+@basic_istream
 @istream
+@wistream
+@basic_iostream
+@iostream
+@wiostream
 
 #endif

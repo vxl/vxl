@@ -1,8 +1,5 @@
 #ifndef vcl_iso_memory_h_
 #define vcl_iso_memory_h_
-/*
-  fsm@robots.ox.ac.uk
-*/
 
 #include <memory>
 

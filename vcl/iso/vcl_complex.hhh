@@ -1,18 +1,26 @@
 #ifndef vcl_iso_complex_h_
 #define vcl_iso_complex_h_
-/*
-  fsm@robots.ox.ac.uk
-*/
 
 #include <complex>
 
 @complex
 @real
 @imag
-@polar
 @abs
-@sqrt
-@conj
+@arg
 @norm
+@conj
+@polar
+@cos
+@cosh
+@exp
+@log
+@log10
+@pow
+@sin
+@sinh
+@sqrt
+@tan
+@tanh
 
 #endif

@@ -1,8 +1,5 @@
 #ifndef vcl_iso_cmath_h_
 #define vcl_iso_cmath_h_
-/*
-  fsm@robots.ox.ac.uk
-*/
 
 #include <cmath>
 
@@ -23,7 +20,6 @@
 @log
 @log10
 @modf
-@pow
 @pow
 @sin
 @sinh

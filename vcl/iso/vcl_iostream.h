@@ -1,11 +1,26 @@
 #ifndef vcl_iso_iostream_h_
 #define vcl_iso_iostream_h_
-/*
-  fsm@robots.ox.ac.uk
-*/
 
 #include <iostream>
 
+// cin
+#ifndef vcl_cin
+#define vcl_cin std::cin
+#endif
+// cout
+#ifndef vcl_cout
+#define vcl_cout std::cout
+#endif
+// cerr
+#ifndef vcl_cerr
+#define vcl_cerr std::cerr
+#endif
+// clog
+#ifndef vcl_clog
+#define vcl_clog std::clog
+#endif
+// the following are not actually in the
+// <iostream> synopsis:
 // ios
 #ifndef vcl_ios
 #define vcl_ios std::ios
@@ -54,6 +69,10 @@
 #ifndef vcl_endl
 #define vcl_endl std::endl
 #endif
+// flush
+#ifndef vcl_flush
+#define vcl_flush std::flush
+#endif
 // streampos
 #ifndef vcl_streampos
 #define vcl_streampos std::streampos
@@ -66,23 +85,12 @@
 #ifndef vcl_streamsize
 #define vcl_streamsize std::streamsize
 #endif
-// cin
-#ifndef vcl_cin
-#define vcl_cin std::cin
-#endif
-// cout
-#ifndef vcl_cout
-#define vcl_cout std::cout
-#endif
-// cerr
-#ifndef vcl_cerr
-#define vcl_cerr std::cerr
-#endif
 
 // allowed for now
 using std::cin;
 using std::cout;
 using std::cerr;
+using std::clog;
 using std::endl;
 using std::flush;
 

@@ -1,8 +1,6 @@
 #ifndef vcl_complex_txx_
 #define vcl_complex_txx_
-/*
-  fsm@robots.ox.ac.uk
-*/
+
 #include <vcl/vcl_complex.h>
 
 #undef vcl_complex_INSTANTIATE

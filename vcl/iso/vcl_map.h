@@ -1,8 +1,5 @@
 #ifndef vcl_iso_map_h_
 #define vcl_iso_map_h_
-/*
-  fsm@robots.ox.ac.uk
-*/
 
 #include <map>
 
@@ -13,6 +10,10 @@
 // multimap
 #ifndef vcl_multimap
 #define vcl_multimap std::multimap
+#endif
+// swap
+#ifndef vcl_swap
+#define vcl_swap std::swap
 #endif
 
 #endif

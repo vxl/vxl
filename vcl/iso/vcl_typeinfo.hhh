@@ -1,9 +1,10 @@
 #ifndef vcl_iso_typeinfo_h_
 #define vcl_iso_typeinfo_h_
-/*
-  fsm@robots.ox.ac.uk
-*/
 
 #include <typeinfo>
+
+@type_info
+@bad_cast
+@bad_typeid
 
 #endif
