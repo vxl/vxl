@@ -8,6 +8,7 @@ TESTS += vul_test_root_dir.cxx
 TESTS += vul_test_temp_filename.cxx
 TESTS += vul_test_psfile.cxx
 TESTS += vul_test_url.cxx
+TESTS += vul_test_file_iterator.cxx
 
 IULIBS := -lvul -lvpl
 
