@@ -5,6 +5,8 @@ aren't documented here, unless the bug-fix has a major observable
 effect. If you change something in VXL, please document it here.
 
 ---------------------------------------------------------------------------
+      - Added NITF support to vil. This format is used in satellite imaging.
+
       - Brought mbl_mz_random into core/vnl/vnl_random. This random
         random number generator provides the same sequence on many platforms.
 
