@@ -13,6 +13,14 @@ class mil_transform_2d;
 //  The valid region is [0,nx()-1][0,ny()-1]
 //  world2im() gives transformation from world to image co-ordinates
 class mil_image_2d : public mil_image {
+private:
+    //: Resize current planes to [0..nx-1][0..ny-1]
+	//  Provided because we can't overload virtual functions
+    virtual void resize2(int nx, int ny) = 0;
+
+    //: Resize to n_planes of [0..nx-1][0..ny-1]
+	//  Provided because we can't overload virtual functions
+    virtual void resize3(int nx, int ny, int n_planes) = 0;
 
 public:
 
@@ -31,17 +39,18 @@ public:
     //: Set world-to-image transformation
     virtual void setWorld2im(const mil_transform_2d& w2i) =0;
 
-    //: Resize to [0..nx-1][0..ny-1]
-    virtual void resize(int nx, int ny) = 0;
+    //: Resize current planes to [0..nx-1][0..ny-1]
+	//  Implemented using resize2()
+    void resize(int nx, int ny)
+	{ resize2(nx,ny); }
 
-    //: Width of image
-    virtual int nx() const = 0;
+    //: Resize to n_planes of [0..nx-1][0..ny-1]
+	//  Implemented using resize2()
+    void resize(int nx, int ny, int n_planes)
+	{ resize3(nx,ny,n_planes); }
 
-    //: Height of image
-    virtual int ny() const =0;
-
-    //: Number of planes of image
-    virtual int nPlanes() const = 0;
+    //: Depth of image (set to 1 for 2D images)
+    virtual int nz() const { return 1; }
 };
 
 #endif // mil_image_2d_h_

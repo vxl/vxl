@@ -87,7 +87,7 @@ template<class T> mil_image_2d_of<T>::~mil_image_2d_of()
 //: Resize all planes
 //=======================================================================
 template<class T>
-void mil_image_2d_of<T>::resize(int nx, int ny)
+void mil_image_2d_of<T>::resize2(int nx, int ny)
 {
 	if (nx==nx_ && ny==ny_  || nPlanes()==0) return;
 
@@ -106,6 +106,14 @@ void mil_image_2d_of<T>::resize(int nx, int ny)
 	ny_ = ny;
 	xstep_ = 1;
 	ystep_ = nx;
+}
+
+//: Resize to n_planes of [0..nx-1][0..ny-1]
+template<class T>
+void mil_image_2d_of<T>::resize3(int nx, int ny, int n_planes)
+{
+  setNPlanes(n_planes);
+  resize2(nx,ny);
 }
 
 //=======================================================================

@@ -47,6 +47,12 @@ private:
 
 	void release_data();
 
+    //: Resize current planes to [0..nx-1][0..ny-1]
+    virtual void resize2(int nx, int ny);
+
+    //: Resize to n_planes of [0..nx-1][0..ny-1]
+    virtual void resize3(int nx, int ny, int n_planes);
+
 public:
 
 		//: Dflt ctor
@@ -69,9 +75,6 @@ public:
 		//  Each plane will be resized to (0,0)
 		//  Default number of planes is 1
 	void setNPlanes(int n);
-
-		//: Resize to [0..nx-1][0..ny-1]
-	virtual void resize(int nx, int ny);
 
 		//: Define parameters 
 		//  planes[i] is pointer to i'th plane of nx x ny image data

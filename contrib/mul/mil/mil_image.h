@@ -31,6 +31,18 @@ public:
 	    //: Number of dimensions of image
     virtual int n_dims() const = 0;
 
+    //: Width of image
+    virtual int nx() const = 0;
+
+    //: Height of image
+    virtual int ny() const =0;
+
+    //: Depth of image (set to 1 for 2D images)
+    virtual int nz() const =0;
+
+    //: Number of planes of image
+    virtual int nPlanes() const = 0;
+
 		//: Version number for I/O 
 	short version_no() const;
 
