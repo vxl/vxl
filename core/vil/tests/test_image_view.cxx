@@ -1,6 +1,7 @@
 // This is mul/vil2/tests/test_image_view.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
+#include <vcl_sstream.h>
 #include <vcl_functional.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vil2/vil2_crop.h>
@@ -10,16 +11,6 @@
 #include <vil2/vil2_convert.h>
 #include <vil2/vil2_view_as.h>
 #include <vil2/vil2_image_view.h>
-
-bool Equal(const vil2_image_view<vxl_byte>& im0,
-           const vil2_image_view<vxl_byte>& im1)
-{
-  return im0.nplanes()==im1.nplanes()
-      && im0.ni() == im1.ni()
-      && im0.nj() == im1.nj()
-      && im0(0,0,0) == im1(0,0,0)
-      && im0(1,1,1) == im1(1,1,1);
-}
 
 template <class S, class T>
 void test_image_view(S d1, vcl_string s_name, T d2)
@@ -54,7 +45,7 @@ void test_image_view(S d1, vcl_string s_name, T d2)
   }
 
 
-   vil2_image_view<S> image2;
+  vil2_image_view<S> image2;
   {
     // Check data remains valid if a copy taken
     vil2_image_view<S> image3;
@@ -186,6 +177,49 @@ void test_image_view(S d1, vcl_string s_name, T d2)
   vil2_print_all(vcl_cout, image7);
 }
 
+static
+void test_contiguous()
+{
+  vil2_image_view<vxl_byte> im1( 4, 5, 6 );
+  TEST( "internal memory: contiguous", im1.is_contiguous(), true );
+
+  vxl_byte memory[ 3*5*7 ];
+
+  for( unsigned d1 = 0; d1 < 3; ++d1 ) {
+    for( unsigned d2 = 0; d2 < 3; ++d2 ) {
+      if( d2==d1 ) continue;
+      for( unsigned d3 = 0; d3 < 3; ++d3 ) {
+        if( d3==d1 || d3==d2 ) continue;
+        int step[3];
+        step[d1] = 1;
+        step[d2] = 3;
+        step[d3] = 15;
+        vcl_ostringstream str;
+        str << "external memory: " << step[0] << "x"<<step[1]<<"x"<<step[2]<<" step contiguous";
+        vil2_image_view<vxl_byte> im( memory, 3, 5, 7, step[d1], step[d2], step[d3] );
+        TEST( str.str().c_str(), im.is_contiguous(), true );
+      }
+    }
+  }
+
+  for( unsigned d1 = 0; d1 < 3; ++d1 ) {
+    for( unsigned d2 = 0; d2 < 3; ++d2 ) {
+      if( d2==d1 ) continue;
+      for( unsigned d3 = 0; d3 < 3; ++d3 ) {
+        if( d3==d1 || d3==d2 ) continue;
+        int step[3];
+        step[d1] = 2;
+        step[d2] = 3;
+        step[d3] = 15;
+        vcl_ostringstream str;
+        str << "external memory: " << step[0] << "x"<<step[1]<<"x"<<step[2]<<" step not contiguous";
+        vil2_image_view<vxl_byte> im( memory, 3, 5, 7, step[d1], step[d2], step[d3] );
+        TEST( str.str().c_str(), im.is_contiguous(), false );
+      }
+    }
+  }
+}
+
 
 MAIN( test_image_view )
 {
@@ -194,6 +228,7 @@ MAIN( test_image_view )
            << " Testing vil2_image_view<byte and float>\n"
            << "*****************************************\n";
   test_image_view(vxl_byte(), "vxl_byte", float());
+  test_contiguous();
 
 
   SUMMARY();
