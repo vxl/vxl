@@ -34,6 +34,7 @@
 #include <vgui/vgui_key.h>
 #include <vgui/vgui_modifier.h>
 #include <vtol/vtol_face_2d_sptr.h>
+#include <vtol/vtol_intensity_face.h>
 #include <gevd/gevd_float_operators.h>
 #include <sdet/sdet_region_proc_params.h>
 #include <sdet/sdet_region_proc.h>
@@ -322,16 +323,14 @@ void bmvv_multiview_manager::regions()
       bgui_vtol2D_tableau_sptr btab = this->get_selected_vtol2D_tableau();
       if (!btab)
         {
-          vcl_cout << "In bmvv_multiview_manager::regions() - "
-                   << "null tableau\n";
+          vcl_cout << "In bmvv_multiview_manager::regions() - null tableau\n";
           return;
         }
       vil1_image ed_img = rp.get_edge_image();
       vgui_image_tableau_sptr itab =  btab->get_image_tableau();
       if (!itab)
         {
-          vcl_cout << "In bmvv_multiview_manager::regions() - "
-                   << "null image tableau\n";
+          vcl_cout << "In bmvv_multiview_manager::regions() - null image tableau\n";
           return;
         }
       itab->set_image(ed_img);
@@ -354,8 +353,7 @@ void bmvv_multiview_manager::read_xml_edges()
   bgui_vtol2D_tableau_sptr btab = this->get_selected_vtol2D_tableau();
   if (!btab)
     {
-      vcl_cout << "In bmvv_multiview_manager::regions() - "
-               << "null tableau\n";
+      vcl_cout << "In bmvv_multiview_manager::regions() - null tableau\n";
       return;
     }
   vcl_vector<vtol_edge_2d_sptr> edges;
@@ -388,14 +386,13 @@ void bmvv_multiview_manager::show_epipolar_line()
   bgui_picker_tableau_sptr pkt = this->get_picker_tableau_at(col, row);
   if (!pkt)
     {
-      vcl_cout << "In bmvv_multiview_manager::show_epipolar_line() - "
-               << "null tableau\n";
+      vcl_cout << "In bmvv_multiview_manager::show_epipolar_line() - null tableau\n";
       return;
     }
   float x = 0, y=0;
   pkt->pick_point(&x, &y);
-  vgui::out << "p(" << x << " " << y << ")\n";
-  vcl_cout << "p(" << x << " " << y << ")\n";
+  vgui::out << "p(" << x << ' ' << y << ")\n";
+  vcl_cout << "p(" << x << ' ' << y << ")\n";
 
   col = 1;//right image
   bgui_vtol2D_tableau_sptr v2D = this->get_vtol2D_tableau_at(col,row);
@@ -426,7 +423,7 @@ void bmvv_multiview_manager::select_curve_corres()
           {
             vgui_soview* sov = sovs[i];
             int id = sov->get_id();
-            vcl_cout << "id = " << id << "\n";
+            vcl_cout << "id = " << id << '\n';
             vtol_edge_2d_sptr e = (*bit)->get_mapped_edge(id);
             vsol_curve_2d_sptr c = e->curve();
             vdgl_digital_curve_sptr dc = c->cast_to_digital_curve();
@@ -546,7 +543,7 @@ void bmvv_multiview_manager::track_edges()
   // frame 0
   for (int i=0;i<tracker.get_output_size_at(0);++i)
   {
-    //vcl_cout<<".";
+    //vcl_cout<<'.';
     vdgl_interpolator_sptr  intp = new vdgl_interpolator_linear( tracker.get_output_curve_at(0,i) );
     vdgl_digital_curve_sptr dc = new vdgl_digital_curve(intp);
     draw_colored_digital_curve(0,0, dc, tracker.get_output_id_at(0,i) );
@@ -554,7 +551,7 @@ void bmvv_multiview_manager::track_edges()
   // frame 1
   for (int i=0;i<tracker.get_output_size_at(1);i++)
   {
-    //vcl_cout<<".";
+    //vcl_cout<<'.';
     vdgl_interpolator_sptr  intp = new vdgl_interpolator_linear( tracker.get_output_curve_at(1,i) );
     vdgl_digital_curve_sptr dc = new vdgl_digital_curve(intp);
     draw_colored_digital_curve(1,0, dc, tracker.get_output_id_at(1,i) );
@@ -601,7 +598,7 @@ void bmvv_multiview_manager::set_changing_colors(int num, float *r, float *g, fl
     case 5 : (*r) = s; (*g) = 0; (*b) = s; break;
     default: (*r) = 0; (*g) = 0; (*b) = 0; break; // this will never happen
   }
-  //vcl_cout<<"color : "<<(*r)<<" : "<<(*g)<<" : "<<(*b)<<"\n";
+  //vcl_cout<<"color : "<<(*r)<<" : "<<(*g)<<" : "<<(*b)<<'\n';
 
   return;
 }
