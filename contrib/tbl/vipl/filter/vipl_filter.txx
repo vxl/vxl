@@ -267,7 +267,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
 }
 
 // What is the ``start coordinate for the current apply section. This always
-// leaves a boarder around the section. (E.g. if there is no ROA this is
+// leaves a border around the section. (E.g. if there is no ROA this is
 // actual section start + image_boarder_size; remember section iteration
 // overlaps). If the current section is outside the ROA, the section_start
 // and section_end may be equal.
@@ -296,6 +296,8 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
       }
       return st;
     }
+    vcl_cerr << "Warning: called start but no valid sections defined. Returning 0\n";
+    return 0;
   } else {
     // should we consider insecp????
     if(secp()){ // ok have a valid section
@@ -318,6 +320,8 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
       if(ROA()) st = vcl_min(end,vcl_max(st,ROA()->curr_sec_start(axis)+ibs));
       return st;
     }
+    vcl_cerr << "Warning: called start but no valid sections defined. Returning 0\n";
+    return 0;
   }
   //else // error
   vcl_cerr << "Warning: called start but no valid sections defined. Returning 0\n";
@@ -330,7 +334,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
 { return start(axis); }
 
 // What is the ``stopping'' coordinate for the current apply section This
-// always leaves a boarder around the section. (E.g. if there is no ROA this
+// always leaves a border around the section. (E.g. if there is no ROA this
 // is actual section end - image_boarder_size; remember section iteration
 // overlaps). If the current section is outside the ROA, the section_start
 // and section_end may be equal.
@@ -357,6 +361,8 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
         if(inROA()) st = vcl_min(end,vcl_max(st,inROA()->curr_sec_start(axis)+ibs));
       return end;
     }
+    vcl_cerr << "Warning: called stop but no valid sections defined. Returning 0\n";
+    return 0;
   } else {
     if(secp()){ // ok have a valid section
       int ibs = image_border_size();
@@ -375,6 +381,8 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
       if(ROA()) st = vcl_min(end,vcl_max(st,ROA()->curr_sec_start(axis)+ibs));
       return end;
     }
+    vcl_cerr << "Warning: called stop but no valid sections defined. Returning 0\n";
+    return 0;
   }
   //else // error
   vcl_cerr << "Warning: called stop but no valid sections defined. Returning 0\n";
