@@ -65,7 +65,7 @@ IF(NETLIB_FOUND)
     SET_SOURCE_FILES_PROPERTIES(test_finite.cxx COMPILE_FLAGS -O0)
   ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
-  TARGET_LINK_LIBRARIES( vnl_test_driver vnl_algo vnl vpl vul testlib )
+  TARGET_LINK_LIBRARIES( vnl_test_driver vnl_algo vnl vpl vul testlib ${CMAKE_THREAD_LIBS} )
 
   ADD_TEST( vnl_test_include                  vnl_test_driver test_include                 )
   ADD_TEST( vnl_test_amoeba                   vnl_test_driver test_amoeba                  )
