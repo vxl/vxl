@@ -63,7 +63,7 @@ class bmvv_cal_manager : public vgui_wrapper_tableau
   //: the virtual handle function
   virtual bool handle(const vgui_event&);
 
-  void load_image_file(vcl_string image_filename, bool greyscale, unsigned col, unsigned row);
+  void load_image_file(vcl_string image_filename, bool greyscale);
  protected:
   //:internal utility methods
   void draw_corr_point(const float x, const float y);

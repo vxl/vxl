@@ -109,8 +109,9 @@ void bmvv_cal_manager::quit()
 //=========================================================================
 //: load an image an put it in the currently selected grid cell
 //=========================================================================
-void bmvv_cal_manager::load_image_file(vcl_string image_filename, bool /* greyscale */, unsigned col, unsigned row)
+void bmvv_cal_manager::load_image_file(vcl_string image_filename, bool /* greyscale */)
 {
+  //add greyscale later
   img_ = vil_load_image_resource(image_filename.c_str());
   if (!img_)
   {
