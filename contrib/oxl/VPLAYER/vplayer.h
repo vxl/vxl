@@ -17,6 +17,8 @@ vgui_image_tableau_sptr get_image_tableau_at(unsigned col, unsigned row);
 vgui_easy2D_sptr get_easy2D_at(unsigned col, unsigned row);
 vgui_rubberbander_sptr get_rubberbander_at(unsigned col, unsigned row);
 void get_current(unsigned* col, unsigned* row);
-class xcv_tableau_sptr;
-extern xcv_tableau_sptr xcv_tab;
+// No need to export xcv_tab:
+//class xcv_tableau;
+//typedef vgui_tableau_sptr_t<xcv_tableau> xcv_tableau_sptr;
+//extern xcv_tableau_sptr xcv_tab;
 #endif // vplayer_h_
