@@ -1298,6 +1298,11 @@ SOURCE=.\Templates/vnl_vector_fixed_ref+vnl_bignum.2-.cxx
 SOURCE=.\Templates/vnl_vector_fixed_ref+vnl_bignum.3-.cxx
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_matlab_print+uint-.cxx
+
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
