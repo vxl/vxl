@@ -105,6 +105,7 @@ $endtime="";
 @current= {};
 $index= 0;
 $nextindex= 0;
+$htmlerrorlink= 0;
 
 ### build stats
 %allbuilds = ();
@@ -116,7 +117,7 @@ $nextindex= 0;
 @buildchildrenwarnings = [];
 @buildchildrenerrors   = [];
 @buildlogs= [];
-$fullbuildlog= "";
+$fullbuildlog="<a href=\"\#ERRORLINK$htmlerrorlink\">Jump to next error</a><br>\n";
 #%buildtime = ();
 
 ########################
@@ -189,7 +190,10 @@ while( $in=<INFO>)
     elsif( m/$gmake_errorindirectory/)
       {
         $builderrors[$index]++;
-        $currentlineweb="<font color=red>$currentlineweb</font>";
+	$currentlineweb="<a name=\"ERRORLINK$htmlerrorlink\">";
+        $currentlineweb.="<font color=red>$currentlineweb</font>";
+	$htmlerrorlink++;
+	$currentlineweb.="<a href=\"\#ERRORLINK$htmlerrorlink\">Jump to next error</a><br>\n";
       }
     elsif( m/Beginning TargetJr make:\s*(.*)$/)
       {
@@ -211,6 +215,9 @@ while( $in=<INFO>)
 
     $fullbuildlog.= $currentlineweb;
   }
+
+$fullbuildlog.="<a name=\"ERRORLINK$htmlerrorlink\">No more errors.<br>\n";
+
 
 ##############################################
 # find the common sub-directory for each build
