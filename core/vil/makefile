@@ -28,8 +28,12 @@ MANPAGE_SOURCES += vil2_math.h
 MANPAGE_SOURCES += vil2_property.h
 SOURCES += vil2_clamp.cxx
 SOURCES += vil2_transpose.cxx
+SOURCES += vil2_flip.cxx
+SOURCES += vil2_plane.cxx
+SOURCES += vil2_print.cxx
+MANPAGE_SOURCES += vil2_view_as.h
 
-SUBDIRS += algo
+SUBDIRS += algo io
 
 ifndef NOTEST
  SUBDIRS += tests examples

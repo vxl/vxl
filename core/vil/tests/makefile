@@ -1,5 +1,7 @@
 USES = vxl mul
+include ${IUEROOT}/mul/vil2/config.mk
 include ${IUEROOT}/mul/vil2/algo/config.mk
+include ${IUEROOT}/mul/vil2/io/config.mk
 include ${IUEROOT}/vxl/vul/config.mk
 include ${IUEROOT}/vxl/vpl/config.mk
 include ${IUEROOT}/vxl/testlib/config.mk
@@ -20,6 +22,7 @@ TESTS += test_sample_grid_bilin.cxx
 TESTS += test_algo_exp_filter_1d.cxx
 TESTS += test_pixel_format.cxx
 TESTS += test_image_view_maths.cxx
+TESTS += test_memory_chunk.cxx
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk
