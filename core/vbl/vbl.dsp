@@ -218,6 +218,11 @@ SOURCE=.\Templates/vbl_array_3d+void~-.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\vbl_bit_array_3d.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\Templates/vbl_bounding_box+double.2-.cxx
 
 # End Source File
