@@ -19,8 +19,9 @@ include $(IUEROOT)/vxl/vnl/client.mk
 include ${IUEROOT}/config/top.mk
 ################################
 
-all:
-	$(SHELL) -x ./time_fastops.mk
+all: $(RELOBJDIR)/time_fastops.40
+$(RELOBJDIR)/time_fastops.40: time_fastops.cxx time_fastops.mk
+	$(SHELL) time_fastops.mk
 
 speeds: $(RELOBJDIR)/time_fastops_O_M1
 
