@@ -50,6 +50,7 @@ TESTS += test_finite.cxx
 TESTS += test_diag_matrix.cxx
 TESTS += test_gamma.cxx
 TESTS += test_arithmetic.cxx
+TESTS += test_cholesky.cxx
 
 MANPAGE_SOURCES += test_arithmetic_body.h
 

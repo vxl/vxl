@@ -25,6 +25,10 @@ SOURCES += clsfy_rbf_svm_smo_1_builder.cxx
 SOURCES += clsfy_adaboost_sorted_builder.cxx
 SOURCES += clsfy_adaboost_trainer.cxx
 SOURCES += clsfy_binary_threshold_1d_builder.cxx
+SOURCES += clsfy_direct_boost.cxx
+SOURCES += clsfy_direct_boost_builder.cxx
+SOURCES += clsfy_mean_square_1d.cxx
+SOURCES += clsfy_mean_square_1d_builder.cxx
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
