@@ -40,7 +40,7 @@ class vil_pixel_traits<char>
 {
  public:
   //: Type of individual components
-  typedef bool component_type;
+  typedef char component_type;
 };
 
 #if !VCL_CANNOT_SPECIALIZE_CV
