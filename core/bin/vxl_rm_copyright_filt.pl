@@ -14,27 +14,26 @@ $begin = 0;
 
 while (<>)
 {
+  if ( /$startpatt/ )
+  {
+    $begin = 1;
+    next;
+  }
 
-	if ( /$startpatt/ )
-	{
-		$begin = 1;
-		next;
-	}
-		
-	if ( /$endpatt/ )
-	{
-		$begin = 0;
-		next;
-	}
+  if ( /$endpatt/ )
+  {
+    $begin = 0;
+    next;
+  }
 
-	if ( $begin )
-	{
-		next;
-	}
-	else
-	{
-		print;
-	}
+  if ( $begin )
+  {
+    next;
+  }
+  else
+  {
+    print;
+  }
 }
 
 #========================================================

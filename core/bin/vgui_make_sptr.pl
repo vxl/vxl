@@ -17,7 +17,7 @@ exec perl -w -x $0 ${1+"$@"}
 # Options: -n     dry run
 #
 #
-# Notes: Given a class name 'blah', the script will attempt to create 
+# Notes: Given a class name 'blah', the script will attempt to create
 # a header file 'blah.h' and to insert (or replace) a definition of
 # 'blah_new' in the given source file.
 #
@@ -34,9 +34,9 @@ exec perl -w -x $0 ${1+"$@"}
 #     ctor2(...);
 #   }
 #
-#blah_new:   
+#blah_new:
 #   // Define the _new type. The definition of blah must be visible
-#   // before we can do this. Usually, the _new class should appear 
+#   // before we can do this. Usually, the _new class should appear
 #   // immediately after blah and should duplicate its constructors.
 #   struct blah_new : public blah_sptr {
 #     ctor1(...) : blah_sptr(new blah(...)) { }
@@ -45,7 +45,7 @@ exec perl -w -x $0 ${1+"$@"}
 #
 #
 # Missing features and known bugs:
-#  1. script could detect tableau base classes and derive 
+#  1. script could detect tableau base classes and derive
 #     the blah_new class from base_sptr?
 #
 #  2. script should not barf on seeing constructors from vgui_tableau*
@@ -85,10 +85,10 @@ sub strip_comments {
   for (my $i=0; $i<=$#lines; ++$i) {
     if ($inside_c_comment) {
       if ($lines[$i] =~ s/.*\*\///) {
-	$inside_c_comment = 0;
+        $inside_c_comment = 0;
       }
       else {
-	$lines[$i] = "";
+        $lines[$i] = "";
       }
     }
     else {
@@ -106,7 +106,7 @@ sub strip_comments {
 sub find_class_def {
   my ($name, @lines) = @_;
   @lines = &strip_comments(@lines);
-  
+
   my $struct_or_class = "";
   my $def_begin = -1;
   my $def_end = -1;
@@ -114,7 +114,7 @@ sub find_class_def {
 
   my $brace_count = 0;
   my $brace_counted = 0;
-  
+
   for (my $i=0; $i<=$#lines; ++$i) {
     # detect beginning of definition.
     if (($def_begin < 0) && ($lines[$i] =~ m/^\s*(struct|class)\s+$name\b(.*)/)) {
@@ -122,34 +122,34 @@ sub find_class_def {
       my $rest = $2;
       if    ($rest =~ m/\s*\;/) { }
       else {
-	if (($i > 0) && ($lines[$i-1] =~ m/\btemplate\s*\<(.*)\>/)) {
-	  $def_begin = $i-1;
-	  $template_clause = $1;
-	}
-	else {
-	  $def_begin = $i;
-	  $template_clause = "";
-	}
+        if (($i > 0) && ($lines[$i-1] =~ m/\btemplate\s*\<(.*)\>/)) {
+          $def_begin = $i-1;
+          $template_clause = $1;
+        }
+        else {
+          $def_begin = $i;
+          $template_clause = "";
+        }
       }
     }
-    
+
     # count braces.
     if (($def_begin >= 0) && ($def_end < 0)) {
       my $t = $lines[$i];
       $t =~ s/[^\{\}]//g;
       $t =~ s/\{\}//g;
       foreach my $c (split //, $t) {
-	if ($c eq "{") { ++$brace_count; $brace_counted = 1; }
-	if ($c eq "}") { --$brace_count; }
+        if ($c eq "{") { ++$brace_count; $brace_counted = 1; }
+        if ($c eq "}") { --$brace_count; }
       }
     }
-    
+
     # detect end of definition.
     if (($def_begin >= 0) && ($def_end < 0) && ($brace_counted) && ($brace_count == 0)) {
       $def_end = $i + 1;
     }
   }
-  
+
   # return
   return ($struct_or_class, $def_begin, $def_end, $template_clause);
 }
@@ -195,10 +195,10 @@ sub do_sptr {
       return;
     }
   }
-  
+
   ##############################
   # scan through the source file:
-  
+
   # find extent of definition of blah:
   my ($struct_or_class, $blah_begin, $blah_end, $template_clause) = &find_class_def($blah, @line);
   die "$me: definition of '$blah' not found\n" if (($blah_begin < 0) || ($blah_end < 0));
@@ -224,7 +224,7 @@ sub do_sptr {
     print STDERR "$me: template_args = '$template_args'\n";
     print STDERR "$me: found definition of 'template <${template_clause}> $struct_or_class $blah':\n";
   }
-  
+
   # collect list of blah's constructor signatures:
   my @blah_ctor = &ctor_signatures($blah, $blah_begin, $blah_end, @line);
   for (my $i=0; $i<=$#blah_ctor; ++$i) {
@@ -232,7 +232,7 @@ sub do_sptr {
       die "$me: '$blah' has constructor from vgui_tableau *\n";
     }
   }
-  
+
   # look for definition of blah_new:
   my ($discarded_value, $blah_new_begin, $blah_new_end) = &find_class_def("${blah}_new", @line);
   my @blah_new_ctor = ();
@@ -247,7 +247,7 @@ sub do_sptr {
     @blah_new_ctor = &ctor_signatures("${blah}_new", $blah_new_begin, $blah_new_end, @line);
     for (my $i=0; $i<=$#blah_ctor; ++$i) {
       if ($blah_ctor[$i] =~ m/vgui_tableau\s*\*/) {
-	die "$me: '${blah}_new' has constructor from vgui_tableau *\n";
+        die "$me: '${blah}_new' has constructor from vgui_tableau *\n";
       }
     }
   }
@@ -258,9 +258,9 @@ sub do_sptr {
     if ($line[$i] =~ m/^\s*\#\s*include\s*([\"\<].*[\"\>])/) {
       my $h = $1;
       if ($h =~ m/\b$blah\_sptr\.h/) {
-	print STDERR "$me: found #include of ${blah}_sptr.h\n";
-	$gotsptr = 1;
-	last;
+        print STDERR "$me: found #include of ${blah}_sptr.h\n";
+        $gotsptr = 1;
+        last;
       }
     }
     if ($line[$i] =~ m/^\s*typedef\s+.*\s+$blah\_sptr\s*\;/) {
@@ -280,32 +280,32 @@ sub do_sptr {
     }
     else {
       if (! $dry_run) {
-	print STDERR "$me: create ${stem}_sptr.h\n";
-	die unless open(FD, ">${stem}_sptr.h");
-	$stem =~ s/[\+\-\.]/_/g;
-	print FD "#ifndef ${stem}_sptr_h_\n";
-	print FD "#define ${stem}_sptr_h_\n";
-	print FD "\n";
-	print FD "// this is a generated file.\n";
-	print FD "\n";
-	print FD "#include <vgui/vgui_tableau_sptr.h>\n";
-	print FD "\n";
-	if ($template_clause eq "") {
-	  print FD "$struct_or_class ${blah};\n";
-	  print FD "typedef vgui_tableau_sptr_t<${blah}> ${blah}_sptr;\n";
-	} else {
-	  print FD "template <$template_clause>\n";
-	  print FD "$struct_or_class ${blah};\n";
-	  print FD "\n";
-	  print FD "template <$template_clause>\n";
-	  print FD "struct ${blah}_sptr : public vgui_tableau_sptr_t<${blah}<$template_args> > {\n";
-	  print FD "  typedef vgui_tableau_sptr_t<${blah}<$template_args> > base;\n";
-	  print FD "  ${blah}_sptr(${blah}<$template_args> *p) : base(p) { }\n";
-	  print FD "};\n";
-	}
-	print FD "\n";
-	print FD "#endif\n";
-	close(FD);
+        print STDERR "$me: create ${stem}_sptr.h\n";
+        die unless open(FD, ">${stem}_sptr.h");
+        $stem =~ s/[\+\-\.]/_/g;
+        print FD "#ifndef ${stem}_sptr_h_\n";
+        print FD "#define ${stem}_sptr_h_\n";
+        print FD "\n";
+        print FD "// this is a generated file.\n";
+        print FD "\n";
+        print FD "#include <vgui/vgui_tableau_sptr.h>\n";
+        print FD "\n";
+        if ($template_clause eq "") {
+          print FD "$struct_or_class ${blah};\n";
+          print FD "typedef vgui_tableau_sptr_t<${blah}> ${blah}_sptr;\n";
+        } else {
+          print FD "template <$template_clause>\n";
+          print FD "$struct_or_class ${blah};\n";
+          print FD "\n";
+          print FD "template <$template_clause>\n";
+          print FD "struct ${blah}_sptr : public vgui_tableau_sptr_t<${blah}<$template_args> > {\n";
+          print FD "  typedef vgui_tableau_sptr_t<${blah}<$template_args> > base;\n";
+          print FD "  ${blah}_sptr(${blah}<$template_args> *p) : base(p) { }\n";
+          print FD "};\n";
+        }
+        print FD "\n";
+        print FD "#endif\n";
+        close(FD);
       }
     }
   }
@@ -313,7 +313,7 @@ sub do_sptr {
     print STDERR "$me: source file is not a header file\n";
   }
 
-  
+
   ##############################
   # compose definition of blah_new
   if ($gotnew) {
@@ -322,7 +322,7 @@ sub do_sptr {
       print STDERR "$me: '${blah}_new' has more constructors than '$blah'\n";
     }
   }
-  
+
   my @blah_new_def = ();
   {
     #print STDERR "$me: making definition of ${blah}_new\n";
@@ -336,83 +336,83 @@ sub do_sptr {
       push @blah_new_def, "struct ${blah}_new : public ${blah}_sptr<$template_args > {\n";
       push @blah_new_def, "  typedef ${blah}_sptr<$template_args > base;\n";
     }
-    
+
     # iterate over constructor signatures.
     for (my $i=0; $i<=$#blah_ctor; ++$i) {
       my $ct = $blah_ctor[$i];
       #print STDERR "$me: ct='$ct'\n";
-      
+
       # list of parameter signatures
       my @pars = split /,/, $ct;
-      
+
       # list of argument names.
       my @args = ();
-      
+
       # invent new argument name when none given.
       my $counter = 1000;
       for (my $j=0; $j<=$#pars; ++$j) {
-	my $a = $pars[$j];
+        my $a = $pars[$j];
 
-	# discard trailing whitespace
-	$a =~ s/\s*$//;
+        # discard trailing whitespace
+        $a =~ s/\s*$//;
 
-	# this to cope with tab(float const min[3], float const max[3]);
-	$a =~ s/\[[\d\s]*\]\s*$//g;
+        # this to cope with tab(float const min[3], float const max[3]);
+        $a =~ s/\[[\d\s]*\]\s*$//g;
 
-	# the parameter name is probably the trailing sequence of \w's
-	$a =~ s/^.*[^\w](\w*)\s*$/$1/;
+        # the parameter name is probably the trailing sequence of \w's
+        $a =~ s/^.*[^\w](\w*)\s*$/$1/;
 
-	#$a =~ s/^.*[\s\&]+//g;
+        #$a =~ s/^.*[\s\&]+//g;
 
-	if ($a eq "") {
-	  $a = "arg$counter";
-	  $pars[$j] .= " $a"; 
-	  ++$counter;
-	}
-	push @args, $a;
-	#print "$me: a = '$a'\n"; 
+        if ($a eq "") {
+          $a = "arg$counter";
+          $pars[$j] .= " $a";
+          ++$counter;
+        }
+        push @args, $a;
+        #print "$me: a = '$a'\n";
       }
-      
+
       # compose line.
       my $str = "";
-      
+
       # ctor signature.
       $str .= "  ${blah}_new(";
       for (my $j=0; $j<=$#pars; ++$j) {
-	$str .= ", " if ($j > 0);
-	$str .= $pars[$j];
+        $str .= ", " if ($j > 0);
+        $str .= $pars[$j];
       }
       $str .= ")";
-      
+
       # base initializer
       if ($template_clause eq "") {
-	$str .= " : base(new ${blah}(";
+        $str .= " : base(new ${blah}(";
       }
       else {
-	$str .= " : base(new ${blah}<$template_args >(";
+        $str .= " : base(new ${blah}<$template_args >(";
       }
       for (my $j=0; $j<=$#args; ++$j) {
-	$str .= ", " if ($j > 0);
-	$str .= "$args[$j]";
+        $str .= ", " if ($j > 0);
+        $str .= "$args[$j]";
       }
       $str .= "))";
-      
+
       # function body
       $str .= " { }\n";
-      
+
       push @blah_new_def, $str;
     }
-    
+
     # special case: no constructors
     if ($#blah_ctor == -1) {
       if ($template_clause eq "") {
-	push @blah_new_def, "  ${blah}_new() : base(new $blah) { }\n";
+        push @blah_new_def, "  ${blah}_new() : base(new $blah) { }\n";
       }
       else {
-	push @blah_new_def, "  ${blah}_new() : base(new $blah<$template_args >) { }\n";
+        push @blah_new_def, "  ${blah}_new() : base(new $blah<$template_args >) { }\n";
       }
     }
-    
+
     push @blah_new_def, "};\n";
   }
   #
@@ -423,15 +423,15 @@ sub do_sptr {
   ##############################
   # make new source file.
   my (@newfile) = ();
-  
+
   # first the stuff before the definition of blah:
   for (my $j=0; $j<$blah_begin; ++$j) {
     push @newfile, $line[$j];
   }
-  
+
   # then declare blah_sptr
   if ($file eq "$blah.h") {
-    # if it's a header file called "blah.h", insert a #include to 
+    # if it's a header file called "blah.h", insert a #include to
     # the _sptr file unless we've already seen one.
     if (! $gotsptr) {
       push @newfile, "#include \"${blah}_sptr.h\"\n";
@@ -443,24 +443,24 @@ sub do_sptr {
     if (! $gotsptr) {
       push @newfile, "#include <vgui/vgui_tableau_sptr.h>\n";
       if ($template_clause eq "") {
-	push @newfile, "$struct_or_class ${blah};\n";
-	push @newfile, "typedef vgui_tableau_sptr_t<${blah}> ${blah}_sptr;\n";
+        push @newfile, "$struct_or_class ${blah};\n";
+        push @newfile, "typedef vgui_tableau_sptr_t<${blah}> ${blah}_sptr;\n";
       } else {
-	push @newfile, "template <$template_clause>\n";
-	push @newfile, "struct ${blah}_sptr : public vgui_tableau_sptr_t<${blah}<$template_args> > {\n";
-	push @newfile, "  typedef vgui_tableau_sptr_t<${blah}<$template_args> > base;\n";
-	push @newfile, "  ${blah}_sptr(${blah}<$template_args> *p) : base(p) { }\n";
-	push @newfile, "};\n";
+        push @newfile, "template <$template_clause>\n";
+        push @newfile, "struct ${blah}_sptr : public vgui_tableau_sptr_t<${blah}<$template_args> > {\n";
+        push @newfile, "  typedef vgui_tableau_sptr_t<${blah}<$template_args> > base;\n";
+        push @newfile, "  ${blah}_sptr(${blah}<$template_args> *p) : base(p) { }\n";
+        push @newfile, "};\n";
       }
       push @newfile, "\n";
     }
   }
-  
+
   # then emit the definition of blah
   for (my $j=$blah_begin; $j < $blah_end; ++$j) {
     push @newfile, $line[$j];
   }
-  
+
   if (! $gotnew) {
     # emit the definition of blah_new just after the definition of blah:
     push @newfile, "\n";
@@ -475,21 +475,21 @@ sub do_sptr {
     # abort if something unexpected happens.
     die "$me: the definition of ${blah}_new must come after the definition of $blah\n"
       if ($blah_end > $blah_new_begin);
-    
+
     # emit the stuff between the def of blah and the def of blah_new
     for (my $j=$blah_end; $j<$blah_new_begin; ++$j) {
       push @newfile, $line[$j];
     }
     # overwrite the old definition of blah_new:
     push @newfile, @blah_new_def;
-    
+
     # emit the rest of the file
     for (my $j=$blah_new_end; $j<=$#line; ++$j) {
       push @newfile, $line[$j];
     }
   }
-  
-  
+
+
   # output new source file.
   print STDERR "$me: writing to $file.new\n";
   die unless open(FD, ">$file.new");
@@ -497,11 +497,11 @@ sub do_sptr {
     print FD $newfile[$j];
   }
   close(FD);
-  
+
   # show diffs
   shell("$os_diff $file $file.new");
   my $different = ($?) ? 1 : 0;
-  
+
   # rename old. replace with new.
   if ($dry_run) {
     shell("$os_rm $file.new");
@@ -520,12 +520,12 @@ sub do_sptr {
 
 sub main {
   my (@argv) = @_;
-  
+
   if ($argv[0] eq "-n") {
     $dry_run = 1;
     shift @argv;
   }
-  
+
   if    ($#argv == 0) {
     my $blah = $argv[0];
     my $file = "$blah.h";

@@ -1614,7 +1614,7 @@ int main()
   for(int y = 0; y < buf.height(); ++y)
     for(int x = 0; x < buf.width(); ++x)
       if (buf(x,y) < 200)
-	buf(x,y) = 0;
+        buf(x,y) = 0;
 
   vil_save(buf, "foothresh.ppm");
 @}

@@ -12,7 +12,7 @@ exec perl -w -x $0 ${1+"$@"}
 #     - each line is separated into code + comment.
 #     - header file conversion.
 #     - look for hints about various things, like whether
-#       'string' is a type or an identifier. 
+#       'string' is a type or an identifier.
 #     - conversion of code (using hints found).
 #     - emit code + comment for each processed line.
 #
@@ -21,7 +21,7 @@ exec perl -w -x $0 ${1+"$@"}
 #
 # Bugs and improvements.
 #   1. the script uses some pretty good heuristics to decide
-#      whether 'string' is an identifier or a type, but at 
+#      whether 'string' is an identifier or a type, but at
 #      the moment the decision is made globally, for an entire
 #      source file. it sometimes get it wrong.
 #
@@ -37,7 +37,7 @@ $vnl  = 0; # convert Numerics code to vnl
 $vil  = 0; # convert EasyImage to vil
 $vsl  = 0; #
 $vgui = 0; # convert old vgui to new vgui
-$lint = 0; # 
+$lint = 0; #
 $mvl  = 0;
 $cool = 0;
 
@@ -55,8 +55,8 @@ sub parse_options {
     elsif ($arg eq "-mvl")  { $mvl  = 1; }
     elsif ($arg eq "-cool") { $cool = 1; }
     elsif ($arg eq "-lint") { $lint = 1; }
-    else { 
-      print STDERR "dunno about '$arg'\n"; 
+    else {
+      print STDERR "dunno about '$arg'\n";
     }
   }
 }
@@ -100,7 +100,7 @@ $num_lines = 0;
 sub read_lines {
   @lines = ();
   @comments = ();
-  
+
   die unless open(FD, "-");
   while (<FD>) {
     # extract comment-part, if any. this is to make sure we only
@@ -127,17 +127,17 @@ sub process_headers {
   for (my $ii=0; $ii<$num_lines; ++$ii) {
     # copy line from array to $_:
     $_ = $lines[$ii];
-    
+
     # skip lines that contain the word "dont_vxl_filter"
     next if m/\bdont_vxl_filter\b/;
-    
+
     #---------------------------------------- old <vcl/vcl_blah> -> new <vcl_blah>
     s/include\s+<vcl\/([^>]*vcl_[^>]*)>/include <$1>/;
-    
+
     #---------------------------------------- Config-IUE -> vcl
     if ($vcl) {
       #-------------------- begin
-      
+
       # standard C headers <blah.h>
       s/include\s*<assert\.h>/include <vcl_cassert.h>/;
       s/include\s*<iso646\.h>/include <vcl_ciso646.h>/;
@@ -157,7 +157,7 @@ sub process_headers {
       s/include\s*<float\.h>/include <vcl_cfloat.h>/;
       s/include\s*<math\.h>/include <vcl_cmath.h>/;
       s/include\s*<stddef\.h>/include <vcl_cstddef.h>/;
-      
+
       # standard C headers <cblah>
       s/include\s*<cassert>/include <vcl_cassert.h>/;
       s/include\s*<ciso646>/include <vcl_ciso646.h>/;
@@ -177,7 +177,7 @@ sub process_headers {
       s/include\s*<cfloat>/include <vcl_cfloat.h>/;
       s/include\s*<cmath>/include <vcl_cmath.h>/;
       s/include\s*<cstddef>/include <vcl_cstddef.h>/;
-      
+
       # standard C++ headers <blah.h>
       s/include\s*<algorithm\.h>/include <vcl_algorithm.h>/;
       s/include\s*<iomanip\.h>/include <vcl_iomanip.h>/;
@@ -213,7 +213,7 @@ sub process_headers {
       #s/include\s*<limits\.h>/include <vcl_limits.h>/;
       s/include\s*<strstream\.h>/include <vcl_strstream.h>/;
       s/include\s*<strstrea\.h>/include <vcl_strstream.h>/;  # win32
-      
+
       # standard C++ headers <blah>
       s/include\s*<algorithm>/include <vcl_algorithm.h>/;
       s/include\s*<iomanip>/include <vcl_iomanip.h>/;
@@ -248,9 +248,9 @@ sub process_headers {
       s/include\s*<functional>/include <vcl_functional.h>/;
       s/include\s*<limits>/include <vcl_limits.h>/;
       s/include\s*<strstream>/include <vcl_strstream.h>/;
-      
+
       #-------------------- end
-      
+
       # the <IUE_*.h> bunch
       s/<IUE_compiler\.h>/<vcl_compiler.h>/;
       s/<IUE_specific_compiler\.h>/<vcl_compiler.h>/;
@@ -260,7 +260,7 @@ sub process_headers {
       s/<IUE_cmath\.h>/<vcl_cmath.h>/;
       s/\bIUE_long_double\b/long double/g;
       $saw_stlfwd = 1 if s!^\#include.*<IUE_stlfwd\.h>!//$&!;
-      
+
       # non-standard STL headers which can be fixed.
       s/include\s*<algo>/include <vcl_algorithm.h>/;
       s/include\s*<algo.h>/include <vcl_algorithm.h>/;
@@ -294,7 +294,7 @@ sub process_headers {
       s/\b(std::)?fstream\b/vcl_fstream/g;
       s/\b(std::)?ifstream\b/vcl_ifstream/g;
       s/\b(std::)?ofstream\b/vcl_ofstream/g;
-      
+
       # remember what we saw
       $saw_functional_h = 1 if m/include <vcl_functional\.h>/;
       $saw_map_h        = 1 if m/include <vcl_map\.h>/;
@@ -309,24 +309,24 @@ sub process_headers {
 
       # warn about hash_map and hash_set
       if ( m/include\s+\<hash_(map|set)\.h\>/ ) {
-	print STDERR "[WARNING: saw hash_map/hash_set]\n";
+        print STDERR "[WARNING: saw hash_map/hash_set]\n";
       }
-      
+
       # instantiation macros
       $saw_stl_instantiate = 1 if ( s/^(\#include <stl\-instantiate\.h>)/\/\/ stl-instantiate.h/ );
     }
-    
+
     #---------------------------------------- COOL -> vcl
     if ($cool) {
       s!<cool/String.h>!<vcl_string.h>!;
     }
-    
+
     #---------------------------------------- Basics -> vbl
     if ($vbl) {
       # headers
       s!Basics/ansi.h!vcl_compiler.h!;
       s!^\#include.*<Basics/point2d.h>!//$&!;  # delete Basics/point2d
-      
+
       s/<Basics\/RGB\.h>/<vil\/vil_rgb.h>/;
       s/<Basics\/RGBcell\.h>/<vil\/vil_rgb.h>/;
       s/<Basics\/RGBA\.h>/<vil\/vil_rgba.h>/;
@@ -352,18 +352,18 @@ sub process_headers {
       s/<Basics\/QSort\.h>/<vbl\/vbl_qsort.h>/;
       s!Basics/BoundingBox.h!vbl/vbl_bounding_box.h!;
       s!Basics/BoundingBox.C!vbl/vbl_bounding_box.txx!;
-      
+
       # sparse array things.
       s!<Basics/SparseArray([123])D.h>!<vbl/vbl_sparse_array_$1d.h>!;
       s!<Basics/SparseArray([123])D.C>!<vbl/vbl_sparse_array_$1d.txx>!;
       s!<Basics/SparseArray.h>!<vbl/vbl_sparse_array.h>!;
       s!<Basics/SparseArray.C>!<vbl/vbl_sparse_array.txx>!;
-      
+
       s/<cool\/Timer\.h>/<vbl\/vbl_timer.h>/;
       s/<cool\/RegExp\.h>/<vbl\/vbl_reg_exp.h>/;
       s!(\#include *\<cool\/decls.h\>)!//$1!;
     }
-    
+
     #---------------------------------------- Numerics -> vnl
     if ($vnl) {
       # includes
@@ -376,7 +376,7 @@ sub process_headers {
       s/<math\/DiagMatrix\.h>/<vnl\/vnl_diag_matrix.h>/;
       s/<math\/math\.h>/<vnl\/vnl_math.h>/;
       s/<math\/c_vector\.h>/<vnl\/vnl_c_vector.h>/;
-      
+
       s/<Numerics\/Math\.h>/<vnl\/vnl_math.h>/;
       s/<Numerics\/RPolyRoots\.h>/<vnl\/algo\/vnl_rpoly_roots.h>/;
       s/<Numerics\/CPolyRoots\.h>/<vnl\/algo\/vnl_cpoly_roots.h>/;
@@ -409,11 +409,11 @@ sub process_headers {
       s/<Numerics\/MatrixRef\.h>/<vnl\/vnl_matrix_ref.h>/;
       s/UnaryFunction\.h/vnl_unary_function.h>/;
       s/Identity\.h/vnl_identity.h>/;
-      
+
       s/<Numerics\/LevenbergMarquardt\.h>/<vnl\/algo\/vnl_levenberg_marquardt.h>/;
       s/<Numerics\/SymmetricEigensystem\.h>/<vnl\/algo\/vnl_symmetric_eigensystem.h>/;
       s/<Numerics\/DiscreteDiff\.h>/<vnl\/algo\/vnl_discrete_diff.h>/;
-      
+
       s/<Numerics\/ComplexVectorT/<vnl\/vnl_complex_vector_t/;
       s/<Numerics\/ComplexVector/<vnl\/vnl_complex_vector/;
       s/<Numerics\/ComplexMatrixT/<vnl\/vnl_complex_matrix_t/;
@@ -425,17 +425,17 @@ sub process_headers {
       s/<Numerics\/Double([0-9])\.h>/<vnl\/vnl_double_$1.h>/;
       s/<Numerics\/LinearOperators3\.h>/<vnl\/vnl_linear_operators_3.h>/;
       s/<Numerics\/ChiSquared\.h>/<vnl\/algo\/vnl_chi_squared.h>/;
-      
+
       s!<cool/Quaternion.h>!<vnl/vnl_quaternion.h>!;
     }
-    
+
     #---------------------------------------- vgl
     if ($vgl) {
       # includes
       #s!MViewBasics/HomgPoint2D!vgl/vgl_homg_point_2d!;
       #s!MViewBasics/HomgLine2D!vgl/vgl_homg_line_2d!;
     }
-    
+
     #---------------------------------------- vil
     if ($vil) {
       # includes
@@ -444,15 +444,15 @@ sub process_headers {
       s!<EasyImage/FileImage.h>!<vil/vil_file_image.h>!;
       s!<ImageClasses/Image.h>!<vil/vil_image.h>!;
     }
-    
+
     #---------------------------------------- MultiView -> mvl
     if ($mvl) {
-      
+
       # includes
       s!MViewBasics/!mvl/!;
       s!MViewCompute/!mvl/!;
       s!MViewComputeOX/!mvox/!;
-      
+
       s!<cool/Array.h>!<vcl_vector.h>!;
       s!<cool/ArrayP.h>!<vcl_vector.h>!;
       s!<cool/Array.C>!<vcl_vector.txx>!;
@@ -460,12 +460,12 @@ sub process_headers {
       s!<cool/List.C>!<vcl_list.txx>!;
       s!^(\#include +\<(Geometry|Topology)/)!//$1!;
     }
-    
+
     #---------------------------------------- vsl
     if ($vsl) {
       s!<vsl/fsm_ortho_regress.h>!<vsl/vsl_ortho_regress.h>!;
     }
-    
+
     #---------------------------------------- VGUI -> vgui
     if ($vgui) {
       s/\bVGUI/vgui/g;
@@ -474,7 +474,7 @@ sub process_headers {
       s!tableaux_DLLDATA!vgui_DLLDATA!g;
       s!vgui_displaybase.C!vgui_displaybase.txx!;
       s!obl/RGBA!vbl/vbl_rgba!g;
-      
+
       s!obl/bool_ostream!vbl/vbl_bool_ostream!g;
       s!obl_on_off!vbl_bool_ostream::on_off!g;
       s!obl_true_false!vbl_bool_ostream::true_false!g;
@@ -487,11 +487,11 @@ sub process_headers {
       s!<IUE_gl!<vgui/vgui_gl!;
       s!<vgui_gtk/!<vgui/impl/gtk/!;
     }
-    
+
     #---------------------------------------- misc
     if ($lint) {
     }
-    
+
     # put $_ back into array:
     $lines[$ii] = $_;
   }
@@ -507,30 +507,30 @@ sub scan_for_hints {
   for (my $ii=0; $ii<$num_lines; ++$ii) {
     # copy line from array to $_:
     $_ = $lines[$ii];
-    
+
     if ($vcl) {
       # sometimes "string" is the name of a type.
       if (!$string_is_typename && !$string_is_identifier) {
-	if ( m/^\s*string\b/ ||                     #^string          (return value or decl-statement)
-	     m/\bstring\s*::/ ||                    # string::        (e.g. string::npos)
-	     m/\bstring\s*&/ ||                     # string &
-	     m/\bstring\s*\*/ ||                    # string *
-	     m/\bstring\s+const\s*&/ ||             # string const &
-	     m/\bconst\s+string\s*&/ ||             # const string &
-	     m/\<\s*string\s*\>/ ||                 # <string>        (template parameter)
-	     m/\<\s*string\s*,.*\>/ ||              # <string,???>    (template parameter)
-	     m/\<[a-zA-Z_0-9\s\*,]+,\s*string\b/ || # <???,string     (template parameter)
-	     m/\(\s*const\s+string\b/ ||            # (const string   (function parameter)
-	     m/\(\s*string\s+const\b/ ||            # (string const   (function parameter)
-	     m/_INSTANTIATE\s*\(\s*string\b/ ||     #                 (instantiation macro)
-	     0) {
-	  $saw_string = 1;
-	  $string_is_typename = 1;
-	  $string_is_identifier = 0;
-	  #print STDERR "['string' being used as typename]\n";
-	}
+        if ( m/^\s*string\b/ ||                     #^string          (return value or decl-statement)
+             m/\bstring\s*::/ ||                    # string::        (e.g. string::npos)
+             m/\bstring\s*&/ ||                     # string &
+             m/\bstring\s*\*/ ||                    # string *
+             m/\bstring\s+const\s*&/ ||             # string const &
+             m/\bconst\s+string\s*&/ ||             # const string &
+             m/\<\s*string\s*\>/ ||                 # <string>        (template parameter)
+             m/\<\s*string\s*,.*\>/ ||              # <string,???>    (template parameter)
+             m/\<[a-zA-Z_0-9\s\*,]+,\s*string\b/ || # <???,string     (template parameter)
+             m/\(\s*const\s+string\b/ ||            # (const string   (function parameter)
+             m/\(\s*string\s+const\b/ ||            # (string const   (function parameter)
+             m/_INSTANTIATE\s*\(\s*string\b/ ||     #                 (instantiation macro)
+             0) {
+          $saw_string = 1;
+          $string_is_typename = 1;
+          $string_is_identifier = 0;
+          #print STDERR "['string' being used as typename]\n";
+        }
       }
-      
+
       # sometimes "string" is used as an identifier.
       if (!$string_is_typename && !$string_is_identifier && !$saw_string && !$saw_string_h) {
        if (m/char\s*\*\s*string\b/ ||         # "char * string"
@@ -574,7 +574,7 @@ sub process_lines {
   for (my $ii=0; $ii<$num_lines; ++$ii) {
     # copy line from array to $_:
     $_ = $lines[$ii];
-    
+
     #---------------------------------------- Config-IUE -> vcl
     if ($vcl) {
       # IUE_compiler.h -> vcl_compiler.h
@@ -585,7 +585,7 @@ sub process_lines {
       s/\bIUE_WIN32\b/VCL_WIN32/g;
       s/\bIUE_VC50\b/VCL_VC50/g;
       s/\bIUE_VC60\b/VCL_VC60/g;
-      
+
       # defines from IUE_compiler :
       s/\bIUE_COMMA\b/VCL_COMMA/g;
       s/\bIUE_FOR_SCOPE_HACK\b/VCL_FOR_SCOPE_HACK/g;
@@ -615,7 +615,7 @@ sub process_lines {
       s/\bIUE_DFL_TMPL_PARAM_STLDECL\b/VCL_DFL_TMPL_PARAM_STLDECL/g;
       s/\bIUE_DFL_TMPL_ARG\b/VCL_DFL_TMPL_ARG/g;
       s/\bIUE_SUNPRO_ALLOCATOR_HACK\b/VCL_SUNPRO_ALLOCATOR_HACK/g;
-      
+
       s/\bIUE_STRING_IS_TYPEDEF\b/VCL_STRING_IS_TYPEDEF/g;
       s/\bdefined\(IUE_USE_NATIVE_STL\)/VCL_USE_NATIVE_STL/g;
       s/(\#\s*if)def\s+IUE_USE_NATIVE_STL\b/$1 VCL_USE_NATIVE_STL/g;
@@ -624,7 +624,7 @@ sub process_lines {
       s/(\#\s*if)def\s+IUE_USE_NATIVE_COMPLEX\b/$1 VCL_USE_NATIVE_COMPLEX/g;
       s/(\#\s*if)ndef\s+IUE_USE_NATIVE_COMPLEX\b/$1 !VCL_USE_NATIVE_COMPLEX/g;
       s/\bIUE_STL_USE_ABBREVS\b/__STL_USE_ABBREVS/g;
-      
+
       # classes and functions
       #this is often a typedef member.  s/\breverse_iterator\b/vcl_reverse_iterator/g;
       s/\bistream_iterator\b/vcl_istream_iterator/g;
@@ -658,8 +658,8 @@ sub process_lines {
       # included, and "string" has not been used as an identifier - it is not
       # a big problem if parameter names are renamed, say.
       if ($string_is_typename || (($saw_string || $saw_string_h) && !$string_is_identifier)) {
-	# substitute "string" -> "vcl_string"
-	$saw_string = 1 if s/\bstring\b/vcl_string/g;
+        # substitute "string" -> "vcl_string"
+        $saw_string = 1 if s/\bstring\b/vcl_string/g;
       }
       # unprotect:
       s/\bstring_dont_filter\b/string/g;
@@ -672,13 +672,13 @@ sub process_lines {
       s/\<\<\s*hex\s*\<\</\<\< vcl_hex \<\</g;
       s/\<\<\s*dec\s*\<\</\<\< vcl_dec \<\</g;
       s/\>\>\s*ws\b/\>\> vcl_ws/g;
-      
+
       s/\bcin\b/vcl_cin/g;
       s/\bcout\b/vcl_cout/g;
       s/\bcerr\b/vcl_cerr/g;
       s/\<\<\s*endl\b/\<\< vcl_endl/g;
       s/<\<\s*flush\b/\<\< vcl_flush/g;
-      
+
       $saw_vector    = 1 if m/\bvcl_vector\s*</;
       $saw_list      = 1 if m/\bvcl_list\s*</;
       $saw_deque     = 1 if m/\bvcl_deque\s*</;
@@ -690,7 +690,7 @@ sub process_lines {
       $saw_pair      = 1 if m/\bvcl_pair\s*</;
       $saw_set       = 1 if m/\bvcl_set\s*</;
       $saw_allocator = 1 if m/\bvcl_allocator\s*</;
-      
+
       # Instantiation macros.
       #deprecated:
       #  s/\bINSTANTIATE_UNARY\b/VCL_SWAP_INSTANTIATE /g;
@@ -704,21 +704,21 @@ sub process_lines {
        $tmp = "set" if ($tmp eq "multiset");
        $tmp = "utility" if ($tmp eq "pair");
        $tmp = "algorithm" if ($tmp eq "swap" ||
-			      $tmp eq "containable" ||
-			      $tmp eq "find" ||
-			      $tmp eq "copy" ||
-			      $tmp eq "copy_backward" ||
-			      $tmp eq "sort");
+                              $tmp eq "containable" ||
+                              $tmp eq "find" ||
+                              $tmp eq "copy" ||
+                              $tmp eq "copy_backward" ||
+                              $tmp eq "sort");
        $tmp = "functional" if ($tmp eq "less");
        push @txx_needed, $tmp;
       }
     }
-    
+
     #---------------------------------------- COOL -> vcl
     if ($cool) {
       s/\bCoolString\b/vcl_string/g;
     }
-    
+
     #---------------------------------------- Basics -> vbl
     if ($vbl) {
       #
@@ -731,9 +731,9 @@ sub process_lines {
       s!\bSparseArray([123])D\b!vbl_sparse_array_$1d!g;
       s!\bINSTANTIATE_SPARSEARRAY([123])D\b!VBL_SPARSE_ARRAY_$1D_INSTANTIATE!;
       s!\bINSTANTIATE_SPARSEARRAY\b!VBL_SPARSE_ARRAY_INSTANTIATE!;
-      
+
       s!\bARRAY2D_INSTANTIATE\b!VBL_ARRAY_2D_INSTANTIATE!g;
-      
+
       # classes and functions
       s/\bRGB</vil_rgb</g;
       s/\bRGBcell\b/vil_rgb<byte> /g;
@@ -755,7 +755,7 @@ sub process_lines {
       s/\bCoolTimer/vbl_timer/g;
       s/\bCoolRegExp/vbl_reg_exp/g;
     }
-    
+
     #---------------------------------------- Numerics -> vnl
     if ($vnl) {
       # macros
@@ -765,7 +765,7 @@ sub process_lines {
       # enums
       s/\bvnl_matlab_Format/vnl_matlab_print_format/g;
       s/\bvnl_matlab_fmt_/vnl_matlab_print_format_/g;
-      
+
       # classes and functions
       s/\bCPolyRoots\b/vnl_cpoly_roots/g;
       s/\bIUE_c_vector\b/vnl_c_vector/g;
@@ -871,16 +871,16 @@ sub process_lines {
       #awf s/\bresize\b/vnl_resize/g;
       s/(\.|\->)maxVal\b/$1max_value/g;
       s!\bCoolQuaternion<!vnl_quaternion<!g;
-      
+
       # test names
       s/Numerics_Test_AssertNear/vnl_test_assert_near/g;
       s/Numerics_Test_Assert/vnl_test_assert/g;
     }
-    
+
     #---------------------------------------- vgl
     if ($vgl) {
     }
-    
+
     #---------------------------------------- vil
     if ($vil) {
       # classes
@@ -888,16 +888,16 @@ sub process_lines {
       s!\bImageBuffer\b!vil_memory_image_of!g;
       s!\bImageWindowOps\b!vil_memory_image_window!g;
       s!\bImage *\* *\b!vil_image !g;
-      
+
       # possibly risky: methods
       #  .GetSizeX()     .width()
       # ->GetSizeX()    ->width()
-      
+
       s!(\.|\-\>)GetSizeX\(\)!$1width()!g;
       s!(\.|\-\>)GetSizeY\(\)!$1height()!g;
       s!(\.|\-\>)GetBuffer\(\)!$1get_buffer()!g;
     }
-    
+
     #---------------------------------------- MultiView -> mvl
     if ($mvl) {
       # symbols
@@ -905,35 +905,35 @@ sub process_lines {
       s!\bCoolArrayP\b!vcl_vector!g;
       s!\bCoolList\b!vcl_list!g;
       s!\bCoolListP\b!vcl_list!g;
-      
+
     }
-    
+
     #---------------------------------------- vsl
     if ($vsl) {
       s/\bvsl_EdgelChain\b/vsl_edgel_chain/g;
       s/\bvsl_Edge\b/vsl_edge/g;
       s/\bvsl_Vertex\b/vsl_vertex/g;
     }
-    
+
     #---------------------------------------- VGUI -> vgui
     if ($vgui) {
       s/\bVGUI/vgui/g;
       s/\bvgui_image\b/vil_image/g; # class
       s!tableaux_DLLDATA!vgui_DLLDATA!g;
       s!vgui_displaybase.C!vgui_displaybase.txx!g;
-      
+
       s!obl_on_off!vbl_bool_ostream::on_off!g;
       s!obl_true_false!vbl_bool_ostream::true_false!g;
       s!obl_high_low!vbl_bool_ostream::high_low!g;
     }
-    
+
     #---------------------------------------- misc
     if ($lint) {
       #print STDERR "use of 'NULL'\n" if m/\bNULL\b/;
       #print STDERR "use of 'nil'\n" if m/\bnil\b/;
       print STDERR "use of VCL_DECLARE_SPECIALIZATION\n" if m/\bVCL_DECLARE_SPECIALIZATION\b/;
     }
-    
+
     # put $_ back into array:
     $lines[$ii] = $_;
   }
@@ -950,33 +950,33 @@ sub output_lines {
     if (!$seen_include && $lines[$ii] =~ m/^\s*\#\s*include/) {
       # if IUE_stlfwd.h was used, take appropriate action
       if ($saw_stlfwd) {
-	print "#include <vcl_utility.h>\t//vxl_filter\n" if($saw_pair   && !$saw_utility_h);
-	print "#include <vcl_vector.h>\t//vxl_filter\n"	if ($saw_vector && !$saw_vector_h);
-	print "#include <vcl_list.h>\t//vxl_filter\n"	if ($saw_list   && !$saw_list_h);
-	print "#include <vcl_deque.h>\t//vxl_filter\n"	if ($saw_deque  && !$saw_deque_h);
-	print "#include <vcl_queue.h>\t//vxl_filter\n"	if ($saw_queue  && !$saw_queue_h);
-	print "#include <vcl_map.h>\t//vxl_filter\n"	if ($saw_map    && !$saw_map_h);
-	print "#include <vcl_set.h>\t//vxl_filter\n"	if ($saw_set    && !$saw_set_h);
+        print "#include <vcl_utility.h>\t//vxl_filter\n" if ($saw_pair   && !$saw_utility_h);
+        print "#include <vcl_vector.h>\t//vxl_filter\n"	 if ($saw_vector && !$saw_vector_h);
+        print "#include <vcl_list.h>\t//vxl_filter\n"	 if ($saw_list   && !$saw_list_h);
+        print "#include <vcl_deque.h>\t//vxl_filter\n"	 if ($saw_deque  && !$saw_deque_h);
+        print "#include <vcl_queue.h>\t//vxl_filter\n"	 if ($saw_queue  && !$saw_queue_h);
+        print "#include <vcl_map.h>\t//vxl_filter\n"	 if ($saw_map    && !$saw_map_h);
+        print "#include <vcl_set.h>\t//vxl_filter\n"	 if ($saw_set    && !$saw_set_h);
       }
-      
+
       # we need <memory> with allocator<> :
       print "#include <vcl_memory.h>\t//vxl_filter\n" if ($saw_allocator && !$saw_memory_h);
 
       # we need <functional> with less<> :
       print "#include <vcl_functional.h>\t//vxl_filter\n" if ($saw_less && !$saw_functional_h);
-      
+
       # we need <utility> with map<> or multimap<> :
       print "#include <vcl_utility.h>\t//vxl_filter\n" if ($saw_map && !$saw_utility_h);
-      
+
       # emit any .txx files needed :
       foreach my $class (@txx_needed) {
         print "#include <vcl_$class.txx>\t//vxl_filter\n";
       }
-      
+
       #
       $seen_include = 1;
     }
-    
+
     # output processed line and comment :
     print "$lines[$ii]$comments[$ii]\n";
   }

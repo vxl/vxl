@@ -48,7 +48,7 @@ bool vbl_array_2d<T>::operator==(vbl_array_2d<T> const& that) const {
   for (int i=0;i<num_rows_;i++)
     for (int j=0;j<num_cols_;j++)
       if (!(operator()(i,j) == that(i,j))) // do not assume we have operator!=
-	return false;
+        return false;
   return true;
 }
 

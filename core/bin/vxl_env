@@ -27,52 +27,52 @@ $forced_shell = 0;
 sub setenv {
     local($var, $val) = @_;
     if ($csh) {
-	print "setenv $var $val $nl";
+        print "setenv $var $val $nl";
     } else {
-	print "$var=$val $nl export $var $nl";
+        print "$var=$val $nl export $var $nl";
     }
 }
 
 while ($_ = shift) {
     if (m/^-local$/ ) {
-	$IUELOCALROOT = shift;
-	$had_local = 1;
-	if ($IUELOCALROOT ne $had_iupackagehome) {
-	    print STDERR "tj-env: Warning: You already have an IUELOCALROOT.\n";
-	    print STDERR "tj-env: Warning:  Old IUELOCALROOT = $had_iupackagehome.\n";
-	    print STDERR "tj-env: Warning:  New '-local' one  = $IUELOCALROOT.\n";
-	}
-	
+        $IUELOCALROOT = shift;
+        $had_local = 1;
+        if ($IUELOCALROOT ne $had_iupackagehome) {
+            print STDERR "tj-env: Warning: You already have an IUELOCALROOT.\n";
+            print STDERR "tj-env: Warning:  Old IUELOCALROOT = $had_iupackagehome.\n";
+            print STDERR "tj-env: Warning:  New '-local' one  = $IUELOCALROOT.\n";
+        }
+
     } elsif (m/^-sys$/) {
-	$IUEROOT = shift;
+        $IUEROOT = shift;
 
     } elsif (m/^-nl$/) {
-	$nl = "\n";
+        $nl = "\n";
 
     } elsif (m/^-bash/) {
-	$csh = 0;
-	$forced_shell = 1;
-	
+        $csh = 0;
+        $forced_shell = 1;
+
     } elsif (/^-csh/) {
-	$csh = 1;
-	$forced_shell = 1;
-	
+        $csh = 1;
+        $forced_shell = 1;
+
     } else {
-	print STDERR "tj-env: Warning: Unknown argument [$_]\n";
+        print STDERR "tj-env: Warning: Unknown argument [$_]\n";
     }
 }
 
 ## Check if we appear to be running the wrong shell
-if (!$forced_shell) { 
+if (!$forced_shell) {
     if ($csh) {
-	# bash sets $_
-	if (defined $ENV{'_'}) {
-	    print STDERR
+        # bash sets $_
+        if (defined $ENV{'_'}) {
+            print STDERR
 "tj-env: Warning: You appear to be running bash or ksh,
 tj-env: Warning: this script assumes a csh-like shell.
 tj-env: Please disambiguate by using `tj-env -bash' or `tj-env -csh'.
 ";
-	}
+        }
     }
 }
 
@@ -122,7 +122,7 @@ if (! $IUEOSTYPE) {
 ## IUEROOT.
 
 if ($IUELOCALROOT && -d "$IUELOCALROOT/Scripts/Shell" ) {
-    $pathbase = $IUELOCALROOT; 
+    $pathbase = $IUELOCALROOT;
 } else {
     $pathbase = $IUEROOT;
 }
@@ -143,7 +143,7 @@ if (defined $BASEPATH && defined $PREFIXPATH) {
     &setenv ("PATH", "${PREFIXPATH}:${TARGETPATH}:${BASEPATH}");
 } else {
     if (defined $BASEPATH || defined $PREFIXPATH) {
-	print STDERR 
+        print STDERR 
 "tj-env: Won't deal with PREFIXPATH and BASEPATH 
 tj-env: when one is defined and the other isn't.  Ignoring.
 ";
