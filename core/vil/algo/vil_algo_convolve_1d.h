@@ -7,6 +7,7 @@
 //  \author Tim Cootes (based on work by fsm)
 
 #include <vcl_compiler.h>
+#include <vil2/vil2_image_view.h>
 
 //: Available options for boundary behavior
 // When convolving a finite signal the boundaries may be
@@ -62,8 +63,8 @@ enum vil2_convolve_boundary_option {
 //: Convolve edge with kernel[x*kstep] x in [k_lo,k_hi] (k_lo<=0)
 //  Fills only edge: dest[i], i=0..(1-k_lo)
 template <class srcT, class destT, class kernelT, class accumT>
-inline void vil2_algo_convolve_edge_1d(destT* dest, int d_step,
-                                       const srcT* src, int n, int s_step,
+inline void vil2_algo_convolve_edge_1d(const srcT* src, unsigned n, int s_step,
+                                       destT* dest, int d_step,
                                        const kernelT* kernel, int k_lo, int k_hi, int kstep,
                                        accumT,
                                        vil2_convolve_boundary_option option)
@@ -166,15 +167,15 @@ inline void vil2_algo_convolve_edge_1d(destT* dest, int d_step,
 //: Convolve kernel[x] x in [k_lo,k_hi] with srcT
 // Assumes dest and src same size (nx)
 template <class srcT, class destT, class kernelT, class accumT>
-inline void vil2_algo_convolve_1d(destT* dest0, int d_step,
-                                  const srcT* src0, unsigned nx, int s_step,
+inline void vil2_algo_convolve_1d(const srcT* src0, unsigned nx, int s_step,
+                                  destT* dest0, int d_step,
                                   const kernelT* kernel, int k_lo, int k_hi,
                                   accumT ac,
                                   vil2_convolve_boundary_option start_option,
                                   vil2_convolve_boundary_option end_option)
 {
   // Deal with start (fill elements 0..1-k_lo of dest)
-  vil2_algo_convolve_edge_1d(dest0,d_step,src0,nx,s_step,kernel,k_lo,k_hi,1,ac,start_option);
+  vil2_algo_convolve_edge_1d(src0,nx,s_step,dest0,d_step,kernel,k_lo,k_hi,1,ac,start_option);
 
   const kernelT* k_begin = kernel+k_lo;
   const kernelT* k_end   = kernel+k_hi+1;
@@ -190,9 +191,36 @@ inline void vil2_algo_convolve_1d(destT* dest0, int d_step,
   }
 
   // Deal with end  (reflect data and kernel!)
-  vil2_algo_convolve_edge_1d(dest0+(nx-1)*d_step,-d_step,
-                             src0+(nx-1)*s_step,nx,-s_step,kernel,
-                             -k_hi,-k_lo,-1,ac,end_option);
+  vil2_algo_convolve_edge_1d(src0+(nx-1)*s_step,nx,-s_step,
+                             dest0+(nx-1)*d_step,-d_step,
+                             kernel,-k_hi,-k_lo,-1,ac,end_option);
 }
 
+//: Convolve kernel[x] x in [k_lo,k_hi] with srcT
+// Assumes dest and src same size (nx)
+template <class srcT, class destT, class kernelT, class accumT>
+inline void vil2_algo_convolve_1d(const vil2_image_view<srcT>& src_im,
+                                  vil2_image_view<destT>& dest_im,
+                                  const kernelT* kernel, int k_lo, int k_hi,
+                                  accumT ac,
+                                  vil2_convolve_boundary_option start_option,
+                                  vil2_convolve_boundary_option end_option)
+{
+  unsigned ni = src_im.ni();
+  unsigned nj = src_im.nj();
+  int s_istep = src_im.istep(), s_jstep = src_im.jstep();
+  int d_istep = dest_im.istep(),d_jstep = dest_im.jstep();
+
+  dest_im.resize(ni,nj,src_im.nplanes());
+
+  for (int p=0;p<src_im.nplanes();++p)
+  {
+    const srcT*  src_row  = src_im.top_left_ptr()+p*src_im.pstep();
+    const destT* dest_row = dest_im.top_left_ptr()+p*dest_im.pstep();
+
+	for (int j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
+      vil2_algo_convolve_1d(src_row,ni,s_istep,  dest_row,d_istep,
+                            kernel,l_lo,k_hi,ac,start_option,end_option);
+  }
+}
 #endif // vil2_algo_convolve_1d_h_
