@@ -142,13 +142,13 @@ double bilin_method1(vil2_image_view<imT>& image, int n_pts, int n_loops)
 {
   vcl_time_t t0=vcl_clock();
   double sum=0.0;
-  double x = 1.3,y=1.7;
   for (int n=0;n<n_loops;++n)
   {
-      int istep=image.istep(),jstep=image.jstep();
-      imT* plane = image.top_left_ptr();
-      for (int i=0;i<n_pts;++i,x+=0.01,y+=0.02)
-        sum+=(double) bilin_interp1(x,y,plane,istep,jstep);
+     double x = 1.3,y=1.7;
+     int istep=image.istep(),jstep=image.jstep();
+     imT* plane = image.top_left_ptr();
+     for (int i=0;i<n_pts;++i,x+=0.01,y+=0.02)
+       sum+=(double) bilin_interp1(x,y,plane,istep,jstep);
   }
   vcl_time_t t1=vcl_clock();
   return 1e9*(double(t1)-double(t0))/(double(n_pts)*n_loops*CLOCKS_PER_SEC);
@@ -159,9 +159,9 @@ double bilin_method2(vil2_image_view<imT>& image, int n_pts, int n_loops)
 {
   vcl_time_t t0=vcl_clock();
   double sum=0.0;
-  double x = 1.3,y=1.7;
   for (int n=0;n<n_loops;++n)
   {
+    double x = 1.3,y=1.7;
     for (int i=0;i<n_pts;++i,x+=0.01,y+=0.02)
       sum+=(double) bilin_interp1(x,y,image.top_left_ptr(),image.istep(),image.jstep());
   }
@@ -185,9 +185,9 @@ double bilin_method3(vil2_image_view<imT>& image, int n_pts, int n_loops)
 
   vcl_time_t t0=vcl_clock();
   double sum=0.0;
-  double x = 1.3,y=1.7;
   for (int n=0;n<n_loops;++n)
   {
+    double x = 1.3,y=1.7;
     for (int i=0;i<n_pts;++i,x+=0.01,y+=0.02)
       sum+=(double) bilin_interp2(x,y,raster_ptrs);
   }

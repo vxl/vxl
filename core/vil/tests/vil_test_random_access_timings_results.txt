@@ -1,7 +1,7 @@
+Times to randomly access image (in nanosecs) [Range= 0.5(max-min)]
 
 450MHz Linux Box,  egcs-2.91.66
-
-Times to randomly access image (in nanosecs) [Range= 0.5(max-min)]
+-------------------------------
 Using -O2:
 Images of BYTE
 Method 1) Mean: 19.8ns  +/-4ns
@@ -20,3 +20,27 @@ Images of FLOAT
 Bilin. Method 1) Mean: 5ns  +/-1ns
 Bilin. Method 2) Mean: 5ns  +/-1ns
 Bilin. Method 3) Mean: 5.1ns  +/-1ns
+
+
+550MHz Linux Box, gcc-2.95.2
+----------------------------
+Using -O2
+
+Images of BYTE
+Method 1) Mean: 11.7ns  +/-1ns
+Method 2) Mean: 4.2ns  +/-1ns
+Method 3) Mean: 4.3ns  +/-1.5ns
+Images of FLOAT
+Method 1) Mean: 11.6ns  +/-1ns
+Method 2) Mean: 4.2ns  +/-1ns
+Method 3) Mean: 4.3ns  +/-1ns
+Using Bilinear interpolation.
+Images of BYTE
+Bilin. Method 1) Mean: 4.2ns  +/-1ns
+Bilin. Method 2) Mean: 4.3ns  +/-1ns
+Bilin. Method 3) Mean: 4.2ns  +/-1ns
+Images of FLOAT
+Bilin. Method 1) Mean: 4.3ns  +/-1ns
+Bilin. Method 2) Mean: 4.2ns  +/-1ns
+Bilin. Method 3) Mean: 4.2ns  +/-1ns
+
