@@ -42,27 +42,10 @@
 
 // ------------------------------------------------------------
 
-#if defined(VCL_GCC_27) || defined(VCL_SGI_CC_720) || ((defined(VCL_EGCS) || defined(VCL_GCC_295)) && !defined(GNU_LIBSTDCXX_V3))
+#if defined(VCL_GCC_27) || defined(VCL_SGI_CC_720)
 # include <iostream.h>
-# define vcl_ios          ios
-# define vcl_ios_in       ios::in
-# define vcl_ios_out      ios::out
-# define vcl_ios_ate      ios::ate
-# define vcl_ios_app      ios::app
-# define vcl_ios_trunc    ios::trunc
-# define vcl_ios_binary   ios::binary
-# define vcl_hex          hex
-# define vcl_dec          dec
-# define vcl_ws           ws
-# define vcl_setprecision setprecision
-# define vcl_endl         endl
-# define vcl_flush        flush
-# define vcl_streampos    streampos
-# define vcl_streambuf    streambuf
-# define vcl_streamsize   streamsize
-# define vcl_cin          cin
-# define vcl_cout         cout
-# define vcl_cerr         cerr
+# define vcl_generic_iostream_STD /* */
+# include "generic/vcl_iostream.h"
 
 #else // -------------------- ISO
 # include "iso/vcl_iostream.h"
@@ -95,13 +78,6 @@ inline istream& operator>>(istream& s, signed char& c)
 // This is not there.
 # undef  vcl_streamsize
 # define vcl_streamsize   unsigned
-#endif
-
-#if defined(VCL_GCC_27)
-// 2.7.2.3 has both "bin" and "binary", but 2.7.2 has
-// only "bin". so we use "bin". fsm@robots.
-# undef  vcl_ios_binary
-# define vcl_ios_binary   ios::bin
 #endif
 
 #endif // vcl_iostream_h_

@@ -1,12 +1,12 @@
 # This rule will not actually get updated
 # until after dependencies have been made
 # but that will probably be OK as the .h
-# files in ./iso are now under cvs.
+# files in ./generic are now under cvs.
 # The || true is to make sure the build
 # doesn't fail for systems where perl is
 # not available.
 xall::
-	( cd ./iso && $(MAKE) ) || true
+	( cd ./generic && $(MAKE) ) || true
 
 LIBRARY := vcl
 VERSION := 1.0

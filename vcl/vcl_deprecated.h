@@ -10,7 +10,7 @@
 # warning "deprecated"
 
 #elif defined(VCL_SGI_CC)
-# int /* deprecated */;
+  int /* deprecated */;
 
 #elif defined(VCL_SUNPRO_CC)
 # error "deprecated"

@@ -7,11 +7,10 @@
 #if !VCL_USE_NATIVE_STL
 # include "emulation/vcl_string.h"
 
-#elif defined(VCL_GCC_WITH_GNU_LIBSTDCXX_V2)
-# include <string>
-# define vcl_basic_string  basic_string
+#elif defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)
+# include "iso/vcl_string.h"
+# undef  vcl_char_traits
 # define vcl_char_traits   string_char_traits
-# define vcl_string        string
 
 #elif defined(VCL_WIN32)
 # include "win32/vcl_string.h"

@@ -44,7 +44,7 @@ template ostream & operator<<(ostream &, smanip<int> const &);
 
 
 #if defined(VCL_SUNPRO_CC_50)
-ostream &operator<<(ostream &s, short x)
+std::ostream &operator<<(std::ostream &s, short x)
 { return s << int(x); }
 
 

@@ -1,10 +1,6 @@
 // -*- c++ -*-
 #include "vcl_deque.h"
 
-#include "vcl_compiler.h"
-
-#undef VCL_DEQUE_INSTANTIATE
-
 #if !VCL_USE_NATIVE_STL
 # include "emulation/vcl_deque.txx"
 #elif defined(VCL_EGCS)

@@ -7,6 +7,8 @@
 #include <vcl_deque.h>
 #include <vcl_algorithm.txx>
 
+#undef VCL_DEQUE_INSTANTIATE
+
 //std::deque<T, std::allocator<T > >;
 #define VCL_DEQUE_INSTANTIATE(T) \
 template class vcl_deque<T >; \
