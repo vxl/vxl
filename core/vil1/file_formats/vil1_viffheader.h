@@ -66,7 +66,7 @@
 //
 //      There is a supporting document for this file called
 //      "The Khoros Visualization/Image File Format" that will help to
-//      expalin the various fields, see $KHOROS_HOME/manual/viff_format.
+//      explain the various fields, see $KHOROS_HOME/manual/viff_format.
 //
 //      The header fields where carefully selected to
 //      prevent contradictions between categories, i.e. they
@@ -90,7 +90,7 @@
 //      two dimensional locations, then there would be a band
 //      of x's followed by a band of y's.
 //
-//      The Khoros convention for the image orientarion is
+//      The Khoros convention for the image orientation is
 //      with the image origin in the upper left hand corner.
 //
 // ******************************************************************
