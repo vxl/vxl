@@ -42,10 +42,11 @@
 
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <vbl/vbl_ref_count.h>
+#include <vcl_stlfwd.h> // for vcl_vector
 
 class gevd_region_edge : public vbl_ref_count
 {
-public:
+ public:
   //Constructors/Destructors
   gevd_region_edge(vtol_edge_2d_sptr e);
   ~gevd_region_edge();
@@ -63,7 +64,7 @@ public:
   unsigned int GetLabel(unsigned int i) const {return i<NumLabels() ? labels_[i] : 0;}
 
   //Utitities (especially for testing)
-protected:
+ protected:
   //Utilities
   bool SetNewLabel(unsigned int label);
   //members
@@ -75,4 +76,4 @@ protected:
   vcl_vector<unsigned int> labels_;
 };
 
-#endif
+#endif // _gevd_region_edge_h_
