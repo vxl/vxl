@@ -42,7 +42,7 @@ mbl_data_array_ptr_wrapper<T>::mbl_data_array_ptr_wrapper(const vcl_vector<const
 template<class T>
 void mbl_data_array_ptr_wrapper<T>::set(const T*const* data, unsigned long n)
 {
-  assert (n != ((unsigned)-1)); // a common mistake
+  assert (n != ((unsigned long)-1)); // a common mistake
   data_    = data;
   n_       = n;
   index_ = 0;
