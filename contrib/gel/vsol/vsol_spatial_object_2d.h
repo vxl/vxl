@@ -47,7 +47,6 @@ class vsol_spatial_object_2d;
 #include <vbl/vbl_ref_count.h>
 #include <vsol/vsol_box_2d.h>
 #include <vsol/vsol_box_2d_sptr.h>
-#include <vcl_vector.h>
 
 class vsol_point_2d;
 class vsol_curve_2d;
