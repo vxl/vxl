@@ -24,15 +24,32 @@ endif
 
 MAKEINFOFLAGS=-Dmakeinfo --no-validate
 
+SOURCEFILES=book.texi \
+            appendix_adding_to_vnl_algo.texi \
+            appendix_build.texi \
+            appendix_structure.texi \
+            appendix_templates.texi \
+            book_header.texi \
+            chapter_examples.texi \
+            chapter_intro.texi \
+            chapter_vbl.texi \
+            chapter_vcl.texi \
+            chapter_vcsl.texi \
+            chapter_vgl.texi \
+            chapter_vil.texi \
+            chapter_vnl.texi \
+            chapter_vsl.texi \
+            chapter_vul.texi
+
 all: book.html book.dvi
 
 thelot: book.info book.html book.dvi book.hpj 
 
 ifdef USE_MAKEINFO
-book.html: book.texi chapter_vsl.texi rosenbrock.png
+book.html: $(SOURCEFILES) rosenbrock.png
 	$(MAKEINFO) $(MAKEINFOFLAGS) book.texi --html -o $@ --number-sections
 else
-book.html: book.texi chapter_vsl.texi rosenbrock.png
+book.html: $(SOURCEFILES) rosenbrock.png
 	$(TEXI2HTML) -expand info -menu -number -split chapter -nosec_nav -frames book.texi
 endif
 
@@ -43,8 +60,8 @@ rosenbrock.png: rosenbrock.eps
 	rm tmp.png
 
 # TeX for paper printing
-book.dvi: book.texi atexinfo.tex
-	$(TEX) book.texi || touch -t 010100001970 book.dvi
+book.dvi: $(SOURCEFILES) atexinfo.tex
+	$(TEX) book.texi || touch -t 197001010000 book.dvi
 
 
 # Windows help files. Process hpj the help compiler 
@@ -52,7 +69,7 @@ book.hpj book.rtf: book.texi
 	-mkinfrtf.exe $(MAKEINFOFLAGS) book --force -o book.rtf --hpj-output book.hpj
 
 # Emacs info file
-book.info: book.texi
+book.info: $(SOURCEFILES)
 	$(MAKEINFO) $(MAKEINFOFLAGS) book --force -o book.info
 
 ## awf private
