@@ -35,13 +35,6 @@ float square(float const& x) { return x*x; }
 void is_minus(float& x, float const& y) { x-=y; }
 float squareroot(float const& x) { return vcl_sqrt(x); }
 
-#ifdef VCL_VC
-#include <vbl/vbl_smart_ptr.h>
-template class vbl_smart_ptr<vil_image>;
-void vbl_smart_ptr<vil_image>::ref(vil_image*) {}
-void vbl_smart_ptr<vil_image>::unref(vil_image*) {}
-#endif
-
 int
 main(int argc, char** argv) {
   if (argc < 3) { vcl_cerr << "Syntax: example_vipl_moment file_in file_out\n"; return 1; }

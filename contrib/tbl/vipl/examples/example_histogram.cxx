@@ -38,12 +38,6 @@ typedef int ubyte; // this is a hack!!!  See the Description.
 #endif
 
 typedef section<int,2> img_type;
-#ifdef VCL_VC
-#include <vbl/vbl_smart_ptr.h>
-template class vbl_smart_ptr<img_type>;
-void vbl_smart_ptr<img_type>::ref(img_type*) {}
-void vbl_smart_ptr<img_type>::unref(img_type*) {}
-#endif
 
 int
 main(int argc, char** argv) {
