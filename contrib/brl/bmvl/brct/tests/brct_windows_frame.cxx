@@ -8,7 +8,6 @@
 #include <vcl_sstream.h>
 #include <vcl_fstream.h>
 #include <vcl_cassert.h>
-#include <vul/vul_file.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_adaptor.h>
@@ -211,24 +210,22 @@ void brct_windows_frame::remove_curve3d()
 
 void brct_windows_frame::init_kalman()
 {
-
   vcl_vector<vgl_point_2d<double> > c2d;
-  
-  if(!e_)
+
+  if (!e_)
   {
-    assert(lines_.size()>=2); 
+    assert(lines_.size()>=2);
     init_epipole();
   }
-  
+
   if (kalman_ == 0)
     vcl_cout<<"brct_windows_frame::kalman_ not created yet\n";
-  else {
+  else
     kalman_->init();
-  }
 
-   // add the curve in the first view
-   c2d = kalman_->get_pre_observes();
-   add_curve2d(c2d);
+  // add the curve in the first view
+  c2d = kalman_->get_pre_observes();
+  add_curve2d(c2d);
 
   //update the display.
   vcl_vector<vgl_point_3d<double> > c3d = kalman_->get_local_pts();
@@ -348,10 +345,9 @@ void brct_windows_frame::load_image()
     instance_->post_redraw();
     status_info_ = image_filename;
     status_info_ += "\n";
-    return;
   }
-
-  vcl_cout << "In brct_windows_frame::load_image() - null tableau\n";
+  else
+    vcl_cout << "In brct_windows_frame::load_image() - null tableau\n";
 }
 
 void brct_windows_frame::show_epipole()
@@ -375,11 +371,10 @@ void brct_windows_frame::init_epipole()
   vgl_point_2d<double> pt(epipole);
   e_ -> set(pt.x(), pt.y());
 
-
   kalman_->init_epipole(pt.x(), pt.y());
 
   vcl_stringstream ss;
-  ss<<pt.x()<<" "<<pt.y();
+  ss<<pt.x()<<' '<<pt.y();
   status_info_ += ss.str();
 }
 
@@ -408,13 +403,11 @@ void brct_windows_frame::save_status()
   {
     vcl_ofstream of(filename.c_str());
     of << status_info_;
-    return ;
   }
 }
 
 void brct_windows_frame::load_status()
 {
- 
   vgui_dialog load_file_dlg("load status");
   static vcl_string filename = "";
   static vcl_string ext = "*.*";
@@ -437,21 +430,16 @@ void brct_windows_frame::load_status()
       img_2d_->set_image(img_);
       instance_->post_redraw();
     }
-    
+
     double x, y;
     in >> x >> y;
-    if(!e_)
-    {
+    if (!e_)
       e_ = new vgl_point_2d<double>;
-    }
     e_ -> set(x, y);
 
-    kalman_->init_epipole(x, y);    
+    kalman_->init_epipole(x, y);
     vcl_stringstream ss;
     ss << x <<' '<<y;
     status_info_ += ss.str();
-    
-    return;
   }
-
 }

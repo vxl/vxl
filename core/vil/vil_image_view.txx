@@ -18,22 +18,20 @@
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h>
 #include <vcl_ostream.h>
-#include <vil/vil_smart_ptr.h>
 #include <vil/vil_pixel_format.h>
 #include <vcl_cstring.h>
 
 //=======================================================================
 
 
-
 template<class T>
 vil_image_view<T>::vil_image_view(unsigned n_i, unsigned n_j, unsigned n_planes,
-  unsigned n_interleaved_planes)
+                                  unsigned n_interleaved_planes)
 : top_left_(0), istep_(n_interleaved_planes)
 {
   assert(n_planes==1 || n_interleaved_planes==1);
   assert(n_planes * n_interleaved_planes == 1 ||
-    vil_pixel_format_num_components(vil_pixel_format_of(T())) == 1);
+         vil_pixel_format_num_components(vil_pixel_format_of(T())) == 1);
   set_size(n_i,n_j,n_planes*n_interleaved_planes);
 }
 
@@ -451,7 +449,6 @@ const vil_image_view<T> & vil_image_view<T>::operator= (const vil_image_view_bas
   set_to_memory(0, 0, 0, 0, 0, 0, 0);
   return *this;
 }
-
 
 
 //=======================================================================

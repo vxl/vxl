@@ -17,23 +17,13 @@
 #include <vcl_iosfwd.h>
 
 #include <vdgl/vdgl_digital_curve_sptr.h>
+#include <vdgl/vdgl_digital_curve.h>
 #include <vsol/vsol_line_2d_sptr.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_polyline_2d_sptr.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 
 #include <vgui/vgui_soview2D.h>
-
-#include <vsol/vsol_spatial_object_2d.h>
-#include <vsol/vsol_point_2d.h>
-#include <vsol/vsol_line_2d.h>
-#include <vsol/vsol_polyline_2d.h>
-#include <vsol/vsol_polygon_2d.h>
-
-#include <vdgl/vdgl_digital_curve.h>
-#include <vdgl/vdgl_interpolator.h>
-#include <vdgl/vdgl_edgel_chain.h>
-
 
 
 class bgui_linked_vsol_soview2D_point : public vgui_soview2D
@@ -42,8 +32,8 @@ class bgui_linked_vsol_soview2D_point : public vgui_soview2D
   //: Constructor - creates a default vsol_point_2d view
   bgui_linked_vsol_soview2D_point( vsol_point_2d_sptr const & pt){ sptr = pt; }
 
-  ~bgui_linked_vsol_soview2D_point() {};
-  
+  ~bgui_linked_vsol_soview2D_point() {}
+
   //: Print details about this vtol_point to the given stream.
   virtual vcl_ostream& print(vcl_ostream&) const;
 
@@ -72,10 +62,10 @@ class bgui_linked_vsol_soview2D_line_seg : public vgui_soview2D
  public:
   //: Constructor - creates a view of a given vtol_edge_2d
   bgui_linked_vsol_soview2D_line_seg(vsol_line_2d_sptr const& seg)
-  { sptr = seg; };
+  { sptr = seg; }
 
   //: Destructor - does nothing, smart pointers pass out of scope automatically
-  ~bgui_linked_vsol_soview2D_line_seg() {};
+  ~bgui_linked_vsol_soview2D_line_seg() {}
 
   //: Print details about this vdgl_digital_curve to the given stream.
   virtual vcl_ostream& print(vcl_ostream&) const;
@@ -107,7 +97,7 @@ class bgui_linked_vsol_soview2D_polyline : public vgui_soview2D
   bgui_linked_vsol_soview2D_polyline(vsol_polyline_2d_sptr const& pline);
 
   //: Deconstructor
-  ~bgui_linked_vsol_soview2D_polyline() {};
+  ~bgui_linked_vsol_soview2D_polyline() {}
 
   //: Print details about this vtol_edge_2d to the given stream.
   virtual vcl_ostream& print(vcl_ostream&) const;
@@ -139,7 +129,7 @@ class bgui_linked_vsol_soview2D_polygon : public vgui_soview2D
   bgui_linked_vsol_soview2D_polygon(vsol_polygon_2d_sptr const& e);
 
   //: Deconstructor
-  ~bgui_linked_vsol_soview2D_polygon() {};
+  ~bgui_linked_vsol_soview2D_polygon() {}
 
   //: Print details about this vdgl_polygon to the given stream.
   virtual vcl_ostream& print(vcl_ostream&) const;
@@ -206,16 +196,16 @@ class bgui_linked_vsol_soview2D_digital_curve : public vgui_soview2D
  public:
   //: Constructor - creates a view of a vdgl_digital_curve
   bgui_linked_vsol_soview2D_digital_curve(vdgl_digital_curve_sptr const& e)
-  { sptr = e; };
+  { sptr = e; }
 
   //: Destructor - does nothing, smart pointers pass out of scope automatically
-  ~bgui_linked_vsol_soview2D_digital_curve() {};
+  ~bgui_linked_vsol_soview2D_digital_curve() {}
 
   //: Print details about this vdgl_digital_curve to the given stream.
   virtual vcl_ostream& print(vcl_ostream&) const;
 
   //: Returns the type of this class ('bgui_linked_vsol_soview2D_digital_curve').
-  vcl_string type_name() const { return "bgui_linked_vsol_soview2D_digital_curve"; };
+  vcl_string type_name() const { return "bgui_linked_vsol_soview2D_digital_curve"; }
 
   //: Render this 2D digital_curve on the display.
   void draw() const;

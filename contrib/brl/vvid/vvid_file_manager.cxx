@@ -25,7 +25,6 @@
 #include <sdet/sdet_fit_lines_params.h>
 #include <sdet/sdet_grid_finder_params.h>
 #include <bdgl/bdgl_curve_tracking.h>
-#include <bdgl/bdgl_curve_matching.h>
 
 #include <vidl/vidl_io.h>
 #include <vidl/vidl_frame.h>
@@ -204,14 +203,15 @@ void vvid_file_manager::display_topology()
   easy0_->clear_all();
     //If tracking is on then we maintain a queue of points
   if (track_)
-    {
-      frame_trail_.add_topology_objects(topos);
-      vcl_vector<vtol_topology_object_sptr> temp;
-      frame_trail_.get_topology_objects(temp);
-      easy0_->add_topology_objects(temp);
-    }
+  {
+    frame_trail_.add_topology_objects(topos);
+    vcl_vector<vtol_topology_object_sptr> temp;
+    frame_trail_.get_topology_objects(temp);
+    easy0_->add_topology_objects(temp);
+  }
   else
     easy0_->add_topology_objects(topos);
+
   vcl_cout << "display " << topos.size()
            << " topology objs in " << t.real() << " msecs.\n";
 }
@@ -254,26 +254,26 @@ void vvid_file_manager::load_video_file()
   int i = 0;
   int inc = 40;
   if (cache_frames_)
+  {
+    for (pframe = my_movie_->first(); pframe!=my_movie_->last(); ++pframe)
     {
-      for (pframe = my_movie_->first(); pframe!=my_movie_->last(); ++pframe)
-        {
-          vil1_image img = pframe->get_image();
-          vgui_image_tableau_sptr itab = vgui_image_tableau_new(img);
-          bgui_vtol2D_tableau_new  e(itab);
-          tabs_.push_back(e);
-          vcl_cout << "Loading Frame [" << i << "]: (" <<width_ <<'x'<<height_ << ")\n";
-          ++inc;
-          ++i;
-        }
-      v2D0_->child.assign(tabs_[0]);
-      itab1_->set_image(tabs_[0]->get_image_tableau()->get_image());
+      vil1_image img = pframe->get_image();
+      vgui_image_tableau_sptr itab = vgui_image_tableau_new(img);
+      bgui_vtol2D_tableau_new  e(itab);
+      tabs_.push_back(e);
+      vcl_cout << "Loading Frame [" << i << "]: (" <<width_ <<'x'<<height_ << ")\n";
+      ++inc;
+      ++i;
     }
+    v2D0_->child.assign(tabs_[0]);
+    itab1_->set_image(tabs_[0]->get_image_tableau()->get_image());
+  }
   else
-    {
-      itab0_->set_image(second);
-      v2D0_->child.assign(easy0_);
-      itab1_->set_image(second);
-    }
+  {
+    itab0_->set_image(second);
+    v2D0_->child.assign(easy0_);
+    itab1_->set_image(second);
+  }
   grid_->post_redraw();
   vgui::run_till_idle();
 }
@@ -287,19 +287,19 @@ void vvid_file_manager::cached_play()
     {
       //pause by repeating the same frame
       if (pause_video_&&play_video_)
+      {
+        if (next_frame_&&vit!=tabs_.end()-2)
         {
-          if (next_frame_&&vit!=tabs_.end()-2)
-            {
-              vit+=2;
-              next_frame_ = false;
-            }
-          if (prev_frame_&&vit!=tabs_.begin()+2)
-            {
-              vit--;
-              prev_frame_ = false;
-            }
-          vit--;
+          vit+=2;
+          next_frame_ = false;
         }
+        if (prev_frame_&&vit!=tabs_.begin()+2)
+        {
+          vit--;
+          prev_frame_ = false;
+        }
+        vit--;
+      }
 
       v2D0_->child.assign(*vit);
         //Here we can put some stuff to control the frame rate. Hard coded to
@@ -371,16 +371,16 @@ void vvid_file_manager::play_video()
   frame_trail_.clear();
   //return the display to the first frame after the play is finished
   if (cache_frames_)
-    {
-      this->cached_play();
-      v2D0_->child.assign(tabs_[0]);
-    }
+  {
+    this->cached_play();
+    v2D0_->child.assign(tabs_[0]);
+  }
   else
-    {
-      this->un_cached_play();
-      vil1_image img =my_movie_->get_image(0);
-      itab1_->set_image(img);
-    }
+  {
+    this->un_cached_play();
+    vil1_image img =my_movie_->get_image(0);
+    itab1_->set_image(img);
+  }
   this->post_redraw();
 }
 
@@ -427,16 +427,16 @@ void vvid_file_manager::easy2D_tableau_demo()
   int inc = 40;
   for (vcl_vector<bgui_vtol2D_tableau_sptr>::iterator eit = tabs_.begin();
        eit != tabs_.end(); eit++, ++inc)
-    {
-      (*eit)->clear();
-      (*eit)->set_foreground(0,1,1);
-      (*eit)->set_point_radius(5);
-      if (inc>60)
-        inc = 40;
-      for (unsigned int j = 0; j<=height_; j+=inc)
-        for (unsigned int k=0; k<=width_; k+=inc)
-          (*eit)->add_point(k,j);
-    }
+  {
+    (*eit)->clear();
+    (*eit)->set_foreground(0,1,1);
+    (*eit)->set_point_radius(5);
+    if (inc>60)
+      inc = 40;
+    for (unsigned int j = 0; j<=height_; j+=inc)
+      for (unsigned int k=0; k<=width_; k+=inc)
+        (*eit)->add_point(k,j);
+  }
 }
 
 void vvid_file_manager::no_op()
@@ -487,10 +487,10 @@ void vvid_file_manager::compute_harris_corners()
 
   video_process_ = new vpro_harris_corner_process(hdp);
   if (track_)
-    {
-      frame_trail_.clear();
-      frame_trail_.set_window(track_window);
-    }
+  {
+    frame_trail_.clear();
+    frame_trail_.set_window(track_window);
+  }
 }
 
 void vvid_file_manager::compute_vd_edges()
@@ -517,10 +517,10 @@ void vvid_file_manager::compute_vd_edges()
 
   video_process_  = new vpro_edge_process(dp);
   if (track_)
-    {
-      frame_trail_.clear();
-      frame_trail_.set_window(track_window);
-    }
+  {
+    frame_trail_.clear();
+    frame_trail_.set_window(track_window);
+  }
 }
 
 void vvid_file_manager::compute_line_fit()
@@ -555,7 +555,7 @@ void vvid_file_manager::compute_grid_match()
   dp.borderp = false;
   static sdet_fit_lines_params flp;
   static sdet_grid_finder_params gfp;
- //  dp.automatic_threshold=true;
+//dp.automatic_threshold=true;
   dp.noise_multiplier=4;
   flp.min_fit_length_=10;
   flp.rms_distance_=0.05;
@@ -570,7 +570,7 @@ void vvid_file_manager::compute_grid_match()
   grid_dialog.field("RMS Distance", flp.rms_distance_);
   grid_dialog.field("Angle Tolerance", gfp.angle_tol_);
   grid_dialog.field("Line Count Threshold", gfp.thresh_);
-//  grid_dialog.checkbox("Debug Output", gfp.verbose_);
+//grid_dialog.checkbox("Debug Output", gfp.verbose_);
 
   if (!grid_dialog.ask())
     return;
@@ -587,20 +587,19 @@ void vvid_file_manager::compute_grid_match()
 void vvid_file_manager::compute_curve_tracking()
 {
   // get parameters
- static int track_window;
+  static int track_window;
   static bdgl_curve_tracking_params tp;
 
   vgui_dialog* tr_dialog = new vgui_dialog("Curve Tracking");
   tr_dialog->field("Estimated Motion", tp.mp.motion_in_pixels);
   tr_dialog->field("No of Top matches",tp.mp.no_of_top_choices);
   tr_dialog->field("Min Length of curves",tp.min_length_of_curves);
-  
+
   tr_dialog->checkbox("Clustering", tp.clustering_);
   tr_dialog->field("No of clusters ",tp.cp.no_of_clusters);
   tr_dialog->field("Min Euc Distance",tp.cp.min_cost_threshold);
   tr_dialog->field("Fg and Bg Threshold",tp.cp.foreg_backg_threshold);
 
-  
   tr_dialog->checkbox("Tracks", track_);
   tr_dialog->field("Window", track_window);
   static sdet_detector_params dp;
@@ -612,61 +611,52 @@ void vvid_file_manager::compute_curve_tracking()
   tr_dialog->checkbox("Agressive Closure", agr);
   if (!tr_dialog->ask())
     return;
-  
-  
+
 
   if (agr)
     dp.aggressive_junction_closure=1;
   else
     dp.aggressive_junction_closure=0;
-  
+
 
   // embedded VD edges computations
   // VD parameters
-  
-  
- 
+
   color_label_ = true;
 
-
-  if(cache_frames_)
+  if (cache_frames_)
   {
-	  video_process_  = new vpro_curve_tracking_process(tp,dp);
-	  for (vcl_vector<bgui_vtol2D_tableau_sptr>::iterator vit = tabs_.begin();
-       vit != tabs_.end()&&play_video_; vit++)
-	   {
-			vgui_image_tableau_sptr temp_img=(*vit)->get_image_tableau();
-			vil1_image temp1_img=temp_img->get_image();
-			vil1_memory_image_of<unsigned char> image(temp1_img);
-			video_process_->add_input_image(image);
-			if (video_process_->execute())
-            {
-              if (video_process_->get_output_type()==vpro_video_process::IMAGE)
-                vcl_cout<<"\n output is image";//display_image();
-              if (video_process_->get_output_type()==
-                  vpro_video_process::SPATIAL_OBJECT)
-				 {	
-				cached_spat_objs_.push_back(video_process_->get_output_spatial_objects());
-			  }
-				
-              if (video_process_->get_output_type()==
-                  vpro_video_process::TOPOLOGY)
-                vcl_cout<<"\n output is topology_objects";//display_topology();
-            }
-	   }
-	   
+    video_process_  = new vpro_curve_tracking_process(tp,dp);
+    for (vcl_vector<bgui_vtol2D_tableau_sptr>::iterator vit = tabs_.begin();
+         vit != tabs_.end()&&play_video_; vit++)
+    {
+      vgui_image_tableau_sptr temp_img=(*vit)->get_image_tableau();
+      vil1_image temp1_img=temp_img->get_image();
+      vil1_memory_image_of<unsigned char> image(temp1_img);
+      video_process_->add_input_image(image);
+      if (video_process_->execute())
+      {
+        if (video_process_->get_output_type()==vpro_video_process::IMAGE)
+          vcl_cout<<"\n output is image";//display_image();
+
+        if (video_process_->get_output_type()==
+            vpro_video_process::SPATIAL_OBJECT)
+          cached_spat_objs_.push_back(video_process_->get_output_spatial_objects());
+
+        if (video_process_->get_output_type()==
+            vpro_video_process::TOPOLOGY)
+          vcl_cout<<"\n output is topology_objects";//display_topology();
+      }
+    }
   }
   else
   {
-   video_process_  = new vpro_curve_tracking_process(tp,dp);
-  
+    video_process_  = new vpro_curve_tracking_process(tp,dp);
   }
 
   if (track_)
-    {
-      frame_trail_.clear();
-      frame_trail_.set_window(track_window);
-    }
-  
-
+  {
+    frame_trail_.clear();
+    frame_trail_.set_window(track_window);
+  }
 }

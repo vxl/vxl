@@ -22,7 +22,6 @@
 
 #include <vcl_vector.h>
 #include <vcl_map.h>
-#include <vcl_utility.h>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_tableau.h>
@@ -43,12 +42,12 @@ struct vgui_displaybase_tableau_selection_callback
 struct vgui_displaybase_tableau_grouping {
 
   // list of objects belonging to this group
-  // duplicates entry in main objects list 
+  // duplicates entry in main objects list
   vcl_vector<vgui_soview*> objects;
-  
+
   // style that will be used for override features
   vgui_style * style;
-    
+
   // used to hide or show this group of soviews
   bool hide;
 
@@ -56,11 +55,10 @@ struct vgui_displaybase_tableau_grouping {
   bool color_override;
 
   // applies a new temporary point size to all soviews in this grouping
-  bool point_size_override; 
+  bool point_size_override;
 
   // applies a new temporary line width to all soviews in this grouping
   bool line_width_override;
-  
 };
 
 #include "vgui_displaybase_tableau_sptr.h"
@@ -107,7 +105,7 @@ class vgui_displaybase_tableau : public vgui_tableau
   vcl_string get_current_grouping();
   vgui_displaybase_tableau_grouping* get_grouping_ptr( vcl_string name );
   vcl_vector< vcl_string > get_grouping_names();
-  
+
   //: Attach your own selection callback.
   // You are in charge of deleting it later.
   void set_selection_callback(vgui_displaybase_tableau_selection_callback* cb);
@@ -122,16 +120,16 @@ class vgui_displaybase_tableau : public vgui_tableau
  protected:
   vcl_vector<vgui_soview*> objects;
 
-  vcl_map< vcl_string , vgui_displaybase_tableau_grouping > groupings; 
- 
+  vcl_map< vcl_string , vgui_displaybase_tableau_grouping > groupings;
+
   vcl_string current_grouping;
-  
+
   // This vector appears to be unused by other classes in VXL.
   // Hopefully whatever functionality it was initially intended
   // to provide will instead be satisfied by the new grouping system.
   //
   //vcl_vector<unsigned> groups;
-  
+
   vcl_vector<unsigned> selections;
   unsigned highlighted;
 
