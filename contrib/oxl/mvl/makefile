@@ -118,6 +118,8 @@ SOURCES += HMatrix2DEuclideanCompute.cxx
 SOURCES += PMatrixCompute.cxx
 SOURCES += PMatrixComputeLinear.cxx
 
+IULIBS += -lvgl -lvil -lvnl-algo -lvnl -lvbl -lvcl
+
 ##########################################
 include ${IUEROOT}/config/usr_rules.mk
 ##########################################
