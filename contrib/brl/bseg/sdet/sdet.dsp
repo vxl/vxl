@@ -129,6 +129,12 @@ SOURCE=.\sdet_harris_detector.cxx
 SOURCE=.\sdet_harris_detector_params.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\sdet_fit_lines.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\sdet_fit_lines_params.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+sdet_region_edge-.cxx
 # End Source File
 # End Group
@@ -166,6 +172,12 @@ SOURCE=.\sdet_region_edge_sptr.h
 # End Source File
 # Begin Source File
 SOURCE=.\sdet_harris_detector.h
+# End Source File
+# Begin Source File
+SOURCE=.\sdet_fit_lines.h
+# End Source File
+# Begin Source File
+SOURCE=.\sdet_fit_lines_params.h
 # End Source File
 # Begin Source File
 SOURCE=.\sdet_harris_detector_params.h
