@@ -17,14 +17,14 @@ double vpdfl_chi2_for_cum_prob(double p, int n_dof, double tol)
   double low_chi = 0;
   double high_chi = d_step;
 
-  double p_low = 0;
+  //double p_low = 0; // not used
   double p_high = vpdfl_cum_prob_chi2(n_dof,high_chi);
 
   // First step along till p_high >= p
   while (p_high<p)
   {
     low_chi = high_chi;
-    p_low = p_high;
+    // p_low = p_high; // not used
     high_chi += d_step;
     p_high = vpdfl_cum_prob_chi2(n_dof,high_chi);
   }
