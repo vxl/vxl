@@ -47,10 +47,12 @@
 #include <vgui/vgui_fwd.h>
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_glu.h>
-#if HAS_GLUT
+#ifdef HAS_GLUT
 # include <vgui/vgui_glut.h>
 #endif
-#include <vgui/vgui_glx.h>
+#ifdef HAS_X11
+# include <vgui/vgui_glx.h>
+#endif
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_grid_tableau_sptr.h>
 #include <vgui/vgui_image_renderer.h>
