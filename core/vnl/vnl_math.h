@@ -83,59 +83,70 @@ class vnl_math
 #endif
 };
 
+// We do not want to make assumptions about unknown types that happen
+// to have conversions to one of the fundamental types.  The templated
+// versions of isnan, isinf, and isfinite below serve as catch-alls to
+// cause linker errors if these functions are invoked with an unknown
+// type.  However, due to compiler bugs, the templates sometimes match
+// too often (see documentation of VCL_TEMPLATE_MATCHES_TOO_OFTEN) and
+// are selected over reference-binding overloads like those in
+// vnl_rational.h.  We add the catch-all templates only if the
+// compiler does not have this bug. -- Brad King
+
 // Note that the three template functions below should not be declared "inline"
 // since that would override the non-inline specialisations. - PVr.
 //
+
 // isnan
-#ifdef VCL_VC // Template versions don't get overridden by vnl_rational version
-inline bool vnl_math_isnan(unsigned char ) { return false; }
-inline bool vnl_math_isnan(signed char ) { return false; }
-inline bool vnl_math_isnan(unsigned short ) { return false; }
-inline bool vnl_math_isnan(signed short ) { return false; }
-inline bool vnl_math_isnan(unsigned int ) { return false; }
-inline bool vnl_math_isnan(signed int ) { return false; }
-inline bool vnl_math_isnan(unsigned long ) { return false; }
-inline bool vnl_math_isnan(signed long ) { return false; }
-#else
-template <class T> bool vnl_math_isnan(T ) { return false; }
-#endif
+inline bool vnl_math_isnan(char) { return false; }
+inline bool vnl_math_isnan(short) { return false; }
+inline bool vnl_math_isnan(int) { return false; }
+inline bool vnl_math_isnan(long) { return false; }
+inline bool vnl_math_isnan(signed char) { return false; }
+inline bool vnl_math_isnan(unsigned char) { return false; }
+inline bool vnl_math_isnan(unsigned short) { return false; }
+inline bool vnl_math_isnan(unsigned int) { return false; }
+inline bool vnl_math_isnan(unsigned long) { return false; }
 bool vnl_math_isnan(float);
 bool vnl_math_isnan(double);
 bool vnl_math_isnan(long double);
+#if !VCL_TEMPLATE_MATCHES_TOO_OFTEN
+template <class T> bool vnl_math_isnan(T);
+#endif
 
 // isinf
-#ifdef VCL_VC
-inline bool vnl_math_isinf(unsigned char ) { return false; }
-inline bool vnl_math_isinf(signed char ) { return false; }
-inline bool vnl_math_isinf(unsigned short ) { return false; }
-inline bool vnl_math_isinf(signed short ) { return false; }
-inline bool vnl_math_isinf(unsigned int ) { return false; }
-inline bool vnl_math_isinf(signed int ) { return false; }
-inline bool vnl_math_isinf(unsigned long ) { return false; }
-inline bool vnl_math_isinf(signed long ) { return false; }
-#else
-template <class T> bool vnl_math_isinf(T ) { return false; }
-#endif
+inline bool vnl_math_isinf(char) { return false; }
+inline bool vnl_math_isinf(short) { return false; }
+inline bool vnl_math_isinf(int) { return false; }
+inline bool vnl_math_isinf(long) { return false; }
+inline bool vnl_math_isinf(signed char) { return false; }
+inline bool vnl_math_isinf(unsigned char) { return false; }
+inline bool vnl_math_isinf(unsigned short) { return false; }
+inline bool vnl_math_isinf(unsigned int) { return false; }
+inline bool vnl_math_isinf(unsigned long) { return false; }
 bool vnl_math_isinf(float);
 bool vnl_math_isinf(double);
 bool vnl_math_isinf(long double);
+#if !VCL_TEMPLATE_MATCHES_TOO_OFTEN
+template <class T> bool vnl_math_isinf(T);
+#endif
 
 // isfinite
-#ifdef VCL_VC
-inline bool vnl_math_isfinite(unsigned char ) { return true; }
-inline bool vnl_math_isfinite(signed char ) { return true; }
-inline bool vnl_math_isfinite(unsigned short ) { return true; }
-inline bool vnl_math_isfinite(signed short ) { return true; }
-inline bool vnl_math_isfinite(unsigned int ) { return true; }
-inline bool vnl_math_isfinite(signed int ) { return true; }
-inline bool vnl_math_isfinite(unsigned long ) { return true; }
-inline bool vnl_math_isfinite(signed long ) { return true; }
-#else
-template <class T> bool vnl_math_isfinite(T ) { return true; }
-#endif
+inline bool vnl_math_isfinite(char) { return true; }
+inline bool vnl_math_isfinite(short) { return true; }
+inline bool vnl_math_isfinite(int) { return true; }
+inline bool vnl_math_isfinite(long) { return true; }
+inline bool vnl_math_isfinite(signed char) { return true; }
+inline bool vnl_math_isfinite(unsigned char) { return true; }
+inline bool vnl_math_isfinite(unsigned short) { return true; }
+inline bool vnl_math_isfinite(unsigned int) { return true; }
+inline bool vnl_math_isfinite(unsigned long) { return true; }
 bool vnl_math_isfinite(float);
 bool vnl_math_isfinite(double);
 bool vnl_math_isfinite(long double);
+#if !VCL_TEMPLATE_MATCHES_TOO_OFTEN
+template <class T> bool vnl_math_isfinite(T);
+#endif
 
 // rnd (rounding; 0.5 rounds up)
 inline int vnl_math_rnd(float  x) { return (x>=0.0)?(int)(x + 0.5):(int)(x - 0.5); }
