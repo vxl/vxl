@@ -53,6 +53,7 @@ class vul_arg_base
 
  public:   // Avoid errors on some compilers that don't follow
            // protected: directive correctly with type_
+
   //: Static text describing type of option (e.g. bool or double).
   char const *type_;
  protected:
@@ -64,7 +65,7 @@ class vul_arg_base
   vcl_string help_;
 
   vul_arg_base(vul_arg_info_list& l, char const* option_string,
-                 char const*helpstring);
+               char const*helpstring);
   vul_arg_base(char const* option_string, char const*helpstring);
   virtual ~vul_arg_base();
 
