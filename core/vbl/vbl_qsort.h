@@ -24,29 +24,15 @@
 #endif
 #include <vcl_vector.h>
 
-int vbl_qsort_double_ascending(double const&, double const&);
-int vbl_qsort_double_descending(double const&, double const&);
+#include <vbl/vbl_sort.h>
 
-int vbl_qsort_int_ascending(int const&, int const&);
-int vbl_qsort_int_descending(int const&, int const&);
+#define vbl_qsort_double_ascending  vbl_sort_double_ascending
+#define vbl_qsort_double_descending vbl_sort_double_descending
+#define vbl_qsort_int_ascending     vbl_sort_int_ascending
+#define vbl_qsort_int_descending    vbl_qort_int_descending
+#define vbl_qsort_helper            vbl_sort_helper
 
 typedef int (*vbl_qsort_compare_t)(const void* a, const void* b);
-
-template <class T> 
-struct vbl_qsort_helper {
-  static int ascend(const void* a, const void* b) {
-    const T& ta = *((const T*)a);
-    const T& tb = *((const T*)b);
-    if (tb > ta)
-      return -1;
-    if (tb == ta)
-      return 0;
-    return 1;
-  }
-  static int descend(const void* a, const void* b) {
-    return 1 - ascend(a,b);
-  }
-};
 
 // -- Sort a C array into ascending order, using the standard comparison
 // operations for T, namely operator> and operator==.
@@ -114,7 +100,6 @@ void vbl_qsort(vcl_vector<T>& v, int (*compare)(T const& a, T const& b))
 }
 
 #define VBL_QSORT_INSTANTIATE(T)\
-template struct vbl_qsort_helper<T>;\
 VCL_INSTANTIATE_INLINE(void vbl_qsort_ascending(T*,int));\
 VCL_INSTANTIATE_INLINE(void vbl_qsort_descending(T*,int));
 
