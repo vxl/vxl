@@ -1,3 +1,13 @@
+//
+// This is vil/vil_tiff.cxx
+// See vil_tiff.h for a description of this file.
+//
+// \author  awf@robots.ox.ac.uk
+// \verbatim
+// Modifications:
+//   09-NOV-2001  K.Y.McGaul  Use default value for orientation when it can't be read.
+// \endverbatim    
+//
 #ifdef __GNUC__
 #pragma implementation
 #endif
@@ -80,6 +90,7 @@ bool vil_tiff_file_format_probe(vil_stream* is)
 
 vil_image_impl* vil_tiff_file_format::make_input_image(vil_stream* is)
 {
+
   if (!vil_tiff_file_format_probe(is))
     return 0;
 
@@ -226,7 +237,14 @@ vil_tiff_generic_image::vil_tiff_generic_image(vil_stream* is):
 bool vil_tiff_generic_image::get_property(char const *tag, void *prop) const
 {
   unsigned short orientation;
-  TIFFGetField(p->tif, TIFFTAG_ORIENTATION, &orientation);
+  int orientation_val_ok = TIFFGetField(p->tif, TIFFTAG_ORIENTATION, &orientation);
+  if (orienatation_val_ok != 1)
+  {
+    // kym - apparently most products ignore this orientation tag and use the default
+    // value of 1 (eg Adobe Photoshop) so its debatable whether its worth reading at all.
+    orientation = 1;
+  }
+
   bool topdown = (orientation==ORIENTATION_TOPLEFT || 
                   orientation==ORIENTATION_TOPRIGHT ||
                   orientation==ORIENTATION_LEFTTOP ||
