@@ -15,11 +15,13 @@
 //  Modifications
 //  3 October 2001 Peter Vanroose - Implemented get_property("top_row_first")
 //  21 February 2002 Maarten Vergauwen - Added access functions for [fi]spare[12]
+//  5 June 2003    Peter Vanroose - bug fix for 64-bit platforms: data is 32-bit
 //\endverbatim
 
 #include <vil1/vil1_file_format.h>
 #include <vil1/vil1_image_impl.h>
 #include "vil1_viffheader.h"
+#include <vxl_config.h> // for vxl_uint_32
 
 //: Loader for VIFF files, i.e., 1-banded Khoros 1.0 images
 // This supports char, short, int, float and double pixel cell types.
@@ -31,11 +33,11 @@ class vil1_viff_file_format : public vil1_file_format
   virtual char const* tag() const;
   virtual vil1_image_impl* make_input_image(vil1_stream* vs);
   virtual vil1_image_impl* make_output_image(vil1_stream* vs, int planes,
-                                            int width,
-                                            int height,
-                                            int components,
-                                            int bits_per_component,
-                                            vil1_component_format format);
+                                             int width,
+                                             int height,
+                                             int components,
+                                             int bits_per_component,
+                                             vil1_component_format format);
 };
 
 //: Generic image implementation for VIFF (Khoros) files
@@ -63,12 +65,12 @@ class vil1_viff_generic_image : public vil1_image_impl
  public:
   vil1_viff_generic_image(vil1_stream* is);
   vil1_viff_generic_image(vil1_stream* is,
-                         int planes,
-                         int width,
-                         int height,
-                         int components,
-                         int bits_per_component,
-                         vil1_component_format format);
+                          int planes,
+                          int width,
+                          int height,
+                          int components,
+                          int bits_per_component,
+                          vil1_component_format format);
   ~vil1_viff_generic_image();
 
   //: Dimensions.  Planes x W x H x Components
@@ -96,12 +98,12 @@ class vil1_viff_generic_image : public vil1_image_impl
   bool get_property(char const *tag, void *prop = 0) const;
 
   //: User defined spare values in header
-  unsigned long ispare1() const { return header_.ispare1;}
-  unsigned long ispare2() const { return header_.ispare2;}
+  vxl_uint_32 ispare1() const { return header_.ispare1;}
+  vxl_uint_32 ispare2() const { return header_.ispare2;}
   float fspare1() const { return header_.fspare1;}
   float fspare2() const { return header_.fspare2;}
-  void set_ispare1(unsigned long ispare1);
-  void set_ispare2(unsigned long ispare2);
+  void set_ispare1(vxl_uint_32 ispare1);
+  void set_ispare2(vxl_uint_32 ispare2);
   void set_fspare1(float fspare1);
   void set_fspare2(float fspare2);
 };

@@ -28,6 +28,8 @@
  *----------------------------------------------------------------------
  */
 
+#include <vxl_config.h> /* for vxl_uint_32 */
+
 /* this is a C header file. you cannot use // comments in it
 //:
 // \file
@@ -39,18 +41,15 @@
 // for portability, expandability and simplicity.
 //
 // \verbatim
-// Modifications
-// Scott R. Wilson 1/13/88
-// Scott R. Wilson 5/3/88 - Version 2, Release 0
-// Scott Wilson, John Rasure, Tom Sauer, and
-// Mark Young:  2/18/89 - Version 3 Release 0
-// Scott Wilson - Version 3.1
-// Tom Sauer - 7/12/89 removed the #defines for
-// location dimension
-// Scott Wilson - Correct comment for
-// subrow_size 5/9/90
-// Scott Wilson - Deleted unneeded include of
-// vdefines.h 18-Jan-91
+//  Modifications
+//   Scott R. Wilson 1/13/88
+//   Scott R. Wilson 5/3/88 - Version 2, Release 0
+//   Scott Wilson, John Rasure, Tom Sauer, and
+//   Mark Young:  2/18/89 - Version 3 Release 0
+//   Scott Wilson - Version 3.1
+//   Tom Sauer - 7/12/89 removed the #defines for location dimension
+//   Scott Wilson - Correct comment for subrow_size 5/9/90
+//   Scott Wilson - Deleted unneeded include of vdefines.h 18-Jan-91
 // \endverbatim
 //
 // \verbatim
@@ -117,15 +116,15 @@ struct vil1_viff_xvimage {
 
 /*  Administrative or file management information */
 
-        char    identifier;     /* a magic number that tells
-                                   the world that this is an
-                                   Khoros file */
+        char    identifier;     /* a magic number (XV_FILE_MAGIC_NUM) that tells
+                                   the world that this is a Khoros file */
 
-        char    file_type;      /* tells if this file is a VIFF file */
+        char    file_type;      /* if equal to XV_FILE_TYPE_XVIFF tells if this
+                                   file is a VIFF (image) file */
 
-        char    release;        /* release number */
+        char    release;        /* release number (1) */
 
-        char    version;        /* version number */
+        char    version;        /* version number (3) */
 
         char    machine_dep;    /* indicates peculiarities of */
                                 /* machine architecture */
@@ -138,103 +137,103 @@ struct vil1_viff_xvimage {
 /* Things that specify the spatial properties of the image, pixel
    organization, and data storage arrangement.  */
 
-        unsigned long   row_size;       /* length of row in pixels,
-                                           i.e. number of columns */
+        vxl_uint_32   row_size;       /* length of row in pixels,
+                                         i.e. number of columns */
 
-        unsigned long   col_size;       /* length of column in pixels,
-                                           i.e. number or rows */
+        vxl_uint_32   col_size;       /* length of column in pixels,
+                                         i.e. number or rows */
 
-        unsigned long   subrow_size;    /* Length of subrows. This is useful
-                                           when one wants pixel vectors to
-                                           represent 2D objects (images).
-                                           The size of each pixel "image"
-                                           would be subrow_size (columns)
-                                           by num_data_bands/subrow_size (rows).
-                                           This field may be ignored except
-                                           by routines that need the 2D
-                                           interpretation. */
+        vxl_uint_32   subrow_size;    /* Length of subrows. This is useful
+                                         when one wants pixel vectors to
+                                         represent 2D objects (images).
+                                         The size of each pixel "image"
+                                         would be subrow_size (columns)
+                                         by num_data_bands/subrow_size (rows).
+                                         This field may be ignored except
+                                         by routines that need the 2D
+                                         interpretation. */
 
 /* The product of row_size and col_size is used to indicate
    the number of locations when the location type is explicit,
    the product also indicates the number of pixels in a band,
    or the number of vectors.  */
 
-        long    startx, starty; /* subimage starting position (upper
-                                   left hand corner), negative indicates
-                                   that it is not a subimage */
+        vxl_sint_32   startx, starty; /* subimage starting position (upper
+                                         left hand corner), negative indicates
+                                         that it is not a subimage */
 
-        float   pixsizx, pixsizy;       /* Actual size of pixel at time of
-                                           digitization in meters */
+        float   pixsizx, pixsizy;     /* Actual size of pixel at time of
+                                         digitization in meters */
 
-        unsigned long   location_type;  /* implied or explicit location
-                                           data -- implied locations are
-                                           derived from row_size and
-                                           col_size */
+        vxl_uint_32   location_type;  /* implied or explicit location
+                                         data -- implied locations are
+                                         derived from row_size and
+                                         col_size */
 
-        unsigned long   location_dim;   /* explicit locations can be of
-                                           any dimension  */
+        vxl_uint_32   location_dim;   /* explicit locations can be of
+                                         any dimension  */
 
-        unsigned long   num_of_images;  /* number of images
-                                           pointed to by *imagedata,
-                                           do not confuse with number of
-                                           bands */
+        vxl_uint_32   num_of_images;  /* number of images
+                                         pointed to by *imagedata,
+                                         do not confuse with number of
+                                         bands */
 
-        unsigned long   num_data_bands; /* Number of bands per data pixel,
-                                           or number of bands per image, or
-                                           dimension of vector data, or
-                                           number of elements in a vector */
+        vxl_uint_32   num_data_bands; /* Number of bands per data pixel,
+                                         or number of bands per image, or
+                                         dimension of vector data, or
+                                         number of elements in a vector */
 
-        unsigned long   data_storage_type;  /* storage type for disk data */
+        vxl_uint_32   data_storage_type;  /* storage type for disk data */
 
-        unsigned long   data_encode_scheme; /* encoding scheme of disk data */
+        vxl_uint_32   data_encode_scheme; /* encoding scheme of disk data */
 
 /* Things that determine how the mapping (if any) of data bands is
    to be done to obtain the actual "image" or data.  */
 
-        unsigned long   map_scheme;     /* How mapping (if any) is to occur */
+        vxl_uint_32   map_scheme;     /* How mapping (if any) is to occur */
 
-        unsigned long   map_storage_type;/* Storage type of cells in the maps */
+        vxl_uint_32   map_storage_type;/* Storage type of cells in the maps */
 
-        unsigned long   map_row_size; /* number of columns in map array */
+        vxl_uint_32   map_row_size; /* number of columns in map array */
 
-        unsigned long   map_col_size;   /* number of entries in map (rows) */
+        vxl_uint_32   map_col_size;   /* number of entries in map (rows) */
 
-        unsigned long   map_subrow_size; /* Length of subrows. This is useful
-                                            when using the output vector from
-                                            the map as a 2-D image, rather
-                                            than just a vector. The size of
-                                            the 2-D image would be:
-                                            map_subrow_size (columns) by
-                                            map_row_size/map_subrow_size
-                                            (rows). This field may be ignored
-                                            except by routines that need the 2D
-                                            interpretation */
+        vxl_uint_32   map_subrow_size; /* Length of subrows. This is useful
+                                          when using the output vector from
+                                          the map as a 2-D image, rather
+                                          than just a vector. The size of
+                                          the 2-D image would be:
+                                          map_subrow_size (columns) by
+                                          map_row_size/map_subrow_size
+                                          (rows). This field may be ignored
+                                          except by routines that need the 2D
+                                          interpretation */
 
-        unsigned long   map_enable;     /* Tells if the disk data is valid
-                                           with or without being sent thru the
-                                           map. Some data MUST be mapped to be
-                                           valid. */
+        vxl_uint_32   map_enable;     /* Tells if the disk data is valid
+                                         with or without being sent thru the
+                                         map. Some data MUST be mapped to be
+                                         valid. */
 
-        unsigned long   maps_per_cycle; /* number of maps to constitue a "cycle"
-                                           for VFF_MS_CYCLE */
+        vxl_uint_32   maps_per_cycle; /* number of maps to constitue a "cycle"
+                                         for VFF_MS_CYCLE */
 
 /* Specification of the particular color model in use when working with a
    color image. This just tells what the coordinate system and axis orientation
    of the color space is.  */
 
-        unsigned long   color_space_model;
+        vxl_uint_32   color_space_model;
 
 /* Extra fields for use by the user as needed. These are NOT SUPPORTED
    in any way, except for being read and written correctly with respect
    to machine dependencies.  */
 
-        unsigned long   ispare1,ispare2;        /* Spare long ints */
+        vxl_uint_32   ispare1,ispare2;        /* Spare 32-bit ints */
 
-        float           fspare1,fspare2;        /* Spare floats */
+        float         fspare1,fspare2;        /* Spare floats */
 
 /* Pointers to the actual data - these are valid only when in memory! */
 
-        char    reserve[VIFF_HEADERSIZE - (21*sizeof(long))
+        char    reserve[VIFF_HEADERSIZE - (21*sizeof(vxl_sint_32))
                              - (520*sizeof(char))
                              - (2*sizeof(char *)) - (4*sizeof(float))
                              - (sizeof(float *))];
@@ -267,7 +266,7 @@ struct vil1_viff_xvimage {
 #define XV_IMAGE_REL_NUM        1       /* Release 1   */
 
 /* definitions for subimage information,
-   long startx, starty; */
+   vxl_sint_32 startx, starty; */
 #define VFF_NOTSUB              ~0      /* a negative number indicates that
                                            the image is not a subimage  */
 
@@ -283,7 +282,7 @@ struct vil1_viff_xvimage {
 
 
 /* definitions for data storage type,
-   unsigned long data_storage_type; */
+   vxl_uint_32 data_storage_type; */
 #define VFF_TYP_BIT             0       /* pixels are on or off (binary image)*/
                                         /* Note: This is an X11 XBitmap
                                            with bits packed into a byte and
@@ -299,7 +298,7 @@ struct vil1_viff_xvimage {
 
 /* definitions for data encoding scheme on disk - i.e. it may be
    compressed using RLE, or uncompressed (RAW).
-   unsigned long data_encode_scheme; */
+   vxl_uint_32 data_encode_scheme; */
 #define VFF_DES_RAW             0       /* Raw - no compression */
 #define VFF_DES_COMPRESS        1       /* Compressed using ALZ */
 #define VFF_DES_RLE             2       /* Compressed using RLE */
@@ -309,7 +308,7 @@ struct vil1_viff_xvimage {
 #define VFF_DES_GENERIC         6       /* User-specified compression */
 
 /* definitions for map data or cells storage type,
-   unsigned long map_storage_type; */
+   vxl_uint_32 map_storage_type; */
 #define VFF_MAPTYP_NONE         0       /* No cell type is assigned  */
 #define VFF_MAPTYP_1_BYTE       1       /* cells are byte (unsigned char)    */
 #define VFF_MAPTYP_2_BYTE       2       /* cells are two byte (short int) */
@@ -319,7 +318,7 @@ struct vil1_viff_xvimage {
 #define VFF_MAPTYP_DOUBLE       7       /* cells are float (double precision) */
 
 /* definitions for mapping schemes,
-   unsigned long map_scheme; */
+   vxl_uint_32 map_scheme; */
 #define VFF_MS_NONE             0       /* No mapping is to be done, and no
                                            maps are to be stored. */
 #define VFF_MS_ONEPERBAND       1       /* Each data band has its own map */
@@ -330,7 +329,7 @@ struct vil1_viff_xvimage {
 #define VFF_MS_GROUP            4       /* All data bands are "grouped"
                                            together to point into one map */
 /* definitions for enabling the map,
-   unsigned long map_enable; */
+   vxl_uint_32 map_enable; */
 #define VFF_MAP_OPTIONAL        1       /* The data is valid without being
                                            sent thru the color map. If a
                                            map is defined, the data may
@@ -339,7 +338,7 @@ struct vil1_viff_xvimage {
                                            to be interpreted */
 
 /* definitions for color map models,
-   unsigned long color_space_model; */
+   vxl_uint_32 color_space_model; */
 
 /*  the models use the following convention:
     ntsc: national television systems committee
@@ -380,7 +379,7 @@ examples of proper use.  */
                                            to any standard */
 
 /* definitions for location type,
-   unsigned long location_type; */
+   vxl_uint_32 location_type; */
 #define VFF_LOC_IMPLICIT        1       /*  The location of image pixels
                                             or vector data is given by using
                                             the implied 2D array given by

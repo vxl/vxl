@@ -57,7 +57,7 @@ SET( vil1_sources
   file_formats/vil1_gen.cxx                  file_formats/vil1_gen.h
   file_formats/vil1_pnm.cxx                  file_formats/vil1_pnm.h
   file_formats/vil1_viff.cxx                 file_formats/vil1_viff.h
-  file_formats/vil1_viff_support.c           file_formats/vil1_viffheader.h
+  file_formats/vil1_viff_support.c           file_formats/vil1_viff_support.h file_formats/vil1_viffheader.h
   file_formats/vil1_iris.cxx                 file_formats/vil1_iris.h
   file_formats/vil1_mit.cxx                  file_formats/vil1_mit.h
   file_formats/vil1_bmp_file_header.cxx      file_formats/vil1_bmp_file_header.h
