@@ -29,6 +29,7 @@ integer *job;
     /* Builtin functions */
     double c_abs();
     void c_div();
+    double sqrt();
 
     /* Local variables */
     static logical negj;
