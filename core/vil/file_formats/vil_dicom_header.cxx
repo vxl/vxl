@@ -8,6 +8,9 @@
 // E-mail: cwolstenholme@imorphics.com
 // Copyright (c) 2001 iMorphics Ltd
 
+#include <vil/vil_config.h>
+#if HAS_DCMTK
+
 #include "vil_dicom_header.h"
 #include <vil/vil_stream.h>
 #include <vcl_iostream.h>
@@ -123,7 +126,6 @@ vil_dicom_header_info_clear( vil_dicom_header_info& info )
   info.stored_bits_ = VIL_DICOM_HEADER_UNSPECIFIED_UNSIGNED;
   info.allocated_bits_ = VIL_DICOM_HEADER_UNSPECIFIED_UNSIGNED;
 }
-
 
 
 //================================================================
@@ -306,7 +308,6 @@ vil_dicom_header_type vil_dicom_header_format::determineFileType(vil_stream &fs)
             // It's not what we want, so skip it and
             // get the next one
             fs.seek(data_block_size + fs.tell());
-
 
             fs.read(&group, sizeof(vxl_uint_16));
             group = shortSwap(group);
@@ -1241,3 +1242,4 @@ void vil_dicom_header_print(vcl_ostream &os, const vil_dicom_header_info &s)
      << " allocated_bits   The bits allocated: " << s.allocated_bits_ << vcl_endl;
 }
 
+#endif // HAS_DCMTK

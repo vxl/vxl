@@ -5,6 +5,9 @@
 //:
 // \file
 
+#include <vil/vil_config.h>
+#if HAS_DCMTK
+
 #include "vil_dicom.h"
 
 #include <vcl_cassert.h>
@@ -961,3 +964,5 @@ read_pixels_into_buffer(DcmPixelData* pixels,
 
   delete pixel_data;
 }
+
+#endif // HAS_DCMTK

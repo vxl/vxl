@@ -1,9 +1,9 @@
+#include <vil/vil_config.h>
+#if HAS_DCMTK
+
 #include "vil_dicom_stream.h"
-
 #include <vil/vil_stream.h>
-
 #include <dcerror.h>
-
 
 #include <vcl_cassert.h>
 
@@ -109,8 +109,6 @@ create() const
 }
 
 
-
-
 // ===========================================================================
 //                                                                stream input
 
@@ -134,3 +132,5 @@ newFactory() const
 {
   return 0;
 }
+
+#endif // HAS_DCMTK
