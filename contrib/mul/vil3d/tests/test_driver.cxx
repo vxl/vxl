@@ -12,10 +12,12 @@ DECLARE( test_algo_binary_dilate );
 DECLARE( test_algo_binary_erode );
 DECLARE( test_algo_exp_filter );
 DECLARE( test_algo_grad_1x3 );
+DECLARE( test_image_resource );
 
 void
 register_tests()
 {
+  REGISTER( test_image_resource );
   REGISTER( test_image_view );
   REGISTER( test_math );
   REGISTER( test_trilin_interp );

@@ -17,6 +17,10 @@ SET( vil3d_sources ${vil3d_sources}
   vil3d_header_data.h vil3d_header_data.cxx
   vil3d_file_format.h vil3d_file_format.cxx
   vil3d_load.h vil3d_load.cxx
+  vil3d_memory_image.h vil3d_memory_image.cxx
+  vil3d_copy.h vil3d_copy.txx
+  vil3d_image_resource.h vil3d_image_resource.cxx
+  vil3d_new.h vil3d_new.cxx
 
   file_formats/vil3d_gipl_format.h file_formats/vil3d_gipl_format.cxx
 )

@@ -1,34 +1,28 @@
 //:
 // \file
 // \brief Functions to read an image from a file
-// \author Tim Cootes
+// \author Ian Scott
 
 #include "vil3d_load.h"
+#include <vil3d/vil3d_file_format.h>
 
-//: Load image from named path
-//  Attempts to load with each of available file format readers
-//  Use vil3d_file_format::add_format() to add additional format options.
-bool vil3d_load(vil3d_header_data_sptr& header,
-                vil3d_image_view_base_sptr& image,
-                const vcl_string& path)
+
+vil3d_image_resource_sptr vil3d_load_image_resource(char const* filename)
 {
-  // Try each format in turn
-  // Could add something to guess format from path
   for (unsigned i=0;i<vil3d_file_format::n_formats();++i)
   {
-    if (vil3d_file_format::format_list()[i]->read_file(header,image,path))
-      return true;
+    vil3d_image_resource_sptr im =
+      vil3d_file_format::format(i).make_input_image(filename);
+    if (im) return im;
   }
-  return false;
+  return 0;
 }
 
-//: Utility function to load image (and discard image header information)
-//  Returns null ptr if unable to load from named path
-vil3d_image_view_base_sptr vil3d_load(const vcl_string& path)
+
+//: Convenience function for loading an image into an image view.
+vil3d_image_view_base_sptr vil3d_load(const char *file)
 {
-  vil3d_header_data_sptr header;
-  vil3d_image_view_base_sptr image;
-  vil3d_load(header,image,path);
-  return image;
+  vil3d_image_resource_sptr data = vil3d_load_image_resource(file);
+  if (!data) return 0;
+  return data -> get_view(0, data->ni(), 0, data->nj(), 0, data->nk());
 }
-

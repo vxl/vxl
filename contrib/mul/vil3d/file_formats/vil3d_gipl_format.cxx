@@ -9,6 +9,7 @@
 
 #include "vil3d_gipl_format.h"
 #include <vcl_cassert.h>
+#include <vcl_cstdlib.h>
 #include <vil2/vil2_stream_16bit.h>
 #include <vil2/vil2_stream_32bit.h>
 #include <vil3d/vil3d_image_view.h>
@@ -89,6 +90,29 @@ vil3d_gipl_format::vil3d_gipl_format() {}
 vil3d_gipl_format::~vil3d_gipl_format()
 {
 }
+
+
+
+
+vil3d_image_resource_sptr vil3d_gipl_format::make_input_image(const char *) const
+{
+  vcl_cerr <<"vil3d_gipl_format::make_input_image() NYI" << vcl_endl;
+  vcl_abort();
+}
+
+
+//: Make a "generic_image" on which put_section may be applied.
+// The file may bo openned immediately for writing so that a header can be written.
+// The width/height etc are explicitly specified, so that file_format implementors
+// know what they need to do...
+vil3d_image_resource_sptr vil3d_gipl_format::make_output_image
+                   (const char* filename, unsigned ni, unsigned nj,
+                    unsigned nk, unsigned nplanes, enum vil2_pixel_format) const
+{
+  vcl_cerr <<"vil3d_gipl_format::make_output_image() NYI" << vcl_endl;
+  vcl_abort();
+}
+
 
 //: Read header and image from given stream if possible
 bool vil3d_gipl_format::read_stream(vil3d_header_data_sptr& header,
