@@ -4,6 +4,7 @@
 #include <vul/vul_arg.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
+#include <vil/vil_math.h>
 #include <ipts/ipts_corner_pyramid.h>
 #include <ipts/ipts_scale_space_peaks.h>
 #include <ipts/ipts_draw.h>
@@ -18,7 +19,7 @@ void print_usage()
 int main( int argc, char* argv[] )
 {
   vul_arg<vcl_string> in_path("-i","Input image path");
-  vul_arg<vcl_string> out_path("-o","Output image file (peaks)");
+  vul_arg<vcl_string> out_path("-o","Output image file (peaks)","output.pnm");
   vul_arg<vcl_string> corner_path("-c","Output image file (corners)");
   vul_arg<float> threshold("-t","Threshold on corner respose",100.0f);
   vul_arg<double> scale("-s","Scale step",1.41);
@@ -64,9 +65,11 @@ int main( int argc, char* argv[] )
   if (corner_path()!="")
   {
     vil_image_view<vxl_byte> out_corners;
+    // Apply sqrt to make structure more visible
+    vil_math_sqrt(flat_corners.image());
     vil_convert_stretch_range(flat_corners.image(),out_corners);
     vil_save(out_corners,corner_path().c_str());
-    vcl_cout<<"Corner pyramid saved to "<<corner_path()<<vcl_endl;
+    vcl_cout<<"(sqrt) Corner pyramid saved to "<<corner_path()<<vcl_endl;
   }
 
   return 0;
