@@ -10,3 +10,5 @@ namespace std {
 #endif
 
 VCL_SORT_INSTANTIATE(vnl_bignum*, vnl_bignum);
+#include <vnl/vnl_bignum_traits.h>
+VCL_CONTAINABLE_INSTANTIATE(vnl_bignum);

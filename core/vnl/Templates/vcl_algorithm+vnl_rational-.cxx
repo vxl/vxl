@@ -10,3 +10,6 @@ namespace std {
 #endif
 
 VCL_SORT_INSTANTIATE(vnl_rational*, vnl_rational);
+
+#include <vnl/vnl_rational_traits.h>
+VCL_CONTAINABLE_INSTANTIATE(vnl_rational);
