@@ -43,8 +43,7 @@ void vimt_dog_pyramid_builder_2d<T>::set_max_levels(int max_l)
 {
   if (max_l<1)
   {
-    vcl_cerr<<"vimt_dog_pyramid_builder_2d<T>::setMaxLevels() ";
-    vcl_cerr<<"Must be >=1\n";
+    vcl_cerr<<"vimt_dog_pyramid_builder_2d<T>::set_max_levels() argument must be >=1\n";
     vcl_abort();
   }
   max_levels_ = max_l;
@@ -73,7 +72,6 @@ double vimt_dog_pyramid_builder_2d<T>::scale_step() const
 {
   return 1.5;
 }
-
 
 
 //=======================================================================
@@ -123,8 +121,8 @@ void vimt_dog_pyramid_builder_2d<T>::build(vimt_image_pyramid& dog_pyr,
 //: Build pyramid
 template<class T>
 void vimt_dog_pyramid_builder_2d<T>::build_dog(vimt_image_pyramid& dog_pyr,
-                                           vimt_image_pyramid& smooth_pyr,
-                                           const vimt_image& im) const
+                                               vimt_image_pyramid& smooth_pyr,
+                                               const vimt_image& im) const
 {
   //  Require image vimt_image_2d_of<T>
   assert(im.is_class(work_im_.is_a()));
@@ -154,7 +152,7 @@ void vimt_dog_pyramid_builder_2d<T>::build_dog(vimt_image_pyramid& dog_pyr,
   vimt_image_2d_of<T>& smooth0 = static_cast<vimt_image_2d_of<T>&>( smooth_pyr(0));
   vimt_image_2d_of<T>& dog0 = static_cast<vimt_image_2d_of<T>&>( dog_pyr(0));
 
-  vil_gauss_filter_5tap_params smooth_params(1.5);  
+  vil_gauss_filter_5tap_params smooth_params(1.5);
                // Perhaps should use wider filter?
 
   vil_gauss_filter_5tap(base_image.image(),smooth0.image(),smooth_params,
@@ -175,7 +173,7 @@ void vimt_dog_pyramid_builder_2d<T>::build_dog(vimt_image_pyramid& dog_pyr,
 
 
   // Subsequent levels
-  for (unsigned i=1;i<max_levels;++i)
+  for (int i=1;i<max_levels;++i)
   {
     vimt_image_2d_of<T>& smooth0 = static_cast<vimt_image_2d_of<T>&>( smooth_pyr(i-1));
     vimt_image_2d_of<T>& smooth1 = static_cast<vimt_image_2d_of<T>&>( smooth_pyr(i));
@@ -294,8 +292,8 @@ void vimt_dog_pyramid_builder_2d<T>::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs,min_y_size_);
     break;
   default:
-    vcl_cerr << "I/O ERROR: vimt_dog_pyramid_builder_2d<T>::b_read(vsl_b_istream&)\n";
-    vcl_cerr << "           Unknown version number "<< version << "\n";
+    vcl_cerr << "I/O ERROR: vimt_dog_pyramid_builder_2d<T>::b_read(vsl_b_istream&)\n"
+             << "           Unknown version number "<< version << '\n';
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
