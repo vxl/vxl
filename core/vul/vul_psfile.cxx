@@ -6,12 +6,13 @@
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
 #include <vcl_iomanip.h> // for setw()
+#include <vcl_algorithm.h> // for vcl_min()
 
-#define PIX2INCH 72.0
 #define RANGE(a,b,c) { if (a < b) a = b;  if (a > c) a = c; }
 #define in_range(a) (a < (1 << 8))
 #define Bit4ToChar(a) ((char)((a<=9) ? (a+'0'): (a - 10 + 'a')))
 
+static const double PIX2INCH = 72.0;
 static bool debug = true;
 
 // sizes of pages in inches
@@ -35,8 +36,8 @@ static double margins[8 ][2] = { { 1.000, 1.000},   // US NORMAL
                                 { 0.078, 0.078}};  // 35mm (24x36)
 
 // min and max value for PostScript paper size
-static int ps_minimum = 10;
-static int ps_maximum = 800;
+static float ps_minimum = 0.1f;
+static float ps_maximum = 8.f;
 
 static const vcl_streampos HEADER_START(-1);
 
@@ -48,7 +49,7 @@ vul_psfile::vul_psfile(char const* f, bool dbg)
     fg_r(0), fg_g(0), fg_b(0),
     bg_r(1), bg_g(1), bg_b(1),
     line_width_(1),
-    scale_x(100), scale_y(100),
+    scale_x(1.f), scale_y(1.f),
     ox(0), oy(0), iw(0), ih(0),
     iwf(1.0), ihf(1.0),
     psizex(8.5), psizey(11),
@@ -121,8 +122,6 @@ void vul_psfile::compute_bounding_box()
 {
   box_width  = max_x - min_x;
   box_height = max_y - min_y;
-  double hsx, hsy;
-  double sz_inx, sz_iny;   // image size, in inches
 
   if (printer_paper_orientation == vul_psfile::LANDSCAPE)
   {
@@ -137,76 +136,54 @@ void vul_psfile::compute_bounding_box()
 
   if (printer_paper_layout == vul_psfile::CENTER)
   {
-    sz_inx = (double) box_width  / PIX2INCH * (scale_x / 100.0);
-    sz_iny = (double) box_height / PIX2INCH * (scale_y / 100.0);
+    double hsx = box_width  / PIX2INCH * scale_x * .5;
+    double hsy = box_height / PIX2INCH * scale_y * .5;
 
-    // round to integer .001ths of an inch
-    sz_inx = vcl_floor(sz_inx * 1000.0 + 0.5) / 1000.0;
-    sz_iny = vcl_floor(sz_iny * 1000.0 + 0.5) / 1000.0;
     // from xv xvps.c subroutine: centerimage
-    pos_inx = psizex/2 - sz_inx/2;
-    pos_iny = psizey/2 - sz_iny/2;
+    pos_inx = psizex*.5 - hsx;
+    pos_iny = psizey*.5 - hsy;
 
     // make sure 'center' of image is still on page
-    hsx = sz_inx/2;  hsy = sz_iny/2;
     RANGE(pos_inx, -hsx, psizex-hsx);
     RANGE(pos_iny, -hsy, psizey-hsy);
 
     // round to integer .001ths of an inch
-    pos_inx = vcl_floor(pos_inx * 1000.0 + 0.5) / 1000.0;
-    pos_iny = vcl_floor(pos_iny * 1000.0 + 0.5) / 1000.0;
+    pos_inx = vcl_floor(pos_inx * 1000.0 + 0.5) * .001;
+    pos_iny = vcl_floor(pos_iny * 1000.0 + 0.5) * .001;
   }
-
-  if (printer_paper_layout == vul_psfile::MAX)
+  else if (printer_paper_layout == vul_psfile::MAX)
   {
-    double scx, scy;
-    sz_inx = psizex - margins[printer_paper_type][0];
-    sz_iny = psizey - margins[printer_paper_type][1];
+    double hsx = psizex - margins[printer_paper_type][0];
+    double hsy = psizey - margins[printer_paper_type][1];
+
+    // avoid division by 0:
+    if (box_width == 0) box_width = 1;
+    if (box_height == 0) box_height = 1;
 
     // choose the smaller scaling factor
-    scx = sz_inx / box_width;
-    scy = sz_iny / box_height;
-    if (scx < scy)
-    {
-      sz_iny = box_height * scx;
-      scale_y = int((100 * (sz_iny * PIX2INCH) / box_width) + .5);
-      scale_x = scale_y;
-    }
-    else
-    {
-      sz_inx = box_width * scy;
-      scale_x = int((100 * (sz_inx * PIX2INCH) / box_width) + .5);
-      scale_y = scale_x;
-    }
+    scale_x = scale_y = vcl_min(hsx/box_width, hsy/box_height) * PIX2INCH;
 
     RANGE(scale_x,ps_minimum,ps_maximum);
     RANGE(scale_y,ps_minimum,ps_maximum);
-    sz_inx = (double) box_width / PIX2INCH * (scale_x / 100.0);
-    sz_iny = (double) box_height / PIX2INCH * (scale_y / 100.0);
+
+    pos_inx = psizex*.5 - box_width / PIX2INCH * scale_x *.5;
+    pos_iny = psizey*.5 - box_height/ PIX2INCH * scale_y *.5;
 
     // round to integer .001ths of an inch
-    sz_inx = vcl_floor(sz_inx * 1000.0 + 0.5) / 1000.0;
-    sz_iny = vcl_floor(sz_iny * 1000.0 + 0.5) / 1000.0;
-    pos_inx = psizex/2 - sz_inx/2;
-    pos_iny = psizey/2 - sz_iny/2;
-
-    // round to integer .001ths of an inch
-    pos_inx = vcl_floor(pos_inx * 1000.0 + 0.5) / 1000.0;
-    pos_iny = vcl_floor(pos_iny * 1000.0 + 0.5) / 1000.0;
+    pos_inx = vcl_floor(pos_inx * 1000.0 + 0.5) * .001;
+    pos_iny = vcl_floor(pos_iny * 1000.0 + 0.5) * .001;
   }
 
   // printed image will have size iw,ih (in picas)
-  if (exist_image && !exist_objs)
+  if (exist_image)
   {
-    iw = int(width  * scale_x/100.0 + 0.5);
-    ih = int(height * scale_y/100.0 + 0.5);
-    iwf = width  * scale_x/100.0;
-    ihf = height * scale_y/100.0;
+    iwf = width  * scale_x; iw = int(iwf + 0.5);
+    ihf = height * scale_y; ih = int(ihf + 0.5);
   }
   if (exist_objs)
   {
-    iw = int(box_width  * scale_x/100.0 + 0.5);
-    ih = int(box_height * scale_y/100.0 + 0.5);
+    iw = int(box_width  * scale_x + 0.5);
+    ih = int(box_height * scale_y + 0.5);
   }
 
   // compute offset to bottom-left of image (in picas)
@@ -461,9 +438,9 @@ void vul_psfile::graphic_header()
 //-----------------------------------------------------------------------------
 void vul_psfile::image_translate_and_scale()
 {
-  int scale_height = int(height* scale_y/100.f);
-  int scale_min_x  = int(min_x * scale_x/100.f);
-  int scale_max_y  = int(max_y * scale_y/100.f);
+  int scale_height = int(height* scale_y);
+  int scale_min_x  = int(min_x * scale_x);
+  int scale_max_y  = int(max_y * scale_y);
 
   if (debug)
     vcl_cout << "vul_psfile::image_translate_and_scale, scale_height= "
@@ -482,15 +459,17 @@ void vul_psfile::image_translate_and_scale()
 //-----------------------------------------------------------------------------
 void vul_psfile::object_translate_and_scale()
 {
-  int scale_height = int(box_height * scale_y/100.f);
-  int scale_min_x  = int(min_x * scale_x/100.f);
-  int scale_min_y  = int(min_y * scale_y/100.f);
+  int scale_height = int(box_height * scale_y);
+  int scale_min_x  = int(min_x * scale_x);
+  int scale_min_y  = int(min_y * scale_y);
+  // round to integer .01ths
+  scale_x = vcl_floor(scale_x * 100.0 + 0.5) * .01;
+  scale_y = vcl_floor(scale_y * 100.0 + 0.5) * .01;
 
   // move origin
   output_filestream << vcl_setw(6) << ox - scale_min_x << ' '
                     << vcl_setw(6) << oy + scale_height + scale_min_y << " translate\n"
-                    << vcl_setw(9) << scale_x/100.0 << ' '
-                    << vcl_setw(9) << -scale_y/100.0 << " scale\n\n"
+                    << vcl_setw(9) << scale_x << ' ' << vcl_setw(9) << -scale_y << " scale\n\n"
                     << "/originalCTM matrix currentmatrix def\n";
 }
 
@@ -501,86 +480,12 @@ bool vul_psfile::set_parameters(int sizex,int sizey)
 {
   width = sizex;
   height = sizey;
+  // avoid division by 0 or other fancy things later on:
+  assert (width > 0 && height > 0);
 
   set_min_max_xy(0,0);
   set_min_max_xy(width,height);
   compute_bounding_box();
-
-  double hsx, hsy;
-  double sz_inx, sz_iny;   // image size, in inches
-
-  if (printer_paper_orientation == vul_psfile::LANDSCAPE)
-  {
-    psizex = paper_size[printer_paper_type][1];
-    psizey = paper_size[printer_paper_type][0];
-  }
-  else
-  {
-    psizex = paper_size[printer_paper_type][0];
-    psizey = paper_size[printer_paper_type][1];
-  }
-
-  if (printer_paper_layout == vul_psfile::CENTER)
-  {
-    sz_inx = (double) width  / PIX2INCH * (scale_x / 100.0);
-    sz_iny = (double) height / PIX2INCH * (scale_y / 100.0);
-
-    // round to integer .001ths of an inch
-    sz_inx = vcl_floor(sz_inx * 1000.0 + 0.5) / 1000.0;
-    sz_iny = vcl_floor(sz_iny * 1000.0 + 0.5) / 1000.0;
-    // from xv xvps.c subroutine: centerimage
-    pos_inx = psizex/2 - sz_inx/2;
-    pos_iny = psizey/2 - sz_iny/2;
-
-    // make sure 'center' of image is still on page
-    hsx = sz_inx/2;  hsy = sz_iny/2;
-    RANGE(pos_inx, -hsx, psizex-hsx);
-    RANGE(pos_iny, -hsy, psizey-hsy);
-
-    // round to integer .001ths of an inch
-    pos_inx = vcl_floor(pos_inx * 1000.0 + 0.5) / 1000.0;
-    pos_iny = vcl_floor(pos_iny * 1000.0 + 0.5) / 1000.0;
-  }
-
-  else if (printer_paper_layout == vul_psfile::MAX)
-  {
-    // choose the smaller scaling factor
-    sz_inx = psizex - margins[printer_paper_type][0];
-    sz_iny = psizey - margins[printer_paper_type][1];
-    double scx = sz_inx / width;
-    double scy = sz_iny / height;
-    if (scx < scy) { sz_iny = height * scx; } else { sz_inx = width * scy; }
-    scale_x = int((100 * (sz_inx * PIX2INCH) / width) + .5);
-    scale_y = int((100 * (sz_inx * PIX2INCH) / width) + .5);
-    RANGE(scale_x,ps_minimum,ps_maximum);
-    RANGE(scale_y,ps_minimum,ps_maximum);
-    sz_inx = (double) width / PIX2INCH * (scale_x / 100.0);
-    sz_iny = (double) height / PIX2INCH * (scale_y / 100.0);
-
-    // round to integer .001ths of an inch
-    sz_inx = vcl_floor(sz_inx * 1000.0 + 0.5) / 1000.0;
-    sz_iny = vcl_floor(sz_iny * 1000.0 + 0.5) / 1000.0;
-    pos_inx = psizex/2 - sz_inx/2;
-    pos_iny = psizey/2 - sz_iny/2;
-
-    // round to integer .001ths of an inch
-    pos_inx = vcl_floor(pos_inx * 1000.0 + 0.5) / 1000.0;
-    pos_iny = vcl_floor(pos_iny * 1000.0 + 0.5) / 1000.0;
-  }
-  else // this should never be reached
-  {
-    vcl_cerr << "vul_psfile: This should not happen...\n";
-    sz_iny = 1;
-    sz_inx = 1;
-  }
-
-  // printed image will have size iw,ih (in picas)
-  iwf = sz_inx * PIX2INCH; iw = int(iwf+0.5);
-  ihf = sz_iny * PIX2INCH; ih = int(ihf+0.5);
-
-  // compute offset to bottom-left of image (in picas)
-  ox = int(pos_inx*PIX2INCH+0.5);
-  oy = int(pos_iny*PIX2INCH+0.5);
 
   return true;
 }
