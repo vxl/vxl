@@ -181,11 +181,13 @@ add_faces( vcl_vector<vtol_intensity_face_sptr>& faces,
 //                                              static variables and constants
 
 
+#if !VCL_STATIC_CONST_INIT_INT_NO_DEFN
 const unsigned
 vtol_extract_topology::null_index  VCL_STATIC_CONST_INIT_INT_DEFN( unsigned(-2) );
 
 const unsigned
 vtol_extract_topology::done_index  VCL_STATIC_CONST_INIT_INT_DEFN( unsigned(-1) );
+#endif
 
 
 // ---------------------------------------------------------------------------

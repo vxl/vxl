@@ -52,6 +52,8 @@ extern "C" int finitef(float);
 
 //--------------------------------------------------------------------------------
 
+#if !VCL_STATIC_CONST_INIT_FLOAT_NO_DEFN
+
 // constants
 const double vnl_math::e               VCL_STATIC_CONST_INIT_FLOAT_DEFN( 2.7182818284590452354  );
 const double vnl_math::log2e           VCL_STATIC_CONST_INIT_FLOAT_DEFN( 1.4426950408889634074  );
@@ -74,6 +76,8 @@ const double vnl_math::sqrteps         VCL_STATIC_CONST_INIT_FLOAT_DEFN( 1.49011
   //: IEEE single machine precision
 const float vnl_math::float_eps        VCL_STATIC_CONST_INIT_FLOAT_DEFN( 1.192092896e-07f );
 const float vnl_math::float_sqrteps    VCL_STATIC_CONST_INIT_FLOAT_DEFN( 3.4526698307e-4f );
+
+#endif
 
 //--------------------------------------------------------------------------------
 #if defined(__INTEL_COMPILER)

@@ -17,6 +17,7 @@
 // ----------------------------------------------------------------------
 // Constants for int
 
+#if !VCL_STATIC_CONST_INIT_INT_NO_DEFN
 const bool vcl_numeric_limits<int>::is_specialized VCL_STATIC_CONST_INIT_INT_DEFN(true);
 const int vcl_numeric_limits<int>::digits   VCL_STATIC_CONST_INIT_INT_DEFN(31);
 const int vcl_numeric_limits<int>::digits10 VCL_STATIC_CONST_INIT_INT_DEFN(9);
@@ -38,11 +39,13 @@ const bool vcl_numeric_limits<int>::is_modulo  VCL_STATIC_CONST_INIT_INT_DEFN(tr
 const bool vcl_numeric_limits<int>::traps      VCL_STATIC_CONST_INIT_INT_DEFN(false);
 const bool vcl_numeric_limits<int>::tinyness_before VCL_STATIC_CONST_INIT_INT_DEFN(false);
 const vcl_float_round_style vcl_numeric_limits<int>::round_style VCL_STATIC_CONST_INIT_INT_DEFN(vcl_round_toward_zero);
+#endif
 
 
 // ----------------------------------------------------------------------
 // Constants for long
 
+#if !VCL_STATIC_CONST_INIT_INT_NO_DEFN
 const bool vcl_numeric_limits<long>::is_specialized VCL_STATIC_CONST_INIT_INT_DEFN(true);
 const int vcl_numeric_limits<long>::digits   VCL_STATIC_CONST_INIT_INT_DEFN(31);
 const int vcl_numeric_limits<long>::digits10 VCL_STATIC_CONST_INIT_INT_DEFN(9);
@@ -64,11 +67,12 @@ const bool vcl_numeric_limits<long>::is_modulo  VCL_STATIC_CONST_INIT_INT_DEFN(t
 const bool vcl_numeric_limits<long>::traps      VCL_STATIC_CONST_INIT_INT_DEFN(false);
 const bool vcl_numeric_limits<long>::tinyness_before VCL_STATIC_CONST_INIT_INT_DEFN(false);
 const vcl_float_round_style vcl_numeric_limits<long>::round_style VCL_STATIC_CONST_INIT_INT_DEFN(vcl_round_toward_zero);
-
+#endif
 
 // ----------------------------------------------------------------------
 // Constants for unsigned long
 
+#if !VCL_STATIC_CONST_INIT_INT_NO_DEFN
 const bool vcl_numeric_limits<unsigned long>::is_specialized VCL_STATIC_CONST_INIT_INT_DEFN(true);
 const int vcl_numeric_limits<unsigned long>::digits   VCL_STATIC_CONST_INIT_INT_DEFN(sizeof(unsigned long) * 8 );
 const int vcl_numeric_limits<unsigned long>::digits10 VCL_STATIC_CONST_INIT_INT_DEFN( (digits * 301) / 1000 );
@@ -90,11 +94,12 @@ const bool vcl_numeric_limits<unsigned long>::is_modulo  VCL_STATIC_CONST_INIT_I
 const bool vcl_numeric_limits<unsigned long>::traps      VCL_STATIC_CONST_INIT_INT_DEFN(false);
 const bool vcl_numeric_limits<unsigned long>::tinyness_before VCL_STATIC_CONST_INIT_INT_DEFN(false);
 const vcl_float_round_style vcl_numeric_limits<unsigned long>::round_style VCL_STATIC_CONST_INIT_INT_DEFN(vcl_round_toward_zero);
-
+#endif
 
 // ----------------------------------------------------------------------
 // Constants for unsigned short
 
+#if !VCL_STATIC_CONST_INIT_INT_NO_DEFN
 const bool vcl_numeric_limits<unsigned short>::is_specialized VCL_STATIC_CONST_INIT_INT_DEFN(true);
 const int vcl_numeric_limits<unsigned short>::digits   VCL_STATIC_CONST_INIT_INT_DEFN(sizeof(unsigned short) * 8 );
 const int vcl_numeric_limits<unsigned short>::digits10 VCL_STATIC_CONST_INIT_INT_DEFN( (digits * 301) / 1000 );
@@ -116,11 +121,12 @@ const bool vcl_numeric_limits<unsigned short>::is_modulo  VCL_STATIC_CONST_INIT_
 const bool vcl_numeric_limits<unsigned short>::traps      VCL_STATIC_CONST_INIT_INT_DEFN(false);
 const bool vcl_numeric_limits<unsigned short>::tinyness_before VCL_STATIC_CONST_INIT_INT_DEFN(false);
 const vcl_float_round_style vcl_numeric_limits<unsigned short>::round_style VCL_STATIC_CONST_INIT_INT_DEFN(vcl_round_toward_zero);
-
+#endif
 
 // ----------------------------------------------------------------------
 // Constants for short
 
+#if !VCL_STATIC_CONST_INIT_INT_NO_DEFN
 const bool vcl_numeric_limits<short>::is_specialized VCL_STATIC_CONST_INIT_INT_DEFN(true);
 const int vcl_numeric_limits<short>::digits   VCL_STATIC_CONST_INIT_INT_DEFN(15);
 const int vcl_numeric_limits<short>::digits10 VCL_STATIC_CONST_INIT_INT_DEFN(5);
@@ -142,11 +148,12 @@ const bool vcl_numeric_limits<short>::is_modulo  VCL_STATIC_CONST_INIT_INT_DEFN(
 const bool vcl_numeric_limits<short>::traps      VCL_STATIC_CONST_INIT_INT_DEFN(false);
 const bool vcl_numeric_limits<short>::tinyness_before VCL_STATIC_CONST_INIT_INT_DEFN(false);
 const vcl_float_round_style vcl_numeric_limits<short>::round_style VCL_STATIC_CONST_INIT_INT_DEFN(vcl_round_toward_zero);
-
+#endif
 
 // ----------------------------------------------------------------------
 // Constants for signed char
 
+#if !VCL_STATIC_CONST_INIT_INT_NO_DEFN
 const bool vcl_numeric_limits<signed char>::is_specialized VCL_STATIC_CONST_INIT_INT_DEFN(true);
 const int vcl_numeric_limits<signed char>::digits   VCL_STATIC_CONST_INIT_INT_DEFN(7);
 const int vcl_numeric_limits<signed char>::digits10 VCL_STATIC_CONST_INIT_INT_DEFN(3);
@@ -168,10 +175,12 @@ const bool vcl_numeric_limits<signed char>::is_modulo  VCL_STATIC_CONST_INIT_INT
 const bool vcl_numeric_limits<signed char>::traps      VCL_STATIC_CONST_INIT_INT_DEFN(false);
 const bool vcl_numeric_limits<signed char>::tinyness_before VCL_STATIC_CONST_INIT_INT_DEFN(false);
 const vcl_float_round_style vcl_numeric_limits<signed char>::round_style VCL_STATIC_CONST_INIT_INT_DEFN(vcl_round_toward_zero);
+#endif
 
 // ----------------------------------------------------------------------
 // Constants for unsigned char
 
+#if !VCL_STATIC_CONST_INIT_INT_NO_DEFN
 const bool vcl_numeric_limits<unsigned char>::is_specialized VCL_STATIC_CONST_INIT_INT_DEFN(true);
 const int vcl_numeric_limits<unsigned char>::digits   VCL_STATIC_CONST_INIT_INT_DEFN(8);
 const int vcl_numeric_limits<unsigned char>::digits10 VCL_STATIC_CONST_INIT_INT_DEFN(3);
@@ -193,6 +202,7 @@ const bool vcl_numeric_limits<unsigned char>::is_modulo  VCL_STATIC_CONST_INIT_I
 const bool vcl_numeric_limits<unsigned char>::traps      VCL_STATIC_CONST_INIT_INT_DEFN(false);
 const bool vcl_numeric_limits<unsigned char>::tinyness_before VCL_STATIC_CONST_INIT_INT_DEFN(false);
 const vcl_float_round_style vcl_numeric_limits<unsigned char>::round_style VCL_STATIC_CONST_INIT_INT_DEFN(vcl_round_toward_zero);
+#endif
 
 // ----------------------------------------------------------------------
 // Constants and functions for double
@@ -247,6 +257,7 @@ double vcl_numeric_limits<double>::signaling_NaN()
   return quiet_NaN();
 }
 
+#if !VCL_STATIC_CONST_INIT_INT_NO_DEFN
 const bool vcl_numeric_limits<double>::is_specialized VCL_STATIC_CONST_INIT_INT_DEFN(true);
 const int  vcl_numeric_limits<double>::digits   VCL_STATIC_CONST_INIT_INT_DEFN(53);
 const int  vcl_numeric_limits<double>::digits10 VCL_STATIC_CONST_INIT_INT_DEFN( 15);
@@ -268,7 +279,7 @@ const bool vcl_numeric_limits<double>::is_modulo  VCL_STATIC_CONST_INIT_INT_DEFN
 const bool vcl_numeric_limits<double>::traps      VCL_STATIC_CONST_INIT_INT_DEFN(true);
 const bool vcl_numeric_limits<double>::tinyness_before VCL_STATIC_CONST_INIT_INT_DEFN(true);
 const vcl_float_round_style vcl_numeric_limits<double>::round_style VCL_STATIC_CONST_INIT_INT_DEFN(vcl_round_to_nearest);
-
+#endif
 
 // ----------------------------------------------------------------------
 // Constants and functions for long double
@@ -325,6 +336,7 @@ long double vcl_numeric_limits<long double>::signaling_NaN()
   return quiet_NaN();
 }
 
+#if !VCL_STATIC_CONST_INIT_INT_NO_DEFN
 const bool vcl_numeric_limits<long double>::is_specialized VCL_STATIC_CONST_INIT_INT_DEFN(true);
 const int  vcl_numeric_limits<long double>::digits   VCL_STATIC_CONST_INIT_INT_DEFN((int)(85-10*szl+.75*szl*szl));
 const int  vcl_numeric_limits<long double>::digits10 VCL_STATIC_CONST_INIT_INT_DEFN((int)(9-3.5*szl+.25*szl*szl-5));
@@ -347,7 +359,7 @@ const bool vcl_numeric_limits<long double>::is_modulo  VCL_STATIC_CONST_INIT_INT
 const bool vcl_numeric_limits<long double>::traps      VCL_STATIC_CONST_INIT_INT_DEFN(true);
 const bool vcl_numeric_limits<long double>::tinyness_before VCL_STATIC_CONST_INIT_INT_DEFN(true);
 const vcl_float_round_style vcl_numeric_limits<long double>::round_style VCL_STATIC_CONST_INIT_INT_DEFN(vcl_round_to_nearest);
-
+#endif
 
 // ----------------------------------------------------------------------
 // Constants and functions for float
@@ -397,6 +409,7 @@ float vcl_numeric_limits<float>::signaling_NaN()
   return quiet_NaN();
 }
 
+#if !VCL_STATIC_CONST_INIT_INT_NO_DEFN
 const bool vcl_numeric_limits<float>::is_specialized VCL_STATIC_CONST_INIT_INT_DEFN(true);
 const int  vcl_numeric_limits<float>::digits   VCL_STATIC_CONST_INIT_INT_DEFN(24);
 const int  vcl_numeric_limits<float>::digits10 VCL_STATIC_CONST_INIT_INT_DEFN( 6);
@@ -418,5 +431,6 @@ const bool vcl_numeric_limits<float>::is_modulo  VCL_STATIC_CONST_INIT_INT_DEFN(
 const bool vcl_numeric_limits<float>::traps      VCL_STATIC_CONST_INIT_INT_DEFN(true);
 const bool vcl_numeric_limits<float>::tinyness_before VCL_STATIC_CONST_INIT_INT_DEFN(true);
 const vcl_float_round_style vcl_numeric_limits<float>::round_style VCL_STATIC_CONST_INIT_INT_DEFN(vcl_round_to_nearest);
+#endif
 
 #endif // !VCL_CXX_HAS_HEADER_LIMITS || !VCL_USE_NATIVE_STL

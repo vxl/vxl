@@ -103,9 +103,11 @@
 #if VCL_CAN_STATIC_CONST_INIT_INT
 #define VCL_STATIC_CONST_INIT_INT_DECL(x) = x
 #define VCL_STATIC_CONST_INIT_INT_DEFN(x) /* initialized at declaration */
+#define VCL_STATIC_CONST_INIT_INT_NO_DEFN 0
 #else
 #define VCL_STATIC_CONST_INIT_INT_DECL(x) /* not allowed */
 #define VCL_STATIC_CONST_INIT_INT_DEFN(x) = x
+#define VCL_STATIC_CONST_INIT_INT_NO_DEFN 0
 #endif
 
 
@@ -125,9 +127,11 @@
 #if VCL_CAN_STATIC_CONST_INIT_FLOAT
 #define VCL_STATIC_CONST_INIT_FLOAT_DECL(x) = x
 #define VCL_STATIC_CONST_INIT_FLOAT_DEFN(x) /* initialized at declaration */
+#define VCL_STATIC_CONST_INIT_FLOAT_NO_DEFN 0
 #else
 #define VCL_STATIC_CONST_INIT_FLOAT_DECL(x) /* not allowed */
 #define VCL_STATIC_CONST_INIT_FLOAT_DEFN(x) = x
+#define VCL_STATIC_CONST_INIT_FLOAT_NO_DEFN 0
 #endif
 
 

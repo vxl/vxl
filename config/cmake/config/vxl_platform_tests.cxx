@@ -278,6 +278,29 @@ int main() { return 0; }
 
 //-------------------------------------
 
+#ifdef VCL_STATIC_CONST_INIT_NO_DEFN
+/* This should not compile.  C++ requires storage to be allocated for
+   the constant to use it at runtime.  Some compilers do compile this,
+   though, and if a definition is given, it becomes a multiply defined
+   symbol.  If this does compile, we should not give a definition for
+   such constants.  */
+class A
+{
+public:
+  static const int x = 27;
+};
+
+void f(const int&) {}
+
+int main()
+{
+  f(A::x);
+  return 0;
+}
+#endif
+
+//-------------------------------------
+
 #ifdef VCL_STATIC_CONST_INIT_FLOAT
 /* (VCL_STATIC_CONST_INIT_FLOAT="1"; echo """yes" 1>&6)
    (VCL_STATIC_CONST_INIT_FLOAT="0"; echo """no" 1>&6)
