@@ -321,6 +321,9 @@ ifeq ($(OS),HP-UX10.20)
   FLAGS_gpfa5f.c = -O0
   FLAGS_dgpfa5f.c = -O0
 endif
+ifeq ($(IU_COMPILER),gcc)
+  FLAGS_zlarfx.c = -Os
+endif
 
 ifneq ($(OS),win32)
 #   debug :=
