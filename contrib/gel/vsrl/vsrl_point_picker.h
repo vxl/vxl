@@ -1,5 +1,5 @@
-#ifndef example_point_selector_h_
-#define example_point_selector_h_
+#ifndef vsrl_point_picker_h_
+#define vsrl_point_picker_h_
 
 #include "vsrl_point_picker_sptr.h"
 #include <vgui/vgui_wrapper_tableau.h>
@@ -20,7 +20,6 @@ class vsrl_point_picker : public vgui_wrapper_tableau
   vnl_vector<float>* put_H_line(float x, float y);
   vnl_vector<float>* get_point() {return point_;}
   vnl_vector<float>* point_;
-
 };
 
-#endif // example_point_selector_h_
+#endif // vsrl_point_picker_h_
