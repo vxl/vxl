@@ -32,33 +32,33 @@ static gint timeout_callback(gpointer);
 vgui_gtk_adaptor::vgui_gtk_adaptor(vgui_gtk_window* win) : win_(win), ovl_helper(0), last_mouse_x(0), last_mouse_y(0) {
 
   widget = gtk_gl_area_new_vargs(0/*NULL*/,         // no sharing
-				 GDK_GL_RGBA,
-				 GDK_GL_DOUBLEBUFFER,
-				 GDK_GL_RED_SIZE, 8,
-				 GDK_GL_GREEN_SIZE, 8,
-				 GDK_GL_BLUE_SIZE, 8,
-				 //GDK_GL_ALPHA_SIZE, 8,
-				 GDK_GL_DEPTH_SIZE,1,
-				     GDK_GL_NONE); // last argument must be GDK_GL_NONE
+                                 GDK_GL_RGBA,
+                                 GDK_GL_DOUBLEBUFFER,
+                                 GDK_GL_RED_SIZE, 8,
+                                 GDK_GL_GREEN_SIZE, 8,
+                                 GDK_GL_BLUE_SIZE, 8,
+                                 //GDK_GL_ALPHA_SIZE, 8,
+                                 GDK_GL_DEPTH_SIZE,1,
+                                     GDK_GL_NONE); // last argument must be GDK_GL_NONE
   if (!widget) {
     widget = gtk_gl_area_new_vargs(0/*NULL*/,         // no sharing
-				   GDK_GL_RGBA,
-				   GDK_GL_DOUBLEBUFFER,
-				   GDK_GL_RED_SIZE, 5,
-				   GDK_GL_GREEN_SIZE, 6,
-				   GDK_GL_BLUE_SIZE, 5,
-				   GDK_GL_DEPTH_SIZE,1,
-				   GDK_GL_NONE); // last argument must be GDK_GL_NONE
+                                   GDK_GL_RGBA,
+                                   GDK_GL_DOUBLEBUFFER,
+                                   GDK_GL_RED_SIZE, 5,
+                                   GDK_GL_GREEN_SIZE, 6,
+                                   GDK_GL_BLUE_SIZE, 5,
+                                   GDK_GL_DEPTH_SIZE,1,
+                                   GDK_GL_NONE); // last argument must be GDK_GL_NONE
   }
 
   if (!widget) {
     widget = gtk_gl_area_new_vargs(0/*NULL*/,         // no sharing
-				   GDK_GL_RGBA,
-				   GDK_GL_DOUBLEBUFFER,
-				   GDK_GL_DEPTH_SIZE,1,
-				   GDK_GL_NONE); // last argument must be GDK_GL_NONE
+                                   GDK_GL_RGBA,
+                                   GDK_GL_DOUBLEBUFFER,
+                                   GDK_GL_DEPTH_SIZE,1,
+                                   GDK_GL_NONE); // last argument must be GDK_GL_NONE
   }
-  
+
   if (!widget) {
     vcl_cerr << __FILE__ << " : Could not get a GL visual!" << vcl_endl;
     vcl_abort();
