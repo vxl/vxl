@@ -184,21 +184,25 @@ vnl_matrix<T> vnl_rank_row_column_reduce(vnl_matrix<T> const& mat, vnl_rank_pivo
 template <class T>
 unsigned int vnl_rank(vnl_matrix<T> const& mat, vnl_rank_type t)
 {
-  vnl_matrix<T> a = (t == vnl_rank_row)    ? vnl_rank_row_reduce(mat,vnl_rank_pivot_all) :
-                    (t == vnl_rank_column) ? vnl_rank_column_reduce(mat,vnl_rank_pivot_all) :
-                                             vnl_rank_row_column_reduce(mat,vnl_rank_pivot_all);
   unsigned int rank = 0;
-  if (t == vnl_rank_row)
-    for (unsigned int r=0; r<a.rows(); ++r)
+  if(t == vnl_rank_row)
     {
+    vnl_matrix<T> a = vnl_rank_row_reduce(mat, vnl_rank_pivot_all);
+    for (unsigned int r=0; r<a.rows(); ++r)
+      {
       unsigned int c=0; while (c<a.columns() && a[r][c] == 0) ++c;
       if (c!=a.columns()) ++rank; // not all elements in row r are 0
+      }
     }
   else
-    for (unsigned int c=0; c<a.columns(); ++c)
     {
+    vnl_matrix<T> a = (t == vnl_rank_column) ? vnl_rank_column_reduce(mat,vnl_rank_pivot_all) :
+                                               vnl_rank_row_column_reduce(mat,vnl_rank_pivot_all);
+    for (unsigned int c=0; c<a.columns(); ++c)
+      {
       unsigned int r=0; while (r<a.rows() && a[r][c] == 0) ++r;
       if (r!=a.rows()) ++rank; // not all elements in column c are 0
+      }
     }
   return rank;
 }
