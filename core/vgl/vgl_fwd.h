@@ -18,6 +18,7 @@ template <class T> class vgl_point_2d;
 template <class T> class vgl_point_3d;
 template <class T> class vgl_vector_2d;
 template <class T> class vgl_vector_3d;
+template <class T> class vgl_conic;
 class vgl_polygon;
 class vgl_polygon_scan_iterator;
 struct vgl_region_scan_iterator;
