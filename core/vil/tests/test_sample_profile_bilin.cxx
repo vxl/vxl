@@ -1,7 +1,6 @@
 // This is mul/vil2/tests/test_sample_profile_bilin.cxx
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
-#include <vnl/vnl_vector.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_sample_profile_bilin.h>
 #include <vil/vil_byte.h>
@@ -19,9 +18,7 @@ void test_sample_profile_bilin_byte()
 
   for (int y=0;y<image1.nj();++y)
      for (int x=0;x<image1.ni();++x)
-     {
        image1(x,y) = x+y*10;
-     }
 
   double x0 = 5.0, y0 = 5.0;
   double dx = 1.0, dy = 0.0;
@@ -65,5 +62,4 @@ MAIN( test_sample_profile_bilin )
   test_sample_profile_bilin_byte();
 
   SUMMARY();
-
 }
