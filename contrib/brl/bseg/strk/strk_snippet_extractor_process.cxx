@@ -13,6 +13,7 @@
 #include <brip/brip_roi.h>
 #include <brip/brip_vil1_float_ops.h>
 #include <strk/strk_io.h>
+
 strk_snippet_extractor_process::strk_snippet_extractor_process()
 {
   failure_ = false;
@@ -50,7 +51,7 @@ bool strk_snippet_extractor_process::execute()
   }
   int frame_index = this->frame_index();
   int offset = frame_index-start_frame_;
-  if (offset<0||offset>=n_frames)
+  if (offset<0||offset>=(int)n_frames)
   {
     failure_ = true;
     return false;
