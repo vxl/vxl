@@ -1,4 +1,4 @@
-// This is vxl/vnl/algo/vnl_amoeba.cxx
+// This is core/vnl/algo/vnl_amoeba.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -56,7 +56,8 @@ void vnl_amoeba::set_relative_diameter(double r)
 }
 
 
-struct vnl_amoebaFit : public vnl_amoeba {
+struct vnl_amoebaFit : public vnl_amoeba
+{
   int cnt;
 
   vnl_amoebaFit(vnl_amoeba& a): vnl_amoeba(a) {
@@ -174,14 +175,14 @@ double simplex_diameter(const vcl_vector<vnl_amoeba_SimplexCorner>& simplex)
 
 vcl_ostream& operator<<(vcl_ostream& s, const vnl_amoeba_SimplexCorner& simplex)
 {
-  s << "S" << simplex.fv << " ";
+  s << 'S' << simplex.fv << ' ';
   return s;
 }
 
 vcl_ostream& operator<<(vcl_ostream& s, const vcl_vector<vnl_amoeba_SimplexCorner>& simplex)
 {
   for (unsigned i = 0; i < simplex.size(); ++i)
-    s << simplex[i].fv << " ";
+    s << simplex[i].fv << ' ';
   return s;
 }
 
@@ -431,10 +432,11 @@ void vnl_amoeba::minimize(vnl_cost_function& f, vnl_vector<double>& x,
 }
 
 
-class vnl_amoeba_LSCF : public vnl_cost_function {
+class vnl_amoeba_LSCF : public vnl_cost_function
+{
   vnl_least_squares_function* ls_;
   vnl_vector<double> fx;
-public:
+ public:
 
   vnl_amoeba_LSCF(vnl_least_squares_function& ls):
     vnl_cost_function(ls.get_number_of_unknowns()),

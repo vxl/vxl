@@ -1,4 +1,4 @@
-// This is vxl/vsl/vsl_binary_io.h
+// This is core/vsl/vsl_binary_io.h
 #ifndef vsl_binary_io_h_
 #define vsl_binary_io_h_
 //:
@@ -21,7 +21,7 @@
 
 //: A binary output adaptor for any vcl_ostream
 // Currently the main use of this is to encourage streams to be opened
-// in binary mode (ie. withour CR/LF conversion)
+// in binary mode (ie. without CR/LF conversion)
 //
 // This class also provide basic support for serialisation. This allows an
 // object which has multiple pointers to it to be saved only once. During
@@ -32,7 +32,7 @@
 // to know how to safely save whatever it is pointing to.
 class vsl_b_ostream
 {
-public:
+ public:
   //: Create this adaptor using an existing stream
   // The stream (os) must be open (i.e. ready to receive insertions)
   // so that the
@@ -50,7 +50,7 @@ public:
   bool operator!() const;
 
   //: Clear the stream's record of any serialisation operations
-  // Calling this function while outputing serialisable things to stream,
+  // Calling this function while outputting serialisable things to stream,
   // will mean
   // that a second copy of an object may get stored to the stream.
   virtual void clear_serialisation_records();
@@ -81,7 +81,7 @@ public:
   // the first real data item.
   static const vcl_streamoff header_length;
 
-protected:
+ protected:
   //: The member stream
   vcl_ostream *os_;
 
@@ -113,7 +113,7 @@ protected:
 //: An adapter for a vcl_ofstream to make it suitable for binary IO
 class vsl_b_ofstream: public vsl_b_ostream
 {
-public:
+ public:
   //: Create this adaptor from a file.
   // The adapter will delete the internal stream automatically on destruction.
   vsl_b_ofstream(const vcl_string &filename,
@@ -137,7 +137,7 @@ public:
 
 //: An adaptor for any vcl_istream to make it suitable for binary input
 // Currently the main use of this is to encourage file streams to be opened
-// in binary mode (ie. withour CR/LF conversion)
+// in binary mode (ie. without CR/LF conversion)
 //
 // This class also provide basic support for serialisation. During loading,
 // multiple pointers to one object can be all set up again to point to the
@@ -147,7 +147,7 @@ public:
 // have to know how to safely save whatever it is pointing to.
 class vsl_b_istream
 {
-public:
+ public:
   //: Create this adaptor using an existing stream.
   // The stream (is) must be open (i.e. ready to be read from) so that the
   // IO version and magic number can be read by this constructor.
@@ -196,7 +196,7 @@ public:
   //: Return the version number of the IO format of the file being read.
   unsigned short version_no() const;
 
-protected:
+ protected:
   //: The member stream
   vcl_istream *is_;
 
@@ -218,7 +218,7 @@ protected:
 //: An adapter for a vcl_ifstream to make it suitable for binary IO
 class vsl_b_ifstream: public vsl_b_istream
 {
-public:
+ public:
   //: Create this adaptor from a file.
   // The adapter will delete the stream automatically on destruction.
   vsl_b_ifstream(const vcl_string &filename, vcl_ios_openmode mode = vcl_ios_in):
@@ -289,9 +289,9 @@ inline void vsl_print_summary(vcl_ostream& os, const char* s )
 // Visual Studio .NET on a 32-bit platform can check for 64-bit
 // portability issues. When these warnings (/Wp64) are turn on,
 // passing a ptrdiff_t as an int triggers a warning. The __w64
-// keyword supresses that warning here, because it's not a problem.
+// keyword suppresses that warning here, because it's not a problem.
 // On a real 64-bit platform, there will presumably be an overloaded
-// vsl_b_write for the 64-bit integral type. We don't want to supress
+// vsl_b_write for the 64-bit integral type. We don't want to suppress
 // the warning (C4244) completely, because it is a useful warning.
 
 #if VCL_VC70 && defined(VCL_WIN32)

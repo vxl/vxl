@@ -1,10 +1,9 @@
-// This is vxl/vil/vil_convolve_simple.txx
+// This is core/vil/vil_convolve_simple.txx
 #ifndef vil_convolve_simple_txx_
 #define vil_convolve_simple_txx_
 //:
 // \file
-// \author
-// fsm
+// \author fsm
 
 #include "vil_convolve_simple.h"
 
@@ -89,7 +88,7 @@ void vil_convolve_simple(vil_memory_image_of<I1> const &input1,    // input 1
                          vil_memory_image_of<I2> const &input2,    // input 2
                          int x2, int y2, unsigned w2, unsigned h2,
                          AC *,
-                         vil_memory_image_of<O>        &output,    // ouput
+                         vil_memory_image_of<O>        &output,    // output
                          int xo, int yo)
 {
   // assert that the memory to be touched may be touched :
@@ -102,7 +101,7 @@ void vil_convolve_simple(vil_memory_image_of<I1> const &input1,    // input 1
   for (unsigned k=0; k<h1; ++k)
     in1[k] = input1[y1+k] + x1;
 #if TRACE
-  vcl_cerr << in1.size() << " rasters in in1" << vcl_endl;
+  vcl_cerr << in1.size() << " rasters in in1\n";
 #endif
 
   //
@@ -110,7 +109,7 @@ void vil_convolve_simple(vil_memory_image_of<I1> const &input1,    // input 1
   for (unsigned k=0; k<h2; ++k)
     in2[k] = input2[y2+k] + x2;
 #if TRACE
-  vcl_cerr << in2.size() << " rasters in in2" << vcl_endl;
+  vcl_cerr << in2.size() << " rasters in in2\n";
 #endif
 
   //
@@ -118,7 +117,7 @@ void vil_convolve_simple(vil_memory_image_of<I1> const &input1,    // input 1
   for (unsigned k=0; k<h1+h2-1; ++k)
     out[k] = output[yo+k] + xo;
 #if TRACE
-  vcl_cerr << out.size() << " rasters in out" << vcl_endl;
+  vcl_cerr << out.size() << " rasters in out\n";
 #endif
 
   // call the simpler routine (see comment above for explanation of hack).

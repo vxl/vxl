@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_matlab_read.cxx
+// This is core/vnl/vnl_matlab_read.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -19,7 +19,8 @@
 //--------------------------------------------------------------------------------
 
 // SGI needs??
-void vnl_read_bytes(vcl_istream &s, void *p, unsigned bytes) {
+void vnl_read_bytes(vcl_istream &s, void *p, unsigned bytes)
+{
   s.read((char *)p, bytes);
 }
 
@@ -51,46 +52,53 @@ implement_read_complex_data(double)
 
 //--------------------------------------------------------------------------------
 
-vnl_matlab_readhdr::vnl_matlab_readhdr(vcl_istream &s_) : s(s_), varname(0), data_read(false) {
+vnl_matlab_readhdr::vnl_matlab_readhdr(vcl_istream &s_) : s(s_), varname(0), data_read(false)
+{
   read_hdr();
 }
 
-vnl_matlab_readhdr::~vnl_matlab_readhdr() {
+vnl_matlab_readhdr::~vnl_matlab_readhdr()
+{
   if (varname)
     delete [] varname;
   varname = 0;
 }
 
-vnl_matlab_readhdr::operator bool () const {
+vnl_matlab_readhdr::operator bool () const
+{
   return s.good() && !s.eof(); // FIXME
 }
 
-bool vnl_matlab_readhdr::is_single() const {
+bool vnl_matlab_readhdr::is_single() const
+{
   return (hdr.type % (10*vnl_matlab_header::vnl_SINGLE_PRECISION)) >= vnl_matlab_header::vnl_SINGLE_PRECISION;
 }
 
-bool vnl_matlab_readhdr::is_rowwise() const {
+bool vnl_matlab_readhdr::is_rowwise() const
+{
   return (hdr.type % (10*vnl_matlab_header::vnl_ROW_WISE)) >= vnl_matlab_header::vnl_ROW_WISE;
 }
 
-bool vnl_matlab_readhdr::is_bigendian() const {
+bool vnl_matlab_readhdr::is_bigendian() const
+{
   return (hdr.type % (10*vnl_matlab_header::vnl_BIG_ENDIAN)) >= vnl_matlab_header::vnl_BIG_ENDIAN;
 }
 
 //: internal
 // increment 'current', record the file position and read the header.
-void vnl_matlab_readhdr::read_hdr() {
+void vnl_matlab_readhdr::read_hdr()
+{
   vcl_memset(&hdr, 0, sizeof hdr);
   ::vnl_read_bytes(s, &hdr, sizeof(hdr));
   if (varname)
     delete [] varname;
   varname = new char[hdr.namlen+1];
 #ifdef DEBUG
-  vcl_cerr << "type:" << hdr.type << vcl_endl;
-  vcl_cerr << "rows:" << hdr.rows << vcl_endl;
-  vcl_cerr << "cols:" << hdr.cols << vcl_endl;
-  vcl_cerr << "imag:" << hdr.imag << vcl_endl;
-  vcl_cerr << "namlen:" << hdr.namlen << vcl_endl;
+  vcl_cerr << "type:" << hdr.type << vcl_endl
+           << "rows:" << hdr.rows << vcl_endl
+           << "cols:" << hdr.cols << vcl_endl
+           << "imag:" << hdr.imag << vcl_endl
+           << "namlen:" << hdr.namlen << vcl_endl;
 #endif
   ::vnl_read_bytes(s, varname, hdr.namlen);
   varname[hdr.namlen] = '\0';
@@ -98,7 +106,8 @@ void vnl_matlab_readhdr::read_hdr() {
   data_read = false;
 }
 
-void vnl_matlab_readhdr::read_next() {
+void vnl_matlab_readhdr::read_next()
+{
   if (!data_read) {
     // number of bytes to skip :
     unsigned long n = rows()*cols()*sizeof(float);

@@ -1,4 +1,4 @@
-// This is vxl/vnl/examples/vnl_polyroots.cxx
+// This is core/vnl/examples/vnl_polyroots.cxx
 
 //:
 // \file
@@ -26,8 +26,8 @@ int main(int argc, char* argv[])
     for (int i=0; i<argc; ++i)
       pts[i] = vcl_atof(argv[i]);
 
-  vcl_cout << "Coefficients = [ " << pts << " ]\n";
-  vcl_cout << "Polynomial = ";
+  vcl_cout << "Coefficients = [ " << pts << " ]\n"
+           << "Polynomial = ";
   for (unsigned i=0; i+2<pts.size(); ++i) if (pts[i] != 0)
     vcl_cout << pts[i] << " X^" << pts.size()-i-1 << " + ";
   vcl_cout << pts[pts.size()-2] << " X + " << pts[pts.size()-1] << vcl_endl;
@@ -35,6 +35,5 @@ int main(int argc, char* argv[])
   vnl_rpoly_roots r(pts);
 
   vcl_cout << "Roots = [ " << r.roots() << " ]\n";
-
   return 0;
 }

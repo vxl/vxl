@@ -1,4 +1,4 @@
-// This is vxl/vil/io/vil_io_image.cxx
+// This is core/vil/io/vil_io_image.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -79,8 +79,8 @@ void vsl_b_read(vsl_b_istream &is,  vil_image& p)
         // This checks that the saving stream and reading stream
         // both agree on whether or not this is the first time they
         // have seen this object.
-        vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_image&) \n";
-        vcl_cerr << "           De-serialisation failure\n";
+        vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_image&)\n"
+                 << "           De-serialisation failure\n";
         is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
         return;
       }
@@ -97,8 +97,8 @@ void vsl_b_read(vsl_b_istream &is,  vil_image& p)
     break;
 
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_image&) \n";
-    vcl_cerr << "           Unknown version number "<< v << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_image&)\n"
+             << "           Unknown version number "<< v << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }

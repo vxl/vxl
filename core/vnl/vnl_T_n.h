@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_T_n.h
+// This is core/vnl/vnl_T_n.h
 #ifndef vnl_T_n_h_
 #define vnl_T_n_h_
 //:
@@ -24,8 +24,9 @@
 //: this macro defines the class.
 // e.g. use vnl_T_n_impl(int,2) to implement class vnl_int_2.
 #define vnl_T_n_class_impl(T,n) \
-class vnl_##T##_##n : public vnl_vector_fixed<T ,n> { \
-public: \
+class vnl_##T##_##n : public vnl_vector_fixed<T ,n> \
+{ \
+ public: \
   vnl_##T##_##n() { } \
   vnl_##T##_##n(vnl_vector<T > const & rhs) : vnl_vector_fixed<T ,n>(rhs) { } \
   vnl_##T##_##n(vnl_vector_fixed<T ,n> const & rhs) : vnl_vector_fixed<T ,n>(rhs) { } \

@@ -1,4 +1,4 @@
-// This is vxl/vil/io/vil_io_memory_image_of.txx
+// This is core/vil/io/vil_io_memory_image_of.txx
 #ifndef vil_io_memory_image_of_txx_
 #define vil_io_memory_image_of_txx_
 //:
@@ -42,8 +42,8 @@ void vsl_b_read(vsl_b_istream &is, vil_memory_image_of<T> & p)
     break;
 
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_memory_image_of<T>&) \n";
-    vcl_cerr << "           Unknown version number "<< v << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_memory_image_of<T>&)\n"
+             << "           Unknown version number "<< v << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }

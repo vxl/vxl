@@ -1,4 +1,4 @@
-// This is vxl/vil/io/vil_io_memory_image.cxx
+// This is core/vil/io/vil_io_memory_image.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -41,8 +41,8 @@ void vsl_b_read(vsl_b_istream &is, vil_memory_image & p)
     break;
 
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_memory_image&) \n";
-    vcl_cerr << "           Unknown version number "<< v << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_memory_image&)\n"
+             << "           Unknown version number "<< v << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }

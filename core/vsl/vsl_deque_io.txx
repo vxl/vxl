@@ -1,4 +1,4 @@
-// This is vxl/vsl/vsl_deque_io.txx
+// This is core/vsl/vsl_deque_io.txx
 #ifndef vsl_deque_io_txx_
 #define vsl_deque_io_txx_
 //:
@@ -43,8 +43,8 @@ void vsl_b_read(vsl_b_istream& is, vcl_deque<T>& v)
       vsl_b_read(is,v[i]);
     break;
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vcl_deque<T>&) \n";
-    vcl_cerr << "           Unknown version number "<< ver << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vcl_deque<T>&)\n"
+             << "           Unknown version number "<< ver << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -58,12 +58,12 @@ void vsl_print_summary(vcl_ostream& os, const vcl_deque<T> &v)
   os << "Deque length: " << v.size() << vcl_endl;
   for (unsigned int i=0; i<v.size() && i<5; i++)
   {
-    os << " " << i << ": ";
+    os << ' ' << i << ": ";
     vsl_print_summary(os,v[i]);
     os << vcl_endl;
   }
   if (v.size() > 5)
-    os << " ..." << vcl_endl;
+    os << " ...\n";
 }
 
 

@@ -1,4 +1,4 @@
-// This is vxl/vul/vul_expand_path.cxx
+// This is core/vul/vul_expand_path.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -135,9 +135,7 @@ vcl_string vul_expand_path_internal(vcl_string path)
             vcl_string a = vcl_string(path.c_str(), path.c_str()+j+1);
             vcl_string b = vcl_string(buf, buf+len);
             vcl_string c = vcl_string(path.c_str() + i, path.c_str() + path.size());
-            //vcl_cerr << "a = " << a << vcl_endl;
-            //vcl_cerr << "b = " << b << vcl_endl;
-            //vcl_cerr << "c = " << c << vcl_endl;
+          //vcl_cerr << "a = " << a << "\nb = " << b << "\nc = " << c << '\n';
             path = a + b + c;
           }
           else {

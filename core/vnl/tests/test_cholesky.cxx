@@ -1,4 +1,4 @@
-// This is vxl/vnl/tests/test_cholesky.cxx
+// This is core/vnl/tests/test_cholesky.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vnl/vnl_matrix.h>
@@ -19,8 +19,8 @@ void test_cholesky()
   {
     vnl_cholesky chol(A);
     vnl_svd<double> svd(A);
-    vcl_cout << "cholesky inverse:\n" << chol.inverse() << '\n';
-    vcl_cout << "svd inverse:\n" << svd.inverse() << '\n';
+    vcl_cout << "cholesky inverse:\n" << chol.inverse() << '\n'
+             << "svd inverse:\n" << svd.inverse() << '\n';
     testlib_test_assert_near("svd.inverse() ~= cholesky.inverse()",
                              (chol.inverse() - svd.inverse()).fro_norm());
   }

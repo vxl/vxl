@@ -1,4 +1,4 @@
-// This is vxl/vnl/algo/vnl_conjugate_gradient.cxx
+// This is core/vnl/algo/vnl_conjugate_gradient.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -39,8 +39,9 @@ int cg_( double *x,                     // IO start guess
 
 /////////////////////////////////////
 
-class vnl_conjugate_gradient_Activate {
-public:
+class vnl_conjugate_gradient_Activate
+{
+ public:
   static vnl_conjugate_gradient* current;
 
   vnl_conjugate_gradient_Activate(vnl_conjugate_gradient* minimizer) {
@@ -200,7 +201,7 @@ void vnl_conjugate_gradient::diagnose_outcome(vcl_ostream& os) const
      << num_evaluations_
      << " evaluations. Cost function reported error"
      << f_->reported_error(start_error_)
-     << "/"
+     << '/'
      << f_->reported_error(end_error_)
      << " . Final step size = " << final_step_size_
      << vcl_endl;

@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_rational.h
+// This is core/vnl/vnl_rational.h
 #ifndef vnl_rational_h_
 #define vnl_rational_h_
 //:
@@ -9,7 +9,7 @@
 // arithmetic, using the built-in type long, for the numerator and denominator.
 // Implicit conversion to the system defined types short, int, long, float, and
 // double is supported by  overloaded  operator member functions.  Although the
-// rational class makes judicous use  of inline  functions and  deals only with
+// rational class makes judicious use of inline  functions and  deals only with
 // integral values, the user  is warned that  the rational  integer  arithmetic
 // class is still considerably slower than the built-in  integer data types. If
 // the range  of values  anticipated will  fit into a  built-in  type, use that
@@ -52,7 +52,7 @@
 // arithmetic, using the built-in type long, for the numerator and denominator.
 // Implicit conversion to the system defined types short, int, long, float, and
 // double is supported by  overloaded  operator member functions.  Although the
-// rational class makes judicous use  of inline  functions and  deals only with
+// rational class makes judicious use of inline  functions and  deals only with
 // integral values, the user  is warned that  the rational  integer  arithmetic
 // class is still considerably slower than the built-in  integer data types. If
 // the range  of values  anticipated will  fit into a  built-in  type, use that
@@ -69,7 +69,7 @@ class vnl_rational
   long num_; //!< Numerator portion
   long den_; //!< Denominator portion
 
-public:
+ public:
   //: Creates a rational with given numerator and denominator.
   //  Default constructor gives 0.
   //  Also serves as automatic cast from long to vnl_rational.
@@ -249,7 +249,7 @@ public:
     return l1<0 ? (-l1) : l1;
   }
 
-private:
+ private:
   //: Private function to normalize numerator/denominator of rational number.
   //  If num_ and den_ are both nonzero, their gcd is made 1 and den_ made positive.
   //  Otherwise, the nonzero den_ is set to 1 or the nonzero num_ to +1 or -1.
@@ -267,104 +267,131 @@ private:
 
 //: formatted output
 // \relates vnl_rational
-inline vcl_ostream& operator<< (vcl_ostream& s, vnl_rational const& r) {
-  return s << r.numerator() << "/" << r.denominator();
+inline vcl_ostream& operator<< (vcl_ostream& s, vnl_rational const& r)
+{
+  return s << r.numerator() << '/' << r.denominator();
 }
 
 //: simple input
 // \relates vnl_rational
-inline vcl_istream& operator>> (vcl_istream& s, vnl_rational& r) {
+inline vcl_istream& operator>> (vcl_istream& s, vnl_rational& r)
+{
   long n, d; s >> n >> d;
   r.set(n,d); return s;
 }
 
 //: Returns the sum of two rational numbers.
 // \relates vnl_rational
-inline vnl_rational operator+ (vnl_rational const& r1, vnl_rational const& r2) {
+inline vnl_rational operator+ (vnl_rational const& r1, vnl_rational const& r2)
+{
   vnl_rational result(r1); return result += r2;
 }
-inline vnl_rational operator+ (vnl_rational const& r1, long r2) {
+inline vnl_rational operator+ (vnl_rational const& r1, long r2)
+{
   vnl_rational result(r1); return result += r2;
 }
-inline vnl_rational operator+ (vnl_rational const& r1, int r2) {
+inline vnl_rational operator+ (vnl_rational const& r1, int r2)
+{
   vnl_rational result(r1); return result += (long)r2;
 }
-inline vnl_rational operator+ (long r2, vnl_rational const& r1) {
+inline vnl_rational operator+ (long r2, vnl_rational const& r1)
+{
   vnl_rational result(r1); return result += r2;
 }
-inline vnl_rational operator+ (int r2, vnl_rational const& r1) {
+inline vnl_rational operator+ (int r2, vnl_rational const& r1)
+{
   vnl_rational result(r1); return result += (long)r2;
 }
 
 //: Returns the difference of two rational numbers.
 // \relates vnl_rational
-inline vnl_rational operator- (vnl_rational const& r1, vnl_rational const& r2) {
+inline vnl_rational operator- (vnl_rational const& r1, vnl_rational const& r2)
+{
   vnl_rational result(r1); return result -= r2;
 }
-inline vnl_rational operator- (vnl_rational const& r1, long r2) {
+inline vnl_rational operator- (vnl_rational const& r1, long r2)
+{
   vnl_rational result(r1); return result -= r2;
 }
-inline vnl_rational operator- (vnl_rational const& r1, int r2) {
+inline vnl_rational operator- (vnl_rational const& r1, int r2)
+{
   vnl_rational result(r1); return result -= (long)r2;
 }
-inline vnl_rational operator- (long r2, vnl_rational const& r1) {
+inline vnl_rational operator- (long r2, vnl_rational const& r1)
+{
   vnl_rational result(-r1); return result += r2;
 }
-inline vnl_rational operator- (int r2, vnl_rational const& r1) {
+inline vnl_rational operator- (int r2, vnl_rational const& r1)
+{
   vnl_rational result(-r1); return result += (long)r2;
 }
 
 //: Returns the product of two rational numbers.
 // \relates vnl_rational
-inline vnl_rational operator* (vnl_rational const& r1, vnl_rational const& r2) {
+inline vnl_rational operator* (vnl_rational const& r1, vnl_rational const& r2)
+{
   vnl_rational result(r1); return result *= r2;
 }
-inline vnl_rational operator* (vnl_rational const& r1, long r2) {
+inline vnl_rational operator* (vnl_rational const& r1, long r2)
+{
   vnl_rational result(r1); return result *= r2;
 }
-inline vnl_rational operator* (vnl_rational const& r1, int r2) {
+inline vnl_rational operator* (vnl_rational const& r1, int r2)
+{
   vnl_rational result(r1); return result *= (long)r2;
 }
-inline vnl_rational operator* (long r2, vnl_rational const& r1) {
+inline vnl_rational operator* (long r2, vnl_rational const& r1)
+{
   vnl_rational result(r1); return result *= r2;
 }
-inline vnl_rational operator* (int r2, vnl_rational const& r1) {
+inline vnl_rational operator* (int r2, vnl_rational const& r1)
+{
   vnl_rational result(r1); return result *= (long)r2;
 }
 
 //: Returns the quotient of two rational numbers.
 // \relates vnl_rational
-inline vnl_rational operator/ (vnl_rational const& r1, vnl_rational const& r2) {
+inline vnl_rational operator/ (vnl_rational const& r1, vnl_rational const& r2)
+{
   vnl_rational result(r1); return result /= r2;
 }
-inline vnl_rational operator/ (vnl_rational const& r1, long r2) {
+inline vnl_rational operator/ (vnl_rational const& r1, long r2)
+{
   vnl_rational result(r1); return result /= r2;
 }
-inline vnl_rational operator/ (vnl_rational const& r1, int r2) {
+inline vnl_rational operator/ (vnl_rational const& r1, int r2)
+{
   vnl_rational result(r1); return result /= (long)r2;
 }
-inline vnl_rational operator/ (long r1, vnl_rational const& r2) {
+inline vnl_rational operator/ (long r1, vnl_rational const& r2)
+{
   vnl_rational result(r1); return result /= r2;
 }
-inline vnl_rational operator/ (int r1, vnl_rational const& r2) {
+inline vnl_rational operator/ (int r1, vnl_rational const& r2)
+{
   vnl_rational result((long)r1); return result /= r2;
 }
 
 //: Returns the remainder of r1 divided by r2.
 // \relates vnl_rational
-inline vnl_rational operator% (vnl_rational const& r1, vnl_rational const& r2) {
+inline vnl_rational operator% (vnl_rational const& r1, vnl_rational const& r2)
+{
   vnl_rational result(r1); return result %= r2;
 }
-inline vnl_rational operator% (vnl_rational const& r1, long r2) {
+inline vnl_rational operator% (vnl_rational const& r1, long r2)
+{
   vnl_rational result(r1); return result %= r2;
 }
-inline vnl_rational operator% (vnl_rational const& r1, int r2) {
+inline vnl_rational operator% (vnl_rational const& r1, int r2)
+{
   vnl_rational result(r1); return result %= (long)r2;
 }
-inline vnl_rational operator% (long r1, vnl_rational const& r2) {
+inline vnl_rational operator% (long r1, vnl_rational const& r2)
+{
   vnl_rational result(r1); return result %= r2;
 }
-inline vnl_rational operator% (int r1, vnl_rational const& r2) {
+inline vnl_rational operator% (int r1, vnl_rational const& r2)
+{
   vnl_rational result((long)r1); return result %= r2;
 }
 
@@ -390,6 +417,6 @@ inline vnl_rational vnl_math_abs(vnl_rational const& x) { return x<0L ? -x : x; 
 inline vnl_rational vnl_math_squared_magnitude(vnl_rational const& x) { return x*x; }
 inline vnl_rational vnl_math_sqr(vnl_rational const& x) { return x*x; }
 inline bool vnl_math_isnan(vnl_rational const& ){return false;}
-inline bool vnl_math_isfinite(vnl_rational const& x){return x.denominator() != 0L;} 
+inline bool vnl_math_isfinite(vnl_rational const& x){return x.denominator() != 0L;}
 
 #endif // vnl_rational_h_

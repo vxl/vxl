@@ -1,4 +1,4 @@
-// This is vxl/vnl/algo/vnl_fft_prime_factors.h
+// This is core/vnl/algo/vnl_fft_prime_factors.h
 #ifndef vnl_fft_prime_factors_h_
 #define vnl_fft_prime_factors_h_
 //:
@@ -8,8 +8,8 @@
 // \date   19 Mar 98
 //
 // \verbatim
-// Modifications
-// 10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
+//  Modifications
+//   10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
 // \endverbatim
 
 #include <vcl_compiler.h> // for "export" keyword
@@ -47,7 +47,7 @@ struct vnl_fft_prime_factors
     construct(N);
   }
 
-private:
+ private:
   T *trigs_;
   int number_;   // the number that is being split into prime-facs
   int pqr_[3];   // store P, Q and R

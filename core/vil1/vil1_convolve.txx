@@ -1,9 +1,7 @@
-// This is vxl/vil/vil_convolve.txx
+// This is core/vil/vil_convolve.txx
 #ifndef vil_convolve_txx_
 #define vil_convolve_txx_
-/*
-  fsm
-*/
+// \author fsm
 #include "vil_convolve.h"
 #include <vcl_iostream.h>
 
@@ -26,7 +24,7 @@ vil_convolve_separable(float const kernel[], unsigned N,
                     (float_type*)0,
                     vil_convolve_signal_2d<float_type         >(tmp.row_array(), 0, 0, w,  0, 0, h),
                     vil_convolve_trim, vil_convolve_trim);
-  vcl_cerr << "done" << vcl_endl;
+  vcl_cerr << "done\n";
 
   vcl_cerr << "convolve y..." << vcl_flush;
   vil_convolve_1d_y(K,
@@ -34,7 +32,7 @@ vil_convolve_separable(float const kernel[], unsigned N,
                     (float_type*)0,
                     vil_convolve_signal_2d<float_type      >(out.row_array(), 0, 0, w,  0, 0, h),
                     vil_convolve_trim, vil_convolve_trim);
-  vcl_cerr << "done" << vcl_endl;
+  vcl_cerr << "done\n";
 }
 
 template <class pixel_type, class float_type>

@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_bignum_traits.h
+// This is core/vnl/vnl_bignum_traits.h
 #ifndef vnl_bignum_traits_h_
 #define vnl_bignum_traits_h_
 //:
@@ -9,8 +9,9 @@
 #include <vnl/vnl_numeric_traits.h>
 
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits<vnl_bignum> {
-public:
+class vnl_numeric_traits<vnl_bignum>
+{
+ public:
   //: Additive identity
   static const vnl_bignum zero; // = 0L
   //: Multiplicative identity

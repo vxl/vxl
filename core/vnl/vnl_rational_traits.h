@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_rational_traits.h
+// This is core/vnl/vnl_rational_traits.h
 #ifndef vnl_rational_traits_h_
 #define vnl_rational_traits_h_
 //:
@@ -9,8 +9,9 @@
 #include <vnl/vnl_numeric_traits.h>
 
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits<vnl_rational> {
-public:
+class vnl_numeric_traits<vnl_rational>
+{
+ public:
   //: Additive identity
   static const vnl_rational zero; // = 0L
   //: Multiplicative identity
@@ -29,14 +30,16 @@ public:
 };
 
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits<vnl_rational const> : public vnl_numeric_traits<vnl_rational> {
+class vnl_numeric_traits<vnl_rational const> : public vnl_numeric_traits<vnl_rational>
+{
 };
 
 vcl_ostream& operator<<(vcl_ostream&, vcl_complex<vnl_rational>);
 
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits<vcl_complex<vnl_rational> > {
-public:
+class vnl_numeric_traits<vcl_complex<vnl_rational> >
+{
+ public:
   //: Additive identity
   static const vcl_complex<vnl_rational> zero; // = vcl_complex<vnl_rational>(0L,0L)
   //: Multiplicative identity
@@ -52,7 +55,8 @@ public:
 };
 
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits<vcl_complex<vnl_rational> const> : public vnl_numeric_traits<vcl_complex<vnl_rational> > {
+class vnl_numeric_traits<vcl_complex<vnl_rational> const> : public vnl_numeric_traits<vcl_complex<vnl_rational> >
+{
 };
 
 vnl_rational vnl_math_squared_magnitude(vcl_complex<vnl_rational> const& );

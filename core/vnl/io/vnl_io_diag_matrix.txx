@@ -1,4 +1,4 @@
-// This is vxl/vnl/io/vnl_io_diag_matrix.txx
+// This is core/vnl/io/vnl_io_diag_matrix.txx
 #ifndef vnl_io_diag_matrix_txx_
 #define vnl_io_diag_matrix_txx_
 //:
@@ -37,8 +37,8 @@ void vsl_b_read(vsl_b_istream &is, vnl_diag_matrix<T> & p)
     break;
 
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vnl_diag_matrix<T>&) \n";
-    vcl_cerr << "           Unknown version number "<< v << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vnl_diag_matrix<T>&)\n"
+             << "           Unknown version number "<< v << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }

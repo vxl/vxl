@@ -1,4 +1,4 @@
-// This is vxl/vsl/vsl_clipon_binary_loader.txx
+// This is core/vsl/vsl_clipon_binary_loader.txx
 #ifndef vsl_clipon_binary_loader_txx_
 #define vsl_clipon_binary_loader_txx_
 //:
@@ -38,9 +38,9 @@ int vsl_clipon_binary_loader<BaseClass,BaseClassIO>::index_for_name(const vcl_st
 
   if (i>=object_io_.size())
   {
-    vcl_cerr << "vsl_clipon_binary_loader<BaseClass>::index_for_name: ";
-    vcl_cerr << "class name <" << name << "> not in list of loaders"<<vcl_endl;
-    vcl_cerr << object_io_.size()<<" valid loaders available for "<<vcl_endl;
+    vcl_cerr << "vsl_clipon_binary_loader<BaseClass>::index_for_name: "
+             << "class name <" << name << "> not in list of loaders\n"
+             << object_io_.size()<<" valid loaders available for\n";
     for (unsigned int j=0; j<object_io_.size(); ++j)
       vcl_cerr << object_io_[j]->target_classname() << vcl_endl;
     vcl_abort();
@@ -58,9 +58,9 @@ const BaseClassIO& vsl_clipon_binary_loader<BaseClass,BaseClassIO>::io_for_class
 
   if (i>=object_io_.size())
   {
-    vcl_cerr << "vsl_clipon_binary_loader<BaseClass>::io_for_class: ";
-    vcl_cerr << "Unable to determine suitable loader."<<vcl_endl;
-    vcl_cerr << object_io_.size()<<" valid loaders available for "<<vcl_endl;
+    vcl_cerr << "vsl_clipon_binary_loader<BaseClass>::io_for_class: "
+             << "Unable to determine suitable loader.\n"
+             << object_io_.size()<<" valid loaders available for\n";
     for (unsigned int j=0; j<object_io_.size(); ++j)
       vcl_cerr << object_io_[j]->target_classname() << vcl_endl;
     vcl_abort();

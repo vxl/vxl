@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_memory_image.cxx
+// This is core/vil/vil_memory_image.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -74,8 +74,7 @@ vil_memory_image::vil_memory_image(int w,int h, vil_pixel_format_t pixel_format)
 vil_image make_memory_image(vil_image const * thatp)
 {
   vil_image const& that = *thatp;
-  //noblather vcl_cerr << thatp << " ptr ";
-  //noblather vcl_cerr << that.impl() << "  ";
+  //noblather vcl_cerr << thatp << " ptr " << that.impl() << "  ";
   if (that.get_property("memory"))
     return that;
   //vcl_cerr << "copying " << that.impl() << endl;
@@ -128,9 +127,9 @@ void vil_memory_image::resize(int planes, int width, int height)
 void vil_memory_image::assert_size(int width, int height) const
 {
   if ((width != width_) || (height != height_)) {
-    vcl_cerr << __FILE__ ": In vil_memory_image::assert_size():\n";
-    vcl_cerr << __FILE__ ": Image has size   " << width_ << 'x' << height_ << vcl_endl;
-    vcl_cerr << __FILE__ ": but it should be " << width  << 'x' << height  << vcl_endl;
+    vcl_cerr << __FILE__ ": In vil_memory_image::assert_size():\n"
+             << __FILE__ ": Image has size   " << width_ << 'x' << height_ << vcl_endl
+             << __FILE__ ": but it should be " << width  << 'x' << height  << vcl_endl;
     assert(false);
   }
 }

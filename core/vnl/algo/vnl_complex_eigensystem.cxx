@@ -1,8 +1,6 @@
-// This is vxl/vnl/algo/vnl_complex_eigensystem.cxx
-/*
-  fsm
-*/
+// This is core/vnl/algo/vnl_complex_eigensystem.cxx
 #include "vnl_complex_eigensystem.h"
+// \author fsm
 
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
@@ -72,13 +70,13 @@ void vnl_complex_eigensystem::compute(vnl_matrix<vcl_complex<double> > const & A
     // success
   }
   else if (info < 0) {
-    vcl_cerr << __FILE__ ": info = " << info << vcl_endl;
-    vcl_cerr << __FILE__ ": " << (-info) << "th argument has illegal value" << vcl_endl;
+    vcl_cerr << __FILE__ ": info = " << info << vcl_endl
+             << __FILE__ ": " << (-info) << "th argument has illegal value\n";
     assert(false);
   }
   else /* if (info > 0) */ {
-    vcl_cerr << __FILE__ ": info = " << info << vcl_endl;
-    vcl_cerr << __FILE__ ": QR algorithm failed to compute all eigenvalues." << vcl_endl;
+    vcl_cerr << __FILE__ ": info = " << info << vcl_endl
+             << __FILE__ ": QR algorithm failed to compute all eigenvalues.\n";
     vnl_matlab_print(vcl_cerr, A, "A", vnl_matlab_print_format_long);
     assert(false);
   }

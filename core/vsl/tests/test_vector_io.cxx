@@ -1,4 +1,4 @@
-// This is vxl/vsl/tests/test_vector_io.cxx
+// This is core/vsl/tests/test_vector_io.cxx
 #include <vcl_iostream.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_vector_io.h>
@@ -47,7 +47,7 @@ void test_vector_io()
 
   vsl_print_summary(vcl_cout, v_bool_in);
   vsl_print_summary(vcl_cout, v_int_in);
-  vsl_print_summary(vcl_cout, v_float_in); 
+  vsl_print_summary(vcl_cout, v_float_in);
   vcl_cout << vcl_endl;
 
   vcl_string gold_path=testlib_root_dir()+"/core/vsl/tests/golden_vector_io_test.bvl";
@@ -64,11 +64,9 @@ void test_vector_io()
 
     vsl_print_summary(vcl_cout, v_bool_in);
     vsl_print_summary(vcl_cout, v_int_in);
-    vsl_print_summary(vcl_cout, v_float_in); 
+    vsl_print_summary(vcl_cout, v_float_in);
     vcl_cout << vcl_endl;
   }
-
-
 }
 
 TESTMAIN(test_vector_io);

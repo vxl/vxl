@@ -1,14 +1,15 @@
-// This is vxl/vil/vil_warp.txx
+// This is core/vil/vil_warp.txx
 #ifndef vil_warp_txx_
 #define vil_warp_txx_
-
-//-*- c++ -*-------------------------------------------------------------------
-//
-// ImageWarp
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 23 Jan 99
-// Modifications:
+//:
+// \file
+// \brief ImageWarp
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   23 Jan 99
+// \verbatim
+//  Modifications:
 //   990123 AWF Initial version.
+// \endverbatim
 //
 //-----------------------------------------------------------------------------
 
@@ -37,8 +38,8 @@ void vil_warp_output_driven(vil_memory_image_of<PixelType> const& in,
   int out_w = out.width();
   int out_h = out.height();
 
-  for(int oy = 0; oy < out_h; ++oy)
-    for(int ox = 0; ox < out_w; ++ox) {
+  for (int oy = 0; oy < out_h; ++oy)
+    for (int ox = 0; ox < out_w; ++ox) {
       // *** Find (ix, iy) from (ox,oy)
       double ixd, iyd;
       map.inverse_map(double(ox), double(oy), &ixd, &iyd);

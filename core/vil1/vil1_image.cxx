@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_image.cxx
+// This is core/vil/vil_image.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -16,9 +16,9 @@ vcl_ostream& vil_image::print(vcl_ostream& s) const
 
   s << "[vil_image: size " << width() << " x " << height();
   char const *fmt = file_format();
-  s << ", file format " << (fmt ? fmt : "unknown");
-  s << ", components " << components();
-  s << ", bits per component " << bits_per_component();
+  s << ", file format " << (fmt ? fmt : "unknown")
+    << ", components " << components()
+    << ", bits per component " << bits_per_component();
 #if 1
   s << ", format " << vil_print(component_format());
 #else
@@ -34,7 +34,7 @@ vcl_ostream& vil_image::print(vcl_ostream& s) const
   return s << "]";
 }
 
-int vil_image::get_size_bytes() const 
+int vil_image::get_size_bytes() const
 {
   return planes() * height() * ((width() * components() * bits_per_component() + CHAR_BIT-1) / CHAR_BIT);
 }

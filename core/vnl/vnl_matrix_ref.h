@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_matrix_ref.h
+// This is core/vnl/vnl_matrix_ref.h
 #ifndef vnl_matrix_ref_h_
 #define vnl_matrix_ref_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -78,17 +78,17 @@ class vnl_matrix_ref : public vnl_matrix<T>
   // you'll be left with undefined behaviour.
   vnl_matrix_ref& non_const() { return *this; }
 
+#if 0
  private:
   // Private operator new because deleting a pointer to
   // one of these through a baseclass pointer will attempt
   // to free this in-class memory.
   // Therefore disallow newing of these -- if you're paying for
   // one malloc, you can afford three.
-// fsm: This was wrong for two reasons:
-//  1. operator new may not return a null pointer.
-//  2. it should be enabled for compilers that need it,
-//     not disabled for compilers that don't need it.
-#if 0
+   // fsm: This was wrong for two reasons:
+   //  1. operator new may not return a null pointer.
+   //  2. it should be enabled for compilers that need it,
+   //     not disabled for compilers that don't need it.
 #include <vcl_new.h>
   void* operator new(vcl_size_t) { return 0; }
 #endif
@@ -101,12 +101,9 @@ class vnl_matrix_ref : public vnl_matrix<T>
   //: Resizing is disallowed
   bool set_size (unsigned int, unsigned int) { return false; }
 
-
   //: Copy constructor from vnl_matrix<T> is disallowed
   // (because it would create a non-const alias to the matrix)
   vnl_matrix_ref(vnl_matrix<T> const &) {}
-
-
 };
 
 #endif // vnl_matrix_ref_h_

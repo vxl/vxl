@@ -1,4 +1,4 @@
-// This is vxl/vnl/algo/vnl_powell.cxx
+// This is core/vnl/algo/vnl_powell.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -12,8 +12,9 @@
 #include <vnl/vnl_matlab_print.h>
 #include <vnl/vnl_math.h>
 
-class vnl_powell_1dfun : public vnl_cost_function {
-public:
+class vnl_powell_1dfun : public vnl_cost_function
+{
+ public:
   vnl_powell* powell_;
   vnl_cost_function* f_;
   unsigned int n_;

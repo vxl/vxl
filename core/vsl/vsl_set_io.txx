@@ -1,12 +1,10 @@
-// This is vxl/vsl/vsl_set_io.txx
+// This is core/vsl/vsl_set_io.txx
 #ifndef vsl_set_io_txx_
 #define vsl_set_io_txx_
 //:
 // \file
 // \brief  binary IO functions for vcl_set<T>
 // \author K.Y.McGaul
-//
-// Implementation
 
 #include "vsl_set_io.h"
 #include <vsl/vsl_binary_io.h>
@@ -46,8 +44,8 @@ void vsl_b_read(vsl_b_istream& is, vcl_set<T>& v)
     }
     break;
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vcl_set<T>&) \n";
-    vcl_cerr << "           Unknown version number "<< ver << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vcl_set<T>&)\n"
+             << "           Unknown version number "<< ver << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -63,12 +61,12 @@ void vsl_print_summary(vcl_ostream& os, const vcl_set<T> &v)
   for (typename vcl_set<T>::const_iterator iter = v.begin();
        iter != v.end() && i<5; ++iter,++i)
   {
-    os << " " << i << ": ";
+    os << ' ' << i << ": ";
     vsl_print_summary(os, *iter);
     os << vcl_endl;
   }
   if (v.size() > 5)
-    os << " ..." << vcl_endl;
+    os << " ...\n";
 }
 
 

@@ -1,5 +1,5 @@
-// This is vxl/vsl/tests/test_polymorphic_io.cxx
-
+// This is core/vsl/tests/test_polymorphic_io.cxx
+#include <testlib/testlib_test.h>
 //:
 // \file
 
@@ -8,12 +8,12 @@
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vsl/vsl_binary_loader.txx>
-#include <testlib/testlib_test.h>
 #include <vpl/vpl.h>
 
 //: Base class to test polymorphic loading
-class test_base_class {
-public:
+class test_base_class
+{
+ public:
   //: Destructor
   virtual ~test_base_class() {};
 
@@ -78,10 +78,11 @@ inline void vsl_b_read(vsl_b_istream &is, test_base_class & v)
 }
 
 //: Derived class to test polymorphic loading
-class test_derived_class : public test_base_class{
-private:
+class test_derived_class : public test_base_class
+{
   int data_;
-public:
+
+ public:
   test_derived_class(int d=0) : data_(d) {}
 
   void set_data(int d) { data_=d; }
@@ -110,13 +111,13 @@ public:
 //: Binary save self to stream.
 void test_derived_class::b_write(vsl_b_ostream &os) const
 {
-   vsl_b_write(os,data_);
+  vsl_b_write(os,data_);
 }
 
 //: Binary load self from stream.
 void test_derived_class::b_read(vsl_b_istream &is)
 {
-   vsl_b_read(is,data_);
+  vsl_b_read(is,data_);
 }
 
 //: Clone this
@@ -127,11 +128,15 @@ test_base_class* test_derived_class::clone() const
 
 //: Return a platform independent string identifying the class as a vnl_matrix
 vcl_string test_derived_class::is_a() const
-{ return "test_derived_class"; }
+{
+  return "test_derived_class";
+}
 
 //: Return true if the argument matches this class' or the parent's identifier
 bool test_derived_class::is_class(vcl_string const& s) const
-{ return s == "test_derived_class" || test_base_class::is_class(s); }
+{
+  return s == "test_derived_class" || test_base_class::is_class(s);
+}
 
 //: Print summary
 void test_derived_class::print_summary(vcl_ostream& os) const

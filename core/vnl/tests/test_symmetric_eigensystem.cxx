@@ -1,5 +1,5 @@
-// This is vxl/vnl/tests/test_symmetric_eigensystem.cxx
-
+// This is core/vnl/tests/test_symmetric_eigensystem.cxx
+#include <testlib/testlib_test.h>
 //:
 // \file
 // \brief test program for symmetric eigensystem routines.
@@ -11,7 +11,6 @@
 #include <vcl_iostream.h>
 #include <vnl/vnl_sample.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
-#include <testlib/testlib_test.h>
 
 //extern "C"
 void test_symmetric_eigensystem()
@@ -29,13 +28,13 @@ void test_symmetric_eigensystem()
   {
     vnl_symmetric_eigensystem<double> eig(S);
     vnl_matrix<double> res = eig.recompose() - S;
-    vcl_cout << "V'*D*V - S = " << res << vcl_endl;
-    vcl_cout << "residual = " << res.fro_norm() << vcl_endl;
+    vcl_cout << "V'*D*V - S = " << res << vcl_endl
+             << "residual = " << res.fro_norm() << vcl_endl;
     testlib_test_assert("recompose residual",  res.fro_norm() < 1e-12);
 
     vcl_cout<<"Eigenvalues: ";
     for (int i=0;i<6;++i)
-      vcl_cout<<eig.get_eigenvalue(i)<<" ";
+      vcl_cout<<eig.get_eigenvalue(i)<<' ';
     vcl_cout<<vcl_endl;
   }
 
@@ -53,13 +52,13 @@ void test_symmetric_eigensystem()
   {
     vnl_symmetric_eigensystem<double> eig(C);
     vnl_matrix<double> res = eig.recompose() - C;
-    vcl_cout << "V'*D*V - C = " << res << vcl_endl;
-    vcl_cout << "residual = " << res.fro_norm() << vcl_endl;
+    vcl_cout << "V'*D*V - C = " << res << vcl_endl
+             << "residual = " << res.fro_norm() << vcl_endl;
     testlib_test_assert("recompose residual", res.fro_norm() < 1e-12);
 
     vcl_cout<<"Eigenvalues: ";
     for (int i=0;i<6;++i)
-      vcl_cout<<eig.get_eigenvalue(i)<<" ";
+      vcl_cout<<eig.get_eigenvalue(i)<<' ';
     vcl_cout<<vcl_endl;
   }
 
@@ -77,8 +76,8 @@ void test_symmetric_eigensystem()
     vnl_matrix<double> evecs(n,n);
     vnl_vector<double> evals(n);
     vnl_symmetric_eigensystem_compute(S,evecs,evals);
-    vcl_cout<<"Testing random system: "<<vcl_endl;
-    vcl_cout<<"evals: "<<evals<<vcl_endl;
+    vcl_cout<<"Testing random system:\n"
+            <<"evals: "<<evals<<vcl_endl;
     for (int i=1;i<n;++i)
       TEST("Eigenvalue increases",evals(i)>=evals(i-1),true);
   }

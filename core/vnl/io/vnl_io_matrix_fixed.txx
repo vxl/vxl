@@ -1,4 +1,4 @@
-// This is vxl/vnl/io/vnl_io_matrix_fixed.txx
+// This is core/vnl/io/vnl_io_matrix_fixed.txx
 #ifndef vnl_io_matrix_fixed_txx_
 #define vnl_io_matrix_fixed_txx_
 //:
@@ -40,9 +40,9 @@ void vsl_b_read(vsl_b_istream &is, vnl_matrix_fixed<T,m,n> & p)
   case 1:
     vsl_b_read(is, stream_m);
     vsl_b_read(is, stream_n);
-    if( stream_n != n || stream_m != m ) {
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vnl_matrix_fixed<T>&) \n";
-      vcl_cerr << "           Expected size " << m << "," << n << "; got " << stream_m << "," << stream_n << "\n";
+    if ( stream_n != n || stream_m != m ) {
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vnl_matrix_fixed<T>&)\n"
+               << "           Expected size " << m << ',' << n << "; got " << stream_m << ',' << stream_n << '\n';
       is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
     }
@@ -54,9 +54,9 @@ void vsl_b_read(vsl_b_istream &is, vnl_matrix_fixed<T,m,n> & p)
   case 2:
     vsl_b_read(is, stream_m);
     vsl_b_read(is, stream_n);
-    if( stream_n != n || stream_m != m ) {
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vnl_matrix_fixed<T>&) \n";
-      vcl_cerr << "           Expected size " << m << "," << n << "; got " << stream_m << "," << stream_n << "\n";
+    if ( stream_n != n || stream_m != m ) {
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vnl_matrix_fixed<T>&)\n"
+               << "           Expected size " << m << ',' << n << "; got " << stream_m << ',' << stream_n << '\n';
       is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
     }
@@ -66,8 +66,8 @@ void vsl_b_read(vsl_b_istream &is, vnl_matrix_fixed<T,m,n> & p)
     break;
 
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vnl_matrix_fixed<T>&) \n";
-    vcl_cerr << "           Unknown version number "<< v << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vnl_matrix_fixed<T>&)\n"
+             << "           Unknown version number "<< v << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -92,11 +92,11 @@ void vsl_print_summary(vcl_ostream & os,const vnl_matrix_fixed<T,nrows,ncols> & 
      os<<vsl_indent()<<" (";
 
      for ( unsigned int j=0; j<n; j++)
-        os<<p(i,j)<<" ";
+        os<<p(i,j)<<' ';
       if (p.cols()>n) os<<"...";
-        os<<")"<<vcl_endl;
+        os<<")\n";
   }
-  if (p.rows()>m) os <<vsl_indent()<<" (..." <<vcl_endl;
+  if (p.rows()>m) os <<vsl_indent()<<" (...\n";
   vsl_indent_dec(os);
 }
 

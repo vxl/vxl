@@ -1,4 +1,4 @@
-// This is vxl/vnl/io/vnl_io_vector_fixed.txx
+// This is core/vnl/io/vnl_io_vector_fixed.txx
 #ifndef vnl_io_vector_fixed_txx_
 #define vnl_io_vector_fixed_txx_
 //:
@@ -35,11 +35,11 @@ void vsl_b_read(vsl_b_istream &is, vnl_vector_fixed<T,n> & p)
   {
   case 1:
     vsl_b_read(is, stream_n);
-    if( n == stream_n ) {
+    if ( n == stream_n ) {
       vsl_b_read_block(is, p.begin(), n);
     } else {
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vnl_vector_fixed<T,n>&)\n"
-               << "           Expected n="<<n<<", got "<<stream_n<<"\n";
+               << "           Expected n="<<n<<", got "<<stream_n<<'\n';
       is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
     }
@@ -47,11 +47,11 @@ void vsl_b_read(vsl_b_istream &is, vnl_vector_fixed<T,n> & p)
 
   case 2:
     vsl_b_read(is, stream_n);
-    if( n == stream_n ) {
+    if ( n == stream_n ) {
       vsl_block_binary_read(is, p.data_block(), n);
     } else {
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vnl_vector_fixed<T,n>&)\n"
-               << "           Expected n="<<n<<", got "<<stream_n<<"\n";
+               << "           Expected n="<<n<<", got "<<stream_n<<'\n';
       is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
     }
@@ -59,7 +59,7 @@ void vsl_b_read(vsl_b_istream &is, vnl_vector_fixed<T,n> & p)
 
   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vnl_vector_fixed<T,n>&)\n"
-             << "           Unknown version number "<< ver << "\n";
+             << "           Unknown version number "<< ver << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -72,9 +72,9 @@ void vsl_print_summary(vcl_ostream & os,const vnl_vector_fixed<T,n> & p)
 {
   os<<"Len: "<<p.size()<<" [fixed] (";
   for ( unsigned int i =0; i < p.size() && i < 5; ++i )
-    os << p(i) <<" ";
+    os << p(i) <<' ';
   if (p.size() > 5) os << " ...";
-  os << ")";
+  os << ')';
 }
 
 #define VNL_IO_VECTOR_FIXED_INSTANTIATE(T,n) \

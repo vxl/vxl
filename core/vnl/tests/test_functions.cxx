@@ -1,5 +1,5 @@
-// This is vxl/vnl/tests/test_functions.cxx
-
+// This is core/vnl/tests/test_functions.cxx
+#include <testlib/testlib_test.h>
 //:
 // \file
 //
@@ -21,7 +21,6 @@
 #include <vcl_cmath.h>
 #include <vcl_ctime.h>
 
-#include <testlib/testlib_test.h>
 #include <vnl/algo/vnl_chi_squared.h>
 
 double cdf_baseline[] =
@@ -87,15 +86,15 @@ int test_functions()
   }
 
   vcl_cout << "cdf(7.88,1) = " << vnl_chi_squared_cumulative(7.88,1)
-           << " should be about 0.995 \n";
-  vcl_cout << "cdf(14.8,12) = " << vnl_chi_squared_cumulative(14.8,12)
-           << " should be about 0.75 \n";
-  vcl_cout << "cdf(10.1,19) = " << vnl_chi_squared_cumulative(10.1,19)
-           << " should be about 0.05 \n";
-  vcl_cout << "cdf(39.3,40) = " << vnl_chi_squared_cumulative(39.3,40)
-           << " should be about 0.50 \n";
-  vcl_cout << "cdf(109.1,100) = " << vnl_chi_squared_cumulative(109.1,100)
-           << " should be about 0.75 \n";
+           << " should be about 0.995\n"
+           << "cdf(14.8,12) = " << vnl_chi_squared_cumulative(14.8,12)
+           << " should be about 0.75\n"
+           << "cdf(10.1,19) = " << vnl_chi_squared_cumulative(10.1,19)
+           << " should be about 0.05\n"
+           << "cdf(39.3,40) = " << vnl_chi_squared_cumulative(39.3,40)
+           << " should be about 0.50\n"
+           << "cdf(109.1,100) = " << vnl_chi_squared_cumulative(109.1,100)
+           << " should be about 0.75\n";
 
   // rand() is not always a good random number generator,
   // so use the following congruential random number generator - PVr
@@ -111,7 +110,7 @@ int test_functions()
   chisq = 0;
   for (int i=0; i<20; i++)
   {
-    vcl_cout << i << " " << hist1[i] << vcl_endl;
+    vcl_cout << i << ' ' << hist1[i] << vcl_endl;
     double delta = hist1[i] - 10.0;
     chisq += delta*delta/(hist1[i] + 10.0);
   }

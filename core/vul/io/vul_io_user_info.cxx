@@ -1,4 +1,4 @@
-// This is vxl/vul/io/vul_io_user_info.cxx
+// This is core/vul/io/vul_io_user_info.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -43,8 +43,8 @@ void vsl_b_read(vsl_b_istream &is, vul_user_info & p)
    break;
 
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vul_user_info&) \n";
-    vcl_cerr << "           Unknown version number "<< v << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vul_user_info&)\n"
+             << "           Unknown version number "<< v << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -56,9 +56,9 @@ void vsl_b_read(vsl_b_istream &is, vul_user_info & p)
 void vsl_print_summary(vcl_ostream& os,const vul_user_info & p)
 {
       os<<"( uid,gid,name,home_directory,full_name,shell,passwd="<<
-      p.uid<<","<<p.gid<<","<<p.name<<
+      p.uid<<','<<p.gid<<','<<p.name<<
       " home_directory,full_name,shell=" <<
-      p.home_directory<<","<< p.full_name<<","<<p.shell<<
+      p.home_directory<<','<< p.full_name<<','<<p.shell<<
       " passwd="<<
-      p.passwd<<")";
+      p.passwd<<')';
 }

@@ -1,5 +1,5 @@
-// This is vxl/vnl/tests/test_svd.cxx
-
+// This is core/vnl/tests/test_svd.cxx
+#include <testlib/testlib_test.h>
 //:
 // \file
 #include <vcl_iostream.h>
@@ -8,8 +8,6 @@
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/algo/vnl_svd.h>
-
-#include <testlib/testlib_test.h>
 
 #include "test_util.h"
 
@@ -85,9 +83,9 @@ void test_ls()
   // Extract vnl_svd<double>
   vnl_svd<double> svd(D);
 
-  // Solve for parameteers
+  // Solve for parameters
   vnl_double_3 A = svd.solve(y);
-  vcl_cout << "A = " << A << "\n";
+  vcl_cout << "A = " << A << '\n';
 
   vnl_double_3 T(a,b,c);
   vcl_cout << "residual = " << (A - T).squared_magnitude() << vcl_endl;
@@ -105,9 +103,8 @@ double test_fmatrix()
   vnl_matrix<double> P(pdata, 3,4);
   vnl_svd<double> svd(P);
   vnl_matrix<double> N = svd.nullspace();
-  vcl_cout << "null(P) = " << N << vcl_endl;
-
-  vcl_cout << "P * null(P) = " << P*N << vcl_endl;
+  vcl_cout << "null(P) = " << N << vcl_endl
+           << "P * null(P) = " << P*N << vcl_endl;
 
   return dot_product(P*N, P*N);
 }
@@ -133,11 +130,11 @@ void test_pmatrix()
 
   vnl_matrix<double> N = svd.nullspace();
   testlib_test_assert("nullspace dimension", N.columns() == 2);
-  vcl_cout << "null(P) = \n" << N << vcl_endl;
+  vcl_cout << "null(P) =\n" << N << vcl_endl;
 
   vnl_matrix<double> PN = P*N;
-  vcl_cout << "P * null(P) = \n" << PN << vcl_endl;
-  vcl_cout << "nullspace residual = " << PN.fro_norm() << vcl_endl;
+  vcl_cout << "P * null(P) =\n" << PN << vcl_endl
+           << "nullspace residual = " << PN.fro_norm() << vcl_endl;
   testlib_test_assert("P nullspace residual", PN.fro_norm() < 1e-12);
 
   vnl_vector<double> n = svd.nullvector();
@@ -145,8 +142,8 @@ void test_pmatrix()
   testlib_test_assert("P nullvector residual", (P*n).magnitude() < 1e-12);
 
   vnl_vector<double> l = svd.left_nullvector();
-  vcl_cout << "left_nullvector(P) = " << l << vcl_endl;
-  vcl_cout << "left_nullvector residual = " << (l*P).magnitude() << vcl_endl;
+  vcl_cout << "left_nullvector(P) = " << l << vcl_endl
+           << "left_nullvector residual = " << (l*P).magnitude() << vcl_endl;
   testlib_test_assert("P left nullvector residual", (l*P).magnitude() < 1e-12);
 }
 
@@ -166,16 +163,16 @@ template <class T>
 void test_svd_recomposition(char const *type, double maxres, T* /* tag */)
 {
   // Test inversion of 5x5 matrix of T :
-  vcl_cout << "----- testing vnl_svd<" << type << "> recomposition -----" << vcl_endl;
+  vcl_cout << "----- testing vnl_svd<" << type << "> recomposition -----\n";
 
   vnl_matrix<T> A(5,5);
   test_util_fill_random(A.begin(), A.end());
 
-  vcl_cout << "A = [ " << vcl_endl << A << "]" << vcl_endl;
+  vcl_cout << "A = [\n" << A << "]\n";
   vnl_svd<T> svd(A);
 
   vnl_matrix<T> B=svd.recompose();
-  vcl_cout << "B = [ " << vcl_endl << B << "]" << vcl_endl;
+  vcl_cout << "B = [\n" << B << "]\n";
 
   double residual=(A - B).fro_norm();
   vcl_cout << "residual=" << residual << vcl_endl;
@@ -199,8 +196,8 @@ void test_nullvector(char const *type, T *)
   vnl_vector<T> Ax = A*x;
   vcl_cout << __FILE__ ": type = " << type << vcl_endl;
   vnl_matlab_print(vcl_cout, A, "A", vnl_matlab_print_format_long);
-  vcl_cout << __FILE__ ": || x|| = " <<  x.two_norm() << vcl_endl;
-  vcl_cout << __FILE__ ": ||Ax|| = " << Ax.two_norm() << vcl_endl;
+  vcl_cout << __FILE__ ": || x|| = " <<  x.two_norm() << vcl_endl
+           << __FILE__ ": ||Ax|| = " << Ax.two_norm() << vcl_endl;
 }
 
 template void test_nullvector(char const *, float *);

@@ -1,5 +1,5 @@
-// This is vxl/vnl/tests/test_generalized_eigensystem.cxx
-
+// This is core/vnl/tests/test_generalized_eigensystem.cxx
+#include <testlib/testlib_test.h>
 //:
 // \file
 // \brief test program for generalized eigensystem routines.
@@ -10,7 +10,6 @@
 
 #include <vcl_iostream.h>
 #include <vnl/algo/vnl_generalized_eigensystem.h>
-#include <testlib/testlib_test.h>
 
 void test_generalized_eigensystem()
 {
@@ -36,9 +35,9 @@ void test_generalized_eigensystem()
 
   vnl_generalized_eigensystem gev(C, S);
 
-  vcl_cout << "V = " << gev.V << vcl_endl;
-  vcl_cout << "D = " << gev.D << vcl_endl;
-  vcl_cout << "residual = " << C * gev.V - S * gev.V * gev.D << vcl_endl;
+  vcl_cout << "V = " << gev.V << vcl_endl
+           << "D = " << gev.D << vcl_endl
+           << "residual = " << C * gev.V - S * gev.V * gev.D << vcl_endl;
   double err = (C * gev.V - S * gev.V * gev.D).fro_norm();
   vcl_cout << "Recomposition residual = " << err << vcl_endl;
 

@@ -1,4 +1,4 @@
-// This is vxl/vsl/vsl_list_io.txx
+// This is core/vsl/vsl_list_io.txx
 #ifndef vsl_list_io_txx_
 #define vsl_list_io_txx_
 //:
@@ -47,8 +47,8 @@ void vsl_b_read(vsl_b_istream& is, vcl_list<T>& v)
     }
     break;
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vcl_list<T>&) \n";
-    vcl_cerr << "           Unknown version number "<< ver << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vcl_list<T>&)\n"
+             << "           Unknown version number "<< ver << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -64,12 +64,12 @@ void vsl_print_summary(vcl_ostream& os, const vcl_list<T> &v)
   for (typename vcl_list<T>::const_iterator iter = v.begin();
        iter != v.end() && i<5; ++iter,++i)
   {
-    os << " " << i << ": ";
+    os << ' ' << i << ": ";
     vsl_print_summary(os, *iter);
     os << vcl_endl;
   }
   if (v.size() > 5)
-    os << " ..." << vcl_endl;
+    os << " ...\n";
 }
 
 #define VSL_LIST_IO_INSTANTIATE(T) \

@@ -1,9 +1,9 @@
-// This is vxl/vnl/vnl_gamma.cxx
+// This is core/vnl/vnl_gamma.cxx
 #include "vnl_gamma.h"
 //:
-//  \file
-//  \brief Complete and incomplete gamma function approximations
-//  \author Tim Cootes
+// \file
+// \brief Complete and incomplete gamma function approximations
+// \author Tim Cootes
 
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
@@ -46,9 +46,8 @@ static double vnl_gamma_series(double a, double x)
       if (vcl_fabs(term_i) < vcl_fabs(sum)*MaxRelError)
         return sum*vcl_exp(-x+a*vcl_log(x)-vnl_log_gamma(a));
     }
-    vcl_cerr<<"vnl_gamma_series : Failed to converge in "<<MAX_ITS<<" steps\n";
-    vcl_cerr<<"a = "<<a<<"   x= "<<x<<vcl_endl;
-    vcl_cerr<<"Returning best guess.\n";
+    vcl_cerr<<"vnl_gamma_series : Failed to converge in "<<MAX_ITS<<" steps\n"
+            <<"a = "<<a<<"   x= "<< x <<"\nReturning best guess.\n";
     return sum*vcl_exp(-x+a*vcl_log(x)-vnl_log_gamma(a));
   }
   else if (x < 0.0)
@@ -82,8 +81,8 @@ static double vnl_gamma_cont_frac(double a, double x)
       return vcl_exp(-x+a*vcl_log(x)-vnl_log_gamma(a))*cf;
   }
 
-  vcl_cerr<<"vnl_gamma_cont_frac : Failed to converge in "<<MAX_ITS<<" steps\n";
-  vcl_cerr<<"a = "<<a<<"   x= "<<x<<vcl_endl;
+  vcl_cerr<<"vnl_gamma_cont_frac : Failed to converge in "<<MAX_ITS<<" steps\n"
+          <<"a = "<<a<<"   x= "<<x<<vcl_endl;
   return vcl_exp(-x+a*vcl_log(x)-vnl_log_gamma(a))*cf;
 }
 

@@ -1,4 +1,4 @@
-// This is vxl/vsl/tests/test_arbitrary_length_int_conversion.cxx
+// This is core/vsl/tests/test_arbitrary_length_int_conversion.cxx
 #include <vcl_iostream.h>
 #include <vcl_sstream.h>
 #include <vcl_ctime.h>
@@ -33,9 +33,9 @@ void test_arbitrary_length_int_conversion_int()
   t2 = clock();
 
   vcl_cout << " Required " << (double)(t2-t1) / CLOCKS_PER_SEC
-           << " seconds to encode 25M ints.\n";
+           << " seconds to encode 25M ints.\n"
 
-  vcl_cout << " Max required buffer size is " << maxbuf << " bytes. Used "
+           << " Max required buffer size is " << maxbuf << " bytes. Used "
            << len << vcl_endl;
 
   TEST("Checking that the buffer didn't overflow", len < maxbuf, true);
@@ -93,7 +93,7 @@ void test_arbitrary_length_int_conversion_short()
   unsigned long len2 = vsl_convert_from_arbitrary_length(buf, c, 65538);
 
   TEST("Checking that the result buffer didn't overflow",
-    (b[0] == (short)0xc5c5) && (b[65539] == 0x5c5c), true);
+       (b[0] == (short)0xc5c5) && (b[65539] == 0x5c5c), true);
 
   TEST("Checking len == len2", len, len2);
 
@@ -165,14 +165,14 @@ void test_explicit_int_io()
 
   vsl_b_ofstream bfs_out("vsl_explicit_int_io_test.bvl.tmp");
   TEST("Created vsl_explicit_int_io_test.bvl.tmp for writing",
-    (!bfs_out), false);
+       (!bfs_out), false);
   for (i = 0; i < 65536; ++i)
     vsl_b_write_uint_16(bfs_out, i);
   bfs_out.close();
 
   vsl_b_ifstream bfs_in("vsl_explicit_int_io_test.bvl.tmp");
   TEST("Opened vsl_explicit_int_io_test.bvl.tmp for reading",
-    (!bfs_in), false);
+       (!bfs_in), false);
   for (i = 0; i < 65536; ++i)
   {
     unsigned long n;
@@ -267,6 +267,5 @@ void test_arbitrary_length_int_conversion()
   test_extreme_int_io();
 //test_arbitrary_length_int_conversion_int();
 }
-
 
 TESTMAIN(test_arbitrary_length_int_conversion);

@@ -1,4 +1,4 @@
-// This is vxl/vnl/tests/test_sparse_matrix.cxx
+// This is core/vnl/tests/test_sparse_matrix.cxx
 #include <vcl_ctime.h>
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
@@ -22,7 +22,7 @@ void doTest1()
   vcl_cout << "m1:\n";
   for (unsigned i=0; i<n; i++) {
     for (unsigned j=0; j<n; j++)
-      vcl_cout << m1(i,j) << " ";
+      vcl_cout << m1(i,j) << ' ';
     vcl_cout << vcl_endl;
   }
 
@@ -35,7 +35,7 @@ void doTest1()
   vcl_cout << "m2:\n";
   for (unsigned i=0; i<n; i++) {
     for (unsigned j=0; j<n; j++)
-      vcl_cout << m2(i,j) << " ";
+      vcl_cout << m2(i,j) << ' ';
     vcl_cout << vcl_endl;
   }
 
@@ -45,7 +45,7 @@ void doTest1()
   vcl_cout << "prod:\n";
   for (unsigned i=0; i<n; i++) {
     for (unsigned j=0; j<n; j++)
-      vcl_cout << prod(i,j) << " ";
+      vcl_cout << prod(i,j) << ' ';
     vcl_cout << vcl_endl;
   }
 
@@ -55,7 +55,7 @@ void doTest1()
   vcl_cout << "sum:\n";
   for (unsigned i=0; i<n; i++) {
     for (unsigned j=0; j<n; j++)
-      vcl_cout << sum(i,j) << " ";
+      vcl_cout << sum(i,j) << ' ';
     vcl_cout << vcl_endl;
   }
 
@@ -65,7 +65,7 @@ void doTest1()
   vcl_cout << "diff:\n";
   for (unsigned i=0; i<n; i++) {
     for (unsigned j=0; j<n; j++)
-      vcl_cout << diff(i,j) << " ";
+      vcl_cout << diff(i,j) << ' ';
     vcl_cout << vcl_endl;
   }
 }
@@ -90,7 +90,7 @@ void doTest2()
     m1.mult(m2,prod);
 
     vcl_clock_t tn = clock();
-    vcl_cout << n << " " << tn - t << vcl_endl;
+    vcl_cout << n << ' ' << tn - t << vcl_endl;
     t = tn;
   }
 }
@@ -109,13 +109,13 @@ void doTest3()
     // ms(i,i) = md(i,i) = 1.0*(i+1)*(i+1);
   }
 
-  vcl_cout << "ms:" << vcl_endl;
+  vcl_cout << "ms:\n";
   for (unsigned i=0; i<n; i++) {
     for (unsigned j=0; j<n; j++)
-      vcl_cout << ms(i,j) << " ";
+      vcl_cout << ms(i,j) << ' ';
     vcl_cout << vcl_endl;
   }
-  vcl_cout << "md:" << vcl_endl << md << vcl_endl;
+  vcl_cout << "md:\n" << md << vcl_endl;
 
   const unsigned int nvals = 2;
   vnl_symmetric_eigensystem<double> ed(md);
@@ -126,8 +126,8 @@ void doTest3()
   // Report 'em.
   for (unsigned i=0; i<nvals; i++) {
     vcl_cout << "Dense[" << i << "] : " << ed.D(i,i) << " -> "
-             << ed.get_eigenvector(i) << vcl_endl;
-    vcl_cout << "Sparse[" << i << "]: " << es.get_eigenvalue(i) << " -> "
+             << ed.get_eigenvector(i) << vcl_endl
+             << "Sparse[" << i << "]: " << es.get_eigenvalue(i) << " -> "
              << es.get_eigenvector(i) << vcl_endl;
   }
 }
@@ -156,8 +156,8 @@ void doTest4()
   for (unsigned i=0; i<nvals; i++) {
     double dense = ed.D(i,i);
     double sparse = es.get_eigenvalue(i);
-    vcl_cout << "Dense[" << i << "] : " << dense << vcl_endl;
-    vcl_cout << "Sparse[" << i << "]: " << sparse << vcl_endl;
+    vcl_cout << "Dense[" << i << "] : " << dense << vcl_endl
+             << "Sparse[" << i << "]: " << sparse << vcl_endl;
     double err = vcl_fabs(dense - sparse);
     vcl_cout << "Error: " << err << vcl_endl;
     testlib_test_assert("vnl_sparse_symmetric_eigensystem eigenvalue error", err < 1e-10);

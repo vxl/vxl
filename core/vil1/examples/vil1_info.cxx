@@ -1,7 +1,6 @@
-// This is vxl/vil/examples/vil_info.cxx
-/*
-  fsm
-*/
+// This is core/vil/examples/vil_info.cxx
+// \author fsm
+
 #include <vcl_iostream.h>
 #include <vil/vil_image.h>
 #include <vil/vil_load.h>
@@ -10,7 +9,7 @@ int main(int argc, char **argv)
 {
   for (int i=1; i<argc; ++i)
   {
-    vcl_cerr << argv[i] << " :" << vcl_endl;
+    vcl_cerr << argv[i] << " :\n";
     vil_image I = vil_load(argv[i]);
     vcl_cerr << "  planes             : " << I.planes() << vcl_endl
              << "  width              : " << I.width() << vcl_endl

@@ -1,4 +1,4 @@
-// This is vxl/vsl/vsl_map_io.txx
+// This is core/vsl/vsl_map_io.txx
 #ifndef vsl_map_io_txx_
 #define vsl_map_io_txx_
 //:
@@ -7,8 +7,8 @@
 // \author K.Y.McGaul
 //
 // \verbatim
-// Modifications:
-// IMS - 22 June 2001 - Added IO for multimap
+//  Modifications:
+//   IMS - 22 June 2001 - Added IO for multimap
 // \endverbatim
 
 #include "vsl_map_io.h"
@@ -54,8 +54,8 @@ void vsl_b_read(vsl_b_istream& is, vcl_map<Key, T, Compare>& v)
     }
     break;
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vcl_map<K, T>&) \n";
-    vcl_cerr << "           Unknown version number "<< ver << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vcl_map<K, T>&)\n"
+             << "           Unknown version number "<< ver << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -71,14 +71,14 @@ void vsl_print_summary(vcl_ostream& os, const vcl_map<Key, T, Compare> &v)
   for (typename vcl_map<Key, T, Compare>::const_iterator iter = v.begin();
        iter != v.end() && i< 5; ++iter,++i)
   {
-    os << " " << i << ": ";
+    os << ' ' << i << ": ";
     vsl_print_summary(os, (*iter).first);
     os << ", ";
     vsl_print_summary(os, (*iter).second);
     os << vcl_endl;
   }
   if (v.size() > 5)
-    os << " ..." << vcl_endl;
+    os << " ...\n";
 }
 
 
@@ -128,8 +128,8 @@ void vsl_b_read(vsl_b_istream& is, vcl_multimap<Key, T, Compare>& v)
     }
     break;
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vcl_multimap<K, T>&) \n";
-    vcl_cerr << "           Unknown version number "<< ver << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vcl_multimap<K, T>&)\n"
+             << "           Unknown version number "<< ver << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -145,14 +145,14 @@ void vsl_print_summary(vcl_ostream& os, const vcl_multimap<Key, T, Compare> &v)
   for (typename vcl_multimap<Key, T, Compare>::const_iterator iter = v.begin();
        iter != v.end() && i< 5; ++iter,++i)
   {
-    os << " " << i << ": ";
+    os << ' ' << i << ": ";
     vsl_print_summary(os, (*iter).first);
     os << ", ";
     vsl_print_summary(os, (*iter).second);
     os << vcl_endl;
   }
   if (v.size() > 5)
-    os << " ..." << vcl_endl;
+    os << " ...\n";
 }
 
 

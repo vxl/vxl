@@ -1,5 +1,5 @@
-// This is vxl/vnl/tests/test_real_eigensystem.cxx
-
+// This is core/vnl/tests/test_real_eigensystem.cxx
+#include <testlib/testlib_test.h>
 //:
 // \file
 // \author Andrew W. Fitzgibbon, Oxford RRG
@@ -10,8 +10,6 @@
 #include <vcl_complex.h>
 #include <vnl/vnl_complexify.h>
 #include <vnl/algo/vnl_real_eigensystem.h>
-
-#include <testlib/testlib_test.h>
 
 void test_real_eigensystem()
 {
@@ -34,12 +32,12 @@ void test_real_eigensystem()
         D(i,i) = vcl_real(eig.D(i,i));
       }
 
-      vcl_cout << "D = " << eig.D << vcl_endl;
-      vcl_cout << "V = " << eig.V << vcl_endl;
+      vcl_cout << "D = " << eig.D << vcl_endl
+               << "V = " << eig.V << vcl_endl;
 
       vnl_matrix<vcl_complex<double> > diff = vnl_complexify(S*eig.Vreal) - vnl_complexify(eig.Vreal)*D;
-      vcl_cout << "X*V - V*D = " << diff << vcl_endl;
-      vcl_cout << "residual = " << diff.fro_norm() << vcl_endl;
+      vcl_cout << "X*V - V*D = " << diff << vcl_endl
+               << "residual = " << diff.fro_norm() << vcl_endl;
       testlib_test_assert("recompose residual",  diff.fro_norm() < 1e-12);
     }
   }
@@ -56,14 +54,14 @@ void test_real_eigensystem()
 
     vnl_real_eigensystem eig(X);
 
-    vcl_cout << "D = " << eig.D << vcl_endl;
-    vcl_cout << "V = " << eig.V << vcl_endl;
+    vcl_cout << "D = " << eig.D << vcl_endl
+             << "V = " << eig.V << vcl_endl;
 
     vnl_matrix<vcl_complex<double> > XC = vnl_complexify(X);
 
     vnl_matrix<vcl_complex<double> > diff = XC*eig.V - eig.V*eig.D;
-    vcl_cout << "X*V - V*D = " << diff << vcl_endl;
-    vcl_cout << "residual = " << diff.fro_norm() << vcl_endl;
+    vcl_cout << "X*V - V*D = " << diff << vcl_endl
+             << "residual = " << diff.fro_norm() << vcl_endl;
     testlib_test_assert("recompose residual",  diff.fro_norm() < 1e-11);
   }
 }

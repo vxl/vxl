@@ -1,4 +1,4 @@
-// This is vxl/vul/vul_redirector.cxx
+// This is core/vul/vul_redirector.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -23,11 +23,12 @@
 #include "vul_redirector.h"
 
 //----------------------------------------------------------------------
-// This class is used as a stream buffer that can 
-// redirect ouput from cout, cerr, clog to a CoutWindow class.
-class vul_redirector_streambuf : public vcl_streambuf {
+// This class is used as a stream buffer that can
+// redirect output from cout, cerr, clog to a CoutWindow class.
+class vul_redirector_streambuf : public vcl_streambuf
+{
   vul_redirector_data* p;
-public:
+ public:
   vul_redirector_streambuf(vul_redirector_data* p_):p(p_) {}
   int sync ();
   int overflow (int ch);
@@ -49,7 +50,8 @@ public:
   xsputn_sizet xsputn (xsputn_const char* text, xsputn_sizet n);
 };
 
-struct vul_redirector_data {
+struct vul_redirector_data
+{
   vul_redirector* owner;
   vcl_streambuf* old_cerrbuf;
   vul_redirector_streambuf* buf;
@@ -60,12 +62,13 @@ struct vul_redirector_data {
 // streambuf stuff
 
 int vul_redirector_streambuf::sync ()
-{ long n = pptr () - pbase ();
+{
+  long n = pptr () - pbase ();
   return (n && p->owner->putchunk ( pbase (), n) != n) ? EOF : 0;
 }
- 
+
 int vul_redirector_streambuf::overflow (int ch)
-{ 
+{
   long n = pptr () - pbase ();
   if (n && sync ())
     return EOF;
@@ -79,9 +82,9 @@ int vul_redirector_streambuf::overflow (int ch)
   pbump (-n);  // Reset pptr().
   return 0;
 }
- 
+
 xsputn_sizet vul_redirector_streambuf::xsputn (xsputn_const char* text, xsputn_sizet n)
-{ 
+{
   return sync () == EOF ? 0 : p->owner->putchunk ( text, n);
 }
 
@@ -116,8 +119,8 @@ vul_redirector::~vul_redirector()
   delete p;
 }
 
-int vul_redirector::sync_passthru() 
-{ 
+int vul_redirector::sync_passthru()
+{
 #if defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)
   // The default libraries these compilers come with are non-standard
   // since they have no pubsync() method. According to standard, though,

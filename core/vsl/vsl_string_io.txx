@@ -1,12 +1,10 @@
-// This is vxl/vsl/vsl_string_io.txx
+// This is core/vsl/vsl_string_io.txx
 #ifndef vsl_string_io_txx_
 #define vsl_string_io_txx_
 //:
 // \file
 // \brief  binary IO functions for vcl_basic_string<T>
 // \author K.Y.McGaul
-//
-// Implementation
 
 #include "vsl_string_io.h"
 #include <vsl/vsl_binary_io.h>
@@ -43,8 +41,8 @@ void vsl_b_read(vsl_b_istream& s, vcl_basic_string<T>& v)
       vsl_b_read(s,v[i]);
     break;
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vcl_basic_string<T>&) \n";
-    vcl_cerr << "           Unknown version number "<< ver << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vcl_basic_string<T>&)\n"
+             << "           Unknown version number "<< ver << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }

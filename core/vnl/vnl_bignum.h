@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_bignum.h
+// This is core/vnl/vnl_bignum.h
 #ifndef vnl_bignum_h_
 #define vnl_bignum_h_
 //:
@@ -95,7 +95,7 @@ vcl_istream& operator>>(vcl_istream& s, vnl_bignum& r);
 // and arithmetic by using a dynamic bit vector. A
 // vnl_bignum object will grow in size as necessary to hold its
 // integer value.  Implicit conversion to the system defined
-// types: short, int, long, float, double and long double 
+// types: short, int, long, float, double and long double
 // is supported by overloaded operator member functions.
 // Addition and subtraction operators are performed by
 // simple bitwise addition and subtraction on
@@ -131,11 +131,12 @@ vcl_istream& operator>>(vcl_istream& s, vnl_bignum& r);
 // 1.234e-5          0 (truncated value less than 1)
 // Infinity          +Inf ("maxval", obeying all conventional arithmetic)
 //
-class vnl_bignum {
+class vnl_bignum
+{
   unsigned short count; // Number of data elements (never 0 except for "0")
   int sign;             // Sign of vnl_bignum (+1 or -1, nothing else!!)
   unsigned short* data; // Pointer to data value
-public:
+ public:
   vnl_bignum();                        // Void constructor
   vnl_bignum(long);                    // Long constructor
   vnl_bignum(unsigned long);           // Unsigned Long constructor
@@ -242,7 +243,7 @@ public:
   friend vcl_string& vnl_bignum_to_string (vcl_string& s, const vnl_bignum& b);
   friend vnl_bignum& vnl_bignum_from_string (vnl_bignum& b, const vcl_string& s);
 
-private:
+ private:
   void xtoBigNum(const char *s);       // convert hex to vnl_bignum
   int  dtoBigNum(const char *s);       // convert decimal to vnl_bignum
   void otoBigNum(const char *s);       // convert octal to vnl_bignum
@@ -286,79 +287,102 @@ inline vnl_bignum operator-(long double r2, vnl_bignum const& r1) { return -(r1 
 
 //: Returns the product of two bignum numbers.
 // \relates vnl_bignum
-inline vnl_bignum operator*(vnl_bignum const& r1, vnl_bignum const& r2) {
+inline vnl_bignum operator*(vnl_bignum const& r1, vnl_bignum const& r2)
+{
   vnl_bignum result(r1); return result *= r2;
 }
-inline vnl_bignum operator*(vnl_bignum const& r1, long r2) {
+inline vnl_bignum operator*(vnl_bignum const& r1, long r2)
+{
   vnl_bignum result(r1); return result *= vnl_bignum(r2);
 }
-inline vnl_bignum operator*(vnl_bignum const& r1, int r2) {
+inline vnl_bignum operator*(vnl_bignum const& r1, int r2)
+{
   vnl_bignum result(r1); return result *= (long)r2;
 }
-inline vnl_bignum operator*(vnl_bignum const& r1, double r2) {
+inline vnl_bignum operator*(vnl_bignum const& r1, double r2)
+{
   vnl_bignum result(r1); return result *= (vnl_bignum)r2;
 }
-inline vnl_bignum operator*(vnl_bignum const& r1, long double r2) {
+inline vnl_bignum operator*(vnl_bignum const& r1, long double r2)
+{
   vnl_bignum result(r1); return result *= (vnl_bignum)r2;
 }
-inline vnl_bignum operator*(long r2, vnl_bignum const& r1) {
+inline vnl_bignum operator*(long r2, vnl_bignum const& r1)
+{
   vnl_bignum result(r1); return result *= r2;
 }
-inline vnl_bignum operator*(int r2, vnl_bignum const& r1) {
+inline vnl_bignum operator*(int r2, vnl_bignum const& r1)
+{
   vnl_bignum result(r1); return result *= (long)r2;
 }
-inline vnl_bignum operator*(double r2, vnl_bignum const& r1) {
+inline vnl_bignum operator*(double r2, vnl_bignum const& r1)
+{
   vnl_bignum result(r1); return result *= (vnl_bignum)r2;
 }
-inline vnl_bignum operator*(long double r2, vnl_bignum const& r1) {
+inline vnl_bignum operator*(long double r2, vnl_bignum const& r1)
+{
   vnl_bignum result(r1); return result *= (vnl_bignum)r2;
 }
 
 //: Returns the division of two bignum numbers.
 // \relates vnl_bignum
-inline vnl_bignum operator/(vnl_bignum const& r1, vnl_bignum const& r2) {
+inline vnl_bignum operator/(vnl_bignum const& r1, vnl_bignum const& r2)
+{
   vnl_bignum result(r1); return result /= r2;
 }
-inline vnl_bignum operator/(vnl_bignum const& r1, long r2) {
+inline vnl_bignum operator/(vnl_bignum const& r1, long r2)
+{
   vnl_bignum result(r1); return result /= r2;
 }
-inline vnl_bignum operator/(vnl_bignum const& r1, int r2) {
+inline vnl_bignum operator/(vnl_bignum const& r1, int r2)
+{
   vnl_bignum result(r1); return result /= (long)r2;
 }
-inline vnl_bignum operator/(vnl_bignum const& r1, double r2) {
+inline vnl_bignum operator/(vnl_bignum const& r1, double r2)
+{
   vnl_bignum result(r1); return result /= (vnl_bignum)r2;
 }
-inline vnl_bignum operator/(vnl_bignum const& r1, long double r2) {
+inline vnl_bignum operator/(vnl_bignum const& r1, long double r2)
+{
   vnl_bignum result(r1); return result /= (vnl_bignum)r2;
 }
-inline vnl_bignum operator/(long r1, vnl_bignum const& r2) {
+inline vnl_bignum operator/(long r1, vnl_bignum const& r2)
+{
   vnl_bignum result(r1); return result /= r2;
 }
-inline vnl_bignum operator/(int r1, vnl_bignum const& r2) {
+inline vnl_bignum operator/(int r1, vnl_bignum const& r2)
+{
   vnl_bignum result((long)r1); return result /= r2;
 }
-inline vnl_bignum operator/(double r1, vnl_bignum const& r2) {
+inline vnl_bignum operator/(double r1, vnl_bignum const& r2)
+{
   vnl_bignum result(r1); return result /= r2;
 }
-inline vnl_bignum operator/(long double r1, vnl_bignum const& r2) {
+inline vnl_bignum operator/(long double r1, vnl_bignum const& r2)
+{
   vnl_bignum result(r1); return result /= r2;
 }
 
 //: Returns the remainder of r1 divided by r2.
 // \relates vnl_bignum
-inline vnl_bignum operator%(vnl_bignum const& r1, vnl_bignum const& r2) {
+inline vnl_bignum operator%(vnl_bignum const& r1, vnl_bignum const& r2)
+{
   vnl_bignum result(r1); return result %= r2;
 }
-inline vnl_bignum operator%(vnl_bignum const& r1, long r2) {
+inline vnl_bignum operator%(vnl_bignum const& r1, long r2)
+{
   vnl_bignum result(r1); return result %= vnl_bignum(r2);
 }
-inline vnl_bignum operator%(vnl_bignum const& r1, int r2) {
+inline vnl_bignum operator%(vnl_bignum const& r1, int r2)
+{
   vnl_bignum result(r1); return result %= vnl_bignum((long)r2);
 }
-inline vnl_bignum operator%(long r1, vnl_bignum const& r2) {
+inline vnl_bignum operator%(long r1, vnl_bignum const& r2)
+{
   vnl_bignum result(r1); return result %= r2;
 }
-inline vnl_bignum operator%(int r1, vnl_bignum const& r2) {
+inline vnl_bignum operator%(int r1, vnl_bignum const& r2)
+{
   vnl_bignum result((long)r1); return result %= r2;
 }
 

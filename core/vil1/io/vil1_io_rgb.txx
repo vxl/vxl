@@ -1,4 +1,4 @@
-// This is vxl/vil/io/vil_io_rgb.txx
+// This is core/vil/io/vil_io_rgb.txx
 #ifndef vil_io_rgb_txx_
 #define vil_io_rgb_txx_
 //:
@@ -36,8 +36,8 @@ void vsl_b_read(vsl_b_istream &is, vil_rgb<T>& v)
     break;
 
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_rgb<T>&) \n";
-    vcl_cerr << "           Unknown version number "<< w << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_rgb<T>&)\n"
+             << "           Unknown version number "<< w << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }

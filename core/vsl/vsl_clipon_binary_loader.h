@@ -1,4 +1,4 @@
-// This is vxl/vsl/vsl_clipon_binary_loader.h
+// This is core/vsl/vsl_clipon_binary_loader.h
 #ifndef vsl_clipon_binary_loader_h_
 #define vsl_clipon_binary_loader_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -19,7 +19,7 @@
 // the object has to be loaded but we can only tell
 // what sort of object it is from the name information
 // stored in the stream.
-// We assume the existance of a polymorphic hierarchy of `clipon'
+// We assume the existence of a polymorphic hierarchy of `clipon'
 // loader objects, eg BaseClassIO and DerivedClassIO, one per
 // class in the hierarchy derived from BaseClass. Each XXXXIO
 // class is able to read and write the corresponding XXXX class.
@@ -27,25 +27,26 @@
 // BaseClassIO must implement the following functions:
 // \code
 // //: Base for objects which provide IO for classes derived from BaseClass
-// class BaseClassIO {
-// public:
+// class BaseClassIO
+// {
+//  public:
 //   //: Create new object of type BaseClass on heap
-// virtual BaseClass* new_object() const;
+//   virtual BaseClass* new_object() const;
 //   //: Write derived class to os using baseclass reference
-// virtual void b_write_by_base(vsl_b_ostream& os,
-//                              const BaseClass& base) const;
+//   virtual void b_write_by_base(vsl_b_ostream& os,
+//                                const BaseClass& base) const;
 //   //: Write derived class to os using baseclass reference
-// virtual void b_read_by_base(vsl_b_istream& is, BaseClass& base) const;
+//   virtual void b_read_by_base(vsl_b_istream& is, BaseClass& base) const;
 //   //: Print summary to stream by BaseClass pointer
-// void vsl_print_summary(vsl_b_ostream &os, const BaseClass * b);
+//   void vsl_print_summary(vsl_b_ostream &os, const BaseClass * b);
 //   //: Copy this object onto the heap and return a pointer
-// virtual BaseClassIO* clone() const;
+//   virtual BaseClassIO* clone() const;
 //   //: Return name of class for which this object provides IO
-// virtual vcl_string target_classname() const;
+//   virtual vcl_string target_classname() const;
 //   //: Return true if b is of class target_classname()
 //   //  Typically this will just be "return b.is_a()==target_classname()"
 //   //  However, third party libraries may use a different system
-// virtual bool is_io_for(const BaseClass& b) const;
+//   virtual bool is_io_for(const BaseClass& b) const;
 // };
 // \endcode
 //
@@ -64,7 +65,7 @@
 // concrete derived classes which can be added
 // to for loading purposes. If you derive a new
 // class you just have to append it to the list of
-// classes of the singletion, viz:
+// classes of the singleton, viz:
 //     vsl_clipon_binary_loader<B,IO>::instance().add(my_object)
 //
 // For examples of usage please see vsl/tests/test_clipon_polymorphic_io.cxx
@@ -85,7 +86,7 @@ class vsl_clipon_binary_loader : public vsl_binary_loader_base
   //: Return index associated with given object name
   int index_for_name(const vcl_string& name) const;
 
-public :
+ public:
   //: Constructor
   vsl_clipon_binary_loader() {};
 
@@ -147,7 +148,6 @@ inline void vsl_b_read( vsl_b_istream& bfs, BaseClass*& b)
   vsl_clipon_binary_loader<BaseClass,BaseClassIO>::
     instance().load_object(bfs,b);
 }
-#endif
-
+#endif // 0
 
 #endif // vsl_clipon_binary_loader_h_

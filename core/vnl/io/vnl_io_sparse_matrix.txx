@@ -1,4 +1,4 @@
-// This is vxl/vnl/io/vnl_io_sparse_matrix.txx
+// This is core/vnl/io/vnl_io_sparse_matrix.txx
 #ifndef vnl_io_sparse_matrix_txx_
 #define vnl_io_sparse_matrix_txx_
 //:
@@ -42,7 +42,7 @@ void vsl_b_read(vsl_b_istream &is, vnl_sparse_matrix_pair<T> & p)
 
   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vnl_sparse_matrix_pair<T>&)\n"
-             << "           Unknown version number "<< ver << "\n";
+             << "           Unknown version number "<< ver << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -54,7 +54,7 @@ void vsl_b_read(vsl_b_istream &is, vnl_sparse_matrix_pair<T> & p)
 template<class T>
 void vsl_print_summary(vcl_ostream& os,const vnl_sparse_matrix_pair<T>& p)
 {
-  os<< "Sparse matrix pair ( " << p.first << "," << p.second << " )" << vcl_endl;
+  os<< "Sparse matrix pair ( " << p.first << ',' << p.second << " )\n";
 }
 
 //I/O for vnl_sparse_matrix
@@ -144,7 +144,7 @@ void vsl_b_read(vsl_b_istream &is, vnl_sparse_matrix<T> & p)
 
   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vnl_sparse_matrix<T>&)\n"
-             << "           Unknown version number "<< ver << "\n";
+             << "           Unknown version number "<< ver << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -161,7 +161,7 @@ void vsl_print_summary(vcl_ostream & os,const vnl_sparse_matrix<T> & p)
   v.next();
   for (int i=0;i<5;i++)
   {
-    os<<" (" << v.getrow() <<"," << v.getcolumn() << ") value " << v.value() <<vcl_endl;
+    os<<" ("<< v.getrow() <<','<< v.getcolumn() <<") value "<< v.value()<<'\n';
     if (!v.next()) break;
   }
 }

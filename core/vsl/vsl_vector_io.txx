@@ -1,12 +1,10 @@
-// This is vxl/vsl/vsl_vector_io.txx
+// This is core/vsl/vsl_vector_io.txx
 #ifndef vsl_vector_io_txx_
 #define vsl_vector_io_txx_
 //:
 // \file
 // \brief binary IO functions for vcl_vector<T>
 // \author Tim Cootes
-//
-// Implementation
 
 #include "vsl_vector_io.h"
 #include <vsl/vsl_binary_explicit_io.h>
@@ -78,8 +76,8 @@ void vsl_b_read(vsl_b_istream& is, vcl_vector<T>& v)
     break;
 
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vcl_vector<T>&) \n";
-    vcl_cerr << "           Unknown version number "<< ver << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vcl_vector<T>&)\n"
+             << "           Unknown version number "<< ver << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -93,12 +91,12 @@ void vsl_print_summary(vcl_ostream& os, const vcl_vector<T> &v)
   os << "Vector length: " << v.size() << vcl_endl;
   for (unsigned int i=0; i<v.size() && i<5; i++)
   {
-    os << " " << i << ": ";
+    os << ' ' << i << ": ";
     vsl_print_summary(os, v[i]);
     os << vcl_endl;
   }
   if (v.size() > 5)
-    os << " ..." << vcl_endl;
+    os << " ...\n";
 }
 
 

@@ -1,19 +1,19 @@
-// This is vxl/vnl/algo/vnl_cholesky.h
+// This is core/vnl/algo/vnl_cholesky.h
 #ifndef vnl_cholesky_h_
 #define vnl_cholesky_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
-//  \file
-//  \brief Decomposition of symmetric matrix
-//  \author Andrew W. Fitzgibbon, Oxford RRG
-//  \date   08 Dec 96
+// \file
+// \brief Decomposition of symmetric matrix
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   08 Dec 96
 //
 // \verbatim
 //  Modifications
-//  Peter Vanroose, Leuven, Apr 1998: added L() (return decomposition matrix)
-//  dac (Manchester) 26/03/2001: tidied up documentation
+//   Peter Vanroose, Leuven, Apr 1998: added L() (return decomposition matrix)
+//   dac (Manchester) 26/03/2001: tidied up documentation
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
@@ -54,7 +54,7 @@ class vnl_cholesky
   double determinant() const;
 
   //   Compute inverse.  Not efficient.
-  // It's broken, I don't have time to fix it.  
+  // It's broken, I don't have time to fix it.
   // Mail awf@robots if you need it and I'll tell you as much as I can
   // to fix it.
   vnl_matrix<double> inverse() const;
@@ -74,11 +74,11 @@ class vnl_cholesky
   //: Return reciprocal condition number (smallest/largest singular values).
   // As long as rcond()>sqrt(precision) the decomposition can be used for
   // solving equations safely.
-  // Not calculated unless Operaton mode at construction was estimate_condition.
+  // Not calculated unless Operation mode at construction was estimate_condition.
   double rcond() const { return rcond_; }
 
   //: Return computed nullvector.
-  // Not calculated unless Operaton mode at construction was estimate_condition.
+  // Not calculated unless Operation mode at construction was estimate_condition.
   vnl_vector<double>      & nullvector()       { return nullvector_; }
   vnl_vector<double> const& nullvector() const { return nullvector_; }
 

@@ -1,12 +1,10 @@
-// This is vxl/vsl/vsl_stack_io.txx
+// This is core/vsl/vsl_stack_io.txx
 #ifndef vsl_stack_io_txx_
 #define vsl_stack_io_txx_
 //:
 // \file
 // \brief  binary IO functions for vcl_stack<T>
 // \author K.Y.McGaul
-//
-// Implementation
 
 #include "vsl_stack_io.h"
 #include <vsl/vsl_binary_io.h>
@@ -65,7 +63,7 @@ void vsl_b_read(vsl_b_istream& is, vcl_stack<T>& v)
     break;
   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vcl_stack<T>&)\n"
-             << "           Unknown version number "<< ver << "\n";
+             << "           Unknown version number "<< ver << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -82,13 +80,13 @@ void vsl_print_summary(vcl_ostream& os, const vcl_stack<T> &v)
   unsigned stack_size = v.size();
   for (unsigned i=0; i<stack_size && i<5; i++)
   {
-    os << " " << i << ": ";
+    os << ' ' << i << ": ";
     vsl_print_summary(os, tmp_stack.top());
     tmp_stack.pop();
     os << vcl_endl;
   }
   if (stack_size > 5)
-    os << " ..." << vcl_endl;
+    os << " ...\n";
 }
 
 

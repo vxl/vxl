@@ -1,4 +1,4 @@
-// This is vxl/vil/io/vil_io_memory_image_format.cxx
+// This is core/vil/io/vil_io_memory_image_format.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -37,8 +37,8 @@ void vsl_b_read(vsl_b_istream &is, vil_memory_image_format& v)
     break;
 
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_memory_image_format&) \n";
-    vcl_cerr << "           Unknown version number "<< w << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_memory_image_format&)\n"
+             << "           Unknown version number "<< w << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -49,29 +49,27 @@ void vsl_b_read(vsl_b_istream &is, vil_memory_image_format& v)
 //: Output a human readable summary of a vil_memory_image_format object
 void vsl_print_summary(vcl_ostream &os, const vil_memory_image_format& v)
 {
-    os<<"Memory image format : ( ";
-    os<<v.components<<" , ";
-    os<<v.bits_per_component<<" , ";
-    switch (v.component_format)
-    {
-      case VIL_COMPONENT_FORMAT_UNKNOWN:
-  os << "VIL_COMPONENT_FORMAT_UNKNOWN";
-        break;
-      case VIL_COMPONENT_FORMAT_UNSIGNED_INT:
-  os << "VIL_COMPONENT_FORMAT_UNSIGNED_INT";
-        break;
-      case VIL_COMPONENT_FORMAT_SIGNED_INT:
-  os << "VIL_COMPONENT_FORMAT_SIGNED_INT";
-        break;
-      case VIL_COMPONENT_FORMAT_IEEE_FLOAT:
-  os << "VIL_COMPONENT_FORMAT_IEEE_FLOAT";
-        break;
-      case VIL_COMPONENT_FORMAT_COMPLEX:
-  os << "VIL_COMPONENT_FORMAT_COMPLEX";
-        break;
-      default:
-  os << "unknown";
-        break;
-    }
-    os << " )";
+  os<<"Memory image format : ( "<<v.components<<" , "<<v.bits_per_component<<" , ";
+  switch (v.component_format)
+  {
+    case VIL_COMPONENT_FORMAT_UNKNOWN:
+      os << "VIL_COMPONENT_FORMAT_UNKNOWN";
+      break;
+    case VIL_COMPONENT_FORMAT_UNSIGNED_INT:
+      os << "VIL_COMPONENT_FORMAT_UNSIGNED_INT";
+      break;
+    case VIL_COMPONENT_FORMAT_SIGNED_INT:
+      os << "VIL_COMPONENT_FORMAT_SIGNED_INT";
+      break;
+    case VIL_COMPONENT_FORMAT_IEEE_FLOAT:
+      os << "VIL_COMPONENT_FORMAT_IEEE_FLOAT";
+      break;
+    case VIL_COMPONENT_FORMAT_COMPLEX:
+      os << "VIL_COMPONENT_FORMAT_COMPLEX";
+      break;
+    default:
+      os << "unknown";
+      break;
+  }
+  os << " )";
 }
