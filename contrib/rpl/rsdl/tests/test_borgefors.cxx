@@ -5,7 +5,7 @@
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_math.h>
 
-#include "rsdl_test.h"
+#include <rsdl/rsdl_test.h>
 
 bool location_close(const vnl_vector_fixed<double,2>& v1,
                     const vnl_vector_fixed<double,2>& v2)
