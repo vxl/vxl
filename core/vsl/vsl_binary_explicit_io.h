@@ -93,7 +93,6 @@ inline void vsl_swap_bytes( char * ptr, int nbyte, int nelem = 1)
       *ptr1++ = *ptr2;
       *ptr2-- = temp;
     }
-
     ptr += nbyte;
   }
 #endif
@@ -132,11 +131,11 @@ inline void vsl_swap_bytes_to_buffer( const char * source, char * dest, int nbyt
 
 #define macro( T ) \
 inline const char * vsl_type_string(T dummy) { return #T; }
-macro (signed short);
+macro (short);
 macro (unsigned short);
-macro (signed int);
+macro (int);
 macro (unsigned int);
-macro (signed long);
+macro (long);
 macro (unsigned long);
 #if 0
 // This test will be replaced with !VCL_PTRDIFF_T_IS_A_STANDARD_TYPE
@@ -154,7 +153,6 @@ macro(vcl_size_t);
 // the number of integers.
 #define VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(size_of_type) \
   (((size_of_type * 8)/7) + ((((size_of_type * 8) % 7) == 0) ? 0: 1))
-
 
 
 //: Implement arbitrary length conversion for unsigned integers.
@@ -189,7 +187,7 @@ inline unsigned long vsl_convert_to_arbitrary_length_signed_impl(
   while (count-- > 0)
   {
 // The inside of this loop is run once per integer
-    signed int v = *(ints++);
+    T v = *(ints++);
     while (v > 63 || v < -64)
     {
       *(ptr++) = v & 127;
@@ -199,7 +197,6 @@ inline unsigned long vsl_convert_to_arbitrary_length_signed_impl(
   }
   return (unsigned long)(ptr - buffer);
 }
-
 
 
 //: Implement arbitrary length conversion for signed integers.
@@ -230,7 +227,7 @@ inline unsigned long vsl_convert_from_arbitrary_length_signed_impl(
     if (bitsLeft < 7)
     {
       if (bitsLeft <= 0 ||
-            b & 64 ?
+          b & 64 ?
               (((signed char)b >> (bitsLeft-1)) != -1) :
               (((b & 127) >> (bitsLeft-1)) != 0) )
       {
@@ -329,8 +326,8 @@ inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buff
 //: Encode an array of ints into an arbitrary length format.
 // The return value is the number of bytes used.
 // buffer should be at least as long as
-// VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(signed long)) * count
-inline unsigned long vsl_convert_to_arbitrary_length(const signed long* ints,
+// VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(long)) * count
+inline unsigned long vsl_convert_to_arbitrary_length(const long* ints,
   unsigned char *buffer, unsigned long count = 1)
 {
   return vsl_convert_to_arbitrary_length_signed_impl(ints, buffer, count);
@@ -346,7 +343,7 @@ inline unsigned long vsl_convert_to_arbitrary_length(const signed long* ints,
 // \param ints   should point to a buffer at least as long as count.
 // \return the number of bytes used, or zero on error.
 inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buffer,
-  signed long *ints, unsigned long count = 1)
+  long *ints, unsigned long count = 1)
 {
   return vsl_convert_from_arbitrary_length_signed_impl(buffer, ints, count);
 }
@@ -386,8 +383,8 @@ inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buff
 //: Encode an array of ints into an arbitrary length format.
 // The return value is the number of bytes used.
 // buffer should be at least as long as
-// VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(signed int)) * count
-inline unsigned long vsl_convert_to_arbitrary_length(const signed int* ints,
+// VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(int)) * count
+inline unsigned long vsl_convert_to_arbitrary_length(const int* ints,
   unsigned char *buffer, unsigned long count = 1)
 {
   return vsl_convert_to_arbitrary_length_signed_impl(ints, buffer, count);
@@ -404,7 +401,7 @@ inline unsigned long vsl_convert_to_arbitrary_length(const signed int* ints,
 // \param ints   should point to a buffer at least as long as count.
 // \return the number of bytes used, or zero on error.
 inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buffer,
-  signed int *ints, unsigned long count = 1)
+  int *ints, unsigned long count = 1)
 {
   return vsl_convert_from_arbitrary_length_signed_impl(buffer, ints, count);
 }
@@ -444,8 +441,8 @@ unsigned short *ints, unsigned long count = 1)
 //: Encode an array of ints into an arbitrary length format.
 // The return value is the number of bytes used.
 // buffer should be at least as long as
-// VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(signed short)) * count
-inline unsigned long vsl_convert_to_arbitrary_length(const signed short* ints,
+// VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(short)) * count
+inline unsigned long vsl_convert_to_arbitrary_length(const short* ints,
   unsigned char *buffer, unsigned long count = 1)
 {
   return vsl_convert_to_arbitrary_length_signed_impl(ints, buffer, count);
@@ -462,7 +459,7 @@ inline unsigned long vsl_convert_to_arbitrary_length(const signed short* ints,
 // \param ints   should point to a buffer at least as long as count.
 // \return the number of bytes used, or zero on error.
 inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buffer,
-  signed short *ints, unsigned long count = 1)
+  short *ints, unsigned long count = 1)
 {
   return vsl_convert_from_arbitrary_length_signed_impl(buffer, ints, count);
 }
@@ -677,9 +674,9 @@ VCL_DEFINE_SPECIALIZATION
 #ifdef VCL_VC60
 static
 #endif
-inline void vsl_b_write_block(vsl_b_ostream &os, const signed int* begin, unsigned nelems)
+inline void vsl_b_write_block(vsl_b_ostream &os, const int* begin, unsigned nelems)
 {
-  char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(signed int)) * nelems];
+  char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(int)) * nelems];
   unsigned long nbytes = vsl_convert_to_arbitrary_length(begin, (unsigned char *)block, nelems);
 
   vsl_b_write(os, nbytes);
@@ -696,21 +693,21 @@ VCL_DEFINE_SPECIALIZATION
 #ifdef VCL_VC60
 static
 #endif
-inline void vsl_b_read_block(vsl_b_istream &is, signed int* begin, unsigned nelems)
+inline void vsl_b_read_block(vsl_b_istream &is, int* begin, unsigned nelems)
 {
   if (!is) return;
   unsigned long nbytes;
   vsl_b_read(is, nbytes);
   if (nbytes)
   {
-    char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(signed int)) * nelems];
+    char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(int)) * nelems];
     is.is().read(block, nbytes);
     unsigned long n_bytes_converted =
     vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
     delete [] block;
     if (n_bytes_converted != nbytes)
     {
-      vcl_cerr << "\nI/O ERROR: vsl_b_read_block(.., signed int*,..)"
+      vcl_cerr << "\nI/O ERROR: vsl_b_read_block(.., int*,..)"
                << " Corrupted data stream\n";
       is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     }
@@ -778,9 +775,9 @@ VCL_DEFINE_SPECIALIZATION
 #ifdef VCL_VC60
 static
 #endif
-inline void vsl_b_write_block(vsl_b_ostream &os, const signed short* begin, unsigned nelems)
+inline void vsl_b_write_block(vsl_b_ostream &os, const short* begin, unsigned nelems)
 {
-  char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(signed short)) * nelems];
+  char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(short)) * nelems];
 
   unsigned long nbytes = vsl_convert_to_arbitrary_length(begin, (unsigned char *)block, nelems);
   vsl_b_write(os, nbytes);
@@ -797,20 +794,20 @@ VCL_DEFINE_SPECIALIZATION
 #ifdef VCL_VC60
 static
 #endif
-inline void vsl_b_read_block(vsl_b_istream &is, signed short* begin, unsigned nelems)
+inline void vsl_b_read_block(vsl_b_istream &is, short* begin, unsigned nelems)
 {
   unsigned long nbytes;
   vsl_b_read(is, nbytes);
   if (nbytes)
   {
-    char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(signed short)) * nelems];
+    char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(short)) * nelems];
     is.is().read(block, nbytes);
     unsigned long n_bytes_converted =
     vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
     delete [] block;
     if (n_bytes_converted != nbytes)
     {
-      vcl_cerr << "\nI/O ERROR: vsl_b_read_block(.., signed short*,..)"
+      vcl_cerr << "\nI/O ERROR: vsl_b_read_block(.., short*,..)"
                << " Corrupted data stream\n";
       is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     }
@@ -878,9 +875,9 @@ VCL_DEFINE_SPECIALIZATION
 #ifdef VCL_VC60
 static
 #endif
-inline void vsl_b_write_block(vsl_b_ostream &os, const signed long* begin, unsigned nelems)
+inline void vsl_b_write_block(vsl_b_ostream &os, const long* begin, unsigned nelems)
 {
-  char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(signed long)) * nelems];
+  char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(long)) * nelems];
 
   unsigned long nbytes = vsl_convert_to_arbitrary_length(begin, (unsigned char *)block, nelems);
   vsl_b_write(os, nbytes);
@@ -897,20 +894,20 @@ VCL_DEFINE_SPECIALIZATION
 #ifdef VCL_VC60
 static
 #endif
-inline void vsl_b_read_block(vsl_b_istream &is, signed long* begin, unsigned nelems)
+inline void vsl_b_read_block(vsl_b_istream &is, long* begin, unsigned nelems)
 {
   unsigned long nbytes;
   vsl_b_read(is, nbytes);
   if (nbytes)
   {
-    char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(signed long)) * nelems];
+    char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(long)) * nelems];
     is.is().read(block, nbytes);
     unsigned long n_bytes_converted =
     vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
     delete [] block;
     if (n_bytes_converted != nbytes)
     {
-      vcl_cerr << "\nI/O ERROR: vsl_b_read_block(.., signed long*,..)"
+      vcl_cerr << "\nI/O ERROR: vsl_b_read_block(.., long*,..)"
                << " Corrupted data stream\n";
       is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     }
@@ -1055,8 +1052,7 @@ inline void vsl_b_read_block(vsl_b_istream &is, vcl_size_t* begin, unsigned nele
   }
 }
 
-
-#endif
+#endif // 0
 
 
 #endif // vsl_binary_explicit_io_h_
