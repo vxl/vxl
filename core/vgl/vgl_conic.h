@@ -34,6 +34,8 @@
 #include <vcl_string.h>
 #include <vcl_iosfwd.h>
 
+#include <vcl_compiler.h>
+
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_line_2d.h>
 
@@ -95,7 +97,11 @@ class vgl_conic
   T f_; //: coefficient of \a w^2
 
  public:
+#ifdef VCL_VC71
+  inline vgl_conic_type type() const { return type_; }
+#else
   inline vgl_conic::vgl_conic_type type() const { return type_; }
+#endif
 
   //: Returns the type of the conic as a string.
   // Possible returned strings are:
@@ -108,10 +114,18 @@ class vgl_conic
 
   //: Returns the internal enum value corresponding to the string argument.
   // Useful for comparison purposes, or for use in "case" statements.
+#ifdef VCL_VC71
+  static vgl_conic_type type_by_name(vcl_string const& name);
+#else
   static vgl_conic::vgl_conic_type type_by_name(vcl_string const& name);
+#endif
 
   //: Converts the conic type from enum (internal representation) to string.
+#ifdef VCL_VC71
+  static vcl_string type_by_number(vgl_conic_type type);
+#else
   static vcl_string type_by_number(vgl_conic::vgl_conic_type type);
+#endif
 
   //: Returns the coefficient of \f$X^2\f$
   inline T a() const { return  a_; }
