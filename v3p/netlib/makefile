@@ -120,6 +120,9 @@ SOURCES += tql2.c
 SOURCES += tred1.c
 SOURCES += tred2.c
 
+# ITPACK
+SOURCES += dsrc2c.c
+
 # MINPACK
 SOURCES += enorm.c
 SOURCES += fdjac2.c
