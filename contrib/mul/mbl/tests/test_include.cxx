@@ -26,6 +26,10 @@
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_print.h>
 #include <mbl/mbl_priority_bounded_queue.h>
+#include <mbl/mbl_progress.h>
+#include <mbl/mbl_progress_composite.h>
+#include <mbl/mbl_progress_null.h>
+#include <mbl/mbl_progress_text.h>
 #include <mbl/mbl_random_n_from_m.h>
 #include <mbl/mbl_rbf_network.h>
 #include <mbl/mbl_read_double.h>

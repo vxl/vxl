@@ -33,6 +33,7 @@
 #include <rgrl/rgrl_data_manager.h>
 #include <rgrl/rgrl_debug_util.h>
 #include <rgrl/rgrl_est_affine.h>
+#include <rgrl/rgrl_est_dis_homo2d_lm.h>
 #include <rgrl/rgrl_est_homography2d.h>
 #include <rgrl/rgrl_est_homo2d_lm.h>
 #include <rgrl/rgrl_est_quadratic.h>
@@ -88,6 +89,7 @@
 #include <rgrl/rgrl_trans_homography2d.h>
 #include <rgrl/rgrl_trans_mixed_spline.h>
 #include <rgrl/rgrl_trans_quadratic.h>
+#include <rgrl/rgrl_trans_rad_dis_homo2d.h>
 #include <rgrl/rgrl_trans_reader.h>
 #include <rgrl/rgrl_trans_reduced_quad.h>
 #include <rgrl/rgrl_trans_rigid.h>

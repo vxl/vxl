@@ -14,6 +14,7 @@
 #include <vgui/vgui_color.h>
 #include <vgui/vgui_color_text.h>
 #include <vgui/vgui_command.h>
+#include <vgui/vgui_command_sptr.h>
 #include <vgui/vgui_composite_tableau.h>
 #include <vgui/vgui_composite_tableau_sptr.h>
 #include <vgui/vgui_debug_tableau.h>
