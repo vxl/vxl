@@ -72,10 +72,26 @@ int main (int argc, char** argv)
     int i1[50000];
     int i2[50000];
 
+#if !VXL_STDLIB_HAS_DRAND48
+    int mvl_sample_seed = 12345;
+#endif
+
     for (int i=0; i < 50000; ++i) {
+#if VXL_STDLIB_HAS_DRAND48
       f[i] = (int)(498*drand48());
       i1[i] = (int)(299*drand48());
       i2[i] = (int)(299*drand48());
+#else
+      mvl_sample_seed = (mvl_sample_seed*16807)%2147483647L;
+      double u = double(mvl_sample_seed)/2147483711L;
+      f[i] = (int)(498*u);
+      mvl_sample_seed = (mvl_sample_seed*16807)%2147483647L;
+      u = double(mvl_sample_seed)/2147483711L;
+      i1[i] = (int)(299*u);
+      mvl_sample_seed = (mvl_sample_seed*16807)%2147483647L;
+      u = double(mvl_sample_seed)/2147483711L;
+      i2[i] = (int)(299*u);
+#endif
     }
     vul_timer timer;
     for (int i=0; i < 50000; ++i) {
@@ -84,4 +100,5 @@ int main (int argc, char** argv)
     vcl_cerr << timer.user()  << " msec" << vcl_endl;
     vcl_cerr << mvm.num_tracks() << " distinct tracks" << vcl_endl;
   }
+  return 0;
 }
