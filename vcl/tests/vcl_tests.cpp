@@ -7,10 +7,6 @@
 #include "test_vcl_compiler.cxx"
 #undef main
 
-#define main test_vcl_rel_ops
-#include "test_vcl_rel_ops.cxx"
-#undef main
-
 #define main test_vcl_iterator
 #include "test_vcl_iterator.cxx"
 #undef main
@@ -53,6 +49,10 @@
 
 #define main test_vcl_complex
 #include "test_vcl_complex.cxx"
+#undef main
+
+#define main test_vcl_rel_ops
+#include "test_vcl_rel_ops.cxx"
 #undef main
 
 #define main test_vcl_algorithm
