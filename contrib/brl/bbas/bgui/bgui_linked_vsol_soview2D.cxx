@@ -318,6 +318,11 @@ void bgui_linked_vsol_soview2D_digital_curve::translate( float x , float y )
 //--------------------------------------------------------------------------
 //: vsol_polygon_2d view
 //--------------------------------------------------------------------------
+bgui_linked_vsol_soview2D_polygon::bgui_linked_vsol_soview2D_polygon(vsol_polygon_2d_sptr const& pline)
+{
+  sptr = pline;
+}
+
 vcl_ostream& bgui_linked_vsol_soview2D_polygon::print(vcl_ostream& poly) const
 {
   return poly;

@@ -11,6 +11,8 @@
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_line_2d.h>
 #include <vsol/vsol_polyline_2d.h>
+#include <vsol/vsol_polygon_2d.h>
+#include <vsol/vsol_region_2d.h>
 
 #include <vdgl/vdgl_digital_curve.h>
 
@@ -172,6 +174,30 @@ bgui_linked_vsol2D_tableau::add_vsol_polyline_2d(vsol_polyline_2d_sptr const& pl
                                        polyline_style_.line_width );
 }
 
+bgui_linked_vsol_soview2D_polygon*
+bgui_linked_vsol2D_tableau::add_vsol_polygon_2d(vsol_polygon_2d_sptr const& pline,
+                                                 const float r,
+                                                 const float g,
+                                                 const float b,
+                                                 const float line_width)
+{
+  bgui_linked_vsol_soview2D_polygon* obj =
+    new bgui_linked_vsol_soview2D_polygon(pline);
+  add(obj);
+  obj->set_style( vgui_style_factory::get_style( r , g , b , 1.0f , line_width ) );
+  return obj;
+}
+
+bgui_linked_vsol_soview2D_polygon*
+bgui_linked_vsol2D_tableau::add_vsol_polygon_2d(vsol_polygon_2d_sptr const& pline)
+{
+  return add_vsol_polygon_2d( pline , polyline_style_.r ,
+                                       polyline_style_.g ,
+                                       polyline_style_.b ,
+                                       polyline_style_.line_width );
+}
+
+
 bgui_linked_vsol_soview2D_digital_curve*
 bgui_linked_vsol2D_tableau::add_digital_curve(vdgl_digital_curve_sptr const& dc,
                                               const float r,
@@ -311,6 +337,13 @@ add_spatial_object(vsol_spatial_object_2d_sptr const& sos)
         vsol_polyline_2d_sptr pline =
           sos->cast_to_curve()->cast_to_polyline_2d();
         this->add_vsol_polyline_2d(pline);
+     }
+  }
+  if (sos->cast_to_region()) {    
+	  if (sos->cast_to_region()->cast_to_polygon_2d()) {
+        vsol_polygon_2d_sptr pline =
+          sos->cast_to_region()->cast_to_polygon_2d();
+        this->add_vsol_polygon_2d(pline);
      }
   }
   return;

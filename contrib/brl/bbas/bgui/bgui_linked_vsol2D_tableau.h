@@ -91,6 +91,19 @@ class bgui_linked_vsol2D_tableau : public vgui_easy2D_tableau
   bgui_linked_vsol_soview2D_polyline*
     add_vsol_polyline_2d(vsol_polyline_2d_sptr const& pline);
 
+
+  //: display for vsol_polygon_2d
+  bgui_linked_vsol_soview2D_polygon*
+    add_vsol_polygon_2d(vsol_polygon_2d_sptr const& pline,
+                         const float r,
+                         const float g,
+                         const float b,
+                         const float line_width);
+
+  bgui_linked_vsol_soview2D_polygon*
+    add_vsol_polygon_2d(vsol_polygon_2d_sptr const& pline);
+
+
   //: display for digital_curve
   bgui_linked_vsol_soview2D_digital_curve*
     add_digital_curve(vdgl_digital_curve_sptr const& dc,
