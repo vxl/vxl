@@ -26,32 +26,36 @@ IF( VXL_MPEG_USE_CONFIGURE )
 
 ELSE( VXL_MPEG_USE_CONFIGURE )
 
+  INCLUDE (${CMAKE_ROOT}/Modules/CheckIncludeFileCXX.cmake)
+  INCLUDE (${CMAKE_ROOT}/Modules/CheckSymbolExists.cmake)
+  INCLUDE (${vxl_SOURCE_DIR}/config/cmake/config/vxl_config_macros.cmake)
+
   IF( CMAKE_SYSTEM_PROCESSOR MATCHES ppc )
     SET( MPEG_ARCH_PPC 1 )
   ELSE( CMAKE_SYSTEM_PROCESSOR MATCHES ppc )
     SET( MPEG_ARCH_PPC 0 )
   ENDIF( CMAKE_SYSTEM_PROCESSOR MATCHES ppc )
 
-  IF(UNIX)
-    IF( CMAKE_SYSTEM_PROCESSOR MATCHES i[56]86 )
-      SET( MPEG_ARCH_X86 1 )
-    ELSE( CMAKE_SYSTEM_PROCESSOR MATCHES i[56]86 )
-      SET( MPEG_ARCH_X86 0 )
-    ENDIF( CMAKE_SYSTEM_PROCESSOR MATCHES i[56]86 )
-  ELSE(UNIX)
+  IF( CMAKE_SYSTEM_PROCESSOR MATCHES i[56]86 )
+	  SET( MPEG_ARCH_X86 1 )
+  ELSE( CMAKE_SYSTEM_PROCESSOR MATCHES i[56]86 )
+	  SET( MPEG_ARCH_X86 0 )
+  ENDIF( CMAKE_SYSTEM_PROCESSOR MATCHES i[56]86 )
+  IF(WIN32)
   # unfortunately MSVC6 (and probably other Windows compilers
   # can't cope with the mmx assembler
     SET( MPEG_ARCH_X86 0 )
-  ENDIF(UNIX)
+  ENDIF(WIN32)
 
 
-  INCLUDE (${CMAKE_ROOT}/Modules/CheckIncludeFileCXX.cmake)
-  CHECK_INCLUDE_FILE_CXX("inttypes.h" MPEG_HAVE_INTTYPES_H)
+  # Calculate the largest value of __aligned
+  
+  PERFORM_CHECK_HEADER(inttypes.h MPEG_HAVE_INTTYPES_H)
+  PERFORM_C_CHECK_FUNCTION(memalign "stdlib.h" MPEG_HAVE_MEMALIGN)
 
-  ## Still need to figure out how to set these for maximum
-  ## efficiency
+  ## Still need to figure out how to calculate this for
+  ## potentially maximum efficiency
   SET( MPEG_ATTRIBUTE_ALIGNED_MAX 0 )
-  SET( MPEG_HAVE_MEMALIGN 0 )
 
   CONFIGURE_FILE(${vthreep_SOURCE_DIR}/mpeg2/include/config_cmake.h.in ${vthreep_BINARY_DIR}/mpeg2/include/config.h)
   IF( NOT MPEG_HAVE_INTTYPES_H )
