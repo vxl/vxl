@@ -21,29 +21,29 @@ INCLUDE (${CMAKE_ROOT}/Modules/CheckSymbolExists.cmake)
 MACRO(PERFORM_CMAKE_TEST FILE TEST)
   IF("${TEST}" MATCHES "^${TEST}$")
     # Perform test
-    SET(MACRO_CHECK_FUNCTION_DEFINITIONS 
-      "-D${TEST} ${CMAKE_REQUIRED_FLAGS}")
+    SET(MACRO_CHECK_FUNCTION_DEFINITIONS
+        "-D${TEST} ${CMAKE_REQUIRED_FLAGS}")
     IF(CMAKE_REQUIRED_LIBRARIES)
       SET(TEST_ADD_LIBRARIES
-        "-DLINK_LIBRARIES:STRING=${CMAKE_REQUIRED_LIBRARIES}")
+          "-DLINK_LIBRARIES:STRING=${CMAKE_REQUIRED_LIBRARIES}")
     ENDIF(CMAKE_REQUIRED_LIBRARIES)
     MESSAGE(STATUS "Performing Test ${TEST}")
 
     TRY_COMPILE(${TEST}
-      ${CMAKE_BINARY_DIR}
-      ${vxl_config_SOURCE_DIR}/${FILE}
-      CMAKE_FLAGS -DCOMPILE_DEFINITIONS:STRING=${MACRO_CHECK_FUNCTION_DEFINITIONS}
-      "${TEST_ADD_LIBRARIES}"
-      OUTPUT_VARIABLE OUTPUT)
+                ${CMAKE_BINARY_DIR}
+                ${vxl_config_SOURCE_DIR}/${FILE}
+                CMAKE_FLAGS -DCOMPILE_DEFINITIONS:STRING=${MACRO_CHECK_FUNCTION_DEFINITIONS}
+                "${TEST_ADD_LIBRARIES}"
+                OUTPUT_VARIABLE OUTPUT)
     IF(${TEST})
       SET(${TEST} 1 CACHE INTERNAL "VXL test ${FUNCTION}")
       MESSAGE(STATUS "Performing Test ${TEST} - Success")
     ELSE(${TEST})
       MESSAGE(STATUS "Performing Test ${TEST} - Failed")
       SET(${TEST} 0 CACHE INTERNAL "Test ${FUNCTION}")
-      WRITE_FILE(${CMAKE_BINARY_DIR}/CMakeError.log 
-        "Performing Test ${TEST} failed with the following output:\n"
-        "${OUTPUT}\n" APPEND)
+      WRITE_FILE(${CMAKE_BINARY_DIR}/CMakeError.log
+                 "Performing Test ${TEST} failed with the following output:\n"
+                 "${OUTPUT}\n" APPEND)
     ENDIF(${TEST})
   ELSE("${TEST}" MATCHES "^${TEST}$")
     # Have result
@@ -100,43 +100,43 @@ MACRO(CHECK_TYPE_EXISTS TYPE FILES VARIABLE)
     SET(CHECK_TYPE_EXISTS_CONTENT "/* */\n")
     SET(MACRO_CHECK_TYPE_EXISTS_FLAGS ${CMAKE_REQUIRED_FLAGS})
     IF(CMAKE_REQUIRED_LIBRARIES)
-      SET(CHECK_TYPE_EXISTS_LIBS 
-        "-DLINK_LIBRARIES:STRING=${CMAKE_REQUIRED_LIBRARIES}")
+      SET(CHECK_TYPE_EXISTS_LIBS
+          "-DLINK_LIBRARIES:STRING=${CMAKE_REQUIRED_LIBRARIES}")
     ENDIF(CMAKE_REQUIRED_LIBRARIES)
     FOREACH(FILE ${FILES})
       SET(CHECK_TYPE_EXISTS_CONTENT
-        "${CHECK_TYPE_EXISTS_CONTENT}#include <${FILE}>\n")
+          "${CHECK_TYPE_EXISTS_CONTENT}#include <${FILE}>\n")
     ENDFOREACH(FILE)
     SET(CHECK_TYPE_EXISTS_CONTENT
-      "${CHECK_TYPE_EXISTS_CONTENT}\nvoid cmakeRequireSymbol(${TYPE} dummy){(void)dummy;}\nint main()\n{return 0;\n}\n")
+        "${CHECK_TYPE_EXISTS_CONTENT}\nvoid cmakeRequireSymbol(${TYPE} dummy){(void)dummy;}\nint main()\n{return 0;\n}\n")
 
-    FILE(WRITE ${CMAKE_BINARY_DIR}/CMakeTmp/CheckTypeExists.cxx 
-      "${CHECK_TYPE_EXISTS_CONTENT}")
+    FILE(WRITE ${CMAKE_BINARY_DIR}/CMakeTmp/CheckTypeExists.cxx
+         "${CHECK_TYPE_EXISTS_CONTENT}")
 
     MESSAGE(STATUS "Looking for ${TYPE}")
     TRY_COMPILE(${VARIABLE}
-      ${CMAKE_BINARY_DIR}
-      ${CMAKE_BINARY_DIR}/CMakeTmp/CheckTypeExists.cxx
-      CMAKE_FLAGS 
-      -DCOMPILE_DEFINITIONS:STRING=${MACRO_CHECK_TYPE_EXISTS_FLAGS}
-      "${CHECK_TYPE_EXISTS_LIBS}"
-      OUTPUT_VARIABLE OUTPUT)
+                ${CMAKE_BINARY_DIR}
+                ${CMAKE_BINARY_DIR}/CMakeTmp/CheckTypeExists.cxx
+                CMAKE_FLAGS
+                -DCOMPILE_DEFINITIONS:STRING=${MACRO_CHECK_TYPE_EXISTS_FLAGS}
+                "${CHECK_TYPE_EXISTS_LIBS}"
+                OUTPUT_VARIABLE OUTPUT)
     IF(${VARIABLE})
       MESSAGE(STATUS "Looking for ${TYPE} - found")
       SET(${VARIABLE} 1 CACHE INTERNAL "Have symbol ${TYPE}")
-      FILE(APPEND ${CMAKE_BINARY_DIR}/CMakeOutput.log 
-        "Determining if the ${TYPE} "
-        "exist passed with the following output:\n"
-        "${OUTPUT}\nFile ${CMAKE_BINARY_DIR}/CMakeTmp/CheckTypeExists.cxx:\n"
-        "${CHECK_TYPE_EXISTS_CONTENT}\n")
+      FILE(APPEND ${CMAKE_BINARY_DIR}/CMakeOutput.log
+           "Determining if the ${TYPE} "
+           "exist passed with the following output:\n"
+           "${OUTPUT}\nFile ${CMAKE_BINARY_DIR}/CMakeTmp/CheckTypeExists.cxx:\n"
+           "${CHECK_TYPE_EXISTS_CONTENT}\n")
     ELSE(${VARIABLE})
       MESSAGE(STATUS "Looking for ${TYPE} - not found.")
       SET(${VARIABLE} "" CACHE INTERNAL "Have symbol ${TYPE}")
-      FILE(APPEND ${CMAKE_BINARY_DIR}/CMakeError.log 
-        "Determining if the ${TYPE} "
-        "exist failed with the following output:\n"
-        "${OUTPUT}\nFile ${CMAKE_BINARY_DIR}/CMakeTmp/CheckTypeExists.c:\n"
-        "${CHECK_TYPE_EXISTS_CONTENT}\n")
+      FILE(APPEND ${CMAKE_BINARY_DIR}/CMakeError.log
+           "Determining if the ${TYPE} "
+           "exist failed with the following output:\n"
+           "${OUTPUT}\nFile ${CMAKE_BINARY_DIR}/CMakeTmp/CheckTypeExists.c:\n"
+           "${CHECK_TYPE_EXISTS_CONTENT}\n")
     ENDIF(${VARIABLE})
   ENDIF("${VARIABLE}" MATCHES "^${VARIABLE}$")
 ENDMACRO(CHECK_TYPE_EXISTS)
@@ -167,8 +167,8 @@ ENDMACRO(CHECK_FUNCTION_EXISTS_ZERO FUNCTION VARIABLE)
 # Determine which type matches the given size
 #
 
-MACRO(DETERMINE_TYPE VAR SIZE 
-    TYPE1_SIZE TYPE1_NAME TYPE2_SIZE TYPE2_NAME TYPE3_SIZE TYPE3_NAME)
+MACRO(DETERMINE_TYPE VAR SIZE
+      TYPE1_SIZE TYPE1_NAME TYPE2_SIZE TYPE2_NAME TYPE3_SIZE TYPE3_NAME)
   IF(${TYPE1_SIZE} MATCHES "^${SIZE}$")
     SET("VXL_${VAR}" "${TYPE1_NAME}")
     SET("VXL_HAS_${VAR}" "1")
@@ -241,8 +241,6 @@ IF(NOT vcl_cv_cxx_define_specialization)
 ENDIF(NOT vcl_cv_cxx_define_specialization)
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_CAN_SPECIALIZE_CV)
 SET(CMAKE_REQUIRED_FLAGS)
-
-
 
 #
 # Find header files
@@ -370,7 +368,7 @@ ENDIF(NOT VCL_CAN_DO_IMPLICIT_TEMPLATES)
 #
 # We are assuming CHAR_BIN = 8. Here we guess that CMake probably does not work
 # on platform where this is not the case.
-# 
+#
 
 SET(CMAKE_REQUIRED_FLAGS ${CMAKE_ANSI_CFLAGS})
 CHECK_TYPE_SIZE("char" SIZEOF_CHAR)
@@ -387,8 +385,8 @@ DETERMINE_TYPE(BYTE 1 "${SIZEOF_CHAR}" "char" "${SIZEOF_CHAR}" "char" "${SIZEOF_
 DETERMINE_TYPE(INT_8 1 "${SIZEOF_CHAR}" "char" "${SIZEOF_SHORT}" "short" "${SIZEOF_CHAR}" "char")
 DETERMINE_TYPE(INT_16 2 "${SIZEOF_SHORT}" "short" "${SIZEOF_INT}" "int" "${SIZEOF_CHAR}" "char")
 DETERMINE_TYPE(INT_32 4 "${SIZEOF_INT}" "int" "${SIZEOF_LONG}" "long" "${SIZEOF_SHORT}" "short")
-DETERMINE_TYPE(INT_64 8 "${SIZEOF_LONG_LONG}" "long long" "${SIZEOF_LONG}" "long" "${SIZEOF___INT64}" "__int64")
-DETERMINE_TYPE(IEEE_32 4 "${SIZEOF_DOUBLE}" "double" "${SIZEOF_FLOAT}" "float" "${SIZEOF_FLOAT}" "float")
+DETERMINE_TYPE(INT_64 8 ""${SIZEOF_LONG}" "long" ${SIZEOF_LONG_LONG}" "long long" "${SIZEOF___INT64}" "__int64")
+DETERMINE_TYPE(IEEE_32 4 "${SIZEOF_DOUBLE}" "double" "${SIZEOF_FLOAT}" "float" "${SIZEOF_LONG DOUBLE}" "long double")
 DETERMINE_TYPE(IEEE_64 8 "${SIZEOF_DOUBLE}" "double" "${SIZEOF_LONG_DOUBLE}" "long double" "${SIZEOF_FLOAT}" "float")
 DETERMINE_TYPE(IEEE_96 12 "${SIZEOF_LONG_DOUBLE}" "long double" "${SIZEOF_DOUBLE}" "double" "${SIZEOF_FLOAT}" "float")
 DETERMINE_TYPE(IEEE_128 16 "${SIZEOF_LONG_DOUBLE}" "long double" "${SIZEOF_DOUBLE}" "double" "${SIZEOF_FLOAT}" "float")
