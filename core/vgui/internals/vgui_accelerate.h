@@ -49,13 +49,13 @@ class vgui_accelerate
   //: Fast-as-we-can version of drawpixels.
   virtual bool vgui_glDrawPixels( GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid *pixels );
 
-  //: For X11/Mesa - copy back buffer to auxilary buffer.
+  //: For X11/Mesa - copy back buffer to auxiliary buffer.
   //  This function is used in X11/Mesa to speed up overlay emulation.  It
   //  returns false to indicate to overlay_biscuit that a default emulation
   //  must be used.
   virtual bool vgui_copy_back_to_aux();
 
-  //: For X11/Mesa - copy auxilary buffer to back buffer.
+  //: For X11/Mesa - copy auxiliary buffer to back buffer.
   //  This function is used in X11/Mesa to speed up overlay emulation.  It
   //  returns false to indicate to overlay_biscuit that a default emulation
   //  must be used.

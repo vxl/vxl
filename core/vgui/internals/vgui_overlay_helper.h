@@ -7,7 +7,7 @@
 //:
 // \file
 // \author fsm
-// \brief  Helper class to emulate overlays using an auxilary buffer.
+// \brief  Helper class to emulate overlays using an auxiliary buffer.
 
 class vgui_event;
 class vgui_adaptor;
