@@ -151,7 +151,7 @@ void test_gauss_reduce_121_2d_byte(int nx, int ny)
                           image0.plane(0),image0.nx(),image0.ny(),
                           image0.xstep(),image0.ystep());
   TEST("Smoothing correct",test2(1,1), 17);
-  vcl_cout<<"Value at (1,1):"<<test2(1,1)<<vcl_endl;
+  vcl_cout<<"Value at (1,1):"<<int(test2(1,1))<<vcl_endl;
 }
 
 void test_gauss_reduce_121_2d_float(int nx, int ny)
