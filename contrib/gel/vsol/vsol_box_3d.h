@@ -65,7 +65,7 @@ class vsol_box_3d : public vbl_ref_count , public vul_timestamp
   void add_point(double x, double y, double z);
 
   // deprecated interface:
-// private:
+ private:
   void set_min_x(const double& v);
   void set_max_x(const double& v);
 

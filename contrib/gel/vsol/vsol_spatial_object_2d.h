@@ -176,7 +176,7 @@ class vsol_spatial_object_2d : public vul_timestamp, public vbl_ref_count
   { if (!bounding_box_) bounding_box_=new vsol_box_2d; bounding_box_->add_point(x,y); }
 
   // deprecated interface:
-// private:
+ private:
   void set_min_x(double xmin) const { add_to_bounding_box(xmin,0); }
   void set_max_x(double xmax) const { add_to_bounding_box(xmax,0); }
   void set_min_y(double ymin) const { add_to_bounding_box(0,ymin); }
