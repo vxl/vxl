@@ -27,9 +27,9 @@
 class brip_roi : public vbl_ref_count
 {
  public:
-  //:should intialize with image bounds on construction
+  //:should initialize with image bounds on construction
   brip_roi(const int n_image_cols = 0, const int n_image_rows = 0);
-  ~brip_roi() {};
+  ~brip_roi() {}
   //:replace existing image bounds
   void set_image_bounds(const int n_image_cols,
                         const int n_image_rows);
@@ -49,11 +49,11 @@ class brip_roi : public vbl_ref_count
   void clip_to_image_bounds(const int n_image_cols,
                             const int n_image_rows);
   bool empty();
-  int n_regions(){return regions_.size();}
-  int cmin(int i);//column minimum for region_i
-  int cmax(int i);//column maximum for region_i
-  int rmin(int i);//row minimum for region_i
-  int rmax(int i);//row maximum for region_i
+  unsigned int n_regions() { return regions_.size(); }
+  int cmin(int i); //!< column minimum for region_i
+  int cmax(int i); //!< column maximum for region_i
+  int rmin(int i); //!< row minimum for region_i
+  int rmax(int i); //!< row maximum for region_i
 
   //:image column and row coordinates from roi coordinates for region i
   int ic(int col, int i = 0);
@@ -61,11 +61,13 @@ class brip_roi : public vbl_ref_count
 
   vsol_box_2d_sptr region(int i){return regions_[i];}
   bool remove_region(int i);
-protected:
 
+ protected:
   int n_image_cols_;
   int n_image_rows_;
   vcl_vector<vsol_box_2d_sptr> regions_;
 };
+
 #include <brip/brip_roi_sptr.h>
+
 #endif // brip_roi_h_
