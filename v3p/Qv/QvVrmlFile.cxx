@@ -67,8 +67,7 @@ bool QvVrmlFile::load(char const* filename)
     p->nodes.push_back(node);
     vcl_cerr << " ";
   }
-  vcl_cerr << vcl_endl;
-  vcl_cerr << "VRML_IO: Loaded " << p->nodes.size() << " topology objects\n";
+  vcl_cerr << "\nVRML_IO: Loaded " << p->nodes.size() << " topology objects\n";
   return true;
 }
 
@@ -170,7 +169,7 @@ void QvVrmlFile::compute_centroid_radius()
   centroid[1] = vcv.centroid[1];
   centroid[2] = vcv.centroid[2];
   radius = vcv.radius;
-  vcl_cerr << "QvVrmlFile::compute_centroid_radius: c = " <<
-    centroid[0] << " " << centroid[1] << " " << centroid[2] <<
-    ", r = " << radius << vcl_endl;
+  vcl_cerr << "QvVrmlFile::compute_centroid_radius: c = "
+           << centroid[0] << " " << centroid[1] << " " << centroid[2]
+           << ", r = " << radius << vcl_endl;
 }
