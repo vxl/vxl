@@ -130,33 +130,31 @@ vil_image_resource_sptr vil_nitf_file_format::make_input_image(vil_stream* is)
     //  FOR NOW, JUST RETURN FIRST IMAGE FROM FILE.
     if (message_header_->NUMI > 0)
     {
-        vil_nitf_image_subheader_sptr image_subheader = image_subheader_vector_[0];
+      vil_nitf_image_subheader_sptr image_subheader = image_subheader_vector_[0];
 
-        // Smart pointers do not provide inheritance like corresponding classes.
-        // Use regular pointer to access non-inherited methods in vil_nitf_image.
-        vil_nitf_image * nitf_image = 0;
+      // Smart pointers do not provide inheritance like corresponding classes.
+      // Use regular pointer to access non-inherited methods in vil_nitf_image.
+      vil_nitf_image * nitf_image = new vil_nitf_image(is, message_header_,
+                                                       image_subheader,
+                                                       io_stream_->tell());
 
-        nitf_image = new vil_nitf_image(is, message_header_, image_subheader,
-                                        io_stream_->tell());
+      nitf_image_resource = nitf_image;
 
-        nitf_image_resource = nitf_image;
+      vcl_cout << method_name << "ni = " << nitf_image->ni()
+               << " nj = " << nitf_image->nj() << vcl_endl;
 
-        vcl_cout << method_name << "ni = " << nitf_image->ni()
-                 << " nj = " << nitf_image->nj() << vcl_endl;
+      nitf_image->display_image_attributes(method_name);
 
-        nitf_image->display_image_attributes(method_name);
+      unsigned bits_per_pixel = 8 * vil_pixel_format_sizeof_components(nitf_image->pixel_format());
 
-        unsigned bits_per_pixel = 8 * vil_pixel_format_sizeof_components(nitf_image->pixel_format());
-
-        //  IS THIS TRUE ?  For now, we are forcing this to be true.
-        //  See method pixel_format.  MAL 28oct2003
-        if (bits_per_pixel != image_subheader->NBPP) {
-          vcl_cerr << method_name
-                   << "WARNING: bits_per_pixel = " << bits_per_pixel
-                   << " calculated from pixel_format"
-                   << " does not equal attribute NBPP = " << image_subheader->NBPP
-                   << ".\n";
-        }
+      //  IS THIS TRUE ?  For now, we are forcing this to be true.
+      //  See method pixel_format.  MAL 28oct2003
+      if (bits_per_pixel != image_subheader->NBPP) {
+        vcl_cerr << method_name
+                 << "WARNING: bits_per_pixel = " << bits_per_pixel
+                 << " calculated from pixel_format does not equal attribute NBPP = "
+                 << image_subheader->NBPP << " in image subheader.\n";
+      }
     }
 
     return nitf_image_resource;
@@ -368,8 +366,7 @@ StatusCode vil_nitf_image::set_image_data()
         image_subheader->ICORDS == vil_nitf_image_subheader::GEOGRAPHIC)
     {
       vcl_cerr << method_name << "WARNING: ICORDS = " << image_subheader->ICORDS
-               << vcl_endl
-               << "    Code to set GeoPt values in super-class Image not implemented.\n";
+               << "\n    Code to set GeoPt values in super-class Image not implemented.\n";
 
 #if 0   // commented out  MAL 22oct2003
       // These methods deal with attributes from TargetJr base class ImageTemplate.
@@ -521,14 +518,13 @@ vil_image_view_base_sptr vil_nitf_image::get_copy_view(
 
     // vil_pixel_format_sizeof_components should give # of bytes per pixel.
     unsigned bytes_per_pixel = vil_pixel_format_sizeof_components(this->pixel_format());
-    unsigned long total_bytes = 0;
+    unsigned long total_bytes = this->get_image_length();
     // ONLY CALCULATE NUMBER OF BYTES IF NOT READING TOTAL IMAGE.
     if (ni < this->ni_ || nj < this->nj_) {
         total_bytes = ni * nj * bytes_per_pixel;
     }
     else {
         vcl_cout << method_name << "Reading entire image - use image size from header.\n";
-        total_bytes = this->get_image_length();
     }
 
     vcl_cout << method_name << "image size get_image_length = "
@@ -582,8 +578,6 @@ vil_image_view_base_sptr vil_nitf_image::get_single_band_view(
 
     vil_memory_chunk_sptr buffer = read_single_band_data(i0, ni, j0, nj);
 
-    vil_image_view<vxl_uint_16> * temp_view = 0;
-
     switch(pixel_format())
     {
         case VIL_PIXEL_FORMAT_BYTE:
@@ -594,11 +588,9 @@ vil_image_view_base_sptr vil_nitf_image::get_single_band_view(
 
         case VIL_PIXEL_FORMAT_UINT_16:
 
-            temp_view = new vil_image_view<vxl_uint_16>(
+            image_view = new vil_image_view<vxl_uint_16>(
                 buffer, (const vxl_uint_16 * ) buffer->data(),
                 ni, nj, nplanes(), nplanes(), nplanes() * ni, 1);
-
-            image_view = temp_view;
 
             break;
 
@@ -659,8 +651,6 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
     unsigned max_block_y = get_num_blocks_y();
     unsigned max_block_y_pixels = get_block_size_y();  /// # of pixels to use in last block in column
 
-    unsigned long last_image_col_num = 0;
-    unsigned long last_image_row_num = 0;
     unsigned long last_image_offset = 0;
 
     const unsigned int DEFAULT_PIXELS_TO_DISPLAY = 8;
@@ -684,14 +674,13 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
     unsigned char * save_buf_1 = new unsigned char[bytes_per_read];
     unsigned char * save_buf_2 = new unsigned char[bytes_per_read];
 
-    unsigned long total_bytes = 0;
+    unsigned long total_bytes = this->get_image_length();
     // ONLY CALCULATE NUMBER OF BYTES IF NOT READING TOTAL IMAGE.
     if (ni < this->ni_ || nj < this->nj_) {
         total_bytes = ni * nj * bytes_per_pixel;
     }
     else {
         vcl_cout << method_name << "Reading entire image - use image size from header.\n";
-        total_bytes = this->get_image_length();
     }
 
     buffer = new vil_memory_chunk(total_bytes, pixel_format());
@@ -716,7 +705,6 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
 
     unsigned int within_row_offset = 0;  // offset with uniform image row
 
-    unsigned long bytes_read = 0;
     unsigned long total_read_count = 0;
     unsigned long read_count = 0;
 
@@ -739,12 +727,12 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
 
     vcl_cout << method_name << "start_block_x = " << start_block_x
              << "  start_block_x_offset = " << start_block_x_offset << vcl_endl;
-    last_image_col_num = (max_block_x * get_block_size_x()) - 1;
-    vcl_cout << method_name << "  max_block_x = " << max_block_x
+    unsigned long last_image_col_num = (max_block_x * get_block_size_x()) - 1;
+    vcl_cout << method_name << "max_block_x = " << max_block_x
              << "  expected last X pixel = " << last_image_col_num << vcl_endl
              << method_name << "start_block_y = " << start_block_y
              << "  max_block_y = " << max_block_y << vcl_endl;
-    last_image_row_num = (max_block_y * get_block_size_x()) - 1;
+    unsigned long last_image_row_num = (max_block_y * get_block_size_x()) - 1;
     vcl_cout << "expected last Y pixel = " << last_image_row_num << vcl_endl;
 
     unsigned long display_pixels = (max_block_x - start_block_x) * get_block_size_x();
@@ -761,64 +749,61 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
     for (unsigned int block_row = start_block_y; block_row < max_block_y; ++block_row)
     {
       unsigned int block_col = 0;  // DEFINE OUT HERE SO WE CAN DISPLAY AT END OF EACH BLOCK ROW
-      unsigned long image_block_col = 0;  // BLOCK COLUMN RELATIVE TO IMAGE.
+#ifdef DEBUG
       unsigned long bytes_copied = 0;  // bytes copied for this row
+#endif
 
       for (block_col = start_block_x; block_col < max_block_x; ++block_col)
       {
-        image_block_col = block_col - start_block_x;
+        unsigned long image_block_col = block_col - start_block_x;  // BLOCK COLUMN RELATIVE TO IMAGE.
 
         // CALCULATE OFFSET TO CURRENT BLOCK IN BLOCK ROW
-          unsigned block_offset = (block_row * bytes_per_block_row)
-                                + (block_col * bytes_per_block);
-          in_stream_->seek(get_image_data_offset() + block_offset);
-          bytes_read = in_stream_->read(block_buffer, bytes_per_block);
+        unsigned block_offset = (block_row * bytes_per_block_row)
+                              + (block_col * bytes_per_block);
+        in_stream_->seek(get_image_data_offset() + block_offset);
+        unsigned long bytes_read = in_stream_->read(block_buffer, bytes_per_block);
 
-          total_read_count += bytes_read;
-          //unsigned long last_bytes_read = bytes_read;
-          ++read_count;
-          ++blocks_read;
+        total_read_count += bytes_read;
+        //unsigned long last_bytes_read = bytes_read;
+        ++read_count;
+        ++blocks_read;
 
-          if (bytes_read != bytes_per_block)
-          {
-            vcl_cerr << method_name << "WARNING: "
-                     << "image_block column = " << image_block_col
-                     << "  block row = " << block_row
-                     << "  block column = " << block_col
-                     << " - number of bytes read = " << bytes_read
-                     << " less than requested = " << bytes_per_read << vcl_endl;
+        if (bytes_read != bytes_per_block)
+        {
+          vcl_cerr << method_name
+                   << "WARNING: image_block column = " << image_block_col
+                   << "  block row = " << block_row
+                   << "  block column = " << block_col
+                   << " - number of bytes read = " << bytes_read
+                   << " less than requested = " << bytes_per_read << vcl_endl;
+          continue;
+        }
+        if (reverse_bytes()) {
+            reverse_bytes(block_buffer, bytes_read, bytes_per_pixel);
+        }
+
+        within_row_offset = (block_col - start_block_x) * get_block_size_x() * bytes_per_pixel;
+        if (start_block_x_offset > 0 && ((block_col - start_block_x) > 0)) {
+            within_row_offset -= start_block_x_offset * bytes_per_pixel;
+        }
+
+        //  block_size_y == # of rows per block
+        unsigned int max_row = get_block_size_y();
+        if ((block_row == (max_block_y - 1)) &&
+            max_block_y_pixels < get_block_size_y())
+        {
+          max_row = max_block_y_pixels;
+        }
+
+        for (unsigned int row = 0; row < max_row; ++row)
+        {
+          // FOR NOW, SKIP OVER UNNEEDED ROWS BY READING AND DISCARDING THEM
+          if (start_block_row_offset > 0 && block_row == start_block_y &&
+              row < start_block_row_offset)
             continue;
-          }
-          if (reverse_bytes()) {
-              reverse_bytes(block_buffer, bytes_read, bytes_per_pixel);
-          }
 
-          within_row_offset = (block_col - start_block_x) * get_block_size_x() * bytes_per_pixel;
-          if (start_block_x_offset > 0 && ((block_col - start_block_x) > 0)) {
-              within_row_offset -= start_block_x_offset * bytes_per_pixel;
-          }
-
-          //  block_size_y == # of rows per block
-          unsigned int max_row = get_block_size_y();
-          if ((block_row == (max_block_y - 1)) &&
-              max_block_y_pixels < get_block_size_y())
-          {
-            max_row = max_block_y_pixels;
-          }
-
-          unsigned char * buffer_pos = 0;
-          unsigned block_buffer_offset = 0;
-
-          for (unsigned int row = 0; row < max_row; ++row)
-          {
-            // FOR NOW, SKIP OVER UNEEDED ROWS BY READING AND DISCARDING THEM
-            if (start_block_row_offset > 0 && (block_row == start_block_y)) {
-              if (row < start_block_row_offset) {
-                continue;
-              }
-            }
-            block_buffer_offset = (row * bytes_per_read);
-            buffer_pos = block_buffer + block_buffer_offset;
+          unsigned block_buffer_offset = (row * bytes_per_read);
+          unsigned char * buffer_pos = block_buffer + block_buffer_offset;
 
           unsigned long image_row_num = ((block_row - start_block_y) * get_block_size_y())
             + row - start_block_row_offset;
@@ -833,8 +818,8 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
           if ((image_row_offset + within_row_offset) >= total_bytes)
           {
             //  ASSERTION WILL FAIL.  PRINT OUT INFORMATION BEFORE INVOKING ASSERTION.
-            vcl_cout << "\n##### ERROR ##### " << method_name << vcl_endl
-                     << "block_row = " << block_row
+            vcl_cout << "\n##### ERROR #####\n" << method_name << vcl_endl
+                     << "  block_row = " << block_row
                      << "  start_block_y = " << start_block_y
                      << "  block_col = " << block_col << vcl_endl
                      << "  row = " << row
@@ -856,14 +841,14 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
           if ((block_col == (max_block_x - 1)) && (max_block_x_pixels < get_block_size_x())) {
             copy_count = max_block_x_pixels * bytes_per_pixel;
           }
-          if (row == 0) {
-            bytes_copied += copy_count;
-          }
 
           assert(copy_count != 0);
           vcl_memcpy(image_offset, first_byte, copy_count);
 
-#if 0
+#ifdef DEBUG
+          if (row == 0)
+            bytes_copied += copy_count;
+
           // display_copied_bytes IS SET ABOVE IF BYTES IN BUFFER ARE DISPLAYED.
           if (display_copied_bytes) {
               vcl_cout << "image_row_num = " << image_row_num
@@ -894,9 +879,8 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
         }  // end for row < get_block_size_y()
       }  // end for block_col < max_block_y
 
+#ifdef DEBUG
       last_image_col_num = (block_col * get_block_size_x()) - 1;
-
-#if 0
       vcl_cout << "end for loop - block_row = " << block_row
                << "  block_col = " << block_col
                << "  start_block_y = " << start_block_y << vcl_endl
@@ -929,13 +913,10 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
     vcl_cout << "buffers read = " << read_count
              << "  expected value = " << expected_read_count << vcl_endl
              << method_name << "total bytes read = " << total_read_count << vcl_endl
-             << method_name << "last_image_row_num = " << last_image_row_num
-             << vcl_endl
-             << method_name << "buffer->size = " << buffer->size()
-             << vcl_endl
+             << method_name << "last_image_row_num = " << last_image_row_num << vcl_endl
+             << method_name << "buffer->size = " << buffer->size() << vcl_endl
              << "last_image_offset = " << last_image_offset
-             << "  last within_row_offset = " << within_row_offset
-             << vcl_endl;
+             << "  last within_row_offset = " << within_row_offset << vcl_endl;
     diff = buffer->size() - last_image_offset;
     vcl_cout << method_name << "buffer end - last_image_offset = " << diff
              << vcl_endl;
@@ -993,20 +974,19 @@ bool vil_nitf_image::construct_pyramid_images(
     bool got_property = this->get_property(tag_name, &bits_per_component);
 
     if (got_property == false) {
-      vcl_cout << method_name << vcl_endl
-               << "    WARNING: failed to get property <" << tag_name << ">\n";
+      vcl_cout << method_name
+               << "WARNING: failed to get property <" << tag_name << ">\n";
     }
 
     vil_image_view_base_sptr image_view = this->get_view();  // RETURN VALUE
 
     vcl_cout << method_name << "vil_image_view parameters:\n"
-             << "    ni = " << image_view->ni()
+             << "  ni = " << image_view->ni()
              << "  nj = " << image_view->nj()
              << "  nplanes = " << image_view->nplanes() << vcl_endl
-             << "    pixel_format = " << image_view->pixel_format()
+             << "  pixel_format = " << image_view->pixel_format()
              << "  bits_per_component from get_property = " << bits_per_component
-             << vcl_endl
-             << method_name << vcl_endl;
+             << vcl_endl;
     vcl_size_t dot_pos = file_name.rfind(".");
     vcl_cout << method_name << "file_name = <" << file_name
              << ">  dot_pos = " << dot_pos << vcl_endl;
@@ -1017,8 +997,7 @@ bool vil_nitf_image::construct_pyramid_images(
     else {
       if (dot_pos > 0) {
         file_name = file_name.substr(0, dot_pos);
-        vcl_cout << method_name << "modified file_name = <" << file_name
-                 << ">\n";
+        vcl_cout << method_name<< "modified file_name = <"<< file_name<< ">\n";
       }
     }
     file_name += ".";
@@ -1027,11 +1006,9 @@ bool vil_nitf_image::construct_pyramid_images(
     vil_image_view<vxl_uint_16> * uint_16_view =
         dynamic_cast<vil_image_view<vxl_uint_16> *>(image_view.as_pointer());
 
-    unsigned int factor = 2;
-
     for (unsigned int i = 0; i < levels; ++i)
     {
-        factor = 2 * (i + 1);
+        unsigned int factor = 2 * (i + 1);
         vil_image_view<vxl_uint_16> decimated_image_view =
             vil_decimate(*uint_16_view, factor, factor);
 
@@ -1039,7 +1016,7 @@ bool vil_nitf_image::construct_pyramid_images(
             new vil_image_view<vxl_uint_16>(decimated_image_view);
 
         vcl_cout << method_name << "save_view parameters:\n"
-                 << "    ni = " << save_view->ni()
+                 << "  ni = " << save_view->ni()
                  << "  nj = " << save_view->nj()
                  << "  nplanes = " << save_view->nplanes()
                  << "  pixel_format = " << save_view->pixel_format()
@@ -1093,19 +1070,13 @@ void  vil_nitf_image::calculate_start_block(
     if (j0 != 0)
     {
         start_block = j0 / block_size;
-        vcl_cout << method_name << "set start_block to " << start_block
-                 << vcl_endl;
+        vcl_cout << method_name << "set start_block to " << start_block << vcl_endl;
 
-        if ((j0 > 0) && j0 % block_size != 0)
+        if (j0 > 0 && j0 % block_size != 0)
         {
-            if (start_block == 0) {
-                start_block_offset = j0;
-            }
-            else {
-                start_block_offset = j0 - (start_block * block_size);
-            }
+            start_block_offset = j0 - (start_block * block_size);
 
-            vcl_cout << method_name << "first pixel not on block boundary"
+            vcl_cout << method_name << "first pixel not on block boundary\n"
                      << "  set offset for starting block = "
                      << start_block_offset << vcl_endl;
         }
@@ -1144,11 +1115,9 @@ void  vil_nitf_image::calculate_max_block(
         max_block_pixels = (j0 + nj) - (max_block * block_size);
         ++max_block;
 
-        vcl_cout << method_name << "rightmost pixel not on block boundary"
-                 << "  set max block = "
-                 << max_block
-                 << ", offset for max block = "
-                 << max_block_pixels << vcl_endl;
+        vcl_cout << method_name << "rightmost pixel not on block boundary\n"
+                 << "  set max block = " << max_block
+                 << ", offset for max block = " << max_block_pixels << vcl_endl;
     }
 }  // end calculate_max_block
 
@@ -1167,7 +1136,7 @@ bool vil_nitf_image::exceeds_display_limits(
     unsigned nj,
     unsigned bytes_per_pixel) const
 {
-    static vcl_string method_name = "exceeds_display_limits: ";
+//  static vcl_string method_name = "vil_nitf_image::exceeds_display_limits: ";
 
     bool exceeds_limits = false;
 
@@ -1196,7 +1165,7 @@ unsigned int vil_nitf_image::calculate_decimate_factor(
     unsigned nj,
     unsigned bytes_per_pixel) const
 {
-    static vcl_string method_name = "calculate_decimate_factor: ";
+//  static vcl_string method_name = "vil_nitf_image::calculate_decimate_factor: ";
 
     unsigned int decimate_factor = 1;
 
@@ -1219,10 +1188,10 @@ unsigned int vil_nitf_image::calculate_decimate_factor(
 }
 
 
-bool vil_nitf_image::put_view(
-    const vil_image_view_base &im,
-    unsigned i0, unsigned j0)
+bool vil_nitf_image::put_view(const vil_image_view_base &/*im*/,
+                              unsigned /*i0*/, unsigned /*j0*/)
 {
+  vcl_cerr << "vil_nitf_image::put_view() NYI\n";
   return false;
 }
 
@@ -1412,20 +1381,19 @@ int vil_nitf_image::check_image_data_offset() const
     if (diff != 0)
     {
         vcl_cout << method_name << "WARNING:\n"
-                 << "    file position and calculated offset differ by "
+                 << "  file position and calculated offset differ by "
                  << diff << " bytes.\n"
-                 << "    Using current file position.\n"
-                 << "    message header length = "
+                 << "  Using current file position.\n"
+                 << "  message header length = "
                  << message_header_->GetHeaderLength() << vcl_endl
-                 << "    image header length   = "
+                 << "  image header length   = "
                  << message_header_->IMAGESH[0]->LISH << vcl_endl
-                 << "    sum           = " << header_length_sum << vcl_endl
-                 << "    file_position = " << get_image_data_offset()
-                 << vcl_endl;
+                 << "  sum           = " << header_length_sum << vcl_endl
+                 << "  file_position = " << get_image_data_offset() << vcl_endl;
     }
     else {
         vcl_cout << method_name
-                 << " file position and calculated header offset agree = "
+                 << "file position and calculated header offset agree = "
                  << get_image_data_offset() << vcl_endl;
     }
 
@@ -1470,7 +1438,7 @@ void vil_nitf_image::display_message_attributes(vcl_string caller)
 
     if (message_header_ == static_cast<vil_nitf_message_header_sptr>(0)) {
         vcl_cout << method_name
-                 << " ERROR: Cannot message attributes.  Message header is null.\n";
+                 << "ERROR: Cannot message attributes.  Message header is null.\n";
     }
     else {
       message_header_->display_header_info(caller);
@@ -1486,7 +1454,7 @@ void vil_nitf_image::display_image_attributes(vcl_string caller)
 
     if (image_subheader_ == static_cast<vil_nitf_image_subheader_sptr>(0)) {
         vcl_cout << method_name
-                 << " ERROR: Cannot display image attributes.  Image subheader is null.\n";
+                 << "ERROR: Cannot display image attributes.  Image subheader is null.\n";
     }
     else {
       image_subheader_->display_size_attributes(caller);
@@ -1502,15 +1470,13 @@ void vil_nitf_image::display_image_attributes(vcl_string caller)
 
 bool vil_nitf_image::reverse_bytes()
 {
-    bool reverse_bytes = false;
-
     // NITF BYTES ARE STORED IN BIG ENDIAN.
     // IF PLATFORM IS LITTLE ENDIAN, NEED TO REVERSE BYTES.
-
 #if VXL_LITTLE_ENDIAN
-    reverse_bytes = true;
+    return true;
+#else
+    return false;
 #endif
-    return reverse_bytes;
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -1519,55 +1485,41 @@ bool vil_nitf_image::reverse_bytes()
 
 vxl_uint_16 vil_nitf_image::reverse_bytes(vxl_uint_16 value) const
 {
-    vcl_string method_name = "reverse_bytes: ";
+    vcl_string method_name = "vil_nitf_image::reverse_bytes: ";
 
     static const unsigned bytes_per_value = 2;
 
     vxl_uint_16 byte0_mask = 0x00FF;
 
-    vxl_uint_16 ret_value = value;
-    vxl_uint_16 temp_long;
-
     vxl_uint_16 inbytes[bytes_per_value];
 
     static const unsigned int DEBUG_LEVEL = 2;
     if (DEBUG_LEVEL < 2) {
-        vcl_cout << method_name << "initial value as vxl_uint_16 = "
-                 << value << vcl_hex << "  0x" << value << vcl_endl;
+        vcl_cout << method_name << "initial value as vxl_uint_16 = " << value
+                 << vcl_hex << " = 0x" << value << vcl_dec << vcl_endl;
     }
-
-    for (unsigned int i = 0; i < bytes_per_value; ++i) {
-      if (i == 0) {
-          inbytes[i] = value & byte0_mask;
-      }
-      else {
-        inbytes[i] = (value >> (8 * i)) & byte0_mask;
-      }
-      if (DEBUG_LEVEL < 2) {
-        vcl_cout << method_name << "inbytes[" << i << "] = 0x"
-                 << vcl_hex << inbytes[i]
-                 << vcl_dec << vcl_endl;
-      }
-    }
-
-    vxl_uint_16 out_value = 0;
-    int shift_count = 0;
 
     for (unsigned int i = 0; i < bytes_per_value; ++i)
     {
-        shift_count = 8 * ((bytes_per_value - 1) - i);
-
-        temp_long = (inbytes[i] << shift_count);
-        out_value = out_value | temp_long;
+      inbytes[i] = (value >> (8 * i)) & byte0_mask;
+      if (DEBUG_LEVEL < 2) {
+        vcl_cout << method_name << "inbytes[" << i << "] = 0x"
+                 << vcl_hex << inbytes[i] << vcl_dec << vcl_endl;
+      }
     }
 
-    ret_value = *((vxl_uint_16 *)&out_value);
+    vxl_uint_16 ret_value = 0;
+
+    for (unsigned int i = 0; i < bytes_per_value; ++i)
+    {
+        int shift_count = 8 * ((bytes_per_value - 1) - i);
+        vxl_uint_16 temp_long = (inbytes[i] << shift_count);
+        ret_value = ret_value | temp_long;
+    }
 
     if (DEBUG_LEVEL < 2) {
-        vcl_cout << method_name << "return value as vxl_uint_16 = "
-                 << vcl_dec << ret_value
-                 << vcl_hex << "  0x" << ret_value
-                 << vcl_dec << vcl_endl;
+        vcl_cout << method_name << "return value as vxl_uint_16 = " << ret_value
+                 << vcl_hex << " = 0x" << ret_value << vcl_dec << vcl_endl;
     }
 
     return ret_value;
@@ -1587,12 +1539,12 @@ void vil_nitf_image::reverse_bytes(
     unsigned long buf_len,
     unsigned int bytes_per_value) const
 {
-    vcl_string method_name = "reverse_bytes: ";
+    vcl_string method_name = "vil_nitf_image::reverse_bytes: ";
 
     if (buf_len % bytes_per_value != 0) {
       vcl_cerr << method_name << "WARNING: number of bytes in buffer = "
-               << buf_len << " not multiple of bytes per value = " << bytes_per_value
-               << ".\n";
+               << buf_len << " is not a multiple of bytes per value = "
+               << bytes_per_value << ".\n";
     }
     vcl_vector<unsigned char> temp_buf( bytes_per_value );
 
@@ -1612,11 +1564,10 @@ void vil_nitf_image::reverse_bytes(
         bool debug_output = false;  // SET TO TRUE TO SEE OUTPUT
         if (count < 4 && debug_output)
         {
-          vxl_uint_16 uint_val = 0;
           bool not_zero = false;
 
           for (unsigned int i = 0; i < bytes_per_value; ++i) {
-            uint_val = vxl_uint_16(temp_buf[i]);
+            vxl_uint_16 uint_val = vxl_uint_16(temp_buf[i]);
             if (uint_val > 0) {
                 not_zero = true;
             }
@@ -1626,14 +1577,14 @@ void vil_nitf_image::reverse_bytes(
               vcl_cout << method_name << "curr_pos = " << curr_pos
                        << "  initial value = " << vcl_hex;
               for (unsigned int i = 0; i < bytes_per_value; ++i) {
-                uint_val = vxl_uint_16(temp_buf[i]);
+                vxl_uint_16 uint_val = vxl_uint_16(temp_buf[i]);
                 vcl_cout << ' ' << uint_val;
               }
               vcl_cout << vcl_endl;
 
               vcl_cout << "  reversed value = ";
               for (unsigned int i = 0; i < bytes_per_value; ++i) {
-                uint_val = vxl_uint_16(buffer[curr_pos + i]);
+                vxl_uint_16 uint_val = vxl_uint_16(buffer[curr_pos + i]);
                 vcl_cout << ' ' << uint_val;
               }
               vcl_cout << vcl_dec << vcl_endl;
@@ -1663,33 +1614,23 @@ bool vil_nitf_image::using_upper_bits(
     unsigned block_row,
     unsigned block_col) const
 {
-    vcl_string method_name = "using_upper_bits: ";
+    vcl_string method_name = "vil_nitf_image::using_upper_bits: ";
 
     bool using_upper_bits = false;
 
     if (buf_len % bytes_per_value != 0) {
       vcl_cerr << method_name << "WARNING: number of bytes in buffer = "
-               << buf_len << " not multiple of bytes per value = " << bytes_per_value
-               << ".\n";
+               << buf_len << " is not a multiple of bytes per value = "
+               << bytes_per_value << ".\n";
     }
-    unsigned long curr_pos = 0;
+    unsigned long curr_pos = reverse_bytes() ? 1 : 0;
 
-    unsigned count = 0;
-    vxl_uint_16 uint_val = 0;
-    vxl_uint_16 masked_val = 0;
     vxl_uint_16 byte_mask = 0x0007;  // MASK FOR LOWER THREE BITS OF BYTE.
 
-    if (reverse_bytes()) {
-        curr_pos = 1;
-    }
-    else {
-        curr_pos = 0;
-    }
     while (curr_pos < buf_len)
     {
-        ++count;
-        uint_val = vxl_uint_16(buffer[curr_pos]);
-        masked_val = uint_val & byte_mask;
+        vxl_uint_16 uint_val = vxl_uint_16(buffer[curr_pos]);
+        vxl_uint_16 masked_val = uint_val & byte_mask;
 
         if ((uint_val > 0) && (uint_val != masked_val))
         {
@@ -1702,9 +1643,8 @@ bool vil_nitf_image::using_upper_bits(
                    << vcl_hex << "  mask = " << byte_mask
                    << "  value = " << vcl_hex
                    << uint_val << "  masked value = "
-                   << masked_val << vcl_endl
-                   << vcl_dec << vcl_endl;
-        }  // end if (count < 4)
+                   << masked_val << vcl_dec << vcl_endl;
+        }
 
         curr_pos += bytes_per_value;
     }  // end while (curr_pos < buf_len)
@@ -1733,27 +1673,23 @@ vxl_uint_16 vil_nitf_image::check_max_value(
     unsigned block_row,
     unsigned block_col) const
 {
-    vcl_string method_name = "check_max_value: ";
+    vcl_string method_name = "vil_nitf_image::check_max_value: ";
 
     vxl_uint_16 max_value = 0;
 
     if (buf_len % bytes_per_value != 0) {
       vcl_cerr << method_name << "WARNING: number of bytes in buffer = "
-               << buf_len << " not multiple of bytes per value = " << bytes_per_value
-               << ".\n";
+               << buf_len << " is not a multiple of bytes per value = "
+               << bytes_per_value << ".\n";
     }
     unsigned long curr_pos = 0;
 
-    unsigned count = 0;
-    vxl_uint_16 uint_val = 0;
-    vxl_uint_16 masked_val = 0;
     vxl_uint_16 byte_mask = 0x0007;
 
     while (curr_pos < buf_len)
     {
-        ++count;
-        uint_val = vxl_uint_16(buffer[curr_pos]);
-        masked_val = uint_val & byte_mask;
+        vxl_uint_16 uint_val = vxl_uint_16(buffer[curr_pos]);
+        vxl_uint_16 masked_val = uint_val & byte_mask;
 
         if ((uint_val > 0) && (uint_val != masked_val))
         {
@@ -1767,7 +1703,7 @@ vxl_uint_16 vil_nitf_image::check_max_value(
                    << uint_val << "  masked value = "
                    << masked_val << vcl_endl
                    << vcl_dec << vcl_endl;
-        }  // end if (count < 4)
+        }
         else {
           uint_val = (vxl_uint_16(buffer[curr_pos]) << 8) + vxl_uint_16(buffer[curr_pos + 1]);
           if (uint_val > max_value) {
@@ -1803,12 +1739,7 @@ void vil_nitf_image::display_image_values(
 {
     static vcl_string method_name = "vil_nitf_image::display_image_values: ";
 
-    unsigned int offset = 0;
     vxl_uint_16 mask = 0xF800;
-    vxl_uint_16 view_pixel_value = 0;
-    vxl_uint_16 buffer_pixel_value = 0;
-    vxl_uint_16 masked_value = 0;
-
 
     unsigned long bytes_per_pixel = vil_pixel_format_sizeof_components(this->pixel_format());
     unsigned long row_offset = row * pixels_per_row * bytes_per_pixel;
@@ -1824,28 +1755,26 @@ void vil_nitf_image::display_image_values(
 
     for (unsigned int i = 0; i < pixel_count; ++i)
     {
-      offset = i + column;
-      view_pixel_value = image_view(row, offset, 0);
-      buffer_pixel_value = (vxl_uint_16(buffer[image_offset + i]) << 8)
-                          + vxl_uint_16(buffer[image_offset + i + 1]);
+      unsigned int offset = i + column;
+      vxl_uint_16 view_pixel_value = image_view(row, offset, 0);
+      vxl_uint_16 buffer_pixel_value = (vxl_uint_16(buffer[image_offset + i]) << 8)
+                                      + vxl_uint_16(buffer[image_offset + i + 1]);
 
-      masked_value = view_pixel_value & mask;
+      vxl_uint_16 masked_value = view_pixel_value & mask;
       if (masked_value > 0)
       {
           vcl_cout << "ERROR: upper five bits should be zero.\n"
                    << method_name << "i = " << i
-                   << "   view value = " << vcl_hex << view_pixel_value
-                   << "   masked value = " << masked_value
-                   << vcl_dec << vcl_endl;
+                   << " view value = " << vcl_hex << view_pixel_value
+                   << " masked value = " << masked_value << vcl_dec << vcl_endl;
           ++invalid_error_count;
       }
       if (view_pixel_value != buffer_pixel_value)
       {
           vcl_cout << "ERROR: value from image and value from buffer not equal.\n"
                    << method_name << "i = " << i
-                   << "   view value = " << vcl_hex << view_pixel_value
-                   << "   buffer value = " << buffer_pixel_value
-                   << vcl_dec << vcl_endl;
+                   << " view value = " << vcl_hex << view_pixel_value
+                   << " buffer value = " << buffer_pixel_value << vcl_dec << vcl_endl;
 
           ++value_error_count;
       }
@@ -1871,32 +1800,28 @@ unsigned int vil_nitf_image::check_image_values(
 {
     static vcl_string method_name = "vil_nitf_image::check_image_values: ";
 
-    unsigned int offset = 0;
-    vxl_uint_16 view_pixel_value = 0;
-    vxl_uint_16 buffer_pixel_value = 0;
-
     unsigned int error_count = 0;
 
     for (unsigned int i = 0; i < pixel_count; ++i)
     {
-      offset = i + column;
+      unsigned int offset = i + column;
       // THIS IS BIG ENDIAN.  WHY DOES THIS WORK ON THE PC, WHICH SHOULD BE LITTLE ENDIAN ??
       //  MAL 5oct2003
-      buffer_pixel_value = (vxl_uint_16(read_buffer[i]) << 8)
-                          + vxl_uint_16(read_buffer[i + 1]);
+      vxl_uint_16 buffer_pixel_value = (vxl_uint_16(read_buffer[i]) << 8)
+                                      + vxl_uint_16(read_buffer[i + 1]);
 
       unsigned char * image_offset = (unsigned char *) mem_chunk->data()
                                      + row_offset + offset;
-      view_pixel_value = (vxl_uint_16(*image_offset) << 8)
-                        + vxl_uint_16(*(image_offset + 1));
+      vxl_uint_16 view_pixel_value = (vxl_uint_16(*image_offset) << 8)
+                                    + vxl_uint_16(*(image_offset + 1));
 
       if (view_pixel_value != buffer_pixel_value)
       {
-          vcl_cout << "ERROR: value from read_buffer and value from memory chunk not equal.\n"
+          vcl_cout << method_name
+                   << "ERROR: value from read_buffer and value from memory chunk not equal.\n"
                    << method_name << "row = " << row << "  column = " << offset
-                   << "   view value = " << vcl_hex << view_pixel_value
-                   << "   buffer value = " << buffer_pixel_value
-                   << vcl_dec << vcl_endl;
+                   << " view value = " << vcl_hex << view_pixel_value
+                   << " buffer value = " << buffer_pixel_value << vcl_dec << vcl_endl;
 
           ++error_count;
       }
@@ -1920,14 +1845,12 @@ void vil_nitf_image::display_block_attributes(vcl_string caller)
 {
     static vcl_string method_name = "vil_nitf_image::display_block_attributes: ";
 
-    vcl_cout << "num blocks X = " << get_num_blocks_x()
-             << "  block size X = " << get_block_size_x()
-             << vcl_endl
-             << "num blocks Y = " << get_num_blocks_y()
-             << "  block size Y = " << get_block_size_y()
-             << vcl_endl
-             << "right pad  = " << get_right_pad() << vcl_endl
-             << "bottom pad = " << get_bottom_pad() << vcl_endl;
+    vcl_cout << method_name << "num blocks X = " << get_num_blocks_x()
+             << "  block size X = " << get_block_size_x() << vcl_endl
+             << "  num blocks Y = " << get_num_blocks_y()
+             << "  block size Y = " << get_block_size_y() << vcl_endl
+             << "  right pad  = " << get_right_pad() << vcl_endl
+             << "  bottom pad = " << get_bottom_pad() << vcl_endl;
 }
 
 
@@ -1951,7 +1874,7 @@ unsigned long vil_nitf_image::compare_bytes(
     unsigned int bytes_per_value,
     vcl_string label) const
 {
-  static vcl_string method_name = "compare_bytes: ";
+  static vcl_string method_name = "vil_nitf_image::compare_bytes: ";
 
     unsigned short temp_short;
     unsigned long err_count = 0;

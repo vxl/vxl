@@ -147,13 +147,11 @@ void display_as_hex(const unsigned char value)
 /////////////////////////////////////////////////////////////////
 int geostr_to_latlon(const char* str, double* lat, double* lon)
 {
-  int latstrlen = 0;
-  int lonstrlen = 0;
-
-  if ((latstrlen = geostr_to_double (str, lat, LAT)) == 0) return 0;
+  int latstrlen = geostr_to_double(str, lat, LAT);
+  if (latstrlen == 0) return 0;
   str += latstrlen;
-  if ( (lonstrlen = geostr_to_double (str, lon, LON)) == 0) return 0;
-
+  int lonstrlen = geostr_to_double(str, lon, LON);
+  if (lonstrlen == 0) return 0;
   return latstrlen + lonstrlen;
 }
 
@@ -358,7 +356,7 @@ int geostr_to_double(const char* string, double* val, geopt_coord lat_lon_flag)
 int
 nitf_strcasecmp( const char* s1, const char* s2 )
 {
-  while( *s1 != '\0' &&
+  while (*s1 != '\0' &&
          *s2 != '\0' &&
          vcl_toupper( *s1 ) == vcl_toupper( *s2 ) ) {
     ++s1;
@@ -366,9 +364,9 @@ nitf_strcasecmp( const char* s1, const char* s2 )
   }
   int us1 = vcl_toupper( *s1 );
   int us2 = vcl_toupper( *s2 );
-  if( us1 == us2 )
+  if ( us1 == us2 )
     return 0;
-  else if( us1 < us2 )
+  else if ( us1 < us2 )
     return -1;
   else
     return 1;
