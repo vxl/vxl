@@ -17,6 +17,10 @@ SET(vsrl_sources
  vsrl_token.cxx                 vsrl_token.h
  vsrl_token_saliency.cxx        vsrl_token_saliency.h
  vsrl_window_accumulator.cxx    vsrl_window_accumulator.h
+ vsrl_manager.h
+ vsrl_menus.h
+ vsrl_point_picker.h
+ vsrl_point_picker_sptr.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates vsrl_sources)
