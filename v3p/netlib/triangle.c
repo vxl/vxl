@@ -753,6 +753,9 @@ struct triedge recenttri;
 #ifdef __sgi
 # include <inttypes.h>
 #endif
+#ifdef __unix
+# include <unistd.h> /* for intptr_t on e.g. Linux */
+#endif
 
 /*****************************************************************************/
 /*                                                                           */
