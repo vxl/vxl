@@ -1,25 +1,30 @@
-        Remove vcl_complex hackery on MSVC 6. vcl_complex is now the
+      - Remove vcl_complex hackery on MSVC 6. vcl_complex is now the
         standard <complex>, since it seems to work with VC6sp5.
 
-        vnl_numeric_limits is deprecated in favour of vcl_numeric_limits. (vnl_n_l was written before vcl. vcl_n_l is now more robust, and can use platform defaults)
-        vbl_basic_tuple, vbl_basic_relation, etc. are deprecated since we have no decent explanation of how to use them.
+      - vnl_numeric_limits is deprecated in favour of vcl_numeric_limits.
+        (vnl_numeric_limits was written before vcl. vcl_numeric_limits is now
+         more robust, and can use platform defaults.)
+      - vbl_basic_tuple, vbl_basic_relation, etc. are deprecated since we have
+        no decent explanation of how to use them.
 
 vxl 1.0.0	- October 2003
 
-	Support for MSVC 7
-	Replaced "vil". The old "vil" is now called "vil1". "vil2" has been renamed to "vil".
-		See the vil chapter in the vxl book for details.
-	vnl_matrix_fixed and vnl_vector_fixed upgraded to be fully space efficient.
-	Many hundreds of small bug fixes and improved functionality in the core and contributed libraries.
+      - Support for MSVC 7
+      - Replaced "vil". The old "vil" is now called "vil1". "vil2" has been
+        renamed to "vil".   See the vil chapter in the vxl book for details.
+      - vnl_matrix_fixed and vnl_vector_fixed upgraded to be fully space efficient.
+      - Many hundreds of small bug fixes and improved functionality in the core
+        and contributed libraries.
 
 vxl 1.0 beta2	- September 2002
 
-	CMake is now the default build system.
+      - CMake is now the default build system.
 
 vxl 1.0 beta1	- November 2000
 
-	The first official vxl beta release.
+      - The first official vxl beta release.
 
 vxl 0.1 	- February 2000
 
-	The very first version of vxl, written from scratch (using pieces of TargetJr) during an intensive coding week.
+      - The very first version of vxl, written from scratch (using pieces of
+        TargetJr) during an intensive coding week in Oxford.
