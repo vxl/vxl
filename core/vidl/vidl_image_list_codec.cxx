@@ -4,7 +4,6 @@
 // \file
 
 #include <vcl_cassert.h>
-#include <vcl_cstdio.h>
 #include <vcl_iostream.h>
 
 #include <vul/vul_sprintf.h>
@@ -134,8 +133,10 @@ vidl_codec_sptr vidl_image_list_codec::load(const char* fname, char mode)
 //: Load a 'movie' from a list of filenames, return a codec.
 vidl_codec_sptr vidl_image_list_codec::load(const vcl_list<vcl_string> &fnames, char mode)
 {
+#if 0 // commented out (why?)
   // Makes sure image loaders are registered
-  //register_image_loaders();
+  register_image_loaders();
+#endif
   assert(mode == 'r');
 
   for (vcl_list<vcl_string>::const_iterator i = fnames.begin(); i!=fnames.end(); ++i)
@@ -163,8 +164,10 @@ vidl_codec_sptr vidl_image_list_codec::load(const vcl_list<vcl_string> &fnames, 
 //: Load a 'movie' from a vector of filenames, return a codec.
 vidl_codec_sptr vidl_image_list_codec::load(const vcl_vector<vcl_string> &fnames, char mode)
 {
+#if 0 // commented out (why?)
   // Make sure image loaders are registered
-  //register_image_loaders();
+  register_image_loaders();
+#endif
   assert(mode == 'r');
 
   for (vcl_vector<vcl_string>::const_iterator i = fnames.begin(); i!=fnames.end(); ++i)
