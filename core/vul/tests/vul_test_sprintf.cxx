@@ -1,4 +1,4 @@
-#include <vbl/vbl_sprintf.h>
+#include <vul/vul_sprintf.h>
 #include <vcl_iostream.h>
 
 void Assert(char const* msg, bool expr)
@@ -7,15 +7,15 @@ void Assert(char const* msg, bool expr)
 }
 
 extern "C"
-void test_vbl_sprintf(void)
+void test_vul_sprintf(void)
 {
-  vbl_sprintf buf0("[%d]", 123);
+  vul_sprintf buf0("[%d]", 123);
   vcl_cerr << "buf0=" << buf0 << vcl_endl;
   Assert("buf0 == 123", buf0 == vcl_string("[123]"));
   
   vcl_string string_fmt = "[%s]";
 
-  vbl_sprintf buf1(string_fmt.c_str(), "awf");
+  vul_sprintf buf1(string_fmt.c_str(), "awf");
   vcl_cerr << "buf1=" << buf1 << vcl_endl;
   Assert("buf1 == [awf]", buf1 == "[awf]");
 }
@@ -23,6 +23,6 @@ void test_vbl_sprintf(void)
 int main()
 {
   vcl_cout << "Running" << vcl_endl;
-  test_vbl_sprintf();
+  test_vul_sprintf();
   return 0;
 }

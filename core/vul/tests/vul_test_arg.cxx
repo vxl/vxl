@@ -1,12 +1,12 @@
 //-*- c++ -*-------------------------------------------------------------------
 //
-// test_vbl_arg
+// test_vul_arg
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 21 Jan 97
 //
 //-----------------------------------------------------------------------------
 
-#include <vbl/vbl_arg.h>
+#include <vul/vul_arg.h>
 #include <vcl_cstring.h> // needed for strcmp()
 #include <vcl_list.h>
 #include <vcl_algorithm.h>
@@ -44,24 +44,24 @@ int count_my_args(char const * const * my_argv)
   return c;
 }
 
-void test_do_vbl_arg()
+void test_do_vul_arg()
 {
-  vbl_arg<int> int1("-int", "A help string", 1);
-  vbl_arg<int> int2("-int2", "Another help string", 2);
-  vbl_arg<bool> bool1("-bool1", "And another", false);
-  vbl_arg<bool> bool2("-bool2", "And another", true);
-  vbl_arg<bool> bool3("-bool3", "And a final help test just to finish off...", true);
-  vbl_arg<vcl_list<int> > list1("-list", "List...");
-  vbl_arg<char*> filename1;
+  vul_arg<int> int1("-int", "A help string", 1);
+  vul_arg<int> int2("-int2", "Another help string", 2);
+  vul_arg<bool> bool1("-bool1", "And another", false);
+  vul_arg<bool> bool2("-bool2", "And another", true);
+  vul_arg<bool> bool3("-bool3", "And a final help test just to finish off...", true);
+  vul_arg<vcl_list<int> > list1("-list", "List...");
+  vul_arg<char*> filename1;
 
   int my_argc = count_my_args(my_argv_1);
-  vcl_cerr << "vbl_argc = " << my_argc
+  vcl_cerr << "vul_argc = " << my_argc
        << ", bool1 = " << bool1()
        << ", bool2 = " << bool2()
        << ", bool3 = " << bool3() << vcl_endl;
   char **my_argv = (char**) my_argv_1;
 
-  vbl_arg_parse(my_argc, my_argv);
+  vul_arg_parse(my_argc, my_argv);
   
   bool b = int1() == 3;
   Assert("int1", b);
@@ -82,14 +82,14 @@ void test_do_vbl_arg()
 }
 
 extern "C"
-void test_vbl_arg()
+void test_vul_arg()
 {
-  test_do_vbl_arg();
+  test_do_vul_arg();
 }
 
 int main()
 {
   vcl_cout << "Running" << vcl_endl;
-  test_vbl_arg();
+  test_vul_arg();
   return 0;
 }
