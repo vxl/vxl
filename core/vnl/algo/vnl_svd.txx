@@ -88,6 +88,7 @@ vnl_svd<T>::vnl_svd(vnl_matrix<T> const& M, double zero_out_tol):
       // iterations in the netlib code. Diagnose the problem here by
       // printing a warning message.
       vcl_cerr << __FILE__ ": suspicious return value (" << info << ") from SVDC" << vcl_endl;
+      vcl_cerr << __FILE__ ": M is " << M.rows() << 'x' << M.cols() << vcl_endl;
     }
 
     // Copy fortran outputs into our storage
