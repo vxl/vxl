@@ -338,7 +338,7 @@ For example, if you used to have code like this
 @example
 bool read_ascii(vcl_istream &);
 ...
-int main() {
+int main() @{
 ...
   vcl_ifstream  input(filename);
   if (!(!input))
@@ -351,7 +351,7 @@ by modifying your code to look like.
 @example
 bool read_ascii(vcl_istream &);
 ...
-int main() {
+int main() @{
 ...
   vcl_istream  *p_input = vul_url::open(filename);
   if (p_input != 0 && !(!(*input)))
