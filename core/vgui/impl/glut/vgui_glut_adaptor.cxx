@@ -1,4 +1,4 @@
-// This is oxl/vgui/impl/glut/vgui_glut_adaptor.cxx
+// This is core/vgui/impl/glut/vgui_glut_adaptor.cxx
 #include "vgui_glut_adaptor.h"
 //:
 //  \file
@@ -198,7 +198,9 @@ bool vgui_glut_adaptor::glut_dispatch(vgui_event &e) {
       //glutUseLayer(GLenum(GLUT_NORMAL));
 
       bool f = dispatch_to_tableau(e);
-      //fsm_hook();
+#ifdef DUMP_FRAME
+      fsm_hook();
+#endif
       swap_buffers();
       return f;
     }
@@ -221,9 +223,9 @@ bool vgui_glut_adaptor::glut_dispatch(vgui_event &e) {
             glGetIntegerv(GL_INDEX_BITS, &bits);
             vcl_cerr << __FILE__ ": color index information:\n";
             int cmapsize = glutGet(GLenum(GLUT_WINDOW_COLORMAP_SIZE));
-            vcl_cerr << "  color map size is " << cmapsize << vcl_endl;
-            vcl_cerr << "  transparent color index is " << index << vcl_endl;
-            vcl_cerr << "  # color index bits is " << bits << vcl_endl;
+            vcl_cerr << "  color map size is " << cmapsize << vcl_endl
+                     << "  transparent color index is " << index << vcl_endl
+                     << "  # color index bits is " << bits << vcl_endl;
             // The default color index values appear to be all transparent
             // which is not very helpful, so let's set some more useful
             // values here.
@@ -680,7 +682,7 @@ implement_static_callback(special_up,(int key,int x,int y),(key,x,y));
 
 //--------------------------------------------------------------------------------
 
-#if 0
+#ifdef DUMP_FRAME
 #include <vul/vul_sprintf.h>
 #include <vil/vil_save.h>
 #include <vil/vil_rgb.h>
