@@ -46,7 +46,7 @@ my $doxydir = $options{o} || "$vxlsrc/Doxy";
 
 my $library_list = "$data_dir/library_list.txt";
 my $book_list    = "$data_dir/book_list.txt";
-my $package_list = "$data_dir/book_list.txt";
+my $package_list = "$data_dir/package_list.txt";
 
 $forcedflag="";
 if (defined($options{f}))
