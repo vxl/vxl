@@ -22,7 +22,7 @@ void test_at_file_size(const vcl_size_t n)
   for (unsigned i=0;i<n;++i)
   {
     rand_next = rand_next*1103515245 + 12345;
-    data[i] = ((rand_next/65536) % 32768) % 256;
+    data[i] = static_cast<unsigned char>(((rand_next/65536) % 32768) % 256);
   }
 
   fs_core_p->m_transfer((char *)data,0, n, false);
