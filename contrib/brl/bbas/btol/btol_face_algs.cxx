@@ -136,7 +136,7 @@ bool btol_face_algs::edge_intersects(vtol_face_2d_sptr const & face,
   if (!bsol_algs::meet(face_bounds, edge_bounds))
     return false;
   vsol_curve_2d_sptr c = edge->curve();
-  vdgl_digital_curve_sptr dc = c->cast_to_digital_curve();
+  vdgl_digital_curve_sptr dc = c->cast_to_vdgl_digital_curve();
   if (!dc)
   {
     vcl_cout << "In btol_face_algs::edge_intersects(.) -"

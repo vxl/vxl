@@ -230,10 +230,10 @@ add_spatial_object_3d(vsol_spatial_object_3d_sptr const& so)
 
   if (so->cast_to_surface()) {
     if (so->cast_to_surface()->cast_to_region() &&
-        so->cast_to_surface()->cast_to_region()->cast_to_polygon_3d())
+        so->cast_to_surface()->cast_to_region()->cast_to_polygon())
     {
       vsol_polygon_3d_sptr poly =
-        so->cast_to_surface()->cast_to_region()->cast_to_polygon_3d();
+        so->cast_to_surface()->cast_to_region()->cast_to_polygon();
       this->add_vsol_polygon_3d(poly);
     }
   }

@@ -188,35 +188,35 @@ add_spatial_object(vsol_spatial_object_2d_sptr const& sos,
   }
 
   if (sos->cast_to_curve()) {
-    if (sos->cast_to_curve()->cast_to_digital_curve_2d())
+    if (sos->cast_to_curve()->cast_to_digital_curve())
       {
         vsol_digital_curve_2d_sptr dc =
-          sos->cast_to_curve()->cast_to_digital_curve_2d();
+          sos->cast_to_curve()->cast_to_digital_curve();
         this->add_digital_curve(dc , style);
       }
     if (sos->cast_to_curve()->cast_to_digital_curve())
       {
         vdgl_digital_curve_sptr dc =
-          sos->cast_to_curve()->cast_to_digital_curve();
+          sos->cast_to_curve()->cast_to_vdgl_digital_curve();
         this->add_edgel_curve(dc , style);
       }
-    if (sos->cast_to_curve()->cast_to_line_2d())
+    if (sos->cast_to_curve()->cast_to_line())
       {
         vsol_line_2d_sptr line =
-          sos->cast_to_curve()->cast_to_line_2d();
+          sos->cast_to_curve()->cast_to_line();
         this->add_vsol_line_2d(line, style);
      }
-    if (sos->cast_to_curve()->cast_to_polyline_2d())
+    if (sos->cast_to_curve()->cast_to_polyline())
       {
         vsol_polyline_2d_sptr pline =
-          sos->cast_to_curve()->cast_to_polyline_2d();
+          sos->cast_to_curve()->cast_to_polyline();
         this->add_vsol_polyline_2d(pline , style);
      }
   }
   if (sos->cast_to_region()) {
-    if (sos->cast_to_region()->cast_to_polygon_2d()) {
+    if (sos->cast_to_region()->cast_to_polygon()) {
       vsol_polygon_2d_sptr pline =
-          sos->cast_to_region()->cast_to_polygon_2d();
+          sos->cast_to_region()->cast_to_polygon();
       this->add_vsol_polygon_2d(pline, style);
     }
   }

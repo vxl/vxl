@@ -138,7 +138,7 @@ bgui_vtol_soview2D_edge::bgui_vtol_soview2D_edge(vtol_edge_2d_sptr const& e)
   }
   if (c->cast_to_digital_curve())
   {
-    vdgl_digital_curve_sptr dc = c->cast_to_digital_curve();
+    vdgl_digital_curve_sptr dc = c->cast_to_vdgl_digital_curve();
     //get the edgel chain
     vdgl_interpolator_sptr itrp = dc->get_interpolator();
     vdgl_edgel_chain_sptr ech = itrp->get_edgel_chain();
@@ -155,11 +155,11 @@ bgui_vtol_soview2D_edge::bgui_vtol_soview2D_edge(vtol_edge_2d_sptr const& e)
     }
     return;
   }
-  if (c->cast_to_line_2d())
+  if (c->cast_to_line())
   {
     n = 2;
     x = new float[n], y = new float[n];
-    vsol_line_2d_sptr l = c->cast_to_line_2d();
+    vsol_line_2d_sptr l = c->cast_to_line();
     vsol_point_2d_sptr p0 = l->p0();
     x[0]=p0->x();      y[0]=p0->y();
     vsol_point_2d_sptr p1 = l->p1();
