@@ -2,9 +2,9 @@
 #ifndef vimt_sample_grid_bilin_txx_
 #define vimt_sample_grid_bilin_txx_
 //:
-//  \file
-//  \brief Profile sampling functions for 2D images
-//  \author Tim Cootes
+// \file
+// \brief Grid sampling functions for 2D images
+// \author Tim Cootes
 
 #include "vimt_sample_grid_bilin.h"
 #include <vil/vil_sample_grid_bilin.h>
@@ -22,17 +22,20 @@ inline bool vimt_grid_corner_in_image(const vgl_point_2d<double>& p,
   return true;
 }
 
-//: Sample along grid, using bilinear interpolation.
-//  Profile points are p+i*u, where i=[0..n-1].
-//  Vector v is resized to n*np elements, where np=image.n_planes().
-//  v[0]..v[np-1] are the values from point p
+//: Sample grid from image, using bilinear interpolation
+//  Grid points are p+i.u+j.v where i=[0..n1-1], j=[0..n2-1]
+//  Vector vec is resized to n1*n2*np elements, where np=image.nplanes().
+//  vec[0]..vec[np-1] are the values from point p0
+//  Samples are taken along direction v first, then along u.
+//  Points outside image return zero.
+// \relates vimt_image_2d_of
 template <class imType, class vecType>
 void vimt_sample_grid_bilin(vnl_vector<vecType>& vec,
-                               const vimt_image_2d_of<imType>& image,
-                               const vgl_point_2d<double>& p0,
-                               const vgl_vector_2d<double>& u,
-                               const vgl_vector_2d<double>& v,
-                               int n1, int n2)
+                            const vimt_image_2d_of<imType>& image,
+                            const vgl_point_2d<double>& p0,
+                            const vgl_vector_2d<double>& u,
+                            const vgl_vector_2d<double>& v,
+                            int n1, int n2)
 {
   vgl_point_2d<double> im_p0 = image.world2im()(p0);
   vgl_point_2d<double> im_p1 = image.world2im()(p0+(n1-1)*u);
@@ -50,7 +53,7 @@ void vimt_sample_grid_bilin(vnl_vector<vecType>& vec,
     if (n2>1) im_v = (im_p2-im_p0)/(n2-1);
 
     vil_sample_grid_bilin(vec_data,image.image(),im_p0.x(),im_p0.y(),
-                           im_u.x(),im_u.y(),im_v.x(),im_v.y(),n1,n2);
+                          im_u.x(),im_u.y(),im_v.x(),im_v.y(),n1,n2);
     return;
   }
 
