@@ -28,7 +28,7 @@ struct vbl_triple
     : first (a)
     , second(b)
     , third (c) { }
-#if VCL_CAN_DO_MEMBER_TEMPLATES
+#if VCL_HAS_MEMBER_TEMPLATES
   template <class U1, class U2, class U3>
   vbl_triple(vbl_triple<U1, U2, U3> const &that)
     : first (that.first )
