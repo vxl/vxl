@@ -111,7 +111,7 @@ static void test_one_chain()
 
   oc1->add_edge(n_e,true);
   TEST("vtol_one_chain::add_edge()", oc1->num_edges(), 5);
-  TEST("vtol_one_chain::add_edge()", oc1->edge(4), n_e);
+  TEST("vtol_one_chain::add_edge()", *(oc1->edge(4)), *n_e);
 
   oc1->remove_edge(n_e,true);
   TEST("vtol_one_chain::remove_edge()", oc1->num_edges(), 4);
