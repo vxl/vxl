@@ -127,7 +127,6 @@ void test_network_builder()
   nbp.elv_min_=0; // minimum row position of the epipolar space
   nbp.elv_max_=100; // maximum row position of the epipolar space
   nbp.Ns_=20;   // number of intensity samples in s of an unbounded region
-  nbp.alpha_range_=0.1f;   //range in alpha for time neighbors [0, 1].
   nbp.max_delta_recip_s_=0.001f;  // range in s for time neighbors (pixels)
 
   bmrf_network_builder nb(nbp);
