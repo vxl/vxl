@@ -23,6 +23,22 @@
 //
 // If one wishes to map a set of source points to multiple target points,
 // use set_source_pts(src_pts);  then build(target_pts); for each target set.
+//
+// \verbatim
+// vcl_vector<vgl_point_2d<double> > src_pts(n_points),dest_pts(n_points);
+//
+// Fill src_pts and dest_pts
+// .....
+//
+// Construct spline object
+// mbl_thin_plate_spline_2d tps;
+// tps.build(src_pts,dest_pts);
+//
+// // Apply to point p:
+// vgl_point_3d<double> p(1,2);
+//
+// vgl_point_2d<double> new_p = tps(p);
+// \endverbatim
 class mbl_thin_plate_spline_2d
 {
   vnl_vector<double> Wx_,Wy_;
