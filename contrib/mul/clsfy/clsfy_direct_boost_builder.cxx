@@ -359,6 +359,7 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
       strong_classifier.add_one_classifier( classifiers[ind], 1.0, ind);
     else
       strong_classifier.add_one_classifier( classifiers[ind], 1.0/errors[ind], ind);
+    classifiers[ind]=0;
 
     if (calc_all_thresholds_)
     {
@@ -402,7 +403,9 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
     //for (int p=0; p<index.size(); ++p)
     //  vcl_cout<<"index["<<p<<"]= "<<index[p]<<vcl_endl;
   }
-
+  for (unsigned i =0; i< classifiers.size(); ++i)
+    delete classifiers[i];
+ 
 
   // calculating response from classifier so far
   // and using this to calc min_error threshold
