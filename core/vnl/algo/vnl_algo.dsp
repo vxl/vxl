@@ -105,6 +105,9 @@ SOURCE=.\Templates/vcl_vector+vnl_amoeba_SimplexCorner-.cxx
 SOURCE=.\Templates/vnl_adjugate+double-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vnl_adjugate+int-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vnl_convolve+double.double-.cxx
 # End Source File
 # Begin Source File
@@ -118,6 +121,9 @@ SOURCE=.\Templates/vnl_determinant+double-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vnl_determinant+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_determinant+int-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vnl_determinant+vcl_complex+double--.cxx
