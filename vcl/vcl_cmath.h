@@ -24,7 +24,7 @@
 //  T floor(T );
 //  T fmod(T, T);
 //  T frexp(T, int *);
-//  T ldexp(float, int);
+//  T ldexp(T, int);
 //  T log(T );
 //  T log10(T );
 //  T modf(T, T *);
