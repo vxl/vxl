@@ -6,7 +6,7 @@
 #include <bsta/bsta_gauss.h>
 #include <bsta/bsta_joint_histogram.h>
 
-#define LOG2 1.442695040889 // == 1/vcl_log(2.0)
+#define LOG2 1.4426950408889634074 // == 1/vcl_log(2.0)
 
 template <class T>
 bsta_joint_histogram<T>::bsta_joint_histogram(const T range,
@@ -93,7 +93,7 @@ T bsta_joint_histogram<T>::entropy() const
       if (pij>min_prob_)
         ent -= pij*T(vcl_log(pij));
     }
-  ent *= LOG2;
+  ent *= (T)LOG2;
   return ent;
 }
 
@@ -108,7 +108,7 @@ T bsta_joint_histogram<T>::renyi_entropy() const
       sum += pij*pij;
     }
   if (sum>min_prob_)
-    ent = - T(vcl_log(sum))*LOG2;
+    ent = - T(vcl_log(sum))*(T)LOG2;
   return ent;
 }
 
