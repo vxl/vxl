@@ -1092,15 +1092,17 @@ void vnl_matrix<T>::assert_finite_internal() const
 {
   if (is_finite())
     return;
+  
+  vcl_cerr << vcl_endl << vcl_endl;
+  vcl_cerr << __FILE__ ":" << __LINE__ << ": matrix has non-finite elements" << vcl_endl;
 
-  vcl_cerr << vcl_endl << vcl_endl
-           << __FILE__ ":" << __LINE__ << ": matrix has non-finite elements"
-           << vcl_endl;
-  if (rows() <= 20 && cols() <= 20)
+  if (rows() <= 20 && cols() <= 20) {
     vcl_cerr << __FILE__ ": here it is:\n" << *this;
+  }
   else {
-    vcl_cerr << __FILE__ ": it is quite big (" << rows() << 'x' << cols() << ")\n"
-             << __FILE__ ": in the following picture - means finite and * means non-finite:\n";
+    vcl_cerr << __FILE__ ": it is quite big (" << rows() << 'x' << cols() << ")" << vcl_endl;
+    vcl_cerr << __FILE__ ": in the following picture '-' means finite and '*' means non-finite:" << vcl_endl;
+
     for (unsigned int i=0; i<rows(); ++i) {
       for (unsigned int j=0; j<cols(); ++j)
         vcl_cerr << char(vnl_math_isfinite((*this)(i, j)) ? '-' : '*');
@@ -1332,7 +1334,7 @@ template <class doublereal>                        // ideally, char* should be b
 int vnl_inplace_transpose(doublereal *a, unsigned m, unsigned n, char* move, unsigned iwrk)
 {
   static doublereal b, c;
-  static const int k = m * n - 1;
+  int k = m * n - 1;
   static int iter, i1, i2, im, i1c, i2c, ncount, max_;
 
 // *****
@@ -1340,7 +1342,7 @@ int vnl_inplace_transpose(doublereal *a, unsigned m, unsigned n, char* move, uns
 // *****
 //  A IS A ONE-DIMENSIONAL ARRAY OF LENGTH MN=M*N, WHICH
 //  CONTAINS THE MXN MATRIX TO BE TRANSPOSED (STORED
-//  COLUMWISE). MOVE IS A ONE-DIMENSIONAL ARRAY OF LENGTH IWRK
+//  COLUMWISE). MOVE IS A ONE-DIMENSIONAL ARRAY O F LENGTH IWRK
 //  USED TO STORE INFORMATION TO SPEED UP THE PROCESS.  THE
 //  VALUE IWRK=(M+N)/2 IS RECOMMENDED. IOK INDICATES THE
 //  SUCCESS OR FAILURE OF THE ROUTINE.
@@ -1369,7 +1371,7 @@ int vnl_inplace_transpose(doublereal *a, unsigned m, unsigned n, char* move, uns
   }
   ncount = 2;
   for (unsigned i = 0; i < iwrk; ++i)
-    move[i] = '\0'; // false;
+    move[i] = char(0); // false;
   if (m > 2 && n > 2) {
 // CALCULATE THE NUMBER OF FIXED POINTS, EUCLIDS ALGORITHM FOR GCD(M-1,N-1).
     int ir2 = m - 1;
