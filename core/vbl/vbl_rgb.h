@@ -45,6 +45,9 @@ public:
   
   // -- The rgb values
   T R_, G_, B_;
+  inline T R() const { return R_; }
+  inline T G() const { return G_; }
+  inline T B() const { return B_; }
   
   // -- Create (0,0,0) vbl_rgb cell. We need the default ctor to do this as the STL
   // effectively mandates that T() produces a nil value.

@@ -30,6 +30,10 @@ public:
   
   // -- The values.
   T  R_; T G_; T B_; T A_;
+  inline T R() const { return R_; }
+  inline T G() const { return G_; }
+  inline T B() const { return B_; }
+  inline T A() const { return A_; }
   
   // -- Create (0,0,0,0) vbl_rgba cell. We need the default ctor to do this as the STL
   // effectively mandates that T() produces a nil value.
