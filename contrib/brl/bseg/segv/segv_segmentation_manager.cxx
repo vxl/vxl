@@ -214,7 +214,7 @@ void segv_segmentation_manager::regions()
     dp.aggressive_junction_closure=1;
   else
     dp.aggressive_junction_closure=0;
-  sdet_region_proc_params rpp(debug, true, dp);
+  sdet_region_proc_params rpp(dp);
   sdet_region_proc rp(rpp);
   rp.set_image(img_);
   rp.extract_regions();
