@@ -18,7 +18,7 @@ vcl_ostream& vul_printf(vcl_ostream& s, char const * fmt, ...)
 {
   char buf[65536];
 
-  va_list ap;
+  vcl_va_list ap;
   va_start(ap, fmt);
   vcl_vsprintf(buf, fmt, ap);
   va_end(ap);

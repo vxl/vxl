@@ -18,25 +18,35 @@
 // for each OS
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
 
+#if defined(VCL_BORLAND_56)
+# include <stdint.h> /* for intptr_t on Borland 5.6. */
+#endif
+
 #include <io.h>
 
 struct vul_file_iterator_data
 {
   struct _finddata_t data_;
-# if defined VCL_VC60 || defined VCL_VC50
-  long handle_;      // works with msvc6
+# if defined VCL_VC60 || defined VCL_VC50 || defined VCL_BORLAND_55
+  typedef long handle_type;      // works with msvc6
 # else
-  intptr_t handle_;  // not found by msvc6
+  typedef intptr_t handle_type;  // not found by msvc6
 #endif
+  handle_type handle_;
 
   vcl_string found_;
   char const* name_;
   vul_reg_exp reg_exp_;
   vcl_string original_dirname_;
 
+  handle_type find_first(const char* dirname, struct _finddata_t* data)
+    {
+    return _findfirst(const_cast<char*>(dirname), data);
+    }
+  
   vul_file_iterator_data(char const* glob) {
     original_dirname_ = vul_file::dirname(glob);
-    handle_ = _findfirst((original_dirname_ + "\\*").c_str(), &data_);
+    handle_ = find_first((original_dirname_ + "\\*").c_str(), &data_);
 
 
 

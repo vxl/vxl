@@ -34,8 +34,18 @@ void vul_get_timestamp(int &secs, int &msecs)
   secs = timestamp.tv_sec;
   msecs = timestamp.tv_usec/1000;
 }
+#elif defined(VCL_WIN32) && defined(VCL_BORLAND)
+// VCL_WIN32 and not __CYGWIN__ and VCL_BORLAND
+void vul_get_timestamp(int &secs, int &msecs)
+{
+  struct timeb real;
+  ftime(&real);
+
+  secs = real.time;
+  msecs = real.millitm;
+}
 #else
-// VCL_WIN32 and not __CYGWIN__
+// VCL_WIN32 and not __CYGWIN__ and not VCL_BORLAND
 void vul_get_timestamp(int &secs, int &msecs)
 {
   struct _timeb real;

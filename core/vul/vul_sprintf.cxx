@@ -17,7 +17,7 @@
 
 vul_sprintf::vul_sprintf(char const *fmt, ...) : vcl_string("")
 {
-  va_list ap;
+  vcl_va_list ap;
   va_start(ap, fmt);
 
   char s[65536];

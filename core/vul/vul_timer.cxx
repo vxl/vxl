@@ -48,7 +48,11 @@ struct vul_timer_data
   struct timeval real0;          // wall clock mark.
 #else
  vcl_clock_t usage0;
+# if defined(VCL_BORLAND)
+ struct timeb real0;
+# else
  struct _timeb real0;
+# endif
 #endif
 };
 
@@ -98,8 +102,12 @@ void vul_timer::mark()
 #endif
 #else
   // Win32 section
-  data->usage0 = clock();
+  data->usage0 = vcl_clock();
+# if defined(VCL_BORLAND)
+  ftime(&data->real0);
+# else
   _ftime(&data->real0);
+# endif
 #endif
 }
 
@@ -132,8 +140,13 @@ long vul_timer::real()
 
 #else
  // Win32 section
+# if defined(VCL_BORLAND)
+ struct timeb real;
+ ftime(&real);
+# else
  struct _timeb real;
  _ftime(&real);
+# endif
  s = long(real.time - data->real0.time);
  long ms = real.millitm - data->real0.millitm;
 
@@ -153,7 +166,7 @@ long vul_timer::user()
   times(&usage);  // new user/system time
   return (usage.tms_utime - data->usage0.tms_utime) * 1000 / CLK_TCK;
 #else
-  vcl_clock_t usage = clock();
+  vcl_clock_t usage = vcl_clock();
   return (usage - data->usage0) / (CLOCKS_PER_SEC/1000);
 #endif
 }
@@ -182,7 +195,7 @@ long vul_timer::all()
   return (usage.tms_utime + usage.tms_stime -
           data->usage0.tms_utime - data->usage0.tms_stime)  * 1000 / CLK_TCK;
 #else
-  vcl_clock_t usage = clock();
+  vcl_clock_t usage = vcl_clock();
   return (usage - data->usage0) / (CLOCKS_PER_SEC/1000);
 #endif
 }

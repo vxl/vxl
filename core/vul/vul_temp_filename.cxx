@@ -8,7 +8,11 @@
 #include <vcl_ctime.h>
 #include <vcl_cstdlib.h> // for rand/srand
 
-#ifdef _MSC_VER
+#if defined(VCL_BORLAND)
+# include <stdio.h> // for _tempnam on borland.
+#endif
+
+#if defined(VCL_VC) || defined(VCL_BORLAND)
   #include <Windows.h>
 #else
 #if defined(unix) || defined(__unix)
@@ -67,7 +71,7 @@
 vcl_string
 vul_temp_filename( )
 {
-#ifdef _MSC_VER
+#if defined(VCL_VC) || defined(VCL_BORLAND)
   char path[ _MAX_PATH ];
   char* file;
   if ( GetTempPath( _MAX_PATH, path ) == 0 )

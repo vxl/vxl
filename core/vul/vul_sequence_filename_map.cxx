@@ -101,13 +101,13 @@ void vul_sequence_filename_map::parse()
       temp.erase(re.start(0));
 
       if (match_start.length() > 0)
-        start_ = atoi(match_start.c_str());
+        start_ = vcl_atoi(match_start.c_str());
 
       if (match_step.length() > 0)
-        step_ = atoi(match_step.c_str()+1);
+        step_ = vcl_atoi(match_step.c_str()+1);
 
       if (match_end.length() > 0)
-        end_ = atoi(match_end.c_str());
+        end_ = vcl_atoi(match_end.c_str());
     }
   }
   // Search for image extension
@@ -342,7 +342,7 @@ int vul_sequence_filename_map::extract_index(char const* name)
 {
   vcl_string name_str(name);
   vcl_string index_str = name_str.substr(basename_.size(), name_str.size() - image_extension_.size());
-  return atoi(index_str.c_str());
+  return vcl_atoi(index_str.c_str());
 }
 
 vcl_ostream& operator<<(vcl_ostream &os, const vul_sequence_filename_map& s)
