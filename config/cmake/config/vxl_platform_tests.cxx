@@ -89,14 +89,15 @@ int main() { return 0; }
 
 #ifdef VCL_FOR_SCOPE_HACK
 // VCL_FOR_SCOPE_HACK will be set to "1" if this fails to compile
+class A { public: void f() { } };
 
 void fn() {
   for (int i=0; i<100; ++i) {}
   for (long i=0; i<1000; ++i) {}
-  double i = 3.141; i *= -1.0;
+  for (double i = 3.141; i<100.0; i += 1.0) { }
+  // VC7 only raises warnings for previous tests
+  A i; i.f();
 }
-
-int main() { return 0; }
 #endif // VCL_FOR_SCOPE_HACK
 
 //-------------------------------------
