@@ -97,7 +97,7 @@ LIB32=link.exe -lib
 # Name "mvl2 - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "c;cxx"
 # Begin Source File
 SOURCE=.\mvl2_image_format_plugin.cxx
 # End Source File
@@ -113,12 +113,9 @@ SOURCE=.\mvl2_video_reader.cxx
 # Begin Source File
 SOURCE=.\mvl2_video_to_avi_windows.cxx
 # End Source File
-# Begin Source File
-SOURCE=.\mvl2_video_writer.cxx
-# End Source File
 # End Group
 # Begin Group "Header Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "h;txx"
 # Begin Source File
 SOURCE=.\mvl2_image_format_plugin.h
 # End Source File
@@ -143,8 +140,6 @@ SOURCE=.\mvl2_video_to_avi_windows.h
 # Begin Source File
 SOURCE=.\mvl2_video_writer.h
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project

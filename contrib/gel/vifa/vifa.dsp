@@ -97,7 +97,7 @@ LIB32=link.exe -lib
 # Name "vifa - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "c;cxx"
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+imp_line-.cxx
 # End Source File
@@ -168,9 +168,6 @@ SOURCE=.\vifa_int_face_attr_common.cxx
 SOURCE=.\vifa_int_face_attr_common_params.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vifa_int_face_attr_factory.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vifa_int_faces_adj_attr.cxx
 # End Source File
 # Begin Source File
@@ -190,7 +187,7 @@ SOURCE=.\vifa_parallel_params.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "h;txx"
 # Begin Source File
 SOURCE=.\vifa_bbox.h
 # End Source File

@@ -97,7 +97,7 @@ LIB32=link.exe -lib
 # Name "gtrl - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "c;cxx"
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+gtrl_triangle-.cxx
 # End Source File
@@ -113,12 +113,9 @@ SOURCE=.\gtrl_triangle.cxx
 # Begin Source File
 SOURCE=.\gtrl_triangulation.cxx
 # End Source File
-# Begin Source File
-SOURCE=.\gtrl_vertex.cxx
-# End Source File
 # End Group
 # Begin Group "Header Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "h;txx"
 # Begin Source File
 SOURCE=.\gtrl_polygon.h
 # End Source File
@@ -131,8 +128,6 @@ SOURCE=.\gtrl_triangulation.h
 # Begin Source File
 SOURCE=.\gtrl_vertex.h
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project

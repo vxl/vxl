@@ -97,7 +97,7 @@ LIB32=link.exe -lib
 # Name "vsol - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "c;cxx"
 # Begin Source File
 SOURCE=.\Templates/vbl_bounding_box+double.3-.cxx
 # End Source File
@@ -270,9 +270,6 @@ SOURCE=.\vsol_conic_2d.cxx
 SOURCE=.\vsol_curve_2d.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vsol_curve_3d.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vsol_group_2d.cxx
 # End Source File
 # Begin Source File
@@ -306,19 +303,10 @@ SOURCE=.\vsol_rectangle_2d.cxx
 SOURCE=.\vsol_rectangle_3d.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vsol_region_2d.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vsol_region_3d.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vsol_spatial_object_2d.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vsol_spatial_object_3d.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vsol_surface_3d.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vsol_tetrahedron.cxx
@@ -330,9 +318,6 @@ SOURCE=.\vsol_triangle_2d.cxx
 SOURCE=.\vsol_triangle_3d.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vsol_volume_3d.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vsol_polyline_2d.cxx
 # End Source File
 # Begin Source File
@@ -340,7 +325,7 @@ SOURCE=.\vsol_digital_curve_2d.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "h;txx"
 # Begin Source File
 SOURCE=.\vsol_box_2d.h
 # End Source File

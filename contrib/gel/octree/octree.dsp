@@ -110,7 +110,7 @@ LINK32=link.exe
 # Name "octree - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "c;cxx"
 # Begin Source File
 SOURCE=.\main.cxx
 # End Source File
@@ -127,17 +127,11 @@ SOURCE=.\Voxel.cxx
 SOURCE=.\OctreeLevel.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Cube.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\ConvexHull.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\BaseCube.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "h;txx"
 # Begin Source File
 SOURCE=.\BaseCube.h
 # End Source File
@@ -159,8 +153,6 @@ SOURCE=.\VoxmapImagePoints.h
 # Begin Source File
 SOURCE=.\VoxmapPoints.h
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project

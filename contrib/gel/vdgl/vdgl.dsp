@@ -97,7 +97,7 @@ LIB32=link.exe -lib
 # Name "vdgl - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "c;cxx"
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+vdgl_digital_curve-.cxx
 # End Source File
@@ -121,9 +121,6 @@ SOURCE=.\Templates/vsl_vector_io+vdgl_digital_curve_sptr-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+vdgl_digital_region-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vdgl_OrthogRegress.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vdgl_digital_curve.cxx
@@ -160,7 +157,7 @@ SOURCE=.\vdgl_ortho_regress.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "h;txx"
 # Begin Source File
 SOURCE=.\vdgl_OrthogRegress.h
 # End Source File
@@ -209,8 +206,6 @@ SOURCE=.\vdgl_interpolator_sptr.h
 # Begin Source File
 SOURCE=.\vdgl_digital_region_sptr.h
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project

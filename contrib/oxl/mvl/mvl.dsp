@@ -97,7 +97,7 @@ LIB32=link.exe -lib
 # Name "mvl - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "c;cxx"
 # Begin Source File
 SOURCE=.\AffineMetric.cxx
 # End Source File
@@ -180,12 +180,6 @@ SOURCE=.\HMatrix3D.cxx
 SOURCE=.\Homg.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Homg2D.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Homg3D.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\HomgPoint2D.cxx
 # End Source File
 # Begin Source File
@@ -234,19 +228,10 @@ SOURCE=.\ImageMetric.cxx
 SOURCE=.\LineSegSet.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\MatchSet.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\NViewMatches.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\PMatrix.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\PMatrixAffine.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\PMatrixCompute.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\PMatrixComputeLinear.cxx
@@ -259,9 +244,6 @@ SOURCE=.\PMatrixDecompAa.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\PMatrixDecompCR.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\PMatrixEuclidean.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\PairMatchMulti.cxx
@@ -408,9 +390,6 @@ SOURCE=.\HMatrix2DComputeRobust.cxx
 SOURCE=.\Probability.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\FileNameGenerator.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\FileNameGeneratorBase.cxx
 # End Source File
 # Begin Source File
@@ -424,7 +403,7 @@ SOURCE=.\TriTensorCompute.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "h;txx"
 # Begin Source File
 SOURCE=.\AffineMetric.h
 # End Source File
@@ -719,8 +698,6 @@ SOURCE=.\mvl_modify_handle.h
 # Begin Source File
 SOURCE=.\PMatrix_sptr.h
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project

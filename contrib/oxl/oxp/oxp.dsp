@@ -97,7 +97,7 @@ LIB32=link.exe -lib
 # Name "oxp - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "c;cxx"
 # Begin Source File
 SOURCE=.\ByteConvertImage.cxx
 # End Source File
@@ -112,9 +112,6 @@ SOURCE=.\ImageSequenceName.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\JPEG_Decompressor.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Mapping_2d_2d.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\MedianReduceImage.cxx
@@ -156,14 +153,11 @@ SOURCE=.\oxp_vidl_moviefile.cxx
 SOURCE=.\oxp_vidl_mpeg_codec.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\oxp_yuv_to_rgb.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\oxp_vob_frame_index.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "h;txx"
 # Begin Source File
 SOURCE=.\ByteConvertImage.h
 # End Source File
@@ -236,8 +230,6 @@ SOURCE=.\oxp_yuv_to_rgb.h
 # Begin Source File
 SOURCE=.\oxp_vob_frame_index.h
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project

@@ -97,7 +97,7 @@ LIB32=link.exe -lib
 # Name "vbl - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "c;cxx"
 # Begin Source File
 SOURCE=.\Templates/vbl_array_1d+double-.cxx
 # End Source File
@@ -156,9 +156,6 @@ SOURCE=.\Templates/vbl_bounding_box+int.2-.cxx
 SOURCE=.\Templates/vbl_quadruple+int.int.int.int-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_shared_pointer+int-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vbl_sparse_array_1d+double-.cxx
 # End Source File
 # Begin Source File
@@ -201,17 +198,11 @@ SOURCE=.\vbl_bool_ostream.cxx
 SOURCE=.\vbl_qsort.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vbl_ref_count.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vbl_shared_pointer.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vbl_sort.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "h;txx"
 # Begin Source File
 SOURCE=.\vbl_array_1d.txx
 # End Source File
@@ -232,9 +223,6 @@ SOURCE=.\vbl_protection_traits.txx
 # End Source File
 # Begin Source File
 SOURCE=.\vbl_quadruple.txx
-# End Source File
-# Begin Source File
-SOURCE=.\vbl_shared_pointer.txx
 # End Source File
 # Begin Source File
 SOURCE=.\vbl_smart_ptr.txx
@@ -332,7 +320,6 @@ SOURCE=.\vbl_sparse_array_base.h
 # Begin Source File
 SOURCE=.\vbl_triple.h
 # End Source File
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project

@@ -97,12 +97,9 @@ LIB32=link.exe -lib
 # Name "vsrl - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "c;cxx"
 # Begin Source File
 SOURCE=.\vsrl_3d_output.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vsrl_dense_matcher.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vsrl_diffusion.cxx
@@ -138,9 +135,6 @@ SOURCE=.\vsrl_step_diffusion.cxx
 SOURCE=.\vsrl_stereo_dense_matcher.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vsrl_token.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vsrl_token_saliency.cxx
 # End Source File
 # Begin Source File
@@ -160,7 +154,7 @@ SOURCE=.\vsrl_region_disparity.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "h;txx"
 # Begin Source File
 SOURCE=.\vsrl_3d_output.h
 # End Source File

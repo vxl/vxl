@@ -97,7 +97,7 @@ LIB32=link.exe -lib
 # Name "osl - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "c;cxx"
 # Begin Source File
 SOURCE=.\Templates/osl_1d_half_kernel+double-.cxx
 # End Source File
@@ -120,9 +120,6 @@ SOURCE=.\internals/droid.cxx
 SOURCE=.\internals/osl_reorder_chain.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\osl_OrthogRegress.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\osl_break_edge.cxx
 # End Source File
 # Begin Source File
@@ -141,13 +138,7 @@ SOURCE=.\osl_canny_ox.cxx
 SOURCE=.\osl_canny_ox_params.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\osl_canny_port.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\osl_canny_rothwell.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\osl_canny_rothwell_params.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\osl_canny_smooth.cxx
@@ -198,9 +189,6 @@ SOURCE=.\osl_load_topology.cxx
 SOURCE=.\osl_ortho_regress.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\osl_roi_window.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\osl_save_topology.cxx
 # End Source File
 # Begin Source File
@@ -211,7 +199,7 @@ SOURCE=.\osl_vertex.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "h;txx"
 # Begin Source File
 SOURCE=.\internals/droid.h
 # End Source File
@@ -320,8 +308,6 @@ SOURCE=.\osl_vertex.h
 # Begin Source File
 SOURCE=.\osl_hacks.h
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project

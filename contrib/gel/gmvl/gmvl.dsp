@@ -96,7 +96,7 @@ LIB32=link.exe -lib
 # Name "gmvl - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "c;cxx"
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+gmvl_connection-.cxx
 # End Source File
@@ -110,16 +110,10 @@ SOURCE=.\gmvl_connection.cxx
 SOURCE=.\gmvl_connection_cache.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\gmvl_corner_node.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\gmvl_database.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\gmvl_helpers.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\gmvl_image_node.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\gmvl_node.cxx
@@ -127,15 +121,9 @@ SOURCE=.\gmvl_node.cxx
 # Begin Source File
 SOURCE=.\gmvl_node_cache.cxx
 # End Source File
-# Begin Source File
-SOURCE=.\gmvl_tag_node.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\gmvl_topology_node.cxx
-# End Source File
 # End Group
 # Begin Group "Header Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "h;txx"
 # Begin Source File
 SOURCE=.\gmvl_connection.h
 # End Source File
@@ -172,8 +160,6 @@ SOURCE=.\gmvl_connection_sptr.h
 # Begin Source File
 SOURCE=.\gmvl_node_sptr.h
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project

@@ -111,9 +111,6 @@ SOURCE=.\bcal_camera.cxx
 SOURCE=.\bcal_calibrate_plane.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\bcal_calibrate_object.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\bcal_camera_node.cxx
 # End Source File
 # Begin Source File

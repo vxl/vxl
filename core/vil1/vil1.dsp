@@ -97,7 +97,7 @@ LIB32=link.exe -lib
 # Name "vil1 - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "c;cxx"
 # Begin Source File
 SOURCE=.\Templates/vil1_clamp+vil1_rgb+double-.cxx
 # End Source File
@@ -402,9 +402,6 @@ SOURCE=.\vil1_resample.cxx
 SOURCE=.\vil1_resample_image_impl.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil1_rgb_byte.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vil1_save.cxx
 # End Source File
 # Begin Source File
@@ -448,7 +445,7 @@ SOURCE=.\file_formats/vil1_ras.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "h;txx"
 # Begin Source File
 SOURCE=.\file_formats/vil1_bmp.h
 # End Source File
@@ -728,8 +725,6 @@ SOURCE=.\vil1_property.h
 # Begin Source File
 SOURCE=.\file_formats/vil1_ras.h
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project

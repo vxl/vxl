@@ -97,7 +97,7 @@ LIB32=link.exe -lib
 # Name "vil - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter "cxx"
+# PROP Default_Filter "c;cxx"
 # Begin Source File
 SOURCE=.\file_formats/vil_pnm.cxx
 # End Source File
@@ -145,9 +145,6 @@ SOURCE=.\Templates/vil_smart_ptr+vil_stream-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vil_crop.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vil_image_view_base.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vil_load.cxx

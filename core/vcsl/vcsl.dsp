@@ -97,7 +97,7 @@ LIB32=link.exe -lib
 # Name "vcsl - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "c;cxx"
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+vcsl_angle-.cxx
 # End Source File
@@ -213,9 +213,6 @@ SOURCE=.\vcsl_angle_unit.cxx
 SOURCE=.\vcsl_axis.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vcsl_cartesian.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vcsl_cartesian_2d.cxx
 # End Source File
 # Begin Source File
@@ -237,16 +234,10 @@ SOURCE=.\vcsl_cylindrical_to_cartesian_3d.cxx
 SOURCE=.\vcsl_degree.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vcsl_dimension.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vcsl_displacement.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vcsl_geocentric.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vcsl_geodetic.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vcsl_geographic.cxx
@@ -300,14 +291,11 @@ SOURCE=.\vcsl_spheroid.cxx
 SOURCE=.\vcsl_translation.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vcsl_unit.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vcsl_utm.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "h;txx"
 # Begin Source File
 SOURCE=.\vcsl_angle.h
 # End Source File
@@ -518,8 +506,6 @@ SOURCE=.\vcsl_unit_sptr.h
 # Begin Source File
 SOURCE=.\vcsl_utm_sptr.h
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project

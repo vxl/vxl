@@ -97,7 +97,7 @@ LIB32=link.exe -lib
 # Name "vil3d - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "c;cxx"
 # Begin Source File
 SOURCE=.\Templates/vil3d_image_view+byte-.cxx
 # End Source File
@@ -127,9 +127,6 @@ SOURCE=.\Templates/vil3d_sample_profile_trilin+float.double-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vil3d_image_view+bool-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vil3d_image_view_base.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vil_smart_ptr+vil3d_image_view_base-.cxx
@@ -193,7 +190,7 @@ SOURCE=.\file_formats/vil3d_slice_list.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "h;txx"
 # Begin Source File
 SOURCE=.\vil3d_image_view.h
 # End Source File

@@ -97,7 +97,7 @@ LIB32=link.exe -lib
 # Name "vgui - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "c;cxx"
 # Begin Source File
 SOURCE=.\Templates/vbl_array_2d+vgui_grid_tableau+-grid_data-.cxx
 # End Source File
@@ -129,25 +129,16 @@ SOURCE=.\internals/vgui_accelerate.cxx
 SOURCE=.\internals/vgui_accelerate_tag.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\internals/vgui_adaptor_mixin.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\internals/vgui_adaptor_tableau.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\internals/vgui_back_project.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\internals/vgui_dialog_field.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\internals/vgui_dialog_impl.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\internals/vgui_draw_line.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\internals/vgui_file_field.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\internals/vgui_invert_homg4x4.cxx
@@ -163,9 +154,6 @@ SOURCE=.\internals/vgui_rasterpos.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\internals/vgui_simple_field.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\internals/vgui_string_field.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\internals/vgui_transpose_4x4.cxx
@@ -213,9 +201,6 @@ SOURCE=.\vgui_dialog.cxx
 SOURCE=.\vgui_drag_mixin.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vgui_drag_tableau.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vgui_error_dialog.cxx
 # End Source File
 # Begin Source File
@@ -258,9 +243,6 @@ SOURCE=.\vgui_matrix_state.cxx
 SOURCE=.\vgui_menu.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vgui_message.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vgui_modifier.cxx
 # End Source File
 # Begin Source File
@@ -271,9 +253,6 @@ SOURCE=.\vgui_observer.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vgui_pixel.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vgui_popup_params.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vgui_projection_inspector.cxx
@@ -301,9 +280,6 @@ SOURCE=.\vgui_soview2D.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vgui_soview3D.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vgui_statusbar.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vgui_statusbuf.cxx
@@ -468,7 +444,7 @@ SOURCE=.\impl/qt/vgui_qt_menu_mocced.cxx
 SOURCE=.\impl/qt/vgui_qt_statusbar_mocced.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\internals/vgui_parent_child_link_data.cxx
+SOURCE=.\vgui_parent_child_link.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vgui_active_tableau.cxx
@@ -496,9 +472,6 @@ SOURCE=.\vgui_enhance_tableau.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vgui_listmanager2D_tableau.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vgui_parent_child_link.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vgui_poly_tableau.cxx
@@ -553,7 +526,7 @@ SOURCE=.\vgui_vil_image_renderer.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "h;txx"
 # Begin Source File
 SOURCE=.\internals/trackball.h
 # End Source File
@@ -1067,8 +1040,6 @@ SOURCE=.\impl/gtk2/vgui_gtk2_utils.h
 # Begin Source File
 SOURCE=.\impl/gtk2/vgui_gtk2_window.h
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project
