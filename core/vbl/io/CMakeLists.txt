@@ -1,5 +1,5 @@
 #
-# ./mul/vbl/io/CMakeLists.txt
+# ./vxl/vbl/io/CMakeLists.txt
 #
 #   Ian Scott
 #

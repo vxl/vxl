@@ -1,5 +1,4 @@
 USES += vxl
-USES += mul
 
 TRY_TIFF := 1
 TRY_JPEG := 1

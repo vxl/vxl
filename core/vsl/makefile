@@ -3,7 +3,6 @@ include ${IUEROOT}/config/top-params.mk
 #######################################
 
 USES := vxl
-USES += mul
 
 LIBRARY := vsl
 VERSION := 1.0

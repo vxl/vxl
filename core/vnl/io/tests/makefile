@@ -1,5 +1,4 @@
 USES += vxl 
-USES += mul
 IULIBS := -lvnl-io -lvnl -lvsl
 
 # TESTS += golden_test_vnl_io.cxx

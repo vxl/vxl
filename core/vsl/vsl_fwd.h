@@ -3,7 +3,7 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// This is mul/vsl/vsl_fwd.h
+// This is vxl/vsl/vsl_fwd.h
 
 // by Ian Scott
 

@@ -1,14 +1,10 @@
 #
-# ./mul/vnl/io/CMakeLists.txt
+# ./vxl/vnl/io/CMakeLists.txt
 #
 #   Ian Scott
 #
 
-
-
 ADD_LIBRARY(vnl_io vnl_io_sources )
-
-
 
 SOURCE_FILES(vnl_io_sources
 vnl_io_nonlinear_minimizer

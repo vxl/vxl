@@ -2,6 +2,9 @@
 include ${IUEROOT}/config/top-params.mk
 #######################################
 
+# stream I/O
+SUBDIRS += vsl
+
 # POSIX layer
 SUBDIRS += vpl
 

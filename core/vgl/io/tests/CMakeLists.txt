@@ -1,10 +1,10 @@
 #
-# ./mul/vgl/io/tests/CMakeLists.txt
+# ./vxl/vgl/io/tests/CMakeLists.txt
 #
 #   Ian Scott
 #
 
-INCLUDE( ${allvxl_SOURCE_DIR}/mul/vgl/io/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vgl/io/CMakeListsLink.txt )
 
 
 ADD_EXECUTABLE(

@@ -1,11 +1,11 @@
 #
-# ./mul/vul/io/CMakeListsLink.txt
+# ./vxl/vul/io/CMakeListsLink.txt
 #
 #   Ian Scott
 #
 
 LINK_LIBRARIES( vul_io )
-LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/mul/vul/io )
+LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/vxl/vul/io )
 
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vul/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/mul/vsl/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vsl/CMakeListsLink.txt )

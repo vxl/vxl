@@ -1,5 +1,4 @@
 USES += vxl
-USES += mul
 IULIBS := -lvsl
 
 TESTS += test_indent.cxx
