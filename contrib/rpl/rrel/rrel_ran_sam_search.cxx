@@ -11,8 +11,7 @@
 #include <vcl_vector.h>
 
 rrel_ran_sam_search::rrel_ran_sam_search( )
-  : prior_scale_( -1 ),
-    generate_all_(false),
+  : generate_all_(false),
     generator_( ),
     params_(0), scale_(0),
     samples_to_take_(0),
@@ -22,8 +21,7 @@ rrel_ran_sam_search::rrel_ran_sam_search( )
 }
 
 rrel_ran_sam_search::rrel_ran_sam_search( int seed )
-  : prior_scale_( -1 ),
-    generate_all_(false),
+  : generate_all_(false),
     generator_( seed ),
     params_(0), scale_(0),
     samples_to_take_(0),
@@ -67,10 +65,9 @@ rrel_ran_sam_search::estimate( const rrel_estimation_problem * problem,
   this->calc_num_samples( problem );
   if ( trace_level_ >= 1 ) vcl_cout << "\nSamples = " << samples_to_take_ << vcl_endl;
 
-  if( obj_fcn->requires_prior_scale() &&
-      !( problem->has_prior_scale() || prior_scale_ > 0 ) ) {
-    vcl_cerr << "ran_sam_search::estimate: Objective function requires prior scale, and neither the problem nor the search is providing one.\n"
-               << "                Aborting estimation." << vcl_endl;
+  if( obj_fcn->requires_prior_scale() && problem->scale_type() == rrel_estimation_problem::NONE ) {
+    vcl_cerr << "ran_sam::estimate: Objective function requires a prior scale, and the problem does not provide one.\n"
+             << "                   Aborting estimation." << vcl_endl;
     return false;
   }
 
@@ -101,10 +98,18 @@ rrel_ran_sam_search::estimate( const rrel_estimation_problem * problem,
       problem->compute_residuals( new_params, residuals );
       if ( trace_level_ >= 2) this->trace_residuals( residuals );
       double new_obj;
-      if( problem->has_prior_scale() )
-        new_obj = obj_fcn->fcn( residuals.begin(), residuals.end(), problem->prior_scales().begin(), &new_params );
-      else
-        new_obj = obj_fcn->fcn( residuals.begin(), residuals.end(), prior_scale_, &new_params );
+
+      switch( problem->scale_type() ) {
+      case rrel_estimation_problem::NONE:
+        new_obj = obj_fcn->fcn( residuals.begin(), residuals.end(), scale_, &new_params );
+        break;
+      case rrel_estimation_problem::SINGLE:
+        new_obj = obj_fcn->fcn( residuals.begin(), residuals.end(), problem->prior_scale(), &new_params );
+        break;
+      case rrel_estimation_problem::MULTIPLE:
+        new_obj = obj_fcn->fcn( residuals.begin(), residuals.end(), problem->prior_multiple_scales().begin(), &new_params );
+        break;
+      }
       if ( trace_level_ >= 1) vcl_cout << "Objective = " << new_obj << vcl_endl;
       if ( !obj_set || new_obj<min_obj ) {
         if ( trace_level_ >= 2) vcl_cout << "New best" << vcl_endl;
@@ -226,8 +231,7 @@ rrel_ran_sam_search::next_sample( unsigned int taken,
 void
 rrel_ran_sam_search::print_params() const
 {
-  vcl_cout << "  prior_scale_ = " << prior_scale_ << "\n"
-           << "  max_outlier_frac_ = " << max_outlier_frac_ << "\n"
+  vcl_cout << "  max_outlier_frac_ = " << max_outlier_frac_ << "\n"
            << "  desired_prob_good_ = " << desired_prob_good_ <<  "\n"
            << "  max_populations_expected_ = " << max_populations_expected_ << "\n"
            << "  min_samples_ = " << min_samples_ << "\n"

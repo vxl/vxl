@@ -81,9 +81,9 @@ main( int argc, char** argv )
   //
   {
     rrel_ransac_obj* ransac = new rrel_ransac_obj();
+    hg->set_prior_scale( 1.0 );
 
     rrel_ran_sam_search* ransam = new rrel_ran_sam_search;
-    ransam->set_prior_scale(1);
     ransam->set_trace_level(trace_level);
     ransam->set_sampling_params( max_outlier_frac, desired_prob_good,
 			         max_pops);
@@ -129,8 +129,9 @@ main( int argc, char** argv )
     int residual_dof = hg->residual_dof();
     rrel_mlesac_obj* mlesac = new rrel_mlesac_obj( residual_dof );
 
+    hg->set_prior_scale(1.0);
+
     rrel_ran_sam_search * ransam = new rrel_ran_sam_search;
-    ransam->set_prior_scale(1);
     ransam->set_trace_level(trace_level);
     ransam->set_sampling_params( max_outlier_frac, desired_prob_good,
 			         max_pops);
@@ -151,6 +152,8 @@ main( int argc, char** argv )
   //  MUSE
   //
   {
+    hg->set_no_prior_scale();
+
     rrel_muset_obj* muset = new rrel_muset_obj( from_pts.size()+1 );
     rrel_ran_sam_search * ransam = new rrel_ran_sam_search;
     ransam->set_trace_level(trace_level);

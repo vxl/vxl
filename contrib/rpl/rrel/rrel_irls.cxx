@@ -125,14 +125,12 @@ rrel_irls::estimate( const rrel_estimation_problem* problem,
 
 
   //  Scale initialization, if necessary
-  if( obj->requires_prior_scale() ) {
-    if( ! problem->has_prior_scale() && ! scale_initialized_ ) {
-      vcl_cerr << "irls::estimate: Objective function requires a prior scale, and neither the problem nor the search is providing one.\n"
-               << "                Aborting estimation." << vcl_endl;
-      return false;
-    }
+  if( obj->requires_prior_scale() && problem->scale_type() == rrel_estimation_problem::NONE ) {
+    vcl_cerr << "irls::estimate: Objective function requires a prior scale, and the problem does not provide one.\n"
+             << "                Aborting estimation." << vcl_endl;
+    return false;
   } else {
-    if( ! problem->has_prior_scale() && ! scale_initialized_ ) {
+    if( problem->scale_type() == rrel_estimation_problem::NONE && ! scale_initialized_ ) {
       problem->compute_residuals( params_, residuals );
       scale_ = rrel_util_median_abs_dev_scale( residuals.begin(), residuals.end(), num_for_fit );
       allow_convergence_test = false;
@@ -189,7 +187,7 @@ rrel_irls::estimate( const rrel_estimation_problem* problem,
       if ( scale_ <= 0 ) {  //  fit exact enough to yield 0 scale estimate
         scale_ = 0;
         converged_ = true;
-        vcl_cerr << "rrel_irls::estimate  scale has gone to 0.\n";
+        vcl_cerr << "rrel_irls::estimate:  scale has gone to 0.\n";
         break;
       }
     }
@@ -245,10 +243,17 @@ rrel_irls::has_converged( const vcl_vector<double>& residuals,
                           vnl_vector<double>* params )
 {
   prev_obj_fcn_ = obj_fcn_;
-  if( problem->has_prior_scale() )
-    obj_fcn_ = obj->fcn( residuals.begin(), residuals.end(), problem->prior_scales().begin(), params );
-  else
+  switch( problem->scale_type() ) {
+  case rrel_estimation_problem::NONE:
     obj_fcn_ = obj->fcn( residuals.begin(), residuals.end(), scale_, params );
+    break;
+  case rrel_estimation_problem::SINGLE:
+    obj_fcn_ = obj->fcn( residuals.begin(), residuals.end(), problem->prior_scale(), params );
+    break;
+  case rrel_estimation_problem::MULTIPLE:
+    obj_fcn_ = obj->fcn( residuals.begin(), residuals.end(), problem->prior_multiple_scales().begin(), params );
+    break;
+  }
 
   if ( trace_level_ >= 1 )
     vcl_cout << "  prev obj fcn = " << prev_obj_fcn_

@@ -32,6 +32,14 @@ class rrel_wls_obj;
 
 class rrel_estimation_problem {
 public:
+  //: Type of scale information this problem provides.
+  //  NONE: problem does not provide any scale information. SINGLE:
+  //  problem provides a single prior scale (homoscedastic
+  //  data). MULTIPLE: problem provides a scale for each residual
+  //  (heteroscedastic data).
+  enum scale_t { NONE = 0, SINGLE = 1, MULTIPLE = 2 };
+
+public:
   //: Constructor.
   // See the comments for param_dof() and num_samples_to_instantiate()
   // for the meaning of these two parameters.
@@ -75,10 +83,6 @@ public:
   // number of samples required to get a given probability of success.
   virtual unsigned int num_unique_samples( ) const { return num_samples(); }
 
-  //: True if the problem has prior scale information.
-  // Defaults to false, since most problems do not have prior scale information.
-  virtual bool has_prior_scale() const { return false; }
-
   //: Generate a parameter vector from a minimal sample set.
   // The \a point_indices vector are indicies into the data set, and
   // must be filled in with num_samples_to_instantiate() indicies.
@@ -110,10 +114,29 @@ public:
                                 double scale,
                                 vcl_vector<double>& weights ) const;
 
+  //: Type of scale information the problem provides.
+  virtual scale_t scale_type() const { return scale_type_; }
+
   //: The prior scale vector, if available.
-  // If has_prior_scale() == false, calling this function will
-  // probably cause an abort().
-  virtual const vcl_vector<double>& prior_scales() const;
+  // The call is valid only if scale_type() == MULTIPLE.
+  virtual const vcl_vector<double>& prior_multiple_scales() const;
+
+  //: The prior scale, if available.
+  // The call is valid only if scale_type() == SINGLE.
+  virtual double prior_scale() const;
+
+  //: Sets the scales for heteroscedastic data.
+  //  Side effect: set scale_type() = MULTIPLE.
+  virtual void set_prior_multiple_scales( const vcl_vector<double>& scales );
+
+  //: Sets the scale for homoscedastic data.
+  //  Side effect: set scale_type() = MULTIPLE.
+  virtual void set_prior_scale( double scale );
+
+  //: Removes the scale information for the problem.
+  //  Side effect: set scale_type() = NONE.
+  virtual void set_no_prior_scale( );
+
 
   //: Compute the parameter vector and the normalised covariance matrix.
   //  (Multiplying this matrix by the variance in the measurements
@@ -139,9 +162,15 @@ protected:
   //: Set the number of samples needed for a unique fit.
   void set_num_samples_for_fit( unsigned int num_samp ) { num_samples_for_fit_ = num_samp; }
 
+  //: Set the type of prior scale.
+  void set_scale_type( scale_t t ) { scale_type_ = t; }
+
 private:
   unsigned int dof_;
   unsigned int num_samples_for_fit_;
+  scale_t scale_type_;
+  double single_scale_;
+  vcl_vector<double>* multiple_scales_;
 };
   
 #endif

@@ -127,7 +127,7 @@ main( )
     ransam->set_sampling_params( max_outlier_frac, desired_prob_good,
 			         max_pops);
     ransam->set_trace_level(trace_level);
-    ransam->set_prior_scale(1.0);
+    lr->set_prior_scale(1.0);
 
     if ( !ransam->estimate( lr, ransac) )
       vcl_cout << "RANSAC failed!!\n";
@@ -151,6 +151,7 @@ main( )
     ransam->set_sampling_params( max_outlier_frac, desired_prob_good,
 			         max_pops);
     ransam->set_trace_level(trace_level);
+    lr->set_prior_scale(1.0);
 
     if ( !ransam->estimate( lr, msac) )
       vcl_cout << "MSAC failed!!\n";
@@ -168,8 +169,12 @@ main( )
   //
   //  MUSE
   //
-  {
+  { 
     rrel_muset_obj* muset = new rrel_muset_obj( pts.size()+1 );
+    muset -> set_min_inlier_fraction( 0.25 );
+
+    lr->set_no_prior_scale();
+
     rrel_ran_sam_search* ransam = new rrel_ran_sam_search;
     ransam->set_sampling_params( 1 - muset->min_inlier_fraction(),
                                  desired_prob_good,
@@ -204,6 +209,8 @@ main( )
   {
     rrel_m_est_obj * m_est = new rrel_tukey_obj( 4.0 );
 
+    lr->set_no_prior_scale();
+
     // With these parameters, the IRLS will run for a maximum of 15
     // iterations, and a minimum of 2. During the first two
     // iterations, scale will be estimated; this estimate will be used
@@ -235,6 +242,9 @@ main( )
 
   {
     rrel_m_est_obj* m_est = new rrel_tukey_obj( 4.0 );
+
+    lr->set_no_prior_scale();
+
     rrel_ran_sam_search* ransam = new rrel_ran_sam_search;
     ransam->set_sampling_params( max_outlier_frac, desired_prob_good,
 			         max_pops);

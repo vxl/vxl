@@ -62,13 +62,6 @@ public:
                             unsigned int max_populations_expected = 1,
                             unsigned int min_samples = 0 );
 
-  //: Set the prior scale.
-  //  This can be used to provide a prior scale for those objective
-  //  functions that require one (e.g. RANSAC), when the problem does
-  //  not provide prior scale estimates.
-  void set_prior_scale( double prior_scale ) { prior_scale_ = prior_scale; }
-
-
   // ----------------------------------------
   //  Main estimation functions
   // ----------------------------------------
@@ -117,7 +110,6 @@ protected:
   //
   //  Parameters
   //
-  double prior_scale_;
   double max_outlier_frac_;
   double desired_prob_good_;
   unsigned int max_populations_expected_;
