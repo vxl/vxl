@@ -17,6 +17,8 @@
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 //   Oct.2002 - Amitha Perera - decoupled vnl_vector and vnl_vector_fixed for
 //              space efficiency, removed necessity for vnl_vector_fixed_ref
+//   Jun.2003 - Paul Smyth - added as_fixed_ref() to convert to fixed-size ref
+//              removed duplicate cross_3d
 // \endverbatim
 
 #include <vcl_cstring.h> // memcpy()
@@ -24,6 +26,8 @@
 #include <vcl_iosfwd.h>
 #include "vnl_vector.h"
 #include "vnl_vector_ref.h"
+#include "vnl_vector_fixed_ref.h"
+#include "vnl_c_vector.h"
 #include "vnl_matrix.h" // outerproduct
 #include <vcl_deprecated.h> // mark x(), y(), z(), t() as deprecated
 
@@ -266,6 +270,16 @@ class vnl_vector_fixed
   // explicit as_ref() method instead.
   operator const vnl_vector_ref<T>() const { return vnl_vector_ref<T>( n, const_cast<T*>(data_) ); }
 
+  //----------------------------------------------------------------------
+  // Conversion to vnl_vector_fixed_ref. Similar to above
+
+  vnl_vector_fixed_ref<T,n> as_fixed_ref() { return vnl_vector_fixed_ref<T,n>( data_block() ); }
+
+  const vnl_vector_fixed_ref<T,n> as_fixed_ref() const { return vnl_vector_fixed_ref<T,n>( const_cast<T*>(data_block()) ); }
+
+//  operator const vnl_vector_fixed_ref<T,n>() const { return vnl_vector_fixed_ref<T,n>( const_cast<T*>(data_block()) ); }
+
+  //----------------------------------------------------------------------
 
   //----------------------------------------------------------------------
 
@@ -688,11 +702,6 @@ template<class T, unsigned int n>
 inline vnl_matrix<T> outer_product( const vnl_vector_fixed<T,n>& a, const vnl_vector_fixed<T,n>& b )
 {
   return outer_product( a.as_ref(), b.as_ref());
-}
-
-template<class T,unsigned int n>
-  inline vnl_vector_fixed<T,n> cross_3d( const vnl_vector_fixed<T,n>& a, const vnl_vector_fixed<T,n>& b ) {
-  return cross_3d( a.as_ref(), b.as_ref());
 }
 
 template<class T,unsigned int n>
