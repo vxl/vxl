@@ -30,31 +30,43 @@ void vnl_matlab_print_scalar(T const &v,
 			     char *buf,
 			     vnl_matlab_print_format =vnl_matlab_print_format_default);
 
-//: Print in nice MATLAB format.
+// Print in nice MATLAB format.
 // If a variable name (e.g. "foo") is given, the raw data will be preceded by
 //   "foo = diag([ " for a vnl_diag_matrix
 //   "foo = [ ...\n" for a vnl_matrix and
 //   "foo = [ "      for a vnl_vector
 // and followed by "])\n", "]\n" and "]\n" respectively. If the variable name
 // is a null pointer, the data is printed as is.
+
+//: print a 1D array.
 template <class T>
 ostream &vnl_matlab_print(ostream &, 
-			  T const *row, 
+			  T const *array,
 			  unsigned length,
 			  vnl_matlab_print_format =vnl_matlab_print_format_default);
 
+//: print a 2D array.
+template <class T>
+ostream &vnl_matlab_print(ostream &, 
+			  T const * const *array,
+			  unsigned rows, unsigned cols,
+			  vnl_matlab_print_format =vnl_matlab_print_format_default);
+
+//: print a vnl_diagonal_matrix<>.
 template <class T>
 ostream &vnl_matlab_print(ostream &, 
 			  vnl_diag_matrix<T> const &, 
 			  char const *variable_name =0,
 			  vnl_matlab_print_format =vnl_matlab_print_format_default);
 
+//: print a vnl_matrix<>.
 template <class T>
 ostream &vnl_matlab_print(ostream &, 
 			  vnl_matrix<T> const &, 
 			  char const *variable_name =0,
 			  vnl_matlab_print_format =vnl_matlab_print_format_default);
 
+//: print a vnl_vector<>.
 template <class T>
 ostream &vnl_matlab_print(ostream &, 
 			  vnl_vector<T> const &, 

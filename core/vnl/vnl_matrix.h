@@ -112,6 +112,8 @@ public:
   vnl_matrix<T>& operator= (vnl_matrix<T> const&);
   
   // arithmetic
+  // note that these functions should not pass T as a const&.
+  // Look what would happen to A /= A(0,0).
   vnl_matrix<T>& operator+= (T value);
   vnl_matrix<T>& operator*= (T value);
   vnl_matrix<T>& operator/= (T value);

@@ -20,7 +20,7 @@
 
 template <class T>
 ostream &vnl_matlab_print(ostream& s, 
-			  T const* row, 
+			  T const* array, 
 			  unsigned length,
 			  vnl_matlab_print_format format VCL_DEFAULT_VALUE(vnl_matlab_print_format_default))
 {
@@ -28,10 +28,21 @@ ostream &vnl_matlab_print(ostream& s,
   for (int j=0; j<length; j++ ) {
     // Format according to selected style
     // In both cases an exact 0 goes out as such
-    vnl_matlab_print_scalar(row[j], buf, format);
+    vnl_matlab_print_scalar(array[j], buf, format);
     s << buf;
   }
   
+  return s;
+}
+
+template <class T>
+ostream &vnl_matlab_print(ostream &s,
+			  T const * const *array,
+			  unsigned rows, unsigned cols,
+			  vnl_matlab_print_format format VCL_DEFAULT_VALUE(vnl_matlab_print_format_default))
+{
+  for (int i=0; i<rows; ++i)
+    vnl_matlab_print(s, array[i], cols, format);
   return s;
 }
 
@@ -48,7 +59,7 @@ ostream& vnl_matlab_print(ostream& s,
   
   if (variable_name) {
     s << " ])";
-    s << endl;
+    s << vcl_endl;
   }
   
   return s;
@@ -62,14 +73,17 @@ ostream& vnl_matlab_print(ostream& s,
 {
   if (variable_name) 
     s << variable_name << " = [ ... \n";
-  
+
+  if (M.rows() == 0)
+    return s << "];" << vcl_endl;
+
   for (int i=0; i<M.rows(); i++ ) {
     vnl_matlab_print(s, M[i], M.cols(), format);
     
     if (variable_name && (i == M.rows()-1))
       s << " ]";
     
-    s << endl;
+    s << vcl_endl;
   }
   
   return s;
@@ -88,7 +102,7 @@ ostream& vnl_matlab_print(ostream& s,
   
   if (variable_name) {
     s << " ]";
-    s << endl;
+    s << vcl_endl;
   }
   
   return s;
@@ -106,11 +120,11 @@ void vnl_dbprintmx(vnl_matrix<double> const& p)
   //336: call of overloaded `vnl_matlab_print' is ambiguous
   //216: candidates are: vnl_matlab_print(ostream &, const vnl_matrix<double> &, const char *)
   //                     vnl_matlab_print(ostream &, const vnl_matrix<double> &, const char *)
-  cerr << "[" << endl << p << "]" << endl;
+  vcl_cerr << "[" << vcl_endl << p << "]" << vcl_endl;
   abort();
 #else
   // why the cast? is it a const_cast?
-  vnl_matlab_print(cerr, p, (char const*)"M", vnl_matlab_print_format_default);
+  vnl_matlab_print(vcl_cerr, p, (char const*)"M", vnl_matlab_print_format_default);
 #endif
 }
 
