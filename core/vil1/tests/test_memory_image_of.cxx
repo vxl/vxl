@@ -14,7 +14,7 @@ void save_writable(vil_image const &m, char const *file)
   vcl_unlink(file);
   // save.
   vil_save(m, file);
-  // Make readable/writeable by all. Else the vil_save() will fail 
+  // Make readable/writable by all. Else the vil_save() will fail 
   // if the program is run later by another user on the same machine.
   vcl_chmod(file, 0666);
 }

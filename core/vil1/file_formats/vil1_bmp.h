@@ -180,14 +180,14 @@ public:
 
   // stuff 
 private:
-  // members used by BMPImage
+  // members used by vil_bmp
    long  offset;
    xBITMAPINFOHEADER header;
    xBITMAPFILEHEADER fbmp;
    int pixsize;
    int** local_color_map_;
 
-  // funcions to emulate base class image
+  // functions to emulate base class image
   
   int get_size_x() const {return width();}
   int get_size_y() const {return height();}

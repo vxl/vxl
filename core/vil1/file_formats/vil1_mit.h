@@ -10,7 +10,7 @@
 // .HEADER vil
 // .INCLUDE vil/vil_mit.h
 // .SECTION Description
-//   The MITImage is a simple image format consisting of a header
+//   vil_mit is a simple image format consisting of a header
 //   of 4 shorts (type,bits_per_pixel,width,height) and the raw data.
 //   The full specification defines a number of image/edge types (see header
 //   for details). Currently only 8-bit images can be read.
