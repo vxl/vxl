@@ -379,6 +379,22 @@ CONFIGURE_FILE(
 )
 
 
+
+# The gcc 3.3 compiler produces lots of warnings like
+#   ./v3p/dcmtk/ofstd/include/ofcond.h:350: warning: cast
+#     from `const OFConditionBase*' to `OFConditionBase*' discards qualifiers from 
+#     pointer target type
+# and
+#   ./v3p/dcmtk/dcmdata/libsrc/dcuid.cxx:773: warning: unused
+#     variable `bool found'
+# There is no point in us fixing them locally. IMS
+
+IF(CMAKE_COMPILER_IS_GNUCXX)
+  SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-cast-qual -Wno-unused-variable")
+  SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-cast-qual -Wno-unused-variable")
+ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+
+
 # ---------------------------------------------------------------------------
 # Source files
 
