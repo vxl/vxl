@@ -24,5 +24,5 @@ int main(int argc, char ** argv)
   vgui_composite_tableau_new comp(image, blend);
 
   vgui_viewer2D_tableau_new viewer(comp);
-  return vgui::run(comp, 512, 512, __FILE__);
+  return vgui::run(viewer, 512, 512, __FILE__);
 }
