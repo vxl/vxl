@@ -263,6 +263,15 @@ SOURCE=.\vnl_symmetric_eigensystem.cxx
 # Begin Source File
 SOURCE=.\Templates/vnl_svd_economy+double-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_svd_economy+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_svd_economy+vcl_complex+double--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_svd_economy+vcl_complex+float--.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
