@@ -14,6 +14,7 @@
 
 #include <vul/vul_printf.h>
 
+#include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_3.h>

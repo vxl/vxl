@@ -8,6 +8,7 @@
 #include "HomgMetric.h"
 
 #include <vcl_iostream.h>
+#include <vnl/vnl_math.h>
 #include <vnl/vnl_identity_3x3.h>
 #include <vnl/vnl_double_2.h>
 

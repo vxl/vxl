@@ -9,6 +9,7 @@
 
 #include <vcl_iostream.h>
 #include <vnl/vnl_double_2.h>
+#include <vnl/vnl_math.h>
 #include <mvl/HomgPoint2D.h>
 #include <mvl/HomgLineSeg2D.h>
 #include <mvl/HomgOperator2D.h>
