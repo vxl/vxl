@@ -505,7 +505,7 @@ void vsrl_dynamic_program::print_costs(int i)
   // print all the costs for token i on list1
 
   vcl_cout << "Printing the costs for token " << i << " in the range " << _lower_search_range[i]
-       << " to " << _upper_search_range[i] << vcl_endl;
+           << " to " << _upper_search_range[i] << vcl_endl;
 
   int j;
   for(j=_lower_search_range[i];j<_upper_search_range[i];j++){

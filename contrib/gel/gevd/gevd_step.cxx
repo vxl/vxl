@@ -119,13 +119,13 @@ gevd_step::gevd_step(float smooth_sigma,	// width of filter dG
 {
   if (smoothSigma < 0.5)	// no guarrantee for 2-pixel separation
     vcl_cerr << "gevd_step::gevd_step -- too small smooth_sigma: " 
-	 << smoothSigma << vcl_endl;
+	     << smoothSigma << vcl_endl;
   if (smoothSigma > 3)		// smooth out too much the junctions
     vcl_cerr << "gevd_step::gevd_step -- too large smooth_sigma: " 
-	 << smoothSigma << vcl_endl;
+	     << smoothSigma << vcl_endl;
   if (noiseSigma < -1) {
     vcl_cerr << "gevd_step::gevd_step -- noiseSigma out of range -[0 1]: " 
-	 << noiseSigma << ". Reset to -1." << vcl_endl;
+	     << noiseSigma << ". Reset to -1." << vcl_endl;
     noiseSigma = -1;    
   }
 }
@@ -157,7 +157,7 @@ gevd_step::DetectEdgels(const gevd_bufferxy& image,
 		   gevd_bufferxy*& grad_mag, gevd_bufferxy*& angle)
 {
   vcl_cout << "*** Detect step profiles with first-derivative of Gaussian"
-       << vcl_endl;
+           << vcl_endl;
   if (image.GetBitsPixel() != bits_per_float) {
     vcl_cerr << "gevd_step::DetectEdgels requires float image" << vcl_endl;
     return false;
