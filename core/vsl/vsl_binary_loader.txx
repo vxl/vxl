@@ -67,7 +67,7 @@ void vsl_binary_loader<BaseClass>::load_object( vsl_b_istream& is, BaseClass*& b
   }
   else
   {
-    vcl_cerr << "\n I/O ERROR: vsl_binary_loader<BaseClass>::load_object: ";
+    vcl_cerr << "\n I/O ERROR: " << is_a() << "::load_object: ";
     vcl_cerr << "class name <" << name << "> not in list of loaders"<<vcl_endl;
     vcl_cerr << object_.size()<<" valid loaders: "<<vcl_endl;
     for (unsigned int j=0; j<object_.size(); ++j)
@@ -120,6 +120,8 @@ vsl_binary_loader<BaseClass>* vsl_binary_loader<BaseClass>::instance_ = 0;
 
 #undef VSL_BINARY_LOADER_INSTANTIATE
 #define VSL_BINARY_LOADER_WITH_SPECIALIZATION_INSTANTIATE(T) \
+VCL_DEFINE_SPECIALIZATION vcl_string vsl_binary_loader<T >::is_a() const \
+{  return vcl_string("vsl_binary_loader<" #T ">"); }\
 template class vsl_binary_loader<T >
 #define VSL_BINARY_LOADER_INSTANTIATE(T) \
 VSL_BINARY_LOADER_WITH_SPECIALIZATION_INSTANTIATE(T); \

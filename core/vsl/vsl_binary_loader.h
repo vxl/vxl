@@ -80,6 +80,8 @@ class vsl_binary_loader : public vsl_binary_loader_base
   //  If is indicates a NULL pointer, b will be set to NULL.
   //  If b not initially NULL, *b will be deleted.
   void load_object( vsl_b_istream& is, BaseClass*& b);
+
+  vcl_string is_a() const;
 };
 
 
