@@ -3,7 +3,10 @@
 SET( rrel_tests_sources
   # empty list
 )
-AUX_SOURCE_DIRECTORY( Templates rrel_tests_sources )
+# This is not needed, and causes an error with bcc 5.5.1 which does
+# not handle the + character in the name of the file in Templates/.
+# Comment out for now.  Will be removed if all goes well.
+# AUX_SOURCE_DIRECTORY( Templates rrel_tests_sources )
 
 ADD_EXECUTABLE( rrel_test_all
   test_driver.cxx
