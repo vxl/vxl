@@ -45,18 +45,23 @@ void vil3d_anisotropic_gaussian_filter(const vil3d_image_view<T>& src,
   unsigned nj = src.nj();
   unsigned nk = src.nk();  
   
-  
   // Create some workspace images
   vil3d_image_view<float> work1(ni, nj, nk);
   vil3d_image_view<float> work2(ni, nj, nk);
   vil3d_image_view<float> work3(ni, nj, nk);
 
-
   // Size of filter (number of "taps")- filter should be ~ 7*sd wide
-  vgl_vector_3d<unsigned> nt(vnl_math_rnd(7.0*sd.x()/vox.x()), 
-                             vnl_math_rnd(7.0*sd.y()/vox.y()), 
-                             vnl_math_rnd(7.0*sd.z()/vox.z()) );
-  
+  unsigned ntx = vnl_math_rnd(7.0*sd.x()/vox.x());
+  unsigned nty = vnl_math_rnd(7.0*sd.y()/vox.y());
+  unsigned ntz = vnl_math_rnd(7.0*sd.z()/vox.z());
+
+  // Temporary fix - force filters to have odd number of taps.
+  // Not sure why, but even-numbered filters cause strange errors.
+  if (ntx%2==0) ntx++;
+  if (nty%2==0) nty++;
+  if (ntz%2==0) ntz++;
+
+  vgl_vector_3d<unsigned> nt(ntx, nty, ntz);  
   
   // Centre (absolute) tap of filter (or just past centre if even length)
   vgl_vector_3d<unsigned> c(nt/2);
@@ -97,38 +102,50 @@ void vil3d_anisotropic_gaussian_filter(const vil3d_image_view<T>& src,
   
   // Convert the results to destination type
   vil3d_convert_round(work3, dest);
-  
+
   
   ////////////////////////////////////////////////////////////////////////
   //
   // Testing
   //
-  vcl_cout << "Source image: \n";
-  vil3d_print_all(vcl_cout, src);
 
-  vcl_cout << "\n\nWork1 image: \n";
-  vil3d_print_all(vcl_cout, work1);
-  double sum1 = 0;
-  vil3d_math_sum(sum1, work1, 0);
-  vcl_cout << "\nSum1= " << sum1 << vcl_endl;
+//  vcl_cout << "Source image: \n";
+//  vil3d_print_all(vcl_cout, src);
+//
+//  vcl_cout << "\n\nWork1 image: \n";
+//  vil3d_print_all(vcl_cout, work1);
+//  double sum1 = 0;
+//  vil3d_math_sum(sum1, work1, 0);
+//  vcl_cout << "\nSum1= " << sum1 << vcl_endl;
+//
+//  vcl_cout << "\n\nWork2 image: \n";
+//  vil3d_print_all(vcl_cout, work2);
+//  double sum2 = 0;
+//  vil3d_math_sum(sum2, work2, 0);
+//  vcl_cout << "\nSum2= " << sum2 << vcl_endl;
+//   
+//  vcl_cout << "\n\nWork3 image: \n";
+//  vil3d_print_all(vcl_cout, work3);
+//  double sum3 = 0;
+//  vil3d_math_sum(sum3, work3, 0);
+//  vcl_cout << "\nSum3= " << sum3 << vcl_endl;
+//
+//  vcl_cout << "\n\nDest image: \n";
+//  vil3d_print_all(vcl_cout, dest);
+//  double sumd = 0;
+//  vil3d_math_sum(sumd, dest, 0);
+//  vcl_cout << "\nSumd= " << sumd << vcl_endl;
+//
+//  // Is nt even?
+//  if (nt.x()%2==0 || nt.y()%2==0 || nt.z()%2==0)
+//  {
+//    vcl_cout << "------------------------------------------------------\n"
+//             << "Warning: filter size is even: this may cause problems.\n" 
+//             << nt.x() << "\t" << nt.y()<< "\t"  << nt.z() << "\n"
+//             << "------------------------------------------------------\n"
+//             << vcl_endl;
+//  }  
 
-  vcl_cout << "\n\nWork2 image: \n";
-  vil3d_print_all(vcl_cout, work2);
-  double sum2 = 0;
-  vil3d_math_sum(sum2, work2, 0);
-  vcl_cout << "\nSum2= " << sum2 << vcl_endl;
-   
-  vcl_cout << "\n\nWork3 image: \n";
-  vil3d_print_all(vcl_cout, work3);
-  double sum3 = 0;
-  vil3d_math_sum(sum3, work3, 0);
-  vcl_cout << "\nSum3= " << sum3 << vcl_endl;
-
-  vcl_cout << "\n\nDest image: \n";
-  vil3d_print_all(vcl_cout, dest);
-  double sumd = 0;
-  vil3d_math_sum(sumd, dest, 0);
-  vcl_cout << "\nSumd= " << sumd << vcl_endl;
   //
   //////////////////////////////////////////////////////////////////////////  
   
