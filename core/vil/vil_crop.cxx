@@ -21,12 +21,13 @@ vil2_image_resource_sptr vil2_crop(const vil2_image_resource_sptr &src, unsigned
 vil2_crop_image_resource::vil2_crop_image_resource(vil2_image_resource_sptr const& gi,
                                            unsigned i0, unsigned ni,
                                            unsigned j0, unsigned nj):
-  gi_(gi),
+  src_(gi),
   i0_(i0),
   ni_(ni),
   j0_(j0),
   nj_(nj)
 {
+  assert (i0+ni <= src_->ni() && j0 + nj <= src_->nj());
 }
 
 

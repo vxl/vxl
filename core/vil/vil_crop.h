@@ -22,35 +22,35 @@ class vil2_crop_image_resource : public vil2_image_resource
   vil2_crop_image_resource(vil2_image_resource_sptr const&, unsigned i0, unsigned ni,
                        unsigned j0, unsigned nj);
 
-  virtual unsigned nplanes() const { return gi_->nplanes(); }
+  virtual unsigned nplanes() const { return src_->nplanes(); }
   virtual unsigned ni() const { return ni_; }
   virtual unsigned nj() const { return nj_; }
 
-  virtual enum vil2_pixel_format pixel_format() const { return gi_->pixel_format(); }
+  virtual enum vil2_pixel_format pixel_format() const { return src_->pixel_format(); }
 
 
   virtual vil2_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni, 
                                                   unsigned j0, unsigned nj) const {
     if (i0 + ni > ni_ || j0 + nj > nj_) return 0;
-    return gi_->get_copy_view(i0+i0_, ni, j0+j0_, nj);
+    return src_->get_copy_view(i0+i0_, ni, j0+j0_, nj);
   }
 
   virtual vil2_image_view_base_sptr get_view(unsigned i0, unsigned ni,
                                              unsigned j0, unsigned nj) const {
     if (i0 + ni > ni_ || j0 + nj > nj_) return 0;
-    return gi_->get_view(j0+j0_, ni, j0+j0_, nj);
+    return src_->get_view(j0+j0_, ni, j0+j0_, nj);
   }
 
 
   //: Put the data in this view back into the image source.
   virtual bool put_view(const vil2_image_view_base& im, unsigned i0,
                         unsigned j0) {
-    return gi_->put_view(im, i0+i0_, j0+j0_);
+    return src_->put_view(im, i0+i0_, j0+j0_);
   }
 
   //: Extra property information
   virtual bool get_property(char const* tag, void* property_value = 0) const {
-    return gi_->get_property(tag, property_value);
+    return src_->get_property(tag, property_value);
   }
 
   //: Return the name of the class;
@@ -60,7 +60,7 @@ class vil2_crop_image_resource : public vil2_image_resource
   virtual bool is_class(vcl_string const&) const;
 
  protected:
-  vil2_image_resource_sptr gi_;
+  vil2_image_resource_sptr src_;
   int i0_;
   int ni_;
   int j0_;
