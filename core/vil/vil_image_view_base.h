@@ -11,6 +11,7 @@
 
 #include <vcl_iosfwd.h>
 #include <vcl_string.h>
+#include <vil2/vil2_pixel_format.h>
 
 //: An abstract base class of smart pointers to actual image data in memory.
 // If you want an actual image, try instantiating vil_image_view<T>.
