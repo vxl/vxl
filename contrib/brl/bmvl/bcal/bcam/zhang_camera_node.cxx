@@ -38,7 +38,7 @@ void zhang_camera_node::set_beat(vcl_vector<double> const& new_beat)
   point_lists_ptr_ = new vcl_vector< vgl_homg_point_2d<double> > [num_views_];
 }
 
-int zhang_camera_node::readData(char *fname, int iView)
+int zhang_camera_node::readData(const char *fname, int iView)
 {
   vcl_ifstream  in(fname);
 

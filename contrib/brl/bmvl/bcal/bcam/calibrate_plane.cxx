@@ -19,7 +19,7 @@ calibrate_plane::~calibrate_plane()
 }
 
 
-int calibrate_plane::readData(char *fname)
+int calibrate_plane::readData(const char *fname)
 {
   vcl_ifstream  in(fname);
 

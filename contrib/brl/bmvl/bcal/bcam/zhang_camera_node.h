@@ -36,7 +36,7 @@ class zhang_camera_node : public camera_node
     return point_lists_ptr_[iview];
   }
 
-  int readData(char* fname, int iview);  // for debugging
+  int readData(const char* fname, int iview);  // for debugging
 
   virtual void set_beat(vcl_vector<double> const& new_beats);
 };
