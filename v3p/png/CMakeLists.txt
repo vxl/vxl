@@ -26,4 +26,13 @@ IF (WIN32)
   ENDIF (NOT CYGWIN)
 ENDIF(WIN32)
 
+IF (CYGWIN)
+  # in Cygwin a define is needed by any file including vxl/v3p/png/png.h
+  IF(BUILD_SHARED_LIBS)
+    ADD_DEFINITIONS(-DPNG_BUILD_DLL)
+  ELSE(BUILD_SHARED_LIBS)
+    ADD_DEFINITIONS(-DPNG_STATIC)
+  ENDIF(BUILD_SHARED_LIBS)
+ENDIF (CYGWIN)
+
 INCLUDE( ${allvxl_SOURCE_DIR}/config.cmake/Modules/FindZLIB.cmake )

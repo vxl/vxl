@@ -8,5 +8,14 @@ IF (LIBRARY_OUTPUT_PATH MATCHES '^$')
   LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/v3p/png )
 ENDIF (LIBRARY_OUTPUT_PATH MATCHES '^$')
 
+IF (CYGWIN)
+  # in Cygwin a define is needed by any file including vxl/v3p/png/png.h
+  IF(BUILD_SHARED_LIBS)
+    ADD_DEFINITIONS(-DPNG_BUILD_DLL)
+  ELSE(BUILD_SHARED_LIBS)
+    ADD_DEFINITIONS(-DPNG_STATIC)
+  ENDIF(BUILD_SHARED_LIBS)
+ENDIF (CYGWIN)
+
 # Immediate dependencies
 INCLUDE( ${allvxl_SOURCE_DIR}/config.cmake/Modules/FindZLIB.cmake )
