@@ -75,6 +75,8 @@ class bgui_vtol2D_tableau : public vgui_easy2D_tableau
 
   void add_spatial_objects(vcl_vector<vsol_spatial_object_2d_sptr> const& sos);
 
+  void add_topology_objects(vcl_vector<vtol_topology_object_sptr> const& tos);
+
   void add_edges(vcl_vector<vtol_edge_2d_sptr> const & edges,
                  bool verts=false);
 

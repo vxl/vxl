@@ -60,7 +60,7 @@ void bgui_vtol2D_tableau::init()
   bgui_style_sptr digital_curve_style =
     new bgui_style(0.8f, 0.0f, 0.8f, 3.0f, 0.0f);
   bgui_style_sptr vertex_style = new bgui_style(1.0f, 0.0f, 0.0f, 3.0f, 0.0f);
-  bgui_style_sptr edge_style = new bgui_style(0.8f, 0.25f, 0.8f, 0.0f, 3.0f);
+  bgui_style_sptr edge_style = new bgui_style(0.0f, 1.0f, 0.0f, 0.0f, 3.0f);
   bgui_style_sptr edge_group_style = new bgui_style(0.0f, 1.0f, 0.0f, 0.0f, 3.0f);
   bgui_style_sptr face_style = new bgui_style(0.0f, 1.0f, 0.0f, 0.0f, 3.0f);
   //put them into the map
@@ -234,6 +234,40 @@ add_spatial_objects(vcl_vector<vsol_spatial_object_2d_sptr> const& sos)
             vdgl_digital_curve_sptr dc =
               (*sit)->cast_to_curve()->cast_to_digital_curve();
             this->add_digital_curve(dc);
+          }
+    }
+}
+//--------------------------------------------------------------
+// Add a list of generic topology objects
+//
+void bgui_vtol2D_tableau::
+add_topology_objects(vcl_vector<vtol_topology_object_sptr> const& tos)
+{
+  for (vcl_vector<vtol_topology_object_sptr>::const_iterator tot = tos.begin();
+       tot != tos.end(); tot++)
+    {
+      if ((*tot)->cast_to_vertex())
+        if((*tot)->cast_to_vertex()->cast_to_vertex_2d())
+          {
+            vtol_vertex_2d_sptr v = 
+              (*tot)->cast_to_vertex()->cast_to_vertex_2d();
+            this->add_vertex(v);
+            continue;
+          }
+      if ((*tot)->cast_to_edge())
+        if((*tot)->cast_to_edge()->cast_to_edge_2d())
+          {
+            vtol_edge_2d_sptr e = 
+              (*tot)->cast_to_edge()->cast_to_edge_2d();
+            this->add_edge(e);
+            continue;
+          }
+      if ((*tot)->cast_to_face())
+        if((*tot)->cast_to_face()->cast_to_face_2d())
+          {
+            vtol_face_2d_sptr f = 
+              (*tot)->cast_to_face()->cast_to_face_2d();
+            this->add_face(f);
           }
     }
 }
