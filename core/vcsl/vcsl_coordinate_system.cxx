@@ -16,7 +16,7 @@
 //---------------------------------------------------------------------------
 // Number of axes
 //---------------------------------------------------------------------------
-int vcsl_coordinate_system::dimensionnality(void) const
+int vcsl_coordinate_system::dimensionality(void) const
 {
   return axes_.size();
 }
@@ -55,8 +55,8 @@ const vcsl_spatial *vcsl_coordinate_system::cast_to_spatial(void) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// Convert `v', exprimed with cs units, to standard units
-// REQUIRE: v.size()==dimensionnality()
+// Convert `v', expressed with cs units, to standard units
+// REQUIRE: v.size()==dimensionality()
 //---------------------------------------------------------------------------
 vnl_vector<double>
 vcsl_coordinate_system::from_cs_to_standard_units(const vnl_vector<double> &v) const
@@ -72,8 +72,8 @@ vcsl_coordinate_system::from_cs_to_standard_units(const vnl_vector<double> &v) c
 }
 
 //---------------------------------------------------------------------------
-// Convert `v', exprimed with standard units, to cs units
-// REQUIRE: v.size()==dimensionnality()
+// Convert `v', expressed with standard units, to cs units
+// REQUIRE: v.size()==dimensionality()
 //---------------------------------------------------------------------------
 vnl_vector<double>
 vcsl_coordinate_system::from_standard_units_to_cs(const vnl_vector<double> &v) const

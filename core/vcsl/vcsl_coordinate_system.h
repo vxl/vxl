@@ -48,7 +48,7 @@ class vcsl_coordinate_system
   //***************************************************************************
 
   //: Number of axes
-  virtual int dimensionnality(void) const;
+  virtual int dimensionality(void) const;
 
 
   //: Is `i' an index on an axis ?
@@ -68,13 +68,13 @@ class vcsl_coordinate_system
   // Conversion
   //***************************************************************************
 
-  //: Convert `v', exprimed with cs units, to standard units
-  //  REQUIRE: v.size()==dimensionnality()
+  //: Convert `v', expressed with cs units, to standard units
+  //  REQUIRE: v.size()==dimensionality()
   vnl_vector<double>
   from_cs_to_standard_units(const vnl_vector<double> &v) const;
 
-  //: Convert `v', exprimed with standard units, to cs units
-  //  REQUIRE: v.size()==dimensionnality()
+  //: Convert `v', expressed with standard units, to cs units
+  //  REQUIRE: v.size()==dimensionality()
   vnl_vector<double>
   from_standard_units_to_cs(const vnl_vector<double> &v) const;
 
