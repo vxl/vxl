@@ -152,7 +152,7 @@ vidl_mpegcodec_helper::demux (uint8_t * buf, uint8_t * endb, int flags)
     //     of data before the next header.
     //
     // NEEDBYTES makes sure we have the requested number of bytes for a
-    // header. If we dont, it copies what we have into head_buf and returns,
+    // header. If we don't, it copies what we have into head_buf and returns,
     // so that when we come back with more data we finish decoding this header.
     //
     // DONEBYTES updates "buf" to point after the header we just parsed.
