@@ -102,7 +102,7 @@ LIB32=link.exe -lib
 SOURCE=.\Templates/mil_image_data+int-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/mil_image_pyramid+mil_image_2d_of+vil1_byte--.cxx
+SOURCE=.\Templates/mil_image_pyramid+mil_image_2d_of+byte--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_io_smart_ptr+mil_image_data+int--.cxx
@@ -126,19 +126,19 @@ SOURCE=.\Templates/mil_gaussian_pyramid_builder_2d+float-.cxx
 SOURCE=.\Templates/mil_gaussian_pyramid_builder_2d_general+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/mil_gaussian_pyramid_builder_2d_general+vil1_byte-.cxx
+SOURCE=.\Templates/mil_gaussian_pyramid_builder_2d_general+byte-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/mil_image_2d_of+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/mil_image_2d_of+vil1_byte-.cxx
+SOURCE=.\Templates/mil_image_2d_of+byte-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/mil_image_data+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/mil_image_data+vil1_byte-.cxx
+SOURCE=.\Templates/mil_image_data+byte-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/mil_sample_profile_2d+float.double-.cxx
@@ -150,13 +150,13 @@ SOURCE=.\Templates/mil_sample_profile_2d+uchar.double-.cxx
 SOURCE=.\Templates/vbl_io_smart_ptr+mil_image_data+float--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_io_smart_ptr+mil_image_data+vil1_byte--.cxx
+SOURCE=.\Templates/vbl_io_smart_ptr+mil_image_data+byte--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+mil_image_data+float--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+mil_image_data+vil1_byte--.cxx
+SOURCE=.\Templates/vbl_smart_ptr+mil_image_data+byte--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vcl_vector+mil_image_io~-.cxx
@@ -240,13 +240,13 @@ SOURCE=.\Templates/vbl_smart_ptr+mil_image_data+double--.cxx
 SOURCE=.\Templates/vbl_smart_ptr+mil_image_data+long--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vsl_vector_io+mil_image_2d_of+vil1_byte--.cxx
+SOURCE=.\Templates/vsl_vector_io+mil_image_2d_of+byte--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/mil_scale_pyramid_builder_2d+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/mil_scale_pyramid_builder_2d+vil1_byte-.cxx
+SOURCE=.\Templates/mil_scale_pyramid_builder_2d+byte-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/mil_sample_grid_2d+float.double-.cxx
@@ -261,7 +261,7 @@ SOURCE=.\Templates/vbl_io_array_2d+mil_transform_2d-.cxx
 SOURCE=.\Templates/mil_gaussian_pyramid_builder_2d+int-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/mil_gaussian_pyramid_builder_2d+vil1_byte-.cxx
+SOURCE=.\Templates/mil_gaussian_pyramid_builder_2d+byte-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/mil_gaussian_pyramid_builder_2d_general+int-.cxx
