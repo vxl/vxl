@@ -34,6 +34,7 @@
 #include <rgrl/rgrl_feature_landmark.h>
 #include <rgrl/rgrl_feature_point.h>
 #include <rgrl/rgrl_feature_point_region.h>
+#include <rgrl/rgrl_feature_reader.h>
 #include <rgrl/rgrl_feature_region.h>
 #include <rgrl/rgrl_feature_set.h>
 #include <rgrl/rgrl_feature_set_location.h>
