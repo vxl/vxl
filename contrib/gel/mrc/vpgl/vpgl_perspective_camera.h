@@ -62,23 +62,25 @@ class vpgl_perspective_camera : public vpgl_basic_camera
   void update_intrinsic();
   void update();
   void set_lcs(const vcsl_spatial_sptr & new_lcs);
-vcsl_spatial_sptr  get_lcs();
-void set_acs(const vcsl_spatial_sptr &new_acs);
-vcsl_spatial_sptr  get_acs();
+  vcsl_spatial_sptr  get_lcs();
+  void set_acs(const vcsl_spatial_sptr &new_acs);
+  vcsl_spatial_sptr  get_acs();
+
+  virtual void get_matrix(vnl_matrix<double>& m) const { mat_cam_->get_matrix(m); }
 
  private:
   // Data Members--------------------------------------------------------------
 
   // Projection matrix from 3d to 2d
-  vpgl_matrix_camera_sptr _mat_cam;
+  vpgl_matrix_camera_sptr mat_cam_;
   // Parameters of projection matrix
-  vcl_vector<double> _mat_params;
+  vcl_vector<double> mat_params_;
 
   void update_matrix_camera();
 
  protected:
-   //Phsical properties which will be converted to projection matrix
-  vcl_vector<double> _params;
+   //Physical properties which will be converted to projection matrix
+  vcl_vector<double> params_;
    //Local coordinate system of the camera
   vcsl_spatial_sptr lcs;
    //Absolute coordinate system.
