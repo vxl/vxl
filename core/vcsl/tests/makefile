@@ -11,6 +11,8 @@ USES := vxl
 
 IULIBS += -lvcsl -lvbl -lvnl
 
+TESTS += vcsl_test_all.cxx
+
 TESTS += test_meter.cxx
 TESTS += test_radian.cxx
 TESTS += test_degree.cxx
