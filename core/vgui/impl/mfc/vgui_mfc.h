@@ -15,6 +15,7 @@
 //   July 2000   Marko Bacic, Oxford RRG   -- Implemented support for MFC
 //   15-AUG-2000 Marko Bacic, Oxford RRG    -- Implemented run_one_event.
 //   29-AUG-2001 K.Y.McGaul - Added destructor to remove Purify mem leak.
+//   23-DEC-2002 J.L. Mundy - Set window on adaptor for convenient access
 // \endverbatim
 
 #include <vcl_vector.h>

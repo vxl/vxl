@@ -170,3 +170,17 @@ void vgui_mfc_window::set_title(const vcl_string &s)
   CWinApp *app = AfxGetApp();
   app->GetMainWnd()->SetWindowText(s.c_str());
 }
+
+//Set the position of the horizontal scrollbar
+int vgui_mfc_window::set_hscrollbar(int pos)
+{
+  CWnd *wnd = AfxGetApp()->GetMainWnd();
+  return wnd->SetScrollPos(SB_HORZ, pos);
+}
+
+//Set the position of the vertical scrollbar
+int vgui_mfc_window::set_vscrollbar(int pos)
+{
+  CWnd *wnd = AfxGetApp()->GetMainWnd();
+  return wnd->SetScrollPos(SB_VERT, pos);
+}
