@@ -174,7 +174,7 @@ void bgui_selector_tableau::remove(vgui_tableau_sptr const& t)
 
 //----------------------------------------------------------------------------
 //: Remove given tableau from list of child tableaux.
-bool bgui_selector_tableau::remove(const vcl_string& name)
+bool bgui_selector_tableau::remove(const vcl_string name)
 {
   vcl_map<vcl_string, vgui_parent_child_link>::iterator itr = child_map_.find(name);
   if (itr != child_map_.end())

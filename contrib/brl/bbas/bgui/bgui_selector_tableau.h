@@ -63,7 +63,7 @@ class bgui_selector_tableau : public vgui_tableau
   void remove(vgui_tableau_sptr const& tab);
 
   //: Remove a tableau from the list of child tableaux by name.
-  bool remove(const vcl_string& name);
+  bool remove(const vcl_string name);
 
   //: Clear the list of child tableaux.
   void clear();
