@@ -554,15 +554,15 @@ test_file_format_read_main( int argc, char* argv[] )
                                                             "ff_grey_float_12bit_uncompressed.dcm" ) );
 #endif // HAS_DCMTK
 
-#if 0 // these are broken
+// NITF tests working as of 1mar2004.   Marc Laymon
   vcl_cout << "NITF [NITF v2.0]\n";
   testlib_test_begin( "  8-bit grey" );
   testlib_test_perform(CheckFile(CompareGrey<vxl_uint_8>(), "ff_grey8bit_true_for_nitf.txt", "ff_grey8bit_uncompressed.nitf" ) );
   testlib_test_begin( "  16-bit grey (actually 11-bit)" );
   testlib_test_perform(CheckFile(CompareGrey<vxl_uint_16>(), "ff_grey16bit_true_for_nitf.txt", "ff_grey16bit_uncompressed.nitf"));
   // ONLY 8 BIT AND 16 BIT GREY ARE VALID TESTS FOR NITF NOW.
-#endif // these are broken too
-#if 0
+
+#if 0 // these are broken
   testlib_test_begin( "  8-bit RGB" );
   testlib_test_perform(CheckFile(ComparePlanes<vxl_uint_,38>(), "ff_planar8bit_true.txt", "ff_rgb8bit_uncompressed.nitf" ) );
   testlib_test_begin( "  16-bit RGB" );
