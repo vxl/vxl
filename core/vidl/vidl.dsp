@@ -99,197 +99,133 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
-
 SOURCE=.\vidl_mpegcodec.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vidl_mpegcodec_helper.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vidl_yuv_2_rgb.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+vidl_clip-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+vidl_codec-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+vidl_frame-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+vidl_image_list_codec-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+vidl_movie-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_list+vbl_smart_ptr+vidl_clip--.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_list+vbl_smart_ptr+vidl_codec--.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_vector+vbl_smart_ptr+vidl_frame--.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vidl_avicodec.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vidl_clip.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vidl_frame.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vidl_frame_as_image.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vidl_image_list_codec.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vidl_io.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vidl_movie.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vidl_test.cxx
-
+# End Source File
+# Begin Source File
+SOURCE=.\vidl_file_sequence.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vidl_vob_frame_index.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
 # Begin Source File
-
 SOURCE=.\vidl_avicodec.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vidl_clip.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vidl_frame.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vidl_frame_as_image.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vidl_image_list_codec.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vidl_io.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vidl_movie.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vidl_avicodec_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vidl_clip_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vidl_codec.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vidl_mpegcodec.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vidl_mpegcodec_helper.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vidl_yuv_2_rgb.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vidl_codec_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vidl_frame_as_image_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vidl_frame_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vidl_image_list_codec_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vidl_movie_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vidl_mpegcodec_sptr.h
-
+# End Source File
+# Begin Source File
+SOURCE=.\vidl_file_sequence.h
+# End Source File
+# Begin Source File
+SOURCE=.\vidl_vob_frame_index.h
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
