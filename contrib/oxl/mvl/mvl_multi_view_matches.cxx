@@ -173,7 +173,7 @@ void mvl_multi_view_matches::add_track(vcl_vector<int> const& views, vcl_vector<
       tracks_[merged_track_index] = new_track;
       update_maps(merged_track_index);
 
-      for (vcl_set<unsigned int, vcl_less<unsigned int> >::reverse_iterator track_iterator = friend_tracks.rbegin(); track_iterator != friend_tracks.rend(); ++track_iterator) {
+      for (vcl_set<unsigned int, vcl_less<unsigned int> >::reverse_iterator track_iterator = friend_tracks.rbegin(); !(track_iterator == friend_tracks.rend()); ++track_iterator) {
 	int dead_track_index = (*track_iterator);
 	if (dead_track_index != tracks_.size() - 1) {   // Don't try to shuffle the final track into itself
 	  tracks_[dead_track_index] = tracks_.back();
@@ -185,7 +185,7 @@ void mvl_multi_view_matches::add_track(vcl_vector<int> const& views, vcl_vector<
     else {
       // URK! The tracks pass different corners in the same frame!
       // No choice, but to throw out the new track and all its friend_tracks.
-      for (vcl_set<unsigned int, vcl_less<unsigned int> >::reverse_iterator track_iterator = friend_tracks.rbegin(); track_iterator != friend_tracks.rend(); ++track_iterator) {
+      for (vcl_set<unsigned int, vcl_less<unsigned int> >::reverse_iterator track_iterator = friend_tracks.rbegin(); !(track_iterator == friend_tracks.rend()); ++track_iterator) {
 	int dead_track_index = (*track_iterator);
 	remove_maps(dead_track_index);
 	if (dead_track_index != tracks_.size() - 1) {   // Don't try to shuffle the final track into itself

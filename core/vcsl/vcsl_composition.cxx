@@ -132,7 +132,9 @@ vnl_vector<double> *vcsl_composition::inverse(const vnl_vector<double> &v,
   
   tmp2=&v;
 
-  for(i=transformations_->rbegin();i!=transformations_->rend();++i)
+  // Emulation STL does not provide != for reverse_iterator of 
+  // vcl_vector<>:iterator.
+  for(i=transformations_->rbegin();!(i==transformations_->rend());++i)
     {
       tmp=(*i)->inverse(*tmp2,time);
       if(tmp2!=&v)
