@@ -12,6 +12,7 @@
 #include <vgl/algo/vgl_h_matrix_2d.h>
 #include <vgl/algo/vgl_h_matrix_2d_compute_linear.h>
 #include <vgl/algo/vgl_h_matrix_2d_compute_4point.h>
+
 static void test_identity_transform()
 {
   vcl_cout << "Testing identity transform on point\n";
@@ -20,11 +21,11 @@ static void test_identity_transform()
   vgl_h_matrix_2d<double> Id(M);
   vgl_homg_point_2d<double> p(3,2,1), pp, ppp;
   pp = Id(p);
-  vcl_cout << "Id \n" << Id << "\n";
-  vcl_cout << "p" << p << " , Id(p) = pp " << pp << "\n";
+  vcl_cout << "Id \n" << Id << "\n"
+           << "p" << p << " , Id(p) = pp " << pp << "\n";
   vgl_point_2d<double> xp(p), xpp(pp);
-  double distance = sqrt((xp.x()-xpp.x())*(xp.x()-xpp.x()) +
-                         (xp.y()-xpp.y())*(xp.y()-xpp.y()));
+  double distance = vcl_sqrt((xp.x()-xpp.x())*(xp.x()-xpp.x()) +
+                             (xp.y()-xpp.y())*(xp.y()-xpp.y()));
   TEST_NEAR("identity",distance , 0.0, 1e-06);
 }
 static void test_perspective_transform()
@@ -38,18 +39,18 @@ static void test_perspective_transform()
   vgl_h_matrix_2d<double> Tproj(M);
   pp = Tproj(p);
   ppp = Tproj.preimage(pp);
-  vcl_cout << "Tproj \n" << Tproj << "\n";
-  vcl_cout << "p" << p << " , Tproj(p) = pp " << pp << "\n";
-  vcl_cout << " , Tproj.preimage(pp) = ppp " << ppp << "\n";
+  vcl_cout << "Tproj \n" << Tproj << "\n"
+           << "p" << p << " , Tproj(p) = pp " << pp << "\n"
+           << " , Tproj.preimage(pp) = ppp " << ppp << "\n";
   vgl_point_2d<double> xp(p), xppp(ppp);
-  double distance = sqrt((xp.x()-xppp.x())*(xp.x()-xppp.x()) +
-                         (xp.y()-xppp.y())*(xp.y()-xppp.y()));
+  double distance = vcl_sqrt((xp.x()-xppp.x())*(xp.x()-xppp.x()) +
+                             (xp.y()-xppp.y())*(xp.y()-xppp.y()));
   TEST_NEAR("perspective",distance , 0.0, 1e-06);
 }
 static void test_projective_basis()
 {
-  vcl_cout << "Testing canonical basis for points\n";
-  vcl_cout << "Test points on a unit square\n";
+  vcl_cout << "Testing canonical basis for points\n"
+           << "Test points on a unit square\n";
   vgl_homg_point_2d<double> p0(0.0,0.0,1.0);
   vgl_homg_point_2d<double> p1(1.0,0.0,1.0);
   vgl_homg_point_2d<double> p2(0.0,1.0,1.0);
@@ -59,15 +60,15 @@ static void test_projective_basis()
   basis_points.push_back(p2);   basis_points.push_back(p3);
   vgl_h_matrix_2d<double> Basis;
   Basis.projective_basis(basis_points);
-  vcl_cout <<"Transform to Canonical Frame \n" << Basis << "\n";
-  vcl_cout <<"canonical p0 " << Basis(p0) << "\n";
-  vcl_cout <<"canonical p1 " << Basis(p1) << "\n";
-  vcl_cout <<"canonical p2 " << Basis(p2) << "\n";
-  vcl_cout <<"canonical p3 " << Basis(p3) << "\n";
+  vcl_cout <<"Transform to Canonical Frame \n" << Basis << "\n"
+           <<"canonical p0 " << Basis(p0) << "\n"
+           <<"canonical p1 " << Basis(p1) << "\n"
+           <<"canonical p2 " << Basis(p2) << "\n"
+           <<"canonical p3 " << Basis(p3) << "\n";
   vgl_point_2d<double> pu(Basis(p3));
-  double distance = sqrt((pu.x()-1.0)*(pu.x()-1.0) +
-                         (pu.y()-1.0)*(pu.y()-1.0));
-  TEST_NEAR("identity",distance , 0.0, 1e-06);  
+  double distance = vcl_sqrt((pu.x()-1.0)*(pu.x()-1.0) +
+                             (pu.y()-1.0)*(pu.y()-1.0));
+  TEST_NEAR("identity",distance , 0.0, 1e-06);
   vcl_cout << "Test collinear points\n";
   vgl_homg_point_2d<double> pcl0(0.0,0.0,1.0);
   vgl_homg_point_2d<double> pcl1(1.0,1.0,1.0);
@@ -106,11 +107,11 @@ static void test_compute_linear()
   vgl_homg_point_2d<double> hdiag(M[0][0], M[1][1], M[2][2]);
   vgl_point_2d<double> diag(hdiag);
   vcl_cout << "The normalized upper diagonal "<<diag << "\n";
-  double distance = sqrt((diag.x()-2.0)*(diag.x()-2.0) +
-                         (diag.y()-2.0)*(diag.y()-2.0));
+  double distance = vcl_sqrt((diag.x()-2.0)*(diag.x()-2.0) +
+                             (diag.y()-2.0)*(diag.y()-2.0));
   TEST_NEAR("recover 2x scale matrix",
             distance, 0.0, 1e-06);
-}  
+}
 
 static void test_compute_4point()
 {
@@ -129,7 +130,7 @@ static void test_compute_4point()
   vgl_homg_point_2d<double> p22(0.0, 2.0, 1.0), p23(2.0, 2.0, 1.0);
 
   points2.push_back(p20); points2.push_back(p21); points2.push_back(p22);
-  points2.push_back(p23); 
+  points2.push_back(p23);
 
   vgl_h_matrix_2d_compute_4point hc4p;
   vgl_h_matrix_2d<double> H = hc4p.compute(points1, points2);
@@ -137,10 +138,9 @@ static void test_compute_4point()
   vgl_homg_point_2d<double> hdiag(M[0][0], M[1][1], M[2][2]);
   vgl_point_2d<double> diag(hdiag);
   vcl_cout << "The normalized upper diagonal "<<diag << "\n";
-  double distance = sqrt((diag.x()-2.0)*(diag.x()-2.0) +
-                         (diag.y()-2.0)*(diag.y()-2.0));
-  TEST_NEAR("recover 2x scale matrix",
-            distance, 0.0, 1e-06);
+  double distance = vcl_sqrt((diag.x()-2.0)*(diag.x()-2.0) +
+                             (diag.y()-2.0)*(diag.y()-2.0));
+  TEST_NEAR("recover 2x scale matrix", distance, 0.0, 1e-06);
 }
 
 MAIN( test_h_matrix_2d )
@@ -153,4 +153,3 @@ MAIN( test_h_matrix_2d )
   test_compute_4point();
   SUMMARY();
 }
-
