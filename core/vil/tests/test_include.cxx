@@ -30,6 +30,7 @@
 #include <vil/algo/vil_line_filter.h>
 #include <vil/algo/vil_median.h>
 #include <vil/algo/vil_normalised_correlation_2d.h>
+#include <vil/algo/vil_orientations.h>
 #include <vil/algo/vil_region_finder.h>
 #include <vil/algo/vil_sobel_1x3.h>
 #include <vil/algo/vil_sobel_3x3.h>
