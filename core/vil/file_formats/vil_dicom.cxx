@@ -9,6 +9,7 @@
 
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
+#include <vcl_sstream.h>
 #include <vcl_cstring.h>
 #include <vcl_cstdlib.h>
 #include <vcl_vector.h>
@@ -58,7 +59,7 @@ vil_image_resource_sptr vil_dicom_file_format::make_output_image(vil_stream* /*v
                                                                  unsigned /*ni*/,
                                                                  unsigned /*nj*/,
                                                                  unsigned /*nplanes*/,
-                                                                 vil_pixel_format )
+                                                                 vil_pixel_format)
 {
   vcl_cerr << "ERROR: vil_dicom_file doesn't support output yet\n";
   return 0;
@@ -90,16 +91,16 @@ read_header( DcmObject* dataset, vil_dicom_header_info& i );
 
 static
 void
-read_pixels_into_buffer( DcmPixelData* pixels,
-                         unsigned num_samples,
-                         Uint16 alloc,
-                         Uint16 stored,
-                         Uint16 high,
-                         Uint16 rep,
-                         Float64 slope,
-                         Float64 intercept,
-                         vil_memory_chunk_sptr& out_buf,
-                         vil_pixel_format& out_format );
+read_pixels_into_buffer(DcmPixelData* pixels,
+                        unsigned num_samples,
+                        Uint16 alloc,
+                        Uint16 stored,
+                        Uint16 high,
+                        Uint16 rep,
+                        Float64 slope,
+                        Float64 intercept,
+                        vil_memory_chunk_sptr& out_buf,
+                        vil_pixel_format& out_format);
 
 
 vil_dicom_image::vil_dicom_image(vil_stream* vs)
@@ -122,9 +123,9 @@ vil_dicom_image::vil_dicom_image(vil_stream* vs)
   DcmDataset& dset = *ffmt.getDataset();
 
   read_header( &dset, header_ );
-  
+
   //correct known manufacturers' drop-offs in header data!
-  correct_manufacturer_discrepancies(); 
+  correct_manufacturer_discrepancies();
 
   // I don't know (yet) how to deal with look up tables. (Without the
   // tables, the pixel values represent actual measurements.)
@@ -143,7 +144,6 @@ vil_dicom_image::vil_dicom_image(vil_stream* vs)
     slope = 1;
   if ( dset.findAndGetFloat64( DCM_RescaleIntercept, intercept ) != EC_Normal )
     intercept = 0;
-
 
   // Gather the storage format info
 
@@ -187,10 +187,10 @@ vil_dicom_image::vil_dicom_image(vil_stream* vs)
       }
     }
     unsigned num_samples = ni() * nj() * nplanes();
-    read_pixels_into_buffer( pixels, num_samples,
-                             bits_alloc, bits_stored, high_bit, pixel_rep,
-                             slope, intercept,
-                             pixel_buf, pixel_format );
+    read_pixels_into_buffer(pixels, num_samples,
+                            bits_alloc, bits_stored, high_bit, pixel_rep,
+                            slope, intercept,
+                            pixel_buf, pixel_format);
   }
 
   // Create an image resource to manage the pixel buffer
@@ -259,7 +259,6 @@ vil_dicom_image::~vil_dicom_image()
 {
 }
 
-
 unsigned vil_dicom_image::nplanes() const
 {
   return header_.pix_samps_;
@@ -275,12 +274,10 @@ unsigned vil_dicom_image::nj() const
   return header_.size_y_;
 }
 
-
 enum vil_pixel_format vil_dicom_image::pixel_format() const
 {
   return pixels_->pixel_format();
 }
-
 
 vil_image_view_base_sptr vil_dicom_image::get_copy_view(
   unsigned x0, unsigned nx, unsigned y0, unsigned ny) const
@@ -288,13 +285,11 @@ vil_image_view_base_sptr vil_dicom_image::get_copy_view(
   return pixels_->get_copy_view( x0, nx, y0, ny );
 }
 
-
 vil_image_view_base_sptr vil_dicom_image::get_view(
   unsigned x0, unsigned nx, unsigned y0, unsigned ny) const
 {
   return pixels_->get_view( x0, nx, y0, ny );
 }
-
 
 bool vil_dicom_image::put_view(const vil_image_view_base& view,
                                unsigned x0, unsigned y0)
@@ -320,18 +315,18 @@ bool vil_dicom_image::put_view(const vil_image_view_base& view,
 //NB if this section starts bloating, use derived classes which override correct_manufacturer_discrepancies
 void vil_dicom_image::correct_manufacturer_discrepancies()
 {
-    if( ( (header_.manufacturer_ == "HOLOGIC") || (header_.manufacturer_ == "Hologic") ) &&
-          (header_.model_name_.find("QDR") != header_.model_name_.npos ) )
+  if ( ( (header_.manufacturer_ == "HOLOGIC") || (header_.manufacturer_ == "Hologic") ) &&
+         (header_.model_name_.find("QDR") != header_.model_name_.npos ) )
+  {
+    //Hologic QDR Bone Densitometry source - set (default) pixel spacing from private format image comments
+    float xPixelSize=1.0;
+    float yPixelSize=1.0;
+    if (interpret_hologic_header(xPixelSize,yPixelSize))
     {
-        //Hologic QDR Bone Densitometry source - set (default) pixel spacing from private format image comments
-      float xPixelSize=1.0;
-      float yPixelSize=1.0;
-      if(interpret_hologic_header(xPixelSize,yPixelSize))
-      {
-        header_.spacing_x_ = xPixelSize;
-           header_.spacing_y_ = yPixelSize;
-       }
+      header_.spacing_x_ = xPixelSize;
+      header_.spacing_y_ = yPixelSize;
     }
+  }
 }
 
 //:try and interpret the Hologic comments section to extract pixel size
@@ -343,61 +338,63 @@ bool vil_dicom_image::interpret_hologic_header(float& xpixSize, float& ypixSize)
   static const vcl_string HOLOGIC_PixelXSizeMM_END = "</PixelXSizeMM>";
   static const vcl_string HOLOGIC_PixelYSizeMM = "<PixelYSizeMM>";
   static const vcl_string HOLOGIC_PixelYSizeMM_END = "</PixelYSizeMM>";
-    
+
   vcl_string src = header_.image_comments_;
   //Find start of x pixel size sub-text
   unsigned ipxStart = src.find(HOLOGIC_PixelXSizeMM);
-  if(ipxStart==src.npos) return false;
-    
+  if (ipxStart==src.npos) return false;
+
   //Find end of x pixel size sub-text
   unsigned ipxEnd = src.find(HOLOGIC_PixelXSizeMM_END,ipxStart);
-  if(ipxEnd==src.npos) return false;
-    
+  if (ipxEnd==src.npos) return false;
+
   //Extract just the numerical part of the text
   vcl_string strPixelXSizeMM="";
   ipxStart+= HOLOGIC_PixelXSizeMM.size();
   strPixelXSizeMM.append(src,ipxStart, ipxEnd-ipxStart);
 
-  if(strPixelXSizeMM.size()>0)
+  if (strPixelXSizeMM.size()>0)
   {
     //Translate string to number
-    vcl_stringstream  translate_is(strPixelXSizeMM,vcl_stringstream::in);
+    vcl_stringstream translate_is(strPixelXSizeMM,vcl_stringstream::in);
     translate_is>>xpixSize;
-    if(!translate_is) return false;
-    if(xpixSize<=0.0 || xpixSize>=1.0E6) return false; //Don't believe crazy values
+    if (!translate_is) return false;
+    if (xpixSize<=0.0 || xpixSize>=1.0E6)
+      return false; //Don't believe crazy values
   }
   else
   {
     return false; //No x pixel value present between the tags
   }
-    
+
   //Find start of y pixel size sub-text
   unsigned ipyStart = src.find(HOLOGIC_PixelYSizeMM);
-  if(ipyStart==src.npos) return false;
-    
+  if (ipyStart==src.npos) return false;
+
   //Find end of y pixel size sub-text
   unsigned ipyEnd = src.find(HOLOGIC_PixelYSizeMM_END,ipyStart);
-  if(ipyEnd==src.npos) return false;
-    
-  //Extract just the numerical part of the text    
+  if (ipyEnd==src.npos) return false;
+
+  //Extract just the numerical part of the text
   vcl_string strPixelYSizeMM="";
   ipyStart+= HOLOGIC_PixelYSizeMM.size();
   strPixelYSizeMM.append(src,ipyStart, ipyEnd-ipyStart);
 
-  if(strPixelYSizeMM.size()>0)
+  if (strPixelYSizeMM.size()>0)
   {
     //Translate string to number
-    vcl_stringstream  translate_is(strPixelYSizeMM,vcl_stringstream::in);
+    vcl_stringstream translate_is(strPixelYSizeMM,vcl_stringstream::in);
     translate_is>>ypixSize;
-    if(!translate_is) return false;
-    if(ypixSize<=0.0 || ypixSize>=1.0E6) return false; //Don't believe crazy values
+    if (!translate_is) return false;
+    if (ypixSize<=0.0 || ypixSize>=1.0E6)
+      return false; //Don't believe crazy values
   }
   else
   {
     return false; //No y pixel value present between the tags
   }
 
-  return true;    //It all worked 
+  return true;    //It all worked
 }
 
 
@@ -458,13 +455,11 @@ namespace
     }
   };
 
-
   VCL_DEFINE_SPECIALIZATION
   struct try_set< vil_dicom_header_AE >
     : public try_set_to_string
   {
   };
-
 
   VCL_DEFINE_SPECIALIZATION
   struct try_set< vil_dicom_header_AS >
@@ -472,20 +467,17 @@ namespace
   {
   };
 
-
   VCL_DEFINE_SPECIALIZATION
   struct try_set< vil_dicom_header_AT >
     : public try_set_to_string
   {
   };
 
-
   VCL_DEFINE_SPECIALIZATION
   struct try_set< vil_dicom_header_CS >
     : public try_set_to_string
   {
   };
-
 
   VCL_DEFINE_SPECIALIZATION
   struct try_set< vil_dicom_header_DA >
@@ -503,7 +495,6 @@ namespace
       }
     }
   };
-
 
   VCL_DEFINE_SPECIALIZATION
   struct try_set< vil_dicom_header_DS >
@@ -537,7 +528,6 @@ namespace
     }
   };
 
-
   VCL_DEFINE_SPECIALIZATION
   struct try_set< vil_dicom_header_FD >
   {
@@ -564,7 +554,6 @@ namespace
     }
   };
 
-
   VCL_DEFINE_SPECIALIZATION
   struct try_set< vil_dicom_header_IS >
   {
@@ -582,13 +571,11 @@ namespace
     }
   };
 
-
   VCL_DEFINE_SPECIALIZATION
   struct try_set< vil_dicom_header_LO >
     : public try_set_to_string
   {
   };
-
 
   VCL_DEFINE_SPECIALIZATION
   struct try_set< vil_dicom_header_LT >
@@ -596,13 +583,11 @@ namespace
   {
   };
 
-
   VCL_DEFINE_SPECIALIZATION
   struct try_set< vil_dicom_header_OB >
     : public try_set_to_string
   {
   };
-
 
   VCL_DEFINE_SPECIALIZATION
   struct try_set< vil_dicom_header_OW >
@@ -610,20 +595,17 @@ namespace
   {
   };
 
-
   VCL_DEFINE_SPECIALIZATION
   struct try_set< vil_dicom_header_PN >
     : public try_set_to_string
   {
   };
 
-
   VCL_DEFINE_SPECIALIZATION
   struct try_set< vil_dicom_header_SH >
     : public try_set_to_string
   {
   };
-
 
   VCL_DEFINE_SPECIALIZATION
   struct try_set< vil_dicom_header_SL >
@@ -638,13 +620,11 @@ namespace
     }
   };
 
-
   VCL_DEFINE_SPECIALIZATION
   struct try_set< vil_dicom_header_SQ >
     : public try_set_to_string
   {
   };
-
 
   VCL_DEFINE_SPECIALIZATION
   struct try_set< vil_dicom_header_SS >
@@ -659,13 +639,11 @@ namespace
     }
   };
 
-
   VCL_DEFINE_SPECIALIZATION
   struct try_set< vil_dicom_header_ST >
     : public try_set_to_string
   {
   };
-
 
   VCL_DEFINE_SPECIALIZATION
   struct try_set< vil_dicom_header_TM >
@@ -684,13 +662,11 @@ namespace
     }
   };
 
-
   VCL_DEFINE_SPECIALIZATION
   struct try_set< vil_dicom_header_UI >
     : public try_set_to_string
   {
   };
-
 
   VCL_DEFINE_SPECIALIZATION
   struct try_set< vil_dicom_header_UL >
@@ -705,13 +681,11 @@ namespace
     }
   };
 
-
   VCL_DEFINE_SPECIALIZATION
   struct try_set< vil_dicom_header_UN >
     : public try_set_to_string
   {
   };
-
 
   VCL_DEFINE_SPECIALIZATION
   struct try_set< vil_dicom_header_US >
@@ -873,21 +847,20 @@ namespace
                     DiInputPixel*& pixel_data,
                     vil_pixel_format& act_format )
   {
-    if( rep == 0 && stored <= 8 ) {
+    if ( rep == 0 && stored <= 8 ) {
       act_format = VIL_PIXEL_FORMAT_BYTE;
       pixel_data = new DiInputPixelTemplate<InT,Uint8>( pixels, alloc, stored, high, 0, num_samples );
-    } else if( rep == 0 && stored <= 16 ) {
+    } else if ( rep == 0 && stored <= 16 ) {
       act_format = VIL_PIXEL_FORMAT_UINT_16;
       pixel_data = new DiInputPixelTemplate<InT,Uint16>( pixels, alloc, stored, high, 0, num_samples );
-    } else if( rep == 1 && stored <= 8 ) {
+    } else if ( rep == 1 && stored <= 8 ) {
       act_format = VIL_PIXEL_FORMAT_SBYTE;
       pixel_data = new DiInputPixelTemplate<InT,Sint8>( pixels, alloc, stored, high, 0, num_samples );
-    } else if( rep == 1 && stored <= 16 ) {
+    } else if ( rep == 1 && stored <= 16 ) {
       act_format = VIL_PIXEL_FORMAT_INT_16;
       pixel_data = new DiInputPixelTemplate<InT,Sint16>( pixels, alloc, stored, high, 0, num_samples );
     }
   }
-
 
   template<class IntType, class OutType>
   void
@@ -904,20 +877,18 @@ namespace
 } // anonymous namespace
 
 
-
-
 static
 void
-read_pixels_into_buffer( DcmPixelData* pixels,
-                         unsigned num_samples,
-                         Uint16 alloc,
-                         Uint16 stored,
-                         Uint16 high,
-                         Uint16 rep,
-                         Float64 slope,
-                         Float64 intercept,
-                         vil_memory_chunk_sptr& out_buf,
-                         vil_pixel_format& out_format )
+read_pixels_into_buffer(DcmPixelData* pixels,
+                        unsigned num_samples,
+                        Uint16 alloc,
+                        Uint16 stored,
+                        Uint16 high,
+                        Uint16 rep,
+                        Float64 slope,
+                        Float64 intercept,
+                        vil_memory_chunk_sptr& out_buf,
+                        vil_pixel_format& out_format)
 {
   // This will be the "true" pixel buffer type after the overlay
   // planes are removed and the pixel bits shifted to the lowest bits
@@ -930,14 +901,14 @@ read_pixels_into_buffer( DcmPixelData* pixels,
   // Make sure pixel_data is deleted before this function exits!
   //
   DiInputPixel* pixel_data = 0;
-  if( pixels->getVR() == EVR_OW ) {
+  if ( pixels->getVR() == EVR_OW ) {
     convert_src_type( (Uint16*)0, pixels, num_samples, alloc, stored, high, rep, pixel_data, act_format );
   } else {
     convert_src_type( (Uint8*)0, pixels, num_samples, alloc, stored, high, rep, pixel_data, act_format );
   }
 
   // On error, return without doing anything
-  if( pixel_data == 0 ) {
+  if ( pixel_data == 0 ) {
     return;
   }
 

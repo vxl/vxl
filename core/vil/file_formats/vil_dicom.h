@@ -44,8 +44,8 @@ class vil_dicom_image : public vil_image_resource
 
  public:
   vil_dicom_image(vil_stream* is, unsigned ni,
-                   unsigned nj, unsigned nplanes,
-                   vil_pixel_format format);
+                  unsigned nj, unsigned nplanes,
+                  vil_pixel_format format);
   vil_dicom_image(vil_stream* is);
   ~vil_dicom_image();
 
@@ -73,10 +73,9 @@ class vil_dicom_image : public vil_image_resource
   //For example Hologic encode pixel-size in the imageComment!
   //NB if this section starts bloating, use derived classes which override correct_manufacturer_discrepancies
   virtual void correct_manufacturer_discrepancies();
-  
+
   //:try and interpret the hologic comments section to extract pixel size
   virtual bool interpret_hologic_header(float& xpixSize, float& ypixSize);
-
 };
 
 #endif // vil_dicom_file_format_h_
