@@ -277,7 +277,7 @@ void bmvv_multiview_manager::regions()
   else
     dp.aggressive_junction_closure=0;
   bool debug = false;
-  sdet_region_proc_params rpp(dp, debug, true);
+  sdet_region_proc_params rpp(dp);
   sdet_region_proc rp(rpp);
   rp.set_image(img_);
   rp.extract_regions();
