@@ -235,7 +235,14 @@ inline void vil2_algo_convolve_1d(const vil2_image_view<srcT>& src_im,
   }
 }
 
-
+template <class destT, class kernelT, class accumT>
+inline vil2_image_resource_sptr vil2_algo_convolve_1d<kernelT, accumT, destT>(
+  const vil2_image_resource_sptr& src_im,
+  const destT dt,
+  const kernelT* kernel, int k_lo, int k_hi,
+  const accumT ac,
+  vil2_convolve_boundary_option start_option,
+  vil2_convolve_boundary_option end_option);
 
 //: A resource adaptor that behaves like a algo_convolve_1d'ed version of its input
 template <class kernelT, class accumT, class destT>
