@@ -173,6 +173,6 @@ ADD_LIBRARY( Qv ${Qv_sources} )
 TARGET_LINK_LIBRARIES( Qv vcl )
 
 IF(BUILD_TESTING)
-  ADD_EXECUTABLE(test-compute-vrml-centroid test-compute-vrml-centroid.cxx)
-  TARGET_LINK_LIBRARIES( test-compute-vrml-centroid Qv )
+  ADD_EXECUTABLE(test_compute_vrml_centroid test-compute-vrml-centroid.cxx)
+  TARGET_LINK_LIBRARIES( test_compute_vrml_centroid Qv )
 ENDIF(BUILD_TESTING)
