@@ -479,6 +479,11 @@ template <class T, class Alloc>
 }
 
 template <class T, class Alloc>
+    inline bool operator!=(const __vector__<T, Alloc>& x, const __vector__<T, Alloc>& y) {
+    return !(x == y);
+}
+
+template <class T, class Alloc>
     inline bool operator<(const __vector__<T, Alloc>& x, const __vector__<T, Alloc>& y) {
     return lexicographical_compare(x.begin_(), x.end_(), y.begin_(), y.end_());
 }
