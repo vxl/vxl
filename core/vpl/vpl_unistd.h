@@ -29,6 +29,7 @@
 
 
 #include <vxl_config.h>        // must be first!!
+#include <unistd.h>
 #include <vcl_compiler.h>
 #include <vcl_cstddef.h> // vcl_size_t
 #include <vcl_cstdlib.h>
