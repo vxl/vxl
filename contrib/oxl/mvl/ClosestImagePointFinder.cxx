@@ -12,9 +12,9 @@
 
 #include "ClosestImagePointFinder.h"
 #include <vcl/vcl_vector.h>
-#include <vcl/vcl_multimap.h>
+#include <vcl/vcl_map.h>
 #include <vcl/vcl_functional.h>
-#include <vcl/vcl_pair.h>
+#include <vcl/vcl_utility.h>
 
 #include <vnl/vnl_math.h>
 #include <mvl/HomgInterestPointSet.h>

@@ -62,6 +62,9 @@
 //-------------------------------------------------------------------------------
 
 #include <vcl/vcl_cassert.h>    
+#if defined(VCL_GCC_295)
+# include <vnl/vnl_vector_fixed.h>
+#endif
 
 class Homg {
 

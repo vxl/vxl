@@ -25,8 +25,6 @@
 #include <vcl/vcl_fstream.h>
 #include <vcl/vcl_string.h>
 
-// #include <vbl/vbl_rgb.h>
-
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_byte.h>
 #include <vil/vil_rgb_byte.h>
@@ -47,6 +45,8 @@ public:
 
   int GetRealFrameIndex(int frame) { return start_ + frame * step_; }
 
+  vil_image GetImage(int frame_index);
+  
   bool HasFrame(int frame_index);
   void GetFrame(int frame_index, vil_rgb_byte * frame);
   void GetFrame(int frame_index, vil_byte* frame);

@@ -26,7 +26,7 @@
 
 #include <vnl/vnl_double_2.h>
 
-class vsl_conic_as_matrix;
+struct vsl_conic_as_matrix;
 
 class vsl_conic_points {
 public:

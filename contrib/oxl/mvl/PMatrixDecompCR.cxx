@@ -51,7 +51,7 @@ void PMatrixDecompCR::compute(const vnl_matrix<double>& p, bool scale_C)
     for(int j = 0; j < 3; ++j)
       PermHtPerm(i,j) = p(2-j,2-i);
     
-  vnl_qr qr(PermHtPerm);
+  vnl_qr<double> qr(PermHtPerm);
     
   vnl_double_3x3 Q = qr.Q();
   vnl_double_3x3 R = qr.R();

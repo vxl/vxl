@@ -8,21 +8,23 @@
 // Created: 13 May 98
 // Modifications:
 
+#include "HMatrix2DEuclideanCompute.h"
+
 #include <vcl/vcl_vector.h>
+
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
-#include <mvl/HMatrix2D.h>
-#include <mvl/HomgPoint2D.h>
-#include <vnl/vnl_matops.h> // use vnl_matlab_print.h for pretty printing
-#include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_2x2.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_transpose.h>
+#include <vnl/algo/vnl_svd.h>
 
-#include "HMatrix2DEuclideanCompute.h"
-#include "HMatrix2DAffineCompute.h"
+#include <mvl/HMatrix2D.h>
+#include <mvl/HomgPoint2D.h>
+#include <mvl/PairMatchSetCorner.h>
+#include <mvl/HMatrix2DAffineCompute.h>
 
 //
 //
@@ -34,7 +36,6 @@ HMatrix2DEuclideanCompute::~HMatrix2DEuclideanCompute() { }
 //
 //
 //
-#include <mvl/PairMatchSetCorner.h>
 HMatrix2D 
 HMatrix2DEuclideanCompute::compute(const PairMatchSetCorner &matches)
 {
@@ -76,7 +77,7 @@ HMatrix2DEuclideanCompute::tmp_fun(const vcl_vector<HomgPoint2D> &pts1,
   sub_rows(p1,mn1);
   sub_rows(p2,mn2);
   
-  vnl_double_2x2 scatter = vnl_transpose(p2)*p1;
+  vnl_double_2x2 scatter = vnl_transpose(p2).operator*(p1);
   vnl_svd<double> svd(scatter);
 
   vnl_double_2x2 R = svd.U() * vnl_transpose(svd.V());

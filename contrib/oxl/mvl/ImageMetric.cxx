@@ -50,7 +50,7 @@
 #include <mvl/HomgLineSeg2D.h>
 #include <mvl/HomgOperator2D.h>
 
-static ostream& warning(char* fn) {
+static ostream& warning(char const * fn) {
   return cerr << fn << " WARNING: ";
 }
 
@@ -88,12 +88,14 @@ HomgPoint2D ImageMetric::image_to_homg(const vnl_double_2& p)
 // -- Condition 2D point (x,y)
 HomgPoint2D ImageMetric::image_to_homg(double x, double y)
 {
+  assert(!"ImageMetric::image_to_homg should be implemented for efficiency");
   return HomgPoint2D(x, y, 1.0);
 }
 
 // -- Convert conditioned point p to image coordinates
 vnl_double_2 ImageMetric::homg_to_image(const HomgPoint2D& p)
 {
+  assert(!"ImageMetric::image_to_homg should be implemented for efficiency");
   double x,y;
   p.get_nonhomogeneous(x, y);
   return vnl_double_2(x, y);

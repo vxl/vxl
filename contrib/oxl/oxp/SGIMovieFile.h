@@ -41,6 +41,7 @@ struct SGIMovieFile : public MovieFileInterface {
   bool HasFrame(int);  
   bool GetFrame(int frame_index, void* buffer);
   bool GetField(int field_index, void* buffer);
+  vil_image GetImage(int);
 
   int GetFrameOffset(int frame_index);
   int GetFrameSize(int frame_index);

@@ -197,9 +197,9 @@ vsl_conic_points::find_angles(vnl_matrix<double> const& b, vnl_matrix<double> co
   if(phi.size()==0)
     {
       // fully inside
-      phi.push_back(atan2(l_infty[1], l_infty[0]));
+      phi.push_back(1);//atan2(l_infty[1], l_infty[0])); gsgs
     }
-  sort(phi.begin(), phi.end());
+  vcl_sort(phi.begin(), phi.end());
 
   for(unsigned n=0;n<phi.size();n++)
     {

@@ -3,19 +3,7 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 
 ###############################################################################
 
-Project: "mvl"=.\mvl\mvl.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "oxl"=.\oxl\oxl.dsp - Package Owner=<4>
+Project: "alloxl"=.\alloxl\alloxl.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -32,6 +20,18 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name vrml
     End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "mvl"=.\mvl\mvl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
 }}}
 
 ###############################################################################

@@ -133,7 +133,7 @@ FMatrix::~FMatrix()
 //---------------------------------------------------------------
 // -- Read from ASCII istream
 bool FMatrix::read_ascii(istream& s) {
-  s >> (vnl_matrix<double>&)_f_matrix; // awf fixme why is this cast needed?
+  s >> _f_matrix;
   if (!(s.good() || s.eof()))
     return false;
   

@@ -37,6 +37,7 @@ struct ImageSequenceMovieFile : public MovieFileInterface {
   int GetBitsPixel();
   bool IsInterlaced();
   bool HasFrame(int);
+  vil_image GetImage(int);
   
   bool GetFrame(int frame_index, void* buffer);
   bool GetField(int field_index, void* buffer);

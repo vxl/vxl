@@ -11,6 +11,7 @@
 #include "POX.h"
 
 #include <vcl/vcl_vector.h>
+#include <vcl/vcl_cassert.h>
 #include <vbl/vbl_qsort.h>
 
 typedef unsigned char byte;

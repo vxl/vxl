@@ -1367,6 +1367,13 @@ FMatrix TriTensor::get_fmatrix_12(const HomgPoint2D& e2, const HomgPoint2D& e3) 
   return vnl_cross_product_matrix(e2.get_vector()) * dot3(e3.get_vector()).transpose();
 }
 
+FMatrix TriTensor::compute_fmatrix_23() const
+{
+  PMatrix P2, P3;
+  compute_P_matrices(&P2, &P3);
+  return FMatrix(P2, P3);
+}
+ 
 // -- Return a manifold-projector for the Fundamental matrix between 1 and 2.
 // The projector is cached until the next time T is changed.
 FManifoldProject* TriTensor::get_fmp12() const

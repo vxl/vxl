@@ -2,21 +2,22 @@
 include ${IUEROOT}/config/usr_params.mk
 ##########################################
 
+# Packages used by this package 
+USES += oxl vxl
+
 ifeq ($(OS),hpux10.20)
 pic = $(PIC)
 endif
 
-#IULIBS += -lMViewBasics -lNumerics
-
-# Packages used by this package 
-USES += oxl vxl
-
 LIBRARY := mvl
 VERSION := 1.0
+
+SUBDIRS = examples
 
 # Utilities 
 # FIXME these ought to go to GeneralUtility later 
 SOURCES += ModifyHandle.cxx
+SOURCES += pair_float_int.cxx
 
 # 1. Homogeneous objects  
 
@@ -84,6 +85,8 @@ SOURCES += TripleMatchSet.cxx
 SOURCES += TripleMatchSetCorner.cxx
 SOURCES += TripleMatchSetLineSeg.cxx
 SOURCES += NViewMatches.cxx
+#SOURCES += wank.cxx
+SOURCES += mvl_multi_view_matches.cxx
 
 # 4. Classes to perform image measurements on homogeneous points.  
 
@@ -118,7 +121,7 @@ SOURCES += HMatrix2DEuclideanCompute.cxx
 SOURCES += PMatrixCompute.cxx
 SOURCES += PMatrixComputeLinear.cxx
 
-IULIBS += -lvgl -lvil -lvnl-algo -lvnl -lvbl -lvcl
+IULIBS += -lvnl-algo -lvnl -lvbl -lvcl
 
 ##########################################
 include ${IUEROOT}/config/usr_rules.mk

@@ -89,7 +89,7 @@ HMatrix1DCompute3Point::compute_cool_homg(const vcl_vector<HomgPoint1D>& points1
 		 
 		 points2[0].get_x() , points2[1].get_x() , points2[2].get_x(),
 		 points2[0].get_w() , points2[1].get_w() , points2[2].get_w());
-  H->set((double*)T);// ugly cast. FIXME
+  H->set(&T[0][0]);
   return true;
 }
 

@@ -14,10 +14,10 @@
 
 #include <vcl/vcl_cassert.h>
 #include <vcl/vcl_fstream.h>
-#include <vcl/vcl_pair.h>
+#include <vcl/vcl_utility.h>
 
 #include <vbl/vbl_sparse_array_2d.h>
-#include <vnl/vnl_matops.h> // use vnl_matlab_print.h for pretty printing
+#include <vnl/vnl_matops.h>
 #include <mvl/PairMatchSet.h>
 
 typedef vbl_sparse_array_2d<double> hack ;

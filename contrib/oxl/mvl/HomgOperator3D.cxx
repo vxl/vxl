@@ -6,49 +6,15 @@
 #include <vbl/vbl_qsort.h>
 
 #include <vnl/algo/vnl_svd.h>
-#include <vnl/vnl_matops.h> // use vnl_matlab_print.h for pretty printing
 
 #include <mvl/HomgLine3D.h>
 #include <mvl/HomgOperator3D.h>
 #include <mvl/HomgPoint3D.h>
 #include <mvl/HomgPlane3D.h>
+#include <mvl/pair_float_int.h>
 
-// @{ GEOMETRIC OPERATIONS @}
-struct pair_float_int {
-  float f;
-  int i;
-
-  pair_float_int() {}
-  pair_float_int(float f_, int i_):f(f_),i(i_) {}
-
-};
-bool operator==(const pair_float_int& p1, const pair_float_int& p2) { return p1.i == p2.i; }
-ostream& operator<<(ostream& s, const pair_float_int& p) { return s << "[ " << p.i << " , " << p.f << "]\n";}
-
-
-#include <vcl/vcl_vector.txx>
-VCL_VECTOR_INSTANTIATE(pair_float_int);
-#if defined(VCL___Which_compiler___Not_gcc_295___Could_it_be_egcs____Signed_yours_fsm)
-// this belongs in the relevant vcl_vector.txx file.
-template pair_float_int * __uninitialized_copy_aux(pair_float_int const *, pair_float_int const *, pair_float_int *, __false_type);
-template pair_float_int * __uninitialized_copy_aux(pair_float_int       *, pair_float_int       *, pair_float_int *, __false_type);
-#endif
-
-int pair_float_int_compare_ascend(pair_float_int const& p1, pair_float_int const& p2)
-{
-  if (p1.f < p2.f)
-    return -1;
-  
-  if (p1.f > p2.f)
-    return 1;
-
-  return 0;
-}
-
-VBL_QSORT_INSTANTIATE_vector(pair_float_int);
 
 // -----------------------------------------------------------------------------
-
 
 // -- Given collinear 3D points in random order, sort them.
 void
@@ -108,8 +74,27 @@ HomgOperator3D::sort_points(HomgPoint3D* points, int n)
     }
   }
 
-#ifdef WIN32
+#if defined(VCL_WIN32)
   vbl_qsort< pair_float_int >(sort_table, &pair_float_int_compare_ascend);
+#elif defined(VCL_SUNPRO_CC)
+  // fsm@robots: SunPro 5.0 fails on the following program, with the error
+  // 14: Error: Could not find a match for sort<>(float*, float*, int(*)(const float&,const float&)).
+  
+  // template <class T> void sort(T *, T *, int (*)(T const &, T const &)) { }
+  //
+  // int compare(float const &a, float const &b) {
+  //   if (a<b) return -1;
+  //   if (a>b) return +1;
+  //   return 0;
+  // }
+  //
+  // int main(int, char **) {
+  //   int const n = 3;
+  //   float v[n] = {1, 3, 2};
+  //   sort(&v[0], &v[n], &compare); // <-- line 14
+  //   return 0;
+  // }
+  ::qsort(sort_table.begin(), sort_table.size(), sizeof(sort_table[0]), (int (*)(void const *, void const *))pair_float_int_compare_ascend);
 #else
   vbl_qsort(sort_table, &pair_float_int_compare_ascend);
 #endif

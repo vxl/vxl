@@ -21,6 +21,8 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <vil/vil_image.h>
+
 struct MovieFileInterface {
   virtual ~MovieFileInterface();
 
@@ -46,6 +48,8 @@ struct MovieFileInterface {
 
   // -- Grab field into supplied buffer, which is GetBitsPixel * SizeX * SizeY
   virtual bool GetField(int field_index, void* buffer);
+
+  virtual vil_image GetImage(int frame_index) = 0;
 
   // -- General verbosity flag for various movie-related operations.
   static bool verbose;

@@ -60,20 +60,22 @@ class AffineMetric : public ImageMetric {
 public:
   // Constructors/Destructors--------------------------------------------------
   
+  AffineMetric();
   AffineMetric(const vnl_matrix<double>& A);
 
-  // AffineMetric(const AffineMetric& that); - use default
-  //~AffineMetric(); - use default
-  // AffineMetric& operator=(const AffineMetric& that); - use default
-
   // Operations----------------------------------------------------------------
+  virtual HomgPoint2D image_to_homg(double x, double y);
+  virtual vnl_double_2 homg_to_image(const HomgPoint2D& p);
 
   virtual HomgPoint2D homg_to_imagehomg(const HomgPoint2D& p);
   virtual HomgPoint2D imagehomg_to_homg(const HomgPoint2D& p);
 
+  void set(vnl_matrix<double> const& A);
+  void set(double a11, double a13, double a22, double a23, double a33);
+  
   // Data Access---------------------------------------------------------------
   virtual const vnl_matrix<double>& get_C() const { return A_; }
-  virtual const vnl_matrix<double>& get_C_inverse() const { return _A_inverse; }
+  virtual const vnl_matrix<double>& get_C_inverse() const { return A_inverse_; }
 
   virtual bool is_linear() const { return true; }
   virtual bool can_invert_distance() const { return false; }
@@ -88,7 +90,7 @@ public:
 protected:
   // Data Members--------------------------------------------------------------
   vnl_double_3x3 A_;
-  vnl_double_3x3 _A_inverse;
+  vnl_double_3x3 A_inverse_;
   
   // Helpers-------------------------------------------------------------------
 };

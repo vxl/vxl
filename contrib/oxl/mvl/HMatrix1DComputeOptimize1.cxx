@@ -2,6 +2,7 @@
 #include "HMatrix1DComputeDesign.h"
 
 #include <vcl/vcl_cassert.h>
+#include <vcl/vcl_iostream.h>
 
 #include <vnl/vnl_least_squares_function.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>

@@ -42,6 +42,12 @@ int SGIMovieFile::GetLength()
   return p->video_indices[0].size();
 }
 
+vil_image SGIMovieFile::GetImage(int)
+{
+  return 0;
+}
+
+
 int SGIMovieFile::GetSizeX(int)
 {
   return p->width;
@@ -204,7 +210,7 @@ bool SGIMovieFile::GetFrame(int frame_index, void* buffer)
     return false;
   }
 
-//int n = p->video_indices[0][frame_index].size;
+  // int n = p->video_indices[0][frame_index].size;
   int s = p->video_indices[0][frame_index].offset;
 
   // Need to open file every time...
@@ -249,6 +255,7 @@ bool SGIMovieFile::GetFrame(int frame_index, void* buffer)
 	}
       }
     }
+    delete [] row_buf;
     if (MovieFileInterface::verbose) vbl_printf(cerr, "] ");
     fclose(fp);
     delete[] row_buf;

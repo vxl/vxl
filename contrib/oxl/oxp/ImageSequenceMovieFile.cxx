@@ -63,6 +63,11 @@ int ImageSequenceMovieFile::GetLength()
   return 100;
 }
 
+vil_image ImageSequenceMovieFile::GetImage(int frame_index)
+{
+  return p->get_image(frame_index);
+}
+
 int ImageSequenceMovieFile::GetSizeX(int frame_index)
 {
   return p->get_image(frame_index).width();

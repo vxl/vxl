@@ -13,14 +13,15 @@
 
 #include "ByteConvertImage.h"
 
+#include <vnl/vnl_math.h>
 #include <vbl/vbl_printf.h>
-#include <vbl/vbl_clamp.h>
+#include <vil/vil_clamp.h>
 
 ByteConvertImage::ByteConvertImage(vil_memory_image_of<float> const& in, bool ignore_zero):
   base(in.width(), in.height())
 {
   ignore_zero_ = ignore_zero;
-  min_ = 1e20;
+  min_ = (float)HUGE_VAL;
   max_ = -min_;
   for(int y = 0; y < in.height(); ++y)
     for(int x = 0; x < in.width(); ++x) {
@@ -38,7 +39,7 @@ ByteConvertImage::ByteConvertImage(vil_memory_image_of<float> const& in, bool ig
 ByteConvertImage::ByteConvertImage(vil_memory_image_of<float> const& in, float min, float max):
   base(in.width(), in.height())
 {
-  // vil_memory_image_of<vil_byte>& outbuf = *this;
+  //vil_memory_image_of<vil_byte>& outbuf = *this;
 
   ignore_zero_ = false;
   min_ = min;
@@ -51,7 +52,7 @@ ByteConvertImage::ByteConvertImage(vil_memory_image_of<double> const& in, bool i
   base(in.width(), in.height())
 {
   ignore_zero_ = ignore_zero;
-  min_ = 1e20;
+  min_ = (float)HUGE_VAL;
   max_ = -min_;
   for(int y = 0; y < in.height(); ++y)
     for(int x = 0; x < in.width(); ++x) {
@@ -69,7 +70,7 @@ ByteConvertImage::ByteConvertImage(vil_memory_image_of<double> const& in, bool i
 ByteConvertImage::ByteConvertImage(vil_memory_image_of<double> const& in, double min, double max):
   base(in.width(), in.height())
 {
-  // vil_memory_image_of<vil_byte>& outbuf = *this;
+  //vil_memory_image_of<vil_byte>& outbuf = *this;
 
   ignore_zero_ = false;
   min_ = min;
@@ -87,7 +88,7 @@ void ByteConvertImage::filter(vil_memory_image_of<float> const& in)
       if (ignore_zero_ && v == 0.0F)
 	(*this)(x,y) = 0;
       else
-	(*this)(x,y) = vbl_clamp((v - min_) * scale, (vil_byte *)0);
+	(*this)(x,y) = vil_clamp((v - min_) * scale, (vil_byte *)0);
     }
 }
 
@@ -101,7 +102,7 @@ void ByteConvertImage::filter(vil_memory_image_of<double> const& in)
       if (ignore_zero_ && v == 0.0F)
 	(*this)(x,y) = 0;
       else
-	(*this)(x,y) = vbl_clamp((v - dmin) * scale, (vil_byte *)0);
+	(*this)(x,y) = vil_clamp((v - dmin) * scale, (vil_byte *)0);
     }
 }
  

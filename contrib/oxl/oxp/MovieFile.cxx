@@ -69,6 +69,11 @@ int MovieFile::GetLength()
   return qt->GetLength();
 }
 
+vil_image MovieFile::GetImage(int frame_index)
+{ 
+  return qt->GetImage(index(frame_index));
+}
+
 int MovieFile::GetSizeX(int frame_index)
 { 
   return qt->GetSizeX(index(frame_index));

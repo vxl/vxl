@@ -29,7 +29,7 @@
 //-----------------------------------------------------------------------------
 
 #include <vcl/vcl_functional.h>
-#include <vcl/vcl_multimap.h>
+#include <vcl/vcl_map.h>
 #include <vcl/vcl_iosfwd.h>
 
 // conceptually a list of tuples (index1, index2, strength)

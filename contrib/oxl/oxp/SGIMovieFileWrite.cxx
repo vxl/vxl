@@ -17,8 +17,6 @@
 #include <vcl/vcl_string.h>
 #include <vcl/vcl_vector.h>
 
-#undef RGB
-
 #include <vbl/vbl_arg.h>
 #include <vbl/vbl_sprintf.h>
 #include <vbl/vbl_printf.h>
@@ -30,7 +28,7 @@ extern "C" {
 
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_byte.h>
-#include <vbl/vbl_rgb.h>
+#include <vil/vil_rgb_byte.h>
 
 const int align = 4;
 inline int ROUNDUP(int x)
@@ -95,7 +93,7 @@ public:
   
   bool interlaced;
 
-  vil_memory_image_of<vbl_rgb<vil_byte> > buffer;
+  vil_memory_image_of<vil_rgb_byte> buffer;
   vcl_vector<JSAMPLE*> rows;
   FILE *fp;
   int directory_pos;

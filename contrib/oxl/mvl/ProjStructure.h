@@ -11,9 +11,14 @@
 
 #include <mvl/ImageMetric.h>
 #include <mvl/PMatrix.h>
+#include <mvl/HomgPoint2D.h>
 #include <mvl/HomgPoint3D.h>
 
+#if defined(VCL_GCC_27)
+# include <mvl/HomgInterestPointSet.h>
+#else
 class HomgInterestPointSet;
+#endif
 
 //: Not documented FIXME
 class ProjStructure {

@@ -41,7 +41,7 @@ RSC=rc.exe
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /I "$(IUEROOT)/oxl" /I "$(IUEROOT)/vxl/config.win32-vc60" /I "$(IUEROOT)/vxl" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -64,7 +64,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "$(IUEROOT)/oxl" /I "$(IUEROOT)/vxl/config.win32-vc60" /I "$(IUEROOT)/vxl" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -83,10 +83,178 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
+# Begin Source File
+
+SOURCE=.\ByteConvertImage.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\GXFileVisitor.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\ImageSequenceMovieFile.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\ImageSequenceName.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\ImageWarp+byte-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\ImageWarp+RGB+byte--.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=.\ImageWarp.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\map+string.string-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mapping_2d_2d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\MedianReduceImage.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\MovieFile.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\MovieFileInterface.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\RadialLensCorrection.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\SequenceFileName.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\SGIMovieFile.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\SGIMovieFilePrivates.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vector+char-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vector+SGIMV_Variables-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vector+vector+int--.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_conic_as_matrix.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_conic_as_params.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_conic_points.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
+# Begin Source File
+
+SOURCE=.\ByteConvertImage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\GXFileVisitor.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ImageSequenceMovieFile.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ImageSequenceName.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ImageWarp.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\JPEG_Decompressor.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\MapInverter.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mapping_2d_2d.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\MovieFile.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\MovieFileInterface.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\POX.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\RadialLensCorrection.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\SequenceFileName.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\SGIMovieFile.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\SGIMovieFilePrivates.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\SGIMovieFileWrite.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_conic_as_matrix.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_conic_as_params.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_conic_fit.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_conic_points.h
+# End Source File
 # End Group
 # End Target
 # End Project

@@ -146,6 +146,8 @@ public:
   FMatrix get_fmatrix_13(const HomgPoint2D& e2, const HomgPoint2D& e3) const;
   FMatrix get_fmatrix_12(const HomgPoint2D& e2, const HomgPoint2D& e3) const;
 
+  FMatrix compute_fmatrix_23() const;
+
   FManifoldProject* get_fmp12() const;
   FManifoldProject* get_fmp23() const;
   FManifoldProject* get_fmp13() const;

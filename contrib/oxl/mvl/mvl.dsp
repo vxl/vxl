@@ -41,7 +41,7 @@ RSC=rc.exe
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /I "$(IUEROOT)/oxl" /I "$(IUEROOT)/vxl/config.win32-vc60" /I "$(IUEROOT)/vxl" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -64,7 +64,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "$(IUEROOT)/vxl/config.win32-vc60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/oxl" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "$(IUEROOT)/oxl" /I "$(IUEROOT)/vxl/config.win32-vc60" /I "$(IUEROOT)/vxl" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /GZ /c
 # SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
@@ -90,119 +90,7 @@ SOURCE=.\AffineMetric.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\Array2D+HomgPoint2D-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\Array2D+PairMatchSetLineSeg~-.cxx"
-# End Source File
-# Begin Source File
-
 SOURCE=.\ClosestImagePointFinder.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\CoolArray+CoolArray+HomgPoint2D--.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\CoolArray+HMatrix1D-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\CoolArray+HMatrix2D-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\CoolArray+HomgInterestPoint-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\CoolArray+HomgLine2D-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\CoolArray+HomgLine3D-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\CoolArray+HomgLineSeg2D-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\CoolArray+HomgLineSeg3D-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\CoolArray+HomgMetric-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\CoolArray+HomgPlane3D-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\CoolArray+HomgPoint1D-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\CoolArray+HomgPoint2D-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\CoolArray+HomgPoint3D-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\CoolArray+NViewMatch-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\CoolArray+PairMatchMulti-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\CoolArray+PMatrix-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\CoolArray+TriTensor-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\CoolArrayP+FMatrix~-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\CoolArrayP+ImageMetric~-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\CoolArrayP+PMatrix~-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\CoolList+HomgLineSeg2D-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\CoolList+HomgPoint2D-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\CoolListP+HomgMatchPoint3D2D~-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\CoolListP+HomgPlane3D~-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\CoolListP+HomgPoint3D~-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\CoolListP+LineSeg~-.cxx"
 # End Source File
 # Begin Source File
 
@@ -386,14 +274,6 @@ SOURCE=.\HomgPrettyPrint.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\identity+ImageMetric~-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\identity+ImageMetric~~-.cxx"
-# End Source File
-# Begin Source File
-
 SOURCE=.\ImageMetric.cxx
 # End Source File
 # Begin Source File
@@ -403,54 +283,6 @@ SOURCE=.\LineSeg.cxx
 # Begin Source File
 
 SOURCE=.\LineSegSet.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\map+uint.FMatrix~-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\map+uint.HMatrix2D~-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\map+uint.HMatrix3D-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\map+uint.HomgInterestPointSet-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\map+uint.ImageMetric~-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\map+uint.LineSegSet-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\map+uint.PairMatchSetCorner~-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\map+uint.PairMatchSetLineSeg~-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\map+uint.PMatrix-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\map+uint.TripleMatchSetCorner~-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\map+uint.TripleMatchSetLineSeg~-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\map+uint.TriTensor~-.cxx"
 # End Source File
 # Begin Source File
 
@@ -467,6 +299,14 @@ SOURCE=.\ModifyHandle.cxx
 # Begin Source File
 
 SOURCE=.\NViewMatches.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\pair_float_int.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\pair_float_int_things.cxx
 # End Source File
 # Begin Source File
 
@@ -534,62 +374,6 @@ SOURCE=.\SimilarityMetric.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\SparseArray+FMatrix~-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\SparseArray+HMatrix2D~-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\SparseArray+HMatrix3D-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\SparseArray+ImageMetric~-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\SparseArray+PairMatchSetCorner~-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\SparseArray+PairMatchSetLineSeg~-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\SparseArray2D+FMatrix~-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\SparseArray2D+HMatrix2D~-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\SparseArray2D+HMatrix3D-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\SparseArray2D+PairMatchSetCorner~-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\SparseArray2D+PairMatchSetLineSeg~-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\SparseArray3D+TripleMatchSetCorner~-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\SparseArray3D+TripleMatchSetLineSeg~-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\SparseArray3D+TriTensor~-.cxx"
-# End Source File
-# Begin Source File
-
 SOURCE=.\TripleMatchSet.cxx
 # End Source File
 # Begin Source File
@@ -606,6 +390,14 @@ SOURCE=.\TriTensor.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=".\Templates\vbl_array_2d+HomgPoint2D-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vbl_array_2d+PairMatchSetLineSeg~-.cxx"
+# End Source File
+# Begin Source File
+
 SOURCE=".\Templates\vbl_array_2d+vnl_matrix+double--.cxx"
 # End Source File
 # Begin Source File
@@ -614,7 +406,235 @@ SOURCE=".\Templates\vbl_array_2d+vnl_vector+double--.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vector+ImageMetric~-.cxx"
+SOURCE=".\Templates\vbl_sparse_array+FMatrix~-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vbl_sparse_array+HMatrix2D~-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vbl_sparse_array+HMatrix3D-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vbl_sparse_array+ImageMetric~-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vbl_sparse_array+PairMatchSetCorner~-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vbl_sparse_array+PairMatchSetLineSeg~-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vbl_sparse_array_2d+FMatrix~-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vbl_sparse_array_2d+HMatrix2D~-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vbl_sparse_array_2d+HMatrix3D-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vbl_sparse_array_2d+PairMatchSetCorner~-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vbl_sparse_array_2d+PairMatchSetLineSeg~-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vbl_sparse_array_3d+TripleMatchSetCorner~-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vbl_sparse_array_3d+TripleMatchSetLineSeg~-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vbl_sparse_array_3d+TriTensor~-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_algo+ImageMetric~-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_algo+ImageMetric~~-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_list+HomgLineSeg2D-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_list+HomgMatchPoint3D2D~-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_list+HomgPlane3D~-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_list+HomgPoint2D-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_list+HomgPoint3D~-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_list+LineSeg~-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_map+uint.FMatrix~-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_map+uint.HMatrix2D~-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_map+uint.HMatrix3D-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_map+uint.HomgInterestPointSet-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_map+uint.ImageMetric~-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_map+uint.LineSegSet-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_map+uint.PairMatchSetCorner~-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_map+uint.PairMatchSetLineSeg~-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_map+uint.PMatrix-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_map+uint.TripleMatchSetCorner~-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_map+uint.TripleMatchSetLineSeg~-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_map+uint.TriTensor-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_map+uint.TriTensor~-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+FMatrix~-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+HMatrix1D-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+HMatrix2D-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+HomgInterestPoint-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+HomgInterestPointSet~-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+HomgLine2D-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+HomgLine3D-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+HomgLineSeg2D-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+HomgLineSeg3D-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+HomgMetric-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+HomgPlane3D-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+HomgPoint1D-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+HomgPoint2D-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+HomgPoint3D-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+ImageMetric~-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+NViewMatch-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+PairMatchMulti-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+PMatrix-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+PMatrix~-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+TriTensor-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+vcl_map+int.int--.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+vcl_map+uint.uint--.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+vcl_vector+HomgPoint2D--.cxx"
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -847,6 +867,10 @@ SOURCE=.\ModifyHandle.h
 # Begin Source File
 
 SOURCE=.\NViewMatches.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\pair_float_int.h
 # End Source File
 # Begin Source File
 
