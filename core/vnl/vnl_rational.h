@@ -241,12 +241,12 @@ private:
 };
 
 //: formatted output
-vcl_ostream& operator<< (vcl_ostream& s, vnl_rational const& r) {
+inline vcl_ostream& operator<< (vcl_ostream& s, vnl_rational const& r) {
   return s << r.numerator() << "/" << r.denominator();
 }
 
 //: simple input
-vcl_istream& operator>> (vcl_istream& s, vnl_rational& r) {
+inline vcl_istream& operator>> (vcl_istream& s, vnl_rational& r) {
   long n, d; s >> n >> d;
   r.set(n,d); return s;
 }
