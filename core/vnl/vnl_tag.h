@@ -4,6 +4,11 @@
 //:
 // \file
 // \author fsm
+//
+// These tags are used as argument to some private vnl_matrix and vnl_vector
+// constructors to take advantage of the C++ return value optimization.
+// \relates vnl_matrix
+// \relates vnl_vector
 
 struct vnl_tag_add { };
 struct vnl_tag_sub { };
