@@ -23,6 +23,8 @@ class kalman_filter
   //: initialize the kalman filter with
   //virtual kalman_state inc(double dt);
  public:
+	vcl_vector<vgl_point_2d<double> > get_pre_observes();
+	vcl_vector<vgl_point_2d<double> > get_cur_observes();
   void read_data(char* fname);
   vcl_vector<vgl_point_3d<double> > kalman_filter::get_local_pts();
 
@@ -51,7 +53,10 @@ class kalman_filter
 
   void init_covariant_matrix();
   void init_cam_intrinsic();
+
+
   void init_observes(vcl_vector<vnl_matrix<double> > &input);
+
   void init_state_vector();
   void init_transit_matrix();
 

@@ -161,6 +161,9 @@ void brct_windows_frame::remove_curve3d()
 
 void brct_windows_frame::init_kalman()
 {
+
+  vcl_vector<vgl_point_2d<double> > c2d;
+
   if (kalman_ == 0)
     vcl_cout<<"brct_windows_frame::kalman_ not created yet\n";
   else {
@@ -168,7 +171,15 @@ void brct_windows_frame::init_kalman()
     kalman_->init();
   }
 
+   // add the curve in the first view
+   c2d = kalman_->get_pre_observes();
+   add_curve2d(c2d);
+
   //update the display.
-  vcl_vector<vgl_point_3d<double> > c=kalman_->get_local_pts();
-  add_curve3d(c);
+  vcl_vector<vgl_point_3d<double> > c3d = kalman_->get_local_pts();
+  add_curve3d(c3d);
+
+  // add the curve in the second view
+  c2d = kalman_->get_cur_observes();
+  add_curve2d(c2d); 
 }

@@ -31,8 +31,6 @@ kalman_filter::kalman_filter()
 {
 }
 
-
-
 kalman_filter::kalman_filter(char* fname)
 {
   // read data into the pool
@@ -42,8 +40,12 @@ kalman_filter::kalman_filter(char* fname)
 
 void kalman_filter::init()
 {
+  //
+  cur_pos_ = 0;
+
   // initialize the transit matrix
   dt_ = 1.0;
+
   init_transit_matrix();
 
   init_cam_intrinsic();
@@ -53,6 +55,9 @@ void kalman_filter::init()
 
   // init covariant matrix P_
   init_covariant_matrix();
+
+  // increase the frame number
+  cur_pos_ = (cur_pos_ ++) % queue_size_;
 
 }
 
@@ -204,20 +209,27 @@ void kalman_filter::init_state_vector()
   X_[0] = xc;
   X_[1] = yc;
   X_[2] = zc;
+
+
 }
+
 
 void kalman_filter::init_observes(vcl_vector<vnl_matrix<double> > &input)
 {
   cur_pos_ = 0;
   queue_size_ = 10;
   memory_size_ = 2;
+
   observes_.resize(queue_size_);
+
+
   curves_.resize(queue_size_);
   motions_.resize(queue_size_);
 
   for (int i=0; i<queue_size_; i++)
     observes_[i] = input[i];
 }
+
 
 void kalman_filter::init_covariant_matrix()
 {
@@ -538,6 +550,34 @@ vcl_vector<vgl_point_3d<double> > kalman_filter::get_local_pts()
   
   for(int i=0; i<num_points_; i++){
     pts[i].set(Xl_[i][0], Xl_[i][1], Xl_[i][2]);
+  }
+  return pts;
+}
+
+vcl_vector<vgl_point_2d<double> > kalman_filter::get_cur_observes()
+{
+  vcl_vector<vgl_point_2d<double> > pts;
+  pts.resize(num_points_);
+
+  vdgl_digital_curve_sptr dc = curves_[cur_pos_-1];
+  for(int i=0; i<num_points_; i++){
+    double s = double (i) / num_points_;
+    pts[i].set(dc->get_x(s), dc->get_y(s));
+  }
+  return pts;
+}
+
+vcl_vector<vgl_point_2d<double> > kalman_filter::get_pre_observes()
+{
+  vcl_vector<vgl_point_2d<double> > pts;
+  pts.resize(num_points_);
+
+  assert(cur_pos_ > 0);
+
+  vdgl_digital_curve_sptr dc = curves_[cur_pos_];
+  for(int i=0; i<num_points_; i++){
+    double s = double (i) / num_points_;
+    pts[i].set(dc->get_x(s), dc->get_y(s));
   }
   return pts;
 }
