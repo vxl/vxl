@@ -251,7 +251,7 @@ vil_rgb<T> vil_clamp_pixel(vil_rgb<T> const& b, double range_min , double range_
 #endif
 
 // capes@robots : These vil_clamp functions are deprecated. See vil_clamp.h
-/*
+#if 0
 inline
 vil_rgb<unsigned char> vil_clamp(vil_rgb<double> const & d, vil_rgb<unsigned char>* dummy)
 {
@@ -267,7 +267,8 @@ vil_rgb<unsigned char> vil_clamp(vil_rgb<float> const& d, vil_rgb<unsigned char>
                                 vil_clamp(d.g, &dummy->g),
                                 vil_clamp(d.b, &dummy->b));
 }
-*/
+#endif
+
 #define VIL_RGB_INSTANTIATE(T) \
 extern "you must include vil/vil_rgb.txx first."
 #define VIL_RGB_INSTANTIATE_LS(T) \
