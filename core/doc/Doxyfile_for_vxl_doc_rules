@@ -208,7 +208,7 @@ EXCLUDE              = "vxl/doc" "vcl"
 
 EXCLUDE_PATTERNS     = "*/doc/*" "*/vxl_copyright.h" "*/vcl/*" "*/dll.h" \
                        "*/test*" "*/example*" "*config*" "*/contrib/*" \
-                       "*/Templates/*" # "*impl*"
+                       "*/Templates/*" "*_mocced.cxx" # "*impl*"
 
 # The EXAMPLE_PATH tag can be used to specify one or more files or
 # directories that contain example code fragments that are included (see
