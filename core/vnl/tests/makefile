@@ -27,6 +27,7 @@ TESTS += test_symmetric_eigensystem.cxx
 TESTS += test_generalized_eigensystem.cxx
 TESTS += test_matrix_exp.cxx
 TESTS += test_transpose.cxx
+TESTS += test_levenberg_marquardt.cxx
 TESTS += $(wildcard test_tensor.cxx)
 
 IULIBS += -lvnl-algo -lvnl -lnetlib -lvpl # vpl_unlink used in test_matlab
