@@ -1,11 +1,4 @@
-/* trapezod.f -- translated by f2c (version 20020621).
-   You must link the resulting object file with the libraries:
-	-lf2c -lm   (in that order)
-*/
-
-#ifdef __cplusplus
-extern "C" {
-#endif
+/* trapezod.f -- translated by f2c (version 20020621). */
 #include "f2c.h"
 
 /*     NUMERICAL METHODS: FORTRAN Programs, (c) John H. Mathews 1994 */
@@ -17,35 +10,28 @@ extern "C" {
 /*     Algorithm 7.1 (Composite Trapezoidal Rule). */
 /*     Section 7.2, Composite Trapezoidal and Simpson's Rule, Page 365 */
 
-/* Subroutine */ int trapru_(E_fp f, real *a, real *b, integer *m, real *
-	trule)
+/* Subroutine */
+int trapru_(E_fp f, real *a, real *b, integer *m, real *trule)
 {
-    /* System generated locals */
-    integer i__1;
-
     /* Local variables */
     static real h__;
     static integer k;
     static real x, sum;
 
     h__ = (*b - *a) / *m;
-    sum = (float)0.;
-    i__1 = *m - 1;
-    for (k = 1; k <= i__1; ++k) {
-	x = *a + h__ * k;
-	sum += (*f)(&x);
+    sum = 0.f;
+    for (k = 1; k < *m; ++k) {
+      x = *a + h__ * k;
+      sum += (*f)(&x);
     }
     sum = h__ * ((*f)(a) + (*f)(b) + sum * 2) / 2;
     *trule = sum;
     return 0;
 } /* trapru_ */
 
-/* Subroutine */ int xtrapru_(E_fp f, real *a, real *b, integer *m, real *
-	trule)
+/* Subroutine */
+int xtrapru_(E_fp f, real *a, real *b, integer *m, real *trule)
 {
-    /* System generated locals */
-    integer i__1;
-
     /* Local variables */
     static real h__;
     static integer k;
@@ -53,18 +39,12 @@ extern "C" {
 
 /*     This subroutine uses labeled DO loop(s). */
     h__ = (*b - *a) / *m;
-    sum = (float)0.;
-    i__1 = *m - 1;
-    for (k = 1; k <= i__1; ++k) {
-	x = *a + h__ * k;
-	sum += (*f)(&x);
-/* L10: */
+    sum = 0.f;
+    for (k = 1; k < *m; ++k) {
+      x = *a + h__ * k;
+      sum += (*f)(&x);
     }
     sum = h__ * ((*f)(a) + (*f)(b) + sum * 2) / 2;
     *trule = sum;
     return 0;
 } /* xtrapru_ */
-
-#ifdef __cplusplus
-	}
-#endif

@@ -1,11 +1,4 @@
-/* simpson.f -- translated by f2c (version 20020621).
-   You must link the resulting object file with the libraries:
-	-lf2c -lm   (in that order)
-*/
-
-#ifdef __cplusplus
-extern "C" {
-#endif
+/* simpson.f -- translated by f2c (version 20020621). */
 #include "f2c.h"
 
 /*     NUMERICAL METHODS: FORTRAN Programs, (c) John H. Mathews 1994 */
@@ -23,41 +16,33 @@ extern "C" {
 /*     B: higher integration limit */
 /*     M: number of intervals. Notice, the subintervals used is 2M */
 /*     Srule: output parameter to store simpson rule result */
-/* Subroutine */ int simpru_(E_fp f, real *a, real *b, integer *m, real *
-	srule)
+/* Subroutine */
+int simpru_(E_fp f, real *a, real *b, integer *m, real *srule)
 {
-    /* System generated locals */
-    integer i__1;
-
     /* Local variables */
     static real h__;
     static integer k;
     static real x, sum, sumodd, sumeven;
 
     h__ = (*b - *a) / (*m << 1);
-    sumeven = (float)0.;
-    i__1 = *m - 1;
-    for (k = 1; k <= i__1; ++k) {
-	x = *a + h__ * 2 * k;
-	sumeven += (*f)(&x);
+    sumeven = 0.f;
+    for (k = 1; k < *m; ++k) {
+      x = *a + h__ * (k << 1);
+      sumeven += (*f)(&x);
     }
-    sumodd = (float)0.;
-    i__1 = *m;
-    for (k = 1; k <= i__1; ++k) {
-	x = *a + h__ * ((k << 1) - 1);
-	sumodd += (*f)(&x);
+    sumodd = 0.f;
+    for (k = 0; k < *m; ++k) {
+      x = *a + h__ * ((k << 1) + 1);
+      sumodd += (*f)(&x);
     }
     sum = h__ * ((*f)(a) + (*f)(b) + sumeven * 2 + sumodd * 4) / 3;
     *srule = sum;
     return 0;
 } /* simpru_ */
 
-/* Subroutine */ int xsimpru_(E_fp f, real *a, real *b, integer *m, real *
-	srule)
+/* Subroutine */
+int xsimpru_(E_fp f, real *a, real *b, integer *m, real *srule)
 {
-    /* System generated locals */
-    integer i__1;
-
     /* Local variables */
     static real h__;
     static integer k;
@@ -65,25 +50,17 @@ extern "C" {
 
 /*     This subroutine uses labeled DO loop(s). */
     h__ = (*b - *a) / (*m << 1);
-    sumeven = (float)0.;
-    i__1 = *m - 1;
-    for (k = 1; k <= i__1; ++k) {
-	x = *a + h__ * 2 * k;
-	sumeven += (*f)(&x);
-/* L10: */
+    sumeven = 0.f;
+    for (k = 1; k < *m; ++k) {
+      x = *a + h__ * (k << 1);
+      sumeven += (*f)(&x);
     }
-    sumodd = (float)0.;
-    i__1 = *m;
-    for (k = 1; k <= i__1; ++k) {
-	x = *a + h__ * ((k << 1) - 1);
-	sumodd += (*f)(&x);
-/* L20: */
+    sumodd = 0.f;
+    for (k = 0; k < *m; ++k) {
+      x = *a + h__ * ((k << 1) + 1);
+      sumodd += (*f)(&x);
     }
     sum = h__ * ((*f)(a) + (*f)(b) + sumeven * 2 + sumodd * 4) / 3;
     *srule = sum;
     return 0;
 } /* xsimpru_ */
-
-#ifdef __cplusplus
-	}
-#endif

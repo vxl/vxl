@@ -1,11 +1,4 @@
-/* adaquad.f -- translated by f2c (version 20020621).
-   You must link the resulting object file with the libraries:
-	-lf2c -lm   (in that order)
-*/
-
-#ifdef __cplusplus
-extern "C" {
-#endif
+/* adaquad.f -- translated by f2c (version 20020621). */
 #include "f2c.h"
 
 /*     NUMERICAL METHODS: FORTRAN Programs, (c) John H. Mathews 1994 */
@@ -18,57 +11,49 @@ extern "C" {
 /*     Section 7.4, Adaptive Quadrature, Page 389 */
 
 /*     add missing variable F in Refine subrutine. */
-/* Subroutine */ int adaptquad_(E_fp f, real *a, real *b, real *tol, real *
-	srmat, real *integral, real *errbdd, integer *m, integer *state)
+/* Subroutine */
+int adaptquad_(E_fp f, real *a, real *b, real *tol, real *srmat, real *integral,
+               real *errbdd, integer *m, integer *state)
 {
-    /* System generated locals */
-    integer i__1;
-    real r__1;
-
     /* Local variables */
     static integer j, k, n, iterating;
     static real sum1, sum2;
     static integer done;
     static real srvec[11];
-    extern /* Subroutine */ int srule_(E_fp, real *, real *, real *, real *), 
-	    refine_(U_fp, integer *, real *, integer *, integer *);
-
-    /* Parameter adjustments */
-    srmat -= 102;
+    extern /* Subroutine */ int srule_(E_fp, real *, real *, real *, real *);
+    extern /* Subroutine */ int refine_(U_fp, integer *, real *, integer *, integer *);
 
     /* Function Body */
     iterating = 0;
     done = 1;
     srule_((E_fp)f, a, b, tol, srvec);
-    for (k = 1; k <= 11; ++k) {
-	srmat[k * 101 + 1] = srvec[k - 1];
+    for (k = 0; k < 11; ++k) {
+      srmat[k * 101] = srvec[k];
     }
     *m = 1;
     *state = iterating;
-    while(*state == iterating) {
-	n = *m;
-	for (j = n; j >= 1; --j) {
-	    refine_((U_fp)f, &j, &srmat[102], m, state);
-	}
+    while (*state == iterating) {
+      n = *m;
+      for (j = n; j >= 1; --j) {
+          refine_((U_fp)f, &j, srmat, m, state);
+      }
     }
-    sum1 = (float)0.;
-    sum2 = (float)0.;
-    i__1 = *m;
-    for (j = 1; j <= i__1; ++j) {
-	sum1 += srmat[j + 808];
-	sum2 += (r__1 = srmat[j + 909], dabs(r__1));
+    sum1 = 0.f;
+    sum2 = 0.f;
+    for (j = 0; j < *m; ++j) {
+      sum1 += srmat[j + 707];
+      sum2 += dabs(srmat[j + 808]);
     }
     *integral = sum1;
     *errbdd = sum2;
     return 0;
 } /* adaptquad_ */
 
-/* Subroutine */ int refine_(U_fp f, integer *p, real *srmat, integer *m, 
-	integer *state)
+/* Subroutine */
+int refine_(U_fp f, integer *p, real *srmat, integer *m, integer *state)
 {
     /* System generated locals */
-    integer i__1;
-    real r__1;
+    integer pm1;
 
     /* Local variables */
     static real a, b, c__;
@@ -81,15 +66,13 @@ extern "C" {
     extern /* Subroutine */ int srule_(E_fp, real *, real *, real *, real *);
     static real sr0vec[11], sr1vec[11], sr2vec[11];
 
-    /* Parameter adjustments */
-    srmat -= 102;
-
     /* Function Body */
     iterating = 0;
     done = 1;
     *state = done;
-    for (k = 1; k <= 11; ++k) {
-	sr0vec[k - 1] = srmat[*p + k * 101];
+    pm1 = *p - 1;
+    for (k = 0; k < 11; ++k) {
+      sr0vec[k] = srmat[pm1 + k * 101];
     }
     a = sr0vec[0];
     c__ = sr0vec[1];
@@ -102,42 +85,42 @@ extern "C" {
     err = sr0vec[8];
     tol = sr0vec[9];
     check = sr0vec[10];
-    if (check == (float)1.) {
-	return 0;
+    if (check == 1.f) {
+      return 0;
     }
     tol2 = tol / 2;
     srule_((E_fp)f, &a, &c__, &tol2, sr1vec);
     srule_((E_fp)f, &c__, &b, &tol2, sr2vec);
-    err = (r__1 = sr0vec[6] - sr1vec[6] - sr2vec[6], dabs(r__1)) / 10;
+    err = dabs(sr0vec[6] - sr1vec[6] - sr2vec[6]) / 10;
     if (err < tol) {
-	sr0vec[10] = (float)1.;
+      sr0vec[10] = 1.f;
     }
     if (err < tol) {
-	for (k = 1; k <= 11; ++k) {
-	    srmat[*p + k * 101] = sr0vec[k - 1];
-	}
-	srmat[*p + 808] = sr1vec[6] + sr2vec[6];
-	srmat[*p + 909] = err;
+      for (k = 0; k < 11; ++k) {
+          srmat[pm1 + k * 101] = sr0vec[k];
+      }
+      srmat[pm1 + 707] = sr1vec[6] + sr2vec[6];
+      srmat[pm1 + 808] = err;
     } else {
-	i__1 = *p;
-	for (j = *m + 1; j >= i__1; --j) {
-	    for (k = 1; k <= 11; ++k) {
-		srmat[j + k * 101] = srmat[j - 1 + k * 101];
-	    }
-	}
-	++(*m);
-	for (k = 1; k <= 11; ++k) {
-	    srmat[*p + k * 101] = sr1vec[k - 1];
-	}
-	for (k = 1; k <= 11; ++k) {
-	    srmat[*p + 1 + k * 101] = sr2vec[k - 1];
-	}
-	*state = iterating;
+      for (j = *m; j >= pm1; --j) {
+          for (k = 0; k < 11; ++k) {
+            srmat[j + k * 101] = srmat[j - 1 + k * 101];
+          }
+      }
+      ++(*m);
+      for (k = 0; k < 11; ++k) {
+          srmat[pm1 + k * 101] = sr1vec[k];
+      }
+      for (k = 0; k < 11; ++k) {
+          srmat[*p + k * 101] = sr2vec[k];
+      }
+      *state = iterating;
     }
     return 0;
 } /* refine_ */
 
-/* Subroutine */ int srule_(E_fp f, real *a, real *b, real *tol0, real *srvec)
+/* Subroutine */
+int srule_(E_fp f, real *a, real *b, real *tol0, real *srvec)
 {
     static real c__, h__, s, s2, fa, fb, fc, err, tol1, check;
 
@@ -154,7 +137,7 @@ extern "C" {
     s2 = s;
     tol1 = *tol0;
     err = *tol0;
-    check = (float)0.;
+    check = 0.f;
     srvec[1] = *a;
     srvec[2] = c__;
     srvec[3] = *b;
@@ -168,7 +151,3 @@ extern "C" {
     srvec[11] = check;
     return 0;
 } /* srule_ */
-
-#ifdef __cplusplus
-	}
-#endif
