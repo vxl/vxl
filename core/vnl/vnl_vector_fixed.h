@@ -23,6 +23,7 @@
 //   Jun.2003 - Paul Smyth - added as_fixed_ref() to convert to fixed-size ref
 //              removed duplicate cross_3d
 //   Jun.2003 - Peter Vanroose - added cross_2d
+//   Oct.2003 - Peter Vanroose - removed deprecated x(), y(), z(), t()
 // \endverbatim
 
 #include <vcl_cstring.h> // memcpy()
@@ -32,7 +33,6 @@
 #include "vnl_vector_ref.h"
 #include "vnl_c_vector.h"
 #include "vnl_matrix.h" // outerproduct
-#include <vcl_deprecated.h> // mark x(), y(), z(), t() as deprecated
 
 //: Fixed length  stack-stored, space-efficient vector.
 // vnl_vector_fixed is a fixed-length, stack storage vector. It has
@@ -229,32 +229,6 @@ class vnl_vector_fixed
   //  O(1).
   //  data_block()[0] is the first element of the vector
   T      * data_block() { return data_; }
-
-  //:
-  // \deprecated Use v[0] instead
-  const T& x() const { VXL_DEPRECATED("vnl_vector_fixed<T>::x()"); return (*this)[0]; }
-  //:
-  // \deprecated Use v[1] instead
-  const T& y() const { VXL_DEPRECATED("vnl_vector_fixed<T>::y()"); assert(n>=1); return (*this)[1]; }
-  //:
-  // \deprecated Use v[2] instead
-  const T& z() const { VXL_DEPRECATED("vnl_vector_fixed<T>::z()"); assert(n>=2); return (*this)[2]; }
-  //:
-  // \deprecated Use v[3] instead
-  const T& t() const { VXL_DEPRECATED("vnl_vector_fixed<T>::t()"); assert(n>=3); return (*this)[3]; }
-
-  //:
-  // \deprecated Use v[0] instead
-  T& x() { VXL_DEPRECATED("vnl_vector_fixed<T>::x()"); return (*this)[0]; }
-  //:
-  // \deprecated Use v[1] instead
-  T& y() { VXL_DEPRECATED("vnl_vector_fixed<T>::y()"); assert(n>=1); return (*this)[1]; }
-  //:
-  // \deprecated Use v[2] instead
-  T& z() { VXL_DEPRECATED("vnl_vector_fixed<T>::z()"); assert(n>=2); return (*this)[2]; }
-  //:
-  // \deprecated Use v[3] instead
-  T& t() { VXL_DEPRECATED("vnl_vector_fixed<T>::t()"); assert(n>=3); return (*this)[3]; }
 
   //----------------------------------------------------------------------
   // Conversion to vnl_vector_ref.
