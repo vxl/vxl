@@ -11,3 +11,5 @@ SUBDIRS(jpeg)
 SUBDIRS(tiff)
 
 SUBDIRS(png)
+
+SUBDIRS(mpeg2)
