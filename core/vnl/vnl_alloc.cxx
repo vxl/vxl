@@ -14,17 +14,17 @@ vnl_alloc::chunk_alloc(vcl_size_t size, int& nobjs)
   char * result;
   vcl_size_t total_bytes = size * nobjs;
   vcl_size_t bytes_left = end_free - start_free;
-  
+
   if (bytes_left >= total_bytes) {
     result = start_free;
     start_free += total_bytes;
-    return(result);
+    return result;
   } else if (bytes_left >= size) {
     nobjs = bytes_left/size;
     total_bytes = size * nobjs;
     result = start_free;
     start_free += total_bytes;
-    return(result);
+    return result;
   } else {
     vcl_size_t bytes_to_get = 2 * total_bytes + ROUND_UP(heap_size >> 4);
     // Try to make use of the left-over piece.
@@ -47,7 +47,7 @@ vnl_alloc::chunk_alloc(vcl_size_t size, int& nobjs)
           *my_free_list = p -> free_list_link;
           start_free = (char *)p;
           end_free = start_free + i;
-          return(chunk_alloc(size, nobjs));
+          return chunk_alloc(size, nobjs);
           // Any leftover piece will eventually make it to the
           // right free vcl_list.
         }
@@ -59,7 +59,7 @@ vnl_alloc::chunk_alloc(vcl_size_t size, int& nobjs)
     }
     heap_size += bytes_to_get;
     end_free = start_free + bytes_to_get;
-    return(chunk_alloc(size, nobjs));
+    return chunk_alloc(size, nobjs);
   }
 }
 
@@ -76,7 +76,7 @@ void* vnl_alloc::refill(vcl_size_t n)
   obj * current_obj, * next_obj;
   int i;
 
-  if (1 == nobjs) return(chunk);
+  if (1 == nobjs) return chunk;
   my_free_list = free_list + FREELIST_INDEX(n);
 
   /* Build free vcl_list in chunk */
@@ -92,7 +92,7 @@ void* vnl_alloc::refill(vcl_size_t n)
       current_obj -> free_list_link = next_obj;
     }
   }
-  return(result);
+  return result;
 }
 
 void*
@@ -104,14 +104,14 @@ vnl_alloc::reallocate(void *p,
   vcl_size_t copy_sz;
 
   if (old_sz > VNL_ALLOC_MAX_BYTES && new_sz > VNL_ALLOC_MAX_BYTES) {
-    return(vcl_realloc(p, new_sz));
+    return vcl_realloc(p, new_sz);
   }
-  if (ROUND_UP(old_sz) == ROUND_UP(new_sz)) return(p);
+  if (ROUND_UP(old_sz) == ROUND_UP(new_sz)) return p;
   result = allocate(new_sz);
   copy_sz = new_sz > old_sz? old_sz : new_sz;
   vcl_memcpy(result, p, copy_sz);
   deallocate(p, old_sz);
-  return(result);
+  return result;
 }
 
 char *vnl_alloc::start_free = 0;
@@ -137,6 +137,6 @@ int main()
   vcl_strcpy(p, "fred\n");
   vcl_cerr << p << vcl_endl;
   vnl_alloc::deallocate(p,10);
-
 }
-#endif
+
+#endif // TEST

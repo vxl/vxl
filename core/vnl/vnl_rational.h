@@ -101,11 +101,11 @@ public:
 
   //: Returns true if the two rationals have the same representation
   inline bool operator== (vnl_rational const& rhs) const {
-    return (num_ == rhs.numerator() && den_ == rhs.denominator()); }
+    return num_ == rhs.numerator() && den_ == rhs.denominator(); }
   inline bool operator!= (vnl_rational const& rhs) const { return !operator==(rhs); }
-  inline bool operator== (long rhs) const { return (num_ == rhs && den_ == 1); }
+  inline bool operator== (long rhs) const { return num_ == rhs && den_ == 1; }
   inline bool operator!= (long rhs) const { return !operator==(rhs); }
-  inline bool operator== (int rhs) const { return (num_ == rhs && den_ == 1); }
+  inline bool operator== (int rhs) const { return num_ == rhs && den_ == 1; }
   inline bool operator!= (int rhs) const { return !operator==(rhs); }
 
   //: Unary minus - returns the negation of the current rational.
@@ -113,7 +113,7 @@ public:
   //: Unary plus - returns the current rational.
   inline vnl_rational operator+() const { return *this; }
   //: Unary not - returns true if rational is equal to zero.
-  inline bool operator!() const { return (num_ == 0L); }
+  inline bool operator!() const { return num_ == 0L; }
   //: Returns the absolute value of the current rational.
   inline vnl_rational abs() const { return vnl_rational(num_<0?-num_:num_, den_); }
   //: Replaces rational with 1/rational and returns it.

@@ -43,7 +43,7 @@ const vcl_size_t VNL_ALLOC_NFREELISTS = VNL_ALLOC_MAX_BYTES/VNL_ALLOC_ALIGN;
 class vnl_alloc {
 private:
   static vcl_size_t ROUND_UP(vcl_size_t bytes) {
-    return (((bytes) + VNL_ALLOC_ALIGN-1) & ~(VNL_ALLOC_ALIGN - 1));
+    return (bytes + VNL_ALLOC_ALIGN-1) & ~(VNL_ALLOC_ALIGN - 1);
   }
 private:
   union obj;
@@ -60,7 +60,7 @@ private:
   static obj * free_list[VNL_ALLOC_NFREELISTS];
 # endif
   static  vcl_size_t FREELIST_INDEX(vcl_size_t bytes) {
-    return (((bytes) + VNL_ALLOC_ALIGN-1)/VNL_ALLOC_ALIGN - 1);
+    return (bytes + VNL_ALLOC_ALIGN-1)/VNL_ALLOC_ALIGN - 1;
   }
 
   // Returns an object of size n, and optionally adds to size n free li*st.
@@ -103,7 +103,7 @@ public:
       return r;
     }
     *my_free_list = result -> free_list_link;
-    return (result);
+    return result;
   };
 
   /* p may not be 0 */
