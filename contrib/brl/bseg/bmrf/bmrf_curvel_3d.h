@@ -47,12 +47,12 @@ class bmrf_curvel_3d : public bugl_gaussian_point_3d<double>, public vbl_ref_cou
 
   //: Set the projection of this curvel into \p frame as the segment in 
   //  \p node at the value \p alpha
-  void set_proj_in_frame(int frame, double alpha, const bmrf_node_sptr& node);
+  void set_proj_in_frame(unsigned int frame, double alpha, const bmrf_node_sptr& node);
 
   //: Returns the 2d position of this curvel in frame \p frame by reference
   // \retval true if a correspondence exists at this frame
   // \retval false if no correspondence exists at this frame
-  bool pos_in_frame(int frame, vnl_double_2& pos);
+  bool pos_in_frame(unsigned int frame, vnl_double_2& pos);
 
  protected:
   //: The next curvel along the curve
