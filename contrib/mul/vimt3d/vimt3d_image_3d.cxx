@@ -9,7 +9,7 @@
 //  3D image is v[0] x v[1] x v[2]
 vcl_vector<unsigned> vimt3d_image_3d::image_size() const
 {
-  vcl_vector<unsigned> d(2);
+  vcl_vector<unsigned> d(3);
   d[0]=image_base().ni();
   d[1]=image_base().nj();
   d[2]=image_base().nk();
