@@ -6,15 +6,16 @@
 // \date   July 2003
 
 #include <vcl_iosfwd.h>
-
-#include <vil/vil_image_view.h>
+#include <vcl_cassert.h>
 
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.txx>
 
 #include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_edge_2d.h>
+#include <vtol/vtol_edge_2d_sptr.h>
 #include <vtol/vtol_one_chain.h>
+#include <vtol/vtol_one_chain_sptr.h>
 
 #include <vsol/vsol_curve_2d_sptr.h>
 
@@ -24,13 +25,11 @@
 #include <vdgl/vdgl_digital_curve.h>
 #include <vtol/vtol_intensity_face.h>
 
-#include <vxl_config.h>
-
 #ifndef NDEBUG
 #  include <vcl_iostream.h>
 #  define DEBUG( x ) x;
 #else
-#  define DEBUG( x ) /*debugging removed*/do{}while(0)
+#  define DEBUG( x ) /*debugging removed*/ do {} while (0)
 #endif
 
 
@@ -65,7 +64,7 @@ struct vtol_extract_topology::edgel_chain
 class vtol_extract_topology::region_type
   : public vbl_ref_count
 {
-public:
+ public:
   //: Add an edge to this region
   void
   push_back( edgel_chain_sptr chain );
@@ -85,7 +84,7 @@ public:
   //: Location of a point inside the region
   double x, y;
 
-private:
+ private:
 
   //: The list of bounday edges (which are edgel chains)
   vcl_vector< edgel_chain_sptr > list_;
@@ -173,7 +172,6 @@ add_faces( vcl_vector<vtol_intensity_face_sptr>& faces,
 } // end anonymous namespace
 
 
-
 // =============================================================================
 //                                                              EXTRACT TOPOLOGY
 // =============================================================================
@@ -203,11 +201,11 @@ vtol_extract_topology( label_image_type const& in_image )
   //
   min_label_ = img_(0,0);
   max_label_ = min_label_;
-  for( unsigned j = 0; j < img_.nj(); ++j ) {
-    for( unsigned i = 0; i < img_.ni(); ++i ) {
-      if( min_label_ > img_(i,j) )
+  for ( unsigned j = 0; j < img_.nj(); ++j ) {
+    for ( unsigned i = 0; i < img_.ni(); ++i ) {
+      if ( min_label_ > img_(i,j) )
         min_label_ = img_(i,j);
-      if( max_label_ < img_(i,j) )
+      if ( max_label_ < img_(i,j) )
         max_label_ = img_(i,j);
     }
   }
@@ -227,8 +225,8 @@ vertices() const
 
   vcl_vector< vtol_vertex_2d_sptr > verts;
 
-  for( vertex_iterator_t i = node_list_.begin();
-       i != node_list_.end(); ++i ) {
+  for ( vertex_iterator_t i = node_list_.begin();
+        i != node_list_.end(); ++i ) {
     verts.push_back( i->vertex );
   }
 
@@ -253,16 +251,16 @@ faces() const
 
   // Process each vertex, generating the boundary chains
   //
-  for( unsigned i = 0; i < node_list_.size(); ++i ) {
-    for( unsigned dir = 0; dir < 4; ++dir ) {
-      if( ! is_marked( markers[i], dir ) &&
-          node(i).link[dir] != null_index ) {
+  for ( unsigned i = 0; i < node_list_.size(); ++i ) {
+    for ( unsigned dir = 0; dir < 4; ++dir ) {
+      if ( ! is_marked( markers[i], dir ) &&
+           node(i).link[dir] != null_index ) {
         region_type_sptr chain = new region_type;
         int label;
         trace_face_boundary( markers, i, dir, *chain, label );
 
         // keep only boundaries for regions inside the image
-        if( label != min_label_-1 ) {
+        if ( label != min_label_-1 ) {
           chain_list[ label - min_label_ ].push_back( chain );
         }
       }
@@ -273,8 +271,8 @@ faces() const
   // After we extract all the chains, we must have gone through every
   // vertex in every available direction.
   //
-  for( unsigned i = 0; i < node_list_.size(); ++i ) {
-    for( unsigned dir = 0; dir < 4; ++dir ) {
+  for ( unsigned i = 0; i < node_list_.size(); ++i ) {
+    for ( unsigned dir = 0; dir < 4; ++dir ) {
       assert( node(i).link[dir] == null_index ||
               is_marked( markers[i], dir ) );
     }
@@ -285,8 +283,8 @@ faces() const
   // than one face based on containment, etc.
   //
   vcl_vector< vtol_intensity_face_sptr > faces;
-  for( unsigned i = 0; i < chain_list.size(); ++i ) {
-    if( ! chain_list[i].empty() ) {
+  for ( unsigned i = 0; i < chain_list.size(); ++i ) {
+    if ( ! chain_list[i].empty() ) {
       compute_faces( chain_list[i], faces );
     }
   }
@@ -302,7 +300,7 @@ int
 vtol_extract_topology::
 label( unsigned i, unsigned j ) const
 {
-  if( i < img_.ni() && j < img_.nj() ) {
+  if ( i < img_.ni() && j < img_.nj() ) {
     return img_( i, j );
   } else {
     return min_label_ - 1;
@@ -320,8 +318,8 @@ is_junction_vertex( unsigned i, unsigned j ) const
   // A junction must have at least three incident boundary edges
 
   unsigned edge_count = 0;
-  for( unsigned dir = 0; dir < 4; ++dir ) {
-    if( is_edge( i, j, dir ) ) {
+  for ( unsigned dir = 0; dir < 4; ++dir ) {
+    if ( is_edge( i, j, dir ) ) {
       ++edge_count;
     }
   }
@@ -500,7 +498,7 @@ trace_edge_chain( unsigned i, unsigned j, unsigned dir )
 {
   // Quick exit if there is nothing to trace in this direction.
   //
-  if( ! is_edge( i, j, dir ) )
+  if ( ! is_edge( i, j, dir ) )
     return;
 
 
@@ -519,7 +517,7 @@ trace_edge_chain( unsigned i, unsigned j, unsigned dir )
   chain->add_edgel( vdgl_edgel( i-0.5, j-0.5 ) );
   move( dir, i, j );
 
-  while( vertex_index( i, j ) == null_index ) {
+  while ( vertex_index( i, j ) == null_index ) {
 
     set_vertex_index( i, j, done_index );
 
@@ -530,12 +528,12 @@ trace_edge_chain( unsigned i, unsigned j, unsigned dir )
     //
     DEBUG( unsigned count = 0 );
     dir = (dir+3) % 4; // same as dir = dir - 1
-    while( ! is_edge( i, j, dir ) ) {
+    while ( ! is_edge( i, j, dir ) ) {
       dir = (dir+1) % 4;
       DEBUG( ++count );
       DEBUG( assert( count < 3 ) );
     }
- 
+
     move( dir, i, j );
 
     // The same non-junction vertex should not appear on multiple
@@ -592,9 +590,9 @@ construct_topology( )
   node_list_.clear();
   index_img_.fill( null_index );
 
-  for( unsigned j = 0; j <= img_.nj(); ++j ) {
-    for( unsigned i = 0; i <= img_.ni(); ++i ) {
-      if( is_junction_vertex( i, j ) ) {
+  for ( unsigned j = 0; j <= img_.nj(); ++j ) {
+    for ( unsigned i = 0; i <= img_.ni(); ++i ) {
+      if ( is_junction_vertex( i, j ) ) {
         set_vertex_index( i, j, node_list_.size() );
         node_list_.push_back( vertex_node( i, j ) );
       }
@@ -604,9 +602,9 @@ construct_topology( )
   // Construct the edge graph by following each edge from
   // each vertex.
   //
-  for( unsigned index = 0; index < node_list_.size(); ++index ) {
-    for( unsigned dir = 0; dir < 4; ++dir ) {
-      if( node(index).link[dir] == null_index ) {
+  for ( unsigned index = 0; index < node_list_.size(); ++index ) {
+    for ( unsigned dir = 0; dir < 4; ++dir ) {
+      if ( node(index).link[dir] == null_index ) {
         trace_edge_chain( node(index).i,
                           node(index).j,
                           dir );
@@ -623,20 +621,20 @@ construct_topology( )
   // faces (created later) will be bounded by two edges, one
   // potentially long edge, and one edge with length one pixel.
   //
-  for( unsigned j = 0; j <= img_.nj(); ++j ) {
-    for( unsigned i = 0; i <= img_.ni(); ++i ) {
-      if( vertex_index( i, j ) == null_index &&
-          is_boundary_vertex( i, j ) ) {
+  for ( unsigned j = 0; j <= img_.nj(); ++j ) {
+    for ( unsigned i = 0; i <= img_.ni(); ++i ) {
+      if ( vertex_index( i, j ) == null_index &&
+           is_boundary_vertex( i, j ) ) {
 
         // Find the two outgoing directions
         //
         unsigned dir = 0;
-        while( dir < 4 && ! is_edge( i, j, dir ) ) {
+        while ( dir < 4 && ! is_edge( i, j, dir ) ) {
           ++dir;
         }
         assert( dir < 4 );
         unsigned dir2 = dir+1;
-        while( dir2 < 4 && ! is_edge( i, j, dir2 ) ) {
+        while ( dir2 < 4 && ! is_edge( i, j, dir2 ) ) {
           ++dir2;
         }
         assert( dir2 < 4 );
@@ -666,15 +664,16 @@ construct_topology( )
 #ifndef NDEBUG
   // Verify the integrity of the vertex graph
   bool good = true;
-  for( unsigned index = 0; index < node_list_.size(); ++index ) {
-    for( unsigned dir = 0; dir < 4; ++dir ) {
-      if( node(index).link[dir] != null_index ) {
+  for ( unsigned index = 0; index < node_list_.size(); ++index ) {
+    for ( unsigned dir = 0; dir < 4; ++dir ) {
+      if ( node(index).link[dir] != null_index ) {
         unsigned nbr = node(index).link[dir];
         unsigned back_dir = node(index).back_dir[dir];
-        if( node(nbr).link[back_dir] != index ) {
-          vcl_cerr << "Bad back link on vertex " << index << " ("<<node(index).i<<","<<node(index).j<<" in dir " << dir << "\n"; 
-          vcl_cerr << "  link     " << dir << " = " << node(index).link[dir] << "; ";
-          vcl_cerr << "  back_dir " << dir << " = " << node(index).back_dir[dir] << "\n";
+        if ( node(nbr).link[back_dir] != index ) {
+          vcl_cerr << "Bad back link on vertex " << index << " ("<<node(index).i
+                   << ',' << node(index).j << " in dir " << dir << '\n'
+                   << "  link     " << dir << " = " << node(index).link[dir] << ";\n"
+                   << "  back_dir " << dir << " = " << node(index).back_dir[dir] << "\n";
         }
       }
     }
@@ -750,9 +749,9 @@ trace_face_boundary( vcl_vector<unsigned>& markers,
       DEBUG( assert( dir != old_dir ) );
 
       edge_labels( i, j, dir, left, right );
-    } while( left == right || right != region_label );
-    
-  } while( index != start_index );
+    } while ( left == right || right != region_label );
+
+  } while ( index != start_index );
 }
 
 
@@ -771,13 +770,12 @@ compute_faces( vcl_vector< region_type_sptr > const& chains,
   // into the appropriate place in the containment hierarchy.
 
   chain_tree_node universe( 0 );
-  for( unsigned i = 0; i < chains.size(); ++i ) {
+  for ( unsigned i = 0; i < chains.size(); ++i ) {
     universe.add( chains[i] );
   }
 
   add_faces( faces, &universe );
 }
-
 
 
 // =============================================================================
@@ -798,12 +796,11 @@ vertex_node( unsigned in_i, unsigned in_j )
   // to explicitly initialize the link[4] array since it is a built-in
   // type and thus will not be zero-initialized.
 
-  for( unsigned i = 0; i < 4; ++i ) {
+  for ( unsigned i = 0; i < 4; ++i ) {
     link[i] = null_index;
     back_dir[i] = 100;
   }
 }
-
 
 
 // =============================================================================
@@ -853,13 +850,12 @@ make_one_chain( ) const
 {
   vcl_vector< vtol_edge_sptr > edges;
 
-  for( unsigned i = 0; i < list_.size(); ++i ) {
+  for ( unsigned i = 0; i < list_.size(); ++i ) {
     edges.push_back( &*list_[i]->edge );
   }
 
   return new vtol_one_chain( edges, /*is_cycle=*/ true );
 }
-
 
 
 // =============================================================================
@@ -885,7 +881,7 @@ chain_tree_node::
 ~chain_tree_node()
 {
   vcl_vector<chain_tree_node*>::iterator itr = children.begin();
-  for( ; itr != children.end(); ++itr ) {
+  for ( ; itr != children.end(); ++itr ) {
     delete *itr;
   }
 }
@@ -903,8 +899,8 @@ add( region_type_sptr new_region )
   // First, determine if it should go further down the tree. If so,
   // add it to the appropriate child and exit immediately.
   //
-  for( itr = children.begin(); itr != children.end(); ++itr ) {
-    if( contains( (*itr)->region, new_region ) ) {
+  for ( itr = children.begin(); itr != children.end(); ++itr ) {
+    if ( contains( (*itr)->region, new_region ) ) {
       (*itr)->add( new_region );
       return;
     }
@@ -916,8 +912,8 @@ add( region_type_sptr new_region )
   //
   chain_tree_node* new_node = new chain_tree_node( new_region );
   itr = children.begin();
-  while( itr != children.end() ) {
-    if( contains( new_region, (*itr)->region ) ) {
+  while ( itr != children.end() ) {
+    if ( contains( new_region, (*itr)->region ) ) {
       new_node->children.push_back( *itr );
       this->children.erase( itr );
     } else {
@@ -937,7 +933,7 @@ make_face() const
 {
   vcl_vector< vtol_one_chain_sptr > face_chains;
   face_chains.push_back( region->make_one_chain() );
-  for( unsigned i = 0; i < children.size(); ++i ) {
+  for ( unsigned i = 0; i < children.size(); ++i ) {
     face_chains.push_back( children[i]->region->make_one_chain() );
   }
   return new vtol_intensity_face( face_chains );
@@ -950,17 +946,17 @@ void
 chain_tree_node::
 print( vcl_ostream& ostr, unsigned indent ) const
 {
-  for( unsigned i = 0; i < indent; ++i ) {
+  for ( unsigned i = 0; i < indent; ++i ) {
     ostr << " ";
   }
   ostr << "["<<children.size()<<"]";
-  if( ! children.empty() ) {
+  if ( ! children.empty() ) {
     ostr << "___\n";
-    for( unsigned i = 0; i < indent; ++i ) {
+    for ( unsigned i = 0; i < indent; ++i ) {
       ostr << " ";
     }
     ostr << "      \\\n";
-    for( unsigned i = 0; i < children.size(); ++i ) {
+    for ( unsigned i = 0; i < children.size(); ++i ) {
       children[i]->print( ostr, indent+7 );
     }
   } else {
@@ -985,10 +981,10 @@ add_faces( vcl_vector<vtol_intensity_face_sptr>& faces,
            chain_tree_node* node,
            bool even_level )
 {
-  if( even_level ) {
+  if ( even_level ) {
     faces.push_back( node->make_face() );
   }
-  for( unsigned i = 0; i < node->children.size(); ++i ) {
+  for ( unsigned i = 0; i < node->children.size(); ++i ) {
     add_faces( faces, node->children[i], !even_level );
   }
 }
@@ -1001,13 +997,13 @@ bool
 contains( region_type_sptr a, region_type_sptr b )
 {
   assert( b );
-  if( !a ) {
+  if ( !a ) {
     return true;
   } else {
     // Odd number of crossings => inside.
     //
     unsigned num_crossings = 0;
-    for( unsigned i = 0; i < a->size(); ++i ) {
+    for ( unsigned i = 0; i < a->size(); ++i ) {
       num_crossings += num_crosses_x_pos_ray( b->x, b->y, *(*a)[i] );
     }
     return ( num_crossings % 2 ) == 1;
@@ -1021,7 +1017,7 @@ contains( region_type_sptr a, region_type_sptr b )
 unsigned
 num_crosses_x_pos_ray( double x, double y, vdgl_edgel_chain const& chain )
 {
-  if( chain.size() < 2 )
+  if ( chain.size() < 2 )
     return 0;
 
   // The edges are vertical or horizontal line segments. Leverage that
@@ -1029,15 +1025,15 @@ num_crosses_x_pos_ray( double x, double y, vdgl_edgel_chain const& chain )
   // cross on a vertex.
   //
   unsigned count = 0;
-  for( int i = 0; i < chain.size()-1; ++i ) {
+  for ( int i = 0; i < chain.size()-1; ++i ) {
     vdgl_edgel const* e0 = &chain[i];
     vdgl_edgel const* e1 = &chain[i+1];
     assert( e0->y() != y && e1->y() != y );
-    if( ( e0->y() < y && y < e1->y() ) ||
+    if ( ( e0->y() < y && y < e1->y() ) ||
         ( e1->y() < y && y < e0->y() ) ) {
       assert( e0->x() == e1->x() );
       assert( e0->x() != x );
-      if( e0->x() > x ) {
+      if ( e0->x() > x ) {
         ++count;
       }
     }
