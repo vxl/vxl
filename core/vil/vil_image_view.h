@@ -196,6 +196,7 @@ public:
   {
     release_memory();
     ni_=nj_=nplanes_=0;
+    top_left_=0;
   }
 
   //: Set this view to look at someone else's memory data.
