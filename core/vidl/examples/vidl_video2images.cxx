@@ -10,11 +10,11 @@
 #include <vcl_algorithm.h>
 #include <vul/vul_arg.h>
 #include <vul/vul_sprintf.h>
-#include <vil/vil_image.h>
-#include <vil/vil_memory_image_of.h>
-#include <vil/vil_save.h>
-#include <vil/vil_byte.h>
-#include <vil/vil_rgb.h>
+#include <vil1/vil1_image.h>
+#include <vil1/vil1_memory_image_of.h>
+#include <vil1/vil1_save.h>
+#include <vil1/vil1_byte.h>
+#include <vil1/vil1_rgb.h>
 #include <vidl/vidl_io.h>
 #include <vidl/vidl_movie.h>
 // windows does not seem to get the -DHAS_MPEG2 option from CMake
@@ -152,17 +152,17 @@ main (int argc, char **argv)
       V2( "frame index: " << i );
 
       if (frames().end() != vcl_find (frames().begin(), frames().end(), i)) {
-          vil_image frame0 = pframe->get_image();
+          vil1_image frame0 = pframe->get_image();
           V2( "frame image: " << frame0 );
           CHECKE( 3 == frame0.components(),
                   "video frames must have 3 components" );
           CHECKE( 8 == frame0.bits_per_component(),
                   "video frames must have 8 bits per component" );
-          vil_memory_image_of<vil_rgb<vil_byte> > frame (frame0);
+          vil1_memory_image_of<vil1_rgb<vil1_byte> > frame (frame0);
           if (oifnt()) {
               vcl_string fn = vul_sprintf (oifnt(), i);
               V2( "writing frame to file " << fn );
-              vil_save (frame, fn.c_str());
+              vil1_save (frame, fn.c_str());
           }
       }
       else {

@@ -25,7 +25,7 @@
 #include <vidl/vidl_frame_sptr.h>
 #include <vidl/vidl_codec_sptr.h>
 
-class vil_image;
+class vil1_image;
 
 //: Allows user to load MPEG files as vxl video.
 class vidl_mpegcodec : public vidl_codec

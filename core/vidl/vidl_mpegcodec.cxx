@@ -7,9 +7,9 @@
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h> // for vcl_strtol()
 #include <vul/vul_file.h>
-#include <vil/vil_image.h>
-#include <vil/vil_memory_image_of.h>
-#include <vil/vil_rgb_byte.h>
+#include <vil1/vil1_image.h>
+#include <vil1/vil1_memory_image_of.h>
+#include <vil1/vil1_rgb_byte.h>
 
 extern "C" {
   // instead of #include <../libvo/video_out_internal.h>
@@ -143,7 +143,7 @@ static int internal_setup (vo_instance_t * instance_,
                                     0, 0, draw_frame);
 }
 
-static void vil_im_draw_frame (vo_frame_t * frame)
+static void vil1_im_draw_frame (vo_frame_t * frame)
 {
   vidl_mpegcodec_data * instance;
 
@@ -155,7 +155,7 @@ static void vil_im_draw_frame (vo_frame_t * frame)
   decode_request * p = instance->pending_decode;
   if (!p)
   {
-    vcl_cerr << "vidl_mpegcodec. vil_im_draw_frame."
+    vcl_cerr << "vidl_mpegcodec. vil1_im_draw_frame."
              << "decode request was never set\n";
     return;
   }
@@ -178,9 +178,9 @@ static void vil_im_draw_frame (vo_frame_t * frame)
 //another callback, called by helper class
 //after this is called, the client of this class
 //should set the decode request
-static int vil_im_setup (vo_instance_t * instance, int width, int height)
+static int vil1_im_setup (vo_instance_t * instance, int width, int height)
 {
-  return internal_setup (instance, width, height, vil_im_draw_frame);
+  return internal_setup (instance, width, height, vil1_im_draw_frame);
 }
 
 // this method is a callback, called by the helper class
@@ -191,7 +191,7 @@ vo_instance_t * vo_vil_im_open (void)
   instance = new vidl_mpegcodec_data;
 
   //set call backs
-  instance->setup = vil_im_setup;
+  instance->setup = vil1_im_setup;
   instance->framenum = -2;
   return (vo_instance_t *) instance;
 }
@@ -424,32 +424,32 @@ vidl_mpegcodec::init()
 #if 0
 //here for reference.
 //this actually describes how to get a
-//vil_image from these char * buffers.
+//vil1_image from these char * buffers.
 
-vil_image *
+vil1_image *
 vidl_mpegcodec::get_image(int frame_position,
                           int x0,
                           int y0,
                           int width,
                           int height)
 {
-  vil_image * frame = 0;
+  vil1_image * frame = 0;
 
   int indy = width * height * this->get_bytes_pixel();
   unsigned char ib[indy];
   this->get_section(frame_position,(void*)ib,x0,y0,width,height);
 
   if (decoder_->get_format() == vidl_mpegcodec_data::GREY)
-    frame = new vil_memory_image_of<unsigned char >(&ib[0],this->width(),this->height());
+    frame = new vil1_memory_image_of<unsigned char >(&ib[0],this->width(),this->height());
   else
   {
     int w = this->width();
     int h = this->height();
-    vil_rgb_byte bites[w*h];
+    vil1_rgb_byte bites[w*h];
     int c=0;
     for (int i=0; i<(w*h); i++,c+=3)
-      bites[i] = vil_rgb_byte(ib[c],ib[c+1],ib[c+2]);
-    frame = new vil_memory_image_of<vil_rgb_byte >(&bites[0],w,h);
+      bites[i] = vil1_rgb_byte(ib[c],ib[c+1],ib[c+2]);
+    frame = new vil1_memory_image_of<vil1_rgb_byte >(&bites[0],w,h);
   }
   return frame;
 }

@@ -16,7 +16,7 @@
 #include <vidl/vidl_clip_sptr.h>
 #include <vidl/vidl_frame_sptr.h>
 #include <vidl/vidl_codec_sptr.h>
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 
 #include <vcl_vector.h>
 #include <vcl_list.h>
@@ -44,14 +44,14 @@ public:
         );
 
   vidl_clip(
-        vcl_list<vil_image> &images,
+        vcl_list<vil1_image> &images,
         int start = 0,
         int end = 0,
         int increment = 1
         );
 
   vidl_clip(
-        vcl_vector<vil_image> &images,
+        vcl_vector<vil1_image> &images,
         int start = 0,
         int end = 0,
         int increment = 1

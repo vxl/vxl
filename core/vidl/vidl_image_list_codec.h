@@ -16,7 +16,7 @@
 #include <vcl_cstring.h>
 #include <vidl/vidl_image_list_codec_sptr.h>
 #include <vidl/vidl_codec.h>
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 #include <vcl_list.h>
 #include <vcl_vector.h>
 
@@ -29,8 +29,8 @@ public:
 
   // Constructors
   vidl_image_list_codec();
-  vidl_image_list_codec(vcl_list<vil_image>& images);
-  vidl_image_list_codec(vcl_vector<vil_image>& images);
+  vidl_image_list_codec(vcl_list<vil1_image>& images);
+  vidl_image_list_codec(vcl_vector<vil1_image>& images);
   // Destructor
   ~vidl_image_list_codec();
 
@@ -58,7 +58,7 @@ public:
         {vcl_strcpy(default_image_type_,type);}
 
   virtual const char* get_image_type() const {return default_image_type_;}
-  vcl_vector<vil_image> get_images() const {return images_;}
+  vcl_vector<vil1_image> get_images() const {return images_;}
 
   // Register image loaders
   //virtual void register_image_loaders ();
@@ -67,7 +67,7 @@ protected:
   virtual bool init();
 
   // Data Members--------------------------------------------------------------
-  vcl_vector<vil_image> images_;
+  vcl_vector<vil1_image> images_;
 
 private:
   char* default_image_type_;

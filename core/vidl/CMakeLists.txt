@@ -38,7 +38,7 @@ IF(WIN32)
 ENDIF(WIN32)
 
 ADD_LIBRARY(vidl ${vidl_sources})
-TARGET_LINK_LIBRARIES( vidl vbl vul vil vcl )
+TARGET_LINK_LIBRARIES( vidl vbl vul vil1 vcl )
 IF( MPEG2_FOUND )
   TARGET_LINK_LIBRARIES( vidl ${MPEG2_LIBRARIES} )
 ENDIF( MPEG2_FOUND )

@@ -18,7 +18,7 @@
 #include <vidl/vidl_frame.h>
 #include <vidl/vidl_frame_sptr.h>
 #include <vidl/vidl_clip.h>
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 #include <vcl_list.h>
 //: Video movie
 //   A vidl_movie is a movie sequence
@@ -40,7 +40,7 @@ public:
 
   // Data Access
   vidl_frame_sptr get_frame(int n);
-  vil_image get_image(int n) { return get_frame(n)->get_image(); }
+  vil1_image get_image(int n) { return get_frame(n)->get_image(); }
   int length() const;
   unsigned int frame_rate() const {return frame_rate_;}
   void set_frame_rate(unsigned int fr) {frame_rate_ = fr;}

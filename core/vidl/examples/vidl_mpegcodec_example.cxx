@@ -7,7 +7,7 @@
 
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h>
-#include <vil/vil_save.h>
+#include <vil1/vil1_save.h>
 #include <vidl/vidl_io.h>
 #include <vidl/vidl_mpegcodec.h>
 #include <vidl/vidl_movie.h>
@@ -56,13 +56,13 @@ int main(int argc, char* argv[])
        pframe <= movie->last();
        ++pframe,i++)
   {
-    vil_image im = pframe->get_image();
+    vil1_image im = pframe->get_image();
     vcl_cout << "decode frame " << i << vcl_endl;
   }
 
   //random frame access
-  vil_image im=movie->get_image(movie->length()/2);
-  vil_save(im,"test.ppm");
+  vil1_image im=movie->get_image(movie->length()/2);
+  vil1_save(im,"test.ppm");
 
   mpegcodec->close();
 

@@ -11,21 +11,21 @@
 // 10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
 // \endverbatim
 
-#include <vil/vil_image_impl.h>
+#include <vil1/vil1_image_impl.h>
 #include <vidl/vidl_frame_as_image_sptr.h>
 #include <vidl/vidl_frame_sptr.h>
 #include <vidl/vidl_frame.h>
 //: see a frame as an image
 //   This is a convenient container to be able to make easily
 //   an image from a frame.
-class vidl_frame_as_image : public vil_image_impl
+class vidl_frame_as_image : public vil1_image_impl
 {
  public:
 
   vidl_frame_as_image(vidl_frame* frame);
   ~vidl_frame_as_image();
 
-  vil_component_format component_format() const { return VIL_COMPONENT_FORMAT_UNSIGNED_INT; }
+  vil1_component_format component_format() const { return VIL1_COMPONENT_FORMAT_UNSIGNED_INT; }
   int bits_per_component() const { return 8; }
   int components() const;
   int planes() const { return 1; }

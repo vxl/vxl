@@ -18,7 +18,7 @@ int main ()
        pframe <= movie->last();
        ++pframe)
   {
-    vil_image im = pframe->get_image();
+    vil1_image im = pframe->get_image();
     vcl_cout << "Got frame: " << im.width() << 'x' << im.height() << '\n';
   }
 
@@ -27,7 +27,7 @@ int main ()
        pframe <= movie->last();
        pframe = pframe + 2)
   {
-    vil_image im = pframe->get_image();
+    vil1_image im = pframe->get_image();
     vcl_cout << "Got frame: " << im.width() << 'x' << im.height() << '\n';
   }
 
@@ -36,7 +36,7 @@ int main ()
        pframe >= movie->first();
        --pframe)
   {
-    vil_image im = pframe->get_image();
+    vil1_image im = pframe->get_image();
     vcl_cout << "Got frame: " << im.width() << 'x' << im.height() << '\n';
   }
 
@@ -45,7 +45,7 @@ int main ()
        pframe >= movie->first();
        pframe = pframe - 2)
   {
-    vil_image im = pframe->get_image();
+    vil1_image im = pframe->get_image();
     vcl_cout << "Got frame: " << im.width() << 'x' << im.height() << '\n';
   }
 

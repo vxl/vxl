@@ -5,7 +5,7 @@
 
 #include <vidl/vidl_codec.h>
 #include <vidl/vidl_frame_as_image.h>
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 
 //=========================================================================
 //  Methods for vidl_frame.
@@ -26,10 +26,10 @@ vidl_frame::~vidl_frame()
 }
 
 //: Return the image.
-vil_image vidl_frame::get_image()
+vil1_image vidl_frame::get_image()
 {
   if (! image_) {
-    image_ = vil_image(new vidl_frame_as_image(this));
+    image_ = vil1_image(new vidl_frame_as_image(this));
   }
   return image_;
 }

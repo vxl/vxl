@@ -13,9 +13,9 @@
 #include <vidl/vidl_codec.h>
 #include <vidl/vidl_movie.h>
 #include <vidl/vidl_frame.h>
-#include <vil/vil_image.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
+#include <vil1/vil1_image.h>
+#include <vil1/vil1_load.h>
+#include <vil1/vil1_save.h>
 
 //=========================================================================
 //  Methods for vidl_image_list_codec.
@@ -29,12 +29,12 @@ char *vidl_image_list_codec::default_initialization_image_type_ = "tiff";
 
 
 //: Constructor, from a list of images
-vidl_image_list_codec::vidl_image_list_codec(vcl_list<vil_image>& images)
+vidl_image_list_codec::vidl_image_list_codec(vcl_list<vil1_image>& images)
 {
   // Set the image type to the default value
   default_image_type_ = default_initialization_image_type_;
 
-  for (vcl_list<vil_image>::iterator i=images.begin(); i!= images.end(); ++i)
+  for (vcl_list<vil1_image>::iterator i=images.begin(); i!= images.end(); ++i)
     images_.push_back(*i);
 
   if (!init())
@@ -42,12 +42,12 @@ vidl_image_list_codec::vidl_image_list_codec(vcl_list<vil_image>& images)
 }
 
 //: Constructor, from a vector of images
-vidl_image_list_codec::vidl_image_list_codec(vcl_vector<vil_image>& images)
+vidl_image_list_codec::vidl_image_list_codec(vcl_vector<vil1_image>& images)
 {
   // Set the image type to the default value
   default_image_type_ = default_initialization_image_type_;
 
-  for (vcl_vector<vil_image>::iterator i=images.begin(); i!= images.end(); ++i)
+  for (vcl_vector<vil1_image>::iterator i=images.begin(); i!= images.end(); ++i)
     images_.push_back(*i);
 
   if (!init())
@@ -79,7 +79,7 @@ bool vidl_image_list_codec::init()
 //   unfinished !!!!! TODO
 
      set_number_frames(images_.size());
-     vil_image first = images_[0];
+     vil1_image first = images_[0];
 
 // Come from TargetJr, don't know the vxl equivalent
 //   set_format(first->get_format());
@@ -115,7 +115,7 @@ vidl_codec_sptr vidl_image_list_codec::load(const char* fname, char mode)
   for ( int i=0; true; i++)
     {
       const char *name = vul_sprintf( fname, i).c_str();
-      vil_image img= vil_load(name);
+      vil1_image img= vil1_load(name);
 
       if (img!=0)
         images_.push_back(img);
@@ -142,7 +142,7 @@ vidl_codec_sptr vidl_image_list_codec::load(const vcl_list<vcl_string> &fnames, 
   for (vcl_list<vcl_string>::const_iterator i = fnames.begin(); i!=fnames.end(); ++i)
     {
       const char* name = (*i).c_str();
-      vil_image img =  vil_load(name);
+      vil1_image img =  vil1_load(name);
       if (img!=0)
       {
         images_.push_back(img);
@@ -171,7 +171,7 @@ vidl_codec_sptr vidl_image_list_codec::load(const vcl_vector<vcl_string> &fnames
   for (vcl_vector<vcl_string>::const_iterator i = fnames.begin(); i!=fnames.end(); ++i)
     {
       const char* name = (*i).c_str();
-      vil_image img =  vil_load(name);
+      vil1_image img =  vil1_load(name);
 
       if (img!=0)
         images_.push_back(img);
@@ -229,14 +229,14 @@ bool vidl_image_list_codec::save(
        ++pframe)
     {
       // Get the image from the frame
-      vil_image image = pframe->get_image();
+      vil1_image image = pframe->get_image();
 
       // Create a name for the current image to be saved
       char currentname [100];
       vcl_sprintf (currentname, "%s%05d.%s",
                    fname, pframe.current_frame_number(), extension.c_str());
 
-      bool saved_image = vil_save(image, currentname, type);
+      bool saved_image = vil1_save(image, currentname, type);
 
       if (!saved_image)
         ret = false;
