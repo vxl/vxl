@@ -19,13 +19,6 @@ SOURCES += strk_tracker.cxx
 SOURCES += strk_tracker_params.cxx
 SOURCES += strk_tracking_face_2d.cxx
 MANPAGE_SOURCES += strk_tracking_face_2d_sptr.h
-SOURCES += strk_epi_point.cxx
-MANPAGE_SOURCES += strk_epi_point_sptr.h
-SOURCES += strk_epi_seg.cxx
-MANPAGE_SOURCES += strk_epi_seg_sptr.h
-SOURCES += strk_epipolar_grouper.cxx
-SOURCES += strk_epipolar_grouper_params.cxx
-SOURCES += strk_epipolar_grouper_process.cxx
 SOURCES += strk_region_info.cxx
 SOURCES += strk_region_info_params.cxx
 
