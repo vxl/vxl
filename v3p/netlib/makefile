@@ -1,15 +1,14 @@
 # Imakefile for netlib library
 # This library contains public domain routines from netlib.att.com
 
-USES = 
-
-USE_IUTEMPLATES := 0
+USES = # nothing!
+IULIBS = # automatically added: -lnetlib
 
 LIBRARY := netlib
 VERSION := 1.0
 
 # remove this if you know where to get z_sqrt.f
-SOURCES += z_sqrt.cc 
+SOURCES += z_sqrt.c 
 
 #*********************
 # Std Fortran Library 
@@ -218,7 +217,7 @@ SOURCES += zunghr.c
 SOURCES += zungqr.c
 
 ##########################################
-include $(IUEROOT)/config/top.mk
+include ${IUEROOT}/config/top.mk
 ##########################################
 
 ifeq ($(OS),hpux10.20)
