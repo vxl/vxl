@@ -1763,7 +1763,7 @@ bool brip_vil1_float_ops::chip(vil1_image const & input,
           brip_roi_sptr const& roi,
           vil1_image& chip)
 {
-  if (!chip||!roi)
+  if (!input||!roi)
     return false;
 
   const int Nc = input.width(), Nr = input.height();
