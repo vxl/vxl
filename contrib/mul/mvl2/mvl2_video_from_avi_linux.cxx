@@ -16,7 +16,7 @@ mvl2_video_from_avi::mvl2_video_from_avi()
 mvl2_video_from_avi::~mvl2_video_from_avi()
 {
   uninitialize();
-  if (buffer_) delete(buffer_);
+  if (buffer_) delete buffer_;
 }
 
 vcl_string mvl2_video_from_avi::is_a() const
@@ -30,8 +30,8 @@ mvl2_video_reader* mvl2_video_from_avi::clone() const
 }
 
 // possible options : Grey
-bool mvl2_video_from_avi::initialize( int width, int height, 
-    vcl_string format, vcl_string file_name)
+bool mvl2_video_from_avi::initialize( int width, int height,
+                                      vcl_string format, vcl_string file_name)
 {
   firstcall_=true;
   current_frame_=0;
@@ -46,8 +46,7 @@ bool mvl2_video_from_avi::initialize( int width, int height,
   width_ = bh.biWidth;
   height_ = bh.biHeight;
   frame_rate_=(double)moviestream_->GetLength()/moviestream_->GetLengthTime();
-  
-	
+
   moviestream_->StartStreaming();
   use_colour_=true;
   if (!format.find(vcl_string("Grey"))) use_colour_=false;
@@ -60,7 +59,7 @@ void mvl2_video_from_avi::uninitialize()
 {
   if (!is_initialized_) return;
   moviestream_->StopStreaming();
-  delete(moviefile_);
+  delete moviefile_;
   is_initialized_=false;
 }
 
@@ -71,45 +70,43 @@ int mvl2_video_from_avi::next_frame()
   moviestream_->ReadFrame();
 
   // hack for GetPos bug with MJPG codec
-  current_frame_=(moviestream_->GetPos()==0
-    )?current_frame_+1:moviestream_->GetPos();
+  current_frame_= moviestream_->GetPos()==0 ? current_frame_+1 : moviestream_->GetPos();
   return current_frame_;
 }
 
 bool mvl2_video_from_avi::get_frame(vimt_image_2d_of<vxl_byte>& image)
 {
-
   if (!is_initialized_) return false;
 
   CImage* cim;
-   
+
   cim=moviestream_->GetFrame();
-  
+
   if (cim==0) return false;
   CImage* im24;
   if (cim->Depth()==24)
     {
     im24=cim;
     }
-  else  
+  else
     {
     im24=new CImage(cim,24);
     }
   if (firstcall_)
     {
-    if (buffer_) delete(buffer_);
+    if (buffer_) delete buffer_;
     buffer_=NULL;
     firstcall_=false;
-    }      
+    }
   if (!buffer_) buffer_=(vxl_byte*)malloc(sizeof(vxl_byte)*im24->Bytes());
   if (use_colour_)
     {
     image.image().set_size(im24->Width(),im24->Height(),3);
     vcl_memcpy(buffer_,im24->At(0,0),sizeof(vxl_byte)*im24->Bytes());
     image.image().set_to_memory(buffer_+2,im24->Width(),im24->Height(),3,
-        3,3*im24->Width(),-1); 
+        3,3*im24->Width(),-1);
     }
-  else  
+  else
     {
     image.image().set_size(im24->Width(),im24->Height(),1);
       // takes the Y componant in the YUV space
@@ -119,7 +116,7 @@ bool mvl2_video_from_avi::get_frame(vimt_image_2d_of<vxl_byte>& image)
             0.587*(double)im24->At(x,y)[2]+
             0.114*(double)im24->At(x,y)[0]);
     }
-  if (cim->Depth()!=24) delete(im24); 
+  if (cim->Depth()!=24) delete im24;
   return true;
 }
 
@@ -128,23 +125,23 @@ void mvl2_video_from_avi::reset_frame()
   if (!is_initialized_) return;
 
   current_frame_=0;
-  moviestream_->Seek(current_frame_); 
+  moviestream_->Seek(current_frame_);
 }
- 
+
 void mvl2_video_from_avi::set_frame_rate(double frame_rate)
 {
 }
- 
+
 double mvl2_video_from_avi::get_frame_rate()
 {
   return frame_rate_;
 }
- 
+
 int mvl2_video_from_avi::get_width()
 {
    return width_;
 }
- 
+
 int mvl2_video_from_avi::get_height()
 {
    return height_;
@@ -159,18 +156,17 @@ int mvl2_video_from_avi::length()
   if (!is_initialized_) return -1;
 
   return moviestream_->GetLength();
-} 
+}
 
 int mvl2_video_from_avi::seek(int frame_number)
 {
-
   if (!is_initialized_ || frame_number>moviestream_->GetLength()) return -1;
-  if (frame_number==0) 
-    {
+  if (frame_number==0)
+  {
     reset_frame();
     next_frame();
     return 0;
-    }
+  }
   if (frame_number==current_frame_) return current_frame_;
   if (frame_number==current_frame_+1) return next_frame();
 
@@ -183,17 +179,16 @@ int mvl2_video_from_avi::seek(int frame_number)
   vcl_cout << key_frame << "  -> uncomppress ";
   vcl_cout << frame_number-key_frame << " frames" << vcl_endl;
   for (int i=key_frame;i<=frame_number;i++)
-    {
+  {
     //current_frame_=moviestream_->GetPos();
     moviestream_->ReadFrame();
     if (i!=frame_number)
-      {
+    {
       CImage* cim;
       cim=moviestream_->GetFrame();
-      }
     }
+  }
   // hack for GetPos bug with MJPG codec
-  current_frame_=(moviestream_->GetPos()==0
-    )?frame_number:moviestream_->GetPos();
+  current_frame_= moviestream_->GetPos()==0 ? frame_number : moviestream_->GetPos();
   return current_frame_;
-} 
+}
