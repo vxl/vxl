@@ -1,9 +1,0 @@
-#ifndef vcl_iso_deque_h_
-#define vcl_iso_deque_h_
-
-#include <deque>
-
-@deque
-@swap
-
-#endif
