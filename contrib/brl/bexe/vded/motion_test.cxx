@@ -1,6 +1,5 @@
 //:
 // \file
-#include <vcl_compiler.h>
 #include <vcl_string.h>
 #include <vcl_fstream.h>
 #include <vcl_sstream.h>
