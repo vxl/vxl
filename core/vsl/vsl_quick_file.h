@@ -22,7 +22,7 @@
 
 //: Load something from a file 
 template <class T>
-bool vsl_quick_file_load(T &data,
+inline bool vsl_quick_file_load(T &data,
   const vcl_string& path,
   vcl_ostream* errorStream = &vcl_cerr)
 {
@@ -53,7 +53,7 @@ bool vsl_quick_file_load(T &data,
 
 //: Save something to a file 
 template <class T>
-bool vsl_quick_file_save(T &data,
+inline bool vsl_quick_file_save(T &data,
   const vcl_string& path,
   vcl_ostream* errorStream = &vcl_cerr)
 {
@@ -77,7 +77,7 @@ bool vsl_quick_file_save(T &data,
 
 // Load two objects from a file 
 template <class T, class S>
-bool vsl_quick_file_load(T &data1,
+inline bool vsl_quick_file_load(T &data1,
   S &data2,
   const vcl_string& path,
   vcl_ostream* errorStream = &vcl_cerr)
@@ -93,7 +93,7 @@ bool vsl_quick_file_load(T &data1,
       // Check that we have reached the end of the file.
       char dummy;
       vsl_b_read(bfs,dummy);
-      if (bfs.eof())
+      if (bfs.is().eof())
       {
         bfs.close();
         if (errorStream)
@@ -111,7 +111,7 @@ bool vsl_quick_file_load(T &data1,
 
 // Save two objects to a file 
 template <class T, class S>
-bool vsl_quick_file_save(T &data1,
+inline bool vsl_quick_file_save(T &data1,
   S &data2,
   const vcl_string& path,
   vcl_ostream* errorStream = &vcl_cerr)
@@ -137,7 +137,7 @@ bool vsl_quick_file_save(T &data1,
 
 // Load three objects from a file 
 template <class T, class S, class U>
-bool vsl_quick_file_load(T &data1,
+inline bool vsl_quick_file_load(T &data1,
   S &data2, U &data3,
   const vcl_string& path,
   vcl_ostream* errorStream = &vcl_cerr)
@@ -153,7 +153,7 @@ bool vsl_quick_file_load(T &data1,
       // Check that we have reached the end of the file.
       char dummy;
       vsl_b_read(bfs,dummy);
-      if (bfs.eof())
+      if (bfs.is().eof())
       {
         bfs.close();
         if (errorStream)
@@ -170,7 +170,7 @@ bool vsl_quick_file_load(T &data1,
 
 // Save three objects to a file 
 template <class T, class S, class U>
-bool vsl_quick_file_save(T &data1,
+inline bool vsl_quick_file_save(T &data1,
   S &data2, U &data3,
   const vcl_string& path,
   vcl_ostream* errorStream = &vcl_cerr)
@@ -197,7 +197,7 @@ bool vsl_quick_file_save(T &data1,
 
 // Load two objects from a file 
 template <class T, class S, class U, class V>
-bool vsl_quick_file_load(T &data1,
+inline bool vsl_quick_file_load(T &data1,
   S &data2, U &data3, V &data4,
   const vcl_string& path,
   vcl_ostream* errorStream = &vcl_cerr)
@@ -214,7 +214,7 @@ bool vsl_quick_file_load(T &data1,
       // Check that we have reached the end of the file.
       char dummy;
       vsl_b_read(bfs,dummy);
-      if (bfs.eof())
+      if (bfs.is().eof())
       {
         bfs.close();
         if (errorStream)
@@ -231,7 +231,7 @@ bool vsl_quick_file_load(T &data1,
 
 // Save four objects to a file 
 template <class T, class S, class U, class V>
-bool vsl_quick_file_save(T &data1,
+inline bool vsl_quick_file_save(T &data1,
   S &data2, U &data3, V &data4,
   const vcl_string& path,
   vcl_ostream* errorStream = &vcl_cerr)
