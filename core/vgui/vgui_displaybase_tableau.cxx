@@ -9,6 +9,7 @@
 // \brief  See vgui_displaybase_tableau.h for a description of this file.
 
 #include "vgui_displaybase_tableau.h"
+#include "vgui_macro.h"
 
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
@@ -115,6 +116,7 @@ void vgui_displaybase_tableau::clear()
 
 void vgui_displaybase_tableau::draw_soviews_render()
 {
+  vgui_macro_report_errors;
   if (debug)
     vcl_cerr << "vgui_style_factory::use_factory : "
              << vbl_bool_ostream::true_false(vgui_style_factory::use_factory)
@@ -189,6 +191,7 @@ void vgui_displaybase_tableau::draw_soviews_render()
       so->draw();
     }//  for all soviews
   }
+  vgui_macro_report_errors;
 }
 
 

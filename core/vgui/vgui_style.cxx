@@ -39,29 +39,21 @@ vgui_style::~vgui_style() {
 void
 vgui_style::apply_color() const
 {
-  vgui_macro_report_errors;
   glColor3f( rgba[0], rgba[1], rgba[2] );
-  vgui_macro_report_errors;
 }
 
 void
 vgui_style::apply_line_width() const
 {
-  if( line_width > 0.0 ) {
-    vgui_macro_report_errors;
+  if( line_width > 0.0 ) 
     glLineWidth( line_width );
-    vgui_macro_report_errors;
-  }
 }
 
 void
 vgui_style::apply_point_size() const
 {
-  if( point_size > 0.0 ) {
-    vgui_macro_report_errors;
+  if( point_size > 0.0 ) 
     glPointSize( point_size );
-    vgui_macro_report_errors;
-  }
 }
 
 void
