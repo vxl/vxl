@@ -111,8 +111,8 @@ public:
     void set_similarity(double s, double theta, double t_x, double t_y);
 
     //: Sets euclidean transformation.
-    //!in: dx: Rotation and scaling of x axis
-    //!in: t: Translation
+    // \param dx  Rotation and scaling of x axis
+    // \param t  Translation
     void set_similarity(const vgl_point_2d<double> & dx, const vgl_point_2d<double> & t);
 
     //: reflect about a line though the points m1, and m2

@@ -50,8 +50,8 @@ const mil_image& mil_byte_image_2d_io::image() const
 }
 
 //: Attempt to load image from named file
-//!in: filetype: String hinting at what image format is
-//  Return true if successful
+// \param filetype  String hinting at what image format is
+// \return true if successful
 bool mil_byte_image_2d_io::loadImage(const vcl_string& path,
               const vcl_string& filetype)
 {
@@ -59,8 +59,8 @@ bool mil_byte_image_2d_io::loadImage(const vcl_string& path,
 }
 
 //: Attempt to save image to named file
-//!in: filetype: String defining what format to save in
-//!ret: true if successful
+// \param filetype  String defining what format to save in
+// \return true if successful
 bool mil_byte_image_2d_io::saveImage(const vcl_string& path,
               const vcl_string& filetype) const
 {
@@ -139,7 +139,7 @@ void mil_byte_image_2d_io::copyGreyToRGB(vil_image& img)
 }
 
 //: Attempt to load image from named file
-//!in: filetype: String hinting at what image format is
+// \param filetype  String hinting at what image format is
 //  Return true if successful
 bool mil_byte_image_2d_io::loadTheImage(mil_image_2d_of<vil_byte>& image,
               const vcl_string& path,
@@ -174,7 +174,7 @@ bool mil_byte_image_2d_io::loadTheImage(mil_image_2d_of<vil_byte>& image,
 
 
 //: Attempt to save image to named file
-//!in: filetype: String defining what format to save in
+// \param filetype  String defining what format to save in
 bool mil_byte_image_2d_io::saveTheImage(const mil_image_2d_of<vil_byte>& image,
             const vcl_string& path,
             const vcl_string& f_type) const

@@ -37,14 +37,14 @@ public:
     virtual const mil_image& image() const =0;
 
     //: Attempt to load image from named file
-    //!in: filetype: String hinting at what image format is  (valid options depend on derived class)
-    //!ret: true if successful
+    // \param filetype  String hinting at what image format is  (valid options depend on derived class)
+    // \return true if successful
     //  If successful, image() will return the image which was loaded.
     virtual bool loadImage(const vcl_string& path,
                            const vcl_string& filetype) =0;
 
     //: Attempt to save image to named file
-    //!in: filetype: String defining what format to save in (valid options depend on derived class)
+    // \param filetype  String defining what format to save in (valid options depend on derived class)
     virtual bool saveImage(const vcl_string& path,
                            const vcl_string& filetype) const =0;
 
