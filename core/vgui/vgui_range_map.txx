@@ -120,8 +120,9 @@ vcl_vector<float> vgui_range_map<Type>::
 compute_float_table(const Type min, const Type max, const Type gamma,
                     const long double ratio)
 {
+  vcl_vector<float> null;
   if (vil_pixel_traits<Type>::is_signed())
-    return 0;
+    return null;
   vcl_vector<float> fmap(size_);
   unsigned maxt = vil_pixel_traits<Type>::maxval();
   for(int i = 0; i <= maxt; i++) 
