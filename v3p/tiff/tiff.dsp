@@ -42,7 +42,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_LIB" /D "JPEG_SUPPORT" /D "HAVE_IEEEFP" /D USE_VARARGS=0 /D "USE_PROTOTYPES" /D "USE_CONST" /YX /Zl /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /I "$(IUEROOT)\v3p\jpeg" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_LIB" /D "JPEG_SUPPORT" /D "HAVE_IEEEFP" /D USE_VARARGS=0 /D "USE_PROTOTYPES" /D "USE_CONST" /YX /Zl /FD /c
 # ADD BASE RSC /l 0x809 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
