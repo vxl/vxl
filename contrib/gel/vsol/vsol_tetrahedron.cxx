@@ -5,7 +5,7 @@
 
 #include <vcl_cmath.h> // for vcl_abs(double)
 #include <vcl_iostream.h>
-#include "vsol_point_3d.h"
+#include <vsol/vsol_point_3d.h>
 
 //***************************************************************************
 // Initialization
@@ -67,34 +67,6 @@ vsol_point_3d_sptr vsol_tetrahedron::p2(void) const
 vsol_point_3d_sptr vsol_tetrahedron::p3(void) const
 {
   return storage_[3];
-}
-
-//***************************************************************************
-// Comparison
-//***************************************************************************
-
-//---------------------------------------------------------------------------
-//: Has `this' the same points than `other' in the same order ?
-//---------------------------------------------------------------------------
-bool vsol_tetrahedron::operator==(const vsol_tetrahedron &other) const
-{
-  return vsol_polyhedron::operator==(other);
-}
-
-bool vsol_tetrahedron::operator==(const vsol_polyhedron &other) const
-{
-  return vsol_polyhedron::operator==(other);
-}
-
-//: spatial object equality
-
-bool vsol_tetrahedron::operator==(const vsol_spatial_object_3d& obj) const
-{
-  return
-   obj.spatial_type() == vsol_spatial_object_3d::VOLUME &&
-   ((vsol_volume_3d const&)obj).volume_type() == vsol_volume_3d::POLYHEDRON
-  ? *this == (vsol_polyhedron const&) (vsol_volume_3d const&) obj
-  : false;
 }
 
 //***************************************************************************

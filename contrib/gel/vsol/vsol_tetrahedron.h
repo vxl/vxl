@@ -14,6 +14,7 @@
 // \verbatim
 //  Modifications
 //   2004/05/14 Peter Vanroose  Added describe()
+//   2004/09/24 Peter Vanroose  Removed operaqtor==() since parent's suffices
 // \endverbatim
 //*****************************************************************************
 
@@ -75,18 +76,6 @@ class vsol_tetrahedron : public vsol_polyhedron
   //: Return the last vertex
   //---------------------------------------------------------------------------
   vsol_point_3d_sptr p3(void) const;
-
-  //***************************************************************************
-  // Comparison
-  //***************************************************************************
-
-  //---------------------------------------------------------------------------
-  //: Has `this' the same points than `other' and the same orientation ?
-  //---------------------------------------------------------------------------
-  virtual bool operator==(vsol_tetrahedron const& other) const;
-  inline bool operator!=(vsol_tetrahedron const& other)const{return !operator==(other);}
-  virtual bool operator==(vsol_polyhedron const& other) const; // virtual of vsol_polyhedron
-  virtual bool operator==(vsol_spatial_object_3d const& obj) const; // virtual of vsol_spatial_object_3d
 
   //***************************************************************************
   // Status report
