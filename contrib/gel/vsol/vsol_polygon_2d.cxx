@@ -9,6 +9,7 @@
 // External declarations for implementation
 //*****************************************************************************
 #include <vcl_cassert.h>
+#include <vcl_cmath.h>
 #include <vsol/vsol_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
 
@@ -134,8 +135,17 @@ void vsol_polygon_2d::compute_bounding_box(void) const
 //---------------------------------------------------------------------------
 double vsol_polygon_2d::area(void) const
 {
-  vcl_cerr << "Warning: vsol_polygon_2d::area() has not yet been implemented\n";
-  return -1; // TO DO
+  double area = 0.0;
+  unsigned int last = storage_->size()-1;
+  
+  for (unsigned int i=0; i<last; ++i)
+    area += ((*storage_)[i]->x() * (*storage_)[i+1]->y())
+          - ((*storage_)[i+1]->x() * (*storage_)[i]->y());
+          
+  area += ((*storage_)[last]->x() * (*storage_)[0]->y())
+        - ((*storage_)[0]->x() * (*storage_)[last]->y());
+          
+  return vcl_abs(area / 2.0);
 }
 
 //---------------------------------------------------------------------------
@@ -305,6 +315,7 @@ inline void vsol_polygon_2d::describe(vcl_ostream &strm, int blanking) const
     strm << "[null]";
   else {
     strm << "[Nverts=" << size();
+    strm << " Area=" << area();
     for (unsigned int i=0; i<size(); ++i)
       strm << " p" << i << ':' << *(vertex(i));
     strm << ']';

@@ -57,6 +57,8 @@ void test_vsol_polygon_2d()
 
   TEST("vsol_polygon_2d::is_convex()", poly->is_convex(), true);
 
+  TEST("vsol_polygon_2d::area()", poly->area(), 15.5);
+
   vsol_polygon_2d_sptr poly2=new vsol_polygon_2d(*poly);
   TEST("Copy constructor", !poly2, false);
 
@@ -73,6 +75,8 @@ void test_vsol_polygon_2d()
   poly=new vsol_polygon_2d(vertices);
 
   TEST("!vsol_polygon_2d::is_convex()", poly->is_convex(), false);
+
+  TEST("vsol_polygon_2d::area() - non-convex", poly->area(), 1.5);
 
   // An example of a non-convex polygon with two consecutive parallel
   // edges.  An earlier implementation of is_convex() will fail here.
