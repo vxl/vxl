@@ -18,14 +18,19 @@
 //---------------------------------------------------------------------------
 
 #include <vbl/vbl_sparse_array_base.h>
-#include <vcl_iosfwd.h>
+#include <vcl_iostream.h>
 
 //: Sparse array allowing space efficient access of the form s[3000] = 2;
 template <class T>
 class vbl_sparse_array_1d: public vbl_sparse_array_base<T, unsigned>
 {
-    //: Print the Array to a stream in "(i,j): value" format.
-  vcl_ostream& print(vcl_ostream&) const;
+  //: Print the Array to a stream in "(i,j): value" format.
+  vcl_ostream& print(vcl_ostream& out) const
+  {
+    for(const_iterator p = begin(); p != end(); ++p)
+      out << "(" << (*p).first << "): " << (*p).second << vcl_endl;
+    return out;
+  }
 };
 
 #define VBL_SPARSE_ARRAY_1D_INSTANTIATE(T) \

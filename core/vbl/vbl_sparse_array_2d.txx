@@ -8,6 +8,7 @@
 
 #include <vcl_iostream.h>
 
+#if 0 // capes@robots - moved print implementation to header file
 //: Print the array to a stream in "(i,j): value" format.
 template <class T>
 vcl_ostream& vbl_sparse_array_2d<T>::print(vcl_ostream& out) const
@@ -18,6 +19,7 @@ vcl_ostream& vbl_sparse_array_2d<T>::print(vcl_ostream& out) const
         << "): " << (*p).second << vcl_endl;
   return out;
 }
+#endif 
 
 #undef VBL_SPARSE_ARRAY_2D_INSTANTIATE
 #define VBL_SPARSE_ARRAY_2D_INSTANTIATE(T) \
