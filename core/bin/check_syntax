@@ -65,6 +65,7 @@ foreach $f (@FILES)
                $f !~ m/\bvgui\/internals\/trackball/ &&
                $f !~ m/\bcore\/vgl\/internals\/gpc\.h$/ &&
                $f !~ m/\bcore\/vidl\/vidl_mpegcodec_helper\.cxx$/ &&
+               $f !~ m/\bcore\/vidl_vil1\/vidl_vil1_mpegcodec_helper\.cxx$/ &&
                $f !~ m/\/oufgl\/(pxc200|bt848(-addons)?)\.h$/ &&
                $f !~ m/\bgel\/vgel\/kl\/.*\.h$/ &&
                $f !~ m/\bvcl(\/[^\/]+)?\/vcl_(c|[siof]+stream|io|strstream|streambuf)/ &&
@@ -127,24 +128,24 @@ foreach $f (@FILES)
     print "$f\t\# doxygen \\file better not have an argument, so remove \"$1\"\n";
     $printed = 1;
   }
-  if ($file =~ m!\n\s*//(:|\s*\\brief\b)(.{40,})\n *// *([a-z]\S*)!)
+  if ($file =~ m!\n\s*//(:|\s*\\brief\b)[ \t]*(.{40,})\n *// *([a-z].*)!)
   {
     unless ($2 =~ m/[.?!]$/ || $3 =~ m/^v[bcginpsu]l_/)
     {
-      print "$f\t\# brief comment possibly continued on next line: \"$2\\n$3 ...\"\n";
+      print "$f\t\# brief comment possibly continued on next line: \"$2\" + \"$3\"\n";
       $printed = 1;
     }
   }
-  elsif ($file =~ m!\n\s*//(:|\s*\\brief\b)(.{40,}\b(and|if|but|since|that|,))\n *//!i)
+  elsif ($file =~ m!\n\s*//(:|\s*\\brief\b)(.{40,}\b(and|if|but|since|that|,))\s*\n *// *(.+)!i)
   {
-    print "$f\t\# brief comment possibly continued on next line: \"$2\\n$3 ...\"\n";
+    print "$f\t\# brief comment possibly continued on next line: \"$2\" + \"$4\"\n";
     $printed = 1;
   }
 
 # 6. Unnecessary #include files and missing #include files.
 #   Unnecessary includes are in principle anything which is not
 #   used or directly referred to in the current file.
-#   Missing includes is currently only vcl_cassert.h
+#   Missing includes is currently only vcl_cassert.h and vcl_iostream.h
   $fl = $file; $fl =~ s!//.*!!g;
   $includes = "\004\n$fl\003";
   $includes =~ s/\n\s*\#\s*include\s\<([^>]+)\>.*/\003$1\004/g;
@@ -156,7 +157,7 @@ foreach $f (@FILES)
   {
     next if ($j eq "");
     $found_cassert = 1 if ($j eq "vcl_cassert.h" || $j eq "assert.h");
-    $found_iostream = 1 if ($j =~ m/^vcl_((i|o|io|f)stream|iosfwd)\.h/ || $j eq "vsl/vsl_binary_io.h");
+    $found_iostream = 1 if ($j =~ m/^vcl_((i|o|io|f)stream|iosfwd|streambuf)\.h/ || $j eq "vsl/vsl_binary_io.h");
     print "$f\t\# invalid #include <$j>\n"
       unless ($j =~ m/\.(h|H|hxx|hpp|txx)$/ || $f =~ m/\/vcl\// || $j eq "std/complext.cc");
     next unless ($j =~ m/\.h$/i);
@@ -286,7 +287,6 @@ foreach $f (@FILES)
     elsif ($j eq "vgui/vgui_tag.h") { $i="$i(|_[a-z_]+)"; }
     elsif ($j eq "vgui/vgui_tableau_sptr.h") { $i="($i(|_t)|get_tableau)"; }
     elsif ($j eq "vgui/internals/vgui_simple_field.h") { $i="vgui_(simple|bool|int|long|float|double)_field"; }
-    elsif ($j eq "vidl/vgui_frame.h") { $i="$i|get_frame\("; }
     elsif ($j =~ m"vil1/vil1_\d+bit\.h$") { $i="($i)(|_(read|write)_(big|little)_endian)"; }
     elsif ($j =~ m"vil/vil_bi(lin|cub)_interp\.h$") { $i="($i)(|_safe|_unsafe|_raw|_safe_extend)"; }
     elsif ($j eq "vil1/vil1_clamp.h") { $i="$i(|_pixel)"; }
@@ -314,6 +314,7 @@ foreach $f (@FILES)
     elsif ($j eq "vil/vil_math.h") { $i="($i)_([a-z_]+)"; }
     elsif ($j eq "vil/vil_memory_chunk.h") { $i="$i(|_sptr)"; }
     elsif ($j eq "vil/vil_new.h") { $i="($i)_image_(resource(_of_view)\?|view_j_i_plane|view_plane_i_j)"; }
+    elsif ($j eq "vil/algo/vil_orientations.h") { $i="$i(|_at_edges|_from_sobel)"; }
     elsif ($j eq "vil/vil_(image_resource|memory_chunk).h") { $i="$i(|_sptr)"; }
     elsif ($j eq "vil/io/vil_io_memory_chunk.h") { $i="($i|vsl_b_write|VIL_IO_SMART_PTR_INSTANTIATE.vil_memory_chunk)"; }
     elsif ($j eq "vil1/io/vil1_io_rgb.h") { $i="($i|vsl_b_write|VIL1_IO_MEMORY_IMAGE_OF_INSTANTIATE.vil1\?_rgb)"; }
@@ -395,7 +396,7 @@ foreach $f (@FILES)
       unless ($fl =~ m/$j\>[^\003]*\b$i\b/ || $f =~ m/\/$ii\./ || $f =~ m/\btests\/test_include\.cxx$/);
   }
   print "$f\t\# should have #include <vcl_cassert.h>\n" if (! $found_cassert && $file =~ m/\n\s*assert\s*\(/);
-# print "$f\t\# should have #include <vcl_iostream.h> or <vcl_iosfwd.h>\n" if (! $found_iostream && $f =~ m/\.h$/ && $f !~ m/vcl_/ && $file =~ m/\bvcl_(cin|cout|cerr|clog|(i|o)stream|endl|ends|flush|stream(pos|buf|size))\b/);
+  print "$f\t\# should have #include <vcl_iostream.h> or <vcl_iosfwd.h>\n" if (! $found_iostream && $f =~ m/\.h$/ && $f !~ m/vcl_/ && $fl =~ m/\bvcl_(cin|cout|cerr|clog|(i|o)stream|endl|ends|flush|stream(pos|buf|size))\b/);
 
   print "$f\t\# suspicious $1\n"
     if ($f !~ m/\bvcl\/\S*vcl_\S+\.(h|txx)$/ &&
@@ -442,7 +443,7 @@ foreach $f (@FILES)
       unless ($f =~ m/vcl\/vcl_complex_fwd\.h$/ || $f =~ m/win32-vc60\/vcl_complex\.h$/ || $f =~ m/vgui\/vgui_glut\.h$/);
     $printed = 1;
   }
-  if ($cpp_file && $f !~ m/\bvidl\/vidl_mpegcodec\.cxx$/ && $f !~ m/\bvul\/vul_url\.cxx$/ &&
+  if ($cpp_file && $f !~ m/\bvidl\/vidl_mpegcodec\.cxx$/ && $f !~ m/\bvidl_vil1\/vidl_vil1_mpegcodec\.cxx$/ && $f !~ m/\bvul\/vul_url\.cxx$/ &&
       $f !~ m/\bvul\/tests\/test_file_iterator\.cxx$/ && $file =~ m/\001[^\001\002]{111,}/)
   {
     print "$f\t\# contains long /*...*/ comments\n";
@@ -794,19 +795,19 @@ foreach $f (@FILES)
     if ($printed && $file =~ m/\n\n[ \t]*\};*\s*\n/);
   print "$f\t\# has empty lines after opening brace\n"
     if ($printed && $file =~ m/\n[ \t]*\{\s*\n\n/);
-  $f_=$file;
-  while ($printed && $f_ =~ s/\n([^()\'\";\n]*\( *)([^();\n]+(\([^();\n]*\)[^();\n]*)*)\n( +)//)
+  $f_=$fl;
+  while ($printed && $f_ =~ s/\n([^()\'\";\n]*\( *)((\([^();\n]*\))*[^();\n]+(\([^();\n]*\)[^();\n]*)*)\n( +)//)
   {
-    $line="$1$2"; $pre="$1"; $post="$4"; $pre =~ s/./ /g;
-    print "$f\t\# incorrect indentation in line following: $line\n"
-      unless ($pre eq $post || $line =~ m/_INSTANTIATE_/ || $line =~ m!^\s*//! || $line =~ m/\<\</);
+    $line="$1$2"; $first=$2; $post="$5"; $pre="$1"; $pre =~ s/./ /g;
+    print "$f\t\# incorrect indentation in line following \"$line\"\n"
+      unless ($pre eq $post || $line =~ m/_INSTANTIATE_/ || $line =~ m/\<\</ || $first eq "\\");
   }
-  $f_=$file; $f_ =~ s/\"[^\n\"]*\"/Q/g; $f_ =~ s/\'\\?.\'/Q/g; $f_ =~ s/\<\</\007/g;
+  $f_=$fl; $f_ =~ s/\"[^\n\"]*\"/Q/g; $f_ =~ s/\'\\?.\'/Q/g; $f_ =~ s/\<\</\007/g;
   while ($printed && $f_ =~ s/\n([^\007;{}\#\n]*)(\007[^;\n]*)\n( +)\007/\n$3\007/)
   {
     $line="$1$2"; $pre="$1"; $post="$3"; next if ($pre =~ m/^\s*$/);
     $line =~ s/\007/\<\</g; $pre =~ s/./ /g;
-    print "$f\t\# incorrect indentation in line following: $line\n"
+    print "$f\t\# incorrect indentation in line following \"$line\"\n"
       unless ($pre eq $post);
   }
   undef($f_);
