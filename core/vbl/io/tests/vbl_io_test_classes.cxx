@@ -1,3 +1,6 @@
+#ifndef vbl_io_test_classes_cxx_
+#define vbl_io_test_classes_cxx_
+
 #include <vbl/vbl_smart_ptr.h>
 #include <vbl/io/vbl_io_smart_ptr.h>
 #include <vbl/io/tests/vbl_io_test_classes.h>
@@ -118,4 +121,5 @@ void vsl_print_summary(vcl_ostream& os, const impl *p)
   } 
 };
 
+#endif // vbl_io_test_classes_cxx_
 

@@ -7,6 +7,7 @@
 #include <vbl/io/vbl_io_array_3d.h>
 #include <vbl/io/vbl_io_user_info.h>
 
+#include <vbl/io/tests/vbl_io_test_classes.h>
 #include <vbl/io/tests/vbl_io_test_classes.cxx>
 
 

@@ -4,6 +4,7 @@
 
 #include <vbl/vbl_test.h>
 #include <vbl/io/tests/vbl_io_test_classes.h>
+#include <vbl/io/tests/vbl_io_test_classes.cxx>
 
 
 
