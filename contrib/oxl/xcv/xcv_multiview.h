@@ -77,7 +77,7 @@ class xcv_multiview
   static vcl_vector<vgui_rubberband_tableau_sptr> twoview_rubber0, twoview_rubber1;
   static vcl_vector<xcv_twoview_manager*> twoview_mgrs;
 
-  //: Gets a threeview_manager between the tableax at the given positions.
+  //: Gets a threeview_manager between the tableaux at the given positions.
   static xcv_threeview_manager* get_threeview_manager(vcl_vector<int>& cols, vcl_vector<int>& rows);
   static vcl_vector<vgui_rubberband_tableau_sptr> threeview_rubber0, threeview_rubber1,
     threeview_rubber2;
