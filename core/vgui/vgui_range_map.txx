@@ -99,20 +99,14 @@ compute_byte_table(const Type min, const Type max, const Type gamma,
   //there are two cases, signed and unsigned map domains
   if (!vil_pixel_traits<Type>::is_signed())
     for (unsigned int i = 0; i < size_; i++)
-    {
-      Type arg = (Type)i;//eliminate warnings
-      bmap[i] = map_pixel_byte(arg, min, max, gamma, ratio);
-    }
+      bmap[i] = map_pixel_byte(Type(i), min, max, gamma, ratio);
   else
   {
     //The values have to be shifted by min
-    int mint = vil_pixel_traits<Type>::minval();
-    int maxt = vil_pixel_traits<Type>::maxval();
-    for (int i = mint; i <= maxt; i++)
-    {
-      Type arg = (Type)i;//eliminate warnings
-      bmap[i-mint] = map_pixel_byte(arg, min, max, gamma, ratio);
-    }
+    Type mint = vil_pixel_traits<Type>::minval();
+    Type maxt = vil_pixel_traits<Type>::maxval();
+    for (unsigned int i = 0; Type(mint+i) <= maxt; ++i)
+      bmap[i] = map_pixel_byte(Type(mint+i), min, max, gamma, ratio);
   }
   maps_.push_back(bmap);
   return bmap;
@@ -127,12 +121,9 @@ compute_float_table(const Type min, const Type max, const Type gamma,
   if (vil_pixel_traits<Type>::is_signed())
     return 0;
   float* fmap =  new float[size_];
-  unsigned maxt = vil_pixel_traits<Type>::maxval();
-  for (unsigned int i = 0; i <= maxt; ++i)
-  {
-    Type arg = (Type)i;//eliminate warnings
-    fmap[i] = map_pixel_float(arg, min, max, gamma, ratio);
-  }
+  Type maxt = vil_pixel_traits<Type>::maxval();
+  for (unsigned int i = 0; Type(i) <= maxt; ++i)
+    fmap[i] = map_pixel_float(Type(i), min, max, gamma, ratio);
   fmaps_.push_back(fmap);
   return fmap;
 }
