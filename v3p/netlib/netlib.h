@@ -23,6 +23,9 @@ extern "C" {
 	  const int& want_eigenvectors, const double *eigenvectors,
 	  const double *workspace_1_size_n, const double *workspace_2_size_n,
 	  int* output_error_code);
+
+  int dqrdc_(double *x, const int& ldx, const int& n, const int& p, double* qraux, int *jpvt, double *work, const int& job);
+
 };
 
 #endif
