@@ -7,7 +7,7 @@
 // Include this file to use the smart pointer vdgl_digital_curve_ref
 //
 
-#include <vdgl/vdgl_digital_curve.h>
+#include "vdgl_digital_curve.h"
 #include <vbl/vbl_smart_ptr.h>
 
 typedef vbl_smart_ptr<vdgl_digital_curve> vdgl_digital_curve_ref;

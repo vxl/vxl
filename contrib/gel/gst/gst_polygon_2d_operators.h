@@ -9,8 +9,8 @@
 
 #include <vcl_vector.h>
 
-#include <gst/gst_edge_2d_ref.h>
-#include <gst/gst_polygon_2d_ref.h>
+#include "gst_edge_2d_ref.h"
+#include "gst_polygon_2d_ref.h"
 
 //: Turn a list of edges into a list of polygons.
 // This is not necessarily efficient, and not unique if the topology

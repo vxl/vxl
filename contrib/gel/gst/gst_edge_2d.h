@@ -10,7 +10,7 @@
 #include <vcl_iostream.h>
 #include <vbl/vbl_ref_count.h>
 
-#include <gst/gst_vertex_2d_ref.h>
+#include "gst_vertex_2d_ref.h"
 
 class gst_edge_2d : public vbl_ref_count
 {

@@ -7,7 +7,7 @@
   crossge@crd.ge.com
 */
 
-#include <gst/gst_vertex_2d.h>
+#include "gst_vertex_2d.h"
 #include <vbl/vbl_smart_ptr.h>
 
 typedef vbl_smart_ptr<gst_vertex_2d> gst_vertex_2d_ref;

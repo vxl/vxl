@@ -5,8 +5,7 @@
 #pragma implementation
 #endif
 
-#include <gst/gst_vertex_2d_ref.h>
-
+#include "gst_vertex_2d_ref.h"
 #include "gst_polygon_2d.h"
 
 

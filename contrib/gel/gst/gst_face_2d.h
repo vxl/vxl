@@ -7,7 +7,7 @@
   crossge@crd.ge.com
 */
 #include <vcl_vector.h>
-#include <gst/gst_polygon_2d_ref.h>
+#include "gst_polygon_2d_ref.h"
 
 //: This class defines a simplified topology structure in 2D.
 // It is light weight, and all interfacing should be done through the

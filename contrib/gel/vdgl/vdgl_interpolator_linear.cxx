@@ -3,11 +3,9 @@
 #endif
 
 #include <vnl/vnl_math.h>
-
-
 #include <vdgl/vdgl_edgel.h>
 #include <vdgl/vdgl_edgel_chain.h>
-#include<vnl/algo/vnl_svd.h>
+#include <vnl/algo/vnl_svd.h>
 #include "vdgl_interpolator_linear.h"
 
 

@@ -10,7 +10,7 @@
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vbl/vbl_ref_count.h>
-#include <gst/gst_edge_2d_ref.h>
+#include "gst_edge_2d_ref.h"
 
 class gst_polygon_2d : public vbl_ref_count
 {
