@@ -14,6 +14,7 @@
 // \endverbatim
 //--------------------------------------------------------------------------------
 #include <vcl_vector.h>
+#include <vcl_iosfwd.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_edge_2d_sptr.h>
