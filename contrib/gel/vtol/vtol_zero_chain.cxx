@@ -7,6 +7,7 @@
 #include <vtol/vtol_macros.h>
 #include <vtol/vtol_list_functions.h>
 #include <vtol/vtol_edge.h>
+#include <vtol/vtol_vertex_2d.h>
 
 //***************************************************************************
 // Initialization
@@ -22,14 +23,42 @@ void vtol_zero_chain::unlink_inferior(vtol_vertex_sptr inf)
   vtol_topology_object::unlink_inferior(inf->cast_to_topology_object());
 }
 
+void vtol_zero_chain::link_inferior(vtol_vertex_2d_sptr inf)
+{
+  vtol_topology_object::link_inferior(inf->cast_to_topology_object());
+}
+
+void vtol_zero_chain::unlink_inferior(vtol_vertex_2d_sptr inf)
+{
+  vtol_topology_object::unlink_inferior(inf->cast_to_topology_object());
+}
+
 //---------------------------------------------------------------------------
 //: Constructor from two vertices (to make an edge creation easier)
 // Require: v1!=v2
 //---------------------------------------------------------------------------
+vtol_zero_chain::vtol_zero_chain(vtol_vertex_sptr const& v1,
+                                 vtol_vertex_sptr const& v2)
+{
+  // require
+  assert(v1!=v2);
+  link_inferior(v1);
+  link_inferior(v2);
+}
+
+vtol_zero_chain::vtol_zero_chain(vtol_vertex_2d_sptr const& v1,
+                                 vtol_vertex_2d_sptr const& v2)
+{
+  // require
+  assert(v1!=v2);
+  link_inferior(v1);
+  link_inferior(v2);
+}
+
 vtol_zero_chain::vtol_zero_chain(vtol_vertex &v1,
                                  vtol_vertex &v2)
 {
-  // require
+  vcl_cerr << "Warning: deprecated vtol_zero_chain constructor\n";
   assert(&v1!=&v2);
   link_inferior(&v1);
   link_inferior(&v2);
@@ -49,10 +78,21 @@ vtol_zero_chain::vtol_zero_chain(const vertex_list &new_vertices)
 }
 
 //---------------------------------------------------------------------------
-//: Copy constructor. Copy the vertices and the links
+//: Pseudo copy constructor. Deep copy.
+//---------------------------------------------------------------------------
+vtol_zero_chain::vtol_zero_chain(vtol_zero_chain_sptr const& other)
+{
+  topology_list::const_iterator i;
+  for (i=other->inferiors()->begin();i!=other->inferiors()->end();++i)
+    link_inferior((*i)->clone()->cast_to_topology_object()->cast_to_vertex());
+}
+
+//---------------------------------------------------------------------------
+//: Copy constructor. Copy the vertices and the links.  Deprecated.
 //---------------------------------------------------------------------------
 vtol_zero_chain::vtol_zero_chain(const vtol_zero_chain &other)
 {
+  vcl_cerr << "vtol_zero_chain copy constructor is deprecated; use vtol_zero_chain_sptr constructor instead\n";
   topology_list::const_iterator i;
   for (i=other.inferiors()->begin();i!=other.inferiors()->end();++i)
     link_inferior((*i)->clone()->cast_to_topology_object()->cast_to_vertex());
@@ -72,7 +112,7 @@ vtol_zero_chain::~vtol_zero_chain()
 //---------------------------------------------------------------------------
 vsol_spatial_object_2d_sptr vtol_zero_chain::clone(void) const
 {
-  return new vtol_zero_chain(*this);
+  return new vtol_zero_chain(vtol_zero_chain_sptr(const_cast<vtol_zero_chain*>(this)));
 }
 
 //---------------------------------------------------------------------------

@@ -20,6 +20,7 @@
 //                   and possibly inconsistent polyhedra volume geometry)
 //     JNS Dec 1998, Added is_within functions (used in 2D display of a block,
 //                   these functions must be wrong for 3D use)
+//  Dec. 2002, Peter Vanroose - interface change: vtol objects -> smart pointers
 // \endverbatim
 //-----------------------------------------------------------------------------
 
@@ -48,8 +49,11 @@ class vtol_block
   //---------------------------------------------------------------------------
   //: Constructor from a two-chain (inferior)
   //---------------------------------------------------------------------------
+  explicit vtol_block(vtol_two_chain_sptr const& faceloop);
+// private:
+  // Deprecated
   explicit vtol_block(vtol_two_chain &faceloop);
-
+ public:
   //---------------------------------------------------------------------------
   //: Constructor from a list of two-chains.
   //  The first two-chain is the outside boundary.
@@ -63,10 +67,15 @@ class vtol_block
   explicit vtol_block(face_list const& new_face_list);
 
   //---------------------------------------------------------------------------
-  //: Copy constructor. Deep copy.
+  //: Pseudo copy constructor. Deep copy.
+  //---------------------------------------------------------------------------
+  vtol_block(vtol_block_sptr const& other);
+// private:
+  //---------------------------------------------------------------------------
+  //: Copy constructor. Deep copy. Deprecated.
   //---------------------------------------------------------------------------
   vtol_block(const vtol_block &other);
-
+ public:
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------

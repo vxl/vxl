@@ -21,7 +21,7 @@ static void vtol_test_refcounting()
   vtol_vertex_2d* v1 = new vtol_vertex_2d(1.0,1.0); v1->set_id(1);
   TEST("single vertex has refcount 0", v1->get_references(), 0);
   vtol_vertex_2d* v2 = new vtol_vertex_2d(2.0,1.0); v2->set_id(2);
-  vtol_edge_2d* e1 = new vtol_edge_2d(*v1,*v2); e1->set_id(1);
+  vtol_edge_2d* e1 = new vtol_edge_2d(vtol_vertex_2d_sptr(v1),v2); e1->set_id(1);
   TEST("vertex on edge has refcount 2", v1->get_references(), 2);
   // Note that refcounts of vertices on edges always jump by two, as opposed
   // to other topology objects: vertices are protected by both the 0-chain and
@@ -29,11 +29,11 @@ static void vtol_test_refcounting()
   TEST("single edge has refcount 0", e1->get_references(), 0);
   // 2. from a 0-chain
   vtol_vertex_2d* v3 = new vtol_vertex_2d(1.0,2.0); v3->set_id(3);
-  vtol_zero_chain* z2 = new vtol_zero_chain(*v3,*v1);
-  vtol_edge_2d* e2 = new vtol_edge_2d(*z2); e2->set_id(2);
+  vtol_zero_chain* z2 = new vtol_zero_chain(vtol_vertex_2d_sptr(v3),vtol_vertex_2d_sptr(v1));
+  vtol_edge_2d* e2 = new vtol_edge_2d(z2); e2->set_id(2);
   TEST("vertex on two edges has refcount 4", v1->get_references(), 4);
   // 3. from a 0-chain list
-  vtol_zero_chain* z3 = new vtol_zero_chain(*v2,*v3);
+  vtol_zero_chain* z3 = new vtol_zero_chain(vtol_vertex_2d_sptr(v2),vtol_vertex_2d_sptr(v3));
   zero_chain_list zl3; zl3.push_back(z3);
   vtol_edge_2d* e3 = new vtol_edge_2d(zl3); e3->set_id(3);
   zl3.clear(); // remove 0-chain from list, to avoid "false" refcounts

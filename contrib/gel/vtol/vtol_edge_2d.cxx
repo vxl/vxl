@@ -7,6 +7,7 @@
 #include <vsol/vsol_curve_2d.h>
 #include <vsol/vsol_line_2d.h>
 #include <vdgl/vdgl_digital_curve.h>
+#include <vcl_cassert.h>
 
 //***************************************************************************
 // Initialization
@@ -16,10 +17,42 @@
 //: Constructor from the two endpoints `new_v1', `new_v2' and from a curve `new_curve'.
 //  If `new_curve' is 0, a line is created from `new_v1' and `new_v2'.
 //---------------------------------------------------------------------------
+vtol_edge_2d::vtol_edge_2d(vtol_vertex_2d_sptr const& new_v1,
+                           vtol_vertex_2d_sptr const& new_v2,
+                           vsol_curve_2d_sptr const& new_curve)
+{
+  assert(new_v1); v1_=new_v1->cast_to_vertex();
+  assert(new_v2); v2_=new_v2->cast_to_vertex();
+  if (!new_curve)
+    curve_=new vsol_line_2d(new_v1->point(),new_v2->point());
+  else
+    curve_=new_curve;
+
+  link_inferior(new vtol_zero_chain(v1_,v2_));
+}
+
+vtol_edge_2d::vtol_edge_2d(vtol_vertex_sptr const& new_v1,
+                           vtol_vertex_sptr const& new_v2,
+                           vsol_curve_2d_sptr const& new_curve)
+{
+  assert(new_v1->cast_to_vertex_2d());
+  assert(new_v2->cast_to_vertex_2d());
+  v1_=new_v1;
+  v2_=new_v2;
+  if (!new_curve)
+    curve_=new vsol_line_2d(v1_->cast_to_vertex_2d()->point(),
+                            v2_->cast_to_vertex_2d()->point());
+  else
+    curve_=new_curve;
+
+  link_inferior(new vtol_zero_chain(v1_,v2_));
+}
+
 vtol_edge_2d::vtol_edge_2d(vtol_vertex_2d &new_v1,
                            vtol_vertex_2d &new_v2,
                            const vsol_curve_2d_sptr &new_curve)
 {
+  vcl_cerr << "Warning: deprecated vtol_edge_2d constructor\n";
   if (!new_curve)
     curve_=new vsol_line_2d(new_v1.point(),new_v2.point());
   else
@@ -27,11 +60,49 @@ vtol_edge_2d::vtol_edge_2d(vtol_vertex_2d &new_v1,
   v1_=&new_v1;
   v2_=&new_v2;
 
-  link_inferior(new vtol_zero_chain(new_v1,new_v2));
+  link_inferior(new vtol_zero_chain(vtol_vertex_2d_sptr(&new_v1),
+                                    vtol_vertex_2d_sptr(&new_v2)));
 }
 
 //---------------------------------------------------------------------------
-//: Copy constructor
+//: Pseudo copy constructor. Deep copy.
+//---------------------------------------------------------------------------
+vtol_edge_2d::vtol_edge_2d(vtol_edge_2d_sptr const& other)
+  : curve_(0)
+{
+  topology_list::const_iterator i;
+  for (i=other->inferiors()->begin();i!=other->inferiors()->end();++i)
+  {
+    link_inferior((*i)->clone()->cast_to_topology_object()->cast_to_zero_chain());
+  }
+  set_vertices_from_zero_chains();
+
+  if (other->curve())
+  {
+    curve_ = other->curve()->clone()->cast_to_curve();
+    // make sure the geometry and Topology are in sync
+    if (v1_)
+    {
+      if (v1_->cast_to_vertex_2d())
+      {
+        curve_->set_p0(v1_->cast_to_vertex_2d()->point());
+        curve_->touch();
+      }
+    }
+    if (v2_)
+    {
+      if (v1_->cast_to_vertex_2d())
+      {
+        curve_->set_p1(v2_->cast_to_vertex_2d()->point());
+        curve_->touch();
+      }
+    }
+  }
+  touch();
+}
+
+//---------------------------------------------------------------------------
+//: Copy constructor. Deep copy.  Deprecated.
 //---------------------------------------------------------------------------
 // Copy constructor for an vtol_edge_2d. This methods performs a deep copy of
 // the elements of the old vtol_edge_2d, olde, and sets the corresponding member
@@ -40,6 +111,7 @@ vtol_edge_2d::vtol_edge_2d(vtol_vertex_2d &new_v1,
 vtol_edge_2d::vtol_edge_2d(const vtol_edge_2d &other)
   : curve_(0)
 {
+  vcl_cerr << "vtol_edge_2d copy constructor is deprecated; use vtol_edge_2d_sptr constructor instead\n";
   topology_list::const_iterator i;
   for (i=other.inferiors()->begin();i!=other.inferiors()->end();++i)
   {
@@ -80,8 +152,25 @@ vtol_edge_2d::vtol_edge_2d(const vtol_edge_2d &other)
 // (v1_, v2_, curve_) are set to NULL.  The vtol_zero_chain, newchain, becomes
 // the Inferior of the vtol_edge_2d.
 
+vtol_edge_2d::vtol_edge_2d(vtol_zero_chain_sptr const& new_zero_chain)
+{
+  link_inferior(new_zero_chain);
+  set_vertices_from_zero_chains();
+  if (new_zero_chain->numinf()==2 && v1_->cast_to_vertex_2d() && v2_->cast_to_vertex_2d())
+    // Safe to assume that it is a vsol_line_2d.
+    curve_=new vsol_line_2d(v1_->cast_to_vertex_2d()->point(),
+                            v2_->cast_to_vertex_2d()->point());
+  else
+    // User must set the type of curve needed.
+    // Since guessing could get confusing.
+    // So NULL indicates an edge of unknown type.
+    curve_=0;
+  touch();
+}
+
 vtol_edge_2d::vtol_edge_2d(vtol_zero_chain &new_zero_chain)
 {
+  vcl_cerr << "Warning: deprecated vtol_edge_2d constructor\n";
   link_inferior(&new_zero_chain);
   set_vertices_from_zero_chains();
   if (new_zero_chain.numinf()==2 && v1_->cast_to_vertex_2d() && v2_->cast_to_vertex_2d())
@@ -134,7 +223,7 @@ vtol_edge_2d::vtol_edge_2d(double x1, double y1,
   else
     curve_=curve->clone()->cast_to_curve();
 
-  link_inferior(new vtol_zero_chain(*v1_,*v2_));
+  link_inferior(new vtol_zero_chain(v1_,v2_));
 }
 
 //: Constructor for an vtol_edge_2d from a vsol_curve_2d.
@@ -147,7 +236,7 @@ vtol_edge_2d::vtol_edge_2d(vsol_curve_2d &edgecurve)
 {
   v1_ = new vtol_vertex_2d(*(edgecurve.p0()));
   v2_ = new vtol_vertex_2d(*(edgecurve.p1()));
-  link_inferior(new vtol_zero_chain(*v1_,*v2_));
+  link_inferior(new vtol_zero_chain(v1_,v2_));
 }
 
 //---------------------------------------------------------------------------
@@ -156,7 +245,7 @@ vtol_edge_2d::vtol_edge_2d(vsol_curve_2d &edgecurve)
 //---------------------------------------------------------------------------
 vsol_spatial_object_2d_sptr vtol_edge_2d::clone(void) const
 {
-  return new vtol_edge_2d(*this);
+  return new vtol_edge_2d(vtol_edge_2d_sptr(const_cast<vtol_edge_2d*>(this)));
 }
 
 //---------------------------------------------------------------------------

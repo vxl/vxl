@@ -93,7 +93,7 @@ int main()
   block_list *bl=v1->blocks(); vcl_cout << bl->size() << '\n';
   delete vl; delete zcl; delete el; delete ocl; delete fl; delete tcl; delete bl;
 
-  vtol_edge_sptr ed=v1->new_edge(*v2);
+  vtol_edge_sptr ed=v1->new_edge(v2);
   vtol_zero_chain_sptr zc=ed->zero_chain();
   vcl_cout <<"                    zero_chain expects   2 1 1 1 1 1 1 - gets  ";
   vl=zc->vertices(); vcl_cout << vl->size() << ' ';
@@ -105,7 +105,7 @@ int main()
   bl=zc->blocks(); vcl_cout << bl->size() << '\n';
   delete vl; delete zcl; delete el; delete ocl; delete fl; delete tcl; delete bl;
 
-  vtol_edge_sptr ed13= v1->new_edge(*v3);
+  vtol_edge_sptr ed13= v1->new_edge(v3);
   vcl_cout <<"                    edge expects         2 2 1 2 2 1 1 - gets  ";
   vl=ed13->vertices(); vcl_cout << vl->size() << ' ';
   zcl=ed13->zero_chains(); vcl_cout << zcl->size() << ' ';

@@ -29,10 +29,10 @@ static void test_face_2d()
   vtol_face_2d_sptr f1 = new vtol_face_2d(v_list);
   f1->describe(vcl_cout,8);
 
-  vtol_edge_sptr e12 = new vtol_edge_2d(*v1,*v2);
-  vtol_edge_sptr e23 = new vtol_edge_2d(*v2,*v3);
-  vtol_edge_sptr e34 = new vtol_edge_2d(*v3,*v4);
-  vtol_edge_sptr e41 = new vtol_edge_2d(*v4,*v1);
+  vtol_edge_sptr e12 = new vtol_edge_2d(v1,v2);
+  vtol_edge_sptr e23 = new vtol_edge_2d(v2,v3);
+  vtol_edge_sptr e34 = new vtol_edge_2d(v3,v4);
+  vtol_edge_sptr e41 = new vtol_edge_2d(v4,v1);
 
   edge_list e_list;
 
@@ -67,14 +67,14 @@ static void test_face_2d()
   TEST("vtol_face_2d::get_hole_cycles()", *((*holes)[0]), *oc1_hole);
   delete holes;
 
-  vtol_face_2d_sptr f3 = new vtol_face_2d(*oc1);
+  vtol_face_2d_sptr f3 = new vtol_face_2d(oc1);
   f3->describe(vcl_cout,8);
   TEST("vtol_face_2d inequality", *f1 == *f3, false);
   TEST("vtol_face_2d inequality", *f1->cast_to_face() == *f3->cast_to_face(), false);
 
-  vtol_face_2d_sptr f1_copy = new vtol_face_2d(*f1);
+  vtol_face_2d_sptr f1_copy = new vtol_face_2d(f1);
 
-  TEST("vtol_face_2d copy constructor", *f1, *f1_copy);
+  TEST("vtol_face_2d deep copy (pseudo copy constructor)", *f1, *f1_copy);
   TEST("vtol_face_2d::cast_to_face_2d()", f1->cast_to_face_2d()==0, false);
   TEST("vtol_face_2d::cast_to_face()", *f1->cast_to_face(), *f1_copy->cast_to_face());
 

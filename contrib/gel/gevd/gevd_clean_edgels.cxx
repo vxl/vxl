@@ -402,7 +402,7 @@ void gevd_clean_edgels::JumpGaps()
         }
       //Now add the new edge which fills the gap
       if (verbose) vcl_cout << "Adding a gap jumping edgel from " << *v << " to " << *new_v << vcl_endl;
-      vtol_edge_2d_sptr new_edge = new vtol_edge_2d(*v, *new_v );
+      vtol_edge_2d_sptr new_edge = new vtol_edge_2d(v, new_v);
       // vdgl_digital_curve_sptr dc = new vdgl_digital_curve(v->point(),new_v->point());
       vdgl_edgel_chain* new_chain = new vdgl_edgel_chain();
       new_chain->add_edgel ( vdgl_edgel ( v->point()->x(), v->point()->y() ) );

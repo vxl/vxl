@@ -37,6 +37,7 @@
 //
 //   02-26-97 Added implementation for virtual Transform() - Peter Vanroose
 //   PTU ported to vxl may 2000.
+//  Dec. 2002, Peter Vanroose - interface change: vtol objects -> smart pointers
 // \endverbatim
 
 #include <vtol/vtol_topology_object.h>
@@ -119,9 +120,13 @@ class vtol_edge
   inline bool operator!=(const vtol_edge &other)const{return !operator==(other);}
   bool operator==(const vsol_spatial_object_2d& obj) const; // virtual of vsol_spatial_object_2d
 
+  virtual void add_edge_loop(vtol_one_chain_sptr const&);
+  virtual void remove_edge_loop(vtol_one_chain_sptr const&);
+// private:
+  // Deprecated:
   virtual void add_edge_loop(vtol_one_chain &);
   virtual void remove_edge_loop(vtol_one_chain &);
-
+ public:
   //***************************************************************************
   // Replaces dynamic_cast<T>
   //***************************************************************************
@@ -180,9 +185,13 @@ class vtol_edge
 
   virtual bool share_vertex_with(vtol_edge &other);
 
+  virtual bool add_vertex(vtol_vertex_sptr const&);
+  virtual bool remove_vertex(vtol_vertex_sptr const&);
+// private:
+  // Deprecated:
   virtual bool add_vertex(vtol_vertex &);
   virtual bool remove_vertex(vtol_vertex &);
-
+ public:
   virtual bool is_endpoint(const vtol_vertex &) const;
   virtual bool is_endpoint1(const vtol_vertex &) const;
   virtual bool is_endpoint2(const vtol_vertex &) const;

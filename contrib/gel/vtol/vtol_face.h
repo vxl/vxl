@@ -31,7 +31,8 @@
 //    AWF Jul 1998: General topology speedup by replacing calls to
 //        vertices() et al with iterators.  Benchmark: constructing
 //        40K triangles, old: 37 sec, new: 9 sec.
-//     PTU ported to vxl may-20
+//     PTU ported to vxl may-2000
+//  Dec. 2002, Peter Vanroose - interface change: vtol objects -> smart pointers
 // \endverbatim
 
 #include <vtol/vtol_topology_object.h>
@@ -144,8 +145,11 @@ class vtol_face
 
   // Editing Functions
 
+  virtual void add_one_chain(vtol_one_chain_sptr const&);
+// private:
+  // Deprecated:
   virtual void add_one_chain(vtol_one_chain &);
-
+ public:
   //: Utility Functions and overloaded operators
 
   virtual void reverse_normal(void);

@@ -80,10 +80,73 @@ vtol_two_chain::vtol_two_chain(face_list const& faces,
 }
 
 //---------------------------------------------------------------------------
-// Copy constructor
+//: Pseudo copy constructor.  Deep copy.
+//---------------------------------------------------------------------------
+vtol_two_chain::vtol_two_chain(vtol_two_chain_sptr const& other)
+{
+  // make a copy of the vertices
+  vertex_list *verts=other->vertices();
+  int vlen=verts->size();
+  topology_list newverts(vlen);
+
+  int i=0;
+  for (vertex_list::iterator vi=verts->begin();vi!=verts->end();++vi,++i)
+  {
+    vtol_vertex_sptr v = *vi;
+    newverts[i] = v->clone()->cast_to_topology_object();
+    v->set_id(i);
+  }
+  delete verts;
+
+  // make a copy of the edges
+  edge_list *edges=other->edges();
+  int elen=edges->size();
+  topology_list newedges(elen);
+
+  int j=0;
+  for (edge_list::iterator ei=edges->begin();ei!= edges->end();++ei,++j)
+  {
+    vtol_edge_sptr e = *ei;
+    newedges[j] = newverts[e->v1()->get_id()]->cast_to_vertex()->new_edge(
+                  newverts[e->v2()->get_id()]->cast_to_vertex())->cast_to_topology_object();
+    e->set_id(j);
+  }
+  delete edges;
+
+  vcl_vector<signed char> &dirs=other->directions_;
+  topology_list &infs=other->inferiors_;
+
+  vcl_vector<signed char>::iterator ddi;
+  topology_list::const_iterator tti;
+  for (ddi=dirs.begin(),tti=infs.begin(); tti!=infs.end()&&ddi!=dirs.end(); ++ddi,++tti)
+  {
+    vtol_face_sptr f=(*tti)->cast_to_face();
+    vtol_face_sptr new_f = f->copy_with_arrays(newverts,newedges);
+#ifdef DEBUG
+    vcl_cout << "f\n";
+    f->describe();
+    vcl_cout << "new f\n";
+    new_f->describe();
+#endif
+    assert(*new_f == *f);
+
+    link_inferior(new_f);
+    directions_.push_back((*ddi));
+  }
+
+  set_cycle(other->is_cycle());
+  const chain_list *hierarchy_infs=other->chain_inferiors();
+
+  for (chain_list::const_iterator hhi=hierarchy_infs->begin();hhi!=hierarchy_infs->end();++hhi)
+    link_chain_inferior((*hhi)->cast_to_two_chain()->copy_with_arrays(newverts,newedges));
+}
+
+//---------------------------------------------------------------------------
+//: Copy constructor.  Deep copy.  Deprecated.
 //---------------------------------------------------------------------------
 vtol_two_chain::vtol_two_chain(vtol_two_chain const &other)
 {
+  vcl_cerr << "vtol_two_chain copy constructor is deprecated; use vtol_two_chain_sptr constructor instead\n";
   vtol_two_chain *fl=const_cast<vtol_two_chain*>(&other); // const violation
 
   // make a copy of the vertices
@@ -112,7 +175,7 @@ vtol_two_chain::vtol_two_chain(vtol_two_chain const &other)
     {
       vtol_edge_sptr e = *ei;
       newedges[j] = newverts[e->v1()->get_id()]->cast_to_vertex()->new_edge(
-                  *(newverts[e->v2()->get_id()]->cast_to_vertex()))->cast_to_topology_object();
+                    newverts[e->v2()->get_id()]->cast_to_vertex())->cast_to_topology_object();
       e->set_id(j);
     }
   delete edges;
@@ -190,7 +253,7 @@ vtol_two_chain::~vtol_two_chain()
 //---------------------------------------------------------------------------
 vsol_spatial_object_2d_sptr vtol_two_chain::clone(void) const
 {
-  return new vtol_two_chain(*this);
+  return new vtol_two_chain(vtol_two_chain_sptr(const_cast<vtol_two_chain*>(this)));
 }
 
 //---------------------------------------------------------------------------
@@ -360,15 +423,39 @@ vtol_two_chain::break_into_connected_components( topology_list& components )
 #endif // 0
 }
 
+void vtol_two_chain::add_face(vtol_face_sptr const& new_face,
+                              signed char dir)
+{
+  directions_.push_back(dir);
+  link_inferior(new_face);
+}
+
 void vtol_two_chain::add_face(vtol_face &new_face,
                               signed char dir)
 {
+  vcl_cerr << "Warning: deprecated form of vtol_face::add_face()\n";
   directions_.push_back(dir);
   link_inferior(&new_face);
 }
 
+void vtol_two_chain::remove_face(vtol_face_sptr const& doomed_face)
+{
+  vtol_topology_object_sptr t=doomed_face->cast_to_topology_object();
+  topology_list::const_iterator i=vcl_find(inferiors()->begin(),inferiors()->end(),t);
+  topology_list::difference_type index=i-inferiors()->begin();
+
+  if (index>=0 && i!= inferiors()->end())
+    {
+      vcl_vector<signed char>::iterator j = directions_.begin() + index;
+      directions_.erase(j);
+      touch();
+      unlink_inferior(doomed_face);
+    }
+}
+
 void vtol_two_chain::remove_face(vtol_face &doomed_face)
 {
+  vcl_cerr << "Warning: deprecated form of vtol_face::remove_face()\n";
   vtol_topology_object_sptr t=&doomed_face;
   topology_list::const_iterator i=vcl_find(inferiors()->begin(),inferiors()->end(),t);
   topology_list::difference_type index=i-inferiors()->begin();

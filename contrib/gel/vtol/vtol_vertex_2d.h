@@ -19,11 +19,13 @@
 //     generic.  Note this is distance, NOT squared distance.
 //  LEG May 2000. ported to vxl
 //  JLM November 2002 - added local bounding_box method
+//  Dec. 2002, Peter Vanroose - interface change: vtol objects -> smart pointers
 // \endverbatim
 
 #include <vnl/vnl_double_2.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vtol/vtol_vertex.h>
+#include <vtol/vtol_vertex_2d_sptr.h>
 
 class vtol_vertex_2d
   : public vtol_vertex
@@ -39,7 +41,7 @@ class vtol_vertex_2d
   explicit vtol_vertex_2d(void);
 
   //---------------------------------------------------------------------------
-  //: Constructor from a point (the point is not copied)
+  //: Constructor from a point (the point is copied, not stored)
   //  REQUIRE: new_point!=0
   //---------------------------------------------------------------------------
   explicit vtol_vertex_2d(vsol_point_2d &new_point);
@@ -56,10 +58,15 @@ class vtol_vertex_2d
                           const double new_y);
 
   //---------------------------------------------------------------------------
-  //: Copy constructor. Copy the point but not the links
+  //: Pseudo copy constructor.  Deep copy.
+  //---------------------------------------------------------------------------
+  explicit vtol_vertex_2d(vtol_vertex_2d_sptr const& other);
+// private:
+  //---------------------------------------------------------------------------
+  //: Copy constructor. Copy the point but not the links.  Deprecated.
   //---------------------------------------------------------------------------
   explicit vtol_vertex_2d(const vtol_vertex_2d &other);
-
+ public:
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
@@ -142,7 +149,8 @@ class vtol_vertex_2d
   //  Otherwise it just returns the existing edge
   //  REQUIRE: other!=*this
   //---------------------------------------------------------------------------
-  virtual vtol_edge_sptr new_edge(vtol_vertex &other);
+  virtual vtol_edge_sptr new_edge(vtol_vertex_sptr const& other);
+  vtol_edge_sptr new_edge(vtol_vertex_2d_sptr const& v);
 
   double distance_from(const vnl_double_2 &);
 

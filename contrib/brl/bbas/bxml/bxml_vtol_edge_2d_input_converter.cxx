@@ -95,10 +95,10 @@ bxml_generic_ptr bxml_vtol_edge_2d_input_converter::construct_object()
       float x = cur_->get_x(0);
       float y = cur_->get_y(0);
 
-      vtol_vertex_2d*  v1 = new vtol_vertex_2d(x,y);
+      vtol_vertex_2d_sptr  v1 = new vtol_vertex_2d(x,y);
       //why doesn't the vertex get inserted in the object table?
       // for some reason this constructor copies the entire curve??
-      vtol_edge_2d* edg = new vtol_edge_2d(*v1, *v1, cur_->cast_to_curve());
+      vtol_edge_2d* edg = new vtol_edge_2d(v1, v1, cur_->cast_to_curve());
 
       bxml_generic_ptr gp(edg);
       if ( !(id_ == null_id_) ) {
@@ -108,7 +108,7 @@ bxml_generic_ptr bxml_vtol_edge_2d_input_converter::construct_object()
       return gp;
     }
     else {
-      vtol_edge_2d* edg = new vtol_edge_2d(*zc_);
+      vtol_edge_2d* edg = new vtol_edge_2d(zc_);
       if (cur_)
         {
           double xc0 = cur_->get_x(0), yc0 = cur_->get_y(0);

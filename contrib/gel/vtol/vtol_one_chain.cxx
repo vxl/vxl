@@ -6,6 +6,7 @@
 #include <vcl_cassert.h>
 #include <vcl_algorithm.h>
 #include <vtol/vtol_edge.h>
+#include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_macros.h>
 #include <vtol/vtol_list_functions.h>
 
@@ -74,11 +75,45 @@ vtol_one_chain::vtol_one_chain(edge_list const& edgs,
 }
 
 //---------------------------------------------------------------------------
-// Copy constructor
+//: Pseudo copy constructor.  Deep copy.
 //---------------------------------------------------------------------------
-//  Copy Constructor....does a deep copy.
+vtol_one_chain::vtol_one_chain(vtol_one_chain_sptr const& other)
+{
+  vertex_list *verts=other->vertices();
+  topology_list newverts(verts->size());
+
+  int i=0;
+  for (vertex_list::iterator v=verts->begin();v!=verts->end();++v,++i)
+  {
+    vtol_vertex_sptr ve=*v;
+    newverts[i]=ve->clone()->cast_to_topology_object();
+    ve->set_id(i);
+  }
+
+  vcl_vector<signed char>::iterator dir=other->directions_.begin();
+  topology_list::iterator inf=other->inferiors()->begin();
+  for (; dir!=other->directions_.end(); ++dir,++inf)
+  {
+    vtol_edge_sptr e=(*inf)->cast_to_edge();
+    vtol_edge_sptr newedge = newverts[e->v1()->get_id()]->cast_to_vertex()->new_edge(
+                             newverts[e->v2()->get_id()]->cast_to_vertex());
+    link_inferior(newedge);
+    directions_.push_back(*dir);
+  }
+  set_cycle(other->is_cycle());
+  const chain_list *hierarchy_infs=other->chain_inferiors();
+
+  for (chain_list::const_iterator h=hierarchy_infs->begin();h!=hierarchy_infs->end();++h)
+    link_chain_inferior((*h)->clone()->cast_to_topology_object()->cast_to_one_chain());
+  delete verts;
+}
+
+//---------------------------------------------------------------------------
+//: Copy constructor.  Deep copy.  Deprecated.
+//---------------------------------------------------------------------------
 vtol_one_chain::vtol_one_chain(vtol_one_chain const& other)
 {
+  vcl_cerr << "vtol_one_chain copy constructor is deprecated; use vtol_one_chain_sptr constructor instead\n";
   vtol_one_chain *el=const_cast<vtol_one_chain*>(&other); // const violation
   vertex_list *verts=el->vertices();
   topology_list newverts(verts->size());
@@ -98,7 +133,7 @@ vtol_one_chain::vtol_one_chain(vtol_one_chain const& other)
       vtol_edge_sptr e=(*inf)->cast_to_edge();
 
       vtol_edge_sptr newedge = newverts[e->v1()->get_id()]->cast_to_vertex()->new_edge(
-                                *(newverts[e->v2()->get_id()]->cast_to_vertex()));
+                               newverts[e->v2()->get_id()]->cast_to_vertex());
       link_inferior(newedge);
       directions_.push_back(*dir);
     }
@@ -125,7 +160,7 @@ vtol_one_chain::~vtol_one_chain()
 //---------------------------------------------------------------------------
 vsol_spatial_object_2d_sptr vtol_one_chain::clone(void) const
 {
-  return new vtol_one_chain(*this);
+  return new vtol_one_chain(vtol_one_chain_sptr(const_cast<vtol_one_chain*>(this)));
 }
 
 vtol_one_chain *
@@ -580,9 +615,30 @@ void vtol_one_chain::determine_edge_directions(void)
 //---------------------------------------------------------------------------
 //: Add an edge
 //---------------------------------------------------------------------------
+void vtol_one_chain::add_edge(vtol_edge_sptr const& new_edge,
+                              bool dir)
+{
+  if (dir)
+    directions_.push_back((signed char)1);
+  else
+    directions_.push_back((signed char)(-1));
+  link_inferior(new_edge);
+}
+
+void vtol_one_chain::add_edge(vtol_edge_2d_sptr const& new_edge,
+                              bool dir)
+{
+  if (dir)
+    directions_.push_back((signed char)1);
+  else
+    directions_.push_back((signed char)(-1));
+  link_inferior(new_edge->cast_to_edge());
+}
+
 void vtol_one_chain::add_edge(vtol_edge &new_edge,
                               bool dir)
 {
+  vcl_cerr << "Warning: deprecated form of vtol_one_chain::add_edge()\n";
   if (dir)
     directions_.push_back((signed char)1);
   else
@@ -593,10 +649,48 @@ void vtol_one_chain::add_edge(vtol_edge &new_edge,
 //---------------------------------------------------------------------------
 //: Remove an edge
 //---------------------------------------------------------------------------
-void vtol_one_chain::remove_edge(vtol_edge &doomed_edge,
+void vtol_one_chain::remove_edge(vtol_edge_sptr const& doomed_edge,
                                  bool force_it)
 {
   // require
+  assert(force_it||!is_cycle());
+
+  vtol_topology_object_sptr t=doomed_edge->cast_to_topology_object();
+  topology_list::const_iterator i=vcl_find(inferiors()->begin(),inferiors()->end(),t);
+  topology_list::difference_type index=i-inferiors()->begin();
+
+  if (index>=0 && i!= inferiors()->end())
+    {
+      vcl_vector<signed char>::iterator j = directions_.begin() + index;
+      directions_.erase(j);// get rid of the direction associated with the edge
+      touch();
+      unlink_inferior(doomed_edge);
+    }
+}
+
+void vtol_one_chain::remove_edge(vtol_edge_2d_sptr const& doomed_edge,
+                                 bool force_it)
+{
+  // require
+  assert(force_it||!is_cycle());
+
+  vtol_topology_object_sptr t=doomed_edge->cast_to_topology_object();
+  topology_list::const_iterator i=vcl_find(inferiors()->begin(),inferiors()->end(),t);
+  topology_list::difference_type index=i-inferiors()->begin();
+
+  if (index>=0 && i!= inferiors()->end())
+    {
+      vcl_vector<signed char>::iterator j = directions_.begin() + index;
+      directions_.erase(j);// get rid of the direction associated with the edge
+      touch();
+      unlink_inferior(doomed_edge->cast_to_edge());
+    }
+}
+
+void vtol_one_chain::remove_edge(vtol_edge &doomed_edge,
+                                 bool force_it)
+{
+  vcl_cerr << "Warning: deprecated form of vtol_one_chain::remove_edge()\n";
   assert(force_it||!is_cycle());
 
   vtol_topology_object_sptr t=&doomed_edge;

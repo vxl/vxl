@@ -28,6 +28,7 @@
 //     JLM Nov 2002  Modified the compute_bounding_box method to use
 //                   box::grow_minmax_bounds for uniformity and to
 //                   avoid dependence on dimension.  Old method was strictly 2-d.
+//  Dec. 2002, Peter Vanroose - interface change: vtol objects -> smart pointers
 // \endverbatim
 //-----------------------------------------------------------------------------
 
@@ -75,10 +76,15 @@ class vtol_one_chain
                           bool new_is_cycle=false);
 
   //---------------------------------------------------------------------------
-  //: Copy constructor
+  //: Pseudo copy constructor.  Deep copy.
+  //---------------------------------------------------------------------------
+  vtol_one_chain(vtol_one_chain_sptr const& other);
+// private:
+  //---------------------------------------------------------------------------
+  //: Copy constructor.  Deep copy.  Deprecated.
   //---------------------------------------------------------------------------
   vtol_one_chain(vtol_one_chain const& other);
-
+ public:
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
@@ -161,9 +167,15 @@ class vtol_one_chain
   int num_edges(void) const { return numinf(); }
 
   virtual void determine_edge_directions(void);
+  virtual void add_edge(vtol_edge_sptr const&, bool);
+  virtual void add_edge(vtol_edge_2d_sptr const&, bool);
+  virtual void remove_edge(vtol_edge_sptr const&, bool);
+  virtual void remove_edge(vtol_edge_2d_sptr const&, bool);
+// private:
+  // Deprecated:
   virtual void add_edge(vtol_edge &, bool);
   virtual void remove_edge(vtol_edge &, bool);
-
+ public:
   // Operators
 
   virtual bool operator==(vtol_one_chain const& other) const;

@@ -27,12 +27,8 @@ vtol_edge_2d_sptr convert_edge_2d(osl_edge & in,vsol_curve_2d::vsol_curve_2d_typ
     vcl_vector<vtol_vertex_sptr> new_vertices;
 
     for (int i=0;i<in.size();i++)
-    {
-      vtol_vertex* temp_vertex=new vtol_vertex_2d(x[i],y[i]);
-      new_vertices.push_back(temp_vertex);
-    }
-    vtol_zero_chain temp_zchain(new_vertices);
-    out=new vtol_edge_2d(temp_zchain);
+      new_vertices.push_back(new vtol_vertex_2d(x[i],y[i]));
+    out=new vtol_edge_2d(new vtol_zero_chain(new_vertices));
   }
   else if (type==vsol_curve_2d::LINE)
   {
@@ -40,7 +36,7 @@ vtol_edge_2d_sptr convert_edge_2d(osl_edge & in,vsol_curve_2d::vsol_curve_2d_typ
     osl_vertex* v2=in.GetV2();
     vtol_vertex_2d_sptr new_v1=convert_vertex_2d(*v1);
     vtol_vertex_2d_sptr new_v2=convert_vertex_2d(*v2);
-    out=new vtol_edge_2d(*new_v1,*new_v2,0);
+    out=new vtol_edge_2d(new_v1,new_v2,0);
   }
 
   return out;
@@ -83,8 +79,8 @@ void convert_pointarray(vcl_vector<vtol_vertex_2d_sptr>& in,
 }
 
 void convert_lines_double_3(vcl_vector<vtol_edge_2d_sptr> in,
-              vnl_double_3 * &outp,
-              vnl_double_3 * &outq)
+                            vnl_double_3 * &outp,
+                            vnl_double_3 * &outq)
 {
   int numlines=in.size();
   outp=new vnl_double_3[numlines];

@@ -67,7 +67,7 @@ int main()
   vtol_vertex_2d_sptr vertexstart= new vtol_vertex_2d(*pointstart);
   vtol_vertex_2d_sptr vertexend  = new vtol_vertex_2d(*pointend);
 
-  vtol_edge_2d_sptr edge = new vtol_edge_2d( *vertexstart, *vertexend, digital_curve.ptr());
+  vtol_edge_2d_sptr edge = new vtol_edge_2d( vertexstart, vertexend, digital_curve.ptr());
   vcl_cout << *edge << '\n';
 
   // Sample 50 points along the curve and print them out

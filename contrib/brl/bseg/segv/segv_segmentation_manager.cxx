@@ -119,8 +119,7 @@ segv_segmentation_manager::draw_edges(vcl_vector<vtol_edge_2d_sptr>& edges,
   vgui_image_tableau_sptr itab = t2D_->get_image_tableau();
   if (!itab)
     {
-      vcl_cout << "In segv_segmentation_manager::draw_edges - null image tab"
-               << vcl_endl;
+      vcl_cout << "In segv_segmentation_manager::draw_edges - null image tab\n";
       return;
     }
   for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
@@ -274,17 +273,17 @@ void segv_segmentation_manager::test_face()
   vtol_vertex_2d_sptr vb = new vtol_vertex_2d(*pb);
   vtol_vertex_2d_sptr vc = new vtol_vertex_2d(*pc);
   vtol_vertex_2d_sptr vd = new vtol_vertex_2d(*pd);
-  vtol_edge_2d_sptr eab = new vtol_edge_2d(*va, *vb, cab);
-  vtol_edge_2d_sptr ebc = new vtol_edge_2d(*vb, *vc, cbc);
-  vtol_edge_2d_sptr ecd = new vtol_edge_2d(*vc, *vd, ccd);
-  vtol_edge_2d_sptr eda = new vtol_edge_2d(*vd, *va, cda);
+  vtol_edge_2d_sptr eab = new vtol_edge_2d(va, vb, cab);
+  vtol_edge_2d_sptr ebc = new vtol_edge_2d(vb, vc, cbc);
+  vtol_edge_2d_sptr ecd = new vtol_edge_2d(vc, vd, ccd);
+  vtol_edge_2d_sptr eda = new vtol_edge_2d(vd, va, cda);
   vcl_vector<vtol_edge_sptr> edges;
   edges.push_back(eab->cast_to_edge());
   edges.push_back(ebc->cast_to_edge());
   edges.push_back(ecd->cast_to_edge());
   edges.push_back(eda->cast_to_edge());
   vtol_one_chain_sptr b_onch = new vtol_one_chain(edges,true);
-  vtol_face_2d_sptr b_f = new  vtol_face_2d(*b_onch);
+  vtol_face_2d_sptr b_f = new  vtol_face_2d(b_onch);
   int px = sx/2, py = sy/2;
 
   vsol_point_2d_sptr p1 = new vsol_point_2d(px+3,py+3);
@@ -296,15 +295,15 @@ void segv_segmentation_manager::test_face()
   vtol_vertex_2d_sptr v1 = new vtol_vertex_2d(*p1);
   vtol_vertex_2d_sptr v2 = new vtol_vertex_2d(*p2);
   vtol_vertex_2d_sptr v3 = new vtol_vertex_2d(*p3);
-  vtol_edge_2d_sptr e12 = new vtol_edge_2d(*v1, *v2, c12);
-  vtol_edge_2d_sptr e23 = new vtol_edge_2d(*v2, *v3, c23);
-  vtol_edge_2d_sptr e31 = new vtol_edge_2d(*v3, *v1, c31);
+  vtol_edge_2d_sptr e12 = new vtol_edge_2d(v1, v2, c12);
+  vtol_edge_2d_sptr e23 = new vtol_edge_2d(v2, v3, c23);
+  vtol_edge_2d_sptr e31 = new vtol_edge_2d(v3, v1, c31);
   edges.clear();
   edges.push_back(e12->cast_to_edge());
   edges.push_back(e23->cast_to_edge());
   edges.push_back(e31->cast_to_edge());
   vtol_one_chain_sptr t_onch = new vtol_one_chain(edges,true);
-  vtol_face_2d_sptr t_f = new  vtol_face_2d(*t_onch);
+  vtol_face_2d_sptr t_f = new  vtol_face_2d(t_onch);
   t2D_->add_face(b_f);   t2D_->add_face(t_f);
   t2D_->set_foreground(1.0, 0.0, 0.0);
   for (int x = 0; x<sx; x+=20)

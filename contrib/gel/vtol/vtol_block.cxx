@@ -27,8 +27,14 @@ void vtol_block::unlink_inferior(vtol_two_chain_sptr inf)
 //---------------------------------------------------------------------------
 //: Constructor from a two-chain (inferior)
 //---------------------------------------------------------------------------
+vtol_block::vtol_block(vtol_two_chain_sptr const& faceloop)
+{
+  link_inferior(faceloop);
+}
+
 vtol_block::vtol_block(vtol_two_chain &faceloop)
 {
+  vcl_cerr << "Warning: deprecated vtol_block constructor\n";
   link_inferior(&faceloop);
 }
 
@@ -60,10 +66,54 @@ vtol_block::vtol_block(face_list const& new_face_list)
 }
 
 //---------------------------------------------------------------------------
-//: Copy constructor. Deep copy.
+//: Pseudo-copy constructor. Deep copy.
+//---------------------------------------------------------------------------
+vtol_block::vtol_block(vtol_block_sptr const& other)
+{
+  edge_list *edgs=other->edges();
+  vertex_list *verts=other->vertices();
+
+  topology_list newedges(edgs->size());
+  topology_list newverts(verts->size());
+
+  int i=0;
+  for (vertex_list::iterator vi=verts->begin();vi!=verts->end();++vi,++i)
+  {
+    vtol_vertex_sptr v= *vi;
+    newverts[i]=v->clone()->cast_to_topology_object();
+    v->set_id(i);
+  }
+
+  int j=0;
+  for (edge_list::iterator ei=edgs->begin();ei!=edgs->end();++ei,++j)
+  {
+    vtol_edge_sptr e = *ei;
+
+    newedges[j]=newverts[e->v1()->get_id()]->cast_to_vertex()->new_edge(
+                              newverts[e->v2()->get_id()]->cast_to_vertex())->cast_to_topology_object();
+
+    e->set_id(j);
+  }
+
+  const topology_list *old2chains = other->inferiors();
+
+  topology_list::const_iterator tci;
+  for (tci=old2chains->begin();tci != old2chains->end();tci++)
+  {
+    vtol_two_chain_sptr new2ch=(*tci)->cast_to_two_chain()->copy_with_arrays(newverts,newedges);
+    assert(*new2ch == *(*tci));
+    link_inferior(new2ch);
+  }
+  delete edgs;
+  delete verts;
+}
+
+//---------------------------------------------------------------------------
+//: Copy constructor. Deep copy. Deprecated.
 //---------------------------------------------------------------------------
 vtol_block::vtol_block(const vtol_block &other)
 {
+  vcl_cerr << "vtol_block copy constructor is deprecated; use vtol_block_sptr constructor instead\n";
   vtol_block* oldblock=const_cast<vtol_block*>(&other); // const violation
   edge_list *edgs=oldblock->edges();
   vertex_list *verts=oldblock->vertices();
@@ -85,7 +135,7 @@ vtol_block::vtol_block(const vtol_block &other)
       vtol_edge_sptr e = *ei;
 
       newedges[j]=newverts[e->v1()->get_id()]->cast_to_vertex()->new_edge(
-                                *(newverts[e->v2()->get_id()]->cast_to_vertex()))->cast_to_topology_object();
+                                newverts[e->v2()->get_id()]->cast_to_vertex())->cast_to_topology_object();
 
       e->set_id(j);
     }
@@ -119,7 +169,7 @@ vtol_block::~vtol_block()
 //---------------------------------------------------------------------------
 vsol_spatial_object_2d_sptr vtol_block::clone(void) const
 {
-  return new vtol_block(*this);
+  return new vtol_block(vtol_block_sptr(const_cast<vtol_block*>(this)));
 }
 
 //: outside boundary vertices

@@ -5,7 +5,6 @@
 
 #include <vcl_cassert.h>
 #include <vtol/vtol_topology_object.h>
-#include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_one_chain.h>
 #include <vsol/vsol_region_2d.h>
@@ -21,13 +20,65 @@ vtol_face_2d::vtol_face_2d(void)
 }
 
 //---------------------------------------------------------------------------
-//: Copy constructor
+//: Pseudo copy constructor.  Deep copy.
+//---------------------------------------------------------------------------
+vtol_face_2d::vtol_face_2d(vtol_face_2d_sptr const& other)
+  : surface_(0)
+{
+  edge_list *edgs=other->edges();
+  vertex_list *verts=other->vertices();
+
+  topology_list newedges(edgs->size());
+  topology_list newverts(verts->size());
+
+  int i=0;
+  for (vertex_list::iterator vi=verts->begin();vi!=verts->end();++vi,++i)
+  {
+    vtol_vertex_sptr v=(*vi);
+    newverts[i]=v->clone()->cast_to_topology_object();
+    v->set_id(i);
+  }
+  int j=0;
+  for (edge_list::iterator ei=edgs->begin();ei!= edgs->end();++ei,++j)
+  {
+    vtol_edge_sptr e=(*ei);
+
+    vtol_topology_object_sptr V1 = newverts[e->v1()->get_id()];
+    vtol_topology_object_sptr V2 = newverts[e->v2()->get_id()];
+    if (!V1 || !V2)
+    {
+      vcl_cerr << "Inconsistent topology in vtol_face_2d pseudo copy constructor\n";
+      link_inferior(new vtol_one_chain);
+      return;
+     }
+    // make the topology and geometry match
+    vtol_edge_sptr newedge=new vtol_edge_2d(V1->cast_to_vertex(),
+                                            V2->cast_to_vertex());
+
+    newedges[j]=newedge->cast_to_topology_object();
+    e->set_id(j);
+  }
+
+  // This is a deep copy of the vtol_face_2d.
+  topology_list::const_iterator ii;
+  for (ii=other->inferiors()->begin();ii!= other->inferiors()->end();++ii)
+    link_inferior((*ii)->cast_to_one_chain()->copy_with_arrays(newverts,newedges));
+  delete edgs;
+  delete verts;
+  set_surface(0);
+  if (other->surface_)
+    set_surface(other->surface_->clone()->cast_to_region());
+}
+
+//---------------------------------------------------------------------------
+//: Copy constructor.  Deep copy.  Deprecated.
 //---------------------------------------------------------------------------
 // This is the Copy Constructor for vtol_face_2d. It performs a deep copy of
 // all vtol_face_2d inferior one_chains.
 vtol_face_2d::vtol_face_2d(const vtol_face_2d &other)
   : surface_(0)
 {
+  vcl_cerr << "vtol_face_2d copy constructor is deprecated; use vtol_face_2d_sptr constructor instead\n";
   vtol_face_2d *oldf=const_cast<vtol_face_2d*>(&other); // const violation
   edge_list *edgs=oldf->edges();
   vertex_list *verts=oldf->vertices();
@@ -56,8 +107,8 @@ vtol_face_2d::vtol_face_2d(const vtol_face_2d &other)
           return;
          }
       // make the topology and geometry match
-      vtol_edge_sptr newedge=new vtol_edge_2d(*(V1->cast_to_vertex()->cast_to_vertex_2d()),
-                                              *(V2->cast_to_vertex()->cast_to_vertex_2d()));
+      vtol_edge_sptr newedge=new vtol_edge_2d(V1->cast_to_vertex(),
+                                              V2->cast_to_vertex());
 
       newedges[j]=newedge->cast_to_topology_object();
       e->set_id(j);
@@ -87,7 +138,7 @@ vtol_face_2d::~vtol_face_2d()
 //---------------------------------------------------------------------------
 vsol_spatial_object_2d_sptr vtol_face_2d::clone(void) const
 {
-  return new vtol_face_2d(*this);
+  return new vtol_face_2d(vtol_face_2d_sptr(const_cast<vtol_face_2d*>(this)));
 }
 
 vsol_region_2d_sptr vtol_face_2d::surface(void) const
@@ -171,7 +222,7 @@ vtol_face_2d::vtol_face_2d(vertex_list const& verts)
 
       vtol_vertex_sptr v02=(*vi); // get the next vertex (may be first)
 
-      vtol_edge_sptr newedge=v01->new_edge(*v02);
+      vtol_edge_sptr newedge=v01->new_edge(v02);
       elist.push_back(newedge);
 
       if (*v02 == *(newedge->v2()))
@@ -222,9 +273,21 @@ vtol_face_2d::vtol_face_2d(one_chain_list const& onechs)
 //: Constructor of a Planar face from a vtol_one_chain.
 //  This method uses the vtol_one_chain, edgeloop, as the outside boundary of the face.
 
+vtol_face_2d::vtol_face_2d(vtol_one_chain_sptr const& edgeloop)
+  : surface_(0)
+{
+  link_inferior(edgeloop);
+
+  // TODO - surface is set to bounding box rectangle, which is often too large
+  set_surface(new vsol_rectangle_2d(new vsol_point_2d(get_min_x(),get_min_y()),
+                                    new vsol_point_2d(get_max_x(),get_min_y()),
+                                    new vsol_point_2d(get_max_x(),get_max_y())));
+}
+
 vtol_face_2d::vtol_face_2d(vtol_one_chain &edgeloop)
   : surface_(0)
 {
+  vcl_cerr << "Warning: deprecated vtol_face_2d constructor\n";
   link_inferior(&edgeloop);
 
   // TODO - surface is set to bounding box rectangle, which is often too large

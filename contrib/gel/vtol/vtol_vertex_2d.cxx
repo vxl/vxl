@@ -47,10 +47,19 @@ vtol_vertex_2d::vtol_vertex_2d(const double new_x,
 }
 
 //---------------------------------------------------------------------------
-//: Copy constructor. Copy the point but not the links
+//: Pseudo copy constructor.  Deep copy.
+//---------------------------------------------------------------------------
+vtol_vertex_2d::vtol_vertex_2d(vtol_vertex_2d_sptr const& other)
+: point_(new vsol_point_2d(*other->point_))
+{
+}
+
+//---------------------------------------------------------------------------
+//: Copy constructor. Copy the point but not the links.  Deprecated.
 //---------------------------------------------------------------------------
 vtol_vertex_2d::vtol_vertex_2d(const vtol_vertex_2d &other)
 {
+  vcl_cerr << "vtol_vertex_2d copy constructor is deprecated; use vtol_vertex_2d_sptr constructor instead\n";
   point_=new vsol_point_2d(*other.point_);
 }
 
@@ -72,7 +81,7 @@ vtol_vertex_2d::~vtol_vertex_2d()
 //---------------------------------------------------------------------------
 vsol_spatial_object_2d_sptr vtol_vertex_2d::clone(void) const
 {
-  return new vtol_vertex_2d(*this);
+  return new vtol_vertex_2d(vtol_vertex_2d_sptr(const_cast<vtol_vertex_2d*>(this)));
 }
 
 //*****************************************************
@@ -160,18 +169,23 @@ void vtol_vertex_2d::describe(vcl_ostream &strm,
 //
 //    Implementor Functions
 
+vtol_edge_sptr vtol_vertex_2d::new_edge(vtol_vertex_2d_sptr const& v)
+{
+  return new_edge(v->cast_to_vertex());
+}
+
 //-----------------------------------------------------------------------------
 //: Create a line edge from `this' and `other' only if this edge does not exist.
 //  Otherwise it just returns the existing edge.
 // Require: other!=*this
 //-----------------------------------------------------------------------------
-vtol_edge_sptr vtol_vertex_2d::new_edge(vtol_vertex &other)
+vtol_edge_sptr vtol_vertex_2d::new_edge(vtol_vertex_sptr const& other)
 {
   // require
-  assert(&other != this);
+  assert(other != this);
 
-  vtol_vertex_2d *other2d = other.cast_to_vertex_2d();
-  assert(other2d!=0);
+  vtol_vertex_2d_sptr other2d = other->cast_to_vertex_2d();
+  assert(other2d);
 
   // awf: load vrml speed up by factor of 2 using this loop.
   vtol_edge_sptr result = 0;
@@ -187,12 +201,12 @@ vtol_edge_sptr vtol_vertex_2d::new_edge(vtol_vertex &other)
       for (ep=sups->begin();ep!=sups->end()&&!found;++ep)
         {
           vtol_edge_sptr e=(*ep)->cast_to_edge();
-          if (e->v1()==&other||e->v2()==&other)
+          if (e->v1()==other||e->v2()==other)
             { result=e; found = true; }
         }
     }
   if (!result)
-    result= static_cast<vtol_edge*>(new vtol_edge_2d(*this,*other2d));
+    result= new vtol_edge_2d(this,other2d);
 
   return result;
 }

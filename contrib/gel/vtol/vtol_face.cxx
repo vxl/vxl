@@ -208,11 +208,19 @@ bool vtol_face::shares_edge_with(vtol_face &f)
 
 //:
 // Links new_vtol_one_chain as an inferior of the vtol_face and returns True if
-// successful. This method will be replacing all calls to add_edge_lop()o.
+// successful. This method will be replacing all calls to add_edge_loop().
+
+void vtol_face::add_one_chain(vtol_one_chain_sptr const& new_vtol_one_chain)
+{
+  // require
+  assert(new_vtol_one_chain->contains_sub_chains());
+
+  link_inferior(new_vtol_one_chain);
+}
 
 void vtol_face::add_one_chain(vtol_one_chain &new_vtol_one_chain)
 {
-  // require
+  vcl_cerr << "Warning: deprecated form of vtol_face::add_one_chain()\n";
   assert(new_vtol_one_chain.contains_sub_chains());
 
   link_inferior(&new_vtol_one_chain);

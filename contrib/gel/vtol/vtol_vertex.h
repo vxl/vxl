@@ -19,6 +19,7 @@
 //     to permit Charlie Rothwell's Polyhedra code to be more
 //     generic.  Note this is distance, NOT squared distance.
 //  LEG May 2000. ported to vxl
+//  Dec. 2002, Peter Vanroose - interface change: vtol objects -> smart pointers
 // \endverbatim
 
 #include "vtol_topology_object.h"
@@ -122,7 +123,10 @@ class vtol_vertex
   //  REQUIRE: other!=*this
   //---------------------------------------------------------------------------
 
-  virtual vtol_edge_sptr new_edge(vtol_vertex &other)=0;
+  virtual vtol_edge_sptr new_edge(vtol_vertex_sptr const& other)=0;
+// private: // deprecated:
+  vtol_edge_sptr new_edge(vtol_vertex const& other);
+ public:
 
   //: check to see if the vertex is part of the edge
   bool is_endpoint (const vtol_edge &);

@@ -16,20 +16,20 @@ static void test_edge_2d()
   vtol_vertex_2d_sptr v3 = new vtol_vertex_2d(2.0,2.0);
   vtol_vertex_2d_sptr v4 = new vtol_vertex_2d(3.0,3.0);
 
-  vtol_edge_2d_sptr e1= new vtol_edge_2d(*v1,*v2);
-  vtol_edge_2d_sptr e1a = new vtol_edge_2d(*e1);
+  vtol_edge_2d_sptr e1= new vtol_edge_2d(v1,v2);
+  vtol_edge_2d_sptr e1a = new vtol_edge_2d(e1);
   e1a->describe(vcl_cout,8);
 
   TEST("vtol_edge_2d equality", *e1, *e1a);
   TEST("vtol_edge_2d::topology_type()", e1->topology_type(), vtol_topology_object::EDGE);
 
-  vtol_zero_chain_sptr zc2 = new vtol_zero_chain(*v2,*v3);
+  vtol_zero_chain_sptr zc2 = new vtol_zero_chain(v2,v3);
   zc2->describe(vcl_cout,8);
 
-  vtol_edge_2d_sptr e2 = new vtol_edge_2d(*zc2);
+  vtol_edge_2d_sptr e2 = new vtol_edge_2d(zc2);
   TEST("vtol_edge_2d inequality", *e2==*e1, false);
 
-  vtol_zero_chain_sptr zc3 = new vtol_zero_chain(*v3,*v4);
+  vtol_zero_chain_sptr zc3 = new vtol_zero_chain(v3,v4);
 
   zero_chain_list z_list;
 

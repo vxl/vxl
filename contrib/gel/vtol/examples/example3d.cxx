@@ -26,6 +26,7 @@
 #include <vtol/vtol_face_sptr.h>
 #include <vtol/vtol_block.h>
 #include <vtol/vtol_block_sptr.h>
+#include <vbl/vbl_smart_ptr.h>
 
 class example_vertex_3d; // forward declaration
 
@@ -33,11 +34,12 @@ class example_vertex_3d; // forward declaration
 class example_edge_3d : public vtol_edge
 {
 #define T example_edge_3d
-#define V example_vertex_3d
+#define V vbl_smart_ptr<example_vertex_3d>
 #define W vtol_vertex
  public:
-  T(V &v1, V &v2) { v1_=(W*)(&v1); v2_=(W*)(&v2); link_inferior(new vtol_zero_chain(*(W*)(&v1),*(W*)(&v2))); }
-  virtual vsol_spatial_object_2d_sptr clone() const {return new T(*(V*)(v1_.ptr()),*(V*)(v2_.ptr())); }
+  T(V const& v1, V const& v2);
+  T(vtol_vertex_sptr const& v1, vtol_vertex_sptr const& v2);
+  virtual vsol_spatial_object_2d_sptr clone() const {return new T(v1_,v2_); }
 
   bool operator==(T const& v) const { return v1_==v.v1() && v2_==v.v2(); }
   T& operator=(T const& v) { v1_=v.v1(); v2_=v.v2(); return *this; }
@@ -67,10 +69,10 @@ class example_vertex_3d : public vtol_vertex
   bool operator==(T const& v) const { return x_==v.x()&&y_==v.y()&&z_==v.z(); }
   T& operator=(T const& v) { x_=v.x();y_=v.y();z_=v.z(); return *this; }
 
-  virtual vtol_edge_sptr new_edge(vtol_vertex &v)
+  virtual vtol_edge_sptr new_edge(vtol_vertex_sptr const& v)
   {
-    assert(v.cast_to_vertex_2d()==0);
-    assert(&v != this);
+    assert(v->cast_to_vertex_2d()==0);
+    assert(v != this);
     vcl_list<vtol_topology_object*>::const_iterator zp;
     for (zp=superiors_.begin();zp!=superiors_.end();++zp)
     {
@@ -79,10 +81,10 @@ class example_vertex_3d : public vtol_vertex
       for (ep=sups->begin();ep!=sups->end();++ep)
       {
         vtol_edge_sptr e=(*ep)->cast_to_edge();
-        if (e->v1()==&v||e->v2()==&v) return e;
+        if (e->v1()==v||e->v2()==v) return e;
       }
     }
-    return new example_edge_3d(*this,*(T*)(&v));
+    return new example_edge_3d(this,v);
   }
   virtual vsol_spatial_object_2d_sptr clone() const {return new T(x(),y(),z()); }
   virtual void copy_geometry(const vtol_vertex&v) { assert(v.cast_to_vertex_2d()==0); operator=(*(T const*)(&v)); }
@@ -92,6 +94,19 @@ class example_vertex_3d : public vtol_vertex
   void describe(vcl_ostream &strm=vcl_cout,int b=0) const { print(strm);describe_inferiors(strm,b);describe_superiors(strm,b); }
 #undef T
 };
+
+#define T example_edge_3d
+#define V vbl_smart_ptr<example_vertex_3d>
+T::T(V const& v1, V const& v2)
+{
+  v1_=v1->cast_to_vertex(); v2_=v2->cast_to_vertex();
+  link_inferior(new vtol_zero_chain(v1_,v2_));
+}
+#undef V
+
+T::T(vtol_vertex_sptr const& v1, vtol_vertex_sptr const& v2)
+{ v1_=v1; v2_=v2; link_inferior(new vtol_zero_chain(v1_,v2_)); }
+#undef T
 
 // Since there is no vtol_face_3d, create one here:
 class example_face_3d : public vtol_face
@@ -107,7 +122,7 @@ class example_face_3d : public vtol_face
     for (vtol_vertex_sptr v02,v01=(*vi); !done; v01=v02) {
       if (++vi==vl.end()) { vi=vl.begin(); done=true; }
       v02=(*vi);
-      vtol_edge_sptr newedge=v01->new_edge(*v02);
+      vtol_edge_sptr newedge=v01->new_edge(v02);
       elist.push_back(newedge);
       if (*v02 == *(newedge->v2())) dirs.push_back((signed char)1);
       else                          dirs.push_back((signed char)(-1));
@@ -193,7 +208,7 @@ int main()
   block_list *bl=v1->blocks(); vcl_cout << bl->size() << '\n';
   delete vl; delete zcl; delete el; delete ocl; delete fl; delete tcl; delete bl;
 
-  vtol_edge_sptr ed=v1->new_edge(*v2);
+  vtol_edge_sptr ed=v1->new_edge(v2);
   vtol_zero_chain_sptr zc=ed->zero_chain();
   vcl_cout <<"                    zero_chain expects   2 1 1 1 1 1 1 - gets  ";
   vl=zc->vertices(); vcl_cout << vl->size() << ' ';
@@ -205,7 +220,7 @@ int main()
   bl=zc->blocks(); vcl_cout << bl->size() << '\n';
   delete vl; delete zcl; delete el; delete ocl; delete fl; delete tcl; delete bl;
 
-  vtol_edge_sptr ed13= v1->new_edge(*v3);
+  vtol_edge_sptr ed13= v1->new_edge(v3);
   vcl_cout <<"                    edge expects         2 2 1 2 2 1 1 - gets  ";
   vl=ed13->vertices(); vcl_cout << vl->size() << ' ';
   zcl=ed13->zero_chains(); vcl_cout << zcl->size() << ' ';

@@ -43,7 +43,7 @@ vtol_vertex::~vtol_vertex()
 //---------------------------------------------------------------------------
  vsol_spatial_object_2d_sptr vtol_vertex::clone(void) const
 {
-  return new vtol_vertex(*this);
+  return new vtol_vertex(this);
 }
 #endif
 
@@ -103,8 +103,8 @@ vcl_vector<vtol_block*>* vtol_vertex::compute_blocks(void)
 //: This method outputs a simple text representation of the vertex including its address in memory.
 void vtol_vertex::print(vcl_ostream &strm) const
 {
-  strm<< "<vtol_vertex " << (void const *)this<<"> with id ";
-  strm<< get_id() << vcl_endl;
+  strm<< "<vtol_vertex " << (void const *)this<<"> with id "
+      << get_id() << vcl_endl;
 }
 
 

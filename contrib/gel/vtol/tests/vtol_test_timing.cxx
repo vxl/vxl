@@ -36,14 +36,14 @@ static void vtol_test_timing()
     {
      for (int x = 1, off = yoff; x<s; ++x, ++off)
         {
-          edges[nedges++] = new vtol_edge_2d(*verts[off-1], *verts[off]);
+          edges[nedges++] = new vtol_edge_2d(verts[off-1], verts[off]);
         }
     }
   for (int x = 0; x<s; ++x)
     {
      for (int y = 1, off = x+s; y<s; ++y, off+=s)
         {
-          edges[nedges++] = new vtol_edge_2d(*verts[off-s], *verts[off]);
+          edges[nedges++] = new vtol_edge_2d(verts[off-s], verts[off]);
         }
     }
   vcl_cout << "Time to construct " << nedges << " edges " << t.real()

@@ -1190,7 +1190,7 @@ gevd_contour::FindJunctions(gevd_bufferxy& edgels,
   }
 #if 0
   vcl_cout << "Merge and delete " << dendpt
-           << " end points and " << dchain << " edges" << vcl_endl;
+           << " end points and " << dchain << " edges\n";
 #endif
   if (dchain)                   // eliminate holes in global arrays
     LookupTableCompress(edges);
@@ -1216,11 +1216,11 @@ gevd_contour::FindJunctions(gevd_bufferxy& edgels,
   }
 #if 0
   vcl_cout << "Create " << ncycle
-           << " virtual end points for isolated cycles." << vcl_endl;
+           << " virtual end points for isolated cycles.\n";
 #endif
 #ifdef DEBUG
   if (talkative)
-    vcl_cout << "All junctions found in " << t.real() << " msecs." << vcl_endl;
+    vcl_cout << "All junctions found in " << t.real() << " msecs.\n";
 #endif
   return vertices.size();
 }
@@ -1278,7 +1278,7 @@ gevd_contour::SubPixelAccuracy(vcl_vector<vtol_edge_2d_sptr>& edges,
 
 #ifdef DEBUG
   if (talkative)
-    vcl_cout << ", in " << t.real() << " msecs." << vcl_endl;
+    vcl_cout << ", in " << t.real() << " msecs.\n";
 #endif
 }
 
@@ -1300,7 +1300,7 @@ static vtol_edge_2d_sptr DigitalEdge(vtol_vertex_2d_sptr  vs, vtol_vertex_2d_spt
   es->add_edgel( vdgl_edgel( xs, ys));
   es->add_edgel( vdgl_edgel( xe, ye));
 
-  vtol_edge_2d_sptr e = new vtol_edge_2d(*vs, *ve, vsol_curve_2d_sptr( dc));
+  vtol_edge_2d_sptr e = new vtol_edge_2d(vs, ve, vsol_curve_2d_sptr(dc));
   return e;
 }
 

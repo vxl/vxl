@@ -161,8 +161,14 @@ void vtol_edge::set_vertices_from_zero_chains(void)
 // superior list.  It returns a boolean value reflecting the success of
 // linking.
 
+void vtol_edge::add_edge_loop(vtol_one_chain_sptr const& new_edge_loop)
+{
+  new_edge_loop->link_inferior(this);
+}
+
 void vtol_edge::add_edge_loop(vtol_one_chain &new_edge_loop)
 {
+  vcl_cerr << "Warning: deprecated form of vtol_edge::add_edge_loop()\n";
   new_edge_loop.link_inferior(this);
 }
 
@@ -171,8 +177,14 @@ void vtol_edge::add_edge_loop(vtol_one_chain &new_edge_loop)
 // vtol_edge's superior list. It returns a boolean value reflecting the
 // success of removing.
 
+void vtol_edge::remove_edge_loop(vtol_one_chain_sptr const& doomed_edge_loop)
+{
+  doomed_edge_loop->unlink_inferior(this);
+}
+
 void vtol_edge::remove_edge_loop(vtol_one_chain &doomed_edge_loop)
 {
+  vcl_cerr << "Warning: deprecated form of vtol_edge::remove_edge_loop()\n";
   doomed_edge_loop.unlink_inferior(this);
 }
 
@@ -298,8 +310,21 @@ bool vtol_edge::share_vertex_with(vtol_edge &other)
 // This method adds newvert to the vtol_edge by linking it to one of the
 // zero_chains of the vtol_edge Inferiors. (Method needs work.)
 
+bool vtol_edge::add_vertex(vtol_vertex_sptr const& newvert)
+{
+  vtol_zero_chain_sptr zc;
+
+  zc=zero_chain();
+  if (!zc)
+    link_inferior(zc = new vtol_zero_chain);
+
+  zc->link_inferior(newvert);
+  return true;
+}
+
 bool vtol_edge::add_vertex(vtol_vertex &newvert)
 {
+  vcl_cerr << "Warning: deprecated form of vtol_edge::add_vertex()\n";
   vtol_zero_chain_sptr zc;
 
   zc=zero_chain();
@@ -314,8 +339,21 @@ bool vtol_edge::add_vertex(vtol_vertex &newvert)
 // This method removes uglyvert from the vtol_edge by removing it from the
 // inferior zero_chains.  (Method needs work.)
 
+bool vtol_edge::remove_vertex(vtol_vertex_sptr const& uglyvert)
+{
+  if (uglyvert==v1_)
+    set_v1(0);
+  else if (uglyvert==v2_)
+    set_v2(0);
+  else
+    return false;
+  touch();
+  return true;
+}
+
 bool vtol_edge::remove_vertex(vtol_vertex &uglyvert)
 {
+  vcl_cerr << "Warning: deprecated form of vtol_edge::remove_vertex()\n";
   if (uglyvert==*v1_)
     set_v1(0);
   else if (uglyvert==*v2_)

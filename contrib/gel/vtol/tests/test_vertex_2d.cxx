@@ -28,7 +28,7 @@ static void test_vertex_2d()
   vtol_vertex_2d_sptr v1b = new vtol_vertex_2d(vec);
   TEST("vtol_vertex_2d constructor from vnl vector", *v1, *v1b);
 
-  vtol_vertex_2d_sptr v1c = new vtol_vertex_2d(*v1);
+  vtol_vertex_2d_sptr v1c = new vtol_vertex_2d(v1);
   TEST("vtol_vertex_2d copy constructor", *v1, *v1c);
 
   v1->set_x(2.0);
@@ -107,7 +107,7 @@ static void test_vertex_2d()
 
   TEST("vtol_vertex_2d::topology_type()", v1->topology_type(), vtol_topology_object::VERTEX);
 
-  vtol_edge_sptr new_edge = v1->new_edge(*v2);
+  vtol_edge_sptr new_edge = v1->new_edge(v2);
   edge_list* e_list=v1->edges();
   TEST("vtol_vertex_2d::edges()", e_list->size(), 1);
   TEST("vtol_vertex_2d::edges()", (*e_list)[0]->v1(), v1);

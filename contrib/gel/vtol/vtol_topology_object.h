@@ -241,51 +241,51 @@ class vtol_topology_object
   //: Is `inferior' type valid for `this' ?
   //---------------------------------------------------------------------------
   virtual bool valid_inferior_type(vtol_topology_object const* inf) const = 0;
-
+ private:
   // deprecated form:
   bool valid_inferior_type(vtol_topology_object const& inf) const
   {
     vcl_cerr << "valid_inferior_type(): deprecated syntax\n";
     return valid_inferior_type(&inf);
   }
-
+ public:
   //---------------------------------------------------------------------------
   //: Is `superior' type valid for `this' ?
   //---------------------------------------------------------------------------
   inline bool valid_superior_type(vtol_topology_object const* sup) const
   { return sup->valid_inferior_type(this); }
-
+ private:
   // deprecated form:
   bool valid_superior_type(vtol_topology_object const& sup) const
   {
     vcl_cerr << "valid_superior_type(): deprecated syntax\n";
     return valid_superior_type(&sup);
   }
-
+ public:
   //---------------------------------------------------------------------------
   //: Is `inferior' already an inferior of `this' ?
   //---------------------------------------------------------------------------
   bool is_inferior(vtol_topology_object_sptr inferior) const;
-
+ private:
   // deprecated form:
   bool is_inferior(vtol_topology_object const& inf) const
   {
     vcl_cerr << "is_inferior(): deprecated syntax\n";
     return is_inferior(const_cast<vtol_topology_object*>(&inf));
   }
-
+ public:
   //---------------------------------------------------------------------------
   //: Is `superior' already a superior of `this' ?
   //---------------------------------------------------------------------------
   bool is_superior(vtol_topology_object* const& superior) const;
-
+ private:
   // deprecated form:
   bool is_superior(vtol_topology_object const& sup) const
   {
     vcl_cerr << "is_superior(): deprecated syntax\n";
     return is_superior(const_cast<vtol_topology_object*>(&sup));
   }
-
+ public:
   //---------------------------------------------------------------------------
   //: Number of inferiors
   //---------------------------------------------------------------------------
@@ -328,27 +328,27 @@ class vtol_topology_object
   //  REQUIRE: valid_inferior_type(inferior) and !is_inferior(inferior)
   //---------------------------------------------------------------------------
   void link_inferior(vtol_topology_object_sptr inferior);
-
+ private:
   // deprecated form:
   void link_inferior(vtol_topology_object & inf)
   {
     vcl_cerr << "link_inferior(): deprecated syntax\n";
     link_inferior(&inf);
   }
-
+ public:
   //---------------------------------------------------------------------------
   //: Unlink `this' from the inferior `inferior'
   //  REQUIRE: valid_inferior_type(inferior) and is_inferior(inferior)
   //---------------------------------------------------------------------------
   void unlink_inferior(vtol_topology_object_sptr inferior);
-
+ private:
   // deprecated form:
   void unlink_inferior(vtol_topology_object & inf)
   {
     vcl_cerr << "unlink_inferior(): deprecated syntax\n";
     unlink_inferior(&inf);
   }
-
+ public:
   //---------------------------------------------------------------------------
   //: Unlink `this' from all its inferiors
   //---------------------------------------------------------------------------

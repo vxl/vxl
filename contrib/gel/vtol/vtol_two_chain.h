@@ -24,6 +24,7 @@
 //      Currently reverts to bounds on vertices from
 //      vtol_topology_object::ComputeBoundingBox()
 //  PTU ported to vxl May 2000
+//  Dec. 2002, Peter Vanroose - interface change: vtol objects -> smart pointers
 // \endverbatim
 //-----------------------------------------------------------------------------
 
@@ -71,10 +72,15 @@ class vtol_two_chain
                           bool new_is_cycle=false);
 
   //---------------------------------------------------------------------------
-  //: Copy constructor
+  //: Pseudo copy constructor.  Deep copy.
+  //---------------------------------------------------------------------------
+  vtol_two_chain(vtol_two_chain_sptr const& other);
+// private:
+  //---------------------------------------------------------------------------
+  //: Copy constructor.  Deep copy.  Deprecated.
   //---------------------------------------------------------------------------
   vtol_two_chain(vtol_two_chain const& other);
-
+ public:
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
@@ -111,9 +117,13 @@ class vtol_two_chain
   virtual void remove_superiors(void);
   virtual void update_superior_list_p_from_hierarchy_parent(void);
 
+  virtual void add_face(vtol_face_sptr const&, signed char);
+  virtual void remove_face(vtol_face_sptr const&);
+// private:
+  // Deprecated:
   virtual void add_face(vtol_face &,signed char);
   virtual void remove_face(vtol_face &);
-
+ public:
   //***************************************************************************
   // Replaces dynamic_cast<T>
   //***************************************************************************

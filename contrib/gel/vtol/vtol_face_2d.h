@@ -31,7 +31,8 @@
 //    AWF Jul 1998: General topology speedup by replacing calls to
 //        vertices() et al with iterators.  Benchmark: constructing
 //        40K triangles, old: 37 sec, new: 9 sec.
-//     PTU ported to vxl may-20
+//     PTU ported to vxl may-2000
+//  Dec. 2002, Peter Vanroose - interface change: vtol objects -> smart pointers
 // \endverbatim
 
 #include <vsol/vsol_region_2d_sptr.h>
@@ -71,18 +72,26 @@ class vtol_face_2d
   //---------------------------------------------------------------------------
   //: Constructor
   //---------------------------------------------------------------------------
+  explicit vtol_face_2d(vtol_one_chain_sptr const& edgeloop);
+// private:
+  // Deprecated
   explicit vtol_face_2d(vtol_one_chain &edgeloop);
-
+ public:
   //---------------------------------------------------------------------------
   //: Constructor
   //---------------------------------------------------------------------------
   explicit vtol_face_2d(vsol_region_2d &facesurf);
 
   //---------------------------------------------------------------------------
-  //: Copy constructor
+  //: Pseudo copy constructor.  Deep copy.
+  //---------------------------------------------------------------------------
+  vtol_face_2d(vtol_face_2d_sptr const& other);
+// private:
+  //---------------------------------------------------------------------------
+  //: Copy constructor.  Deep copy.  Deprecated.
   //---------------------------------------------------------------------------
   vtol_face_2d(const vtol_face_2d &other);
-
+ public:
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------

@@ -421,8 +421,7 @@ sdet_contour::FindChains(gevd_bufferxy& edgels, const int njunction,
     vcl_cout << "Find " << edges.size()
              << " chains/cycles, with pixels > " << minLength
              << " and strength > " << minStrength
-             << ", in " << t.real() << " msecs."
-             << vcl_endl;
+             << ", in " << t.real() << " msecs.\n";
   return edges.size();  // number of chains found so far
 }
 
@@ -1473,8 +1472,7 @@ static vtol_edge_2d_sptr DigitalEdge(vtol_vertex_2d_sptr const& vs,
                                      vtol_vertex_2d_sptr const& ve)
 {
   vsol_curve_2d_sptr dc= new vdgl_digital_curve(vs->point(), ve->point());
-  vtol_edge_2d_sptr e = new vtol_edge_2d(*vs, *ve, dc);
-  return e;
+  return new vtol_edge_2d(vs, ve, dc);
 }
 
 

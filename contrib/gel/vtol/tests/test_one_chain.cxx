@@ -20,10 +20,10 @@ static void test_one_chain()
   vtol_vertex_2d_sptr v4 = new vtol_vertex_2d(3.0,3.0);
 
   edge_list e_list;
-  vtol_edge_sptr e12 = new vtol_edge_2d(*v1,*v2); e_list.push_back(e12);
-  vtol_edge_sptr e23 = new vtol_edge_2d(*v2,*v3); e_list.push_back(e23);
-  vtol_edge_sptr e34 = new vtol_edge_2d(*v3,*v4); e_list.push_back(e34);
-  vtol_edge_sptr e41 = new vtol_edge_2d(*v4,*v1); e_list.push_back(e41);
+  vtol_edge_sptr e12 = new vtol_edge_2d(v1,v2); e_list.push_back(e12);
+  vtol_edge_sptr e23 = new vtol_edge_2d(v2,v3); e_list.push_back(e23);
+  vtol_edge_sptr e34 = new vtol_edge_2d(v3,v4); e_list.push_back(e34);
+  vtol_edge_sptr e41 = new vtol_edge_2d(v4,v1); e_list.push_back(e41);
   vtol_one_chain_sptr oc1 = new vtol_one_chain(e_list);
   oc1->describe(vcl_cout,8);
 
@@ -37,9 +37,9 @@ static void test_one_chain()
 
   TEST("vtol_one_chain equality", *oc1, *oc2);
 
-  vtol_one_chain_sptr oc3 = new vtol_one_chain(*oc2);
+  vtol_one_chain_sptr oc3 = new vtol_one_chain(oc2);
 
-  TEST("vtol_one_chain copy constructor", *oc2, *oc3);
+  TEST("vtol_one_chain deep copy (pseudo copy constructor)", *oc2, *oc3);
 
   vsol_spatial_object_2d_sptr so_oc_clone = oc3->clone();
   so_oc_clone->describe(vcl_cout,8);
@@ -78,16 +78,16 @@ static void test_one_chain()
 
   // add some holes to oc1;
 
-  vtol_vertex_2d_sptr vh1 = new vtol_vertex_2d(0.1,0.1);
-  vtol_vertex_2d_sptr vh2 = new vtol_vertex_2d(1.1,1.1);
-  vtol_vertex_2d_sptr vh3 = new vtol_vertex_2d(2.1,2.1);
-  vtol_vertex_2d_sptr vh4 = new vtol_vertex_2d(3.1,3.1);
+  vtol_vertex_sptr vh1 = new vtol_vertex_2d(0.1,0.1);
+  vtol_vertex_sptr vh2 = new vtol_vertex_2d(1.1,1.1);
+  vtol_vertex_sptr vh3 = new vtol_vertex_2d(2.1,2.1);
+  vtol_vertex_sptr vh4 = new vtol_vertex_2d(3.1,3.1);
 
   e_list.clear();
-  vtol_edge_sptr eh12 = new vtol_edge_2d(*vh1,*vh2); e_list.push_back(eh12);
-  vtol_edge_sptr eh23 = new vtol_edge_2d(*vh2,*vh3); e_list.push_back(eh23);
-  vtol_edge_sptr eh34 = new vtol_edge_2d(*vh3,*vh4); e_list.push_back(eh34);
-  vtol_edge_sptr eh41 = new vtol_edge_2d(*vh4,*vh1); e_list.push_back(eh41);
+  vtol_edge_sptr eh12 = new vtol_edge_2d(vh1,vh2); e_list.push_back(eh12);
+  vtol_edge_sptr eh23 = new vtol_edge_2d(vh2,vh3); e_list.push_back(eh23);
+  vtol_edge_sptr eh34 = new vtol_edge_2d(vh3,vh4); e_list.push_back(eh34);
+  vtol_edge_sptr eh41 = new vtol_edge_2d(vh4,vh1); e_list.push_back(eh41);
   vtol_one_chain_sptr och1 = new vtol_one_chain(e_list);
   oc1->link_chain_inferior(och1);
 
@@ -107,13 +107,13 @@ static void test_one_chain()
 
   oc1->reverse_directions();
 
-  vtol_edge_2d* n_e = new vtol_edge_2d(5,5,1,1);
+  vtol_edge_2d_sptr n_e = new vtol_edge_2d(5,5,1,1);
 
-  oc1->add_edge(*n_e,true);
+  oc1->add_edge(n_e,true);
   TEST("vtol_one_chain::add_edge()", oc1->num_edges(), 5);
   TEST("vtol_one_chain::add_edge()", oc1->edge(4), n_e);
 
-  oc1->remove_edge(*n_e,true);
+  oc1->remove_edge(n_e,true);
   TEST("vtol_one_chain::remove_edge()", oc1->num_edges(), 4);
 
   vsol_spatial_object_2d_sptr oc1_clone = oc1->clone();
@@ -132,11 +132,11 @@ static void test_one_chain()
   vsol_curve_2d_sptr dc  = new vdgl_digital_curve(p0, p1);
   vtol_vertex_2d_sptr vd0 = new vtol_vertex_2d(*p0);
   vtol_vertex_2d_sptr vd1 = new vtol_vertex_2d(*p1);
-  vtol_edge_sptr e0   = new vtol_edge_2d(*vd0, *vd1, dc);
+  vtol_edge_sptr e0   = new vtol_edge_2d(vd0, vd1, dc);
   //complete the triangle
   vtol_vertex_2d_sptr vd2 = new vtol_vertex_2d(0, 4);
-  vtol_edge_sptr e1   = new vtol_edge_2d(*vd1, *vd2);
-  vtol_edge_sptr e2   = new vtol_edge_2d(*vd2, *vd0);
+  vtol_edge_sptr e1   = new vtol_edge_2d(vd1, vd2);
+  vtol_edge_sptr e2   = new vtol_edge_2d(vd2, vd0);
   vcl_vector<vtol_edge_sptr> edges;
   edges.push_back(e0);   edges.push_back(e1);   edges.push_back(e2);
   vtol_one_chain_sptr onch = new vtol_one_chain(edges, true);

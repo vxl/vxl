@@ -38,11 +38,13 @@
 //   02-26-97 Added implementation for virtual Transform() - Peter Vanroose
 //   PTU ported to vxl may 2000.
 //   November 30, 2002 - added local implementation for compute_bounding_box
+//  Dec. 2002, Peter Vanroose - interface change: vtol objects -> smart pointers
 // \endverbatim
 
 #include <vcl_vector.h>
 #include <vtol/vtol_zero_chain.h>
 #include <vtol/vtol_vertex_2d.h>
+#include <vtol/vtol_vertex_2d_sptr.h>
 #include <vsol/vsol_curve_2d.h>
 #include <vsol/vsol_curve_2d_sptr.h>
 #include <vtol/vtol_edge.h>
@@ -68,20 +70,37 @@ class vtol_edge_2d
   //: Constructor from the two endpoints `new_v1', `new_v2' and from a curve `new_curve'.
   //  If `new_curve' is 0, a line is created from `new_v1' and `new_v2'.
   //---------------------------------------------------------------------------
+  explicit vtol_edge_2d(vtol_vertex_2d_sptr const& new_v1,
+                        vtol_vertex_2d_sptr const& new_v2,
+                        const vsol_curve_2d_sptr &new_curve=0);
+
+  explicit vtol_edge_2d(vtol_vertex_sptr const& new_v1,
+                        vtol_vertex_sptr const& new_v2,
+                        const vsol_curve_2d_sptr &new_curve=0);
+// private:
+  // deprecated interface:
   explicit vtol_edge_2d(vtol_vertex_2d &new_v1,
                         vtol_vertex_2d &new_v2,
                         const vsol_curve_2d_sptr &new_curve=0);
 
   //---------------------------------------------------------------------------
-  //: Copy constructor
+  //: Copy constructor. Deep copy.  Deprecated.
   //---------------------------------------------------------------------------
   vtol_edge_2d(const vtol_edge_2d &other);
+ public:
+  //---------------------------------------------------------------------------
+  //: Pseudo copy constructor. Deep copy.
+  //---------------------------------------------------------------------------
+  vtol_edge_2d(vtol_edge_2d_sptr const& other);
 
   //---------------------------------------------------------------------------
   //: Constructor from a zero-chain.
   //---------------------------------------------------------------------------
+  explicit vtol_edge_2d(vtol_zero_chain_sptr const& new_zero_chain);
+// private:
+  // Deprecated:
   explicit vtol_edge_2d(vtol_zero_chain &new_zero_chain);
-
+ public:
   //---------------------------------------------------------------------------
   //: Constructor from an array of zero-chains.
   //---------------------------------------------------------------------------

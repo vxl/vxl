@@ -28,7 +28,7 @@ vdgl_intensity_face::vdgl_intensity_face(vcl_vector<vtol_edge*>* edges)
 
 //: Copy constructor
 vdgl_intensity_face::vdgl_intensity_face(vdgl_intensity_face const& f)
-  :vtol_face_2d(f),
+  :vtol_face_2d(const_cast<vtol_face_2d*>(f.cast_to_face_2d())),
    region_(new vdgl_digital_region(f.Npix(), f.Xj(), f.Yj(), f.Zj(), f.Ij()))
 {
 }
@@ -63,13 +63,15 @@ vdgl_intensity_face::vdgl_intensity_face(vcl_vector<vtol_one_chain_sptr>* chains
 
 vdgl_intensity_face::vdgl_intensity_face(vtol_face_2d& face, int npts, float const* xp, float const* yp,
                                          unsigned short const* pix)
-  :vtol_face_2d(face), region_(new vdgl_digital_region(npts, xp, yp, pix))
+  :vtol_face_2d(const_cast<vtol_face_2d*>(face.cast_to_face_2d())),
+   region_(new vdgl_digital_region(npts, xp, yp, pix))
 {
 }
 
 vdgl_intensity_face::vdgl_intensity_face(vtol_face_2d& face, int npts, float const* xp, float const* yp,
                                          float const* zp, unsigned short const* pix)
-  :vtol_face_2d(face), region_(new vdgl_digital_region(npts, xp, yp, zp, pix))
+  :vtol_face_2d(const_cast<vtol_face_2d*>(face.cast_to_face_2d())),
+   region_(new vdgl_digital_region(npts, xp, yp, zp, pix))
 {
 }
 //Default Destructor
@@ -186,7 +188,7 @@ float vdgl_intensity_face::perimeter()
           break;
         default:
           vcl_cout << "In vdgl_intensity_face::perimeter() - warning:"
-                   << " Edge does not have known geometry" << vcl_endl;
+                   << " Edge does not have known geometry\n";
         break;
         }
     }

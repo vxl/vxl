@@ -51,7 +51,7 @@ static void test_block()
   tc1->describe(vcl_cout,8);
 
   TEST("vtol_two_chain equality", *tc1, *tc1_copy);
-  vtol_block_sptr b1 = new vtol_block(*tc1);
+  vtol_block_sptr b1 = new vtol_block(tc1);
   b1->describe(vcl_cout,8);
 
   vcl_vector<signed char> dirs;
@@ -69,8 +69,8 @@ static void test_block()
   TEST("vtol_block::get_boundary_cycle()", b1->get_boundary_cycle(), tc1);
   TEST("vtol_block::get_boundary_cycle()", *(b1->get_boundary_cycle()), *(b3->get_boundary_cycle()));
 
-  vtol_block_sptr b1_copy = new vtol_block(*b1);
-  TEST("vtol_block copy constructor", *b1, *b1_copy);
+  vtol_block_sptr b1_copy = new vtol_block(b1);
+  TEST("vtol_block deep copy (pseudo copy constructor)", *b1, *b1_copy);
   b1_copy->describe(vcl_cout,8);
 
   TEST("vtol_block::get_boundary_cycle() is not null", b1->get_boundary_cycle(), true);
@@ -90,8 +90,8 @@ static void test_block()
   TEST("vtol_block::vertices()", verts->size(), 8);
   delete verts;
 
-  vtol_block_sptr b2_copy = new vtol_block(*b2);
-  TEST("vtol_block copy constructor", *b2, *b2_copy);
+  vtol_block_sptr b2_copy = new vtol_block(b2);
+  TEST("vtol_block deep copy (pseudo copy constructor)", *b2, *b2_copy);
 
   vsol_spatial_object_2d_sptr b2_clone = b2->clone();
   TEST("vtol_block::clone()", *b2, *b2_clone);

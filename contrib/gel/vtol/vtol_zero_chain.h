@@ -17,13 +17,16 @@
 // Modifications:
 //   JLM Dec 1995, Added timeStamp (Touch) to operations which affect bounds.
 //   Peter Vanroose - 02-26-97 Added implementation for virtual Transform()
-//   PTU - ported may 2000
+//   PTU - ported to vxl may 2000
+//  Dec. 2002, Peter Vanroose - interface change: vtol objects -> smart pointers
 // \endverbatim
 //-----------------------------------------------------------------------------
 
 #include <vtol/vtol_topology_object.h>
 #include <vcl_vector.h>
 #include <vtol/vtol_vertex.h>
+#include <vtol/vtol_vertex_sptr.h>
+#include <vtol/vtol_vertex_2d_sptr.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 class vtol_vertex;
 class vtol_edge;
@@ -46,12 +49,19 @@ class vtol_zero_chain
   explicit vtol_zero_chain(void) {}
 
   //---------------------------------------------------------------------------
-  //: Constructor from two vertices (to make an edge creation easier)
+  //: Constructor from two vertices (to make edge creation easier)
   //  REQUIRE: v1!=v2
   //---------------------------------------------------------------------------
+  vtol_zero_chain(vtol_vertex_sptr const& v1,
+                  vtol_vertex_sptr const& v2);
+
+  vtol_zero_chain(vtol_vertex_2d_sptr const& v1,
+                  vtol_vertex_2d_sptr const& v2);
+// private:
+  // Deprecated
   explicit vtol_zero_chain(vtol_vertex &v1,
                            vtol_vertex &v2);
-
+ public:
   //---------------------------------------------------------------------------
   //: Constructor from an array of vertices
   //  REQUIRE: new_vertices.size()>0
@@ -60,10 +70,15 @@ class vtol_zero_chain
   vtol_zero_chain(const vertex_list &new_vertices);
 
   //---------------------------------------------------------------------------
-  //: Copy constructor. Copy the vertices and the links
+  //: Pseudo copy constructor. Deep copy.
+  //---------------------------------------------------------------------------
+  vtol_zero_chain(vtol_zero_chain_sptr const& other);
+// private:
+  //---------------------------------------------------------------------------
+  //: Copy constructor. Copy the vertices and the links.  Deprecated.
   //---------------------------------------------------------------------------
   vtol_zero_chain(const vtol_zero_chain &other);
-
+ public:
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
@@ -105,6 +120,8 @@ class vtol_zero_chain
 
   void link_inferior(vtol_vertex_sptr inf);
   void unlink_inferior(vtol_vertex_sptr inf);
+  void link_inferior(vtol_vertex_2d_sptr inf);
+  void unlink_inferior(vtol_vertex_2d_sptr inf);
 
   //---------------------------------------------------------------------------
   //: Is `inferior' type valid for `this' ?

@@ -40,8 +40,8 @@ static void test_two_chain()
   tc2->describe(vcl_cout,8);
   TEST("vtol_two_chain inequality (directions)", *tc1 == *tc2, false);
 
-  vtol_two_chain_sptr tc1_copy = new vtol_two_chain(*tc1);
-  TEST("vtol_two_chain copy constructor", *tc1, *tc1_copy);
+  vtol_two_chain_sptr tc1_copy = new vtol_two_chain(tc1);
+  TEST("vtol_two_chain deep copy (pseudo copy constructor)", *tc1, *tc1_copy);
 
   vsol_spatial_object_2d_sptr tc2_clone = tc2->clone();
   tc2_clone->describe(vcl_cout,8);
@@ -63,10 +63,10 @@ static void test_two_chain()
   vtol_vertex_sptr v11 = new vtol_vertex_2d(3.0,2.0); v_list3.push_back(v11);
   vtol_vertex_sptr v12 = new vtol_vertex_2d(4.0,3.0); v_list3.push_back(v12);
   vtol_face_sptr f3 = new vtol_face_2d(v_list3);
-  tc1->add_face(*f3,1);
+  tc1->add_face(f3,1);
   TEST("vtol_two_chain::add_face()", tc1->face(2), f3);
 
-  tc1->remove_face(*f2);
+  tc1->remove_face(f2);
   TEST("vtol_two_chain::remove_face()", tc1->face(1), f3);
 
   TEST("vtol_two_chain::cast_to_two_chain()", tc1->cast_to_two_chain()==0, false);
@@ -76,8 +76,8 @@ static void test_two_chain()
   TEST("vtol_two_chain::num_faces()", tc1->num_faces(), 2);
 
   tc1->link_chain_inferior(tc2);
-  vtol_two_chain_sptr new_copy = new vtol_two_chain(*tc1);
-  TEST("vtol_two_chain copy constructor", *new_copy, *tc1);
+  vtol_two_chain_sptr new_copy = new vtol_two_chain(tc1);
+  TEST("vtol_two_chain deep copy (pseudo copy constructor)", *new_copy, *tc1);
 }
 
 TESTLIB_DEFINE_MAIN(test_two_chain);
