@@ -27,37 +27,37 @@ void vcl_multimap_uint_uint::clear() { base::erase(begin(), end()); }
 //: Default constructor
 PairMatchMulti::PairMatchMulti()
 {
-  _scores = 0;
+  scores_ = 0;
 }
 
 // - Construct and load matches (via operator>>) from vcl_istream.
 PairMatchMulti::PairMatchMulti(vcl_istream& f)
 {
-  _scores = 0;
+  scores_ = 0;
   f >> *this;
 }
 
 //: Copy ctor
 PairMatchMulti::PairMatchMulti(const PairMatchMulti& that)
 {
-  _scores = 0;
+  scores_ = 0;
   operator=(that);
 }
 
 //: Assignment
 PairMatchMulti& PairMatchMulti::operator=(const PairMatchMulti& that)
 {
-  _matches12 = that._matches12;
-  delete _scores; _scores = 0;
-  if (that._scores)
-    _scores = new vbl_sparse_array_2d<double>(*that._scores);
+  matches12_ = that.matches12_;
+  delete scores_; scores_ = 0;
+  if (that.scores_)
+    scores_ = new vbl_sparse_array_2d<double>(*that.scores_);
   return *this;
 }
 
 //: Destructor
 PairMatchMulti::~PairMatchMulti()
 {
-  delete _scores; _scores = 0;
+  delete scores_; scores_ = 0;
 }
 
 void PairMatchMulti::add_match(int i1, int i2, double score)
@@ -68,15 +68,15 @@ void PairMatchMulti::add_match(int i1, int i2, double score)
 
 void PairMatchMulti::set_score(int i1, int i2, double score)
 {
-  if (!_scores)
-    _scores = new vbl_sparse_array_2d<double>;
+  if (!scores_)
+    scores_ = new vbl_sparse_array_2d<double>;
 
-  _scores->put(i1, i2, score);
+  scores_->put(i1, i2, score);
 }
 
 bool PairMatchMulti::contains(int i1, int i2) const
 {
-  for (vcl_multimap_uint_uint::const_iterator p = _matches12.lower_bound(i1); p != _matches12.upper_bound(i1); ++p)
+  for (vcl_multimap_uint_uint::const_iterator p = matches12_.lower_bound(i1); p != matches12_.upper_bound(i1); ++p)
     if ((*p).second == (unsigned)i2)
       return true;
   return false;
@@ -84,10 +84,10 @@ bool PairMatchMulti::contains(int i1, int i2) const
 
 double PairMatchMulti::get_score(int i1, int i2) const
 {
-  if (_scores == 0)
+  if (scores_ == 0)
     return -1.0;
 
-  double* p = _scores->get_addr(i1, i2);
+  double* p = scores_->get_addr(i1, i2);
   if (p == 0)
     return -1.0;
 

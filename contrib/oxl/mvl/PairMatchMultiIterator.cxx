@@ -4,3 +4,9 @@
 #endif
 
 #include "PairMatchMulti.h"
+
+PairMatchMultiIterator::PairMatchMultiIterator(PairMatchMulti const& pmm):
+  first_(pmm.matches12_.begin()),
+  last_(pmm.matches12_.end())
+{
+}
