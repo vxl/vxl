@@ -58,7 +58,7 @@ class kalman_filter
  protected:
   //: check whether the matched point is a outlier
   bool is_outlier(vnl_double_2& z, vnl_double_2& z_pred);
-  
+
   //: get time interval from ith frame to j-th frame
   vnl_matrix_fixed<double, 6, 6> get_transit_matrix(int i, int j);
 
@@ -123,7 +123,7 @@ class kalman_filter
   vnl_double_3x3 K_;
 
   //: used for denote outlier point in image
-  static const double large_num_=1e15;
+  static const double large_num_ /* =1e15 */;
 };
 
 #endif // brct_kalman_filter_h_
