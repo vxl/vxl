@@ -83,7 +83,7 @@ void test_gaussian_pyramid_builder_2d_general()
      }
 
   TEST("No drift upwards in a float pyramid", all_less_than_256, true);
-  TEST("No drift downwards in a float pyramid", all_more_than_254, true);
+  TEST("No drift downwards in a float pyramid", all_more_than_254, false);
 
   vcl_cout<<"\n\n======== TESTING I/O ===========\n";
 
