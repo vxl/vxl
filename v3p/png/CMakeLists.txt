@@ -11,7 +11,6 @@ IF(NOT VXL_USING_NATIVE_PNG)
     INCLUDE_DIRECTORIES( ${ZLIB_INCLUDE_DIR} )
 
     SET( png_sources
-      pngasmrd.h
       pngconf.h
 
       png.c png.h
