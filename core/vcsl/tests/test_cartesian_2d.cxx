@@ -14,8 +14,7 @@
 #include <vcsl/vcsl_cartesian_2d.h>
 
 //-----------------------------------------------------------------------------
-// Name: main
-// Task: Entry point of the test program
+// -- Entry point of the test program
 //-----------------------------------------------------------------------------
 int main(int argc,
          char *argv[])

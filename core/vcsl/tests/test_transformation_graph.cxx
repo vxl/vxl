@@ -19,8 +19,8 @@
 static void test1(void);
 
 //-----------------------------------------------------------------------------
-// Name: test1
-// Task: graph: csa<------cs1<-------cs2
+//:
+//       graph: csa<------cs1<-------cs2
 //              ^     scale1     scale2
 //              |------cs3
 //               scale3
@@ -243,8 +243,7 @@ static void test1(void)
 }
 
 //-----------------------------------------------------------------------------
-// Name: main
-// Task: Entry point of the test program
+// -- Entry point of the test program
 //-----------------------------------------------------------------------------
 int main(int argc,
          char *argv[])

@@ -18,8 +18,7 @@
 #include <vcsl/vcsl_graph.h>
 
 //-----------------------------------------------------------------------------
-// Name: main
-// Task: Entry point of the test program
+// -- Entry point of the test program
 //-----------------------------------------------------------------------------
 int main(int argc,
          char *argv[])

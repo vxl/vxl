@@ -28,8 +28,7 @@
 #include <vnl/vnl_math.h> // for pi
 
 //-----------------------------------------------------------------------------
-// Name: main
-// Task: Entry point of the example program
+// -- Entry point of the example program
 //-----------------------------------------------------------------------------
 int main(int argc,
          char *argv[])
