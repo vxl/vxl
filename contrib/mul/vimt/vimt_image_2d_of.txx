@@ -10,7 +10,6 @@
 #include <vsl/vsl_indent.h>
 #include <vimt/vimt_image_2d_of.h>
 #include <vil2/vil2_print.h>
-#include <vil2/vil2_crop.h>
 #include <vsl/vsl_vector_io.h>
 #include <vil2/io/vil2_io_image_view.h>
 
@@ -50,39 +49,6 @@ void vimt_image_2d_of<T>::set_valid_region(int x0, unsigned nx, int y0, unsigned
   world2im_.set_translation(-x0,-y0);
 }
 
-
-//: Arrange that this is window on given image.
-//  I.e. plane(i) points to im.plane(i) + offset
-//  The world2im transform is set to match
-//  so this appears identical to im when addressed
-//  in world co-ords.
-template<class T>
-void vimt_image_2d_of<T>::set_to_window(const vimt_image_2d_of& im,
-                                        unsigned x0, unsigned nx, unsigned y0, unsigned ny)
-{
-  assert(this!=&im);
-  image_.set_to_window(im.image(),x0,nx,y0,ny);
-
-  vimt_transform_2d trans;
-  trans.set_translation(-double(x0),-double(y0));
-  world2im_ = trans * im.world2im();
-}
-
-//: Create windowed view of given image
-//  The parameters should be in image co-ords.
-//  The world2im transform is set to match
-//  so this appears identical to im when addressed
-//  in world co-ords.
-template<class T>
-vimt_image_2d_of<T> vimt_image_2d_of<T>::window(unsigned x0, unsigned nx,
-                                                unsigned y0, unsigned ny) const
-{
-  vimt_transform_2d trans;
-  trans.set_translation(-double(x0),-double(y0));
-  return vimt_image_2d_of<T>(vil2_crop(image_,x0,ny,y0,ny),trans*world2im_);
-}
-
-
 template<class T>
 bool vimt_image_2d_of<T>::is_class(vcl_string const& s) const
 {
@@ -109,8 +75,8 @@ vimt_image* vimt_image_2d_of<T>::clone() const
 template<class T>
 void vimt_image_2d_of<T>::print_summary(vcl_ostream& os) const
 {
-  os<<vsl_indent() << image_<<vcl_endl;
   os<<vsl_indent() << "Transform: "<<world2im_;
+  os<<vsl_indent() << image_<<vcl_endl;
 }
 
 //=======================================================================

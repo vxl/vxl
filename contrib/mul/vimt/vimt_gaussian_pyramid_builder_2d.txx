@@ -10,10 +10,11 @@
 #include <vcl_cstdlib.h>
 #include <vcl_string.h>
 
-#include <vimt/vimt_image_pyramid.h>
-#include <vil2/algo/vil2_gauss_reduce.h>
 #include <vcl_cassert.h>
 #include <vnl/vnl_math.h> // for sqrt2
+#include <vil2/algo/vil2_gauss_reduce.h>
+#include <vimt/vimt_image_pyramid.h>
+#include <vimt/vimt_crop.h>
 
 //=======================================================================
 
@@ -171,7 +172,7 @@ void vimt_gaussian_pyramid_builder_2d<T>::build(vimt_image_pyramid& image_pyr,
   vimt_image_2d_of<T>& im0 = (vimt_image_2d_of<T>&) image_pyr(0);
 
   // Shallow copy of part of base_image
-  im0.set_to_window(base_image,0,ni,0,nj);
+  im0 = vimt_crop(base_image,0,ni,0,nj);
 
   int i;
   for (i=1;i<max_levels;i++)

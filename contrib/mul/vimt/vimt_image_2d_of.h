@@ -40,21 +40,6 @@ class vimt_image_2d_of : public vimt_image_2d
   //: Image view
   const vil2_image_view<T>& image() const { return image_; }
 
-  //: Arrange that this is window on given image.
-  //  The parameters should be in image co-ords.
-  //  The world2im transform is set to match
-  //  so this appears identical to im when addressed
-  //  in world co-ords.
-  void set_to_window(const vimt_image_2d_of& im,
-                     unsigned x0, unsigned nx, unsigned y0, unsigned ny);
-
-  //: Create windowed view of given image
-  //  The parameters should be in image co-ords.
-  //  The world2im transform is set to match
-  //  so this appears identical to im when addressed
-  //  in world co-ords.
-  vimt_image_2d_of<T> window(unsigned x0, unsigned nx, unsigned y0, unsigned ny) const;
-
   //: True if transforms are equal, and they share same image data.
   //  This does not do a deep equality on image data. If the images point
   //  to different image data objects that contain identical images, then

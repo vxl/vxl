@@ -3,12 +3,13 @@
 // \brief Example of taking sub-windows of an image.
 // \author Tim Cootes - Manchester
 
-#include <vimt/vimt_image_2d_of.h>
-#include <vimt/vimt_sample_profile_bilin.h>
-#include <vil2/vil2_image_view.h>
-#include <vxl_config.h> // for vxl_byte
 #include <vcl_iostream.h>
+#include <vxl_config.h> // for vxl_byte
 #include <vnl/vnl_vector.h>
+#include <vil2/vil2_image_view.h>
+#include <vimt/vimt_image_2d_of.h>
+#include <vimt/vimt_crop.h>
+#include <vimt/vimt_sample_profile_bilin.h>
 
 int main(int argc, char** argv)
 {
@@ -27,7 +28,7 @@ int main(int argc, char** argv)
   vcl_cout<<vcl_endl;
 
   vcl_cout<<"Create a 5 x 5 window with corner at (3,3)"<<vcl_endl;
-  vimt_image_2d_of<vxl_byte> window = image0.window(3,5,3,5);
+  vimt_image_2d_of<vxl_byte> window = vimt_crop(image0, 3,5,3,5);
   window.print_all(vcl_cout);
   vcl_cout<<vcl_endl;
 

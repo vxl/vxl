@@ -47,7 +47,7 @@ vil3d_image_view<T>::vil3d_image_view(const T* top_left,
 //: Set this view to look at another view's data
 //  Need to pass the memory chunk to set up the internal smart ptr appropriately
 template<class T>
-vil3d_image_view<T>::vil3d_image_view(const vil2_smart_ptr<vil2_memory_chunk>& mem_chunk,
+vil3d_image_view<T>::vil3d_image_view(const vil2_memory_chunk_sptr& mem_chunk,
                     const T* top_left, unsigned n_i, unsigned n_j,
 										unsigned n_k, unsigned n_planes,
                     int i_step, int j_step, int k_step, int plane_step)
@@ -509,49 +509,6 @@ void vil3d_image_view<T>::set_to_memory(const T* top_left,
 
 
 //=======================================================================
-//: Arrange that this is window on given image.
-template<class T>
-void vil3d_image_view<T>::set_to_window(const vil3d_image_view& im,
-                                       unsigned i0, unsigned n_i,
-                                       unsigned j0, unsigned n_j,
-                                       unsigned k0, unsigned n_k,
-                                       unsigned p0, unsigned n_p)
-{
-  assert(this!=&im);
-
-  assert(i0<im.ni()); assert(i0+n_i<=im.ni());
-  assert(j0<im.nj()); assert(j0+n_j<=im.nj());
-  assert(k0<im.nk()); assert(k0+n_k<=im.nk());
-  assert(p0<im.nplanes()); assert(p0+n_p<=im.nplanes());
-
-  release_memory();
-
-  // Take smart pointer to im's data to keep it in scope
-  ptr_ = im.ptr_;
-
-  ni_ = n_i;
-  nj_ = n_j;
-  nk_ = n_k;
-  nplanes_ = n_p;
-  istep_ = im.istep();
-  jstep_ = im.jstep();
-  kstep_ = im.kstep();
-  planestep_ = im.planestep();
-
-  // Have to force the cast to avoid compiler warnings about const
-  top_left_ = (T*) im.origin_ptr() + i0*istep_ + j0*jstep_+ k0*kstep_ + p0*planestep_;
-}
-
-//: Arrange that this is window on all planes of given image.
-template<class T>
-void vil3d_image_view<T>::set_to_window(const vil3d_image_view& im,
-                                       unsigned i0, unsigned n_i,
-																			 unsigned j0, unsigned n_j,
-																			 unsigned k0, unsigned n_k)
-{
-  set_to_window(im,i0,n_i,j0,n_j,k0,n_k,0,im.nplanes());
-}
-
 //: Fill view with given value
 template<class T>
 void vil3d_image_view<T>::fill(T value)

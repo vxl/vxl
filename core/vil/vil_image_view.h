@@ -205,16 +205,6 @@ class vil2_image_view : public vil2_image_view_base
   void set_to_memory(const T* top_left, unsigned ni, unsigned nj, unsigned nplanes,
                      int i_step, int j_step, int plane_step);
 
-  //: Arrange that this is window on some planes of given image.
-  //  i.e. plane(i) points to im.plane(i+p0) + offset
-  void set_to_window(const vil2_image_view& im,
-                     unsigned i0, unsigned ni, unsigned j0,
-                     unsigned nj, unsigned p0, unsigned np);
-
-  //: Arrange that this is window on all planes of given image.
-  void set_to_window(const vil2_image_view& im,
-                     unsigned i0, unsigned ni, unsigned j0, unsigned nj);
-
   //: Fill view with given value
   void fill(T value);
 

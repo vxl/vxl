@@ -519,43 +519,6 @@ void vil2_image_view<T>::set_to_memory(const T* top_left,
 
 
 //=======================================================================
-//: Arrange that this is window on given image.
-template<class T>
-void vil2_image_view<T>::set_to_window(const vil2_image_view& im,
-                                       unsigned i0, unsigned n_i,
-                                       unsigned j0, unsigned n_j,
-                                       unsigned p0, unsigned n_p)
-{
-  assert(this!=&im);
-
-  assert(i0<im.ni()); assert(i0+n_i<=im.ni());
-  assert(j0<im.nj()); assert(j0+n_j<=im.nj());
-  assert(p0<im.nplanes()); assert(p0+n_p<=im.nplanes());
-
-  release_memory();
-
-  // Take smart pointer to im's data to keep it in scope
-  ptr_ = im.ptr_;
-
-  ni_ = n_i;
-  nj_ = n_j;
-  nplanes_ = n_p;
-  istep_ = im.istep();
-  jstep_ = im.jstep();
-  planestep_ = im.planestep();
-
-  // Have to force the cast to avoid compiler warnings about const
-  top_left_ = (T*) im.top_left_ptr() + i0*istep_ + j0*jstep_ + p0*planestep_;
-}
-
-//: Arrange that this is window on all planes of given image.
-template<class T>
-void vil2_image_view<T>::set_to_window(const vil2_image_view& im,
-                                       unsigned i0, unsigned n_i, unsigned j0, unsigned n_j)
-{
-  set_to_window(im,i0,n_i,j0,n_j,0,im.nplanes());
-}
-
 //: Fill view with given value
 template<class T>
 void vil2_image_view<T>::fill(T value)
@@ -596,8 +559,11 @@ void vil2_image_view<T>::print(vcl_ostream& os) const
 template<class T>
 bool vil2_image_view<T>::operator==(const vil2_image_view_base &rhs) const
 {
-  if (rhs.pixel_format() != pixel_format()) return true;
+  if (rhs.pixel_format() != pixel_format()) return false;
+
   const vil2_image_view<T> & other = static_cast<const vil2_image_view<T> &>(rhs);
+
+  if (this == &other) return true;
 
   if (!(bool) *this && !(bool)other) return true;
   return ptr_  == other.ptr_ &&
@@ -619,10 +585,10 @@ template<class T>
 bool vil2_image_view<T>::operator<(const vil2_image_view_base& rhs) const
 {
   if (rhs.pixel_format() != pixel_format()) return pixel_format() < rhs.pixel_format();
-  const vil2_image_view<T> & other = static_cast<const vil2_image_view<T> &>(rhs);
 
+  const vil2_image_view<T> & other = static_cast<const vil2_image_view<T> &>(rhs);
   if (ptr_ != other.ptr_) return ptr_<other.ptr_;
-  if ((bool) *this && (bool)other) return false;
+  if (!(bool) *this && !(bool)other) return false;
   if (nplanes_ != other.nplanes_) return nplanes_ < other.nplanes_;
   if (ni_ != other.ni_) return ni_ < other.ni_;
   if (nj_ != other.nj_) return nj_ < other.nj_;
@@ -641,10 +607,13 @@ template<class T>
 bool vil2_image_view<T>::operator>(const vil2_image_view_base& rhs) const
 {
   if (rhs.pixel_format() != pixel_format()) return pixel_format() > rhs.pixel_format();
+
   const vil2_image_view<T> & other = static_cast<const vil2_image_view<T> &>(rhs);
 
+  if (this == &other) return false;
+
   if (ptr_ != other.ptr_) return ptr_>other.ptr_;
-  if ((bool) *this && (bool)other) return false;
+  if (!(bool) *this && !(bool)other) return false;
   if (nplanes_ != other.nplanes_) return nplanes_ > other.nplanes_;
   if (ni_ != other.ni_) return ni_ > other.ni_;
   if (nj_ != other.nj_) return nj_ > other.nj_;

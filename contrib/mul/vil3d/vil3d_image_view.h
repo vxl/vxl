@@ -73,7 +73,7 @@ class vil3d_image_view : public vil3d_image_view_base
   //  Typically used by functions which generate a manipulated view of
   //  another's image data.
   //  Need to pass the memory chunk to set up the internal smart ptr appropriately
-  vil3d_image_view(const vil2_smart_ptr<vil2_memory_chunk>& mem_chunk,
+  vil3d_image_view(const vil2_memory_chunk_sptr& mem_chunk,
                    const T* top_left,
 									 unsigned ni, unsigned nj, unsigned nk, unsigned nplanes,
                    int i_step, int j_step, int k_step, int plane_step);
@@ -212,17 +212,6 @@ class vil3d_image_view : public vil3d_image_view_base
   void set_to_memory(const T* top_left,
 	                   unsigned ni, unsigned nj, unsigned nk, unsigned nplanes,
                      int i_step, int j_step, int k_step, int plane_step);
-
-  //: Arrange that this is window on some planes of given image.
-  //  i.e. plane(i) points to im.plane(i+p0) + offset
-  void set_to_window(const vil3d_image_view& im,
-                     unsigned i0, unsigned ni, unsigned j0,  unsigned nj,
-										 unsigned k0, unsigned nk, unsigned p0, unsigned np);
-
-  //: Arrange that this is window on all planes of given image.
-  void set_to_window(const vil3d_image_view& im,
-                     unsigned i0, unsigned ni, unsigned j0, unsigned nj,
-										 unsigned k0, unsigned nk);
 
   //: Fill view with given value
   void fill(T value);

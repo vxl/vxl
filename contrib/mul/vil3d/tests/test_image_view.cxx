@@ -3,13 +3,11 @@
 #include <vcl_iostream.h>
 #include <vcl_functional.h>
 #include <vxl_config.h> // for vxl_int_32
-// #include <vil2/vil2_copy.h>
 #include <vil3d/vil3d_print.h>
 #include <vil3d/vil3d_plane.h>
 #include <vil3d/vil3d_slice.h>
-// #include <vil2/vil2_convert.h>
-// #include <vil2/vil2_view_as.h>
 #include <vil3d/vil3d_image_view.h>
+#include <vil3d/vil3d_crop.h>
 
 bool Equal(const vil3d_image_view<vxl_int_32>& im0,
            const vil3d_image_view<vxl_int_32>& im1)
@@ -97,14 +95,14 @@ void test_image_view_int()
   }
 
   vil3d_image_view<vxl_int_32> image_win;
-  image_win.set_to_window(image0,2,4,3,4,0,1);
-  TEST("set_to_window size",
+  image_win = vil3d_crop(image0,2,4,3,4,0,1);
+  TEST("vil3d_crop size",
        image_win.ni()==4 && image_win.nj()==4 &&
 			 image_win.nk()==1 && image_win.nplanes()==image0.nplanes(),
        true);
 
   image0(2,3,0)=222;
-  TEST("set_to_window is shallow copy",image_win(0,0,0),222);
+  TEST("vil3d_crop is shallow copy",image_win(0,0,0),222);
 
   vcl_cout<<image0.is_a()<<vcl_endl;
   TEST("is_a() specialisation for vxl_int_32",image0.is_a(),"vil3d_image_view<vxl_int_32>");

@@ -2,7 +2,8 @@
 //  \brief Structuring element for morphology represented as a list of non-zero pixels
 //  \author Tim Cootes
 
-#include <vil2/algo/vil2_structuring_element.h>
+#include "vil2_structuring_element.h"
+#include <vcl_cassert.h>
 
 //: Define elements { (p_i[k],p_j[k]) }
 vil2_structuring_element::vil2_structuring_element(const vcl_vector<int>& p_i,

@@ -5,7 +5,7 @@
 #include <vxl_config.h> // for bool
 #include <vil2/algo/vil2_binary_dilate.h>
 
-void print_binary_image(const vil2_image_view<bool>& im)
+inline void print_binary_image(const vil2_image_view<bool>& im)
 {
   for (int j=0;j<im.nj();++j)
   {

@@ -14,7 +14,7 @@
 #include <vimt/vimt_image_pyramid.h>
 #include <mbl/mbl_gamma.h>
 #include <vsl/vsl_indent.h>
-
+#include <vimt/vimt_crop.h>
 //=======================================================================
 
 template <class T>
@@ -81,7 +81,7 @@ void vimt_gaussian_pyramid_builder_2d_general<T>::build(
   vimt_image_2d_of<T>& im0 = (vimt_image_2d_of<T>&) im_pyr(0);
 
   // Shallow copy of part of base_image
-  im0.set_to_window(base_image,0,ni,0,nj);
+  im0 = vimt_crop(base_image,0,ni,0,nj);
 
   s = scale_step();
   for (int i=1;i<maxlevels;i++)
