@@ -44,17 +44,17 @@ HomgPlane3D::~HomgPlane3D ()
 }
 
 //: closest point
-HomgPoint3D HomgPlane3D::closest_point(const HomgPoint3D& x) const
+HomgPoint3D HomgPlane3D::closest_point(const HomgPoint3D& p) const
 {
-  vnl_double_3 n(_homg_vector[0], _homg_vector[1], _homg_vector[2]);
+  vnl_double_3 n(x(), y(), z());
 
   double s = 1.0/n.magnitude();
-  double d = -_homg_vector[3];
+  double d = -w();
 
   n *= s;
   d *= s;
 
-  vnl_double_3 x3 = x.get_double3();
+  vnl_double_3 x3 = p.get_double3();
 
   double dp = dot_product(x3, n) - d;
 
@@ -64,14 +64,14 @@ HomgPoint3D HomgPlane3D::closest_point(const HomgPoint3D& x) const
 }
 
 //: Distance point to plane
-double HomgPlane3D::distance(const HomgPoint3D& x) const
+double HomgPlane3D::distance(const HomgPoint3D& p) const
 {
-  vnl_double_3 n(_homg_vector[0], _homg_vector[1], _homg_vector[2]);
+  vnl_double_3 n(x(), y(), z());
 
   double s = 1.0/n.magnitude();
-  double d = -_homg_vector[3];
+  double d = -w();
 
-  vnl_double_3 x3 = x.get_double3();
+  vnl_double_3 x3 = p.get_double3();
 
   return (dot_product(x3, n) - d)*s;
 }
