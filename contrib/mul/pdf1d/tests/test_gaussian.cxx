@@ -33,7 +33,11 @@ void test_gaussian()
 
   pdf1d_gaussian_builder builder;
 
-  pdf1d_gaussian pdf(1,2);
+  pdf1d_gaussian pdf(1,4);
+
+  // Values calculated independently using Matlab normpdf(0,1,2) and normcdf(0,1,2)
+  TEST_NEAR("N(1.0,2.0), p(x=0.0)", pdf(0.0),      0.17603, 0.0001);
+  TEST_NEAR("N(1.0,2.0), P(x<=0.0)", pdf.cdf(0.0), 0.30854, 0.0001);
 
 // Test builder =======================================
   int n_samples = 10000;

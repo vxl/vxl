@@ -17,9 +17,9 @@
 
 void run_test_pdf1d()
 {
+  test_gaussian();
   test_weighted_epanech_kernel_pdf();
   test_gaussian_kernel_pdf();
-  test_gaussian();
   test_exponential();
   test_mixture();
   test_compare_to_pdf_ks();

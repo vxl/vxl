@@ -46,7 +46,7 @@ void pdf1d_gaussian::calc_log_k()
   log_k_ = vcl_log(k_);
 }
 
-//: Initialise
+//: Initialise with mean and variance (NOT standard deviation)
 void pdf1d_gaussian::set(double mean, double var)
 {
   pdf1d_pdf::set_mean(mean);
