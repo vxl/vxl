@@ -13,6 +13,65 @@
 #include <vil2/vil2_image_view.h>
 
 template <class S, class T>
+void test_image_view_rgba(vil2_image_view<S> image2, vil2_image_view<T> image7)
+{
+// do nothing in general case
+}
+
+VCL_DEFINE_SPECIALIZATION
+void test_image_view_rgba(vil2_image_view<vxl_byte> &image2, vil2_image_view<float> &image7)
+{
+  image2.resize(10,10,2);
+  vil2_image_view<vil_rgba<vxl_byte> > image6 = image2;
+  TEST("Can't assign a 3 plane images to rgba view", image6, false);
+
+  vil2_convert_grey_to_rgba(image7, image6);
+  TEST("vil2_convert_grey_to_rgba", image6, true);
+
+  image2 = vil2_plane(vil2_view_as_planes(image6),1);
+  vil2_transform(vil2_plane(vil2_view_as_planes(image6),1), image2,
+                 vcl_bind2nd(vcl_plus<vxl_byte>(),1));
+
+  vil2_print_all(vcl_cout, image6);
+  image7.clear();
+  vil2_convert_rgb_to_grey(image6, image7);
+  TEST("vil2_convert_rgb_to_grey(vil2_rgba)", image7, true);
+
+  TEST_NEAR("Conversion rgba to grey", image7(0,0),  1.71540, 1e-5);
+
+  TEST_NEAR("Conversion rgba to grey", image7(2,1), 35.71540, 1e-5);
+
+  vil2_print_all(vcl_cout, image7);
+}
+
+VCL_DEFINE_SPECIALIZATION
+void test_image_view_rgba(vil2_image_view<float> &image2, vil2_image_view<double> &image7)
+{
+  image2.resize(10,10,2);
+  vil2_image_view<vil_rgba<vxl_byte> > image6 = image2;
+  TEST("Can't assign a 3 plane images to rgba view", image6, false);
+
+  vil2_convert_grey_to_rgba(image7, image6);
+  TEST("vil2_convert_grey_to_rgba", image6, true);
+
+  image2 = vil2_plane(vil2_view_as_planes(image6),1);
+  vil2_transform(vil2_plane(vil2_view_as_planes(image6),1), image2,
+                 vcl_bind2nd(vcl_plus<vxl_byte>(),1));
+
+  vil2_print_all(vcl_cout, image6);
+  image7.clear();
+  vil2_convert_rgb_to_grey(image6, image7);
+  TEST("vil2_convert_rgb_to_grey(vil2_rgba)", image7, true);
+
+  TEST_NEAR("Conversion rgba to grey", image7(0,0),  1.3154, 1e-5);
+
+  TEST_NEAR("Conversion rgba to grey", image7(2,1), 34.9114, 1e-5);
+
+  vil2_print_all(vcl_cout, image7);
+}
+
+
+template <class S, class T>
 void test_image_view(S d1, vcl_string s_name, T d2)
 {
 
@@ -101,8 +160,6 @@ void test_image_view(S d1, vcl_string s_name, T d2)
   image5 = image2;
   TEST("Can assign 3 planes suitable image to rgb view", image5, true);
 
-  vil2_image_view<vil_rgba<S> > image6 = image2;
-  TEST("Can't assign a 3 plane images to rgba view", image6, false);
 
   TEST("Equality", image2, image2);
   TEST("comparison", image2 < image2, false);
@@ -149,32 +206,37 @@ void test_image_view(S d1, vcl_string s_name, T d2)
   vil2_transform(image7, image7, vcl_bind2nd(vcl_plus<T>(),0.6f));
   vil2_convert_cast(image7, image2);
   vil2_print_all(vcl_cout, image2);
-  TEST("Rounding ", image2(0,0,0) == 1 && image2(2,2,1) == 36, true);
+
+  const vil2_pixel_format format = vil2_pixel_format_of(S());
+  if (format == VIL2_PIXEL_FORMAT_FLOAT || format == VIL2_PIXEL_FORMAT_DOUBLE)
+  {
+    TEST_NEAR("Rounding ", image2(0,0,0), 0.6, 1e-5);
+    TEST_NEAR("Rounding ", image2(2,2,1), 35.6, 1e-5);
+  }
+  else
+    TEST("Rounding ", image2(0,0,0) == 1 && image2(2,2,1) == 36, true);
 
   image7.clear();
   vil2_convert_rgb_to_grey(vil2_view_as_rgb(image2), image7);
   vil2_print_all(vcl_cout, image7);
-  TEST("vil2_convert_rgb_to_grey(vil2_rgba)", image7, true);
-  TEST_NEAR("Conversion rgb to grey", image7(0,0), 1.0, 1e-5);
-  TEST_NEAR("Conversion rgb to grey", image7(2,1), 34.5960, 1e-5);
+  TEST("vil2_convert_rgb_to_grey(vil2_rgb)", image7, true);
+
+  if (format == VIL2_PIXEL_FORMAT_FLOAT || format == VIL2_PIXEL_FORMAT_DOUBLE)
+    TEST_NEAR("Conversion rgb to grey", image7(0,0), 0.6, 1e-5);
+  else
+    TEST_NEAR("Conversion rgb to grey", image7(0,0), 1.0, 1e-5);
+  if (format == VIL2_PIXEL_FORMAT_FLOAT || format == VIL2_PIXEL_FORMAT_DOUBLE)
+    TEST_NEAR("Conversion rgb to grey", image7(2,1), 34.196, 1e-5);
+  else
+    TEST_NEAR("Conversion rgb to grey", image7(2,1), 34.5960, 1e-5);
+
   vil2_convert_grey_to_rgb(image7, image5);
   TEST("vil2_convert_grey_to_rgb", image5, true);
   vil2_print_all(vcl_cout, image5);
 
-  vil2_convert_grey_to_rgba(image7, image6);
-  TEST("vil2_convert_grey_to_rgba", image6, true);
-
-  image2 = vil2_plane(vil2_view_as_planes(image6),1);
-  vil2_transform(vil2_plane(vil2_view_as_planes(image6),1), image2,
-                 vcl_bind2nd(vcl_plus<S>(),1));
-
-  vil2_print_all(vcl_cout, image6);
-  image7.clear();
-  vil2_convert_rgb_to_grey(image6, image7);
-  TEST("vil2_convert_rgb_to_grey(vil2_rgba)", image7, true);
-  TEST_NEAR("Conversion rgba to grey", image7(0,0),  1.71540, 1e-5);
-  TEST_NEAR("Conversion rgba to grey", image7(2,1), 35.71540, 1e-5);
-  vil2_print_all(vcl_cout, image7);
+  // Only test rgba conversion for float and byte.
+  // other components types don't have rgba instantiated.
+  test_image_view_rgba(image2, image7);
 }
 
 static
@@ -228,6 +290,18 @@ MAIN( test_image_view )
            << " Testing vil2_image_view<byte and float>\n"
            << "*****************************************\n";
   test_image_view(vxl_byte(), "vxl_byte", float());
+  vcl_cout << "*****************************************\n"
+           << " Testing vil2_image_view<float and double>\n"
+           << "*****************************************\n";
+  test_image_view(float(), "float", double());
+  vcl_cout << "*****************************************\n"
+           << " Testing vil2_image_view<int_16 and double>\n"
+           << "*****************************************\n";
+  test_image_view(vxl_int_16(), "vxl_int_16", float());
+  vcl_cout << "*****************************************\n"
+           << " Testing vil2_image_view<uint_32 and double>\n"
+           << "*****************************************\n";
+  test_image_view(vxl_uint_32(), "vxl_uint_32", float());
   test_contiguous();
 
 

@@ -54,6 +54,7 @@ vil2_image_view<T>::vil2_image_view(const vil2_smart_ptr<vil2_memory_chunk>& mem
  , planestep_(plane_step)
  , ptr_(mem_chunk)
 {
+#ifndef NDEBUG
   // check view and chunk are in rough agreement
   assert(mem_chunk->size() >= n_planes*n_i*n_j*sizeof(T));
   if (top_left < (const T*)mem_chunk->data() ||
@@ -63,6 +64,7 @@ vil2_image_view<T>::vil2_image_view(const vil2_smart_ptr<vil2_memory_chunk>& mem
              << ", size of data type " << sizeof(T) << '\n';
   assert(top_left >= (const T*)mem_chunk->data() &&
          top_left  < (const T*)mem_chunk->data() + mem_chunk->size());
+#endif
 }
 
 //: Copy constructor

@@ -33,5 +33,6 @@ macro(vil_rgb<vxl_uint_16> )
 macro(vil_rgb<float> )
 macro(vil_rgb<double> )
 macro(vil_rgba<vxl_byte> )
+macro(vil_rgba<float> )
 
 #undef macro
