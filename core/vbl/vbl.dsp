@@ -66,7 +66,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "$(IUEROOT)\vxl\config.win32-VC60" /I "$(IUEROOT)/vxl" /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /Ob2 /I "$(IUEROOT)\vxl\config.win32-VC60" /I "$(IUEROOT)/vxl" /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -152,6 +152,10 @@ SOURCE=.\vbl_psfile.cxx
 # Begin Source File
 
 SOURCE=.\vbl_qsort.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_redirector.cxx
 # End Source File
 # Begin Source File
 
@@ -304,6 +308,10 @@ SOURCE=.\vbl_psfile.h
 # Begin Source File
 
 SOURCE=.\vbl_qsort.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_redirector.h
 # End Source File
 # Begin Source File
 

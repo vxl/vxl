@@ -13,6 +13,7 @@ SOURCES += vbl_awk.cxx
 SOURCES += vbl_base_array_3d.cxx
 SOURCES += vbl_file.cxx
 SOURCES += vbl_printf.cxx
+SOURCES += vbl_redirector.cxx
 SOURCES += vbl_ref_count.cxx
 SOURCES += vbl_reg_exp.cxx
 SOURCES += vbl_sparse_array_2d_base.cxx
