@@ -1,4 +1,7 @@
 // Example: convolution
+#ifdef __GNUC__
+#pragma implementation "vul_arg.h"//otherwise "unresolved typeinfo vul_arg_base"
+#endif
 
 #include <vcl_cstring.h>
 #include <vcl_cmath.h>   // vcl_fabs()
