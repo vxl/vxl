@@ -18,7 +18,7 @@ static void test_algo_cartesian_differential_invariants()
   const int n = 11;
 
   vil_image_view<float> src(n,n);
-  vil_image_view<float> dest;
+  vil_image_view<float> dest, dest2;
 
   src.fill(0);
   src(n/2,n/2) = 255;
@@ -154,6 +154,24 @@ static void test_algo_cartesian_differential_invariants()
     }
   }
   TEST("impulse response matches golden data", i, dest.size());
+
+
+  // Test invariant properties
+
+  src.fill(0.f);
+  src(n/2,n/2) =   256.f;
+  src(n/2-1,n/2) = 128.f;
+  src(n/2+1,n/2) = 512.f;
+  vil_cartesian_differential_invariants_3(src, dest, 1.0);
+  src.fill(0.f);
+  src(n/2,n/2) =   256.f;
+  src(n/2,n/2-1) = 128.f;
+  src(n/2,n/2+1) = 512.f;
+  vil_cartesian_differential_invariants_3(src, dest2, 1.0);
+  for (unsigned i=0; i<8; ++i)
+    TEST_NEAR("cartesian invariance", dest2(n/2,n/2,i), dest2(n/2,n/2,i),
+      vcl_abs(dest2(n/2,n/2,i)*1.e-4f));
+ 
 
 }
 

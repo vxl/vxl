@@ -15,15 +15,14 @@
 #include <vil/vil_transpose.h>
 
 
-template <class T> T sqr(T) { return v*v; }
-
 //: Compute 1st, 2nd, and 3rd order C.d.i.s of an image.
 // The input must be 1 plane, the output will be 8 planes.
+template <class S, class T>
 void vil_cartesian_differential_invariants_3(
-  const vil_image_view<float>& src, vil_image_view<float>& dest, double scale)
+  const vil_image_view<S>& src, vil_image_view<T>& dest, double scale)
 {
   assert(src.nplanes()==1);
-  const unsigned filt_n=7;
+  const unsigned filt_n=(3*scale + 0.5)*2+1;
   const unsigned filt_c=filt_n/2;
 
   vcl_vector<double> filt_0(filt_n), filt_2(filt_n), filt_1(filt_n), filt_3(filt_n);
@@ -35,14 +34,14 @@ void vil_cartesian_differential_invariants_3(
   const vil_convolve_boundary_option bo = vil_convolve_constant_extend;
 
   // Filter all the x directions
-  vil_image_view<float> LX, LXx, LXxx, LXxxx;
+  vil_image_view<T> LX, LXx, LXxx, LXxxx;
   vil_convolve_1d(src, LX, &filt_0[filt_c], -filt_c, filt_c, double(), bo, bo);
   vil_convolve_1d(src, LXx, &filt_1[filt_c], -filt_c, filt_c, double(), bo, bo);
   vil_convolve_1d(src, LXxx, &filt_2[filt_c], -filt_c, filt_c, double(), bo, bo);
   vil_convolve_1d(src, LXxxx, &filt_3[filt_c], -filt_c, filt_c, double(), bo, bo);
   
   // Now calculate the full values.
-  vil_image_view<float> Lx, Ly, Lxx, Lxy, Lyy, Lxxx, Lxxy, Lxyy, Lyyy;
+  vil_image_view<T> Lx, Ly, Lxx, Lxy, Lyy, Lxxx, Lxxy, Lxyy, Lyyy;
 
   // construct first order partial derivatives
   vil_convolve_1d(vil_transpose(LXx), Lx,
@@ -138,5 +137,9 @@ void vil_cartesian_differential_invariants_3(
   }
 }
 
+#undef VIL_CARTESIAN_DIFFERENTIAL_INVARIANTS_INSTANTIATE
+#define VIL_CARTESIAN_DIFFERENTIAL_INVARIANTS_INSTANTIATE(S, T) \
+template void vil_cartesian_differential_invariants_3( \
+  const vil_image_view< S >& src,  vil_image_view< T >& dest, double );
 
-#endif // vil_cartesian_differential_invariants_h_
+#endif // vil_cartesian_differential_invariants_txx_
