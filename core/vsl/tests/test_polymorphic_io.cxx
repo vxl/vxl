@@ -140,9 +140,9 @@ void test_derived_class::print_summary(vcl_ostream& os) const
 
 void test_polymorphic_io()
 {
-  vcl_cout << "**********************************" << vcl_endl;
-  vcl_cout << "Testing vsl polymorphic binary io" << vcl_endl;
-  vcl_cout << "**********************************" << vcl_endl;
+  vcl_cout << "*********************************\n"
+           << "Testing vsl polymorphic binary io\n"
+           << "*********************************\n";
 
   // Arrange that the loader knows about derived class
   vsl_add_to_binary_loader(test_derived_class());
