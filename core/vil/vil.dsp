@@ -251,6 +251,21 @@ SOURCE=.\vil2_plane.cxx
 # Begin Source File
 SOURCE=.\vil2_print.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil2_jpeg.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil2_jpeg_compressor.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil2_jpeg_decompressor.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil2_jpeg_destination_mgr.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil2_jpeg_source_mgr.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -309,9 +324,6 @@ SOURCE=.\vil2_sample_profile_bilin.txx
 SOURCE=.\vil2_save.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_pixel_traits.h
-# End Source File
-# Begin Source File
 SOURCE=.\vil2_sample_grid_bilin.h
 # End Source File
 # Begin Source File
@@ -355,6 +367,24 @@ SOURCE=.\vil2_convert.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil2_transform.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil2_jpeg.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil2_jpeg_compressor.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil2_jpeg_decompressor.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil2_jpeg_destination_mgr.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil2_jpeg_source_mgr.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil2_jpeglib.h
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
