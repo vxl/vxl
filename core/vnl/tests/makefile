@@ -8,6 +8,7 @@ TESTS += test_fft2d.cxx
 TESTS += test_matlab.cxx
 TESTS += test_math.cxx
 TESTS += test_vector.cxx
+TESTS += test_resize.cxx
 TESTS += test_matrix.cxx
 TESTS += test_matrix_fixed.cxx
 TESTS += test_file_matrix.cxx
