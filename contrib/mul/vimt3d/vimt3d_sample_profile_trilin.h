@@ -24,7 +24,7 @@ void vimt3d_sample_profile_trilin(vnl_vector<vecType>& vec,
   vgl_point_3d<double> im_p0 = image.world2im()(p0);
   vgl_point_3d<double> im_p1 = image.world2im()(p0+u);
   int np = image.image().nplanes();
-  vec.resize(n*np);
+  vec.set_size(n*np);
   vecType *v = vec.data_block();
 
   // Can do all work in image co-ordinates under an affine transformation
