@@ -46,6 +46,34 @@ macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 }
 
 
+//: Create an wrapper around the given image_view
+vil_memory_image::vil_memory_image(vil_image_view_base &view)
+{
+  switch (vil_pixel_format_component_format(view.pixel_format()))
+  {
+#define macro( F , T ) \
+  case F :  view_ = new vil_image_view<T >(view); break;
+macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
+macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
+macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
+macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
+macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
+macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
+macro(VIL_PIXEL_FORMAT_BOOL , bool )
+macro(VIL_PIXEL_FORMAT_FLOAT , float )
+macro(VIL_PIXEL_FORMAT_DOUBLE , double )
+#undef macro
+  default:
+    vcl_cerr << "ERROR: vil_memory_image::vil_memory_image\n"
+                "\t unknown format " << 
+      vil_pixel_format_component_format(view.pixel_format()) << vcl_endl;
+    vcl_abort();
+  }
+  assert (view_->ni() == view.ni() && view_->nj() == view.nj());
+
+}
+
+
 //: Create a read/write view of a copy of this data.
 // Currently not yet implemented.
 // \return 0 if unable to get view of correct size.

@@ -14,7 +14,7 @@
 #include <vcl_cstring.h>
 
 //: Generic image implementation for PNM files
-// You can't create one of these yourself - use vil_new() instead.
+// You can't create one of these yourself - use vil_new_image_resource() instead.
 class vil_memory_image : public vil_image_resource
 {
   //: Management of the memory image is devolved to an internal image_view.
@@ -30,9 +30,16 @@ class vil_memory_image : public vil_image_resource
                    unsigned nplanes,
                    vil_pixel_format format);
 
+  //: Create an wrapper around the given image_view
+  vil_memory_image(vil_image_view_base &);
+
+
   friend vil_image_resource_sptr vil_new_image_resource(
     unsigned ni, unsigned nj, unsigned nplanes,
     vil_pixel_format format);
+
+  friend vil_image_resource_sptr vil_new_image_resource_of_view(
+    vil_image_view_base & view);
 
  public:
 

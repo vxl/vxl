@@ -62,12 +62,20 @@ class vil_image_resource
                                             unsigned j0, unsigned nj) const
   { return get_copy_view (i0, ni, j0, nj); }
 
+  //: Create a read/write view of all the data.
+  vil_image_view_base_sptr get_view() const
+  { return get_view (0, ni(), 0, nj()); }
+
   //: Create a read/write view of a copy of this data.
   // This function will always return a
   // multi-plane scalar-pixel view of the data.
   // \return 0 if unable to get view of correct size, or if resource is write-only.
   virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
                                                  unsigned j0, unsigned nj) const = 0;
+
+  //: Create a read/write view of a copy of all the data.
+  vil_image_view_base_sptr get_copy_view() const
+  { return get_copy_view (0, ni(), 0, nj()); }
 
   //: Put the data in this view back into the image source.
   // The view must be of scalar components. Assign your
@@ -76,6 +84,10 @@ class vil_image_resource
   // format of view is not correct (if it is a compound pixel type, try
   // assigning it to a multi-plane scalar pixel view.)
   virtual bool put_view(const vil_image_view_base& im, unsigned i0, unsigned j0) = 0;
+
+  //: Put the data in this view back into the image source at the origin
+  bool put_view(const vil_image_view_base& im)
+  { return put_view(im, 0, 0); }
 
   //: Check that a view will fit into the data at the given offset.
   // This includes checking that the pixel type is scalar.

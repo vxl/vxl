@@ -27,9 +27,14 @@ void test_image_resource(vcl_string type, vil_pixel_format format, T  /*dummy*/)
   TEST("vil_memory_image::get_view()",
        view1 && view1.ni()==10 && view1.nj()==8 && view1.nplanes()==1, true );
 
+  vil_image_resource_sptr mem2 = vil_new_image_resource_of_view(view1);
+
+  TEST("vil_new_image_resource_of_view", mem2 && mem2->get_view()==view1, true);
+
+
   view1.fill(0);
 
-  TEST("vil_memory_image::put_view()", mem->put_view(view1,0,0), true);
+  TEST("vil_memory_image::put_view()", mem->put_view(view1), true);
 
   vil_image_resource_sptr crop = vil_crop(mem, 2, 6, 2, 4);
 

@@ -22,7 +22,7 @@
 //     25 Sep 2002 Ian Scott - convert to vil.
 //\endverbatim
 
-#include <vil/vil_fwd.h> // for vil_stream
+#include <vil/vil_fwd.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_view.h>
 
@@ -30,6 +30,14 @@
 // \relates vil_image_resource
 vil_image_resource_sptr vil_new_image_resource(unsigned ni, unsigned nj, unsigned nplanes,
                                                vil_pixel_format format);
+
+//: Make a new image resource that is a wrapper on an existing view's data.
+// \note The output will be a shallow copy of the input, so changing the pixel values
+// of one may change the pixel value of the other. Thank's to the magic of smart pointers
+// the output will remain valid even if you destroy the input.
+// \relates vil_image_resource
+vil_image_resource_sptr vil_new_image_resource_of_view(vil_image_view_base & view);
+
 
 //: Make a new image, similar format to the prototype.
 // \relates vil_image_resource
