@@ -229,6 +229,134 @@ SOURCE=.\oxp_vidl_mpeg_codec.cxx
 
 # End Source File
 # End Group
+# Begin Group "Header Files"
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\ByteConvertImage.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\GXFileVisitor.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\ImageSequenceMovieFile.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\ImageSequenceName.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\ImageWarp.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\ImageWarp.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\JPEG_Decompressor.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mapping_2d_2d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\MovieFile.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\MovieFileInterface.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\RadialLensCorrection.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\SGIMovieFile.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\SGIMovieFilePrivates.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\SGIMovieFileWrite.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\SequenceFileName.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\oxp_bunch_of_files.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\oxp_mpeg_codec.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\oxp_parse_seqname.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\oxp_vidl_moviefile.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\oxp_vidl_mpeg_codec.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_conic_as_matrix.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_conic_as_params.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_conic_points.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\MapInverter.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\POX.h
+
+# End Source File
+# End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
