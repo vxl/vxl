@@ -26,7 +26,7 @@
 //-----------------------------------------------------------------------------
 
 #include <vcl_vector.h>
-#include <vnl/vnl_matrix.h>
+#include <vnl/vnl_double_3x3.h>
 #include <vsol/vsol_region_2d.h>
 
 class vdgl_digital_region : public vsol_region_2d
@@ -115,13 +115,11 @@ class vdgl_digital_region : public vsol_region_2d
   void PrintFit() const;
 
   virtual vsol_spatial_object_2d* clone() const;
-  
+
   //: Return a platform independent string identifying the class
   vcl_string is_a() const;
 
  protected:
-  //
-  void init();              //!< Set inital region data
   // Members
   int npts_;                //!< Number of pixels in the region
   float pixel_size_;        //!< Image pixel size in fractions of a pixel
@@ -133,8 +131,6 @@ class vdgl_digital_region : public vsol_region_2d
   mutable int pix_index_;   //!< Index in pixel array (iterator)
   void ComputeScatterMatrix() const; // mutable
   void IncrByXYI(double x, double y, int intens) const; // mutable
-  void SolveForPlane() const; // mutable
-  double ComputeResidual(vnl_matrix<double> const& pvect) const; // mutable
   double ComputeSampleResidual() const; // mutable
   //members
   mutable bool fit_valid_;           //!< Has a plane fit been done?
@@ -143,8 +139,8 @@ class vdgl_digital_region : public vsol_region_2d
   mutable double Iy_;                //!< dI/dy
   //: The sums of various monomials to form the scatter matrix
   mutable double X2_,Y2_,I2_,XY_,XI_,YI_;
-  mutable double error_, sigma_sq_;      //!< fitting errors
-  mutable vnl_matrix<double> *Si_, *pi_; //!< Scatter matrices and etc.
+  mutable double error_, sigma_sq_;  //!< fitting errors
+  mutable vnl_double_3x3 Si_;        //!< scatter matrix
 };
 
 #endif // vdgl_digital_region_h_

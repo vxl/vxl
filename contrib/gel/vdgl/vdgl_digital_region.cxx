@@ -4,7 +4,6 @@
 #include "vdgl_digital_region.h"
 #include <vcl_cmath.h> // for fabs and sqrt
 #include <vcl_cassert.h>
-#include <vnl/vnl_transpose.h>
 #include <vnl/algo/vnl_svd.h>
 
 #if 0
@@ -32,39 +31,26 @@ vcl_string vdgl_digital_region::is_a() const
   return vcl_string("vdgl_digital_region");
 }
 
-//-----------------------------------------------------------
-//: Initialize region data
-void vdgl_digital_region::init()
-{
-  npts_ = 0;
-  pixel_size_=1.0f;
-  max_ = 0;
-  min_ = (unsigned short)(-1);
-  xp_ = NULL; yp_ = NULL; zp_ = NULL; pix_ = NULL;
-  xo_ = yo_ = zo_ = io_ = io_stdev_ = 0.0f;
-  X2_ = 0;  Y2_ = 0;  I2_ = 0;
-  XY_ = 0;  XI_ = 0;  YI_ = 0;
-  error_ = 0; sigma_sq_ = 0;
-  fit_valid_ = false;
-  scatter_matrix_valid_ = false;
-  Si_ = new vnl_matrix<double>(3, 3, 0.0);
-  pi_ = new vnl_matrix<double>(3, 1, 0.0);
-#if 0
-  hist_ = NULL;
-#endif
-}
-
 //-------------------------------------------------------------------------
 // Constructors
 //
 vdgl_digital_region::vdgl_digital_region()
+  : npts_(0), pixel_size_(1.f), xp_(0), yp_(0), zp_(0), pix_(0),
+    max_(0), min_((unsigned short)(-1)), xo_(0.f), yo_(0.f), zo_(0.f),
+    io_(0.f), io_stdev_(0.0f), pix_index_(0),
+    fit_valid_(false), scatter_matrix_valid_(false),
+    X2_(0), Y2_(0), I2_(0), XY_(0), XI_(0), YI_(0), error_(0), sigma_sq_(0)
 {
-  this->init();
 }
 
 vdgl_digital_region::vdgl_digital_region(vdgl_digital_region const& r)
+  : vsol_region_2d(),
+    npts_(0), pixel_size_(1.f), xp_(0), yp_(0), zp_(0), pix_(0),
+    max_(0), min_((unsigned short)(-1)), xo_(0.f), yo_(0.f), zo_(0.f),
+    io_(0.f), io_stdev_(0.0f), pix_index_(0),
+    fit_valid_(false), scatter_matrix_valid_(false),
+    X2_(0), Y2_(0), I2_(0), XY_(0), XI_(0), YI_(0), error_(0), sigma_sq_(0)
 {
-  this->init();
   for (int i = 0; i<r.Npix(); ++i)
     this->IncrementMeans(r.Xj()[i], r.Yj()[i], r.Zj()[i], r.Ij()[i]);
   this->InitPixelArrays();
@@ -75,9 +61,13 @@ vdgl_digital_region::vdgl_digital_region(vdgl_digital_region const& r)
 
 vdgl_digital_region::vdgl_digital_region(int npts, const float* xp, const float* yp,
                                          const unsigned short *pix)
+  : npts_(0), pixel_size_(1.f), xp_(0), yp_(0), zp_(0), pix_(0),
+    max_(0), min_((unsigned short)(-1)), xo_(0.f), yo_(0.f), zo_(0.f),
+    io_(0.f), io_stdev_(0.0f), pix_index_(0),
+    fit_valid_(false), scatter_matrix_valid_(false),
+    X2_(0), Y2_(0), I2_(0), XY_(0), XI_(0), YI_(0), error_(0), sigma_sq_(0)
 {
   assert(npts > 0);
-  this->init();
   for (int i = 0; i<npts; i++)
     this->IncrementMeans(xp[i], yp[i], pix[i]);
   this->InitPixelArrays();
@@ -88,9 +78,13 @@ vdgl_digital_region::vdgl_digital_region(int npts, const float* xp, const float*
 
 vdgl_digital_region::vdgl_digital_region(int npts, const float* xp, const float* yp,
                                          const float* zp, const unsigned short *pix)
+  : npts_(0), pixel_size_(1.f), xp_(0), yp_(0), zp_(0), pix_(0),
+    max_(0), min_((unsigned short)(-1)), xo_(0.f), yo_(0.f), zo_(0.f),
+    io_(0.f), io_stdev_(0.0f), pix_index_(0),
+    fit_valid_(false), scatter_matrix_valid_(false),
+    X2_(0), Y2_(0), I2_(0), XY_(0), XI_(0), YI_(0), error_(0), sigma_sq_(0)
 {
   assert(npts > 0);
-  this->init();
   for (int i = 0; i<npts; i++)
     this->IncrementMeans(xp[i], yp[i], zp[i], pix[i]);
   this->InitPixelArrays();
@@ -105,32 +99,23 @@ vdgl_digital_region::vdgl_digital_region(int npts, const float* xp, const float*
 //
 vdgl_digital_region::~vdgl_digital_region()
 {
-  delete [] xp_;
-  delete [] yp_;
-  delete [] zp_;
-  delete [] pix_;
-  delete pi_;
-  delete Si_;
+  delete[] xp_;
+  delete[] yp_;
+  delete[] zp_;
+  delete[] pix_;
 }
 
-#if 0
+#if 0 // no histogram anymore
 //--------------------------------------------------------
-//: The Histogram is lazily evaluated.
-//  If a Histogram is present, it is not recomputed unless force is true;
-Histogram_ref vdgl_digital_region::GetHistogram(bool force)
+//: Compute the histogram
+Histogram_ref vdgl_digital_region::GetHistogram()
 {
-  if (!npts_) return NULL;
+  if (npts_ == 0) return NULL;
   int res = int(max_-min_);
-  if (hist_&&!force)
-    return hist_;
-  Histogram* h;
-  if (res)
-    h = new Histogram(res, min_, max_);
-  else
-    h = new Histogram(1, min_, max_);
+  if (res < 1) res=1;
+  Histogram* h = new Histogram(res, min_, max_);
   for (int i =0; i<npts_; i++)
     h->UpCount(pix_[i]);
-  hist_ = h;
   return h;
 }
 #endif
@@ -393,7 +378,7 @@ float vdgl_digital_region::Diameter() const
   vnl_matrix<double> s(2, 2, 0.0);
   for (int r = 1; r<=2; r++)
     for (int c = 1; c<=2; c++)
-      s(r-1,c-1) = (*Si_)(r,c);
+      s(r-1,c-1) = Si_(r,c);
   //Compute SVD of s to get diameter
   vnl_svd<double> svd(s);
   if (svd.rank()!=2)
@@ -416,7 +401,7 @@ float vdgl_digital_region::AspectRatio() const
   vnl_matrix<double> s(2, 2, 0.0);
   for (int r = 1; r<=2; r++)
     for (int c = 1; c<=2; c++)
-      s(r-1,c-1) = (*Si_)(r,c);
+      s(r-1,c-1) = Si_(r,c);
   //Compute SVD of s to get aspect ratio
   vnl_svd<double> svd(s);
   if (svd.rank()!=2)
@@ -443,7 +428,7 @@ void vdgl_digital_region::PrincipalOrientation(vcl_vector<float>& major_axis)
   vnl_matrix<double> s(2, 2, 0.0);
   for (int r = 1; r<=2; r++)
     for (int c = 1; c<=2; c++)
-      s(r-1,c-1) = (*Si_)(r,c);
+      s(r-1,c-1) = Si_(r,c);
   //Compute SVD of s to get aspect ratio
   SVD svd(s);
   if (svd.rank()!=2)
@@ -515,53 +500,13 @@ void vdgl_digital_region::ComputeScatterMatrix() const
   //  | YI   XY   Y^2 |
   //   -             -
   //
-  Si_->put(0,0, I2_/npts_);
-  Si_->put(0,1, XI_/npts_);
-  Si_->put(0,2, YI_/npts_);
-  Si_->put(1,1, X2_/npts_);
-  Si_->put(1,2, XY_/npts_);
-  Si_->put(2,2, Y2_/npts_);
-  Si_->put(1,0, Si_->get(0,1));
-  Si_->put(2,0, Si_->get(0,2));
-  Si_->put(2,1, Si_->get(1,2));
+  Si_(0,0) = I2_/npts_;
+  Si_(1,0) = Si_(0,1) = XI_/npts_;
+  Si_(2,0) = Si_(0,2) = YI_/npts_;
+  Si_(1,1) = X2_/npts_;
+  Si_(2,1) = Si_(1,2) = XY_/npts_;
+  Si_(2,2) = Y2_/npts_;
   scatter_matrix_valid_ = true;
-}
-
-//--------------------------------------------------------------
-//: Solve for the fitted plane.
-//  Closed form solution in terms of the scatter matrix.
-void vdgl_digital_region::SolveForPlane() const
-{
-  assert(npts_ >= 4);
-  fit_valid_ = true;
-  double den = Si_->get(1,1)*Si_->get(2,2)
-             - Si_->get(1,2)*Si_->get(1,2);
-  if (near_zero(den))
-  {
-    vcl_cout << "In vdgl_digital_region::SolveForPlane(..) determinant near zero\n";
-    Ix_ = 0;
-    Iy_ = 0;
-    pi_->put(0,0, 1.0);   pi_->put(1,0, -Ix_);   pi_->put(2,0, -Iy_);
-    return;
-  }
-  double adet = Si_->get(0,1)*Si_->get(2,2)
-              - Si_->get(0,2)*Si_->get(1,2);
-  double bdet = Si_->get(1,1)*Si_->get(0,2)
-              - Si_->get(0,1)*Si_->get(1,2);
-  Ix_ = adet/den;
-  Iy_ = bdet/den;
-  pi_->put(0,0, 1.0);   pi_->put(1,0, -Ix_);   pi_->put(2,0, -Iy_);
-}
-
-//---------------------------------------------------------------
-//: Computes the square residual error using the scatter matrix
-//
-double vdgl_digital_region::ComputeResidual(vnl_matrix<double> const& pvect) const
-{
-  if (!fit_valid_)
-    this->DoPlaneFit();
-  vnl_matrix<double> residual = vnl_transpose(pvect) * (*Si_) * pvect;
-  return residual.get(0,0);
 }
 
 //---------------------------------------------------------------
@@ -571,16 +516,37 @@ double vdgl_digital_region::ComputeSampleResidual() const
 {
   if (!fit_valid_)
     this->DoPlaneFit();
-  return Si_->get(0,0) + Si_->get(1,1) + Si_->get(2,2);
+  return Si_(0,0) + Si_(1,1) + Si_(2,2);
 }
 
+//: Solve for the fitted plane.
+//  Closed form solution in terms of the scatter matrix.
 void vdgl_digital_region::DoPlaneFit() const
 {
+  assert(npts_ >= 4);
+  fit_valid_ = true;
+
   if (!scatter_matrix_valid_)
     this->ComputeScatterMatrix();
 
-  this->SolveForPlane();
-  error_ =  this->ComputeResidual(*pi_);
+  double den = Si_(1,1)*Si_(2,2)
+             - Si_(1,2)*Si_(2,1);
+  if (near_zero(den))
+  {
+    vcl_cout << "In vdgl_digital_region::SolveForPlane(..) determinant near zero\n";
+    Ix_ = Iy_ = 0;
+    error_ = Si_(0,0);
+    sigma_sq_ = Si_(0,0) + Si_(1,1) + Si_(2,2);
+    return;
+  }
+  double adet = Si_(0,1)*Si_(2,2)
+              - Si_(0,2)*Si_(2,1);
+  double bdet = Si_(0,2)*Si_(1,1)
+              - Si_(0,1)*Si_(1,2);
+  Ix_ = adet/den;
+  Iy_ = bdet/den;
+  error_ = Si_(0,0) - 2*Ix_*Si_(0,1) - 2*Iy_*Si_(0,2)
+         + Ix_*Ix_*Si_(1,1) + 2*Ix_*Iy_*Si_(1,2) + Iy_*Iy_*Si_(2,2);
   sigma_sq_ =  this->ComputeSampleResidual();
 }
 
@@ -626,12 +592,12 @@ float vdgl_digital_region::Ir() const
   if (npts_<4)
     return 0.0f;
 
-    if (!fit_valid_)
-    {
-      int initial_pix_index = pix_index_;//Save the current pix_index_ state
-      this->DoPlaneFit();
-      pix_index_ = initial_pix_index;//Restore the pix_index_ state
-    }
+  if (!fit_valid_)
+  {
+    int initial_pix_index = pix_index_;//Save the current pix_index_ state
+    this->DoPlaneFit();
+    pix_index_ = initial_pix_index;//Restore the pix_index_ state
+  }
   float val = float(this->I());
   float io = this->Io(),
         ix = float(this->Ix()), x = this->X(), xo = this->Xo(),
