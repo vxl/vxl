@@ -1,12 +1,12 @@
-// This is vxl/vbl/io/vbl_io_user_info.cxx
+// This is vxl/vul/io/vul_io_user_info.cxx
 
 #include <vcl_cstdlib.h> // vcl_abort()
-#include <vbl/vbl_user_info.h>
-#include <vbl/io/vbl_io_user_info.h>
+#include <vul/vul_user_info.h>
+#include <vul/io/vul_io_user_info.h>
 
 //=========================================================================
 //: Binary save self to stream.
-void vsl_b_write(vsl_b_ostream &os, const vbl_user_info & p)
+void vsl_b_write(vsl_b_ostream &os, const vul_user_info & p)
 {
   const short io_version_no = 1;
   vsl_b_write(os, io_version_no);
@@ -20,7 +20,7 @@ void vsl_b_write(vsl_b_ostream &os, const vbl_user_info & p)
 }
 //=========================================================================
 //: Binary load self from stream.
-void vsl_b_read(vsl_b_istream &is, vbl_user_info & p)
+void vsl_b_read(vsl_b_istream &is, vul_user_info & p)
 {
   short v;
   vsl_b_read(is, v);
@@ -45,7 +45,7 @@ void vsl_b_read(vsl_b_istream &is, vbl_user_info & p)
 
 //=========================================================================
 //: Output a human readable summary to the stream
-void vsl_print_summary(vcl_ostream& os,const vbl_user_info & p)
+void vsl_print_summary(vcl_ostream& os,const vul_user_info & p)
 {
       os<<"( uid,gid,name,home_directory,full_name,shell,passwd="<<
       p.uid<<","<<p.gid<<","<<p.name<<
