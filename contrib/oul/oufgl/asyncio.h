@@ -3,14 +3,13 @@
 #define OTAGO_Asyncio_IO__h_INCLUDED
 //:
 // \file
-// \brief A simple wrapper around POSIX.1b aynchronous I/O
+// \brief A simple wrapper around POSIX.1b asynchronous I/O
 //
 // Copyright (c) 2001 Simon Brady
 // University of Otago, Dunedin, New Zealand
 // Reproduction rights limited as described in the COPYRIGHT file.
 //----------------------------------------------------------------------
-
-//----------------------------------------------------------------------
+//
 //: Asynchronous I/O wrapper
 // Simple wrapper around POSIX.1b asynchronous I/O (as documented in GNU Info
 // under Libc -> Low-Level I/O -> Asynchronous I/O). This should be portable
@@ -37,11 +36,10 @@
 // and per-object state.
 //
 // \verbatim
-// Change history:
-//
-//  06-Nov-00  SJB  Initial version
-//  13-Dec-00  SJB  Use SIGIO as default completion signal
-//                  Fix up wait_for_completion, add suspend flag
+//  Modifications
+//   06-Nov-00  SJB  Initial version
+//   13-Dec-00  SJB  Use SIGIO as default completion signal
+//                   Fix up wait_for_completion, add suspend flag
 // \endverbatim
 // \author Simon Brady
 // \status Complete
