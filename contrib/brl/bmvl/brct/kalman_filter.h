@@ -37,7 +37,7 @@ class kalman_filter
   void init();
   void inc();
   void update_covariant();
-  vnl_double_2 projection(vnl_double_3x4 &P, vnl_double_3 &X);
+  vnl_double_2 projection(const vnl_double_3x4 &P, const vnl_double_3 &X);
   void prediction();
 
   //: constructors
@@ -48,7 +48,7 @@ class kalman_filter
 
  protected:
   //: update the matched point using closeset neighbour.
-  void update_observes();
+  void update_observes(const vnl_double_3x4 &P);
   void init_velocity();
   void adjust_state_vector(vnl_double_2 const& pred, vnl_double_2 const& meas);
 

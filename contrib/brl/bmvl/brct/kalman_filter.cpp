@@ -120,7 +120,7 @@ void kalman_filter::init_state_vector()
 
   FMatrix FM(F);
 
-  // point matcher
+  // point matcher using epiplar geometry
   assert(curves_.size()>=2);
   vdgl_digital_curve_sptr dc0 = curves_[0];
   vdgl_interpolator_sptr interp0 = dc0->get_interpolator();
@@ -314,7 +314,7 @@ void kalman_filter::set_H_matrix(vnl_double_3x4 &P, vnl_double_3 &X)
   }
 }
 
-vnl_double_2 kalman_filter::projection(vnl_double_3x4 &P, vnl_double_3 &X)
+vnl_double_2 kalman_filter::projection(const vnl_double_3x4 &P, const vnl_double_3 &X)
 {
     vnl_double_2 z;
     for (int i=0; i<2; i++) {
@@ -334,9 +334,16 @@ vnl_double_2 kalman_filter::projection(vnl_double_3x4 &P, vnl_double_3 &X)
     return z;
 }
 
-void kalman_filter::update_observation()
+void kalman_filter::update_observes(const vnl_double_3x4 &P)
 {
   //TO DO
+  vnl_double_3 X;
+  for(int i=0; i<num_points_; i++){
+    X[0] = Xl_[0][i];
+    X[1] = Xl_[1][i];
+    X[2] = Xl_[2][i];
+   vnl_double_2 x = projection(P, X); 
+  }
 }
 
 void kalman_filter::update_covariant()
