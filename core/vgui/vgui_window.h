@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_window.h
+// This is core/vgui/vgui_window.h
 #ifndef vgui_window_h_
 #define vgui_window_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -9,18 +9,15 @@
 // \author fsm
 // \brief  An abstract representation of a system window.
 //
-//  Contains classes: vgui_window.
-//
 // \verbatim
 //  Modifications:
-//    07-AUG-2002 K.Y.McGaul - Changed to and added Doxygen style comments.
-//    23-DEC-2002 J.L. Mundy - added set methods for scroll bars
+//   07-AUG-2002 K.Y.McGaul - Changed to and added Doxygen style comments.
+//   23-DEC-2002 J.L. Mundy - added set methods for scroll bars
 // \endverbatim
 
 class vgui_menu;
 class vgui_adaptor;
 class vgui_statusbar;
-
 #include <vcl_string.h>
 
 //: An abstract representation of a system window.
@@ -30,8 +27,8 @@ class vgui_statusbar;
 //  which is accessed using set_menubar.
 //
 //  Possibly not all GUI toolkits using this representation will have
-//  menus, statusbars, scrollbars or titles, though there wouldn't be much 
-//  point in implementing this if you couldn't at least display an OpenGL 
+//  menus, statusbars, scrollbars or titles, though there wouldn't be much
+//  point in implementing this if you couldn't at least display an OpenGL
 //  area (vgui_adaptor) in your window.
 class vgui_window
 {
@@ -41,8 +38,8 @@ class vgui_window
 
   //: Destructor.
   virtual ~vgui_window();
- 
-  //: Put the given menu in the menubar (if it exists). 
+
+  //: Put the given menu in the menubar (if it exists).
   virtual void set_menubar(vgui_menu const &);
 
   //: If true, activate the statusbar (if it exists).
@@ -79,7 +76,7 @@ class vgui_window
 
   //: Move the window to the new given x,y position.
   virtual void reposition(int, int);
- 
+
   //: Use the given text as the window title (if the window has a title).
   virtual void set_title(vcl_string const &);
 
@@ -88,7 +85,6 @@ class vgui_window
 
   //: Set the position of the vertical scrollbar, returns old position
   virtual int set_vscrollbar(int pos);
-
 };
 
 #endif // vgui_window_h_

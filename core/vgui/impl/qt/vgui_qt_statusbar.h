@@ -1,4 +1,4 @@
-// This is oxl/vgui/impl/qt/vgui_qt_statusbar.h
+// This is core/vgui/impl/qt/vgui_qt_statusbar.h
 #ifndef VGUI_QT_STATUSBAR_H_
 #define VGUI_QT_STATUSBAR_H_
 //:
@@ -7,8 +7,8 @@
 // \author Joris Schouteden
 //
 // \verbatim
-// Modifications:
-// 24.03.2000 JS  Initial Version, adapted from vgui_gtk_statusbar
+//  Modifications:
+//   24.03.2000 JS  Initial Version, adapted from vgui_gtk_statusbar
 // \endverbatim
 
 #include <vcl_string.h>
@@ -25,7 +25,7 @@ class vgui_qt_statusbar :
    public vgui_statusbar
 {
    Q_OBJECT
-public:
+ public:
    vgui_qt_statusbar();
   ~vgui_qt_statusbar();
 

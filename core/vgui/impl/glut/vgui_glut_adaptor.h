@@ -1,12 +1,10 @@
-// This is oxl/vgui/impl/glut/vgui_glut_adaptor.h
+// This is core/vgui/impl/glut/vgui_glut_adaptor.h
 #ifndef vgui_glut_adaptor_h_
 #define vgui_glut_adaptor_h_
 //:
 // \file
 // \author fsm
 // \brief  The GLUT (OpenGL Utility Toolkit) implementation of vgui_adaptor.
-//
-//  Contains classes: vgui_glut_adaptor
 //
 // \verbatim
 //  Modifications:
@@ -43,7 +41,7 @@ struct vgui_glut_adaptor : vgui_adaptor
   void get_popup_bindings(vgui_modifier &m, vgui_button &b) const
     { m = popup_modifier; b = popup_button; }
 
-private:
+ private:
   int id;
   vgui_glut_window *win;
 
@@ -69,14 +67,14 @@ private:
   // super and sub
   vgui_glut_adaptor *super; // 0 if none.
   vcl_vector<vgui_glut_adaptor*> sub_contexts;
-  
+
   // popup things
   friend struct vgui_glut_popup_impl;
   vgui_glut_popup_impl *popup;
   void make_popup();
   static void pre_menu_hook(int );
   //static void queue_command(vgui_command *);
-  
+
   // dynamic callbacks :
   virtual void         display();
   virtual void overlay_display();

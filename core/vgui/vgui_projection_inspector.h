@@ -1,16 +1,13 @@
-// This is oxl/vgui/vgui_projection_inspector.h
+// This is core/vgui/vgui_projection_inspector.h
 #ifndef vgui_projection_inspector_h_
 #define vgui_projection_inspector_h_
 //:
 // \file
 // \author fsm
-// \brief
-//
-//  Contains classes:  vgui_projection_inspector
 //
 // \verbatim
 //  Modifications:
-//    14-Aug-2002 K.Y.McGaul - Converted to Doxygen style comments.
+//   14-Aug-2002 K.Y.McGaul - Converted to Doxygen style comments.
 // \endverbatim
 
 #include <vnl/vnl_vector_fixed.h>
@@ -19,7 +16,7 @@
 //:
 class vgui_projection_inspector
 {
-public:
+ public:
   //: Constructor - with default projection and modelview matrices.
   vgui_projection_inspector();
 
@@ -108,7 +105,7 @@ public:
   //  x can be a 2 or 3-vcl_vector. The returned vcl_vector has size 1+x.size().
   vnl_vector<double> back_project(vnl_vector<double> const &x,vnl_vector_fixed<double,4> const &p) const;
 
-private:
+ private:
   int vp[4]; // viewport
   vnl_matrix_fixed<double,4,4> P; // projection matrix
   vnl_matrix_fixed<double,4,4> M; // modelview matrix

@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_event_server.cxx
+// This is core/vgui/vgui_event_server.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -16,8 +16,9 @@
 // the default is 'false'. don't check in 'true'.
 //static bool debug = false;
 
-class vgui_event_server_interpose_tableau : public vgui_wrapper_tableau {
-public:
+class vgui_event_server_interpose_tableau : public vgui_wrapper_tableau
+{
+ public:
   vgui_event_server* the_server_;
 
   vgui_event_server_interpose_tableau(vgui_event_server* s):
@@ -68,10 +69,12 @@ vgui_event_server::~vgui_event_server()
   vgui_parent_child_link::replace_child_everywhere(grabber_, grabber_->child);
 }
 
-void vgui_event_server::reset() {
+void vgui_event_server::reset()
+{
 }
 
-bool vgui_event_server::next() {
+bool vgui_event_server::next()
+{
   use_event_ = false;
   while (!use_event_)
     vgui::run_one_event();
@@ -79,6 +82,7 @@ bool vgui_event_server::next() {
   return true;
 }
 
-vgui_event vgui_event_server::last_event() {
+vgui_event vgui_event_server::last_event()
+{
   return last_event_;
 }

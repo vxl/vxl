@@ -1,4 +1,4 @@
-// This is oxl/vgui/impl/qt/vgui_qt_window.h
+// This is core/vgui/impl/qt/vgui_qt_window.h
 #ifndef VGUI_QT_WINDOW_H_
 #define VGUI_QT_WINDOW_H_
 //:
@@ -7,8 +7,8 @@
 // \author Joris Schouteden
 //
 // \verbatim
-// Modifications:
-// 24.03.2000 JS  Initial Version, adapted from vgui_gtk_window
+//  Modifications:
+//   24.03.2000 JS  Initial Version, adapted from vgui_gtk_window
 // \endverbatim
 
 #include <vgui/vgui_window.h>
@@ -21,13 +21,12 @@
 
 class vgui_gtk_adaptor;
 
-//: QT implemenation of vgui_window.
+//: QT implementation of vgui_window.
 class vgui_qt_window :
    public QMainWindow,
    public vgui_window
 {
-public:
-
+ public:
    vgui_qt_window(int w, int h, const vgui_menu& menu, const char* title);
    vgui_qt_window(int w, int h, const char* title);
   ~vgui_qt_window() { };
@@ -47,7 +46,7 @@ public:
    bool use_menubar;
    bool use_statusbar;
 
-private:
+ private:
    void setup_widget(int w, int h, const char* title);
 };
 

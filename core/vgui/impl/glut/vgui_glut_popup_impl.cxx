@@ -1,4 +1,4 @@
-// This is oxl/vgui/impl/glut/vgui_glut_popup_impl.cxx
+// This is core/vgui/impl/glut/vgui_glut_popup_impl.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -13,7 +13,8 @@
 #include <vgui/vgui_command.h>
 #include <vgui/vgui_glut.h>
 
-vgui_glut_popup_impl::vgui_glut_popup_impl() {
+vgui_glut_popup_impl::vgui_glut_popup_impl()
+{
   //vcl_cerr << "popup_impl ctor\n";
   int old_id = glutGetMenu();
   menu_id = glutCreateMenu(command_func);
@@ -26,7 +27,8 @@ vgui_glut_popup_impl::vgui_glut_popup_impl() {
 }
 
 
-void vgui_glut_popup_impl::clear() {
+void vgui_glut_popup_impl::clear()
+{
   //vcl_cerr << "popup_impl::clear()\n";
   int old_id = glutGetMenu();
   glutSetMenu(menu_id);
@@ -49,26 +51,28 @@ void vgui_glut_popup_impl::clear() {
   subs.clear();
 }
 
-
-vgui_glut_popup_impl::~vgui_glut_popup_impl() {
+vgui_glut_popup_impl::~vgui_glut_popup_impl()
+{
   //vcl_cerr << "popup_impl dtor\n";
   clear();
   glutDestroyMenu( menu_id );
   menu_id = 0;
 }
 
-void vgui_glut_popup_impl::build(vgui_menu const &m) {
+void vgui_glut_popup_impl::build(vgui_menu const &m)
+{
   //clear();
 
   // FIXME - this line here is to make sure the commands in the
   // given menu stay alive while the popup menu is active :
   tmp_menu = m;
 
-  //vcl_cerr << "popup_impl::build : m = \n" << m << vcl_endl;
+  //vcl_cerr << "popup_impl::build : m =\n" << m << vcl_endl;
   this->build_internal(m);
 }
 
-void vgui_glut_popup_impl::build_internal(vgui_menu const &m) {
+void vgui_glut_popup_impl::build_internal(vgui_menu const &m)
+{
   int old_id = glutGetMenu();
   //vgui_macro_warning << "before\n";
   glutSetMenu(menu_id);
@@ -88,7 +92,7 @@ void vgui_glut_popup_impl::build_internal(vgui_menu const &m) {
 
     else if (m[i].is_toggle_button()) {
       vgui_command_toggle *c = static_cast<vgui_command_toggle*>( m[i].cmnd.as_pointer() );
-      glutAddMenuEntry( (m[i].name + (c->state ? " (on)":" (off)")).c_str(),
+      glutAddMenuEntry( (m[i].name + (c->state ? " (on)" : " (off)")).c_str(),
                         reinterpret_cast<long>(m[i].cmnd.as_pointer()));
     }
 
@@ -99,8 +103,8 @@ void vgui_glut_popup_impl::build_internal(vgui_menu const &m) {
     }
 
     else {
-      vgui_macro_warning << "unknown menu item\n";
-      vgui_macro_warning << "menu = \n" << m << vcl_endl;
+      vgui_macro_warning << "unknown menu item\n"
+                         << "menu =\n" << m << vcl_endl;
     }
   }
 

@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_blackbox_tableau.h
+// This is core/vgui/vgui_blackbox_tableau.h
 #ifndef vgui_blackbox_tableau_h_
 #define vgui_blackbox_tableau_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -14,11 +14,11 @@
 //
 // \verbatim
 //  Modifications:
-//    13-OCT-1999  P.Pritchett - Initial version.
-//    26-APR-2002  K.Y.McGaul - Converted to and added doxygen style comments.
-//    01-OCT-2002  K.Y.McGaul - Moved vgui_blackbox to vgui_blackbox_tableau.
+//   13-OCT-1999  P.Pritchett - Initial version.
+//   26-APR-2002  K.Y.McGaul  - Converted to and added doxygen style comments.
+//   01-OCT-2002  K.Y.McGaul  - Moved vgui_blackbox to vgui_blackbox_tableau.
 //                            - Removed 'playback' - doesn't seem to be used.
-// \endverbatim.
+// \endverbatim
 
 #include "vgui_blackbox_tableau_sptr.h"
 #include <vgui/vgui_wrapper_tableau.h>
@@ -30,11 +30,11 @@
 // The user can control event recording and playback by pressing the
 // following keys inside the rendering area:
 //
-// - `,'  start/stop record 
-// - `.'           playback 
-// - `s'   playback w. dump 
-// - `/'       print events 
-// - `#'       clear events 
+// - `,'  start/stop record
+// - `.'           playback
+// - `s'   playback w. dump
+// - `/'       print events
+// - `#'       clear events
 class vgui_blackbox_tableau : public vgui_wrapper_tableau
 {
  public:
@@ -66,7 +66,7 @@ class vgui_blackbox_tableau : public vgui_wrapper_tableau
 struct vgui_blackbox_tableau_new : public vgui_blackbox_tableau_sptr
 {
   typedef vgui_blackbox_tableau_sptr base;
-  
+
   //: Constructor - creates a smart-pointer to a vgui_blackbox_tableau.
   //  Takes the single child tableau as a parameter.
   vgui_blackbox_tableau_new(vgui_tableau_sptr const& a) : base(new vgui_blackbox_tableau(a)) { }

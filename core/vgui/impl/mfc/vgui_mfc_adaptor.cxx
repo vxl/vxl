@@ -1,6 +1,5 @@
-// This is oxl/vgui/impl/mfc/vgui_mfc_adaptor.cxx
+// This is core/vgui/impl/mfc/vgui_mfc_adaptor.cxx
 #include "vgui_mfc_adaptor.h"
-
 //:
 // \file
 // \author RRG, Oxford University
@@ -38,9 +37,9 @@ IMPLEMENT_DYNCREATE(vgui_mfc_adaptor, CView)
 vgui_mfc_adaptor::vgui_mfc_adaptor( ):ovl_helper(0), win_(0), /*come_out_now(false),*/ redraw_posted(true)
 {
   if (vgui_accelerate::vgui_mfc_acceleration)
-    // kym - double buffering is not available with 
+    // kym - double buffering is not available with
     // acceleration (it crashes windows).
-    set_double_buffering(false); 
+    set_double_buffering(false);
 
   // If m_pCWnd is not set (using setup_adaptor) assume we use the main window:
   m_pCWnd = 0;
@@ -136,13 +135,13 @@ void vgui_mfc_adaptor::swap_buffers()
 //: Change the default popup menu to the given one (not yet implemented).
 void vgui_mfc_adaptor::set_default_popup(vgui_menu)
 {
-  vcl_cerr << "vgui_mfc_adaptor::set_default_popup"<< vcl_endl;
+  vcl_cerr << "vgui_mfc_adaptor::set_default_popup\n";
 }
 
 //: Return the default popup menu (not yet implemented).
 vgui_menu vgui_mfc_adaptor::get_popup()
 {
-  vcl_cerr<< "vgui_mfc_adaptor::get_popup"<< vcl_endl;
+  vcl_cerr<< "vgui_mfc_adaptor::get_popup\n";
   return vgui_menu();
 }
 
@@ -341,7 +340,7 @@ void vgui_mfc_adaptor::service_redraws()
 {
   if (redraw_posted)
   {
-    if (use_double_buffering) 
+    if (use_double_buffering)
       glDrawBuffer(GL_BACK);
 
     dispatch_to_tableau(vgui_event(vgui_DRAW));
@@ -356,8 +355,7 @@ void vgui_mfc_adaptor::service_redraws()
       CDC *win_dc = wnd->GetDC();
       RECT r;
       wnd->GetClientRect(&r);
-      win_dc->BitBlt(0,0,r.right,r.bottom,vgui_mfc_adaptor_global_dc,0,0,
-        SRCCOPY);
+      win_dc->BitBlt(0,0,r.right,r.bottom,vgui_mfc_adaptor_global_dc,0,0,SRCCOPY);
     }
 
     swap_buffers();
@@ -365,7 +363,7 @@ void vgui_mfc_adaptor::service_redraws()
   }
 }
 
-//: Sets timer to dispatch WM_TIME event to a mainframe every time miliseconds
+//: Sets timer to dispatch WM_TIME event to a mainframe every time milliseconds
 void vgui_mfc_adaptor::post_timer(float tm,int id)
 {
   CWnd* wnd;
@@ -380,7 +378,7 @@ void vgui_mfc_adaptor::post_timer(float tm,int id)
 void vgui_mfc_adaptor::OnDraw(CDC* pDC)
 {
   if (debug)
-    vcl_cerr << "OnDraw" << vcl_endl;
+    vcl_cerr << "OnDraw\n";
   // post_redraw();
 
   service_redraws();
@@ -439,24 +437,24 @@ void vgui_mfc_adaptor::OnSize(UINT nType, int cx, int cy)
 //: Convert MFC key character into an int suitable for vgui.
 void mfc_key(UINT nChar, UINT nFlags, int *the_key, int *the_ascii_char)
 {
-  if (nFlags & 256) 
+  if (nFlags & 256)
   {
     // Extended code
     switch (nChar)
     {
-      case VK_NEXT: 
+      case VK_NEXT:
         *the_key = vgui_PAGE_DOWN;
         *the_ascii_char = vgui_PAGE_DOWN;
         return;
-      case VK_PRIOR: 
+      case VK_PRIOR:
         *the_key = vgui_PAGE_UP;
         *the_ascii_char = vgui_PAGE_UP;
         return;
-      case VK_LEFT: 
+      case VK_LEFT:
         *the_key = vgui_CURSOR_LEFT;
         *the_ascii_char = vgui_CURSOR_LEFT;
         return;
-      case VK_UP: 
+      case VK_UP:
         *the_key = vgui_CURSOR_UP;
         *the_ascii_char = vgui_CURSOR_UP;
         return;
@@ -483,7 +481,7 @@ void mfc_key(UINT nChar, UINT nFlags, int *the_key, int *the_ascii_char)
 
     int is_ok = ToAscii(nChar, nFlags & 0xff, lpKeyState, buf, 0);
     if (is_ok == 1)
-      *the_key = buf[0]; 
+      *the_key = buf[0];
     else
       *the_key = nChar;
 
@@ -493,7 +491,7 @@ void mfc_key(UINT nChar, UINT nFlags, int *the_key, int *the_ascii_char)
 
     is_ok = ToAscii(nChar, nFlags & 0xff, lpKeyState, buf, 0);
     if (is_ok == 1)
-      *the_ascii_char = buf[0]; 
+      *the_ascii_char = buf[0];
     else
       *the_ascii_char = nChar;
   }
@@ -544,7 +542,7 @@ void vgui_mfc_adaptor::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 //: Handles mouse press/release events.
 void vgui_mfc_adaptor::domouse(vgui_event_type et, UINT nFlags, CPoint point, vgui_button b)
 {
-  //vcl_cerr << "vgui_mfc_adaptor::domouse: wo = " << point.x << ", " << point.y << vcl_endl;
+//vcl_cerr <<"vgui_mfc_adaptor::domouse: wo = "<< point.x<<", "<< point.y<<'\n';
   // awf: BLETCH. This offset is consistent over resize, depth, screen position, machines,
   // and I can't find it... Sorry.
   point.x += 2;
@@ -640,6 +638,6 @@ void vgui_mfc_adaptor::OnMouseMove(UINT nFlags, CPoint point)
 //: Called by MFC when a user rotates a mouse wheel.
 BOOL vgui_mfc_adaptor::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 {
-  //vcl_cerr << "Mouse wheel events are not handled" << vcl_endl;
+  //vcl_cerr << "Mouse wheel events are not handled\n";
   return FALSE;
 }

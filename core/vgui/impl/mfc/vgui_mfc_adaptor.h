@@ -1,4 +1,4 @@
-// This is oxl/vgui/impl/mfc/vgui_mfc_adaptor.h
+// This is core/vgui/impl/mfc/vgui_mfc_adaptor.h
 #ifndef AFX_VGUI_MFC_ADAPTOR_H__6BE405F7_0910_4C83_A175_5E8FBDCE88A5__INCLUDED_
 #define AFX_VGUI_MFC_ADAPTOR_H__6BE405F7_0910_4C83_A175_5E8FBDCE88A5__INCLUDED_
 //:
@@ -46,7 +46,7 @@ struct vgui_overlay_helper;
 //  this is done, when an OpenGL area is used in a dialog box.
 class vgui_mfc_adaptor : public CView, public vgui_adaptor, public vgui_adaptor_mixin
 {
-public:
+ public:
   //: Constructor used by dynamic creation.
   //  kym - this used to be protected, but I changed it to public so I can add
   //  adaptors to dialog boxes.
@@ -92,7 +92,7 @@ public:
   //: Change the default popup menu to the given one (not yet implemented).
   void set_default_popup(vgui_menu);
 
-  //: Sets timer to dispatch WM_TIME event to a mainframe every time miliseconds
+  //: Sets timer to dispatch WM_TIME event to a mainframe every time milliseconds
   void post_timer(float,int);
 
   //: Return the default popup menu (not yet implemented).
@@ -122,7 +122,7 @@ public:
   //  rendering context when this adaptor is deleted.
   void setup_adaptor(CWnd* this_cwnd, HDC OldDC, HGLRC oldContext);
 
-protected:
+ protected:
   //: The window associated with this adaptor if it is not the main window.
   CWnd* m_pCWnd;
 
@@ -134,7 +134,7 @@ protected:
 
   // 1. MFC stuff -  ClassWizard generated virtual function overrides
   //-------------
-protected:
+ protected:
   //: Called by MFC when a draw event is required - overridden to draw this view
   virtual void OnDraw(CDC* pDC);
 
@@ -142,9 +142,9 @@ protected:
   virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 
 // Implementation
-public:
+ public:
   virtual ~vgui_mfc_adaptor();
-protected:
+ protected:
 #ifdef _DEBUG
   virtual void AssertValid() const;
   virtual void Dump(CDumpContext& dc) const;

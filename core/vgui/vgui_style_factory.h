@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_style_factory.h
+// This is core/vgui/vgui_style_factory.h
 #ifndef vgui_style_factory_h_
 #define vgui_style_factory_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -9,11 +9,10 @@
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   18 Oct 1999
 // \brief  Factory that manufactures vgui_style objects.
-//  Contains classes: vgui_style_factory
 //
 // \verbatim
 //  Modifications:
-//    18-OCT-1999 P.Pritchett - Initial version.
+//   18-OCT-1999 P.Pritchett - Initial version.
 // \endverbatim
 
 #include <vcl_functional.h>
@@ -40,7 +39,7 @@ class vgui_style_factory
   static vgui_style_factory* instance();
 
   //: Returns a pointer to the vgui_style corresponding to the given values.
-  static vgui_style* get_style(float r, float g, float b, float point_size, 
+  static vgui_style* get_style(float r, float g, float b, float point_size,
                                float line_width);
 
   //: Gets a list of pointers to all styles held in the factory.
@@ -50,7 +49,7 @@ class vgui_style_factory
   static void get_soviews(vgui_style*, vcl_vector<vgui_soview*>& soviews);
 
   //: Change the style of the given soview.
-  static void change_style(vgui_soview* so, vgui_style* st_new, 
+  static void change_style(vgui_soview* so, vgui_style* st_new,
     vgui_style* st_old);
 
   //: Remove a style association.
@@ -77,13 +76,13 @@ class vgui_style_factory
   vgui_style_factory();
   static vgui_DLLDATA vgui_style_factory* instance_;
 
-  vgui_style* get_style_impl(float r, float g, float b, float point_size, 
+  vgui_style* get_style_impl(float r, float g, float b, float point_size,
     float line_width);
   void get_styles_impl(vcl_vector<vgui_style*>& styles_copy);
   void get_soviews_impl(vgui_style*, vcl_vector<vgui_soview*>& soviews);
   void change_style_impl(vgui_soview* so, vgui_style* st_new, vgui_style* st_old);
   void remove_style_impl(vgui_soview* so);
-  
+
   //vgui_style* default_style;
   vcl_vector<vgui_style*> styles;
   MultiMap_styles styles_map;

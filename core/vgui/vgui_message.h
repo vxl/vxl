@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_message.h
+// This is core/vgui/vgui_message.h
 #ifndef vgui_message_h_
 #define vgui_message_h_
 //:
@@ -6,11 +6,9 @@
 // \author  fsm
 // \brief   Used to send messages from observables to observers.
 //
-//  Contains classes:  vgui_message
-//
 // \verbatim
-// Modifications
-//pcp - I removed the type and user fields and replaced them with
+//  Modifications
+//   pcp - I removed the type and user fields and replaced them with
 //      a vcl_string. this is because I think the types of message that
 //      will be sent are much more diverse than the event types
 //      and so shouldn't follow that model. It is more difficult
@@ -20,15 +18,15 @@
 //      This is because the observable class doesn't contain any useful info
 //      as far as the observer is concerned and a static cast to another class
 //      (usually some tableau subclass) would be necessary - and would be
-//      based on the contents of the message. Observable is only useful as a 
-//      mixin class to provide observer management. I don't think it should 
-//      actually store observers though as some classes may not store their 
+//      based on the contents of the message. Observable is only useful as a
+//      mixin class to provide observer management. I don't think it should
+//      actually store observers though as some classes may not store their
 //      observers locally.
 //
-//fsm - I have a license from pcp to put them back in, so I might do that 
-//      without warning.
+//   fsm - I have a license from pcp to put them back in, so I might do that
+//         without warning.
 //
-//fsm - now I've done it.
+//   fsm - now I've done it.
 // \endverbatim
 
 //: Used to send messages from observables to observers.
@@ -36,10 +34,12 @@
 // example :
 //
 // \code
-// class sender : public vgui_observable {
+// class sender : public vgui_observable
+// {
 //   static const char begin[];
 //   static const char end[];
-//   void f() {
+//   void f()
+//   {
 //     vcl_string moo="moo moo moo";
 //     vgui_message m;
 //     m.from = this;
@@ -47,7 +47,8 @@
 //     m.data = &moo;
 //     notify(m);
 //   }
-//   void g() {
+//   void g()
+//   {
 //     vgui_message m;
 //     m.from = this;
 //     m.user = sender::end;
@@ -56,17 +57,22 @@
 //   }
 // };
 //
-// class receiver : public vgui_observer {
-//   void update(const vgui_message &m) {
-//     if (m.user == sender::begin) {
+// class receiver : public vgui_observer
+// {
+//   void update(const vgui_message &m)
+//   {
+//     if (m.user == sender::begin)
+//     {
 //       vcl_string *s = static_cast<vcl_string*>(m.data);
 //       vcl_cerr << "begin : " << *s << vcl_endl;
 //     }
-//     else if (m.user == sender::end) {
+//     else if (m.user == sender::end)
+//     {
 //       sender *s = static_cast<sender*>(m.from);
-//       vcl_cerr << "end" << vcl_endl;
+//       vcl_cerr << "end\n";
 //     }
-//     else {
+//     else
+//     {
 //       // dunno
 //     }
 //   }
@@ -74,21 +80,21 @@
 // \endcode
 class vgui_message
 {
-public:
+ public:
   vgui_message();
 
-  //: Pointer to sender. 
+  //: Pointer to sender.
   //  When the message was broadcast from a vgui_observer
   //  via the notify() method, this will point to the observer.
   const void *from;
-  
-  //: This field must uniquely identify the type of message sent. 
-  //  Usually it will point to some static POD somewhere.
-  const void *user; 
 
-  //: Extra data can be packaged into this. 
-  //  It is up to the sender of the message to ensure that 'data' can be   
-  //  safely cast to whatever the receiver expects when receiving a message 
+  //: This field must uniquely identify the type of message sent.
+  //  Usually it will point to some static POD somewhere.
+  const void *user;
+
+  //: Extra data can be packaged into this.
+  //  It is up to the sender of the message to ensure that 'data' can be
+  //  safely cast to whatever the receiver expects when receiving a message
   //  with a particular value of 'user' set.
   const void *data;
 };

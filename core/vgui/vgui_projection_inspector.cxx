@@ -1,11 +1,9 @@
-// This is oxl/vgui/vgui_projection_inspector.cxx
-
+// This is core/vgui/vgui_projection_inspector.cxx
+#include "vgui_projection_inspector.h"
 //:
 // \file
 // \author fsm
 // \brief  See vgui_projection_inspector.h for a description of this file.
-
-#include "vgui_projection_inspector.h"
 
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h> // vcl_abort()
@@ -30,8 +28,8 @@ vgui_projection_inspector::~vgui_projection_inspector()
 
 void vgui_projection_inspector::print(vcl_ostream& s) const
 {
-  s << "vgui_projection_inspector: {\n";
-  s << "VP = " << vp[0] << " " << vp[1] << " " << vp[2] << " " << vp[3] << " " << vcl_endl;
+  s << "vgui_projection_inspector: {\n"
+    << "VP = " << vp[0] << ' ' << vp[1] << ' ' << vp[2] << ' ' << vp[3] << '\n';
   vnl_matlab_print(s, P, "P");
   vnl_matlab_print(s, M, "M");
   s << "}\n";
@@ -198,7 +196,7 @@ void vgui_projection_inspector::inspect()
   else
   {
     diagonal_scale_3d = false;
-    // vcl_cerr << "T = " << vcl_endl << T << vcl_endl;
+    // vcl_cerr << "T =\n" << T << vcl_endl;
   }
 }
 

@@ -1,4 +1,4 @@
-// This is oxl/vgui/internals/vgui_accelerate_x11.cxx
+// This is core/vgui/internals/vgui_accelerate_x11.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -35,7 +35,8 @@
 
 #ifdef HAS_HERMES
 // These are the source packing formats that vgui_glDrawPixels will support
-struct gl_to_hermes_format_map {
+struct gl_to_hermes_format_map
+{
   GLenum gl_format;
   GLenum gl_type;
   int32 bits_per_pixel;
@@ -57,7 +58,8 @@ struct gl_to_hermes_format_map {
 #else
 # define s(x) endian_swap32(x)
 #endif
-gl_to_hermes_format_map gl_to_hermes_formats[] = {
+gl_to_hermes_format_map gl_to_hermes_formats[] =
+{
   {GL_RGBA,     GL_UNSIGNED_BYTE,        32, s(0x000000ff), s(0x0000ff00), s(0x00ff0000), 0},
   {GL_BGRA,     GL_UNSIGNED_BYTE,        32, s(0x00ff0000), s(0x0000ff00), s(0x000000ff), 0},
   {GL_ABGR_EXT, GL_UNSIGNED_BYTE,        32, s(0xff000000), s(0x00ff0000), s(0x0000ff00), 0},
@@ -220,16 +222,16 @@ bool vgui_accelerate_x11::vgui_glDrawPixels( GLsizei width, GLsizei height,
         glGetIntegerv (GL_UNPACK_SKIP_ROWS, &skip_rows);
 
 #if 0 // commented out
-        vcl_cerr << "bb width " << backbuffer->width << vcl_endl;
-        vcl_cerr << "bb height " << backbuffer->height << vcl_endl;
-        vcl_cerr << "raspos " << raster_pos[0] << " " << raster_pos[1]
-                 << " " << raster_pos[2] << " " << raster_pos[3] << vcl_endl;
-        vcl_cerr << "pz x " << pixel_zoom_x << vcl_endl;
-        vcl_cerr << "pz y " << pixel_zoom_y << vcl_endl;
-        vcl_cerr << "skip x " << skip_pixels << vcl_endl;
-        vcl_cerr << "skip y " << skip_rows << vcl_endl;
-        vcl_cerr << "width " << width << vcl_endl;
-        vcl_cerr << "height " << height << vcl_endl;
+        vcl_cerr << "bb width " << backbuffer->width << vcl_endl
+                 << "bb height " << backbuffer->height << vcl_endl
+                 << "raspos " << raster_pos[0] << ' ' << raster_pos[1]
+                 << ' ' << raster_pos[2] << ' ' << raster_pos[3] << vcl_endl
+                 << "pz x " << pixel_zoom_x << vcl_endl
+                 << "pz y " << pixel_zoom_y << vcl_endl
+                 << "skip x " << skip_pixels << vcl_endl
+                 << "skip y " << skip_rows << vcl_endl
+                 << "width " << width << vcl_endl
+                 << "height " << height << vcl_endl;
 #endif
 
         // Find the OUTERMOST boundary of the scaled src image in window coords
@@ -250,8 +252,8 @@ bool vgui_accelerate_x11::vgui_glDrawPixels( GLsizei width, GLsizei height,
         }
 
 #if 0 // commented out
-        vcl_cerr << dest_x_min << " " << dest_x_max << vcl_endl;
-        vcl_cerr << dest_y_min << " " << dest_y_max << vcl_endl;
+        vcl_cerr << dest_x_min << ' ' << dest_x_max << vcl_endl
+                 << dest_y_min << ' ' << dest_y_max << vcl_endl;
 #endif
 
         float window_x_min, window_y_min, window_x_max, window_y_max;
@@ -301,12 +303,12 @@ bool vgui_accelerate_x11::vgui_glDrawPixels( GLsizei width, GLsizei height,
         }
 
 #if 0 // commented out
-        vcl_cerr << "clipped dest -\n";
-        vcl_cerr << dest_x_min << " " << dest_x_max << vcl_endl;
-        vcl_cerr << dest_y_min << " " << dest_y_max << vcl_endl;
-        vcl_cerr << "clipped src -\n";
-        vcl_cerr << src_x_min << " " << src_x_max << vcl_endl;
-        vcl_cerr << src_y_min << " " << src_y_max << vcl_endl;
+        vcl_cerr << "clipped dest -\n"
+                 << dest_x_min << ' ' << dest_x_max << vcl_endl
+                 << dest_y_min << ' ' << dest_y_max << vcl_endl
+                 << "clipped src -\n"
+                 << src_x_min << ' ' << src_x_max << vcl_endl
+                 << src_y_min << ' ' << src_y_max << vcl_endl;
 #endif
 
         // Okay, the destination rectangle should be correct. Now lets adjust skip_pixels and skip_rows,

@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_satellite_tableau.h
+// This is core/vgui/vgui_satellite_tableau.h
 #ifndef vgui_satellite_tableau_h_
 #define vgui_satellite_tableau_h_
 //:
@@ -13,7 +13,6 @@
 //  Modifications:
 //   02-OCT-2002 A.W.Fitzgibbon - Changed overview documentation.
 // \endverbatim
-
 
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_tableau.h>
@@ -48,7 +47,7 @@
 //                          /     \                       .
 //                         |       |
 //                       image   image
-// \end verbatim
+// \endverbatim
 //
 // But a single tableau cannot have multiple paths through
 // "handle", so we might split "dob" into two helper tableaus,
@@ -72,12 +71,12 @@
 //                         |       |
 //                         |       |
 //                       image   image
-// \end verbatim
+// \endverbatim
 //
 // However, this is a small bit of hassle for the writer of "dob", which
 // vgui_satellite_tableau makes easier.  Add an extra argument to
-// dob::handle(event), which indicates which side the event is on, and then 
-// put a 
+// dob::handle(event), which indicates which side the event is on, and then
+// put a
 //   vgui_satellite_tableau_t<type_of_dob, int>(dob, 1)
 // in the left tree and a
 //   vgui_satellite_tableau_t<type_of_dob, int>(dob, 2)
@@ -89,12 +88,12 @@ struct vgui_satellite_tableau_t : public vgui_tableau
 {
   typedef bool (object::*method)(vgui_event const &, data );
 
-  //: The 'object' type must have a method type_name(). 
+  //: The 'object' type must have a method type_name().
   //  It is used to implement the type_name() methods on the satellites.
   object *p;
 
   method  m;
- 
+
   //: Client data.
   //  The 'data' parameter may seem superfluous because one could
   //  achieve the same result by having two methods which were used
@@ -109,19 +108,19 @@ struct vgui_satellite_tableau_t : public vgui_tableau
 
   //: Constructor - don't use this, use vgui_satellite_tableau_t_new.
   //  There is no vgui_satellite_tableau_t_sptr for this tableau.
-  vgui_satellite_tableau_t(object *p_, method m_, data const &d_, 
+  vgui_satellite_tableau_t(object *p_, method m_, data const &d_,
                            vcl_string const &n_ = "")
     : p(p_), m(m_), d(d_), n(n_) { }
 
   bool handle(vgui_event const &e) { return (p && m) && (p->*m)(e, d); }
 
-  vcl_string type_name() const 
+  vcl_string type_name() const
     { return vcl_string("vgui_satellite_tableau_t[") + n + vcl_string("]"); }
 
   vgui_menu a_menu;
   void add_popup(vgui_menu &m) { m.include(a_menu); }
 
-protected:
+ protected:
   ~vgui_satellite_tableau_t() { p = 0; m = 0; }
 };
 
@@ -134,7 +133,7 @@ struct vgui_satellite_tableau : public vgui_tableau
 {
   typedef bool (object::*method)(vgui_event const &);
 
-  //:The 'object' type must have a method type_name(). 
+  //:The 'object' type must have a method type_name().
   // It is used to implement the type_name() methods on the satellites.
   object *p;
 
@@ -150,10 +149,10 @@ struct vgui_satellite_tableau : public vgui_tableau
 
   bool handle(vgui_event const &e) { return (p && m) && (p->*m)(e); }
 
-  vcl_string type_name() const 
+  vcl_string type_name() const
     { return vcl_string("vgui_satellite_tableau[") + n + vcl_string("]"); }
 
-protected:
+ protected:
   ~vgui_satellite_tableau() { p = 0; m = 0; }
 };
 
@@ -171,7 +170,7 @@ struct vgui_satellite_tableau_t_new : public vgui_tableau_sptr_t<vgui_satellite_
   typedef vgui_satellite_tableau_t<object, data> impl;
   typedef vgui_tableau_sptr_t<impl quirk(vgui_tableau_sptr)> base;
   typedef typename impl::method method;
-  vgui_satellite_tableau_t_new(object *p, method m, data const &d, 
+  vgui_satellite_tableau_t_new(object *p, method m, data const &d,
     vcl_string const &n = "") : base(new impl(p, m, d, n)) { }
 };
 
@@ -183,7 +182,7 @@ struct vgui_satellite_tableau_new : public vgui_tableau_sptr_t<vgui_satellite_ta
   typedef vgui_satellite_tableau<object> impl;
   typedef vgui_tableau_sptr_t<impl quirk(vgui_tableau_sptr)> base;
   typedef typename impl::method method;
-  vgui_satellite_tableau_new(object *p, method m, vcl_string const &n = "") 
+  vgui_satellite_tableau_new(object *p, method m, vcl_string const &n = "")
     : base(new impl(p, m, n)) { }
 };
 #undef quirk

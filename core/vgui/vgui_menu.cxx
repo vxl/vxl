@@ -1,6 +1,6 @@
-// This is oxl/vgui/vgui_menu.cxx
+// This is core/vgui/vgui_menu.cxx
 #include "vgui_menu.h"
-//: 
+//:
 // \file
 // \author fsm
 // \brief  See vgui_menu.h for a description of this file.
@@ -194,19 +194,19 @@ static void dump(vgui_menu const &This, vcl_ostream &os, vcl_string const &pre)
 
     // what it does
     if (This[i].is_command())
-      os << "command(" << static_cast<void*>(This[i].cmnd.as_pointer()) << ')' << vcl_endl;
+      os << "command(" << static_cast<void*>(This[i].cmnd.as_pointer()) << ")\n";
     else if (This[i].is_submenu()) {
-      os << "submenu:" << vcl_endl;
+      os << "submenu:\n";
       dump(* This[i].menu,os,pre+"  ");
     }
     else if (This[i].is_toggle_button()) {
       vgui_command_toggle *c = static_cast<vgui_command_toggle*>(This[i].cmnd.as_pointer());
-      os << "toggle (" << (c->state ? "on" : "off") << ")" << vcl_endl;
+      os << "toggle (" << (c->state ? "on" : "off") << ")\n";
     }
     else if (This[i].is_separator())
-      os << "(----- separator -----)" << vcl_endl;
+      os << "(----- separator -----)\n";
     else
-      os << "[unknown menuitem]" << vcl_endl; //
+      os << "[unknown menuitem]\n"; //
   }
 }
 

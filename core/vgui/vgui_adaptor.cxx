@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_adaptor.cxx
+// This is core/vgui/vgui_adaptor.cxx
 #include "vgui_adaptor.h"
 //:
 // \file
@@ -40,8 +40,7 @@ vgui_adaptor::vgui_adaptor()
   the_tableau->ref();
 
   vgui_menu sub;
-  sub.add("Configure",
-    new vgui_command_simple<vgui_adaptor>(this, &vgui_adaptor::config_dialog));
+  sub.add("Configure", new vgui_command_simple<vgui_adaptor>(this, &vgui_adaptor::config_dialog));
   menu.add("vgui_adaptor", sub);
 }
 
@@ -55,8 +54,7 @@ vgui_adaptor::~vgui_adaptor()
   --adaptor_count;
 
   if (adaptor_count == 0) {
-    vcl_cerr << "All adaptors have been deleted -- calling vgui::quit()" 
-      << vcl_endl;
+    vcl_cerr << "All adaptors have been deleted -- calling vgui::quit()\n";
     vgui::quit();
   }
 }
@@ -101,8 +99,8 @@ vgui_menu vgui_adaptor::get_total_popup(vgui_popup_params &params) const
 
 //-----------------------------------------------------------------------------
 //: Pops up a dialog for changing the popup modifier and button bindings.
-void vgui_adaptor::config_dialog() {
-
+void vgui_adaptor::config_dialog()
+{
   // table stores the correspondence between vgui modifiers and pretty names.
   static struct {
     vgui_modifier mod;
@@ -154,8 +152,8 @@ void vgui_adaptor::config_dialog() {
   }
 
   // debug
-  vcl_cerr << "mod_index " << mod_index << vcl_endl;
-  vcl_cerr << "button_index " << but_index << vcl_endl;
+  vcl_cerr << "mod_index " << mod_index << vcl_endl
+           << "button_index " << but_index << vcl_endl;
 
   vgui_dialog mydialog("Adaptor Config");
   mydialog.choice("Popup modifier", mod_labels, mod_index);
@@ -175,7 +173,8 @@ void vgui_adaptor::config_dialog() {
 //  This method performs various checks which can be performed generically for
 //  all tableaux. It is not the responsibility of this method to take care of
 //  overlay handling - the derived class must sort that out.
-bool vgui_adaptor::dispatch_to_tableau(vgui_event const &e) {
+bool vgui_adaptor::dispatch_to_tableau(vgui_event const &e)
+{
   vgui_macro_report_errors;
 
   // if the event is DRAW, DRAW_OVERLAY or RESHAPE
@@ -190,13 +189,13 @@ bool vgui_adaptor::dispatch_to_tableau(vgui_event const &e) {
     vgui_matrix_state::identity_gl_matrices(); // to identity
 
     vgui_macro_report_errors;
-    if (e.type == vgui_DRAW && !vgui_accelerate::vgui_mfc_acceleration) 
+    if (e.type == vgui_DRAW && !vgui_accelerate::vgui_mfc_acceleration)
     {
       GLint buffer;
       glGetIntegerv(GL_DRAW_BUFFER,&buffer);
-      if (buffer != GL_BACK) 
+      if (buffer != GL_BACK)
       {
-        vgui_macro_warning << "setting draw buffer to back" << vcl_endl;
+        vgui_macro_warning << "setting draw buffer to back\n";
         glDrawBuffer(GL_BACK);
       }
     }
@@ -220,51 +219,59 @@ bool vgui_adaptor::dispatch_to_tableau(vgui_event const &e) {
 }
 
 //-----------------------------------------------------------------------------
-vgui_window *vgui_adaptor::get_window() const {
-  vgui_macro_warning << "get_window() not implemented" << vcl_endl;
+vgui_window *vgui_adaptor::get_window() const
+{
+  vgui_macro_warning << "get_window() not implemented\n";
   return 0;
 }
 
 //-----------------------------------------------------------------------------
 //: Bind the given modifier/button combination to the popup menu.
-void vgui_adaptor::bind_popups(vgui_modifier /*m*/, vgui_button /*b*/) {
-  vgui_macro_warning << "bind_popups() not implemented" << vcl_endl;
+void vgui_adaptor::bind_popups(vgui_modifier /*m*/, vgui_button /*b*/)
+{
+  vgui_macro_warning << "bind_popups() not implemented\n";
 }
 
 //-----------------------------------------------------------------------------
-void vgui_adaptor::get_popup_bindings(vgui_modifier &, vgui_button &) const {
-  vgui_macro_warning << "get_popup_bindings() not implemented" << vcl_endl;
+void vgui_adaptor::get_popup_bindings(vgui_modifier &, vgui_button &) const
+{
+  vgui_macro_warning << "get_popup_bindings() not implemented\n";
 }
 
 //-----------------------------------------------------------------------------
-void vgui_adaptor::swap_buffers() {
-  vgui_macro_warning << "swap_buffers() not implemented" << vcl_endl;
+void vgui_adaptor::swap_buffers()
+{
+  vgui_macro_warning << "swap_buffers() not implemented\n";
 }
 
 //-----------------------------------------------------------------------------
 void vgui_adaptor::post_message(char const *, void const *)
 {
-  vgui_macro_warning << "post_message() not implemented" << vcl_endl;
+  vgui_macro_warning << "post_message() not implemented\n";
 }
 
 //-----------------------------------------------------------------------------
-void vgui_adaptor::make_current() {
-  vgui_macro_warning << "make_current() not implemented" << vcl_endl;
+void vgui_adaptor::make_current()
+{
+  vgui_macro_warning << "make_current() not implemented\n";
 }
 
 //-----------------------------------------------------------------------------
-void vgui_adaptor::post_timer(float, int) {
-  vgui_macro_warning << "post_timer(float, int) not implemented" << vcl_endl;
+void vgui_adaptor::post_timer(float, int)
+{
+  vgui_macro_warning << "post_timer(float, int) not implemented\n";
 }
 
 //-----------------------------------------------------------------------------
-int  vgui_adaptor::post_timer(float t) {
+int  vgui_adaptor::post_timer(float t)
+{
   static int counter = 0;
   post_timer(t, counter);
   return counter++;
 }
 
 //-----------------------------------------------------------------------------
-void vgui_adaptor::post_destroy() {
-  vgui_macro_warning << "post_destroy() not implemented" << vcl_endl;
+void vgui_adaptor::post_destroy()
+{
+  vgui_macro_warning << "post_destroy() not implemented\n";
 }

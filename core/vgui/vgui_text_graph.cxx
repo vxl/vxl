@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_text_graph.cxx
+// This is core/vgui/vgui_text_graph.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -16,7 +16,7 @@
 //: Sends a text description of the tableau heirachy beneath the given tableau.
 static
 void vgui_text_graph(vcl_ostream &s, vcl_string const &prefix,
-  vgui_tableau_sptr const &t)
+                     vgui_tableau_sptr const &t)
 {
   s << prefix << t/*->type_name()*/ << vcl_endl;
 
@@ -39,7 +39,7 @@ void vgui_text_graph(vcl_ostream &s, vgui_tableau_sptr const &t)
 }
 
 //-----------------------------------------------------------------------------
-//: Sends a text description of the whole tableau hierachy to the given stream.
+//: Sends a text description of the whole tableau hierarchy to the given stream.
 void vgui_text_graph(vcl_ostream &s)
 {
   s << "All tableaux in the world:\n";
@@ -48,7 +48,7 @@ void vgui_text_graph(vcl_ostream &s)
 
   // find those tableaux with no parents.
   vcl_vector<vgui_tableau_sptr> top;
-  for (unsigned int i=0; i<all.size(); ++i) 
+  for (unsigned int i=0; i<all.size(); ++i)
   {
     vcl_vector<vgui_tableau_sptr> tmp;
     all[i]->get_parents(&tmp);
@@ -56,7 +56,7 @@ void vgui_text_graph(vcl_ostream &s)
       top.push_back(all[i]);
   }
 
-  for (unsigned int i=0; i<top.size(); ++i) 
+  for (unsigned int i=0; i<top.size(); ++i)
   {
     if (i > 0)
       s << vcl_endl;

@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_grid_tableau.cxx
+// This is core/vgui/vgui_grid_tableau.cxx
 #include "vgui_grid_tableau.h"
 //:
 // \file
@@ -8,7 +8,7 @@
 //
 // \verbatim
 //  Modifications:
-//    20-JAN-2000 K.Y.McGaul - Initial version.
+//   20-JAN-2000 K.Y.McGaul - Initial version.
 // \endverbatim
 
 #include <vcl_iostream.h>
@@ -47,8 +47,8 @@ void vgui_grid_tableau::init(unsigned initial_cols, unsigned initial_rows)
 
   grid_size_changeable = true;
 
-//if (debug) vcl_cerr << "init: intialising grid with "<< initial_cols << " columns and "
-//                << initial_rows << " rows" << vcl_endl;
+//if (debug) vcl_cerr << "init: initialising grid with " << initial_cols
+//                    << " columns and " << initial_rows << " rows\n";
   nb_cols = initial_cols;
   nb_rows = initial_rows;
   max_cols = initial_cols + INCREMENT_COLS;
@@ -190,7 +190,7 @@ void vgui_grid_tableau::add_next(vgui_tableau_sptr const& tab)
   if (grid_size_changeable == true)
   {
     // If we have got here then there are no free spaces in the grid.
-    if (debug) vcl_cerr << "add_next: current grid is full, adding another column" << vcl_endl;
+    if (debug) vcl_cerr << "add_next: current grid is full, adding another column\n";
     add_column();
     unsigned col_pos = nb_cols - 1;
     unsigned row_pos = 0;
@@ -211,14 +211,14 @@ void vgui_grid_tableau::add_next(vgui_tableau_sptr const& tab)
 void vgui_grid_tableau::add_at(vgui_tableau_sptr const& tab, unsigned col_pos, unsigned row_pos)
 {
   // This function leaks core because a tableau which is replaced by another
-  // is still referenced by the smart pointer in `tabs'. why do we need a 
-  // separate array of tableaux? can't we just put them in the grid_data 
+  // is still referenced by the smart pointer in `tabs'. why do we need a
+  // separate array of tableaux? can't we just put them in the grid_data
   // structure? -- fsm
 
-  // kym - This isn't a core leak!! It is intentional that pointers to 
-  // tableaux are kept - this means that we can flip through the list of 
-  // tableaux using page up and down but not display all tableaux at the 
-  // same time (see xcv for an example of this).  Each grid position provides 
+  // kym - This isn't a core leak!! It is intentional that pointers to
+  // tableaux are kept - this means that we can flip through the list of
+  // tableaux using page up and down but not display all tableaux at the
+  // same time (see xcv for an example of this).  Each grid position provides
   // a view of the deck of tableaux kept in 'tabs'.
   if (col_pos < nb_cols && row_pos < nb_rows)
   {
@@ -232,9 +232,9 @@ void vgui_grid_tableau::add_at(vgui_tableau_sptr const& tab, unsigned col_pos, u
     layout_grid();
   }
   else {
-    vcl_cerr << __FILE__ ": in add_at():" << vcl_endl;
-    vcl_cerr << __FILE__ ": nb_cols nb_rows = " << nb_cols << ' ' << nb_rows << vcl_endl;
-    vcl_cerr << __FILE__ ": col_pos row_pos = " << col_pos << ' ' << row_pos << vcl_endl;
+    vcl_cerr << __FILE__ ": in add_at():\n"
+             << __FILE__ ": nb_cols nb_rows = " << nb_cols << ' ' << nb_rows << vcl_endl
+             << __FILE__ ": col_pos row_pos = " << col_pos << ' ' << row_pos << vcl_endl;
   }
 }
 
@@ -262,9 +262,9 @@ void vgui_grid_tableau::remove_at(unsigned col_pos, unsigned row_pos)
     }
   }
   else {
-    vcl_cerr << __FILE__ ": in remove_at():" << vcl_endl;
-    vcl_cerr << __FILE__ ": nb_cols nb_rows = " << nb_cols << ' ' << nb_rows << vcl_endl;
-    vcl_cerr << __FILE__ ": col_pos row_pos = " << col_pos << ' ' << row_pos << vcl_endl;
+    vcl_cerr << __FILE__ ": in remove_at():\n"
+             << __FILE__ ": nb_cols nb_rows = " << nb_cols << ' ' << nb_rows << vcl_endl
+             << __FILE__ ": col_pos row_pos = " << col_pos << ' ' << row_pos << vcl_endl;
   }
 }
 
@@ -283,9 +283,7 @@ vgui_tableau_sptr vgui_grid_tableau::get_tableau_at(unsigned col_pos, unsigned r
   else if ( row_pos >= nb_rows)
     vgui_macro_warning << "Given row number " << row_pos
                        << " is out of range, max value = " << nb_rows-1 << vcl_endl;
-  else
-    ; //vgui_macro_warning << "Only default tableau at (" << col_pos << ", " << row_pos
-  //<< ")." << vcl_endl;
+//else vgui_macro_warning << "Only default tableau at (" << col_pos << ", " << row_pos << ").\n";
   return vgui_tableau_sptr();
 }
 
@@ -384,7 +382,7 @@ vcl_vector<int>* row_pos, vcl_vector<int>* times)
 //------------------------------------------------------------------------------
 void vgui_grid_tableau::layout_grid()
 {
-//if (debug) vcl_cerr << "layout_grid: redrawing grid keeping current row and column positions" << vcl_endl;
+//if (debug) vcl_cerr << "layout_grid: redrawing grid keeping current row and column positions\n";
   for (unsigned i = 0; i < nb_cols; i++)
   {
     for (unsigned j = 0; j < nb_rows; j++)
@@ -399,7 +397,7 @@ void vgui_grid_tableau::layout_grid()
 //------------------------------------------------------------------------------
 void vgui_grid_tableau::layout_grid2()
 {
-//if (debug) vcl_cerr << "layout_grid2: redrawing grid without gaps" << vcl_endl;
+//if (debug) vcl_cerr << "layout_grid2: redrawing grid without gaps\n";
   unsigned grid_col = 0;
   unsigned grid_row = 0;
   for (unsigned j = 0; j < nb_rows; j++)

@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_composite_tableau.h
+// This is core/vgui/vgui_composite_tableau.h
 #ifndef vgui_composite_tableau_h_
 #define vgui_composite_tableau_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -12,7 +12,7 @@
 //
 // \verbatim
 //  Modifications:
-//   18-Sep-2000 capes@robots - Added set_enable_key_bindings. 
+//   18-Sep-2000 capes@robots - Added set_enable_key_bindings.
 //                             Key bindings are OFF by default.
 //   09-Feb-2001 awf@robots - Add Alt-C to re-enable key bindings.
 //   26-APR-2002 K.Y.McGaul - Converted to doxygen style comments.
@@ -31,10 +31,10 @@ class vgui_event;
 
 //: Tableau which treats it children as a stack of acetates
 //
-//  The vgui_composite_tableau class can have any number of children, indexed 
-//  from 0 upwards.  The draw action of vgui_composite_tableau is to draw each 
-//  of its children, in order, into  the current context.  Events reaching the 
-//  vgui_composite_tableau are passed on to each child in turn, till it is 
+//  The vgui_composite_tableau class can have any number of children, indexed
+//  from 0 upwards.  The draw action of vgui_composite_tableau is to draw each
+//  of its children, in order, into  the current context.  Events reaching the
+//  vgui_composite_tableau are passed on to each child in turn, till it is
 //  handled, so that child 0, the first added, is the "top" tableau.
 //
 //  The exceptions to this rule are :
@@ -42,27 +42,28 @@ class vgui_event;
 //  [b] the DRAW, DRAW_OVERLAY events which are sent to all children.
 class vgui_composite_tableau : public vgui_tableau
 {
-public:
+ public:
   //: Constructor - don't use this, use vgui_composite_tableau_new.
   //  Creates an empty composite tableau.
   vgui_composite_tableau();
 
   //: Constructor - don't use this, use vgui_composite_tableau_new.
   //  Creates a composite with two child tableaux.
-  vgui_composite_tableau(vgui_tableau_sptr const& child0, 
-    vgui_tableau_sptr const& child1);
+  vgui_composite_tableau(vgui_tableau_sptr const& child0,
+                         vgui_tableau_sptr const& child1);
 
   //: Constructor - don't use this, use vgui_composite_tableau_new.
   //  Creates a composite with three child tableaux.
-  vgui_composite_tableau(vgui_tableau_sptr const& child0, 
-    vgui_tableau_sptr const& child1, vgui_tableau_sptr const& child2);
+  vgui_composite_tableau(vgui_tableau_sptr const& child0,
+                         vgui_tableau_sptr const& child1,
+                         vgui_tableau_sptr const& child2);
 
   //: Constructor - don't use this, use vgui_composite_tableau_new.
   //  Takes a vector of child tableaux.
   vgui_composite_tableau(vcl_vector<vgui_tableau_sptr> const& children);
 
   //: Handle all events sent to this tableau.
-  //  All events (except key-presses '0'-'9' and draw events) are passed 
+  //  All events (except key-presses '0'-'9' and draw events) are passed
   //  to each child until the event is handled.
   //  Key presses '0'-'9' toggle the activeness of the children and
   //  draw events are sent to all children.
@@ -90,7 +91,7 @@ public:
   //: Add a tableau to the list of child tableaux.
   void add(vgui_tableau_sptr const&);
 
-  //: Remove a tableau from the list of child tableux.
+  //: Remove a tableau from the list of child tableaux.
   void remove(vgui_tableau_sptr const&);
 
   //: Clear the list of child tableaux.
@@ -108,7 +109,7 @@ public:
   void set_enable_key_bindings(bool on) { enable_key_bindings = on; }
 
   //: The event which occurs to toggle enable/disable key bindings.
-  //  Defaut is Alt-C enables / disables key bindings
+  //  Default is Alt-C enables / disables key bindings
   vgui_event_condition c_enable_key_bindings;
 
  protected:
@@ -148,16 +149,20 @@ struct vgui_composite_tableau_new : public vgui_composite_tableau_sptr
   vgui_composite_tableau_new() : base(new vgui_composite_tableau()) { }
 
   //: Constructor - creates a pointer to a composite with two children.
-  vgui_composite_tableau_new(vgui_tableau_sptr const& child0, vgui_tableau_sptr const& child1)
+  vgui_composite_tableau_new(vgui_tableau_sptr const& child0,
+                             vgui_tableau_sptr const& child1)
     : base(new vgui_composite_tableau(child0, child1)) { }
 
   //: Constructor - creates a pointer to a composite with three children.
-  vgui_composite_tableau_new(vgui_tableau_sptr const& child0, vgui_tableau_sptr const& child1, vgui_tableau_sptr const& child2)
+  vgui_composite_tableau_new(vgui_tableau_sptr const& child0,
+                             vgui_tableau_sptr const& child1,
+                             vgui_tableau_sptr const& child2)
     : base(new vgui_composite_tableau(child0, child1, child2)) { }
 
   //: Constructor - creates pointer to a composite with the given children.
   //  Takes a vector of child tableaux.
-  vgui_composite_tableau_new(vcl_vector<vgui_tableau_sptr> const& children): base(new vgui_composite_tableau(children)) {}
+  vgui_composite_tableau_new(vcl_vector<vgui_tableau_sptr> const& children)
+    : base(new vgui_composite_tableau(children)) {}
 };
 
 #endif // vgui_composite_tableau_h_

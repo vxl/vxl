@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_adaptor.h
+// This is core/vgui/vgui_adaptor.h
 #ifndef vgui_adaptor_h_
 #define vgui_adaptor_h_
 //:
@@ -6,13 +6,11 @@
 // \author fsm
 // \brief  Provides an abstract interface to an OpenGL rendering state.
 //
-//  Contains classes: vgui_adaptor.
-//
 // \verbatim
 // Modifications
 // 20 October  1999 pcp@robots. removed derivation from tableau.
-// 20 Octover  1999 fsm. detach()ed the adaptor from the tableau in
-//                  the destuctor to avoid leaving a dangling pointer in the
+// 20 October  1999 fsm. detach()ed the adaptor from the tableau in
+//                  the destructor to avoid leaving a dangling pointer in the
 //                  tableau.
 // 28 October  1999 fsm. added more menu support (as agreed with pcp).
 //  7 January  1999 fsm. new observer/observable method of getting
@@ -49,9 +47,9 @@ class vgui_adaptor_tableau;
 // to the tableau as an observer. The tableau may detach that observer if it so
 // chooses, but that would be a bad idea as it would stop post()s from tableaux
 // reaching the adaptor.
-class vgui_adaptor 
+class vgui_adaptor
 {
-public:
+ public:
   //: Constructor - create a default adaptor.
   vgui_adaptor();
 
@@ -60,7 +58,7 @@ public:
 
   //: Get the vgui_tableau associated with this vgui_adaptor.
   vgui_tableau_sptr get_tableau() const;
- 
+
   //: Set the vgui_tableau associated with this vgui_adaptor.
   void set_tableau(vgui_tableau_sptr const& t);
 
@@ -89,7 +87,7 @@ public:
   bool dispatch_to_tableau(vgui_event const &);
 
   //: This static datum points to the adaptor that last received a mouse event.
-  //  It is set to zero if its pointee receives a LEAVE event.  It will
+  //  It is set to zero if its pointer receives a LEAVE event.  It will
   // often point to the adaptor which was current when a popup menu was
   // triggered, which is often what one wants it for.
   static vgui_DLLDATA vgui_adaptor *current;
@@ -99,12 +97,12 @@ public:
   // the rest is quality-of-implementation stuff.
 
   //: Return width of rendering area.
-  //  *Not* the width of the viewport. There seems to be no OpenGL 
+  //  *Not* the width of the viewport. There seems to be no OpenGL
   //  mechanism for doing this.
   virtual unsigned get_width() const =0;
 
   //: Return height of rendering area.
-  //  *Not* the height of the viewport. There seems to be no OpenGL 
+  //  *Not* the height of the viewport. There seems to be no OpenGL
   //  mechanism for doing this.
   virtual unsigned get_height() const =0;
 
@@ -119,12 +117,11 @@ public:
   virtual void post_destroy();
 
   //: Bind the given modifier/button combination to the popup menu.
-  virtual void bind_popups(vgui_modifier =vgui_MODIFIER_NULL, 
-    vgui_button =vgui_RIGHT);
+  virtual void bind_popups(vgui_modifier=vgui_MODIFIER_NULL, vgui_button=vgui_RIGHT);
 
   //: Return the modifier/button which pops up the popup menu.
   virtual void get_popup_bindings(vgui_modifier &, vgui_button &) const;
- 
+
   // getting the window.
   virtual vgui_window *get_window() const;
 
@@ -132,7 +129,7 @@ public:
   virtual void swap_buffers();
   virtual void make_current();
 
-protected:
+ protected:
   //: Parameters controlling the popup menu style.
   // These are put onto a popup_params object and passed to tableau::get_popup()
   bool nested_popups;
@@ -141,7 +138,7 @@ protected:
   //: Whether or not to use double buffering.
   bool use_double_buffering;
 
-private:
+ private:
   vgui_adaptor_tableau *the_tableau;
 
   //: this menu is put before the tableau's popup menu.

@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_rubberband_tableau.cxx
+// This is core/vgui/vgui_rubberband_tableau.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -27,25 +27,32 @@ vgui_rubberband_tableau::object_type vgui_rubberband_tableau::obj_type = none_en
 #else
 # define function_macro __FILE__ ":" << __LINE__
 #endif
-void vgui_rubberband_client::add_point(float, float) {
+void vgui_rubberband_client::add_point(float, float)
+{
   vcl_cerr << function_macro << " not implemented!\n";
 }
-void vgui_rubberband_client::add_line(float,float,float,float) {
+void vgui_rubberband_client::add_line(float,float,float,float)
+{
   vcl_cerr << function_macro << " not implemented!\n";
 }
-void vgui_rubberband_client::add_infinite_line(float,float,float) {
+void vgui_rubberband_client::add_infinite_line(float,float,float)
+{
   vcl_cerr << function_macro << " not implemented!\n";
 }
-void vgui_rubberband_client::add_circle(float,float,float) {
+void vgui_rubberband_client::add_circle(float,float,float)
+{
   vcl_cerr << function_macro << " not implemented!\n";
 }
-void vgui_rubberband_client::add_linestrip(int /*n*/,float const *,float const *) {
+void vgui_rubberband_client::add_linestrip(int /*n*/,float const *,float const *)
+{
   vcl_cerr << function_macro << " not implemented!\n";
 }
-void vgui_rubberband_client::add_polygon(int /*n*/,float const*,float const*) {
+void vgui_rubberband_client::add_polygon(int /*n*/,float const*,float const*)
+{
   vcl_cerr << function_macro << " not implemented!\n";
 }
-void vgui_rubberband_client::add_box(float,float,float,float) {
+void vgui_rubberband_client::add_box(float,float,float,float)
+{
   vcl_cerr << function_macro << " not implemented!\n";
 }
 #undef function_macro
@@ -118,7 +125,6 @@ add_box(float x0, float y0, float x1, float y1)
   float y[4] = {y0, y0, y1, y1};
   this->add_polygon( 4, x, y );
 }
-
 
 
 //---------------------------------------------------------------------------

@@ -1,4 +1,4 @@
-// This is oxl/vgui/internals/vgui_dialog_impl.h
+// This is core/vgui/internals/vgui_dialog_impl.h
 #ifndef vgui_dialog_impl_h_
 #define vgui_dialog_impl_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -102,28 +102,25 @@ class vgui_dialog_impl
   virtual void* string_field_widget(const char*, vcl_string&);
 
   //: Pointer to a GUI widget for a choice field.
-  virtual void* choice_field_widget(const char*, 
-    const vcl_vector<vcl_string>&, int&);
+  virtual void* choice_field_widget(const char*, const vcl_vector<vcl_string>&, int&);
 
   //: Pointer to a GUI widget for a text message.
   virtual void* text_message_widget(const char*);
 
-  //: Pointer to a GUI widget for a file browser. 
+  //: Pointer to a GUI widget for a file browser.
   virtual void* file_browser_widget(const char*, vcl_string&, vcl_string&);
 
-  //: Pointer to a GUI widget for an inline file browser. 
-  virtual void* inline_file_browser_widget(const char *,vcl_string&, 
-    vcl_string&);
- 
+  //: Pointer to a GUI widget for an inline file browser.
+  virtual void* inline_file_browser_widget(const char *,vcl_string&, vcl_string&);
+
   //: Pointer to a GUI widget for a colour chooser.
   virtual void* color_chooser_widget(const char*, vcl_string&);
 
   //: Pointer to a GUI widget for an inline colour chooser.
   virtual void* inline_color_chooser_widget(const char *,vcl_string&);
-  
+
   //: Pointer to a GUI widget for a tableau (OpenGL area).
-  virtual void* inline_tableau_widget(const vgui_tableau_sptr tab, 
-    unsigned width, unsigned height);
+  virtual void* inline_tableau_widget(const vgui_tableau_sptr tab, unsigned width, unsigned height);
 
   //: Set the modality of the dialog box.
   //  True makes the dialog modal (i.e. the dialog 'grabs' all events) and
@@ -158,7 +155,7 @@ class vgui_dialog_impl
     //  as we need them, except perhaps for something complicated like a
     //  file browser or colour chooser.
     void *widget;
-    //: Field to collect data from the user. 
+    //: Field to collect data from the user.
     vgui_dialog_field *field;
   };
 

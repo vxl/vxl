@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_command.cxx
+// This is core/vgui/vgui_command.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -44,7 +44,7 @@ vgui_command_cfunc::~vgui_command_cfunc()
 
 //-----------------------------------------------------------------------------
 void vgui_command_cfunc::execute()
-{ 
+{
   if (fn_pv)
     (*fn_pv)(data);
   else if (fn)
@@ -61,10 +61,8 @@ vgui_command_toggle::~vgui_command_toggle()
 //-----------------------------------------------------------------------------
 void vgui_command_toggle::execute()
 {
-  //vcl_cerr << vcl_endl;
-  //vcl_cerr << "toggle. old state : " << state << vcl_endl;
+  //vcl_cerr << vcl_endl << "toggle. old state : " << state << vcl_endl;
   state = !state;
-  //vcl_cerr << "toggle. new state : " << state << vcl_endl;
-  //vcl_cerr << vcl_endl;
+  //vcl_cerr << "toggle. new state : " << state << vcl_endl << vcl_endl;
 }
 

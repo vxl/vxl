@@ -1,5 +1,6 @@
-// This is oxl/vgui/vgui_poly_tableau.h
-
+// This is core/vgui/vgui_poly_tableau.h
+#ifndef vgui_poly_tableau_h_
+#define vgui_poly_tableau_h_
 //:
 // \file
 // \author fsm
@@ -9,13 +10,10 @@
 //
 // \verbatim
 //  Modifications:
-//    01-OCT-2002 K.Y.McGaul - Combined vgui_polytab_base with vgui_polytab.
-//                           - Added some Doxygen style comments.
-//                           - Moved vgui_polytab to vgui_poly_tableau.
+//   01-OCT-2002 K.Y.McGaul - Combined vgui_polytab_base with vgui_polytab.
+//                          - Added some Doxygen style comments.
+//                          - Moved vgui_polytab to vgui_poly_tableau.
 // \endverbatim
-
-#ifndef vgui_poly_tableau_h_
-#define vgui_poly_tableau_h_
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_tableau.h>
@@ -46,7 +44,7 @@
 // events.
 class vgui_poly_tableau : public vgui_tableau
 {
-public:
+ public:
   //: Constructor - don't use this, use vgui_poly_tableau_new.
   vgui_poly_tableau();
 
@@ -116,7 +114,7 @@ public:
   //: Set color to outline tableau.
   void set_outline_color(const int id, const int r, const int g, const int b);
 
-protected:
+ protected:
   //: Destructor - called by vgui_poly_tableau_sptr.
   ~vgui_poly_tableau();
 
@@ -145,7 +143,8 @@ protected:
 
 
 //: Creates a smart-pointer to a vgui_poly_tableau tableau.
-struct vgui_poly_tableau_new : public vgui_poly_tableau_sptr {
+struct vgui_poly_tableau_new : public vgui_poly_tableau_sptr
+{
   typedef vgui_poly_tableau_sptr base;
 
   //: Constructor - create a smart-pointer to an empty vgui_poly_tableau.

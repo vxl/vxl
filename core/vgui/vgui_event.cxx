@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_event.cxx
+// This is core/vgui/vgui_event.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -10,7 +10,7 @@
 //
 // \verbatim
 //  Modifications:
-//    11-SEP-1999 P.Pritchett - Initial version.
+//   11-SEP-1999 P.Pritchett - Initial version.
 // \endverbatim
 
 #include "vgui_event.h"
@@ -19,7 +19,8 @@
 
 //----------------------------------------------------------------------------
 //: Initialise default event.
-void vgui_event::init() {
+void vgui_event::init()
+{
   type = vgui_EVENT_NULL;
   button = vgui_BUTTON_NULL;
   key = vgui_KEY_NULL;
@@ -45,13 +46,15 @@ void vgui_event::init() {
 
 //----------------------------------------------------------------------------
 //: Constructor - create a default event.
-vgui_event::vgui_event() {
+vgui_event::vgui_event()
+{
   init();
 }
 
 //----------------------------------------------------------------------------
 //: Constructor - create an event of the given type.
-vgui_event::vgui_event(vgui_event_type etype) {
+vgui_event::vgui_event(vgui_event_type etype)
+{
   init();
   type = etype;
 }
@@ -79,22 +82,26 @@ void vgui_event::set_key(vgui_key c)
 }
 
 //----------------------------------------------------------------------------
-bool vgui_event::modifier_is_down(int mods) const {
+bool vgui_event::modifier_is_down(int mods) const
+{
   return (mods & modifier) == mods;
 }
 
 //----------------------------------------------------------------------------
-double vgui_event::secs_since(vgui_event const& e) const {
+double vgui_event::secs_since(vgui_event const& e) const
+{
   return (this->timestamp - e.timestamp) * 1e-3;
 }
 
 //----------------------------------------------------------------------------
-long vgui_event::usecs_since(vgui_event const& e) const {
+long vgui_event::usecs_since(vgui_event const& e) const
+{
   return long(this->timestamp - e.timestamp) * 1000;
 }
 
 //----------------------------------------------------------------------------
-static struct {
+static struct
+{
   vgui_event_type t;
   char const *name;
 } fsm_event_table[] = {
@@ -104,7 +111,7 @@ static struct {
 #define macro(e) {vgui_ ## e,#e}
   // doing it this way means we don't rely on the event types being
   // enummed in any particular order (the code had that particular
-  // bug before I changed it) -- fsm.
+  // bug before I changed it). fsm.
   macro(EVENT_NULL),
   macro(ENTER),
   macro(LEAVE),
@@ -132,7 +139,7 @@ vcl_ostream& operator<<(vcl_ostream& s, vgui_event_type t)
   for (int i=0; i<fsm_event_table_size; ++i)
     if (fsm_event_table[i].t == t)
       return s << fsm_event_table[i].name;
-  return s << "[" __FILE__ " : bad event, code " << int(t) << "]";
+  return s << "[" __FILE__ " : bad event, code " << int(t) << ']';
 }
 
 //-----------------------------------------------------------------------------
@@ -143,10 +150,10 @@ vcl_ostream& operator<<(vcl_ostream& s, vgui_event const& e)
   if (e.ascii_char != 0) s << ", ascii_char: " << vgui_key(e.ascii_char);
   if (e.button != vgui_BUTTON_NULL) s << ", button:" << e.button;
   if (e.modifier != vgui_MODIFIER_NULL) s << ", modifiers:" << vgui_modifier(e.modifier);
-  s << ", w(" << e.wx << "," << e.wy << ")";
-  s << ", time:" << e.timestamp << "ms";
+  s << ", w(" << e.wx << ',' << e.wy << ')'
+    << ", time:" << e.timestamp << "ms";
   if (e.str != "") s << ", vcl_string:\"" << e.str << "\"";
-  return s << "]";
+  return s << ']';
 };
 
 //-----------------------------------------------------------------------------

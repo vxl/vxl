@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_deck_tableau.h
+// This is core/vgui/vgui_deck_tableau.h
 #ifndef vgui_deck_tableau_h_
 #define vgui_deck_tableau_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -14,8 +14,8 @@
 //
 // \verbatim
 //  Modifications:
-//    13-SEP-1999 P.Pritchett - Initial version.
-//    26-APR-2002 K.Y.McGaul - Converted to and added doxygen style comments.
+//   13-SEP-1999 P.Pritchett - Initial version.
+//   26-APR-2002 K.Y.McGaul - Converted to and added doxygen style comments.
 // \endverbatim
 
 #include "vgui_deck_tableau_sptr.h"
@@ -26,13 +26,13 @@
 
 //: Tableau holding many child tableaux, but only one receives events.
 //
-//  vgui_deck_tableau holds an ordered collection of child tableaux, only one 
-//  of which is passed all events that the vgui_deck_tableau receives. The 
-//  effect is a flick-book of tableaux where the currently active tableau can 
+//  vgui_deck_tableau holds an ordered collection of child tableaux, only one
+//  of which is passed all events that the vgui_deck_tableau receives. The
+//  effect is a flick-book of tableaux where the currently active tableau can
 //  be changed using PageUp and PageDown
-class vgui_deck_tableau : public vgui_tableau 
+class vgui_deck_tableau : public vgui_tableau
 {
-public:
+ public:
   //: Constructor - don't use this, use vgui_deck_tableau_new.
   //  Make an empty deck
   vgui_deck_tableau();

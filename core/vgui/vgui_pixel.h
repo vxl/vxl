@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_pixel.h
+// This is core/vgui/vgui_pixel.h
 #ifndef vgui_pixel_h_
 #define vgui_pixel_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -156,8 +156,8 @@ template<typename T>
 inline
 vxl_byte vgui_pixel_clamp( T in )
 {
-  if( in > 255 ) return 255u;
-  if( in < 0 ) return 0u;
+  if ( in > 255 ) return 255u;
+  if ( in < 0 ) return 0u;
   return vxl_byte(in);
 }
 
@@ -179,7 +179,7 @@ vxl_byte vgui_pixel_clamp( vxl_byte in )
 inline
 vxl_byte vgui_pixel_clamp( vxl_sbyte in )
 {
-  if( in < 0 ) return 0u;
+  if ( in < 0 ) return 0u;
   return in;
 }
 
@@ -190,7 +190,7 @@ vxl_byte vgui_pixel_clamp( vxl_sbyte in )
 inline
 vxl_byte vgui_pixel_clamp( vxl_uint_16 in )
 {
-  if( in > 255 ) return 255u;
+  if ( in > 255 ) return 255u;
   return in;
 }
 
@@ -201,7 +201,7 @@ vxl_byte vgui_pixel_clamp( vxl_uint_16 in )
 inline
 vxl_byte vgui_pixel_clamp( vxl_uint_32 in )
 {
-  if( in > 255 ) return 255u;
+  if ( in > 255 ) return 255u;
   return in;
 }
 

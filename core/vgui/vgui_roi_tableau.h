@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_roi_tableau.h
+// This is core/vgui/vgui_roi_tableau.h
 #ifndef vgui_roi_tableau_h_
 #define vgui_roi_tableau_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -16,8 +16,8 @@
 //
 // \verbatim
 //  Modifications:
-//    18-Jul-2000  Marko Bacic - Initial version.
-//    08-Aug-2002  K.Y.McGaul - Changed to Doxygen style comments.
+//   18-Jul-2000  Marko Bacic - Initial version.
+//   08-Aug-2002  K.Y.McGaul - Changed to Doxygen style comments.
 // \endverbatim
 
 
@@ -42,15 +42,20 @@ class vgui_roi_tableau : public vgui_tableau
     float sy;
     float width;
     float height;
-  }ROI;
+  }  ROI;
 
+ private:
+  ROI roi_;
+  vil_image cropped_image_;
+  vcl_string name_;
+
+ public:
   //: Constructor - don't use this, use vgui_roi_tableau_new.
   vgui_roi_tableau();
 
   //: Constructor - don't use this, use vgui_roi_tableau_new.
-  vgui_roi_tableau(vil_image const &, char const *, float, float, float,
-                   float);
-  
+  vgui_roi_tableau(vil_image const &, char const *, float, float, float, float);
+
   //: Returns the type of this tableau ('vgui_roi_tableau').
   vcl_string type_name() const;
 
@@ -84,11 +89,6 @@ class vgui_roi_tableau : public vgui_tableau
 
   //: Handle all events passed to this tableau.
   bool handle(vgui_event const &e);
-
- private:
-  ROI roi_;
-  vil_image cropped_image_;
-  vcl_string name_;
 };
 
 //: Creates a smart-pointer to a vgui_roi_tableau.

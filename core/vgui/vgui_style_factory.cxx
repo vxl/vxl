@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_style_factory.cxx
+// This is core/vgui/vgui_style_factory.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -10,7 +10,7 @@
 //
 // \verbatim
 //  Modifications:
-//    18-OCT-1999 P.Pritchett - Initial version.
+//   18-OCT-1999 P.Pritchett - Initial version.
 // \endverbatim
 
 #include "vgui_style_factory.h"
@@ -30,7 +30,8 @@ bool vgui_style_factory::use_factory = false;
 vgui_style_factory* vgui_style_factory::instance_ = 0;
 
 
-vgui_style_factory* vgui_style_factory::instance() {
+vgui_style_factory* vgui_style_factory::instance()
+{
   if (!instance_)
     instance_ = new vgui_style_factory;
 
@@ -79,7 +80,8 @@ vgui_style* vgui_style_factory::get_style_impl(float r, float g, float b,
   return snew;
 }
 
-void vgui_style_factory::get_styles(vcl_vector<vgui_style*>& styles_copy) {
+void vgui_style_factory::get_styles(vcl_vector<vgui_style*>& styles_copy)
+{
   instance()->get_styles_impl(styles_copy);
 }
 
@@ -93,7 +95,8 @@ void vgui_style_factory::get_styles_impl(vcl_vector<vgui_style*>& styles_copy)
 }
 
 
-void vgui_style_factory::get_soviews(vgui_style* style, vcl_vector<vgui_soview*>& soviews) {
+void vgui_style_factory::get_soviews(vgui_style* style, vcl_vector<vgui_soview*>& soviews)
+{
   instance()->get_soviews_impl(style, soviews);
 }
 
@@ -108,18 +111,21 @@ void vgui_style_factory::get_soviews_impl(vgui_style* style, vcl_vector<vgui_sov
 }
 
 
-bool vgui_style_factory::so_equal::operator()(MultiMap_styles::value_type obj) {
+bool vgui_style_factory::so_equal::operator()(MultiMap_styles::value_type obj)
+{
   if (obj.second == s1)
     return true;
   return false;
 }
 
-void vgui_style_factory::change_style(vgui_soview* so, vgui_style* st_new, vgui_style* st_old) {
+void vgui_style_factory::change_style(vgui_soview* so, vgui_style* st_new, vgui_style* st_old)
+{
   instance()->change_style_impl(so,st_new,st_old);
 }
 
 
-void vgui_style_factory::change_style_impl(vgui_soview* so, vgui_style* st_new, vgui_style* st_old) {
+void vgui_style_factory::change_style_impl(vgui_soview* so, vgui_style* st_new, vgui_style* st_old)
+{
   // It doesn't make sense for a single view to be associated with two
   // styles, so delete all old associations before inserting a new
   // one.
@@ -131,11 +137,13 @@ void vgui_style_factory::change_style_impl(vgui_soview* so, vgui_style* st_new, 
 }
 
 
-void vgui_style_factory::remove_style(vgui_soview* so) {
+void vgui_style_factory::remove_style(vgui_soview* so)
+{
   instance()->remove_style_impl(so);
 }
 
-void vgui_style_factory::remove_style_impl(vgui_soview* so) {
+void vgui_style_factory::remove_style_impl(vgui_soview* so)
+{
   // the standard does not guarantee that a multimap is stable under
   // erase, so we have to do two passes.
   // See Defect Report 371
@@ -146,8 +154,8 @@ void vgui_style_factory::remove_style_impl(vgui_soview* so) {
   // Find all mappings with so
   //
   vcl_vector<Iter> to_erase;
-  for( Iter i = styles_map.begin(); i != styles_map.end(); ++i ) {
-    if( i->second == so ) {
+  for ( Iter i = styles_map.begin(); i != styles_map.end(); ++i ) {
+    if ( i->second == so ) {
       to_erase.push_back( i );
     }
   }
@@ -155,7 +163,7 @@ void vgui_style_factory::remove_style_impl(vgui_soview* so) {
   // Erase 'em. This is okay because iterators are not invalidated on
   // erase.
   //
-  for( vcl_vector<Iter>::iterator i = to_erase.begin(); i != to_erase.end(); ++i ) {
+  for ( vcl_vector<Iter>::iterator i = to_erase.begin(); i != to_erase.end(); ++i ) {
     styles_map.erase( *i );
   }
 

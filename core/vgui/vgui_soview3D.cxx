@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_soview3D.cxx
+// This is core/vgui/vgui_soview3D.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -18,8 +18,8 @@ vgui_soview3D::vgui_soview3D() {}
 
 vcl_ostream& vgui_point3D::print(vcl_ostream& s) const
 {
-  s << "[vgui_point3D " << x << "," << y << "," << z << " ";
-  s << " "; return vgui_soview3D::print(s) << "]";
+  s << "[vgui_point3D " << x << ',' << y << ',' << z << ' ';
+  return vgui_soview3D::print(s) << ']';
 }
 
 void vgui_point3D::draw() const
@@ -51,9 +51,9 @@ vgui_lineseg3D::vgui_lineseg3D( float x0_, float y0_, float z0_,
 
 vcl_ostream& vgui_lineseg3D::print(vcl_ostream& s) const
 {
-  s << "[vgui_lineseg3D " << x0 << "," << y0 << "," << z0
-    << " - " << x1 << "," << y1 << "," << z1 << " ";
-  return vgui_soview3D::print(s) << "]";
+  s << "[vgui_lineseg3D " << x0 << ',' << y0 << ',' << z0
+    << " - " << x1 << ',' << y1 << ',' << z1 << ' ';
+  return vgui_soview3D::print(s) << ']';
 }
 
 void vgui_lineseg3D::draw() const
@@ -89,10 +89,10 @@ vgui_triangle3D::vgui_triangle3D( float x0_, float y0_, float z0_,
 
 vcl_ostream& vgui_triangle3D::print(vcl_ostream& s) const
 {
-  s << "[vgui_triangle3D " << x0 << "," << y0 << "," << z0
-    << " - " << x1 << "," << y1 << "," << z1
-    << " - " << x2 << "," << y2 << "," << z2 << " ";
-  return vgui_soview3D::print(s) << "]";
+  s << "[vgui_triangle3D " << x0 << ',' << y0 << ',' << z0
+    << " - " << x1 << ',' << y1 << ',' << z1
+    << " - " << x2 << ',' << y2 << ',' << z2 << ' ';
+  return vgui_soview3D::print(s) << ']';
 }
 
 void vgui_triangle3D::draw() const

@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_listmanager2D_tableau.cxx
+// This is core/vgui/vgui_listmanager2D_tableau.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -7,7 +7,6 @@
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   21 Oct 99
 // \brief  See vgui_listmanager2D_tableau.h for a description of this file.
-
 
 #include "vgui_listmanager2D_tableau.h"
 
@@ -98,12 +97,11 @@ bool vgui_listmanager2D_tableau::index_ok(int v)
 
 bool vgui_listmanager2D_tableau::help()
 {
-  vcl_cerr << vcl_endl;
-  vcl_cerr << "-- vgui_listmanager2D_tableau ----------\n";
-  vcl_cerr << "|     keys                     |\n";
-  vcl_cerr << "| `1' to `9'  toggle child `n' |\n";
-  vcl_cerr << "--------------------------------\n";
-  vcl_cerr << vcl_endl;
+  vcl_cerr << '\n'
+           << "+- vgui_listmanager2D_tableau keys -+\n"
+           << "|                                   |\n"
+           << "| `1' to `9'  toggle child `n'      |\n"
+           << "+-----------------------------------+\n\n";
   return false;
 }
 

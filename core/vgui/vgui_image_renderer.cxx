@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_image_renderer.cxx
+// This is core/vgui/vgui_image_renderer.cxx
 #include "vgui_image_renderer.h"
 //:
 // \file
@@ -7,7 +7,7 @@
 //
 // \verbatim
 //  Modifications
-//   15-AUG-2000 Marko Bacic, Oxford RRG -- Now uses new routines for image 
+//   15-AUG-2000 Marko Bacic, Oxford RRG -- Now uses new routines for image
 //                                          rendering via textures
 //   23-AUG-2000 Marko Bacic, Oxford RRG -- Now uses vgui_cache_wizard
 //   08-AUG-2000 Marko Bacic, Oxford RRG -- Minor changes
@@ -31,21 +31,21 @@ extern bool vgui_images_are_textures;
 //-----------------------------------------------------------------------------
 //: Constructor - create an empty image renderer.
 vgui_image_renderer::vgui_image_renderer()
-  : use_texture_mapping(vgui_images_are_textures)
-  , buffer(0)
+  : buffer(0)
+  , use_texture_mapping(vgui_images_are_textures)
 {
 }
 
 //-----------------------------------------------------------------------------
 //: Destructor - delete image buffer.
-vgui_image_renderer::~vgui_image_renderer() 
+vgui_image_renderer::~vgui_image_renderer()
 {
   if (buffer)
     delete buffer;
 }
 
 //-----------------------------------------------------------------------------
-void vgui_image_renderer::need_resection() const 
+void vgui_image_renderer::need_resection() const
 {
   // Not implemented since we use only one section buffer at the moment.
   // Ideally, the set_image() method should be implemented by :
@@ -59,7 +59,8 @@ void vgui_image_renderer::need_resection() const
 
 //-----------------------------------------------------------------------------
 //: Attach the renderer to a new vil_image.
-void vgui_image_renderer::set_image(vil_image const &image_) {
+void vgui_image_renderer::set_image(vil_image const &image_)
+{
   if (image_ == the_image)
     return; // same image -- do nothing.
 
@@ -84,7 +85,8 @@ void vgui_image_renderer::reread_image()
 
 //-----------------------------------------------------------------------------
 // draw the image :
-void vgui_image_renderer::render() {
+void vgui_image_renderer::render()
+{
   if (!the_image)
     return;
 
@@ -103,12 +105,13 @@ void vgui_image_renderer::render() {
 
   // Use texture mapping if requested (only). If the image fails to
   // render, render its outline.
-  if (use_texture_mapping) {
+  if (use_texture_mapping)
+  {
     GLint vp[4];
     glGetIntegerv(GL_VIEWPORT, vp);
     if (debug)
-      vcl_cerr << vp[0] << ", " << vp[1] << ", " << vp[0]+vp[2] << ", " 
-      << vp[1]+vp[3] << vcl_endl;
+      vcl_cerr << vp[0] << ", " << vp[1] << ", " << vp[0]+vp[2] << ", "
+               << vp[1]+vp[3] << vcl_endl;
 
     vgui_projection_inspector pi;
 
@@ -129,12 +132,11 @@ void vgui_image_renderer::render() {
     if (debug) vcl_cerr << "New x1 y1:" << x1 << ", " << y1 << vcl_endl;
     if (debug) vcl_cerr << "New x0 y0:" << x0 << ", " << y0 << vcl_endl;
 
-    buffer->draw_image_as_cached_textures(x0, y0, vcl_fabs(x1-x0), 
+    buffer->draw_image_as_cached_textures(x0, y0, vcl_fabs(x1-x0),
       vcl_fabs(y1-y0)) || buffer->draw_as_rectangle();
     vgui_macro_report_errors;
   }
-  else {
-    // not texturing.
+  else { // not texturing.
     buffer->draw_as_image() || buffer->draw_as_rectangle();
   }
 }

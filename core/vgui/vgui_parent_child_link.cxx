@@ -1,10 +1,9 @@
-// This is oxl/vgui/vgui_parent_child_link.cxx
+// This is core/vgui/vgui_parent_child_link.cxx
 #include "vgui_parent_child_link.h"
 //:
 // \file
 // \author fsm
 // \brief  See vgui_parent_child_link.h for a description of this file.
-//
 
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
@@ -16,9 +15,9 @@
 #include <vgui/vgui_macro.h>
 
 // For efficiency (e.g. when posting redraws), the parents of a tableau
-// may be cached in the vgui_parent_child_link_data baseclass of vgui_tableau. 
+// may be cached in the vgui_parent_child_link_data baseclass of vgui_tableau.
 // This macro enables that optimization. If caching is not enabled, parents
-// are computed by scanning the entire registry of parent_child_links in 
+// are computed by scanning the entire registry of parent_child_links in
 // existence which could obviously be quite slow.
 #define cache_parents 1
 
@@ -31,11 +30,11 @@
 //  Implementation notes:
 //
 //  [1]
-//  Since tableaux will hold parent_child_links and use them to refer to 
+//  Since tableaux will hold parent_child_links and use them to refer to
 //  children, each parent_child_link must ref()erence its child.
 //
 //  [2]
-//  A parent_child_link should not ref()erence its parent as that would lead to 
+//  A parent_child_link should not ref()erence its parent as that would lead to
 //  cyclic dependencies and hence core leaks. Thus, we use a raw pointer to hold
 //  the parent.
 //
@@ -44,18 +43,18 @@
 //  advantage in that.
 //
 //  [4]
-//  A parent_child_link's parent pointer must never be zero because a 
-//  parent_child_link which does not have a parent is a useless 
-//  parent_child_link (and so is most likely an error). Thus 'p' is a private 
+//  A parent_child_link's parent pointer must never be zero because a
+//  parent_child_link which does not have a parent is a useless
+//  parent_child_link (and so is most likely an error). Thus 'p' is a private
 //  data member of vgui_parent_child_link_impl and the constructor will
 //  cause assertion failure if given a null parent pointer.
 //
 //  [5]
-//  A parent_child_link's parent pointer cannot be changed because there is no 
-//  legitimite use for that.
+//  A parent_child_link's parent pointer cannot be changed because there is no
+//  legitimate use for that.
 struct vgui_parent_child_link_impl
 {
-  // all is stored as a pointer as it must live longer than any static 
+  // all is stored as a pointer as it must live longer than any static
   // parent_child_links
   typedef vcl_set<void *> all_t;
   static all_t* all;
@@ -76,7 +75,7 @@ struct vgui_parent_child_link_impl
   inline void acquire();
   inline void release();
 
-private:
+ private:
   vgui_tableau *p; // parent
   vgui_tableau *c; // child
   int use_count;   // reference count
@@ -129,14 +128,13 @@ void vgui_parent_child_link_impl::link(vgui_tableau *p, vgui_tableau *c)
 #endif
 }
 
-vgui_parent_child_link_impl::vgui_parent_child_link_impl(
-  vgui_tableau *p_, vgui_tableau *c_)
+vgui_parent_child_link_impl::vgui_parent_child_link_impl(vgui_tableau *p_, vgui_tableau *c_)
   : p(p_)
   , c(c_)
   , use_count(0)
 {
   if (! p) {
-    vgui_macro_warning << "parent is null" << vcl_endl;
+    vgui_macro_warning << "parent is null\n";
     assert(false);
   }
 
@@ -154,7 +152,7 @@ vgui_parent_child_link_impl::vgui_parent_child_link_impl(
 
   // parent and child are not allowed to be equal.
   if (p == c) {
-    vgui_macro_warning << "parent and child are equal" << vcl_endl;
+    vgui_macro_warning << "parent and child are equal\n";
     assert(false);
   }
 
@@ -185,9 +183,7 @@ void vgui_parent_child_link_impl::assign(vgui_tableau *t)
     return;
 
   if (t == p) {
-    vgui_macro_warning 
-      << "cannot assign() a parent_child_link\'s parent to its child" 
-      << vcl_endl;
+    vgui_macro_warning << "cannot assign() a parent_child_link\'s parent to its child\n";
     assert(false);
   }
 
@@ -220,15 +216,14 @@ vgui_parent_child_link::vgui_parent_child_link(vgui_tableau *p)
   pimpl->acquire();
 }
 
-vgui_parent_child_link::vgui_parent_child_link(vgui_tableau *p, 
-  vgui_tableau_sptr const &c)
+vgui_parent_child_link::vgui_parent_child_link(vgui_tableau *p,
+                                               vgui_tableau_sptr const &c)
 {
   pimpl = new vgui_parent_child_link_impl(p, c.operator->());
   pimpl->acquire();
 }
 
-vgui_parent_child_link::vgui_parent_child_link(
-  vgui_parent_child_link const &that)
+vgui_parent_child_link::vgui_parent_child_link(vgui_parent_child_link const &that)
 {
   pimpl = that.pimpl;
 
@@ -244,8 +239,7 @@ vgui_parent_child_link::~vgui_parent_child_link()
   pimpl = 0;
 }
 
-vgui_parent_child_link &vgui_parent_child_link::operator=(
-  vgui_parent_child_link const &that)
+vgui_parent_child_link &vgui_parent_child_link::operator=(vgui_parent_child_link const &that)
 {
   if (pimpl != that.pimpl) {
     if (that.pimpl)
@@ -279,9 +273,10 @@ void vgui_parent_child_link::assign(vgui_tableau_sptr const &t)
 {
   if (pimpl)
     pimpl->assign(t.operator->());
-  else {
-    vgui_macro_warning << "attempted assign() to empty parent_child_link." << vcl_endl;
-    vgui_macro_warning << "t = " << t << vcl_endl;
+  else
+  {
+    vgui_macro_warning << "attempted assign() to empty parent_child_link.\n"
+                       << "t = " << t << vcl_endl;
     assert(false);
   }
 }
@@ -318,35 +313,37 @@ vcl_ostream & operator<<(vcl_ostream &os, vgui_parent_child_link const &s)
             << vcl_flush
             << static_cast<void*>( s.parent().operator->() ) << ", "
             << vcl_flush
-            << static_cast<void*>( s.child ().operator->() ) << ")"
+            << static_cast<void*>( s.child ().operator->() ) << ')'
             << vcl_flush;
 }
 
 //------------------------------------------------------------------------------
 
-void vgui_parent_child_link::get_children_of(vgui_tableau_sptr const& tab, 
-  vcl_vector<vgui_tableau_sptr> *children)
+void vgui_parent_child_link::get_children_of(vgui_tableau_sptr const& tab,
+                                             vcl_vector<vgui_tableau_sptr> *children)
 {
-  for (vcl_set<void*>::iterator i=vgui_parent_child_link_impl::all->begin(); i!=vgui_parent_child_link_impl::all->end(); ++i) {
+  for (vcl_set<void*>::iterator i=vgui_parent_child_link_impl::all->begin();
+       i!=vgui_parent_child_link_impl::all->end(); ++i)
+  {
     vgui_parent_child_link_impl *ptr = static_cast<vgui_parent_child_link_impl*>(*i);
     if ( ptr->parent() == tab.operator->() )
       children->push_back( ptr->child() );
   }
 }
 
-void vgui_parent_child_link::get_parents_of (vgui_tableau_sptr const& tab, 
-  vcl_vector<vgui_tableau_sptr> *parents)
+void vgui_parent_child_link::get_parents_of (vgui_tableau_sptr const& tab,
+                                             vcl_vector<vgui_tableau_sptr> *parents)
 {
 #if cache_parents
-  vcl_vector<vgui_tableau*> const &vec 
+  vcl_vector<vgui_tableau*> const &vec
     = tab->vgui_parent_child_link_data::parents;
   for (unsigned i=0; i<vec.size(); ++i)
     parents->push_back(vec[i]);
 #else
-  for (vcl_set<void*>::iterator i=vgui_parent_child_link_impl::all->begin(); 
-    i!=vgui_parent_child_link_impl::all->end(); ++i) 
+  for (vcl_set<void*>::iterator i=vgui_parent_child_link_impl::all->begin();
+    i!=vgui_parent_child_link_impl::all->end(); ++i)
     {
-    vgui_parent_child_link_impl *ptr 
+    vgui_parent_child_link_impl *ptr
       = static_cast<vgui_parent_child_link_impl*>(*i);
     if ( ptr->child() == tab.operator->() )
       children->push_back( ptr->parent() );
@@ -354,25 +351,25 @@ void vgui_parent_child_link::get_parents_of (vgui_tableau_sptr const& tab,
 #endif
 }
 
-void vgui_parent_child_link::replace_child_everywhere (
-  vgui_tableau_sptr const &old_child, vgui_tableau_sptr const &new_child)
+void vgui_parent_child_link::replace_child_everywhere(vgui_tableau_sptr const &old_child,
+                                                      vgui_tableau_sptr const &new_child)
 {
   // the default is 'false'. don't check in 'true'.
   static bool debug = false;
 
   if (debug)
-    vcl_cerr << "vgui_parent_child_link replace_child_everywhere " << vcl_endl
+    vcl_cerr << "vgui_parent_child_link replace_child_everywhere\n"
              << "old_child : " << old_child->pretty_name()
-             << "\t"
+             << '\t'
              << "new child : " << new_child->pretty_name() << vcl_endl;
 
   if (old_child == new_child)
     vcl_cerr << "vgui_parent_child_link::replace_child_everywhere: old_child == new_child\n";
 
-  for (vcl_set<void*>::iterator i=vgui_parent_child_link_impl::all->begin(); 
-    i!=vgui_parent_child_link_impl::all->end(); ++i) 
+  for (vcl_set<void*>::iterator i=vgui_parent_child_link_impl::all->begin();
+    i!=vgui_parent_child_link_impl::all->end(); ++i)
   {
-    vgui_parent_child_link_impl *ptr 
+    vgui_parent_child_link_impl *ptr
       = static_cast<vgui_parent_child_link_impl*>(*i);
 
     if (debug) {
@@ -380,7 +377,7 @@ void vgui_parent_child_link::replace_child_everywhere (
                << "parent : " << ptr->parent()->pretty_name()
                << "\tchild : ";
       if (! ptr->child())
-        vcl_cerr << "0" << vcl_endl;
+        vcl_cerr << "0\n";
       else
         vcl_cerr << ptr->child()->pretty_name() << vcl_endl;
     }

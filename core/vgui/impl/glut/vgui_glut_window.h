@@ -1,16 +1,10 @@
-// This is oxl/vgui/impl/glut/vgui_glut_window.h
+// This is core/vgui/impl/glut/vgui_glut_window.h
 #ifndef vgui_glut_window_h_
 #define vgui_glut_window_h_
 //:
 // \file
 // \author fsm
 // \brief  The GLUT (OpenGL Utility Toolkit) implementation of vgui_window.
-//
-//  Contains classes:  vgui_glut_window
-//
-// \verbatim
-//  Modifications:
-// \endverbatim
 
 struct vgui_glut_adaptor;
 #include <vgui/vgui_menu.h>
@@ -21,7 +15,7 @@ struct vgui_glut_window : public vgui_window
 {
   vgui_glut_window(char const *title, unsigned w, unsigned h, int posx =-1, int posy=-1);
   ~vgui_glut_window();
-  
+
   vgui_menu menubar;
   void set_menubar(vgui_menu const &m) { menubar = m; }
 
@@ -35,13 +29,13 @@ struct vgui_glut_window : public vgui_window
   void reshape(unsigned, unsigned);
   void reposition(int, int);
   void set_title(vcl_string const &);
-  
-private:
+
+ private:
   bool pending_reshape;
   bool pending_reposition;
   int data0;
   int data1;
-  
+
   friend struct vgui_glut_adaptor;
   void hello_from_adaptor();
 };

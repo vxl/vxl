@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_toolkit.cxx
+// This is core/vgui/vgui_toolkit.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -6,7 +6,6 @@
 // \file
 // \author fsm
 // \brief  See vgui_toolkit.h for a description of this file.
-
 
 #include "vgui_toolkit.h"
 
@@ -92,8 +91,8 @@ vgui_dialog_impl *vgui_toolkit::produce_dialog(char const*)
 
 void vgui_toolkit::quit()
 {
-  vgui_macro_warning << "vgui_toolkit::quit() called.\n";
-  vgui_macro_warning << "calling exit()\n";
+  vgui_macro_warning << "vgui_toolkit::quit() called.\n"
+                     << "calling exit()\n";
   vcl_exit(0);
 }
 

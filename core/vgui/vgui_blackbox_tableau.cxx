@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_blackbox_tableau.cxx
+// This is core/vgui/vgui_blackbox_tableau.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -10,9 +10,8 @@
 //
 // \verbatim
 //  Modifications:
-//    13-OCT-1999 P.Pritchett - Initial version
+//   13-OCT-1999 P.Pritchett - Initial version
 // \endverbatim
-
 
 #include "vgui_blackbox_tableau.h"
 
@@ -38,21 +37,22 @@ vgui_blackbox_tableau::~vgui_blackbox_tableau()
 vcl_string vgui_blackbox_tableau::type_name() const { return "vgui_blackbox_tableau"; }
 
 
-static void help() {
-  vcl_cerr << vcl_endl;
-  vcl_cerr << "-- vgui_blackbox_tableau ---------\n";
-  vcl_cerr << "|     keys               |\n";
-  vcl_cerr << "| `,'  start/stop record |\n";
-  vcl_cerr << "| `.'           playback |\n";
-  vcl_cerr << "| `s'   playback w. dump |\n";
-  vcl_cerr << "| `/'       print events |\n";
-  vcl_cerr << "| `#'       clear events |\n";
-  vcl_cerr << "--------------------------\n";
-  vcl_cerr << vcl_endl;
+static void help()
+{
+  vcl_cerr << '\n'
+           << "+- vgui_blackbox_tableau keys -+\n"
+           << "|                              |\n"
+           << "| `,'  start/stop record       |\n"
+           << "| `.'           playback       |\n"
+           << "| `s'   playback w. dump       |\n"
+           << "| `/'       print events       |\n"
+           << "| `#'       clear events       |\n"
+           << "+------------------------------+\n\n";
 }
 
 
-bool vgui_blackbox_tableau::handle(const vgui_event& event) {
+bool vgui_blackbox_tableau::handle(const vgui_event& event)
+{
   // manage the recording and playback
   if (event.type == vgui_KEY_PRESS) {
     bool do_save= false;
@@ -115,8 +115,8 @@ bool vgui_blackbox_tableau::handle(const vgui_event& event) {
               if (do_save)  vgui_utils::dump_colour_buffer(buf);
               if (old_e) {
                 double d = (dt * 1e-3);
-                story << "delay " <<  d << vcl_endl;
-                story << "image " << buf << vcl_endl;
+                story << "delay " <<  d << vcl_endl
+                      << "image " << buf << vcl_endl;
                 vgui::out << "blackbox: Saving frame " << buf << ", delay " << dt << vcl_endl;
               }
 

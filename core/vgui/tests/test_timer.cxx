@@ -1,15 +1,14 @@
-// This is oxl/vgui/tests/test_timer.cxx
-/*
-  fsm
-*/
+// This is core/vgui/tests/test_timer.cxx
+// \author fsm
 #include <vcl_cmath.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_adaptor.h>
 
-class tab : public vgui_tableau {
-public:
+class tab : public vgui_tableau
+{
+ public:
   int ct;
 
   tab() : ct(-1) { }
@@ -38,7 +37,7 @@ public:
     else {
       // start it
       if (ct == -1) {
-        vcl_cerr << __FILE__ ": hrrmph!" << vcl_endl;
+        vcl_cerr << __FILE__ ": hrrmph!\n";
         ct = 0;
         e.origin->post_timer(0, 5678);
       }
@@ -47,7 +46,8 @@ public:
   }
 };
 
-int main(int argc,char **argv) {
+int main(int argc,char **argv)
+{
   vgui::init(argc, argv);
 
   return vgui::run(new tab, 256, 256, __FILE__);

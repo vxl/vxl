@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_shell_tableau.h
+// This is core/vgui/vgui_shell_tableau.h
 #ifndef vgui_shell_tableau_h_
 #define vgui_shell_tableau_h_
 //:
@@ -10,9 +10,9 @@
 //
 // \verbatim
 //  Modifications
-//    18 Sept 00 capes@robots. Added set_enable_key_bindings(). 
-//                             Key bindings are OFF by default.
-//    07-Aug-2002 K.Y.McGaul - Converted to Doxygen style comments.
+//   18 Sept 00 capes@robots. Added set_enable_key_bindings().
+//                            Key bindings are OFF by default.
+//   07-Aug-2002 K.Y.McGaul - Converted to Doxygen style comments.
 // \endverbatim
 
 #include "vgui_shell_tableau_sptr.h"
@@ -38,7 +38,7 @@
 //
 class vgui_shell_tableau_bindings
 {
-public:
+ public:
   //:
   vgui_shell_tableau_bindings()
     : quit( default_quit ), close( default_close ), graph( default_graph )
@@ -132,7 +132,8 @@ class vgui_shell_tableau : public vgui_composite_tableau
 };
 
 //: Create a smart-pointer to a vgui_shell_tableau.
-struct vgui_shell_tableau_new : public vgui_shell_tableau_sptr {
+struct vgui_shell_tableau_new : public vgui_shell_tableau_sptr
+{
   typedef vgui_shell_tableau_sptr base;
   vgui_shell_tableau_new()
     : base(new vgui_shell_tableau()) { }
