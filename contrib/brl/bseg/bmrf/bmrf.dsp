@@ -135,6 +135,9 @@ SOURCE=.\bmrf_epi_point.cxx
 SOURCE=.\bmrf_epi_seg.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bmrf_gamma_func.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\bmrf_network.cxx
 # End Source File
 # Begin Source File
