@@ -21,51 +21,49 @@ integer *ierr;
     static doublereal c, f, g, h;
     static integer i, j, l, m;
     static doublereal p, r, s, c2, c3;
-    static integer l1, l2;
     static doublereal s2;
     extern doublereal pythag_();
     static doublereal dl1, el1;
-    static integer mml;
     static doublereal tst1, tst2;
 
-/*     this subroutine is a translation of the algol procedure tql1, */
-/*     num. math. 11, 293-306(1968) by bowdler, martin, reinsch, and */
-/*     wilkinson. */
-/*     handbook for auto. comp., vol.ii-linear algebra, 227-240(1971). */
-
-/*     this subroutine finds the eigenvalues of a symmetric */
-/*     tridiagonal matrix by the ql method. */
-
-/*     on input */
-
-/*        n is the order of the matrix. */
-
-/*        d contains the diagonal elements of the input matrix. */
-
-/*        e contains the subdiagonal elements of the input matrix */
-/*          in its last n-1 positions.  e(1) is arbitrary. */
-
-/*      on output */
-
-/*        d contains the eigenvalues in ascending order.  if an */
-/*          error exit is made, the eigenvalues are correct and */
-/*          ordered for indices 1,2,...ierr-1, but may not be */
-/*          the smallest eigenvalues. */
-
-/*        e has been destroyed. */
-
-/*        ierr is set to */
-/*          zero       for normal return, */
-/*          j          if the j-th eigenvalue has not been */
-/*                     determined after 30 iterations. */
-
-/*     calls pythag for  dsqrt(a*a + b*b) . */
-
-/*     questions and comments should be directed to burton s. garbow, */
-/*     mathematics and computer science div, argonne national laboratory */
-
-/*     this version dated august 1983. */
-
+/*     this subroutine is a translation of the algol procedure tql1,      */
+/*     num. math. 11, 293-306(1968) by bowdler, martin, reinsch, and      */
+/*     wilkinson.                                                         */
+/*     handbook for auto. comp., vol.ii-linear algebra, 227-240(1971).    */
+/*                                                                        */
+/*     this subroutine finds the eigenvalues of a symmetric               */
+/*     tridiagonal matrix by the ql method.                               */
+/*                                                                        */
+/*     on input                                                           */
+/*                                                                        */
+/*        n is the order of the matrix.                                   */
+/*                                                                        */
+/*        d contains the diagonal elements of the input matrix.           */
+/*                                                                        */
+/*        e contains the subdiagonal elements of the input matrix         */
+/*          in its last n-1 positions.  e(1) is arbitrary.                */
+/*                                                                        */
+/*      on output                                                         */
+/*                                                                        */
+/*        d contains the eigenvalues in ascending order.  if an           */
+/*          error exit is made, the eigenvalues are correct and           */
+/*          ordered for indices 1,2,...ierr-1, but may not be             */
+/*          the smallest eigenvalues.                                     */
+/*                                                                        */
+/*        e has been destroyed.                                           */
+/*                                                                        */
+/*        ierr is set to                                                  */
+/*          zero       for normal return,                                 */
+/*          j          if the j-th eigenvalue has not been                */
+/*                     determined after 30 iterations.                    */
+/*                                                                        */
+/*     calls pythag for  dsqrt(a*a + b*b) .                               */
+/*                                                                        */
+/*     questions and comments should be directed to burton s. garbow,     */
+/*     mathematics and computer science div, argonne national laboratory  */
+/*                                                                        */
+/*     this version dated august 1983.                                    */
+/*                                                                        */
 /*     ------------------------------------------------------------------ */
 
     *ierr = 0;
@@ -109,8 +107,6 @@ L130:
         }
         ++j;
 /*     .......... form shift .......... */
-        l1 = l + 1;
-        l2 = l1 + 1;
         g = d[l];
         p = (d[l+1] - g) / (e[l] * 2.);
         r = pythag_(&p, &c_b10);
@@ -130,7 +126,6 @@ L130:
         c2 = c;
         el1 = e[l+1];
         s = 0.;
-        mml = m - l;
         for (i = m-1; i >= l; --i) {
             c3 = c2;
             c2 = c;
@@ -162,6 +157,4 @@ L210:
         }
         d[i] = p;
     }
-
 } /* tql1_ */
-

@@ -352,8 +352,6 @@ doublereal dlamch_(char *cmach)
 
    =====================================================================
 */
-    /* Table of constant values */
-    static integer c__1 = 1;
     /* Initialized data */
     static logical first = TRUE_;
     static logical iwarn = FALSE_;

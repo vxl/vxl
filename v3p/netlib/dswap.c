@@ -15,14 +15,13 @@ integer *incy;
     /* Local variables */
     static integer i, m;
     static doublereal dtemp;
-    static integer ix, iy, mp1;
+    static integer ix, iy;
 
-/*     interchanges two vectors. */
-/*     uses unrolled loops for increments equal one. */
-/*     jack dongarra, linpack, 3/11/78. */
-/*     modified 12/3/93, array(1) declarations changed to array(*) */
+/*     interchanges two vectors.                                    */
+/*     uses unrolled loops for increments equal one.                */
+/*     jack dongarra, linpack, 3/11/78.                             */
+/*     modified 12/3/93, array(1) declarations changed to array(*)  */
 
-    /* Function Body */
     if (*n <= 0) {
         return;
     }
@@ -61,4 +60,3 @@ integer *incy;
         }
     }
 } /* dswap_ */
-

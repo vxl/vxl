@@ -1,6 +1,6 @@
 /*  -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
-	-lf2c -lm   (in that order)
+        -lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
@@ -10,8 +10,7 @@
 static integer c__2 = 2;
 static integer c__1 = 1;
 
-/* Subroutine */ int dlagv2_(a, lda, b, ldb, alphar, alphai, beta, csl, snl, 
-	csr, snr)
+/* Subroutine */ void dlagv2_(a, lda, b, ldb, alphar, alphai, beta, csl, snl, csr, snr)
 doublereal *a;
 integer *lda;
 doublereal *b;
@@ -19,18 +18,17 @@ integer *ldb;
 doublereal *alphar, *alphai, *beta, *csl, *snl, *csr, *snr;
 {
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset;
-    doublereal d__1, d__2, d__3, d__4, d__5, d__6;
+    doublereal d__1;
 
     /* Local variables */
-    extern /* Subroutine */ int drot_(), dlag2_();
+    extern /* Subroutine */ void drot_(), dlag2_();
     static doublereal r__, t, anorm, bnorm, h1, h2, h3, scale1, scale2;
-    extern /* Subroutine */ int dlasv2_();
+    extern /* Subroutine */ void dlasv2_();
     extern doublereal dlapy2_();
     static doublereal ascale, bscale;
     extern doublereal dlamch_();
     static doublereal wi, qq, rr, safmin;
-    extern /* Subroutine */ int dlartg_();
+    extern /* Subroutine */ void dlartg_();
     static doublereal wr1, wr2, ulp;
 
 
@@ -39,305 +37,230 @@ doublereal *alphar, *alphai, *beta, *csl, *snl, *csr, *snr;
 /*     Courant Institute, Argonne National Lab, and Rice University */
 /*     June 30, 1999 */
 
-/*     .. Scalar Arguments .. */
-/*     .. */
-/*     .. Array Arguments .. */
-/*     .. */
-
-/*  Purpose */
-/*  ======= */
-
-/*  DLAGV2 computes the Generalized Schur factorization of a real 2-by-2 */
-/*  matrix pencil (A,B) where B is upper triangular. This routine */
-/*  computes orthogonal (rotation) matrices given by CSL, SNL and CSR, */
-/*  SNR such that */
-
-/*  1) if the pencil (A,B) has two real eigenvalues (include 0/0 or 1/0 */
-/*     types), then */
-
-/*     [ a11 a12 ] := [  CSL  SNL ] [ a11 a12 ] [  CSR -SNR ] */
-/*     [  0  a22 ]    [ -SNL  CSL ] [ a21 a22 ] [  SNR  CSR ] */
-
-/*     [ b11 b12 ] := [  CSL  SNL ] [ b11 b12 ] [  CSR -SNR ] */
-/*     [  0  b22 ]    [ -SNL  CSL ] [  0  b22 ] [  SNR  CSR ], */
-
-/*  2) if the pencil (A,B) has a pair of complex conjugate eigenvalues, */
-/*     then */
-
-/*     [ a11 a12 ] := [  CSL  SNL ] [ a11 a12 ] [  CSR -SNR ] */
-/*     [ a21 a22 ]    [ -SNL  CSL ] [ a21 a22 ] [  SNR  CSR ] */
-
-/*     [ b11  0  ] := [  CSL  SNL ] [ b11 b12 ] [  CSR -SNR ] */
-/*     [  0  b22 ]    [ -SNL  CSL ] [  0  b22 ] [  SNR  CSR ] */
-
-/*     where b11 >= b22 > 0. */
-
-
-/*  Arguments */
-/*  ========= */
-
-/*  A       (input/output) DOUBLE PRECISION array, dimension (LDA, 2) */
-/*          On entry, the 2 x 2 matrix A. */
-/*          On exit, A is overwritten by the ``A-part'' of the */
-/*          generalized Schur form. */
-
-/*  LDA     (input) INTEGER */
-/*          THe leading dimension of the array A.  LDA >= 2. */
-
-/*  B       (input/output) DOUBLE PRECISION array, dimension (LDB, 2) */
-/*          On entry, the upper triangular 2 x 2 matrix B. */
-/*          On exit, B is overwritten by the ``B-part'' of the */
-/*          generalized Schur form. */
-
-/*  LDB     (input) INTEGER */
-/*          THe leading dimension of the array B.  LDB >= 2. */
-
-/*  ALPHAR  (output) DOUBLE PRECISION array, dimension (2) */
-/*  ALPHAI  (output) DOUBLE PRECISION array, dimension (2) */
-/*  BETA    (output) DOUBLE PRECISION array, dimension (2) */
-/*          (ALPHAR(k)+i*ALPHAI(k))/BETA(k) are the eigenvalues of the */
-/*          pencil (A,B), k=1,2, i = sqrt(-1).  Note that BETA(k) may */
-/*          be zero. */
-
-/*  CSL     (output) DOUBLE PRECISION */
-/*          The cosine of the left rotation matrix. */
-
-/*  SNL     (output) DOUBLE PRECISION */
-/*          The sine of the left rotation matrix. */
-
-/*  CSR     (output) DOUBLE PRECISION */
-/*          The cosine of the right rotation matrix. */
-
-/*  SNR     (output) DOUBLE PRECISION */
-/*          The sine of the right rotation matrix. */
-
-/*  Further Details */
-/*  =============== */
-
-/*  Based on contributions by */
-/*     Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA */
-
+/*  Purpose                                                               */
+/*  =======                                                               */
+/*                                                                        */
+/*  DLAGV2 computes the Generalized Schur factorization of a real 2-by-2  */
+/*  matrix pencil (A,B) where B is upper triangular. This routine         */
+/*  computes orthogonal (rotation) matrices given by CSL, SNL and CSR,    */
+/*  SNR such that                                                         */
+/*                                                                        */
+/*  1) if the pencil (A,B) has two real eigenvalues (include 0/0 or 1/0   */
+/*     types), then                                                       */
+/*                                                                        */
+/*     [ a11 a12 ] := [  CSL  SNL ] [ a11 a12 ] [  CSR -SNR ]             */
+/*     [  0  a22 ]    [ -SNL  CSL ] [ a21 a22 ] [  SNR  CSR ]             */
+/*                                                                        */
+/*     [ b11 b12 ] := [  CSL  SNL ] [ b11 b12 ] [  CSR -SNR ]             */
+/*     [  0  b22 ]    [ -SNL  CSL ] [  0  b22 ] [  SNR  CSR ],            */
+/*                                                                        */
+/*  2) if the pencil (A,B) has a pair of complex conjugate eigenvalues,   */
+/*     then                                                               */
+/*                                                                        */
+/*     [ a11 a12 ] := [  CSL  SNL ] [ a11 a12 ] [  CSR -SNR ]             */
+/*     [ a21 a22 ]    [ -SNL  CSL ] [ a21 a22 ] [  SNR  CSR ]             */
+/*                                                                        */
+/*     [ b11  0  ] := [  CSL  SNL ] [ b11 b12 ] [  CSR -SNR ]             */
+/*     [  0  b22 ]    [ -SNL  CSL ] [  0  b22 ] [  SNR  CSR ]             */
+/*                                                                        */
+/*     where b11 >= b22 > 0.                                              */
+/*                                                                        */
+/*                                                                        */
+/*  Arguments                                                             */
+/*  =========                                                             */
+/*                                                                        */
+/*  A       (input/output) DOUBLE PRECISION array, dimension (LDA, 2)     */
+/*          On entry, the 2 x 2 matrix A.                                 */
+/*          On exit, A is overwritten by the ``A-part'' of the            */
+/*          generalized Schur form.                                       */
+/*                                                                        */
+/*  LDA     (input) INTEGER                                               */
+/*          THe leading dimension of the array A.  LDA >= 2.              */
+/*                                                                        */
+/*  B       (input/output) DOUBLE PRECISION array, dimension (LDB, 2)     */
+/*          On entry, the upper triangular 2 x 2 matrix B.                */
+/*          On exit, B is overwritten by the ``B-part'' of the            */
+/*          generalized Schur form.                                       */
+/*                                                                        */
+/*  LDB     (input) INTEGER                                               */
+/*          THe leading dimension of the array B.  LDB >= 2.              */
+/*                                                                        */
+/*  ALPHAR  (output) DOUBLE PRECISION array, dimension (2)                */
+/*  ALPHAI  (output) DOUBLE PRECISION array, dimension (2)                */
+/*  BETA    (output) DOUBLE PRECISION array, dimension (2)                */
+/*          (ALPHAR(k)+i*ALPHAI(k))/BETA(k) are the eigenvalues of the    */
+/*          pencil (A,B), k=1,2, i = sqrt(-1).  Note that BETA(k) may     */
+/*          be zero.                                                      */
+/*                                                                        */
+/*  CSL     (output) DOUBLE PRECISION                                     */
+/*          The cosine of the left rotation matrix.                       */
+/*                                                                        */
+/*  SNL     (output) DOUBLE PRECISION                                     */
+/*          The sine of the left rotation matrix.                         */
+/*                                                                        */
+/*  CSR     (output) DOUBLE PRECISION                                     */
+/*          The cosine of the right rotation matrix.                      */
+/*                                                                        */
+/*  SNR     (output) DOUBLE PRECISION                                     */
+/*          The sine of the right rotation matrix.                        */
+/*                                                                        */
+/*  Further Details                                                       */
+/*  ===============                                                       */
+/*                                                                        */
+/*  Based on contributions by                                             */
+/*     Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA      */
+/*                                                                        */
 /*  ===================================================================== */
 
-/*     .. Parameters .. */
-/*     .. */
-/*     .. Local Scalars .. */
-/*     .. */
-/*     .. External Subroutines .. */
-/*     .. */
-/*     .. External Functions .. */
-/*     .. */
-/*     .. Intrinsic Functions .. */
-/*     .. */
-/*     .. Executable Statements .. */
-
-    /* Parameter adjustments */
-    a_dim1 = *lda;
-    a_offset = 1 + a_dim1 * 1;
-    a -= a_offset;
-    b_dim1 = *ldb;
-    b_offset = 1 + b_dim1 * 1;
-    b -= b_offset;
-    --alphar;
-    --alphai;
-    --beta;
-
-    /* Function Body */
     safmin = dlamch_("S", (ftnlen)1);
     ulp = dlamch_("P", (ftnlen)1);
 
 /*     Scale A */
 
-/* Computing MAX */
-    d__5 = (d__1 = a[a_dim1 + 1], abs(d__1)) + (d__2 = a[a_dim1 + 2], abs(
-	    d__2)), d__6 = (d__3 = a[(a_dim1 << 1) + 1], abs(d__3)) + (d__4 = 
-	    a[(a_dim1 << 1) + 2], abs(d__4)), d__5 = max(d__5,d__6);
-    anorm = max(d__5,safmin);
+    anorm = max(max(abs(a[0]) + abs(a[1]), abs(a[*lda]) + abs(a[*lda + 1])), safmin);
     ascale = 1. / anorm;
-    a[a_dim1 + 1] = ascale * a[a_dim1 + 1];
-    a[(a_dim1 << 1) + 1] = ascale * a[(a_dim1 << 1) + 1];
-    a[a_dim1 + 2] = ascale * a[a_dim1 + 2];
-    a[(a_dim1 << 1) + 2] = ascale * a[(a_dim1 << 1) + 2];
+    a[0] *= ascale;
+    a[1] *= ascale;
+    a[*lda] *= ascale;
+    a[*lda + 1] *= ascale;
 
 /*     Scale B */
 
-/* Computing MAX */
-    d__4 = (d__3 = b[b_dim1 + 1], abs(d__3)), d__5 = (d__1 = b[(b_dim1 << 1) 
-	    + 1], abs(d__1)) + (d__2 = b[(b_dim1 << 1) + 2], abs(d__2)), d__4 
-	    = max(d__4,d__5);
-    bnorm = max(d__4,safmin);
+    bnorm = max(max(abs(b[0]), abs(b[*ldb]) + abs(b[*ldb + 1])), safmin);
     bscale = 1. / bnorm;
-    b[b_dim1 + 1] = bscale * b[b_dim1 + 1];
-    b[(b_dim1 << 1) + 1] = bscale * b[(b_dim1 << 1) + 1];
-    b[(b_dim1 << 1) + 2] = bscale * b[(b_dim1 << 1) + 2];
+    b[0] *= bscale;
+    b[*ldb] *= bscale;
+    b[*ldb + 1] *= bscale;
 
 /*     Check if A can be deflated */
 
-    if ((d__1 = a[a_dim1 + 2], abs(d__1)) <= ulp) {
-	*csl = 1.;
-	*snl = 0.;
-	*csr = 1.;
-	*snr = 0.;
-	a[a_dim1 + 2] = 0.;
-	b[b_dim1 + 2] = 0.;
+    if (abs(a[1]) <= ulp) {
+        *csl = 1.;
+        *snl = 0.;
+        *csr = 1.;
+        *snr = 0.;
+        a[1] = 0.;
+        b[1] = 0.;
 
 /*     Check if B is singular */
 
-    } else if ((d__1 = b[b_dim1 + 1], abs(d__1)) <= ulp) {
-	dlartg_(&a[a_dim1 + 1], &a[a_dim1 + 2], csl, snl, &r__);
-	*csr = 1.;
-	*snr = 0.;
-	drot_(&c__2, &a[a_dim1 + 1], lda, &a[a_dim1 + 2], lda, csl, snl);
-	drot_(&c__2, &b[b_dim1 + 1], ldb, &b[b_dim1 + 2], ldb, csl, snl);
-	a[a_dim1 + 2] = 0.;
-	b[b_dim1 + 1] = 0.;
-	b[b_dim1 + 2] = 0.;
+    } else if (abs(b[0]) <= ulp) {
+        dlartg_(&a[0], &a[1], csl, snl, &r__);
+        *csr = 1.;
+        *snr = 0.;
+        drot_(&c__2, &a[0], lda, &a[1], lda, csl, snl);
+        drot_(&c__2, &b[0], ldb, &b[1], ldb, csl, snl);
+        a[1] = 0.;
+        b[0] = 0.;
+        b[1] = 0.;
 
-    } else if ((d__1 = b[(b_dim1 << 1) + 2], abs(d__1)) <= ulp) {
-	dlartg_(&a[(a_dim1 << 1) + 2], &a[a_dim1 + 2], csr, snr, &t);
-	*snr = -(*snr);
-	drot_(&c__2, &a[a_dim1 + 1], &c__1, &a[(a_dim1 << 1) + 1], &c__1, csr,
-		 snr);
-	drot_(&c__2, &b[b_dim1 + 1], &c__1, &b[(b_dim1 << 1) + 1], &c__1, csr,
-		 snr);
-	*csl = 1.;
-	*snl = 0.;
-	a[a_dim1 + 2] = 0.;
-	b[b_dim1 + 2] = 0.;
-	b[(b_dim1 << 1) + 2] = 0.;
+    } else if (abs(b[*ldb + 1]) <= ulp) {
+        dlartg_(&a[*lda + 1], &a[1], csr, snr, &t);
+        *snr = -(*snr);
+        drot_(&c__2, &a[0], &c__1, &a[*lda], &c__1, csr, snr);
+        drot_(&c__2, &b[0], &c__1, &b[*ldb], &c__1, csr, snr);
+        *csl = 1.;
+        *snl = 0.;
+        a[1] = 0.;
+        b[1] = 0.;
+        b[*ldb + 1] = 0.;
 
     } else {
 
 /*        B is nonsingular, first compute the eigenvalues of (A,B) */
 
-	dlag2_(&a[a_offset], lda, &b[b_offset], ldb, &safmin, &scale1, &
-		scale2, &wr1, &wr2, &wi);
+        dlag2_(a, lda, b, ldb, &safmin, &scale1, &scale2, &wr1, &wr2, &wi);
 
-	if (wi == 0.) {
+        if (wi == 0.) {
 
 /*           two real eigenvalues, compute s*A-w*B */
 
-	    h1 = scale1 * a[a_dim1 + 1] - wr1 * b[b_dim1 + 1];
-	    h2 = scale1 * a[(a_dim1 << 1) + 1] - wr1 * b[(b_dim1 << 1) + 1];
-	    h3 = scale1 * a[(a_dim1 << 1) + 2] - wr1 * b[(b_dim1 << 1) + 2];
+            h1 = scale1 * a[0] - wr1 * b[0];
+            h2 = scale1 * a[*lda    ] - wr1 * b[*ldb    ];
+            h3 = scale1 * a[*lda + 1] - wr1 * b[*ldb + 1];
 
-	    rr = dlapy2_(&h1, &h2);
-	    d__1 = scale1 * a[a_dim1 + 2];
-	    qq = dlapy2_(&d__1, &h3);
+            rr = dlapy2_(&h1, &h2);
+            d__1 = scale1 * a[1];
+            qq = dlapy2_(&d__1, &h3);
 
-	    if (rr > qq) {
+            if (rr > qq) {
+/*              find right rotation matrix to zero 1,1 element of (sA - wB) */
+                dlartg_(&h2, &h1, csr, snr, &t);
+            } else {
+/*              find right rotation matrix to zero 2,1 element of (sA - wB) */
+                d__1 = scale1 * a[1];
+                dlartg_(&h3, &d__1, csr, snr, &t);
+            }
 
-/*              find right rotation matrix to zero 1,1 element of */
-/*              (sA - wB) */
-
-		dlartg_(&h2, &h1, csr, snr, &t);
-
-	    } else {
-
-/*              find right rotation matrix to zero 2,1 element of */
-/*              (sA - wB) */
-
-		d__1 = scale1 * a[a_dim1 + 2];
-		dlartg_(&h3, &d__1, csr, snr, &t);
-
-	    }
-
-	    *snr = -(*snr);
-	    drot_(&c__2, &a[a_dim1 + 1], &c__1, &a[(a_dim1 << 1) + 1], &c__1, 
-		    csr, snr);
-	    drot_(&c__2, &b[b_dim1 + 1], &c__1, &b[(b_dim1 << 1) + 1], &c__1, 
-		    csr, snr);
+            *snr = -(*snr);
+            drot_(&c__2, &a[0], &c__1, &a[*lda], &c__1, csr, snr);
+            drot_(&c__2, &b[0], &c__1, &b[*ldb], &c__1, csr, snr);
 
 /*           compute inf norms of A and B */
 
-/* Computing MAX */
-	    d__5 = (d__1 = a[a_dim1 + 1], abs(d__1)) + (d__2 = a[(a_dim1 << 1)
-		     + 1], abs(d__2)), d__6 = (d__3 = a[a_dim1 + 2], abs(d__3)
-		    ) + (d__4 = a[(a_dim1 << 1) + 2], abs(d__4));
-	    h1 = max(d__5,d__6);
-/* Computing MAX */
-	    d__5 = (d__1 = b[b_dim1 + 1], abs(d__1)) + (d__2 = b[(b_dim1 << 1)
-		     + 1], abs(d__2)), d__6 = (d__3 = b[b_dim1 + 2], abs(d__3)
-		    ) + (d__4 = b[(b_dim1 << 1) + 2], abs(d__4));
-	    h2 = max(d__5,d__6);
+            h1 = max(abs(a[0]) + abs(a[*lda]),
+                     abs(a[1]) + abs(a[*lda + 1]));
+            h2 = max(abs(b[0]) + abs(b[*ldb]),
+                     abs(b[1]) + abs(b[*ldb + 1]));
 
-	    if (scale1 * h1 >= abs(wr1) * h2) {
-
+            if (scale1 * h1 >= abs(wr1) * h2) {
 /*              find left rotation matrix Q to zero out B(2,1) */
-
-		dlartg_(&b[b_dim1 + 1], &b[b_dim1 + 2], csl, snl, &r__);
-
-	    } else {
-
+                dlartg_(&b[0], &b[1], csl, snl, &r__);
+            } else {
 /*              find left rotation matrix Q to zero out A(2,1) */
+                dlartg_(&a[0], &a[1], csl, snl, &r__);
+            }
 
-		dlartg_(&a[a_dim1 + 1], &a[a_dim1 + 2], csl, snl, &r__);
+            drot_(&c__2, &a[0], lda, &a[1], lda, csl, snl);
+            drot_(&c__2, &b[0], ldb, &b[1], ldb, csl, snl);
 
-	    }
+            a[1] = 0.;
+            b[1] = 0.;
 
-	    drot_(&c__2, &a[a_dim1 + 1], lda, &a[a_dim1 + 2], lda, csl, snl);
-	    drot_(&c__2, &b[b_dim1 + 1], ldb, &b[b_dim1 + 2], ldb, csl, snl);
-
-	    a[a_dim1 + 2] = 0.;
-	    b[b_dim1 + 2] = 0.;
-
-	} else {
+        } else {
 
 /*           a pair of complex conjugate eigenvalues */
 /*           first compute the SVD of the matrix B */
 
-	    dlasv2_(&b[b_dim1 + 1], &b[(b_dim1 << 1) + 1], &b[(b_dim1 << 1) + 
-		    2], &r__, &t, snr, csr, snl, csl);
+            dlasv2_(&b[0], &b[*ldb], &b[*ldb + 1], &r__, &t, snr, csr, snl, csl);
 
 /*           Form (A,B) := Q(A,B)Z' where Q is left rotation matrix and */
 /*           Z is right rotation matrix computed from DLASV2 */
 
-	    drot_(&c__2, &a[a_dim1 + 1], lda, &a[a_dim1 + 2], lda, csl, snl);
-	    drot_(&c__2, &b[b_dim1 + 1], ldb, &b[b_dim1 + 2], ldb, csl, snl);
-	    drot_(&c__2, &a[a_dim1 + 1], &c__1, &a[(a_dim1 << 1) + 1], &c__1, 
-		    csr, snr);
-	    drot_(&c__2, &b[b_dim1 + 1], &c__1, &b[(b_dim1 << 1) + 1], &c__1, 
-		    csr, snr);
+            drot_(&c__2, &a[0], lda, &a[1], lda, csl, snl);
+            drot_(&c__2, &b[0], ldb, &b[1], ldb, csl, snl);
+            drot_(&c__2, &a[0], &c__1, &a[*lda], &c__1, csr, snr);
+            drot_(&c__2, &b[0], &c__1, &b[*ldb], &c__1, csr, snr);
 
-	    b[b_dim1 + 2] = 0.;
-	    b[(b_dim1 << 1) + 1] = 0.;
-
-	}
-
+            b[1] = 0.;
+            b[*ldb] = 0.;
+        }
     }
 
 /*     Unscaling */
 
-    a[a_dim1 + 1] = anorm * a[a_dim1 + 1];
-    a[a_dim1 + 2] = anorm * a[a_dim1 + 2];
-    a[(a_dim1 << 1) + 1] = anorm * a[(a_dim1 << 1) + 1];
-    a[(a_dim1 << 1) + 2] = anorm * a[(a_dim1 << 1) + 2];
-    b[b_dim1 + 1] = bnorm * b[b_dim1 + 1];
-    b[b_dim1 + 2] = bnorm * b[b_dim1 + 2];
-    b[(b_dim1 << 1) + 1] = bnorm * b[(b_dim1 << 1) + 1];
-    b[(b_dim1 << 1) + 2] = bnorm * b[(b_dim1 << 1) + 2];
+    a[0] *= anorm;
+    a[1] *= anorm;
+    a[*lda] *= anorm;
+    a[*lda + 1] *= anorm;
+    b[0] *= bnorm;
+    b[1] *= bnorm;
+    b[*ldb] *= bnorm;
+    b[*ldb + 1] *= bnorm;
 
     if (wi == 0.) {
-	alphar[1] = a[a_dim1 + 1];
-	alphar[2] = a[(a_dim1 << 1) + 2];
-	alphai[1] = 0.;
-	alphai[2] = 0.;
-	beta[1] = b[b_dim1 + 1];
-	beta[2] = b[(b_dim1 << 1) + 2];
+        alphar[0] = a[0];
+        alphar[1] = a[*lda + 1];
+        alphai[0] = 0.;
+        alphai[1] = 0.;
+        beta[0] = b[0];
+        beta[1] = b[*ldb + 1];
     } else {
-	alphar[1] = anorm * wr1 / scale1 / bnorm;
-	alphai[1] = anorm * wi / scale1 / bnorm;
-	alphar[2] = alphar[1];
-	alphai[2] = -alphai[1];
-	beta[1] = 1.;
-	beta[2] = 1.;
+        alphar[0] = anorm * wr1 / scale1 / bnorm;
+        alphai[0] = anorm * wi / scale1 / bnorm;
+        alphar[1] = alphar[0];
+        alphai[1] = -alphai[0];
+        beta[0] = 1.;
+        beta[1] = 1.;
     }
-
-/* L10: */
-
-    return 0;
-
-/*     End of DLAGV2 */
-
 } /* dlagv2_ */
-

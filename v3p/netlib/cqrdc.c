@@ -42,7 +42,7 @@ integer *job;
     extern /* Subroutine */ void caxpy_();
     static complex nrmxl;
     extern doublereal scnrm2_();
-    static integer jj, jp, pl, pu;
+    static integer jp, pl, pu;
     static real tt, maxnrm;
 
 /*************************************************************************/
@@ -127,8 +127,6 @@ integer *job;
 /*     fortran aimag,amax1,cabs,cmplx,csqrt,min0,real                    */
 /*                                                                       */
 /*************************************************************************/
-
-    /* Function Body */
 
     pl = 0;
     pu = -1;
@@ -269,6 +267,4 @@ L120:
         qraux[l].r = x[i__1].r, qraux[l].i = x[i__1].i;
         x[i__1].r = -nrmxl.r, x[i__1].i = -nrmxl.i;
     }
-    return;
 } /* cqrdc_ */
-

@@ -33,7 +33,7 @@ ftnlen jobvl_len;
 ftnlen jobvr_len;
 {
     /* System generated locals */
-    integer i__1, i__2, i__3, i__4;
+    integer i__1, i__2;
     doublereal d__1;
 
     /* Builtin functions */
@@ -163,8 +163,6 @@ ftnlen jobvr_len;
 /*                                                                        */
 /*  ===================================================================== */
 
-    /* Function Body */
-
     *info = 0;
     wantvl = lsame_(jobvl, "V", 1L, 1L);
     wantvr = lsame_(jobvr, "V", 1L, 1L);
@@ -176,9 +174,9 @@ ftnlen jobvr_len;
         *info = -3;
     } else if (*lda < max(1,*n)) {
         *info = -5;
-    } else if (*ldvl < 1 || wantvl && *ldvl < *n) {
+    } else if (*ldvl < 1 || (wantvl && *ldvl < *n)) {
         *info = -8;
-    } else if (*ldvr < 1 || wantvr && *ldvr < *n) {
+    } else if (*ldvr < 1 || (wantvr && *ldvr < *n)) {
         *info = -10;
     }
 
@@ -198,20 +196,20 @@ ftnlen jobvr_len;
         maxwrk = *n + *n * ilaenv_(&c__1, "ZGEHRD", " ", n, &c__1, n, &c__0, 6L, 1L);
         if (! wantvl && ! wantvr) {
             minwrk = max(1,(*n<<1));
-            i__1 = ilaenv_(&c__8, "ZHSEQR", "EN", n, &c__1, n, &c_n1, 6L, 2L);
-            maxb = max(i__1,2);
-            i__4 = ilaenv_(&c__4, "ZHSEQR", "EN", n, &c__1, n, & c_n1, 6L, 2L);
-            k = min(min(maxb,*n),max(2,i__4));
+            maxb = ilaenv_(&c__8, "ZHSEQR", "EN", n, &c__1, n, &c_n1, 6L, 2L);
+            maxb = max(maxb,2);
+            k = ilaenv_(&c__4, "ZHSEQR", "EN", n, &c__1, n, & c_n1, 6L, 2L);
+            k = min(min(maxb,*n),max(2,k));
             hswork = max(k * (k + 2),(*n<<1));
             maxwrk = max(maxwrk,hswork);
         } else {
             minwrk = max(1,(*n<<1));
-            i__2 = *n + (*n - 1) * ilaenv_(&c__1, "ZUNGHR", " ", n, &c__1, n, &c_n1, 6L, 1L);
-            maxwrk = max(maxwrk,i__2);
-            i__1 = ilaenv_(&c__8, "ZHSEQR", "SV", n, &c__1, n, &c_n1, 6L, 2L);
-            maxb = max(i__1,2);
-            i__4 = ilaenv_(&c__4, "ZHSEQR", "SV", n, &c__1, n, & c_n1, 6L, 2L);
-            k = min(min(maxb,*n),max(2,i__4));
+            i__1 = *n + (*n - 1) * ilaenv_(&c__1, "ZUNGHR", " ", n, &c__1, n, &c_n1, 6L, 1L);
+            maxwrk = max(maxwrk,i__1);
+            maxb = ilaenv_(&c__8, "ZHSEQR", "SV", n, &c__1, n, &c_n1, 6L, 2L);
+            maxb = max(maxb,2);
+            k = ilaenv_(&c__4, "ZHSEQR", "SV", n, &c__1, n, & c_n1, 6L, 2L);
+            k = min(min(maxb,*n),max(2,k));
             hswork = max(k * (k + 2),(*n<<1));
             maxwrk = max(max(maxwrk,hswork),(*n<<1));
         }
@@ -369,8 +367,8 @@ ftnlen jobvr_len;
             scl = 1. / dznrm2_(n, &vl[i * *ldvl], &c__1);
             zdscal_(n, &scl, &vl[i * *ldvl], &c__1);
             for (k = 0; k < *n; ++k) {
-                i__3 = k + i * *ldvl;
-                rwork[irwork + k] = vl[i__3].r * vl[i__3].r + vl[i__3].i * vl[i__3].i;
+                i__1 = k + i * *ldvl; /* index [k,i] */
+                rwork[irwork + k] = vl[i__1].r * vl[i__1].r + vl[i__1].i * vl[i__1].i;
             }
             k = idamax_(n, &rwork[irwork], &c__1) - 1;
             d_cnjg(&tmp, &vl[k + i * *ldvl]);
@@ -395,8 +393,8 @@ ftnlen jobvr_len;
             scl = 1. / dznrm2_(n, &vr[i * *ldvr], &c__1);
             zdscal_(n, &scl, &vr[i * *ldvr], &c__1);
             for (k = 0; k < *n; ++k) {
-                i__3 = k + i * *ldvr;
-                rwork[irwork + k] = vr[i__3].r * vr[i__3].r + vr[i__3].i * vr[i__3].i;
+                i__1 = k + i * *ldvr; /* index [k,i] */
+                rwork[irwork + k] = vr[i__1].r * vr[i__1].r + vr[i__1].i * vr[i__1].i;
             }
             k = idamax_(n, &rwork[irwork], &c__1) - 1;
             d_cnjg(&tmp, &vr[k + i * *ldvr]);
@@ -412,19 +410,14 @@ ftnlen jobvr_len;
 L50:
     if (scalea) {
         i__1 = *n - *info;
-        i__2 = max(*n - *info, 1);
-        zlascl_("G", &c__0, &c__0, &cscale, &anrm, &i__1, &c__1, &w[*info],
-                &i__2, &ierr, 1L);
+        i__2 = max(i__1, 1);
+        zlascl_("G", &c__0, &c__0, &cscale, &anrm, &i__1, &c__1, &w[*info], &i__2, &ierr, 1L);
         if (*info > 0) {
             i__1 = ilo - 1;
-            zlascl_("G", &c__0, &c__0, &cscale, &anrm, &i__1, &c__1, w, n,
-                    &ierr, 1L);
+            zlascl_("G", &c__0, &c__0, &cscale, &anrm, &i__1, &c__1, w, n, &ierr, 1L);
         }
     }
 
     work[0].r = (doublereal) maxwrk, work[0].i = 0.;
 
-/*     End of ZGEEV */
-
 } /* zgeev_ */
-

@@ -33,7 +33,6 @@ real *cdf;
 
     /* System generated locals */
     real danu2;
-    doublereal d__1;
 
     /* Builtin functions */
     double sqrt(), exp(), pow(), log();
@@ -58,52 +57,52 @@ real *cdf;
     static doublereal dnu;
     static doublereal sum;
 
-/*     PURPOSE--THIS SUBROUTINE COMPUTES THE CUMULATIVE DISTRIBUTION */
-/*              FUNCTION VALUE FOR THE CHI-SQUARED DISTRIBUTION */
-/*              WITH INTEGER DEGREES OF FREEDOM PARAMETER = NU. */
-/*              THIS DISTRIBUTION IS DEFINED FOR ALL NON-NEGATIVE X. */
-/*              THE PROBABILITY DENSITY FUNCTION IS GIVEN */
-/*              IN THE REFERENCES BELOW. */
-/*     INPUT  ARGUMENTS--X      = THE SINGLE PRECISION VALUE AT */
-/*                                WHICH THE CUMULATIVE DISTRIBUTION */
-/*                                FUNCTION IS TO BE EVALUATED. */
-/*                                X SHOULD BE NON-NEGATIVE. */
-/*                     --NU     = THE INTEGER NUMBER OF DEGREES */
-/*                                OF FREEDOM. */
-/*                                NU SHOULD BE POSITIVE. */
-/*     OUTPUT ARGUMENTS--CDF    = THE SINGLE PRECISION CUMULATIVE */
-/*                                DISTRIBUTION FUNCTION VALUE. */
-/*     OUTPUT--THE SINGLE PRECISION CUMULATIVE DISTRIBUTION */
-/*             FUNCTION VALUE CDF FOR THE CHI-SQUARED DISTRIBUTION */
-/*             WITH DEGREES OF FREEDOM PARAMETER = NU. */
-/*     PRINTING--NONE UNLESS AN INPUT ARGUMENT ERROR CONDITION EXISTS. */
-/*     RESTRICTIONS--X SHOULD BE NON-NEGATIVE. */
-/*                 --NU SHOULD BE A POSITIVE INTEGER VARIABLE. */
-/*     OTHER DATAPAC   SUBROUTINES NEEDED--NORCDF. */
-/*     FORTRAN LIBRARY SUBROUTINES NEEDED--DSQRT, DEXP. */
-/*     MODE OF INTERNAL OPERATIONS--DOUBLE PRECISION. */
-/*     LANGUAGE--ANSI FORTRAN. */
-/*     REFERENCES--NATIONAL BUREAU OF STANDARDS APPLIED MATHEMATICS */
-/*                 SERIES 55, 1964, PAGE 941, FORMULAE 26.4.4 AND 26.4.5.  */
-/*               --JOHNSON AND KOTZ, CONTINUOUS UNIVARIATE */
-/*                 DISTRIBUTIONS--1, 1970, PAGE 176, */
-/*                 FORMULA 28, AND PAGE 180, FORMULA 33.1. */
-/*               --OWEN, HANDBOOK OF STATISTICAL TABLES, */
-/*                 1962, PAGES 50-55. */
-/*               --PEARSON AND HARTLEY, BIOMETRIKA TABLES */
-/*                 FOR STATISTICIANS, VOLUME 1, 1954, */
-/*                 PAGES 122-131. */
-/*     WRITTEN BY--JAMES J. FILLIBEN */
-/*                 STATISTICAL ENGINEERING LABORATORY (205.03) */
-/*                 NATIONAL BUREAU OF STANDARDS */
-/*                 WASHINGTON, D. C. 20234 */
-/*                 PHONE:  301-921-2315 */
-/*     ORIGINAL VERSION--JUNE      1972. */
-/*     UPDATED         --MAY       1974. */
-/*     UPDATED         --SEPTEMBER 1975. */
-/*     UPDATED         --NOVEMBER  1975. */
-/*     UPDATED         --OCTOBER   1976. */
-
+/*     PURPOSE--THIS SUBROUTINE COMPUTES THE CUMULATIVE DISTRIBUTION     */
+/*              FUNCTION VALUE FOR THE CHI-SQUARED DISTRIBUTION          */
+/*              WITH INTEGER DEGREES OF FREEDOM PARAMETER = NU.          */
+/*              THIS DISTRIBUTION IS DEFINED FOR ALL NON-NEGATIVE X.     */
+/*              THE PROBABILITY DENSITY FUNCTION IS GIVEN                */
+/*              IN THE REFERENCES BELOW.                                 */
+/*     INPUT  ARGUMENTS--X      = THE SINGLE PRECISION VALUE AT          */
+/*                                WHICH THE CUMULATIVE DISTRIBUTION      */
+/*                                FUNCTION IS TO BE EVALUATED.           */
+/*                                X SHOULD BE NON-NEGATIVE.              */
+/*                     --NU     = THE INTEGER NUMBER OF DEGREES          */
+/*                                OF FREEDOM.                            */
+/*                                NU SHOULD BE POSITIVE.                 */
+/*     OUTPUT ARGUMENTS--CDF    = THE SINGLE PRECISION CUMULATIVE        */
+/*                                DISTRIBUTION FUNCTION VALUE.           */
+/*     OUTPUT--THE SINGLE PRECISION CUMULATIVE DISTRIBUTION              */
+/*             FUNCTION VALUE CDF FOR THE CHI-SQUARED DISTRIBUTION       */
+/*             WITH DEGREES OF FREEDOM PARAMETER = NU.                   */
+/*     PRINTING--NONE UNLESS AN INPUT ARGUMENT ERROR CONDITION EXISTS.   */
+/*     RESTRICTIONS--X SHOULD BE NON-NEGATIVE.                           */
+/*                 --NU SHOULD BE A POSITIVE INTEGER VARIABLE.           */
+/*     OTHER DATAPAC   SUBROUTINES NEEDED--NORCDF.                       */
+/*     FORTRAN LIBRARY SUBROUTINES NEEDED--DSQRT, DEXP.                  */
+/*     MODE OF INTERNAL OPERATIONS--DOUBLE PRECISION.                    */
+/*     LANGUAGE--ANSI FORTRAN.                                           */
+/*     REFERENCES--NATIONAL BUREAU OF STANDARDS APPLIED MATHEMATICS      */
+/*                 SERIES 55, 1964, PAGE 941, FORMULAE 26.4.4 AND 26.4.5.*/
+/*               --JOHNSON AND KOTZ, CONTINUOUS UNIVARIATE               */
+/*                 DISTRIBUTIONS--1, 1970, PAGE 176,                     */
+/*                 FORMULA 28, AND PAGE 180, FORMULA 33.1.               */
+/*               --OWEN, HANDBOOK OF STATISTICAL TABLES,                 */
+/*                 1962, PAGES 50-55.                                    */
+/*               --PEARSON AND HARTLEY, BIOMETRIKA TABLES                */
+/*                 FOR STATISTICIANS, VOLUME 1, 1954,                    */
+/*                 PAGES 122-131.                                        */
+/*     WRITTEN BY--JAMES J. FILLIBEN                                     */
+/*                 STATISTICAL ENGINEERING LABORATORY (205.03)           */
+/*                 NATIONAL BUREAU OF STANDARDS                          */
+/*                 WASHINGTON, D. C. 20234                               */
+/*                 PHONE:  301-921-2315                                  */
+/*     ORIGINAL VERSION--JUNE      1972.                                 */
+/*     UPDATED         --MAY       1974.                                 */
+/*     UPDATED         --SEPTEMBER 1975.                                 */
+/*     UPDATED         --NOVEMBER  1975.                                 */
+/*     UPDATED         --OCTOBER   1976.                                 */
+/*                                                                       */
 /* --------------------------------------------------------------------- */
 
 /*     CHECK THE INPUT ARGUMENTS FOR ERRORS */
@@ -120,8 +119,6 @@ real *cdf;
         *cdf = 0.f;
         return;
     }
-
-/* -----START POINT----------------------------------------------------- */
 
     dx = *x;
     anu = (real) (*nu);
@@ -213,7 +210,7 @@ L1000:
 
     sum *= exp(-dx / 2.);
     if (ievodd != 0) {
-        sum = sqrt(2. / pi) * sum;
+        sum *= sqrt(2. / pi);
         spchi = (float)chi;
         norcdf_(&spchi, &cdfn);
         dcdfn = cdfn;
@@ -230,8 +227,8 @@ L1000:
 
 L2000:
     dfact = dnu * 4.5;
-    d__1 = dx / dnu;
-    u = (float)(pow(d__1, dpower) - 1.f + 1.f / dfact) * sqrtf(dfact);
+    u = (float)(dx / dnu);
+    u = (float)(pow(u, dpower) - 1.f + 1.f / dfact) * sqrtf(dfact);
     norcdf_(&u, &cdfn);
     *cdf = cdfn;
     return;
@@ -259,7 +256,6 @@ L3000:
     *cdf = cdfn;
 } /* chscdf_ */
 
-/* NORCDF */
 /* Subroutine */ void norcdf_(x, cdf)
 real *x, *cdf;
 {
@@ -281,46 +277,42 @@ real *x, *cdf;
     /* Local variables */
     static real t, z;
 
-
-/*     PURPOSE--THIS SUBROUTINE COMPUTES THE CUMULATIVE DISTRIBUTION */
-/*              FUNCTION VALUE FOR THE NORMAL (GAUSSIAN) */
-/*              DISTRIBUTION WITH MEAN = 0 AND STANDARD DEVIATION = 1. */
-/*              THIS DISTRIBUTION IS DEFINED FOR ALL X AND HAS */
-/*              THE PROBABILITY DENSITY FUNCTION */
-/*              F(X) = (1/SQRT(2*PI))*EXP(-X*X/2). */
-/*     INPUT  ARGUMENTS--X      = THE SINGLE PRECISION VALUE AT */
-/*                                WHICH THE CUMULATIVE DISTRIBUTION */
-/*                                FUNCTION IS TO BE EVALUATED. */
-/*     OUTPUT ARGUMENTS--CDF    = THE SINGLE PRECISION CUMULATIVE */
-/*                                DISTRIBUTION FUNCTION VALUE. */
-/*     OUTPUT--THE SINGLE PRECISION CUMULATIVE DISTRIBUTION */
-/*             FUNCTION VALUE CDF. */
-/*     PRINTING--NONE. */
-/*     RESTRICTIONS--NONE. */
-/*     OTHER DATAPAC   SUBROUTINES NEEDED--NONE. */
-/*     FORTRAN LIBRARY SUBROUTINES NEEDED--EXP. */
-/*     MODE OF INTERNAL OPERATIONS--SINGLE PRECISION. */
-/*     LANGUAGE--ANSI FORTRAN. */
-/*     REFERENCES--NATIONAL BUREAU OF STANDARDS APPLIED MATHEMATICS */
-/*                 SERIES 55, 1964, PAGE 932, FORMULA 26.2.17. */
-/*               --JOHNSON AND KOTZ, CONTINUOUS UNIVARIATE */
-/*                 DISTRIBUTIONS--1, 1970, PAGES 40-111. */
-/*     WRITTEN BY--JAMES J. FILLIBEN */
-/*                 STATISTICAL ENGINEERING LABORATORY (205.03) */
-/*                 NATIONAL BUREAU OF STANDARDS */
-/*                 WASHINGTON, D. C. 20234 */
-/*                 PHONE:  301-921-2315 */
-/*     ORIGINAL VERSION--JUNE      1972. */
-/*     UPDATED         --SEPTEMBER 1975. */
-/*     UPDATED         --NOVEMBER  1975. */
-
+/*     PURPOSE--THIS SUBROUTINE COMPUTES THE CUMULATIVE DISTRIBUTION     */
+/*              FUNCTION VALUE FOR THE NORMAL (GAUSSIAN)                 */
+/*              DISTRIBUTION WITH MEAN = 0 AND STANDARD DEVIATION = 1.   */
+/*              THIS DISTRIBUTION IS DEFINED FOR ALL X AND HAS           */
+/*              THE PROBABILITY DENSITY FUNCTION                         */
+/*              F(X) = (1/SQRT(2*PI))*EXP(-X*X/2).                       */
+/*     INPUT  ARGUMENTS--X      = THE SINGLE PRECISION VALUE AT          */
+/*                                WHICH THE CUMULATIVE DISTRIBUTION      */
+/*                                FUNCTION IS TO BE EVALUATED.           */
+/*     OUTPUT ARGUMENTS--CDF    = THE SINGLE PRECISION CUMULATIVE        */
+/*                                DISTRIBUTION FUNCTION VALUE.           */
+/*     OUTPUT--THE SINGLE PRECISION CUMULATIVE DISTRIBUTION              */
+/*             FUNCTION VALUE CDF.                                       */
+/*     PRINTING--NONE.                                                   */
+/*     RESTRICTIONS--NONE.                                               */
+/*     OTHER DATAPAC   SUBROUTINES NEEDED--NONE.                         */
+/*     FORTRAN LIBRARY SUBROUTINES NEEDED--EXP.                          */
+/*     MODE OF INTERNAL OPERATIONS--SINGLE PRECISION.                    */
+/*     LANGUAGE--ANSI FORTRAN.                                           */
+/*     REFERENCES--NATIONAL BUREAU OF STANDARDS APPLIED MATHEMATICS      */
+/*                 SERIES 55, 1964, PAGE 932, FORMULA 26.2.17.           */
+/*               --JOHNSON AND KOTZ, CONTINUOUS UNIVARIATE               */
+/*                 DISTRIBUTIONS--1, 1970, PAGES 40-111.                 */
+/*     WRITTEN BY--JAMES J. FILLIBEN                                     */
+/*                 STATISTICAL ENGINEERING LABORATORY (205.03)           */
+/*                 NATIONAL BUREAU OF STANDARDS                          */
+/*                 WASHINGTON, D. C. 20234                               */
+/*                 PHONE:  301-921-2315                                  */
+/*     ORIGINAL VERSION--JUNE      1972.                                 */
+/*     UPDATED         --SEPTEMBER 1975.                                 */
+/*     UPDATED         --NOVEMBER  1975.                                 */
+/*                                                                       */
 /* --------------------------------------------------------------------- */
 
 /*     CHECK THE INPUT ARGUMENTS FOR ERRORS. */
-/*     NO INPUT ARGUMENT ERRORS POSSIBLE */
-/*     FOR THIS DISTRIBUTION. */
-
-/* -----START POINT----------------------------------------------------- */
+/*     NO INPUT ARGUMENT ERRORS POSSIBLE FOR THIS DISTRIBUTION. */
 
     z = *x;
     if (z < 0.f)
@@ -360,7 +352,6 @@ doublereal *cdf;
 
     /* System generated locals */
     doublereal danu2;
-    doublereal d__1;
 
     /* Builtin functions */
     double sqrt(), exp(), pow(), log();
@@ -384,52 +375,52 @@ doublereal *cdf;
     static doublereal dnu;
     static doublereal sum;
 
-/*     PURPOSE--THIS SUBROUTINE COMPUTES THE CUMULATIVE DISTRIBUTION */
-/*              FUNCTION VALUE FOR THE CHI-SQUARED DISTRIBUTION */
-/*              WITH INTEGER DEGREES OF FREEDOM PARAMETER = NU. */
-/*              THIS DISTRIBUTION IS DEFINED FOR ALL NON-NEGATIVE X. */
-/*              THE PROBABILITY DENSITY FUNCTION IS GIVEN */
-/*              IN THE REFERENCES BELOW. */
-/*     INPUT  ARGUMENTS--X      = THE DOUBLE PRECISION VALUE AT */
-/*                                WHICH THE CUMULATIVE DISTRIBUTION */
-/*                                FUNCTION IS TO BE EVALUATED. */
-/*                                X SHOULD BE NON-NEGATIVE. */
-/*                     --NU     = THE INTEGER NUMBER OF DEGREES */
-/*                                OF FREEDOM. */
-/*                                NU SHOULD BE POSITIVE. */
-/*     OUTPUT ARGUMENTS--CDF    = THE DOUBLE PRECISION CUMULATIVE */
-/*                                DISTRIBUTION FUNCTION VALUE. */
-/*     OUTPUT--THE DOUBLE PRECISION CUMULATIVE DISTRIBUTION */
-/*             FUNCTION VALUE CDF FOR THE CHI-SQUARED DISTRIBUTION */
-/*             WITH DEGREES OF FREEDOM PARAMETER = NU. */
-/*     PRINTING--NONE UNLESS AN INPUT ARGUMENT ERROR CONDITION EXISTS. */
-/*     RESTRICTIONS--X SHOULD BE NON-NEGATIVE. */
-/*                 --NU SHOULD BE A POSITIVE INTEGER VARIABLE. */
-/*     OTHER DATAPAC   SUBROUTINES NEEDED--NORCDF. */
-/*     FORTRAN LIBRARY SUBROUTINES NEEDED--DSQRT, DEXP. */
-/*     MODE OF INTERNAL OPERATIONS--DOUBLE PRECISION. */
-/*     LANGUAGE--ANSI FORTRAN. */
-/*     REFERENCES--NATIONAL BUREAU OF STANDARDS APPLIED MATHEMATICS */
-/*                 SERIES 55, 1964, PAGE 941, FORMULAE 26.4.4 AND 26.4.5.  */
-/*               --JOHNSON AND KOTZ, CONTINUOUS UNIVARIATE */
-/*                 DISTRIBUTIONS--1, 1970, PAGE 176, */
-/*                 FORMULA 28, AND PAGE 180, FORMULA 33.1. */
-/*               --OWEN, HANDBOOK OF STATISTICAL TABLES, */
-/*                 1962, PAGES 50-55. */
-/*               --PEARSON AND HARTLEY, BIOMETRIKA TABLES */
-/*                 FOR STATISTICIANS, VOLUME 1, 1954, */
-/*                 PAGES 122-131. */
-/*     WRITTEN BY--JAMES J. FILLIBEN */
-/*                 STATISTICAL ENGINEERING LABORATORY (205.03) */
-/*                 NATIONAL BUREAU OF STANDARDS */
-/*                 WASHINGTON, D. C. 20234 */
-/*                 PHONE:  301-921-2315 */
-/*     ORIGINAL VERSION--JUNE      1972. */
-/*     UPDATED         --MAY       1974. */
-/*     UPDATED         --SEPTEMBER 1975. */
-/*     UPDATED         --NOVEMBER  1975. */
-/*     UPDATED         --OCTOBER   1976. */
-
+/*     PURPOSE--THIS SUBROUTINE COMPUTES THE CUMULATIVE DISTRIBUTION     */
+/*              FUNCTION VALUE FOR THE CHI-SQUARED DISTRIBUTION          */
+/*              WITH INTEGER DEGREES OF FREEDOM PARAMETER = NU.          */
+/*              THIS DISTRIBUTION IS DEFINED FOR ALL NON-NEGATIVE X.     */
+/*              THE PROBABILITY DENSITY FUNCTION IS GIVEN                */
+/*              IN THE REFERENCES BELOW.                                 */
+/*     INPUT  ARGUMENTS--X      = THE DOUBLE PRECISION VALUE AT          */
+/*                                WHICH THE CUMULATIVE DISTRIBUTION      */
+/*                                FUNCTION IS TO BE EVALUATED.           */
+/*                                X SHOULD BE NON-NEGATIVE.              */
+/*                     --NU     = THE INTEGER NUMBER OF DEGREES          */
+/*                                OF FREEDOM.                            */
+/*                                NU SHOULD BE POSITIVE.                 */
+/*     OUTPUT ARGUMENTS--CDF    = THE DOUBLE PRECISION CUMULATIVE        */
+/*                                DISTRIBUTION FUNCTION VALUE.           */
+/*     OUTPUT--THE DOUBLE PRECISION CUMULATIVE DISTRIBUTION              */
+/*             FUNCTION VALUE CDF FOR THE CHI-SQUARED DISTRIBUTION       */
+/*             WITH DEGREES OF FREEDOM PARAMETER = NU.                   */
+/*     PRINTING--NONE UNLESS AN INPUT ARGUMENT ERROR CONDITION EXISTS.   */
+/*     RESTRICTIONS--X SHOULD BE NON-NEGATIVE.                           */
+/*                 --NU SHOULD BE A POSITIVE INTEGER VARIABLE.           */
+/*     OTHER DATAPAC   SUBROUTINES NEEDED--NORCDF.                       */
+/*     FORTRAN LIBRARY SUBROUTINES NEEDED--DSQRT, DEXP.                  */
+/*     MODE OF INTERNAL OPERATIONS--DOUBLE PRECISION.                    */
+/*     LANGUAGE--ANSI FORTRAN.                                           */
+/*     REFERENCES--NATIONAL BUREAU OF STANDARDS APPLIED MATHEMATICS      */
+/*                 SERIES 55, 1964, PAGE 941, FORMULAE 26.4.4 AND 26.4.5.*/
+/*               --JOHNSON AND KOTZ, CONTINUOUS UNIVARIATE               */
+/*                 DISTRIBUTIONS--1, 1970, PAGE 176,                     */
+/*                 FORMULA 28, AND PAGE 180, FORMULA 33.1.               */
+/*               --OWEN, HANDBOOK OF STATISTICAL TABLES,                 */
+/*                 1962, PAGES 50-55.                                    */
+/*               --PEARSON AND HARTLEY, BIOMETRIKA TABLES                */
+/*                 FOR STATISTICIANS, VOLUME 1, 1954,                    */
+/*                 PAGES 122-131.                                        */
+/*     WRITTEN BY--JAMES J. FILLIBEN                                     */
+/*                 STATISTICAL ENGINEERING LABORATORY (205.03)           */
+/*                 NATIONAL BUREAU OF STANDARDS                          */
+/*                 WASHINGTON, D. C. 20234                               */
+/*                 PHONE:  301-921-2315                                  */
+/*     ORIGINAL VERSION--JUNE      1972.                                 */
+/*     UPDATED         --MAY       1974.                                 */
+/*     UPDATED         --SEPTEMBER 1975.                                 */
+/*     UPDATED         --NOVEMBER  1975.                                 */
+/*     UPDATED         --OCTOBER   1976.                                 */
+/*                                                                       */
 /* --------------------------------------------------------------------- */
 
 /*     CHECK THE INPUT ARGUMENTS FOR ERRORS */
@@ -446,8 +437,6 @@ doublereal *cdf;
         *cdf = 0.0;
         return;
     }
-
-/* -----START POINT----------------------------------------------------- */
 
     dx = *x;
     anu = (doublereal) (*nu);
@@ -539,7 +528,7 @@ L1000:
 
     sum *= exp(-dx / 2.);
     if (ievodd != 0) {
-        sum = sqrt(2. / pi) * sum;
+        sum *= sqrt(2. / pi);
         spchi = chi;
         dnorcdf_(&spchi, &cdfn);
         dcdfn = cdfn;
@@ -557,8 +546,8 @@ L1000:
 
 L2000:
     dfact = dnu * 4.5;
-    d__1 = dx / dnu;
-    u = (pow(d__1, dpower) - 1.0 + 1.0 / dfact) * sqrt(dfact);
+    u = dx / dnu;
+    u = (pow(u, dpower) - 1.0 + 1.0 / dfact) * sqrt(dfact);
     dnorcdf_(&u, &cdfn);
     *cdf = cdfn;
     return;
@@ -586,7 +575,6 @@ L3000:
     *cdf = cdfn;
 } /* dchscdf_ */
 
-/* NORCDF */
 /* Subroutine */ void dnorcdf_(x, cdf)
 doublereal *x, *cdf;
 {
@@ -609,45 +597,42 @@ doublereal *x, *cdf;
     static doublereal t, z;
 
 
-/*     PURPOSE--THIS SUBROUTINE COMPUTES THE CUMULATIVE DISTRIBUTION */
-/*              FUNCTION VALUE FOR THE NORMAL (GAUSSIAN) */
-/*              DISTRIBUTION WITH MEAN = 0 AND STANDARD DEVIATION = 1. */
-/*              THIS DISTRIBUTION IS DEFINED FOR ALL X AND HAS */
-/*              THE PROBABILITY DENSITY FUNCTION */
-/*              F(X) = (1/SQRT(2*PI))*EXP(-X*X/2). */
-/*     INPUT  ARGUMENTS--X      = THE DOUBLE PRECISION VALUE AT */
-/*                                WHICH THE CUMULATIVE DISTRIBUTION */
-/*                                FUNCTION IS TO BE EVALUATED. */
-/*     OUTPUT ARGUMENTS--CDF    = THE DOUBLE PRECISION CUMULATIVE */
-/*                                DISTRIBUTION FUNCTION VALUE. */
-/*     OUTPUT--THE DOUBLE PRECISION CUMULATIVE DISTRIBUTION */
-/*             FUNCTION VALUE CDF. */
-/*     PRINTING--NONE. */
-/*     RESTRICTIONS--NONE. */
-/*     OTHER DATAPAC   SUBROUTINES NEEDED--NONE. */
-/*     FORTRAN LIBRARY SUBROUTINES NEEDED--EXP. */
-/*     MODE OF INTERNAL OPERATIONS--DOUBLE PRECISION. */
-/*     LANGUAGE--ANSI FORTRAN. */
-/*     REFERENCES--NATIONAL BUREAU OF STANDARDS APPLIED MATHEMATICS */
-/*                 SERIES 55, 1964, PAGE 932, FORMULA 26.2.17. */
-/*               --JOHNSON AND KOTZ, CONTINUOUS UNIVARIATE */
-/*                 DISTRIBUTIONS--1, 1970, PAGES 40-111. */
-/*     WRITTEN BY--JAMES J. FILLIBEN */
-/*                 STATISTICAL ENGINEERING LABORATORY (205.03) */
-/*                 NATIONAL BUREAU OF STANDARDS */
-/*                 WASHINGTON, D. C. 20234 */
-/*                 PHONE:  301-921-2315 */
-/*     ORIGINAL VERSION--JUNE      1972. */
-/*     UPDATED         --SEPTEMBER 1975. */
-/*     UPDATED         --NOVEMBER  1975. */
-
+/*     PURPOSE--THIS SUBROUTINE COMPUTES THE CUMULATIVE DISTRIBUTION     */
+/*              FUNCTION VALUE FOR THE NORMAL (GAUSSIAN)                 */
+/*              DISTRIBUTION WITH MEAN = 0 AND STANDARD DEVIATION = 1.   */
+/*              THIS DISTRIBUTION IS DEFINED FOR ALL X AND HAS           */
+/*              THE PROBABILITY DENSITY FUNCTION                         */
+/*              F(X) = (1/SQRT(2*PI))*EXP(-X*X/2).                       */
+/*     INPUT  ARGUMENTS--X      = THE DOUBLE PRECISION VALUE AT          */
+/*                                WHICH THE CUMULATIVE DISTRIBUTION      */
+/*                                FUNCTION IS TO BE EVALUATED.           */
+/*     OUTPUT ARGUMENTS--CDF    = THE DOUBLE PRECISION CUMULATIVE        */
+/*                                DISTRIBUTION FUNCTION VALUE.           */
+/*     OUTPUT--THE DOUBLE PRECISION CUMULATIVE DISTRIBUTION              */
+/*             FUNCTION VALUE CDF.                                       */
+/*     PRINTING--NONE.                                                   */
+/*     RESTRICTIONS--NONE.                                               */
+/*     OTHER DATAPAC   SUBROUTINES NEEDED--NONE.                         */
+/*     FORTRAN LIBRARY SUBROUTINES NEEDED--EXP.                          */
+/*     MODE OF INTERNAL OPERATIONS--DOUBLE PRECISION.                    */
+/*     LANGUAGE--ANSI FORTRAN.                                           */
+/*     REFERENCES--NATIONAL BUREAU OF STANDARDS APPLIED MATHEMATICS      */
+/*                 SERIES 55, 1964, PAGE 932, FORMULA 26.2.17.           */
+/*               --JOHNSON AND KOTZ, CONTINUOUS UNIVARIATE               */
+/*                 DISTRIBUTIONS--1, 1970, PAGES 40-111.                 */
+/*     WRITTEN BY--JAMES J. FILLIBEN                                     */
+/*                 STATISTICAL ENGINEERING LABORATORY (205.03)           */
+/*                 NATIONAL BUREAU OF STANDARDS                          */
+/*                 WASHINGTON, D. C. 20234                               */
+/*                 PHONE:  301-921-2315                                  */
+/*     ORIGINAL VERSION--JUNE      1972.                                 */
+/*     UPDATED         --SEPTEMBER 1975.                                 */
+/*     UPDATED         --NOVEMBER  1975.                                 */
+/*                                                                       */
 /* --------------------------------------------------------------------- */
 
 /*     CHECK THE INPUT ARGUMENTS FOR ERRORS. */
-/*     NO INPUT ARGUMENT ERRORS POSSIBLE */
-/*     FOR THIS DISTRIBUTION. */
-
-/* -----START POINT----------------------------------------------------- */
+/*     NO INPUT ARGUMENT ERRORS POSSIBLE FOR THIS DISTRIBUTION. */
 
     z = *x;
     if (z < 0.0)

@@ -30,7 +30,7 @@ ftnlen transb_len;
     static doublecomplex temp;
     static integer i, j, l;
     static logical conja, conjb;
-    static integer ncola;
+/*  static integer ncola; */
     extern logical lsame_();
     static integer nrowa, nrowb;
     extern /* Subroutine */ void xerbla_();
@@ -172,10 +172,10 @@ ftnlen transb_len;
     conjb = lsame_(transb, "C", 1L, 1L);
     if (nota) {
         nrowa = *m;
-        ncola = *k;
+/*      ncola = *k; */
     } else {
         nrowa = *k;
-        ncola = *m;
+/*      ncola = *m; */
     }
     if (notb) {
         nrowb = *k;
@@ -505,8 +505,4 @@ ftnlen transb_len;
             }
         }
     }
-
-/*     End of ZGEMM . */
-
 } /* zgemm_ */
-
