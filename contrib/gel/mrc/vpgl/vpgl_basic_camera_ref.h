@@ -10,4 +10,4 @@ class vpgl_basic_camera;
 
 typedef vbl_smart_ptr<vpgl_basic_camera> vpgl_basic_camera_ref;
 
-#endif 
+#endif // VPGL_BASIC_CAMERA_REF_H
