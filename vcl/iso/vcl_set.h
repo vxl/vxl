@@ -1,19 +1,16 @@
 #ifndef vcl_iso_set_h_
 #define vcl_iso_set_h_
 
+// This is a generated file. DO NOT EDIT! Not even a little bit.
+
 #include <set>
 
-// set
-#ifndef vcl_set
-#define vcl_set std::set
+#ifdef vcl_generic_set_STD
+  ** error **
+#else
+# define vcl_generic_set_STD std
 #endif
-// multiset
-#ifndef vcl_multiset
-#define vcl_multiset std::multiset
-#endif
-// swap
-#ifndef vcl_swap
-#define vcl_swap std::swap
-#endif
+
+#include "../generic/vcl_set.h"
 
 #endif // vcl_iso_set_h_
