@@ -37,7 +37,7 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
   SET_SOURCE_FILES_PROPERTIES(test_algo_convolve_1d.cxx PROPERTIES COMPILE_FLAGS -O0)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
-TARGET_LINK_LIBRARIES( vil_algo_test_all vil_algo vpl vul testlib vcl )
+TARGET_LINK_LIBRARIES( vil_algo_test_all vil_algo testlib vcl )
 
 
 # vil/algo
