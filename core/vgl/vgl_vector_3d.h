@@ -100,11 +100,11 @@ template <class T> inline v      operator-(v const& a, v const& b) { return v(a.
 
 //: a+=b: add b to a and return a.
 // \relates vgl_vector_3d
-template <class T> inline v&     operator+=(v& a, v const& b) { a.x()+=b.x(); a.y()+=b.y(); a.z()+=b.z(); return a; }
+template <class T> inline v&     operator+=(v& a, v const& b) { a.x_+=b.x_; a.y_+=b.y_; a.z_+=b.z_; return a; }
 
 //: a-=b: subtract b from a and return a.
 // \relates vgl_vector_3d
-template <class T> inline v&     operator-=(v& a, v const& b) { a.x()-=b.x(); a.y()-=b.y(); a.z()-=b.z(); return a; }
+template <class T> inline v&     operator-=(v& a, v const& b) { a.x_-=b.x_; a.y_-=b.y_; a.z_-=b.z_; return a; }
 
 //: +b: unary plus operator (no-op).
 // \relates vgl_vector_3d
