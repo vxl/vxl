@@ -31,6 +31,9 @@ SUBDIRS += bugl
 # Brown Graph Library
 SUBDIRS += bgrl
 
+# Brown statistics library
+SUBDIRS += bsta
+
 ################################
 include ${IUEROOT}/config/top.mk
 ################################
