@@ -1,5 +1,5 @@
-#ifndef _IntensityFace_h_
-#define _IntensityFace_h_
+#ifndef vdgl_intensity_face_h_
+#define vdgl_intensity_face_h_
 
 //:
 // \file
@@ -20,6 +20,12 @@
 //
 // \author Author J.L. Mundy - November 21, 1999
 //
+// \verbatim
+// Modifications
+//  8-May-2002 - Peter Vanroose - no longer inherits from vdgl_digital_region:
+//               dependency changed to "has_a", but with cast_to semantics
+// \endverbatim
+//
 //-------------------------------------------------------------------------
 
 #include <vnl/vnl_matrix.h>
@@ -32,7 +38,7 @@
 #include <vtol/vtol_face_sptr.h>
 #include <vdgl/vdgl_intensity_face_sptr.h>
 
-class vdgl_intensity_face : public vtol_face_2d, public vdgl_digital_region 
+class vdgl_intensity_face : public vtol_face_2d
 {
 public:
   //Constructors
@@ -42,16 +48,58 @@ public:
   vdgl_intensity_face(vcl_vector<vtol_one_chain_sptr>* chains, vdgl_digital_region& dr);
   vdgl_intensity_face(vdgl_intensity_face& iface);
   vdgl_intensity_face(vtol_face_2d& face, int npts, float* xp, float* yp,
-                unsigned short *pix);
+                      unsigned short *pix);
   vdgl_intensity_face(vtol_face_2d& face, int npts, float* xp, float* yp, float* zp,
-                unsigned short *pix);
+                      unsigned short *pix);
   ~vdgl_intensity_face();
+  vdgl_intensity_face(vdgl_intensity_face const&);
+
+  //---------------------------------------------------------------------------
+  //: Clone `this': creation of a new object and initialization
+  //  See Prototype pattern
+  //---------------------------------------------------------------------------
+  virtual vsol_spatial_object_2d_sptr clone(void) const;
 
   bool IsHoleP();
   inline vtol_topology_object::vtol_topology_object_type
     GetTopologyType() const { return vtol_topology_object::INTENSITYFACE; }
   virtual vdgl_intensity_face* CastToIntensityFace() {return this;}
-  virtual vdgl_digital_region* cast_to_digital_region() {return this;}
+  virtual vdgl_digital_region* cast_to_digital_region() const {return region_;}
+  virtual vdgl_digital_region* cast_to_digital_region() {return region_;}
+  double area() { return region_->area(); }
+  void ResetPixelData() { region_->ResetPixelData(); }
+  void IncrementMeans(float x, float y, unsigned short pix){region_->IncrementMeans(x,y,pix);}
+  void InitPixelArrays() { region_->InitPixelArrays(); }
+  void InsertInPixelArrays(float x, float y, unsigned short pix){region_->InsertInPixelArrays(x,y,pix);}
+  float* Xj() { return region_->Xj(); }
+  float* Yj() { return region_->Yj(); }
+  float* Zj() { return region_->Zj(); }
+  unsigned short* Ij() { return region_->Ij(); }
+  int Npix(){return region_->Npix(); }
+  float X() { return region_->X(); }
+  float Y() { return region_->Y(); }
+  float Z() { return region_->Z(); }
+  float Xo() { return region_->Xo(); }
+  float Yo() { return region_->Yo(); }
+  float Zo() { return region_->Zo(); }
+  float Io() { return region_->Io(); }
+  double X2() { return region_->X2(); }
+  double Y2() { return region_->Y2(); }
+  double XY() { return region_->XY(); }
+  double I2() { return region_->I2(); }
+  double XI() { return region_->XI(); }
+  double YI() { return region_->YI(); }
+  double Xi() { return region_->Xi(); }
+  double Yi() { return region_->Yi(); }
+  double Ii() { return region_->Ii(); }
+  double Ix() { return region_->Ix(); }
+  double Iy() { return region_->Iy(); }
+  float Ir() { return region_->Ir(); }
+  float Diameter() { return region_->Diameter(); }
+  float AspectRatio() { return region_->AspectRatio(); }
+  void PrincipalOrientation(vcl_vector<float>& axis) { region_->PrincipalOrientation(axis); }
+  double Var() { return region_->Var(); }
+
   //Accessors
   //The Face moment matrix
   virtual vnl_matrix<double> MomentMatrix();
@@ -76,6 +124,7 @@ public:
   float GetAdjacentRegionMean();
  protected:
   //members
+  vdgl_digital_region* region_;
 };
 
-#endif
+#endif // vdgl_intensity_face_h_

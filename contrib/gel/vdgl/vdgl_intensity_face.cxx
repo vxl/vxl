@@ -34,6 +34,12 @@ vdgl_intensity_face::vdgl_intensity_face(vcl_vector<vtol_edge*>* edges)
 }
 #endif
 
+//: Copy constructor
+vdgl_intensity_face::vdgl_intensity_face(vdgl_intensity_face const& f)
+  :vtol_face_2d(f), region_(new vdgl_digital_region(*(f.cast_to_digital_region())))
+{
+}
+
 //----------------------------------------------------------------
 //: A similar constructor using previously formed vtol_one_chain(s)
 //    The list is structured with the outer boundary as the first
@@ -53,7 +59,7 @@ vdgl_intensity_face::vdgl_intensity_face(vcl_vector<vtol_edge_sptr>* edges, vdgl
 #endif
 //: Uses given 2-d vtol_one_chain(s) (not deep copy) with intensity information from dr.
 vdgl_intensity_face::vdgl_intensity_face(vcl_vector<vtol_one_chain_sptr>* chains, vdgl_digital_region& dr)
-  : vtol_face_2d(*chains), vdgl_digital_region(dr.Npix(), dr.Xj(), dr.Yj(), dr.Ij())
+  : vtol_face_2d(*chains), region_(new vdgl_digital_region(dr.Npix(), dr.Xj(), dr.Yj(), dr.Ij()))
 {
 }
 
@@ -64,21 +70,18 @@ vdgl_intensity_face::vdgl_intensity_face(vcl_vector<vtol_one_chain_sptr>* chains
 
 vdgl_intensity_face::vdgl_intensity_face(vtol_face_2d& face, int npts, float* xp, float* yp,
                              unsigned short *pix)
-  :vtol_face_2d(face), vdgl_digital_region(npts, xp, yp, pix)
+  :vtol_face_2d(face), region_(new vdgl_digital_region(npts, xp, yp, pix))
 {
 }
 
 vdgl_intensity_face::vdgl_intensity_face(vtol_face_2d& face, int npts, float* xp, float* yp,
                              float* zp, unsigned short *pix)
-  :vtol_face_2d(face), vdgl_digital_region(npts, xp, yp, zp, pix)
+  :vtol_face_2d(face), region_(new vdgl_digital_region(npts, xp, yp, zp, pix))
 {
 }
 vdgl_intensity_face::vdgl_intensity_face(vdgl_intensity_face& iface)
-  :vtol_face_2d(iface), vdgl_digital_region(iface.Npix(),
-                              iface.Xj(),
-                              iface.Yj(),
-                              iface.Zj(),
-                              iface.Ij())
+  :vtol_face_2d((vtol_face_2d&)iface),
+   region_(new vdgl_digital_region(iface.Npix(), iface.Xj(), iface.Yj(), iface.Zj(), iface.Ij()))
 {
 }
 //Default Destructor
@@ -86,6 +89,15 @@ vdgl_intensity_face::~vdgl_intensity_face()
 {
 }
 
+
+//---------------------------------------------------------------------------
+//: Clone `this': creation of a new object and initialization
+// See Prototype pattern
+//---------------------------------------------------------------------------
+vsol_spatial_object_2d_sptr vdgl_intensity_face::clone(void) const
+{
+  return new vdgl_intensity_face(*this);
+}
 
 //----------------------------------------------------
 //: A local method for the moment matrix.
@@ -95,14 +107,11 @@ vdgl_intensity_face::~vdgl_intensity_face()
 //
 vnl_matrix<double> vdgl_intensity_face::MomentMatrix()
 {
-  if (!_scatter_matrix_valid)
-    this->ComputeScatterMatrix();
-
   vnl_matrix<double> M(3,3);
 
-  M(0,0) = _X2+(_Xi*_Xi/_npts); M(0,1) = _XY+(_Xi*_Yi/_npts); M(0,2) = _Xi;
-  M(1,0) = M(0,1);               M(1,1) = _Y2+(_Yi*_Yi/_npts); M(1,2) = _Yi;
-  M(2,0) = _Xi;                 M(2,1) = _Yi;                 M(2,2) = _npts;
+  M(0,0) = X2()+(Xi()*Xi()/Npix()); M(0,1) = XY()+(Xi()*Yi()/Npix()); M(0,2) = Xi();
+  M(1,0) = M(0,1);                  M(1,1) = Y2()+(Yi()*Yi()/Npix()); M(1,2) = Yi();
+  M(2,0) = Xi();                    M(2,1) = Yi();                    M(2,2) = Npix();
   return M;
 }
 
