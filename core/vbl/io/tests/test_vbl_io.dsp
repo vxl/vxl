@@ -94,6 +94,10 @@ SOURCE=.\test_vbl_io.cxx
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
+# Begin Source File
+
+SOURCE=.\vbl_io_test_classes.h
+# End Source File
 # End Group
 # End Target
 # End Project
