@@ -4,6 +4,7 @@
 #include <rrel/rrel_muse_table.h>
 
 #include <vnl/vnl_math.h>
+#include <vnl/vnl_numeric_limits.h>
 
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
@@ -143,6 +144,13 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
       prev_k = k;
     }
 
+    if( at_start ) {
+      vcl_cerr << "WARNING:  There were NO values of k with stable estimates.\n"
+               << "          Setting sigma = +Infinity\n";
+      sigma_est = vnl_numeric_limits<double>::infinity();
+      return;
+    }
+
     //  Refine the scale estimate
     if ( ! use_sk_refine_ ) {
       sigma_est = best_sk;
@@ -203,6 +211,13 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
       prev_k = k;
     }
 
+    if( at_start ) {
+      vcl_cerr << "WARNING:  There were NO values of k with stable estimates.\n"
+               << "          Setting sigma = +Infinity\n";
+      sigma_est = vnl_numeric_limits<double>::infinity();
+      return;
+    }
+
     //  Refine the scale estimate
     if ( ! use_sk_refine_ ) {
       sigma_est = best_sk;
@@ -251,6 +266,13 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
         best_sk = sk;
         at_start = false;
       }
+    }
+
+    if( at_start ) {
+      vcl_cerr << "WARNING:  There were NO values of k with stable estimates.\n"
+               << "          Setting sigma = +Infinity\n";
+      sigma_est = vnl_numeric_limits<double>::infinity();
+      return;
     }
 
     //  Refine the scale estimate
