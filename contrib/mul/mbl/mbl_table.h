@@ -70,6 +70,15 @@ public:
                      const vcl_vector<double>& column);
   
 
+  //: Append an empty column with its own heading.
+  // \param header String identifying the column.
+  // \param val Default value to initialize all elements of the new column.
+  // \return true If the column was added.
+  // \note The new column will be the same length as existing columns.
+  bool append_column(const vcl_string& header,
+                     const double val=0);
+  
+
   //: Append a row of data.
   // \return true if the row was added.
   // \param row A vector containing the values of the new row.
@@ -77,20 +86,27 @@ public:
   bool append_row(const vcl_vector<double>& row);
   
 
+  //: Append an empty row.
+  // \return true If the row was added.
+  // \param val Default value to initialize all elements of the new row.
+  // \note The new row will be the same length as existing rows.
+  bool append_row(const double val=0);
+  
+
   //: Set the value of an existing element.
   // \param header The string identifying the column to be modified.
-  // \param row The row index of the element to be modified.
+  // \param r The row index of the element to be modified.
   // \param value The new value to use for the modified element.
   // \return False if the column does not exist or the row index is not valid.
   // \note This function is intended only for existing elements.
   bool set_element(const vcl_string& header, 
-                   const unsigned row, 
+                   const unsigned r, 
                    const double value);
 
 
   //: Get the value of an existing element.
   // \param header The string identifying the column of interest.
-  // \param row The row index of the element of interest.
+  // \param r The row index of the element of interest.
   // \return The value of the requested element (undefined if the element
   //         does not exist).
   // \retval success If provided, will be used to indicate whether the 
@@ -98,7 +114,7 @@ public:
   // \note This function is intended only for existing elements.
   // \note It is recommended that you provide and check the parameter success.
   double get_element(const vcl_string& header, 
-                     const unsigned row, 
+                     const unsigned r, 
                      bool* success=0) const;
 
   

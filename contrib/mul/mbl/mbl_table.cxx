@@ -87,6 +87,12 @@ bool mbl_table::get_column(const vcl_string& header,
     column = columns_[iter->second];
     success = true;
   }
+  else
+  {
+    vcl_cerr << "ERROR: mbl_table::get_column(): column \""
+      << header << "\" does not exist in the table."
+      << vcl_endl;
+  }
 
   return success;
 }
@@ -126,7 +132,7 @@ bool mbl_table::get_row(const unsigned& r,
 // Set the value of an existing element.
 //========================================================================
 bool mbl_table::set_element(const vcl_string& header, 
-                            const unsigned row, 
+                            const unsigned r, 
                             const double value)
 {
   bool success = false;
@@ -139,12 +145,24 @@ bool mbl_table::set_element(const vcl_string& header,
   {
     // Does the column have sufficient rows?
     vcl_vector<double>& col = columns_[iter->second];
-    if (col.size()>row)
+    if (col.size()>r)
     {
       // Set the value
-      col[row] = value;
+      col[r] = value;
       success = true;
     }
+    else
+    {
+      vcl_cerr << "ERROR: mbl_table::set_element(): row "
+        << r << " does not exist in the table."
+        << vcl_endl;
+    }
+  }
+  else
+  {
+    vcl_cerr << "ERROR: mbl_table::set_element(): column \""
+      << header << "\" does not exist in the table."
+      << vcl_endl;
   }
 
   return success;
@@ -155,7 +173,7 @@ bool mbl_table::set_element(const vcl_string& header,
 // Get the value of an existing element.
 //========================================================================
 double mbl_table::get_element(const vcl_string& header, 
-                              const unsigned row, 
+                              const unsigned r, 
                               bool* success/*=0*/) const
 { 
   double value = 1e-19;
@@ -170,14 +188,26 @@ double mbl_table::get_element(const vcl_string& header,
   {
     // Does the column have sufficient rows?
     const vcl_vector<double>& col = columns_[iter->second];
-    if (col.size()>row)
+    if (col.size()>r)
     {
       // Get the value
-      value = col[row];
+      value = col[r];
       if (success)
         *success = true;
     }
+    else
+    {
+      vcl_cerr << "ERROR: mbl_table::get_element(): row "
+        << r << " does not exist in the table."
+        << vcl_endl;
+    }
   }
+  else
+  {
+    vcl_cerr << "ERROR: mbl_table::get_element(): column \""
+      << header << "\" does not exist in the table."
+      << vcl_endl;
+  }  
   
   return value;
 }
@@ -190,7 +220,7 @@ bool mbl_table::append_column(const vcl_string& header,
                               const vcl_vector<double>& column)
 {
   // Check whether there is already a column with this heading  
-  if (header_to_column_index_.find(header) != header_to_column_index_.end())
+  if (header_to_column_index_.find(header) == header_to_column_index_.end())
   {
     // Check that the length of the new column matches the existing columns
     if (num_rows()==column.size())
@@ -211,8 +241,36 @@ bool mbl_table::append_column(const vcl_string& header,
   }
   else
   {
-    vcl_cerr << "ERROR: mbl_table::append_column(): a column with header "
-      << header << " already exists.\n"
+    vcl_cerr << "ERROR: mbl_table::append_column(): a column with header \""
+      << header << "\" already exists.\n"
+      << "Column not appended."
+      << vcl_endl;
+    return false;
+  }
+}
+
+
+//========================================================================
+//: Append an empty column with its own heading.
+//========================================================================
+bool mbl_table::append_column(const vcl_string& header,
+                              const double val/*=0*/)
+{
+  // Check whether there is already a column with this heading  
+  if (header_to_column_index_.find(header) == header_to_column_index_.end())
+  {
+    // Append a new column of the same length as existing columns
+    column_headers_.push_back(header);
+    unsigned c = columns_.size();
+    header_to_column_index_[header] = c;
+    columns_.push_back(vcl_vector<double>());
+    columns_[c].resize(num_rows(), val);
+    return true;
+  }
+  else
+  {
+    vcl_cerr << "ERROR: mbl_table::append_column(): a column with header \""
+      << header << "\" already exists.\n"
       << "Column not appended."
       << vcl_endl;
     return false;
@@ -243,6 +301,22 @@ bool mbl_table::append_row(const vcl_vector<double>& row)
       << vcl_endl;
     return false;
   }
+}
+
+
+//========================================================================
+// Append an empty row.
+//========================================================================
+bool mbl_table::append_row(const double val/*=0*/)
+{
+  // Append a new element to each column
+  unsigned ncols = num_cols();
+  for (unsigned c=0; c<ncols; ++c)
+  {
+    columns_[c].push_back(val);
+  }
+
+  return true;
 }
 
 
