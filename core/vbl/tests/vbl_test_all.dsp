@@ -111,6 +111,9 @@ SOURCE=.\vbl_test_qsort.cxx
 SOURCE=.\vbl_test_array.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vbl_test_bit_array.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vbl_test_smart_ptr.cxx
 # End Source File
 # Begin Source File
