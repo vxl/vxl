@@ -26,7 +26,8 @@
 //                                                                   data item
 //
 
-//: An object to store the moving_feature_set, its matching fixed_feature_set, and other components that work on the two feature sets during registration.
+//: An object to store the moving_feature_set, its matching fixed_feature_set, and other components
+//  (that work on the two feature sets during registration).
 //
 class rgrl_data_manager_data_item
 {

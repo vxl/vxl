@@ -77,7 +77,8 @@ class rgrl_initializer_ran_sam
                 rgrl_estimator_sptr                xform_estimator,
                 unsigned                           initial_resolution = 0);
 
-  //: Initialize with a set of information, assuming that registration applies to \a from_image_roi always, and \a from_image_roi and \a to_image_roi are the same
+  //: Initialize with a set of information, assuming that registration applies to \a from_image_roi always;
+  //  And \a from_image_roi and \a to_image_roi are the same
   void set_data(rgrl_match_set_sptr                init_match_set,
                 rgrl_scale_estimator_unwgted_sptr  scale_est,
                 rgrl_mask_box       const&         from_image_roi,

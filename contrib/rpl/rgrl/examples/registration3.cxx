@@ -125,7 +125,8 @@ main( int argc, char* argv[] )
   if ( argc < 5 ) {
     vcl_cerr << "Missing Parameters\n"
              << "Usage: " << argv[0]
-          << " FixedImageFeatureFileHighRes FixedImageFeatureFileLowRes MovingImageFeatureFileHighRes MovingImageFeatureFileLowRes\n";
+             << " FixedImageFeatureFileHighRes FixedImageFeatureFileLowRes"
+             << " MovingImageFeatureFileHighRes MovingImageFeatureFileLowRes\n";
     return 1;
   }
 
