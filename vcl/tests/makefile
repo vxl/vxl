@@ -1,33 +1,27 @@
-TESTMAIN = vcl_tests.cxx
-# All tests are called from vcl_tests.cxx
-#SOURCES += test_vcl_rel_ops.cxx
-SOURCES += test_vcl_cstdio.cxx
-SOURCES += test_vcl_compiler.cxx
-SOURCES += test_vcl_headers.cxx
-SOURCES += test_vcl_iterator.cxx
-SOURCES += test_vcl_iostream.cxx
-SOURCES += test_vcl_fstream.cxx
-SOURCES += test_vcl_map.cxx
-SOURCES += test_vcl_multimap.cxx
-SOURCES += test_vcl_vector.cxx
-SOURCES += test_vcl_list.cxx
-SOURCES += test_vcl_string.cxx
-SOURCES += test_vcl_set.cxx
-SOURCES += test_vcl_deque.cxx
-SOURCES += test_vcl_complex.cxx
-SOURCES += test_vcl_algorithm.cxx
-SOURCES += test_vcl_new.cxx
-SOURCES += test_vcl_cmath.cxx
-SOURCES += test_vcl_stlfwd.cxx
-SOURCES += test_vcl_exception.cxx
-SOURCES += test_vcl_cctype.cxx
+TESTMAIN = test_driver.cxx
+#TESTS += test_rel_ops.cxx
+TESTS += test_cstdio.cxx
+PARAMS_test_cstdio := test_cstdio.txt
+TESTS += test_compiler.cxx
+SOURCES += test_headers.cxx
+TESTS += test_iterator.cxx
+TESTS += test_iostream.cxx
+TESTS += test_fstream.cxx
+TESTS += test_map.cxx
+TESTS += test_multimap.cxx
+TESTS += test_vector.cxx
+TESTS += test_list.cxx
+TESTS += test_string.cxx
+TESTS += test_set.cxx
+TESTS += test_deque.cxx
+TESTS += test_complex.cxx
+TESTS += test_algorithm.cxx
+TESTS += test_new.cxx
+TESTS += test_cmath.cxx
+SOURCES += test_stlfwd.cxx
+TESTS += test_exception.cxx
+TESTS += test_cctype.cxx
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk
 #########################################
-
-$(RELOBJDIR)$/vcl_tests.out:
-	$(RELOBJDIR)$/vcl_tests$(EXESUFFIX)$(PROGSUFFIX) ./test_vcl_cstdio.txt > $@
-
-xall:: $(RELOBJDIR)$/vcl_tests.out
-
