@@ -53,7 +53,7 @@ inline void vsl_b_read(vsl_b_istream &is, vil2_image_view<T>& image)
     vsl_b_read(is, istep);
     vsl_b_read(is, jstep);
     vsl_b_read(is, pstep);
-    if (ni*nj*np==0) image.resize(0,0,0);
+    if (ni*nj*np==0) image.set_size(0,0,0);
     else
     {
       vsl_b_read(is, chunk);

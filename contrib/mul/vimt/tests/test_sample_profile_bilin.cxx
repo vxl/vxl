@@ -16,7 +16,7 @@ void test_sample_profile_bilin_byte_affine()
 
   vcl_cout<< "One plane image\n";
   vimt_image_2d_of<vxl_byte> image1;
-  image1.image().resize(10,10);
+  image1.image().set_size(10,10);
 
   for (unsigned int j=0;j<image1.image().nj();++j)
      for (unsigned int i=0;i<image1.image().ni();++i)
@@ -39,7 +39,7 @@ void test_sample_profile_bilin_byte_affine()
 
   vcl_cout<< "Three plane image (float)\n";
   vimt_image_2d_of<float> image3;
-  image3.image().resize(10,10,3);
+  image3.image().set_size(10,10,3);
 
   for (unsigned int j=0;j<image3.image().nj();++j)
      for (unsigned int i=0;i<image3.image().ni();++i)
@@ -68,7 +68,7 @@ void test_sample_profile_bilin_byte_projective()
 
   vcl_cout<<"Testing projective mappings\n";
   vimt_image_2d_of<vxl_byte> image1;
-  image1.image().resize(10,10);
+  image1.image().set_size(10,10);
 
   vimt_transform_2d trans;
   // Create projective identity matrix
@@ -105,7 +105,7 @@ void test_sample_profile_bilin_byte_projective()
 
   vcl_cout<< "Three plane image (float)\n";
   vimt_image_2d_of<float> image3;
-  image3.image().resize(10,10,3);
+  image3.image().set_size(10,10,3);
 
   for (unsigned int j=0;j<image3.image().nj();++j)
      for (unsigned int i=0;i<image3.image().ni();++i)

@@ -14,7 +14,7 @@ void test_gauss_reduce_float()
   vcl_cout<<"Image Size: "<<ni<<" x "<<nj<<" k "<<nk<<vcl_endl;
 
   vil3d_image_view<float> image0;
-  image0.resize(ni,nj,nk);
+  image0.set_size(ni,nj,nk);
 
   for (int k=0;k<image0.nk();++k)
     for (int j=0;j<image0.nj();++j)
@@ -43,7 +43,7 @@ void test_gauss_reduce_ij()
   int ni = 20, nj = 20, nk = 10;
 
   vil3d_image_view<float> image0;
-  image0.resize(ni,nj,nk);
+  image0.set_size(ni,nj,nk);
 
   for (int k=0;k<image0.nk();++k)
     for (int j=0;j<image0.nj();++j)
@@ -73,7 +73,7 @@ void test_gauss_reduce_ik()
   int ni = 20, nj = 10, nk = 20;
 
   vil3d_image_view<float> image0;
-  image0.resize(ni,nj,nk);
+  image0.set_size(ni,nj,nk);
 
   for (int k=0;k<image0.nk();++k)
     for (int j=0;j<image0.nj();++j)
@@ -102,7 +102,7 @@ void test_gauss_reduce_jk()
   int ni = 10, nj = 20, nk = 20;
 
   vil3d_image_view<float> image0;
-  image0.resize(ni,nj,nk);
+  image0.set_size(ni,nj,nk);
 
   for (int k=0;k<image0.nk();++k)
     for (int j=0;j<image0.nj();++j)

@@ -12,7 +12,7 @@ void test_bilin_interp_byte()
            << "***************************\n";
 
   vil2_image_view<vxl_byte> image0;
-  image0.resize(5,5);
+  image0.set_size(5,5);
 
   for (unsigned int j=0;j<image0.nj();++j)
      for (unsigned int i=0;i<image0.ni();++i)

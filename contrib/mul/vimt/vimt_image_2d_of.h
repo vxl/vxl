@@ -49,8 +49,8 @@ class vimt_image_2d_of : public vimt_image_2d
   //: Define valid data region (including transform).
   //  Resizes and sets the transformation so that
   //  world2im(x,y) is valid for all points in range
-  //  Specifically, resize(nx,ny);
-  //  world2im() translates by (-xlo,-ylo)
+  //  Specifically, set_valid_region(x0,nx,y0,ny);
+  //  world2im() translates by (-x0,-y0)
   void set_valid_region(int x0, unsigned nx, int y0, unsigned ny);
 
   //: Take a deep copy of image (copy data, not just pointers)

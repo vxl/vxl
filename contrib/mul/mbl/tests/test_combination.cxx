@@ -9,11 +9,11 @@ void test_combination()
            << "****************************\n";
 
   vcl_vector<unsigned> n(3);
-  for (int i=0;i<n.size();++i) n[i]=i+2;
+  for (unsigned i=0;i<n.size();++i) n[i]=i+2;
 
   TEST("mbl_n_combinations",mbl_n_combinations(n),2*3*4);
 
-  int nc=0;
+  unsigned nc=0;
   vcl_vector<unsigned> x = mbl_combination_begin(n);
   do {nc++;}  while (mbl_combination_next(x,n));
   TEST("Loop count",nc,mbl_n_combinations(n));

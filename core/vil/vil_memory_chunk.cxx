@@ -38,7 +38,7 @@ vil2_memory_chunk& vil2_memory_chunk::operator=(const vil2_memory_chunk& d)
 {
   if (this==&d) return *this;
 
-  resize(d.size(),d.pixel_format());
+  set_size(d.size(),d.pixel_format());
   vcl_memcpy(data_,d.data_,size_);
   return *this;
 }
@@ -57,7 +57,7 @@ void vil2_memory_chunk::unref()
 
 //: Create empty space for n elements.
 //  Leave existing data untouched if the size is already n.
-void vil2_memory_chunk::resize(unsigned long n, vil2_pixel_format pixel_form)
+void vil2_memory_chunk::set_size(unsigned long n, vil2_pixel_format pixel_form)
 {
   if (size_==n) return;
   delete [] (char*) data_;

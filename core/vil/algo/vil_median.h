@@ -30,7 +30,7 @@ inline T vil2_sorted_value(const vil2_image_view<T>& image, unsigned plane,
                            const vil2_structuring_element& element, int i0, int j0,
                            vcl_vector<T>& values, double r)
 {
-  values.resize(0);
+  values.clear();
   unsigned n = element.p_i().size();
   for (unsigned int k=0;k<n;++k)
   {

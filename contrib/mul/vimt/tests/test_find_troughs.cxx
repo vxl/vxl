@@ -7,7 +7,7 @@
 void test_find_troughs_byte()
 {
   vimt_image_2d_of<vxl_byte> image0;
-  image0.image().resize(10,10);
+  image0.image().set_size(10,10);
   image0.image().fill(10);
   image0.image()(3,7)=8;  // One trough
   image0.image()(7,5)=9;  // Another trough

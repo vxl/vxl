@@ -32,7 +32,7 @@ protected:
   ni_(ni), nj_(nj), nplanes_(nplanes), reference_count_(0) {}
 
   //: Default is an empty one-plane image
-  //  Don't set nplanes_ to zero as it confuses resize(nx,ny) later
+  //  Don't set nplanes_ to zero as it confuses set_size(nx,ny) later
   vil2_image_view_base(): ni_(0), nj_(0), nplanes_(1), reference_count_(0) {}
 
 public:
@@ -49,13 +49,23 @@ public:
   //: The number of pixels.
   unsigned size() const { return ni_ * nj_ * nplanes_; }
 
-  //: resize current planes to width x height.
+  //: set_size current planes to width x height.
   // If already correct size, this function returns quickly
-  virtual void resize(unsigned width, unsigned height) =0;
+  virtual void set_size(unsigned width, unsigned height) =0;
 
   //: resize to width x height x nplanes.
   // If already correct size, this function returns quickly
-  virtual void resize(unsigned width, unsigned height, unsigned nplanes) =0;
+  virtual void set_size(unsigned width, unsigned height, unsigned nplanes) =0;
+
+  //: resize current planes to ni x nj
+  // If already correct size, this function returns quickly
+  // \deprecated in favour of set_size
+  // void resize(unsigned ni, unsigned nj) { set_size(ni, nj);}
+
+  //: resize to ni x nj x nplanes
+  // If already correct size, this function returns quickly
+  // \deprecated in favour of set_size
+  // void resize(unsigned ni, unsigned nj, unsigned nplanes){ set_size(ni, nj, nplanes);}
 
   //: Print a 1-line summary of contents
   virtual void print(vcl_ostream&) const =0;

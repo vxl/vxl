@@ -89,7 +89,7 @@ template<class aT, class sumT>
 inline void vil2_math_mean_over_planes(const vil2_image_view<aT>& src,
                                        vil2_image_view<sumT>& dest)
 {
-  dest.resize(src.ni(), src.nj(), 1);
+  dest.set_size(src.ni(), src.nj(), 1);
   for (unsigned j=0;j<src.nj();++j)
     for (unsigned i=0;i<src.ni();++i)
     {
@@ -216,7 +216,7 @@ inline void vil2_math_image_sum(const vil2_image_view<aT>& imA,
 {
   unsigned ni = imA.ni(),nj = imA.nj(),np = imA.nplanes();
   assert(imB.ni()==ni && imB.nj()==nj && imB.nplanes()==np);
-  im_sum.resize(ni,nj,np);
+  im_sum.set_size(ni,nj,np);
 
   int istepA=imA.istep(),jstepA=imA.jstep(),pstepA = imA.planestep();
   int istepB=imB.istep(),jstepB=imB.jstep(),pstepB = imB.planestep();
@@ -249,7 +249,7 @@ inline void vil2_math_image_difference(const vil2_image_view<aT>& imA,
 {
   unsigned ni = imA.ni(),nj = imA.nj(),np = imA.nplanes();
   assert(imB.ni()==ni && imB.nj()==nj && imB.nplanes()==np);
-  im_sum.resize(ni,nj,np);
+  im_sum.set_size(ni,nj,np);
 
   int istepA=imA.istep(),jstepA=imA.jstep(),pstepA = imA.planestep();
   int istepB=imB.istep(),jstepB=imB.jstep(),pstepB = imB.planestep();
@@ -282,7 +282,7 @@ inline void vil2_math_image_abs_difference(const vil2_image_view<aT>& imA,
 {
   unsigned ni = imA.ni(),nj = imA.nj(),np = imA.nplanes();
   assert(imB.ni()==ni && imB.nj()==nj && imB.nplanes()==np);
-  im_sum.resize(ni,nj,np);
+  im_sum.set_size(ni,nj,np);
 
   int istepA=imA.istep(),jstepA=imA.jstep(),pstepA = imA.planestep();
   int istepB=imB.istep(),jstepB=imB.jstep(),pstepB = imB.planestep();
@@ -347,7 +347,7 @@ inline void vil2_math_integral_image(const vil2_image_view<aT>& imA,
 {
   assert(imA.nplanes()==1);
   unsigned ni = imA.ni(),nj = imA.nj();
-  im_sum.resize(ni,nj,1);
+  im_sum.set_size(ni,nj,1);
 
   int istepA=imA.istep(),jstepA=imA.jstep();
   int istepS=im_sum.istep(),jstepS=im_sum.jstep();
@@ -392,8 +392,8 @@ inline void vil2_math_integral_sqr_image(const vil2_image_view<aT>& imA,
 {
   assert(imA.nplanes()==1);
   unsigned ni = imA.ni(),nj = imA.nj();
-  im_sum.resize(ni,nj,1);
-  im_sum_sq.resize(ni,nj,1);
+  im_sum.set_size(ni,nj,1);
+  im_sum_sq.set_size(ni,nj,1);
 
   int istepA=imA.istep(),jstepA=imA.jstep();
   int istepS=im_sum.istep(),jstepS=im_sum.jstep();

@@ -14,7 +14,7 @@ void test_resample_bilin_byte()
 
   vil2_image_view<vxl_byte> image0;
   vil2_image_view<double> dest_im;
-  image0.resize(10,10);
+  image0.set_size(10,10);
 
   vcl_cout<<"Testing one plane image\n";
 
@@ -48,7 +48,7 @@ void test_resample_bilin_byte()
 
   vcl_cout<<"Testing three plane image\n";
 
-  image0.resize(10,10,2);
+  image0.set_size(10,10,2);
   for (unsigned int j=0;j<image0.nj();++j)
     for (unsigned int i=0;i<image0.ni();++i)
       for (unsigned int p=0;p<2;++p)

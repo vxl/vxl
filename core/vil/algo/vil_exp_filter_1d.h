@@ -55,7 +55,7 @@ inline void vil2_exp_filter_i(const vil2_image_view<srcT>& src_im,
 {
   unsigned ni = src_im.ni();
   unsigned nj = src_im.nj();
-  dest_im.resize(ni,nj,src_im.nplanes());
+  dest_im.set_size(ni,nj,src_im.nplanes());
   int s_istep = src_im.istep(), s_jstep = src_im.jstep();
   int d_istep = dest_im.istep(),d_jstep = dest_im.jstep();
 
@@ -80,7 +80,7 @@ inline void vil2_exp_filter_j(const vil2_image_view<srcT>& src_im,
 {
   unsigned ni = src_im.ni();
   unsigned nj = src_im.nj();
-  dest_im.resize(ni,nj,src_im.nplanes());
+  dest_im.set_size(ni,nj,src_im.nplanes());
   int s_istep = src_im.istep(), s_jstep = src_im.jstep();
   int d_istep = dest_im.istep(),d_jstep = dest_im.jstep();
 

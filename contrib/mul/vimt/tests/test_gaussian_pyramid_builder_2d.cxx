@@ -13,7 +13,7 @@ void test_gaussian_pyramid_builder_2d_build(vimt_gaussian_pyramid_builder_2d<vxl
   vcl_cout<<"Image Size: "<<ni<<" x "<<nj<<'\n';
 
   vimt_image_2d_of<vxl_byte> image0;
-  image0.image().resize(ni,nj);
+  image0.image().set_size(ni,nj);
 
   for (unsigned y=0;y<image0.image().nj();++y)
     for (unsigned x=0;x<image0.image().ni();++x)

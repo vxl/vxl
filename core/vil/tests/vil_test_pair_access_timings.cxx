@@ -20,7 +20,7 @@ template <class imT>
 double method1(const vil2_image_view<imT>& src_image,
                vil2_image_view<imT>& dest_image, int n_loops)
 {
-  dest_image.resize(src_image.ni(),src_image.nj(),src_image.nplanes());
+  dest_image.set_size(src_image.ni(),src_image.nj(),src_image.nplanes());
   vcl_time_t t0=vcl_clock();
   for (int n=0;n<n_loops;++n)
   {
@@ -37,7 +37,7 @@ template <class imT>
 double method2(const vil2_image_view<imT>& src_image,
                vil2_image_view<imT>& dest_image, int n_loops)
 {
-  dest_image.resize(src_image.ni(),src_image.nj(),src_image.nplanes());
+  dest_image.set_size(src_image.ni(),src_image.nj(),src_image.nplanes());
   vcl_time_t t0=vcl_clock();
   for (int n=0;n<n_loops;++n)
   {

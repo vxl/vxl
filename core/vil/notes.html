@@ -12,7 +12,6 @@
 <ul>
   <li>PNG loader</li>
   <li>TIFF loader</li>
-  <li>BMP loader</li>
   <li>Convert all Manchester Code</li>
   <li>Trial conversion of some code that uses vil1</li>
 </ul>
@@ -98,9 +97,9 @@ size-no-problem image processing code, should write functions that take
 <code>vil2_image_view&lt;T&gt;</code>. To get the functional style, most operations on a
 <code>vil2_image_resource</code>, should be on a <code>vil2_image_resource_sptr</code>.</p>
 <h2>Design decisions:</h2>
-<h4>vil_image_view&lt;T&gt;::resize should be virtual and in the base class</h4>
+<h4><code>vil_image_view&lt;T&gt;::set_size(..)</code> should be virtual and in the base class</h4>
 <p>It is 
-  in <code>mil_image_2d</code>. Resize can be slow so virtual function is no problem. It can 
+  in <code>mil_image_2d</code>. Resizing can be slow so virtual function is no problem. It can 
 be useful to set the size of a image without knowing its type. Decision IMS and 
 TFC.</p>
 <h4><code>vil2_memory_chunk </code>should not be templated.</h4>
@@ -176,13 +175,13 @@ vil2_image_view&lt;T&gt;</code>, and functions on
 <p>Where function overloading doesn't discriminate (e.g. <code>
 vil2_load(&quot;filename&quot;)</code> ) then use <code>vil2_load_image_resource(&quot;filename&quot;)</code> 
 for <code>vil2_image_resource </code>objects. Decision IMS and TFC</p>
-<h4>vil2_image_view&lt;T&gt;::resize(ni, nj) will make no changes if size is same. It 
+<h4><code>vil2_image_view&lt;T&gt;::set_size(ni, nj)</code> will make no changes if size is same. It 
 will detach from original underlying data and create new data if different.</h4>
 <p>This has some odd effects. If you have multiple views to the same data then 
-resize may or may not move view to different data. However, it is very useful 
+set_size may or may not move view to different data. However, it is very useful 
 when treating views as ordinary images, and allows very efficient use of 
 workspace images. For example multiple calls to an image processing class often 
-need identically sized image workspaces. Using this resize means that it doesn't 
+need identically sized image workspaces. Using this set_size means that it doesn't 
 have to reallocate memory on a regular basis. <code>mil_image </code>has been 
 using this design for 18 months with no problems. Decision at Providence meeting.</p>
 <h4>vil2_image_view&lt;T&gt;::operator=() can be smart but should do fast view 
@@ -247,6 +246,10 @@ was originally <code>vil2_image_data</code>. However that was thought to be
 confusing and might get confused with the <code>vil2_memory_chunk</code> class.
 So <code>vil2_image_resource</code>. Decision at Providence meeting and by vote
 on vxl-maintainers.</p>
+<h4>Use <code>set_size(..)</code> rather than <code>resize(..)</code>.</h4>
+<p>The STL has introduced the notion of a data preserving resize. Since our code
+doesn't do that, we use <code>set_size</code><code>(..)</code> instead. Decision
+Amitha and consensus on the reflector.</p>
 <h2>Remaining questions</h2>
 <p>Don't do early optimisation? A good compiler will optimise sequential pixel 
 access using vil2_image_view&lt;T&gt;::operator(i,j,p) to efficient pointer stepping. 

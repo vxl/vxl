@@ -26,10 +26,10 @@ void vil2_gauss_reduce(const vil2_image_view<T>& src_im,
   unsigned ni2 = (ni+1)/2;
   unsigned nj2 = (nj+1)/2;
 
-  dest_im.resize(ni2,nj2,n_planes);
+  dest_im.set_size(ni2,nj2,n_planes);
 
   if (work_im.ni()<ni2 || work_im.nj()<nj)
-    work_im.resize(ni2,nj);
+    work_im.set_size(ni2,nj);
 
   // Reduce plane-by-plane
   for (unsigned int i=0;i<n_planes;++i)
@@ -62,7 +62,7 @@ void vil2_gauss_reduce_121(const vil2_image_view<T>& src_im,
   unsigned int ni2 = (ni+1)/2;
   unsigned int nj2 = (nj+1)/2;
 
-  dest_im.resize(ni2,nj2,n_planes);
+  dest_im.set_size(ni2,nj2,n_planes);
 
   // Reduce plane-by-plane
   for (unsigned int i=0;i<n_planes;++i)
@@ -219,10 +219,10 @@ void vil2_gauss_reduce_general(const vil2_image_view<T>& src,
                           const vil2_gauss_reduce_params &params)
 {
   if (worka.ni() < src.ni() || worka.nj() < src.nj())
-    worka.resize(src.ni(), src.nj());
+    worka.set_size(src.ni(), src.nj());
   if (workb.ni() < src.ni() || workb.nj() < src.nj())
-    workb.resize(src.ni(), src.nj());
-  dest.resize((unsigned) (src.ni()/params.scale_step()+0.5),
+    workb.set_size(src.ni(), src.nj());
+  dest.set_size((unsigned) (src.ni()/params.scale_step()+0.5),
     (unsigned) (src.nj()/params.scale_step()+0.5), src.nplanes());
 
   // Reduce plane-by-plane

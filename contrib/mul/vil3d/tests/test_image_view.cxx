@@ -28,13 +28,13 @@ void test_image_view_int()
            << "*******************************\n";
 
   vil3d_image_view<vxl_int_32> image0;
-  image0.resize(10,8,2);
+  image0.set_size(10,8,2);
   vcl_cout<<"image0: "<<image0<<vcl_endl;
 
   TEST("N.Planes",image0.nplanes(),1);
-  TEST("resize i",image0.ni(),10);
-  TEST("resize j",image0.nj(),8);
-  TEST("resize k",image0.nk(),2);
+  TEST("set_size i",image0.ni(),10);
+  TEST("set_size j",image0.nj(),8);
+  TEST("set_size k",image0.nk(),2);
 
   for (unsigned int k=0;k<image0.nk();++k)
     for (unsigned int j=0;j<image0.nj();++j)
@@ -65,7 +65,7 @@ void test_image_view_int()
   {
     // Check data remains valid if a copy taken
     vil3d_image_view<vxl_int_32> image3;
-    image3.resize(4,5,3,2);
+    image3.set_size(4,5,3,2);
     image3.fill(111);
     image2 = image3;
   }
@@ -162,7 +162,7 @@ void test_image_view_int()
 
   image2.fill(0);
   image_win = vil2_crop(image2,2,1,1,2);
-  image5.resize(1,2);
+  image5.set_size(1,2);
   image5(0,0) = vil_rgb<vxl_int_32>(25,35,45);
   image5(0,1) = vil_rgb<vxl_int_32>(25,35,45);
   image0 = image5;
@@ -178,7 +178,7 @@ void test_image_view_int()
        vil3d_image_view_deep_equality(test_image,image2), true);
   test_image(2,2,2) = 44;
   TEST("!vil2_deep_equality", vil3d_image_view_deep_equality(test_image,image2), false);
-  test_image.resize(5,4,4);
+  test_image.set_size(5,4,4);
   TEST("!vil2_deep_equality", vil3d_image_view_deep_equality(test_image,image2), false);
   vil2_print_all(vcl_cout, image2);
 

@@ -56,7 +56,7 @@ void vsl_b_write(vsl_b_ostream &os, const vil2_memory_chunk& chunk)
 #undef write_case_macro
 
 #define read_case_macro(T)\
-chunk.resize(n*sizeof(T ),pixel_format); \
+chunk.set_size(n*sizeof(T ),pixel_format); \
 vsl_b_read_block(is,(T *)chunk.data(),n)
 
 //: Binary load vil2_memory_chunk from stream.

@@ -34,7 +34,7 @@ protected:
   ni_(ni), nj_(nj), nk_(nk), nplanes_(nplanes), reference_count_(0) {}
 
   //: Default is an empty one-plane image
-  //  Don't set nplanes_ to zero as it confuses resize(nx,ny,nz) later
+  //  Don't set nplanes_ to zero as it confuses set_size(nx,ny,nz) later
   vil3d_image_view_base(): ni_(0), nj_(0), nk_(0), nplanes_(1), reference_count_(0) {}
 
 public:
@@ -55,11 +55,11 @@ public:
 
   //: resize current planes to ni x nj * nk 
   // If already correct size, this function returns quickly
-  virtual void resize(unsigned ni, unsigned nj, unsigned nk) =0;
+  virtual void set_size(unsigned ni, unsigned nj, unsigned nk) =0;
 
   //: resize to ni x nj * nk with nplanes planes.
   // If already correct size, this function returns quickly
-  virtual void resize(unsigned ni, unsigned nj, unsigned nk, unsigned nplanes) =0;
+  virtual void set_size(unsigned ni, unsigned nj, unsigned nk, unsigned nplanes) =0;
 
   //: Print a 1-line summary of contents
   virtual void print(vcl_ostream&) const =0;

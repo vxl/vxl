@@ -45,7 +45,7 @@ void vil2_resample_bilin(const vil2_image_view<sType>& src_image,
   const int pstep = src_image.planestep();
   const sType* plane0 = src_image.top_left_ptr();
 
-  dest_image.resize(n1,n2,np);
+  dest_image.set_size(n1,n2,np);
   const int d_istep = dest_image.istep();
   const int d_jstep = dest_image.jstep();
   const int d_pstep = dest_image.planestep();

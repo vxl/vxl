@@ -16,7 +16,7 @@ void test_gaussian_pyramid_builder_2d_general_a()
 
 
   vimt_image_2d_of<vil_byte> image0;
-  image0.image().resize(ni,nj);
+  image0.image().set_size(ni,nj);
 
 #if 0 // use 2x2 chessboard pattern
   for (unsigned y=0;y<nj/2;++y)

@@ -21,7 +21,7 @@ void test_binary_dilate_byte()
            << "****************************\n";
 
   vil2_image_view<bool> image0;
-  image0.resize(10,10);
+  image0.set_size(10,10);
   image0.fill(false);
 
   image0(5,5)=true;  // Central pixel

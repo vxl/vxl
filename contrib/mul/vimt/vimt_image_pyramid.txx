@@ -28,7 +28,7 @@ template <class T> void vimt_image_pyramid_flatten(T& out, const vimt_image_pyra
     for (int i =0; i<n_levels; ++i)
       width += (in(i).nx());
     const int n_planes = in(0).n_planes();
-    out.resize(width, in(0).ny(), n_planes);
+    out.set_size(width, in(0).ny(), n_planes);
     out.fill((typename T::pixel_type)0);
     int offset=0;
     for (int i =0; i<n_levels; ++i)

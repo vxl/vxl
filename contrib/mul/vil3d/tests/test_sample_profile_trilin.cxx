@@ -13,7 +13,7 @@ void test_sample_profile_trilin_float()
 
   vcl_cout<< "One plane image\n";
   vil3d_image_view<float> image1;
-  image1.resize(10,10,10);
+  image1.set_size(10,10,10);
 
   for (int y=0;y<image1.nj();++y)
    for (int x=0;x<image1.ni();++x)
@@ -39,7 +39,7 @@ void test_sample_profile_trilin_float()
 
   vcl_cout<< "Three plane image (float)\n";
   vil3d_image_view<float> image3;
-  image3.resize(10,10,10,3);
+  image3.set_size(10,10,10,3);
 
   for (int z=0;z<image3.nk();++z)
     for (int y=0;y<image3.nj();++y)

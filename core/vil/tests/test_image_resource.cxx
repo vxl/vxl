@@ -59,7 +59,7 @@ void test_image_resource(vcl_string type, vil2_pixel_format format, T dummy)
   TEST("Value range after clamping is 1,9", v1 == 1 && v2 == 9, true);
 
 
-  view2.resize(1,1,1);
+  view2.set_size(1,1,1);
   view2.fill(T(20));
   vil2_image_resource_sptr trans = vil2_transpose(mem);
   TEST("Transpose::put_view",trans->put_view(view2,3,0), true);

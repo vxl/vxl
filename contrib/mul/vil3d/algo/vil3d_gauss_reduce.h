@@ -53,13 +53,13 @@ inline void vil3d_gauss_reduce(const vil3d_image_view<T>& src_im,
   unsigned nj2 = (nj+1)/2;
   unsigned nk2 = (nk+1)/2;
 
-  dest_im.resize(ni2,nj2,nk2,n_planes);
+  dest_im.set_size(ni2,nj2,nk2,n_planes);
 
   if (work_im1.ni()<ni2 || work_im1.nj()<nj || work_im1.nk()<nk)
-    work_im1.resize(ni2,nj,nk);
+    work_im1.set_size(ni2,nj,nk);
 
   if (work_im2.ni()<ni2 || work_im2.nj()<nj2 || work_im2.nk()<nk)
-    work_im2.resize(ni2,nj2,nk);
+    work_im2.set_size(ni2,nj2,nk);
 
   // Reduce plane-by-plane
   for (int p=0;p<n_planes;++p)
@@ -103,10 +103,10 @@ inline void vil3d_gauss_reduce_ij(const vil3d_image_view<T>& src_im,
   unsigned nj2 = (nj+1)/2;
   unsigned nk2 = nk;
 
-  dest_im.resize(ni2,nj2,nk2,n_planes);
+  dest_im.set_size(ni2,nj2,nk2,n_planes);
 
   if (work_im1.ni()<ni2 || work_im1.nj()<nj || work_im1.nk()<nk)
-    work_im1.resize(ni2,nj,nk);
+    work_im1.set_size(ni2,nj,nk);
 
   // Reduce plane-by-plane
   for (int p=0;p<n_planes;++p)
@@ -144,10 +144,10 @@ inline void vil3d_gauss_reduce_ik(const vil3d_image_view<T>& src_im,
   unsigned nj2 = nj;
   unsigned nk2 = (nk+1)/2;
 
-  dest_im.resize(ni2,nj2,nk2,n_planes);
+  dest_im.set_size(ni2,nj2,nk2,n_planes);
 
   if (work_im1.ni()<ni2 || work_im1.nj()<nj || work_im1.nk()<nk)
-    work_im1.resize(ni2,nj,nk);
+    work_im1.set_size(ni2,nj,nk);
 
   // Reduce plane-by-plane
   for (int p=0;p<n_planes;++p)
@@ -185,10 +185,10 @@ inline void vil3d_gauss_reduce_jk(const vil3d_image_view<T>& src_im,
   unsigned nj2 = (nj+1)/2;
   unsigned nk2 = (nk+1)/2;
 
-  dest_im.resize(ni2,nj2,nk2,n_planes);
+  dest_im.set_size(ni2,nj2,nk2,n_planes);
 
   if (work_im1.ni()<ni || work_im1.nj()<nj2 || work_im1.nk()<nk)
-    work_im1.resize(ni,nj2,nk);
+    work_im1.set_size(ni,nj2,nk);
 
   // Reduce plane-by-plane
   for (int p=0;p<n_planes;++p)

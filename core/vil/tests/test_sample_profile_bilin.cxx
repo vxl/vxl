@@ -14,7 +14,7 @@ void test_sample_profile_bilin_byte()
 
   vcl_cout<< "One plane image"<<vcl_endl;
   vil2_image_view<vxl_byte> image1;
-  image1.resize(10,10);
+  image1.set_size(10,10);
 
   for (unsigned int j=0;j<image1.nj();++j)
      for (unsigned int i=0;i<image1.ni();++i)
@@ -35,7 +35,7 @@ void test_sample_profile_bilin_byte()
 
   vcl_cout<< "Three plane image (float)"<<vcl_endl;
   vil2_image_view<float> image3;
-  image3.resize(10,10,3);
+  image3.set_size(10,10,3);
 
   for (unsigned int j=0;j<image3.nj();++j)
      for (unsigned int i=0;i<image3.ni();++i)

@@ -61,7 +61,7 @@ inline void vil2_convolve_2d(const vil2_image_view<srcT>& src_im,
   int s_istep = src_im.istep(), s_jstep = src_im.jstep();
   int s_pstep = src_im.planestep();
 
-  dest_im.resize(ni,nj,1);
+  dest_im.set_size(ni,nj,1);
   int d_istep = dest_im.istep(),d_jstep = dest_im.jstep();
 
   // Select first row of p-th plane

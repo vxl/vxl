@@ -7,17 +7,17 @@
 void test_find_peaks_byte()
 {
   vimt_image_2d_of<vxl_byte> image0;
-  image0.image().resize(10,10);
+  image0.image().set_size(10,10);
   image0.image().fill(10);
   image0.image()(3,7)=18;  // One peak
   image0.image()(7,5)=19;  // Another peak
 
-  vcl_vector<vgl_point_2d<int> > im_peaks;
+  vcl_vector<vgl_point_2d<unsigned> > im_peaks;
   vimt_find_image_peaks_3x3(im_peaks,image0.image());
 
   TEST("Number of peaks",im_peaks.size(),2);
-  TEST_NEAR("Peak 0",(im_peaks[0]-vgl_point_2d<int>(7,5)).sqr_length(),0,1e-6);
-  TEST_NEAR("Peak 1",(im_peaks[1]-vgl_point_2d<int>(3,7)).sqr_length(),0,1e-6);
+  TEST_NEAR("Peak 0",(im_peaks[0]-vgl_point_2d<unsigned>(7,5)).sqr_length(),0,1e-6);
+  TEST_NEAR("Peak 1",(im_peaks[1]-vgl_point_2d<unsigned>(3,7)).sqr_length(),0,1e-6);
 
   vcl_vector<vgl_point_2d<double> > w_peaks;
   vimt_transform_2d w2i;
@@ -29,8 +29,8 @@ void test_find_peaks_byte()
   TEST_NEAR("Peak 0",(w_peaks[0]-vgl_point_2d<double>(5,2)).sqr_length(),0,1e-6);
   TEST_NEAR("Peak 1",(w_peaks[1]-vgl_point_2d<double>(1,4)).sqr_length(),0,1e-6);
 
-  vgl_point_2d<int> im_p1 = vimt_find_max(image0.image());
-  TEST_NEAR("Global peak",(im_p1-vgl_point_2d<int>(7,5)).sqr_length(),0,1e-6);
+  vgl_point_2d<unsigned> im_p1 = vimt_find_max(image0.image());
+  TEST_NEAR("Global peak",(im_p1-vgl_point_2d<unsigned>(7,5)).sqr_length(),0,1e-6);
 
   vgl_point_2d<double> w_p1 = vimt_find_max(image0);
   TEST_NEAR("Global peak",(w_p1-vgl_point_2d<double>(5,2)).sqr_length(),0,1e-6);

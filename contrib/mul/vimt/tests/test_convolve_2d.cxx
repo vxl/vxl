@@ -11,7 +11,7 @@ void test_convolve_2d_byte()
 {
   vimt_image_2d_of<vxl_byte> image0;
   vimt_image_2d_of<float> fit_image,sample_im;
-  image0.image().resize(10,10);
+  image0.image().set_size(10,10);
   image0.image().fill(10);
   image0.image()(3,7)=18;  // One peak
 

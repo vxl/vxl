@@ -14,7 +14,7 @@ void test_memory_chunk1()
   TEST("size()",chunk1.size(),35);
   TEST("format",chunk1.pixel_format(),VIL2_PIXEL_FORMAT_BYTE);
 
-  chunk1.resize(25*sizeof(double),VIL2_PIXEL_FORMAT_DOUBLE);
+  chunk1.set_size(25*sizeof(double),VIL2_PIXEL_FORMAT_DOUBLE);
   TEST("size()",chunk1.size(),25*sizeof(double));
   TEST("format",chunk1.pixel_format(),VIL2_PIXEL_FORMAT_DOUBLE);
 

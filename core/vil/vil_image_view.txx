@@ -32,7 +32,7 @@ template<class T>
 vil2_image_view<T>::vil2_image_view(unsigned n_i, unsigned n_j, unsigned n_planes)
 : top_left_(0),istep_(1),jstep_(0)
 {
-  resize(n_i,n_j,n_planes);
+  set_size(n_i,n_j,n_planes);
 }
 
 //: Set this view to look at someone else's memory data.
@@ -91,7 +91,7 @@ top_left_(0), istep_(0), jstep_(0), planestep_(0), ptr_(0)
 template<class T>
 void vil2_image_view<T>::deep_copy(const vil2_image_view<T>& src)
 {
-  resize(src.ni(),src.nj(),src.nplanes());
+  set_size(src.ni(),src.nj(),src.nplanes());
 
   int s_planestep = src.planestep();
   int s_istep = src.istep();
@@ -453,9 +453,9 @@ template<class T> vil2_image_view<T>::~vil2_image_view()
 
 
 template<class T>
-void vil2_image_view<T>::resize(unsigned n_i, unsigned n_j)
+void vil2_image_view<T>::set_size(unsigned n_i, unsigned n_j)
 {
-  resize(n_i,n_j, nplanes_);
+  set_size(n_i,n_j, nplanes_);
 }
 
 //: True if data all in one unbroken block and top_left_ptr() is lowest data address
@@ -515,7 +515,7 @@ bool vil2_image_view<T>::is_contiguous() const
 //=======================================================================
 
 template<class T>
-void vil2_image_view<T>::resize(unsigned n_i, unsigned n_j, unsigned n_planes)
+void vil2_image_view<T>::set_size(unsigned n_i, unsigned n_j, unsigned n_planes)
 {
   if (n_i==ni_ && n_j==nj_ && n_planes==nplanes_) return;
 

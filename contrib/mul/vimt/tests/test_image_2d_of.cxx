@@ -21,7 +21,7 @@ void test_image_2d_byte_io()
   // -------- Test the binary I/O --------
   vimt_image_2d_of<vxl_byte> image_out0;
   vimt_image_2d_of<vxl_byte> image_out1;
-  image_out0.image().resize(5,6,2);
+  image_out0.image().set_size(5,6,2);
   for (int p=0;p<2;++p)
     for (int j=0;j<6;++j)
       for (int i=0;i<5;++i)
@@ -55,7 +55,7 @@ void test_image_2d_byte_io()
 void test_image_2d_byte_functions()
 {
   vimt_image_2d_of<vxl_byte> image0;
-  image0.image().resize(5,6,2);
+  image0.image().set_size(5,6,2);
   for (int p=0;p<2;++p)
     for (int j=0;j<6;++j)
       for (int i=0;i<5;++i)

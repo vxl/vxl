@@ -23,7 +23,7 @@
 //  The (i,j) element of the p'th plane is given by
 //  im.top_left_ptr()[i*im.istep() + j*im.jstep() + p*im.planestep]
 //  The actual image data is either allocated by the class
-//  (using resize), in which case it is deleted
+//  (using set_size), in which case it is deleted
 //  only when it has no views observing it, or is allocated outside (and is not
 //  deleted on destruction).  This allows external images to be accessed
 //  without a deep copy.
@@ -183,11 +183,11 @@ class vil2_image_view : public vil2_image_view_base
 
   //: resize current planes to ni x nj
   // If already correct size, this function returns quickly
-  virtual void resize(unsigned ni, unsigned nj);
+  virtual void set_size(unsigned ni, unsigned nj);
 
   //: resize to ni x nj x nplanes
   // If already correct size, this function returns quickly
-  virtual void resize(unsigned ni, unsigned nj, unsigned nplanes);
+  virtual void set_size(unsigned ni, unsigned nj, unsigned nplanes);
 
   //: Make a copy of the data in src and set this to view it
   void deep_copy(const vil2_image_view<T>& src);

@@ -10,7 +10,7 @@ void test_sample_grid_bilin_byte_affine()
 {
   vcl_cout<<"Testing up to affine mappings\n";
   vimt_image_2d_of<vxl_byte> image0;
-  image0.image().resize(10,10);
+  image0.image().set_size(10,10);
 
   vcl_cout<<"Testing one plane image\n";
 
@@ -41,7 +41,7 @@ void test_sample_grid_bilin_byte_affine()
 
   vcl_cout<<"Testing three plane image\n";
 
-  image0.image().resize(10,10,2);
+  image0.image().set_size(10,10,2);
   for (unsigned int j=0;j<image0.image().nj();++j)
     for (unsigned int i=0;i<image0.image().ni();++i)
       for (unsigned int p=0;p<2;++p)
@@ -67,7 +67,7 @@ void test_sample_grid_bilin_byte_projective()
 {
   vcl_cout<<"Testing projective mappings\n";
   vimt_image_2d_of<vxl_byte> image0;
-  image0.image().resize(10,10);
+  image0.image().set_size(10,10);
 
   vimt_transform_2d trans;
   // Create projective identity matrix
@@ -111,7 +111,7 @@ void test_sample_grid_bilin_byte_projective()
 
   vcl_cout<<"Testing three plane image\n";
 
-  image0.image().resize(10,10,2);
+  image0.image().set_size(10,10,2);
   for (unsigned int j=0;j<image0.image().nj();++j)
     for (unsigned int i=0;i<image0.image().ni();++i)
       for (unsigned int p=0;p<2;++p)

@@ -22,7 +22,7 @@ void test_image_view_rgba(vil2_image_view<S> &image2, vil2_image_view<T> &image7
 VCL_DEFINE_SPECIALIZATION
 void test_image_view_rgba(vil2_image_view<vxl_byte> &image2, vil2_image_view<float> &image7)
 {
-  image2.resize(10,10,2);
+  image2.set_size(10,10,2);
   vil2_image_view<vil_rgba<vxl_byte> > image6 = image2;
   TEST("Can't assign a 3 plane images to rgba view", image6, false);
 
@@ -48,7 +48,7 @@ void test_image_view_rgba(vil2_image_view<vxl_byte> &image2, vil2_image_view<flo
 VCL_DEFINE_SPECIALIZATION
 void test_image_view_rgba(vil2_image_view<float> &image2, vil2_image_view<double> &image7)
 {
-  image2.resize(10,10,2);
+  image2.set_size(10,10,2);
   vil2_image_view<vil_rgba<float> > image6 = image2;
   TEST("Can't assign a 3 plane images to rgba view", image6, false);
 
@@ -77,12 +77,12 @@ void test_image_view(S d1, vcl_string s_name, T d2)
 {
 
   vil2_image_view<S> image0;
-  image0.resize(10,8);
+  image0.set_size(10,8);
   vcl_cout<<"image0: "<<image0<<vcl_endl;
 
   TEST("N.Planes",image0.nplanes(),1);
-  TEST("resize i",image0.ni(),10);
-  TEST("resize j",image0.nj(),8);
+  TEST("set_size i",image0.ni(),10);
+  TEST("set_size j",image0.nj(),8);
 
   for (unsigned int j=0;j<image0.nj();++j)
      for (unsigned int i=0;i<image0.ni();++i)
@@ -109,7 +109,7 @@ void test_image_view(S d1, vcl_string s_name, T d2)
   {
     // Check data remains valid if a copy taken
     vil2_image_view<S> image3;
-    image3.resize(4,5,3);
+    image3.set_size(4,5,3);
     image3.fill(111);
     image2 = image3;
   }
@@ -150,7 +150,7 @@ void test_image_view(S d1, vcl_string s_name, T d2)
   TEST("is_a() specialisation for S",image0.is_a(),"vil2_image_view<"+s_name+">");
 
   vil2_image_view<vil_rgb<S> > image5;
-  image5.resize(5,4);
+  image5.set_size(5,4);
   image5.fill(vil_rgb<S>(25,35,45));
   image5(2,2).b = 50;
 
@@ -182,7 +182,7 @@ void test_image_view(S d1, vcl_string s_name, T d2)
   TEST("Equality", image2 == image_win, false);
   TEST("Comparison", image_win < image2, true);
   TEST("Comparison", image_win > image2, false);
-  image5.resize(1,2);
+  image5.set_size(1,2);
   image5(0,0) = vil_rgb<S>(25,35,45);
   image5(0,1) = vil_rgb<S>(25,35,45);
   image0 = image5;
@@ -198,7 +198,7 @@ void test_image_view(S d1, vcl_string s_name, T d2)
        vil2_image_view_deep_equality(test_image,image2), true);
   test_image(2,2,2) = 44;
   TEST("!vil2_deep_equality", vil2_image_view_deep_equality(test_image,image2), false);
-  test_image.resize(5,4,4);
+  test_image.set_size(5,4,4);
   TEST("!vil2_deep_equality", vil2_image_view_deep_equality(test_image,image2), false);
   vil2_print_all(vcl_cout, image2);
 

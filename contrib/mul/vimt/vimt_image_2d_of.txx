@@ -44,7 +44,7 @@ template<class T> vimt_image_2d_of<T>::~vimt_image_2d_of()
 template<class T>
 void vimt_image_2d_of<T>::set_valid_region(int x0, unsigned nx, int y0, unsigned ny)
 {
-  image_.resize(nx,ny);
+  image_.set_size(nx,ny);
   world2im_.set_translation(-x0,-y0);
 }
 

@@ -12,7 +12,7 @@ void test_greyscale_erode_byte()
            << "******************************\n";
 
   vil2_image_view<vxl_byte> image0;
-  image0.resize(10,10);
+  image0.set_size(10,10);
   image0.fill(false);
 
   image0(4,5)=4;  // Central pixel

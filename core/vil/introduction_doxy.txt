@@ -118,12 +118,12 @@ for (unsigned p=0;p<nplanes;++p)
   }
 \endverbatim
 *
-* \subsection resize Resizing
-* When one resizes a vil2_image_view<T> the view disconnects from the data
+* \subsection set_size Resizing
+* When one resizes (using set_size) a vil2_image_view<T> the view disconnects from the data
 * (which may then be deleted if no other views are connected), allocates a new
 * chunk of memory for the new image and sets the view to look at it.
 *
-* Note that if the resize does not change the image size, then nothing is done
+* Note that if the set_size does not change the image size, then nothing is done
 * and the view remains unchanged.
 *
 * \subsection view_manipulation Manipulating Views

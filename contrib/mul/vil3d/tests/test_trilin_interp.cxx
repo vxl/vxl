@@ -14,7 +14,7 @@ void test_trilin_interp_float()
   int nj = 5;
   int nk = 5;
   vil3d_image_view<float> image0;
-  image0.resize(ni,nj,nk);
+  image0.set_size(ni,nj,nk);
 
   for (int y=0;y<image0.nj();++y)
     for (int x=0;x<image0.ni();++x)

@@ -18,7 +18,7 @@ void vil2_sobel_3x3(const vil2_image_view<srcT>& src,
   int np = src.nplanes();
   int ni = src.ni();
   int nj = src.nj();
-  grad_ij.resize(ni,nj,2*np);
+  grad_ij.set_size(ni,nj,2*np);
   for (int p=0;p<np;++p)
   {
     vil2_sobel_3x3_1plane(src.top_left_ptr()+p*src.planestep(),
@@ -39,8 +39,8 @@ void vil2_sobel_3x3(const vil2_image_view<srcT>& src,
   int np = src.nplanes();
   int ni = src.ni();
   int nj = src.nj();
-  grad_i.resize(ni,nj,np);
-  grad_j.resize(ni,nj,np);
+  grad_i.set_size(ni,nj,np);
+  grad_j.set_size(ni,nj,np);
   for (int p=0;p<np;++p)
   {
     vil2_sobel_3x3_1plane(src.top_left_ptr()+p*src.planestep(),

@@ -166,7 +166,7 @@ inline void vil2_convert_planes_to_grey(const vil2_image_view<inP>&src,
   assert(src.nplanes() >= 3);
   assert(vil2_pixel_format_num_components(src.pixel_format()) == 1);
   assert(vil2_pixel_format_num_components(dest.pixel_format()) == 1);
-  dest.resize(src.ni(), src.nj(), 1);
+  dest.set_size(src.ni(), src.nj(), 1);
   for (unsigned j = 0; j < src.nj(); ++j)
     for (unsigned i = 0; i < src.ni(); ++i)
       dest(i,j) = vil2_convert_cast_pixel<double,outP>()(

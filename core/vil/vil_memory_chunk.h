@@ -67,7 +67,7 @@ class vil2_memory_chunk
 
     //: Create space for n elements
     //  pixel_format indicates what format to be used for binary IO
-    void resize(unsigned long n, vil2_pixel_format pixel_format);
+    void set_size(unsigned long n, vil2_pixel_format pixel_format);
 };
 
 typedef vil2_smart_ptr<vil2_memory_chunk> vil2_memory_chunk_sptr;

@@ -71,8 +71,8 @@ void vimt_gaussian_pyramid_builder_2d_general<T>::build(
   if (maxlevels>max_levels())
     maxlevels=max_levels();
 
-  worka_.resize(ni,nj);
-  workb_.resize(ni,nj);
+  worka_.set_size(ni,nj);
+  workb_.set_size(ni,nj);
 
   // Set up image pyramid
   check_pyr(im_pyr,maxlevels);
@@ -146,8 +146,8 @@ void vimt_gaussian_pyramid_builder_2d_general<T>::extend(vimt_image_pyramid& ima
   if (maxlevels>max_levels())
       maxlevels=max_levels();
 
-  worka_.resize(ni,nj);
-  workb_.resize(ni,nj);
+  worka_.set_size(ni,nj);
+  workb_.set_size(ni,nj);
 
   // Set up image pyramid
   int oldsize = image_pyr.n_levels();
@@ -161,7 +161,7 @@ void vimt_gaussian_pyramid_builder_2d_general<T>::extend(vimt_image_pyramid& ima
       image_pyr.data()[i] = new vimt_image_2d_of<T>;
       vimt_image_2d_of<T>& im_i0 = (vimt_image_2d_of<T>&) image_pyr(i);
       vimt_image_2d_of<T>& im_i1 = (vimt_image_2d_of<T>&) image_pyr(i-1);
-      im_i0.image().resize((unsigned)(ni/s+0.5),(unsigned)(nj/s+0.5),
+      im_i0.image().set_size((unsigned)(ni/s+0.5),(unsigned)(nj/s+0.5),
         im_i1.image().nplanes());
 
       s*=scale_step();

@@ -13,9 +13,9 @@ void test_algo_gauss_reduce_byte(unsigned nx)
            << "*********************************************\n";
 
   vil2_image_view<vxl_byte> image0;
-  image0.resize(nx,3);
+  image0.set_size(nx,3);
   vil2_image_view<vxl_byte> reduced_x;
-  reduced_x.resize((nx+1)/2,3);
+  reduced_x.set_size((nx+1)/2,3);
 
   for (unsigned int j=0;j<image0.nj();++j)
     for (unsigned int i=0;i<image0.ni();++i)
@@ -34,7 +34,7 @@ void test_algo_gauss_reduce_byte(unsigned nx)
   TEST("Last element", reduced_x(L,1),image0(2*L,1));
 
   vil2_image_view<vxl_byte> test2;
-  test2.resize(nx,3);
+  test2.set_size(nx,3);
   test2.fill(222);
   vil2_gauss_reduce(image0.top_left_ptr(),image0.ni(),image0.nj(),
                      image0.istep(),image0.jstep(),
@@ -43,9 +43,9 @@ void test_algo_gauss_reduce_byte(unsigned nx)
 
   // Test it can be used to smooth in y by swapping ordinates
   vil2_image_view<vxl_byte> image1;
-  image1.resize(3,nx);
+  image1.set_size(3,nx);
   vil2_image_view<vxl_byte> reduced_y;
-  reduced_y.resize(3,(nx+1)/2);
+  reduced_y.set_size(3,(nx+1)/2);
 
   for (unsigned int j=0;j<image1.nj();++j)
     for (unsigned int i=0;i<image1.ni();++i)
@@ -70,9 +70,9 @@ void test_algo_gauss_reduce_int_32(unsigned nx)
            << "*********************************************\n";
 
   vil2_image_view<vxl_int_32> image0;
-  image0.resize(nx,3);
+  image0.set_size(nx,3);
   vil2_image_view<vxl_int_32> reduced_x;
-  reduced_x.resize((nx+1)/2,3);
+  reduced_x.set_size((nx+1)/2,3);
 
   for (unsigned int j=0;j<image0.nj();++j)
     for (unsigned int i=0;i<image0.ni();++i)
@@ -91,7 +91,7 @@ void test_algo_gauss_reduce_int_32(unsigned nx)
   TEST("Last element", reduced_x(L,1),image0(2*L,1));
 
   vil2_image_view<vxl_int_32> test2;
-  test2.resize(nx,3);
+  test2.set_size(nx,3);
   test2.fill(222);
   vil2_gauss_reduce(image0.top_left_ptr(),image0.ni(),image0.nj(),
                      image0.istep(),image0.jstep(),
@@ -100,9 +100,9 @@ void test_algo_gauss_reduce_int_32(unsigned nx)
 
   // Test it can be used to smooth in y by swapping ordinates
   vil2_image_view<vxl_int_32> image1;
-  image1.resize(3,nx);
+  image1.set_size(3,nx);
   vil2_image_view<vxl_int_32> reduced_y;
-  reduced_y.resize(3,(nx+1)/2);
+  reduced_y.set_size(3,(nx+1)/2);
 
   for (unsigned int j=0;j<image1.nj();++j)
     for (unsigned int i=0;i<image1.ni();++i)
@@ -127,9 +127,9 @@ void test_algo_gauss_reduce_float(int nx)
            << "**********************************************\n";
 
   vil2_image_view<float> image0;
-  image0.resize(nx,3);
+  image0.set_size(nx,3);
   vil2_image_view<float> reduced_x;
-  reduced_x.resize((nx+1)/2,3);
+  reduced_x.set_size((nx+1)/2,3);
 
   for (unsigned int j=0;j<image0.nj();++j)
     for (unsigned int i=0;i<image0.ni();++i)
@@ -149,7 +149,7 @@ void test_algo_gauss_reduce_float(int nx)
 
 
   vil2_image_view<float> test2;
-  test2.resize(nx,3);
+  test2.set_size(nx,3);
   test2.fill(22.2f);
   vil2_gauss_reduce(image0.top_left_ptr(),image0.ni(),image0.nj(),
                      image0.istep(),image0.jstep(),
@@ -164,9 +164,9 @@ void test_algo_gauss_reduce_121_byte(unsigned nx, unsigned ny)
            << "*******************************************************\n";
 
   vil2_image_view<vxl_byte> image0;
-  image0.resize(nx,ny);
+  image0.set_size(nx,ny);
   vil2_image_view<vxl_byte> reduced_x;
-  reduced_x.resize((nx+1)/2,(ny+1)/2);
+  reduced_x.set_size((nx+1)/2,(ny+1)/2);
 
   for (unsigned int j=0;j<image0.nj();++j)
     for (unsigned int i=0;i<image0.ni();++i)
@@ -187,7 +187,7 @@ void test_algo_gauss_reduce_121_byte(unsigned nx, unsigned ny)
   TEST("Last element in y",reduced_x(1,Ly-1),image0(2,2*(Ly-1)));
 
   vil2_image_view<vxl_byte> test2;
-  test2.resize(nx,ny);
+  test2.set_size(nx,ny);
   test2.fill(222);
   vil2_gauss_reduce_121(image0.top_left_ptr(),image0.ni(),image0.nj(),
                          image0.istep(),image0.jstep(),
@@ -211,9 +211,9 @@ void test_algo_gauss_reduce_121_int_32(unsigned nx, unsigned ny)
            << "*******************************************************\n";
 
   vil2_image_view<vxl_int_32> image0;
-  image0.resize(nx,ny);
+  image0.set_size(nx,ny);
   vil2_image_view<vxl_int_32> reduced_x;
-  reduced_x.resize((nx+1)/2,(ny+1)/2);
+  reduced_x.set_size((nx+1)/2,(ny+1)/2);
 
   for (unsigned int j=0;j<image0.nj();++j)
     for (unsigned int i=0;i<image0.ni();++i)
@@ -234,7 +234,7 @@ void test_algo_gauss_reduce_121_int_32(unsigned nx, unsigned ny)
   TEST("Last element in y",reduced_x(1,Ly-1),image0(2,2*(Ly-1)));
 
   vil2_image_view<vxl_int_32> test2;
-  test2.resize(nx,ny);
+  test2.set_size(nx,ny);
   test2.fill(222);
   vil2_gauss_reduce_121(image0.top_left_ptr(),image0.ni(),image0.nj(),
                          image0.istep(),image0.jstep(),
@@ -258,9 +258,9 @@ void test_algo_gauss_reduce_121_float(unsigned nx, unsigned ny)
            << "********************************************************\n";
 
   vil2_image_view<float> image0;
-  image0.resize(nx,ny);
+  image0.set_size(nx,ny);
   vil2_image_view<float> reduced_x;
-  reduced_x.resize((nx+1)/2,(ny+1)/2);
+  reduced_x.set_size((nx+1)/2,(ny+1)/2);
 
   for (unsigned int j=0;j<image0.nj();++j)
     for (unsigned int i=0;i<image0.ni();++i)
@@ -281,7 +281,7 @@ void test_algo_gauss_reduce_121_float(unsigned nx, unsigned ny)
   TEST_NEAR("Last element in y",reduced_x(1,Ly-1),image0(2,2*(Ly-1)),1e-6);
 
   vil2_image_view<float> test2;
-  test2.resize(nx,ny);
+  test2.set_size(nx,ny);
   test2.fill(22.2f);
   vil2_gauss_reduce_121(image0.top_left_ptr(),image0.ni(),image0.nj(),
                              image0.istep(),image0.jstep(),

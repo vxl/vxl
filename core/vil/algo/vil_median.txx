@@ -19,7 +19,7 @@ void vil2_median(const vil2_image_view<T>& src_image,
   assert(src_image.nplanes()==1);
   unsigned ni = src_image.ni();
   unsigned nj = src_image.nj();
-  dest_image.resize(ni,nj,1);
+  dest_image.set_size(ni,nj,1);
 
   int s_istep = src_image.istep(),  s_jstep = src_image.jstep();
   int d_istep = dest_image.istep(), d_jstep = dest_image.jstep();

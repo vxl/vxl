@@ -17,7 +17,7 @@
 template <class inP, class outP, class Op >
 inline void vil2_transform(const vil2_image_view<inP >&src, vil2_image_view<outP >&dest, Op functor)
 {
-  dest.resize(src.ni(), src.nj(), src.nplanes());
+  dest.set_size(src.ni(), src.nj(), src.nplanes());
   for (unsigned p = 0; p < src.nplanes(); ++p)
     for (unsigned j = 0; j < src.nj(); ++j)
       for (unsigned i = 0; i < src.ni(); ++i)
@@ -33,7 +33,7 @@ inline void vil2_transform(const vil2_image_view<inA >&srcA,
 {
   assert(srcB.ni() == srcA.ni() && srcA.nj() == srcB.nj()
     && srcA.nplanes() == srcB.nplanes());
-  dest.resize(srcA.ni(), srcA.nj(), srcA.nplanes());
+  dest.set_size(srcA.ni(), srcA.nj(), srcA.nplanes());
   for (unsigned p = 0; p < srcA.nplanes(); ++p)
     for (unsigned j = 0; j < srcA.nj(); ++j)
       for (unsigned i = 0; i < srcA.ni(); ++i)
