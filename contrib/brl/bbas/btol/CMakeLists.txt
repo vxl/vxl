@@ -13,3 +13,7 @@ AUX_SOURCE_DIRECTORY(Templates btol_sources)
 ADD_LIBRARY(btol ${btol_sources})
 
 TARGET_LINK_LIBRARIES(btol bsol vtol vsol vbl vul)
+
+IF (BUILD_TESTING)
+  SUBDIRS(tests)
+ENDIF (BUILD_TESTING)

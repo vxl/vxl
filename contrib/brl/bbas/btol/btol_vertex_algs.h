@@ -10,7 +10,9 @@
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
+#include <vnl/vnl_matrix_fixed.h>
 #include <vtol/vtol_vertex_sptr.h>
+#include <vtol/vtol_vertex_2d_sptr.h>
 #include <vcl_vector.h>
 
 class btol_vertex_algs
@@ -28,6 +30,8 @@ class btol_vertex_algs
   static void vertex_erase(vcl_vector<vtol_vertex>& verts,
                            vtol_vertex_sptr& v);
 
+  static vtol_vertex_2d_sptr transform(vtol_vertex_2d_sptr const& v,
+                                       vnl_matrix_fixed<double, 3, 3> const& T);
  private:
   btol_vertex_algs();
 };

@@ -1,9 +1,11 @@
 //:
 // \file
+#include <vcl_cmath.h> // for fabs()
 #include <vcl_algorithm.h>
 #include <btol/btol_vertex_algs.h>
 #include <btol/btol_edge_algs.h>
 #include <vtol/vtol_vertex.h>
+#include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_edge_sptr.h>
 
 
@@ -43,3 +45,17 @@ static void vertex_erase(vcl_vector<vtol_vertex_sptr>& verts,
   return;
 }
 #endif // 0
+
+vtol_vertex_2d_sptr btol_vertex_algs::
+transform(vtol_vertex_2d_sptr const& v,
+          vnl_matrix_fixed<double, 3, 3> const& T)
+{
+  vtol_vertex_2d_sptr out;
+  vnl_vector_fixed<double, 3> P(v->x(), v->y(), 1.0), p;
+  p = T*P;
+  if(vcl_fabs(p[2])<1e-06)
+    return out;
+  out = new vtol_vertex_2d(p[0]/p[2], p[1]/p[2]);
+  return out;
+}
+
