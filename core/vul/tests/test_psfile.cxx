@@ -46,11 +46,11 @@ static void write_geometry(vul_psfile& f)
   for (int i=0; i<100; ++i)
     f.point(300.0f+i,400.0f-i,0.5f);
 
-  f.set_line_width(f.line_width()*1.5);
+  f.set_line_width(f.line_width()*1.5f);
   for (int i=0; i<10; ++i)
     f.circle(210.0f+5*i,210.0f,10.0f+5*i);
 
-  f.set_line_width(f.line_width()*0.5);
+  f.set_line_width(f.line_width()*0.5f);
   for (int i=0; i<10; ++i)
     f.ellipse(150.0f+5*i,350.0f+5*i,10.0f+5*i,20.0f+10*i,45);
 }
