@@ -21,7 +21,16 @@ IF(NOT HAS_OPENGL)
   
       SET( HAS_OPENGL "NO" )
   
+      # The first line below is to make sure that the proper headers
+      # are used on a Linux machine with the NVidia drivers installed.
+      # They replace Mesa with NVidia's own library but normally do not
+      # install headers and that causes the linking of parts of vgui to
+      # fail since the compiler finds the Mesa headers but NVidia's library.
+      # Make sure the NVIDIA directory comes BEFORE the others.
+      #   -- Atanas Georgiev <atanas@cs.columbia.edu>
+  
       FIND_PATH(OPENGL_INCLUDE_PATH GL/gl.h 
+        /usr/share/doc/NVIDIA_GLX-1.0/include
         /usr/include 
         /usr/X11R6/include 
       )
