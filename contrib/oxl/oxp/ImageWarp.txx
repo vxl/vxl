@@ -55,7 +55,7 @@ void ImageWarp<PixelType>::mean_nz_intensity(const vil_memory_image_of<PixelType
   if (nnzp)
     *nnzp = nnz;
 #if defined(VCL_GCC_27)
-#warning This code does not compile under gcc2.7
+#warning This code does not work with gcc2.7
 #else
   if (nnz > 0)
     *out = total_nz * (1.0 / nnz);
@@ -76,7 +76,7 @@ void ImageWarp<PixelType>::gapfill(vil_memory_image_of<PixelType>& out, int ngap
       for(int oy = 0; oy < h; ++oy) 
 	for(int ox = 0; ox < w; ++ox)
 #if defined(VCL_GCC_27)
-#warning This code does not compile under gcc2.7
+#warning This code does not work with gcc2.7
 #else
 	  if (out(ox, oy) == vnl_numeric_traits<PixelType>::zero) {
 	    int nnz;
