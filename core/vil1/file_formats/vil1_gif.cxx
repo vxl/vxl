@@ -11,6 +11,7 @@
 #include <vcl_iostream.h>
 #include <vcl_iomanip.h>
 #include <vcl_cstring.h>
+#include <vcl_cctype.h> // for vcl_isprint
 
 #include <vil/vil_stream.h>
 #include <vil/vil_16bit.h>
@@ -159,8 +160,13 @@ vil_gif_loader_saver::vil_gif_loader_saver(vil_stream *s_) : s(s_), is_grey(fals
     if (b == ';')   // terminator
       break;
     if (b != ',') { // separator
-      vcl_cerr << "unexpected character \'" << char(b) << "\' (0x" << vcl_hex
-               << int(b) << vcl_dec << ") in GIF stream" << vcl_endl;
+      vcl_cerr << "unexpected character \'";
+      if (vcl_isprint(b)) {
+        vcl_cerr << b;
+      } else {
+        vcl_cerr << "[unprintable]";
+      }
+      vcl_cerr << "\' (0x" << vcl_hex << int(b) << vcl_dec << ") in GIF stream" << vcl_endl;
       assert(false);
     }
 
