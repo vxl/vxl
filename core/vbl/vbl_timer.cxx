@@ -1,3 +1,5 @@
+// This is vxl/vbl/vbl_timer.cxx
+
 //
 // Copyright (C) 1991 Texas Instruments Incorporated.
 //
@@ -73,7 +75,7 @@ vbl_timer::~vbl_timer()
   data = 0;
 }
 
-// -- Sets the reference time to now.
+//: Sets the reference time to now.
 
 void vbl_timer::mark()
 {
@@ -96,7 +98,7 @@ void vbl_timer::mark()
 #endif
 }
 
-// -- Returns the number of milliseconds of wall clock time, since last mark().
+//: Returns the number of milliseconds of wall clock time, since last mark().
 
 long vbl_timer::real()
 {
@@ -138,7 +140,6 @@ long vbl_timer::real()
 #endif
 }
 
-// --
 
 long vbl_timer::user()
 {
@@ -152,7 +153,7 @@ long vbl_timer::user()
 #endif
 }
 
-// -- Returns the number of milliseconds spent in user-process or
+//: Returns the number of milliseconds spent in user-process or
 // operating system respectively, since last mark().
 
 long vbl_timer::system()
@@ -182,7 +183,7 @@ long vbl_timer::all()
 #endif
 }
 
-// -- Display user and real time since the last mark.
+//: Display user and real time since the last mark.
 void vbl_timer::print(vcl_ostream& s)
 {
   s << "Time: user " << user() / 1000.0 << ", real " << real() / 1000.0 << vcl_endl;

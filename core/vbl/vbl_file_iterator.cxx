@@ -1,4 +1,6 @@
 
+// This is vxl/vbl/vbl_file_iterator.cxx
+
 #include "vbl_file_iterator.h"
 #include <vcl_string.h>
 #include <vcl_cassert.h>

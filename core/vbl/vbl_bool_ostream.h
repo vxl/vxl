@@ -3,11 +3,17 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vbl_bool_ostream
-// .HEADER vxl package
-// .LIBRARY vbl
-// .INCLUDE vbl/vbl_bool_ostream.h
-// .FILE vbl_bool_ostream.cxx
+// This is vxl/vbl/vbl_bool_ostream.h
+
+//:
+// \file
+//
+// \verbatim
+// Modifications
+// PDA (Manchester) 21/03/2001: Tidied up the documentation
+// \endverbatim
+
+
 
 #include <vcl_iostream.h>
 
@@ -32,9 +38,12 @@ public:
   };
 };
 
-vcl_ostream& operator<<(vcl_ostream& s, const vbl_bool_ostream::on_off& proxy);
-vcl_ostream& operator<<(vcl_ostream& s, const vbl_bool_ostream::high_low& proxy);
-vcl_ostream& operator<<(vcl_ostream& s, const vbl_bool_ostream::true_false& proxy);
+vcl_ostream& operator<<(vcl_ostream& s, 
+                        const vbl_bool_ostream::on_off& proxy);
+vcl_ostream& operator<<(vcl_ostream& s, 
+                        const vbl_bool_ostream::high_low& proxy);
+vcl_ostream& operator<<(vcl_ostream& s, 
+                        const vbl_bool_ostream::true_false& proxy);
 
 
 #endif // vbl_bool_ostream_h_

@@ -1,3 +1,5 @@
+// This is vxl/vbl/vbl_hash_map.txx
+
 // -*- c++ -*-
 #ifndef vbl_hash_map_txx_
 #define vbl_hash_map_txx_

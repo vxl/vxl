@@ -1,6 +1,8 @@
+// This is vxl/vbl/vbl_sparse_array_2d.txx
+
 //-*- c++ -*-------------------------------------------------------------------
 //
-// .NAME vbl_sparse_array_2d
+
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 02 Oct 96
 //
@@ -11,7 +13,7 @@
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 
-// -- Print the Array to a stream in "(i,j): value" format.
+//: Print the Array to a stream in "(i,j): value" format.
 template <class T>
 vcl_ostream& vbl_sparse_array_2d<T>::print(vcl_ostream& out) const
 {

@@ -4,27 +4,28 @@
 #pragma interface
 #endif
 
-// .NAME    vbl_printf - vbl_printf to ostream
-// .LIBRARY vbl
-// .HEADER  vxl package
-// .INCLUDE vbl/vbl_printf.h
-// .FILE    vbl_printf.cxx
+// This is vxl/vbl/vbl_printf.h
+
+//:
+// \file
+// \brief Contains vbl_printf function
+// \author Andrew W. Fitzgibbon, Oxford RRG, 03 Jul 97
 //
-// .SECTION Description
+// \verbatim
+// Description
 //    Printf formatting is just plain handy sometimes.  This header provides
 //    it for C++ programs in a standard-conforming manner.
 //
-// .SECTION Author
-//     Andrew W. Fitzgibbon, Oxford RRG, 03 Jul 97
-//
-// .SECTION Modifications
-//    970703 AWF Initial version.
-//
-//-----------------------------------------------------------------------------
+// Modifications
+// 970703 AWF Initial version.
+// PDA (Manchester) 21/03/2001: Tidied up the documentation
+// \endverbatim
+
+
 
 #include <vcl_iosfwd.h>
 
-//: vbl_printf(cout, "%d\n", 12);
+//: e.g. vbl_printf(cout, "%d\n", 12);
 vcl_ostream& vbl_printf(vcl_ostream&, char const* fmt, ...);
 
 #endif // vbl_printf_h_

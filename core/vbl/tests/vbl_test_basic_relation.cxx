@@ -1,5 +1,5 @@
 //
-// .NAME test_vbl_basic_relation
+// test_vbl_basic_relation
 // Author: Rupert W. Curwen
 // Created: 22 Jan 98
 //

@@ -3,17 +3,23 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vbl_qsort - Collection of common predicates for library sort routines
-// .HEADER vxl package
-// .LIBRARY vbl
-// .INCLUDE vbl/vbl_qsort.h
-// .FILE vbl_qsort.cxx
-// .SECTION Author
-//    awf@robots.ox.ac.uk
-// Created: 15 Mar 00
+// This is vxl/vbl/vbl_qsort.h
+
+
+//:
+// \file
+// \brief Collection of common predicates for library sort routines
+// \author awf@robots.ox.ac.uk, 15 Mar 00
 //
-// .SECTION Modifications
-//     971119 AWF Initial version.
+// \verbatim
+// Modifications
+//971119 AWF Initial version
+//  
+// PDA (Manchester) 23/03/2001: Tidied up the documentation
+// \endverbatim
+
+
+
 
 #include <vxl_config.h> // VXL_STDLIB_HAS_QSORT
 
@@ -34,7 +40,7 @@
 
 typedef int (*vbl_qsort_compare_t)(const void* a, const void* b);
 
-// -- Sort a C array into ascending order, using the standard comparison
+//: Sort a C array into ascending order, using the standard comparison
 // operations for T, namely operator> and operator==.
 template <class T>
 inline
@@ -47,7 +53,7 @@ void vbl_qsort_ascending(T* base, int n)
 #endif
 }
 
-// -- Sort a C array into descending order, using the standard comparison
+//: Sort a C array into descending order, using the standard comparison
 // operations for T, namely "operator>" and "operator==".
 template <class T>
 inline
@@ -60,7 +66,7 @@ void vbl_qsort_descending(T* base, int n)
 #endif
 }
 
-// -- Sort an STL vector into ascending order, using the standard comparison
+//: Sort an STL vector into ascending order, using the standard comparison
 // operations for T, namely operator> and operator==.  I know STL has a sort,
 // but this is easier, and faster in the 20th century.
 template <class T>
@@ -74,26 +80,28 @@ void vbl_qsort_ascending(vcl_vector<T>& v)
 #endif
 }
 
-// -- Sort an STL vector into descending order, using the standard comparison
+//: Sort an STL vector into descending order, using the standard comparison
 // operations for T, namely "operator>" and "operator==".
 template <class T>
 inline
 void vbl_qsort_descending(vcl_vector<T>& v)
 {
 #if VXL_STDLIB_HAS_QSORT
-  qsort(&v[0], v.size(), sizeof v[0], vbl_qsort_helper<T>::descend); //vector<>::iterator
+  //vector<>::iterator
+  qsort(&v[0], v.size(), sizeof v[0], vbl_qsort_helper<T>::descend); 
 #else
   vcl_sort(v.begin(), v.end(), vcl_greater<T>());
 #endif
 }
 
-// -- Sort STL vector.
+//: Sort STL vector.
 template <class T>
 inline
 void vbl_qsort(vcl_vector<T>& v, int (*compare)(T const& a, T const& b))
 {
 #if VXL_STDLIB_HAS_QSORT
-  qsort(&v[0], v.size(), sizeof v[0], (vbl_qsort_compare_t)compare); //vector<>::iterator
+  //vector<>::iterator
+  qsort(&v[0], v.size(), sizeof v[0], (vbl_qsort_compare_t)compare); 
 #else
   vcl_cerr << "Sorry, this type of qsort has not been implemented\n";
 #endif
@@ -104,6 +112,7 @@ VCL_INSTANTIATE_INLINE(void vbl_qsort_ascending(T*,int));\
 VCL_INSTANTIATE_INLINE(void vbl_qsort_descending(T*,int));
 
 #define VBL_QSORT_INSTANTIATE_vector(T)\
-VCL_INSTANTIATE_INLINE(void vbl_qsort(vcl_vector<T>& v, int (*compare)(T const& a, T const& b)))
+VCL_INSTANTIATE_INLINE(void vbl_qsort(vcl_vector<T>& v, \
+                        int (*compare)(T const& a, T const& b)))
 
 #endif // vbl_qsort_h_

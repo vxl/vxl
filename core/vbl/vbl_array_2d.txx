@@ -1,3 +1,5 @@
+// This is vxl/vbl/vbl_array_2d.txx
+
 #include <vcl_iostream.h>
 
 #include "vbl_array_2d.h"
@@ -10,14 +12,14 @@ vbl_array_2d<T>::vbl_array_2d()
   rows_ = 0;
 }
 
-// -- Construct num_rows x num_cols array
+//: Construct num_rows x num_cols array
 template <class T>
 vbl_array_2d<T>::vbl_array_2d(int num_rows, int num_cols)
 {
   create(num_rows, num_cols);
 }
 
-// -- Copy that
+//: Copy that
 template <class T>
 vbl_array_2d<T>::vbl_array_2d(vbl_array_2d<T> const& that)
 {
@@ -27,7 +29,7 @@ vbl_array_2d<T>::vbl_array_2d(vbl_array_2d<T> const& that)
       operator()(i,j) = that(i,j);
 }
 
-// -- Copy that
+//: Copy that
 template <class T>
 vbl_array_2d<T>& vbl_array_2d<T>::operator=(vbl_array_2d<T> const& that)
 {
@@ -59,7 +61,7 @@ vbl_array_2d<T>::~vbl_array_2d()
   destroy();
 }
 
-// -- Delete contents and resize to num_rows x num_cols
+//: Delete contents and resize to num_rows x num_cols
 template <class T>
 void vbl_array_2d<T>::resize(int num_rows, int num_cols)
 {
@@ -67,7 +69,7 @@ void vbl_array_2d<T>::resize(int num_rows, int num_cols)
   create(num_rows, num_cols);
 }
 
-// -- Fill with value
+//: Fill with value
 template <class T>
 void vbl_array_2d<T>::fill(T value)
 {

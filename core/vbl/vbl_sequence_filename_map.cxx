@@ -1,9 +1,11 @@
+// This is vxl/vbl/vbl_sequence_filename_map.cxx
+
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
 #pragma implementation
 #endif
 //
-// .NAME vbl_sequence_filename_map
+
 // Author: David Capel, Oxford RRG
 // Created: 15 April 2000
 //
@@ -93,8 +95,9 @@ vcl_string vbl_sequence_filename_map::pair_name (int i, int j)
 }
 vcl_string vbl_sequence_filename_map::triplet_name (int i, int j, int k)
 {
-  vcl_string index_str =
-    vbl_sprintf((index_format_ + "." + index_format_ + "." + index_format_).c_str(), indices_[i], indices_[j], indices_[k]);
+  vcl_string index_str = vbl_sprintf((index_format_ + "." +
+    index_format_ + "." + index_format_).c_str(), indices_[i],
+    indices_[j], indices_[k]); 
   return basename_ + index_str;
 }
 

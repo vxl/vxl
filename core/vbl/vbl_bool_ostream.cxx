@@ -1,3 +1,5 @@
+// This is vxl/vbl/vbl_bool_ostream.cxx
+
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
 #pragma implementation

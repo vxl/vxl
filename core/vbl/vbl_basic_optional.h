@@ -1,22 +1,17 @@
 #ifndef vbl_basic_optional_h
 #define vbl_basic_optional_h
 
-//-----------------------------------------------------------------------------
+// This is vxl/vbl/vbl_basic_optional.h
+
+
+//:
+// \file
+// \author Rupert Curwen GE Corporate Research and Development
 //
-// .NAME vbl_basic_optional
-// .LIBRARY vbl
-// .HEADER vxl package
-// .INCLUDE vbl/vbl_basic_optional.h
-// .FILE vbl_basic_optional.cxx
-//
-// .SECTION Author:
-//             Rupert Curwen
-//             GE Corporate Research and Development
-//
-// .SECTION Modifications
-//     None Yet
-//
-//-----------------------------------------------------------------------------
+// \verbatim
+// Modifications
+// PDA (Manchester) 21/03/2001: Tidied up the documentation
+// \endverbatim
 
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h>
@@ -37,7 +32,8 @@ class vbl_basic_optional
 public:
   vbl_basic_optional() {}
   vbl_basic_optional(const vbl_basic_optional&) {}
-  inline static void Error(const char* message) { vcl_cerr << message << vcl_endl; abort(); }
+  inline static void Error(const char* message) 
+  { vcl_cerr << message << vcl_endl; abort(); }
 };
 
 // Here is the general case for the traits class used to determine

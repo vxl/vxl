@@ -1,3 +1,5 @@
+// This is vxl/vbl/vbl_timestamp.cxx
+
 #include <vbl/vbl_timestamp.h>
 
 unsigned long vbl_timestamp::mark = 0;

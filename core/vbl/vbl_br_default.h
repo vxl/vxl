@@ -1,23 +1,22 @@
 #ifndef vbl_br_default_h
 #define vbl_br_default_h
 
-//-----------------------------------------------------------------------------
+// This is vxl/vbl/vbl_br_default.h
+
+
+//:
+// \file
+// \author Rupert Curwen, January 14th, 1998, 
+//         GE Corporate Research and Development
 //
-// .NAME vbl_br_default
-// .LIBRARY vbl
-// .HEADER vxl package
-// .INCLUDE vbl/vbl_br_default.h
-// .FILE vbl_br_default.txx
-//
-// .SECTION Author:
-//             Rupert Curwen, January 14th, 1998
-//             GE Corporate Research and Development
-//
-// .SECTION Modifications
-//     260498 AWF Conditionalized for gcc/sgi native.
+// \verbatim
+// Modifications
+// 260498 AWF Conditionalized for gcc/sgi native.
 //              I can't find a mutually acceptable syntax at the moment.
-//
-//-----------------------------------------------------------------------------
+// PDA (Manchester) 21/03/2001: Tidied up the documentation
+// \endverbatim
+
+
 
 #ifdef _MSC_VER
 // disable annoying MSC warning about symbols greater than 255
@@ -42,7 +41,7 @@ template <class T1, class T2,
 class vbl_br_default;
 
 //------------------------------------------------------------
-// -- This iterator is used when the where clause has at least one
+//: This iterator is used when the where clause has at least one
 // non-wild element.
 template <class T1, class T2,
   VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional),
@@ -60,20 +59,21 @@ public:
 
 public:
   vbl_br_default_iter();
-  vbl_br_default_iter(implementation* i, const vbl_basic_relation_where<T1,T2,T3,T4,T5>* w);
+  vbl_br_default_iter(implementation* i, 
+    const vbl_basic_relation_where<T1,T2,T3,T4,T5>* w);
   vbl_br_default_iter(const vbl_br_default_iter<T1,T2,T3,T4,T5>& it);
   virtual ~vbl_br_default_iter();
 
-  // Make a copy of this instance.
+  //: Make a copy of this instance.
   virtual vbl_br_iter_impl<T1,T2,T3,T4,T5>* copy() const;
 
-  // Dereference.
+  //: Dereference.
   virtual vbl_basic_tuple<T1,T2,T3,T4,T5>* deref() const;
 
-  // Increment.
+  //: Increment.
   virtual void incr();
 
-  // Compare.
+  //: Compare.
   virtual bool compare(const vbl_br_iter_impl<T1,T2,T3,T4,T5>& i) const;
 
 protected:
@@ -87,7 +87,7 @@ protected:
 };
 
 //------------------------------------------------------------
-// -- This iterator is used when the where clause has all wild elements.
+//: This iterator is used when the where clause has all wild elements.
 template <class T1, class T2,
   VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional),
   VCL_DFL_TYPE_PARAM_STLDECL (T4, vbl_basic_optional),
@@ -102,20 +102,21 @@ public:
   typedef vbl_hash_map<T1, tuple_list> first_map;
 
 public:
-  vbl_br_default_wild_iter(implementation* i, const vbl_basic_relation_where<T1,T2,T3,T4,T5>* w);
+  vbl_br_default_wild_iter(implementation* i, 
+    const vbl_basic_relation_where<T1,T2,T3,T4,T5>* w);
   vbl_br_default_wild_iter(const vbl_br_default_wild_iter<T1,T2,T3,T4,T5>& it);
   virtual ~vbl_br_default_wild_iter();
 
-  // Make a copy of this instance.
+  //: Make a copy of this instance.
   virtual vbl_br_iter_impl<T1,T2,T3,T4,T5>* copy() const;
 
-  // Dereference.
+  //: Dereference.
   virtual vbl_basic_tuple<T1,T2,T3,T4,T5>* deref() const;
 
-  // Increment.
+  //: Increment.
   virtual void incr();
 
-  // Compare.
+  //: Compare.
   virtual bool compare(const vbl_br_iter_impl<T1,T2,T3,T4,T5>& i) const;
 
 protected:
@@ -130,7 +131,6 @@ protected:
 // which is used unless the factory has been set otherwise.  The
 // relation is implemented using one hash table for each attribute
 // as indices, with values being lists of tuple references.
-
 template <class T1, class T2, class T3, class T4, class T5>
 class vbl_br_default : public vbl_br_impl<T1,T2,T3,T4,T5>
 // defaults for T3 T4 T5 already declared around line 92 -- PLEASE don't put them back here!! - PVr
@@ -152,22 +152,22 @@ public:
   typedef vbl_hash_map<T5, tuple_list> fifth_map;
 
 public:
-  // Constructor.
+  //: Constructor.
   vbl_br_default(const vcl_string& n);
 
-  // Copy constructor.
+  //: Copy constructor.
   vbl_br_default(const vbl_br_default<T1,T2,T3,T4,T5>& i);
 
-  // Destructor.
+  //: Destructor.
   virtual ~vbl_br_default();
 
-  // Add a tuple.
+  //: Add a tuple.
   virtual bool Insert(const vbl_basic_tuple<T1,T2,T3,T4,T5>& t);
 
-  // Remove a tuple.
+  //: Remove a tuple.
   virtual bool Remove(const vbl_basic_tuple<T1,T2,T3,T4,T5>& t);
 
-  // Remove tuples matching where clause.
+  //: Remove tuples matching where clause.
   bool Remove(const vbl_basic_relation_where<T1,T2,T3,T4,T5>& w);
 
   // Make attributes unique.
@@ -183,8 +183,10 @@ public:
   virtual void SetFifthUnique(bool b) { u5 = b; }
 
   // Get iterators.
-  virtual vbl_br_iter_impl<T1,T2,T3,T4,T5>* begin(const vbl_basic_relation_where<T1,T2,T3,T4,T5>& w);
-  virtual vbl_br_iter_impl<T1,T2,T3,T4,T5>* end(const vbl_basic_relation_where<T1,T2,T3,T4,T5>& w);
+  virtual vbl_br_iter_impl<T1,T2,T3,T4,T5>* 
+    begin(const vbl_basic_relation_where<T1,T2,T3,T4,T5>& w);
+  virtual vbl_br_iter_impl<T1,T2,T3,T4,T5>* 
+    end(const vbl_basic_relation_where<T1,T2,T3,T4,T5>& w);
 
   // Size methods.
   virtual int size(const vbl_basic_relation_where<T1,T2,T3,T4,T5>& w);
@@ -215,7 +217,8 @@ template <class T1, class T2,
   VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional),
   VCL_DFL_TYPE_PARAM_STLDECL (T4, vbl_basic_optional),
   VCL_DFL_TYPE_PARAM_STLDECL(T5,vbl_basic_optional)>
-class vbl_br_default_factory : public vbl_basic_relation_factory<T1,T2,T3,T4,T5>
+class vbl_br_default_factory : 
+      public vbl_basic_relation_factory<T1,T2,T3,T4,T5>
 {
 public:
   virtual ~vbl_br_default_factory();

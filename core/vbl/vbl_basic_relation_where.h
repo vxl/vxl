@@ -1,21 +1,19 @@
 #ifndef vbl_basic_relation_where_h
 #define vbl_basic_relation_where_h
 
-//-----------------------------------------------------------------------------
+// This is vxl/vbl/vbl_basic_relation_where.h
+
+//:
+// \file
+// \author Rupert W. Curwen, November 13, 1997, 
+//         GE Corporate Research and Development
 //
-// .NAME vbl_basic_relation_where
-// .LIBRARY vbl
-// .HEADER vxl Package
-// .INCLUDE vbl/vbl_basic_relation_where.h
-// .FILE vbl_basic_relation_where.cxx
-//
-// .SECTION Author
-//             Rupert W. Curwen, November 13, 1997
-//             GE Corporate Research and Development
-//
-// .SECTION Modifications
-//
-//-----------------------------------------------------------------------------
+// \verbatim
+// Modifications
+// PDA (Manchester) 21/03/2001: Tidied up the documentation
+// \endverbatim
+
+
 #include <vbl/vbl_basic_tuple.h>
 
 //: A tuple used to select in vbl_basic_relation
@@ -30,7 +28,7 @@ class vbl_basic_relation_where : public vbl_basic_tuple<T1,T2,T3,T4,T5>
 {
 
 public:
-  // Constructors.
+  //: Constructors.
   vbl_basic_relation_where()
     : first_wild(true),
       second_wild(true),
@@ -40,7 +38,7 @@ public:
   {
   }
 
-  // Copy constructor.
+  //: Copy constructor.
   vbl_basic_relation_where(const vbl_basic_relation_where<T1,T2,T3,T4,T5>& w)
     : vbl_basic_tuple<T1,T2,T3,T4,T5>(w),
       first_wild(w.first_wild),
@@ -51,7 +49,7 @@ public:
   {
   }
 
-  // Construct exact clause.
+  //: Construct exact clause.
   vbl_basic_relation_where(const vbl_basic_tuple<T1,T2,T3,T4,T5>& t)
     : vbl_basic_tuple<T1,T2,T3,T4,T5>(t),
       first_wild(false),
@@ -62,13 +60,14 @@ public:
   {
   }
 
-  // Destructor.
+  //: Destructor.
   ~vbl_basic_relation_where()
   {
   }
 
-  // Operator =.
-  inline vbl_basic_relation_where<T1,T2,T3,T4,T5>& operator=(const vbl_basic_relation_where<T1,T2,T3,T4,T5>& w)
+  //: Operator =.
+  inline vbl_basic_relation_where<T1,T2,T3,T4,T5>& 
+    operator=(const vbl_basic_relation_where<T1,T2,T3,T4,T5>& w)
   {
     if (this == &w) return *this;
 
@@ -85,7 +84,7 @@ public:
     return *this;
   }
 
-  // Test for match.
+  //: Test for match.
   inline bool match(const vbl_basic_tuple<T1,T2,T3,T4,T5>& w)
   {
     if ((!first_wild) && !(GetFirst() == w.GetFirst())) return false;
@@ -99,16 +98,16 @@ public:
     return true;
   }
 
-  // Test for match.
+  //: Test for match.
   inline bool match(const vbl_basic_tuple<T1,T2,T3,T4,T5>* w)
   {
     return match(*w);
   }
 
-  // Print the where clause on cout.
+  //: Print the where clause on cout.
   inline void Print() { Dump(vcl_cout); }
 
-  // Print the where clause on cerr or stream.
+  //: Print the where clause on cerr or stream.
   void Dump(vcl_ostream& str = vcl_cerr) const
   {
     str << "<";
@@ -171,7 +170,7 @@ public:
   }
 
   //------------------------------------------------------------
-  // -- Return the primary key for the where clause.  The primary key
+  //: Return the primary key for the where clause.  The primary key
   // is the number of the first non-wild attribute in the where
   // clause, with one being the first attribute.  If all attributes
   // are wild, zero is returned.

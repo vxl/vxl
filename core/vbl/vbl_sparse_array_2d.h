@@ -3,21 +3,17 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// .NAME    vbl_sparse_array_2d - Sparse 2D array
-// .LIBRARY vbl
-// .HEADER  vxl package
-// .INCLUDE vbl/vbl_sparse_array_2d.h
-// .FILE    vbl_sparse_array_2d.txx
-//
-// .SECTION Description
-//    vbl_sparse_array_2d is a sparse 2D array allowing space efficient access of
-//    the form s(3000,7000) = 2;
-//
-// .SECTION Author
-//     Andrew W. Fitzgibbon, Oxford RRG, 02 Oct 96
-//
-// .SECTION Modifications:
+// This is vxl/vbl/vbl_sparse_array_2d.h
+
+//:
+// \file
+// \brief a 2d sparse array allowing space efficient access 
+// of the form s(3000,7000) = 2.
+// \author Andrew W. Fitzgibbon, Oxford RRG, 02 Oct 96
+// \verbatim
+// Modifications:
+// 26 March 01 cjb updated documentation
+// \endverbatim
 //
 //-----------------------------------------------------------------------------
 
@@ -26,18 +22,27 @@
 #include <vcl_iosfwd.h>
 
 template <class T>
-class vbl_sparse_array_2d : private vbl_sparse_array<T>, public vbl_sparse_array_2d_base {
+//: Sparse 2D array allowing space efficient access of the form 
+// s(3000,7000) = 2;
+class vbl_sparse_array_2d : private vbl_sparse_array<T>, 
+                            public vbl_sparse_array_2d_base {
 public:
   // Constructors/Destructors--------------------------------------------------
 
-// - Construct a vbl_sparse_array_2d which can hold a maximum of (n1 x n2) elements.
-// Currently (n1*n2) must be representable in 32 bits, or about 64K per dimension.
-// Powers of two might conceivably give better performance -- they won't be worse.
-  // not implemented
-  // vbl_sparse_array_2d(unsigned max_dim_1 = 0x10000, unsigned max_dim_2 = 0x10000);
+// - Construct a vbl_sparse_array_2d which can hold a maximum of (n1 x n2) 
+//  elements. Currently (n1*n2) must be representable in 32 bits, or about 64K 
+//  per dimension.  Powers of two might conceivably give better performance -- 
+//  they won't be worse.
+// not implemented
+// vbl_sparse_array_2d(unsigned max_dim_1 = 0x10000, 
+  //unsigned max_dim_2 = 0x10000);
 
+  //: default constructor
   vbl_sparse_array_2d() {}
-  vbl_sparse_array_2d(const vbl_sparse_array_2d<T>& that): vbl_sparse_array<T>(that) {}
+  //: Copy constructor
+  vbl_sparse_array_2d(const vbl_sparse_array_2d<T>& that): 
+                  vbl_sparse_array<T>(that) {}
+  //: Assignment
   vbl_sparse_array_2d& operator=(const vbl_sparse_array_2d<T>& that) {
     vbl_sparse_array<T>::operator=(that);
     return *this;
@@ -50,8 +55,9 @@ public:
     return Base::put(encode(i,j), t);
   }
 
-//: Return contents of location (i,j).  Returns an undefined value (in fact a T())
-// if location (i,j) has not been filled with a value.
+//: Return contents of location (i,j).
+//  Returns an undefined value (in fact 
+//  a T()) if location (i,j) has not been filled with a value.
   T& operator () (unsigned i, unsigned j) {
     return Base::operator[](encode(i,j));
   }
@@ -75,11 +81,13 @@ public:
 //: Return number of locations that have been assigned a value using "put".
   vbl_sparse_array<T>::count_nonempty;
 
+//: iterator over the sparse array
   typedef vbl_sparse_array<T>::const_iterator const_iterator;
   vbl_sparse_array<T>::begin;
   vbl_sparse_array<T>::end;
 
   // Data Control--------------------------------------------------------------
+//: Print the Array to a stream in "(i,j): value" format.
   vcl_ostream& print(vcl_ostream&) const;
   //friend ostream& operator >> (ostream&, const vbl_sparse_array_2d<T>& );
 
@@ -89,7 +97,8 @@ protected:
 };
 
 template <class T>
-inline vcl_ostream& operator << (vcl_ostream& s, const vbl_sparse_array_2d<T>& a) {
+inline vcl_ostream& operator << 
+(vcl_ostream& s, const vbl_sparse_array_2d<T>& a) {
   return a.print(s);
 }
 

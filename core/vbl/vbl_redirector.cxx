@@ -2,6 +2,8 @@
 #pragma implementation
 #endif
 
+// This is vxl/vbl/vbl_redirector.cxx
+
 #include <vcl_compiler.h>
 #if defined(VCL_SGI_CC)
 // urgh! there is no rdbuf() method for *setting* thestream buffer.
@@ -132,7 +134,7 @@ int vbl_redirector::put_passthru(char const* buf, int n)
   return p->old_cerrbuf->sputn(buf, n);
 }
 
-// -- Default action is just to pass text on the the old stream.
+//: Default action is just to pass text on the the old stream.
 int vbl_redirector::putchunk(char const* buf, int n)
 {
   return put_passthru(buf, n);

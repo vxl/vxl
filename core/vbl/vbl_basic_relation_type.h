@@ -1,22 +1,19 @@
 #ifndef vbl_basic_relation_type_h
 #define vbl_basic_relation_type_h
 
-//-----------------------------------------------------------------------------
+// This is vxl/vbl/vbl_basic_relation_type.h
+
+//:
+// \file
+// \author Rupert Curwen, August 28th, 1998, 
+//                        GE Corporate Research and Development
 //
-// .NAME vbl_basic_relation_type
-// .LIBRARY vbl
-// .HEADER vxl package
-// .INCLUDE vbl/vbl_basic_relation_type.h
-// .FILE vbl_basic_relation_type.cxx
+// \verbatim
+// Modifications
+// PDA (Manchester) 21/03/2001: Tidied up the documentation
+// \endverbatim
 //
-// .SECTION Author:
-//             Rupert Curwen, August 28th, 1998
-//             GE Corporate Research and Development
-//
-// .SECTION Modifications
-//     None Yet
-//
-//-----------------------------------------------------------------------------
+
 
 //: A base class for all vbl_basic_relations; provides type-safe downcasting
 //

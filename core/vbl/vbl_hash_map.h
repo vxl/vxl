@@ -1,14 +1,22 @@
+// This is vxl/vbl/vbl_hash_map.h
+
 // -*- c++ -*-
 #ifndef vbl_hash_map_h_
 #define vbl_hash_map_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vbl_hash_map - Simpler hashtable
-// .LIBRARY vbl
-// .HEADER vxl package
-// .INCLUDE vbl/vbl_hash_map.h
-// .FILE vbl_hash_map.txx
+
+
+
+//:
+// \file
+// \brief Simpler hashtable
+// \author 
+//
+// \verbatim
+// \endverbatim
+
 
 #include <vcl_iosfwd.h>
 #include <vcl_functional.h> // vcl_equal_to()
@@ -18,7 +26,9 @@
 //: Simpler hashtable
 //
 template <class Key, class T>
-class vbl_hash_map : public vcl_hash_map<Key, T, vcl_hash<Key>, vcl_equal_to<Key> > {
+class vbl_hash_map : 
+         public vcl_hash_map<Key, T, vcl_hash<Key>, vcl_equal_to<Key> > 
+{
  public:
   typedef vcl_hash_map<Key, T, vcl_hash<Key>, vcl_equal_to<Key> > base;
   typedef typename base::value_type value_type;

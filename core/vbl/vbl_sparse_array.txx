@@ -1,6 +1,8 @@
+// This is vxl/vbl/vbl_sparse_array.txx
+
 //-*- c++ -*-------------------------------------------------------------------
 //
-// .NAME vbl_sparse_array
+
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 02 Oct 96
 //
@@ -12,7 +14,7 @@
 #include <vcl_iostream.h>
 #include <vcl_utility.h>
 
-// -- Return contents of (i).  Assertion failure if not yet filled.
+//: Return contents of (i).  Assertion failure if not yet filled.
 template <class T>
 T const & vbl_sparse_array<T>::operator [] (unsigned i) const
 {
@@ -23,7 +25,7 @@ T const & vbl_sparse_array<T>::operator [] (unsigned i) const
   return (*p).second;
 }
 
-// -- Return the address of location (i).  0 if not yet filled.
+//: Return the address of location (i).  0 if not yet filled.
 template <class T>
 T* vbl_sparse_array<T>::get_addr(unsigned i)
 {
@@ -35,14 +37,14 @@ T* vbl_sparse_array<T>::get_addr(unsigned i)
   return &(*p).second;
 }
 
-// -- Return true if location (i) has been filled.
+//: Return true if location (i) has been filled.
 template <class T>
 bool vbl_sparse_array<T>::fullp(unsigned i) const
 {
   return storage_.find(i) != storage_.end();
 }
 
-// -- Put a value into location (i).
+//: Put a value into location (i).
 template <class T>
 bool vbl_sparse_array<T>::put(unsigned i, const T& t)
 {
@@ -51,7 +53,7 @@ bool vbl_sparse_array<T>::put(unsigned i, const T& t)
   return res.second;
 } 
 
-// -- Print the Array to a stream in "(i): value" format.
+//: Print the Array to a stream in "(i): value" format.
 template <class T>
 vcl_ostream& vbl_sparse_array<T>::print(vcl_ostream& out) const
 {

@@ -1,11 +1,9 @@
 #ifndef vbl_psfile_h_
 #define vbl_psfile_h_
 
-// .NAME vbl_psfile
-// .HEADER vxl package
-// .LIBRARY vbl
-// .INCLUDE vbl/vbl_psfile.h
-// .FILE vbl_psfile.cxx
+// This is vxl/vbl/vbl_psfile.h
+
+
 
 #include <vcl_string.h>
 #include <vcl_fstream.h>
@@ -37,8 +35,10 @@ public:
   void set_min_max_xy(int x, int y);
   bool set_parameters(int sizex, int sizey);
   void set_paper_type(vbl_psfile::paper_type type){printer_paper_type = type;}
-  void set_paper_layout(vbl_psfile::paper_layout layout) {printer_paper_layout = layout;}
-  void set_paper_orientation(vbl_psfile::paper_orientation o) {printer_paper_orientation = o;}
+  void set_paper_layout(vbl_psfile::paper_layout layout) 
+  {printer_paper_layout = layout;}
+  void set_paper_orientation(vbl_psfile::paper_orientation o) 
+  {printer_paper_orientation = o;}
   void set_reduction_factor(int rf) {reduction_factor = rf;}
   void set_scale_x(int sx) {scale_x = sx;}
   void set_scale_y(int sy) {scale_x = sy;}

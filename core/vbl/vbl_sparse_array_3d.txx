@@ -1,6 +1,8 @@
+// This is vxl/vbl/vbl_sparse_array_3d.txx
+
 //-*- c++ -*-------------------------------------------------------------------
 //
-// .NAME vbl_sparse_array_3d
+
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 02 Oct 96
 //

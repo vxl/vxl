@@ -3,16 +3,15 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// .NAME vbl_trace
-// .HEADER vxl package
-// .LIBRARY vbl
-// .INCLUDE vbl/vbl_trace.h
-// .FILE vbl_trace.cxx
-// .SECTION Author
-//  fsm@robots.ox.ac.uk
+// This is vxl/vbl/vbl_trace.h
+
+//:
+// \file
+// \brief writes out file, line to stderr.
+// \author fsm@robots.ox.ac.uk
 //
 
+//: writes out file, line to stderr and flushes.
 void vbl_trace_function(char const *file, int line);
 
 // recompile with DEFINES=-DVBL_TRACE

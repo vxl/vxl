@@ -1,3 +1,5 @@
+// This is vxl/vbl/vbl_reg_exp.cxx
+
 //
 // Copyright (C) 1991 Texas Instruments Incorporated.
 //

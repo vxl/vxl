@@ -1,6 +1,8 @@
+// This is vxl/vbl/vbl_bounding_box.txx
+
 //-*- c++ -*-------------------------------------------------------------------
 //
-// .NAME vbl_bounding_box
+
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 07 Aug 97
 //

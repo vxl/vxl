@@ -1,3 +1,5 @@
+// This is vxl/vbl/vbl_array_3d.txx
+
 #include "vbl_array_3d.h"
 
 #include <vcl_cassert.h>
@@ -8,7 +10,7 @@
 //
 //--------------------------------------------------------------
 
-// -- Constructor utility.  This allocates a 3D array which can be
+//: Constructor utility.  This allocates a 3D array which can be
 // referenced using the form myarray[a][b][c].  Useful in C although maybe
 // superfluous here as access is via a get function anyway.
 template <class T>
@@ -17,14 +19,14 @@ void vbl_array_3d<T>::construct(int n1, int n2, int n3)
   assert(n1 >= 0);
   assert(n2 >= 0);
   assert(n3 >= 0);
-
+  
   row1_count_ = n1;
   row2_count_ = n2;
   row3_count_ = n3;
-
+  
   // allocate the memory for the first level pointers.
   element_ = new T** [n1];
-
+  
   // set the first level pointers and allocate the memory for the second level pointers.
   {
     element_[0] = new T* [n1 * n2];
@@ -66,7 +68,7 @@ void vbl_array_3d<T>::resize(int n1, int n2, int n3)
   construct(n1, n2, n3);
 }
 
-// -- Fill from static array of Ts.  The final index fills fastest, so if
+//: Fill from static array of Ts.  The final index fills fastest, so if
 // we consider the tensor as a set of matrices (M[i])[j][k] then the matrices are
 // filled in the usual C order.
 template <class T>
@@ -78,7 +80,7 @@ void vbl_array_3d<T>::set(T const* p)
         element_ [row1_index][row2_index][row3_index] = *p++;
 }
 
-// -- Get into array
+//: Get into array
 template <class T>
 void vbl_array_3d<T>::get(T* p) const
 {
@@ -88,7 +90,7 @@ void vbl_array_3d<T>::get(T* p) const
         *p++ = element_ [row1_index][row2_index][row3_index];
 }
 
-// -- Fill with constant
+//: Fill with constant
 template <class T>
 void vbl_array_3d<T>::fill(T const& value)
 {

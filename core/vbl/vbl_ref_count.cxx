@@ -1,3 +1,5 @@
+// This is vxl/vbl/vbl_ref_count.cxx
+
 #include <vbl/vbl_ref_count.h>
 
 //vbl_ref_count::vbl_ref_count() : ref_count(0) { }

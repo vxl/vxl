@@ -1,3 +1,17 @@
+// This is vxl/vbl/vbl_reg_exp.h
+
+
+//:
+// \file
+// \brief contains class for Pattern matching with regular expressions
+// \author Texas Instruments Incorporated.
+//
+// \verbatim
+// Modifications
+// PDA (Manchester) 21/03/2001: Tidied up the documentation
+// \endverbatim
+
+
 // Original Copyright notice:
 // Copyright (C) 1991 Texas Instruments Incorporated.
 //
@@ -8,14 +22,9 @@
 //
 // Texas Instruments Incorporated provides this software "as is" without
 // express or implied warranty.
-//
-// .NAME vbl_reg_exp - Pattern matching with regular expressions
-// .LIBRARY vbl
-// .HEADER vxl package
-// .INCLUDE vbl/vbl_reg_exp.h
-// .FILE vbl_reg_exp.cxx
-// .EXAMPLE examples/vbl_reg_exp_example.cxx
-//
+
+
+
 #ifndef vbl_reg_exph
 #define vbl_reg_exph
 
@@ -23,7 +32,7 @@
 
 const int NSUBEXP = 10;
 
-//:
+//: Pattern matching with regular expressions.
 //  A regular expression allows a programmer to specify  complex
 //  patterns  that  can  be searched for and matched against the
 //  character string of a string object. In its simplest form, a
@@ -82,37 +91,56 @@ const int NSUBEXP = 10;
 //
 class vbl_reg_exp {
 public:
-  inline vbl_reg_exp ();                // vbl_reg_exp with program=NULL
-  inline vbl_reg_exp (char const*);     // vbl_reg_exp with compiled char*
-  vbl_reg_exp (vbl_reg_exp const&);     // Copy constructor
-  inline ~vbl_reg_exp();                // Destructor
+    //: Creates an empty regular expression.
+  inline vbl_reg_exp ();
+    //: Creates a regular expression from string s, and compiles s.
+  inline vbl_reg_exp (char const*); 
+    //: Copy constructor
+  vbl_reg_exp (vbl_reg_exp const&);
+    //: Frees space allocated for regular expression.
+  inline ~vbl_reg_exp();
+    //: Compiles char* --> regexp
+  void compile (char const*);
+    //: true if regexp in char* arg
+  bool find (char const*);
+    //: true if regexp in char* arg
+  bool find (vcl_string const&); 
+    //: Returns the start index of the last item found.
+  inline long start() const;
+    //: Returns the end index of the last item found.
+  inline long end() const;
+    //: Equality operator
+  bool operator== (vbl_reg_exp const&) const;
+    //: Inequality operator
+  inline bool operator!= (vbl_reg_exp const&) const; 
+    //: Same regexp and state?
+  bool deep_equal (vbl_reg_exp const&) const;
+    //: Returns true if a valid RE is compiled and ready for pattern matching.
+  inline bool is_valid() const;
+    //: Invalidates regular expression.
+  inline void set_invalid();
 
-  void compile (char const*);           // Compiles char* --> regexp
-  bool find (char const*);              // true if regexp in char* arg
-  bool find (vcl_string const&);        // true if regexp in char* arg
-  inline long start() const;            // Index to start of first find
-  inline long end() const;              // Index to end of first find
-
-  bool operator== (vbl_reg_exp const&) const;        // Equality operator
-  inline bool operator!= (vbl_reg_exp const&) const; // Inequality operator
-  bool deep_equal (vbl_reg_exp const&) const;        // Same regexp and state?
-
-  inline bool is_valid() const;         // true if compiled regexp
-  inline void set_invalid();            // Invalidates regexp
-
-  // awf added
+    //: Return start index of nth submatch.
+    // start(0) is the start of the full match.
   int start(int n) const;
+    //: Return end index of nth submatch
+    // end(0) is the end of the full match.
   int end(int n) const;
+    //: Return nth submatch as a string.
   vcl_string match(int n) const;
 
 private:
   const char* startp[NSUBEXP];
   const char* endp[NSUBEXP];
-  char  regstart;         // Internal use only
-  char  reganch;          // Internal use only
-  const char* regmust;    // Internal use only
-  int   regmlen;          // Internal use only
-  char* program;
+    //: Internal use only
+  char  regstart;
+    //: Internal use only
+  char  reganch;
+    //: Internal use only
+  const char* regmust;
+    //: Internal use only
+  int   regmlen;
+  char* program;   
   int   progsize;
   const char* searchstring;
 };
@@ -139,7 +167,6 @@ inline vbl_reg_exp::~vbl_reg_exp () {
 //#endif
 }
 
-// --
 
 inline long vbl_reg_exp::start () const {
   return(this->startp[0] - searchstring);
@@ -160,7 +187,7 @@ inline bool vbl_reg_exp::operator!= (vbl_reg_exp const& r) const {
 }
 
 
-//: Returns true if a valid regular expression is compiled and ready for pattern matching.
+//: Returns true if a valid RE is compiled and ready for pattern matching.
 
 inline bool vbl_reg_exp::is_valid () const {
   return (this->program != NULL);
@@ -176,15 +203,15 @@ inline void vbl_reg_exp::set_invalid () {
   this->program = NULL;
 }
 
-//: Return start index of nth submatch. start(0) is the start of the full match.
-
+//: Return start index of nth submatch.
+// start(0) is the start of the full match.
 inline int vbl_reg_exp::start(int n) const
 {
   return this->startp[n] - searchstring;
 }
 
-//: Return end index of nth submatch. end(0) is the end of the full match.
-
+//: Return end index of nth submatch
+// end(0) is the end of the full match.
 inline int vbl_reg_exp::end(int n) const
 {
   return this->endp[n] - searchstring;

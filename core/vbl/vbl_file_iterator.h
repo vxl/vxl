@@ -1,9 +1,25 @@
+// This is vxl/vbl/vbl_file_iterator.h
+
 //-*- c++ -*-------------------------------------------------------------------
 #ifndef vbl_file_iterator_h_
 #define vbl_file_iterator_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
+
+
+//:
+// \file
+// \brief class to iterate through directories and/or "glob" patterns (*.*)
+// \author awf@robots.ox.ac.uk, 27 Nov 00
+//
+// \verbatim
+// Modifications
+// 
+// PDA (Manchester) 21/03/2001: Tidied up the documentation
+// \endverbatim
+
+
 // Author: awf@robots.ox.ac.uk
 // Created: 27 Nov 00
 
@@ -22,9 +38,7 @@ struct vbl_file_iterator_data;
 //     ... use fn() as filename
 //   }
 // rather than opendir/glob/etc.
-
 // Valid glob patterns are unix-like.
-
 class vbl_file_iterator {
 public:
 

@@ -1,3 +1,5 @@
+// This is vxl/vbl/vbl_br_default.txx
+
 #include <vbl/vbl_br_default.h>
 #include <vbl/vbl_basic_optional.h>
 #include <vcl_cassert.h>
@@ -6,7 +8,7 @@
 // Methods for the regular iterator.
 
 //------------------------------------------------------------
-// -- Constructor.  This iterator is at end.
+//: Constructor.  This iterator is at end.
 template <class T1, class T2, class T3, class T4, class T5>
 vbl_br_default_iter<T1,T2,T3,T4,T5>::vbl_br_default_iter()
   : vbl_br_iter_impl<T1,T2,T3,T4,T5>(), where(0), tlist(0)
@@ -14,7 +16,7 @@ vbl_br_default_iter<T1,T2,T3,T4,T5>::vbl_br_default_iter()
 }
 
 //------------------------------------------------------------
-// -- Constructor.
+//: Constructor.
 template <class T1, class T2, class T3, class T4, class T5>
 vbl_br_default_iter<T1,T2,T3,T4,T5>::vbl_br_default_iter(vbl_br_default<T1,T2,T3,T4,T5>* impl,
                                              vbl_basic_relation_where<T1,T2,T3,T4,T5> const* w)
@@ -66,7 +68,7 @@ vbl_br_default_iter<T1,T2,T3,T4,T5>::vbl_br_default_iter(vbl_br_default<T1,T2,T3
 }
 
 //------------------------------------------------------------
-// -- Copy constructor.
+//: Copy constructor.
 template <class T1, class T2, class T3, class T4, class T5>
 vbl_br_default_iter<T1,T2,T3,T4,T5>::vbl_br_default_iter(const vbl_br_default_iter<T1,T2,T3,T4,T5>& it)
   : vbl_br_iter_impl<T1,T2,T3,T4,T5>(it),
@@ -77,7 +79,7 @@ vbl_br_default_iter<T1,T2,T3,T4,T5>::vbl_br_default_iter(const vbl_br_default_it
 }
 
 //------------------------------------------------------------
-// -- Destructor.
+//: Destructor.
 template <class T1, class T2, class T3, class T4, class T5>
 vbl_br_default_iter<T1,T2,T3,T4,T5>::~vbl_br_default_iter()
 {
@@ -85,7 +87,7 @@ vbl_br_default_iter<T1,T2,T3,T4,T5>::~vbl_br_default_iter()
 }
 
 //------------------------------------------------------------
-// -- Make a copy of this instance.
+//: Make a copy of this instance.
 template <class T1, class T2, class T3, class T4, class T5>
 vbl_br_iter_impl<T1,T2,T3,T4,T5>* vbl_br_default_iter<T1,T2,T3,T4,T5>::copy() const
 {
@@ -93,7 +95,7 @@ vbl_br_iter_impl<T1,T2,T3,T4,T5>* vbl_br_default_iter<T1,T2,T3,T4,T5>::copy() co
 }
 
 //------------------------------------------------------------
-// -- Dereference to return the current tuple.
+//: Dereference to return the current tuple.
 template <class T1, class T2, class T3, class T4, class T5>
 vbl_basic_tuple<T1,T2,T3,T4,T5>*
 vbl_br_default_iter<T1,T2,T3,T4,T5>::deref() const
@@ -103,7 +105,7 @@ vbl_br_default_iter<T1,T2,T3,T4,T5>::deref() const
 }
 
 //------------------------------------------------------------
-// -- Increment to point to the next selected tuple.
+//: Increment to point to the next selected tuple.
 template <class T1, class T2, class T3, class T4, class T5>
 void vbl_br_default_iter<T1,T2,T3,T4,T5>::incr()
 {
@@ -113,7 +115,7 @@ void vbl_br_default_iter<T1,T2,T3,T4,T5>::incr()
 }
 
 //------------------------------------------------------------
-// -- Compare two iterators.  Since these are both from the same
+//: Compare two iterators.  Since these are both from the same
 // relation, and tuples are unique within the relation, we can just
 // compare the addresses of tuples.
 template <class T1, class T2, class T3, class T4, class T5>
@@ -123,7 +125,7 @@ bool vbl_br_default_iter<T1,T2,T3,T4,T5>::compare(const vbl_br_iter_impl<T1,T2,T
 }
 
 //------------------------------------------------------------
-// -- Step iterator through relation until match is valid.  Starts by
+//: Step iterator through relation until match is valid.  Starts by
 // testing the current position, so this does not necessarily perform
 // an increment.
 template <class T1, class T2, class T3, class T4, class T5>
@@ -139,7 +141,7 @@ void vbl_br_default_iter<T1,T2,T3,T4,T5>::FindMatch()
 }
 
 //------------------------------------------------------------
-// -- Return true if *this == impl.end().
+//: Return true if *this == impl.end().
 template <class T1, class T2, class T3, class T4, class T5>
 bool vbl_br_default_iter<T1,T2,T3,T4,T5>::AtEnd() const
 {
@@ -150,7 +152,7 @@ bool vbl_br_default_iter<T1,T2,T3,T4,T5>::AtEnd() const
 // Methods for the wild iterator.
 
 //------------------------------------------------------------
-// -- Constructor.
+//: Constructor.
 template <class T1, class T2, class T3, class T4, class T5>
 vbl_br_default_wild_iter<T1,T2,T3,T4,T5>::vbl_br_default_wild_iter(vbl_br_default<T1,T2,T3,T4,T5>* init_impl,
                                                      vbl_basic_relation_where<T1,T2,T3,T4,T5> const* w)
@@ -181,7 +183,7 @@ vbl_br_default_wild_iter<T1,T2,T3,T4,T5>::vbl_br_default_wild_iter(vbl_br_defaul
 }
 
 //------------------------------------------------------------
-// -- Copy constructor.
+//: Copy constructor.
 template <class T1, class T2, class T3, class T4, class T5>
 vbl_br_default_wild_iter<T1,T2,T3,T4,T5>::vbl_br_default_wild_iter(const vbl_br_default_wild_iter<T1,T2,T3,T4,T5>& it)
   : vbl_br_iter_impl<T1,T2,T3,T4,T5>(it),
@@ -191,7 +193,7 @@ vbl_br_default_wild_iter<T1,T2,T3,T4,T5>::vbl_br_default_wild_iter(const vbl_br_
 }
 
 //------------------------------------------------------------
-// -- Destructor.
+//: Destructor.
 template <class T1, class T2, class T3, class T4, class T5>
 vbl_br_default_wild_iter<T1,T2,T3,T4,T5>::~vbl_br_default_wild_iter()
 {
@@ -199,7 +201,7 @@ vbl_br_default_wild_iter<T1,T2,T3,T4,T5>::~vbl_br_default_wild_iter()
 }
 
 //------------------------------------------------------------
-// -- Make a copy of this instance.
+//: Make a copy of this instance.
 template <class T1, class T2, class T3, class T4, class T5>
 vbl_br_iter_impl<T1,T2,T3,T4,T5>* vbl_br_default_wild_iter<T1,T2,T3,T4,T5>::copy() const
 {
@@ -207,7 +209,7 @@ vbl_br_iter_impl<T1,T2,T3,T4,T5>* vbl_br_default_wild_iter<T1,T2,T3,T4,T5>::copy
 }
 
 //------------------------------------------------------------
-// -- Dereference to return the current tuple.  Returns a pointer,
+//: Dereference to return the current tuple.  Returns a pointer,
 // which is null if dereference is invalid for current position.
 template <class T1, class T2, class T3, class T4, class T5>
 vbl_basic_tuple<T1,T2,T3,T4,T5>* vbl_br_default_wild_iter<T1,T2,T3,T4,T5>::deref() const
@@ -218,7 +220,7 @@ vbl_basic_tuple<T1,T2,T3,T4,T5>* vbl_br_default_wild_iter<T1,T2,T3,T4,T5>::deref
 }
 
 //------------------------------------------------------------
-// -- Increment
+//: Increment
 template <class T1, class T2, class T3, class T4, class T5>
 void vbl_br_default_wild_iter<T1,T2,T3,T4,T5>::incr()
 {
@@ -245,7 +247,7 @@ void vbl_br_default_wild_iter<T1,T2,T3,T4,T5>::incr()
 }
 
 //------------------------------------------------------------
-// -- Compare two iterators.
+//: Compare two iterators.
 template <class T1, class T2, class T3, class T4, class T5>
 bool vbl_br_default_wild_iter<T1,T2,T3,T4,T5>::compare(const vbl_br_iter_impl<T1,T2,T3,T4,T5>& i) const
 {
@@ -257,7 +259,7 @@ bool vbl_br_default_wild_iter<T1,T2,T3,T4,T5>::compare(const vbl_br_iter_impl<T1
 // Methods for the relation implementation.
 
 //------------------------------------------------------------
-// -- Constructor.  Calls the parent constructor.
+//: Constructor.  Calls the parent constructor.
 template <class T1, class T2, class T3, class T4, class T5>
 vbl_br_default<T1,T2,T3,T4,T5>::vbl_br_default(const vcl_string& n)
   : vbl_br_impl<T1,T2,T3,T4,T5>(n),
@@ -266,7 +268,7 @@ vbl_br_default<T1,T2,T3,T4,T5>::vbl_br_default(const vcl_string& n)
 }
 
 //------------------------------------------------------------
-// -- Copy constructor.
+//: Copy constructor.
 template <class T1, class T2, class T3, class T4, class T5>
 vbl_br_default<T1,T2,T3,T4,T5>::vbl_br_default(const vbl_br_default<T1,T2,T3,T4,T5>& i)
   : vbl_br_impl<T1,T2,T3,T4,T5>(i),
@@ -290,14 +292,14 @@ vbl_br_default<T1,T2,T3,T4,T5>::vbl_br_default(const vbl_br_default<T1,T2,T3,T4,
 }
 
 //------------------------------------------------------------
-// -- Destructor.
+//: Destructor.
 template <class T1, class T2, class T3, class T4, class T5>
 vbl_br_default<T1,T2,T3,T4,T5>::~vbl_br_default()
 {
 }
 
 //------------------------------------------------------------
-// -- Add a tuple.  Return false if tuple already in relation.
+//: Add a tuple.  Return false if tuple already in relation.
 template <class T1, class T2, class T3, class T4, class T5>
 bool vbl_br_default<T1,T2,T3,T4,T5>::Insert(vbl_basic_tuple<T1,T2,T3,T4,T5> const& t)
 {
@@ -306,7 +308,7 @@ bool vbl_br_default<T1,T2,T3,T4,T5>::Insert(vbl_basic_tuple<T1,T2,T3,T4,T5> cons
 }
 
 //------------------------------------------------------------
-// -- Remove a tuple.  Return true if tuple was in relation.
+//: Remove a tuple.  Return true if tuple was in relation.
 template <class T1, class T2, class T3, class T4, class T5>
 bool vbl_br_default<T1,T2,T3,T4,T5>::Remove(vbl_basic_tuple<T1,T2,T3,T4,T5> const& t)
 {
@@ -387,7 +389,7 @@ bool vbl_br_default<T1,T2,T3,T4,T5>::Remove(vbl_basic_tuple<T1,T2,T3,T4,T5> cons
 }
 
 //------------------------------------------------------------
-// -- Remove the tuples matching a where clause.  This uses wild cards
+//: Remove the tuples matching a where clause.  This uses wild cards
 // to search.  Return true if at least one tuple removed.
 template <class T1, class T2, class T3, class T4, class T5>
 bool vbl_br_default<T1,T2,T3,T4,T5>::Remove(vbl_basic_relation_where<T1,T2,T3,T4,T5> const& w)
@@ -417,7 +419,7 @@ bool vbl_br_default<T1,T2,T3,T4,T5>::Remove(vbl_basic_relation_where<T1,T2,T3,T4
 }
 
 //------------------------------------------------------------
-// -- Get an iterator for a given where clause.
+//: Get an iterator for a given where clause.
 template <class T1, class T2, class T3, class T4, class T5>
 vbl_br_iter_impl<T1,T2,T3,T4,T5>* vbl_br_default<T1,T2,T3,T4,T5>::begin(vbl_basic_relation_where<T1,T2,T3,T4,T5> const& w)
 {
@@ -429,7 +431,7 @@ vbl_br_iter_impl<T1,T2,T3,T4,T5>* vbl_br_default<T1,T2,T3,T4,T5>::begin(vbl_basi
 }
 
 //------------------------------------------------------------
-// -- Get an iterator for the end of a where clause.
+//: Get an iterator for the end of a where clause.
 template <class T1, class T2, class T3, class T4, class T5>
 vbl_br_iter_impl<T1,T2,T3,T4,T5>* vbl_br_default<T1,T2,T3,T4,T5>::end(vbl_basic_relation_where<T1,T2,T3,T4,T5> const&)
 {
@@ -437,7 +439,7 @@ vbl_br_iter_impl<T1,T2,T3,T4,T5>* vbl_br_default<T1,T2,T3,T4,T5>::end(vbl_basic_
 }
 
 //------------------------------------------------------------
-// -- Get the number of tuples in this relation which match the where
+//: Get the number of tuples in this relation which match the where
 // clause.
 template <class T1, class T2, class T3, class T4, class T5>
 int vbl_br_default<T1,T2,T3,T4,T5>::size(vbl_basic_relation_where<T1,T2,T3,T4,T5> const& w)
@@ -459,7 +461,7 @@ int vbl_br_default<T1,T2,T3,T4,T5>::size(vbl_basic_relation_where<T1,T2,T3,T4,T5
 }
 
 //------------------------------------------------------------
-// -- Return true if no tuples match the where clause.
+//: Return true if no tuples match the where clause.
 template <class T1, class T2, class T3, class T4, class T5>
 bool vbl_br_default<T1,T2,T3,T4,T5>::empty(vbl_basic_relation_where<T1,T2,T3,T4,T5> const& w)
 {
@@ -476,7 +478,7 @@ bool vbl_br_default<T1,T2,T3,T4,T5>::empty(vbl_basic_relation_where<T1,T2,T3,T4,
 }
 
 //------------------------------------------------------------
-// -- Return the address of this, used for downcasts.
+//: Return the address of this, used for downcasts.
 template <class T1, class T2, class T3, class T4, class T5>
 void* vbl_br_default<T1,T2,T3,T4,T5>::This()
 {
@@ -484,7 +486,7 @@ void* vbl_br_default<T1,T2,T3,T4,T5>::This()
 }
 
 //------------------------------------------------------------
-// -- Add a tuple.  This method is used in the constructor hence it is
+//: Add a tuple.  This method is used in the constructor hence it is
 // non-virtual.  Return false if tuple is already present.
 template <class T1, class T2, class T3, class T4, class T5>
 bool vbl_br_default<T1,T2,T3,T4,T5>::DoInsert(const vbl_basic_tuple<T1,T2,T3,T4,T5>& t)
@@ -580,7 +582,7 @@ vbl_br_default_factory<T1,T2,T3,T4,T5>::~vbl_br_default_factory()
 }
 
 //------------------------------------------------------------
-// -- Either return existing implementation of that name, or generate a new one.
+//: Either return existing implementation of that name, or generate a new one.
 template <class T1, class T2, class T3, class T4, class T5>
 vbl_br_impl<T1,T2,T3,T4,T5>* vbl_br_default_factory<T1,T2,T3,T4,T5>::Generate(vcl_string name)
 {
@@ -596,7 +598,7 @@ vbl_br_impl<T1,T2,T3,T4,T5>* vbl_br_default_factory<T1,T2,T3,T4,T5>::Generate(vc
 }
 
 //------------------------------------------------------------
-// -- Check whether the implementation is empty, and only protected
+//: Check whether the implementation is empty, and only protected
 // here.  If so then remove and delete it.
 template <class T1, class T2, class T3, class T4, class T5>
 void vbl_br_default_factory<T1,T2,T3,T4,T5>::CheckEmpty(vbl_br_impl<T1,T2,T3,T4,T5>* impl)

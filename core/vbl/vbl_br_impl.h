@@ -1,22 +1,22 @@
 #ifndef vbl_br_impl_h
 #define vbl_br_impl_h
 
-//-----------------------------------------------------------------------------
+// This is vxl/vbl/vbl_br_impl.h
+
+
+//:
+// \file
+// \author Rupert Curwen, January 14th, 1998, 
+//         GE Corporate Research and Development
 //
-// .NAME vbl_br_impl
-// .LIBRARY vbl
-// .HEADER vxl package
-// .INCLUDE vbl/vbl_br_impl.h
-// .FILE vbl_br_impl.txx
+// \verbatim
+// Modifications
+// PDA (Manchester) 21/03/2001: Tidied up the documentation
+// \endverbatim
 //
-// .SECTION Author:
-//             Rupert Curwen, January 14th, 1998
-//             GE Corporate Research and Development
-//
-// .SECTION Modifications
-//     None Yet
-//
-//-----------------------------------------------------------------------------
+
+
+
 #include <vcl_string.h>
 #include <vcl_hash_string.h>
 
@@ -45,25 +45,25 @@ public:
   typedef vbl_basic_relation_where<T1,T2,T3,T4,T5> where_clause;
 
 public:
-  // Constructor.
+  //: Constructor.
   vbl_br_iter_impl() {}
 
-  // Copy constructor.
+  //: Copy constructor.
   vbl_br_iter_impl(const vbl_br_iter_impl<T1,T2,T3,T4,T5>&) {}
 
-  // Destructor.
+  //: Destructor.
   virtual ~vbl_br_iter_impl() {}
 
-  // Make a copy of this instance.
+  //: Make a copy of this instance.
   virtual vbl_br_iter_impl<T1,T2,T3,T4,T5>* copy() const = 0;
 
-  // Dereference.
+  //: Dereference.
   virtual vbl_basic_tuple<T1,T2,T3,T4,T5>* deref() const = 0;
 
-  // Increment.
+  //: Increment.
   virtual void incr() = 0;
 
-  // Compare.
+  //: Compare.
   virtual bool compare(const vbl_br_iter_impl<T1,T2,T3,T4,T5>& i) const = 0;
 };
 
@@ -87,31 +87,32 @@ public:
   typedef vbl_br_iter_impl<T1,T2,T3,T4,T5> iterator;
 
 public:
-  // Constructor.
+  //: Constructor.
   vbl_br_impl(const vcl_string& n) : name(n) {}
 
-  // Copy constructor.
+  //: Copy constructor.
   vbl_br_impl(const vbl_br_impl<T1,T2,T3,T4,T5>& i) : name(i.name) {}
 
-  // Destructor.
+  //: Destructor.
   virtual ~vbl_br_impl() {}
 
-  // Get the factory for this class.
+  //: Get the factory for this class.
   static vbl_basic_relation_factory<T1,T2,T3,T4,T5>* GetFactory();
 
-  // Set the factory for this class.
+  //: Set the factory for this class.
   static void SetFactory(vbl_basic_relation_factory<T1,T2,T3,T4,T5>* f);
 
-  // Add a tuple.
+  //: Add a tuple.
   virtual bool Insert(const vbl_basic_tuple<T1,T2,T3,T4,T5>&) { return false; }
 
-  // Remove a tuple.
+  //: Remove a tuple.
   virtual bool Remove(const vbl_basic_tuple<T1,T2,T3,T4,T5>&) { return false; }
 
-  // Remove tuples matching where clause.
-  virtual bool Remove(const vbl_basic_relation_where<T1,T2,T3,T4,T5>&) { return false; }
+  //: Remove tuples matching where clause.
+  virtual bool Remove(const vbl_basic_relation_where<T1,T2,T3,T4,T5>&) 
+  { return false; }
 
-  // Make attributes unique.
+  //: Make attributes unique.
   virtual bool FirstUnique() { return false; }
   virtual bool SecondUnique() { return false; }
   virtual bool ThirdUnique() { return false; }
@@ -125,12 +126,16 @@ public:
 
 
   // Get iterators.
-  virtual vbl_br_iter_impl<T1,T2,T3,T4,T5>* begin(const vbl_basic_relation_where<T1,T2,T3,T4,T5>&) { return NULL; }
-  virtual vbl_br_iter_impl<T1,T2,T3,T4,T5>* end(const vbl_basic_relation_where<T1,T2,T3,T4,T5>&) { return NULL; }
+  virtual vbl_br_iter_impl<T1,T2,T3,T4,T5>* 
+    begin(const vbl_basic_relation_where<T1,T2,T3,T4,T5>&) { return NULL; }
+  virtual vbl_br_iter_impl<T1,T2,T3,T4,T5>* 
+    end(const vbl_basic_relation_where<T1,T2,T3,T4,T5>&) { return NULL; }
 
   // Size methods.
-  virtual int size(const vbl_basic_relation_where<T1,T2,T3,T4,T5>&) {return 0;}
-  virtual bool empty(const vbl_basic_relation_where<T1,T2,T3,T4,T5>&) { return true; }
+  virtual int size(const vbl_basic_relation_where<T1,T2,T3,T4,T5>&) 
+  { return 0; }
+  virtual bool empty(const vbl_basic_relation_where<T1,T2,T3,T4,T5>&) 
+  { return true; }
 
   // Get name.
   const vcl_string& GetName() const { return name; }

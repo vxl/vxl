@@ -3,18 +3,20 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vbl_bounding_box - A class to hold and update a bounding box
-// .LIBRARY vbl
-// .HEADER vxl package
-// .INCLUDE vbl/vbl_bounding_box.h
-// .FILE vbl_bounding_box.txx
-// .SECTION Author
-//    awf@robots.ox.ac.uk
-// Created: 17 Mar 00
+// This is vxl/vbl/vbl_bounding_box.h
+
+//:
+// \file
+// \brief Contains a bounding box class
+// \author awf@robots.ox.ac.uk, Created: 17 Mar 00
 //
-// .SECTION Modifications
-//     970807 AWF Initial version.
+// \verbatim
+// Modifications
+//970807 AWF Initial version.
 //     07 Mar 01 stewart@cs.rpi.edu added "inside" functions
+// PDA (Manchester) 21/03/2001: Tidied up the documentation and 
+// \endverbatim
+
 
 #include <vcl_iosfwd.h>
 
@@ -24,7 +26,7 @@
 template <class T, int DIM>
 class vbl_bounding_box {
 public:
-  // -- Construct an empty bounding box.
+  //: Construct an empty bounding box.
   vbl_bounding_box() : initialized_(false) { }
 
   //: Incorporate 2d point x, y
@@ -136,7 +138,8 @@ bool nested(vbl_bounding_box<T,DIM> const &a, vbl_bounding_box<T,DIM> const &b)
 
 template <class T, int DIM>
 inline
-bool disjoint(vbl_bounding_box<T,DIM> const &a, vbl_bounding_box<T,DIM> const &b)
+bool disjoint(vbl_bounding_box<T,DIM> const &a, 
+              vbl_bounding_box<T,DIM> const &b)
 {
   for (int i=0; i<DIM; ++i)
     if (a.min_[i] > b.max_[i] || a.max_[i] < b.min_[i])
@@ -146,19 +149,23 @@ bool disjoint(vbl_bounding_box<T,DIM> const &a, vbl_bounding_box<T,DIM> const &b
 
 template <class T, int DIM>
 inline
-bool meet(vbl_bounding_box<T,DIM> const &a, vbl_bounding_box<T,DIM> const &b)
+bool meet(vbl_bounding_box<T,DIM> const &a, 
+          vbl_bounding_box<T,DIM> const &b)
 { return ! disjoint(a, b); }
 #endif
 
 // VC50 has trouble with this
 #if !defined (VCL_WIN32) && !defined(VCL_SUNPRO_CC)
 template <class T, int DIM>
-vcl_ostream& operator << (vcl_ostream& s, const vbl_bounding_box<T,DIM>& bbox) { return bbox.print(s); }
+vcl_ostream& operator << (vcl_ostream& s, const vbl_bounding_box<T,DIM>& bbox)
+ { return bbox.print(s); }
 #else
 template <class T>
-vcl_ostream& operator << (vcl_ostream& s, const vbl_bounding_box<T,2>& bbox) { return bbox.print(s); }
+vcl_ostream& operator << (vcl_ostream& s, const vbl_bounding_box<T,2>& bbox)
+ { return bbox.print(s); }
 template <class T>
-vcl_ostream& operator << (vcl_ostream& s, const vbl_bounding_box<T,3>& bbox) { return bbox.print(s); }
+vcl_ostream& operator << (vcl_ostream& s, const vbl_bounding_box<T,3>& bbox)
+ { return bbox.print(s); }
 #endif
 
 #endif // vbl_bounding_box_h_

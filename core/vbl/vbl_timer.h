@@ -1,5 +1,7 @@
 #ifndef vbl_timer_h
 #define vbl_timer_h
+// This is vxl/vbl/vbl_timer.h
+//
 //
 // Copyright (C) 1991 Texas Instruments Incorporated.
 //
@@ -10,16 +12,20 @@
 //
 // Texas Instruments Incorporated provides this software "as is" without
 // express or implied warranty.
+//:
+// \file 
+// \brief vbl_timer - A timing facility for C++.
 //
-// .NAME vbl_timer - A timing facility for C++
-// .LIBRARY vbl
-// .HEADER vxl package
-// .INCLUDE vbl/vbl_timer.h
-// .FILE vbl_timer.cxx
-// .EXAMPLE examples/vbl_timer.cxx
+// \verbatim
+// Modifications:
+// Created: BMK 07/14/89  Initial design and implementation.
+// Updated: LGO 09/23/89  Conform to COOL coding style.
+// Updated: AFM 12/31/89  OS/2 port.
+// Updated: DLS 03/22/91  New lite version.
+// Updated: VDN 10/14/93  ANSI C does not have user/system time.
+// \endverbatim
 //
-//
-// .SECTION Description
+// Description
 // The Timer class and provides an interface to system timing.
 // It allows a C++ program to record the time between  a  reference
 // point (mark) and now. This class uses the system
@@ -37,29 +43,49 @@
 // time  as  appropriate. See the Timer header file for system-
 // specific notes.
 //
+// The Timer class provides timing code  for performance evaluation.  
+// This code
+// was originally written by Joe Rahmeh at UT Austin.
+// \verbatim
+//  User time:
+//    time cpu spends in user mode on behalf of the program.
+//  System time:
+//    time cpu spends in system mode on behalf of the program.
+//  Real time:
+//    what you get from a stop watch timer.
+// \endverbatim
 
+//: struct containing timer data
 struct vbl_timer_data;
 
 #include <vcl_iosfwd.h>
 
+//: The Timer class provides timing code  for performance evaluation.  
 class vbl_timer {
 public:
-  vbl_timer();   // construct and mark
+  //: construct and mark
+  vbl_timer(); 
   ~vbl_timer();
+  //: mark timer
+  void mark();
+  //: real        time (ms) since last mark
+  long real();   
+  //: user        time (ms) since last mark
+  long user();
+  //: system      time (ms) since last mark
+  long system();
+  //: user+system time (ms) since last mark
+  long all();
 
-  void mark();   // mark timer
-
-  long real();   // real        time (ms) since last mark
-  long user();   // user        time (ms) since last mark
-  long system(); // system      time (ms) since last mark
-  long all();    // user+system time (ms) since last mark
-
+  //: Display user and real time since the last mark.
   void print(vcl_ostream& s);
 
 private:
+  //: struct containing timer data
   vbl_timer_data *data;
-  // disallow.
+  //: disallow.
   vbl_timer(vbl_timer const &) { }
+  //: NYI
   void operator=(vbl_timer const &) { }
 };
 

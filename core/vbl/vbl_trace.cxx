@@ -1,6 +1,9 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
+// This is vxl/vbl/vbl_trace.cxx
+
+//
+//  fsm@robots.ox.ac.uk
+//
+
 #ifdef __GNUC__
 #pragma implementation
 #endif

@@ -3,28 +3,32 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vbl_redirector - Simplified redirection of iostreams
-// .HEADER vxl package
-// .LIBRARY vbl
-// .INCLUDE vbl/vbl_redirector.h
-// .FILE vbl_redirector.cxx
-// .SECTION Description
-// To implement your own, derive a class from vbl_redirector,
-// and implement `putchunk'.
-// .SECTION Author
-//    awf@robots.ox.ac.uk
-// Created: 05 Jul 00
-// .SECTION Modifications:
-//   21-JUL-00  M.Bacic, Oxford RRG -- fixed 'pubsync' on gcc. 
+// This is vxl/vbl/vbl_redirector.h
+
+//:
+// \file
+// \brief Contains class for simplified redirection of iostreams
+// \author awf@robots.ox.ac.uk
+//
+// \verbatim
+// Modifications
+// 21-JUL-00  M.Bacic, Oxford RRG -- fixed 'pubsync' on gcc. 
 //               See vbl_redirector.cxx 
+// PDA (Manchester) 21/03/2001: Tidied up the documentation
+// \endverbatim
+
+
 #include <vcl_iostream.h>
 
 struct vbl_redirector_data;
 
+//: Simplified redirection of iostreams
+// To implement your own, derive a class from vbl_redirector,
+// and implement `putchunk'.
 class vbl_redirector {
 public:
 
-  //:
+  //: 
   // Attach redirector to ostream s, 
   // so that all future output to s goes through this->putchunk
    vbl_redirector(vcl_ostream& s);

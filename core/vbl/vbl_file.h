@@ -3,18 +3,21 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+// This is vxl/vbl/vbl_file.h
+
+//:
+// \file
+// \brief A collection of miscellaneous filesystem-type utilities
+// \author Andrew W. Fitzgibbon, Oxford RRG, 02 Nov 98
 //
-// .NAME    vbl_file
-// .LIBRARY vbl
-// .HEADER  vxl package
-// .INCLUDE vbl/vbl_file.h
-// .FILE    vbl_file.cxx
-// .SECTION Author
-//     Andrew W. Fitzgibbon, Oxford RRG, 02 Nov 98
-// .SECTION Modifications
-//   981102 AWF Initial version.
-//
-//-----------------------------------------------------------------------------
+// \verbatim
+// Modifications
+// 981102 AWF Initial version.
+// PDA (Manchester) 21/03/2001: Tidied up the documentation
+// \endverbatim
+
+
+
 
 #include <vcl_string.h>
 

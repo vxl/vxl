@@ -1,3 +1,5 @@
+// This is vxl/vbl/vbl_get_timestamp.cxx
+
 /*
   fsm@robots.ox.ac.uk
 */

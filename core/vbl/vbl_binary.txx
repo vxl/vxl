@@ -1,5 +1,7 @@
 #ifndef vbl_binary_txx_
 #define vbl_binary_txx_
+// This is vxl/vbl/vbl_binary.txx
+
 /*
   fsm@robots.ox.ac.uk
 */

@@ -1,32 +1,28 @@
 #ifndef _vbl_protection_traits_h
 #define _vbl_protection_traits_h
-//-----------------------------------------------------------------------------
-//
-// .NAME vbl_protection_traits - Template to standardize protection of classes
-// .LIBRARY vbl
-// .HEADER vxl package
-// .INCLUDE vbl/vbl_protection_traits.h
-// .FILE vbl_protection_traits.txx
-//
-// .SECTION Description
-//
-//   The vbl_protection_traits class is specialized for each type which is to be
-//   contained as a reference counted pointer.  The specialized class defines
-//   the protect and unprotect methods to be used for the type.  The default is
-//   to use Protect and UnProtect.
-//
-//
-// .SECTION See also
-//   DBGenWrapper in Database.
-//
-// .SECTION Author
-//   Rupert Curwen, GE CRD, 6/3/98
-//
-// .SECTION Modifications
-//   <none yet>
-//
-//-----------------------------------------------------------------------------
+// This is vxl/vbl/vbl_protection_traits.h
 
+
+//:
+// \file
+// \brief Template to standardize protection of classes
+// \author Rupert Curwen, GE CRD, 6/3/98
+//
+// \verbatim
+//   See also
+//   DBGenWrapper in Database.
+// Modifications
+// PDA (Manchester) 23/03/2001: Tidied up the documentation
+// \endverbatim
+
+
+
+
+//:
+// The vbl_protection_traits class is specialized for each type which is to be
+// contained as a reference counted pointer.  The specialized class defines
+// the protect and unprotect methods to be used for the type.  The default is
+// to use Protect and UnProtect.
 template <class T> class vbl_protection_traits
 {
 public:

@@ -3,23 +3,23 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// .NAME vbl_user_info - Reads information about a user from the password file
-// .LIBRARY vbl
-// .HEADER  vxl package
-// .INCLUDE vbl/vbl_user_info.h
-// .FILE    vbl_user_info.cxx
-// .SECTION Author
-//     Andrew W. Fitzgibbon, Oxford RRG, 08 Apr 99
-//
-// .SECTION Modifications
+// This is vxl/vbl/vbl_user_info.h
+
+//:
+// \file
+// \brief Reads information about a user from the password file.
+// \author Andrew W. Fitzgibbon, Oxford RRG, 08 Apr 99
+// 
+// \verbatim
+//    Modifications
 //     990408 AWF Initial version.
-//
+//     010321 C. Beeston documentation changes
+// \endverbatim
 //-----------------------------------------------------------------------------
 
 #include <vcl_string.h>
 
-//
+//: Reads information about a user from the password file
 class vbl_user_info {
 public:
   typedef unsigned long uid_type;
@@ -35,11 +35,15 @@ public:
 
   // Constructors/Destructors--------------------------------------------------
 
+//: Lookup info from numeric user-id
   vbl_user_info(uid_type uid);
+//: Lookup info from login name
   vbl_user_info(char const* name);
+//: Lookup info from login name
   vbl_user_info(vcl_string const& name);
-
+//: NYI
   void init(uid_type);
+//: initialise vbl_user_info for given login name
   void init(char const* name);
 };
 

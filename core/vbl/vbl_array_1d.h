@@ -3,19 +3,20 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME    vbl_array_1d
-// .LIBRARY vbl
-// .HEADER  vxl package
-// .INCLUDE vbl/vbl_array_1d.h
-// .FILE    vbl_array_1d.txx
-// .SECTION Description
-// a container which stores its elements in contiguous
+// This is vbl/vbl_array_1d.h
+
+//:
+// \file
+// \brief A simple container.
+// \author fsm@robots.ox.ac.uk
+// This container stores its elements in contiguous
 // storage and whose iterator types are raw pointers. There is
 // no requirement that the element type have a default constructor.
-// .SECTION Author
-//  fsm@robots.ox.ac.uk
-// .SECTION Modifications
+
+// Modifications
+// \verbatim
 //    Peter Vanroose 5apr2001 added operator==
+// \verbatim
 
 #include <vcl_new.h>
 

@@ -3,25 +3,26 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+// This is vxl/vbl/vbl_awk.h
+
+//:
+// \file
+// \author Andrew W. Fitzgibbon, Oxford RRG, 17 May 97
 //
-// .NAME    vbl_awk
-// .LIBRARY vbl
-// .HEADER  vxl package
-// .INCLUDE vbl/vbl_awk.h
-// .FILE    vbl_awk.cxx
-// .SECTION Author
-//     Andrew W. Fitzgibbon, Oxford RRG, 17 May 97
-// .SECTION Modifications
-//     970517 AWF Initial version.
-//
-//-----------------------------------------------------------------------------
+// Modifications
+// \verbatim
+// 970517 AWF Initial version.
+// PDA (Manchester) 21/03/2001: Tidied up the documentation
+// \endverbatim
+
 
 #include <vcl_string.h>
 #include <vcl_iosfwd.h>
 #include <vcl_vector.h>
 
 //: The core of awk
-// vbl_awk reads lines from an istream and breaks them into whitespace-separated
+// vbl_awk reads lines from an istream and breaks them into whitespace-
+// separated
 // fields.  Its primary advantage is that its name defines the semantics of
 // its methods---except that this C++ version uses zero-based fields.  The
 // usage is exemplified in this example, to print the second field in every
@@ -72,9 +73,11 @@ public:
 //: Advance to the next line
   vbl_awk& operator ++ () { next(); return *this; }
 
-//: Display error message, line number, optional field number and char within field.
+//: Display error message, line number.
+// Also display optional field number and  char within field.
 
-  void error(vcl_ostream&, char const* message, int field = -1, int char_within_field = 0);
+  void error(vcl_ostream&, char const* message, int field = -1, 
+    int char_within_field = 0);
 
   // Computations--------------------------------------------------------------
 

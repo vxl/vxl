@@ -1,3 +1,5 @@
+// This is vxl/vbl/vbl_canonical_path.cxx
+
 /*
   fsm@robots.ox.ac.uk
 */

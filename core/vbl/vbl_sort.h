@@ -4,18 +4,21 @@
 #pragma interface
 #endif
 
-// .NAME    vbl_sort - Collection of common predicates for sorting
-// .LIBRARY vbl
-// .HEADER  vxl package
-// .INCLUDE vbl/vbl_sort.h
-// .FILE    vbl_sort.txx
-// .SECTION Author
-//     Andrew W. Fitzgibbon, Oxford RRG, 19 Nov 97
+// This is vxl/vbl/vbl_sort.h
+
+
+//:
+// \file
+// \brief Collection of common predicates for sorting
+// \author Andrew W. Fitzgibbon, Oxford RRG, 19 Nov 97
 //
-// .SECTION Modifications
-//    971119 AWF Initial version.
-//
-//-----------------------------------------------------------------------------
+// \verbatim
+// Modifications
+// 971119 AWF Initial version.
+// PDA (Manchester) 21/03/2001: Tidied up the documentation
+// \endverbatim
+
+
 
 int vbl_sort_double_ascending(double const&, double const&);
 int vbl_sort_double_descending(double const&, double const&);
@@ -23,6 +26,8 @@ int vbl_sort_double_descending(double const&, double const&);
 int vbl_sort_int_ascending(int const&, int const&);
 int vbl_sort_int_descending(int const&, int const&);
 
+
+//: Collection of common predicates for sorting
 template <class T>
 struct vbl_sort_helper {
   static int ascend(const void* a, const void* b) {

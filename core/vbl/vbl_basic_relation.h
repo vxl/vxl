@@ -1,22 +1,18 @@
 #ifndef vbl_basic_relation_h
 #define vbl_basic_relation_h
 
-//-----------------------------------------------------------------------------
+// This is vxl/vbl/vbl_basic_relation.h
+
+//:
+// \file
+// \author Rupert Curwen, 31/10/1997 GE Corporate Research and Development
 //
-// .NAME vbl_basic_relation
-// .LIBRARY vbl
-// .HEADER vxl package
-// .INCLUDE vbl/vbl_basic_relation.h
-// .FILE vbl_basic_relation.txx
+// \verbatim
+// Modifications
+// PDA (Manchester) 21/03/2001: Tidied up the documentation
+// \endverbatim
 //
-// .SECTION Author:
-//             Rupert Curwen, October 31st, 1997
-//             GE Corporate Research and Development
-//
-// .SECTION Modifications
-//     None Yet
-//
-//-----------------------------------------------------------------------------
+
 #include <vcl_string.h>
 #include <vcl_cassert.h>
 #include <vcl_iosfwd.h>
@@ -39,7 +35,7 @@ class vbl_basic_relation_where;
 #endif
 
 //------------------------------------------------------------
-// -- vbl_basic_relation iterator.  Holds a sub-class of vbl_br_iter_impl which
+//: vbl_basic_relation iterator.  Holds a sub-class of vbl_br_iter_impl which
 // does the implementation.
 template <class T1, class T2,
   VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional),
@@ -57,16 +53,19 @@ public:
   vbl_basic_relation_iterator(const iterator& it);
   ~vbl_basic_relation_iterator();
 
-  tuple& operator*() const { tuple* t = impl->deref(); assert(t != 0); return *t; }
+  tuple& operator*() const 
+  { tuple* t = impl->deref(); assert(t != 0); return *t; }
 
-  // Prefix increment
+  //: Prefix increment
   iterator& operator++() { impl->incr(); return *this; }
-  // Postfix increment
+  //: Postfix increment
   iterator operator++(int) { iterator tmp(*this); impl->incr(); return tmp; }
 
-  inline bool operator==(const iterator& it) const { return impl->compare(*it.impl); }
+  inline bool operator==(const iterator& it) const 
+  { return impl->compare(*it.impl); }
   iterator& operator=(const iterator& it);
-  inline bool operator!=(const iterator& it) const { return ! impl->compare(*it.impl); }
+  inline bool operator!=(const iterator& it) const 
+  { return ! impl->compare(*it.impl); }
 
 protected:
   implementation* impl;
@@ -94,41 +93,45 @@ public:
   typedef vbl_basic_relation_where<T1,T2,T3,T4,T5> where_clause;
 
 public:
-  // Constructor.
+  //: Constructor.
   vbl_basic_relation(const vcl_string& name);
 
-  // Copy constructor.
+  //: Copy constructor.
   vbl_basic_relation(const vbl_basic_relation<T1,T2,T3,T4,T5>& rel);
 
-  // Destructor.
+  //: Destructor.
   ~vbl_basic_relation();
 
-  // Add a tuple.
+  //: Add a tuple.
   bool insert(T1 t1,T2 t2) { return impl->Insert(tuple(t1,t2)); }
   bool insert(T1 t1,T2 t2,T3 t3) { return impl->Insert(tuple(t1,t2,t3)); }
-  bool insert(T1 t1,T2 t2,T3 t3,T4 t4) { return impl->Insert(tuple(t1,t2,t3,t4)); }
-  bool insert(T1 t1,T2 t2,T3 t3,T4 t4,T5 t5) { return impl->Insert(tuple(t1,t2,t3,t4,t5)); };
+  bool insert(T1 t1,T2 t2,T3 t3,T4 t4) 
+  { return impl->Insert(tuple(t1,t2,t3,t4)); }
+  bool insert(T1 t1,T2 t2,T3 t3,T4 t4,T5 t5) 
+  { return impl->Insert(tuple(t1,t2,t3,t4,t5)); };
   bool insert(const tuple& t) { return impl->Insert(t); }
 
-  // Remove a tuple.
+  //: Remove a tuple.
   bool remove(T1 t1,T2 t2) { return impl->Remove(tuple(t1,t2)); }
   bool remove(T1 t1,T2 t2,T3 t3) { return impl->Remove(tuple(t1,t2,t3)); }
-  bool remove(T1 t1,T2 t2,T3 t3,T4 t4) { return impl->Remove(tuple(t1,t2,t3,t4)); }
-  bool remove(T1 t1,T2 t2,T3 t3,T4 t4,T5 t5) { return impl->Remove(tuple(t1,t2,t3,t4,t5)); }
+  bool remove(T1 t1,T2 t2,T3 t3,T4 t4) 
+  { return impl->Remove(tuple(t1,t2,t3,t4)); }
+  bool remove(T1 t1,T2 t2,T3 t3,T4 t4,T5 t5) 
+  { return impl->Remove(tuple(t1,t2,t3,t4,t5)); }
   bool remove(const tuple& t) { return impl->Remove(t); }
 
-  // Iterators.
+  //: Iterators.
   iterator begin();
   iterator end();
 
-  // Size queries.
+  //: Size queries.
   int size() { return impl->size(*where); }
   bool empty() { return impl->empty(*where); }
 
-  // Clear.
+  //: Clear.
   bool clear();
 
-  // Get name.
+  //: Get name.
   const vcl_string& get_name() const { return impl->GetName(); }
 
   // Remove based on attribute.
@@ -144,7 +147,8 @@ public:
   vbl_basic_relation<T1,T2,T3,T4,T5> where_third(T3 t3);
   vbl_basic_relation<T1,T2,T3,T4,T5> where_fourth(T4 t4);
   vbl_basic_relation<T1,T2,T3,T4,T5> where_fifth(T5 t5);
-  vbl_basic_relation<T1,T2,T3,T4,T5> where_is(const vbl_basic_relation_where<T1,T2,T3,T4,T5>& where);
+  vbl_basic_relation<T1,T2,T3,T4,T5> 
+    where_is(const vbl_basic_relation_where<T1,T2,T3,T4,T5>& where);
 
   // Make attributes unique.
   bool first_unique() { return impl->FirstUnique(); }
@@ -183,7 +187,8 @@ template
   class T3,
   class T4,
   class T5>
-inline vcl_ostream& operator<<(vcl_ostream& str, vbl_basic_relation<T1,T2,T3,T4,T5>& rel)
+inline vcl_ostream& operator<<(vcl_ostream& str, 
+                               vbl_basic_relation<T1,T2,T3,T4,T5>& rel)
 {
   rel.dump_relation(str);
   return str;

@@ -1,3 +1,5 @@
+// This is vxl/vbl/vbl_smart_ptr.txx
+
 #include "vbl_smart_ptr.h"
 #include <vcl_iostream.h>
 

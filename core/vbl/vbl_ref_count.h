@@ -1,11 +1,17 @@
 #ifndef vbl_ref_count_h
 #define vbl_ref_count_h
 
-// .NAME vbl_ref_count
-// .HEADER vxl package
-// .LIBRARY vbl
-// .INCLUDE vbl/vbl_ref_count.h
-// .FILE vbl_ref_count.cxx
+// This is vxl/vbl/vbl_ref_count.h
+
+//:
+// \file
+// \author 
+//
+// \verbatim
+// Modifications
+// PDA (Manchester) 21/03/2001: Tidied up the documentation
+// \endverbatim
+
 
 #include "dll.h"
 

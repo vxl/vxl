@@ -1,9 +1,11 @@
+// This is vxl/vbl/vbl_user_info.cxx
+
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
 #pragma implementation
 #endif
 //
-// .NAME vbl_user_info
+
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 08 Apr 99
 //
@@ -21,19 +23,19 @@
 
 #include <vcl_iostream.h>
 
-// -- Lookup info from login name
+//: Lookup info from login name
 vbl_user_info::vbl_user_info(char const* name_)
 {
   init(name_);
 }
 
-// -- Lookup info from login name
+//: Lookup info from login name
 vbl_user_info::vbl_user_info(vcl_string const & name_)
 {
   init(name_.c_str());
 }
 
-// -- Lookup info from numeric user-id
+//: Lookup info from numeric user-id
 vbl_user_info::vbl_user_info(uid_type uid_)
 {
   init(uid_);

@@ -1,5 +1,7 @@
-// Note that even though this file defines instances of a templated
-// class, it is a .cxx file and not a .txx file because it does not
+// This is vxl/vbl/vbl_arg.cxx
+
+// Note that even though this file defines instances of a templated 
+// class, it is a .cxx file and not a .txx file because it does not 
 // supply a class definition for use by clients.
 //
 // If you need to define your own vbl_arg<T>, you should #include vbl_arg.h
@@ -54,7 +56,7 @@ void vbl_arg_base::add_to_current(vbl_arg_base* a)
   current_list().add(a);
 }
 
-// -- The main static method.
+//: The main static method.
 void vbl_arg_base::parse_deprecated(int& argc, char **& argv, bool warn_about_unrecognized_arguments)
 {
   current_list().parse(argc, argv, warn_about_unrecognized_arguments);
@@ -98,7 +100,7 @@ vbl_arg_base::vbl_arg_base(char const* option, char const*helpstring):
 
 //------------------------------------------------------------------------------
 
-// -- Construct an empty vbl_arg_info_list.
+//: Construct an empty vbl_arg_info_list.
 vbl_arg_info_list::vbl_arg_info_list(vbl_arg_info_list::autonomy autonomy__):
   nargs(0),
   args(new vbl_arg_base*[100]),
@@ -108,13 +110,13 @@ vbl_arg_info_list::vbl_arg_info_list(vbl_arg_info_list::autonomy autonomy__):
 {
 }
 
-// -- Destructor.
+//: Destructor.
 vbl_arg_info_list::~vbl_arg_info_list()
 {
   delete [] args;
 }
 
-// -- Change the help operator (defaults to -?)
+//: Change the help operator (defaults to -?)
 void vbl_arg_info_list::set_help_option(char const* str)
 {
   // check that the operator isn't already being used
@@ -128,7 +130,7 @@ void vbl_arg_info_list::set_help_option(char const* str)
   help = str;
 }
 
-// -- Add an argument to the list.
+//: Add an argument to the list.
 void vbl_arg_info_list::add(vbl_arg_base* arg)
 {
   if ( arg->option() && help == arg->option() )
@@ -138,7 +140,7 @@ void vbl_arg_info_list::add(vbl_arg_base* arg)
     args[nargs++] = arg;
 }
 
-// -- Append another list.  The other list is not copied, just pointed to.
+//: Append another list.  The other list is not copied, just pointed to.
 void vbl_arg_info_list::include(vbl_arg_info_list& l)
 {
   assert(&l != this);
@@ -147,7 +149,7 @@ void vbl_arg_info_list::include(vbl_arg_info_list& l)
     add(l.args[i]);
 }
 
-// -- Display help about each option in the arg list.
+//: Display help about each option in the arg list.
 // note that this function does not exit at the end.
 void vbl_arg_info_list::display_help( char const*progname)
 {
@@ -213,7 +215,7 @@ void vbl_arg_info_list::display_help( char const*progname)
       }
 }
 
-// -- Parse the command line, using the current list of args.  Remove all
+//: Parse the command line, using the current list of args.  Remove all
 // recognised arguments from the command line by modifying argc and argv.
 void vbl_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecognized_arguments)
 {

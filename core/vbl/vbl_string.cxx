@@ -1,3 +1,5 @@
+// This is vxl/vbl/vbl_string.cxx
+
 #include "vbl_string.h"
 
 #include <vcl_cstdlib.h>

@@ -3,34 +3,43 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+// This is vxl/vbl/vbl_array_2d.h
+
+
+//:
+// \file
+// \brief Contains class for a templated 2d array
+// \author Andrew W. Fitzgibbon, Oxford RRG, 05 Aug 96
 //
-// .NAME    vbl_array_2d
-// .LIBRARY vbl
-// .HEADER  vxl package
-// .INCLUDE vbl/vbl_array_2d.h
-// .FILE    vbl_array_2d.txx
-// .SECTION Author
-//     Andrew W. Fitzgibbon, Oxford RRG, 05 Aug 96
-//
-// .SECTION Modifications:
-//    Peter Vanroose -13nov98- added copy constructor and assignment operator
-//   101298 AWF Added row/column store.  The old split was just too pedantic.
-//    Peter Vanroose 5apr2001 added operator==
-//
-//-----------------------------------------------------------------------------
+// Modifications
+// \verbatim
+// Peter Vanroose -13nov98- added copy constructor and assignment operator
+// 101298 AWF Added row/column store.  The old split was just too pedantic.
+// PDA (Manchester) 21/03/2001: Tidied up the documentation
+// \endverbatim
+
+
 
 #include <vcl_iosfwd.h>
 
 //: Simplest possible 2D array
-
 export template <class T>
 class vbl_array_2d {
 public:
+
+  //: Default constructor
   vbl_array_2d();
+
+  //: Construct from two integers
   vbl_array_2d(int m, int n);
+
+  //: Construct from a 2d array
   vbl_array_2d(vbl_array_2d<T> const &);
+
+  //: Destructor
  ~vbl_array_2d();
 
+  //: Assignment
   vbl_array_2d& operator=(const vbl_array_2d<T>&);
   bool operator==(vbl_array_2d<T> const&) const;
 
@@ -48,9 +57,17 @@ public:
   T const* operator[] (int i) const { return rows_[i]; }
   T      * operator[] (int i) { return rows_[i]; }
 
+
+  //: Return number of rows
   int rows() const { return num_rows_; }
+
+  //: Return number of columns
   int cols() const { return num_cols_; }
+
+  //: Return number of columns
   int columns() const { return num_cols_; }
+
+  //: Return size = (number of rows) * (number of columns) 
   int size() const { return num_rows_ * num_cols_; }
 
   T      *      * get_rows() { return rows_; }

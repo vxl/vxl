@@ -1,22 +1,20 @@
 #ifndef vbl_basic_tuple_h
 #define vbl_basic_tuple_h
 
-//-----------------------------------------------------------------------------
+// This is vxl/vbl/vbl_basic_tuple.h
+
+//:
+// \file 
+// \author Rupert Curwen, January 13th, 1998, 
+//         GE Corporate Research and Development
 //
-// .NAME vbl_basic_tuple
-// .LIBRARY vbl
-// .HEADER vxl package
-// .INCLUDE vbl/vbl_basic_tuple.h
-// .FILE vbl_basic_tuple.cxx
-//
-// .SECTION Author:
-//             Rupert Curwen, January 13th, 1998
-//             GE Corporate Research and Development
-//
-// .SECTION Modifications
-//     None Yet
-//
-//-----------------------------------------------------------------------------
+// \verbatim
+// Modifications
+// PDA (Manchester) 23/03/2001: Tidied up the documentation
+// \endverbatim
+
+
+
 
 #include <vcl_iostream.h>
 #include <vbl/vbl_basic_optional.h>
@@ -53,16 +51,20 @@ public:
   vbl_basic_tuple(T1 t1,T2 t2)
     : first(t1), second(t2)
   {
-    if (!vbl_basic_optional_traits<T3>::IsOptional || vbl_basic_optional_traits<T2>::IsOptional)
-      vbl_basic_optional::Error("vbl_basic_tuple constructed with wrong number of arguments.");
+    if (!vbl_basic_optional_traits<T3>::IsOptional || 
+      vbl_basic_optional_traits<T2>::IsOptional)
+      vbl_basic_optional::Error("vbl_basic_tuple constructed 
+      with wrong number of arguments.");
     vbl_protection_traits<T1>::protect(first);
     vbl_protection_traits<T2>::protect(second);
   }
   vbl_basic_tuple(T1 t1,T2 t2,T3 t3)
     : first(t1), second(t2), third(t3)
   {
-    if (!vbl_basic_optional_traits<T4>::IsOptional || vbl_basic_optional_traits<T3>::IsOptional)
-      vbl_basic_optional::Error("vbl_basic_tuple constructed with wrong number of arguments.");
+    if (!vbl_basic_optional_traits<T4>::IsOptional || 
+      vbl_basic_optional_traits<T3>::IsOptional)
+      vbl_basic_optional::Error("vbl_basic_tuple constructed 
+      with wrong number of arguments.");
     vbl_protection_traits<T1>::protect(first);
     vbl_protection_traits<T2>::protect(second);
     vbl_protection_traits<T3>::protect(third);
@@ -70,8 +72,10 @@ public:
   vbl_basic_tuple(T1 t1,T2 t2,T3 t3,T4 t4)
     : first(t1), second(t2), third(t3), fourth(t4)
   {
-    if (!vbl_basic_optional_traits<T5>::IsOptional || vbl_basic_optional_traits<T4>::IsOptional)
-      vbl_basic_optional::Error("vbl_basic_tuple constructed with wrong number of arguments.");
+    if (!vbl_basic_optional_traits<T5>::IsOptional || 
+      vbl_basic_optional_traits<T4>::IsOptional)
+      vbl_basic_optional::Error("vbl_basic_tuple constructed 
+      with wrong number of arguments.");
     vbl_protection_traits<T1>::protect(first);
     vbl_protection_traits<T2>::protect(second);
     vbl_protection_traits<T3>::protect(third);
@@ -81,7 +85,8 @@ public:
     : first(t1), second(t2), third(t3), fourth(t4), fifth(t5)
   {
     if (vbl_basic_optional_traits<T5>::IsOptional)
-      vbl_basic_optional::Error("vbl_basic_tuple constructed with wrong number of arguments.");
+      vbl_basic_optional::Error("vbl_basic_tuple constructed 
+      with wrong number of arguments.");
     vbl_protection_traits<T1>::protect(first);
     vbl_protection_traits<T2>::protect(second);
     vbl_protection_traits<T3>::protect(third);
@@ -127,7 +132,8 @@ public:
   }
 
   // Operator =.
-  inline vbl_basic_tuple<T1,T2,T3,T4,T5>& operator=(const vbl_basic_tuple<T1,T2,T3,T4,T5>& tuple)
+  inline vbl_basic_tuple<T1,T2,T3,T4,T5>& 
+    operator=(const vbl_basic_tuple<T1,T2,T3,T4,T5>& tuple)
   {
     if (this == &tuple) return *this;
 
@@ -257,7 +263,8 @@ template
 inline bool operator==(const vbl_basic_tuple<T1,T2,T3,T4,T5>& x,
                        const vbl_basic_tuple<T1,T2,T3,T4,T5>& y)
 {
-  bool res = (x.GetFirst() == y.GetFirst()) && (x.GetSecond() == y.GetSecond());
+  bool res = (x.GetFirst() == y.GetFirst()) && 
+    (x.GetSecond() == y.GetSecond());
   if (!vbl_basic_optional_traits<T3>::IsOptional)
     res = res && (x.GetThird() == y.GetThird());
   if (!vbl_basic_optional_traits<T4>::IsOptional)
@@ -273,7 +280,8 @@ template
   class T3,
   class T4,
   class T5>
-inline vcl_ostream& operator<<(vcl_ostream& str, const vbl_basic_tuple<T1,T2,T3,T4,T5>& tuple)
+inline vcl_ostream& operator<<(vcl_ostream& str, 
+                               const vbl_basic_tuple<T1,T2,T3,T4,T5>& tuple)
 {
   tuple.Dump(str);
   return str;

@@ -1,9 +1,10 @@
+// This is vxl/vbl/vbl_awk.cxx
+
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
 #pragma implementation
 #endif
 //
-// .NAME vbl_awk
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 17 May 97
 //
@@ -14,7 +15,7 @@
 #include <vcl_cctype.h>
 #include <vcl_iostream.h>
 
-// -- Construct from input stream
+//: Construct from input stream
 vbl_awk::vbl_awk(vcl_istream& s, ModeFlags mode):
   fd_(s),
   mode_(mode)

@@ -16,11 +16,14 @@
 
 class example_sp : public vbl_ref_count {
 public:
-  example_sp() { vcl_cout << "example_sp constructor, refcount=" << get_references() << vcl_endl; }
+  example_sp() { vcl_cout << "example_sp constructor, refcount=" 
+    << get_references() << vcl_endl; }
 
-  ~example_sp() { vcl_cout << "example_sp destructor, refcount=" << get_references() << vcl_endl; }
+  ~example_sp() { vcl_cout << "example_sp destructor, refcount=" 
+    << get_references() << vcl_endl; }
 
-  example_sp(example_sp const&) { vcl_cout << "example_sp copy constructor, refcount=" << get_references() << vcl_endl; }
+  example_sp(example_sp const&) { vcl_cout << "example_sp copy constructor, 
+    refcount=" << get_references() << vcl_endl; }
 
   friend vcl_ostream& operator<<(vcl_ostream& os, example_sp const& e) {
     int p = e.get_references(); 

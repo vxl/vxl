@@ -1,9 +1,11 @@
+// This is vxl/vbl/vbl_file.cxx
+
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
 #pragma implementation
 #endif
 //
-// .NAME vbl_file
+
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 02 Nov 98
 //

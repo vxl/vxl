@@ -1,13 +1,29 @@
 #ifndef vbl_smart_ptr_h_
 #define vbl_smart_ptr_h_
-// .NAME vbl_smart_ptr - A templated smart pointer class
-// .HEADER vxl package
-// .LIBRARY vbl
-// .INCLUDE vbl/vbl_smart_ptr.h
-// .FILE vbl_smart_ptr.txx
-// .EXAMPLE examples/vbl_smart_ptr_example.cxx
+// This is vxl/vbl/vbl_smart_ptr.h
+
+
+
+//:
+// \file
+// \brief Contains a templated smart pointer class 
+// \author Richard Hartley (original Macro version), 
+//         William A. Hoffman (current templated version)
 //
-// .SECTION Description
+// \verbatim
+// Modifications
+// 2000.05.15 François BERTEL Added some missing <T>
+// 2000.05.16 Peter Vanroose  Operators > < >= <= made const
+// 2000.09.13 fsm@robots      Added rationale for unprotect().
+// PDA (Manchester) 23/03/2001: Tidied up the documentation
+// \endverbatim
+
+
+#include <vcl_iosfwd.h>
+
+
+
+//: A templated smart pointer class 
 // This class requires that the class being templated over has
 // the following signatures (methods) :
 //   void T::ref();
@@ -33,21 +49,7 @@
 // can sometimes (but not always) be avoided by assigning 0 (null pointer)
 // to one of the nodes in the ring.
 //
-//
-// .SECTION See also
-//   vbl_refcount
-//
-// .SECTION Author
-//   Richard Hartley (original Macro version),
-//   William A. Hoffman (current templated version)
-//
-// .SECTION Modifications
-// 2000.05.15 François BERTEL Added some missing <T>
-// 2000.05.16 Peter Vanroose  Operators > < >= <= made const
-// 2000.09.13 fsm@robots      Added rationale for unprotect().
-
-#include <vcl_iosfwd.h>
-
+// See also vbl_refcount
 template <class T>
 class vbl_smart_ptr {
 public:
@@ -60,10 +62,12 @@ public:
   vbl_smart_ptr (T *p)
     : protected_(true), ptr_(p) { if (ptr_) ref(ptr_); }
 
-  ~vbl_smart_ptr () {
+  ~vbl_smart_ptr ()
+  {
     // the strange order of events in this function is to avoid
     // heap corruption if unref() causes *this to be deleted.
-    if (protected_) {
+    if (protected_)
+    {
       T *old_ptr = ptr_;
       ptr_ = 0;
       if (old_ptr)
@@ -74,9 +78,15 @@ public:
   }
 
   //: Assignment
-  vbl_smart_ptr<T> &operator = (vbl_smart_ptr<T> const &r) { return operator=(r.as_pointer()); }
-  vbl_smart_ptr<T> &operator = (T *r) {
-    if (ptr_ != r) {
+  vbl_smart_ptr<T> &operator = (vbl_smart_ptr<T> const &r)
+  {
+    return operator=(r.as_pointer());
+  }
+
+  vbl_smart_ptr<T> &operator = (T *r)
+  {
+    if (ptr_ != r)
+    {
       // If there are circular references, calling unref() may
       // cause *this to be destroyed and so assigning to 'ptr_'
       // would be ill-formed and could cause heap corruption.
@@ -91,6 +101,7 @@ public:
       if (old_ptr)
         unref(old_ptr);
     }
+    protected_ = true;
     return *this;
   }
 
@@ -118,18 +129,32 @@ public:
     protected_ = false;
   }
 
-  //  //: If a T_sptr is converted to a pointer then back to a T_sptr,
-  //  // you'll need to call this
-  //  void protect() { ref(); }
+  //: Is this smart pointer responsible for the object being pointed to
+  // If this value is false, the object does not have to save it.
+  bool is_protected() const { return protected_;};
+
+  // //: If a T_ref is converted to a pointer then back to a T_ref,
+  // // you'll need to call this
+  // // void protect()
+  // {
+  //    if (!protected_ && ptr_)
+  //     ref(ptr_);
+  //   protected_ = true;
+  // }
 
   //: Relational operators.
-  // [There's no need for casts to void* or any other pointer type than T* here.]
+  //There's no need for casts to void* or any other pointer type than T* here.
   bool operator == (T const *p) const { return ptr_ == p; }
-  bool operator == (vbl_smart_ptr<T> const &p) const { return ptr_ == p.as_pointer(); }
-  bool operator <  (vbl_smart_ptr<T> const &p) const { return ptr_ <  p.as_pointer(); }
-  bool operator >  (vbl_smart_ptr<T> const &p) const { return ptr_ >  p.as_pointer(); }
-  bool operator <= (vbl_smart_ptr<T> const &p) const { return ptr_ <= p.as_pointer(); }
-  bool operator >= (vbl_smart_ptr<T> const &p) const { return ptr_ >= p.as_pointer(); }
+  bool operator == (vbl_smart_ptr<T> const &p) const 
+  { return ptr_ == p.as_pointer(); }
+  bool operator <  (vbl_smart_ptr<T> const &p) const 
+  { return ptr_ <  p.as_pointer(); }
+  bool operator >  (vbl_smart_ptr<T> const &p) const 
+  { return ptr_ >  p.as_pointer(); }
+  bool operator <= (vbl_smart_ptr<T> const &p) const 
+  { return ptr_ <= p.as_pointer(); }
+  bool operator >= (vbl_smart_ptr<T> const &p) const 
+  {return ptr_ >= p.as_pointer(); }
 
 private:
   // These two methods should not be inlined as they call T's ref()
@@ -139,16 +164,16 @@ private:
   static void ref  (T *p);
   static void unref(T *p);
 
-  // The protected flag says whether or not the object held will be
+  //: The protected flag says whether or not the object held will be
   // unref()fed when the smart pointer goes out of scope.
   bool protected_;
 
-  // Pointer to object, or 0.
+  //: Pointer to object, or 0.
   T *ptr_;
 };
 
 
-// -- Comparison of pointer with smart-pointer (cannot be a member function)
+//: Comparison of pointer with smart-pointer (cannot be a member function)
 template <class T>
 inline bool operator== (T const* p, vbl_smart_ptr<T> const& a)
 {

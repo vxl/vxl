@@ -3,12 +3,11 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// .NAME vbl_whereami
-// .INCLUDE vbl/vbl_whereami.h
-// .SECTION Author
-//  fsm@robots.ox.ac.uk
-//
+// This is vxl/vbl/vbl_whereami.h
+
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
 
 #include <vcl_iostream.h>
 

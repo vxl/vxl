@@ -1,9 +1,11 @@
+// This is vxl/vbl/vbl_qsort.cxx
+
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
 #pragma implementation
 #endif
 //
-// .NAME vbl_qsort
+
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 19 Nov 97
 //
