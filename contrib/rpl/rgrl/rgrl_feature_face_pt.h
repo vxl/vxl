@@ -19,6 +19,14 @@ class rgrl_feature_face_pt
 
   virtual vnl_vector<double> const& location() const;
 
+  //: Provide the scale level at which this feature is detected
+  virtual 
+  double scale() const { return scale_; }
+  
+  //: Set the scale level at which this feature is detected
+  virtual 
+  void set_scale( double scale ) { scale_ = scale; }
+
   virtual vnl_matrix<double> const& error_projector() const;
 
   virtual unsigned int num_constraints() const;
@@ -35,6 +43,9 @@ class rgrl_feature_face_pt
   //: Result is a rgrl_feature_face_pt
   virtual rgrl_feature_sptr transform( rgrl_transformation const& xform ) const;
 
+  //:  Compute the signature weight between two features.
+  virtual double absolute_signature_weight( rgrl_feature_sptr other ) const;
+
  protected:
   //:
   // Create an uninitialized face_pt of dimension dim
@@ -44,6 +55,7 @@ class rgrl_feature_face_pt
   vnl_vector<double> location_;
   vnl_vector<double> normal_;
   vnl_matrix<double> error_proj_;
+  double             scale_;
 
  private:
 

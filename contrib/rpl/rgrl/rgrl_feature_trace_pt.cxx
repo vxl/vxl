@@ -17,7 +17,8 @@ rgrl_feature_trace_pt( vnl_vector<double> const& loc,
     tangent_( tangent ),
     error_proj_( loc.size(), loc.size(), vnl_matrix_identity ),
     subspace_cached_(false),
-    length_( 0 ), radius_( 0 )
+    length_( 0 ), radius_( 0 ),
+    scale_( 0 )
 {
   tangent_.normalize();
   error_proj_ -= outer_product( tangent_, tangent_ );
@@ -32,7 +33,8 @@ rgrl_feature_trace_pt( vnl_vector<double> const& loc,
     tangent_( tangent ),
     error_proj_( loc.size(), loc.size(), vnl_matrix_identity ),
     subspace_cached_(false),
-    length_( length ), radius_( radius )
+    length_( length ), radius_( radius ),
+    scale_( 0 )
 {
   tangent_.normalize();
   error_proj_ -= outer_product( tangent_, tangent_ );
@@ -42,7 +44,8 @@ rgrl_feature_trace_pt( vnl_vector<double> const& loc,
 rgrl_feature_trace_pt::
 rgrl_feature_trace_pt( )
   : subspace_cached_(false),
-    length_( 0 ), radius_( 0 )
+    length_( 0 ), radius_( 0 ),
+    scale_( 0 )
 {
 }
 

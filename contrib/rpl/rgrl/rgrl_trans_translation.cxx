@@ -124,7 +124,17 @@ rgrl_transformation_sptr
 rgrl_trans_translation::
 inverse_transform( ) const
 {
-  return new rgrl_trans_translation( -t() );
+  rgrl_transformation_sptr result = new rgrl_trans_translation( -t() );
+
+  const unsigned m = scaling_factors_.size();
+  if( m > 0 ) {
+    vnl_vector<double> scaling( m );
+    for( unsigned int i=0; i<m; ++i )
+      scaling[i] = 1.0 / scaling_factors_[i];
+    result->set_scaling_factors( scaling );
+  }
+  
+  return result;
 }
 
 

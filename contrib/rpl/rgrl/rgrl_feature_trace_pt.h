@@ -33,6 +33,14 @@ class rgrl_feature_trace_pt
   virtual vnl_vector<double> const&
   location() const;
 
+  //: Provide the scale level at which this feature is detected
+  virtual 
+  double scale() const { return scale_; }
+  
+  //: Set the scale level at which this feature is detected
+  virtual 
+  void set_scale( double scale ) { scale_ = scale; }
+
   virtual vnl_vector<double> const&
   tangent() const;
 
@@ -101,6 +109,9 @@ class rgrl_feature_trace_pt
 
   double length_;
   double radius_;
+  
+  // scale level at which this feture is detected
+  double scale_;
 };
 
 #endif

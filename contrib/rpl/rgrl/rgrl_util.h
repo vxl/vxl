@@ -35,6 +35,16 @@ rgrl_util_geometric_error_scaling( rgrl_match_set const& match_set );
 double
 rgrl_util_geometric_error_scaling( rgrl_set_of<rgrl_match_set_sptr> const& current_match_sets );
 
+//: Estimate the change between the spreads of the from_feature_set and mapped_feature_set
+bool 
+rgrl_util_geometric_scaling_factors( rgrl_set_of<rgrl_match_set_sptr> const& current_match_sets,
+                                     vnl_vector<double>& factors );
+
+//: Estimate the change between the spreads of the from_feature_set and mapped_feature_set
+bool 
+rgrl_util_geometric_scaling_factors( rgrl_match_set const& current_match_set,
+                                     vnl_vector<double>& factors );
+
 //:
 //  Given an oriented, rectangular solid in any number of dimensions, represented by
 //  the basis_directions and radii, find the pixel locations that are within the solid.

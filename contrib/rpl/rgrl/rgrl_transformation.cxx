@@ -1,4 +1,7 @@
-#include "rgrl_transformation.h"
+#include <rgrl/rgrl_transformation.h>
+#include <rgrl/rgrl_util.h>
+#include <vnl/vnl_math.h>
+
 //:
 // \file
 // \brief Base class for transformation representation, estimations and application in generalized registration library
@@ -276,6 +279,22 @@ scale_by( double /*scale*/ ) const
   assert ( ! "rgrl_transformation::scale_by() is not defined" );
   return 0;
 }
+
+//: set scaling factors
+//  Unless the transformation is not estimated using estimators in rgrl,
+//  it does not need to be set explicitly
+void 
+rgrl_transformation::
+set_scaling_factors( vnl_vector<double> const& scaling )
+{ 
+  // checking scaling
+  // set it to epsison if scaling is in fact zero
+  for( unsigned int i=0; i<scaling.size(); ++i )
+    assert( vnl_math_isfinite( scaling[i] ) && scaling[i] > 0.0 );
+    
+  scaling_factors_ = scaling; 
+}
+
 
 vcl_ostream& 
 operator<< (vcl_ostream& os, rgrl_transformation const& xform )

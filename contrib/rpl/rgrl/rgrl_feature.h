@@ -32,6 +32,15 @@ class rgrl_feature
   virtual
   vnl_vector<double> const& location() const = 0;
 
+  //: Provide the scale level at which this feature is detected
+  //  If no associated scale, return 0
+  virtual 
+  double scale() const { return 0.0; }
+  
+  //: Set the scale level at which this feature is detected
+  virtual 
+  void set_scale( double scale ); 
+  
   //:  Projects the error to the normal space of the underlying surface.
   //
   // This matrix essentially describes the underlying surface from

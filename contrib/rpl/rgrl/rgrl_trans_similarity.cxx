@@ -163,7 +163,17 @@ inverse_transform( ) const
 {
   vnl_svd<double> svd( A() );
   vnl_matrix<double> invA = svd.inverse();
-  return new rgrl_trans_similarity( invA, -invA * t() );
+  rgrl_transformation_sptr result =  new rgrl_trans_similarity( invA, -invA * t() );
+
+  const unsigned m = scaling_factors_.size();
+  if( m > 0 ) {
+    vnl_vector<double> scaling( m );
+    for( unsigned int i=0; i<m; ++i )
+      scaling[i] = 1.0 / scaling_factors_[i];
+    result->set_scaling_factors( scaling );
+  }
+
+  return result;
 }
 
 

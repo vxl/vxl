@@ -178,9 +178,62 @@ rgrl_util_estimate_global_region( rgrl_mask_box const&         from_image_roi,
 double
 rgrl_util_geometric_error_scaling( rgrl_match_set const& match_set )
 {
+  vnl_vector<double> factors;
+  bool success = rgrl_util_geometric_scaling_factors( match_set, factors );
+  if( !success ) 
+    return 0.0;
+
+  // Estimate the change in the spread of the feature set
+  //
+  double change_in_fst = vnl_math_max( factors[0],
+                                       1/factors[0] );
+  double change_in_snd = vnl_math_max( factors[1],
+                                       1/factors[1] );
+
+  double scaling = vnl_math_max( change_in_fst, change_in_snd );
+  //double scaling = vcl_sqrt(scaling_sqr);
+
+  return scaling;
+
+#if 0 // commented out
+  // The new formulation, measures the changes of the ratio of te 2nd
+  // moments
+  double ratio_from = ev_fst_from/ev_snd_from;
+  double ratio_mapped = ev_fst_mapped/ev_snd_mapped;
+  double distortion = vnl_math_max( ratio_from/ratio_mapped,
+                                    ratio_mapped/ratio_from );
+
+  return distortion;
+#endif // 0
+}
+
+double
+rgrl_util_geometric_error_scaling( rgrl_set_of<rgrl_match_set_sptr> const& current_match_sets )
+{
+  vnl_vector<double> factors;
+  bool success = rgrl_util_geometric_scaling_factors( current_match_sets, factors );
+  if( !success ) 
+    return 0.0;
+
+  // Estimate the change in the spread of the feature set
+  //
+  double change_in_fst = vnl_math_max( factors[0],
+                                       1/factors[0] );
+  double change_in_snd = vnl_math_max( factors[1],
+                                       1/factors[1] );
+
+  double scaling = vnl_math_max( change_in_fst, change_in_snd );
+
+  return scaling;
+}
+
+bool 
+rgrl_util_geometric_scaling_factors( rgrl_match_set const& match_set,
+                                     vnl_vector<double>& factors )
+{
   typedef rgrl_match_set::const_from_iterator FIter;
 
-  if ( match_set.from_size() == 0 ) return 0.0; //geometric scaling not significant
+  if ( match_set.from_size() == 0 ) return false; //geometric scaling not significant
 
   // The dimensionality of the space we are working in. Find it by
   // looking at the dimension of one of the data points.
@@ -218,48 +271,86 @@ rgrl_util_geometric_error_scaling( rgrl_match_set const& match_set )
   //
   vnl_svd<double> svd_from (cov_matrix_from );
   vnl_svd<double> svd_mapped (cov_matrix_mapped );
-  double ev_fst_from = svd_from.W(0);
-  double ev_snd_from = svd_from.W(1);
-  double ev_fst_mapped = vnl_math_max( svd_mapped.W(0), 1e-16 );
-  double ev_snd_mapped = vnl_math_max( svd_mapped.W(1), 1e-16 );
-
-  // Estimate the change in the spread of the feature set
-  //
-  double change_in_fst = vnl_math_max(ev_fst_from/ev_fst_mapped,
-                                      ev_fst_mapped/ev_fst_from);
-  double change_in_snd = vnl_math_max(ev_snd_from/ev_snd_mapped,
-                                      ev_snd_mapped/ev_snd_from);
-
-  double scaling_sqr = vnl_math_max( change_in_fst, change_in_snd );
-  double scaling = vcl_sqrt(scaling_sqr);
-
-  return scaling;
-
-#if 0 // commented out
-  // The new formulation, measures the changes of the ratio of te 2nd
-  // moments
-  double ratio_from = ev_fst_from/ev_snd_from;
-  double ratio_mapped = ev_fst_mapped/ev_snd_mapped;
-  double distortion = vnl_math_max( ratio_from/ratio_mapped,
-                                    ratio_mapped/ratio_from );
-
-  return distortion;
-#endif // 0
-}
-
-double
-rgrl_util_geometric_error_scaling( rgrl_set_of<rgrl_match_set_sptr> const& current_match_sets )
-{
-  // Take the max geometric scaling of the set
-  //
-  double geometric_scaling = 0;
-  for ( unsigned ds=0; ds < current_match_sets.size(); ++ds ) {
-    geometric_scaling = vnl_math_max(geometric_scaling,
-                                     rgrl_util_geometric_error_scaling(*current_match_sets[ds]) );
+  
+  double sv_from, sv_mapped;
+  factors.set_size( m );
+  for( unsigned i=0; i<m; ++i ) {
+    sv_from = vcl_sqrt( svd_from.W(i) );
+    sv_mapped = vcl_sqrt( vnl_math_max( svd_mapped.W(i), 1e-16 ) );
+    factors[i] = sv_mapped / sv_from;
   }
 
-  return geometric_scaling;
+  return true;
 }
+
+bool 
+rgrl_util_geometric_scaling_factors( rgrl_set_of<rgrl_match_set_sptr> const& current_match_sets,
+                                     vnl_vector<double>& factors )
+{
+  typedef rgrl_match_set::const_from_iterator FIter;
+
+  if ( current_match_sets.size() == 0 ) return false; //geometric scaling not significant
+
+  // The dimensionality of the space we are working in. Find it by
+  // looking at the dimension of one of the data points.
+  //
+  int m;
+  unsigned int i=0;
+  while( current_match_sets[i]->from_size() == 0 && i<current_match_sets.size() ) 
+    ++i;
+  if( i==current_match_sets.size() )  return false;
+  m = current_match_sets[i]->from_begin().from_feature()->location().size();
+
+  // Compute the centers of the from_feature_set and the mapped_feature_set
+  //
+  vnl_vector<double> from_centre( m, 0.0 );
+  vnl_vector<double> mapped_centre( m, 0.0 );
+  unsigned num = 0;
+  for( i=0; i<current_match_sets.size(); ++i) {
+    rgrl_match_set const& match_set = *(current_match_sets[i]);
+    num += match_set.from_size();
+    for ( FIter fi = match_set.from_begin(); fi != match_set.from_end(); ++fi ) {
+      from_centre += fi.from_feature()->location();
+      mapped_centre += fi.mapped_from_feature()->location();
+    }
+  }
+  from_centre /= double(num);
+  mapped_centre /=  double(num);
+
+  // Compute the covariance matrices
+  //
+  vnl_matrix<double> cov_matrix_from(m,m,0.0);
+  vnl_matrix<double> cov_matrix_mapped(m,m,0.0);
+  for( i=0; i<current_match_sets.size(); ++i) {
+    rgrl_match_set const& match_set = *(current_match_sets[i]);
+    for ( FIter fi = match_set.from_begin(); fi != match_set.from_end(); ++fi ) {
+      cov_matrix_from +=
+        outer_product(fi.from_feature()->location() - from_centre,
+                      fi.from_feature()->location() - from_centre);
+      cov_matrix_mapped +=
+        outer_product(fi.mapped_from_feature()->location() - mapped_centre,
+                      fi.mapped_from_feature()->location() - mapped_centre);
+    }
+  }
+  cov_matrix_from /= double(num);
+  cov_matrix_mapped /=  double(num);
+
+  // Perform SVD to get the 1st and 2nd eigenvalues.
+  //
+  vnl_svd<double> svd_from (cov_matrix_from );
+  vnl_svd<double> svd_mapped (cov_matrix_mapped );
+  
+  double sv_from, sv_mapped;
+  factors.set_size( m );
+  for( unsigned i=0; i<m; ++i ) {
+    sv_from = svd_from.W(i);
+    sv_mapped = vnl_math_max( svd_mapped.W(i), 1e-16 );
+    factors[i] = sv_mapped / sv_from;
+  }
+
+  return true;
+}
+
 
 void
 rgrl_util_extract_region_locations( vnl_vector< double >             const& center,

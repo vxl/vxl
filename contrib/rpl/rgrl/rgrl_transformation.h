@@ -10,9 +10,11 @@
 #include <vnl/vnl_matrix.h>
 #include <vcl_iosfwd.h>
 
-#include "rgrl_object.h"
+#include <rgrl/rgrl_object.h>
+#include <rgrl/rgrl_set_of.h>
+#include <rgrl/rgrl_match_set_sptr.h>
 
-#include "rgrl_transformation_sptr.h"
+#include <rgrl/rgrl_transformation_sptr.h>
 
 //: A base class that represents a transformation.
 //
@@ -149,6 +151,14 @@ class rgrl_transformation
   //: input transformation
   virtual void read( vcl_istream& is ) = 0;
 
+  //: set scaling factors
+  //  Unless the transformation is not estimated using estimators in rgrl,
+  //  it does not need to be set explicitly
+  void set_scaling_factors( vnl_vector<double> const& scaling );
+  
+  //: return scaling factor
+  const vnl_vector<double>& scaling_factors() const { return scaling_factors_; }
+  
   // Defines type-related functions
   rgrl_type_macro( rgrl_transformation, rgrl_object );
 
@@ -179,6 +189,11 @@ class rgrl_transformation
   //: flag of setting covariance 
   //  Check it before using covariance matrix
   bool is_covar_set_;
+  
+  //: scaling factors of current transformation on each dimension
+  //  this is computed from current transformation.
+  //  And it has nothing to do with how to transform points
+  vnl_vector<double> scaling_factors_; 
 };
 
 vcl_ostream& 

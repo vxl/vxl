@@ -232,7 +232,17 @@ rgrl_trans_rigid::
 inverse_transform( ) const
 {
   vnl_matrix<double> invR = R().transpose();
-  return new rgrl_trans_rigid( invR, -invR * t() );
+  rgrl_transformation_sptr result = new rgrl_trans_rigid( invR, -invR * t() );
+
+  const unsigned m = scaling_factors_.size();
+  if( m > 0 ) {
+    vnl_vector<double> scaling( m );
+    for( unsigned int i=0; i<m; ++i )
+      scaling[i] = 1.0 / scaling_factors_[i];
+    result->set_scaling_factors( scaling );
+  }
+
+  return result;
 }
 
 rgrl_transformation_sptr
