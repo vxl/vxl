@@ -3,7 +3,7 @@
 #include <math/vnl_matrix_to_vbl_array.h>
 #include <math/vnl_vector_to_vbl_array.h>
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 
 void test_matrix_conversions()
 {

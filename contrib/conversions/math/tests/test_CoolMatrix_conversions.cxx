@@ -1,11 +1,20 @@
+#include <testlib/testlib_test.h>
+
+#ifdef HAS_NO_COOL
+
+#include <vcl_iostream.h>
+void test_CoolMatrix_conversions()
+{
+  vcl_cerr << "test not run since you do not have the TargetJr COOL package\n";
+}
+
+#else
 #include <math/CoolMatrix_to_vnl_matrix.h>
 #include <math/CoolVector_to_vnl_vector.h>
 #include <math/vnl_matrix_to_CoolMatrix.h>
 #include <math/vnl_vector_to_CoolVector.h>
 
-#include <vnl/vnl_test.h>
-
-void test_matrix_conversions()
+void test_CoolMatrix_conversions()
 {
   int data[] = { 1, 2, 3, 2, 4, 6, 3, 6, 9 };
   CoolMatrix<int> m1(data,3,3);
@@ -26,4 +35,6 @@ void test_matrix_conversions()
   TEST("vnl_vector_to_CoolVector", v3, v1);
 }
 
-TESTMAIN(test_matrix_conversions);
+#endif // HAS_NO_COOL
+
+TESTMAIN(test_CoolMatrix_conversions);

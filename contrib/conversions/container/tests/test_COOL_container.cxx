@@ -1,3 +1,14 @@
+#include <testlib/testlib_test.h>
+
+#ifdef HAS_NO_COOL
+
+#include <vcl_iostream.h>
+void test_COOL_container()
+{
+  vcl_cerr << "test not run since you do not have the TargetJr COOL package\n";
+}
+
+#else
 #include <container/vcl_vector_to_CoolArray.h>
 #include <container/CoolArray_to_CoolList.h>
 #include <container/CoolList_to_vcl_list.h>
@@ -8,9 +19,8 @@
 #include <container/CoolArray_to_vcl_list.h>
 #include <container/vcl_list_to_CoolList.h>
 #include <container/CoolList_to_vcl_vector.h>
-#include <vnl/vnl_test.h>
 
-void test_container_conversions()
+void test_COOL_container()
 {
   int data[] = { 1, 2, 3, 2, 1, 0, -1 };
   vcl_vector<int> l(data, data+7);
@@ -36,4 +46,6 @@ void test_container_conversions()
   TEST("container conversions", j[0]==1 && j[1]==2 && j[2]==3 && j[3]==2 && j[4]==1 && j[5]==0 && j[6]==-1, true);
 }
 
-TESTMAIN(test_container_conversions);
+#endif // HAS_NO_COOL
+
+TESTMAIN(test_COOL_container);

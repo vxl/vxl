@@ -2,7 +2,7 @@
 #include <osl/osl_edgel_chain.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vsol/vsol_point_2d.h>
-#include <vgl/vgl_test.h>
+#include <testlib/testlib_test.h>
 
 void test_osl_to_vdgl() {
   osl_edgel_chain dc(7);

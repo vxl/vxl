@@ -2,9 +2,9 @@
 #include <container/vcl_vector_to_vcl_list.h>
 #include <container/vcl_vector_to_vnl_vector.h>
 #include <container/vnl_vector_to_vcl_vector.h>
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 
-void test_container_conversions()
+void test_container()
 {
   int data[] = { 1, 2, 3, 2, 1, 0, -1 };
   vcl_vector<int> l(data, data+7);
@@ -19,4 +19,4 @@ void test_container_conversions()
   TEST("container conversions: vcl_vector", b, d);
 }
 
-TESTMAIN(test_container_conversions);
+TESTMAIN(test_container);

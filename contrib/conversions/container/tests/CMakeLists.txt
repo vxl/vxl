@@ -1,9 +1,17 @@
-ADD_EXECUTABLE( conversions_test_container test_container.cxx )
-ADD_TEST( conversions_test_container conversions_test_container )
+INCLUDE( ${allvxl_SOURCE_DIR}/conversions/container/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/testlib/CMakeListsLink.txt )
 
 IF(HAS_COOL)
-  ADD_EXECUTABLE( conversions_test_COOL_container test_COOL_container.cxx )
-  ADD_TEST( conversions_test_COOL_container conversions_test_COOL_container )
+ELSE(HAS_COOL)
+  ADD_DEFINITIONS(-DHAS_NO_COOL=1)
 ENDIF(HAS_COOL)
 
-INCLUDE( ${allvxl_SOURCE_DIR}/conversions/container/CMakeListsLink.txt )
+ADD_EXECUTABLE( conversions_container_test_driver
+  test_driver.cxx
+
+  test_container.cxx
+  test_COOL_container.cxx
+)
+
+ADD_TEST( conversions_test_container conversions_container_test_driver test_container )
+ADD_TEST( conversions_test_COOL_container conversions_container_test_driver test_COOL_container )

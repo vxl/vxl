@@ -1,13 +1,17 @@
 INCLUDE( ${allvxl_SOURCE_DIR}/conversions/geometry/CMakeListsLink.txt )
-
-IF(BUILD_GEL)
- IF(BUILD_OXL)
-  ADD_EXECUTABLE( conversions_test_osl_to_vdgl test_osl_to_vdgl.cxx )
-  ADD_TEST( conversions_test_osl_to_vdgl conversions_test_osl_to_vdgl )
- ENDIF(BUILD_OXL)
-ENDIF(BUILD_GEL)
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/testlib/CMakeListsLink.txt )
 
 IF(HAS_SPATIALOBJECTS)
-  ADD_EXECUTABLE( conversions_test_DigitalCurve_to_vdgl test_DigitalCurve_to_vdgl.cxx )
-  ADD_TEST( conversions_test_DigitalCurve_to_vdgl conversions_test_DigitalCurve_to_vdgl )
+ELSE(HAS_SPATIALOBJECTS)
+  ADD_DEFINITIONS(-DHAS_NO_SPATIALOBJECTS=1)
 ENDIF(HAS_SPATIALOBJECTS)
+
+ADD_EXECUTABLE( conversions_geometry_test_driver
+  test_driver.cxx
+
+  test_osl_to_vdgl.cxx
+  test_DigitalCurve_to_vdgl.cxx
+)
+
+ADD_TEST( conversions_test_osl_to_vdgl conversions_geometry_test_driver test_osl_to_vdgl )
+ADD_TEST( conversions_test_DigitalCurve_to_vdgl conversions_geometry_test_driver test_DigitalCurve_to_vdgl )
