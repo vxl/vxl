@@ -1,4 +1,6 @@
 // This is vxl/vnl/vnl_determinant.txx
+#ifndef vnl_determinant_txx_
+#define vnl_determinant_txx_
 
 /*
   fsm@robots.ox.ac.uk
@@ -58,5 +60,6 @@ T vnl_determinant(T const *row0, T const *row1, T const *row2, T const *row3) {
 #define VNL_DETERMINANT_INSTANTIATE(T) \
 template T vnl_determinant(T const *, T const *); \
 template T vnl_determinant(T const *, T const *, T const *); \
-template T vnl_determinant(T const *, T const *, T const *, T const *);
+template T vnl_determinant(T const *, T const *, T const *, T const *)
 
+#endif // vnl_determinant_txx_

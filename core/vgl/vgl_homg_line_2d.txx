@@ -1,31 +1,30 @@
 // This is vxl/vgl/vgl_homg_line_2d.txx
+#ifndef vgl_homg_line_2d_txx_
+#define vgl_homg_line_2d_txx_
 
-#include <vgl/vgl_homg_line_2d.h> 
-#include <vgl/vgl_homg_point_2d.h> 
+#include "vgl_homg_line_2d.h"
+#include <vgl/vgl_homg_point_2d.h>
 
-// TODO
-//  Type get_direction() const
-//  {
-//    // return the direction of the line
-  
-//    Type direction[3];
-//    direction[0]=this->a();
-//    direction[1]=this->b();
-//    direction[2]=0;
-//    return direction;
-//  }
-  
+#if 0 // TODO
+//: return the direction of the line
+Type get_direction() const
+{
+  Type direction[3];
+  direction[0]=this->a();
+  direction[1]=this->b();
+  direction[2]=0;
+  return direction;
+}
 
-//  vcl_vector<Type> get_normal() const;
-//  {
-//    // todo
-
-//    vcl_vector<Type,3> normal;
-//    normal[0]= - this->b();
-//    normal[1]=this->a();
-//    normal[2]=0;
-//    return normal;
-//  }
+vcl_vector<Type> get_normal() const;
+{
+  vcl_vector<Type,3> normal;
+  normal[0]= - this->b();
+  normal[1]=this->a();
+  normal[2]=0;
+  return normal;
+}
+#endif
 
 //: get two points on the line.  These two points are normally the intersections
 // with the Y axis and X axis, respectively.  When the line is parallel to one
@@ -54,7 +53,8 @@ vgl_homg_line_2d<Type>::vgl_homg_line_2d (vgl_homg_point_2d<Type> const& l1,
 }
 
 #define VGL_HOMG_LINE_2D_INSTANTIATE(T) \
-template class vgl_homg_line_2d<T>; \
-template vcl_ostream& operator<<(vcl_ostream&, const vgl_homg_line_2d<T>&); \
-template vcl_istream& operator>>(vcl_istream&, vgl_homg_line_2d<T>&); \
-; 
+template class vgl_homg_line_2d<T >; \
+template vcl_ostream& operator<<(vcl_ostream&, const vgl_homg_line_2d<T >&); \
+template vcl_istream& operator>>(vcl_istream&, vgl_homg_line_2d<T >&)
+
+#endif // vgl_homg_line_2d_txx_

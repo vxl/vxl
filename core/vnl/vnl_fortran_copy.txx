@@ -1,6 +1,6 @@
 // This is vxl/vnl/vnl_fortran_copy.txx
-
-// vnl_fortran_copy
+#ifndef vnl_fortran_copy_txx_
+#define vnl_fortran_copy_txx_
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 29 Aug 96
 //
@@ -34,3 +34,5 @@ vnl_fortran_copy<T>::~vnl_fortran_copy()
 
 #undef VNL_FORTRAN_COPY_INSTANTIATE
 #define VNL_FORTRAN_COPY_INSTANTIATE(T) template class vnl_fortran_copy<T >
+
+#endif // vnl_fortran_copy_txx_

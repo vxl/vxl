@@ -1,8 +1,12 @@
-#ifndef fsm_dont_croak
 // This is vxl/vil/vil_convolve_1d_y.txx
+#ifndef vil_convolve_1d_y_txx_
+#define vil_convolve_1d_y_txx_
 
+#ifndef fsm_dont_croak
 croak
 #endif
+
+#include <vcl_cstdlib.h> // for vcl_abort()
 
 template <class I1, class I2, class AC, class O>
 void vil_convolve_1d_y(vil_convolve_signal_1d<I1 const> const &kernel,
@@ -32,7 +36,6 @@ void vil_convolve_1d_y(vil_convolve_signal_1d<I1 const> const &kernel,
   // this is not very efficient at the moment, buy my main
   // concern for now is that it works correctly.
   for (int y=y0; y<y1; ++y) {
-
     for (int x=x0; x<x1; ++x) {
       AC ac = 0; // accumulated "kernel * input" terms.
       AC wt = 0; // accumulated "kernel" terms.
@@ -108,5 +111,6 @@ void vil_convolve_1d_y(vil_convolve_signal_1d<I1 const> const &kernel,
         value2d(output, x, y) = ac * total_weight / wt;
     }
   }
-
 }
+
+#endif // vil_convolve_1d_y_txx_

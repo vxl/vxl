@@ -1,7 +1,8 @@
 // This is vxl/vgl/vgl_line_2d.txx
+#ifndef vgl_line_2d_txx_
+#define vgl_line_2d_txx_
 
-#include <vgl/vgl_line_2d.h>
-
+#include "vgl_line_2d.h"
 #include <vgl/vgl_point_2d.h>
 
 //: get two points on the line.  These two points are normally the intersections
@@ -20,8 +21,8 @@ void vgl_line_2d<Type>::get_two_points(vgl_point_2d<Type> &p1, vgl_point_2d<Type
 
 
 #define VGL_LINE_2D_INSTANTIATE(T) \
-template class vgl_line_2d<T>; \
-template vcl_ostream& operator<<(vcl_ostream&, const vgl_line_2d<T>&); \
-template vcl_istream& operator>>(vcl_istream&, vgl_line_2d<T>&); \
-;
+template class vgl_line_2d<T >; \
+template vcl_ostream& operator<<(vcl_ostream&, const vgl_line_2d<T >&); \
+template vcl_istream& operator>>(vcl_istream&, vgl_line_2d<T >&)
 
+#endif // vgl_line_2d_txx_

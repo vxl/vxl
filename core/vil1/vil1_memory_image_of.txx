@@ -1,6 +1,7 @@
 // This is vxl/vil/vil_memory_image_of.txx
+#ifndef vil_memory_image_of_txx_
+#define vil_memory_image_of_txx_
 
-// vil_memory_image_of
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 19 Aug 96
 //
@@ -112,5 +113,7 @@ void vil_memory_image_of<T>::fill(T const& v)
   }
 }
 
-#define VIL_MEMORY_IMAGE_OF_INSTANTIATE(T)\
+#define VIL_MEMORY_IMAGE_OF_INSTANTIATE(T) \
 template class vil_memory_image_of<T >
+
+#endif // vil_memory_image_of_txx_

@@ -1,4 +1,6 @@
 // This is vxl/vbl/vbl_array_3d.txx
+#ifndef vbl_array_3d_txx_
+#define vbl_array_3d_txx_
 
 #include "vbl_array_3d.h"
 
@@ -19,14 +21,14 @@ void vbl_array_3d<T>::construct(int n1, int n2, int n3)
   assert(n1 >= 0);
   assert(n2 >= 0);
   assert(n3 >= 0);
-  
+
   row1_count_ = n1;
   row2_count_ = n2;
   row3_count_ = n3;
-  
+
   // allocate the memory for the first level pointers.
   element_ = new T** [n1];
-  
+
   // set the first level pointers and allocate the memory for the second level pointers.
   {
     element_[0] = new T* [n1 * n2];
@@ -141,3 +143,5 @@ vcl_istream & operator>>(vcl_istream& is, vbl_array_3d<T>& A)
 #define VBL_ARRAY_3D_IO_INSTANTIATE(T) \
 template vcl_ostream & operator<<(vcl_ostream &,vbl_array_3d<T > const &); \
 template vcl_istream & operator>>(vcl_istream &,vbl_array_3d<T > &)
+
+#endif // vbl_array_3d_txx_

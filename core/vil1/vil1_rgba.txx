@@ -1,4 +1,6 @@
 // This is vxl/vil/vil_rgba.txx
+#ifndef vil_rgba_txx_
+#define vil_rgba_txx_
 
 //-*- c++ -*-------------------------------------------------------------------
 //
@@ -11,5 +13,7 @@
 #include "vil_rgba.h"
 
 #undef VIL_RGBA_INSTANTIATE
-#define VIL_RGBA_INSTANTIATE(T)\
-template struct vil_rgba<T >;
+#define VIL_RGBA_INSTANTIATE(T) \
+template struct vil_rgba<T >
+
+#endif // vil_rgba_txx_

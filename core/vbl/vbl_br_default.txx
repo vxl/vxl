@@ -1,6 +1,8 @@
 // This is vxl/vbl/vbl_br_default.txx
+#ifndef vbl_br_default_txx_
+#define vbl_br_default_txx_
 
-#include <vbl/vbl_br_default.h>
+#include "vbl_br_default.h"
 #include <vbl/vbl_basic_optional.h>
 #include <vcl_cassert.h>
 
@@ -620,3 +622,5 @@ void vbl_br_default_factory<T1,T2,T3,T4,T5>::CheckEmpty(vbl_br_impl<T1,T2,T3,T4,
         }
     }
 }
+
+#endif // vbl_br_default_txx_

@@ -1,4 +1,6 @@
 // This is vxl/vil/vil_ncc.txx
+#ifndef vil_ncc_txx_
+#define vil_ncc_txx_
 
 /*
   capes@robots.ox.ac.uk
@@ -105,5 +107,6 @@ template O vil_ncc/*<I1, I2, O >*/(vil_memory_image_of<I1 > const &, \
                                    O *); \
 template O vil_ncc/*<I1, I2, O >*/(I1 const * const *, int, int, \
                                    I2 const * const *, int, int, \
-                                   int, O *); \
-;
+                                   int, O *)
+
+#endif // vil_ncc_txx_

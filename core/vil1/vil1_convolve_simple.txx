@@ -1,4 +1,6 @@
 // This is vxl/vil/vil_convolve_simple.txx
+#ifndef vil_convolve_simple_txx_
+#define vil_convolve_simple_txx_
 
 /*
   fsm@robots.ox.ac.uk
@@ -75,7 +77,7 @@ void vil_convolve_simple(I1 const* const* input1, unsigned w1, unsigned h1,
 template void vil_convolve_simple/*<I1, I2, AC, O >*/(I1 const * const *, unsigned, unsigned, \
                                                       I2 const * const *, unsigned, unsigned, \
                                                       AC *,  \
-                                                      O * const *);
+                                                      O * const *)
 
 //----------------------------------------------------------------------
 
@@ -133,13 +135,13 @@ void vil_convolve_simple(vil_memory_image_of<I1> const &input1,    // input 1
 }
 
 #define VIL_CONVOLVE_SIMPLE_INSTANTIATE1(I1, I2, AC, O) \
-template void vil_convolve_simple/*<I1, I2, AC, O >*/(vil_memory_image_of<I1> const &, \
+template void vil_convolve_simple/*<I1, I2, AC, O >*/(vil_memory_image_of<I1 > const &, \
                                                       int, int, unsigned, unsigned, \
-                                                      vil_memory_image_of<I2> const &, \
+                                                      vil_memory_image_of<I2 > const &, \
                                                       int, int, unsigned, unsigned, \
                                                       AC *, \
-                                                      vil_memory_image_of<O>        &, \
-                                                      int, int);
+                                                      vil_memory_image_of<O >        &, \
+                                                      int, int)
 
 //----------------------------------------------------------------------
 
@@ -164,10 +166,10 @@ void vil_convolve_simple(vil_memory_image_of<I1> const &in1,
 }
 
 #define VIL_CONVOLVE_SIMPLE_INSTANTIATE2(I1, I2, AC, O) \
-template void vil_convolve_simple/*<I1, I2, AC, O >*/(vil_memory_image_of<I1> const &, \
-                                                      vil_memory_image_of<I2> const &, \
+template void vil_convolve_simple/*<I1, I2, AC, O >*/(vil_memory_image_of<I1 > const &, \
+                                                      vil_memory_image_of<I2 > const &, \
                                                       AC *, \
-                                                      vil_memory_image_of<O>        &);
+                                                      vil_memory_image_of<O >        &)
 
 //--------------------------------------------------------------------------------
 
@@ -175,4 +177,6 @@ template void vil_convolve_simple/*<I1, I2, AC, O >*/(vil_memory_image_of<I1> co
 #define VIL_CONVOLVE_SIMPLE_INSTANTIATE(I1, I2, AC, O) \
 VIL_CONVOLVE_SIMPLE_INSTANTIATE0(I1, I2, AC, O); \
 VIL_CONVOLVE_SIMPLE_INSTANTIATE1(I1, I2, AC, O); \
-VIL_CONVOLVE_SIMPLE_INSTANTIATE2(I1, I2, AC, O);
+VIL_CONVOLVE_SIMPLE_INSTANTIATE2(I1, I2, AC, O)
+
+#endif // vil_convolve_simple_txx_

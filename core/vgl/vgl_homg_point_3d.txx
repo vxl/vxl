@@ -1,6 +1,8 @@
 // This is vxl/vgl/vgl_homg_point_3d.txx
+#ifndef vgl_homg_point_3d_txx_
+#define vgl_homg_point_3d_txx_
 
-#include <vgl/vgl_homg_point_3d.h>
+#include "vgl_homg_point_3d.h"
 
 //---------------------------------------------------------------------------
 //: Default constructor with (0,0,0,1)
@@ -17,19 +19,14 @@ vgl_homg_point_3d<Type>::vgl_homg_point_3d(void)
 template <class Type>
 bool vgl_homg_point_3d<Type>::operator==(const vgl_homg_point_3d<Type> &other) const
 {
-  bool result;
-
-  result=this==&other;
-  if(!result)
-    result=((this->x()==other.x()) && (this->y()==other.y())
-      && (this->z()==other.z()) &&  (this->w()==other.w()));
-  return result;
-
+  return (this==&other) ||
+         (   (this->x()==other.x()) && (this->y()==other.y())
+          && (this->z()==other.z()) && (this->w()==other.w()));
 }
 
-
 #define VGL_HOMG_POINT_3D_INSTANTIATE(T) \
-template class vgl_homg_point_3d<T>; \
-template vcl_ostream& operator<<(vcl_ostream&, vgl_homg_point_3d<T>const&); \
-template vcl_istream& operator>>(vcl_istream&, vgl_homg_point_3d<T>&)
+template class vgl_homg_point_3d<T >; \
+template vcl_ostream& operator<<(vcl_ostream&, vgl_homg_point_3d<T >const&); \
+template vcl_istream& operator>>(vcl_istream&, vgl_homg_point_3d<T >&)
 
+#endif // vgl_homg_point_3d_txx_

@@ -1,10 +1,11 @@
 // This is vxl/vgl/vgl_box_2d.txx
+#ifndef vgl_box_2d_txx_
+#define vgl_box_2d_txx_
 
 // Author: Don Hamilton, Peter Tu
 // Copyright:
 // Created: Feb 15 2000
 //: Represents a cartesian 2D box.
-
 
 #include "vgl_box_2d.h"
 
@@ -241,25 +242,20 @@ vgl_box_2d<Type> intersect(vgl_box_2d<Type> const& a, vgl_box_2d<Type> const& b)
   else
     return vgl_box_2d<Type> (0,0,0,0);
 
-  // capes - replaced this wrong code
-  /*
+#if 0 // capes - replaced this wrong code
   return vgl_box_2d<Type>(vcl_max(a.get_min_x(), b.get_min_x()),
               vcl_min(a.get_max_x(), b.get_max_x()),
               vcl_max(a.get_min_y(), b.get_min_y()),
               vcl_min(a.get_max_y(), b.get_max_y())
               );
-  */
+#endif
 }
 
-
-
-
-
 #undef VGL_BOX_2D_INSTANTIATE
-#define VGL_BOX_2D_INSTANTIATE(Type)\
+#define VGL_BOX_2D_INSTANTIATE(Type) \
 template class vgl_box_2d<Type >;\
 template vcl_istream& operator>>(vcl_istream&, vgl_box_2d<Type >&);\
 template vcl_ostream& operator<<(vcl_ostream&, vgl_box_2d<Type > const&);\
-template vgl_box_2d<Type > intersect(vgl_box_2d<Type > const&, vgl_box_2d<Type > const&);\
-;
+template vgl_box_2d<Type > intersect(vgl_box_2d<Type > const&, vgl_box_2d<Type > const&)
 
+#endif // vgl_box_2d_txx_

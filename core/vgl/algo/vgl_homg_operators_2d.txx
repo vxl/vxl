@@ -1,21 +1,25 @@
-// Author: Don Hamilton Peter Tu
+// This is vxl/vgl/algo/vgl_homg_operators_2d.txx
+#ifndef vgl_homg_operators_2d_txx_
+#define vgl_homg_operators_2d_txx_
+
+//:
+// \file
+// \brief 2D homogeneous operations
+// \author Don Hamilton, Peter Tu
 // Copyright:
 // Created: Feb 16 2000
-//: 2D homogeneous operations
-
 
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
-#include <vnl/vnl_matrix.h>
-#include <vnl/vnl_math.h>
-#include <vnl/algo/vnl_scatter_3x3.h> // used in most_orthogonal_vector()
 
-
+#include "vgl_homg_operators_2d.h"
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgl/vgl_homg_point_2d.h>
 
-#include <vgl/algo/vgl_homg_operators_2d.h>
+#include <vnl/vnl_matrix.h>
+#include <vnl/vnl_math.h>
+#include <vnl/algo/vnl_scatter_3x3.h> // used in most_orthogonal_vector()
 #include <vnl/vnl_numeric_limits.h> // for infinity
 
 //-----------------------------------------------------------------------------
@@ -134,7 +138,7 @@ void vgl_homg_operators_2d<Type>::unitize(vgl_homg_point_2d<Type>& a)
   a.set(x*norm, y*norm, z*norm);
 }
 
-//  DISTANCE MEASUREMENTS IN IMAGE COORDINATES 
+//  DISTANCE MEASUREMENTS IN IMAGE COORDINATES
 
 //: Get the square of the 2D distance between the two points.
 template <class Type>
@@ -164,9 +168,9 @@ vgl_homg_operators_2d<Type>::distance_squared(
 }
 
 //: Get the square of the perpendicular distance to a line.
-// This is just the homogeneous form of the familiar 
+// This is just the homogeneous form of the familiar
 // \f$ \frac{a x + b y + c}{\sqrt{a^2+b^2}} \f$ :
-// \[ d = \frac{(l^\top p)}{p_z\sqrt{l_x^2 + l_y^2}} \] 
+// \[ d = \frac{(l^\top p)}{p_z\sqrt{l_x^2 + l_y^2}} \]
 // If either the point or the line are at infinity an error message is
 // printed and Homg::infinity is returned.
 
@@ -190,7 +194,7 @@ vgl_homg_operators_2d<Type>::perp_dist_squared(
 }
 
 
-//  ANGLES 
+//  ANGLES
 
 //-----------------------------------------------------------------------------
 //: Get the anticlockwise angle between a line and the x axis.
@@ -256,7 +260,7 @@ vgl_homg_operators_2d<Type>::angle_between_oriented_lines(
 //-----------------------------------------------------------------------------
 //
 //: Get the line through two points (the cross-product).
-// 
+//
 
 template <class Type>
 vgl_homg_line_2d<Type>
@@ -299,7 +303,7 @@ vgl_homg_operators_2d<Type>::join_oriented(const vgl_homg_point_2d<Type>&point1,
 //-----------------------------------------------------------------------------
 //
 //: Get the intersection point of two lines (the cross-product).
-// 
+//
 
 template <class Type>
 vgl_homg_point_2d<Type>
@@ -338,7 +342,7 @@ vgl_homg_operators_2d<Type>::perp_line_through_point ( const vgl_homg_line_2d<Ty
 //-----------------------------------------------------------------------------
 //
 //: Get the perpendicular projection of point onto line.
-// 
+//
 
 template <class Type>
 vgl_homg_point_2d<Type> vgl_homg_operators_2d<Type>::perp_projection(
@@ -367,7 +371,7 @@ vgl_homg_operators_2d<Type>::midpoint( const vgl_homg_point_2d<Type>& p1,
   return vgl_homg_point_2d<Type>(x,y,w);
 }
 
-//  FITTING 
+//  FITTING
 
 // - Kanatani sect 2.2.2.
 template <class Type>
@@ -485,3 +489,5 @@ vgl_homg_point_2d<Type> vgl_homg_operators_2d<Type>::Conjugate(
   double ky = y1*w3 - y3*w1, my = y2*w3 - y3*w2, ny = ky*w2-cr*my*w1;
   return vgl_homg_point_2d<Type>((x2*kx-cr*x1*mx)*ny,(y2*ky-cr*y1*my)*nx,nx*ny);
 }
+
+#endif // vgl_homg_operators_2d_txx_

@@ -1,18 +1,16 @@
 // This is vxl/vgl/vgl_point_3d.txx
+#ifndef vgl_point_3d_txx_
+#define vgl_point_3d_txx_
 
-#include <vgl/vgl_point_3d.h>
+#include "vgl_point_3d.h"
 
 #include <vcl_cmath.h>
 
 template <class Type>
 bool vgl_point_3d<Type>::operator==(const vgl_point_3d<Type> &other) const
 {
-  bool result;
-
-  result=this==&other;
-  if(!result)
-    result=((this->x()==other.x()) && (this->y()==other.y()) && (this->z()==other.z()));
-  return result;
+  return (this==&other) ||
+         (   (this->x()==other.x()) && (this->y()==other.y()) && (this->z()==other.z()));
 }
 
 template <class Type>
@@ -31,8 +29,8 @@ vgl_point_3d<Type> vgl_point_3d<Type>::operator-(const vgl_point_3d<Type>& that)
 }
 
 #define VGL_POINT_3D_INSTANTIATE(T) \
-template class vgl_point_3d<T>; \
-template vcl_ostream& operator<<(vcl_ostream&, const vgl_point_3d<T>&); \
-template vcl_istream& operator>>(vcl_istream&, vgl_point_3d<T>&); \
-;
+template class vgl_point_3d<T >; \
+template vcl_ostream& operator<<(vcl_ostream&, const vgl_point_3d<T >&); \
+template vcl_istream& operator>>(vcl_istream&, vgl_point_3d<T >&)
 
+#endif // vgl_point_3d_txx_

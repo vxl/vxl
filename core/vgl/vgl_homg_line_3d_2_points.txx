@@ -1,6 +1,8 @@
 // This is vxl/vgl/vgl_homg_line_3d_2_points.txx
+#ifndef vgl_homg_line_3d_2_points_txx_
+#define vgl_homg_line_3d_2_points_txx_
 
-#include <vgl/vgl_homg_line_3d_2_points.h>
+#include "vgl_homg_line_3d_2_points.h"
 
 //***************************************************************************
 // Initialization
@@ -15,21 +17,22 @@ vgl_homg_line_3d_2_points<Type>::vgl_homg_line_3d_2_points(vgl_homg_point_3d<Typ
 {
   bool start_finite = start.w() != 0;
   bool end_finite = end.w() != 0;
-  
+
   if (start_finite && end_finite) {
     point_finite_ = start;
-    
+
     Type dx = end.x() - start.x();
     Type dy = end.y() - start.y();
     Type dz = end.z() - start.z();
-    
+
     point_infinite_.set(dx,dy,dz, 0.0);
-  } else if (end_finite) {
+  }
+  else if (end_finite) {
     // Start infinite
     point_finite_ = end;
     point_infinite_ = start;
-  } else {
-    // End infinite
+  }
+  else { // End infinite
     point_finite_ = start; // possibly also infinite
     point_infinite_ = end;
   }
@@ -66,8 +69,9 @@ template <class Type>
 vcl_ostream& operator<<(vcl_ostream &s,
                     const vgl_homg_line_3d_2_points<Type> &p)
 {
-  return s << "<vgl_homg_line_3d_2_points  finite_point: " 
+  return s << "<vgl_homg_line_3d_2_points  finite_point: "
            << p.get_point_finite()
            << " infinite_point: " << p.get_point_infinite_() << ">";
 }
 
+#endif // vgl_homg_line_3d_2_points_txx_

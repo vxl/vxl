@@ -1,6 +1,8 @@
 // This is vxl/vbl/vbl_br_impl.txx
+#ifndef vbl_br_impl_txx_
+#define vbl_br_impl_txx_
 
-#include <vbl/vbl_br_impl.h>
+#include "vbl_br_impl.h"
 #include <vbl/vbl_br_default.h>
 #include <vcl_iostream.h>
 
@@ -26,7 +28,9 @@ void vbl_br_impl<T1,T2,T3,T4,T5>::SetFactory(vbl_basic_relation_factory<T1,T2,T3
 template <class T1, class T2, class T3, class T4, class T5>
 vbl_basic_relation_factory<T1,T2,T3,T4,T5>*& vbl_br_impl<T1,T2,T3,T4,T5>::factory()
 {
-  static vbl_basic_relation_factory<T1,T2,T3,T4,T5>* factory 
+  static vbl_basic_relation_factory<T1,T2,T3,T4,T5>* factory
     = new vbl_br_default_factory<T1,T2,T3,T4,T5>;
   return factory;
 }
+
+#endif // vbl_br_impl_txx_

@@ -1,10 +1,11 @@
 // This is vxl/vgl/vgl_point_2d.txx
+#ifndef vgl_point_2d_txx_
+#define vgl_point_2d_txx_
 
-
-#include <vgl/vgl_point_2d.h> 
-#include <vgl/vgl_line_2d.h> 
-#include <vgl/vgl_homg_point_2d.h> 
-#include <vgl/vgl_homg_line_2d.h> 
+#include "vgl_point_2d.h"
+#include <vgl/vgl_line_2d.h>
+#include <vgl/vgl_homg_point_2d.h>
+#include <vgl/vgl_homg_line_2d.h>
 
 template <class Type>
 vgl_point_2d<Type>::vgl_point_2d(vgl_line_2d<Type> const& l1,
@@ -19,13 +20,8 @@ vgl_point_2d<Type>::vgl_point_2d(vgl_line_2d<Type> const& l1,
 template <class Type>
 bool vgl_point_2d<Type>::operator==(const vgl_point_2d<Type> &other) const
 {
-  bool result;
-
-  result=this==&other;
-  if(!result)
-    result=((this->x()==other.x()) && (this->y()==other.y()));
-  return result;
-
+  return (this==&other) ||
+         (   (this->x()==other.x()) && (this->y()==other.y()));
 }
 
 template <class Type>
@@ -42,11 +38,9 @@ vgl_point_2d<Type> vgl_point_2d<Type>::operator-(const vgl_point_2d<Type>& that)
    return result;
 }
 
-
 #define VGL_POINT_2D_INSTANTIATE(T) \
-template class vgl_point_2d<T>; \
-template vcl_ostream& operator<<(vcl_ostream&, const vgl_point_2d<T>&); \
-template vcl_istream& operator>>(vcl_istream&, vgl_point_2d<T>&); \
-;
+template class vgl_point_2d<T >; \
+template vcl_ostream& operator<<(vcl_ostream&, const vgl_point_2d<T >&); \
+template vcl_istream& operator>>(vcl_istream&, vgl_point_2d<T >&)
 
-
+#endif // vgl_point_2d_txx_

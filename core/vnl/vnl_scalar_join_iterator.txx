@@ -1,20 +1,19 @@
 // This is vxl/vnl/vnl_scalar_join_iterator.txx
-
-// vnl_scalar_join_iterator
+#ifndef vnl_scalar_join_iterator_txx_
+#define vnl_scalar_join_iterator_txx_
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 27 Dec 96
 //
 //-----------------------------------------------------------------------------
 
 #include "vnl_scalar_join_iterator.h"
-
 #include <vcl_list.txx>
 
-#define VNL_SCALAR_JOIN_ITERATOR_INSTANTIATE(T)\
+#define VNL_SCALAR_JOIN_ITERATOR_INSTANTIATE(T) \
 template class vnl_scalar_join_iterator_indexed_pair<T >;\
 template class vnl_scalar_join_iterator<T >; \
-template vcl_ostream& operator<<(vcl_ostream& s, const vnl_scalar_join_iterator_indexed_pair<T>& p);\
-VCL_LIST_INSTANTIATE(vnl_scalar_join_iterator_indexed_pair<T>)
+template vcl_ostream& operator<<(vcl_ostream& s, const vnl_scalar_join_iterator_indexed_pair<T >& p);\
+VCL_LIST_INSTANTIATE(vnl_scalar_join_iterator_indexed_pair<T >)
 
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
@@ -155,3 +154,5 @@ vnl_scalar_join_iterator<T>& vnl_scalar_join_iterator<T>::operator++(int)
   vcl_cerr << "This should not happen! postfix ++ called\n";
   return *this;
 }
+
+#endif // vnl_scalar_join_iterator_txx_

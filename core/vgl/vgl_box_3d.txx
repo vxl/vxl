@@ -1,13 +1,14 @@
 // This is vxl/vgl/vgl_box_3d.txx
+#ifndef vgl_box_3d_txx_
+#define vgl_box_3d_txx_
 
-
-#include <vgl/vgl_box_3d.h> 
+#include "vgl_box_3d.h"
 #include <vgl/vgl_point_3d.h>
 
 // Constructors/Destructors--------------------------------------------------
 
 template <class Type>
-vgl_box_3d<Type>::vgl_box_3d(Type const min_position[3], 
+vgl_box_3d<Type>::vgl_box_3d(Type const min_position[3],
                              Type const max_position[3] )
 {
   min_pos_[0]=min_position[0];
@@ -39,7 +40,7 @@ vgl_box_3d<Type>::vgl_box_3d(Type xmin, Type ymin, Type zmin,
   min_pos_[0]=xmin;
   min_pos_[1]=ymin;
   min_pos_[2]=zmin;
-  
+
   max_pos_[0]=xmax;
   max_pos_[1]=ymax;
   max_pos_[2]=zmax;
@@ -103,7 +104,7 @@ void vgl_box_3d<Type>::set_width(const Type width)
   max_pos_[0] = x+0.5*width;
 }
 
-template <class Type> 
+template <class Type>
 void vgl_box_3d<Type>::set_height(const Type height)
 {
   Type y = get_centroid_y();
@@ -125,7 +126,7 @@ void vgl_box_3d<Type>::set_min_point(vgl_point_3d<Type> const& min_point)
   min_pos_[0]=min_point.x();
   min_pos_[1]=min_point.y();
   min_pos_[2]=min_point.z();
- 
+
   if(max_pos_[0] < min_pos_[0]){
     max_pos_[0]=min_pos_[0];
   }
@@ -171,7 +172,6 @@ vcl_ostream& vgl_box_3d<Type>::print(vcl_ostream& s) const
   << " to "
   << max_pos_[0] << "," << max_pos_[1] << "," << max_pos_[2]
   << ">";
- 
 }
 
 template <class Type>
@@ -188,8 +188,7 @@ vcl_istream& vgl_box_3d<Type>::read(vcl_istream& s)
        >> max_pos_[0] >> max_pos_[1] >> max_pos_[2];
 }
 
-
 #define VGL_BOX_3D_INSTANTIATE(Type) \
-template class vgl_box_3d<Type>;
+template class vgl_box_3d<Type >
 
-
+#endif // vgl_box_3d_txx_

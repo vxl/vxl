@@ -1,4 +1,6 @@
 // This is vxl/vbl/vbl_smart_ptr.txx
+#ifndef vbl_smart_ptr_txx_
+#define vbl_smart_ptr_txx_
 
 #include "vbl_smart_ptr.h"
 #include <vcl_iostream.h>
@@ -39,4 +41,6 @@ template class vbl_smart_ptr<T >; \
 VCL_DEFINE_SPECIALIZATION struct vbl_smart_ptr_T_as_string<T > \
 { static char const *str() { return #T; } }; \
 template vcl_ostream& operator<< (vcl_ostream&, vbl_smart_ptr<T > const&); \
-VCL_INSTANTIATE_INLINE(bool operator== (vbl_smart_ptr<T > const&, vbl_smart_ptr<T > const&));
+VCL_INSTANTIATE_INLINE(bool operator== (vbl_smart_ptr<T > const&, vbl_smart_ptr<T > const&))
+
+#endif // vbl_smart_ptr_txx_

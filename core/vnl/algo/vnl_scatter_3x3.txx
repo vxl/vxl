@@ -1,5 +1,7 @@
-//-*- c++ -*-------------------------------------------------------------------
-// vnl_scatter_3x3
+// This is vxl/vnl/algo/vnl_scatter_3x3.txx
+#ifndef vnl_scatter_3x3_txx_
+#define vnl_scatter_3x3_txx_
+
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 02 Oct 96
 //-----------------------------------------------------------------------------
@@ -71,4 +73,6 @@ void vnl_scatter_3x3<T>::compute_eigensystem()
 //--------------------------------------------------------------------------------
 
 #define VNL_SCATTER_3X3_INSTANTIATE(T) \
-template class vnl_scatter_3x3<T >;
+template class vnl_scatter_3x3<T >
+
+#endif // vnl_scatter_3x3_txx_

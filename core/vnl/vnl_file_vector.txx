@@ -1,4 +1,6 @@
 // This is vxl/vnl/vnl_file_vector.txx
+#ifndef vnl_file_vector_txx_
+#define vnl_file_vector_txx_
 
 #include "vnl_file_vector.h"
 
@@ -25,3 +27,5 @@ vnl_file_vector<T>::vnl_file_vector(char const* filename)
 
 #undef VNL_FILE_VECTOR_INSTANTIATE
 #define VNL_FILE_VECTOR_INSTANTIATE(T) template class vnl_file_vector<T >
+
+#endif // vnl_file_vector_txx_

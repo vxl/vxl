@@ -1,8 +1,6 @@
-
 // This is vxl/vnl/vnl_file_matrix.txx
-
-//
-// vnl_file_matrix
+#ifndef vnl_file_matrix_txx_
+#define vnl_file_matrix_txx_
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 23 Dec 96
 //
@@ -33,3 +31,5 @@ vnl_file_matrix<T>::vnl_file_matrix(char const* filename)
 
 #undef VNL_FILE_MATRIX_INSTANTIATE
 #define VNL_FILE_MATRIX_INSTANTIATE(T) template class vnl_file_matrix<T >
+
+#endif // vnl_file_matrix_txx_

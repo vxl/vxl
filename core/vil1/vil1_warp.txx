@@ -1,4 +1,6 @@
 // This is vxl/vil/vil_warp.txx
+#ifndef vil_warp_txx_
+#define vil_warp_txx_
 
 //-*- c++ -*-------------------------------------------------------------------
 //
@@ -42,30 +44,31 @@ void vil_warp_output_driven(vil_memory_image_of<PixelType> const& in,
       map.inverse_map(double(ox), double(oy), &ixd, &iyd);
 
       switch (interpolation) {
-      case vil_warp_interpolation_nearest_neighbour: {
-        // nearest neigbour
-        int ix = int(ixd + 0.5);
-        int iy = int(iyd + 0.5);
-        if (vil_warp_inrange_window(in, ix, iy, 0))
-          out(ox, oy) = in(ix,iy);
-        break;
-      }
-      case vil_warp_interpolation_bilinear: {
-        // bilinear
-        vil_interpolate_bilinear(in, ixd, iyd, &out(ox,oy));
-        break;
-      }
-      case vil_warp_interpolation_bicubic: {
-        vil_interpolate_bicubic(in, ixd, iyd, &out(ox,oy));
-        break;
-      }
+        case vil_warp_interpolation_nearest_neighbour: {
+          // nearest neigbour
+          int ix = int(ixd + 0.5);
+          int iy = int(iyd + 0.5);
+          if (vil_warp_inrange_window(in, ix, iy, 0))
+            out(ox, oy) = in(ix,iy);
+          break;
+        }
+        case vil_warp_interpolation_bilinear: {
+          // bilinear
+          vil_interpolate_bilinear(in, ixd, iyd, &out(ox,oy));
+          break;
+        }
+        case vil_warp_interpolation_bicubic: {
+          vil_interpolate_bicubic(in, ixd, iyd, &out(ox,oy));
+          break;
+        }
       }
     }
 }
 
-#define VIL_WARP_INSTANTIATE(PixelType, Mapper)\
+#define VIL_WARP_INSTANTIATE(PixelType, Mapper) \
 template void vil_warp_output_driven(vil_memory_image_of<PixelType > const&, \
                                      vil_memory_image_of<PixelType >&,\
                                      Mapper const&,\
-                                     vil_warp_interpolation_type);
+                                     vil_warp_interpolation_type)
 
+#endif // vil_warp_txx_

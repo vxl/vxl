@@ -1,8 +1,10 @@
 // This is vxl/vbl/vbl_sparse_array.txx
+#ifndef vbl_sparse_array_txx_
+#define vbl_sparse_array_txx_
 
 // deprecated
 #include <vcl_deprecated.h>
-#include <vbl/vbl_sparse_array_1d.txx>
+#include "vbl_sparse_array_1d.txx"
 
 #undef VBL_SPARSE_ARRAY_INSTANTIATE
 #define VBL_SPARSE_ARRAY_INSTANTIATE(T) VBL_SPARSE_ARRAY_1D_INSTANTIATE(T)
@@ -24,7 +26,9 @@ int main()
   vcl_cout << "100 = " << x[100] << vcl_endl;
 
   vcl_cout << "303 is full? " << x.fullp(303) << vcl_endl;
-  
+
   vcl_cout << x;
 }
 #endif
+
+#endif // vbl_sparse_array_txx_

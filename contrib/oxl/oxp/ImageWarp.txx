@@ -1,3 +1,6 @@
+#ifndef ImageWarp_txx_
+#define ImageWarp_txx_
+
 #include "ImageWarp.h"
 
 #include <vcl_cassert.h>
@@ -128,8 +131,10 @@ void ImageWarp<PixelType>::warp_inverse(Mapping_2d_2d& map,
       double ixd, iyd;
       map.inverse_map(double(ox + out_offset_x), double(oy + out_offset_y), &ixd, &iyd);
 
-//    switch (1) {
-//    case 1: {
+#if 0
+      switch (1) {
+      case 1: {
+#endif
         // nearest neigbour
         int ix = vnl_math_rnd(ixd);
         int iy = vnl_math_rnd(iyd);
@@ -137,17 +142,21 @@ void ImageWarp<PixelType>::warp_inverse(Mapping_2d_2d& map,
           out(ox, oy) = in(ix,iy);
         else
           out(ox, oy) = vnl_numeric_traits<PixelType>::zero;
-//      break;
-//    }
-//    case 2: {
-//      // bilinear
-//      out(ox, oy) = vbl_clamp(in.bilinear(ixd, iyd), (PixelType*)0);
-//      break;
-//      }
-//    case 3: {
-//      out(ox, oy) = vbl_clamp(in.bicubic(ixd, iyd), (PixelType*)0);
-//      break;
-//    }
-//    }
+#if 0
+        break;
+      }
+      case 2: {
+        // bilinear
+        out(ox, oy) = vbl_clamp(in.bilinear(ixd, iyd), (PixelType*)0);
+        break;
+        }
+      case 3: {
+        out(ox, oy) = vbl_clamp(in.bicubic(ixd, iyd), (PixelType*)0);
+        break;
+      }
+      }
+#endif
     }
 }
+
+#endif // ImageWarp_txx_

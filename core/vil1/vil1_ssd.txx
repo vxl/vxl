@@ -1,4 +1,6 @@
 // This is vxl/vil/vil_ssd.txx
+#ifndef vil_ssd_txx_
+#define vil_ssd_txx_
 
 /*
   fsm@robots.ox.ac.uk
@@ -40,5 +42,6 @@ O vil_ssd(vil_memory_image_of<I1> const &a,
 #define VIL_SSD_INSTANTIATE(I1, I2, O) \
 template O vil_ssd/*<I1, I2, O >*/(vil_memory_image_of<I1 > const &, \
                                    vil_memory_image_of<I2 > const &, \
-                                   O *); \
-;
+                                   O *)
+
+#endif // vil_ssd_txx_
