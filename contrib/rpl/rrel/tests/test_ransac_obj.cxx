@@ -35,5 +35,7 @@ MAIN( test_ransac_obj )
   testlib_test_begin( "ransac rho 5" );
   testlib_test_perform( close(rho(obj,-1.0), 0.0 ) );
 
+  delete obj;
+
   SUMMARY();
 }

@@ -208,6 +208,7 @@ MAIN( test_ran_sam_search )
 
   delete ransam;
   delete lms;
+  delete match_prob;
 
   SUMMARY();
 }

@@ -123,5 +123,7 @@ MAIN( test_m_est_obj )
   testlib_test_begin( "trunc_quad wgt 3" );
   testlib_test_perform( close(m_est3->wgt(1.0,2.0), 1.0/(2.0*2.0)) );
 
+  delete m_est;
+
   SUMMARY();
 }
