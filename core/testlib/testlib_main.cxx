@@ -40,12 +40,15 @@ testlib_main( int argc, char* argv[] )
   // test name. The special test name "all" can be used to run all the tests
   // with the subsequent arguments passed to each test.
 
-  if( argc >= 2 && vcl_string("all") == argv[1] ) {
+  bool test_name_given =  argc >= 2;
+
+  if( test_name_given && vcl_string("all") == argv[1] ) {
     --argc;
     ++argv;
+    test_name_given = false;
   }
 
-  if( argc >= 2 ) {
+  if( test_name_given ) {
 
     for( vec_size_t i = 0; i < testlib_test_name_.size(); ++i ) {
       if( testlib_test_name_[i] == argv[1] ) {
