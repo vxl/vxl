@@ -5,10 +5,12 @@
 //:
 //  \file
 
+#include "TriTensor.h"
+
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
-//#include <vcl_memory.h>
 #include <vcl_cstdlib.h>
+#include <vcl_cassert.h>
 #include <vcl_vector.h>
 
 #include <vul/vul_printf.h>
@@ -27,7 +29,6 @@
 #include <mvl/HMatrix2D.h>
 #include <mvl/FMatrix.h>
 #include <mvl/PMatrix.h>
-#include <mvl/TriTensor.h>
 #include <mvl/PMatrixDecompAa.h>
 #include <mvl/HMatrix3D.h>
 #include <mvl/HomgOperator2D.h>
@@ -42,8 +43,8 @@ public:
 
 inline OuterProduct3x3::OuterProduct3x3(const vnl_vector<double>& a, const vnl_vector<double>& b)
 {
-  for(int i = 0; i < 3; ++i)
-    for(int j = 0; j < 3; ++j)
+  for (int i = 0; i < 3; ++i)
+    for (int j = 0; j < 3; ++j)
       put(i,j, a[i] * b[j]);
 }
 
@@ -57,9 +58,8 @@ static bool tt_verbose = false;
 
 //: Default constructor.
 TriTensor::TriTensor ():
-  T (3, 3, 3)
+  T (3, 3, 3), _e12(0), _e13(0), _fmp12(0), _fmp13(0), _fmp23(0)
 {
-  init_caches();
 }
 
 //
@@ -67,39 +67,34 @@ TriTensor::TriTensor ():
 // The doubles are stored in ``matrix'' order, with the last index
 // increasing fastest.
 TriTensor::TriTensor (const double *tritensor_array)
-  : T(3, 3, 3, tritensor_array)
+  : T(3, 3, 3, tritensor_array), _e12(0), _e13(0), _fmp12(0), _fmp13(0), _fmp23(0)
 {
-  init_caches();
 }
 
 //: Copy constructor.
 TriTensor::TriTensor (const TriTensor& that):
-  T(that.T)
+  T(that.T), _e12(0), _e13(0), _fmp12(0), _fmp13(0), _fmp23(0)
 {
-  init_caches();
 }
 
 //: Construct from 3 projection matrices.
 TriTensor::TriTensor (const PMatrix& P1, const PMatrix& P2, const PMatrix& P3):
-  T (3, 3, 3)
+  T (3, 3, 3), _e12(0), _e13(0), _fmp12(0), _fmp13(0), _fmp23(0)
 {
-  init_caches();
   set(P1, P2, P3);
 }
 
 //: Construct from 2 projection matrices, as described in set.
 TriTensor::TriTensor (const PMatrix& P2, const PMatrix& P3):
-  T (3, 3, 3)
+  T (3, 3, 3), _e12(0), _e13(0), _fmp12(0), _fmp13(0), _fmp23(0)
 {
-  init_caches();
   set(P2, P3);
 }
 
 //: Construct from 3 matrices.
 TriTensor::TriTensor (const vnl_matrix<double>& T1, const vnl_matrix<double>& T2, const vnl_matrix<double>& T3):
-  T (3, 3, 3)
+  T (3, 3, 3), _e12(0), _e13(0), _fmp12(0), _fmp13(0), _fmp23(0)
 {
-  init_caches();
   set(T1, T2, T3);
 }
 
@@ -118,27 +113,14 @@ TriTensor::~TriTensor()
   delete_caches();
 }
 
-// - Zero epipole and manifold projector classes
-void TriTensor::init_caches()
-{
-  _e12 = 0;
-  _e13 = 0;
-
-  _fmp12 = 0;
-  _fmp13 = 0;
-  _fmp23 = 0;
-}
-
 // - Delete and zero epipole and manifold projector classes.
-void TriTensor::delete_caches()
+void TriTensor::delete_caches() const
 {
-  delete _e12;
-  delete _e13;
-  delete _fmp12;
-  delete _fmp13;
-  delete _fmp23;
-
-  init_caches();
+  delete _e12; _e12 = 0;
+  delete _e13; _e13 = 0;
+  delete _fmp12; _fmp12 = 0;
+  delete _fmp13; _fmp13 = 0;
+  delete _fmp23; _fmp23 = 0;
 }
 
 //: Convert T to 27x1 matrix. Out is assumed to have been appropriately resized.
@@ -176,9 +158,9 @@ TriTensor::set(const PMatrix& P1, const PMatrix& P2, const PMatrix& P3)
     p3.set(P3 * H);
   }
 
-  for(int i = 0; i < 3; ++i)
-    for(int j = 0; j < 3; ++j)
-      for(int k = 0; k < 3; ++k)
+  for (int i = 0; i < 3; ++i)
+    for (int j = 0; j < 3; ++j)
+      for (int k = 0; k < 3; ++k)
         T(i,j,k) = p2.A(j,i) * p3.a[k] - p3.A(k,i) * p2.a[j];
   delete_caches();
 }
@@ -194,9 +176,9 @@ TriTensor::set(const PMatrix& P2, const PMatrix& P3)
   p2.set(P2);
   p3.set(P3);
 
-  for(int i = 0; i < 3; ++i)
-    for(int j = 0; j < 3; ++j)
-      for(int k = 0; k < 3; ++k)
+  for (int i = 0; i < 3; ++i)
+    for (int j = 0; j < 3; ++j)
+      for (int k = 0; k < 3; ++k)
         T(i,j,k) = p2.A(j,i) * p3.a[k] - p3.A(k,i) * p2.a[j];
 
   delete_caches();
@@ -212,10 +194,10 @@ TriTensor::set(const vnl_matrix<double>& T1, const vnl_matrix<double>& T2, const
   Ts[1] = &T2;
   Ts[2] = &T3;
 
-  for(int i = 0; i < 3; ++i) {
+  for (int i = 0; i < 3; ++i) {
     const vnl_matrix<double>& Ti = *Ts[i];
-    for(int j = 0; j < 3; ++j)
-      for(int k = 0; k < 3; ++k)
+    for (int j = 0; j < 3; ++j)
+      for (int k = 0; k < 3; ++k)
         T(i,j,k) = Ti(j,k);
   }
   delete_caches();
@@ -487,11 +469,11 @@ TriTensor TriTensor::premultiply(unsigned tensor_axis, const vnl_matrix<double>&
 TriTensor TriTensor::postmultiply1(const vnl_matrix<double>& M) const
 {
   TriTensor S;
-  for(int i = 0; i < 3; ++i)
-    for(int j = 0; j < 3; ++j)
-      for(int k = 0; k < 3; ++k) {
+  for (int i = 0; i < 3; ++i)
+    for (int j = 0; j < 3; ++j)
+      for (int k = 0; k < 3; ++k) {
         double v = 0;
-        for(int p = 0; p < 3; ++p)
+        for (int p = 0; p < 3; ++p)
           v += T(p,j,k) * M(p,i);
         S(i,j,k) = v;
       }
@@ -502,11 +484,11 @@ TriTensor TriTensor::postmultiply1(const vnl_matrix<double>& M) const
 TriTensor TriTensor::postmultiply2(const vnl_matrix<double>& M) const
 {
   TriTensor S;
-  for(int i = 0; i < 3; ++i)
-    for(int j = 0; j < 3; ++j)
-      for(int k = 0; k < 3; ++k) {
+  for (int i = 0; i < 3; ++i)
+    for (int j = 0; j < 3; ++j)
+      for (int k = 0; k < 3; ++k) {
         double v = 0;
-        for(int p = 0; p < 3; ++p)
+        for (int p = 0; p < 3; ++p)
           v += T(i,p,k) * M(p,j);
         S(i,j,k) = v;
       }
@@ -517,11 +499,11 @@ TriTensor TriTensor::postmultiply2(const vnl_matrix<double>& M) const
 TriTensor TriTensor::postmultiply3(const vnl_matrix<double>& M) const
 {
   TriTensor S;
-  for(int i = 0; i < 3; ++i)
-    for(int j = 0; j < 3; ++j)
-      for(int k = 0; k < 3; ++k) {
+  for (int i = 0; i < 3; ++i)
+    for (int j = 0; j < 3; ++j)
+      for (int k = 0; k < 3; ++k) {
         double v = 0;
-        for(int p = 0; p < 3; ++p)
+        for (int p = 0; p < 3; ++p)
           v += T(i,j,p) * M(p,k);
         S(i,j,k) = v;
       }
@@ -532,11 +514,11 @@ TriTensor TriTensor::postmultiply3(const vnl_matrix<double>& M) const
 TriTensor TriTensor::premultiply1(const vnl_matrix<double>& M) const
 {
   TriTensor S;
-  for(int i = 0; i < 3; ++i)
-    for(int j = 0; j < 3; ++j)
-      for(int k = 0; k < 3; ++k) {
+  for (int i = 0; i < 3; ++i)
+    for (int j = 0; j < 3; ++j)
+      for (int k = 0; k < 3; ++k) {
         double v = 0;
-        for(int p = 0; p < 3; ++p)
+        for (int p = 0; p < 3; ++p)
           v += M(i,p) * T(p,j,k);
         S(i,j,k) = v;
       }
@@ -547,11 +529,11 @@ TriTensor TriTensor::premultiply1(const vnl_matrix<double>& M) const
 TriTensor TriTensor::premultiply2(const vnl_matrix<double>& M) const
 {
   TriTensor S;
-  for(int i = 0; i < 3; ++i)
-    for(int j = 0; j < 3; ++j)
-      for(int k = 0; k < 3; ++k) {
+  for (int i = 0; i < 3; ++i)
+    for (int j = 0; j < 3; ++j)
+      for (int k = 0; k < 3; ++k) {
         double v = 0;
-        for(int p = 0; p < 3; ++p)
+        for (int p = 0; p < 3; ++p)
           v += M(j,p) * T(i,p,k);
         S(i,j,k) = v;
       }
@@ -562,11 +544,11 @@ TriTensor TriTensor::premultiply2(const vnl_matrix<double>& M) const
 TriTensor TriTensor::premultiply3(const vnl_matrix<double>& M) const
 {
   TriTensor S;
-  for(int i = 0; i < 3; ++i)
-    for(int j = 0; j < 3; ++j)
-      for(int k = 0; k < 3; ++k) {
+  for (int i = 0; i < 3; ++i)
+    for (int j = 0; j < 3; ++j)
+      for (int k = 0; k < 3; ++k) {
         double v = 0;
-        for(int p = 0; p < 3; ++p)
+        for (int p = 0; p < 3; ++p)
           v += M(k,p) * T(i,j,p);
         S(i,j,k) = v;
       }
@@ -775,7 +757,7 @@ void TriTensor::get_constraint_lines_image3(const HomgPoint2D& p1, const HomgPoi
 
   assert(lines->size() == 9);
   if (tt_verbose)
-    for(int i = 0; i < 9; ++i)
+    for (int i = 0; i < 9; ++i)
       vcl_cout << (*lines)[i]<< vcl_endl;
 
   return;
@@ -1194,9 +1176,9 @@ void TriTensor::get_constraint_lines_image1(const HomgPoint2D& p2, const HomgPoi
 //: Read from ASCII vcl_istream
 vcl_istream& operator >> (vcl_istream& s, TriTensor& T)
 {
-  for(int i = 0; i < 3; ++i)
-    for(int j = 0; j < 3; ++j)
-      for(int k = 0; k < 3; ++k)
+  for (int i = 0; i < 3; ++i)
+    for (int j = 0; j < 3; ++j)
+      for (int k = 0; k < 3; ++k)
         s >> T(i,j,k);
   return s;
 }
@@ -1205,9 +1187,9 @@ vcl_istream& operator >> (vcl_istream& s, TriTensor& T)
 //: Print in ASCII to vcl_ostream
 vcl_ostream& operator << (vcl_ostream& s, const TriTensor& T)
 {
-  for(int i = 0; i < 3; ++i) {
-    for(int j = 0; j < 3; ++j) {
-      for(int k = 0; k < 3; ++k)
+  for (int i = 0; i < 3; ++i) {
+    for (int j = 0; j < 3; ++j) {
+      for (int k = 0; k < 3; ++k)
         vul_printf(s, "%20.16e ", T(i,j,k));
       s << vcl_endl;
     }
@@ -1216,7 +1198,6 @@ vcl_ostream& operator << (vcl_ostream& s, const TriTensor& T)
   return s;
 }
 
-#include <vnl/vnl_matops.h> // use vnl_matlab_print.h for pretty printing
 struct Column3x3 : public vnl_double_3x3 {
   Column3x3(const vnl_vector<double>& v1, const vnl_vector<double>& v2, const vnl_vector<double>& v3) {
     (*this)(0,0) = v1[0];   (*this)(0,1) = v2[0];  (*this)(0,2) = v3[0];
@@ -1228,7 +1209,7 @@ struct Column3x3 : public vnl_double_3x3 {
 // @{ FUNDAMENTAL MATRICES AND EPIPOLES @}
 
 //: Compute and cache the two epipoles from image 1.
-bool TriTensor::compute_epipoles()
+bool TriTensor::compute_epipoles() const
 {
   vnl_double_3x3 T1 = dot1(vnl_double_3(1,0,0));
   vnl_double_3x3 T2 = dot1(vnl_double_3(0,1,0));
@@ -1266,7 +1247,7 @@ bool TriTensor::compute_epipoles()
   delete _e13;
   _e13 = new HomgPoint2D(svdu.left_nullvector());
 
-  return _e12 && _e13;
+  return _e12!=0 && _e13!=0;
 }
 
 //: Return epipoles e2 and e3, from image 1 into images 2 and 3 respectively.
@@ -1275,7 +1256,7 @@ bool TriTensor::get_epipoles(HomgPoint2D* e2, HomgPoint2D* e3) const
 {
   // Check if cached.
   if (!_e12)
-    MUTABLE_CAST(compute_epipoles());
+    compute_epipoles();
 
   if (e2) *e2 = *_e12;
   if (e3) *e3 = *_e13;
@@ -1334,23 +1315,23 @@ FMatrix TriTensor::compute_fmatrix_23() const
 
 //: Return a manifold-projector for the Fundamental matrix between 1 and 2.
 // The projector is cached until the next time T is changed.
-FManifoldProject* TriTensor::get_fmp12() const
+const FManifoldProject* TriTensor::get_fmp12() const
 {
   // If not cached, compute it.
-  if (!_fmp12) MUTABLE_CAST(_fmp12) = new FManifoldProject(get_fmatrix_12());
+  if (!_fmp12) _fmp12 = new FManifoldProject(get_fmatrix_12());
   return _fmp12;
 }
 
 //: Return a manifold-projector as above, between 1 and 3.
-FManifoldProject* TriTensor::get_fmp13() const
+const FManifoldProject* TriTensor::get_fmp13() const
 {
   // If not cached, compute it.
-  if (!_fmp13) MUTABLE_CAST(_fmp13) = new FManifoldProject(get_fmatrix_13());
+  if (!_fmp13) _fmp13 = new FManifoldProject(get_fmatrix_13());
   return _fmp13;
 }
 
 //: Return a manifold-projector as above, between 2 and 3.
-FManifoldProject* TriTensor::get_fmp23() const
+const FManifoldProject* TriTensor::get_fmp23() const
 {
   // If not cached, compute it.
   if (!_fmp23) {
@@ -1360,7 +1341,7 @@ FManifoldProject* TriTensor::get_fmp23() const
     compute_P_matrices(&P2, &P3);
     FMatrix f23(P2,P3);
 
-    MUTABLE_CAST(_fmp23) = new FManifoldProject(f23);
+    _fmp23 = new FManifoldProject(f23);
   }
   return _fmp23;
 }
@@ -1412,9 +1393,9 @@ struct maxabs {
 maxabs::maxabs(const TriTensor& T)
 {
   maxval = 0;
-  for(int i = 0; i < 3; ++i)
-    for(int j = 0; j < 3; ++j)
-      for(int k = 0; k < 3; ++k) {
+  for (int i = 0; i < 3; ++i)
+    for (int j = 0; j < 3; ++j)
+      for (int k = 0; k < 3; ++k) {
         double v = vcl_fabs(T(i,j,k));
         if (v >= maxval) {
           maxval = v;
@@ -1431,9 +1412,9 @@ static bool check_same(const TriTensor& T1, const TriTensor& T2) {
   double scale2 = 1/vcl_fabs(T2(m1.i,m1.j,m1.k));
 
   double rms = 0;
-  for(int i = 0; i < 3; ++i)
-    for(int j = 0; j < 3; ++j)
-      for(int k = 0; k < 3; ++k) {
+  for (int i = 0; i < 3; ++i)
+    for (int j = 0; j < 3; ++j)
+      for (int k = 0; k < 3; ++k) {
         double d = T1(i,j,k)*scale1 - T2(i,j,k) * scale2;
         rms += d*d;
       }

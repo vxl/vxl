@@ -98,7 +98,7 @@ public:
   HMatrix2D get_hmatrix_21(const HomgLine2D& line3) const;
 
   bool get_epipoles(HomgPoint2D* e2, HomgPoint2D* e3) const;
-  bool compute_epipoles();
+  bool compute_epipoles() const; // mutable const
 
   HomgPoint2D get_epipole_12() const;
   HomgPoint2D get_epipole_13() const;
@@ -112,9 +112,9 @@ public:
 
   FMatrix compute_fmatrix_23() const;
 
-  FManifoldProject* get_fmp12() const;
-  FManifoldProject* get_fmp23() const;
-  FManifoldProject* get_fmp13() const;
+  const FManifoldProject* get_fmp12() const;
+  const FManifoldProject* get_fmp23() const;
+  const FManifoldProject* get_fmp13() const;
 
   void compute_P_matrices(const vnl_vector<double>& x, double alpha, double beta, PMatrix* P2, PMatrix* P3) const;
   void compute_P_matrices(const vnl_vector<double>& x, double alpha, PMatrix* P2, PMatrix* P3) const {
@@ -183,15 +183,14 @@ private:
   vbl_array_3d<double> T;
 
   // Caches for various computed quantities
-  void init_caches();
-  void delete_caches();
+  void delete_caches() const; // mutable const
 
-  HomgPoint2D* _e12;
-  HomgPoint2D* _e13;
+  mutable const HomgPoint2D* _e12;
+  mutable const HomgPoint2D* _e13;
 
-  FManifoldProject* _fmp12;
-  FManifoldProject* _fmp23;
-  FManifoldProject* _fmp13;
+  mutable const FManifoldProject* _fmp12;
+  mutable const FManifoldProject* _fmp13;
+  mutable const FManifoldProject* _fmp23;
 };
 
 vcl_ostream& operator << (vcl_ostream&, const TriTensor& T);
