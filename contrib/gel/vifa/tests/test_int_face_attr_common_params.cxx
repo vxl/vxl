@@ -5,9 +5,9 @@
 
 static void test_int_face_attr_common_params()
 {
-	vifa_int_face_attr_common_params	vifacp;
+  vifa_int_face_attr_common_params  vifacp;
 
-	vifacp.print_info();
+  vifacp.print_info();
 }
 
 

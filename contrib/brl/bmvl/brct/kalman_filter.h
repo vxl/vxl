@@ -24,12 +24,14 @@
 
 class kalman_filter
 {
+#if 0
  public:
-  //: initialize the kalman filter with
-  //virtual kalman_state inc(double dt);
+  //: initialize the kalman filter with dt
+  virtual kalman_state inc(double dt);
+#endif // 0
  public:
-	vnl_matrix<double> get_predicted_curve();
-	vnl_double_3 get_next_motion(vnl_double_3 v);
+  vnl_matrix<double> get_predicted_curve();
+  vnl_double_3 get_next_motion(vnl_double_3 v);
   vcl_vector<vgl_point_2d<double> > get_pre_observes();
   vcl_vector<vgl_point_2d<double> > get_cur_observes();
   void read_data(char* fname);

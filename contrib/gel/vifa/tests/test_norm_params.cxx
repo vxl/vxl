@@ -5,9 +5,9 @@
 
 static void test_norm_params()
 {
-	vifa_norm_params	vnp;
+  vifa_norm_params  vnp;
 
-	vnp.print_info();
+  vnp.print_info();
 }
 
 

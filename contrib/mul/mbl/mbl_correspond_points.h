@@ -5,7 +5,6 @@
 // \brief Shapiro & Brady's point correspondence algorithm
 // \author Tim Cootes
 
-#include <vcl_string.h>
 #include <vcl_vector.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
@@ -20,11 +19,11 @@
 //  I'll do this soon - Tim.
 class mbl_correspond_points
 {
-private:
+ private:
   //: Eigenvalues of proximity matrix 1
-	vnl_vector<double> evals1_;
+  vnl_vector<double> evals1_;
   //: Eigenvalues of proximity matrix 2
-	vnl_vector<double> evals2_;
+  vnl_vector<double> evals2_;
 
   //: Return index of row in H2 most similar to row i of H1
   unsigned closest_row(const vnl_matrix<double>& H1,
@@ -36,34 +35,31 @@ private:
   //  Ensure p.1>=0 to obtain consistancy.
   void fix_eigenvectors(vnl_matrix<double>& P);
 
-public:
+ public:
 
   //: Dflt ctor
   mbl_correspond_points();
 
-    //: Find best correspondence between points1 and points2
-    //  On exit, matches[i] gives index of points2 which
-    //  corresponds to points1[i].
-    //  Note that there may be a many to one correspondence produced.
-    //  \param sigma Scaling factor defining kernel width
+  //: Find best correspondence between points1 and points2
+  //  On exit, matches[i] gives index of points2 which
+  //  corresponds to points1[i].
+  //  Note that there may be a many to one correspondence produced.
+  //  \param sigma Scaling factor defining kernel width
   void correspond(const vcl_vector<vgl_point_2d<double> >& points1,
                   const vcl_vector<vgl_point_2d<double> >& points2,
                   vcl_vector<unsigned>& matches, double sigma);
 
-    //: Construct proximity matrix using cosh kernel
-    //  On exit, D(i,j) = tanh(pi*d_ij/sigma) * 2/(pi*d_ij)
-    //  where d_ij is the distance between points i and j
+  //: Construct proximity matrix using cosh kernel
+  //  On exit, D(i,j) = tanh(pi*d_ij/sigma) * 2/(pi*d_ij)
+  //  where d_ij is the distance between points i and j
   void proximity_by_tanh(const vcl_vector<vgl_point_2d<double> >& points,
                          vnl_matrix<double>& H, double sigma);
 
   //: Eigenvalues of proximity matrix 1 in last call to correspond
-	const vnl_vector<double>& evals1() const { return evals1_; }
+  const vnl_vector<double>& evals1() const { return evals1_; }
 
   //: Eigenvalues of proximity matrix 2 in last call to correspond
-	const vnl_vector<double>& evals2() const { return evals2_; }
-
-
+  const vnl_vector<double>& evals2() const { return evals2_; }
 };
 
 #endif //mbl_correspond_points_h_
-

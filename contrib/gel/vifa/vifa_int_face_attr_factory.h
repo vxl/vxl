@@ -1,4 +1,4 @@
-// This is contrib/gel/vifa/vifa_int_face_attr.h
+// This is gel/vifa/vifa_int_face_attr_factory.h
 #ifndef _VIFA_INT_FACE_ATTR_FACTORY_H_
 #define _VIFA_INT_FACE_ATTR_FACTORY_H_
 
@@ -13,22 +13,22 @@
 
 class vifa_int_face_attr_factory
 {
-public:
-	vifa_int_face_attr_factory();
-	virtual ~vifa_int_face_attr_factory();
+ public:
+  vifa_int_face_attr_factory();
+  virtual ~vifa_int_face_attr_factory();
 
-	virtual vifa_int_face_attr_sptr
-		obtain_int_face_attr(vdgl_intensity_face_sptr	face) = 0;
+  virtual vifa_int_face_attr_sptr
+    obtain_int_face_attr(vdgl_intensity_face_sptr  face) = 0;
 
-	virtual vifa_int_face_attr_sptr
-		obtain_int_face_attr(vdgl_intensity_face_sptr	face,
-							 sdet_fit_lines_params*		fpp,
-							 vifa_group_pgram_params*	gpp_s,
-							 vifa_group_pgram_params*	gpp_w,
-							 vifa_norm_params*			np
-							) = 0;
+  virtual vifa_int_face_attr_sptr
+    obtain_int_face_attr(vdgl_intensity_face_sptr  face,
+                         sdet_fit_lines_params*    fpp,
+                         vifa_group_pgram_params*  gpp_s,
+                         vifa_group_pgram_params*  gpp_w,
+                         vifa_norm_params*      np
+                        ) = 0;
 
-	virtual void reset() = 0;
+  virtual void reset() = 0;
 };
 
-#endif	// _VIFA_INT_FACE_ATTR_FACTORY_H_
+#endif  // _VIFA_INT_FACE_ATTR_FACTORY_H_

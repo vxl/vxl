@@ -5,9 +5,9 @@
 
 static void test_parallel_params()
 {
-	vifa_parallel_params	vpp;
+  vifa_parallel_params  vpp;
 
-	vpp.print_info();
+  vpp.print_info();
 }
 
 

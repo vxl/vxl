@@ -5,9 +5,9 @@
 
 void test_correspond_points()
 {
-  vcl_cout << "********************\n"
+  vcl_cout << "*******************************\n"
            << " Testing mbl_correspond_points\n"
-           << "********************\n";
+           << "*******************************\n";
 
   mbl_correspond_points cp;
   mbl_mz_random mz_random(325746);
@@ -22,7 +22,7 @@ void test_correspond_points()
     points2[i] = vgl_point_2d<double>(x+0.12,y-0.34);
     points3[i] = vgl_point_2d<double>(1.2*x+1.0,1.3*y-0.7);
     points4[n1-1-i] = points3[i];
-		vgl_vector_2d<double> n(mz_random.normal64(),mz_random.normal64());
+    vgl_vector_2d<double> n(mz_random.normal64(),mz_random.normal64());
     points5[i] = points1[i] + 0.005*n;
   }
 
@@ -69,11 +69,10 @@ void test_correspond_points()
   }
   vcl_cout<<n_correct<<" out of "<<n1<<vcl_endl;
   TEST("All matches correct (gaussian noise)",n_correct,n1);
-	vcl_cout<<"Evals1: "<<cp.evals1()<<vcl_endl;
-	vcl_cout<<"Evals2: "<<cp.evals2()<<vcl_endl;
+  vcl_cout<<"Evals1: "<<cp.evals1()<<vcl_endl
+          <<"Evals2: "<<cp.evals2()<<vcl_endl;
 
-  vcl_cout<<"Add one clutter point and move it around"<<vcl_endl;
-
+  vcl_cout<<"Add one clutter point and move it around\n";
   points2.push_back(vgl_point_2d<double>(0,0));
 
   for (unsigned i=0;i<5;++i)
@@ -84,14 +83,12 @@ void test_correspond_points()
     cp.correspond(points1,points2,matches,sigma);
     n_correct = 0;
     for (unsigned i=0;i<matches.size();++i) if (matches[i]==i) n_correct++;
-    vcl_cout<<n_correct<<" out of "<<n1<<vcl_endl;
-	  vcl_cout<<"Evals1: "<<cp.evals1()<<vcl_endl;
-	  vcl_cout<<"Evals2: "<<cp.evals2()<<vcl_endl;
-
+    vcl_cout<<n_correct<<" out of "<<n1<<vcl_endl
+            <<"Evals1: "<<cp.evals1()<<vcl_endl
+            <<"Evals2: "<<cp.evals2()<<vcl_endl;
   }
 
-  vcl_cout<<"Add two clutter points and move them around"<<vcl_endl;
-
+  vcl_cout<<"Add two clutter points and move them around\n";
   points2.push_back(vgl_point_2d<double>(0,0));
 
   for (unsigned i=0;i<5;++i)
@@ -104,16 +101,16 @@ void test_correspond_points()
     cp.correspond(points1,points2,matches,sigma);
     n_correct = 0;
     for (unsigned i=0;i<matches.size();++i) if (matches[i]==i) n_correct++;
-    vcl_cout<<n_correct<<" out of "<<n1<<vcl_endl;
-	  vcl_cout<<"Evals1: "<<cp.evals1()<<vcl_endl;
-	  vcl_cout<<"Evals2: "<<cp.evals2()<<vcl_endl;
-
+    vcl_cout<<n_correct<<" out of "<<n1<<vcl_endl
+            <<"Evals1: "<<cp.evals1()<<vcl_endl
+            <<"Evals2: "<<cp.evals2()<<vcl_endl;
   }
 
-
-//  TEST("All matches correct (invariant to translation+scale + clutter)",n_correct,n1);
- // The above test currently fails.
- // We need to re-order the eigenvectors by absolute magnitude to fix it.
+#if 0
+  TEST("All matches correct (invariant to translation+scale + clutter)",n_correct,n1);
+  // The above test currently fails.
+  // We need to re-order the eigenvectors by absolute magnitude to fix it.
+#endif // 0
 }
 
 TESTLIB_DEFINE_MAIN(test_correspond_points);

@@ -5,14 +5,11 @@
 // \brief Shapiro & Brady's point correspondence algorithm
 // \author Tim Cootes
 
-#include <vcl_cstdlib.h>
-#include <vcl_cassert.h>
 #include <vcl_cmath.h>
 #include <vgl/vgl_distance.h>
 #include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vcl_algorithm.h>
-#include <vcl_iostream.h>
 
 //=======================================================================
 // Dflt ctor
@@ -24,8 +21,8 @@ mbl_correspond_points::mbl_correspond_points()
 
 //: Return index of row in H2 most similar to row i of H1
 unsigned mbl_correspond_points::closest_row(const vnl_matrix<double>& H1,
-                       const vnl_matrix<double>& H2,
-                       unsigned i1)
+                                            const vnl_matrix<double>& H2,
+                                            unsigned i1)
 {
   unsigned nc = vcl_min(H1.cols(),H2.cols());
   unsigned best_i;
@@ -65,8 +62,8 @@ void mbl_correspond_points::fix_eigenvectors(vnl_matrix<double>& P)
 //  corresponds to points1[i].
 //  \param sigma Scaling factor defining kernel width
 void mbl_correspond_points::correspond(const vcl_vector<vgl_point_2d<double> >& points1,
-                  const vcl_vector<vgl_point_2d<double> >& points2,
-                  vcl_vector<unsigned>& matches, double sigma)
+                                       const vcl_vector<vgl_point_2d<double> >& points2,
+                                       vcl_vector<unsigned>& matches, double sigma)
 {
   unsigned n1 = points1.size();
   unsigned n2 = points2.size();
@@ -97,15 +94,13 @@ void mbl_correspond_points::correspond(const vcl_vector<vgl_point_2d<double> >& 
   matches.resize(n1);
   for (unsigned i=0;i<n1;++i)
     matches[i] = closest_row(P1,P2,i);
-
 }
 
 //: Construct distance matrix using cosh kernel
 //  On exit, D(i,j) = tanh(pi*d_ij/sigma) * 2/(pi*d_ij)
 //  where d_ij is the distance between points i and j
-void mbl_correspond_points::proximity_by_tanh(
-                         const vcl_vector<vgl_point_2d<double> >& points,
-                         vnl_matrix<double>& H, double sigma)
+void mbl_correspond_points::proximity_by_tanh(const vcl_vector<vgl_point_2d<double> >& points,
+                                              vnl_matrix<double>& H, double sigma)
 {
   const unsigned n = points.size();
   const vgl_point_2d<double> *p = &points[0];
@@ -123,5 +118,4 @@ void mbl_correspond_points::proximity_by_tanh(
       H(i,j) = H(j,i) = k1*vcl_tanh(k2*d)/d;
     }
   }
-
 }

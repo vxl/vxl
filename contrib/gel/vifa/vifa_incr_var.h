@@ -1,4 +1,4 @@
-// This is contrib/gel/vifa/vifa_incr_var.h
+// This is gel/vifa/vifa_incr_var.h
 #ifndef _VIFA_INCR_VAR_H_
 #define _VIFA_INCR_VAR_H_
 
@@ -30,57 +30,55 @@
 
 class vifa_incr_var : public vul_timestamp, public vbl_ref_count
 {
-protected:
-	//: The current mean of the data set
-	double	data_mean_;
+ protected:
+  //: The current mean of the data set
+  double  data_mean_;
 
-	//: The current variance of the data set
-	double	data_var_;
+  //: The current variance of the data set
+  double  data_var_;
 
-	//: The number of samples in the data set
-	int		n_;
+  //: The number of samples in the data set
+  int    n_;
 
-	//: The minimum-value sample of the data set
-	double	min_;
+  //: The minimum-value sample of the data set
+  double  min_;
 
-	//: The maximum-value sample of the data set
-	double	max_;
+  //: The maximum-value sample of the data set
+  double  max_;
 
-public:
-	//: Default constructor
-	vifa_incr_var(void);
+ public:
+  //: Default constructor
+  vifa_incr_var(void);
 
-	//: Fetch the current mean
-	double	get_mean(void) const;
+  //: Fetch the current mean
+  double  get_mean(void) const;
 
-	//: Fetch the current variance
-	double	get_var(void) const;
+  //: Fetch the current variance
+  double  get_var(void) const;
 
-	//: Fetch the number of samples received so far
-	int		get_n(void) const;
+  //: Fetch the number of samples received so far
+  int    get_n(void) const;
 
-	//: Fetch the minimum-value sample of the data set
-	double	get_min(void) const;
+  //: Fetch the minimum-value sample of the data set
+  double  get_min(void) const;
 
-	//: Fetch the maximum-value sample of the data set
-	double	get_max(void) const;
+  //: Fetch the maximum-value sample of the data set
+  double  get_max(void) const;
 
-	//: Update the mean & variance measures with a new sample
-	// This method is a convenience front-end for add_sample() (see below)
-	void	add_sample(double	data_point	/*!< The new data sample */
-					  );
+  //: Update the mean & variance measures with a new sample
+  // This method is a convenience front-end for add_sample() (see below)
+  void  add_sample(double  data_point); // !< The new data sample
 
-	//: Update the mean & variance measures with a new sample
-	void	add_sample(double	data_point,	/*!< The new data sample */
-					   double	prev_factor,/*!< Ratio of current n_ & new n_ */
-					   double	curr_factor	/*!< Inverse of new n_ */
-					  );
+  //: Update the mean & variance measures with a new sample
+  void  add_sample(double  data_point,  // !< The new data sample
+                   double  prev_factor, // !< Ratio of current n_ & new n_
+                   double  curr_factor  // !< Inverse of new n_
+                  );
 };
 
-typedef vbl_smart_ptr<vifa_incr_var>	vifa_incr_var_sptr;
+typedef vbl_smart_ptr<vifa_incr_var>  vifa_incr_var_sptr;
 
-typedef vcl_vector<vifa_incr_var_sptr>	incr_var_list;
+typedef vcl_vector<vifa_incr_var_sptr>  incr_var_list;
 
 
-#endif	// _VIFA_INCR_VAR_H_
-
+#endif  // _VIFA_INCR_VAR_H_

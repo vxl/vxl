@@ -4,7 +4,6 @@
 // \file
 
 #include <vcl_vector.h>
-#include <vcl_iostream.h>
 #include <vnl/vnl_matrix.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
@@ -118,19 +117,19 @@ vnl_matrix<double> vdgl_intensity_face::MomentMatrix()
 // Resurrected from #ifdef'd block below for intensity face attributes
 float vdgl_intensity_face::perimeter()
 {
-	vcl_vector<vtol_edge_sptr>*	edges = this->edges();
-	float						p = 0;
+  vcl_vector<vtol_edge_sptr>*  edges = this->edges();
+  float  p = 0;
 
-	for (vcl_vector<vtol_edge_sptr>::iterator eit = edges->begin();
-		eit != edges->end(); eit++)
-	{
-		vsol_curve_2d_sptr	c = (*eit)->cast_to_edge_2d()->curve();
-		if (c)
-		{
-			p += c->length();
-		}
-	}
-	return p;
+  for (vcl_vector<vtol_edge_sptr>::iterator eit = edges->begin();
+       eit != edges->end(); eit++)
+  {
+    vsol_curve_2d_sptr  c = (*eit)->cast_to_edge_2d()->curve();
+    if (c)
+    {
+      p += c->length();
+    }
+  }
+  return p;
 }
 
 #if 0 //nobody appears to call these methods

@@ -1,4 +1,4 @@
-// This is contrib/gel/vifa/vifa_group_pgram.h
+// This is gel/vifa/vifa_group_pgram.h
 #ifndef VIFA_GROUP_PGRAM_H
 #define VIFA_GROUP_PGRAM_H
 
@@ -29,75 +29,73 @@
 
 class vifa_group_pgram : public vifa_group_pgram_params
 {
-private:
-	int				_th_dim;
-	double			_angle_range;
+  int         _th_dim;
+  double      _angle_range;
 
-	//: Array of dominant theta indices
-	vcl_vector<int>	_dominant_dirs;
+  //: Array of dominant theta indices
+  vcl_vector<int>  _dominant_dirs;
 
-	vifa_bbox_sptr	_bb;
-	imp_line_table	_curves;
-	double			_tmp1;
+  vifa_bbox_sptr  _bb;
+  imp_line_table  _curves;
+  double          _tmp1;
 
-public:
-	// Constructors and Destructors
-	vifa_group_pgram(imp_line_list&					lg,
-					 const vifa_group_pgram_params& old_params,
-					 double							angle_range = 180.0
-					);
-	~vifa_group_pgram();
+ public:
+  // Constructors and Destructors
+  vifa_group_pgram(imp_line_list&          lg,
+                   const vifa_group_pgram_params& old_params,
+                   double              angle_range = 180.0
+                  );
+  ~vifa_group_pgram();
 
-	// Index insertion
-	void		Index(imp_line_sptr		il);
-	void		Index(imp_line_list&	lg);
-	void		Clear();
+  // Index insertion
+  void    Index(imp_line_sptr    il);
+  void    Index(imp_line_list&  lg);
+  void    Clear();
 
-	// Data accessors
-	vifa_histogram_sptr		GetCoverageHist(void);
-	vifa_line_cover_sptr	GetLineCover(int	angle_bin);
-	double					LineCoverage(int	angle_bin);
-	void					CollectAdjacentLines(int			angle_bin,
-												 imp_line_list&	lg
-												);
-	vifa_bbox_sptr			GetBoundingBox(void);
-	void					SetTemp1(const double	tmp)
-	{ _tmp1 = tmp; }
-	double					GetAdjacentPerimeter(int	bin);
-	double					norm_parallel_line_length(void);
+  // Data accessors
+  vifa_histogram_sptr   GetCoverageHist(void);
+  vifa_line_cover_sptr  GetLineCover(int  angle_bin);
+  double         LineCoverage(int  angle_bin);
+  void           CollectAdjacentLines(int      angle_bin,
+                                      imp_line_list&  lg
+                                     );
+  vifa_bbox_sptr GetBoundingBox(void);
+  void           SetTemp1(const double  tmp)
+  { _tmp1 = tmp; }
+  double         GetAdjacentPerimeter(int  bin);
+  double         norm_parallel_line_length(void);
 
-protected:
-	int				AngleLoc(imp_line_sptr	il);
-	imp_line_sptr	LineAtAngle(int	angle_bin);
-	void			CheckUpdateBoundingBox(void);
-	void			ComputeBoundingBox(void);
-	void			ComputeDominantDirs(void);
+ protected:
+  int            AngleLoc(imp_line_sptr  il);
+  imp_line_sptr  LineAtAngle(int  angle_bin);
+  void           CheckUpdateBoundingBox(void);
+  void           ComputeBoundingBox(void);
+  void           ComputeDominantDirs(void);
 };
 
 // Test consistency of bound
 inline void vifa_group_pgram::
 CheckUpdateBoundingBox(void)
 {
-	if (!_bb )
-	{
-		_bb = new vifa_bbox;
-		this->ComputeBoundingBox();
-		return;
-	}
+  if (!_bb )
+  {
+    _bb = new vifa_bbox;
+    this->ComputeBoundingBox();
+    return;
+  }
 
-	if (_bb->older(this))
-	{
-		this->ComputeBoundingBox();
-	}
+  if (_bb->older(this))
+  {
+    this->ComputeBoundingBox();
+  }
 }
 
 inline vifa_bbox_sptr vifa_group_pgram::
 GetBoundingBox(void)
 {
-	this->CheckUpdateBoundingBox();
-	return _bb;
+  this->CheckUpdateBoundingBox();
+  return _bb;
 }
 
 
-#endif	// VIFA_GROUP_PGRAM_H
-
+#endif  // VIFA_GROUP_PGRAM_H

@@ -71,7 +71,7 @@ class vdgl_intensity_face : public vtol_face_2d
   // MPP 5/9/2003
   // Added API consistent w/ overloaded vtol method
   virtual vtol_topology_object::vtol_topology_object_type
-	topology_type(void) const { return GetTopologyType(); }
+  topology_type(void) const { return GetTopologyType(); }
 
   virtual vdgl_intensity_face* CastToIntensityFace() {return this;}
   virtual vdgl_digital_region* cast_to_digital_region() const {return region_;}

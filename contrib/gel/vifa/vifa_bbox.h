@@ -1,4 +1,4 @@
-// This is contrib/gel/vifa/vifa_bbox.h
+// This is gel/vifa/vifa_bbox.h
 #ifndef _VIFA_BBOX_H_
 #define _VIFA_BBOX_H_
 
@@ -20,16 +20,16 @@
 #include <vul/vul_timestamp.h>
 
 
-class vifa_bbox : public vul_timestamp, public vbl_ref_count,
-	public vgl_box_2d<double>
+class vifa_bbox : public vul_timestamp,
+                  public vbl_ref_count,
+                  public vgl_box_2d<double>
 {
-public:
-	//: Default constructor
-	inline vifa_bbox(void) {}
+ public:
+  //: Default constructor
+  inline vifa_bbox(void) {}
 };
 
-typedef vbl_smart_ptr<vifa_bbox>	vifa_bbox_sptr;
+typedef vbl_smart_ptr<vifa_bbox>  vifa_bbox_sptr;
 
 
-#endif	// _VIFA_BBOX_H_
-
+#endif  // _VIFA_BBOX_H_

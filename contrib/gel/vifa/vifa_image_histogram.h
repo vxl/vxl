@@ -1,4 +1,4 @@
-// This is contrib/gel/vifa/vifa_image_histogram.h
+// This is gel/vifa/vifa_image_histogram.h
 #ifndef VIFA_IMAGE_HISTOGRAM_H
 #define VIFA_IMAGE_HISTOGRAM_H
 
@@ -24,21 +24,21 @@
 
 class vifa_image_histogram : public vifa_histogram
 {
-protected:
-	enum vil_pixel_format	_form;
-	unsigned int			_byte_depth;
+ protected:
+  enum vil_pixel_format  _form;
+  unsigned int      _byte_depth;
 
-public:
-	vifa_image_histogram(vil_image_view_base_sptr	image,
-						 double						percent = 100.0
-						);
+ public:
+  vifa_image_histogram(vil_image_view_base_sptr  image,
+                       double            percent = 100.0
+                      );
 
-protected:
+ protected:
   void init(void);
-  void fill_histogram(vil_image_view_base_sptr	src_buf,
-					  double					percentage = 100.0
-					 );
+  void fill_histogram(vil_image_view_base_sptr  src_buf,
+                      double          percentage = 100.0
+                     );
 };
 
 
-#endif	// VIFA_IMAGE_HISTOGRAM_H
+#endif  // VIFA_IMAGE_HISTOGRAM_H

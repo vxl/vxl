@@ -29,7 +29,7 @@ bsol_distance_histogram::bsol_distance_histogram(int nbins, double max_val)
   delta_ = max_val/nbins;
 }
 bsol_distance_histogram::
-bsol_distance_histogram(const int nbins, 
+bsol_distance_histogram(const int nbins,
                         vcl_vector<vsol_line_2d_sptr> const& lines)
 {
   if (!nbins)
@@ -115,14 +115,14 @@ void bsol_distance_histogram::up_count(const double value, const double count,
 double bsol_distance_histogram::interpolate_peak(int initial_peak)
 {
   //boundary conditions
-  if(initial_peak<0)
+  if (initial_peak<0)
     return 0;
-  if(initial_peak==0)
+  if (initial_peak==0)
     return bin_values_[0];
   int n = bin_values_.size();
-  if(initial_peak==(n-1))
+  if (initial_peak==(n-1))
     return bin_values_[n-1];
-  if(initial_peak>=n)
+  if (initial_peak>=n)
     return 0;
   double fminus = bin_counts_[initial_peak-1];
   double fzero = bin_counts_[initial_peak];
@@ -130,7 +130,7 @@ double bsol_distance_histogram::interpolate_peak(int initial_peak)
 
   double df = 0.5*(fplus-fminus);//first derivative
   double d2f = 0.5*(fplus+fminus-2.0*fzero);//second derivative
-  if(vcl_fabs(d2f)<1.0e-8)
+  if (vcl_fabs(d2f)<1.0e-8)
     return bin_values_[initial_peak];
 
   double root = -0.5*df/d2f;
@@ -141,11 +141,11 @@ double bsol_distance_histogram::interpolate_peak(int initial_peak)
   double dplus = bin_values_[initial_peak+1];
 
   double result;
-  if(root<0)
+  if (root<0)
    result = (dzero*(1+root)-dminus*root);
   else
     result =  (dzero*(1-root)+dplus*root);
-  //  vcl_cout << "interpolated distance " << result << "\n";
+  //  vcl_cout << "interpolated distance " << result << '\n';
   return result;
 }
 //---------------------------------------------------------------
@@ -168,8 +168,8 @@ distance_peaks(double& peak1, double& peak2, double min_peak_height_ratio)
   for (i = 0; i<nbins&&state!=fail&&state!=s_peak2; i++)
     {
 //        vcl_cout << "State[" << state << "], D = " << bin_values_[i]
-//                 << " C = "<< bin_counts_[i] << " srt_d = " << start_distance 
-//                 << " v = "<< v << "\n";
+//                 << " C = "<< bin_counts_[i] << " srt_d = " << start_distance
+//                 << " v = "<< v << '\n';
       //Begin the scan look for a value above 0
       if (state==init)
         if (bin_counts_[i]>0)
@@ -180,9 +180,9 @@ distance_peaks(double& peak1, double& peak2, double min_peak_height_ratio)
             continue;
           }
       //If we are in the start state set the threshold and move down.
-      if(state==start)
-        //        if(bin_counts_[i]>0)
-          if(bin_counts_[i]<=v)
+      if (state==start)
+        //        if (bin_counts_[i]>0)
+          if (bin_counts_[i]<=v)
             {
               state = down;
               //second peak should be a significant ratio of the starting value
@@ -215,13 +215,13 @@ distance_peaks(double& peak1, double& peak2, double min_peak_height_ratio)
             continue;
           }
       // we are moving up, waiting to capture a peak above the threshold
-      if(state==up)
-        //        if(bin_counts_[i]>tr)
+      if (state==up)
+        //        if (bin_counts_[i]>tr)
           {
             if (bin_counts_[i]<=v)
               {
                 state = s_peak1;
-				peak1_bin_counts = bin_counts_[upi1];
+                peak1_bin_counts = bin_counts_[upi1];
                 tr = min_peak_height_ratio*peak1_bin_counts;
               }
             else
@@ -233,7 +233,7 @@ distance_peaks(double& peak1, double& peak2, double min_peak_height_ratio)
             continue;
           }
       // we have just passed  peak 1
-      if(state==s_peak1)
+      if (state==s_peak1)
         {
           if (bin_counts_[i]<=peak1_bin_counts)
             state = down2;
@@ -259,10 +259,10 @@ distance_peaks(double& peak1, double& peak2, double min_peak_height_ratio)
             continue;
           }
 
-      // we are moving up a second time, waiting to capture a peak 
+      // we are moving up a second time, waiting to capture a peak
       // above the threshold
-      if(state==up2)
-        //        if(bin_counts_[i]>tr)
+      if (state==up2)
+        //        if (bin_counts_[i]>tr)
           {
             if (bin_counts_[i]<=v)
               {
@@ -341,12 +341,12 @@ vcl_ostream& operator << (vcl_ostream& os, const bsol_distance_histogram& h)
   for (unsigned int i=0; i<vals.size(); i++)
     {
       double val = vals[i];
-      vcl_cout << val << "|";
+      vcl_cout << val << '|';
       double cnt = cnts[i];
       int c = int(cnt*nchars/max_cnt);
       for (int k = 0; k<c; k++)
-        vcl_cout << "*";
-      vcl_cout << "\n";
+        vcl_cout << '*';
+      vcl_cout << '\n';
     }
   return os;
 }

@@ -5,9 +5,9 @@
 
 static void test_coll_lines_params()
 {
-	vifa_coll_lines_params	vclp;
+  vifa_coll_lines_params  vclp;
 
-	vclp.print_info();
+  vclp.print_info();
 }
 
 

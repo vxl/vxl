@@ -1,4 +1,4 @@
-// This is contrib/gel/vifa/vifa_line_cover.h
+// This is gel/vifa/vifa_line_cover.h
 #ifndef VIFA_LINE_COVER_H
 #define VIFA_LINE_COVER_H
 
@@ -31,44 +31,43 @@
 
 class vifa_line_cover : public vbl_ref_count
 {
-private:
-	int				_dim;
-	int*			_index;
-	double*			_max_extent;
-	double*			_min_extent;
-	imp_line_sptr	_line;
+ private:
+  int        _dim;
+  int*      _index;
+  double*      _max_extent;
+  double*      _min_extent;
+  imp_line_sptr  _line;
 
-public:
-	// Constructors and Destructors
-	vifa_line_cover();
-	vifa_line_cover(imp_line_sptr	prototype_line,
-					int				index_dimension
-				   );
-	~vifa_line_cover();
+ public:
+  // Constructors and Destructors
+  vifa_line_cover();
+  vifa_line_cover(imp_line_sptr  prototype_line,
+                  int            index_dimension
+                 );
+  ~vifa_line_cover();
 
-	// Indexing methods
-	void	InsertLine(imp_line_sptr	l);
+  // Indexing methods
+  void  InsertLine(imp_line_sptr  l);
 
-	// Data Access methods
-	double	GetCoverage();
-	double	GetDenseCoverage();
-	double	GetCustomCoverage(const double	norm);
-	void	GetExtent(imp_line_sptr&	lmin,
-					  imp_line_sptr&	lmax
-					 );
+  // Data Access methods
+  double  GetCoverage();
+  double  GetDenseCoverage();
+  double  GetCustomCoverage(const double  norm);
+  void  GetExtent(imp_line_sptr&  lmin,
+                  imp_line_sptr&  lmax
+                 );
 
-protected:
-	int				get_index_min();
-	int				get_index_max();
-	double			get_signed_distance(vgl_point_2d<double> const &	p);
-	imp_line_sptr	get_offset_line(int		start,
-									int		end,
-									double	dist
-								   );
+ protected:
+  int        get_index_min();
+  int        get_index_max();
+  double      get_signed_distance(vgl_point_2d<double> const &  p);
+  imp_line_sptr  get_offset_line(int    start,
+                                 int    end,
+                                 double dist
+                                );
 };
 
-typedef vbl_smart_ptr<vifa_line_cover>	vifa_line_cover_sptr;
+typedef vbl_smart_ptr<vifa_line_cover>  vifa_line_cover_sptr;
 
 
-#endif	// VIFA_LINE_COVER_H
-
+#endif  // VIFA_LINE_COVER_H

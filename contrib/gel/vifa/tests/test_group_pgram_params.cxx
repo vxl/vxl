@@ -5,9 +5,9 @@
 
 static void test_group_pgram_params()
 {
-	vifa_group_pgram_params	vgpp;
+  vifa_group_pgram_params  vgpp;
 
-	vgpp.print_info();
+  vgpp.print_info();
 }
 
 

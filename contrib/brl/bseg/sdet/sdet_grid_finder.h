@@ -35,19 +35,19 @@
 //are provided.
 class line_chamfer_1d
 {
-public:
+ public:
   line_chamfer_1d();
   ~line_chamfer_1d();
-  bool insert_lines(vcl_vector<vsol_line_2d_sptr> const& lines); 
+  bool insert_lines(vcl_vector<vsol_line_2d_sptr> const& lines);
   bool get_lines_in_interval(const double dlo, const double dhi,
-	  vcl_vector<vsol_line_2d_sptr>& lines) const;
+                             vcl_vector<vsol_line_2d_sptr>& lines) const;
   int index_size() const {return size_;}
   int n_lines() const {return distances_.size();}
   double offset(int i) const {return distances_[i];}
   double distance(double x) const;
   void forward_champher();
   void backward_champher();
-private:
+ private:
   vcl_vector<int> index_;
   vcl_vector<double> distances_;
   vcl_vector<vcl_vector<vsol_line_2d_sptr>* > line_index_;
@@ -75,7 +75,7 @@ class sdet_grid_finder : public sdet_grid_finder_params
                  vcl_vector<vsol_line_2d_sptr> const& lines);
 
   bool get_homography(vgl_h_matrix_2d<double>& homog);
-  bool get_debug_lines(vcl_vector<vsol_line_2d_sptr> & lines);  
+  bool get_debug_lines(vcl_vector<vsol_line_2d_sptr> & lines);
   bool get_affine_lines(vcl_vector<vsol_line_2d_sptr> & lines);
   bool get_matched_lines(vcl_vector<vsol_line_2d_sptr> & lines);
   bool get_mapped_lines(vcl_vector<vsol_line_2d_sptr> & lines);
@@ -92,10 +92,10 @@ class sdet_grid_finder : public sdet_grid_finder_params
                                    vsol_line_2d_sptr const & l);
 
   //:the vanishing point of a line bundle
-  
+
   bool get_vanishing_point(vcl_vector<vsol_line_2d_sptr> const & para_lines,
                            vgl_homg_point_2d<double>& vp);
-  
+
   bool scale_transform(const double max_distance,
                        vcl_vector<vsol_line_2d_sptr> const& gh,
                        vcl_vector<vsol_line_2d_sptr> const& gv,
