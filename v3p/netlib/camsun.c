@@ -222,7 +222,7 @@ L1000:
 L2000:
     dfact = dnu * 4.5;
     u = (float)(dx / dnu);
-    u = (float)(pow(u, dpower) - 1.f + 1.f / dfact) * sqrtf(dfact);
+    u = (float)(pow(u, dpower) - 1.0 + 1.0 / dfact) * sqrt(dfact);
     norcdf_(&u, &cdfn);
     *cdf = cdfn;
     return;
@@ -235,7 +235,7 @@ L2000:
 
 L3000:
     dw = sqrt(dx - dnu - dnu * log(dx / dnu));
-    danu = sqrtf(2.f / dnu);
+    danu = sqrt(2.0 / dnu);
     d1 = dw;
     d2 = dw * dw;
     d3 = dw * d2;
