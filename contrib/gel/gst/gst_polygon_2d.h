@@ -34,6 +34,11 @@ public:
   bool inside( const double x, const double y) const;
   bool inside( const gst_vertex_2d_ref v) const;
 
+  double get_centroid_x() const;
+  double get_centroid_y() const;
+
+  double area() const;
+
   // output
   friend ostream &operator<<( ostream &os, gst_polygon_2d &p);
 

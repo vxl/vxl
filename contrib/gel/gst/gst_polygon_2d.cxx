@@ -49,6 +49,52 @@ bool gst_polygon_2d::check_validity() const
   return false;
 }
 
+// returns the centroid
+double gst_polygon_2d::get_centroid_x() const
+{
+  double xsum= 0;
+
+  for( int i=0; i< edges_.size(); i++)
+    {
+      xsum+= edges_[i]->get_start()->get_x();
+    }
+
+  return xsum/edges_.size();
+}
+
+double gst_polygon_2d::get_centroid_y() const
+{
+  double ysum= 0;
+
+  for( int i=0; i< edges_.size(); i++)
+    {
+      ysum+= edges_[i]->get_start()->get_y();
+    }
+
+  return ysum/edges_.size();
+}
+
+
+// returns the area (signed)
+//        2 A( P ) = sum_{i=0}^{n-1} (x_i y_{i+1} - y_i x_{i+1}).
+double gst_polygon_2d::area() const
+{
+  double area= 0;
+
+  for( int i=0; i< edges_.size(); i++)
+    {
+      int ip1=((i+1)==edges_.size())?0:(i+1);
+
+      double dp= edges_[i]->get_start()->get_x()* edges_[ip1]->get_start()->get_y()
+               - edges_[i]->get_start()->get_x()* edges_[ip1]->get_start()->get_x();
+
+      area+= dp;
+    }
+
+  return (area/2);
+}
+
+
 // simple and efficient point in polygon test.
 //   from comp.graphics.algorithms faq
 //   should only call if validity passes (no check
