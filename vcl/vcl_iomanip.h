@@ -6,11 +6,10 @@
 
 #include "vcl_compiler.h"
 
-#if defined(VCL_SGI_CC_720)
-# include <iomanip.h>
-# define vcl_generic_iomanip_STD /* */
-# include "generic/vcl_iomanip.h"
-
+#if defined(VCL_GCC_295)
+# include <gcc-295/vcl_iomanip.h>
+#elif defined(VCL_SGI_CC_720)
+# include <sgi/vcl_iomanip.h>
 #else
 # include "iso/vcl_iomanip.h"
 #endif

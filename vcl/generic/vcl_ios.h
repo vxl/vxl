@@ -25,85 +25,117 @@
 #ifndef vcl_basic_ios
 #define vcl_basic_ios vcl_generic_ios_STD :: basic_ios
 #endif
-// boolalpha
-#ifndef vcl_boolalpha
-#define vcl_boolalpha vcl_generic_ios_STD :: boolalpha
+// ios::basefield
+#ifndef vcl_ios_basefield
+#define vcl_ios_basefield vcl_generic_ios_STD :: ios::basefield
 #endif
-// noboolalpha
-#ifndef vcl_noboolalpha
-#define vcl_noboolalpha vcl_generic_ios_STD :: noboolalpha
+// ios::floatfield
+#ifndef vcl_ios_floatfield
+#define vcl_ios_floatfield vcl_generic_ios_STD :: ios::floatfield
 #endif
-// showbase
-#ifndef vcl_showbase
-#define vcl_showbase vcl_generic_ios_STD :: showbase
+// ios::adjustfield
+#ifndef vcl_ios_adjustfield
+#define vcl_ios_adjustfield vcl_generic_ios_STD :: ios::adjustfield
 #endif
-// noshowbase
-#ifndef vcl_noshowbase
-#define vcl_noshowbase vcl_generic_ios_STD :: noshowbase
+// ios::boolalpha
+#ifndef vcl_ios_boolalpha
+#define vcl_ios_boolalpha vcl_generic_ios_STD :: ios::boolalpha
 #endif
-// showpoint
-#ifndef vcl_showpoint
-#define vcl_showpoint vcl_generic_ios_STD :: showpoint
+// ios::noboolalpha
+#ifndef vcl_ios_noboolalpha
+#define vcl_ios_noboolalpha vcl_generic_ios_STD :: ios::noboolalpha
 #endif
-// noshowpoint
-#ifndef vcl_noshowpoint
-#define vcl_noshowpoint vcl_generic_ios_STD :: noshowpoint
+// ios::showbase
+#ifndef vcl_ios_showbase
+#define vcl_ios_showbase vcl_generic_ios_STD :: ios::showbase
 #endif
-// showpos
-#ifndef vcl_showpos
-#define vcl_showpos vcl_generic_ios_STD :: showpos
+// ios::noshowbase
+#ifndef vcl_ios_noshowbase
+#define vcl_ios_noshowbase vcl_generic_ios_STD :: ios::noshowbase
 #endif
-// noshowpos
-#ifndef vcl_noshowpos
-#define vcl_noshowpos vcl_generic_ios_STD :: noshowpos
+// ios::showpoint
+#ifndef vcl_ios_showpoint
+#define vcl_ios_showpoint vcl_generic_ios_STD :: ios::showpoint
 #endif
-// skipws
-#ifndef vcl_skipws
-#define vcl_skipws vcl_generic_ios_STD :: skipws
+// ios::noshowpoint
+#ifndef vcl_ios_noshowpoint
+#define vcl_ios_noshowpoint vcl_generic_ios_STD :: ios::noshowpoint
 #endif
-// noskipws
-#ifndef vcl_noskipws
-#define vcl_noskipws vcl_generic_ios_STD :: noskipws
+// ios::showpos
+#ifndef vcl_ios_showpos
+#define vcl_ios_showpos vcl_generic_ios_STD :: ios::showpos
 #endif
-// uppercase
-#ifndef vcl_uppercase
-#define vcl_uppercase vcl_generic_ios_STD :: uppercase
+// ios::noshowpos
+#ifndef vcl_ios_noshowpos
+#define vcl_ios_noshowpos vcl_generic_ios_STD :: ios::noshowpos
 #endif
-// nouppercase
-#ifndef vcl_nouppercase
-#define vcl_nouppercase vcl_generic_ios_STD :: nouppercase
+// ios::skipws
+#ifndef vcl_ios_skipws
+#define vcl_ios_skipws vcl_generic_ios_STD :: ios::skipws
 #endif
-// internal
-#ifndef vcl_internal
-#define vcl_internal vcl_generic_ios_STD :: internal
+// ios::noskipws
+#ifndef vcl_ios_noskipws
+#define vcl_ios_noskipws vcl_generic_ios_STD :: ios::noskipws
 #endif
-// left
-#ifndef vcl_left
-#define vcl_left vcl_generic_ios_STD :: left
+// ios::uppercase
+#ifndef vcl_ios_uppercase
+#define vcl_ios_uppercase vcl_generic_ios_STD :: ios::uppercase
 #endif
-// right
-#ifndef vcl_right
-#define vcl_right vcl_generic_ios_STD :: right
+// ios::nouppercase
+#ifndef vcl_ios_nouppercase
+#define vcl_ios_nouppercase vcl_generic_ios_STD :: ios::nouppercase
 #endif
-// dec
-#ifndef vcl_dec
-#define vcl_dec vcl_generic_ios_STD :: dec
+// ios::internal
+#ifndef vcl_ios_internal
+#define vcl_ios_internal vcl_generic_ios_STD :: ios::internal
 #endif
-// hex
-#ifndef vcl_hex
-#define vcl_hex vcl_generic_ios_STD :: hex
+// ios::left
+#ifndef vcl_ios_left
+#define vcl_ios_left vcl_generic_ios_STD :: ios::left
 #endif
-// oct
-#ifndef vcl_oct
-#define vcl_oct vcl_generic_ios_STD :: oct
+// ios::right
+#ifndef vcl_ios_right
+#define vcl_ios_right vcl_generic_ios_STD :: ios::right
 #endif
-// fixed
-#ifndef vcl_fixed
-#define vcl_fixed vcl_generic_ios_STD :: fixed
+// ios::dec
+#ifndef vcl_ios_dec
+#define vcl_ios_dec vcl_generic_ios_STD :: ios::dec
 #endif
-// scientific
-#ifndef vcl_scientific
-#define vcl_scientific vcl_generic_ios_STD :: scientific
+// ios::hex
+#ifndef vcl_ios_hex
+#define vcl_ios_hex vcl_generic_ios_STD :: ios::hex
+#endif
+// ios::oct
+#ifndef vcl_ios_oct
+#define vcl_ios_oct vcl_generic_ios_STD :: ios::oct
+#endif
+// ios::fixed
+#ifndef vcl_ios_fixed
+#define vcl_ios_fixed vcl_generic_ios_STD :: ios::fixed
+#endif
+// ios::scientific
+#ifndef vcl_ios_scientific
+#define vcl_ios_scientific vcl_generic_ios_STD :: ios::scientific
+#endif
+// ios::fmtflags
+#ifndef vcl_ios_fmtflags
+#define vcl_ios_fmtflags vcl_generic_ios_STD :: ios::fmtflags
+#endif
+// ios::seekdir
+#ifndef vcl_ios_seekdir
+#define vcl_ios_seekdir vcl_generic_ios_STD :: ios::seekdir
+#endif
+// ios::beg
+#ifndef vcl_ios_beg
+#define vcl_ios_beg vcl_generic_ios_STD :: ios::beg
+#endif
+// ios::cur
+#ifndef vcl_ios_cur
+#define vcl_ios_cur vcl_generic_ios_STD :: ios::cur
+#endif
+// ios::end
+#ifndef vcl_ios_end
+#define vcl_ios_end vcl_generic_ios_STD :: ios::end
 #endif
 
 #endif // vcl_generic_ios_h_

@@ -5,7 +5,7 @@
 */
 
 #include <iostream.h>
-#include "generic/vcl_ios.h" // necessary for e.g. vcl_dec which is in both
+#include <iomanip.h>
 #define vcl_generic_iostream_STD /* */
 #include "generic/vcl_iostream.h"
 

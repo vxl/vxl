@@ -22,6 +22,9 @@
 // the following are not actually in the
 // <iostream> synopsis. for example, endl
 // and ends actually come from <ostream>.
+// hex, oct, dec, ws, setprecision, setw,
+// setfill, fixed, scientific come from
+// <iomanip>.
 // ios
 #ifndef vcl_ios
 #define vcl_ios vcl_generic_iostream_STD :: ios
@@ -54,21 +57,13 @@
 #ifndef vcl_ios_openmode
 #define vcl_ios_openmode vcl_generic_iostream_STD :: ios::openmode
 #endif
-// hex
-#ifndef vcl_hex
-#define vcl_hex vcl_generic_iostream_STD :: hex
+// istream
+#ifndef vcl_istream
+#define vcl_istream vcl_generic_iostream_STD :: istream
 #endif
-// dec
-#ifndef vcl_dec
-#define vcl_dec vcl_generic_iostream_STD :: dec
-#endif
-// ws
-#ifndef vcl_ws
-#define vcl_ws vcl_generic_iostream_STD :: ws
-#endif
-// setprecision
-#ifndef vcl_setprecision
-#define vcl_setprecision vcl_generic_iostream_STD :: setprecision
+// ostream
+#ifndef vcl_ostream
+#define vcl_ostream vcl_generic_iostream_STD :: ostream
 #endif
 // endl
 #ifndef vcl_endl
@@ -93,6 +88,42 @@
 // streamsize
 #ifndef vcl_streamsize
 #define vcl_streamsize vcl_generic_iostream_STD :: streamsize
+#endif
+// hex
+#ifndef vcl_hex
+#define vcl_hex vcl_generic_iostream_STD :: hex
+#endif
+// oct
+#ifndef vcl_oct
+#define vcl_oct vcl_generic_iostream_STD :: oct
+#endif
+// dec
+#ifndef vcl_dec
+#define vcl_dec vcl_generic_iostream_STD :: dec
+#endif
+// ws
+#ifndef vcl_ws
+#define vcl_ws vcl_generic_iostream_STD :: ws
+#endif
+// setfill
+#ifndef vcl_setfill
+#define vcl_setfill vcl_generic_iostream_STD :: setfill
+#endif
+// setprecision
+#ifndef vcl_setprecision
+#define vcl_setprecision vcl_generic_iostream_STD :: setprecision
+#endif
+// setw
+#ifndef vcl_setw
+#define vcl_setw vcl_generic_iostream_STD :: setw
+#endif
+// fixed
+#ifndef vcl_fixed
+#define vcl_fixed vcl_generic_iostream_STD :: fixed
+#endif
+// scientific
+#ifndef vcl_scientific
+#define vcl_scientific vcl_generic_iostream_STD :: scientific
 #endif
 
 #endif // vcl_generic_iostream_h_
