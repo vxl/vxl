@@ -42,8 +42,8 @@ void test_matlab() {
 
   // vnl_matlab_write, vnl_matlab_read
   {
-    char const* TMPNAM = vul_temp_filename().c_str();
-    char const *file = TMPNAM ? TMPNAM : "/tmp/smoo.mat";
+    vcl_string tmp_nam = vul_temp_filename();
+    char const *file = tmp_nam!="" ? tmp_nam.c_str() : "/tmp/smoo.mat";
     {
       vcl_ofstream f(file);
       vnl_matlab_write(f, v.begin(), v.size(), "v");
