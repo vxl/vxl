@@ -26,7 +26,7 @@ ifeq (1,$(USE_LEUVENVERSION))
   VTK_EXTRA_LIBS += -lxgl
  endif
  ifeq ($(OS),Linux2)
-  OPENGL_LIBS = -lMesaGLU -lMesaGL -lpthread -lglide3
+  OPENGL_LIBS = -lMesaGLU -lMesaGL -lpthread # -lglide3
  endif
  USE_IPGENERIC := 1
  ifneq ($(OS),win32)
