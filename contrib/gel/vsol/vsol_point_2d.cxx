@@ -154,7 +154,7 @@ void vsol_point_2d::b_write(vsl_b_ostream &os) const
   vsl_b_write(os, p_.y());
 }
 
-//: Binary load self from stream.
+//: Binary load self from stream (not typically used)
 void vsol_point_2d::b_read(vsl_b_istream &is)
 {
   if(!is)
@@ -199,7 +199,7 @@ bool vsol_point_2d::is_class(const vcl_string& cls) const
 //external functions
 vcl_ostream& operator<<(vcl_ostream& s, vsol_point_2d const& p)
 {
-  s << '(' << (int)p.x() << ' ' << (int)p.y() << ")\n";
+  s << '(' << p.x() << ' ' << p.y() << ')';
   return s;
 }
 
@@ -222,11 +222,22 @@ vsl_b_read(vsl_b_istream &is, vsol_point_2d_sptr &p)
 {
   bool not_null_ptr;
   vsl_b_read(is, not_null_ptr);
-  if (not_null_ptr){
-    p = new vsol_point_2d(0, 0);
-    p->b_read(is);
-  }
-  else
-    p = 0;
+  if (not_null_ptr)
+    {
+      short ver;
+      vsl_b_read(is, ver);
+      switch(ver)
+        {
+        case 1:
+          {
+            double x=0, y=0;
+            vsl_b_read(is, x);
+            vsl_b_read(is, y);
+            p = new vsol_point_2d(x, y);
+            break;
+          }
+        default:
+          p = 0;
+        }
+    }
 }
-
