@@ -8,6 +8,9 @@
 // \file
 // \brief Fixed length stack-stored vnl_vector
 //
+// The operators are inlined because (1) they are small and
+// (2) we then have less explicit instantiation trouble.
+//
 // \author Andrew W. Fitzgibbon, Oxford RRG
 // \date   04 Aug 96
 //
@@ -19,6 +22,7 @@
 //              space efficiency, removed necessity for vnl_vector_fixed_ref
 //   Jun.2003 - Paul Smyth - added as_fixed_ref() to convert to fixed-size ref
 //              removed duplicate cross_3d
+//   Jun.2003 - Peter Vanroose - added cross_2d
 // \endverbatim
 
 #include <vcl_cstring.h> // memcpy()
@@ -277,10 +281,6 @@ class vnl_vector_fixed
 
   const vnl_vector_fixed_ref<T,n> as_fixed_ref() const { return vnl_vector_fixed_ref<T,n>( const_cast<T*>(data_block()) ); }
 
-//  operator const vnl_vector_fixed_ref<T,n>() const { return vnl_vector_fixed_ref<T,n>( const_cast<T*>(data_block()) ); }
-
-  //----------------------------------------------------------------------
-
   //----------------------------------------------------------------------
 
   //: Type defs for iterators
@@ -532,14 +532,10 @@ class vnl_vector_fixed
 };
 
 
-// Make the operators below inline because (1) they are small and
-// (2) we then have less explicit instantiation trouble.
-
-
 // --- Vector-scalar operators ----------------------------------------
 
-
-//: \relates vnl_vector_fixed
+//:
+// \relates vnl_vector_fixed
 template<class T, unsigned int n>
 inline vnl_vector_fixed<T,n> operator+( const vnl_vector_fixed<T,n>& v, T s )
 {
@@ -548,7 +544,8 @@ inline vnl_vector_fixed<T,n> operator+( const vnl_vector_fixed<T,n>& v, T s )
   return r;
 }
 
-//: \relates vnl_vector_fixed
+//:
+// \relates vnl_vector_fixed
 template<class T, unsigned int n>
 inline vnl_vector_fixed<T,n> operator+( T s, const vnl_vector_fixed<T,n>& v )
 {
@@ -557,7 +554,8 @@ inline vnl_vector_fixed<T,n> operator+( T s, const vnl_vector_fixed<T,n>& v )
   return r;
 }
 
-//: \relates vnl_vector_fixed
+//:
+// \relates vnl_vector_fixed
 template<class T, unsigned int n>
 inline vnl_vector_fixed<T,n> operator-( const vnl_vector_fixed<T,n>& v, T s )
 {
@@ -566,7 +564,8 @@ inline vnl_vector_fixed<T,n> operator-( const vnl_vector_fixed<T,n>& v, T s )
   return r;
 }
 
-//: \relates vnl_vector_fixed
+//:
+// \relates vnl_vector_fixed
 template<class T, unsigned int n>
 inline vnl_vector_fixed<T,n> operator-( T s, const vnl_vector_fixed<T,n>& v )
 {
@@ -575,7 +574,8 @@ inline vnl_vector_fixed<T,n> operator-( T s, const vnl_vector_fixed<T,n>& v )
   return r;
 }
 
-//: \relates vnl_vector_fixed
+//:
+// \relates vnl_vector_fixed
 template<class T, unsigned int n>
 inline vnl_vector_fixed<T,n> operator*( const vnl_vector_fixed<T,n>& v, T s )
 {
@@ -584,7 +584,8 @@ inline vnl_vector_fixed<T,n> operator*( const vnl_vector_fixed<T,n>& v, T s )
   return r;
 }
 
-//: \relates vnl_vector_fixed
+//:
+// \relates vnl_vector_fixed
 template<class T, unsigned int n>
 inline vnl_vector_fixed<T,n> operator*( T s, const vnl_vector_fixed<T,n>& v )
 {
@@ -593,7 +594,8 @@ inline vnl_vector_fixed<T,n> operator*( T s, const vnl_vector_fixed<T,n>& v )
   return r;
 }
 
-//: \relates vnl_vector_fixed
+//:
+// \relates vnl_vector_fixed
 template<class T, unsigned int n>
 inline vnl_vector_fixed<T,n> operator/( const vnl_vector_fixed<T,n>& v, T s )
 {
@@ -604,9 +606,13 @@ inline vnl_vector_fixed<T,n> operator/( const vnl_vector_fixed<T,n>& v, T s )
 
 
 // --- Vector-vector operators ----------------------------------------
+//
+// Includes overloads for the common case of mixing a fixed with a
+// non-fixed. Because the operators are templated, the fixed will not
+// be automatically converted to a non-fixed-ref. These do it for you.
 
-
-//: \relates vnl_vector_fixed
+//:
+// \relates vnl_vector_fixed
 template<class T, unsigned int n>
 inline vnl_vector_fixed<T,n> operator+( const vnl_vector_fixed<T,n>& a, const vnl_vector_fixed<T,n>& b )
 {
@@ -615,7 +621,26 @@ inline vnl_vector_fixed<T,n> operator+( const vnl_vector_fixed<T,n>& a, const vn
   return r;
 }
 
-//: \relates vnl_vector_fixed
+//:
+// \relates vnl_vector
+// \relates vnl_vector_fixed
+template<class T, unsigned int n>
+inline vnl_vector<T> operator+( const vnl_vector_fixed<T,n>& a, const vnl_vector<T>& b )
+{
+  return a.as_ref() + b;
+}
+
+//:
+// \relates vnl_vector
+// \relates vnl_vector_fixed
+template<class T, unsigned int n>
+inline vnl_vector<T> operator+( const vnl_vector<T>& a, const vnl_vector_fixed<T,n>& b )
+{
+  return a + b.as_ref();
+}
+
+//:
+// \relates vnl_vector_fixed
 template<class T, unsigned int n>
 inline vnl_vector_fixed<T,n> operator-( const vnl_vector_fixed<T,n>& a, const vnl_vector_fixed<T,n>& b )
 {
@@ -624,6 +649,26 @@ inline vnl_vector_fixed<T,n> operator-( const vnl_vector_fixed<T,n>& a, const vn
   return r;
 }
 
+//:
+// \relates vnl_vector
+// \relates vnl_vector_fixed
+template<class T, unsigned int n>
+inline vnl_vector<T> operator-( const vnl_vector_fixed<T,n>& a, const vnl_vector<T>& b )
+{
+  return a.as_ref() - b;
+}
+
+//:
+// \relates vnl_vector
+// \relates vnl_vector_fixed
+template<class T, unsigned int n>
+inline vnl_vector<T> operator-( const vnl_vector<T>& a, const vnl_vector_fixed<T,n>& b )
+{
+  return a - b.as_ref();
+}
+
+//:
+// \relates vnl_vector_fixed
 template<class T, unsigned int n>
 inline vnl_vector_fixed<T,n> element_product( const vnl_vector_fixed<T,n>& a, const vnl_vector_fixed<T,n>& b )
 {
@@ -632,6 +677,32 @@ inline vnl_vector_fixed<T,n> element_product( const vnl_vector_fixed<T,n>& a, co
   return r;
 }
 
+//:
+// \relates vnl_vector
+// \relates vnl_vector_fixed
+template<class T, unsigned int n>
+inline vnl_vector<T> element_product( const vnl_vector_fixed<T,n>& a, const vnl_vector<T>& b )
+{
+  assert( b.size() == n );
+  vnl_vector<T> r(n);
+  vnl_vector_fixed<T,n>::mul( a.data_block(), b.data_block(), r.data_block() );
+  return r;
+}
+
+//:
+// \relates vnl_vector
+// \relates vnl_vector_fixed
+template<class T, unsigned int n>
+inline vnl_vector<T> element_product( const vnl_vector<T>& a, const vnl_vector_fixed<T,n>& b )
+{
+  assert( a.size() == n );
+  vnl_vector<T> r(n);
+  vnl_vector_fixed<T,n>::mul( a.data_block(), b.data_block(), r.data_block() );
+  return r;
+}
+
+//:
+// \relates vnl_vector_fixed
 template<class T, unsigned int n>
 inline vnl_vector_fixed<T,n> element_quotient( const vnl_vector_fixed<T,n>& a, const vnl_vector_fixed<T,n>& b )
 {
@@ -640,6 +711,60 @@ inline vnl_vector_fixed<T,n> element_quotient( const vnl_vector_fixed<T,n>& a, c
   return r;
 }
 
+//:
+// \relates vnl_vector
+// \relates vnl_vector_fixed
+template<class T, unsigned int n>
+inline vnl_vector<T> element_quotient( const vnl_vector_fixed<T,n>& a, const vnl_vector<T>& b )
+{
+  assert( b.size() == n );
+  vnl_vector<T> r(n);
+  vnl_vector_fixed<T,n>::div( a.data_block(), b.data_block(), r.data_block() );
+  return r;
+}
+
+//:
+// \relates vnl_vector
+// \relates vnl_vector_fixed
+template<class T, unsigned int n>
+inline vnl_vector<T> element_quotient( const vnl_vector<T>& a, const vnl_vector_fixed<T,n>& b )
+{
+  assert( a.size() == n );
+  vnl_vector<T> r(n);
+  vnl_vector_fixed<T,n>::div( a.data_block(), b.data_block(), r.data_block() );
+  return r;
+}
+
+//:
+// \relates vnl_vector_fixed
+template<class T>
+T cross_2d (vnl_vector_fixed<T,2> const& v1, vnl_vector_fixed<T,2> const& v2)
+{
+  return v1[0] * v2[1] - v1[1] * v2[0];
+}
+
+//:
+// \relates vnl_vector
+// \relates vnl_vector_fixed
+template<class T>
+T cross_2d (vnl_vector_fixed<T,2> const& v1, vnl_vector<T> const& v2)
+{
+  assert( v2.size() == 2 );
+  return v1[0] * v2[1] - v1[1] * v2[0];
+}
+
+//:
+// \relates vnl_vector
+// \relates vnl_vector_fixed
+template<class T>
+T cross_2d (vnl_vector<T> const& v1, vnl_vector_fixed<T,2> const& v2)
+{
+  assert( v1.size() == 2 );
+  return v1[0] * v2[1] - v1[1] * v2[0];
+}
+
+//:
+// \relates vnl_vector_fixed
 template<class T>
 vnl_vector_fixed<T,3> cross_3d (vnl_vector_fixed<T,3> const& v1, vnl_vector_fixed<T,3> const& v2)
 {
@@ -651,93 +776,94 @@ vnl_vector_fixed<T,3> cross_3d (vnl_vector_fixed<T,3> const& v1, vnl_vector_fixe
   return result;
 }
 
-// These overloads for the common case of mixing a fixed with a
-// non-fixed. Because the operator* are templated, the fixed will not
-// be automatically converted to a non-fixed-ref. These do it for you.
-
-template<class T, unsigned int n>
-inline vnl_vector<T> operator+( const vnl_vector_fixed<T,n>& a, const vnl_vector<T>& b )
-{
-  return a.as_ref() + b;
+//:
+// \relates vnl_vector
+// \relates vnl_vector_fixed
+template<class T,unsigned int n>
+  inline vnl_vector_fixed<T,n> cross_3d( const vnl_vector_fixed<T,n>& a, const vnl_vector<T>& b ) {
+  return cross_3d( a.as_ref(), b);
 }
 
-template<class T, unsigned int n>
-inline vnl_vector<T> operator+( const vnl_vector<T>& a, const vnl_vector_fixed<T,n>& b )
-{
-  return a + b.as_ref();
+//:
+// \relates vnl_vector
+// \relates vnl_vector_fixed
+template<class T,unsigned int n>
+  inline vnl_vector_fixed<T,n> cross_3d( const vnl_vector<T>& a, const vnl_vector_fixed<T,n>& b ) {
+  return cross_3d( a, b.as_ref());
 }
 
-template<class T, unsigned int n>
-inline vnl_vector<T> operator-( const vnl_vector_fixed<T,n>& a, const vnl_vector<T>& b )
-{
-  return a.as_ref() - b;
-}
-
-template<class T, unsigned int n>
-inline vnl_vector<T> operator-( const vnl_vector<T>& a, const vnl_vector_fixed<T,n>& b )
-{
-  return a - b.as_ref();
-}
-
-
+//:
+// \relates vnl_vector_fixed
 template<class T, unsigned n>
 inline T dot_product( const vnl_vector_fixed<T,n>& a, const vnl_vector_fixed<T,n>& b )
 {
   return dot_product( a.as_ref(), b.as_ref() );
 }
 
+//:
+// \relates vnl_vector
+// \relates vnl_vector_fixed
 template<class T, unsigned n>
 inline T dot_product( const vnl_vector_fixed<T,n>& a, const vnl_vector<T>& b )
 {
   return dot_product( a.as_ref(), b );
 }
 
+//:
+// \relates vnl_vector
+// \relates vnl_vector_fixed
 template<class T, unsigned n>
 inline T dot_product( const vnl_vector<T>& a, const vnl_vector_fixed<T,n>& b )
 {
   return dot_product( a, b.as_ref() );
 }
 
+//:
+// \relates vnl_vector_fixed
 template<class T, unsigned int n>
 inline vnl_matrix<T> outer_product( const vnl_vector_fixed<T,n>& a, const vnl_vector_fixed<T,n>& b )
 {
   return outer_product( a.as_ref(), b.as_ref());
 }
 
-template<class T,unsigned int n>
-  inline vnl_vector_fixed<T,n> cross_3d( const vnl_vector_fixed<T,n>& a, const vnl_vector<T>& b ) {
-  return cross_3d( a.as_ref(), b);
-}
-
-template<class T,unsigned int n>
-  inline vnl_vector_fixed<T,n> cross_3d( const vnl_vector<T>& a, const vnl_vector_fixed<T,n>& b ) {
-  return cross_3d( a, b.as_ref());
-}
-
+//:
+// \relates vnl_vector
+// \relates vnl_vector_fixed
 template<class T, unsigned int n>
 inline vnl_matrix<T> outer_product( const vnl_vector<T>& a, const vnl_vector_fixed<T,n>& b )
 {
   return outer_product( a, b.as_ref());
 }
 
+//:
+// \relates vnl_vector
+// \relates vnl_vector_fixed
 template<class T, unsigned int n>
 inline vnl_matrix<T> outer_product( const vnl_vector_fixed<T,n>& a, const vnl_vector<T>& b )
 {
   return outer_product( a.as_ref(), b);
 }
 
+//:
+// \relates vnl_vector_fixed
 template<class T, unsigned n>
 inline T angle( const vnl_vector_fixed<T,n>& a, const vnl_vector_fixed<T,n>& b )
 {
   return angle( a.as_ref(), b.as_ref() );
 }
 
+//:
+// \relates vnl_vector
+// \relates vnl_vector_fixed
 template<class T, unsigned n>
 inline T angle( const vnl_vector_fixed<T,n>& a, const vnl_vector<T>& b )
 {
   return angle( a.as_ref(), b );
 }
 
+//:
+// \relates vnl_vector
+// \relates vnl_vector_fixed
 template<class T, unsigned n>
 inline T angle( const vnl_vector<T>& a, const vnl_vector_fixed<T,n>& b )
 {
@@ -745,18 +871,26 @@ inline T angle( const vnl_vector<T>& a, const vnl_vector_fixed<T,n>& b )
 }
 
 
+//:
+// \relates vnl_vector_fixed
 template<class T, unsigned n>
 inline T vnl_vector_ssd( const vnl_vector_fixed<T,n>& a, const vnl_vector_fixed<T,n>& b )
 {
   return vnl_vector_ssd( a.as_ref(), b.as_ref() );
 }
 
+//:
+// \relates vnl_vector
+// \relates vnl_vector_fixed
 template<class T, unsigned n>
 inline T vnl_vector_ssd( const vnl_vector_fixed<T,n>& a, const vnl_vector<T>& b )
 {
   return vnl_vector_ssd( a.as_ref(), b );
 }
 
+//:
+// \relates vnl_vector
+// \relates vnl_vector_fixed
 template<class T, unsigned n>
 inline T vnl_vector_ssd( const vnl_vector<T>& a, const vnl_vector_fixed<T,n>& b )
 {
@@ -764,25 +898,64 @@ inline T vnl_vector_ssd( const vnl_vector<T>& a, const vnl_vector_fixed<T,n>& b 
 }
 
 
-//: \relates vnl_vector_fixed
+//:
+// \relates vnl_vector_fixed
 template<class T, unsigned int n>
 inline bool operator==( const vnl_vector_fixed<T,n>& a, const vnl_vector_fixed<T,n>& b )
 {
-  return a.operator_eq( b );
+  return a.operator_eq(b);
 }
 
-//: \relates vnl_vector_fixed
+//:
+// \relates vnl_vector
+// \relates vnl_vector_fixed
+template<class T, unsigned int n>
+inline bool operator==( vnl_vector_fixed<T,n> const& a, vnl_vector<T> const& b )
+{
+  return a.operator_eq(b);
+}
+
+//:
+// \relates vnl_vector
+// \relates vnl_vector_fixed
+template<class T, unsigned int n>
+inline bool operator==( vnl_vector<T> const& a, vnl_vector_fixed<T,n> const& b )
+{
+  return b.operator_eq(a);
+}
+
+//:
+// \relates vnl_vector_fixed
 template<class T, unsigned int n>
 inline bool operator!=( const vnl_vector_fixed<T,n>& a, const vnl_vector_fixed<T,n>& b )
 {
-  return ! a.operator_eq( b );
+  return ! a.operator_eq(b);
+}
+
+//:
+// \relates vnl_vector
+// \relates vnl_vector_fixed
+template<class T, unsigned int n>
+inline bool operator!=( vnl_vector_fixed<T,n> const& a, vnl_vector<T> const& b )
+{
+  return ! a.operator_eq(b);
+}
+
+//:
+// \relates vnl_vector
+// \relates vnl_vector_fixed
+template<class T, unsigned int n>
+inline bool operator!=( vnl_vector<T> const& a, vnl_vector_fixed<T,n> const& b )
+{
+  return ! b.operator_eq(a);
 }
 
 
 // --- I/O operators -------------------------------------------------
 
 
-//: \relates vnl_vector_fixed
+//:
+// \relates vnl_vector_fixed
 template<class T, unsigned int n>
 inline
 vcl_ostream& operator<< ( vcl_ostream& ostr, const vnl_vector_fixed<T,n>& v )
@@ -791,7 +964,8 @@ vcl_ostream& operator<< ( vcl_ostream& ostr, const vnl_vector_fixed<T,n>& v )
   return ostr;
 }
 
-//: \relates vnl_vector_fixed
+//:
+// \relates vnl_vector_fixed
 template<class T, unsigned int n>
 inline
 vcl_istream& operator>> ( vcl_istream& ostr, vnl_vector_fixed<T,n>& v )
