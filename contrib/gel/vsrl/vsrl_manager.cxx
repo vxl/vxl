@@ -29,6 +29,7 @@
 #include <vtol/vtol_vertex.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_edge_2d_sptr.h>
+#include <vtol/vtol_intensity_face.h>
 #include <vepl/vepl_gradient_mag.h>
 #include <vsrl/vsrl_menus.h>
 #include <vsrl/vsrl_manager.h>
