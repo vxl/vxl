@@ -9,10 +9,10 @@
 //  Contains classes:  vgui_grid_tableau   vgui_grid_tableau_data
 //
 // \verbatim
-//  Modifications:
-//    K.Y.McGaul 20-JAN-2000 Initial version.
-//    K.Y.McGaul 11-FEB-2000 Added a clear_tableau to the empty grid positions.
-//    K.Y.McGaul 21-FEB-2002 Added comments and documentation.
+//  Modifications
+//   K.Y.McGaul 20-JAN-2000 Initial version.
+//   K.Y.McGaul 11-FEB-2000 Added a clear_tableau to the empty grid positions.
+//   K.Y.McGaul 21-FEB-2002 Added comments and documentation.
 // \endverbatim
 
 #include <vcl_vector.h>
@@ -56,7 +56,7 @@ bool operator==(vgui_grid_tableau_data const &a,
 //  in 'tabs'.  A tableau will only be removed from 'tabs' by using remove_at.
 //
 //  By default, the user can make the grid larger or smaller by using
-//  (CTRL) + and - to add and remove (rows and) columnns.
+//  (CTRL) + and - to add and remove (rows and) columns.
 //
 //  These default behaviours can be changed using set_uses_paging_events and
 //  set_grid_size_changeable.  This stops vgui_grid using the events, but
