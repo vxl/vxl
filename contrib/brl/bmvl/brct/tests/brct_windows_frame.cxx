@@ -171,16 +171,18 @@ void brct_windows_frame::remove_curve2d()
 void brct_windows_frame::add_curve3d(vcl_vector<vgl_point_3d<double> >& pts)
 {
   int size = pts.size();
-  curves_3d_.resize(size-1);
-  instance_->tab_3d_->set_foreground(1, 1, 1);
-  for (int i=0; i<size-1; i++)
-  {
-    vgl_point_3d<double>& s = pts[i];
-    vgl_point_3d<double>& e = pts[i+1];
-    vgui_lineseg3D* l = instance_->tab_3d_->add_line(s.x(), s.y(), s.z(), e.x(), e.y(), e.z());
-    curves_3d_[i] = l;
-  }
+  if(size > 1){
+    curves_3d_.resize(size-1);
+    instance_->tab_3d_->set_foreground(1, 1, 1);
+    for (int i=0; i<size-1; i++)
+    {
+      vgl_point_3d<double>& s = pts[i];
+      vgl_point_3d<double>& e = pts[i+1];
+      vgui_lineseg3D* l = instance_->tab_3d_->add_line(s.x(), s.y(), s.z(), e.x(), e.y(), e.z());
+      curves_3d_[i] = l;
+    }
   instance_->post_redraw();
+  }
 }
 
 void brct_windows_frame::remove_debug_info()
