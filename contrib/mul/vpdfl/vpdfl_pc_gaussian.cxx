@@ -7,6 +7,9 @@
 //    IMS   Converted to VXL 23 April 2000
 // \endverbatim
 
+#ifdef __GNUC__
+#pragma implementation
+#endif
 
 #include <vcl_string.h>
 #include <vcl_cassert.h>
@@ -262,7 +265,7 @@ void vpdfl_pc_gaussian::b_read(vsl_b_istream& bfs)
 		vcl_cerr << "vpdfl_pc_gaussian::load() : ";
 		vcl_cerr << "Attempted to load object of type ";
 		vcl_cerr << name <<" into object of type " << is_a() << vcl_endl;
-		abort();
+		vcl_abort();
 	}
 
 	short version;
@@ -277,7 +280,7 @@ void vpdfl_pc_gaussian::b_read(vsl_b_istream& bfs)
 		default:
 			vcl_cerr << "vpdfl_pc_gaussian::b_read() ";
 			vcl_cerr << "Unexpected version number " << version << vcl_endl;
-			abort();
+			vcl_abort();
 	}
 }
 

@@ -6,6 +6,10 @@
 // Modifications
 // 23 April 2001 IMS - Ported to VXL
 
+#ifdef __GNUC__
+#pragma implementation
+#endif
+
 //=======================================================================
 // inclusions
 //=======================================================================
@@ -20,7 +24,7 @@
 #include <vnl/vnl_math.h>
 #include "vpdfl_pc_gaussian_builder.h"
 #include "vpdfl_pc_gaussian.h"
-#include <algorithm>
+//#include <vcl_algorithm.h>
 #ifdef _MSC_VER
 	
 #endif
@@ -232,7 +236,7 @@ void vpdfl_pc_gaussian_builder::weighted_build(vpdfl_pdf_base& model,
 	if (n_samples<2)
 	{
 		vcl_cerr<<"vpdfl_gaussian_builder::weighted_build() Too few examples available."<<vcl_endl;
-		abort();
+		vcl_abort();
 	}
 
 	const int n = data.current().size();
@@ -339,7 +343,8 @@ unsigned vpdfl_pc_gaussian_builder::decide_partition(const vnl_vector<double>& e
 	else
 	{
 		vcl_cerr << "vpdfl_pc_gaussian_builder::decidePartition: Unexpected partition method: " << partitionMethod_ <<vcl_endl;
-		abort();
+		vcl_abort();
+                return 0;
 	}
 }	
 
@@ -406,7 +411,7 @@ void vpdfl_pc_gaussian_builder::b_read(vsl_b_istream& bfs)
 		vcl_cerr << "vpdfl_pc_gaussian_builder::b_read : ";
 		vcl_cerr << "Attempted to load object of type ";
 		vcl_cerr << name <<" into object of type " << is_a() << vcl_endl;
-		abort();
+		vcl_abort();
 	}
 
 	short version;
@@ -423,7 +428,7 @@ void vpdfl_pc_gaussian_builder::b_read(vsl_b_istream& bfs)
 		default:
 			vcl_cerr << "vpdfl_pc_gaussian_builder::b_read() ";
 			vcl_cerr << "Unexpected version number " << version << vcl_endl;
-			abort();
+			vcl_abort();
 	}
 }
 

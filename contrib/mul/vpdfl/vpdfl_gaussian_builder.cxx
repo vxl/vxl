@@ -11,6 +11,10 @@
 // inclusions
 //=======================================================================
 
+#ifdef __GNUC__
+#pragma implementation
+#endif
+
 #include <vcl_cstdlib.h>
 #include <vcl_string.h>
 
