@@ -1,10 +1,12 @@
 // This is ./vxl/vnl/vnl_bignum.cxx
 #include "vnl_bignum.h"
 #include <vnl/vnl_math.h>
-#include <vcl_cstdlib.h> // Include standard c library support
-#include <vcl_cctype.h>  // Include character macros
-#include <vcl_cstring.h> // Include standard strings
-//#include <vcl_new.h>     // for placement syntax of new
+#include <vcl_cstdlib.h>   // Include standard c library support
+#include <vcl_cctype.h>    // Include character macros
+#include <vcl_cstring.h>   // Include standard strings
+#include <vcl_cmath.h>     // for vcl_fmod
+#include <vcl_algorithm.h> // for vcl_copy
+#include <vcl_vector.h>
 #include <vcl_cassert.h>
 
 //:
@@ -124,26 +126,16 @@ vnl_bignum::vnl_bignum (double d) {
     this->sign = -1;
   }
 
-  const double LOG10_MAXDOUBLE = log10(vnl_math::maxdouble);
-  const double LOG10_RADIX_S = log10(double(0x10000));
-  static unsigned long buf_size_s = (int)(LOG10_MAXDOUBLE/LOG10_RADIX_S+0.1); // Size of buffer to convert d
-
-  Data *buf = new Data[buf_size_s];     // Buffer to convert d into
-  Counter i = 0;                        // buffer index
+  // Note: 0x10000L == 1 >> 16: the (assumed) size of unsigned short is 16 bits.
+  vcl_vector<Data> buf;
   while (d >= 1.0) {
-    assert(i < buf_size_s);             // no more buffer space
-    buf[i] = Data(fmod(d,0x10000L));    // Get next data "digit" from d
-    d /= 0x10000L;                      // Shift d right 1 data "digit"
-    ++i;                                // Increment buffer index
+    buf.push_back( Data(vcl_fmod(d,0x10000L)) );  // Get next data "digit" from d
+    d /= 0x10000L;                                // Shift d right 1 data "digit"
   }
-  this->data = (i>0 ? new Data[i] : 0); // Allocate permanent data
-  this->count = i;                      // Save count
-  i = 0;
-  while (i < this->count) {             // Copy temp buffer into
-    this->data[i] = buf[i];             //   permanent data
-    i++;
-  }
-  delete [] buf;                        // Deallocate buffer
+  // Allocate and copy into permanent buffer
+  this->data = (buf.size()>0 ? new Data[buf.size()] : 0);
+  this->count = buf.size();
+  vcl_copy( buf.begin(), buf.end(), data );
 }
 
 
@@ -157,26 +149,16 @@ vnl_bignum::vnl_bignum (long double d) {
     this->sign = -1;
   }
 
-  const double LOG10_MAXDOUBLE = log10(vnl_math::maxdouble); // to be on the safe side
-  const double LOG10_RADIX_S = log10(double(0x10000));
-  static unsigned long buf_size_s = (int)(LOG10_MAXDOUBLE/LOG10_RADIX_S+0.1); // Size of buffer to convert d
-
-  Data *buf = new Data[buf_size_s];     // Buffer to convert d into
-  Counter i = 0;                        // buffer index
+  // Note: 0x10000L == 1 >> 16: the (assumed) size of unsigned short is 16 bits.
+  vcl_vector<Data> buf;
   while (d >= 1.0) {
-    assert(i < buf_size_s);             // no more buffer space
-    buf[i] = Data(fmod(d,0x10000L));    // Get next data "digit" from d
-    d /= 0x10000L;                      // Shift d right 1 data "digit"
-    ++i;                                // Increment buffer index
+    buf.push_back( Data(vcl_fmod(d,0x10000L)) );  // Get next data "digit" from d
+    d /= 0x10000L;                                // Shift d right 1 data "digit"
   }
-  this->data = (i>0 ? new Data[i] : 0); // Allocate permanent data
-  this->count = i;                      // Save count
-  i = 0;
-  while (i < this->count) {             // Copy temp buffer into
-    this->data[i] = buf[i];             //   permanent data
-    i++;
-  }
-  delete [] buf;                        // Deallocate buffer
+  // Allocate and copy into permanent buffer
+  this->data = (buf.size()>0 ? new Data[buf.size()] : 0);
+  this->count = buf.size();
+  vcl_copy( buf.begin(), buf.end(), data );
 }
 
 

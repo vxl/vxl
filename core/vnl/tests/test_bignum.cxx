@@ -37,6 +37,16 @@ static void run_constructor_tests() {
   {vnl_bignum b(-1234567e3); TEST("vnl_bignum b(-1234567e3);", (double)b, -1234567e3);}
   {vnl_bignum b(double(0xf00000)); TEST("vnl_bignum b(double(0xf00000));", b, 0xf00000);}
 
+  vcl_cout << "long double constructor:\n";
+  {vnl_bignum b(0.0L); TEST("vnl_bignum b(0.0L);", (long double)b, 0.0L);}
+  {vnl_bignum b(1.0L); TEST("vnl_bignum b(1.0L);", (long double)b, 1.0L);}
+  {vnl_bignum b(-1.0L); TEST("vnl_bignum b(-1.0L);", (long double)b, -1.0L);}
+  {vnl_bignum b(1234567.0L); TEST("vnl_bignum b(1234567.0L);", (long double)b, 1234567.0L);}
+  {vnl_bignum b(-1234567.0L); TEST("vnl_bignum b(-1234567.0L);", (long double)b, -1234567.0L);}
+  {vnl_bignum b(1234567e3L); TEST("vnl_bignum b(1234567e3L);", (long double)b, 1234567e3L);}
+  {vnl_bignum b(-1234567e3L); TEST("vnl_bignum b(-1234567e3L);", (long double)b, -1234567e3L);}
+  {vnl_bignum b((long double)(0xf00000)); TEST("vnl_bignum b(double(0xf00000));", b, 0xf00000);}
+
   vcl_cout << "char* constructor:\n";
   {vnl_bignum b("-1"); TEST("vnl_bignum b(\"-1\");", b, -1L);}
   {vnl_bignum b("+1"); TEST("vnl_bignum b(\"+1\");", b, 1L);}
