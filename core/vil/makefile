@@ -88,8 +88,8 @@ SOURCES += vil2_stream_fstream.cxx
 SOURCES += vil2_stream_core.cxx
 SOURCES += vil2_stream_section.cxx
 SOURCES += vil2_stream_url.cxx
-SOURCES += vil2_stream_16bit.cxx
-SOURCES += vil2_stream_32bit.cxx
+SOURCES += vil2_stream_read.cxx
+SOURCES += vil2_stream_write.cxx
 SOURCES += vil2_open.cxx
 
 # Conversion to/from vil1 images
