@@ -37,7 +37,7 @@
 
 #include <vcl_cstddef.h>   // For vcl_ptrdiff_t and vcl_size_t
 #include <vcl_iosfwd.h>
-//dont use this. it is wrong. #include <vcl_rel_ops.h>   // For operator!= from operator==
+//do not use this. it is wrong. #include <vcl_rel_ops.h>   // For operator!= from operator==
 
 #include "vcl_stlconf.h"
 #include "vcl_straits.h"

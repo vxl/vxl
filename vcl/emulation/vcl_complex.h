@@ -32,7 +32,7 @@ template <class FLOAT> class vcl_complex;
 template <class FLOAT>
 class vcl_complex
 {
-public:
+ public:
   vcl_complex (FLOAT r = 0, FLOAT i = 0): re (r), im (i) { }
 #if VCL_HAS_MEMBER_TEMPLATES
   template <class T>
@@ -48,7 +48,7 @@ public:
   vcl_complex& operator /= (const vcl_complex&);
   FLOAT real () const { return re; }
   FLOAT imag () const { return im; }
-private:
+ private:
   FLOAT re, im;
 };
 
@@ -205,7 +205,7 @@ operator == (FLOAT x, const vcl_complex<FLOAT>& y)
   return x == y.real() && y.imag() == 0;
 }
 
-#if 1 // this is the way to go. dont use rel_ops.
+#if 1 // this is the way to go. do not use rel_ops.
 template <class FLOAT> inline bool
 operator != (const vcl_complex<FLOAT>& x, const vcl_complex<FLOAT>& y)
 {
