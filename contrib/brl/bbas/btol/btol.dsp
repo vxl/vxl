@@ -102,6 +102,9 @@ LIB32=link.exe -lib
 SOURCE=.\btol_edge_algs.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\btol_face_algs.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\btol_vertex_algs.cxx
 # End Source File
 # End Group
@@ -112,6 +115,9 @@ SOURCE=.\btol_edge_algs.h
 # End Source File
 # Begin Source File
 SOURCE=.\btol_vertex_algs.h
+# End Source File
+# Begin Source File
+SOURCE=.\btol_face_algs.h
 # End Source File
 # End Group
 # End Target
