@@ -1,8 +1,9 @@
+//:
+// \file
 // \author Chuck Stewart
 // \author Bess Lee
-
 //
-//  Program demonstrating use the Robust Estimation library in line fitting.
+// \brief Program demonstrating use of the Robust Estimation library in line fitting
 //
 
 #include <vcl_iostream.h>
@@ -20,7 +21,6 @@
 int
 main( int argc, char** argv )
 {
-
   //
   // Read in the data.
   //
@@ -28,8 +28,8 @@ main( int argc, char** argv )
   // with 20% gross outliers.
   //
 
-  vector< vnl_vector<double> > from_pts;
-  vector< vnl_vector<double> > to_pts;
+  vcl_vector< vnl_vector<double> > from_pts;
+  vcl_vector< vnl_vector<double> > to_pts;
   vnl_vector<double> p(3);
   double x1, x2, y1, y2, w1, w2;
 
@@ -61,15 +61,14 @@ main( int argc, char** argv )
 
     rrel_ran_sam_search* ransam = new rrel_ran_sam_search;
     ransam->set_trace_level(trace_level);
-    ransam->set_sampling_params( max_outlier_frac, desired_prob_good,
-		  	         max_pops);
+    ransam->set_sampling_params( max_outlier_frac, desired_prob_good, max_pops);
 
     if ( !ransam->estimate( hg, lms ) )
       vcl_cout << "LMS failed!!\n";
     else {
       vcl_cout << "LMS succeeded.\n";
       vcl_cout << "estimate = " << ransam->params() << vcl_endl
- 	       << "scale = " << ransam->scale() << vcl_endl;
+               << "scale = " << ransam->scale() << vcl_endl;
     }
     vcl_cout << vcl_endl;
     delete lms;
@@ -85,15 +84,14 @@ main( int argc, char** argv )
 
     rrel_ran_sam_search* ransam = new rrel_ran_sam_search;
     ransam->set_trace_level(trace_level);
-    ransam->set_sampling_params( max_outlier_frac, desired_prob_good,
-			         max_pops);
+    ransam->set_sampling_params( max_outlier_frac, desired_prob_good, max_pops);
 
     if ( !ransam->estimate( hg, ransac ) )
       vcl_cout << "RANSAC failed!!\n";
     else {
       vcl_cout << "RANSAC succeeded.\n";
       vcl_cout << "estimate = " << ransam->params() << vcl_endl
-  	       << "scale = " << ransam->scale() << vcl_endl;
+               << "scale = " << ransam->scale() << vcl_endl;
     }
     vcl_cout << vcl_endl;
     delete ransac;
@@ -107,15 +105,14 @@ main( int argc, char** argv )
     rrel_trunc_quad_obj* msac = new rrel_trunc_quad_obj();
     rrel_ran_sam_search * ransam = new rrel_ran_sam_search;
     ransam->set_trace_level(trace_level);
-    ransam->set_sampling_params( max_outlier_frac, desired_prob_good,
-			         max_pops);
+    ransam->set_sampling_params( max_outlier_frac, desired_prob_good, max_pops);
 
     if ( !ransam->estimate( hg, msac ) )
       vcl_cout << "MSAC failed!!\n";
     else {
       vcl_cout << "MSAC succeeded.\n";
       vcl_cout << "estimate = " << ransam->params() << vcl_endl
-	       << "scale = " << ransam->scale() << vcl_endl;
+               << "scale = " << ransam->scale() << vcl_endl;
     }
     vcl_cout << vcl_endl;
     delete msac;
@@ -133,15 +130,14 @@ main( int argc, char** argv )
 
     rrel_ran_sam_search * ransam = new rrel_ran_sam_search;
     ransam->set_trace_level(trace_level);
-    ransam->set_sampling_params( max_outlier_frac, desired_prob_good,
-			         max_pops);
+    ransam->set_sampling_params( max_outlier_frac, desired_prob_good, max_pops);
 
     if ( !ransam->estimate( hg, mlesac ) )
       vcl_cout << "MLESAC failed!!\n";
     else {
       vcl_cout << "MLESAC succeeded.\n";
       vcl_cout << "estimate = " << ransam->params() << vcl_endl
-	       << "scale = " << ransam->scale() << vcl_endl;
+               << "scale = " << ransam->scale() << vcl_endl;
     }
     vcl_cout << vcl_endl;
     delete mlesac;
@@ -159,14 +155,14 @@ main( int argc, char** argv )
     ransam->set_trace_level(trace_level);
     ransam->set_sampling_params( 1 - muset->min_inlier_fraction(),
                                  desired_prob_good,
-			         max_pops);
+                                 max_pops);
 
     if ( !ransam->estimate( hg, muset ) )
       vcl_cout << "MUSE failed!!\n";
     else {
       vcl_cout << "MUSE succeeded.\n";
       vcl_cout << "estimate = " << ransam->params() << vcl_endl
-	       << "scale = " << ransam->scale() << vcl_endl;
+               << "scale = " << ransam->scale() << vcl_endl;
     }
     vcl_cout << vcl_endl;
     delete muset;

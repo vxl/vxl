@@ -8,7 +8,7 @@
 #include <vcl_algorithm.h>
 
 rrel_muset_obj::rrel_muset_obj( int max_n, 
-				bool use_sk_refine )
+                                bool use_sk_refine )
   : use_sk_refine_( use_sk_refine ),
     table_owned_(true)
 {
@@ -22,7 +22,7 @@ rrel_muset_obj::rrel_muset_obj( int max_n,
 
 
 rrel_muset_obj::rrel_muset_obj( rrel_muse_table* table,
-				bool use_sk_refine)
+                                bool use_sk_refine)
   : use_sk_refine_(use_sk_refine),
     table_owned_(false),
     table_(table)
@@ -64,7 +64,7 @@ rrel_muset_obj::fcn( vect_const_iter begin, vect_const_iter end,
 
 void
 rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
-			      double& best_objective, double& sigma_est ) const
+                              double& best_objective, double& sigma_est ) const
 {
   // Calculate the absolute residuals and sort them.
   vcl_vector<double> abs_residuals;

@@ -18,7 +18,7 @@ rrel_orthogonal_regression::rrel_orthogonal_regression( const vnl_matrix<double>
          << "solutions exists.\n";
   }
   set_num_samples_for_fit( param_dof() );
-}  
+}
 
 rrel_orthogonal_regression::rrel_orthogonal_regression( const vcl_vector<vnl_vector<double> >& pts )
   : vars_( pts.size(),pts[0].size() )
@@ -26,7 +26,7 @@ rrel_orthogonal_regression::rrel_orthogonal_regression( const vcl_vector<vnl_vec
   for (unsigned int i=0;i<vars_.rows();i++)
     for (unsigned int j=0;j<vars_.cols();j++)
       vars_ (i,j) = pts [i][j];
-  
+
   unsigned int num_pts = vars_.rows();
   set_param_dof( vars_.cols()-1 ); // up to a scale
   if ( param_dof() > num_pts ) {
@@ -72,8 +72,8 @@ rrel_orthogonal_regression::fit_from_minimal_set( const vcl_vector<int>& point_i
 
   vnl_svd<double> svd( A, 1.0e-8 );
   if ( (unsigned int)svd.rank() < param_dof() ) {
-  	vcl_cerr << "rrel_orthogonal_regression:: singular fit!\n";
-    return false;    // singular fit 
+    vcl_cerr << "rrel_orthogonal_regression:: singular fit!\n";
+    return false;    // singular fit
   }
   else {
     params = svd.nullvector();
@@ -81,7 +81,7 @@ rrel_orthogonal_regression::fit_from_minimal_set( const vcl_vector<int>& point_i
   }
 }
 
-void 
+void
 rrel_orthogonal_regression::compute_residuals( const vnl_vector<double>& params,
                                                vcl_vector<double>& residuals ) const
 {
@@ -115,7 +115,7 @@ rrel_orthogonal_regression::weighted_least_squares_fit( vnl_vector<double>& para
       for ( unsigned int j=0; j<vars_.cols(); ++j ) {
         A(i,j) = vars_(i,j) * (*weights)[i];
       }
-  
+
   else A = vars_;
 
   vnl_svd<double> svd( A, 1.0e-8 );
