@@ -18,9 +18,11 @@
 // This cross ratio is often denoted as ((p1, p2; p3, p4)) (which also
 // equals ((p3, p4; p1, p2)) or ((p2, p1; p4, p3)) or ((p4, p3; p2, p1)) )
 // and is calculated as
+// \verbatim
 //                      p1 - p3   p2 - p3      (p1-p3)(p2-p4)
 //                      ------- : --------  =  --------------
 //                      p1 - p4   p2 - p4      (p1-p4)(p2-p3)
+// \endverbatim
 //
 // In principle, any single nonhomogeneous coordinate from the four points
 // can be used as parameters for cross_ratio (but of course the same for all

@@ -358,9 +358,11 @@ vgl_homg_operators_2d<T>::lines_to_point(const vcl_list<vgl_homg_line_2d<T> >& l
 // This cross ratio is often denoted as ((p1, p2; p3, p4)) (which also
 // equals ((p3, p4; p1, p2)) or ((p2, p1; p4, p3)) or ((p4, p3; p2, p1)) )
 // and is calculated as
+// \verbatim
 //                      p1 - p3   p2 - p3      (p1-p3)(p2-p4)
 //                      ------- : --------  =  --------------
 //                      p1 - p4   p2 - p4      (p1-p4)(p2-p3)
+// \endverbatim
 //
 // In principle, any single nonhomogeneous coordinate from the four points
 // can be used as parameters for cross_ratio (but of course the same for all
@@ -385,7 +387,7 @@ double vgl_homg_operators_2d<T>::cross_ratio(const vgl_homg_point_2d<T>& a,
   return n/m;
 }
 
-//: Conjugate point of three given colinear points.
+//: Conjugate point of three given collinear points.
 // If cross ratio cr is given (default: -1), the generalized conjugate point
 // returned is such that ((x1,x2;x3,answer)) = cr.
 template <class T>
