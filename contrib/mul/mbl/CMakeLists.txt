@@ -46,6 +46,7 @@ SET(mbl_sources
   mbl_progress.cxx                      mbl_progress.h
   mbl_progress_text.h
   mbl_progress_null.h
+  mbl_progress_composite.cxx            mbl_progress_composite.h
 
   mbl_chord.h
   mbl_cloneable_ptr.h
