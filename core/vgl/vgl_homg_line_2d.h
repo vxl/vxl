@@ -4,6 +4,9 @@
 #pragma interface
 #endif
 
+// .NAME vgl_homg_line_2d
+// .INCLUDE vgl/vgl_homg_line_2d.h
+// .FILE vgl_homg_line_2d.txx
 // .SECTION Author
 //    Don Hamilton, Peter Tu
 // Created: Feb 15 2000

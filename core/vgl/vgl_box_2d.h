@@ -5,6 +5,9 @@
 #endif
 
 // .NAME vgl_box_2d - Represents a 2D box
+// .INCLUDE vgl/vgl_box_2d.h
+// .FILE vgl_box_2d.txx
+//
 // .SECTION Description
 //  A 2d box with sides aligned with the x and y axes.
 //  Also supports operations required of a bounding box for geometric region
@@ -23,7 +26,7 @@
 //        |       MinPosition
 //        O------X
 // \endverbatim
-
+//
 // .SECTION Author
 //    Don Hamilton, Peter Tu
 // Created: Feb 15 2000

@@ -2,7 +2,7 @@
   fsm@robots.ox.ac.uk
 */
 #ifdef __GNUC__
-#pragma implementation "vgl_polygon_test"
+#pragma implementation
 #endif
 #include "vgl_polygon_test.h"
 #include <vcl/vcl_cmath.h>

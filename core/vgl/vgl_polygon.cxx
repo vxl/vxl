@@ -1,5 +1,5 @@
 #ifdef __GNUC__
-#pragma implementation "vgl_polygon.h"
+#pragma implementation
 #endif
 
 #include "vgl_polygon.h"

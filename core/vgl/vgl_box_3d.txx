@@ -1,9 +1,5 @@
 // Author: Don Hamilton, Peter Tu
-// Copyright:
 // Created: Feb 15 2000
-// Modifications:
-//  Peter Vanroose, Feb 28 2000: lots of minor corrections
-//: Represents a cartesian 3D box.
 
 
 //--------------------------------------------------------------

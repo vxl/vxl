@@ -1,20 +1,14 @@
 #ifndef vgl_rtree_h_
 #define vgl_rtree_h_
 #ifdef __GNUC__
-#pragma interface "vgl_rtree"
+#pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
-#include <vcl/vcl_vector.h>
-//: forward declare all classes.
-template <class V, class B, class C> class vgl_rtree_probe;
-template <class V, class B, class C> class vgl_rtree_node;
-template <class V, class B, class C> class vgl_rtree_iterator_base;
-template <class V, class B, class C> class vgl_rtree_iterator;
-template <class V, class B, class C> class vgl_rtree_const_iterator;
-template <class V, class B, class C> class vgl_rtree;
-
+// .NAME vgl_rtree
+// .INCLUDE vgl/algo/vgl_rtree.h
+// .FILE vgl_rtree.txx
+// @author fsm@robots.ox.ac.uk
+//
+// .SECTION Description
 // Templated rtree class. The rtree is templated over the element
 // type V, the type B of the bounding region used (e.g.
 // axis-aligned bounding boxes are common but there are other 
@@ -68,6 +62,15 @@ template <class V, class B, class C> class vgl_rtree;
 // about where to put new elements.
 
 //--------------------------------------------------------------------------------
+
+#include <vcl/vcl_vector.h>
+// forward declare all classes.
+template <class V, class B, class C> class vgl_rtree_probe;
+template <class V, class B, class C> class vgl_rtree_node;
+template <class V, class B, class C> class vgl_rtree_iterator_base;
+template <class V, class B, class C> class vgl_rtree_iterator;
+template <class V, class B, class C> class vgl_rtree_const_iterator;
+template <class V, class B, class C> class vgl_rtree;
 
 //: this is a function predicate object for querying the tree.
 template <class V, class B, class C>

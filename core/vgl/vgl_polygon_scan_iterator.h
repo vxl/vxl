@@ -4,8 +4,11 @@
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_box_2d.h>
 
-//: Fill a polygonal face with interior scan lines
+// .NAME vgl_polygon_scan_iterator - Fill a polygonal face with interior scan lines
+// .INCLUDE vgl/vgl_polygon_scan_iterator.h
+// .FILE vgl_polygon_scan_iterator.cxx
 //
+// .SECTION Description
 //  This class provides an interator-style interface to polygon scan
 //  conversion.  There are convenient constructors from vgl_polygon, and_
 //  lists of floats.  An auxillary clipping window can be specified by the

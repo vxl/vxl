@@ -1,11 +1,12 @@
 #ifndef vgl_lineseg_test_h_
 #define vgl_lineseg_test_h_
 #ifdef __GNUC__
-#pragma interface "vgl_lineseg_test"
+#pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+// .NAME vgl_lineseg_test
+// .INCLUDE vgl/vgl_lineseg_test.h
+// .FILE vgl_lineseg_test.cxx
+// @author fsm@robots.ox.ac.uk
 
 //: return true if the two linesegments meet
 template <class T>

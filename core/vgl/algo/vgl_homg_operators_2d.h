@@ -5,6 +5,9 @@
 #endif
 
 
+// .NAME vgl_homg_operators_2d
+// .INCLUDE vgl/vgl_homg_operators_2d.h
+// .FILE vgl_homg_operators_2d.txx
 // .SECTION Author
 //   Don Hamilton, Peter Tu
 // Created: Feb 16 2000

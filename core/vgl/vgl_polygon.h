@@ -4,6 +4,9 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+// .NAME vgl_polygon
+// .INCLUDE vgl/vgl_polygon.h
+// .FILE vgl_polygon.cxx
 // .SECTION Author
 //    awf@robots.ox.ac.uk
 // Created: 02 Apr 00

@@ -4,6 +4,9 @@
 #pragma interface
 #endif
 
+// .NAME vgl_point_3d
+// .INCLUDE vgl/vgl_point_3d.h
+// .FILE vgl_point_3d.txx
 // .SECTION Author
 //    Don Hamilton, Peter Tu
 // Created: Feb 15 2000

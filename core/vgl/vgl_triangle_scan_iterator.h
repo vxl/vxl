@@ -1,11 +1,12 @@
 #ifndef vgl_triangle_scan_iterator_h_
 #define vgl_triangle_scan_iterator_h_
 #ifdef __GNUC__
-#pragma interface "vgl_triangle_scan_iterator"
+#pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+// .NAME vgl_triangle_scan_iterator
+// .INCLUDE vgl/vgl_triangle_scan_iterator.h
+// .FILE vgl_triangle_scan_iterator.cxx
+// @author fsm@robots.ox.ac.uk
 
 // Optimized polygon scan iterator for triangles.
 

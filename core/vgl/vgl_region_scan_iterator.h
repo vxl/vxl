@@ -1,11 +1,12 @@
 #ifndef vgl_region_scan_iterator_h_
 #define vgl_region_scan_iterator_h_
 #ifdef __GNUC__
-#pragma interface "vgl_region_scan_iterator"
+#pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+// .NAME vgl_region_scan_iterator
+// .INCLUDE vgl/vgl_region_scan_iterator.h
+// .FILE vgl_region_scan_iterator.cxx
+// @author fsm@robots.ox.ac.uk
 
 // Abstract base class for iterating over the pixels in
 // a region of image.

@@ -2,7 +2,7 @@
   fsm@robots.ox.ac.uk
 */
 #ifdef __GNUC__
-#pragma implementation "vgl_triangle_scan_iterator"
+#pragma implementation
 #endif
 #include "vgl_triangle_scan_iterator.h"
 

@@ -4,6 +4,9 @@
 #pragma interface
 #endif
 
+// .NAME vgl_homg_plane_3d
+// .INCLUDE vgl/vgl_homg_plane_3d.h
+// .FILE vgl_homg_plane_3d.txx
 // .SECTION Author
 //    Don Hamilton, Peter Tu
 // Created: Feb 15 2000
