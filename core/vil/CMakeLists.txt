@@ -79,6 +79,7 @@ SET( vil_sources ${vil_sources}
   vil_sample_profile_bilin.txx vil_sample_profile_bilin.h
   vil_sample_grid_bilin.txx    vil_sample_grid_bilin.h
   vil_resample_bilin.txx       vil_resample_bilin.h
+  vil_rotate.txx               vil_rotate.h
 
   # Bicubic Sampling Operations
   vil_bicub_interp.txx         vil_bicub_interp.h
@@ -164,4 +165,3 @@ ENDIF( BUILD_EXAMPLES )
 IF( BUILD_TESTING )
   SUBDIRS(tests)
 ENDIF( BUILD_TESTING )
-
