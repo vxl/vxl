@@ -32,7 +32,7 @@
 // <end copyright notice>
 
 #ifndef _gevd_memory_mixin_h
-#define _gevd_memory_mixin_h 1
+#define _gevd_memory_mixin_h
 
 //=========================== Basics ====================================
 //
@@ -164,4 +164,4 @@ class gevd_memory_mixin : public gevd_status_mixin
 
 //=======================================================================
 
-#endif
+#endif // _gevd_memory_mixin_h

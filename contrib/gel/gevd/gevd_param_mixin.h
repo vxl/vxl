@@ -30,12 +30,9 @@
 //
 // ---------------------------------------------------------------------------
 // <end copyright notice>
-/* sccs keyword ids:
-   @(#) gevd_param_mixin.h 3.1 9/4/92 @(#)
-*/
 
 #ifndef _gevd_param_mixin_h
-#define _gevd_param_mixin_h 1
+#define _gevd_param_mixin_h
 
 //=========================== Basics ====================================
 //
@@ -132,5 +129,4 @@ public:
                         BoolChoiceStyle style = TrueFalse) = 0;
 };
 
-#endif
-
+#endif // _gevd_param_mixin_h

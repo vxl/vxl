@@ -32,7 +32,7 @@
 // <end copyright notice>
 
 #ifndef _gevd_bufferxy_h
-#define _gevd_bufferxy_h 1
+#define _gevd_bufferxy_h
 
 //=========================== Basics ====================================
 //
