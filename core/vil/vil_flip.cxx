@@ -136,7 +136,6 @@ vil2_image_view_base_sptr vil2_flip_ud_image_resource::get_copy_view(unsigned i0
   default:
     return 0;
   }
-  return vs;
 }
 
 vil2_image_view_base_sptr vil2_flip_ud_image_resource::get_view(unsigned i0, unsigned ni,
@@ -164,7 +163,6 @@ vil2_image_view_base_sptr vil2_flip_ud_image_resource::get_view(unsigned i0, uns
   default:
     return 0;
   }
-  return vs;
 }
 
 //: Put the data in this view back into the image source.
