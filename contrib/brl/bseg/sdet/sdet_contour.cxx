@@ -2505,9 +2505,9 @@ sdet_contour::SetEdgelData(gevd_bufferxy& grad_mag, gevd_bufferxy& angle, vcl_ve
                   if (iy >= grad_mag.GetSizeY()) iy = grad_mag.GetSizeY()-1;
                 }
 
-              vdgl_edgel edgel= xypos->edgel(i);
-              edgel.set_grad( floatPixel( grad_mag, ix, iy));
-              edgel.set_theta( floatPixel( angle, ix, iy));
+            
+              (*xypos)[i].set_grad( floatPixel( grad_mag, ix, iy));
+              (*xypos)[i].set_theta( floatPixel( angle, ix, iy));
 #if 0
               gr[i] = floatPixel(grad_mag, ix, iy);
               th[i] = floatPixel(angle, ix, iy);
