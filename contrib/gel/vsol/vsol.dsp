@@ -183,6 +183,9 @@ SOURCE=.\Templates/vsl_vector_io+vsol_point_2d_sptr-.cxx
 SOURCE=.\Templates/vsl_vector_io+vsol_box_2d_sptr-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vsl_vector_io+vsol_box_3d_sptr-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vsl_vector_io+vsol_line_2d_sptr-.cxx
 # End Source File
 # Begin Source File
@@ -243,6 +246,15 @@ SOURCE=.\Templates/vbl_smart_ptr+vsol_digital_curve_2d-.cxx
 SOURCE=.\Templates/vsl_vector_io+vsol_digital_curve_2d_sptr-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vbl_io_smart_ptr+vsol_digital_curve_3d-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+vsol_digital_curve_3d-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_vector_io+vsol_digital_curve_3d_sptr-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_io_smart_ptr+vsol_point_3d-.cxx
 # End Source File
 # Begin Source File
@@ -268,6 +280,9 @@ SOURCE=.\vsol_conic_2d.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vsol_curve_2d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vsol_curve_3d.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vsol_group_2d.cxx
@@ -325,6 +340,9 @@ SOURCE=.\vsol_polyline_3d.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vsol_digital_curve_2d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vsol_digital_curve_3d.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -496,6 +514,12 @@ SOURCE=.\vsol_digital_curve_2d.h
 # End Source File
 # Begin Source File
 SOURCE=.\vsol_digital_curve_2d_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\vsol_digital_curve_3d.h
+# End Source File
+# Begin Source File
+SOURCE=.\vsol_digital_curve_3d_sptr.h
 # End Source File
 # End Group
 # End Target
