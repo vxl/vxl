@@ -28,8 +28,14 @@ void mbl_matrix_product_a_bt(vnl_matrix<double>& ABt,
 				   int n_cols);
 
 //: Compute product AtB = A.transpose() * B
+//  Result is of size A.cols() x B.cols()
 void mbl_matrix_product_at_b(vnl_matrix<double>& AtB, const vnl_matrix<double>& A,
                    const vnl_matrix<double>& B);
+
+//: Compute AtB = A.transpose() * B , using first ncols_a cols of A
+//  Result is of size ncols_a x B.cols()
+void mbl_matrix_product_at_b(vnl_matrix<double>& AtB, const vnl_matrix<double>& A,
+                   const vnl_matrix<double>& B, int ncols_a);
 
 //: ADB = A * D * B where D is diagonal with elements d
 // A, d, and B should be compatible sizes, ADB will

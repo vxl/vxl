@@ -116,8 +116,19 @@ void mbl_matrix_product_at_b(vnl_matrix<double>& AtB,
                    const vnl_matrix<double>& A,
                    const vnl_matrix<double>& B)
 {
+  mbl_matrix_product_at_b(AtB,A,B,A.columns());
+}
+
+//=======================================================================
+//: Compute product ABt = A * B.transpose(), using nc_a cols of A
+//=======================================================================
+void mbl_matrix_product_at_b(vnl_matrix<double>& AtB,
+                   const vnl_matrix<double>& A,
+                   const vnl_matrix<double>& B,
+				   int nc_a)
+{
   int nr1 = A.rows();
-  int nc1 = A.columns();
+  assert(A.columns()>=nc_a);
   int nr2 = B.rows();
   int nc2 = B.columns();
 
@@ -127,8 +138,8 @@ void mbl_matrix_product_at_b(vnl_matrix<double>& AtB,
     vcl_abort();
   }
 
-  if ( (AtB.rows()!=nc1) || (AtB.columns()!= nc2) )
-    AtB.resize( nc1, nc2 ) ;
+  if ( (AtB.rows()!=nc_a) || (AtB.columns()!= nc2) )
+    AtB.resize( nc_a, nc2 ) ;
 
   double const *const * A_data = A.data_array();
   double const *const * B_data = B.data_array();
@@ -141,7 +152,7 @@ void mbl_matrix_product_at_b(vnl_matrix<double>& AtB,
     const double* A_row = A_data[r1]-1;
     const double* B_row = B_data[r1]-1;
     double a;
-    int c1 =  nc1+1;
+    int c1 =  nc_a+1;
     while (--c1)
     {
       double *R_row = R_data[c1]-1;
@@ -154,7 +165,6 @@ void mbl_matrix_product_at_b(vnl_matrix<double>& AtB,
     }
   }
 }
-
 
 //: Returns ADB = A * D * B
 //  where D is diagonal with elements d
