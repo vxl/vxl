@@ -138,11 +138,11 @@ for (unsigned p=0;p<nplanes;++p)
 vil2_image_view<vxl_byte> ;
 src_image = vil2_load("image_file.jpg");
 vil2_image_view<vxl_byte> tmp_image1,tmp_image2;
-vil2_algo_exp_filter_1d(tmp_image1,src_image,k,double());  // Apply filter to rows of src_image
-vil2_algo_exp_filter_1d(tmp_image2,tmp_image1.tranpose(),k,double());  // Apply filter to cols of tmp_image1
+vil2_exp_filter_1d(tmp_image1,src_image,k,double());  // Apply filter to rows of src_image
+vil2_exp_filter_1d(tmp_image2,tmp_image1.tranpose(),k,double());  // Apply filter to cols of tmp_image1
 vil2_image_view<vxl_byte> filtered_image = vil2_transpose(tmp_image2);
 // Note that
-// vil2_algo_exp_filter_1d(vil2_transpose(filtered_image),vil2_transpose(tmp_image1),k,double())
+// vil2_exp_filter_1d(vil2_transpose(filtered_image),vil2_transpose(tmp_image1),k,double())
 // would only work correctly if filtered_image was already the correct size.
 // If it isn't, then the view created by vil2_transpose(filtered_image) would
 // be resized, and disconnected from filtered_image itself, which would remain
@@ -182,22 +182,34 @@ vil2_image_view<vxl_byte> filtered_image = vil2_transpose(tmp_image2);
 *   vil2_crop_image_resource adn vil2_decimate_image_resource. These are created using the 
 *   equivalent functions: vil2_crop(), vil2_decimate(), etc.
 * - Representing the outcome of an image processing algorithm (see next section)
-*   e.g. vil2_algo_convolve_1d_resource. These are creates using the equivalent functions
-*   vil2_algo_convolve_1d().
+*   e.g. vil2_convolve_1d_resource. These are creates using the equivalent functions
+*   vil2_convolve_1d().
 *
 * vil2_image_resource objects in most cases only deal with scalar-type pixels.
 * Of course once you get a view of real image data in memory, you can easily
 * convert a multi-planar view into a multi-component view.
 *
+* \section Legacy interfaces
+*
+* There are two reasons to still use vil1 (currently vxl/vil)
+* - vil1  has more image processing functions and image loaders than vil2 at
+* the moment.
+* - You may have lots of code that uses vil1, and haven't yet converted to vil2.
+*
+* There are several functions to convert between the various types of vil1 and vil2 images.
+* - vil2_vil1_to_image_resource(vil_image): creates a vil2_image_resource.
+* - vil2_vil1_to_image_view(vil_memory_image_of<T>): creates a vil2_image_view<T>.
+* - vil2_vil1_from_image_view(vil2_image_view<T>): creates a vil_memory_image_of<T>.
+*
 * \section algo Algorithms and Image Processing
 * Some simple algorithms for manipulating images are included in the algo sub-directory.
-* Note that the argument order is typically of the form vil2_algo_f(src_im,dest_im,params).
+* Note that the argument order is typically of the form vil2_f(src_im,dest_im,params).
 * Examples include
-* - vil2_algo_convolve_1d   - Convolve with 1D filter - all manner of edge effects catered for
-* - vil2_algo_convolve_2d   - Convolve with 2D filter (no edge effects catered for yet!)
-* - vil2_algo_exp_filter_1d - Apply exponential filter along one axis (fast recursive method)
-* - vil2_algo_sobel_3x3     - to generate X/Y gradient images using 3x3 Sobel operators
-* - vil2_algo_gauss_reduce  - smooth and sub-sample to produce half sized image
+* - vil2_convolve_1d   - Convolve with 1D filter - all manner of edge effects catered for
+* - vil2_convolve_2d   - Convolve with 2D filter (no edge effects catered for yet!)
+* - vil2_exp_filter_1d - Apply exponential filter along one axis (fast recursive method)
+* - vil2_sobel_3x3     - to generate X/Y gradient images using 3x3 Sobel operators
+* - vil2_gauss_reduce  - smooth and sub-sample to produce half sized image
 * See also the vipl library for a more generic image processing interface and
 * more image processing algorithms.
 *

@@ -70,7 +70,7 @@ class vil2_image_view : public vil2_image_view_base
   //  Typically used by functions which generate a manipulated view of
   //  another's image data.
   //  Need to pass the memory chunk to set up the internal smart ptr appropriately
-  vil2_image_view(const vil2_smart_ptr<vil2_memory_chunk>& mem_chunk,
+  vil2_image_view(const vil2_memory_chunk_sptr& mem_chunk,
                   const T* top_left, unsigned ni, unsigned nj, unsigned nplanes,
                   int i_step, int j_step, int plane_step);
 

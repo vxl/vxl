@@ -56,6 +56,9 @@ SET( vil2_sources ${vil2_sources}
   vil2_smart_ptr.txx vil2_smart_ptr.h
   vil2_property.h
   vil2_pixel_format.cxx vil2_pixel_format.h
+
+  # Conversion to from vil1 images
+  vil2_vil1.cxx vil2_vil1.h
 )
 
 

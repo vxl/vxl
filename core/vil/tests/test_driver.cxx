@@ -1,5 +1,6 @@
 #include <testlib/testlib_register.h>
 
+DECLARE( test_vil1 );
 DECLARE( test_convert );
 DECLARE( test_file_format_read );
 DECLARE( test_pixel_format );
@@ -19,6 +20,7 @@ DECLARE( test_memory_chunk );
 void
 register_tests()
 {
+  REGISTER( test_vil1 );
   REGISTER( test_convert );
   REGISTER( test_pixel_format );
   REGISTER( test_save_load_image );
