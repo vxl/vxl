@@ -27,5 +27,7 @@
 #include <vil3d/vil3d_trilin_interp.h>
 #include <vil3d/vil3d_transform.h>
 #include <vil3d/vil3d_property.h>
+#include <vimt3d/vimt3d_add_all_loaders.h>
+#include <vimt3d/vimt3d_vil3d_v3i.h>
 
 int main() { return 0; }
