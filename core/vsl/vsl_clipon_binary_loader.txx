@@ -138,10 +138,8 @@ void vsl_clipon_binary_loader<BaseClass,BaseClassIO>::print_object_summary( vcl_
   io.print_summary_by_base(os,*b);
 }
 
-#if VCL_CAN_DO_STATIC_TEMPLATE_MEMBER
 template <class B, class IO>
 vsl_clipon_binary_loader<B, IO>* vsl_clipon_binary_loader<B, IO>::instance_ = 0;
-#endif
 
 #define VSL_CLIPON_BINARY_LOADER_INSTANTIATE(B,IO) \
 template class vsl_clipon_binary_loader<B, IO >; \

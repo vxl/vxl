@@ -71,33 +71,14 @@ void vsl_binary_loader<BaseClass>::load_object( vsl_b_istream& is, BaseClass*& b
   }
 }
 
-template <class T>
-vsl_binary_loader<T>* vsl_binary_loader<T>::instance_ = 0;
+template <class BaseClass>
+vsl_binary_loader<BaseClass>* vsl_binary_loader<BaseClass>::instance_ = 0;
 
+#undef VSL_BINARY_LOADER_INSTANTIATE
 #define VSL_BINARY_LOADER_INSTANTIATE(T) \
 template class vsl_binary_loader<T >; \
 template void vsl_b_read( vsl_b_istream& bfs, T*& b); \
 VCL_VECTOR_INSTANTIATE(T*)
 
-
-#if 0 // is this really needed? why?
-#ifdef __GNUC__
-#define VNL_BINARY_LOADER_INSTANTIATE(T) \
-vsl_binary_loader<T >* vsl_binary_loader<T >::instance_ = 0; \
-template class vsl_binary_loader<T >; \
-template void vsl_b_read( vsl_b_istream& bfs, T*& b); \
-/* Create space for singleton pointer */ \
-VCL_VECTOR_INSTANTIATE(T*)
-#else
-#define VNL_BINARY_LOADER_INSTANTIATE(T) \
-template class vsl_binary_loader<T >; \
-template void vsl_b_read( vsl_b_istream& bfs, T*& b); \
-/* Create space for singleton pointer */ \
-VCL_VECTOR_INSTANTIATE(T*)
-
-template <class T> vsl_binary_loader<T >* vsl_binary_loader<T >::instance_ = 0;
-
-#endif // __GNUC__
-#endif // 0
 
 #endif // vsl_binary_loader_txx_
