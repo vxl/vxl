@@ -1,5 +1,6 @@
 USES = vxl gel
-IULIBS += -lvtol -lvsol -lvgl -lvbl -lvnl -lvul
+include $(IUEROOT)/vxl/vnl/algo/config.mk
+IULIBS += -lvtol -lvsol -lvgl-algo -lvgl -lvnl-algo -lvnl -lvbl -lvnl -lvul
 
 MINI_PROG_SOURCES += example2d.cxx
 #MINI_PROG_SOURCES += example3d.cxx
