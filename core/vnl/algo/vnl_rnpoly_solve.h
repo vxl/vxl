@@ -42,11 +42,11 @@ class vnl_rnpoly_solve
 
  public:
 #ifndef VCL_WIN32
-  static const unsigned int M_ = 11;   // Maximum dimension of problem
-  static const unsigned int T_ = 2500; // Max. number of terms in a polynomial
+  static const unsigned int M_ = 11;  // Maximum dimension of problem
+  static const unsigned int T_ = 250; // Max. number of terms in a polynomial
 #else
-  enum { M_ = 11 };   // Maximum dimension of problem
-  enum { T_ = 2500 }; // Maximum number of terms in a polynomial
+  enum { M_ = 11 };  // Maximum dimension of problem
+  enum { T_ = 250 }; // Maximum number of terms in a polynomial
 #endif
 
   // Constructor---------------------------------------------------------------
