@@ -14,6 +14,7 @@ DECLARE( test_algo_gauss_reduce );
 DECLARE( test_algo_convolve_1d );
 DECLARE( test_algo_convolve_2d );
 DECLARE( test_algo_exp_filter_1d );
+DECLARE( test_algo_exp_grad_filter_1d );
 DECLARE( test_image_view_maths );
 DECLARE( test_memory_chunk );
 DECLARE( test_resample_bilin );
@@ -40,6 +41,7 @@ register_tests()
   REGISTER( test_algo_convolve_1d );
   REGISTER( test_algo_convolve_2d );
   REGISTER( test_algo_exp_filter_1d );
+  REGISTER( test_algo_exp_grad_filter_1d );
   REGISTER( test_image_view_maths );
   REGISTER( test_memory_chunk );
   REGISTER( test_resample_bilin );

@@ -18,6 +18,7 @@ ADD_EXECUTABLE( vil2_test_driver
   test_algo_convolve_1d.cxx
   test_algo_convolve_2d.cxx
   test_algo_exp_filter_1d.cxx
+  test_algo_exp_grad_filter_1d.cxx
   test_image_view_maths.cxx
   test_memory_chunk.cxx
   test_binary_dilate.cxx
@@ -30,24 +31,26 @@ TARGET_LINK_LIBRARIES( vil2_test_driver vil2_algo vil2 vpl vul testlib vcl )
 
 
 ADD_TEST( vil2_test_vil1              vil2_test_driver test_vil1 ${allvxl_SOURCE_DIR}/vxl/vil/tests/file_read_data)
-ADD_TEST( vil2_test_convert                vil2_test_driver test_convert )
-ADD_TEST( vil2_test_pixel_format           vil2_test_driver test_pixel_format )
+ADD_TEST( vil2_test_convert                 vil2_test_driver test_convert )
+ADD_TEST( vil2_test_pixel_format            vil2_test_driver test_pixel_format )
 ADD_TEST( vil2_test_file_format_read  vil2_test_driver test_file_format_read ${allvxl_SOURCE_DIR}/vxl/vil/tests/file_read_data )
 ADD_TEST( vil2_test_save_load_image   vil2_test_driver test_save_load_image )
-ADD_TEST( vil2_test_image_view             vil2_test_driver test_image_view )
-ADD_TEST( vil2_test_image_resource         vil2_test_driver test_image_resource )
-ADD_TEST( vil2_test_bilin_interp           vil2_test_driver test_bilin_interp )
-ADD_TEST( vil2_test_sample_profile_bilin   vil2_test_driver test_sample_profile_bilin )
-ADD_TEST( vil2_test_sample_grid_bilin      vil2_test_driver test_sample_grid_bilin )
-ADD_TEST( vil2_test_algo_gauss_reduce      vil2_test_driver test_algo_gauss_reduce )
-ADD_TEST( vil2_test_algo_convolve_1d       vil2_test_driver test_algo_convolve_1d )
-ADD_TEST( vil2_test_algo_convolve_2d       vil2_test_driver test_algo_convolve_2d )
-ADD_TEST( vil2_test_algo_exp_filter_1d     vil2_test_driver test_algo_exp_filter_1d )
-ADD_TEST( vil2_test_image_view_maths       vil2_test_driver test_image_view_maths )
-ADD_TEST( vil2_memory_chunk                vil2_test_driver test_memory_chunk )
-ADD_TEST( vil2_resample_bilin              vil2_test_driver test_resample_bilin )
-ADD_TEST( vil2_test_binary_dilate          vil2_test_driver test_binary_dilate )
-ADD_TEST( vil2_test_binary_erode           vil2_test_driver test_binary_erode )
-ADD_TEST( vil2_test_greyscale_dilate       vil2_test_driver test_greyscale_dilate )
-ADD_TEST( vil2_test_greyscale_erode        vil2_test_driver test_greyscale_erode )
-ADD_TEST( vil2_test_median                 vil2_test_driver test_median )
+ADD_TEST( vil2_test_image_view              vil2_test_driver test_image_view )
+ADD_TEST( vil2_test_image_resource          vil2_test_driver test_image_resource )
+ADD_TEST( vil2_test_bilin_interp            vil2_test_driver test_bilin_interp )
+ADD_TEST( vil2_test_sample_profile_bilin    vil2_test_driver test_sample_profile_bilin )
+ADD_TEST( vil2_test_sample_grid_bilin       vil2_test_driver test_sample_grid_bilin )
+ADD_TEST( vil2_test_algo_gauss_reduce       vil2_test_driver test_algo_gauss_reduce )
+ADD_TEST( vil2_test_algo_convolve_1d        vil2_test_driver test_algo_convolve_1d )
+ADD_TEST( vil2_test_algo_convolve_2d        vil2_test_driver test_algo_convolve_2d )
+ADD_TEST( vil2_test_algo_exp_filter_1d      vil2_test_driver test_algo_exp_filter_1d )
+ADD_TEST( vil2_test_algo_exp_grad_filter_1d vil2_test_driver vil2_test_algo_exp_grad_filter_1d )
+ADD_TEST( vil2_test_image_view_maths        vil2_test_driver test_image_view_maths )
+ADD_TEST( vil2_memory_chunk                 vil2_test_driver test_memory_chunk )
+ADD_TEST( vil2_resample_bilin               vil2_test_driver test_resample_bilin )
+ADD_TEST( test_binary_dilate                vil2_test_driver test_binary_dilate )
+ADD_TEST( test_binary_erode                 vil2_test_driver test_binary_erode )
+ADD_TEST( test_greyscale_dilate             vil2_test_driver test_greyscale_dilate )
+ADD_TEST( test_greyscale_erode              vil2_test_driver test_greyscale_erode )
+ADD_TEST( test_median                       vil2_test_driver test_median )
+
