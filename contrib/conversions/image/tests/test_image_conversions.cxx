@@ -1,3 +1,12 @@
+#ifdef HAS_NO_IMAGE
+
+#include <vcl_iostream.h>
+void test_image_conversions()
+{
+  vcl_cerr << "test not run since you do not have the TargetJr Image package\n";
+}
+
+#else
 #include <image/Image_to_vil.h>
 #include <image/vil_to_Image.h>
 
@@ -51,5 +60,7 @@ void test_image_conversions()
 
   delete[] buf1; delete[] buf2;
 }
+
+#endif // HAS_NO_IMAGE
 
 TESTMAIN(test_image_conversions);
