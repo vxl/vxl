@@ -76,9 +76,9 @@ vcl_string vul_file::dirname(char const* fn)
   vcl_string self(fn);
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
-  unsigned int slash_index = self.find_last_of("\\/");
+  vcl_string::size_type slash_index = self.find_last_of("\\/");
 #else
-  unsigned int slash_index = self.rfind('/');
+  vcl_string::size_type slash_index = self.rfind('/');
 #endif
   if (slash_index == vcl_string::npos)
     return ".";
@@ -91,7 +91,7 @@ vcl_string vul_file::extension(char const* fn)
 {
   vcl_string self(fn);
 
-  unsigned int dot_index = self.rfind('.');
+  vcl_string::size_type dot_index = self.rfind('.');
   if (dot_index != vcl_string::npos)
     return self.substr(dot_index, vcl_string::npos);
   else
@@ -103,9 +103,9 @@ vcl_string vul_file::strip_directory(char const* fn)
    vcl_string self(fn);
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
-  unsigned int slash_index = self.find_last_of("\\/");
+   vcl_string::size_type slash_index = self.find_last_of("\\/");
 #else
-  unsigned int slash_index = self.rfind('/');
+   vcl_string::size_type slash_index = self.rfind('/');
 #endif
    if (slash_index != vcl_string::npos)
      self.erase(0, slash_index+1);
@@ -117,7 +117,7 @@ vcl_string vul_file::strip_extension(char const* fn)
 {
   vcl_string self(fn);
 
-  unsigned int dot_index = self.rfind('.');
+  vcl_string::size_type dot_index = self.rfind('.');
   if (dot_index != vcl_string::npos)
     self.erase(dot_index, vcl_string::npos);
 
@@ -130,9 +130,9 @@ vcl_string vul_file::basename(char const* fn, char const * suffix)
   vcl_string self(fn);
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
-  unsigned int slash_index = self.find_last_of("\\/");
+  vcl_string::size_type slash_index = self.find_last_of("\\/");
 #else
-  unsigned int slash_index = self.rfind('/');
+  vcl_string::size_type slash_index = self.rfind('/');
 #endif
 
   if (slash_index != vcl_string::npos)
@@ -201,7 +201,7 @@ vcl_string vul_file::expand_tilde(char const* vul_filename)
   // 1. Strip to directory only, and remove the tilde itself
   vcl_string fn(vul_filename);
   vcl_string dir;
-  unsigned int first_slash =  fn.find('/');
+  vcl_string::size_type first_slash =  fn.find('/');
   if (first_slash != vcl_string::npos) {
     dir = fn.substr(1, first_slash-1);
     fn = fn.substr(first_slash, vcl_string::npos);

@@ -7,8 +7,8 @@
 // \author Ian Scott
 // Based on vil_stream_url by fsm
 // \verbatim
-// Modifications
-// 8 Nov 2002 - Peter Vanroose - corrected HTTP client request syntax
+//  Modifications
+//   8 Nov 2002 - Peter Vanroose - corrected HTTP client request syntax
 // \endverbatim
 
 #include "vul_url.h"
@@ -36,8 +36,7 @@
 
 # include <winsock2.h>
 
-#endif
-
+#endif // unix
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
 // So that we don't call WSAStartup more than we need to
@@ -180,8 +179,8 @@ vcl_istream * vul_http_open(char const *url)
 
   if (auth != "")
     vcl_sprintf(buffer+vcl_strlen(buffer),
-     "Authorization: Basic %s\r\n",
-     vul_url::encode_base64(auth).c_str());
+                "Authorization: Basic %s\r\n",
+                vul_url::encode_base64(auth).c_str());
 
   vcl_sprintf(buffer+vcl_strlen(buffer), "\r\n");
 
@@ -232,12 +231,12 @@ vcl_istream * vul_http_open(char const *url)
   vcl_cerr << "HTTP server returned:\n" << contents << '\n';
 #endif
 
-  if ( (contents.find("HTTP/1.1 200")) == contents.npos)
+  if (contents.find("HTTP/1.1 200") == contents.npos)
   {
     return 0;
   }
-  unsigned n;
-  if ( (n = contents.find("\r\n\r\n")) == contents.npos)
+  vcl_string::size_type n = contents.find("\r\n\r\n");
+  if (n == contents.npos)
   {
     return 0;
   }
