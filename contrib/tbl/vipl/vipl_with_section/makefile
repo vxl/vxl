@@ -10,6 +10,9 @@ USES += vxl tbl
 LIBRARY := vipl_with_section
 VERSION := 1.0
 
+# Do not instantiate templates in the library but implicitly, on use:
+USE_IMPLICIT_TEMPLATES := 1
+
 MANPAGE_SOURCES += accessors/vipl_accessors_section.txx
 
 #######################################

@@ -13,6 +13,9 @@
 USES = vxl tbl
 include ${IUEROOT}/vxl/vil/config.mk
 
+# Do not instantiate templates in the library but implicitly, on use:
+USE_IMPLICIT_TEMPLATES := 1
+
 MINI_PROG_SOURCES += example_convert.cxx
 MINI_PROG_SOURCES += example_add_random_noise.cxx
 MINI_PROG_SOURCES += example_std_dev.cxx

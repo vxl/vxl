@@ -20,6 +20,9 @@ USES += vxl tbl
 LIBRARY := vipl
 VERSION := 1.0
 
+# Do not instantiate templates in the library but implicitly, on use:
+USE_IMPLICIT_TEMPLATES := 1
+
 SOURCES += filter/vipl_filter_abs.cxx
 
 # A. Point operators:
