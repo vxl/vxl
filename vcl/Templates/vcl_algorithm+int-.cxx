@@ -1,7 +1,7 @@
 #include <vcl_iterator.h>
 #include <vcl_iostream.h>
-#include <vcl_vector.h>
 #include <vcl_algorithm.txx>
+#include <vcl_vector.h>
 
 #ifdef GNU_LIBSTDCXX_V3
 VCL_FIND_INSTANTIATE(vcl_vector<int>::iterator, int);
