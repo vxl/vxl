@@ -1,3 +1,4 @@
+// This is vxl/vil/examples/vil_scale.cxx
 // Example: scaling.
 
 #include <vcl_iostream.h>
@@ -58,7 +59,7 @@ struct pnmscale {
     if ( xscale <= 0.0 )
       pm_error( "x scale must be greater than 0" );
     specxscale = 1;
-    this->xscale = xscale;
+    this->xscale = float(xscale);
   }
 
   void set_yscale(double yscale) {
@@ -69,7 +70,7 @@ struct pnmscale {
     if ( yscale <= 0.0 )
       pm_error( "y scale must be greater than 0" );
     specyscale = 1;
-    this->yscale = yscale;
+    this->yscale = float(yscale);
   }
 
   void set_width(int newcols) {
@@ -123,9 +124,9 @@ struct pnmscale {
   }
 
   void set_scale(double scale) {
-    yscale = xscale = scale;
+    yscale = xscale = float(scale);
     specxscale = specyscale = 1;
-    if ( xscale <= 0.0 )
+    if ( scale <= 0.0 )
       pm_error( "scale must be greater than 0" );
   }
 
