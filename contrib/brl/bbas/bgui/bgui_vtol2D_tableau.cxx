@@ -38,7 +38,7 @@ static void print_edgels(vtol_edge_2d_sptr const & e)
   if (!ec)
     return;
   int N = ec->size();
-  for(int i = 0; i<N; i++)
+  for (int i = 0; i<N; i++)
     vcl_cout << "egl(" << i << ")" << (*ec)[i] << "\n";
 }
 
@@ -53,9 +53,9 @@ void bgui_vtol2D_tableau::init()
   //such as set_foreground.  Probably though we shouldn't use those
   //since normal users wouldn't want to change the color of standard
   //topology items.
-  bgui_style_sptr vsol_point_style = 
+  bgui_style_sptr vsol_point_style =
     new bgui_style(0.0f, 1.0f, 0.0f, 5.0f, 0.0f);
-  bgui_style_sptr digital_curve_style = 
+  bgui_style_sptr digital_curve_style =
     new bgui_style(0.8f, 0.0f, 0.8f, 3.0f, 0.0f);
   bgui_style_sptr vertex_style = new bgui_style(1.0f, 0.0f, 0.0f, 3.0f, 0.0f);
   bgui_style_sptr edge_style = new bgui_style(0.8f, 0.25f, 0.8f, 0.0f, 3.0f);
@@ -119,7 +119,7 @@ bool bgui_vtol2D_tableau::handle(vgui_event const &e)
   return vgui_easy2D_tableau::handle(e);
 }
 
-bgui_vtol_soview2D_point* 
+bgui_vtol_soview2D_point*
 bgui_vtol2D_tableau::add_vsol_point_2d(vsol_point_2d_sptr const& p)
 {
   bgui_vtol_soview2D_point* obj =
@@ -133,7 +133,7 @@ bgui_vtol2D_tableau::add_vsol_point_2d(vsol_point_2d_sptr const& p)
 }
 
 
-bgui_vtol_soview2D_digital_curve* 
+bgui_vtol_soview2D_digital_curve*
 bgui_vtol2D_tableau::add_digital_curve(vdgl_digital_curve_sptr const& dc)
 {
   this->set_line_width(3.0);
@@ -144,7 +144,7 @@ bgui_vtol2D_tableau::add_digital_curve(vdgl_digital_curve_sptr const& dc)
   return obj;
 }
 
-bgui_vtol_soview2D_vertex* 
+bgui_vtol_soview2D_vertex*
 bgui_vtol2D_tableau::add_vertex(vtol_vertex_2d_sptr const& v)
 {
   bgui_vtol_soview2D_vertex* obj = new bgui_vtol_soview2D_vertex();
@@ -157,13 +157,13 @@ bgui_vtol2D_tableau::add_vertex(vtol_vertex_2d_sptr const& v)
     {
       sty->clone_style(obj->get_style());
       int id = obj->get_id();
-      if(highlight_)
+      if (highlight_)
       obj_map_[id]=v->cast_to_topology_object();
     }
   return obj;
 }
 
-bgui_vtol_soview2D_edge* 
+bgui_vtol_soview2D_edge*
 bgui_vtol2D_tableau::add_edge(vtol_edge_2d_sptr const& e)
 {
   //  print_edgels(e);
@@ -175,7 +175,7 @@ bgui_vtol2D_tableau::add_edge(vtol_edge_2d_sptr const& e)
     {
       sty->clone_style(obj->get_style());
       int id = obj->get_id();
-      if(highlight_)
+      if (highlight_)
         obj_map_[id]=e->cast_to_topology_object();
     }
   return obj;
@@ -193,7 +193,7 @@ bgui_vtol2D_tableau::add_edge_group(vcl_vector<vtol_edge_2d_sptr>& edges)
   return obj;
 }
 
-bgui_vtol_soview2D_face* 
+bgui_vtol_soview2D_face*
 bgui_vtol2D_tableau::add_face(vtol_face_2d_sptr const& f)
 {
   bgui_vtol_soview2D_face* obj = new bgui_vtol_soview2D_face(f);
@@ -205,7 +205,7 @@ bgui_vtol2D_tableau::add_face(vtol_face_2d_sptr const& f)
     {
       sty->clone_style(obj->get_style());
       int id = obj->get_id();
-      if(highlight_)
+      if (highlight_)
         obj_map_[id]=f->cast_to_topology_object();
     }
   return obj;
@@ -219,15 +219,15 @@ add_spatial_objects(vcl_vector<vsol_spatial_object_2d_sptr> const& sos)
   for (vcl_vector<vsol_spatial_object_2d_sptr>::const_iterator sit = sos.begin();
        sit != sos.end(); sit++)
     {
-      if((*sit)->cast_to_point())
+      if ((*sit)->cast_to_point())
         {
           vsol_point_2d_sptr p = (*sit)->cast_to_point();
           this->add_vsol_point_2d(p);
         }
-      if((*sit)->cast_to_curve())
-        if((*sit)->cast_to_curve()->cast_to_digital_curve())
+      if ((*sit)->cast_to_curve())
+        if ((*sit)->cast_to_curve()->cast_to_digital_curve())
           {
-            vdgl_digital_curve_sptr dc = 
+            vdgl_digital_curve_sptr dc =
               (*sit)->cast_to_curve()->cast_to_digital_curve();
             this->add_digital_curve(dc);
           }
