@@ -1,0 +1,11 @@
+The initial import of the Otago University library. Contains:
+ouel: Otago Uni Estimation Library (currently only Kalman Filter)
+oufgl: Otago Uni Frame Grabber Library (pxc200 for linux)
+ouml: Otago Uni Misc Library (eigenfaces, image_database, polygon_mesh)
+
+Hasn't been fully tested using the latest release of vxl but should work
+with only minor mods as it works OK with vxl-1.0-beta.
+CVS: ----------------------------------------------------------------------
+CVS: Enter Log.  Lines beginning with `CVS:' are removed automatically
+CVS: 
+CVS: ----------------------------------------------------------------------

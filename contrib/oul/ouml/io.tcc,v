@@ -1,0 +1,145 @@
+head	1.4;
+access;
+symbols
+	last_grey:1.4
+	locate_and_track:1.4
+	rigid_optimised:1.3
+	no_structure_preservation:1.3
+	somewhat_optimised:1.3
+	partially_optimised:1.3
+	limited_endsegment_rotation2:1.3
+	limited_endsegment_rotation:1.3
+	slow_segment:1.2;
+locks
+	mccane:1.4; strict;
+comment	@# @;
+
+
+1.4
+date	2000.12.13.20.00.38;	author mccane;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2000.12.06.00.35.38;	author mccane;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2000.12.05.01.58.12;	author mccane;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2000.11.29.21.20.19;	author mccane;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.4
+log
+@Modified to work with colour images. Seems to work OK, but it's hard to
+tell if it's any better than with just greyscale. Also goes a bit slower -
+about 19ms/frame compared to 13ms/frame for greyscale.
+@
+text
+@// miscellaneous io operators
+
+#include "io.h"
+
+template <class T>
+ostream &operator <<(ostream &os, const vcl_vector<T> &vec)
+{
+	vcl_vector<T>::const_iterator iter, end_iter;
+
+	end_iter = vec.end();
+	cout << "<Vector: ";
+	for (iter=vec.begin(); iter!=end_iter; iter++)
+	{
+		cout << " " << *iter;
+	}
+	cout << "> ";
+
+	return(os);
+}
+
+template <class T, class S>
+ostream &operator<<(ostream &os, const vcl_map<T, S> &omap)
+{
+	vcl_map<T, S>::const_iterator iter, end_iter;
+
+	end_iter = omap.end();
+	os << "<Map: ";
+	for (iter=omap.begin(); iter!=end_iter; iter++)
+	{
+		os << " <" << (*iter).first << ", " << (*iter).second << ">";
+	}
+	os << "> ";
+
+	return(os);
+}
+	
+template <class T>
+ostream &operator <<(ostream &os, const vcl_set<T> &vec)
+{
+	vcl_set<T>::const_iterator iter, end_iter;
+
+	end_iter = vec.end();
+	os << "<Set: ";
+	for (iter=vec.begin(); iter!=end_iter; iter++)
+	{
+		os << " " << *iter;
+	}
+	os << "> ";
+
+	return(os);
+}
+
+
+ostream &operator<<(ostream &os, const vil_rgb<unsigned char> &colour)
+{
+	os << "<RGB = " << (int)colour.R_ << ", " << (int)colour.G_ << ", " 
+	   << (int)colour.B_ << ">\n";
+	return os;
+}
+@
+
+
+1.3
+log
+@Added an ostream for a set.
+@
+text
+@d43 1
+a43 1
+	cout << "<Set: ";
+d46 1
+a46 1
+		cout << " " << *iter;
+d48 1
+a48 1
+	cout << "> ";
+d51 8
+@
+
+
+1.2
+log
+@Don't know
+@
+text
+@d37 15
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d20 17
+@
