@@ -105,7 +105,13 @@ SOURCE=.\Templates/vil2_algo_sobel_3x3+float.float-.cxx
 SOURCE=.\Templates/vil2_algo_sobel_3x3+uchar.float-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vil2_algo_gauss_reduce+uchar-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vil2_algo_sobel_3x3.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_algo_gauss_reduce.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -115,6 +121,15 @@ SOURCE=.\vil2_algo_sobel_3x3.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil2_algo_sobel_3x3.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_algo_gauss_reduce.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_algo_gauss_reduce.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_algo_convolve_1d.h
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
