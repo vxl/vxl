@@ -63,20 +63,20 @@ void golden_test_vil_io(bool save_file)
   //----------------------------------------------------------------------
 
   // vil_memory_image_of
-  int height = 11;
-  int width = 9; // on purpose not equal to height
+  int height = 9;
+  int width = 11; // on purpose not equal to height
   int planes = 1;
-  vil_memory_image_of<int> p_out_memory_image_of(height,width),
+  vil_memory_image_of<int> p_out_memory_image_of(width,height),
                            p_in_memory_image_of(1,1);
 
   int val = 0;
-  for (int i=0;i<height;i++)
-    for (int j=0;j<width;j++)
+  for (int i=0;i<width;i++)
+    for (int j=0;j<height;j++)
       p_out_memory_image_of(i,j) = val++;
 
     // vil_memory_image_impl
     vil_memory_image_of_format<int> memory_image_of_format;
-    vil_memory_image_impl p_out_memory_image_impl(planes,height,width,
+    vil_memory_image_impl p_out_memory_image_impl(planes,width,height,
                                                   memory_image_of_format.components,
                                                   memory_image_of_format.bits_per_component,
                                                   memory_image_of_format.component_format);
