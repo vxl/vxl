@@ -1,166 +1,166 @@
 
-char vtol_dtd[] = "
-
-<!DOCTYPE vxl [
-
-<!-- vxl 
-  -->
-
-<!ELEMENT vxl ANY>
-
-<!-- ** Generic structures ** -->
-
-<!ELEMENT vxl_flip EMPTY>
-
-<!-- ** Geometry structures ** -->
-
-<!-- vxl_point_[23]d
-        <vxl_point_2d x=\"1\" y=\"3\" w=\"4\"/>
-
-	x,y,z and w values (w defaults to 1)
-        pointer (_ref) exists
-  -->
-
-<!ELEMENT vxl_point_2d EMPTY>
-  <!ATTLIST vxl_point_2d id ID   #IMPLIED
-                         x CDATA #REQUIRED
-                         y CDATA #REQUIRED
-                         w CDATA \"1\" >
-<!ELEMENT vxl_point_3d EMPTY>
-  <!ATTLIST vxl_point_3d id ID   #IMPLIED
-                         x CDATA #REQUIRED
-                         y CDATA #REQUIRED
-                         z CDATA #REQUIRED
-                         w CDATA \"1\" >
-
-<!ELEMENT vxl_point_2d_ref EMPTY>
-  <!ATTLIST vxl_point_2d_ref id IDREF #REQUIRED>
-<!ELEMENT vxl_point_3d_ref EMPTY>
-  <!ATTLIST vxl_point_3d_ref id IDREF #REQUIRED>
-
-<!-- ** Topology structures ** -->
-
-<!-- vxl_vertex_[23]d
-        <vxl_vertex_2d id=\"3\"><vxl_point_2d x=\"1\" y=\"3\"/></vxl_vertex>
-
-     vxl_vertex_[23]d_ref
-        <vxl_vertex_2d_ref id=\"3\">
-
-	Vertex contains a vxl_point or a pointer to a vxl_point.
-  -->
-
-<!ELEMENT vxl_vertex_2d ( vxl_point_2d | vxl_point_2d_ref )>
-  <!ATTLIST vxl_vertex_2d id ID #IMPLIED>
-<!ELEMENT vxl_vertex_3d ( vxl_point_3d | vxl_point_2d_ref )>
-  <!ATTLIST vxl_vertex_3d id ID #IMPLIED>
-
-<!ELEMENT vxl_vertex_2d_ref EMPTY>
-  <!ATTLIST vxl_vertex_2d_ref id IDREF #REQUIRED>
-<!ELEMENT vxl_vertex_3d_ref EMPTY>
-  <!ATTLIST vxl_vertex_3d_ref id IDREF #REQUIRED>
-
-<!-- vxl_zero_chain_2d
-         <vxl_zero_chain_2d id=\"3\">
-              <vxl_vertex_2d ...>
-              <vxl_vertex_2d ...>
-         </vxl_zero_chain_2d>
-  -->
-
-<!ELEMENT vxl_zero_chain_2d ( ( ( vxl_vertex_2d, vxl_flip? ) | 
-                               ( vxl_vertex_2d_ref, vxl_flip? ) )+ )> 
-  <!ATTLIST vxl_zero_chain_2d id ID #IMPLIED>
-
-<!ELEMENT vxl_zero_chain_2d_ref EMPTY>
-  <!ATTLIST vxl_zero_chain_2d_ref id IDREF #REQUIRED>
-
-<!-- vxl_edge_2d
-         <vxl_edge_2d id=\"3\">
-              <vxl_vertex_2d ...>
-              <vxl_vertex_2d ...>
-         </vxl_edge_2d>
-  -->
-
-<!ELEMENT vxl_edge_2d ( vxl_zero_chain_2d | vxl_zero_chain_2d_ref)>
-  <!ATTLIST vxl_edge_2d id ID #IMPLIED>
-
-<!ELEMENT vxl_edge_2d_ref EMPTY>
-  <!ATTLIST vxl_edge_2d_ref id IDREF #REQUIRED>
-
-<!-- vxl_one_chain_[23d]
-          <vxl_one_chain_[23d] id=\"6\"
-                <vxl_edge_2d ...>
-                <vxl_edge_2d ...>
-                <vxl_edge_2d ...>
-          </vxl_one_chain_2d>
-
-	  One_Chain is a list of edges or edge pointers.
-	  Closure is enforced by the list.
-	  Pointer (_ref) exists.
-  -->
-
-<!ELEMENT vxl_one_chain_2d ( ( ( vxl_edge_2d, vxl_flip? ) | 
-                              ( vxl_edge_2d_ref, vxl_flip? ) | 
-                              vxl_one_chain_2d )+ )>
-  <!ATTLIST vxl_one_chain_2d id ID #IMPLIED>
-
-<!ELEMENT vxl_one_chain_2d_ref EMPTY>
-  <!ATTLIST vxl_one_chain_2d_ref id IDREF #REQUIRED>
-
-<!-- vxl_triangle_2d
-        <vxl_triangle_2d>
-           <vxl_point_2d><vxl_point_2d><vxl_point_2d>
-        </vxl_triangle_2d>
-
-	Three (no more, no less) vxl_vertices (The Lightweight Solution).
-        At the same level as a one-chain.
-	Pointer (_ref) exists.
-  -->
-
-<!ELEMENT vxl_triangle_2d ( ( vxl_vertex_2d | vxl_vertex_2d_ref ), 
-                            ( vxl_vertex_2d | vxl_vertex_2d_ref ), 
-                            ( vxl_vertex_2d | vxl_vertex_2d_ref ))>
-  <!ATTLIST vxl_triangle_2d id ID #IMPLIED>
-
-<!ELEMENT vxl_triangle_2d_ref EMPTY>
-  <!ATTLIST vxl_triangle_2d_ref id IDREF #REQUIRED>
-
-<!-- vxl_face_[23d]
-           <vxl_face_2d id=\"7\">
-                 <vxl_one_chain_2d ...>
-                 <vxl_one_chain_2d ...>
-           </vxl_face_2d>
-
-	   Face is a list of one chains or pointers to one chains.
-	   Pointer (_ref) exists.
-  -->
-
-<!ELEMENT vxl_face_2d ( ( vxl_one_chain_2d | vxl_one_chain_2d_ref |
-                          vxl_triangle_2d | vxl_triangle_2d_ref )+ )>
-  <!ATTLIST vxl_face_2d id ID #IMPLIED>
-
-<!ELEMENT vxl_face_2d_ref EMPTY>
-  <!ATTLIST vxl_face_2d_ref id IDREF #REQUIRED>
-
-<!-- vxl_two_chain_[23d]
-           <vxl_two_chain_2d id=\"12\">
-                     <vxl_face_2d ...>
-                     <vxl_face_2d ...>
-           </vxl_two_chain_2d>
-
-	   Two chain is a list of faces or pointers to faces.
-	   Pointer (_ref) exists.
-  -->
-
-<!ELEMENT vxl_two_chain_2d ( ( vxl_face_2d | vxl_face_2d_ref )+ )>
-  <!ATTLIST vxl_two_chain_2d id ID #IMPLIED>
-
-<!ELEMENT vxl_two_chain_2d_ref EMPTY>
-  <!ATTLIST vxl_two_chain_2d_ref id IDREF #REQUIRED>
-
-]>
-
-
-
-
-
+char vtol_dtd[] = "\
+\n\
+<!DOCTYPE vxl [\n\
+\n\
+<!-- vxl \n\
+  -->\n\
+\n\
+<!ELEMENT vxl ANY>\n\
+\n\
+<!-- ** Generic structures ** -->\n\
+\n\
+<!ELEMENT vxl_flip EMPTY>\n\
+\n\
+<!-- ** Geometry structures ** -->\n\
+\n\
+<!-- vxl_point_[23]d\n\
+        <vxl_point_2d x=\"1\" y=\"3\" w=\"4\"/>\n\
+\n\
+	x,y,z and w values (w defaults to 1)\n\
+        pointer (_ref) exists\n\
+  -->\n\
+\n\
+<!ELEMENT vxl_point_2d EMPTY>\n\
+  <!ATTLIST vxl_point_2d id ID   #IMPLIED\n\
+                         x CDATA #REQUIRED\n\
+                         y CDATA #REQUIRED\n\
+                         w CDATA \"1\" >\n\
+<!ELEMENT vxl_point_3d EMPTY>\n\
+  <!ATTLIST vxl_point_3d id ID   #IMPLIED\n\
+                         x CDATA #REQUIRED\n\
+                         y CDATA #REQUIRED\n\
+                         z CDATA #REQUIRED\n\
+                         w CDATA \"1\" >\n\
+\n\
+<!ELEMENT vxl_point_2d_ref EMPTY>\n\
+  <!ATTLIST vxl_point_2d_ref id IDREF #REQUIRED>\n\
+<!ELEMENT vxl_point_3d_ref EMPTY>\n\
+  <!ATTLIST vxl_point_3d_ref id IDREF #REQUIRED>\n\
+\n\
+<!-- ** Topology structures ** -->\n\
+\n\
+<!-- vxl_vertex_[23]d\n\
+        <vxl_vertex_2d id=\"3\"><vxl_point_2d x=\"1\" y=\"3\"/></vxl_vertex>\n\
+\n\
+     vxl_vertex_[23]d_ref\n\
+        <vxl_vertex_2d_ref id=\"3\">\n\
+\n\
+	Vertex contains a vxl_point or a pointer to a vxl_point.\n\
+  -->\n\
+\n\
+<!ELEMENT vxl_vertex_2d ( vxl_point_2d | vxl_point_2d_ref )>\n\
+  <!ATTLIST vxl_vertex_2d id ID #IMPLIED>\n\
+<!ELEMENT vxl_vertex_3d ( vxl_point_3d | vxl_point_2d_ref )>\n\
+  <!ATTLIST vxl_vertex_3d id ID #IMPLIED>\n\
+\n\
+<!ELEMENT vxl_vertex_2d_ref EMPTY>\n\
+  <!ATTLIST vxl_vertex_2d_ref id IDREF #REQUIRED>\n\
+<!ELEMENT vxl_vertex_3d_ref EMPTY>\n\
+  <!ATTLIST vxl_vertex_3d_ref id IDREF #REQUIRED>\n\
+\n\
+<!-- vxl_zero_chain_2d\n\
+         <vxl_zero_chain_2d id=\"3\">\n\
+              <vxl_vertex_2d ...>\n\
+              <vxl_vertex_2d ...>\n\
+         </vxl_zero_chain_2d>\n\
+  -->\n\
+\n\
+<!ELEMENT vxl_zero_chain_2d ( ( ( vxl_vertex_2d, vxl_flip? ) | \n\
+                               ( vxl_vertex_2d_ref, vxl_flip? ) )+ )> \n\
+  <!ATTLIST vxl_zero_chain_2d id ID #IMPLIED>\n\
+\n\
+<!ELEMENT vxl_zero_chain_2d_ref EMPTY>\n\
+  <!ATTLIST vxl_zero_chain_2d_ref id IDREF #REQUIRED>\n\
+\n\
+<!-- vxl_edge_2d\n\
+         <vxl_edge_2d id=\"3\">\n\
+              <vxl_vertex_2d ...>\n\
+              <vxl_vertex_2d ...>\n\
+         </vxl_edge_2d>\n\
+  -->\n\
+\n\
+<!ELEMENT vxl_edge_2d ( vxl_zero_chain_2d | vxl_zero_chain_2d_ref)>\n\
+  <!ATTLIST vxl_edge_2d id ID #IMPLIED>\n\
+\n\
+<!ELEMENT vxl_edge_2d_ref EMPTY>\n\
+  <!ATTLIST vxl_edge_2d_ref id IDREF #REQUIRED>\n\
+\n\
+<!-- vxl_one_chain_[23d]\n\
+          <vxl_one_chain_[23d] id=\"6\"\n\
+                <vxl_edge_2d ...>\n\
+                <vxl_edge_2d ...>\n\
+                <vxl_edge_2d ...>\n\
+          </vxl_one_chain_2d>\n\
+\n\
+	  One_Chain is a list of edges or edge pointers.\n\
+	  Closure is enforced by the list.\n\
+	  Pointer (_ref) exists.\n\
+  -->\n\
+\n\
+<!ELEMENT vxl_one_chain_2d ( ( ( vxl_edge_2d, vxl_flip? ) | \n\
+                              ( vxl_edge_2d_ref, vxl_flip? ) | \n\
+                              vxl_one_chain_2d )+ )>\n\
+  <!ATTLIST vxl_one_chain_2d id ID #IMPLIED>\n\
+\n\
+<!ELEMENT vxl_one_chain_2d_ref EMPTY>\n\
+  <!ATTLIST vxl_one_chain_2d_ref id IDREF #REQUIRED>\n\
+\n\
+<!-- vxl_triangle_2d\n\
+        <vxl_triangle_2d>\n\
+           <vxl_point_2d><vxl_point_2d><vxl_point_2d>\n\
+        </vxl_triangle_2d>\n\
+\n\
+	Three (no more, no less) vxl_vertices (The Lightweight Solution).\n\
+        At the same level as a one-chain.\n\
+	Pointer (_ref) exists.\n\
+  -->\n\
+\n\
+<!ELEMENT vxl_triangle_2d ( ( vxl_vertex_2d | vxl_vertex_2d_ref ), \n\
+                            ( vxl_vertex_2d | vxl_vertex_2d_ref ), \n\
+                            ( vxl_vertex_2d | vxl_vertex_2d_ref ))>\n\
+  <!ATTLIST vxl_triangle_2d id ID #IMPLIED>\n\
+\n\
+<!ELEMENT vxl_triangle_2d_ref EMPTY>\n\
+  <!ATTLIST vxl_triangle_2d_ref id IDREF #REQUIRED>\n\
+\n\
+<!-- vxl_face_[23d]\n\
+           <vxl_face_2d id=\"7\">\n\
+                 <vxl_one_chain_2d ...>\n\
+                 <vxl_one_chain_2d ...>\n\
+           </vxl_face_2d>\n\
+\n\
+	   Face is a list of one chains or pointers to one chains.\n\
+	   Pointer (_ref) exists.\n\
+  -->\n\
+\n\
+<!ELEMENT vxl_face_2d ( ( vxl_one_chain_2d | vxl_one_chain_2d_ref |\n\
+                          vxl_triangle_2d | vxl_triangle_2d_ref )+ )>\n\
+  <!ATTLIST vxl_face_2d id ID #IMPLIED>\n\
+\n\
+<!ELEMENT vxl_face_2d_ref EMPTY>\n\
+  <!ATTLIST vxl_face_2d_ref id IDREF #REQUIRED>\n\
+\n\
+<!-- vxl_two_chain_[23d]\n\
+           <vxl_two_chain_2d id=\"12\">\n\
+                     <vxl_face_2d ...>\n\
+                     <vxl_face_2d ...>\n\
+           </vxl_two_chain_2d>\n\
+\n\
+	   Two chain is a list of faces or pointers to faces.\n\
+	   Pointer (_ref) exists.\n\
+  -->\n\
+\n\
+<!ELEMENT vxl_two_chain_2d ( ( vxl_face_2d | vxl_face_2d_ref )+ )>\n\
+  <!ATTLIST vxl_two_chain_2d id ID #IMPLIED>\n\
+\n\
+<!ELEMENT vxl_two_chain_2d_ref EMPTY>\n\
+  <!ATTLIST vxl_two_chain_2d_ref id IDREF #REQUIRED>\n\
+\n\
+]>\n\
+\n\
+\n\
+\n\
+\n\
+\n\
 ";
