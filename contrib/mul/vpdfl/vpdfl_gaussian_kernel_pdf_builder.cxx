@@ -49,7 +49,7 @@ vcl_string vpdfl_gaussian_kernel_pdf_builder::is_a() const
 
 bool vpdfl_gaussian_kernel_pdf_builder::is_class(vcl_string const& s) const
 {
-  return vpdfl_kernel_pdf_builder::is_class(s) || s==vcl_string("vpdfl_gaussian_kernel_pdf_builder");
+  return vpdfl_kernel_pdf_builder::is_class(s) || s==vpdfl_gaussian_kernel_pdf_builder::is_a();
 }
 
 //=======================================================================

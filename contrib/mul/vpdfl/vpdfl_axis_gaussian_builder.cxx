@@ -202,7 +202,7 @@ vcl_string vpdfl_axis_gaussian_builder::is_a() const
 
 bool vpdfl_axis_gaussian_builder::is_class(vcl_string const& s) const
 {
-  return vpdfl_builder_base::is_class(s) || s==vcl_string("vpdfl_axis_gaussian_builder");
+  return vpdfl_builder_base::is_class(s) || s==vpdfl_axis_gaussian_builder::is_a();
 }
 
 //=======================================================================

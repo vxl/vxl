@@ -106,8 +106,7 @@ vcl_string vpdfl_kernel_pdf::is_a() const
 
 bool vpdfl_kernel_pdf::is_class(vcl_string const& s) const
 {
-  static const vcl_string s_ = "vpdfl_kernel_pdf";
-  return s==s_ || vpdfl_pdf_base::is_class(s);
+  return s==vpdfl_kernel_pdf::is_a() || vpdfl_pdf_base::is_class(s);
 }
 
 //=======================================================================

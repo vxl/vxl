@@ -176,7 +176,7 @@ vcl_string vpdfl_mixture::is_a() const
 
 bool vpdfl_mixture::is_class(vcl_string const& s) const
 {
-  return vpdfl_pdf_base::is_class(s) || s==vcl_string("vpdfl_mixture");
+  return vpdfl_pdf_base::is_class(s) || s==vpdfl_mixture::is_a();
 }
 
 //=======================================================================

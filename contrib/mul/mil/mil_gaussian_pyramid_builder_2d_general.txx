@@ -429,8 +429,7 @@ vcl_string mil_gaussian_pyramid_builder_2d_general<T>::is_a() const
 template <class T>
 bool mil_gaussian_pyramid_builder_2d_general<T>::is_class(vcl_string const& s) const
 {
-  static const vcl_string s_ = "mil_gaussian_pyramid_builder_2d_general<T>";
-  return s==s_ || mil_gaussian_pyramid_builder_2d<T>::is_class(s);
+  return s==mil_gaussian_pyramid_builder_2d_general<T>::is_a() || mil_gaussian_pyramid_builder_2d<T>::is_class(s);
 }
 
 //=======================================================================

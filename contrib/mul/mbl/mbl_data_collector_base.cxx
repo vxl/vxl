@@ -44,8 +44,7 @@ vcl_string mbl_data_collector_base::is_a() const
 
 bool mbl_data_collector_base::is_class(vcl_string const& s) const
 {
-  static const vcl_string s_ = "mbl_data_collector_base";
-  return s==s_;
+  return s==mbl_data_collector_base::is_a();
 }
 
 //=======================================================================

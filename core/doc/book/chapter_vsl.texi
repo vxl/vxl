@@ -1033,14 +1033,19 @@ vcl_string vanyl_my_class::is_a() const
 @{
     return vcl_string("vanyl_my_class");
 @}
+@end example
 
+The @code{is_class()} methods are not used by the vsl system, but are useful when
+you don't have RTTI.
+@example
 //=======================================
 //: Return true if the argument matches the string identifying the class or any parent class
 bool vanyl_my_class::is_class(vcl_string const& s) const
 @{
-    return s=="vanyl_my_class" || vanyl_parent_class::is_class(s);
+    return s==vanyl_my_class::is_class || vanyl_parent_class::is_class(s);
 @}
 @end example
+
 
 @subsubsection Polymorphic Copy Creation onto the Heap
 

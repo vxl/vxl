@@ -327,8 +327,7 @@ vcl_string mil3d_image_3d_of<T>::is_a() const
 template<class T>
 bool mil3d_image_3d_of<T>::is_class(vcl_string const& s) const
 {
-  static const vcl_string s_ = "mil3d_image_3d_of<T>";
-  return s==s_ || mil3d_image_3d::is_class(s);
+  return s==mil3d_image_3d_of<T>::is_a() || mil3d_image_3d::is_class(s);
 }
 
 //=======================================================================

@@ -523,7 +523,7 @@ vcl_string vpdfl_mixture_builder::is_a() const
 
 bool vpdfl_mixture_builder::is_class(vcl_string const& s) const
 {
-  return vpdfl_builder_base::is_class(s) || s==vcl_string("vpdfl_mixture_builder");
+  return vpdfl_builder_base::is_class(s) || s==vpdfl_mixture_builder::is_a();
 }
 
 //=======================================================================

@@ -94,8 +94,7 @@ vcl_string mil_image_data<T>::is_a() const
 template<class T>
 bool mil_image_data<T>::is_class(vcl_string const& s) const
 {
-  static const vcl_string s_ = "mil_image_data<T>";
-  return s==s_;
+  return s==mil_image_data<T>::is_a();
 }
 
 //: Print class to os

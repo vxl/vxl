@@ -75,8 +75,7 @@ vcl_string mbl_data_collector_list<T>::is_a() const
 template <class T>
 bool mbl_data_collector_list<T>::is_class(vcl_string const& s) const
 {
-  static const vcl_string s_ = "mbl_data_collector_list<T>";
-  return s==s_ || mbl_data_collector<T>::is_class(s);
+  return s==mbl_data_collector_list<T>::is_a() || mbl_data_collector<T>::is_class(s);
 }
 
 //=======================================================================

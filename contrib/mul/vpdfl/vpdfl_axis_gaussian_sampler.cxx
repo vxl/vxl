@@ -48,7 +48,7 @@ vcl_string vpdfl_axis_gaussian_sampler::is_a() const
 
 bool vpdfl_axis_gaussian_sampler::is_class(vcl_string const& s) const
 {
-  return vpdfl_sampler_base::is_class(s) || s==vcl_string("vpdfl_axis_gaussian_sampler");
+  return vpdfl_sampler_base::is_class(s) || s==vpdfl_axis_gaussian_sampler::is_a();
 }
 
 //=======================================================================

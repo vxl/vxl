@@ -289,7 +289,7 @@ vcl_string vpdfl_kernel_pdf_builder::is_a() const
 
 bool vpdfl_kernel_pdf_builder::is_class(vcl_string const& s) const
 {
-  return vpdfl_builder_base::is_class(s) || s==vcl_string("vpdfl_kernel_pdf_builder");
+  return vpdfl_builder_base::is_class(s) || s==vpdfl_kernel_pdf_builder::is_a();
 }
 
 //=======================================================================

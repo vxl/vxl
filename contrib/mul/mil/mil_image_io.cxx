@@ -44,8 +44,7 @@ vcl_string mil_image_io::is_a() const
 
 bool mil_image_io::is_class(vcl_string const& s) const
 {
-  static const vcl_string s_ = "mil_image_io";
-  return s==s_;
+  return s==mil_image_io::is_a();
 }
 
 //=======================================================================

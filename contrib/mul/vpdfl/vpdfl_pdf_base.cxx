@@ -155,8 +155,7 @@ vcl_string vpdfl_pdf_base::is_a() const
 
 bool vpdfl_pdf_base::is_class(vcl_string const& s) const
 {
-  static vcl_string class_name_ = "vpdfl_pdf_base";
-  return s==class_name_;
+  return s==vpdfl_pdf_base::is_a();
 }
 
 //=======================================================================

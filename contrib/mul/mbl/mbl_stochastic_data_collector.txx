@@ -154,8 +154,7 @@ vcl_string mbl_stochastic_data_collector<T>::is_a() const
 template <class T>
 bool mbl_stochastic_data_collector<T>::is_class(vcl_string const& s) const
 {
-  static const vcl_string s_ = "mbl_stochastic_data_collector<T>";
-  return s==s_ || mbl_data_collector<T>::is_class(s);
+  return s==mbl_stochastic_data_collector<T>::is_a() || mbl_data_collector<T>::is_class(s);
 }
 
 //=======================================================================

@@ -94,7 +94,7 @@ vcl_string vpdfl_sampler_base::is_a() const
 
 bool vpdfl_sampler_base::is_class(vcl_string const& s) const
 {
-  return s==vcl_string("vpdfl_sampler_base");
+  return s==vpdfl_sampler_base::is_a();
 }
 
 //=======================================================================

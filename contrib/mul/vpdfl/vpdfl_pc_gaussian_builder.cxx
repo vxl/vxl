@@ -372,8 +372,7 @@ vcl_string vpdfl_pc_gaussian_builder::is_a() const
 
 bool vpdfl_pc_gaussian_builder::is_class(vcl_string const& s) const
 {
-  static vcl_string class_name_ = "vpdfl_pc_gaussian_builder";
-  return vpdfl_gaussian_builder::is_class(s) || s==class_name_;
+  return vpdfl_gaussian_builder::is_class(s) || s==vpdfl_pc_gaussian_builder::is_a();
 }
 
 //=======================================================================

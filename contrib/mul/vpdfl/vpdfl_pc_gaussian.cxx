@@ -228,7 +228,7 @@ vcl_string vpdfl_pc_gaussian::is_a() const
 
 bool vpdfl_pc_gaussian::is_class(vcl_string const& s) const
 {
-  return vpdfl_gaussian::is_class(s) || s==vcl_string("vpdfl_pc_gaussian");
+  return vpdfl_gaussian::is_class(s) || s==vpdfl_pc_gaussian::is_a();
 }
 
 //=======================================================================
