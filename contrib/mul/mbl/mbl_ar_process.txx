@@ -68,7 +68,7 @@ bool mbl_ar_process<T>::is_class(vcl_string const& s) const
 template<class T>
 vnl_vector<T> mbl_ar_process<T>::predict(vnl_vector<T>& Xm1,
                                          vnl_vector<T>& Xm2,
-										 vnl_random *rng/*=0*/)
+                                         vnl_random *rng/*=0*/)
 {
   vnl_vector<T> Xm0; // uninitialised
   if (Xm1.size()!=Xm2.size() || Xm1.size()!=Xm.size()) return Xm0;
@@ -78,7 +78,7 @@ vnl_vector<T> mbl_ar_process<T>::predict(vnl_vector<T>& Xm1,
   if (!rng)
   {
     static vnl_random mz_random;
-	rng = &mz_random;
+    rng = &mz_random;
   }
 
   for (unsigned int i=0;i<Xm.size();i++)
