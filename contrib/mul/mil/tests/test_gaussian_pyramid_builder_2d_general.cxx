@@ -24,6 +24,7 @@ void test_gaussian_pyramid_builder_2d_general()
   mil_image_2d_of<vil_byte> image0;
   image0.resize(nx,ny);
 
+#if(0) // use 2x2 chessboard pattern
   for (int y=0;y<ny/2;++y)
      for (int x=0;x<nx/2;++x)
      {
@@ -32,12 +33,13 @@ void test_gaussian_pyramid_builder_2d_general()
        image0(x,y+ny/2) = 200;
        image0(x+nx/2,y) = 200;
      }
+#else // Use smooth plane pattern
   for (int y=0;y<image0.ny();++y)
      for (int x=0;x<image0.nx();++x)
      {
        image0(x,y) = x+y*10;
      }
-
+#endif
 
   mil_gaussian_pyramid_builder_2d_general<vil_byte> builder;
   int default_n_levels = builder.maxLevels();
@@ -53,8 +55,6 @@ void test_gaussian_pyramid_builder_2d_general()
 
   TEST("Found correct number of levels", image_pyr.nLevels(), 2);
 
-  int nx2 = (nx+1)/2;
-  int ny2 = (ny+1)/2;
   const mil_image_2d_of<vil_byte>& image1 = (const mil_image_2d_of<vil_byte>&) image_pyr(1);
   TEST("Level 1 size",image1.nx()==(int)(nx/1.2+0.5) && image1.ny()==(int)(ny/1.2+0.5), true);
   TEST("Pixel (0,0)",image1(0,0)==1,true);
