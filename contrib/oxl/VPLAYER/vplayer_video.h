@@ -16,12 +16,12 @@ class vgui_menu;
 class vplayer_video
 {
 public:
-  static void play_video(const void *);
-  static void stop_video(const void *);
-  static void go_to_frame(const void *);
-  static void next_frame(const void *);
-  static void prev_frame(const void *);
-  static void set_speed(const void *);
+  static void play_video();
+  static void stop_video();
+  static void go_to_frame();
+  static void next_frame();
+  static void prev_frame();
+  static void set_speed();
   static vgui_menu create_video_menu();
 private:
 };
