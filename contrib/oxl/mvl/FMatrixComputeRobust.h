@@ -1,6 +1,5 @@
 #ifndef FMatrixComputeRobust_h
 #define FMatrixComputeRobust_h
-
 //:
 // \file
 // \brief Robust FMatrix computation
@@ -15,24 +14,26 @@
 //-----------------------------------------------------------------------------
 
 #include <mvl/FMatrixCompute.h>
-#include <mvl/FMatrix.h>
 #include <mvl/HomgPoint2D.h>
 #include <vcl_vector.h>
 
 class FMatrixComputeRobust : public FMatrixCompute
 {
-public:
+ public:
   FMatrixComputeRobust();
   virtual ~FMatrixComputeRobust();
 
-  // Computations--------------------------------------------------------------
+  // FMatrixCompute virtuals---------------------------------------------------
 
   //: Compute a fundamental matrix for a set of point matches.
   // This is the implemented method, other computes wrap this.
-  virtual bool compute(PairMatchSetCorner& matches, FMatrix* F);
-  virtual bool compute (vcl_vector<HomgPoint2D>&, vcl_vector<HomgPoint2D>&, FMatrix* F);
-  virtual FMatrix compute (PairMatchSetCorner& matched_points);
-  virtual FMatrix compute (vcl_vector<HomgPoint2D>&, vcl_vector<HomgPoint2D>&);
+  bool compute(PairMatchSetCorner& matches, FMatrix* F);
+  bool compute(vcl_vector<HomgPoint2D>& p1, vcl_vector<HomgPoint2D>& p2, FMatrix* F)
+    { return FMatrixCompute::compute(p1,p2,F); }
+
+  inline FMatrix compute(PairMatchSetCorner& p) { return FMatrixCompute::compute(p); }
+  inline FMatrix compute(vcl_vector<HomgPoint2D>& p1, vcl_vector<HomgPoint2D>& p2)
+    { return FMatrixCompute::compute(p1,p2); }
 
   // Data Access---------------------------------------------------------------
 

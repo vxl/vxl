@@ -138,41 +138,6 @@ bool FMatrixComputeRobust::compute(PairMatchSetCorner& matches, FMatrix *F)
   return true;
 }
 
-
-// Implemented from FMatrixCompute
-// Wrapping prior compute method
-bool FMatrixComputeRobust::compute (vcl_vector<HomgPoint2D>& p1,
-                                    vcl_vector<HomgPoint2D>& p2,
-                                    FMatrix* F) {
-  if (p1.size() != p2.size())
-    vcl_cerr << "Point vectors are not of equal length\n";
-  int count = p1.size();
-  HomgInterestPointSet const* points1 = new HomgInterestPointSet(p1,0);
-  HomgInterestPointSet const* points2 = new HomgInterestPointSet(p2,0);
-  PairMatchSetCorner matches(points1, points2);
-  vcl_vector<bool> inliers(count, true);
-  vcl_vector<int> ind1(count), ind2(count);
-  for (int i = 0; i < count; i++) {
-    ind1[i] = i;
-    ind2[i] = i;
-  }
-  matches.set(inliers, ind1, ind2);
-  return compute(matches, F);
-}
-
-FMatrix FMatrixComputeRobust::compute(PairMatchSetCorner& matched_points) {
-  FMatrix* F = new FMatrix();
-  compute(matched_points, F);
-  return *F;
-}
-
-FMatrix FMatrixComputeRobust::compute(vcl_vector<HomgPoint2D>& p1,
-                                      vcl_vector<HomgPoint2D>& p2) {
-  FMatrix* F = new FMatrix();
-  compute(p1, p2, F);
-  return *F;
-}
-
 // Calculate all the residuals for a given relation
 vcl_vector<double> FMatrixComputeRobust::calculate_residuals(vcl_vector<HomgPoint2D>& one,
                                                              vcl_vector<HomgPoint2D>& two,

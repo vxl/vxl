@@ -5,9 +5,10 @@
 //:
 // \file
 
-#include <mvl/FMatrix.h>
-#include <mvl/FMatrixCompute.h>
-#include <mvl/PairSetCorner.h>
+#include "FMatrixCompute.h"
+#include <mvl/PairMatchSetCorner.h>
+#include <mvl/HomgInterestPointSet.h>
+#include <vcl_cassert.h>
 
 //---------------------------------------------------------------
 //
@@ -40,32 +41,28 @@ FMatrixCompute::~FMatrixCompute()
 
 bool FMatrixCompute::compute (PairMatchSetCorner& matches, FMatrix* F_out)
 {
-  PairSetCorner inliers(matches);
-  return compute(inliers.points1, inliers.points2, F_out);
-}
-
-//: Compute fundamental matrix using given matchlist and return an FMatrix object.
-//  This is implemented in terms of compute(MatchList*, FMatrix*)
-
-FMatrix FMatrixCompute::compute (PairMatchSetCorner& matches)
-{
-  FMatrix ret;
-  compute(matches, &ret);
-  return ret;
-}
-
-FMatrix FMatrixCompute::compute (vcl_vector<HomgPoint2D>& points1,
-                                 vcl_vector<HomgPoint2D>& points2)
-{
-  FMatrix ret;
-  compute(points1, points2, &ret);
-  return ret;
+  // Copy matching points from matchset.
+  vcl_vector<HomgPoint2D> points1(matches.count());
+  vcl_vector<HomgPoint2D> points2(matches.count());
+  matches.extract_matches(points1, points2);
+  return compute(points1, points2, F_out);
 }
 
 bool FMatrixCompute::compute (vcl_vector<HomgPoint2D>& points1,
                               vcl_vector<HomgPoint2D>& points2,
-                              FMatrix* out)
+                              FMatrix* F_out)
 {
-  *out = compute(points1, points2);
-  return true;
+  if (points1.size() != points2.size())
+    vcl_cerr << "FMatrixCompute::compute(): Point vectors are not of equal length\n";
+  assert(points1.size() <= points2.size());
+  HomgInterestPointSet const* p1 = new HomgInterestPointSet(points1,0);
+  HomgInterestPointSet const* p2 = new HomgInterestPointSet(points2,0);
+  // the two above lines cause a memory leak!
+  PairMatchSetCorner matches(p1, p2);
+  int count = matches.size();
+  vcl_vector<bool> inliers(count, true);
+  vcl_vector<int> ind1(count), ind2(count);
+  for (int i = 0; i < count; i++)  ind1[i] = ind2[i] = i;
+  matches.set(inliers, ind1, ind2);
+  return compute(matches, F_out);
 }

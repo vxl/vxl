@@ -21,25 +21,37 @@
 // - FMatrixComputeRANSAC    - Oxford robust RANSAC computation
 // - FMatrixComputeNonLinear - Oxford nonlinear optimization
 // - FMatrixCompute7Point    - Oxford implementation of 7-point algorithm
+// - FMatrixCompute8Point    - linear least squares on 8 point matches
+// - FMatrixComputeLMedSq    - Zhengyou Zhang's Least Medium of Squares estimation
+// - FMatrixComputeMLESAC    - Phil Torr's Maximum Likelyhood estimation
+// - FMatrixComputeRANSAC    - Phil Torr's Robust Sampling Concensus
 //
 
 #include <vcl_vector.h>
-class FMatrix;
+#include <mvl/FMatrix.h>
 class HomgPoint2D;
 class PairMatchSetCorner;
 
 class FMatrixCompute
 {
  public:
-  // Constructors/Initializers/Destructors----------------------------------
   FMatrixCompute();
   virtual ~FMatrixCompute();
 
-  // Compute interface------------------------------------------------------
+  //: This is the virtual compute interface
+  // Both functions are implemented in terms of each other,
+  // so it suffices to implement exactly one of them in a derived class,
+  // and implement the other one by calling this implementation.
   virtual bool compute (PairMatchSetCorner& matched_points, FMatrix* f_matrix_ptr);
   virtual bool compute (vcl_vector<HomgPoint2D>&, vcl_vector<HomgPoint2D>&, FMatrix* f_matrix_ptr);
-  virtual FMatrix compute (PairMatchSetCorner& matched_points);
-  virtual FMatrix compute (vcl_vector<HomgPoint2D>&, vcl_vector<HomgPoint2D>&);
+
+  //: Compute fundamental matrix using given matchlist and return an FMatrix object.
+  //  This is implemented in terms of compute(MatchList*, FMatrix*)
+  inline FMatrix compute(PairMatchSetCorner& matched_points)
+    { FMatrix* ret; compute(matched_points, ret); return *ret; }
+
+  inline FMatrix compute(vcl_vector<HomgPoint2D>& pts1, vcl_vector<HomgPoint2D>& pts2)
+    { FMatrix* ret; compute(pts1, pts2, ret); return *ret; }
 };
 
 #endif // _FMatrixCompute_h
