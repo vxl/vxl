@@ -129,7 +129,7 @@ bmvv_multiview_manager::get_picker_tableau_at(unsigned col, unsigned row)
 //====================================================================
 bgui_picker_tableau_sptr bmvv_multiview_manager::get_selected_picker_tableau()
 {
-  unsigned int row =0, col=0;
+  unsigned int row=0, col=0;
   grid_->get_last_selected_position(&col, &row);
   return this->get_picker_tableau_at(col, row);
 }
@@ -486,7 +486,6 @@ void bmvv_multiview_manager::track_edges()
   vdgl_edgel_chain_sptr  ec;
   vcl_vector< vdgl_edgel_chain_sptr > ecl;
   bgui_vtol2D_tableau_sptr btab;
-  int i;
 
   // first image
   det1.SetImage(this->get_image_at(0,0));
@@ -503,7 +502,7 @@ void bmvv_multiview_manager::track_edges()
     }
   // pass the edges
   ecl.clear();
-  for (i=0;i<edges->size();i++){
+  for (unsigned int i=0;i<edges->size();i++){
     c = (*edges)[i]->curve();
     dc = c->cast_to_digital_curve();
     interp = dc->get_interpolator();
@@ -526,7 +525,7 @@ void bmvv_multiview_manager::track_edges()
       return;
     }
   ecl.clear();
-  for (i=0;i<edges->size();i++){
+  for (unsigned int i=0;i<edges->size();i++){
     c = (*edges)[i]->curve();
     dc = c->cast_to_digital_curve();
     interp = dc->get_interpolator();

@@ -3,6 +3,7 @@
 // \file
 // \author P.L. Bazin
 //-----------------------------------------------------------------------------
+
 #include <vcl_vector.h>
 #include <bdgl/bdgl_curve_tracker.h>
 #include <vdgl/vdgl_edgel_chain_sptr.h>
@@ -16,7 +17,6 @@
 //-----------------------------------------------------------------------------
 void bdgl_curve_tracker::track()
 {
-  int i,j,t;
   bdgl_curve_region                           reg;
   vcl_vector< bdgl_curve_region >             regions;
   bdgl_curve_tracker_primitive                primitive;
@@ -31,13 +31,13 @@ void bdgl_curve_tracker::track()
 
   if (input_curve_.size()==0) return;
   vcl_cout<<input_curve_.size()<<" images\n";
-  for (i=0;i<input_curve_.size();i++)
+  for (unsigned int i=0;i<input_curve_.size();i++)
     vcl_cout<<input_curve_[i].size()<<" curves on image "<<i<<"\n";
 
   // init : copy the first curves
   output_curve_.clear();
 
-  for (i=0;i<input_curve_[0].size();i++){
+  for (unsigned int i=0;i<input_curve_[0].size();i++){
     primitive.init(i, input_curve_[0][i]);
     primitive_list.insert(primitive_list.end(), primitive);
   }
@@ -45,28 +45,30 @@ void bdgl_curve_tracker::track()
 
   // init : duplicate empty primitive lists
   primitive_list.clear();
-  for (t=1;t<input_curve_.size();t++){
+  for (unsigned int t=1;t<input_curve_.size();t++){
     output_curve_.insert(output_curve_.end(), primitive_list);
   }
 
   // for all images:
-  for (t=1;t<input_curve_.size();t++){
+  for (unsigned int t=1;t<input_curve_.size();t++)
+  {
     // init the used flag
     is_used.clear();
-    for (j=0;j<input_curve_[t].size();j++)
+    for (unsigned int j=0;j<input_curve_[t].size();j++)
       is_used.insert(is_used.end(), 0);
 
     // compute regions
     vcl_cout<<"-> compute regions\n";
 
     regions.clear();
-    for (j=0;j<input_curve_[t].size();j++){
+    for (unsigned int j=0;j<input_curve_[t].size();j++){
       reg.init(input_curve_[t][j]);
       regions.insert(regions.end(), reg);
     }
 
     // take every primitive and find the best related curve
-    for (i=0;i<output_curve_[t-1].size();i++){
+    for (unsigned int i=0;i<output_curve_[t-1].size();i++)
+    {
       best_id = -1;
       best_val = 1e6;
       vcl_cout<<".";
@@ -78,7 +80,8 @@ void bdgl_curve_tracker::track()
 #endif // 0
 
       // look for curves in the neighborhood
-      for (j=0;j<input_curve_[t].size();j++){
+      for (unsigned int j=0;j<input_curve_[t].size();j++)
+      {
         // test for neighborhood
         dist = vcl_sqrt( (regions[j].x()- output_curve_[t-1][i].region_.x())
                         *(regions[j].x()- output_curve_[t-1][i].region_.x())
@@ -120,7 +123,7 @@ void bdgl_curve_tracker::track()
     }
     vcl_cout<<"-unmatched primitives-\n";
     // take every curve left, and build a primitive for it
-    for (j=0;j<input_curve_[t].size();j++){
+    for (unsigned int j=0;j<input_curve_[t].size();j++){
       if (!is_used[j]){
         primitive.init(output_curve_[t].size(), input_curve_[t][j]);
         output_curve_[t].insert(output_curve_[t].end(), primitive);
