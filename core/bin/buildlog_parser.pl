@@ -408,10 +408,10 @@ sub webify_string
           {
             $c= "<br>\n";
           }
-        elsif( $c eq  "\"")
-          {
-            $c= "&quot";
-          }
+#        elsif( $c eq  "\"")
+#          {
+#            $c= "&quot";
+#          }
         elsif( $c eq  "&")
           {
             $c= "&amp";
