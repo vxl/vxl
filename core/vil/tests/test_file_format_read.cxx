@@ -16,7 +16,6 @@
 // For testing specific file formats
 #include <vil/vil_stream_fstream.h>
 #include <vil/file_formats/vil_dicom.h>
-#include <vil/file_formats/vil_dicom2.h>
 
 //#define DEBUG
 
@@ -538,6 +537,7 @@ test_file_format_read_main( int argc, char* argv[] )
   testlib_test_begin( "  8-bit RGB" );
   testlib_test_perform(CheckFile(CompareRGB<vxl_byte>(), "ff_rgb8bit_true.txt", "ff_rgb8bit.mit" ) );
 
+#if HAS_DCMTK
   vcl_cout << "DICOM [dcm]\n";
   testlib_test_begin( "  16-bit greyscale uncompressed" );
   testlib_test_perform(CheckFile(CompareGrey<vxl_uint_16>(), "ff_grey16bit_true_for_dicom.txt", "ff_grey16bit_uncompressed.dcm"));
@@ -546,7 +546,6 @@ test_file_format_read_main( int argc, char* argv[] )
   testlib_test_perform(CheckFile(CompareGrey<vxl_uint_16>(), "ff_grey16bit_true.txt", "ff_grey16bit_uncompressed2.dcm" ) );
   testlib_test_begin( "  8-bit greyscale uncompressed" );
   testlib_test_perform(CheckFile(CompareGrey<vxl_uint_8>(), "ff_grey8bit_true.txt", "ff_grey8bit_uncompressed.dcm" ) );
-#if HAS_DCMTK
   testlib_test_begin( "  16-bit greyscale uncompressed 3" );
   testlib_test_perform(CheckFile(CompareGrey<vxl_uint_16>(), "ff_grey16bit_true.txt", "ff_grey16bit_uncompressed3.dcm" ) );
 #endif // HAS_DCMTK
@@ -572,47 +571,6 @@ test_file_format_read_main( int argc, char* argv[] )
   testlib_test_perform(CheckFile(CompareGreyFloat<double>(), "ff_grey_float_true.txt", "ff_grey_double.nitf" ) );
 #endif
 
-  // Test specific file formats. This is only useful when we have
-  // multiple readers for the same format.
-
-  vcl_cout << "\nSPECIFIC IMAGE LOADERS\n\n";
-
-  {
-    vcl_cout << "\n\nvil_dicom\n\n";
-    vil_file_format* ffmt = new vil_dicom_file_format;
-    testlib_test_begin( "  16-bit greyscale uncompressed" );
-    testlib_test_perform( CheckFormat( CompareGrey<vxl_uint_16>(), "ff_grey16bit_true_for_dicom.txt",
-                                       "ff_grey16bit_uncompressed.dcm", ffmt ) );
-    testlib_test_begin( "  16-bit greyscale uncompressed 2" );
-    testlib_test_perform( CheckFormat( CompareGrey<vxl_uint_16>(), "ff_grey16bit_true.txt",
-                                       "ff_grey16bit_uncompressed2.dcm", ffmt ) );
-#if 0 // this is broken
-    testlib_test_begin( "  8-bit greyscale uncompressed" );
-    testlib_test_perform( CheckFormat( CompareGrey<vxl_uint_8>(), "ff_grey8bit_true.txt",
-                                       "ff_grey8bit_uncompressed.dcm", ffmt ) );
-#endif // this is broken
-    delete ffmt;
-  }
-
-#if HAS_DCMTK
-  {
-    vcl_cout << "\n\nvil_dicom2\n\n";
-    vil_file_format* ffmt = new vil_dicom2_file_format;
-    testlib_test_begin( "  16-bit greyscale uncompressed" );
-    testlib_test_perform( CheckFormat( CompareGrey<vxl_uint_16>(), "ff_grey16bit_true_for_dicom.txt",
-                                       "ff_grey16bit_uncompressed.dcm", ffmt ) );
-    testlib_test_begin( "  16-bit greyscale uncompressed 2" );
-    testlib_test_perform( CheckFormat( CompareGrey<vxl_uint_16>(), "ff_grey16bit_true.txt",
-                                       "ff_grey16bit_uncompressed2.dcm", ffmt ) );
-    testlib_test_begin( "  16-bit greyscale uncompressed 3" );
-    testlib_test_perform( CheckFormat( CompareGrey<vxl_uint_16>(), "ff_grey16bit_true.txt",
-                                       "ff_grey16bit_uncompressed3.dcm", ffmt ) );
-    testlib_test_begin( "  8-bit greyscale uncompressed" );
-    testlib_test_perform( CheckFormat( CompareGrey<vxl_uint_8>(), "ff_grey8bit_true.txt",
-                                     "ff_grey8bit_uncompressed.dcm", ffmt ) );
-    delete ffmt;
-  }
-#endif //HAS_DCMTK
 
   return testlib_test_summary();
 }
