@@ -52,8 +52,7 @@ vil2_image_view_base_sptr vil2_transpose_image_resource::get_copy_view(unsigned 
   {
 #define macro( F , T ) \
   case F : \
-    return new vil2_image_view<T > (vil2_transpose(static_cast<const vil2_image_view<T >&>(*vs)));
-    break;
+    return new vil2_image_view<T > (vil2_transpose(static_cast<const vil2_image_view<T >&>(*vs))); 
 
       macro(VIL2_PIXEL_FORMAT_BYTE , vxl_byte )
       macro(VIL2_PIXEL_FORMAT_SBYTE , vxl_sbyte )
@@ -81,7 +80,6 @@ vil2_image_view_base_sptr vil2_transpose_image_resource::get_view(unsigned i0, u
 #define macro( F , T ) \
   case F : \
     return new vil2_image_view<T > (vil2_transpose(static_cast<const vil2_image_view<T >&>(*vs)));
-    break;
 
       macro(VIL2_PIXEL_FORMAT_BYTE , vxl_byte )
       macro(VIL2_PIXEL_FORMAT_SBYTE , vxl_sbyte )
