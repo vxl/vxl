@@ -9,7 +9,7 @@
 //
 
 #include <vil1/vil1_memory_image_of.h>
-#include <vipl/accessors/vipl_accessors_vil_image.h>
+#include <vipl/accessors/vipl_accessors_vil1_image.h>
 #include <vipl/accessors/vipl_accessors_vcl_vector.h>
 #include <vipl/vipl_with_vnl_matrix/accessors/vipl_accessors_vnl_vector.h>
 #include <vipl/vipl_histogram.h>

@@ -24,7 +24,7 @@
 #include <vil1/vil1_save.h>
 #include <vil1/vil1_memory_image_of.h>
 
-#include <vipl/accessors/vipl_accessors_vil_image.h>
+#include <vipl/accessors/vipl_accessors_vil1_image.h>
 #include <vipl/vipl_add_random_noise.h>
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h> // for atof()

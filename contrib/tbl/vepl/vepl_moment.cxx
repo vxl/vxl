@@ -1,7 +1,7 @@
 // This is tbl/vepl/vepl_moment.cxx
 #include "vepl_moment.h"
 #include <vcl_iostream.h>
-#include <vipl/accessors/vipl_accessors_vil_image.h>
+#include <vipl/accessors/vipl_accessors_vil1_image.h>
 #include <vipl/vipl_moment.h>
 #include <vil1/vil1_memory_image_of.h>
 

@@ -3,4 +3,4 @@
 #pragma implementation
 #endif
 #include "vipl_filter_abs.h"
-#include <vipl/accessors/vipl_accessors_vil_image.h>
+#include <vipl/accessors/vipl_accessors_vil1_image.h>

@@ -29,9 +29,9 @@ SET(vipl_sources
  section/vipl_section_descriptor.txx     section/vipl_section_descriptor.h
  section/vipl_section_descriptor_2d.txx  section/vipl_section_descriptor_2d.h
  section/vipl_section_iterator.txx       section/vipl_section_iterator.h
- section/vipl_filterable_section_container_generator_vil_image.txx
+ section/vipl_filterable_section_container_generator_vil1_image.txx
  section/vipl_filterable_section_container_generator_vcl_vector.txx
- accessors/vipl_accessors_vil_image.txx  accessors/vipl_accessors_vil_image.h
+ accessors/vipl_accessors_vil1_image.txx  accessors/vipl_accessors_vil1_image.h
  accessors/vipl_accessors_vcl_vector.txx accessors/vipl_accessors_vcl_vector.h
 
  vipl_with_section/vipl_filterable_section_container_generator_section.txx

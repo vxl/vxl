@@ -9,7 +9,7 @@
 // \author Peter Vanroose, K.U.Leuven, ESAT/PSI
 // \date   12 Sept. 2000
 
-#include <vipl/accessors/vipl_accessors_vil_image.h>
+#include <vipl/accessors/vipl_accessors_vil1_image.h>
 #include <vipl/vipl_threshold.h>
 #include "test_driver.h"
 
