@@ -36,12 +36,11 @@ ADD_TEST( vgl_test_ellipse_scan_iterator        vgl_test_all test_ellipse_scan_i
 ADD_TEST( vgl_test_window_scan_iterator         vgl_test_all test_window_scan_iterator )
 ADD_TEST( vgl_test_area                         vgl_test_all test_area )
 ADD_TEST( vgl_test_clip                         vgl_test_all test_clip )
-ADD_TEST( vgl_h_matrix_2d                       vgl_test_all test_h_matrix_2d )
-ADD_TEST( vgl_h_matrix_3d                       vgl_test_all test_h_matrix_3d )
-ADD_TEST( vgl_fit_lines_2d                      vgl_test_all test_fit_lines_2d)
-ADD_TEST( vgl_p_matrix                          vgl_test_all test_p_matrix)
+ADD_TEST( vgl_test_h_matrix_2d                  vgl_test_all test_h_matrix_2d )
+ADD_TEST( vgl_test_h_matrix_3d                  vgl_test_all test_h_matrix_3d )
+ADD_TEST( vgl_test_fit_lines_2d                 vgl_test_all test_fit_lines_2d)
+ADD_TEST( vgl_test_p_matrix                     vgl_test_all test_p_matrix)
 
 ADD_EXECUTABLE( vgl_test_include test_include.cxx )
 
 TARGET_LINK_LIBRARIES( vgl_test_include vgl_algo vgl )
-
