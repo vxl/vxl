@@ -133,7 +133,7 @@ void sdet_region_proc::extract_regions()
 {
   if (regions_valid_)
     return;
-  vcl_vector<vtol_edge_2d_sptr> * edges = 0;
+  vcl_vector<vtol_edge_2d_sptr> * edges;
   sdet_detector detector(dp_);
   if(!use_vil_image_&&!this->set_detector_image_vil1(detector))
     {

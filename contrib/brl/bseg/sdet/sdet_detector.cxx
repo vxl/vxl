@@ -204,7 +204,7 @@ bool sdet_detector::DoStep()
 {
   if (edgel) return true;
 
-  const gevd_bufferxy* source=0;
+  const gevd_bufferxy* source;
   if(use_vil_image)
     source = GetBufferFromVilImage();
   else
