@@ -20,7 +20,7 @@ void test_list_io()
     l_float_out.push_back(i);
 
   vsl_b_ofstream bfs_out("vsl_list_io_test.bvl.tmp",
-    vcl_ios::out | vcl_ios_binary);
+    vcl_ios_out | vcl_ios_binary);
   TEST ("Created vsl_list_io_test.bvl.tmp for writing", (!bfs_out), false);
   vsl_b_write(bfs_out, l_int_out);
   vsl_b_write(bfs_out, l_float_out);
@@ -30,7 +30,7 @@ void test_list_io()
   vcl_list<float> l_float_in;
   
   vsl_b_ifstream bfs_in("vsl_list_io_test.bvl.tmp", 
-    vcl_ios::in | vcl_ios_binary);
+    vcl_ios_in | vcl_ios_binary);
   TEST ("Opened vsl_list_io_test.bvl.tmp for reading", (!bfs_in), false);
   vsl_b_read(bfs_in, l_int_in);
   vsl_b_read(bfs_in, l_float_in);

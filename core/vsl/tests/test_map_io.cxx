@@ -32,7 +32,7 @@ void test_map_io()
   m_string_int_out[vcl_string("six")] = 6;
 
   vsl_b_ofstream bfs_out("vsl_map_io_test.bvl.tmp", 
-    vcl_ios::out | vcl_ios_binary);
+    vcl_ios_out | vcl_ios_binary);
   TEST ("Created vsl_map_io_test.bvl.tmp for writing", (!bfs_out), false);
   vsl_b_write(bfs_out, m_int_int_out);
   vsl_b_write(bfs_out, m_int_string_out);
@@ -44,7 +44,7 @@ void test_map_io()
   vcl_map<vcl_string,int, vcl_less<vcl_string> > m_string_int_in;
   
   vsl_b_ifstream bfs_in("vsl_map_io_test.bvl.tmp", 
-    vcl_ios::in | vcl_ios_binary);
+    vcl_ios_in | vcl_ios_binary);
   TEST ("Opened vsl_map_io_test.bvl.tmp for reading", (!bfs_in), false);
   vsl_b_read(bfs_in, m_int_int_in);
   vsl_b_read(bfs_in, m_int_string_in);
