@@ -409,7 +409,7 @@ bool vtol_vertex_3d::operator==(const vsol_spatial_object_3d &obj) const
 }
 
 //:
-// bool vtol_vertex_3d::operator== (vtol_vertex_3d & v2) --
+// bool vtol_vertex_3d::operator== (const vtol_vertex_3d & v2) const --
 // This method returns true if the vertex is equivalent to v2.
 bool vtol_vertex_3d::operator== (const vtol_vertex_3d &v2) const
 {

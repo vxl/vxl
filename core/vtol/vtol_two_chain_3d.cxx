@@ -854,14 +854,14 @@ vcl_vector<vtol_two_chain_3d*>* vtol_two_chain_3d::outside_boundary_two_chains()
 //:
 // equality operator 
 
-bool vtol_two_chain_3d::operator==( vtol_two_chain_3d& obj)
+bool vtol_two_chain_3d::operator==(const vtol_two_chain_3d& obj) const
 {
   if (this == &obj) return true;
 
   if (_inferiors.size() != obj._inferiors.size())
     return false;
 
-  topology_list_3d::iterator ti1,ti2;
+  topology_list_3d::const_iterator ti1,ti2;
   for (ti1=obj._inferiors.begin(),ti2= _inferiors.begin();ti2!= _inferiors.end() && ti1!= obj._inferiors.end(); ti1++,ti2++)
     {
       vtol_face_3d* f1 = (*ti2)->cast_to_face_3d();
@@ -869,28 +869,29 @@ bool vtol_two_chain_3d::operator==( vtol_two_chain_3d& obj)
       if (!(*f1 == *f2))
         return false;
     }
-  hierarchy_node_list_3d& righth = this->_hierarchy_inferiors;
-  hierarchy_node_list_3d& lefth = obj._hierarchy_inferiors;
+  const hierarchy_node_list_3d& righth = this->_hierarchy_inferiors;
+  const hierarchy_node_list_3d& lefth = obj._hierarchy_inferiors;
   if(righth.size() != lefth.size())
     return false;
  
-   hierarchy_node_list_3d::iterator hi1,hi2;
+   hierarchy_node_list_3d::const_iterator hi1,hi2;
 
   for(hi1=righth.begin(),hi2= lefth.begin();hi1!= righth.end() && hi2!=lefth.end();hi1++,hi2++)
-  //    if( *((vtol_two_chain_3d*)righth.value()) != *((vtol_two_chain_3d*)lefth.value()))
-  if( *((vsol_spatial_object_3d*)(*hi1)) != *((vsol_spatial_object_3d*)(*hi2)))
+    if( *((vsol_spatial_object_3d*)(*hi1)) != *((vsol_spatial_object_3d*)(*hi2)))
       return false;
   return true;
 }
 
 
-bool vtol_two_chain_3d::operator==(vsol_spatial_object_3d& obj)
+bool vtol_two_chain_3d::operator==(const vsol_spatial_object_3d& obj) const
 {
-  vtol_topology_object_3d* topo = (vtol_topology_object_3d*)(obj.cast_to_topology_object_3d());
-  if (!topo) return false;
-  vtol_two_chain_3d* chainobj = (vtol_two_chain_3d*)(topo->cast_to_two_chain_3d());
-  if (!chainobj) return false;
-  return (*this == *chainobj);
+  
+ if ((obj.spatial_type() == vsol_spatial_object_3d::TOPOLOGYOBJECT) &&
+      (((vtol_topology_object_3d&)obj).topology_type() == vtol_topology_object_3d::TWOCHAIN))
+    return (vtol_two_chain_3d &)*this == (vtol_two_chain_3d&) (vtol_topology_object_3d&) obj;
+  else return false;
+ 
+
 }
 
 

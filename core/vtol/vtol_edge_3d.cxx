@@ -513,7 +513,7 @@ bool vtol_edge_3d::remove_edge_loop(vtol_one_chain_3d *doomed_edge_loop)
 //:
 // operators
 
-bool vtol_edge_3d::operator==(vtol_edge_3d const &e) const
+bool vtol_edge_3d::operator==(const vtol_edge_3d &e) const
 {
   vtol_zero_chain_3d *zc1=(vtol_zero_chain_3d *)(this->_inferiors[0]);
   vtol_zero_chain_3d *zc2=(vtol_zero_chain_3d *)(e._inferiors[0]);
@@ -544,16 +544,15 @@ bool vtol_edge_3d::operator==(vtol_edge_3d const &e) const
   return equiv;
 }
 
-bool vtol_edge_3d::operator==(vsol_spatial_object_3d &obj)
+bool vtol_edge_3d::operator==(const vsol_spatial_object_3d &obj) const 
 {
-  // TODO
-  /*
-  if ((obj.GetSpatialType() == vsol_spatial_object_3d::TOPOLOGYOBJECT) &&
-      (((vtol_topology_object_3d &)obj).GetTopologyType() == vtol_topology_object_3d::EDGE))
+  
+  if ((obj.spatial_type() == vsol_spatial_object_3d::TOPOLOGYOBJECT) &&
+      (((vtol_topology_object_3d&)obj).topology_type() == vtol_topology_object_3d::EDGE))
     return (vtol_edge_3d &)*this == (vtol_edge_3d&) (vtol_topology_object_3d&) obj;
   else return false;
-  */
-  return false;
+
+
 }
 
 

@@ -140,8 +140,8 @@ public:
                          vtol_vertex_2d *);
  
 
-  bool operator==(vsol_spatial_object_2d &obj);
-  bool operator==(vtol_edge_2d const &) const;
+  bool operator==(const vsol_spatial_object_2d &obj) const;
+  bool operator==(const vtol_edge_2d &) const;
 
   bool add_edge_loop(vtol_one_chain_2d *);
   bool remove_edge_loop(vtol_one_chain_2d *);

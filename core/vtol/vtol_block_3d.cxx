@@ -251,7 +251,7 @@ vcl_vector<vtol_block_3d*>* vtol_block_3d::blocks()
 // This is hardly an equality test...but we`ll leave it for now....pav
 // June 1992.
 
-bool vtol_block_3d::operator==(vtol_block_3d& bl)
+bool vtol_block_3d::operator==(const vtol_block_3d& bl) const
 {
   vtol_two_chain_3d *twoch1, *twoch2;
 
@@ -262,7 +262,7 @@ bool vtol_block_3d::operator==(vtol_block_3d& bl)
   else
     {
       
-      topology_list_3d::iterator bi1, bi2;
+      topology_list_3d::const_iterator bi1, bi2;
 
       bl._inferiors.begin();
       for (bi1=_inferiors.begin(), bi2= bl._inferiors.begin(); bi1!=_inferiors.end();bi1++,bi2++)
@@ -281,14 +281,13 @@ bool vtol_block_3d::operator==(vtol_block_3d& bl)
 //:
 // spatial object equality
 
-bool vtol_block_3d::operator==(vsol_spatial_object_3d& obj)
+bool vtol_block_3d::operator==(const vsol_spatial_object_3d& obj) const
 {
-  /* todo
-  if ((obj.get_spatial_type() == vsol_spatial_object_3d::TOPOLOGYOBJECT) &&
-      (((vtol_topology_object_3d &)obj).get_topology_type() == vtol_topology_object_3d::BLOCK))
+  if ((obj.spatial_type() == vsol_spatial_object_3d::TOPOLOGYOBJECT) &&
+      (((vtol_topology_object_3d&)obj).topology_type() == vtol_topology_object_3d::BLOCK))
     return (vtol_block_3d &)*this == (vtol_block_3d&) (vtol_topology_object_3d&) obj;
   else return false;
-  */
+
   return true;
 }
 

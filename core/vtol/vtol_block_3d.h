@@ -94,8 +94,8 @@ public:
   virtual vtol_topology_object_3d * shallow_copy_with_no_links( void );
   virtual vsol_spatial_object_3d* spatial_copy() { return this->copy(); }
 
-  bool operator==(vsol_spatial_object_3d&);
-  bool operator== (vtol_block_3d& obj);
+  bool operator==(const vsol_spatial_object_3d&) const;
+  bool operator== (const vtol_block_3d& obj) const;
 
   //: Printing Functions
   void print (ostream& strm =cout);

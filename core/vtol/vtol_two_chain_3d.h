@@ -124,8 +124,8 @@ public:
   virtual void correct_chain_directions();
   // virtual vtol_face_3d * FindClosestvtol_face_3d(CoolVector<float> &);
 
-  bool operator==(vsol_spatial_object_3d& );
-  bool operator==( vtol_two_chain_3d&);
+  bool operator==(const vsol_spatial_object_3d& ) const;
+  bool operator==(const vtol_two_chain_3d&) const;
 
   void print (ostream& strm =cout);
   void describe_directions(ostream& strm = cout, int blanking = 0);

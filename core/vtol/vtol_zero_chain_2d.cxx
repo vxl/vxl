@@ -151,20 +151,20 @@ vtol_zero_chain_2d* vtol_zero_chain_2d::copy()
 //:
 // operators
 
-bool vtol_zero_chain_2d::operator== (vtol_zero_chain_2d & z2)
+bool vtol_zero_chain_2d::operator== (const vtol_zero_chain_2d & z2) const
 {
   
   if (this == &z2)
     return true;
   
-  topology_list_2d *inf1 = this->get_inferiors();
-  topology_list_2d *inf2 = z2.get_inferiors();
+  const topology_list_2d *inf1 = this->get_inferiors();
+  const topology_list_2d *inf2 = z2.get_inferiors();
   vtol_topology_object_2d *v1, *v2;
 
   
   if (inf1->size() == inf2->size())
     {
-      topology_list_2d::iterator i1,i2;
+      topology_list_2d::const_iterator i1,i2;
 
       i2=inf2->begin(); 
       for (i1=inf1->begin(); i1 !=inf1->end(); i1++,i2++)
@@ -186,17 +186,14 @@ bool vtol_zero_chain_2d::operator== (vtol_zero_chain_2d & z2)
 
 
 
-bool vtol_zero_chain_2d::operator==(vsol_spatial_object_2d& obj)
+bool vtol_zero_chain_2d::operator==(const vsol_spatial_object_2d& obj) const
 {
-  /* need to fix 
  
-  if ((obj.get_spatial_type() == vsol_spatial_object_2d::TOPOLOGYOBJECT) &&
-      (((vtol_topology_object_2d &)obj).get_topology_type() == vtol_topology_object_2d::ZEROCHAIN))
-    return (vtol_zero_chain_2d &)*this == (vtol_zero_chain_2d&) (vtol_topology_object_2d&) obj; 
-  
+  if ((obj.spatial_type() == vsol_spatial_object_2d::TOPOLOGYOBJECT) &&
+      (((vtol_topology_object_2d&)obj).topology_type() == vtol_topology_object_2d::ZEROCHAIN))
+    return (vtol_zero_chain_2d &)*this == (vtol_zero_chain_2d&) (vtol_topology_object_2d&) obj;
   else return false;
-  */
-  return false;
+ 
 }
 
 /*******  Print Methods   *************/

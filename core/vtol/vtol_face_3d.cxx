@@ -708,7 +708,7 @@ bool vtol_face_3d::remove_two_chain(vtol_two_chain_3d* doomed_vtol_two_chain_3d)
 // -- deep equality check on faces.  uses fuzzy equal on vertices.
 //
 
-bool vtol_face_3d::operator==( vtol_face_3d& otherf)
+bool vtol_face_3d::operator==(const vtol_face_3d& otherf) const
 {
 
 
@@ -724,7 +724,7 @@ bool vtol_face_3d::operator==( vtol_face_3d& otherf)
   else
     {
 
-      topology_list_3d::iterator ti1,ti2;
+      topology_list_3d::const_iterator ti1,ti2;
       
 
 
@@ -739,15 +739,13 @@ bool vtol_face_3d::operator==( vtol_face_3d& otherf)
 }
 
 
-bool vtol_face_3d::operator==(vsol_spatial_object_3d& obj)
+bool vtol_face_3d::operator==(const vsol_spatial_object_3d& obj) const
 {
-  /* todo
-  if ((obj.GetSpatialType() == vsol_spatial_object_3d::TOPOLOGYOBJECT) &&
-      (((vtol_topology_object_3d &)obj).GetTopologyType() == vtol_topology_object_3d::FACE))
+  if ((obj.spatial_type() == vsol_spatial_object_3d::TOPOLOGYOBJECT) &&
+      (((vtol_topology_object_3d&)obj).topology_type() == vtol_topology_object_3d::FACE))
     return (vtol_face_3d &)*this == (vtol_face_3d&) (vtol_topology_object_3d&) obj;
   else return false;
-  */
-  return false;
+
 }
 
 

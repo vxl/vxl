@@ -83,8 +83,11 @@ public:
   void print(ostream& strm=cout);
   void describe(ostream& strm=cout,int blanking=0);
 
-  inline topology_list_2d * get_inferiors() { return &_inferiors; }
-  inline topology_list_2d * get_superiors() { return &_superiors; }
+  inline const  topology_list_2d * get_inferiors() const { return &_inferiors; }
+  inline const  topology_list_2d * get_superiors() const { return &_superiors; }
+
+  inline topology_list_2d * get_inferiors()  { return &_inferiors; }
+  inline topology_list_2d * get_superiors()  { return &_superiors; }
 
   void set_inferiors(topology_list_2d& newinf) { _inferiors = newinf; }
   void set_superiors(topology_list_2d& newsup) { _superiors = newsup; }

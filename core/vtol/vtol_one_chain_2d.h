@@ -88,6 +88,7 @@ public:
 
   inline bool get_cycle_p()  { return _cycle_p; }
   inline vcl_vector<signed char> *get_directions()  { return &_directions; }
+  inline const vcl_vector<signed char> *get_directions() const   { return &_directions; }
   signed char get_direction(vtol_edge_2d* e);
   inline void set_cycle_p(bool cyc)  { _cycle_p = cyc; }
 
@@ -119,7 +120,7 @@ public:
   virtual void compute_bounding_box(); //A local implementation
   void clear();
 
-  inline bool cycle()  { return _cycle_p; }
+  inline bool cycle() const  { return _cycle_p; }
   signed char dir(int i) { return _directions[i]; }
   vtol_edge_2d *edge(int i) { return (vtol_edge_2d*)_inferiors[i]; }
   int num_edges(){ return _inferiors.size(); }
@@ -141,8 +142,8 @@ public:
   // Operators
   //: \brief Operators
 
-  bool operator==(vsol_spatial_object_2d& obj);
-  bool operator==(vtol_one_chain_2d&);
+  bool operator==(const vsol_spatial_object_2d& obj) const;
+  bool operator==(const vtol_one_chain_2d&) const;
 
   void print(ostream& strm = cout);
   void describe_directions(ostream& strm = cout, int blanking = 0);

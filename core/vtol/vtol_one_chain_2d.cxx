@@ -616,16 +616,20 @@ bool vtol_one_chain_2d::remove_edge(vtol_edge_2d* doomed_edge, bool force_it)
 //:
 // comparison operator
 
-bool vtol_one_chain_2d::operator==(vtol_one_chain_2d& ch)
+bool vtol_one_chain_2d::operator==(const vtol_one_chain_2d& ch) const
 {
-  topology_list_2d* inf1 = this->get_inferiors();
-  topology_list_2d* inf2 = ch.get_inferiors();
+  const topology_list_2d* inf1 = this->get_inferiors();
+  const topology_list_2d* inf2 = ch.get_inferiors();
 
   if (this == &ch) return true;
 
   // Check to see if the number of vertices is the same
-  vcl_vector<vtol_vertex_2d*>* verts1 = this->vertices();
-  vcl_vector<vtol_vertex_2d*>* verts2 = ch.vertices();
+  
+  /* this should not be necessary - if the inferiors are the
+     same then the vertices should be the same */
+  /*
+  const vcl_vector<vtol_vertex_2d*>* verts1 = this->vertices();
+  const vcl_vector<vtol_vertex_2d*>* verts2 = ch.vertices();
   if(verts1->size() != verts2->size())
     {
       delete verts1;
@@ -635,41 +639,43 @@ bool vtol_one_chain_2d::operator==(vtol_one_chain_2d& ch)
   delete verts1;
   delete verts2;
 
+  */
+
   if (inf1->size() != inf2->size())
     return false;
   
   
-  topology_list_2d::iterator i1;
-  topology_list_2d::iterator i2;
+  topology_list_2d::const_iterator i1;
+  topology_list_2d::const_iterator i2;
   
   for(i1=inf1->begin() , i2 = inf2->begin(); i1 != inf1->end(); i1++ , i2++){
     if (!( *(*i1) == *(*i2) ))
       return false;
 
     // Comparing the _directions
-    vcl_vector<signed char> *dir1 = this->get_directions();
-    vcl_vector<signed char> *dir2 = ch.get_directions();
+   const vcl_vector<signed char> *dir1 = this->get_directions();
+   const vcl_vector<signed char> *dir2 = ch.get_directions();
     
     
     if ((dir1->size() != dir2->size()) || (_cycle_p != ch.cycle()))
       return false;
     
-    vcl_vector<signed char>::iterator d1;
-    vcl_vector<signed char>::iterator d2;
+    vcl_vector<signed char>::const_iterator d1;
+    vcl_vector<signed char>::const_iterator d2;
     
     for(d1=dir1->begin(), d2=dir2->begin(); d1 != dir1->end(); d1++, d2++)
       if (!(*d1 == *d2))
 	return false;
     
     // compare onechains that make up any holes
-    hierarchy_node_list_2d& righth = this->_hierarchy_inferiors;
-    hierarchy_node_list_2d& lefth = ch._hierarchy_inferiors;
+    const hierarchy_node_list_2d& righth = this->_hierarchy_inferiors;
+    const hierarchy_node_list_2d& lefth = ch._hierarchy_inferiors;
     if(righth.size() != lefth.size())
       return false;
     
     
-    hierarchy_node_list_2d::iterator r;
-    hierarchy_node_list_2d::iterator l;
+    hierarchy_node_list_2d::const_iterator r;
+    hierarchy_node_list_2d::const_iterator l;
     
     for(r=righth.begin(), l=lefth.begin(); r!=righth.end(); r++, l++)
       if( *((vsol_spatial_object_2d*)(*r)) != *((vsol_spatial_object_2d*)((l))))
@@ -734,13 +740,14 @@ void  vtol_one_chain_2d::reverse_directions()
 //:
 // comparison operator
 
-bool vtol_one_chain_2d::operator==(vsol_spatial_object_2d& obj)
+bool vtol_one_chain_2d::operator==(const vsol_spatial_object_2d& obj) const
 {
-  vtol_topology_object_2d* topo = (vtol_topology_object_2d*)(obj.cast_to_topology_object_2d());
-  if (!topo) return false;
-  vtol_one_chain_2d* chainobj = topo->cast_to_one_chain_2d();
-  if (!chainobj) return false;
-  return *this == *chainobj;
+ 
+  if ((obj.spatial_type() == vsol_spatial_object_2d::TOPOLOGYOBJECT) &&
+      (((vtol_topology_object_2d&)obj).topology_type() == vtol_topology_object_2d::ONECHAIN))
+    return (vtol_one_chain_2d &)*this == (vtol_one_chain_2d&) (vtol_topology_object_2d&) obj;
+  else return false;
+
 }
 
 //:

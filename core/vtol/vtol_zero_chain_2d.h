@@ -85,8 +85,8 @@ public:
   void describe (ostream& strm =cout, int blanking = 0);
 
 
-  bool operator==(vsol_spatial_object_2d& );
-  bool operator== (vtol_zero_chain_2d&);
+  bool operator==(const vsol_spatial_object_2d& ) const;
+  bool operator== (const vtol_zero_chain_2d&) const;
 
   bool remove( vtol_vertex_2d * vertex,
                vcl_vector< vtol_topology_object_2d * > & changes,

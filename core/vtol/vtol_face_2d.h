@@ -129,8 +129,8 @@ public:
   virtual void compute_bounding_box(void); //A local implementation
 
 
-  bool operator==(vsol_spatial_object_2d &);
-  bool operator== (vtol_face_2d &);
+  bool operator==(const vsol_spatial_object_2d &) const;
+  bool operator== (const vtol_face_2d &)const;
 
   void print (ostream &strm=cout);
 
