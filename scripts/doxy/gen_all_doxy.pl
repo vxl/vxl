@@ -216,7 +216,7 @@ while (<MODULES>)
   if ( /search:/ ) { next; }
 
   chomp;
-  @bits = split /\s/;
+  @bits = split /\s+/;
   $package = $bits[0];
   $library = $bits[1];
 #  $prefix  = $bits[2];
