@@ -18,17 +18,15 @@ class vil_nitf_version
   const char*  GetTitle();
   unsigned int GetVersion();
 
-  bool operator== (const vil_nitf_version&);
+  bool operator==(const vil_nitf_version&);
 
-  virtual vil_nitf_image_subheader_band * newImageHeaderBand (
-      vil_nitf_image_subheader_band * ish_band = 0) {return 0; }
+  virtual vil_nitf_image_subheader_band * newImageHeaderBand(
+      vil_nitf_image_subheader_band * /*ish_band*/ = 0) { return 0; }
 
  protected:
-
-  vil_nitf_version (const char* name);
+  vil_nitf_version(const char* name);
 
  private:
-
 #if 0  // COMMENTED OUT
   struct nitfVersion
   {
