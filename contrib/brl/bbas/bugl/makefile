@@ -11,6 +11,7 @@ MANPAGE_SOURCES += bugl_normal_point_3d.h
 MANPAGE_SOURCES += bugl_normal_point_3d_sptr.h
 MANPAGE_SOURCES += bugl_uncertainty_point_2d.txx
 MANPAGE_SOURCES += bugl_uncertainty_point_3d.txx
+SOURCES += bugl_curve_3d.cxx
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
