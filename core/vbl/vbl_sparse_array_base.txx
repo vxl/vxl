@@ -20,7 +20,7 @@ template <class T, class Index>
 T const & vbl_sparse_array_base<T, Index>::operator [] (Index i) const
 {
   Map::const_iterator p = storage_.find(i);
-  
+
   assert(p != storage_.end());
 
   return (*p).second;
@@ -40,7 +40,7 @@ template <class T, class Index>
 T const & vbl_sparse_array_base<T, Index>::operator () (Index i) const
 {
   Map::const_iterator p = storage_.find(i);
-  
+
   assert(p != storage_.end());
 
   return (*p).second;
@@ -72,12 +72,10 @@ bool vbl_sparse_array_base<T, Index>::put(Index i, const T& t)
   vcl_pair<Map::iterator,bool> res = storage_.insert(Map::value_type(i,t));
 
   return res.second;
-} 
-
+}
 
 #undef VBL_SPARSE_ARRAY_BASE_INSTANTIATE
-#define VBL_SPARSE_ARRAY_BASE_INSTANTIATE(T, I)\
+#define VBL_SPARSE_ARRAY_BASE_INSTANTIATE(T, I) \
 template class vbl_sparse_array_base<T , I >
 
-
-#endif
+#endif // vbl_sparse_array_base_txx_

@@ -15,7 +15,7 @@
 #endif
 
 #undef VCL_LIST_INSTANTIATE
-#define VCL_LIST_INSTANTIATE(T)\
+#define VCL_LIST_INSTANTIATE(T) \
 template struct __list_node<T >;\
 template struct __list_iterator<T >;\
 template struct __list_const_iterator<T >;\

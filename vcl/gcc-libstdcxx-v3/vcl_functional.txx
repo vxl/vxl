@@ -5,7 +5,7 @@
 */
 #include <vcl_functional.h>
 
-#define VCL_LESS_INSTANTIATE(T)\
+#define VCL_LESS_INSTANTIATE(T) \
 template struct vcl_less<T >
 
-#endif
+#endif // vcl_gcc_libstdcxx_v3_functional_cxx_

@@ -1,11 +1,9 @@
+// This is vxl/vbl/vbl_sort.h
 #ifndef vbl_sort_h_
 #define vbl_sort_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-
-// This is vxl/vbl/vbl_sort.h
-
 
 //:
 // \file
@@ -17,8 +15,6 @@
 // 971119 AWF Initial version.
 // PDA (Manchester) 21/03/2001: Tidied up the documentation
 // \endverbatim
-
-
 
 int vbl_sort_double_ascending(double const&, double const&);
 int vbl_sort_double_descending(double const&, double const&);
@@ -44,7 +40,7 @@ struct vbl_sort_helper {
   }
 };
 
-#define VBL_SORT_INSTANTIATE(T)\
+#define VBL_SORT_INSTANTIATE(T) \
 template struct vbl_sort_helper<T >
 
 #endif // vbl_sort_h_

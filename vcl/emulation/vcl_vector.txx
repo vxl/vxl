@@ -14,8 +14,8 @@
 #endif
 
 #undef VCL_VECTOR_INSTANTIATE
-#define VCL_VECTOR_INSTANTIATE(T)\
+#define VCL_VECTOR_INSTANTIATE(T) \
 __VECTOR_INSTANTIATE(T);\
-template class __vector_base<T , vcl_alloc >;
+template class __vector_base<T , vcl_alloc >
 
-#endif
+#endif // vcl_emulation_vector_txx_

@@ -14,7 +14,7 @@ template Out std::copy_backward(Inp, Inp, Out)
 #define VCL_FILL_INSTANTIATE(Out, T) \
 template void std::fill(Out, Out, T const &)
 
-#define VCL_SWAP_INSTANTIATE(T)\
+#define VCL_SWAP_INSTANTIATE(T) \
 VCL_INSTANTIATE_INLINE(void swap(T&, T&))
 
 #define VCL_OPERATOR_NE_INSTANTIATE(T) \
@@ -30,7 +30,7 @@ template struct vcl_less<T >
 #define VCL_FIND_INSTANTIATE(I, T) \
 template I vcl_find(I, I, T const&)
 
-// vcl_sort(). We really do need to know both the element type 
+// vcl_sort(). We really do need to know both the element type
 // and the iterator type.
 //
 // I is a random access iterator

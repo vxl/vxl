@@ -15,7 +15,7 @@
 #endif
 
 #undef VCL_DEQUE_INSTANTIATE
-#define VCL_DEQUE_INSTANTIATE(T)\
+#define VCL_DEQUE_INSTANTIATE(T) \
 template struct __deque_iterator<T >;\
 template struct __deque_const_iterator<T >;\
 __DEQUE_INSTANTIATE(T);\
@@ -26,4 +26,4 @@ template class reverse_bidirectional_iterator<__deque_const_iterator<T >, T , T 
 VCL_ITER_RA_INSTANTIATE(__deque_iterator<T >);\
 VCL_ITER_RA_INSTANTIATE(__deque_const_iterator<T >)
 
-#endif
+#endif // vcl_emulation_deque_txx_

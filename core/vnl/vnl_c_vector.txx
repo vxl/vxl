@@ -226,7 +226,7 @@ void vnl_c_vector_rms_norm(T const *p, unsigned n, S *out)
   vnl_c_vector_two_norm_squared(p, n, out);
   *out /= n;
   typedef typename vnl_numeric_traits<S>::real_t real_t;
-  *out = vcl_sqrt(real_t(*out));
+  *out = (S)(vcl_sqrt(real_t(*out)));
 }
 
 template <class T, class S>
@@ -297,7 +297,7 @@ T** vnl_c_vector<T>::allocate_Tptr(int n)
   return (T**)vnl_c_vector_alloc(n, sizeof (T*));
 }
 
-template<class T> 
+template<class T>
 void vnl_c_vector<T>::deallocate(T** v, int n)
 {
   vnl_c_vector_dealloc(v, n, sizeof (T*));
@@ -306,7 +306,7 @@ void vnl_c_vector<T>::deallocate(T** v, int n)
 // "T *" is POD, but "T" might not be.
 #include <vcl_new.h>
 
-template<class T> 
+template<class T>
 T* vnl_c_vector<T>::allocate_T(int n)
 {
   T *p = (T*)vnl_c_vector_alloc(n, sizeof (T));
@@ -317,7 +317,7 @@ T* vnl_c_vector<T>::allocate_T(int n)
   return p;
 }
 
-template<class T> 
+template<class T>
 void vnl_c_vector<T>::deallocate(T* p, int n)
 {
 #if 1
@@ -329,7 +329,7 @@ void vnl_c_vector<T>::deallocate(T* p, int n)
 
 //---------------------------------------------------------------------------
 
-#define VNL_C_VECTOR_INSTANTIATE_norm(T, S)\
+#define VNL_C_VECTOR_INSTANTIATE_norm(T, S) \
 template void vnl_c_vector_two_norm_squared(T const *, unsigned, S *); \
 template void vnl_c_vector_rms_norm(T const *, unsigned, S *); \
 template void vnl_c_vector_one_norm(T const *, unsigned, S *); \
