@@ -396,7 +396,7 @@ bool vil_mit_image::put_view(vil_image_view_base const& buf, unsigned int x0, un
       for (unsigned int y = y0; y < y0+nj; ++y)
       {
         vcl_memcpy(tempbuf, ob, rowsize);
-        for (unsigned int i=0; i<rowsize; i+=bytes_per_pixel())
+        for (vxl_uint_32 i=0; i<rowsize; i+=bytes_per_pixel())
           swap(tempbuf+i,bytes_per_pixel());
         is_->seek(8L + bytes_per_pixel()*(y*ni_+x0));
         if ((vil_streampos)rowsize != is_->write(tempbuf, rowsize))
