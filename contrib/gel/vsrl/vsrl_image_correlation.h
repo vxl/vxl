@@ -45,7 +45,7 @@ class vsrl_image_correlation
   //: we want to know how the correlation function behaves around the point x1 y1.
   void get_correlation_stats(int x, int y, double &mean, double &std);
 
-  //: intepolate to get subpixel accuracy for delta_x
+  //: interpolate to get subpixel accuracy for delta_x
   double get_sub_pixel_delta(int x1, int y1, int delta_x);
 
   //: get the correlation directly
