@@ -89,7 +89,7 @@ public:
   virtual bool is_class(vcl_string const& s) const;
 
   //: Return the class's IO version number
-  short clsfy_rbf_svm_smo_1_builder::version_no() const;
+  short version_no() const;
 
   //: Create a copy on the heap and return base class pointer
   virtual clsfy_builder_base* clone() const;
