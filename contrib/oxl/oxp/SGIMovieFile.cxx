@@ -190,7 +190,11 @@ SGIMovieFilePrivates::SGIMovieFilePrivates(char const* fn):
       vbl_printf(cerr, "\n");
     }
     
+#ifdef GNU_LIBSTDCXX_V3
+    vbl_printf(cerr, "SGIMovieFile: Final position, after reading header, is %d\n", std::streamoff(f.tellg()));
+#else
     vbl_printf(cerr, "SGIMovieFile: Final position, after reading header, is %d\n", f.tellg());
+#endif
   }
 }
 
@@ -402,7 +406,7 @@ int SGIMV_Variables::get_int(vcl_string const& s)
   const vcl_string& v = data[s];
   if (v.size() == 0)
     return -1;
-  istrstream vs((char*)v.data(), v.size());
+  vcl_istrstream vs((char*)v.data(), v.size());
   int x;
   vs >> x;
   return x;
@@ -413,7 +417,7 @@ double SGIMV_Variables::get_double(vcl_string const& s)
   const vcl_string& v = data[s];
   if (v.size() == 0)
     return -1.0;
-  istrstream vs((char*)v.data(), v.size());
+  vcl_istrstream vs((char*)v.data(), v.size());
   double x;
   vs >> x;
   return x;
