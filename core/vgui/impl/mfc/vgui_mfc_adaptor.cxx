@@ -616,8 +616,8 @@ void vgui_mfc_adaptor::domouse(vgui_event_type et, UINT nFlags, CPoint point, vg
     popup->TrackPopupMenu(TPM_LEFTALIGN|TPM_RIGHTBUTTON,point.x,point.y,wnd);
     delete popup;
   }
-
-  dispatch_to_tableau(e);
+  else
+    dispatch_to_tableau(e);
 
   // Grab mouse?
   {
