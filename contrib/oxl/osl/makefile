@@ -1,4 +1,5 @@
 USES += vxl oxl
+include config.mk
 
 LIBRARY := osl
 VERSION := 1.0
@@ -69,7 +70,6 @@ MANPAGE_SOURCES += osl_hacks.h
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
-include client.mk
 #######################################
 
 ifndef NOTEST

@@ -1,7 +1,7 @@
 USES = vxl oxl v3p
+include ${IUELOCALROOT}/oxl/vgui/config.mk
 
 ifeq ($(OS),win32)
- include ${IUELOCALROOT}/oxl/vgui/easy-client.mk
  PROGRAM = VPLAYER
 
  SOURCES += easy2D_loader.cxx

@@ -1,12 +1,13 @@
-##########################################
-include $(IUEROOT)/oxl/vgui/easy-client.mk
-##########################################
-
 USES += vxl oxl v3p
 
-PROGRAM = xcv
-ald_libs += mvl osl vgl
+#####################################
+include $(IUEROOT)/oxl/vgui/config.mk
+include $(IUEROOT)/oxl/mvl/config.mk
+include $(IUEROOT)/oxl/osl/config.mk
+include $(IUEROOT)/vxl/vgl/config.mk
+#####################################
 
+PROGRAM = xcv
 
 SOURCES += xcv_image_tableau.cxx
 
@@ -27,6 +28,10 @@ SOURCES += xcv_multiview_create_multiview_menu.cxx
 SOURCES += xcv_picker_tableau.cxx
 SOURCES += xcv_axes_tableau.cxx
 SOURCES += xcv_axes_limits.cxx
+
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
 
 ifeq "$(IU_COMPILER)" "egcs"
 FLAGS_xcv_geometry.cxx += -ftemplate-depth-100
