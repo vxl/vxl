@@ -60,6 +60,7 @@ TESTS += test_algo_histogram.cxx
 TESTS += test_algo_histogram_equalise.cxx
 TESTS += test_algo_distance_transform.cxx
 TESTS += test_algo_trace_4con_boundary.cxx
+TESTS += test_algo_blob_finder.cxx
 
 #MINI_PROG_SOURCES += vil_mil_gauss_general_timings.cxx
 #MINI_PROG_SOURCES += vil_vil_compare_access_timings.cxx
