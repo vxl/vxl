@@ -4,6 +4,7 @@
 
 #include "vdgl_edgel_chain.h"
 #include <vgl/vgl_distance.h>
+#include <vcl_cassert.h>
 
 vdgl_edgel_chain::vdgl_edgel_chain()
 {
@@ -29,9 +30,10 @@ bool vdgl_edgel_chain::add_edgel( const vdgl_edgel &e)
   return true;
 }
 
-bool vdgl_edgel_chain::set_edgel( const int index, const vdgl_edgel &e)
+bool vdgl_edgel_chain::set_edgel( int index, const vdgl_edgel &e)
 {
-  if(( index< 0) && ( index>= es_.size()))
+  assert(index>=0);
+  if ( (unsigned int)index >= es_.size())
     return false;
 
   es_[index]= e;
@@ -45,22 +47,23 @@ void vdgl_edgel_chain::notify_change()
   vul_timestamp::touch();
 }
 
-bool vdgl_edgel_chain::add_edgels( const vcl_vector<vdgl_edgel> &es, const int index)
+bool vdgl_edgel_chain::add_edgels( const vcl_vector<vdgl_edgel> &es, int index)
 {
-  if(( index< 0) || ( index> es_.size()))
+  assert(index>=0);
+  if ( (unsigned int)index> es_.size())
     return false;
-  else if( es_.size()== 0)
+  else if (es_.size()== 0)
     es_= es;
   else
     {
       vcl_vector<vdgl_edgel> temp;
-      for( int i=0; i< index; i++)
+      for (int i=0; i< index; i++)
         temp.push_back( es_[i]);
 
-      for( int i=0; i< es.size(); i++)
+      for (unsigned int i=0; i< es.size(); i++)
         temp.push_back( es[i]);
 
-      for( int i=index; i< es_.size(); i++)
+      for (unsigned int i=index; i< es_.size(); i++)
         temp.push_back( es_[i]);
 
       es_= temp;
@@ -75,12 +78,10 @@ bool vdgl_edgel_chain::add_edgels( const vcl_vector<vdgl_edgel> &es, const int i
 vcl_ostream& operator<<(vcl_ostream& s, const vdgl_edgel_chain& p)
 {
   s << "<vdgl_edgel_chain (";
-  for( int i=0; i< p.es_.size(); i++)
-    {
-      s << p.es_[i];
-      if( i!= (p.es_.size()-1))
-        s << ", ";
-    }
+  if ( p.es_.size() > 0)
+    s << p.es_[0];
+  for (unsigned int i=1; i< p.es_.size(); ++i)
+    s << ", " << p.es_[i];
 
   return s << ")";
 }
@@ -114,12 +115,12 @@ bool vdgl_edgel_chain::split( double x, double y,
     if (e < d) { d=e; split_index = i+1;}
   }
 
-  if(split_index < 0) return false; // only happens with empty edgel_chain
+  if (split_index < 0) return false; // only happens with empty edgel_chain
 
-  if(split_index == 1 && d == sq_dist(edgel(0),x,y)) split_index = 0;
-  if(split_index == n-1 && d == sq_dist(edgel(n-1),x,y)) split_index = n;
+  if (split_index == 1 && d == sq_dist(edgel(0),x,y)) split_index = 0;
+  if (split_index == n-1 && d == sq_dist(edgel(n-1),x,y)) split_index = n;
 
   if (split_index > 0) ec1 = this->extract_subchain(0, split_index-1);
   if (split_index < n) ec2 = this->extract_subchain(split_index, n-1);
-  return (split_index > 0 && split_index < n);
+  return split_index > 0 && split_index < n;
 }

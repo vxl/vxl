@@ -15,15 +15,14 @@ rsdl_kd_tree::rsdl_kd_tree( const vcl_vector< rsdl_point >& points,
                             int points_per_leaf )
   : points_(points), min_angle_(min_angle)
 {
-  if ( points_per_leaf < 1 ) points_per_leaf = 1;
+  assert(points_per_leaf > 0);
 
   Nc_ = points_[0].num_cartesian();
   Na_ = points_[0].num_angular();
-  unsigned int i;
 
   //  0. Consistency check
 
-  for ( i=1; i<points_.size(); ++i ) {
+  for ( unsigned int i=1; i<points_.size(); ++i ) {
     assert( Nc_ == points_[i].num_cartesian() );
     assert( Na_ == points_[i].num_angular() );
   }
@@ -34,7 +33,7 @@ rsdl_kd_tree::rsdl_kd_tree( const vcl_vector< rsdl_point >& points,
 
   // 1a. initialize the cartesian upper and lower limits
   if ( Nc_ > 0 ) {
-    for ( int i=0; i<Nc_; ++i ) {
+    for ( unsigned int i=0; i<Nc_; ++i ) {
       low.cartesian(i)  = -vnl_math::maxdouble;
       high.cartesian(i) =  vnl_math::maxdouble;
     }
@@ -42,7 +41,7 @@ rsdl_kd_tree::rsdl_kd_tree( const vcl_vector< rsdl_point >& points,
 
   // 1b. initialize the angular upper and lower limits
   if ( Na_ > 0 ) {
-    for ( int i=0; i<Na_; ++i ) {
+    for ( unsigned int i=0; i<Na_; ++i ) {
       low.angular(i) = min_angle;
       high.angular(i) = min_angle + 2*vnl_math::pi;
     }
@@ -78,6 +77,7 @@ rsdl_kd_tree::build_kd_tree( int points_per_leaf,
                              int depth,
                              vcl_vector< int >& indices )
 {
+  assert(points_per_leaf > 0);
   unsigned int i;
 
   /// vcl_cout << "build_kd_tree:  \n  ids:  ";
@@ -94,7 +94,7 @@ rsdl_kd_tree::build_kd_tree( int points_per_leaf,
 
   // 2. If the number of points is small enough, create and return a leaf node.
 
-  if ( indices.size() <= points_per_leaf ) {
+  if ( indices.size() <= (unsigned int)points_per_leaf ) {
     // vcl_cout << "making leaf node" << vcl_endl;
     leaf_count_ ++ ;
     return new rsdl_kd_node ( outer_box, inner_box, depth, indices );
@@ -131,7 +131,7 @@ rsdl_kd_tree::build_kd_tree( int points_per_leaf,
 
   // 5. Partition the vector and the bounding box along the dimension.
 
-  int med_loc = (indices.size()-1) / 2;
+  unsigned int med_loc = (indices.size()-1) / 2;
   double median_value = (values[med_loc].first + values[med_loc+1].first) / 2;
   // vcl_cout << "med_loc = " << med_loc << ", median_value = " << median_value << vcl_endl;
   rsdl_bounding_box left_outer_box( outer_box ), right_outer_box( outer_box );
@@ -166,17 +166,17 @@ rsdl_kd_tree :: build_inner_box( const vcl_vector< int >& indices )
   rsdl_point min_point( points_[ indices[ 0 ] ] );
   rsdl_point max_point( min_point );
 
-  for ( int i=1; i < indices.size(); ++ i ) {
+  for (unsigned int i=1; i < indices.size(); ++ i ) {
     const rsdl_point& pt = points_[ indices[ i ] ];
 
-    for ( int j=0; j < Nc_; ++ j ) {
+    for ( unsigned int j=0; j < Nc_; ++ j ) {
       if ( pt.cartesian( j ) < min_point.cartesian( j ) )
         min_point.cartesian( j ) = pt.cartesian( j );
       if ( pt.cartesian( j ) > max_point.cartesian( j ) )
         max_point.cartesian( j ) = pt.cartesian( j );
     }
 
-    for ( int j=0; j < Na_; ++ j ) {
+    for ( unsigned int j=0; j < Na_; ++ j ) {
       if ( pt.angular( j ) < min_point.angular( j ) )
         min_point.angular( j ) = pt.angular( j );
       if ( pt.angular( j ) > max_point.angular( j ) )
@@ -195,11 +195,10 @@ rsdl_kd_tree::greatest_variation( const vcl_vector<int>& indices,
   use_cartesian = true;
   bool initialized = false;
   double interval_size;
-  int i;
 
   // 1. Check the Cartesian dimensions, if they exist
 
-  for ( i=0; i<Nc_; ++i ) {
+  for ( unsigned int i=0; i<Nc_; ++i ) {
     double min_v, max_v;
     min_v = max_v = points_[ indices[0] ].cartesian( i );
     for ( unsigned int j=1; j<indices.size(); ++j ) {
@@ -216,10 +215,10 @@ rsdl_kd_tree::greatest_variation( const vcl_vector<int>& indices,
 
   // 2. Check the angular dimensions, if they exist
 
-  for ( i=0; i<Na_; ++i ) {
+  for ( unsigned int i=0; i<Na_; ++i ) {
     double min_v, max_v;
     min_v = max_v = points_[ indices[0] ].angular( i );
-    for ( int j=1; j<indices.size(); ++j ) {
+    for (unsigned int j=1; j<indices.size(); ++j ) {
       double v = points_[ indices[j] ].angular( i );
       if ( v < min_v ) min_v = v;
       if ( v > max_v ) max_v = v;
@@ -260,10 +259,11 @@ rsdl_kd_tree::n_nearest( const rsdl_point& query_point,
                          vcl_vector< int >& closest_indices,
                          bool use_heap )
 {
+  assert(n>0);
   assert( query_point.num_cartesian() == Nc_ );
   assert( query_point.num_angular() == Na_ );
 
-  if ( closest_indices.size() != n )
+  if ( closest_indices.size() != (unsigned int)n )
     closest_indices.resize( n );
   vcl_vector< double > sq_distances( n );  // could cache for (slight) efficiency gain
   int num_found = 0;
@@ -280,10 +280,11 @@ rsdl_kd_tree::n_nearest( const rsdl_point& query_point,
            << "\n     internal_examined_ = " << internal_examined_
            << ", fraction = " << float(internal_examined_) / internal_count_ << vcl_endl;
 #endif
-  if ( closest_points.size() != num_found )
+  assert(num_found >= 0);
+  if ( closest_points.size() != (unsigned int)num_found )
     closest_points.resize( num_found );
 
-  for ( unsigned int i=0; i<num_found; ++i ) {
+  for ( int i=0; i<num_found; ++i ) {
     closest_points[i] = points_[ closest_indices[i] ];
   }
 }
@@ -297,6 +298,7 @@ rsdl_kd_tree::n_nearest_with_stack( const rsdl_point& query_point,
                                     vcl_vector< double >& sq_distances,
                                     int & num_found )
 {
+  assert(n>0);
   // vcl_cout << "\n\n----------------\nn_nearest_with_stack \n";
   vcl_vector< rsdl_kd_heap_entry  > stack_vec;
   stack_vec.reserve( 100 );    // way more than will ever be needed
@@ -389,6 +391,7 @@ rsdl_kd_tree::n_nearest_with_heap( const rsdl_point& query_point,
                                    vcl_vector< double >& sq_distances,
                                    int & num_found )
 {
+  assert(n>0);
   // vcl_cout << "\n\n----------------\nn_nearest_with_heap \n";
   vcl_vector< rsdl_kd_heap_entry > heap_vec;
   heap_vec.reserve( 100 );
@@ -481,6 +484,7 @@ rsdl_kd_tree::update_closest( const rsdl_point& query_point,
                               vcl_vector< double >& sq_distances,
                               int & num_found )
 {
+  assert(n>0);
   // vcl_cout << "Update_closest for leaf " << vcl_endl;
   // vcl_cout << " query_point = " << query_point << vcl_endl;
   // vcl_cout << " inner bounding box = \n" << p->inner_box_ << vcl_endl;
@@ -537,6 +541,7 @@ rsdl_kd_tree :: bounded_at_leaf ( const rsdl_point& query_point,
                                   const vcl_vector< double >& sq_distances,
                                   int & num_found )
 {
+  assert(n>0);
   // vcl_cout << "bounded_at_leaf\n"
   //          << "num_found = " << num_found << "\n";
 
@@ -546,7 +551,7 @@ rsdl_kd_tree :: bounded_at_leaf ( const rsdl_point& query_point,
 
   double radius = vcl_sqrt( sq_distances[ n-1 ] );
 
-  for ( int i = 0; i < Nc_; ++ i ) {
+  for ( unsigned int i = 0; i < Nc_; ++ i ) {
     double x = query_point.cartesian( i );
     if ( current -> outer_box_ . min_cartesian( i ) > x - radius ||
          current -> outer_box_ . max_cartesian( i ) < x + radius ) {
@@ -554,7 +559,7 @@ rsdl_kd_tree :: bounded_at_leaf ( const rsdl_point& query_point,
     }
   }
 
-  for ( int i = 0; i < Na_; ++ i ) {
+  for ( unsigned int i = 0; i < Na_; ++ i ) {
     double a = query_point.angular( i );
     if ( current -> outer_box_ . min_angular( i ) > a - radius ||
          current -> outer_box_ . max_angular( i ) < a + radius ) {
@@ -592,7 +597,7 @@ rsdl_kd_tree :: points_in_radius( const rsdl_point& query_point,
   rsdl_point max_point( query_point.num_cartesian(), query_point.num_angular() );
 
   //  Fill in the cartesian values.
-  for ( int i=0; i < query_point.num_cartesian(); ++i ) {
+  for ( unsigned int i=0; i < query_point.num_cartesian(); ++i ) {
     min_point.cartesian( i ) = query_point.cartesian(i) - radius;
     max_point.cartesian( i ) = query_point.cartesian(i) + radius;
   }
@@ -648,7 +653,7 @@ rsdl_kd_tree :: points_in_bounding_box( rsdl_kd_node* current,
                                         vcl_vector< int >& indices_in_box )
 {
   if ( ! current -> left_ ) {
-    for ( int i=0; i < current -> point_indices_ . size(); ++i ) {
+    for ( unsigned int i=0; i < current -> point_indices_ . size(); ++i ) {
       int index = current -> point_indices_[ i ];
       if ( rsdl_dist_point_in_box( this -> points_[ index ], box ) )
         indices_in_box.push_back( index );

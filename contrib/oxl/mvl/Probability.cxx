@@ -3,6 +3,7 @@
 #include <vcl_iostream.h>
 #include <vcl_iterator.h>
 #include <vcl_cmath.h>
+#include <vcl_cassert.h>
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_svd.h>
@@ -25,6 +26,7 @@
 
 vcl_vector<int> Monte_Carlo(vcl_vector<HomgPoint2D> points, vcl_vector<int> index, int buckets, int samples)
 {
+  assert(samples > 0);
   double row_size = 2.0;
   double col_size = 2.0;
   vcl_vector<int> out_points(samples);
@@ -35,7 +37,7 @@ vcl_vector<int> Monte_Carlo(vcl_vector<HomgPoint2D> points, vcl_vector<int> inde
     vcl_cout << "Warning Monte Carlo sampling will not work." << vcl_endl
              << "Not enough buckets: need 1, have " << buckets << "." << vcl_endl;
   }
-  if (index.size() < samples) {
+  if (index.size() < (unsigned int)samples) {
     vcl_cout << "Warning Monte Carlo sampling will not work." << vcl_endl
              << "Not enough points to choose from: need " << samples
              << ", have " << index.size() << "." << vcl_endl;
@@ -50,7 +52,7 @@ vcl_vector<int> Monte_Carlo(vcl_vector<HomgPoint2D> points, vcl_vector<int> inde
 
   double max_x = -1e31, max_y = -1e31, min_x = 1e31, min_y = 1e31;
 
-  for (int i=0;i<index.size();i++)
+  for (unsigned int i=0;i<index.size();i++)
   {
     if ( points[i].get_x() > max_x )
       max_x = points[i].get_x();
@@ -69,7 +71,7 @@ vcl_vector<int> Monte_Carlo(vcl_vector<HomgPoint2D> points, vcl_vector<int> inde
   double center_y = ( max_y - min_y ) * 0.5;
 
   vcl_vector<vnl_double_2> points_rescale;
-  for (int i=0;i<index.size();i++)
+  for (unsigned int i=0;i<index.size();i++)
   {
     vnl_double_2 v = points[i].get_double2(); // non-homogeneous representation
     double x = -1.0 + ( v[0] - min_x ) / center_x;
@@ -79,8 +81,8 @@ vcl_vector<int> Monte_Carlo(vcl_vector<HomgPoint2D> points, vcl_vector<int> inde
 
   // ********************* //
 
-  int i = 0;
-  while (i < samples) {
+  unsigned int i = 0;
+  while (i < (unsigned int)samples) {
     int random;
     if (buckets > 1) {
       random  = (int)((float)(no_buckets - 1)*rand()/(RAND_MAX+1.0));
@@ -113,7 +115,7 @@ vcl_vector<int> Monte_Carlo(vcl_vector<HomgPoint2D> points, vcl_vector<int> inde
     vcl_vector<int> list;
 
     // Select from the first list
-    for (int j = 0; j < index.size(); j++) {
+    for (unsigned int j = 0; j < index.size(); j++) {
       double x = points_rescale[j][0], y = points_rescale[j][1];
       if (y >= row_check_lower && y < row_check_upper &&
           x >= col_check_lower && x < col_check_upper) {
@@ -139,7 +141,7 @@ vcl_vector<int> Monte_Carlo(vcl_vector<HomgPoint2D> points, vcl_vector<int> inde
         int pick = (int)((float)(list_size - 1)*rand()/(RAND_MAX+1.0));
         int picked = list[pick];
         fail = false;
-        for (int k = 0; k < i; k++) {
+        for (unsigned int k = 0; k < i; k++) {
           if (picked == out_points[k])
             fail = true;
         }

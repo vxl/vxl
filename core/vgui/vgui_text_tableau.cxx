@@ -1,20 +1,21 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is ./oxl/vgui/vgui_text_tableau.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// This is vgui/vgui_text_tableau.cxx
+//:
+// \file
 // See vgui_text_tableau.h for a description of this file.
 //
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date 19 Oct 99
-//   
+//
 //-----------------------------------------------------------------------------
 
 #include "vgui_text_tableau.h"
 #include <vgui/vgui_text.h>
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_gl.h>
+#include <vcl_cassert.h>
 
 vgui_text_tableau::vgui_text_tableau() : first_empty(0) {
   // Default text colour is red:
@@ -61,8 +62,8 @@ int vgui_text_tableau::add(float x, float y, char const *text) {
 }
 
 void vgui_text_tableau::move(int handle, float nx, float ny) {
-  if (handle >= size()) handle = size()-1;
-  if (handle < 0) handle = 0;
+  assert(handle >= 0);
+  assert((unsigned int)handle < size());
   xs[handle] = nx;
   ys[handle] = ny;
   post_redraw();
@@ -74,30 +75,30 @@ void vgui_text_tableau::set_colour(float r, float g, float b) {
     r_ = r;
     g_ = g;
     b_ = b;
-  } 
+  }
 }
 
 float vgui_text_tableau::get_posx(int handle) const {
-  if (handle >= size()) handle = size()-1;
-  if (handle < 0) handle = 0;
+  assert(handle >= 0);
+  assert((unsigned int)handle < size());
   return xs[handle];
 }
 
 float vgui_text_tableau::get_posy(int handle) const {
-  if (handle >= size()) handle = size()-1;
-  if (handle < 0) handle = 0;
+  assert(handle >= 0);
+  assert((unsigned int)handle < size());
   return ys[handle];
 }
 
 vcl_string const &vgui_text_tableau::get_text(int handle) const {
-  if (handle >= size()) handle = size()-1;
-  if (handle < 0) handle = 0;
+  assert(handle >= 0);
+  assert((unsigned int)handle < size());
   return ts[handle];
 }
 
 void vgui_text_tableau::remove(int handle) {
-  if (handle >= size()) handle = size()-1;
-  if (handle < 0) handle = 0;
+  assert(handle >= 0);
+  assert((unsigned int)handle < size());
   xs[handle] = -1;
 
   // KYM - don't do this because it changes handles of values remaining in list:
@@ -106,13 +107,13 @@ void vgui_text_tableau::remove(int handle) {
   //ts.erase(ts.begin() + handle);
 
   post_redraw();
-  if (handle < first_empty)
+  if ((unsigned int)handle < first_empty)
     first_empty = handle;
 }
 
 void vgui_text_tableau::change(int handle, char const *ntext) {
-  if (handle >= size()) handle = size()-1;
-  if (handle < 0) handle = 0;
+  assert(handle >= 0);
+  assert((unsigned int)handle < size());
   ts[handle] = ntext;
   post_redraw();
 }
@@ -127,7 +128,7 @@ bool vgui_text_tableau::handle(vgui_event const &e) {
   glDisable(GL_TEXTURE_2D);
   glDisable(GL_LIGHTING);
   glShadeModel(GL_FLAT);
-  
+
   glColor3f(r_,g_,b_); // FIXME
 
   for (unsigned i=0; i<size(); ++i) {
