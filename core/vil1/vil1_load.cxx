@@ -48,6 +48,18 @@ vil_image vil_load_raw(char const* filename)
   if (!filename || !*filename)
     return 0;
 
+#if 1
+  vil_stream *is = new vil_stream_fstream(filename, "r");
+#else
+  // unfortunately, the following doesn't work because (note typo)
+  //    vil_open("/tmp/foo.jgp")
+  // will create a new file, permissions allowing, instead of opening
+  // the intended file /tmp/foo.jpg. suggest long-term solution is to
+  // make a new vil_open*() set of functions which can open an image
+  // for reading and/or writing depending on the caller's need and that
+  // vil_load() just does a vil_open() for reading. i do not think people
+  // expect "loading an image" to open the disk file for writing by
+  // default. -- fsm
   vil_stream *is = new vil_stream_fstream(filename, "r+");
   is->ref();
   // the file might not be writable.
@@ -56,6 +68,7 @@ vil_image vil_load_raw(char const* filename)
     is = new vil_stream_fstream(filename, "r");
     is->ref();
   }
+#endif
   // current block scope is owner of stream.
 
   if (!is->ok()) {
