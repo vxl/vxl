@@ -1,4 +1,4 @@
-// This is vxl/vbl/vbl_array_1d.h
+// This is core/vbl/vbl_array_1d.h
 #ifndef vbl_array_1d_h_
 #define vbl_array_1d_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -153,5 +153,8 @@ struct vbl_array_1d
   // begin_ <= end_ <= alloc_
   T *begin_, *end_, *alloc_;
 };
+
+export template <class T>
+vcl_ostream& operator<<(vcl_ostream &, vbl_array_1d<T> const &);
 
 #endif // vbl_array_1d_h_
