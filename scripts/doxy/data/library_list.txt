@@ -31,7 +31,7 @@ package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl core Level-2 Vi
 core vil1    vil1_    build core/vil
 core vidl    vidl_    build core/vbl core/vul core/vil1
 core vcsl    vcsl_    build core/vnl core/vbl
-core vgui    vgui_    build core/vgl core/vpl core/vbl core/vul core/vnl core/vil1
+core vgui    vgui_    build core/vgl core/vpl core/vbl core/vul core/vnl core/vil core/vil1
 
 package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl core Test Framework
 core testlib testlib_ build
@@ -42,42 +42,57 @@ contrib/mul mil    mil_    build contrib/mul/mbl core/vbl core/vil1
 contrib/mul mil3d  mil3d_  build contrib/mul/mil
 contrib/mul pdf1d  pdf1d_  build contrib/mul/mbl core/vbl
 contrib/mul vpdfl  vpdfl_  build contrib/mul/mbl
-contrib/mul clsfy  clsfy_  build contrib/mul/vpdfl contrib/mul/vpdf1d
-contrib/mul vimt   vimt_   build core/vil
-contrib/mul vil3d  vil3d_  build core/vil
+contrib/mul clsfy  clsfy_  build contrib/mul/vpdfl
+contrib/mul vimt   vimt_   build core/vil core/vgl
+contrib/mul vil3d  vil3d_  build core/vil core/vul
 contrib/mul vimt3d vimt3d_ build contrib/mul/vil3d contrib/mul/vimt
-contrib/mul mvl2   mvl2_   build contrib/mul/vimt contrib/mul/ core/vul
+contrib/mul mvl2   mvl2_   build contrib/mul/vimt contrib/mul/mbl core/vul
 
 package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl contrib/tbl Various Image Processing Libraries
-contrib/tbl vipl   vipl_   build core/vil1
+contrib/tbl vipl   vipl_   build core/vil1 core/vnl
 contrib/tbl vepl   vepl_   build contrib/tbl/vipl
-contrib/tbl vepl2  vepl2_  build contrib/tbl/vipl
+contrib/tbl vepl2  vepl2_  build contrib/tbl/vipl core/vil
 
 package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl contrib/oxl Oxford University Libraries
-# Need to check dependency order
-contrib/oxl mvl    mvl_    build core/vnl core/vil1 core/vbl core/vgl core/vul
+contrib/oxl mvl    mvl_    build core/vnl core/vbl core/vgl core/vul
 contrib/oxl osl    osl_    build core/vnl core/vil1 core/vgl core/vbl
+contrib/oxl oxp    oxp_    build core/vnl core/vil1 core/vul core/vbl core/vpl
+contrib/oxl vrml   vrml_   build core/vbl
 
 package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl contrib/gel GE Libraries
 contrib/gel geml   geml_   build core/vil1 core/vnl
-contrib/gel vsrl   vsrl_   build core/vil1 core/vnl
 contrib/gel gtrl   gtrl_   build core/vbl
 contrib/gel vsol   vsol_   build core/vgl core/vnl core/vbl core/vul
 contrib/gel gst    gst_    build core/vbl
-contrib/gel vdgl   vdgl_   build contrib/gel/vsol core/vgl
+contrib/gel vdgl   vdgl_   build contrib/gel/vsol
 contrib/gel vtol   vtol_   build contrib/gel/vdgl
+contrib/gel vsrl   vsrl_   build contrib/brl/bseg/sdet contrib/gel/vtol contrib/tbl/vepl core/vgui
 contrib/gel gmvl   gmvl_   build contrib/gel/vtol core/vil1
-contrib/gel vgel   vgel_   build contrib/gel/vtol core/vil1 core/vidl contrib/oxl/mvl
+contrib/gel vgel   vgel_   build contrib/gel/vtol core/vidl contrib/oxl/mvl
 contrib/gel gkll   gkll_   build contrib/gel/vgel
-contrib/gel vmal   vmal_   build contrib/gel/vgel contrib/oxl/osl
+contrib/gel vmal   vmal_   build contrib/gel/vgel
 contrib/gel gevd   gevd_   build contrib/gel/vtol core/vil1
+contrib/gel jvid   jvid_   build core/vgui core/vidl
+contrib/gel pop    pop_    build core/vgl
 
 package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl contrib/rpl RPI libraries
 contrib/rpl rrel   rrel_   build contrib/mul/mbl core/vbl
-contrib/rpl rsdl   rsdl_   build core/vnl core/vbl core/vil1
+contrib/rpl rsdl   rsdl_   build core/vnl core/vbl
 
 package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl contrib/brl Brown University libraries
-contrib/brl vvid   vvid_   build contrib/gel/gevd contrib/oxl/vgui core/vidl core/vul
-
-
+contrib/brl/bbas bdgl   bdgl_   build contrib/gel/vtol core/vil1 core/vbl
+contrib/brl/bbas bgui   bgui_   build contrib/gel/vtol core/vgui
+contrib/brl/bbas bsol   bsol_   build contrib/gel/vsol core/vil1 core/vbl
+contrib/brl/bbas btol   btol_   build contrib/gel/vtol core/vil1 core/vbl
+contrib/brl/bbas bvgl   bvgl_   build core/vgl
+contrib/brl/bbas bxml   bxml_   build contrib/brl/bbas/bdgl core/vul
+contrib/brl/bmvl bcal   bcal_   build contrib/gel/vsol core/vcsl
+contrib/brl/bmvl brct   brct_   build contrib/brl/bbas/bdgl contrib/oxl/mvl
+contrib/brl/bmvl btom   btom_   build contrib/gel/gevd
+contrib/brl/bseg brip   brip_   build core/vil1 core/vbl core/vul
+contrib/brl/bseg sdet   sdet_   build contrib/brl/bseg/brip contrib/brl/bbas/btol contrib/brl/bbas/bsol contrib/brl/bbas/bdgl contrib/gel/gevd
+contrib/brl/bmvl bmvv   bmvv_   build contrib/brl/bmvl/btom contrib/brl/bseg/sdet contrib/brl/bbas/bgui contrib/brl/bbas/bxml contrib/oxl/mvl
+contrib/brl/bseg segv   segv_   build contrib/brl/bseg/sdet contrib/brl/bbas/bgui
+contrib/brl/bseg vpro   vpro_   build contrib/brl/bseg/sdet core/vidl
+contrib/brl      vvid   vvid_   build contrib/brl/bbas/bgui contrib/brl/bseg/sdet contrib/brl/bseg/vpro contrib/brl/bseg/brip contrib/gel/vtol core/vidl core/vul
 
