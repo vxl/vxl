@@ -1,13 +1,15 @@
-// This is vxl/vnl/tests/test_matrix.cxx
+// This is core/vnl/tests/test_matrix.cxx
 #include <vcl_iostream.h>
 #include <vnl/vnl_matrix.h>
 #include <testlib/testlib_test.h>
+#include <vcl_cmath.h> // sqrt()
 
 static
-void test_int () {
-  vcl_cout << "*******************\n"
-           << "Testing Matrix<int>\n"
-           << "*******************\n";
+void test_int ()
+{
+  vcl_cout << "***********************\n"
+           << "Testing vnl_matrix<int>\n"
+           << "***********************\n";
   vnl_matrix<int> m0(2,2);
   TEST ("vnl_matrix<int> m0(2,2)", (m0.rows()==2 && m0.columns()==2), true);
   vnl_matrix<int> m1(3,4);
@@ -19,10 +21,10 @@ void test_int () {
         (m2 = vnl_matrix<int>(2,2, 2),
         (m2.get(0,0)==2 && m2.get(0,1)==2 && m2.get(1,0)==2 && m2.get(1,1)==2)), true);
   const vnl_matrix<int> ma = m2;
-  TEST ("(const Matrix)(i,j)",
+  TEST ("(const vnl_matrix)(i,j)",
         (ma(0,0)==2 && ma(0,1)==2 && ma(1,0)==2 && ma(1,1)==2), true);
   vnl_matrix<int> mb = m2;
-  TEST ("(Matrix)(i,j)",
+  TEST ("(vnl_matrix)(i,j)",
         (mb(0,0) = 0,
          mb(0,0)==0 && mb(0,1)==2 && mb(1,0)==2 && mb(1,1)==2), true);
   int mcvalues[4] = {1, 2, 3};
@@ -189,15 +191,6 @@ void test_int () {
         (dot_product(v1,v2)==0 && dot_product(v1,v3)==0 && dot_product(v2,v3)==0), true);
   v = v3;
   TEST ("4d-v=3d-v", (v.rows()==3 && v.columns()==1 && v==v3), true);
-#if 0
-  TEST ("cross_3d(v1,v2)", (v=cross_3d(v1,v2), v == v3), true);
-  TEST ("cross_3d(v2,v3)", (v=cross_3d(v2,v3), v == v1), true);
-  TEST ("cross_3d(v1,v3)", (v=cross_3d(v1,v3), v == -v2), true);
-  vnl_matrix<int> vv(2,1,0);
-  v1 = vv; v1.x()=1;
-  v2 = vv; v2.y()=1;
-  TEST ("cross_2d(v1,v2)", cross_2d(v1,v2)==1, true);
-#endif
 
   // Zero-size
   {
@@ -211,14 +204,19 @@ void test_int () {
     m = (m1 * m2) * m3;
     TEST("zero-size mult rows", m.rows(), 0);
     TEST("zero-size mult cols", m.columns(), 0);
+
+    m2.clear();
+    TEST("zero-size after clear()", m2.rows(), 0);
+    TEST("zero-size after clear()", m2.columns(), 0);
   }
 }
 
 
-void test_float () {
-  vcl_cout << "*********************\n"
-           << "Testing Matrix<float>\n"
-           << "*********************\n";
+void test_float ()
+{
+  vcl_cout << "*************************\n"
+           << "Testing vnl_matrix<float>\n"
+           << "*************************\n";
   vnl_matrix<float> d0(2,2);
   TEST ("vnl_matrix<float> d0(2,2)", (d0.rows()==2 && d0.columns()==2), true);
   vnl_matrix<float> d1(3,4);
@@ -334,21 +332,17 @@ void test_float () {
         (dot_product(v1,v2)==0 && dot_product(v1,v3)==0 && dot_product(v2,v3)==0), true);
   v = v3;
   TEST ("4d-v=3d-v", (v.rows()==3 && v.columns()==1 && v==v3), true);
-#if 0
-  TEST ("cross_3d(v1,v2)", (v=cross_3d(v1,v2), v == v3), true);
-  TEST ("cross_3d(v2,v3)", (v=cross_3d(v2,v3), v == v1), true);
-  TEST ("cross_3d(v1,v3)", (v=cross_3d(v1,v3), v == -v2), true);
-  vnl_matrix<float> vv(2,1,0);
-  v1 = vv; v1.x()=1;
-  v2 = vv; v2.y()=1;
-  TEST ("cross_2d(v1,v2)", cross_2d(v1,v2)==1, true);
-#endif
+
+  v.clear();
+  TEST("zero-size after clear()", v.rows(), 0);
+  TEST("zero-size after clear()", v.columns(), 0);
 }
 
-void test_double () {
-  vcl_cout << "**********************\n"
-           << "Testing Matrix<double>\n"
-           << "**********************\n";
+void test_double ()
+{
+  vcl_cout << "**************************\n"
+           << "Testing vnl_matrix<double>\n"
+           << "**************************\n";
   vnl_matrix<double> d0(2,2);
   TEST ("vnl_matrix<double> d0(2,2)", (d0.rows()==2 && d0.columns()==2), true);
   vnl_matrix<double> d1(3,4);
@@ -405,9 +399,27 @@ void test_double () {
                      (d5.get(0,0)==19.0 && d5.get(0,1)==22.0 && d5.get(1,0)==43.0 && d5.get(1,1)==50.0)), true);
   TEST ("d6*=d7", ((d6*=d7),
                    (d6.get(0,0)==19.0 && d6.get(0,1)==22.0 && d6.get(1,0)==43.0 && d6.get(1,1)==50.0)), true);
+
+  d0.clear();
+  TEST("zero-size after clear()", d0.rows(), 0);
+  TEST("zero-size after clear()", d0.columns(), 0);
+
+  // apply sqrt to every element
+  double d8values [] = {0.0, 1.0, 9.0, 16.0};
+  vnl_matrix<double> d8(2,2,4,d8values);
+  d8 = d8.apply(vcl_sqrt);
+  TEST("apply(sqrt)", d8[0][0]==0 && d8[0][1]==1 && d8[1][0]==3 && d8[1][1]==4, true);
+
+  // normalizations
+  d8.normalize_rows();
+  TEST("normalize_rows()", d8[0][0]==0 && d8[0][1]==1, true);
+  TEST_NEAR("normalize_rows()", d8[1][0], 0.6, 1e-12);
+  TEST_NEAR("normalize_rows()", d8[1][1], 0.8, 1e-12);
+  d8.normalize_columns();
+  TEST("normalize_columns()", d8[0][0]==0 && d8[1][0]==1, true);
 }
 
-#if LEAK
+#ifdef LEAK
 static
 void test_leak () {   // use top4.1 to watch memory usage.
   for (;;) {          // remember to kill process.
@@ -423,7 +435,7 @@ void test_matrix() {
   test_int ();
   test_float ();
   test_double ();
-#if LEAK
+#ifdef LEAK
   test_leak ();
 #endif
 }
