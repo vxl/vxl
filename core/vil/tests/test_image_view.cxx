@@ -182,8 +182,8 @@ void test_image_view(S /*d1*/, vcl_string s_name, T /*d2*/)
   TEST("Comparison", image_win < image2, true);
   TEST("Comparison", image_win > image2, false);
   image5.set_size(1,2);
-  image5(0,0) = vil_rgb<S>(25,35,45);
-  image5(0,1) = vil_rgb<S>(25,35,45);
+  image5(0,0).r = 25; image5(0,0).g = 35; image5(0,0).b = 45;
+  image5(0,1).r = 25; image5(0,1).g = 35; image5(0,1).b = 45;
   image0 = image5;
 
   vil_copy_reformat(image0, image_win);
