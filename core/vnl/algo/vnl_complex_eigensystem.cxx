@@ -36,10 +36,10 @@ void vnl_complex_eigensystem::compute(vnl_matrix<vcl_complex<double> > const & A
   //
   vnl_matrix<vcl_complex<double> > tmp(A);
 
-  int work_space=10*N;
+  unsigned int work_space=10*N;
   vnl_vector<vcl_complex<double> > work(work_space);
 
-  int rwork_space=2*N;
+  unsigned int rwork_space=2*N;
   vnl_vector<double> rwork(rwork_space);
 
   int info;
@@ -59,12 +59,12 @@ void vnl_complex_eigensystem::compute(vnl_matrix<vcl_complex<double> > const & A
          rwork.data_block(),         // rwork
          &info                       // info
          );
-  assert(tmpN == N);
+  assert(tmpN == int(N));
 
   if (right) {
     // conjugate all elements of R :
-    for (int i=0;i<N;i++)
-      for (int j=0;j<N;j++)
+    for (unsigned int i=0;i<N;i++)
+      for (unsigned int j=0;j<N;j++)
         R(i,j) = vcl_conj( R(i,j) );
   }
 

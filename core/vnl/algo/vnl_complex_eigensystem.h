@@ -38,7 +38,7 @@ class vnl_complex_eigensystem
 {
  public:
   // please do not add underscores to my members - they are publicly accessible
-  int const N;
+  unsigned int const N;
   vnl_matrix<vcl_complex<double> > L; // left evecs
   vnl_matrix<vcl_complex<double> > R; // right evecs
   vnl_vector<vcl_complex<double> > W; // evals

@@ -15,7 +15,7 @@
 
 #include "test_util.h"
 
-void test_fft_1d(int N)
+void test_fft_1d(unsigned int N)
 {
   vnl_vector<vcl_complex<double> > signal(N);
   test_util_fill_random(signal.begin(), signal.end());
@@ -36,7 +36,7 @@ void test_fft_1d(int N)
   testlib_test_assert("test fwd-bwd", err <= 1e-10);
 }
 
-void test_fft_2d(int M, int N)
+void test_fft_2d(unsigned int M, unsigned int N)
 {
   vnl_matrix<vcl_complex<double> > signal(M, N);
   test_util_fill_random(signal.begin(), signal.end());
