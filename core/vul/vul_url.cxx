@@ -282,6 +282,7 @@ bool vul_http_exists(char const *url)
       path.replace(k, 1, "%20");
     else if (path[k] == '%')
       path.replace(k, 1, "%25");
+    k++;
   }
 
   // so far so good.
