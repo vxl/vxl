@@ -2,7 +2,7 @@
 #include <sys/stat.h>
 #include <direct.h>
 #include <io.h>
-#include <afxmt.h>
+#include <windows.h>
 
 char *
 vpl_getcwd( char *buf, vcl_size_t buf_size )
