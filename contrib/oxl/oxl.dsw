@@ -24,7 +24,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "awfmfc"=..\vxl\vgui\examples\awf\awfmfc\awfmfc.dsp - Package Owner=<4>
+Project: "awfmfc"=.\vgui\examples\awf\awfmfc\awfmfc.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -73,6 +73,9 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vrml
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name jpeg
     End Project Dependency
 }}}
 
@@ -213,7 +216,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vgui"=..\vxl\vgui\vgui.dsp - Package Owner=<4>
+Project: "vgui"=.\vgui\vgui.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -225,7 +228,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vgui_glut"=..\vxl\vgui\impl\glut\vgui_glut.dsp - Package Owner=<4>
+Project: "vgui_glut"=.\vgui\impl\glut\vgui_glut.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -237,7 +240,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vgui_mfc"=..\vxl\vgui\impl\mfc\vgui_mfc.dsp - Package Owner=<4>
+Project: "vgui_mfc"=.\vgui\impl\mfc\vgui_mfc.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -249,7 +252,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vgui_vrml"=..\vxl\vgui\vrml\vgui_vrml.dsp - Package Owner=<4>
+Project: "vgui_vrml"=.\vgui\vrml\vgui_vrml.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -310,6 +313,18 @@ Package=<4>
 ###############################################################################
 
 Project: "vpl"=..\vxl\vpl\vpl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vplayer"=.\VPLAYER\vplayer.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -497,6 +512,18 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name vpl
     End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "xcv"=.\xcv\xcv.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
 }}}
 
 ###############################################################################

@@ -41,6 +41,7 @@ public:
 
   vnl_amoeba(vnl_cost_function& f);
 
+  void set_delta(vnl_vector<double> const& delta_x);
   void minimize(vnl_vector<double>& x);
   int get_num_evaluations() const { return num_evaluations_; }
   

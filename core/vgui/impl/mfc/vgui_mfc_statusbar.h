@@ -41,7 +41,7 @@ public:
   CStatusBar *statusbar;
   vcl_string linebuffer;
   vgui_statusbuf* statusbuf;
-  ostream out;  
+  vcl_ostream out;  
 };
 
 #endif // vgui_mfc_statusbar_h_

@@ -169,10 +169,6 @@ void vnl_amoebaFit::amoeba(vnl_vector<double>& x)
 //	Environments: Microcomputers in Large-Scale Computing,
 //	edited by A. Wouk, SIAM, 1987, pp. 116-122.
 
-//	C. Moler, 8-19-86
-//	Revised Andy Grace, 6-22-90, 1-17-92 CBM,  10-5-93 AFP
-//	Copyright (c) 1984-94 by The MathWorks, Inc.
-
 // Set up a simplex near the initial guess.
   int n = x.size();
   vcl_vector<SimplexCorner> simplex(n+1, SimplexCorner(n));
