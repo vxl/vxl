@@ -5,6 +5,7 @@
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_clip.h>
+#include <vgl/vgl_closest_point.h>
 #include <vgl/vgl_conic.h>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_ellipse_scan_iterator.h>

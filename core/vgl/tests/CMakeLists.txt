@@ -5,6 +5,7 @@ ADD_EXECUTABLE( vgl_test_all
 
   test_cartesian.cxx
   test_distance.cxx
+  test_closest_point.cxx
   test_conic.cxx
   test_homg.cxx
   test_polygon.cxx
@@ -21,6 +22,7 @@ TARGET_LINK_LIBRARIES( vgl_test_all vgl_algo vgl testlib )
 
 ADD_TEST( vgl_test_cartesian                    vgl_test_all test_cartesian )
 ADD_TEST( vgl_test_distance                     vgl_test_all test_distance )
+ADD_TEST( vgl_test_closest_point                vgl_test_all test_closest_point )
 ADD_TEST( vgl_test_conic                        vgl_test_all test_conic )
 ADD_TEST( vgl_test_homg                         vgl_test_all test_homg )
 ADD_TEST( vgl_test_polygon                      vgl_test_all test_polygon )
@@ -31,7 +33,7 @@ ADD_TEST( vgl_test_area                         vgl_test_all test_area )
 ADD_TEST( vgl_test_clip                         vgl_test_all test_clip )
 ADD_TEST( vgl_h_matrix_2d                       vgl_test_all test_h_matrix_2d )
 ADD_TEST( vgl_h_matrix_3d                       vgl_test_all test_h_matrix_3d )
-ADD_TEST( vgl_fit_lines_2d                      vgl_test_all test_fit_lines_2d)
+ADD_TEST( vgl_fit_lines_2d                      vgl_test_all test_fit_lines_2d )
 
 ADD_EXECUTABLE( vgl_test_include test_include.cxx )
 
