@@ -12,7 +12,6 @@
 #include <vil2/vil2_view_as.h>
 #include <vil2/vil2_plane.h>
 
-
 //: Compute minimum and maximum values over view
 template<class T>
 inline void vil2_math_value_range(const vil2_image_view<T>& view, T& min_value, T& max_value)
@@ -87,7 +86,7 @@ inline sumT vil2_math_ssd(const vil2_image_view<imT>& imA, const vil2_image_view
 //: Calc the mean of each pixel over all the planes.
 // \relates vil2_image_view
 template<class aT, class sumT>
-void vil2_math_mean_over_planes(const vil2_image_view<aT>& src,
+inline void vil2_math_mean_over_planes(const vil2_image_view<aT>& src,
                               vil2_image_view<sumT>& dest)
 {
   dest.resize(src.ni(), src.nj(), 1);
@@ -160,7 +159,7 @@ inline void vil2_math_mean_and_variance(sumT& mean, sumT& var, const vil2_image_
 //: Multiply values in-place in image view by scale
 // \relates vil2_image_view
 template<class T>
-void vil2_math_scale_values(vil2_image_view<T>& image, double scale)
+inline void vil2_math_scale_values(vil2_image_view<T>& image, double scale)
 {
   unsigned ni = image.ni(),nj = image.nj(),np = image.nplanes();
   int istep=image.istep(),jstep=image.jstep(),pstep = image.planestep();
@@ -179,7 +178,7 @@ void vil2_math_scale_values(vil2_image_view<T>& image, double scale)
 //: Multiply values in-place in image view by scale and add offset
 // \relates vil2_image_view
 template<class imT, class offsetT>
-void vil2_math_scale_and_offset_values(vil2_image_view<imT>& image, double scale, offsetT offset)
+inline void vil2_math_scale_and_offset_values(vil2_image_view<imT>& image, double scale, offsetT offset)
 {
   unsigned ni = image.ni(),nj = image.nj(),np = image.nplanes();
   int istep=image.istep(),jstep=image.jstep(),pstep = image.planestep();
@@ -195,10 +194,23 @@ void vil2_math_scale_and_offset_values(vil2_image_view<imT>& image, double scale
   }
 }
 
+//: Scale and offset values so their mean is zero and their variance is one.
+//  Only works on signed types!
+template<class imT>
+inline void vil2_math_normalise(vil2_image_view<imT>& image)
+{
+  assert(image.nplanes()==1);
+  double mean,var;
+  vil2_math_mean_and_variance(mean,var,image,0);
+  double s=0;
+	if (var>0) s = 1.0/sqrt(var);
+	vil2_math_scale_and_offset_values(image,s,-s*mean);
+}
+
 //: Compute sum of two images (im_sum = imA+imB)
 // \relates vil2_image_view
 template<class aT, class bT, class sumT>
-void vil2_math_image_sum(const vil2_image_view<aT>& imA,
+inline void vil2_math_image_sum(const vil2_image_view<aT>& imA,
                          const vil2_image_view<bT>& imB,
                          vil2_image_view<sumT>& im_sum)
 {
@@ -231,7 +243,7 @@ void vil2_math_image_sum(const vil2_image_view<aT>& imA,
 //: Compute difference of two images (im_sum = imA-imB)
 // \relates vil2_image_view
 template<class aT, class bT, class sumT>
-void vil2_math_image_difference(const vil2_image_view<aT>& imA,
+inline void vil2_math_image_difference(const vil2_image_view<aT>& imA,
                                 const vil2_image_view<bT>& imB,
                                 vil2_image_view<sumT>& im_sum)
 {
@@ -264,7 +276,7 @@ void vil2_math_image_difference(const vil2_image_view<aT>& imA,
 //: Compute absolute difference of two images (im_sum = |imA-imB|)
 // \relates vil2_image_view
 template<class aT, class bT, class sumT>
-void vil2_math_image_abs_difference(const vil2_image_view<aT>& imA,
+inline void vil2_math_image_abs_difference(const vil2_image_view<aT>& imA,
                                     const vil2_image_view<bT>& imB,
                                     vil2_image_view<sumT>& im_sum)
 {
@@ -299,7 +311,7 @@ void vil2_math_image_abs_difference(const vil2_image_view<aT>& imA,
 // to update current mean by a fraction f of new_im
 // \relates vil2_image_view
 template<class aT, class bT, class scaleT>
-void vil2_math_add_image_fraction(vil2_image_view<aT>& imA, scaleT fa,
+inline void vil2_math_add_image_fraction(vil2_image_view<aT>& imA, scaleT fa,
                                   const vil2_image_view<bT>& imB, scaleT fb)
 {
   unsigned ni = imA.ni(),nj = imA.nj(),np = imA.nplanes();
@@ -330,7 +342,7 @@ void vil2_math_add_image_fraction(vil2_image_view<aT>& imA, scaleT fa,
 // is given by im_sum(i,j)+im_sum(i+ni-1,j+nj-1)-im_sum(i+ni-1,j)-im_sum(i,j+nj-1)
 // \relates vil2_image_view
 template<class aT, class sumT>
-void vil2_math_integral_image(const vil2_image_view<aT>& imA,
+inline void vil2_math_integral_image(const vil2_image_view<aT>& imA,
                               vil2_image_view<sumT>& im_sum)
 {
   assert(imA.nplanes()==1);
@@ -374,7 +386,7 @@ void vil2_math_integral_image(const vil2_image_view<aT>& imA,
 // Similar result holds for sum of squares, allowing rapid calculation of variance etc.
 // \relates vil2_image_view
 template<class aT, class sumT>
-void vil2_math_integral_sqr_image(const vil2_image_view<aT>& imA,
+inline void vil2_math_integral_sqr_image(const vil2_image_view<aT>& imA,
                                   vil2_image_view<sumT>& im_sum,
                                   vil2_image_view<sumT>& im_sum_sq)
 {

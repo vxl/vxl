@@ -72,6 +72,17 @@ void test_image_view_maths_byte()
   vil2_math_integral_sqr_image(imA,im_sum,im_sum_sqr);
   TEST_NEAR("integral_sqr_image (sum)",im_sum(n-1,m-1),sumA,1e-6);
   TEST_NEAR("integral_sqr_image (sum sqr)",im_sum_sqr(n-1,m-1),sum_sqrA,1e-6);
+
+	vil2_image_view<float> f_image(5,5);
+	f_image.fill(1.0);
+	f_image(3,3)=17;
+	vcl_cout<<"Testing vil2_math_normalise"<<vcl_endl;
+  vil2_math_normalise(f_image);
+	double f_mean,f_var;
+  vil2_math_mean_and_variance(f_mean,f_var,f_image,0);
+	TEST_NEAR("Mean",f_mean,0,1e-6);
+	TEST_NEAR("Var",f_var,1.0,1e-6);
+
 }
 
 MAIN( test_image_view_maths )
