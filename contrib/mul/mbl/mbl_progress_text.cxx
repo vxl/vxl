@@ -1,10 +1,12 @@
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
 
 #include <mbl/mbl_progress_text.h>
 
-  //: Constructor
+//: Constructor
 mbl_progress_text::mbl_progress_text()
 {}
 
@@ -12,7 +14,7 @@ mbl_progress_text::mbl_progress_text()
 mbl_progress_text::~mbl_progress_text()
 {}
 
-  //: Name of the class
+//: Name of the class
 vcl_string mbl_progress_text::is_a() const
 { return "mbl_progress_text"; }
 
@@ -29,7 +31,6 @@ void mbl_progress_text::on_set_progress(const vcl_string& identifier,
            << " (out of " << estimated_iterations(identifier) << ")"
            << vcl_endl;
 }
-
 
 void mbl_progress_text::on_end_progress(const vcl_string &identifier)
 { vcl_cout << "Finishing " << identifier << vcl_endl; }
