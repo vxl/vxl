@@ -1,3 +1,6 @@
+# ./vxl/vcsl/tests/CMakeLists.txt
+
+ADD_EXECUTABLE( vcsl_test_all vcsl_test_all.cxx )
 ADD_EXECUTABLE( test_meter test_meter.cxx )
 ADD_EXECUTABLE( test_radian test_radian.cxx )
 ADD_EXECUTABLE( test_degree test_degree.cxx )
@@ -13,6 +16,7 @@ ADD_EXECUTABLE( test_translation test_translation.cxx )
 ADD_EXECUTABLE( test_rotation test_rotation.cxx )
 ADD_EXECUTABLE( test_displacement test_displacement.cxx )
 
+ADD_TEST( vcsl_test_all vcsl_test_all )
 ADD_TEST( vcsl_test_meter test_meter )
 ADD_TEST( vcsl_test_radian test_radian )
 ADD_TEST( vcsl_test_degree test_degree )
@@ -27,7 +31,6 @@ ADD_TEST( vcsl_test_scale test_scale )
 ADD_TEST( vcsl_test_translation test_translation )
 ADD_TEST( vcsl_test_rotation test_rotation )
 ADD_TEST( vcsl_test_displacement test_displacement )
-
 
 # Immediate dependencies
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vcsl/CMakeListsLink.txt )
