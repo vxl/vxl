@@ -4,7 +4,7 @@
 #   geoff.cross@crd.ge.com
 #
 
-INCLUDE(${CMAKE_ROOT}/Modules/FindGLUT.cmake)
+INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindGLUT.cmake)
 
 IF(HAS_GLUT)
   INCLUDE(${allvxl_SOURCE_DIR}/oxl/vgui/impl/glut/CMakeListsLink.txt)
@@ -14,7 +14,7 @@ IF(WIN32)
   INCLUDE(${allvxl_SOURCE_DIR}/oxl/vgui/impl/mfc/CMakeListsLink.txt)
 ELSE(WIN32)
 
-  INCLUDE(${CMAKE_ROOT}/Modules/FindGTK.cmake)
+  INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindGTK.cmake)
 
   IF(HAS_GTK)
     INCLUDE(${allvxl_SOURCE_DIR}/oxl/vgui/impl/gtk/CMakeListsLink.txt)
