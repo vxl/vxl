@@ -18,6 +18,18 @@ vil_image vepl_threshold(vil_image const& image, double threshold, double below,
     return out;
   }
 
+  // 16-bit greyscale
+  if (vil_pixel_format(image) == VIL_UINT16) {
+    typedef unsigned short ushort;
+    vil_memory_image_of<ushort> mem(image); // load in memory to pass to filter
+    vil_memory_image_of<ushort> out(image);
+    vipl_threshold<vil_image,vil_image,ushort,ushort,vipl_trivial_pixeliter> op((ushort)threshold, (ushort)below, (ushort)above);
+    op.put_in_data_ptr(&mem);
+    op.put_out_data_ptr(&out);
+    op.filter();
+    return out;
+  }
+
   // byte rgb
   else if (vil_pixel_format(image) == VIL_RGB_BYTE) {
     vcl_cerr << __FILE__ ": vepl_threshold() cannot be implemented for colour images\n";
