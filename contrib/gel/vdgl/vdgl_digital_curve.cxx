@@ -20,6 +20,13 @@ vdgl_digital_curve::vdgl_digital_curve( vdgl_interpolator_sptr interpolator)
   if (!interpolator) { i = i / j; }
 }
 
+vdgl_digital_curve::vdgl_digital_curve(vsol_point_2d_sptr& p0,
+                                       vsol_point_2d_sptr& p1)
+{
+  vdgl_edgel_chain* ec = new vdgl_edgel_chain(p0->x(), p0->y(), p1->x(), p1->y());
+  interpolator_ = new vdgl_interpolator_linear(ec);
+}
+
 vsol_spatial_object_2d_sptr vdgl_digital_curve::clone(void) const
 {
   return new vdgl_digital_curve(interpolator_);

@@ -13,6 +13,7 @@
 // \verbatim
 // Modifications:
 //  10-Apr-2002 Peter Vanroose - Implemented split()
+//  30-Nov-2002 J.L. Mundy added constructor from end points
 // \endverbatim
 
 #include <vdgl/vdgl_digital_curve_sptr.h>
@@ -26,7 +27,7 @@ class vdgl_digital_curve : public vsol_curve_2d
 
   // Constructors/Destructors--------------------------------------------------
   vdgl_digital_curve( vdgl_interpolator_sptr interpolator);
-
+  vdgl_digital_curve(vsol_point_2d_sptr& p0, vsol_point_2d_sptr& p1);
   // Operators----------------------------------------------------------------
 
   // these must be defined as they are virtual in vsol_curve_2d
