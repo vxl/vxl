@@ -226,6 +226,10 @@ class vgui_soview2D_circle : public vgui_soview2D
   //: Constructor - creates a default 2D circle.
   vgui_soview2D_circle() {}
 
+  //: Constructor - creates a circle with radius r, centered at (x,y)
+  vgui_soview2D_circle( float x_, float y_, float r_ )
+    : r(r_), x(x_), y(y_)  {  }
+  
   //: Render this 2D circle on the display.
   virtual void draw() const;
 
