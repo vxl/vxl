@@ -14,8 +14,9 @@
 
 
 //: Constructor
-bmrf_node::bmrf_node( const bmrf_epi_seg_sptr& epi_seg, int frame_num)
-  : segment_(epi_seg), frame_num_(frame_num), probability_(-1.0),
+bmrf_node::bmrf_node( const bmrf_epi_seg_sptr& epi_seg, int frame_num,
+                      double prob )
+  : segment_(epi_seg), frame_num_(frame_num), probability_(prob),
     out_arcs_(), in_arcs_(), boundaries_(ALL+1, out_arcs_.end()), sizes_(ALL,0)
 {
 }
