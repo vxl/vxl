@@ -39,8 +39,10 @@ bmrf_curvel_3d::set_proj_in_frame(unsigned int frame, double alpha, const bmrf_n
 
 //: Returns the 2d position of this curvel in \p frame by reference
 bool
-bmrf_curvel_3d::pos_in_frame(unsigned int frame, vnl_double_2& pos)
+bmrf_curvel_3d::pos_in_frame(unsigned int frame, vnl_double_2& pos) const
 {
+  if( frame >= projs_2d_.size() )
+    return false;
   double alpha = projs_2d_[frame].first;
   bmrf_node_sptr node = projs_2d_[frame].second;
   if (node.ptr() == NULL || node->epi_seg().ptr() == NULL)
@@ -49,4 +51,42 @@ bmrf_curvel_3d::pos_in_frame(unsigned int frame, vnl_double_2& pos)
   pos[1] = node->epi_seg()->y(alpha);
 
   return true;
+}
+
+
+//: Returns the smart pointer to the node at the projection into \p frame
+bmrf_node_sptr 
+bmrf_curvel_3d::node_at_frame(unsigned int frame) const
+{
+  if( frame >= projs_2d_.size() )
+    return NULL;
+  return projs_2d_[frame].second;
+}
+
+
+//: Return true if \p a projection of this curvel lies on \p node
+bool 
+bmrf_curvel_3d::is_projection(const bmrf_node_sptr& node) const
+{
+  for ( vcl_vector<vcl_pair<double,bmrf_node_sptr> >::const_iterator itr = projs_2d_.begin();
+        itr != projs_2d_.end();  ++itr )
+  {
+    if(node == itr->second)
+      return true;
+  }
+  return false;
+}
+
+
+//: Return the number of projections available
+int 
+bmrf_curvel_3d::num_projections() const
+{
+  int count = 0;
+  for ( vcl_vector<vcl_pair<double,bmrf_node_sptr> >::const_iterator itr = projs_2d_.begin();
+        itr != projs_2d_.end();  ++itr )
+    if(!itr->second == NULL)
+      ++count;
+  
+  return count;
 }
