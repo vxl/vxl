@@ -3,7 +3,7 @@ USE_NETLIB := 1
 
 TESTS += test_fft1d.cxx
 TESTS += test_fft2d.cxx
-#TESTS += test_matlab.cxx
+TESTS += test_matlab.cxx
 TESTS += test_math.cxx
 TESTS += test_vector.cxx
 TESTS += test_matrix.cxx
@@ -30,7 +30,7 @@ TESTS += test_matrix_exp.cxx
 TESTS += test_transpose.cxx
 TESTS += $(wildcard test_tensor.cxx)
 
-IULIBS += -lvnl-algo -lvnl -lnetlib -lvcl
+IULIBS += -lvnl-algo -lvnl -lnetlib -lvpl -lvcl # vpl_unlink used in test_matlab
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk
