@@ -3,6 +3,7 @@
 #   This is the zlib directory of v3p.  Current version is 1.1.3.
 
 USES := # nothing
+USE_STDC++ := 0
 
 LIBRARY := z
 VERSION := 1.1.3

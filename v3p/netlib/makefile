@@ -2,6 +2,7 @@
 # This library contains public domain routines from netlib.att.com
 
 USES = # nothing!
+USE_STDC++ := 0
 IULIBS = # no dependencies whatsoever
 
 LIBRARY := netlib

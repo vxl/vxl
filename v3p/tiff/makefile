@@ -10,6 +10,7 @@
 #   DEPENDENCIES:  libm libc
 
 USES := # nothing
+USE_STDC++ := 0
 USE_JPEG := 1
 
 LIBRARY := tiff

@@ -3,6 +3,7 @@
 #   This is the png directory of v3p.  Current version is 1.0.8.
 
 USES := v3p/zlib
+USE_STDC++ := 0
 
 LIBRARY := png
 VERSION := 1.0.8

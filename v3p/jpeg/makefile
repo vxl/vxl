@@ -1,4 +1,5 @@
 USES = # nothing
+USE_STDC++ := 0
 
 LIBRARY := jpeg
 VERSION := 1.0
