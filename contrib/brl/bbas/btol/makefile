@@ -7,6 +7,14 @@ SOURCES += btol_edge_algs.cxx
 SOURCES += btol_vertex_algs.cxx
 SOURCES += btol_face_algs.cxx
 
-################################
-include ${IUEROOT}/config/top.mk
-################################
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+SUBDIRS += tests
+endif
+
+######################################
+include ${IUEROOT}/config/top-rules.mk
+######################################
