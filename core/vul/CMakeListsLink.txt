@@ -1,8 +1,14 @@
+# ./vxl/vul/CMakeListsLink.txt
+
 LINK_LIBRARIES( vul )
-LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/vxl/vul )
 
 IF (WIN32)
   LINK_LIBRARIES(ws2_32.lib)
 ENDIF (WIN32)
 
+IF (LIBRARY_OUTPUT_PATH MATCHES '^$')
+  LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/vxl/vul )
+ENDIF (LIBRARY_OUTPUT_PATH MATCHES '^$')
+
+# Immediate dependencies
 INCLUDE( ${allvxl_SOURCE_DIR}/vcl/CMakeListsLink.txt )

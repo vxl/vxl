@@ -1,5 +1,11 @@
-LINK_LIBRARIES( vnl_algo )
-LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/vxl/vnl/algo )
+# ./vxl/vnl/algo/CMakeListsLink.txt
 
+LINK_LIBRARIES( vnl_algo )
+
+IF (LIBRARY_OUTPUT_PATH MATCHES '^$')
+  LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/vxl/vnl/algo )
+ENDIF (LIBRARY_OUTPUT_PATH MATCHES '^$')
+
+# Immediate dependencies
 INCLUDE( ${allvxl_SOURCE_DIR}/v3p/netlib/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vnl/CMakeListsLink.txt )

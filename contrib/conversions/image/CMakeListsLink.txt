@@ -1,0 +1,10 @@
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vil/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vpl/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vul/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vbl/CMakeListsLink.txt )
+
+IF(HAS_IMAGE)
+  LINK_DIRECTORIES( Image COOL Numerics GeneralUtility )
+  LINK_LIBRARIES( ImageClasses Basics Numerics )
+ENDIF(HAS_IMAGE)
+

@@ -1,4 +1,10 @@
-LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/tbl/vepl )
+# ./tbl/vepl/CMakeListsLink.txt
+
 LINK_LIBRARIES( vepl )
 
+IF (LIBRARY_OUTPUT_PATH MATCHES '^$')
+  LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/tbl/vepl )
+ENDIF (LIBRARY_OUTPUT_PATH MATCHES '^$')
+
+# Immediate dependencies
 INCLUDE( ${allvxl_SOURCE_DIR}/tbl/vipl/CMakeListsLink.txt )

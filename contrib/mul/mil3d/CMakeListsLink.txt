@@ -1,3 +1,10 @@
+# ./mul/mil3d/CMakeListsLink.txt
 
 LINK_LIBRARIES( mil3d )
-LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/mul/mil3d )
+
+IF (LIBRARY_OUTPUT_PATH MATCHES '^$')
+  LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/mul/mil3d )
+ENDIF (LIBRARY_OUTPUT_PATH MATCHES '^$')
+
+# Immediate dependencies
+INCLUDE( ${allvxl_SOURCE_DIR}/mul/mil/CMakeListsLink.txt )

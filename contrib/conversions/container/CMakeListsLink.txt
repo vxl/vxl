@@ -1,0 +1,6 @@
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vnl/CMakeListsLink.txt )
+IF(HAS_COOL)
+  LINK_DIRECTORIES( COOL Numerics )
+  LINK_LIBRARIES( TJCOOL iue-math )
+ENDIF(HAS_COOL)
+

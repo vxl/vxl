@@ -1,11 +1,17 @@
-LINK_LIBRARIES( vil )
-LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/vxl/vil )
+# ./vxl/vil/CMakeListsLink.txt
 
-INCLUDE( ${allvxl_SOURCE_DIR}/config.cmake/Modules/FindJPEG.cmake )
-INCLUDE( ${allvxl_SOURCE_DIR}/config.cmake/Modules/FindPNG.cmake )
-INCLUDE( ${allvxl_SOURCE_DIR}/config.cmake/Modules/FindTIFF.cmake ) 
+LINK_LIBRARIES( vil )
 
 IF (WIN32)
   LINK_LIBRARIES(ws2_32.lib)
 ENDIF (WIN32)
 
+IF (LIBRARY_OUTPUT_PATH MATCHES '^$')
+  LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/vxl/vil )
+ENDIF (LIBRARY_OUTPUT_PATH MATCHES '^$')
+
+# Immediate dependencies
+INCLUDE( ${allvxl_SOURCE_DIR}/vcl/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/config.cmake/Modules/FindJPEG.cmake )
+INCLUDE( ${allvxl_SOURCE_DIR}/config.cmake/Modules/FindPNG.cmake )
+INCLUDE( ${allvxl_SOURCE_DIR}/config.cmake/Modules/FindTIFF.cmake )

@@ -1,2 +1,7 @@
-LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/oxl/vgui/impl/gtk )
+# ./oxl/vgui/impl/gtk/CMakeListsLink.txt
+
 LINK_LIBRARIES( vgui_gtk )
+
+IF (LIBRARY_OUTPUT_PATH MATCHES '^$')
+  LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/oxl/vgui/impl/gtk )
+ENDIF (LIBRARY_OUTPUT_PATH MATCHES '^$')

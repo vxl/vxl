@@ -1,2 +1,7 @@
-LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/oxl/vgui/impl/qt )
+# ./oxl/vgui/impl/qt/CMakeListsLink.txt
+
 LINK_LIBRARIES( vgui_qt )
+
+IF (LIBRARY_OUTPUT_PATH MATCHES '^$')
+  LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/oxl/vgui/impl/qt )
+ENDIF (LIBRARY_OUTPUT_PATH MATCHES '^$')

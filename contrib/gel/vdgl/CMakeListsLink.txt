@@ -1,8 +1,10 @@
-INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/vxl )
-INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/gel )
+# ./gel/vdgl/CMakeListsLink.txt
 
 LINK_LIBRARIES( vdgl )
-LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/gel/vdgl )
+
+IF (LIBRARY_OUTPUT_PATH MATCHES '^$')
+  LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/gel/vdgl )
+ENDIF (LIBRARY_OUTPUT_PATH MATCHES '^$')
 
 # Immediate dependencies
 INCLUDE( ${allvxl_SOURCE_DIR}/gel/vsol/CMakeListsLink.txt )

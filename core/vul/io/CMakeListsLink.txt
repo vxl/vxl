@@ -1,11 +1,11 @@
-#
 # ./vxl/vul/io/CMakeListsLink.txt
-#
-#   Ian Scott
-#
 
 LINK_LIBRARIES( vul_io )
-LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/vxl/vul/io )
 
+IF (LIBRARY_OUTPUT_PATH MATCHES '^$')
+  LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/vxl/vul/io )
+ENDIF (LIBRARY_OUTPUT_PATH MATCHES '^$')
+
+# Immediate dependencies
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vul/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vsl/CMakeListsLink.txt )

@@ -1,4 +1,10 @@
-INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/vxl )
+# ./gel/vsrl/CMakeListsLink.txt
+
+LINK_LIBRARIES( vsrl )
+
+IF (LIBRARY_OUTPUT_PATH MATCHES '^$')
+  LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/gel/vsrl )
+ENDIF (LIBRARY_OUTPUT_PATH MATCHES '^$')
 
 # Immediate dependencies
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vil/CMakeListsLink.txt )
@@ -7,6 +13,3 @@ INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vnl/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vnl/algo/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/oxl/osl/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/vcl/CMakeListsLink.txt )
-
-LINK_LIBRARIES( vsrl )
-LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/gel/vsrl )

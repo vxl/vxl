@@ -1,7 +1,12 @@
+# ./v3p/png/CMakeListsLink.txt
 
-LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/v3p/png )
 LINK_LIBRARIES( png )
+
 INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/v3p/png )
 
-INCLUDE( ${allvxl_SOURCE_DIR}/config.cmake/Modules/FindZLIB.cmake )
+IF (LIBRARY_OUTPUT_PATH MATCHES '^$')
+  LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/v3p/png )
+ENDIF (LIBRARY_OUTPUT_PATH MATCHES '^$')
 
+# Immediate dependencies
+INCLUDE( ${allvxl_SOURCE_DIR}/config.cmake/Modules/FindZLIB.cmake )
