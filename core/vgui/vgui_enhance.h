@@ -1,27 +1,16 @@
+// This is oxl/vgui/vgui_enhance.h
+
+//:
+// \file
+// \author Philip C. Pritchett, Robotics Research Group, University of Oxford
+// \date   16 Nov 99
+// \brief  Magnify or display another tableau in a region around the mouse pointer.
+
 #ifndef vgui_enhance_h_
 #define vgui_enhance_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// .NAME vgui_enhance - Undocumented class FIXME
-// .LIBRARY vgui
-// .HEADER vxl Package
-// .INCLUDE vgui/vgui_enhance.h
-// .FILE vgui_enhance.cxx
-//
-// .SECTION Description:
-//
-// vgui_enhance is a class that Phil hasnt documented properly. FIXME
-//
-// .SECTION Author:
-//              Philip C. Pritchett, 16 Nov 99
-//              Robotics Research Group, University of Oxford
-//
-// .SECTION Modifications:
-//     <none yet>
-//
-//-----------------------------------------------------------------------------
 
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_slot.h>
@@ -29,10 +18,23 @@
 
 class vgui_event;
 
+//: Magnify or display another tableau in a region around the mouse pointer.
+//  This happens when the left mouse button is pressed down.
+//  Use '[' and ']' to change size of region around the mouse pointer.
+//  Use '{' and '}' to change the magnification.
+//
+// \verbatim
+//  Modifications:
+//    16-NOV-1999 P.Pritchett - Initial version.
+//    26-APR-2002 K.Y.McGaul - Converted to and added doxygen style comments.
+// \endverbatim
 class vgui_enhance : public vgui_tableau {
 public:
+  //: Constructor - magnifies area under the mouse pointer.
   vgui_enhance();
+  //: Constructor - magnifies area of the given tableau under the mouse pointer.
   vgui_enhance(vgui_tableau_sptr const& t);
+  //: Constructor - displays t2 on top of t1 in a region around the mouse pointer.
   vgui_enhance(vgui_tableau_sptr const& t1, vgui_tableau_sptr const& t2);
 
   vcl_string file_name() const;

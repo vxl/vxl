@@ -1,13 +1,18 @@
+// This is oxl/vgui/vgui_key.h
+
+//:
+// \file
+// \brief Enumeration of possible key strokes.
+
 #ifndef vgui_key_h_
 #define vgui_key_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-//:
-// \file
 
 #include <vcl_iosfwd.h>
 
+//: Enumeration of possible key strokes.
 enum vgui_key {
   vgui_KEY_NULL = 0,
   vgui_ESC=27, /* */ vgui_ESCAPE=27,

@@ -1,11 +1,11 @@
+// This is oxl/vgui/vgui_displaylist2D.cxx
+//
+// \author Philip C. Pritchett, RRG, University of Oxford
+// \date   14 Sep 99
+
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//:
-// \file
-// \author Philip C. Pritchett, RRG, University of Oxford
-// \date   14 Sep 99
-//-----------------------------------------------------------------------------
 
 #include "vgui_displaylist2D.h"
 

@@ -1,6 +1,7 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
+// This is oxl/vgui/internals/vgui_adaptor_tableau.cxx
+//
+// \author fsm@robots.ox.ac.uk
+
 #ifdef __GNUC__
 #pragma implementation
 #endif

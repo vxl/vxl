@@ -1,14 +1,20 @@
+// This is oxl/vgui/internals/vgui_accelerate.h
+
+//:
+// \file
+// \author David Capel, Robotics Research Group, University of Oxford
+// \date   1 April 2000
+// \brief  (Potentially) Accelerated functions
+
 #ifndef vgui_accelerate_h_
 #define vgui_accelerate_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-//:
-//  \file
-//
-// \author
-//              David Capel
-//              Robotics Research Group, University of Oxford
+
+#include <vgui/vgui_gl.h>
+
+//: (Potentially) Accelerated functions
 //
 // \verbatim
 //  Modifications
@@ -16,11 +22,6 @@
 //   10-JUL-2000   Marko Bacic, Oxford RRG - Speeded up rendering on Mesa by using GL_RGB instead of GL_RGBA
 //   Feb.2002    - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
-
-#include <vgui/vgui_gl.h>
-
-// (Potentially) Accelerated functions
-
 class vgui_accelerate {
 public:
   static bool vgui_no_acceleration;

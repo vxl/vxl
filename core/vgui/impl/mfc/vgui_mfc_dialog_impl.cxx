@@ -4,19 +4,11 @@
 #endif
 
 //:
-//  \file
+// \file
 // \author Marko Bacic, Oxford RRG
 // \date   31 July 2000
 //
 // See vgui_mfc_dialog_impl.h for a description of this file.
-//
-// \verbatim
-// Modifications:
-//  03-MAR-2001 K.Y.McGaul - Added correct modifiers to key press/release events
-//                         - Set checkboxes to display current value correctly
-//  22-AUG-2001 K.Y.McGaul - Fixed memory leak: font is now deleted.
-//  19-SEP-2001 K.Y.McGaul & Marko Bacic - Finally got inline tableau working!
-// \endverbatim
 //
 
 #include <vcl_string.h>

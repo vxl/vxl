@@ -1,33 +1,29 @@
+// This is oxl/vgui/vgui_displaylist2D.h
+
+//:
+// \file
+// \author Philip C. Pritchett, Robotics Research Group, University of Oxford
+// \date   14 Sep 99
+// \brief  Displaying two-dimensional geometric objects.
+
 #ifndef vgui_displaylist2D_h_
 #define vgui_displaylist2D_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// .NAME vgui_displaylist2D - Undocumented class FIXME
-// .LIBRARY vgui
-// .HEADER vxl Package
-// .INCLUDE vgui/vgui_displaylist2D.h
-// .FILE vgui_displaylist2D.cxx
-//
-// .SECTION Description
-//
-// vgui_displaylist2D is a class that Phil hasnt documented properly. FIXME
-//
-// .SECTION Author
-//              Philip C. Pritchett, 14 Sep 99
-//              Robotics Research Group, University of Oxford
-//
-// .SECTION Modifications
-//    1-SEP-2000 -- Marko Bacic,Oxford RRG -- Added displaying of object
-//                  information
-//-----------------------------------------------------------------------------
 
 #include "vgui_displaybase.h"
 
 #include <vgui/vgui_drag_mixin.h>
 #include <vgui/vgui_displaylist2D_sptr.h>
 
+//: Displaying two-dimensional geometric objects.
+//
+// \verbatim
+//  Modifications
+//    1-SEP-2000 -- Marko Bacic,Oxford RRG -- Added displaying of object
+//                  information
+// \endverbatim
 class vgui_displaylist2D : public vgui_displaybase {
 public:
   vgui_displaylist2D();

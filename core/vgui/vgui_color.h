@@ -1,12 +1,15 @@
+// This is oxl/vgui/vgui_color.h
+
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+// \brief  Easy functions which attempt to set the current color in both RGBA and color index mode
+
 #ifndef vgui_color_h_
 #define vgui_color_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vgui_color - Easy functions which attempt to set the current color in both RGBA and color index mode
-// .INCLUDE vgui/vgui_color.h
-// .FILE vgui_color.cxx
-// \author fsm@robots.ox.ac.uk
 
 #define vgui_color_WHITE  1, 1, 1
 #define vgui_color_YELLOW 1, 1, 0

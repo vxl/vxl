@@ -1,7 +1,25 @@
+// This is oxl/vgui/vgui_adaptor.h
+
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+// \brief  Provides an abstract interface to an OpenGL rendering state.
+
 #ifndef vgui_adaptor_h_
 #define vgui_adaptor_h_
-//:
-//  \file
+
+#include "dll.h"
+#include <vgui/vgui_menu.h>
+#include <vgui/vgui_event.h>
+#include <vgui/vgui_observer.h>
+
+class vgui_window;
+class vgui_tableau;
+struct vgui_tableau_sptr;
+class vgui_popup_params;
+class vgui_adaptor_tableau;
+
+//: Provides an abstract interface to an OpenGL rendering state.
 //
 // Class adaptor. Provides an abstract interface to an OpenGL rendering state
 // (context) producing events. Events from adaptor (eg. when someone presses a
@@ -32,19 +50,6 @@
 // 20 Sept     2000 capes@robots. added post_destroy() method.
 // Feb.2002         Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
-
-#include "dll.h"
-#include <vgui/vgui_menu.h>
-#include <vgui/vgui_event.h>
-#include <vgui/vgui_observer.h>
-
-class vgui_window;
-class vgui_tableau;
-struct vgui_tableau_sptr;
-class vgui_popup_params;
-class vgui_adaptor_tableau;
-// see vgui_adaptor.cxx for information about this class.
-
 class vgui_adaptor {
 public:
   vgui_adaptor();
@@ -77,15 +82,20 @@ public:
   // only the pure virtuals need be implemented.
   // the rest is quality-of-implementation stuff.
 
-  // Return width and height of rendering area (*not* the width and height of the
-  // viewport). There seems to be no OpenGL mechanism for doing this.
+  //: Return width of rendering area.
+  // *Not* the width of the viewport. There seems to be no OpenGL 
+  // mechanism for doing this.
   virtual unsigned get_width() const =0;
+  //: Return height of rendering area.
+  // *Not* the height of the viewport. There seems to be no OpenGL 
+  // mechanism for doing this.
   virtual unsigned get_height() const =0;
 
   // These methods are called by vgui_adaptor (in its capacity as a base class)
   // when a post arrives.
   virtual int  post_timer(float);
   virtual void post_timer(float, int );
+  //: Redraw the rendering area.
   virtual void post_redraw() =0;
   virtual void post_overlay_redraw() =0;
   virtual void post_message(char const *, void const *);

@@ -6,12 +6,7 @@
 // \file
 // \author  Marko Bacic, Oxford RRG
 // \date    27 July 2000
-// \brief  Defines a main application document
-//
-// \verbatim
-//  Modifications:
-//    Marko Bacic   27-JUL-2000   Initial version.
-// \endverbatim
+// \brief   Defines a main application document
 
 #if _MSC_VER > 1000
 #pragma once
@@ -19,7 +14,12 @@
 
 class vgui_tableau;
 
-
+//: Defines a main application document.
+//
+// \verbatim
+//  Modifications:
+//    Marko Bacic   27-JUL-2000   Initial version.
+// \endverbatim
 class vgui_mfc_doc : public CDocument
 {
 protected: // create from serialization only

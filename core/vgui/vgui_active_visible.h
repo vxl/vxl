@@ -1,28 +1,26 @@
+// This is oxl/vgui/vgui_active_visible.h
+
+//:
+// \file   Robotics Research Group, University of Oxford
+// \author Philip C. Pritchett
+// \date   25 Jan 00
+// \brief  
+
 #ifndef vgui_active_visible_h_
 #define vgui_active_visible_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// 
-// .NAME vgui_active_visible - Undocumented class FIXME
-// .LIBRARY vgui
-// .HEADER vxl Package
-// .INCLUDE vgui/vgui_active_visible.h
-// .FILE vgui_active_visible.cxx
-//
-// .SECTION Description
-//
-// vgui_active_visible is a class that Phil hasnt documented properly. FIXME
-//
-// .SECTION Author
-//              Philip C. Pritchett, 25 Jan 00
-//              Robotics Research Group, University of Oxford
-//
-//-----------------------------------------------------------------------------
 
 #include "vgui_active_visible_sptr.h"
 #include "vgui_wrapper_tableau.h"
 
+//:
+//
+// \verbatim
+//  Modifications:
+//    25-JAN-2000 P.Pritchett - Initial version.
+// \endverbatim
 class vgui_active_visible : public vgui_wrapper_tableau {
 public:
   vgui_active_visible(vgui_tableau_sptr const &, bool name_in_menu = false);

@@ -1,21 +1,25 @@
+// This is oxl/vgui/vgui_command.h
+
+//:
+// \file
+// \author fsm@robots.ox.ac.uk and pcp@robots.ox.ac.uk
+// \brief  Defines the abstract interface to commands.
+
 #ifndef vgui_command_h_
 #define vgui_command_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-//:
-// \file
-// \author
-// fsm@robots.ox.ac.uk \and pcp@robots.ox.ac.uk
+
+#include <vbl/vbl_ref_count.h>
+
+//: Defines the abstract interface to commands
+//
 // \verbatim
 // Modifications
 //  awf renamed derived classes to be consistent with header-file naming convention.
 //  fsm fixed everything afterwards....
 // \endverbatim
-
-#include <vbl/vbl_ref_count.h>
-
-//: this defines the abstract interface to commands
 struct vgui_command : public vbl_ref_count
 {
   vgui_command();
@@ -47,6 +51,7 @@ struct vgui_command_toggle : public vgui_command
   void execute();
 };
 
+template <class receiver>
 //: pcp's templated bound member functions.
 // All methods are inline, so we don't need a separate .cxx file.
 //
@@ -61,8 +66,6 @@ struct vgui_command_toggle : public vgui_command
 // You can make a command such as
 //    vgui_command_simple<myclass>(my_app, myclass::do_thing);
 //  and pass it to a menu.
-//
-template <class receiver>
 struct vgui_command_simple : public vgui_command
 {
   typedef void (receiver::* action)();
@@ -76,8 +79,8 @@ struct vgui_command_simple : public vgui_command
 #define VGUI_COMMAND_SIMPLE_INSTANTIATE(receiver) \
 template struct vgui_command_simple<receiver >
 
-// similar, but for methods that take a single argument (fsm).
 template <class object_t, class data_t>
+//: For methods that take a single argument (fsm).
 struct vgui_command_bound_method : public vgui_command
 {
   typedef void (object_t::*action_t)(data_t);

@@ -1,6 +1,7 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
+// This is oxl/vgui/vgui_adaptor_mixin.cxx
+//
+// \author fsm@robots.ox.ac.uk
+
 #ifdef __GNUC__
 #pragma implementation
 #endif

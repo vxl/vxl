@@ -1,16 +1,21 @@
+// This is oxl/vgui/vgui_drag_mixin.h
+
+//:
+// \file 
+// \author Philip C. Pritchett, Robotics Research Group, University of Oxford
+// \date   11 Sep 99
+// \brief  A tableau for drag events.
+
 #ifndef vgui_drag_mixin_h_
 #define vgui_drag_mixin_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// 
-// .NAME vgui_drag_mixin - a tableau for drag events 
-// .LIBRARY vgui
-// .HEADER vxl Package
-// .INCLUDE vgui/vgui_drag_mixin.h
-// .FILE vgui_drag_mixin.cxx
-//
-// .SECTION Description
+
+#include "vgui_event.h"
+#include "vgui_tableau.h"
+
+//: A tableau for drag events 
 //
 // vgui_drag_mixin simplifies the implementation of interactive tableaux.
 // Rather than having a switch in the tableau handle function, one implements
@@ -21,15 +26,11 @@
 // vgui_MOTION events to the function mouse_drag() if the mouse is being moved
 // with a button depressed.
 //
-// .SECTION Author
-//              Philip C. Pritchett, 11 Sep 99
-//              Robotics Research Group, University of Oxford
-//
-//-----------------------------------------------------------------------------
-
-#include "vgui_event.h"
-#include "vgui_tableau.h"
-
+// \verbatim
+//  Modifications:
+//    11-SEP-1999 P.Pritchett - Initial version.
+//    26-APR-2002 K.Y.McGaul - Converted to doxygen style comments.
+// \endverbatim
 class vgui_drag_mixin {
 public:
   vgui_drag_mixin(void);

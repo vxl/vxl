@@ -1,41 +1,45 @@
+// This is oxl/vgui/vgui_camera.h
+
+//:
+// \file
+// \author Geoffrey Cross, Oxford RRG
+// \date   03 Nov 99
+// \brief  Allows 3D models to project into a GL context given a camera projection matrix.
 #ifndef vgui_camera_h_
 #define vgui_camera_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// .NAME    vgui_camera
-// .LIBRARY vgui
-// .HEADER  vxl package
-// .INCLUDE vgui/vgui_camera.h
-// .FILE    vgui_camera.cxx
-//
-// .SECTION Description
-//    vgui_camera is a utility class which allows 3D models to projected into
-//     a GL context given a known camera projection matrix.  Note comments in
-//     code about clipping planes which is really rather important if you care
-//     about such things.  Use the class in conjunction with a vgui_load (if
-//     you dare), or a vgui_mult to change the GL_PROJECTION_MATRIX
-//     appropriately.
-//
-// .SECTION Author
-//     Geoffrey Cross, Oxford RRG, 03 Nov 99
-//
-// .SECTION Modifications
-//     991103 Geoff Initial version.
-//
-//-----------------------------------------------------------------------------
 
 class PMatrix;
 
+//: Allows 3D models to project into a GL context given a camera projection matrix.
+//
+//  vgui_camera is a utility class which allows 3D models to projected into
+//  a GL context given a known camera projection matrix.  Note comments in
+//  code about clipping planes which is really rather important if you care
+//  about such things.  Use the class in conjunction with a vgui_load (if
+//  you dare), or a vgui_mult to change the GL_PROJECTION_MATRIX
+//  appropriately.
+//
+// \verbatim
+//  Modifications
+//    991103 Geoff Initial version.
+//    26-APR-2002  K.Y.McGaul - Converted to doxygen style comments. 
+// \endverbatim
 class vgui_camera {
 public:
   vgui_camera();
   vgui_camera( const vnl_matrix<double> &P);
-
+  
+  //: Set the projection matrix to the given matrix.
   void set_pmatrix( const vnl_matrix<double> &m);
 
-  // Plug this matrix into a vgui_load or vgui_mult tableau.
+  //: Plug this matrix into a vgui_load or vgui_mult tableau.
+  //  Note: this will return a GL_PROJECTION_MATRIX with the assumption that
+  //  you have an euclidean reconstruction.  The result is that the front and
+  //  back clipping planes will be PARALLEL (note: not projective frame!) to 
+  //  the image plane. 
   vnl_matrix<double> get_glprojmatrix( const int imagesizex= 720, const int imagesizey= 576) const;
 
 protected:

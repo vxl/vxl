@@ -1,30 +1,26 @@
+// This is oxl/vgui/vgui_function_tableau.h
+
+//:
+// \file
+// \author Philip C. Pritchett, Robotics Research Group, University of Oxford
+// \date   25 Nov 99
+// \brief  Tableau where functions passed in are called for various events.
+
 #ifndef vgui_function_tableau_h_
 #define vgui_function_tableau_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// 
-// .NAME vgui_function_tableau - Undocumented class FIXME
-// .LIBRARY vgui
-// .HEADER vxl Package
-// .INCLUDE vgui/vgui_function_tableau.h
-// .FILE vgui_function_tableau.cxx
-//
-// .SECTION Description
-//
-// vgui_function_tableau is a class that Phil hasnt documented properly. FIXME
-//
-// .SECTION Author
-//              Philip C. Pritchett, 25 Nov 99
-//              Robotics Research Group, University of Oxford
-//
-// .SECTION Modifications
-//
-//-----------------------------------------------------------------------------
 
 #include <vgui/vgui_tableau.h>
 #include "dll.h"
 
+//:  Tableau where functions passed in are called for various events.
+//
+// \verbatim
+//  Modifications:
+//    25-NOV-1999 P.Pritchett - Initial version.
+// \endverbatim
 class vgui_function_tableau : public vgui_tableau {
 public:
   typedef bool (*function)(const vgui_event&);

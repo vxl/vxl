@@ -10,15 +10,6 @@
 // \author  Marko Bacic, RRG, University of Oxford
 // \date    31 Jul 2000
 // \brief   Provides support for a dialog box
-//
-//  Specialization of vgui_dialog_impl for mfc. Creates a mfc dialog box.
-//  Based on vgui_gtk_dialog_impl
-//
-// \verbatim
-//  Modifications:
-//    Marko Bacic    31-JUL-2000   Initial version.
-// \endverbatim
-//
 
 class CFont;
 
@@ -31,6 +22,19 @@ class CFont;
 #define ID_EDIT 0x8200
 #define ID_COMBOBOX 0x8300
 
+//: Provides support for an MFC dialog box.
+// 
+//  Specialization of vgui_dialog_impl for mfc. Creates a mfc dialog box.
+//  Based on vgui_gtk_dialog_impl
+//
+// \verbatim
+//  Modifications:
+//  31-JUL-2000 Marko Bacic - Initial version.
+//  03-MAR-2001 K.Y.McGaul - Added correct modifiers to key press/release events
+//                         - Set checkboxes to display current value correctly
+//  22-AUG-2001 K.Y.McGaul - Fixed memory leak: font is now deleted.
+//  19-SEP-2001 K.Y.McGaul & Marko Bacic - Finally got inline tableau working!
+// \endverbatim
 class vgui_mfc_dialog_impl : public CWnd,public vgui_dialog_impl {
 public:
   vgui_mfc_dialog_impl(const char* name);

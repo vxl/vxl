@@ -1,11 +1,24 @@
+// This is oxl/vgui/internals/vgui_dialog.h
+
+//: 
+// \file
+// \author Philip C. Pritchett, Robotics Research Group, University of Oxford
+// \date   23 Oct 1999
+// \brief  Abstract dialog class.
+
 #ifndef vgui_dialog_h_
 #define vgui_dialog_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-//:
-//  \file
-// \brief Abstract dialog class
+
+#include <vcl_string.h>
+#include <vcl_vector.h>
+#include <vgui/vgui_tableau.h>
+//class vgui_dialog_field;
+class vgui_dialog_impl;
+
+//: Abstract dialog class
 //
 // vgui_dialog allows the user to build a dialog from a collection of fields.
 // A field in this context consists of a vcl_string label and a variable.
@@ -26,30 +39,21 @@
 //   send_order(the_table, the_dressing, has_mayo);
 // \endcode
 //
-// \author
-//              Philip C. Pritchett, 23 Oct 99
-//              Robotics Research Group, University of Oxford
-//
 // \verbatim
 //  Modifications
-//   K.Y.McGaul 25-JAN-00   Added message function to allow text messages in dialogs.
-//   K.Y.McGaul 27-JAN-00   Added set_modal function to allow non-modal dialogs.
-//   K.Y.McGaul 24-FEB-00   Added file browser and color chooser.
-//   Marko Bacic 11-JUL-00  Added inline file browser
-//   Marko Bacic 12-JUL-00  Added inline color chooser
+//   23-OCT-1999 P.Pritchet - Initial version.
+//   25-JAN-2000 K.Y.McGaul - Added message function to allow text messages in dialogs.
+//   27-JAN-2000 K.Y.McGaul - Added set_modal function to allow non-modal dialogs.
+//   24-FEB-2000 K.Y.McGaul - Added file browser and color chooser.
+//   11-JUL-2000 Marko Bacic - Added inline file browser
+//   12-JUL-2000 Marko Bacic - Added inline color chooser
+//   26-APR-2002 K.Y.McGaul - Converted to doxygen style comments.
 // \endverbatim
-//-----------------------------------------------------------------------------
-
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vgui/vgui_tableau.h>
-//class vgui_dialog_field;
-class vgui_dialog_impl;
-
 class vgui_dialog
 {
 public:
-
+  
+  //: Constructor - takes the title of the dialog box.
   vgui_dialog(const char* name);
  ~vgui_dialog();
 
@@ -61,9 +65,11 @@ public:
   void field(const char*, double&);
   void field(const char*, vcl_string&);
 
-  // multiple choice
+  //: Multiple choice - with two options.
   void choice(const char* label, const char* option1, const char* option2, int& chosen);
+  //: Multiple choice - with three options.
   void choice(const char* label, const char* option1, const char* option2, const char* option3, int& chosen);
+  //: Multiple choice - with the list of options given.
   void choice(const char*, const vcl_vector<vcl_string>&, int &);  // get index in vcl_vector of strings.
   void choice(const char*s, const vcl_vector<vcl_string>&v, unsigned &r) { choice(s,v,*reinterpret_cast<int*>(&r)); }
 

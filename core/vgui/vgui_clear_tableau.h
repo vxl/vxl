@@ -1,27 +1,16 @@
+// This is oxl/vgui/vgui_clear_tableau.h
+
+//:
+// \file
+// \author Philip C. Pritchett, Robotics Research Group, University of Oxford
+// \date   11 Nov 99
+// \brief  Tableau performing OpenGL clearing.
+
 #ifndef vgui_clear_tableau_h_
 #define vgui_clear_tableau_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// .NAME vgui_clear_tableau - tableau performing OpenGL clearing
-// .LIBRARY vgui
-// .INCLUDE vgui/vgui_clear_tableau.h
-// .FILE vgui_clear_tableau.cxx
-//
-// .SECTION Description:
-//
-// vgui_clear_tableau is a tableau that performs OpenGL clearing upon
-// receipt of a vgui_DRAW event. It passes all events to its single child.
-//
-// .SECTION Author:
-//              Philip C. Pritchett, 11 Nov 99
-//              Robotics Research Group, University of Oxford
-//
-// .SECTION Modifications:
-//     <none yet>
-//
-//-----------------------------------------------------------------------------
 
 #include "vgui_clear_tableau_sptr.h"
 #include <vgui/vgui_gl.h>
@@ -29,12 +18,23 @@
 #include <vgui/vgui_slot.h>
 class vgui_menu;
 
+//: Tableau performing OpenGL clearing.
+//
+// vgui_clear_tableau is a tableau that performs OpenGL clearing upon
+// receipt of a vgui_DRAW event. It passes all events to its single child.
+//
+// \verbatim
+//  Modifications:
+//    11-NOV-1999 P.Pritchett - Initial version.
+//    26-APR-2002 K.Y.McGaul - Added some doxygen style comments.
+// \endverbatim
 class vgui_clear_tableau : public vgui_tableau {
 public:
   vgui_clear_tableau();
 
   vcl_string type_name() const;
 
+  //: Set colour of clear_tableau to the given red, green, blue values.
   void set_colour(float r, float g, float b, float a=1);
   void set_mask(GLbitfield);
 

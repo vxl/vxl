@@ -1,10 +1,14 @@
+// This is oxl/vgui/vgui_find.h
+
+//:
+// \file
+// \author  fsm@robots.ox.ac.uk
+
 #ifndef vgui_find_h_
 #define vgui_find_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-//: \file
-// \author  fsm@robots.ox.ac.uk
 
 #include <vcl_string.h>
 #include <vgui/vgui_tableau_sptr.h>

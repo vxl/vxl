@@ -1,13 +1,17 @@
+// This is oxl/vgui/vgui_displaybase.h
+
+/:
+// \file
+// \author Philip C. Pritchett, Robotics Research Group, University of Oxford
+// \date   14 Sep 99
+// \brief  General display list functionality, can use any type of soview.
+
 #ifndef vgui_displaybase_h_
 #define vgui_displaybase_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-//:
-//  \file
-// \author
-//              Philip C. Pritchett, 14 Sep 99
-//              Robotics Research Group, University of Oxford
+/
 //-----------------------------------------------------------------------------
 
 #include <vcl_string.h>
@@ -29,10 +33,9 @@ struct vgui_displaybase_selection_callback {
   virtual bool deselect_all();
 };
 
+#include "vgui_displaybase_sptr.h"
 //: General display list functionality, can use any type of soview.
 // As long as it's black.
-#include "vgui_displaybase_sptr.h"
-
 class vgui_displaybase : public vgui_tableau {
 public:
 

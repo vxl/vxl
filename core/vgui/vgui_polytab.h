@@ -1,40 +1,24 @@
-#ifndef vgui_polytab_h_
-#define vgui_polytab_h_
-
-// .NAME vgui_polytab
-// .INCLUDE vgui/vgui_polytab.h
-// .FILE vgui_polytab.cxx
+// This is oxl/vgui/vgui_polytab.h
 
 //:
 // \file
-// Class polytab_base is a tableau which renders its children into sub-rectangles
-// of its given viewport. The subrectangles are given as relative coordinates
-// on [0,1]x[0,1], with (0,0) being the lower left corner and (1,1) the upper
-// right corner. polytab_base has a concept of which child is 'current', meaning
-// roughly which child is getting the mouse events.
-//
-// Class polytab is derived from polytab_base and automatically switches current
-// child, according to where the pointer is, in a sensible way.
-//
-// This can be used to emulate two adaptors side by side.
+// \author fsm@robots.ox.ac.uk
+// \brief  A tableau which renders its children into sub-rectangles of its viewport.
 
-// Implementation notes:
-// Many methods take an argument "GLint const vp[4]", which is the viewport (in
-// the format returned by OpenGL) as it was when the last event reached the
-// tableau. For example, it is not possible to switch 'current' child without
-// knowing the viewport, because a LEAVE/ENTER pair have to be sent to the old
-// and new child and the viewport must be set correctly before dispatching these
-// events.
-//
-// @author fsm@robots.ox.ac.uk
-
-//--------------------------------------------------------------------------------
+#ifndef vgui_polytab_h_
+#define vgui_polytab_h_
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_slot.h>
 
-// base class. recommend use vgui_polytab further down the file.
+//: Base class for vgui_polytab - it is recommended to use vgui_polytab (further down the file).
+//
+// Class polytab_base is a tableau which renders its children into sub-rectangles
+// of its given viewport. The subrectangles are given as relative coordinates
+// on [0,1]x[0,1], with (0,0) being the lower left corner and (1,1) the upper
+// right corner. polytab_base has a concept of which child is 'current', meaning
+// roughly which child is getting the mouse events.
 class vgui_polytab_base : public vgui_tableau {
 public:
   vgui_polytab_base();
@@ -99,6 +83,26 @@ protected:
 // use this class, not the base class.
 #include "vgui_polytab_sptr.h"
 
+//: A tableau which renders its children into sub-rectangles of its viewport.
+//
+// Class polytab_base is a tableau which renders its children into sub-rectangles
+// of its given viewport. The subrectangles are given as relative coordinates
+// on [0,1]x[0,1], with (0,0) being the lower left corner and (1,1) the upper
+// right corner. polytab_base has a concept of which child is 'current', meaning
+// roughly which child is getting the mouse events.
+//
+// Class polytab is derived from polytab_base and automatically switches current
+// child, according to where the pointer is, in a sensible way.
+//
+// This can be used to emulate two adaptors side by side.
+//
+// Implementation notes:
+// Many methods take an argument "GLint const vp[4]", which is the viewport (in
+// the format returned by OpenGL) as it was when the last event reached the
+// tableau. For example, it is not possible to switch 'current' child without
+// knowing the viewport, because a LEAVE/ENTER pair have to be sent to the old
+// and new child and the viewport must be set correctly before dispatching these
+// events.
 class vgui_polytab : public vgui_polytab_base {
 public:
   vgui_polytab();

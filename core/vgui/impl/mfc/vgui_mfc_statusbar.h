@@ -1,27 +1,28 @@
+// This is vgui/impl/mfc/vgui_mfc_statusbar
 #ifndef vgui_mfc_statusbar_h_
 #define vgui_mfc_statusbar_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// 
-// This is vgui/impl/mfc/vgui_mfc_statusbar
 
 //:
 // \file
 // \author   Marko Bacic, Oxford RRG
 // \date     08 Aug 2000
 // \brief    Status bar for the main window of the application.
-// \verbatim
-//  Modifications:
-//     <none yet>
-// \endverbatim
-//
 
 #include <vcl_string.h>
 #include <vcl_iosfwd.h>
 #include <vgui/vgui_statusbuf.h>
 #include <vgui/vgui_statusbar.h>
 #include "stdafx.h"
+
+//: Status bar for the main window of the application.
+//
+// \verbatim
+//  Modifications:
+//     08-AUG-2000 Marko Bacic - Initial version.
+// \endverbatim
 class vgui_mfc_statusbar : public vgui_statusbar {
 public:
   

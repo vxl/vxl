@@ -1,4 +1,3 @@
-//
 // This is vgui/impl/mfc/vgui_mfc_utils.h
 
 //:
@@ -6,12 +5,6 @@
 // \author  Marko Bacic, Oxford RRG
 // \date    4 August 2000
 // \brief   Provides support for menus 
-// \verbatim
-//  Modifications:
-//   14-AUG-2000 Marko Bacic   Added support for popup menus
-//   16-MAR-2001 K.Y.McGaul    Added menu accelerators
-// \endverbatim
-//
 
 #ifndef vgui_mfc_utils_h_
 #define vgui_mfc_utils_h_
@@ -28,7 +21,16 @@
 
 typedef void (*fp)();
 
-//: Only one instance of the class is allowed
+//: MFC version of vgui_utils - provides support for menus.
+//  Only one instance of the class is allowed
+//
+// \verbatim
+//  Modifications:
+//   04-AUG-2000 Marko Bacic - Initial version.
+//   14-AUG-2000 Marko Bacic - Added support for popup menus
+//   16-MAR-2001 K.Y.McGaul - Added menu accelerators
+//   22-AUG-2001 K.Y.McGaul - Added destructor to fix memory leak: all menus now deleted.
+// \endverbatim
 class vgui_mfc_utils 
 {
   //: Number of menu items.
@@ -61,7 +63,7 @@ public:
   HACCEL AccelTable;
 
 private:
-  // List of menus to be deleted when we are finished:
+  //: List of menus to be deleted when we are finished:
   vcl_vector<CMenu*> menus_to_be_deleted;
 
 };

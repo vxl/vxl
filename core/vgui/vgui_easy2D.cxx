@@ -1,11 +1,12 @@
+// This is oxl/vgui/vgui_easy2D.cxx
+
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
 #pragma implementation
 #endif
 //
-// .NAME vgui_easy2D
-// Author: Philip C. Pritchett, RRG, University of Oxford
-// Created: 24 Sep 99
+// \author Philip C. Pritchett, RRG, University of Oxford
+// \date   24 Sep 99
 //
 //-----------------------------------------------------------------------------
 
@@ -101,11 +102,13 @@ vcl_string vgui_easy2D::type_name() const {
   return "vgui_easy2D";
 }
 
+//: Set the child tableau to be the given image_tableau.
 void vgui_easy2D::set_image(vcl_string const& fn)
 {
   image_image->set_image(fn.c_str());
 }
 
+//: Set the child tableau to be the given tableau.
 void vgui_easy2D::set_child(vgui_tableau_sptr const& i) {
   if (i->type_name() != "vgui_image_tableau" &&
       i->type_name() != "xcv_image_tableau")
@@ -113,6 +116,7 @@ void vgui_easy2D::set_child(vgui_tableau_sptr const& i) {
   image_slot.assign(i);
 }
 
+//: Add the given two-dimensional object to the display.
 void vgui_easy2D::add(vgui_soview2D* object) {
 
   vgui_style *style = vgui_style_factory::instance()->get_style(fg[0], fg[1], fg[2], point_size, line_width);
@@ -121,7 +125,7 @@ void vgui_easy2D::add(vgui_soview2D* object) {
   vgui_displaylist2D::add(object);
 }
 
-
+//: Add a point at the given position to the display.
 vgui_soview2D_point* vgui_easy2D::add_point(float x, float y)
 {
   vgui_soview2D_point *obj = new vgui_soview2D_point;
@@ -132,7 +136,8 @@ vgui_soview2D_point* vgui_easy2D::add_point(float x, float y)
   return obj;
 }
 
-
+//: Add a finite line with the given start and end points to the display.
+//  Note that this will be added as a vgui_lineseg (not vgui_line - which doesn't exist).
 vgui_soview2D_lineseg* vgui_easy2D::add_line(float x0, float y0, float x1, float y1) {
   vgui_soview2D_lineseg *obj = new vgui_soview2D_lineseg;
 
@@ -145,6 +150,7 @@ vgui_soview2D_lineseg* vgui_easy2D::add_line(float x0, float y0, float x1, float
   return obj;
 }
 
+//: Add an infinite line (ax + by +c = 0) to the display.
 vgui_soview2D_infinite_line* vgui_easy2D::add_infinite_line(float a, float b, float c) {
   vgui_soview2D_infinite_line *obj = new vgui_soview2D_infinite_line;
 
@@ -156,6 +162,7 @@ vgui_soview2D_infinite_line* vgui_easy2D::add_infinite_line(float a, float b, fl
   return obj;
 }
 
+//: Add a circle with the given centre and radius to the display.
 vgui_soview2D_circle* vgui_easy2D::add_circle(float x, float y, float r) {
   vgui_soview2D_circle *obj = new vgui_soview2D_circle;
 
@@ -167,24 +174,28 @@ vgui_soview2D_circle* vgui_easy2D::add_circle(float x, float y, float r) {
   return obj;
 }
 
-
+//: Add a point with the given projective coordinates.
 vgui_soview2D_point* vgui_easy2D::add_point_3dv(double const p[3]) {
   return add_point(p[0]/p[2], p[1]/p[2]);
 }
 
+//: Add a line with the given projective start and end points.
 vgui_soview2D_lineseg* vgui_easy2D::add_line_3dv_3dv(double const p[3], double const q[3]) {
   return add_line(p[0]/p[2], p[1]/p[2],
                   q[0]/q[2], q[1]/q[2]);
 }
 
+//: Add an infinite line with the given projective coordinates.
 vgui_soview2D_infinite_line* vgui_easy2D::add_infinite_line_3dv(double const l[3]) {
   return add_infinite_line(l[0], l[1], l[2]);
 }
 
+//: Add a circle with the given centre (in projective coords) and radius to the display.
 vgui_soview2D_circle* vgui_easy2D::add_circle_3dv(double const point[3], float r) {
   return add_circle(point[0]/point[2], point[1]/point[2], r);
 }
 
+//: Add a linestrip with the given n vertices to the display.
 vgui_soview2D_linestrip* vgui_easy2D::add_linestrip(unsigned n, float const *x, float const *y) {
   vgui_soview2D_linestrip *obj = new vgui_soview2D_linestrip(n, x, y);
 
@@ -192,6 +203,7 @@ vgui_soview2D_linestrip* vgui_easy2D::add_linestrip(unsigned n, float const *x, 
   return obj;
 }
 
+//: Add  polygon with the given n vertices to the display.
 vgui_soview2D_polygon* vgui_easy2D::add_polygon(unsigned n, float const *x, float const *y) {
   vgui_soview2D_polygon *obj = new vgui_soview2D_polygon(n, x, y);
 
@@ -199,6 +211,10 @@ vgui_soview2D_polygon* vgui_easy2D::add_polygon(unsigned n, float const *x, floa
   return obj;
 }
 
+//: Screen dump to postscript file.
+//  Specify the optional arguments in case this tableau does not contain
+//  an image tableau, or if you want a smaller part of the image printed.
+//  If wd or ht are 0, no image is printed at all.
 void vgui_easy2D::print_psfile(vcl_string filename, int reduction_factor, bool print_geom_objs, int wd, int ht)
 {
   // Set wd and ht from the image tableau, if not specified as parameters

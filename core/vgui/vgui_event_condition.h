@@ -1,15 +1,16 @@
+// This is oxl/vgui/vgui_event_condition.h
+
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+// \brief  Represent and recognise simple event conditions.
+
 #ifndef vgui_event_condition_h_
 #define vgui_event_condition_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 
-//:
-//  \file
-
-/*
-  fsm@robots.ox.ac.uk
-*/
 #include <vcl_string.h>
 #include <vgui/vgui_key.h>
 #include <vgui/vgui_button.h>
@@ -17,9 +18,8 @@
 class vgui_event;
 
 //: Represent and recognise simple event conditions.
-// This makes it easy to change the key/mouse combination that causes
-// one's tableau to do something.
-
+//  This makes it easy to change the key/mouse combination that causes
+//  one's tableau to do something.
 struct vgui_event_condition
 {
   // We use bitfields to avoid the charge that these things take

@@ -1,11 +1,14 @@
+// This is oxl/vgui/internals/vgui_accelerate_x11.h
+
+//:
+// \file
+// \author VGG, Oxford
+
 #ifndef vgui_accelerate_x11_h_
 #define vgui_accelerate_x11_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vgui_accelerate_x11
-// .INCLUDE vgui/internals/vgui_accelerate_x11.h
-// .FILE internals/vgui_accelerate_x11.cxx
 
 #include <vgui/vgui_gl.h>
 #include <vgui/internals/vgui_accelerate.h>

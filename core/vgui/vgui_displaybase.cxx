@@ -1,13 +1,11 @@
+// This is oxl/vgui/vgui_displaybase.cxx
+
+// \author Philip C. Pritchett, RRG, University of Oxford
+// \date   14 Sep 99
+
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//-*- c++ -*-------------------------------------------------------------------
-//
-// .NAME vgui_displaybase
-// Author: Philip C. Pritchett, RRG, University of Oxford
-// Created: 14 Sep 99
-//
-//-----------------------------------------------------------------------------
 
 #include "vgui_displaybase.h"
 

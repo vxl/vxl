@@ -1,13 +1,12 @@
+// This is oxl/vgui/vgui_blackbox.cxx
+//
+// \author Philip C. Pritchett, RRG, University of Oxford
+// \date   13 Oct 99
+
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// .NAME vgui_blackbox
-// Author: Philip C. Pritchett, RRG, University of Oxford
-// Created: 13 Oct 99
-//
-//-----------------------------------------------------------------------------
 
 #include "vgui_blackbox.h"
 

@@ -1,15 +1,24 @@
 // This is ./oxl/vgui/internals/vgui_dialog_impl.h
-#ifndef vgui_dialog_impl_h_
-#define vgui_dialog_impl_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
 
 //:
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   25 Oct 99
 // \brief vgui_dialog_impl is the abstract base class for dialog implementation.
+
+#ifndef vgui_dialog_impl_h_
+#define vgui_dialog_impl_h_
+#ifdef __GNUC__
+#pragma interface
+#endif
+
+#include <vcl_string.h>
+#include <vcl_vector.h>
+#include <vgui/vgui_tableau.h>
+
+class vgui_dialog_field;
+
+//: vgui_dialog_impl is the abstract base class for dialog implementation.
 //
 //  It contains methods for adding fields corresponding to those in
 //  vgui_dialog. It also contains a vcl_vector of elements which are tuples of
@@ -28,15 +37,6 @@
 //   Joris S.    09-NOV-00    Fixed weird color browser things
 //   K.Y.McGaul  22-MAY-01    Added tableau field.
 // \endverbatim
-//
-
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vgui/vgui_tableau.h>
-
-class vgui_dialog_field;
-
-
 class vgui_dialog_impl
 {
 public:

@@ -1,13 +1,12 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is oxl/vgui/vgui_clear_tableau.cxx
+
+// \author Philip C. Pritchett, RRG, University of Oxford
+// \date   11 Nov 99
+// See vgui_clear_tableau.h for a description of this class.
+
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// .NAME vgui_clear_tableau
-// Author: Philip C. Pritchett, RRG, University of Oxford
-// Created: 11 Nov 99
-//
-//-----------------------------------------------------------------------------
 
 #include "vgui_clear_tableau.h"
 #include <vgui/vgui_event.h>

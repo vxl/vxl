@@ -1,27 +1,16 @@
+// This is oxl/vgui/vgui_displaylist3D.h
+
+//:
+// \file
+// \author Philip C. Pritchett, Robotics Research Group, University of Oxford
+// \date   14 Sep 99
+// \brief  Displaying of three-dimensional geometric objects.
+
 #ifndef vgui_displaylist3D_h_
 #define vgui_displaylist3D_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// 
-// .NAME vgui_displaylist3D - Undocumented class FIXME
-// .LIBRARY vgui
-// .HEADER vxl Package
-// .INCLUDE vgui/vgui_displaylist3D.h
-// .FILE vgui_displaylist3D.cxx
-//
-// .SECTION Description:
-//
-// vgui_displaylist3D is a class that Phil hasnt documented properly. FIXME
-//
-// .SECTION Author:
-//              Philip C. Pritchett, 14 Sep 99
-//              Robotics Research Group, University of Oxford
-//
-// .SECTION Modifications:
-//     <none yet>
-//
-//-----------------------------------------------------------------------------
 
 #include "vgui_displaybase.h"
 
@@ -29,6 +18,12 @@
 
 class vgui_soview3D;
 
+//: Displaying of three-dimensional geometric objects
+//              
+// \verbatim
+//  Modifications:
+//    14-SEP-1999 P.Pritchett - Initial version.
+// \endverbatim
 class vgui_displaylist3D : public vgui_displaybase, public vgui_drag_mixin { 
 public:
   vgui_displaylist3D();

@@ -1,35 +1,16 @@
+// This is oxl/vgui/vgui_composite.h
+
+//:
+// \file
+// \author Philip C. Pritchett, Robotics Research Group, University of Oxford
+// \date   15 Sep 99
+// \brief  Tableau which treats it children as a stack of acetates
+
 #ifndef vgui_composite_h_
 #define vgui_composite_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// .NAME vgui_composite - treats it children as a stack of acetates
-// .LIBRARY vgui
-// .HEADER vxl Package
-// .INCLUDE vgui/vgui_composite.h
-// .FILE vgui_composite.cxx
-//
-// .SECTION Description:
-//
-//   The vgui_composite class can have any number of children, indexed from 0 upwards.
-// The draw action of vgui_composite is to draw each of its children, in order, into
-// the current context.  Events reaching the vgui_composite are passed on to each child
-// in turn, till it is handled, so that child 0, the first added, is the "top" tableau.
-//
-// The exceptions to this rule are :
-// [a] key presses '0'-'9', which toggle the activeness of the children and
-// [b] the DRAW, DRAW_OVERLAY events which are sent to all children.
-//
-// .SECTION Author:
-//              Philip C. Pritchett, 15 Sep 99
-//              Robotics Research Group, University of Oxford
-//
-// .SECTION Modifications:
-// 18 Sep 00 capes@robots. Added set_enable_key_bindings. Key bindings are OFF by default.
-//  9 Feb 01 awf@robots. Add Alt-C to re-enable key bindings.
-//
-//-----------------------------------------------------------------------------
 
 #include <vcl_vector.h>
 
@@ -41,11 +22,32 @@
 
 class vgui_event;
 
+//: Tableau which treats it children as a stack of acetates
+//
+//  The vgui_composite class can have any number of children, indexed from 0 upwards.
+//  The draw action of vgui_composite is to draw each of its children, in order, into
+//  the current context.  Events reaching the vgui_composite are passed on to each child
+//  in turn, till it is handled, so that child 0, the first added, is the "top" tableau.
+//
+//  The exceptions to this rule are :
+//  [a] key presses '0'-'9', which toggle the activeness of the children and
+//  [b] the DRAW, DRAW_OVERLAY events which are sent to all children.   
+//
+// \verbatim
+//  Modifications:
+//   18 Sep 00 capes@robots. Added set_enable_key_bindings. Key bindings are OFF by default.
+//    9 Feb 01 awf@robots. Add Alt-C to re-enable key bindings.
+//   26-APR-2002 K.Y.McGaul - Converted to doxygen style comments.
+// \endverbatim
 class vgui_composite : public vgui_tableau {
 public:
+  //: Constructor - default.
   vgui_composite();
+  //: Constructor - takes two child tableaux.
   vgui_composite(vgui_tableau_sptr const& child0, vgui_tableau_sptr const& child1);
+  //: Constructor - takes three child tableaux.
   vgui_composite(vgui_tableau_sptr const& child0, vgui_tableau_sptr const& child1, vgui_tableau_sptr const& child2);
+  //: Constructor - takes a list of child tableaux.
   vgui_composite(vcl_vector<vgui_tableau_sptr> const& children);
 
   virtual bool handle(const vgui_event&);
@@ -56,11 +58,14 @@ public:
   vcl_string pretty_name() const;
   virtual void notify() const;
 
-  // conceptually, this is a list on which observers can put themselves.
+  //: Conceptually, this is a list on which observers can put themselves.
   vgui_observable observers;
 
+  //: Add a tableau to the list of child tableaux.
   void add(vgui_tableau_sptr const&);
+  //: Remove a tableau from the list of child tableux.
   void remove(vgui_tableau_sptr const&);
+  //: Clear the list of child tableaux.
   void clear();
 
   bool toggle(int);
@@ -81,6 +86,7 @@ protected:
   bool index_ok(int);
 
   // data
+  //: List of child tableaux.
   vcl_vector<vgui_slot> children;
   vcl_vector<bool> active;
   bool enable_key_bindings;

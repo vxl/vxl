@@ -1,26 +1,33 @@
+// This is oxl/vgui/vgui_deck_tableau.h
+
+//:
+// \file
+// \author Philip C. Pritchett, Robotics Research Group, University of Oxford
+// \date   13 Sep 99
+// \brief  Tableau which holds many child tableau, only one of which receives events.
+
 #ifndef vgui_deck_tableau_h_
 #define vgui_deck_tableau_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-//:
-//  \file
-// \brief A deck of tableaux
-//
-// vgui_deck_tableau holds an ordered collection of child tableaux, only one of which is
-// passed all events that the vgui_deck_tableau receives. The effect is a flick-book of
-// tableaux where the currently active tableau can be changed using PageUp and PageDown
-//
-// \author
-//              Philip C. Pritchett, 13 Sep 99
-//              Robotics Research Group, University of Oxford
-//-----------------------------------------------------------------------------
 
 #include "vgui_deck_tableau_sptr.h"
 #include <vgui/vgui_observable.h>
 #include <vgui/vgui_drag_mixin.h>
 #include <vgui/vgui_slot.h>
 
+//: Tableau which holds many child tableau, only one of which receives events.
+//
+//  vgui_deck_tableau holds an ordered collection of child tableaux, only one of which is
+//  passed all events that the vgui_deck_tableau receives. The effect is a flick-book of
+//  tableaux where the currently active tableau can be changed using PageUp and PageDown
+//
+// \verbatim
+//  Modifications:
+//    13-SEP-1999 P.Pritchett - Initial version.
+//    26-APR-2002 K.Y.McGaul - Converted to and added doxygen style comments.
+// \endverbatim
 class vgui_deck_tableau : public vgui_tableau {
 public:
   //: Make an empty deck

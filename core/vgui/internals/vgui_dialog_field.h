@@ -1,31 +1,29 @@
+// This is oxl/vgui/internals/vgui_dialog_field.h
+
+//:
+// \file
+// \author Philip C. Pritchett, Robotics Research Group, University of Oxford
+// \date   23 Oct 99
+// \brief  Represents a field in a dialog.
+
 #ifndef vgui_dialog_field_h_
 #define vgui_dialog_field_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// 
-// .NAME vgui_dialog_field - represents a field in a dialog
-// .LIBRARY vgui
-// .HEADER vxl Package
-// .INCLUDE vgui/internals/vgui_dialog_field.h
-// .FILE internals/vgui_dialog_field.cxx
-//
-// .SECTION Description
-//
-// vgui_dialog_field represents a field in a vgui_dialog. It is the base class for 
-// all dialog fields so far. It has abstract functions for synchronising its 
-// stored value with a vcl_string  
-//
-// .SECTION Author
-//              Philip C. Pritchett, 23 Oct 99
-//              Robotics Research Group, University of Oxford
-//
-// .SECTION Modifications
-//
-//-----------------------------------------------------------------------------
 
 #include <vcl_string.h>
 
+//: Represents a field in a dialog.
+//
+//  vgui_dialog_field represents a field in a vgui_dialog. It is the base class for 
+//  all dialog fields so far. It has abstract functions for synchronising its 
+//  stored value with a vcl_string  
+//
+// \verbatim
+//  Modifications
+//    23-OCT-1999 P.Pritchett - Initial version.
+// \endverbatim
 class vgui_dialog_field 
 {
 public:

@@ -1,29 +1,16 @@
+// This is oxl/vgui/vgui_event.h
+
+//: 
+// \file
+// \author Philip C. Pritchett, Robotics Research Group, University of Oxford
+// \date   11 Sep 99
+// \brief  The vgui_event class encapsulates the events handled by the vgui system.
+
 #ifndef vgui_event_h_
 #define vgui_event_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// 
-// .NAME vgui_event
-// .INCLUDE vgui/vgui_event.h
-// .FILE vgui_event.cxx
-// .SECTION Description:
-// The vgui_event class encapsulates the events handled by the vgui system.
-//
-// .SECTION Author:
-//              Philip C. Pritchett, 11 Sep 99
-//              Robotics Research Group, University of Oxford
-//
-// .SECTION Modifications:
-// 16 Sep 1999  fsm@robots. various.
-//  5 Oct 1999  fsm@robots. replaced (x,y) by (wx,wy) and (ux,uy).
-// 10 Oct 1999  pcp         added timestamp
-// 20 Oct 1999  awf         Changed timestamp to int.
-// 19 Oct 1999  fsm@robots. added pointer to adaptor.
-//  1 Nov 1999  fsm@robots. events now use viewport, not window coordinates.
-// 28 Nov 1999  fsm@robots. added vcl_string event.
-// 22 Aug 2000  Marko Bacic. added support for scroll bar events
-//-----------------------------------------------------------------------------
 
 #include <vcl_string.h>
 #include <vgui/vgui_key.h>
@@ -53,6 +40,19 @@ enum vgui_event_type {
 };
 vcl_ostream& operator<<(vcl_ostream& s, vgui_event_type e);
 
+//: The vgui_event class encapsulates the events handled by the vgui system.
+//
+// \verbatim
+// Modifications:
+// 16 Sep 1999  fsm@robots. various.
+//  5 Oct 1999  fsm@robots. replaced (x,y) by (wx,wy) and (ux,uy).
+// 10 Oct 1999  pcp         added timestamp
+// 20 Oct 1999  awf         Changed timestamp to int.
+// 19 Oct 1999  fsm@robots. added pointer to adaptor.
+//  1 Nov 1999  fsm@robots. events now use viewport, not window coordinates.
+// 28 Nov 1999  fsm@robots. added vcl_string event.
+// 22 Aug 2000  Marko Bacic. added support for scroll bar events
+// \endverbatim
 class vgui_event {
 public:
   vgui_event();

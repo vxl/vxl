@@ -1,11 +1,28 @@
-// This is ./oxl/vgui/impl/mfc/vgui_mfc_adaptor.h
-#ifndef AFX_VGUI_MFC_ADAPTOR_H__6BE405F7_0910_4C83_A175_5E8FBDCE88A5__INCLUDED_
-#define AFX_VGUI_MFC_ADAPTOR_H__6BE405F7_0910_4C83_A175_5E8FBDCE88A5__INCLUDED_
+// This is /oxl/vgui/impl/mfc/vgui_mfc_adaptor.h
 
 //:
 // \file
 // \author RRG Oxford
 // \brief  Specialization of vgui_adaptor for MFC.
+
+#ifndef AFX_VGUI_MFC_ADAPTOR_H__6BE405F7_0910_4C83_A175_5E8FBDCE88A5__INCLUDED_
+#define AFX_VGUI_MFC_ADAPTOR_H__6BE405F7_0910_4C83_A175_5E8FBDCE88A5__INCLUDED_
+#if _MSC_VER > 1000
+#pragma once
+#endif // _MSC_VER > 1000
+
+#include <afxwin.h>
+#include <vgui/vgui_adaptor.h>
+#include <vgui/internals/vgui_adaptor_mixin.h>
+
+struct vgui_overlay_helper;
+
+//: Implementation of vgui_adaptor for MFC.
+//
+//  The adaptor allows you to draw an OpenGL area in your application.
+//  If this adaptor is not being used inside the main window of the application
+//  then you will need to call setup_adaptor.  See vgui_mfc_dialog_impl where
+//  this is done when an OpenGL area is used in a dialog box.
 //
 // \verbatim
 //  Modifications:
@@ -22,18 +39,6 @@
 //                             now specify which window our adaptor is in.  If you
 //                             don't call setup_adaptor it is assumed to be the main window.
 // \endverbatim
-
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
-
-#include <afxwin.h>
-#include <vgui/vgui_adaptor.h>
-#include <vgui/internals/vgui_adaptor_mixin.h>
-
-
-// vgui_mfc_adaptor view
-struct vgui_overlay_helper;
 class vgui_mfc_adaptor : public CView, public vgui_adaptor, public vgui_adaptor_mixin
 {
 //protected:  - kym - changed to public so I can add adaptors to dialog boxes:
@@ -89,6 +94,8 @@ public:
     m = mixin::popup_modifier;
     b = mixin::popup_button;
   }
+  // kym stuff
+  //----------
   //: If your adaptor is not in the main window of the application call this function.
   void setup_adaptor(CWnd* this_cwnd, HDC OldDC, HGLRC oldContext);
 

@@ -1,12 +1,15 @@
+// This is oxl/vgui/vgui_draw_line.h
+
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+// \brief  Draw infinite lines.
+
 #ifndef vgui_draw_line_h_
 #define vgui_draw_line_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vgui_draw_line
-// .INCLUDE vgui/internals/vgui_draw_line.h
-// .FILE internals/vgui_draw_line.cxx
-// @author fsm@robots.ox.ac.uk
 
 //--------------------------------------------------------------------------------
 

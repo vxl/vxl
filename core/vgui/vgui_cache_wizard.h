@@ -1,29 +1,31 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is oxl/vgui/vgui_cache_wizard.h
+
+//:
+// \file
+// \author Marko Bacic
+// \date   17 Aug 2000
+// \brief Provides support for caching of large images
+
 #ifndef vgui_cache_wizard_h_
 #define vgui_cache_wizard_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-//:
-//  \file
-//  \brief Provides support for caching of large images
-//
-// \author
-//    17-AUG-2000 Initial version. Marko Bacic,Oxford RRG
-//
-// \verbatim
-//  Modifications
-//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
-// \endverbatim
-//-----------------------------------------------------------------------------
+
 #include <vcl_vector.h>
 #include <vcl_list.h>
 #include <vcl_utility.h>
 
 #include <vil/vil_image.h>
-
 #include <vgui/vgui_gl.h>
 
+//: Provides support for caching of large images.
+//
+// \verbatim
+//  Modifications
+//   17-AUG-2000 Initial version. Marko Bacic,Oxford RRG
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
+// \endverbatim
 class vgui_cache_wizard {
 public:
   //: Each image consists of MxN quadrants. M,N is to be determined on runtime

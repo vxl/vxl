@@ -1,14 +1,18 @@
+// This is oxl/vgui/vgui_button.h
+
+//:
+// \file
+// \brief Enumeration of possible mouse buttons.
+
 #ifndef vgui_button_h_
 #define vgui_button_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vgui_button
-// .INCLUDE vgui/vgui_button.h
-// .FILE vgui_button.cxx
 
 #include <vcl_iosfwd.h>
 
+//: Enumeration of possible mouse buttons.
 enum vgui_button {
   vgui_BUTTON_NULL=0,
   vgui_LEFT  =0x1,

@@ -1,12 +1,15 @@
+// This is oxl/vgui/vgui_event_loop.h
+
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+// \brief
+
 #ifndef vgui_event_loop_h_
 #define vgui_event_loop_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vgui_event_loop
-// .INCLUDE vgui/vgui_event_loop.h
-// .FILE vgui_event_loop.cxx
-// @author fsm@robots.ox.ac.uk
 
 struct vgui_slab;
 struct vgui_tableau_sptr;

@@ -1,17 +1,21 @@
+// This is oxl/vgui/internals/vgui_adaptor_tableau.h
+
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+// \brief  Propagates tableau posts to an adaptor.
+
 #ifndef vgui_adaptor_tableau_h_
 #define vgui_adaptor_tableau_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vgui_adaptor_tableau
-// .INCLUDE vgui/internals/vgui_adaptor_tableau.h
-// .FILE internals/vgui_adaptor_tableau.cxx
-// @author fsm@robots.ox.ac.uk
 
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_slot.h>
 class vgui_adaptor;
 
+//: Propagates tableau posts to an adaptor.
 class vgui_adaptor_tableau : private vgui_tableau
 {
   friend class vgui_adaptor;

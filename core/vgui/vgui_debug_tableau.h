@@ -1,27 +1,29 @@
+// This is oxl/vgui/vgui_debug_tableau.h
+
+//:
+// \file
+// \author awf
+// \date   08-11-99
+// \brief  Event-printing "tee" tableau.
+
 #ifndef vgui_debug_tableau_h_
 #define vgui_debug_tableau_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// .NAME vgui_debug_tableau - Event-printing "tee" tableau
-// .INCLUDE vgui/vgui_debug_tableau.h
-// .FILE vgui_debug_tableau.cxx
-// .SECTION Description
-//    A vgui_tableau that prints events and then forwards them to
-//    a child.
-//
-// .SECTION Author
-//    awf
-//
-// .SECTION Modifications
-//     991008 AWF Initial version.
-//
-//-----------------------------------------------------------------------------
 
 #include "vgui_debug_tableau_sptr.h"
 #include <vgui/vgui_wrapper_tableau.h>
 
+//: Event-printing "tee" tableau.
+//  A vgui_tableau that prints events and then forwards them to
+//  a child.
+//
+// \verbatim
+//  Modifications:
+//    991008 AWF Initial version.
+//    26-APR-2002 K.Y.McGaul - Converted to doxygen style comments.
+// \endverbatim
 class vgui_debug_tableau : public vgui_wrapper_tableau {
 public:
   // Public interface at the top
