@@ -153,8 +153,8 @@ void mvl2_video_to_avi::write_frame(vimt_image_2d_of<vxl_byte>& image)
         }
         if (xn<0) xn=0;
         if (yn<0) yn=0;
-        if (xn>=image.image().ni()-1) xn=image.image().ni()-1;
-        if (yn>=image.image().nj()-1) yn=image.image().nj()-1;
+        if (xn>=image.image().ni()) xn=image.image().ni()-1;
+        if (yn>=image.image().nj()) yn=image.image().nj()-1;
         if (image.image().nplanes()==3)
         {
           im24->At(x,y)[bgr_?2:0] = image.image()(xn,yn,2);
