@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_test.cxx
+// This is vxl/testlib/testlib_test.cxx
 
 //
 // Copyright (C) 1991 Texas Instruments Incorporated.
@@ -12,20 +12,21 @@
 // express or implied warranty.
 //
 // Created: 11-Mar-2001: TFC Copy of vnl_test
+// Created: 25-Apr-2002: AGAP Modified copy of testlib_test
 //
 
-#include "vil_test.h"
+#include "testlib_test.h"
+
 #include <vcl_cmath.h>
-#include <vcl_cstdlib.h>
 #include <vcl_iostream.h>
-#include <vcl_iomanip.h> // for setfill, setw (replaces cout.form())
+#include <vcl_iomanip.h> // for setfill, setw
 
 static int num_test;
 static int tests_passed;
 static int tests_failed;
 static const char* test_name;
 
-void vil_test_start(const char* name = 0) {
+void testlib_test_start(const char* name = 0) {
   num_test = 0;
   tests_passed = 0;
   tests_failed = 0;
@@ -37,33 +38,28 @@ void vil_test_start(const char* name = 0) {
   vcl_cout.flush();
  }
 
-void vil_test_begin(const char* msg) {
+void testlib_test_begin(const char* msg) {
   num_test++;
-#if 0 // .form() is non-ANSI // #if defined(__GNUG__) && !defined(GNU_LIBSTDCXX_V3)
-  vcl_cout.form(" Test %03d: %-53s --> ", num_test, msg);
-  vcl_cout.flush();
-#else
   vcl_cout <<" Test "<< vcl_setw(3) << vcl_right << vcl_setfill('0') << num_test
            <<": "<< vcl_setw(53) << vcl_left << vcl_setfill(' ')<< msg <<" --> "
            << vcl_flush;
-#endif
 }
 
 // NOTE: We don't pass in the message (see test_begin) because
 //       we want to ensure that the message is printed BEFORE
 //       the test is executed.  This way when a test crashes
 //       we can tell if it was during a test, or between tests.
-void vil_test_perform(int success) {
+void testlib_test_perform(int success) {
   if (success) {
     tests_passed++;
-    vcl_cout << "  PASSED\n" << vcl_flush;
+    vcl_cout << "  PASSED" << vcl_endl;
   } else {
     tests_failed++;
-    vcl_cout << "**FAILED**\n" << vcl_flush;
+    vcl_cout << "**FAILED**" << vcl_endl;
   }
 }
 
-int vil_test_summary() {
+int testlib_test_summary() {
   vcl_cout << "-----------------------------------------------------------------------------\n";
   if (test_name != NULL) vcl_cout << test_name << " ";
   vcl_cout << "Test Summary: ";
@@ -71,19 +67,18 @@ int vil_test_summary() {
     vcl_cout<<tests_passed<<" tests succeeded, "<<tests_failed<<" tests failed\t\t\t*****";
   else
     vcl_cout<<"All "<<tests_passed<<" tests succeeded";
-  vcl_cout << "\n-----------------------------------------------------------------------------\n";
-  vcl_cout.flush();
+  vcl_cout << "\n-----------------------------------------------------------------------------" << vcl_endl;
   return tests_failed;
 }
 
-void vil_test_assert(const vcl_string& msg, bool expr)
+void testlib_test_assert(const vcl_string& msg, bool expr)
 {
   vcl_cout << msg << " - ";
-  vil_test_perform(expr);
+  testlib_test_perform(expr);
 }
 
-void vil_test_assert_near(const vcl_string& msg, double expr, double target, double tol)
+void testlib_test_assert_near(const vcl_string& msg, double expr, double target, double tol)
 {
   vcl_cout << msg << " should be " << target << ", is " << expr << ", ";
-  vil_test_perform(vcl_abs(expr - target) < tol);
+  testlib_test_perform(vcl_abs(expr - target) < tol);
 }

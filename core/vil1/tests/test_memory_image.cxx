@@ -6,6 +6,7 @@
 #include <vil/vil_memory_image.h>
 #include <vil/vil_save.h>
 
+static
 void p(vil_image const& m)
 {
   for(int y = 0; y < m.height(); ++y) {
@@ -18,7 +19,8 @@ void p(vil_image const& m)
   }
 }
 
-int main()
+int
+test_memory_image_main(int, char*[])
 {
   vcl_string tmp_nam = vul_temp_filename() + ".pgm";
   char const *file1 = tmp_nam!="" ? tmp_nam.c_str() : "vil_test_memory_image_1.pgm";

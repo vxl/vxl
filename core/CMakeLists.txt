@@ -9,7 +9,8 @@ IF (WIN32)
   ENDIF (NOT CYGWIN)
 ENDIF(WIN32)
 
-SUBDIRS(vul vsl vbl vpl vil vnl vgl vidl)
+SUBDIRS( testlib )
+SUBDIRS( vul vsl vbl vpl vil vnl vgl vidl )
 SUBDIRS( vcgl vcsl )
 
 IF( BUILD_EXAMPLES )

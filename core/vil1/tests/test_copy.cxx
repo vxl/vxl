@@ -6,14 +6,14 @@
 
 #include <vxl_config.h>
 #include <vcl_iostream.h>
-#include <vil/vil_test.h>
+
+#include <testlib/testlib_test.h>
 
 static char default_filename[] = "square.pgm";
 
-int
-main( int argc, char* argv[] )
+MAIN( test_copy )
 {
-  vil_test_start("test_vil_copy");
+  START("vil_copy");
 
   char* filename = argv[1];
   if( argc<2 ) {
@@ -33,5 +33,6 @@ main( int argc, char* argv[] )
   b(0,0) = 1;
   c(0,0) = 2;
   TEST("", a(0,0) != b(0,0) && a(0,0) != c(0,0) && b(0,0) != c(0,0) , true);
-  return vil_test_summary();
+
+  SUMMARY();
 }

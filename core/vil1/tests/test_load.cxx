@@ -6,7 +6,7 @@
 #include <vil/vil_load.h>
 #include <vil/vil_image_impl.h>
 
-#include <vil/vil_test.h>
+#include <testlib/testlib_test.h>
 
 static void test(char const* magic, int comps, int bits)
 {
@@ -36,14 +36,14 @@ static void test(char const* magic, int comps, int bits)
 #endif
 }
 
-void test_load_pnm()
+MAIN( test_load )
 {
+  START( "vil_load" )
   test("P1", 1, 1);
   test("P2", 1, 8);
   test("P3", 3, 8);
   test("P4", 1, 1);
   test("P5", 1, 8);
   test("P6", 3, 8);
+  SUMMARY();
 }
-
-TESTMAIN(test_load_pnm);

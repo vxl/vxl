@@ -1,11 +1,14 @@
 #include <vcl_iostream.h>
 #include <vil/vil_colour_space.h>
-#include <vil/vil_test.h>
 #include <vil/vil_byte.h>
 #include <vcl_cmath.h>
 
-void test_colour_space()
+#include <testlib/testlib_test.h>
+
+MAIN( test_colour_space )
 {
+  START( "colour space" );
+
   double r, g, b, h ,s ,v, nr, ng, nb;
   r=10;
   g=120;
@@ -35,6 +38,6 @@ void test_colour_space()
   vcl_cout<<"d= "<<d<<vcl_endl;
 
   TEST ("test r g b values", d<0.1, true);
-}
 
-TESTMAIN(test_colour_space);
+  SUMMARY();
+}

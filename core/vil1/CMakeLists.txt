@@ -13,7 +13,6 @@ SOURCE_FILES( vil_sources
   vil_byte_swap.cxx
   vil_16bit.cxx
   vil_32bit.cxx
-  vil_test.cxx
 
   # various vil_stream classes
   # from a file

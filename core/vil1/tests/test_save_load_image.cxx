@@ -17,6 +17,7 @@
 // 21 Jan 2001 - deprecated vil_buffer<> - use vcl_vector<> instead
 //  1 May 2001 - Peter Vanroose - now using vil_test.h
 // 7 June 2001 - Peter Vanroose - test added for pbm images
+// 14 Apr 2002 - Amitha Perera - switched from vil_test to testlib
 // \endverbatim
 
 #include <vcl_string.h>
@@ -35,7 +36,7 @@
 #include <vil/vil_save.h>
 #include <vil/vil_memory_image_of.h>
 
-#include <vil/vil_test.h>
+#include <testlib/testlib_test.h>
 
 #ifndef LEAVE_IMAGES_BEHIND
 #define LEAVE_IMAGES_BEHIND 0
@@ -428,7 +429,9 @@ vil_image CreateTestfloatImage(int wd, int ht)
   return image;
 }
 
-void test_save_load_image() {
+MAIN( test_save_load_image )
+{
+  START( "save/load" );
   // create test images
   int sizex = 253;
   int sizey = 155;
@@ -509,6 +512,6 @@ void test_save_load_image() {
   vil_test_image_type("mit", image16);
   vil_test_image_type("mit", image24);
 #endif
-}
 
-TESTMAIN(test_save_load_image);
+  SUMMARY();
+}

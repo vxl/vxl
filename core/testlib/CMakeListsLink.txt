@@ -1,0 +1,6 @@
+# ./vxl/testlib/CMakeListsLink.txt
+
+LINK_LIBRARIES( testlib )
+
+# Immediate dependencies
+INCLUDE( ${allvxl_SOURCE_DIR}/vcl/CMakeListsLink.txt )

@@ -6,14 +6,16 @@
 #include <vil/vil_save.h>
 #include <vil/vil_rgb.h>
 
-#include <vil/vil_test.h>
+#include <testlib/testlib_test.h>
 #include <vul/vul_temp_filename.h>
 
 const int W = 768;
 const int H = 256;
 
-void test_vil_memory_image_of()
+MAIN( test_memory_image_of )
 {
+  START( "vil_memory_image_of" );
+
   vcl_string tmp_nam = vul_temp_filename() + ".pgm";
   char const *file_name_2 = tmp_nam!="" ? tmp_nam.c_str() : "vil_test_memory_image_of.pgm";
   {
@@ -85,8 +87,5 @@ void test_vil_memory_image_of()
     p = image(2,1); TEST ("p == 6", p, 6);
   }
 
-  {
-  }
+  SUMMARY();
 }
-
-TESTMAIN(test_vil_memory_image_of);

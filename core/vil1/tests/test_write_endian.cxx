@@ -7,10 +7,12 @@
 #include <vil/vil_16bit.h>
 #include <vil/vil_stream_fstream.h>
 
-#include <vil/vil_test.h>
+#include <testlib/testlib_test.h>
 
-void test_write_endian()
+MAIN( test_write_endian )
 {
+  START( "write endian" );
+
   vcl_string tmp_nam = vul_temp_filename() + ".bin";
   char const *file = tmp_nam!="" ? tmp_nam.c_str() : "smoo.bin";
   vil_stream *s = 0;
@@ -50,6 +52,6 @@ void test_write_endian()
         bytes[1] == 0x01 &&
         bytes[2] == 0x03 &&
         bytes[3] == 0x04,  true);
-}
 
-TESTMAIN(test_write_endian);
+  SUMMARY();
+}

@@ -2,9 +2,10 @@
 
 #include <vil/vil_memory_image.h>
 #include <vil/vil_flipud.h>
-#include <vil/vil_test.h>
 
+#include <testlib/testlib_test.h>
 
+static
 void p(vil_image const& m)
 {
   for(int y = 0; y < m.height(); ++y) {
@@ -54,4 +55,7 @@ void test_flipud()
   TEST ("full get_section shows flipped data", i, 6);
 }
 
-TESTMAIN(test_flipud);
+MAIN( test_flipud )
+{
+  RUN_TEST_FUNC(test_flipud);
+}

@@ -1,4 +1,4 @@
-#include <vil/vil_test.h>
+#include <testlib/testlib_test.h>
 
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_rgb.h>
@@ -122,7 +122,7 @@ test( const char* true_data_file, const CheckPixel& check )
 }
 
 int
-main( int argc, char* argv[] )
+test_file_format_read_main( int argc, char* argv[] )
 {
   if( argc >= 2 ) {
     image_base = argv[1];
@@ -133,45 +133,45 @@ main( int argc, char* argv[] )
 #endif
   }
 
-  vil_test_start("test_file_format_read");
+  testlib_test_start(" file format read");
 
   vcl_cout << "Portable aNy Map [pnm]: pbm, pgm, ppm)\n";
-  vil_test_begin( "  8-bit pgm ascii" );
-  vil_test_perform( test( "ff_grey8bit_true.txt", CheckGrey<vxl_uint_8>( "ff_grey8bit_ascii.pgm" ) ) );
-  vil_test_begin( "  8-bit pgm raw" );
-  vil_test_perform( test( "ff_grey8bit_true.txt", CheckGrey<vxl_uint_8>( "ff_grey8bit_raw.pgm" ) ) );
-  vil_test_begin( "  8-bit ppm ascii" );
-  vil_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_ascii.ppm" ) ) );
-  vil_test_begin( "  8-bit ppm raw" );
-  vil_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_raw.ppm" ) ) );
+  testlib_test_begin( "  8-bit pgm ascii" );
+  testlib_test_perform( test( "ff_grey8bit_true.txt", CheckGrey<vxl_uint_8>( "ff_grey8bit_ascii.pgm" ) ) );
+  testlib_test_begin( "  8-bit pgm raw" );
+  testlib_test_perform( test( "ff_grey8bit_true.txt", CheckGrey<vxl_uint_8>( "ff_grey8bit_raw.pgm" ) ) );
+  testlib_test_begin( "  8-bit ppm ascii" );
+  testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_ascii.ppm" ) ) );
+  testlib_test_begin( "  8-bit ppm raw" );
+  testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_raw.ppm" ) ) );
 
   vcl_cout << "Sun raster [ras]\n";
-  vil_test_begin( "  8-bit grey, no colourmap" );
-  vil_test_perform( test( "ff_grey8bit_true.txt", CheckGrey<vxl_uint_8>( "ff_grey8bit_nocol.ras" ) ) );
-  vil_test_begin( "  8-bit RGB, no colourmap" );
-  vil_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_raw.ras" ) ) );
-  vil_test_begin( "  8-bit indexed RGB" );
-  vil_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_indexed.ras" ) ) );
+  testlib_test_begin( "  8-bit grey, no colourmap" );
+  testlib_test_perform( test( "ff_grey8bit_true.txt", CheckGrey<vxl_uint_8>( "ff_grey8bit_nocol.ras" ) ) );
+  testlib_test_begin( "  8-bit RGB, no colourmap" );
+  testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_raw.ras" ) ) );
+  testlib_test_begin( "  8-bit indexed RGB" );
+  testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_indexed.ras" ) ) );
 
 //    vcl_cout << "Windows bitmap [bmp]\n";
-//    vil_test_begin( "  8-bit RGB (xv created)" );
-//    vil_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_xv.bmp" ) ) );
+//    testlib_test_begin( "  8-bit RGB (xv created)" );
+//    testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_xv.bmp" ) ) );
 
   vcl_cout << "TIFF [tiff]\n";
-  vil_test_begin( "  8-bit RGB uncompressed" );
-  vil_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_uncompressed.tif" ) ) );
-  vil_test_begin( "  8-bit RGB packbits" );
-  vil_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_packbits.tif" ) ) );
+  testlib_test_begin( "  8-bit RGB uncompressed" );
+  testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_uncompressed.tif" ) ) );
+  testlib_test_begin( "  8-bit RGB packbits" );
+  testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_packbits.tif" ) ) );
 
 //    vcl_cout << "SGI IRIS [iris]\n";
-//    vil_test_begin( "  8-bit RGB rle" );
-//    vil_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit.iris" ) ) );
+//    testlib_test_begin( "  8-bit RGB rle" );
+//    testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit.iris" ) ) );
 
   vcl_cout << "Portable Network Graphics [png]\n";
-  vil_test_begin( "  8-bit RGB uncompressed" );
-  vil_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_uncompressed.png" ) ) );
-  vil_test_begin( "  8-bit RGB compressed" );
-  vil_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_compressed.png" ) ) );
+  testlib_test_begin( "  8-bit RGB uncompressed" );
+  testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_uncompressed.png" ) ) );
+  testlib_test_begin( "  8-bit RGB compressed" );
+  testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_compressed.png" ) ) );
 
-  return vil_test_summary();
+  return testlib_test_summary();
 }

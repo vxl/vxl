@@ -29,7 +29,8 @@ double f(double i, double j, int d)
   return out;
 }
 
-int main(int, char **)
+int
+test_interpolate_main(int, char **)
 {
   vil_memory_image_of<double> I(10, 10);
 
