@@ -21,6 +21,7 @@
 
 #include <vidl/vidl_io.h>
 #include <vidl/vidl_movie.h>
+#include <vidl/vidl_frame.h>
 
 vidl_movie_sptr my_movie;
 vidl_movie::frame_iterator pframe(my_movie);
