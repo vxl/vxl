@@ -77,14 +77,14 @@ class vnl_vector_fixed_ref_const
 
   // The const version of as_ref should return a const vnl_vector_ref
   // so that the vnl_vector_ref::non_const() cannot be used on
-  // it. This prevents a vnl_vector_fixed_ref_const from being case into a
+  // it. This prevents a vnl_vector_fixed_ref_const from being cast into a
   // non-const vnl_vector reference, giving a slight increase in type safety.
 
   //: Explicit conversion to a vnl_vector_ref.
   // This is a cheap conversion for those functions that have an interface
   // for vnl_vector_ref but not for vnl_vector_fixed_ref. There is also a
   // conversion operator that should work most of the time.
-  // \sa vnl_matrix_ref::non_const
+  // \sa vnl_vector_ref::non_const
   const vnl_vector_ref<T> as_ref() const { return vnl_vector_ref<T>( n, const_cast<T*>(data_) ); }
 
   //: Cheap conversion to vnl_vector_ref
