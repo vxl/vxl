@@ -8,7 +8,6 @@
 // \author Tim Cootes.
 
 #include <vil3d/vil3d_image_view.h>
-#include <vcl_cassert.h>
 
 //: Change axes so that result(j,i,k)==im(i,j,k)
 // \relates vil3d_image_view
@@ -61,4 +60,3 @@ inline vil3d_image_view<T> vil3d_switch_axes_ikj(const vil3d_image_view<T> &im)
 }
 
 #endif // vil3d_switch_axes_h_
-
