@@ -3,7 +3,7 @@
 ADD_LIBRARY(vipl vipl_sources)
 
 SOURCE_FILES(vipl_sources
-  filter/vipl_filter_abs
+  filter/vipl_filter_abs.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates vipl_sources)
