@@ -10,7 +10,6 @@
 #include "vnl_generalized_eigensystem.h"
 
 #include <vcl_iostream.h>
-#include <vcl_complex.h>
 
 #include <vnl/vnl_fortran_copy.h>
 #include <vnl/vnl_matlab_print.h>
@@ -22,15 +21,6 @@ vnl_generalized_eigensystem::vnl_generalized_eigensystem(const vnl_matrix<double
                                                          const vnl_matrix<double>& B)
   :
   n(A.rows()), V(n,n), D(n)
-{
-  compute_eispack(A, B);
-}
-
-
-// *****************************************************************************
-
-void vnl_generalized_eigensystem::compute_eispack(const vnl_matrix<double>& A,
-                                                  const vnl_matrix<double>& B)
 {
   // Copy source matrices into fortran storage
   vnl_fortran_copy<double> a(A);
