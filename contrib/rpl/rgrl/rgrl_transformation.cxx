@@ -117,9 +117,9 @@ map_normal( vnl_vector<double> const & from_loc,
     vnl_double_3 from_tangent0;
     vnl_double_3 from_tangent1;
     // find the element with smallest magnitude
-    unsigned int min_index, i, j;
-    double min=1e+30;
-    for ( i=0; i<3; i++)
+    unsigned int min_index=0;
+    double min = vcl_abs(from_dir[0]);
+    for ( unsigned int i=1; i<3; i++)
       if ( vcl_abs(from_dir[i]) < min ) {
         min = vcl_abs( from_dir[i] );
         min_index = i;
@@ -127,7 +127,7 @@ map_normal( vnl_vector<double> const & from_loc,
 
     // shrink it to 2D, by removing that smallest element.
     vnl_double_2 t, n;
-    for ( i=0,j=0; i<3; i++)
+    for (unsigned int i=0,j=0; i<3; ++i)
       if ( i != min_index )
         n[j++] = from_dir[i];
     // 2D orthogonality constraint
@@ -135,7 +135,7 @@ map_normal( vnl_vector<double> const & from_loc,
     t[1] = -n[0];
     // fill it back to 3D, with the corresponding smallest
     // element set as zero
-    for ( i=0,j=0; i<3; i++)
+    for (unsigned int i=0,j=0; i<3; ++i)
       if ( i != min_index )
         from_tangent0[i] = t[j++];
       else
