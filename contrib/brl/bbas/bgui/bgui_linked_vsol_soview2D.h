@@ -13,27 +13,20 @@
 //   M.R. Johnson June 20, 2003      Initial version.
 // \endverbatim
 //--------------------------------------------------------------------------------
-#include <vcl_vector.h>
+
 #include <vcl_iosfwd.h>
 
 #include <vdgl/vdgl_digital_curve_sptr.h>
 #include <vsol/vsol_line_2d_sptr.h>
 #include <vsol/vsol_polyline_2d_sptr.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
-#if 0 // currently not needed
-#include <vsol/vsol_point_2d_sptr.h>
-#include <vsol/vsol_conic_2d_sptr.h>
-#include <vsol/vsol_rectangle_2d_sptr.h>
-#include <vsol/vsol_triangle_2d_sptr.h>
-#include <vsol/vsol_group_2d_sptr.h>
-#endif
 
 #include <vgui/vgui_soview2D.h>
-#include <vgui/vgui_style.h>
 
+#if 0 // commented out
 //: This view is essentially the same as a point, the only difference is style.
 // Probably move to a geometry tableau later
-/*class bgui_linked_vsol_soview2D_point : public vgui_soview2D_point
+class bgui_linked_vsol_soview2D_point : public vgui_soview2D_point
 {
  public:
   //: Constructor - creates a default vsol_point_2d view
@@ -45,7 +38,8 @@
   //: Returns the type of this class ('bgui_linked_vsol_soview2D_point').
   vcl_string type_name() const { return "bgui_linked_vsol_soview2D_point"; }
 };
-*/
+#endif // 0
+
 //: vsol_line_2d
 class bgui_linked_vsol_soview2D_line_seg : public vgui_soview2D
 {
@@ -56,10 +50,10 @@ class bgui_linked_vsol_soview2D_line_seg : public vgui_soview2D
 
   //: Destructor - does nothing, smart pointers pass out of scope automatically
   ~bgui_linked_vsol_soview2D_line_seg() {};
-  
+
   //: Print details about this vdgl_digital_curve to the given stream.
   virtual vcl_ostream& print(vcl_ostream&) const;
-  
+
   //: Returns the type of this class ('bgui_linked_vsol_soview2D_edge').
   vcl_string type_name() const { return "bgui_linked_vsol_soview2D_line_seg"; }
 
@@ -88,7 +82,7 @@ class bgui_linked_vsol_soview2D_polyline : public vgui_soview2D
 
   //: Deconstructor
   ~bgui_linked_vsol_soview2D_polyline() {};
-  
+
   //: Print details about this vtol_edge_2d to the given stream.
   virtual vcl_ostream& print(vcl_ostream&) const;
 
@@ -118,7 +112,7 @@ class bgui_linked_vsol_soview2D_polygon : public vgui_soview2D
     //: Constructor - creates a view of a vdgl_polygon
   bgui_linked_vsol_soview2D_polygon(vsol_polygon_2d_sptr const& e);
 
-  //: Deconstructor 
+  //: Deconstructor
   ~bgui_linked_vsol_soview2D_polygon() {};
 
   //: Print details about this vdgl_polygon to the given stream.
@@ -126,7 +120,7 @@ class bgui_linked_vsol_soview2D_polygon : public vgui_soview2D
 
   //: Returns the type of this class ('bgui_linked_vsol_soview2D_polygon').
   vcl_string type_name() const { return "bgui_linked_vsol_soview2D_polygon"; }
-  
+
   //: Render this 2D digital_curve on the display.
   void draw() const;
 
@@ -142,7 +136,8 @@ class bgui_linked_vsol_soview2D_polygon : public vgui_soview2D
   //: Smart pointer to a vsol line
   vsol_polygon_2d_sptr sptr;
 };
-/*
+
+#if 0 // commented out
 //: a group of vsol_line_2d - used for projecting 3-d shapes
 class bgui_linked_vsol_soview2D_line_group : public vgui_soview2D_group
 {
@@ -177,7 +172,8 @@ class bgui_linked_vsol_soview2D_dotted_digital_curve : public vgui_soview2D_grou
   //: Returns the type of this class ('bgui_linked_vsol_soview2D_dotted_digital_curve').
   vcl_string type_name() const { return "bgui_linked_vsol_soview2D_dotted_digital_curve"; }
 };
-*/
+#endif // 0
+
 //: vdgl_digital_curve
 class bgui_linked_vsol_soview2D_digital_curve : public vgui_soview2D
 {
@@ -188,7 +184,7 @@ class bgui_linked_vsol_soview2D_digital_curve : public vgui_soview2D
 
   //: Destructor - does nothing, smart pointers pass out of scope automatically
   ~bgui_linked_vsol_soview2D_digital_curve() {};
-  
+
   //: Print details about this vdgl_digital_curve to the given stream.
   virtual vcl_ostream& print(vcl_ostream&) const;
 
@@ -210,7 +206,8 @@ class bgui_linked_vsol_soview2D_digital_curve : public vgui_soview2D
   //: Smart pointer to vdgl_digital_curve
   vdgl_digital_curve_sptr sptr;
 };
-/*
+
+#if 0 // commented out
 //: a group of vsol_polygon_2d - used for projecting 3-d polyhedra
 class bgui_linked_vsol_soview2D_polygon_group : public vgui_soview2D_group
 {
@@ -227,5 +224,6 @@ class bgui_linked_vsol_soview2D_polygon_group : public vgui_soview2D_group
   //: Returns the type of this class ('bgui_linked_vsol_soview2D_polygon_group').
   vcl_string type_name() const { return "bgui_linked_vsol_soview2D_polygon_group"; }
 };
-*/
+#endif // 0
+
 #endif // bgui_linked_vsol_soview2D_h_
