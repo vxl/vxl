@@ -8,6 +8,7 @@
 // Modifications
 // \verbatim
 // 2000/06/28 François BERTEL Creation. Adapted from IUE
+// 2002/01/22 Peter Vanroose - return type of execute() and inverse() changed to non-ptr
 // \endverbatim
 
 
@@ -66,14 +67,14 @@ public:
 
   //: Image of `v' by `this'
   //  REQUIRE: is_valid()
-  virtual vnl_vector<double> *execute(const vnl_vector<double> &v,
-                                      const double time) const;
+  virtual vnl_vector<double> execute(const vnl_vector<double> &v,
+                                     const double time) const;
 
   //: Image of `v' by the inverse of `this'
   //  REQUIRE: is_valid()
   //  REQUIRE: is_invertible(time)
-  virtual vnl_vector<double> *inverse(const vnl_vector<double> &v,
-                                      const double time) const;
+  virtual vnl_vector<double> inverse(const vnl_vector<double> &v,
+                                     const double time) const;
 protected:
   vcl_vector<vcsl_spatial_transformation_sptr> *transformations_;
 };

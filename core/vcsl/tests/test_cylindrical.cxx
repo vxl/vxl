@@ -19,12 +19,7 @@
 int main(int argc,
          char *argv[])
 {
-  int result;
+  vcsl_cylindrical_sptr p=new vcsl_cylindrical;
 
-  result=0;
-
-  vcsl_cylindrical_sptr p;
-  p=new vcsl_cylindrical;
-
-  return result;
+  return 0;
 }

@@ -1,6 +1,15 @@
 #ifndef vcsl_matrix_h
 #define vcsl_matrix_h
 
+//:
+// \file
+// \author François BERTEL
+// Modifications
+// \verbatim
+// 2000/07/19 François BERTEL Creation.
+// 2002/01/22 Peter Vanroose - return type of execute() and inverse() changed to non-ptr
+// \endverbatim
+
 #include <vcsl/vcsl_matrix_param.h>
 #include <vcsl/vcsl_matrix_sptr.h>
 #include <vcsl/vcsl_spatial_transformation.h>
@@ -53,11 +62,11 @@ public:
 
   virtual list_of_vcsl_matrix_param_sptr *matrix_list(void) const;
 
-  virtual vnl_vector<double> * execute(const vnl_vector<double> &v,
-                                       const double time) const;
+  virtual vnl_vector<double> execute(const vnl_vector<double> &v,
+                                     const double time) const;
 
-  virtual vnl_vector<double> * inverse(const vnl_vector<double> &v,
-                                       const double time) const;
+  virtual vnl_vector<double> inverse(const vnl_vector<double> &v,
+                                     const double time) const;
 
 protected:
 

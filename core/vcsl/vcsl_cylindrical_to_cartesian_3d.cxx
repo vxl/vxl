@@ -47,7 +47,7 @@ bool vcsl_cylindrical_to_cartesian_3d::is_valid(void) const
 // REQUIRE: is_valid()
 // REQUIRE: v.size()==3
 //---------------------------------------------------------------------------
-vnl_vector<double> *
+vnl_vector<double>
 vcsl_cylindrical_to_cartesian_3d::execute(const vnl_vector<double> &v,
                                           const double time) const
 {
@@ -55,27 +55,18 @@ vcsl_cylindrical_to_cartesian_3d::execute(const vnl_vector<double> &v,
   assert(is_valid());
   assert(v.size()==3);
 
-  vnl_vector<double> *result;
+  vnl_vector<double> result(3);
 
-  double rho;
-  double theta;
-  double z;
+  double rho=v.get(0);
+  double theta=v.get(1);
+  double z=v.get(2);
 
-  double x;
-  double y;
+  double x=rho*vcl_cos(theta);
+  double y=rho*vcl_sin(theta);
 
-  result=new vnl_vector<double>(3);
-
-  rho=v.get(0);
-  theta=v.get(1);
-  z=v.get(2);
-
-  x=rho*vcl_cos(theta);
-  y=rho*vcl_sin(theta);
-  
-  result->put(0,x);
-  result->put(1,y);
-  result->put(2,z);
+  result.put(0,x);
+  result.put(1,y);
+  result.put(2,z);
 
   return result;
 }
@@ -86,7 +77,7 @@ vcsl_cylindrical_to_cartesian_3d::execute(const vnl_vector<double> &v,
 // REQUIRE: is_invertible(time)
 // REQUIRE: v.size()==3
 //---------------------------------------------------------------------------
-vnl_vector<double> *
+vnl_vector<double>
 vcsl_cylindrical_to_cartesian_3d::inverse(const vnl_vector<double> &v,
                                           const double time) const
 {
@@ -95,25 +86,18 @@ vcsl_cylindrical_to_cartesian_3d::inverse(const vnl_vector<double> &v,
   assert(is_invertible(time));
   assert(v.size()==3);
 
-  vnl_vector<double> *result;
-  double x;
-  double y;
-  double z;
-  double rho;
-  double theta;
+  vnl_vector<double> result(3);
 
-  result=new vnl_vector<double>(3);
+  double x=v.get(0);
+  double y=v.get(1);
+  double z=v.get(2);
 
-  x=v.get(0);
-  y=v.get(1);
-  z=v.get(2);
+  double rho=vcl_sqrt(x*x+y*y);
+  double theta=vcl_atan2(y,x);
 
-  rho=vcl_sqrt(x*x+y*y);
-  theta=vcl_atan2(y,x);
-
-  result->put(0,rho);
-  result->put(1,theta);
-  result->put(2,z);
+  result.put(0,rho);
+  result.put(1,theta);
+  result.put(2,z);
 
   return result;
 }

@@ -94,13 +94,10 @@ vcl_vector<vcsl_spatial_transformation_sptr> *vcsl_spatial::motion(void) const
 //---------------------------------------------------------------------------
 bool vcsl_spatial::valid_time(const double time) const
 {
-  bool result;
-
-  result=beat_==0;
-  if(!result)
-    result=((*beat_)[0]<=time)&&(time<=(*beat_)[beat_->size()-1]);
-
-  return result;
+  if (beat_==0)
+    return true;
+  else
+    return ((*beat_)[0]<=time)&&(time<=(*beat_)[beat_->size()-1]);
 }
 
 //***************************************************************************
@@ -217,13 +214,9 @@ int vcsl_spatial::matching_interval(const double time) const
 bool vcsl_spatial::path_from_local_to_cs_exists(const vcsl_spatial_sptr &other,
                                                 const double time)
 {
-  bool result;
-
   graph_->init_vertices();
 
-  result=recursive_path_from_local_to_cs_exists(other,time);
-
-  return result;
+  return recursive_path_from_local_to_cs_exists(other,time);
 }
 
 //---------------------------------------------------------------------------
@@ -392,17 +385,13 @@ bool vcsl_spatial::is_absolute(const double time) const
   // require
   assert(valid_time(time));
 
-  bool result;
-  int i;
-
-  result=parent_==0;
-  if(!result)
+  if (parent_==0)
+    return true;
+  else
     {
-      i=matching_interval(time);
-      result=(*parent_)[i].ptr()==0;
+      int i=matching_interval(time);
+      return (*parent_)[i].ptr()==0;
     }
-
-  return result;
 }
 
 //---------------------------------------------------------------------------
@@ -410,17 +399,13 @@ bool vcsl_spatial::is_absolute(const double time) const
 // return a vector exprimed in the spatial coordinate system `other'
 // REQUIRE: path_from_local_to_cs_exists(other,time)
 //---------------------------------------------------------------------------
-vnl_vector<double> *
+vnl_vector<double>
 vcsl_spatial::from_local_to_cs(const vnl_vector<double> &v,
                                const vcsl_spatial_sptr &other,
                                const double time)
 {
   // require
   assert(path_from_local_to_cs_exists(other,time));
-
-  vnl_vector<double> *result;
-  vnl_vector<double> *tmp;
-  const vnl_vector<double> *tmp2;
 
   vcl_vector<vcsl_spatial_transformation_sptr> path;
   vcl_vector<bool> sens;
@@ -430,25 +415,18 @@ vcsl_spatial::from_local_to_cs(const vnl_vector<double> &v,
 
   path_from_local_to_cs(other,time,path,sens);
 
-  tmp2=from_cs_to_standard_units(v);
+  vnl_vector<double> tmp=from_cs_to_standard_units(v);
 
   j=sens.begin();
 
-  for(i=path.begin();i!=path.end();++i)
+  for(i=path.begin();i!=path.end();++i,++j)
     {
       if(*j)
-        tmp=(*i)->inverse(*tmp2,time);
+        tmp=(*i)->inverse(tmp,time);
       else
-        tmp=(*i)->execute(*tmp2,time);
-      delete tmp2;
-      tmp2=tmp;
-      ++j;
+        tmp=(*i)->execute(tmp,time);
     }
-  tmp=other->from_standard_units_to_cs(*tmp2);
-  delete tmp2;
-  result=tmp;
-
-  return result;
+  return other->from_standard_units_to_cs(tmp);
 }
 
 void vcsl_spatial::set_graph(const vcsl_graph_sptr &new_graph)

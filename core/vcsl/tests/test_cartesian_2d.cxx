@@ -19,12 +19,7 @@
 int main(int argc,
          char *argv[])
 {
-  int result;
+  vcsl_cartesian_2d_sptr c=new vcsl_cartesian_2d;
 
-  result=0;
-
-  vcsl_cartesian_2d_sptr c;
-  c=new vcsl_cartesian_2d;
-
-  return result;
+  return 0;
 }

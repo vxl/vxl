@@ -93,7 +93,7 @@ int vcsl_spatial_transformation::matching_interval(const double time) const
         inf=mid;
     }
   result=inf;
-  
+
   return result;
 }
 
@@ -146,34 +146,49 @@ double vcsl_spatial_transformation::lsi(const double v0,
 //---------------------------------------------------------------------------
 // Linear interpolation on vnl_vectors
 //---------------------------------------------------------------------------
-vnl_vector<double> *
+vnl_vector<double>
 vcsl_spatial_transformation::lvi(const vnl_vector<double> &v0,
                                  const vnl_vector<double> &v1,
                                  const int index,
                                  const double time) const
 {
-  vnl_vector<double> *result;
-  int i;
-  int size;
+  int size=v0.size();
+  double t0=(*beat_)[index];
+  double t1=(*beat_)[index+1];
 
-  double t0;
-  double t1;
-  double dt0;
-  double dt1;
-  double denominator;
+  double denominator=1/(t1-t0);
+  double dt1=(t1-time)*denominator;
+  double dt0=(time-t0)*denominator;
 
-  size=v0.size();
-  t0=(*beat_)[index];
-  t1=(*beat_)[index+1];
+  vnl_vector<double> result(size);
+  for(int i=0;i<size;++i)
+    result.put(i,v0.get(i)*dt1+v1.get(i)*dt0);
 
-  result=new vnl_vector<double>(size);
+  return result;
+}
 
-  denominator=1/(t1-t0);
-  dt1=(t1-time)*denominator;
-  dt0=(time-t0)*denominator;
+//---------------------------------------------------------------------------
+// Linear interpolation on vnl_matrices
+//---------------------------------------------------------------------------
+vnl_matrix<double>
+vcsl_spatial_transformation::lmi(const vnl_matrix<double> &m0,
+                                 const vnl_matrix<double> &m1,
+                                 const int index,
+                                 const double time) const
+{
+  int rows=m0.rows();
+  int cols=m0.cols();
+  double t0=(*beat_)[index];
+  double t1=(*beat_)[index+1];
 
-  for(i=0;i<size;++i)
-    result->put(i,v0.get(i)*dt1+v1.get(i)*dt0);
+  double denominator=1/(t1-t0);
+  double dt1=(t1-time)*denominator;
+  double dt0=(time-t0)*denominator;
+
+  vnl_matrix<double> result(rows,cols);
+  for(int i=0;i<rows;++i)
+  for(int j=0;j<cols;++j)
+    result.put(i,j,m0.get(i,j)*dt1+m1.get(i,j)*dt0);
 
   return result;
 }
@@ -181,40 +196,29 @@ vcsl_spatial_transformation::lvi(const vnl_vector<double> &v0,
 //---------------------------------------------------------------------------
 // Linear interpolation on quaternions
 //---------------------------------------------------------------------------
-vnl_quaternion<double> *
+vnl_quaternion<double>
 vcsl_spatial_transformation::lqi(const vnl_quaternion<double> &v0,
                                  const vnl_quaternion<double> &v1,
                                  const int index,
                                  const double time) const
 {
-  vnl_quaternion<double> *result;
-  double t0;
-  double t1;
-  double t;
+  double t0=(*beat_)[index];
+  double t1=(*beat_)[index+1];
+  double t=(time-t0)/(t1-t0);
+
   double cosangle;
-  double angle;
-  double invsin;
-  double coef1;
-  double coef2;
-
-  t0=(*beat_)[index];
-  t1=(*beat_)[index+1];
-  t=(time-t0)/(t1-t0);
-
   { // sunpro 5.0 is overload challenged
     vnl_vector<double> const &v0_ = v0;
     vnl_vector<double> const &v1_ = v1;
     cosangle=dot_product(v0_, v1_);
   }
-  angle=vcl_acos(cosangle);
-  invsin=1/vcl_sin(angle);
-  coef1=vcl_sin((1-t)*angle)*invsin;
-  coef2=vcl_sin(t*angle)*invsin;
+  double angle=vcl_acos(cosangle);
+  double invsin=1/vcl_sin(angle);
+  double coef1=vcl_sin((1-t)*angle)*invsin;
+  double coef2=vcl_sin(t*angle)*invsin;
 
-  result=new vnl_quaternion<double>(v0.x()*coef1+v1.x()*coef2,
-                                    v0.y()*coef1+v1.y()*coef2,
-                                    v0.z()*coef1+v1.z()*coef2,
-                                    v0.r()*coef1+v1.r()*coef2);
-
-  return result;
+  return vnl_quaternion<double>(v0.x()*coef1+v1.x()*coef2,
+                                v0.y()*coef1+v1.y()*coef2,
+                                v0.z()*coef1+v1.z()*coef2,
+                                v0.r()*coef1+v1.r()*coef2);
 }

@@ -58,7 +58,7 @@ bool vcsl_scale::is_valid(void) const
 //---------------------------------------------------------------------------
 void vcsl_scale::set_static(const double new_scale)
 {
-  if(scale_==0||scale_->size()!=1)
+  if (scale_==0||scale_->size()!=1)
     scale_=new list_of_scalars(1);
   (*scale_)[0]=new_scale;
   beat_=0;
@@ -70,7 +70,7 @@ void vcsl_scale::set_static(const double new_scale)
 //---------------------------------------------------------------------------
 void vcsl_scale::set_scale(vcl_vector<double> &new_scale)
 {
-  if(scale_!=0&&scale_->size()==1)
+  if (scale_!=0&&scale_->size()==1)
     delete scale_;
   scale_=&new_scale;
 }
@@ -91,16 +91,16 @@ vcl_vector<double> *vcsl_scale::scale(void) const
 // Image of `v' by `this'
 // REQUIRE: is_valid()
 //---------------------------------------------------------------------------
-vnl_vector<double> *vcsl_scale::execute(const vnl_vector<double> &v,
-                                        const double time) const
+vnl_vector<double> vcsl_scale::execute(const vnl_vector<double> &v,
+                                       const double time) const
 {
   // require
   assert(is_valid());
 
   double value=scale_value(time);
-  vnl_vector<double> *result=new vnl_vector<double>(v.size());
-  for(unsigned int i=0;i<v.size();++i)
-    result->put(i,value*v.get(i));
+  vnl_vector<double> result(v.size());
+  for (unsigned int i=0;i<v.size();++i)
+    result.put(i,value*v.get(i));
 
   return result;
 }
@@ -110,17 +110,17 @@ vnl_vector<double> *vcsl_scale::execute(const vnl_vector<double> &v,
 // REQUIRE: is_valid()
 // REQUIRE: is_invertible(time)
 //---------------------------------------------------------------------------
-vnl_vector<double> *vcsl_scale::inverse(const vnl_vector<double> &v,
-                                        const double time) const
+vnl_vector<double> vcsl_scale::inverse(const vnl_vector<double> &v,
+                                       const double time) const
 {
   // require
   assert(is_valid());
   assert(is_invertible(time));
 
   double value=scale_value(time);
-  vnl_vector<double> *result=new vnl_vector<double>(v.size());
-  for(unsigned int i=0;i<v.size();++i)
-    result->put(i,v.get(i)/value);
+  vnl_vector<double> result(v.size());
+  for (unsigned int i=0;i<v.size();++i)
+    result.put(i,v.get(i)/value);
 
   return result; 
 }
@@ -130,19 +130,15 @@ vnl_vector<double> *vcsl_scale::inverse(const vnl_vector<double> &v,
 //---------------------------------------------------------------------------
 double vcsl_scale::scale_value(const double time) const
 {
-  double result;
-  int i;
-
-  if(beat_==0) // static
-    result=(*scale_)[0];
+  if (beat_==0) // static
+    return (*scale_)[0];
   else
     {
-      i=matching_interval(time);
+      int i=matching_interval(time);
       switch((*interpolator_)[i])
         {
         case vcsl_linear:
-          result=lsi((*scale_)[i],(*scale_)[i+1],i,time);
-          break;
+          return lsi((*scale_)[i],(*scale_)[i+1],i,time);
         case vcsl_cubic:
           assert(false); // Not yet implemented
           break;
@@ -154,5 +150,5 @@ double vcsl_scale::scale_value(const double time) const
           break;
         }
     }
-  return result;
+  return 0.0; // never reached
 }

@@ -14,7 +14,6 @@
 //---------------------------------------------------------------------------
 vcsl_coordinate_system::vcsl_coordinate_system(void)
 {
-
 }
 
 //---------------------------------------------------------------------------
@@ -73,21 +72,15 @@ const vcsl_spatial *vcsl_coordinate_system::cast_to_spatial(void) const
 // Convert `v', exprimed with cs units, to standard units
 // REQUIRE: v.size()==dimensionnality()
 //---------------------------------------------------------------------------
-vnl_vector<double> *
+vnl_vector<double>
 vcsl_coordinate_system::from_cs_to_standard_units(const vnl_vector<double> &v) const
 {
-  vnl_vector<double> *result;
-  vcl_vector<vcsl_axis_sptr>::const_iterator i;
-  int j;
-  
-  result=new vnl_vector<double>(v.size());
+  vnl_vector<double> result(v.size());
 
-  j=0;
-  for(i=axes_.begin();i!=axes_.end();++i)
-    {
-      result->put(j,v.get(j)/(*i)->unit()->units_per_standard_unit());
-      ++j;
-    }
+  int j=0;
+  vcl_vector<vcsl_axis_sptr>::const_iterator i;
+  for(i=axes_.begin();i!=axes_.end();++i,++j)
+    result.put(j,v.get(j)/(*i)->unit()->units_per_standard_unit());
 
   return result;
 }
@@ -96,20 +89,15 @@ vcsl_coordinate_system::from_cs_to_standard_units(const vnl_vector<double> &v) c
 // Convert `v', exprimed with standard units, to cs units
 // REQUIRE: v.size()==dimensionnality()
 //---------------------------------------------------------------------------
-vnl_vector<double> *
+vnl_vector<double>
 vcsl_coordinate_system::from_standard_units_to_cs(const vnl_vector<double> &v) const
 {
-  vnl_vector<double> *result;
-  vcl_vector<vcsl_axis_sptr>::const_iterator i;
-  int j;
+  vnl_vector<double> result(v.size());
 
-  result=new vnl_vector<double>(v.size());
-  j=0;
-  for(i=axes_.begin();i!=axes_.end();++i)
-    {
-      result->put(j,v.get(j)*(*i)->unit()->units_per_standard_unit());
-      ++j;
-    }
+  int j=0;
+  vcl_vector<vcsl_axis_sptr>::const_iterator i;
+  for(i=axes_.begin();i!=axes_.end();++i,++j)
+    result.put(j,v.get(j)*(*i)->unit()->units_per_standard_unit());
 
   return result;
 }

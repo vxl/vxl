@@ -88,19 +88,16 @@ list_of_vectors *vcsl_translation::vector(void) const
 // Image of `v' by `this'
 // REQUIRE: is_valid()
 //---------------------------------------------------------------------------
-vnl_vector<double> *vcsl_translation::execute(const vnl_vector<double> &v,
-                                              const double time) const
+vnl_vector<double> vcsl_translation::execute(const vnl_vector<double> &v,
+                                             const double time) const
 {
   // require
   assert(is_valid());
 
-  vnl_vector<double> *value=vector_value(time);
-  vnl_vector<double> *result=new vnl_vector<double>(v.size());
+  vnl_vector<double> value=vector_value(time);
+  vnl_vector<double> result(v.size());
   for(unsigned int i=0;i<v.size();++i)
-    result->put(i,v.get(i)+value->get(i));
-
-  if(beat_!=0) // dynamic
-    delete value;
+    result.put(i,v.get(i)+value.get(i));
 
   return result;
 }
@@ -110,20 +107,17 @@ vnl_vector<double> *vcsl_translation::execute(const vnl_vector<double> &v,
 // REQUIRE: is_valid()
 // REQUIRE: is_invertible(time)
 //---------------------------------------------------------------------------
-vnl_vector<double> *vcsl_translation::inverse(const vnl_vector<double> &v,
-                                              const double time) const
+vnl_vector<double> vcsl_translation::inverse(const vnl_vector<double> &v,
+                                             const double time) const
 {
   // require
   assert(is_valid());
   assert(is_invertible(time));
 
-  vnl_vector<double> *value=vector_value(time);
-  vnl_vector<double> *result=new vnl_vector<double>(v.size());
+  vnl_vector<double> value=vector_value(time);
+  vnl_vector<double> result(v.size());
   for(unsigned int i=0;i<v.size();++i)
-    result->put(i,v.get(i)-value->get(i));
-
-  if(beat_!=0) // dynamic
-    delete value;
+    result.put(i,v.get(i)-value.get(i));
 
   return result;
 }
@@ -131,21 +125,17 @@ vnl_vector<double> *vcsl_translation::inverse(const vnl_vector<double> &v,
 //---------------------------------------------------------------------------
 // Compute the value of the parameter at time `time'
 //---------------------------------------------------------------------------
-vnl_vector<double> *vcsl_translation::vector_value(const double time) const
+vnl_vector<double> vcsl_translation::vector_value(const double time) const
 {
-  vnl_vector<double> *result;
-  int i;
-  
   if(beat_==0) // static
-    result=(*vector_)[0];
+    return *((*vector_)[0]);
   else
     {
-      i=matching_interval(time);
+      int i=matching_interval(time);
       switch((*interpolator_)[i])
         {
         case vcsl_linear:
-          result=lvi(*(*vector_)[i],*(*vector_)[i+1],i,time);
-          break;
+          return lvi(*(*vector_)[i],*(*vector_)[i+1],i,time);
         case vcsl_cubic:
           assert(false); // Not yet implemented
           break;
@@ -157,5 +147,5 @@ vnl_vector<double> *vcsl_translation::vector_value(const double time) const
           break;
         }
     }
-  return result;
+  return vnl_vector<double>(); // never reached
 }

@@ -7,6 +7,7 @@
 // Version |Date      | Author                   |Comment
 // --------+----------+--------------------------+-----------------------------
 // 1.0     |2000/07/19| François BERTEL          |Creation
+// 1.1     |2002/01/22| Peter Vanroose           |Avoid new/delete if possible
 //*****************************************************************************
 
 #include <vcl_iostream.h>
@@ -21,29 +22,12 @@
 int main(int argc,
          char *argv[])
 {
-  int result;
-
-  vcsl_graph_sptr graph;
-  vcsl_spatial_sptr csa;
-  vcsl_spatial_sptr cs0;
-  vcsl_spatial_sptr cs1;
-  vcl_vector<double> *beat;
-  vcl_vector<double> *tr0_beat;
-  vcl_vector<vcsl_spatial_sptr> *parent;
-  vcl_vector<vcsl_spatial_transformation_sptr> *motion;
-  vcl_vector<double> *scale_values;
-  vcl_vector<vcsl_interpolator> *scale_interpolators;
-  vnl_vector<double> *p;
-  vnl_vector<double> *q;
-  vcsl_scale_sptr scale;
-
-  result=0;
   vcl_cout<<"Creation of graph..."<< vcl_flush;
-  graph=new vcsl_graph();
+  vcsl_graph_sptr graph=new vcsl_graph();
   vcl_cout<<"done"<<vcl_endl;
 
   vcl_cout<<"Creation of csa..."<< vcl_flush;
-  csa=new vcsl_cartesian_3d();
+  vcsl_spatial_sptr csa=new vcsl_cartesian_3d();
   assert(csa.ptr()!=0);
   vcl_cout<<"done"<<vcl_endl;
   vcl_cout<<"Adding csa to graph..."<< vcl_flush;
@@ -51,7 +35,7 @@ int main(int argc,
   vcl_cout<<"done"<<vcl_endl;
 
   vcl_cout<<"Creation of cs0..."<< vcl_flush;
-  cs0=new vcsl_cartesian_3d();
+  vcsl_spatial_sptr cs0=new vcsl_cartesian_3d();
   assert(cs0.ptr()!=0);
   vcl_cout<<"done"<<vcl_endl;
   vcl_cout<<"Adding cs0 to graph..."<< vcl_flush;
@@ -59,7 +43,7 @@ int main(int argc,
   vcl_cout<<"done"<<vcl_endl;
 
   vcl_cout<<"Creation of cs1..."<< vcl_flush;
-  cs1=new vcsl_cartesian_3d();
+  vcsl_spatial_sptr cs1=new vcsl_cartesian_3d();
   assert(cs1.ptr()!=0);
   vcl_cout<<"done"<<vcl_endl;
   vcl_cout<<"Adding cs1 to graph..."<< vcl_flush;
@@ -67,136 +51,117 @@ int main(int argc,
   vcl_cout<<"done"<<vcl_endl;
 
   vcl_cout<<"Creation of beat..."<< vcl_flush;
-  beat=new vcl_vector<double>;
-  assert(beat!=0);
+  vcl_vector<double> beat;
   vcl_cout<<"done"<<vcl_endl;
   vcl_cout<<"Filling of beat..."<< vcl_flush;
-  beat->reserve(2);
-  beat->push_back(0);
-  beat->push_back(1);
+  beat.reserve(2);
+  beat.push_back(0);
+  beat.push_back(1);
   vcl_cout<<"done"<<vcl_endl;
-  
+
   vcl_cout<<"Attaching beat to cs0..."<< vcl_flush;
-  cs0->set_beat(*beat);
+  cs0->set_beat(beat);
   vcl_cout<<"done"<<vcl_endl;
 
   vcl_cout<<"Creation of parent..."<< vcl_flush;
-  parent=new vcl_vector<vcsl_spatial_sptr>;
-  assert(parent!=0);
+  vcl_vector<vcsl_spatial_sptr> parent;
   vcl_cout<<"done"<<vcl_endl;
 
   vcl_cout<<"Filling of parent..."<< vcl_flush;
-  parent->reserve(1);
-  parent->push_back(csa);
+  parent.reserve(1);
+  parent.push_back(csa);
   vcl_cout<<"done"<<vcl_endl;
 
   vcl_cout<<"Attaching parent to cs0..."<< vcl_flush;
-  cs0->set_parent(*parent);
+  cs0->set_parent(parent);
   vcl_cout<<"done"<<vcl_endl;
-
-  vcl_cout<<"Creation of motion..."<< vcl_flush;
-  motion=new vcl_vector<vcsl_spatial_transformation_sptr>;
-  assert(motion!=0);
-  vcl_cout<<"done"<<vcl_endl;
-
-  motion->reserve(1);
 
   vcl_cout<<"Creation of scale..."<< vcl_flush;
-  scale=new vcsl_scale;
+  vcsl_scale_sptr scale=new vcsl_scale;
   assert(scale.ptr()!=0);
   vcl_cout<<"done"<<vcl_endl;
 
-  tr0_beat=beat;
+  vcl_vector<double>& tr0_beat=beat;
 
   vcl_cout<<"Attaching tr0_beat to scale..."<< vcl_flush;
-  scale->set_beat(*tr0_beat);
+  scale->set_beat(tr0_beat);
   vcl_cout<<"done"<<vcl_endl;
 
   vcl_cout<<"Test set_beat() and beat() of vcsl_transformation..."<< vcl_flush;
-  assert(scale->beat()==tr0_beat);
+  assert(scale->beat()==&tr0_beat);
   vcl_cout<<"passed"<<vcl_endl;
 
   vcl_cout<<"Creation of scale_values..."<< vcl_flush;
-  scale_values=new vcl_vector<double>;
-  assert(scale_values!=0);
+  vcl_vector<double> scale_values;
   vcl_cout<<"done"<<vcl_endl;
 
   vcl_cout<<"Filling of scale_values..."<< vcl_flush;
-  scale_values->reserve(2);
-  scale_values->push_back(1);
-  scale_values->push_back(2);
+  scale_values.reserve(2);
+  scale_values.push_back(1);
+  scale_values.push_back(2);
   vcl_cout<<"done"<<vcl_endl;
 
   vcl_cout<<"Attaching scale_values to scale..."<< vcl_flush;
-  scale->set_scale(*scale_values);
+  scale->set_scale(scale_values);
   vcl_cout<<"done"<<vcl_endl;
 
   vcl_cout<<"Test set_scale() and scale() of vcsl_scale...";
   vcl_cout<< vcl_flush;
-  assert(scale->scale()==scale_values);
+  assert(scale->scale()==&scale_values);
   vcl_cout<<"passed"<<vcl_endl;
 
   vcl_cout<<"Creation of scale_interpolators..."<< vcl_flush;
-  scale_interpolators=new vcl_vector<vcsl_interpolator>;
-  assert(scale_interpolators!=0);
+  vcl_vector<vcsl_interpolator> scale_interpolators;
   vcl_cout<<"done"<<vcl_endl;
 
-  scale_interpolators->reserve(1);
   vcl_cout<<"Filling scale_interpolators..."<< vcl_flush;
-  scale_interpolators->push_back(vcsl_linear);
+  scale_interpolators.reserve(1);
+  scale_interpolators.push_back(vcsl_linear);
   vcl_cout<<"done"<<vcl_endl;
   vcl_cout<<"Attaching scale_interpolators to scale..."<< vcl_flush;
-  scale->set_interpolators(*scale_interpolators);
+  scale->set_interpolators(scale_interpolators);
   vcl_cout<<"done"<<vcl_endl;
 
   vcl_cout<<"Test set_interpolators() and interpolators() of ";
   vcl_cout<<"vcsl_scale..."<< vcl_flush;
-  assert(scale->interpolators()==scale_interpolators);
+  assert(scale->interpolators()==&scale_interpolators);
   vcl_cout<<"passed"<<vcl_endl;
 
+  vcl_cout<<"Creation of motion..."<< vcl_flush;
+  vcl_vector<vcsl_spatial_transformation_sptr> motion;
+  vcl_cout<<"done"<<vcl_endl;
+
   vcl_cout<<"Filling motion..."<< vcl_flush;
-  motion->push_back(scale.ptr());
+  motion.reserve(1);
+  motion.push_back(scale.ptr());
   vcl_cout<<"done"<<vcl_endl;
 
   vcl_cout<<"Attaching motion to cs0..."<< vcl_flush;
-  cs0->set_motion(*motion);
+  cs0->set_motion(motion);
   vcl_cout<<"done"<<vcl_endl;
 
   vcl_cout<<"Creation of p..."<< vcl_flush;
-  p=new vnl_vector<double>(3);
-  assert(p!=0);
+  vnl_vector<double> p(3);
   vcl_cout<<"done"<<vcl_endl;
 
   vcl_cout<<"Setting of p..."<< vcl_flush;
-  p->put(0,1);
-  p->put(1,2);
-  p->put(2,3);
+  p.put(0,1);
+  p.put(1,2);
+  p.put(2,3);
   vcl_cout<<"done"<<vcl_endl;
 
   vcl_cout<<"Creation of q from p at time 0 ..."<< vcl_flush;
-  q=cs0->from_local_to_cs(*p,csa,0);
-  assert(q!=0);
+  vnl_vector<double> q=cs0->from_local_to_cs(p,csa,0);
   vcl_cout<<"done"<<vcl_endl;
-  vcl_cout<<q->get(0)<<' '<<q->get(1)<<' '<<q->get(2)<<vcl_endl;
-  delete q;
+  vcl_cout<<q.get(0)<<' '<<q.get(1)<<' '<<q.get(2)<<vcl_endl;
   vcl_cout<<"Creation of q from p at time 0.5 ..."<< vcl_flush;
-  q=cs0->from_local_to_cs(*p,csa,0.5);
-  assert(q!=0);
+  q=cs0->from_local_to_cs(p,csa,0.5);
   vcl_cout<<"done"<<vcl_endl;
-  vcl_cout<<q->get(0)<<' '<<q->get(1)<<' '<<q->get(2)<<vcl_endl;
-  delete q;
+  vcl_cout<<q.get(0)<<' '<<q.get(1)<<' '<<q.get(2)<<vcl_endl;
   vcl_cout<<"Creation of q from p at time 1 ..."<< vcl_flush;
-  q=cs0->from_local_to_cs(*p,csa,1);
-  assert(q!=0);
+  q=cs0->from_local_to_cs(p,csa,1);
   vcl_cout<<"done"<<vcl_endl;
-  vcl_cout<<q->get(0)<<' '<<q->get(1)<<' '<<q->get(2)<<vcl_endl;
-  delete q;
+  vcl_cout<<q.get(0)<<' '<<q.get(1)<<' '<<q.get(2)<<vcl_endl;
 
-  delete scale_interpolators;
-  delete scale_values;
-  delete motion;
-  delete parent;
-  delete beat;
-
-  return result;
+  return 0;
 }

@@ -52,7 +52,7 @@ bool vcsl_displacement::is_valid(void) const
 //---------------------------------------------------------------------------
 void vcsl_displacement::set_static_point(vnl_vector<double> &new_point)
 {
-  if(point_==0||point_->size()!=1)
+  if (point_==0||point_->size()!=1)
     point_=new list_of_vectors(1);
   (*point_)[0]=&new_point;
   beat_=0;
@@ -64,7 +64,7 @@ void vcsl_displacement::set_static_point(vnl_vector<double> &new_point)
 //---------------------------------------------------------------------------
 void vcsl_displacement::set_point(list_of_vectors &new_point)
 {
-  if(point_!=0&&point_->size()==1)
+  if (point_!=0&&point_->size()==1)
     delete point_;
   point_=&new_point;
 }
@@ -76,7 +76,7 @@ list_of_vectors *vcsl_displacement::point(void) const
 {
   return point_;
 }
-  
+
 //***************************************************************************
 // Basic operations
 //***************************************************************************
@@ -85,42 +85,38 @@ list_of_vectors *vcsl_displacement::point(void) const
 // Image of `v' by `this'
 // REQUIRE: is_valid()
 //---------------------------------------------------------------------------
-vnl_vector<double> *vcsl_displacement::execute(const vnl_vector<double> &v,
-                                               const double time) const
+vnl_vector<double> vcsl_displacement::execute(const vnl_vector<double> &v,
+                                              const double time) const
 {
   // require
   assert(is_valid());
+  assert((is_2d()&&v.size()==2)||(is_3d()&&v.size()==3));
 
-  vnl_vector<double> *result;
-  
-  vnl_quaternion<double> *q;
-  vnl_vector<double> *translation;
-  vnl_vector<double> *tmp;
+  vnl_vector<double> translation=vector_value(time);
 
-  translation=vector_value(time);
+  vnl_vector<double> result(3);
 
-  tmp=new vnl_vector<double>(3);
-  if(_mode_2d)
-    tmp->put(2,0);
-  for(unsigned int i=0;i<v.size();++i)
-    tmp->put(i,v.get(i)-translation->get(i));
+  if (_mode_2d)
+    {
+      result.put(0,v.get(0)-translation.get(0));
+      result.put(1,v.get(1)-translation.get(1));
+      result.put(2,0);
+    }
+  else
+    result=v-translation;
 
-  q=quaternion(time);
+  vnl_quaternion<double> q=quaternion(time);
+  result = q.rotate(result);
 
-  result=new vnl_vector<double>(q->rotate(*tmp));
-  delete q;
-  delete tmp;
-
-  tmp=result;
-  if(_mode_2d)
-    result=new vnl_vector<double>(2);
-  for(unsigned int i=0;i<v.size();++i)
-    result->put(i,tmp->get(i)+translation->get(i));
-  if(_mode_2d)
-     delete tmp;
-  if(beat_!=0)
-    delete translation;
-  return result;
+  if (_mode_2d)
+    {
+      vnl_vector<double> tmp(2);
+      tmp.put(0,result.get(0)+translation.get(0));
+      tmp.put(1,result.get(1)+translation.get(1));
+      return tmp;
+    }
+  else 
+    return result+translation;
 }
 
 //---------------------------------------------------------------------------
@@ -128,67 +124,55 @@ vnl_vector<double> *vcsl_displacement::execute(const vnl_vector<double> &v,
 // REQUIRE: is_valid()
 // REQUIRE: is_invertible(time)
 //---------------------------------------------------------------------------
-vnl_vector<double> *vcsl_displacement::inverse(const vnl_vector<double> &v,
-                                               const double time) const
+vnl_vector<double> vcsl_displacement::inverse(const vnl_vector<double> &v,
+                                              const double time) const
 {
   // require
   assert(is_valid());
   assert(is_invertible(time));
+  assert((is_2d()&&v.size()==2)||(is_3d()&&v.size()==3));
 
-  vnl_vector<double> *result;
-  
-  vnl_quaternion<double> *q0;
-  vnl_quaternion<double> *q1;
-  vnl_vector<double> *translation;
-  vnl_vector<double> *tmp;
+  vnl_vector<double> translation=vector_value(time);
 
-  translation=vector_value(time);
+  vnl_vector<double> result(3);
 
-  tmp=new vnl_vector<double>(3);
-  if(_mode_2d)
-    tmp->put(2,0);
-  for(unsigned int i=0;i<v.size();++i)
-    tmp->put(i,v.get(i)-translation->get(i));
+  if (_mode_2d)
+    {
+      result.put(0,v.get(0)-translation.get(0));
+      result.put(1,v.get(1)-translation.get(1));
+      result.put(2,0);
+    }
+  else
+    result=v-translation;
 
-  q0=quaternion(time);
-  q1=new vnl_quaternion<double>(q0->conjugate());
-  delete q0;
+  vnl_quaternion<double> q=quaternion(time);
+  result = q.conjugate().rotate(result);
 
-  result=new vnl_vector<double>(q1->rotate(*tmp));
-  delete q1;
-  delete tmp;
-
-  tmp=result;
-  if(_mode_2d)
-    result=new vnl_vector<double>(2);
-
-  for(unsigned int i=0;i<v.size();++i)
-    result->put(i,tmp->get(i)+translation->get(i));
-  if(_mode_2d)
-    delete tmp;
-  if(beat_!=0)
-    delete translation;
-  return result;
+  if (_mode_2d)
+    {
+      vnl_vector<double> tmp(2);
+      tmp.put(0,result.get(0)+translation.get(0));
+      tmp.put(1,result.get(1)+translation.get(1));
+      return tmp;
+    }
+  else 
+    return result+translation;
 }
 
 //---------------------------------------------------------------------------
 // Compute the value of the vector at time `time'
 //---------------------------------------------------------------------------
-vnl_vector<double> *vcsl_displacement::vector_value(const double time) const
+vnl_vector<double> vcsl_displacement::vector_value(const double time) const
 {
-  vnl_vector<double> *result;
-  int i;
-
-  if(beat_==0) // static
-    result=(*point_)[0];
+  if (beat_==0) // static
+    return *((*point_)[0]);
   else
     {
-      i=matching_interval(time);
+      int i=matching_interval(time);
       switch((*interpolator_)[i])
         {
         case vcsl_linear:
-          result=lvi(*(*point_)[i],*(*point_)[i+1],i,time);
-          break;
+          return lvi(*(*point_)[i],*(*point_)[i+1],i,time);
         case vcsl_cubic:
           assert(false); // Not yet implemented
           break;
@@ -200,5 +184,5 @@ vnl_vector<double> *vcsl_displacement::vector_value(const double time) const
           break;
         }
     }
-  return result;
+  return vnl_vector<double>(); // never reached
 }

@@ -7,7 +7,8 @@
 // Modifications
 // \verbatim
 // 2000/07/10 François BERTEL Creation
-// 10/4/2001 Ian Scott (Manchester) Coverted perceps header to doxygen
+// 2001/04/10 Ian Scott (Manchester) Converted perceps header to doxygen
+// 2002/01/22 Peter Vanroose - return type of from_local_to_cs() changed from ptr to non-ptr
 // \endverbatim
 
 #include <vcsl/vcsl_spatial_sptr.h>
@@ -108,9 +109,9 @@ public:
   //: From a vector `v' exprimed in `this',
   //  return a vector exprimed in the spatial coordinate system `other'
   //  REQUIRE: path_from_local_to_cs_exists(other,time)
-  virtual vnl_vector<double> *from_local_to_cs(const vnl_vector<double> &v,
-                                               const vcsl_spatial_sptr &other,
-                                               const double time);
+  virtual vnl_vector<double> from_local_to_cs(const vnl_vector<double> &v,
+                                              const vcsl_spatial_sptr &other,
+                                              const double time);
 
   virtual void set_graph(const vcsl_graph_sptr &new_graph);
 

@@ -19,12 +19,7 @@
 int main(int argc,
          char *argv[])
 {
-  int result;
+  vcsl_polar_sptr p=new vcsl_polar;
 
-  result=0;
-
-  vcsl_polar_sptr p;
-  p=new vcsl_polar;
-
-  return result;
+  return 0;
 }

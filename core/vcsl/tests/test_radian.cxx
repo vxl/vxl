@@ -19,12 +19,7 @@
 int main(int argc,
          char *argv[])
 {
-  int result;
+  vcsl_radian_sptr r=vcsl_radian::instance();
 
-  result=0;
-
-  vcsl_radian_sptr r;
-  r=vcsl_radian::instance();
-
-  return result;
+  return 0;
 }

@@ -7,7 +7,8 @@
 // Modifications
 // \verbatim
 // 2000/06/28 François BERTEL Creation. Adapted from IUE
-// 10/4/2001 Ian Scott (Manchester) Coverted perceps header to doxygen
+// 2001/04/10 Ian Scott (Manchester) Converted perceps header to doxygen
+// 2002/01/22 Peter Vanroose - return type of execute() and inverse() changed to non-ptr
 // \endverbatim
 
 
@@ -65,18 +66,18 @@ public:
 
   //: Image of `v' by `this'
   //  REQUIRE: is_valid()
-  virtual vnl_vector<double> *execute(const vnl_vector<double> &v,
-                                      const double time) const;
+  virtual vnl_vector<double> execute(const vnl_vector<double> &v,
+                                     const double time) const;
 
   //: Image of `v' by the inverse of `this'
   //  REQUIRE: is_valid()
   //  REQUIRE: is_invertible(time)
-  virtual vnl_vector<double> *inverse(const vnl_vector<double> &v,
-                                      const double time) const;
+  virtual vnl_vector<double> inverse(const vnl_vector<double> &v,
+                                     const double time) const;
 
 protected:
   //: Compute the value of the parameter at time `time'
-  virtual vnl_vector<double> *vector_value(const double time) const;
+  virtual vnl_vector<double> vector_value(const double time) const;
 
   //: Direction vector variation along the time
   list_of_vectors *vector_;

@@ -7,7 +7,8 @@
 // Modifications
 // \verbatim
 // 2000/06/28 François BERTEL Creation. Adapted from IUE
-// 10/4/2001 Ian Scott (Manchester) Coverted perceps header to doxygen
+// 2001/04/10 Ian Scott (Manchester) Converted perceps header to doxygen
+// 2002/01/22 Peter Vanroose - return type of quaternion(), execute() and inverse() changed to non-ptr
 // \endverbatim
 
 
@@ -95,19 +96,19 @@ public:
   //: Image of `v' by `this'
   //  REQUIRE: is_valid()
   //  REQUIRE: (is_2d()&&v.size()==2)||(is_3d()&&v.size()==3)
-  virtual vnl_vector<double> *execute(const vnl_vector<double> &v,
-                                      const double time) const;
+  virtual vnl_vector<double> execute(const vnl_vector<double> &v,
+                                     const double time) const;
 
   //: Image of `v' by the inverse of `this'
   //  REQUIRE: is_valid()
   //  REQUIRE: is_invertible(time)
   //  REQUIRE (is_2d()&&v.size()==2)||(is_3d()&&v.size()==3)
-  virtual vnl_vector<double> *inverse(const vnl_vector<double> &v,
-                                      const double time) const;
+  virtual vnl_vector<double> inverse(const vnl_vector<double> &v,
+                                     const double time) const;
 
 protected:
   //: Compute the value of the quaternion at time `time'
-  vnl_quaternion<double> *quaternion(const double time) const;
+  vnl_quaternion<double> quaternion(const double time) const;
 
   //: False if `this' is a 3D rotation, true if `this' is a 2D rotation
   bool _mode_2d;

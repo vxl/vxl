@@ -7,6 +7,7 @@
 // Modifications
 // \verbatim
 // 2000/06/28 François BERTEL Creation. Adapted from IUE
+// 2002/01/22 Peter Vanroose - return type of from_cs_to_standard_units() and from_standard_units_to_cs() changed non-ptr
 // \endverbatim
 
 #include <vcsl/vcsl_coordinate_system_sptr.h>
@@ -65,12 +66,12 @@ public:
 
   //: Convert `v', exprimed with cs units, to standard units
   //  REQUIRE: v.size()==dimensionnality()
-  vnl_vector<double> *
+  vnl_vector<double>
   from_cs_to_standard_units(const vnl_vector<double> &v) const;
 
   //: Convert `v', exprimed with standard units, to cs units
   //  REQUIRE: v.size()==dimensionnality()
-  vnl_vector<double> *
+  vnl_vector<double>
   from_standard_units_to_cs(const vnl_vector<double> &v) const;
 
 protected:

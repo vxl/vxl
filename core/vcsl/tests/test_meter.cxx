@@ -19,13 +19,7 @@
 int main(int argc,
          char *argv[])
 {
-  int result;
+  vcsl_meter_sptr m=vcsl_meter::instance();
 
-  result=0;
-
-  vcsl_meter_sptr m;
-  m=vcsl_meter::instance();
-
-
-  return result;
+  return 0;
 }

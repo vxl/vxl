@@ -88,22 +88,21 @@ list_of_scalars *vcsl_perspective::focal(void) const
 // REQUIRE: is_valid()
 // REQUIRE: v.size()==3 and v[2]<0
 //---------------------------------------------------------------------------
-vnl_vector<double> *vcsl_perspective::execute(const vnl_vector<double> &v,
-                                              const double time) const
+vnl_vector<double> vcsl_perspective::execute(const vnl_vector<double> &v,
+                                             const double time) const
 {
   assert(is_valid());
   assert(v.size()==3);
   assert(v[2]<0);
 
-  vnl_vector<double> *result;
   double f;
   double lambda;
 
-  result=new vnl_vector<double>(2);
+  vnl_vector<double> result(2);
   f=focal_value(time);
   lambda=-f/v[2];
-  (*result)[0]=v[0]*lambda;
-  (*result)[1]=v[1]*lambda;
+  result[0]=v[0]*lambda;
+  result[1]=v[1]*lambda;
   return result;
 }
 
@@ -113,13 +112,13 @@ vnl_vector<double> *vcsl_perspective::execute(const vnl_vector<double> &v,
 // REQUIRE: is_invertible(time) and v.size()==2
 // The first pre-condition is never true. You can not use this method
 //---------------------------------------------------------------------------
-vnl_vector<double> *vcsl_perspective::inverse(const vnl_vector<double> &v,
-                                              const double time) const
+vnl_vector<double> vcsl_perspective::inverse(const vnl_vector<double> &v,
+                                             const double time) const
 {
   // require
   assert(is_valid());
   assert((is_invertible(time))&&(v.size()==2));
-  return 0; // Just to avoid compilation warning/error message
+  return vnl_vector<double>(); // To avoid compilation warning/error message
 }
 
 //---------------------------------------------------------------------------
@@ -127,19 +126,15 @@ vnl_vector<double> *vcsl_perspective::inverse(const vnl_vector<double> &v,
 //---------------------------------------------------------------------------
 double vcsl_perspective::focal_value(const double time) const
 {
-  double result;
-  int i;
-
   if(beat_==0) // static
-    result=(*focal_)[0];
+    return (*focal_)[0];
   else
     {
-      i=matching_interval(time);
+      int i=matching_interval(time);
       switch((*interpolator_)[i])
         {
         case vcsl_linear:
-          result=lsi((*focal_)[i],(*focal_)[i+1],i,time);
-          break;
+          return lsi((*focal_)[i],(*focal_)[i+1],i,time);
         case vcsl_cubic:
           assert(false); // Not yet implemented
           break;
@@ -151,5 +146,5 @@ double vcsl_perspective::focal_value(const double time) const
           break;
         }
     }
-  return result;
+  return 0.0; // never reached
 }

@@ -31,12 +31,10 @@ bool vcsl_composition::is_invertible(const double time) const
   // require
   assert(valid_time(time));
 
-  bool result;
-
   vcl_vector<vcsl_spatial_transformation_sptr>::const_iterator i;
 
-  result=true;
-  for(i=transformations_->begin();i!=transformations_->end()&&result;++i)
+  bool result=true;
+  for(i=transformations_->begin();result&&i!=transformations_->end();++i)
     result=(*i)->is_invertible(time);
 
   return result;
@@ -47,12 +45,10 @@ bool vcsl_composition::is_invertible(const double time) const
 //---------------------------------------------------------------------------
 bool vcsl_composition::is_valid(void) const
 {
-  bool result;
-
   vcl_vector<vcsl_spatial_transformation_sptr>::const_iterator i;
 
-  result=true;
-  for(i=transformations_->begin();i!=transformations_->end()&&result;++i)
+  bool result=true;
+  for(i=transformations_->begin();result&&i!=transformations_->end();++i)
     result=(*i)->is_valid();
 
   return result;
@@ -89,23 +85,17 @@ vcsl_composition::set_composition(vcl_vector<vcsl_spatial_transformation_sptr> &
 // Image of `v' by `this'
 // REQUIRE: is_valid()
 //---------------------------------------------------------------------------
-vnl_vector<double> *vcsl_composition::execute(const vnl_vector<double> &v,
-                                              const double time) const
+vnl_vector<double> vcsl_composition::execute(const vnl_vector<double> &v,
+                                             const double time) const
 {
   // require
   assert(is_valid());
 
-  vnl_vector<double> *result = 0;
-  const vnl_vector<double> *tmp2 = &v;
+  vnl_vector<double> result = v;
 
   vcl_vector<vcsl_spatial_transformation_sptr>::const_iterator i;
   for(i=transformations_->begin();i!=transformations_->end();++i)
-    {
-      result=(*i)->execute(*tmp2,time);
-      if(tmp2!=&v)
-        delete tmp2;
-      tmp2=result;
-    }
+    result=(*i)->execute(result,time);
   return result;
 }
 
@@ -114,25 +104,17 @@ vnl_vector<double> *vcsl_composition::execute(const vnl_vector<double> &v,
 // REQUIRE: is_valid()
 // REQUIRE: is_invertible(time)
 //---------------------------------------------------------------------------
-vnl_vector<double> *vcsl_composition::inverse(const vnl_vector<double> &v,
-                                              const double time) const
+vnl_vector<double> vcsl_composition::inverse(const vnl_vector<double> &v,
+                                             const double time) const
 {
   // require
   assert(is_valid());
   assert(is_invertible(time));
 
-  vnl_vector<double> *result = 0;
-  const vnl_vector<double> *tmp2 = &v;
+  vnl_vector<double> result = v;
 
   vcl_vector<vcsl_spatial_transformation_sptr>::reverse_iterator i;
-  // Emulation STL does not provide != for reverse_iterator of
-  // vcl_vector<>:iterator.
   for(i=transformations_->rbegin();!(i==transformations_->rend());++i)
-    {
-      result=(*i)->inverse(*tmp2,time);
-      if(tmp2!=&v)
-        delete tmp2;
-      tmp2=result;
-    }
+    result=(*i)->inverse(result,time);
   return result;
 }

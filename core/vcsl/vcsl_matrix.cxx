@@ -90,27 +90,21 @@ list_of_vcsl_matrix_param_sptr *vcsl_matrix::matrix_list(void) const
 // Image of `v' by `this'
 // REQUIRE: is_valid()
 //---------------------------------------------------------------------------
-vnl_vector<double> *vcsl_matrix::execute(const vnl_vector<double> &v,
-                                              const double time) const
+vnl_vector<double> vcsl_matrix::execute(const vnl_vector<double> &v,
+                                        const double time) const
 {
   // require
   assert(is_valid());
+  assert(v.size()==3);
 
-  vnl_vector<double> *result;
-  vnl_matrix<double> value(3,4);
-  vnl_vector<double>  temp(4);
-  result=new vnl_vector<double>(3);
+  vnl_vector<double> temp(4);
   temp(0)=v(0);
   temp(1)=v(1);
   temp(2)=v(2);
   temp(3)=1;
 
-  value=matrix_value(time,true);
-  assert(v.size()==3);
-  result=new vnl_vector<double>(v.size());
-  *result=value*temp;
-
-  return result;
+  vnl_matrix<double> value=matrix_value(time,true);
+  return value*temp;
 }
 
 //---------------------------------------------------------------------------
@@ -118,25 +112,20 @@ vnl_vector<double> *vcsl_matrix::execute(const vnl_vector<double> &v,
 // REQUIRE: is_valid()
 // REQUIRE: is_invertible(time)
 //---------------------------------------------------------------------------
-vnl_vector<double> *vcsl_matrix::inverse(const vnl_vector<double> &v,
-                                              const double time) const
-{  assert(is_valid());
-  vnl_vector<double> *result;
-  vnl_matrix<double> value(3,4);
-  vnl_vector<double>  temp(4);
+vnl_vector<double> vcsl_matrix::inverse(const vnl_vector<double> &v,
+                                        const double time) const
+{
+  assert(is_valid());
+  assert(v.size()==3);
 
-  result=new vnl_vector<double>(3);
+  vnl_vector<double> temp(4);
   temp(0)=v(0);
   temp(1)=v(1);
   temp(2)=v(2);
   temp(3)=1;
 
-  value=matrix_value(time,false);
-  assert(v.size()==3);
-  result=new vnl_vector<double>(v.size());
-  *result=value*temp;
-
-  return result;
+  vnl_matrix<double> value=matrix_value(time,false);
+  return value*temp;
 }
 
 //---------------------------------------------------------------------------
@@ -146,20 +135,16 @@ vnl_vector<double> *vcsl_matrix::inverse(const vnl_vector<double> &v,
 
 vnl_matrix<double> vcsl_matrix::matrix_value(const double time, bool type) const
 {
-  vnl_matrix<double> result;
-  int i;
-
   if(beat_==0) // static
-    result=param_to_matrix((*matrix_)[0],type);
+    return param_to_matrix((*matrix_)[0],type);
 
   else
     {
-      i=matching_interval(time);
+      int i=matching_interval(time);
       switch((*interpolator_)[i])
         {
         case vcsl_linear:
-          //result=lmi(*(*matrix_)[i],*(*matrix_)[i+1],i,time);
-          break;
+          return lmi(param_to_matrix((*matrix_)[i],type),param_to_matrix((*matrix_)[i+1],type),i,time);
         case vcsl_cubic:
           assert(false); // Not yet implemented
           break;
@@ -171,7 +156,7 @@ vnl_matrix<double> vcsl_matrix::matrix_value(const double time, bool type) const
           break;
         }
     }
-  return result;
+  return vnl_matrix<double>(); // never reached
 }
 
 vnl_matrix<double>  vcsl_matrix::param_to_matrix(vcsl_matrix_param_sptr from,bool type ) const

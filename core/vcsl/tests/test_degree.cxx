@@ -19,12 +19,7 @@
 int main(int argc,
          char *argv[])
 {
-  int result;
+  vcsl_degree_sptr r=vcsl_degree::instance();
 
-  result=0;
-
-  vcsl_degree_sptr r;
-  r=vcsl_degree::instance();
-
-  return result;
+  return 0;
 }
