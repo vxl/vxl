@@ -48,7 +48,6 @@ void osl_fit_lines::simple_fit_to_list(vcl_list<osl_edge *> *myedges,
                                        vcl_list<osl_edge *> *outedges)
 {
   int edge_no = 0;
-  bool success = false;
   vcl_list<osl_edgel_chain*> curves;
   for (vcl_list<osl_edge*>::iterator i=myedges->begin(); i!=myedges->end(); ++i)
   {
@@ -58,12 +57,10 @@ void osl_fit_lines::simple_fit_to_list(vcl_list<osl_edge *> *myedges,
     {
       osl_edgel_chain *dc = edge;//->GetCurve()->CastToDigitalCurve();
       assert(dc!=0);
+      bool success = false;
 
       // If the osl_edgel_chain is long enough fit
-      if ( dc->size() < min_fit_length_ )
-        success = false;
-
-      else
+      if ( dc->size() >= min_fit_length_ )
       {
         double using_degrees = 1.0;
         // Since some code sets Theta in degrees, and some radians!
@@ -77,7 +74,6 @@ void osl_fit_lines::simple_fit_to_list(vcl_list<osl_edge *> *myedges,
             break;
           }
         }
-        success = false;
         data_->Reset();
         double angle = 0.7853981;
         int  orient0 = int((dc->GetTheta(0) * using_degrees + angle/2.0) / angle);
@@ -94,14 +90,14 @@ void osl_fit_lines::simple_fit_to_list(vcl_list<osl_edge *> *myedges,
         float ls_cost = (float)data_->GetCost();
         if (use_square_fit_ && ls_cost < threshold_ ||
             !use_square_fit_ && mean_cost < threshold_ && angle_ok)
-          {
-            success = true;
-            old_finish_ = 0;
-            if (use_square_fit_)
-              OutputLine(&curves, 0, dc->size(), dc, ls_cost);
-            else
-              OutputLine(&curves, 0, dc->size(), dc, mean_cost);
-          }
+        {
+          success = true;
+          old_finish_ = 0;
+          if (use_square_fit_)
+            OutputLine(&curves, 0, dc->size(), dc, ls_cost);
+          else
+            OutputLine(&curves, 0, dc->size(), dc, mean_cost);
+        }
       }
 
       if (success) { // ie. we have fitted a line and have no gunk
@@ -182,12 +178,11 @@ void osl_fit_lines::incremental_fit_to_list(vcl_list<osl_edge *> *myedges,
     else
     {
       curves.reverse();
-      osl_vertex *v1 = 0;
       osl_vertex *v2 = edge->GetV1();
       while (!curves.empty())
       {
         osl_edgel_chain *next = fsm_pop(&curves);
-        v1 = v2;
+        osl_vertex* v1 = v2;
         if (curves.empty()) // last one
           v2 = edge->GetV2();
         else // somewhere in the middle
