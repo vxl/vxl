@@ -57,6 +57,6 @@ vcsl_utm_to_cartesian_3d
 virtual bool is_linear(void) const=0;
 
 //: Homogeneous matrix of `this' at time `time'
-//: REQUIRE: is_valid()
-//: REQUIRE: is_linear()
+// REQUIRE: is_valid()
+// REQUIRE: is_linear()
 virtual vnl_matrix<double> *matrix(const double time) const;
