@@ -27,7 +27,7 @@ double vgl_homg_operators_3d<Type>::angle_between_oriented_lines (const vgl_homg
   n       *= dir2.x()*dir2.x()+dir2.y()*dir2.y()+dir2.z()*dir2.z();
   // dot product of unit direction vectors:
   n = (dir1.x()*dir2.x()+dir1.y()*dir2.y()+dir1.z()*dir2.z())/sqrt(n);
-  return acos(n);
+  return vcl_acos(n);
 }
 
 
@@ -63,7 +63,7 @@ template <class Type>
 Type vgl_homg_operators_3d<Type>::distance (const vgl_homg_point_3d<Type>& point1, 
 					    const vgl_homg_point_3d<Type>& point2)
 {
-  return sqrt(vgl_homg_operators_3d<Type>::distance_squared(point1,point2));
+  return vcl_sqrt( vgl_homg_operators_3d<Type>::distance_squared(point1,point2) );
 }
 
 //-----------------------------------------------------------------------------
@@ -101,24 +101,27 @@ vgl_homg_point_3d<Type> vgl_homg_operators_3d<Type>::intersect_line_and_plane (c
 // - Compute the intersection point of the lines, or the mid-point
 // of the common perpendicular if the lines are skew
 // 
+#if 0 // linker error better than run-time error.
 template <class Type>
 vgl_homg_point_3d<Type> vgl_homg_operators_3d<Type>::lines_to_point (const vgl_homg_line_3d& , const vgl_homg_line_3d& )
 {
-  cerr << "Warning: vgl_homg_operators_3d<Type>::lines_to_point() not yet implemented\n";
+  vcl_cerr << "Warning: vgl_homg_operators_3d<Type>::lines_to_point() not yet implemented\n";
   return vgl_homg_point_3d<Type>();
 }
-
+#endif
 
 //-----------------------------------------------------------------------------
 //
 // - Compute the best fit intersection point of the lines
 // 
+#if 0 // linker error better than run-time error.
 template <class Type>
 vgl_homg_point_3d<Type> vgl_homg_operators_3d<Type>::lines_to_point (const vcl_vector<vgl_homg_line_3d >& )
 {
-  cerr << "Warning: vgl_homg_operators_3d<Type>::lines_to_point() not yet implemented\n";
+  vcl_cerr << "Warning: vgl_homg_operators_3d<Type>::lines_to_point() not yet implemented\n";
   return vgl_homg_point_3d<Type>();
 }
+#endif
 
 //-----------------------------------------------------------------------------
 //
@@ -190,60 +193,70 @@ vgl_homg_operators_3d<Type>::vgl_homg_line_3d vgl_homg_operators_3d<Type>::plane
 //
 // - Compute the best-fit intersection line of the planes
 // 
+#if 0 // linker error better than run-time error.
 template <class Type>
 vgl_homg_operators_3d<Type>::vgl_homg_line_3d vgl_homg_operators_3d<Type>::planes_to_line (const vcl_vector<vgl_homg_plane_3d<Type> >&)
 {
-  cerr << "Warning: vgl_homg_operators_3d<Type>::planes_to_line() not yet implemented\n";
-  return vgl_homg_line_3d();
+  vcl_cerr << "Warning: vgl_homg_operators_3d<Type>::planes_to_line() not yet implemented\n";
+  return vgl_homg_line_3d<Type>();
 }
+#endif
 
 
 //-----------------------------------------------------------------------------
 //
 // - Return the line through the points
 // 
+#if 0 // linker error better than run-time error.
 template <class Type>
 vgl_homg_operators_3d<Type>::vgl_homg_line_3d vgl_homg_operators_3d<Type>::points_to_line (const vgl_homg_point_3d<Type>&, const vgl_homg_point_3d<Type>&)
 {
-  cerr << "Warning: vgl_homg_operators_3d<Type>::points_to_line() not yet implemented\n";
-  return vgl_homg_line_3d();
+  vcl_cerr << "Warning: vgl_homg_operators_3d<Type>::points_to_line() not yet implemented\n";
+  return vgl_homg_line_3d<Type>();
 }
+#endif
 
 //-----------------------------------------------------------------------------
 //
 // - Compute the best-fit line through the points
 //
+#if 0 // linker error better than run-time error.
 template <class Type>
 vgl_homg_operators_3d<Type>::vgl_homg_line_3d vgl_homg_operators_3d<Type>::points_to_line (const vcl_vector<vgl_homg_point_3d<Type> >&)
 {
-  cerr << "Warning: vgl_homg_operators_3d<Type>::points_to_line() not yet implemented\n";
-  return vgl_homg_line_3d();
+  vcl_cerr << "Warning: vgl_homg_operators_3d<Type>::points_to_line() not yet implemented\n";
+  return vgl_homg_line_3d<Type>();
 }
+#endif
 
 //-----------------------------------------------------------------------------
 //
 // - Return the plane through the points
 //
+#if 0 // linker error better than run-time error.
 template <class Type>
 vgl_homg_plane_3d<Type> 
 vgl_homg_operators_3d<Type>::points_to_plane (const vgl_homg_point_3d<Type>&, const vgl_homg_point_3d<Type>&, const vgl_homg_point_3d<Type>&)
 {
-  cerr << "Warning: vgl_homg_operators_3d<Type>::points_to_plane() not yet implemented\n";
-  return vgl_homg_plane_3d<Type>(0,0,0,0);
+  vcl_cerr << "Warning: vgl_homg_operators_3d<Type>::points_to_plane() not yet implemented\n";
+  return vgl_homg_plane_3d<Type>();
 }
+#endif
 
 
 //-----------------------------------------------------------------------------
 //
 // - Compute the best-fit plane through the points
 //
+#if 0 // linker error better than run-time error.
 template <class Type>
 vgl_homg_plane_3d<Type> 
 vgl_homg_operators_3d<Type>::points_to_plane (const vcl_vector<vgl_homg_point_3d<Type> >&)
 {
-  cerr << "Warning: vgl_homg_operators_3d<Type>::points_to_plane() not yet implemented\n";
-  return vgl_homg_plane_3d<Type>(0,0,0,0);
+  vcl_cerr << "Warning: vgl_homg_operators_3d<Type>::points_to_plane() not yet implemented\n";
+  return vgl_homg_plane_3d<Type>();
 }
+#endif
 
 // -- Compute best-fit intersection of planes in a point.
 
@@ -355,7 +368,6 @@ double vgl_homg_operators_3d<Type>::CrossRatio(const vgl_homg_point_3d<Type>& a,
              (y>z)        ? (y1*w4-y4*w1)*(y2*w3-y3*w2) :
                             (z1*w4-z4*w1)*(z2*w3-z3*w2);
   if (n == 0 && m == 0)
-    cerr << "CrossRatio not defined: three of the given points coincide" << endl;
+    vcl_cerr << "CrossRatio not defined: three of the given points coincide" << vcl_endl;
   return n/m;
 }
-
