@@ -154,9 +154,6 @@ SOURCE=.\vgl_h_matrix_2d_compute_4point.cxx
 # Begin Source File
 SOURCE=.\vgl_h_matrix_2d_compute_linear.cxx
 # End Source File
-# Begin Source File
-SOURCE=.\vgl_algo.cxx
-# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
