@@ -395,99 +395,91 @@ bool vil1_tiff_generic_image::read_header()
   // int ncolors = (1 << bitspersample);
 
   TIFFGetField(p->tif, TIFFTAG_PHOTOMETRIC, &p->photometric);
-  switch (p->photometric) {
-  case PHOTOMETRIC_RGB:
-    {
-      if (!TIFFIsTiled(p->tif)) {
-        // section_tiff_image = new ForeignImage(GetDescription(), 'r', GetSizeX(), GetSizeY(), GetBitsPixel(), 8);
+  switch (p->photometric)
+  {
+   case PHOTOMETRIC_RGB:
+    if (!TIFFIsTiled(p->tif)) {
+      // section_tiff_image = new ForeignImage(GetDescription(), 'r', GetSizeX(), GetSizeY(), GetBitsPixel(), 8);
 #ifdef RIH_DEBUG
-        vcl_cerr << "vil1_tiff: Treating Tiff image as uncompressed ForeignImage\n";
+      vcl_cerr << "vil1_tiff: Treating Tiff image as uncompressed ForeignImage\n";
 #endif
-      }
     }
     break;
-  case PHOTOMETRIC_MINISBLACK:
+   case PHOTOMETRIC_MINISBLACK:
+    if (!TIFFIsTiled(p->tif))
     {
-      if (!TIFFIsTiled(p->tif))
-        {
-          // section_tiff_image = new ForeignImage(GetDescription(), 'r', GetSizeX(), GetSizeY(), GetBitsPixel(), 8);
+      // section_tiff_image = new ForeignImage(GetDescription(), 'r', GetSizeX(), GetSizeY(), GetBitsPixel(), 8);
 #ifdef RIH_DEBUG
-          vcl_cerr << "Treating Tiff image as uncompressed ForeignImage\n";
-#endif
-        }
-
-#if 0 // commented out
-      SetColorNum(0);
-
-      SetBandOrder("IMAGE", 0);
-      SetBandOrder("RED",   0);
-      SetBandOrder("GREEN", 0);
-      SetBandOrder("BLUE",  0);
+      vcl_cerr << "Treating Tiff image as uncompressed ForeignImage\n";
 #endif
     }
-    break;
-  case PHOTOMETRIC_MINISWHITE:
-    {
+
 #if 0 // commented out
-       // invert colormap
-       int** cm = new int*[3];
-       cm[0] = new int[ncolors];
-       cm[1] = new int[ncolors];
-       cm[2] = new int[ncolors];
-
-       for (int i=0; i < ncolors; i++) {
-         cm[0][i] = (ncolors-1)-i;
-         cm[1][i] = (ncolors-1)-i;
-         cm[2][i] = (ncolors-1)-i;
-       }
-       SetColorMap(cm);
-       SetColorNum(ncolors);
-
-       SetBandOrder("IMAGE", 0);
-       SetBandOrder("RED",   0);
-       SetBandOrder("GREEN", 0);
-       SetBandOrder("BLUE",  0);
+    SetColorNum(0);
+    SetBandOrder("IMAGE", 0);
+    SetBandOrder("RED",   0);
+    SetBandOrder("GREEN", 0);
+    SetBandOrder("BLUE",  0);
 #endif
-    }
     break;
-  case PHOTOMETRIC_PALETTE:
-    {
+   case PHOTOMETRIC_MINISWHITE:
 #if 0 // commented out
-      int** cm = new int*[3];
-      cm[0] = new int[ncolors];
-      cm[1] = new int[ncolors];
-      cm[2] = new int[ncolors];
+     // invert colormap
+     int** cm = new int*[3];
+     cm[0] = new int[ncolors];
+     cm[1] = new int[ncolors];
+     cm[2] = new int[ncolors];
 
-      unsigned short *redcolormap,*bluecolormap,*greencolormap;
-      TIFFGetField(p->tif, TIFFTAG_COLORMAP,
-                   &redcolormap, &greencolormap, &bluecolormap);
+     for (int i=0; i < ncolors; i++) {
+       cm[0][i] = (ncolors-1)-i;
+       cm[1][i] = (ncolors-1)-i;
+       cm[2][i] = (ncolors-1)-i;
+     }
+     SetColorMap(cm);
+     SetColorNum(ncolors);
 
-      for (int i=0; i < ncolors; i++) {
-        cm[0][i] = (int) CVT(redcolormap[i]);
-        cm[1][i] = (int) CVT(greencolormap[i]);
-        cm[2][i] = (int) CVT(bluecolormap[i]);
-      }
-      // make sure ncolors is set first or set cm will fail!
-      SetColorNum(ncolors);
-      SetColorMap(cm);
-
-
-      SetBandOrder("IMAGE", 0);
-
-      ColorList* cl = GetColorList();
-      ArrayMapping* map = cl->GenerateRedMapping();
-      SetBandOrder("RED", 0, map);
-
-      cl->GenerateGreenMapping(map);
-      SetBandOrder("GREEN", 0, map);
-
-      cl->GenerateBlueMapping(map);
-      SetBandOrder("BLUE", 0, map);
-      delete map;
+     SetBandOrder("IMAGE", 0);
+     SetBandOrder("RED",   0);
+     SetBandOrder("GREEN", 0);
+     SetBandOrder("BLUE",  0);
 #endif
-    }
     break;
-  default:
+   case PHOTOMETRIC_PALETTE:
+#if 0 // commented out
+    int** cm = new int*[3];
+    cm[0] = new int[ncolors];
+    cm[1] = new int[ncolors];
+    cm[2] = new int[ncolors];
+
+    unsigned short *redcolormap,*bluecolormap,*greencolormap;
+    TIFFGetField(p->tif, TIFFTAG_COLORMAP,
+                 &redcolormap, &greencolormap, &bluecolormap);
+
+    for (int i=0; i < ncolors; i++) {
+      cm[0][i] = (int) CVT(redcolormap[i]);
+      cm[1][i] = (int) CVT(greencolormap[i]);
+      cm[2][i] = (int) CVT(bluecolormap[i]);
+    }
+    // make sure ncolors is set first or set cm will fail!
+    SetColorNum(ncolors);
+    SetColorMap(cm);
+
+
+    SetBandOrder("IMAGE", 0);
+
+    ColorList* cl = GetColorList();
+    ArrayMapping* map = cl->GenerateRedMapping();
+    SetBandOrder("RED", 0, map);
+
+    cl->GenerateGreenMapping(map);
+    SetBandOrder("GREEN", 0, map);
+
+    cl->GenerateBlueMapping(map);
+    SetBandOrder("BLUE", 0, map);
+    delete map;
+#endif
+    break;
+   default:
     TIFFError("TIFFImageRH: ",
               "Can not handle image with PhotometricInterpretation=%d",
               p->photometric);

@@ -68,12 +68,10 @@ void vsl_b_read(vsl_b_istream& is, impl &p)
   vsl_b_read(is, ver);
   switch(ver)
   {
-  case 1:
-    {
-      vsl_b_read(is, p.n);
-    }
+   case 1:
+    vsl_b_read(is, p.n);
     break;
-  default:
+   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, impl&)\n";
     vcl_cerr << "           Unknown version number "<< ver << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream

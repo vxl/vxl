@@ -34,14 +34,12 @@ void vsl_b_read(vsl_b_istream &is, vil1_memory_image_of<T> & p)
   vsl_b_read(is, v);
   switch(v)
   {
-  case 1:
-    {
-      vsl_b_read(is, (vil1_memory_image &) p);
-      p.recache_from_impl();
-    }
+   case 1:
+    vsl_b_read(is, (vil1_memory_image &) p);
+    p.recache_from_impl();
     break;
 
-  default:
+   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil1_memory_image_of<T>&)\n"
              << "           Unknown version number "<< v << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
@@ -55,7 +53,7 @@ void vsl_b_read(vsl_b_istream &is, vil1_memory_image_of<T> & p)
 template <class T>
 void vsl_print_summary(vcl_ostream& os,const vil1_memory_image_of<T> & p)
 {
-    vsl_print_summary(os, p.impl());
+  vsl_print_summary(os, p.impl());
 }
 
 
