@@ -37,6 +37,8 @@ bugl_uncertainty_point_3d<T>()
 template<class T>
 T bugl_gaussian_point_3d<T>::prob_at(vgl_point_3d<T> &p)
 {
+ if(!exists_)
+  return 0;
   vnl_vector_fixed<T, 3> d(p.x() - this->x(), p.y() - y(), p.z() - z());
 
   const double pi = vnl_math::pi;

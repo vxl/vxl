@@ -1,5 +1,33 @@
 #ifndef bugl_curve_3d_h_
 #define bugl_curve_3d_h_
+//--------------------------------------------------------------------------
+//:
+// \file
+
+// \brief bugl_curve_3d - a 3-d pointset with curve (1-d) neighborhood
+//
+//    The data structure is a matrix of 3-d points with uncertainty
+//    
+//     ->|              |<--- 2*num_neighbors_ + 1
+//       x x x  p0  x x x  
+//       x x x  p1  x x x
+//             ...  |---|  <--- num_neighbors_
+//             ...
+//       x x x pN-1 x x x
+//                    ^---neighboring points
+//    N = data_.size()
+//
+//   There is also the notion of "fragments". A vector, index_, marks 
+//   intervals between sets of 3-d points inserted by each invocation of
+//   ::add_curve(..)
+//   
+//  
+// \author Kongbin Kang
+// \verbatim
+// Initial version November 22, 2003
+// \endverbatim
+//---------------------------------------------------------------------------
+
 //:
 // \file
 #include <bugl/bugl_normal_point_3d_sptr.h>

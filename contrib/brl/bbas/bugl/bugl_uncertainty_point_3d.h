@@ -11,11 +11,14 @@ template<class T>
 class bugl_uncertainty_point_3d : public vgl_point_3d<T>
 {
  public:
-  bugl_uncertainty_point_3d(T x, T y, T z) : vgl_point_3d<T>(x,y,z){}
-  bugl_uncertainty_point_3d(vgl_point_3d<T> &p) : vgl_point_3d<T>(p) {}
-  bugl_uncertainty_point_3d() : vgl_point_3d<T>(){}
+  bugl_uncertainty_point_3d(T x, T y, T z) : vgl_point_3d<T>(x,y,z){exists_=true;}
+  bugl_uncertainty_point_3d(vgl_point_3d<T> &p) : vgl_point_3d<T>(p) {exists_=true;}
+  bugl_uncertainty_point_3d() : vgl_point_3d<T>(){exists_=false;}
  ~bugl_uncertainty_point_3d(){}
-
+ void set_existence(bool exists){exists_ = exists;}
+ bool exists(){return exists_;}
+ protected:
+ bool exists_;//does the point exist
 #if 0
   virtual double probability(vgl_point_3d<T> p)=0;
 #endif

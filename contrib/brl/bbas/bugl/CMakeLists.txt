@@ -1,6 +1,6 @@
 # ./brl/bbas/bugl/CMakeLists.txt
 # writen by Kongbin Kang for creating a brown uncertainty geometry library.
-
+INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas)
 
@@ -22,7 +22,7 @@ AUX_SOURCE_DIRECTORY(Templates bugl_sources)
 
 ADD_LIBRARY(bugl ${bugl_sources})
 
-TARGET_LINK_LIBRARIES(bugl vnl vgl vbl vcl)
+TARGET_LINK_LIBRARIES(bugl vdgl vnl vgl vbl vcl)
 
 IF(BUILD_TESTING)
   SUBDIRS(tests)
