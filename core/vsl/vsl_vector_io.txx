@@ -1,7 +1,6 @@
-// This is ./vxl/vsl/vsl_vector_io.txx
+// This is vxl/vsl/vsl_vector_io.txx
 #ifndef vsl_vector_io_txx_
 #define vsl_vector_io_txx_
-
 //:
 // \file
 // \brief binary IO functions for vcl_vector<T>
@@ -9,7 +8,7 @@
 //
 // Implementation
 
-#include <vsl/vsl_vector_io.h>
+#include "vsl_vector_io.h"
 #include <vsl/vsl_binary_io.h>
 #include <vcl_iostream.h>
 #include <vsl/vsl_binary_explicit_io.h>

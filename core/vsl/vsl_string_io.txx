@@ -1,7 +1,6 @@
-// This is ./vxl/vsl/vsl_string_io.txx
+// This is vxl/vsl/vsl_string_io.txx
 #ifndef vsl_string_io_txx_
 #define vsl_string_io_txx_
-
 //:
 // \file
 // \brief  binary IO functions for vcl_basic_string<T>
@@ -9,7 +8,7 @@
 //
 // Implementation
 
-#include <vsl/vsl_string_io.h>
+#include "vsl_string_io.h"
 #include <vsl/vsl_binary_io.h>
 
 //====================================================================================

@@ -5,7 +5,7 @@
 //:
 // \file
 
-#include <vcsl/vcsl_scale.h>
+#include "vcsl_scale.h"
 
 #include <vcl_cassert.h>
 

@@ -1,4 +1,5 @@
-#include <vcsl/vcsl_cylindrical.h>
+// This is vxl/vcsl/vcsl_cylindrical.cxx
+#include "vcsl_cylindrical.h"
 
 #include <vcsl/vcsl_axis.h>
 #include <vcsl/vcsl_angle.h>

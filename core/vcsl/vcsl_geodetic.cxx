@@ -1,4 +1,5 @@
-#include <vcsl/vcsl_geodetic.h>
+// This is vxl/vcsl/vcsl_geodetic.cxx
+#include "vcsl_geodetic.h"
 
 //***************************************************************************
 // Constructors/Destructor

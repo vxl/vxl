@@ -1,4 +1,5 @@
-#include <vcsl/vcsl_dimension.h>
+// This is vxl/vcsl/vcsl_dimension.cxx
+#include "vcsl_dimension.h"
 
 //***************************************************************************
 // Constructors/Destructor

@@ -1,4 +1,5 @@
-#include <vcsl/vcsl_length.h>
+// This is vxl/vcsl/vcsl_length.cxx
+#include "vcsl_length.h"
 
 #include <vcsl/vcsl_meter.h>
 
@@ -42,7 +43,7 @@ vcsl_unit_sptr vcsl_length::standard_unit(void) const
 //---------------------------------------------------------------------------
 vcsl_length_sptr vcsl_length::instance(void)
 {
-  if(instance_.ptr()==0)
+  if (instance_.ptr()==0)
     instance_=new vcsl_length;
   return instance_;
 }

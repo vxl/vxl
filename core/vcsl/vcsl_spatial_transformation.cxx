@@ -5,7 +5,7 @@
 //:
 // \file
 
-#include <vcsl/vcsl_spatial_transformation.h>
+#include "vcsl_spatial_transformation.h"
 #include <vcl_cmath.h> // for acos(), sin()
 
 #include <vcl_cassert.h>

@@ -1,4 +1,5 @@
-#include <vcsl/vcsl_angle_unit.h>
+// This is vxl/vcsl/vcsl_angle_unit.cxx
+#include "vcsl_angle_unit.h"
 
 #include <vcsl/vcsl_radian.h>
 

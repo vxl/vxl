@@ -1,4 +1,5 @@
-#include <vcsl/vcsl_meter.h>
+// This is vxl/vcsl/vcsl_meter.cxx
+#include "vcsl_meter.h"
 
 //***************************************************************************
 // Constructors/Destructor
@@ -33,7 +34,7 @@ double vcsl_meter::units_per_standard_unit(void) const
 //---------------------------------------------------------------------------
 vcsl_meter_sptr vcsl_meter::instance(void)
 {
-  if(instance_.ptr()==0)
+  if (instance_.ptr()==0)
     instance_=new vcsl_meter;
   return instance_;
 }

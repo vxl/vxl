@@ -1,4 +1,5 @@
-#include <vcsl/vcsl_radian.h>
+// This is vxl/vcsl/vcsl_radian.cxx
+#include "vcsl_radian.h"
 
 //***************************************************************************
 // Constructors/Destructor
@@ -33,7 +34,7 @@ double vcsl_radian::units_per_standard_unit(void) const
 //---------------------------------------------------------------------------
 vcsl_radian_sptr vcsl_radian::instance(void)
 {
-  if(instance_.ptr()==0)
+  if (instance_.ptr()==0)
     instance_=new vcsl_radian;
   return instance_;
 }

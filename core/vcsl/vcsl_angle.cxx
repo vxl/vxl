@@ -1,4 +1,5 @@
-#include <vcsl/vcsl_angle.h>
+// This is vxl/vcsl/vcsl_angle.cxx
+#include "vcsl_angle.h"
 
 #include <vcsl/vcsl_radian.h>
 
@@ -42,7 +43,7 @@ vcsl_unit_sptr vcsl_angle::standard_unit(void) const
 //---------------------------------------------------------------------------
 vcsl_angle_sptr vcsl_angle::instance(void)
 {
-  if(instance_.ptr()==0)
+  if (instance_.ptr()==0)
     instance_=new vcsl_angle;
   return instance_;
 }

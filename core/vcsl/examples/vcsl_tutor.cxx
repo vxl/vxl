@@ -1,4 +1,4 @@
-// This is ./vxl/vcsl/examples/vcsl_tutor.cxx
+// This is vxl/vcsl/examples/vcsl_tutor.cxx
 
 //:
 // \file

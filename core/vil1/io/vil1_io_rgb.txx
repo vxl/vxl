@@ -1,11 +1,10 @@
-// This is ./vxl/vil/io/vil_io_rgb.txx
+// This is vxl/vil/io/vil_io_rgb.txx
 #ifndef vil_io_rgb_txx_
 #define vil_io_rgb_txx_
-
 //:
 // \file
 
-#include <vil/io/vil_io_rgb.h>
+#include "vil_io_rgb.h"
 
 //========================================================================
 //: Binary save vil_rgb to stream.

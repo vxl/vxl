@@ -5,7 +5,7 @@
 //:
 // \file
 
-#include <vsl/vsl_binary_loader_base.h>
+#include "vsl_binary_loader_base.h"
 #include <vcl_vector.h>
 #include <vcl_vector.txx>
 

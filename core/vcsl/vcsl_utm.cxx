@@ -1,4 +1,5 @@
-#include <vcsl/vcsl_utm.h>
+// This is vxl/vcsl/vcsl_utm.cxx
+#include "vcsl_utm.h"
 
 #include <vcsl/vcsl_axis.h>
 

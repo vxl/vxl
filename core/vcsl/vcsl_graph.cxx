@@ -2,7 +2,7 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-#include <vcsl/vcsl_graph.h>
+#include "vcsl_graph.h"
 
 #include <vcl_cassert.h>
 

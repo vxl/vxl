@@ -1,11 +1,10 @@
-// This is ./vxl/vgl/io/vgl_io_line_2d.txx
+// This is vxl/vgl/io/vgl_io_line_2d.txx
 #ifndef vgl_io_line_2d_txx_
 #define vgl_io_line_2d_txx_
-
 //:
 // \file
 
-#include <vgl/io/vgl_io_line_2d.h>
+#include "vgl_io_line_2d.h"
 
 //======================================================================
 //: Binary save vgl_line_2d to stream.

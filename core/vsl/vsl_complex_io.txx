@@ -1,7 +1,6 @@
-// This is ./vxl/vsl/vsl_complex_io.txx
+// This is vxl/vsl/vsl_complex_io.txx
 #ifndef vsl_complex_io_txx_
 #define vsl_complex_io_txx_
-
 //:
 // \file
 // \brief  binary IO functions for vcl_complex<T>
@@ -9,7 +8,7 @@
 //
 // Implementation
 
-#include <vsl/vsl_complex_io.h>
+#include "vsl_complex_io.h"
 #include <vsl/vsl_binary_io.h>
 
 

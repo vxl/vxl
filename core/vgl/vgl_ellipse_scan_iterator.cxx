@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 
-#include <vgl/vgl_ellipse_scan_iterator.h>
+#include "vgl_ellipse_scan_iterator.h"
 
 #include <vcl_cmath.h>
 

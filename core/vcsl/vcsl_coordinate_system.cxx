@@ -2,7 +2,7 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-#include <vcsl/vcsl_coordinate_system.h>
+#include "vcsl_coordinate_system.h"
 
 #include <vcl_cassert.h>
 

@@ -1,4 +1,5 @@
-#include <vcsl/vcsl_spherical.h>
+// This is vxl/vcsl/vcsl_spherical.cxx
+#include "vcsl_spherical.h"
 
 #include <vcsl/vcsl_axis.h>
 #include <vcsl/vcsl_angle.h>

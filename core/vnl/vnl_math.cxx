@@ -5,7 +5,7 @@
 //:
 // \file
 
-#include <vnl/vnl_math.h>
+#include "vnl_math.h"
 #include <vxl_config.h>
 
 #if defined(VCL_VC)

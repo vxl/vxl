@@ -1,4 +1,5 @@
-#include <vcsl/vcsl_cartesian_3d.h>
+// This is vxl/vcsl/vcsl_cartesian_3d.cxx
+#include "vcsl_cartesian_3d.h"
 
 #include <vcsl/vcsl_axis.h>
 

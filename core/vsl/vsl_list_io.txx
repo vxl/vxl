@@ -1,7 +1,6 @@
-// This is ./vxl/vsl/vsl_list_io.txx
+// This is vxl/vsl/vsl_list_io.txx
 #ifndef vsl_list_io_txx_
 #define vsl_list_io_txx_
-
 //:
 // \file
 // \brief  binary IO functions for vcl_list<T>
@@ -9,7 +8,7 @@
 //
 // Implementation
 
-#include <vsl/vsl_list_io.h>
+#include "vsl_list_io.h"
 #include <vsl/vsl_binary_io.h>
 #include <vcl_iostream.h>
 

@@ -5,7 +5,7 @@
 //:
 // \file
 
-#include <vsl/vsl_indent.h>
+#include "vsl_indent.h"
 #include <vcl_iostream.h>
 #include <vcl_map.txx>
 #include <vcl_utility.h>

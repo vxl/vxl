@@ -1,11 +1,10 @@
-// This is ./vxl/vgl/io/vgl_io_box_2d.txx
+// This is vxl/vgl/io/vgl_io_box_2d.txx
 #ifndef vgl_io_box_2d_txx_
 #define vgl_io_box_2d_txx_
-
 //:
 // \file
 
-#include <vgl/io/vgl_io_box_2d.h>
+#include "vgl_io_box_2d.h"
 #include <vsl/vsl_binary_io.h>
 
 //============================================================================

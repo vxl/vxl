@@ -5,7 +5,7 @@
 //:
 // \file
 
-#include <vcsl/vcsl_spatial.h>
+#include "vcsl_spatial.h"
 
 #include <vcl_cassert.h>
 

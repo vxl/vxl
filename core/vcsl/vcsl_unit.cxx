@@ -1,4 +1,5 @@
-#include <vcsl/vcsl_unit.h>
+// This is vxl/vcsl/vcsl_unit.cxx
+#include "vcsl_unit.h"
 
 //***************************************************************************
 // Constructors/Destructor

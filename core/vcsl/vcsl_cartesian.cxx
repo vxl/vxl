@@ -1,4 +1,5 @@
-#include <vcsl/vcsl_cartesian.h>
+// This is vxl/vcsl/vcsl_cartesian.cxx
+#include "vcsl_cartesian.h"
 
 //***************************************************************************
 // Constructors/Destructor

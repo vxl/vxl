@@ -1,6 +1,7 @@
-#include <vcsl/vcsl_spheroid.h>
-#include <vcl_cmath.h> // for sqrt()
+// This is vxl/vcsl/vcsl_spheroid.cxx
+#include "vcsl_spheroid.h"
 
+#include <vcl_cmath.h> // for sqrt()
 #include <vcl_cassert.h>
 
 //***************************************************************************

@@ -1,8 +1,8 @@
-
+// This is vxl/vidl/vidl_frame.cxx
+#include "vidl_frame.h"
 //:
 // \file
 
-#include <vidl/vidl_frame.h>
 #include <vidl/vidl_codec.h>
 #include <vidl/vidl_frame_as_image.h>
 #include <vil/vil_image.h>

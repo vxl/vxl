@@ -1,11 +1,10 @@
-// This is ./vxl/vgl/io/vgl_io_homg_plane_3d.txx
+// This is vxl/vgl/io/vgl_io_homg_plane_3d.txx
 #ifndef vgl_io_homg_plane_3d_txx_
 #define vgl_io_homg_plane_3d_txx_
-
 //:
 // \file
 
-#include <vgl/io/vgl_io_homg_plane_3d.h>
+#include "vgl_io_homg_plane_3d.h"
 #include <vsl/vsl_binary_io.h>
 
 //============================================================================

@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 
-#include <vbl/vbl_ref_count.h>
+#include "vbl_ref_count.h"
 
 //vbl_ref_count::vbl_ref_count() : ref_count(0) { }
 

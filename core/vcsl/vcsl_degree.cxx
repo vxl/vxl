@@ -1,4 +1,5 @@
-#include <vcsl/vcsl_degree.h>
+// This is vxl/vcsl/vcsl_degree.cxx
+#include "vcsl_degree.h"
 
 #include <vnl/vnl_math.h>
 
@@ -35,7 +36,7 @@ double vcsl_degree::units_per_standard_unit(void) const
 //---------------------------------------------------------------------------
 vcsl_degree_sptr vcsl_degree::instance(void)
 {
-  if(instance_.ptr()==0)
+  if (instance_.ptr()==0)
     instance_=new vcsl_degree;
   return instance_;
 }

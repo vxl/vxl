@@ -1,4 +1,5 @@
-#include <vcsl/vcsl_lambertian.h>
+// This is vxl/vcsl/vcsl_lambertian.cxx
+#include "vcsl_lambertian.h"
 
 #include <vcsl/vcsl_axis.h>
 

@@ -1,11 +1,10 @@
 // This is vxl/vbl/vbl_basic_relation.txx
 #ifndef vbl_basic_relation_txx_
 #define vbl_basic_relation_txx_
-
 //:
 // \file
 
-#include <vbl/vbl_basic_relation.h>
+#include "vbl_basic_relation.h"
 #include <vbl/vbl_basic_relation_where.h>
 #include <vcl_iostream.h>
 

@@ -1,7 +1,10 @@
+// This is vxl/vsl/vsl_binary_loader.txx
 #ifndef vsl_binary_loader_txx_
 #define vsl_binary_loader_txx_
+//:
+// \file
 
-#include <vsl/vsl_binary_loader.h>
+#include "vsl_binary_loader.h"
 #include <vcl_vector.txx>
 
 template<class BaseClass>

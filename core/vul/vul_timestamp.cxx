@@ -1,6 +1,6 @@
 // This is vxl/vul/vul_timestamp.cxx
 
-#include <vul/vul_timestamp.h>
+#include "vul_timestamp.h"
 
 unsigned long vul_timestamp::mark = 0;
 

@@ -1,4 +1,5 @@
-#include <vcsl/vcsl_geocentric.h>
+// This is vxl/vcsl/vcsl_geocentric.cxx
+#include "vcsl_geocentric.h"
 
 #include <vcsl/vcsl_axis.h>
 #include <vcsl/vcsl_angle.h>

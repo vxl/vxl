@@ -1,7 +1,6 @@
-// This is ./vxl/vsl/vsl_deque_io.txx
+// This is vxl/vsl/vsl_deque_io.txx
 #ifndef vsl_deque_io_txx_
 #define vsl_deque_io_txx_
-
 //:
 // \file
 // \brief  binary IO functions for vcl_deque<T>
@@ -9,7 +8,7 @@
 //
 // Implementation
 
-#include <vsl/vsl_deque_io.h>
+#include "vsl_deque_io.h"
 #include <vsl/vsl_binary_io.h>
 #include <vcl_iostream.h>
 

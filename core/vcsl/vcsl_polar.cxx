@@ -1,4 +1,5 @@
-#include <vcsl/vcsl_polar.h>
+// This is vxl/vcsl/vcsl_polar.cxx
+#include "vcsl_polar.h"
 
 #include <vcsl/vcsl_axis.h>
 #include <vcsl/vcsl_angle.h>
