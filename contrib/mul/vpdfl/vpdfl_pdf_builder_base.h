@@ -96,7 +96,7 @@ public:
   //  an instance of each derived class that might be
   //  found.  This function gives the model class to
   //  the appropriate loader.
-void vxl_add_to_binary_loader(const vpdfl_pdf_builder_base& b);
+void vsl_add_to_binary_loader(const vpdfl_pdf_builder_base& b);
 
   //: Binary file stream output operator for class reference
 void vsl_b_write(vsl_b_ostream& bfs, const vpdfl_pdf_builder_base& b);

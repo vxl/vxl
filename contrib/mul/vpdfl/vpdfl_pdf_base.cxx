@@ -51,7 +51,7 @@ short vpdfl_pdf_base::version_no() const
 // Method: vxl_add_to_binary_loader
 //=======================================================================
 
-void vxl_add_to_binary_loader(const vpdfl_pdf_base& b)
+void vsl_add_to_binary_loader(const vpdfl_pdf_base& b)
 {
   vsl_binary_loader<vpdfl_pdf_base>::instance().add(b);
 }

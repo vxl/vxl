@@ -226,7 +226,6 @@ void vpdfl_axis_gaussian_builder::print_summary(ostream& os) const
 
 void vpdfl_axis_gaussian_builder::b_write(vsl_b_ostream& bfs) const
 {
-  vsl_b_write(bfs,is_a());
   vsl_b_write(bfs,version_no());
   vsl_b_write(bfs,min_var_);
 }

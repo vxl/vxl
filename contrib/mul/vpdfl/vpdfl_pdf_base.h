@@ -125,7 +125,7 @@ private:
   //  an instance of each derived class that might be
   //  found.  This function gives the model class to
   //  the appropriate loader.
-void vxl_add_to_binary_loader(const vpdfl_pdf_base& b);
+void vsl_add_to_binary_loader(const vpdfl_pdf_base& b);
 
   //: Binary file stream output operator for class reference
 void vsl_b_write(vsl_b_ostream& bfs, const vpdfl_pdf_base& b);
@@ -134,7 +134,7 @@ void vsl_b_write(vsl_b_ostream& bfs, const vpdfl_pdf_base& b);
 void vsl_b_write(vsl_b_ostream& bfs, const vpdfl_pdf_base* b);
 
   //: Binary file stream input operator for class reference
-void vsl_b_read(vsl_b_ostream& bfs, vpdfl_pdf_base& b);
+void vsl_b_read(vsl_b_istream& bfs, vpdfl_pdf_base& b);
 
   //: Stream output operator for class reference
 ostream& operator<<(ostream& os,const vpdfl_pdf_base& b);
