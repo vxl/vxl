@@ -1,5 +1,9 @@
 /* adaquad.f -- translated by f2c (version 20020621). */
 #include "f2c.h"
+extern /* Subroutine */
+int srule_(E_fp, real *, real *, real *, real *);
+extern /* Subroutine */
+int refine_(U_fp, integer *, real *, integer *, integer *);
 
 /*     NUMERICAL METHODS: FORTRAN Programs, (c) John H. Mathews 1994 */
 /*     To accompany the text: */
@@ -20,8 +24,6 @@ int adaptquad_(E_fp f, real *a, real *b, real *tol, real *srmat, real *integral,
     static real sum1, sum2;
     static integer done;
     static real srvec[11];
-    extern /* Subroutine */ int srule_(E_fp, real *, real *, real *, real *);
-    extern /* Subroutine */ int refine_(U_fp, integer *, real *, integer *, integer *);
 
     /* Function Body */
     iterating = 0;
@@ -63,7 +65,6 @@ int refine_(U_fp f, integer *p, real *srmat, integer *m, integer *state)
     static real s2, fa, fb, fc, err, tol, tol2;
     static integer done;
     static real check;
-    extern /* Subroutine */ int srule_(E_fp, real *, real *, real *, real *);
     static real sr0vec[11], sr1vec[11], sr2vec[11];
 
     /* Function Body */
