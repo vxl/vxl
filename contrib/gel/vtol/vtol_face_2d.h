@@ -107,7 +107,7 @@ class vtol_face_2d : public vtol_face
   //  See Prototype pattern
   //---------------------------------------------------------------------------
   virtual vsol_spatial_object_2d* clone(void) const;
-  
+
   //: Return a platform independent string identifying the class
   vcl_string is_a() const;
 
@@ -121,12 +121,12 @@ class vtol_face_2d : public vtol_face
   //***************************************************************************
 
   //---------------------------------------------------------------------------
-  //: Return `this' if `this' is a face, 0 otherwise
+  //: Return `this' if `this' is a 2D face, 0 otherwise
   //---------------------------------------------------------------------------
   virtual const vtol_face_2d *cast_to_face_2d(void) const { return this; }
 
   //---------------------------------------------------------------------------
-  //: Return `this' if `this' is a face, 0 otherwise
+  //: Return `this' if `this' is a 2D face, 0 otherwise
   //---------------------------------------------------------------------------
   virtual vtol_face_2d *cast_to_face_2d(void) { return this; }
 
