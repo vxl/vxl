@@ -15,6 +15,9 @@
 #if defined(VCL_SGI_CC_720)
 # include "sgi/vcl_ios.h"
 
+#elif !VCL_CXX_HAS_HEADER_IOS
+# include "vcl_iostream.h" // should should do it
+
 #else // -------------------- ISO
 # include "iso/vcl_ios.h"
 #endif
