@@ -15,6 +15,7 @@
 #include <mil/tests/test_gaussian_pyramid_builder_2d_general.cxx>
 #include <mil/tests/test_algo_exp_filter_1d.cxx>
 #include <mil/tests/test_algo_line_filter.cxx>
+#include <mil/tests/test_algo_grad_filter_2d.cxx>
 
 #undef TESTMAIN
 #define TESTMAIN(x) int main() \
@@ -33,6 +34,7 @@ void run_test_mil()
   test_gaussian_pyramid_builder_2d_general();
   test_algo_exp_filter_1d();
   test_algo_line_filter();
+  test_algo_grad_filter_2d();
 }
 
 
