@@ -23,7 +23,7 @@ void tagged_union(vcl_vector<vsol_spatial_object_2d*>* topolist)
   // the elements and removing duplicates.
 
   for (i=topolist->begin(); i!=topolist->end(); ++i)
-    if (((vsol_spatial_object_2d*)(*i))->get_tagged_union_flag() == false)
+    if (!((vsol_spatial_object_2d*)(*i))->get_tagged_union_flag())
       {
         ((vsol_spatial_object_2d*)(*i))->set_tagged_union_flag();
         temp.push_back(*i);
@@ -46,7 +46,7 @@ void tagged_union(vcl_list<vtol_topology_object_sptr> *topolist)
   // the elements and removing duplicates.
 
   for (i=topolist->begin(); i!=topolist->end(); ++i)
-    if (((*i))->get_tagged_union_flag() == false)
+    if (!((*i))->get_tagged_union_flag())
       {
         ((*i))->set_tagged_union_flag();
         temp.push_back(*i);
