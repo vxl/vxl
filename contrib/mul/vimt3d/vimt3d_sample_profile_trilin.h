@@ -5,8 +5,8 @@
 //  \brief Profile sampling functions for 3D images
 //  \author Tim Cootes
 
-#include <vimt3d/vimt_image_3d_of.h>
-#include <vil3d/vil3d_sample_profile_bilin.h>
+#include <vimt3d/vimt3d_image_3d_of.h>
+#include <vil3d/vil3d_sample_profile_trilin.h>
 #include <vnl/vnl_vector.h>
 #include <vgl/vgl_vector_3d.h>
 
@@ -16,7 +16,7 @@
 //  v[0]..v[np-1] are the values from point p
 template <class imType, class vecType>
 void vimt3d_sample_profile_trilin(vnl_vector<vecType>& v,
-                               const vimt_image_3d_of<imType>& image,
+                               const vimt3d_image_3d_of<imType>& image,
                                const vgl_point_3d<double>& p,
                                const vgl_vector_3d<double>& u,
                                int n)
