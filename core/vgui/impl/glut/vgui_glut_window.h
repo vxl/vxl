@@ -19,8 +19,8 @@ struct vgui_glut_window : public vgui_window
   vgui_menu menubar;
   void set_menubar(vgui_menu const &m) { menubar = m; }
 
-  vgui_glut_adaptor *glutwin;
-  vgui_adaptor *get_adaptor();
+  vgui_adaptor *glutwin;
+  vgui_adaptor *get_adaptor() { return glutwin; }
 
   //
   void show();

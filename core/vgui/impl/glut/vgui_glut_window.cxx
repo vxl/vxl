@@ -1,6 +1,4 @@
-/*
-  fsm
-*/
+// \author fsm
 #include "vgui_glut_window.h"
 #include "vgui_glut_adaptor.h"
 #include <vgui/vgui_glut.h>
@@ -40,15 +38,10 @@ vgui_glut_window::~vgui_glut_window()
   glutwin = 0;
 }
 
-vgui_adaptor* vgui_glut_window::get_adaptor()
-{
-  return glutwin;
-}
-
 void vgui_glut_window::show()
 {
   int old = glutGetWindow();
-  glutSetWindow( glutwin->get_id() );
+  glutSetWindow( static_cast<vgui_glut_adaptor*>(glutwin)->get_id() );
   glutShowWindow();
   glutSetWindow( old );
 }
@@ -56,7 +49,7 @@ void vgui_glut_window::show()
 void vgui_glut_window::hide()
 {
   int old = glutGetWindow();
-  glutSetWindow( glutwin->get_id() );
+  glutSetWindow( static_cast<vgui_glut_adaptor*>(glutwin)->get_id() );
   glutHideWindow();
   glutSetWindow( old );
 }
@@ -64,7 +57,7 @@ void vgui_glut_window::hide()
 void vgui_glut_window::iconify()
 {
   int old = glutGetWindow();
-  glutSetWindow( glutwin->get_id() );
+  glutSetWindow( static_cast<vgui_glut_adaptor*>(glutwin)->get_id() );
   glutIconifyWindow();
   glutSetWindow( old );
 }
@@ -72,7 +65,7 @@ void vgui_glut_window::iconify()
 void vgui_glut_window::reshape(unsigned w, unsigned h)
 {
   int old = glutGetWindow();
-  glutSetWindow( glutwin->get_id() );
+  glutSetWindow( static_cast<vgui_glut_adaptor*>(glutwin)->get_id() );
   glutReshapeWindow(w,h);
   glutSetWindow( old );
 }
@@ -80,7 +73,7 @@ void vgui_glut_window::reshape(unsigned w, unsigned h)
 void vgui_glut_window::reposition(int x,int y)
 {
   int old = glutGetWindow();
-  glutSetWindow( glutwin->get_id() );
+  glutSetWindow( static_cast<vgui_glut_adaptor*>(glutwin)->get_id() );
   glutPositionWindow(x,y);
   glutSetWindow( old );
 }
