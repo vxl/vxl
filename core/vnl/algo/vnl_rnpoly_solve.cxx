@@ -356,7 +356,7 @@ static int ludcmp(vnl_rnpoly_solve_cmplx a[M_][M_], int n, int indx[M_])
 }
 
 
-// ------------------------- LU Back Subsitution -------------------------
+// ------------------------- LU Back Substitution -------------------------
 static void lubksb(vnl_rnpoly_solve_cmplx a[M_][M_], int n, int indx[M_],
                    vnl_rnpoly_solve_cmplx bb[M_], vnl_rnpoly_solve_cmplx b[M_])
 {
@@ -397,7 +397,7 @@ static void lubksb(vnl_rnpoly_solve_cmplx a[M_][M_], int n, int indx[M_],
 
 
 //-------------------------- LINNR -------------------
-//: Solve a complex system of equations by using l-u decomposition and then back subsitution.
+//: Solve a complex system of equations by using l-u decomposition and then back substitution.
 static int linnr(int len,vnl_rnpoly_solve_cmplx dhx[M_][M_],
                  vnl_rnpoly_solve_cmplx rhs[M_],
                  vnl_rnpoly_solve_cmplx resid[M_])
@@ -667,8 +667,8 @@ static int Perform_Distributed_Task(int points,vnl_rnpoly_solve_cmplx sols[LEN_]
     }
 #ifdef DEBUG
     // print something out for each root
-    if (solflag) vcl_cout << ".";
-    else vcl_cout << '*';
+    if (solflag) vcl_cout << '.';
+    else         vcl_cout << '*';
     vcl_cout.flush();
 #endif
   }
