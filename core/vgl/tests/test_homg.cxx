@@ -378,11 +378,13 @@ inline bool collinear(vgl_homg_line_2d<int> const& l1,
   return concurrent(l1,l2,l3);
 }
 
+#if 0 // currently not used
 inline bool collinear(vgl_homg_line_3d_2_points<double> const& l1,
                       vgl_homg_line_3d_2_points<double> const& l2,
                       vgl_homg_line_3d_2_points<double> const& l3) {
   return concurrent(l1,l2,l3) && coplanar(l1,l2,l3);
 }
+#endif
 
 inline double ratio(vgl_homg_line_2d<int> const& l1,
                     vgl_homg_line_2d<int> const& l2,
