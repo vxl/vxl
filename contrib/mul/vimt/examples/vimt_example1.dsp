@@ -2,14 +2,13 @@
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
-
 # variables to REPLACE
 # 
 #  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\mul" == include path
 #  == override in output directory
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 # vimt_example1  == name of output library
-#  /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\  vimt.lib vil2_algo.lib vil2.lib testlib.lib vnl_algo.lib netlib.lib vil2_io.lib vil2.lib vgl.lib vbl_io.lib vsl.lib vbl.lib vnl.lib vil.lib ws2_32.lib tiff.lib png.lib zlib.lib jpeg.lib vcl.lib /STACK:10000000  == libraries linked in 
+#  /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\  vimt.lib vil2_algo.lib vil2.lib vnl_algo.lib netlib.lib vil2_io.lib vil2.lib vgl.lib vbl_io.lib vsl.lib vbl.lib vnl.lib vil.lib ws2_32.lib tiff.lib png.lib zlib.lib jpeg.lib vcl.lib /STACK:10000000  == libraries linked in 
 # TARGTYPE "Win32 (x86) Application" 0x0103
 
 CFG=vimt_example1 - Win32 Debug
@@ -69,7 +68,6 @@ LINK32=link.exe
 # ADD LINK32 vimt.lib
 # ADD LINK32 vil2_algo.lib
 # ADD LINK32 vil2.lib
-# ADD LINK32 testlib.lib
 # ADD LINK32 vnl_algo.lib
 # ADD LINK32 netlib.lib
 # ADD LINK32 vil2_io.lib
@@ -87,9 +85,6 @@ LINK32=link.exe
 # ADD LINK32 jpeg.lib
 # ADD LINK32 vcl.lib
 # ADD LINK32 /STACK:10000000 
-
-
-
 
 !ELSEIF  "$(CFG)" == "vimt_example1 - Win32 Debug"
 
@@ -123,7 +118,6 @@ LINK32=link.exe
 # ADD LINK32 vimt.lib
 # ADD LINK32 vil2_algo.lib
 # ADD LINK32 vil2.lib
-# ADD LINK32 testlib.lib
 # ADD LINK32 vnl_algo.lib
 # ADD LINK32 netlib.lib
 # ADD LINK32 vil2_io.lib
@@ -142,10 +136,8 @@ LINK32=link.exe
 # ADD LINK32 vcl.lib
 # ADD LINK32 /STACK:10000000 
 
-
-
-
 !ELSEIF  "$(CFG)" == "vimt_example1 - Win32 MinSizeRel"
+
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
 # PROP BASE Output_Dir "MinSizeRel"
@@ -174,7 +166,6 @@ LINK32=link.exe
 # ADD LINK32 vimt.lib
 # ADD LINK32 vil2_algo.lib
 # ADD LINK32 vil2.lib
-# ADD LINK32 testlib.lib
 # ADD LINK32 vnl_algo.lib
 # ADD LINK32 netlib.lib
 # ADD LINK32 vil2_io.lib
@@ -192,9 +183,6 @@ LINK32=link.exe
 # ADD LINK32 jpeg.lib
 # ADD LINK32 vcl.lib
 # ADD LINK32 /STACK:10000000 
-
-
-
 
 !ELSEIF  "$(CFG)" == "vimt_example1 - Win32 RelWithDebInfo"
 
@@ -226,7 +214,6 @@ LINK32=link.exe
 # ADD LINK32 vimt.lib
 # ADD LINK32 vil2_algo.lib
 # ADD LINK32 vil2.lib
-# ADD LINK32 testlib.lib
 # ADD LINK32 vnl_algo.lib
 # ADD LINK32 netlib.lib
 # ADD LINK32 vil2_io.lib
@@ -244,9 +231,6 @@ LINK32=link.exe
 # ADD LINK32 jpeg.lib
 # ADD LINK32 vcl.lib
 # ADD LINK32 /STACK:10000000 
-
-
-
 
 !ENDIF 
 
@@ -267,4 +251,3 @@ SOURCE=.\example1.cxx
 # End Group
 # End Target
 # End Project
-
