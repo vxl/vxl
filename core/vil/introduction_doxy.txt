@@ -115,8 +115,8 @@ for (int i=0;i<nplanes;++i)
 vil2_image_view<vil2_byte> ;
 src_image = *vil2_load("image_file.jpg");
 vil2_image_view<vil2_byte> tmp_image1,tmp_image2;
-vil2_filter_rows(tmp_image1,src_image);  // Apply filter to rows of src_image
-vil2_filter_rows(tmp_image2,tmp_image1.tranpose());  // Apply filter to cols of tmp_image1
+vil2_algo_exp_filter_1d(tmp_image1,src_image,k,double());  // Apply filter to rows of src_image
+vil2_algo_exp_filter_1d(tmp_image2,tmp_image1.tranpose(),k,double());  // Apply filter to cols of tmp_image1
 vil2_image_view<vil2_byte> filtered_image = vil2_transpose(tmp_image2);
 // Note that vil2_filter_rows(vil2_transpose(filtered_image),vil2_transpose(tmp_image1))
 // would only work correctly if filtered_image was already the correct size.
@@ -152,6 +152,8 @@ vil2_image_view<vil2_byte> filtered_image = vil2_transpose(tmp_image2);
 * \section algo Algorithms and Image Processing
 * Some simple algorithms for manipulation images are included in the algo sub-directory.
 * Examples include
+* - vil2_algo_convolve_1d - Convolve in 1D - all manner of edge effects catered for
+* - vil2_algo_exp_filter_1d - Apply exponential filter along one axis (fast recursive method)
 * - vil2_algo_sobel_3x3 - to generate X/Y gradient images using 3x3 Sobel operators
 * - vil2_algo_gauss_reduce - smooth and sub-sample to produce half sized image
 *
