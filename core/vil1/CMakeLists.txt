@@ -1,5 +1,41 @@
 # vxl/vil/CMakeLists.txt
 
+
+# vil_file_formats.cxx uses -DTIFF, etc, so we need to do this here.
+#
+INCLUDE(${MODULE_PATH}/FindJPEG.cmake)
+INCLUDE(${MODULE_PATH}/FindPNG.cmake)
+INCLUDE(${MODULE_PATH}/FindTIFF.cmake)
+
+IF(HAS_PNG)
+  INCLUDE_DIRECTORIES( ${PNG_INCLUDE_PATH} )
+  SET( vil_sources ${vil_sources}
+    file_formats/vil_png.cxx file_formats/vil_png.h
+  )
+ENDIF(HAS_PNG)
+
+IF(JPEG_FOUND)
+  INCLUDE_DIRECTORIES( ${JPEG_INCLUDE_PATH} )
+  ADD_DEFINITIONS( ${JPEG_DEFINITIONS} )
+  SET( vil_sources ${vil_sources}
+    vil_jpeglib.h
+    file_formats/vil_jpeg.cxx file_formats/vil_jpeg.h
+    file_formats/vil_jpeg_source_mgr.cxx file_formats/vil_jpeg_source_mgr.h
+    file_formats/vil_jpeg_decompressor.cxx file_formats/vil_jpeg_decompressor.h
+    file_formats/vil_jpeg_destination_mgr.cxx file_formats/vil_jpeg_destination_mgr.h
+    file_formats/vil_jpeg_compressor.cxx file_formats/vil_jpeg_compressor.h
+  )
+ENDIF(JPEG_FOUND)
+
+IF(HAS_TIFF)
+  INCLUDE_DIRECTORIES( ${TIFF_INCLUDE_PATH} )
+  SET( vil_sources ${vil_sources}
+    file_formats/vil_tiff.cxx file_formats/vil_tiff.h
+  )
+ENDIF(HAS_TIFF)
+
+
+
 SET( vil_sources
   vil_fwd.h
 
@@ -97,37 +133,6 @@ SET( vil_sources
   vil_ip_traits.h
 )
 
-# vil_file_formats.cxx uses -DTIFF, etc, so we need to do this here.
-#
-INCLUDE(${MODULE_PATH}/FindJPEG.cmake)
-INCLUDE(${MODULE_PATH}/FindPNG.cmake)
-INCLUDE(${MODULE_PATH}/FindTIFF.cmake)
-
-IF(HAS_PNG)
-  INCLUDE_DIRECTORIES( ${PNG_INCLUDE_PATH} )
-  SET( vil_sources ${vil_sources}
-    file_formats/vil_png.cxx file_formats/vil_png.h
-  )
-ENDIF(HAS_PNG)
-
-IF(HAS_JPEG)
-  INCLUDE_DIRECTORIES( ${JPEG_INCLUDE_PATH} )
-  SET( vil_sources ${vil_sources}
-    vil_jpeglib.h
-    file_formats/vil_jpeg.cxx file_formats/vil_jpeg.h
-    file_formats/vil_jpeg_source_mgr.cxx file_formats/vil_jpeg_source_mgr.h
-    file_formats/vil_jpeg_decompressor.cxx file_formats/vil_jpeg_decompressor.h
-    file_formats/vil_jpeg_destination_mgr.cxx file_formats/vil_jpeg_destination_mgr.h
-    file_formats/vil_jpeg_compressor.cxx file_formats/vil_jpeg_compressor.h
-  )
-ENDIF(HAS_JPEG)
-
-IF(HAS_TIFF)
-  INCLUDE_DIRECTORIES( ${TIFF_INCLUDE_PATH} )
-  SET( vil_sources ${vil_sources}
-    file_formats/vil_tiff.cxx file_formats/vil_tiff.h
-  )
-ENDIF(HAS_TIFF)
 
 AUX_SOURCE_DIRECTORY(Templates vil_sources)
 
