@@ -162,8 +162,8 @@ void vsrl_3d_output::write_output(char *filename)
           if (Z >= c_range) Z = c_range;
 
           // the texture coordinates
-          double tx=x/width;
-          double ty=(height-y)/height;
+          double tx=(float)x/(float)width;
+          double ty=((float)height-(float)y)/(float)height;
           // ty=y/height;
 
           X_out.push_back(X);
