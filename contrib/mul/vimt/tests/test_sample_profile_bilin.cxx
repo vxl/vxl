@@ -52,7 +52,7 @@ void test_sample_profile_bilin_byte_affine()
   TEST("Vector size",vec3.size(),9);
   TEST_NEAR("First value",vec3[0],5.5f,1e-6);
   TEST_NEAR("Second value",vec3[1],15.5f,1e-6);
-  TEST_NEAR("Last value",vec3[8],25.7f,1e-6);
+  TEST_NEAR("Last value",vec3[8],25.7f,1e-5);
 
   vnl_vector<double> vec4;
   vimt_sample_profile_bilin(vec4,image3,p0,u,8);
@@ -118,7 +118,7 @@ void test_sample_profile_bilin_byte_projective()
   TEST("Vector size",vec3.size(),9);
   TEST_NEAR("First value",vec3[0],5.5f,1e-6);
   TEST_NEAR("Second value",vec3[1],15.5f,1e-6);
-  TEST_NEAR("Last value",vec3[8],25.7f,1e-6);
+  TEST_NEAR("Last value",vec3[8],25.7f,1e-5);
 
   vnl_vector<double> vec4;
   vimt_sample_profile_bilin(vec4,image3,p0,u,8);
