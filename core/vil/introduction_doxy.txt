@@ -1,5 +1,5 @@
 // The following text is included in the main documentation page by doxygen
-/*! \mainpage vil : New core image library
+/*! \mainpage vil : Core image library
 * A set of classes to represent and manipulate images
 *
 * Broadly there are two sorts of image one is interested in - images in memory
@@ -166,6 +166,7 @@ vil_image_view<vxl_byte> filtered_image = vil_transpose(tmp_image2);
 * - vil_fill_col(view,i,value)     : Fills col i with value
 * - vil_fill_mask(view,mask,value) : Fills region defined by boolean mask image
 * - vil_clamp                      : Clamp image pixels to given range
+* - vil_histogram_equalise(image)  : Apply histogram equalisation
 *
 * \section image_src Image resources
 * The vil_image_resource class is an abstract base class for image data, views
@@ -255,6 +256,8 @@ vil_image_view<vxl_byte> filtered_image = vil_transpose(tmp_image2);
 * Other related maths functions
 * - vil_math_integral_image(imA,im_sum)               : Images integrating values
 * - vil_math_integral_sqr_image(imA,im_sum,im_sum_sq) : Images integrating values and square of values
+* - vil_histogram(image,hist,min,max,nbins)           : Compute histogram of image values
+* - vil_histogram_byte(image,histo)                   : Compute histogram from byte image
 *
 * \subsection interp Interpolating images
 * Bilinear interpolation (of single planes of scalar types) can be obtained using
