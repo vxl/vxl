@@ -9,6 +9,7 @@
 #include <vimt3d/vimt3d_image_3d_of.h>
 #include <vnl/vnl_fwd.h>
 #include <vcl_cstdlib.h>
+#include <vcl_cassert.h>
 #include <vnl/vnl_math.h>
 
 //: Fill voxel which x,y,z is in with val
@@ -18,8 +19,8 @@
 // \param add_data adds data to existing values
 template<class T>
 inline void vimt3d_reconstruct_ic_safe(double val, double x, double y, double z,
-                                      T* data, int ni, int nj, int nk,
-                                      vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep, vcl_ptrdiff_t zstep, bool add_data)
+                                       T* data, int ni, int nj, int nk,
+                                       vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep, vcl_ptrdiff_t zstep, bool add_data)
 {
   int ix=vnl_math_rnd(x);
   int iy=vnl_math_rnd(y);
@@ -49,18 +50,21 @@ inline void vimt3d_reconstruct_ic_safe(double val, double x, double y, double z,
 
 
 //: Fill voxel which x,y,z is in with val
-//  Image is nx * ny * nz array of T. x,y,z element is data[z*zstep+ystep*y+x*xstep]
-//  No bound checks are made
+//  Image is ni * nj * nk array of T. x,y,z element is data[z*zstep+y*ystep+x*xstep]
+//  No bound checks are made in release mode
 // \param val value at image coordinates x,y,z
 // \param add_data adds data to existing values
 template<class T>
 inline void vimt3d_reconstruct_ic_no_checks(double val, double x, double y, double z,
-                                      T* data, int ni, int nj, int nk,
-                                      vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep, vcl_ptrdiff_t zstep, bool add_data)
+                                            T* data, int ni, int nj, int nk,
+                                            vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep, vcl_ptrdiff_t zstep, bool add_data)
 {
   int ix=vnl_math_rnd(x);
   int iy=vnl_math_rnd(y);
   int iz=vnl_math_rnd(z);
+  assert (ix >= 0 && ix < ni);
+  assert (iy >= 0 && iy < nj);
+  assert (iz >= 0 && iz < nk);
   int index = (ix  *xstep) + (iy  *ystep) + (iz  *zstep);
 
   // now add or set the image values
@@ -79,12 +83,12 @@ inline void vimt3d_reconstruct_ic_no_checks(double val, double x, double y, doub
 // \param add_data adds data to existing values
 template <class imType, class vecType>
 void vimt3d_reconstruct_from_grid(vimt3d_image_3d_of<imType>& image,
-                               const vnl_vector<vecType>& vec,
-                               const vgl_point_3d<double>& p,
-                               const vgl_vector_3d<double>& u,
-                               const vgl_vector_3d<double>& v,
-                               const vgl_vector_3d<double>& w,
-                               int nu, int nv, int nw, bool add_data);
+                                  const vnl_vector<vecType>& vec,
+                                  const vgl_point_3d<double>& p,
+                                  const vgl_vector_3d<double>& u,
+                                  const vgl_vector_3d<double>& v,
+                                  const vgl_vector_3d<double>& w,
+                                  int nu, int nv, int nw, bool add_data);
 
 
 //: Reconstruct a smoothed image grid p+i.u+j.v+k.w from vector (in image coordinates)
@@ -95,11 +99,11 @@ void vimt3d_reconstruct_from_grid(vimt3d_image_3d_of<imType>& image,
 // \param add_data adds data to existing values
 template <class imType, class vecType>
 void vimt3d_reconstruct_from_grid_ic(vil3d_image_view<imType>& image,
-                                  const vnl_vector<vecType>& vec,
-                                  const vgl_point_3d<double>& im_p,
-                                  const vgl_vector_3d<double>& im_u,
-                                  const vgl_vector_3d<double>& im_v,
-                                  const vgl_vector_3d<double>& im_w,
-                                  int nu, int nv, int nw, bool add_data);
+                                     const vnl_vector<vecType>& vec,
+                                     const vgl_point_3d<double>& im_p,
+                                     const vgl_vector_3d<double>& im_u,
+                                     const vgl_vector_3d<double>& im_v,
+                                     const vgl_vector_3d<double>& im_w,
+                                     int nu, int nv, int nw, bool add_data);
 
 #endif // vimt3d_reconstruct_from_grid_h_
