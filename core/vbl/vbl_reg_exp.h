@@ -9,6 +9,7 @@
 // Texas Instruments Incorporated provides this software "as is" without
 // express or implied warranty.
 //
+// .NAME vbl_reg_exp - Pattern matching with regular expressions
 // .LIBRARY vbl
 // .HEADER vxl package
 // .INCLUDE vbl/vbl_reg_exp.h
@@ -22,7 +23,7 @@
 
 const int NSUBEXP = 10;
 
-//: Pattern matching with regular expressions
+//:
 //  A regular expression allows a programmer to specify  complex
 //  patterns  that  can  be searched for and matched against the
 //  character string of a string object. In its simplest form, a

@@ -4,7 +4,7 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vbl_qsort
+// .NAME vbl_qsort - Collection of common predicates for library sort routines
 // .INCLUDE vbl/vbl_qsort.h
 // .FILE vbl_qsort.cxx
 // .SECTION Author
@@ -15,8 +15,6 @@
 //     971119 AWF Initial version.
 
 #include <vxl_config.h> // VXL_STDLIB_HAS_QSORT
-
-//: Collection of common predicates for library sort routines
 
 #include <vcl/vcl_cstdlib.h>
 #include <vcl/vcl_algorithm.h>

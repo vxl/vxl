@@ -5,6 +5,7 @@
 #pragma interface
 #endif
 //
+// .NAME vbl_sparse_array - Sparse array allowing space efficient access of the form s[3000] = 2;
 // .LIBRARY     vbl
 // .HEADER	vxl package
 // .INCLUDE     vbl/vbl_sparse_array.h
@@ -21,7 +22,6 @@
 #include <vcl/vcl_utility.h>
 #include <vcl/vcl_iostream.h>
 
-//: Sparse array allowing space efficient access of the form s[3000] = 2;
 //
 template <class T>
 class vbl_sparse_array {

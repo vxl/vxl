@@ -4,6 +4,7 @@
 #pragma interface
 #endif
 //
+// .NAME vbl_user_info - Reads information about a user from the password file
 // .LIBRARY     vbl
 // .HEADER	vxl package
 // .INCLUDE     vbl/vbl_user_info.h
@@ -18,7 +19,6 @@
 
 #include <vcl/vcl_string.h>
 
-//: Reads information about a user from the password file
 //
 class vbl_user_info {
 public:
