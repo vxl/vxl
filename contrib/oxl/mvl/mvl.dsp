@@ -250,6 +250,16 @@ SOURCE=.\Homg3D.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\HomgPoint2D.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\HomgPoint3D.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\HomgInterestPoint.cxx
 
 # End Source File
@@ -301,21 +311,6 @@ SOURCE=.\HomgOperator3D.cxx
 # Begin Source File
 
 SOURCE=.\HomgPlane3D.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\HomgPoint1D.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\HomgPoint2D.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\HomgPoint3D.cxx
 
 # End Source File
 # Begin Source File
@@ -1068,6 +1063,16 @@ SOURCE=.\Homg3D.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\HomgPoint2D.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\HomgPoint3D.h
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\HomgInterestPoint.h
 
 # End Source File
@@ -1119,21 +1124,6 @@ SOURCE=.\HomgOperator3D.h
 # Begin Source File
 
 SOURCE=.\HomgPlane3D.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\HomgPoint1D.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\HomgPoint2D.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\HomgPoint3D.h
 
 # End Source File
 # Begin Source File
