@@ -57,21 +57,21 @@ attr_names[] =
 
 float vifa_int_faces_attr::
 attr_min_vals[] = {
-  0.0039,      // 1/255
-  0.0039,
-  0.0039,
-  0.0001,      //... not sure what the minimum variance should be
-  1.0,         // min area
-  1.0,         // min aspect ratio
-  1.0,         // min perimeter
-  1.0,         // min weighted perimeter
-  1.0,         // min complexity
-  1.0,         // min weighted complexity
-  0.05,        // min strong parallel
-  0.05,        // min weak parallel
-  1.0e-05,
-  1.0e-05,
-  1.0e-05
+  0.0039f,      // 1/255
+  0.0039f,
+  0.0039f,
+  0.0001f,      //... not sure what the minimum variance should be
+  1.0f,         // min area
+  1.0f,         // min aspect ratio
+  1.0f,         // min perimeter
+  1.0f,         // min weighted perimeter
+  1.0f,         // min complexity
+  1.0f,         // min weighted complexity
+  0.05f,        // min strong parallel
+  0.05f,        // min weak parallel
+  1.0e-05f,
+  1.0e-05f,
+  1.0e-05f
 };
 
 void vifa_int_faces_attr::

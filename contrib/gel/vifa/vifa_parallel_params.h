@@ -10,7 +10,7 @@
 // \author Roddy Collins, from DDB in TargetJr
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   MPP Mar 2003, Ported to VXL
 // \endverbatim
 //-----------------------------------------------------------------------------
@@ -19,8 +19,8 @@
 #include <vul/vul_timestamp.h>
 #include <vbl/vbl_ref_count.h>
 
-#define DEFAULT_MIN_ANGLE  0.0
-#define DEFAULT_MAX_ANGLE  179.9999
+#define DEFAULT_MIN_ANGLE  0.0f
+#define DEFAULT_MAX_ANGLE  179.9999f
 #define DEFAULT_NBUCKETS  60
 
 

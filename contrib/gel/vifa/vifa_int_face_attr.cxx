@@ -344,8 +344,8 @@ ComputeCacheValues()
   vcl_cout << "vifa::ComputeCacheValues(): end dump\n";
 #endif
 
-  cached_min_ = normalize_intensity(intensity_hist.LowClipVal(0.1));
-  cached_max_ = normalize_intensity(intensity_hist.LowClipVal(0.9));
+  cached_min_ = normalize_intensity(intensity_hist.LowClipVal(0.1f));
+  cached_max_ = normalize_intensity(intensity_hist.LowClipVal(0.9f));
   cached_mean_ = normalize_intensity(face_->Io());
 
   float          sum = 0.0;

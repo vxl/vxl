@@ -34,7 +34,7 @@ static void test_int_faces_attr()
       = new vil_image_view<vil1_byte>(vil1_to_vil_image_view(test_img_mem));
 
     // Set up the image's normalization
-    vifa_norm_params  np(0, 0.05, 0, 0.95);
+    vifa_norm_params  np(0, 0.05f, 0, 0.95f);
     np.get_norm_bounds(vil_test_img,
                        np.plow, np.phigh,
                        np.ilow, np.ihigh);
