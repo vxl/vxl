@@ -13,9 +13,9 @@ bool double_fuzz_equal (const double& d1, const double& d2) {
 }
 
 void test_int () {
-  cout << "***********************" << endl;
-  cout << "Testing Matrix<int>" << endl;
-  cout << "***********************" << endl;  
+  vcl_cout << "***********************" << vcl_endl;
+  vcl_cout << "Testing Matrix<int>" << vcl_endl;
+  vcl_cout << "***********************" << vcl_endl;  
   vnl_matrix<int> m0(2,2);
   TEST ("vnl_matrix<int> m0(2,2)", (m0.rows()==2 && m0.columns()==2), true);
   vnl_matrix<int> m1(3,4);
@@ -222,9 +222,9 @@ void test_int () {
 
 
 void test_float () {
-  cout << "***********************" << endl;
-  cout << "Testing Matrix<float>" << endl;
-  cout << "***********************" << endl;  
+  vcl_cout << "***********************" << vcl_endl;
+  vcl_cout << "Testing Matrix<float>" << vcl_endl;
+  vcl_cout << "***********************" << vcl_endl;  
   vnl_matrix<float> d0(2,2);
   TEST ("vnl_matrix<float> d0(2,2)", (d0.rows()==2 && d0.columns()==2), true);
   vnl_matrix<float> d1(3,4);
@@ -352,9 +352,9 @@ bool float_fuzz_equal2 (const float& d1, const float& d2) {
 
 
 void test_double () {
-  cout << "***********************" << endl;
-  cout << "Testing Matrix<double>" << endl;
-  cout << "***********************" << endl;  
+  vcl_cout << "***********************" << vcl_endl;
+  vcl_cout << "Testing Matrix<double>" << vcl_endl;
+  vcl_cout << "***********************" << vcl_endl;  
   vnl_matrix<double> d0(2,2);
   TEST ("vnl_matrix<double> d0(2,2)", (d0.rows()==2 && d0.columns()==2), true);
   vnl_matrix<double> d1(3,4);

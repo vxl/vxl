@@ -7,9 +7,9 @@
 #include <vnl/vnl_matrix.h>
 
 void vnl_vector_test_int() {
-  cout << "***********************" << endl;
-  cout << "Testing Vector<int>" << endl;
-  cout << "***********************" << endl;  
+  vcl_cout << "***********************" << vcl_endl;
+  vcl_cout << "Testing Vector<int>" << vcl_endl;
+  vcl_cout << "***********************" << vcl_endl;  
   //// test constructors, accessors
   vnl_vector<int> v0;
   TEST ("vnl_vector<int> v0()", (v0.size()==0), true);
@@ -163,9 +163,9 @@ bool float_equal(const float& f1, const float& f2){
 }
 
 void vnl_vector_test_float() {
-  cout << "***********************" << endl;
-  cout << "Testing Vector<float>" << endl;
-  cout << "***********************" << endl;  
+  vcl_cout << "***********************" << vcl_endl;
+  vcl_cout << "Testing Vector<float>" << vcl_endl;
+  vcl_cout << "***********************" << vcl_endl;  
   //// test constructors, accessors
   vnl_vector<float> v0;
   TEST ("vnl_vector<float> v0()", (v0.size()==0), true);
@@ -199,7 +199,7 @@ void vnl_vector_test_float() {
   vnl_vector<float> v4(v3);
   TEST ("vnl_vector<float> v4(v3)", (v3==v4), true);
   TEST ("v0=v2", (v0=v2, (v0==v2)), true);
-  cout << &v0 << " == " << v0 << endl;
+  vcl_cout << &v0 << " == " << v0 << vcl_endl;
   TEST ("<<", 1, 1);
 
   //// test additions and substractions
@@ -323,12 +323,12 @@ void vnl_vector_test_float() {
     TEST("v.set_z(3) and v[2]", (v[2] == 3), true);
     vnl_vector<float> v1((float)1, (float)0, (float)0);
     vnl_vector<float> v2((float)0, (float)1, (float)0);
-    cout << "v1 - v2 = " << v1 - v2 << endl;
-    cout << "angle(v1,v2) = " << angle(v1,v2) << endl;
+    vcl_cout << "v1 - v2 = " << v1 - v2 << vcl_endl;
+    vcl_cout << "angle(v1,v2) = " << angle(v1,v2) << vcl_endl;
     float ang = angle(v1,v2) * (360/(2*vnl_math::pi));
-    cout << "angle(v1,v2) in degrees = " << ang << endl;
-    cout << "cross_2d(v1,v2) = " << cross_2d(v1,v2) << endl;
-    cout << "cross_3d(v1,v2) = " << cross_3d(v1,v2) << endl;
+    vcl_cout << "angle(v1,v2) in degrees = " << ang << vcl_endl;
+    vcl_cout << "cross_2d(v1,v2) = " << cross_2d(v1,v2) << vcl_endl;
+    vcl_cout << "cross_3d(v1,v2) = " << cross_3d(v1,v2) << vcl_endl;
     TEST("angle", (ang == 90.0f), true);
 //    TEST("squared_distance_2d", (squared_distance_2d(v1,v2) == 2), true);
 //    TEST("squared_distance_3d", (squared_distance_3d(v1,v2) == 2), true);
