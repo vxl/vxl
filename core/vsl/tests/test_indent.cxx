@@ -3,6 +3,7 @@
 #include <vcl_utility.h>
 #include <vcl_string.h>
 
+#include <vsl/vsl_test.h>
 #include <vsl/vsl_indent.h>
 
 void test_indent1()
@@ -45,8 +46,4 @@ void test_indent()
 
 }
 
-int main()
-{
-  test_indent();
-  return 0;
-}
+TESTMAIN(test_indent);
