@@ -26,7 +26,7 @@ extern "C" int finite(double);
 //--------------------------------------------------------------------------------
 
 // constants
-#if !defined(VCL_GCC_EGCS)
+#if ! VCL_CAN_STATIC_CONST_INIT_FLOAT
 const double vnl_math::e       	      	= 2.7182818284590452354;
 const double vnl_math::log2e   	      	= 1.4426950408889634074;
 const double vnl_math::log10e  	      	= 0.43429448190325182765;
