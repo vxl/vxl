@@ -37,18 +37,18 @@ vcl_string mbl_parse_block(vcl_istream &afs, bool open_already /*= false*/, cons
       return "{}";
     }
   }
-  //: The stored string.
+  // The stored string.
   vcl_string s="{";
-  //: The current line is stored separately
+  // The current line is stored separately
   // before being added to s, in case it turns out to be a comment.
   vcl_string s2="";
-  //: The number of open braces.
+  // The number of open braces.
   unsigned level=1;
-  //: The current position in a comment token.
+  // The current position in a comment token.
   unsigned comment_position=0;
-  //: length of the comment token;
+  // length of the comment token;
   const unsigned comment_length = vcl_strlen(comment);
-  //: true if we are currently in the whitespace at the beggining of a line
+  // true if we are currently in the whitespace at the beggining of a line
   bool newline=true;
 
   while (!(!afs))
