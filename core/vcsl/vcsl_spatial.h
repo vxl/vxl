@@ -24,11 +24,10 @@
 #include <vcsl/vcsl_spatial_transformation_sptr.h>
 #include <vcsl/vcsl_graph_sptr.h>
 
+// This is needed for icc-7.0 to solve a strange link problem.
 #include <vcl_compiler.h>
 #ifdef VCL_ICC
-// This is needed for icc-7.0 to solve a link problem.  There is some
-// indication from the Intel web site that this is due to a known and
-// fixed compiler bug.  Hopefully the next release will have the fix.
+// Link problem occurs with either vcl_vector<bool> or std::vector<bool>
 #define VCSL_SPATIAL_VECTOR_BOOL vcl_vector<int>
 #else
 #define VCSL_SPATIAL_VECTOR_BOOL vcl_vector<bool>
