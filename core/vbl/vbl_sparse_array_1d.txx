@@ -16,7 +16,6 @@ vcl_ostream& vbl_sparse_array_1d<T>::print(vcl_ostream& out) const
 #undef VBL_SPARSE_ARRAY_1D_INSTANTIATE
 #define VBL_SPARSE_ARRAY_1D_INSTANTIATE(T)\
 template class vbl_sparse_array_1d<T >; \
-template class vbl_sparse_array_base<T , unsigned >; \
+VBL_SPARSE_ARRAY_BASE_INSTANTIATE(T, unsigned int); \
 VCL_INSTANTIATE_INLINE(vcl_ostream& operator << (vcl_ostream&, const vbl_sparse_array_1d<T > &))
-
 
