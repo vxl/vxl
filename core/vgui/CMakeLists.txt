@@ -137,7 +137,8 @@ AUX_SOURCE_DIRECTORY(Templates vgui_sources)
 AUX_SOURCE_DIRECTORY(vrml/Templates vgui_sources)
 
 SUBDIRS(impl)
+SUBDIRS(examples)
+
 IF(BUILD_TESTS)
-  SUBDIRS(examples)
   SUBDIRS(tests) 
 ENDIF(BUILD_TESTS)
