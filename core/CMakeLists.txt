@@ -1,0 +1,20 @@
+SUBDIRS = \
+vcl \
+vnl
+
+LINK_DIRECTORIES = \
+${CMAKE_BINARY_DIR}/vxl/vcl 
+
+
+LINK_LIBRARIES = \
+vcl
+
+INCLUDE_DIRECTORIES = \
+${CMAKE_BINARY_DIR} \
+${CMAKE_SOURCE_ROOT} \
+${CMAKE_SOURCE_ROOT}/vxl \
+${CMAKE_BINARY_DIR}/vxl \
+${CMAKE_BINARY_DIR}/vxl/vcl \
+${CMAKE_SOURCE_ROOT}/vxl/vcl
+
+
