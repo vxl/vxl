@@ -49,7 +49,6 @@ double DPMatch::transformed_euclidean_distance()
   y1_centroid=y1_centroid/N;
   y2_centroid=y2_centroid/N;
 
-  double max_x1=0,max_x2=0,max_y1=0,max_y2=0;
   // centering the data
   for (int j=0;j<N;j++)
   {
@@ -104,7 +103,7 @@ double DPMatch::transformed_euclidean_distance()
   if (denominator>1e-6)
     scale = numerator/denominator;
 
-  for (int i=0;i<x1.size();i++)
+  for (unsigned int i=0;i<x1.size();i++)
   {
     vnl_double_2 X(x1[i],y1[i]);
     //double tempX[2]={x1[i],y1[i]};
@@ -149,7 +148,7 @@ void DPMatch::detect_tail(vcl_vector<int> &tail1 , vcl_vector<int> &tail2)
   end1=finalMap_[finalMap_.size()-1].first;
   end2=finalMap_[finalMap_.size()-1].second;
 
-  for (int i=0;i<finalMap_.size()-1;i++)
+  for (unsigned int i=0;i<finalMap_.size()-1;i++)
   {
     int x1=finalMap_[i].first;
     int x2=finalMap_[i].second;
@@ -158,7 +157,7 @@ void DPMatch::detect_tail(vcl_vector<int> &tail1 , vcl_vector<int> &tail2)
       tail_start.push_back(x1);
   }
 
-  for (int i=finalMap_.size()-1;i>0;i--)
+  for (unsigned int i=finalMap_.size()-1;i>0;i--)
   {
     int x1=finalMap_[i].first;
     int x2=finalMap_[i].second;
@@ -170,12 +169,12 @@ void DPMatch::detect_tail(vcl_vector<int> &tail1 , vcl_vector<int> &tail2)
 
   if (ratio1>0.3 && ratio1>ratio2)
   {
-    for (int i=0;i<tail_start.size();i++)
+    for (unsigned int i=0;i<tail_start.size();i++)
       tail1.push_back(tail_start[i]);
   }
   else if (ratio2>0.3 && ratio2> ratio1)
   {
-    for (int i=0;i<tail_end.size();i++)
+    for (unsigned int i=0;i<tail_end.size();i++)
       tail1.push_back(tail_end[i]);
   }
   else
@@ -185,7 +184,7 @@ void DPMatch::detect_tail(vcl_vector<int> &tail1 , vcl_vector<int> &tail2)
   tail_start.clear();
   tail_end.clear();
 
-  for (int i=0;i<finalMap_.size()-1;i++)
+  for (unsigned int i=0;i<finalMap_.size()-1;i++)
   {
     int x1=finalMap_[i].first;
     int x2=finalMap_[i].second;
@@ -204,12 +203,12 @@ void DPMatch::detect_tail(vcl_vector<int> &tail1 , vcl_vector<int> &tail2)
 
   if (ratio1>0.3 && ratio1>ratio2)
   {
-    for (int i=0;i<tail_start1.size();i++)
+    for (unsigned int i=0;i<tail_start1.size();i++)
       tail2.push_back(tail_start1[i]);
   }
   else if (ratio2>0.3 && ratio2> ratio1)
   {
-    for (int i=0;i<tail_end1.size();i++)
+    for (unsigned int i=0;i<tail_end1.size();i++)
       tail2.push_back(tail_end1[i]);
   }
   else
@@ -224,7 +223,7 @@ vcl_map <int,int> DPMatch::refine_mapping()
   int x1;
   int x2;
 
-  for (int i=0;i<finalMap_.size();i++)
+  for (unsigned int i=0;i<finalMap_.size();i++)
   {
     x1=finalMap_[i].first;
     x2=finalMap_[i].second;
@@ -298,7 +297,7 @@ double DPMatch::euclidean_distance(vnl_matrix<double> R,vnl_matrix<double> T,dou
   double dist=0;
   double tx=0,ty=0;
 
-  for (int i=0;i<x1.size();i++)
+  for (unsigned int i=0;i<x1.size();i++)
   {
     x1[i]-=xcen1;
     y1[i]-=ycen1;
@@ -314,7 +313,7 @@ double DPMatch::euclidean_distance(vnl_matrix<double> R,vnl_matrix<double> T,dou
   }
   tx/=x1.size();
   ty/=y1.size();
-  for (int i=0;i<x1.size();i++)
+  for (unsigned int i=0;i<x1.size();i++)
   {
     H[0]=x1[i];
     H[1]=y1[i];
@@ -496,7 +495,7 @@ void DPMatch::findDPCorrespondence(int n, int m)
     ip=map_[i][j].first;
     jp=map_[i][j].second;
     vcl_pair <int,int> p(ip,jp);
-    double cost=computeIntervalCost(p1.first,p1.second,p.first, p.second);
+    computeIntervalCost(p1.first,p1.second, p.first,p.second);
 
     finalMap_.push_back(p);
     finalMapCost_.push_back(cost_[p.first][p.second]);

@@ -43,13 +43,12 @@ void bdgl_curve_tracker::track_frame(unsigned int frame)
   vcl_vector< vcl_map< int,double> >          cost_table;
   vcl_vector< vcl_map< int,double> >          filtered_cost_table;
   vcl_map<int,double>:: iterator              iter;
-  double dist;
 
   aspects.clear();
   vcl_vector<int> ctemp;
 
   //declaring two arrays
-  int * first_id, * second_id;
+//int * first_id, * second_id;
   vcl_pair<int,int> temp;
 
 
@@ -72,7 +71,9 @@ void bdgl_curve_tracker::track_frame(unsigned int frame)
       primitive_list.insert(primitive_list.end(), primitive);
     }
     output_curve_.insert(output_curve_.end(), primitive_list);
-  }else{
+  }
+  else
+  {
     // init : duplicate empty primitive lists
     primitive_list.clear();
 
@@ -81,8 +82,8 @@ void bdgl_curve_tracker::track_frame(unsigned int frame)
     for (unsigned int j=0;j<input_curve_[frame].size();j++)
       is_used.insert(is_used.end(), 0);
 
-  first_id= new int[output_curve_[frame-1].size()];
-  second_id = new int[input_curve_[frame].size()];
+//  first_id= new int[output_curve_[frame-1].size()];
+//  second_id = new int[input_curve_[frame].size()];
     // compute regions
 #ifdef DEBUG
     vcl_cout<<"-> compute regions\n";
@@ -94,7 +95,7 @@ void bdgl_curve_tracker::track_frame(unsigned int frame)
       reg.init(input_curve_[frame][j]);
 //    input_curve_[frame][j]->compute_boundary_box();
       regions.insert(regions.end(), reg);
-    second_id[j]=0;
+//    second_id[j]=0;
     }
 
     // take every primitive and find the best related curve
@@ -117,10 +118,10 @@ vcl_vector<vcl_map<int,double> > bdgl_curve_tracker::filter_top_ranks(vcl_vector
   vcl_map<int,double>::iterator iter;
 
   int min_cost_second_id=0;
-  for (int i=0;i<cost_table.size();i++)
+  for (unsigned int i=0; i<cost_table.size(); ++i)
   {
     temp_list.clear();
-    for (int j=0; j<5 && j<cost_table[i].size(); j++)
+    for (unsigned int j=0; j<5 && j<cost_table[i].size(); ++j)
     {
       double min_cost=1e6;
       for (iter=cost_table[i].begin();iter!=cost_table[i].end();iter++)
@@ -229,24 +230,25 @@ void bdgl_curve_match_tracker::track_match_frame(unsigned int frame)
     vcl_cout<<"\n the total number of curves are "<<untracked_curve_[frame].size();
     for (unsigned int i=0;i<tracked_curve_[frame-1].size();i++)
     {
-     vsol_box_2d_sptr box1=untracked_curve_[frame-1][i]->get_bounding_box();
-     int count=0;
-     for (unsigned int j=0;j<untracked_curve_[frame].size();j++)
-     {
-       untracked_curve_[frame][j]->compute_bounding_box();
-       vsol_box_2d_sptr box2=untracked_curve_[frame][j]->get_bounding_box();
-       if ((box2->get_min_x()<=box1->get_max_x()+motion &&
-            box2->get_max_x()>=box1->get_min_x()-motion) ||
-           (box2->get_min_y()<=box1->get_max_y()+motion &&
-            box2->get_max_y()>=box1->get_min_y()-motion))
+      vsol_box_2d_sptr box1=untracked_curve_[frame-1][i]->get_bounding_box();
+      int count=0;
+      for (unsigned int j=0;j<untracked_curve_[frame].size();j++)
       {
-        count++;
-        bdgl_curve_description desc1(untracked_curve_[frame][j]->get_interpolator()->get_edgel_chain());
-        bdgl_curve_description desc2(tracked_curve_[frame-1][j].get_member_edge()->get_interpolator()->get_edgel_chain());
+        untracked_curve_[frame][j]->compute_bounding_box();
+        vsol_box_2d_sptr box2=untracked_curve_[frame][j]->get_bounding_box();
+        if ((box2->get_min_x()<=box1->get_max_x()+motion &&
+             box2->get_max_x()>=box1->get_min_x()-motion) ||
+            (box2->get_min_y()<=box1->get_max_y()+motion &&
+             box2->get_max_y()>=box1->get_min_y()-motion))
+        {
+          count++;
+          bdgl_curve_description desc1(untracked_curve_[frame][j]->get_interpolator()->get_edgel_chain());
+          bdgl_curve_description desc2(tracked_curve_[frame-1][j].get_member_edge()->get_interpolator()->get_edgel_chain());
 
-        double coarse_cost=coarse_match(desc1,desc2);
-        //tracked_curve_[frame][j].add_child(vdgl_digital_curve_sptr candidate_curve,coarse_cost)
-        vcl_cout<<"\n the lengths are "<< desc1.curvature_<<'\t'<<desc2.curvature_<<'\t'<<dist;
+          double coarse_cost=coarse_match(desc1,desc2);
+          //tracked_curve_[frame][j].add_child(vdgl_digital_curve_sptr candidate_curve,coarse_cost)
+          vcl_cout<<"\n the lengths are "<< desc1.curvature_<<'\t'<<desc2.curvature_<<'\t'<<dist;
+        }
       }
     }
   }
@@ -320,22 +322,15 @@ void bdgl_curve_match_tracker::track_match_frame(unsigned int frame)
       min_cost_second_id=-1;
 
       for (int i=0;i<cost_table.size();i++)
-      {
         if (first_id[i]==0)
-        {
-        for (iter=cost_table[i].begin();iter!=cost_table[i].end();iter++)
-        {
-          if (second_id[(*iter).first]==0)
-          {
-            if (min_cost>(*iter).second)
-            {
-              min_cost=(*iter).second;
-              min_cost_second_id=(*iter).first;
-              min_cost_first_id=i;
-            }
-          }
-        }
-      }
+          for (iter=cost_table[i].begin();iter!=cost_table[i].end();iter++)
+            if (second_id[(*iter).first]==0)
+              if (min_cost>(*iter).second)
+              {
+                min_cost=(*iter).second;
+                min_cost_second_id=(*iter).first;
+                min_cost_first_id=i;
+              }
     }
     if (min_cost_first_id!=-1 || min_cost_second_id!=-1)
     {
