@@ -29,7 +29,7 @@ vil2_image_view_base_sptr vepl2_monadic_abs(vil2_image_view_base const& image)
 {
   // byte rgb
   if (image.pixel_format() == VIL2_PIXEL_FORMAT_RGB_BYTE) {
-    vil2_image_view<vil_rgb<vxl_byte> >* im = new vil2_image_view<vil_rgb<vxl_byte> >;
+    vil2_image_view<vil2_rgb<vxl_byte> >* im = new vil2_image_view<vil2_rgb<vxl_byte> >;
     im->deep_copy((vil2_image_view<vxl_byte>const&)(image));
     // vxl_byte is unsigned so nothing happens
     return im;

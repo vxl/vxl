@@ -28,12 +28,12 @@ int vepl2_test_dyadic() {
   ONE_TEST(vepl2_dyadic_sum,byte_img,byte_ori,unsigned char,2778,m+"_sum_byte");
   ONE_TEST(vepl2_dyadic_sum,shrt_img,shrt_ori,unsigned short,2778,m+"_sum_short");
   ONE_TEST(vepl2_dyadic_sum,flot_img,flot_ori,float,278,m+"_sum_float");
-  ONE_TEST(vepl2_dyadic_sum,colr_img,colr_ori,vil_rgb,13950,m+"_sum_colour");
+  ONE_TEST(vepl2_dyadic_sum,colr_img,colr_ori,vil2_rgb,13950,m+"_sum_colour");
 
   ONE_TEST(vepl2_dyadic_dif,byte_img,byte_ori,unsigned char,0,m+"_dif_byte");
   ONE_TEST(vepl2_dyadic_dif,shrt_img,shrt_ori,unsigned short,0,m+"_dif_short");
   ONE_TEST(vepl2_dyadic_dif,flot_img,flot_ori,float,0,m+"_dif_float");
-  ONE_TEST(vepl2_dyadic_dif,colr_img,colr_ori,vil_rgb,0,m+"_dif_colour");
+  ONE_TEST(vepl2_dyadic_dif,colr_img,colr_ori,vil2_rgb,0,m+"_dif_colour");
 
   ONE_TEST(vepl2_dyadic_min,byte_img,byte_ori,unsigned char,0,m+"min__byte");
   ONE_TEST(vepl2_dyadic_min,shrt_img,shrt_ori,unsigned short,0,m+"min__short");

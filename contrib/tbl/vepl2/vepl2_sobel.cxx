@@ -4,7 +4,7 @@
 #include <vipl/vipl_sobel.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_pixel_format.h>
-#include <vil/vil_rgb.h>
+#include <vil2/vil2_rgb.h>
 #include <vxl_config.h> // for vxl_byte
 
 vil2_image_view_base_sptr vepl2_sobel(vil2_image_view_base const& image)
@@ -12,7 +12,7 @@ vil2_image_view_base_sptr vepl2_sobel(vil2_image_view_base const& image)
   // byte rgb
   if (image.nplanes() == 3 && image.pixel_format() == VIL2_PIXEL_FORMAT_BYTE) {
     vil2_image_view<vxl_byte>* out = new vil2_image_view<vxl_byte>(image.ni(),image.nj(),3);
-    vipl_sobel<vil2_image_view_base,vil2_image_view_base,vil_rgb<vxl_byte>,vil_rgb<vxl_byte>,vipl_trivial_pixeliter> op;
+    vipl_sobel<vil2_image_view_base,vil2_image_view_base,vil2_rgb<vxl_byte>,vil2_rgb<vxl_byte>,vipl_trivial_pixeliter> op;
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(out);
     op.filter();
@@ -21,8 +21,8 @@ vil2_image_view_base_sptr vepl2_sobel(vil2_image_view_base const& image)
 
   // byte rgb
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_RGB_BYTE) {
-    vil2_image_view<vil_rgb<vxl_byte> >* out = new vil2_image_view<vil_rgb<vxl_byte> >(image.ni(),image.nj(),image.nplanes());
-    vipl_sobel<vil2_image_view_base,vil2_image_view_base,vil_rgb<vxl_byte>,vil_rgb<vxl_byte>,vipl_trivial_pixeliter> op;
+    vil2_image_view<vil2_rgb<vxl_byte> >* out = new vil2_image_view<vil2_rgb<vxl_byte> >(image.ni(),image.nj(),image.nplanes());
+    vipl_sobel<vil2_image_view_base,vil2_image_view_base,vil2_rgb<vxl_byte>,vil2_rgb<vxl_byte>,vipl_trivial_pixeliter> op;
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(out);
     op.filter();

@@ -26,7 +26,7 @@ int vepl2_test_monadic() {
   ONE_TEST(vepl2_monadic_abs,byte_img,byte_ori,unsigned char,0,m+"_abs_byte",args);
   ONE_TEST(vepl2_monadic_abs,shrt_img,shrt_ori,unsigned short,0,m+"_abs_short",args);
   ONE_TEST(vepl2_monadic_abs,flot_img,flot_ori,float,276,m+"_abs_float",args);
-  ONE_TEST(vepl2_monadic_abs,colr_img,colr_ori,vil_rgb,0,m+"_abs_colour",args);
+  ONE_TEST(vepl2_monadic_abs,colr_img,colr_ori,vil2_rgb,0,m+"_abs_colour",args);
 
   ONE_TEST(vepl2_monadic_sqr,byte_img,byte_ori,unsigned char,82410,m+"_sqr_byte",args);
   ONE_TEST(vepl2_monadic_sqr,shrt_img,shrt_ori,unsigned short,21755370,m+"_sqr_short",args);

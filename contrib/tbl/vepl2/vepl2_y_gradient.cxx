@@ -4,14 +4,14 @@
 #include <vipl/vipl_y_gradient.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_pixel_format.h>
-#include <vil/vil_rgb.h>
+#include <vil2/vil2_rgb.h>
 #include <vxl_config.h> // for vxl_byte
 
 vil2_image_view_base_sptr vepl2_y_gradient(vil2_image_view_base const& image, double scale, double shift)
 {
   // byte rgb
   if (image.pixel_format() == VIL2_PIXEL_FORMAT_RGB_BYTE) {
-    typedef vil_rgb<vxl_byte> r_g_b;
+    typedef vil2_rgb<vxl_byte> r_g_b;
     vil2_image_view<r_g_b>* out = new vil2_image_view<r_g_b>(image.ni(),image.nj(),image.nplanes());
     vipl_y_gradient<vil2_image_view_base,vil2_image_view_base,r_g_b,r_g_b,vipl_trivial_pixeliter>
       op(scale, r_g_b((vxl_byte)(shift+0.5)) );
@@ -23,7 +23,7 @@ vil2_image_view_base_sptr vepl2_y_gradient(vil2_image_view_base const& image, do
 
   // byte rgb
   else if (image.nplanes() == 3 && image.pixel_format() == VIL2_PIXEL_FORMAT_BYTE) {
-    typedef vil_rgb<vxl_byte> r_g_b;
+    typedef vil2_rgb<vxl_byte> r_g_b;
     vil2_image_view<vxl_byte>* out = new vil2_image_view<vxl_byte>(image.ni(),image.nj(),3);
     vipl_y_gradient<vil2_image_view_base,vil2_image_view_base,r_g_b,r_g_b,vipl_trivial_pixeliter>
       op(scale, r_g_b((vxl_byte)(shift+0.5)) );

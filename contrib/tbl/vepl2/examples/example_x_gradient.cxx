@@ -3,7 +3,7 @@
 //  This example program shows a typical use of a gradient function on
 //  a colour image.  The input image (argv[1]) must be 24 bit (colour), and in
 //  that case its X gradient is written to argv[2] which is always a PPM file.
-//  Note that this requires operator-() on the vil_rgb<ubyte> data type.
+//  Note that this requires operator-() on the vil2_rgb<ubyte> data type.
 //  But this indeed produces a *colour* gradient!
 //
 // \author Peter Vanroose, K.U.Leuven, ESAT/PSI
@@ -17,9 +17,9 @@
 #include <vil2/vil2_save.h>
 #include <vcl_iostream.h>
 
-#include <vil/vil_rgb.h>
+#include <vil2/vil2_rgb.h>
 #include <vxl_config.h> // for vxl_byte
-typedef vil_rgb<vxl_byte> rgbcell;
+typedef vil2_rgb<vxl_byte> rgbcell;
 
 int
 main(int argc, char** argv) {

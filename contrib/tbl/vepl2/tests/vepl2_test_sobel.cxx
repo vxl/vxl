@@ -26,7 +26,7 @@ int vepl2_test_sobel() {
   ONE_TEST(vepl2_sobel,byte_img,byte_ori,unsigned char,95634,m+"_byte",args);
   ONE_TEST(vepl2_sobel,shrt_img,shrt_ori,unsigned short,24640914,m+"_short",args);
   ONE_TEST(vepl2_sobel,flot_img,flot_ori,float,301,m+"_float",args);
-  ONE_TEST(vepl2_sobel,colr_img,colr_ori,vil_rgb,186894,m+"_colour",args);
+  ONE_TEST(vepl2_sobel,colr_img,colr_ori,vil2_rgb,186894,m+"_colour",args);
 
   return 0;
 }

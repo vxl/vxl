@@ -1,5 +1,5 @@
 #include "vepl2_dilate_disk.h"
-#include <vil/vil_rgb.h>
+#include <vil2/vil2_rgb.h>
 #include <vepl2/accessors/vipl_accessors_vil2_image_view_base.h>
 #include <vipl/vipl_dilate_disk.h>
 #include <vil2/vil2_image_view.h>
@@ -7,7 +7,7 @@
 #include <vxl_config.h> // for vxl_byte
 
 #if 0 // currently no dilation of colour images
-static inline bool operator<(vil_rgb<vxl_byte> const& a, vil_rgb<vxl_byte> const& b)
+static inline bool operator<(vil2_rgb<vxl_byte> const& a, vil2_rgb<vxl_byte> const& b)
 {
   return a.r<b.r || (a.r==b.r && a.g<b.g) || (a.r==b.r && a.g==b.g && a.b<b.b);
 }

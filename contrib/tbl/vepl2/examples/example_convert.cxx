@@ -4,14 +4,14 @@
 //  any image.  The input image (argv[1]) is converted to a ubyte image
 //  and written to argv[2] which is always a PGM file image.
 //  When the input image is RGB, its intensity is extracted.
-//  To this end an explicit converter from vil_rgb<ubyte> to ubyte is necessary.
+//  To this end an explicit converter from vil2_rgb<ubyte> to ubyte is necessary.
 //  When it is short, int or float, an implicit mapping is done to 0--255.
 //
 // \author Peter Vanroose, K.U.Leuven, ESAT/PSI
 // \date   7 October 2002, from vepl/examples
 //
 #include <vepl2/vepl2_convert.h>
-#include <vil/vil_rgb.h>
+#include <vil2/vil2_rgb.h>
 
 // for I/O:
 #include <vil2/vil2_image_view.h>
@@ -20,7 +20,7 @@
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
 
-typedef vil_rgb<vxl_byte> rgbcell;
+typedef vil2_rgb<vxl_byte> rgbcell;
 
 int
 main(int argc, char** argv) {

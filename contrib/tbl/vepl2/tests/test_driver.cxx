@@ -3,7 +3,7 @@
 #include "test_driver.h"
 #include <vil2/vil2_new.h>
 #include <vil2/vil2_image_view.h>
-#include <vil/vil_rgb.h>
+#include <vil2/vil2_rgb.h>
 #include <vxl_config.h> // for vxl_byte etc.
 #include <vcl_string.h>
 
@@ -78,10 +78,10 @@ vil2_image_view_base_sptr CreateTest16bitImage(int wd, int ht)
 vil2_image_view_base_sptr CreateTest24bitImage(int wd, int ht)
 {
   vil2_image_resource_sptr im = vil2_new_image_resource(wd, ht, 1, VIL2_PIXEL_FORMAT_RGB_BYTE);
-  vil2_image_view<vil_rgb<vxl_byte> >* image = new vil2_image_view<vil_rgb<vxl_byte> >(im->get_view(0,wd,0,ht));
+  vil2_image_view<vil2_rgb<vxl_byte> >* image = new vil2_image_view<vil2_rgb<vxl_byte> >(im->get_view(0,wd,0,ht));
   for (int x = 0; x < wd; x++)
     for (int y = 0; y < ht; y++)
-      (*image)(x, y) = vil_rgb<vxl_byte>( x&0xff, ((x-wd/2)*(y-ht/2)/16)&0xff, (y/3)&0xff );
+      (*image)(x, y) = vil2_rgb<vxl_byte>( x&0xff, ((x-wd/2)*(y-ht/2)/16)&0xff, (y/3)&0xff );
   return image;
 }
 

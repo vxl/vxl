@@ -3,7 +3,7 @@
 
 #include "vipl_accessors_vil2_image_view_base.h"
 #include <vepl2/section/vipl_filterable_section_container_generator_vil2_image_view_base.txx>
-#include <vil/vil_rgb.h>
+#include <vil2/vil2_rgb.h>
 #include <vcl_config_compiler.h>
 
 template <class DataType>
@@ -35,21 +35,21 @@ inline void setpixel(vil2_image_view_base& i, int x, int y, DataType e)
 
 #if VCL_HAS_TEMPLATE_SYMBOLS
 template <class DataType>
-inline vil_rgb<DataType> fgetpixel(vil2_image_view_base const& i, int x, int y, vil_rgb<DataType> /* dummy */)
+inline vil2_rgb<DataType> fgetpixel(vil2_image_view_base const& i, int x, int y, vil2_rgb<DataType> /* dummy */)
 {
   if (i.nplanes() == 3)
   {
     vil2_image_view<DataType> const& im = static_cast<vil2_image_view<DataType>const&>(i);
-    return vil_rgb<DataType>(im(x,y,0),im(x,y,1),im(x,y,2));
+    return vil2_rgb<DataType>(im(x,y,0),im(x,y,1),im(x,y,2));
   }
   else
   {
-    vil2_image_view<vil_rgb<DataType> > const& im = static_cast<vil2_image_view<vil_rgb<DataType> >const&>(i);
+    vil2_image_view<vil2_rgb<DataType> > const& im = static_cast<vil2_image_view<vil2_rgb<DataType> >const&>(i);
     return im(x,y);
   }
 }
 template <class DataType>
-inline void fsetpixel(vil2_image_view_base& i, int x, int y, vil_rgb<DataType> e)
+inline void fsetpixel(vil2_image_view_base& i, int x, int y, vil2_rgb<DataType> e)
 {
   if (i.nplanes() == 3)
   {
@@ -58,27 +58,27 @@ inline void fsetpixel(vil2_image_view_base& i, int x, int y, vil_rgb<DataType> e
   }
   else
   {
-    vil2_image_view<vil_rgb<DataType> >& im = static_cast<vil2_image_view<vil_rgb<DataType> >&>(i);
+    vil2_image_view<vil2_rgb<DataType> >& im = static_cast<vil2_image_view<vil2_rgb<DataType> >&>(i);
     im(x,y) = e;
   }
 }
 template <class DataType>
-inline vil_rgb<DataType> getpixel(vil2_image_view_base const& i, int x, int y, vil_rgb<DataType> /* dummy */)
+inline vil2_rgb<DataType> getpixel(vil2_image_view_base const& i, int x, int y, vil2_rgb<DataType> /* dummy */)
 {
-  if (x<0 || y<0 || x>=(int)i.ni() || y>=(int)i.nj()) return vil_rgb<DataType>();
+  if (x<0 || y<0 || x>=(int)i.ni() || y>=(int)i.nj()) return vil2_rgb<DataType>();
   if (i.nplanes() == 3)
   {
     vil2_image_view<DataType> const& im = static_cast<vil2_image_view<DataType>const&>(i);
-    return vil_rgb<DataType>(im(x,y,0),im(x,y,1),im(x,y,2));
+    return vil2_rgb<DataType>(im(x,y,0),im(x,y,1),im(x,y,2));
   }
   else
   {
-    vil2_image_view<vil_rgb<DataType> > const& im = static_cast<vil2_image_view<vil_rgb<DataType> >const&>(i);
+    vil2_image_view<vil2_rgb<DataType> > const& im = static_cast<vil2_image_view<vil2_rgb<DataType> >const&>(i);
     return im(x,y);
   }
 }
 template <class DataType>
-inline void setpixel(vil2_image_view_base& i, int x, int y, vil_rgb<DataType> e)
+inline void setpixel(vil2_image_view_base& i, int x, int y, vil2_rgb<DataType> e)
 {
   if (x<0 || y<0 || x>=(int)i.ni() || y>=(int)i.nj()) return;
   if (i.nplanes() == 3)
@@ -88,25 +88,25 @@ inline void setpixel(vil2_image_view_base& i, int x, int y, vil_rgb<DataType> e)
   }
   else
   {
-    vil2_image_view<vil_rgb<DataType> >& im = static_cast<vil2_image_view<vil_rgb<DataType> >&>(i);
+    vil2_image_view<vil2_rgb<DataType> >& im = static_cast<vil2_image_view<vil2_rgb<DataType> >&>(i);
     im(x,y) = e;
   }
 }
 #else // compilers with overload problems ...
-inline vil_rgb<vxl_byte> fgetpixel(vil2_image_view_base const& i, int x, int y, vil_rgb<vxl_byte> /* dummy */)
+inline vil2_rgb<vxl_byte> fgetpixel(vil2_image_view_base const& i, int x, int y, vil2_rgb<vxl_byte> /* dummy */)
 {
   if (i.nplanes() == 3)
   {
     vil2_image_view<vxl_byte> const& im = static_cast<vil2_image_view<vxl_byte>const&>(i);
-    return vil_rgb<vxl_byte>(im(x,y,0),im(x,y,1),im(x,y,2));
+    return vil2_rgb<vxl_byte>(im(x,y,0),im(x,y,1),im(x,y,2));
   }
   else
   {
-    vil2_image_view<vil_rgb<vxl_byte> > const& im = static_cast<vil2_image_view<vil_rgb<vxl_byte> >const&>(i);
+    vil2_image_view<vil2_rgb<vxl_byte> > const& im = static_cast<vil2_image_view<vil2_rgb<vxl_byte> >const&>(i);
     return im(x,y);
   }
 }
-inline void fsetpixel(vil2_image_view_base& i, int x, int y, vil_rgb<vxl_byte> e)
+inline void fsetpixel(vil2_image_view_base& i, int x, int y, vil2_rgb<vxl_byte> e)
 {
   if (i.nplanes() == 3)
   {
@@ -115,25 +115,25 @@ inline void fsetpixel(vil2_image_view_base& i, int x, int y, vil_rgb<vxl_byte> e
   }
   else
   {
-    vil2_image_view<vil_rgb<vxl_byte> >& im = static_cast<vil2_image_view<vil_rgb<vxl_byte> >&>(i);
+    vil2_image_view<vil2_rgb<vxl_byte> >& im = static_cast<vil2_image_view<vil2_rgb<vxl_byte> >&>(i);
     im(x,y) = e;
   }
 }
-inline vil_rgb<vxl_byte> getpixel(vil2_image_view_base const& i, int x, int y, vil_rgb<vxl_byte> /* dummy */)
+inline vil2_rgb<vxl_byte> getpixel(vil2_image_view_base const& i, int x, int y, vil2_rgb<vxl_byte> /* dummy */)
 {
-  if (x<0 || y<0 || x>=(int)i.ni() || y>=(int)i.nj()) return vil_rgb<vxl_byte>();
+  if (x<0 || y<0 || x>=(int)i.ni() || y>=(int)i.nj()) return vil2_rgb<vxl_byte>();
   if (i.nplanes() == 3)
   {
     vil2_image_view<vxl_byte> const& im = static_cast<vil2_image_view<vxl_byte>const&>(i);
-    return vil_rgb<vxl_byte>(im(x,y,0),im(x,y,1),im(x,y,2));
+    return vil2_rgb<vxl_byte>(im(x,y,0),im(x,y,1),im(x,y,2));
   }
   else
   {
-    vil2_image_view<vil_rgb<vxl_byte> > const& im = static_cast<vil2_image_view<vil_rgb<vxl_byte> >const&>(i);
+    vil2_image_view<vil2_rgb<vxl_byte> > const& im = static_cast<vil2_image_view<vil2_rgb<vxl_byte> >const&>(i);
     return im(x,y);
   }
 }
-inline void setpixel(vil2_image_view_base& i, int x, int y, vil_rgb<vxl_byte> e)
+inline void setpixel(vil2_image_view_base& i, int x, int y, vil2_rgb<vxl_byte> e)
 {
   if (x<0 || y<0 || x>=i.ni() || y>=i.nj()) return;
   if (i.nplanes() == 3)
@@ -143,7 +143,7 @@ inline void setpixel(vil2_image_view_base& i, int x, int y, vil_rgb<vxl_byte> e)
   }
   else
   {
-    vil2_image_view<vil_rgb<vxl_byte> >& im = static_cast<vil2_image_view<vil_rgb<vxl_byte> >&>(i);
+    vil2_image_view<vil2_rgb<vxl_byte> >& im = static_cast<vil2_image_view<vil2_rgb<vxl_byte> >&>(i);
     im(x,y) = e;
   }
 }

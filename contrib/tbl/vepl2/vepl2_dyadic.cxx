@@ -4,19 +4,19 @@
 #include <vipl/vipl_dyadic.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_pixel_format.h>
-#include <vil/vil_rgb.h>
+#include <vil2/vil2_rgb.h>
 #include <vxl_config.h> // for vxl_byte
 
 void sum_ubyte(vxl_byte& a, vxl_byte const& b) { a += b; }
 void sum_short(vxl_uint_16& a, vxl_uint_16 const& b) { a += b; }
 void sum_int(vxl_uint_32& a, vxl_uint_32 const& b) { a += b; }
-void sum_rgb(vil_rgb<vxl_byte>& a, vil_rgb<vxl_byte> const& b) { a.r += b.r; a.g += b.g; a.b += b.b; }
+void sum_rgb(vil2_rgb<vxl_byte>& a, vil2_rgb<vxl_byte> const& b) { a.r += b.r; a.g += b.g; a.b += b.b; }
 void sum_float(float& a, float const& b) { a += b; }
 void sum_double(double& a, double const& b) { a += b; }
 void dif_ubyte(vxl_byte& a, vxl_byte const& b) { a -= b; }
 void dif_short(vxl_uint_16& a, vxl_uint_16 const& b) { a -= b; }
 void dif_int(vxl_uint_32& a, vxl_uint_32 const& b) { a -= b; }
-void dif_rgb(vil_rgb<vxl_byte>& a, vil_rgb<vxl_byte> const& b) { a.r -= b.r; a.g -= b.g; a.b -= b.b; }
+void dif_rgb(vil2_rgb<vxl_byte>& a, vil2_rgb<vxl_byte> const& b) { a.r -= b.r; a.g -= b.g; a.b -= b.b; }
 void dif_float(float& a, float const& b) { a -= b; }
 void dif_double(double& a, double const& b) { a -= b; }
 void min_ubyte(vxl_byte& a, vxl_byte const& b) { if (b<a) a = b; }
@@ -43,8 +43,8 @@ void vepl2_dyadic_sum(vil2_image_view_base_sptr im_out, vil2_image_view_base con
 
   // byte rgb
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_RGB_BYTE) {
-    vil2_image_view<vil_rgb<vxl_byte> >& out = static_cast<vil2_image_view<vil_rgb<vxl_byte> >&>(*im_out);
-    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,vil_rgb<vxl_byte> ,vil_rgb<vxl_byte> ,vipl_trivial_pixeliter> op(sum_rgb);
+    vil2_image_view<vil2_rgb<vxl_byte> >& out = static_cast<vil2_image_view<vil2_rgb<vxl_byte> >&>(*im_out);
+    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,vil2_rgb<vxl_byte> ,vil2_rgb<vxl_byte> ,vipl_trivial_pixeliter> op(sum_rgb);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -105,8 +105,8 @@ void vepl2_dyadic_dif(vil2_image_view_base_sptr im_out, vil2_image_view_base con
 
   // byte rgb
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_RGB_BYTE) {
-    vil2_image_view<vil_rgb<vxl_byte> >& out = static_cast<vil2_image_view<vil_rgb<vxl_byte> >&>(*im_out);
-    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,vil_rgb<vxl_byte> ,vil_rgb<vxl_byte> ,vipl_trivial_pixeliter> op(dif_rgb);
+    vil2_image_view<vil2_rgb<vxl_byte> >& out = static_cast<vil2_image_view<vil2_rgb<vxl_byte> >&>(*im_out);
+    vipl_dyadic<vil2_image_view_base,vil2_image_view_base,vil2_rgb<vxl_byte> ,vil2_rgb<vxl_byte> ,vipl_trivial_pixeliter> op(dif_rgb);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(&out);
     op.filter();
