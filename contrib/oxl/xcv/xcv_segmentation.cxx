@@ -35,7 +35,7 @@ extern vgui_easy2D_sptr get_easy2D_at(unsigned, unsigned);
 extern void add_image(vil_image& img);
 
 //-----------------------------------------------------------------------------
-//-- Make and display a dialog box to get Harris parameters.
+//: Make and display a dialog box to get Harris parameters.
 //-----------------------------------------------------------------------------
 bool xcv_segmentation::get_harris_params(osl_harris_params* params)
 {
@@ -52,7 +52,7 @@ bool xcv_segmentation::get_harris_params(osl_harris_params* params)
 }
 
 //-----------------------------------------------------------------------------
-//-- Perform Harris corner detection.
+//: Perform Harris corner detection.
 //-----------------------------------------------------------------------------
 void xcv_segmentation::perform_harris(osl_harris_params& params,
   unsigned col, unsigned row)
@@ -85,7 +85,7 @@ void xcv_segmentation::perform_harris(osl_harris_params& params,
 }
 
 //-----------------------------------------------------------------------------
-//-- Get the current row and column and params for Harris corner detection.
+//: Get the current row and column and params for Harris corner detection.
 //-----------------------------------------------------------------------------
 void xcv_segmentation::harris()
 {
@@ -100,7 +100,7 @@ void xcv_segmentation::harris()
 }
 
 //-----------------------------------------------------------------------------
-//-- Draw the given edges onto the given location.
+//: Draw the given edges onto the given location.
 //-----------------------------------------------------------------------------
 void xcv_segmentation::draw_edges(vcl_list<osl_edge*> lines, unsigned col,
   unsigned row)
@@ -142,7 +142,7 @@ void xcv_segmentation::draw_edges(vcl_list<osl_edge*> lines, unsigned col,
 }
 
 //-----------------------------------------------------------------------------
-//-- Draw straight lines onto the given location.
+//: Draw straight lines onto the given location.
 //-----------------------------------------------------------------------------
 void xcv_segmentation::draw_straight_lines(vcl_vector<float> x1, vcl_vector<float> y1,
   vcl_vector<float> x2, vcl_vector<float> y2, unsigned col, unsigned row)
@@ -177,7 +177,7 @@ void xcv_segmentation::draw_straight_lines(vcl_vector<float> x1, vcl_vector<floa
 }
 
 //-----------------------------------------------------------------------------
-//-- Display a dialog box to get the parameters needed for Oxford Canny.
+//: Display a dialog box to get the parameters needed for Oxford Canny.
 //-----------------------------------------------------------------------------
 bool xcv_segmentation::get_canny_ox_params(osl_canny_ox_params* params)
 {
@@ -202,7 +202,7 @@ bool xcv_segmentation::get_canny_ox_params(osl_canny_ox_params* params)
 
 
 //-----------------------------------------------------------------------------
-//-- Perform Oxford canny edge detection.
+//: Perform Oxford canny edge detection.
 //-----------------------------------------------------------------------------
 void xcv_segmentation::canny_ox()
 {
@@ -223,7 +223,7 @@ void xcv_segmentation::canny_ox()
 }
 
 //-----------------------------------------------------------------------------
-//-- Get parameters from the user for break_lines_ox.
+//: Get parameters from the user for break_lines_ox.
 //-----------------------------------------------------------------------------
 bool xcv_segmentation::get_break_lines_ox_params(double* bk_thresh)
 {
@@ -233,7 +233,7 @@ bool xcv_segmentation::get_break_lines_ox_params(double* bk_thresh)
 }
 
 //-----------------------------------------------------------------------------
-//-- Get a list of broken edges from the current image.
+//: Get a list of broken edges from the current image.
 //-----------------------------------------------------------------------------
 void xcv_segmentation::get_broken_edges(double bk_thresh, vcl_list<osl_edge*>* broken_edges)
 {
@@ -274,7 +274,7 @@ void xcv_segmentation::get_broken_edges(double bk_thresh, vcl_list<osl_edge*>* b
 }
 
 //-----------------------------------------------------------------------------
-//-- Break edges at points of extreme "bentness".
+//: Break edges at points of extreme "bentness".
 //-----------------------------------------------------------------------------
 void xcv_segmentation::break_lines_ox()
 {
@@ -290,7 +290,7 @@ void xcv_segmentation::break_lines_ox()
 }
 
 //-----------------------------------------------------------------------------
-//-- Get parameters from user required for detect_lines_ox.
+//: Get parameters from user required for detect_lines_ox.
 //-----------------------------------------------------------------------------
 bool xcv_segmentation::get_detect_lines_ox_params(float* high, int* edge_min,
   int* min_length, int* min_fit_length)
@@ -304,7 +304,7 @@ bool xcv_segmentation::get_detect_lines_ox_params(float* high, int* edge_min,
 }
 
 //-----------------------------------------------------------------------------
-//-- Detect straight lines in the edges computed by Canny.
+//: Detect straight lines in the edges computed by Canny.
 //-----------------------------------------------------------------------------
 void xcv_segmentation::detect_lines_ox()
 {
@@ -361,7 +361,7 @@ void xcv_segmentation::detect_lines_ox()
 }
 
 //-----------------------------------------------------------------------------
-//-- Creates a menu containing all the functions in this file.
+//: Creates a menu containing all the functions in this file.
 //-----------------------------------------------------------------------------
 vgui_menu xcv_segmentation::create_segmentation_menu()
 {

@@ -44,13 +44,13 @@ void xcv_processing::xcv_processing_dup()
 }
 
 //-----------------------------------------------------------------------------
-//-- Creates a menu containing all the functions in this file.
+//: Creates a menu containing all the functions in this file.
 //-----------------------------------------------------------------------------
 vgui_menu xcv_processing::create_processing_menu()
 {
   vgui_menu pro_menu;
   pro_menu.add("Gaussian smoothing", xcv_processing_dup);
- 
+
   return pro_menu;
 }
 

@@ -35,7 +35,7 @@ extern vgui_easy2D_sptr get_easy2D_at(unsigned, unsigned);
 extern xcv_image_tableau_sptr get_image_tableau_at(unsigned col, unsigned row);
 
 //-----------------------------------------------------------------------------
-//-- Load the selected image file into the current grid position.
+//: Load the selected image file into the current grid position.
 //-----------------------------------------------------------------------------
 void xcv_file::load_image()
 {
@@ -55,7 +55,7 @@ void xcv_file::load_image()
 }
 
 //-----------------------------------------------------------------------------
-//-- Save image to specified file.
+//: Save image to specified file.
 //-----------------------------------------------------------------------------
 void xcv_file::save_image()
 {
@@ -86,7 +86,7 @@ void xcv_file::save_image()
 }
 
 //-----------------------------------------------------------------------------
-//-- Save image and spatial objects to specified postscript file.
+//: Save image and spatial objects to specified postscript file.
 //-----------------------------------------------------------------------------
 void xcv_file::save_as_ps()
 {
@@ -111,7 +111,7 @@ void xcv_file::save_as_ps()
 }
 
 //-----------------------------------------------------------------------------
-//-- Remove currently selected image.
+//: Remove currently selected image.
 //-----------------------------------------------------------------------------
 void xcv_file::remove_image()
 {
@@ -129,7 +129,7 @@ void xcv_file::remove_image()
 
 
 //-----------------------------------------------------------------------------
-//-- Exit XCV.
+//: Exit XCV.
 //-----------------------------------------------------------------------------
 void xcv_file::exit_xcv()
 {
@@ -143,7 +143,7 @@ void xcv_file::exit_xcv()
 }
 
 //-----------------------------------------------------------------------------
-//-- Creates a menu containing all the functions in this file.
+//: Creates a menu containing all the functions in this file.
 //-----------------------------------------------------------------------------
 vgui_menu xcv_file::create_file_menu()
 {

@@ -24,7 +24,7 @@ xcv_threeview_manager::xcv_threeview_manager()
 xcv_threeview_manager::~xcv_threeview_manager() { }
 
 //-----------------------------------------------------------------------------
-//-- Set the tableau at the given position to the given tableau.
+//: Set the tableau at the given position to the given tableau.
 //-----------------------------------------------------------------------------
 void xcv_threeview_manager::set_tableau(vgui_tableau_sptr const& tab, unsigned tab_nb)
 {
@@ -43,7 +43,7 @@ void xcv_threeview_manager::set_tableau(vgui_tableau_sptr const& tab, unsigned t
 }
 
 //-----------------------------------------------------------------------------
-//-- Toggle between displaying and not displaying the TriTensor
+//: Toggle between displaying and not displaying the TriTensor
 //-----------------------------------------------------------------------------
 void xcv_threeview_manager::toggle_tri_tensor_display()
 {
@@ -84,7 +84,7 @@ void xcv_threeview_manager::draw_tri_tensor(vgui_event const& e, vgui_tableau_sp
 
 
 //-----------------------------------------------------------------------------
-//-- Handle any events we are interested in.
+//: Handle any events we are interested in.
 //-----------------------------------------------------------------------------
 void xcv_threeview_manager::handle_tjunction_event(vgui_event const& e, vgui_tableau_sptr const& child_tab)
 {

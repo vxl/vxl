@@ -94,10 +94,10 @@ bool xcv_image_tableau::handle(vgui_event const &e)
   if (e.type == vgui_DRAW) {
     base::handle(e);
     if(defined_) {
-      // -- Draw a region of interest
+      // Draw a region of interest
       glLineWidth(1);
-          glColor3f(0,1,0);
-          glBegin(GL_LINE_LOOP);
+      glColor3f(0,1,0);
+      glBegin(GL_LINE_LOOP);
       glVertex2f(roi_.x,roi_.y);
       glVertex2f(roi_.x+roi_.width,roi_.y);
       glVertex2f(roi_.x+roi_.width,roi_.y+roi_.height);

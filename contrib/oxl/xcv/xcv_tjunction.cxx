@@ -30,7 +30,7 @@ vcl_string xcv_tjunction::pretty_name() const
 }
 
 //------------------------------------------------------------------------------
-//-- Handle events by passing them to the manager and the child tableau.
+//: Handle events by passing them to the manager and the child tableau.
 //------------------------------------------------------------------------------
 bool xcv_tjunction::handle(const vgui_event &e)
 {

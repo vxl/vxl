@@ -48,7 +48,7 @@ extern vgui_easy2D_sptr get_easy2D_at(unsigned, unsigned);
 extern bool get_image_at(vil_image*, unsigned, unsigned);
 
 //-----------------------------------------------------------------------------
-//-- Gets a twoview_manager between the tableaux at the given positions.
+//: Gets a twoview_manager between the tableaux at the given positions.
 //   If a manager already exists this manager is returned, otherwise a
 //   new manager is created and returned.
 //-----------------------------------------------------------------------------
@@ -96,7 +96,7 @@ xcv_twoview_manager* xcv_multiview::get_twoview_manager(vcl_vector<int>& col_pos
 }
 
 //-----------------------------------------------------------------------------
-//-- Gets a threeview_manager between the tableax at the given positions.
+//: Gets a threeview_manager between the tableax at the given positions.
 //   If a manager already exists then this manager is returned, otherwise a
 //   new manager is created and returned.
 //-----------------------------------------------------------------------------
@@ -175,7 +175,7 @@ xcv_threeview_manager* xcv_multiview::get_threeview_manager(vcl_vector<int>& col
 }
 
 //-----------------------------------------------------------------------------
-//-- Load an FMatrix for the two selected views from a file.
+//: Load an FMatrix for the two selected views from a file.
 //-----------------------------------------------------------------------------
 void xcv_multiview::load_f_matrix()
 {
@@ -200,7 +200,7 @@ void xcv_multiview::load_f_matrix()
 }
 
 //-----------------------------------------------------------------------------
-//-- Load an HMatrix2D for the two selected views from a file.
+//: Load an HMatrix2D for the two selected views from a file.
 //-----------------------------------------------------------------------------
 void xcv_multiview::load_h_matrix2d()
 {
@@ -223,7 +223,7 @@ void xcv_multiview::load_h_matrix2d()
 }
 
 //-----------------------------------------------------------------------------
-//-- Load corner matches for the two selected views from a file.
+//: Load corner matches for the two selected views from a file.
 //-----------------------------------------------------------------------------
 void xcv_multiview::load_corner_matches()
 {
@@ -242,7 +242,7 @@ void xcv_multiview::load_corner_matches()
 }
 
 //-----------------------------------------------------------------------------
-//-- Save the FMatrix of the two selected views to file.
+//: Save the FMatrix of the two selected views to file.
 //-----------------------------------------------------------------------------
 void xcv_multiview::save_f_matrix()
 {
@@ -270,7 +270,7 @@ void xcv_multiview::save_f_matrix()
 }
 
 //-----------------------------------------------------------------------------
-//-- Save the HMatrix2D of the two selected views to file.
+//: Save the HMatrix2D of the two selected views to file.
 //-----------------------------------------------------------------------------
 void xcv_multiview::save_h_matrix2d()
 {
@@ -298,7 +298,7 @@ void xcv_multiview::save_h_matrix2d()
 }
 
 //-----------------------------------------------------------------------------
-//-- Save the corner matches to file.
+//: Save the corner matches to file.
 //-----------------------------------------------------------------------------
 void xcv_multiview::save_corner_matches()
 {
@@ -325,7 +325,7 @@ void xcv_multiview::save_corner_matches()
 }
 
 //-----------------------------------------------------------------------------
-//-- Toggle display of the FMatrix.
+//: Toggle display of the FMatrix.
 //-----------------------------------------------------------------------------
 void xcv_multiview::toggle_f_matrix()
 {
@@ -338,7 +338,7 @@ void xcv_multiview::toggle_f_matrix()
 }
 
 //-----------------------------------------------------------------------------
-//-- Toggle display of the HMatrix2D.
+//: Toggle display of the HMatrix2D.
 //-----------------------------------------------------------------------------
 void xcv_multiview::toggle_h_matrix()
 {
@@ -351,7 +351,7 @@ void xcv_multiview::toggle_h_matrix()
 }
 
 //-----------------------------------------------------------------------------
-//-- Display corner matches by highlighting corresponding points in two views.
+//: Display corner matches by highlighting corresponding points in two views.
 //-----------------------------------------------------------------------------
 void xcv_multiview::display_corner_matches()
 {
@@ -372,7 +372,7 @@ void xcv_multiview::display_corner_matches()
 
 
 //-----------------------------------------------------------------------------
-//-- Display corner tracks.
+//: Display corner tracks.
 //-----------------------------------------------------------------------------
 void xcv_multiview::display_corner_tracks()
 {
@@ -412,7 +412,7 @@ void xcv_multiview::display_corner_tracks()
 }
 
 //-----------------------------------------------------------------------------
-//-- Load a TriTensor into the threeview_manager from file.
+//: Load a TriTensor into the threeview_manager from file.
 //-----------------------------------------------------------------------------
 void xcv_multiview::load_tri_tensor()
 {
@@ -461,7 +461,7 @@ void xcv_multiview::load_tri_tensor()
 }
 
 //-----------------------------------------------------------------------------
-//-- Save a TriTensor to file.
+//: Save a TriTensor to file.
 //-----------------------------------------------------------------------------
 void xcv_multiview::save_tri_tensor()
 {
@@ -490,7 +490,7 @@ void xcv_multiview::save_tri_tensor()
 }
 
 //-----------------------------------------------------------------------------
-//--  Toggle display of the TriTensor for the selected views.
+//:  Toggle display of the TriTensor for the selected views.
 //-----------------------------------------------------------------------------
 void xcv_multiview::toggle_tri_tensor()
 {
@@ -517,11 +517,10 @@ void xcv_multiview::toggle_tri_tensor()
   two_col_pos[1] = col_pos[2]; two_row_pos[1] = row_pos[2];
   xcv_twoview_manager* mgr4 = get_twoview_manager(two_col_pos, two_row_pos);
   mgr4->toggle_f_matrix_display();
-
 }
 
 //-----------------------------------------------------------------------------
-//-- Transfers a point on two view to a point on the third view.
+//: Transfers a point on two view to a point on the third view.
 //-----------------------------------------------------------------------------
 void xcv_multiview::transfer_point()
 {
@@ -609,7 +608,7 @@ void xcv_multiview::transfer_point()
 }
 
 //-----------------------------------------------------------------------------
-//-- Transfers a line on two views to a line on the third view.
+//: Transfers a line on two views to a line on the third view.
 //-----------------------------------------------------------------------------
 void xcv_multiview::transfer_line()
 {

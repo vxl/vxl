@@ -78,6 +78,7 @@ void post_to_status_bar(const char* msg)
 {
   vgui::out << msg << vcl_endl;
 }
+
 vgui_tableau_sptr get_top(unsigned col,unsigned row)
 {
   return xcv_tab->get_tableau_at(col,row);
@@ -335,8 +336,8 @@ void add_image_at(vcl_string image_filename, unsigned col, unsigned row)
   vgui_rubberbander_new rubber(new vgui_rubberbander_easy2D_client(easy));
   vgui_composite_new c(easy,rubber);
   vgui_viewer2D_new view(c);
-  // xcv_tab->add_at(view, col, row); -- u97mb This didn't work for some reason
-  xcv_tab->add_next(view); // -- u97mb
+//xcv_tab->add_at(view, col, row); // - u97mb This didn't work for some reason
+  xcv_tab->add_next(view); // - u97mb
 }
 
 
@@ -366,7 +367,6 @@ vgui_menu xcv_menubar;
 
 vgui_menu create_menubar()
 {
-
   xcv_menubar.add("File", xcv_file::create_file_menu());
   xcv_menubar.add("Display", xcv_display::create_display_menu());
   //xcv_menubar.add("Image-processing", xcv_processing::create_processing_menu());

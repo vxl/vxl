@@ -4,12 +4,12 @@
 #include "xcv_multiview.h"
 
 //-----------------------------------------------------------------------------
-//-- Creates a menu containing all the functions in xcv_multiview
+//: Creates a menu containing all the functions in xcv_multiview
 //-----------------------------------------------------------------------------
 vgui_menu xcv_multiview::create_multiview_menu()
 {
   vgui_menu mult_menu;
-  //---- Two view menu --------------------- 
+  //---- Two view menu ---------------------
   {
     vgui_menu two_menu;
     {
@@ -20,7 +20,7 @@ vgui_menu xcv_multiview::create_multiview_menu()
       //twoload_menu.add("Load line matches", twoview);
       two_menu.add("Load", twoload_menu);
     }
-    
+
     {
       vgui_menu twosave_menu;
       twosave_menu.add("Save FMatrix", save_f_matrix);
@@ -28,7 +28,7 @@ vgui_menu xcv_multiview::create_multiview_menu()
       twosave_menu.add("Save corner matches", save_corner_matches);
       two_menu.add("Save", twosave_menu);
     }
-    
+
     {
       vgui_menu twodisp_menu;
       twodisp_menu.add("Toggle display FMatrix", toggle_f_matrix);
@@ -39,8 +39,8 @@ vgui_menu xcv_multiview::create_multiview_menu()
     }
     mult_menu.add("Two view", two_menu);
   }
-  
-  //---- Three view menu --------------------- 
+
+  //---- Three view menu ---------------------
   {
     vgui_menu three_menu;
     {
@@ -48,7 +48,7 @@ vgui_menu xcv_multiview::create_multiview_menu()
       threeload_menu.add("Load TriTensor", load_tri_tensor);
       three_menu.add("Load", threeload_menu);
     }
-    { 
+    {
       vgui_menu threesave_menu;
       threesave_menu.add("Save TriTensor", save_tri_tensor);
       three_menu.add("Save", threesave_menu);
@@ -62,7 +62,7 @@ vgui_menu xcv_multiview::create_multiview_menu()
     }
     mult_menu.add("Three view", three_menu);
   }
-  
+
   return mult_menu;
 }
 

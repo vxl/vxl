@@ -42,7 +42,7 @@ static xcv_image_tableau_sptr img;
 static vgui_easy2D_sptr easy;
 
 //-----------------------------------------------------------------------------
-//-- Centre the current image.
+//: Centre the current image.
 //-----------------------------------------------------------------------------
 void xcv_display::centre_image()
 {
@@ -57,7 +57,7 @@ void xcv_display::centre_image()
 }
 
 //-----------------------------------------------------------------------------
-//-- Toggle display of the enhance lens.
+//: Toggle display of the enhance lens.
 //   This is done by slotting in an enhance tableau above the image tableau.
 //-----------------------------------------------------------------------------
 void xcv_display::toggle_enhance()
@@ -105,7 +105,7 @@ void xcv_display::toggle_enhance()
 }
 
 //-----------------------------------------------------------------------------
-//-- Toggle display of the magnify glass.
+//: Toggle display of the magnify glass.
 //   This is done by slotting in an enhance tableau above the image tableau.
 //-----------------------------------------------------------------------------
 void xcv_display::toggle_magnify()
@@ -139,7 +139,7 @@ void xcv_display::toggle_magnify()
   }
 }
 //-----------------------------------------------------------------------------
-//-- Define region of interest
+//: Define region of interest
 //-----------------------------------------------------------------------------
 void xcv_display::make_roi()
 {
@@ -165,7 +165,7 @@ void xcv_display::make_roi()
   //roi_tableau_client_ = 0;
 }
 //-----------------------------------------------------------------------------
-//-- Remove region of interest
+//: Remove region of interest
 //-----------------------------------------------------------------------------
 void xcv_display::remove_roi()
 {
@@ -184,7 +184,7 @@ void xcv_display::remove_roi()
 }
 
 //-----------------------------------------------------------------------------
-//-- Creates a menu containing all the functions in this file.
+//: Creates a menu containing all the functions in this file.
 //-----------------------------------------------------------------------------
 vgui_menu xcv_display::create_display_menu()
 {

@@ -36,7 +36,7 @@ static vcl_string filename = "/tmp/temp.gx";
 static vcl_string regexp = "*.*";
 
 //-----------------------------------------------------------------------------
-//-- Draw a point onto the currently selected tableau.
+//: Draw a point onto the currently selected tableau.
 //-----------------------------------------------------------------------------
 void xcv_geometry::create_point()
 {
@@ -48,7 +48,7 @@ void xcv_geometry::create_point()
 }
 
 //-----------------------------------------------------------------------------
-//-- Rubberband a line on the currently selected tableau.
+//: Rubberband a line on the currently selected tableau.
 //-----------------------------------------------------------------------------
 void xcv_geometry::create_line()
 {
@@ -60,7 +60,7 @@ void xcv_geometry::create_line()
 }
 
 //-----------------------------------------------------------------------------
-//-- Rubberband a circle on the currently selected tableau.
+//: Rubberband a circle on the currently selected tableau.
 //-----------------------------------------------------------------------------
 void xcv_geometry::create_circle()
 {
@@ -72,7 +72,7 @@ void xcv_geometry::create_circle()
 }
 
 //-----------------------------------------------------------------------------
-//-- Rubberband a polygon on the currently selected tableau.
+//: Rubberband a polygon on the currently selected tableau.
 //-----------------------------------------------------------------------------
 void xcv_geometry::create_polygon()
 {
@@ -83,7 +83,7 @@ void xcv_geometry::create_polygon()
     rubber->rubberband_polygon();
 }
 //-----------------------------------------------------------------------------
-//-- Rubberband a linestrip on the currently selected tableau.
+//: Rubberband a linestrip on the currently selected tableau.
 //-----------------------------------------------------------------------------
 void xcv_geometry::create_linestrip()
 {
@@ -94,7 +94,7 @@ void xcv_geometry::create_linestrip()
     rubber->rubberband_linestrip();
 }
 //-----------------------------------------------------------------------------
-//-- Rubberband infinite line on the currently selected tableau.
+//: Rubberband infinite line on the currently selected tableau.
 //-----------------------------------------------------------------------------
 void xcv_geometry::create_infinite_line()
 {
@@ -105,7 +105,7 @@ void xcv_geometry::create_infinite_line()
     rubber->rubberband_infinite_line();
 }
 //-----------------------------------------------------------------------------
-//-- Change the color of all the selected geometric objects.
+//: Change the color of all the selected geometric objects.
 //-----------------------------------------------------------------------------
 void xcv_geometry::change_sel_color()
 {
@@ -130,7 +130,7 @@ void xcv_geometry::change_sel_color()
   }
 }
 //-----------------------------------------------------------------------------
-//-- Change the radius of all the selected points.
+//: Change the radius of all the selected points.
 //-----------------------------------------------------------------------------
 void xcv_geometry::change_sel_radius()
 {
@@ -155,7 +155,7 @@ void xcv_geometry::change_sel_radius()
 }
 
 //-----------------------------------------------------------------------------
-//-- Change the line widths of all the selected geometric objects
+//: Change the line widths of all the selected geometric objects
 // (that aren't points).
 //-----------------------------------------------------------------------------
 void xcv_geometry::change_sel_width()
@@ -181,7 +181,7 @@ void xcv_geometry::change_sel_width()
 }
 
 //-----------------------------------------------------------------------------
-//-- Delete all the selected geometric objects.
+//: Delete all the selected geometric objects.
 //-----------------------------------------------------------------------------
 void xcv_geometry::delete_sel_objs()
 {
@@ -202,7 +202,7 @@ void xcv_geometry::delete_sel_objs()
   }
 }
 //-----------------------------------------------------------------------------
-//-- Delete all geometric objects.
+//: Delete all geometric objects.
 //-----------------------------------------------------------------------------
 void xcv_geometry::delete_all()
 {
@@ -231,7 +231,7 @@ void xcv_geometry::delete_all()
 }
 
 //-----------------------------------------------------------------------------
-//-- Delete all points
+//: Delete all points
 //-----------------------------------------------------------------------------
 void xcv_geometry::delete_points()
 {
@@ -258,7 +258,7 @@ void xcv_geometry::delete_points()
   }
 }
 //-----------------------------------------------------------------------------
-//-- Delete all lines
+//: Delete all lines
 //-----------------------------------------------------------------------------
 void xcv_geometry::delete_lines()
 {
@@ -285,7 +285,7 @@ void xcv_geometry::delete_lines()
   }
 }
 //-----------------------------------------------------------------------------
-//-- Delete all infinite lines
+//: Delete all infinite lines
 //-----------------------------------------------------------------------------
 void xcv_geometry::delete_inf_lines()
 {
@@ -312,7 +312,7 @@ void xcv_geometry::delete_inf_lines()
   }
 }
 //-----------------------------------------------------------------------------
-//-- Delete all circles
+//: Delete all circles
 //-----------------------------------------------------------------------------
 void xcv_geometry::delete_circles()
 {
@@ -339,7 +339,7 @@ void xcv_geometry::delete_circles()
   }
 }
 //-----------------------------------------------------------------------------
-//-- Delete all linestrips
+//: Delete all linestrips
 //-----------------------------------------------------------------------------
 void xcv_geometry::delete_linestrips()
 {
@@ -367,7 +367,7 @@ void xcv_geometry::delete_linestrips()
 }
 
 //-----------------------------------------------------------------------------
-//-- Change the default color for geometric objects.
+//: Change the default color for geometric objects.
 //   Note, this will apply to geometric objects created in the future, not
 //   to geometric objects already on the tableau.
 //-----------------------------------------------------------------------------
@@ -388,7 +388,7 @@ void xcv_geometry::change_default_color()
 }
 
 //-----------------------------------------------------------------------------
-//-- Change the default radius for points.
+//: Change the default radius for points.
 //   Note, this will apply to points created in the future, not to points
 //   already on the tableau.
 //-----------------------------------------------------------------------------
@@ -408,7 +408,7 @@ void xcv_geometry::change_default_radius()
 }
 
 //-----------------------------------------------------------------------------
-//-- Change the default line width for geometric objects.
+//: Change the default line width for geometric objects.
 //   Note, this will apply to geometric objects created in the future, not
 //   to geometric objects already on the tableau.
 //-----------------------------------------------------------------------------
@@ -425,12 +425,10 @@ void xcv_geometry::change_default_width()
     easy_list[i]->set_line_width(line_width);
 }
 //-----------------------------------------------------------------------------
-//-- Write coordinates into a file
+//: Write coordinates into a file
 //-----------------------------------------------------------------------------
 void xcv_geometry::save(const char *object_type,const char *dialog_name)
 {
-
-
   unsigned col, row;
   get_current(&col, &row);
   vgui_easy2D_sptr easy_tab = get_easy2D_at(col, row);
@@ -523,12 +521,10 @@ void xcv_geometry::save_geometry()
   save(0,"Save geometry");
 }
 //-----------------------------------------------------------------------------
-//-- Load coordinates from a file
+//: Load coordinates from a file
 //-----------------------------------------------------------------------------
 void xcv_geometry::load(const char *object_type,const char *dialog_name)
 {
-
-
   unsigned col, row;
   get_current(&col, &row);
   vgui_easy2D_sptr easy_tab = get_easy2D_at(col, row);
@@ -755,7 +751,7 @@ static void xcv_geometry_explode_geometry()
 }
 
 //-----------------------------------------------------------------------------
-//-- Create a menu containing all the functions in this file.
+//: Create a menu containing all the functions in this file.
 //-----------------------------------------------------------------------------
 void xcv_geometry::create_box()
 {
