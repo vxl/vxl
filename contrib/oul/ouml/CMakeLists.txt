@@ -4,6 +4,7 @@ SET(ouml_sources
   eigenfaces.h       eigenfaces.cxx
   image_database.h   image_database.cxx
   polygon_mesh.h     polygon_mesh.cxx
+  CardinalSpline.h   CardinalSpline.cxx
 
   image_convert.h    image_convert.txx
   image_ops.h        image_ops.txx
