@@ -49,7 +49,7 @@ void test_vector_fixed_ref()
   ref = other;
   TEST("assign_vf", ref, other);
   // test different adresses
-  TEST("assign_vf", (ref.begin() != other.begin()), true);
+  TEST("assign_vf address", (ref.begin() != other.begin()), true);
 #endif // 0
 
   {
@@ -59,7 +59,7 @@ void test_vector_fixed_ref()
   ref = cref;
   TEST("assign_const_ref", ref, other);
   // test different adresses
-  TEST("assign_const_ref", (ref.begin() != other.begin()), true);
+  TEST("assign_const_ref address", (ref.begin() != other.begin()), true);
   }
 
   {
@@ -70,7 +70,7 @@ void test_vector_fixed_ref()
   ref = ref2;
   TEST("assign_ref", ref, other);
   // test different adresses
-  TEST("assign_ref", (ref.begin() != other.begin()), true);
+  TEST("assign_ref address", (ref.begin() != other.begin()), true);
 #endif // 0
   }
 
