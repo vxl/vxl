@@ -4,6 +4,7 @@
 #include "vcsl_matrix.h"
 #include <vcl_cassert.h>
 #include <vcl_cmath.h> // for vcl_cos(), vcl_sin()
+#include <vcl_iostream.h>
 
 //***************************************************************************
 // Status report

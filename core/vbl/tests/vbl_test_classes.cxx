@@ -1,6 +1,7 @@
 #include "vbl_test_classes.h"
+#include <vcl_iostream.h>
 
-// Remember, the template instances must be in 
+// Remember, the template instances must be in
 // Templates, but they use these classes, so the class
 // implementation must be in the library even if only
 // one test uses it.
@@ -25,7 +26,7 @@ base_impl::~base_impl() {
 void base_impl::Print (vcl_ostream &str) {
   str << "base_impl(" << n << ") ";
 }
-  
+
 bool base_impl::checkcount ( int count ) {
   if (reftotal == count) {
     vcl_cout << "base_impl : PASSED" << vcl_endl;
@@ -35,5 +36,5 @@ bool base_impl::checkcount ( int count ) {
              << " (expecting " << count << ")" << vcl_endl;
     return false;
   }
-} 
+}
 

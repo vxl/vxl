@@ -1,8 +1,9 @@
+#include "vsrl_dynamic_program.h"
 #include <vsrl/vsrl_token.h>
 #include <vsrl/vsrl_null_token.h>
-#include <vsrl/vsrl_dynamic_program.h>
 #include <vsrl/vsrl_parameters.h>
 #include <vcl_cassert.h>
+#include <vcl_iostream.h>
 
 // this class will perform a dynamic program
 

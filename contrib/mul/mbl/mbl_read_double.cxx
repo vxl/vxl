@@ -1,33 +1,35 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
-
 //:
 // \file
 // \brief Asks question and waits for an answer
 // \author tim
 // hand crafted into vxl by gvw
 //
-//  Function Name:  mbl_read_double
-//  Synopsis:       double mbl_read_double(char* q_str, double default_d)
-//  Inputs:         q_str: A question
+// - Function Name: mbl_read_double
+// - Synopsis:      double mbl_read_double(char* q_str, double default_d)
+// - Inputs:        q_str: A question
 //                  default_d: Default answer
 //                  min_d: Min allowed value (optional)
 //                  max_d: Max allowed value (optional)
-//  Outputs:        -
-//  Returns:        The answer or a default
-//  Description:    Asks question and waits for an answer.
+// - Outputs:       -
+// - Returns:       The answer or a default
+// - Description:   Asks question and waits for an answer.
 //                  If the answer is a double, returns it.
 //                  If the answer is an empty vcl_string (return)
 //                  then returns default.
 //                  Otherwise waits for another input.
-//  References:     -
-//  Example:
+// - References:    -
+// - Example:
+// \verbatim
 //    double new_scale = mbl_read_double("Scale?",1.00);
 //    double new_scale = mbl_read_double("Scale?",1.00,min_scale,max_scale);
+// \endverbatim
 
-#include <mbl/mbl_read_double.h>
-#include <vcl_cstdio.h>
+#include "mbl_read_double.h"
+#include <vcl_cstdio.h> // for fgets()
+#include <vcl_iostream.h>
 
 const int MAX_LEN = 40;
 

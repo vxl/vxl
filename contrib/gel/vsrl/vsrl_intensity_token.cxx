@@ -1,4 +1,5 @@
-#include <vsrl/vsrl_intensity_token.h>
+#include "vsrl_intensity_token.h"
+#include <vcl_iostream.h>
 
 
 vsrl_intensity_token::vsrl_intensity_token()
@@ -13,13 +14,12 @@ vsrl_intensity_token::vsrl_intensity_token()
 
 vsrl_intensity_token::~vsrl_intensity_token()
 {
-
 }
 
 double vsrl_intensity_token::cost(vsrl_token *tok)
 {
   // this is a null assignment
-  if(tok->null_token()){
+  if (tok->null_token()){
     // this is a null assignemnet
     return tok->cost(this);
   }
@@ -29,10 +29,10 @@ double vsrl_intensity_token::cost(vsrl_token *tok)
   double image_cost=1.0;
   double delta_bias=0;
 
-  if(tok->intensity_token()){
+  if (tok->intensity_token()){
     // this is an intensity token so lets compare intensity
 
-    if(_image_correlation){
+    if (_image_correlation){
 
       // we know how to perform image correlation so lets do it;
       int x1 = (int) this->get_x();
@@ -46,19 +46,18 @@ double vsrl_intensity_token::cost(vsrl_token *tok)
       // find the distance from the bias
 
       delta_bias=(x2-_bias);
-      if(delta_bias <0){
+      if (delta_bias <0){
         delta_bias = 0-delta_bias;
       }
 
       // compute the image correlation
-      if(y1==y2){
+      if (y1==y2){
         // we should be able to perform an efficient lookup
         image_cost= (1.0 - _image_correlation->get_correlation(x1,y1,(x2-x1)));
-        if(image_cost <0.0){
+        if (image_cost <0.0){
           // vcl_cout << "Warning we have a strange correlation function" << vcl_endl;
           image_cost=1.0;
         }
-
       }
       else{
         // well it looks like we have to perform this calculation on the fly
@@ -81,7 +80,6 @@ double vsrl_intensity_token::cost(vsrl_token *tok)
   // double delta_cost = sqrt(delta_bias) * _bias_cost * (1.0 - _correlation_dyn_range);
   double delta_cost = (delta_bias) * _bias_cost;
   return delta_cost + image_cost;
-
 }
 
 void vsrl_intensity_token::set_image_correlation(vsrl_image_correlation *image_correlation)
@@ -90,7 +88,6 @@ void vsrl_intensity_token::set_image_correlation(vsrl_image_correlation *image_c
   // compute the correlation std
   compute_correlation_dyn_range();
 }
-
 
 void vsrl_intensity_token::set_bias(double bias)
 {
@@ -118,7 +115,7 @@ void vsrl_intensity_token::compute_correlation_dyn_range()
 
   _correlation_dyn_range=0;
 
-  if(!_image_correlation){
+  if (!_image_correlation){
     return;
   }
 
@@ -136,20 +133,19 @@ void vsrl_intensity_token::compute_correlation_dyn_range()
   int range = _image_correlation->get_correlation_range();
   int i;
 
-  for(i=0;i<2*range+1;i++){
+  for (i=0;i<2*range+1;i++){
     v= _image_correlation->get_correlation(x1,y1,(i-range));
-    if(v<min_v){
+    if (v<min_v){
       min_v=v;
     }
-    if(v>max_v){
+    if (v>max_v){
       max_v=v;
     }
   }
 
-  if(min_v<0){
+  if (min_v<0){
     min_v=0;
   }
 
   _correlation_dyn_range=max_v-min_v;
-
 }

@@ -1,5 +1,6 @@
 #include "vbl_test_classes.h"
 #include <vcl_list.h>
+#include <vcl_iostream.h>
 #include <vbl/vbl_smart_ptr.h>
 
 //----------------------------------------------------------------------
@@ -32,7 +33,7 @@ bool doit ()
   bool result_okay = true;
 
   base_sptr p;
-  if(p) {
+  if (p) {
     vcl_cout << "FAILED: p is initially not null (true)" << vcl_endl;
     result_okay = false;
   }
@@ -131,22 +132,22 @@ bool doit ()
     base_sptr p = new base_impl( 1 );
     base_sptr q = p;
     base_sptr r = new base_impl( 1 );
-    if( !( base_impl::checkcount( good_count ) && p->get_references() == 2
+    if ( !( base_impl::checkcount( good_count ) && p->get_references() == 2
            && r->get_references() == 1 ) ) {
       vcl_cout << "FAILED: reference counts are wrong." << vcl_endl;
       result_okay = false;
     }
     q.unprotect();
-    if( p->get_references() != 1 ) {
+    if ( p->get_references() != 1 ) {
       vcl_cout << "FAILED: unprotected didn't unref!" << vcl_endl;
       result_okay = false;
     }
     q = r;
-    if( !base_impl::checkcount( good_count ) ) {
+    if ( !base_impl::checkcount( good_count ) ) {
       vcl_cout << "    an object was unexpectedly destroyed" << vcl_endl;
       result_okay = false;
     }
-    if( r->get_references() != 2 ) {
+    if ( r->get_references() != 2 ) {
       vcl_cout << "FAILED: assignment didn't ref" << vcl_endl;
       result_okay = false;
     }
