@@ -1,7 +1,7 @@
+// This is gel/vtol/vtol_face.cxx
 #include "vtol_face.h"
-
 //:
-//  \file
+// \file
 
 #include <vcl_cassert.h>
 #include <vtol/vtol_macros.h>
@@ -77,16 +77,14 @@ vtol_face::topology_type(void) const
 
 vertex_list *vtol_face::outside_boundary_vertices(void)
 {
-  vertex_list *new_ref_list = new vertex_list();
+  vertex_list *new_ref_list = new vertex_list;
   vcl_vector<vtol_vertex*>* ptr_list = this->outside_boundary_compute_vertices();
+
   // copy the lists
-
   for (vcl_vector<vtol_vertex*>::iterator ti = ptr_list->begin(); ti != ptr_list->end(); ++ti)
-  {
     new_ref_list->push_back(*ti);
-  }
-  delete ptr_list;
 
+  delete ptr_list;
   return new_ref_list;
 }
 
@@ -121,16 +119,14 @@ vcl_vector<vtol_zero_chain*> *vtol_face::outside_boundary_compute_zero_chains(vo
 
 zero_chain_list *vtol_face::outside_boundary_zero_chains(void)
 {
-  zero_chain_list *new_ref_list = new zero_chain_list();
+  zero_chain_list *new_ref_list = new zero_chain_list;
   vcl_vector<vtol_zero_chain*>* ptr_list = this->outside_boundary_compute_zero_chains();
+
   // copy the lists
-
   for (vcl_vector<vtol_zero_chain*>::iterator ti = ptr_list->begin(); ti != ptr_list->end(); ++ti)
-  {
     new_ref_list->push_back(*ti);
-  }
-  delete ptr_list;
 
+  delete ptr_list;
   return new_ref_list;
 }
 
@@ -156,16 +152,14 @@ vcl_vector<vtol_edge*> *vtol_face::outside_boundary_compute_edges(void)
 //---------------------------------------------------------------------------
 edge_list *vtol_face::outside_boundary_edges(void)
 {
-  edge_list *new_ref_list = new edge_list();
+  edge_list *new_ref_list = new edge_list;
   vcl_vector<vtol_edge*>* ptr_list = this->outside_boundary_compute_edges();
+
   // copy the lists
-
   for (vcl_vector<vtol_edge*>::iterator ti = ptr_list->begin(); ti != ptr_list->end(); ++ti)
-  {
     new_ref_list->push_back(*ti);
-  }
-  delete ptr_list;
 
+  delete ptr_list;
   return new_ref_list;
 }
 
@@ -180,12 +174,12 @@ vcl_vector<vtol_edge*> *vtol_face::compute_edges(void)
 one_chain_list *vtol_face::outside_boundary_one_chains(void)
 {
   vcl_vector<vtol_one_chain*>* ptr_list= outside_boundary_compute_one_chains();
-  one_chain_list *ref_list= new one_chain_list();
+  one_chain_list *ref_list= new one_chain_list;
 
   vcl_vector<vtol_one_chain*>::iterator i;
-  for (i=ptr_list->begin();i!=ptr_list->end();++i){
+  for (i=ptr_list->begin();i!=ptr_list->end();++i)
     ref_list->push_back(*i);
-  }
+
   delete ptr_list;
   return ref_list;
 }
@@ -232,17 +226,13 @@ vcl_vector<vtol_block*> *vtol_face::compute_blocks(void)
 //---------------------------------------------------------------------------
 bool vtol_face::shares_edge_with(vtol_face &f)
 {
-  bool result;
-  edge_list *thisedges;
-  edge_list *fedges;
-  vcl_vector<vtol_edge_sptr>::const_iterator ei1;
-  vcl_vector<vtol_edge_sptr>::const_iterator ei2;
-
-  result=this==&f;
+  bool result = this==&f;
   if (!result)
     {
-      thisedges=edges();
-      fedges=f.edges();
+      edge_list *thisedges=edges();
+      edge_list *fedges=f.edges();
+      edge_list::const_iterator ei1;
+      edge_list::const_iterator ei2;
       for (ei1=thisedges->begin();!result&&ei1!=thisedges->end();++ei1)
         for (ei2= fedges->begin();!result&&ei2!=fedges->end();++ei2)
           result=(*ei1)==(*ei2);
@@ -314,7 +304,7 @@ bool vtol_face::operator==(const vsol_spatial_object_2d& obj) const
 vtol_one_chain *vtol_face::get_one_chain(int which)
 {
   if ((unsigned int)which < inferiors()->size())
-    return (_inferiors[which])->cast_to_one_chain();
+    return (inferiors_[which])->cast_to_one_chain();
   else
     {
       vcl_cerr << "Tried to get bad edge_loop from face" << vcl_endl;
@@ -349,18 +339,16 @@ bool vtol_face::add_hole_cycle(vtol_one_chain &new_hole)
 
 // Returns a list of the one_chains that make up the holes of the vtol_face.
 
-vcl_vector<vtol_one_chain_sptr> *vtol_face::get_hole_cycles(void)
+one_chain_list *vtol_face::get_hole_cycles(void)
 {
-  vcl_vector<vtol_one_chain_sptr> * result=new vcl_vector<vtol_one_chain_sptr>();
+  one_chain_list * result=new one_chain_list;
 
   topology_list::const_iterator ii;
   for (ii=inferiors()->begin();ii!=inferiors()->end();++ii)
     {
-      vcl_vector<vtol_one_chain_sptr> * templist=(*ii)->cast_to_one_chain()->inferior_one_chains();
+      one_chain_list* templist=(*ii)->cast_to_one_chain()->inferior_one_chains();
 
-      // new_list->insert(new_list->end(),templist->begin(),templist->end());
-      vcl_vector<vtol_one_chain_sptr>::iterator oi;
-      for (oi=templist->begin();oi!=templist->end();++oi)
+      for (one_chain_list::iterator oi=templist->begin();oi!=templist->end();++oi)
         result->push_back(*oi);
       delete templist;
     }
@@ -375,7 +363,6 @@ int vtol_face::get_num_edges(void) const
 {
   int result=0;
   topology_list::const_iterator ii;
-
   for (ii=inferiors()->begin();ii!=inferiors()->end();++ii)
     result+=((*ii)->cast_to_one_chain())->numinf();
   return result;
@@ -392,51 +379,20 @@ void vtol_face::reverse_normal(void)
   // compute_normal();
 }
 
-//-----------------------------------------------------------------
-//: Compute bounds from the geometry of surface_.
-//  If the surface is not fully bounded, then use the vertices.
-//
-void vtol_face::compute_bounding_box()
-{
-  // TODO
-#if 0
-  if (surface_ && surface_->GetGeometryType() != GeometryObject::IMPLICITPLANE)
-     {
-      // Get bounds from surface.
-      // But are bounds consistent with face vertices? -JLM
-      // Anyway, this is what was done in get_min_max on vtol_edge.
-       if (surface_->GetExtent() == vsol_region::FULLY_BOUNDED)
-         {
-           this->set_minX(surface_->GetMinX());
-           this->set_minY(surface_->GetMinY());
-           this->set_minZ(surface_->GetMinZ());
-
-           this->set_maxX(surface_->GetMaxX());
-           this->set_maxY(surface_->GetMaxY());
-           this->set_maxZ(surface_->GetMaxZ());
-         }
-     }
-  else  // Just use the generic method computing bounds from vertices
-    this->vtol_topology_object::ComputeBoundingBox();
-#endif
-  vtol_topology_object::compute_bounding_box();
-}
-
-
 //:
 //  This method describes the data members of the vtol_face including the
 // Inferiors.  The blanking argument is used to indent the output in
 // a clear fashion.
 
 void vtol_face::describe(vcl_ostream &strm,
-                            int blanking) const
+                         int blanking) const
 {
   for (int j=0; j<blanking; ++j) strm << ' ';
   print();
   for (unsigned int i=0;i<inferiors()->size();++i)
     {
-      if ((_inferiors[i])->cast_to_one_chain()!=0)
-        (_inferiors[i])->cast_to_one_chain()->describe(strm,blanking);
+      if ((inferiors_[i])->cast_to_one_chain()!=0)
+        (inferiors_[i])->cast_to_one_chain()->describe(strm,blanking);
       else
         vcl_cout << "*** Odd inferior for a face" << vcl_endl;
     }
@@ -448,9 +404,9 @@ void vtol_face::describe(vcl_ostream &strm,
 void vtol_face::print(vcl_ostream &strm) const
 {
   strm << "<vtol_face  ";
-  topology_list::const_iterator ii;
 
+  topology_list::const_iterator ii;
   for (ii=inferiors()->begin();ii!= inferiors()->end();++ii)
     strm << " " << (*ii)->inferiors()->size();
-  strm << "   " << (void const *) this << '>' << vcl_endl;
+  strm << "   " << (void const *) this << ">\n";
 }

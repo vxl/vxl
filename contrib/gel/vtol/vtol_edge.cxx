@@ -305,18 +305,20 @@ vertex_list *vtol_edge::endpoints(void)
 //  Returns true if the invoking edge has a vertex in common with
 //  vtol_edge `other'.  The method determines if the two edges share a vertex
 //  by comparing pointer values, not the vertex geometry.
-//
 
 bool vtol_edge::share_vertex_with(vtol_edge &other)
 {
+  bool r = false;
   vertex_list *thisedges=vertices();
   vertex_list *eedges=other.vertices();
 
-  for (vertex_list::iterator i1=thisedges->begin();i1!=thisedges->end();++i1 )
-    for (vertex_list::iterator i2=eedges->begin();i2!=eedges->end(); ++i2 )
+  for (vertex_list::iterator i1=thisedges->begin();i1!=thisedges->end()&&!r;++i1 )
+    for (vertex_list::iterator i2=eedges->begin();i2!=eedges->end()&&!r; ++i2 )
       if ((*i1)==(*i2))
-        return true;
-  return false;
+        r = true;
+  delete thisedges;
+  delete eedges;
+  return r;
 }
 
 //:
@@ -383,32 +385,6 @@ vtol_vertex_sptr vtol_edge::other_endpoint(const vtol_vertex &overt) const
   else
     return 0;
 }
-
-//-----------------------------------------------------------------
-//: Compute bounds from the geometry of curve().
-// If the curve is not fully bounded, then use the vertices.
-//
-void vtol_edge::compute_bounding_box(void)
-{
-#if 0 // TODO
-  if (curve() && curve()->GetGeometryType() != GeometryObject::IMPLICITLINE)
-  {
-    // Get bounds from curve.
-    // But are curve endpoints consistent with vertices? -JLM
-    // Anyway, this is what was done in get_min_max
-    if (curve()->GetExtent() == vsol_curve::FULLY_BOUNDED)
-    {
-      this->set_min_x(curve()->get_min_x());
-      this->set_min_y(curve()->get_min_y());
-      this->set_max_x(curve()->get_max_x());
-      this->set_max_y(curve()->get_max_y());
-    }
-  }
-  else  // Just use the generic method computing bounds from vertices
-#endif
-    this->vtol_topology_object::compute_bounding_box();
-}
-
 
 // ******************************************************
 //

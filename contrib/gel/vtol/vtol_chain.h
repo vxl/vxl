@@ -1,25 +1,24 @@
+// This is gel/vtol/vtol_chain.h
 #ifndef vtol_chain_h_
 #define vtol_chain_h_
 //-----------------------------------------------------------------------------
 //:
-//  \file
+// \file
 // \brief Base class for representation of holes
 //
-//   The vtol_chain class is a base class of vtol_one_chain and vtol_two_chain.  It
-//   provides the data and methods for creating the doubly linked subhierarchy
-//   of holes in Blocks and Faces respectively.  (Warning:: this class and
-//   philosophy of holes may not be around after evaluation of the necessity
-//   for Boolean operations....pav).
+//  The vtol_chain class is a base class of vtol_one_chain and vtol_two_chain.
+//  It provides the data and methods for creating the doubly linked subhierarchy
+//  of holes in Blocks and Faces respectively.  (Warning:: this class and
+//  philosophy of holes may not be around after evaluation of the necessity
+//  for Boolean operations....pav).
 //
 // \author
 //     Patricia A. Vrobel
 //-----------------------------------------------------------------------------
-#include <vtol/vtol_chain_sptr.h>
 
+#include <vtol/vtol_chain_sptr.h>
 #include <vtol/vtol_topology_object.h>
 #include <vcl_vector.h>
-
-//class vtol_hierarchy_node;
 
 typedef vcl_vector<vtol_chain_sptr> chain_list;
 
@@ -35,7 +34,7 @@ typedef vcl_vector<vtol_chain_sptr> chain_list;
 class vtol_chain
   :public vtol_topology_object
 {
-public:
+ public:
   //***************************************************************************
   // Initialization
   //***************************************************************************
@@ -60,7 +59,8 @@ public:
   virtual const chain_list *chain_inferiors(void) const;
 
   //---------------------------------------------------------------------------
-  //: Return a pointer to the superiors (no copy)
+  //: Return a copy of the chain_superiors list
+  // The return value must be deleted by the caller
   //---------------------------------------------------------------------------
   virtual const chain_list *chain_superiors(void) const;
 
@@ -87,24 +87,24 @@ public:
   is_chain_superior(const vtol_chain &chain_superior) const;
 
   //---------------------------------------------------------------------------
-  //: Number of superiors
+  //: Return the number of superiors
   //---------------------------------------------------------------------------
-  virtual int num_chain_superiors(void) const;
+  virtual int num_chain_superiors(void) const {return chain_superiors_.size();}
 
   //---------------------------------------------------------------------------
-  //: Number of inferiors
+  //: Return the number of inferiors
   //---------------------------------------------------------------------------
-  virtual int num_chain_inferiors(void) const;
+  virtual int num_chain_inferiors(void) const {return chain_inferiors_.size();}
 
   //---------------------------------------------------------------------------
   //: Does `this' contain some sub chains ?
   //---------------------------------------------------------------------------
-  virtual bool contains_sub_chains(void) const;
+  virtual bool contains_sub_chains(void)const{return chain_inferiors_.size()>0;}
 
   //---------------------------------------------------------------------------
   //: Is `this' a sub chain ?
   //---------------------------------------------------------------------------
-  virtual bool is_sub_chain(void) const;
+  virtual bool is_sub_chain(void) const { return chain_superiors_.size()>0; }
 
   //***************************************************************************
   // Basic operations
@@ -142,66 +142,44 @@ public:
   //---------------------------------------------------------------------------
   //: Return the directions
   //---------------------------------------------------------------------------
-  virtual const vcl_vector<signed char> *directions(void) const;
+  virtual const vcl_vector<signed char> *directions(void) const { return &directions_; }
 
   //---------------------------------------------------------------------------
   //: Return the directions
   //---------------------------------------------------------------------------
-  virtual vcl_vector<signed char> *directions(void);
+  virtual vcl_vector<signed char> *directions(void) { return &directions_; }
 
   //---------------------------------------------------------------------------
   //: Return the direction `i'
   //---------------------------------------------------------------------------
-  virtual int dir(int i) const;
+  virtual int dir(int i) const { return directions_[i]; }
 
   //---------------------------------------------------------------------------
   //: Set if `this' is a connected chain
   //---------------------------------------------------------------------------
-  virtual void set_cycle(bool new_is_cycle);
+  virtual void set_cycle(bool new_is_cycle) { is_cycle_=new_is_cycle; }
 
   //---------------------------------------------------------------------------
   // Task: Reset the chain
   //---------------------------------------------------------------------------
   virtual void clear(void);
 
-private:
-  //***************************************************************************
-  // WARNING: the 2 following methods are directly called only by the superior
-  // class. It is FORBIDDEN to use them directly
-  // If you want to link and unlink superior use sup.link_chain_inferior(*this)
-  // of sup.unlink_chain_inferior(*this)
-  //***************************************************************************
-
-  //---------------------------------------------------------------------------
-  //: Link `this' with a chain superior `chain_superior'
-  //  REQUIRE: valid_chain_type(chain_superior)
-  //           and !is_chain_superior(chain_superior)
-  //---------------------------------------------------------------------------
-  virtual void link_chain_superior(vtol_chain &chain_superior);
-
-  //---------------------------------------------------------------------------
-  //: Unlink `this' with its chain superior `chain_superior'
-  //  REQUIRE: valid_chain_type(chain_superior)
-  //           and is_chain_superior(chain_superior)
-  //---------------------------------------------------------------------------
-  virtual void unlink_chain_superior(vtol_chain &chain_superior);
-
   //***************************************************************************
   // Implementation
   //***************************************************************************
-protected:
+ protected:
   //---------------------------------------------------------------------------
   // Description: array of the inferiors
   //---------------------------------------------------------------------------
-  chain_list _chain_inferiors;
+  chain_list chain_inferiors_;
 
   //---------------------------------------------------------------------------
   // Description: array of the superiors
   //---------------------------------------------------------------------------
-  vcl_list<vtol_chain_sptr> _chain_superiors;
+  vcl_list<vtol_chain*> chain_superiors_;
 
-  bool _is_cycle; // True if `this' is a connected chain
-  vcl_vector<signed char> _directions;
+  bool is_cycle_; // True if `this' is a connected chain
+  vcl_vector<signed char> directions_;
 };
 
 #endif // vtol_chain_h_

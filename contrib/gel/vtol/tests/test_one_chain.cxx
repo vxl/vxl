@@ -110,10 +110,11 @@ int main(int, char **)
 
   one_chain_list *ic_list = oc1->inferior_one_chains();
   Assert(ic_list->size()==1);
+  delete ic_list;
 
   one_chain_list *sc_list = och1->superior_one_chains();
-
   Assert(*(*(sc_list->begin()))==*oc1);
+  delete sc_list;
 
   int dir = oc1->dir(0);
 

@@ -1,3 +1,4 @@
+// This is gel/vtol/vtol_block.h
 #ifndef vtol_block_h
 #define vtol_block_h
 //-----------------------------------------------------------------------------
@@ -33,7 +34,7 @@ class vtol_two_chain;
 class vtol_block
   : public vtol_topology_object
 {
-public:
+ public:
   //***************************************************************************
   // Initialization
   //***************************************************************************
@@ -86,8 +87,8 @@ public:
   virtual vtol_two_chain *get_boundary_cycle(void)
   {
     return
-      (_inferiors.size() > 0)
-      ? (vtol_two_chain*)(_inferiors[0].ptr())
+      (inferiors_.size() > 0)
+      ? (vtol_two_chain*)(inferiors_[0].ptr())
       : 0;
   }
 
@@ -128,7 +129,8 @@ public:
   virtual face_list *outside_boundary_faces(void);
   virtual two_chain_list *outside_boundary_two_chains(void);
 
- // WARNING these methods should not be used by clients
+  // WARNING these methods should not be used by clients
+  // The returned pointers must be deleted after use.
 
   virtual vcl_vector<vtol_vertex *> *compute_vertices(void);
   virtual vcl_vector<vtol_edge *> *compute_edges(void);

@@ -157,8 +157,6 @@ class vtol_face
   //---------------------------------------------------------------------------
   virtual vtol_face *shallow_copy_with_no_links(void) const =0;
 
-  virtual void compute_bounding_box(void); //A local implementation
-
   virtual bool operator==(const vtol_face &other)const;
   inline bool operator!=(const vtol_face &other)const{return !operator==(other);}
   bool operator==(const vsol_spatial_object_2d& obj) const; // virtual of vsol_spatial_object_2d

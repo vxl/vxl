@@ -1,7 +1,7 @@
-//:
-//  \file
-
+// This is gel/vtol/vtol_face_2d.cxx
 #include "vtol_face_2d.h"
+//:
+// \file
 
 #include <vcl_cassert.h>
 #include <vtol/vtol_topology_object.h>
@@ -28,24 +28,22 @@ vtol_face_2d::vtol_face_2d(void)
 vtol_face_2d::vtol_face_2d(const vtol_face_2d &other)
   : surface_(0)
 {
-  vtol_face_2d *oldf=(vtol_face_2d *)(&other); // const violation
+  vtol_face_2d *oldf=const_cast<vtol_face_2d*>(&other); // const violation
   edge_list *edgs=oldf->edges();
   vertex_list *verts=oldf->vertices();
 
-  vcl_vector<vtol_topology_object_sptr> newedges(edgs->size());
-  vcl_vector<vtol_topology_object_sptr> newverts(verts->size());
+  topology_list newedges(edgs->size());
+  topology_list newverts(verts->size());
 
   int i=0;
-  vcl_vector<vtol_vertex_sptr>::iterator vi;
-  for (vi=verts->begin();vi!=verts->end();++vi,++i)
+  for (vertex_list::iterator vi=verts->begin();vi!=verts->end();++vi,++i)
     {
       vtol_vertex_sptr v=(*vi);
       newverts[i]=v->clone().ptr()->cast_to_topology_object();
       v->set_id(i);
     }
   int j=0;
-  vcl_vector<vtol_edge_sptr>::iterator ei;
-  for (ei=edgs->begin();ei!= edgs->end();++ei,++j)
+  for (edge_list::iterator ei=edgs->begin();ei!= edgs->end();++ei,++j)
     {
       vtol_edge_sptr e=(*ei);
 
@@ -106,8 +104,8 @@ vsol_region_2d_sptr vtol_face_2d::surface(void) const
 //: copy with an array
 
 vtol_face *
-vtol_face_2d::copy_with_arrays(vcl_vector<vtol_topology_object_sptr> &verts,
-                               vcl_vector<vtol_topology_object_sptr> &edges) const
+vtol_face_2d::copy_with_arrays(topology_list &verts,
+                               topology_list &edges) const
 {
   vtol_face_2d *newface=new vtol_face_2d();
   topology_list::const_iterator i;
@@ -247,18 +245,11 @@ vtol_face_2d::vtol_face_2d(vtol_one_chain &edgeloop)
   : surface_(0)
 {
   link_inferior(edgeloop);
-  topology_list faces;
-  faces.push_back(this);
 
-  // big todo
-  double xmin=0;
-  double ymin=0;
-  double xmax=1;
-  double ymax=1;
-
-  set_surface(new vsol_rectangle_2d(new vsol_point_2d(xmin,ymin),
-                                    new vsol_point_2d(xmax,ymin),
-                                    new vsol_point_2d(xmax,ymax)));
+  // TODO - surface is set to bounding box rectangle, which is often too large
+  set_surface(new vsol_rectangle_2d(new vsol_point_2d(get_min_x(),get_min_y()),
+                                    new vsol_point_2d(get_max_x(),get_min_y()),
+                                    new vsol_point_2d(get_max_x(),get_max_y())));
 }
 
 //: Constructor requiring only the underlying geometric surface
@@ -339,8 +330,8 @@ void vtol_face_2d::describe(vcl_ostream &strm,
   print();
   for (unsigned int i=0;i<inferiors()->size();++i)
     {
-      if ((_inferiors[i])->cast_to_one_chain()!=0)
-        (_inferiors[i])->cast_to_one_chain()->describe(strm,blanking);
+      if ((inferiors_[i])->cast_to_one_chain()!=0)
+        (inferiors_[i])->cast_to_one_chain()->describe(strm,blanking);
       else
         vcl_cout << "*** Odd inferior for a face\n";
     }
@@ -352,8 +343,8 @@ void vtol_face_2d::describe(vcl_ostream &strm,
 void vtol_face_2d::print(vcl_ostream &strm) const
 {
   strm << "<vtol_face_2d  ";
-  topology_list::const_iterator ii;
 
+  topology_list::const_iterator ii;
   for (ii=inferiors()->begin();ii!= inferiors()->end();++ii)
     strm << " " << (*ii)->inferiors()->size();
   strm << "   " << (void const *) this << '>' << vcl_endl;

@@ -1,3 +1,4 @@
+// This is gel/vtol/vtol_two_chain.h
 #ifndef vtol_two_chain_h
 #define vtol_two_chain_h
 //-----------------------------------------------------------------------------
@@ -38,7 +39,7 @@ class vtol_block;
 class vtol_two_chain
   : public vtol_chain
 {
-public:
+ public:
   //***************************************************************************
   // Initialization
   //***************************************************************************
@@ -82,8 +83,8 @@ public:
   virtual vsol_spatial_object_2d_sptr clone(void) const;
 
   virtual vtol_two_chain *
-  copy_with_arrays(vcl_vector<vtol_topology_object_sptr> &verts,
-                   vcl_vector<vtol_topology_object_sptr> &edges) const;
+  copy_with_arrays(topology_list &verts,
+                   topology_list &edges) const;
   // Accessors
 
   //---------------------------------------------------------------------------
@@ -94,7 +95,7 @@ public:
   //: get the direction of the face
   signed char direction(vtol_face const& f) const;
 
-  virtual vtol_face *face(int i) { return (vtol_face *)(_inferiors[i].ptr()); }
+  virtual vtol_face *face(int i) { return (vtol_face *)(inferiors_[i].ptr()); }
 
   //---------------------------------------------------------------------------
   //: Shallow copy with no links
@@ -153,10 +154,13 @@ public:
   virtual face_list *outside_boundary_faces(void);
   virtual two_chain_list *outside_boundary_two_chains(void);
 
+  // The returned pointers must be deleted after use.
   virtual two_chain_list *inferior_two_chains(void);
+  // The returned pointers must be deleted after use.
   virtual two_chain_list *superior_two_chains(void);
 
   // WARNING these methods should not be used by clients
+  // The returned pointers must be deleted after use.
 
   virtual vcl_vector<vtol_vertex*> *compute_vertices(void);
   virtual vcl_vector<vtol_edge*> *compute_edges(void);
@@ -185,7 +189,7 @@ public:
   virtual void describe_directions(vcl_ostream &strm=vcl_cout, int blanking=0) const;
   virtual void describe(vcl_ostream &strm=vcl_cout, int blanking=0) const;
 
-  virtual bool break_into_connected_components(vcl_vector<vtol_topology_object *> &components);
+  virtual bool break_into_connected_components(topology_list &components);
 };
 
 #endif // vtol_two_chain_h

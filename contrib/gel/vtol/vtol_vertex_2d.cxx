@@ -1,7 +1,8 @@
-//:
-//  \file
-
+// This is gel/vtol/vtol_vertex_2d.cxx
 #include "vtol_vertex_2d.h"
+//:
+// \file
+
 #include <vsol/vsol_point_2d.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_edge.h>
@@ -145,8 +146,8 @@ void vtol_vertex_2d::set_y(const double new_y)
 //: This method outputs a simple text representation of the vertex including its address in memory.
 void vtol_vertex_2d::print(vcl_ostream &strm) const
 {
-  strm<<"<vtol_vertex_2d "<<x()<<","<<y()<<","<<(void const *)this<<"> with id ";
-  strm<<get_id()<<vcl_endl;
+  strm<<"<vtol_vertex_2d "<<x()<<","<<y()<<","<<(void const *)this<<"> with id "
+      <<get_id()<<vcl_endl;
 }
 
 
@@ -184,33 +185,25 @@ vtol_edge *vtol_vertex_2d::new_edge(vtol_vertex &other)
 
   // awf: load vrml speed up by factor of 2 using this loop.
   vtol_edge *result = 0;
-  bool found;
-
-  vcl_list<vtol_topology_object_sptr>::const_iterator zp;
-  const vcl_vector<vtol_topology_object_sptr> *sups;
-  vcl_vector<vtol_topology_object_sptr>::const_iterator ep;
-  vtol_edge *e;
 
   // Scan Zero Chains
-  found=false;
-  for (zp=_superiors.begin();zp!=_superiors.end()&&!found;++zp)
+  bool found = false;
+  vcl_list<vtol_topology_object*>::const_iterator zp;
+  for (zp=superiors_.begin();zp!=superiors_.end()&&!found;++zp)
     {
       // Scan superiors of ZChain (i.e. edges)
-      // topology_list *sups=(*zp)->get_superiors();
-      sups=(*zp)->superiors();
+      const topology_list *sups=(*zp)->superiors();
+      topology_list::const_iterator ep;
       for (ep=sups->begin();ep!=sups->end()&&!found;++ep)
         {
-          e=(*ep)->cast_to_edge();
+          vtol_edge *e=(*ep)->cast_to_edge();
           if (e->v1()==&other||e->v2()==&other)
-            {
-              found=true;
-              result=e;
-            }
+            { result=e; found = true; }
         }
       delete sups;
     }
-  if (!found)
-    result= (vtol_edge*)(new vtol_edge_2d(*this,*other2d));
+  if (!result)
+    result= static_cast<vtol_edge*>(new vtol_edge_2d(*this,*other2d));
 
   return result;
 }
@@ -312,10 +305,9 @@ bool vtol_vertex_2d::compare_geometry(const vtol_vertex &other) const
 
 void vtol_vertex_2d::compute_bounding_box(void)
 {
-    if(!this->bounding_box_)
+    if (!this->bounding_box_)
     {
-      vcl_cout << "In void vtol_vertex::compute_bounding_box() - shouldn't happen"
-               << vcl_endl;
+      vcl_cout << "In void vtol_vertex::compute_bounding_box() - shouldn't happen\n";
       return;
     }
     bounding_box_->set_min_x(this->x());

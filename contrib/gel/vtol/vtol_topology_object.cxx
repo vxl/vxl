@@ -15,10 +15,10 @@
 // Default constructor
 //---------------------------------------------------------------------------
 vtol_topology_object::vtol_topology_object(void)
-  :_superiors(0),
-   _inferiors(0)
+  :superiors_(0),
+   inferiors_(0)
 {
-  inf_sup_cache= new vtol_topology_cache(this);
+  inf_sup_cache_= new vtol_topology_cache(this);
   touch();
 }
 
@@ -27,10 +27,10 @@ vtol_topology_object::vtol_topology_object(void)
 //---------------------------------------------------------------------------
 vtol_topology_object::vtol_topology_object(const int num_inferiors,
                                            const int num_superiors)
-  :_superiors(num_superiors),
-   _inferiors(num_inferiors)
+  :superiors_(num_superiors),
+   inferiors_(num_inferiors)
 {
-  inf_sup_cache=new vtol_topology_cache(this);
+  inf_sup_cache_=new vtol_topology_cache(this);
   touch();
 }
 
@@ -39,7 +39,7 @@ vtol_topology_object::vtol_topology_object(const int num_inferiors,
 //---------------------------------------------------------------------------
 vtol_topology_object::~vtol_topology_object()
 {
-  delete inf_sup_cache;
+  delete inf_sup_cache_;
 }
 
 //***************************************************************************
@@ -52,8 +52,7 @@ vtol_topology_object::~vtol_topology_object()
 bool
 vtol_topology_object::is_inferior(const vtol_topology_object &inferior) const
 {
-  vcl_vector<vtol_topology_object_sptr>::const_iterator i;
-
+  topology_list::const_iterator i;
   for (i=inferiors()->begin(); i!=inferiors()->end(); ++i)
     if ((*i).ptr()== &inferior)
       return true;
@@ -62,87 +61,32 @@ vtol_topology_object::is_inferior(const vtol_topology_object &inferior) const
 }
 
 //---------------------------------------------------------------------------
-//: Is `superior' already an superior of `this' ?
+//: Is `superior' already a superior of `this' ?
 //---------------------------------------------------------------------------
 bool
 vtol_topology_object::is_superior(const vtol_topology_object &superior) const
 {
-  vcl_list<vtol_topology_object_sptr>::const_iterator i;
-  for (i=_superiors.begin(); i!=_superiors.end(); ++i)
-    if ((*i).ptr() == &superior)
+  vcl_list<vtol_topology_object*>::const_iterator i;
+  for (i=superiors_.begin(); i!=superiors_.end(); ++i)
+    if (*i == &superior)
       return true;
 
   return false;
 }
 
 //---------------------------------------------------------------------------
-//: Number of inferiors
+//: Return the superiors list (must be deallocated after use)
 //---------------------------------------------------------------------------
-int vtol_topology_object::numinf(void) const
+const topology_list * vtol_topology_object::superiors(void) const
 {
-  return inferiors()->size();
-}
+  topology_list *result=new topology_list;
+  result->reserve(superiors_.size());
 
-//---------------------------------------------------------------------------
-//: Number of superiors
-//---------------------------------------------------------------------------
-int vtol_topology_object::numsup(void) const
-{
-  return _superiors.size();
-}
-
-//---------------------------------------------------------------------------
-//: Return the superiors list
-//---------------------------------------------------------------------------
-const vcl_vector<vtol_topology_object_sptr> *
-vtol_topology_object::superiors(void) const
-{
-  vcl_vector<vtol_topology_object_sptr> *result;
-  vcl_list<vtol_topology_object_sptr>::const_iterator i;
-
-  result=new vcl_vector<vtol_topology_object_sptr>();
-  result->reserve(_superiors.size());
-  for (i=_superiors.begin();i!=_superiors.end();++i)
+  vcl_list<vtol_topology_object*>::const_iterator i;
+  for (i=superiors_.begin();i!=superiors_.end();++i)
     result->push_back(*i);
 
-  // check
-  assert(_superiors.size()==result->size());
-
   return result;
-}
-
-//---------------------------------------------------------------------------
-//: Return the inferiors list
-//---------------------------------------------------------------------------
-vcl_vector<vtol_topology_object_sptr> *
-vtol_topology_object::inferiors(void)
-{
-  return &_inferiors;
-}
-
-const vcl_vector<vtol_topology_object_sptr> *
-vtol_topology_object::inferiors(void) const
-{
-  return &_inferiors;
-}
-
-//---------------------------------------------------------------------------
-// Name: spatial_type
-// Name: Return the spatial type
-//---------------------------------------------------------------------------
-vtol_topology_object::vsol_spatial_object_2d_type
-vtol_topology_object::spatial_type(void) const
-{
-  return TOPOLOGYOBJECT;
-}
-
-//---------------------------------------------------------------------------
-//: Return the topology type
-//---------------------------------------------------------------------------
-vtol_topology_object::vtol_topology_object_type
-vtol_topology_object::topology_type(void) const
-{
-  return TOPOLOGY_NO_TYPE;
 }
 
 //***************************************************************************
@@ -158,17 +102,14 @@ void vtol_topology_object::link_inferior(vtol_topology_object &inferior)
   // require
   assert(valid_inferior_type(inferior));
 
-  // Is this true?
-  if ( is_inferior ( inferior ) ) { return; }
+  // Do nothing if already an inferior
+  if ( is_inferior (inferior) )  return;
 
   assert(!is_inferior(inferior));
+  assert(!inferior.is_superior(*this));
 
-  inferiors()->push_back(&inferior);
-
-  ref();
-  inferior.link_superior(*this);
-
-  --ref_count;
+  inferiors_.push_back(&inferior);
+  inferior.superiors_.push_back(this);
   touch();
 }
 
@@ -180,33 +121,33 @@ void vtol_topology_object::unlink_inferior(vtol_topology_object &inferior)
 {
   // require
   assert(valid_inferior_type(inferior));
-
-  // Is this true?
-  if ( !is_inferior ( inferior ) ) { return; }
-
   assert(is_inferior(inferior));
+  assert(inferior.is_superior(*this));
 
-  vcl_vector<vtol_topology_object_sptr>::iterator i;
+  vcl_list<vtol_topology_object*>::iterator i=inferior.superiors_.begin();
+  while ( i!=inferior.superiors_.end() && *i!=this ) ++i;
+  // check presence in "superiors_" list of inferior:
+  assert(*i==this);
 
-  // for (i=inferiors()->begin();(i!=inferiors()->end())&&(*(*i)!=inferior); ++i);
-  for (i=inferiors()->begin();(i!=inferiors()->end())&& ((*i).ptr()!=&inferior); ++i);
-    ;
-  inferior.unlink_superior(*this);
-  inferiors()->erase(i);
+  inferior.superiors_.erase(i); // unlink this from superiors_ list of inferior
+
+  topology_list::iterator j=inferiors_.begin();
+  while ( j!=inferiors_.end() && (*j).ptr()!=&inferior) ++j;
+  // check presence in "inferiors_" list:
+  assert((*j).ptr()==&inferior);
+
+  inferiors()->erase(j);
   touch();
 }
 
 //---------------------------------------------------------------------------
-//: Unlink `this' with all its inferiors
+//: Unlink `this' from all its inferiors
 //---------------------------------------------------------------------------
 void vtol_topology_object::unlink_all_inferiors(void)
 {
-  while (inferiors()->size()>0)
-    {
-      (*inferiors()->begin())->unlink_superior(*this);
-      inferiors()->erase(inferiors()->begin());
-    }
-  touch();
+  // remove superior-inferior link, running through inferiors list back-to-front
+  while (inferiors_.size()>0)
+    unlink_inferior(*(inferiors_.back()));
 }
 
 //---------------------------------------------------------------------------
@@ -214,66 +155,17 @@ void vtol_topology_object::unlink_all_inferiors(void)
 //---------------------------------------------------------------------------
 void vtol_topology_object::unlink(void)
 {
-  while (_superiors.size()>0)
-    (*_superiors.begin())->unlink_inferior(*this);
+  while (superiors_.size()>0)
+    (*superiors_.begin())->unlink_inferior(*this);
   unlink_all_inferiors();
 }
-
-//***************************************************************************
-// WARNING: the 2 following methods are directly called only by the superior
-// class. It is FORBIDDEN to use them directly
-// If you want to link and unlink superior use sup.link_inferior(*this)
-// of sup.unlink_inferior(*this)
-//***************************************************************************
-
-//---------------------------------------------------------------------------
-//: Link `this' with a superior `superior'
-// Require: valid_superior_type(superior) and !is_superior(superior)
-//---------------------------------------------------------------------------
-void vtol_topology_object::link_superior(vtol_topology_object &superior)
-{
-  // require
-  assert(valid_superior_type(superior));
-  assert(!is_superior(superior));
-  vcl_list<vtol_topology_object_sptr>::iterator i;
-
-  _superiors.push_back(&superior);
-  i=_superiors.end();
-  --i;
-//(*i).unprotect();
-  touch();
-}
-
-//---------------------------------------------------------------------------
-//: Unlink `this' with its superior `superior'
-// Require: valid_superior_type(superior) and is_superior(superior)
-//---------------------------------------------------------------------------
-void vtol_topology_object::unlink_superior(vtol_topology_object &superior)
-{
-  // require
-  assert(valid_superior_type(superior));
-  assert(is_superior(superior));
-
-  vcl_list<vtol_topology_object_sptr>::iterator i;
-
-  // for (i=_superiors.begin();(i!=_superiors.end())&&(*(*i)!=superior); ++i)
-  for (i=_superiors.begin();(i!=_superiors.end())&&
-        ((*i).ptr()!=&superior); ++i)
-   ;
-  // check
-  assert(*(*i)==superior);
-
-  _superiors.erase(i); // unlink
-  touch();
-}
-
 
 //: get list of vertices
 
 vertex_list* vtol_topology_object::vertices(void)
 {
   vertex_list* new_list=new vertex_list;
-  inf_sup_cache->vertices(*new_list);
+  inf_sup_cache_->vertices(*new_list);
   return new_list;
 }
 
@@ -281,22 +173,21 @@ vertex_list* vtol_topology_object::vertices(void)
 
 void vtol_topology_object::vertices(vertex_list& verts)
 {
-  inf_sup_cache->vertices(verts);
+  inf_sup_cache_->vertices(verts);
 }
 
 //: get list of zero_chains
 zero_chain_list* vtol_topology_object::zero_chains(void)
 {
   zero_chain_list* new_list=new zero_chain_list;
-  inf_sup_cache->zero_chains(*new_list);
+  inf_sup_cache_->zero_chains(*new_list);
   return new_list;
 }
-
 
 //: get list of zero chains
 void vtol_topology_object::zero_chains(zero_chain_list &zerochains)
 {
-  inf_sup_cache->zero_chains(zerochains);
+  inf_sup_cache_->zero_chains(zerochains);
 }
 
 //: get list of edges
@@ -304,7 +195,7 @@ void vtol_topology_object::zero_chains(zero_chain_list &zerochains)
 edge_list* vtol_topology_object::edges(void)
 {
   edge_list* new_list=new edge_list;
-  inf_sup_cache->edges(*new_list);
+  inf_sup_cache_->edges(*new_list);
   return new_list;
 }
 
@@ -312,7 +203,7 @@ edge_list* vtol_topology_object::edges(void)
 
 void vtol_topology_object::edges(edge_list &edges)
 {
-  inf_sup_cache->edges(edges);
+  inf_sup_cache_->edges(edges);
 }
 
 //: get list of one chains
@@ -320,7 +211,7 @@ void vtol_topology_object::edges(edge_list &edges)
 one_chain_list* vtol_topology_object::one_chains(void)
 {
   one_chain_list* new_list=new one_chain_list;
-  inf_sup_cache->one_chains(*new_list);
+  inf_sup_cache_->one_chains(*new_list);
   return new_list;
 }
 
@@ -328,7 +219,7 @@ one_chain_list* vtol_topology_object::one_chains(void)
 
 void vtol_topology_object::one_chains(one_chain_list &onechains)
 {
-  inf_sup_cache->one_chains(onechains);
+  inf_sup_cache_->one_chains(onechains);
 }
 
 //: get list of faces
@@ -336,7 +227,7 @@ void vtol_topology_object::one_chains(one_chain_list &onechains)
 face_list *vtol_topology_object::faces(void)
 {
   face_list *new_list=new face_list;
-  inf_sup_cache->faces(*new_list);
+  inf_sup_cache_->faces(*new_list);
   return new_list;
 }
 
@@ -344,7 +235,7 @@ face_list *vtol_topology_object::faces(void)
 
 void vtol_topology_object::faces(face_list &face_list)
 {
-  inf_sup_cache->faces(face_list);
+  inf_sup_cache_->faces(face_list);
 }
 
 //: get list of two chains
@@ -352,7 +243,7 @@ void vtol_topology_object::faces(face_list &face_list)
 two_chain_list *vtol_topology_object::two_chains(void)
 {
   two_chain_list *new_list=new two_chain_list;
-  inf_sup_cache->two_chains(*new_list);
+  inf_sup_cache_->two_chains(*new_list);
   return new_list;
 }
 
@@ -360,27 +251,24 @@ two_chain_list *vtol_topology_object::two_chains(void)
 
 void vtol_topology_object::two_chains(two_chain_list &new_list)
 {
-  inf_sup_cache->two_chains(new_list);
+  inf_sup_cache_->two_chains(new_list);
 }
-
 
 //: get list of blocks
 
 block_list *vtol_topology_object::blocks(void)
 {
   block_list *new_list=new block_list;
-  inf_sup_cache->blocks(*new_list);
+  inf_sup_cache_->blocks(*new_list);
   return new_list;
 }
-
 
 //: get list of blocks
 
 void vtol_topology_object::blocks(block_list &new_list)
 {
-  inf_sup_cache->blocks(new_list);
+  inf_sup_cache_->blocks(new_list);
 }
-
 
 //: print the object
 void vtol_topology_object::print(vcl_ostream &strm) const
@@ -391,41 +279,44 @@ void vtol_topology_object::print(vcl_ostream &strm) const
 }
 
 void vtol_topology_object::describe_inferiors(vcl_ostream &strm,
-                                                 int blanking) const
+                                              int blanking) const
 {
-  vcl_vector<vtol_topology_object_sptr>::const_iterator i;
-
   for (int n=0; n<blanking; ++n) strm << ' ';
   if (inferiors()->size()==0)
     strm<<"**INFERIORS:  Empty\n";
   else
     strm<<"**INFERIORS:\n";
 
-  for (i=inferiors()->begin();i!=inferiors()->end();++i) {
+  topology_list::const_iterator i;
+  for (i=inferiors()->begin();i!=inferiors()->end();++i)
+  {
     for (int n=0; n<blanking; ++n) strm << ' ';
     (*i)->print();
   }
 }
 
 void vtol_topology_object::describe_superiors(vcl_ostream &strm,
-                                                 int blanking) const
+                                              int blanking) const
 {
-  vcl_list<vtol_topology_object_sptr>::const_iterator i;
-
   for (int n=0; n<blanking; ++n) strm << ' ';
-  if (_superiors.size()==0)
+  if (superiors_.size()==0)
+  {
     strm<<"**SUPERIORS:  Empty\n";
+    return;
+  }
   else
     strm<<"**SUPERIORS:\n";
 
-  for (i=_superiors.begin();i!= _superiors.end();++i) {
+  vcl_list<vtol_topology_object*>::const_iterator i;
+  for (i=superiors_.begin();i!= superiors_.end();++i)
+  {
     for (int n=0; n<blanking; ++n) strm << ' ';
     (*i)->print();
   }
 }
 
 void vtol_topology_object::describe(vcl_ostream &strm,
-                                       int blanking) const
+                                    int blanking) const
 {
   describe_inferiors(strm,blanking);
   describe_superiors(strm,blanking);
@@ -515,7 +406,7 @@ void vtol_topology_object::compute_bounding_box()
              << " shouldn't happen\n";
     return;
   }
-  vcl_vector<vtol_vertex_sptr> *verts= this->vertices();
+  vertex_list *verts= this->vertices();
   if (!verts->size())
   {
     vcl_cout << "In void vtol_topology_object::compute_bounding_box() -"
@@ -523,8 +414,7 @@ void vtol_topology_object::compute_bounding_box()
     return;
   }
   this->bounding_box_->reset_bounds();
-  for (vcl_vector<vtol_vertex_sptr>::iterator vit = verts->begin();
-       vit != verts->end(); vit++)
+  for (vertex_list::iterator vit = verts->begin(); vit != verts->end(); vit++)
     this->bounding_box_->grow_minmax_bounds(*(*vit)->get_bounding_box());
   delete verts;
 }

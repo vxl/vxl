@@ -190,9 +190,6 @@ public:
 
   virtual vtol_vertex_sptr other_endpoint(const vtol_vertex &) const;
 
-
-  virtual void compute_bounding_box(void); // A local implementation
-
   virtual void print(vcl_ostream &strm=vcl_cout) const;
   virtual void describe(vcl_ostream &strm=vcl_cout,
                         int blanking=0) const;
