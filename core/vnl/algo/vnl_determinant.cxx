@@ -43,7 +43,7 @@ T vnl_determinant(vnl_matrix<T> const &M) {
 // it can be called whatever it likes.
 #define VNL_ALGO_DETERMINANT_INSTANTIATE(T) \
 template T vnl_determinant(T const * const *, unsigned); \
-template T vnl_determinant(vnl_matrix<T > const &);
+template T vnl_determinant(vnl_matrix<T > const &)
 
 #include <vcl_complex.h>
 
