@@ -160,6 +160,9 @@ SOURCE=.\test_symmetric_eigensystem.cxx
 SOURCE=.\test_cholesky.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_integral.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_algo.cxx
 # End Source File
 # End Group

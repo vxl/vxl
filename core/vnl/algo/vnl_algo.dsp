@@ -267,6 +267,12 @@ SOURCE=.\vnl_sparse_symmetric_eigensystem.cxx
 SOURCE=.\vnl_symmetric_eigensystem.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vnl_adaptsimpson_integral.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_simpson_integral.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vnl_svd_economy+double-.cxx
 # End Source File
 # Begin Source File
@@ -427,6 +433,12 @@ SOURCE=.\vnl_svd_economy.txx
 # End Source File
 # Begin Source File
 SOURCE=.\vnl_svd_economy.h
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_adaptsimpson_integral.h
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_simpson_integral.h
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
