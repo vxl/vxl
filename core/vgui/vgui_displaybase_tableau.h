@@ -96,9 +96,9 @@ class vgui_displaybase_tableau : public vgui_tableau
   bool highlight(unsigned id) { highlighted = id; return true; }
 
   // add soview
-  void add(vgui_soview*);
-  void remove(vgui_soview*);
-  void clear();
+  virtual void add(vgui_soview*);
+  virtual void remove(vgui_soview*);
+  virtual void clear();
 
   // grouping
   void set_current_grouping(vcl_string name) { current_grouping = name; }
