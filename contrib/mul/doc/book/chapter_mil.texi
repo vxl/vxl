@@ -166,3 +166,19 @@ To perform a deep copy of an image use the deepCopy() function:
 
 This creates a new data block on the heap and copies the appropriate bits
 of old_image into it.
+
+
+The following will create a sub-image which is a view of a region of the original
+image.
+@smallexample
+  mil_image_2d_of<vil_byte> full_image(100,100);
+
+  mil_image_2d_of<vil_byte> window;
+  window.setToWindow(full_image,5,10,  8,32);
+@end smallexample
+
+Note that if we save the two images to the same file with vsl_b_write(), then load them
+with vsl_b_read(), this relationship will be retained.  That's due to
+the awesome power of the serialisation in the binary IO code, and the
+use of mbl_smart_ptr (thanks to Ian Scott for that).
+
