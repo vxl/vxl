@@ -34,6 +34,14 @@ bool vnl_symmetric_eigensystem_compute(vnl_matrix<double> const & A,
   A.assert_finite();
 
   int n = A.rows();
+
+// The fortran code does not like it if V or D are
+// undersized. I expect they probably should not be
+// oversized either. - IMS
+  assert(V.rows() == n);
+  assert(V.cols() == n);
+  assert(D.size() == n);
+
   vnl_vector<double> work1(n);
   vnl_vector<double> work2(n);
   vnl_vector<double> Vvec(n*n);
