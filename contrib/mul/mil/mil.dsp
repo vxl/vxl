@@ -120,9 +120,6 @@ SOURCE=.\Templates/vbl_smart_ptr+mil_image_data+short--.cxx
 SOURCE=.\Templates/mil_image_data+short-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/mil_gaussian_pyramid_builder+vil1_byte-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/mil_gaussian_pyramid_builder_2d+float-.cxx
 # End Source File
 # Begin Source File
