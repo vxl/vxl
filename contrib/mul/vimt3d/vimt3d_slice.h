@@ -35,7 +35,7 @@ inline vimt_image_2d_of<T> vimt3d_slice_ji(const vimt3d_image_3d_of<T> &im, unsi
 
   // Get the appropriate transform details
   vimt_transform_2d trans2;
-  trans2.set_zoom_only(trans3.matrix()(1,1),trans3.matrix()(0,0),0,0);
+  trans2.set_zoom_only(trans3.matrix()(1,1),trans3.matrix()(0,0),trans3.matrix()(1,3),trans3.matrix()(0,3));
 
   return vimt_image_2d_of<T>(imview,trans2);
 }
@@ -59,7 +59,7 @@ inline vimt_image_2d_of<T> vimt3d_slice_ij(const vimt3d_image_3d_of<T> &im, unsi
 
   // Get the appropriate transform details
   vimt_transform_2d trans2;
-  trans2.set_zoom_only(trans3.matrix()(0,0),trans3.matrix()(1,1),0,0);
+  trans2.set_zoom_only(trans3.matrix()(0,0),trans3.matrix()(1,1),trans3.matrix()(0,3),trans3.matrix()(1,3));
 
   return vimt_image_2d_of<T>(imview,trans2);
 }
@@ -83,7 +83,7 @@ inline vimt_image_2d_of<T> vimt3d_slice_jk(const vimt3d_image_3d_of<T> &im, unsi
 
   // Get the appropriate transform details
   vimt_transform_2d trans2;
-  trans2.set_zoom_only(trans3.matrix()(1,1),trans3.matrix()(2,2),0,0);
+  trans2.set_zoom_only(trans3.matrix()(1,1),trans3.matrix()(2,2),trans3.matrix()(1,3),trans3.matrix()(2,3));
 
   return vimt_image_2d_of<T>(imview,trans2);
 }
@@ -100,14 +100,14 @@ inline vimt_image_2d_of<T> vimt3d_slice_kj(const vimt3d_image_3d_of<T> &im, unsi
 
   // Get the 2d view
   vil_image_view<T> imview = vil3d_slice_kj(im.image(),i);
-
+ 
   // Check the transform
   vimt3d_transform_3d trans3 = im.world2im();
     assert(trans3.is_identity() || trans3.form()==vimt3d_transform_3d::ZoomOnly);
 
   // Get the appropriate transform details
   vimt_transform_2d trans2;
-  trans2.set_zoom_only(trans3.matrix()(2,2),trans3.matrix()(1,1),0,0);
+  trans2.set_zoom_only(trans3.matrix()(2,2),trans3.matrix()(1,1),trans3.matrix()(2,3),trans3.matrix()(1,3));
 
   return vimt_image_2d_of<T>(imview,trans2);
 }
@@ -131,7 +131,7 @@ inline vimt_image_2d_of<T> vimt3d_slice_ki(const vimt3d_image_3d_of<T> &im, unsi
 
   // Get the appropriate transform details
   vimt_transform_2d trans2;
-  trans2.set_zoom_only(trans3.matrix()(2,2),trans3.matrix()(0,0),0,0);
+  trans2.set_zoom_only(trans3.matrix()(2,2),trans3.matrix()(0,0),trans3.matrix()(2,3),trans3.matrix()(0,3));
 
   return vimt_image_2d_of<T>(imview,trans2);
 }
@@ -142,7 +142,7 @@ inline vimt_image_2d_of<T> vimt3d_slice_ki(const vimt3d_image_3d_of<T> &im, unsi
 // \relates vil_image_view
 template<class T>
 inline vimt_image_2d_of<T> vimt3d_slice_ik(const vimt3d_image_3d_of<T> &im, unsigned j)
-{
+{ 
   // Check the slice is in range
   assert(j<im.image().nj());
 
@@ -155,7 +155,7 @@ inline vimt_image_2d_of<T> vimt3d_slice_ik(const vimt3d_image_3d_of<T> &im, unsi
 
   // Get the appropriate transform details
   vimt_transform_2d trans2;
-  trans2.set_zoom_only(trans3.matrix()(0,0),trans3.matrix()(2,2),0,0);
+  trans2.set_zoom_only(trans3.matrix()(0,0),trans3.matrix()(2,2),trans3.matrix()(0,3),trans3.matrix()(2,3));
 
   return vimt_image_2d_of<T>(imview,trans2);
 }
