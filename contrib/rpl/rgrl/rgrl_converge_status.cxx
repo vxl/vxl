@@ -6,6 +6,19 @@
 #include "rgrl_converge_status.h"
 
 #include <vcl_cassert.h>
+
+
+rgrl_converge_status::
+rgrl_converge_status( )
+  : conv_( conv_on_going ),
+    status_( status_on_going ),
+    error_( -1.0 ),
+    oscillation_count_( 0 ),
+    error_diff_( -1.0 )
+{
+  
+}  
+
  
 rgrl_converge_status::
 rgrl_converge_status( bool     in_has_converged,
@@ -27,8 +40,12 @@ rgrl_converge_status( bool     in_has_converged,
   if( in_has_stagnated )
     conv_ = stagnated;
 
+  // for backward compatibility
+  // Good enough means the algorithm can quit.
+  // Hence, should be good_and_terminate
+  //
   if( in_is_good_enough )
-    status_ = good_enough;
+    status_ = good_and_terminate;
 
   if( in_is_failed )
     status_ = failed;
@@ -62,7 +79,7 @@ bool
 rgrl_converge_status::
 is_good_enough() const
 {
-  return status_ == good_enough;
+  return status_ == good_enough || status_ == good_and_terminate;
 }
 
 bool
@@ -105,6 +122,13 @@ rgrl_converge_status::
 set_current_status( status_type s )
 {
   status_ = s;
+}
+
+void
+rgrl_converge_status::
+set_objective_value( double obj )
+{
+  error_ = obj;
 }
 
 double

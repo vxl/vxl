@@ -20,6 +20,10 @@ class rgrl_converge_status
   : public rgrl_object
 {
 public:
+
+  //: default ctor
+  rgrl_converge_status( );
+  
   //:
   rgrl_converge_status( bool     has_converged,
                         bool     has_stagnated,
@@ -67,6 +71,9 @@ public:
   
   //: set current coverage
   void set_current_status( status_type s );
+  
+  //: set objective value
+  void set_objective_value( double obj );
   
   //: Current value of the objective function
   //
