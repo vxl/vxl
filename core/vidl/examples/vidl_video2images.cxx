@@ -115,8 +115,9 @@ static const char * help_text[] = {
 "",
 "  -pid STRING",
 "",
-"    Specify the video PID.  The default is 0x0000.  Note that this",
-"    looks like a hex format value but is passed as a string.",
+"    Specify the video PID.  The default is 0x0000.  If you have to guess,",
+"    another value to try is 0x1023.  Note that this looks like an integer",
+"    in hex format but is passed as a string.",
 "",
 0
 };
