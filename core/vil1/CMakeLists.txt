@@ -69,6 +69,7 @@ SOURCE_FILES( vil_sources
   # Operations
   vil_image_as.cxx vil_image_as.h
   vil_new.cxx vil_new.h
+  vil_open.cxx vil_open.h
   vil_load.cxx vil_load.h
   vil_save.cxx vil_save.h
   vil_copy.cxx vil_copy.h

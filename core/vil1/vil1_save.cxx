@@ -12,7 +12,7 @@
 #include <vcl_iostream.h>
 
 #include <vil/vil_new.h>
-#include <vil/vil_stream_fstream.h>
+#include <vil/vil_open.h>
 #include <vil/vil_image.h>
 #include <vil/vil_copy.h>
 #include <vil/vil_property.h>
@@ -25,7 +25,7 @@
 //: Send vil_image to disk.
 bool vil_save(vil_image i, char const* filename, char const* file_format)
 {
-  vil_stream_fstream* os = new vil_stream_fstream(filename, "w");
+  vil_stream* os = vil_open(filename, "w");
   if (!os->ok()) {
     vcl_cerr << __FILE__ ": Invalid stream for \"" << filename << "\"" << vcl_endl;
     return false;
@@ -47,7 +47,7 @@ bool vil_save(vil_image i, char const* filename, char const* file_format)
 //: Send vil_image to disk; preserve byte order.
 bool vil_save_raw(vil_image const& i, char const* filename, char const* file_format)
 {
-  vil_stream_fstream* os = new vil_stream_fstream(filename, "w");
+  vil_stream* os = vil_open(filename, "w");
   return vil_save_raw(i, os, file_format);
 }
 
@@ -68,8 +68,8 @@ bool vil_save_raw(vil_image const& i, vil_stream* os, char const* file_format)
   return true;
 }
 
-//: save to file, deducing format from filename.
-bool vil_save(vil_image const& i, char const* filename)
+static
+char const *guess_file_format(char const* filename)
 {
   char const *file_format = 0;
 
@@ -102,7 +102,13 @@ bool vil_save(vil_image const& i, char const* filename)
     }
   }
 
-  return vil_save(i, filename, file_format);
+  return file_format;
+}
+
+//: save to file, deducing format from filename.
+bool vil_save(vil_image const& i, char const* filename)
+{
+  return vil_save(i, filename, guess_file_format(filename));
 }
 
 // What's the point of these *_template functions? Why not just put
