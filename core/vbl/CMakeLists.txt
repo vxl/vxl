@@ -11,8 +11,6 @@ SOURCE_FILES( vbl_sources
   vbl_shared_pointer.cxx
   vbl_bit_array_2d.cxx
   vbl_bit_array_3d.cxx
-  vbl_triple.txx
-  vbl_test.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates vbl_sources)
