@@ -2,12 +2,11 @@
 #ifndef vil2_convolve_2d_h_
 #define vil2_convolve_2d_h_
 //:
-//  \file
-//  \brief 2D Convolution
-//  \author Tim Cootes
+// \file
+// \brief 2D Convolution
+// \author Tim Cootes
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
 #include <vil2/vil2_flip.h>
 #include <vil2/algo/vil2_correlate_2d.h>
 
