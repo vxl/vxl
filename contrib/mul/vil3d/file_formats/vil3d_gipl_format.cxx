@@ -38,42 +38,35 @@ const unsigned GIPL_MAGIC = 719555000;
 #define GIPL_C_DOUBLE     193
 
 
+#if VXL_LITTLE_ENDIAN
 inline void swap16_for_big_endian(char *a, unsigned n)
 {
-#if VXL_LITTLE_ENDIAN
-  char c;
   for (unsigned i = 0; i < n * 2; i += 2)
   {
-    c = a[i]; a[i] = a[i+1]; a[i+1] = c;
+    char c = a[i]; a[i] = a[i+1]; a[i+1] = c;
   }
-#endif //VXL_LITTLE_ENDIAN
 }
 
 inline void swap32_for_big_endian(char *a, unsigned n)
 {
-#if VXL_LITTLE_ENDIAN
-  char c;
   for (unsigned i = 0; i < n * 4; i += 4)
   {
-    c = a[i];   a[i] =   a[i+3]; a[i+3] = c;
-    c = a[i+1]; a[i+1] = a[i+2]; a[i+2] = c;
+    char c = a[i];   a[i] =   a[i+3]; a[i+3] = c;
+         c = a[i+1]; a[i+1] = a[i+2]; a[i+2] = c;
   }
-#endif //VXL_LITTLE_ENDIAN
 }
 
 inline void swap64_for_big_endian(char *a, unsigned n)
 {
-#if VXL_LITTLE_ENDIAN
-  char c;
   for (unsigned i = 0; i < n * 8; i += 8)
   {
-    c = a[i];   a[i]   = a[i+7]; a[i+7] = c;
-    c = a[i+1]; a[i+1] = a[i+6]; a[i+6] = c;
-    c = a[i+2]; a[i+2] = a[i+5]; a[i+5] = c;
-    c = a[i+3]; a[i+3] = a[i+4]; a[i+4] = c;
+    char c = a[i];   a[i]   = a[i+7]; a[i+7] = c;
+         c = a[i+1]; a[i+1] = a[i+6]; a[i+6] = c;
+         c = a[i+2]; a[i+2] = a[i+5]; a[i+5] = c;
+         c = a[i+3]; a[i+3] = a[i+4]; a[i+4] = c;
   }
-#endif //VXL_LITTLE_ENDIAN
 }
+#endif //VXL_LITTLE_ENDIAN
 
 
 vil3d_gipl_format::vil3d_gipl_format() {}
@@ -197,23 +190,21 @@ vil3d_image_view_base_sptr vil3d_gipl_image::get_copy_view(
 {
   if (i0+ni > this->ni() || j0+nj > this->nj() || k0+nk > this->nk()) return 0;
 
-#define macro( type ) \
+#define macro(type) \
   vil3d_image_view< type > im = \
     vil3d_new_image_view_plane_k_j_i(ni, nj, nk, 1, type()); \
   for (unsigned k=0; k<nk; ++k) \
   { \
     if (ni == this->ni()) \
     { \
-      is_->seek(GIPL_HEADERSIZE + ((k+k0)*this->nj()*ni + \
-        j0*ni) * sizeof( type )); \
-      is_->read(&im(0,0,k), nj*ni * sizeof( type )); \
+      is_->seek(GIPL_HEADERSIZE + ((k+k0)*this->nj()*ni + j0*ni) * sizeof(type)); \
+      is_->read(&im(0,0,k), nj*ni * sizeof(type)); \
     } \
     else \
       for (unsigned j=0; j<nj; ++j) \
       { \
-        is_->seek(GIPL_HEADERSIZE + ((k+k0)*this->nj()*this->ni() + \
-          (j+j0)*this->ni() + i0) * sizeof( type )); \
-        is_->read(&im(0,j,k), ni * sizeof( type )); \
+        is_->seek(GIPL_HEADERSIZE + ((k+k0)*this->nj()*this->ni() + (j+j0)*this->ni() + i0) * sizeof(type)); \
+        is_->read(&im(0,j,k), ni * sizeof(type)); \
       } \
   }
 
@@ -222,54 +213,60 @@ vil3d_image_view_base_sptr vil3d_gipl_image::get_copy_view(
   {
     case VIL_PIXEL_FORMAT_SBYTE:
     {
-      macro( vxl_sbyte );
+      macro(vxl_sbyte);
       return new vil3d_image_view<vxl_sbyte>(im);
     }
     case VIL_PIXEL_FORMAT_BYTE:
     {
-      macro( vxl_byte );
+      macro(vxl_byte);
       return new vil3d_image_view<vxl_byte>(im);
     }
     case VIL_PIXEL_FORMAT_INT_16:
     {
-      macro( vxl_int_16 );
-      swap16_for_big_endian((char *)(im.origin_ptr()),
-        ni*nj*nk);
+      macro(vxl_int_16);
+#if VXL_LITTLE_ENDIAN
+      swap16_for_big_endian((char *)(im.origin_ptr()), ni*nj*nk);
+#endif //VXL_LITTLE_ENDIAN
       return new vil3d_image_view<vxl_int_16>(im);
     }
     case VIL_PIXEL_FORMAT_UINT_16:
     {
-      macro( vxl_uint_16 );
-      swap16_for_big_endian((char *)(im.origin_ptr()),
-        ni*nj*nk);
+      macro(vxl_uint_16);
+#if VXL_LITTLE_ENDIAN
+      swap16_for_big_endian((char *)(im.origin_ptr()), ni*nj*nk);
+#endif //VXL_LITTLE_ENDIAN
       return new vil3d_image_view<vxl_uint_16>(im);
     }
     case VIL_PIXEL_FORMAT_UINT_32:
     {
-      macro( vxl_uint_32 );
-      swap32_for_big_endian((char *)(im.origin_ptr()),
-        ni*nj*nk);
+      macro(vxl_uint_32);
+#if VXL_LITTLE_ENDIAN
+      swap32_for_big_endian((char *)(im.origin_ptr()), ni*nj*nk);
+#endif //VXL_LITTLE_ENDIAN
       return new vil3d_image_view<vxl_uint_32>(im);
     }
     case VIL_PIXEL_FORMAT_INT_32:
     {
-      macro( vxl_int_32 );
-      swap32_for_big_endian((char *)(im.origin_ptr()),
-        ni*nj*nk);
+      macro(vxl_int_32);
+#if VXL_LITTLE_ENDIAN
+      swap32_for_big_endian((char *)(im.origin_ptr()), ni*nj*nk);
+#endif //VXL_LITTLE_ENDIAN
       return new vil3d_image_view<vxl_int_32>(im);
     }
     case VIL_PIXEL_FORMAT_FLOAT:
     {
-      macro( float );
-      swap32_for_big_endian((char *)(im.origin_ptr()),
-        ni*nj*nk);
+      macro(float);
+#if VXL_LITTLE_ENDIAN
+      swap32_for_big_endian((char *)(im.origin_ptr()), ni*nj*nk);
+#endif //VXL_LITTLE_ENDIAN
       return new vil3d_image_view<float>(im);
     }
     case VIL_PIXEL_FORMAT_DOUBLE:
     {
-      macro( double );
-      swap64_for_big_endian((char *)(im.origin_ptr()),
-        ni*nj*nk);
+      macro(double);
+#if VXL_LITTLE_ENDIAN
+      swap64_for_big_endian((char *)(im.origin_ptr()), ni*nj*nk);
+#endif //VXL_LITTLE_ENDIAN
       return new vil3d_image_view<double>(im);
     }
     case VIL_PIXEL_FORMAT_BOOL:
