@@ -1,7 +1,7 @@
 #include <testlib/testlib_test.h>
 
-#include <vbl/vbl_bounding_box.h>
 #include <vbl/vbl_triple.h>
+#include <vbl/vbl_bounding_box.h>
 #include <vbl/vbl_quadruple.h>
 #include <vbl/vbl_qsort.h>
 
