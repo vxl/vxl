@@ -9,49 +9,6 @@
 #include <vcl_iostream.h>
 #include <vcl_sstream.h>
 
-//------------------------------------------------------------------------
-// Constructors
-//
-
-sdet_watershed_region_proc_params::
-sdet_watershed_region_proc_params(const sdet_watershed_region_proc_params& wrpp)
-{
-  InitParams((brip_watershed_params)wrpp.wp_,
-             wrpp.verbose_,
-             wrpp.debug_,
-             wrpp.min_area_,
-             wrpp.merge_tol_,
-             wrpp.merge_priority_
-             );
-}
-
-sdet_watershed_region_proc_params::
-sdet_watershed_region_proc_params(const brip_watershed_params& wp,
-                                  bool verbose,
-                                  bool debug,
-                                  int min_area,
-                                  float merge_tol,
-                                  int merge_priority
-                                  )
-{
-  InitParams(wp, verbose, debug, min_area, merge_tol, merge_priority);
-}
-
-void sdet_watershed_region_proc_params::InitParams(const brip_watershed_params& wp,
-                                                   bool verbose,
-                                                   bool debug,
-                                                   int min_area,
-                                                   float merge_tol,
-                                                   int merge_priority)
-{
-  min_area_ = min_area;
-  merge_tol_ = merge_tol;
-  merge_priority_ = merge_priority;
-  debug_ = debug;
-  verbose_ = verbose;
-  wp_ = wp;
-}
-
 //-----------------------------------------------------------------------------
 //
 //:   Checks that parameters are within acceptable bounds
@@ -63,11 +20,11 @@ bool sdet_watershed_region_proc_params::SanityCheck()
   vcl_stringstream msg;
   bool valid = true;
 
-  if(min_area_<2)
-    {
-      msg << "ERROR: don't use a label array resolution factor less than 2x";
-      valid = false;
-    }
+  if (min_area_<2)
+  {
+    msg << "ERROR: don't use a label array resolution factor less than 2x\n";
+    valid = false;
+  }
 
   valid = valid && wp_.SanityCheck();
   msg << wp_.GetErrorMsg() << vcl_ends;
@@ -76,16 +33,14 @@ bool sdet_watershed_region_proc_params::SanityCheck()
   return valid;
 }
 
-vcl_ostream& operator << (vcl_ostream& os, const sdet_watershed_region_proc_params& wrpp)
+vcl_ostream& operator << (vcl_ostream& os, const sdet_watershed_region_proc_params& p)
 {
-  os << "sdet_watershed_region_proc_params:" << vcl_endl << "[---" << vcl_endl;
-  os << wrpp.wp_ << vcl_endl
-     << "  ---" << vcl_endl;
-  os << "debug " << wrpp.debug_ << vcl_endl;
-  os << "verbose " << wrpp.verbose_ << vcl_endl;
-  os << "min region area " << wrpp.min_area_ << vcl_endl;
-  os << "region merge tol " << wrpp.merge_tol_ << vcl_endl;
-  os << "merge priority " << wrpp.merge_priority_ << vcl_endl;
-  os << "---]" << vcl_endl;
-  return os;
+  return
+  os << "sdet_watershed_region_proc_params:\n[---\n" << p.wp_
+     << "\n  ---\ndebug " << p.debug_
+     << "\nverbose " << p.verbose_
+     << "\nmin region area " << p.min_area_
+     << "\nregion merge tol " << p.merge_tol_
+     << "\nmerge priority " << p.merge_priority_
+     << "\n---]\n";
 }

@@ -21,21 +21,24 @@ class sdet_watershed_region_proc_params : public gevd_param_mixin
                       bool debug = false,
                       int min_area = 5,
                       float merge_tol = 40,
-                      int merge_priority = 0);
+                      int merge_priority = 0)
+  : min_area_(min_area), merge_tol_(merge_tol), merge_priority_(merge_priority),
+    debug_(debug), verbose_(verbose), wp_(wp) {}
 
-  sdet_watershed_region_proc_params(sdet_watershed_region_proc_params const& old_params);
+  sdet_watershed_region_proc_params(sdet_watershed_region_proc_params const& p)
+  : gevd_param_mixin(), min_area_(p.min_area_), merge_tol_(p.merge_tol_),
+    merge_priority_(p.merge_priority_), debug_(p.debug_), verbose_(p.verbose_),
+    wp_(p.wp_) {}
+
  ~sdet_watershed_region_proc_params() {}
 
   bool SanityCheck();
-  friend
-    vcl_ostream& operator<<(vcl_ostream& os, const sdet_watershed_region_proc_params& rpp);
  protected:
-  void InitParams(const brip_watershed_params& wp,
-                  bool verbose,
-                  bool debug,
-                  int min_area,
-                  float merge_tol,
-                  int merge_priority);
+  void InitParams(brip_watershed_params const& wp, bool verbose,
+                  bool debug, int min_area, float merge_tol, int merge_priority)
+  { min_area_ = min_area; merge_tol_ = merge_tol; merge_priority_ =
+    merge_priority; debug_ = debug; verbose_ = verbose; wp_ = wp; }
+
  public:
   //
   // Parameter blocks and parameters
@@ -45,7 +48,9 @@ class sdet_watershed_region_proc_params : public gevd_param_mixin
   int merge_priority_;    //!< order for region merge
   bool debug_;            //!< Carry out debug processing
   bool verbose_;          //!< Print detailed output
-  brip_watershed_params wp_;  //!< parameters associated with step and fold detection
+  brip_watershed_params wp_; //!< params associated with step and fold detection
 };
+
+vcl_ostream& operator<<(vcl_ostream&, sdet_watershed_region_proc_params const&);
 
 #endif // sdet_watershed_region_proc_params_h_
