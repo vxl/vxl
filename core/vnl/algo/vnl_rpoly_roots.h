@@ -10,14 +10,14 @@
 //  \author  Andrew W. Fitzgibbon, Oxford RRG, 06 Aug 96
 //
 //  Modifications
-//  23 may 97, Peter Vanroose - "NO_COMPLEX" option added 
+//  23 may 97, Peter Vanroose - "NO_COMPLEX" option added
 //  (until "complex" type is standardised)
 //  dac (Manchester) 28/03/2001: tidied up documentation
 
 #include <vcl_complex.h>
 #include <vnl/vnl_vector.h>
 
-//: Find the roots of a real polynomial.  
+//: Find the roots of a real polynomial.
 //  Uses algorithm 493 from
 //  ACM Trans. Math. Software - the Jenkins-Traub algorithm, described
 //  by Numerical Recipes under "Other sure-fire techniques" as
@@ -26,7 +26,6 @@
 //
 //  This class is not very const-correct as it is intended as a compute object
 //  rather than a data object.
-
 
 
 class vnl_real_polynomial;
@@ -47,7 +46,7 @@ public:
   // Operations----------------------------------------------------------------
 
 //: Return i'th complex root
-  vcl_complex<double> operator [] (int i) 
+  vcl_complex<double> operator [] (int i)
         const { return vcl_complex<double>(r_[i], i_[i]); }
 
 //: Complex vector of all roots.
@@ -64,7 +63,7 @@ public:
 
 //: Vector of imaginary parts of roots
   vnl_vector<double>& imag() { return i_; }
-  
+
 //: Return real roots only.  Roots are real if the absolute value
 // of their imaginary part is less than the optional argument TOL.
 // TOL defaults to 1e-12 [untested]
@@ -74,16 +73,12 @@ public:
 
   //: Compute roots using Jenkins-Traub algorithm.
   bool compute();
-  
+
   //: Compute roots using QR decomposition of companion matrix. [unimplemented]
   bool compute_qr();
-  
+
   //: Compute roots using Laguerre algorithm. [unimplemented]
   bool compute_laguerre();
-  
-  // Data Access---------------------------------------------------------------
-
-  // Data Control--------------------------------------------------------------
 
 protected:
   // Data Members--------------------------------------------------------------
@@ -91,11 +86,8 @@ protected:
 
   vnl_vector<double> r_;
   vnl_vector<double> i_;
-  
+
   int num_roots_found_;
-  
-private:
-  // Helpers-------------------------------------------------------------------
 };
 
 #endif // vnl_rpoly_roots_h_
