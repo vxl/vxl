@@ -1,4 +1,4 @@
-#include <vtol/vtol_edge_2d_sptr.h>
+#include <vtol/vtol_edge_2d.h>
 #include <vcl_vector.txx>
 
 VCL_VECTOR_INSTANTIATE(vtol_edge_2d_sptr);
