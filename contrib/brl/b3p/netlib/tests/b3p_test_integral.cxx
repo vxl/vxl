@@ -21,9 +21,18 @@ int main(int argc, char* argv[])
   int n = 100;
 
   simpru_(&f, &a, &b, &n, &res);
-  printf("simpson integration of x/(1+x^2) from 0 to 1 is %f \n", res);
+  printf("simpson integral of x/(1+x^2) from 0 to 1 (%d grids) is %lf \n", n, res);
 
   trapru_(&f, &a, &b, &n, &res);
-  printf("trapezod integration of x/(1+x^2) from 0 to 1 is %f \n", res);
+  printf("trapezod integral of x/(1+x^2) from 0 to 1 (%d grids) is %lf \n", n, res);
+
+
+  double rvec[11];
+  float rmat[1111];
+  float tol = 1e-13;
+  float errbound;
+  int stat;
+  adaptquad_(&f, &a, &b, &tol, rmat, &res, &errbound, &n, &stat );
+  printf("adapted simpson integral of x/(1+x^2) from 0 to 1 (%d grids)  is %lf \n", n,  res);
   return 0;
 }

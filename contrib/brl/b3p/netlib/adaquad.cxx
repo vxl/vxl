@@ -18,7 +18,7 @@ extern "C" {
 /*     Section 7.4, Adaptive Quadrature, Page 389 */
 
 /*     add missing variable F in Refine subrutine. */
-/* Subroutine */ int adaptquad_(U_fp f, real *a, real *b, real *tol, real *
+/* Subroutine */ int adaptquad_(E_fp f, real *a, real *b, real *tol, real *
 	srmat, real *integral, real *errbdd, integer *m, integer *state)
 {
     /* System generated locals */
