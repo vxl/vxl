@@ -253,7 +253,7 @@ static int ludcmp(vnl_rnpoly_solve_cmplx a[M][M], int n, int indx[M])
     for (vnl_rnpoly_solve_cmplx *aptr=&a[i][0]; aptr<endptr; ++aptr)
       if ((temp=aptr->norm()) > big) big = temp;
     if (big == 0.0) return 1;
-    vv[i]=1.0/sqrt(big);}
+    vv[i]=1.0/vcl_sqrt(big);}
 
   // This is the loop over columns of Crout's method
   for (int j=0;j<n;++j) {
@@ -360,7 +360,10 @@ static int linnr(int len,vnl_rnpoly_solve_cmplx dhx[M][M], vnl_rnpoly_solve_cmpl
 
 
 /* -----------------------  XNORM  -------------------- */
-/* -- Finds the unit normal of a vcl_vector v		*/
+/* -- Finds the unit normal of a vector v		*/
+#ifdef VCL_SUNPRO_CC_50
+using std::fabs; // FIXME
+#endif
 static double xnorm(int n, vnl_rnpoly_solve_cmplx v[])
 {
   double txnorm=0.0;
@@ -369,7 +372,7 @@ static double xnorm(int n, vnl_rnpoly_solve_cmplx v[])
 }
 
 /* ---------------------- PREDICT ---------------------	*/
-/* -- Predict new x vcl_vector using Taylor's Expansion.	*/
+/* -- Predict new x vector using Taylor's Expansion.	*/
 static void predict(int len, int ideg[M], vnl_rnpoly_solve_cmplx pdg[M], vnl_rnpoly_solve_cmplx qdg[M],
 		    double step, double& t, vnl_rnpoly_solve_cmplx x[M], int polyn[M][T][M],
 		    double coeff[M][T], int terms[M], int max_deg)
@@ -391,7 +394,7 @@ static void predict(int len, int ideg[M], vnl_rnpoly_solve_cmplx pdg[M], vnl_rnp
   // Call the function that solves a complex system of equations
   if (linnr(len,dhx,rhs,dz) == 1) return;
 
-  // Find the unit normal of a vcl_vector and normalize our step
+  // Find the unit normal of a vector and normalize our step
   factor = step/(1+xnorm(len,dz));
   if (factor>maxdt) factor = maxdt;
 
@@ -558,7 +561,7 @@ static void strptr(int n,int icount[M],int ideg[M], vnl_rnpoly_solve_cmplx r[M],
 
   for (int j=0;j<n;j++) {
     double angle = twopi / ideg[j] * icount[j];
-    x[j] = r[j] * vnl_rnpoly_solve_cmplx (cos(angle), sin(angle));
+    x[j] = r[j] * vnl_rnpoly_solve_cmplx (vcl_cos(angle), vcl_sin(angle));
   }
 }
 
