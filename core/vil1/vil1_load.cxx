@@ -48,7 +48,9 @@ vil1_image vil1_load_raw(char const* filename)
   vil1_stream *is = vil1_open(filename, "r");
   if (is) {
     vil1_image im = vil1_load_raw(is);
-    // this will delete the stream object.
+    // this will delete the stream object in case the loader has failed;
+    // otherwise the specific image file format will have ref()ed "is"
+    // in which case this does not harm.
     is->ref(); is->unref();
     return im;
   }
