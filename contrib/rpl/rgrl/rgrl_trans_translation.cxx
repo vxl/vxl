@@ -126,6 +126,15 @@ inv_map( const vnl_vector<double>& to,
   from = to - trans_ + from_centre_;
 }
 
+rgrl_transformation_sptr 
+rgrl_trans_translation::
+inverse_transform( ) const
+{
+  vnl_matrix<double> dummy_covar(covar_.rows(), covar_.cols(), 0.0);
+  return new rgrl_trans_translation( -t(), dummy_covar );
+}
+
+
 vnl_matrix<double>
 rgrl_trans_translation::
 jacobian(  vnl_vector<double> const& /*from_loc*/ ) const

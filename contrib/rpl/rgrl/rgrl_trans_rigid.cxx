@@ -236,6 +236,14 @@ inv_map( const vnl_vector<double>& to,
   from = svd.inverse()*to - svd.inverse()*trans_;
 }
 
+rgrl_transformation_sptr 
+rgrl_trans_rigid::
+inverse_transform( ) const
+{
+  vnl_matrix<double> invR = R().transpose();
+  return new rgrl_trans_rigid( invR, -invR * t() );
+}
+
 rgrl_transformation_sptr
 rgrl_trans_rigid::
 scale_by( double scale ) const

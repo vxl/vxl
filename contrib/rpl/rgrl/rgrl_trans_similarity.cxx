@@ -162,6 +162,16 @@ inv_map( const vnl_vector<double>& to,
   from = svd.inverse()*to - svd.inverse()*trans_ + from_centre_;
 }
 
+rgrl_transformation_sptr 
+rgrl_trans_similarity::
+inverse_transform( ) const
+{
+  vnl_svd<double> svd( A() );
+  vnl_matrix<double> invA = svd.inverse();
+  return new rgrl_trans_similarity( invA, -invA * t() );
+}
+
+
 vnl_matrix<double>
 rgrl_trans_similarity::
 jacobian( vnl_vector<double> const& /*from_loc*/ ) const

@@ -233,6 +233,15 @@ inv_map( const vnl_vector<double>& /*to*/,
   assert ( ! "rgrl_transformation::inv_map() is not defined" );
 }
 
+rgrl_transformation_sptr 
+rgrl_transformation::
+inverse_transform( ) const
+{
+  assert ( ! "rgrl_transformation::inverse_transform() is not defined" );
+  return 0;
+}
+
+
 rgrl_transformation_sptr
 rgrl_transformation::
 scale_by( double /*scale*/ ) const

@@ -60,6 +60,13 @@ class rgrl_trans_translation
   void inv_map( const vnl_vector<double>& to,
                 vnl_vector<double>& from ) const;
 
+  //: is this an invertible transformation?
+  virtual bool is_invertible() const { return true; }
+  
+  //: Return an inverse transformation
+  //  This function only exist for certain transformations.
+  virtual rgrl_transformation_sptr inverse_transform() const;
+
   //: Return the jacobian of the transform
   vnl_matrix<double> jacobian( vnl_vector<double> const & from_loc ) const;
 
