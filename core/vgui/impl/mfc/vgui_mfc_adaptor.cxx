@@ -71,6 +71,10 @@ vgui_mfc_adaptor::~vgui_mfc_adaptor()
   // Delete the DC
   if ( m_pDC )
     delete m_pDC;
+
+  if (ovl_helper)
+    delete ovl_helper;
+  ovl_helper = 0;
 }
 
 BEGIN_MESSAGE_MAP(vgui_mfc_adaptor, CView)
@@ -97,8 +101,10 @@ END_MESSAGE_MAP()
 
 //: MFC implementation of vgui_adaptor function - redraws overlay buffer.
 void vgui_mfc_adaptor::post_overlay_redraw()
-{
-  redraw_posted = true;
+{ 
+  if (!ovl_helper)
+    ovl_helper = new vgui_overlay_helper(this);
+  ovl_helper->post_overlay_redraw();
 }
 
 //: MFC implementation of vgui_adaptor function - redraws rendering area.
@@ -340,10 +346,13 @@ void vgui_mfc_adaptor::service_redraws()
 {
   if (redraw_posted)
   {
-    if (use_double_buffering)
-      glDrawBuffer(GL_BACK);
+//    if (use_double_buffering)
+//      glDrawBuffer(GL_BACK);
 
-    dispatch_to_tableau(vgui_event(vgui_DRAW));
+    if (ovl_helper)
+      ovl_helper->dispatch(vgui_event(vgui_DRAW));
+    else
+      dispatch_to_tableau(vgui_event(vgui_DRAW));
 
     if (!use_double_buffering)
     {
@@ -582,7 +591,10 @@ void vgui_mfc_adaptor::domouse(vgui_event_type et, UINT nFlags, CPoint point, vg
     delete popup;
   }
 
-  dispatch_to_tableau(e);
+  if (ovl_helper)
+    ovl_helper->dispatch(e);
+  else
+    dispatch_to_tableau(e);
 
   // Grab mouse?
   {
@@ -642,3 +654,4 @@ BOOL vgui_mfc_adaptor::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
   //vcl_cerr << "Mouse wheel events are not handled\n";
   return FALSE;
 }
+

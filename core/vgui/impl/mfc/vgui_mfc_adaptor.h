@@ -25,6 +25,10 @@
 //                            our adaptor is in.  If you don't call
 //                            setup_adaptor it is assumed to be the main
 //                            window.
+//   07-07-2003  M.R.Johnson - Disabled MFC acceleration by default so that new
+//                             overlay code will work (which requires double 
+//                             buffering). Overlays necessary to enable new
+//                             highlighting mechanism in vgui tableaux.
 // \endverbatim
 
 #if _MSC_VER > 1000
