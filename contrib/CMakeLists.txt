@@ -21,6 +21,10 @@ IF( EXISTS ${vxl_SOURCE_DIR}/contrib/oul/CMakeLists.txt )
   OPTION(BUILD_OUL "Build the Otago University library package?" YES)
 ENDIF( EXISTS ${vxl_SOURCE_DIR}/contrib/oul/CMakeLists.txt )
 
+IF( EXISTS ${vxl_SOURCE_DIR}/contrib/prip/CMakeLists.txt )
+  OPTION(BUILD_PRIP "Build the T.U.Wien library package?" YES)
+ENDIF( EXISTS ${vxl_SOURCE_DIR}/contrib/prip/CMakeLists.txt )
+
 IF( EXISTS ${vxl_SOURCE_DIR}/contrib/oxl/CMakeLists.txt )
   OPTION(BUILD_OXL "Build the Oxford University library package?" YES)
 ENDIF( EXISTS ${vxl_SOURCE_DIR}/contrib/oxl/CMakeLists.txt )
@@ -61,6 +65,10 @@ ENDIF(BUILD_GEL)
 IF(BUILD_BRL)
   SUBDIRS(brl)
 ENDIF(BUILD_BRL)
+
+IF(BUILD_PRIP)
+  SUBDIRS(prip)
+ENDIF(BUILD_PRIP)
 
 IF(BUILD_CONVERSIONS)
   SUBDIRS(conversions)
