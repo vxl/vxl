@@ -13,7 +13,7 @@
 //   L. Guichard
 // .SECTION Modifications:
 //--------------------------------------------------------------------------------
-#include <gkll/kl/klt.h>
+#include <vgel/kl/klt.h>
 
 class gkll_kl_params {
 

@@ -10,7 +10,7 @@
 //   L. Guichard
 // .SECTION Modifications:
 //--------------------------------------------------------------------------------
-#include <gkll/kl/klt_CC.h>
+#include <vgel/kl/klt_CC.h>
 #include <gkll/gkll_kl_params.h>
 #include <vtol/vtol_vertex_2d_sptr.h>
 #include <vil/vil_image.h>
