@@ -125,7 +125,7 @@ compute_float_table(const Type min, const Type max, const float gamma,
     return null;
   vbl_array_1d<float> fmap(size_, 0);
   unsigned maxt = (unsigned)vil_pixel_traits<Type>::maxval();
-  for (int i = 0; i <= maxt; i++)
+  for (unsigned int i = 0; i <= maxt; ++i)
   {
     Type arg = (Type)i;//eliminate warnings
     fmap[i] = map_pixel_float(arg, min, max, gamma, ratio);
