@@ -12,6 +12,7 @@ TESTS += test_sprintf.cxx
 TESTS += test_url.cxx
 TESTS += test_temp_filename.cxx
 TESTS += test_regexp.cxx
+TESTS += test_string.cxx
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk
