@@ -171,6 +171,9 @@ SOURCE=.\Templates/vil_median+byte-.cxx
 SOURCE=.\Templates/vil_median+float-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vil_median+int-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vil_sobel_3x3+double.double-.cxx
 # End Source File
 # Begin Source File

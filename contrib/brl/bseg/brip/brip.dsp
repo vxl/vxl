@@ -99,7 +99,10 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx;c"
 # Begin Source File
-SOURCE=.\brip_float_ops.cxx
+SOURCE=.\brip_vil1_float_ops.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\brip_vil_float_ops.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/brip_histogram+double-.cxx
@@ -117,9 +120,6 @@ SOURCE=.\Templates/brip_mutual_info+vxl_byte-.cxx
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
-SOURCE=.\brip_float_ops.h
-# End Source File
-# Begin Source File
 SOURCE=.\brip_vil_ops.h
 # End Source File
 # Begin Source File
@@ -133,6 +133,12 @@ SOURCE=.\brip_mutual_info.h
 # End Source File
 # Begin Source File
 SOURCE=.\brip_mutual_info.txx
+# End Source File
+# Begin Source File
+SOURCE=.\brip_vil1_float_ops.h
+# End Source File
+# Begin Source File
+SOURCE=.\brip_vil_float_ops.h
 # End Source File
 # End Group
 # End Target
