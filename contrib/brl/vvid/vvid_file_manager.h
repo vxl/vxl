@@ -27,7 +27,7 @@
 #include <vgui/vgui_window.h>
 #include <vidl_vil1/vidl_vil1_movie_sptr.h>
 #include <vvid/vvid_frame_trail.h>
-class vil1_image;
+#include <vil1/vil1_image.h>
 
 //: A singleton manager class for playing videos.
 // A vector of images with
