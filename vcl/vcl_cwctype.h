@@ -12,8 +12,9 @@
 #ifdef VCL_SGI_CC_720
 # include <wctype.h>
 #elif defined(hpux)
-// someone: HP does not have /usr/include/wctype.h
+// PVr: HP does not have /usr/include/wctype.h
 // fsm: but the compiler might supply <cwctype>?
+// PVr: but that file probably just #includes wctype.h?
 # include <wchar.h>
 #else
 # include "iso/vcl_cwctype.h"
