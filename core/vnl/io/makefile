@@ -31,5 +31,5 @@ include ${IUEROOT}/config/top-rules.mk
 ######################################
 
 ifeq ($(COMPILER),gcc)
-FLAGS_Templates/vsl_vector_io+vcl_vector+vcl_vector+vnl_vector+double----.cxx := -ftemplate-depth-25
+FLAGS_Templates/vsl_vector_io+vcl_vector+vcl_vector+vnl_vector+double----.cxx := -ftemplate-depth-35
 endif
