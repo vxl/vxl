@@ -409,8 +409,7 @@ vnl_vector<T> vnl_vector<T>::operator* (const vnl_matrix<T>&m) const {
   // template vnl_matrix<double > outer_product (const vnl_vector<double >&,const vnl_vector<dou
 
   if (num_elmts != m.rows())			// dimensions do not match?
-    vnl_error_vector_dimension ("operator*", 
-		       num_elmts, m.rows());
+    vnl_error_vector_dimension ("operator*", num_elmts, m.rows());
   vnl_vector<T> result(m.columns());	// Temporary
   vnl_matrix<T>& mm = (vnl_matrix<T>&) m;	// Drop const for get()
   for (unsigned i = 0; i < m.columns(); i++) {	// For each index
@@ -427,10 +426,9 @@ vnl_vector<T> vnl_vector<T>::operator* (const vnl_matrix<T>&m) const {
 
 template<class T> 
 vnl_vector<T>& vnl_vector<T>::update (vnl_vector<T> const& v, unsigned start) {
- unsigned end = start + v.num_elmts;
+ unsigned end = start + v.size();
   if (this->num_elmts < end)
-    vnl_error_vector_dimension ("update", 
-			   end-start, v.num_elmts);
+    vnl_error_vector_dimension ("update", end-start, v.size());
   for (unsigned i = start; i < end; i++)
     this->data[i] = v.data[i-start];
   return *this;
@@ -443,8 +441,7 @@ template<class T>
 vnl_vector<T> vnl_vector<T>::extract (unsigned len, unsigned start) const {
   unsigned end = start + len;
   if (this->num_elmts < end)
-    vnl_error_vector_dimension ("extract", 
-			   end-start, len);
+    vnl_error_vector_dimension ("extract", end-start, len);
   vnl_vector<T> result(len);
   for (unsigned i = 0; i < len; i++)
     result.data[i] = data[start+i];
@@ -455,12 +452,11 @@ vnl_vector<T> vnl_vector<T>::extract (unsigned len, unsigned start) const {
 
 template<class T> 
 vnl_vector<T> element_product (vnl_vector<T> const& v1, vnl_vector<T> const& v2) {
-  if (v1.num_elmts != v2.num_elmts)		// Size?
-    vnl_error_vector_dimension ("element_product", 
-			v1.num_elmts, v2.num_elmts);
-  vnl_vector<T> result(v1.num_elmts);
-  for (unsigned i = 0; i < v1.num_elmts; i++)
-    result.data[i] = v1.data[i] * v2.data[i];
+  if (v1.size() != v2.size())
+    vnl_error_vector_dimension ("element_product", v1.size(), v2.size());
+  vnl_vector<T> result(v1.size());
+  for (unsigned i = 0; i < v1.size(); i++)
+    result.data_block()[i] = v1.data_block()[i] * v2.data_block()[i];
   return result;				 
 }
 
@@ -468,11 +464,11 @@ vnl_vector<T> element_product (vnl_vector<T> const& v1, vnl_vector<T> const& v2)
 
 template<class T>
 vnl_vector<T> element_quotient (vnl_vector<T> const& v1, vnl_vector<T> const& v2) {
-  if (v1.num_elmts != v2.num_elmts)		// Size?
+  if (v1.size() != v2.size())
     vnl_error_vector_dimension ("element_quotient", 
-			v1.num_elmts, v2.num_elmts);
-  vnl_vector<T> result(v1.num_elmts);
-  for (unsigned i = 0; i < v1.num_elmts; i++)
+			v1.size(), v2.size());
+  vnl_vector<T> result(v1.size());
+  for (unsigned i = 0; i < v1.size(); i++)
     result.data[i] = v1.data[i] / v2.data[i];
   return result;				 
 }
@@ -480,7 +476,7 @@ vnl_vector<T> element_quotient (vnl_vector<T> const& v1, vnl_vector<T> const& v2
 //:
 template <class T>
 vnl_vector<T> vnl_vector<T>::apply(T (*f)(T const&)) const {
-  vnl_vector<T> ret(num_elmts);
+  vnl_vector<T> ret(size());
   vnl_c_vector<T>::apply(this->data, num_elmts, f, ret.data);
   return ret;
 }
@@ -497,9 +493,9 @@ vnl_vector<T> vnl_vector<T>::apply(T (*f)(T)) const {
 
 template<class T> 
 T dot_product (vnl_vector<T> const& v1, vnl_vector<T> const& v2) {
-  if (v1.num_elmts != v2.num_elmts)		// Size?
+  if (v1.size() != v2.size())
     vnl_error_vector_dimension ("dot_product", 
-				v1.num_elmts, v2.num_elmts);
+				v1.size(), v2.size());
   return vnl_c_vector<T>::dot_product(v1.begin(),
 				      v2.begin(),
 				      v1.size());
@@ -509,9 +505,9 @@ T dot_product (vnl_vector<T> const& v1, vnl_vector<T> const& v2) {
 
 template<class T> 
 T inner_product (vnl_vector<T> const& v1, vnl_vector<T> const& v2) {
-  if (v1.num_elmts != v2.num_elmts)		// Size?
+  if (v1.size() != v2.size())
     vnl_error_vector_dimension ("inner_product", 
-				v1.num_elmts, v2.num_elmts);
+				v1.size(), v2.size());
   return vnl_c_vector<T>::inner_product(v1.begin(),
 					v2.begin(),
 					v1.size());
@@ -549,9 +545,8 @@ vnl_matrix<T> outer_product (vnl_vector<T> const& v1,
 
 template<class T> 
 T cross_2d (vnl_vector<T> const& v1, vnl_vector<T> const& v2) {
-  if (v1.num_elmts < 2 || v2.num_elmts < 2)
-    vnl_error_vector_dimension ("cross_2d", 
-			v1.num_elmts, v2.num_elmts);
+  if (v1.size() < 2 || v2.size() < 2)
+    vnl_error_vector_dimension ("cross_2d", v1.size(), v2.size());
 
   return (v1.data[0] * v2.data[1]
 	  -					
@@ -562,10 +557,9 @@ T cross_2d (vnl_vector<T> const& v1, vnl_vector<T> const& v2) {
 
 template<class T>
 vnl_vector<T> cross_3d (vnl_vector<T> const& v1, vnl_vector<T> const& v2) {
-  if (v1.num_elmts != 3 || v2.num_elmts != 3)
-    vnl_error_vector_dimension ("cross_3d", 
-			v1.num_elmts, v2.num_elmts);
-  vnl_vector<T> result(v1.num_elmts);
+  if (v1.size() != 3 || v2.size() != 3)
+    vnl_error_vector_dimension ("cross_3d", v1.size(), v2.size());
+  vnl_vector<T> result(v1.size());
   
   vnl_vector<T>& vv1 = *((vnl_vector<T>*) &v1);
   vnl_vector<T>& vv2 = *((vnl_vector<T>*) &v2);
@@ -643,9 +637,9 @@ bool vnl_vector<T>::operator_eq (vnl_vector<T> const& rhs) const {
   if (this == &rhs)                               // same object => equal.
     return true;
 
-  if (this->num_elmts != rhs.num_elmts)	          // Size different ?
+  if (this->size() != rhs.size())	          // Size different ?
     return false;				  // Then not equal.
-  for (unsigned i = 0; i < num_elmts; i++)   // For each index
+  for (unsigned i = 0; i < size(); i++)		  // For each index
     if (this->data[i] != rhs.data[i])             // Element different ?
       return false;				  // Then not equal.
   
