@@ -13,7 +13,7 @@
 struct vgl_region_scan_iterator
 {
   vgl_region_scan_iterator() { }
-  virtual ~vgl_region_scan_iterator() { }
+  virtual ~vgl_region_scan_iterator();
 
   virtual void reset() =0;
   virtual bool next() =0;
