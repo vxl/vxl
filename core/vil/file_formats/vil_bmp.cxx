@@ -335,19 +335,19 @@ vil2_image_view_base_sptr vil2_bmp_image::get_copy_view(
   if (nx == ni())
   {
     is_->seek(bit_map_start + have_bytes_per_raster*y0);
-    is_->read(static_cast<vxl_byte *>(buf->data()), want_bytes_per_raster *ny);
+    is_->read(reinterpret_cast<vxl_byte *>(buf->data()), want_bytes_per_raster *ny);
   }
   else
   {
     for (unsigned i=0; i<ny; ++i)
     {
       is_->seek(bit_map_start + have_bytes_per_raster*(i+y0) + x0*bytes_per_pixel);
-      is_->read(static_cast<vxl_byte *>(buf->data()) + want_bytes_per_raster*i, want_bytes_per_raster);
+      is_->read(reinterpret_cast<vxl_byte *>(buf->data()) + want_bytes_per_raster*i, want_bytes_per_raster);
     }
   }
 
   return new vil2_image_view<vxl_byte>(buf,
-    static_cast<vxl_byte *>(buf->data())+(ny-1)*have_bytes_per_raster + nplanes()-1,
+    reinterpret_cast<vxl_byte *>(buf->data())+(ny-1)*have_bytes_per_raster + nplanes()-1,
     nx, ny, nplanes(),
     nplanes(), -have_bytes_per_raster, -1);
 }

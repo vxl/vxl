@@ -181,18 +181,18 @@ struct vil2_png_structures {
       return ok = problem("couldn't allocate space for image");
 
     unsigned long linesize;
-    if (png_get_bit_depth( png_ptr, info_ptr ) == 16)
+    if (png_get_bit_depth(png_ptr, info_ptr) == 16)
       linesize = 2 * info_ptr->width;
     else
       linesize = info_ptr->width;
 
-    if (png_get_color_type( png_ptr, info_ptr ) == PNG_COLOR_TYPE_GRAY_ALPHA)
+    if (png_get_color_type(png_ptr, info_ptr) == PNG_COLOR_TYPE_GRAY_ALPHA)
       linesize *= 2;
     else
-      if (png_get_color_type( png_ptr, info_ptr ) == PNG_COLOR_TYPE_RGB)
+      if (png_get_color_type(png_ptr, info_ptr) == PNG_COLOR_TYPE_RGB)
         linesize *= 3;
       else
-        if (png_get_color_type( png_ptr, info_ptr ) == PNG_COLOR_TYPE_RGB_ALPHA)
+        if (png_get_color_type(png_ptr, info_ptr) == PNG_COLOR_TYPE_RGB_ALPHA)
           linesize *= 4;
 
     unsigned int height = png_get_image_height(png_ptr,info_ptr);
@@ -321,7 +321,7 @@ bool vil2_png_image::read_header()
   png_set_sig_bytes (p_->png_ptr, SIG_CHECK_SIZE);
   png_read_info (p_->png_ptr, p_->info_ptr);
 
-  if (png_get_bit_depth( p_->png_ptr, p_->info_ptr ) < 8)
+  if (png_get_bit_depth(p_->png_ptr, p_->info_ptr) < 8)
     png_set_packing (p_->png_ptr);
 
 #if 0
@@ -334,20 +334,20 @@ bool vil2_png_image::read_header()
 
 #if VXL_LITTLE_ENDIAN
   // PNG stores data MSB
-  if ( png_get_bit_depth( p_->png_ptr, p_->info_ptr ) > 8 )
-    png_set_swap( p_->png_ptr );
+  if ( png_get_bit_depth(p_->png_ptr, p_->info_ptr) > 8 )
+    png_set_swap(p_->png_ptr);
 #endif
 
-  this->width_ = png_get_image_width( p_->png_ptr, p_->info_ptr );
-  this->height_ = png_get_image_height( p_->png_ptr, p_->info_ptr );
-  this->components_ = png_get_channels( p_->png_ptr, p_->info_ptr );
-  this->bits_per_component_ = png_get_bit_depth( p_->png_ptr, p_->info_ptr );
+  this->width_ = png_get_image_width(p_->png_ptr, p_->info_ptr);
+  this->height_ = png_get_image_height(p_->png_ptr, p_->info_ptr);
+  this->components_ = png_get_channels(p_->png_ptr, p_->info_ptr);
+  this->bits_per_component_ = png_get_bit_depth(p_->png_ptr, p_->info_ptr);
 
   if (this->bits_per_component_ == 1) format_ = VIL2_PIXEL_FORMAT_BOOL;
   else if (this->bits_per_component_ <=8) format_=VIL2_PIXEL_FORMAT_BYTE;
   else format_ = VIL2_PIXEL_FORMAT_UINT_16;
 
-  if (png_get_valid( p_->png_ptr, p_->info_ptr, PNG_INFO_sBIT )) problem("LAZY AWF! PNG_INFO_sBIT");
+  if (png_get_valid(p_->png_ptr, p_->info_ptr, PNG_INFO_sBIT)) problem("LAZY AWF! PNG_INFO_sBIT");
 
   // if (p->info_ptr->valid & PNG_INFO_bKGD) problem("LAZY AWF! PNG_INFO_bKGD");
   png_setjmp_off();
@@ -379,7 +379,7 @@ bool vil2_png_image::write_header()
 #if VXL_LITTLE_ENDIAN
   // PNG stores data MSB
   if ( bits_per_component_ > 8 )
-    png_set_swap( p_->png_ptr );
+    png_set_swap(p_->png_ptr);
 #endif
 
   // Make memory image
@@ -415,8 +415,8 @@ vil2_image_view_base_sptr vil2_png_image::get_copy_view(unsigned x0,
   {
     assert(x0 == 0);
 
-    vcl_memcpy(static_cast<char*>(chunk->data()), rows[y0], ny * bytes_per_row_dst);
-    return new vil2_image_view<vxl_uint_16>(chunk, static_cast<vxl_uint_16*>(chunk->data()),
+    vcl_memcpy(reinterpret_cast<char*>(chunk->data()), rows[y0], ny * bytes_per_row_dst);
+    return new vil2_image_view<vxl_uint_16>(chunk, reinterpret_cast<vxl_uint_16*>(chunk->data()),
       nx, ny, nplanes(), nplanes(), nplanes()*nx, 1);
   }
   if ((bit_depth ==8) &&
@@ -424,24 +424,24 @@ vil2_image_view_base_sptr vil2_png_image::get_copy_view(unsigned x0,
   {
     assert(x0 == 0);
 
-    vcl_memcpy(static_cast<char*>(chunk->data()), rows[y0], ny * bytes_per_row_dst);
-    return new vil2_image_view<vxl_byte>(chunk, static_cast<vxl_byte*>(chunk->data()),
+    vcl_memcpy(reinterpret_cast<char*>(chunk->data()), rows[y0], ny * bytes_per_row_dst);
+    return new vil2_image_view<vxl_byte>(chunk, reinterpret_cast<vxl_byte*>(chunk->data()),
       nx, ny, nplanes(), nplanes(), nplanes()*nx, 1);
   }
   else if (bit_depth==16)
   {
-    png_byte* dst = static_cast<png_byte*>(chunk->data());
+    png_byte* dst = reinterpret_cast<png_byte*>(chunk->data());
     for (unsigned y = 0; y < ny; ++y, dst += bytes_per_row_dst)
       vcl_memcpy(dst, &rows[y0+y][x0*bytes_per_pixel], nx*bytes_per_pixel);
-    return new vil2_image_view<vxl_uint_16>(chunk, static_cast<vxl_uint_16*>(chunk->data()),
+    return new vil2_image_view<vxl_uint_16>(chunk, reinterpret_cast<vxl_uint_16*>(chunk->data()),
       nx, ny, nplanes(), nplanes(), nplanes()*nx, 1);
   }
   else if (bit_depth==8)
   {
-    png_byte* dst = static_cast<png_byte*>(chunk->data());
+    png_byte* dst = reinterpret_cast<png_byte*>(chunk->data());
     for (unsigned y = 0; y < ny; ++y, dst += bytes_per_row_dst)
       vcl_memcpy(dst, &rows[y0+y][x0*bytes_per_pixel], nx*bytes_per_pixel);
-    return new vil2_image_view<vxl_byte>(chunk, static_cast<vxl_byte*>(chunk->data()),
+    return new vil2_image_view<vxl_byte>(chunk, reinterpret_cast<vxl_byte*>(chunk->data()),
       nx, ny, nplanes(), nplanes(), nplanes()*nx, 1);
   }
   // FIXME Can't handle pixel depths of 1 2 or 4 pixels yet

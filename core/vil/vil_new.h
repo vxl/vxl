@@ -67,7 +67,7 @@ vil2_image_view<T> vil2_new_image_view_j_i_plane(unsigned ni, unsigned nj, unsig
 {
   vil2_memory_chunk_sptr chunk = new vil2_memory_chunk(ni*nj*nplanes*sizeof(T),
     vil2_pixel_format_component_format(vil2_pixel_format_of(T())));
-  return vil2_image_view<T>(chunk, static_cast<T *>(chunk->data()), ni, nj, nplanes, nplanes*nj, nplanes, 1);
+  return vil2_image_view<T>(chunk, reinterpret_cast<T *>(chunk->data()), ni, nj, nplanes, nplanes*nj, nplanes, 1);
 }
 
 //: Create an image view whose j step is 1.
@@ -77,7 +77,7 @@ vil2_image_view<T> vil2_new_image_view_plane_i_j(unsigned ni, unsigned nj, unsig
 {
   vil2_memory_chunk_sptr chunk = new vil2_memory_chunk(ni*nj*nplanes*sizeof(T),
     vil2_pixel_format_component_format(vil2_pixel_format_of(T())));
-  return vil2_image_view<T>(chunk, static_cast<T *>(chunk->data()), ni, nj, nplanes, nj, 1, nj*ni);
+  return vil2_image_view<T>(chunk, reinterpret_cast<T *>(chunk->data()), ni, nj, nplanes, nj, 1, nj*ni);
 }
 
 #endif // vil2_new_h_

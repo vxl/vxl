@@ -19,7 +19,7 @@ inline void test_memory_chunk_io_as(T value)
   vcl_cout<<"Testing IO as type "<<vil2_pixel_format_of(T())<<vcl_endl;
   vil2_memory_chunk chunk1(35*sizeof(T),
     vil2_pixel_format_component_format(vil2_pixel_format_of(T())));
-  T* data1 = static_cast<T*>( chunk1.data());
+  T* data1 = reinterpret_cast<T*>(chunk1.data());
   vcl_memset(data1,0,35*sizeof(T)); // avoid "UMR" on subsequent vsl_b_write()
   data1[3]= value;
   vil2_memory_chunk_sptr chunk_sptr1 = new vil2_memory_chunk(chunk1);
@@ -43,7 +43,7 @@ inline void test_memory_chunk_io_as(T value)
   vpl_unlink("vil2_memory_chunk_test_io.bvl.tmp");
 #endif
 
-  T* data2 = static_cast<T*>( chunk2.data());
+  T* data2 = reinterpret_cast<T*>(chunk2.data());
 
   TEST("Size OK",chunk2.size()==chunk1.size(),true);
   TEST("Type OK", chunk1.pixel_format(),chunk2.pixel_format());

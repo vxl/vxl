@@ -28,7 +28,7 @@ inline void vsl_b_write(vsl_b_ostream &os, const vil3d_image_view<T>& image)
   {
     vsl_b_write(os, image.memory_chunk());
 
-    vcl_ptrdiff_t offset = (image.origin_ptr()-static_cast<const T*>(image.memory_chunk()->data()));
+    vcl_ptrdiff_t offset = (image.origin_ptr()-reinterpret_cast<const T*>(image.memory_chunk()->data()));
     vsl_b_write(os, offset);
   }
 }
@@ -63,9 +63,9 @@ inline void vsl_b_read(vsl_b_istream &is, vil3d_image_view<T>& image)
     {
       vsl_b_read(is, chunk);
       vsl_b_read(is, offset);
-      const T* data = static_cast<const T*>( chunk->data());
+      const T* data = reinterpret_cast<const T*>(chunk->data());
       image = vil3d_image_view<T>(chunk,data+offset,
-                                 ni,nj,nk,np,istep,jstep,kstep,pstep);
+                                  ni,nj,nk,np,istep,jstep,kstep,pstep);
     }
     break;
 

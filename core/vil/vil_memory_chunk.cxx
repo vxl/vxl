@@ -1,9 +1,9 @@
-//:
-//  \file
-//  \brief Ref. counted block of data on the heap
-//  \author Tim Cootes
-
+// This is mul/vil2/vil2_memory_chunk.cxx
 #include "vil2_memory_chunk.h"
+//:
+// \file
+// \brief Ref. counted block of data on the heap
+// \author Tim Cootes
 #include <vcl_cstring.h>
 #include <vcl_cassert.h>
 
@@ -23,7 +23,7 @@ vil2_memory_chunk::vil2_memory_chunk(unsigned long n, vil2_pixel_format pixel_fo
 //: Destructor
 vil2_memory_chunk::~vil2_memory_chunk()
 {
-  delete [] static_cast<char*>( data_);
+  delete [] reinterpret_cast<char*>(data_);
 }
 
 //: Copy ctor
@@ -50,7 +50,7 @@ void vil2_memory_chunk::unref()
   ref_count_--;
   if (ref_count_==0)
   {
-    delete [] static_cast<char*>( data_); data_=0;
+    delete [] reinterpret_cast<char*>(data_); data_=0;
     delete this;
   }
 }
@@ -60,7 +60,7 @@ void vil2_memory_chunk::unref()
 void vil2_memory_chunk::set_size(unsigned long n, vil2_pixel_format pixel_form)
 {
   if (size_==n) return;
-  delete [] static_cast<char*>( data_);
+  delete [] reinterpret_cast<char*>(data_);
   data_ = 0;
   if (n>0)
     data_ = new char[n];

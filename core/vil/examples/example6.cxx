@@ -16,7 +16,8 @@ vil2_image_view<vxl_byte> view_as_planes(const vil2_image_view<vil_rgb<vxl_byte>
   assert(v.nplanes()==1);
 
   // Image is RGBRGBRGB so i step = 3*v.istep(), jstep=3*v.jstep()
-  return vil2_image_view<vxl_byte>(v.memory_chunk(),static_cast<vxl_byte const*>(v.top_left_ptr()),
+  return vil2_image_view<vxl_byte>(v.memory_chunk(),
+                                   reinterpret_cast<vxl_byte const*>(v.top_left_ptr()),
                                    v.ni(),v.nj(),3,
                                    v.istep()*3,v.jstep()*3,1);
 }
@@ -29,7 +30,7 @@ vil2_image_view<vil_rgb<vxl_byte> > view_as_rgb(const vil2_image_view<vxl_byte>&
   assert(v.istep()==3 || v.jstep()==3);
 
   return vil2_image_view<vil_rgb<vxl_byte> >(v.memory_chunk(),
-                                             static_cast<vil_rgb<vxl_byte> const*>(v.top_left_ptr()),
+                                             reinterpret_cast<vil_rgb<vxl_byte> const*>(v.top_left_ptr()),
                                              v.ni(),v.nj(),1,
                                              v.istep()/3,v.jstep()/3,1);
 }

@@ -54,7 +54,7 @@ vil3d_image_view<T>::vil3d_image_view(const vil2_memory_chunk_sptr& mem_chunk,
                                       vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step,
                                       vcl_ptrdiff_t k_step, vcl_ptrdiff_t plane_step)
  : vil3d_image_view_base(n_i, n_j, n_k, n_planes)
- , top_left_(const_cast<T*>( top_left))
+ , top_left_(const_cast<T*>(top_left))
  , istep_(i_step), jstep_(j_step), kstep_(k_step)
  , planestep_(plane_step)
  , ptr_(mem_chunk)
@@ -63,13 +63,13 @@ vil3d_image_view<T>::vil3d_image_view(const vil2_memory_chunk_sptr& mem_chunk,
   {
     // check view and chunk are in rough agreement
     assert(mem_chunk->size() >= n_planes*n_i*n_j*n_k*sizeof(T));
-    if (top_left < static_cast<const T*>(mem_chunk->data()) ||
-        top_left >= reinterpret_cast<const T*>(static_cast<char*>(mem_chunk->data()) + mem_chunk->size()))
+    if (top_left  < reinterpret_cast<const T*>(mem_chunk->data()) ||
+        top_left >= reinterpret_cast<const T*>(reinterpret_cast<char*>(mem_chunk->data()) + mem_chunk->size()))
       vcl_cerr << "top_left at " << static_cast<const void*>(top_left) << ", memory_chunk at "
-               << static_cast<const void*>(mem_chunk->data()) << ", size " << mem_chunk->size()
+               << reinterpret_cast<const void*>(mem_chunk->data()) << ", size " << mem_chunk->size()
                << ", size of data type " << sizeof(T) << '\n';
-    assert(top_left >= static_cast<const T*>(mem_chunk->data()) &&
-           top_left  < reinterpret_cast<const T*>(static_cast<char*>(mem_chunk->data()) + mem_chunk->size()));
+    assert(top_left >= reinterpret_cast<const T*>(mem_chunk->data()) &&
+           top_left  < reinterpret_cast<const T*>(reinterpret_cast<char*>(mem_chunk->data()) + mem_chunk->size()));
   }
 }
 
@@ -108,14 +108,12 @@ void vil3d_image_view<T>::deep_copy(const vil3d_image_view<T>& src)
 }
 
 
-
 template<class T> vil3d_image_view<T>::~vil3d_image_view()
 {
   // release_data();
 }
 
 //=======================================================================
-
 
 template<class T>
 void vil3d_image_view<T>::set_size(unsigned n_i, unsigned n_j, unsigned n_k)
@@ -175,7 +173,7 @@ void vil3d_image_view<T>::set_size(unsigned n_i, unsigned n_j, unsigned n_k, uns
   kstep_ = n_i*n_j;
   planestep_ = n_i*n_j*n_k;
 
-  top_left_ = static_cast<T*>( ptr_->data());
+  top_left_ = reinterpret_cast<T*>(ptr_->data());
 }
 
 
@@ -199,7 +197,6 @@ void vil3d_image_view<T>::set_to_memory(const T* top_left,
   kstep_ = k_step;
   planestep_ = plane_step;
 }
-
 
 //=======================================================================
 //: Fill view with given value

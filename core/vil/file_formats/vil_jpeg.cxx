@@ -39,7 +39,7 @@ bool vil2_jpeg_file_probe(vil_stream *vs) {
   }
 
   // 0xFF followed by 0xD8
-  return ( (magic[0] == char(0xFF)) && (magic[1] == char(0xD8)) );
+  return (magic[0] == char(0xFF)) && (magic[1] == char(0xD8));
 }
 
 // static data
@@ -144,10 +144,10 @@ vil2_image_view_base_sptr vil2_jpeg_image::get_copy_view(unsigned x0,
     if (!scanline)
       return 0; // failed
 
-    vcl_memcpy(static_cast<char*>(chunk->data()) + i*nx*bpp, &scanline[x0*bpp], nx*bpp);
+    vcl_memcpy(reinterpret_cast<char*>(chunk->data()) + i*nx*bpp, &scanline[x0*bpp], nx*bpp);
   }
 
-  return new vil2_image_view<vxl_byte>(chunk, static_cast<vxl_byte *>(chunk->data()), nx, ny, bpp, bpp, bpp*nx, 1);
+  return new vil2_image_view<vxl_byte>(chunk, reinterpret_cast<vxl_byte *>(chunk->data()), nx, ny, bpp, bpp, bpp*nx, 1);
 }
 
 //--------------------------------------------------------------------------------

@@ -2,9 +2,9 @@
 #ifndef vil2_image_view_txx_
 #define vil2_image_view_txx_
 //:
-//  \file
-//  \brief Represent images of one or more planes of Ts.
-//  \author Ian Scott
+// \file
+// \brief Represent images of one or more planes of Ts.
+// \author Ian Scott
 //
 // Note: To keep down size of vil2_image_view
 // Please think carefully before adding any new methods.
@@ -51,7 +51,7 @@ vil2_image_view<T>::vil2_image_view(const vil2_smart_ptr<vil2_memory_chunk>& mem
                                     const T* top_left, unsigned n_i, unsigned n_j, unsigned n_planes,
                                     vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step, vcl_ptrdiff_t plane_step)
  : vil2_image_view_base(n_i, n_j, n_planes)
- , top_left_(const_cast<T*>( top_left))
+ , top_left_(const_cast<T*>(top_left))
  , istep_(i_step), jstep_(j_step)
  , planestep_(plane_step)
  , ptr_(mem_chunk)
@@ -61,13 +61,13 @@ vil2_image_view<T>::vil2_image_view(const vil2_smart_ptr<vil2_memory_chunk>& mem
   if (mem_chunk) // if we are doing a view transform on a non-owned image, then mem_chunk will be 0.
   {
     assert(mem_chunk->size() >= n_planes*n_i*n_j*sizeof(T));
-    if (top_left < static_cast<const T*>(mem_chunk->data()) ||
-        top_left >= reinterpret_cast<const T*>(static_cast<char*>(mem_chunk->data()) + mem_chunk->size()))
+    if (top_left  < reinterpret_cast<const T*>(mem_chunk->data()) ||
+        top_left >= reinterpret_cast<const T*>(reinterpret_cast<const char*>(mem_chunk->data()) + mem_chunk->size()))
       vcl_cerr << "top_left at " << static_cast<const void*>(top_left) << ", memory_chunk at "
-               << static_cast<const void*>(mem_chunk->data()) << ", size " << mem_chunk->size()
+               << reinterpret_cast<const void*>(mem_chunk->data()) << ", size " << mem_chunk->size()
                << ", size of data type " << sizeof(T) << '\n';
-    assert(top_left >= static_cast<const T*>(mem_chunk->data()) &&
-           top_left  < reinterpret_cast<const T*>(static_cast<char*>(mem_chunk->data()) + mem_chunk->size()));
+    assert(top_left >= reinterpret_cast<const T*>(mem_chunk->data()) &&
+           top_left  < reinterpret_cast<const T*>(reinterpret_cast<const char*>(mem_chunk->data()) + mem_chunk->size()));
   }
 #endif
 }
@@ -100,7 +100,7 @@ void vil2_image_view<T>::deep_copy(const vil2_image_view<T>& src)
   vcl_ptrdiff_t s_planestep = src.planestep();
   vcl_ptrdiff_t s_istep = src.istep();
   vcl_ptrdiff_t s_jstep = src.jstep();
-  
+
   if (src.is_contiguous())
   {
     if (src.istep()>0 && src.jstep()>0 && src.planestep()>=0)
@@ -481,14 +481,14 @@ bool vil2_image_view<T>::is_contiguous() const
 
   int s1, s2, s3;
   unsigned n1, n2;
-  if( istep_ < jstep_ )
-    if( jstep_ < planestep_ )
+  if ( istep_ < jstep_ )
+    if ( jstep_ < planestep_ )
       {
         s1 = istep_; s2 = jstep_; s3 = planestep_;
         n1 = ni_;    n2 = nj_;  //  n3 = nplanes_;
       }
     else // planestep_ < jstep_
-      if( istep_ < planestep_ )
+      if ( istep_ < planestep_ )
         {
           s1 = istep_; s2 = planestep_; s3 = jstep_;
           n1 = ni_;    n2 = nplanes_; //  n3 = nj_;
@@ -499,8 +499,8 @@ bool vil2_image_view<T>::is_contiguous() const
           n1 = nplanes_;   n2 = ni_;  //  n3 = nj_;
         }
   else // jstep < istep_
-    if( jstep_ < planestep_ )
-      if( istep_ < planestep_ )
+    if ( jstep_ < planestep_ )
+      if ( istep_ < planestep_ )
         {
           s1 = jstep_; s2 = istep_; s3 = planestep_;
           n1 = nj_;    n2 = ni_;  //  n3 = nplanes_;
@@ -516,9 +516,9 @@ bool vil2_image_view<T>::is_contiguous() const
         n1 = nplanes_;   n2 = nj_;  //  n3 = ni_;
       }
 
-  return ( s1 == 1 &&
-           s2 > 0 && unsigned(s2) == n1 &&
-           s3 > 0 && unsigned(s3) == n1*n2 );
+  return s1 == 1 &&
+         s2 > 0 && unsigned(s2) == n1 &&
+         s3 > 0 && unsigned(s3) == n1*n2;
 }
 
 //=======================================================================
@@ -540,7 +540,7 @@ void vil2_image_view<T>::set_size(unsigned n_i, unsigned n_j, unsigned n_planes)
   jstep_ = n_i;
   planestep_ = n_i*n_j;
 
-  top_left_ = static_cast<T*>( ptr_->data());
+  top_left_ = reinterpret_cast<T*>(ptr_->data());
 }
 
 
@@ -568,7 +568,7 @@ template<class T>
 void vil2_image_view<T>::fill(T value)
 {
   T* plane = top_left_;
-  
+
   if (is_contiguous())
   {
     vil2_image_view<T>::iterator it = begin();
