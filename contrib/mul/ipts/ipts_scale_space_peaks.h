@@ -43,7 +43,7 @@ inline void ipts_scale_space_peaks_2d(vcl_vector<vgl_point_3d<double> >& peak_pt
   unsigned ni=image.image().ni(),nj=image.image().nj();
   vcl_ptrdiff_t istep = image.image().istep(),jstep=image.image().jstep();
   assert(istep!=0); // strange image if istep would be 0 ... most probably uninitialised!
-  const T* row = &image.image()(1,1,0);
+  const T* row = &image.image()(2,2,0);
 
   const vil_image_view<T>& im_below = image_below.image();
   const vil_image_view<T>& im_above = image_above.image();
