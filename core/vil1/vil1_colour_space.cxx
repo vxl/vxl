@@ -27,6 +27,8 @@ void vil_colour_space_RGB_to_YIQ(T const in[3], T out[3])
 //    \    /     \     /    //
 //     blue  --- magenta    //
 //                          //
+// \endverbatim
+
 template <class T>
 void vil_colour_space_RGB_to_HSV(T r, T g, T b, T *h, T *s, T *v)
 {
@@ -65,26 +67,29 @@ void vil_colour_space_RGB_to_HSV(T r, T g, T b, T *h, T *s, T *v)
 template <class T>
 void vil_colour_space_HSV_to_RGB(T h, T s, T v, T *r, T *g, T *b)
 {
-  float p1, p2, p3, i, f, nr=0, ng=0, nb=0;
-  float xh;
+  T p1, p2, p3, f, nr=0, ng=0, nb=0;
+  T xh;
+  int i;
 
   v = v/255;
 
-  //extern float hue,  s,  v;  /* hue (0.0 to 360.0, is circular, 0=360)
-  //                                    s and v are from 0.0 - 1.0) */
-  //extern long  r2,  g2,  b2; /* values from 0 to 63 */
+#if 0
+  extern float hue,  s,  v;  // hue (0.0 to 360.0, is circular, 0=360)
+                             // s and v are from 0.0 to 1.0
+  extern long  r2,  g2,  b2; // values from 0 to 63
+#endif
 
-  if (h == 360.0)
-  h = 0.0;           /* (THIS LOOKS BACKWARDS)       */
+  if (h == 360)
+  h = 0;           /* (THIS LOOKS BACKWARDS)       */
 
-  xh = h / 60.;                   /* convert hue to be in 0,6       */
-  i = (float)vcl_floor((double)xh);    /* i = greatest integer <= h    */
-  f = xh - i;                     /* f = fractional part of h     */
+  xh = h / 60;                   // convert hue to be in [0,6)
+  i = (int)vcl_floor((double)xh);// i = greatest integer <= xh
+  f = xh - i;                    // f = fractional part of xh
   p1 = v * (1 - s);
   p2 = v * (1 - (s * f));
   p3 = v * (1 - (s * (1 - f)));
 
-  switch ((int) i)
+  switch (i)
   {
     case 0:
             nr = v;
@@ -118,9 +123,9 @@ void vil_colour_space_HSV_to_RGB(T h, T s, T v, T *r, T *g, T *b)
             break;
   }
 
-  *r = (T)(nr * 255.); /* Normalize the values to 63 */
-  *g = (T)(ng * 255.);
-  *b = (T)(nb * 255.);
+  *r = nr * 255; /* Normalize the values to 63 */
+  *g = ng * 255;
+  *b = nb * 255;
   return;
 }
 
