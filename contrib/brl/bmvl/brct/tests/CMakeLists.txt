@@ -32,7 +32,7 @@ ADD_EXECUTABLE(brct_test_all
   brct_test_compute_P.cxx
   brct_test_synthetic_data.cxx
 )
-TARGET_LINK_LIBRARIES(brct_test_all brct bugl bgui testlib)	
+TARGET_LINK_LIBRARIES(brct_test_all brct bugl testlib)	
 
 ADD_TEST(brct_test_synthetic_data brct_test_all brct_test_synthetic_data)
 ADD_TEST(brct_test_compute_P      brct_test_all brct_test_compute_P)
