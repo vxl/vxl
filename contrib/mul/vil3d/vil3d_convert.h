@@ -174,7 +174,7 @@ inline void vil3d_convert_stretch_range_limited(const vil3d_image_view<inP>& src
           inP s = src(i,j,k,p);
           dest(i,j,k,p) = s<=src_lo ? dest_lo :
                           s>=src_hi ? dest_hi :
-                                      dest_lo + dds*static_cast<double>(p-src_lo);
+                                      dest_lo + dds*static_cast<double>(s-src_lo);
         }
 }
 
