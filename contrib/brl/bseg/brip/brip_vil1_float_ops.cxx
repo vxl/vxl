@@ -1625,8 +1625,8 @@ bool brip_vil1_float_ops::homography(vil1_memory_image_of<float> const & input,
         if ((iu < ailow || iu >= aihigh-1) ||
             (iv < ajlow || iv >= ajhigh-1))
         {
-          val = 0;
-       // if (! zero_missed_pixels) continue;
+          // val = 0;
+          // if (! zero_missed_pixels) continue;
           continue;
         }
         else
