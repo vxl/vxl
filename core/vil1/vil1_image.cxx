@@ -36,5 +36,5 @@ vcl_ostream& vil_image::print(vcl_ostream& s) const
 
 int vil_image::get_size_bytes() const 
 {
-  return planes() * width() * height() * components() * bits_per_component() / CHAR_BIT;
+  return planes() * height() * ((width() * components() * bits_per_component() + CHAR_BIT-1) / CHAR_BIT);
 }
