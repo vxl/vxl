@@ -61,7 +61,7 @@ bool vipl_gaussian_convolution <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: preop()
   int size = radius + 1; // only need half mask, because it is symmetric
   ref_masksize() = size;
   if(mask() == 0) ref_mask() = new double[size];
-  else { delete ref_mask(); ref_mask() = new double[size]; }
+  else { delete[] ref_mask(); ref_mask() = new double[size]; }
   double halfnorm = 0.5;
   ref_mask()[0] = 1.0;
   for (int x=1; x<=size; ++x)
@@ -73,7 +73,7 @@ bool vipl_gaussian_convolution <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: preop()
 // We destroy the mask in postop, after we are all done filtering
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
 bool vipl_gaussian_convolution <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: postop(){
-  delete ref_mask(); ref_mask()=0;
+  delete[] ref_mask(); ref_mask()=0;
   return true;
 }
 

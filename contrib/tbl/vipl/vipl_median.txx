@@ -53,8 +53,8 @@ bool vipl_median <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: preop(){
          ref_mask() = new boolptr[1+size];
   else {
         for (int x=0; x<=size; ++x)
-            if(mask()[x]) delete ref_mask()[x];
-        delete ref_mask();
+            if(mask()[x]) delete[] ref_mask()[x];
+        delete[] ref_mask();
         ref_mask() = new boolptr[1+size];
         }
   for (int x=0; x<=size; ++x) {
@@ -72,8 +72,8 @@ bool vipl_median <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: postop(){
   int size = (radius() < 0) ? 0 : int(radius());
   if(mask()){
     for (int x=0; x<=size; ++x)
-      if(mask()[x]) delete ref_mask()[x];
-    delete ref_mask();
+      if(mask()[x]) delete[] ref_mask()[x];
+    delete[] ref_mask();
     ref_mask()=0;
   }
   return true;
