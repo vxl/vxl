@@ -34,8 +34,6 @@ rgrl_trans_translation( vnl_vector<double> const& in_trans )
   : trans_( in_trans ),
     from_centre_( in_trans.size(), 0.0 )
 {
-  assert ( covar_.rows() == covar_.cols() );
-  assert ( covar_.rows() == trans_.size() );
 }
 
 rgrl_trans_translation::
