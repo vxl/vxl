@@ -14,8 +14,8 @@ void vil_byte_swap(void *b_, void *e_) {
   char *b = static_cast<char*>(b_);
   char *e = static_cast<char*>(e_);
   assert(b < e);
-  unsigned n = e-b;
-  for (unsigned i=0; i<n/2; ++i) {
+  unsigned long n = e-b;
+  for (unsigned long i=0; i<n/2; ++i) {
     char tmp = b[i];
     b[i] = b[n-1-i];
     b[n-1-i] = tmp;
