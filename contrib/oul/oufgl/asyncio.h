@@ -1,11 +1,14 @@
 //-*-c++-*--------------------------------------------------------------
-//
+//:
 // \file asyncio.h: A simple wrapper around POSIX.1b aynchronous I/O
 //
 // Copyright (c) 2001 Simon Brady
 // University of Otago, Dunedin, New Zealand
 // Reproduction rights limited as described in the COPYRIGHT file.
 //----------------------------------------------------------------------
+
+#ifndef OTAGO_Asyncio_IO__h_INCLUDED
+#define OTAGO_Asyncio_IO__h_INCLUDED
 
 //----------------------------------------------------------------------
 //: Asynchronous I/O wrapper
@@ -44,15 +47,12 @@
 // \status Complete
 //----------------------------------------------------------------------
 
-#ifndef OTAGO_Asyncio_IO__h_INCLUDED
-#define OTAGO_Asyncio_IO__h_INCLUDED 1
-
 #include <unistd.h>
 #ifndef _POSIX_ASYNCHRONOUS_IO
 #error Your system does not support POSIX asynchronous I/O
 #endif
 #include <aio.h>
-#include <signal.h>
+#include <vcl_csignal.h>
 
 class AsyncIO_Shared_State
 {
@@ -81,16 +81,16 @@ public:
   // on failure
 
   // Begin reading n bytes into buf starting at current file position
-  int read(volatile void *buf, size_t n);
+  int read(volatile void *buf, vcl_size_t n);
 
   // Begin reading n bytes into buf starting at absolute file position pos
-  int read(volatile void *buf, size_t n, off_t pos);
+  int read(volatile void *buf, vcl_size_t n, off_t pos);
 
   // Begin writing n bytes from buf starting at current file position
-  int write(volatile void *buf, size_t nbytes);
+  int write(volatile void *buf, vcl_size_t nbytes);
 
   // Begin writing n bytes from buf starting at absolute file position pos
-  int write(volatile void *buf, size_t nbytes, off_t pos);
+  int write(volatile void *buf, vcl_size_t nbytes, off_t pos);
 
   // Wait for I/O to complete, then return status. If suspend is true, block
   // the calling process while waiting, otherwise continously poll for
@@ -102,4 +102,5 @@ public:
   bool is_complete() { return complete; }
 };
 
-#endif
+#endif // OTAGO_Asyncio_IO__h_INCLUDED
+

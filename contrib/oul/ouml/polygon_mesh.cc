@@ -1,6 +1,7 @@
 //-*-c++-*--------------------------------------------------------------
-//
-// polygon_mesh.cc: a class for polygon meshes
+//:
+// \file
+// \brief polygon_mesh.cc: a class for polygon meshes
 //
 // Copyright (c) 2001 Brendan McCane University of Otago, Dunedin, New
 // Zealand Reproduction rights limited as described in the COPYRIGHT
@@ -8,6 +9,9 @@
 //----------------------------------------------------------------------
 
 #include "polygon_mesh.h"
+#include <vcl_cstdio.h>
+#include <vcl_cstdlib.h>
+#include <vcl_iostream.h>
 
 //----------------------------------------------------------------------
 //: add_vertex
@@ -15,14 +19,14 @@
 // Add a vertex to the end of the list of vertices
 //
 // .param DPoint &pt: The location of the vertex
-// .ret int: the position of the added vertex 
+// .ret int: the position of the added vertex
 //
 //.author Brendan McCane
 //----------------------------------------------------------------------
 int PolygonMesh::add_vertex(DPoint &pt)
 {
-	vertex_list.push_back(pt);
-	return (vertex_list.size()-1);
+  vertex_list.push_back(pt);
+  return vertex_list.size()-1;
 }
 
 
@@ -33,18 +37,18 @@ int PolygonMesh::add_vertex(DPoint &pt)
 //
 // .param DPoint &pt: The location of the vertex
 // .param int index: where to add the vertex
-// .ret int: the position of the added vertex 
+// .ret int: the position of the added vertex
 //
 //.author Brendan McCane
 //----------------------------------------------------------------------
 
 int PolygonMesh::set_vertex(int index, DPoint &pt)
 {
-	assert(index>=0);
-	if (vertex_list.capacity()<=index)
-		vertex_list.reserve(index+100);
-	vertex_list[index] = pt;
-	return(index);
+  assert(index>=0);
+  if (vertex_list.capacity()<=(unsigned int)index)
+    vertex_list.reserve(index+100);
+  vertex_list[index] = pt;
+  return index;
 }
 
 //----------------------------------------------------------------------
@@ -53,15 +57,15 @@ int PolygonMesh::set_vertex(int index, DPoint &pt)
 // Add a face to the end of the list of faces
 //
 // .param Face &fc: The vertices associated with the face
-// .ret int: the position of the added face 
+// .ret int: the position of the added face
 //
 //.author Brendan McCane
 //----------------------------------------------------------------------
 
 int PolygonMesh::add_face(Face &fc)
 {
-	face_list.push_back(fc);
-	return(face_list.size()-1);
+  face_list.push_back(fc);
+  return face_list.size()-1;
 }
 
 //----------------------------------------------------------------------
@@ -71,18 +75,18 @@ int PolygonMesh::add_face(Face &fc)
 //
 // .param Face &fc: The vertices associated with the face
 // .param int index: where to add the face
-// .ret int: the position of the added face 
+// .ret int: the position of the added face
 //
 //.author Brendan McCane
 //----------------------------------------------------------------------
 
 int PolygonMesh::set_face(int index, Face &fc)
 {
-	assert(index>=0);
-	if (face_list.capacity()<=index)
-		face_list.reserve(index+100);
-	face_list[index] = fc;
-	return(index);
+  assert(index>=0);
+  if (face_list.capacity()<=(unsigned int)index)
+    face_list.reserve(index+100);
+  face_list[index] = fc;
+  return index;
 }
 
 //----------------------------------------------------------------------
@@ -98,14 +102,13 @@ int PolygonMesh::set_face(int index, Face &fc)
 
 PolygonMesh::DPoint PolygonMesh::get_vertex(int index)
 {
-	DPoint empty;
-
-	if (index>=vertex_list.size())
-	{
-		cerr << "Warning: vertex doesn't exist" << endl;
-		return(empty);
-	}
-	return(vertex_list[index]);
+  assert(index >= 0);
+  if ((unsigned int)index>=vertex_list.size())
+  {
+    vcl_cerr << "Warning: vertex doesn't exist" << vcl_endl;
+    return DPoint();
+  }
+  return vertex_list[index];
 }
 
 //----------------------------------------------------------------------
@@ -121,16 +124,17 @@ PolygonMesh::DPoint PolygonMesh::get_vertex(int index)
 
 PolygonMesh::Polygon PolygonMesh::get_face(int index)
 {
-	Polygon poly;
-	if (index>=face_list.size())
-	{
-		cerr << "Warning: face doesn't exist" << endl;
-		return(poly);
-	}
-	Face *face=&(face_list[index]);
-	for (int i=0; i<face->size(); i++)
-		poly.push_back(vertex_list[(*face)[i]]);
-	return(poly);
+  assert(index >= 0);
+  Polygon poly;
+  if ((unsigned int)index>=face_list.size())
+  {
+    vcl_cerr << "Warning: face doesn't exist" << vcl_endl;
+    return poly;
+  }
+  Face& face = face_list[index];
+  for (unsigned int i=0; i<face.size(); i++)
+    poly.push_back(vertex_list[face[i]]);
+  return poly;
 }
 
 
@@ -145,56 +149,52 @@ PolygonMesh::Polygon PolygonMesh::get_face(int index)
 //.author Brendan McCane
 //----------------------------------------------------------------------
 
-#include <stdio.h>
-#include <stdlib.h>
-
 bool PolygonMesh::read_file(char *filename)
 {
-	char start[100];
-	FILE *fp=fopen(filename, "r");
-	if (!fp) return(false);
+  char start[100];
+  FILE *fp=vcl_fopen(filename, "r");
+  if (!fp) return false;
 
-	while (fscanf(fp, "%s", start)!=EOF)
-	{
-		if (!strcmp(start, "Vertex")) // read in a vertex
-		{
-			int index;
-			DPoint pt;
-			double x, y, z;
-			fscanf(fp, "%d %lf %lf %lf", &index, &x, &y, &z);
-			// add the vertex
-			pt.set_x(x); pt.set_y(y), pt.set_z(z);
-			//printf("Vertex: %d %f %f %f\n", index, x, y, z);
-			set_vertex(index, pt);
-		}
-		else if (!strcmp(start, "Face")) // read in a face
-		{
-			int index;
-			int vertex;
-			Face fc;
-			fscanf(fp, "%d", &index);
-			//printf("Face: %d ", index);
-			// read in all the vertex indices
-			while ((fscanf(fp, "%d", &vertex)))
-			{
-				//printf("%d ", vertex);
-				fc.push_back(vertex);
-			}
-			//printf("\n");
-			set_face(index, fc);
-		}
-		else if (!strcmp(start, "End")) // end of mesh
-			break;
-		else // assume comment, read to eoln
-		{
-			char c;
-			do {
-				fscanf(fp, "%c", &c);
-			} while (c!='\n');
-		}
-	}
-	
-	return(true);
+  while (vcl_fscanf(fp, "%s", start)!=EOF)
+  {
+    if (!vcl_strcmp(start, "Vertex")) // read in a vertex
+    {
+      int index;
+      double x, y, z;
+      vcl_fscanf(fp, "%d %lf %lf %lf", &index, &x, &y, &z);
+      // add the vertex
+      DPoint pt(x,y,z);
+      //vcl_printf("Vertex: %d %f %f %f\n", index, x, y, z);
+      set_vertex(index, pt);
+    }
+    else if (!vcl_strcmp(start, "Face")) // read in a face
+    {
+      int index;
+      int vertex;
+      Face fc;
+      vcl_fscanf(fp, "%d", &index);
+      //vcl_printf("Face: %d ", index);
+      // read in all the vertex indices
+      while ((vcl_fscanf(fp, "%d", &vertex)))
+      {
+        //vcl_printf("%d ", vertex);
+        fc.push_back(vertex);
+      }
+      //vcl_printf("\n");
+      set_face(index, fc);
+    }
+    else if (!vcl_strcmp(start, "End")) // end of mesh
+      break;
+    else // assume comment, read to eoln
+    {
+      char c;
+      do {
+        vcl_fscanf(fp, "%c", &c);
+      } while (c!='\n');
+    }
+  }
+
+  return true;
 }
 
 //----------------------------------------------------------------------
@@ -202,7 +202,7 @@ bool PolygonMesh::read_file(char *filename)
 //
 // return the normal vector for the given vertex of a given face.
 //
-// .param int face_index: which face 
+// .param int face_index: which face
 //
 // .param int vertex_index: which vertex in the face (ie not the
 // vertex index in the entire list of vertices, but the vertex index
@@ -215,20 +215,21 @@ bool PolygonMesh::read_file(char *filename)
 
 PolygonMesh::DVector3D PolygonMesh::get_face_normal
 (
-	int face_index,
-	int vertex_index
+  int face_index,
+  int vertex_index
 )
 {
-	assert(face_index<face_list.size());
-	// in this version, I'm just returning the same vector for all
-	// vertices. Therefore I need to find the cross-product of two
-	// vectors lying on the plane of the polygon.
-	Polygon face = get_face(face_index);
-	DVector3D v1(face[0].x()-face[1].x(), face[0].y()-face[1].y(),
-				 face[0].z()-face[1].z());
-	DVector3D v2(face[0].x()-face[2].x(), face[0].y()-face[2].y(),
-				 face[0].z()-face[2].z());
-	DVector3D cross = cross_3d(v1, v2);
-	cross.normalize();
-	return(cross);
+  assert(face_index>=0);
+  assert((unsigned int)face_index<face_list.size());
+  // in this version, I'm just returning the same vector for all
+  // vertices. Therefore I need to find the cross-product of two
+  // vectors lying on the plane of the polygon.
+  Polygon face = get_face(face_index);
+  DVector3D v1(face[0].x()-face[1].x(), face[0].y()-face[1].y(),
+         face[0].z()-face[1].z());
+  DVector3D v2(face[0].x()-face[2].x(), face[0].y()-face[2].y(),
+         face[0].z()-face[2].z());
+  DVector3D cross = cross_3d(v1, v2);
+  cross.normalize();
+  return cross;
 }

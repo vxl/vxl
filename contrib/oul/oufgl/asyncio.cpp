@@ -1,6 +1,6 @@
-#include <sys/types.h>
-#include <errno.h>
-#include <assert.h>
+#include <vcl_sys/types.h>
+#include <vcl_cerrno.h>
+#include <vcl_cassert.h>
 #include "asyncio.h"
 
 // Initialise shared state to "no operation in progress"
@@ -38,7 +38,7 @@ AsyncIO::~AsyncIO()
 
 // Begin reading n bytes into buf starting at current file position
 
-int AsyncIO::read(volatile void *buf, size_t n)
+int AsyncIO::read(volatile void *buf, vcl_size_t n)
 {
   // Only one op allowed at a time. Note that aio_read() itself never
   // returns EBUSY.
@@ -55,7 +55,7 @@ int AsyncIO::read(volatile void *buf, size_t n)
 
 // Begin reading n bytes into buf starting at absolute file position pos
 
-int AsyncIO::read(volatile void *buf, size_t n, off_t pos)
+int AsyncIO::read(volatile void *buf, vcl_size_t n, off_t pos)
 {
   // Only one op allowed at a time. Note that aio_read() itself never
   // returns EBUSY.
@@ -81,7 +81,7 @@ int AsyncIO::read(volatile void *buf, size_t n, off_t pos)
 
 // Begin writing n bytes from buf starting at current file position
 
-int AsyncIO::write(volatile void *buf, size_t n)
+int AsyncIO::write(volatile void *buf, vcl_size_t n)
 {
   // Only one op allowed at a time. Note that aio_write() itself never
   // returns EBUSY.
@@ -98,7 +98,7 @@ int AsyncIO::write(volatile void *buf, size_t n)
 
 // Begin writing n bytes from buf starting at absolute file position pos
 
-int AsyncIO::write(volatile void *buf, size_t n, off_t pos)
+int AsyncIO::write(volatile void *buf, vcl_size_t n, off_t pos)
 {
   // Only one op allowed at a time. Note that aio_write() itself never
   // returns EBUSY.
@@ -138,12 +138,12 @@ int AsyncIO::wait_for_completion(bool suspend = true)
       // Delivery of the completion signal might cause EINTR, so wait for
       // either success or some other status
       while (aio_suspend(aio_list, 1, NULL) == -1)
-	if (errno != EINTR)
-	  return errno;
+        if (errno != EINTR)
+          return errno;
     }
     else
       while (aio_error(&cb) == EINPROGRESS)
-	/* wait */ ;
+        /* wait */ ;
     assert(complete);      // Just in case...
   }
   if ((status = aio_error(&cb)) != 0)

@@ -2,7 +2,7 @@
 /** \file image_database.h
  *
  * An image database. Basically maintains a list of labels and
- * associated images. And allows for saving and loading a database. 
+ * associated images. And allows for saving and loading a database.
  * Ideally, this would form an inheritance hierarchy or be a templated
  * class, but I'm looking for simplicity at the moment.
  *
@@ -20,66 +20,66 @@
 //----------------------------------------------------------------------
 
 #ifndef OTAGO__image_database_INCLUDED_
-#define OTAGO__image_database_INCLUDED_ 1
+#define OTAGO__image_database_INCLUDED_
 
+#if defined(unix)
 #include <unistd.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <dirent.h>
-#include <errno.h>
-#include <multimap.h>
-#include <utility>
+#include <fcntl.h>
+#include <sys/stat.h>
+#else
+#include <Windows.h>
+#endif
+#include <vcl_sys/types.h>
+#include <vcl_cstring.h> // for strcpy()
+#include <vcl_cstdio.h>
+#include <vcl_cstdlib.h>
+#include <vcl_cerrno.h>
+#include <vcl_map.h>
+#include <vcl_utility.h>
 #include <vil/vil_memory_image.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
 
 class ImageDatabase
 {
-	
-	// the comparison object for the map
+  // the comparison object for the map
 public:
-	struct ltstr
-	{
-		bool operator()(const char* s1, const char* s2) const
-		{
-			return strcasecmp(s1, s2) < 0;
-		}
-	};
+  struct ltstr
+  {
+    bool operator()(const char* s1, const char* s2) const
+    {
+      return strcasecmp(s1, s2) < 0;
+    }
+  };
 
 private:
-	// the multimap to store label/image pairs
-	multimap<const char*, vil_memory_image *, ltstr> image_db;
+  // the multimap to store label/image pairs
+  vcl_multimap<const char*, vil_memory_image *, ltstr> image_db;
 
 public:
-	// typedefs for access to the image_db
-	typedef multimap<const char*, vil_memory_image *, ltstr>::iterator iterator;
-	typedef multimap<const char*, vil_memory_image *, ltstr>::const_iterator 
-	const_iterator;
-	typedef pair<const char *, vil_memory_image *> value_type;
+  // typedefs for access to the image_db
+  typedef vcl_multimap<const char*, vil_memory_image *, ltstr>::iterator iterator;
+  typedef vcl_multimap<const char*, vil_memory_image *, ltstr>::const_iterator const_iterator;
+  typedef vcl_pair<const char *, vil_memory_image *> value_type;
 
-	ImageDatabase(){};
-	~ImageDatabase();
-	inline iterator insert(const char *label, vil_memory_image *image)
-		{char *new_label=new char[200]; strcpy(new_label, label);
-		value_type ins(new_label, image); return(image_db.insert(ins));};
-	inline iterator begin(){return image_db.begin();};
-	inline iterator end(){return image_db.end();};
-	inline const_iterator begin() const {return image_db.begin();};
-	inline const_iterator end() const {return image_db.end();};
-	inline pair<iterator, iterator> equal_range(const char *&label)
-		{return(image_db.equal_range(label));};
-	inline pair<const_iterator, const_iterator> equal_range(const char *&label)
-		const {return(image_db.equal_range(label));};
-	inline bool label_exists(const char *label)
-		{return(image_db.count(label)>0);};
-	void clear();
-	
-	bool save(const char *name, const char *imagetype);
-	bool load(const char *name);
+  ImageDatabase(){}
+  ~ImageDatabase();
+  inline iterator insert(const char *label, vil_memory_image *image)
+    {char *new_label=new char[200]; vcl_strcpy(new_label, label);
+    value_type ins(new_label, image); return image_db.insert(ins);}
+  inline iterator begin(){return image_db.begin();}
+  inline iterator end(){return image_db.end();}
+  inline const_iterator begin() const {return image_db.begin();}
+  inline const_iterator end() const {return image_db.end();}
+  inline vcl_pair<iterator, iterator> equal_range(const char *&label)
+    {return image_db.equal_range(label);}
+  inline vcl_pair<const_iterator, const_iterator> equal_range(const char *&label)
+    const {return image_db.equal_range(label);}
+  inline bool label_exists(const char *label)
+    {return image_db.count(label)>0;}
+  void clear();
 
+  bool save(const char *name, const char *imagetype);
+  bool load(const char *name);
 };
 
-#endif
+#endif // OTAGO__image_database_INCLUDED_

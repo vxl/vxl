@@ -1,12 +1,11 @@
-#include <math.h>
+#ifndef OTAGO_INLINES_H__
+#define OTAGO_INLINES_H__
 
-#ifndef _INLINES_H__
-#define _INLINES_H__
+#include <vcl_cmath.h>
 
 inline bool epsilon_equals(double d1, double d2, double epsilon=1.0e-6)
 {
-	if (fabs(d1-d2)<epsilon) return(true);
-	else return(false);
+  return  vcl_fabs(d1-d2)<epsilon;
 }
 
-#endif
+#endif // OTAGO_INLINES_H__

@@ -20,6 +20,9 @@
 //----------------------------------------------------------------------
 
 #include "image_database.h"
+#include <vcl_iostream.h>
+#include <vil/vil_load.h>
+#include <vil/vil_save.h>
 
 //----------------------------------------------------------------------
 /** destructor
@@ -34,7 +37,7 @@
 
 ImageDatabase::~ImageDatabase()
 {
-	clear();
+  clear();
 }
 
 //----------------------------------------------------------------------
@@ -47,11 +50,11 @@ ImageDatabase::~ImageDatabase()
 //----------------------------------------------------------------------
 void ImageDatabase::clear()
 {
-	for (iterator i=begin(); i!=end(); i++)
-	{
-		delete((*i).second);
-	}
-	image_db.clear();
+  for (iterator i=begin(); i!=end(); i++)
+  {
+    delete (*i).second;
+  }
+  image_db.clear();
 }
 
 //----------------------------------------------------------------------
@@ -75,49 +78,49 @@ void ImageDatabase::clear()
 
 bool ImageDatabase::save(const char *name, const char *imagetype)
 {
-	char dirname[200];
-	sprintf(dirname, "%s.d", name);
+  char dirname[200];
+  vcl_sprintf(dirname, "%s.d", name);
 
-	DIR *d;
-	// check if the directory exists
-	if ((d = opendir(dirname))==NULL)
-	{
-		int fd;
-		// if it doesn't exist
-		if (errno==ENOENT)
-		{
-			// try and create it
-			if ((fd=mkdir(dirname, S_IRWXU))==-1)
-			{
-				cerr << "can't open directory " << dirname << endl;
-				return(false);
-			}
-			else close(fd);
-		}
-		else perror("ImageDatabase::save: Can't open directory for saving");
-	} else closedir(d);
+  DIR *d;
+  // check if the directory exists
+  if ((d = opendir(dirname))==NULL)
+  {
+    int fd;
+    // if it doesn't exist
+    if (errno==ENOENT)
+    {
+      // try and create it
+      if ((fd=mkdir(dirname, S_IRWXU))==-1)
+      {
+        vcl_cerr << "can't open directory " << dirname << vcl_endl;
+        return false;
+      }
+      else close(fd);
+    }
+    else perror("ImageDatabase::save: Can't open directory for saving");
+  } else closedir(d);
 
-	// now open the database file
-	FILE *dbfile;
-	if (!(dbfile=fopen(name, "w")))
-	{
-		cerr << "Can't open database file " << name << endl;
-		return(false);
-	}
+  // now open the database file
+  FILE *dbfile;
+  if (!(dbfile=vcl_fopen(name, "w")))
+  {
+    vcl_cerr << "Can't open database file " << name << vcl_endl;
+    return false;
+  }
 
-	int index=0;
-	for (iterator i=begin(); i!=end(); i++)
-	{
-		char filename[200];
-		sprintf(filename, "%s/%s_%03d.%s", dirname, (*i).first, index++, 
-				imagetype);
-		vil_save(*((*i).second), filename);
+  int index=0;
+  for (iterator i=begin(); i!=end(); i++)
+  {
+    char filename[200];
+    vcl_sprintf(filename, "%s/%s_%03d.%s", dirname, (*i).first, index++, 
+                imagetype);
+    vil_save(*((*i).second), filename);
 
-		printf("db: %s %s\n", (*i).first, filename);
-		fprintf(dbfile, "%s %s\n", (*i).first, filename);
-	}
-	fclose(dbfile);
-	return(true);
+    vcl_printf("db: %s %s\n", (*i).first, filename);
+    vcl_fprintf(dbfile, "%s %s\n", (*i).first, filename);
+  }
+  vcl_fclose(dbfile);
+  return true;
 }
 
 
@@ -135,22 +138,22 @@ bool ImageDatabase::save(const char *name, const char *imagetype)
 
 bool ImageDatabase::load(const char *name)
 {
-	// now open the database file
-	FILE *db;
-	if (!(db=fopen(name, "r")))
-	{
-		cerr << "Can't open database file " << name << endl;
-		return(false);
-	}
+  // now open the database file
+  FILE *db;
+  if (!(db=vcl_fopen(name, "r")))
+  {
+    vcl_cerr << "Can't open database file " << name << vcl_endl;
+    return false;
+  }
 
-	char label[200], filename[200];
-	while (fscanf(db, "%s%s", label, filename)!=EOF)
-	{
-		vil_image im = vil_load(filename);
-		if (!im) return(false);
-		vil_memory_image *image = new vil_memory_image(im);
-		insert(label, image);
-	}
-	fclose(db);
-	return(true);
+  char label[200], filename[200];
+  while (vcl_fscanf(db, "%s%s", label, filename)!=EOF)
+  {
+    vil_image im = vil_load(filename);
+    if (!im) return false;
+    vil_memory_image *image = new vil_memory_image(im);
+    insert(label, image);
+  }
+  vcl_fclose(db);
+  return true;
 }
