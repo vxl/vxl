@@ -7,11 +7,6 @@
 // \author Jocelyn Marchadier
 // \date 06/05/2004
 //
-// Here you can write the long description of what's in this file
-// Doxygen will add this to the extended documentation of the file
-// Put the date and author tags immediately following the brief tag,
-// as doxygen (poor thing) is easily confused otherwise.
-//
 // \verbatim
 //  Modifications
 //   6 May 2004 Jocelyn Marchadier - initial version
@@ -24,19 +19,19 @@ class vpyr_2_pyramid_base_dart ;
 template <typename DPtr>
 inline DPtr vpyr_2_pyramid_base_alpha(DPtr arg, vmap_level_index l)
 {
-  return (DPtr) arg->vpyr_2_pyramid_base_dart::alpha(l) ;
+  return (DPtr) (*arg).vpyr_2_pyramid_base_dart::alpha(l) ;
 }
 
 template <typename DPtr>
 inline DPtr vpyr_2_pyramid_base_sigma(DPtr arg, vmap_level_index l)
 {
-  return (DPtr) arg->vpyr_2_pyramid_base_dart::sigma(l) ;
+  return (DPtr) (*arg).vpyr_2_pyramid_base_dart::sigma(l) ;
 }
 
 template <typename DPtr>
 inline DPtr vpyr_2_pyramid_base_phi(DPtr arg, vmap_level_index l)
 {
-  return (DPtr) arg->vpyr_2_pyramid_base_dart::phi(l) ;
+  return (DPtr) (*arg).vpyr_2_pyramid_base_dart::phi(l) ;
 }
 
 template <typename DPtr>
@@ -48,7 +43,7 @@ inline DPtr vpyr_2_pyramid_base_ialpha(DPtr arg, vmap_level_index l)
 template <typename DPtr>
 inline DPtr vpyr_2_pyramid_base_isigma(DPtr arg, vmap_level_index l)
 {
-  return (DPtr) arg->vpyr_2_pyramid_base_dart::isigma(l) ;
+  return (DPtr) (*arg).vpyr_2_pyramid_base_dart::isigma(l) ;
 }
 
 template <typename DPtr>
@@ -89,7 +84,7 @@ struct vmap_replicated_data
   std::vector<value_type> d;
   vmap_replicated_data()
   {
-    d.push_back(ReturnType()) ;
+    d.push_back(this->ReturnType()) ;
   }
   value_type & data(vmap_level_index arg_level)
   {
