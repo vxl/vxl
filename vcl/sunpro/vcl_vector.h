@@ -22,9 +22,9 @@ struct vcl_vector_sunpro_50 : public std::vector<T, std::allocator<T> >
   //template <typename InputIterator>
   //vcl_vector_sunpro_50(InputIterator first, InputIterator last) : base(first, last) { }
   explicit vcl_vector_sunpro_50(base::const_iterator first, base::const_iterator last) : base(first, last) { }
-  
+
   explicit vcl_vector_sunpro_50(base const &that) : base(that) { }
-  
+
   bool operator==(vcl_vector_sunpro_50<T> const &that) const
   {
     if (base::size() != that.base::size())
@@ -34,7 +34,7 @@ struct vcl_vector_sunpro_50 : public std::vector<T, std::allocator<T> >
         return false;
     return true;
   }
-  
+
   bool operator!=(vcl_vector_sunpro_50<T> const &that) const
   { return operator!=(that); }
 };

@@ -5,7 +5,7 @@
 // \file
 // \author Amitha Perera
 // \brief  Macros for registering the tests with the driver.
-// 
+//
 // A test driver program would simply look like
 // \verbatim
 //   #include <testlib/testlib_register.h>
@@ -42,7 +42,7 @@ extern vcl_vector<vcl_string>       testlib_test_name_;
 #define DECLARE( testname ) int _cdecl testname ## _main ( int argc, char* argv[] )
 #else
 #define DECLARE( testname )  int testname ## _main ( int argc, char* argv[] )
-#endif 
+#endif
 
 //: Register the test with the driver.
 // \param testname should be the same as one of the tests declared with DECLARE.
@@ -62,5 +62,5 @@ extern vcl_vector<vcl_string>       testlib_test_name_;
      register_tests(); \
      return testlib_main( argc, argv ); \
    }
-     
+
 #endif

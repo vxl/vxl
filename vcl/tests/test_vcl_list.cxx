@@ -6,7 +6,7 @@ int test_vcl_list_main()
 {
   typedef vcl_list<int> container;
   container m;
-  
+
   m.push_back(1);
   m.push_back(2);
 

@@ -16,7 +16,7 @@ void test_transpose()
   vnl_matlab_print(vcl_cout, X, "X");
 
   X.inplace_transpose();
-  
+
   vnl_matlab_print(vcl_cout, X, "X");
 
   TEST ("X == old_X.transpose()", X == old_X.transpose(), true);

@@ -20,7 +20,7 @@ void test_matrix(char const* name, const vnl_matrix<double>& A, double det = 0)
 
   if (det)
     testlib_test_assert_near(n+ "Determinant", qr.determinant(), det, 1e-10);
-} 
+}
 
 void double_test()
 {
@@ -120,10 +120,10 @@ inst(vcl_complex<double>);
 void complex_test()
 {
   typedef vcl_complex<double> ct;
-  
+
   vnl_matrix<ct> A(5,4); // #rows must be >= #cols when using netlib QR decomposition
   vnl_vector<ct> b(5);
-  
+
   A(0,0)=ct( -0.1370,0.5573);
   A(1,0)=ct(  0.6187,0.3482);
   A(2,0)=ct( -0.4402,0.6825);
@@ -144,7 +144,7 @@ void complex_test()
   A(2,3)=ct( -0.8424,0.5799);
   A(3,3)=ct( -0.6948,0.0472);
   A(4,3)=ct(  0.8900,0.5085);
-  
+
   b(0)=ct( 0.9764,0.2280);
   b(1)=ct( 0.5994,0.0454);
   b(2)=ct(-0.2385,0.4884);
@@ -165,7 +165,7 @@ extern "C" void test_qr() {
   complex_test();
   vcl_cout << "-------------------- double" << vcl_endl;
   double_test();
-  
+
   vcl_cout << "-------------------- float" << vcl_endl;
   new_test((float*)0);
   vcl_cout << "-------------------- double" << vcl_endl;

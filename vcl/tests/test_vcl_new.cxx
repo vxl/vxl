@@ -10,10 +10,10 @@ struct X_s
   ~X_s() { delete [] p; }
 };
 
-int test_vcl_new_main() 
+int test_vcl_new_main()
 {
   X_s my_x;
-  
+
   vcl_destroy(&my_x);
   new (&my_x) X_s; // vcl_construct(&my_x);
 

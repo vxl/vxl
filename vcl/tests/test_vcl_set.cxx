@@ -6,7 +6,7 @@ int test_vcl_set_main()
 {
   typedef vcl_set<int, vcl_less<int> > myset;
   myset s;
-  
+
   s.insert(1);
 
   for (myset::iterator p = s.begin(); p != s.end(); ++p)

@@ -24,17 +24,17 @@ void test_generalized_eigensystem()
    20.2380,   -0.2282,   28.6779,    3.9419,    2.5821,   44.0636,
   };
   double Cdata[36] = {
-    0,  0,  0,  0,  0,  0,  
-    0,  0,  0,  0,  0,  0,  
-    0,  0,  0,  0,  0,  0,  
-    0,  0,  0,  0,  0,  2,  
-    0,  0,  0,  0, -1,  0,  
-    0,  0,  0,  2,  0,  0,  
+    0,  0,  0,  0,  0,  0,
+    0,  0,  0,  0,  0,  0,
+    0,  0,  0,  0,  0,  0,
+    0,  0,  0,  0,  0,  2,
+    0,  0,  0,  0, -1,  0,
+    0,  0,  0,  2,  0,  0,
   };
 
   vnl_matrix<double> S(Sdata, 6,6);
   vnl_matrix<double> C(Cdata, 6,6);
-  
+
   vnl_generalized_eigensystem gev(C, S);
 
   vcl_cout << "V = " << gev.V << vcl_endl;

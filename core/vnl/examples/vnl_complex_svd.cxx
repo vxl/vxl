@@ -32,7 +32,7 @@ int main()
   for (int k=0; k<12; ++k) cmplx[k] = vcl_complex<double>(r[k],i[k]);
 
   vnl_matrix<vcl_complex<double> > C(cmplx, 4, 3);
-  
+
   vcl_cout << "C = " << C << vcl_endl;
 
   vnl_svd<vcl_complex<double> > C_svd(C);
@@ -40,7 +40,7 @@ int main()
   vnl_matlab_print(vcl_cout, C_svd.U(), "U");
   vnl_matlab_print(vcl_cout, C_svd.W().asMatrix(), "W");
   vnl_matlab_print(vcl_cout, C_svd.V(), "V");
-  
+
   vcl_complex<double> rhs[4]; rhs[0]=3; rhs[1]=9; rhs[2]=-2; rhs[3]=-8;
   vnl_vector<vcl_complex<double> > b(rhs, 4);
 

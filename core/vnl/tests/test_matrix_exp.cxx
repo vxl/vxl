@@ -21,7 +21,7 @@ void test_matrix_exp()
 
   vnl_matrix<double> X = vnl_cross_product_matrix(v);
   vnl_matlab_print(vcl_cout, X, "[v]");
-  
+
   vnl_matrix<double> expX = vnl_matrix_exp(X);
   vnl_matlab_print(vcl_cout, expX, "matrix exp([v])");
   testlib_test_assert("expX(0,0)", vcl_abs(expX(0,0)-0.6221833130) < 1e-10);

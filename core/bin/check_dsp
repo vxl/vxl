@@ -306,7 +306,7 @@ foreach $dir (@DIRS)
   @test_files = sort(@test_files); push @test_files, "~END";
   next if ("@source" eq "@sources" && "@source" eq "@source_files" && "@tests" eq "@test_files"
         && "@hsource" eq "@hsources" && "@hsource" eq "@hsource_files" && "@hsource" eq "@hfiles");
-  
+
   $source=""; $sources=""; $source_files="";
   # Note that shift() removes the *first* element from the list, so we run through
   # the lists in alphabetical order.

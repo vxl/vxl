@@ -25,6 +25,6 @@ int main (int argc, char** argv)
     vil_save(vil_image_as_rgb_byte(vil_clamp(in, low, high)), argv[4], "pnm");
   else
     ;
-  
+
   return 0;
 }

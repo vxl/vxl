@@ -19,7 +19,7 @@ void test_fft_1d(int N)
 {
   vnl_vector<vcl_complex<double> > signal(N);
   test_util_fill_random(signal.begin(), signal.end());
-  
+
   vnl_fft_1d<double> fft(N);
 
   vnl_vector<vcl_complex<double> > tmp = signal;
@@ -40,7 +40,7 @@ void test_fft_2d(int M, int N)
 {
   vnl_matrix<vcl_complex<double> > signal(M, N);
   test_util_fill_random(signal.begin(), signal.end());
-  
+
   vnl_fft_2d<double> fft(M, N);
 
   vnl_matrix<vcl_complex<double> > tmp = signal;

@@ -47,9 +47,9 @@ int test_vcl_compiler_main()
     vcl_cout << i << vcl_endl;
   for (int i = 0; i < 2; ++i)
     ;
-  
+
   vcl_test_implicit_instantiation(100);
-  
+
   return (int)(long) X<int>::pl;
 }
 
@@ -83,7 +83,7 @@ void vcl_test_implicit_instantiation(int n)
   vcl_sort(v.begin(), v.end());
   v = v;
   v.clear();
-  
+
   typedef vcl_map<int, mystery_type, vcl_less<int> > map_t;
   map_t m;
   for (int i=0; i<n; ++i)

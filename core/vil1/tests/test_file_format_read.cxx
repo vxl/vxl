@@ -46,7 +46,7 @@ public:
   {
     assert( p == 0 );
     return img_ && pixel.size() == 3 && pixel[0] == img_(x,y).r && pixel[1] == img_(x,y).g && pixel[2] == img_(x,y).b;
-  } 
+  }
 private:
   vil_memory_image_of< vil_rgb<T> > img_;
 };
@@ -67,7 +67,7 @@ public:
   bool operator() ( int p, int x, int y, const vcl_vector<TruePixelType>& pixel ) const
   {
     return img_ && pixel.size() == 1 && pixel[0] == img_(15*y+3*x+p,0);
-  } 
+  }
 private:
   vil_memory_image_of< T > img_;
 };
@@ -89,7 +89,7 @@ public:
   {
     assert( p == 0 );
     return img_ && pixel.size() == 1 && pixel[0] == img_(x,y);
-  } 
+  }
 private:
   vil_memory_image_of< T > img_;
 };
@@ -115,7 +115,7 @@ test( const char* true_data_file, const CheckPixel& check )
   int num_comp;
   int width;
   int height;
-  
+
   vcl_ifstream fin( (image_base+true_data_file).c_str() );
   if( !( fin >> num_planes >> num_comp >> width >> height ) ) {
     vcl_cout << "[couldn't read header from " << true_data_file << "]";

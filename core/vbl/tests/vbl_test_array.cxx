@@ -11,7 +11,7 @@
 # define container vcl_vector
 #endif
 
-struct X 
+struct X
 {
   // NB no default constructor
   X(int a, int b) : x(a + b) { }
@@ -40,7 +40,7 @@ int main(int, char **)
 
   for (container<X>::iterator i=v.begin(); i!=v.end(); ++i)
     (*i).method();
-  
+
   return 0;
 }
 

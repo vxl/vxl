@@ -16,7 +16,7 @@ public:
   vul_timestamp();
   //: Destructor
   virtual ~vul_timestamp();
-  
+
   //: Get a new timestamp
   void touch();
   //: Get a new timestamp (incremented by 1 each time)
@@ -32,7 +32,7 @@ protected:
   unsigned long timestamp_;
 
 private:
-  //: mark is incremented to give a unique timestamp 
+  //: mark is incremented to give a unique timestamp
   static unsigned long mark;
 
   //: get a new timestamp

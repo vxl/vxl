@@ -7,9 +7,9 @@
 #if defined (linux) && defined (__OPTIMIZE__)
 // * avoid infinite recursion when calling vnl_math::isfinite().
 // * avoid symbol in object file being called vnl_math::_isinf.
-# undef isinf  
+# undef isinf
 // * avoid that vnl_math::isnan is redefined in <math.h>.
-# undef isnan  
+# undef isnan
 #endif
 
 #endif // vcl_cmath_h_

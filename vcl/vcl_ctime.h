@@ -3,7 +3,7 @@
 /*
   fsm@robots.ox.ac.uk
 */
-  
+
 #include "vcl_compiler.h"
 
 // Purpose: provide access to the <time.h> standard C header.

@@ -7,7 +7,7 @@
 #include <vnl/algo/vnl_lsqr.h>
 
 int main (int argc, char** argv) {
-  
+
   vnl_sparse_matrix<double> A(10000, 1000);
 
   vcl_vector<int> cols(50);
@@ -23,7 +23,7 @@ int main (int argc, char** argv) {
     A.set_row(row_, cols, vals);
     A.scale_row(row_, 1.0/sum);
   }
-  
+
   vnl_vector<double> x(1000);
   for (int i=0; i < 1000; ++i)
     x[i] = (double) vcl_rand() / (double) RAND_MAX;

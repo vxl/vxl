@@ -26,7 +26,7 @@ void test_psfile()
   f.set_line_width(0.2f);
 
   f.postscript_header();
-  
+
   const int wd = 32, ht = 32;
 
   if (TEST_GREY) {
