@@ -174,7 +174,7 @@ unsigned long mbl_mz_random::lrand32()
 
 int mbl_mz_random::lrand32(int lower, int upper)
 {
-  assert(lower < upper);
+  assert(lower <= upper);
 
   // Note: we have to reject some numbers otherwise we get a very slight bias
   // towards the lower part of the range lower - upper. See below
@@ -189,7 +189,7 @@ int mbl_mz_random::lrand32(int lower, int upper)
 
 int mbl_mz_random::lrand32(int lower, int upper, int &count)
 {
-  assert(lower < upper);
+  assert(lower <= upper);
 
   // Note: we have to reject some numbers otherwise we get a very slight bias
   // towards the lower part of the range lower - upper. Hence this is a "count"
@@ -206,13 +206,13 @@ int mbl_mz_random::lrand32(int lower, int upper, int &count)
 
 double mbl_mz_random::drand32(double lower, double upper)
 {
-  assert(lower < upper);
+  assert(lower <= upper);
   return  (double(lrand32())/0xffffffff)*(upper-lower) + lower;
 }
 
 double mbl_mz_random::drand64(double lower, double upper)
 {
-  assert(lower < upper);
+  assert(lower <= upper);
   return  (double(lrand32())/0xffffffff + double(lrand32())/(double(0xffffffff)*double(0xffffffff)))*(upper-lower) + lower;
 }
 
