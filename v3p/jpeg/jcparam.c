@@ -592,7 +592,7 @@ jpeg_simple_progression (j_compress_ptr cinfo)
     scanptr = fill_a_scan(scanptr, 2, 1, 63, 1, 0);
     scanptr = fill_a_scan(scanptr, 1, 1, 63, 1, 0);
     /* Luma bottom bit comes last since it's usually largest scan */
-    scanptr = fill_a_scan(scanptr, 0, 1, 63, 1, 0);
+              fill_a_scan(scanptr, 0, 1, 63, 1, 0);
   } else {
     /* All-purpose script for other color spaces. */
     /* Successive approximation first pass */

@@ -1192,7 +1192,7 @@ GLOBAL(boolean)
 jpeg_resync_to_restart (j_decompress_ptr cinfo, int desired)
 {
   int marker = cinfo->unread_marker;
-  int action = 1;
+  int action;
 
   /* Always put up a warning. */
   WARNMS2(cinfo, JWRN_MUST_RESYNC, marker, desired);
