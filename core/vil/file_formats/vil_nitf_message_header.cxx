@@ -146,7 +146,7 @@ void vil_nitf_message_header::display_header_info (vcl_string caller) const
     vcl_cout << vcl_endl;
 
     vcl_cout << "message version from file = " << this->MHDR << vcl_endl
-             << "message header length  = " << this->HL << vcl_endl
+             << "message header length  = " << this->GetHeaderLength() << vcl_endl
              << "message length = " << this->ML << vcl_endl
              << "station ID = " << this->OSTAID << vcl_endl
              << "message date and time = " << this->MDT << vcl_endl
@@ -169,6 +169,19 @@ void vil_nitf_message_header::display_header_info (vcl_string caller) const
              << "number of RES segments = " << this->NUMRES << vcl_endl;
 
 }  // end method display_header_info
+
+unsigned long vil_nitf_message_header::get_image_header_length (int image_num) const
+{
+    unsigned long header_length = 0;
+
+    if (this->NUMI > 0) {
+      if (image_num < this->NUMI
+          && (this->IMAGESH[image_num] != 0)) {
+          header_length = this->IMAGESH[image_num]->LISH ;
+      }
+    }
+    return header_length ;
+}
 
 unsigned long vil_nitf_message_header::get_image_data_length (int image_num) const
 {
