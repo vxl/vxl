@@ -102,46 +102,7 @@ LIB32=link.exe -lib
 SOURCE=.\bdgl_curve_algs.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\bdgl_curve_description.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bdgl_curve_matcher.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\bdgl_curve_region.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bdgl_curve_tracker.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bdgl_curve_tracker_primitive.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\DPMatch.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+bdgl_tracker_curve-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+match_data-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bdgl_curve_clustering.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bdgl_curve_tracking.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bdgl_tracker_curve.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\curve.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\utils.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bdgl_curve_matching.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -150,46 +111,7 @@ SOURCE=.\bdgl_curve_matching.cxx
 SOURCE=.\bdgl_curve_algs.h
 # End Source File
 # Begin Source File
-SOURCE=.\bdgl_curve_description.h
-# End Source File
-# Begin Source File
-SOURCE=.\bdgl_curve_matcher.h
-# End Source File
-# Begin Source File
 SOURCE=.\bdgl_curve_region.h
-# End Source File
-# Begin Source File
-SOURCE=.\bdgl_curve_tracker.h
-# End Source File
-# Begin Source File
-SOURCE=.\bdgl_curve_tracker_primitive.h
-# End Source File
-# Begin Source File
-SOURCE=.\DPMatch.h
-# End Source File
-# Begin Source File
-SOURCE=.\bdgl_curve_clustering.h
-# End Source File
-# Begin Source File
-SOURCE=.\bdgl_curve_tracking.h
-# End Source File
-# Begin Source File
-SOURCE=.\bdgl_tracker_curve.h
-# End Source File
-# Begin Source File
-SOURCE=.\bdgl_tracker_curve_sptr.h
-# End Source File
-# Begin Source File
-SOURCE=.\curve.h
-# End Source File
-# Begin Source File
-SOURCE=.\curveMatch.h
-# End Source File
-# Begin Source File
-SOURCE=.\utils.h
-# End Source File
-# Begin Source File
-SOURCE=.\bdgl_curve_matching.h
 # End Source File
 # End Group
 # End Target
