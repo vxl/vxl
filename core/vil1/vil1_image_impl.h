@@ -36,6 +36,19 @@ enum vil_component_format {
   VIL_COMPONENT_FORMAT_COMPLEX
 };
 
+inline
+const char* vil_print(vil_component_format f)
+{
+  switch(f) {
+    case VIL_COMPONENT_FORMAT_UNKNOWN: return "VIL_COMPONENT_FORMAT=UNKNOWN";
+    case VIL_COMPONENT_FORMAT_UNSIGNED_INT: return "VIL_COMPONENT_FORMAT=unsigned int";
+    case VIL_COMPONENT_FORMAT_SIGNED_INT: return "VIL_COMPONENT_FORMAT=signed int";
+    case VIL_COMPONENT_FORMAT_IEEE_FLOAT: return "VIL_COMPONENT_FORMAT=IEEE float";
+    case VIL_COMPONENT_FORMAT_COMPLEX: return "VIL_COMPONENT_FORMAT=complex";
+    default: return "VIL_COMPONENT_FORMAT_INVALID";
+  }
+}
+
 //:
 // Representation of a generic image.
 //
