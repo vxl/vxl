@@ -163,7 +163,7 @@ public:
 
   virtual bool operator==(const vtol_face &other)const;
   inline bool operator!=(const vtol_face &other)const{return !operator==(other);}
-  bool operator==(const vsol_spatial_object_3d& obj) const; // virtual of vsol_spatial_object
+  bool operator==(const vsol_spatial_object_2d& obj) const; // virtual of vsol_spatial_object_2d
 
   virtual void print(vcl_ostream &strm=vcl_cout) const;
 

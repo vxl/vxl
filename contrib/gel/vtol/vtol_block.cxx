@@ -6,7 +6,6 @@
 #include <vtol/vtol_edge.h>
 #include <vtol/vtol_macros.h>
 #include <vtol/vtol_list_functions.h>
-#include <vsol/vsol_box_3d.h>
 #include <vcl_algorithm.h>
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
@@ -122,7 +121,7 @@ vtol_block::~vtol_block()
 //: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_3d_sptr vtol_block::clone(void) const
+vsol_spatial_object_2d_sptr vtol_block::clone(void) const
 {
   return new vtol_block(*this);
 }
@@ -396,10 +395,10 @@ bool vtol_block::operator==(const vtol_block &other) const
 
 //: spatial object equality
 
-bool vtol_block::operator==(const vsol_spatial_object_3d& obj) const
+bool vtol_block::operator==(const vsol_spatial_object_2d& obj) const
 {
   return
-   obj.spatial_type() == vsol_spatial_object_3d::TOPOLOGYOBJECT &&
+   obj.spatial_type() == vsol_spatial_object_2d::TOPOLOGYOBJECT &&
    ((vtol_topology_object const&)obj).topology_type() == vtol_topology_object::BLOCK
   ? *this == (vtol_block const&) (vtol_topology_object const&) obj
   : false;

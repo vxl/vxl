@@ -106,7 +106,7 @@ public:
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_3d_sptr clone(void) const;
+  virtual vsol_spatial_object_2d_sptr clone(void) const;
 
   //---------------------------------------------------------------------------
   //: Return the curve associated to `this'
@@ -124,7 +124,7 @@ public:
   virtual bool operator==(const vtol_edge_2d &other) const;
   inline bool operator!=(const vtol_edge_2d &other)const{return !operator==(other);}
   bool operator==(const vtol_edge &other) const; // virtual of vtol_edge
-  bool operator==(const vsol_spatial_object_3d& obj) const; // virtual of vsol_spatial_object_2d
+  bool operator==(const vsol_spatial_object_2d& obj) const; // virtual of vsol_spatial_object_2d
 
   //***************************************************************************
   // Replaces dynamic_cast<T>

@@ -54,7 +54,7 @@ int main(int, char **)
 
   Assert(*oc2==*oc3);
 
-  vsol_spatial_object_3d_sptr so_oc_clone = oc3->clone();
+  vsol_spatial_object_2d_sptr so_oc_clone = oc3->clone();
   vtol_one_chain_sptr oc3_clone = so_oc_clone->cast_to_topology_object()->cast_to_one_chain();
 
   Assert(*oc3_clone==*oc3);
@@ -138,7 +138,7 @@ int main(int, char **)
 
   Assert(oc1->num_edges()==4);
 
-  vsol_spatial_object_3d_sptr oc1_clone = oc1->clone();
+  vsol_spatial_object_2d_sptr oc1_clone = oc1->clone();
 
   Assert(*oc1 == *oc1_clone);
   Assert(!(*oc1 == *och1));

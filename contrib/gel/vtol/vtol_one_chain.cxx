@@ -8,7 +8,7 @@
 #include <vtol/vtol_edge.h>
 #include <vtol/vtol_macros.h>
 #include <vtol/vtol_list_functions.h>
-#include <vsol/vsol_box_3d_sptr.h>
+#include <vsol/vsol_box_2d_sptr.h>
 
 
 vtol_edge *vtol_one_chain::edge(int i) const
@@ -131,7 +131,7 @@ vtol_one_chain::~vtol_one_chain()
 //: Clone `this': creation of a new object and initialization.
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_3d_sptr vtol_one_chain::clone(void) const
+vsol_spatial_object_2d_sptr vtol_one_chain::clone(void) const
 {
   return new vtol_one_chain(*this);
 }
@@ -268,7 +268,7 @@ vtol_one_chain::outside_boundary_compute_vertices(void)
         }
       delete templist;
     }
-  tagged_union((vcl_vector<vsol_spatial_object_3d *> *)result);
+  tagged_union((vcl_vector<vsol_spatial_object_2d *> *)result);
   return result;
 }
 
@@ -486,7 +486,7 @@ vcl_vector<vtol_face*> *vtol_one_chain::compute_faces(void)
             }
           delete sublist;
         }
-      tagged_union((vcl_vector<vsol_spatial_object_3d *> *)result);
+      tagged_union((vcl_vector<vsol_spatial_object_2d *> *)result);
       return result;
     }
   else
@@ -522,7 +522,7 @@ vcl_vector<vtol_two_chain*> *vtol_one_chain::compute_two_chains(void)
             }
           delete sublist;
         }
-      tagged_union((vcl_vector<vsol_spatial_object_3d *> *)result);
+      tagged_union((vcl_vector<vsol_spatial_object_2d *> *)result);
       return result;
     }
   else
@@ -559,7 +559,7 @@ vcl_vector<vtol_block*> *vtol_one_chain::compute_blocks(void)
             }
           delete sublist;
         }
-      tagged_union((vcl_vector<vsol_spatial_object_3d *> *)result);
+      tagged_union((vcl_vector<vsol_spatial_object_2d *> *)result);
       return result;
     }
   else
@@ -600,7 +600,7 @@ void vtol_one_chain::compute_bounding_box(void)
   for (eit=edgs->begin();eit!=edgs->end();++eit)
     {
       vtol_edge_sptr e=(*eit);
-      vsol_box_3d_sptr b=e->get_bounding_box();
+      vsol_box_2d_sptr b=e->get_bounding_box();
       if (!b)
         {
           vcl_cout << "In vtol_one_chain::ComputeBoundingBox()"
@@ -876,10 +876,10 @@ void vtol_one_chain::reverse_directions(void)
 //---------------------------------------------------------------------------
 //: Spatial object equality
 //---------------------------------------------------------------------------
-bool vtol_one_chain::operator==(vsol_spatial_object_3d const& obj) const
+bool vtol_one_chain::operator==(vsol_spatial_object_2d const& obj) const
 {
   return
-   obj.spatial_type() == vsol_spatial_object_3d::TOPOLOGYOBJECT &&
+   obj.spatial_type() == vsol_spatial_object_2d::TOPOLOGYOBJECT &&
    ((vtol_topology_object const&)obj).topology_type() == vtol_topology_object::ONECHAIN
   ? *this == (vtol_one_chain const&) (vtol_topology_object const&) obj
   : false;

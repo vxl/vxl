@@ -23,7 +23,7 @@
         }\
         delete sublist;\
       }\
-       tagged_union((vcl_vector<vsol_spatial_object_3d *> *)new_list);\
+       tagged_union((vcl_vector<vsol_spatial_object_2d *> *)new_list);\
       return new_list
 
 #define SEL_INF(inftype,target)\
@@ -41,7 +41,7 @@
       }\
      delete sublist;\
     }\
-    tagged_union((vcl_vector<vsol_spatial_object_3d *> *)new_list);\
+    tagged_union((vcl_vector<vsol_spatial_object_2d *> *)new_list);\
     return new_list
 
 #define SUBCHAIN_INF(listnm, suptype, inftype, target) \
@@ -56,7 +56,7 @@
           } \
          delete templist;\
        } \
-    tagged_union((vcl_vector<vsol_spatial_object_3d*> *)listnm); \
+    tagged_union((vcl_vector<vsol_spatial_object_2d*> *)listnm); \
     return listnm
 
 

@@ -206,7 +206,7 @@ vtol_two_chain::~vtol_two_chain()
 //: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_3d_sptr vtol_two_chain::clone(void) const
+vsol_spatial_object_2d_sptr vtol_two_chain::clone(void) const
 {
   return new vtol_two_chain(*this);
 }
@@ -652,7 +652,7 @@ vcl_vector<vtol_block*> *vtol_two_chain::compute_blocks(void)
               result->push_back(*si);
           delete sublist;
         }
-      tagged_union((vcl_vector<vsol_spatial_object_3d*> *)result); // from vsol_spatial_object_3dListExtras.h
+      tagged_union((vcl_vector<vsol_spatial_object_2d*> *)result);
       return result;
     }
   else
@@ -774,9 +774,9 @@ bool vtol_two_chain::operator==(vtol_two_chain const& other) const
 
 //: spatial object equality
 
-bool vtol_two_chain::operator==(vsol_spatial_object_3d const& obj) const
+bool vtol_two_chain::operator==(vsol_spatial_object_2d const& obj) const
 {
-  return obj.spatial_type() == vsol_spatial_object_3d::TOPOLOGYOBJECT &&
+  return obj.spatial_type() == vsol_spatial_object_2d::TOPOLOGYOBJECT &&
    ((vtol_topology_object const&)obj).topology_type() == vtol_topology_object::TWOCHAIN
   ? *this == (vtol_two_chain const&) (vtol_topology_object const&) obj
   : false;

@@ -41,7 +41,7 @@
 //    ported by Luis E. Galup
 
 #include <vtol/vtol_topology_object_sptr.h>
-#include <vsol/vsol_spatial_object_3d.h>
+#include <vsol/vsol_spatial_object_2d.h>
 
 #include <vcl_vector.h>
 #include <vcl_list.h>
@@ -86,7 +86,7 @@ typedef vcl_vector<vtol_block *>           block_list;
 //*****************************************************************************
 
 class vtol_topology_object
-  : public vsol_spatial_object_3d
+  : public vsol_spatial_object_2d
 {
 public:
   enum vtol_topology_object_type
@@ -256,7 +256,7 @@ public:
   //---------------------------------------------------------------------------
   //: Return the spatial type
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_3d_type spatial_type(void) const;
+  virtual vsol_spatial_object_2d_type spatial_type(void) const;
 
   //---------------------------------------------------------------------------
   //: Return the topology type

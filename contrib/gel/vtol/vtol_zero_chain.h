@@ -72,7 +72,7 @@ public:
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_3d_sptr clone(void) const;
+  virtual vsol_spatial_object_2d_sptr clone(void) const;
 
   //---------------------------------------------------------------------------
   //: Return the topology type
@@ -124,7 +124,7 @@ public:
   //---------------------------------------------------------------------------
   virtual bool operator==(const vtol_zero_chain &other) const;
   inline bool operator!=(const vtol_zero_chain &other)const{return !operator==(other);}
-  bool operator==(const vsol_spatial_object_3d& obj) const; // virtual of vsol_spatial_object_3d
+  bool operator==(const vsol_spatial_object_2d& obj) const; // virtual of vsol_spatial_object_2d
 
   virtual void print(vcl_ostream &strm=vcl_cout) const;
   virtual void describe(vcl_ostream &strm=vcl_cout,

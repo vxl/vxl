@@ -85,7 +85,7 @@ int main(int, char **)
 
   Assert(*f1 == *f1_copy);
 
-  vsol_spatial_object_3d_sptr f1_clone = f1->clone();
+  vsol_spatial_object_2d_sptr f1_clone = f1->clone();
   Assert(*f1 == *f1_clone);
 
   vsol_region_2d_sptr surf = f1->surface();

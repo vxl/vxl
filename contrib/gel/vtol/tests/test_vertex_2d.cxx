@@ -46,7 +46,7 @@ int main(int, char **)
 
   // try to clone this vertex
 
-  vsol_spatial_object_3d_sptr so = v1->clone();
+  vsol_spatial_object_2d_sptr so = v1->clone();
 
   vtol_topology_object_sptr to = so->cast_to_topology_object();
   Assert(to);

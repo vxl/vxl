@@ -110,7 +110,7 @@ int main(int, char **)
   Assert(*(b2->get_boundary_cycle()) == *(b2_copy->get_boundary_cycle()));
   Assert(*b2 == *b2_copy);
 
-  vsol_spatial_object_3d_sptr b2_clone = b2->clone();
+  vsol_spatial_object_2d_sptr b2_clone = b2->clone();
 
   Assert(*b2 == *b2_clone);
   Assert(b2->cast_to_block()!=0);

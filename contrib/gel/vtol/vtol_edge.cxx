@@ -229,9 +229,9 @@ bool vtol_edge::operator==(const vtol_edge &other) const
 
 //: spatial object equality
 
-bool vtol_edge::operator==(const vsol_spatial_object_3d& obj) const
+bool vtol_edge::operator==(const vsol_spatial_object_2d& obj) const
 {
-  return obj.spatial_type() == vsol_spatial_object_3d::TOPOLOGYOBJECT &&
+  return obj.spatial_type() == vsol_spatial_object_2d::TOPOLOGYOBJECT &&
    ((vtol_topology_object const&)obj).topology_type() == vtol_topology_object::EDGE
   ? *this == (vtol_edge const&) (vtol_topology_object const&) obj
   : false;
@@ -355,7 +355,7 @@ bool vtol_edge::remove_vertex(vtol_vertex &uglyvert)
 
 bool vtol_edge::is_endpoint(const vtol_vertex &v) const
 {
-  return (is_endpoint1(v)||is_endpoint2(v));
+  return is_endpoint1(v)||is_endpoint2(v);
 }
 
 

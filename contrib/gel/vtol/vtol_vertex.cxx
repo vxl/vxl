@@ -48,7 +48,7 @@ vtol_vertex::~vtol_vertex()
 //: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
- vsol_spatial_object_3d_sptr vtol_vertex::clone(void) const
+ vsol_spatial_object_2d_sptr vtol_vertex::clone(void) const
 {
   return new vtol_vertex(*this);
 }
@@ -210,10 +210,10 @@ vtol_vertex &vtol_vertex::operator=(const vtol_vertex &other)
 
 //: spatial object equality
 
-bool vtol_vertex::operator==(const vsol_spatial_object_3d& obj) const
+bool vtol_vertex::operator==(const vsol_spatial_object_2d& obj) const
 {
   return
-  obj.spatial_type() == vsol_spatial_object_3d::TOPOLOGYOBJECT &&
+  obj.spatial_type() == vsol_spatial_object_2d::TOPOLOGYOBJECT &&
    ((vtol_topology_object const&)obj).topology_type() == vtol_topology_object::VERTEX
   ? *this == (vtol_vertex const&) (vtol_topology_object const&) obj
   : false;

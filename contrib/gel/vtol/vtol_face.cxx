@@ -300,10 +300,10 @@ bool vtol_face::operator==(const vtol_face &other) const
 //---------------------------------------------------------------------------
 //: Spatial object equality
 //---------------------------------------------------------------------------
-bool vtol_face::operator==(const vsol_spatial_object_3d& obj) const
+bool vtol_face::operator==(const vsol_spatial_object_2d& obj) const
 {
   return
-   obj.spatial_type() == vsol_spatial_object_3d::TOPOLOGYOBJECT &&
+   obj.spatial_type() == vsol_spatial_object_2d::TOPOLOGYOBJECT &&
    ((vtol_topology_object const&)obj).topology_type() == vtol_topology_object::FACE
   ? *this == (vtol_face const&) (vtol_topology_object const&) obj
   : false;

@@ -128,7 +128,7 @@ vtol_topology_object::inferiors(void) const
 // Name: spatial_type
 // Name: Return the spatial type
 //---------------------------------------------------------------------------
-vtol_topology_object::vsol_spatial_object_3d_type
+vtol_topology_object::vsol_spatial_object_2d_type
 vtol_topology_object::spatial_type(void) const
 {
   return TOPOLOGYOBJECT;

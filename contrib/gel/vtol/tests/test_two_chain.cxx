@@ -75,7 +75,7 @@ int main(int, char **)
 
   Assert(!(*tc1 == *tc2));
 
-  vsol_spatial_object_3d_sptr tc2_clone = tc2->clone();
+  vsol_spatial_object_2d_sptr tc2_clone = tc2->clone();
 
   Assert(*tc2 == *tc2_clone);
 

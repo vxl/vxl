@@ -79,7 +79,7 @@ vtol_zero_chain::~vtol_zero_chain()
 //: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_3d_sptr vtol_zero_chain::clone(void) const
+vsol_spatial_object_2d_sptr vtol_zero_chain::clone(void) const
 {
   return new vtol_zero_chain(*this);
 }
@@ -206,10 +206,10 @@ bool vtol_zero_chain::operator==(const vtol_zero_chain &other) const
 
 //: spatial object equality
 
-bool vtol_zero_chain::operator==(const vsol_spatial_object_3d& obj) const
+bool vtol_zero_chain::operator==(const vsol_spatial_object_2d& obj) const
 {
   return
-   obj.spatial_type() == vsol_spatial_object_3d::TOPOLOGYOBJECT &&
+   obj.spatial_type() == vsol_spatial_object_2d::TOPOLOGYOBJECT &&
    ((vtol_topology_object const&)obj).topology_type() == vtol_topology_object::ZEROCHAIN
   ? *this == (vtol_zero_chain const&) (vtol_topology_object const&) obj
   : false;

@@ -181,7 +181,7 @@ vtol_edge_2d::vtol_edge_2d(vsol_curve_2d &edgecurve)
 //: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_3d_sptr vtol_edge_2d::clone(void) const
+vsol_spatial_object_2d_sptr vtol_edge_2d::clone(void) const
 {
   return new vtol_edge_2d(*this);
 }
@@ -239,10 +239,10 @@ bool vtol_edge_2d::operator==(const vtol_edge &other) const
 }
 
 //: spatial object equality
-bool vtol_edge_2d::operator==(const vsol_spatial_object_3d& obj) const
+bool vtol_edge_2d::operator==(const vsol_spatial_object_2d& obj) const
 {
   return
-   obj.spatial_type() == vsol_spatial_object_3d::TOPOLOGYOBJECT &&
+   obj.spatial_type() == vsol_spatial_object_2d::TOPOLOGYOBJECT &&
    ((vtol_topology_object const&)obj).topology_type() == vtol_topology_object::EDGE
   ? *this == (vtol_edge_2d const&) (vtol_topology_object const&) obj
   : false;

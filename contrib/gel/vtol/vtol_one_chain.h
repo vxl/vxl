@@ -84,7 +84,7 @@ public:
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_3d_sptr clone(void) const;
+  virtual vsol_spatial_object_2d_sptr clone(void) const;
 
   // Access methods
 
@@ -163,7 +163,7 @@ public:
 
   virtual bool operator==(vtol_one_chain const& other) const;
   inline bool operator!=(const vtol_one_chain &other)const{return !operator==(other);}
-  bool operator==(vsol_spatial_object_3d const& obj) const; // virtual of vsol_spatial_object_3d
+  bool operator==(vsol_spatial_object_2d const& obj) const; // virtual of vsol_spatial_object_2d
 
   virtual void print(vcl_ostream &strm=vcl_cout) const;
   virtual void describe_directions(vcl_ostream &strm=vcl_cout, int blanking=0) const;

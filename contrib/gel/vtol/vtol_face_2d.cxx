@@ -96,7 +96,7 @@ vtol_face_2d::~vtol_face_2d()
 //: Clone `this': creation of a new object and initialization.
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_3d_sptr vtol_face_2d::clone(void) const
+vsol_spatial_object_2d_sptr vtol_face_2d::clone(void) const
 {
   return new vtol_face_2d(*this);
 }
@@ -319,10 +319,10 @@ bool vtol_face_2d::operator==(const vtol_face &other) const
 
 //: spatial object equality
 
-bool vtol_face_2d::operator==(const vsol_spatial_object_3d& obj) const
+bool vtol_face_2d::operator==(const vsol_spatial_object_2d& obj) const
 {
   return
-   obj.spatial_type() == vsol_spatial_object_3d::TOPOLOGYOBJECT &&
+   obj.spatial_type() == vsol_spatial_object_2d::TOPOLOGYOBJECT &&
    ((vtol_topology_object const&)obj).topology_type() == vtol_topology_object::FACE
   ? *this == (vtol_face_2d const&) (vtol_topology_object const&) obj
   : false;
