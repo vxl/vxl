@@ -7,8 +7,6 @@
 
 #include "bvgl_norm_trans_2d.h"
 #include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_line_2d.h>
-#include <vcl_fstream.h>
 
 //--------------------------------------------------------------
 //
@@ -69,7 +67,7 @@ bvgl_norm_trans_2d<T>::~bvgl_norm_trans_2d<T>()
 // 1) Compute the center of gravity and form the normalizing
 //    transformation matrix
 // 2) Transform the point set to a temporary collection
-// 3) Compute the average point radius 
+// 3) Compute the average point radius
 // 4) Complete the normalizing transform
 template <class T>
 bool bvgl_norm_trans_2d<T>::
@@ -80,14 +78,14 @@ compute_from_points(vcl_vector<vgl_homg_point_2d<T> > const& points)
    t12_matrix_.set_identity();
    t12_matrix_.put(0,2, -cx);    t12_matrix_.put(1,2, -cy);
    vcl_vector<vgl_homg_point_2d<T> > temp;
-   for(vcl_vector<vgl_homg_point_2d<T> >::const_iterator pit = points.begin();
-       pit != points.end(); pit++)
+   for (vcl_vector<vgl_homg_point_2d<T> >::const_iterator pit = points.begin();
+        pit != points.end(); pit++)
      {
        vgl_homg_point_2d<T> p((*this)(*pit));
        temp.push_back(p);
      }
    //Points might be coincident
-   if(!this->scale_xyroot2(temp, radius))
+   if (!this->scale_xyroot2(temp, radius))
      return false;
    T scale = 1/radius;
    t12_matrix_.put(0,0, scale);
@@ -119,7 +117,7 @@ center_of_mass(vcl_vector<vgl_homg_point_2d<T> > const& in, T& cx, T& cy)
   unsigned n = in.size();
   for (unsigned i = 0; i < n; ++i)
     {
-    if(in[i].ideal(tol))
+    if (in[i].ideal(tol))
       continue;
     vgl_point_2d<T> p(in[i]);
     T x = p.x();
@@ -143,33 +141,31 @@ template <class T>
 bool bvgl_norm_trans_2d<T>::
 scale_xyroot2(vcl_vector<vgl_homg_point_2d<T> > const& in, T& radius)
 {
-  T magnitude = 0.0;
-  T numfinite = 0.0;
-  T tol = 1e-06;
-  radius = 0.0;
-  for (unsigned i = 0; i < in.size(); ++i) 
+  T magnitude = T(0);
+  int numfinite = 0;
+  T tol = T(1e-06);
+  radius = T(0);
+  for (unsigned i = 0; i < in.size(); ++i)
     {
-      if(in[i].ideal(tol))
+      if (in[i].ideal(tol))
         continue;
       vgl_point_2d<T> p(in[i]);
       vnl_vector_fixed<T, 2> v(p.x(), p.y());
       magnitude += v.magnitude();
       ++numfinite;
     }
-  
+
   if (numfinite > 0)
     {
-      magnitude /= numfinite;
-      radius = magnitude;
-      if(radius<tol)
-        return false;
-      return true;
+      radius = magnitude / numfinite;
+      return radius>=tol;
     }
   return false;
 }
+
 //----------------------------------------------------------------------------
 #undef BVGL_NORM_TRANS_2D_INSTANTIATE
 #define BVGL_NORM_TRANS_2D_INSTANTIATE(T) \
-template class bvgl_norm_trans_2d<T >; 
+template class bvgl_norm_trans_2d<T >
 
 #endif // bvgl_norm_trans_2d_txx_
