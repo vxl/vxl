@@ -1,17 +1,16 @@
+#include "rgrl_trans_affine.h"
 //:
 // \file
 // \author Amitha Perera
 // \date   Feb 2003
 //
 // \verbatim
-// Modifications
-//     Sep 2003 Charlene Tsai, added inv_map(.) functions.
-// \endverbatim 
-
-#include "rgrl_trans_affine.h"
-
+//  Modifications
+//   Sep 2003 Charlene Tsai, added inv_map(.) functions.
+// \endverbatim
 
 #include <vcl_cassert.h>
+#include <vcl_cstdlib.h>
 #include <vnl/algo/vnl_svd.h>
 #include <rgrl/rgrl_util.h>
 
@@ -23,10 +22,10 @@ rgrl_trans_affine( unsigned int dimension )
     from_centre_( dimension, 0.0 )
 {
 }
-  
+
 
 rgrl_trans_affine::
-rgrl_trans_affine( vnl_matrix<double> const& in_A, 
+rgrl_trans_affine( vnl_matrix<double> const& in_A,
                    vnl_vector<double> const& in_trans,
                    vnl_matrix<double> const& in_covar )
   : A_( in_A ),
@@ -34,14 +33,14 @@ rgrl_trans_affine( vnl_matrix<double> const& in_A,
     covar_( in_covar ),
     from_centre_( in_trans.size(), 0.0 )
 {
-  assert( A_.rows() == A_.cols() );
-  assert( A_.rows() == trans_.size() );
-  assert( covar_.rows() == covar_.cols() );
-  assert( covar_.rows() == A_.rows()* (A_.rows()+1) );
+  assert ( A_.rows() == A_.cols() );
+  assert ( A_.rows() == trans_.size() );
+  assert ( covar_.rows() == covar_.cols() );
+  assert ( covar_.rows() == A_.rows()* (A_.rows()+1) );
 }
 
 rgrl_trans_affine::
-rgrl_trans_affine( vnl_matrix<double> const& in_A, 
+rgrl_trans_affine( vnl_matrix<double> const& in_A,
                    vnl_vector<double> const& in_trans )
   : A_( in_A ),
     trans_( in_trans ),
@@ -50,14 +49,14 @@ rgrl_trans_affine( vnl_matrix<double> const& in_A,
   int dim = in_trans.size();
   covar_ = vnl_matrix<double>( dim*(dim+1), dim*(dim+1), 0.0 );
 
-  assert( A_.rows() == A_.cols() );
-  assert( A_.rows() == trans_.size() );
-  assert( covar_.rows() == covar_.cols() );
-  assert( covar_.rows() == A_.rows()* (A_.rows()+1) );
+  assert ( A_.rows() == A_.cols() );
+  assert ( A_.rows() == trans_.size() );
+  assert ( covar_.rows() == covar_.cols() );
+  assert ( covar_.rows() == A_.rows()* (A_.rows()+1) );
 }
 
 rgrl_trans_affine::
-rgrl_trans_affine( vnl_matrix<double> const& in_A, 
+rgrl_trans_affine( vnl_matrix<double> const& in_A,
                    vnl_vector<double> const& in_trans,
                    vnl_matrix<double> const& in_covar,
                    vnl_vector<double> const& in_from_centre,
@@ -67,11 +66,11 @@ rgrl_trans_affine( vnl_matrix<double> const& in_A,
     covar_( in_covar ),
     from_centre_( in_from_centre )
 {
-  assert( A_.rows() == A_.cols() );
-  assert( A_.rows() == trans_.size() );
-  assert( covar_.rows() == covar_.cols() );
-  assert( covar_.rows() == A_.rows()* (A_.rows()+1) );
-  assert( from_centre_.size() == trans_.size() );
+  assert ( A_.rows() == A_.cols() );
+  assert ( A_.rows() == trans_.size() );
+  assert ( covar_.rows() == covar_.cols() );
+  assert ( covar_.rows() == A_.rows()* (A_.rows()+1) );
+  assert ( from_centre_.size() == trans_.size() );
 }
 
 
@@ -80,7 +79,7 @@ rgrl_trans_affine::
 map_loc( vnl_vector<double> const& from,
          vnl_vector<double>      & to   ) const
 {
-  assert( from.size() == A_.rows() );
+  assert ( from.size() == A_.rows() );
   to = A_ * (from-from_centre_) + trans_;
 }
 
@@ -91,8 +90,8 @@ map_dir( vnl_vector<double> const& from_loc,
          vnl_vector<double> const& from_dir,
          vnl_vector<double>      & to_dir    ) const
 {
-  assert( from_loc.size() == A_.cols() );
-  assert( from_dir.size() == A_.cols() );
+  assert ( from_loc.size() == A_.cols() );
+  assert ( from_dir.size() == A_.cols() );
   to_dir = A_ * from_dir;
   to_dir.normalize();
 }
@@ -104,12 +103,12 @@ transfer_error_covar( vnl_vector<double> const& p  ) const
 {
   unsigned const m = A_.rows();
 
-  assert( p.size() == m );
+  assert ( p.size() == m );
 
   vnl_matrix<double> temp( m, m*(m+1), 0.0 );
-  for( unsigned i=0; i < m; ++i ) {
+  for ( unsigned i=0; i < m; ++i ) {
     unsigned off = i*(m+1);
-    for( unsigned j=0; j < m; ++j ) {
+    for ( unsigned j=0; j < m; ++j ) {
       temp(i,off+j) = p[j] - from_centre_[j];
     }
     temp(i,off+m) = 1.0;
@@ -145,7 +144,7 @@ t() const
 
 void
 rgrl_trans_affine::
-inv_map( const vnl_vector<double>& to, 
+inv_map( const vnl_vector<double>& to,
          bool initialize_next,
          const vnl_vector<double>& to_delta,
          vnl_vector<double>& from,
@@ -153,7 +152,7 @@ inv_map( const vnl_vector<double>& to,
 {
   const double epsilon = 0.01;
   vnl_vector<double> to_est = this->map_location(from);
-  
+
   // compute the inverse of the Jacobian, which is the A_^-1
   vnl_svd<double> svd( A_ );
   vnl_matrix<double> J_inv = svd.inverse();
@@ -169,7 +168,7 @@ inv_map( const vnl_vector<double>& to,
 
 void
 rgrl_trans_affine::
-inv_map( const vnl_vector<double>& to, 
+inv_map( const vnl_vector<double>& to,
          vnl_vector<double>& from ) const
 {
   vnl_svd<double> svd( A_ );
@@ -183,47 +182,47 @@ jacobian( vnl_vector<double> const& from_loc ) const
   return A_;
 }
 
-rgrl_transformation_sptr 
+rgrl_transformation_sptr
 rgrl_trans_affine::
 scale_by( double scale ) const
 {
-  return new rgrl_trans_affine( A_, trans_ * scale, 
+  return new rgrl_trans_affine( A_, trans_ * scale,
                                 covar_, from_centre_ * scale,
                                 vnl_vector<double>(from_centre_.size(), 0.0) );
 }
 
-void 
+void
 rgrl_trans_affine::
 write( vcl_ostream& os ) const
 {
   // tag
-  os << "AFFINE" << vcl_endl;
+  os << "AFFINE\n"
   // parameters
-  os << trans_.size() << vcl_endl;
-  os << A_ << trans_ << ' ' << from_centre_ << vcl_endl;
+     << trans_.size() << vcl_endl
+     << A_ << trans_ << ' ' << from_centre_ << vcl_endl;
 }
 
-void 
+void
 rgrl_trans_affine::
 read( vcl_istream& is )
 {
   int dim;
-  
+
   // skip empty lines
   rgrl_util_skip_empty_lines( is );
-  
+
   vcl_string str;
   vcl_getline( is, str );
-  
-  if( str != "AFFINE" ) {
-    WarningMacro( "The tag is not AFFINE. reading is aborted." << vcl_endl );
-    exit(10);
+
+  if ( str != "AFFINE" ) {
+    WarningMacro( "The tag is not AFFINE. reading is aborted.\n" );
+    vcl_exit(10);
   }
-  
+
   // input global xform
   dim=-1;
   is >> dim;
-  if( dim > 0 ) {
+  if ( dim > 0 ) {
     A_.set_size( dim, dim );
     trans_.set_size( dim );
     from_centre_.set_size( dim );

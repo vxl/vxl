@@ -1,12 +1,11 @@
+#include "rgrl_trans_reduced_quad.h"
 //:
 // \file
 // \author Charlene Tsai
 // \date   Sep 2003
 
-#include "rgrl_trans_reduced_quad.h"
-
 #include <vcl_cassert.h>
-
+#include <vcl_cstdlib.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_math.h>
 #include <rgrl/rgrl_util.h>
@@ -20,11 +19,11 @@ rgrl_trans_reduced_quad( unsigned int dim)
     from_centre_( dim, 0.0 )
 {
 }
-  
+
 
 rgrl_trans_reduced_quad::
-rgrl_trans_reduced_quad( vnl_matrix<double> const& in_Q, 
-                         vnl_matrix<double> const& in_A, 
+rgrl_trans_reduced_quad( vnl_matrix<double> const& in_Q,
+                         vnl_matrix<double> const& in_A,
                          vnl_vector<double> const& in_trans,
                          vnl_matrix<double> const& in_covar )
   : Q_( in_Q ),
@@ -33,15 +32,15 @@ rgrl_trans_reduced_quad( vnl_matrix<double> const& in_Q,
     covar_( in_covar ),
     from_centre_( in_trans.size(), 0.0 )
 {
-  assert( Q_.rows() + Q_.rows()*(Q_.rows()-1)/2 == Q_.cols() );
-  assert( A_.rows() == A_.cols() );
-  assert( A_.rows() == trans_.size() );
-  assert( covar_.rows() == covar_.cols() );//6 for 2D
+  assert ( Q_.rows() + Q_.rows()*(Q_.rows()-1)/2 == Q_.cols() );
+  assert ( A_.rows() == A_.cols() );
+  assert ( A_.rows() == trans_.size() );
+  assert ( covar_.rows() == covar_.cols() );//6 for 2D
 }
 
 rgrl_trans_reduced_quad::
-rgrl_trans_reduced_quad( vnl_matrix<double> const& in_Q, 
-                         vnl_matrix<double> const& in_A, 
+rgrl_trans_reduced_quad( vnl_matrix<double> const& in_Q,
+                         vnl_matrix<double> const& in_A,
                          vnl_vector<double> const& in_trans )
   : Q_( in_Q ),
     A_( in_A ),
@@ -49,30 +48,30 @@ rgrl_trans_reduced_quad( vnl_matrix<double> const& in_Q,
     covar_( vnl_matrix<double>( 6 ,6, 0.0 ) ),
     from_centre_( in_trans.size(), 0.0 )
 {
-  assert( Q_.rows() + Q_.rows()*(Q_.rows()-1)/2 == Q_.cols() );
-  assert( A_.rows() == A_.cols() );
-  assert( A_.rows() == trans_.size() );
-  assert( covar_.rows() == covar_.cols() );//6 for 2D
+  assert ( Q_.rows() + Q_.rows()*(Q_.rows()-1)/2 == Q_.cols() );
+  assert ( A_.rows() == A_.cols() );
+  assert ( A_.rows() == trans_.size() );
+  assert ( covar_.rows() == covar_.cols() );//6 for 2D
 }
 
 rgrl_trans_reduced_quad::
 rgrl_trans_reduced_quad( vnl_matrix<double> const& in_Q,
-                         vnl_matrix<double> const& in_A, 
+                         vnl_matrix<double> const& in_A,
                          vnl_vector<double> const& in_trans,
                          vnl_matrix<double> const& in_covar,
                          vnl_vector<double> const& in_from_centre,
                          vnl_vector<double> const& in_to_centre )
-  : Q_( in_Q ),  
+  : Q_( in_Q ),
     A_( in_A ),
     trans_( in_trans ),
     covar_( in_covar ),
     from_centre_( in_from_centre )
 {
-  assert( Q_.rows() + Q_.rows()*(Q_.rows()-1)/2 == Q_.cols() );
-  assert( A_.rows() == A_.cols() );
-  assert( A_.rows() == trans_.size() );
-  assert( covar_.rows() == covar_.cols() );
-  assert( from_centre_.size() == trans_.size() );
+  assert ( Q_.rows() + Q_.rows()*(Q_.rows()-1)/2 == Q_.cols() );
+  assert ( A_.rows() == A_.cols() );
+  assert ( A_.rows() == trans_.size() );
+  assert ( covar_.rows() == covar_.cols() );
+  assert ( from_centre_.size() == trans_.size() );
 
   vnl_vector<double> new_trans;
   map_loc( -in_from_centre, new_trans );
@@ -93,7 +92,7 @@ rgrl_trans_reduced_quad( vnl_matrix<double> const& in_Q,
     double cy = in_from_centre[1];
     double cz = in_from_centre[2];
 
-    new_A(0,0) = -2*cx*Q_(0,0)-cy*Q_(0,3)-cz*Q_(0,5)+A_(0,0); 
+    new_A(0,0) = -2*cx*Q_(0,0)-cy*Q_(0,3)-cz*Q_(0,5)+A_(0,0);
     new_A(0,1) = -2*cy*Q_(0,1)-cx*Q_(0,3)-cz*Q_(0,4)+A_(0,1);
     new_A(0,2) = -2*cz*Q_(0,2)-cy*Q_(0,4)-cx*Q_(0,5)+A_(0,2);
 
@@ -121,7 +120,7 @@ rgrl_trans_reduced_quad::
 map_loc( vnl_vector<double> const& from,
          vnl_vector<double>      & to   ) const
 {
-  assert( from.size() == A_.rows() );
+  assert ( from.size() == A_.rows() );
   vnl_vector<double> hot = higher_order_terms(from);
   to = Q_ * hot + A_ * from + trans_;
 }
@@ -133,8 +132,8 @@ map_dir( vnl_vector<double> const& from_loc,
          vnl_vector<double> const& from_dir,
          vnl_vector<double>      & to_dir    ) const
 {
-  assert( from_loc.size() == A_.cols() );
-  assert( from_dir.size() == A_.cols() );
+  assert ( from_loc.size() == A_.cols() );
+  assert ( from_dir.size() == A_.cols() );
   vnl_vector<double> to_loc_begin, to_loc_end;
   this->map_loc(from_loc, to_loc_begin);
   this->map_loc(from_loc+from_dir, to_loc_end);
@@ -148,7 +147,7 @@ vnl_matrix<double>
 rgrl_trans_reduced_quad::
 transfer_error_covar( vnl_vector<double> const& p  ) const
 {
-  assert( p.size() == 2 ); //only deal with 2D for now
+  assert ( p.size() == 2 ); //only deal with 2D for now
 
   vnl_matrix<double> temp( 2, 6, 0.0 );
   vnl_vector<double> p_centered = p - from_centre_;
@@ -157,7 +156,7 @@ transfer_error_covar( vnl_vector<double> const& p  ) const
   temp(0,3) = -p_centered[1];
   temp(1,2) =  p_centered[1];
   temp(0,4) = temp(1,5) = 1;
-  
+
   return temp * covar_ * temp.transpose();
 }
 
@@ -192,9 +191,9 @@ t() const
   return trans_;
 }
 
-void 
+void
 rgrl_trans_reduced_quad::
-inv_map( const vnl_vector<double>& to, 
+inv_map( const vnl_vector<double>& to,
          bool initialize_next,
          const vnl_vector<double>& to_delta,
          vnl_vector<double>& from,
@@ -204,7 +203,7 @@ inv_map( const vnl_vector<double>& to,
   const double eps_squared = epsilon*epsilon;
   int t=0;
   const int max_t = 20;  //  Generally, only one or two iterations should be needed.
-  assert(to.size() == from.size());
+  assert (to.size() == from.size());
   int m = to.size();
   vnl_vector<double> to_est = this->map_location(from);
   vnl_matrix<double> approx_A_inv;
@@ -216,7 +215,7 @@ inv_map( const vnl_vector<double>& to,
     vnl_matrix<double> X(Q_.cols(), Q_.rows(), 0.0); //content of X depends on m
     if (m == 2) { //2D
       X(0,0) = 2*from[0]; X(1,1) = 2*from[1];
-      X(2,0) = from[1]; X(2,1) = from[0]; 
+      X(2,0) = from[1]; X(2,1) = from[0];
     }
     else { //3D
       X(0,0) = 2*from[0]; X(1,1) = 2*from[1]; X(2,2) = 2*from[2];
@@ -224,15 +223,15 @@ inv_map( const vnl_vector<double>& to,
       X(4,1) = from[2]; X(4,2) = from[1];
       X(5,0) = from[2]; X(5,2) = from[0];
     }
-    approx_A += Q_*X; 
+    approx_A += Q_*X;
     vnl_svd<double> svd(approx_A);
     approx_A_inv = svd.inverse();
 
     // increase from by approx_A^-1*(to-to_est)
     from += 0.95 * approx_A_inv * (to - to_est);
-    to_est = this->map_location(from);    
+    to_est = this->map_location(from);
   }
-  if ( t > max_t ) 
+  if ( t > max_t )
     DebugMacro( 0, " rgrl_trans_reduced_quad::inv_map()--  no convergence\n");
 
   if ( initialize_next ) {
@@ -241,15 +240,15 @@ inv_map( const vnl_vector<double>& to,
       vnl_matrix<double> X(Q_.cols(), Q_.rows(), 0.0); //content of X depends on m
       if (m == 2) { //2D
         X(0,0) = 2*from[0]; X(1,1) = 2*from[1];
-        X(2,0) = from[1]; X(2,1) = from[0]; 
+        X(2,0) = from[1]; X(2,1) = from[0];
       }
       else { //3D
         X(0,0) = 2*from[0]; X(1,1) = 2*from[1]; X(2,2) = 2*from[2];
         X(3,0) = from[1]; X(2,1) = from[0];
         X(4,1) = from[2]; X(4,2) = from[1];
-        X(5,0) = from[2]; X(5,2) = from[0];        
+        X(5,0) = from[2]; X(5,2) = from[0];
       }
-      approx_A += Q_*X; 
+      approx_A += Q_*X;
       vnl_svd<double> svd(approx_A);
       approx_A_inv = svd.inverse();
     }
@@ -257,7 +256,7 @@ inv_map( const vnl_vector<double>& to,
   }
 }
 
-vnl_matrix<double> 
+vnl_matrix<double>
 rgrl_trans_reduced_quad::
 jacobian( vnl_vector<double> const& from_loc ) const
 {
@@ -270,12 +269,12 @@ jacobian( vnl_vector<double> const& from_loc ) const
   return A_ + jacobian_Q;
 }
 
-rgrl_transformation_sptr 
+rgrl_transformation_sptr
 rgrl_trans_reduced_quad::
 scale_by( double scale ) const
 {
-  rgrl_trans_reduced_quad* quad = 
-    new rgrl_trans_reduced_quad( Q_/scale, A_, trans_ * scale, 
+  rgrl_trans_reduced_quad* quad =
+    new rgrl_trans_reduced_quad( Q_/scale, A_, trans_ * scale,
                                  covar_ );
 
   quad->set_from_center( from_centre_ * scale );
@@ -284,7 +283,7 @@ scale_by( double scale ) const
 }
 
 
-vnl_vector<double> 
+vnl_vector<double>
 rgrl_trans_reduced_quad::
 higher_order_terms(vnl_vector<double> p) const
 {
@@ -308,38 +307,38 @@ higher_order_terms(vnl_vector<double> p) const
   return higher_terms;
 }
 
-void 
+void
 rgrl_trans_reduced_quad::
 write( vcl_ostream& os ) const
 {
   // tag
-  os << "REDUCED_QUADRATIC" << vcl_endl;
+  os << "REDUCED_QUADRATIC\n"
   // parameters
-  os << t().size() << vcl_endl;
-  os << Q()<< A() << t() << ' ' << from_centre_ << vcl_endl;
+     << t().size() << vcl_endl
+     << Q()<< A() << t() << ' ' << from_centre_ << vcl_endl;
 }
 
-void 
+void
 rgrl_trans_reduced_quad::
 read( vcl_istream& is )
 {
   int dim;
-  
+
   // skip empty lines
   rgrl_util_skip_empty_lines( is );
-  
+
   vcl_string str;
   vcl_getline( is, str );
-  
-  if( str != "REDUCED_QUADRATIC" ) {
-    WarningMacro( "The tag is not REDUCED_QUADRATIC. reading is aborted." << vcl_endl );
-    exit(10);
+
+  if ( str != "REDUCED_QUADRATIC" ) {
+    WarningMacro( "The tag is not REDUCED_QUADRATIC. reading is aborted.\n" );
+    vcl_exit(10);
   }
-  
+
   // input global xform
   dim=-1;
   is >> dim;
-  if( dim > 0 ) {
+  if ( dim > 0 ) {
     Q_.set_size( dim, dim + int(dim*(dim-1)/2) );
     A_.set_size( dim, dim );
     trans_.set_size( dim );
