@@ -23,7 +23,9 @@ rrel_util_vector_double_iterator_instantiation_tickler()
   rrel_util_median_abs_dev_scale( itr, itr, 1, &val );
   rrel_util_median_abs_dev_scale( itr, itr, 1 );
   rrel_util_weighted_scale( itr, itr, itr, 1, &val );
+#if !VCL_TEMPLATE_MATCHES_TOO_OFTEN // not for compilers with overload problems
   rrel_util_weighted_scale( itr, itr, itr, 1 );
+#endif
   rrel_util_median_and_scale_copy( itr, itr, val, val, 1 );
   rrel_util_intercept_adjustment_copy( itr, itr, val, val, 1 );
   rrel_util_intercept_adjust_stats_copy( itr, itr, val, val, val, 1 );
