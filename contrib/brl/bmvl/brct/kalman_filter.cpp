@@ -11,10 +11,8 @@
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
 #include <mvl/FMatrix.h>
-#include <vnl/vnl_math.h> // for pi
 #include <vnl/vnl_inverse.h>
 #include <vnl/vnl_quaternion.h>
-#include <vnl/vnl_numeric_traits.h>
 #include <vdgl/vdgl_edgel.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_edgel_chain_sptr.h>
@@ -40,9 +38,9 @@ kalman_filter::kalman_filter(const char* fname)
   e_ = 0;
 }
 
+
 void kalman_filter::init()
 {
-
   //
   cur_pos_ = 0;
 
@@ -55,9 +53,9 @@ void kalman_filter::init()
   motions_.resize(queue_size_);
 
   init_cam_intrinsic();
-  
+
   init_velocity();
-  init_covariant_matrix();  
+  init_covariant_matrix();
 
   init_state_vector();
   memory_size_ = 2;
@@ -66,11 +64,12 @@ void kalman_filter::init()
   cur_pos_ = (cur_pos_ + 1) % queue_size_;
 }
 
+
 kalman_filter::~kalman_filter()
 {
-  if(e_)
-    delete e_;
+  delete e_;
 }
+
 
 void kalman_filter::init_state_vector()
 {
@@ -121,10 +120,9 @@ void kalman_filter::init_state_vector()
 
   vnl_double_3x3 Sigma3d;
 
-  for(int i=0; i<3; i++){
-    for(int j=0; j<3; j++)
+  for (int i=0; i<3; i++)
+    for (int j=0; j<3; j++)
       Sigma3d[i][j] = Q0_[i][j];
-  }
 
   for (int i=0; i<npts; i++)
   {
@@ -177,7 +175,6 @@ void kalman_filter::init_state_vector()
       }
   }
 
-
   num_points_ = pts_3d.size();
 
   curve_3d_.resize(num_points_);
@@ -193,13 +190,13 @@ void kalman_filter::init_state_vector()
   X_[0] = T[0];
   X_[1] = T[1];
   X_[2] = T[2];
-
 }
+
 
 void kalman_filter::init_covariant_matrix()
 {
   // initialize P
-    Q_.set_identity();
+  Q_.set_identity();
 
   // initialize Q0_ to let the variance on
   // velocity direction bigger
@@ -211,16 +208,16 @@ void kalman_filter::init_covariant_matrix()
   vnl_double_3 xaxis(1, 0, 0);
   vnl_double_3 T(X_[0], X_[1], X_[2]);
   vnl_double_3 axis = cross_3d(xaxis, T);
-  axis /= axis.magnitude(); 
+  axis /= axis.magnitude();
   double theta = angle(T, xaxis);
 
   vnl_quaternion<double> q(axis, theta);
   vnl_double_3x3 RT = q.rotation_matrix_transpose();
   Sigma = RT.transpose()*Sigma*RT;
-  
+
   Q0_ = 0.0;
   for (int i=0; i<3; i++)
-    for(int j=0; j<3; j++)
+    for (int j=0; j<3; j++)
       Q0_[i][j] = Sigma[i][j];
 
   // initialize R
@@ -232,6 +229,7 @@ void kalman_filter::init_covariant_matrix()
     R_[i][i] = 0.25;
 }
 
+
 void kalman_filter::init_cam_intrinsic()
 {
   // set up the intrinsic matrix of the camera
@@ -240,10 +238,12 @@ void kalman_filter::init_cam_intrinsic()
   K_[2][0] = 0;        K_[2][1] = 0;        K_[2][2] = 1;
 }
 
+
 void kalman_filter::prediction()
 {
   // TODO
 }
+
 
 vnl_double_3x4 kalman_filter::get_projective_matrix(const vnl_double_3& v ) const
 {
@@ -262,15 +262,15 @@ vnl_double_3x4 kalman_filter::get_projective_matrix(const vnl_double_3& v ) cons
   return K_*M_ex;
 }
 
+
 vnl_matrix_fixed<double, 2, 6> kalman_filter::get_H_matrix(vnl_double_3x4 &P, vnl_double_3 &X)
 {
   vnl_matrix_fixed<double, 2, 6> H;
 
   // compute \sum {P_{4k} X_k } + P_{44}
-  double temp = 0;
+  double temp = P[2][3];
   for (int k = 0; k<3; k++)
     temp += P[2][k]*X[k];
-  temp += P[2][3];
 
   for (int i=0; i<2; i++)
   {
@@ -289,6 +289,7 @@ vnl_matrix_fixed<double, 2, 6> kalman_filter::get_H_matrix(vnl_double_3x4 &P, vn
 
   return H;
 }
+
 
 vnl_double_2 kalman_filter::projection(const vnl_double_3x4 &P, const vnl_double_3 &X)
 {
@@ -325,19 +326,17 @@ void kalman_filter::update_observes(const vnl_double_3x4 &P, int iframe)
     vnl_double_2 z(u.x(), u.y());
     vnl_double_2 z_pred(x.x(), x.y());
 
-    if(is_outlier(z, z_pred)){
+    if (is_outlier(z, z_pred))
       u.set(this->large_num_, this->large_num_);
-    }
-    
+
     // set point
     observes_[iframe%queue_size_][i].set_point(u);
     vnl_double_2x2 sigma;
     sigma.set_identity();
     observes_[iframe%queue_size_][i].set_covariant_matrix(sigma);
-    
   }
-
 }
+
 
 void kalman_filter::update_confidence()
 {
@@ -371,6 +370,7 @@ void kalman_filter::update_confidence()
   for (int i=0; i<num_points_; i++)
     prob_[i] /= normalization_factor;
 }
+
 
 void kalman_filter::inc()
 {
@@ -413,8 +413,8 @@ void kalman_filter::inc()
 
     //
     // go to the correction step
-    // 
-    if(!is_outlier(z, z_pred)){
+    //
+    if (!is_outlier(z, z_pred)){
       Xpred = Xpred +  G_*(z - z_pred)*prob_[i];
 
       vnl_matrix_fixed<double, 6, 6> I;
@@ -448,38 +448,38 @@ void kalman_filter::inc()
   {
     for (int j=0; j<memory_size_; j++)
     {
-      if(observes_[j][i].x() != this->large_num_ || \
+      if (observes_[j][i].x() != this->large_num_ ||
           observes_[j][i].y() != this->large_num_){
         pts[j] = vnl_double_2(observes_[j][i].x(), observes_[j][i].y());
         Ps[j] = get_projective_matrix(motions_[j]);
       }
     }
-    
+
     vgl_point_3d<double> X3d = brct_algos::bundle_reconstruct_3d_point(pts, Ps);
     // update covariant matrix
     vnl_double_3 dX(X3d.x() - curve_3d_[i].x(), X3d.y() - curve_3d_[i].y(), X3d.z() - curve_3d_[i].z());
     vnl_double_3x3 Sigma3d = curve_3d_[i].get_covariant_matrix();
     Sigma3d = Sigma3d*(cur_pos_-1.0)/(double)cur_pos_;
-    for(int m = 0; m<3; m++)
-      for(int n = 0; n<3; n++)
+    for (int m = 0; m<3; m++)
+      for (int n = 0; n<3; n++)
         Sigma3d[m][n] += dX[m]*dX[n] /(cur_pos_);
-  
-//    vcl_cout<<Sigma3d<<"\n i = "<<i<<"--------------\n";
 
     curve_3d_[i].set_point(X3d);
     curve_3d_[i].set_covariant_matrix(Sigma3d);
 
 #if 0
-    brct_structure_estimator se(Ps[cur_pos_%queue_size_]); 
+    vcl_cout<<Sigma3d<<"\n i = "<<i<<"--------------\n";
+
+    brct_structure_estimator se(Ps[cur_pos_%queue_size_]);
     bugl_gaussian_point_3d<double> X = se.forward(curve_3d_[i], observes_[cur_pos_%queue_size_][i]);
     curve_3d_[i] = se.forward(curve_3d_[i], observes_[cur_pos_%queue_size_][i]);
 #endif
-    
   }
 
   // update confidence level for each points
   update_confidence();
 }
+
 
 void kalman_filter::read_data(const char *fname)
 {
@@ -489,7 +489,7 @@ void kalman_filter::read_data(const char *fname)
   int MAX_LEN=1000;
   int numEdges;
 
-  double x,y, dir , conf;
+  double x, y, dir, conf;
   while (fp.getline(buffer,MAX_LEN))
   {
     //ignore comment lines and empty lines
@@ -540,21 +540,20 @@ void kalman_filter::read_data(const char *fname)
   time_tick_.resize(num_frames);
 
   double time = 0;
-  for(int i=0; i<num_frames; i++){
+  for (int i=0; i<num_frames; i++) {
     time_tick_[i] = time;
     time += (i%2==0?1:2);
- }
- 
+  }
 }
+
 
 void kalman_filter::init_velocity()
 {
   vcl_vector<vgl_homg_line_2d<double> > lines;
 
-  if(!e_){ //if epipole is not initialized
+  if (!e_) //if epipole is not initialized
     vcl_cerr<<"epipole is not initialized\n";
-  }
-  
+
   vnl_double_3 e((*e_)[0],(*e_)[1],1.0);
   init_cam_intrinsic();
 
@@ -562,7 +561,7 @@ void kalman_filter::init_velocity()
   double trans_dist = 1.0; // 105mm
   vnl_double_3 T = vnl_inverse(K_) * e;
   T /= vcl_sqrt(T[0]*T[0] + T[1]*T[1] + T[2]*T[2]);
-  if(T[2]<0)
+  if (T[2]<0)
     T *= trans_dist;
   else
     T *= -trans_dist;
@@ -577,6 +576,7 @@ void kalman_filter::init_velocity()
   X_[4] = T[1] /dt;
   X_[5] = T[2] /dt;
 }
+
 
 vcl_vector<vgl_point_3d<double> > kalman_filter::get_local_pts()
 {
@@ -601,6 +601,7 @@ vcl_vector<vgl_point_3d<double> > kalman_filter::get_local_pts()
   return pts;
 }
 
+
 vcl_vector<vgl_point_2d<double> > kalman_filter::get_next_observes()
 {
   vcl_vector<vgl_point_2d<double> > pts(num_points_);
@@ -613,6 +614,7 @@ vcl_vector<vgl_point_2d<double> > kalman_filter::get_next_observes()
   }
   return pts;
 }
+
 
 vcl_vector<vgl_point_2d<double> > kalman_filter::get_cur_observes()
 {
@@ -627,6 +629,7 @@ vcl_vector<vgl_point_2d<double> > kalman_filter::get_cur_observes()
   return pts;
 }
 
+
 vcl_vector<vgl_point_2d<double> > kalman_filter::get_pre_observes()
 {
   assert(cur_pos_ > 0);
@@ -640,6 +643,7 @@ vcl_vector<vgl_point_2d<double> > kalman_filter::get_pre_observes()
   }
   return pts;
 }
+
 
 vnl_double_3 kalman_filter::get_next_motion(vnl_double_3 v)
 {
@@ -669,13 +673,14 @@ vnl_matrix<double> kalman_filter::get_predicted_curve()
   return t;
 }
 
+
 vcl_vector<vnl_matrix<double> > kalman_filter::get_back_projection() const
 {
  vcl_vector<vnl_matrix<double> > res(memory_size_);
- for(int f=0; f<memory_size_; f++)
+ for (int f=0; f<memory_size_; f++)
   {
     vnl_double_3x4 P = get_projective_matrix(motions_[f]);
-    
+
     vnl_matrix<double> t(2, num_points_);
 
     for (int i=0; i<num_points_; i++)
@@ -690,6 +695,7 @@ vcl_vector<vnl_matrix<double> > kalman_filter::get_back_projection() const
 
   return res;
 }
+
 
 vgl_point_2d<double> kalman_filter::get_cur_epipole() const
 {
@@ -716,23 +722,22 @@ vgl_point_2d<double> kalman_filter::get_cur_epipole() const
 
 void kalman_filter::init_epipole(double x, double y)
 {
-
-  if(!e_)
+  if (!e_)
     e_ = new vnl_double_2;
-  
+
   (*e_)[0] = x;
   (*e_)[1] = y;
 }
+
 
 bool kalman_filter::is_outlier(vnl_double_2& z, vnl_double_2& z_pred)
 {
   // a brutal-force implementation
   vnl_double_2 dz = z - z_pred;
-  if(sqrt(dz[0]*dz[0] + dz[1]*dz[1]) > 3.0)
-    return true;
-  else
-    return false;
+  // no need for sqrt here:
+  return dz[0]*dz[0] + dz[1]*dz[1] > 9.0;
 }
+
 
 vnl_matrix_fixed<double, 6, 6> kalman_filter::get_transit_matrix(int i, int j)
 {
