@@ -135,6 +135,23 @@ void vil_gen_generic_image::init(vcl_string const& s)
     type_ = vil_gen_gray;
 
     vcl_cerr << "vil_gen_generic_image: p0 = ["<<params_[0]<<"]\n";
+  } else if (type == "rgb" || type == "gray") {
+    if (*p == ',') {
+      ++p;
+      params_[0] = read_int(&p);
+      ++p;
+      params_[1] = read_int(&p);
+      ++p;
+      params_[2] = read_int(&p);
+    }
+    else
+      params_[0] = 128;
+    components_ = 3;
+    bits_per_component_ = 8;
+    type_ = vil_gen_rgb;
+
+    vcl_cerr << "vil_gen_generic_image: p0 = ["<<params_[0]<<"], "
+      << "p1 = ["<<params_[1]<<"], p2 = ["<<params_[2]<<"] \n";
   } else {
     vcl_abort();
   }
@@ -154,7 +171,7 @@ bool vil_gen_generic_image::get_property(char const *tag, void *prop) const
 bool vil_gen_generic_image::get_section(void* buf, int x0, int y0, int xs, int ys) const
 {
   if (type_ == vil_gen_gray) {
-    vcl_memset(buf, xs*ys, int(params_[0]));
+    vcl_memset(buf, int(params_[0]), xs*ys);
     return true;
   }
   if (type_ == vil_gen_rgb) {

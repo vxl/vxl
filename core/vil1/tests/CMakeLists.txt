@@ -8,6 +8,7 @@ ADD_EXECUTABLE( vil_test_driver
   test_assign.cxx
   test_interpolate.cxx
   test_load.cxx
+  test_load_gen.cxx
   test_memory_image.cxx
   test_memory_image_of.cxx
   test_save_load_image.cxx
@@ -23,6 +24,7 @@ ADD_TEST( vil_test_flipud            vil_test_driver test_flipud )
 ADD_TEST( vil_test_assign            vil_test_driver test_assign )
 ADD_TEST( vil_test_interpolate       vil_test_driver test_interpolate )
 ADD_TEST( vil_test_load              vil_test_driver test_load )
+ADD_TEST( vil_test_load_gen          vil_test_driver test_load_gen )
 ADD_TEST( vil_test_memory_image      vil_test_driver test_memory_image )
 ADD_TEST( vil_test_memory_image_of   vil_test_driver test_memory_image_of )
 ADD_TEST( vil_test_save_load_image   vil_test_driver test_save_load_image )
