@@ -6,9 +6,8 @@
 #include <vul/vul_timer.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_math.h>
-#include <vnl/vnl_complexify.h>
+#include <vcl_complex.h>
 #include <vnl/algo/vnl_fft_prime_factors.h>
-#include <vnl/algo/vnl_fft_2d.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vil1/vil1_smooth.h>
 
@@ -179,39 +178,39 @@ interpolate_center(vbl_array_2d<float> const & neighborhood,
 {
   dx = 0; dy=0;
   //extract the neighborhood
- float n_m1_m1 = neighborhood[0][0];
- float n_m1_0 = neighborhood[0][1];
- float n_m1_1 = neighborhood[0][2];
- float n_0_m1 = neighborhood[1][0];
- float n_0_0 = neighborhood[1][1];
- float n_0_1 = neighborhood[1][2];
- float n_1_m1 = neighborhood[2][0];
- float n_1_0 = neighborhood[2][1];
- float n_1_1 = neighborhood[2][2];
+  float n_m1_m1 = neighborhood[0][0];
+  float n_m1_0 = neighborhood[0][1];
+  float n_m1_1 = neighborhood[0][2];
+  float n_0_m1 = neighborhood[1][0];
+  float n_0_0 = neighborhood[1][1];
+  float n_0_1 = neighborhood[1][2];
+  float n_1_m1 = neighborhood[2][0];
+  float n_1_0 = neighborhood[2][1];
+  float n_1_1 = neighborhood[2][2];
 
- //Compute the 2nd order quadratic coefficients
- //      1/6 * [ -1  0 +1 ]
- // Ix =       [ -1  0 +1 ]
- //            [ -1  0 +1 ]
- float Ix =(-n_m1_m1+n_m1_1-n_0_m1+n_0_1-n_1_m1+n_1_1)/6.0f;
- //      1/6 * [ -1 -1 -1 ]
- // Iy =       [  0  0  0 ]
- //            [ +1 +1 +1 ]
- float Iy =(-n_m1_m1-n_m1_0-n_m1_1+n_1_m1+n_1_0+n_1_1)/6.0f;
- //      1/3 * [ +1 -2 +1 ]
- // Ixx =      [ +1 -2 +1 ]
- //            [ +1 -2 +1 ]
- float Ixx = ((n_m1_m1+n_0_m1+n_1_m1+n_m1_1+n_0_1+n_1_1)
-              -2.0f*(n_m1_0+n_0_0+n_1_0))/3.0f;
- //      1/4 * [ +1  0 -1 ]
- // Ixy =      [  0  0  0 ]
- //            [ -1  0 +1 ]
- float Ixy = (n_m1_m1-n_m1_1+n_1_m1+n_1_1)/4.0f;
- //      1/3 * [ +1 +1 +1 ]
- // Iyy =      [ -2 -2 -2 ]
- //            [ +1 +1 +1 ]
- float Iyy = ((n_m1_m1+n_m1_0+n_m1_1+n_1_m1+n_1_0+n_1_1)
-              -2.0f*(n_0_m1 + n_0_0 + n_1_0))/3.0f;
+  //Compute the 2nd order quadratic coefficients
+  //      1/6 * [ -1  0 +1 ]
+  // Ix =       [ -1  0 +1 ]
+  //            [ -1  0 +1 ]
+  float Ix =(-n_m1_m1+n_m1_1-n_0_m1+n_0_1-n_1_m1+n_1_1)/6.0f;
+  //      1/6 * [ -1 -1 -1 ]
+  // Iy =       [  0  0  0 ]
+  //            [ +1 +1 +1 ]
+  float Iy =(-n_m1_m1-n_m1_0-n_m1_1+n_1_m1+n_1_0+n_1_1)/6.0f;
+  //      1/3 * [ +1 -2 +1 ]
+  // Ixx =      [ +1 -2 +1 ]
+  //            [ +1 -2 +1 ]
+  float Ixx = ((n_m1_m1+n_0_m1+n_1_m1+n_m1_1+n_0_1+n_1_1)
+               -2.0f*(n_m1_0+n_0_0+n_1_0))/3.0f;
+  //      1/4 * [ +1  0 -1 ]
+  // Ixy =      [  0  0  0 ]
+  //            [ -1  0 +1 ]
+  float Ixy = (n_m1_m1-n_m1_1+n_1_m1+n_1_1)/4.0f;
+  //      1/3 * [ +1 +1 +1 ]
+  // Iyy =      [ -2 -2 -2 ]
+  //            [ +1 +1 +1 ]
+  float Iyy = ((n_m1_m1+n_m1_0+n_m1_1+n_1_m1+n_1_0+n_1_1)
+               -2.0f*(n_0_m1 + n_0_0 + n_1_0))/3.0f;
   //
   // The next bit is to find the extremum of the fitted surface by setting its
   // partial derivatives to zero. We need to solve the following linear system :
@@ -309,12 +308,12 @@ brip_float_ops::abs_clip_to_level(vil1_memory_image_of<float> const & image,
   out.resize(w, h);
   for (int y = 0; y<h; y++)
     for (int x = 0; x<w; x++)
-      {
-        if(vcl_fabs(image(x,y))>thresh)
-          out(x,y) = level;
-		else
-		  out(x,y) = image(x,y);
-      }
+    {
+      if (vcl_fabs(image(x,y))>thresh)
+        out(x,y) = level;
+      else
+        out(x,y) = image(x,y);
+    }
   return out;
 }
 
@@ -408,7 +407,7 @@ brip_float_ops::beaudet(vil1_memory_image_of<float> const & Ixx,
     {
       float xx = Ixx(x,y), xy = Ixy(x,y), yy = Iyy(x,y);
 
-     //compute eigenvalues for experimentation
+      //compute eigenvalues for experimentation
       float det = xx*yy-xy*xy;
       float tr = xx+yy;
       float arg = tr*tr-4.0*det, lambda0 = 0, lambda1=0;
@@ -775,7 +774,7 @@ brip_float_ops::convert_to_float(vil1_image const & image)
 //-----------------------------------------------------------------
 // : convert a vil1_rgb<unsigned char> image to an unsigned_char image.
 vil1_memory_image_of<unsigned char>
- brip_float_ops::convert_to_grey(vil1_image const& image)
+brip_float_ops::convert_to_grey(vil1_image const& image)
 {
   if (!image)
     return vil1_memory_image_of<unsigned char>();
@@ -916,157 +915,157 @@ basis_images(vcl_vector<vil1_memory_image_of<float> > const & input_images,
 }
 
 //: 1d fourier transform
-/*-------------------------------------------------------------------------
-   This computes an in-place complex-to-complex FFT
-   x and y are the real and imaginary arrays of 2^m points.
-   dir =  1 gives forward transform
-   dir = -1 gives reverse transform
-
-     Formula: forward
-                  N-1
-                  ---
-              1   \          - j k 2 pi n / N
-      X(n) = ---   >   x(k) e                    = forward transform
-              N   /                                n=0..N-1
-                  ---
-                  k=0
-
-      Formula: reverse
-                  N-1
-                  ---
-                  \          j k 2 pi n / N
-      X(n) =       >   x(k) e                    = forward transform
-                  /                                n=0..N-1
-                  ---
-                  k=0
-*/
+//-------------------------------------------------------------------------
+// This computes an in-place complex-to-complex FFT
+// x and y are the real and imaginary arrays of 2^m points.
+// dir =  1 gives forward transform
+// dir = -1 gives reverse transform
+//
+//   Formula: forward
+//                N-1
+//                ---
+//            1   \          - j k 2 pi n / N
+//    X(n) = ---   >   x(k) e                    = forward transform
+//            N   /                                n=0..N-1
+//                ---
+//                k=0
+//
+//    Formula: reverse
+//                N-1
+//                ---
+//                \          j k 2 pi n / N
+//    X(n) =       >   x(k) e                    = forward transform
+//                /                                n=0..N-1
+//                ---
+//                k=0
+//
 bool brip_float_ops::fft_1d(int dir, int m, double* x, double* y)
 {
   long nn,i,i1,j,k,i2,l,l1,l2;
-   double c1,c2,tx,ty,t1,t2,u1,u2,z;
+  double c1,c2,tx,ty,t1,t2,u1,u2,z;
 
-   /* Calculate the number of points */
-   nn = 1;
-   for (i=0;i<m;i++)
+  /* Calculate the number of points */
+  nn = 1;
+  for (i=0;i<m;i++)
       nn *= 2;
 
-   /* Do the bit reversal */
-   i2 = nn >> 1;
-   j = 0;
-   for (i=0;i<nn-1;i++) {
-      if (i < j) {
-         tx = x[i];
-         ty = y[i];
-         x[i] = x[j];
-         y[i] = y[j];
-         x[j] = tx;
-         y[j] = ty;
-      }
-      k = i2;
-      while (k <= j) {
-         j -= k;
-         k >>= 1;
-      }
-      j += k;
-   }
+  /* Do the bit reversal */
+  i2 = nn >> 1;
+  j = 0;
+  for (i=0;i<nn-1;i++) {
+    if (i < j) {
+      tx = x[i];
+      ty = y[i];
+      x[i] = x[j];
+      y[i] = y[j];
+      x[j] = tx;
+      y[j] = ty;
+    }
+    k = i2;
+    while (k <= j) {
+      j -= k;
+      k >>= 1;
+    }
+    j += k;
+  }
 
-   /* Compute the FFT */
-   c1 = -1.0;
-   c2 = 0.0;
-   l2 = 1;
-   for (l=0;l<m;l++) {
-      l1 = l2;
-      l2 <<= 1;
-      u1 = 1.0;
-      u2 = 0.0;
-      for (j=0;j<l1;j++) {
-         for (i=j;i<nn;i+=l2) {
-            i1 = i + l1;
-            t1 = u1 * x[i1] - u2 * y[i1];
-            t2 = u1 * y[i1] + u2 * x[i1];
-            x[i1] = x[i] - t1;
-            y[i1] = y[i] - t2;
-            x[i] += t1;
-            y[i] += t2;
-         }
-         z =  u1 * c1 - u2 * c2;
-         u2 = u1 * c2 + u2 * c1;
-         u1 = z;
+  // Compute the FFT
+  c1 = -1.0;
+  c2 = 0.0;
+  l2 = 1;
+  for (l=0;l<m;l++) {
+    l1 = l2;
+    l2 <<= 1;
+    u1 = 1.0;
+    u2 = 0.0;
+    for (j=0;j<l1;j++) {
+      for (i=j;i<nn;i+=l2) {
+        i1 = i + l1;
+        t1 = u1 * x[i1] - u2 * y[i1];
+        t2 = u1 * y[i1] + u2 * x[i1];
+        x[i1] = x[i] - t1;
+        y[i1] = y[i] - t2;
+        x[i] += t1;
+        y[i] += t2;
       }
-      c2 = sqrt((1.0 - c1) / 2.0);
-      if (dir == 1)
-         c2 = -c2;
-      c1 = sqrt((1.0 + c1) / 2.0);
-   }
+      z =  u1 * c1 - u2 * c2;
+      u2 = u1 * c2 + u2 * c1;
+      u1 = z;
+    }
+    c2 = vcl_sqrt((1.0 - c1) / 2.0);
+    if (dir == 1)
+      c2 = -c2;
+    c1 = vcl_sqrt((1.0 + c1) / 2.0);
+  }
 
-   /* Scaling for forward transform */
-   if (dir == 1) {
-      for (i=0;i<nn;i++) {
-         x[i] /= (double)nn;
-         y[i] /= (double)nn;
-      }
-   }
+  // Scaling for forward transform
+  if (dir == 1) {
+    for (i=0;i<nn;i++) {
+      x[i] /= (double)nn;
+      y[i] /= (double)nn;
+    }
+  }
 
-   return(true);
+  return true;
 }
-/*-------------------------------------------------------------------------
-   Perform a 2D FFT inplace given a complex 2D array
-   The direction dir, 1 for forward, -1 for reverse
-   The size of the array (nx,ny)
-   Return false if there are memory problems or
-      the dimensions are not powers of 2
-*/
+
+//-------------------------------------------------------------------------
+//  Perform a 2D FFT inplace given a complex 2D array
+//  The direction dir, 1 for forward, -1 for reverse
+//  The size of the array (nx,ny)
+//  Return false if there are memory problems or
+//  the dimensions are not powers of 2
+//
 bool brip_float_ops::fft_2d(vnl_matrix<vcl_complex<double> >& c,int nx,int ny,int dir)
 {
-   int i,j;
-   int mx, my;
-   double *real,*imag;
-   vnl_fft_prime_factors<double> pfx (nx);
-   vnl_fft_prime_factors<double> pfy (ny);
-   mx = (int)pfx.pqr()[0];
-   my = (int)pfy.pqr()[0];
-   /* Transform the rows */
-   real = new double[nx];
-   imag = new double[nx];
-   if (real == 0 || imag == 0)
-      return(false);
-   for (j=0;j<ny;j++) {
-      for (i=0;i<nx;i++) {
-         real[i] = c[j][i].real();
-         imag[i] = c[j][i].imag();
-      }
-      brip_float_ops::fft_1d(dir,mx,real,imag);
-      for (i=0;i<nx;i++) {
-		  vcl_complex<double> v(real[i], imag[i]);
-         c[j][i] = v;
-      }
-   }
-   delete [] real;
-   delete [] imag;
-   /* Transform the columns */
-   real = new double[ny];
-   imag = new double[ny];
-   if (real == 0 || imag == 0)
-      return(false);
-   for (i=0;i<nx;i++) {
-      for (j=0;j<ny;j++) {
-         real[j] = c[j][i].real();
-         imag[j] = c[j][i].imag();
-      }
-      fft_1d(dir,my,real,imag);
-      for (j=0;j<ny;j++) {
-		  vcl_complex<double> v(real[j], imag[j]);
-         c[j][i] =  v;
- 
-      }
-   }
-   delete [] real;
-   delete [] imag;
-   return(true);
+  int i,j;
+  int mx, my;
+  double *real,*imag;
+  vnl_fft_prime_factors<double> pfx (nx);
+  vnl_fft_prime_factors<double> pfy (ny);
+  mx = (int)pfx.pqr()[0];
+  my = (int)pfy.pqr()[0];
+  /* Transform the rows */
+  real = new double[nx];
+  imag = new double[nx];
+  if (real == 0 || imag == 0)
+    return false;
+  for (j=0;j<ny;j++) {
+    for (i=0;i<nx;i++) {
+      real[i] = c[j][i].real();
+      imag[i] = c[j][i].imag();
+    }
+    brip_float_ops::fft_1d(dir,mx,real,imag);
+    for (i=0;i<nx;i++) {
+      vcl_complex<double> v(real[i], imag[i]);
+      c[j][i] = v;
+    }
+  }
+  delete [] real;
+  delete [] imag;
+  /* Transform the columns */
+  real = new double[ny];
+  imag = new double[ny];
+  if (real == 0 || imag == 0)
+    return false;
+  for (i=0;i<nx;i++) {
+    for (j=0;j<ny;j++) {
+      real[j] = c[j][i].real();
+      imag[j] = c[j][i].imag();
+    }
+    fft_1d(dir,my,real,imag);
+    for (j=0;j<ny;j++) {
+      vcl_complex<double> v(real[j], imag[j]);
+      c[j][i] =  v;
+    }
+  }
+  delete [] real;
+  delete [] imag;
+  return true;
 }
 
-//: reorder the transform values to sequential frequencies as in 
-//  conventional Fourier transforms.  The tranformation is its self-inverse.
+//: reorder the transform values to sequential frequencies as in conventional Fourier transforms.
+//  The transformation is its self-inverse.
 void brip_float_ops::
 ftt_fourier_2d_reorder(vnl_matrix<vcl_complex<double> > const& F1,
                        vnl_matrix<vcl_complex<double> > & F2)
@@ -1074,48 +1073,48 @@ ftt_fourier_2d_reorder(vnl_matrix<vcl_complex<double> > const& F1,
   int rows = F1.rows(), cols = F1.cols();
   int half_rows = rows/2, half_cols = cols/2;
   int ri, ci;
-  for(int r = 0; r<rows; r++)
+  for (int r = 0; r<rows; r++)
+  {
+    if (r<half_rows)
+      ri = half_rows+r;
+    else
+      ri = r-half_rows;
+    for (int c = 0; c<cols; c++)
     {
-      if(r<half_rows)
-        ri = half_rows+r;
+      if (c<half_cols)
+        ci = half_cols+c;
       else
-        ri = r-half_rows;
-      for(int c = 0; c<cols; c++)
-        {
-          if(c<half_cols)
-            ci = half_cols+c;
-          else
-            ci = c-half_cols;
-          F2[ri][ci]=F1[r][c];
-        }
+        ci = c-half_cols;
+      F2[ri][ci]=F1[r][c];
     }
+  }
 }
 
-//:  Compute the fourier transform.  If the image dimensions are not 
-//   a power of 2 then the operation fails
+//:  Compute the fourier transform.
+//   If the image dimensions are not a power of 2 then the operation fails.
 bool brip_float_ops::
-fourier_transform(vil1_memory_image_of<float> const & input, 
+fourier_transform(vil1_memory_image_of<float> const & input,
                   vil1_memory_image_of<float>& mag,
                   vil1_memory_image_of<float>& phase)
 {
   int w = input.width(), h = input.height();
   vnl_fft_prime_factors<float> pfx (w);
   vnl_fft_prime_factors<float> pfy (h);
-  if(!pfx.pqr()[0]||!pfy.pqr()[0])
+  if (!pfx.pqr()[0]||!pfy.pqr()[0])
     return false;
   //fill the fft matrix
   vnl_matrix<vcl_complex<double> > fft_matrix(h, w), fourier_matrix(h,w);
-  for(int y = 0; y<h; y++)
-    for(int x =0; x<w; x++)
+  for (int y = 0; y<h; y++)
+    for (int x =0; x<w; x++)
     {
       vcl_complex<double> cv(input(x,y), 0.0);
       fft_matrix.put(y, x, cv);
     }
-  for(int r = 0; r<h; r++)
-    for(int c =0; c<w; c++) 
-      {
-        vcl_complex<double> res = fft_matrix[r][c];
-      }
+  for (int r = 0; r<h; r++)
+    for (int c =0; c<w; c++)
+    {
+      vcl_complex<double> res = fft_matrix[r][c];
+    }
 
   brip_float_ops::fft_2d(fft_matrix, w, h, 1);
   brip_float_ops::ftt_fourier_2d_reorder(fft_matrix, fourier_matrix);
@@ -1123,14 +1122,14 @@ fourier_transform(vil1_memory_image_of<float> const & input,
   phase.resize(w,h);
 
   //extract magnitude and phase
-  for(int r = 0; r<h; r++)
-    for(int c = 0; c<w; c++)
-      {
-        float re = (float)fourier_matrix[r][c].real(), im = (float)fourier_matrix[r][c].imag();
-        mag(c,r) = vcl_sqrt(re*re + im*im);
-        phase(c,r) = vcl_atan2(im, re);
-      }
-  
+  for (int r = 0; r<h; r++)
+    for (int c = 0; c<w; c++)
+    {
+      float re = (float)fourier_matrix[r][c].real(), im = (float)fourier_matrix[r][c].imag();
+      mag(c,r) = vcl_sqrt(re*re + im*im);
+      phase(c,r) = vcl_atan2(im, re);
+    }
+
   return true;
 }
 bool brip_float_ops::
@@ -1138,38 +1137,37 @@ inverse_fourier_transform(vil1_memory_image_of<float> const& mag,
                           vil1_memory_image_of<float> const& phase,
                           vil1_memory_image_of<float>& output)
 {
-  
   int w = mag.width(), h = mag.height();
   vnl_matrix<vcl_complex<double> > fft_matrix(h, w), fourier_matrix(h, w);
-  for(int y = 0; y<h; y++)
-    for(int x =0; x<w; x++)
-      {
-       float m = mag(x,y);
-       float p = phase(x,y);
-       vcl_complex<double> cv(m*vcl_cos(p), m*vcl_sin(p));
-       fourier_matrix.put(y, x, cv);
-      }
-  
-  brip_float_ops::ftt_fourier_2d_reorder(fourier_matrix, fft_matrix);  
-  brip_float_ops::fft_2d(fft_matrix, w, h, -1);  
+  for (int y = 0; y<h; y++)
+    for (int x =0; x<w; x++)
+    {
+      float m = mag(x,y);
+      float p = phase(x,y);
+      vcl_complex<double> cv(m*vcl_cos(p), m*vcl_sin(p));
+      fourier_matrix.put(y, x, cv);
+    }
+
+  brip_float_ops::ftt_fourier_2d_reorder(fourier_matrix, fft_matrix);
+  brip_float_ops::fft_2d(fft_matrix, w, h, -1);
 
   output.resize(w,h);
 
-  for(int y = 0; y<h; y++)
-    for(int x = 0; x<w; x++)
+  for (int y = 0; y<h; y++)
+    for (int x = 0; x<w; x++)
       output(x,y) = (float)fft_matrix[y][x].real();
   return true;
 }
 
-void brip_float_ops::resize(vil1_memory_image_of<float> const & input, 
+void brip_float_ops::resize(vil1_memory_image_of<float> const & input,
                             const int width, const int height,
                             vil1_memory_image_of<float>& output)
 {
   int w = input.width(), h = input.height();
   output.resize(width, height);
-  for(int y = 0; y<height; y++)
-    for(int x = 0; x<width; x++)
-      if(x<w && y<h)
+  for (int y = 0; y<height; y++)
+    for (int x = 0; x<width; x++)
+      if (x<w && y<h)
         output(x,y) = input(x,y);
       else
         output(x,y) = 0;//pad with zeroes
@@ -1177,69 +1175,62 @@ void brip_float_ops::resize(vil1_memory_image_of<float> const & input,
 
 //: resize the input to the closest power of two image dimensions
 bool brip_float_ops::
-resize_to_power_of_two(vil1_memory_image_of<float> const & input, 
+resize_to_power_of_two(vil1_memory_image_of<float> const & input,
                        vil1_memory_image_of<float>& output)
 {
   int max_exp = 13; //we wouldn't want to have such large images in memory
   int w = input.width(), h = input.height();
   int prodw = 1, prodh = 1;
-  int ew = 0, eh =0;
   //Find power of two width
   int nw, nh;
-  for(nw = 1; nw<=max_exp; nw++)
-    if(prodw>w)
+  for (nw = 1; nw<=max_exp; nw++)
+    if (prodw>w)
       break;
     else
-      {
-        ew = nw;
-        prodw *= 2;
-      }
-  if(nw==max_exp)
+      prodw *= 2;
+  if (nw==max_exp)
     return false;
   //Find power of two height
-  for(nh = 1; nh<=max_exp; nh++)
-    if(prodh>h)
+  for (nh = 1; nh<=max_exp; nh++)
+    if (prodh>h)
       break;
     else
-      {
-        eh = nh;
-        prodh *= 2;
-      }
-  if(nh==max_exp)
+      prodh *= 2;
+  if (nh==max_exp)
     return false;
   brip_float_ops::resize(input, prodw, prodh, output);
 
   return true;
 }
 //
-//: block a periodic signal by supressing two Gaussian lobes in the frequency
-//  domain. The lobes are on the line defined by dir_fx and dir_fy through the
+//: block a periodic signal by suppressing two Gaussian lobes in the frequency domain.
+//  The lobes are on the line defined by dir_fx and dir_fy through the
 //  dc origin, assumed (0, 0).  The center frequency, f0, is the distance along
 //  the line to the center of each blocking lobe (+- f0). radius is the
 //  standard deviation of each lobe. Later we can define a "filter" class.
-//  
+//
 float brip_float_ops::gaussian_blocking_filter(const float dir_fx,
-                                               const float dir_fy, 
-                                               const float f0, 
+                                               const float dir_fy,
+                                               const float f0,
                                                const float radius,
-                                               const float fx, 
+                                               const float fx,
                                                const float fy)
 {
   // normalize dir_fx and dir_fy
   float mag = vcl_sqrt(dir_fx*dir_fx + dir_fy*dir_fy);
-  if(!mag)
+  if (!mag)
     return 0;
   float r2 = 2.0*radius*radius;
   float dx = dir_fx/mag, dy = dir_fy/mag;
   // compute the centers of each lobe
   float fx0p = dx*f0, fy0p = dy*f0;
   float fx0m = -dx*f0, fy0m = -dy*f0;
-  // the squared distance of fx, fy from each center 
+  // the squared distance of fx, fy from each center
   float d2p = (fx-fx0p)*(fx-fx0p) + (fy-fy0p)*(fy-fy0p);
   float d2m = (fx-fx0m)*(fx-fx0m) + (fy-fy0m)*(fy-fy0m);
   // use the closest lobe
   float d = d2p;
-  if(d2m<d2p)
+  if (d2m<d2p)
     d = d2m;
   // the gaussian blocking function
   float gb = 1.0-vcl_exp(-d/r2);
@@ -1248,35 +1239,35 @@ float brip_float_ops::gaussian_blocking_filter(const float dir_fx,
 
 bool brip_float_ops::
 spatial_frequency_filter(vil1_memory_image_of<float> const & input,
-                         const float dir_fx, const float dir_fy, 
+                         const float dir_fx, const float dir_fy,
                          const float f0, const float radius,
                          const bool output_fourier_mag,
                          vil1_memory_image_of<float> & output)
 {
-	//Compute the fourier transform of the image.
+  //Compute the fourier transform of the image.
   vil1_memory_image_of<float> pow_two, mag, bmag, phase, pow_two_filt;
   brip_float_ops::resize_to_power_of_two(input, pow_two);
   int Nfx = pow_two.width(), Nfy = pow_two.height();
-  
-  if(!brip_float_ops::fourier_transform(pow_two, mag, phase))
+
+  if (!brip_float_ops::fourier_transform(pow_two, mag, phase))
     return false;
   bmag.resize(Nfx, Nfy);
-  
+
   //filter the magnitude function
   float Ofx = Nfx/2, Ofy = Nfy/2;
-  for(int fy =0; fy<Nfy; fy++)
-    for(int fx =0; fx<Nfx; fx++)
-	{
-		float gb = gaussian_blocking_filter(dir_fx, dir_fy, f0, 
-                                                        radius,
-														fx-Ofx, fy-Ofy);
-    bmag(fx,fy) = mag(fx,fy)*gb;
-	}
-  if(output_fourier_mag)
+  for (int fy =0; fy<Nfy; fy++)
+    for (int fx =0; fx<Nfx; fx++)
     {
-      output = bmag;
-      return true;
+      float gb = gaussian_blocking_filter(dir_fx, dir_fy, f0,
+                                          radius,
+                                          fx-Ofx, fy-Ofy);
+      bmag(fx,fy) = mag(fx,fy)*gb;
     }
+  if (output_fourier_mag)
+  {
+    output = bmag;
+    return true;
+  }
   //Transform back
   pow_two_filt.resize(Nfx, Nfy);
   brip_float_ops::inverse_fourier_transform(bmag, phase, pow_two_filt);
@@ -1286,4 +1277,3 @@ spatial_frequency_filter(vil1_memory_image_of<float> const & input,
   return true;
 }
 
-  
