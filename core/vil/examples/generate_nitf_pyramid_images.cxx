@@ -1,5 +1,5 @@
 // This is core/vil/examples/generate_nitf_pyramid_images.cxx
-
+#include <vil/file_formats/vil_nitf.h>
 //:
 // \file
 // Generate pyramid images for NITF files.
@@ -19,50 +19,42 @@
 #include <vil/vil_property.h>
 #include <vil/vil_stream.h>
 
-#include <vil/file_formats/vil_nitf.h>
-
 const int DEFAULT_LEVELS = 6;
 
 // ######################################################################
-int main (int argc, char **argv)
+int main(int argc, char **argv)
 {
-    static vcl_string method_name = "main: ";
+    static vcl_string method_name = "vil/examples/generate_nitf_pyramid_images.cxx: ";
 
-    unsigned int levels = DEFAULT_LEVELS;
+    unsigned int levels = argc>2 ?  vcl_atoi(argv[2]) : DEFAULT_LEVELS;
 
-    char * test_input_file = "schen9_29a.nitf";
-    vcl_cout << "argc = " << argc << vcl_endl;
+    const char * test_input_file = argc>1 ? argv[1] :  "schen9_29a.nitf";
+    vcl_cout << "argc = " << argc << vcl_endl
+             << "input file = <" << test_input_file
+             << ">  # levels = " << levels << vcl_endl;
 
-    if (argc > 1) {
-      test_input_file = argv[1];
-      if (argc > 2) {
-        levels = vcl_atoi (argv[2]);
-      }
-      vcl_cout << "input file = <" << test_input_file
-               << ">  # levels = " << levels << vcl_endl;
-    }
-    else {
+    if (argc < 2) {
       vcl_cout << "Usage: test_generate_pyramid_images.exe <input_file_name> <num_levels>\n";
       vcl_exit(-1);
     }
 
-    vil_stream * input_stream = vil_open (test_input_file, "r");
+    vil_stream * input_stream = vil_open(test_input_file, "r");
     vcl_cout << "input opened OK.\n";
 
     input_stream->ref();
-    input_stream->seek (0);  // RESET STREAM TO BEGINNING
+    input_stream->seek(0);  // RESET STREAM TO BEGINNING
 
     vcl_cout << "create vil_nitf_file_format\n";
     vil_nitf_file_format * file_format = new vil_nitf_file_format();
 
     vcl_cout << "call vil_nitf_file_format::make_input_image\n";
-    vil_image_resource_sptr nitf_image = file_format->make_input_image (input_stream);
+    vil_image_resource_sptr nitf_image = file_format->make_input_image(input_stream);
 
-    if (nitf_image != static_cast<vil_image_resource_sptr> (0))
+    if (nitf_image != static_cast<vil_image_resource_sptr>(0))
     {
-      char * tag_name = vil_property_quantisation_depth;
+      const char * tag_name = vil_property_quantisation_depth;
       unsigned int bits_per_component = 0;
-      bool got_property = nitf_image->get_property (tag_name, &bits_per_component);
+      bool got_property = nitf_image->get_property(tag_name, &bits_per_component);
 
       if (got_property == false) {
         vcl_cout << "WARNING: failed to get property <" << tag_name << ">\n";
@@ -81,7 +73,7 @@ int main (int argc, char **argv)
       // SPECIFIC METHODS, LIKE get_rational_camera.
 
       vil_nitf_image * temp_nitf_image =
-            dynamic_cast<vil_nitf_image *> (nitf_image.as_pointer());
+            dynamic_cast<vil_nitf_image*>(nitf_image.as_pointer());
 
       if (temp_nitf_image == 0) {
         vcl_cerr << method_name << "dynamic cast to vil_nitf_image failed.\n";
@@ -90,7 +82,7 @@ int main (int argc, char **argv)
         vcl_string base_file_name = test_input_file;
         vcl_string dir_name = "";
 
-        temp_nitf_image->construct_pyramid_images (levels, base_file_name, dir_name);
+        temp_nitf_image->construct_pyramid_images(levels, base_file_name, dir_name);
       }
     }
 

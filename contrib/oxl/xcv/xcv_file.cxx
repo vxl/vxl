@@ -86,7 +86,7 @@ void xcv_file::save_image()
 #ifdef DEBUG
     vcl_cerr << "Saving image to file: " << image_filename->c_str() << vcl_endl;
 #endif
-    static char *format[] = {
+    static const char *format[] = {
       "jpg","tiff","pnm","png","iris","mit","viff"};
     vil1_save(imt->get_image(),image_filename->c_str(),format[choice_value]);
   }
@@ -129,8 +129,7 @@ void xcv_file::save_as_ps()
   if (ps_dl.ask())
   {
 #ifdef DEBUG
-    vcl_cerr << "Saving data to postscript file: " << image_filename 
-      << vcl_endl;
+    vcl_cerr << "Saving data to postscript file: "<< image_filename << vcl_endl;
 #endif
     vgui_easy2D_tableau_sptr easy = get_easy2D_at(col, row);
     if (easy)

@@ -50,7 +50,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define LENGTH 512
+#define LENGTH 512L
 
 int vil_viff_imagesize(struct vil_viff_xvimage *image,int *dsize, int *dcount, int *msize,
                        int *mcount, int *lsize,int *lcount);
@@ -84,7 +84,7 @@ int vil_viff_imagesize(struct vil_viff_xvimage *image,int *dsize, int *dcount, i
 struct vil_viff_xvimage *
 vil_viff_createimage(vxl_uint_32 col_size, vxl_uint_32 row_size,
                      vxl_uint_32 data_storage_type, vxl_uint_32 num_of_images,
-                     vxl_uint_32 num_data_bands, char* comment,
+                     vxl_uint_32 num_data_bands, const char* comment,
                      vxl_uint_32 map_row_size, vxl_uint_32 map_col_size,
                      vxl_uint_32 map_scheme, vxl_uint_32 map_storage_type,
                      vxl_uint_32 location_type, vxl_uint_32 location_dim)
@@ -135,7 +135,7 @@ vil_viff_createimage(vxl_uint_32 col_size, vxl_uint_32 row_size,
     image->version = XV_IMAGE_VER_NUM;
     image->machine_dep = VFF_DEP_IEEEORDER; /* assume IEEE byte order */
     memset(image->reserve, 0, VIFF_HEADERSIZE-21*sizeof(vxl_sint_32)-520*sizeof(char)-4*sizeof(float));
-    memset(image->trash, 0, 3);
+    memset(image->trash, 0, 3L);
     memset(image->comment, 0, LENGTH);
     strcpy(image->comment, tmp_comment);
     image->row_size = row_size;

@@ -39,7 +39,7 @@ test_gevd_memory_mixin()
 
   //now use the other constructor, and do the same stuff.
   char * buf = new char[8];
-  char * testwrd = "hickory";
+  const char * testwrd = "hickory";
   vcl_memcpy(buf,testwrd,8);
   gevd_memory_mixin * gmm2 = new gevd_memory_mixin(8,(void*)buf);
 
