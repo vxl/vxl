@@ -98,6 +98,7 @@ class bgui_vtol2D_tableau : public bgui_vsol2D_tableau
   //void enable_highlight(){highlight_ = true;}
   //void disable_highlight(){highlight_ = false;}
   vtol_edge_2d_sptr get_mapped_edge(const int id);
+  vtol_face_2d_sptr get_mapped_face(const int id);
 
   //: Methods for changing the default style of displayable objects
   void set_vtol_topology_object_style(vtol_topology_object_sptr tos,
