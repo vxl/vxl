@@ -9,6 +9,10 @@
 
 #include "vcl_compiler.h"
 
+#ifndef hpux
 #include <wctype.h>
+#else // HP does not have /usr/include/wctype.h
+#include <wchar.h>
+#endif
 
 #endif // vcl_cwctype_h_
