@@ -14,7 +14,7 @@ INCLUDE(${MODULE_PATH}/FindGLUT.cmake)
 
 # The following are for the optional toolkit
 # implementations
-INCLUDE(${MODULE_PATH}/FindQt.cmake)
+INCLUDE(${MODULE_PATH}/NewCMake/FindQt.cmake)
 INCLUDE(${MODULE_PATH}/FindGTK.cmake)
 INCLUDE(${MODULE_PATH}/FindFltk.cmake)
 
@@ -241,7 +241,7 @@ ENDIF (HAS_GLUT)
 # Qt
 ##################################################
 
-IF (HAS_QT)
+IF (QT_FOUND)
 
   OPTION(VGUI_USE_QT "Should Qt support be compiled into vgui?" YES)
 
@@ -249,7 +249,8 @@ IF (HAS_QT)
 
     ADD_DEFINITIONS( "-DVGUI_USE_QT" )
 
-    INCLUDE_DIRECTORIES(${QT_INCLUDE_PATH})
+    INCLUDE_DIRECTORIES(${QT_INCLUDE_DIR})
+    ADD_DEFINITIONS(${QT_DEFINITIONS})
 
     SET(vgui_qt_sources
       impl/qt/vgui_qt.cxx             impl/qt/vgui_qt.h
@@ -272,7 +273,7 @@ IF (HAS_QT)
 
   ENDIF(VGUI_USE_QT)
 
-ENDIF (HAS_QT)
+ENDIF (QT_FOUND)
 
 
 ##################################################
