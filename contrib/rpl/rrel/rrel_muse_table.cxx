@@ -62,7 +62,6 @@ void
 rrel_muse_table::calculate_all( unsigned int k, unsigned int n,
                                 rrel_muse_table_entry & entry )
 {
-  vcl_cout << "rrel_muse_table::calculate_all" << vcl_endl;
   entry . initialized_ = true;
   entry . expected_ = calculate_expected( k, n );
   entry . standard_dev_ = calculate_standard_dev( k, n, entry . expected_ );
