@@ -21,9 +21,3 @@ void vil_byte_swap(void *b_, void *e_) {
     b[n-1-i] = tmp;
   }
 }
-
-#if 0 // for 2.7
-VCL_INSTANTIATE_INLINE( void vil_byte_swap(long &) );
-VCL_INSTANTIATE_INLINE( void vil_byte_swap(unsigned short &) );
-VCL_INSTANTIATE_INLINE( void vil_byte_swap(unsigned long &) );
-#endif
