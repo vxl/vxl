@@ -151,7 +151,7 @@ void vul_sequence_filename_map::parse()
     bool found_match = false;
     {
       vul_file_iterator fn("./*");
-      for (;!found_match && fn; ++fn)
+      for (;!found_match && bool(fn); ++fn)
         for (int i=0; i < num_dir_ext_pairs && !found_match; ++i)
           if (filter_dirent(fn(), dir_ext_pairs[i].extension)) {
             image_dir_ = "./";
@@ -164,7 +164,7 @@ void vul_sequence_filename_map::parse()
         vcl_string glob(dir_ext_pairs[i].image_dir);
         glob += "/*";
         vul_file_iterator fn(glob);
-        for (;!found_match && fn;++fn)
+        for (;!found_match && bool(fn);++fn)
             if (filter_dirent(fn(), dir_ext_pairs[i].extension)) {
               image_dir_ = dir_ext_pairs[i].image_dir;
               image_extension_ = dir_ext_pairs[i].extension;
@@ -185,7 +185,7 @@ void vul_sequence_filename_map::parse()
   else if (image_dir_ == "") {
     bool found_match = false;
     {
-      for (vul_file_iterator fn("./*"); !found_match && fn; ++fn)
+      for (vul_file_iterator fn("./*"); !found_match && bool(fn); ++fn)
         if (filter_dirent(fn.filename(), image_extension_)) {
           image_dir_ = "./";
           found_match = true;
@@ -196,7 +196,7 @@ void vul_sequence_filename_map::parse()
       for (int i=0; i < num_dir_ext_pairs && !found_match; ++i)
         if (vcl_string(dir_ext_pairs[i].extension) == image_extension_) {
           vcl_string glob(dir_ext_pairs[i].image_dir); glob += "*";
-          for (vul_file_iterator fn(glob); !found_match && fn; ++fn)
+          for (vul_file_iterator fn(glob); !found_match && bool(fn); ++fn)
             if (filter_dirent(fn.filename(), image_extension_)) {
               image_dir_ = dir_ext_pairs[i].image_dir;
               found_match = true;
@@ -207,7 +207,7 @@ void vul_sequence_filename_map::parse()
     if (!found_match) {
       for (int i=0; i < num_dir_ext_pairs && !found_match; ++i) {
         vcl_string glob(dir_ext_pairs[i].image_dir); glob += "*";
-        for (vul_file_iterator fn(glob); !found_match && fn; ++fn)
+        for (vul_file_iterator fn(glob); !found_match && bool(fn); ++fn)
           if (filter_dirent(fn.filename(), image_extension_)) {
             image_dir_ = dir_ext_pairs[i].image_dir;
             found_match = true;
@@ -233,7 +233,7 @@ void vul_sequence_filename_map::parse()
       if (fn) {
         for (int i=0; i < num_dir_ext_pairs && !found_match; ++i)
           if (vcl_string(dir_ext_pairs[i].image_dir) == image_dir_) {
-            for (;!found_match && fn;++fn)
+            for (;!found_match && bool(fn);++fn)
               if (filter_dirent(fn.filename(), dir_ext_pairs[i].extension)) {
                 image_extension_ = dir_ext_pairs[i].extension;
                 found_match = true;
@@ -246,7 +246,7 @@ void vul_sequence_filename_map::parse()
       vul_file_iterator fn(image_dir_);
       if (fn) {
         for (int i=0; i < num_dir_ext_pairs && !found_match; ++i) {
-          for (;!found_match && fn; ++fn)
+          for (;!found_match && bool(fn); ++fn)
             if (filter_dirent(fn.filename(), dir_ext_pairs[i].extension)) {
               image_extension_ = dir_ext_pairs[i].extension;
               found_match = true;
