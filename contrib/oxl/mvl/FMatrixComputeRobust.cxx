@@ -154,8 +154,8 @@ bool FMatrixComputeRobust::compute (vcl_vector<HomgPoint2D>& p1,
   vcl_vector<bool> inliers(count, true);
   vcl_vector<int> ind1(count), ind2(count);
   for(int i = 0; i < count; i++) {
-    ind1[count] = count;
-    ind2[count] = count;
+    ind1[i] = i;
+    ind2[i] = i;
   }
   matches.set(inliers, ind1, ind2);
   return compute(matches, F);
