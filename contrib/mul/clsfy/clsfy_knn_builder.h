@@ -1,8 +1,11 @@
-#ifndef	clsfy_knn_builder_h_
+#ifndef clsfy_knn_builder_h_
 #define clsfy_knn_builder_h_
 
-//	Copyright: (C) 2001 Britsh Telecommunications plc
+// Copyright: (C) 2001 Britsh Telecommunications plc
 
+#ifdef __GNUC__
+#pragma interface
+#endif
 
 //:
 // \file
@@ -10,7 +13,6 @@
 // \author Ian Scott
 // \date 2001/10/07
 
-// inclusions
 
 #include "clsfy/clsfy_builder_base.h"
 #include <vcl_vector.h>
@@ -25,49 +27,46 @@
 // classifiers.
 class clsfy_knn_builder : public clsfy_builder_base
 {
+  unsigned k_; //!< The number of nearest neighbours to look for.
+
 public:
-//: Dflt ctor
+  // Dflt ctor
   clsfy_knn_builder();
 
-//: Create empty model
-// Caller is responsible for deletion
+  //: Create empty model
+  // Caller is responsible for deletion
   virtual clsfy_classifier_base* new_classifier() const;
 
-//: Build classifier from data
-// return the mean error over the training set.
+  //: Build classifier from data
+  // return the mean error over the training set.
   virtual double build(clsfy_classifier_base& model,
-    mbl_data_wrapper<vnl_vector<double> >& inputs,
-    unsigned nClasses,
-    const vcl_vector<unsigned> &outputs) const;
+                       mbl_data_wrapper<vnl_vector<double> >& inputs,
+                       unsigned nClasses,
+                       const vcl_vector<unsigned> &outputs) const;
 
-//: Name of the class
+  //: Name of the class
   virtual vcl_string is_a() const;
 
-//: IO Version number
+  //: IO Version number
   short version_no() const;
 
-//: Create a copy on the heap and return base class pointer
-  virtual	clsfy_builder_base*	clone()	const;
+  //: Create a copy on the heap and return base class pointer
+  virtual clsfy_builder_base* clone() const;
 
-//: Print class to os
+  //: Print class to os
   virtual void print_summary(vcl_ostream& os) const;
 
-//: Save class to binary file stream
+  //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;
 
-//: Load class from binary file stream
+  //: Load class from binary file stream
   virtual void b_read(vsl_b_istream& bfs);
 
-//: The number of nearest neighbours to look for.
+  //: The number of nearest neighbours to look for.
   unsigned k() const;
 
-//: Set the The number of nearest neighbours to look for.
+  //: Set the The number of nearest neighbours to look for.
   void set_k(unsigned);
-
-private:
-
-//: The number of nearest neighbours to look for.
-  unsigned k_;
 };
 
 //: Allows derived class to be loaded by base-class pointer
@@ -82,6 +81,4 @@ void vsl_b_read(vsl_b_istream& bfs, clsfy_knn_builder& b);
 //: Stream output operator for class reference
 vcl_ostream& operator<<(vcl_ostream& os,const clsfy_knn_builder& b);
 
-#endif
-
-
+#endif // clsfy_knn_builder_h_
