@@ -749,16 +749,15 @@ struct triedge recenttri;
 
 
 /* Deal with point types that are not unsigned long                          */
-#include <stddef.h> /* for intptr_t on Visual C 7 */
-#include <stdlib.h> /* for intptr_t on e.g. SGI */
-#if defined(__sgi) || defined(__FreeBSD__)
-# include <inttypes.h>
-#endif
-#if defined(__unix)
-# include <unistd.h> /* for intptr_t on e.g. Linux */
-#endif
-#if ((defined _MSC_VER) && (_MSC_VER <= 1200)) || defined(__CYGWIN__)
-typedef unsigned long intptr_t;
+#if (defined _MSC_VER) && (_MSC_VER <= 1200)
+ typedef unsigned long intptr_t;
+#else
+# if defined(__alpha) || defined(__CYGWIN__)  /* there is no inttypes.h here */
+ typedef unsigned long intptr_t;
+# else
+#  include <inttypes.h> /* for intptr_t on e.g. SGI, Linux, Solaris */
+#  include <stddef.h>   /* for intptr_t on Visual C 7 */
+# endif
 #endif
 
 /*****************************************************************************/
