@@ -26,6 +26,8 @@ SOURCES += vul_timestamp.cxx  # ??
 SOURCES += vul_user_info.cxx
 SOURCES += vul_psfile.cxx
 SOURCES += vul_sequence_filename_map.cxx
+SOURCES += vul_root_dir.cxx
+SOURCES += vul_url.cxx
 
 # debugging
 SOURCES += vul_trace.cxx
