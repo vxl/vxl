@@ -20,9 +20,10 @@ static void create_image(const char* name)
 
 void test_image_conversions()
 {
-  char const* filename = vul_temp_filename().c_str();
-  create_image(filename);
-  vil_image im1 = vil_load(filename);
+  vcl_string filename = vul_temp_filename();
+  if (filename == "") filename = "temp_image.ppm";
+  create_image(filename.c_str());
+  vil_image im1 = vil_load(filename.c_str());
   TEST("image file", (bool)im1, true);
   if (!im1) { vcl_cerr << filename << " is not a valid image file\n"; return; }
   int size = im1.get_size_bytes();
@@ -35,7 +36,7 @@ void test_image_conversions()
   // load into memory
   im1.get_section(buf1, 0, 0, wd, ht);
   // now remove the file
-  vpl_unlink(filename);
+  vpl_unlink(filename.c_str());
 
   Image* im2 = vil_to_Image(im1);
   TEST("vil_to_Image width", wd, im2->GetSizeX());
