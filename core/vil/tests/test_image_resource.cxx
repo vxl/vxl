@@ -39,7 +39,7 @@ void test_image_resource(vcl_string type, vil2_pixel_format format, T dummy)
   TEST("vil2_memory_image::get_copy_view()",
        view2 && view2.ni()==6 && view2.nj()==4 && view2.nplanes()==1, true );
 
-  view2.fill(10.0);
+  view2.fill(10);
 
   TEST("vil2_memory_image::put_view(copy)", crop->put_view(view2,0,0), true);
 
@@ -102,10 +102,10 @@ void test_image_resource(vcl_string type, vil2_pixel_format format, T dummy)
   TEST("vil2_decimate get_view sizes", view1.ni() == 5 && view1.nj() == 2, true);
   TEST("vil2_decimate get_view pixels", view1(0,1) == 20.0f && view1(1,1) == 10.0f && view1(1,0) == 0.0f, true);
   view2 = flip4->get_copy_view(0,10,0,8);
-  view1(0,1) = 30.0f;
+  view1(0,1) = 30;
   TEST("vil2_decimate put_view", dec->put_view(view1, 0, 0), true);
   view1 = flip4->get_copy_view(0,10,0,8);
-  view2(0,3) = 30.0f;
+  view2(0,3) = 30;
   TEST("vil2_decimate put_view pixels",
     vil2_image_view_deep_equality(view1, view2), true);
 }
