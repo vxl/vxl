@@ -67,43 +67,43 @@ vgl_box_2d<Type>::vgl_box_2d(const vgl_point_2d<Type>& min_position,
 }
 
 template <class Type>
-Type vgl_box_2d<Type>::get_centroid_x() const
+Type vgl_box_2d<Type>::centroid_x() const
 {
   return (min_pos_[0] + max_pos_[0])/2;
 }
 
 template <class Type>
-Type vgl_box_2d<Type>::get_centroid_y() const
+Type vgl_box_2d<Type>::centroid_y() const
 {
   return (min_pos_[1] + max_pos_[1])/2;
 }
 
 template <class Type>
-Type vgl_box_2d<Type>::get_width() const
+Type vgl_box_2d<Type>::width() const
 {
   return (max_pos_[0] - min_pos_[0]);
 }
 
 template <class Type>
-Type vgl_box_2d<Type>::get_height() const
+Type vgl_box_2d<Type>::height() const
 {
   return (max_pos_[1] - min_pos_[1]);
 }
 
 template <class Type>
-vgl_point_2d<Type> vgl_box_2d<Type>::get_min_point() const
+vgl_point_2d<Type> vgl_box_2d<Type>::min_point() const
 {
   return vgl_point_2d<Type>(min_pos_[0],min_pos_[1]);
 }
 
 template <class Type>
-vgl_point_2d<Type> vgl_box_2d<Type>::get_max_point() const
+vgl_point_2d<Type> vgl_box_2d<Type>::max_point() const
 {
   return vgl_point_2d<Type>(max_pos_[0],max_pos_[1]);
 }
 
 template <class Type>
-vgl_point_2d<Type> vgl_box_2d<Type>::get_centroid_point() const
+vgl_point_2d<Type> vgl_box_2d<Type>::centroid_point() const
 {
   return vgl_point_2d<Type>(get_centroid_x(),get_centroid_y());
 }
@@ -264,6 +264,63 @@ template <class Type>
 vcl_istream&  operator>>(vcl_istream& is,  vgl_box_2d<Type>& p) {
   return p.read(is);
 }
+
+
+// ---START DEPRECATED BLOCK---
+
+
+template <class Type>
+Type vgl_box_2d<Type>::get_centroid_x() const
+{
+  VXL_DEPRECATED("vgl_box_2d<T>::get_centroid_x()");
+  return centroid_x();
+}
+
+template <class Type>
+Type vgl_box_2d<Type>::get_centroid_y() const
+{
+  VXL_DEPRECATED("vgl_box_2d<T>::get_centroid_y()");
+  return centroid_y();
+}
+
+template <class Type>
+Type vgl_box_2d<Type>::get_width() const
+{
+  VXL_DEPRECATED("vgl_box_2d<T>::get_width()");
+  return width();
+}
+
+template <class Type>
+Type vgl_box_2d<Type>::get_height() const
+{
+  VXL_DEPRECATED("vgl_box_2d<T>::get_height()");
+  return height();
+}
+
+template <class Type>
+vgl_point_2d<Type> vgl_box_2d<Type>::get_min_point() const
+{
+  VXL_DEPRECATED("vgl_box_2d<T>::get_min_point()");
+  return min_point();
+}
+
+template <class Type>
+vgl_point_2d<Type> vgl_box_2d<Type>::get_max_point() const
+{
+  VXL_DEPRECATED("vgl_box_2d<T>::get_max_point()");
+  return max_point();
+}
+
+template <class Type>
+vgl_point_2d<Type> vgl_box_2d<Type>::get_centroid_point() const
+{
+  VXL_DEPRECATED("vgl_box_2d<T>::get_centroid_point()");
+  return centroid_point();
+}
+
+// ---END DEPRECATED BLOCK---
+
+
 
 #undef VGL_BOX_2D_INSTANTIATE
 #define VGL_BOX_2D_INSTANTIATE(Type) \

@@ -14,10 +14,12 @@
 // \verbatim
 //  Modifications
 //  IMS (Manchester) 14/03/2001: Tidied up the documentation + added binary_io
+//  Amitha Perera    10/07/2001: Deprecated get_*() in favour of *(), as agreed in Zurich.
 // \endverbatim
 
 #include <vcl_iosfwd.h>
 #include <vgl/vgl_fwd.h> // forward declare vgl_point_2d
+#include <vcl_deprecated.h>
 
 //: Represents a 2D box
 //  A 2d box with sides aligned with the x and y axes.
@@ -104,34 +106,68 @@ public:
 
   // Data Access---------------------------------------------------------------
 
-  //: Get min x
-  inline Type get_min_x() const {return min_pos_[0];}
-  //: Get min y
-  inline Type get_min_y() const {return min_pos_[1];}
-  //: Get max x
-  inline Type get_max_x() const {return max_pos_[0];}
-  //: Get max y
-  inline Type get_max_y() const {return max_pos_[1];}
+  // ---START DEPRECATED BLOCK---
 
-  //: Get x component of centroid
+  //: \deprecated Use min_x()
+  inline Type get_min_x() const {VXL_DEPRECATED("vgl_box_2d<T>::get_min_x()"); return min_pos_[0];}
+  //: \deprecated Use min_y()
+  inline Type get_min_y() const {VXL_DEPRECATED("vgl_box_2d<T>::get_min_y()"); return min_pos_[1];}
+  //: \deprecated Use max_x()
+  inline Type get_max_x() const {VXL_DEPRECATED("vgl_box_2d<T>::get_max_x()"); return max_pos_[0];}
+  //: \deprecated Use max_y()
+  inline Type get_max_y() const {VXL_DEPRECATED("vgl_box_2d<T>::get_max_y()"); return max_pos_[1];}
+
+  //: \deprecated Use centroid_x()
   Type get_centroid_x() const;
-  //: Get y component of centroid
+  //: \deprecated Use centroid_y()
   Type get_centroid_y() const;
 
-  //: Get width of box
+  //: \deprecated Use width()
   Type get_width()  const;
 
-  //: Get height of box
+  //: \deprecated Use height()
   Type get_height() const;
 
-  //: Lower left corner of box
+  //: \deprecated Use min_point()
   vgl_point_2d<Type> get_min_point() const;
 
-  //: Upper right corner of box
+  //: \deprecated Use max_point()
   vgl_point_2d<Type> get_max_point() const;
 
-  //: Centroid of box
+  //: \deprecated Use centroid_point()
   vgl_point_2d<Type> get_centroid_point() const;
+
+  // ---END DEPRECATED BLOCK---
+
+
+  //: Get min x
+  inline Type min_x() const {return min_pos_[0];}
+  //: Get min y
+  inline Type min_y() const {return min_pos_[1];}
+  //: Get max x
+  inline Type max_x() const {return max_pos_[0];}
+  //: Get max y
+  inline Type max_y() const {return max_pos_[1];}
+
+  //: Get x component of centroid
+  Type centroid_x() const;
+  //: Get y component of centroid
+  Type centroid_y() const;
+
+  //: Get width of box
+  Type width()  const;
+
+  //: Get height of box
+  Type height() const;
+
+  //: Lower left corner of box
+  vgl_point_2d<Type> min_point() const;
+
+  //: Upper right corner of box
+  vgl_point_2d<Type> max_point() const;
+
+  //: Centroid of box
+  vgl_point_2d<Type> centroid_point() const;
 
   //: Set left side of box (other side ordinates unchanged)
   inline void set_min_x(Type min_x) {min_pos_[0]=min_x;}
