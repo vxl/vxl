@@ -12,7 +12,6 @@
 #include <vcl_iostream.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vsol/vsol_point_2d.h>
-#include <vsol/vsol_polygon_2d_sptr.h>
 #include <vbl/io/vbl_io_smart_ptr.h>
 
 //***************************************************************************
@@ -31,7 +30,7 @@ vsol_rectangle_2d::vsol_rectangle_2d()
   storage_->push_back(new vsol_point_2d(1.0,1.0));
   storage_->push_back(new vsol_point_2d(1.0,0.0));
 }
-  
+
 //---------------------------------------------------------------------------
 //: Constructor from 4 points, the corners of the rectangle
 //---------------------------------------------------------------------------
@@ -39,14 +38,14 @@ vsol_rectangle_2d::vsol_rectangle_2d(const vsol_point_2d_sptr &new_p0,
                                      const vsol_point_2d_sptr &new_p1,
                                      const vsol_point_2d_sptr &new_p2,
                                      const vsol_point_2d_sptr &new_p3)
- : vsol_polygon_2d()                                     
+ : vsol_polygon_2d()
 {
   storage_->clear();
   storage_->push_back(new_p0);
   storage_->push_back(new_p1);
   storage_->push_back(new_p2);
   storage_->push_back(new_p3);
-} 
+}
 
 //---------------------------------------------------------------------------
 //: Constructor from 3 points.
@@ -77,8 +76,7 @@ vsol_rectangle_2d::vsol_rectangle_2d(const vsol_point_2d_sptr &new_pc,
   storage_->push_back(new vsol_point_2d(v3.x(), v3.y()));
 }
 //---------------------------------------------------------------------------
-//: Constructor from center, half_width, half_height,
-//  angle(ccw from x axis, in deg/rad)
+//: Constructor from center, half_width, half_height, angle(ccw from x axis, in deg/rad)
 //---------------------------------------------------------------------------
 vsol_rectangle_2d::vsol_rectangle_2d(const vsol_point_2d_sptr &center,
                                      const double half_width,
@@ -89,7 +87,7 @@ vsol_rectangle_2d::vsol_rectangle_2d(const vsol_point_2d_sptr &center,
 {
   assert(half_width>0&&half_height>0);
   double ang = angle;
-  if(deg)
+  if (deg)
     ang = (vnl_math::pi*angle)/180.0;
   double c = vcl_cos(ang), s = vcl_sin(ang);
   vgl_vector_2d<double> a(half_width*c, half_width*s);
@@ -250,30 +248,28 @@ void vsol_rectangle_2d::b_write(vsl_b_ostream &os) const
 //: Binary load self from stream (not typically used)
 void vsol_rectangle_2d::b_read(vsl_b_istream &is)
 {
-  if(!is)
+  if (!is)
     return;
   short ver;
   vsl_b_read(is, ver);
-  switch(ver)
-    {
-    case 1:
-      {
-        vsol_polygon_2d::b_read(is);
-        if(storage_->size()!=4){
-          vcl_cerr << "I/O ERROR: vsol_rectangle_2d::b_read(vsl_b_istream&)\n"
-                   << "           Incorrect number of vertices: "<< storage_->size() << '\n';
-          is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-          return;
-        }
-      }
-      break;
-      
-    default:
+  switch (ver)
+  {
+   case 1:
+    vsol_polygon_2d::b_read(is);
+    if (storage_->size()!=4){
       vcl_cerr << "I/O ERROR: vsol_rectangle_2d::b_read(vsl_b_istream&)\n"
-               << "           Unknown version number "<< ver << '\n';
+               << "           Incorrect number of vertices: "<< storage_->size() << '\n';
       is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
     }
+    break;
+
+   default:
+    vcl_cerr << "I/O ERROR: vsol_rectangle_2d::b_read(vsl_b_istream&)\n"
+             << "           Unknown version number "<< ver << '\n';
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
+  }
 }
 //: Return IO version number;
 short vsol_rectangle_2d::version() const
@@ -296,13 +292,13 @@ bool vsol_rectangle_2d::is_class(const vcl_string& cls) const
 //external functions
 
 //: Binary save vsol_rectangle_2d* to stream.
-void 
+void
 vsl_b_write(vsl_b_ostream &os, const vsol_rectangle_2d* r)
 {
-  if (!r){
+  if (!r) {
     vsl_b_write(os, false); // Indicate null rectangle stored
-  } 
-  else{
+  }
+  else {
     vsl_b_write(os,true); // Indicate non-null rectangle stored
     r->b_write(os);
   }
