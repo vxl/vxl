@@ -25,8 +25,12 @@ class vil_image;
 //: You should not derive from vil_image to make a new image type.
 // Derive from vil_image_impl instead.
 // The trick used here to inhibit derivation is to derive from a 
-// virtual base class 
+// virtual base class.
 struct vil_image_inhibit_derivation {vil_image_inhibit_derivation(int) {}};
+// fsm: initialization of the virtual base class must come first.
+//#define VIL_IMAGE_DERIVED_CLASS_INIT  , vil_image_inhibit_derivation(1)
+//#define VIL_IMAGE_DERIVED_CLASS_INIT0 : vil_image_inhibit_derivation(1)
+#define VIL_IMAGE_DERIVED_CLASS_INIT vil_image_inhibit_derivation(1)
 
 class vil_image : public virtual vil_image_inhibit_derivation {
 public:
@@ -90,12 +94,12 @@ public:
   
   //------------ smart-pointer logic --------
 
-  vil_image(vil_image_impl *p = 0) : vil_image_inhibit_derivation(0), ptr(p) {
+  vil_image(vil_image_impl *p = 0) : VIL_IMAGE_DERIVED_CLASS_INIT, ptr(p) {
     if (ptr)
       ptr->up_ref();
   }
 
-  vil_image(vil_image const& that) : vil_image_inhibit_derivation(0), ptr(that.ptr) {
+  vil_image(vil_image const& that) : VIL_IMAGE_DERIVED_CLASS_INIT, ptr(that.ptr) {
     if (ptr)
       ptr->up_ref();
   }

@@ -48,12 +48,14 @@ public:
   //: 
   vil_memory_image_of(vil_memory_image_of const &);
 
-  //: Deprecated -- This was used to copy the ROI, which is no longer on image
+  //: Copy given image into a memory buffer.
+  // If it's already a memory image, do as the 
+  // copy constructor (above) does.
+  vil_memory_image_of(vil_image const& image);
+
+  // Deprecated -- This was used to copy the ROI, which is no longer on image
   //vil_memory_image_of(vil_image const&, bool) {}
 
-  //: Copy given image into a memory buffer.
-  vil_memory_image_of(vil_image const& image);
-  
   //: Construct a w x h image, pixel format is determined from T
   vil_memory_image_of(int sizex, int sizey);
   

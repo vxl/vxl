@@ -28,7 +28,7 @@ public:
   
 private:
   int flags_;
-  fstream f_;
+  vcl_fstream f_;
   int id_;
 };
 

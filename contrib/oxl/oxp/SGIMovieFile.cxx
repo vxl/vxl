@@ -385,9 +385,9 @@ void SGIMV_Variables::read(istream& f) {
   //     };
   //     VarData data[num_vars];
   //   };
-  int pad = get_u32(f);
+  /*int pad =*/ get_u32(f);
   int n = get_u32(f);
-  pad = get_u32(f);
+  /*pad =*/ get_u32(f);
   if (n > 1000) {
     vbl_printf(cerr, "SGIMovieFile: warning: A Variable list is %d elements long\n", n);
   }

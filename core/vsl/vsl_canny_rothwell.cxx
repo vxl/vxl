@@ -20,7 +20,7 @@ vsl_canny_rothwell::vsl_canny_rothwell(vsl_canny_rothwell_params const &params)
 {
   // Determine the size of the largest convolution kernel
   _range = params.range;
-  _gauss_tail = 0.01;   // Canny uses 0.001
+  _gauss_tail = 0.01f;   // Canny uses 0.001
   _width = int(_sigma*sqrt(2*log(1/_gauss_tail))+1); // round up to int
   _w0 = _width;
   _k_size = 2*_width+ 1;
@@ -190,7 +190,7 @@ void vsl_canny_rothwell::detect_edges(vil_image const &image, vcl_list<vsl_Edge*
 //
 void vsl_canny_rothwell::Non_maximal_supression() {
   float h1,h2;
-  float k = 180.0/3.1415926;
+  float k = 180.0f/3.1415926f;
   int orient;
   float theta,grad;
   float fraction,newx,newy;
@@ -444,7 +444,7 @@ void vsl_canny_rothwell::Final_hysteresis(vcl_list<vsl_Edge*> *edges) {
 	    *(pg++) = 0.0;   // Mark the gradient as zero at a junction
 	  }
 	  if (_theta[tmpx][tmpy] == DUMMYTHETA) {
-	    const float k = 180.0/3.1415926;
+	    const float k = 180.0f/3.1415926f;
 	    float *dx = _dx[tmpx];
 	    float *dy = _dy[tmpx];
 	    

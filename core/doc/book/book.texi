@@ -797,6 +797,48 @@ program higgledy piggledy, so one can collect arguments in objects of type
 @code{vbl_arg_list}.
 
 
+@section Timing operations: vbl_timer
+@cindex time, measuring elapsed
+@cindex vbl_timer
+@cindex cpu time
+
+If you want to measure elapsed time, for example to find out how long a
+section of your program takes to run, use the @code{vbl_timer} class.  When
+a @code{vbl_timer} is initialized, like so, it records the current time.
+@example
+   vbl_timer mytimer;
+@end example
+Later, you can find out the elapsed time using the @code{real()} method:
+@example
+   vcl_cerr << "That took " << mytimer.real() << " milliseconds\n";
+@end example
+If you want to reset the timer to make a new measurement, use the
+@code{mark()} method.
+@example
+   mytimer.mark();  // Reset and start counting from zero again.
+@end example
+
+If you are running other jobs on your computer, you might like to know how
+much time was used by your program alone.  For that, one would use the
+@code{user()} method.
+@example
+   vcl_cerr << "Of which " << mytimer.user() << "ms was actually me\n";
+@end example
+In general, it is better to use the @code{real}, ``wall-clock'' elapsed
+time, as the CPU time returned by user can fail to include work carried out
+on your program's behalf by the operating system.  For example, if you're
+using a lot of memory, the system will swap pages in and out of virtual
+memory, and your program will run slowly, but @code{user()} will not report
+it.
+
+Finally, there's a super-convienient @code{print} method, which is used
+to just print the real and user times to a stream without any
+formatting, for quick testing purposes.  Here's an example
+@example
+  vbl_timer tic; // Start timing
+  // do stuff
+  tic.print(vcl_cerr); // Print times to cerr.
+@end example
 
 
 
@@ -822,7 +864,43 @@ remembering the line number for error messages.  It is used like this:
 @section Regular expression parsing: @code{vbl_reg_exp}
 @cindex regular expressions
 @cindex vbl_reg_exp
+A regular expression allows a programmer to specify complex patterns that
+can be searched for and matched against the character string of a string
+object. In its simplest form, a regular expression is a sequence of
+characters used to search for exact character matches. However, many times
+the exact sequence to be found is not known, or only a match at the
+beginning or end of a string is desired. The vbl regular expression class
+implements regular expression pattern matching as is found and implemented
+in many UNIX commands and utilities, notably perl.  The perl code
+@example
+   $filename =~ m"([a-z]+)\.h";
+   print $1;
+@end example
+is written as follows in @vxl{}
+@example
+   vbl_reg_exp re("([a-z]+)\\.h");
+   re.find(filename);
+   cerr << re.match(1);
+@end example
 
+The vbl syntax is similar to perl's, although not quite as clean.  Here are
+the metacharacters:
+@example
+ ^        Matches at beginning of a line
+ $        Matches at end of a line
+ .        Matches any single character
+[ ]       Matches any character(s) inside the brackets
+[^ ]      Matches any character(s) not inside the brackets
+ -        Matches any character in range on either side of a dash
+ *        Matches preceding pattern zero or more times
+ +        Matches preceding pattern one or more times
+ ?        Matches preceding pattern zero or once only
+()        Saves a matched expression and uses it in a later match.
+@end example
+Note that more than one of these metacharacters can be used in a single
+regular expression in order to create complex search patterns. For example,
+the pattern @code{[^ab1-9]} says to match any character sequence that does
+not begin with the characters "ab" followed by numbers in the series 1-9.
 
 @comment ------------------------------------------------------------------
 @node    vnl,       vil,  vbl,      top

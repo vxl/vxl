@@ -71,6 +71,27 @@ vcl_string vbl_file::dirname(char const* fn)
   return self.substr(0, slash_index);
 }
 
+vcl_string vbl_file::basename(char const* fn, char const * suffix)
+{
+  // First strip dir
+  vcl_string self(fn);
+
+  unsigned int slash_index = self.rfind('/');
+  if (slash_index != vcl_string::npos)
+    self.erase(0, slash_index+1);
+
+  // Now strip suffix if any
+  if (suffix) {
+    int start = self.size() - strlen(suffix);
+    if (start >= 0)
+      // egcs, 2.95, 2.96 have no method which can do
+      //   self.compare(start, vcl_string::npos, suffix) == 0
+      if (vcl_string(self.begin()+start, self.end()) == suffix)
+        self.erase(start, vcl_string::npos);
+  }
+  return self;
+}
+
 vcl_string vbl_file::expand_tilde(char const* vbl_filename)
 {
   if (!vbl_filename || (strlen(vbl_filename) == 0))
@@ -118,23 +139,4 @@ vcl_string vbl_file::expand_tilde(char const* vbl_filename)
   // Got user info
   return user.home_directory + fn;
 #endif
-}
-
-vcl_string vbl_file::basename(char const* filename, char const* suffix)
-{
-  vcl_string fn(filename);
-  unsigned int start = fn.rfind('/') + 1;
-  unsigned int end;
-  if (!suffix) {
-    end = fn.rfind('.') - 1;
-  } else {
-    if (suffix[0] != '.')
-      end = fn.rfind(suffix) - 2;
-    else 
-      end = fn.rfind(suffix) - 1;	
-  }
-  if (start != vcl_string::npos) 
-    return fn.substr(start, end-start+1);
-  else 
-    return fn.substr(0,end);
 }

@@ -50,7 +50,7 @@ typedef int logical; // not bool
 
 /* Common Block Declarations */
 
-extern "C" struct {
+struct {
 // C    GTOL is a DOUBLE PRECISION variable with default value 0.9, which
 // C        controls the accuracy of the line search routine MCSRCH. If the
 // C        function and gradient evaluations are inexpensive with respect

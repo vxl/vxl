@@ -98,7 +98,7 @@ UNIMPr(char           *, crypt, (const char *  a0,const char *  a1), (a0, a1), 0
 UNIMPr(char           *, ctermid, (char *  a0), (a0), 0);
 PASSTHRU(int, dup, (int  a0), (a0));
 PASSTHRU(int, dup2, (int  a0,int  a1), (a0, a1));
-UNIMPr(void, encrypt, (char a0[64],int  a1), (a0, a1), VPL_VOID_RETURN);
+UNIMPr(void, encrypt, (char a0[64],int  a1), (a0, a1), VCL_VOID_RETURN);
 
 #include <process.h>
 UNIMPr(int, execl, (const char *, const char *,...), (), 0);

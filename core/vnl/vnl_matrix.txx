@@ -296,6 +296,7 @@ ostream& operator<< (ostream& os, vnl_matrix<T> const& m) {
 // determining file size if the input matrix has zero size.
 template<class T>
 istream& operator>>(istream& s, vnl_matrix<T>& M) {
+  if (M.data_block() == 0) M = T(1) + T(3) * M; // fsm: hack to get 2.96 to instantiate the inline function.
   M.read_ascii(s); 
   return s;
 }

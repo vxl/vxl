@@ -164,5 +164,8 @@ vil_image vil_memory_image_impl::get_plane(int /*plane*/) const
 
 bool vil_memory_image_impl::get_property(char const *tag, void *property_value) const
 {
-  return 0==strcmp(tag, "memory");
+  if (0==strcmp(tag, "memory"))
+    return true;
+
+  return false;
 }

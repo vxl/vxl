@@ -20,8 +20,4 @@
 #define vcl_ofstream std::ofstream
 #endif
 
-using std :: fstream;
-using std :: ofstream;
-using std :: ifstream;
-
 #endif

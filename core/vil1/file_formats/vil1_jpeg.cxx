@@ -15,6 +15,7 @@
 #include <vcl/vcl_cstdio.h>
 #include <vcl/vcl_climits.h> // CHAR_BIT
 #include <vcl/vcl_iostream.h>
+#include <vcl/vcl_cstring.h> // memcpy()
 
 #include <vil/vil_stream.h>
 #include <vil/vil_image.h>

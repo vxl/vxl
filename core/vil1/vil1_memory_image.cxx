@@ -28,50 +28,53 @@
 }
 
 vil_memory_image::vil_memory_image()
-  :  vil_image_inhibit_derivation(0)
+  : VIL_IMAGE_DERIVED_CLASS_INIT
 {
   cache_from_impl;
 }
 
 vil_memory_image::vil_memory_image(int planes, int w, int h, vil_memory_image_format const& format)
-  : vil_image_inhibit_derivation(0)
+  : VIL_IMAGE_DERIVED_CLASS_INIT
   , vil_image(new vil_memory_image_impl(planes, w, h, format))
 {
   cache_from_impl;
 }
 
 vil_memory_image::vil_memory_image(int planes, int w, int h, int components, int bits_per_component, vil_component_format component_format)
-  : vil_image_inhibit_derivation(0)
+  : VIL_IMAGE_DERIVED_CLASS_INIT
   , vil_image(new vil_memory_image_impl(planes, w, h, components, bits_per_component, component_format))
 {
   cache_from_impl;
 }
 
 vil_memory_image::vil_memory_image(int planes, int w, int h, vil_pixel_format pixel_format)
-  : vil_image_inhibit_derivation(0)
+  : VIL_IMAGE_DERIVED_CLASS_INIT
   , vil_image(new vil_memory_image_impl(planes, w, h, pixel_format))
 {
   cache_from_impl;
 }
 
 vil_memory_image::vil_memory_image(int w, int h, int components, int bits_per_component, vil_component_format component_format)
-  : vil_image_inhibit_derivation(0)
+  : VIL_IMAGE_DERIVED_CLASS_INIT
   , vil_image(new vil_memory_image_impl(1, w, h, components, bits_per_component, component_format))
 {
   cache_from_impl;
 }
 
 vil_memory_image::vil_memory_image(int w, int h, vil_pixel_format pixel_format)
-  : vil_image_inhibit_derivation(0)
+  : VIL_IMAGE_DERIVED_CLASS_INIT
   , vil_image(new vil_memory_image_impl(1, w, h, pixel_format))
 {
   cache_from_impl;
 }
 
 // make a memory image if input is not already one.
-static
-vil_image make_memory_image(vil_image const & that)
+
+vil_image make_memory_image(vil_image const * thatp)
 {
+  cerr << thatp << " ptr ";
+  vil_image const& that = *thatp;
+  cerr << that.impl() << "  ";
   if (that.get_property("memory"))
     return that;
   //vcl_cerr << "copying " << that.impl() << endl;
@@ -88,18 +91,14 @@ vil_image make_memory_image(vil_image const & that)
 
 //: If that is a memory image, just point to it, otherwise get_section
 vil_memory_image::vil_memory_image(vil_image const & that)
-  : vil_image_inhibit_derivation(0)
-  , vil_image(make_memory_image(that))
+  : VIL_IMAGE_DERIVED_CLASS_INIT
+  , vil_image(make_memory_image(&that))
 {
   cache_from_impl;
-  if (this->impl() != that.impl()) {
-    //cerr << "get_section";
-    that.get_section(get_buffer(), 0, 0, width(), height());
-  }
 }
 
 vil_memory_image::vil_memory_image(vil_memory_image const& that)
-  : vil_image_inhibit_derivation(0)
+  : VIL_IMAGE_DERIVED_CLASS_INIT
   , vil_image(that)
 {
   cache_from_impl;

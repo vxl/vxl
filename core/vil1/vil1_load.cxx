@@ -7,7 +7,7 @@
 #include <vil/vil_stream_fstream.h>
 #include <vil/vil_image.h>
 
-vil_image vil_load(char const* filename)
+vil_image vil_load_raw(char const* filename)
 {
   vil_stream_fstream* is = new vil_stream_fstream(filename, "r");
   if (!is->ok()) {
@@ -35,4 +35,13 @@ vil_image vil_load(char const* filename)
   cerr << endl;
 
   return 0;
+}
+
+vil_image vil_load(char const* filename)
+{
+  vil_image i = vil_load_raw(filename);
+//  bool flipud;
+//  if (i.get_property("flipud", &flipud) && flipud)    i = vil_flipud(i);
+  
+  return i;
 }
