@@ -104,6 +104,9 @@ SOURCE=.\bnl_parabolic_interpolator.cxx
 # Begin Source File
 SOURCE=.\bnl_quadratic_interpolator.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\bnl_definite_integral.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -112,6 +115,15 @@ SOURCE=.\bnl_parabolic_interpolator.h
 # End Source File
 # Begin Source File
 SOURCE=.\bnl_quadratic_interpolator.h
+# End Source File
+# Begin Source File
+SOURCE=.\bnl_analytic_integrant.h
+# End Source File
+# Begin Source File
+SOURCE=.\bnl_definite_integral.h
+# End Source File
+# Begin Source File
+SOURCE=.\bnl_integrant_fnct.h
 # End Source File
 # End Group
 # End Target
