@@ -82,7 +82,8 @@ int main(int, char **) {
   macro(VXL_INT_64, 8, long long);
   macro(VXL_IEEE_32, 4, float);
   macro(VXL_IEEE_64, 8, double);
-//  macro(VXL_IEEE_96, 12, long double);
+//  macro(VXL_IEEE_96, 12, long double);  // x86
+//  macro(VXL_IEEE_128, 16, long double); // sparc, mips
   return 0;
 }
 EOF
