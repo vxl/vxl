@@ -105,9 +105,6 @@ SOURCE=.\vimt_gaussian_pyramid_builder_2d.cxx
 SOURCE=.\vimt_image.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vimt_image_2d_of.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vimt_image_pyramid.cxx
 # End Source File
 # Begin Source File

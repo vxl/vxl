@@ -120,9 +120,6 @@ SOURCE=.\Templates/vil3d_sample_profile_trilin+byte.double-.cxx
 SOURCE=.\Templates/vil3d_sample_profile_trilin+float.double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil3d_image_view.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vil3d_image_view_base.cxx
 # End Source File
 # End Group

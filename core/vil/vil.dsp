@@ -105,9 +105,6 @@ SOURCE=.\file_formats/vil2_pnm.cxx
 SOURCE=.\vil2_image_resource.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_image_view.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vil2_memory_chunk.cxx
 # End Source File
 # Begin Source File
@@ -241,6 +238,21 @@ SOURCE=.\Templates/vil2_resample_bilin+float.double-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vil2_sample_grid_bilin+float.float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_image_view+vil_rgba+float--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil2_bmp.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil2_bmp_core_header.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil2_bmp_file_header.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil2_bmp_info_header.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vil2_memory_image.cxx
@@ -415,6 +427,18 @@ SOURCE=.\vil2_resample_bilin.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil2_vil1.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil2_bmp.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil2_bmp_core_header.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil2_bmp_file_header.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil2_bmp_info_header.h
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
