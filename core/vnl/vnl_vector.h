@@ -43,6 +43,8 @@ template <class T> v      element_product(v const&,v const&);
 template <class T> v      element_quotient(v const&,v const&);
 template <class T> T      cross_2d (v const&, v const&);
 template <class T> v      cross_3d (v const&, v const&);
+template <class T> T      vnl_vector_ssd(v const&, v const&);
+template <class T> void   swap(v &, v &);
 #undef v
 #undef m
 
@@ -425,7 +427,7 @@ inline void swap(vnl_vector<T> &a, vnl_vector<T> &b) { a.swap(b); }
 //: Euclidean Distance between two vectors.
 // Sum of Differences squared.
 template<class T>
-T vnl_vector_ssd (vnl_vector<T> const& v1, vnl_vector<T> const& v2)
+inline T vnl_vector_ssd (vnl_vector<T> const& v1, vnl_vector<T> const& v2)
 {
 #ifndef NDEBUG
   if (v1.size() != v2.size())
