@@ -20,17 +20,25 @@ void test_byte_image_2d_io()
   int ny=20;
   mil_image_2d_of<vil_byte> orig_image(nx,ny),saved_image,loaded_image;
   // Fill image with shaded squares
-  for (int y=0;y<nx;++y)
-    for (int x=0;x<ny;++x)
-      orig_image(x,y)=10*(x%10)+10*(y%10);
+  for (int y=0;y<ny;++y)
+    for (int x=0;x<nx;++x)
+      orig_image(x,y)=x*5+y*5;
+  
+  //orig_image.print_all(vcl_cout);
+
 
   //save the image
   saved_image=orig_image;
   mil_byte_image_2d_io image_io;
   image_io.saveTheImage(saved_image,"./tmp.bmp","bmp");
+  image_io.saveTheImage(saved_image,"./tmp.jpg","jpeg");
+  
+  
 
   //load the image
   image_io.loadTheImage(loaded_image,"./tmp.bmp","bmp");
+  image_io.saveTheImage(loaded_image,"./tmp_loaded.bmp","bmp");
+  
 
   //nb have to use lossless image format ie bitmap, not JPEG!
 
