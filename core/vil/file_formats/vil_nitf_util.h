@@ -1,8 +1,9 @@
 // This is core/vil/file_formats/vil_nitf_util.h
 
 //================ GE Aerospace NITF support libraries =================
-//
-// Description: This file defines utility methods for NITF.
+//:
+// \file
+// \brief This file defines utility methods for NITF.
 //
 // For a given header 'head', head->Read (file) is called when the
 // appropriate place in the file is reached, and it will return a
@@ -31,15 +32,16 @@
 // PUT MACROS FOR STRCPY AND STRNCPY IN SEPARATE FILE FOR NOW.
 #include "vil_nitf_macro_defs.h"
 
-//  Function to delete characters c from s. Options are:
+//: Function to delete characters c from s.
+//  Options are:
 //
 //  \param s input string
 //  \param c character to remove
 //  \param optflag flag indicating how to remove characters
-//    0: ALL:            delete all characters c.
-//    1: TRAILING:       delete trailing characters c.
-//    2: LEADING:          delete leading characters c.
-//    3: HEAD/TAIL:        delete all leading && trailing characters c.
+//    - ALL:            delete all characters c.
+//    - TRAILING:       delete trailing characters c.
+//    - LEADING:        delete leading characters c.
+//    - HEAD/TAIL:      delete all leading && trailing characters c.
 //
 char * squeeze(char*, int, int);
 void clear_string_vector(vcl_vector<vcl_string *> str_vector);
@@ -58,6 +60,7 @@ enum geopt_coord {LAT, LON};
 int geostr_to_latlon(const char* str, double* lat, double* lon);
 int geostr_to_double(const char* str, double* val, geopt_coord lat_lon_flag);
 
+//:
 // this inline assumes b, v and f are valid.  It does not
 // change the value of v unless the read is successful.
 //
@@ -90,6 +93,7 @@ inline bool GetInt(char* cbuf, int* ival, int count, vil_stream * f, bool preser
     return true;
 }
 
+//:
 // this inline assumes b, v and f are valid.  It does not
 // change the value of v unless the read is successful.
 //
@@ -174,11 +178,11 @@ inline bool PutUchar(char* b, vxl_byte* v, int w, vil_stream* f)
 }
 
 /////////////////////////////////////////////////
-/// Create copy of string.
-///
-/// \param str string to be copied
-/// \return char * pointer to new copy of string
-///
+//: Create copy of string.
+//
+// \param str string to be copied
+// \return char * pointer to new copy of string
+//
 /////////////////////////////////////////////////
 inline char* new_strdup(const char* str)
 {
