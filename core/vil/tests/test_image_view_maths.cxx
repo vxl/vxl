@@ -4,6 +4,7 @@
 #include <vxl_config.h> // for vxl_byte
 #include <vil2/vil2_copy.h>
 #include <vil2/vil2_math.h>
+#include <vil2/vil2_print.h>
 
 void test_image_view_maths_byte()
 {
@@ -82,6 +83,40 @@ void test_image_view_maths_byte()
   vil2_math_mean_and_variance(f_mean,f_var,f_image,0);
   TEST_NEAR("Mean",f_mean,0,1e-6);
   TEST_NEAR("Var",f_var,1.0,1e-6);
+
+
+  // extra test for normalisation
+
+  int nx=5;
+  int ny=5;
+  vil2_image_view<float> orig_image(nx,ny),
+                         var_norm_image,
+                         correct_var_norm_image(nx,ny);
+
+  // Create original image
+  for (int y=0;y<ny;++y)
+    for (int x=0;x<nx;++x)
+      orig_image(x,y)=1.25f*x;
+
+  vil2_print_all( vcl_cout, orig_image );
+
+   var_norm_image=vil2_copy_deep(orig_image);
+  vil2_math_normalise( var_norm_image);
+
+  vil2_print_all( vcl_cout, var_norm_image );
+
+  // create correct variance norm image
+  for (int y=0;y<ny;++y)
+    for (int x=0;x<nx;++x)
+      correct_var_norm_image(x,y)=(x-2.f)/ (float)vcl_sqrt(2.0);
+
+  double diff2=0;
+  for (int y=0;y<ny;++y)
+    for (int x=0;x<nx;++x)
+      diff2+=vcl_fabs( var_norm_image(x,y)-
+                       correct_var_norm_image(x,y) );
+
+  TEST_NEAR("test variance normalisation",diff2,0,1e-6);
 }
 
 MAIN( test_image_view_maths )

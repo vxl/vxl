@@ -35,8 +35,10 @@ void test_convert_stretch_range()
   vcl_cout<<"testing vil2_convert_stretch_range(src,dest):"<<vcl_endl;
   vil2_image_view<float> f_image(10,10);
   for (unsigned j=0;j<f_image.nj();++j)
-    for (unsigned i=0;i<f_image.ni();++i)  f_image(i,j)=0.1f*i+0.01f*j;
+    for (unsigned i=0;i<f_image.ni();++i)  f_image(i,j)=0.1f*i+0.01f*j+5.0;
   
+  vil2_print_all(vcl_cout, f_image) ;
+
   vil2_image_view<vxl_byte> b_image;
   vil2_convert_stretch_range(f_image,b_image);
   TEST("Width",b_image.ni(),f_image.ni());
@@ -45,7 +47,7 @@ void test_convert_stretch_range()
   vil2_math_value_range(b_image,min_b,max_b);
   TEST("Min. value",min_b,0);
   TEST("Max. value",max_b,255);
-  TEST("b_image(5,5)",b_image(5,5),vxl_byte(0.55*255/0.99+0.5));
+  TEST("b_image(5,5)",b_image(5,5),vxl_byte( (5.55-5.0)*255/0.99 ) );
 }
 
 MAIN( test_convert )
