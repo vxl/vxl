@@ -278,6 +278,10 @@ static void test_line_2d()
   vcl_cout << ls3 << '\n';
   TEST("line segment equality", ls3, ls);
   TEST("line segment equality", ls3, ls2);
+
+  TEST("normalize", l2.normalize(), true);
+  TEST_NEAR("normalize: a()", l2.a(), 0.6, 1e-12);
+  TEST_NEAR("normalize: b()", l2.b(), 0.8, 1e-12);
 }
 
 static void test_line_3d()
