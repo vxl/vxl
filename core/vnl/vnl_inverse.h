@@ -35,8 +35,13 @@ vnl_matrix_fixed<T,1,1> vnl_inverse(vnl_matrix_fixed<T,1,1> const& m)
 template <class T>
 vnl_matrix_fixed<T,2,2> vnl_inverse(vnl_matrix_fixed<T,2,2> const& m)
 {
+  T det = vnl_det(m);
+  if (det==0) {
+    assert(!"Cannot invert 2x2 matrix with zero determinant");
+    return vnl_matrix_fixed<T,2,2>();
+  }
+  det = T(1)/det;
   T d[4];
-  T det = T(1)/vnl_det(m);
   d[0] = m(1,1)*det; d[1] = - m(0,1)*det;
   d[3] = m(0,0)*det; d[2] = - m(1,0)*det;
   return vnl_matrix_fixed<T,2,2>(d);
@@ -45,8 +50,13 @@ vnl_matrix_fixed<T,2,2> vnl_inverse(vnl_matrix_fixed<T,2,2> const& m)
 template <class T>
 vnl_matrix_fixed<T,3,3> vnl_inverse(vnl_matrix_fixed<T,3,3> const& m)
 {
+  T det = vnl_det(m);
+  if (det==0) {
+    assert(!"Cannot invert 3x3 matrix with zero determinant");
+    return vnl_matrix_fixed<T,3,3>();
+  }
+  det = T(1)/det;
   T d[9];
-  T det = T(1)/vnl_det(m);
   d[0] = (m(1,1)*m(2,2)-m(1,2)*m(2,1))*det;
   d[1] = (m(2,1)*m(0,2)-m(2,2)*m(0,1))*det;
   d[2] = (m(0,1)*m(1,2)-m(0,2)*m(1,1))*det;
