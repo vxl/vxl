@@ -172,7 +172,7 @@ static void test_ran_sam_search()
 #ifdef DEBUG
   vcl_cout << "estimate = " << est_params
            << ", true model = " << true_params << vcl_endl
-           << "scale = " << ransam->get_scale() << vcl_endl;
+           << "scale = " << ransam->scale() << vcl_endl;
 #endif // DEBUG
   ok = vnl_math_abs( est_params[0] - true_params[0] ) < 0.2
     && vnl_math_abs( est_params[1] - true_params[1] ) < 0.025
