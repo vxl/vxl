@@ -18,7 +18,7 @@ struct vbl_file_iterator_data {
   long handle;
   vcl_string found;
   char const* name;
-  
+
   vbl_file_iterator_data(char const* glob) {
     original = glob;
     handle = _findfirst(glob, &data);
@@ -46,19 +46,19 @@ struct vbl_file_iterator_data {
       handle = -1;
     }
   }
-  
+
   // should be constish, and ret 0 when nuffink
   char const* value() {
     if (handle == -1L) return 0;
     return name;
   }
-  
+
   // Return non-dir part of fn
   char const* value_filename() {
     if (handle == -1L) return 0;
     return data.name;
   }
-  
+
   ~vbl_file_iterator_data() {
     if (handle != -1L)
       _findclose(handle);
@@ -67,7 +67,7 @@ struct vbl_file_iterator_data {
 #else
 // Er, I can't do this one.  I think it would mean hauling
 // in libglob.  Can that do "*/*"?
-// Done just enough that dir/* will work....
+// Done just enough that "dir/*" will work....
 #include <dirent.h>
 struct vbl_file_iterator_data {
   vcl_string original_dirname;
@@ -76,7 +76,7 @@ struct vbl_file_iterator_data {
   dirent* de;
   vcl_string found;
   char const* name;
-  
+
   vbl_file_iterator_data(char const* glob) {
     original_dirname = vbl_file::dirname(glob);
     baseglob = vbl_file::basename(glob);
@@ -101,19 +101,19 @@ struct vbl_file_iterator_data {
       dir_handle = 0;
     }
   }
-  
+
   // should be constish, and ret 0 when nuffink
   char const* value() {
     if (!dir_handle) return 0;
     return name;
   }
-  
+
   // Return non-dir part of fn
   char const* value_filename() {
     if (!dir_handle) return 0;
     return de->d_name;
   }
-  
+
   ~vbl_file_iterator_data() {
     if (dir_handle)
       closedir(dir_handle);

@@ -15,7 +15,7 @@
 
 //
 //Modifications:
-//* Documentation updated by Ian Scott 12 Mar 2000
+//  Documentation updated by Ian Scott 12 Mar 2000
 //
 //-----------------------------------------------------------------------------
 

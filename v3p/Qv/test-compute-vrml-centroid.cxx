@@ -5,12 +5,12 @@
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 10 Jul 00
 // Compile with:
-/*
-   egcs -I$IUEROOT/vxl -I$IUEROOT/vxl/config.solaris-egcs -I$IUEROOT/v3p test-compute-vrml-centroid.cxx \
-      -L$IUEROOT/v3p/lib/solaris-egcs -L$IUEROOT/vxl/lib/solaris-egcs \
-      -R $IUEROOT/v3p/lib/solaris-egcs:$IUEROOT/vxl/lib/solaris-egcs \
-     -lQv -lvcl
-*/
+//
+// $CXX -I$IUEROOT/vxl -I$IUEROOT/vxl/config.$TJ_BUILD_TAG -I$IUEROOT/v3p test-compute-vrml-centroid.cxx \
+//    -L$IUEROOT/v3p/lib/$TJ_BUILD_TAG -L$IUEROOT/vxl/lib/$TJ_BUILD_TAG \
+//    -Wl,-rpath,$IUEROOT/v3p/lib/$TJ_BUILD_TAG:$IUEROOT/vxl/lib/$TJ_BUILD_TAG \
+//    -lQv -lvcl
+//
 // Modifications:
 //
 //-----------------------------------------------------------------------------

@@ -22,8 +22,9 @@ int main(int /*argc*/, char** /*argv*/)
   unsigned char orange_grey = orange.grey();
 
   // Write to an ostream: the output as the format [R G B].
-  vcl_cout << "/* XPM */\n/* " << orange << black << white << grey
-       << (int)orange_grey << " */" << vcl_endl;
+  vcl_cout << "/* XPM */\n"
+           << "/* " << orange << black << white << grey
+           << (int)orange_grey << " */" << vcl_endl;
 
   // And now an .xpm file using these vil_rgb_cells, and the function as_hex:
   vcl_cout << "static char* example_rgb[] = {\n\"20 8 4 1\",\n";
