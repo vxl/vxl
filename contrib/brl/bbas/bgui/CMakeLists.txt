@@ -15,7 +15,7 @@ SET(bgui_sources
   bgui_vsol2D_tableau.cxx        bgui_vsol2D_tableau.h        bgui_vsol2D_tableau_sptr.h
   bgui_vtol2D_tableau.cxx        bgui_vtol2D_tableau.h        bgui_vtol2D_tableau_sptr.h
   bgui_vtol_soview2D.cxx         bgui_vtol_soview2D.h
-# bgui_vsol_camera_tableau.cxx   bgui_vsol_camera_tableau.h   bgui_vsol_camera_tableau_sptr.h
+  bgui_vsol_camera_tableau.cxx   bgui_vsol_camera_tableau.h   bgui_vsol_camera_tableau_sptr.h
   bgui_picker_tableau.cxx        bgui_picker_tableau.h        bgui_picker_tableau_sptr.h
   bgui_image_tableau.cxx         bgui_image_tableau.h         bgui_image_tableau_sptr.h
   bgui_bmrf_soview2D.cxx         bgui_bmrf_soview2D.h

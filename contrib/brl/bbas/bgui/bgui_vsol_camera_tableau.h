@@ -10,7 +10,8 @@
 //
 // \verbatim
 //  Created June 2, 2003
-//  Modifications: <none>
+//  Modifications:
+//   Peter Vanroose - 8 May 2004 - re-implemented add_vsol_box_3d() with a single polygon
 // \endverbatim
 //-----------------------------------------------------------------------------
 #include <vcl_vector.h>
@@ -32,7 +33,6 @@
 class bgui_vsol_soview2D_point;
 class bgui_vsol_soview2D_line_seg;
 class bgui_vsol_soview2D_polygon;
-class bgui_vsol_soview2D_polygon_group;
 
 class bgui_vsol_camera_tableau : public vgui_easy2D_tableau
 {
@@ -40,10 +40,10 @@ class bgui_vsol_camera_tableau : public vgui_easy2D_tableau
   bgui_vsol_camera_tableau(const char* n="unnamed");
 
   bgui_vsol_camera_tableau(vgui_image_tableau_sptr const& it,
-                      const char* n="unnamed");
+                           const char* n="unnamed");
 
   bgui_vsol_camera_tableau(vgui_tableau_sptr const& t,
-                      const char* n="unnamed");
+                           const char* n="unnamed");
 
   ~bgui_vsol_camera_tableau();
 
@@ -54,20 +54,20 @@ class bgui_vsol_camera_tableau : public vgui_easy2D_tableau
   void set_camera(vgl_p_matrix<double> const& camera){camera_=camera;}
   vgl_p_matrix<double> get_camera(){return camera_;}
 
-  //: display for projected vsol_point_3d 
+  //: display for projected vsol_point_3d
   bgui_vsol_soview2D_point*
     add_vsol_point_3d(vsol_point_3d_sptr const& point);
 
-  //: display for vsol_line_3d 
-  bgui_vsol_soview2D_line_seg* 
+  //: display for vsol_line_3d
+  bgui_vsol_soview2D_line_seg*
     add_vsol_line_3d(vsol_line_3d_sptr const& line);
 
-  //: display for vsol_polygon_3d 
-  bgui_vsol_soview2D_polygon* 
+  //: display for vsol_polygon_3d
+  bgui_vsol_soview2D_polygon*
     add_vsol_polygon_3d(vsol_polygon_3d_sptr const& poly);
 
-  //:display for a 3-d box
-  bgui_vsol_soview2D_polygon_group*
+  //:display for a 3D box
+  bgui_vsol_soview2D_polygon*
     add_vsol_box_3d(vsol_box_3d_sptr const& box);
 
   //: display for general spatial object
@@ -93,7 +93,7 @@ class bgui_vsol_camera_tableau : public vgui_easy2D_tableau
   void disable_highlight(){highlight_ = false;}
 
   //: Methods for changing the default style of displayable objects
-  
+
   void set_vsol_point_3d_style(const float r, const float g, const float b,
                                const float point_radius);
 
@@ -104,7 +104,7 @@ class bgui_vsol_camera_tableau : public vgui_easy2D_tableau
                                  const float line_width);
 
   void set_vsol_box_3d_style(const float r, const float g, const float b,
-                                 const float line_width);
+                             const float line_width);
 
  protected:
   //internal methods
@@ -129,7 +129,7 @@ struct bgui_vsol_camera_tableau_new : public bgui_vsol_camera_tableau_sptr
   bgui_vsol_camera_tableau_new(const char* n="unnamed") :
     base(new bgui_vsol_camera_tableau(n)) { }
   bgui_vsol_camera_tableau_new(vgui_image_tableau_sptr const& it,
-                          const char* n="unnamed") :
+                               const char* n="unnamed") :
     base(new bgui_vsol_camera_tableau(it,n)) { }
 
   bgui_vsol_camera_tableau_new(vgui_tableau_sptr const& t, const char* n="unnamed")
