@@ -45,9 +45,8 @@ mbl_rbf_network::mbl_rbf_network()
 //  If s<=0 then a suitable s is estimated from the data
 void mbl_rbf_network::build(const vcl_vector<vnl_vector<double> >& x, double s)
 {
-  int lo = 0; //x.lo();
   int n = x.size();
-  build(x.begin()+lo,n,s);
+  build(&(x.front()),n,s);
 }
 
 //: Build weights given n examples x[0] to x[n-1]
@@ -138,7 +137,7 @@ void mbl_rbf_network::calcWts(vnl_vector<double>& w, const vnl_vector<double>& n
   if (v_.size()!=n) v_.resize(n);
 
   double* v_data = v_.begin();
-  const vnl_vector<double>* x_data = x_.begin();
+  const vnl_vector<double>* x_data = &(x_.front());
 
   if (n==1)
   {
