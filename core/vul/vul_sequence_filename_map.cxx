@@ -45,36 +45,27 @@ const int num_dir_ext_pairs = sizeof(dir_ext_pairs) / sizeof(dir_ext_pairs[0]);
 
 // Empty constructor to allow the operator= to be used later.
 vul_sequence_filename_map::vul_sequence_filename_map ()
+  : start_(-1), step_(-1), end_(-1)
 {
 }
 
 vul_sequence_filename_map::vul_sequence_filename_map (vcl_string const & seq_template, vcl_vector<int> const & indices)
+  : seq_template_(seq_template), indices_(indices), start_(-1), step_(-1), end_(-1)
 {
-  seq_template_ = seq_template;
-  indices_ = indices;
-  start_ = -1;
-  step_ = -1;
-  end_ = -1;
   parse();
 }
 
 vul_sequence_filename_map::vul_sequence_filename_map (vcl_string const & seq_template, int start, int end, int step)
+  : seq_template_(seq_template), start_(start), step_(step), end_(end)
 {
-  seq_template_ = seq_template;
   for (int i=start; i <= end; i+=step)
     indices_.push_back(i);
-  start_ = start;
-  step_ = step;
-  end_ = end;
   parse();
 }
 
 vul_sequence_filename_map::vul_sequence_filename_map (vcl_string const & seq_template, int step)
+  : seq_template_(seq_template), start_(-1), step_(step), end_(-1)
 {
-  seq_template_ = seq_template;
-  start_ = -1;
-  step_ = step;
-  end_ = -1;
   parse();
 }
 
@@ -311,7 +302,7 @@ void vul_sequence_filename_map::parse()
   }
 }
 
-int vul_sequence_filename_map::get_mapped_index(int real) const 
+int vul_sequence_filename_map::get_mapped_index(int real) const
 {
   int idx = -1;
   for (int i=0; i < indices_.size(); ++i)
