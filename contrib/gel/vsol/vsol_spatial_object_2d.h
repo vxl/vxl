@@ -277,14 +277,14 @@ inline int vsol_spatial_object_2d::get_tag_id()
 
 inline vcl_ostream &operator<<(vcl_ostream &strm, vsol_spatial_object_2d const& so)
 {
-  ((vsol_spatial_object_2d const*)&so)->print(strm);
+  so.print(strm);
   return strm;
 }
 
 inline vcl_ostream &operator<<(vcl_ostream &strm, vsol_spatial_object_2d const* so)
 {
   if (so)
-    ((vsol_spatial_object_2d const*)so)->print(strm);
+    so->print(strm);
   else
     strm << "NULL Spatial Object.\n";
   return strm;
