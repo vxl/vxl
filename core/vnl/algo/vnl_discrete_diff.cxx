@@ -5,14 +5,10 @@
   fsm@robots.ox.ac.uk
 */
 
-//--------------------------------------------------------------------------------
-//
-// forward differencing
-//
-bool vnl_discrete_diff::fwd_diff(vnl_least_squares_function *lsf,
-                            double h_,
-                            vnl_vector<double> const &x,
-                            vnl_matrix<double>       &J)
+bool vnl_discrete_diff_fwd(vnl_least_squares_function *lsf,
+			   double h_,
+			   vnl_vector<double> const &x,
+			   vnl_matrix<double>       &J)
 {
   vnl_vector<double> y(lsf->get_number_of_residuals());
   lsf->f(x,y);
@@ -20,26 +16,26 @@ bool vnl_discrete_diff::fwd_diff(vnl_least_squares_function *lsf,
     return false;
   vnl_vector<double> h(lsf->get_number_of_unknowns());
   h.fill(h_);
-  return fwd_diff(lsf,h,x,y,J);
+  return vnl_discrete_diff_fwd(lsf,h,x,y,J);
 }
 
-bool vnl_discrete_diff::fwd_diff(vnl_least_squares_function *lsf,
-                            vnl_vector<double> const &h,
-                            vnl_vector<double> const &x,
-                            vnl_matrix<double>       &J)
+bool vnl_discrete_diff_fwd(vnl_least_squares_function *lsf,
+			   vnl_vector<double> const &h,
+			   vnl_vector<double> const &x,
+			   vnl_matrix<double>       &J)
 {
   vnl_vector<double> y(lsf->get_number_of_residuals());
   lsf->f(x,y);
   if (lsf->failure)
     return false;
-  return fwd_diff(lsf,h,x,y,J);
+  return vnl_discrete_diff_fwd(lsf,h,x,y,J);
 }
 
-bool vnl_discrete_diff::fwd_diff(vnl_least_squares_function *lsf,
-                            vnl_vector<double> const &h,
-                            vnl_vector<double> const &x,
-                            vnl_vector<double> const &y,
-                            vnl_matrix<double>       &J)
+bool vnl_discrete_diff_fwd(vnl_least_squares_function *lsf,
+			   vnl_vector<double> const &h,
+			   vnl_vector<double> const &x,
+			   vnl_vector<double> const &y,
+			   vnl_matrix<double>       &J)
 {
   unsigned m=J.rows();
   unsigned n=J.columns();
@@ -63,24 +59,20 @@ bool vnl_discrete_diff::fwd_diff(vnl_least_squares_function *lsf,
   return true;
 }
 
-//--------------------------------------------------------------------------------
-//
-// symmetric differencing
-//
-bool vnl_discrete_diff::sym_diff(vnl_least_squares_function *lsf,
-                            double h_,
-                            vnl_vector<double> const &x,
-                            vnl_matrix<double>       &J)
+bool vnl_discrete_diff_sym(vnl_least_squares_function *lsf,
+			   double h_,
+			   vnl_vector<double> const &x,
+			   vnl_matrix<double>       &J)
 {
   vnl_vector<double> h(lsf->get_number_of_unknowns());
   h.fill(h_);
-  return sym_diff(lsf,h,x,J);
+  return vnl_discrete_diff_sym(lsf,h,x,J);
 }
 
-bool vnl_discrete_diff::sym_diff(vnl_least_squares_function *lsf,
-                            vnl_vector<double> const &h,
-                            vnl_vector<double> const &x,
-                            vnl_matrix<double>       &J)
+bool vnl_discrete_diff_sym(vnl_least_squares_function *lsf,
+			   vnl_vector<double> const &h,
+			   vnl_vector<double> const &x,
+			   vnl_matrix<double>       &J)
 {
   unsigned m=J.rows();
   unsigned n=J.columns();
@@ -108,5 +100,3 @@ bool vnl_discrete_diff::sym_diff(vnl_least_squares_function *lsf,
   }
   return true;
 }
-
-//--------------------------------------------------------------------------------
