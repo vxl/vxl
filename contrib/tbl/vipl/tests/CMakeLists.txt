@@ -10,7 +10,7 @@ ADD_EXECUTABLE( vipl_test_all
   vipl_test_erode_disk.cxx
   vipl_test_gaussian_convolution.cxx
 )
-TARGET_LINK_LIBRARIES( vipl_test_all vipl mil testlib )
+TARGET_LINK_LIBRARIES( vipl_test_all vipl testlib )
 
 ADD_TEST(vipl_test_histogram            vipl_test_all vipl_test_histogram)
 ADD_TEST(vipl_test_threshold            vipl_test_all vipl_test_threshold)

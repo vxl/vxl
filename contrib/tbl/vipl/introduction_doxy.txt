@@ -8,7 +8,7 @@
 *
 * Every class is templated on five types:
 * - The input image (e.g. \c vil1_image , but it could as well be e.g.
-*   \c vnl_matrix<double> or \c mil_image or your own array-type class).
+*   \c vnl_matrix<double> or your own array-type class).
 * - The output image (and indeed, it may be different from the input type,
 *   so a simple "copy pixels" IP algorithm could be used as an image type
 *   converter between any two types of image-like storage!)

@@ -51,6 +51,14 @@ IF (BUILD_CORE_GEOMETRY AND BUILD_CORE_NUMERICS)
   ENDIF (BUILD_CORE_UTILITIES AND BUILD_CORE_SERIALISATION)
 ENDIF (BUILD_CORE_GEOMETRY AND BUILD_CORE_NUMERICS)
 
+# Options to build no longer maintained libraries.
+# It is still useful to have the dashboard check that they are correct,
+# but no-one is likely to work on improving test coverage or fixing memory leaks.
+IF( DART_ROOT )
+  OPTION( BUILD_UNMAINTAINED_LIBRARIES "Build libraries that are no longer actively maintained?" YES )
+ELSE( DART_ROOT )
+  OPTION( BUILD_UNMAINTAINED_LIBRARIES "Build libraries that are no longer actively maintained?" NO )
+ENDIF( DART_ROOT )
 
 # Build the core vxl + support libraries
 SUBDIRS(vcl v3p core)

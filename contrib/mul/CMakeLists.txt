@@ -7,4 +7,7 @@ SET( MUL_INCLUDE_DIR ${mul_SOURCE_DIR} CACHE STATIC "Manchester University packa
 INCLUDE_DIRECTORIES( ${VXLCORE_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
 
-SUBDIRS(mbl mil mil3d vpdfl pdf1d clsfy vimt ipts vil3d vimt3d mvl2)
+SUBDIRS(mbl vpdfl pdf1d clsfy vimt ipts vil3d vimt3d mvl2)
+IF (BUILD_UNMAINTAINED_LIBRARIES)
+  SUBDIRS(mil mil3d)
+ENDIF (BUILD_UNMAINTAINED_LIBRARIES) 

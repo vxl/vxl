@@ -81,6 +81,7 @@ vil1_image CreateTestfloatImage(int wd, int ht)
   return image;
 }
 
+#if 0
 // create an 8 bit test image
 mil_image_2d_of<unsigned char> Create_mil8bitImage(int wd, int ht)
 {
@@ -116,6 +117,7 @@ mil_image_2d_of<float> Create_milfloatImage(int wd, int ht)
     }
   return image;
 }
+#endif
 
 // Compare two images and return true (=failure) if their difference is not v
 template <class T>
@@ -145,8 +147,10 @@ bool difference(vil1_image const& a, vil1_image const& b, double v, vcl_string c
 
 template bool difference(vil1_image const&, vil1_image const&, double, vcl_string const&, unsigned char);
 template bool difference(vil1_image const&, vil1_image const&, double, vcl_string const&, unsigned short);
+template bool difference(vil1_image const&, vil1_image const&, double, vcl_string const&, signed short);
 template bool difference(vil1_image const&, vil1_image const&, double, vcl_string const&, float);
 
+#if 0
 template <class T>
 bool difference(mil_image_2d_of<T> const& a, mil_image_2d_of<T> const& b, double v, vcl_string const& m, T)
 {
@@ -175,3 +179,4 @@ template bool difference(mil_image_2d_of<short> const&, mil_image_2d_of<short> c
                          double, vcl_string const&, short);
 template bool difference(mil_image_2d_of<float> const&, mil_image_2d_of<float> const&,
                          double, vcl_string const&, float);
+#endif
