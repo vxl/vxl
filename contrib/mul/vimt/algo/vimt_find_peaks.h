@@ -4,7 +4,7 @@
 //:
 //  \file
 //  \brief Find peaks in image
-//  \author Tim Cootes
+//  \author Tim Cootes, VP (Sept03)
 
 #include <vimt/vimt_image_2d_of.h>
 
@@ -23,6 +23,18 @@ inline bool vimt_is_peak_3x3(const T* im, vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_
   if (v<=im[-i_step-j_step]) return false;
   return true;
 }
+
+//: True if pixel at *im is strictly above its neighbours in a 2*radius+1 neighbourhood
+template <class T>
+inline bool vimt_is_peak(const T* im, unsigned radius, vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step)
+{
+  T v = *im;
+  for(unsigned i=-radius; i<radius+1; i++)
+    for(unsigned j=-radius; j<radius+1; j++)
+      if (v<im[i_step*i+j_step*j]) return false;      // One of the 
+  return true;
+}
+
 
 //: Return image co-ordinates of all points in image strictly above their 8 neighbours
 // \param clear_list: If true (the default) then empty list before adding new examples
@@ -64,6 +76,64 @@ inline void vimt_find_image_peaks_3x3(vcl_vector<vgl_point_2d<unsigned> >& peaks
       { 
         peaks.push_back(vgl_point_2d<unsigned>(i,j));
         peak_value.push_back(*pixel);
+      }
+  }
+}
+
+//: Return image co-ordinates of all points in image strictly above their neighbours
+//  in a 2*radius+1 x 2*radius+1 neighbourhood of pixels (e.g.r=2 equivalent to 5x5)
+// \param peak_value: Value at peak
+// \param clear_list: If true (the default) then empty list before adding new examples
+template <class T>
+inline void vimt_find_image_peaks(vcl_vector<vgl_point_2d<unsigned> >& peaks,
+                                      vcl_vector<T>& peak_value,
+                                      const vil_image_view<T>& image,
+                                      unsigned radius=1,
+                                      unsigned plane=0, bool clear_list=true)
+{
+  if (clear_list) { peaks.resize(0); peak_value.resize(0); }
+  unsigned ni=image.ni(),nj=image.nj();
+  vcl_ptrdiff_t istep = image.istep(),jstep=image.jstep();
+  const T* row = image.top_left_ptr()+plane*image.planestep()+istep+jstep;
+  for (unsigned j=radius;j<nj-radius;++j,row+=jstep)
+  {
+    const T* pixel = row;
+    for (unsigned i=radius;i<ni-radius;++i,pixel+=istep)
+      if (vimt_is_peak(pixel,radius,istep,jstep))
+      { 
+        peaks.push_back(vgl_point_2d<unsigned>(i,j));
+        peak_value.push_back(*pixel);
+      }
+  }
+}
+
+//: Return image co-ordinates of all points in image strictly above their neighbours
+//  in a 2*radius+1 x 2*radius+1 neighbourhood of pixels (e.g.r=2 equivalent to 5x5)
+//  Additionally, only peaks of the value higher than threshold (thresh) are returned
+// \param peak_value: Value at peak
+// \param clear_list: If true (the default) then empty list before adding new examples
+template <class T>
+inline void vimt_find_image_peaks(vcl_vector<vgl_point_2d<unsigned> >& peaks,
+                                      vcl_vector<T>& peak_value,
+                                      const vil_image_view<T>& image,
+                                      T thresh, unsigned radius=1,
+                                      unsigned plane=0, bool clear_list=true)
+{
+  if (clear_list) { peaks.resize(0); peak_value.resize(0); }
+  unsigned ni=image.ni(),nj=image.nj();
+  vcl_ptrdiff_t istep = image.istep(),jstep=image.jstep();
+  const T* row = image.top_left_ptr()+plane*image.planestep()+istep+jstep;
+  for (unsigned j=radius;j<nj-radius;++j,row+=jstep)
+  {
+    const T* pixel = row;
+    for (unsigned i=radius;i<ni-radius;++i,pixel+=istep)
+      if (*pixel>thresh)
+      {
+        if (vimt_is_peak(pixel,radius,istep,jstep))
+        { 
+          peaks.push_back(vgl_point_2d<unsigned>(i,j));
+          peak_value.push_back(*pixel);
+        }
       }
   }
 }
