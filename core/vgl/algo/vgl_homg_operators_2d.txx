@@ -463,9 +463,31 @@ vcl_list<vgl_homg_point_2d<T> >
 vgl_homg_operators_2d<T>::do_intersect(vgl_conic<T> const& c1,
                                        vgl_conic<T> const& c2)
 {
+  if (c1==c2)
+  {
+    vcl_cerr << __FILE__ << "Warning: the intersection of two identical conics"
+             << " is not a finite set of points.\nReturning an empty list.\n";
+    return vcl_list<vgl_homg_point_2d<T> >();
+  }
   T A=c1.a(),B=c1.b(),C=c1.c(),D=c1.d(),E=c1.e(),F=c1.f();
   T a=c2.a(),b=c2.b(),c=c2.c(),d=c2.d(),e=c2.e(),f=c2.f();
+  // Idea: eliminate the coefficient in x^2, solve for x in terms of y, resubstitute in the other equation.
   T ab=a*B-A*b, ac=a*C-A*c, ad=a*D-A*d, ae=a*E-A*e, af=a*F-A*f, BD=b*D+B*d;
+
+  // If the quadratic parts of the two conics are identical (up to scale factor),
+  // the intersection is the same as with a degenerate conic where one part is the line at infinity,
+  // viz. the conic with as equation the (weighted) difference of the two equations:
+  if (ab==0 && ac==0)
+    return intersection(c1,vgl_conic<T>(0,0,0,ad,ae,af));
+
+  // If the parts without x of the two conics are identical (up to scale factor),
+  // the intersection is the same as with a degenerate conic consisting of two vertical lines:
+  if (ab==0 && ad==0)
+    return intersection(c1,vgl_conic<T>(0,0,ac,0,ae,af));
+
+  // And of course idem for y:
+  if (ab==0 && ae==0)
+    return intersection(c1,vgl_conic<T>(0,0,ac,ad,0,af));
 
   vnl_vector<T> coef(5,0);
   coef(0) = ac*ac-ab*(b*C-B*c);
@@ -476,27 +498,32 @@ vgl_homg_operators_2d<T>::do_intersect(vgl_conic<T> const& c1,
 
   // Solutions of the fourth order equation
   //   4      3      2
-  //  x  +  bx  +  cx  +  dx  +  e  =  0
+  //  y  +  py  +  qy  +  ry  +  s  =  0
   // are the eigenvalues of the matrix
-  // [ -b   -c   -d   -e ]
+  // [ -p   -q   -r   -s ]
   // [  1    0    0    0 ]
   // [  0    1    0    0 ]
   // [  0    0    1    0 ]
 
   if (coef(0) == 0 && coef(1) == 0) {
+    if (coef(2) == 0 && coef(3) == 0) return vcl_list<vgl_homg_point_2d<T> >(); // no real solutions.
     T dis = coef(3)*coef(3)-4*coef(2)*coef(4); // discriminant
     if (dis < 0) return vcl_list<vgl_homg_point_2d<T> >(); // no real solutions.
     T y;
     if (coef(2) == 0) dis=0, y = - coef(4) / coef(3);
     else                     y = - coef(3) / coef(2) / 2;
-    T x = -(y*y*ac+y*ae+af)/(y*ab+ad);
-    if (dis == 0) {return vcl_list<vgl_homg_point_2d<T> >(1,vgl_homg_point_2d<T>(x,y,1));}
+    T w = y*ab+ad;
+    T x = -(y*y*ac+y*ae+af);
+    if (x == 0 && w == 0) x = w = 1;
+    if (dis == 0) {return vcl_list<vgl_homg_point_2d<T> >(2,vgl_homg_point_2d<T>(x,y*w,w));}
     dis = vcl_sqrt(dis) / coef(2) / 2;
     vcl_list<vgl_homg_point_2d<T> > solutions;
-    y -= dis; x = -(y*y*ac+y*ae+af)/(y*ab+ad);
-    solutions.push_back(vgl_homg_point_2d<T>(x,y,1));
-    y += 2*dis; x = -(y*y*ac+y*ae+af)/(y*ab+ad);
-    solutions.push_back(vgl_homg_point_2d<T>(x,y,1));
+    y -= dis; w = y*ab+ad; x = -(y*y*ac+y*ae+af);
+    if (x == 0 && w == 0) x = w = 1;
+    solutions.push_back(vgl_homg_point_2d<T>(x,y*w,w));
+    y += 2*dis; w = y*ab+ad; x = -(y*y*ac+y*ae+af);
+    if (x == 0 && w == 0) x = w = 1;
+    solutions.push_back(vgl_homg_point_2d<T>(x,y*w,w));
     return solutions;
   }
   if (coef(0) == 0) {
@@ -507,10 +534,12 @@ vgl_homg_operators_2d<T>::do_intersect(vgl_conic<T> const& c1,
     vnl_diag_matrix<vcl_complex<double> >  polysolutions = eig.D;
     vcl_list<vgl_homg_point_2d<T> > solutions;
     for (int i=0;i<3;i++)
-      if (vcl_abs(vcl_imag(polysolutions(i))) < 1e-7) {// only want the real solutions
+      if (vcl_abs(vcl_imag(polysolutions(i))) < 1e-3) {// only want the real solutions
         T y = (T)vcl_real(polysolutions(i));
-        T x = -(y*y*ac+y*ae+af)/(y*ab+ad);
-        solutions.push_back(vgl_homg_point_2d<T>(x,y,1));
+        T w = y*ab+ad;
+        T x = -(y*y*ac+y*ae+af);
+        if (x == 0 && w == 0) x = w = 1;
+        solutions.push_back(vgl_homg_point_2d<T>(x,y*w,w));
       }
     return solutions;
   }
@@ -530,8 +559,10 @@ vgl_homg_operators_2d<T>::do_intersect(vgl_conic<T> const& c1,
   for (int i=0;i<4;i++)
     if (vcl_abs(vcl_imag(polysolutions(i))) < 1e-7) { // only want the real solutions
       T y = (T)vcl_real(polysolutions(i));
-      T x = -(y*y*ac+y*ae+af)/(y*ab+ad);
-      solutions.push_back(vgl_homg_point_2d<T>(x,y,1));
+      T w = y*ab+ad;
+      T x = -(y*y*ac+y*ae+af);
+      if (x == 0 && w == 0) x = w = 1;
+      solutions.push_back(vgl_homg_point_2d<T>(x,y*w,w));
     }
   return solutions;
 }
