@@ -14,7 +14,7 @@ static void test_region_algs()
   unsigned short * I1 = new unsigned short[n1];
   for (int i = 0; i<n1; i++)
   {
-    X1[i] = 1.0f*i; Y1[i] = 2.0f*i; I1[i]= 10.0f*i;
+    X1[i] = 1.0f*i; Y1[i] = 2.0f*i; I1[i]= 10*i;
   }
 
   vdgl_digital_region_sptr r1 = new vdgl_digital_region(n1, X1, Y1, I1);
@@ -24,7 +24,7 @@ static void test_region_algs()
   unsigned short * I2 = new unsigned short[n2];
   for (int i = 0; i<n2; i++)
   {
-    X2[i] = 3.0f*i; Y2[i] = -6.0f*i; I2[i]= 100.0f*i;
+    X2[i] = 3.0f*i; Y2[i] = -6.0f*i; I2[i]= 100*i;
   }
   vdgl_digital_region_sptr r2 = new vdgl_digital_region(n2, X2, Y2, I2);
 
