@@ -25,6 +25,7 @@
 #include <vcl_sys/types.h>
 #include <vcl_cstring.h> // for strcpy(), strcmp()
 #include <vcl_cctype.h> // for tolower()
+#include <vcl_string.h>
 #include <vcl_map.h>
 #include <vcl_utility.h>
 #include <vcl_algorithm.h>
