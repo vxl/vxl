@@ -2,6 +2,7 @@
 // \file
 #include "frame_grabber_pxc200.h"
 #include <vcl_algorithm.h>
+#include <vcl_cstring.h> // for memcpy()
 
 //----------------------------------------------------------------------
 //: constructor
