@@ -79,7 +79,6 @@ SOURCES += TripleMatchSet.cxx
 SOURCES += TripleMatchSetCorner.cxx
 SOURCES += TripleMatchSetLineSeg.cxx
 SOURCES += NViewMatches.cxx
-#SOURCES += wank.cxx
 SOURCES += mvl_multi_view_matches.cxx
 
 # 4. Classes to perform image measurements on homogeneous points.  

@@ -43,20 +43,18 @@
 //
 //-----------------------------------------------------------------------------
 
+#include "FMatrixComputeLinear.h"
+
 #include <vcl/vcl_cassert.h>
 #include <vcl/vcl_vector.h>
 #include <vcl/vcl_iostream.h>
 
 #include <vnl/algo/vnl_svd.h>
-#include <vnl/vnl_matops.h> // use vnl_matlab_print.h for pretty printing
 
-#include <mvl/FMatrix.h>
 #include <mvl/HomgMetric.h>
-
 #include <mvl/PairMatchSetCorner.h>
-#include "FMatrixComputeLinear.h"
-#include "FDesignMatrix.h"
-#include "HomgNorm2D.h"
+#include <mvl/FDesignMatrix.h>
+#include <mvl/HomgNorm2D.h>
 
 FMatrixComputeLinear::FMatrixComputeLinear(bool precondition, bool rank2_truncate):
   _precondition(precondition),

@@ -66,8 +66,7 @@
 //-----------------------------------------------------------------------------
 
 #include <mvl/FMatrixCompute.h>
-
-class FMatrix;
+#include <mvl/FMatrix.h>
 
 class FMatrixComputeLinear : public FMatrixCompute {
 public:
