@@ -20,7 +20,6 @@
 #include <vcl_iosfwd.h>
 #include <vcl_vector.h>
 
-#include "vgui_style.h"
 #include "vgui_style_sptr.h"
 
 class vgui_observer;
