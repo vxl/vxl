@@ -1,7 +1,6 @@
-//--*-c++-*----
-#ifndef _vgl_h_matrix_2d_compute_4point_h
-#define _vgl_h_matrix_2d_compute_4point_h
-
+// This is core/vgl/algo/vgl_h_matrix_2d_compute_4point.h
+#ifndef vgl_h_matrix_2d_compute_4point_h_
+#define vgl_h_matrix_2d_compute_4point_h_
 //--------------------------------------------------------------
 //:
 // \file
@@ -14,21 +13,22 @@
 // $p'_i$ their images.
 //
 // \verbatim
-// Modifications:
-//      08-02-98 FSM obsoleted bool compute(vgl_h_matrix_2d<double>  *)
-//      Mar 26, 2003 JLM Preparing to move up to vgl
+//  Modifications
+//   08-02-98 FSM obsoleted bool compute(vgl_h_matrix_2d<double>  *)
+//   Mar 26, 2003 JLM Preparing to move up to vgl
 // \endverbatim
 
 #include <vgl/algo/vgl_h_matrix_2d_compute.h>
 
-class vgl_h_matrix_2d_compute_4point : public vgl_h_matrix_2d_compute {
-public:
+class vgl_h_matrix_2d_compute_4point : public vgl_h_matrix_2d_compute
+{
+ public:
   int minimum_number_of_correspondences() const { return 4; }
 
-protected:
+ protected:
   bool compute_p(vcl_vector<vgl_homg_point_2d<double> > const & points1,
                  vcl_vector<vgl_homg_point_2d<double> > const & points2,
                  vgl_h_matrix_2d<double>& H);
 };
 
-#endif // _vgl_h_matrix_2d_compute_4point_h
+#endif // vgl_h_matrix_2d_compute_4point_h_
