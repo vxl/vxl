@@ -58,14 +58,19 @@
 # include "borland55/vcl_cmath.h"
 #else
 # include "iso/vcl_cmath.h"
-# if !VCL_COMPLEX_POW_WORKS
+#endif
+
+
+#if !VCL_COMPLEX_POW_WORKS && !defined VCL_CMATH_POW_DECLARED
 // deal with corrections to pow(complex...)
-#  undef vcl_pow
-#  define vcl_pow vcl_pow
-inline float vcl_pow(float x, float y) { std::pow(x, y); }
-inline double vcl_pow(double x, double y) { std::pow(x, y); }
-inline long double vcl_pow(long double x, long double y) { std::pow(x, y); }
-#  endif
+# undef vcl_pow
+# define vcl_pow vcl_pow
+// VCL_CMATH_POW_DECLARED is true if vcl_pow has been declared
+// to an inline functions rather than defined to std::pow
+# define VCL_CMATH_POW_DECLARED 1
+inline float vcl_pow(float x, float y) { return std::pow(x, y); }
+inline double vcl_pow(double x, double y) { return std::pow(x, y); }
+inline long double vcl_pow(long double x, long double y) { return std::pow(x, y); }
 #endif
 
 #endif // vcl_cmath_h_
