@@ -51,7 +51,7 @@
 * - vnl_fft_1d : 1D Fast Fourier Transform
 * - vnl_fft_2d : 2D Fast Fourier Transform
 * - vnl_convolve
-* - vnl_sample : sample from various probability distributions
+* - vnl_random : random number generation, with normal and box distributions.
 * - vnl_gamma, vnl_gamma_p, vnl_gamma_q : gamma functions
 * - vnl_erf
 * - vnl_chi_squared : CDF of chi-squared distribution
