@@ -51,18 +51,41 @@ enum vil2_pixel_format {
   VIL2_PIXEL_FORMAT_RGBA_DOUBLE = 33,
 //  VIL2_PIXEL_FORMAT_RGBA_LONG_DOUBLE = 34,
 // Add values here and be careful to keep values in vil2_pixel_format.cxx in sync
-// Don't forget to increase the end value.
+// Don't forget to increase the end value. Also add to vil2_convert_cast in vil2_convert.h
 
   VIL2_PIXEL_FORMAT_ENUM_END = 35
 };
 
 
+//: The pixel format enumeration corresponding to the C++ type.
+//
 template <class T>
 inline vil2_pixel_format vil2_pixel_format_of(T dummy) { return VIL2_PIXEL_FORMAT_UNKNOWN;}
 
+
+//: The C++ type corresponding to a pixel format enumeration.
+// Use like
+// \code
+//    typedef vil2_pixel_format_type_of<VIL2_PIXEL_FORMAT_BYTE>::type byte_type;
+// \endcode
+// This is specialized for each pixel type enumeration for which a C++
+// type exists.
+//
+template <vil2_pixel_format pix_type>
+struct vil2_pixel_format_type_of {
+};
+
+
+VCL_DEFINE_SPECIALIZATION
+struct vil2_pixel_format_type_of<VIL2_PIXEL_FORMAT_UNKNOWN> {
+  // no type associated with unknown
+  // typedef void type;
+};
+
 //: Get the vil2_pixel_format value for a given type.
 #define vil2_pixel_format_macro(T,V)\
-VCL_DEFINE_SPECIALIZATION inline vil2_pixel_format vil2_pixel_format_of(T /*dummy*/) { return V; }
+VCL_DEFINE_SPECIALIZATION inline vil2_pixel_format vil2_pixel_format_of(T /*dummy*/) { return V; }\
+VCL_DEFINE_SPECIALIZATION struct vil2_pixel_format_type_of<V> { typedef T type; };
 
 vil2_pixel_format_macro(vxl_uint_32, VIL2_PIXEL_FORMAT_UINT_32)
 vil2_pixel_format_macro(vxl_int_32,  VIL2_PIXEL_FORMAT_INT_32)
