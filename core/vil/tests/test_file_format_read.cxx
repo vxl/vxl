@@ -43,10 +43,12 @@ class CheckRGB : public CheckPixel
     if ( !im )
       vcl_cout << "[ couldn't load " << file << "]\n";
     else
+    {
       img_ = im;
 #ifdef DEBUG
-    vcl_cout << '\n'; vil2_print_all(vcl_cout, img_);
+      vcl_cout << '\n' << vcl_flush; vil2_print_all(vcl_cout, img_);
 #endif
+    }
   }
 
   bool operator() ( int p, int i, int j, const vcl_vector<TruePixelType>& pixel ) const
@@ -99,7 +101,7 @@ class CheckColourPlanes : public CheckPixel
     {
       img_ = im;
 #ifdef DEBUG
-      vcl_cout << '\n'; vil2_print_all(vcl_cout, img_);
+      vcl_cout << '\n' << vcl_flush; vil2_print_all(vcl_cout, img_);
 #endif
     }
   }
@@ -125,7 +127,7 @@ class CheckGrey : public CheckPixel
     {
       img_ = im;
 #ifdef DEBUG
-      vcl_cout << '\n'; vil2_print_all(vcl_cout, img_);
+      vcl_cout << '\n' << vcl_flush; vil2_print_all(vcl_cout, img_);
 #endif
     }
   };
