@@ -7,8 +7,6 @@
 
 #include "FManifoldProject.h"
 
-#include <vcl_cstdlib.h>
-
 #include <vnl/vnl_double_2x2.h>
 #include <vnl/vnl_double_4.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>

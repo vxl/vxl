@@ -10,7 +10,6 @@
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_cmath.h>
-#include <vcl_cstdlib.h>
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_matlab_print.h>

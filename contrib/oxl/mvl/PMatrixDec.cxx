@@ -9,7 +9,6 @@
 
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
-#include <vcl_cstdlib.h>
 
 //--------------------------------------------------------------
 //: Constructor

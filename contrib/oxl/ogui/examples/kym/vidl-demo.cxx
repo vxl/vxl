@@ -1,4 +1,8 @@
-// vidl-demo.cxx - gtk movie player
+// This is oxl/ogui/examples/kym/vidl-demo.cxx
+
+//:
+// \file
+// \brief gtk movie player
 //
 
 #include <vul/vul_sprintf.h>
@@ -6,7 +10,6 @@
 
 #include <vgui/vgui_load.h>
 #include <vgui/vgui_image_tableau.h>
-#include <vcl_cstdlib.h>
 #include <vgui/impl/gtk/vgui_gtk_adaptor.h>
 #include <gtk/gtk.h>
 #include <gtkgl/gtkglarea.h>

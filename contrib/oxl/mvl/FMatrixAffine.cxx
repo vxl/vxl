@@ -7,8 +7,6 @@
 
 #include "FMatrixAffine.h"
 
-#include <vcl_cmath.h>
-#include <vcl_cstdlib.h>
 #include <mvl/HomgLine2D.h>
 #include <mvl/HomgOperator2D.h>
 #include <mvl/HomgPoint2D.h>

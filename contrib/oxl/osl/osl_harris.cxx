@@ -1,17 +1,15 @@
+// This is oxl/osl/osl_harris.cxx
 #include "osl_harris.h"
-
 //:
 //  \file
 
 #include <vcl_cmath.h>
-#include <vcl_cstdlib.h>
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vcl_iomanip.h>
 #include <vcl_fstream.h>
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
-#include <vcl_functional.h>
 
 #include <vil/vil_image_as.h>
 #include <vil/vil_copy.h>
@@ -30,13 +28,12 @@ void osl_harris::prepare_buffers(int w, int h)
   image_w = w;
 
   if (params_.verbose)
-    vcl_cerr << "Doing harris on image region "
-         << image_h << " by " << image_w << vcl_endl
-         << "Maximum no of corners                     = " << params_.corner_count_max << vcl_endl
-         << "Gaussian sigma                            = " << params_.gauss_sigma << vcl_endl
-         << "Expected ratio lowest/max corner strength = " << params_.relative_minimum << vcl_endl
-         << "Auto-correlation scale factor             = " << params_.scale_factor << vcl_endl
-         << "Computing cornerness operator response...." << vcl_flush;
+    vcl_cerr << "Doing harris on image region " << image_h << " by " << image_w << '\n'
+             << "Maximum no of corners                     = " << params_.corner_count_max << '\n'
+             << "Gaussian sigma                            = " << params_.gauss_sigma << '\n'
+             << "Expected ratio lowest/max corner strength = " << params_.relative_minimum << '\n'
+             << "Auto-correlation scale factor             = " << params_.scale_factor << '\n'
+             << "Computing cornerness operator response....\n" << vcl_flush;
 
   // response images (no realloc performed unless size actually changes).
   image_buf           .resize(image_w, image_h);
@@ -62,9 +59,11 @@ void osl_harris::compute_gradients(vil_image const &image)
 
   // compute gradients
   if (params_.verbose) {
-    vcl_cerr << " gradient" << vcl_flush << vcl_endl;
-    //    for(int i = 0; i < 10; ++i)
-    //      vcl_cerr << i << ": " << (int)image_buf(i,i+4) << vcl_endl;
+    vcl_cerr << " gradient\n" << vcl_flush;
+#if 0
+    for (int i = 0; i < 10; ++i)
+      vcl_cerr << i << ": " << (int)image_buf(i,i+4) << '\n';
+#endif
   }
 
   // trim the window
@@ -130,7 +129,7 @@ void osl_harris::compute_cornerness()
   //
   if (params_.verbose) {
     vcl_cerr << "------\n";
-    //    for(int i = 0; i < 10; ++i)
+    //    for (int i = 0; i < 10; ++i)
     //      vcl_cerr << i << ": " << (float)image_cornerness_buf(i,i+4) << vcl_endl;
   }
 
@@ -255,15 +254,15 @@ void osl_harris::do_adaptive() {
   keep.fill(false);
 
   // Do two passes, overlapping tiles by 1/2
-  for(int pass = 0; pass < 2; ++pass) {
+  for (int pass = 0; pass < 2; ++pass) {
     int win_offset = pass * TILE_WIDTH / 2;
     if (params_.verbose)
       vcl_cerr << vcl_endl << "pass " << pass;
-    for(int tile_y = 0; tile_y < n_tiles_y; ++tile_y) {
+    for (int tile_y = 0; tile_y < n_tiles_y; ++tile_y) {
       int window_row_start_index = tile_y * TILE_WIDTH + row_min + win_offset;
       int window_row_end_index = vcl_min(window_row_start_index+TILE_WIDTH, row_max);
 
-      for(int tile_x = 0; tile_x < n_tiles_x; ++tile_x) {
+      for (int tile_x = 0; tile_x < n_tiles_x; ++tile_x) {
         int window_col_start_index = tile_x * TILE_WIDTH + col_min + win_offset;
         int window_col_end_index = vcl_min(window_col_start_index+TILE_WIDTH, col_max);
 
@@ -271,8 +270,8 @@ void osl_harris::do_adaptive() {
         vil_memory_image_of<bool>        &corner_present  = image_cornermax_buf;
         vil_memory_image_of<float> const &corner_strength = image_cornerness_buf;
         int n = 0;
-        for(int row = window_row_start_index; row < window_row_end_index; row++)
-          for(int col = window_col_start_index; col < window_col_end_index; col++)
+        for (int row = window_row_start_index; row < window_row_end_index; row++)
+          for (int col = window_col_start_index; col < window_col_end_index; col++)
             if (corner_present[row][col])
               cornerness[n++] = corner_strength[row][col];
         //        if (params_.verbose)
@@ -296,8 +295,8 @@ void osl_harris::do_adaptive() {
         }
 
         // Keep corners over thresh
-        for(int row = window_row_start_index; row < window_row_end_index; row++)
-          for(int col = window_col_start_index; col < window_col_end_index; col++)
+        for (int row = window_row_start_index; row < window_row_end_index; row++)
+          for (int col = window_col_start_index; col < window_col_end_index; col++)
             if (corner_present[row][col])
               if (corner_strength[row][col] >= thresh)
                 keep[row][col] = true;
