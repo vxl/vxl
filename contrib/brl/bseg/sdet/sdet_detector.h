@@ -74,7 +74,7 @@
 class gevd_bufferxy;
 
 #include <vcl_vector.h>
-#include <vcl_iosfwd.h>
+#include <vcl_iostream.h>
 #include <vil1/vil1_image.h>
 
 #include <vtol/vtol_vertex_2d_sptr.h>
