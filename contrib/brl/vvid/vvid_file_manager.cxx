@@ -1,5 +1,5 @@
-//this-sets-emacs-to-*-c++-*-mode
-
+// This is brl/vvid/vvid_file_manager.cxx
+#include "vvid_file_manager.h"
 //:
 // \file
 // \author J.L. Mundy
@@ -28,7 +28,6 @@
 #include <vvid/vvid_motion_process.h>
 #include <vvid/vvid_lucas_kanade_process.h>
 #include <vvid/vvid_harris_corner_process.h>
-#include <vvid/vvid_file_manager.h>
 
 //static manager instance
 vvid_file_manager *vvid_file_manager::instance_ = 0;
@@ -115,7 +114,7 @@ void vvid_file_manager::display_spatial_objects()
     video_process_->get_spatial_objects();
   if (easy0_)
   {
-	  easy0_->clear_all();
+    easy0_->clear_all();
     easy0_->add_spatial_objects(sos);
   }
 }
