@@ -44,9 +44,8 @@ public:
   //: Number of objects available
   virtual unsigned size() const;
 
-	//: Return pointer to start of data array
-	const T* data() const { return data_; }
-
+  //: Return pointer to start of data array
+  const T* data() const { return data_; }
 
   //: Reset so that current() returns first object
   virtual void reset();
@@ -70,7 +69,6 @@ public:
 
   //: Name of the class
   virtual vcl_string is_a() const;
-
 };
 
 #endif // mbl_data_array_wrapper_h
