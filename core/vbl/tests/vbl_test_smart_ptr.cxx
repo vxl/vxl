@@ -121,7 +121,7 @@ static void vbl_test_smart_ptr()
     TEST("assignment should ref", r->get_references(), 2);
   }
 
-  TEST("checkcount()", base_impl::checkcount(), 0);
+  TEST("checkcount(0)", base_impl::checkcount(0), true);
 }
 
 TESTMAIN(vbl_test_smart_ptr);
