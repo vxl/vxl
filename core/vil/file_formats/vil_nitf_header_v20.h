@@ -6,8 +6,8 @@
 // \file
 // \brief This file defines the NITF headers for NITF v2.0.
 //
-//  \date: 2003/12/26
-//  \author: mlaymon
+// \date: 2003/12/26
+// \author: mlaymon
 //
 // For a given header 'head', head->Read(file) is called when the
 // appropriate place in the file is reached, and it will return a
@@ -63,18 +63,18 @@
 
 #if 0  // NOT IMPLEMENTED
 
-inline StatusCode LabelSubHeader_v20::AsciiWrite (vil_stream*) {return STATUS_BAD;}
-inline StatusCode LabelSubHeader_v20::AsciiRead (vil_stream*)  {return STATUS_BAD;}
-inline StatusCode TextSubHeader_v20::AsciiRead (vil_stream*)   {return STATUS_BAD;}
-inline StatusCode TextSubHeader_v20::AsciiWrite (vil_stream*)  {return STATUS_BAD;}
+inline StatusCode LabelSubHeader_v20::AsciiWrite(vil_stream*) {return STATUS_BAD;}
+inline StatusCode LabelSubHeader_v20::AsciiRead(vil_stream*)  {return STATUS_BAD;}
+inline StatusCode TextSubHeader_v20::AsciiRead(vil_stream*)   {return STATUS_BAD;}
+inline StatusCode TextSubHeader_v20::AsciiWrite(vil_stream*)  {return STATUS_BAD;}
 
 #endif
 
 // Format for strftime
 #ifdef _MSC_VER
-   static const char *date_format =  "%d%H%M%SZ%b%y";
+   static const char *date_format = "%d%H%M%SZ%b%y";
 #else
-   static const char *date_format =  "%d%H%M%SZ%h%y";
+   static const char *date_format = "%d%H%M%SZ%h%y";
 #endif
 
 inline const char* GetVersion20Date()
@@ -84,14 +84,12 @@ inline const char* GetVersion20Date()
     // We must fool SCCS, otherwise it will try to
     // be smart and interpret the percents in the string.
     //
-    vcl_time_t clock;
-    struct tm *tm;
-    clock = time (NULL);
-    tm = localtime (&clock);
+    vcl_time_t clock = time(NULL);
+    struct tm *tm_ = localtime(&clock);
     // char* format = "%d%H%M%SZ%h%y";
 
     vcl_strncpy(rval, "              ", 15);
-    vcl_strftime(rval, 15, date_format, tm);
+    vcl_strftime(rval, 15, date_format, tm_);
 
     return rval;
 }
