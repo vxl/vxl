@@ -24,7 +24,7 @@ integer *job;
     integer i__1, i__2;
     real r__1;
     doublereal d__1, d__2;
-    complex q__1, q__2;
+    complex q__1;
 
     /* Builtin functions */
     double c_abs();
