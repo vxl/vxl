@@ -13,15 +13,13 @@ bool vipl_sobel <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(){
   int stopx = stop(X_Axis());
   int stopy = stop(Y_Axis());
   for (int j = starty, ej =  stopy; j < ej  ; ++j)
-    for (int i = startx, ei = stopx; i < ei ; ++i) {
-      DataIn v;
-      v = fgetpixel(in, i, j, v); v *= 4;
-      v -= getpixel(in, i+1, j+1, v);
-      v -= getpixel(in, i-1, j+1, v);
-      v -= getpixel(in, i+1, j-1, v);
-      v -= getpixel(in, i-1, j-1, v);
-      fsetpixel(out, i, j, (DataOut)v);
-    }
+    for (int i = startx, ei = stopx; i < ei ; ++i)
+      fsetpixel(out, i, j, (DataOut)(
+                4*fgetpixel(in, i, j, (DataIn)0)
+              -    getpixel(in, i+1, j+1, (DataIn)0)
+              -    getpixel(in, i-1, j+1, (DataIn)0)
+              -    getpixel(in, i+1, j-1, (DataIn)0)
+              -    getpixel(in, i-1, j-1, (DataIn)0)));
   return true;
 }
 
