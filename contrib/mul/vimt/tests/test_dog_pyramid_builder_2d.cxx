@@ -2,7 +2,6 @@
 #include <testlib/testlib_test.h>
 
 #include <vcl_iostream.h>
-#include <vxl_config.h> // for float
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vimt/vimt_dog_pyramid_builder_2d.h>
 #include <vimt/vimt_image_pyramid.h>
@@ -25,6 +24,7 @@ void test_dog_pyramid_builder_2d_build(vimt_dog_pyramid_builder_2d<float>& build
       image0.image()(x,y) = x+y*10;
 
   int default_n_levels = builder.max_levels();
+  TEST("Default max. number of levels is 99", default_n_levels, 99);
   builder.set_max_levels(3);
   vimt_image_pyramid image_pyr;
 
@@ -37,7 +37,6 @@ void test_dog_pyramid_builder_2d_build(vimt_dog_pyramid_builder_2d<float>& build
   const vimt_image_2d_of<float>& v_image0 = static_cast<const vimt_image_2d_of<float>&>(image_pyr(0));
   TEST("Base width",v_image0.image().ni(),ni);
   TEST("Base height",v_image0.image().nj(),nj);
-
 }
 
 void test_dog_pyramid_builder_2d_a()
