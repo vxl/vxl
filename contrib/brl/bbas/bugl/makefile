@@ -3,10 +3,12 @@ USES += contrib/brl contrib/brl/bbas core
 LIBRARY := bugl
 VERSION := 1.0
 
-MANPAGE_SOURCES += bugl_uncertainty_point_2d.txx
 MANPAGE_SOURCES += bugl_gaussian_point_2d.txx
-MANPAGE_SOURCES += bugl_uncertainty_point_3d.txx
+MANPAGE_SOURCES += bugl_gaussian_point_2d_sptr.h
 MANPAGE_SOURCES += bugl_gaussian_point_3d.txx
+MANPAGE_SOURCES += bugl_gaussian_point_3d_sptr.h
+MANPAGE_SOURCES += bugl_uncertainty_point_2d.txx
+MANPAGE_SOURCES += bugl_uncertainty_point_3d.txx
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
