@@ -114,8 +114,7 @@ vsl_binary_loader<BaseClass>* vsl_binary_loader<BaseClass>::instance_ = 0;
 
 #undef VSL_BINARY_LOADER_INSTANTIATE
 #define VSL_BINARY_LOADER_WITH_SPECIALIZATION_INSTANTIATE(T) \
-template class vsl_binary_loader<T >; \
-VCL_VECTOR_INSTANTIATE(T*)
+template class vsl_binary_loader<T >
 #define VSL_BINARY_LOADER_INSTANTIATE(T) \
 VSL_BINARY_LOADER_WITH_SPECIALIZATION_INSTANTIATE(T); \
 VCL_INSTANTIATE_INLINE(void vsl_b_read( vsl_b_istream& bfs, T*& b)); \
