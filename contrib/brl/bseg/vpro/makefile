@@ -4,7 +4,7 @@ USES += contrib/brl contrib/gel contrib/brl/bbas contrib/brl/bseg core
 LIBRARY := vpro
 VERSION := 1.0
 
-IMMEDIATE_LIBS := sdet brip bdgl vdgl vtol vsol vidl vil1 vul vbl
+IMMEDIATE_LIBS := sdet brip bdgl vdgl vtol vsol vidl_vil1 vil1 vul vbl
 
 SOURCES += vpro_video_process.cxx
 MANPAGE_SOURCES += vpro_video_process_sptr.h

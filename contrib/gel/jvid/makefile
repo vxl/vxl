@@ -2,7 +2,7 @@ USES += contrib/gel core
 USE_OPENGL:= 1
 TRY_MPEG2 := 1
 
-IMMEDIATE_LIBS := -lvidl -lvgui -lvil -lvul
+IMMEDIATE_LIBS := -lvidl_vil1 -lvgui -lvil -lvul
 
 LIBRARY := jvid
 VERSION := 1.0

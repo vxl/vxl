@@ -20,8 +20,8 @@ include ${IUEROOT}/config/top-params.mk
 ifeq ($(USE_GTKGLAREA),1)
 MINI_PROG_SOURCES += gtk-display-image.cxx
 MINI_PROG_SOURCES += gtk-movie-player.cxx
-ifneq (,$(strip $(wildcard $(IUEROOT)/core/vidl/config.mk)))
-include ${IUEROOT}/core/vidl/config.mk
+ifneq (,$(strip $(wildcard $(IUEROOT)/core/vidl_vil1/config.mk)))
+include ${IUEROOT}/core/vidl_vil1/config.mk
 MINI_PROG_SOURCES += vidl-demo.cxx
 endif
 endif

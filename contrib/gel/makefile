@@ -32,7 +32,7 @@ SUBDIRS += mrc
 # Kanade-Lucas-Tomasi feature tracker
 SUBDIRS += vgel gkll
 
-# Experiments with the vidl library and vgui (JLM)
+# Experiments with the vidl_vil1 library and vgui (JLM)
 SUBDIRS += jvid
 
 # Intensity face attributes (MPP)
