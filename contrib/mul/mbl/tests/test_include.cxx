@@ -13,6 +13,7 @@
 #include <mbl/mbl_data_collector_list.h>
 #include <mbl/mbl_data_wrapper.h>
 #include <mbl/mbl_data_wrapper_mixer.h>
+#include <mbl/mbl_exception.h>
 #include <mbl/mbl_file_data_collector.h>
 #include <mbl/mbl_file_data_wrapper.h>
 #include <mbl/mbl_gamma.h>
