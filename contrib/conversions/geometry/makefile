@@ -2,6 +2,7 @@
 
 USES := vxl gel oxl
 IMMEDIATE_LIBS := -losl -lvdgl -vbl
+MANPAGE_SOURCES += osl_to_vdgl.h
 
 ifneq (,$(wildcard $(IUEROOT)/SpatialObjects))
 USES += COOL GeneralUtility SpatialObjects Numerics

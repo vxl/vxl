@@ -2,6 +2,8 @@
 include ${IUEROOT}/config/top-params.mk
 #######################################
 
+MANPAGE_SOURCES += vxl_copyright.h
+
 # utilities
 SUBDIRS += vul
 

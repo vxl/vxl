@@ -141,6 +141,8 @@ MANPAGE_SOURCES += PairMatchSetMulti.h
 MANPAGE_SOURCES += TriTensorCompute.h
 MANPAGE_SOURCES += mvl_modify_handle.h
 
+MANPAGE_SOURCES += PMatrix_sptr.h
+
 #######################################
 include ${IUEROOT}/config/top-params.mk
 #######################################

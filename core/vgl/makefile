@@ -17,6 +17,7 @@ MANPAGE_SOURCES += vgl_vector_3d.txx
 SOURCES += vgl_1d_basis.cxx
 MANPAGE_SOURCES += vgl_1d_basis.txx
 SOURCES += vgl_homg.cxx
+MANPAGE_SOURCES += vgl_homg_1d.txx
 
 # Points
 MANPAGE_SOURCES += vgl_homg_point_1d.txx

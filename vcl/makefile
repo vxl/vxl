@@ -14,6 +14,7 @@ VERSION := 1.0
 MANPAGE_SOURCES += vcl_stlfwd.h
 MANPAGE_SOURCES += vcl_iosfwd.h
 MANPAGE_SOURCES += vcl_complex_fwd.h
+MANPAGE_SOURCES += vcl_where_root_dir.h.in
 
 SOURCES += vcl_cmath.cxx
 SOURCES += vcl_cstdlib.cxx
