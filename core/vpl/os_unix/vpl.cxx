@@ -1,7 +1,10 @@
 // Include system headers for UNIX-like operating system :
+#define _XOPEN_SOURCE 1 // necessary on alpha and on SGI since otherwise
+#define _XOPEN_SOURCE_EXTENDED 1 // usleep is not declared
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <vxl_config.h> // for VXL_UNISTD_*
 
 char *
 vpl_getcwd( char *buf, vcl_size_t buf_size )
@@ -42,10 +45,15 @@ vpl_sleep( unsigned int t )
 int
 vpl_usleep( unsigned int t )
 {
-  #if VXL_UNISTD_USLEEP_IS_VOID
-    usleep( t );
-    return 0;
-  #else
-    return usleep( t );
-  #endif
+  // some implementations require argument to usleep < 1000000 :
+  if (t > 1000000) sleep( t/1000000 ); t %= 1000000;
+#if VXL_UNISTD_HAS_USLEEP
+ #if VXL_UNISTD_USLEEP_IS_VOID
+  usleep( t ); return 0;
+ #else
+  return usleep( t );
+ #endif
+#else
+  return 0;
+#endif
 }
