@@ -1,7 +1,3 @@
-#######################################
-include ${IUEROOT}/config/top-params.mk
-#######################################
-
 USES := vxl
 USES += mul
 
@@ -38,8 +34,13 @@ MANPAGE_SOURCES += mil_bilin_interp_2d.h
 MANPAGE_SOURCES += mil_convert_vil.h
 MANPAGE_SOURCES += mil_image_2d.h
 MANPAGE_SOURCES += mil_sample_profile_2d.txx
+MANPAGE_SOURCES += mil_wrappers.h
 
 SUBDIRS += algo
+
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
 
 ifndef NOTEST
  SUBDIRS += tests
