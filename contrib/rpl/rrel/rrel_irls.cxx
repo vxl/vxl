@@ -143,6 +143,8 @@ rrel_irls::estimate( const rrel_estimation_problem* problem,
 
   assert( params_initialized_ && scale_initialized_ );
   if ( scale_ <= 1e-8 ) {
+    unsigned int dof = problem-> param_dof();
+    cofact_ = 1e-16 * vnl_matrix<double>(dof, dof, vnl_matrix_identity);
     scale_ = 0.0;
     converged_ = true;
     vcl_cerr << "rrel_irls::estimate: initial scale is zero - cannot estimate\n";
@@ -197,6 +199,8 @@ rrel_irls::estimate( const rrel_estimation_problem* problem,
       }
       if ( trace_level_ >= 1 ) vcl_cout << "Scale estimated: " << scale_ << vcl_endl;
       if ( scale_ <= 1e-8 ) {  //  fit exact enough to yield 0 scale estimate
+        unsigned int dof = problem-> param_dof();
+        cofact_ = 1e-16 * vnl_matrix<double>(dof, dof, vnl_matrix_identity);
         scale_ = 0.0;
         converged_ = true;
         vcl_cerr << "rrel_irls::estimate:  scale has gone to 0.\n";
