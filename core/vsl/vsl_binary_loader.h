@@ -4,8 +4,8 @@
 #pragma interface
 #endif
 
-#include <vsl/vsl_binary_loader_base.h>
 #include <vsl/vsl_binary_io.h>
+#include <vsl/vsl_binary_loader_base.h>
 #include <vcl_vector.h>
 #include <vcl_string.h>
 
