@@ -11,7 +11,7 @@
 
 class bmrf_node_tester : public bmrf_node
 {
-public:
+ public:
   bool add_neighbor( bmrf_node *node, neighbor_type type );
 
   bool remove_neighbor( bmrf_node *node, neighbor_type type = ALL);
@@ -36,6 +36,7 @@ void test_node()
                         node_3->frame_num() == 2 );
 
   testlib_test_begin("Testing probability()");
+  vcl_cout << node_1->probability() << ' ' << node_2->probability() << ' ' << node_3->probability() << ' ';
   testlib_test_perform( node_1->probability() == 0.5 &&
                         node_2->probability() == 0.7 &&
                         node_3->probability() == 0.2 );
@@ -71,7 +72,6 @@ void test_node()
 
   // remove the temporary file
   vpl_unlink ("test_node_io.tmp");
-
 }
 
 
