@@ -38,9 +38,9 @@ class bmrf_node : public vbl_ref_count
     friend class bmrf_node;
 
     //: Constructor
-    bmrf_arc() : from_(NULL), to_(NULL) {}
+    bmrf_arc();
     //: Constructor
-    bmrf_arc( bmrf_node* f, bmrf_node* t) : from_(f), to_(t) {}
+    bmrf_arc( const bmrf_node_sptr& f, const bmrf_node_sptr& t);
     //: Destructor
     ~bmrf_arc() {}
 
@@ -56,9 +56,17 @@ class bmrf_node : public vbl_ref_count
     //: Smart pointer to the node where this arc ends
     bmrf_node_sptr to() { return bmrf_node_sptr(to_); }
 
+    //: Compute the alpha range and intensity comparison
+    // \note vertices must be set
+    void time_init();
+
    private:
     bmrf_node* from_;
     bmrf_node* to_;
+
+    double probability_;
+    double min_alpha_, max_alpha_;
+    double int_prob_;
   };
 
 
@@ -127,12 +135,12 @@ class bmrf_node : public vbl_ref_count
   //: Add \p node as a neighbor of type \p type
   // \retval true if the node was added successfully
   // \retval false if the neighbor is not valid or already exists
-  bool add_neighbor( bmrf_node *node, neighbor_type type );
+  bool add_neighbor( const bmrf_node_sptr& node, neighbor_type type );
 
   //: Remove \p node from the neighborhood
   // \retval true if the node is removed successfully
   // \retval false if the node was not a neighbor
-  bool remove_neighbor( bmrf_node *node, neighbor_type type = ALL);
+  bool remove_neighbor( bmrf_node_sptr node, neighbor_type type = ALL);
 
   //: Remove the arc associated with the outgoing iterator
   bool remove_helper( arc_iterator& a_itr, neighbor_type type );
@@ -145,13 +153,6 @@ class bmrf_node : public vbl_ref_count
   // \retval true if any arcs were removed
   // \retval false if all arcs are valid
   bool purge();
-
-  //: Compute the weights of each node for use in probability computation
-  // Nodes are weighted by alpha overlap and intesity similarity
-  void compute_weights();
-
-  //: Map nodes to weights
-  vcl_map<bmrf_node*, double> weight_;
 
  private:
   //: A smart pointer to the underlying epi-segment data

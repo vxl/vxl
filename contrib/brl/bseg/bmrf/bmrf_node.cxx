@@ -138,9 +138,6 @@ pair_dbl_arc_gt_cmp ( const vcl_pair<double,bmrf_node::arc_iterator>& lhs,
 void
 bmrf_node::compute_probability()
 {
-  if (weight_.empty())
-    this->compute_weights();
-
   probability_ = 0.0;
   for ( arc_iterator a_itr = this->begin(TIME); 
         a_itr != this->end(TIME); ++a_itr )
@@ -166,9 +163,6 @@ bmrf_node::compute_probability()
 void 
 bmrf_node::prune_by_probability(double threshold, bool relative)
 {
-  if (weight_.empty())
-    this->compute_weights();
-
   // Compute a probability mass function
   vcl_vector<vcl_pair<double,arc_iterator> > pmf;
   for ( arc_iterator a_itr = this->begin(TIME); 
@@ -202,14 +196,12 @@ bmrf_node::prune_by_probability(double threshold, bool relative)
 double
 bmrf_node::probability(const bmrf_gamma_func_sptr& gamma)
 {
-  if (weight_.empty())
-    this->compute_weights();
-
   // precompute the segment in the next and previous frames since
   // this should make up most of the neighbors
   bmrf_epi_seg_sptr prev_seg = bmrf_epi_transform(this->epi_seg(), gamma, -1.0);
   bmrf_epi_seg_sptr next_seg = bmrf_epi_transform(this->epi_seg(), gamma, 1.0);
   double prob = 0.0;
+  double total_alpha = 0.0;
   for ( arc_iterator a_itr = this->begin(TIME); a_itr != this->end(TIME); ++a_itr ) {
     bmrf_node_sptr neighbor = (*a_itr)->to();
     int time_step = neighbor->frame_num() - this->frame_num();
@@ -226,55 +218,17 @@ bmrf_node::probability(const bmrf_gamma_func_sptr& gamma)
       bmrf_epi_seg_sptr xform_seg = bmrf_epi_transform(this->epi_seg(), gamma, double(time_step));
       error = bmrf_match_error(xform_seg, neighbor->epi_seg());
     }
-    vcl_map<bmrf_node*, double>::iterator w_itr = weight_.find(neighbor.ptr());
-    prob += w_itr->second * vcl_exp(-error/2.0);
+    double alpha_range = (*a_itr)->max_alpha_ - (*a_itr)->min_alpha_;
+    prob += alpha_range * (*a_itr)->int_prob_ * vcl_exp(-error/2.0);
+    total_alpha += alpha_range;
   }
-  return prob * 0.398942; // 1/sqrt(2*pi)
-}
-
-
-//: Compute the weights of each node for use in probability computation
-// Nodes are weighted by alpha overlap and intensity similarity
-void
-bmrf_node::compute_weights()
-{
-  double int_var = 0.001; // intensity variance
-  double total_wgt = 0.0;
-  bmrf_epi_seg_sptr ep1 = this->epi_seg();
-  for ( arc_iterator a_itr = this->begin(TIME); a_itr != this->end(TIME); ++a_itr ) {
-    bmrf_node_sptr neighbor = (*a_itr)->to();
-    bmrf_epi_seg_sptr ep2 = neighbor->epi_seg();
-
-    double min_alpha = MAX(ep1->min_alpha(), ep2->min_alpha());
-    double max_alpha = MIN(ep1->max_alpha(), ep2->max_alpha());
-    double alpha_range = max_alpha - min_alpha;
-    double d_alpha =   MIN((ep1->max_alpha() - ep1->min_alpha())/ep1->n_pts() ,
-                           (ep2->max_alpha() - ep2->min_alpha())/ep2->n_pts() );
-
-    double l_error = 0.0, r_error = 0.0;
-    for (double alpha = min_alpha; alpha <= max_alpha; alpha += d_alpha)
-    {
-      double dli = (ep1->left_int(alpha) - ep2->left_int(alpha));
-      double dri = (ep1->right_int(alpha) - ep2->right_int(alpha));
-      l_error += dli*dli;
-      r_error += dri*dri;
-    }
-    double int_error = (l_error + r_error) * d_alpha / (alpha_range * int_var);
-    double wgt = alpha_range*vcl_exp(-int_error/2.0);
-    weight_[neighbor.ptr()] = wgt;
-    total_wgt += alpha_range;
-  }
-  double scale = 1.0/total_wgt;
-  for ( vcl_map<bmrf_node*, double>::iterator w_itr = weight_.begin();
-        w_itr != weight_.end();  ++w_itr ) {
-    w_itr->second *= scale;
-  }
+  return (prob / total_alpha) * 0.398942; // 1/sqrt(2*pi)
 }
 
 
 //: Add \p node as a neighbor of type \p type
 bool
-bmrf_node::add_neighbor( bmrf_node *node, neighbor_type type )
+bmrf_node::add_neighbor( const bmrf_node_sptr& node, neighbor_type type )
 {
   if (!node || node == this || type == ALL)
     return false;
@@ -293,16 +247,13 @@ bmrf_node::add_neighbor( bmrf_node *node, neighbor_type type )
   for (int t=type; t>=0 && (boundaries_[type+1] == boundaries_[t]); --t)
     --boundaries_[t];
 
-  // weights must be recomputed
-  weight_.clear();
-
   return true;
 }
 
 
 //: Remove \p node from the neighborhood
 bool
-bmrf_node::remove_neighbor( bmrf_node *node, neighbor_type type )
+bmrf_node::remove_neighbor( bmrf_node_sptr node, neighbor_type type )
 {
   if (!node || node == this)
     return false;
@@ -357,9 +308,6 @@ bmrf_node::remove_helper( arc_iterator& a_itr, neighbor_type type)
   // a pointer to this arc
   arc->to_ = NULL;
   arc->from_ = NULL;
-
-  // The weights are now invalid
-  weight_.clear();
 
   return true;
 }
@@ -453,6 +401,8 @@ bmrf_node::b_read( vsl_b_istream& is )
         bmrf_arc_sptr arc_ptr;
         vsl_b_read(is, arc_ptr);
         arc_ptr->from_ = this;
+        if(arc_ptr->to_)
+          arc_ptr->time_init();
         out_arcs_.push_back(arc_ptr);
 
         while (type < ALL && n == b_loc) {
@@ -469,6 +419,8 @@ bmrf_node::b_read( vsl_b_istream& is )
         bmrf_arc_sptr arc_ptr;
         vsl_b_read(is, arc_ptr);
         arc_ptr->to_ = this;
+        if(arc_ptr->from_)
+          arc_ptr->time_init();
         in_arcs_.push_back(arc_ptr);
       }
     }
@@ -502,7 +454,25 @@ bmrf_node::print_summary( vcl_ostream& os ) const
 //-----------------------------------------------------------------------------------------
 // bmrf_arc member functions
 //-----------------------------------------------------------------------------------------
+    
+//: Constructor
+bmrf_node::bmrf_arc::bmrf_arc() 
+  : from_(NULL), to_(NULL), probability_(0.0), 
+    min_alpha_(0.0), max_alpha_(0.0), int_prob_(0.0)
+{
+}
 
+
+//: Constructor
+bmrf_node::bmrf_arc::bmrf_arc( const bmrf_node_sptr& f, const bmrf_node_sptr& t) 
+  : from_(f.ptr()), to_(t.ptr()), probability_(0.0),
+    min_alpha_(0.0), max_alpha_(0.0), int_prob_(0.0) 
+{
+  if( from_ && to_ ){
+    if(from_->frame_num() != to_->frame_num())
+      time_init();
+  }
+}
 
 //: Binary save bmrf_arc to stream.
 void
@@ -517,6 +487,34 @@ void
 bmrf_node::bmrf_arc::b_read( vsl_b_istream& )
 {
   // Nothing to read
+}
+
+
+//: Compute the alpha range and intensity comparison
+void 
+bmrf_node::bmrf_arc::time_init()
+{
+  double int_var = 0.001; // intensity variance
+  
+  bmrf_epi_seg_sptr ep1 = from_->epi_seg();
+  bmrf_epi_seg_sptr ep2 = to_->epi_seg();
+
+  min_alpha_ = MAX(ep1->min_alpha(), ep2->min_alpha());
+  max_alpha_ = MIN(ep1->max_alpha(), ep2->max_alpha());
+  double alpha_range = max_alpha_ - min_alpha_;
+  double d_alpha =   MIN((ep1->max_alpha() - ep1->min_alpha())/ep1->n_pts() ,
+                         (ep2->max_alpha() - ep2->min_alpha())/ep2->n_pts() );
+
+  double l_error = 0.0, r_error = 0.0;
+  for (double alpha = min_alpha_; alpha <= max_alpha_; alpha += d_alpha)
+  {
+    double dli = (ep1->left_int(alpha) - ep2->left_int(alpha));
+    double dri = (ep1->right_int(alpha) - ep2->right_int(alpha));
+    l_error += dli*dli;
+    r_error += dri*dri;
+  }
+  double int_error = (l_error + r_error) * d_alpha / (alpha_range * int_var);
+  int_prob_ = vcl_exp(-int_error/2.0);
 }
 
 
