@@ -5,6 +5,7 @@
 #include <vil2/vil2_crop.h>
 #include <vil2/vil2_clamp.h>
 #include <vil2/vil2_transpose.h>
+#include <vil2/vil2_flip.h>
 #include <vcl_iostream.h>
 #include <testlib/testlib_test.h>
 
@@ -65,12 +66,20 @@ void test_image_resource_1()
 
   trans = vil2_transpose(clamp);
 
-  view1 = clamp->get_view(0, clamp->ni(), 0, clamp->nj());
+  view1 = clamp->get_view(0, clamp->ni()/2, 0, clamp->nj()/2);
   TEST("Clamping", view1 && view1(3,0) == 1.0f && view1(0,3)==9.0f, true);
-  view1 = trans->get_view(0, trans->ni(), 0, trans->nj());
+  view1 = trans->get_view(0, trans->ni()/2, 0, trans->nj()/2);
   TEST("Transpose, and clamping", view1 && view1(3,0) == 9.0f && view1(0,3)==1.0f, true);
 
-  
+
+  vil2_image_resource_sptr flip1 = vil2_flip_lr(clamp);
+  vil2_image_resource_sptr flip2 = vil2_flip_ud(flip1);
+  vil2_image_resource_sptr flip3 = vil2_flip_lr(flip2);
+  vil2_image_resource_sptr flip4 = vil2_flip_ud(flip3);
+  view1 = flip4->get_view(0, flip4->ni(), 0, flip4->nj());
+  view2 = clamp->get_view(0, clamp->ni(), 0, clamp->nj());
+  TEST("x == flip_lr(flip_ud(flip_lr(flip_ud(x))))", vil2_deep_equality(view1, view2), true);
+
 }
 
 MAIN( test_image_resource )

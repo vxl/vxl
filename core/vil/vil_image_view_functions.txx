@@ -78,27 +78,6 @@ vil2_image_view<vil_rgb<T> > vil2_view_as_rgb(const vil2_image_view<T>& v)
 }
 
 
-//: Create a reflected view in which i -> (ni-1)-i
-//  i.e vil2_flip_lr(view)(i,j,p) = view(ni-1-i,j,p)
-template<class T>
-vil2_image_view<T> vil2_flip_lr(const vil2_image_view<T>& v)
-{
-  return vil2_image_view<T>(v.memory_chunk(),
-                            v.top_left_ptr()+(v.ni()-1)*v.istep(),
-                            v.ni(),v.nj(),v.nplanes(),
-                            -v.istep(),v.jstep(),v.planestep());
-}
-
-//: Create a reflected view in which j -> (nj-1)-j
-//  i.e vil2_flip_ud(view)(i,j,p) = view(i,nj-1-j,p)
-template<class T>
-vil2_image_view<T> vil2_flip_ud(const vil2_image_view<T>& v)
-{
-  return vil2_image_view<T>(v.memory_chunk(),
-                            v.top_left_ptr()+(v.nj()-1)*v.jstep(),
-                            v.ni(),v.nj(),v.nplanes(),
-                            v.istep(),-v.jstep(),v.planestep());
-}
 
 //: Compute minimum and maximum values over view
 template<class T>
