@@ -62,8 +62,8 @@ struct vgui_command_toggle : vgui_command
 //  and pass it to a menu.
 //
 template <class receiver>
-class vgui_command_simple : public vgui_command {
-public:
+struct vgui_command_simple : vgui_command
+{
   typedef void (receiver::* action)();
 
   vgui_command_simple(receiver* o, action m) : obj(o), mem(m) { }
@@ -73,7 +73,7 @@ public:
   action mem;
 };
 #define VGUI_COMMAND_SIMPLE_INSTANTIATE(receiver) \
-template class vgui_command_simple<receiver >
+template struct vgui_command_simple<receiver >
 
 // similar, but for methods that take a single argument (fsm).
 template <class object_t, class data_t>
