@@ -15,6 +15,9 @@ SUBDIRS += clsfy
 # New vil
 SUBDIRS += vimt vil3d vimt3d
 
+# video
+SUBDIRS += mvl2
+
 ################################
 include ${IUEROOT}/config/top.mk
 ################################
