@@ -40,7 +40,7 @@ test_trans_affine()
 
   testlib_test_begin( "Construct 3D affine transform object" );
   rgrl_transformation_sptr xform = new rgrl_trans_affine( A, t, covar );
-  testlib_test_perform( true );
+  testlib_test_perform( xform );
 
   testlib_test_begin( "Transform 3D location" );
 
