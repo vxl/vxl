@@ -1,8 +1,8 @@
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h>
+#include <vcl_complex.h>
 #include <vnl/vnl_test.h>
 #include <vnl/vnl_matrix.h>
-#include <vnl/vnl_complex.h>
 #include <vnl/vnl_matlab_print.h>
 #include <vnl/algo/vnl_qr.h>
 
@@ -86,20 +86,20 @@ public:
 };
 
 VCL_DEFINE_SPECIALIZATION 
-class traits<vnl_float_complex> {
+class traits<vcl_complex<float> > {
 public:
   static float eps() { return traits<float>::eps(); }
-  static vnl_float_complex rand(vnl_float_complex const &) { 
-    return vnl_float_complex(traits<float>::rand(0), traits<float>::rand(0));
+  static vcl_complex<float> rand(vcl_complex<float> const &) { 
+    return vcl_complex<float>(traits<float>::rand(0), traits<float>::rand(0));
   }
 };
 
 VCL_DEFINE_SPECIALIZATION 
-class traits<vnl_double_complex> {
+class traits<vcl_complex<double> > {
 public:
   static double eps() { return traits<double>::eps(); }
-  static vnl_double_complex rand(vnl_double_complex const &) { 
-    return vnl_double_complex(traits<double>::rand(0), traits<double>::rand(0));
+  static vcl_complex<double> rand(vcl_complex<double> const &) { 
+    return vcl_complex<double>(traits<double>::rand(0), traits<double>::rand(0));
   }
 };
 
@@ -138,8 +138,8 @@ void new_test(T *) {
 template void new_test(T *);
 inst(float);
 inst(double);
-inst(vnl_float_complex);
-inst(vnl_double_complex);
+inst(vcl_complex<float>);
+inst(vcl_complex<double>);
 #undef inst
 
 //--------------------------------------------------------------------------------
@@ -152,9 +152,9 @@ extern "C" void test_qr() {
   vcl_cout << "-------------------- double" << vcl_endl;
   new_test((double*)0);
   vcl_cout << "-------------------- float_complex" << vcl_endl;
-  new_test((vnl_float_complex*)0);
+  new_test((vcl_complex<float>*)0);
   vcl_cout << "-------------------- double_complex" << vcl_endl;
-  new_test((vnl_double_complex*)0);
+  new_test((vcl_complex<double>*)0);
 }
 
 TESTMAIN(test_qr);

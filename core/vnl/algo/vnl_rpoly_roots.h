@@ -28,8 +28,8 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <vcl_complex.h>
 #include <vnl/vnl_vector.h>
-#include <vnl/vnl_complex.h>
 
 class vnl_real_polynomial;
 
@@ -49,10 +49,10 @@ public:
   // Operations----------------------------------------------------------------
 
 // -- Return i'th complex root
-  vnl_double_complex operator [] (int i) const { return vnl_double_complex(r_[i], i_[i]); }
+  vcl_complex<double> operator [] (int i) const { return vcl_complex<double>(r_[i], i_[i]); }
 
 // -- Complex vector of all roots.
-  vnl_vector<vnl_double_complex> roots() const;
+  vnl_vector<vcl_complex<double> > roots() const;
 
 // -- Real part of root I.
   const double& real(int i) const { return r_[i]; }

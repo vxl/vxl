@@ -1,8 +1,8 @@
 #include <vcl_cstdlib.h>
 #include <vcl_iostream.h>
+#include <vcl_complex.h>
 
 #include <vnl/vnl_test.h>
-#include <vnl/vnl_complex.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_matops.h>
@@ -160,8 +160,8 @@ void test_I()
 STATIC double double_random() { return rand()/double(RAND_MAX); }
 STATIC void fill_random(float &x)  { x = double_random(); }
 STATIC void fill_random(double &x) { x = double_random(); }
-STATIC void fill_random(vnl_float_complex &x)  { x = vnl_float_complex (double_random(), double_random()); }
-STATIC void fill_random(vnl_double_complex &x) { x = vnl_double_complex(double_random(), double_random()); }
+STATIC void fill_random(vcl_complex<float> &x)  { x = vcl_complex<float> (double_random(), double_random()); }
+STATIC void fill_random(vcl_complex<double> &x) { x = vcl_complex<double>(double_random(), double_random()); }
 
 template <class T>
 void test_svd_recomposition(char const *type, double maxres, T */*tag*/)
@@ -187,8 +187,8 @@ void test_svd_recomposition(char const *type, double maxres, T */*tag*/)
 
 template void test_svd_recomposition(char const *, double, float *);
 template void test_svd_recomposition(char const *, double, double *);
-template void test_svd_recomposition(char const *, double, vnl_float_complex *);
-template void test_svd_recomposition(char const *, double, vnl_double_complex *);
+template void test_svd_recomposition(char const *, double, vcl_complex<float> *);
+template void test_svd_recomposition(char const *, double, vcl_complex<double> *);
 
 // Driver
 void test_svd()
@@ -199,8 +199,8 @@ void test_svd()
   test_I();
   test_svd_recomposition("float",              1e-5 , (float*)0);
   test_svd_recomposition("double",             1e-10, (double*)0);
-  test_svd_recomposition("vnl_float_complex",  1e-5 , (vnl_float_complex*)0);
-  test_svd_recomposition("vnl_double_complex", 1e-10, (vnl_double_complex*)0);
+  test_svd_recomposition("vcl_complex<float>",  1e-5 , (vcl_complex<float>*)0);
+  test_svd_recomposition("vcl_complex<double>", 1e-10, (vcl_complex<double>*)0);
 }
 
 TESTMAIN(test_svd);

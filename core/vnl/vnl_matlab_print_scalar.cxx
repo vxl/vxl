@@ -5,8 +5,7 @@
 #include <vcl_cstring.h> // strlen()
 #include <vcl_cctype.h>
 #include <vcl_cassert.h>
-
-#include <vnl/vnl_complex.h>
+#include <vcl_complex.h>
 
 // moved here because 2.7 choked
 
@@ -79,7 +78,7 @@ void vnl_matlab_print_scalar(double const &v,
 }
 
 VCL_DEFINE_SPECIALIZATION
-void vnl_matlab_print_scalar(vnl_double_complex const &v, 
+void vnl_matlab_print_scalar(vcl_complex<double> const &v, 
 			     char *buf,
 			     vnl_matlab_print_format format VCL_DEFAULT_VALUE(vnl_matlab_print_format_default))
 {
@@ -147,7 +146,7 @@ void vnl_matlab_print_scalar(vnl_double_complex const &v,
 }
 
 VCL_DEFINE_SPECIALIZATION
-void vnl_matlab_print_scalar(vnl_float_complex const &v, 
+void vnl_matlab_print_scalar(vcl_complex<float> const &v, 
 			     char *buf,
 			     vnl_matlab_print_format format VCL_DEFAULT_VALUE(vnl_matlab_print_format_default))
 {

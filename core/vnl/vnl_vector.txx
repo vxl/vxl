@@ -4,7 +4,7 @@
 // The parameterized vnl_vector<T> class implements 1D arithmetic vectors of a
 // user specified type. The only constraint placed on the type is that
 // it must overload the following operators: +, -, *, and /. Thus, it will
-// be possible to have a vnl_vector over vnl_complex<T>.  The vnl_vector<T>
+// be possible to have a vnl_vector over vcl_complex<T>.  The vnl_vector<T>
 // class is static in size, that is once a vnl_vector<T> of a particular
 // size has been declared, elements cannot be added or removed. Using the
 // resize() method causes the vector to resize, but the contents will be
@@ -35,6 +35,7 @@
 #include <vcl_algorithm.h>
 
 #include <vnl/vnl_math.h>
+#include <vnl/vnl_complex.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_c_vector.h>
 #include <vnl/vnl_numeric_traits.h>
@@ -674,7 +675,7 @@ T cos_angle(vnl_vector<T> const& a, vnl_vector<T> const& b) {
   T a_b = sqrt( a.squared_magnitude() * b.squared_magnitude() );
   return T(ab)/T(a_b);
 #else
-  double/*abs_t*/ a_b = sqrt( double(a.squared_magnitude() * b.squared_magnitude()) );
+  double/*abs_t*/ a_b = vcl_sqrt( double(a.squared_magnitude() * b.squared_magnitude()) );
   return T( ab * abs_t(1.0 / a_b) );
 #endif
 }
@@ -684,7 +685,7 @@ T cos_angle(vnl_vector<T> const& a, vnl_vector<T> const& b) {
 template<class T> 
 double angle (vnl_vector<T> const& a, vnl_vector<T> const& b) {
   double cosine = vnl_math_abs( cos_angle(a, b) );
-  return acos(cosine);
+  return vcl_acos(cosine);
 }
 
 //

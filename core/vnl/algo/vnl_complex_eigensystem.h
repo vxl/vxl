@@ -29,7 +29,7 @@
 // .SECTION Author
 //  fsm@robots.ox.ac.uk
 //
-#include <vnl/vnl_complex.h>
+#include <vcl_complex.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 
@@ -40,24 +40,24 @@ public:
   vnl_complex_eigensystem(const vnl_matrix<double> &A_real,const vnl_matrix<double> &A_imag,
 		     bool right=true,bool left=false);
 
-  vnl_complex_eigensystem(const vnl_matrix<vnl_double_complex> &A,
+  vnl_complex_eigensystem(const vnl_matrix<vcl_complex<double> > &A,
 		     bool right=true,bool left=false);
 
   ~vnl_complex_eigensystem();
 
   // please do not add underscores to my members.
   int const N;
-  vnl_matrix<vnl_double_complex> L; // left evecs
-  vnl_matrix<vnl_double_complex> R; // right evecs
-  vnl_vector<vnl_double_complex> W; // evals
+  vnl_matrix<vcl_complex<double> > L; // left evecs
+  vnl_matrix<vcl_complex<double> > R; // right evecs
+  vnl_vector<vcl_complex<double> > W; // evals
 
   // convenience methods
-  vnl_double_complex eigen_value(unsigned i) const { return W[i]; }
-  vnl_vector<vnl_double_complex> left_eigen_vector(unsigned i) const { return L.get_row(i); }
-  vnl_vector<vnl_double_complex> right_eigen_vector(unsigned i) const { return R.get_row(i); }
+  vcl_complex<double> eigen_value(unsigned i) const { return W[i]; }
+  vnl_vector<vcl_complex<double> > left_eigen_vector(unsigned i) const { return L.get_row(i); }
+  vnl_vector<vcl_complex<double> > right_eigen_vector(unsigned i) const { return R.get_row(i); }
 
 private:
-  void compute(const vnl_matrix<vnl_double_complex> &,bool,bool);
+  void compute(const vnl_matrix<vcl_complex<double> > &,bool,bool);
 };
 
 #endif // vnl_complex_eigensystem_h_

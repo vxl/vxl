@@ -10,11 +10,11 @@
 #include "vnl_matlab_print.h"
 
 #include <vcl_iostream.h>
+#include <vcl_complex.h>
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_diag_matrix.h>
-#include <vnl/vnl_complex.h>
 
 //--------------------------------------------------------------------------------
 
@@ -139,6 +139,6 @@ template vcl_ostream &vnl_matlab_print(vcl_ostream &, vnl_vector<T > const &, ch
 inst(int);
 inst(float);
 inst(double);
-inst(vnl_float_complex);
-inst(vnl_double_complex);
+inst(vcl_complex<float>);
+inst(vcl_complex<double>);
 #undef inst

@@ -3,7 +3,6 @@
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 
-#include <vnl/vnl_complex.h>
 #include <vnl/vnl_test.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>

@@ -20,12 +20,7 @@
 
 #include <vcl_cmath.h>
 #include <vcl_complex.h>
-#include "vnl_math.h"
-
-// fsm: these three lines will disappear in the future.
-#define vnl_complex vcl_complex
-typedef vcl_complex<float>  vnl_float_complex;
-typedef vcl_complex<double> vnl_double_complex;
+#include <vnl/vnl_math.h>
 
 // isnan
 bool vnl_math_isnan(const vcl_complex<float>&);
@@ -40,15 +35,15 @@ bool vnl_math_isfinite(const vcl_complex<float>&);
 bool vnl_math_isfinite(const vcl_complex<double>&);
 
 // abs
-inline float    vnl_math_abs(vnl_complex<float> const& x) { return vcl_abs(x); }
-inline double   vnl_math_abs(vnl_complex<double> const& x) { return vcl_abs(x); }
+inline float    vnl_math_abs(vcl_complex<float> const& x) { return vcl_abs(x); }
+inline double   vnl_math_abs(vcl_complex<double> const& x) { return vcl_abs(x); }
 
 // sqr (square)
-inline vnl_complex<float>  vnl_math_sqr(vnl_complex<float> const& x) { return x*x; }
-inline vnl_complex<double> vnl_math_sqr(vnl_complex<double> const& x) { return x*x; }
+inline vcl_complex<float>  vnl_math_sqr(vcl_complex<float> const& x) { return x*x; }
+inline vcl_complex<double> vnl_math_sqr(vcl_complex<double> const& x) { return x*x; }
 
 // squared_magnitude
-inline float    vnl_math_squared_magnitude(vnl_complex<float> const& x) { return vcl_norm(x); }
-inline double   vnl_math_squared_magnitude(vnl_complex<double> const& x) { return vcl_norm(x); }
+inline float    vnl_math_squared_magnitude(vcl_complex<float> const& x) { return vcl_norm(x); }
+inline double   vnl_math_squared_magnitude(vcl_complex<double> const& x) { return vcl_norm(x); }
 
 #endif // vnl_complex_h_

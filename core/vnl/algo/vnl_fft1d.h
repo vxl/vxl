@@ -37,17 +37,17 @@
 // .SECTION Modifications:
 //-----------------------------------------------------------------------------
 
-#include <vnl/vnl_complex.h>
+#include <vcl_complex.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_fftxd_prime_factors.h>
 
 template<class T>
-class vnl_fft1d : public vnl_vector<vnl_complex<T> > {
-  typedef vnl_vector<vnl_complex<T> > base;
+class vnl_fft1d : public vnl_vector<vcl_complex<T> > {
+  typedef vnl_vector<vcl_complex<T> > base;
 public:
   // real-constructors
   vnl_fft1d (const vnl_vector<T> &r); // only real data, always forward
-  vnl_fft1d (const vnl_vector<vnl_complex<T> > &z, int dir); // forw & backw
+  vnl_fft1d (const vnl_vector<vcl_complex<T> > &z, int dir); // forw & backw
   
   // (real,imag)-constructors
   vnl_fft1d (const vnl_vector<T> &r, const vnl_vector<T> &i,
@@ -66,7 +66,7 @@ public:
   vnl_fft1d (const vcl_complex<T> *cdata, unsigned len, const vnl_fftxd_prime_factors<T> &, int dir);  // 'raw' complex data
 
   // static member function: avoid copy-overhead
-  static int doFFT_IP (vnl_complex<T> *cdata, unsigned len, 
+  static int doFFT_IP (vcl_complex<T> *cdata, unsigned len, 
 		       const vnl_fftxd_prime_factors<T> &, int dir);  
 private:
   int doFFT (const vnl_fftxd_prime_factors<T> &, int dir);
