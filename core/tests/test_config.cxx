@@ -111,6 +111,14 @@ MAIN( test_config )
 #endif
   vcl_cout << vcl_endl;
 
+  vcl_cout << "VCL_STATIC_CONST_INIT_INT_NO_DEFN ";
+#ifdef VCL_STATIC_CONST_INIT_INT_NO_DEFN
+  vcl_cout << "is set to " << quote(VCL_STATIC_CONST_INIT_INT_NO_DEFN);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
   vcl_cout << "VCL_CAN_STATIC_CONST_INIT_FLOAT ";
 #ifdef VCL_CAN_STATIC_CONST_INIT_FLOAT
   vcl_cout << "is set to " << quote(VCL_CAN_STATIC_CONST_INIT_FLOAT);
@@ -135,6 +143,14 @@ MAIN( test_config )
 #endif
   vcl_cout << vcl_endl;
 
+  vcl_cout << "VCL_STATIC_CONST_INIT_FLOAT_NO_DEFN ";
+#ifdef VCL_STATIC_CONST_INIT_FLOAT_NO_DEFN
+  vcl_cout << "is set to " << quote(VCL_STATIC_CONST_INIT_FLOAT_NO_DEFN);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
   vcl_cout << "VCL_HAS_MEMBER_TEMPLATES ";
 #ifdef VCL_HAS_MEMBER_TEMPLATES
   vcl_cout << "is set to " << quote(VCL_HAS_MEMBER_TEMPLATES);
@@ -154,6 +170,14 @@ MAIN( test_config )
   vcl_cout << "VCL_DEFINE_SPECIALIZATION ";
 #ifdef VCL_DEFINE_SPECIALIZATION
   vcl_cout << "is set to " << quote(VCL_DEFINE_SPECIALIZATION);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "VCL_CANNOT_SPECIALIZE_CV ";
+#ifdef VCL_CANNOT_SPECIALIZE_CV
+  vcl_cout << "is set to " << quote(VCL_CANNOT_SPECIALIZE_CV);
 #else
   vcl_cout << "is not set";
 #endif
@@ -207,6 +231,14 @@ MAIN( test_config )
 #endif
   vcl_cout << vcl_endl;
 
+  vcl_cout << "VCL_CAN_DO_STATIC_TEMPLATE_MEMBER ";
+#ifdef VCL_CAN_DO_STATIC_TEMPLATE_MEMBER
+  vcl_cout << "is set to " << quote(VCL_CAN_DO_STATIC_TEMPLATE_MEMBER);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
   vcl_cout << "VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(symbol) ";
 #ifdef VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER
   vcl_cout << "is set to " << quote(VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(symbol));
@@ -218,14 +250,6 @@ MAIN( test_config )
   vcl_cout << "VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(symbol) ";
 #ifdef VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER
   vcl_cout << "is set to " << quote(VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(symbol));
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_CAN_DO_STATIC_TEMPLATE_MEMBER ";
-#ifdef VCL_CAN_DO_STATIC_TEMPLATE_MEMBER
-  vcl_cout << "is set to " << quote(VCL_CAN_DO_STATIC_TEMPLATE_MEMBER);
 #else
   vcl_cout << "is not set";
 #endif
@@ -290,22 +314,6 @@ MAIN( test_config )
   vcl_cout << "VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER ";
 #ifdef VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER
   vcl_cout << "is set to " << quote(VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_DFL_TYPE_PARAM_STLDECL(A,a) ";
-#ifdef VCL_DFL_TYPE_PARAM_STLDECL
-  vcl_cout << "is set to " << quote(VCL_DFL_TYPE_PARAM_STLDECL(A,a));
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_DFL_TMPL_ARG(class) ";
-#ifdef VCL_DFL_TMPL_ARG
-  vcl_cout << "is set to " << quote(VCL_DFL_TMPL_ARG(class));
 #else
   vcl_cout << "is not set";
 #endif
@@ -1223,6 +1231,30 @@ MAIN( test_config )
 #endif
   vcl_cout << vcl_endl;
 
+  vcl_cout << "VCL_BORLAND ";
+#ifdef VCL_BORLAND
+  vcl_cout << "is set to " << quote(VCL_BORLAND);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "VCL_BORLAND_55 ";
+#ifdef VCL_BORLAND_55
+  vcl_cout << "is set to " << quote(VCL_BORLAND_55);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "VCL_BORLAND_56 ";
+#ifdef VCL_BORLAND_56
+  vcl_cout << "is set to " << quote(VCL_BORLAND_56);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
   vcl_cout << "VCL_WIN32 ";
 #ifdef VCL_WIN32
   vcl_cout << "is set to " << quote(VCL_WIN32);
@@ -1418,6 +1450,14 @@ MAIN( test_config )
   vcl_cout << "__INTEL_COMPILER ";
 #ifdef __INTEL_COMPILER
   vcl_cout << "is set to " << quote(__INTEL_COMPILER);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "__BORLANDC__ ";
+#ifdef __BORLANDC__
+  vcl_cout << "is set to " << quote(__BORLANDC__);
 #else
   vcl_cout << "is not set";
 #endif

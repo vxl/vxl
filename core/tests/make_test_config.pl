@@ -4,7 +4,7 @@ exec perl -w -x $0 ${1+"$@"}
 #!perl
 #line 6
 
-# wheeler@crd.ge.com
+# wheeler at crd.ge.com
 #
 # Prints test_config.cxx to stdout.
 #
@@ -64,21 +64,24 @@ for $var_exp (
   'VCL_CAN_STATIC_CONST_INIT_INT',
   'VCL_STATIC_CONST_INIT_INT_DECL(x)',
   'VCL_STATIC_CONST_INIT_INT_DEFN(x)',
+  'VCL_STATIC_CONST_INIT_INT_NO_DEFN',
   'VCL_CAN_STATIC_CONST_INIT_FLOAT',
   'VCL_STATIC_CONST_INIT_FLOAT_DECL(x)',
   'VCL_STATIC_CONST_INIT_FLOAT_DEFN(x)',
+  'VCL_STATIC_CONST_INIT_FLOAT_NO_DEFN',
   'VCL_HAS_MEMBER_TEMPLATES',
   'VCL_CAN_DO_PARTIAL_SPECIALIZATION',
   'VCL_DEFINE_SPECIALIZATION',
+  'VCL_CANNOT_SPECIALIZE_CV',
   'VCL_NULL_TMPL_ARGS',
   'VCL_ALLOWS_INLINE_INSTANTIATION',
   'VCL_NEEDS_INLINE_INSTANTIATION',
   'VCL_DO_NOT_INSTANTIATE(text,ret)',
   'VCL_UNINSTANTIATE_SPECIALIZATION(symbol)',
   'VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION(symbol)',
+  'VCL_CAN_DO_STATIC_TEMPLATE_MEMBER',
   'VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(symbol)',
   'VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(symbol)',
-  'VCL_CAN_DO_STATIC_TEMPLATE_MEMBER',
   'VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER',
   'VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD',
   'VCL_OVERLOAD_CAST(T,x)',
@@ -87,8 +90,6 @@ for $var_exp (
   'VCL_DEFAULT_TMPL_ARG(arg)',
   'VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER',
   'VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER',
-  'VCL_DFL_TYPE_PARAM_STLDECL(A,a)',
-  'VCL_DFL_TMPL_ARG(class)',
   'VCL_SUNPRO_CLASS_SCOPE_HACK(A)',
   'VCL_HAS_EXCEPTIONS',
   'VCL_HAS_NAMESPACES',
@@ -211,6 +212,9 @@ for $var_exp (
   'VCL_GCC_30',
   'VCL_GCC_31',
   'VCL_GCC_32',
+  'VCL_BORLAND',
+  'VCL_BORLAND_55',
+  'VCL_BORLAND_56',
   'VCL_WIN32',
   'VCL_VC',
   'VCL_VC_DOTNET',
@@ -242,6 +246,7 @@ for $var_exp (
   '__VERSION__',        # gcc, icc
   '__OPTIMIZE__',       # gcc, icc
   '__INTEL_COMPILER',   # icc
+  '__BORLANDC__',       # bcc
   '__SUNPRO_CC',        # sun
   '_MSC_VER',           # msvc++
   '_COMPILER_VERSION',  # sgi
@@ -260,8 +265,8 @@ for $var_exp (
   'macintosh',          #
 
   # other
-  '__DATE__',           # gcc
-  '__TIME__',           # gcc
+  '__DATE__',           # gcc (set at compile time)
+  '__TIME__',           # gcc (set at compile time)
 
   ) {
 $var_name = $var_exp;
