@@ -124,17 +124,17 @@ rrel_ran_sam_search::estimate( const rrel_estimation_problem * problem,
         this->trace_residuals( residuals );
 
       double new_obj = 0.0;
-      switch( problem->scale_type() ) {
-      case rrel_estimation_problem::NONE:
+      switch ( problem->scale_type() ) {
+       case rrel_estimation_problem::NONE:
         new_obj = obj_fcn->fcn( residuals.begin(), residuals.end(), scale_, &new_params );
         break;
-      case rrel_estimation_problem::SINGLE:
+       case rrel_estimation_problem::SINGLE:
         new_obj = obj_fcn->fcn( residuals.begin(), residuals.end(), problem->prior_scale(), &new_params );
         break;
-      case rrel_estimation_problem::MULTIPLE:
+       case rrel_estimation_problem::MULTIPLE:
         new_obj = obj_fcn->fcn( residuals.begin(), residuals.end(), problem->prior_multiple_scales().begin(), &new_params );
         break;
-      default:
+       default:
         vcl_cerr << __FILE__ << ": unknown scale type\n";
         vcl_abort();
       }
@@ -147,6 +147,8 @@ rrel_ran_sam_search::estimate( const rrel_estimation_problem * problem,
         min_obj = new_obj;
         params_ = new_params;
       }
+      indices_ = point_indices;
+      residuals_ = residuals;
     }
     else if (trace_level_ >= 1)
       vcl_cout << "No fit to sample.\n";
@@ -279,10 +281,10 @@ rrel_ran_sam_search::next_sample( unsigned int taken,
 void
 rrel_ran_sam_search::print_params() const
 {
-  vcl_cout << "  max_outlier_frac_ = " << max_outlier_frac_ << "\n"
-           << "  desired_prob_good_ = " << desired_prob_good_ <<  "\n"
-           << "  max_populations_expected_ = " << max_populations_expected_ << "\n"
-           << "  min_samples_ = " << min_samples_ << "\n"
+  vcl_cout << "  max_outlier_frac_ = " << max_outlier_frac_ << '\n'
+           << "  desired_prob_good_ = " << desired_prob_good_ <<  '\n'
+           << "  max_populations_expected_ = " << max_populations_expected_ << '\n'
+           << "  min_samples_ = " << min_samples_ << '\n'
            << "  generate_all_ = " << generate_all_ << vcl_endl;
 }
 
@@ -293,7 +295,7 @@ rrel_ran_sam_search::trace_sample( const vcl_vector<int>& indices ) const
 {
   vcl_cout << "\nNew sample: ";
   for ( unsigned int i=0; i<indices.size(); ++i)
-    vcl_cout << " " << indices[i];
+    vcl_cout << ' ' << indices[i];
   vcl_cout << vcl_endl;
 }
 
@@ -303,6 +305,6 @@ rrel_ran_sam_search::trace_residuals( const vcl_vector<double>& residuals ) cons
 {
   vcl_cout << "\nResiduals:\n";
   for ( unsigned int i=0; i<residuals.size(); ++i )
-    vcl_cout << "  " << i << ":  " << residuals[i] << "\n";
+    vcl_cout << "  " << i << ":  " << residuals[i] << '\n';
   vcl_cout << vcl_endl;
 }

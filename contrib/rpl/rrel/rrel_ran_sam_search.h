@@ -79,6 +79,15 @@ class rrel_ran_sam_search
   //:  Get the parameter estimate.
   const vnl_vector<double>& params() const { return params_; }
 
+  //:  Get the indices of best data sample
+  const vcl_vector<int>& index() const { return indices_; }
+
+  //:  Get the residuals for best sample
+  const vcl_vector<double>& residuals() const { return residuals_; }
+
+  //:  Get the cost for best sample returned by rrel_objective function
+  double cost() const { return min_obj_; }
+
   //:  Get the number of samples tested in during estimation.
   int samples_tested() const { return samples_to_take_; }
 
@@ -126,7 +135,10 @@ class rrel_ran_sam_search
   //
   vnl_vector<double> params_;
   double scale_;
+  vcl_vector<int> indices_;
+  vcl_vector<double> residuals_;
 
+  double min_obj_;
   //
   //  Sampling variables
   //
