@@ -2,4 +2,4 @@
 #include <vsol/vsol_box_2d.h>
 #include <vtol/algo/vtol_extract_topology.h>
 
-template vbl_smart_ptr< vtol_extract_topology_region_type >;
+template class vbl_smart_ptr< vtol_extract_topology_region_type >;
