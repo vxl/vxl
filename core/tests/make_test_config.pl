@@ -10,6 +10,7 @@ exec perl -w -x $0 ${1+"$@"}
 #
 # Usage:
 #   cd $VXLSRC/core/tests
+#   rm test_config.cxx
 #   ./make_test_config.pl > test_config.cxx
 
 use strict;
@@ -189,6 +190,7 @@ for $var_exp (
   'VXL_IEEEFP_HAS_FINITE',
   'VXL_MATH_HAS_FINITE',
   'VXL_MATH_HAS_SQRTF',
+  'VXL_C_MATH_HAS_SQRTF',
   'VXL_UNISTD_USLEEP_IS_VOID',
   'VXL_TWO_ARG_GETTIME',
   'VXL_HAS_IEEEFP_H',
