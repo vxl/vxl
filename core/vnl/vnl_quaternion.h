@@ -108,8 +108,10 @@ public:
   T angle () const;
 
  //: 3x3 rotation matrix
-  vnl_matrix_fixed<T,3,3> rotation_matrix () const;
-  vnl_matrix_fixed<T,3,3> rotation_matrix_transpose () const { return rotation_matrix().transpose(); }
+#ifndef VXL_DOXYGEN_SHOULD_SKIP_THIS
+  vnl_matrix_fixed<T,3,3> rotation_matrix () const; // mis-named method. do not use.
+#endif
+  vnl_matrix_fixed<T,3,3> rotation_matrix_transpose () const { return rotation_matrix(); }
 
  //: 4x4 rotation matrix
   vnl_matrix_fixed<T,4,4> rotation_matrix_4 () const;
