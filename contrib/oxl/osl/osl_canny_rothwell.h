@@ -43,12 +43,12 @@ public:
   osl_canny_rothwell(osl_canny_rothwell_params const &);
   ~osl_canny_rothwell();
 
-  void detect_edges(vil_image const &image, vcl_list<osl_Edge*>*, bool adaptive = false);
+  void detect_edges(vil_image const &image, vcl_list<osl_edge*>*, bool adaptive = false);
 
 protected:
   void Non_maximal_supression();
   void Initial_hysteresis();
-  void Final_hysteresis(vcl_list<osl_Edge*>*);
+  void Final_hysteresis(vcl_list<osl_edge*>*);
   void Jump_gap(int,int,int,int,int*,int*);
   void Thin_edges();
   void Jump_single_breaks();

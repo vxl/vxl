@@ -68,7 +68,7 @@ osl_canny_ox::~osl_canny_ox() {
 
 //-----------------------------------------------------------------------------
 
-void osl_canny_ox::detect_edges(vil_image const &image_in, vcl_list<osl_Edge*> *edges) {
+void osl_canny_ox::detect_edges(vil_image const &image_in, vcl_list<osl_edge*> *edges) {
   assert(edges);
 
   // Get the image size
@@ -143,10 +143,10 @@ void osl_canny_ox::detect_edges(vil_image const &image_in, vcl_list<osl_Edge*> *
   int *_y = new int[n_edgels_NMS];
 
 
-  // Copy edgels from _thick image into an osl_EdgelChain class.
-  // osl_Edgels after NMS are not connected, but still are stored in osl_EdgelChain.
+  // Copy edgels from _thick image into an osl_edgel_chain class.
+  // edgels after NMS are not connected, but still are stored in osl_edgel_chain.
   // edgels_NMS is the input to Hysteresis
-  osl_EdgelChain *edgels_NMS = Get_NMS_edgelsOX(n_edgels_NMS, _x, _y);
+  osl_edgel_chain *edgels_NMS = Get_NMS_edgelsOX(n_edgels_NMS, _x, _y);
 
 
   if (verbose) vcl_cerr << "doing hysteresis\n";
@@ -154,7 +154,7 @@ void osl_canny_ox::detect_edges(vil_image const &image_in, vcl_list<osl_Edge*> *
   int n_edgels_Hysteresis = HysteresisOX(edgels_NMS, status);
   if (verbose) vcl_cerr << "Number of edgels after Hysteresis = " << n_edgels_Hysteresis << vcl_endl;
 
-  osl_EdgelChain *edgels_Hysteresis = new osl_EdgelChain(n_edgels_Hysteresis);
+  osl_edgel_chain *edgels_Hysteresis = new osl_edgel_chain(n_edgels_Hysteresis);
   Get_hysteresis_edgelsOX(edgels_NMS,status,edgels_Hysteresis, _x, _y);
 
   // delete the edgels that are output of Non_maximal_supression
@@ -201,14 +201,14 @@ void osl_canny_ox::detect_edges(vil_image const &image_in, vcl_list<osl_Edge*> *
 //-----------------------------------------------------------------------------
 //
 //: Copy edgels from _thick image. These edgels are the result of NMS.
-// Although the edgels are stored in osl_EdgelChain edgels_NMS, they are
+// Although the edgels are stored in osl_edgel_chain edgels_NMS, they are
 // not actually connected.
 // Also initialises _x and _y: the pixel locations of the edgels. These
 // are needed later in filling the image _thin with the edgels after
 // hysteresis.
-osl_EdgelChain *osl_canny_ox::Get_NMS_edgelsOX(int n_edgels_NMS, int *_x, int *_y) {
+osl_edgel_chain *osl_canny_ox::Get_NMS_edgelsOX(int n_edgels_NMS, int *_x, int *_y) {
   // the number of edges must be given in advance!
-  osl_EdgelChain *edgels_NMS = new osl_EdgelChain(n_edgels_NMS);
+  osl_edgel_chain *edgels_NMS = new osl_edgel_chain(n_edgels_NMS);
 
   int i = 0;
 
@@ -235,7 +235,7 @@ osl_EdgelChain *osl_canny_ox::Get_NMS_edgelsOX(int n_edgels_NMS, int *_x, int *_
 //: Hysteresis follows edgels that lie above the low threshold and have at
 // least one edgel above the high threshold.
 //
-int osl_canny_ox::HysteresisOX(osl_EdgelChain *&edgels_NMS,
+int osl_canny_ox::HysteresisOX(osl_edgel_chain *&edgels_NMS,
                                int *&status)
 {
   int n_edgels_NMS = edgels_NMS->size();
@@ -298,7 +298,7 @@ int osl_canny_ox::HysteresisOX(osl_EdgelChain *&edgels_NMS,
 //: Initial follow. Used for the hysteresis part of canny.
 void osl_canny_ox::Initial_followOX(int to,
                                     int from,
-                                    osl_EdgelChain *&edgels_NMS,
+                                    osl_edgel_chain *&edgels_NMS,
                                     osl_LINK *links[],
                                     int *&status,
                                     float low)
@@ -463,7 +463,7 @@ void osl_canny_ox::Link_edgelsOX(vcl_vector<unsigned> const &col,
 //
 //: Returns the number of edgels after hysteresis.
 //
-int osl_canny_ox::Get_n_edgels_hysteresisOX(osl_EdgelChain *&edgels_NMS,
+int osl_canny_ox::Get_n_edgels_hysteresisOX(osl_edgel_chain *&edgels_NMS,
                                             int *&status)
 {
   int n_edgels_Hysteresis = 0;
@@ -480,9 +480,9 @@ int osl_canny_ox::Get_n_edgels_hysteresisOX(osl_EdgelChain *&edgels_NMS,
 // Also fill the image _thin with the edgels after hysteresis for
 // further processing by the FollowerOX() part.
 //
-void osl_canny_ox::Get_hysteresis_edgelsOX(osl_EdgelChain *& edgels_NMS,
+void osl_canny_ox::Get_hysteresis_edgelsOX(osl_edgel_chain *& edgels_NMS,
                                            int *&status,
-                                           osl_EdgelChain *& edgels_Hysteresis,
+                                           osl_edgel_chain *& edgels_Hysteresis,
                                            int *_x, int *_y)
 {
   // Initialise _thin to zero's
@@ -507,17 +507,17 @@ void osl_canny_ox::Get_hysteresis_edgelsOX(osl_EdgelChain *& edgels_NMS,
 //----------------------------------------------------------------------------
 //
 //: NO_FollowerOX : In the case of _follow_strategy_OX = 0, this function
-// returns an osl_Edge * filled from osl_EdgelChain *edgels_Hysteresis.
-// i.e., the result of the Hysteresis part of Canny is returned in the osl_Edge *.
+// returns an osl_edge * filled from osl_edgel_chain *edgels_Hysteresis.
+// i.e., the result of the Hysteresis part of Canny is returned in the osl_edge *.
 // The Follow part (FollowerOX) is not executed.
-osl_Edge *osl_canny_ox::NO_FollowerOX(osl_EdgelChain *edgels_Hysteresis)
+osl_edge *osl_canny_ox::NO_FollowerOX(osl_edgel_chain *edgels_Hysteresis)
 {
   int n_edgels_Hysteresis = edgels_Hysteresis->size();
 
   // Define a digital curve to store the edgels data
   //  dc only stores the list of edgels after the Hysteresis stage of canny.
-  //  dc is used later in this function to define an osl_Edge *edge
-  osl_Edge *dc = new osl_Edge(n_edgels_Hysteresis,
+  //  dc is used later in this function to define an osl_edge *edge
+  osl_edge *dc = new osl_edge(n_edgels_Hysteresis,
                               new osl_Vertex(edgels_Hysteresis->GetX(0)+_xstart,
                                              edgels_Hysteresis->GetY(0)+_ystart),
                               new osl_Vertex(edgels_Hysteresis->GetX(n_edgels_Hysteresis-1)+_xstart,
@@ -533,7 +533,7 @@ osl_Edge *osl_canny_ox::NO_FollowerOX(osl_EdgelChain *edgels_Hysteresis)
     *(pt++) = edgels_Hysteresis->GetTheta(i);
   }
 
-  return dc; //new osl_Edge(dc);
+  return dc; //new osl_edge(dc);
 }
 
 
@@ -561,7 +561,7 @@ osl_Vertex *osl_find(vcl_list<osl_Vertex*> const *l, float x, float y) {
 //: Go through every point in the image and for every one which is above a
 // threshold:   follow from the point, in one direction and then the other.
 //
-void osl_canny_ox::FollowerOX(vcl_list<osl_Edge*> *edges) {
+void osl_canny_ox::FollowerOX(vcl_list<osl_edge*> *edges) {
   if (_junction_option_OX)
     _chain_no = 10;    // Must be set to a number >= 1
 
@@ -600,14 +600,14 @@ void osl_canny_ox::FollowerOX(vcl_list<osl_Edge*> *edges) {
         // cerr << "short list found in Final_followOX\n";
         continue;
 
-      // Create an osl_EdgeChain and add to the list
-      osl_EdgelChain * dc = new osl_EdgelChain(count);
+      // Create an osl_edgel_chain and add to the list
+      osl_edgel_chain * dc = new osl_edgel_chain(count);
       float *px = dc->GetX();
       float *py = dc->GetY();
       float *pg = dc->GetGrad();
       float *pt = dc->GetTheta();
 
-      // Write the points to the osl_EdgelChain and the end points to the Curve
+      // Write the points to the osl_edgel_chain and the end points to the Curve
       //dc->SetStart(xcoords.front()+_xstart, ycoords.front()+_ystart);
       int tmpx=0,tmpy=0;// dummy initialization, as count is always > 0.
       while (count--) {
@@ -656,7 +656,7 @@ void osl_canny_ox::FollowerOX(vcl_list<osl_Edge*> *edges) {
             float dx = dc->GetX(0) - dc->GetX(dc->size()-1);
             float dy = dc->GetY(0) - dc->GetY(dc->size()-1);
             if (dc->size() < 1 || dx*dx+dy*dy < 4) {// ie. dist < 2 pixels it is closed
-              //edge = new osl_Edge(v1,v1);
+              //edge = new osl_edge(v1,v1);
               delete v2; // osl_IUDelete(v2);
               v2 = v1;
               single_chain = true;
@@ -666,7 +666,7 @@ void osl_canny_ox::FollowerOX(vcl_list<osl_Edge*> *edges) {
           if (!single_chain) {
             if (V1) { delete v1; v1 = V1; }//was: { osl_IUDelete(v1); v1 = V1; }
             if (V2) { delete v2; v2 = V2; }//was: { osl_IUDelete(v2); v2 = V2; }
-            //edge = new osl_Edge(v1,v2);
+            //edge = new osl_edge(v1,v2);
           }
         }
         else {
@@ -675,12 +675,12 @@ void osl_canny_ox::FollowerOX(vcl_list<osl_Edge*> *edges) {
           float dx = dc->GetX(0) - dc->GetX(dc->size()-1);
           float dy = dc->GetY(0) - dc->GetY(dc->size()-1);
           if ((dx*dx+dy*dy) < 4.0) {// ie. dist < 2 pixels it is closed
-            //edge = new osl_Edge(v1,v1);
+            //edge = new osl_edge(v1,v1);
             delete v2; // osl_IUDelete(v2);
             v2 = v1;
           }
           //else
-          //  edge = new osl_Edge(v1,v2);
+          //  edge = new osl_edge(v1,v2);
         }
 
         // Note that the edge can start and end in the same osl_Vertex.
@@ -689,7 +689,7 @@ void osl_canny_ox::FollowerOX(vcl_list<osl_Edge*> *edges) {
         //dc->SetEnd(dc->GetX(dc->size()-1),dc->GetY(dc->size()-1));
 
         //cerr << __FILE__ ": push" << endl;
-        edges->push_front(new osl_Edge(*dc, v1, v2));
+        edges->push_front(new osl_edge(*dc, v1, v2));
         delete dc;
       }
     }
@@ -795,7 +795,7 @@ void osl_canny_ox::Final_followOX(int x,
 
   // Else see if there is a junction nearby, and record it. The _chain_no
   // variable is used to prevent the same junction being inserted at both
-  // ends of the osl_EdgelChains when reversel occurs next to the junction
+  // ends of the edgel chains when reversel occurs next to the junction
   // (in that case there will only be two stored points: the edge and the junction)
   if (false) { }
 #define smoo(a, b) \

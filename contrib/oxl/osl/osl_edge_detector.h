@@ -42,7 +42,7 @@
 //             histogram is constructed in Set_thresholds
 //
 //          JLM May 1995 Added a new Do_edge_detector signature
-//             to output an osl_EdgelGroup which bundles edgel chains and
+//             to output an edgel group which bundles edgel chains and
 //             gradient statistics together.
 //
 //          JLM May 1997 Modified the formation of the gradient histogram
@@ -54,21 +54,21 @@
 //          JLM June 1997 Found a bug in the above change which failed if
 //                       _ghist is NULL.
 //          JLM Dec 1997 Moved _sigma, _low, _gauss_tail and _verbose
-//                       up to osl_EdgeDetectorParams and added new syle
+//                       up to osl_edge_detector_params and added new syle
 //                       constructors and execution
 //-----------------------------------------------------------------------------
 
 #include <osl/osl_canny_port.h>
 #include <osl/osl_edge_detector_params.h>
 
-class osl_edge_detector : public osl_edge_detector_params {
-public:
+struct osl_edge_detector : osl_edge_detector_params
+{
   osl_edge_detector(osl_edge_detector_params const &);
 
   ~osl_edge_detector();
 
   void detect_edges(vil_image const &image,
-                    vcl_list<osl_Edge*> *edges,
+                    vcl_list<osl_edge*> *edges,
                     bool maintain_topology = true);
 
 private:
@@ -77,7 +77,7 @@ private:
   void Set_thresholds();
   void Fill_holes();
   void Thin_edges();
-  void Follow_curves(vcl_list<osl_Edge*>*);
+  void Follow_curves(vcl_list<osl_edge*>*);
   void Follow(int,int,vcl_list<int>*,vcl_list<int>*,vcl_list<float>*,int);
 
   void Find_junctions();

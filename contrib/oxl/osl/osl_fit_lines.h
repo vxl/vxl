@@ -62,17 +62,17 @@ public:
 
   // NB. these have the undesirable behaviour of deleting the given edges.
   // beware of future changes. use at own risk. complain to fsm@robots.ox.ac.uk
-  void incremental_fit_to_list(vcl_list<osl_Edge *> *in,
-                               vcl_list<osl_Edge *> *out);
-  void simple_fit_to_list(vcl_list<osl_Edge *> *in,
-                          vcl_list<osl_Edge *> *out);
+  void incremental_fit_to_list(vcl_list<osl_edge *> *in,
+                               vcl_list<osl_edge *> *out);
+  void simple_fit_to_list(vcl_list<osl_edge *> *in,
+                          vcl_list<osl_edge *> *out);
 
 //private:
-  void SquareIncrementalFit(vcl_list<osl_EdgelChain*> *_curves, osl_Edge*);
-  void MeanIncrementalFit(vcl_list<osl_EdgelChain*> *_curves, osl_Edge*);
-  void OutputLine(vcl_list<osl_EdgelChain*> *_curves, int,int, osl_EdgelChain*,float);
-  void MergeLines(vcl_list<osl_EdgelChain*> *_curves);
-  static float MyGetCost(osl_OrthogRegress const *, int, int, osl_EdgelChain *);
+  void SquareIncrementalFit(vcl_list<osl_edgel_chain*> *_curves, osl_edge*);
+  void MeanIncrementalFit(vcl_list<osl_edgel_chain*> *_curves, osl_edge*);
+  void OutputLine(vcl_list<osl_edgel_chain*> *_curves, int,int, osl_edgel_chain*,float);
+  void MergeLines(vcl_list<osl_edgel_chain*> *_curves);
+  static float MyGetCost(osl_OrthogRegress const *, int, int, osl_edgel_chain *);
 
   osl_OrthogRegress *_data;
   int _old_finish;

@@ -66,7 +66,7 @@ osl_canny_rothwell::~osl_canny_rothwell() {
 
 //-----------------------------------------------------------------------------
 
-void osl_canny_rothwell::detect_edges(vil_image const &image, vcl_list<osl_Edge*> *edges, bool adaptive)
+void osl_canny_rothwell::detect_edges(vil_image const &image, vcl_list<osl_edge*> *edges, bool adaptive)
 {
   assert(edges);
 
@@ -307,9 +307,9 @@ void osl_canny_rothwell::Initial_hysteresis() {
 
   vcl_list<int> xcoords,ycoords;
   vcl_list<float> grad;
-  vcl_list<osl_EdgelChain*> edges;
+  vcl_list<osl_edgel_chain*> edges;
   float *thin,*px,*py,*pg;
-  osl_EdgelChain *edgels;
+  osl_edgel_chain *edgels;
 
   // Find a point above _high and start to follow it.
   // First time round we are just trying to get rid of the weak dangling chains
@@ -323,8 +323,8 @@ void osl_canny_rothwell::Initial_hysteresis() {
         Initial_follow(_thin, _xsize, _ysize, _low,
                        x,y,&xcoords,&ycoords,&grad);
 
-        // Create an osl_EdgeChain and add to the list
-        edgels = new osl_EdgelChain(xcoords.size());
+        // Create an edge chain and add to the list
+        edgels = new osl_edgel_chain(xcoords.size());
         px = edgels->GetX();
         py = edgels->GetY();
         pg = edgels->GetGrad();
@@ -363,7 +363,7 @@ extern osl_Vertex *osl_find(vcl_list<osl_Vertex*> const *l, float x, float y);
 // phase, all edges greater than _low will be by default good and so have a member
 // greater than _high.
 //
-void osl_canny_rothwell::Final_hysteresis(vcl_list<osl_Edge*> *edges) {
+void osl_canny_rothwell::Final_hysteresis(vcl_list<osl_edge*> *edges) {
   vcl_list<int> xcoords,ycoords;
   vcl_list<float> grad;
   float *thin,*px,*py,*pg,*pt,val;
@@ -416,12 +416,12 @@ void osl_canny_rothwell::Final_hysteresis(vcl_list<osl_Edge*> *edges) {
       if ( count < 2 )
         continue;
 
-      // Create a osl_EdgelChain
-      osl_EdgelChain *dc = new osl_EdgelChain(count);
+      // Create a osl_edgel_chain
+      osl_edgel_chain *dc = new osl_edgel_chain(count);
       px = dc->GetX();     py = dc->GetY();
       pg = dc->GetGrad();  pt = dc->GetTheta();
 
-      // Write the edgels and end points to the osl_EdgelChain
+      // Write the edgels and end points to the osl_edgel_chain
       //dc->SetStart(xcoords.front()+_xstart, ycoords.front()+_ystart);
       int tmpx=0, tmpy=0;// dummy initialization, as count is always > 0.
       while (count) {
@@ -505,7 +505,7 @@ void osl_canny_rothwell::Final_hysteresis(vcl_list<osl_Edge*> *edges) {
         //dc->SetStart(dc->GetX(0), dc->GetY(0));
         //dc->SetEnd(dc->GetX(dc->size()-1), dc->GetY(dc->size()-1));
 
-        edges->push_front(new osl_Edge(*dc, V1, V2));
+        edges->push_front(new osl_edge(*dc, V1, V2));
         delete dc;
       }
 
