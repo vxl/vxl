@@ -86,6 +86,7 @@ vil2_jpeg_image::vil2_jpeg_image(vil2_stream *s)
 
 bool vil2_jpeg_image::get_property(char const * /*tag*/, void * /*prop*/) const
 {
+  // This is not an in-memory image type, nor is it read-only:
   return false;
 }
 

@@ -61,8 +61,8 @@ vil2_image_resource_sptr vil2_png_file_format::make_output_image(vil2_stream* vs
   // FIXME || format != VIL2_PIXEL_FORMAT_BOOL
 
   {
-    vcl_cout<<"ERROR! vil2_png_file_format::make_output_image()\n";
-    vcl_cout<<"Pixel format should be byte, but is "<<format<<" instead.\n";
+    vcl_cout<<"ERROR! vil2_png_file_format::make_output_image()\n"
+            <<"Pixel format should be byte, but is "<<format<<" instead.\n";
     return 0;
   }
 
@@ -265,6 +265,7 @@ vil2_png_image::vil2_png_image(vil2_stream* is):
 
 bool vil2_png_image::get_property(char const* /*tag*/, void* /*prop*/) const
 {
+  // This is not an in-memory image type, nor is it read-only:
   return false;
 }
 

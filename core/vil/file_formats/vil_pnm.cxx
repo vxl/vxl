@@ -76,6 +76,7 @@ vil2_pnm_image::vil2_pnm_image(vil2_stream* vs):
 
 bool vil2_pnm_image::get_property(char const * /*tag*/, void * /*prop*/) const
 {
+  // This is not an in-memory image type, nor is it read-only:
   return false;
 }
 

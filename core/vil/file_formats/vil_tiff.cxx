@@ -1,4 +1,4 @@
-// This is contrib/mul/vil2/file_formats/vil2_tiff.cxx
+// This is core/vil2/file_formats/vil2_tiff.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -24,7 +24,6 @@
 
 #include <vil2/vil2_stream.h>
 #include <vil2/vil2_image_view.h>
-#include <vil2/vil2_property.h>
 
 #include <tiffio.h>
 
@@ -108,7 +107,7 @@ vil2_image_resource_sptr
   if (nplanes==1 && vil2_pixel_format_sizeof_components(format)>1)
   {
     vcl_cerr << "ERROR with vil2_tiff_file_format::make_output_image():\n"
-     << "Can't deal with greyscale images with pixel widths other than 8 bits"<< vcl_endl;
+             << "Can't deal with greyscale images with pixel widths other than 8 bits\n";
     return 0;
   }
   return new vil2_tiff_image(vs, nx, ny, nplanes, format);
@@ -126,8 +125,10 @@ struct vil2_tiff_structures {
     vs(vs_),
     filesize(0),
     buf(0)
-    { if (vs) vs->ref(); }
-  ~vil2_tiff_structures() {
+  { if (vs) vs->ref(); }
+
+ ~vil2_tiff_structures()
+  {
     delete [] buf;
     if (vs) vs->unref();
   }
@@ -192,13 +193,9 @@ static toff_t vil2_tiff_seekproc(thandle_t h, toff_t offset, int whence)
 {
   trace << "seek " << offset << " w = " << whence << vcl_endl;
   vil2_tiff_structures* p = (vil2_tiff_structures*)h;
-  if (whence == SEEK_SET) {
-    p->vs->seek(offset);
-  } else if (whence == SEEK_CUR) {
-    p->vs->seek(p->vs->tell() + offset);
-  } else if (whence == SEEK_END) {
-    p->vs->seek(p->filesize + offset);
-  }
+  if      (whence == SEEK_SET) { p->vs->seek(offset); }
+  else if (whence == SEEK_CUR) { p->vs->seek(p->vs->tell() + offset); }
+  else if (whence == SEEK_END) { p->vs->seek(p->filesize + offset); }
   vil2_streampos s = p->vs->tell();
   if (s > p->filesize)
     p->filesize = s;
@@ -242,8 +239,9 @@ vil2_tiff_image::vil2_tiff_image(vil2_stream* is):
   read_header();
 }
 
-bool vil2_tiff_image::get_property(char const *tag, void *prop) const
+bool vil2_tiff_image::get_property(char const * /*tag*/, void * /*prop*/) const
 {
+  // This is not an in-memory image type, nor is it read-only:
   return false;
 }
 
@@ -273,6 +271,7 @@ vil2_pixel_format vil2_tiff_image::pixel_format() const
   default: return VIL2_PIXEL_FORMAT_UNKNOWN;
   }
 }
+
 vil2_tiff_image::~vil2_tiff_image()
 {
   if (p->tif)
@@ -696,21 +695,21 @@ bool vil2_tiff_image::put_view(const vil2_image_view_base &im,
   if (im.pixel_format() != pixel_format())
   {
     vcl_cerr << "WARNING: vil2_tiff_image::put_view\n"
-      << "Failed because input is wrong pixel_type.\n";
-    vcl_cerr << "Input is " << im.pixel_format();
-    vcl_cerr << " tiff_image is " << pixel_format() << vcl_endl;
+             << "Failed because input is wrong pixel_type.\n"
+             << "Input is " << im.pixel_format()
+             << ", tiff_image is " << pixel_format() << vcl_endl;
     return false;
   }
   if (bits_per_component_ != vil2_pixel_format_sizeof_components(pixel_format())*8)
   {
     vcl_cerr << "WARNING: vil2_tiff_image::put_view\n"
-      << "Failed because TIFF image has incorrect component size." << vcl_endl;
+             << "Failed because TIFF image has incorrect component size.\n";
     return false;
   }
   if (im.nplanes() != components_)
   {
     vcl_cerr << "WARNING: vil2_tiff_image::put_view\n"
-      << "Failed because TIFF image has incorrect component size." << vcl_endl;
+             << "Failed because TIFF image has incorrect component size.\n";
     return false;
   }
 
@@ -767,10 +766,9 @@ bool vil2_tiff_image::put_view(const vil2_image_view_base &im,
       } else
       {
         vcl_cerr << "WARNING: vil2_tiff_image::put_view\n"
-          << "Can't deal with this pixel depth." << vcl_endl;
+                 << "Can't deal with this pixel depth.\n";
         return false;
       }
-
     }
     TIFFWriteEncodedStrip(p->tif, strip_id, p->buf, (long)(ymax - ymin + 1) * p->scanlinesize);
   }
