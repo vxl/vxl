@@ -2,7 +2,7 @@
 
 #include <vcl_iostream.h>
 
-const float vsol_spatial_object_2d::eps=1.0e-3;
+const float vsol_spatial_object_2d::eps=1.0e-3f;
 int vsol_spatial_object_2d::_tagcount=0;
 
 char *vsol_spatial_object_2d::SpatialTypes[]=
