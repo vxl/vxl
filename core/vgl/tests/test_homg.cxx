@@ -1,3 +1,4 @@
+//:
 // \file
 // \author Peter.Vanroose@esat.kuleuven.ac.be
 // \date  4 July, 2001
@@ -39,15 +40,17 @@ static void test_homg_point_1d()
   double r = ratio(p1,p2,p3);
   TEST("ratio", r, 2.25);
   vgl_homg_point_1d<float> m = midpoint(p1,p2,2.25f);
-  TEST("midpoint", m, p3);
+  TEST("generalised midpoint", m, p3);
+  m = vgl_homg_operators_1d<float>::midpoint(p1,p2);
+  TEST("ordinary midpoint", m, vgl_homg_point_1d<float>(3.f));
 
-  vgl_homg_point_1d<float> c = centre(p1,p2);
+  m = centre(p1,p2);
   vgl_homg_point_1d<float> cc(3); // constructor with one argument
-  TEST("centre", c, cc);
+  TEST("centre", m, cc);
   vcl_vector<vgl_homg_point_1d<float> > v1;
-  v1.push_back(p1); v1.push_back(p2); v1.push_back(c);
+  v1.push_back(p1); v1.push_back(p2); v1.push_back(m);
   cc = centre(v1); // assignment
-  TEST("centre", c, cc);
+  TEST("centre", m, cc);
 
   cc.set(1,0);
   r = cross_ratio(cc,p1,p2,p3); // must equal ratio(p1,p2,p3)
@@ -59,8 +62,11 @@ static void test_homg_point_1d()
   TEST("is_ideal", is_ideal(p2), false);
   p2.set(-6,0);
   TEST("ideal", p2.ideal(), true);
-  p2.set(4,1);
 
+  vgl_homg_operators_1d<float>::unitize(p2);
+  TEST("unitize()", p2.x(), -1.f);
+
+  p2.set(4,1);
   r = vgl_homg_operators_1d<float>::dot(p1,p2);
   vcl_cout << "p1 = " << p1 << ", p2 = " << p2 << '\n';
   vcl_cout << "dot(p1,p2) = " << r << '\n';
@@ -73,6 +79,10 @@ static void test_homg_point_1d()
   vgl_homg_point_1d<float> cj = vgl_homg_operators_1d<float>::conjugate(p1,p2,p3);
   vcl_cout << "conjugate(p1,p2,p3) = " << cj << '\n';
   TEST("conjugate", cj, vgl_homg_point_1d<float>(23.0f,7.0f));
+
+  float cf = vgl_homg_operators_1d<float>::conjugate(1,7,4, 2);
+  vcl_cout << "conjugate(1,7,4, 2) = " << cf << '\n';
+  TEST("conjugate", cf, 3.f);
 
   r = vgl_homg_operators_1d<float>::distance(p1,p2);
   vcl_cout << "distance(p1,p2) = " << r << '\n';
@@ -109,19 +119,19 @@ static void test_homg_point_2d()
   vgl_homg_point_2d<int> m = midpoint(p1,p2,4);
   TEST("midpoint", m, p3);
 
-  vgl_homg_point_2d<int> c = centre(p1,p3);
+  m = centre(p1,p3); // assignment
   vgl_homg_point_2d<int> cc(5,3,1);
-  TEST("centre", c, cc);
+  TEST("centre", m, cc);
   vcl_vector<vgl_homg_point_2d<int> > v1;
-  v1.push_back(p1); v1.push_back(p2); v1.push_back(c);
-  c = centre(v1); // assignment
-  TEST("centre", c, p2);
+  v1.push_back(p1); v1.push_back(p2); v1.push_back(m);
+  m = centre(v1);
+  TEST("centre", m, p2);
   vcl_vector<vgl_homg_point_2d<int> > v2;
   v2.push_back(p2); v2.push_back(p3); v2.push_back(cc); v2.push_back(p2);
-  c = centre(v2);
-  TEST("centre", c, cc);
+  m = centre(v2);
+  TEST("centre", m, cc);
 
-  r = cross_ratio(p1,p2,c,p3);
+  r = cross_ratio(p1,p2,m,p3);
   TEST("cross_ratio", r, 1.5);
 
   vgl_homg_point_2d<double> q1(3,7,1), q2(5,6,1), q3(7,5,1), q4(-1,9,1);
@@ -204,19 +214,19 @@ static void test_homg_point_3d()
   vgl_homg_point_3d<int> m = midpoint(p1,p2,4);
   TEST("midpoint", m, p3);
 
-  vgl_homg_point_3d<int> c = centre(p1,p3);
+  m = centre(p1,p3); // assignment
   vgl_homg_point_3d<int> cc(5,3,5,1);
-  TEST("centre", c, cc);
+  TEST("centre", m, cc);
   vcl_vector<vgl_homg_point_3d<int> > v1;
-  v1.push_back(p1); v1.push_back(p2); v1.push_back(c);
-  c = centre(v1); // assignment
-  TEST("centre", c, p2);
+  v1.push_back(p1); v1.push_back(p2); v1.push_back(m);
+  m = centre(v1);
+  TEST("centre", m, p2);
   vcl_vector<vgl_homg_point_3d<int> > v2;
   v2.push_back(p2); v2.push_back(p3); v2.push_back(cc); v2.push_back(p2);
-  c = centre(v2);
-  TEST("centre", c, cc);
+  m = centre(v2);
+  TEST("centre", m, cc);
 
-  r = cross_ratio(p1,p2,c,p3);
+  r = cross_ratio(p1,p2,m,p3);
   TEST("cross_ratio", r, 1.5);
 
   vgl_homg_plane_3d<double> pl1(0,0,0,1), pl2(0,0,1,0), pl3(0,1,0,0);
