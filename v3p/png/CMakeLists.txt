@@ -1,4 +1,5 @@
 # v3p/png/CMakeLists.txt
+#   This is the png directory of v3p.  Current version is 1.2.5 of October 2002.
 
 INCLUDE(${MODULE_PATH}/FindPNG.cmake)
 
@@ -61,4 +62,8 @@ IF(NOT VXL_USING_NATIVE_PNG)
   ENDIF(ZLIB_FOUND)
 
 ENDIF(NOT VXL_USING_NATIVE_PNG)
+
+IF(BUILD_TESTING)
+  SUBDIRS(tests)
+ENDIF(BUILD_TESTING)
 

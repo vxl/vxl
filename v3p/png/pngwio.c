@@ -1,8 +1,9 @@
+
 /* pngwio.c - functions for data output
  *
- * libpng 1.0.8 - July 24, 2000
+ * libpng 1.2.5 - October 3, 2002
  * For conditions of distribution and use, see copyright notice in png.h
- * Copyright (c) 1998, 1999, 2000 Glenn Randers-Pehrson
+ * Copyright (c) 1998-2002 Glenn Randers-Pehrson
  * (Version 0.96 Copyright (c) 1996, 1997 Andreas Dilger)
  * (Version 0.88 Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.)
  *
@@ -16,6 +17,7 @@
 
 #define PNG_INTERNAL
 #include "png.h"
+#ifdef PNG_WRITE_SUPPORTED
 
 /* Write the data to whatever output you are using.  The default routine
    writes to a file pointer.  Note that this routine sometimes gets called
@@ -38,7 +40,7 @@ png_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
    write_data function and use it at run time with png_set_write_fn(), rather
    than changing the library. */
 #ifndef USE_FAR_KEYWORD
-static void /* PRIVATE */
+void PNGAPI
 png_default_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
 {
    png_uint_32 check;
@@ -61,7 +63,7 @@ png_default_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
 #define NEAR_BUF_SIZE 1024
 #define MIN(a,b) (a <= b ? a : b)
 
-static void /* PRIVATE */
+void PNGAPI
 png_default_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
 {
    png_uint_32 check;
@@ -124,7 +126,7 @@ png_flush(png_structp png_ptr)
 }
 
 #if !defined(PNG_NO_STDIO)
-static void /* PRIVATE */
+void PNGAPI
 png_default_flush(png_structp png_ptr)
 {
 #if !defined(_WIN32_WCE)
@@ -154,7 +156,7 @@ png_default_flush(png_structp png_ptr)
                    arguments a pointer to a png_struct.  After a call to
                    the flush function, there should be no data in any buffers
                    or pending transmission.  If the output method doesn't do
-                   any buffering of output, a function prototype must still be
+                   any buffering of ouput, a function prototype must still be
                    supplied although it doesn't have to do anything.  If
                    PNG_WRITE_FLUSH_SUPPORTED is not defined at libpng compile
                    time, output_flush_fn will be ignored, although it must be
@@ -204,10 +206,10 @@ void *png_far_to_near(png_structp png_ptr,png_voidp ptr, int check)
    void FAR *far_ptr;
    FP_OFF(near_ptr) = FP_OFF(ptr);
    far_ptr = (void FAR *)near_ptr;
-   if (check != 0)
-      if (FP_SEG(ptr) != FP_SEG(far_ptr))
+   if(check != 0)
+      if(FP_SEG(ptr) != FP_SEG(far_ptr))
          png_error(png_ptr,"segment lost in conversion");
-   return near_ptr;
+   return(near_ptr);
 }
 #  else
 void *png_far_to_near(png_structp png_ptr,png_voidp ptr, int check)
@@ -216,10 +218,11 @@ void *png_far_to_near(png_structp png_ptr,png_voidp ptr, int check)
    void FAR *far_ptr;
    near_ptr = (void FAR *)ptr;
    far_ptr = (void FAR *)near_ptr;
-   if (check != 0)
-      if (far_ptr != ptr)
+   if(check != 0)
+      if(far_ptr != ptr)
          png_error(png_ptr,"segment lost in conversion");
-   return near_ptr;
+   return(near_ptr);
 }
 #   endif
 #   endif
+#endif /* PNG_WRITE_SUPPORTED */
