@@ -37,8 +37,8 @@ template <class T>
 bool operator==(const vnl_sym_matrix<T> &a, const vnl_matrix<T> &b)
 {
   if (a.rows() != b.rows() || a.cols() != b.cols()) return false;
-  const T* a_data = a.data_block();
-  const T* b_data = a.data_block();
+  //const T* a_data = a.data_block();
+  //const T* b_data = a.data_block();
   const unsigned n = a.rows();
   for (unsigned i=0; i< n; ++i)
     for (unsigned j=0; j<=i; ++j)
