@@ -1,5 +1,5 @@
-#ifndef bugl_curve3d_h_
-#define bugl_curve3d_h_
+#ifndef bugl_curve_3d_h_
+#define bugl_curve_3d_h_
 #include <bbas/bugl/bugl_normal_point_3d_sptr.h>
 #include <bugl/bugl_normal_point_3d.h>
 #include <bugl/bugl_normal_point_3d_sptr.h>
