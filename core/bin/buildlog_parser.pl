@@ -7,6 +7,14 @@ exec perl -I $IUEROOT/vxl/bin -x $0 ${1+"$@"}
 #
 # crossge@crd.ge.com
 #
+# Modifications:
+# 13 May 2001 - Peter Vanroose - several minor fixes:
+#      unified search strings for different compilers; 
+#      consequently removed specific computer names;
+#      ad-hoc fix for bug in ParseDate which does not recognise "DST" in date;
+#      simplified expressions, e.g. by replacing $currentline with $_;
+#      added removal of $IUEROOT absolute path (which is irrelevant).
+#
 
 # global modules from CPAN
 use Date::Manip qw(ParseDate UnixDate);
@@ -23,9 +31,9 @@ $date= localtime;
 
 # make[2]: Entering directory `/a/directory/a/directory'
 # make[6]: ***
-$gmake_enteringdirectory= "^g?make\\[[0-9]+\\]: Entering directory \\\`([^\\\']+)\\\'\\\s*\$";
-$gmake_leavingdirectory = "^g?make\\[[0-9]+\\]: Leaving directory \\\`([^\\\']+)\\\'\\\s*\$";
-$gmake_errorindirectory = "^g?make\\[[0-9]+\\]: \\*\\*\\* \\[";
+$gmake_enteringdirectory= q/^g?make\[\d+\]: Entering directory \`(.+?)\'\s*$/;
+$gmake_leavingdirectory = q/^g?make\[\d+\]: Leaving directory \`(.+?)\'\s*$/;
+$gmake_errorindirectory = q/^g?make\[\d+\]: \*\*\* \[/;
 
 ############
 # gcc-2.95
@@ -33,10 +41,6 @@ $gmake_errorindirectory = "^g?make\\[[0-9]+\\]: \\*\\*\\* \\[";
 # g++ ... -o something.o
 # gcc ... -o something.o
 # gcc ... -o something.so
-$gcc_compilingcpp= "^g\\\+\\\+\\s.*\\s\\-o\\s([^\\s]+\\.o)";
-$gcc_compilingc  = "^gcc\\s.*\\s\\-o\\s([^\\s]+\\.o)";
-$gcc_linkingso   = "^gcc\\s.*\\s\\-o\\s([^\\s]+\\.so)";
-$gcc_compilewarning= "[^:]+:[0-9]+: warning";
 
 ############
 # FreeBSD
@@ -44,39 +48,32 @@ $gcc_compilewarning= "[^:]+:[0-9]+: warning";
 # c++ ... -o something.o
 # gcc ... -o something.o
 # gcc ... -o something.so
-$freebsd_compilingcpp= "^c\\\+\\\+\\s.*\\s\\-o\\s([^\\s]+\\.o)";
-$freebsd_compilingc  = "^gcc\\s.*\\s\\-o\\s([^\\s]+\\.o)";
-$freebsd_linkingso   = "^gcc\\s.*\\s\\-o\\s([^\\s]+\\.so)";
-$freebsd_compilewarning= "[^:]+:[0-9]+: warning";
 
 ##############
 # SGI compiler
+# SunPro
 # CC ... -o something.o
 # cc ... -o something.o
 # CC ... -o something.so
 #  "rpoly.c", line 111: warning(1194): floating-point value does not fit in
-#  ld: WARNING 127: 
-$sgi_compilingcpp= "^CC\\s.*\\s\\-o\\s([^\\s]+\\.o)";
-$sgi_compilingc  = "^cc\\s.*\\s\\-o\\s([^\\s]+\\.o)";
-$sgi_linkingso   = "^CC\\s.*\\s\\-o\\s([^\\s]+\\.so)";
-$sgi_linkwarning = "ld: WARNING [0-9]+:";
-$sgi_compilewarning= "^\\\"[^\\\"]+\\\", line [0-9]+: warning";
+#  ld: WARNING 127:
 
-########
-# SunPro
-$sun_compilingcpp= "^CC\\s.*\\s\\-o\\s([^\\s]+\\.o)";
-$sun_compilingc  = "^cc\\s.*\\s\\-o\\s([^\\s]+\\.o)";
-$sun_linkingso   = "^CC\\s.*\\s\\-o\\s([^\\s]+\\.so)";
-$sun_compilewarning= "^\\\"[^\\\"]+\\\", line [0-9]+: Warning";
+$compilingcpp   = q/^[cg]?[+cC][+cC]\s.*\s\-o\s(\S+\.o)/;
+$compilingc     = q/^g?cc\s.*\s\-o\s(\S+\.o)/;
+$linkingso      = q/^[cg]?[+Cc][+Cc]\s.*\s\-o\s(\S+\.so)/;
+$compilewarning = q/[^:]+:\d+: [Ww]arning/;
+$sgi_linkwarning= q/ld: WARNING \d+:/;
+#$sgi_compilewarning = q/^\".+?\", line \d+: warning/;
+$linkwarning    = $sgi_linkwarning;
+$iueroot = $ENV{"IUEROOT"};
 
-############### 
+###############
 # status flags
 
 open(INFO,"-");
 
 $starttime="";
 $endtime="";
-$currentline="";
 @current= {};
 $index= 0;
 $nextindex= 0;
@@ -97,55 +94,8 @@ $fullbuildlog= "";
 ########################
 # get the current machine ...
 @uname = split(/\s/,<INFO>);
-
-if( $uname[1]=~ /julia/)
-  {
-    $machine= "julia";
-
-    $compilingcpp= $sgi_compilingcpp;
-    $compilingc=$sgi_compilingc;
-    $linkingso=$sgi_linkingso;
-    $compilewarning=$sgi_compilewarning;
-  }
-elsif(( $uname[1]=~ /^imogen/) | 
-      ( $uname[1]=~ /^shadow/) | 
-      ( $uname[1]=~ /^viola/) | 
-      ( $uname[1]=~ /^volumnia/) | 
-      ( $uname[1]=~ /^maxcreek/))
-  {
-    $machine= $uname[1];
-    $machine=~ s/\..*//;
-
-    $compilingcpp= $gcc_compilingcpp;
-    $compilingc=$gcc_compilingc;
-    $linkingso=$gcc_linkingso;
-    $compilewarning=$gcc_compilewarning;
-  }
-elsif(( $uname[1]=~ /pre/) |
-      ( $uname[1]=~ /lomme/))
-  {
-    $machine= $uname[1];
-    $machine=~ s/\..*//;
-
-    $compilingcpp= $freebsd_compilingcpp;
-    $compilingc=$freebsd_compilingc;
-    $linkingso=$freebsd_linkingso;
-    $compilewarning=$freebsd_compilewarning;
-  }
-elsif( $uname[1]=~ /kate/)
-  {
-    $machine= "kate";
-
-    $compilingcpp= $sun_compilingcpp;
-    $compilingc=$sun_compilingc;
-    $linkingso=$sun_linkingso;
-    $compilewarning=$sun_compilewarning;
-  }
-else
-  {
-    print "ERROR\n";
-    exit(1);
-  }
+$machine = $uname[1];
+$machine =~ s/\..*//;
 
 #print "Machine: $machine\n";
 #print "Date   : $date\n";
@@ -155,83 +105,81 @@ else
 
 while( $in=<INFO>)
   {
+    $_ = "$in";
     # patch together multi-lines
-    if( $in=~ s/\\\s*$//)
+    $_ .= <INFO> while( s/\\\s*$//);
+    s/$iueroot//g if( $iueroot);
+
+    $currentlineweb= webify_string($_);
+
+    if( m/$gmake_enteringdirectory/)
       {
-	$currentline= $currentline.$in;
+        $currentlineweb="<font color=\"555500\">$currentlineweb</font>";
+
+        push( @current, $1);
+
+        if( !exists( $allbuilds{$1}))
+          {
+            $nextindex=$nextindex+1;
+            $allbuilds{$1}= $nextindex;
+            $index= $nextindex;
+            $buildname[$index]= $1;
+          }
+        else
+          {
+            $index= $allbuilds{$1};
+          }
       }
-    else
+    elsif( m/$gmake_leavingdirectory/)
       {
-	# no multi-line
-	$currentline= $currentline.$in;
-	$currentlineweb= webify_string($currentline);
-	
-	if( $currentline=~ /$gmake_enteringdirectory/)
-	  {
-	    $currentlineweb="<font color=\"555500\">$currentlineweb</font>";
+        $currentlineweb="<font color=\"555500\">$currentlineweb</font>";
+        pop( @current);
+        $index= $allbuilds{$current[$#current]};
+      }
+    elsif( m/$compilingcpp/)
+      {
+        $buildfilenumber[$index]++;
+        $currentlineweb="<font color=blue>$currentlineweb</font>";
+      }
+    elsif( m/$compilingc/)
+      {
+        $buildfilenumber[$index]++;
+        $currentlineweb="<font color=blue>$currentlineweb</font>";
+      }
+    elsif( m/$linkingso/)
+      {
+#       print "so file: $1\n";
+      }
+    elsif( m/$compilewarning/)
+      {
+        $buildwarnings[$index]++;
+        $currentlineweb="<font color=\"AA0000\">$currentlineweb</font>";
+      }
+    elsif( m/$linkwarning/)
+      {
+      }
+    elsif( m/$gmake_errorindirectory/)
+      {
+        $builderrors[$index]++;
+        $currentlineweb="<font color=red>$currentlineweb</font>";
+      }
+    elsif( m/Beginning TargetJr make:\s*(.*)$/)
+      {
+        $f = $1; $f =~ s/ ?DST / /;
+        @thisdate= ParseDate( $f);
+        $starttime= UnixDate( @thisdate, "%a %b %e %H:%M:%S %z %Y") unless ($starttime);
+      }
+    elsif( m/Done TargetJr make:\s*(.*)$/)
+      {
+        $f = $1; $f =~ s/ ?DST / /;
+        @thisdate= ParseDate( $f);
+        $endtime= UnixDate( @thisdate, "%a %b %e %H:%M:%S %z %Y");
+      }
 
-	    push( @current, $1);
-
-	    if( !exists( $allbuilds{$1}))
-	      {
-		$nextindex=$nextindex+1;
-		$allbuilds{$1}= $nextindex;
-		$index= $nextindex;
-		$buildname[$index]= $1;
-	      }
-	    else
-	      {
-		$index= $allbuilds{$1};
-	      }
-	  }
-	elsif( $currentline=~ /$gmake_leavingdirectory/)
-	  {
-	    $currentlineweb="<font color=\"555500\">$currentlineweb</font>";
-	    pop( @current);
-	    $index= $allbuilds{$current[$#current]};
-	  }
-	elsif( $currentline=~ /$compilingcpp/)
-	  {
-	    $buildfilenumber[$index]++;
-	    $currentlineweb="<font color=blue>$currentlineweb</font>";
-	  }
-	elsif( $currentline=~ /$compilingc/)
-	  {
-	    $buildfilenumber[$index]++;
-	    $currentlineweb="<font color=blue>$currentlineweb</font>";
-	  }
-	elsif( $currentline=~ /$linkingso/)
-	  {
-#	    print "so file: $1\n";
-	  }
-	elsif( $currentline=~ /$compilewarning/)
-	  {
-	    $buildwarnings[$index]++;
-	    $currentlineweb="<font color=\"AA0000\">$currentlineweb</font>";
-	  }
-	elsif( $currentline=~ /$gmake_errorindirectory/)
-	  {
-	    $builderrors[$index]++;
-	    $currentlineweb="<font color=red>$currentlineweb</font>";
-	  }
-	elsif( $currentline=~ /^Beginning TargetJr make:(.*)$/)
-	  {
-	    @thisdate= ParseDate( $1);
-	    $starttime= UnixDate( @thisdate, "%a %b %e %H:%M:%S %z %Y");
-	  }
-	elsif( $currentline=~ /Done TargetJr make:(.*)$/)
-	  {
-	    @thisdate= ParseDate( $1);
-	    $endtime= UnixDate( @thisdate, "%a %b %e %H:%M:%S %z %Y");
-	  }
-
-	if( $index)
-	  {
-	    $buildlogs[$index].= $currentlineweb;
-	    $fullbuildlog.= $fullbuildlog;
-	  }
-
-	$currentline= "";
+    if( $index)
+      {
+        $buildlogs[$index].= $currentlineweb;
+        $fullbuildlog.= $fullbuildlog;
       }
   }
 
@@ -244,11 +192,11 @@ for $build ( keys %allbuilds )
   {
     if( $subdir== -1)
       {
-	$subdir= $build;
+        $subdir= $build;
       }
     else
       {
-	($subdir)=(($subdir."_FOO_".$build) =~ /^(.*).*_FOO_\1.*$/);
+        ($subdir)=(($subdir."_FOO_".$build) =~ /^(.*).*_FOO_\1.*$/);
       }
   }
 
@@ -280,10 +228,10 @@ for $buildit1 ( keys %allbuilds )
 
     for $buildit2 ( keys %allbuilds )
       {
-	if( $buildit1 eq $buildit2)
-	  {
-	    $buildparent[$index]= $allbuilds{$buildit2};
-	  }
+        if( $buildit1 eq $buildit2)
+          {
+            $buildparent[$index]= $allbuilds{$buildit2};
+          }
       }
 
   }
@@ -299,32 +247,29 @@ for $build ( keys %allbuilds )
   {
     if (( $build!~ /\//) & ( $build!~ /^\s*$/))
       {
-	$errors= 0;
-	$warnings= 0;
+        $errors= 0;
+        $warnings= 0;
 
-	for $buildit ( keys %allbuilds )
-	  {
-	    if ( $buildit =~ /^$build/)
-	      {
-		$errors+= $builderrors[$allbuilds{$buildit}];
-		$warnings+= $buildwarnings[$allbuilds{$buildit}];
-		$files+= $buildfilenumber[$allbuilds{$buildit}];
-	      }
-	  }
+        for $buildit ( keys %allbuilds )
+          {
+            if ( $buildit =~ /^$build/)
+              {
+                $errors+= $builderrors[$allbuilds{$buildit}];
+                $warnings+= $buildwarnings[$allbuilds{$buildit}];
+                $files+= $buildfilenumber[$allbuilds{$buildit}];
+              }
+          }
 
-	$builderrors[$allbuilds{$build}]= $errors;
-	$buildwarnings[$allbuilds{$build}]= $warnings;
-	$toterrors+= $errors;
-	$totwarnings+= $warnings;
-	$totfiles+= $files;
+        $builderrors[$allbuilds{$build}]= $errors;
+        $buildwarnings[$allbuilds{$build}]= $warnings;
+        $toterrors+= $errors;
+        $totwarnings+= $warnings;
+        $totfiles+= $files;
       }
-
   }
-
 
 ($ds, $Ms, $ys, $hs,$ms,$ss)= UnixDate( ParseDate( $starttime), "%d", "%m", "%y", "%H", "%M", "%S");
 ($de, $Me, $ye, $he,$me,$se)= UnixDate( ParseDate( $endtime)  , "%d", "%m", "%y", "%H", "%M", "%S");
-
 
 #print "Start time = $starttime\n";
 #print "End time   = $endtime\n";
@@ -392,30 +337,30 @@ sub webify_string
 
     for( $i= 0; $i<= length($string); $i++)
       {
-	$c= substr($string,$i,1);
+        $c= substr($string,$i,1);
 
-	if ( $c eq "\n")
-	  {
-	    $c= "<br>\n";
-	  }
-	elsif( $c eq  "\"")
-	  {
-	    $c= "&quot";
-	  }
-	elsif( $c eq  "&")
-	  {
-	    $c= "&amp";
-	  }
-	elsif( $c eq  "<")
-	  {
-	    $c= "&lt";
-	  }
-	elsif( $c eq  ">")
-	  {
-	    $c= "&gt";
-	  }
+        if ( $c eq "\n")
+          {
+            $c= "<br>\n";
+          }
+        elsif( $c eq  "\"")
+          {
+            $c= "&quot";
+          }
+        elsif( $c eq  "&")
+          {
+            $c= "&amp";
+          }
+        elsif( $c eq  "<")
+          {
+            $c= "&lt";
+          }
+        elsif( $c eq  ">")
+          {
+            $c= "&gt";
+          }
 
-	$n.= $c;
+        $n.= $c;
       }
 
     return $n;
@@ -430,8 +375,8 @@ sub get_depth
 
     while( $buildparent[$index]!= $index)
       {
-	$i++;
-	$index= $buildparent[$index];
+        $i++;
+        $index= $buildparent[$index];
       }
 
     return $i;
@@ -449,11 +394,11 @@ sub get_children
 
     for( $i= 0; $i<= $#pr; $i++)
       {
-	if(( $pr[$i]== $index) &
-	   ( $i!= $index))
-	  {
-	    push( @children, $i);
-	  }
+        if(( $pr[$i]== $index) &
+           ( $i!= $index))
+          {
+            push( @children, $i);
+          }
       }
 
     return @children;
@@ -467,23 +412,22 @@ sub display
     my $i;
     my $j;
 
- 
-    for $i ( keys %allbuilds ) 
+    for $i ( keys %allbuilds )
       {
-	print "name = $i ".$allbuilds{$i}." Parent = "
-	  .$buildparent[$allbuilds{$i}]." Warnings = "
-	    .($buildwarnings[$allbuilds{$i}])." Errors = "
-	      .($builderrors[$allbuilds{$i}])." Files = "
-		.($buildfilenumber[$allbuilds{$i}])." ";
+        print "name = $i ".$allbuilds{$i}." Parent = "
+          .$buildparent[$allbuilds{$i}]." Warnings = "
+            .($buildwarnings[$allbuilds{$i}])." Errors = "
+              .($builderrors[$allbuilds{$i}])." Files = "
+                .($buildfilenumber[$allbuilds{$i}])." ";
 
-	@children= get_children( $allbuilds{$i});
-	print "Children = ";
-	for( $j= 0; $j<= $#children; $j++)
-	  {
-	    print $children[$j]." ";
-	  }
-	print  "\n";
-      } 
+        @children= get_children( $allbuilds{$i});
+        print "Children = ";
+        for( $j= 0; $j<= $#children; $j++)
+          {
+            print $children[$j]." ";
+          }
+        print  "\n";
+      }
   }
 
 
@@ -500,47 +444,47 @@ sub XMLruntestgroup
     StartRunTestGroup( $name, $date);
 
       {
-	if( $name=~ /\//)
-	  {
-	    StartRunTest( "BuildDirectory", $date);
-	  }
-	else
-	  {
-	    StartRunTest( "BuildLibrary", $date);	    
-	  }
+        if( $name=~ /\//)
+          {
+            StartRunTest( "BuildDirectory", $date);
+          }
+        else
+          {
+            StartRunTest( "BuildLibrary", $date);
+          }
 
-	# errors
-	RunMeasurement( "Errors",($builderrors[$index]+0));
+        # errors
+        RunMeasurement( "Errors",($builderrors[$index]+0));
 
-	# warnings
-	RunMeasurement( "Warnings", ($buildwarnings[$index]+0));
+        # warnings
+        RunMeasurement( "Warnings", ($buildwarnings[$index]+0));
 
-	if ( $buildlogs[$index] ne "")
-	  {
-	    RunMeasurementBase64( "BuildLog", $buildlogs[$index]);
-	  }
+        if ( $buildlogs[$index] ne "")
+          {
+            RunMeasurementBase64( "BuildLog", $buildlogs[$index]);
+          }
 
-	# file count
-#	RunMeasurement( "BuildFileNumber", ($buildfilenumber[$index]+0));
+        # file count
+#       RunMeasurement( "BuildFileNumber", ($buildfilenumber[$index]+0));
 
-	# start time
-#	RunMeasurement( "BuildStartTime", $starttime);
+        # start time
+#       RunMeasurement( "BuildStartTime", $starttime);
 
-	if( $builderrors[$index]== 0)
-	  {
-	    EndRunTest("t");
-	  }
-	else
-	  {
-	    EndRunTest("f");
-	  }
+        if( $builderrors[$index]== 0)
+          {
+            EndRunTest("t");
+          }
+        else
+          {
+            EndRunTest("f");
+          }
       }
 
     @children= get_children( $index);
 
     for( $i=0; $i<=$#children; $i++)
       {
-	XMLruntestgroup( $children[$i]);
+        XMLruntestgroup( $children[$i]);
       }
 
     EndRunTestGroup( $date);
