@@ -40,6 +40,7 @@ public:
 
   // Data Access
   vidl_frame_sptr get_frame(int n);
+  vil_image get_image(int n) { return get_frame(n)->get_image(); }
   int length() const;
   unsigned int frame_rate() const {return frame_rate_;}
   void set_frame_rate(unsigned int fr) {frame_rate_ = fr;}

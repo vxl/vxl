@@ -29,7 +29,7 @@ public:
 
   // Constructors/Initializers/Destructors-------------------------------------
   vidl_codec() {clear_strings();}
-  ~vidl_codec() {}
+  virtual ~vidl_codec() {}
 
   //=====================================================
   // Casting methods -- lets use a standard form for these, namely
@@ -81,9 +81,19 @@ public:
   virtual const char* type() = 0;
 
   // IO
+
+  //: Try to load fname, and if successful, return the codec that did it
   virtual vidl_codec_sptr load(const char* fname, char mode = 'r' ) = 0;
+
+  //: Take a vidl_movie, and save in the format of this codec.
   virtual bool save(vidl_movie* movie, const char* fname) = 0;
+
+  //: Return true if fname looks like something we can read.
   virtual bool probe(const char* fname) = 0;
+
+  //: Perform any operations required to close down the codec.
+  // This will typically be called just before program exit.
+  virtual void close() {};
 
 private:
 

@@ -10,3 +10,7 @@ IF(NOT UNIX)
 ENDIF(NOT UNIX)
 INCLUDE( ${allvxl_SOURCE_DIR}/vcl/CMakeListsLink.txt )
 
+
+IF (WIN32)
+  LINK_LIBRARIES(vfw32.lib)
+ENDIF (WIN32)

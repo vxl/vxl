@@ -319,6 +319,16 @@ void vidl_io::register_codec(vidl_codec* codec)
   supported_types_.push_back(codec);
 }
 
+//-- Destroy codecs.
+// Must call this before the MPEG library is deleted, i.e. on exit.
+void vidl_io::close()
+{
+  vcl_list<vcl_string> ret;
+  for (vcl_list<vidl_codec_sptr>::iterator i=supported_types_.begin(); i!=supported_types_.end(); ++i)
+    (*i)->close();
+  supported_types_.erase(supported_types_.begin(), supported_types_.end());
+}
+
 static bool looks_like_a_file_list(char const* fname)
 {
   while (*fname) {

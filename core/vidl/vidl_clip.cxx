@@ -124,10 +124,10 @@ vidl_clip::~vidl_clip()
 vidl_frame_sptr vidl_clip::get_frame(int n)
 {
   // Check that the asked frame is in the clip
-  if (n>=length())
+  if (n>=length() || n < 0)
     {
       vcl_cerr << "vidl_clip::get_frame Frame number " << n << " does not exist." << vcl_endl;
-      return NULL;
+      return 0;
     }
 
   // return the frame
