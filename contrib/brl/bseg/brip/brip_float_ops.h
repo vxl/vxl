@@ -1,3 +1,4 @@
+//---*-c++-*- this tells emacs to use C++
 #ifndef brip_float_ops_h_
 #define brip_float_ops_h_
 
@@ -34,6 +35,16 @@ class brip_float_ops
   static vil_memory_image_of<float>  
     gaussian(vil_memory_image_of<float> const & input, float sigma);
 
+  //:downsamples the input using the Bert-Adelson algorithm
+  static vil_memory_image_of<float> 
+    half_resolution(vil_memory_image_of<float> const & input,
+                    float filter_coef=0.359375);
+ 
+ //:interpolates the input using the Bert-Adelson algorithm
+//   static vil_memory_image_of<float> 
+//     double_resolution(vil_memory_image_of<float> const & input,
+//                       float filter_coef=0.359375);
+
   //:subtracts image_1 from image_2
   static vil_memory_image_of<float>  
     difference(vil_memory_image_of<float> const & image_1, 
@@ -44,12 +55,38 @@ class brip_float_ops
                            vil_memory_image_of<float>& grad_x,
                            vil_memory_image_of<float>& grad_y);
 
+  static void hessian_3x3(vil_memory_image_of<float> const & input,
+                          vil_memory_image_of<float>& Ixx,
+                          vil_memory_image_of<float>& Ixy,
+                          vil_memory_image_of<float>& Iyy);
+
+  static vil_memory_image_of<float> 
+  beaudet(vil_memory_image_of<float> const & Ixx,
+          vil_memory_image_of<float> const & Ixy,
+          vil_memory_image_of<float> const & Iyy);
+
+
+  //:IxIx.transpose gradient matrix elements (N = 2n+1)
+  static void grad_matrix_NxN(vil_memory_image_of<float> const & input,
+                              const int n,
+                              vil_memory_image_of<float>& IxIx,
+                              vil_memory_image_of<float>& IxIy,
+                              vil_memory_image_of<float>& IyIy);
+
+  //: Computes the Harris corner measure
+  static vil_memory_image_of<float> 
+  harris(vil_memory_image_of<float> const & IxIx,
+         vil_memory_image_of<float> const & IxIy,
+         vil_memory_image_of<float> const & IyIy,
+         double scale=0.04);
+    
+    
   //:computes the conditioning of the 2n+1 x 2n+1 gradient neigborhood
   static vil_memory_image_of<float>  
     sqrt_grad_singular_values(vil_memory_image_of<float> & input, int n);
   
   //:computes Lucas-Kanade optical flow on a 2n+1 neighborhood 
-static void Lucas_KanadeMotion(vil_memory_image_of<float> & current_frame,
+  static void Lucas_KanadeMotion(vil_memory_image_of<float> & current_frame,
                                vil_memory_image_of<float> & previous_frame,
                                int n, double thresh,
                                vil_memory_image_of<float>& vx,
@@ -78,7 +115,12 @@ static void Lucas_KanadeMotion(vil_memory_image_of<float> & current_frame,
 
   //:loads a 2n+1 x 2n+1 convolution kernel (see .cxx for file format)
   static vbl_array_2d<float> load_kernel(vcl_string const & file);
+ 
  private:
+  //:sub-sample a 1-d array using the Bert-Adelson algorithm
+  static void half_resolution_1d(const float* input, int n, 
+                                 const float k0, const float k1,
+                                 const float k2, float* output);
   brip_float_ops(){};
 };
 
