@@ -26,15 +26,15 @@
 #include <vcsl/vcsl_spatial_transformation_sptr.h>
 
 
-template<class ObjectNode, class CameraNode, class Trans>
+template<class S, class V, class E>
 class camera_graph
 {
     protected:
       struct vertex_node{
       public:
         int id_;
-        CameraNode *v_; // distinguish source with other node
-        ObjectNode *s_;
+        V *v_; // distinguish source with other node
+        S *s_;
       public:
         vertex_node(int id) 
         { 
@@ -58,9 +58,9 @@ class camera_graph
       
       struct edge_node{ 
         vertex_node* v_; // recode which vertex attached with this edge
-        Trans* e_;
+        E* e_;
       public:
-        edge_node(vertex_node* v) { v_ = v; e_ = new Trans;}
+        edge_node(vertex_node* v) { v_ = v; e_ = new E;}
         virtual ~edge_node() {  if(e_) delete e_;   }
       };
       
@@ -82,12 +82,12 @@ class camera_graph
           vertex_node *v = new vertex_node(num_vertice_++);
           
           if(is_source){
-            v->s_ = new ObjectNode;
+            v->s_ = new S;
             v->v_ = 0;
           }
           else{
             v->s_ = 0;
-            v->v_ = new CameraNode;
+            v->v_ = new V;
           }
           
           return v;
@@ -100,8 +100,8 @@ class camera_graph
       iterator() :pos_ (0), _Ptr(0) {}
       iterator(vcl_vector<vertex_node*> *_P, int pos = 0) : _Ptr(_P), pos_(pos) {}
       iterator(const iterator& _X) : _Ptr( _X._Ptr ), pos_(_X.pos_) {}
-      CameraNode& operator*() const {return *((*_Ptr)[pos_]->v_); }
-      CameraNode* operator->() const {return &(* *this); }
+      V& operator*() const {return *((*_Ptr)[pos_]->v_); }
+      V* operator->() const {return &(* *this); }
 
       iterator& operator=(iterator& _X)
       {
@@ -169,17 +169,17 @@ class camera_graph
       }
       
     public: // operations
-      ObjectNode* get_source() {  return source_;}
+      S* get_source() {  return source_;}
       int get_source_id() { return 0;}
 
       // get vertex at position of 
-      CameraNode* get_vertex_from_pos(int pos) 
+      V* get_vertex_from_pos(int pos) 
       { 
         assert(num_vertice_ > pos); 
         return vertice_[pos + 1]->v_;
       }
 
-      CameraNode* get_vertex_from_id(int id)
+      V* get_vertex_from_id(int id)
       {
         assert(id > 0 && id <= num_vertice_);
         return get_vertex_from_pos(id - 1);
@@ -226,7 +226,7 @@ class camera_graph
       }
       
       // id is the same of it is position in array
-      inline CameraNode* get_vertex(int i)
+      inline V* get_vertex(int i)
       {
         assert(i>0); 
         return vertice_[i]->v_;
@@ -239,7 +239,7 @@ class camera_graph
 #endif
       
       // get edge from v1 to v2
-      inline Trans* get_edge(int v1, int v2)
+      inline E* get_edge(int v1, int v2)
       {
         assert(v1 == 0 && v2 <= num_vertice_); // only from souce to camera is avaible
         vcl_vector<edge_node*>* plist = edges_[v1];
@@ -313,7 +313,7 @@ class camera_graph
       private:
         vcl_vector<vertex_node*> vertice_;
         vcl_vector<vcl_vector<edge_node*>* > edges_; // adjacent neigbhour list
-        ObjectNode* source_;
+        S* source_;
         int num_vertice_;
 
 };
