@@ -24,17 +24,17 @@
 
 //=======================================================================
 
-template<class T>
-vil_image_view<T>::vil_image_view()
-: top_left_(0),istep_(0),jstep_(0),planestep_(0)
-{}
+
 
 template<class T>
-vil_image_view<T>::vil_image_view(unsigned n_i, unsigned n_j, unsigned n_planes, unsigned n_components)
-: top_left_(0),istep_(n_components)
+vil_image_view<T>::vil_image_view(unsigned n_i, unsigned n_j, unsigned n_planes,
+  unsigned n_interleaved_planes)
+: top_left_(0), istep_(n_interleaved_planes)
 {
-  assert(n_planes==1 || n_components==1);
-  set_size(n_i,n_j,n_planes*n_components);
+  assert(n_planes==1 || n_interleaved_planes==1);
+  assert(n_planes * n_interleaved_planes == 1 ||
+    vil_pixel_format_num_components(vil_pixel_format_of(T())) == 1);
+  set_size(n_i,n_j,n_planes*n_interleaved_planes);
 }
 
 //: Set this view to look at someone else's memory data.
@@ -453,12 +453,6 @@ const vil_image_view<T> & vil_image_view<T>::operator= (const vil_image_view_bas
 }
 
 
-//=======================================================================
-
-template<class T> vil_image_view<T>::~vil_image_view()
-{
-  // release_data();
-}
 
 //=======================================================================
 
