@@ -34,7 +34,7 @@ void bxml_test_vector_vtol_edge_2d_input_conv(int argc, char* argv[])
       edges_2d.push_back(e2d);
       vcl_cout << "edge:" << *(e2d->v1()) << *(e2d->v2()) << vcl_endl;
       vsol_curve_2d_sptr c = e2d->curve();
-      vdgl_digital_curve_sptr dc = c->cast_to_digital_curve();
+      vdgl_digital_curve_sptr dc = c->cast_to_vdgl_digital_curve();
       vdgl_interpolator_sptr intrp = dc->get_interpolator();
       vdgl_edgel_chain_sptr ec = intrp->get_edgel_chain();
       vcl_cout << "edgel_chain size =" << ec->size() << vcl_endl;
