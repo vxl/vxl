@@ -50,49 +50,6 @@ rrel_orthogonal_regression::num_samples( ) const
   return vars_.rows();
 }
 
-
-//  bool
-//  rrel_orthogonal_regression::fit_from_minimal_set( const vcl_vector<int>& point_indices,
-//                                                    vnl_vector<double>& params ) const
-//  {
-//    if ( point_indices.size() != param_dof() ) {
-//      vcl_cerr << "rrel_orthogonal_regression::fit_from_minimal_sample  The number of point "
-//           << "indices must agree with the fit degrees of freedom.\n";
-//      return false;
-//    }
-
-//    // The equation to be solved is Ap = 0, where A is a dof_ x dof_
-//    // because the solution is up to a scale.
-//    // The plane equation will be p(x - x0) = 0
-//    // where x0 is the center of the points.
-//    // We solve the uniqueness by adding another constraint ||p||=1
-
-//    vnl_matrix<double> A(param_dof(), param_dof());
-//    vnl_vector<double> sum_vect(3, 0.0);
-//    for ( unsigned int i=0; i<param_dof(); ++i ) {
-//      int index = point_indices[i];
-//      sum_vect += vars_.get_row(index);
-//    }
-//    vnl_vector<double> avg = sum_vect / param_dof();
-//    for (unsigned int i=0; i<param_dof(); ++i)
-//      A.set_row(i, vars_.get_row(i)-avg);
-
-//    vnl_svd<double> svd( A, 1.0e-8 );
-//    if ( (unsigned int)svd.rank() < param_dof() ) {
-//      vcl_cerr << "rrel_orthogonal_regression:: singular fit!\n";
-//      return false;    // singular fit
-//    }
-//    else {
-//      vnl_vector<double> norm = svd.nullvector();
-//      params.resize( norm.size() + 1 );
-//      for (unsigned int i=0; i<norm.size(); i++)
-//        params[i] = norm[i];
-//      params[ norm.size() ] = -1 * dot_product( norm, avg );
-//      //params /= vcl_sqrt( 1 - vnl_math_sqr( params[ params.size()-1 ] ) );  // normal is a unit vector
-//    }
-//    return true;
-//  }
-
 bool
 rrel_orthogonal_regression::fit_from_minimal_set( const vcl_vector<int>& point_indices,
                                                   vnl_vector<double>& params ) const
