@@ -35,14 +35,22 @@ class vbl_bounding_box_base
   //: Construct an empty bounding box.
   inline vbl_bounding_box_base() : initialized_(false) { }
 
+  //: Incorporate 1d point x
+  inline void update(T const& x) {
+    assert(DIM_::value == 1);
+    update(&x);
+  }
+
   //: Incorporate 2d point x, y
   inline void update(T const& x, T const& y) {
+    assert(DIM_::value == 2);
     T tmp[2] = {x,y};
     update(tmp);
   }
 
   //: Incorporate 3d point x, y, z
   inline void update(T const& x, T const& y, T const& z) {
+    assert(DIM_::value == 3);
     T tmp[3] = {x,y,z};
     update(tmp);
   }
@@ -72,7 +80,7 @@ class vbl_bounding_box_base
 
   //:  is a 2D point inside the bounding box
   inline bool inside( const T& x, const T& y) const {
-    assert (DIM_::value >= 2);
+    assert (DIM_::value == 2);
     return
       initialized_ &&
       min_[0] <= x && x <= max_[0] &&
@@ -81,7 +89,7 @@ class vbl_bounding_box_base
 
   //:  is a 3D point inside the bounding box
   inline bool inside( const T& x, const T& y, const T& z) const {
-    assert (DIM_::value >= 3);
+    assert (DIM_::value == 3);
     return
       initialized_ &&
       min_[0] <= x && x <= max_[0] &&
