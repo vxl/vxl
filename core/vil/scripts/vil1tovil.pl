@@ -33,6 +33,7 @@ s/\bvil1_flipud/vil_flip_ud/g;
 s/\bvil1_load(_raw)?\b/vil_load/g;
 s/\bvil1_save/vil_save/g;
 s!\bvil/vil_image_as\b!vil/vil_convert!g;
+s/\bvil1_image_as_byte/vil_convert_cast<vxl_byte>/g;
 s/\bvil1_image_as_([a-z0-9_]+)/vil_convert_cast<$1>/g;
 s!\bvil/vil_ncc\b!vil/algo/vil_normalised_correlation_2d!g;
 s/\bvil1_ncc\b/vil_normalised_correlation_2d</g;
