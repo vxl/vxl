@@ -14,7 +14,7 @@
 # $(VXLROOT)/bin/ == override in output directory
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL == compiler defines
 # vsol_tests  == name of output library
-# /libpath:"$(VXLROOT)/contrib/gel/vsol/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vgl/algo/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vgl/$(OUTDIR)" /libpath:"$(VXLROOT)/vcl/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vnl/algo/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/netlib/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vnl/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vbl/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vul/$(OUTDIR)" "opengl32.lib" "glu32.lib" "vsol.lib" "vgl_algo.lib" "vgl.lib" "vnl_algo.lib" "netlib.lib" "vnl.lib" "vbl.lib" "vul.lib" "vcl.lib" /STACK:10000000  == libraries linked in 
+# /libpath:"$(VXLROOT)/contrib/gel/vsol/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vgl/algo/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vgl/$(OUTDIR)" /libpath:"$(VXLROOT)/vcl/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vnl/algo/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/netlib/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vnl/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vul/$(OUTDIR)" "opengl32.lib" "glu32.lib" "vsol.lib" "vgl_algo.lib" "vgl.lib" "vnl_algo.lib" "netlib.lib" "vnl.lib" "vbl.lib" "vpl.lib" "vul.lib" "vsl.lib" "vcl.lib" /STACK:10000000  == libraries linked in 
 # TARGTYPE "Win32 (x86) Application" 0x0103
 
 CFG=vsol_tests - Win32 Debug
@@ -76,8 +76,10 @@ LINK32=link.exe
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/netlib/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/core/vnl/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/core/vbl/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vpl/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/core/vul/$(OUTDIR)"
-# ADD LINK32 "opengl32.lib" "glu32.lib" "vsol.lib" "vgl_algo.lib" "vgl.lib" "vnl_algo.lib" "netlib.lib" "vnl.lib" "vbl.lib" "vul.lib" "vcl.lib" /STACK:10000000 
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vsl/$(OUTDIR)"
+# ADD LINK32 "opengl32.lib" "glu32.lib" "vsol.lib" "vgl_algo.lib" "vgl.lib" "vnl_algo.lib" "netlib.lib" "vnl.lib" "vbl.lib" "vpl.lib" "vul.lib" "vsl.lib" "vcl.lib" /STACK:10000000 
 
 
 !ELSEIF  "$(CFG)" == "vsol_tests - Win32 Debug"
@@ -117,7 +119,7 @@ LINK32=link.exe
 # ADD LINK32 /libpath:"$(VXLROOT)/core/vnl/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/core/vbl/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/core/vul/$(OUTDIR)"
-# ADD LINK32 "opengl32.lib" "glu32.lib" "vsol.lib" "vgl_algo.lib" "vgl.lib" "vnl_algo.lib" "netlib.lib" "vnl.lib" "vbl.lib" "vul.lib" "vcl.lib" /STACK:10000000 
+# ADD LINK32 "opengl32.lib" "glu32.lib" "vsol.lib" "vgl_algo.lib" "vgl.lib" "vnl_algo.lib" "netlib.lib" "vnl.lib" "vbl.lib" "vpl.lib" "vul.lib" "vsl.lib" "vcl.lib" /STACK:10000000 
 
 !ENDIF 
 
@@ -174,6 +176,9 @@ SOURCE=.\test_vsol_triangle_2d.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_vsol_triangle_3d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_vsol_io.cxx
 # End Source File
 # End Group
 # End Target
