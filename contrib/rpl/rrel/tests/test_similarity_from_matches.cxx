@@ -92,7 +92,7 @@ MAIN( test_similarity_from_matches )
 
   vcl_vector<double> residuals;
   testlib_test_begin( "compute_residuals" );
-  sim.compute_residuals( params, residuals );
+  sim.compute_residuals( params.as_ref(), residuals );
   testlib_test_perform( residuals.size() == 6
                     && close( residuals[0],  0 )
                     && close( residuals[1],  5 )

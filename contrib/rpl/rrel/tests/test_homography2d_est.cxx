@@ -23,51 +23,51 @@ MAIN( test_homography2d_est )
   const double tol = 1e-8;
   vnl_double_3 t (0,0,1);
 
-  p.push_back (t);
+  p.push_back (t.as_ref());
 
 
   //first 4 points are colinear.
   t(0) = 2; t(1) = 5;
-  p.push_back (t);
+  p.push_back (t.as_ref());
 
   t(0) = 4; t(1) = 9;
-  p.push_back (t);
+  p.push_back (t.as_ref());
 
   t(0) = -1; t(1) = -1;
-  p.push_back (t);
+  p.push_back (t.as_ref());
 
   t(0) = -3; t(1) = -5;
-  p.push_back (t);
+  p.push_back (t.as_ref());
 
   t(0) = -9; t(1) = .5;
-  p.push_back (t);
+  p.push_back (t.as_ref());
 
   t(0) = 5; t(1) = -5.678;
-  p.push_back (t);
+  p.push_back (t.as_ref());
 
   t(0) = 5; t(1) = -5.678; t(2) = 3;
-  p.push_back (t);
+  p.push_back (t.as_ref());
 
   t(0) = 0.4; t(1) = 0.894; t(2) = 0.1;
-  p.push_back (t);
+  p.push_back (t.as_ref());
 
   t(0) = 500; t(1) = -100; t(2) = 100;
-  p.push_back (t);
+  p.push_back (t.as_ref());
 
   t(0) = -20; t(1) = -20; t(2) = 1;
-  p.push_back (t);
+  p.push_back (t.as_ref());
 
   t(0) = 4; t(1) = 0.02; t(2) = 1.5;
-  p.push_back (t);
+  p.push_back (t.as_ref());
 
   t(0) = 2.345; t(1) = -10; t(2) = 1;
-  p.push_back (t);
+  p.push_back (t.as_ref());
 
   t(0) = 8.9e-4; t(1) = -3.1e-4; t(2) = -1e-4;
-  p.push_back (t);
+  p.push_back (t.as_ref());
 
   t(0) = -10; t(1) = 40; t(2) = 1;
-  p.push_back (t);
+  p.push_back (t.as_ref());
 
   // ----------------------------------------------------------------
   n = p.size ();
