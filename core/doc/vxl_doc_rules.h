@@ -34,17 +34,15 @@
 //   Possibly multiple lines.  Don't forget to end the \author, \date and
 //   \brief sections with an empty line (i.e., just //).
 //
-// Here you can write the long description of what's in this file
-// Doxygen will add this to the extended documentation of the file
-// Put the date and author tags immediately following the brief tag,
-// as doxygen (poor thing) is easily confused otherwise.
+// Here you can write the long description of what's in this file.
+// Doxygen will add this to the extended documentation of the file.
 //
 // \verbatim
 //  Modifications
 //   Here goes a chronological list of file modifications (with author and date)
 // \endverbatim
 
-#include <vcl_iostream.h> // includes go here; avoid unnecessary includes!
+#include <parent_class.h> // includes go here; avoid unnecessary includes!
 
 //: Brief description of the class
 // The long description starts here
@@ -63,7 +61,7 @@
 // \endcode
 // The long description ends here
 
-class my_class
+class my_class : public parent_class
 {
   //: Brief description of the member variable.
   double my_value;
