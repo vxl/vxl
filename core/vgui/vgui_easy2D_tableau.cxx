@@ -334,7 +334,7 @@ void vgui_easy2D_tableau::print_psfile(vcl_string filename, int reduction_factor
         psfile.line(linestrip->x[ii-1],linestrip->y[ii-1],
                     linestrip->x[ii  ],linestrip->y[ii  ]);
       if (debug)
-        vcl_cerr<< " vgui_easy2D_tableau: Adding linestrip \n";
+        vcl_cerr<< " vgui_easy2D_tableau: Adding linestrip\n";
     }
     else if (sv->type_name() == "vgui_soview2D_polygon")
     {
@@ -346,7 +346,7 @@ void vgui_easy2D_tableau::print_psfile(vcl_string filename, int reduction_factor
                   polygon->y[polygon->n - 1],
                   polygon->x[0], polygon->y[0]);
       if (debug)
-        vcl_cerr<< " vgui_easy2D_tableau: Adding polygon \n";
+        vcl_cerr<< " vgui_easy2D_tableau: Adding polygon\n";
     }
     else
       vgui_macro_warning << "unknown soview typename = " << sv->type_name() << vcl_endl;
@@ -354,7 +354,8 @@ void vgui_easy2D_tableau::print_psfile(vcl_string filename, int reduction_factor
 }
 
 //: Add an image at the given position to the display.
-vgui_soview2D_image* vgui_easy2D_tableau::add_image(float x, float y, float w, float h, char *data, unsigned int format, unsigned int type)
+vgui_soview2D_image* vgui_easy2D_tableau::add_image(float x, float y, float w, float h,
+                                                    char *data, unsigned int format, unsigned int type)
 {
   vgui_soview2D_image *obj = new vgui_soview2D_image;
   obj->set_image(x,y,w,h,data);
