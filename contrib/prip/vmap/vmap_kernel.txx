@@ -5,7 +5,6 @@
 // \file
 
 #include "vmap_kernel.h"
-#include "vcl_iostream.h"
 
 template <class TPermutation>
 void vmap_permutation_kernel<TPermutation>::initialise()
