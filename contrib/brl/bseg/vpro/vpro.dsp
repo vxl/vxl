@@ -146,6 +146,12 @@ SOURCE=.\vpro_corr_tracker_process.cxx
 # Begin Source File
 SOURCE=.\vpro_motion_params.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vpro_info_tracker_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vpro_track_display_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -196,6 +202,12 @@ SOURCE=.\vpro_corr_tracker_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\vpro_motion_params.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpro_info_tracker_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpro_track_display_process.h
 # End Source File
 # End Group
 # End Target
