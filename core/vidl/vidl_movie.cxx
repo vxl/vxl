@@ -42,8 +42,7 @@ vidl_frame_sptr vidl_movie::get_frame(int n)
 
   vcl_list<vidl_clip_sptr>::iterator i = clip_.begin();
 
-  while ((i!=clip_.end()) &&
-         (!(ret_frame=(*i)->get_frame(n))))
+  while ((i!=clip_.end()) && (!(ret_frame=(*i)->get_frame(n))))
   {
     n = n - (**i).length();
     i++;
@@ -52,6 +51,11 @@ vidl_frame_sptr vidl_movie::get_frame(int n)
   // one can note that if the frame was not in the clip (n too big),
   // Then, NULL is returned.
   return ret_frame;
+}
+
+vil1_image vidl_movie::get_image(int n)
+{
+  return get_frame(n)->get_image();
 }
 
 //: Add a clip at the end of the movie

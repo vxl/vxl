@@ -1,23 +1,22 @@
 #ifndef vidl_movie_h
 #define vidl_movie_h
 //:
-// \file 
+// \file
 // \author Nicolas Dano, september 1999
 //
 // \verbatim
-//  Modifications
-//   Julien ESTEVE, June 2000 -   Ported from TargetJr
-//   10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
+//   Modifications
+//    Julien ESTEVE, June 2000 -   Ported from TargetJr
+//    10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
 // \endverbatim
-
 
 #include <vbl/vbl_ref_count.h>
 #include <vidl/vidl_movie_sptr.h>
-#include <vidl/vidl_frame.h>
 #include <vidl/vidl_frame_sptr.h>
 #include <vidl/vidl_clip.h>
 #include <vil1/vil1_image.h>
 #include <vcl_list.h>
+
 //: Video movie
 //   A vidl_movie is a movie sequence
 //   It is basically a list of clips.
@@ -38,7 +37,7 @@ class vidl_movie : public vbl_ref_count
 
   // Data Access
   vidl_frame_sptr get_frame(int n);
-  vil1_image get_image(int n) { return get_frame(n)->get_image(); }
+  vil1_image get_image(int n);
   int length() const;
   unsigned int frame_rate() const {return frame_rate_;}
   void set_frame_rate(unsigned int fr) {frame_rate_ = fr;}
@@ -74,15 +73,12 @@ class vidl_movie : public vbl_ref_count
     // i.e. if we have frame_iterator it, then *it is a vidl_frame.
     // and it-> accesses the members of vidl_frame.
     //
-    // The subclassing off Image is just done so that we can define
-    // the method GetSection to get a buffer or pixels to display.
-    //
     // Correct way of running through all the frames of a movie is
     // for (vidl_movie::frame_iterator frame = movie.begin();
     //      frame != movie.end();
-    //      frame++)
+    //      ++frame)
     //
-    // Also look at test.C for other examples
+    // Also look at examples/vidl_mpegcodec_example.cxx for other examples
 
    private :
     vidl_movie_sptr movie_;
@@ -102,32 +98,30 @@ class vidl_movie : public vbl_ref_count
     ~frame_iterator () {}
 
     // Assigning one iterator to another
-    frame_iterator &operator = (const frame_iterator &fr)
+    frame_iterator& operator= (const frame_iterator &fr)
     {
-      // We do not want to bother about copying the image
       movie_ = fr.movie_;
       frame_number_ = fr.frame_number_;
       return *this;
     }
 
-    frame_iterator &operator = (int n) { frame_number_ = n; return *this; }
+    frame_iterator& operator= (int n) { frame_number_ = n; return *this; }
 
     // Incrementing the frame number
-    frame_iterator &operator ++ () { frame_number_ ++; return *this; }
-    frame_iterator &operator -- () { frame_number_ --; return *this; }
-    frame_iterator &operator + (int n) { frame_number_ += n; return *this; }
-    frame_iterator &operator - (int n) { frame_number_ -= n; return *this; }
+    frame_iterator& operator++ () { frame_number_ ++; return *this; }
+    frame_iterator& operator-- () { frame_number_ --; return *this; }
+    frame_iterator& operator+= (int n) { frame_number_ += n; return *this; }
+    frame_iterator& operator-= (int n) { frame_number_ -= n; return *this; }
 
     // Treating as a vidl_frame_sptr
-    operator vidl_frame_sptr ()
+    operator vidl_frame_sptr () const
     {
       if (frame_number_ < 0 || frame_number_ >= movie_->length())
         return vidl_frame_sptr(0);
-      vidl_frame_sptr frame = movie_->get_frame(frame_number_);
-      return frame;
+      return movie_->get_frame(frame_number_);
     }
 
-    vidl_frame_sptr operator -> () { return (vidl_frame_sptr) *this; }
+    vidl_frame_sptr operator -> () const { return (vidl_frame_sptr) *this; }
 
     // Comparison against other iterators
     friend bool operator == (const frame_iterator &fr1,
@@ -168,9 +162,10 @@ class vidl_movie : public vbl_ref_count
 
   //---------------------------------------------------------------------
   // Methods that return iterators
-  frame_iterator first() { frame_iterator fr (this, 0); return fr; }
-  frame_iterator last() {frame_iterator fr(this,this->length()-1); return fr;}
+  frame_iterator first() { return frame_iterator(this, 0); }
+  frame_iterator last()  { return frame_iterator(this,this->length()-1); }
   frame_iterator begin() { return first(); }
-  frame_iterator end() { return last()+1; }
+  frame_iterator end()   { return frame_iterator(this,this->length()); }
 };
+
 #endif // vidl_movie_h
