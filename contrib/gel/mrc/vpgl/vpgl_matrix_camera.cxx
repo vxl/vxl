@@ -1,7 +1,7 @@
 // This is gel/mrc/vpgl/vpgl_matrix_camera.cxx
 #include "vpgl_matrix_camera.h"
 //:
-//  \file
+// \file
 
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_math.h> // for vnl_huge_val()
@@ -21,8 +21,8 @@ vpgl_matrix_camera::vpgl_matrix_camera(const vnl_matrix<double>& mat):
 {
   if ((mat.rows() != 3) || (mat.columns() != 3))
     {
-    vcl_cerr << "vpgl_matrix_camera: 3x3 camera matrix not provided. ";
-    vcl_cerr << "Creating identity camera.\n" ;
+    vcl_cerr << "vpgl_matrix_camera: 3x3 camera matrix not provided. "
+             << "Creating identity camera.\n" ;
     int r, c;
     for (r=0; r<3; r++)
       for (c=0; c<3; c++)
@@ -46,10 +46,10 @@ void vpgl_matrix_camera::world_to_image(vnl_vector<double> const& vect3d,
 
   // Set the values, if the homog var is non-zero
   if (homog_image_pt[2] != 0)
-    {
+  {
     imgu = homog_image_pt[0]/homog_image_pt[2];
     imgv = homog_image_pt[1]/homog_image_pt[2];
-    }
+  }
 }
 
 
@@ -59,7 +59,7 @@ void vpgl_matrix_camera::world_to_image(vnl_vector<double> const& vect3d,
 void vpgl_matrix_camera::world_to_image(double x, double y, double z,
                                         double& ix, double& iy, double time)
 {
-  vnl_vector<double> vect3d(x, y, z);
+  vnl_vector<double> vect3d(3); vect3d[0]=x; vect3d[1]=y; vect3d[2]=z;
   this->world_to_image(vect3d, ix, iy, time);
 }
 
@@ -132,10 +132,10 @@ double& vpgl_matrix_camera::operator() (unsigned int r, unsigned int c)
 {
   // Do the range check
   if ((r > 2) || (c > 3))
-    {
-    vcl_cerr << "vpgl_matrix_camera:  Parameter indices out of bound. ";
-    vcl_cerr << "Program may segfault now." ;
-    }
+  {
+    vcl_cerr << "vpgl_matrix_camera:  Parameter indices out of bound. "
+             << "Program may segfault now.\n";
+  }
 
   // Return the matrix entry
   return _matrix(r, c);
@@ -151,7 +151,7 @@ void vpgl_matrix_camera::set_general_matrix(const vnl_matrix<double> & gen){
 void vpgl_matrix_camera::set_matrix(const vnl_matrix<double>& mat)
 {
   if ((mat.rows() != 3) || (mat.columns() != 4))
-    vcl_cerr << "vpgl_matrix_camera: Wrong dimensions of the matrix" << vcl_endl;
+    vcl_cerr << "vpgl_matrix_camera: Wrong dimensions of the matrix\n";
   else
     _matrix = mat;
 }
