@@ -294,13 +294,13 @@ init_intensity_info(vtol_face_2d_sptr const& face,
       unsigned short v = (unsigned short)image(x, y);
       intf_->IncrementMeans(float(x), float(y), v);
     }
-  if(!intf_->Npix())
-    {
-      vcl_cout << "In strk_tracking_face_2d::strk_tracking_face_2d(..) -"
-               << " no pixels\n";
-      return;
-    }
-    intf_->InitPixelArrays();
+  if (!intf_->Npix())
+  {
+    vcl_cout << "In strk_tracking_face_2d::strk_tracking_face_2d(..) -"
+             << " no pixels\n";
+    return;
+  }
+  intf_->InitPixelArrays();
 
   bsta_histogram<float> model_intensity_hist(255, 16);
   intensity_hist_bins_ = model_intensity_hist.nbins();
@@ -729,18 +729,19 @@ compute_mutual_information(vil1_memory_image_of<float> const& image,
 
   return true;
 }
+
 bool strk_tracking_face_2d::
 compute_only_gradient_mi(vil1_memory_image_of<float> const& Ix,
                          vil1_memory_image_of<float> const& Iy)
 {
   if ((!Ix || !Iy) && gradient_info_)
     return false;
-  
+
   if (gradient_info_)
     this->set_grad_mutual_info(this->compute_gradient_mutual_information(Ix,Iy));
   return true;
 }
-                                
+
 
 void strk_tracking_face_2d::print_pixels(vil1_memory_image_of<float> const& image)
 {
@@ -794,8 +795,7 @@ vcl_vector<float> strk_tracking_face_2d::random_intensities(int& n_pix)
   return rand_pix;
 }
 
-//: compute the intensity joint entropy between the pixels in the image
-//  under *this face and the "model" pixels of the other face.
+//: compute the intensity joint entropy between the pixels in the image under this face and the "model" pixels of the other face.
 //
 float strk_tracking_face_2d::
 compute_intensity_joint_entropy(strk_tracking_face_2d_sptr const& other,
@@ -919,11 +919,12 @@ compute_color_joint_entropy(strk_tracking_face_2d_sptr const& other,
       continue;
     float hue_i = hue(x,y), sat_i = sat(x,y);
     //    float hue_other = hvals[i], sat_other = svals[i];
-    if(i<mpix)
-	{
-	float hue_other = other->hue(i), sat_other = other->sat(i);
-    if (sat_other>0&&sat_i>0)
-		joint_color_hist.upcount(hue_other, sat_other, hue_i, sat_i);}
+    if (i<mpix)
+    {
+      float hue_other = other->hue(i), sat_other = other->sat(i);
+      if (sat_other>0&&sat_i>0)
+        joint_color_hist.upcount(hue_other, sat_other, hue_i, sat_i);
+    }
   }
 #ifdef DEBUG
   vcl_cout << "Joint Color Background  Hist\n";
@@ -1021,6 +1022,7 @@ color_mutual_info_diff(strk_tracking_face_2d_sptr const& other,
   color_info_diff_ = mi_diff;
   return mi_diff;
 }
+
 float strk_tracking_face_2d::
 intensity_mutual_info_diff(vcl_vector<strk_tracking_face_2d_sptr> const& others,
                                    vil1_memory_image_of<float> const& image,
@@ -1036,7 +1038,7 @@ intensity_mutual_info_diff(vcl_vector<strk_tracking_face_2d_sptr> const& others,
   float Hom = intensity_joint_entropy_;
   int n_others = 0;
   float mi_diff_avg = 0, Hob_avg = 0, Hb_avg = 0;
-  for(vcl_vector<strk_tracking_face_2d_sptr>::const_iterator fit = others.begin(); fit != others.end(); fit++, n_others++)
+  for (vcl_vector<strk_tracking_face_2d_sptr>::const_iterator fit = others.begin(); fit != others.end(); fit++, n_others++)
   {
     float Hb = (*fit)->model_intensity_entropy();
     float Hob = this->compute_intensity_joint_entropy(*fit, image);
@@ -1045,12 +1047,12 @@ intensity_mutual_info_diff(vcl_vector<strk_tracking_face_2d_sptr> const& others,
     Hob_avg += Hob;
     mi_diff_avg += mi_diff;
   }
-  if(n_others)
-    {
-      Hb_avg/=n_others;
-      Hob_avg/=n_others;
-      mi_diff_avg/=n_others;
-    }
+  if (n_others)
+  {
+    Hb_avg/=n_others;
+    Hob_avg/=n_others;
+    mi_diff_avg/=n_others;
+  }
   //  if (verbose)
   if (true)
   {
@@ -1065,6 +1067,7 @@ intensity_mutual_info_diff(vcl_vector<strk_tracking_face_2d_sptr> const& others,
   intensity_info_diff_ = mi_diff_avg;
   return mi_diff_avg;
 }
+
 float strk_tracking_face_2d::
 color_mutual_info_diff(vcl_vector<strk_tracking_face_2d_sptr> const& others,
                        vil1_memory_image_of<float> const& hue,
@@ -1081,7 +1084,7 @@ color_mutual_info_diff(vcl_vector<strk_tracking_face_2d_sptr> const& others,
   float Hom = color_joint_entropy_;
   int n_others = 0;
   float mi_diff_avg = 0, Hob_avg = 0, Hb_avg = 0;
-  for(vcl_vector<strk_tracking_face_2d_sptr>::const_iterator fit = others.begin(); fit != others.end(); fit++, n_others++)
+  for (vcl_vector<strk_tracking_face_2d_sptr>::const_iterator fit = others.begin(); fit != others.end(); fit++, n_others++)
   {
     float Hb = (*fit)->model_color_entropy();
     float Hob = this->compute_color_joint_entropy(*fit, hue, sat);
@@ -1090,12 +1093,12 @@ color_mutual_info_diff(vcl_vector<strk_tracking_face_2d_sptr> const& others,
     Hob_avg += Hob;
     mi_diff_avg += mi_diff;
   }
-  if(n_others)
-    {
-      Hb_avg/=n_others;
-      Hob_avg/=n_others;
-      mi_diff_avg/=n_others;
-    }
+  if (n_others)
+  {
+    Hb_avg/=n_others;
+    Hob_avg/=n_others;
+    mi_diff_avg/=n_others;
+  }
   if (verbose)
   {
     vcl_cout << "background color entropy = " << Hb_avg
@@ -1108,13 +1111,15 @@ color_mutual_info_diff(vcl_vector<strk_tracking_face_2d_sptr> const& others,
   color_info_diff_ = mi_diff_avg;
   return mi_diff_avg;
 }
+
 float strk_tracking_face_2d::total_info_diff()
 {
   float temp = intensity_info_diff_+color_info_diff_;
-  if(gradient_info_)
+  if (gradient_info_)
     return temp+gradient_dir_mi_;
   return temp;
 }
+
 void strk_tracking_face_2d::
 print_intensity_histograms(vil1_memory_image_of<float> const& image)
 {
