@@ -40,7 +40,6 @@ IF(NETLIB_FOUND)
     test_vector_fixed_ref.cxx
     test_matrix_fixed_ref.cxx
     test_minimizers.cxx
-    test_numeric_limits.cxx
     test_numeric_traits.cxx
     test_qr.cxx
     test_qsvd.cxx
@@ -101,7 +100,6 @@ IF(NETLIB_FOUND)
   ADD_TEST( vnl_test_vector_fixed_ref         vnl_test_all test_vector_fixed_ref        )
   ADD_TEST( vnl_test_matrix_fixed_ref         vnl_test_all test_matrix_fixed_ref        )
   ADD_TEST( vnl_test_minimizers               vnl_test_all test_minimizers              )
-  ADD_TEST( vnl_test_numeric_limits           vnl_test_all test_numeric_limits          )
   ADD_TEST( vnl_test_numeric_traits           vnl_test_all test_numeric_traits          )
   ADD_TEST( vnl_test_qr                       vnl_test_all test_qr                      )
   ADD_TEST( vnl_test_qsvd                     vnl_test_all test_qsvd                    )

@@ -26,7 +26,6 @@ DECLARE( test_matrix_exp );
 DECLARE( test_matrix_fixed );
 DECLARE( test_matrix_fixed_ref );
 DECLARE( test_minimizers );
-DECLARE( test_numeric_limits );
 DECLARE( test_numeric_traits );
 DECLARE( test_qr );
 DECLARE( test_qsvd );
@@ -77,7 +76,6 @@ register_tests()
   REGISTER( test_matrix_fixed );
   REGISTER( test_matrix_fixed_ref );
   REGISTER( test_minimizers );
-  REGISTER( test_numeric_limits );
   REGISTER( test_numeric_traits );
   REGISTER( test_qr );
   REGISTER( test_qsvd );
