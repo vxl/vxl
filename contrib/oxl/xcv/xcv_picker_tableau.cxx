@@ -1,4 +1,4 @@
-//  This is oxl/xcv/xcv_picker_tableau.cxx
+// This is oxl/xcv/xcv_picker_tableau.cxx
 #include "xcv_picker_tableau.h"
 //:
 //  \file
