@@ -71,6 +71,39 @@ vcl_string vbl_file::dirname(char const* fn)
   return self.substr(0, slash_index);
 }
 
+vcl_string vbl_file::extension(char const* fn)
+{
+  vcl_string self(fn);
+
+  unsigned int dot_index = self.rfind('.');
+  if (dot_index != vcl_string::npos)
+    return self.substr(dot_index, vcl_string::npos);
+  else 
+    return vcl_string();
+}
+
+vcl_string vbl_file::strip_directory(char const* fn)
+{
+   vcl_string self(fn);
+
+   unsigned int slash_index = self.rfind('/');
+   if (slash_index != vcl_string::npos)
+     self.erase(0, slash_index+1); 
+
+   return self;
+}
+
+vcl_string vbl_file::strip_extension(char const* fn)
+{
+  vcl_string self(fn);
+  
+  unsigned int dot_index = self.rfind('.');
+  if (dot_index != vcl_string::npos)
+    self.erase(dot_index, vcl_string::npos); 
+  
+  return self; 
+}
+
 vcl_string vbl_file::basename(char const* fn, char const * suffix)
 {
   // First strip dir

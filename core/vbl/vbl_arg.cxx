@@ -392,9 +392,13 @@ static int list_parse(vcl_list<int> &out, char ** argv)
     
     // this is the current token.
     vcl_string token = str.substr(start, end);
+//cout << "KYM token = " << token << endl;
     vcl_string match1 = range_regexp.match(1);
+//cout << "KYM match1 = " << match1 << endl;
     vcl_string match2 = range_regexp.match(2);
+//cout << "KYM match2 = " << match2 << endl;
     vcl_string match3 = range_regexp.match(3);
+//cout << "KYM match3 = " << match3 << endl;
 
     // Remove this match from the front of string.
     str.erase(0, end + 1);
