@@ -8,10 +8,10 @@
 #include <vsrl/vsrl_parameters.h>
 
 vsrl_diffusion::vsrl_diffusion(vsrl_dense_matcher *matcher)
-: matcher_(matcher)
-, width_(matcher->get_width())
+: width_(matcher->get_width())
 , height_(matcher->get_height())
 , disparity_matrix_(new vnl_matrix<double>(width_,height_))
+, matcher_(matcher)
 {
 }
 
