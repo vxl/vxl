@@ -183,7 +183,7 @@ public:
   {
     assert(x>=0); assert(x<nx_);
     assert(y>=0); assert(y<ny_);
-    assert(z>=0); assert(z<ny_);
+    assert(z>=0); assert(z<nz_);
     return planes_[0][ystep_*y+x*xstep_+z*zstep_];
   }
 
