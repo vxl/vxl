@@ -10,7 +10,7 @@
 
 //: Return minimum value of |im[offset[k]]-v0| k=0..n-1
 template <class T1, class T2>
-inline double vil_abs_shuffle_distance(T1 v0, const T2* im, 
+inline double vil_abs_shuffle_distance(T1 v0, const T2* im,
                                        const vcl_ptrdiff_t* offset, unsigned n)
 {
   double min_v = im[offset[0]]<v0?(v0-im[offset[0]]):(im[offset[0]]-v0);
@@ -24,7 +24,7 @@ inline double vil_abs_shuffle_distance(T1 v0, const T2* im,
 }
 
 //: Return min difference of pixels under structuring element centred at (i0,j0)
-//  ie returns minimum of |v0-image(i,j,plane)| over (i,j) in element
+//  I.e., returns minimum of |v0-image(i,j,plane)| over (i,j) in element.
 //  Checks boundary overlap.
 template <class T1, class T2>
 inline double vil_abs_shuffle_distance(T1 v0, const vil_image_view<T2>& image,
