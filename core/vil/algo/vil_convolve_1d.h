@@ -203,7 +203,7 @@ inline void vil2_convolve_1d(const srcT* src0, unsigned nx, int s_step,
 //: Convolve kernel[i] (i in [k_lo,k_hi]) with srcT in i-direction
 // On exit dest_im(i,j) = sum src(i+x,j)*kernel(x)  (x=k_lo..k_hi)
 // \param kernel should point to tap 0.
-// Assumes dest and src same size (nx)
+// dest_im resized to size of src_im.
 template <class srcT, class destT, class kernelT, class accumT>
 inline void vil2_convolve_1d(const vil2_image_view<srcT>& src_im,
                                   vil2_image_view<destT>& dest_im,
