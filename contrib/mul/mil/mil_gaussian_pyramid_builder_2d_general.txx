@@ -466,7 +466,7 @@ void mil_gaussian_pyramid_builder_2d_general<T>::b_write(vsl_b_ostream& bfs) con
   vsl_b_write(bfs,is_a());
   vsl_b_write(bfs,version_no());
   mil_gaussian_pyramid_builder_2d<T>::b_write(bfs);
-  vsl_b_write(bfs,scale_step_);
+  vsl_b_write(bfs,scale_step());
 }
 
 //=======================================================================
@@ -483,14 +483,18 @@ void mil_gaussian_pyramid_builder_2d_general<T>::b_read(vsl_b_istream& bfs)
     vcl_cerr << name <<" into object of type " << is_a() << vcl_endl;
     vcl_abort();
   }
-
+  
   short version;
   vsl_b_read(bfs,version);
+  double scale;
+
   switch (version)
   {
     case (1):
       mil_gaussian_pyramid_builder_2d<T>::b_read(bfs);
-      vsl_b_read(bfs,scale_step_);
+      
+      vsl_b_read(bfs,scale);
+      set_scale_step(scale);
       break;
     default:
       vcl_cerr << "mil_gaussian_pyramid_builder_2d_general<T>::b_read() ";

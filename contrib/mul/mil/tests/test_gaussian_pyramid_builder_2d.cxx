@@ -11,12 +11,12 @@
 #include <mil/mil_image_pyramid.h>
 #include <vil/vil_byte.h>
 
-
+#include <vsl/vsl_binary_loader.h>
 
 void test_gaussian_pyramid_builder_2d()
 {
   int nx = 20, ny = 20;
-  vcl_cout << "*******************************************************" << vcl_endl;
+  vcl_cout << "\n\n*******************************************************" << vcl_endl;
   vcl_cout << " Testing mil_gaussian_pyramid_builder_2d (byte)(nx="<<nx<<")" << vcl_endl;
   vcl_cout << "*******************************************************" << vcl_endl;
 
@@ -59,6 +59,36 @@ void test_gaussian_pyramid_builder_2d()
 
 
   TEST("Found correct number of levels", image_pyr.n_levels(), 3);
+
+
+  vcl_cout<<"\n\n======== TESTING I/O ==========="<<vcl_endl;
+
+  vsl_add_to_binary_loader(mil_gaussian_pyramid_builder_2d<vil_byte>());
+  
+  vcl_string test_path = "test_gaussian_pyramid_builder_2d.bvl.tmp";
+  vsl_b_ofstream bfs_out(test_path);
+  TEST (("Created " + test_path + " for writing").c_str(),
+             (!bfs_out), false);
+  vsl_b_write(bfs_out, builder);
+  vsl_b_write(bfs_out, (mil_image_pyramid_builder*)(&builder));
+  bfs_out.close();
+
+  mil_gaussian_pyramid_builder_2d<vil_byte> builder_in;
+  mil_image_pyramid_builder* ptr_in=0;
+
+  vsl_b_ifstream bfs_in(test_path);
+  TEST (("Opened " + test_path + " for reading").c_str(),
+           (!bfs_in), false);
+  vsl_b_read(bfs_in, builder_in);
+  vsl_b_read(bfs_in, ptr_in);
+  bfs_in.close();
+
+  TEST ("saved builder = loaded builder",
+    builder.scale_step() == 2.0, true);
+  TEST("saved and loaded builder by base class ptr",
+    ptr_in->is_a() == builder.is_a(), true);
+
+  vsl_delete_all_loaders();
 
   
 }
