@@ -5,7 +5,7 @@
 
 #include <vidl/vidl_codec.h>
 #include <vidl/vidl_frame_as_image.h>
-#include <vil1/vil1_image.h>
+#include <vil/vil_image_view.h>
 
 //=========================================================================
 //  Methods for vidl_frame.
@@ -26,16 +26,16 @@ vidl_frame::~vidl_frame()
 }
 
 //: Return the image.
-vil1_image vidl_frame::get_image()
+vil_image_view_base_sptr vidl_frame::get_view()
 {
   if (! image_) {
-    image_ = vil1_image(new vidl_frame_as_image(this));
+    image_ = coder_->get_view(position_);
   }
   return image_;
 }
 
 //: Get the pixels for the rectangular window starting at x0, y0 and width and height wide.
- bool vidl_frame::get_section(void* ib, int x0, int y0, int width, int height) const
+vil_image_view_base_sptr vidl_frame::get_view(int x0, int width, int y0, int height) const
 {
-  return coder_->get_section(position_, ib, x0, y0, width, height);
+  return coder_->get_view(position_, x0, width, y0, height);
 }

@@ -53,9 +53,9 @@ vidl_frame_sptr vidl_movie::get_frame(int n)
   return ret_frame;
 }
 
-vil1_image vidl_movie::get_image(int n)
+vil_image_view_base_sptr vidl_movie::get_view(int n)
 {
-  return get_frame(n)->get_image();
+  return get_frame(n)->get_view();
 }
 
 //: Add a clip at the end of the movie

@@ -97,18 +97,17 @@ bool vidl_avicodec::write_header()
 
 
 //-----------------------------------------------------------------------------
-bool vidl_avicodec::get_section(
+vil_image_view_base_sptr vidl_avicodec::get_view(
                                 int position, // position of the frame in the stream
-                                void* ib, // To receive the datas
                                 int x0, // starting x
-                                int y0, // starting y
                                 int xs, // row size
-                                int ys) const // col size
+                                int y0, // starting y
+                                int ys ) const // col size
 {
   int i, j;
   byte* DIB;
   byte* StartDIB;
-  byte* db; // current output datas
+  vxl_byte *db, *ib; // current output datas
 
   DIB = (byte*) AVIStreamGetFrame(avi_get_frame_, position);
 
@@ -137,15 +136,8 @@ bool vidl_avicodec::get_section(
   // (a row contains a multiple of 4 bytes)
   int line_length = (width()*BitsPerPixel+31)/32*4;
 
-  if (!ib) {
-    ib = new byte[xs*ys*get_bytes_pixel()];
-    if (!ib) {
-      //SetStatusBad();
-      return false;
-    }
-  }
-
-  db = (byte*)ib;
+  db = new byte[xs*ys*get_bytes_pixel()];
+  ib = db;
 
   // Store the DIB datas into ib (db).
   // Note : DIB is a flipped upside down
@@ -185,8 +177,10 @@ bool vidl_avicodec::get_section(
                << BitsPerPixel << " bits per pixel AVI File.\n";
     } // end switch Bits per pixel
 
+  vil_image_view_base_sptr image_sptr(new vil_image_view<vxl_byte>(ib, xs, ys, 3, 
+                                                                   3, ((xs*3+3)& -4), 1));
   db = NULL;
-  return true;
+  return image_sptr;
 }
 
 
@@ -194,13 +188,12 @@ bool vidl_avicodec::get_section(
 // we may need to change make_dib to
 // be able to put a section different
 // of the entire frame.
-int vidl_avicodec::put_section(int position,
-                               void* ib,
-                               int x0, int y0,
-                               int xs, int ys)
+bool vidl_avicodec::put_view( int position,
+                              const vil_image_view_base &im,
+                              int x0, int y0)
 {
   vcl_cerr << "vidl_avicodec::put_section not implemented\n";
-  return -1;
+  return false;
 }
 
 //-----------------------------------------------------------------------------
@@ -558,10 +551,8 @@ void vidl_avicodec::choose_encoder(AVIEncoderType encoder)
 HANDLE  vidl_avicodec::make_dib(vidl_frame_sptr frame, UINT bits)
 {
   // 1st, Get the datas from the video frame
-
-  byte* TjSection = new byte[frame->width() * frame->height() * frame->get_bytes_pixel()];
-  if (!frame->get_section(TjSection, 0, 0, frame->width(), frame->height()) )
-    vcl_cerr << "vidl_avicodec::make_dib--Could not read get section\n";
+  vil_image_view<vxl_byte> image(frame->get_view());
+  byte* TjSection = (byte*) image.top_left_ptr();
 
   // 2nd, Copy the array of bytes (and transform it),
   // so it is usable by a 'windows' BitMap

@@ -1,3 +1,4 @@
+// This is core/vidl/vidl_io.h
 #ifndef vidl_io_h
 #define vidl_io_h
 //:
@@ -8,6 +9,7 @@
 //  Modifications
 //   Julien ESTEVE, June 2000 -  Ported from TargetJr
 //   10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
+//   10/7/2003 Matt Leotta (Brown) Converted vil1 to vil
 // \endverbatim
 
 

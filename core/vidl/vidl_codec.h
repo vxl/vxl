@@ -1,3 +1,4 @@
+// This is core/vidl/vidl_codec.h
 #ifndef vidl_codec_h
 #define vidl_codec_h
 
@@ -10,12 +11,14 @@
 // Julien ESTEVE, June 2000
 //     Ported from TargetJr
 // 10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
+// 10/7/2003 Matt Leotta (Brown) Converted vil1 to vil
 // \endverbatim
 
 
 #include <vcl_cstring.h>
 #include <vidl/vidl_codec_sptr.h>
 #include <vbl/vbl_ref_count.h>
+#include <vil/vil_image_view_base.h>
 
 class vidl_movie;
 class vidl_image_list_codec;
@@ -66,21 +69,21 @@ public:
   inline int  get_bits_pixel() const { return B; }
   inline int  get_bytes_pixel()const { return (B+7)/8; }
 
-  virtual bool get_section(
+  virtual vil_image_view_base_sptr get_view(
         int position,
-        void* ib,
         int x0,
-        int y0,
         int width,
-        int heigth) const = 0;
-
-  virtual int put_section(
-        int position,
-        void* ib,
-        int x0,
         int y0,
-        int xs,
-        int ys) = 0;
+        int height) const = 0;
+
+  inline vil_image_view_base_sptr get_view(int position)
+  { return get_view(position, 0, X, 0, Y); }
+
+  virtual bool put_view( 
+        int position,
+        const vil_image_view_base &im,
+        int x0,
+        int y0) = 0;
 
   virtual const char* type() = 0;
 

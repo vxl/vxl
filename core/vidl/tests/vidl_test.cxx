@@ -18,8 +18,8 @@ int main ()
        pframe <= movie->last();
        ++pframe)
   {
-    vil1_image im = pframe->get_image();
-    vcl_cout << "Got frame: " << im.width() << 'x' << im.height() << '\n';
+    vil_image_view_base_sptr im = pframe->get_view();
+    vcl_cout << "Got frame: " << im->ni() << 'x' << im->nj() << '\n';
   }
 
   // Running through the frames 2 images at a time
@@ -27,8 +27,8 @@ int main ()
        pframe <= movie->last();
        pframe += 2)
   {
-    vil1_image im = pframe->get_image();
-    vcl_cout << "Got frame: " << im.width() << 'x' << im.height() << '\n';
+    vil_image_view_base_sptr im = pframe->get_view();
+    vcl_cout << "Got frame: " << im->ni() << 'x' << im->nj() << '\n';
   }
 
   // Running backwards throught the image
@@ -36,8 +36,8 @@ int main ()
        pframe >= movie->first();
        --pframe)
   {
-    vil1_image im = pframe->get_image();
-    vcl_cout << "Got frame: " << im.width() << 'x' << im.height() << '\n';
+    vil_image_view_base_sptr im = pframe->get_view();
+    vcl_cout << "Got frame: " << im->ni() << 'x' << im->nj() << '\n';
   }
 
   // Backwards two at a time
@@ -45,8 +45,8 @@ int main ()
        pframe >= movie->first();
        pframe -= 2)
   {
-    vil1_image im = pframe->get_image();
-    vcl_cout << "Got frame: " << im.width() << 'x' << im.height() << '\n';
+    vil_image_view_base_sptr im = pframe->get_view();
+    vcl_cout << "Got frame: " << im->ni() << 'x' << im->nj() << '\n';
   }
 
   // Run over all pairs of images
@@ -67,7 +67,7 @@ int main ()
   for (int p=0; p<10 && pframe!=movie->end(); ++p) ++pframe;
   for (int p=10; p<=20 && pframe!=movie->end(); ++p,++pframe)
   {
-    pframe->get_image();
+    pframe->get_view();
   }
 
   return 0;

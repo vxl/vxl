@@ -7,9 +7,9 @@
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h> // for vcl_strtol()
 #include <vul/vul_file.h>
-#include <vil1/vil1_image.h>
-#include <vil1/vil1_memory_image_of.h>
-#include <vil1/vil1_rgb_byte.h>
+#include <vil/vil_image_view.h>
+#include <vil/vil_image_view.h>
+#include <vil/vil_rgb.h>
 
 extern "C" {
   // instead of #include <../libvo/video_out_internal.h>
@@ -143,7 +143,7 @@ static int internal_setup (vo_instance_t * instance_,
                                     0, 0, draw_frame);
 }
 
-static void vil1_im_draw_frame (vo_frame_t * frame)
+static void vil_im_draw_frame (vo_frame_t * frame)
 {
   vidl_mpegcodec_data * instance;
 
@@ -155,7 +155,7 @@ static void vil1_im_draw_frame (vo_frame_t * frame)
   decode_request * p = instance->pending_decode;
   if (!p)
   {
-    vcl_cerr << "vidl_mpegcodec. vil1_im_draw_frame."
+    vcl_cerr << "vidl_mpegcodec. vil_im_draw_frame."
              << "decode request was never set\n";
     return;
   }
@@ -178,9 +178,9 @@ static void vil1_im_draw_frame (vo_frame_t * frame)
 //another callback, called by helper class
 //after this is called, the client of this class
 //should set the decode request
-static int vil1_im_setup (vo_instance_t * instance, int width, int height)
+static int vil_im_setup (vo_instance_t * instance, int width, int height)
 {
-  return internal_setup (instance, width, height, vil1_im_draw_frame);
+  return internal_setup (instance, width, height, vil_im_draw_frame);
 }
 
 // this method is a callback, called by the helper class
@@ -191,7 +191,7 @@ vo_instance_t * vo_vil_im_open (void)
   instance = new vidl_mpegcodec_data;
 
   //set call backs
-  instance->setup = vil1_im_setup;
+  instance->setup = vil_im_setup;
   instance->framenum = -2;
   return (vo_instance_t *) instance;
 }
@@ -251,13 +251,10 @@ vidl_codec_sptr vidl_mpegcodec::load(const char* fname, char  /*mode*/)
   return 0;
 }
 
-bool
-vidl_mpegcodec::get_section(int position,
-                            void* ib,
-                            int x0,
-                            int y0,
-                            int width,
-                            int height) const
+vil_image_view_base_sptr
+vidl_mpegcodec::get_view( int position,
+                          int x0, int width,
+                          int y0, int height) const
 {
   assert(inited == true);
   assert(x0+width  <= this->width());
@@ -320,9 +317,15 @@ vidl_mpegcodec::get_section(int position,
   }
 
   unsigned char * buf = buffers_->get_buff(position);
-  vcl_memcpy(ib,(void *) buf,((this->get_bytes_pixel())*width*height));
 
-  return true;
+  vil_image_view<vxl_byte> *image;
+  image = new vil_image_view<vxl_byte>(buf, width, height, 
+                                       this->get_bytes_pixel(), 
+                                       this->get_bytes_pixel(), 
+                                       this->get_bytes_pixel()*width, 1);
+  vil_image_view_base_sptr image_sptr(image);
+
+  return image_sptr;
 }
 
 bool
@@ -425,32 +428,32 @@ vidl_mpegcodec::init()
 #if 0
 //here for reference.
 //this actually describes how to get a
-//vil1_image from these char * buffers.
+//vil_image_resource from these char * buffers.
 
-vil1_image *
+vil_image_resource *
 vidl_mpegcodec::get_image(int frame_position,
                           int x0,
                           int y0,
                           int width,
                           int height)
 {
-  vil1_image * frame = 0;
+  vil_image_resource * frame = 0;
 
   int indy = width * height * this->get_bytes_pixel();
   unsigned char ib[indy];
-  this->get_section(frame_position,(void*)ib,x0,y0,width,height);
+  this->get_view( /* Fix params : remove first (becomes return value) and interchange third and fourth */ : frame_position,(void*)ib,x0,y0,width,height);
 
   if (decoder_->get_format() == vidl_mpegcodec_data::GREY)
-    frame = new vil1_memory_image_of<unsigned char >(&ib[0],this->width(),this->height());
+    frame = new vil_image_view<unsigned char >(&ib[0],this->ni(),this->nj());
   else
   {
-    int w = this->width();
-    int h = this->height();
-    vil1_rgb_byte bites[w*h];
+    int w = this->ni();
+    int h = this->nj();
+    vil_rgb<vxl_byte> bites[w*h];
     int c=0;
     for (int i=0; i<(w*h); i++,c+=3)
-      bites[i] = vil1_rgb_byte(ib[c],ib[c+1],ib[c+2]);
-    frame = new vil1_memory_image_of<vil1_rgb_byte >(&bites[0],w,h);
+      bites[i] = vil_rgb<vxl_byte>(ib[c],ib[c+1],ib[c+2]);
+    frame = new vil_image_view<vil_rgb<vxl_byte> >(&bites[0],w,h);
   }
   return frame;
 }

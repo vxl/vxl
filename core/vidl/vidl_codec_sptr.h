@@ -1,13 +1,4 @@
-//*****************************************************************************
-// File name: vidl_codec_sptr.h
-// Description: A smart pointer on a vidl_codec
-//-----------------------------------------------------------------------------
-// Language: C++
-//
-// Version |Date      | Author                   |Comment
-// --------+----------+--------------------------+-----------------------------
-// 1.0     |2000/05/26| Julien ESTEVE            |Creation
-//*****************************************************************************
+// This is core/vidl/vidl_codec_sptr.h
 #ifndef vidl_codec_sptr_h
 #define vidl_codec_sptr_h
 
@@ -22,5 +13,5 @@ class vidl_codec;
 
 typedef vbl_smart_ptr<vidl_codec> vidl_codec_sptr;
 
-#endif // ifndef vidl_codec_sptr_h
+#endif // vidl_codec_sptr_h
 

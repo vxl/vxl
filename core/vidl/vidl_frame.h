@@ -1,3 +1,4 @@
+// This is core/vidl/vidl_frame.h
 #ifndef vidl_frame_h
 #define vidl_frame_h
 
@@ -9,11 +10,13 @@
 // Modifications
 // Julien Esteve, May 2000 Ported from TargetJr
 // 10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
+// 10/7/2003 Matt Leotta (Brown) Converted vil1 to vil
 // \endverbatim
 
 
 #include <vbl/vbl_ref_count.h>
-#include <vil1/vil1_image.h>
+#include <vil/vil_image_view.h>
+#include <vil/vil_image_resource.h>
 #include <vidl/vidl_frame_sptr.h>
 #include <vidl/vidl_codec.h>
 
@@ -27,9 +30,9 @@ class vidl_frame : public vbl_ref_count
         vidl_frame(int position, vidl_codec_sptr coder);
         ~vidl_frame();
 
-        vil1_image get_image();
-        virtual bool get_section(
-                void* ib, int x0, int y0, int width, int heigth) const;
+        vil_image_view_base_sptr get_view();
+        virtual vil_image_view_base_sptr get_view( 
+                int x0, int width, int y0, int heigth) const;
 
         vidl_codec_sptr get_codec() {return coder_;}
 
@@ -48,7 +51,7 @@ class vidl_frame : public vbl_ref_count
         // Data Members
         const int position_;
         vidl_codec_sptr coder_;
-        vil1_image image_;
+        vil_image_view_base_sptr image_;
 };
 
 #endif // vidl_frame_h

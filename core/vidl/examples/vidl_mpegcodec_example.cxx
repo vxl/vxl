@@ -7,7 +7,7 @@
 
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h>
-#include <vil1/vil1_save.h>
+#include <vil/vil_save.h>
 #include <vidl/vidl_io.h>
 #include <vidl/vidl_mpegcodec.h>
 #include <vidl/vidl_movie.h>
@@ -48,7 +48,7 @@ int main(int argc, char* argv[])
   assert( movie->length()>0 );
   vcl_cout << "Length = " << movie->length() << vcl_endl
            << "Width  = " << movie->width() << vcl_endl
-           << "Height = " << movie->width() << vcl_endl;
+           << "Height = " << movie->height() << vcl_endl;
 
 
   //traverse the movie sequence
@@ -57,13 +57,13 @@ int main(int argc, char* argv[])
        pframe <= movie->last();
        ++pframe,i++)
   {
-    vil1_image im = pframe->get_image();
+    vil_image_view_base_sptr im = pframe->get_view();
     vcl_cout << "decode frame " << i << vcl_endl;
   }
 
   //random frame access
-  vil1_image im=movie->get_image(movie->length()/2);
-  vil1_save(im,"test.ppm");
+  vil_image_view_base_sptr im=movie->get_view(movie->length()/2);
+  vil_save(*im,"test.ppm");
 
   mpegcodec->close();
 

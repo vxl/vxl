@@ -14,7 +14,6 @@ SET(vidl_sources
   vidl_clip.cxx  vidl_clip.h  vidl_clip_sptr.h
   vidl_movie.cxx vidl_movie.h vidl_movie_sptr.h
   vidl_frame.cxx vidl_frame.h vidl_frame_sptr.h
-  vidl_frame_as_image.cxx vidl_frame_as_image.h vidl_frame_as_image_sptr.h
   vidl_image_list_codec.cxx vidl_image_list_codec.h vidl_image_list_codec_sptr.h
   vidl_io.cxx    vidl_io.h
 )
@@ -38,7 +37,7 @@ IF(WIN32)
 ENDIF(WIN32)
 
 ADD_LIBRARY(vidl ${vidl_sources})
-TARGET_LINK_LIBRARIES( vidl vbl vul vil1 vcl )
+TARGET_LINK_LIBRARIES( vidl vbl vul vil vcl )
 IF( MPEG2_FOUND )
   TARGET_LINK_LIBRARIES( vidl ${MPEG2_LIBRARIES} )
 ENDIF( MPEG2_FOUND )

@@ -1,3 +1,4 @@
+// This is core/vidl/vidl_mpegcodec.h
 #ifndef vidl_mpegcodec_h
 #define vidl_mpegcodec_h
 //:
@@ -24,7 +25,7 @@
 #include <vidl/vidl_codec.h>
 #include <vidl/vidl_codec_sptr.h>
 
-class vil1_image;
+class vil_image_resource;
 
 //: Allows user to load MPEG files as vxl video.
 class vidl_mpegcodec : public vidl_codec
@@ -47,18 +48,13 @@ class vidl_mpegcodec : public vidl_codec
   //pure virtual methods
   //------------------------------------------
 
-  bool   get_section(int frame_position,
-                     void* ib,
-                     int x0,
-                     int y0,
-                     int xs,
-                     int ys) const;
-  int    put_section(int /*frame_position*/,
-                     void* /*ib*/,
-                     int /*x0*/,
-                     int /*y0*/,
-                     int /*xs*/,
-                     int /*ys*/){return 0;}
+  vil_image_view_base_sptr get_view( int frame_position,
+                                     int x0, int xs,
+                                     int y0, int ys ) const;
+
+  bool put_view( int frame_position,
+                 const vil_image_view_base &im,
+                 int x0, int y0 ) {return 0;}
 
   virtual bool probe(const char* fname);
   virtual vidl_codec_sptr load(const char* fname, char mode = 'r' );

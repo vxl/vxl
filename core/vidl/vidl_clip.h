@@ -1,3 +1,4 @@
+// This is core/vidl/vidl_clip.h
 #ifndef vidl_clip_h
 #define vidl_clip_h
 
@@ -10,13 +11,14 @@
 // Julien ESTEVE, June 2000
 //     Ported from TargetJr
 // 10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
+// 10/7/2003 Matt Leotta (Brown) Converted vil1 to vil
 // \endverbatim
 
 #include <vbl/vbl_ref_count.h>
 #include <vidl/vidl_clip_sptr.h>
 #include <vidl/vidl_frame_sptr.h>
 #include <vidl/vidl_codec_sptr.h>
-#include <vil1/vil1_image.h>
+#include <vil/vil_image_resource.h>
 
 #include <vcl_vector.h>
 #include <vcl_list.h>
@@ -44,14 +46,14 @@ public:
         );
 
   vidl_clip(
-        vcl_list<vil1_image> &images,
+        vcl_list<vil_image_resource_sptr> &images,
         int start = 0,
         int end = 0,
         int increment = 1
         );
 
   vidl_clip(
-        vcl_vector<vil1_image> &images,
+        vcl_vector<vil_image_resource_sptr> &images,
         int start = 0,
         int end = 0,
         int increment = 1

@@ -1,13 +1,4 @@
-//*****************************************************************************
-// File name: vidl_movie_sptr.h
-// Description: A smart pointer on a vidl_movie
-//-----------------------------------------------------------------------------
-// Language: C++
-//
-// Version |Date      | Author                   |Comment
-// --------+----------+--------------------------+-----------------------------
-// 1.0     |2000/05/26| Julien ESTEVE            |Creation
-//*****************************************************************************
+// This is core/vidl/vidl_movie_sptr.h
 #ifndef vidl_movie_sptr_h
 #define vidl_movie_sptr_h
 
@@ -22,5 +13,5 @@ class vidl_movie;
 
 typedef vbl_smart_ptr<vidl_movie> vidl_movie_sptr;
 
-#endif // ifndef vidl_movie_sptr_h
+#endif // vidl_movie_sptr_h
 

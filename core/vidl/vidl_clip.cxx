@@ -34,7 +34,7 @@ vidl_clip::vidl_clip(
 
 //: Constructor. Create a clip from a vector of images. Start, end and increment frames are optional.
 vidl_clip::vidl_clip(
-        vcl_vector<vil1_image> &images,
+        vcl_vector<vil_image_resource_sptr> &images,
         int start,
         int end,
         int increment
@@ -44,7 +44,7 @@ vidl_clip::vidl_clip(
                     // but that would be better
   vidl_image_list_codec_sptr codec = new vidl_image_list_codec(images);
 
-  for (vcl_vector<vil1_image>::iterator i=images.begin(); i!= images.end(); ++i)
+  for (vcl_vector<vil_image_resource_sptr>::iterator i=images.begin(); i!= images.end(); ++i)
     {
       vidl_frame_sptr f = new vidl_frame(position, codec.ptr());
       frames_.push_back(f);
@@ -58,7 +58,7 @@ vidl_clip::vidl_clip(
 
 //: Constructor. Create a clip from a list of images. Start, end and increment frames are optional.
 vidl_clip::vidl_clip(
-                     vcl_list<vil1_image> &images,
+                     vcl_list<vil_image_resource_sptr> &images,
                      int start,
                      int end,
                      int increment
@@ -68,7 +68,7 @@ vidl_clip::vidl_clip(
                     // but that would be better
   vidl_image_list_codec_sptr codec = new vidl_image_list_codec(images);
 
-  for (vcl_list<vil1_image>::iterator i=images.begin(); i!= images.end(); ++i)
+  for (vcl_list<vil_image_resource_sptr>::iterator i=images.begin(); i!= images.end(); ++i)
     {
       vidl_frame_sptr f = new vidl_frame(position, codec.ptr());
       frames_.push_back(f);

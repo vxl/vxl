@@ -1,3 +1,4 @@
+// This is core/vidl/vidl_image_list_codec.h
 #ifndef vidl_image_list_codec_h
 #define vidl_image_list_codec_h
 //:
@@ -8,13 +9,14 @@
 //  Modifications
 //   Julien ESTEVE, June 2000 -  Ported from TargetJr
 //   10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
+//   10/7/2003 Matt Leotta (Brown) Converted vil1 to vil
 // \endverbatim
 
 #include <vcl_string.h>
 #include <vcl_cstring.h>
 #include <vidl/vidl_image_list_codec_sptr.h>
 #include <vidl/vidl_codec.h>
-#include <vil1/vil1_image.h>
+#include <vil/vil_image_resource.h>
 #include <vcl_list.h>
 #include <vcl_vector.h>
 
@@ -27,8 +29,8 @@ class vidl_image_list_codec :  public vidl_codec
 
   // Constructors
   vidl_image_list_codec();
-  vidl_image_list_codec(vcl_list<vil1_image>& images);
-  vidl_image_list_codec(vcl_vector<vil1_image>& images);
+  vidl_image_list_codec(vcl_list<vil_image_resource_sptr>& images);
+  vidl_image_list_codec(vcl_vector<vil_image_resource_sptr>& images);
   // Destructor
   ~vidl_image_list_codec();
 
@@ -36,8 +38,8 @@ class vidl_image_list_codec :  public vidl_codec
   // Safe cast to a parent from Image
   virtual vidl_image_list_codec* casttovidl_image_list_codec() { return this; }
 
-  virtual bool get_section(int position, void* ib, int x0, int y0, int w, int h) const;
-  virtual int put_section(int position, void* ib, int x0, int y0, int w, int h);
+  virtual vil_image_view_base_sptr get_view(int position, int x0, int w, int y0, int h) const;
+  virtual bool put_view(int position, const vil_image_view_base &im, int x0, int y0);
   // IO
   virtual vidl_codec_sptr load(const char* fname, char mode = 'r' );
   virtual vidl_codec_sptr load(const vcl_list<vcl_string> &fnames, char mode = 'r');
@@ -56,7 +58,7 @@ class vidl_image_list_codec :  public vidl_codec
         {vcl_strcpy(default_image_type_,type);}
 
   virtual const char* get_image_type() const {return default_image_type_;}
-  vcl_vector<vil1_image> get_images() const {return images_;}
+  vcl_vector<vil_image_resource_sptr> get_images() const {return images_;}
 
   // Register image loaders
   //virtual void register_image_loaders ();
@@ -65,7 +67,7 @@ class vidl_image_list_codec :  public vidl_codec
   virtual bool init();
 
   // Data Members--------------------------------------------------------------
-  vcl_vector<vil1_image> images_;
+  vcl_vector<vil_image_resource_sptr> images_;
 
  private:
   char* default_image_type_;

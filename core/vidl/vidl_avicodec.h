@@ -1,3 +1,4 @@
+// This is core/vidl/vidl_avicodec.h
 #ifndef vidl_avicodec_h
 #define vidl_avicodec_h
 //:
@@ -13,6 +14,7 @@
 //   Julien ESTEVE, June 2000
 //     Ported from TargetJr
 //   10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
+//   10/7/2003 Matt Leotta (Brown) Converted vil1 to vil
 // \endverbatim
 
 #include <vcl_compiler.h>
@@ -38,8 +40,12 @@ class vidl_avicodec : public vidl_codec
 
   //-----------------------------------------------------
 
-  virtual bool   get_section(int position, void* ib, int x0, int y0, int xs, int ys) const;
-  virtual int    put_section(int position, void* ib, int x0, int y0, int xs, int ys);
+  virtual vil_image_view_base_sptr  get_view(int position, 
+                                             int x0, int xs, 
+                                             int y0, int ys ) const;
+  virtual bool put_view(int position, 
+                        const vil_image_view_base &im, 
+                        int x0, int y0 );
 
   //-----------------------------------------------------
   virtual bool probe(const char* fname);

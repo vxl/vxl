@@ -1,3 +1,4 @@
+// This is core/vidl/vidl_movie.h
 #ifndef vidl_movie_h
 #define vidl_movie_h
 //:
@@ -8,13 +9,14 @@
 //   Modifications
 //    Julien ESTEVE, June 2000 -   Ported from TargetJr
 //    10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
+//    10/7/2003 Matt Leotta (Brown) Converted vil1 to vil
 // \endverbatim
 
 #include <vbl/vbl_ref_count.h>
 #include <vidl/vidl_movie_sptr.h>
 #include <vidl/vidl_frame_sptr.h>
 #include <vidl/vidl_clip.h>
-#include <vil1/vil1_image.h>
+#include <vil/vil_image_view.h>
 #include <vcl_list.h>
 
 //: Video movie
@@ -37,7 +39,7 @@ class vidl_movie : public vbl_ref_count
 
   // Data Access
   vidl_frame_sptr get_frame(int n);
-  vil1_image get_image(int n);
+  vil_image_view_base_sptr get_view(int n);
   int length() const;
   unsigned int frame_rate() const {return frame_rate_;}
   void set_frame_rate(unsigned int fr) {frame_rate_ = fr;}

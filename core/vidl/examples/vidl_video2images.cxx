@@ -10,11 +10,11 @@
 #include <vcl_algorithm.h>
 #include <vul/vul_arg.h>
 #include <vul/vul_sprintf.h>
-#include <vil1/vil1_image.h>
-#include <vil1/vil1_memory_image_of.h>
-#include <vil1/vil1_save.h>
-#include <vil1/vil1_byte.h>
-#include <vil1/vil1_rgb.h>
+#include <vil/vil_image_view.h>
+#include <vil/vil_image_view.h>
+#include <vil/vil_save.h>
+#include <vxl_config.h>
+#include <vil/vil_rgb.h>
 #include <vidl/vidl_io.h>
 #include <vidl/vidl_frame.h>
 #include <vidl/vidl_movie.h>
@@ -216,17 +216,17 @@ main (int argc, char **argv)
 
     if (frames().end() != vcl_find (frames().begin(), frames().end(), i))
     {
-      vil1_image frame0 = pframe->get_image();
+      vil_image_view_base_sptr frame0 = pframe->get_view();
       V2( "frame image: " << frame0 );
-      CHECKE( 3 == frame0.components(),
+      CHECKE( 3 == vil_pixel_format_num_components(frame0->pixel_format()),
               "video frames must have 3 components" );
-      CHECKE( 8 == frame0.bits_per_component(),
+      CHECKE( 1 == vil_pixel_format_sizeof_components(frame0->pixel_format()),
               "video frames must have 8 bits per component" );
-      vil1_memory_image_of<vil1_rgb<vil1_byte> > frame (frame0);
+      vil_image_view<vil_rgb<vxl_byte> > frame (frame0);
       if (oifnt()) {
         vcl_string fn = vul_sprintf (oifnt(), i);
         V2( "writing frame to file " << fn );
-        vil1_save (frame, fn.c_str());
+        vil_save (frame, fn.c_str());
       }
     }
     else
