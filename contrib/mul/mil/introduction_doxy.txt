@@ -39,7 +39,13 @@
 * including
 * - mil_algo_exp_filter_2d<srcT,destT>  (applies exponential filter)
 * - mil_algo_line_filter<T> (Looks for line like structures)
+* - mil_algo_grad_filter_2d<srcT,destT> (Computes gradient images)
 *
-* Note that in general one should use classes in vipl (the image processing library)
+* These can be applied to vil_image objects by creating mil_image_2d_of<T> as
+* wrappers around the vil_image objects (though care should be taken to
+* ensure that the destination images are of the correct size, since the wrapper
+* cannot resize them - it will create new data space on the heap if the size is wrong).
+*
+* Note that in general one should use classes in vepl and vipl (the image processing library)
 * for image filtering.
 */
