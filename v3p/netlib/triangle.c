@@ -318,6 +318,7 @@
 /* exit() may or may not already be defined at this point.  I declare these  */
 /* functions explicitly because some non-ANSI C compilers lack stdlib.h.     */
 
+#ifndef _MSC_VER
 #ifndef _STDLIB_H_
 extern void *malloc();
 extern void free();
@@ -325,6 +326,7 @@ extern void exit();
 extern double strtod();
 extern long strtol();
 #endif /* _STDLIB_H_ */
+#endif
 
 /* A few forward declarations.                                               */
 
@@ -755,6 +757,9 @@ struct triedge recenttri;
 #endif
 #ifdef __unix
 # include <unistd.h> /* for intptr_t on e.g. Linux */
+#endif
+#if (defined _MSC_VER) && (_MSC_VER <= 1200)
+typedef unsigned long intptr_t;
 #endif
 
 /*****************************************************************************/
