@@ -6,8 +6,8 @@ IF(WIN32)
   # that depend on subtle logic at compile time.
   # This is a bit indescriminate, but it may be the only feasible way to suppress them.
   IF (CMAKE_CXX_COMPILER MATCHES "^cl$")
-	SET ( CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} /WARN:0")
-	SET ( CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /WARN:0")
+    SET ( CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} /WARN:0")
+    SET ( CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /WARN:0")
   ENDIF (CMAKE_CXX_COMPILER MATCHES "^cl$")
 ENDIF(WIN32)
 
@@ -16,8 +16,8 @@ PROJECT( vcl )
 
 # Set up vcl_where_root_dir.h to have a macro set to $VCL_SOURCE_ROOT_DIR
 CONFIGURE_FILE(
-      ${vxl_SOURCE_DIR}/vcl/vcl_where_root_dir.h.in
-      ${vxl_BINARY_DIR}/vcl/vcl_where_root_dir.h ESCAPE_QUOTES
+  ${vxl_SOURCE_DIR}/vcl/vcl_where_root_dir.h.in
+  ${vxl_BINARY_DIR}/vcl/vcl_where_root_dir.h ESCAPE_QUOTES
 )
 
 SET( vcl_sources
@@ -312,6 +312,7 @@ SET( vcl_sources
   win32-vc60/vcl_complex.h
   win32-vc60/vcl_cstdarg.h
   win32-vc60/vcl_cstdlib.h
+  win32-vc60/vcl_memory.h
   win32-vc60/vcl_string.h
 
   win32-vc70/vcl_cmath.h
@@ -335,7 +336,6 @@ SET( vcl_sources
 AUX_SOURCE_DIRECTORY(Templates vcl_sources)
 
 
-
 ADD_LIBRARY(vcl ${vcl_sources})
 
 IF(WIN32)
@@ -344,7 +344,6 @@ IF(WIN32)
     INCLUDE_DIRECTORIES( config.win32 )
   ENDIF(NOT CYGWIN)
 ENDIF(WIN32)
-
 
 
 IF(UNIX)
