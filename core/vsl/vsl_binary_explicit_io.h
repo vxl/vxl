@@ -26,7 +26,7 @@
 //    emit 0 bit
 //    emit least significant 7 bits of value.
 //    shift value right 7 bits
-//   emit bit 1
+//  emit bit 1
 //  emit value embedded in 7 bits
 // \endverbatim
 
@@ -63,12 +63,13 @@
 // Note: There is no point in #ifdef-ing out calls to byte-swapping if you
 // are on a little-endian machine. An optimising compiler will inline the
 // function to nothing for little-endian machines anyway.
-
+//
 // If your computer doesn't use IEEE format reals, then we really should
 // redesign the floating point IO.
-// Propsed design notes:
-// Should do conversion to and from a buffer, rather than in place, (since size not known in general)
-// double and reals should be converted to IEEE format,
+// Proposed design notes:
+// Should do conversion to and from a buffer, rather than in place,
+// (since size not known in general)
+// double and reals should be converted to IEEE format.
 // Someone needs to write a long double format anyway.
 // Don't forget to fix all the code that calls vsl_swap_bytes.
 // Really should check anything that #includes this file.
@@ -130,7 +131,7 @@ inline void vsl_swap_bytes_to_buffer( const char * source, char * dest, int nbyt
 /////////////////////////////////////////////////////////////////////////
 
 #define macro( T ) \
-inline const char * vsl_type_string(T dummy) { return #T; }
+inline const char * vsl_type_string(T /*dummy*/) { return #T; }
 macro (short);
 macro (unsigned short);
 macro (int);
@@ -165,7 +166,7 @@ inline unsigned long vsl_convert_to_arbitrary_length_unsigned_impl(
   unsigned char* ptr = buffer;
   while (count-- > 0)
   {
-// The inside of this loop is run once per integer
+    // The inside of this loop is run once per integer
     T v = *(ints++);
     while (v > 127)
     {
@@ -188,7 +189,7 @@ inline unsigned long vsl_convert_to_arbitrary_length_signed_impl(
   unsigned char* ptr = buffer;
   while (count-- > 0)
   {
-// The inside of this loop is run once per integer
+    // The inside of this loop is run once per integer
     T v = *(ints++);
     while (v > 63 || v < -64)
     {
@@ -211,7 +212,7 @@ inline unsigned long vsl_convert_from_arbitrary_length_signed_impl(
   const unsigned char* ptr = buffer;
   while (count-- > 0)
   {
-// The inside of this loop is run once per integer
+    // The inside of this loop is run once per integer
 
     T v = 0; // The value being loaded
     unsigned char b= *(ptr++);
@@ -223,8 +224,8 @@ inline unsigned long vsl_convert_from_arbitrary_length_signed_impl(
       b = *(ptr++);
     }
 
-// At the end of the loop, the last seven bits have not been added
-// Now check that number has not and will not overflow
+    // At the end of the loop, the last seven bits have not been added
+    // Now check that number has not and will not overflow
     int bitsLeft = sizeof(T)*8 - bitsLoaded;
     if (bitsLeft < 7)
     {
@@ -242,7 +243,7 @@ inline unsigned long vsl_convert_from_arbitrary_length_signed_impl(
       }
     }
 
-// Now add the last 1<=n<=7 bits.
+    // Now add the last 1<=n<=7 bits.
     *(ints++) = v |            // the stuff found before the final 7 bits
       ( ((T)(b & 63)) << bitsLoaded) | // the value of the penultimate 6 bits
       ( ((T)(b & 64)) ? (-64 << bitsLoaded) : 0); // the value of the final bit.
@@ -260,7 +261,7 @@ inline unsigned long vsl_convert_from_arbitrary_length_unsigned_impl(
   const unsigned char* ptr = buffer;
   while (count-- > 0)
   {
-// The inside of this loop is run once per integer
+    // The inside of this loop is run once per integer
     T v = 0;
     unsigned char b = *(ptr++);
     int bitsLoaded = 0;
@@ -271,8 +272,8 @@ inline unsigned long vsl_convert_from_arbitrary_length_unsigned_impl(
       b = *(ptr++);
     }
 
-// At the end of the loop, the last seven bits have not been added
-// First check that number has not and will not overflow
+    // At the end of the loop, the last seven bits have not been added
+    // First check that number has not and will not overflow
     int bitsLeft = sizeof(T)*8 - bitsLoaded;
     if (bitsLeft < 7)
     {
@@ -287,7 +288,7 @@ inline unsigned long vsl_convert_from_arbitrary_length_unsigned_impl(
       }
     }
 
-// Now add the last 7 bits.
+    // Now add the last 7 bits.
     *(ints++) = v + ( ((T)(b & 127)) << bitsLoaded);
   }
   return (unsigned long)(ptr - buffer);
@@ -525,7 +526,7 @@ inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buff
 {
   return vsl_convert_from_arbitrary_length_signed_impl(buffer, ints, count);
 }
-#endif
+#endif // 0
 
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
