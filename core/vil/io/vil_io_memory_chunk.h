@@ -23,4 +23,9 @@ void vsl_b_read(vsl_b_istream &is, vil2_memory_chunk*& chunk);
 //: Print human readable summary of a vil2_memory_chunk object to a stream
 void vsl_print_summary(vcl_ostream& os,const vil2_memory_chunk& chunk);
 
+//: Print human readable summary of a vil2_memory_chunk object to a stream
+inline void vsl_print_summary(vcl_ostream& os,const vil2_memory_chunk* chunk) {
+  vsl_print_summary(os, *chunk); }
+
+
 #endif

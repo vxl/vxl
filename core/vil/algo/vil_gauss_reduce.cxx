@@ -1,5 +1,5 @@
-// This is mul/vil2/algo/vil2_algo_gauss_reduce.cxx
-#include "vil2_algo_gauss_reduce.h"
+// This is mul/vil2/algo/vil2_gauss_reduce.cxx
+#include "vil2_gauss_reduce.h"
 //:
 //  \file
 //  \brief Functions to smooth and sub-sample image in one direction
@@ -9,7 +9,7 @@
 //: Smooth and subsample single plane src_im in x to produce dest_im
 //  Applies 1-5-8-5-1 filter in x, then samples
 //  every other pixel.  Fills [0,(ni+1)/2-1][0,nj-1] elements of dest
-void vil2_algo_gauss_reduce(const vxl_byte* src_im,
+void vil2_gauss_reduce(const vxl_byte* src_im,
                             int src_ni, int src_nj,
                             int s_x_step, int s_y_step,
                             vxl_byte* dest_im,
@@ -46,7 +46,7 @@ void vil2_algo_gauss_reduce(const vxl_byte* src_im,
 //: Smooth and subsample single plane src_im in x to produce dest_im
 //  Applies 1-5-8-5-1 filter in x, then samples
 //  every other pixel.  Fills [0,(ni+1)/2-1][0,nj-1] elements of dest
-void vil2_algo_gauss_reduce(const float* src_im,
+void vil2_gauss_reduce(const float* src_im,
                             int src_ni, int src_nj,
                             int s_x_step, int s_y_step,
                             float* dest_im,int d_x_step, int d_y_step)
@@ -82,7 +82,7 @@ void vil2_algo_gauss_reduce(const float* src_im,
 //: Smooth and subsample single plane src_im in x to produce dest_im
 //  Applies 1-5-8-5-1 filter in x, then samples
 //  every other pixel.  Fills [0,(ni+1)/2-1][0,nj-1] elements of dest
-void vil2_algo_gauss_reduce(const int* src_im,
+void vil2_gauss_reduce(const int* src_im,
                             int src_ni, int src_nj,
                             int s_x_step, int s_y_step,
                             int* dest_im,
@@ -119,7 +119,7 @@ void vil2_algo_gauss_reduce(const int* src_im,
 
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
 //  Smooths with a 3x3 filter and subsamples
-void vil2_algo_gauss_reduce_121(const vxl_byte* src_im,
+void vil2_gauss_reduce_121(const vxl_byte* src_im,
                                 int src_ni, int src_nj,
                                 int s_x_step, int s_y_step,
                                 vxl_byte* dest_im,int d_x_step, int d_y_step)
@@ -189,7 +189,7 @@ void vil2_algo_gauss_reduce_121(const vxl_byte* src_im,
 
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
 //  Smooths with a 3x3 filter and subsamples
-void vil2_algo_gauss_reduce_121(const float* src_im,
+void vil2_gauss_reduce_121(const float* src_im,
                                 int src_ni, int src_nj,
                                 int s_x_step, int s_y_step,
                                 float* dest_im,
@@ -260,7 +260,7 @@ void vil2_algo_gauss_reduce_121(const float* src_im,
 
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
 //  Smooths with a 3x3 filter and subsamples
-void vil2_algo_gauss_reduce_121(const int* src_im,
+void vil2_gauss_reduce_121(const int* src_im,
                                 int src_ni, int src_nj,
                                 int s_x_step, int s_y_step,
                                 int* dest_im,

@@ -1,6 +1,6 @@
-// This is mul/vil2/algo/vil2_algo_convolve_1d.h
-#ifndef vil2_algo_convolve_1d_h_
-#define vil2_algo_convolve_1d_h_
+// This is mul/vil2/algo/vil2_convolve_1d.h
+#ifndef vil2_convolve_1d_h_
+#define vil2_convolve_1d_h_
 //:
 //  \file
 //  \brief 1D Convolution with cunning boundary options
@@ -71,7 +71,7 @@ enum vil2_convolve_boundary_option
 //: Convolve edge with kernel[x*kstep] x in [k_lo,k_hi] (k_lo<=0)
 //  Fills only edge: dest[i], i=0..(-k_lo-1)
 template <class srcT, class destT, class kernelT, class accumT>
-inline void vil2_algo_convolve_edge_1d(const srcT* src, unsigned n, int s_step,
+inline void vil2_convolve_edge_1d(const srcT* src, unsigned n, int s_step,
                                        destT* dest, int d_step,
                                        const kernelT* kernel, int k_lo, int k_hi, int kstep,
                                        accumT,
@@ -161,7 +161,7 @@ inline void vil2_algo_convolve_edge_1d(const srcT* src, unsigned n, int s_step,
   }
   else
   {
-    vcl_cout<<"vil2_algo_convolve_edge_1d: ";
+    vcl_cout<<"vil2_convolve_edge_1d: ";
     vcl_cout<<"Sorry, can't deal with supplied edge option.\n";
     vcl_abort();
   }
@@ -171,7 +171,7 @@ inline void vil2_algo_convolve_edge_1d(const srcT* src, unsigned n, int s_step,
 // Assumes dest and src same size (nx)
 // \relates vil2_image_view
 template <class srcT, class destT, class kernelT, class accumT>
-inline void vil2_algo_convolve_1d(const srcT* src0, unsigned nx, int s_step,
+inline void vil2_convolve_1d(const srcT* src0, unsigned nx, int s_step,
                                   destT* dest0, int d_step,
                                   const kernelT* kernel, int k_lo, int k_hi,
                                   accumT ac,
@@ -179,7 +179,7 @@ inline void vil2_algo_convolve_1d(const srcT* src0, unsigned nx, int s_step,
                                   vil2_convolve_boundary_option end_option)
 {
   // Deal with start (fill elements 0..1-k_lo of dest)
-  vil2_algo_convolve_edge_1d(src0,nx,s_step,dest0,d_step,kernel,k_lo,k_hi,1,ac,start_option);
+  vil2_convolve_edge_1d(src0,nx,s_step,dest0,d_step,kernel,k_lo,k_hi,1,ac,start_option);
 
   const kernelT* k_begin = kernel+k_lo;
   const kernelT* k_end   = kernel+k_hi+1;
@@ -195,7 +195,7 @@ inline void vil2_algo_convolve_1d(const srcT* src0, unsigned nx, int s_step,
   }
 
   // Deal with end  (reflect data and kernel!)
-  vil2_algo_convolve_edge_1d(src0+(nx-1)*s_step,nx,-s_step,
+  vil2_convolve_edge_1d(src0+(nx-1)*s_step,nx,-s_step,
                              dest0+(nx-1)*d_step,-d_step,
                              kernel,-k_hi,-k_lo,-1,ac,end_option);
 }
@@ -205,7 +205,7 @@ inline void vil2_algo_convolve_1d(const srcT* src0, unsigned nx, int s_step,
 // \param kernel should point to tap 0.
 // Assumes dest and src same size (nx)
 template <class srcT, class destT, class kernelT, class accumT>
-inline void vil2_algo_convolve_1d(const vil2_image_view<srcT>& src_im,
+inline void vil2_convolve_1d(const vil2_image_view<srcT>& src_im,
                                   vil2_image_view<destT>& dest_im,
                                   const kernelT* kernel, int k_lo, int k_hi,
                                   accumT ac,
@@ -227,13 +227,13 @@ inline void vil2_algo_convolve_1d(const vil2_image_view<srcT>& src_im,
 
     // Apply convolution to each row in turn
     for (unsigned int j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
-      vil2_algo_convolve_1d(src_row,ni,s_istep,  dest_row,d_istep,
+      vil2_convolve_1d(src_row,ni,s_istep,  dest_row,d_istep,
                             kernel,k_lo,k_hi,ac,start_option,end_option);
   }
 }
 
 template <class destT, class kernelT, class accumT>
-inline vil2_image_resource_sptr vil2_algo_convolve_1d(
+inline vil2_image_resource_sptr vil2_convolve_1d(
                const vil2_image_resource_sptr& src_im,
                const destT dt,
                const kernelT* kernel, int k_lo, int k_hi,
@@ -243,11 +243,11 @@ inline vil2_image_resource_sptr vil2_algo_convolve_1d(
 
 //: A resource adaptor that behaves like a algo_convolve_1d'ed version of its input
 template <class kernelT, class accumT, class destT>
-class vil2_algo_convolve_1d_resource : public vil2_image_resource
+class vil2_convolve_1d_resource : public vil2_image_resource
 {
   //: Construct a convolve filter.
-  // You can't create one of these directly, use vil2_algo_convolve_1d instead
-  vil2_algo_convolve_1d_resource(const vil2_image_resource_sptr& src,
+  // You can't create one of these directly, use vil2_convolve_1d instead
+  vil2_convolve_1d_resource(const vil2_image_resource_sptr& src,
                                  const kernelT* kernel, int k_lo, int k_hi,
                                  vil2_convolve_boundary_option start_option,
                                  vil2_convolve_boundary_option end_option):
@@ -259,7 +259,7 @@ class vil2_algo_convolve_1d_resource : public vil2_image_resource
               end_option != vil2_convolve_periodic_extend);
     }
 
-  friend vil2_image_resource_sptr vil2_algo_convolve_1d VCL_NULL_TMPL_ARGS (
+  friend vil2_image_resource_sptr vil2_convolve_1d VCL_NULL_TMPL_ARGS (
     const vil2_image_resource_sptr& src_im, const destT dt, const kernelT* kernel,
     int k_lo, int k_hi, const accumT ac,
     vil2_convolve_boundary_option start_option,
@@ -280,7 +280,7 @@ class vil2_algo_convolve_1d_resource : public vil2_image_resource
     {
 #define macro( F , T ) \
       case F : \
-        vil2_algo_convolve_1d(static_cast<vil2_image_view<T >&>(*vs),dest, \
+        vil2_convolve_1d(static_cast<vil2_image_view<T >&>(*vs),dest, \
           kernel_, klo_, khi_, accumT(), start_option_, end_option_); \
         return new vil2_image_view<destT>(vil2_crop(dest, lboundary, ni, 0, nj));
 
@@ -310,7 +310,7 @@ class vil2_algo_convolve_1d_resource : public vil2_image_resource
   //: Put the data in this view back into the image source.
   virtual bool put_view(const vil2_image_view_base& im, unsigned i0, unsigned j0)
   {
-    vcl_cerr << "WARNING: vil2_algo_convolve_1d_resource::put_back\n"
+    vcl_cerr << "WARNING: vil2_convolve_1d_resource::put_back\n"
              << "\tYou can't push data back into a convolve filter.\n";
     return false;
   }
@@ -335,7 +335,7 @@ class vil2_algo_convolve_1d_resource : public vil2_image_resource
 // \param kernel should point to tap 0.
 // \relates vil2_image_resource
 template <class destT, class kernelT, class accumT>
-inline vil2_image_resource_sptr vil2_algo_convolve_1d(
+inline vil2_image_resource_sptr vil2_convolve_1d(
                          const vil2_image_resource_sptr& src_im,
                          const destT dt,
                          const kernelT* kernel, int k_lo, int k_hi,
@@ -343,8 +343,8 @@ inline vil2_image_resource_sptr vil2_algo_convolve_1d(
                          vil2_convolve_boundary_option start_option,
                          vil2_convolve_boundary_option end_option)
 {
-  return new vil2_algo_convolve_1d_resource<kernelT, accumT, destT>(src_im,
+  return new vil2_convolve_1d_resource<kernelT, accumT, destT>(src_im,
                               kernel, k_lo, k_hi, start_option, end_option);
 }
 
-#endif // vil2_algo_convolve_1d_h_
+#endif // vil2_convolve_1d_h_

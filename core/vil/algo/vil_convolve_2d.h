@@ -1,12 +1,12 @@
-// This is mul/vil2/algo/vil2_algo_convolve_2d.h
-#ifndef vil2_algo_convolve_2d_h_
-#define vil2_algo_convolve_2d_h_
+// This is mul/vil2/algo/vil2_convolve_2d.h
+#ifndef vil2_convolve_2d_h_
+#define vil2_convolve_2d_h_
 //:
 //  \file
 //  \brief 2D Convolution
 //  \author Tim Cootes
 
-#include <vil2/algo/vil2_algo_convolve_1d.h>
+#include <vil2/algo/vil2_convolve_1d.h>
 #include <vcl_compiler.h>
 #include <vcl_cstdlib.h> // for vcl_abort()
 #include <vcl_cassert.h>
@@ -16,7 +16,7 @@
 // Returns  sum_ijp src_im[i*istep+j*jstep+p*pstep]*kernel(i,j,p)
 // \relates vil2_image_view
 template <class srcT, class kernelT, class accumT>
-inline accumT vil2_algo_convolve_2d_at_pt(const srcT *src_im,
+inline accumT vil2_convolve_2d_at_pt(const srcT *src_im,
                                           int s_istep, int s_jstep, int s_pstep,
                                           const vil2_image_view<kernelT>& kernel,
                                           accumT)
@@ -53,7 +53,7 @@ inline accumT vil2_algo_convolve_2d_at_pt(const srcT *src_im,
 // On exit dest(x,y) = sum_ij src_im(x+i,y+j)*kernel(i,j)
 // \relates vil2_image_view
 template <class srcT, class destT, class kernelT, class accumT>
-inline void vil2_algo_convolve_2d(const vil2_image_view<srcT>& src_im,
+inline void vil2_convolve_2d(const vil2_image_view<srcT>& src_im,
                                   vil2_image_view<destT>& dest_im,
                                   const vil2_image_view<kernelT>& kernel,
                                   accumT ac)
@@ -75,9 +75,9 @@ inline void vil2_algo_convolve_2d(const vil2_image_view<srcT>& src_im,
     const srcT* sp = src_row;
     destT* dp = dest_row;
     for (int i=0;i<ni;++i, sp += s_istep, dp += d_istep)
-      *dp = (destT) vil2_algo_convolve_2d_at_pt(sp,s_istep,s_jstep,s_pstep,kernel,accumT());
+      *dp = (destT) vil2_convolve_2d_at_pt(sp,s_istep,s_jstep,s_pstep,kernel,accumT());
       // Convolve at src(i,j)
   }
 }
 
-#endif // vil2_algo_convolve_2d_h_
+#endif // vil2_convolve_2d_h_

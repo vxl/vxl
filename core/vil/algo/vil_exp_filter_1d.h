@@ -1,5 +1,5 @@
-#ifndef vil2_algo_exp_filter_1d_h_
-#define vil2_algo_exp_filter_1d_h_
+#ifndef vil2_exp_filter_1d_h_
+#define vil2_exp_filter_1d_h_
 
 //: \file
 //  \brief Apply exponential filter
@@ -12,7 +12,7 @@
 //  Symmetric exponential filter of the form exp(c*|x|) applied. c=log(k)
 //  Uses fast recursive implementation.
 template <class srcT, class destT, class accumT>
-inline void vil2_algo_exp_filter_1d(const srcT* src, int sstep,
+inline void vil2_exp_filter_1d(const srcT* src, int sstep,
                                     destT* dest, int dstep,
                                     int n, double k, accumT)
 {
@@ -49,7 +49,7 @@ inline void vil2_algo_exp_filter_1d(const srcT* src, int sstep,
 //  Uses fast recursive implementation.
 // \relates vil2_image_view
 template <class srcT, class destT, class accumT>
-inline void vil2_algo_exp_filter_1d(const vil2_image_view<srcT>& src_im,
+inline void vil2_exp_filter_1d(const vil2_image_view<srcT>& src_im,
                                     vil2_image_view<destT>& dest_im,
                                     double k, accumT ac)
 {
@@ -66,7 +66,7 @@ inline void vil2_algo_exp_filter_1d(const vil2_image_view<srcT>& src_im,
     const destT* dest_row = dest_im.top_left_ptr()+p*dest_im.pstep();
 
   for (int j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
-      vil2_algo_exp_filter_1d(src_row,s_istep, dest_row,d_istep,   ni, ac);
+      vil2_exp_filter_1d(src_row,s_istep, dest_row,d_istep,   ni, ac);
   }
 }
 

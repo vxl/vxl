@@ -2,11 +2,11 @@
 //  \brief Apply gradient operator to 2D planes of data
 //  \author Tim Cootes
 
-#include "vil2_algo_sobel_3x3.h"
+#include "vil2_sobel_3x3.h"
 
 //: Compute gradients of single plane of 2D data using 3x3 Sobel filters
 //  Computes both i and j gradients of an ni x nj plane of data
-void vil2_algo_sobel_3x3_1plane(const unsigned char* src,
+void vil2_sobel_3x3_1plane(const unsigned char* src,
                                 int s_istep, int s_jstep,
                                 float* gi, int gi_istep, int gi_jstep,
                                 float* gj, int gj_istep, int gj_jstep,
@@ -110,7 +110,7 @@ void vil2_algo_sobel_3x3_1plane(const unsigned char* src,
 
 //: Compute gradients of single plane of 2D data using 3x3 Sobel filters
 //  Computes both x and j gradients of an nx x nj plane of data
-void vil2_algo_sobel_3x3_1plane(const float* src,
+void vil2_sobel_3x3_1plane(const float* src,
                        int s_istep, int s_jstep,
                        float* gi, int gi_istep, int gi_jstep,
                        float* gj, int gj_istep, int gj_jstep,

@@ -7,7 +7,7 @@
 #include <vxl_config.h> // for vxl_byte
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_print.h>
-#include <vil2/algo/vil2_algo_sobel_3x3.h>
+#include <vil2/algo/vil2_sobel_3x3.h>
 
 int main(int argc, char** argv)
 {
@@ -28,7 +28,7 @@ int main(int argc, char** argv)
     // Objects to hold gradients
   vil2_image_view<float> grad_i,grad_j;
 
-  vil2_algo_sobel_3x3(image,grad_i,grad_j);
+  vil2_sobel_3x3(image,grad_i,grad_j);
 
   vcl_cout<<vcl_endl;
   vcl_cout<<"Sobel I Gradient:"<<vcl_endl;
