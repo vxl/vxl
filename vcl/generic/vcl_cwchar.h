@@ -11,10 +11,7 @@
 #ifndef vcl_wint_t
 #define vcl_wint_t vcl_generic_cwchar_STD :: wint_t
 #endif
-// size_t
-#ifndef vcl_size_t
-#define vcl_size_t vcl_generic_cwchar_STD :: size_t
-#endif
+// NB: size_t is declared in <cstddef>, not <cwchar>
 // btowc
 #ifndef vcl_btowc
 #define vcl_btowc vcl_generic_cwchar_STD :: btowc

@@ -1,6 +1,6 @@
 @FILE
 @fpos_t
-@size_t
+// NB: size_t is declared in <cstddef>, not <cstdio>
 @clearerr
 @fclose
 @feof

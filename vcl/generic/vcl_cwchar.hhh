@@ -1,6 +1,6 @@
 @mbstate_t
 @wint_t
-@size_t
+// NB: size_t is declared in <cstddef>, not <cwchar>
 @btowc
 @fgetwc
 @fgetws

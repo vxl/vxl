@@ -3,10 +3,7 @@
 
 // THIS IS A GENERATED FILE. DO NOT EDIT! -- Edit the source .hhh and run make instead
 
-// size_t
-#ifndef vcl_size_t
-#define vcl_size_t vcl_generic_cstring_STD :: size_t
-#endif
+// NB: size_t is declared in <cstddef>, not <cstring>
 // memchr
 #ifndef vcl_memchr
 #define vcl_memchr vcl_generic_cstring_STD :: memchr

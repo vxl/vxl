@@ -3,10 +3,7 @@
 
 // THIS IS A GENERATED FILE. DO NOT EDIT! -- Edit the source .hhh and run make instead
 
-// size_t
-#ifndef vcl_size_t
-#define vcl_size_t vcl_generic_ctime_STD :: size_t
-#endif
+// NB: size_t is declared in <cstddef>, not <ctime>
 // clock_t
 #ifndef vcl_clock_t
 #define vcl_clock_t vcl_generic_ctime_STD :: clock_t

@@ -11,10 +11,7 @@
 #ifndef vcl_fpos_t
 #define vcl_fpos_t vcl_generic_cstdio_STD :: fpos_t
 #endif
-// size_t
-#ifndef vcl_size_t
-#define vcl_size_t vcl_generic_cstdio_STD :: size_t
-#endif
+// NB: size_t is declared in <cstddef>, not <cstdio>
 // clearerr
 #ifndef vcl_clearerr
 #define vcl_clearerr vcl_generic_cstdio_STD :: clearerr
