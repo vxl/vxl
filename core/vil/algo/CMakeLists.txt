@@ -43,6 +43,7 @@ SET( vil_algo_sources
   vil_cartesian_differential_invariants.txx   vil_cartesian_differential_invariants.h 
                               vil_tile_images.h
   vil_orientations.cxx        vil_orientations.h
+  vil_colour_space.cxx        vil_colour_space.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates vil_algo_sources)
