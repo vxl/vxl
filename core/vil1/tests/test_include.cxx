@@ -1,6 +1,5 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
+#include <vil/vil_fwd.h>
+
 #include <vil/vil_16bit.h>
 #include <vil/vil_32bit.h>
 //#include <vil/vil_block_cache_image_impl.h>
@@ -17,9 +16,10 @@
 //#include <vil/vil_crop_image_impl.h>
 #include <vil/vil_file_format.h>
 #include <vil/vil_file_image.h>
+#include <vil/vil_flip_components.h>
+//#include <vil/vil_flip_components_impl.h>
 #include <vil/vil_flipud.h>
 //#include <vil/vil_flipud_impl.h>
-#include <vil/vil_fwd.h>
 #include <vil/vil_image.h>
 #include <vil/vil_image_as.h>
 //#include <vil/vil_image_impl.h>
@@ -34,6 +34,7 @@
 #include <vil/vil_memory_image_window.h>
 #include <vil/vil_ncc.h>
 #include <vil/vil_new.h>
+#include <vil/vil_open.h>
 #include <vil/vil_pixel.h>
 #include <vil/vil_property.h>
 #include <vil/vil_pyramid.h>
