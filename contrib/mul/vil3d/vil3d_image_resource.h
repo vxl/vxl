@@ -92,7 +92,7 @@ class vil3d_image_resource
   virtual char const* file_format() const { return 0; }
 
   //: Extra property information
-  virtual bool get_property(char const* tag, void* property_value = 0) const =0;
+  virtual bool get_property(char const* label, void* property_value = 0) const =0;
 
  private:
   // You probably should not use a vil3d_image_resource in a vbl_smart_ptr, so the
