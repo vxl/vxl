@@ -135,6 +135,9 @@ class bmrf_node : public vbl_ref_count
   //: Prune neighbors with a probability below \p threshold
   void prune_by_probability(double threshold, bool relative = false);
 
+  //: Prune neighbors with a gamma outside this range
+  void prune_by_gamma(double min_gamma, double max_gamma);
+
   //: Prune directed arcs leaving only arcs to nodes which have arcs back to this node
   void prune_directed();
 

@@ -160,17 +160,20 @@ void
 bmrf_network::prune_by_probability(double threshold, bool relative)
 {
   for( seg_node_map::const_iterator itr = node_from_seg_.begin();
-       itr != node_from_seg_.end();  ++itr )
+       itr != node_from_seg_.end(); )
   {
-    if( itr->second->out_arcs_.empty() && 
-        itr->second->in_arcs_.empty() ){
-      this->remove_node((itr--)->second);
+    seg_node_map::const_iterator next_itr = itr; 
+    ++next_itr;
+    if( itr->second->out_arcs_.empty() ){
+      this->remove_node(itr->second);
+      itr = next_itr;
       continue;
     }
     itr->second->prune_by_probability(threshold, relative);
-    if( itr->second->out_arcs_.empty() && 
-        itr->second->in_arcs_.empty() )
-      this->remove_node((itr--)->second);
+    if( itr->second->out_arcs_.empty() ){
+      this->remove_node(itr->second);
+    }
+    itr = next_itr;
   }
 }
 
@@ -182,22 +185,18 @@ bmrf_network::prune_by_gamma(double min_gamma, double max_gamma)
   for( seg_node_map::const_iterator itr = node_from_seg_.begin();
        itr != node_from_seg_.end(); )
   {
-    if( ( itr->second->out_arcs_.empty() && 
-          itr->second->in_arcs_.empty() ) ||
-        itr->second->gamma().ptr() == NULL ){
-      seg_node_map::const_iterator next_itr = itr; ++next_itr;
-      this->remove_node((itr)->second);
+    seg_node_map::const_iterator next_itr = itr; 
+    ++next_itr;
+    if( itr->second->out_arcs_.empty() ){
+      this->remove_node(itr->second);
       itr = next_itr;
       continue;
     }
-    double gamma = itr->second->gamma()->mean();
-    if( gamma < min_gamma || gamma > max_gamma ){
-      bmrf_node_sptr node = itr->second;
-      seg_node_map::const_iterator next_itr = itr; ++next_itr;
-      this->remove_node((itr)->second);
-      itr = next_itr; 
-    }else
-      ++itr;
+    itr->second->prune_by_gamma(min_gamma, max_gamma);
+    if( itr->second->out_arcs_.empty() ){
+      this->remove_node(itr->second);
+    }
+    itr = next_itr;
   }
 }
 

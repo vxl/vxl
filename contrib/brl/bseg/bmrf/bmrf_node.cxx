@@ -194,6 +194,28 @@ bmrf_node::prune_by_probability(double threshold, bool relative)
   }
 }
 
+
+//: Prune neighbors with a gamma outside this range
+void 
+bmrf_node::prune_by_gamma(double min_gamma, double max_gamma)
+{
+  for ( arc_iterator a_itr = this->begin(TIME);
+        a_itr != this->end(TIME);)
+  {
+    bmrf_node_sptr neighbor = (*a_itr)->to();
+    double dist_ratio = avg_distance_ratio(this->epi_seg(), neighbor->epi_seg());
+    int time_step = neighbor->frame_num() - this->frame_num();
+    double gamma = (1.0 - dist_ratio) / time_step;
+
+    arc_iterator next_itr = a_itr;
+    ++next_itr;
+    if( gamma < min_gamma || gamma > max_gamma ){
+      remove_helper(a_itr, TIME);
+    }
+    a_itr = next_itr;
+  }
+}
+
  
 //: Prune directed arcs leaving only arcs to nodes which have arcs back to this node
 void 
