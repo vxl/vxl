@@ -485,27 +485,27 @@ void brip_para_cvrg::compute_parallel_coverage()
       float coverage[4];
       this->project(x, y, 0, proj_0_);
       coverage[0] = this->parallel_coverage(proj_0_);
-   // vcl_cout << " O degrees = " << coverage[0] << '\n';
-
+      float max_coverage = coverage[0];
       this->project(x, y, 45, proj_45_);
       coverage[1] = this->parallel_coverage(proj_45_);
-   // vcl_cout << " 45 degrees = " << coverage[1] << '\n';
-
+      if (coverage[1]>max_coverage)
+        max_coverage = coverage[1];
       this->project(x, y, 90, proj_90_);
       coverage[2] = this->parallel_coverage(proj_90_);
-   // vcl_cout << " 90 degrees = " << coverage[2] << '\n';
-
+      if (coverage[2]>max_coverage)
+        max_coverage = coverage[2];
       this->project(x, y, 135, proj_135_);
       coverage[3] = this->parallel_coverage(proj_135_);
-   // vcl_cout << " 135 degrees = " << coverage[3] << '\n';
-      float max_coverage = 0;
-      int max_dir = 0;
-      for (int i =0; i<4; i++)
-        if (coverage[i]>max_coverage)
-        {
-          max_coverage = coverage[i];
-          max_dir = i*45;
-        }
+      if (coverage[3]>max_coverage)
+        max_coverage = coverage[3];
+#ifdef DEBUG
+      vcl_cout << '(' << x << ',' << y << ") coverage:\n"
+               << "   O degrees = " << coverage[0] << '\n'
+               << "  45 degrees = " << coverage[1] << '\n'
+               << "  90 degrees = " << coverage[2] << '\n'
+               << " 135 degrees = " << coverage[3] << '\n'
+               << "max_coverage = " << max_coverage << '\n';
+#endif
 
       det_[x][y] = max_coverage;
     }
