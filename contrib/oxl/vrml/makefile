@@ -10,10 +10,10 @@ VXL := 1
 LIBRARY := vrml
 VERSION := 1.0
 
+IMMEDIATE_LIBS += -lvbl
+
 SOURCES += vrml_out.cxx
 
-IULIBS += -lvbl -lvcl
-
-##########################################
+################################
 include ${IUEROOT}/config/top.mk
-##########################################
+################################
