@@ -61,7 +61,7 @@ bool brct_volume_processor::write_prob_volumes_vrml(vcl_string const&  filename)
   vcl_vector<vsol_point_3d_sptr> points;
   float scal = 1.0f;
   if (total_pts)
-    scal = 1.0/total_pts;
+    scal = 1.0f/total_pts;
   scal=100*scal;
   for (int r = 0; r<nrows_; r++)
     for (int c = 0; c<ncols_; c++)
@@ -111,8 +111,8 @@ bool brct_volume_processor::compute_change()
     for (int c = 0; c<ncols_; c++)
       for (int s = 0; s<nslabs_; s++)
       {
-        float ni = (*index_).n_points(r, c, s);
-        float nc = (*change_index_).n_points(r, c, s);
+        int ni = (*index_).n_points(r, c, s);
+        int nc = (*change_index_).n_points(r, c, s);
         if (nc>cell_thresh_&&ni<cell_thresh_)
           change_volumes_.push_back((*index_).index_cell(r, c, s));
       }

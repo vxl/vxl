@@ -820,39 +820,36 @@ static void rgb_to_ihs(vil_rgb<vxl_byte> const & rgb,
   // Reference: figure 13.36, page 595 of Foley & van Dam
   float r = rgb.R(), g = rgb.G(), b = rgb.B();
   i = rgb.grey();
-  float maxval;
-  float minval;
-  float delta;
 
-  maxval = vnl_math_max(r, vnl_math_max(g, b));
-  minval = vnl_math_min(r, vnl_math_min(g, b));
+  float maxval = vnl_math_max(r, vnl_math_max(g, b));
+  float minval = vnl_math_min(r, vnl_math_min(g, b));
 
   //lightness
-  float la = (maxval + minval) / 2.0;
+  float la = (maxval + minval) / 2.f;
   // Achromatic case, intensity is grey or near black or white
   if (maxval == minval||i<20||i>235)
   {
-    s = -1.0;
-    h = 0.0;
+    s = -1.f;
+    h = 0.f;
   }
   else//the chromatic case
   {
     // Calculate the saturation.
     if (la <= 127)
     {
-      s = (255.0*(maxval - minval))/(maxval + minval);
+      s = (255.f*(maxval - minval))/(maxval + minval);
     }
     else
     {
-      s = (255.0*(maxval - minval)) / (512 - maxval - minval);
+      s = (255.f*(maxval - minval)) / (512.f - maxval - minval);
       if (s<0)
-        s=0;
+        s = 0.f;
       if (s>255)
-        s=255;
+        s = 255.f;
     }
 
     // Calculate the hue.
-    delta = maxval - minval;
+    float delta = maxval - minval;
     if (r == maxval)
     {
       // The resulting color is between yellow and magenta.
@@ -861,18 +858,18 @@ static void rgb_to_ihs(vil_rgb<vxl_byte> const & rgb,
     else if (g == maxval)
     {
       // The resulting color is between cyan and yellow.
-      h = 120.0 + (60*(b - r))/delta;
+      h = 120.f + (60*(b - r))/delta;
     }
     else
     {
       // The resulting color is between magenta and cyan.
-      h = 240.0 + (60*(r - g))/delta;
+      h = 240.f + (60*(r - g))/delta;
     }
-    // Be sure 0.0 <= hue <= 360.0
-    if (h < 0.0)
-      h += 360;
-    if (h > 360.0)
-      h -= 360.0;
+    // Be sure 0 <= hue <= 360
+    if (h < 0)
+      h += 360.f;
+    if (h > 360)
+      h -= 360.f;
   }
 }
 
@@ -946,17 +943,16 @@ display_IHS_as_RGB(vil_image_view<float> const& I,
   int w = I.ni(), h = I.nj();
   image.set_size(w,h);
 
-  float deg_to_rad = vnl_math::pi/180.0f;
+  const float deg_to_rad = float(vnl_math::pi/180);
   for (int r = 0; r < h; r++)
     for (int c = 0; c < w; c++)
     {
-      float hue, sat;
-      hue = H(c,r);
-      sat = 2.0*S(c,r);
+      float hue = H(c,r);
+      float sat = 2.f*S(c,r);
       if (sat<0)
-        sat = 0;
+        sat = 0.f;
       if (sat>255)
-        sat = 255;
+        sat = 255.f;
       float ang = deg_to_rad*hue;
       float cs = vcl_cos(ang), si = vcl_fabs(vcl_sin(ang));
       float red,green,blue;
@@ -1102,7 +1098,7 @@ basis_images(vcl_vector<vil_image_view<float> > const & input_images,
   int npix = width*height;
 
   //Insert the images into matrix I
-  vnl_matrix<float> I(npix, n_images, 0.0);
+  vnl_matrix<float> I(npix, n_images, 0.f);
   for (int i = 0; i<n_images; i++)
     insert_image(input_images[i], i, I);
 
@@ -1459,7 +1455,7 @@ float brip_vil_float_ops::gaussian_blocking_filter(const float dir_fx,
   // normalize dir_fx and dir_fy
   float mag = vcl_sqrt(dir_fx*dir_fx + dir_fy*dir_fy);
   if (!mag)
-    return 0;
+    return 0.f;
   float r2 = 2.f*radius*radius;
   float dx = dir_fx/mag, dy = dir_fy/mag;
   // compute the centers of each lobe
@@ -1533,9 +1529,9 @@ double brip_vil_float_ops::
   int xr = (int)x, yr = (int)y;
   double fx = x-xr, fy = y-yr;
   if (xr<0||xr>w-2)
-    return 0;
+    return 0.0;
   if (yr<0||yr>h-2)
-    return 0;
+    return 0.0;
   double int00 = input(xr, yr), int10 = input(xr+1,yr);
   double int01 = input(xr, yr+1), int11 = input(xr+1,yr+1);
   double int0 = int00 + fy * (int01 - int00);
@@ -1557,7 +1553,7 @@ bool brip_vil_float_ops::homography(vil_image_view<float> const & input,
     return false;
   // smooth the input to condition interpolation
   vil_image_view<float> gimage =
-    brip_vil_float_ops::gaussian(input, 0.5);
+    brip_vil_float_ops::gaussian(input, 0.5f);
 
   //First, there is some rather complex bookeeping to insure that
   //the input and output image rois are consistent with the homography.
@@ -1630,15 +1626,15 @@ bool brip_vil_float_ops::homography(vil_image_view<float> const & input,
   //get the value of each output pixel
 
   // Dimensions of the input image
-  int ailow  = int(input_roi->get_min_x()+0.9999); // round up to nearest int
+  int ailow  = int(input_roi->get_min_x()+0.9999f); // round up to nearest int
   int aihigh = int(input_roi->get_max_x());      // round down to nearest int
-  int ajlow  = int(input_roi->get_min_y()+0.9999);
+  int ajlow  = int(input_roi->get_min_y()+0.9999f);
   int ajhigh = int(input_roi->get_max_y());
 
   // Dimensions of the output image
-  int bilow  = int(output_roi->get_min_x()+0.9999);
+  int bilow  = int(output_roi->get_min_x()+0.9999f);
   int bihigh = int(output_roi->get_max_x());
-  int bjlow  = int(output_roi->get_min_y()+0.9999);
+  int bjlow  = int(output_roi->get_min_y()+0.9999f);
   int bjhigh = int(output_roi->get_max_y());
 
   /* The inverse transform is used to map backwards from the output */
@@ -1754,22 +1750,22 @@ static float cross_corr(const double area, const double si1, const double si2,
                         const float intensity_thresh)
 {
   if (!area)
-    return 0;
+    return 0.f;
   //the mean values
   double u1 = si1/area, u2 = si2/area;
   if (u1<intensity_thresh||u2<intensity_thresh)
-    return -1;
+    return -1.f;
   double neu = si1i2 - area*u1*u2;
   double sd1 = vcl_sqrt(si1i1-area*u1*u1), sd2 = vcl_sqrt(si2i2-area*u2*u2);
   if (!neu)
-    return 0;
+    return 0.f;
   if (!sd1||!sd2)
     if (neu>0)
-      return 1;
+      return 1.f;
     else
-      return -1;
+      return -1.f;
   double den = sd1*sd2;
-  return (float)neu/den;
+  return float(neu/den);
 }
 
 //:perform normalized cross-correlation at a sub-pixel location
@@ -1794,8 +1790,8 @@ cross_correlate(vil_image_view<float> const & image1,
   int s = 2*radius+1;
   double area = s*s;
   double sI1=0, sI2=0, sI1I1=0, sI2I2=0, sI1I2=0;
-  for (float y0 = -radius; y0<=radius; y0+=1.0)
-    for (float x0 = -radius; x0<=radius; x0+=1.0)
+  for (float y0 = -radius; y0<=radius; y0+=1.f)
+    for (float x0 = -radius; x0<=radius; x0+=1.f)
     {
       float xp = x+x0, yp = y+y0;
       double v1 =
@@ -1969,12 +1965,12 @@ cross_correlate(vil_image_view<float> const & image1,
     return out;
   }
   out.set_size(w, h);
-  out.fill(0.0);
+  out.fill(0.f);
   int s = 2*radius+1;
   //Create the running sum slices
   vbl_array_2d<double> SI1(s,w), SI2(s,w),
     SI1I1(s,w), SI2I2(s,w), SI1I2(s,w);
-  vbl_array_1d<float> cc(w, 0.0);
+  vbl_array_1d<float> cc(w, 0.f);
   vbl_array_1d<double> dSI1(w, 0.0), dSI2(w, 0.0),
     dSI1I1(w, 0.0), dSI2I2(w, 0.0), dSI1I2(w, 0.0);
   initialize_slice(image1, image2, radius, SI1, SI2, SI1I1, SI2I2, SI1I2);

@@ -566,7 +566,7 @@ depth_image(vil1_memory_image_of<unsigned char>& depth_out,
         if (cc_val > max_corr(c, r))
         {
           max_corr(c, r) = cc_val;
-          depth(c, r) = z;
+          depth(c, r) = float(z);
         }
       }
   }
@@ -723,7 +723,7 @@ correlate_corners(vcl_vector<vil1_memory_image_of<float> > const& imgs,
   for (int i = 0; i< n1; i++)
   {
     //sub-pixel locations
-    float x0 = pts1[i]->x(), y0 = pts1[i]->y();
+    double x0 = pts1[i]->x(), y0 = pts1[i]->y();
     //integer locations
     int r = (int)y0, c = (int)x0;
     if (r<0||r>=h||c<0||c>=w)
@@ -732,7 +732,8 @@ correlate_corners(vcl_vector<vil1_memory_image_of<float> > const& imgs,
     if (has_neighbor(r, c, pr, h, w, pt_index))
     {
       float val =
-        brip_vil1_float_ops::cross_correlate(imgs[0], imgs[1], x0, y0,
+        brip_vil1_float_ops::cross_correlate(imgs[0], imgs[1],
+                                             float(x0), float(y0),
                                              corr_radius_,
                                              intensity_thresh_);
 

@@ -539,7 +539,7 @@ init_intensity_info(vtol_face_2d_sptr const& face,
       continue;
     ent -= pm*vcl_log(pm);
   }
-  model_intensity_entropy_ = ent/vcl_log(2.0);
+  model_intensity_entropy_ = float(ent/vcl_log(2.0));
 }
 
 void strk_tracking_face_2d::
@@ -579,7 +579,7 @@ init_gradient_info(vil1_memory_image_of<float> const& Ix,
       continue;
     ent -= pm*vcl_log(pm);
   }
-  model_gradient_dir_entropy_= ent/vcl_log(2.0);
+  model_gradient_dir_entropy_= float(ent/vcl_log(2.0));
 }
 
 void strk_tracking_face_2d::
@@ -616,7 +616,7 @@ init_color_info(vil1_memory_image_of<float> const& hue,
       continue;
     ent -= pm*vcl_log(pm);
   }
-  model_color_entropy_= ent/vcl_log(2.0);
+  model_color_entropy_= float(ent/vcl_log(2.0));
 }
 
 void strk_tracking_face_2d::set_int_mutual_info(float mi)
@@ -647,15 +647,15 @@ void strk_tracking_face_2d::transform(double tx, double ty,
   this->face()->vertices(verts);
   for (vcl_vector<vtol_vertex_sptr>::iterator vit = verts.begin();
        vit != verts.end(); vit++)
-    {
-      vtol_vertex_2d_sptr v = (*vit)->cast_to_vertex_2d();
-      if (!v)
-        continue;
-      double x = v->x(), y = v->y();
-      double xp =(x-xo)*scale, yp =(y-yo)*scale;
-      v->set_x(xp*c - yp*s + xo + tx);
-      v->set_y(xp*s + yp*c + yo + ty);
-    }
+  {
+    vtol_vertex_2d_sptr v = (*vit)->cast_to_vertex_2d();
+    if (!v)
+      continue;
+    double x = v->x(), y = v->y();
+    double xp =(x-xo)*scale, yp =(y-yo)*scale;
+    v->set_x(xp*c - yp*s + xo + tx);
+    v->set_y(xp*s + yp*c + yo + ty);
+  }
   for (this->reset(); this->next();)
   {
     double x = this->X(), y = this->Y();
