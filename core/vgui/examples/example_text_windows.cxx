@@ -8,6 +8,7 @@
 #include <vcl_iostream.h>
 #include <vcl_sstream.h>
 #include <vil/vil_load.h>
+#include <vil/vil_image_view.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_text_tableau.h>
 #include <vgui/vgui_image_tableau.h>
@@ -54,7 +55,7 @@ int main (int argc, char** argv)
     vcl_abort();
   }
 
-  vil_image img = vil_load(argv[1]);
+  vil_image_view<vxl_byte> img = vil_load(argv[1]);
   if (!img) {
     vcl_cerr << __FILE__ " : cannot load image from " << argv[1] << '\n';
     vcl_abort();
@@ -62,7 +63,7 @@ int main (int argc, char** argv)
 
   vgui_image_tableau_new img_tab(img);
 
-  int wd=img.width(), ht=img.height();
+  int wd=img.ni(), ht=img.nj();
   vgui_text_tableau_new text_tab;
   text_tab->add(wd,ht,"text 2");
 
