@@ -45,8 +45,7 @@ public:
 
     //: Attempt to save image to named file
     //!in: filetype: String defining what format to save in (valid options depend on derived class)
-    virtual bool saveImage(const mil_image& image,
-                           const vcl_string& path,
+    virtual bool saveImage(const vcl_string& path,
                            const vcl_string& filetype) const =0;
 
     //: Version number for I/O

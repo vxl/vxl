@@ -58,12 +58,13 @@ public:
   virtual bool loadImage(const vcl_string& path,
                          const vcl_string& filetype);
 
-  //: Attempt to save image to named file
+	//: Attempt to save image to named file
   //!in: filetype: String defining what format to save in
-  virtual bool saveImage(const mil_image& image,
-                         const vcl_string& path,
+  //!ret: true if successfull
+  virtual bool saveImage(const vcl_string& path,
                          const vcl_string& filetype) const;
 
+ 
   //: Attempt to load image from named file
   //!in: filetype: String hinting at what image format is
   //  If filetype=="" ,then guess the format from the path extension
@@ -71,6 +72,12 @@ public:
   bool loadTheImage(mil_image_2d_of<vil_byte>& image,
                     const vcl_string& path,
                     const vcl_string& filetype);
+
+	//: Attempt to save image to named file
+  //!in: filetype: String defining what format to save in
+  bool saveTheImage(const mil_image_2d_of<vil_byte>& image,
+                         const vcl_string& path,
+                         const vcl_string& filetype) const;
 
   //: Version number for I/O
   short version_no() const;

@@ -13,6 +13,7 @@
 #include <vcl_cassert.h>
 
 #include <vil/vil_load.h>
+#include <vil/vil_save.h>
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_rgb_byte.h>
 
@@ -63,6 +64,15 @@ bool mil_byte_image_2d_io::loadImage(const vcl_string& path,
               const vcl_string& filetype)
 {
   return loadTheImage(image_,path,filetype);
+}
+
+//: Attempt to save image to named file
+//!in: filetype: String defining what format to save in
+//!ret: true if successfull
+bool mil_byte_image_2d_io::saveImage(const vcl_string& path,
+              const vcl_string& filetype) const
+{
+  return saveTheImage(image_,path,filetype);
 }
 
 
@@ -144,45 +154,47 @@ bool mil_byte_image_2d_io::loadTheImage(mil_image_2d_of<vil_byte>& image,
               const vcl_string& f_type)
 
 {
-  vil_image img = vil_load(path.c_str());
+  vil_image img = vil_load(path.c_str());  // ie f_type is ignored here !!
   int nx = img.width();
   int ny = img.height();
   if (nx==0 || ny==0) return false;
 
   bool img_is_grey = (img.get_size_bytes()==(nx*ny));
 
-  if (colour_=="Grey")
+  if (colour_=="Grey")   // ie make a grey image whatever image is loaded
   {
     if (img_is_grey)
-    copyAsGrey(img);
-  else
-      copyGreyToRGB(img);
+		copyAsGrey(img);
+	else
+		copyGreyToRGB(img);
   }
-  else
-  if (colour_=="RGB")
+  else   // ie colour_=="" => rely on image or colour_="RGB"
   {
-    copyAsRGB(img);
-  }
-  else
-  {
-    if (img_is_grey)
-    copyAsGrey(img);
-  else
-      copyAsRGB(img);
+	if (colour_=="RGB")
+	{
+		copyAsRGB(img);
+	}
+	else    // ie colour_="" => rely on image
+	{
+		if (img_is_grey)
+			copyAsGrey(img);  //copy grey image as grey
+		else
+			copyAsRGB(img);   //ie copy colour image as colour
+	}
   }
 
+	image=image_;
   return true;
 }
 
-    //: Attempt to save image to named file
-    //!in: filetype: String defining what format to save in
-bool mil_byte_image_2d_io::saveImage(const mil_image& image,
+    
+//: Attempt to save image to named file
+//!in: filetype: String defining what format to save in
+bool mil_byte_image_2d_io::saveTheImage(const mil_image_2d_of<vil_byte>& image,
             const vcl_string& path,
             const vcl_string& f_type) const
 {
-  assert(image.is_a()=="mil_image_2d_of<vil_byte>");
-
-  vcl_string filetype = f_type;
+	vcl_string filetype = f_type;
   if (f_type=="")
     filetype=guessFileType(path);
 
@@ -191,16 +203,57 @@ bool mil_byte_image_2d_io::saveImage(const mil_image& image,
     vcl_cerr<<"File type for "<<path<<" unknown"<<vcl_endl;
     return false;
   }
- 
-#if 0 // not yet implemented
-  const mil_image_2d_of<vil_byte>& bp_image
-    = (const mil_image_2d_of<vil_byte>&) image;
-  ...
-  return true;
-#else
-  vcl_cerr<<"saveImage Not yet implemented. Sorry."<<vcl_endl;
-  return false;
-#endif
+
+	//convert mil_image to vil_image
+	//if colour=>vil_memory_image_of<vil_rgb_byte> 
+	//if grey=>vil_memory_image_of<vil_byte>
+	//then use vil_save	with appropriate "filetype"
+	
+	bool image_is_grey=false,image_is_colour=false;
+	if (image.n_planes()==1) image_is_grey=true;
+	else if (image.n_planes()==3) image_is_colour=true;
+	else 
+	{
+		vcl_cerr<<"Failed to save: number of planes = "<<image.n_planes()<<" ??, require 1 or 3"<<vcl_endl;
+		return false;
+	}
+
+	int nx=image.nx();
+	int ny=image.ny();
+
+	if (image_is_grey)
+	{
+		vil_memory_image_of<vil_byte> buf(nx,ny);
+    // Inefficient copy
+		for (int y=0;y<ny;++y)
+			for (int x=0;x<nx;++x)
+				buf(x,y)= image(x,y);
+			
+		vil_save(buf,path.c_str(),filetype.c_str());
+		//vil_save(buf,path.c_str());
+		return true;
+	}
+	
+	else if (image_is_colour)
+	{
+		vil_memory_image_of<vil_rgb_byte> buf(nx,ny);
+    vil_byte red,green,blue;
+		// Inefficient copy
+		for (int y=0;y<ny;++y)
+			for (int x=0;x<nx;++x)
+			{
+				red=image(x,y,0);
+				green=image(x,y,1);
+				blue=image(x,y,2);
+				buf(x,y)=vil_rgb_byte(red,green,blue);
+			}
+		vil_save(buf,path.c_str(),filetype.c_str());
+		//vil_save(buf,path.c_str());
+		return true;
+	}
+	else
+	return false;
+
 }
 
 
