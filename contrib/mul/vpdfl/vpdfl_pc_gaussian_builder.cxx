@@ -81,12 +81,12 @@ void vpdfl_pc_gaussian_builder::build(vpdfl_pdf_base& model,
 {
   vpdfl_pc_gaussian& g = gaussian(model);
   int n = mean.size();
-
+  
   // Generate an identity matrix for eigenvectors
   vnl_matrix<double> P(n,n);
   P.fill(0);
   P.fill_diagonal(1.0);
-
+  
   g.set(mean,P,vnl_vector<double>(0), min_var());
 }
 
