@@ -48,31 +48,31 @@ public:
   vcl_string pretty_name() const;
 
   //: Return the image being rendered by this tableau.
-  vil1_image get_image() const;
+  virtual vil1_image get_image() const;
 
   //: Return the image view being rendered by this tableau.
-  vil_image_view_base_sptr get_image_view() const;
+  virtual vil_image_view_base_sptr get_image_view() const;
 
   //: Make the given image, the image rendered by this tableau.
-  void set_image( vil1_image const &img );
+  virtual void set_image( vil1_image const &img );
 
   //: Make the given image view, the image rendered by this tableau.
-  void set_image_view( vil_image_view_base const& img );
+  virtual void set_image_view( vil_image_view_base const& img );
 
   //: Make image loaded from the given file, the image rendered by this tableau.
-  void set_image( char const* filename );
+  virtual void set_image( char const* filename );
 
   //: Reread the image from file.
-  void reread_image();
+  virtual void reread_image();
 
   //: Width of image (0 if none).
-  unsigned width() const;
+  virtual unsigned width() const;
 
   //: Height of image (0 if none).
-  unsigned height() const;
+  virtual unsigned height() const;
 
   //: Returns the box bounding the rendered image.
-  bool get_bounding_box( float low[3], float high[3] ) const;
+  virtual bool get_bounding_box( float low[3], float high[3] ) const;
 
   //: Sets coordinate to be in the middle or corner of the pixel.
   //  This method controls whether the coordinate (i, j) is the
@@ -82,7 +82,7 @@ public:
   //: Handle all events sent to this tableau.
   //  In particular, use draw events to render the image contained in
   //  this tableau.
-  bool handle( vgui_event const& e );
+  virtual bool handle( vgui_event const& e );
 
 protected:
   friend struct vgui_image_tableau_new;
