@@ -444,7 +444,8 @@ template void vnl_c_vector_inf_norm(T const *, unsigned, S *)
 #undef VNL_C_VECTOR_INSTANTIATE_ordered
 #define VNL_C_VECTOR_INSTANTIATE_ordered(T) \
 VNL_C_VECTOR_INSTANTIATE_norm(T, vnl_c_vector<T >::abs_t); \
-template class vnl_c_vector<T >
+template class vnl_c_vector<T >; \
+template vcl_ostream& print_vector(vcl_ostream &,T const *,unsigned) 
 
 
 #undef VNL_C_VECTOR_INSTANTIATE_unordered
