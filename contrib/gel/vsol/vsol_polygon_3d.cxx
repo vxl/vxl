@@ -224,7 +224,7 @@ bool vsol_polygon_3d::is_convex(void) const
    }
    if (n == vgl_vector_3d<double>(0.0,0.0,0.0))
      return true;
-     
+
    for(unsigned int i=0; i<storage_->size(); ++i)
    {
      int j = (i>1) ? i-2 : i-2+storage_->size();

@@ -210,7 +210,7 @@ bool vsol_polygon_2d::is_convex(void) const
    }
    if (n == 0.0)
      return true;
-     
+
    for(unsigned int i=0; i<storage_->size(); ++i)
    {
      int j = (i>1) ? i-2 : i-2+storage_->size();
