@@ -885,8 +885,6 @@ void vtol_cycle_processor::sort_one_cycles()
       vsol_box_2d* bc = (*cit)->get_bounding_box();
       if ((*bc<*b)&&!bc->near_equal(*b, tolerance_))
       {
-        if ((vtol_one_chain_sptr)(*cit)==(vtol_one_chain_sptr)outer_chain)
-          continue;
         vsol_box_2d* bc = (*cit)->get_bounding_box();
         if ((*bc<*b)&&!bc->near_equal(*b, tolerance_))
           {
@@ -898,8 +896,8 @@ void vtol_cycle_processor::sort_one_cycles()
             touch(*cit);
           }
       }
+    }
 }
-
 
 void vtol_cycle_processor::process()
 {
