@@ -1,6 +1,6 @@
-// This is gel/sdet/sdet_edgel_regions.h
-#ifndef _sdet_edgel_regions_h_
-#define _sdet_edgel_regions_h_
+// This is brl/bseg/sdet/sdet_edgel_regions.h
+#ifndef sdet_edgel_regions_h_
+#define sdet_edgel_regions_h_
 //:
 // \file
 // \brief generation of regions bounded by sdet_edgel chains
@@ -50,7 +50,6 @@
 #include <vcl_map.h>
 #include <vbl/vbl_array_2d.h>
 #include <vil/vil_image.h>
-#include <vtol/vtol_vertex_sptr.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <gevd/gevd_bufferxy.h>
 #include <vdgl/vdgl_intensity_face_sptr.h>
@@ -186,4 +185,4 @@ protected:
   unsigned short* sbuf_;
 };
 
-#endif
+#endif // sdet_edgel_regions_h_
