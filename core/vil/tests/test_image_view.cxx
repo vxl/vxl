@@ -210,8 +210,8 @@ void test_image_view(S /*d1*/, vcl_string s_name, T /*d2*/)
   const vil_pixel_format format = vil_pixel_format_of(S());
   if (format == VIL_PIXEL_FORMAT_FLOAT || format == VIL_PIXEL_FORMAT_DOUBLE)
   {
-    TEST_NEAR("Casting ", image2(0,0,0), 0.6, 1e-5);
-    TEST_NEAR("Casting ", image2(2,2,1), 35.6, 1e-5);
+    TEST_NEAR("Casting ", (double)image2(0,0,0), 0.6, 1e-5);
+    TEST_NEAR("Casting ", (double)image2(2,2,1), 35.6, 1e-5);
   }
   else
   {

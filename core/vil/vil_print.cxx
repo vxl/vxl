@@ -119,7 +119,7 @@ void vil_print_value(vcl_ostream& os, const vxl_int_64& value)
 #if VCL_VC60    // IMS. This Hack could be replaced by code which
   os << "****"; // splits the 64bit int and does the right thing.
 #else
-  int v=value;
+  vxl_int_64 v=value;
   if (v<0) { v=-v; os<<'-'; } else os<<' ';
   if (v<10)       os<<'0';
   if (v<100)      os<<'0';

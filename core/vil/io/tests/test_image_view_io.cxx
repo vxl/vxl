@@ -47,8 +47,8 @@ inline void test_image_view_io_as(T value1, T value2)
   TEST("istep()",image2.istep(),image1.istep());
   TEST("jstep()",image2.jstep(),image1.jstep());
   TEST("planestep()",image2.planestep(),image1.planestep());
-  TEST_NEAR("Data(0,0,0)",image1(0,0,0),image2(0,0,0),1e-6);
-  TEST_NEAR("Data(3,2,1)",image1(3,2,1),image2(3,2,1),1e-6);
+  TEST_NEAR("Data(0,0,0)",(double)(image1(0,0,0)-image2(0,0,0)),0,1e-6);
+  TEST_NEAR("Data(3,2,1)",(double)(image1(3,2,1)-image2(3,2,1)),0,1e-6);
   TEST("Smart ptr", &image2p(0,0), &image2(0,0,1));
 }
 

@@ -47,7 +47,7 @@ inline void test_memory_chunk_io_as(T value)
 
   TEST("Size OK",chunk2.size()==chunk1.size(),true);
   TEST("Type OK", chunk1.pixel_format(),chunk2.pixel_format());
-  TEST_NEAR("Data",data1[3],data2[3],1e-6);
+  TEST_NEAR("Data",(double)(data1[3]-data2[3]),0,1e-6);
 
   vcl_cout<<"Testing IO using smart pointer\n";
   TEST("Size OK",chunk_sptr2->size()==chunk1.size(),true);
