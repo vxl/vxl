@@ -3,9 +3,14 @@
 
 #include <vcl_compiler.h>
 
-#if defined(VCL_WIN32)
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
 # include <sys/timeb.h>
 extern "C" int gettimeofday(struct timeval*, struct timezone*);
+
+#elif defined(__CYGWIN__)
+# include <sys/time.h>
+# include <sys/timeb.h>
+# include <sys/times.h>
 
 #elif defined(GNU_LIBSTDCXX_V3)
 # define __restrict /* */
