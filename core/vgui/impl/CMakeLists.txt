@@ -6,4 +6,7 @@
 
 IF(WIN32)
   SUBDIRS(mfc)
+ELSE(WIN32)
+  SUBDIRS(gtk)
 ENDIF(WIN32)
+
