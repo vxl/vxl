@@ -149,6 +149,12 @@ SOURCE=.\vimt3d_load.cxx
 # Begin Source File
 SOURCE=.\vimt3d_image_3d.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vimt3d_add_all_loaders.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vimt3d_vil3d_v3i.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # Begin Source File
@@ -195,6 +201,12 @@ SOURCE=.\vimt3d_slice.h
 # End Source File
 # Begin Source File
 SOURCE=.\vimt3d_crop.h
+# End Source File
+# Begin Source File
+SOURCE=.\vimt3d_add_all_loaders.h
+# End Source File
+# Begin Source File
+SOURCE=.\vimt3d_vil3d_v3i.h
 # End Source File
 # End Group
 # End Target
