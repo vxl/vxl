@@ -1,17 +1,16 @@
 #ifndef vnl_cross_h_
 #define vnl_cross_h_
-
 //:
 // \file
 // Implements cross product for vectors.
 // \author Amitha Perera
 // \verbatim
-// Modifications
+//  Modifications
 //   Oct.2002 - Amitha Perera - moved from vnl_vector.h
 // \endverbatim
 
-#include "vnl_vector.h"
-#include "vnl_vector_fixed.h"
+#include <vnl/vnl_vector.h>
+#include <vnl/vnl_vector_fixed.h>
 #include <vcl_cassert.h>
 
 //: Compute the 2-D cross product
