@@ -1,8 +1,6 @@
-// This is brl/bseg/vpro/vpro_corr_tracker_process.cxx
+// This is brl/bseg/strk/strk_corr_tracker_process.cxx
 #include <vcl_iostream.h>
 #include <vtol/vtol_topology_object.h>
-#include <vtol/vtol_vertex_sptr.h>
-#include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_edge.h>
 #include <vtol/vtol_face_2d.h>
 #include <vil1/vil1_memory_image_of.h>
@@ -31,8 +29,8 @@ bool strk_corr_tracker_process::execute()
   }
   if (this->get_N_input_images()!=1)
   {
-    vcl_cout << "In strk_corr_tracker_process::execute() - not exactly one"
-             << " input image\n";
+    vcl_cout << "In strk_corr_tracker_process::execute() -"
+             << " not exactly one input image\n";
     failure_ = true;
     return false;
   }
@@ -46,8 +44,8 @@ bool strk_corr_tracker_process::execute()
     tracker_.set_image_0(img);
     if (!get_N_input_topo_objs())
     {
-      vcl_cout << "In strk_corr_tracker_process::execute() - no input"
-               << " correlation face\n";
+      vcl_cout << "In strk_corr_tracker_process::execute() -"
+               << " no input correlation face\n";
       failure_ = true;
       return false;
     }
@@ -56,8 +54,8 @@ bool strk_corr_tracker_process::execute()
     vtol_face_2d_sptr f2d = f->cast_to_face_2d();
     if (!f2d)
     {
-      vcl_cout << "In strk_corr_tracker_process::execute() - input"
-               << " is not a vtol_face_2d\n";
+      vcl_cout << "In strk_corr_tracker_process::execute() -"
+               << " input is not a vtol_face_2d\n";
       failure_ = true;
       return false;
     }
@@ -65,12 +63,12 @@ bool strk_corr_tracker_process::execute()
     tracker_.init();
     vcl_vector<vtol_edge_sptr> edges_2d;
     f2d->edges(edges_2d);
-    for(vcl_vector<vtol_edge_sptr>::iterator eit = edges_2d.begin();
-        eit != edges_2d.end(); eit++)
-      {
-        vtol_topology_object_sptr to = (*eit)->cast_to_edge();
-        output_topo_objs_.push_back(to);
-      }
+    for (vcl_vector<vtol_edge_sptr>::iterator eit = edges_2d.begin();
+         eit != edges_2d.end(); eit++)
+    {
+      vtol_topology_object_sptr to = (*eit)->cast_to_edge();
+      output_topo_objs_.push_back(to);
+    }
     first_frame_ = false;
     return true;
   }
@@ -80,11 +78,11 @@ bool strk_corr_tracker_process::execute()
   vtol_face_2d_sptr f = tracker_.get_best_sample();
   vcl_vector<vtol_edge_sptr> edges;
   f->edges(edges);
-  for(vcl_vector<vtol_edge_sptr>::iterator eit = edges.begin();
-      eit != edges.end(); eit++)
-    {
-      vtol_topology_object_sptr to = (*eit)->cast_to_edge();
-      output_topo_objs_.push_back(to);
-    }
+  for (vcl_vector<vtol_edge_sptr>::iterator eit = edges.begin();
+       eit != edges.end(); eit++)
+  {
+    vtol_topology_object_sptr to = (*eit)->cast_to_edge();
+    output_topo_objs_.push_back(to);
+  }
   return true;
 }

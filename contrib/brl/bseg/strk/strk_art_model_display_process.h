@@ -1,5 +1,4 @@
-//-*-c++-*-
-// This is brl/strk/strk_art_model_display_process.h
+// This is brl/bseg/strk/strk_art_model_display_process.h
 #ifndef strk_art_model_display_process_h_
 #define strk_art_model_display_process_h_
 //----------------------------------------------------------------------------
@@ -16,8 +15,6 @@
 //---------------------------------------------------------------------------
 #include <vcl_fstream.h>
 #include <vcl_string.h>
-#include <vil1/vil1_image.h>
-#include <vgl/vgl_point_2d.h>
 #include <vtol/vtol_face_2d_sptr.h>
 #include <vpro/vpro_video_process.h>
 

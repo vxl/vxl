@@ -2,26 +2,19 @@
 #include "strk_info_tracker.h"
 //:
 // \file
-#include <vcl_cmath.h>   // for vcl_fabs(double)
 #include <vcl_algorithm.h>
-#include <vnl/algo/vnl_svd.h>
 #include <vul/vul_timer.h>
-#include <vgl/vgl_polygon.h>
-#include <vgl/vgl_polygon_scan_iterator.h>
 #include <vil1/vil1_memory_image_of.h>
-#include <vtol/vtol_intensity_face.h>
-#include <vtol/vtol_vertex_2d.h>
 #include <brip/brip_float_ops.h>
 #include <strk/strk_tracking_face_2d.h>
 
 //Gives a sort on mutual information decreasing order
 static bool info_compare(strk_tracking_face_2d_sptr const f1,
                          strk_tracking_face_2d_sptr const f2)
-                         
+
 
 {
   return f1->total_info() > f2->total_info();//JLM Switched
-  
 }
 
 
@@ -44,9 +37,9 @@ strk_info_tracker::strk_info_tracker(strk_info_tracker_params& tp)
 //:Default Destructor
 strk_info_tracker::~strk_info_tracker()
 {
-//  if(model_intensity_hist_)
+//  if (model_intensity_hist_)
 //    delete model_intensity_hist_;
- // if(model_gradient_dir_hist_)
+ // if (model_gradient_dir_hist_)
  //   delete model_gradient_dir_hist_;
 }
 
@@ -107,7 +100,7 @@ void strk_info_tracker::init()
   if (!initial_model_)
     return;
   strk_tracking_face_2d_sptr tf;
-  if(gradient_info_)
+  if (gradient_info_)
     tf = new strk_tracking_face_2d(initial_model_, image_0_,
                                    Ix_0_, Iy_0_);
   else
@@ -120,7 +113,7 @@ void strk_info_tracker::init()
 strk_tracking_face_2d_sptr strk_info_tracker::
 generate_randomly_positioned_sample(strk_tracking_face_2d_sptr const& seed)
 {
-  if(!seed)
+  if (!seed)
     return 0;
   //random sample of uniform distribution
   float tx = (2.0*search_radius_)*(rand()/(RAND_MAX+1.0)) - search_radius_;
@@ -139,12 +132,12 @@ void strk_info_tracker::generate_samples()
 {
   vul_timer t;
   for (vcl_vector<strk_tracking_face_2d_sptr>::iterator fit =
-         current_samples_.begin(); fit != current_samples_.end(); fit++)
+       current_samples_.begin(); fit != current_samples_.end(); fit++)
     for (int i = 0; i<n_samples_; i++)
       {
-        strk_tracking_face_2d_sptr tf; 
-        tf = this->generate_randomly_positioned_sample(*fit); 
-        if(!tf)
+        strk_tracking_face_2d_sptr tf;
+        tf = this->generate_randomly_positioned_sample(*fit);
+        if (!tf)
           continue;
         tf->compute_mutual_information(image_i_, Ix_i_, Iy_i_);
         hypothesized_samples_.push_back(tf);
@@ -153,8 +146,8 @@ void strk_info_tracker::generate_samples()
   //sort the hypotheses
   vcl_sort(hypothesized_samples_.begin(),
            hypothesized_samples_.end(), info_compare);
-
 }
+
 bool strk_info_tracker::refresh_sample()
 {
   float t = rand()/(RAND_MAX+1.0);
@@ -164,38 +157,38 @@ bool strk_info_tracker::refresh_sample()
 strk_tracking_face_2d_sptr strk_info_tracker::
 clone_and_refresh_data(strk_tracking_face_2d_sptr const& sample)
 {
-  if(!sample)
+  if (!sample)
     return (strk_tracking_face_2d*)0;
-  vtol_face_2d_sptr f = 
+  vtol_face_2d_sptr f =
     sample->face()->cast_to_face_2d();
-  strk_tracking_face_2d_sptr tf; 
-  if(gradient_info_)
+  strk_tracking_face_2d_sptr tf;
+  if (gradient_info_)
     tf = new strk_tracking_face_2d(f, image_0_,
                                    Ix_0_, Iy_0_);
   else
     tf = new strk_tracking_face_2d(f, image_0_);
   return tf;
 }
+
 //--------------------------------------------------------------------------
 //: cull out the best N hypothesized samples to become the current samples
 void strk_info_tracker::cull_samples()
 {
   current_samples_.clear();
-  double sx =0, sy =0;
   for (int i =0; i<n_samples_; i++)
-    current_samples_.push_back(hypothesized_samples_[i]);        
+    current_samples_.push_back(hypothesized_samples_[i]);
       //     vcl_cout << "I[" << i << "]= " << hypothesized_samples_[i]->total_info() << "\n";
       //     vcl_cout << vcl_flush;
-    
-  if(verbose_)
+
+  if (verbose_)
     vcl_cout << "Total Inf = " << hypothesized_samples_[0]->total_info()
              << " = IntInfo(" <<  hypothesized_samples_[0]->int_mutual_info()
              << ") + GradInfo(" <<  hypothesized_samples_[0]->grad_mutual_info()
              << ")\n";
-  
+
   hypothesized_samples_.clear();
   //save track history
-  strk_tracking_face_2d_sptr refreshed_best = 
+  strk_tracking_face_2d_sptr refreshed_best =
     clone_and_refresh_data(current_samples_[0]);
   track_history_.push_back(refreshed_best);
 }
@@ -203,25 +196,25 @@ void strk_info_tracker::cull_samples()
 #if 0
 //--------------------------------------------------------------------------
 //: Use parabolic interpolation to refine the transform for the best sample
-//  
+//
 void strk_info_tracker::refine_best_sample()
 {
   strk_tracking_face_2d_sptr btf = current_samples_[0];
   //translation first
-  double idtx = 0, idty = 0, idth = 0, ids = 0;  
+  double idtx = 0, idty = 0, idth = 0, ids = 0;
   double idtx_max=0, idty_max=0, inf_max= btf->total_info();
   double inf = 0;
   double xrange = 0, yrange = 0;
   vcl_cout << "Initial Info " << inf_max << "\n";
   double range_fraction = 0.1;
-  if(false)
-    //  if(initial_model_)
+  if (false)
+    //  if (initial_model_)
     {
       vtol_face* f = (vtol_face_2d*)initial_model_->cast_to_face();
       vtol_topology_object* to = (vtol_topology_object*)f;
       vsol_spatial_object_2d* so = (vsol_spatial_object_2d*)to;
       vsol_box_2d_sptr bb = so->get_bounding_box();
-      if(bb)
+      if (bb)
         {
           xrange = range_fraction*bb->width();
           yrange = range_fraction*bb->height();
@@ -230,17 +223,17 @@ void strk_info_tracker::refine_best_sample()
   double dx = (2*xrange)/n_samples_, dy = (2*yrange)/n_samples_;
   vcl_cout << "X,Y range(" << xrange << " " << yrange << ")\n";
   strk_tracking_face_2d_sptr tf = new strk_tracking_face_2d(btf);
-  for(double ty = -yrange; ty<=yrange; ty+=dy)
-    for(double tx = -xrange; tx<=xrange;tx+=dx)
+  for (double ty = -yrange; ty<=yrange; ty+=dy)
+    for (double tx = -xrange; tx<=xrange;tx+=dx)
       {
-        if(tx||ty)
+        if (tx||ty)
           {
             tf->transform(tx, ty, 0, 1.0);
             this->mutual_info_face(tf);
             inf = tf->total_info();
             //            vcl_cout << "(" << tx << " " << ty  << ")=" << inf << "\n";
             tf->transform(-tx, -ty, 0, 1.0);
-            if(inf>inf_max)
+            if (inf>inf_max)
               {
                 inf_max = inf;
                 idtx_max = tx;
@@ -257,10 +250,10 @@ void strk_info_tracker::refine_best_sample()
 //   strk_quadratic_interpolator qtrans;
 //   // strk_parabolic_interpolator pith;
 //   //   strk_parabolic_interpolator pisc;
-//   for(int i = 0; i<search_pattern.size(); i++)
+//   for (int i = 0; i<search_pattern.size(); i++)
 //     {
 //       strk_tracking_face_2d_sptr af = search_pattern[i];
-//       if(!af)
+//       if (!af)
 //         continue;
 //       af->global_transform(gtx, gty, gth, gsc);
 //       dtx = gtx-bgtx; dty = gty-bgty;
@@ -272,25 +265,26 @@ void strk_info_tracker::refine_best_sample()
 //       //       pisc.add_data_point(ds, inf);
 //     }
 
-//   if(search_radius_&&qtrans.solve())
+//   if (search_radius_&&qtrans.solve())
 //     qtrans.extremum(idtx, idty);
   //limit the interpolated value
-  //   if(vcl_fabs(idtx)>search_radius_)
+  //   if (vcl_fabs(idtx)>search_radius_)
   //     idtx = 0;
-  //   if(vcl_fabs(idty)>search_radius_)
+  //   if (vcl_fabs(idty)>search_radius_)
   //     idty = 0;
-  //   if(vcl_fabs(idth)>angle_range_)
+  //   if (vcl_fabs(idth)>angle_range_)
   //     idth = 0;
-  //   if(vcl_fabs(ids)>scale_range_)
+  //   if (vcl_fabs(ids)>scale_range_)
   //     ids = 0;
   btf->transform(idtx, idty, idth, 1.0+ids);
   this->mutual_info_face(btf);
   double info = btf->total_info();
-  vcl_cout << "Final dtrans (" << idtx << " " << idty 
-           << " " << idth << " " << ids << ") = " << info 
+  vcl_cout << "Final dtrans (" << idtx << " " << idty
+           << " " << idth << " " << ids << ") = " << info
            <<  "\n" << vcl_flush;
 }
 #endif
+
 //--------------------------------------------------------------------------
 //: because of sorting, the best sample will be the first current sample
 vtol_face_2d_sptr strk_info_tracker::get_best_sample()
@@ -307,7 +301,7 @@ void strk_info_tracker::get_samples(vcl_vector<vtol_face_2d_sptr>& samples)
 {
   samples.clear();
   for (vcl_vector<strk_tracking_face_2d_sptr>::iterator
-         fit = current_samples_.begin(); fit != current_samples_.end(); fit++)
+       fit = current_samples_.begin(); fit != current_samples_.end(); fit++)
     samples.push_back((*fit)->face()->cast_to_face_2d());
 }
 
@@ -317,10 +311,11 @@ void strk_info_tracker::track()
 {
   vul_timer t;
   this->generate_samples();
-  if(verbose_)
+  if (verbose_)
     vcl_cout << "Samples generated " << t.real() << " msecs.\n";
   this->cull_samples();
 }
+
 void strk_info_tracker::clear()
 {
   current_samples_.clear();

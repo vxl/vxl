@@ -1,4 +1,4 @@
-// This is brl/strk/strk_corr_tracker_process.h
+// This is brl/bseg/strk/strk_corr_tracker_process.h
 #ifndef strk_corr_tracker_process_h_
 #define strk_corr_tracker_process_h_
 //----------------------------------------------------------------------------
@@ -13,7 +13,6 @@
 //   J.L. Mundy August 21, 2002    Initial version.
 // \endverbatim
 //---------------------------------------------------------------------------
-#include <vcl_string.h>
 #include <strk/strk_tracker_params.h>
 #include <strk/strk_tracker.h>
 #include <vpro/vpro_video_process.h>

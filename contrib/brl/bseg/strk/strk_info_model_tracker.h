@@ -6,13 +6,13 @@
 //:
 // \file
 // \brief a processor for tracking an articulated model
-// 
-//  The info_model_tracker operates by randomly generating a 
-//  set of hypotheses in the vicinity of the previous best n matches. 
-//  These new hypotheses are tested,using mutual information on intensity 
+//
+//  The info_model_tracker operates by randomly generating a
+//  set of hypotheses in the vicinity of the previous best n matches.
+//  These new hypotheses are tested,using mutual information on intensity
 //  and optionally gradient direction. Each sample represents a different
 //  configuration of the strk_art_art_info_model.
-//  
+//
 // \author
 //  J.L. Mundy - November 05, 2003
 //
@@ -23,12 +23,10 @@
 //
 //-------------------------------------------------------------------------
 #include <vcl_vector.h>
-#include <vbl/vbl_array_2d.h>
-#include <vnl/vnl_matrix.h>
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vtol/vtol_face_2d_sptr.h>
-#include <vtol/vtol_intensity_face.h>
+#include <vtol/vtol_intensity_face_sptr.h>
 #include <strk/strk_tracking_face_2d_sptr.h>
 #include <strk/strk_art_info_model_sptr.h>
 #include <strk/strk_info_model_tracker_params.h>
@@ -52,8 +50,8 @@ class strk_info_model_tracker : public strk_info_model_tracker_params
   void init();
   void generate_samples();
   void cull_samples();
-  void track(); 
-  void clear(); 
+  void track();
+  void clear();
 
  protected:
   //protected methods
@@ -63,18 +61,17 @@ class strk_info_model_tracker : public strk_info_model_tracker_params
                  vil1_memory_image_of<float> const& image);
 
   //: set the gradient values in the model face
-  void set_gradient(strk_art_info_model_sptr tf, 
+  void set_gradient(strk_art_info_model_sptr tf,
                     vil1_memory_image_of<float> const& Ix,
                     vil1_memory_image_of<float> const& Iy);
 
   //: Generate a random sample
-  strk_art_info_model_sptr 
+  strk_art_info_model_sptr
   generate_model(strk_art_info_model_sptr const& seed);
 
   double compute_intensity_mutual_information(strk_art_info_model_sptr tf);
   double compute_gradient_mutual_information(strk_art_info_model_sptr tf);
-  
-  
+
   //members
   vil1_memory_image_of<float> image_0_;  //frame 0
   vil1_memory_image_of<float> image_i_;  //frame i

@@ -22,7 +22,6 @@
 //
 //-------------------------------------------------------------------------
 #include <vcl_vector.h>
-#include <vbl/vbl_array_2d.h>
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vtol/vtol_face_2d_sptr.h>
@@ -46,8 +45,8 @@ struct strk_correlated_face
  private:
   float c_;
   vtol_intensity_face_sptr f_;
-  float* Ix_; 
-  float* Iy_; 
+  float* Ix_;
+  float* Iy_;
 };
 
 class strk_tracker : public strk_tracker_params
@@ -101,7 +100,7 @@ class strk_tracker : public strk_tracker_params
 
   //: Form a new sample from the current image
   void transform_sample_in_place(strk_correlated_face* sample,
-                                 double tx, double ty, 
+                                 double tx, double ty,
                                  double theta, double scale);
 
   //: Compute the optical flow motion

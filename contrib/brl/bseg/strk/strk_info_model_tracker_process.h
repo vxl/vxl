@@ -1,4 +1,4 @@
-// This is brl/strk/strk_info_model_tracker_process.h
+// This is brl/bseg/strk/strk_info_model_tracker_process.h
 #ifndef strk_info_model_tracker_process_h_
 #define strk_info_model_tracker_process_h_
 //----------------------------------------------------------------------------
@@ -13,8 +13,6 @@
 //   J.L. Mundy November 06, 2003    Initial version.
 // \endverbatim
 //---------------------------------------------------------------------------
-#include <vcl_fstream.h>
-#include <vtol/vtol_face_2d_sptr.h>
 #include <strk/strk_info_model_tracker_params.h>
 #include <strk/strk_info_model_tracker.h>
 #include <vpro/vpro_video_process.h>

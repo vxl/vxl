@@ -2,16 +2,10 @@
 #include "strk_info_model_tracker.h"
 //:
 // \file
-#include <vcl_cmath.h>   // for vcl_fabs(double)
 #include <vcl_algorithm.h>
-#include <vnl/algo/vnl_svd.h>
 #include <vul/vul_timer.h>
-#include <vgl/vgl_polygon.h>
-#include <vgl/vgl_polygon_scan_iterator.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vsol/vsol_point_2d.h>
-#include <vtol/vtol_intensity_face.h>
-#include <vtol/vtol_vertex_2d.h>
 #include <btol/btol_face_algs.h>
 #include <brip/brip_float_ops.h>
 #include <strk/strk_art_info_model.h>
@@ -96,7 +90,7 @@ void strk_info_model_tracker::init()
 //for now use the centroid of the first face
   vsol_point_2d_sptr pivot = btol_face_algs::centroid(initial_model_[0]);
   strk_art_info_model_sptr mod;
-  if(gradient_info_)
+  if (gradient_info_)
     mod = new strk_art_info_model(initial_model_,pivot, image_0_, Ix_0_, Iy_0_);
   else
     mod = new strk_art_info_model(initial_model_,pivot, image_0_);
@@ -110,10 +104,10 @@ static double rand_val(double range)
 
 //--------------------------------------------------------------------------
 //: generate a randomly positioned articulated model
-strk_art_info_model_sptr 
+strk_art_info_model_sptr
 strk_info_model_tracker::generate_model(strk_art_info_model_sptr  const& seed)
 {
-  if(!seed)
+  if (!seed)
     return 0;
   //random sample of uniform distribution
   float stem_tx = rand_val(stem_trans_radius_);
@@ -124,8 +118,8 @@ strk_info_model_tracker::generate_model(strk_art_info_model_sptr  const& seed)
   float long_arm_tip_angle = rand_val(long_arm_tip_angle_range_);
   float short_arm_tip_angle = rand_val(short_arm_tip_angle_range_);
   strk_art_info_model_sptr mod = new strk_art_info_model(seed);
-  if(!mod->transform(stem_tx, stem_ty, stem_angle, long_arm_angle,
-                     short_arm_angle, long_arm_tip_angle, short_arm_tip_angle))
+  if (!mod->transform(stem_tx, stem_ty, stem_angle, long_arm_angle,
+                      short_arm_angle, long_arm_tip_angle, short_arm_tip_angle))
     return (strk_art_info_model*)0;
   return mod;
 }
@@ -136,28 +130,27 @@ void strk_info_model_tracker::generate_samples()
 {
   vul_timer t;
   for (vcl_vector<strk_art_info_model_sptr>::iterator mit =
-         current_samples_.begin(); mit != current_samples_.end(); mit++)
+       current_samples_.begin(); mit != current_samples_.end(); mit++)
     for (int i = 0; i<n_samples_; i++)
+    {
+      strk_art_info_model_sptr mod =
+        this->generate_model(*mit);
+      if (!mod)
       {
-        strk_art_info_model_sptr mod = 
-          this->generate_model(*mit);      
-        if(!mod)
-          {
-            vcl_cout << "In strk_info_model_tracker::generate_samples()"
-                     << " - generate_model failed \n";
-            continue;
-          }
-        if(gradient_info_)
-          mod->compute_mutual_information(image_i_, Ix_i_, Iy_i_);
-        else
-          mod->compute_mutual_information(image_i_);
-        hypothesized_samples_.push_back(mod);
+        vcl_cout << "In strk_info_model_tracker::generate_samples() -"
+                 << " generate_model failed\n";
+        continue;
       }
+      if (gradient_info_)
+        mod->compute_mutual_information(image_i_, Ix_i_, Iy_i_);
+      else
+        mod->compute_mutual_information(image_i_);
+      hypothesized_samples_.push_back(mod);
+    }
 
   //sort the hypotheses
   vcl_sort(hypothesized_samples_.begin(),
            hypothesized_samples_.end(), info_compare);
-
 }
 
 //--------------------------------------------------------------------------
@@ -165,12 +158,11 @@ void strk_info_model_tracker::generate_samples()
 void strk_info_model_tracker::cull_samples()
 {
   current_samples_.clear();
-  double sx =0, sy =0;
   for (int i =0; i<n_samples_; i++)
-    {
-      current_samples_.push_back(hypothesized_samples_[i]);
-    }
-  if(verbose_)
+  {
+    current_samples_.push_back(hypothesized_samples_[i]);
+  }
+  if (verbose_)
     vcl_cout << "Total Inf = " << hypothesized_samples_[0]->total_model_info()
              << ")\n";
   hypothesized_samples_.clear();
@@ -191,7 +183,7 @@ void strk_info_model_tracker::get_samples(vcl_vector<strk_art_info_model_sptr>& 
 {
   samples.clear();
   for (vcl_vector<strk_art_info_model_sptr>::iterator
-         mit = current_samples_.begin(); mit != current_samples_.end(); mit++)
+       mit = current_samples_.begin(); mit != current_samples_.end(); mit++)
     samples.push_back(*mit);
 }
 
@@ -201,10 +193,11 @@ void strk_info_model_tracker::track()
 {
   vul_timer t;
   this->generate_samples();
-  if(verbose_)
+  if (verbose_)
     vcl_cout << "Samples generated " << t.real() << " msecs.\n";
   this->cull_samples();
 }
+
 void strk_info_model_tracker::clear()
 {
   current_samples_.clear();
