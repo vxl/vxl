@@ -19,6 +19,7 @@ TESTS += test_qsvd.cxx
 TESTS += test_sample.cxx
 TESTS += test_functions.cxx
 TESTS += test_numeric_limits.cxx
+TESTS += test_numeric_traits.cxx
 TESTS += test_rpoly_roots.cxx
 TESTS += test_cpoly_roots.cxx
 TESTS += test_complex.cxx
@@ -46,7 +47,7 @@ include ${IUEROOT}/config/top-params.mk
 
 ifeq "$(TJ_GCC30)" "1"
 # gcc 3.0 needs too much virtual memory with optimisation
-FLAGS_test_rational.cxx += -O0
+FLAGS_test_rational.cxx += -O1
 endif
 
 IULIBS += -lvnl-algo -lvnl -lvpl -lvul # vpl_unlink used in test_matlab; vul_timer used
