@@ -1,20 +1,15 @@
 #ifndef vsol_box_3d_H
 #define vsol_box_3d_H
+//:
+//  \file
+// \brief A bounding box
 //
-// .NAME        vsol_box_3d - A bounding box
-// .LIBRARY     vsol
-// .HEADER      gel package
-// .INCLUDE     vsol/vsol_box_3d.h
-// .FILE        vsol_box_3d.cxx
-//
-// .SECTION Description
-//
-//                     Note that the definition of width, depth and 
-//                     height are such that the X-Y plane is considered
-//                     as a Rectangle with a "width" and "height" 
-//                     according to the usual definition. The figure 
-//                     shows a right-handed coordinate system, but there
-//                     is no commitment to that in the definitions
+//   Note that the definition of width, depth and 
+//   height are such that the X-Y plane is considered
+//   as a Rectangle with a "width" and "height" 
+//   according to the usual definition. The figure 
+//   shows a right-handed coordinate system, but there
+//   is no commitment to that in the definitions
 // \verbatim
 //                       |<--width-->| 
 //                 Z     O-----------O  ---
@@ -28,7 +23,6 @@
 //                    |/          |/   /
 //                    O-----------O  --- X
 // \endverbatim
-
 
 #include <vul/vul_timestamp.h>
 #include <vbl/vbl_ref_count.h>
@@ -66,7 +60,7 @@ class vsol_box_3d : public vbl_ref_count , public vul_timestamp
   void set_min_z(const double& v);
   void set_max_z(const double& v);
 
-  //Compare this' bounds to comp_box and grow to the maximum bounding box
+  //: Compare this' bounds to comp_box and grow to the maximum bounding box
   void grow_minmax_bounds(vsol_box_3d & comp_box);
 
   double width();

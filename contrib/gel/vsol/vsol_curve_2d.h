@@ -1,18 +1,18 @@
 #ifndef VSOL_CURVE_2D_H
 #define VSOL_CURVE_2D_H
 //*****************************************************************************
+//:
+//  \file
+// \brief Abstract curve in a 2D space
 //
-// .NAME vsol_curve_2d - Abstract curve in a 2D space
-// .LIBRARY vsol
-// .INCLUDE vsol/vsol_curve_2d.h
-// .FILE    vsol/vsol_curve_2d.cxx
-//
-// .SECTION Author
+// \author
 // François BERTEL
 //
-// .SECTION Modifications
-// 2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
-// 2000/04/27 François BERTEL Creation
+// \verbatim
+// Modifications
+//  2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
+//  2000/04/27 François BERTEL Creation
+// \endverbatim
 //*****************************************************************************
 
 class vsol_curve_2d;

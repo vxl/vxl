@@ -1,19 +1,16 @@
 #ifndef _vsol_spatial_object_2d_h_
 #define _vsol_spatial_object_2d_h_
 //-----------------------------------------------------------------------------
+//:
+//  \file
+// \brief Base class of spatial entities Topology Geometry SpatialGroup
 //
-// .NAME        vsol_spatial_object_2d - Base class of spatial entities Topology Geometry SpatialGroup
-// .LIBRARY     vsol
-// .HEADER      vxl  package
-// .INCLUDE     vsol/vsol_spatial_object_2d.h
-// .FILE        vsol_spatial_object_2d.cxx
-//
-// .SECTION Description
 //   vsol_spatial_object_2d is the base class of all spatial entities: vtol, vsol.
 //
-// .SECTION Author
+// \author
 //     Patricia A. Vrobel
-// .SECTION Modifications
+// \verbatim
+// Modifications
 // 2000/05/10 François BERTEL  add cast_to_group() because VXL is not compiled
 //                             with -frtti :-(
 // 2000/05/03 Peter TU         ported
@@ -26,7 +23,7 @@
 //           if the vsol_spatial_object_2d is modified it is "touched" to
 //           set the timestamp.  Then, any request to bounding information
 //           automatically updates the bounding volume if necessary.
-//
+// \endverbatim
 //-----------------------------------------------------------------------------
 
 class vsol_spatial_object_2d;
@@ -169,6 +166,7 @@ public:
   //: protected destroy
   virtual void protected_destroy(void);
 
+#if 0 // these functions are deprecated, and are nowhere used
   //: Geometry Accessors
   virtual vcl_vector<double> *GetLocation(void) { return 0; }
   virtual vcl_vector<double> *GetOrientation(void) { return 0; }
@@ -235,6 +233,7 @@ public:
   {
     not_applicable("SetScalar");
   }
+#endif
 
   virtual void UpdateGeometry(void)
   {
@@ -347,7 +346,6 @@ inline vsol_box_2d *vsol_spatial_object_2d::get_bounding_box(void)
 //  this->check_update_bounding_box();
 //  _bounding_box->get_max_location(max_loc);
 //}
-
 
 inline float vsol_spatial_object_2d::get_min_x(void)
 {

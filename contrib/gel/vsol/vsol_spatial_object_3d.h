@@ -1,19 +1,16 @@
 #ifndef _vsol_spatial_object_3d_h_
 #define _vsol_spatial_object_3d_h_
 //-----------------------------------------------------------------------------
+//:
+//  \file
+// \brief Base class of spatial entities Topology Geometry SpatialGroup
 //
-// .NAME    vsol_spatial_object_3d - Base class of spatial entities Topology Geometry SpatialGroup
-// .LIBRARY vsol
-// .HEADER  vxl package
-// .INCLUDE vsol/vsol_spatial_object_3d.h
-// .FILE    vsol_spatial_object_3d.cxx
-//
-// .SECTION Description
 //   vsol_spatial_object_3d is the base class of all spatial entities: vtol, vsol.
 //
-// .SECTION Author
+// \author
 //     Patricia A. Vrobel
-// .SECTION Modifications
+// \verbatim
+// Modifications
 // 2000/05/12 François BERTEL  add cast_to_group() because VXL is not compiled
 //                             with -frtti :-(
 // 2000/05/03 Peter TU         ported
@@ -26,6 +23,7 @@
 //           if the vsol_spatial_object_3d is modified it is "touched" to
 //           set the timestamp.  Then, any request to bounding information
 //           automatically updates the bounding volume if necessary.
+// \endverbatim
 //-----------------------------------------------------------------------------
 
 class vsol_spatial_object_3d;
@@ -43,7 +41,6 @@ class vsol_spatial_object_3d;
 #include <vcl_vector.h>
 #include <vsol/vsol_group_3d_sptr.h>
 
-class vtol_topology_object_3d;
 class vtol_topology_object;
 
 class vsol_spatial_object_3d;
@@ -172,10 +169,8 @@ public:
 
   // virtual SpatialGroup *  CastToSpatialGroup()   { return NULL;}
   // virtual SpatialGroup const* CastToSpatialGroup() const { return NULL;}
-  virtual vtol_topology_object_3d* cast_to_topology_object_3d() { return NULL;}
 
   // for the moment topology object inherits off of spatial_object_3d
-
   virtual vtol_topology_object* cast_to_topology_object() { return NULL;}
 
   //virtual GeometryObject* CastToGeometryObject() { return NULL;}
@@ -185,6 +180,7 @@ public:
 
   virtual void protected_destroy(void);
 
+#if 0 // these functions are deprecated, and are nowhere used
 //: Geometry Accessors
   virtual vcl_vector<double> *GetLocation(void) { return 0; }
   virtual vcl_vector<double> *GetOrientation(void) { return 0; }
@@ -261,7 +257,6 @@ public:
     not_applicable("UpdateGeometry");
   }
 
-#if 0 // commented out
   virtual  vcl_vector<double>  *GetCog()  { return NULL; }
   const vcl_vector<double> *GetCog() const  { return ((vsol_spatial_object_3d*)this)->GetCog(); }
 
@@ -281,8 +276,6 @@ public:
   inline void check_update_bounding_box(void);  // Test consistency of bound
   // inline void get_min_location(vcl_vector<double>& min_loc);
   // inline void get_max_location(vcl_vector<double>& max_loc);
-
-
   void grow_minmax_bounds(vsol_box_3d & comp_box); //grow to the largest dimension of this and comp_box
   inline float get_min_x(void);
   inline float get_max_x(void);
@@ -397,7 +390,6 @@ inline vsol_box_3d *vsol_spatial_object_3d::get_bounding_box(void)
 //  this->check_update_bounding_box();
 //  _bounding_box->get_max_location(max_loc);
 //}
-
 
 inline float vsol_spatial_object_3d::get_min_x(void)
 {

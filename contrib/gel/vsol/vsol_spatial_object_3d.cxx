@@ -1,5 +1,8 @@
 #include <vsol/vsol_spatial_object_3d.h>
 
+//:
+//  \file
+
 #include <vcl_iostream.h>
 
 const float vsol_spatial_object_3d::eps = 1.0e-3f;
@@ -47,7 +50,8 @@ void iu_delete(vsol_spatial_object_3d* so)
 }
 
 //---------------------------------------------------------------------------
-//: The same behavior than dynamic_cast<>. Needed because VXL is not compiled with -frtti :-(
+//: The same behavior than dynamic_cast<>.
+//  Needed because VXL is not compiled with -frtti :-(
 //---------------------------------------------------------------------------
 const vsol_group_3d *vsol_spatial_object_3d::cast_to_group(void) const
 {
@@ -71,7 +75,8 @@ vsol_spatial_object_3d::Transform(CoolTransform const& )
 }
 
 //------------------------------------------------------------
-//: Return the projective transformation needed to move GetLocation() to (0,0,0),
+//:
+// Return the projective transformation needed to move GetLocation() to (0,0,0),
 // GetOrientation() to (1,0,0), GetNormal() to (0,0,1) and GetSize() to (1,1,1).
 CoolTransform vsol_spatial_object_3d::GetTransformation() const
 {
@@ -80,7 +85,8 @@ CoolTransform vsol_spatial_object_3d::GetTransformation() const
 }
 
 //------------------------------------------------------------
-//: leave GetLocation() fixed, move all other points towards or away from it
+//:
+// Leave GetLocation() fixed, move all other points towards or away from it
 // by the given scale factor.  Smaller than 1 means towards.  Negative moves the
 // points to the other side of GetLocation().
 bool
@@ -91,7 +97,8 @@ vsol_spatial_object_3d::LinearScale(float )
 }
 
 //------------------------------------------------------------
-//: leave GetOrientation() fixed, translate all points so that GetLocation()
+//:
+// Leave GetOrientation() fixed, translate all points so that GetLocation()
 // moves to (0,0,0).
 bool
 vsol_spatial_object_3d::Translate()
@@ -101,7 +108,8 @@ vsol_spatial_object_3d::Translate()
 }
 
 //------------------------------------------------------------
-//: leave GetLocation() fixed, rotate all other points around it so that
+//:
+// Leave GetLocation() fixed, rotate all other points around it so that
 // GetOrientation() moves to (1,0,0).
 bool
 vsol_spatial_object_3d::Rotate()
@@ -111,7 +119,8 @@ vsol_spatial_object_3d::Rotate()
 }
 
 //------------------------------------------------------------
-//: leave GetOrientation() fixed, rotate all other points around it over 180
+//:
+// Leave GetOrientation() fixed, rotate all other points around it over 180
 // degrees.
 bool
 vsol_spatial_object_3d::Reflect()
@@ -121,7 +130,8 @@ vsol_spatial_object_3d::Reflect()
 }
 
 //------------------------------------------------------------
-//: leave GetOrientation() fixed, move all other points parallel to it,
+//:
+// Leave GetOrientation() fixed, move all other points parallel to it,
 // over a distance which is proportional to its distance to GetOrientation().
 // A right angle becomes an angle of a (in degrees).
 bool
@@ -136,9 +146,7 @@ vsol_spatial_object_3d::Shear(float )
 void vsol_spatial_object_3d::grow_minmax_bounds(vsol_box_3d & comp_box)
 {
   if(_bounding_box==0)
-    {
     _bounding_box=new vsol_box_3d;
-    }
   _bounding_box->grow_minmax_bounds(comp_box);
 }
 
