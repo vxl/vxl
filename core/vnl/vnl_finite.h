@@ -32,7 +32,6 @@
 
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h> // for sqrt
 #include <vcl_vector.h>
 
 //: finite modulo-N arithmetic
