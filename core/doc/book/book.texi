@@ -1,3 +1,4 @@
+% \input awffonts % should be *before* atexinfo.tex
 \input atexinfo   @c -*-texinfo-*-
 @c %**start of header
 @setfilename vxl.info
@@ -9,6 +10,13 @@
 @afourlatex
 @end iftex
 
+
+@ifset makeinfo 
+@macro anchor{label}
+@end macro
+@macro ejectallfigures
+@end macro
+@end ifset
 
 @c Define the @caption{1} macro
 @ifnottex
@@ -105,7 +113,7 @@ inputclass \name\
 
 @c -----------------------------------------------------------------------------
 
-@node Top, Introduction, , (dir)
+@node Top, Introduction, (dir), (dir)
 
 @ifinfo
 This documents the VXL collection of C++ libraries.
@@ -146,7 +154,7 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 * Concept Index::
 @end menu
 
-@node    Introduction, vbl, top,      top
+@node    Introduction, eg, Top, Top
 @comment node-name, next,           previous, up
 @chapter Introduction
 @cindex Introduction
@@ -411,12 +419,6 @@ begin with @code{vxl_stuff_}, and possibly @code{vxl_stuff} itself.
 @end quotation
 An example of a header file which obeys this rule is shown in figure 1.
 
-
-@figure
-x
-@end figure
-
-
 @figure
 @cartouche
 @smallexample
@@ -491,7 +493,7 @@ libraries.  I don't know whether that would help or not...
 
 
 @comment ------------------------------------------------------------------
-@node    eg,       vcl,  Introduction, top
+@node    eg, vcl, Introduction, Top
 @comment node-name, next, previous,     up
 @chapter vxl example programs
 
@@ -562,7 +564,7 @@ $15 = (int (*)(void)) 0x80c5578 <vil_tiff_file_format::~vil_tiff_file_format(voi
 
 
 @comment ------------------------------------------------------------------
-@node    vcl,       vbl,  eg, top
+@node    vcl, vbl, eg, Top
 @comment node-name, next, previous,     up
 @chapter vcl: C++ compatibility
 @cindex vcl
@@ -687,7 +689,7 @@ but either #include <vcl_something_fwd.h> or #include <vcl_something.h>
 
 
 @comment ------------------------------------------------------------------
-@node    vbl, vnl, Introduction,      top
+@node    vbl, vnl, vcl, Top
 @comment node-name, next,           previous, up
 @chapter vbl: Basics
 @cindex vbl
@@ -1025,7 +1027,7 @@ the pattern @code{[^ab1-9]} says to match any character sequence that does
 not begin with the characters "ab" followed by numbers in the series 1-9.
 
 @comment ------------------------------------------------------------------
-@node    vnl,       vil,  vbl,      top
+@node    vnl, vil, vbl, Top
 @comment node-name, next, previous, up
 @chapter vnl: Numerics
 @cindex vnl
@@ -1274,9 +1276,9 @@ things, you can use the @code{vnl_matrix_inverse} class to compute an
 inverse object:
 @example
 #include <vnl/algo/vnl_matrix_inverse.h>
-main() {
+main() @{
   vcl_cerr << vnl_matrix_inverse(A) * B;
-}
+@}
 @end example
 
 If you want more control over how the inverse is taken, then you might want
@@ -1703,7 +1705,7 @@ optimization.  Users can contribute code to address these deficiencies
 based on the existing examples, and using the conversion hints in
 Appendix~A.  In addition there are many algorithms that ought to be
 included, listed roughly in order of priority:
-@itemize
+@itemize @bullet
 
 @item
 Additional matrix decompositions in the same vein, including an updateable
@@ -1720,7 +1722,7 @@ I will use default template arguments when the compilers support them.
 @end itemize
 
 @comment ------------------------------------------------------------------
-@node    vil,       vgl,     vnl,      top
+@node    vil, vgl, vnl, Top
 @comment node-name, next,    previous, up
 @chapter vil: Imaging
 @cindex vil
@@ -2056,7 +2058,7 @@ simple.
 
 
 @comment ------------------------------------------------------------------
-@node    Conclusion,  ,    vgui,      top
+@node    Conclusion, Concept Index, vgui, Top
 @comment node-name, next,    previous, up
 @chapter Conclusion
 
@@ -2184,7 +2186,7 @@ In addition to these fortran specifics, it is important to be aware of the
 sorts of design patterns seen in numerical code.  Many routines are coded
 for maximum generality and efficiency, which can make reading the
 descriptions heavy going.  Common conventions are:
-@itemize
+@itemize @bullet
 @item An array is passed with three dimensions: number of rows in the physical
 array, number of rows to use for computation and number of columns.  This
 allows the routines to be used on any submatrix of a larger matrix.
@@ -2253,7 +2255,7 @@ Now, the function may be called as
 @end example
 
 @comment ------------------------------------------------------------------
-@node    Concept Index,     , , Top
+@node    Concept Index,  , Conclusion, Top
 @c        node-name,    next, previous,        up
 @unnumbered Concept Index
 
