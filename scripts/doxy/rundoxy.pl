@@ -72,7 +72,7 @@ sub get_dependencies
       $prefix = $pref;
       last;
     }
-		# Add library to list of those seen
+        # Add library to list of those seen
     @liblist = (@liblist,$packlib);
   }
   close(IN);
@@ -154,6 +154,8 @@ sub check_havedot
 # Main
 #-----------------------------------------------------------
 
+use Env qw(OS);
+ 
 my %options;
 getopts('v:s:l:n:o:', \%options);
 
@@ -162,6 +164,8 @@ my $script_dir = $options{s} || "$vxlsrc/scripts/doxy";
 my $library_list_file = $options{l} || "$script_dir/data/library_list.txt";
 my $library = $options{n} || "";
 my $doxydir = $options{o} || "$vxlsrc/Doxy";
+
+if ( !defined($OS) ) {$OS = "Unix";}
 
 if ( ! $vxlsrc || !$library_list_file || !$library)
 {
@@ -248,7 +252,10 @@ $relpath =~ s/[^\/]+/\.\./g;
 
 # create the command to install the docs
 
-$command = "./installdox.pl ";
+if ($OS =~ /Windows/)
+{ $command = "installdox.pl "; }
+else 
+{ $command = "./installdox.pl "; }
 foreach $dep (@deps)
 {
   # Deduce tag file name  (vnl -> vnl.tag,  vnl/algo -> vnl_algo.tag etc)
