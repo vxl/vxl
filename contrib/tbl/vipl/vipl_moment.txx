@@ -70,7 +70,7 @@ bool vipl_moment <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
   for (int i=startx-x1;i<=(startx+x2);++i)
     for (int j=starty-y1;j<=(starty+y2);++j)
     {
-      DataIn w = getpixel(in,i,j,w);
+      DataIn w; w = getpixel(in,i,j,w);
       d += pow(double(w),order_);
     }
   tempbuf[0] = d;
@@ -84,7 +84,7 @@ bool vipl_moment <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
     d = tempbuf[i-startx-1];
     for (int j = starty-y1;j<=starty+y2;++j)
     {
-      DataIn w  = getpixel(in,i-1-x1,j,w);
+      DataIn w; w = getpixel(in,i-1-x1,j,w);
       d -= pow(double(w),order_);
       w  = getpixel(in,i+x2,j,w);
       d += pow(double(w),order_);
@@ -101,7 +101,7 @@ bool vipl_moment <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
     d = tempbuf[(j-starty-1)*sizex];
     for (int i = startx-x1;i<=startx+x2;++i)
     {
-      DataIn w  = getpixel(in,i,j-1-y1,w);
+      DataIn w; w = getpixel(in,i,j-1-y1,w);
       d -= pow(double(w),order_);
       w  = getpixel(in,i,j+y2,w);
       d += pow(double(w),order_);
@@ -119,7 +119,7 @@ bool vipl_moment <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
       int i1 = i-startx;
       int j1 = j-starty;
       d = tempbuf[i1-1 + j1*sizex] + tempbuf[i1+(j1-1)*sizex] - tempbuf[(i1-1) + (j1-1)*sizex];
-      DataIn
+      DataIn w;
       w = getpixel(in,i-x1-1,j-y1-1,w);  d += pow(double(w),order_);
       w = getpixel(in,i-x1-1,j+y2,w);    d -= pow(double(w),order_);
       w = getpixel(in,i+x2,j-y1-1,w);    d -= pow(double(w),order_);
