@@ -12,6 +12,7 @@ TESTS += test_irls.cxx
 TESTS += test_linear_reg.cxx
 TESTS += test_lms_lts.cxx
 TESTS += test_m_est_obj.cxx
+TESTS += test_muse_table.cxx
 TESTS += test_orthogonal_regression.cxx
 TESTS += test_ran_sam_search.cxx
 TESTS += test_ransac_obj.cxx
