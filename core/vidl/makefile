@@ -10,14 +10,13 @@ VERSION := 1.0
 
 USES += vxl
 
-SOURCES += 		\
-	   vidl_clip.cxx \
-	   vidl_movie.cxx \
-	   vidl_frame.cxx \
-	   vidl_frame_as_image.cxx \
-	   vidl_image_list_codec.cxx \
-	   vidl_io.cxx \
-	   vidl_test.cxx 
+SOURCES += vidl_clip.cxx
+SOURCES += vidl_movie.cxx
+SOURCES += vidl_frame.cxx
+SOURCES += vidl_frame_as_image.cxx
+SOURCES += vidl_image_list_codec.cxx
+SOURCES += vidl_io.cxx
+SOURCES += vidl_test.cxx 
 
 #######################################
 include ${IUEROOT}/config/top-params.mk

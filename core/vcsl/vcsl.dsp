@@ -1,24 +1,24 @@
-# Microsoft Developer Studio Project File - Name="vnl_algo" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="vcsl" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
-CFG=vnl_algo - Win32 Debug
+CFG=vcsl - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "vnl_algo.mak".
+!MESSAGE NMAKE /f "vcsl.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "vnl_algo.mak" CFG="vnl_algo - Win32 Debug"
+!MESSAGE NMAKE /f "vcsl.mak" CFG="vcsl - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "vnl_algo - Win32 Release" (based on "Win32 (x86) Static Library")
-!MESSAGE "vnl_algo - Win32 Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "vcsl - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "vcsl - Win32 Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -28,7 +28,7 @@ CFG=vnl_algo - Win32 Debug
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "vnl_algo - Win32 Release"
+!IF  "$(CFG)" == "vcsl - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -42,17 +42,17 @@ RSC=rc.exe
 # PROP Target_Dir ""
 MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GX /O2 /Ob2 /I "$(IUEROOT)\vxl\config.win32-VC60" /I "$(IUEROOT)/vxl" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
-# ADD BASE RSC /l 0x409 /d "NDEBUG"
-# ADD RSC /l 0x409 /d "NDEBUG"
+# ADD CPP /nologo /MT /W3 /GX /O2 /I "$(IUEROOT)\vxl\config.win32-VC60" /I "$(IUEROOT)/vxl" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
+# ADD BASE RSC /l 0x809 /d "NDEBUG"
+# ADD RSC /l 0x809 /d "NDEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"..\..\Release\vnl_algo.lib"
+# ADD LIB32 /nologo
 
-!ELSEIF  "$(CFG)" == "vnl_algo - Win32 Debug"
+!ELSEIF  "$(CFG)" == "vcsl - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -65,291 +65,310 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
 MTL=midl.exe
-# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /Ob2 /I "$(IUEROOT)/vxl/config.win32-vc60" /I "$(IUEROOT)/Image/JPEG" /I "$(IUEROOT)\vxl\config.win32-VC60" /I "$(IUEROOT)/vxl" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /D "_AFXDLL" /FR /FD /GZ /c
-# SUBTRACT CPP /YX
-# ADD BASE RSC /l 0x409 /d "_DEBUG"
-# ADD RSC /l 0x409 /d "_DEBUG" /d "_AFXDLL"
+# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ  /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "$(IUEROOT)\vxl\config.win32-VC60" /I "$(IUEROOT)/vxl" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /D "_AFXDLL" /YX /FD /GZ  /c
+# ADD BASE RSC /l 0x809 /d "_DEBUG"
+# ADD RSC /l 0x809 /d "_DEBUG" /d "_AFXDLL"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"..\..\Debug\vnl_algo.lib"
+# ADD LIB32 /nologo
 
 !ENDIF 
 
 # Begin Target
 
-# Name "vnl_algo - Win32 Release"
-# Name "vnl_algo - Win32 Debug"
+# Name "vcsl - Win32 Release"
+# Name "vcsl - Win32 Debug"
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=.\Templates\vnl_adjugate+double-.cxx
-# End Source File
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_angle.cxx
 # Begin Source File
 
-SOURCE=.\Templates\vnl_fft1d+float-.cxx
 # End Source File
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_angle_unit.cxx
 # Begin Source File
 
-SOURCE=.\Templates\vnl_orthogonal_complement+double-.cxx
 # End Source File
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_axis.cxx
 # Begin Source File
 
-SOURCE=.\Templates\vnl_orthogonal_complement+double_complex-.cxx
 # End Source File
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_cartesian.cxx
 # Begin Source File
 
-SOURCE=.\Templates\vnl_scatter_3x3+float-.cxx
 # End Source File
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_cartesian_2d.cxx
 # Begin Source File
 
-SOURCE=.\vnl_lsqr.cxx
 # End Source File
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_cartesian_3d.cxx
 # Begin Source File
 
-SOURCE=".\Templates\vcl_vector+vnl_amoeba_SimplexCorner-.cxx"
 # End Source File
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_composition.cxx
 # Begin Source File
 
-SOURCE=.\vnl_amoeba.cxx
 # End Source File
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_coordinate_system.cxx
 # Begin Source File
 
-SOURCE=.\vnl_chi_squared.cxx
 # End Source File
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_cylindrical.cxx
 # Begin Source File
 
-SOURCE=.\vnl_cholesky.cxx
 # End Source File
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_cylindrical_to_cartesian_3d.cxx
 # Begin Source File
 
-SOURCE=.\vnl_complex_eigensystem.cxx
 # End Source File
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_degree.cxx
 # Begin Source File
 
-SOURCE=.\vnl_conjugate_gradient.cxx
 # End Source File
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_dimension.cxx
 # Begin Source File
 
-SOURCE=.\vnl_cpoly_roots.cxx
 # End Source File
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_displacement.cxx
 # Begin Source File
 
-SOURCE=.\vnl_determinant.cxx
 # End Source File
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_geocentric.cxx
 # Begin Source File
 
-SOURCE=.\vnl_discrete_diff.cxx
 # End Source File
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_geodetic.cxx
 # Begin Source File
 
-SOURCE=".\Templates\vnl_fft1d+double-.cxx"
 # End Source File
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_geographic.cxx
 # Begin Source File
 
-SOURCE=.\Templates\vnl_fft2d.cxx
 # End Source File
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_graph.cxx
 # Begin Source File
 
-SOURCE=.\vnl_fftxd_prime_factors.cxx
 # End Source File
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_lambertian.cxx
 # Begin Source File
 
-SOURCE=.\vnl_gaussian_kernel_1d.cxx
 # End Source File
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_length.cxx
 # Begin Source File
 
-SOURCE=.\vnl_generalized_eigensystem.cxx
 # End Source File
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_length_unit.cxx
 # Begin Source File
 
-SOURCE=.\vnl_lbfgs.cxx
 # End Source File
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_meter.cxx
 # Begin Source File
 
-SOURCE=.\vnl_levenberg_marquardt.cxx
 # End Source File
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_perspective.cxx
 # Begin Source File
 
-SOURCE=".\Templates\vnl_matrix_inverse+double-.cxx"
 # End Source File
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_polar.cxx
 # Begin Source File
 
-SOURCE=".\Templates\vnl_qr+double-.cxx"
 # End Source File
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_radian.cxx
 # Begin Source File
 
-SOURCE=".\Templates\vnl_qr+double_complex-.cxx"
 # End Source File
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_rotation.cxx
 # Begin Source File
 
-SOURCE=".\Templates\vnl_qr+float-.cxx"
 # End Source File
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_scale.cxx
 # Begin Source File
 
-SOURCE=".\Templates\vnl_qr+float_complex-.cxx"
 # End Source File
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_spatial.cxx
 # Begin Source File
 
-SOURCE=.\vnl_real_eigensystem.cxx
 # End Source File
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_spatial_transformation.cxx
 # Begin Source File
 
-SOURCE=.\vnl_rnpoly_solve.cxx
 # End Source File
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_spherical.cxx
 # Begin Source File
 
-SOURCE=.\vnl_rpoly_roots.cxx
 # End Source File
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_spheroid.cxx
 # Begin Source File
 
-SOURCE=".\Templates\vnl_scatter_3x3+double-.cxx"
 # End Source File
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_translation.cxx
 # Begin Source File
 
-SOURCE=.\vnl_sparse_symmetric_eigensystem.cxx
 # End Source File
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_unit.cxx
 # Begin Source File
 
-SOURCE=".\Templates\vnl_svd+double-.cxx"
 # End Source File
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_utm.cxx
 # Begin Source File
 
-SOURCE=".\Templates\vnl_svd+double_complex-.cxx"
 # End Source File
+SOURCE=.\Templates\vcl_vector+vcsl_axis_ref.cxx
 # Begin Source File
 
-SOURCE=".\Templates\vnl_svd+float-.cxx"
 # End Source File
+SOURCE=.\Templates\vcl_vector+vcsl_interpolator.cxx
 # Begin Source File
 
-SOURCE=".\Templates\vnl_svd+float_complex-.cxx"
 # End Source File
+SOURCE=.\Templates\vcl_vector+vcsl_spatial_ref.cxx
 # Begin Source File
 
-SOURCE=.\vnl_symmetric_eigensystem.cxx
+# End Source File
+SOURCE=.\Templates\vcl_vector+vcsl_spatial_transformation_ref.cxx
+# Begin Source File
+
+# End Source File
+SOURCE=.\vcsl_angle.cxx
+# Begin Source File
+
+# End Source File
+SOURCE=.\vcsl_angle_unit.cxx
+# Begin Source File
+
+# End Source File
+SOURCE=.\vcsl_axis.cxx
+# Begin Source File
+
+# End Source File
+SOURCE=.\vcsl_cartesian.cxx
+# Begin Source File
+
+# End Source File
+SOURCE=.\vcsl_cartesian_2d.cxx
+# Begin Source File
+
+# End Source File
+SOURCE=.\vcsl_cartesian_3d.cxx
+# Begin Source File
+
+# End Source File
+SOURCE=.\vcsl_composition.cxx
+# Begin Source File
+
+# End Source File
+SOURCE=.\vcsl_coordinate_system.cxx
+# Begin Source File
+
+# End Source File
+SOURCE=.\vcsl_cylindrical.cxx
+# Begin Source File
+
+# End Source File
+SOURCE=.\vcsl_cylindrical_to_cartesian_3d.cxx
+# Begin Source File
+
+# End Source File
+SOURCE=.\vcsl_degree.cxx
+# Begin Source File
+
+# End Source File
+SOURCE=.\vcsl_dimension.cxx
+# Begin Source File
+
+# End Source File
+SOURCE=.\vcsl_displacement.cxx
+# Begin Source File
+
+# End Source File
+SOURCE=.\vcsl_geocentric.cxx
+# Begin Source File
+
+# End Source File
+SOURCE=.\vcsl_geodetic.cxx
+# Begin Source File
+
+# End Source File
+SOURCE=.\vcsl_geographic.cxx
+# Begin Source File
+
+# End Source File
+SOURCE=.\vcsl_graph.cxx
+# Begin Source File
+
+# End Source File
+SOURCE=.\vcsl_lambertian.cxx
+# Begin Source File
+
+# End Source File
+SOURCE=.\vcsl_length.cxx
+# Begin Source File
+
+# End Source File
+SOURCE=.\vcsl_length_unit.cxx
+# Begin Source File
+
+# End Source File
+SOURCE=.\vcsl_meter.cxx
+# Begin Source File
+
+# End Source File
+SOURCE=.\vcsl_perspective.cxx
+# Begin Source File
+
+# End Source File
+SOURCE=.\vcsl_polar.cxx
+# Begin Source File
+
+# End Source File
+SOURCE=.\vcsl_radian.cxx
+# Begin Source File
+
+# End Source File
+SOURCE=.\vcsl_rotation.cxx
+# Begin Source File
+
+# End Source File
+SOURCE=.\vcsl_scale.cxx
+# Begin Source File
+
+# End Source File
+SOURCE=.\vcsl_spatial.cxx
+# Begin Source File
+
+# End Source File
+SOURCE=.\vcsl_spatial_transformation.cxx
+# Begin Source File
+
+# End Source File
+SOURCE=.\vcsl_spherical.cxx
+# Begin Source File
+
+# End Source File
+SOURCE=.\vcsl_spheroid.cxx
+# Begin Source File
+
+# End Source File
+SOURCE=.\vcsl_translation.cxx
+# Begin Source File
+
+# End Source File
+SOURCE=.\vcsl_unit.cxx
+# Begin Source File
+
+# End Source File
+SOURCE=.\vcsl_utm.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
-# Begin Source File
-
-SOURCE=.\dll.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_affine_approx.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_algo_fwd.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_amoeba.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_chi_squared.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_cholesky.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_complex_eigensystem.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_conjugate_gradient.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_cpoly_roots.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_determinant.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_discrete_diff.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_fft1d.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_fft2d.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_fftxd_prime_factors.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_gaussian_kernel_1d.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_generalized_eigensystem.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_lbfgs.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_levenberg_marquardt.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_matrix_inverse.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_netlib.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_qr.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_real_eigensystem.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_rnpoly_solve.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_rpoly_roots.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_sparse_symmetric_eigensystem.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_svd.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_symmetric_eigensystem.h
-# End Source File
 # End Group
-# Begin Source File
-
-SOURCE=.\vnl_matrix_inverse.txx
-# End Source File
 # End Target
 # End Project

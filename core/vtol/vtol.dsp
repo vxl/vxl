@@ -85,6 +85,278 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
+# Begin Source File
+
+SOURCE=.\Templates\vbl_smart_ptr+vtol_block_2d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vbl_smart_ptr+vtol_block_3d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vbl_smart_ptr+vtol_chain_2d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vbl_smart_ptr+vtol_edge_2d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vbl_smart_ptr+vtol_edge_3d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vbl_smart_ptr+vtol_face_2d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vbl_smart_ptr+vtol_face_3d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vbl_smart_ptr+vtol_one_chain_2d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vbl_smart_ptr+vtol_one_chain_3d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vbl_smart_ptr+vtol_topology_object_2d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vbl_smart_ptr+vtol_topology_object_3d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vbl_smart_ptr+vtol_two_chain_2d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vbl_smart_ptr+vtol_two_chain_3d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vbl_smart_ptr+vtol_vertex_2d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vbl_smart_ptr+vtol_vertex_3d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vbl_smart_ptr+vtol_zero_chain_2d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vbl_smart_ptr+vtol_zero_chain_3d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_list+vtol_chain_2d_ref.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_list+vtol_topology_object_2d_ref.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vtol_block_2d_ref.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vtol_block_2d~-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vtol_block_3d~-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vtol_chain_2d_ref.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vtol_edge_2d_ref.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vtol_edge_2d~-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vtol_edge_3d~-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vtol_face_2d_ref.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vtol_face_2d~-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vtol_face_3d~-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vtol_hierarchy_node_3d~-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vtol_one_chain_2d_ref.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vtol_one_chain_2d~-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vtol_one_chain_3d~-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vtol_topology_object_2d_ref.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vtol_topology_object_2d~-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vtol_topology_object_3d~-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vtol_two_chain_2d_ref.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vtol_two_chain_2d~-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vtol_two_chain_3d~-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vtol_vertex_2d_ref.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vtol_vertex_2d~-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vtol_vertex_3d~-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vtol_zero_chain_2d_ref.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vtol_zero_chain_2d~-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vtol_zero_chain_3d~-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_block_2d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_block_3d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_chain_2d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_edge_2d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_edge_3d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_face_2d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_face_3d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_hierarchy_node_3d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_list_functions_2d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_list_functions_3d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_one_chain_2d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_one_chain_3d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_topology_cache_2d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_topology_cache_3d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_topology_hierarchy_node_3d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_topology_object_2d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_topology_object_3d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_two_chain_2d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_two_chain_3d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_vertex_2d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_vertex_3d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_zero_chain_2d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vtol_zero_chain_3d.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 

@@ -1,24 +1,24 @@
-# Microsoft Developer Studio Project File - Name="vbl" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="vipl" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
-CFG=vbl - Win32 Debug
+CFG=vipl - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "vbl.mak".
+!MESSAGE NMAKE /f "vipl.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "vbl.mak" CFG="vbl - Win32 Debug"
+!MESSAGE NMAKE /f "vipl.mak" CFG="vipl - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "vbl - Win32 Release" (based on "Win32 (x86) Static Library")
-!MESSAGE "vbl - Win32 Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "vipl - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "vipl - Win32 Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -28,7 +28,7 @@ CFG=vbl - Win32 Debug
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "vbl - Win32 Release"
+!IF  "$(CFG)" == "vipl - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -50,9 +50,9 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"..\Release\vbl.lib"
+# ADD LIB32 /nologo /out:"..\Release\vipl.lib"
 
-!ELSEIF  "$(CFG)" == "vbl - Win32 Debug"
+!ELSEIF  "$(CFG)" == "vipl - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -74,184 +74,244 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"..\Debug\vbl.lib"
+# ADD LIB32 /nologo /out:"..\Debug\vipl.lib"
 
 !ENDIF 
 
 # Begin Target
 
-# Name "vbl - Win32 Release"
-# Name "vbl - Win32 Debug"
+# Name "vipl - Win32 Release"
+# Name "vipl - Win32 Debug"
 # Begin Group "Source Files"
 
-# PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat;txx"
+# PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=.\vbl_arg.cxx
+SOURCE=.\Templates\vipl_accessors_vil_image+double-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vbl_array+double-.cxx
+SOURCE=.\Templates\vipl_accessors_vil_image+float-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vbl_array+float-.cxx
+SOURCE=.\Templates\vipl_accessors_vil_image+int-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vbl_array_2d+bool-.cxx
+SOURCE=.\Templates\vipl_accessors_vil_image+short-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vbl_array_2d+double-.cxx"
+SOURCE=.\Templates\vipl_accessors_vil_image+uchar-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vbl_array_2d+int-.cxx"
+SOURCE=.\Templates\vipl_accessors_vil_image+ushort-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vbl_array_2d+unsigned-.cxx"
+SOURCE=.\Templates\vipl_add_random_noise+vil_image.vil_image.uchar.uchar-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vbl_array_2d+unsignedchar-.cxx"
+SOURCE=.\Templates\vipl_convert+vil_image.vil_image.double.uchar-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vbl_array_3d+double-.cxx"
+SOURCE=.\Templates\vipl_convert+vil_image.vil_image.float.uchar-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vbl_array_3d+int-.cxx"
+SOURCE=.\Templates\vipl_convert+vil_image.vil_image.int.uchar-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vbl_array_3d+unsignedchar-.cxx"
+SOURCE=.\Templates\vipl_convert+vil_image.vil_image.short.uchar-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_awk.cxx
+SOURCE=.\Templates\vipl_convert+vil_image.vil_image.uchar.uchar-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_base_array_3d.cxx
+SOURCE=.\Templates\vipl_convert+vil_image.vil_image.vil_rgb+uchar-.uchar-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vbl_binary+double-.cxx"
+SOURCE=.\Templates\vipl_dilate_disk+vil_image.vil_image.uchar.uchar-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vbl_binary+int-.cxx"
+SOURCE=.\Templates\vipl_dyadic+vil_image.vil_image.float.float-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_bool_ostream.cxx
+SOURCE=.\Templates\vipl_erode_disk+vil_image.vil_image.uchar.uchar-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vbl_bounding_box+double-.cxx"
+SOURCE=.\Templates\vipl_filter_2d+vil_image.vil_image.double.uchar-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vbl_bounding_box+float-.cxx"
+SOURCE=.\Templates\vipl_filter_2d+vil_image.vil_image.float.float-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vbl_bounding_box+int-.cxx"
+SOURCE=.\Templates\vipl_filter_2d+vil_image.vil_image.float.uchar-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_canonical_path.cxx
+SOURCE=.\Templates\vipl_filter_2d+vil_image.vil_image.int.uchar-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_file.cxx
+SOURCE=.\Templates\vipl_filter_2d+vil_image.vil_image.short.short-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_file_iterator.cxx
+SOURCE=.\Templates\vipl_filter_2d+vil_image.vil_image.short.uchar-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_get_timestamp.cxx
+SOURCE=.\Templates\vipl_filter_2d+vil_image.vil_image.uchar.float-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_printf.cxx
+SOURCE=.\Templates\vipl_filter_2d+vil_image.vil_image.uchar.uchar-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_psfile.cxx
+SOURCE=.\Templates\vipl_filter_2d+vil_image.vil_image.ushort.ushort-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_qsort.cxx
+SOURCE=.\Templates\vipl_filter_2d+vil_image.vil_image.vil_rgb+uchar-.uchar-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_redirector.cxx
+SOURCE=.\Templates\vipl_filter_abs.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_ref_count.cxx
+SOURCE=.\Templates\vipl_gradient_mag+vil_image.vil_image.uchar.uchar-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_reg_exp.cxx
+SOURCE=.\Templates\vipl_median+vil_image.vil_image.uchar.uchar-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_sequence_filename_map.cxx
+SOURCE=.\Templates\vipl_moment+vil_image.vil_image.uchar.float-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vbl_sparse_array+double-.cxx"
+SOURCE=.\Templates\vipl_monadic+vil_image.vil_image.float.float-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vbl_sparse_array+int-.cxx"
+SOURCE=.\Templates\vipl_section_container+double-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vbl_sparse_array_2d+double-.cxx"
+SOURCE=.\Templates\vipl_section_container+float-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_sparse_array_2d_base.cxx
+SOURCE=.\Templates\vipl_section_container+int-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vbl_sparse_array_3d+double-.cxx"
+SOURCE=.\Templates\vipl_section_container+short-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vbl_sparse_array_3d+void~-.cxx"
+SOURCE=.\Templates\vipl_section_container+uchar-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_sprintf.cxx
+SOURCE=.\Templates\vipl_section_container+ushort-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_string.cxx
+SOURCE=.\Templates\vipl_section_container+vil_rgb+uchar--.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_timer.cxx
+SOURCE=.\Templates\vipl_section_descriptor+double-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_timestamp.cxx
+SOURCE=.\Templates\vipl_section_descriptor+float-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_trace.cxx
+SOURCE=.\Templates\vipl_section_descriptor+int-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_user_info.cxx
+SOURCE=.\Templates\vipl_section_descriptor+short-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vipl_section_descriptor+uchar-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vipl_section_descriptor+ushort-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vipl_section_descriptor+vil_rgb+uchar--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vipl_section_iterator+double-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vipl_section_iterator+float-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vipl_section_iterator+int-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vipl_section_iterator+short-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vipl_section_iterator+uchar-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vipl_section_iterator+ushort-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vipl_section_iterator+vil_rgb+uchar--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vipl_sobel+vil_image.vil_image.uchar.uchar-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vipl_threshold+vil_image.vil_image.float.float-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vipl_threshold+vil_image.vil_image.uchar.uchar-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vipl_threshold+vil_image.vil_image.ushort.ushort-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vipl_x_gradient+vil_image.vil_image.uchar.uchar-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -259,191 +319,67 @@ SOURCE=.\vbl_user_info.cxx
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=.\dll.h
+SOURCE=.\vipl_add_random_noise.txx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_arg.h
+SOURCE=.\vipl_convert.txx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_array.h
+SOURCE=.\vipl_dilate_disk.txx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_array_2d.h
+SOURCE=.\vipl_dyadic.txx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_array_3d.h
+SOURCE=.\vipl_erode_disk.txx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_awk.h
+SOURCE=.\vipl_gaussian_convolution.txx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_base_array_3d.h
+SOURCE=.\vipl_gradient_dir.txx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_basic_optional.h
+SOURCE=.\vipl_gradient_mag.txx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_basic_relation.h
+SOURCE=.\vipl_histogram.txx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_basic_relation_type.h
+SOURCE=.\vipl_median.txx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_basic_relation_where.h
+SOURCE=.\vipl_moment.txx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_basic_tuple.h
+SOURCE=.\vipl_monadic.txx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_bool_ostream.h
+SOURCE=.\vipl_sobel.txx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_bounding_box.h
+SOURCE=.\vipl_threshold.txx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_br_default.h
+SOURCE=.\vipl_x_gradient.txx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_br_impl.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vbl_canonical_path.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vbl_clamp.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vbl_file.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vbl_file_iterator.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vbl_fwd.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vbl_get_timestamp.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vbl_hash_map.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vbl_printf.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vbl_protection_traits.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vbl_psfile.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vbl_qsort.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vbl_redirector.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vbl_ref_count.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vbl_reg_exp.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vbl_rgb.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vbl_rgba.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vbl_sequence_filename_map.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vbl_smart_ptr.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vbl_sort.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vbl_sparse_array.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vbl_sparse_array_2d.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vbl_sparse_array_2d_base.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vbl_sparse_array_3d.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vbl_sprintf.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vbl_string.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vbl_timer.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vbl_timestamp.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vbl_trace.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vbl_types.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vbl_user_info.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vbl_whereami.h
+SOURCE=.\vipl_y_gradient.txx
 # End Source File
 # End Group
 # End Target

@@ -211,10 +211,6 @@ SOURCE=".\Templates\vil_memory_image_of+float_complex-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vil_memory_image_of+rgb_byte-.cxx"
-# End Source File
-# Begin Source File
-
 SOURCE=".\Templates\vil_memory_image_of+signed_char-.cxx"
 # End Source File
 # Begin Source File
@@ -328,6 +324,10 @@ SOURCE=.\file_formats\vil_viff_support.c
 # Begin Source File
 
 SOURCE=.\Templates\vcl_vector+vil_image-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vil_memory_image_of+double--.cxx
 # End Source File
 # Begin Source File
 

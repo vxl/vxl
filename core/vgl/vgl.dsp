@@ -87,6 +87,86 @@ LIB32=link.exe -lib
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
+SOURCE=.\Templates\vcl_vector+vcl_vector+vgl_point_2d+float---.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vgl_point_2d+double--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vgl_point_2d+float--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vgl_polygon-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vgl_box_2d+int-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vgl_line_2d+float-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vgl_line_segment_2d+double-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vgl_line_segment_3d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vgl_plane_3d+double-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vgl_plane_3d+float-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vgl_point_2d+double-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vgl_point_2d+float-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vgl_point_3d+double-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vgl_point_3d+float-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_lineseg_test.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_polygon_test.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_region_scan_iterator.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_triangle_scan_iterator.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_triangle_test.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_window_scan_iterator.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=".\Templates\vgl_box_2d+double-.cxx"
 # End Source File
 # Begin Source File

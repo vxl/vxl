@@ -68,6 +68,8 @@ SOURCES += vnl_int_3.cxx
 SOURCES += vnl_int_4.cxx
 SOURCES += vnl_float_2.cxx
 SOURCES += vnl_float_3.cxx
+SOURCES += vnl_float_4.cxx
+
 SOURCES += vnl_double_2.cxx
 SOURCES += vnl_double_3.cxx
 SOURCES += vnl_double_4.cxx

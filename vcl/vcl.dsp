@@ -88,6 +88,181 @@ LIB32=link.exe -lib
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
+SOURCE=.\Templates\fstream-instances.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_algorithm+int-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_list+float-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_list+float~-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_list+uint-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_list+ulong-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_list+vcl_pair+void~.int--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_list+vcl_string-.cxx
+# Begin Source File
+
+SOURCE=.\Templates\vcl_list+vcl_string-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_list+void~-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_map+int.double-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_map+int.uint-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_map+unsigned_int.double-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_map+unsigned_int.int-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_map+void~.int-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_pair+float.float-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_set+unsigned-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_set+vcl_string-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_set+void~-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_sort+vcl_vector+pair_di-..iterator-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+double_const~-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+schar~-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+ulong~-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vcl_map+int.int--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vcl_map+uint.uint--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vcl_pair+double.double--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vcl_pair+double.int--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vcl_pair+float.float--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vcl_pair+int.int--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vcl_pair+int.int-~-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vcl_pair+int.string--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vcl_pair+string.string--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vcl_pair+uint.uint--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vcl_vector+double--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vcl_vector+int--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vcl_vector+unsigned-~-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation\vcl_alloc.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation\vcl_hashtable.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation\vcl_rbtree_instances.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation\vcl_straits.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\emulation\vcl_string_instances.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_cassert.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_cmath.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_cstdlib.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=".\Templates\complex-instances.cxx"
 # End Source File
 # Begin Source File
