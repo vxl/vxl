@@ -29,6 +29,12 @@
 template <class Type>
 class vgl_plane_3d
 {
+  // the data associated with this plane
+  Type a_;
+  Type b_;
+  Type c_;
+  Type d_;
+
  public:
 
   // Constructors/Initializers/Destructor------------------------------------
@@ -98,15 +104,6 @@ class vgl_plane_3d
 
   inline vgl_vector_3d<Type> normal() const {
     return normalized(vgl_vector_3d<Type>(a(),b(),c())); }
-
-  // INTERNALS---------------------------------------------------------------
-
- private:
-  // the data associated with this plane
-  Type a_;
-  Type b_;
-  Type c_;
-  Type d_;
 };
 
 
@@ -115,11 +112,13 @@ class vgl_plane_3d
 template <class Type> inline
 bool is_ideal(vgl_plane_3d<Type> const&, Type=Type(0)) {return false;}
 
-// stream operators
-
+//: Write to stream
+// \relates vgl_plane_3d
 template <class Type>
 vcl_ostream&  operator<<(vcl_ostream& s, const vgl_plane_3d<Type>& p);
 
+//: Read from stream
+// \relates vgl_plane_3d
 template <class Type>
 vcl_istream&  operator>>(vcl_istream& is, vgl_plane_3d<Type>& p);
 

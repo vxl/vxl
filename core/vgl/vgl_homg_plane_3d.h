@@ -95,6 +95,7 @@ class vgl_homg_plane_3d
 
 //: Return true iff p is the plane at infinity
 // The method checks that max(|a|,|b|,|c|) <= tol * |d|
+// \relates vgl_homg_plane_3d
 template <class Type>
 inline bool is_ideal(vgl_homg_plane_3d<Type> const& p, Type tol=Type(0)){return p.ideal(tol);}
 

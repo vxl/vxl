@@ -46,6 +46,8 @@ template <class T, int n> vnl_vector_fixed<T,n> element_quotient(vnl_vector_fixe
 export template <class T, int n>
 class vnl_vector_fixed : public vnl_vector_fixed_ref<T,n>
 {
+  T space[n];
+
   typedef vnl_vector_fixed_ref<T,n> Base;
  public:
   //: Construct an uninitialized n-vector
@@ -141,26 +143,33 @@ class vnl_vector_fixed : public vnl_vector_fixed_ref<T,n>
   friend vnl_vector_fixed<T,n> element_quotient VCL_NULL_TMPL_ARGS (vnl_vector_fixed_ref<T,n> const&,
                                                                     vnl_vector_fixed_ref<T,n> const&);
 #endif
-
- private:
-  T space[n];
 };
 
-#if VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER
-// sunpro 5.0 can't go here
+#if VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER // sunpro 5.0 can't go here
+
 // define inline friends.
+
+//:
+// \relates vnl_vector_fixed
 template <class T, int n>
 inline vnl_vector_fixed<T,n> operator+(T const t, vnl_vector_fixed<T,n> const & rhs)
 { return  vnl_vector_fixed<T,n> (rhs) += t; }
 
+//:
+// \relates vnl_vector_fixed
 template <class T, int n>
 inline vnl_vector_fixed<T,n> operator-(T const t, vnl_vector_fixed<T,n> const & rhs)
 { return  ( - vnl_vector_fixed<T,n> (rhs)) += t; }
 
+//:
+// \relates vnl_vector_fixed
 template <class T, int n>
 inline vnl_vector_fixed<T,n> operator*(T const t, vnl_vector_fixed<T,n> const& rhs)
 { return  vnl_vector_fixed<T,n> (rhs) *= t; }
 
+//:
+// \relates vnl_vector_fixed
+// \relates vnl_vector_fixed_ref
 template <class T, int n>
 inline vnl_vector_fixed<T,n> element_product (vnl_vector_fixed_ref<T,n> const& a,
                                               vnl_vector_fixed_ref<T,n> const& b)
@@ -170,6 +179,9 @@ inline vnl_vector_fixed<T,n> element_product (vnl_vector_fixed_ref<T,n> const& a
   return ret;
 }
 
+//:
+// \relates vnl_vector_fixed
+// \relates vnl_vector_fixed_ref
 template <class T, int n>
 inline vnl_vector_fixed<T,n> element_quotient (vnl_vector_fixed_ref<T,n> const& a,
                                                vnl_vector_fixed_ref<T,n> const& b)

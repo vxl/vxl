@@ -46,6 +46,7 @@
 //     | /         MinPosition
 //     O-----X
 // \endverbatim
+// \sa vgl_box_2d
 
 template <class Type>
 class vgl_box_3d
@@ -236,10 +237,12 @@ class vgl_box_3d
 
 
 //: Write box to stream
+// \relates vgl_box_3d
 template <class Type>
 vcl_ostream&  operator<<(vcl_ostream& s, vgl_box_3d<Type> const& p);
 
 //: Read box from stream
+// \relates vgl_box_3d
 template <class Type>
 vcl_istream&  operator>>(vcl_istream& is,  vgl_box_3d<Type>& p);
 

@@ -43,7 +43,10 @@
 // but all other operations remain valid.
 //
 template <int N>
-class vnl_finite_int {
+class vnl_finite_int
+{
+  int val_; //!< value of this number (smallest nonnegative representation)
+
   typedef vnl_finite_int<N> Base;
  public:
   //: The number of different finite_int numbers of this type
@@ -251,25 +254,26 @@ class vnl_finite_int {
   //: private function to set cached value of lp1_ when available
   void set_log(unsigned int r) const { r %= Base::totient(); lp1_ = r+1; }
 
- private:
-  int val_; //!< value of this number (smallest nonnegative representation)
   mutable unsigned int mo_; //!< cached value for multiplicative order
   mutable unsigned int lp1_; //!< cached value for 1+log()
 };
 
 //: formatted output
+// \relates vnl_finite_int
 template <int N>
 inline vcl_ostream& operator<< (vcl_ostream& s, vnl_finite_int<N> const& r) {
   return s << int(r);
 }
 
 //: simple input
+// \relates vnl_finite_int
 template <int N>
 inline vcl_istream& operator>> (vcl_istream& s, vnl_finite_int<N>& r) {
   int n; s >> n; r=n; return s;
 }
 
-//: Returns the addition of two finite int numbers.
+//: Returns the sum of two finite int numbers.
+// \relates vnl_finite_int
 template <int N>
 inline vnl_finite_int<N> operator+ (vnl_finite_int<N> const& r1, vnl_finite_int<N> const& r2) {
   vnl_finite_int<N> result(r1); return result += r2;
@@ -284,6 +288,7 @@ inline vnl_finite_int<N> operator+ (int r2, vnl_finite_int<N> const& r1) {
 }
 
 //: Returns the difference of two finite int numbers.
+// \relates vnl_finite_int
 template <int N>
 inline vnl_finite_int<N> operator- (vnl_finite_int<N> const& r1, vnl_finite_int<N> const& r2) {
   vnl_finite_int<N> result(r1); return result -= r2;
@@ -297,7 +302,8 @@ inline vnl_finite_int<N> operator- (int r2, vnl_finite_int<N> const& r1) {
   vnl_finite_int<N> result(-r1); return result += r2;
 }
 
-//: Returns the multiplication of two finite int numbers.
+//: Returns the product of two finite int numbers.
+// \relates vnl_finite_int
 template <int N>
 inline vnl_finite_int<N> operator* (vnl_finite_int<N> const& r1, vnl_finite_int<N> const& r2) {
   vnl_finite_int<N> result(r1); return result *= r2;
@@ -312,6 +318,7 @@ inline vnl_finite_int<N> operator* (int r2, vnl_finite_int<N> const& r1) {
 }
 //: Returns the quotient of two finite int numbers.
 //  Uses r2.reciproc() for efficient computation.
+// \relates vnl_finite_int
 template <int N>
 inline vnl_finite_int<N> operator/(vnl_finite_int<N> const& r1, vnl_finite_int<N> const& r2) {
   assert(r2.is_unit()); return r1 == 0 ? vnl_finite_int<N>(0) : r1*r2.reciproc();
@@ -330,6 +337,8 @@ inline bool operator== (int  r1, vnl_finite_int<N> const& r2) { return r2==r1; }
 template <int N>
 inline bool operator!= (int  r1, vnl_finite_int<N> const& r2) { return r2!=r1; }
 
+//:
+// \relates vnl_finite_int
 template <int N>
 inline vnl_finite_int<N> vnl_math_squared_magnitude(vnl_finite_int<N> const& x) { return x*x; }
 template <int N>
@@ -355,6 +364,8 @@ inline bool vnl_math_isfinite(vnl_finite_int<N> const& x){return true;}
 //
 template <int N, int M>
 class vnl_finite_int_poly {
+  vcl_vector<Scalar> val_; //!< M-tuple (or degree M-1 polynomial) representing this
+
   typedef vnl_finite_int_poly<N,M> Base;
   typedef vnl_finite_int<N> Scalar;
   // This essentially implements std::pow(int,int) which is not always available
@@ -496,8 +507,6 @@ class vnl_finite_int_poly {
   }
 
  private:
-  vcl_vector<Scalar> val_; //!< M-tuple (or degree M-1 polynomial) representing this
-
   //: Add x to the i-th degree coefficient of val_, possibly reducing modulo the "modulo" poly.
   inline void add_modulo_poly(unsigned int m, Scalar const& x)
   {
@@ -509,19 +518,23 @@ class vnl_finite_int_poly {
   }
 };
 
-//: Returns the addition of two finite int polynomials.
+//: Returns the sum of two finite int polynomials.
+// \relates vnl_finite_int_poly
 template <int N, int M>
 inline vnl_finite_int_poly<N,M> operator+ (vnl_finite_int_poly<N,M> const& r1, vnl_finite_int_poly<N,M> const& r2) {
   vnl_finite_int_poly<N,M> result=r1; return result += r2;
 }
 
 //: Returns the difference of two finite int polynomials.
+// \relates vnl_finite_int_poly
 template <int N, int M>
 inline vnl_finite_int_poly<N,M> operator- (vnl_finite_int_poly<N,M> const& r1, vnl_finite_int_poly<N,M> const& r2) {
   vnl_finite_int_poly<N,M> result=r1; return result -= r2;
 }
 
 //: Returns a scalar multiple of a finite int polynomial.
+// \relates vnl_finite_int
+// \relates vnl_finite_int_poly
 template <int N, int M>
 inline vnl_finite_int_poly<N,M> operator* (vnl_finite_int_poly<N,M> const& r1, vnl_finite_int<N> const& r2) {
   vnl_finite_int_poly<N,M> result(r1); return result *= r2;
@@ -534,12 +547,14 @@ inline vnl_finite_int_poly<N,M> operator* (vnl_finite_int<N> const& r2, vnl_fini
 //: Multiplies two finite int polynomials.
 //  NOTE: this requires the "modulo" polynomial to be set.
 //  Do this by calling modulo_polynomial(p), where p is a vector of length M+1.
+// \relates vnl_finite_int_poly
 template <int N, int M>
 inline vnl_finite_int_poly<N,M> operator* (vnl_finite_int_poly<N,M> const& r1, vnl_finite_int_poly<N,M> const& r2) {
   vnl_finite_int_poly<N,M> result(r1); return result *= r2;
 }
 
 //: formatted output
+// \relates vnl_finite_int_poly
 template <int N, int M>
 inline vcl_ostream& operator<< (vcl_ostream& s, vnl_finite_int_poly<N,M> const& r) {
   bool out = false;

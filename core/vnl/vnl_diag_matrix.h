@@ -132,11 +132,10 @@ class vnl_diag_matrix
   #endif
 };
 
+//:
+// \relates vnl_diag_matrix
 template <class T>
 vcl_ostream& operator<< (vcl_ostream&, vnl_diag_matrix<T> const&);
-
-
-template <class T> vcl_ostream& operator<< (vcl_ostream&, vnl_diag_matrix<T> const&);
 
 //: Convert a vnl_diag_matrix to a Matrix.
 template <class T>
@@ -181,6 +180,7 @@ inline T vnl_diag_matrix<T>::determinant() const
 }
 
 //: Multiply two vnl_diag_matrices.  Just multiply the diag elements - n flops
+// \relates vnl_diag_matrix
 template <class T>
 inline vnl_diag_matrix<T> operator* (vnl_diag_matrix<T> const& A, vnl_diag_matrix<T> const& B)
 {
@@ -191,7 +191,9 @@ inline vnl_diag_matrix<T> operator* (vnl_diag_matrix<T> const& A, vnl_diag_matri
   return ret;
 }
 
-//: Multiply a Matrix by a vnl_diag_matrix.  Just scales the columns - mn flops
+//: Multiply a vnl_matrix by a vnl_diag_matrix.  Just scales the columns - mn flops
+// \relates vnl_diag_matrix
+// \relates vnl_matrix
 template <class T>
 inline vnl_matrix<T> operator* (vnl_matrix<T> const& A, vnl_diag_matrix<T> const& D)
 {
@@ -203,7 +205,9 @@ inline vnl_matrix<T> operator* (vnl_matrix<T> const& A, vnl_diag_matrix<T> const
   return ret;
 }
 
-//: Multiply a vnl_diag_matrix by a Matrix.  Just scales the rows - mn flops
+//: Multiply a vnl_diag_matrix by a vnl_matrix.  Just scales the rows - mn flops
+// \relates vnl_diag_matrix
+// \relates vnl_matrix
 template <class T>
 inline vnl_matrix<T> operator* (vnl_diag_matrix<T> const& D, vnl_matrix<T> const& A)
 {
@@ -217,6 +221,7 @@ inline vnl_matrix<T> operator* (vnl_diag_matrix<T> const& D, vnl_matrix<T> const
 }
 
 //: Add two vnl_diag_matrices.  Just add the diag elements - n flops
+// \relates vnl_diag_matrix
 template <class T>
 inline vnl_diag_matrix<T> operator+ (vnl_diag_matrix<T> const& A, vnl_diag_matrix<T> const& B)
 {
@@ -227,7 +232,9 @@ inline vnl_diag_matrix<T> operator+ (vnl_diag_matrix<T> const& A, vnl_diag_matri
   return ret;
 }
 
-//: Add a vnl_diag_matrix to a Matrix.  n adds, mn copies.
+//: Add a vnl_diag_matrix to a vnl_matrix.  n adds, mn copies.
+// \relates vnl_diag_matrix
+// \relates vnl_matrix
 template <class T>
 inline vnl_matrix<T> operator+ (vnl_matrix<T> const& A, vnl_diag_matrix<T> const& D)
 {
@@ -240,7 +247,9 @@ inline vnl_matrix<T> operator+ (vnl_matrix<T> const& A, vnl_diag_matrix<T> const
   return ret;
 }
 
-//: Add a Matrix to a vnl_diag_matrix.  n adds, mn copies.
+//: Add a vnl_matrix to a vnl_diag_matrix.  n adds, mn copies.
+// \relates vnl_diag_matrix
+// \relates vnl_matrix
 template <class T>
 inline vnl_matrix<T> operator+ (vnl_diag_matrix<T> const& D, vnl_matrix<T> const& A)
 {
@@ -248,6 +257,7 @@ inline vnl_matrix<T> operator+ (vnl_diag_matrix<T> const& D, vnl_matrix<T> const
 }
 
 //: Subtract two vnl_diag_matrices.  Just subtract the diag elements - n flops
+// \relates vnl_diag_matrix
 template <class T>
 inline vnl_diag_matrix<T> operator- (vnl_diag_matrix<T> const& A, vnl_diag_matrix<T> const& B)
 {
@@ -258,7 +268,9 @@ inline vnl_diag_matrix<T> operator- (vnl_diag_matrix<T> const& A, vnl_diag_matri
   return ret;
 }
 
-//: Subtract a vnl_diag_matrix from a Matrix.  n adds, mn copies.
+//: Subtract a vnl_diag_matrix from a vnl_matrix.  n adds, mn copies.
+// \relates vnl_diag_matrix
+// \relates vnl_matrix
 template <class T>
 inline vnl_matrix<T> operator- (vnl_matrix<T> const& A, vnl_diag_matrix<T> const& D)
 {
@@ -271,7 +283,9 @@ inline vnl_matrix<T> operator- (vnl_matrix<T> const& A, vnl_diag_matrix<T> const
   return ret;
 }
 
-//: Subtract a Matrix from a vnl_diag_matrix.  n adds, mn copies.
+//: Subtract a vnl_matrix from a vnl_diag_matrix.  n adds, mn copies.
+// \relates vnl_diag_matrix
+// \relates vnl_matrix
 template <class T>
 inline vnl_matrix<T> operator- (vnl_diag_matrix<T> const& D, vnl_matrix<T> const& A)
 {
@@ -290,7 +304,9 @@ inline vnl_matrix<T> operator- (vnl_diag_matrix<T> const& D, vnl_matrix<T> const
   return ret;
 }
 
-//: Multiply a vnl_diag_matrix by a Vector.  n flops.
+//: Multiply a vnl_diag_matrix by a vnl_vector.  n flops.
+// \relates vnl_diag_matrix
+// \relates vnl_vector
 template <class T>
 inline vnl_vector<T> operator* (vnl_diag_matrix<T> const& D, vnl_vector<T> const& A)
 {
@@ -298,7 +314,9 @@ inline vnl_vector<T> operator* (vnl_diag_matrix<T> const& D, vnl_vector<T> const
   return element_product(D.diagonal(), A);
 }
 
-//: Multiply a Vector by a vnl_diag_matrix.  n flops.
+//: Multiply a vnl_vector by a vnl_diag_matrix.  n flops.
+// \relates vnl_diag_matrix
+// \relates vnl_vector
 template <class T>
 inline vnl_vector<T> operator* (vnl_vector<T> const& A, vnl_diag_matrix<T> const& D)
 {

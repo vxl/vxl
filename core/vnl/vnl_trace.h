@@ -17,6 +17,7 @@
 template <class T> class vnl_matrix;
 
 //: Calculate trace of a matrix
+// \relates vnl_matrix
 template <class T>
 T vnl_trace(vnl_matrix<T> const &);
 

@@ -24,6 +24,11 @@
 template <class Type>
 class vgl_point_3d
 {
+  // the data associated with this point
+  Type x_;
+  Type y_;
+  Type z_;
+
  public:
 
   // Constructors/Initializers/Destructor------------------------------------
@@ -78,23 +83,17 @@ class vgl_point_3d
   //: Return true iff the point is at infinity (an ideal point).
   //  Always returns false.
   inline bool ideal(Type = Type(0)) const { return false; }
-
-  // INTERNALS---------------------------------------------------------------
-
- private:
-  // the data associated with this point
-  Type x_;
-  Type y_;
-  Type z_;
 };
 
 //  +-+-+ point_3d simple I/O +-+-+
 
 //: Write "<vgl_point_3d x,y,z> " to stream
+// \relates vgl_point_3d
 template <class Type>
 vcl_ostream&  operator<<(vcl_ostream& s, vgl_point_3d<Type> const& p);
 
 //: Read x y z from stream
+// \relates vgl_point_3d
 template <class Type>
 vcl_istream&  operator>>(vcl_istream& s, vgl_point_3d<Type>& p);
 
@@ -106,6 +105,7 @@ template <class Type> inline
 bool is_ideal(vgl_point_3d<Type> const&, Type = 0) { return false; }
 
 //: The difference of two points is the vector from second to first point
+// \relates vgl_point_3d
 template <class Type> inline
 vgl_vector_3d<Type> operator-(vgl_point_3d<Type> const& p1,
                               vgl_point_3d<Type> const& p2) {
@@ -114,6 +114,7 @@ vgl_vector_3d<Type> operator-(vgl_point_3d<Type> const& p1,
 
 //: Adding a vector to a point gives a new point at the end of that vector
 // Note that vector + point is not defined!  It's always point + vector.
+// \relates vgl_point_3d
 template <class Type> inline
 vgl_point_3d<Type> operator+(vgl_point_3d<Type> const& p,
                              vgl_vector_3d<Type> const& v) {
@@ -121,6 +122,7 @@ vgl_point_3d<Type> operator+(vgl_point_3d<Type> const& p,
 }
 
 //: Adding a vector to a point gives the point at the end of that vector
+// \relates vgl_point_3d
 template <class Type> inline
 vgl_point_3d<Type>& operator+=(vgl_point_3d<Type>& p,
                                vgl_vector_3d<Type> const& v) {
@@ -128,6 +130,7 @@ vgl_point_3d<Type>& operator+=(vgl_point_3d<Type>& p,
 }
 
 //: Subtracting a vector from a point is the same as adding the inverse vector
+// \relates vgl_point_3d
 template <class Type> inline
 vgl_point_3d<Type> operator-(vgl_point_3d<Type> const& p,
                              vgl_vector_3d<Type> const& v) {
@@ -135,6 +138,7 @@ vgl_point_3d<Type> operator-(vgl_point_3d<Type> const& p,
 }
 
 //: Subtracting a vector from a point is the same as adding the inverse vector
+// \relates vgl_point_3d
 template <class Type> inline
 vgl_point_3d<Type>& operator-=(vgl_point_3d<Type>& p,
                                vgl_vector_3d<Type> const& v) {
@@ -160,11 +164,13 @@ vgl_point_3d<Type>& operator-=(vgl_point_3d<Type>& p,
 // In this implementation, a least-squares result is calculated when the
 // points are not exactly collinear.
 //
+// \relates vgl_point_3d
 template <class T>
 double cross_ratio(vgl_point_3d<T>const& p1, vgl_point_3d<T>const& p2,
                    vgl_point_3d<T>const& p3, vgl_point_3d<T>const& p4);
 
 //: Are three points collinear, i.e., do they lie on a common line?
+// \relates vgl_point_3d
 template <class Type> inline
 bool collinear(vgl_point_3d<Type> const& p1,
                vgl_point_3d<Type> const& p2,
@@ -179,6 +185,7 @@ bool collinear(vgl_point_3d<Type> const& p1,
 //  The mid point of p1 and p2 has ratio 0.5.
 //  Note that the return type is double, not Type, since the ratio of e.g.
 //  two vgl_vector_3d<int> need not be an int.
+// \relates vgl_point_3d
 template <class Type> inline
 double ratio(vgl_point_3d<Type> const& p1,
              vgl_point_3d<Type> const& p2,
@@ -191,6 +198,7 @@ double ratio(vgl_point_3d<Type> const& p1,
 //  Note that the third argument is Type, not double, so the midpoint of e.g.
 //  two vgl_point_3d<int> is not a valid concept.  But the reflection point
 //  of p2 wrt p1 is: in that case f=-1.
+// \relates vgl_point_3d
 template <class Type> inline
 vgl_point_3d<Type> midpoint(vgl_point_3d<Type> const& p1,
                             vgl_point_3d<Type> const& p2,
@@ -201,6 +209,7 @@ vgl_point_3d<Type> midpoint(vgl_point_3d<Type> const& p1,
 
 //: Return the point at the centre of gravity of two given points.
 // Identical to midpoint(p1,p2).
+// \relates vgl_point_3d
 template <class Type> inline
 vgl_point_3d<Type> centre(vgl_point_3d<Type> const& p1,
                           vgl_point_3d<Type> const& p2) {
@@ -210,6 +219,7 @@ vgl_point_3d<Type> centre(vgl_point_3d<Type> const& p1,
 }
 
 //: Return the point at the centre of gravity of three given points.
+// \relates vgl_point_3d
 template <class Type> inline
 vgl_point_3d<Type> centre(vgl_point_3d<Type> const& p1,
                           vgl_point_3d<Type> const& p2,
@@ -220,6 +230,7 @@ vgl_point_3d<Type> centre(vgl_point_3d<Type> const& p1,
 }
 
 //: Return the point at the centre of gravity of four given points.
+// \relates vgl_point_3d
 template <class Type> inline
 vgl_point_3d<Type> centre(vgl_point_3d<Type> const& p1,
                           vgl_point_3d<Type> const& p2,
@@ -232,6 +243,7 @@ vgl_point_3d<Type> centre(vgl_point_3d<Type> const& p1,
 
 //: Return the point at the centre of gravity of a set of given points.
 // Beware of possible rounding errors when Type is e.g. int.
+// \relates vgl_point_3d
 template <class Type> inline
 vgl_point_3d<Type> centre(vcl_vector<vgl_point_3d<Type> > const& v) {
   int n=v.size();

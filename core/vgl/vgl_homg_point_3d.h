@@ -1,7 +1,6 @@
-// This is ./vxl/vgl/vgl_homg_point_3d.h
+// This is vxl/vgl/vgl_homg_point_3d.h
 #ifndef vgl_homg_point_3d_h_
 #define vgl_homg_point_3d_h_
-
 //:
 // \file
 // \brief point in projective 3D space
@@ -104,10 +103,12 @@ class vgl_homg_point_3d
 //  +-+-+ point_3d simple I/O +-+-+
 
 //: Write "<vgl_homg_point_3d (x,y,z,w) >" to stream
+// \relates vgl_homg_point_3d
 template <class Type>
 vcl_ostream& operator<<(vcl_ostream& s, vgl_homg_point_3d<Type> const& p);
 
 //: Read x y z w from stream
+// \relates vgl_homg_point_3d
 template <class Type>
 vcl_istream& operator>>(vcl_istream& s, vgl_homg_point_3d<Type>& p);
 
@@ -115,11 +116,13 @@ vcl_istream& operator>>(vcl_istream& s, vgl_homg_point_3d<Type>& p);
 
 //: Return true iff the point is at infinity (an ideal point).
 // The method checks whether |w| <= tol * max(|x|,|y|,|z|)
+// \relates vgl_homg_point_3d
 template <class Type> inline
 bool is_ideal(vgl_homg_point_3d<Type> const& p, Type tol = Type(0)) {
   return p.ideal(); }
 
 //: Return true iff the 4 points are coplanar, i.e., they belong to a common plane
+// \relates vgl_homg_point_3d
 template <class Type> inline
 bool coplanar(vgl_homg_point_3d<Type> const& p1,
               vgl_homg_point_3d<Type> const& p2,
@@ -141,6 +144,7 @@ bool coplanar(vgl_homg_point_3d<Type> const& p1,
 
 //: The difference of two points is the vector from second to first point
 // This function is only valid if the points are not at infinity.
+// \relates vgl_homg_point_3d
 template <class Type> inline
 vgl_vector_3d<Type> operator-(vgl_homg_point_3d<Type> const& p1,
                               vgl_homg_point_3d<Type> const& p2) {
@@ -153,6 +157,7 @@ vgl_vector_3d<Type> operator-(vgl_homg_point_3d<Type> const& p1,
 //: Adding a vector to a point gives a new point at the end of that vector
 // If the point is at infinity, nothing happens.
 // Note that vector + point is not defined!  It's always point + vector.
+// \relates vgl_homg_point_3d
 template <class Type> inline
 vgl_homg_point_3d<Type> operator+(vgl_homg_point_3d<Type> const& p,
                                   vgl_vector_3d<Type> const& v) {
@@ -163,6 +168,7 @@ vgl_homg_point_3d<Type> operator+(vgl_homg_point_3d<Type> const& p,
 
 //: Adding a vector to a point gives the point at the end of that vector
 // If the point is at infinity, nothing happens.
+// \relates vgl_homg_point_3d
 template <class Type> inline
 vgl_homg_point_3d<Type>& operator+=(vgl_homg_point_3d<Type>& p,
                                     vgl_vector_3d<Type> const& v) {
@@ -170,6 +176,7 @@ vgl_homg_point_3d<Type>& operator+=(vgl_homg_point_3d<Type>& p,
 }
 
 //: Subtracting a vector from a point is the same as adding the inverse vector
+// \relates vgl_homg_point_3d
 template <class Type> inline
 vgl_homg_point_3d<Type> operator-(vgl_homg_point_3d<Type> const& p,
                                   vgl_vector_3d<Type> const& v) {
@@ -177,6 +184,7 @@ vgl_homg_point_3d<Type> operator-(vgl_homg_point_3d<Type> const& p,
 }
 
 //: Subtracting a vector from a point is the same as adding the inverse vector
+// \relates vgl_homg_point_3d
 template <class Type> inline
 vgl_homg_point_3d<Type>& operator-=(vgl_homg_point_3d<Type>& p,
                                     vgl_vector_3d<Type> const& v) {
@@ -202,11 +210,13 @@ vgl_homg_point_3d<Type>& operator-=(vgl_homg_point_3d<Type>& p,
 // In this implementation, a least-squares result is calculated when the
 // points are not exactly collinear.
 //
+// \relates vgl_homg_point_3d
 template <class T>
 double cross_ratio(vgl_homg_point_3d<T>const& p1, vgl_homg_point_3d<T>const& p2,
                    vgl_homg_point_3d<T>const& p3, vgl_homg_point_3d<T>const& p4);
 
 //: Are three points collinear, i.e., do they lie on a common line?
+// \relates vgl_homg_point_3d
 template <class Type>
 bool collinear(vgl_homg_point_3d<Type> const& p1,
                vgl_homg_point_3d<Type> const& p2,
@@ -219,6 +229,7 @@ bool collinear(vgl_homg_point_3d<Type> const& p1,
 //  The mid point of p1 and p2 has ratio 0.5.
 //  Note that the return type is double, not Type, since the ratio of e.g.
 //  two vgl_vector_3d<int> need not be an int.
+// \relates vgl_homg_point_3d
 template <class Type> inline
 double ratio(vgl_homg_point_3d<Type> const& p1,
              vgl_homg_point_3d<Type> const& p2,
@@ -231,6 +242,7 @@ double ratio(vgl_homg_point_3d<Type> const& p1,
 //  Note that the third argument is Type, not double, so the midpoint of e.g.
 //  two vgl_homg_point_3d<int> is not a valid concept.  But the reflection point
 //  of p2 wrt p1 is: in that case f=-1.
+// \relates vgl_homg_point_3d
 template <class Type> inline
 vgl_homg_point_3d<Type> midpoint(vgl_homg_point_3d<Type> const& p1,
                                  vgl_homg_point_3d<Type> const& p2,
@@ -243,6 +255,7 @@ vgl_homg_point_3d<Type> midpoint(vgl_homg_point_3d<Type> const& p1,
 // Identical to midpoint(p1,p2).
 // Invalid when both points are at infinity.
 // If only one point is at infinity, that point is returned. inline
+// \relates vgl_homg_point_3d
 template <class Type> inline
 vgl_homg_point_3d<Type> centre(vgl_homg_point_3d<Type> const& p1,
                                vgl_homg_point_3d<Type> const& p2) {
@@ -254,6 +267,7 @@ vgl_homg_point_3d<Type> centre(vgl_homg_point_3d<Type> const& p1,
 
 //: Return the point at the centre of gravity of a set of given points.
 // There are no rounding errors when Type is e.g. int, if all w() are 1.
+// \relates vgl_homg_point_3d
 template <class Type> inline
 vgl_homg_point_3d<Type> centre(vcl_vector<vgl_homg_point_3d<Type> > const& v) {
   int n=v.size();

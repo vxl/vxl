@@ -86,6 +86,7 @@ class vnl_matrix_fixed : public vnl_matrix_fixed_ref<T,m,n>
 #ifndef VCL_SUNPRO_CC
 
 //: Multiply two conformant vnl_matrix_fixed (M x N) times (N x O)
+// \relates vnl_matrix_fixed
 template <class T, int M, int N, int O>
 vnl_matrix_fixed<T, M, O> operator*(const vnl_matrix_fixed<T, M, N>& a, const vnl_matrix_fixed<T, N, O>& b)
 {
@@ -101,6 +102,8 @@ vnl_matrix_fixed<T, M, O> operator*(const vnl_matrix_fixed<T, M, N>& a, const vn
 }
 
 //: Multiply  conformant vnl_matrix_fixed (M x N) and vector_fixed (N)
+// \relates vnl_vector_fixed
+// \relates vnl_matrix_fixed
 template <class T, int M, int N>
 vnl_vector_fixed<T, M> operator*(const vnl_matrix_fixed<T, M, N>& a, const vnl_vector_fixed<T, N>& b)
 {

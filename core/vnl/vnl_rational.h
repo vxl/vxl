@@ -64,7 +64,11 @@
 // conversion from e.g. double 1.0/3.0 to the rational number 1/3, hence no more
 // rounding errors.  This is implemented with continued fraction approximations.
 //
-class vnl_rational {
+class vnl_rational
+{
+  long num_; //!< Numerator portion
+  long den_; //!< Denominator portion
+
 public:
   //: Creates a rational with given numerator and denominator.
   //  Default constructor gives 0.
@@ -246,9 +250,6 @@ public:
   }
 
 private:
-  long num_; //!< Numerator portion
-  long den_; //!< Denominator portion
-
   //: Private function to normalize numerator/denominator of rational number.
   //  If num_ and den_ are both nonzero, their gcd is made 1 and den_ made positive.
   //  Otherwise, the nonzero den_ is set to 1 or the nonzero num_ to +1 or -1.
@@ -265,17 +266,20 @@ private:
 };
 
 //: formatted output
+// \relates vnl_rational
 inline vcl_ostream& operator<< (vcl_ostream& s, vnl_rational const& r) {
   return s << r.numerator() << "/" << r.denominator();
 }
 
 //: simple input
+// \relates vnl_rational
 inline vcl_istream& operator>> (vcl_istream& s, vnl_rational& r) {
   long n, d; s >> n >> d;
   r.set(n,d); return s;
 }
 
-//: Returns the addition of two rational numbers.
+//: Returns the sum of two rational numbers.
+// \relates vnl_rational
 inline vnl_rational operator+ (vnl_rational const& r1, vnl_rational const& r2) {
   vnl_rational result(r1); return result += r2;
 }
@@ -293,6 +297,7 @@ inline vnl_rational operator+ (int r2, vnl_rational const& r1) {
 }
 
 //: Returns the difference of two rational numbers.
+// \relates vnl_rational
 inline vnl_rational operator- (vnl_rational const& r1, vnl_rational const& r2) {
   vnl_rational result(r1); return result -= r2;
 }
@@ -309,7 +314,8 @@ inline vnl_rational operator- (int r2, vnl_rational const& r1) {
   vnl_rational result(-r1); return result += (long)r2;
 }
 
-//: Returns the multiplication of two rational numbers.
+//: Returns the product of two rational numbers.
+// \relates vnl_rational
 inline vnl_rational operator* (vnl_rational const& r1, vnl_rational const& r2) {
   vnl_rational result(r1); return result *= r2;
 }
@@ -326,7 +332,8 @@ inline vnl_rational operator* (int r2, vnl_rational const& r1) {
   vnl_rational result(r1); return result *= (long)r2;
 }
 
-//: Returns the division of two rational numbers.
+//: Returns the quotient of two rational numbers.
+// \relates vnl_rational
 inline vnl_rational operator/ (vnl_rational const& r1, vnl_rational const& r2) {
   vnl_rational result(r1); return result /= r2;
 }
@@ -344,6 +351,7 @@ inline vnl_rational operator/ (int r1, vnl_rational const& r2) {
 }
 
 //: Returns the remainder of r1 divided by r2.
+// \relates vnl_rational
 inline vnl_rational operator% (vnl_rational const& r1, vnl_rational const& r2) {
   vnl_rational result(r1); return result %= r2;
 }

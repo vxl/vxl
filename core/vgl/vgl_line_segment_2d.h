@@ -21,6 +21,11 @@
 template <class Type>
 class vgl_line_segment_2d
 {
+  //: One end of line segment
+  vgl_point_2d<Type> point1_;
+  //: The other end of the line segment
+  vgl_point_2d<Type> point2_;
+
  public:
   //: Default constructor - does not initialise!
   inline vgl_line_segment_2d() {}
@@ -53,19 +58,15 @@ class vgl_line_segment_2d
   //: Assignment
   inline void set(vgl_point_2d<Type> const& p1, vgl_point_2d<Type> const& p2) {
     point1_ = p1; point2_ = p2; }
-
- private:
-  //: One end of line segment
-  vgl_point_2d<Type> point1_;
-  //: The other end of the line segment
-  vgl_point_2d<Type> point2_;
 };
 
 //: Write to stream
+// \relates vgl_line_segment_2d
 template <class Type>
 vcl_ostream&  operator<<(vcl_ostream& s, const vgl_line_segment_2d<Type>& p);
 
 //: Read from stream
+// \relates vgl_line_segment_2d
 template <class Type>
 vcl_istream&  operator>>(vcl_istream& is,  vgl_line_segment_2d<Type>& p);
 

@@ -61,6 +61,7 @@
 //                      O------------O
 //                               MaxPosition
 // \endverbatim
+// \sa vgl_box_3d
 
 
 template <class Type>
@@ -229,19 +230,23 @@ class vgl_box_2d
 };
 
 //: Print to stream
+// \relates vgl_box_2d
 template <class Type>
 vcl_ostream&  operator<<(vcl_ostream& s, const vgl_box_2d<Type>& p);
 
 //: Read from stream
+// \relates vgl_box_2d
 template <class Type>
 vcl_istream&  operator>>(vcl_istream& is,  vgl_box_2d<Type>& p);
 
 //: Return box defining intersection between in1 and in2
 //  Empty box (0,0,0,0) returned if no intersection.
+// \relates vgl_box_2d
 template <class Type>
 vgl_box_2d<Type> intersect(vgl_box_2d<Type> const& in1, vgl_box_2d<Type> const& in2);
 
 //: Return box which bounds p1 and p2 (ie p1,p2 are any two of the corners)
+// \relates vgl_box_2d
 template <class Type>
 vgl_box_2d<Type> vgl_bounding_box_2d(const vgl_point_2d<Type>& p1,
                                      const vgl_point_2d<Type>& p2);

@@ -119,6 +119,7 @@ struct vgl_polygon_sheet_as_array
   ~vgl_polygon_sheet_as_array();
 };
 
+// \relates vgl_polygon
 vcl_ostream& operator<< (vcl_ostream& os, vgl_polygon const& p);
 
 #endif // vgl_polygon_h_

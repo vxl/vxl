@@ -67,25 +67,26 @@
 
 class vnl_bignum;
 
+// These are all auxiliary functions:
+
 int magnitude_cmp(const vnl_bignum&, const vnl_bignum&);
 void add(const vnl_bignum&, const vnl_bignum&, vnl_bignum&);
 void subtract(const vnl_bignum&, const vnl_bignum&, vnl_bignum&);
 void multiply_aux(const vnl_bignum&, unsigned short d, vnl_bignum&, unsigned short i);
-//: Normalize for division
 unsigned short normalize(const vnl_bignum&, const vnl_bignum&, vnl_bignum&, vnl_bignum&);
-//: Divide digit
 void divide_aux(const vnl_bignum&, unsigned short, vnl_bignum&, unsigned short&);
 unsigned short estimate_q_hat(const vnl_bignum&, const vnl_bignum&, unsigned short);
-//: Multiply quotient and subtract
 unsigned short multiply_subtract(vnl_bignum&, const vnl_bignum&, unsigned short, unsigned short);
 void divide(const vnl_bignum&, const vnl_bignum&, vnl_bignum&, vnl_bignum&);
 vnl_bignum left_shift(const vnl_bignum& b1, int l);
 vnl_bignum right_shift(const vnl_bignum& b1, int l);
 
 //: formatted output
+// \relates vnl_bignum
 vcl_ostream& operator<<(vcl_ostream& s, vnl_bignum const& r);
 
 //: simple input
+// \relates vnl_bignum
 vcl_istream& operator>>(vcl_istream& s, vnl_bignum& r);
 
 //: Infinite precision integers
@@ -253,12 +254,15 @@ private:
 
 
 //: Convert the number to a decimal representation in a string.
+// \relates vnl_bignum
 vcl_string& vnl_bignum_to_string (vcl_string& s, const vnl_bignum& b);
 
 //: Convert the number from a decimal representation in a string.
+// \relates vnl_bignum
 vnl_bignum& vnl_bignum_from_string (vnl_bignum& b, const vcl_string& s);
 
-//: Returns the addition of two bignum numbers.
+//: Returns the sum of two bignum numbers.
+// \relates vnl_bignum
 inline vnl_bignum operator+(vnl_bignum const& r1, long r2) { return r1+vnl_bignum(r2); }
 inline vnl_bignum operator+(vnl_bignum const& r1, int r2) { return r1+long(r2); }
 inline vnl_bignum operator+(vnl_bignum const& r1, double r2) { return r1+vnl_bignum(r2); }
@@ -269,6 +273,7 @@ inline vnl_bignum operator+(double r2, vnl_bignum const& r1) { return r1 + r2; }
 inline vnl_bignum operator+(long double r2, vnl_bignum const& r1) { return r1 + r2; }
 
 //: Returns the difference of two bignum numbers.
+// \relates vnl_bignum
 inline vnl_bignum operator-(vnl_bignum const& r1, vnl_bignum const& r2) { return r1 + (-r2); }
 inline vnl_bignum operator-(vnl_bignum const& r1, long r2) { return r1 + (-r2); }
 inline vnl_bignum operator-(vnl_bignum const& r1, int r2) { return r1 + (-r2); }
@@ -279,7 +284,8 @@ inline vnl_bignum operator-(int r2, vnl_bignum const& r1) { return -(r1 + (-r2))
 inline vnl_bignum operator-(double r2, vnl_bignum const& r1) { return -(r1 + (-r2)); }
 inline vnl_bignum operator-(long double r2, vnl_bignum const& r1) { return -(r1 + (-r2)); }
 
-//: Returns the multiplication of two bignum numbers.
+//: Returns the product of two bignum numbers.
+// \relates vnl_bignum
 inline vnl_bignum operator*(vnl_bignum const& r1, vnl_bignum const& r2) {
   vnl_bignum result(r1); return result *= r2;
 }
@@ -309,6 +315,7 @@ inline vnl_bignum operator*(long double r2, vnl_bignum const& r1) {
 }
 
 //: Returns the division of two bignum numbers.
+// \relates vnl_bignum
 inline vnl_bignum operator/(vnl_bignum const& r1, vnl_bignum const& r2) {
   vnl_bignum result(r1); return result /= r2;
 }
@@ -338,6 +345,7 @@ inline vnl_bignum operator/(long double r1, vnl_bignum const& r2) {
 }
 
 //: Returns the remainder of r1 divided by r2.
+// \relates vnl_bignum
 inline vnl_bignum operator%(vnl_bignum const& r1, vnl_bignum const& r2) {
   vnl_bignum result(r1); return result %= r2;
 }

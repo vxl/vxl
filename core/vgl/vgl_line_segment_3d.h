@@ -22,6 +22,9 @@
 template <class Type>
 class vgl_line_segment_3d
 {
+  vgl_point_3d<Type> point1_;
+  vgl_point_3d<Type> point2_;
+
  public:
   //: Default constructor - does not initialise!
   inline vgl_line_segment_3d() {}
@@ -49,19 +52,17 @@ class vgl_line_segment_3d
   //: assignment
   inline void set(vgl_point_3d<Type> const& p1, vgl_point_3d<Type> const& p2) {
     point1_ = p1; point2_ = p2; }
-
- private:
-  vgl_point_3d<Type> point1_;
-  vgl_point_3d<Type> point2_;
 };
 
-// stream operators
+//: Write to stream
+// \relates vgl_line_segment_3d
 template <class Type>
 vcl_ostream&  operator<<(vcl_ostream& s, const vgl_line_segment_3d<Type>& p);
 
+//: Read from stream
+// \relates vgl_line_segment_3d
 template <class Type>
 vcl_istream&  operator>>(vcl_istream& is,  vgl_line_segment_3d<Type>& p);
-
 #define VGL_LINE_SEGMENT_3D_INSTANTIATE(T) extern "please include vgl/vgl_line_segment_3d.txx first"
 
 #endif // vgl_line_segment_3d_h_

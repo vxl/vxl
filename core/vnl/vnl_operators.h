@@ -12,6 +12,8 @@
 //
 // The ordering itself is implemenation defined - so don't rely
 // on the meaning of less here.
+//
+// \relates vnl_vector
 template<class T>
 bool operator<(vnl_vector<T> const& lhs, vnl_vector<T> const& rhs)
 {
@@ -34,6 +36,8 @@ bool operator<(vnl_vector<T> const& lhs, vnl_vector<T> const& rhs)
 //
 // The ordering itself is implemenation defined - so don't rely
 // on the meaning of less here.
+//
+// \relates vnl_matrix
 template<class T>
 bool operator<(vnl_matrix<T> const& lhs, vnl_matrix<T> const& rhs)
 {

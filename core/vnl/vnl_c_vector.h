@@ -129,9 +129,10 @@ class vnl_c_vector
   static T*  allocate_T(int n);
   static void deallocate(T**, int n_when_allocated);
   static void deallocate(T*, int n_when_allocated);
-
 };
+
 //: Input & output
+// \relates vnl_c_vector
 template <class T>
 vcl_ostream& print_vector(vcl_ostream&, T const*, unsigned);
 

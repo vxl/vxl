@@ -43,7 +43,8 @@ template <class T> vcl_istream& operator>> (vcl_istream&, m&);
 
 //--------------------------------------------------------------------------------
 
-enum vnl_matrix_type {
+enum vnl_matrix_type
+{
   vnl_matrix_null,
   vnl_matrix_identity
 };
@@ -132,7 +133,8 @@ class vnl_matrix
 #endif
 
   //: Matrix destructor
-  ~vnl_matrix() {
+  ~vnl_matrix()
+  {
     // save some fcalls if data is 0 (i.e. in matrix_fixed)
     if (data) destroy();
   }
@@ -435,14 +437,16 @@ class vnl_matrix
 
   //: abort if size is not as expected
   // This function does or tests nothing if NDEBUG is defined
-  void assert_size(unsigned rows, unsigned cols) const {
+  void assert_size(unsigned rows, unsigned cols) const
+  {
 #ifndef NDEBUG
     assert_size_internal(rows, cols);
 #endif
   }
   //: abort if matrix containins any INFs or NANs
   // This function does or tests nothing if NDEBUG is defined
-  void assert_finite() const {
+  void assert_finite() const
+  {
 #ifndef NDEBUG
     assert_finite_internal();
 #endif 
@@ -450,12 +454,10 @@ class vnl_matrix
 
   ////----------------------- Input/Output ----------------------------
 
-  //: Read a vnl_matrix from an ascii vcl_istream, automatically
-  // determining file size if the input matrix has zero size.
+  //: Read a vnl_matrix from an ascii vcl_istream, automatically determining file size if the input matrix has zero size.
   static vnl_matrix<T> read(vcl_istream& s);
 
-  // : Read a vnl_matrix from an ascii vcl_istream, automatically
-  // determining file size if the input matrix has zero size.
+  // : Read a vnl_matrix from an ascii vcl_istream, automatically determining file size if the input matrix has zero size.
   bool read_ascii(vcl_istream& s);
 
   //--------------------------------------------------------------------------------
@@ -510,7 +512,7 @@ class vnl_matrix
   void clear();
 
   //: Resize to r rows by c columns. Old data lost.
-  // returns true if size changed.
+  // Returns true if size changed.
   bool resize (unsigned r, unsigned c);
 //--------------------------------------------------------------------------------
 
@@ -551,11 +553,12 @@ class vnl_matrix
 // Definitions of inline functions.
 
 
-//: get -- Returns the value of the element at specified row and column. O(1).
+//: Returns the value of the element at specified row and column. O(1).
 // Checks for valid range of indices.
 
 template<class T>
-inline T vnl_matrix<T>::get (unsigned row, unsigned column) const {
+inline T vnl_matrix<T>::get (unsigned row, unsigned column) const
+{
 #if ERROR_CHECKING
   if (row >= this->num_rows)                    // If invalid size specified
     vnl_error_matrix_row_index ("get", row);    // Raise exception
@@ -565,11 +568,12 @@ inline T vnl_matrix<T>::get (unsigned row, unsigned column) const {
   return this->data[row][column];
 }
 
-//: put -- Puts value into element at specified row and column. O(1).
+//: Puts value into element at specified row and column. O(1).
 // Checks for valid range of indices.
 
 template<class T>
-inline void vnl_matrix<T>::put (unsigned row, unsigned column, T const& value) {
+inline void vnl_matrix<T>::put (unsigned row, unsigned column, T const& value)
+{
 #if ERROR_CHECKING
   if (row >= this->num_rows)                    // If invalid size specified
     vnl_error_matrix_row_index ("put", row);  // Raise exception
@@ -582,16 +586,24 @@ inline void vnl_matrix<T>::put (unsigned row, unsigned column, T const& value) {
 
 // non-member arithmetical operators.
 
+//:
+// \relates vnl_matrix
 template<class T>
-inline vnl_matrix<T> operator* (T const& value, vnl_matrix<T> const& m) {
+inline vnl_matrix<T> operator* (T const& value, vnl_matrix<T> const& m)
+{
   return vnl_matrix<T>(m, value, vnl_tag_mul());
 }
 
+//:
+// \relates vnl_matrix
 template<class T>
-inline vnl_matrix<T> operator+ (T const& value, vnl_matrix<T> const& m) {
+inline vnl_matrix<T> operator+ (T const& value, vnl_matrix<T> const& m)
+{
   return vnl_matrix<T>(m, value, vnl_tag_add());
 }
 
+//: Swap two matrices
+// \relates vnl_matrix
 template<class T>
 inline void swap(vnl_matrix<T> &A, vnl_matrix<T> &B) { A.swap(B); }
 

@@ -19,7 +19,6 @@
 
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
-//what was this for? #include <vcl_functional.h>
 
 //: 4-element vector that represents rotation in 3D.
 // Quaternion is a 4-element vector with 1 real and 3 imaginary
@@ -225,21 +224,12 @@ inline vnl_quaternion<T>& vnl_quaternion<T>::operator= (const vnl_quaternion<T>&
   return *this;
 }
 
-
 //: operator<<
+// \relates vnl_quaternion
 template <class T>
 inline vcl_ostream& operator<< (vcl_ostream& os, const vnl_quaternion<T>& q) {
   return os << *((vnl_vector<T>*) &q);
 }
-
-#if 0
-// operator<<  -- Print the components of Quaternion.
-//  awf removed : pointers should never be printed dereffed.
-template <class T>
-inline vcl_ostream& operator<< (vcl_ostream& os, const vnl_quaternion<T>* q) {
-  return os << *((vnl_vector<T>*) q);
-}
-#endif
 
 #define VNL_QUATERNION_INSTANTIATE(T) extern "you must include vnl/vnl_quaternion.txx first"
 

@@ -39,36 +39,44 @@ double vgl_distance_to_closed_polygon(float const px[], float const py[], unsign
                                       double x, double y);
 
 //: find the shortest distance of the line to the origin
+// \relates vgl_line_2d
 template <class Type>
 double vgl_distance_origin(vgl_line_2d<Type> const& l);
 
 //: find the shortest distance of the line to the origin
+// \relates vgl_homg_line_2d
 template <class Type>
 double vgl_distance_origin(vgl_homg_line_2d<Type> const& l);
 
 //: return the distance between two points
+// \relates vgl_point_2d
 template <class Type>
 inline double vgl_distance(vgl_point_2d<Type>const& p1,
                            vgl_point_2d<Type>const& p2) {return length(p2-p1);}
 
 //: return the distance between two points
+// \relates vgl_point_3d
 template <class Type>
 inline double vgl_distance(vgl_point_3d<Type>const& p1,
                            vgl_point_3d<Type>const& p2) {return length(p2-p1);}
 
 //: return the distance between two points
+// \relates vgl_homg_point_2d
 template <class Type>
 inline double vgl_distance(vgl_homg_point_2d<Type>const& p1,
                            vgl_homg_point_2d<Type>const& p2) {
   return vgl_distance(vgl_point_2d<Type>(p1),vgl_point_2d<Type>(p2)); }
 
 //: return the distance between two points
+// \relates vgl_homg_point_3d
 template <class Type>
 inline double vgl_distance(vgl_homg_point_3d<Type>const& p1,
                            vgl_homg_point_3d<Type>const& p2) {
   return vgl_distance(vgl_point_3d<Type>(p1),vgl_point_3d<Type>(p2)); }
 
-//: return the perpendicular distance from a point to a line in 2D:
+//: return the perpendicular distance from a point to a line in 2D
+// \relates vgl_point_2d
+// \relates vgl_line_2d
 template <class Type>
 double vgl_distance(vgl_line_2d<Type> const& l, vgl_point_2d<Type> const& p);
 template <class Type>
@@ -76,16 +84,24 @@ inline double vgl_distance(vgl_point_2d<Type> const& p,
                            vgl_line_2d<Type> const& l) {return vgl_distance(l,p);}
 template <class Type>
 double vgl_distance(vgl_homg_line_2d<Type> const& l, vgl_homg_point_2d<Type> const& p);
+//: return the perpendicular distance from a point to a line in 2D
+// \relates vgl_homg_point_2d
+// \relates vgl_homg_line_2d
 template <class Type>
 inline double vgl_distance(vgl_homg_point_2d<Type> const& p,
                            vgl_homg_line_2d<Type> const& l) {return vgl_distance(l,p);}
 
-//: return the perpendicular distance from a point to a plane in 3D:
+//: return the perpendicular distance from a point to a plane in 3D
+// \relates vgl_point_3d
+// \relates vgl_plane_3d
 template <class Type>
 double vgl_distance(vgl_plane_3d<Type> const& l, vgl_point_3d<Type> const& p);
 template <class Type>
 inline double vgl_distance(vgl_point_3d<Type> const& p,
                            vgl_plane_3d<Type> const& l) {return vgl_distance(l,p);}
+//: return the perpendicular distance from a point to a plane in 3D
+// \relates vgl_homg_point_3d
+// \relates vgl_homg_plane_3d
 template <class Type>
 double vgl_distance(vgl_homg_plane_3d<Type> const& l, vgl_homg_point_3d<Type> const& p);
 template <class Type>
@@ -93,6 +109,8 @@ inline double vgl_distance(vgl_homg_point_3d<Type> const& p,
                            vgl_homg_plane_3d<Type> const& l) {return vgl_distance(l,p);}
 
 //: distance between a point and the closest point on the polygon.
+// \relates vgl_point_2d
+// \relates vgl_polygon
 template <class Type>
 double vgl_distance(vgl_polygon const& poly, vgl_point_2d<Type> const& point);
 

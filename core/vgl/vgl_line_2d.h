@@ -32,6 +32,11 @@
 template <class Type>
 class vgl_line_2d
 {
+  // the data associated with this point
+  Type a_;
+  Type b_;
+  Type c_;
+
  public:
   //: Default constructor (Line 1.y==0, the X axis)
   inline vgl_line_2d() : a_(0), b_(1), c_(0) {}
@@ -114,23 +119,17 @@ class vgl_line_2d
   // the point with \a y=1 or \a x=1, resp. are taken.  When the line goes
   // through the origin, the second point is (b, -a).
   void get_two_points(vgl_point_2d<Type> &p1, vgl_point_2d<Type> &p2);
-
-  // INTERNALS---------------------------------------------------------------
-
- private:
-  // the data associated with this point
-  Type a_;
-  Type b_;
-  Type c_;
 };
 
 #define l vgl_line_2d<Type>
 
 //: Return true iff line is the line at infinity
+// \relates vgl_line_2d
 template <class Type> inline
 bool is_ideal(l const&, Type = Type(0)) { return false; }
 
 //: Are three lines concurrent, i.e., do they pass through a common point?
+// \relates vgl_line_2d
 template <class Type> inline
 bool concurrent(l const& l1, l const& l2, l const& l3) {
   return l1.a()*(l2.b()*l3.c()-l3.b()*l2.c())
@@ -139,10 +138,12 @@ bool concurrent(l const& l1, l const& l2, l const& l3) {
 }
 
 //: Write line description to stream: "<vgl_line_2d ax+by+c>"
+// \relates vgl_line_2d
 template <class Type>
 vcl_ostream&  operator<<(vcl_ostream& s, l const& line);
 
 //: Read in three line parameters from stream
+// \relates vgl_line_2d
 template <class Type>
 vcl_istream&  operator>>(vcl_istream& s, l& line);
 

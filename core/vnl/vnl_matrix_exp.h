@@ -16,10 +16,12 @@
 #include <vnl/vnl_matrix.h>
 
 //: Compute the exponential of a square matrix - fiddly form
+// \relates vnl_matrix
 template <class T>
 bool vnl_matrix_exp(vnl_matrix<T> const &X, vnl_matrix<T> &expX, double max_err);
 
 //: Compute the exponential of a square matrix - easy form.
+// \relates vnl_matrix
 template <class T>
 vnl_matrix<T> vnl_matrix_exp(vnl_matrix<T> const &X);
 

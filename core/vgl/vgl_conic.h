@@ -1,4 +1,4 @@
-// This is ./vxl/vgl/vgl_conic.h
+// This is vxl/vgl/vgl_conic.h
 #ifndef vgl_conic_h_
 #define vgl_conic_h_
 //:
@@ -66,6 +66,14 @@
 template <class T>
 class vgl_conic
 {
+  vgl_conic_type type_;
+  T a_; //: coefficient of \a x^2
+  T b_; //: coefficient of \a xy
+  T c_; //: coefficient of \a y^2
+  T d_; //: coefficient of \a xw
+  T e_; //: coefficient of \a yw
+  T f_; //: coefficient of \a w^2
+
 public:
    enum vgl_conic_type {
      no_type=0,
@@ -236,14 +244,6 @@ public:
   void translate_by(T x, T y);
 
 private:
-  vgl_conic_type type_;
-  T a_; //: coefficient of \a x^2
-  T b_; //: coefficient of \a xy
-  T c_; //: coefficient of \a y^2
-  T d_; //: coefficient of \a xw
-  T e_; //: coefficient of \a yw
-  T f_; //: coefficient of \a w^2
-
   //--------------------------------------------------------------------------
   //: set conic type from polynomial coefficients and store in member type_
   // This method must be called by all constructors (except the default
@@ -252,10 +252,12 @@ private:
 };
 
 //: Write "<vgl_conic aX^2+bXY+cY^2+dXW+eYW+fW^2>" to stream
+// \relates vgl_conic
 template <class T>
 vcl_ostream&  operator<<(vcl_ostream& s, vgl_conic<T> const& c);
 
 //: Read a b c d e f from stream
+// \relates vgl_conic
 template <class T>
 vcl_istream&  operator>>(vcl_istream& s, vgl_conic<T>& c);
 

@@ -129,6 +129,7 @@ class vgl_1d_basis
 //  +-+-+ 1d_basis simple I/O +-+-+
 
 //: Write "<vgl_1d_basis o u i> " to stream
+// \relates vgl_1d_basis
 template <class T> vcl_ostream& operator<<(vcl_ostream& s, vgl_1d_basis<T> const&);
 
 #define VGL_1D_BASIS_INSTANTIATE(T) extern "please include vgl/vgl_1d_basis.txx first"
