@@ -1,39 +1,36 @@
+# spatial objects
+SUBDIRS += vsol
+
+# topology
+SUBDIRS += vtol gst
+
+# digital  geometry
+SUBDIRS += vdgl
+
 # van-duc region finder (ported from TargetJr)
 SUBDIRS += gevd
 
 # matcher
 SUBDIRS += geml
 
-# octree stuff from Geoff's thesis
-SUBDIRS += octree
-
 # Multi-view database
 SUBDIRS += gmvl
 
 # Dense matcher
-SUBDIRS += vsrl
+SUBDIRS += vsrl vmal
 
 # Triangulation code
 SUBDIRS += gtrl
 
-# spatial objects
-SUBDIRS += vsol
-
-# topology
-SUBDIRS += gst vtol
-
-# digital  geometry
-SUBDIRS += vdgl
+# octree stuff from Geoff's thesis
+SUBDIRS += octree
 
 SUBDIRS += mrc
 # photogrammetry in mrc/vpgl
-# coordinate systems addon in mrc/vcsl
+# coordinate systems add-on in mrc/vcsl
 
 # Kanade-Lucas-Tomasi feature tracker
 SUBDIRS += vgel gkll
-
-# Dense matcher
-SUBDIRS += vmal
 
 # Experiments with the vidl library and vgui (JLM)
 SUBDIRS += jvid
