@@ -143,7 +143,6 @@ vcl_istream * vul_http_open(char const *url)
     close(tcp_socket);
 #endif
 
-    
     return 0;
   }
 
@@ -164,7 +163,7 @@ vcl_istream * vul_http_open(char const *url)
 #else
     close(tcp_socket);
 #endif
-    
+
     return 0;
   }
 
@@ -254,7 +253,7 @@ bool vul_http_exists(char const *url)
 
 
   if (*p)
-    path = p+1;
+    path = p+1; // may be the empty string, if URL ends in a slash
   else
     path = "";
 
@@ -292,8 +291,6 @@ bool vul_http_exists(char const *url)
            << "path = \'" << path << "\'" << vcl_endl
            << "port = " << port << vcl_endl;
 #endif
-
-
 
 #ifdef VCL_WIN32
   if (called_WSAStartup==0)
