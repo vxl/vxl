@@ -9,7 +9,7 @@
 //             Charlie Rothwell - 4/5/95
 //             INRIA, Sophia Antipolis
 //
-// SpatialBorgefors is a class for managing parts of the verfication procedures which
+// SpatialBorgefors is a class for managing parts of the verification procedures which
 // are required for recognition. At the basic level, this involves computing the
 // distance transform image and the orientation image. This is done using the
 // 3-4 chamfer distance transform. All indexing of distances and orientations
@@ -97,7 +97,7 @@ class SpatialBorgefors : public vbl_ref_count, public vul_timestamp
 
   // Data Members--------------------------------------------------------------
 
-private:
+ private:
 
   // Various pieces of image info
   int xsize_,ysize_,xstart_,ystart_;
