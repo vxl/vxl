@@ -6,8 +6,9 @@
 // Modifications:
 //-----------------------------------------------------------------------------
 
+#include <vcl/vcl_iostream.h>
 #include <vnl/vnl_complex.h>
-#include <vnl/vnl_matops.h>
+#include <vnl/vnl_matlab_print.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_svd.h>
@@ -37,9 +38,9 @@ int main()
 
   vnl_svd<vcl_double_complex> C_svd(C);
 
-  vnl_matops::matlab_print(cout, C_svd.U(), "U");
-  vnl_matops::matlab_print(cout, C_svd.W().asMatrix(), "W");
-  vnl_matops::matlab_print(cout, C_svd.V(), "V");
+  vnl_matlab_print(cout, C_svd.U(), "U");
+  vnl_matlab_print(cout, C_svd.W().asMatrix(), "W");
+  vnl_matlab_print(cout, C_svd.V(), "V");
 
   vnl_double_complex rhs[4]; rhs[0]=3; rhs[1]=9; rhs[2]=-2; rhs[3]=-8;
   vnl_vector<vcl_double_complex> b(rhs, 4);

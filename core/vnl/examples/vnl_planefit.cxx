@@ -5,6 +5,7 @@
 // Converted to vxl by Peter Vanroose, February 2000
 //-----------------------------------------------------------------------------
 
+#include <vcl/vcl_iostream.h>
 #include <vnl/vnl_matops.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
@@ -33,7 +34,7 @@ int main()
 
   // 2. Compute using eigensystem of D'*D
   {
-    vnl_symmetric_eigensystem eig(D.transpose() * D);
+    vnl_symmetric_eigensystem<double> eig(D.transpose() * D);
     vnl_vector<double> a = eig.get_eigenvector(0);
     cout << "Eig residual = " << (D * a).magnitude() << endl;
   }

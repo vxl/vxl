@@ -5,6 +5,7 @@
 // Converted to vxl by Peter Vanroose, February 2000
 //-----------------------------------------------------------------------------
 
+#include <vcl/vcl_iostream.h>
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_least_squares_function.h>
 #include <vnl/vnl_least_squares_cost_function.h>

@@ -10,7 +10,7 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_rpoly_roots.h>
 
-main(int argc, char* argv[])
+int main(int argc, char* argv[])
 {
   --argc; ++argv;
 
