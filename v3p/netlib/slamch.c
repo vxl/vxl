@@ -2,6 +2,15 @@
 #include "netlib.h"
 #include <stdio.h>
 
+/* There are too many problems in this file created by the MSVC
+   optimizer.  Just disable it.  If this becomes a performance
+   bottleneck for someone then they can try finding work-arounds for
+   all the problems.  The most recent problem is that slamc1_ sets its
+   lbeta variable to zero and gets in an infinite loop.  */
+#if defined(_MSC_VER)
+# pragma optimize("", off)
+#endif
+
 static void slamc1_(integer *beta, integer *t, logical *rnd, logical *ieee1);
 static void slamc2_(integer *beta, integer *t, logical *rnd, real *eps,
                     integer *emin, real *rmin, integer *emax, real *rmax);
