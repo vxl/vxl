@@ -38,8 +38,8 @@ AC_STDCXX_LIB := -lstdc++
 endif
 pic := -fpic
 PIC := -fPIC
-wall := -Wall -Wnested-externs -Wstrict-prototypes -Wmissing-prototypes -Wpointer-arith
-#wall += -Wcast-qual -Wcast-align -Woverloaded-virtual -Winline -Wshadow # annoying warnings
+wall := -Wall -Wstrict-prototypes -Wmissing-prototypes -Wpointer-arith
+#wall += -Wnested-externs -Wcast-qual -Wcast-align -Woverloaded-virtual -Winline -Wshadow # annoying warnings
 
 ccflags += -fno-math-errno
 
