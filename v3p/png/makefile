@@ -9,7 +9,6 @@ LIBRARY := png
 VERSION := 1.0.8
 
 MANPAGE_SOURCES += pngconf.h
-MANPAGE_SOURCES += pngasmrd.h
 SOURCES += png.c
 SOURCES += pngset.c
 SOURCES += pngget.c
