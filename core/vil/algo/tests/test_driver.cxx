@@ -29,6 +29,7 @@ DECLARE( test_greyscale_dilate );
 DECLARE( test_greyscale_erode );
 DECLARE( test_median );
 DECLARE( test_suppress_non_max );
+DECLARE( test_algo_sobel );
 
 void
 register_tests()
@@ -62,6 +63,7 @@ register_tests()
   REGISTER( test_greyscale_erode );
   REGISTER( test_median );
   REGISTER( test_suppress_non_max );
+  REGISTER( test_algo_sobel );
 }
 
 DEFINE_MAIN;
