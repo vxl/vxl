@@ -4,23 +4,23 @@
 #pragma interface
 #endif
 
-// .NAME vdgl_edgel_chain - Represents an edgel list
-// .INCLUDE vgl/vdgl_edgel_chain.h
-// .FILE vdgl_edgel_chain.txx
-//
-// .SECTION Description
+//:
+// \file
+// \brief Represents an edgel list
 //  A 2d set of edgels
+// \author Geoff Cross
 //
-// .SECTION Author
-//    Geoff Cross
-// Created: xxx xx xxxx
+// \verbatim
+// Modifications:
+//  10-Apr-2002 Peter Vanroose - Added & implemented split(), extract_subchain()
+// \endverbatim
 
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vul/vul_timestamp.h>
 #include <vbl/vbl_ref_count.h>
 
-
+#include "vdgl_edgel_chain_sptr.h"
 #include "vdgl_edgel.h"
 
 class vdgl_edgel_chain : public vul_timestamp,
@@ -39,6 +39,11 @@ public:
   bool add_edgel( const vdgl_edgel &e);
   bool add_edgels( const vcl_vector<vdgl_edgel> &es, const int index);
   bool set_edgel( const int index, const vdgl_edgel &e);
+  //: return a new edgel_chain, containing the edgels numbered start up to end.
+  vdgl_edgel_chain_sptr extract_subchain(int start, int end);
+  //: split the current edgel_chain at or around the given point (x,y)
+  bool split( double x, double y,
+              vdgl_edgel_chain_sptr &ec1, vdgl_edgel_chain_sptr &ec2);
 
   friend vcl_ostream& operator<<(vcl_ostream& s, const vdgl_edgel_chain& p);
 
@@ -48,25 +53,16 @@ public:
   vdgl_edgel edgel( int i) const { return es_[i]; }
   vdgl_edgel &operator[]( int i) { return es_[i]; }
 
-  // should call this if one of the edgels is likely to have changed
+  //: should call this if one of the edgels is likely to have changed
   void notify_change();
-
-  // Data Control--------------------------------------------------------------
-
-  // Computations--------------------------------------------------------------
-
 
   // INTERNALS-----------------------------------------------------------------
 protected:
   // Data Members--------------------------------------------------------------
 
   vcl_vector<vdgl_edgel> es_;
-
-private:
-  // Helpers-------------------------------------------------------------------
 };
 
-vcl_ostream& operator<<(vcl_ostream& s, const vdgl_edgel_chain& p) ;
-
+vcl_ostream& operator<<(vcl_ostream& s, const vdgl_edgel_chain& p);
 
 #endif // _blank_file_h
