@@ -3,11 +3,9 @@
 #include "rgrl_scale.h"
 #include "rgrl_cast.h"
 
-#include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
-
-#include <vbl/vbl_smart_ptr.h>
+#include <vcl_cassert.h>
 
 #include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_svd.h>
@@ -22,7 +20,7 @@ rgrl_invariant_single_landmark(vnl_vector<double> location,
                                vnl_vector<double> vessel_dir2,
                                vnl_vector<double> vessel_dir3,
                                double width1, double width2, double width3,
-                               double angular_std, 
+                               double angular_std,
                                double width_ratio_std):
   location_(location),
   center_set_(false),
@@ -80,14 +78,13 @@ rgrl_invariant_single_landmark(vnl_vector<double> location,
 
 rgrl_invariant_single_landmark::
 rgrl_invariant_single_landmark(const rgrl_invariant_single_landmark& copy,
-                               double angular_std, 
+                               double angular_std,
                                double width_ratio_std)
+  : rgrl_invariant(copy),
+    location_(copy.location_),
+    radius_(copy.radius_),
+    center_set_(false)
 {
-  // copy the landmark location and radius
-  location_ = copy.location_;
-  radius_ = copy.radius_;
-  center_set_ = false;
- 
   // copy the normal, width, and boundary points of each trace in the
   // signature the index of each is shifted by one
   for (unsigned int i = 0; i<3; i++) {
@@ -95,7 +92,7 @@ rgrl_invariant_single_landmark(const rgrl_invariant_single_landmark& copy,
     local_widths_.push_back(copy.local_widths_[(i+1)%3]);
     boundary_points_.push_back(copy.boundary_points_[((i+1)%3)*2]);
     boundary_points_.push_back( copy.boundary_points_[((i+1)%3)*2+1]);
-  } 
+  }
   //compute invariants
   angular_invariants_.set_size(3);
   angular_invariants_[0] = copy.angular_invariants_[1];
@@ -107,14 +104,14 @@ rgrl_invariant_single_landmark(const rgrl_invariant_single_landmark& copy,
   cartesian_invariants_[1] = vcl_atan(local_widths_[0]/local_widths_[2])*angular_std/width_ratio_std;
 }
 
-const vnl_double_2& 
+const vnl_double_2&
 rgrl_invariant_single_landmark::
 location() const
 {
   return location_;
 }
 
-const vnl_double_2& 
+const vnl_double_2&
 rgrl_invariant_single_landmark::
 boundary_point_location(int i) const
 {
@@ -122,7 +119,7 @@ boundary_point_location(int i) const
   return boundary_points_[i];
 }
 
-const vnl_double_2& 
+const vnl_double_2&
 rgrl_invariant_single_landmark::
 boundary_point_normal(int i) const
 {
@@ -130,14 +127,14 @@ boundary_point_normal(int i) const
   return trace_normals_[i/2];
 }
 
-const vnl_vector<double>& 
+const vnl_vector<double>&
 rgrl_invariant_single_landmark::
 cartesian_invariants() const
 {
   return cartesian_invariants_;
 }
 
-const vnl_vector<double>& 
+const vnl_vector<double>&
 rgrl_invariant_single_landmark::
 angular_invariants() const
 {
@@ -155,7 +152,7 @@ region() const
   return rgrl_mask_box(x0, x1);
 }
 
-bool 
+bool
 rgrl_invariant_single_landmark::
 estimate(rgrl_invariant_sptr         from_inv,
          rgrl_transformation_sptr&   xform,
@@ -171,19 +168,19 @@ estimate(rgrl_invariant_sptr         from_inv,
 
   unsigned int i=0;
   unsigned int num_boundary_points = 6;
-  while(i < num_boundary_points){
+  while (i < num_boundary_points) {
     double px, py, nx, ny, qx, qy;
     nx = this->boundary_point_normal(i)[0];
     ny = this->boundary_point_normal(i)[1];
 
     px = from->boundary_point_location(i)[0] - from->center()[0];
     py = from->boundary_point_location(i)[1] - from->center()[1];
-    
+
     qx = this->boundary_point_location(i)[0] - this->center()[0];
     qy = this->boundary_point_location(i)[1] - this->center()[1];
-    
+
     ++i;
-    
+
     double elt0 = nx;
     double elt1 = ny;
     double elt2 = px*nx + py*ny;
@@ -210,10 +207,10 @@ estimate(rgrl_invariant_sptr         from_inv,
   sum_prod(1,1)+=1;               sum_prod(1,2)+=py;
   sum_prod(1,3)+=px;              sum_prod(2,2)+=px*px+py*py;
   sum_prod(2,3)+=0;               sum_prod(3,3)+=px*px+py*py;
-  
+
   double qx = this->location()[0] - this->center()[0];
   double qy = this->location()[1] - this->center()[1];
-  
+
   sum_rhs(0,0)+=qx;
   sum_rhs(1,0)+=qy;
   sum_rhs(2,0)+=px*qx+py*qy;
@@ -221,15 +218,15 @@ estimate(rgrl_invariant_sptr         from_inv,
 
   // Fill in the lhs below the main diagonal.
   for ( int i=1; i<4; ++i )
-    for( int j=0; j<i; ++j )
+    for ( int j=0; j<i; ++j )
       sum_prod(i,j) = sum_prod(j,i);
-  
+
 
   // Find the scales and scale the matrices appropriate to normalize
   // them and increase the numerical stability.
   double factor0 = vnl_math_max(sum_prod(0,0),sum_prod(1,1));
   double factor1 = vnl_math_max(sum_prod(2,2),sum_prod(3,3));
-  double norm_scale = sqrt(factor1 / factor0);   // neither should be 0
+  double norm_scale = vcl_sqrt(factor1 / factor0);   // neither should be 0
 
   vnl_double_4 s;
   s(2) = s(3) = 1; s(0) = s(1) = norm_scale;
@@ -254,7 +251,7 @@ estimate(rgrl_invariant_sptr         from_inv,
   for ( int i=0; i<4; i++ ) {
     c_params(i,0) *= s(i);
   }
- 
+
   // Eliminate the center
   //
   double tx = c_params(0,0)+this->center()[0]
@@ -273,7 +270,7 @@ estimate(rgrl_invariant_sptr         from_inv,
   A(0,1) = -c_params(3,0);
   A(1,0) = -A(0,1);
   rgrl_trans_similarity est_xform(A, trans, norm_covar);
- 
+
   // Compute the scale
   //
   double obj = 0;
@@ -288,7 +285,7 @@ estimate(rgrl_invariant_sptr         from_inv,
   obj += (location_ - mapped).squared_magnitude();
   //n = 8 for number of constraints
   //k = 4 for dof
-  //geometric_scale = sqrt(obj/(n-k));
+  //geometric_scale = vcl_sqrt(obj/(n-k));
   geometric_scale = vcl_sqrt(obj/4);
 
   // Set the return parameters
@@ -301,7 +298,7 @@ estimate(rgrl_invariant_sptr         from_inv,
   return is_estimate_set_ = true;
 }
 
-const vnl_double_2& 
+const vnl_double_2&
 rgrl_invariant_single_landmark::
 center()
 {
@@ -326,14 +323,14 @@ center()
 }
 
 //------------ Non-member Functions ----------------------------
-void 
+void
 rgrl_invariant_single_landmark::
 reorder_vessel(vcl_vector<vnl_vector<double> >& directions,
                vcl_vector<double>& local_widths,
                vcl_vector<double>& angles)
 {
   // create a basis for the x-axis
-  vnl_double_2 x_axis(1, 0);   
+  vnl_double_2 x_axis(1, 0);
 
   // make a copy of the old stuff
   vcl_vector<vnl_vector<double> > old_dirs = directions;
@@ -344,17 +341,17 @@ reorder_vessel(vcl_vector<vnl_vector<double> >& directions,
   // calculate the counterclockwise angle between the basis and each
   // trace direction.
   angles.clear();
-  for(int i = 0; i<3; ++i)
+  for (int i = 0; i<3; ++i)
     angles.push_back( ccw_angle_between(x_axis, old_dirs[i]) );
 
   // make a copy of the angles before sorting, and sort the angles
   vcl_vector<double> old_angles(angles);
   vcl_sort(angles.begin(), angles.end());
-                                       
+
   // re-assign the directions
-  for(int i=0; i<3; ++i){
-    for(int j=0; j<3; ++j){
-      if(angles[i]==old_angles[j]){
+  for (int i=0; i<3; ++i){
+    for (int j=0; j<3; ++j){
+      if (angles[i]==old_angles[j]){
         directions.push_back(old_dirs[j]);
         local_widths.push_back(old_widths[j]);
         break;
@@ -371,7 +368,7 @@ ccw_angle_between(vnl_double_2 from, vnl_double_2 to)
                   (from.magnitude()*to.magnitude()); //normalize
   double angle = vcl_acos(cosine);
   double z = from[0]*to[1] - from[1]*to[0];
-  if (z >= 0) 
+  if (z >= 0)
     return angle;
   else
     return vnl_math::pi*2 - angle;

@@ -7,6 +7,7 @@
 #include "rgrl_cast.h"
 
 #include <vnl/vnl_math.h>
+#include <vcl_cassert.h>
 
 typedef vcl_vector< vnl_vector<double> > vec_vec_type;
 
@@ -23,7 +24,8 @@ rgrl_feature_landmark( vnl_vector<double> const& loc,
 
 rgrl_feature_landmark::
 rgrl_feature_landmark( rgrl_feature_landmark const& other )
-  : location_( other.location_ ),
+  : rgrl_feature(other),
+    location_( other.location_ ),
     error_proj_( other.error_proj_ ),
     outgoing_directions_( other.outgoing_directions_ )
 {
@@ -50,7 +52,7 @@ num_constraints() const
   return location_.size();
 }
 
-rgrl_feature_sptr 
+rgrl_feature_sptr
 rgrl_feature_landmark::
 transform( rgrl_transformation const& xform ) const
 {
@@ -65,14 +67,14 @@ transform( rgrl_transformation const& xform ) const
   vec_vec_type::const_iterator fitr = this->outgoing_directions_.begin();
   vec_vec_type::const_iterator fend = this->outgoing_directions_.end();
   vec_vec_type::iterator titr = result->outgoing_directions_.begin();
-  for( ; fitr != fend; ++fitr, ++titr ) {
+  for ( ; fitr != fend; ++fitr, ++titr ) {
     xform.map_direction( this->location_, *fitr, *titr );
   }
 
   return result;
 }
 
-double 
+double
 rgrl_feature_landmark::
 absolute_signature_weight( rgrl_feature_sptr other ) const
 {
@@ -82,7 +84,7 @@ absolute_signature_weight( rgrl_feature_sptr other ) const
   rgrl_feature_landmark* other_ptr = rgrl_cast<rgrl_feature_landmark *>(other);
   const vcl_vector<vnl_vector<double> >& sig_P = this->outgoing_directions_;
   const vcl_vector<vnl_vector<double> >& sig_Q = other_ptr->outgoing_directions_;
-  
+
   int ones = vnl_math_min(sig_P.size(), sig_Q.size());
   double max;
   if (sig_P.size() < sig_Q.size()) {
@@ -93,7 +95,7 @@ absolute_signature_weight( rgrl_feature_sptr other ) const
     vbl_array_2d<bool> invalid(sig_Q.size(), sig_P.size(), false);
     max = max_similarity(sig_Q, sig_P, ones, invalid);
   }
-  
+
   return vcl_pow( 0.5*max/ones, 100 );
 }
 
@@ -104,7 +106,7 @@ double
 rgrl_feature_landmark::
 max_similarity(const vcl_vector<vnl_vector<double> >& u,
                const vcl_vector<vnl_vector<double> >& v,
-               int count, 
+               int count,
                const vbl_array_2d<bool>& invalid) const
 {
   if (count == 0) return 0.0;
