@@ -36,6 +36,7 @@ public:
   // left in for capes :
   static HMatrix2D compute (const PairMatchSetCorner &matches);
   static HMatrix2D compute (const vcl_vector<HomgPoint2D>&p1, const vcl_vector<HomgPoint2D>&p2);
+  int minimum_number_of_correspondences() const { return 2; }
 private:
   static bool tmp_fun(const PointArray&,
                        const PointArray&,
