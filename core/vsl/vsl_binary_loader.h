@@ -36,7 +36,7 @@
 // concrete derived classes which can be added
 // to for loading purposes. If you derive a new
 // class you just have to append it to the list of
-// classes of the singletion, viz:
+// classes of the singleton, viz:
 //     vsl_binary_loader::instance().append(my_object)
 // The BaseClass MUST implement is_a(),is_class(),clone(),b_write() and
 // b_read() virtual functions.
