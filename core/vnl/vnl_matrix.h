@@ -276,6 +276,7 @@ public:
   void print(vcl_ostream& os) const;
 
   //--------------------------------------------------------------------------------
+  void clear();
   bool resize (unsigned r, unsigned c); // returns true if size changed.
 
 protected:
