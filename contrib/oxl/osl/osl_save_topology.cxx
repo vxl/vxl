@@ -42,7 +42,7 @@ void osl_save_topology(vcl_ostream &f, vcl_list<osl_edge*> const &es, vcl_list<o
   // write the vertices :
   f << stashed.size() << " vertices\n";
   for (vcl_list<osl_vertex*>::iterator i=stashed.begin(); i!=stashed.end(); ++i) {
-    long stashid = (long) (*i)->stash_retrieve(name);
+    void* stashid = (void*) (*i)->stash_retrieve(name);
     f << stashid << ' ' << (*i)->GetId() << ' ' << (*i)->GetX() << ' ' << (*i)->GetY() << vcl_endl;
   }
   f << vcl_endl;
@@ -50,8 +50,8 @@ void osl_save_topology(vcl_ostream &f, vcl_list<osl_edge*> const &es, vcl_list<o
   // write the edges :
   f << es.size() << " edges\n";
   for (vcl_list<osl_edge*>::const_iterator i=es.begin(); i!=es.end(); ++i) {
-    long stashid1 = (long) (*i)->GetV1()->stash_retrieve(name);
-    long stashid2 = (long) (*i)->GetV2()->stash_retrieve(name);
+    void* stashid1 = (void*) (*i)->GetV1()->stash_retrieve(name);
+    void* stashid2 = (void*) (*i)->GetV2()->stash_retrieve(name);
     f << stashid1 << ' ' << stashid2 << vcl_endl; // endpoints
     f << (*i)->GetId() << vcl_endl; // id of edge
     (*i)->osl_edgel_chain::write_ascii(f);
