@@ -6,10 +6,7 @@
 ADD_LIBRARY(netlib netlib_sources)
 
 SOURCE_FILES( netlib_sources
-c_sqrt
 z_sqrt
-cdabs
-cdsqrt
 F77_aloc
 exit
 s_cmp
