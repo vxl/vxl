@@ -42,7 +42,7 @@ class vgui_gtk2_dialog_impl : public vgui_dialog_impl
   //: Changes the modality of the dialog.
   //  True makes the dialog modal (i.e. the dialog 'grabs' all events), this is the default.
   //  False makes the dialog non-modal.
-  void modal(bool m) { is_modal = m; }
+  void modal(bool m);
 
   void set_ok_button(const char* txt);
   void set_cancel_button(const char* txt);

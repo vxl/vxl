@@ -97,18 +97,12 @@ class vgui_style_equal
 {
  public:
   //: Constructor - takes one of the styles to be compared.
-  vgui_style_equal(vgui_style_sptr s1_) : s1(s1_) {}
+  vgui_style_equal(vgui_style_sptr s1);
 
   //: Returns true if the given style is identical to the stored style.
-  bool operator() (vgui_style_sptr s2) {
-    return s1->rgba[0] == s2->rgba[0] &&
-           s1->rgba[1] == s2->rgba[1] &&
-           s1->rgba[2] == s2->rgba[2] &&
-           s1->point_size == s2->point_size &&
-           s1->line_width == s2->line_width;
-  }
+  bool operator() (vgui_style_sptr s2);
 
-  vgui_style_sptr s1;
+  vgui_style_sptr s_;
 };
 
 #endif // vgui_style_h_
