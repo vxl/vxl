@@ -4,7 +4,7 @@
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
-CFG=mvl - Win32 Debug
+CFG=mvl - Win32 DebugSTLPort
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
@@ -13,19 +13,23 @@ CFG=mvl - Win32 Debug
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "mvl.mak" CFG="mvl - Win32 Debug"
+!MESSAGE NMAKE /f "mvl.mak" CFG="mvl - Win32 DebugSTLPort"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
 !MESSAGE "mvl - Win32 Release" (based on "Win32 (x86) Static Library")
 !MESSAGE "mvl - Win32 Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "mvl - Win32 ReleaseWithDBInfo" (based on "Win32 (x86) Static Library")
+!MESSAGE "mvl - Win32 StaticDebug" (based on "Win32 (x86) Static Library")
+!MESSAGE "mvl - Win32 StaticRelease" (based on "Win32 (x86) Static Library")
+!MESSAGE "mvl - Win32 ReleaseSTLPort" (based on "Win32 (x86) Static Library")
+!MESSAGE "mvl - Win32 DebugSTLPort" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
 # PROP AllowPerConfigDependencies 0
-# PROP Scc_ProjName ""
-# PROP Scc_LocalPath ""
+# PROP Scc_ProjName ""$/vxl-2d3/oxl/mvl", BADCAAAA"
+# PROP Scc_LocalPath "."
 CPP=cl.exe
 RSC=rc.exe
 
@@ -102,6 +106,106 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\Release\mvl.lib"
 # ADD LIB32 /nologo /out:"..\Release\mvl.lib"
 
+!ELSEIF  "$(CFG)" == "mvl - Win32 StaticDebug"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "mvl___Win32_StaticDebug"
+# PROP BASE Intermediate_Dir "mvl___Win32_StaticDebug"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "StaticDebug"
+# PROP Intermediate_Dir "StaticDebug"
+# PROP Target_Dir ""
+MTL=midl.exe
+# ADD BASE CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "$(IUEROOT)/vcl/config.win32-vc60" /I "$(IUEROOT)\vcl\config.win32-VC60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)/oxl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /GZ /c
+# SUBTRACT BASE CPP /YX
+# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "$(IUEROOT)/vcl/config.win32-vc60" /I "$(IUEROOT)\vcl\config.win32-VC60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)/oxl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /GZ /c
+# SUBTRACT CPP /YX
+# ADD BASE RSC /l 0x409 /d "_DEBUG"
+# ADD RSC /l 0x409 /d "_DEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo /out:"..\Debug\mvl.lib"
+# ADD LIB32 /nologo /out:"..\StaticDebug\mvl.lib"
+
+!ELSEIF  "$(CFG)" == "mvl - Win32 StaticRelease"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "mvl___Win32_StaticRelease"
+# PROP BASE Intermediate_Dir "mvl___Win32_StaticRelease"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "StaticRelease"
+# PROP Intermediate_Dir "StaticRelease"
+# PROP Target_Dir ""
+MTL=midl.exe
+# ADD BASE CPP /nologo /MT /W3 /GX /O2 /I "$(IUEROOT)/oxl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
+# ADD CPP /nologo /MT /W3 /GX /O2 /I "$(IUEROOT)/oxl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
+# ADD BASE RSC /l 0x409 /d "NDEBUG"
+# ADD RSC /l 0x409 /d "NDEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo /out:"..\Release\mvl.lib"
+# ADD LIB32 /nologo /out:"..\StaticRelease\mvl.lib"
+
+!ELSEIF  "$(CFG)" == "mvl - Win32 ReleaseSTLPort"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "mvl___Win32_ReleaseSTLPort"
+# PROP BASE Intermediate_Dir "mvl___Win32_ReleaseSTLPort"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "Release-STLPort"
+# PROP Intermediate_Dir "Release-STLPort"
+# PROP Target_Dir ""
+MTL=midl.exe
+# ADD BASE CPP /nologo /MT /W3 /GX /O2 /I "$(IUEROOT)/oxl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
+# ADD CPP /nologo /MT /W3 /GX /O2 /I "$(STLPORT)\stlport" /I "$(IUEROOT)\vcl\config.stlport.win32-VC60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /I "$(IUEROOT)\oxl" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
+# ADD BASE RSC /l 0x409 /d "NDEBUG"
+# ADD RSC /l 0x409 /d "NDEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo /out:"..\Release\mvl.lib"
+# ADD LIB32 /nologo /out:"..\Release-STLPort\mvl.lib"
+
+!ELSEIF  "$(CFG)" == "mvl - Win32 DebugSTLPort"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "mvl___Win32_DebugSTLPort"
+# PROP BASE Intermediate_Dir "mvl___Win32_DebugSTLPort"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "Debug-STLPort"
+# PROP Intermediate_Dir "Debug-STLPort"
+# PROP Target_Dir ""
+MTL=midl.exe
+# ADD BASE CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "$(IUEROOT)/vcl/config.win32-vc60" /I "$(IUEROOT)\vcl\config.win32-VC60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)/oxl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /GZ /c
+# SUBTRACT BASE CPP /YX
+# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "$(STLPORT)\stlport" /I "$(IUEROOT)\vcl\config.stlport.win32-VC60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /I "$(IUEROOT)\oxl" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /GZ /c
+# SUBTRACT CPP /YX
+# ADD BASE RSC /l 0x409 /d "_DEBUG"
+# ADD RSC /l 0x409 /d "_DEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo /out:"..\Debug\mvl.lib"
+# ADD LIB32 /nologo /out:"..\Debug-STLPort\mvl.lib"
+
 !ENDIF 
 
 # Begin Target
@@ -109,6 +213,10 @@ LIB32=link.exe -lib
 # Name "mvl - Win32 Release"
 # Name "mvl - Win32 Debug"
 # Name "mvl - Win32 ReleaseWithDBInfo"
+# Name "mvl - Win32 StaticDebug"
+# Name "mvl - Win32 StaticRelease"
+# Name "mvl - Win32 ReleaseSTLPort"
+# Name "mvl - Win32 DebugSTLPort"
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
