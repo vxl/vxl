@@ -19,7 +19,7 @@
 //--------------------------------------------------------------
 //
 template <class T>
-vgl_p_matrix<T>::vgl_p_matrix():
+vgl_p_matrix<T>::vgl_p_matrix() :
   svd_(0)
 {
   for (int row_index = 0; row_index < 3; row_index++)
@@ -43,8 +43,7 @@ vgl_p_matrix<T>::vgl_p_matrix(vcl_istream& i) :
 //
 template <class T>
 vgl_p_matrix<T>::vgl_p_matrix(vnl_matrix_fixed<T, 3, 4> const& pmatrix) :
-  p_matrix_ (pmatrix),
-  svd_(0)
+  p_matrix_(pmatrix), svd_(0)
 {
 }
 
@@ -61,8 +60,7 @@ vgl_p_matrix<T>::vgl_p_matrix(const vnl_matrix<T>& A, const vnl_vector<T>& a) :
 //
 template <class T>
 vgl_p_matrix<T>::vgl_p_matrix(const T *c_matrix) :
-  p_matrix_ (c_matrix),
-  svd_(0)
+  p_matrix_(c_matrix), svd_(0)
 {
 }
 
@@ -71,8 +69,7 @@ vgl_p_matrix<T>::vgl_p_matrix(const T *c_matrix) :
 // - Copy ctor
 template <class T>
 vgl_p_matrix<T>::vgl_p_matrix(const vgl_p_matrix& that) :
-  p_matrix_ (that.get_matrix()),
-  svd_(0)
+  p_matrix_(that.get_matrix()), svd_(0)
 {
 }
 
@@ -125,7 +122,6 @@ vgl_homg_point_3d<T> vgl_p_matrix<T>::backproject_pseudoinverse (const vgl_homg_
   return vgl_homg_point_3d<T>(p[0],p[1],p[2],p[3]);
 }
 
-
 //-----------------------------------------------------------------------------
 //
 template <class T>
@@ -167,7 +163,7 @@ bool vgl_p_matrix<T>::read_ascii(vcl_istream& f)
   clear_svd();
 
   if (!ok(f)) {
-    //    vcl_cerr << "vgl_p_matrix::read_ascii: Failed to load P matrix\n";
+    vcl_cerr << "vgl_p_matrix::read_ascii: Failed to load P matrix\n";
     return false;
   }
 
@@ -250,7 +246,7 @@ bool vgl_p_matrix<T>::is_canonical(T tol) const
 {
   for (int r = 0; r < 3; ++r)
     for (int c = 0; c < 4; ++c) {
-      double d = (r == c) ? (p_matrix_(r,c) - 1) : p_matrix_(r,c);
+      double d = r==c ? p_matrix_(r,c)-1 : p_matrix_(r,c);
       if (vcl_fabs(d) > tol)
         return false;
     }
@@ -445,6 +441,7 @@ vgl_p_matrix<T>::set (const vnl_matrix<T>& A, const vnl_vector<T>& a)
   p_matrix_(1,3) = a[1];
   p_matrix_(2,3) = a[2];
 }
+
 //----------------------------------------------------------------
 //
 template <class T>
@@ -477,17 +474,15 @@ vgl_p_matrix<T>::fix_cheirality()
   double det = vnl_qr<double>(A).determinant();
 
   double scale = 1;
-  // Used to scale by 1/det, but it's a bad idea if det is small
-  if (0) {
-    if (vcl_fabs(det - 1) > 1e-8) {
-      vcl_cerr << "vgl_p_matrix::fix_cheirality: Flipping, determinant is " << det << vcl_endl;
-    }
-
-    scale = 1/det;
-  } else {
-    if (det < 0)
-      scale = -1;
+#if 0 // Used to scale by 1/det, but it's a bad idea if det is small
+  if (vcl_fabs(det - 1) > 1e-8) {
+    vcl_cerr << "vgl_p_matrix::fix_cheirality: Flipping, determinant is " << det << vcl_endl;
   }
+
+  scale = 1/det;
+#endif // 0
+  if (det < 0)
+    scale = -scale;
 
   p_matrix_ *= scale;
   if (svd_)
