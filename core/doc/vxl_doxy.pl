@@ -17,14 +17,14 @@ exec perl -w -x $0 ${1+"$@"}
 
 
 # patterns to be matched
-$verbpatt = "\\\\verbatim";
-$endverbpatt = "\\\\endverbatim";
+$verbpatt = '\\verbatim';
+$endverbpatt = '\\endverbatim';
 $slashslashpatt = '^\s*//';
 $slashslashcolonpatt = '^\s*//:';
-$slashstarstarpatt = "/**";
-$spacespacepatt = "  ";
-$starpatt = "*";
-$starslashpatt = "*/";
+$slashstarstarpatt = '/**';
+$spacespacepatt = '  ';
+$starpatt = '*';
+$starslashpatt = '*/';
 
 # variables that keep state:
 
