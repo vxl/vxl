@@ -35,7 +35,27 @@
 
 extern "C" {
   typedef unsigned char uint8_t;
+
+    // In some versions of Cygwin, uint32_t is typedefed to unsigned
+    // long in /usr/include/stdint.h.  When that is the case, that
+    // file also #defines __uint32_t_defined.
+
+    // Instead of these typedefs, perhaps we should be #including the
+    // system inttypes.h, or the win32/inttypes.h that v3p/mpeg2
+    // provides.  To do that, look at how v3p/mpeg2/CmakeLists.txt
+    // adds in include directories for config.h and inttypes.h and
+    // duplicate that logic to add those directories to
+    // MPEG2_INCLUDE_DIR in config/cmake/Modules/FindMPEG2.cmake.
+
+    // The root problem here seems to be that mpeg2dec makes a
+    // config.h and inttypes.h (for win32) for its own use, but does
+    // not set them up in such a way that other applications using
+    // mpeg2dec can use those files.  Or, maybe it does when you go
+    // through its install procedure.
+
+#ifndef __uint32_t_defined
   typedef unsigned int uint32_t;
+#endif
 #define this c_this
 #include <mpeg2dec/video_out.h>
 #include <mpeg2dec/mpeg2.h>
