@@ -1,3 +1,4 @@
+include $(IUELOCALROOT)/config/top-params.mk
 VXL := 1
 
 USES = vxl oxl
@@ -20,9 +21,13 @@ SOURCES += GXFileVisitor.cxx
 
 SOURCES += MovieFile.cxx
 SOURCES += MovieFileInterface.cxx
+ifneq ($(HAS_BROKEN_AS)-$(BUILD),1-noshared)
 SOURCES += SGIMovieFile.cxx
 SOURCES += SGIMovieFilePrivates.cxx
 SOURCES += SGIMovieFileWrite.cxx
+else
+TEMPLATE_SOURCES := $(subst Templates/vector+SGIMV_Variables-.cxx,,$(TEMPLATE_SOURCES))
+endif
 SOURCES += ImageSequenceMovieFile.cxx
 
 SOURCES += vsl_conic_as_params.cxx
@@ -31,4 +36,4 @@ SOURCES += vsl_conic_points.cxx
 
 IULIBS += -lvil -lvnl_algo -lvnl -lvbl -lvcl
 
-include $(IUELOCALROOT)/config/top.mk
+include $(IUELOCALROOT)/config/top-rules.mk

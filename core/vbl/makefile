@@ -12,7 +12,9 @@ SOURCES += vbl_arg.cxx  # if this is in a .txx file, gcc 2.95 will not generate 
 SOURCES += vbl_awk.cxx
 SOURCES += vbl_base_array_3d.cxx
 SOURCES += vbl_file.cxx
+ifneq ($(HAS_BROKEN_AS)-$(BUILD),1-noshared) # this file generates 4281 bytes assembler line (Rb_tree) which is too much.
 SOURCES += vbl_canonical_path.cxx
+endif
 SOURCES += vbl_printf.cxx
 SOURCES += vbl_redirector.cxx
 SOURCES += vbl_ref_count.cxx
