@@ -694,7 +694,7 @@ bool vil3d_gipl_image::put_view(const vil3d_image_view_base& view,
 
   // write out actual image
   vil_streampos byte_start = start_of_data_ + (k0*dim2_ + j0 * dim1_ + i0) * bytes_per_pixel;
-  unsigned byte_width = dim1_ * bytes_per_pixel;
+  //unsigned byte_width = dim1_ * bytes_per_pixel;
   unsigned byte_out_width = view.ni() * bytes_per_pixel;
 
   if (view.pixel_format() == VIL_PIXEL_FORMAT_BOOL)
