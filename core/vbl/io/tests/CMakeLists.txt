@@ -12,6 +12,7 @@ ADD_EXECUTABLE(vbl_test_io
   test_array_2d_io.cxx
   test_array_3d_io.cxx
   test_sparse_array_io.cxx
+  test_triple_io.cxx
   golden_test_vbl_io.cxx
 )
 
@@ -21,4 +22,5 @@ ADD_TEST(vbl_test_array_1d_io     vbl_test_io test_array_1d_io)
 ADD_TEST(vbl_test_array_2d_io     vbl_test_io test_array_2d_io)
 ADD_TEST(vbl_test_array_3d_io     vbl_test_io test_array_3d_io)
 ADD_TEST(vbl_test_sparse_array_io vbl_test_io test_sparse_array_io)
+ADD_TEST(vbl_test_triple_io       vbl_test_io test_triple_io)
 ADD_TEST(vbl_golden_test_vbl_io   vbl_test_io golden_test_vbl_io)
