@@ -2,7 +2,7 @@ TRY_GLUT := 1
 TRY_OPENGL := 1
 TRY_X11 := 1
 IULIBS += -lvgui -lQv
-include ${IUEROOT}/core/vnl/algo/config.mk
+include ${IUEROOT}/core/vnl/config.mk
 include ${IUEROOT}/core/vil/config.mk
 include ${IUEROOT}/core/vil1/config.mk
 include ${IUEROOT}/core/vgl/config.mk

@@ -4,7 +4,7 @@ TRY_GLUT := 1 # vgui_text needs glut. fsm.
 TRY_X11 := 1
 TRY_HERMES := 1
 LIBRARY := vgui
-IMMEDIATE_LIBS += -lvil1 -lvil -lvbl -lvnl-algo -lvnl -lvul
+IMMEDIATE_LIBS += -lvil1 -lvil -lvbl -lvnl -lvul
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
