@@ -144,7 +144,7 @@ inline unsigned vsl_convert_from_arbitrary_length(const unsigned char* buffer,
     int bitsLoaded = 0;
     while ((b & 128) == 0)
     {
-      v += b << bitsLoaded;
+      v += ((unsigned long)b) << bitsLoaded;
       bitsLoaded += 7;
       b = *(ptr++);
     }
@@ -165,7 +165,7 @@ inline unsigned vsl_convert_from_arbitrary_length(const unsigned char* buffer,
     }      
     
 // Now add the last 7 bits.
-    *(ints++) = v + ((b & 127) << bitsLoaded);
+    *(ints++) = v + ( ((unsigned long)(b & 127)) << bitsLoaded);
   }
   return (unsigned int)(ptr - buffer);
 }
@@ -219,7 +219,7 @@ inline unsigned vsl_convert_from_arbitrary_length(const unsigned char* buffer,
     int bitsLoaded = 0;
     while ((b & 128) == 0)
     {
-      v += b << bitsLoaded;
+      v += ((signed long)b) << bitsLoaded;
       bitsLoaded += 7;
       b = *(ptr++);
     }
@@ -245,8 +245,8 @@ inline unsigned vsl_convert_from_arbitrary_length(const unsigned char* buffer,
 
 // Now add the last 1<=n<=7 bits.
     *(ints++) = v |            // the stuff found before the final 7 bits
-      ((b & 63) << bitsLoaded) | // the value of the penultimate 6 bits
-      ((b & 64) ? (-64 << bitsLoaded) : 0); // the value of the final bit.
+      (((signed long)(b & 63)) << bitsLoaded) | // the value of the penultimate 6 bits
+      (((signed long)(b & 64)) ? (-64 << bitsLoaded) : 0); // the value of the final bit.
   }
   return (unsigned int)(ptr - buffer);
 }
@@ -300,7 +300,7 @@ inline unsigned vsl_convert_from_arbitrary_length(const unsigned char* buffer,
     int bitsLoaded = 0;
     while ((b & 128) == 0)
     {
-      v += b << bitsLoaded;
+      v += ((unsigned int)b) << bitsLoaded;
       bitsLoaded += 7;
       b = *(ptr++);
     }
@@ -322,7 +322,7 @@ inline unsigned vsl_convert_from_arbitrary_length(const unsigned char* buffer,
     }      
     
 // Now add the last 7 bits.
-    *(ints++) = v + ((b & 127) << bitsLoaded);
+    *(ints++) = v + ( ((unsigned int)(b & 127)) << bitsLoaded);
   }
   return (unsigned int)(ptr - buffer);
 }
@@ -377,7 +377,7 @@ inline unsigned vsl_convert_from_arbitrary_length(const unsigned char* buffer,
     int bitsLoaded = 0;
     while ((b & 128) == 0)
     {
-      v += b << bitsLoaded;
+      v += ((signed int)b) << bitsLoaded;
       bitsLoaded += 7;
       b = *(ptr++);
     }
@@ -404,8 +404,8 @@ inline unsigned vsl_convert_from_arbitrary_length(const unsigned char* buffer,
 
 // Now add the last 1<=n<=7 bits.
     *(ints++) = v |            // the stuff found before the final 7 bits
-      ((b & 63) << bitsLoaded) | // the value of the penultimate 6 bits
-      ((b & 64) ? (-64 << bitsLoaded) : 0); // the value of the final bit.
+      ( ((signed int)(b & 63)) << bitsLoaded) | // the value of the penultimate 6 bits
+      ( ((signed int)(b & 64)) ? (-64 << bitsLoaded) : 0); // the value of the final bit.
   }
   return (unsigned int)(ptr - buffer);
 }
@@ -459,7 +459,7 @@ inline unsigned vsl_convert_from_arbitrary_length(const unsigned char* buffer,
     int bitsLoaded = 0;
     while ((b & 128) == 0)
     {
-      v += b << bitsLoaded;
+      v += ((unsigned short)b) << bitsLoaded;
       bitsLoaded += 7;
       b = *(ptr++);
     }
@@ -481,7 +481,7 @@ inline unsigned vsl_convert_from_arbitrary_length(const unsigned char* buffer,
     }      
     
 // Now add the last 7 bits.
-    *(ints++) = v + ((b & 127) << bitsLoaded);
+    *(ints++) = v + ( ((unsigned short)(b & 127)) << bitsLoaded);
   }
   return (unsigned int)(ptr - buffer);
 }
@@ -537,7 +537,7 @@ inline unsigned vsl_convert_from_arbitrary_length(const unsigned char* buffer,
     int bitsLoaded = 0;
     while ((b & 128) == 0)
     {
-      v += b << bitsLoaded;
+      v += ((signed short)b) << bitsLoaded;
       bitsLoaded += 7;
       b = *(ptr++);
     }
@@ -563,8 +563,8 @@ inline unsigned vsl_convert_from_arbitrary_length(const unsigned char* buffer,
 
 // Now add the last 1<=n<=7 bits.
     *(ints++) = v |            // the stuff found before the final 7 bits
-      ((b & 63) << bitsLoaded) | // the value of the penultimate 6 bits
-      ((b & 64) ? (-64 << bitsLoaded) : 0); // the value of the final bit.
+      ( ((signed short)(b & 63)) << bitsLoaded) | // the value of the penultimate 6 bits
+      ( ((signed short)(b & 64)) ? (-64 << bitsLoaded) : 0); // the value of the final bit.
 
   }
   return (unsigned int)(ptr - buffer);
