@@ -169,20 +169,44 @@ MSVC 6.0 SP5
 850Mhz P3 Windows 2000, using MSVC 6.0 SP5
 ------------------------------------------
 No Optimisation (Debug)
-Method 1) Mean: 14170us  +/-200us
-Method 2) Mean: 11987us  +/-105us
-Method 3) Mean: 7311us  +/-5us
-Method 4) Mean: 2844us  +/-50us
-Method 5) Mean: 2844us  +/-55us
-Method 6) Mean: 3285us  +/-55us
+Images of BYTE
+Method 1) Mean: 13920us  +/-100us
+Method 2) Mean: 11746us  +/-55us
+Method 3) Mean: 7341us  +/-55us
+Method 4) Mean: 2844us  +/-55us
+Method 5) Mean: 2834us  +/-55us
+Method 6) Mean: 3245us  +/-50us
+Method 7) Mean: 4006us  +/-5us
+Method 8) Mean: 3775us  +/-55us
+Images of FLOAT
+Method 1) Mean: 19348us  +/-255us
+Method 2) Mean: 17134us  +/-250us
+Method 3) Mean: 11777us  +/-55us
+Method 4) Mean: 7271us  +/-55us
+Method 5) Mean: 7030us  +/-50us
+Method 6) Mean: 6860us  +/-150us
+Method 7) Mean: 7070us  +/-150us
+Method 8) Mean: 7291us  +/-55us
 
 Optimisation with specified inlining (with debug info added) (RelwithDebInfo)
-Method 1) Mean: 3535us  +/-50us
-Method 2) Mean: 3214us  +/-50us
-Method 3) Mean: 1392us  +/-100us
-Method 4) Mean: 1192us  +/-55us
-Method 5) Mean: 761us  +/-55us
+Images of BYTE
+Method 1) Mean: 3545us  +/-55us
+Method 2) Mean: 3214us  +/-55us
+Method 3) Mean: 1402us  +/-95us
+Method 4) Mean: 1182us  +/-55us
+Method 5) Mean: 751us  +/-55us
 Method 6) Mean: 721us  +/-50us
+Method 7) Mean: 721us  +/-50us
+Method 8) Mean: 741us  +/-50us
+Images of FLOAT
+Method 1) Mean: 6259us  +/-55us
+Method 2) Mean: 6259us  +/-50us
+Method 3) Mean: 5758us  +/-55us
+Method 4) Mean: 5849us  +/-105us
+Method 5) Mean: 5838us  +/-105us
+Method 6) Mean: 5749us  +/-50us
+Method 7) Mean: 5768us  +/-100us
+Method 8) Mean: 5828us  +/-55us
 
 Optimisation with optimiser controlled inlining (with debug info added)
 Method 1) Mean: 3545us  +/-55us
@@ -190,12 +214,3 @@ Method 2) Mean: 3214us  +/-50us
 Method 3) Mean: 1402us  +/-5us
 Method 4) Mean: 1192us  +/-50us
 Method 5) Mean: 741us  +/-50us
-
-With all vxl_byte replace by float in RelwithDebInfo
-Method 1) Mean: 7821us  +/-150us
-Method 2) Mean: 7761us  +/-55us
-Method 3) Mean: 7260us  +/-50us
-Method 4) Mean: 7471us  +/-200us
-Method 5) Mean: 7481us  +/-55us
-Method 6) Mean: 7250us  +/-50us
-Method 7) Mean: 7271us  +/-50us
