@@ -25,7 +25,7 @@
 
 //=======================================================================
 
-//: Classify the input vector
+//: Classify the input vector.
 // Returns either 0 (for negative class) or 1 (for positive class)
 unsigned clsfy_binary_hyperplane::classify(const vnl_vector<double> &input) const
 {
@@ -48,8 +48,8 @@ void clsfy_binary_hyperplane::class_probabilities(vcl_vector<double> &outputs,
 
 //=======================================================================
 
-//: Log likelyhood of being in the positive class
-// class probability = 1 / (1+exp(-log_l))
+//: Log likelyhood of being in the positive class.
+// Class probability = 1 / (1+exp(-log_l))
 double clsfy_binary_hyperplane::log_l(const vnl_vector<double> &input) const
 {
   return dot_product(input, weights_) - bias_;

@@ -46,16 +46,16 @@ public:
   //: Destructor
   ~clsfy_simple_adaboost();
 
-  //: Find the posterior probability of the input being in the positive class
+  //: Find the posterior probability of the input being in the positive class.
   // The result is outputs(0)
   virtual void class_probabilities(vcl_vector<double> &outputs, const vnl_vector<double> &input) const;
 
-  //: Classify the input vector
-  // returns a number between 0 and nClasses-1 inclusive to represent the most likely class
+  //: Classify the input vector.
+  // Returns a number between 0 and nClasses-1 inclusive to represent the most likely class
   unsigned virtual classify(const vnl_vector<double> &input) const;
 
-  //: Log likelyhood of being in the positive class
-  // class probability = 1 / (1+exp(-log_l))
+  //: Log likelyhood of being in the positive class.
+  // Class probability = 1 / (1+exp(-log_l))
   virtual double log_l(const vnl_vector<double> &input) const;
 
   //: The dimensionality of input vectors.
@@ -87,7 +87,7 @@ public:
   virtual void b_write(vsl_b_ostream& bfs) const;
 
   //: Create a deep copy.
-  // client is responsible for deleting returned object.
+  // Client is responsible for deleting returned object.
   virtual clsfy_classifier_base* clone() const
   { return new clsfy_simple_adaboost(*this); }
 

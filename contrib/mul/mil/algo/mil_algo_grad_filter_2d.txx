@@ -1,7 +1,8 @@
 #ifndef mil_algo_grad_filter_2d_txx_
 #define mil_algo_grad_filter_2d_txx_
 
-//: \file
+//:
+//  \file
 //  \brief Apply exponential filter to a 2D image
 //  \author Tim Cootes
 
@@ -9,7 +10,7 @@
 #include <mil/algo/mil_algo_grad_3x3.h>
 
 
-//: Apply simple 3x3 gradient filter to 2D image
+//: Apply simple 3x3 gradient filter to 2D image.
 //  dest has twice as many planes as src, with dest plane (2i) being the x-gradient
 //  of source plane i and dest plane (2i+1) being the y-gradient.
 template<class srcT, class destT>

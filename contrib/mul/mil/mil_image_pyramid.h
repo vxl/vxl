@@ -4,7 +4,8 @@
 #pragma interface
 #endif
 
-//: \file
+//:
+//  \file
 //  \brief Pyramid of images of arbitrary type
 //  \author Tim Cootes
 
@@ -16,72 +17,70 @@ class mil_image;
 
 //: Pyramid of images of arbitrary type
 class mil_image_pyramid {
-private:
-    vcl_vector<mil_image*> image_;
-    double base_pixel_width_;
-    double scale_step_;
+  vcl_vector<mil_image*> image_;
+  double base_pixel_width_;
+  double scale_step_;
 
-    void deleteImages();
+  void deleteImages();
 public:
+  //: Dflt ctor
+  mil_image_pyramid();
 
-        //: Dflt ctor
-    mil_image_pyramid();
+  //: Copy ctor
+  // Makes a shallow copy of each mil_image object, not of the
+  // underlying data
+  mil_image_pyramid(const mil_image_pyramid &);
 
-        //: Copy ctor
-        // Makes a shallow copy of each mil_image object, not of the
-        // underlying data
-    mil_image_pyramid(const mil_image_pyramid &);
+  //: Destructor
+  virtual ~mil_image_pyramid();
 
-        //: Destructor
-    virtual ~mil_image_pyramid();
+  //: Resize to n_levels pyramid
+  //  Each level of which is a clone of im_type
+  void resize(int n_levels, const mil_image& im_type);
 
-        //: Resize to n_levels pyramid
-        //  Each level of which is a clone of im_type
-    void resize(int n_levels, const mil_image& im_type);
+  //: Lowest level (highest resolution image) of pyramid
+  int lo() const;
 
-        //: Lowest level (highest resolution image) of pyramid
-    int lo() const;
+  //: Highest level (lowest resolution image) of pyramid
+  int hi() const;
 
-        //: Highest level (lowest resolution image) of pyramid
-    int hi() const;
+  //: Number of levels
+  int n_levels() const;
 
-        //: Number of levels
-    int n_levels() const;
+  //: Image at level L
+  mil_image& operator()(int L);
 
-        //: Image at level L
-    mil_image& operator()(int L);
+  //: Image at level L
+  const mil_image& operator()(int L) const;
 
-        //: Image at level L
-    const mil_image& operator()(int L) const;
+  //: Copy operator
+  // Makes a shallow copy of each mil_image object, not of the
+  // underlying data
+  const mil_image_pyramid& operator=(const mil_image_pyramid& that);
 
-        //: Copy operator
-        // Makes a shallow copy of each mil_image object, not of the
-        // underlying data
-    const mil_image_pyramid& operator=(const mil_image_pyramid& that);
+  //: Mean width (in world coords) of pixels at level zero
+  double basePixelWidth() const;
 
-        //: Mean width (in world coords) of pixels at level zero
-    double basePixelWidth() const;
+  //: Scaling per level
+  //  Pixels at level L have width
+  //  basePixelWidth() * scaleStep()^L
+  double scale_step() const;
 
-        //: Scaling per level
-        //  Pixels at level L have width
-        //  basePixelWidth() * scaleStep()^L
-    double scale_step() const;
+  //: Access to image data
+  //  Should only be used by pyramid builders
+  vcl_vector<mil_image*>& data();
 
-        //: Access to image data
-        //  Should only be used by pyramid builders
-    vcl_vector<mil_image*>& data();
+  //: Define pixel widths
+  void setWidths(double base_pixel_width, double scale_step);
 
-        //: Define pixel widths
-    void setWidths(double base_pixel_width, double scale_step);
+  void print_summary(vcl_ostream& os) const;
 
-    void print_summary(vcl_ostream& os) const;
-
-        //: Print whole of each image to os
-    void print_all(vcl_ostream& os) const;
+  //: Print whole of each image to os
+  void print_all(vcl_ostream& os) const;
 };
 
 //: Convert an image pyramid into a flat image containing each layer.
-// e.g. a three layer 2d image pyramid with scale factor 2.0
+// E.g. a three layer 2d image pyramid with scale factor 2.0
 // would be converted to an image looking like
 // \verbatim
 // ________________

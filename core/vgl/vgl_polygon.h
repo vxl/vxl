@@ -13,6 +13,7 @@
 // \verbatim
 // Modifications:
 // Binary IO added and documentation tidied up NPC, 20/03/01
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
 #include <vcl_iosfwd.h>
@@ -44,15 +45,15 @@ public:
   //: Construct setting number of sheets or regions
   vgl_polygon(int num_sheets);
 
-  //: Construct setting the points in the first sheet
+  //: Construct setting the points in the first sheet.
   // n is the number of points
   vgl_polygon(float const* x, float const* y, int n);
 
-  //: Construct setting the points in the first sheet
+  //: Construct setting the points in the first sheet.
   // n is the number of points
   vgl_polygon(vcl_pair<float, float> const p[], int n);
 
-  //: Construct setting the points in the first sheet
+  //: Construct setting the points in the first sheet.
   // n is the number of points
   vgl_polygon(vcl_pair<double, double> const p[], int n);
 

@@ -32,8 +32,8 @@ void clsfy_binary_threshold_1d::class_probabilities(vcl_vector<double> &outputs,
 
 //=======================================================================
 
-//: Log likelyhood of being in the positive class
-// class probability = 1 / (1+exp(-log_l))
+//: Log likelyhood of being in the positive class.
+// Class probability = 1 / (1+exp(-log_l))
 double clsfy_binary_threshold_1d::log_l(double input) const
 {
   return s_*input - threshold_;

@@ -5,7 +5,8 @@
 #pragma interface
 #endif
 
-//: \file
+//:
+//  \file
 //  \brief Represent 3D images of one or more planes of type T.
 //  \author Graham Vincent (following design of mil_image_2d_of by Tim Cootes)
 
@@ -82,7 +83,7 @@ public:
   //  Default number of planes is 1
   void set_n_planes(int n);
 
-  //: Define parameters
+  //: Define parameters.
   //  planes[i] is pointer to i'th plane of nx x ny x nz image data
   //  i should be valid in range [0,n_planes-1]
   //  xstep is step in memory between im(x,y,z) and im(x+1,y,z)
@@ -94,8 +95,8 @@ public:
            int xstep, int ystep, int zstep,
            const char* format);
 
-  //: Arrange that this is window on given image
-  //  ie plane(i) points to im.plane(i) + offset
+  //: Arrange that this is window on given image.
+  //  I.e. plane(i) points to im.plane(i) + offset
   //  The world2im transform is set to match
   //  so this appears identical to im when addressed
   //  in world co-ords.
@@ -121,27 +122,27 @@ public:
   //: Depth of image (Valid y range: [0,nz()-1]
   virtual int nz() const { return nz_; }
 
-  //: Step between im(x,y,z) and im(x+1,y,z)
+  //: Step between im(x,y,z) and im(x+1,y,z).
   //  im(x,y,z) given by plane(i)[x*xstep()+y*ystep()+z*zstep()]
   int xstep() const { return xstep_; }
 
-  //: Data square length or step between im(x,y,z) and im(x,y+1,z)
+  //: Data square length or step between im(x,y,z) and im(x,y+1,z).
   //  im(x,y,z) given by plane(i)[x*xstep()+y*ystep()+z*zstep()]
   int ystep() const { return ystep_; }
 
-  //: Data row length or step between im(x,y,z) and im(x,y,z+1)
+  //: Data row length or step between im(x,y,z) and im(x,y,z+1).
   //  im(x,y,z) given by plane(i)[x*xstep()+y*ystep()+z*zstep()]
   int zstep() const { return zstep_; }
 
   //: Number of planes available
   int n_planes() const { return planes_.size(); }
 
-  //: const pointer to i'th plane of data
+  //: const pointer to i'th plane of data.
   //  plane(i)[x*xstep()+y*ystep()+z*zstep()] is value of (x,y,z) pixel in plane i
   //  Valid range for i: [0,n_planes()-1]
   const T* plane(int i) const { return planes_[i]; }
 
-  //: (non-const) pointer to i'th plane of data
+  //: (non-const) pointer to i'th plane of data.
   //  plane(i)[x*xstep()+y*ystep()+z*zstep()] is value of (x,y,z) pixel in plane i
   //  Valid range for i: [0,n_planes()-1]
   T* plane(int i) { return planes_[i]; }
@@ -150,7 +151,7 @@ public:
   //  planes()[i] is pointer to i'th image
   T** planes() { return &planes_[0]; }
 
-  //: Access to (x,y,z) pixel in plane i
+  //: Access to (x,y,z) pixel in plane i.
   T& operator()(int x, int y, int z, int i)
   {
     assert(x>=0); assert(x<nx_);
@@ -160,7 +161,7 @@ public:
     return planes_[i][ystep_*y+x*xstep_+z*zstep_];
   }
 
-  //: Access to (x,y,z) pixel in plane i
+  //: Access to (x,y,z) pixel in plane i.
   const T& operator()(int x, int y, int z, int i) const
   {
     assert(x>=0); assert(x<nx_);
@@ -169,7 +170,7 @@ public:
     return planes_[i][ystep_*y+x*xstep_+z*zstep_];
   }
 
-  //: Access to (x,y,z) pixel in plane 0
+  //: Access to (x,y,z) pixel in plane 0.
   T& operator()(int x, int y, int z)
   {
     assert(x>=0); assert(x<nx_);
@@ -178,7 +179,7 @@ public:
     return planes_[0][ystep_*y+x*xstep_+z*zstep_];
   }
 
-  //: Access to (x,y,z) pixel in plane 0
+  //: Access to (x,y,z) pixel in plane 0.
   const T& operator()(int x, int y, int z) const
   {
     assert(x>=0); assert(x<nx_);
@@ -201,7 +202,7 @@ public:
   //  the result will still be false.
   bool operator==(const mil3d_image_3d_of<T> &) const;
 
-  //: Define valid data region (including transform)
+  //: Define valid data region (including transform).
   //  Resizes and sets the tranformation so that
   //  worldToIm(x,y,z) is valid for all points in range
   //  Specifically, resize(1+xhi-xlo,1+yhi-ylo,1+zhi-zlo);

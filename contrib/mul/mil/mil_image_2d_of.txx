@@ -1,7 +1,8 @@
 #ifndef mil_image_2d_of_txx_
 #define mil_image_2d_of_txx_
 
-//: \file
+//:
+//  \file
 //  \brief Represent images of one or more planes of Ts.
 //  \author Tim Cootes
 
@@ -114,7 +115,7 @@ void mil_image_2d_of<T>::resize3(int nx, int ny, int n_planes)
 }
 
 //=======================================================================
-//: Define number of planes
+//: Define number of planes.
 //  Each plane will be resized to (0,0)
 //  Default number of planes is 1
 template<class T>
@@ -134,7 +135,7 @@ void mil_image_2d_of<T>::set_n_planes(int n)
 }
 
 //=======================================================================
-//: Define valid data region (including transform)
+//: Define valid data region (including transform).
 //  Resizes and sets the tranformation so that
 //  worldToIm(x,y) is valid for all points in range
 //  Specifically, resize(1+xhi-xlo,1+yhi-ylo);
@@ -184,7 +185,7 @@ void mil_image_2d_of<T>::setFormat(const char* f)
 }
 
 //=======================================================================
-//: Define parameters
+//: Define parameters.
 //  planes[i] is pointer to i'th plane of nx x ny image data
 //  i should be valid in range [0,n_planes-1]
 //  Copies of pointers recorded (ie a shallow copy)
@@ -205,7 +206,7 @@ void mil_image_2d_of<T>::set(vcl_vector<T*>& planes,
 }
 
 //=======================================================================
-//: Define parameters
+//: Define parameters.
 //  planes[i] is pointer to i'th plane of nx x ny image data
 //  i should be valid in range [0,n_planes-1]
 //  Copies of pointers recorded (ie a shallow copy)
@@ -244,7 +245,7 @@ void mil_image_2d_of<T>::setGrey(T* grey_data, int nx, int ny, int ystep)
 }
 
 //=======================================================================
-//: Define parameters for 3 plane (RGB) T images
+//: Define parameters for 3 plane (RGB) T images.
 //  Sets up a 3 plane image with plane(0) = r, plane(1) = g etc
 //  General declaration. Can be used to set a BGR image.
 template<class T>
@@ -264,7 +265,7 @@ void mil_image_2d_of<T>::setRGB(T* r, T* g, T* b,
 }
 
 //=======================================================================
-//: Define parameters for 3 plane (RGB) T images
+//: Define parameters for 3 plane (RGB) T images.
 //  Sets up a 3 plane image with plane(0) = r, plane(1) = g etc
 template<class T>
 void mil_image_2d_of<T>::setRGB(T* r, T* g, T* b,
@@ -284,7 +285,7 @@ void mil_image_2d_of<T>::setRGB(T* r, T* g, T* b,
 }
 
 //=======================================================================
-//: Define parameters for packed RGB T images
+//: Define parameters for packed RGB T images.
 //  Sets up a 3 plane image, assuming nx x ny image
 //  of xstep T pixels, ie  red(x,y) = data[x*xstep+y*step],
 //  green(x,y) = data[1+x*xstep+y*step],
@@ -306,8 +307,8 @@ void mil_image_2d_of<T>::setRGB(T* data, int nx, int ny, int xstep, int ystep)
 }
 
 //=======================================================================
-//: Arrange that this is window on given image
-//  ie plane(i) points to im.plane(i) + offset
+//: Arrange that this is window on given image.
+//  I.e. plane(i) points to im.plane(i) + offset
 //  The world2im transform is set to match
 //  so this appears identical to im when addressed
 //  in world co-ords.

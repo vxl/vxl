@@ -6,6 +6,9 @@
 #endif
 //
 
+//:
+// \file
+
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 02 Nov 98
 //
@@ -37,7 +40,7 @@ bool vul_file::make_directory(char const* name)
 {
 #ifdef WIN32
   return -1 != mkdir(name);
-#else 
+#else
   return -1 != mkdir(name, 0755);
 #endif
 }
@@ -70,7 +73,7 @@ vcl_string vul_file::dirname(char const* fn)
   unsigned int slash_index = self.rfind('/');
   if (slash_index == vcl_string::npos)
     return ".";
-  
+
   return self.substr(0, slash_index);
 }
 
@@ -81,7 +84,7 @@ vcl_string vul_file::extension(char const* fn)
   unsigned int dot_index = self.rfind('.');
   if (dot_index != vcl_string::npos)
     return self.substr(dot_index, vcl_string::npos);
-  else 
+  else
     return vcl_string();
 }
 
@@ -91,7 +94,7 @@ vcl_string vul_file::strip_directory(char const* fn)
 
    unsigned int slash_index = self.rfind('/');
    if (slash_index != vcl_string::npos)
-     self.erase(0, slash_index+1); 
+     self.erase(0, slash_index+1);
 
    return self;
 }
@@ -99,12 +102,12 @@ vcl_string vul_file::strip_directory(char const* fn)
 vcl_string vul_file::strip_extension(char const* fn)
 {
   vcl_string self(fn);
-  
+
   unsigned int dot_index = self.rfind('.');
   if (dot_index != vcl_string::npos)
-    self.erase(dot_index, vcl_string::npos); 
-  
-  return self; 
+    self.erase(dot_index, vcl_string::npos);
+
+  return self;
 }
 
 vcl_string vul_file::basename(char const* fn, char const * suffix)
@@ -130,7 +133,7 @@ vcl_string vul_file::basename(char const* fn, char const * suffix)
 
 
 #ifdef VCL_WIN32
-//: replace instances of 'from' in 's' with 'to' 
+//: replace instances of 'from' in 's' with 'to'
 static unsigned replace(char from, char to, vcl_string &s)
 {
   unsigned c = 0;
@@ -145,7 +148,7 @@ static unsigned replace(char from, char to, vcl_string &s)
 #endif
 
 //: Delete 1 or more files using the Local OS prefered globbing.
-// e.g. \c delete_file_glob("*"); will delete all the files in the
+// E.g. \c delete_file_glob("*"); will delete all the files in the
 // current directory on most operating systems.
 // Takes Posix path separators i.e. '/'
 bool vul_file::delete_file_glob(char const* file_glob)
@@ -173,9 +176,9 @@ vcl_string vul_file::expand_tilde(char const* vul_filename)
 
   if (vul_filename[0] != '~')
     return vcl_string(vul_filename);
-  
+
   //// ** Have a tilde, go for it
-  
+
   // 1. Strip to directory only, and remove the tilde itself
   vcl_string fn(vul_filename);
   vcl_string dir;
@@ -188,11 +191,11 @@ vcl_string vul_file::expand_tilde(char const* vul_filename)
     fn = "";
   }
   // Now, from original to  (dir, vul_filename) is one of
-  //  ~            ""     "" 
+  //  ~            ""     ""
   //  ~fre         "fre"  ""
   //  ~/fred       ""     "/fred"
   //  ~user/fred   "user" "/fred"
-  
+
   if (dir.size() == 0) {
     // Was just ~, use getenv(HOME)
     char const * home_directory = getenv("HOME");
@@ -204,7 +207,7 @@ vcl_string vul_file::expand_tilde(char const* vul_filename)
   vul_user_info user(dir);
   if (!user.ok)
     return vcl_string(vul_filename);
-  
+
   // Got user info
   return user.home_directory + fn;
 #endif

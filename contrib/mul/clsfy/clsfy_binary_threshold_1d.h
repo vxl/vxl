@@ -11,7 +11,7 @@
 #include <vnl/vnl_vector.h>
 
 
-//: Simplest possible 1D classifier: A single thresholding function
+//: Simplest possible 1D classifier: A single thresholding function.
 //  Returns class zero if s_*x<threshold_
 class clsfy_binary_threshold_1d : public clsfy_classifier_1d
 {
@@ -20,17 +20,17 @@ protected:
   double threshold_;
 public:
 
-  //: Find the posterior probability of the input being in the positive class
+  //: Find the posterior probability of the input being in the positive class.
   // The result is outputs(0)
   virtual void class_probabilities(vcl_vector<double> &outputs, double input) const;
 
-  //: Classify the input vector
-  // returns a number between 0 and nClasses-1 inclusive to represent the most likely class
+  //: Classify the input vector.
+  // Returns a number between 0 and nClasses-1 inclusive to represent the most likely class
   unsigned virtual classify(double input) const
     { if (s_*input<threshold_) return 0; else return 1; }
 
-  //: Log likelyhood of being in the positive class
-  // class probability = 1 / (1+exp(-log_l))
+  //: Log likelyhood of being in the positive class/
+  // Class probability = 1 / (1+exp(-log_l))
   virtual double log_l(double input) const;
 
   //: Set the threshold and orientation.
@@ -60,7 +60,7 @@ public:
   virtual void b_write(vsl_b_ostream& bfs) const;
 
   //: Create a deep copy.
-  // client is responsible for deleting returned object.
+  // Client is responsible for deleting returned object.
   virtual clsfy_classifier_1d* clone() const
   { return new clsfy_binary_threshold_1d(*this); }
 

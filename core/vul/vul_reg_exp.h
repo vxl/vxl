@@ -11,6 +11,7 @@
 // Modifications
 // PDA (Manchester) 21/03/2001: Tidied up the documentation
 // Peter Vanroose   27/05/2001: Corrected the documentation
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 //
 // Original Copyright notice:
@@ -112,7 +113,7 @@ public:
     //: Return start index of nth submatch.
     // start(0) is the start of the full match.
   int start(int n) const { return this->startp[n] - searchstring; }
-    //: Return end index of nth submatch
+    //: Return end index of nth submatch.
     // end(0) is the end of the full match.
   int end(int n)   const { return this->endp[n] - searchstring; }
     //: Return nth submatch as a string.

@@ -81,14 +81,14 @@ public:
     void set(const vnl_vector<double>& v, Form); // Sets transform using v
     //: Set to identity transformation
     void set_identity();
-    //:Sets the transformation to be separable affine :
+    //: Sets the transformation to be separable affine.
     // x' = s_x.x + t_x,  y' = s_y.y + t_y
     // s_x: Scaling in x
     // s_y: Scaling in y
     // t_x: Translation in x
     // t_y: Translation in y
     void set_zoom_only(double s_x, double s_y, double t_x, double t_y);
-    //: Sets the transformation to be a zoom:
+    //: Sets the transformation to be a zoom.
     // x' = s.x + t_x,  y' = s.y + t_y
     //   s: Scaling
     // t_x: Translation in x
@@ -123,8 +123,8 @@ public:
     //: Sets to be 2D projective transformation
     void set_projective(const vnl_matrix<double>&);   // 3x3 matrix
 
-    //: Returns the coords of the origin
-    // i.e. operator()(vgl_point_2d<double> (0,0))
+    //: Returns the coords of the origin.
+    // I.e. operator()(vgl_point_2d<double> (0,0))
     vgl_point_2d<double>  origin() const
         { return vgl_point_2d<double> (tt_==1?xt_:xt_/tt_,tt_==1?yt_:yt_/tt_); }
     //: Modifies the transformation so that operator()(vgl_point_2d<double> (0,0)) == p.
@@ -140,7 +140,7 @@ public:
 
     //: Calculates inverse of this transformation
     mil_transform_2d inverse() const;
-    //: Returns change in tranformed point when original point moved by dp
+    //: Returns change in tranformed point when original point moved by dp.
     // Point dp: Movement from point
     // Returns: T(p+dp)-T(p)
     vgl_vector_2d<double>  delta(const vgl_point_2d<double> & p, const vgl_vector_2d<double> & dp) const;

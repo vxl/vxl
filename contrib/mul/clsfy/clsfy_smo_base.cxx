@@ -76,7 +76,7 @@ double clsfy_smo_base::bias()
 
 // ----------------------------------------------------------------
 
-//: Reseeds the internal random number generator
+//: Reseeds the internal random number generator.
 // To achieve quasi-random initialisation use;
 // \verbatim
 // #include <vcl_ctime.h>
@@ -90,7 +90,7 @@ void clsfy_smo_base::reseed(unsigned long seed)
 
 // ----------------------------------------------------------------
 
-//: amount by which a sample can violate the KKT conditions
+//: Amount by which a sample can violate the KKT conditions
 const double& clsfy_smo_base::tolerance() const
 {
   return tolerance_;
@@ -98,8 +98,8 @@ const double& clsfy_smo_base::tolerance() const
 
 // ----------------------------------------------------------------
 
-//: Set the amount by which a sample can violate the KKT conditions
-// Default value is 0.001;
+//: Set the amount by which a sample can violate the KKT conditions.
+// Default value is 0.001
 void clsfy_smo_base::set_tolerance(double tolerance)
 {
   assert(tolerance >= 0.0);
@@ -108,8 +108,8 @@ void clsfy_smo_base::set_tolerance(double tolerance)
 
 // ----------------------------------------------------------------
 
-//: tolerance on several equalities
-// including testing if a lagrange multiplier is at one of the bounds.
+//: Tolerance on several equalities.
+// Including testing if a Lagrange multiplier is at one of the bounds.
 double clsfy_smo_base::eps() const
 {
   return eps_;
@@ -117,8 +117,8 @@ double clsfy_smo_base::eps() const
 
 // ----------------------------------------------------------------
 
-//: Set the tolerance on several equalities
-// including testing if a lagrange multiplier is at one of the bounds.
+//: Set the tolerance on several equalities.
+// Including testing if a Lagrange multiplier is at one of the bounds.
 // Default value is 0.001;
 void clsfy_smo_base::set_eps(double eps)
 {

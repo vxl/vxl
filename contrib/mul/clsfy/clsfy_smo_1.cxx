@@ -86,7 +86,7 @@ double clsfy_smo_1_rbf::gamma() const
 
 // ----------------------------------------------------------------
 
-//: Control sigma, the width of the gaussian kernel
+//: Control sigma, the width of the gaussian kernel.
 // gamma = 0.5 sigma^-2
 void clsfy_smo_1_rbf::set_gamma(double gamma)
 {

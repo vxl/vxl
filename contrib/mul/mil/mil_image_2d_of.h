@@ -4,7 +4,8 @@
 #pragma interface
 #endif
 
-//: \file
+//:
+//  \file
 //  \brief Represent images of one or more planes of type T.
 //  \author Tim Cootes
 
@@ -81,7 +82,7 @@ public:
     //  Default number of planes is 1
     void set_n_planes(int n);
 
-    //: Define parameters
+    //: Define parameters.
     //  planes[i] is pointer to i'th plane of nx x ny image data
     //  i should be valid in range [0,n_planes-1]
     //  ystep gives data row length
@@ -91,7 +92,7 @@ public:
              int xstep, int ystep,
              const char* format);
 
-    //: Define parameters
+    //: Define parameters.
     //  planes[i] is pointer to i'th plane of nx x ny image data
     //  i should be valid in range [0,n_planes-1]
     //  Copies of pointers recorded (ie a shallow copy)
@@ -99,32 +100,32 @@ public:
              int nx, int ny, int xstep, int ystep,
              const char* format);
 
-    //: Define parameters for grey scale images (single plane)
+    //: Define parameters for grey scale images (single plane).
     //  ystep gives data row length
     void setGrey(T* grey, int nx, int ny,int ystep);
 
-    //: Define parameters for 3 plane (RGB) T images
-    //  Sets up a 3 plane image with plane(0) = r, plane(1) = g etc
-    //  ystep gives data row length
+    //: Define parameters for 3 plane (RGB) T images.
+    //  Sets up a 3 plane image with plane(0) = r, plane(1) = g etc.
+    //  ystep gives data row length.
     void setRGB(T* r, T* g, T* b,
                          int nx, int ny, int ystep);
 
-    //: Define parameters for 3 plane (RGB) T images
-    //  Sets up a 3 plane image with plane(0) = r, plane(1) = g etc
-    //  ystep gives data row length
-    //  xstep gives the length we have to jump to find the next color value
+    //: Define parameters for 3 plane (RGB) T images.
+    //  Sets up a 3 plane image with plane(0) = r, plane(1) = g etc.
+    //  ystep gives data row length.
+    //  xstep gives the length we have to jump to find the next color value.
     void setRGB(T* r, T* g, T* b,
                          int nx, int ny, int xstep, int ystep);
 
-    //: Define parameters for packed RGB T images
+    //: Define parameters for packed RGB T images.
     //  Sets up a 3 plane image, assuming nx x ny image
     //  of xstep T pixels, ie  red(x,y) = data[x*xstep+y*step],
     //  green(x,y) = data[1+x*xstep+y*step],
     //  blue(x,y) = data[2+x*xstep+y*step]
     void setRGB(T* data, int nx, int ny, int xstep, int ystep);
 
-    //: Arrange that this is window on given image
-    //  ie plane(i) points to im.plane(i) + offset
+    //: Arrange that this is window on given image.
+    //  I.e. plane(i) points to im.plane(i) + offset
     //  The world2im transform is set to match
     //  so this appears identical to im when addressed
     //  in world co-ords.
@@ -147,23 +148,23 @@ public:
     //: Height of image (Valid y range: [0,ny()-1]
     virtual int ny() const { return ny_; }
 
-    //: Step between im(x,y) and im(x+1y)
+    //: Step between im(x,y) and im(x+1y).
     //  im(x,y) given by plane(i)[x*xstep()+y*ystep()]
     int xstep() const { return xstep_; }
 
-    //: Data row length or step between im(x,y) and im(x,y+1)
+    //: Data row length or step between im(x,y) and im(x,y+1).
     //  im(x,y) given by plane(i)[x*xstep()+y*ystep()]
     int ystep() const { return ystep_; }
 
     //: Number of planes available
     int n_planes() const { return planes_.size(); }
 
-    //: const pointer to i'th plane of data
+    //: const pointer to i'th plane of data.
     //  plane(i)[x*xstep()+y*ystep()] is value of (x,y) pixel in plane i
     //  Valid range for i: [0,n_planes()-1]
     const T* plane(int i) const { return planes_[i]; }
 
-    //: (non-const) pointer to i'th plane of data
+    //: (non-const) pointer to i'th plane of data.
     //  plane(i)[x*xstep()+y*nx()] is value of (x,y) pixel in plane i
     //  Valid range for i: [0,n_planes()-1]
     T* plane(int i) { return planes_[i]; }
@@ -172,23 +173,23 @@ public:
     //  planes()[i] is pointer to i'th image
     T** planes() { return &planes_[0]; }
 
-    //: Access to (x,y) pixel in plane i
+    //: Access to (x,y) pixel in plane i.
     T& operator()(int x, int y, int i)
     { assert(x>=0); assert(x<nx_); assert(y>=0); assert(y<ny_);
       assert(i>=0); assert(i<planes_.size());
       return planes_[i][ystep_*y+x*xstep_]; }
 
-    //: Access to (x,y) pixel in plane i
+    //: Access to (x,y) pixel in plane i.
     const T& operator()(int x, int y, int i) const
     { assert(x>=0); assert(x<nx_); assert(y>=0); assert(y<ny_);
       return planes_[i][ystep_*y+x*xstep_]; }
 
-    //: Access to (x,y) pixel in plane 0
+    //: Access to (x,y) pixel in plane 0.
     T& operator()(int x, int y) {
       assert(x>=0); assert(x<nx_); assert(y>=0); assert(y<ny_);
       return planes_[0][ystep_*y+x*xstep_]; }
 
-    //: Access to (x,y) pixel in plane 0
+    //: Access to (x,y) pixel in plane 0.
     const T& operator()(int x, int y) const
     { assert(x>=0); assert(x<nx_); assert(y>=0); assert(y<ny_);
       return planes_[0][ystep_*y+x*xstep_]; }
@@ -199,7 +200,7 @@ public:
     //  the result will still be false.
     bool operator==(const mil_image_2d_of<T> &) const;
 
-    //: Define valid data region (including transform)
+    //: Define valid data region (including transform).
     //  Resizes and sets the tranformation so that
     //  worldToIm(x,y) is valid for all points in range
     //  Specifically, resize(1+xhi-xlo,1+yhi-ylo);

@@ -40,7 +40,7 @@ mbl_rbf_network::mbl_rbf_network()
   sum_to_one_ = true;
 }
 
-//: Build weights given examples x
+//: Build weights given examples x.
 //  s gives the scaling to use in r2 * vcl_log(r2) r2 = distSqr/(s*s)
 //  If s<=0 then a suitable s is estimated from the data
 void mbl_rbf_network::build(const vcl_vector<vnl_vector<double> >& x, double s)
@@ -49,7 +49,7 @@ void mbl_rbf_network::build(const vcl_vector<vnl_vector<double> >& x, double s)
   build(&(x.front()),n,s);
 }
 
-//: Build weights given n examples x[0] to x[n-1]
+//: Build weights given n examples x[0] to x[n-1].
 //  s gives the scaling to use in r2 * vcl_log(r2) r2 = distSqr/(s*s)
 //  If s<=0 then a suitable s is estimated from the data
 void mbl_rbf_network::build(const vnl_vector<double>* x, int n, double s)
@@ -122,7 +122,7 @@ void mbl_rbf_network::setSumToOne(bool flag)
 }
 
 
-//: Compute weights for given new_xx
+//: Compute weights for given new_x.
 //  If new_x = x()(i) then w(i+1)==1, w(j!=i+1)==0
 //  Otherwise w varyies smoothly repending on distance
 //  of new_x from x()'s

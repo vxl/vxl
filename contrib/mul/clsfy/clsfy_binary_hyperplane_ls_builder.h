@@ -22,14 +22,14 @@ public:
   virtual clsfy_classifier_base* new_classifier() const
   { return new clsfy_binary_hyperplane; }
 
-  //: Build a linear classifier, with the given data
-  // return the mean error over the training set.
+  //: Build a linear classifier, with the given data.
+  // Return the mean error over the training set.
   double build(clsfy_classifier_base &classifier,
                mbl_data_wrapper<vnl_vector<double> > &inputs,
                const vcl_vector<unsigned> &outputs) const;
 
-  //: Build a linear classifier, with the given data
-  // return the mean error over the training set.
+  //: Build a linear classifier, with the given data.
+  // Return the mean error over the training set.
   // n_classes must be 1
   double build(clsfy_classifier_base &classifier,
                mbl_data_wrapper<vnl_vector<double> > &inputs,

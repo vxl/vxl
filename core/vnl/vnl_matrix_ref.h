@@ -16,6 +16,7 @@
 // \verbatim
 // Modifications:
 //  Documentation updated by Ian Scott 12 Mar 2000
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
@@ -77,7 +78,7 @@ private:
 
 
   //: Copy constructor from vnl_matrix<T> is disallowed
-  // because it would create a non-const alias to the Matrix
+  // (because it would create a non-const alias to the matrix)
   vnl_matrix_ref(vnl_matrix<T> const &) {}
 
 

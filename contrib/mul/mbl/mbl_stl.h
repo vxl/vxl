@@ -4,7 +4,6 @@
 #pragma interface
 #endif
 
-
 //:
 // \file
 // \brief Useful things missing from vcl_algorithm, etc.
@@ -35,12 +34,10 @@ inline T mbl_stl_increments_n(Out first, Size n, T init)
   return init;
 }
 
-
-    
-//: Produces a first order sequence from the supplied unary function
-// the value produced at a given step is a function of the previous value.
-// e.g. the following is equivalent to using mbl_stl_increments
-// \vebatim
+//: Produces a first order sequence from the supplied unary function.
+// The value produced at a given step is a function of the previous value.
+// E.g. the following is equivalent to using mbl_stl_increments
+// \verbatim
 // mbl_stl_sequence(A.begin(), A.end(), vcl_bind1st(vcl_plus<unsigned>(), 1u), 0u);
 // \endverbatim
 // \return the next value in the sequence.
@@ -51,9 +48,9 @@ inline T mbl_stl_sequence(Out first, Out last, UnOp op, T init)
   return init;
 }
 
-//: Produces a first order sequence of size n from the supplied function
-// the value produced at a given step is a function of the previous value.
-// e.g. the following is equivalent to using mbl_stl_increments
+//: Produces a first order sequence of size n from the supplied function.
+// The value produced at a given step is a function of the previous value.
+// E.g. the following is equivalent to using mbl_stl_increments
 // \return the next value in the sequence.
 template<class Out, class Size, class T, class UnOp>
 inline T mbl_stl_sequence_n(Out first, Size n, UnOp op, T init)

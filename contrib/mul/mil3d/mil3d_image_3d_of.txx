@@ -1,7 +1,8 @@
 #ifndef mil3d_image_3d_of_txx_
 #define mil3d_image_3d_of_txx_
 
-//: \file
+//:
+//  \file
 //  \brief Represent 3D images of one or more planes of Ts.
 //  \author Graham Vincent (extended from mil_image_2d_of by Tim Cootes)
 
@@ -122,7 +123,7 @@ void mil3d_image_3d_of<T>::resize3(int nx, int ny, int nz, int n_planes)
 }
 
 //=======================================================================
-//: Define number of planes
+//: Define number of planes.
 //  Each plane will be resized to (0,0)
 //  Default number of planes is 1
 //=======================================================================
@@ -145,7 +146,7 @@ void mil3d_image_3d_of<T>::set_n_planes(int n)
 }
 
 //=======================================================================
-//: Define valid data region (including transform)
+//: Define valid data region (including transform).
 //  Resizes and sets the tranformation so that
 //  worldToIm(x,y,z) is valid for all points in range
 //  Specifically, resize(1+xhi-xlo,1+yhi-ylo,1+zhi-zlo);
@@ -218,8 +219,8 @@ void mil3d_image_3d_of<T>::set(vcl_vector<T*>& planes,
 }
 
 //=======================================================================
-//: Arrange that this is window on given image
-//  ie plane(i) points to im.plane(i) + offset
+//: Arrange that this is window on given image.
+//  I.e. plane(i) points to im.plane(i) + offset
 //  The world2im transform is set to match
 //  so this appears identical to im when addressed
 //  in world co-ords.
@@ -363,7 +364,7 @@ void mil3d_image_3d_of<T>::print_summary(vcl_ostream& os) const
 }
 
 //=======================================================================
-//: print all data to os
+//: Print all data to os
 //=======================================================================
 template<class T>
 void mil3d_image_3d_of<T>::print_all(vcl_ostream& os) const

@@ -38,8 +38,8 @@ double clsfy_rbf_svm::kernel(const vnl_vector<double> &v1,
 
 //=======================================================================
 
-//: Classify the input vector
-// returns 0 to indicate out of (or negative) class and one to
+//: Classify the input vector.
+// Returns 0 to indicate out of (or negative) class and one to
 // indicate in class (or positive.)
 unsigned clsfy_rbf_svm::classify(const vnl_vector<double> &input) const
 {
@@ -65,10 +65,10 @@ unsigned clsfy_rbf_svm::classify(const vnl_vector<double> &input) const
 
 //=======================================================================
 
-//: Log likelyhood of being in class (binary classifiers only)
+//: Log likelyhood of being in class (binary classifiers only).
 // class probability = vcl_exp(logL) / (1+vcl_exp(logL))
-// This is not a strict log likelihood value, since SVMs do not give Bayesian outputs. However
-// its properties fit the requirements of a log likelihood value.
+// This is not a strict log likelihood value, since SVMs do not give Bayesian
+// outputs. However its properties fit the requirements of a log likelihood value.
 double clsfy_rbf_svm::log_l(const vnl_vector<double> &input) const
 {
   int n = supports_.size();
@@ -116,7 +116,7 @@ void clsfy_rbf_svm::calculate_targets()
 
 //=======================================================================
 
-//: Set the internal values defining the classifier;
+//: Set the internal values defining the classifier.
 void clsfy_rbf_svm::set( const vcl_vector<vnl_vector<double> > &supportVectors,
                          const vcl_vector<double> &lagrangianAlphas,
                          const vcl_vector<unsigned> &labels,

@@ -4,7 +4,8 @@
 #pragma interface
 #endif
 
-//: \file
+//:
+//  \file
 //  \brief Build gaussian pyramids of mil_image_2d_of<T>
 //  \author Tim Cootes
 
@@ -40,13 +41,13 @@ protected:
   //: Deletes all data in im_pyr
   void emptyPyr(mil_image_pyramid& im_pyr) const;
 
-  //: Smooth and subsample src_im to produce dest_im
+  //: Smooth and subsample src_im to produce dest_im.
   //  Applies 1-5-8-5-1 filter in x and y, then samples
   //  every other pixel.
   void gauss_reduce_15851(mil_image_2d_of<T>& dest_im,
                     const mil_image_2d_of<T>& src_im) const;
 
-  //: Smooth and subsample src_im to produce dest_im
+  //: Smooth and subsample src_im to produce dest_im.
   //  Applies 1-2-1 filter in x and y, then samples
   //  every other pixel.
   void gauss_reduce_121(mil_image_2d_of<T>& dest_im,
@@ -65,11 +66,11 @@ public:
   //: Set current filter width (must be 3 or 5 at present)
   void set_filter_width(unsigned);
 
-  //: Create new (empty) pyramid on heap
+  //: Create new (empty) pyramid on heap.
   //  Caller responsible for its deletion
   virtual mil_image_pyramid* newImagePyramid() const;
 
-  //: Define maximum number of levels to build
+  //: Define maximum number of levels to build.
   //  Limits levels built in subsequent calls to build()
   //  Useful efficiency measure.  As build() only takes
   //  a shallow copy of the original image, using
@@ -82,12 +83,12 @@ public:
   //: Build pyramid
   virtual void build(mil_image_pyramid&, const mil_image&) const;
 
-  //: Extend pyramid
+  //: Extend pyramid.
   // The first layer of the pyramid must already be set.
   // Scale steps must be equal.
   virtual void extend(mil_image_pyramid&) const;
 
-  //: Smooth and subsample src_im to produce dest_im
+  //: Smooth and subsample src_im to produce dest_im.
   //  Applies filter in x and y, then samples every other pixel.
   //  Filter width defined by set_filter_width()
   void gauss_reduce(mil_image_2d_of<T>& dest_im,
@@ -96,12 +97,12 @@ public:
   //: Scale step between levels
   virtual double scale_step() const;
 
-  //: get the minimum Y size of the top layer of the pyramid
-  // defaults to 5.
+  //: Get the minimum Y size of the top layer of the pyramid.
+  // Defaults to 5.
   unsigned min_y_size() const { return minYSize_;}
 
-  //: get the minimum Y size of the top layer of the pyramid
-  // defaults to 5.
+  //: Get the minimum Y size of the top layer of the pyramid.
+  // Defaults to 5.
   unsigned min_x_size() const { return minXSize_;}
 
   //: Set the minimum size of the top layer of the pyramid
@@ -129,4 +130,4 @@ public:
   virtual void b_read(vsl_b_istream& bfs);
 };
 
-#endif
+#endif // mil_gaussian_pyramid_builder_2d_h_

@@ -36,17 +36,17 @@ protected:
 
 public:
 
-    //: Dflt ctor
+  //: Dflt ctor
   vpdfl_kernel_pdf();
 
-    //: Destructor
+  //: Destructor
   virtual ~vpdfl_kernel_pdf();
 
-    //: Initialise so all kernels have the same width
+  //: Initialise so all kernels have the same width.
     //  width is essentially the sd on the kernels
   void set_centres(const vnl_vector<double>* x, int n, double width);
 
-    //: Initialise so all kernels have given width
+  //: Initialise so all kernels have given width.
     //  width[i] is essentially the sd on kernel i
   void set_centres(const vnl_vector<double>* x, int n,
                    const vnl_vector<double>& width);
@@ -60,22 +60,22 @@ public:
   //: True if all kernels have the same width
   bool all_same_width() const { return all_same_width_; }
 
-    //: Version number for I/O
+  //: Version number for I/O
   short version_no() const;
 
-    //: Name of the class
+  //: Name of the class
   virtual vcl_string is_a() const;
 
-    //: Does the name of the class match the argument?
+  //: Does the name of the class match the argument?
   virtual bool is_class(vcl_string const& s) const;
 
-    //: Print class to os
+  //: Print class to os
   virtual void print_summary(vcl_ostream& os) const;
 
-    //: Save class to binary file stream
+  //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;
 
-    //: Load class from binary file stream
+  //: Load class from binary file stream
   virtual void b_read(vsl_b_istream& bfs);
 };
 

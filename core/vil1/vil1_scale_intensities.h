@@ -13,7 +13,7 @@
 #include <vil/vil_image.h>
 
 //: Adaptor which returns a vil_image with pixel components scaled/shifted
-// i.e. performs a contrast/brightness operation.
+// I.e. performs a contrast/brightness operation.
 //
 //  (I_new = scale * I_old  + shift)
 

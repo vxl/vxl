@@ -86,7 +86,7 @@ void clsfy_simple_adaboost::set_parameters(
 }
 
 
-//: Classify the input vector
+//: Classify the input vector.
 // Returns either 0 (for negative class) or 1 (for positive class)
 unsigned clsfy_simple_adaboost::classify(const vnl_vector<double> &v) const
 {
@@ -114,8 +114,8 @@ void clsfy_simple_adaboost::class_probabilities(vcl_vector<double> &outputs,
 
 //=======================================================================
 
-//: Log likelyhood of being in the positive class
-// class probability = 1 / (1+exp(-log_l))
+//: Log likelyhood of being in the positive class.
+// Class probability = 1 / (1+exp(-log_l))
 double clsfy_simple_adaboost::log_l(const vnl_vector<double> &v) const
 {
   int n = index_.size();

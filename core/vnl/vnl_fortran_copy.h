@@ -16,13 +16,14 @@
 // \verbatim
 //   Modifications:
 //   LSB (Manchester) 23/3/01 Tidied documentation
+//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_matrix.h>
-//:  Convert row-stored matrix to column-stored
-//  convert C format (row-stored) matrix to fortran format (column-stored) matrix.
+//:  Convert row-stored matrix to column-stored.
+//  Convert C format (row-stored) matrix to fortran format (column-stored) matrix.
 template <class T>
 class vnl_fortran_copy {
 public:

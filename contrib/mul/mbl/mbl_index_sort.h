@@ -18,7 +18,7 @@ struct mbl_index_sort_cmp1
   }
 };
 
-//: Sort n elements, giving the resulting order in index
+//: Sort n elements, giving the resulting order in index.
 //  data[index[0]] is smallest element, data[index[n-1]] is largest
 template <class T>
 void mbl_index_sort(const T* data, int n, vcl_vector<int>& index)
