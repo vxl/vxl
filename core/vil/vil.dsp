@@ -417,6 +417,12 @@ SOURCE=.\file_formats/vil_dicom.cxx
 SOURCE=.\file_formats/vil_dicom_header.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\file_formats/vil_viff.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_viff_support.c
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vil_resample_bilin+float.float-.cxx
 # End Source File
 # Begin Source File
@@ -655,6 +661,15 @@ SOURCE=.\vil_rotate.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil_rotate.txx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_viff.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_viff_support.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_viffheader.h
 # End Source File
 # End Group
 # End Target
