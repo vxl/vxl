@@ -103,8 +103,8 @@ void test_ar_process()
   vnl_vector<double> dm=arp_mean(vlist)-arp_mean(glist);
   vnl_vector<double> ds=arp_vars(vlist)-arp_vars(glist);
 #ifdef DEBUG
-  vcl_cout << "\nvlist:"; for (int i=0;i<SIZE+2;++i) vcl_cout<<' '<<vlist[i];
-  vcl_cout << "\nglist:"; for (int i=0;i<SIZE+2;++i) vcl_cout<<' '<<glist[i];
+  vcl_cout << "\nvlist:"; for (unsigned int i=0;i<SIZE+2;++i) vcl_cout<<' '<<vlist[i];
+  vcl_cout << "\nglist:"; for (unsigned int i=0;i<SIZE+2;++i) vcl_cout<<' '<<glist[i];
   vcl_cout << "\nv_mean: "<<arp_mean(vlist)<<"\tv_vars: "<<arp_vars(vlist)
            << "\ng_mean: "<<arp_mean(glist)<<"\tg_vars: "<<arp_vars(glist)
            << "\ndm="<<dm<<"\nds="<<ds<<'\n'
@@ -127,8 +127,8 @@ void test_ar_process()
   dm=arp_mean(vlist)-arp_mean(glist);
   vnl_matrix<double> dC=arp_covar(vlist)-arp_covar(glist);
 #ifdef DEBUG
-  vcl_cout << "\nvlist:"; for (int i=0;i<SIZE+2;++i) vcl_cout<<' '<<vlist[i];
-  vcl_cout << "\nglist:"; for (int i=0;i<SIZE+2;++i) vcl_cout<<' '<<glist[i];
+  vcl_cout << "\nvlist:"; for (unsigned int i=0;i<SIZE+2;++i) vcl_cout<<' '<<vlist[i];
+  vcl_cout << "\nglist:"; for (unsigned int i=0;i<SIZE+2;++i) vcl_cout<<' '<<glist[i];
   vcl_cout << "\nv_mean: "<<arp_mean(vlist)<<"\tv_covar: "<<arp_covar(vlist)
            << "\ng_mean: "<<arp_mean(glist)<<"\tg_covar: "<<arp_covar(glist)
            << "\ndm="<<dm<<"\ndC="<<dC<<'\n'
