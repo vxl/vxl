@@ -8,8 +8,10 @@
 #  include <stdlib.h> /* for malloc and friends */
 # endif
 #else
-# if defined(__alpha) || defined(__CYGWIN__)  /* there is no inttypes.h here */
+# if defined(__alpha) /* there is no inttypes.h here */
    typedef unsigned long intptr_t;
+# elif defined(__CYGWIN__)
+#  include <sys/types.h> /* for intptr_t on Cygwin */
 # else
 #  include <inttypes.h> /* for intptr_t on e.g. SGI, Linux, Solaris */
 # endif
