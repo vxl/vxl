@@ -17,7 +17,6 @@
 
 #include <vnl/vnl_double_3x3.h>
 
-
 //:  Calculates the 3x3 skew symmetric cross product matrix from a vector.
 //
 // vnl_cross_product_matrix(e) is the matrix [e]_ x:
@@ -43,11 +42,11 @@ class vnl_cross_product_matrix : public vnl_double_3x3
 
   //: Construct a vnl_cross_product_matrix from a C-array of 3 doubles.
   //  Overrides a method in vnl_matrix.
-  void set(const double* v)
+  inline void set(const double* v)
   {
-    const double e1 = v[0];
-    const double e2 = v[1];
-    const double e3 = v[2];
+    double const& e1 = v[0];
+    double const& e2 = v[1];
+    double const& e3 = v[2];
 
     vnl_cross_product_matrix & E = *this;
 
