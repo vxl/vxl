@@ -151,7 +151,7 @@ bool pdf1d_pdf::write_plot_file(const vcl_string& plot_file, double min_x, doubl
   for (int i=0;i<n;++i)
   {
     double x = min_x + i*dx;
-    ofs<<x<<" "<<operator()(x)<<'\n';
+    ofs<<x<<' '<<operator()(x)<<'\n';
   }
   ofs.close();
 
@@ -223,7 +223,7 @@ void pdf1d_pdf::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,var_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_pdf &) \n"
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_pdf &)\n"
                << "           Unknown version number "<< version << '\n';
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
@@ -305,32 +305,28 @@ double pdf1d_pdf::inverse_cdf(double P) const
     // slope = 1 / sqrt(12 * variance)
     double step = 2.0 * vnl_math_abs(f_init - P)*vcl_sqrt(12 * variance());
 
-    double x_above, x_below, f_above, f_below;
+    double x_above, x_below;
     if (f_init > P)
     {
       x_above = x_init;
-      f_above = f_init;
       while (true)
       {
         x_below = x_above - step;
-        f_below = cdf(x_below);
+        double f_below = cdf(x_below);
         if (f_below < P) break;
         x_above = x_below;
-        f_above = f_below;
         step *= 2.0;
       }
     }
     else
     {
       x_below = x_init;
-      f_below = f_init;
       while (true)
       {
         x_above = x_below + step;
-        f_above = cdf(x_above);
+        double f_above = cdf(x_above);
         if (f_above > P) break;
         x_below = x_above;
-        f_below = f_above;
         step *= 2.0;
       }
     }

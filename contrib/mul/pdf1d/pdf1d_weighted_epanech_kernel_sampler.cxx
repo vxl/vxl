@@ -88,8 +88,8 @@ void pdf1d_weighted_epanech_kernel_sampler::regular_samples(vnl_vector<double>& 
   // we use dist to measure our way through the kernels.
   // Think of dist as being split up in proportion to the weight values.
 
-  unsigned i=0, kernel=0;
-  for ( kernel = 0; kernel<nk; ++kernel)
+  unsigned int i=0;
+  for (unsigned int kernel = 0; kernel<nk; ++kernel)
   {
     // n_this_k is approximately the number of samples for this kernel.
     // the exact number depends on the non-integer part of dist.

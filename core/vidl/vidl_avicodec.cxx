@@ -59,8 +59,8 @@ bool vidl_avicodec::read_header()
   if (avi_stream_info_.rcFrame.right-avi_stream_info_.rcFrame.left
       != avi_file_info_.dwWidth)
   {
-    vcl_cerr << "vidl_avicodec::read_header width size screwed up"
-             << "\n          size of avi file : " << avi_file_info_.dwWidth
+    vcl_cerr << "vidl_avicodec::read_header width size screwed up\n"
+             <<   "          size of avi file : " << avi_file_info_.dwWidth
              << "\n          size of the stream : "
              << avi_stream_info_.rcFrame.right-avi_stream_info_.rcFrame.left
              << vcl_endl;
@@ -71,8 +71,8 @@ bool vidl_avicodec::read_header()
   if (avi_stream_info_.rcFrame.bottom-avi_stream_info_.rcFrame.top
       != avi_file_info_.dwHeight)
   {
-    vcl_cerr << "vidl_avicodec::read_header Height size screwed up"
-             << "\n          size of avi file : " << avi_file_info_.dwHeight
+    vcl_cerr << "vidl_avicodec::read_header Height size screwed up\n"
+             <<   "          size of avi file : " << avi_file_info_.dwHeight
              << "\n          size of the stream : "
              << avi_stream_info_.rcFrame.bottom-avi_stream_info_.rcFrame.top
              << vcl_endl;
@@ -568,20 +568,17 @@ HANDLE  vidl_avicodec::make_dib(vidl_frame_sptr frame, UINT bits)
   // The byte swapping below is probabily unnecessary - use vil_flip_ud instead - FIXME
 
   // Store the TargetJr data in a Bitmap way, DIB is a flipped upside down
-  byte* DIB = newbits;
   switch (frame->get_bytes_pixel())
   {
     case 3:
       for (j=frame->height()-1; j>=0;j--)
       {
         db = TjSection+ (j*frame->width())*frame->get_bytes_pixel();
-        DIB = newbits + (frame->height()-j-1)*line_length;
-        for (i=0; i<frame->width(); i++) {
+        byte* DIB = newbits + (frame->height()-j-1)*line_length;
+        for (i=0; i<frame->width(); ++i, DIB+=3, db+=3) {
           *DIB = *(db+2);
           *(DIB+1) = *(db+1);
           *(DIB+2) = *(db);
-          DIB+=3;
-          db+=3;
         }
       }
       break;
@@ -589,13 +586,11 @@ HANDLE  vidl_avicodec::make_dib(vidl_frame_sptr frame, UINT bits)
       for (j=frame->height()-1; j>=0;j--)
       {
         db = TjSection+ (j*frame->width())*frame->get_bytes_pixel();
-        DIB = newbits + (frame->height()-j-1)*line_length;
-        for (i=0; i<frame->width(); i++) {
+        byte* DIB = newbits + (frame->height()-j-1)*line_length;
+        for (i=0; i<frame->width(); ++i, DIB+=3, db+=1) {
           *DIB = *(db);
           *(DIB+1) = *(db);
           *(DIB+2) = *(db);
-          DIB+=3;
-          db+=1;
         }
       }
       break;

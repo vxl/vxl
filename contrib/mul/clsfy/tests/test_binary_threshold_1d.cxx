@@ -110,7 +110,6 @@ void test_adaboost()
     if ( b_thresh_clsfr->classify( neg_samples[i] ) == 1 ) fp++;
 
 
-  double tpr=(tp*1.0)/n_pos, fpr= (fp*1.0)/n_neg;
   double te=((n_pos-tp+fp)*1.0)/(n_pos+n_neg);
   vcl_cout<<"te on training set= "<<te<<vcl_endl;
 
@@ -124,7 +123,7 @@ void test_adaboost()
     if ( b_thresh_clsfr->classify( neg_samples_test[i] ) == 1 ) fp++;
 
   vcl_cout<<"Applied to test set:\n";
-  tpr=(tp*1.0)/n_pos, fpr= (fp*1.0)/n_neg;
+  double tpr=(tp*1.0)/n_pos, fpr= (fp*1.0)/n_neg;
   vcl_cout<<"True positives= "<<tpr<<vcl_endl
           <<"False positives= "<<fpr<<vcl_endl;
 

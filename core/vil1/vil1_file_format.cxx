@@ -108,7 +108,7 @@ vil1_file_format** vil1_file_format::all()
     storage[c++] = new vil1_gen_file_format;
 #endif
 
-    storage[c++] = 0;
+    storage[c] = 0;
   }
   return storage;
 }

@@ -198,7 +198,7 @@ int ZEXPORT deflateInit_(strm, level, version, stream_size)
 
 /* ========================================================================= */
 int ZEXPORT deflateInit2_(strm, level, method, windowBits, memLevel, strategy,
-                  version, stream_size)
+                          version, stream_size)
     z_streamp strm;
     int  level;
     int  method;
@@ -322,7 +322,6 @@ int ZEXPORT deflateSetDictionary (strm, dictionary, dictLength)
     for (n = 0; n <= length - MIN_MATCH; n++) {
         INSERT_STRING(s, n, hash_head);
     }
-    if (hash_head) hash_head = 0;  /* to make compiler happy */
     return Z_OK;
 }
 

@@ -328,7 +328,7 @@ h2v1_fancy_upsample (j_decompress_ptr cinfo, jpeg_component_info * compptr,
     /* Special case for last column */
     invalue = GETJSAMPLE(*inptr);
     *outptr++ = (JSAMPLE) ((invalue * 3 + GETJSAMPLE(inptr[-1]) + 1) >> 2);
-    *outptr++ = (JSAMPLE) invalue;
+    *outptr   = (JSAMPLE) invalue;
   }
 }
 
@@ -384,7 +384,7 @@ h2v2_fancy_upsample (j_decompress_ptr cinfo, jpeg_component_info * compptr,
 
       /* Special case for last column */
       *outptr++ = (JSAMPLE) ((thiscolsum * 3 + lastcolsum + 8) >> 4);
-      *outptr++ = (JSAMPLE) ((thiscolsum * 4 + 7) >> 4);
+      *outptr   = (JSAMPLE) ((thiscolsum * 4 + 7) >> 4);
     }
     inrow++;
   }

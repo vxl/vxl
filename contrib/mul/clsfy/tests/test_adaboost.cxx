@@ -164,13 +164,11 @@ void test_adaboost()
 
   // test positive examples from training set
   // N.B. egs0 are the positive training examples
-  int tp=0, fp=0;
   double tpr=0.0, fpr=1.0, adab_te=0.0, te; // initialise to make compiler happy
 
   for (unsigned int k=1; k<=pClassifier->alphas().size(); ++k)
   {
-    tp=0;
-    fp=0;
+    int tp=0, fp=0;
     pClassifier->set_n_clfrs_used(k);
     for (int i=0; i<n_pos; ++i)
       if ( pClassifier->classify( pos_samples[i] ) == 1 ) tp++;
@@ -205,10 +203,10 @@ void test_adaboost()
     vnl_vector<double> pos_wts(n_pos, 0.5/n_pos), neg_wts(n_neg, 0.5/n_neg);
 
 #if 0
-    vcl_cout<<"pos_egs= "<<pos_egs<<vcl_endl;
-    vcl_cout<<"pos_wts= "<<pos_wts<<vcl_endl;
-    vcl_cout<<"neg_egs= "<<neg_egs<<vcl_endl;
-    vcl_cout<<"neg_wts= "<<neg_wts<<vcl_endl;
+    vcl_cout<<"pos_egs= "<<pos_egs<<vcl_endl
+            <<"pos_wts= "<<pos_wts<<vcl_endl
+            <<"neg_egs= "<<neg_egs<<vcl_endl
+            <<"neg_wts= "<<neg_wts<<vcl_endl;
 #endif
 
     clsfy_classifier_1d* c1d2 = b_thresh_builder.new_classifier();
@@ -218,8 +216,7 @@ void test_adaboost()
     c1d2->print_summary(vcl_cout);
 
 
-    tp=0;
-    fp=0;
+    int tp=0, fp=0;
     for (int i=0; i<n_pos; ++i)
       if ( c1d2->classify( pos_egs[i] ) == 1 ) tp++;
 
@@ -263,17 +260,16 @@ void test_adaboost()
   vpl_unlink("temp.dat");
 #endif
 
-  vcl_cout<<"Saved :\n";
-  vcl_cout<< *pClassifier << vcl_endl;
-  vcl_cout<<"Loaded:\n";
-  vcl_cout<< classifier_in << vcl_endl;
+  vcl_cout<<"Saved :\n"
+          << *pClassifier << vcl_endl
+          <<"Loaded:\n"
+          << classifier_in << vcl_endl;
 
   TEST("saved classifier == loaded classifier", *pClassifier, classifier_in);
 
   delete pClassifier;
 
   vsl_delete_all_loaders();
-
 }
 
 TESTLIB_DEFINE_MAIN(test_adaboost);

@@ -49,15 +49,15 @@ void test_adaboost()
 
   pos_sampler.get_samples( pos_samples );
   neg_sampler.get_samples( neg_samples );
-  //vcl_cout<<"pos_samples= "<<pos_samples<<vcl_endl;
-  //vcl_cout<<"neg_samples= "<<neg_samples<<vcl_endl;
+  //vcl_cout<<"pos_samples= "<<pos_samples<<vcl_endl
+  //        <<"neg_samples= "<<neg_samples<<vcl_endl;
 
   // Generate lots of examples for test set
   vnl_vector<double>  pos_samples_test(n_pos), neg_samples_test(n_neg);
   pos_sampler.get_samples( pos_samples_test );
   neg_sampler.get_samples( neg_samples_test );
-  //vcl_cout<<"pos_samples_test= "<<pos_samples_test<<vcl_endl;
-  //vcl_cout<<"neg_samples_test= "<<neg_samples_test<<vcl_endl;
+  //vcl_cout<<"pos_samples_test= "<<pos_samples_test<<vcl_endl
+  //        <<"neg_samples_test= "<<neg_samples_test<<vcl_endl;
 
 
   vcl_cout<<"=================test pos + neg samples ============\n";
@@ -96,9 +96,8 @@ void test_adaboost()
   TEST("Clsfrs the same", *mean_square_clsfr2, *mean_square_clsfr);
   TEST_NEAR("Clsfr error", error2, 0.0, 0.2);
 
-  vcl_cout<<*mean_square_clsfr2<<vcl_endl;
-
-  vcl_cout<<*mean_square_clsfr<<vcl_endl;
+  vcl_cout<<*mean_square_clsfr2<<vcl_endl
+          <<*mean_square_clsfr<<vcl_endl;
   //mean_square_clsfr->print_summary(vcl_cout);
   vcl_cout<<"error1= "<<error1<<vcl_endl;
 
@@ -112,7 +111,6 @@ void test_adaboost()
     if ( mean_square_clsfr->classify( neg_samples[i] ) == 1 ) fp++;
 
 
-  double tpr=(tp*1.0)/n_pos, fpr= (fp*1.0)/n_neg;
   double te=((n_pos-tp+fp)*1.0)/(n_pos+n_neg);
   vcl_cout<<"te on training set= "<<te<<vcl_endl;
 
@@ -126,9 +124,9 @@ void test_adaboost()
     if ( mean_square_clsfr->classify( neg_samples_test[i] ) == 1 ) fp++;
 
   vcl_cout<<"Applied to test set:\n";
-  tpr=(tp*1.0)/n_pos, fpr= (fp*1.0)/n_neg;
-  vcl_cout<<"True positives= "<<tpr<<vcl_endl;
-  vcl_cout<<"False positives= "<<fpr<<vcl_endl;
+  double tpr=(tp*1.0)/n_pos, fpr= (fp*1.0)/n_neg;
+  vcl_cout<<"True positives= "<<tpr<<vcl_endl
+          <<"False positives= "<<fpr<<vcl_endl;
 
   te=((n_pos-tp+fp)*1.0)/(n_pos+n_neg);
   vcl_cout<<"te= "<<te<<vcl_endl;
@@ -175,10 +173,10 @@ void test_adaboost()
   vpl_unlink(test_path.c_str());
 #endif
 
-  vcl_cout<<"Saved :\n";
-  vcl_cout<< *mean_square_clsfr << vcl_endl;
-  vcl_cout<<"Loaded:\n";
-  vcl_cout<< classifier_in << vcl_endl;
+  vcl_cout<<"Saved :\n"
+          << *mean_square_clsfr << vcl_endl
+          <<"Loaded:\n"
+          << classifier_in << vcl_endl;
 
   TEST("saved classifier = loaded classifier",
        mean_square_clsfr ->params(), classifier_in->params());

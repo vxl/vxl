@@ -178,7 +178,7 @@ Fax3PreDecode(TIFF* tif, tsample_t s)
         sp->refruns[0] = (uint16) sp->b.rowpixels;
         sp->refruns[1] = 0;
     }
-    return (1);
+    return 1;
 }
 
 /*
@@ -257,10 +257,10 @@ Fax3Decode1D(TIFF* tif, tidata_t buf, tsize_t occ, tsample_t s)
     EOF1Da:             /* premature EOF */
         (*sp->fill)(buf, thisrun, pa, lastx);
         UNCACHE_STATE(tif, sp);
-        return (-1);
+        return -1;
     }
     UNCACHE_STATE(tif, sp);
-    return (1);
+    return 1;
 }
 
 #define SWAP(t,a,b)     { t x; x = (a); (a) = (b); (b) = x; }
@@ -311,10 +311,10 @@ Fax3Decode2D(TIFF* tif, tidata_t buf, tsize_t occ, tsample_t s)
     EOF2Da:             /* premature EOF */
         (*sp->fill)(buf, thisrun, pa, lastx);
         UNCACHE_STATE(tif, sp);
-        return (-1);
+        return -1;
     }
     UNCACHE_STATE(tif, sp);
-    return (1);
+    return 1;
 }
 #undef SWAP
 
@@ -387,8 +387,8 @@ _TIFFFax3fillruns(u_char* buf, uint32* runs, uint32* erun, uint32 lastx)
             *cp++ &= 0xff << (8-bx);
             run -= 8-bx;
             }
-            if( (n = run >> 3) != 0 ) { /* multiple bytes to fill */
-            if ((n/sizeof (long)) > 1) {
+            if ( (n = run >> 3) != 0 ) { /* multiple bytes to fill */
+              if ((n/sizeof (long)) > 1) {
                 /*
                  * Align to longword boundary and fill.
                  */
@@ -426,8 +426,8 @@ _TIFFFax3fillruns(u_char* buf, uint32* runs, uint32* erun, uint32 lastx)
             *cp++ |= 0xff >> bx;
             run -= 8-bx;
             }
-            if( (n = run>>3) != 0 ) {   /* multiple bytes to fill */
-            if ((n/sizeof (long)) > 1) {
+            if ( (n = run>>3) != 0 ) {   /* multiple bytes to fill */
+              if ((n/sizeof (long)) > 1) {
                 /*
                  * Align to longword boundary and fill.
                  */
@@ -478,7 +478,7 @@ Fax3SetupState(TIFF* tif)
     if (td->td_bitspersample != 1) {
         TIFFError(tif->tif_name,
                   "Bits/sample must be 1 for Group 3/4 encoding/decoding");
-        return (0);
+        return 0;
     }
     /*
      * Calculate the scanline/tile widths.
@@ -531,7 +531,7 @@ Frank Warmerdam (warmerda@home.com)
             TIFFError("Fax3SetupState",
                       "%s: No space for Group 3/4 run arrays",
                       tif->tif_name);
-            return (0);
+            return 0;
         }
         dsp->curruns = dsp->runs;
         if (needsRefLine)
@@ -557,11 +557,11 @@ Frank Warmerdam (warmerda@home.com)
             TIFFError("Fax3SetupState",
                       "%s: No space for Group 3/4 reference line",
                       tif->tif_name);
-            return (0);
+            return 0;
         }
     } else                  /* 1d encoding */
         EncoderState(tif)->refline = NULL;
-    return (1);
+    return 1;
 }
 
 /*
@@ -699,7 +699,6 @@ Fax3PutEOL(TIFF* tif)
                 align = sp->bit + (8 - align);
             else
                 align = sp->bit - align;
-            code = 0;
             tparm=align;
             _PutBits(tif, 0, tparm);
         }
@@ -751,7 +750,7 @@ Fax3PreEncode(TIFF* tif, tsample_t s)
         sp->k = sp->maxk-1;
     } else
         sp->k = sp->maxk = 0;
-    return (1);
+    return 1;
 }
 
 static const u_char zeroruns[256] = {
@@ -823,7 +822,7 @@ find0span(u_char* bp, int32 bs, int32 be)
         if (span > bits)    /* constrain span to bit range */
             span = bits;
         if (n+span < 8)     /* doesn't extend to edge of byte */
-            return (span);
+            return span;
         bits -= span;
         bp++;
     } else
@@ -835,7 +834,7 @@ find0span(u_char* bp, int32 bs, int32 be)
          */
         while (!isAligned(bp, long)) {
             if (*bp != 0x00)
-                return (span + zeroruns[*bp]);
+                return span + zeroruns[*bp];
             span += 8, bits -= 8;
             bp++;
         }
@@ -851,7 +850,7 @@ find0span(u_char* bp, int32 bs, int32 be)
      */
     while (bits >= 8) {
         if (*bp != 0x00)    /* end of run */
-            return (span + zeroruns[*bp]);
+            return span + zeroruns[*bp];
         span += 8, bits -= 8;
         bp++;
     }
@@ -862,7 +861,7 @@ find0span(u_char* bp, int32 bs, int32 be)
         n = zeroruns[*bp];
         span += (n > bits ? bits : n);
     }
-    return (span);
+    return span;
 }
 
 INLINE static int32
@@ -882,7 +881,7 @@ find1span(u_char* bp, int32 bs, int32 be)
         if (span > bits)    /* constrain span to bit range */
             span = bits;
         if (n+span < 8)     /* doesn't extend to edge of byte */
-            return (span);
+            return span;
         bits -= span;
         bp++;
     } else
@@ -894,7 +893,7 @@ find1span(u_char* bp, int32 bs, int32 be)
          */
         while (!isAligned(bp, long)) {
             if (*bp != 0xff)
-                return (span + oneruns[*bp]);
+                return span + oneruns[*bp];
             span += 8, bits -= 8;
             bp++;
         }
@@ -910,7 +909,7 @@ find1span(u_char* bp, int32 bs, int32 be)
      */
     while (bits >= 8) {
         if (*bp != 0xff)    /* end of run */
-            return (span + oneruns[*bp]);
+            return span + oneruns[*bp];
         span += 8, bits -= 8;
         bp++;
     }
@@ -921,7 +920,7 @@ find1span(u_char* bp, int32 bs, int32 be)
         n = oneruns[*bp];
         span += (n > bits ? bits : n);
     }
-    return (span);
+    return span;
 }
 
 /*
@@ -970,7 +969,7 @@ Fax3Encode1DRow(TIFF* tif, u_char* bp, uint32 bits)
             !isAligned(tif->tif_rawcp, uint16))
             Fax3FlushBits(tif, sp);
     }
-    return (1);
+    return 1;
 }
 
 static const tableentry horizcode =
@@ -1029,7 +1028,7 @@ Fax3Encode2DRow(TIFF* tif, u_char* bp, u_char* rp, uint32 bits)
         b1 = finddiff(rp, a0, bits, !PIXEL(bp,a0));
         b1 = finddiff(rp, b1, bits, PIXEL(bp,a0));
     }
-    return (1);
+    return 1;
 #undef PIXEL
 }
 
@@ -1048,11 +1047,11 @@ Fax3Encode(TIFF* tif, tidata_t bp, tsize_t cc, tsample_t s)
         if (is2DEncoding(sp)) {
             if (sp->tag == G3_1D) {
                 if (!Fax3Encode1DRow(tif, bp, sp->b.rowpixels))
-                    return (0);
+                    return 0;
                 sp->tag = G3_2D;
             } else {
                 if (!Fax3Encode2DRow(tif, bp, sp->refline, sp->b.rowpixels))
-                    return (0);
+                    return 0;
                 sp->k--;
             }
             if (sp->k == 0) {
@@ -1062,14 +1061,14 @@ Fax3Encode(TIFF* tif, tidata_t bp, tsize_t cc, tsample_t s)
                 _TIFFmemcpy(sp->refline, bp, sp->b.rowbytes);
         } else {
             if (!Fax3Encode1DRow(tif, bp, sp->b.rowpixels))
-                return (0);
+                return 0;
         }
         bp += sp->b.rowbytes;
         cc -= sp->b.rowbytes;
         if (cc != 0)
             tif->tif_row++;
     }
-    return (1);
+    return 1;
 }
 
 static int
@@ -1079,7 +1078,7 @@ Fax3PostEncode(TIFF* tif)
 
     if (sp->bit != 8)
         Fax3FlushBits(tif, sp);
-    return (1);
+    return 1;
 }
 
 static void
@@ -1168,11 +1167,11 @@ Fax3VSetField(TIFF* tif, ttag_t tag, va_list ap)
     switch (tag) {
     case TIFFTAG_FAXMODE:
         sp->mode = va_arg(ap, int);
-        return (1);             /* NB: pseudo tag */
+        return 1;             /* NB: pseudo tag */
     case TIFFTAG_FAXFILLFUNC:
         if (tif->tif_mode == O_RDONLY)
             DecoderState(tif)->fill = va_arg(ap, TIFFFaxFillFunc);
-        return (1);             /* NB: pseudo tag */
+        return 1;             /* NB: pseudo tag */
     case TIFFTAG_GROUP3OPTIONS:
     case TIFFTAG_GROUP4OPTIONS:
         sp->groupoptions = va_arg(ap, uint32);
@@ -1200,7 +1199,7 @@ Fax3VSetField(TIFF* tif, ttag_t tag, va_list ap)
     }
     TIFFSetFieldBit(tif, _TIFFFieldWithTag(tif, tag)->field_bit);
     tif->tif_flags |= TIFF_DIRTYDIRECT;
-    return (1);
+    return 1;
 }
 
 static int
@@ -1241,7 +1240,7 @@ Fax3VGetField(TIFF* tif, ttag_t tag, va_list ap)
     default:
         return (*sp->vgetparent)(tif, tag, ap);
     }
-    return (1);
+    return 1;
 }
 
 static void
@@ -1318,7 +1317,7 @@ InitCCITTFax3(TIFF* tif)
     if (tif->tif_data == NULL) {
         TIFFError("TIFFInitCCITTFax3",
                   "%s: No space for state block", tif->tif_name);
-        return (0);
+        return 0;
     }
     sp = Fax3State(tif);
 
@@ -1360,7 +1359,7 @@ InitCCITTFax3(TIFF* tif)
     tif->tif_close = Fax3Close;
     tif->tif_cleanup = Fax3Cleanup;
 
-    return (1);
+    return 1;
 }
 
 int
@@ -1374,7 +1373,7 @@ TIFFInitCCITTFax3(TIFF* tif, int scheme)
          */
         return TIFFSetField(tif, TIFFTAG_FAXMODE, FAXMODE_CLASSF);
     } else
-        return (0);
+        return 0;
 }
 
 /*
@@ -1416,10 +1415,10 @@ Fax4Decode(TIFF* tif, tidata_t buf, tsize_t occ, tsample_t s)
     EOFG4:
         (*sp->fill)(buf, thisrun, pa, lastx);
         UNCACHE_STATE(tif, sp);
-        return (-1);
+        return -1;
     }
     UNCACHE_STATE(tif, sp);
-    return (1);
+    return 1;
 }
 #undef  SWAP
 
@@ -1434,14 +1433,14 @@ Fax4Encode(TIFF* tif, tidata_t bp, tsize_t cc, tsample_t s)
     (void) s;
     while ((long)cc > 0) {
         if (!Fax3Encode2DRow(tif, bp, sp->refline, sp->b.rowpixels))
-            return (0);
+            return 0;
         _TIFFmemcpy(sp->refline, bp, sp->b.rowbytes);
         bp += sp->b.rowbytes;
         cc -= sp->b.rowbytes;
         if (cc != 0)
             tif->tif_row++;
     }
-    return (1);
+    return 1;
 }
 
 static int
@@ -1454,7 +1453,7 @@ Fax4PostEncode(TIFF* tif)
     Fax3PutBits(tif, EOL, 12);
     if (sp->bit != 8)
         Fax3FlushBits(tif, sp);
-    return (1);
+    return 1;
 }
 
 int
@@ -1475,7 +1474,7 @@ TIFFInitCCITTFax4(TIFF* tif, int scheme)
          */
         return TIFFSetField(tif, TIFFTAG_FAXMODE, FAXMODE_NORTC);
     } else
-        return (0);
+        return 0;
 }
 
 /*
@@ -1526,10 +1525,10 @@ Fax3DecodeRLE(TIFF* tif, tidata_t buf, tsize_t occ, tsample_t s)
     EOFRLE:             /* premature EOF */
         (*sp->fill)(buf, thisrun, pa, lastx);
         UNCACHE_STATE(tif, sp);
-        return (-1);
+        return -1;
     }
     UNCACHE_STATE(tif, sp);
-    return (1);
+    return 1;
 }
 
 int
@@ -1545,7 +1544,7 @@ TIFFInitCCITTRLE(TIFF* tif, int scheme)
         return TIFFSetField(tif, TIFFTAG_FAXMODE,
                             FAXMODE_NORTC|FAXMODE_NOEOL|FAXMODE_BYTEALIGN);
     } else
-        return (0);
+        return 0;
 }
 
 int
@@ -1561,6 +1560,6 @@ TIFFInitCCITTRLEW(TIFF* tif, int scheme)
         return TIFFSetField(tif, TIFFTAG_FAXMODE,
                             FAXMODE_NORTC|FAXMODE_NOEOL|FAXMODE_WORDALIGN);
     } else
-        return (0);
+        return 0;
 }
 #endif /* CCITT_SUPPORT */

@@ -95,7 +95,7 @@ Copyright: (C) 1997-1999, Advanced Interfaces Group,
                             fprintf(stderr, "gpc malloc failure: %s\n", s); \
                             exit(0);}} else p= NULL;}
 
-#define FREE(p)            {if (p) {free(p); (p)= NULL;}}
+#define FREE(p)            {if (p) free(p);}
 
 
 /*
@@ -390,7 +390,7 @@ static void free_sbtree(sb_tree **sbtree)
   {
     free_sbtree(&((*sbtree)->less));
     free_sbtree(&((*sbtree)->more));
-    FREE(*sbtree);
+    FREE(*sbtree); *sbtree = 0;
   }
 }
 
@@ -965,9 +965,9 @@ void gpc_free_polygon(gpc_polygon *p)
   int c;
 
   for (c= 0; c < p->num_contours; c++)
-    FREE(p->contour[c].vertex);
-  FREE(p->hole);
-  FREE(p->contour);
+    { FREE(p->contour[c].vertex); p->contour[c].vertex = 0; }
+  FREE(p->hole); p->hole = 0;
+  FREE(p->contour); p->contour = 0;
   p->num_contours= 0;
 }
 
@@ -1702,8 +1702,8 @@ void gpc_add_contour(gpc_polygon *p, gpc_vertex_list *new_contour, int hole)
     extended_contour[c].vertex[v]= new_contour->vertex[v];
 
   /* Dispose of the old contour */
-  FREE(p->contour);
-  FREE(p->hole);
+  FREE(p->contour); p->contour = 0;
+  FREE(p->hole); p->hole = 0;
 
   /* Update the polygon information */
   p->num_contours++;
@@ -1745,8 +1745,8 @@ void gpc_free_tristrip(gpc_tristrip *t)
   int s;
 
   for (s= 0; s < t->num_strips; s++)
-    FREE(t->strip[s].vertex);
-  FREE(t->strip);
+    { FREE(t->strip[s].vertex); t->strip[s].vertex = 0; }
+  FREE(t->strip); t->strip = 0;
   t->num_strips= 0;
 }
 

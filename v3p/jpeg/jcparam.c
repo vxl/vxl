@@ -603,7 +603,7 @@ jpeg_simple_progression (j_compress_ptr cinfo)
     scanptr = fill_scans(scanptr, ncomps, 1, 63, 2, 1);
     /* Successive approximation final pass */
     scanptr = fill_dc_scans(scanptr, ncomps, 1, 0);
-    scanptr = fill_scans(scanptr, ncomps, 1, 63, 1, 0);
+              fill_scans(scanptr, ncomps, 1, 63, 1, 0);
   }
 }
 

@@ -575,20 +575,17 @@ HANDLE  vidl_vil1_avicodec::make_dib(vidl_vil1_frame_sptr frame, UINT bits)
   }
 
   // Store the TargetJr data in a Bitmap way, DIB is a flipped upside down
-  byte* DIB = newbits;
   switch (frame->get_bytes_pixel())
     {
     case 3:
       for (j=frame->height()-1; j>=0;j--)
       {
         db = TjSection+ (j*frame->width())*frame->get_bytes_pixel();
-        DIB = newbits + (frame->height()-j-1)*line_length;
-        for (i=0; i<frame->width(); i++) {
+        byte* DIB = newbits + (frame->height()-j-1)*line_length;
+        for (i=0; i<frame->width(); ++i, DIB+=3, db+=3) {
           *DIB = *(db+2);
           *(DIB+1) = *(db+1);
           *(DIB+2) = *(db);
-          DIB+=3;
-          db+=3;
         }
       }
       break;
@@ -596,13 +593,11 @@ HANDLE  vidl_vil1_avicodec::make_dib(vidl_vil1_frame_sptr frame, UINT bits)
       for (j=frame->height()-1; j>=0;j--)
       {
         db = TjSection+ (j*frame->width())*frame->get_bytes_pixel();
-        DIB = newbits + (frame->height()-j-1)*line_length;
-        for (i=0; i<frame->width(); i++) {
+        byte* DIB = newbits + (frame->height()-j-1)*line_length;
+        for (i=0; i<frame->width(); ++i, DIB+=3, db+=1) {
           *DIB = *(db);
           *(DIB+1) = *(db);
           *(DIB+2) = *(db);
-          DIB+=3;
-          db+=1;
         }
       }
       break;

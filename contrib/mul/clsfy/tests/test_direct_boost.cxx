@@ -142,13 +142,11 @@ void test_direct_boost()
 
   // test positive examples from training set
   // nb egs0 are the positive training examples
-  int tp=0, fp=0;
   double tpr=0.0, fpr=1.0, adab_te=0.0;
 
   for (unsigned int k=1; k<=pClassifier->wts().size(); ++k)
   {
-    tp=0;
-    fp=0;
+    int tp=0, fp=0;
     pClassifier->set_n_clfrs_used(k);
     for (int i=0; i<n_pos; ++i)
       if ( pClassifier->classify( pos_samples[i] ) == 1 ) tp++;
@@ -196,10 +194,10 @@ void test_direct_boost()
   vpl_unlink("temp.dat");
 #endif
 
-  vcl_cout<<"Saved :\n";
-  vcl_cout<< *pClassifier << vcl_endl;
-  vcl_cout<<"Loaded:\n";
-  vcl_cout<< classifier_in << vcl_endl;
+  vcl_cout<<"Saved :\n"
+          << *pClassifier << vcl_endl
+          <<"Loaded:\n"
+          << classifier_in << vcl_endl;
 
   TEST("saved classifier == loaded classifier", *pClassifier, classifier_in);
 

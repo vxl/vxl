@@ -86,32 +86,28 @@ double pdf1d_kernel_pdf::inverse_cdf(double P) const
   // guess initial step size. assuming a triangular kernel.
   double step = width_(index_[int(P * x_.size())]);
 
-  double x_above, x_below, f_above, f_below;
+  double x_above, x_below;
   if (f_init > P)
   {
     x_above = x_init;
-    f_above = f_init;
     while (true)
     {
       x_below = x_above - step;
-      f_below = cdf(x_below);
+      double f_below = cdf(x_below);
       if (f_below < P) break;
       x_above = x_below;
-      f_above = f_below;
       step *= 2.0;
     }
   }
   else
   {
     x_below = x_init;
-    f_below = f_init;
     while (true)
     {
       x_above = x_below + step;
-      f_above = cdf(x_above);
+      double f_above = cdf(x_above);
       if (f_above > P) break;
       x_below = x_above;
-      f_below = f_above;
       step *= 2.0;
     }
   }

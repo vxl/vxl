@@ -101,7 +101,6 @@ void clsfy_adaboost_trainer::build_strong_classifier(
   vnl_vector<double> wts1(n1,0.5/n1);
 
   vnl_vector<double> egs0_1d, egs1_1d;
-  double beta, alpha;
 
   for (int i=0;i<n;++i)
   {
@@ -134,7 +133,7 @@ void clsfy_adaboost_trainer::build_strong_classifier(
     if (min_error<1e-10)  // Hooray!
     {
       vcl_cout<<"min_error<1e-10 !!!\n";
-      alpha  = vcl_log(2.0*(n0+n1));   //is this appropriate???
+      double alpha  = vcl_log(2.0*(n0+n1));   //is this appropriate???
       strong_classifier.add_classifier( best_c1d, alpha, best_j);
 
       // delete classifiers on heap, because clones taken by strong_classifier
@@ -147,7 +146,6 @@ void clsfy_adaboost_trainer::build_strong_classifier(
     if (0.5-min_error<1e-10) // Oh dear, no further improvement possible
     {
       vcl_cout<<"min_error => 0.5 !!!\n";
-      beta=1.0;
 
       // delete classifiers on heap, because clones taken by strong_classifier
       delete c1d;
@@ -155,8 +153,8 @@ void clsfy_adaboost_trainer::build_strong_classifier(
       return;
     }
 
-    beta = min_error/(1.0-min_error);
-    alpha  = -1.0*vcl_log(beta);
+    double beta = min_error/(1.0-min_error);
+    double alpha  = -1.0*vcl_log(beta);
     strong_classifier.add_classifier( best_c1d, alpha, best_j);
 
     if (i<(n-1))
@@ -266,7 +264,7 @@ void clsfy_adaboost_trainer::b_read(vsl_b_istream& /*bfs*/)
     vsl_b_read(bfs,data_);
     break;
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_adaboost_trainer&) \n"
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_adaboost_trainer&)\n"
              << "           Unknown version number "<< version << '\n';
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
