@@ -6,6 +6,7 @@
 // \author Tim Cootes
 
 #include <vcl_cstddef.h>
+#include <vcl_iostream.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vil2/io/vil2_io_memory_chunk.h>
 #include <vil2/io/vil2_io_smart_ptr.h>
@@ -100,4 +101,4 @@ inline void vsl_print_summary(vcl_ostream& os,const vil3d_image_view<T>& image)
   image.print(os);
 }
 
-#endif
+#endif // vil3d_io_image_view_h_

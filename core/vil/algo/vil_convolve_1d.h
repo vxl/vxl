@@ -5,6 +5,7 @@
 //  \file
 //  \brief 1D Convolution with cunning boundary options
 //  \author Tim Cootes, Ian Scott (based on work by fsm)
+//
 // Note. The convolution operation is defined by
 //    $(f*g)(x) = \int f(x-y) g(y) dy$
 // i.e. the kernel g is reflected before the integration is performed.
@@ -17,6 +18,7 @@
 #include <vcl_cstdlib.h> // for vcl_abort()
 #include <vcl_cstring.h>
 #include <vcl_cassert.h>
+#include <vcl_iostream.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_image_resource.h>
 #include <vil2/vil2_property.h>

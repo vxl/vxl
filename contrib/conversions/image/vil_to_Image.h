@@ -1,3 +1,4 @@
+// This is conversions/image/vil_to_Image.h
 #ifndef vil_to_Image_h_
 #define vil_to_Image_h_
 
@@ -5,6 +6,8 @@
 #include <vil/vil_image.h>
 
 #include <ImageClasses/MemoryImage.h>
+
+#include <vcl_iostream.h>
 
 inline Image* vil_to_Image(vil_image const& im)
 {

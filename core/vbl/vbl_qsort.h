@@ -1,4 +1,4 @@
-// This is vxl/vbl/vbl_qsort.h
+// This is core/vbl/vbl_qsort.h
 #ifndef vbl_qsort_h_
 #define vbl_qsort_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -11,9 +11,9 @@
 // \date   15 Mar 00
 //
 // \verbatim
-// Modifications
-// 971119 AWF Initial version
-// PDA (Manchester) 23/03/2001: Tidied up the documentation
+//  Modifications
+//   971119 AWF Initial version
+//   PDA (Manchester) 23/03/2001: Tidied up the documentation
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
@@ -25,6 +25,7 @@
 # include <vcl_cstdlib.h>
 #else
 # include <vcl_functional.h>
+# include <vcl_iostream.h>
 #endif
 #include <vcl_vector.h>
 

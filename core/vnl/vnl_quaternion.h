@@ -21,6 +21,7 @@
 
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
+#include <vcl_iostream.h>
 
 //: 4-element vector that represents rotation in 3D.
 // vnl_quaternion is a 4-element vector with 1 real and 3 imaginary

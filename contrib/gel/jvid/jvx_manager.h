@@ -1,3 +1,4 @@
+// This is gel/jvid/jvx_manager.h
 #ifndef jvx_manager_h_
 #define jvx_manager_h_
 //--------------------------------------------------------------------------------
@@ -14,6 +15,7 @@
 // \endverbatim
 //--------------------------------------------------------------------------------
 #include <vcl_vector.h>
+#include <vcl_iostream.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_viewer2D_tableau_sptr.h>
 #include <vgui/vgui_dialog.h>
@@ -43,9 +45,7 @@ jvid_load_mpegcodec_callback(vidl_codec * vc)
   dialog.field("total frames. if not known, leave it.",numframes);
 
   if ( !dialog.ask())
-    {
-      vcl_cout << "jvid_load_mpegcodec_callback. did not initialize codec." << vcl_endl;
-    }
+    vcl_cout << "jvid_load_mpegcodec_callback. did not initialize codec.\n";
 
   vidl_mpegcodec * mpegcodec = vc->castto_vidl_mpegcodec();
   if (!mpegcodec) return;
@@ -83,4 +83,5 @@ class jvx_manager : public vgui_grid_tableau
   vidl_movie_sptr my_movie_;
   vcl_vector<vgui_viewer2D_tableau_sptr> tabs_;
 };
+
 #endif // jvx_manager_h_

@@ -10,6 +10,7 @@
 
 #include <vil2/vil2_print.h>
 #include <vil3d/vil3d_image_view.h>
+#include <vcl_iostream.h>
 
 #ifdef VCL_VC70
 #  pragma warning( push )

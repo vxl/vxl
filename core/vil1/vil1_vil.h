@@ -9,6 +9,7 @@
 #include <vil/vil_image.h>
 #include <vil2/vil2_image_resource.h>
 #include <vil2/vil2_image_view.h>
+#include <vcl_iostream.h>
 
 //: Create a view of a vil_memory_image_of<T>
 // Warning, the created view doesn't not share ownership of the underlying image. The
@@ -62,7 +63,7 @@ class vil2_vil1_image_resource: public vil2_image_resource
   friend vil2_image_resource_sptr vil2_vil1_to_image_resource(const vil_image &vil1_im);
   vil_image src_;
 
-public:
+ public:
   virtual vil2_pixel_format pixel_format() const;
 
   virtual unsigned ni() const;

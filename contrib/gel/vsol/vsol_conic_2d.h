@@ -5,6 +5,7 @@
 //:
 // \file
 // \brief Euclidean general conic class in 2D space
+//
 // The conic is defined by its cartesian equation
 // a x^2 +b xy +c y^2 +d x +e y +f
 // This class inherits both from vsol_curve_2d and vgl_conic<double>.
@@ -42,6 +43,7 @@
 #include <vsol/vsol_line_2d_sptr.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vcl_list.h>
+#include <vcl_iostream.h>
 
 //: Euclidean general conic class, part of the vsol_curve_2d hierarchy
 
@@ -359,4 +361,4 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   }
 };
 
-#endif // #ifndef vsol_conic_2d_h_
+#endif // vsol_conic_2d_h_

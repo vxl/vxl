@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_matlab_print2.h
+// This is core/vnl/vnl_matlab_print2.h
 #ifndef vnl_matlab_print2_h_
 #define vnl_matlab_print2_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -25,9 +25,10 @@
 //   vnl_matlab_print(vcl_cerr, foo, 0, vnl_matlab_fmt_long);
 // \endcode
 //
-//  \author fsm
+// \author fsm
 
 #include <vnl/vnl_matlab_print.h>
+#include <vcl_iostream.h>
 
 // The proxy classes.
 template <class T>

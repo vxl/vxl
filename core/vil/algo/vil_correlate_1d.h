@@ -9,6 +9,7 @@
 #include <vcl_algorithm.h>
 #include <vcl_cstring.h>
 #include <vcl_cassert.h>
+#include <vcl_iostream.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_image_resource.h>
 #include <vil2/vil2_property.h>

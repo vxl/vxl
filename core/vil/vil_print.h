@@ -1,4 +1,4 @@
-// This is mul/vil2/vil2_print.h
+// This is core/vil2/vil2_print.h
 #ifndef vil2_print_h_
 #define vil2_print_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -9,6 +9,7 @@
 // \author Ian Scott, Tim Cootes.
 
 #include <vil2/vil2_image_view.h>
+#include <vcl_iostream.h>
 
 //: How to print value in vil2_print_all(image_view)
 // \relates vil2_image_view

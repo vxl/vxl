@@ -33,6 +33,7 @@
 #include <vxl_config.h>
 #include <vcl_cassert.h>
 #include <vcl_cstring.h>
+#include <vcl_iostream.h>
 #include "vsl_binary_io.h"
 
 // Both VXL_LITTLE_ENDIAN && VXL_BIG_ENDIAN should be defined
