@@ -505,8 +505,8 @@ AC_LANG_CPLUSPLUS
 VCL_COMPILE_CXX
 AC_TRY_COMPILE([
 class A { public: static const int x = 27; };
-void f(const int&) {}
-int not_main() { f(A::x); return 0; }
+int f(const void* x) { return x?1:0; }
+int not_main() { return f(&A::x); }
 ],,[VCL_STATIC_CONST_INIT_NO_DEFN=1;AC_MSG_RESULT(yes)],[VCL_STATIC_CONST_INIT_NO_DEFN=0;AC_MSG_RESULT(no)])
 export VCL_STATIC_CONST_INIT_NO_DEFN
 AC_LANG_RESTORE])

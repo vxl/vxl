@@ -3737,8 +3737,8 @@ _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 class A { public: static const int x = 27; };
-void f(const int&) {}
-int main() { f(A::x); return 0; }
+int f(const void* x) { return x?1:0; }
+int main() { return f(&A::x); }
 _ACEOF
 rm -f conftest.$ac_objext
 if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
