@@ -63,7 +63,10 @@ class bmrf_curve_3d_builder
                                  double alpha) const;
 
   //: Reconstruct the 3d location of a curvel from its projections
-  void reconstruct_3d(bmrf_curvel_3d_sptr curvel) const;
+  void reconstruct_point(bmrf_curvel_3d_sptr curvel) const;
+
+  //: Simultaneously reconstruct all points in a 3d curve
+  void reconstruct_curve(vcl_list<bmrf_curvel_3d_sptr>& curve) const;
 
   //: Match the \p curvels to the ends of the \p growing_curves
   void append_curvels(vcl_list<bmrf_curvel_3d_sptr> curvels, 

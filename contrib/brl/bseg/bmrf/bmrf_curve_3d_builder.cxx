@@ -14,6 +14,7 @@
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_4.h>
 #include <vnl/algo/vnl_svd.h>
+#include <vnl/algo/vnl_qr.h>
 
 #undef MAX
 #define MAX(a,b) ((a)>(b)?(a):(b))
@@ -118,7 +119,7 @@ bmrf_curve_3d_builder::build()
     growing_curves.push_back(list_ptr);
   }
 
-  for( double alpha = min_alpha_+0.001; alpha < max_alpha_; alpha += 0.001 ) {
+  for( double alpha = min_alpha_+0.002; alpha < max_alpha_; alpha += 0.002 ) {
     // find all curvels
     vcl_list<bmrf_curvel_3d_sptr> curvels = build_curvels(alpha);
     this->append_curvels(curvels, growing_curves);
@@ -131,6 +132,8 @@ bmrf_curve_3d_builder::build()
     ++next_itr;
     if( itr->size() < 10 )
       curves_.erase(itr);
+    else
+      this->reconstruct_curve(*itr);
     itr = next_itr;
   }
 
@@ -221,7 +224,7 @@ bmrf_curve_3d_builder::build_curvels(double alpha, int min)
     if((*itr)->num_projections() < 3)
       all_curvels.erase(itr);
     else{
-      this->reconstruct_3d(*itr);
+      //this->reconstruct_point(*itr);
     }
 
     itr = next_itr;
@@ -277,10 +280,12 @@ bmrf_curve_3d_builder::best_match( const bmrf_node_sptr& node,
 
 //: Reconstruct the 3d location of a curvel from its projections
 void
-bmrf_curve_3d_builder::reconstruct_3d(bmrf_curvel_3d_sptr curvel) const
+bmrf_curve_3d_builder::reconstruct_point(bmrf_curvel_3d_sptr curvel) const
 {
   unsigned int num_frames = network_->num_frames();
   unsigned int nviews = curvel->num_projections();
+
+  vcl_cout << "reconstructing from " << nviews << " views" << vcl_endl;
 
   vnl_matrix<double> A(2*nviews, 4, 0.0);
 
@@ -291,7 +296,7 @@ bmrf_curve_3d_builder::reconstruct_3d(bmrf_curvel_3d_sptr curvel) const
       for (unsigned int i=0; i<4; i++) {
         A[2*v  ][i] = pos[0]*C_[f][2][i] - C_[f][0][i];
         A[2*v+1][i] = pos[1]*C_[f][2][i] - C_[f][1][i];
-      }
+      } 
       ++v;
     }
   }
@@ -299,6 +304,83 @@ bmrf_curve_3d_builder::reconstruct_3d(bmrf_curvel_3d_sptr curvel) const
   vnl_double_4 p = svd_solver.nullvector();
 
   curvel->set(p[0]/p[3], p[1]/p[3], p[2]/p[3]);
+}
+
+
+//: Simultaneously reconstruct all points in a 3d curve
+void
+bmrf_curve_3d_builder::reconstruct_curve(vcl_list<bmrf_curvel_3d_sptr>& curve) const
+{
+  unsigned int num_frames = network_->num_frames();
+  unsigned int num_pts = curve.size();
+
+  vcl_cout << "reconstructing curve of size " << curve.size() << vcl_endl;
+  vnl_matrix<double> A(3*num_pts, 3*num_pts, 0.0);
+  vnl_vector<double> b(3*num_pts, 0.0);
+
+  int cnt=0;
+  for ( vcl_list<bmrf_curvel_3d_sptr>::iterator itr = curve.begin();
+        itr != curve.end(); ++itr, ++cnt) 
+  {
+    unsigned int num_views = (*itr)->num_projections();
+    vnl_matrix<double> C(2*num_views, 3, 0.0);
+    vnl_vector<double> d(2*num_views, 0.0);
+    unsigned int v=0;
+    for (unsigned int f = 0; f<num_frames; ++f){
+      vnl_double_2 pos;
+      if ( (*itr)->pos_in_frame(f,pos) ){
+        for (unsigned int i=0; i<3; i++) {
+          C[2*v  ][i] = (pos[0]*C_[f][2][i] - C_[f][0][i])/2000;
+          C[2*v+1][i] = (pos[1]*C_[f][2][i] - C_[f][1][i])/2000;
+        } 
+        d[2*v  ] = -(pos[0]*C_[f][2][3] - C_[f][0][3])/2000;
+        d[2*v+1] = -(pos[1]*C_[f][2][3] - C_[f][1][3])/2000;
+        ++v;
+      }
+    }
+    vnl_matrix<double> Ct = C.transpose();
+    C = Ct * C;
+    d = Ct * d;
+    for (int i=0; i<3; ++i){
+      for (int j=0; j<3; ++j){
+        A[3*cnt+i][3*cnt+j] = C[i][j];
+      }
+      b[3*cnt+i] = d[i];
+      if(cnt > 0 && cnt < num_pts-1){
+        A[3*cnt+i][3*(cnt-1)+i] -= 0.25;
+        A[3*cnt+i][3*cnt+i] += 0.5;
+        A[3*cnt+i][3*(cnt+1)+i] -= 0.25;
+      }
+    }
+  }
+
+  vnl_qr<double> qr_solver(A);
+  vnl_vector<double> p = qr_solver.solve(b);
+
+  vnl_vector<double> error = A*p - b;
+  error.normalize();
+
+  vnl_vector<double> error2(error.size()/3,0.0);
+  cnt=0;
+  for(; cnt < error2.size(); ++cnt){
+    double e1 = error[3*cnt];
+    double e2 = error[3*cnt+1];
+    double e3 = error[3*cnt+2];
+    error2[cnt] = vcl_sqrt(e1*e1+e2*e2+e3*e3);
+  }
+
+  double max = error2.max_value();
+  double min = error2.min_value();
+  error2 -= min;
+  error2 *= 1.0/(max-min);
+
+  cnt=0;
+  for ( vcl_list<bmrf_curvel_3d_sptr>::iterator itr = curve.begin();
+        itr != curve.end(); ++itr, ++cnt) 
+  {
+    (*itr)->set(p[cnt*3], p[cnt*3+1], p[cnt*3+2]);
+    (*itr)->set_proj_error(error2[cnt]);
+  }
 }
 
 
