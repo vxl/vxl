@@ -1,7 +1,7 @@
         Remove vcl_complex hackery on MSVC 6. vcl_complex is now the
         standard <complex>, since it seems to work with VC6sp5.
 
-        vnl_numeric_limits is deprecated in favour of vcl_numeric_limits.
+        vnl_numeric_limits is deprecated in favour of vcl_numeric_limits. (vnl_n_l was written before vcl. vcl_n_l is now more robust, and can use platform defaults)
         vbl_basic_tuple, vbl_basic_relation, etc. are deprecated since we have no decent explanation of how to use them.
 
 vxl 1.0.0	- October 2003
