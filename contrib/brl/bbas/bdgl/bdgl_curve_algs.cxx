@@ -191,18 +191,17 @@ vdgl_digital_curve_sptr bdgl_curve_algs::reverse(vdgl_digital_curve_sptr const& 
   vdgl_digital_curve_sptr rev_dc = new vdgl_digital_curve(rev_intrp);
   return rev_dc;
 }
-//: a preliminary test to see if an infinite line intersects the bounding
-//  box of the digital curve.
+//: preliminary test to see if an infinite line intersects the bounding box of the digital curve.
 bool bdgl_curve_algs::intersect_bounding_box(vdgl_digital_curve_sptr const& dc,
                                              vgl_line_2d<double> & line)
 {
   vsol_box_2d_sptr bb = dc->get_bounding_box();
-  if(!bb)
+  if (!bb)
     return false;
   vgl_box_2d<double> box(bb->get_min_x(), bb->get_max_x(),
                          bb->get_min_y(), bb->get_max_y());
   vgl_point_2d<double> p0, p1;
-  if(box.intersect(line, p0, p1))
+  if (box.intersect(line, p0, p1))
     return true;
   return false;
 }
