@@ -52,6 +52,7 @@ while (<>)
     s/\bVCL_STATIC_CONST_INIT_(INT|FLOAT)\s*\(([^()]*)\)/= $2/g;
     s/\bVCL_DFL_TYPE_PARAM_STLDECL\s*\(([^,()]*),([^,()]*)\)/class $1 = $2 /g;
     s/\bDECLARE_DYNCREATE\s*\([^()]*\)//g; # for MFC
+    s/\bTODO\b/\\todo/g;
 
     if ( $should_end_verbatim )
     {
@@ -106,7 +107,10 @@ while (<>)
     {
         s!$slashslashpatt!$starpatt!;
         # remove lines of the form ========= or +-+-+-+-+ or ********* or longer:
-        print unless m/^\s*[*=+-]{9,}\s*$/; next;
+        print unless m/^\s*[*=+-]{9,}\s*$/;
+        # found \brief: finish it after single line:
+        print "\n" if ( m!\\brief\b!);
+        next;
     }
 
     # found end of comment -> start line with */
