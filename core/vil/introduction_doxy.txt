@@ -51,7 +51,7 @@ vil2_image_view<vil_rgb<vxl_byte> > rgb_image2 = three_plane_image;
 rgb_image2 = vil2_view_as_rgb(three_plane_image);
 
 // If you want a greyscale image no matter whether the underlying image is rgb or grey
-vil2_image_view<vxl_byte> image2 = vil2_convert_to_grey_using_average("my_image.jpg");
+vil2_image_view<vxl_byte> image2 = vil2_convert_to_grey_using_average<vxl_byte>("my_image.jpg",vxl_byte());
 
 \endverbatim
 *
