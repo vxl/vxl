@@ -804,6 +804,43 @@ int main() { int a[5]; qsort(a, 5, sizeof(int), f); return 0; }
 
 //-------------------------------------
 
+#ifdef VCL_COMPLEX_POW_WORKS
+// It appears several programmers have (independently)
+// not realised their lack of knowledge of complex numbers.
+// pow(complex(-1,0),0.5) should return (0,1) not (Nan,0), etc.
+
+// Several versions of gcc (3.0, 3.1, and 3.2) come with a
+// numeric_limits that reports that they have no infinity.
+
+#include <complex>
+int main()
+{
+  const std::complex<double> neg1(-1.0, 0.0);
+  const std::complex<double> half(0.5,0.0);
+
+  std::complex<double> sqrt_neg1 = std::pow(neg1, 0.5);
+  if ( std::abs(sqrt_neg1-1.0) > 1e-6 )
+  {} // Deal with NaN case
+  else
+    return 1;
+
+  sqrt_neg1 = std::pow(neg1, half);
+  if ( std::abs(sqrt_neg1-1.0) > 1.0e-6)
+  {} // Deal with NaN case
+  else
+    return 1;
+
+  sqrt_neg1 = std::pow(-1.0, half);
+  if ( std::abs(sqrt_neg1-1.0) > 1.0e-6)
+  {} // Deal with NaN case
+  else
+    return 1;
+
+  return 0; // success
+}
+#endif // VCL_COMPLEX_POW_WORKS
+
+//-------------------------------------
 #ifdef VCL_NUMERIC_LIMITS_HAS_INFINITY
 // Does vcl_numeric_limits<float>::has_infinity == 1?
 
