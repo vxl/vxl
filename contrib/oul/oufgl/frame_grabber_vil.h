@@ -3,16 +3,16 @@
 
 #include <sys/mman.h>
 #include <sys/ioctl.h>
-#include <sys/types.h>
+#include <vcl_sys/types.h>
 #include <linux/videodev.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <sys/signal.h>
-#include <iostream>
-#include <cstdio>
+#include <vcl_cstdio.h>
 #include <vil/vil_image_view.h>
 #include <vcl_iostream.h>
 #include <errno.h>
+#include <unistd.h>
 
 // The framegrabber class. Very easy to use. Uses the video-4-linux
 // interface. Simply create an object of type FrameGrabber and then
