@@ -66,7 +66,8 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /Ob2 /I "$(IUEROOT)\vxl\config.win32-VC60" /I "$(IUEROOT)/vxl" /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /D "_AFXDLL" /YX /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /Ob2 /I "$(IUEROOT)\vxl\config.win32-VC60" /I "$(IUEROOT)/vxl" /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /D "_AFXDLL" /FD /GZ /c
+# SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG" /d "_AFXDLL"
 BSC32=bscmake.exe
@@ -91,15 +92,15 @@ SOURCE=.\vbl_arg.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vbl_array+double-.cxx
+SOURCE=".\Templates\vbl_array+double-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vbl_array+float-.cxx
+SOURCE=".\Templates\vbl_array+float-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vbl_array_2d+bool-.cxx
+SOURCE=".\Templates\vbl_array_2d+bool-.cxx"
 # End Source File
 # Begin Source File
 
@@ -200,10 +201,6 @@ SOURCE=.\vbl_ref_count.cxx
 # Begin Source File
 
 SOURCE=.\vbl_reg_exp.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=.\vbl_sequence_filename_map.cxx
 # End Source File
 # Begin Source File
 

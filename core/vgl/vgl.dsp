@@ -66,7 +66,8 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /Ob2 /I "$(IUEROOT)\vxl\config.win32-VC60" /I "$(IUEROOT)/vxl" /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /D "_AFXDLL" /YX /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /Ob2 /I "$(IUEROOT)\vxl\config.win32-VC60" /I "$(IUEROOT)/vxl" /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /D "_AFXDLL" /FD /GZ /c
+# SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG" /d "_AFXDLL"
 BSC32=bscmake.exe
@@ -87,83 +88,19 @@ LIB32=link.exe -lib
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=.\Templates\vcl_vector+vcl_vector+vgl_point_2d+float---.cxx
+SOURCE=".\Templates\vcl_vector+vcl_vector+vgl_point_2d+float---.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vcl_vector+vgl_point_2d+double--.cxx
+SOURCE=".\Templates\vcl_vector+vgl_point_2d+double--.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vcl_vector+vgl_point_2d+float--.cxx
+SOURCE=".\Templates\vcl_vector+vgl_point_2d+float--.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vcl_vector+vgl_polygon-.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates\vgl_box_2d+int-.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates\vgl_line_2d+float-.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates\vgl_line_segment_2d+double-.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates\vgl_line_segment_3d.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates\vgl_plane_3d+double-.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates\vgl_plane_3d+float-.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates\vgl_point_2d+double-.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates\vgl_point_2d+float-.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates\vgl_point_3d+double-.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates\vgl_point_3d+float-.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgl_lineseg_test.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgl_polygon_test.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgl_region_scan_iterator.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgl_triangle_scan_iterator.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgl_triangle_test.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgl_window_scan_iterator.cxx
+SOURCE=".\Templates\vcl_vector+vgl_polygon-.cxx"
 # End Source File
 # Begin Source File
 
@@ -172,6 +109,10 @@ SOURCE=".\Templates\vgl_box_2d+double-.cxx"
 # Begin Source File
 
 SOURCE=".\Templates\vgl_box_2d+float-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vgl_box_2d+int-.cxx"
 # End Source File
 # Begin Source File
 
@@ -235,11 +176,71 @@ SOURCE=".\Templates\vgl_line_2d+double-.cxx"
 # End Source File
 # Begin Source File
 
+SOURCE=".\Templates\vgl_line_2d+float-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vgl_line_segment_2d+double-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vgl_line_segment_3d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_lineseg_test.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vgl_plane_3d+double-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vgl_plane_3d+float-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vgl_point_2d+double-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vgl_point_2d+float-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vgl_point_3d+double-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vgl_point_3d+float-.cxx"
+# End Source File
+# Begin Source File
+
 SOURCE=.\vgl_polygon.cxx
 # End Source File
 # Begin Source File
 
 SOURCE=.\vgl_polygon_scan_iterator.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_polygon_test.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_region_scan_iterator.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_triangle_scan_iterator.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_triangle_test.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_window_scan_iterator.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

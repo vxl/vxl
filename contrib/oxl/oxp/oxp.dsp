@@ -64,7 +64,8 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /Ob2 /I "$(IUEROOT)/oxl" /I "$(IUEROOT)/vxl/config.win32-vc60" /I "$(IUEROOT)/vxl" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /D "_AFXDLL" /YX /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /Ob2 /I "$(IUEROOT)/oxl" /I "$(IUEROOT)/vxl/config.win32-vc60" /I "$(IUEROOT)/vxl" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /D "_AFXDLL" /FD /GZ /c
+# SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG" /d "_AFXDLL"
 BSC32=bscmake.exe
@@ -102,10 +103,6 @@ SOURCE=.\ImageSequenceName.cxx
 # Begin Source File
 
 SOURCE=".\Templates\ImageWarp+byte-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\ImageWarp+RGB+byte--.cxx"
 # End Source File
 # Begin Source File
 
