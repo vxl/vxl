@@ -56,6 +56,30 @@ class vgui_vrml_draw_visitor : public QvVisitor
   bool Visit(QvTexture2* node);
   bool Visit(QvShapeHints* node);
 
+  // Dummy implementations of parent's virtual functions:
+  bool Visit(QvNode *node)      { return QvVisitor::Visit(node); }
+  bool Visit(QvGroup *node)     { return QvVisitor::Visit(node); }
+  bool Visit(QvSwitch *node)    { return QvVisitor::Visit(node); }
+  bool Visit(QvWWWInline *node) { return QvVisitor::Visit(node); }
+  bool Visit(QvCoordinate3 *) { return false; }
+  bool Visit(QvDirectionalLight *) { return false; }
+  bool Visit(QvFontStyle *) { return false; }
+  bool Visit(QvInfo *) { return false; }
+  bool Visit(QvLOD *) { return false; }
+  bool Visit(QvMaterialBinding *) { return false; }
+  bool Visit(QvMatrixTransform *) { return false; }
+  bool Visit(QvNormal *) { return false; }
+  bool Visit(QvNormalBinding *) { return false; }
+  bool Visit(QvOrthographicCamera *) { return false; }
+  bool Visit(QvPerspectiveCamera *) { return false; }
+  bool Visit(QvPointLight *) { return false; }
+  bool Visit(QvSpotLight *) { return false; }
+  bool Visit(QvTexture2Transform *) { return false; }
+  bool Visit(QvTextureCoordinate2 *) { return false; }
+  bool Visit(QvWWWAnchor *) { return false; }
+  bool Visit(QvUnknownNode *) { return false; }
+  bool Visit(QvLabel *) { return false; }
+  bool Visit(QvLightModel *) { return false; }
 
   enum mode_type {wireframe, textured, shaded};
 
