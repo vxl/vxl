@@ -89,6 +89,8 @@ char const *guess_file_format(char const* filename)
     macro(ppm, pnm);
     macro(pnm, pnm);
     macro(jpg, jpeg);
+    macro(jpeg, jpeg);
+    macro(tiff, tiff);
     macro(tif, tiff);
     macro(mit, mit);
     macro(gif, gif);
