@@ -1,8 +1,7 @@
-#undef VCL_COPY_INSTANTIATE
-#define VCL_COPY_INSTANTIATE(Inp, Out) \
-template Out std::copy(Inp, Inp, Out)
 
-#undef VCL_FIND_INSTANTIATE
-#define VCL_FIND_INSTANTIATE(Inp,Out) \
-template Inp std::find(Inp, Inp, Out const&)
-
+#define INSTANTIATE_TAGS(I, TAG)
+#define INSTANTIATE_ITER_FWD(ForwardIterator)
+#define INSTANTIATE_ITER_BD_Distance(BidirectionalIterator, Distance)
+#define INSTANTIATE_ITER_BD(BidirectionalIterator)
+#define INSTANTIATE_ITER_RA_Distance(RandomAccessIterator, Distance)
+#define INSTANTIATE_ITER_RA(RandomAccessIterator)

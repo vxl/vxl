@@ -1,7 +1,7 @@
 #include <vcl/vcl_compiler.h>
 #include "vcl_algorithm.txx"
 #include "vcl_iterator.txx"
-#include "vcl_pair.txx"
+#include "vcl_utility.txx"
 
 //-*- c++ -*-
 // --- Feature testing ---

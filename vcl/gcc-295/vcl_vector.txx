@@ -2,7 +2,6 @@
 #define vcl_gcc295_vector_txx_
 
 #include <vcl/vcl_vector.h>
-#include <vcl/vcl_compiler.h>
 
 #define VCL_VECTOR_STLINST_uninitialized_copy(Inp, Fwd, Size) \
 template Fwd __uninitialized_copy_aux(Inp, Inp, Fwd, __false_type);\
@@ -17,6 +16,8 @@ template vector<T >::iterator fill_n(vector<T >::iterator, vector<T >::size_type
 VCL_VECTOR_STLINST_uninitialized_copy(vector<T >::iterator, vector<T >::iterator, vector<T >::size_type);\
 VCL_VECTOR_STLINST_uninitialized_copy(vector<T >::const_iterator, vector<T >::iterator, vector<T >::size_type);\
 /*VCL_FIND_INSTANTIATE(vector<T >::iterator, T);*/\
+/* the next one is for the inline "void insert(pos, first, last);" method. */ \
+template void vector<T, allocator<T > >::_M_range_insert(T *, T *, T *, forward_iterator_tag); \
 template class vector<T >
 
 #endif

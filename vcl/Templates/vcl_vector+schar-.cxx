@@ -1,4 +1,3 @@
-#include <vcl/vcl_vector.h>
 #include <vcl/vcl_vector.txx>
 
 // The sunpro CC compiler does not have an operator>>(signed char) only
@@ -8,8 +7,8 @@
 // however on the sun signed char is char.
  
 
-#if defined(VCL_SUNPRO_CC)
-# define signed 
-#endif
+//#if defined(VCL_SUNPRO_CC)
+//# define signed 
+//#endif
 
 VCL_VECTOR_INSTANTIATE(signed char);

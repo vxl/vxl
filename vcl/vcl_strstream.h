@@ -12,6 +12,7 @@
 #include <strstream>
 using std :: ostrstream;
 using std :: istrstream;
+
 #else
 #include <strstream.h>
 #endif

@@ -1,3 +1,6 @@
+#ifndef vcl_emulation_vector_txx_
+#define vcl_emulation_vector_txx_
+
 // -*- c++ -*-
 #include <vcl/vcl_compiler.h>
 #include "vcl_vector.h"
@@ -16,3 +19,5 @@
 #define VCL_VECTOR_INSTANTIATE(T)				\
 __VECTOR_INSTANTIATE(T)						\
 template class __vector_base<T , vcl_alloc >;
+
+#endif

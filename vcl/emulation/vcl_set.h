@@ -226,7 +226,8 @@ inline bool operator<(const vcl_set<Key, Compare>& x,
 #  endif
 # endif /*  __STL_DEFAULT_TYPE_PARAM */
 
-#define VCL_SET_INSTANTIATE \
-extern "please include vcl/emulation/vcl_set.txx instead"
+// This is defined in vcl/vcl_set.h
+//#define VCL_SET_INSTANTIATE \
+//extern "please include vcl/emulation/vcl_set.txx instead"
 
 #endif // vcl_emulation_set_h

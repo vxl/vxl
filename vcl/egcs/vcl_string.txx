@@ -6,6 +6,7 @@
 
 #include <vcl/vcl_string.h>
 
+#undef VCL_BASIC_STRING_INSTANTIATE
 #define VCL_BASIC_STRING_INSTANTIATE(charT, Traits) \
 template ostream& operator<<(ostream&, basic_string<charT, Traits > const &);
 

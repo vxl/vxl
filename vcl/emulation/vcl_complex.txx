@@ -1,3 +1,5 @@
+#ifndef vcl_emulation_complex_txx_
+#define vcl_emulation_complex_txx_
 //-*- c++ -*-------------------------------------------------------------------
 //
 // Module: complex
@@ -50,3 +52,5 @@ VCL_INSTANTIATE_INLINE(FLOAT arg (vcl_complex<FLOAT >const&));		\
 VCL_INSTANTIATE_INLINE(FLOAT abs (vcl_complex<FLOAT >const&));		\
 VCL_INSTANTIATE_INLINE(FLOAT norm (vcl_complex<FLOAT >const&));         \
 VCL_INSTANTIATE_INLINE(vcl_complex<FLOAT> conj (vcl_complex<FLOAT >const&));
+
+#endif

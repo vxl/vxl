@@ -16,7 +16,10 @@ template vector<T >::iterator __uninitialized_fill_n_aux(vector<T >::iterator, v
 template void fill(vector<T >::iterator, vector<T >::iterator, T const &); \
 template vector<T >::iterator fill_n(vector<T >::iterator, vector<T >::size_type, T const &);\
 INSTANTIATE_COPY(vector<T >::const_iterator, vector<T >::iterator);\
-STLINST_uninitialized_copy(vector<T >::const_iterator, vector<T >::iterator, vector<T >::size_type);\
+VCL_VECTOR_STLINST_uninitialized_copy(vector<T >::iterator, vector<T >::iterator, vector<T >::size_type);\
+VCL_VECTOR_STLINST_uninitialized_copy(vector<T >::const_iterator, vector<T >::iterator, vector<T >::size_type);\
+template \
+void vector<T, __default_alloc_template<true, 0> >::range_insert(T *, T *, T *, forward_iterator_tag); \
 template class vector<T >
 
 #endif

@@ -7,11 +7,13 @@
 template class basic_string<char, string_char_traits<char> >;
 template ostream& operator<<(ostream&, vcl_string const&);
 
+#define concat(x, y) x##y
+
 namespace {
   void f(ostream& os) {
     char a;
     string_char_traits<char>::eq(a,a);
-    string s;
+    concat(str,ing) s;
     os << s;
   }
 }

@@ -58,13 +58,14 @@
 
 #include <vcl/vcl_cstdlib.h>
 
+#include <vcl/vcl_iostream.h>
 //#include <vcl/vcl_alloc.h>
 #include "vcl_alloc.h"
 #include <vcl/vcl_algorithm.h>
 #include <vcl/vcl_iterator.h>
 #include <vcl/vcl_functional.h>
 #include <vcl/vcl_vector.h>
-#include <vcl/vcl_pair.h>
+#include "vcl_pair.h"
 #include <vcl/vcl_exception.h>
 #include <vcl/vcl_memory.h>
 

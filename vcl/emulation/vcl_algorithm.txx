@@ -22,8 +22,10 @@ VCL_INSTANTIATE_INLINE( I find(I, I, T const&) );
 
 // I is a random access iterator.
 // this works for vector<double>::iterator with gcc 2.7 and irix6-CC-n32 :
-#define VCL_SORT_INSTANTIATE(I) \
+#define VCL_SORT_INSTANTIATE(I, T) \
 VCL_INSTANTIATE_INLINE( void sort(I, I ) );
+#define VCL_SORT_INSTANTIATE_CMP(I, T, C) \
+VCL_INSTANTIATE_INLINE( void sort(I, I, C ) );
 
 #undef VCL_COPY_INSTANTIATE
 #define VCL_COPY_INSTANTIATE(Inp, Out) \
@@ -32,3 +34,5 @@ VCL_INSTANTIATE_INLINE(Out copy(Inp, Inp, Out));
 #undef VCL_COPY_BACKWARD_INSTANTIATE
 #define VCL_COPY_BACKWARD_INSTANTIATE(Inp, Out) \
 VCL_INSTANTIATE_INLINE(Out copy_backward(Inp, Inp, Out));
+
+#define VCL_FIND_IF_INSTANTIATE(I, P) VCL_INSTANTIATE_INLINE(I find_if(I, I, P));

@@ -4,6 +4,8 @@
   fsm@robots.ox.ac.uk
 */
 
+#include <vcl/vcl_compiler.h>
+
 // Purpose: provide access to the <time.h> standard C header.
 
 #include <time.h>

@@ -4,6 +4,7 @@
   fsm@robots.ox.ac.uk
 */
 
+#undef VCL_BASIC_STRING_INSTANTIATE
 #define VCL_BASIC_STRING_INSTANTIATE(charT, Traits) \
 /* wibble */
 

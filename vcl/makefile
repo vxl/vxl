@@ -1,7 +1,5 @@
-VXL := 1
-
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${IUEROOT}/config/usr_params.mk
 #######################################
 
 USES := vxl
@@ -13,7 +11,10 @@ ifndef NOTEST
 SUBDIRS = tests
 endif
 
+SOURCES += vcl_cmath.cxx
 SOURCES += vcl_unistd.cxx
+SOURCES += $(wildcard vcl_rtti.cxx)
+SOURCES += $(wildcard vcl_debug.cxx)
 
 ifndef USE_NATIVE_STL
 SOURCES += emulation/vcl_straits.cxx
@@ -26,5 +27,5 @@ endif
 DEFINES += -DBUILDING_VCL_DLL
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${IUEROOT}/config/usr_rules.mk
 ######################################

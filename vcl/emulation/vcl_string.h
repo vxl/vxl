@@ -637,20 +637,20 @@ operator>= (const vcl_basic_string <charT, traits>& lhs,
 #endif
 // #endif
 
-template <class charT, class traits> istream&
-operator>> (istream&, vcl_basic_string <charT, traits>&);
+template <class charT, class traits> vcl_istream&
+operator>> (vcl_istream&, vcl_basic_string <charT, traits>&);
 template <class charT, class traits>
-inline ostream&
-operator<< (ostream &o, const vcl_basic_string <charT, traits>& s)
+inline vcl_ostream&
+operator<< (vcl_ostream &o, const vcl_basic_string <charT, traits>& s)
 {
   return o.write (s.data (), s.length ());
 }
 
-template <class charT, class traits> istream&
+template <class charT, class traits> vcl_istream&
 #ifdef __SUNPRO_CC
-getline (istream&, vcl_basic_string <charT, traits>&, charT delim);
+getline (vcl_istream&, vcl_basic_string <charT, traits>&, charT delim);
 #else
-getline (istream&, vcl_basic_string <charT, traits>&, charT delim ='\n');
+getline (vcl_istream&, vcl_basic_string <charT, traits>&, charT delim ='\n');
 #endif
 } // extern "C++"
 
@@ -688,7 +688,8 @@ struct vcl_string : public vcl_basic_string <char, vcl_string_char_traits <char>
 typedef vcl_basic_string <char, vcl_string_char_traits <char> > vcl_string;
 #endif
 
-#define VCL_BASIC_STRING_INSTANTIATE \
-extern "please include vcl/emulation/vcl_string.txx instead"
+// KYM: moved to vcl/vcl_string.h to match others
+//#define VCL_BASIC_STRING_INSTANTIATE \
+//extern "please include vcl/emulation/vcl_string.txx instead"
 
 #endif // vcl_emulation_string_h

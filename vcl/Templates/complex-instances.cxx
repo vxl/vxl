@@ -3,15 +3,19 @@
 // e.g. ensure that "operator/(complex<float>, float)" exists
 // it is in Templates because it may need implicit templates to work properly
 
-#include <vcl/vcl_compiler.h>
 #include <vcl/vcl_iostream.h> 
-#include <vcl/vcl_complex.h> 
 #include <vcl/vcl_complex.txx> 
 
+//#if 0
+#if defined(VCL_GCC_27) || defined(VCL_GCC_EGCS)
 // ---------- emulation
 #if !VCL_USE_NATIVE_COMPLEX
-  VCL_COMPLEX_INSTANTIATE(float)
+  VCL_COMPLEX_INSTANTIATE(float);
   VCL_COMPLEX_INSTANTIATE(double);
+# if defined(VCL_GCC_27)
+  VCL_INSTANTIATE_INLINE(vcl_complex<float > operator+(vcl_complex<float > const &));
+  VCL_INSTANTIATE_INLINE(vcl_complex<double> operator+(vcl_complex<double> const &));
+#endif
 
 // ---------- egcs and gcc 2.95
 #elif defined(VCL_GCC_295) || defined(VCL_GCC_EGCS)
@@ -52,6 +56,7 @@ istream &operator>>(istream &is, vcl_complex<T > &z) { \
       F(FLOAT arg (complex<FLOAT >const&));		\
       F(FLOAT abs (complex<FLOAT >const&));		\
       F(FLOAT norm (complex<FLOAT >const&)); \
+      F(complex<FLOAT>& __doadv (complex<FLOAT>* ths, const complex<FLOAT>& y)); \
       template ostream& operator<<(ostream &, complex<FLOAT > const &);
 //#pragma implementation "fcomplex"
 //VCL_COMPLEX_INSTANTIATE(float);
@@ -59,9 +64,22 @@ do_inlines(float); implement_rsh(float);
 //#pragma implementation "dcomplex"
 //VCL_COMPLEX_INSTANTIATE(double);
 do_inlines(double); implement_rsh(double);
+#if 0
+// tickle implicit templates :
+namespace {
+  void foo() {
+    complex<float> *a, *b;
+    (*a) += (*b);
+    (*a) -= (*b);
+    (*a) *= (*b);
+    (*a) /= (*b);
+  }
+};
+#endif
 
 // ---------- sunpro
 #elif defined(VCL_SUNPRO_CC)
-template complex<double> std::conj<double>(complex<double> const &);
+template std::complex<double> std::conj<double>(std::complex<double> const &);
 
+#endif
 #endif

@@ -7,6 +7,8 @@
   fsm@robots.ox.ac.uk
 */
 
+#include <vcl/vcl_compiler.h>
+
 #include <stdio.h>
 
 #endif

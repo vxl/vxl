@@ -1,3 +1,5 @@
+#ifndef vcl_egcs_algorithm_txx_
+#define vcl_egcs_algorithm_txx_
 
 #include <vcl/vcl_compiler.h>
 
@@ -19,8 +21,12 @@ template struct less<T >;
 #define VCL_FIND_INSTANTIATE(I, T) \
 template I std::find(I, I, T const&);
 
-// I is a random access iterator
-#define VCL_SORT_INSTANTIATE(I) \
+#define VCL_SORT_INSTANTIATE(I, T) \
 template void __final_insertion_sort(I, I); \
 template void __introsort_loop(I, I, I, int);
+#define VCL_SORT_INSTANTIATE_CMP(I, T, C) \
+/* fix it if you need it */
 
+#define VCL_FIND_IF_INSTANTIATE(I, P) template I find_if(I, I, P);
+
+#endif

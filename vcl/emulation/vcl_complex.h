@@ -451,7 +451,8 @@ inline vcl_complex<float> operator*(const vcl_complex<float>& c, double d)
   return vcl_complex<float>(c.real() * f, c.imag() * f);
 }
 
-#define VCL_COMPLEX_INSTANTIATE \
-extern "please include vcl/emulation/vcl_complex.txx instead"
+// This is already defined in vcl/vcl_complex.h
+//#define VCL_COMPLEX_INSTANTIATE \
+//extern "please include vcl/emulation/vcl_complex.txx instead"
 
 #endif // vcl_emulation_complex_h

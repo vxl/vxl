@@ -3,16 +3,24 @@
 
 #include <vcl/vcl_compiler.h>
 
-#if !VCL_USE_NATIVE_STL
+// -------------------- all emulation
+#ifndef VCL_USE_NATIVE_STL
 # include <vcl/emulation/vcl_functional.h>
+
+// -------------------- all native below
 #else
 
-#if defined(VCL_WIN32) 
-#define vcl_function_h_STD std::
-#else 
-#define vcl_function_h_STD ::
-#endif
+// Include system header and define vcl_functional_h_STD :
+# if defined(VCL_GCC)
+#  include <function.h>
+#  define vcl_function_h_STD ::
 
+# else //if defined(VCL_WIN32) || defined(VCL_SUNPRO_CC)
+#  include <functional>
+#  define vcl_function_h_STD std::
+# endif
+
+// Now #define vcl_blah to std::blah :
 # define  vcl_unary_function vcl_function_h_STD unary_function
 # define  vcl_binary_function vcl_function_h_STD binary_function
 # define  vcl_plus vcl_function_h_STD plus
@@ -30,7 +38,6 @@
 # define  vcl_logical_and vcl_function_h_STD logical_and
 # define  vcl_logical_or vcl_function_h_STD logical_or
 # define  vcl_logical_not vcl_function_h_STD logical_not
-# define  vcl___unary_fun_aux vcl_function_h_STD __unary_fun_aux
 # define  vcl_identity vcl_function_h_STD identity
 # define  vcl_select1st vcl_function_h_STD select1st
 # define  vcl_select2nd vcl_function_h_STD select2nd
@@ -40,69 +47,48 @@
 # define  vcl_constant_unary_fun vcl_function_h_STD constant_unary_fun
 # define  vcl_constant_binary_fun vcl_function_h_STD constant_binary_fun
 
-# ifdef __GNUC__
-#  include_next <function.h>
-# elif defined(VCL_SUNPRO_CC) || defined (WIN32)
-// SunPro
-#  include <functional>
-
-// select1st and select2nd are extensions: they are not part of the standard.
+// fixes for SunPro and VisualC++ :
+# if defined(VCL_SUNPRO_CC) || defined (VCL_WIN32)
+// Select1st and Select2nd are extensions: they are not part of the standard.
+// fsm: So why do we need them?
 template <class _Pair>
 struct vcl_Select1st : public vcl_unary_function<_Pair, typename _Pair::first_type> {
-  const typename _Pair::first_type& operator()(const _Pair& __x) const {
+  typename _Pair::first_type const & operator()(_Pair const & __x) const {
     return __x.first;
   }
 };
  
 template <class _Pair>
-struct vcl_Select2nd : public vcl_unary_function<_Pair, typename _Pair::second_type>
-{
-  const typename _Pair::second_type& operator()(const _Pair& __x) const {
+struct vcl_Select2nd : public vcl_unary_function<_Pair, typename _Pair::second_type> {
+  typename _Pair::second_type const & operator()(_Pair const & __x) const {
     return __x.second;
   }
 };
 
-// add select* to std
+// Add select* to std.
 namespace std {
-  template <class _Pair> struct select1st;
-  template <class _Pair> struct select2nd;
+  template <class _Pair> struct select1st : public vcl_Select1st<_Pair> { };
+  template <class _Pair> struct select2nd : public vcl_Select2nd<_Pair> { };
 };
 
-template <class _Pair> 
-struct vcl_select1st : public vcl_Select1st<_Pair> 
-{
-};
-
-template <class _Pair> 
-struct vcl_select2nd : public vcl_Select2nd<_Pair> 
-{
-};
-
+// fsm: With SunPro5.0, these conflict with the partial specializations in
+// <iterator> and the result is that comparing vcl_set<unsigned>::reverse_iterators
+// yields an overloading ambiguity.
+#  if !defined(VCL_SUNPRO_CC_50)
+template <class T>
+inline bool operator!=(T const& x, T const& y) { return !(x == y); }
 
 template <class T>
-inline bool operator!=(const T& x, const T& y) {
-       return !(x == y);
-   }
-   
-   template <class T>
-   inline bool operator>(const T& x, const T& y) {
-       return y < x;
-   }
-   
-   template <class T>
-   inline bool operator<=(const T& x, const T& y) {
-       return !(y < x);
-   }
-   
-   template <class T>
-   inline bool operator>=(const T& x, const T& y) {
-       return !(x < y);
-   }
-# else
-  ** help **   
-# endif
-#endif
+inline bool operator> (T const& x, T const& y) { return y < x; }
 
-#endif
+template <class T>
+inline bool operator<=(T const& x, T const& y) { return !(y < x); }
 
+template <class T>
+inline bool operator>=(T const& x, T const& y) { return !(x < y); }
+#  endif // !defined(VCL_SUNPRO_CC_50)
+# endif // end of SunPro/VisualC++ fixes.
 
+#endif // end of native STL
+
+#endif // inclusion guard

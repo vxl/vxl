@@ -9,13 +9,15 @@
 #if !VCL_USE_NATIVE_STL
 # include <vcl/emulation/vcl_stlfwd.h>
 #else
-#include "vcl_alloc.h"
-#include "vcl_vector.h"
-#include "vcl_stack.h"
-#include "vcl_list.h"
-#include "vcl_map.h"
-#include "vcl_multimap.h"
-#include "vcl_set.h"
-#include "vcl_queue.h"
+# include <vcl/vcl_alloc.h>
+# include <vcl/vcl_vector.h>
+# include <vcl/vcl_stack.h>
+# include <vcl/vcl_list.h>
+# include <vcl/vcl_map.h>
+# include <vcl/vcl_set.h>
+# include <vcl/vcl_stack.h>
+# include <vcl/vcl_queue.h>
+# include <vcl/vcl_deque.h>
 #endif
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vcl_stlfwd.
+
+#endif

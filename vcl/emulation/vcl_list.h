@@ -646,7 +646,8 @@ template <class T, class Alloc>
 inline void swap(__list__<T,Alloc>& a, __list__<T,Alloc>& b) { a.swap(b); }
 # endif
 
-#define VCL_LIST_INSTANTIATE \
-extern "please include vcl/emulation/vcl_list.txx instead"
+//KYM: moved to vcl/vcl_list.h
+//#define VCL_LIST_INSTANTIATE \
+//extern "please include vcl/emulation/vcl_list.txx instead"
 
 #endif // vcl_emulation_list_h

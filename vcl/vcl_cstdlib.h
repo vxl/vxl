@@ -5,23 +5,25 @@
 #pragma interface "vcl_cstdlib.h"
 #endif
 
+// [26.5.4] In addition to the signatures from <stdlib.h> the C++
+// header <cstdlib> adds the overloaded signatures :
+//   long   abs(long);        // labs()
+//   ldiv_t div(long, long);  // ldiv()
+
 #include <vcl/vcl_compiler.h>
+
+// Include system stdlib.h
+#include <stdlib.h>
 
 #if !VCL_USE_NATIVE_STL
 # include <vcl/emulation/vcl_stlconf.h>
 #else
-extern "C++" {
 # if _G_HAS_LABS
-  inline long   abs(long x)		{ return labs (x); }
+inline long   vcl_abs(long x)         { return labs (x); }
 # else
-  inline long   abs(long x)		{ return x >= 0 ? x : -x; }
+inline long   vcl_abs(long x)         { return x >= 0 ? x : -x; }
 # endif
-  //inline ldiv_t div(long x, long y)	{ return ldiv (x, y); }
-}
+inline ldiv_t vcl_div(long x, long y) { return ldiv (x, y); }
 #endif
-
-// Need to #include this in both cases. It's the client's reason
-// for #including vcl_cstdlib.h in the first place.
-#include <stdlib.h>
 
 #endif

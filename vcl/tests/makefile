@@ -2,14 +2,18 @@ USES = vxl
 VXL:=1
 
 TESTS += test_vcl_compiler.cxx
+TESTS += test_vcl_fstream.cxx
 TESTS += test_vcl_map.cxx
+TESTS += test_vcl_multimap.cxx
 TESTS += test_vcl_vector.cxx
 TESTS += test_vcl_list.cxx
 TESTS += test_vcl_string.cxx
 TESTS += test_vcl_set.cxx
 TESTS += test_vcl_deque.cxx
 TESTS += test_vcl_complex.cxx
+TESTS += test_vcl_algorithm.cxx
 TESTS += test_vcl_unistd.cxx
+TESTS += $(wildcard test_vcl_rtti.cxx)
 
 IULIBS = -lvcl 
 

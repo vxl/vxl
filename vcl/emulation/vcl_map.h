@@ -243,7 +243,9 @@ inline bool operator<(const vcl_map<Key, T, Compare>& x,
 
 # endif /*  __STL_DEFAULT_TYPE_PARAM */
 
-#define VCL_MAP_INSTANTIATE \
-extern "please include vcl/emulation/vcl_map.txx instead"
+// KYM: don't do this here, its done in vcl/vcl_map.h
+// Plus you don't want to include stuff in emulation so this message is wrong.
+//#define VCL_MAP_INSTANTIATE \
+//extern "please include vcl/emulation/vcl_map.txx instead"
 
 #endif // vcl_emulation_map_h

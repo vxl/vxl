@@ -358,7 +358,7 @@ typedef malloc_alloc multithreaded_alloc;
     
     // Default node allocator.
     // With a reasonable compiler, this should be roughly as fast as the
-    // original STL class-specific allocators, but with vcl_less fragmentation.
+    // original STL class-specific allocators, but with less fragmentation.
     // Default_alloc_template parameters are experimental and MAY
     // DISAPPEAR in the future.  Clients should just use vcl_alloc for now.
     //

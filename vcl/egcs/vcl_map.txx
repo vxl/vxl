@@ -2,39 +2,32 @@
 #define vcl_egcs_map_txx_
 
 #include <vcl/vcl_map.h>
-#include <vcl/vcl_compiler.h>
 
-// * You can't call INSTANTIATE_MAP twice from within the same macro
-// as the __LINE__ will be the same.
+// Macro to instantiate the underlying rb_tree and its member templates.
+//template class rb_tree<Key, pair<Key const, T>, select1st<pair<Key const, T> >, Comp, __default_alloc_template<true, 0> >
+#define VCL_MAP_INSTANTIATE_RB_TREE_tagged(tag, Key, T, Comp) \
+template class rb_tree<Key, pair<Key const, T>, select1st<pair<Key const, T> >, Comp, __default_alloc_template<true, 0> >; \
+typedef        rb_tree<Key, pair<Key const, T>, select1st<pair<Key const, T> >, Comp, __default_alloc_template<true, 0> > cont##tag; \
+template void cont##tag::insert_unique(cont##tag::iterator, cont##tag::iterator);
+#define VCL_MAP_INSTANTIATE_RB_TREE(Key, T, Comp) \
+VCL_MAP_INSTANTIATE_RB_TREE_tagged(__LINE__, Key, T, Comp);
 
-#ifdef __STL_MEMBER_TEMPLATES
-#define VCL_MAP_INSTANTIATE_MT_InputIterator(maptype, T, Key, Comp, InputIterator)\
-template maptype<T, Key, Comp >::maptype(InputIterator, InputIterator);\
-template maptype<T, Key, Comp >::maptype(InputIterator first, InputIterator last, Comp const&);\
-template void maptype<T, Key, Comp >::insert(InputIterator first, InputIterator last);
-#else
-#define VCL_MAP_INSTANTIATE_MT_InputIterator(maptype, T, Key, Comp, InputIterator) /* no-op */
-#endif
+// Macro to instantiate something.
+#define VCL_MAP_INSTANTIATE_MT_InputIterator(maptype, Key, T, Comp, InputIterator)\
+template maptype<Key, T, Comp >::maptype(InputIterator, InputIterator);\
+template maptype<Key, T, Comp >::maptype(InputIterator first, InputIterator last, Comp const&);\
+template void maptype<Key, T, Comp >::insert(InputIterator first, InputIterator last);
 
+// Macro to instantiate vcl_map<Key, T, Comp>
+#undef VCL_MAP_INSTANTIATE
+#define VCL_MAP_INSTANTIATE(Key, T, Comp)\
+template class vcl_map<Key, T, Comp >; \
+VCL_MAP_INSTANTIATE_MT_InputIterator(vcl_map, Key, T, Comp, vcl_map<Key VCL_COMMA T VCL_COMMA Comp >::iterator); \
+VCL_MAP_INSTANTIATE_RB_TREE(Key, T, Comp);
 
-#define VCL_MAP_INSTANTIATE(T, Key, Comp)\
-template class vcl_map<T, Key, Comp >; \
-VCL_MAP_INSTANTIATE_MT_InputIterator(vcl_map, T, Key, Comp, vcl_map<T VCL_COMMA Key VCL_COMMA Comp >::iterator)
-
-// #ifdef __STL_MEMBER_TEMPLATES
-// #define INSTANTIATE_MAP_MT_InputIterator(maptype, T, Key, Comp, InputIterator)
-// template maptype<T, Key, Comp >::maptype(InputIterator, InputIterator);
-// template maptype<T, Key, Comp >::maptype(InputIterator first, InputIterator last, Comp const&);
-// template void maptype<T, Key, Comp >::insert(InputIterator first, InputIterator last)
-// #else
-// #define INSTANTIATE_MAP_MT_InputIterator(maptype, T, Key, Comp, InputIterator) /* no-op */
-// #endif
-
-
-// #define INSTANTIATE_MAP(T, Key, Comp)
-// template class map<T, Key, Comp >;
-// template class map<T, Key, Comp >::rep_type;
-// template class multimap<T, Key, Comp >;
-// INSTANTIATE_MAP_MT_InputIterator(map, T, Key, Comp, map<T VCL_COMMA Key VCL_COMMA Comp >::iterator)
+// Macro to instantiate vcl_multimap<Key, T, Comp>
+#undef VCL_MULTIMAP_INSTANTIATE
+#define VCL_MULTIMAP_INSTANTIATE(Key, T, Comp)\
+template class vcl_multimap<Key, T, Comp >;
 
 #endif

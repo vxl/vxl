@@ -28,16 +28,11 @@ template <class T> class complex;
 
 // ---------- native WIN32
 #elif defined(VCL_WIN32)
-// forward declare the native std::complex<T> :
-namespace std { template <class T> class complex; }
-using std::complex;
-# define vcl_complex complex
+# include <vcl/win32/vcl_complex_fwd.h>
 
 // ---------- SunPro compiler
 #elif defined(VCL_SUNPRO_CC)
-// forward declare the native std::complex<T> :
-namespace std { template <class T> class complex; }
-# define vcl_complex std::complex
+# include <vcl/sunpro/vcl_complex_fwd.h>
 
 // ---------- all other compilers
 #else

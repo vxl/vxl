@@ -1,3 +1,6 @@
+#ifndef vcl_emulation_map_txx_
+#define vcl_emulation_map_txx_
+
 #include <vcl/vcl_compiler.h>
 #include "vcl_map.h"
 #include "vcl_multimap.h"
@@ -12,9 +15,11 @@
 #undef VCL_MAP_INSTANTIATE
 #define VCL_MAP_INSTANTIATE(T, Key, Comp)			\
 template class vcl_map<T, Key, Comp VCL_DFL_TMPL_ARG(vcl_alloc) >;	\
+/*fsm: the multimap should be instantiated with VCL_MULTIMAP_INSTANTIATE */ \
+/*template class vcl_multimap<T,Key,Comp VCL_DFL_TMPL_ARG(vcl_alloc) >;*/ \
 VCL_RBTREE_MAP_PAIR_INSTANTIATE(T, Key, __LINE__)
 
-// This "vcl_identity" passthru gets __LINE__ expanded
+// This "identity" passthru gets __LINE__ expanded
 #define VCL_RBTREE_MAP_PAIR_INSTANTIATE(T, Key, TAG) VCL_RBTREE_MAP_PAIRx_INSTANTIATE(T, Key, TAG)
 
 #define VCL_RBTREE_MAP_PAIRx_INSTANTIATE(T, Key, TAG)	\
@@ -26,3 +31,12 @@ VCL_RBTREE_PAIR_INSTANTIATE(T, RBPairc ## TAG)
 VCL_RBTREE_INSTANTIATE(T,RBPair,vcl_select1st<RBPair >,vcl_less<T >);\
 VCL_RBTREE_VALUE_INSTANTIATE(RBPair)
 
+
+
+// -------------------- multimap
+
+#undef VCL_MULTIMAP_INSTANTIATE
+#define VCL_MULTIMAP_INSTANTIATE(T, Key, Comp)\
+template class vcl_multimap<T, Key, Comp >;
+
+#endif

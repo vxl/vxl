@@ -1,4 +1,4 @@
-#include <vcl/vcl_algorithm.h>
 #include <vcl/vcl_algorithm.txx>
 
-VCL_SORT_INSTANTIATE(double*);
+VCL_SORT_INSTANTIATE(double*, double);
+VCL_SORT_INSTANTIATE(double**, double*);

@@ -14,8 +14,12 @@
 
 #elif defined(VCL_WIN32)
 # include <string>
-# define vcl_string std::string
+//fsm@robots: for some reason, vc60 crashes if vnl_fwd.h is used in conjunction
+//with this #define. using a typedef seems to fix it.
+//# define vcl_string std::string
+typedef std::string vcl_string;
 # define vcl_string_char_traits std::char_traits
+
 #else
 # include <string>
 # define vcl_string std::string
@@ -35,5 +39,8 @@ inline ostream& operator<<(ostream& os, vcl_string const& s) {
 #if defined(VCL_GCC_EGCS) || defined(VCL_SUNPRO_CC)
 # define VCL_STRING_IS_TYPEDEF 1
 #endif
+
+#define VCL_BASIC_STRING_INSTANTIATE \
+extern "include vcl/vcl_string.txx instead"
 
 #endif

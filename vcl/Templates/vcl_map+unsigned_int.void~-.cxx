@@ -1,3 +1,4 @@
 #include <vcl/vcl_map.txx>
 
-VCL_MAP_INSTANTIATE(unsigned int, void*, vcl_less<unsigned int>);
+//VCL_MULTIMAP_INSTANTIATE(unsigned, void*, vcl_less<unsigned>);
+VCL_MAP_INSTANTIATE(unsigned, void*, vcl_less<unsigned>);

@@ -932,7 +932,8 @@ template <class T, class Alloc>
 inline void swap(__deque__<T,Alloc>& a, __deque__<T,Alloc>& b) { a.swap(b); }
 # endif
 
-#define VCL_DEQUE_INSTANTIATE \
-extern "please include vcl/emulation/vcl_deque.txx instead"
+// KYM: moved to vcl/vcl_deque.h
+//#define VCL_DEQUE_INSTANTIATE \
+//extern "please include vcl/emulation/vcl_deque.txx instead"
 
 #endif // vcl_emulation_deque_h

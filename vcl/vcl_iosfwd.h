@@ -42,4 +42,4 @@ using std::ofstream;
 #define vcl_ofstream ofstream
 #define vcl_ifstream ifstream
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS VCL_iosfwd.
+#endif

@@ -167,6 +167,21 @@
 // the problem go away.
 
 
+// -- VCL_OVERLOAD_CAST
+//
+// Some compilers (gcc 2.7.2.3 and SGI native 6.0) often won't perform
+// certain implicit casts. E.g. casting a templated derived class to a
+// templated base class (see above), or even realizing that
+// "template void foo(float const * const *, float * const *, int, int)"
+// can be called with parameters of type "(float **, float **, int, int)".
+//   To fix the code, it is tempting to add an explicit cast and get on
+// with things, but that would throw away the checking performed by more
+// helpful compilers. Use VCL_OVERLOAD_CAST instead.
+//
+//#define VCL_OVERLOAD_CAST(T, x) ((T)(x))
+//#define VCL_OVERLOAD_CAST(T, x) (x)
+
+
 // -- VCL_DECLARE_SPECIALIZATION
 //
 // On EGCS 1.1, even with -fguiding-decls, function template specializations
@@ -334,6 +349,7 @@
 #define VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(x) x;
 #define VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(x)
 #define VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD(text) friend text;
+#define VCL_OVERLOAD_CAST(T,x) ((T)(x))
 #define VCL_DECLARE_SPECIALIZATION(f) /* template <> f; */
 #define VCL_DEFINE_SPECIALIZATION /* template <> */
 #define VCL_STL_NULL_TMPL_ARGS /* <> */
@@ -360,6 +376,7 @@
 #define VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(x) x;
 #define VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(x)
 #define VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD(text)
+#define VCL_OVERLOAD_CAST(T,x) /*(T)*/(x)
 #define VCL_DECLARE_SPECIALIZATION(f) template <> f;
 #define VCL_DEFINE_SPECIALIZATION template <>
 #define VCL_STL_NULL_TMPL_ARGS <>
@@ -386,6 +403,7 @@
 #define VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(x) x;
 #define VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(x)
 #define VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD(text)
+#define VCL_OVERLOAD_CAST(T,x) /*(T)*/(x)
 #define VCL_DECLARE_SPECIALIZATION(f) template <> f;
 #define VCL_DEFINE_SPECIALIZATION template <>
 #define VCL_STL_NULL_TMPL_ARGS <>
@@ -412,6 +430,7 @@
 #define VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(x) x;
 #define VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(x)
 #define VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD(text)
+#define VCL_OVERLOAD_CAST(T,x) /*(T)*/(x)
 #define VCL_DECLARE_SPECIALIZATION(f) template <> f;
 #define VCL_DEFINE_SPECIALIZATION template <>
 // Rather splendidly, gcc 2.95.1 bails if these are correctly specified...
@@ -443,6 +462,7 @@
 #define VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(x) x;
 #define VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(x)
 #define VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD(text)
+#define VCL_OVERLOAD_CAST(T,x) /*(T)*/(x)
 #define VCL_DECLARE_SPECIALIZATION(f) /* template <> f; */
 #define VCL_DEFINE_SPECIALIZATION /* template <> */
 #define VCL_STL_NULL_TMPL_ARGS /* <> */
@@ -470,6 +490,7 @@
 #define VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(x) @pragma do_not_instantiate x@
 #define VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(x) x;
 #define VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD(text) friend text;
+#define VCL_OVERLOAD_CAST(T,x) ((T)(x))
 #define __SGI_STL_NO_ARROW_OPERATOR
 #define VCL_DECLARE_SPECIALIZATION(f) /* template <> f; */
 #define VCL_DEFINE_SPECIALIZATION /* template <> */
@@ -497,6 +518,7 @@
 #define VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(x) @pragma do_not_instantiate x@
 #define VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(x) x;
 #define VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD(text) friend text;
+#define VCL_OVERLOAD_CAST(T,x) ((T)(x))
 #define __SGI_STL_NO_ARROW_OPERATOR
 #define VCL_DECLARE_SPECIALIZATION(f) /* template <> f; */
 #define VCL_DEFINE_SPECIALIZATION /* template <> */
@@ -524,6 +546,7 @@
 #define VCL_UNINSTANTIATE_SPECIALIZATION(x)
 #define VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION(x)
 #define VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD(text)
+#define VCL_OVERLOAD_CAST(T,x) /*(T)*/(x)
 #define VCL_DECLARE_SPECIALIZATION(f) /* template <> f; */
 #define VCL_DEFINE_SPECIALIZATION /* template <> */
 #define VCL_STL_NULL_TMPL_ARGS /* <> */
@@ -553,6 +576,7 @@
 #define VCL_UNINSTANTIATE_SPECIALIZATION(x)
 #define VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION(x)
 #define VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD(text)
+#define VCL_OVERLOAD_CAST(T,x) /*(T)*/(x)
 #define VCL_DECLARE_SPECIALIZATION(f) template <> f;
 #define VCL_DEFINE_SPECIALIZATION template <>
 #define VCL_STL_NULL_TMPL_ARGS /* <> */

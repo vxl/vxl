@@ -40,6 +40,7 @@ RSC=rc.exe
 # PROP Output_Dir "Release"
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
+MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
 # ADD CPP /nologo /MD /W3 /GX /O2 /I "$(IUEROOT)\vxl\config.win32-VC60" /I "$(IUEROOT)/vxl" /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /D "VCL_USE_NATIVE_STL" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -49,7 +50,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo
+# ADD LIB32 /nologo /out:"..\Release\vcl.lib"
 
 !ELSEIF  "$(CFG)" == "vcl - Win32 Debug"
 
@@ -63,6 +64,7 @@ LIB32=link.exe -lib
 # PROP Output_Dir "Debug"
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
+MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
 # ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "$(IUEROOT)\vxl\config.win32-VC60" /I "$(IUEROOT)/vxl" /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -72,7 +74,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"D:\target\target\vxl\Debug\vcl.lib"
+# ADD LIB32 /nologo /out:"..\Debug\vcl.lib"
 
 !ENDIF 
 
@@ -86,10 +88,6 @@ LIB32=link.exe -lib
 # Begin Source File
 
 SOURCE=".\Templates\complex-instances.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\float-instances.cxx"
 # End Source File
 # Begin Source File
 
@@ -369,11 +367,15 @@ SOURCE=.\vcl_fstream.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vcl_function.h
+SOURCE=.\vcl_functional.h
 # End Source File
 # Begin Source File
 
 SOURCE=.\vcl_iomanip.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_ios.h
 # End Source File
 # Begin Source File
 
@@ -385,11 +387,23 @@ SOURCE=.\vcl_iostream.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\vcl_istream.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\vcl_iterator.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\vcl_limits.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\vcl_list.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_locale.h
 # End Source File
 # Begin Source File
 
@@ -413,7 +427,15 @@ SOURCE=.\vcl_new.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\vcl_numeric.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\vcl_pair.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_queue.h
 # End Source File
 # Begin Source File
 
@@ -421,11 +443,23 @@ SOURCE=.\vcl_set.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\vcl_sstream.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\vcl_stack.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\vcl_stdexcept.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\vcl_stlfwd.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vcl_streambuf.h
 # End Source File
 # Begin Source File
 

@@ -4,6 +4,7 @@
   Peter.Vanroose@esat.kuleuven.ac.be
 */
 
+#include <vcl/vcl_compiler.h>
 #include <stddef.h>
 /* This should define: sizeof(), size_t, and ptrdiff_t */
 

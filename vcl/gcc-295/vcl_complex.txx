@@ -15,6 +15,7 @@
 // order to produce an instance definition for compilers that use emulation.
 // I've put an #ifdef in there, but it would be nice to avoid that.
 
+#undef VCL_COMPLEX_INSTANTIATE
 #define VCL_COMPLEX_INSTANTIATE(FLOAT)\
 template class complex<FLOAT>; \
 VCL_COMPLEX_INSTANTIATE_INLINE(bool operator==(complex<FLOAT >const&,complex<FLOAT >const&));\

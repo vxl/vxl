@@ -16,7 +16,7 @@ template void settype<T, Comp >::insert(InputIterator first, InputIterator last)
 #endif
 
 #define VCL_SET_INSTANTIATE_ITERATOR(InputIterator, Distance)\
-template void __distance (InputIterator , InputIterator , Distance& , std::bidirectional_iterator_tag ) 
+template void std :: __distance (InputIterator , InputIterator , Distance& , std::bidirectional_iterator_tag ) 
 
 
 
