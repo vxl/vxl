@@ -15,8 +15,8 @@ static void test_from_image_2d_1()
   unsigned nk=1;
   unsigned nplanes=1;
   vil_image_view<vxl_int_32> imview2d(ni, nj);
-  for (int j=0; j<nj; ++j)
-    for (int i=0; i<ni; ++i)
+  for (unsigned j=0; j<nj; ++j)
+    for (unsigned i=0; i<ni; ++i)
       imview2d(i,j) = 10*i + j;
   vimt_transform_2d transf2d;
   transf2d.set_zoom_only(2.0, 1.0, 0.0, 0.0);
