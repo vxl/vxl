@@ -56,6 +56,7 @@ vil2_image_view_base_sptr vil2_clamp_image_resource::get_copy_view(unsigned i0, 
                                                 unsigned j0, unsigned nj) const
 {
   vil2_image_view_base_sptr vs = src_->get_copy_view(i0, ni, j0, nj);
+  if (!vs) return 0;
 
   switch (vs->pixel_format())
   {

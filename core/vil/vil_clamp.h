@@ -52,7 +52,7 @@ class vil2_clamp_image_resource : public vil2_image_resource
 
   virtual vil2_image_view_base_sptr get_view(unsigned i0, unsigned ni,
                                              unsigned j0, unsigned nj) const {
-    return get_copy_view(j0, ni, j0, nj); }
+    return get_copy_view(i0, ni, j0, nj); }
 
 
   //: Put the data in this view back into the image source.
