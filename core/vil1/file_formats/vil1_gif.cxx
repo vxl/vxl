@@ -1,0 +1,213 @@
+/*
+  fsm@robots.ox.ac.uk
+*/
+#ifdef __GNUC__
+#pragma implementation "vil_gif"
+#endif
+#include "vil_gif.h"
+
+#include <vcl/vcl_iostream.h>
+
+#include <vil/vil_stream.h>
+#include <vil/vil_16bit.h>
+
+bool vil_gif_probe(vil_stream *s)
+{
+  // 47 49 46 38 37 61  "GIF87a"
+  s->seek(0);
+  char magic[6];
+  s->read(magic, sizeof magic);
+
+  if (magic[0] != 0x47 ||
+      magic[1] != 0x49 ||
+      magic[2] != 0x46 )
+    return false;
+  
+  if (magic[3] != 0x38 ||
+      magic[4] != 0x37 ||
+      magic[5] != 0x61 ) {
+    cerr << __FILE__ ": file format may be GIF, but is not v87" << endl;
+    // may be GIF, but not GIF87a
+    return false;
+  }
+  return true;
+}
+
+char const *vil_gif_file_format::tag() const { return "gif"; }
+
+vil_image_impl *vil_gif_file_format::make_input_image(vil_stream *s)
+{
+  if (! vil_gif_probe(s))
+    return 0;
+  else
+    return new vil_gif_loader_saver(s);
+}
+
+vil_gif_loader_saver::vil_gif_loader_saver(vil_stream *s_) : s(s_)
+{
+  s->ref();
+  assert(vil_gif_probe(s));
+  s->seek(6);
+  
+  // read screen descriptor
+  screen_width_  = vil_16bit_read_little_endian(s);
+  screen_height_ = vil_16bit_read_little_endian(s);
+  cerr << "screen width and height : " << screen_width_ << ' ' << screen_height_ << endl;
+  
+  unsigned char b;
+  
+  s->read(&b, 1);
+  if (b & 0x80) {
+    int bits = 1 + ((b & 0x70)>>4) /* why ?? */ + 1;
+    global_color_map = new vil_gif_color_map( 0x1 << bits );
+    cerr << "global colour map has size " << global_color_map->size << endl;
+  }
+  else
+    global_color_map = 0;
+
+  if (b & 0x07 != 7) {
+    // cannot cope unless there are 8 bits per pixel.
+    assert(false);
+  }
+  
+  s->read(&b, 1);
+  background_index = b;
+  cerr << "background has colour index " << background_index << endl;
+
+  s->read(&b, 1); // zero
+  
+  cerr << "position is 0x" << hex << s->tell() << dec << endl;
+  if (global_color_map) {
+    cerr << "read global colour map" << endl;
+    s->read(global_color_map->cmap, 3*global_color_map->size);
+  }
+
+  // read image descriptors
+  while (true) {
+    int offset = s->tell();
+    cerr << "position is 0x" << hex << offset << dec << endl;
+
+    s->read(&b, 1);
+    if (b == ';')
+      break; // GIF terminator
+    if (b != ',') { // image separator
+      cerr << "unexpected character \'" << char(b) << "\' (0x" << hex << int(b) << dec << ") in GIF stream" << endl;
+      assert(false);
+    }
+    vil_gif_image_record *ir = new vil_gif_image_record;
+    ir->offset = offset;
+    ir->x0 = vil_16bit_read_little_endian(s);
+    ir->y0 = vil_16bit_read_little_endian(s);
+    ir->w  = vil_16bit_read_little_endian(s);
+    ir->h  = vil_16bit_read_little_endian(s);
+    cerr << "x0 y0 w h = " << ir->x0 << ' ' << ir->y0 << ' ' << ir->w << ' ' << ir->h << endl;
+
+    cerr << "position is 0x" << hex << s->tell() << dec << endl;
+
+    s->read(&b, 1);
+    cerr << "b = 0x" << hex << int(b) << dec << endl;
+
+    cerr << "position is 0x" << hex << s->tell() << dec << endl;
+    if (b & 0x80) {
+      int bits = 1 + (b & 0x07);
+      cerr << "read local colour map (" << bits << " bits per pixel)" << endl;
+      ir->color_map = new vil_gif_color_map(0x1 << bits);
+      s->read(ir->color_map->cmap, 3*ir->color_map->size);
+    }
+    else {
+      cerr << "no local colour map" << endl;
+      ir->color_map = 0;
+    }
+    cerr << "position is 0x" << hex << s->tell() << dec << endl;
+    
+    ir->interlaced = b & 0x40;
+    cerr << (ir->interlaced ? "interlaced" : "sequential") << endl;
+
+    ir->bitmap_start = s->tell();
+    
+    // seek to end of raster data
+    s->seek(ir->bitmap_start + ir->w * ir->h);
+    
+    images.push_back(ir);
+    break;
+  }
+  cerr << "read " << images.size() << " image descriptors" << endl;
+}
+
+vil_gif_loader_saver::~vil_gif_loader_saver()
+{
+  s->unref();
+
+  if (global_color_map) {
+    delete global_color_map;
+    global_color_map = 0;
+  }
+
+  for (int i=0; i<images.size(); ++i) {
+    vil_gif_image_record *ir = static_cast<vil_gif_image_record*>(images[i]);
+    if (ir->color_map)
+      delete ir->color_map;
+    delete ir;
+  }
+  images.clear();
+}
+
+char const *vil_gif_loader_saver::file_format() const { return "gif"; }
+
+vil_image vil_gif_loader_saver::get_plane(int i) const
+{
+  if (0<=i && i<images.size())
+    return new vil_gif_loader_saver_proxy(i, const_cast<vil_gif_loader_saver*>(this));
+  else
+    return 0;
+}
+
+bool vil_gif_loader_saver::get_section(void *buf, int x0, int y0, int w, int h) const
+{
+  if (planes() == 1)
+    return get_section(0, buf, x0, y0, w, h);
+  else
+    return false;
+}
+
+bool vil_gif_loader_saver::put_section(void const *buf, int x0, int y0, int w, int h)
+{
+  if (planes() == 1)
+    return put_section(0, buf, x0, y0, w, h);
+  else
+    return false;
+}
+
+bool vil_gif_loader_saver::get_section(int image, void* buf, int x0, int y0, int w, int h) const
+{
+  assert(0<=image && image<images.size());
+  char *char_buf = (char*) buf;
+
+  vil_gif_image_record *ir = static_cast<vil_gif_image_record*>( images[image] );
+
+#if 0
+  for (int i=0; i<h; ++i) {
+    s->seek(ir->bitmap_start + x0 + ir->w*(y0 + i));
+    s->read(char_buf + w*i, w);
+  }
+#else
+  unsigned char *tmp = new unsigned char [w];
+
+  vil_gif_color_map *cm = ir->color_map ? ir->color_map : global_color_map;
+  
+  for (int i=0; i<h; ++i) {
+    s->seek(ir->bitmap_start + x0 + ir->w*(y0 + i));
+    s->read(tmp, w);
+    for (int j=0; j<w; ++j) {
+      int index = int(tmp[j]);
+      (char_buf + 3*w*i)[3*j + 0] = cm->cmap[3*index + 0];
+      (char_buf + 3*w*i)[3*j + 1] = cm->cmap[3*index + 1];
+      (char_buf + 3*w*i)[3*j + 2] = cm->cmap[3*index + 2];
+    }
+  }
+  
+  delete [] tmp;
+#endif
+  
+  return true;
+}

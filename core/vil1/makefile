@@ -1,4 +1,4 @@
-#######################################
+######################################
 include ${IUEROOT}/config/top-params.mk
 #######################################
 
@@ -23,7 +23,6 @@ SOURCES += vil_32bit.cxx
 #SOURCES += vil_stream_iso_stream.cxx  # from a C++ stream
 SOURCES += vil_stream_fstream.cxx     # from a file
 SOURCES += vil_stream_core.cxx        # in-core vil_stream
-SOURCES += vil_stream_FILE_ptr.cxx    # adapt a vil_stream to a FILE * using temp file
 SOURCES += vil_stream_section.cxx     # present a section of a vil_stream
 
 # classes derived from vil_image
@@ -53,6 +52,7 @@ SOURCES += file_formats/vil_bmp_file_header.cxx
 SOURCES += file_formats/vil_bmp_core_header.cxx
 SOURCES += file_formats/vil_bmp_info_header.cxx
 SOURCES += file_formats/vil_bmp.cxx
+#SOURCES += file_formats/vil_gif.cxx
 ifeq ($(HAS_PNG),1)
 USE_PNG := 1
 SOURCES += file_formats/vil_png.cxx

@@ -74,7 +74,7 @@ vil_image make_memory_image(vil_image const & that)
 {
   if (that.get_property("memory"))
     return that;
-  vcl_cerr << "copying " << that.impl() << endl;
+  //vcl_cerr << "copying " << that.impl() << endl;
 
   vil_memory_image mem(that.planes(), 
 		       that.width(), 
@@ -93,7 +93,7 @@ vil_memory_image::vil_memory_image(vil_image const & that)
 {
   cache_from_impl;
   if (this->impl() != that.impl()) {
-    cerr << "get_section";
+    //cerr << "get_section";
     that.get_section(get_buffer(), 0, 0, width(), height());
   }
 }

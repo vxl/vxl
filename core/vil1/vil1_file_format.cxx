@@ -26,6 +26,7 @@ vil_file_format::~vil_file_format()
 #endif
 
 #include <vil/file_formats/vil_bmp.h>
+//#include <vil/file_formats/vil_gif.h>
 
 
 
@@ -33,7 +34,7 @@ static vil_file_format** storage = 0;
 vil_file_format** vil_file_format::all()
 {
   if (storage == 0) {
-    storage = new vil_file_format*[32];
+    storage = new vil_file_format*[256];
     int c = 0;
 
 #if HAS_JPEG
@@ -50,6 +51,7 @@ vil_file_format** vil_file_format::all()
     storage[c++] = new vil_mit_file_format;
     storage[c++] = new vil_viff_file_format;
     storage[c++] = new vil_bmp_file_format;
+    //storage[c++] = new vil_gif_file_format;
 
     storage[c++] = 0;
   }
