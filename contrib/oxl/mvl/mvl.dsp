@@ -856,6 +856,56 @@ SOURCE=.\mvl_six_point_design_matrix_row.cxx
 SOURCE=.\mvl_three_view_six_point_structure.cxx
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\ComputeGRIC.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\FMatrixCompute7Point.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\FMatrixComputeLMedSq.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\FMatrixComputeMLESAC.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\FMatrixComputeNonLinear.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\FMatrixComputeRANSAC.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\FMatrixComputeRobust.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\HMatrix2DComputeMLESAC.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\HMatrix2DComputeRobust.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Probability.cxx
+
+# End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
