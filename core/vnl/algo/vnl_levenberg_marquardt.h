@@ -53,8 +53,11 @@ public:
 // -- Minimize the function supplied in the constructor until convergence
 // or failure.  On return, x is such that f(x) is the lowest value achieved.
 // Returns true for convergence, false for failure.
-  bool minimize(vnl_vector<double>& x);
-  bool minimize_using_gradient(vnl_vector<double>& x);
+  bool minimize_without_gradient(vnl_vector<double>& x);
+  bool minimize_using_gradient  (vnl_vector<double>& x);
+
+  // use this one if you can remember whether it uses the gradient or not.
+  bool minimize(vnl_vector<double>& x) { return minimize_without_gradient(x); }
 
   // Coping with failure-------------------------------------------------------
 
