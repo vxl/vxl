@@ -208,12 +208,12 @@
 // void foo<int>(int *), the client doesn't need to know that the template
 // symbol he links against is a specialization.
 
-// -- VCL_STL_NULL_TMPL_ARGS
+// -- VCL_NULL_TMPL_ARGS
 //
 // Define to <> for compilers that require them in friend template function
 // declarations (i.e., EGCS).
 //
-//#define VCL_STL_NULL_TMPL_ARGS <>
+//#define VCL_NULL_TMPL_ARGS <>
 
 // -- VCL_DEFAULT_VALUE(x)
 //
@@ -368,7 +368,7 @@
 #define VCL_OVERLOAD_CAST(T,x) ((T)(x))
 #define VCL_DECLARE_SPECIALIZATION(f) /* template <> f; */
 #define VCL_DEFINE_SPECIALIZATION /* template <> */
-#define VCL_STL_NULL_TMPL_ARGS /* <> */
+#define VCL_NULL_TMPL_ARGS /* <> */
 #define VCL_DEFAULT_VALUE(x) =x
 #define VCL_DFL_TYPE_PARAM_STLDECL(A,a) class A = a
 #define VCL_DFL_TMPL_PARAM_STLDECL(A,a) class A
@@ -397,7 +397,7 @@
 #define VCL_OVERLOAD_CAST(T,x) /*(T)*/(x)
 #define VCL_DECLARE_SPECIALIZATION(f) template <> f;
 #define VCL_DEFINE_SPECIALIZATION template <>
-#define VCL_STL_NULL_TMPL_ARGS <>
+#define VCL_NULL_TMPL_ARGS <>
 #define VCL_DEFAULT_VALUE(x)
 #define VCL_DFL_TYPE_PARAM_STLDECL(A,a) class A = a
 #define VCL_DFL_TMPL_PARAM_STLDECL(A,a) class A = a
@@ -426,7 +426,7 @@
 #define VCL_OVERLOAD_CAST(T,x) /*(T)*/(x)
 #define VCL_DECLARE_SPECIALIZATION(f) template <> f;
 #define VCL_DEFINE_SPECIALIZATION template <>
-#define VCL_STL_NULL_TMPL_ARGS <>
+#define VCL_NULL_TMPL_ARGS <>
 #define VCL_DEFAULT_VALUE(x) =x
 #define VCL_DFL_TYPE_PARAM_STLDECL(A,a) class A = a
 #define VCL_DFL_TMPL_PARAM_STLDECL(A,a) class A
@@ -457,10 +457,10 @@
 #define VCL_DEFINE_SPECIALIZATION template <>
 #if 0
 // Rather splendidly, gcc 2.95.1 bails if these are correctly specified...
-#define VCL_STL_NULL_TMPL_ARGS /* <> */
+#define VCL_NULL_TMPL_ARGS /* <> */
 #else
 // But 2.95.2 needs them, and that compiler is cleverer that 2.95.1, so:
-#define VCL_STL_NULL_TMPL_ARGS <>
+#define VCL_NULL_TMPL_ARGS <>
 #endif
 #define VCL_DEFAULT_VALUE(x)
 #define VCL_DFL_TYPE_PARAM_STLDECL(A,a) class A = a
@@ -494,7 +494,7 @@
 #define VCL_OVERLOAD_CAST(T,x) /*(T)*/(x)
 #define VCL_DECLARE_SPECIALIZATION(f) /* template <> f; */
 #define VCL_DEFINE_SPECIALIZATION /* template <> */
-#define VCL_STL_NULL_TMPL_ARGS /* <> */
+#define VCL_NULL_TMPL_ARGS /* <> */
 #define VCL_DEFAULT_VALUE(x)
 #define VCL_DFL_TYPE_PARAM_STLDECL(A,a) class A = a
 #define VCL_DFL_TMPL_PARAM_STLDECL(A,a) class A
@@ -525,7 +525,7 @@
 #define __SGI_STL_NO_ARROW_OPERATOR
 #define VCL_DECLARE_SPECIALIZATION(f) /* template <> f; */
 #define VCL_DEFINE_SPECIALIZATION /* template <> */
-#define VCL_STL_NULL_TMPL_ARGS /* <> */
+#define VCL_NULL_TMPL_ARGS /* <> */
 #define VCL_DEFAULT_VALUE(x)
 #define VCL_DFL_TYPE_PARAM_STLDECL(A,a) class A = a
 #define VCL_DFL_TMPL_PARAM_STLDECL(A,a) class A = a
@@ -555,7 +555,7 @@
 #define __SGI_STL_NO_ARROW_OPERATOR
 #define VCL_DECLARE_SPECIALIZATION(f) /* template <> f; */
 #define VCL_DEFINE_SPECIALIZATION /* template <> */
-#define VCL_STL_NULL_TMPL_ARGS /* <> */
+#define VCL_NULL_TMPL_ARGS /* <> */
 #define VCL_DEFAULT_VALUE(x)
 #define VCL_DFL_TYPE_PARAM_STLDECL(A,a) class A = a
 #define VCL_DFL_TMPL_PARAM_STLDECL(A,a) class A = a
@@ -584,7 +584,7 @@
 #define VCL_OVERLOAD_CAST(T,x) /*(T)*/(x)
 #define VCL_DECLARE_SPECIALIZATION(f) /* template <> f; */
 #define VCL_DEFINE_SPECIALIZATION /* template <> */
-#define VCL_STL_NULL_TMPL_ARGS /* <> */
+#define VCL_NULL_TMPL_ARGS /* <> */
 #define VCL_DEFAULT_VALUE(x)
 #define VCL_DFL_TYPE_PARAM_STLDECL(A,a) class A
 #define VCL_DFL_TMPL_PARAM_STLDECL(A,a) class A
@@ -616,7 +616,7 @@
 #define VCL_OVERLOAD_CAST(T,x) /*(T)*/(x)
 #define VCL_DECLARE_SPECIALIZATION(f) template <> f;
 #define VCL_DEFINE_SPECIALIZATION template <>
-#define VCL_STL_NULL_TMPL_ARGS /* <> */
+#define VCL_NULL_TMPL_ARGS /* <> */
 #define VCL_DEFAULT_VALUE(x)
 #define VCL_DFL_TYPE_PARAM_STLDECL(A,a) class A
 #define VCL_DFL_TMPL_PARAM_STLDECL(A,a) class A
