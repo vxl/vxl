@@ -14,6 +14,9 @@ void vsl_b_write(vsl_b_ostream &os, const vil2_memory_chunk& chunk);
 //: Binary load vil2_memory_chunk from stream.
 void vsl_b_read(vsl_b_istream &is, vil2_memory_chunk& chunk);
 
+//: Binary load vil2_memory_chunk from stream  onto the heap 
+void vsl_b_read(vsl_b_istream &is, vil2_memory_chunk*& chunk);
+
 //: Print human readable summary of a vil2_memory_chunk object to a stream
 void vsl_print_summary(vcl_ostream& os,const vil2_memory_chunk& chunk);
 

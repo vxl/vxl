@@ -122,6 +122,21 @@ void vsl_b_read(vsl_b_istream &is, vil2_memory_chunk& chunk)
 
 #undef read_case_macro
 
+//: Binary load vil2_memory_chunk from stream  onto the heap
+void vsl_b_read(vsl_b_istream &is, vil2_memory_chunk*& p)
+{
+  delete p;
+  bool not_null_ptr;
+  vsl_b_read(is, not_null_ptr);
+  if (not_null_ptr)
+  {
+    p = new vil2_memory_chunk();
+    vsl_b_read(is, *p);
+  }
+  else
+    p = 0;
+}
+
 //: Print human readable summary of a vil2_memory_chunk object to a stream
 void vsl_print_summary(vcl_ostream& os,const vil2_memory_chunk& chunk)
 {
