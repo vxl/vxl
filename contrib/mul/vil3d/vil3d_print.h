@@ -17,7 +17,7 @@ template<class T>
 inline void vil3d_print_all(vcl_ostream& os,const vil3d_image_view<T>& view)
 {
   os<<view.is_a()<<" "<<view.nplanes()
-	  <<" planes, each "<<view.ni()<<" x "<<view.nj()<<" x "<<view.nk();
+    <<" planes, each "<<view.ni()<<" x "<<view.nj()<<" x "<<view.nk();
   os<<" istep: "<<view.istep()<<" ";
   os<<" jstep: "<<view.jstep()<<" ";
   os<<" kstep: "<<view.kstep()<<" ";

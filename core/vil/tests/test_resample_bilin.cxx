@@ -8,9 +8,9 @@
 
 void test_resample_bilin_byte()
 {
-  vcl_cout << "********************************\n"
+  vcl_cout << "*****************************\n"
            << " Testing vil2_resample_bilin\n"
-           << "********************************\n";
+           << "*****************************\n";
 
   vil2_image_view<vxl_byte> image0;
   vil2_image_view<double> dest_im;
@@ -29,8 +29,8 @@ void test_resample_bilin_byte()
 
   vcl_cout<<"Fully in image\n";
   vil2_resample_bilin(image0,dest_im,x0,y0,dx1,dy1,dx2,dy2,4,3);
-	TEST("Width",dest_im.ni(),4);
-	TEST("Height",dest_im.nj(),3);
+  TEST("Width",dest_im.ni(),4);
+  TEST("Height",dest_im.nj(),3);
   TEST_NEAR("dest(0,0)",dest_im(0,0),55,1e-6);
   TEST_NEAR("dest(0,2)",dest_im(0,2),75,1e-6);
   TEST_NEAR("dest(3,2)",dest_im(3,2),78,1e-6);
@@ -57,16 +57,16 @@ void test_resample_bilin_byte()
   vcl_cout<<"Fully in image\n";
   x0 = 5.0;
   vil2_resample_bilin(image0,dest_im,x0,y0,dx1,dy1,dx2,dy2,4,3);
-	TEST("Width",dest_im.ni(),4);
-	TEST("Height",dest_im.nj(),3);
-	TEST("nplanes",dest_im.nplanes(),2);
+  TEST("Width",dest_im.ni(),4);
+  TEST("Height",dest_im.nj(),3);
+  TEST("nplanes",dest_im.nplanes(),2);
   TEST_NEAR("dest_im(0,0,0)",dest_im(0,0,0),55,1e-6);
   TEST_NEAR("dest_im(0,0,1)",dest_im(0,0,1),155,1e-6);
   TEST_NEAR("dest_im(1,0,0)",dest_im(1,0,0),56,1e-6);
   TEST_NEAR("dest_im(1,2,0)",dest_im(1,2,0),76,1e-6);
   TEST_NEAR("dest_im(3,2,1)",dest_im(3,2,1),178,1e-6);
 
-	vcl_cout<<"At half pixel interval..."<<vcl_endl;
+  vcl_cout<<"At half pixel interval...\n";
   x0 = 5.5;
   vil2_resample_bilin(image0,dest_im,x0,y0,dx1,dy1,dx2,dy2,4,3);
   TEST_NEAR("dest_im(0,0,0)",dest_im(0,0,0),55.5,1e-6);

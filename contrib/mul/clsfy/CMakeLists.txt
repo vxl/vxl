@@ -22,7 +22,7 @@ SET(clsfy_sources
  clsfy_rbf_svm.cxx                            clsfy_rbf_svm.h
  clsfy_rbf_svm_smo_1_builder.cxx              clsfy_rbf_svm_smo_1_builder.h
  clsfy_adaboost_trainer.cxx                   clsfy_adaboost_trainer.h
- clsfy_adaboost_sorted_builder.cxx            clsfy_adaboost_sorted_builder.h	
+ clsfy_adaboost_sorted_builder.cxx            clsfy_adaboost_sorted_builder.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates clsfy_sources)

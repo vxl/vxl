@@ -49,7 +49,7 @@ vil3d_image_view<T>::vil3d_image_view(const T* top_left,
 template<class T>
 vil3d_image_view<T>::vil3d_image_view(const vil2_memory_chunk_sptr& mem_chunk,
                     const T* top_left, unsigned n_i, unsigned n_j,
-										unsigned n_k, unsigned n_planes,
+                    unsigned n_k, unsigned n_planes,
                     int i_step, int j_step, int k_step, int plane_step)
  : vil3d_image_view_base(n_i, n_j, n_k, n_planes)
  , top_left_(const_cast<T*>( top_left))
@@ -150,7 +150,7 @@ inline bool convert_components_from_planes(vil3d_image_view<T> &lhs,
     const vil3d_image_view<comp_type> &rhs = static_cast<const vil3d_image_view<comp_type>&>(rhs_base);
     // Check that the steps are suitable for viewing as components
     if (rhs.planestep() != 1 || rhs.istep()%ncomp !=0 ||
-		    rhs.jstep()%ncomp !=0 || rhs.kstep()%ncomp !=0 ) return false;
+        rhs.jstep()%ncomp !=0 || rhs.kstep()%ncomp !=0 ) return false;
     lhs = vil3d_image_view<T >(rhs.memory_chunk(),
                               (T const*) rhs.origin_ptr(),
                               rhs.ni(),rhs.nj(),rhs.nk(),1,
@@ -227,7 +227,7 @@ inline bool convert_planes_from_components(vil3d_image_view<vxl_byte> &lhs,
     lhs = vil3d_image_view<vxl_byte>(rhs.memory_chunk(), rhs.origin_ptr(),
                                     rhs.ni(),rhs.nj(),rhs.nk(),ncomp,
                                     rhs.istep()*ncomp,rhs.jstep()*ncomp,
-																		rhs.kstep()*ncomp,1);
+                                    rhs.kstep()*ncomp,1);
     return true;
   }
   else
@@ -324,7 +324,7 @@ inline bool convert_planes_from_components(vil3d_image_view<vxl_int_32> &lhs,
     lhs = vil3d_image_view<vxl_int_32>(rhs.memory_chunk(), rhs.origin_ptr(),
                                       rhs.ni(),rhs.nj(),rhs.nk(),ncomp,
                                       rhs.istep()*ncomp,rhs.jstep()*ncomp,
-																			rhs.kstep()*ncomp,1);
+                                      rhs.kstep()*ncomp,1);
     return true;
   }
   else
@@ -446,7 +446,7 @@ bool vil3d_image_view<T>::is_contiguous() const
     if (kstep_==1 && jstep_==int(nk_) && istep_==int(nj_*nk_) ) return true;
   }
 
-	int np = nplanes_;
+  int np = nplanes_;
   // RGBRGBRGB
   if (planestep_==1)
   {
@@ -491,7 +491,7 @@ void vil3d_image_view<T>::resize(unsigned n_i, unsigned n_j, unsigned n_k, unsig
 template<class T>
 void vil3d_image_view<T>::set_to_memory(const T* top_left,
                                        unsigned n_i, unsigned n_j,
-																			 unsigned n_k, unsigned n_planes,
+                                       unsigned n_k, unsigned n_planes,
                                        int i_step, int j_step, int k_step, int plane_step)
 {
   release_memory();

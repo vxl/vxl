@@ -1,7 +1,6 @@
 // This is mul/vil2/tests/test_sample_grid_bilin.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
-#include <vcl_vector.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vimt/vimt_sample_grid_bilin.h>
 #include <vnl/vnl_vector.h>
@@ -9,7 +8,7 @@
 
 void test_sample_grid_bilin_byte_affine()
 {
-	vcl_cout<<"Testing up to affine mappings"<<vcl_endl;
+  vcl_cout<<"Testing up to affine mappings\n";
   vimt_image_2d_of<vxl_byte> image0;
   image0.image().resize(10,10);
 
@@ -20,7 +19,7 @@ void test_sample_grid_bilin_byte_affine()
        image0.image()(i,j) = i+j*10;
 
   vgl_point_2d<double> p0(5.0,5.0);
-	vgl_vector_2d<double> u(1.0,0.0), v(0.0,1.0);
+  vgl_vector_2d<double> u(1.0,0.0), v(0.0,1.0);
   vnl_vector<double> vec;
 
   vcl_cout<<"Fully in image\n";
@@ -66,20 +65,20 @@ void test_sample_grid_bilin_byte_affine()
 
 void test_sample_grid_bilin_byte_projective()
 {
-	vcl_cout<<"Testing projective mappings"<<vcl_endl;
+  vcl_cout<<"Testing projective mappings\n";
   vimt_image_2d_of<vxl_byte> image0;
   image0.image().resize(10,10);
 
-	vimt_transform_2d trans;
-	// Create projective identity matrix
-	vnl_matrix<double> P(3,3);
-	P.fill(0.0);
-	P(0,0)=P(1,1)=P(2,2)=1.0;
-	trans.set_projective(P);
+  vimt_transform_2d trans;
+  // Create projective identity matrix
+  vnl_matrix<double> P(3,3);
+  P.fill(0.0);
+  P(0,0)=P(1,1)=P(2,2)=1.0;
+  trans.set_projective(P);
 
-	// If following line fails then set_projective has been tweaked to
-	// select simplest mapping, and the later tests are irrelevant.
-	TEST("Projective",trans.form(),vimt_transform_2d::Projective);
+  // If following line fails then set_projective has been tweaked to
+  // select simplest mapping, and the later tests are irrelevant.
+  TEST("Projective",trans.form(),vimt_transform_2d::Projective);
   image0.set_world2im(trans);
 
 
@@ -90,7 +89,7 @@ void test_sample_grid_bilin_byte_projective()
        image0.image()(i,j) = i+j*10;
 
   vgl_point_2d<double> p0(5.0,5.0);
-	vgl_vector_2d<double> u(1.0,0.0), v(0.0,1.0);
+  vgl_vector_2d<double> u(1.0,0.0), v(0.0,1.0);
   vnl_vector<double> vec;
 
   vcl_cout<<"Fully in image\n";
@@ -140,8 +139,8 @@ void test_sample_grid_bilin_byte()
            << " Testing vimt_sample_grid_bilin\n"
            << "********************************\n";
 
-	test_sample_grid_bilin_byte_affine();
-	test_sample_grid_bilin_byte_projective();
+  test_sample_grid_bilin_byte_affine();
+  test_sample_grid_bilin_byte_projective();
 }
 
 MAIN( test_sample_grid_bilin )

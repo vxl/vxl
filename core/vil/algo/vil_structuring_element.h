@@ -1,6 +1,7 @@
 #ifndef vil2_structuring_element_h_
 #define vil2_structuring_element_h_
-//: \file
+//:
+//  \file
 //  \brief Structuring element for morphology represented as a list of non-zero pixels
 //  \author Tim Cootes
 
@@ -10,8 +11,8 @@
 //: Structuring element for morphology represented as a list of non-zero pixels
 // Elements in box bounded by [min_i(),max_i()][min_j(),max_j()]
 // Non-zero pixels are given by (p_i[k],p_j[k])
-class vil2_structuring_element {
-private:
+class vil2_structuring_element
+{
   //: i position of elements (i,j)
   vcl_vector<int> p_i_;
   //: j position of elements (i,j)
@@ -29,20 +30,20 @@ public:
   vil2_structuring_element()
     : min_i_(0),max_i_(-1),min_j_(0),max_j_(-1) {}
 
-	//: Define elements { (p_i[k],p_j[k]) }
+  //: Define elements { (p_i[k],p_j[k]) }
   vil2_structuring_element(const vcl_vector<int>& p_i,const vcl_vector<int>& p_j);
 
-	//: Define elements { (p_i[k],p_j[k]) }
+  //: Define elements { (p_i[k],p_j[k]) }
   void set(const vcl_vector<int>& p_i,const vcl_vector<int>& p_j);
 
-    //: Set to disk of radius r
-	//  Select pixels in disk s.t. x^x+y^y<=r^r
+  //: Set to disk of radius r
+  //  Select pixels in disk s.t. x^x+y^y<=r^r
   void set_to_disk(double r);
 
-	  //: Set to line along i (ilo,0)..(ihi,0)
+  //: Set to line along i (ilo,0)..(ihi,0)
   void set_to_line_i(int ilo, int ihi);
 
-	  //: Set to line along j (jlo,0)..(jhi,0)
+  //: Set to line along j (jlo,0)..(jhi,0)
   void set_to_line_j(int jlo, int jhi);
 
   //: i position of elements (i,j)

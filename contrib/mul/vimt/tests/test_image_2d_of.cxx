@@ -1,7 +1,5 @@
 // This is mul/vimt/tests/test_image_2d_of.cxx
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
-#include <vcl_functional.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vimt/vimt_image_2d_of.h>
 
@@ -13,7 +11,7 @@ bool Equal(const vimt_image_2d_of<vxl_byte>& im0,
       && im0.image().nj() == im1.image().nj()
       && im0.image()(0,0,0) == im1.image()(0,0,0)
       && im0.image()(1,1,1) == im1.image()(1,1,1)
-			&& im0.world2im() == im1.world2im();
+      && im0.world2im() == im1.world2im();
 }
 
 
