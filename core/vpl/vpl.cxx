@@ -1,9 +1,9 @@
-#include <vpl/vpl.h>
+#include "vpl.h"
 
 #if defined(__CYGWIN__)
-# include <vpl/os_unix/vpl.cxx>
+# include "os_unix/vpl.cxx"
 #elif defined(_MSC_VER)
-# include <vpl/os_win32/vpl.cxx>
+# include "os_win32/vpl.cxx"
 #else
-# include <vpl/os_unix/vpl.cxx>
+# include "os_unix/vpl.cxx"
 #endif
