@@ -32,8 +32,8 @@ image_to_label(const image_type& img)
 {
   const int nplanes = 1;
   label_image_type img2(img.ni(), img.nj(), nplanes);
-  for (int i=0; i<img.ni(); i++) {
-    for (int j=0; j<img.nj(); j++) {
+  for (unsigned int i=0; i<img.ni(); i++) {
+    for (unsigned int j=0; j<img.nj(); j++) {
       img2(i, j) = img(i, j);
     }
   }
@@ -142,11 +142,14 @@ test_image_1()
   const unsigned RD = R | D;
   const unsigned RU = R | U;
   const unsigned UD = U | D;
+#if 0
   const unsigned LUD = L | U | D;
   const unsigned RUD = R | U | D;
   const unsigned LRD = L | R | D;
   const unsigned LRU = L | R | U;
+#endif
   const unsigned LRUD = L | R | U | D;
+
   static unsigned edges[7][7] =
     { { RD, LR, LR, LR,  LR, LR, LD },
       { UD, 0,  0,  RD,  LR, LD, UD },
@@ -154,18 +157,17 @@ test_image_1()
       { UD, RD, LR, LRUD,LR, LU, UD },
       { UD, UD, 0,  UD,  0,  0, UD },
       { UD, RU, LR, LU,  0,  0, UD },
-      { RU, LR, LR, LR, LR, LR, LU } };
-
+      { RU, LR, LR, LR, LR, LR, LU }
 #if 0
-      { UD, RD, LR, LRU, LRU, LD, UD },
-      { UD, RUD, LR, LD, 0, UD, UD },
-      { UD, RU, LRD, LRUD, LR, LUD, UD },
-      { UD, RD, LRUD, LUD, RD, LU, UD },
-      { RUD, LRUD, LRUD, LRUD, LRU, LR, LUD },
+     ,{ UD, RD, LR, LRU, LRU, LD, UD }
+     ,{ UD, RUD, LR, LD, 0, UD, UD }
+     ,{ UD, RU, LRD, LRUD, LR, LUD, UD }
+     ,{ UD, RD, LRUD, LUD, RD, LU, UD }
+     ,{ RUD, LRUD, LRUD, LRUD, LRU, LR, LUD }
 
-      { RU, LRU, LRU, LRU, LR, LR, LU } };
+     ,{ RU, LRU, LRU, LRU, LR, LR, LU }
 #endif
-
+    };
   testlib_test_begin( "Constructing extract object" );
   vtol_extract_topology< TEST_LABEL_TYPE > te( img );
   testlib_test_perform( true );
