@@ -13,6 +13,8 @@
 #include <vpl/vpl.h>
 #include <testlib/testlib_test.h>
 #include <gevd/gevd_bufferxy.h>
+#include <vil/vil_image_view.h>
+#include <vil/vil_memory_image.h>
 
 void
 test_gevd_bufferxy()
@@ -75,6 +77,42 @@ test_gevd_bufferxy()
   delete gbxy1;
   delete gbxy2;
   delete gbxy3;
+  vcl_cout << "Test vil buffer constructor\n";
+
+  //Test vil buffer constructor
+  //Test byte constructor
+  vil_image_resource_sptr rsb = vil_new_image_resource(3,4,1,VIL_PIXEL_FORMAT_BYTE);
+  vil_image_view<unsigned char> bview = rsb->get_view(0,3,0,4);
+  for(unsigned r  = 0; r<4; ++r)
+    for(unsigned c = 0; c<3; ++c)
+      bview(c,r)= c*r;
+  gevd_bufferxy bbuf(*rsb);
+  
+  bool good_buf = true;
+
+  for(unsigned r  = 0; r<4; ++r)
+    for(unsigned c = 0; c<3; ++c)
+      good_buf = 
+        good_buf&&(*((unsigned char*)bbuf.GetElementAddr(c,r)))==c*r;
+  TEST("Unsigned char vil bufferxy constructor ",good_buf,true);  
+
+  //Test unsigned short constructor
+  vil_image_resource_sptr rs = vil_new_image_resource(3,4,1,VIL_PIXEL_FORMAT_UINT_16);
+  vil_image_view<unsigned short> usview = rs->get_view(0,3,0,4);
+  for(unsigned r  = 0; r<4; ++r)
+    for(unsigned c = 0; c<3; ++c)
+      usview(c,r)= 1000+c*r;
+  gevd_bufferxy buf(*rs);
+  
+  good_buf = true;
+
+  for(unsigned r  = 0; r<4; ++r)
+    for(unsigned c = 0; c<3; ++c)
+      good_buf = 
+        good_buf&&(*((unsigned short*)buf.GetElementAddr(c,r)))==1000+c*r;
+  TEST("Unsigned short vil bufferxy constructor ",good_buf,true);  
+  vil_image_resource_sptr vm = vil_new_memory_image(3,4,1,VIL_PIXEL_FORMAT_UINT_16);
+  
 }
 
 TESTMAIN(test_gevd_bufferxy);

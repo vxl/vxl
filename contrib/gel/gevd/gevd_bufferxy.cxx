@@ -4,7 +4,8 @@
 #include <vcl_fstream.h>
 #include <vcl_cstdio.h>
 #include <vcl_cstring.h>
-
+#include <vil/vil_pixel_format.h>
+#include <vil/vil_image_view.h>
 #include "gevd_bufferxy.h"
 
 #include <vcl_compiler.h>
@@ -53,17 +54,72 @@ gevd_bufferxy::gevd_bufferxy(int x, int y, int b, void* memptr) : gevd_memory_mi
 }
 
 //: Construct a gevd_bufferxy from a vil1_image
-gevd_bufferxy::gevd_bufferxy(vil1_image &image) : gevd_memory_mixin( image.get_size_bytes() )
+gevd_bufferxy::gevd_bufferxy(vil1_image const& image) : gevd_memory_mixin( image.get_size_bytes() )
 {
   int sizey= image.rows();
   int sizex= image.cols();
 
   Init(sizex, sizey, image.bits_per_component());
 
-  gevd_bufferxy image_buf(sizex, sizey, image.bits_per_component());
-
   image.get_section(GetBufferPtr(),     // copy bytes image into buf
                     0, 0, sizex, sizey);
+}
+
+//: Construct a gevd_bufferxy from a vil_image
+gevd_bufferxy::gevd_bufferxy(vil_image_resource_sptr const& image_s) :
+  gevd_memory_mixin(image_s->nplanes()*image_s->ni()*image_s->nj()*vil_pixel_format_sizeof_components(image_s->pixel_format()))
+{
+  if(!image_s)
+    {
+      vcl_cout << "In gevd_bufferxy - null image_resource \n";
+      return;
+    }
+  vil_image_resource& image = *image_s;
+  if(image.nplanes()!=1)
+    {
+      vcl_cout << "In gevd_bufferxy - can't handle image format, buffer invalid\n";
+      return;
+    }
+  unsigned n_rows= image.nj();
+  unsigned n_cols= image.ni();
+  vil_pixel_format fmt = image.pixel_format();
+  unsigned n_bytes = vil_pixel_format_sizeof_components(fmt);
+  unsigned n_bits = 8*n_bytes;
+  Init(n_cols, n_rows, n_bits);
+  //two cases of interest
+  switch (n_bytes)
+    {
+    case 1:// unsigned byte pixels
+      {
+        unsigned char* buf = gevd_memory_mixin::GetBufferPtr();
+        vil_image_view<unsigned char> view = image.get_view(0, n_cols,
+                                                            0, n_rows);
+        vcl_ptrdiff_t istep=view.istep(),jstep=view.jstep();
+        const unsigned char* row = view.top_left_ptr();
+        for (unsigned j=0;j<n_rows;++j,row += jstep, buf += jstep)
+          {
+            const unsigned char* pixel = row;
+            unsigned char* buf_pixel = buf;
+            for (unsigned i=0;i<n_cols;++i,pixel+=istep, buf_pixel += istep)
+                *buf_pixel = *pixel;
+          }
+        break;            
+      }
+    case 2://unsigned short pixels
+      {
+        vil_image_view<unsigned short> view = image.get_view(0, n_cols,
+                                                             0, n_rows);
+        for (unsigned j=0;j<n_rows;++j)
+          for(unsigned i=0;i<n_cols;++i)
+            *((unsigned short*)GetElementAddr(i,j)) = view(i,j);
+        break;            
+      }
+    default:
+      {
+        vcl_cout << "In gevd_bufferxy - can't handle pixel type, buffer invalid\n";
+        return;
+      }
+    }
 }
 
 gevd_bufferxy::~gevd_bufferxy()

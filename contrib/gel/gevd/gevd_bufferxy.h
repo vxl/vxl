@@ -19,12 +19,15 @@
 //     - Constructor added that allows to supply allocated memory.
 //   Peter Vanroose - Aug 17 1999.
 //     - File dump I/O added.
+//   J.L. Mundy - Dec 27 2004.
+//     - added support for vil
 // \endverbatim
 //=======================================================================
 
 #include "gevd_memory_mixin.h"
 #include <vcl_iostream.h>
 #include <vil1/vil1_image.h>
+#include <vil/vil_image_resource.h>
 
 class gevd_bufferxy : public gevd_memory_mixin
 {
@@ -51,7 +54,8 @@ class gevd_bufferxy : public gevd_memory_mixin
 
   gevd_bufferxy(int X, int Y, int B);
   gevd_bufferxy(int X, int Y, int B, void* memptr);
-  gevd_bufferxy(vil1_image &img);
+  gevd_bufferxy(vil1_image const &img);
+  gevd_bufferxy(vil_image_resource_sptr const& img);
   ~gevd_bufferxy();
   gevd_bufferxy(gevd_bufferxy const&);
 
