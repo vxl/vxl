@@ -2,7 +2,7 @@
 #define mpeg2_include_inttypes_h_
 /**
  * \file
- * This file either is or was generated from mpeg/include/inttypes.h.in
+ * This file either is or was generated from v3p/mpeg2/include/inttypes.h.in
  */
 
 /*--------------------------------------------------------------------------*/
@@ -33,9 +33,8 @@
 
 #if @VXL_HAS_INT_64@
   typedef   signed @VXL_INT_64@ int64_t;
-  typedef unsigned @VXL_INT_64@ int64_t;
+  typedef unsigned @VXL_INT_64@ uint64_t;
 #endif
-
 
 
 #endif /* mpeg2_include_inttypes_h_ */
