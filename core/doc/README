@@ -1,4 +1,23 @@
 
+VXL - Documentation
+-------------------
+
+This directory holds documentation for the VXL libraries.  The documentation
+comes in two main forms: automatically extracted source code comments and the
+VXL book.
+
+The VXL Book
+************
+
+The book (in subdirectory book) is a human-written collection of VXL
+documentation, suitable for printing.  It is written in texinfo, a limited form
+of LaTeX which allows us to make various forms of output: printed, HTML, windows
+help files, emacs info, and plain text files.  Each of these forms has its
+adherents, and each is useful.
+
+Automatically generated documentation
+*************************************
+
 An example of what the syntax for documentation looks like can be found
 in vxl_doc_rules.[h,cxx]
 
@@ -15,9 +34,6 @@ To generate the entire documentation with doxygen
 3. Make sure doxygen is in your path
 
 4. Type "doxygen Doxyfile"
-
-
-
 
 To generate the documentation for the example vxl_doc_rules.[h,cxx]:
 
