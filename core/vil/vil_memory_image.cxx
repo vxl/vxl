@@ -52,6 +52,8 @@ macro(VIL2_PIXEL_FORMAT_DOUBLE , double )
 vil2_image_view_base_sptr vil2_memory_image::get_copy_view(unsigned i0, unsigned ni,
                                                            unsigned j0, unsigned nj) const
 {
+  if (i0 + ni > view_->ni() || j0 + nj > view_->nj()) return 0;
+
   switch(view_->pixel_format())
   {
 #define macro( F , T ) \
@@ -82,6 +84,8 @@ macro(VIL2_PIXEL_FORMAT_DOUBLE , double )
 vil2_image_view_base_sptr vil2_memory_image::get_view(unsigned i0, unsigned ni,
                                                       unsigned j0, unsigned nj) const
 {
+  if (i0 + ni > view_->ni() || j0 + nj > view_->nj()) return 0;
+
   switch(view_->pixel_format())
   {
 #define macro( F , T ) \
