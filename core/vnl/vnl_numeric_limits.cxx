@@ -11,6 +11,11 @@
 
 #include "vnl_numeric_limits.h"
 
+#ifdef VCL_SGI_CC // for this compiler, "template<>" cannot be used to specialise a static data member
+#undef VCL_DEFINE_SPECIALIZATION
+#define VCL_DEFINE_SPECIALIZATION
+#endif
+
 // ----------------------------------------------------------------------
 // Constants for int
 
@@ -244,7 +249,6 @@ VCL_DEFINE_SPECIALIZATION
 const bool vnl_numeric_limits<short>::tinyness_before VCL_STATIC_CONST_INIT_INT_DEFN(false);
 VCL_DEFINE_SPECIALIZATION
 const vnl_float_round_style vnl_numeric_limits<short>::round_style VCL_STATIC_CONST_INIT_INT_DEFN(vnl_round_toward_zero);
-
 
 // ----------------------------------------------------------------------
 // Constants and functions for double
