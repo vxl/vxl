@@ -126,7 +126,7 @@ void vbl_br_default_iter<T1,T2,T3,T4,T5>::incr()
 template <class T1, class T2, class T3, class T4, class T5>
 bool vbl_br_default_iter<T1,T2,T3,T4,T5>::compare(vbl_br_iter_impl<T1,T2,T3,T4,T5> const& i) const
 {
-  return (deref() == i.deref());
+  return deref() == i.deref();
 }
 
 //------------------------------------------------------------
@@ -256,7 +256,7 @@ void vbl_br_default_wild_iter<T1,T2,T3,T4,T5>::incr()
 template <class T1, class T2, class T3, class T4, class T5>
 bool vbl_br_default_wild_iter<T1,T2,T3,T4,T5>::compare(vbl_br_iter_impl<T1,T2,T3,T4,T5> const& i) const
 {
-  return (deref() == i.deref());
+  return deref() == i.deref();
 }
 
 

@@ -173,8 +173,8 @@ bool vul_reg_exp::deep_equal (vul_reg_exp const& rxp) const {
   while(ind-- != 0)                             // Else while still characters
     if(this->program[ind] != rxp.program[ind])  // If regexp are different
       return false;                             // Return failure
-  return (this->startp[0] == rxp.startp[0] &&   // Else if same start/end ptrs,
-          this->endp[0] == rxp.endp[0]);        // Return true
+  return this->startp[0] == rxp.startp[0] &&    // Else if same start/end ptrs,
+           this->endp[0] == rxp.endp[0];        // Return true
 }
 
 // The remaining code in this file is derived from the  regular expression code
@@ -303,7 +303,7 @@ const unsigned char MAGIC = 0234;
 //
 #define UCHARAT(p)      ((const unsigned char*)(p))[0]
 
-#define FAIL(m) { regerror(m); return(NULL); }
+#define FAIL(m) { regerror(m); return NULL; }
 #define ISMULT(c)       ((c) == '*' || (c) == '+' || (c) == '?')
 #define META    "^$.[()|?+*\\"
 
@@ -489,7 +489,7 @@ static char* reg (int paren, int *flagp) {
     // Pick up the branches, linking them together.
     br = regbranch(&flags);
     if (br == NULL)
-        return (NULL);
+        return NULL;
     if (ret != NULL)
         regtail(ret, br); // OPEN -> first.
     else
@@ -501,7 +501,7 @@ static char* reg (int paren, int *flagp) {
         regparse++;
         br = regbranch(&flags);
         if (br == NULL)
-            return (NULL);
+            return NULL;
         regtail(ret, br); // BRANCH -> BRANCH.
         if (!(flags & HASWIDTH))
             *flagp &= ~HASWIDTH;
@@ -535,7 +535,7 @@ static char* reg (int paren, int *flagp) {
         }
         // NOTREACHED
     }
-    return (ret);
+    return ret;
 }
 
 
@@ -556,7 +556,7 @@ static char* regbranch (int *flagp) {
     while (*regparse != '\0' && *regparse != '|' && *regparse != ')') {
         latest = regpiece(&flags);
         if (latest == NULL)
-            return (NULL);
+            return NULL;
         *flagp |= flags & HASWIDTH;
         if (chain == NULL) // First piece.
             *flagp |= flags & SPSTART;
@@ -567,7 +567,7 @@ static char* regbranch (int *flagp) {
     if (chain == NULL) // Loop ran zero times.
         regnode(NOTHING);
 
-    return (ret);
+    return ret;
 }
 
 
@@ -588,12 +588,12 @@ static char* regpiece (int *flagp) {
 
     ret = regatom(&flags);
     if (ret == NULL)
-        return (NULL);
+        return NULL;
 
     op = *regparse;
     if (!ISMULT(op)) {
         *flagp = flags;
-        return (ret);
+        return ret;
     }
 
     if (!(flags & HASWIDTH) && op != '?') {
@@ -637,7 +637,7 @@ static char* regpiece (int *flagp) {
         vcl_cout << "vul_reg_exp::compile(): Nested *?+.\n";
         return 0;
     }
-    return (ret);
+    return ret;
 }
 
 
@@ -711,7 +711,7 @@ static char* regatom (int *flagp) {
         case '(':
             ret = reg(1, &flags);
             if (ret == NULL)
-                return (NULL);
+                return NULL;
             *flagp |= flags & (HASWIDTH | SPSTART);
             break;
         case '\0':
@@ -763,7 +763,7 @@ static char* regatom (int *flagp) {
             }
             break;
     }
-    return (ret);
+    return ret;
 }
 
 
@@ -777,7 +777,7 @@ static char* regnode (char op) {
     ret = regcode;
     if (ret == &regdummy) {
         regsize += 3;
-        return (ret);
+        return ret;
     }
 
     ptr = ret;
@@ -786,7 +786,7 @@ static char* regnode (char op) {
     *ptr++ = '\0';
     regcode = ptr;
 
-    return (ret);
+    return ret;
 }
 
 
@@ -923,7 +923,7 @@ bool vul_reg_exp::find (char const* string) {
             s++;
         }
         if (s == NULL) // Not present.
-            return (0);
+            return 0;
     }
 
     // Mark beginning of line for ^ .
@@ -931,7 +931,7 @@ bool vul_reg_exp::find (char const* string) {
 
     // Simplest case:  anchored match need be tried only once.
     if (this->reganch)
-        return (regtry(string, this->startp, this->endp, this->program) != 0);
+        return regtry(string, this->startp, this->endp, this->program) != 0;
 
     // Messy cases:  unanchored match.
     s = string;
@@ -939,18 +939,18 @@ bool vul_reg_exp::find (char const* string) {
         // We know what char it must start with.
         while ((s = vcl_strchr(s, this->regstart)) != NULL) {
             if (regtry(s, this->startp, this->endp, this->program))
-                return (1);
+                return 1;
             s++;
         }
     else
         // We don't - general case.
         do {
             if (regtry(s, this->startp, this->endp, this->program))
-                return (1);
+                return 1;
         } while (*s++ != '\0');
 
     // Failure.
-    return (0);
+    return 0;
 }
 
 
@@ -976,10 +976,10 @@ static int regtry (const char* string, const char* *start,
     if (regmatch(prog + 1)) {
         start[0] = string;
         end[0] = reginput;
-        return (1);
+        return 1;
     }
     else
-        return (0);
+        return 0;
 }
 
 
@@ -1006,15 +1006,15 @@ static int regmatch (const char* prog) {
         switch (OP(scan)) {
             case BOL:
                 if (reginput != regbol)
-                    return (0);
+                    return 0;
                 break;
             case EOL:
                 if (*reginput != '\0')
-                    return (0);
+                    return 0;
                 break;
             case ANY:
                 if (*reginput == '\0')
-                    return (0);
+                    return 0;
                 reginput++;
                 break;
             case EXACTLY:{
@@ -1024,21 +1024,21 @@ static int regmatch (const char* prog) {
                     opnd = OPERAND(scan);
                     // Inline the first character, for speed.
                     if (*opnd != *reginput)
-                        return (0);
+                        return 0;
                     len = vcl_strlen(opnd);
                     if (len > 1 && vcl_strncmp(opnd, reginput, len) != 0)
-                        return (0);
+                        return 0;
                     reginput += len;
                 }
                 break;
             case ANYOF:
                 if (*reginput == '\0' || vcl_strchr(OPERAND(scan), *reginput) == NULL)
-                    return (0);
+                    return 0;
                 reginput++;
                 break;
             case ANYBUT:
                 if (*reginput == '\0' || vcl_strchr(OPERAND(scan), *reginput) != NULL)
-                    return (0);
+                    return 0;
                 reginput++;
                 break;
             case NOTHING:
@@ -1068,10 +1068,10 @@ static int regmatch (const char* prog) {
                         //
                         if (regstartp[no] == NULL)
                             regstartp[no] = save;
-                        return (1);
+                        return 1;
                     }
                     else
-                        return (0);
+                        return 0;
                 }
             case CLOSE + 1:
             case CLOSE + 2:
@@ -1096,10 +1096,10 @@ static int regmatch (const char* prog) {
                         //
                         if (regendp[no] == NULL)
                             regendp[no] = save;
-                        return (1);
+                        return 1;
                     }
                     else
-                        return (0);
+                        return 0;
                 }
             case BRANCH:{
 
@@ -1111,11 +1111,11 @@ static int regmatch (const char* prog) {
                         do {
                             save = reginput;
                             if (regmatch(OPERAND(scan)))
-                                return (1);
+                                return 1;
                             reginput = save;
                             scan = regnext(scan);
                         } while (scan != NULL && OP(scan) == BRANCH);
-                        return (0);
+                        return 0;
                         // NOTREACHED
                     }
                 }
@@ -1141,15 +1141,15 @@ static int regmatch (const char* prog) {
                         // If it could work, try it.
                         if (nextch == '\0' || *reginput == nextch)
                             if (regmatch(next))
-                                return (1);
+                                return 1;
                         // Couldn't or didn't - back up.
                         no--;
                         reginput = save + no;
                     }
-                    return (0);
+                    return 0;
                 }
             case END:
-                return (1); // Success!
+                return 1; // Success!
 
             default:
                 //RAISE Error, SYM(vul_reg_exp), SYM(Internal_Error),
@@ -1165,7 +1165,7 @@ static int regmatch (const char* prog) {
     //
     //RAISE Error, SYM(vul_reg_exp), SYM(Internal_Error),
     vcl_cout << "vul_reg_exp::find(): Internal error -- corrupted pointers.\n";
-    return (0);
+    return 0;
 }
 
 
@@ -1207,7 +1207,7 @@ static int regrepeat (const char* p) {
             return 0;
     }
     reginput = scan;
-    return (count);
+    return count;
 }
 
 
@@ -1217,16 +1217,16 @@ static const char* regnext (register const char* p) {
     register int offset;
 
     if (p == &regdummy)
-        return (NULL);
+        return NULL;
 
     offset = NEXT(p);
     if (offset == 0)
-        return (NULL);
+        return NULL;
 
     if (OP(p) == BACK)
-        return (p - offset);
+        return p - offset;
     else
-        return (p + offset);
+        return p + offset;
 }
 
 
@@ -1234,14 +1234,14 @@ static char* regnext (register char* p) {
     register int offset;
 
     if (p == &regdummy)
-        return (NULL);
+        return NULL;
 
     offset = NEXT(p);
     if (offset == 0)
-        return (NULL);
+        return NULL;
 
     if (OP(p) == BACK)
-        return (p - offset);
+        return p - offset;
     else
-        return (p + offset);
+        return p + offset;
 }

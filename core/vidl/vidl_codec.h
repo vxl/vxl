@@ -55,15 +55,15 @@ public:
   // Data Access---------------------------------------------------------------
 
   inline int length() const {return numberframes; }
-  inline const char* get_name() const  { return(name)?name:""; }
-  inline const char* get_description() const { return(description)?description:""; }
+  inline const char* get_name() const  { return (name)?name:""; }
+  inline const char* get_description() const { return (description)?description:""; }
 
-  inline char get_image_class()const { return(Class); }
-  inline char get_format() const     { return(format); }
-  inline int  width() const          { return(X); }
-  inline int  height() const     { return(Y); }
-  inline int  get_bits_pixel() const { return(B); }
-  inline int  get_bytes_pixel()const { return((B+7)/8); }
+  inline char get_image_class()const { return Class; }
+  inline char get_format() const     { return format; }
+  inline int  width() const          { return X; }
+  inline int  height() const     { return Y; }
+  inline int  get_bits_pixel() const { return B; }
+  inline int  get_bytes_pixel()const { return (B+7)/8; }
 
   virtual bool get_section(
         int position,

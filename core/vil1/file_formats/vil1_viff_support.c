@@ -118,7 +118,7 @@ int     image_data_size_bytes,          /* # data bytes */
     {
          fprintf(stderr,"vil_viff_createimage: No space for image \
 - malloc failed!\n");
-        return(0);
+        return 0;
     }
 
 /* setup the comment (can only be 511 chars) */
@@ -184,7 +184,7 @@ int     image_data_size_bytes,          /* # data bytes */
     {
         fprintf(stderr, "vil_viff_createimage: Uninterpretable image \
 specificationa\n");
-        return(0);
+        return 0;
     }
 
 /* malloc room for the image data */
@@ -196,7 +196,7 @@ specificationa\n");
        {
            fprintf(stderr,"vil_viff_createimage: Not enough memory for image\
  data!\n");
-          return(0);
+          return 0;
        }
     }
     else
@@ -212,7 +212,7 @@ specificationa\n");
        {
             fprintf(stderr,"vil_viff_createimage: Not enough memory for maps\
  data!\n");
-           return(0);
+           return 0;
        }
     }
     else
@@ -230,7 +230,7 @@ specificationa\n");
        {
             fprintf(stderr,"vil_viff_createimage: Not enough memory \
  for location data!\n");
-           return(0);
+           return 0;
        }
     }
     else
@@ -245,7 +245,7 @@ specificationa\n");
     image->location = location;
     image->imagedata = imagedata;
 
-    return(image);
+    return image;
 }
 
 /************************************************************
@@ -404,7 +404,7 @@ int vil_viff_imagesize(struct vil_viff_xvimage *image,int *dsize, int *dcount, i
         default:
           fprintf(stderr,"\nvil_viff_imagesize: Unknown mapping scheme:");
           fprintf(stderr," %lu\n",image->map_scheme);
-          return(0);
+          return 0;
           /* break; */
       }
 
@@ -430,6 +430,6 @@ int vil_viff_imagesize(struct vil_viff_xvimage *image,int *dsize, int *dcount, i
     *mcount = mapcount;
     *lsize = locsize;
     *lcount = loccount;
-    return(1);
+    return 1;
 }
 

@@ -184,8 +184,8 @@ public:
     deallocate(p, old_sz);
     return result;
   }
-  static void deallocate(void* p) { ::operator delete(p); }
-  static void deallocate(void* p, vcl_size_t) { ::operator delete(p); }
+  static void deallocate(void* p) { ::operator delete p; }
+  static void deallocate(void* p, vcl_size_t) { ::operator delete p; }
 };
 
 typedef __new_alloc<0> new_alloc;
@@ -229,7 +229,7 @@ public:
   {
     __oom_handler_type old = oom_handler;
     oom_handler = f;
-    return(old);
+    return old;
   }
 };
 
@@ -253,7 +253,7 @@ void * __malloc_alloc<inst>::oom_malloc(vcl_size_t n)
     (*my_malloc_handler)();
     result = malloc(n);
   }
-  return(result);
+  return result;
 }
 
 template <int inst>
@@ -268,7 +268,7 @@ void * __malloc_alloc<inst>::oom_realloc(void *p, vcl_size_t n)
     (*my_malloc_handler)();
     result = realloc(p, n);
   }
-  return(result);
+  return result;
 }
 
 typedef __malloc_alloc<0> vcl_malloc_alloc;
@@ -471,7 +471,7 @@ typedef vcl_malloc_alloc multithreaded_alloc;
             obj * __RESTRICT result;
 
             if (n > __MAX_BYTES) {
-                return(vcl_malloc_alloc::allocate(n));
+                return vcl_malloc_alloc::allocate(n);
             }
             my_free_list = free_list + FREELIST_INDEX(n);
             // Acquire the lock here with a constructor call.
@@ -487,7 +487,7 @@ typedef vcl_malloc_alloc multithreaded_alloc;
                 return r;
             }
             *my_free_list = result -> free_list_link;
-            return (result);
+            return result;
       };
 
       /* p may not be 0 */
@@ -538,13 +538,13 @@ typedef vcl_malloc_alloc multithreaded_alloc;
             if (bytes_left >= total_bytes) {
                 result = start_free;
                 start_free += total_bytes;
-                return(result);
+                return result;
             } else if (bytes_left >= size) {
                 nobjs = bytes_left/size;
                 total_bytes = size * nobjs;
                 result = start_free;
                 start_free += total_bytes;
-                return(result);
+                return result;
             } else {
                 vcl_size_t bytes_to_get = 2 * total_bytes + ROUND_UP(heap_size >> 4);
                 // Try to make use of the left-over piece.
@@ -569,7 +569,7 @@ typedef vcl_malloc_alloc multithreaded_alloc;
                         *my_free_list = p -> free_list_link;
                         start_free = (char *)p;
                         end_free = start_free + i;
-                        return(chunk_alloc(size, nobjs));
+                        return chunk_alloc(size, nobjs);
                         // Any leftover piece will eventually make it to the
                         // right free vcl_list.
                         }
@@ -581,7 +581,7 @@ typedef vcl_malloc_alloc multithreaded_alloc;
                 }
                 heap_size += bytes_to_get;
                 end_free = start_free + bytes_to_get;
-                return(chunk_alloc(size, nobjs));
+                return chunk_alloc(size, nobjs);
             }
     }
 
@@ -599,7 +599,7 @@ typedef vcl_malloc_alloc multithreaded_alloc;
             obj * current_obj, * next_obj;
             int i;
 
-            if (1 == nobjs) return(chunk);
+            if (1 == nobjs) return chunk;
             my_free_list = free_list + FREELIST_INDEX(n);
 
             /* Build free vcl_list in chunk */
@@ -615,7 +615,7 @@ typedef vcl_malloc_alloc multithreaded_alloc;
                     current_obj -> free_list_link = next_obj;
                 }
               }
-            return(result);
+            return result;
     }
 
     template <bool threads, int inst>
@@ -628,14 +628,14 @@ typedef vcl_malloc_alloc multithreaded_alloc;
             vcl_size_t copy_sz;
 
             if (old_sz > __MAX_BYTES && new_sz > __MAX_BYTES) {
-                return(realloc(p, new_sz));
+                return realloc(p, new_sz);
             }
-            if (ROUND_UP(old_sz) == ROUND_UP(new_sz)) return(p);
+            if (ROUND_UP(old_sz) == ROUND_UP(new_sz)) return p;
             result = allocate(new_sz);
             copy_sz = new_sz > old_sz? old_sz : new_sz;
             vcl_memcpy(result, p, copy_sz);
             deallocate(p, old_sz);
-            return(result);
+            return result;
     }
 
 

@@ -33,12 +33,12 @@ class vidl_frame : public vbl_ref_count
 
         vidl_codec_sptr get_codec() {return coder_;}
 
-        inline char get_image_class()const { return(coder_->get_image_class()); }
-        inline char get_format() const     { return(coder_->get_format()); }
-        inline int  width() const     { return(coder_->width()); }
-        inline int  height() const     { return(coder_->height()); }
-        inline int  get_bits_pixel() const { return(coder_->get_bits_pixel()); }
-        inline int  get_bytes_pixel()const { return(coder_->get_bytes_pixel()); }
+        inline char get_image_class()const { return coder_->get_image_class(); }
+        inline char get_format() const     { return coder_->get_format(); }
+        inline int  width() const     { return coder_->width(); }
+        inline int  height() const     { return coder_->height(); }
+        inline int  get_bits_pixel() const { return coder_->get_bits_pixel(); }
+        inline int  get_bytes_pixel()const { return coder_->get_bytes_pixel(); }
 
         //: Return the index of this frame in the movie.
         int get_real_frame_index() const { return position_; }

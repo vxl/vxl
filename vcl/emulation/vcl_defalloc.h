@@ -44,12 +44,12 @@ inline T* allocate(vcl_size_t size, T*) {
 
 template <class T>
 inline void deallocate(T* buffer) {
-    ::operator delete(buffer);
+    ::operator delete buffer;
 }
 
 template <class T>
 inline void deallocate(T* buffer, vcl_size_t) {
-    ::operator delete(buffer);
+    ::operator delete buffer;
 }
 
 template <class T>

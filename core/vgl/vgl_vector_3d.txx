@@ -30,7 +30,7 @@ bool orthogonal(vgl_vector_3d<T> const& a, vgl_vector_3d<T> const& b, double eps
   if (eps <= 0 || dot == T(0)) return dot == T(0);
   eps *= eps * a.sqr_length() * b.sqr_length();
   dot *= dot;
-  return (dot < eps);
+  return dot < eps;
 }
 
 template <class T>
@@ -39,7 +39,7 @@ bool parallel(vgl_vector_3d<T> const& a, vgl_vector_3d<T> const& b, double eps)
   double cross = cross_product(a,b).sqr_length(); // should be zero
   if (eps <= 0 || cross == 0.0) return cross == 0.0;
   eps *= eps * a.sqr_length() * b.sqr_length();
-  return (cross < eps);
+  return cross < eps;
 }
 
 //: Write "<vgl_vector_3d x,y,z> " to stream

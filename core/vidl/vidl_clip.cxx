@@ -137,7 +137,7 @@ vidl_frame_sptr vidl_clip::get_frame(int n)
 //: Return the number of frames
 int vidl_clip::length()
 {
-  return ((endframe_-startframe_)/increment_ + 1);
+  return (endframe_-startframe_)/increment_ + 1;
 }
 
 //: Return the horizontal size of the frames in the clip

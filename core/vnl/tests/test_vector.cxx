@@ -142,7 +142,7 @@ void vnl_vector_test_int() {
 
 
 bool float_equal(const float& f1, const float& f2){
-  return (vcl_fabs(f1 - f2) < 1.0e-6);
+  return vcl_fabs(f1 - f2) < 1.0e-6;
 }
 
 void vnl_vector_test_float() {
