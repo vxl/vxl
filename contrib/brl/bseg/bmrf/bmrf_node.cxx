@@ -27,8 +27,12 @@ void
 bmrf_node::strip()
 {
   for (int t = 0; t<ALL; ++t)
-    for (arc_iterator itr = boundaries_[t]; itr != boundaries_[t+1]; ++itr)
-      remove_helper(itr--, neighbor_type(t));
+    for (arc_iterator itr = boundaries_[t]; itr != boundaries_[t+1]; )
+    {
+      arc_iterator next_itr = itr; ++next_itr;
+      remove_helper(itr, neighbor_type(t));
+      itr = next_itr;
+    }
 
   for (arc_iterator itr = in_arcs_.begin(); itr != in_arcs_.end(); ++itr)
     if ((*itr)->from_)
@@ -76,7 +80,7 @@ avg_distance_ratio( const bmrf_epi_seg_sptr& ep1, const bmrf_epi_seg_sptr& ep2)
                          (ep2->max_alpha() - ep2->min_alpha())/ep2->n_pts() );
 
   double s1 = 0.0, s2 = 0.0;
-  for (double alpha = min_alpha; alpha <= max_alpha; alpha += d_alpha){
+  for (double alpha = min_alpha; alpha <= max_alpha; alpha += d_alpha) {
     s1 += ep1->s(alpha);
     s2 += ep2->s(alpha);
   }
@@ -108,10 +112,10 @@ bmrf_match_error( const bmrf_epi_seg_sptr& ep1, const bmrf_epi_seg_sptr& ep2 )
 double
 bmrf_node::probability()
 {
-  if(this->num_neighbors() < 1)
+  if (this->num_neighbors() < 1)
     return probability_ = 0.0;
 
-  if(probability_ <= 0.0)
+  if (probability_ <= 0.0)
     compute_probability();
 
   return probability_;
@@ -119,7 +123,7 @@ bmrf_node::probability()
 
 
 //: Return the gamma funtion of this node
-bmrf_gamma_func_sptr 
+bmrf_gamma_func_sptr
 bmrf_node::gamma()
 {
   if (!gamma_.ptr())
@@ -129,7 +133,7 @@ bmrf_node::gamma()
 }
 
 
-static bool 
+static bool
 pair_dbl_arc_gt_cmp ( const vcl_pair<double,bmrf_node::arc_iterator>& lhs,
                       const vcl_pair<double,bmrf_node::arc_iterator>& rhs )
 {
@@ -141,7 +145,7 @@ void
 bmrf_node::compute_probability()
 {
   probability_ = 0.0;
-  for ( arc_iterator a_itr = this->begin(TIME); 
+  for ( arc_iterator a_itr = this->begin(TIME);
         a_itr != this->end(TIME); ++a_itr )
   {
     bmrf_node_sptr neighbor = (*a_itr)->to();
@@ -152,23 +156,23 @@ bmrf_node::compute_probability()
     (*a_itr)->probability_ = this->probability(gamma_func);
 
     // select the probability of the best neighbor
-    if( (*a_itr)->probability_ > probability_ ){
+    if ( (*a_itr)->probability_ > probability_ ) {
       probability_ = (*a_itr)->probability_;
       gamma_ = gamma_func;
     }
   }
-
 }
 
 
 //: Prune neighbors with a probability below \p threshold
-void 
+void
 bmrf_node::prune_by_probability(double threshold, bool relative)
 {
   // Compute a probability mass function
   vcl_vector<vcl_pair<double,arc_iterator> > pmf;
-  for ( arc_iterator a_itr = this->begin(TIME); 
-        a_itr != this->end(TIME); ++a_itr ){
+  for ( arc_iterator a_itr = this->begin(TIME);
+        a_itr != this->end(TIME); ++a_itr )
+  {
     bmrf_node_sptr neighbor = (*a_itr)->to();
     double dist_ratio = avg_distance_ratio(this->epi_seg(), neighbor->epi_seg());
     int time_step = neighbor->frame_num() - this->frame_num();
@@ -182,13 +186,13 @@ bmrf_node::prune_by_probability(double threshold, bool relative)
   vcl_sort(pmf.begin(), pmf.end(), pair_dbl_arc_gt_cmp);
 
   // if relative, modify the threshold relative to the maximum probability
-  if( relative )
+  if ( relative )
     threshold *= pmf.front().first;
 
-  // Remove arcs to neighbors that are below threshold 
+  // Remove arcs to neighbors that are below threshold
   vcl_vector<vcl_pair<double,arc_iterator> >::iterator p_itr = pmf.begin();
-  while( p_itr != pmf.end() && p_itr->first > threshold)  ++p_itr;
-  for ( ; p_itr != pmf.end(); ++p_itr ){
+  while ( p_itr != pmf.end() && p_itr->first > threshold)  ++p_itr;
+  for ( ; p_itr != pmf.end(); ++p_itr ) {
     remove_helper(p_itr->second, TIME);
   }
 }
@@ -268,7 +272,9 @@ bmrf_node::remove_neighbor( bmrf_node_sptr node, neighbor_type type )
   {
     for (arc_iterator itr = boundaries_[t]; itr != boundaries_[t+1]; ++itr) {
       if ((*itr)->to_ == node) {
-        remove_helper(itr--, neighbor_type(t));
+        arc_iterator prev_itr = itr; --prev_itr;
+        remove_helper(itr, neighbor_type(t));
+        itr = prev_itr;
         if (type != ALL) return true;
         removed = true;
       }
@@ -280,7 +286,7 @@ bmrf_node::remove_neighbor( bmrf_node_sptr node, neighbor_type type )
 
 
 //: Remove the arc associated with the outgoing iterator
-bool 
+bool
 bmrf_node::remove_helper( arc_iterator& a_itr, neighbor_type type)
 {
   bmrf_arc_sptr arc = *a_itr;
@@ -292,8 +298,8 @@ bmrf_node::remove_helper( arc_iterator& a_itr, neighbor_type type)
     ++boundaries_[t];
 
   // find the pointer back from the other node
-  arc_iterator back_itr = vcl_find( (*a_itr)->to_->in_arcs_.begin(), 
-                                    (*a_itr)->to_->in_arcs_.end(), 
+  arc_iterator back_itr = vcl_find( (*a_itr)->to_->in_arcs_.begin(),
+                                    (*a_itr)->to_->in_arcs_.end(),
                                     *a_itr );
 
   // erase the pointer back from the other node
@@ -301,10 +307,10 @@ bmrf_node::remove_helper( arc_iterator& a_itr, neighbor_type type)
       (*a_itr)->to_->in_arcs_.erase(back_itr);
 
   // erase the arc
-  out_arcs_.erase(a_itr); 
+  out_arcs_.erase(a_itr);
 
   // decrease count
-  --sizes_[type]; 
+  --sizes_[type];
 
   // Make these pointers NULL in case someone else still has
   // a pointer to this arc
@@ -403,7 +409,7 @@ bmrf_node::b_read( vsl_b_istream& is )
         bmrf_arc_sptr arc_ptr;
         vsl_b_read(is, arc_ptr);
         arc_ptr->from_ = this;
-        if(arc_ptr->to_)
+        if (arc_ptr->to_)
           arc_ptr->time_init();
         out_arcs_.push_back(arc_ptr);
 
@@ -421,7 +427,7 @@ bmrf_node::b_read( vsl_b_istream& is )
         bmrf_arc_sptr arc_ptr;
         vsl_b_read(is, arc_ptr);
         arc_ptr->to_ = this;
-        if(arc_ptr->from_)
+        if (arc_ptr->from_)
           arc_ptr->time_init();
         in_arcs_.push_back(arc_ptr);
       }
@@ -456,22 +462,22 @@ bmrf_node::print_summary( vcl_ostream& os ) const
 //-----------------------------------------------------------------------------------------
 // bmrf_arc member functions
 //-----------------------------------------------------------------------------------------
-    
+
 //: Constructor
-bmrf_node::bmrf_arc::bmrf_arc() 
-  : from_(NULL), to_(NULL), probability_(0.0), 
+bmrf_node::bmrf_arc::bmrf_arc()
+  : from_(NULL), to_(NULL), probability_(0.0),
     min_alpha_(0.0), max_alpha_(0.0), int_prob_(0.0)
 {
 }
 
 
 //: Constructor
-bmrf_node::bmrf_arc::bmrf_arc( const bmrf_node_sptr& f, const bmrf_node_sptr& t) 
+bmrf_node::bmrf_arc::bmrf_arc( const bmrf_node_sptr& f, const bmrf_node_sptr& t)
   : from_(f.ptr()), to_(t.ptr()), probability_(0.0),
-    min_alpha_(0.0), max_alpha_(0.0), int_prob_(0.0) 
+    min_alpha_(0.0), max_alpha_(0.0), int_prob_(0.0)
 {
-  if( from_ && to_ ){
-    if(from_->frame_num() != to_->frame_num())
+  if ( from_ && to_ ) {
+    if (from_->frame_num() != to_->frame_num())
       time_init();
   }
 }
@@ -493,11 +499,11 @@ bmrf_node::bmrf_arc::b_read( vsl_b_istream& )
 
 
 //: Compute the alpha range and intensity comparison
-void 
+void
 bmrf_node::bmrf_arc::time_init()
 {
   double int_var = 0.001; // intensity variance
-  
+
   bmrf_epi_seg_sptr ep1 = from_->epi_seg();
   bmrf_epi_seg_sptr ep2 = to_->epi_seg();
 
