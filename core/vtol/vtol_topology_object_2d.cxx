@@ -632,5 +632,5 @@ vertex_list_2d *vtol_topology_object_2d::vertices(void)
 }
 #endif
 
-#include <vcl_rel_ops.h> // gcc 2.7
-VCL_INSTANTIATE_INLINE(bool operator!=(vtol_topology_object_2d const &, vtol_topology_object_2d const &));
+//#include <vcl_rel_ops.h> // gcc 2.7
+//VCL_INSTANTIATE_INLINE(bool operator!=(vtol_topology_object_2d const &, vtol_topology_object_2d const &));

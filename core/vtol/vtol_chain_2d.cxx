@@ -290,5 +290,5 @@ void vtol_chain_2d::clear(void)
   unlink_all_inferiors();
 }
 
-#include <vcl_rel_ops.h> // gcc 2.7
-VCL_INSTANTIATE_INLINE(bool operator!=(vtol_chain_2d const &, vtol_chain_2d const &));
+//#include <vcl_rel_ops.h> // gcc 2.7
+//VCL_INSTANTIATE_INLINE(bool operator!=(vtol_chain_2d const &, vtol_chain_2d const &));
