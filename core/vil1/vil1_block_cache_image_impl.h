@@ -47,7 +47,7 @@ class vil1_block_cache_image_impl : public vil1_image_impl
   //: Write nominated section of image to buf
   bool get_section(void *buf, int x0, int y0, int w, int h) const;
 
-  //: Write buf to mininated section of image
+  //: Write buf to nominated section of image
   bool put_section(void const *buf, int x0, int y0, int w, int h); // write-through
 
   //: Get info about block-characteristics
