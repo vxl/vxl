@@ -2,6 +2,7 @@
 
 SET(vil3d_algo_sources
   vil3d_gauss_reduce.h
+  vil3d_algo_dummy.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates vil3d_algo_sources)

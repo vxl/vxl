@@ -2,6 +2,9 @@
 
 SET(vil3d_io_sources
   vil3d_io_image_view.h
+# force building of a library
+  vil3d_io_dummy.cxx
+
 )
 
 AUX_SOURCE_DIRECTORY(Templates vil3d_io_sources)
