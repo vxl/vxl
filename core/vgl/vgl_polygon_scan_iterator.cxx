@@ -15,8 +15,6 @@
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h>
 
-#include <vgl/vgl_box_2d.h>
-
 // It used to be necessary to add 0.5 to the scanline coordinates
 // obtained from a vgl_polygon_scan_iterator. Presumably this had
 // something to do with pixels and rendering them, but that issue is
