@@ -105,5 +105,18 @@ inline void vsl_b_read( vsl_b_istream& bfs, BaseClass*& b)
   vsl_binary_loader<BaseClass>::instance().load_object(bfs,b);
 }
 
+//: Binary file stream output operator for pointer to class
+//  This works correctly even if b is a NULL pointer
+template<class BaseClass>
+inline void vsl_b_write(vsl_b_ostream& bfs, const BaseClass* b)
+{
+  if (b)
+  {
+    vsl_b_write(bfs, b->is_a());
+    b->b_write(bfs);
+  }
+  else
+    vsl_b_write(bfs, vcl_string("VSL_NULL_PTR"));
+}
 
 #endif // vsl_binary_loader_h_

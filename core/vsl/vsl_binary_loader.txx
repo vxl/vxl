@@ -79,6 +79,7 @@ vsl_binary_loader<BaseClass>* vsl_binary_loader<BaseClass>::instance_ = 0;
 #define VSL_BINARY_LOADER_INSTANTIATE(T) \
 template class vsl_binary_loader<T >; \
 template void vsl_b_read( vsl_b_istream& bfs, T*& b); \
+template void vsl_b_write(vsl_b_ostream& bfs, const T* b); \
 VCL_VECTOR_INSTANTIATE(T*)
 
 
