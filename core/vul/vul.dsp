@@ -318,11 +318,6 @@ SOURCE=.\vul_canonical_path.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vul_deprecated.h
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\vul_fwd.h
 
 # End Source File
