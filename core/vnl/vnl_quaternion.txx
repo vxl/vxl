@@ -21,12 +21,12 @@
 // All member functions on vectors are applicable to quaternions.
 //
 // Rep Invariant:
-//   1. norm = 1, for a rotation.
-//   2. position vector represented by imaginary quaternion.
+//   -  norm = 1, for a rotation.
+//   -  position vector represented by imaginary quaternion.
 // References:
-// 1. Horn, B.K.P. (1987) Closed-form solution of absolute orientation using
+// -  Horn, B.K.P. (1987) Closed-form solution of absolute orientation using
 //       unit quaternions. J. Opt. Soc. Am. Vol 4, No 4, April.
-// 2. Horn, B.K.P. (1987) Robot Vision. MIT Press. pp. 437-551.
+// -  Horn, B.K.P. (1987) Robot Vision. MIT Press. pp. 437-551.
 //
 
 
@@ -83,7 +83,7 @@ vnl_quaternion<T>::vnl_quaternion (const vnl_vector<T>& vec)
 }
 
 //: Creates a quaternion from a vector.
-// 4D vector is assumed to be a 4-element quaternion, to 
+// 4D vector is assumed to be a 4-element quaternion, to
 // provide casting between vector and quaternion
 
 template <class T>
@@ -221,7 +221,7 @@ vnl_quaternion<T> vnl_quaternion<T>::conjugate () const {
 template <class T>
 vnl_quaternion<T> vnl_quaternion<T>::inverse () const {
   vnl_quaternion<T> inv = this->conjugate();
-  inv /= vnl_c_vector<T>::dot_product(data_, data_, 4);
+  inv /= vnl_c_vector<T>::dot_product(this->data_, this->data_, 4);
   return inv;
 }
 
