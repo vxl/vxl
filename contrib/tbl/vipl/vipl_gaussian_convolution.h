@@ -64,12 +64,22 @@ private:
 // -+-+- constructors/destructors: -+-+-
 public:
   inline vipl_gaussian_convolution(double s=1, double c=0.01)
-           : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(), sigma_(s), cutoff_(c), mask_(0), masksize_(0)
+           : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>()
+           , sigma_(s)
+           , cutoff_(c)
+           , mask_(0)
+           , masksize_(0)
     { if (s < 0) ref_sigma() = -s;
       if (c < 0.005) ref_cutoff() = 0.005;
       if (c > 0.5) ref_cutoff() = 0.5; }
+
   inline vipl_gaussian_convolution(vipl_gaussian_convolution const& A)
-           : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(A), sigma_(A.sigma()), cutoff_(A.cutoff()), mask_(0), masksize_(0) {}
+           : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(A)
+           , sigma_(A.sigma())
+           , cutoff_(A.cutoff())
+           , mask_(0)
+           , masksize_(0) {}
+
   inline ~vipl_gaussian_convolution() {}
 
 // -+-+- required method for filters: -+-+-
@@ -77,8 +87,6 @@ public:
 // -+-+- optional method for filters, compute mask only once in preop, free in postop: -+-+-
   bool preop();
   bool postop();
-
 };
-
 
 #endif // vipl_gaussian_convolution_h_
