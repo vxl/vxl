@@ -14,6 +14,7 @@
 // Modifications
 // PDA (Manchester) 21/03/2001: Tidied up the documentation
 // Peter Vanroose   27/05/2001: Corrected the documentation
+// Ian Scott        12/06/2003: Added filen?m[abc].* notation to unix and dos version
 // \endverbatim
 
 #include <vcl_string.h>
@@ -35,7 +36,9 @@ struct vul_file_iterator_data;
 //   }
 // \endcode
 // rather than opendir/glob/etc.
-// Valid glob patterns are unix-like.
+//
+// Valid glob patterns are unix-like - '?' matches precisely one character
+// '*' matches any sequence (including empty), [abc] matches either 'a' or 'b' or 'c'
 
 class vul_file_iterator
 {

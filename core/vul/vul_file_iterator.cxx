@@ -8,6 +8,7 @@
 #include <vcl_cassert.h>
 
 #include <vul/vul_file.h>
+#include <vul/vul_reg_exp.h>
 
 // Modifications:
 //  Ian Scott 09/06/2003 Add filename general globbing support
@@ -21,69 +22,118 @@
 
 struct vul_file_iterator_data
 {
-  vcl_string original;
-  vcl_string original_dirname;
-  struct _finddata_t data;
-  // intptr_t handle;  // not found by msvc6
-  __int64 handle;      // works with msvc6
-  vcl_string found;
-  char const* name;
+  struct _finddata_t data_;
+  // intptr_t handle_;  // not found by msvc6
+  __int64 handle_;      // works with msvc6
+  vcl_string found_;
+  char const* name_;
+  vul_reg_exp reg_exp_;
+  vcl_string original_dirname_;
 
   vul_file_iterator_data(char const* glob) {
-    original = glob;
-    handle = _findfirst(glob, &data);
-    original_dirname = vul_file::dirname(glob);
+    original_dirname_ = vul_file::dirname(glob);
+    handle_ = _findfirst((original_dirname_ + "\\*").c_str(), &data_);
 
-    if (handle != -1L)
+
+
+    vcl_string baseglob = vul_file::basename(glob);
+    vcl_string::iterator i = baseglob.begin();
+    bool prev_slash=false, in_sqr_brackets=false;
+    vcl_string re; //assemble the Regexp string
+    while (i != baseglob.end())
+    {
+      if (*i=='\\' && !prev_slash)
+        prev_slash = true;
+      else if (prev_slash)
+      {
+        prev_slash = false;
+        re.append(1,('\\'));
+        re.append(1,*i);
+      }
+      else if (*i=='[' && !in_sqr_brackets)
+      {
+        in_sqr_brackets = true;
+        re.append(1,'[');
+      }
+      else if (*i==']' && in_sqr_brackets)
+      {
+        in_sqr_brackets = false;
+        re.append(1,']');
+      }
+      else if (*i=='?' && !in_sqr_brackets)
+        re.append(1,'.');
+      else if (*i=='*' && !in_sqr_brackets)
+        re.append(".*");
+      else
+        re.append(vul_reg_exp::protect(*i));
+
+      ++i;
+    }
+
+    reg_exp_.compile(re.c_str());
+
+
+    if (handle_ != -1L)
+    {
+      while ( ! reg_exp_.find(data_.name) )
+      {
+        if (_findnext(handle_, &data_) != 0) {
+          _findclose(handle_);
+          handle_ = -1L;
+          return;
+        }
+      } 
       mkname();
+    }
   }
 
   void mkname() {
     // Remember full path
-    found = original_dirname + "/" + data.name;
-    name = found.c_str();
-    // no need to remember filename, it's in data.name
+    found_ = original_dirname_ + "\\" + data_.name;
+    name_ = found_.c_str();
+    // no need to remember filename, it's in data_.name
   }
 
+
   void next() {
-    assert(handle != -1L);
-    if (_findnext(handle, &data) == 0) {
-      // found one
-      mkname();
-    } else {
-      // failed to find one, done
-      _findclose(handle);
-      handle = -1L;
-    }
+    assert(handle_ != 0);
+    do
+    {
+      if (_findnext(handle_, &data_) != 0) {
+        _findclose(handle_);
+        handle_ = -1L;
+        return;
+      }
+    } while ( ! reg_exp_.find(data_.name) );
+    mkname();
   }
+
 
   // should be constish, and ret 0 when nuffink
   char const* value() {
-    if (handle == -1L) return 0;
-    return name;
+    if (handle_ == -1L) return 0;
+    return name_;
   }
 
   // Return non-dir part of fn
   char const* value_filename() {
-    if (handle == -1L) return 0;
-    return data.name;
+    if (handle_ == -1L) return 0;
+    return data_.name;
   }
 
   ~vul_file_iterator_data() {
-    if (handle != -1L)
-      _findclose(handle);
+    if (handle_ != -1L)
+      _findclose(handle_);
   }
 };
 
 #else // !defined(VCL_WIN32) || defined(__CYGWIN__)
 
 #include <dirent.h>
-#include <vul/vul_reg_exp.h>
 
 struct vul_file_iterator_data
 {
   vcl_string original_dirname_;
-  vcl_string baseglob_;
   DIR* dir_handle_;
   dirent* de_;
   vcl_string found_;
@@ -93,11 +143,11 @@ struct vul_file_iterator_data
   vul_file_iterator_data(char const* glob) {
     original_dirname_ = vul_file::dirname(glob) + "/";
 
-    baseglob_ = vul_file::basename(glob);
+    vcl_string baseglob = vul_file::basename(glob);
     vcl_string::iterator i = baseglob_.begin();
     bool prev_slash=false, in_sqr_brackets=false;
     vcl_string re; //assemble the Regexp string
-    while (i != baseglob_.end())
+    while (i != baseglob.end())
     {
       if (*i=='\\' && !prev_slash)
         prev_slash = true;
@@ -131,9 +181,6 @@ struct vul_file_iterator_data
 
     dir_handle_ = opendir(original_dirname_.c_str());
 
-    // Strip unnecessary ./
-    if (original_dirname_ == "./") original_dirname_ = "";
-
     next();
   }
 
@@ -141,7 +188,7 @@ struct vul_file_iterator_data
     // Remember full path
     found_ = original_dirname_ + de_->d_name;
     name_ = found_.c_str();
-    // no need to remember filename, it's in data.name
+    // no need to remember filename, it's in data_.name
   }
 
   void next() {

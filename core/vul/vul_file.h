@@ -15,6 +15,7 @@
 // 981102 AWF Initial version.
 // PDA (Manchester) 21/03/2001: Tidied up the documentation
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
+//   Jun.2003 - Ian Scott      - added support for '\' file separator to dos version
 // \endverbatim
 
 #include <vcl_string.h>

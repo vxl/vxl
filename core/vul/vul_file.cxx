@@ -75,9 +75,14 @@ vcl_string vul_file::dirname(char const* fn)
 {
   vcl_string self(fn);
 
-  vcl_string::size_type slash_index = self.rfind('/');
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+  unsigned int slash_index = self.find_last_of("\\/");
+#else
+  unsigned int slash_index = self.rfind('/');
+#endif
   if (slash_index == vcl_string::npos)
     return ".";
+
 
   return self.substr(0, slash_index);
 }
@@ -97,7 +102,11 @@ vcl_string vul_file::strip_directory(char const* fn)
 {
    vcl_string self(fn);
 
-   unsigned int slash_index = self.rfind('/');
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+  unsigned int slash_index = self.find_last_of("\\/");
+#else
+  unsigned int slash_index = self.rfind('/');
+#endif
    if (slash_index != vcl_string::npos)
      self.erase(0, slash_index+1);
 
@@ -120,7 +129,12 @@ vcl_string vul_file::basename(char const* fn, char const * suffix)
   // First strip dir
   vcl_string self(fn);
 
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+  unsigned int slash_index = self.find_last_of("\\/");
+#else
   unsigned int slash_index = self.rfind('/');
+#endif
+
   if (slash_index != vcl_string::npos)
     self.erase(0, slash_index+1);
 
