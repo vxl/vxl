@@ -248,6 +248,7 @@ foreach $f (@FILES)
         "$f.$wd" !~ m/_rational\.(h|cxx)\.sqrt$/ &&
         "$f.$wd" !~ m/\bvul\/vul_timer\.(h|cxx)\.real$/ &&
         "$f.$wd" !~ m/\bvnl\/vnl_quaternion\.h\.real$/ &&
+        "$f.$wd" !~ m/\bvnl\/tests\/test_complex\.cxx\.acos$/ &&
         "$f.$wd" !~ m/\bvnl\/(vnl_rational\.h|tests\/test_rational\.cxx)\.(abs|ceil|floor)$/ &&
         "$f.$wd" !~ m/\bvnl\/vnl_numeric_limits\.h\.(min|max)$/ &&
         "$f.$wd" !~ m/\bvil\/vil_rgb\.(h|txx)\.(min|max)$/ &&
@@ -282,6 +283,7 @@ foreach $f (@FILES)
     if ($f !~ m/\bvcl\/.*\bvcl_(ios|iosfwd|iomanip|[siof]+stream|strstream|streambuf)\.h/ &&
         $f !~ m/\bv3p\/(netlib|jpeg|tiff|png|zlib)\// &&
         ($f !~ m/\bvcl\/emulation\/vcl_string\.h$/ || $wd !~ m/end/ ) &&
+        ($f !~ m/\boxp\/oxp_mpeg_codec\.cxx$/ || $wd !~ m/end/ ) &&
         ($f !~ m/\b(rrel\/rrel_util|rsdl\/rsdl_borgefors)\.txx$/ || $wd !~ m/end/ ) &&
         $file_s =~ m/,\s*$wd\s*\)/) {
       print "$f\t\# $wd must be vcl_ios_$wd\n";
