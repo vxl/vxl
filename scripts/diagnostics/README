@@ -23,3 +23,4 @@ vxl_run_tests.pl -d $VXLBIN/vxl -o /tmp/vxl_output -r 1
 
 Then look at /tmp/vxl_output/index.html
 
+foo
