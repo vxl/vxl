@@ -105,14 +105,13 @@ void vgui_soview2D_lineseg::draw() const
 
 float vgui_soview2D_lineseg::distance_squared(float x, float y) const
 {
-  // Here we explicitely give the template instantiation of
-  // vgl_distance2_to_linesegment that we want to help the Borland
-  // compiler which otherwise tries to use
+  // Here we explicitely cast some parameters to type float to help
+  // the Borland compiler, which otherwise tries to use
   // vgl_distance2_to_linesegment<const float>, presumably because
   // this is a const member function so some of the parameters passed
   // to vgl_distance2_to_linesegment are effectively of type const
   // float.
-  return vgl_distance2_to_linesegment<float>(x0, y0, x1, y1, x, y);
+  return vgl_distance2_to_linesegment(float(x0), float(y0), float(x1), float(y1), x, y);
 }
 
 void vgui_soview2D_lineseg::get_centroid(float* x, float* y) const
