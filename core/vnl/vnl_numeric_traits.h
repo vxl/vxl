@@ -43,7 +43,7 @@ class vnl_numeric_traits_not_a_valid_type { };
 template <class T>
 class vnl_numeric_traits
 {
-	public:
+ public:
   //: Additive identity
   static const vnl_numeric_traits_not_a_valid_type zero;
 
