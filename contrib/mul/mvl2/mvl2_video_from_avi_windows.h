@@ -6,6 +6,8 @@
 // \author Franck Bettinger
 
 #include <vcl_string.h>
+// If we must use windows.h, we should at least sanitise it first
+#define NOMINMAX
 #include <windows.h>
 #include <vfw.h>
 #include <vil/vil_image_view.h>
