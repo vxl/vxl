@@ -56,16 +56,6 @@ T vnl_determinant(T const *row0, T const *row1, T const *row2, T const *row3) {
 
 //--------------------------------------------------------------------------------
 
-
-template <class T>
-T vnl_determinant(T const *const *rows, int size, bool balance)
-{
-  vnl_matrix<T> tmp(size, size);
-  for (int i=0; i<size; ++i)
-    tmp.set_row(i, rows[i]);
-  return vnl_determinant(tmp, balance);
-}
-
 //#include <vcl_cmath.h>
 //#include <vcl_algorithm.h>
 //#include <vcl_iostream.h>
@@ -147,12 +137,17 @@ T vnl_determinant(vnl_matrix<T> const &M, bool balance)
 
 //--------------------------------------------------------------------------------
 
-#undef VNL_DETERMINANT_INSTANTIATE
-#define VNL_DETERMINANT_INSTANTIATE(T) \
+#define VNL_DETERMINANT_INSTANTIATE_1(T) \
 template T vnl_determinant(T const *, T const *); \
 template T vnl_determinant(T const *, T const *, T const *); \
-template T vnl_determinant(T const *, T const *, T const *, T const *); \
-template T vnl_determinant(T const * const *, int, bool); \
+template T vnl_determinant(T const *, T const *, T const *, T const *)
+
+#define VNL_DETERMINANT_INSTANTIATE_2(T) \
 template T vnl_determinant(vnl_matrix<T > const &, bool)
+
+#undef VNL_DETERMINANT_INSTANTIATE
+#define VNL_DETERMINANT_INSTANTIATE(T) \
+VNL_DETERMINANT_INSTANTIATE_1(T); \
+VNL_DETERMINANT_INSTANTIATE_2(T)
 
 #endif // vnl_algo_determinant_txx_

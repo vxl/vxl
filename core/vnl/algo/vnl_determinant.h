@@ -40,11 +40,6 @@ template <class T> T vnl_determinant(T const *row0,
 //: evaluation using direct methods for sizes of 2x2, 3x3, and 4x4
 // or qr decompostion for other matrices.
 template <class T>
-T vnl_determinant(T const *const *rows, int size, bool balance = false);
-
-//: evaluation using direct methods for sizes of 2x2, 3x3, and 4x4
-// or qr decompostion for other matrices.
-template <class T>
 T vnl_determinant(vnl_matrix<T> const &M, bool balance = false);
 
 #define VNL_DETERMINANT_INSTANTIATE(T) \
