@@ -1,7 +1,7 @@
 #ifndef vpgl_tests_h_
 #define vpgl_tests_h_
 
-#include <vcl/vcl_string.h>
+#include <vcl_string.h>
 #include <vcl_cassert.h>
 #include <vul/vul_arg.h>
 #include <vcl_iosfwd.h>
