@@ -8,6 +8,7 @@
 ADD_LIBRARY(pdf1d pdf1d_sources)
 
 SOURCE_FILES(pdf1d_sources
+  pdf1d_all.h
   pdf1d_pdf.cxx
   pdf1d_sampler.cxx
   pdf1d_builder.cxx
@@ -63,7 +64,7 @@ IF (WIN32)
   pdf1d_exponential_sampler.h
   pdf1d_exponential_builder.h
   pdf1d_kernel_pdf.h
-  pdf1d_kernel_pdf_builder.cxx
+  pdf1d_kernel_pdf_builder.h
   pdf1d_gaussian_kernel_pdf.h
   pdf1d_gaussian_kernel_pdf_sampler.h
   pdf1d_gaussian_kernel_pdf_builder.h
