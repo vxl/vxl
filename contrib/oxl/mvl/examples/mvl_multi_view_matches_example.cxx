@@ -1,8 +1,8 @@
-#include <vcl_fstream.h>
 #include <vul/vul_timer.h>
 #include <mvl/mvl_multi_view_matches.h>
+#include <vcl_iostream.h>
 
-#define W -1
+static const int W = -1;
 
 int my_views[] = {5, 10, 15, 20, 25, 30, 35, 40, 45, 50};
 
