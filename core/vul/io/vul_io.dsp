@@ -154,65 +154,6 @@ LIB32=link.exe -lib
 # Name "vul_io - Win32 RelWithDebInfo"
 
 
-# Begin Source File
-
-SOURCE=".\CMakeLists.txt"
-
-!IF  "$(CFG)" == "vul_io - Win32 Release"
-USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/vxl/CMakeLists.txt"\
-	"$(IUEROOT)/vxl/vul/CMakeLists.txt"\
-	"$(IUEROOT)/vxl/vul/io/CMakeLists.txt"
-# Begin Custom Build
-
-"vul_io.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"cmake.exe" "$(IUEROOT)/vxl/vul/io/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/vxl/vul/io" -O"$(IUEROOT)/vxl/vul/io" -B"$(IUEROOT)"
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "vul_io - Win32 Debug"
-USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/vxl/CMakeLists.txt"\
-	"$(IUEROOT)/vxl/vul/CMakeLists.txt"\
-	"$(IUEROOT)/vxl/vul/io/CMakeLists.txt"
-# Begin Custom Build
-
-"vul_io.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"cmake.exe" "$(IUEROOT)/vxl/vul/io/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/vxl/vul/io" -O"$(IUEROOT)/vxl/vul/io" -B"$(IUEROOT)"
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "vul_io - Win32 MinSizeRel"
-USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/vxl/CMakeLists.txt"\
-	"$(IUEROOT)/vxl/vul/CMakeLists.txt"\
-	"$(IUEROOT)/vxl/vul/io/CMakeLists.txt"
-# Begin Custom Build
-
-"vul_io.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"cmake.exe" "$(IUEROOT)/vxl/vul/io/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/vxl/vul/io" -O"$(IUEROOT)/vxl/vul/io" -B"$(IUEROOT)"
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "vul_io - Win32 RelWithDebInfo"
-USERDEP__HACK=\
-	"$(IUEROOT)/CMakeLists.txt"\
-	"$(IUEROOT)/vxl/CMakeLists.txt"\
-	"$(IUEROOT)/vxl/vul/CMakeLists.txt"\
-	"$(IUEROOT)/vxl/vul/io/CMakeLists.txt"
-# Begin Custom Build
-
-"vul_io.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"cmake.exe" "$(IUEROOT)/vxl/vul/io/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/vxl/vul/io" -O"$(IUEROOT)/vxl/vul/io" -B"$(IUEROOT)"
-
-# End Custom Build
-
-!ENDIF
-
-# End Source File
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
