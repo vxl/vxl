@@ -1,6 +1,5 @@
 #include "vnl_determinant.h"
 
-VCL_DEFINE_SPECIALIZATION
 int vnl_determinant(vnl_matrix<int> const &M, bool balance )
 {
   unsigned n = M.rows();
