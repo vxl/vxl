@@ -83,25 +83,22 @@ static void test_cycle_processor()
     vtol_edge_2d_sptr efc = new vtol_edge_2d(vf,vc, cfc);
     vtol_edge_2d_sptr efd = new vtol_edge_2d(vf,vd, cfd);
 
-    double ang_ef_fa = vtol_cycle_processor::
-      angle_between_edges(eef,efa,vf);
+    double ang_ef_fa = vtol_cycle_processor::angle_between_edges(eef,efa,vf);
+    double flip = ang_ef_fa < 0 ? 0 : 180;
     vcl_cout << "Angle ef-fa = " << ang_ef_fa <<vcl_endl;
-    TEST_NEAR("angle_between_edges()", ang_ef_fa,-45, 1e-3);
+    TEST_NEAR("angle_between_edges()", ang_ef_fa, flip-45, 1e-6);
 
-    double ang_ef_fb = vtol_cycle_processor::
-      angle_between_edges(eef,efb,vf);
+    double ang_ef_fb = vtol_cycle_processor::angle_between_edges(eef,efb,vf);
     vcl_cout << "Angle ef-fb = "  << ang_ef_fb << vcl_endl;
-    TEST_NEAR("angle_between_edges()", ang_ef_fb,-30, 1e-3);
+    TEST_NEAR("angle_between_edges()", ang_ef_fb, flip-30, 0.001);
 
-    double ang_ef_fc = vtol_cycle_processor::
-      angle_between_edges(eef,efc,vf);
+    double ang_ef_fc = vtol_cycle_processor::angle_between_edges(eef,efc,vf);
     vcl_cout << "Angle ef-fc = " << ang_ef_fc << vcl_endl;
-    TEST_NEAR("angle_between_edges()", ang_ef_fc, 30, 1e-3);
+    TEST_NEAR("angle_between_edges()", ang_ef_fc, 30-flip, 0.001);
 
-    double ang_ef_fd = vtol_cycle_processor::
-      angle_between_edges(eef,efd,vf);
+    double ang_ef_fd = vtol_cycle_processor::angle_between_edges(eef,efd,vf);
     vcl_cout << "Angle ef-fd = " << ang_ef_fd << vcl_endl;
-    TEST_NEAR("angle_between_edges()", ang_ef_fd, 45, 1e-3);
+    TEST_NEAR("angle_between_edges()", ang_ef_fd, 45-flip, 1e-6);
   }
 
   //
