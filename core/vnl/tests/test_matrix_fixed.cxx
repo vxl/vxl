@@ -63,6 +63,10 @@ void test_matrix_fixed()
   vcl_printf("X v = [ %g %g %g ]\n", Xv[0], Xv[1], Xv[2]);
 
   verbose_malloc = false;
+
+  // test that vnl_double_3x3's can be multiplied
+  vnl_double_3x3 A(datablock);
+  vnl_double_3x3 B = A * A;
 }
 
 #if TEST_MALLOC
