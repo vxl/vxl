@@ -24,8 +24,8 @@ class sdet_grid_finder_params : public gevd_param_mixin
               TRANS_PERIM_LINES,
               AFFINE_GROUP_AFTER_TRANS};
 
-  sdet_grid_finder_params(const int n_lines_x=11, const int n_lines_y=11,
-                          const double spacing=100.0,
+  sdet_grid_finder_params(const int n_lines_x=11, const int n_lines_y=11, 
+                          const double spacing=53.34, 
                           const int thresh=1, const float angle_tol=5,
                           bool verbose = false,
                           int debug_state = false);
@@ -42,8 +42,7 @@ class sdet_grid_finder_params : public gevd_param_mixin
                   const double spacing, const int thresh,
                   const float angle_tol,
                   bool verbose,
-                  int debug_state
-                  );
+                  int debug_state);
  public:
   //
   // Parameter blocks and parameters
