@@ -1,4 +1,6 @@
-#ifdef WIN32
+#include <vcl_compiler.h>
+
+#ifdef VCL_WIN32
 
 //:
 //  \file

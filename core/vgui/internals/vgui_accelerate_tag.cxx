@@ -2,6 +2,7 @@
   capes@robots.ox.ac.uk
 */
 
+#include <vcl_compiler.h>
 #include <vgui/vgui_gl.h>
 #include "vgui_accelerate.h"
 #include "vgui_accelerate_x11.h"
@@ -17,7 +18,7 @@ vgui_tag(accelerate_x11) {
   return 0;
 }
 #endif
-#ifdef WIN32
+#ifdef VCL_WIN32
 vgui_tag(accelerate_mfc) {
   vul_trace;
   vgui_accelerate::register_accelerator(new vgui_accelerate_mfc, 1);

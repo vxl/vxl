@@ -7,7 +7,10 @@
 // Created: 01 Apr 2000
 //
 //-----------------------------------------------------------------------------
-#ifdef WIN32
+
+#include <vcl_compiler.h>
+
+#ifdef VCL_WIN32
 #include <vgui/impl/mfc/stdafx.h>
 extern CDC *vgui_mfc_adaptor_global_dc;
 #endif
