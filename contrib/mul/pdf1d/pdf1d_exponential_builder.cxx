@@ -1,13 +1,14 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
+//:
+// \file
 
 #include <vcl_cassert.h>
 #include <vcl_string.h>
 #include <vcl_cstdlib.h> // vcl_abort()
 #include <vcl_cmath.h>
 
-#include <vsl/vsl_indent.h>
 #include <mbl/mbl_data_wrapper.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <pdf1d/pdf1d_exponential.h>
@@ -79,7 +80,7 @@ void pdf1d_exponential_builder::build_from_array(pdf1d_pdf& model, const double*
   if (n<2)
   {
     vcl_cerr<<"pdf1d_exponential_builder::build_from_array()";
-	vcl_cerr<<" Too few examples available."<<vcl_endl;
+    vcl_cerr<<" Too few examples available."<<vcl_endl;
     vcl_abort();
   }
 
@@ -103,15 +104,14 @@ void pdf1d_exponential_builder::build(pdf1d_pdf& model, mbl_data_wrapper<double>
     vcl_abort();
   }
 
-	if (data.is_a()=="mbl_data_array_wrapper<T>")
-	{
-	  // Use more efficient build_from_array algorithm
-    mbl_data_array_wrapper<double>& data_array =
-		               (mbl_data_array_wrapper<double>&) data;
-		build_from_array(model,data_array.data(),n_samples);
-		return;
-	}
-
+    if (data.is_a()=="mbl_data_array_wrapper<T>")
+    {
+      // Use more efficient build_from_array algorithm
+      mbl_data_array_wrapper<double>& data_array =
+                       (mbl_data_array_wrapper<double>&) data;
+      build_from_array(model,data_array.data(),n_samples);
+      return;
+    }
 
   double sum = 0;
 
@@ -132,8 +132,8 @@ void pdf1d_exponential_builder::build(pdf1d_pdf& model, mbl_data_wrapper<double>
 }
 
 void pdf1d_exponential_builder::weighted_build(pdf1d_pdf& model,
-                                            mbl_data_wrapper<double>& data,
-                                            const vcl_vector<double>& wts) const
+                                               mbl_data_wrapper<double>& data,
+                                               const vcl_vector<double>& wts) const
 {
   int n_samples = data.size();
 
@@ -145,7 +145,7 @@ void pdf1d_exponential_builder::weighted_build(pdf1d_pdf& model,
 
   double sum = 0;
   double w_sum = 0;
-  const double* w = wts.begin();
+  const double* w = &(wts.front()); // cannot use wts.begin() since that's an iterator, not a pointer
 
 
   // Inefficient to go through twice.
@@ -155,14 +155,14 @@ void pdf1d_exponential_builder::weighted_build(pdf1d_pdf& model,
   for (int i=0;i<n_samples;i++)
   {
     double x = data.current();
-	double wi = w[i];
+    double wi = w[i];
     sum += wi*x;
-	w_sum += wi;
+    w_sum += wi;
     data.next();
   }
 
   double m = sum/w_sum;
-  double min_m = sqrt(min_var_);
+  double min_m = vcl_sqrt(min_var_);
   if (m<min_m) m=min_m;
 
   pdf1d_exponential& g = exponential(model);

@@ -1,12 +1,13 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
+//:
+// \file
 
 #include <vcl_cassert.h>
 #include <vcl_string.h>
 #include <vcl_cstdlib.h> // vcl_abort()
 
-#include <vsl/vsl_indent.h>
 #include <mbl/mbl_data_wrapper.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <pdf1d/pdf1d_gaussian.h>
@@ -77,7 +78,7 @@ void pdf1d_gaussian_builder::build_from_array(pdf1d_pdf& model, const double* da
   if (n<2)
   {
     vcl_cerr<<"pdf1d_gaussian_builder::build_from_array()";
-	vcl_cerr<<" Too few examples available."<<vcl_endl;
+    vcl_cerr<<" Too few examples available."<<vcl_endl;
     vcl_abort();
   }
 
@@ -102,14 +103,14 @@ void pdf1d_gaussian_builder::build(pdf1d_pdf& model, mbl_data_wrapper<double>& d
     vcl_abort();
   }
 
-	if (data.is_a()=="mbl_data_array_wrapper<T>")
-	{
-	  // Use more efficient build_from_array algorithm
-    mbl_data_array_wrapper<double>& data_array =
-		               (mbl_data_array_wrapper<double>&) data;
-		build_from_array(model,data_array.data(),n_samples);
-		return;
-	}
+    if (data.is_a()=="mbl_data_array_wrapper<T>")
+    {
+      // Use more efficient build_from_array algorithm
+      mbl_data_array_wrapper<double>& data_array =
+                       (mbl_data_array_wrapper<double>&) data;
+      build_from_array(model,data_array.data(),n_samples);
+      return;
+    }
 
 
   double sum = 0;
@@ -120,7 +121,7 @@ void pdf1d_gaussian_builder::build(pdf1d_pdf& model, mbl_data_wrapper<double>& d
   {
     double x = data.current();
     sum += x;
-	sum_sq += x*x;
+    sum_sq += x*x;
     data.next();
   }
 
@@ -148,7 +149,7 @@ void pdf1d_gaussian_builder::weighted_build(pdf1d_pdf& model,
   double sum = 0;
   double w_sum = 0;
   double sum_sq = 0;
-  const double* w = wts.begin();
+  const double* w = &(wts.front()); // cannot use wts.begin() since that's an iterator, not a pointer
 
 
   // Inefficient to go through twice.
@@ -158,10 +159,10 @@ void pdf1d_gaussian_builder::weighted_build(pdf1d_pdf& model,
   for (int i=0;i<n_samples;i++)
   {
     double x = data.current();
-	double wi = w[i];
+    double wi = w[i];
     sum += wi*x;
-	sum_sq += wi*x*x;
-	w_sum += wi;
+    sum_sq += wi*x*x;
+    w_sum += wi;
     data.next();
   }
 
