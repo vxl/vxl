@@ -278,10 +278,22 @@ class vil2_algo_convolve_1d_resource : public vil2_image_resource
     vil2_image_view<destT> dest(vs->ni(), vs->nj(), vs->nplanes());
     switch (vs->pixel_format())
     {
-      case VIL2_PIXEL_FORMAT_BYTE:
-        vil2_algo_convolve_1d(static_cast<vil2_image_view<vxl_byte>&>(*vs),dest,
-          kernel_, klo_, khi_, accumT(), start_option_, end_option_);
+#define macro( F , T ) \
+      case F : \
+        vil2_algo_convolve_1d(static_cast<vil2_image_view<T >&>(*vs),dest, \
+          kernel_, klo_, khi_, accumT(), start_option_, end_option_); \
         return new vil2_image_view<destT>(vil2_window(dest, lboundary, ni, 0, nj));
+
+      macro(VIL2_PIXEL_FORMAT_BYTE , vxl_byte )
+      macro(VIL2_PIXEL_FORMAT_SBYTE , vxl_sbyte )
+      macro(VIL2_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
+      macro(VIL2_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
+      macro(VIL2_PIXEL_FORMAT_INT_32 , vxl_int_32 )
+      macro(VIL2_PIXEL_FORMAT_INT_16 , vxl_int_16 )
+      macro(VIL2_PIXEL_FORMAT_BOOL , bool )
+      macro(VIL2_PIXEL_FORMAT_FLOAT , float )
+      macro(VIL2_PIXEL_FORMAT_DOUBLE , double )
+#undef macro
       default:
         return 0;
     }
