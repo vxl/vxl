@@ -101,11 +101,29 @@ LIB32=link.exe -lib
 # Begin Source File
 SOURCE=.\bsol_hough_line_index.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\bsol_distance_histogram.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bsol_algs.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+bsol_hough_line_index-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
 SOURCE=.\bsol_hough_line_index.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsol_algs.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsol_distance_histogram.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsol_hough_line_index_sptr.h
 # End Source File
 # End Group
 # End Target
