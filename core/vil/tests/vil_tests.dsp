@@ -29,6 +29,7 @@ SOURCE=.\vil2_test_random_access_timings.cxx
 SOURCE=.\vil2_test_access_timings_noplanes.cxx
 SOURCE=.\vil2_test_pair_access_timings.cxx
 SOURCE=.\vil2_vil_compare_access_timings.cxx
+SOURCE=.\vil2_vil_compare_function_timings.cxx
 # End Group
 # Begin Group "Header Files"
 # End Group
