@@ -81,7 +81,7 @@ void vsrl_dynamic_program::set_tokens(token_list &l1,
 
   // set the search range for each token
 
-  define_search_range();
+  //define_search_range();
 }
 
 // define the search range for the tokens in list1
@@ -92,6 +92,27 @@ void vsrl_dynamic_program::define_search_range()
   {
     int low=i*2+1 - 2*search_range_;
     int high=i*2+1 + 2*search_range_;
+
+    if (low<0)
+      low=0;
+    if ((unsigned int)low>=list2_.size())
+      low=list2_.size()-1;
+    if (high<0)
+      high=0;
+    if ((unsigned int)high>list2_.size())
+      high=list2_.size();
+
+    lower_search_range_.push_back(low);
+    upper_search_range_.push_back(high);
+  }
+}
+
+void vsrl_dynamic_program::define_search_range(vnl_vector<int > curr_row)
+{
+  for (unsigned int i=0;i<list1_.size();i++)
+  {
+    int low=curr_row[i]*2+1 - 2*search_range_;
+    int high=curr_row[i]*2+1 + 2*search_range_;
 
     if (low<0)
       low=0;
@@ -199,8 +220,12 @@ double vsrl_dynamic_program::execute()
   for (int i=0;i<num_row_;i++)
     for (int j=lower_search_range_[i];j<upper_search_range_[i];j++)
       compute_cost(i,j);
-
-
+ /*for (int i=0;i<num_row_;i++)
+ {
+    vcl_cout<<"\n";  
+     for (int j=lower_search_range_[i];j<upper_search_range_[i];j++)
+        vcl_cout<<cost_matrix_[i][j].cost<<" ";
+ }*/
   // we can now set the optimum assignment
 
   double cost= optimum_assignment();

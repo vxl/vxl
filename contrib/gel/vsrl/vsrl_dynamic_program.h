@@ -6,6 +6,8 @@
 // to compute a set of assignments between two sets of tokens
 
 #include <vcl_vector.h>
+#include <vnl/vnl_vector.h>
+
 class vsrl_token;
 class vsrl_null_token;
 
@@ -42,6 +44,12 @@ class vsrl_dynamic_program
 
   double execute();
 
+  void define_search_range();
+    
+  void define_search_range(vnl_vector<int > curr_row);
+
+
+
  protected:
 
  // this structure will keep track of possible assignments
@@ -65,7 +73,6 @@ class vsrl_dynamic_program
   vcl_vector<int> lower_search_range_; // the search range for each token
   vcl_vector<int> upper_search_range_; // in the future it could be specific
 
-  void define_search_range();
 
 
   assignment_node **cost_matrix_; // structure used to keep track of assignment costs

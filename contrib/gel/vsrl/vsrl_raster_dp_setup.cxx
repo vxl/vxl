@@ -6,7 +6,7 @@
 #include <vsrl/vsrl_parameters.h>
 #include <vsrl/vsrl_token.h>
 #include <vcl_iostream.h>
-
+#include <vnl/vnl_vector.h>
 // constructor
 
 vsrl_raster_dp_setup::vsrl_raster_dp_setup(int raster_line, vsrl_image_correlation *image_correlation)
@@ -18,6 +18,9 @@ vsrl_raster_dp_setup::vsrl_raster_dp_setup(int raster_line, vsrl_image_correlati
   search_range_=image_correlation->get_correlation_range();
   prior_raster_=0;
   bias_cost_=vsrl_parameters::instance()->bias_cost; // probably 0.2
+  inner_cost_=1.0;
+  outer_cost_=0.5;
+
 }
 
 
@@ -153,7 +156,59 @@ double vsrl_raster_dp_setup::execute()
   }
 
   dyn_prog.set_tokens(list1,list2);
+  dyn_prog.define_search_range();
 
+  dyn_prog.set_inner_cost(inner_cost_);
+  dyn_prog.set_inner_cost(outer_cost_);
+  double total_cost = dyn_prog.execute();
+
+  vcl_cout << " Total cost is " << total_cost << vcl_endl;
+
+  // dyn_prog.print_direct_costs(375);
+  // dyn_prog.print_costs(375);
+
+  return total_cost;
+}
+
+double vsrl_raster_dp_setup::execute(vnl_vector<int > curr_row)
+{
+  // create the token lists
+
+  create_token_list(get_image1_width(),image_correlation_,tok_list1,1.0);
+  create_token_list(get_image2_width(),0,tok_list2,1.0);
+
+  // set the bias information for token list1 based the previous raster
+  set_token_biases();
+
+  // create the right kind of list
+
+  vcl_vector<vsrl_token*> list1;
+  vcl_vector<vsrl_token*> list2;
+
+  vcl_vector<vsrl_intensity_token*>::iterator i;
+
+  for (i=tok_list1.begin();i<tok_list1.end();i++)
+  {
+    list1.push_back(*i);
+  }
+
+  for (i=tok_list2.begin();i<tok_list2.end();i++)
+  {
+    list2.push_back(*i);
+  }
+
+
+  // perform the dynamic program
+
+  vsrl_dynamic_program dyn_prog;
+
+  if (search_range_)
+  {
+    dyn_prog.set_search_range(search_range_);
+  }
+
+  dyn_prog.set_tokens(list1,list2);
+  dyn_prog.define_search_range(curr_row);
 
   double total_cost = dyn_prog.execute();
 

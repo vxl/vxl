@@ -33,6 +33,13 @@ class vsrl_raster_dp_setup
 
   void set_search_range(int range);
 
+  // set the inner null cost for the dynamic program
+
+  void set_inner_cost(double ic){inner_cost_=ic;}
+   // set the outer null cost for the dynamic program
+
+  void set_outer_cost(double oc){outer_cost_=oc;}
+
   // set the prior raster
   void set_prior_raster(vsrl_raster_dp_setup *prior_raster);
 
@@ -44,6 +51,8 @@ class vsrl_raster_dp_setup
   // perform the dynamic program
 
   double execute();
+  double execute(vnl_vector<int > curr_row);
+
 
  private:
 
@@ -74,6 +83,9 @@ class vsrl_raster_dp_setup
   // the bias cost
   double bias_cost_;
 
+  // the inner cost
+  double inner_cost_;
+  double outer_cost_;
   // the prior raster
   vsrl_raster_dp_setup *prior_raster_;
 
