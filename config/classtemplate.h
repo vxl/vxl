@@ -1,33 +1,35 @@
-// This is filename
+// This is libname/classname.h
 #ifndef classname_h_
 #define classname_h_
 //:
 // \file
-// \brief Contains classname.
-// \author Your name here
+// \brief <short description> FIXME
+// \author <your name here> FIXME
 //
-//  <description>
+//  <long description> FIXME
 //
 // \verbatim
-// Modifications
+//  Modifications
 //   <none yet>
 // \endverbatim
 
-//: A brief description of the class
+//: A brief description of the class.
 // More information about the class
 class classname
 {
   // PUBLIC INTERFACE----------------------------------------------------------
-public:
+ public:
 
-  // Default constructor
-  classname();
+  // Constructors/Destructors--------------------------------------------------
 
-  // Copy Constructor
-  classname(classname const&);
-
+  //: Default constructor
+  classname() : data_member_(0) {}
+  //: Copy Constructor
+  classname(classname const& c) : data_member_(c.data_member()) {}
+  //: Constructor from an int
+  classname(int v) : data_member_(v) {}
   // Destructor
-  ~classname();
+ ~classname() {}
 
   // Operators-----------------------------------------------------------------
   classname& operator=(classname const&);
@@ -46,11 +48,11 @@ public:
   // Utility Methods-----------------------------------------------------------
 
   // INTERNALS-----------------------------------------------------------------
-protected:
+ protected:
   // Data Members--------------------------------------------------------------
   int data_member_;
 
-private:
+ private:
   // Helpers-------------------------------------------------------------------
 };
 
