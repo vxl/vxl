@@ -1,5 +1,5 @@
-//this-sets-emacs-to-*-c++-*-mode
-
+// This is brl/bseg/segv/segv_segmentation_manager.cxx
+#include "segv_segmentation_manager.h"
 //:
 // \file
 // \author J.L. Mundy
@@ -7,9 +7,7 @@
 #include <math.h>
 #include <vcl_cstdlib.h> // for vcl_exit()
 #include <vcl_iostream.h>
-#include <vil/vil_memory_image_of.h>
 #include <vil/vil_load.h>
-#include <vsol/vsol_curve_2d.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_interpolator.h>
 #include <vdgl/vdgl_edgel_chain.h>
@@ -33,16 +31,16 @@
 #include <vgui/vgui_image_tableau.h>
 #include <gevd/gevd_float_operators.h>
 #include <segv/segv_vtol2D_tableau.h>
-#include <segv/segv_segmentation_manager.h>
+
 //static live_video_manager instance
-segv_segmentation_manager *segv_segmentation_manager::_instance = 0;
+segv_segmentation_manager *segv_segmentation_manager::instance_ = 0;
 
 
 segv_segmentation_manager *segv_segmentation_manager::instance()
 {
-  if (!_instance)
-    _instance = new segv_segmentation_manager();
-  return segv_segmentation_manager::_instance;
+  if (!instance_)
+    instance_ = new segv_segmentation_manager();
+  return segv_segmentation_manager::instance_;
 }
 
 //-----------------------------------------------------------
@@ -53,6 +51,7 @@ segv_segmentation_manager() : vgui_grid_tableau(1,1)
 {
   this->set_grid_size_changeable(true);
 }
+
 segv_segmentation_manager::~segv_segmentation_manager()
 {
   //this->clear_display();
@@ -64,6 +63,7 @@ bool segv_segmentation_manager::handle(const vgui_event &e)
 {
   return vgui_grid_tableau::handle(e);
 }
+
 void segv_segmentation_manager::quit()
 {
   vcl_exit(1);
@@ -79,39 +79,41 @@ void segv_segmentation_manager::load_image()
   load_image_dlg.checkbox("greyscale ", greyscale);
   if (!load_image_dlg.ask())
     return;
-  _img = vil_load(image_filename.c_str());
-  vgui_image_tableau_sptr itab = vgui_image_tableau_new(_img);
-  //  _e2D = vgui_easy2D_tableau_new(itab);
-  _t2D = segv_vtol2D_tableau_new(itab);
-  //vgui_shell_tableau_sptr stab = vgui_shell_tableau_new(_e2D);
-  vgui_shell_tableau_sptr stab = vgui_shell_tableau_new(_t2D);
+  img_ = vil_load(image_filename.c_str());
+  vgui_image_tableau_sptr itab = vgui_image_tableau_new(img_);
+  //  e2D_ = vgui_easy2D_tableau_new(itab);
+  t2D_ = segv_vtol2D_tableau_new(itab);
+  //vgui_shell_tableau_sptr stab = vgui_shell_tableau_new(e2D_);
+  vgui_shell_tableau_sptr stab = vgui_shell_tableau_new(t2D_);
   vgui_viewer2D_tableau_sptr v2d = vgui_viewer2D_tableau_new(stab);
   unsigned col=0, row=0;
   this->add_at(v2d, col, row);
 }
+
 //-----------------------------------------------------------------------------
 //: Clear the display
 //-----------------------------------------------------------------------------
 void segv_segmentation_manager::clear_display()
 {
-  if(!_t2D)
+  if (!t2D_)
     return;
-  _t2D->clear();
+  t2D_->clear();
 }
+
 //-----------------------------------------------------------------------------
 //: Draw the given edges onto the given location.
 //-----------------------------------------------------------------------------
-void 
+void
 segv_segmentation_manager::draw_edges(vcl_vector<vtol_edge_2d_sptr>& edges,
                                       bool verts)
 {
-  if (!_t2D)
+  if (!t2D_)
     return;
-  _t2D->set_line_width(3.0);
-  _t2D->set_point_radius(5.0);
+  t2D_->set_line_width(3.0);
+  t2D_->set_point_radius(5.0);
   this->clear_display();
-  vgui_image_tableau_sptr itab = _t2D->get_image_tableau();
-  if(!itab)
+  vgui_image_tableau_sptr itab = t2D_->get_image_tableau();
+  if (!itab)
     {
       vcl_cout << "In segv_segmentation_manager::draw_edges - null image tab"
                << vcl_endl;
@@ -119,30 +121,30 @@ segv_segmentation_manager::draw_edges(vcl_vector<vtol_edge_2d_sptr>& edges,
     }
   for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
        eit != edges.end(); eit++)
-    {     
-      _t2D->set_foreground(0.5,0.5,0.0);
-      _t2D->add_edge(*eit);
+    {
+      t2D_->set_foreground(0.5,0.5,0.0);
+      t2D_->add_edge(*eit);
       //optionally display the edge vertices
-      if(verts)
+      if (verts)
         {
-          _t2D->set_foreground(1.0,0.0,0.0);
-          if((*eit)->v1())
+          t2D_->set_foreground(1.0,0.0,0.0);
+          if ((*eit)->v1())
             {
               vtol_vertex_2d_sptr v1 =
                 (vtol_vertex_2d*)(*eit)->v1()->cast_to_vertex_2d();
-              _t2D->add_vertex(v1);
+              t2D_->add_vertex(v1);
             }
-          if((*eit)->v2())
-            {	
+          if ((*eit)->v2())
+            {
               vtol_vertex_2d_sptr v2 =
                 (vtol_vertex_2d*)(*eit)->v2()->cast_to_vertex_2d();
-              _t2D->add_vertex(v2);
+              t2D_->add_vertex(v2);
             }
         }
-
     }
-  _t2D->post_redraw();
+  t2D_->post_redraw();
 }
+
 void segv_segmentation_manager::vd_edges()
 {
   this->clear_display();
@@ -153,29 +155,29 @@ void segv_segmentation_manager::vd_edges()
   vd_dialog->field("Noise Threshold", dp.noise_multiplier);
   vd_dialog->checkbox("Automatic Threshold", dp.automatic_threshold);
   vd_dialog->checkbox("Agressive Closure", agr);
-  if(!vd_dialog->ask())
+  if (!vd_dialog->ask())
     return;
-  if(agr)
+  if (agr)
     dp.aggressive_junction_closure=1;
   else
     dp.aggressive_junction_closure=0;
   sdet_detector det(dp);
-  det.SetImage(_img);
+  det.SetImage(img_);
   det.DoContour();
   vcl_vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
   this->draw_edges(*edges, true);
   //display test verts
   vcl_vector<vtol_vertex_2d_sptr> test_verts = det.get_test_verts();
-  _t2D->set_foreground(0.0,1.0,0.0);
-  for(vcl_vector<vtol_vertex_2d_sptr>::iterator vit = test_verts.begin();
+  t2D_->set_foreground(0.0,1.0,0.0);
+  for (vcl_vector<vtol_vertex_2d_sptr>::iterator vit = test_verts.begin();
       vit != test_verts.end(); vit++)
-    if((*vit))
-      _t2D->add_vertex(*vit);
+    if ((*vit))
+      t2D_->add_vertex(*vit);
 }
 
 void segv_segmentation_manager::clean_vd_edges()
 {
-  sdet_detector det(_img);
+  sdet_detector det(img_);
   det.DoContour();
   vcl_vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
   vcl_vector<vtol_edge_2d_sptr> broken_edges;

@@ -5,7 +5,6 @@
 //:
 // \file
 // \brief Manager for segmentation algorithm execution and display
-
 // \author
 //   J.L. Mundy
 //
@@ -16,10 +15,6 @@
 //--------------------------------------------------------------------------------
 #include <vcl_vector.h>
 #include <vil/vil_image.h>
-#include <vil/vil_memory_image_of.h>
-#include <vtol/vtol_vertex_2d.h>
-#include <vtol/vtol_edge_2d.h>
-#include <vtol/vtol_vertex_2d_sptr.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
@@ -29,8 +24,8 @@
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_window.h>
 #include <segv/segv_vtol2D_tableau_sptr.h>
-//: A manager for displaying segmentation results.  
 
+//: A manager for displaying segmentation results.
 class segv_segmentation_manager : public vgui_grid_tableau
 {
  public:
@@ -43,25 +38,22 @@ class segv_segmentation_manager : public vgui_grid_tableau
   void vd_edges();
   void clean_vd_edges();
   //: access to the window
-  vgui_window* get_window(){return _win;}
-  void set_window(vgui_window* win){_win=win;}
+  vgui_window* get_window(){return win_;}
+  void set_window(vgui_window* win){win_=win;}
 
   //: the virtual handle function
   virtual bool handle(const vgui_event&);
  protected:
   void draw_edges(vcl_vector<vtol_edge_2d_sptr>& edges, bool verts=false);
 
-
  private:
-  //utility functions
-
   //flags
 
-  vil_image _img;
-  vgui_window* _win;
-  //  vgui_easy2D_tableau_sptr _e2D;
-  segv_vtol2D_tableau_sptr _t2D;
-  static segv_segmentation_manager *_instance;
+  vil_image img_;
+  vgui_window* win_;
+  //  vgui_easy2D_tableau_sptr e2D_;
+  segv_vtol2D_tableau_sptr t2D_;
+  static segv_segmentation_manager *instance_;
 };
 
 #endif // segv_segmentation_manager_h_

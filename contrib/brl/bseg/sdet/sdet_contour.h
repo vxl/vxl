@@ -77,7 +77,7 @@
 
 class sdet_contour
 {
-public:
+ public:
   sdet_contour(float min_strength, int min_length, // hysteresis
                float min_jump,         // jump in strength at junctions
                float max_gap=2.236068f); // bridge small gaps (sqrt(5))
@@ -137,18 +137,18 @@ public:
   static void BeSilent() {talkative = false;}
   static void BeTalkative() {talkative = true;}
   void propagate_chains(vcl_vector<vtol_edge_2d_sptr >& edges);
-  vcl_vector<vtol_vertex_2d_sptr>&  get_test_verts(){return _test_verts;}
+  vcl_vector<vtol_vertex_2d_sptr>&  get_test_verts(){return test_verts_;}
   static vtol_vertex_2d_sptr clear_vertex_superiors(vtol_vertex_sptr& v);
-protected:
+ protected:
   float minStrength;  // hysteresis or noise threshold
   int minLength;      // number of pixels in shortest chain
   float minJump;      // change in strength at junction
   int maxSpiral;      // number of spiral search for max_gap
   vbl_array_2d<vtol_edge_2d_sptr> *edgeMap;
   vbl_array_2d<vtol_vertex_2d_sptr> *vertexMap; // map pixel to junction/chain
-  vcl_vector<vtol_vertex_2d_sptr> _test_verts;
-  
-protected:
+  vcl_vector<vtol_vertex_2d_sptr> test_verts_;
+
+ protected:
   int FindChains(gevd_bufferxy& edgels, // link pixels into chains
                  const int njunction, // junctions detected
                  const int* junctionx, const int* junctiony,

@@ -1,129 +1,80 @@
-// <begin copyright notice>
-// ---------------------------------------------------------------------------
-//
-//                   Copyright (c) 1997 TargetJr Consortium
-//               GE Corporate Research and Development (GE CRD)
-//                             1 Research Circle
-//                            Niskayuna, NY 12309
-//                            All Rights Reserved
-//              Reproduction rights limited as described below.
-//                               
-//      Permission to use, copy, modify, distribute, and sell this software
-//      and its documentation for any purpose is hereby granted without fee,
-//      provided that (i) the above copyright notice and this permission
-//      notice appear in all copies of the software and related documentation,
-//      (ii) the name TargetJr Consortium (represented by GE CRD), may not be
-//      used in any advertising or publicity relating to the software without
-//      the specific, prior written permission of GE CRD, and (iii) any
-//      modifications are clearly marked and summarized in a change history
-//      log.
-//       
-//      THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTY OF ANY KIND,
-//      EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
-//      WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
-//      IN NO EVENT SHALL THE TARGETJR CONSORTIUM BE LIABLE FOR ANY SPECIAL,
-//      INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND OR ANY
-//      DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
-//      WHETHER OR NOT ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, OR ON
-//      ANY THEORY OF LIABILITY ARISING OUT OF OR IN CONNECTION WITH THE
-//      USE OR PERFORMANCE OF THIS SOFTWARE.
-//
-// ---------------------------------------------------------------------------
-// <end copyright notice>
-#ifndef _SpatialBorgefors_h
-#define _SpatialBorgefors_h
+#ifndef SpatialBorgefors_h_
+#define SpatialBorgefors_h_
 
 //-----------------------------------------------------------------------------
+//:
+// \file
+// \brief Computes 3-4 distance transform
+// \author
+//             Charlie Rothwell - 4/5/95
+//             INRIA, Sophia Antipolis
 //
-// Class : SpatialBorgefors
-//
-// .SECTION Description:
-//
-// SpatialBorgefors is a class for managing parts of the verfication procedures which 
-// are required for recognition. At the basic level, this involves computing the 
+// SpatialBorgefors is a class for managing parts of the verfication procedures which
+// are required for recognition. At the basic level, this involves computing the
 // distance transform image and the orientation image. This is done using the
-// 3-4 chamfer distance transform. All indexing of distances and orientations 
-// is done in global image terms, and not at the level of the ROI (and hence 
-// we are using the real image origin). The distance and orientation images 
+// 3-4 chamfer distance transform. All indexing of distances and orientations
+// is done in global image terms, and not at the level of the ROI (and hence
+// we are using the real image origin). The distance and orientation images
 // are stored as unsigned chars, though the return values are cast to floats.
 // Information about the Edge and element of its associated curve are also
 // stored in separate images.
 //
-// Man page information:
-//
-// .NAME SpatialBorgefors - Computes 3-4 distance transform
-// .LIBRARY SpatialBasics
-// .HEADER SpatialObjects package
-// .INCLUDE SpatialBasics/SpatialBorgefors.h
-// .FILE SpatialBorgefors.C
-//
-// .SECTION Author:
-//             Charlie Rothwell - 4/5/95
-//             INRIA, Sophia Antipolis
-//
 //-----------------------------------------------------------------------------
 
-#ifndef CoolListPh
-template <class T> class CoolListP;
-#endif
-
+#include <vnl/vnl_numeric_traits.h>
+#include <vbl/vbl_ref_count.h>
+#include <vul/vul_timestamp.h>
 class BufferXY;
 class Edge;
-#include <Basics/RefCntTimeStampMixin.h>
 
-class SpatialBorgefors : public RefCntTimeStampMixin
+class SpatialBorgefors : public vbl_ref_count, public vul_timestamp
 {
-
   // PUBLIC INTERFACE----------------------------------------------------------
 
-public:
+ public:
 
   // Constructors/Initializers/Destructors-------------------------------------
-  
+
   SpatialBorgefors(int,int,int,int,CoolListP<Edge*>&);
   ~SpatialBorgefors();
 
   // Data Access---------------------------------------------------------------
 
   inline float Distance(int x, int y) {
-	int i = x - _xstart;
-	int j = y - _ystart;
-	if( (i>=0) && (i<_xsize) && (j>=0) && (j<_ysize) )
-	    return( (float) _distance[i][j] );
-	else
-	    return(HUGE);
+    int i = x - xstart_;
+    int j = y - ystart_;
+    if ( (i>=0) && (i<xsize_) && (j>=0) && (j<ysize_) )
+        return (float) distance_[i][j];
+    else
+        return vnl_numeric_traits<float>::maxval;
     }
 
   inline float Orientation(int x, int y) {
-	int i = x - _xstart;
-	int j = y - _ystart;
-	if( (i>=0) && (i<_xsize) && (j>=0) && (j<_ysize) )
-	    return( (float) _orientation[i][j] );
-	else
-	    return(-1.0);
+    int i = x - xstart_;
+    int j = y - ystart_;
+    if ( (i>=0) && (i<xsize_) && (j>=0) && (j<ysize_) )
+        return (float) orientation_[i][j];
+    else
+        return -1.0f;
     }
 
   inline Edge *ImageEdge(int x, int y) {
-	int i = x - _xstart;
-	int j = y - _ystart;
-	if( (i>=0) && (i<_xsize) && (j>=0) && (j<_ysize) )
-	    return( _edges[i][j] );
-	else
-	    return(NULL);
+    int i = x - xstart_;
+    int j = y - ystart_;
+    if ( (i>=0) && (i<xsize_) && (j>=0) && (j<ysize_) )
+        return edges_[i][j];
+    else
+        return NULL;
     }
 
   inline int CurveIndex(int x, int y) {
-	int i = x - _xstart;
-	int j = y - _ystart;
-	if( (i>=0) && (i<_xsize) && (j>=0) && (j<_ysize) )
-	    return( _index[i][j] );
-	else
-	    return(-1);
+    int i = x - xstart_;
+    int j = y - ystart_;
+    if ( (i>=0) && (i<xsize_) && (j>=0) && (j<ysize_) )
+        return index_[i][j];
+    else
+        return -1;
     }
-
-  // Data Control--------------------------------------------------------------
-
-  // Utility Methods-----------------------------------------------------------
 
   // INTERNALS-----------------------------------------------------------------
 
@@ -142,28 +93,26 @@ public:
   void BackwardChamfer();
   void ComputeRealDistances();
   void UpdateBufImage();
-  BufferXY* GetBufImage(){return _buf_image;}
-
-protected:
+  BufferXY* GetBufImage(){return buf_image_;}
 
   // Data Members--------------------------------------------------------------
 
 private:
 
   // Various pieces of image info
-  int _xsize,_ysize,_xstart,_ystart;
+  int xsize_,ysize_,xstart_,ystart_;
 
   // The distance and orientation images
-  unsigned char **_orientation,**_distance;
+  unsigned char **orientation_,**distance_;
 
   // Pointers to the nearest Edge for each pixel;
-  Edge ***_edges;
+  Edge ***edges_;
 
   // The index of the digital curve element at a given pixel
-  int **_index;
+  int **index_;
 
   // Store the image in this buffer
-  BufferXY* _buf_image;
+  BufferXY* buf_image_;
 };
 
 #endif

@@ -1,4 +1,3 @@
-#include <vcl_iostream.h>
 #include <segv/segv_vtol_soview2D.h>
 #include <segv/segv_vtol2D_tableau.h>
 
@@ -29,10 +28,10 @@ segv_vtol_soview2D_edge* segv_vtol2D_tableau::add_edge(vtol_edge_2d_sptr& e)
   return obj;
 }
 
-segv_vtol_soview2D_edge_group* 
+segv_vtol_soview2D_edge_group*
 segv_vtol2D_tableau::add_edge_group(vcl_vector<vtol_edge_2d_sptr>& edges)
 {
-  segv_vtol_soview2D_edge_group* obj = 
+  segv_vtol_soview2D_edge_group* obj =
     new segv_vtol_soview2D_edge_group(edges);
   add(obj);
   return obj;

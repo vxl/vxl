@@ -1,4 +1,4 @@
-// This is brl/bseg/sdet_detector.cxx
+// This is brl/bseg/sdet/sdet_detector.cxx
 #include "sdet_detector.h"
 #include "sdet_contour.h"
 //:
@@ -13,7 +13,6 @@
 #include <gevd/gevd_float_operators.h>
 #include <gevd/gevd_step.h>
 #include <gevd/gevd_bufferxy.h>
-#include <vtol/vtol_edge_2d.h>
 
 //--------------------------------------------------------------------------------
 //
@@ -111,7 +110,7 @@ bool  sdet_detector::DoContour()
   }
   this->set_test_verts(contour.get_test_verts());//JLM
   //vcl_vector<vtol_edge_2d_sptr>::iterator edge;
-  //  vcl_cout << "IN DoContour before SubPixelAccuracy" << vcl_endl;
+  //  vcl_cout << "IN DoContour before SubPixelAccuracy\n";
   this->print(vcl_cout);
 //   for ( edge = edges->begin() ; edge != edges->end(); ++edge)
 //     {
@@ -188,7 +187,7 @@ bool sdet_detector::DoStep()
 
   const gevd_bufferxy* source = GetBufferFromImage();
   if (!source) {
-    vcl_cout << " cannot get image buffer" << vcl_endl;
+    vcl_cout << " cannot get image buffer\n";
     return false;
   }
 
@@ -261,7 +260,7 @@ gevd_bufferxy* sdet_detector::GetBufferFromImage()
 
   if (!image)
     {
-      vcl_cout << "No image" << vcl_endl;
+      vcl_cout << "No image\n";
       return 0;
     }
 

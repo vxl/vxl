@@ -1,8 +1,6 @@
-#include <vcl_cmath.h>
+//:
+// \file
 #include <vcl_iostream.h>
-
-#include <vgl/vgl_distance.h>
-#include <vnl/vnl_math.h>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_style.h>
@@ -33,7 +31,7 @@ vcl_ostream& segv_vtol_soview2D_edge::print(vcl_ostream& s) const
 
 segv_vtol_soview2D_edge::segv_vtol_soview2D_edge(vtol_edge_2d_sptr& e)
 {
-  if(!e)
+  if (!e)
     {
       vcl_cout << "In segv_vtol_soview2D_edge(..) - null input edge"
                << vcl_endl;
@@ -42,13 +40,13 @@ segv_vtol_soview2D_edge::segv_vtol_soview2D_edge(vtol_edge_2d_sptr& e)
 
   //find out what kind of curve the edge has
   vsol_curve_2d_sptr c = e->curve();
-  if(!c)
+  if (!c)
     {
       vcl_cout << "In segv_vtol_soview2D_edge(..) -"
                << " null curve " << vcl_endl;
       return;
     }
-  if(c->cast_to_digital_curve())
+  if (c->cast_to_digital_curve())
     {
       vdgl_digital_curve_sptr dc = c->cast_to_digital_curve();
       //get the edgel chain
@@ -59,7 +57,7 @@ segv_vtol_soview2D_edge::segv_vtol_soview2D_edge(vtol_edge_2d_sptr& e)
       n = ech->size();
       //offset the coordinates for display (may not be needed)
       x = new float[n], y = new float[n];
-      for(int i=0; i<n;i++)
+      for (int i=0; i<n;i++)
         {
           vdgl_edgel ed = (*ech)[i];
           x[i]=ed.get_x();
@@ -67,9 +65,8 @@ segv_vtol_soview2D_edge::segv_vtol_soview2D_edge(vtol_edge_2d_sptr& e)
         }
       return;
     }
-  vcl_cout << "In segv_vtol_soview2D_edge(vtol_vertex_2d_sptr& e) -"
-           << " attempt to draw an edge with unknown curve geometry" 
-           << vcl_endl;
+  vcl_cout << "In segv_vtol_soview2D_edge(vtol_edge_2d_sptr& e) -"
+           << " attempt to draw an edge with unknown curve geometry\n";
 }
 
 //--------------------------------------------------------------------------
@@ -84,7 +81,7 @@ vcl_ostream& segv_vtol_soview2D_edge_group::print(vcl_ostream& s) const
 segv_vtol_soview2D_edge_group::
 segv_vtol_soview2D_edge_group(vcl_vector<vtol_edge_2d_sptr>& edges)
 {
-  for(vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
+  for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
       eit != edges.end(); eit++)
     {
       vgui_soview2D* sov = new segv_vtol_soview2D_edge(*eit);
@@ -102,7 +99,7 @@ vcl_ostream& segv_vtol_soview2D_face::print(vcl_ostream& s) const
 
 segv_vtol_soview2D_face::segv_vtol_soview2D_face(vtol_face_2d_sptr& f)
 {
-  if(!f)
+  if (!f)
     {
       vcl_cout << "In segv_vtol_soview2D_face(..) - null input face"
                << vcl_endl;
@@ -110,11 +107,11 @@ segv_vtol_soview2D_face::segv_vtol_soview2D_face(vtol_face_2d_sptr& f)
     }
   vcl_vector<vtol_edge_sptr>* edges = f->edges();
 
-  for(vcl_vector<vtol_edge_sptr>::iterator eit = edges->begin();
+  for (vcl_vector<vtol_edge_sptr>::iterator eit = edges->begin();
       eit != edges->end(); eit++)
-    {  
+    {
       vtol_edge_2d_sptr e = (*eit)->cast_to_edge_2d();
-	  vgui_soview2D* sov = new segv_vtol_soview2D_edge(e);
+      vgui_soview2D* sov = new segv_vtol_soview2D_edge(e);
       ls.push_back(sov);
     }
   delete edges;

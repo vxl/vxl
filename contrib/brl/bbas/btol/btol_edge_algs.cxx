@@ -1,3 +1,5 @@
+//:
+// \file
 #include <btol/btol_edge_algs.h>
 #include <vtol/vtol_topology_object_sptr.h>
 #include <vtol/vtol_topology_object.h>
@@ -27,22 +29,22 @@ bool btol_edge_algs::split_edge_2d(vtol_vertex_2d_sptr& v, vtol_edge_2d_sptr& e,
 
 bool btol_edge_algs::unlink_all_inferiors_twoway(vtol_edge_2d_sptr& e)
 {
-	if(!e->v1()||!e->v2())
-			return false;
+  if (!e->v1()||!e->v2())
+    return false;
   vtol_topology_object_sptr tv1 = e->v1()->cast_to_topology_object();
   vtol_topology_object_sptr tv2 = e->v2()->cast_to_topology_object();
 
   vtol_topology_object_sptr toe = e->cast_to_topology_object();
   vcl_vector<vtol_topology_object_sptr>* infs = toe->inferiors();
   //this will be the zero_chain for the edge
-  if(infs->size()!=1)
+  if (infs->size()!=1)
     {
       vcl_cout << " In btol_edge_algs::unlink_all_inferiors_twoway(..) "
                << " inferiors inconsistent size " << vcl_endl;
       return false;
     }
   vtol_topology_object_sptr inf_two_chain = (*infs)[0];
-  if(!inf_two_chain)
+  if (!inf_two_chain)
     {
       vcl_cout << " In btol_edge_algs::unlink_all_inferiors_twoway(..) "
                << " null two chain " << vcl_endl;
@@ -58,8 +60,8 @@ bool btol_edge_algs::unlink_all_inferiors_twoway(vtol_edge_2d_sptr& e)
 //-----------------------------------------------------------------------------
 // Replaces va by vb on edge e.
 //-----------------------------------------------------------------------------
-bool btol_edge_algs::subst_vertex_on_edge(vtol_vertex_sptr& va, 
-                                          vtol_vertex_sptr& vb, 
+bool btol_edge_algs::subst_vertex_on_edge(vtol_vertex_sptr& va,
+                                          vtol_vertex_sptr& vb,
                                           vtol_edge_sptr& e)
 {
   //not implemented
