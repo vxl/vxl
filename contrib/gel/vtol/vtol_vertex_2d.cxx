@@ -29,10 +29,8 @@ vtol_vertex_2d::vtol_vertex_2d(void)
 //---------------------------------------------------------------------------
 vtol_vertex_2d::vtol_vertex_2d(vsol_point_2d &new_point)
 {
-  // require
-  //  assert(new_point.ptr()!=0);
-
-  _point=&new_point;
+  // Must allocate here, since this pointer will be unref()ed by destructor
+  _point=new vsol_point_2d(new_point);
 }
 
 //---------------------------------------------------------------------------
@@ -101,10 +99,8 @@ vsol_point_2d_sptr vtol_vertex_2d::point(void) const
 //---------------------------------------------------------------------------
 void vtol_vertex_2d::set_point(vsol_point_2d &new_point)
 {
-  // require
-  //  assert(new_point.ptr()!=0);
-
-  _point=&new_point;
+  // Must allocate here, since this pointer will be unref()ed by destructor
+  _point=new vsol_point_2d(new_point);
 }
 
 //---------------------------------------------------------------------------
@@ -128,8 +124,11 @@ double vtol_vertex_2d::y(void) const
 //---------------------------------------------------------------------------
 void vtol_vertex_2d::set_x(const double new_x)
 {
-  _point->set_x(new_x);
+  vsol_point_2d new_point(*_point);
+  new_point.set_x(new_x);
   this->touch(); //Timestamp update
+  // Must allocate here, since this pointer will be unref()ed by destructor
+  _point=new vsol_point_2d(new_point);
 }
 
 //---------------------------------------------------------------------------
@@ -137,8 +136,11 @@ void vtol_vertex_2d::set_x(const double new_x)
 //---------------------------------------------------------------------------
 void vtol_vertex_2d::set_y(const double new_y)
 {
-  _point->set_y(new_y);
-  this->touch();
+  vsol_point_2d new_point(*_point);
+  new_point.set_y(new_y);
+  this->touch(); //Timestamp update
+  // Must allocate here, since this pointer will be unref()ed by destructor
+  _point=new vsol_point_2d(new_point);
 }
 
 //***************************************************************************
@@ -261,9 +263,9 @@ vtol_vertex_2d &vtol_vertex_2d::operator=(const vtol_vertex_2d &other)
 {
   if(this!=&other)
     {
-      _point->set_x(other._point->x());
-      _point->set_y(other._point->y());
-      touch();
+      this->touch(); //Timestamp update
+      // Must allocate here, since this pointer will be unref()ed by destructor
+      _point=new vsol_point_2d(*(other._point));
     }
   return *this;
 }
@@ -272,9 +274,9 @@ vtol_vertex& vtol_vertex_2d::operator=(const vtol_vertex &other)
 {
   if(this!=&other)
     {
-      _point->set_x(other.cast_to_vertex_2d()->_point->x());
-      _point->set_y(other.cast_to_vertex_2d()->_point->y());
-      touch();
+      this->touch(); //Timestamp update
+      // Must allocate here, since this pointer will be unref()ed by destructor
+      _point=new vsol_point_2d(*(other.cast_to_vertex_2d()->_point));
     }
   return *this;
 }
