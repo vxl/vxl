@@ -243,15 +243,15 @@ set_rotation_about_axis(const vnl_vector_fixed<T,3>& axis, T angle)
   //get the transpose of the rotation matrix
   vnl_matrix_fixed<T,3,3> R = q.rotation_matrix_transpose();
   //fill in with the transpose
-  for(int c = 0; c<3; c++)
-    for(int r = 0; r<3; r++)
+  for (int c = 0; c<3; c++)
+    for (int r = 0; r<3; r++)
       t12_matrix_[r][c]=R[c][r];
 }
 
-//: Set to roll, pitch and yaw specified rotation. 
-//   roll is rotation about z
-//   pitch is rotation about y
-//   yaw is rotation about x
+//: Set to roll, pitch and yaw specified rotation.
+// - roll is rotation about z
+// - pitch is rotation about y
+// - yaw is rotation about x
 
 template <class T>
 void vgl_h_matrix_3d<T>::
@@ -259,7 +259,7 @@ set_rotation_roll_pitch_yaw(T yaw, T pitch, T roll)
 {
   typedef typename vnl_numeric_traits<T>::real_t real_t;
   real_t ax = yaw/2, ay = pitch/2, az = roll/2;
-  
+
   vnl_quaternion<T> qx(vcl_sin(ax),0,0,vcl_cos(ax));
   vnl_quaternion<T> qy(0,vcl_sin(ay),0,vcl_cos(ay));
   vnl_quaternion<T> qz(0,0,vcl_sin(az),vcl_cos(az));
@@ -267,8 +267,8 @@ set_rotation_roll_pitch_yaw(T yaw, T pitch, T roll)
 
   vnl_matrix_fixed<T,3,3> R = q.rotation_matrix_transpose();
   //fill in with the transpose
-  for(int c = 0; c<3; c++)
-    for(int r = 0; r<3; r++)
+  for (int c = 0; c<3; c++)
+    for (int r = 0; r<3; r++)
       t12_matrix_[r][c]=R[c][r];
 }
 
@@ -279,7 +279,7 @@ set_rotation_euler(T rz1, T ry, T rz2)
 {
   typedef typename vnl_numeric_traits<T>::real_t real_t;
   real_t az1 = rz1/2, ay = ry/2, az2 = rz2/2;
-  
+
   vnl_quaternion<T> qz1(0,0,vcl_sin(az1),vcl_cos(az1));
   vnl_quaternion<T> qy(0,vcl_sin(ay),0,vcl_cos(ay));
   vnl_quaternion<T> qz2(0,0,vcl_sin(az2),vcl_cos(az2));
@@ -287,8 +287,8 @@ set_rotation_euler(T rz1, T ry, T rz2)
 
   vnl_matrix_fixed<T,3,3> R = q.rotation_matrix_transpose();
   //fill in with the transpose
-  for(int c = 0; c<3; c++)
-    for(int r = 0; r<3; r++)
+  for (int c = 0; c<3; c++)
+    for (int r = 0; r<3; r++)
       t12_matrix_[r][c]=R[c][r];
 }
 
