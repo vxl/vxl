@@ -1,5 +1,8 @@
 #ifndef vcsl_coordinate_system_h
 #define vcsl_coordinate_system_h
+#ifdef __GNUC__
+#pragma interface
+#endif
 
 //:
 // \file
@@ -34,10 +37,10 @@ public:
   //***************************************************************************
 
   //: Default constructor
-  explicit vcsl_coordinate_system(void);
+  explicit vcsl_coordinate_system(void) {}
 
   //: Destructor
-  virtual ~vcsl_coordinate_system();
+  virtual ~vcsl_coordinate_system() {}
 
   //***************************************************************************
   // Status report
@@ -48,11 +51,11 @@ public:
 
 
   //: Is `i' an index on an axis ?
-  virtual bool valid_axis(const int i) const;
+  virtual bool valid_axis(int i) const;
 
   //: Return the axis `i'
   //  REQUIRE: valid_axis(i)
-  virtual vcsl_axis_sptr axis(const int i) const;
+  virtual vcsl_axis_sptr axis(int i) const;
 
   //***************************************************************************
   // Because VXL does not use dynamic_cast<> :-(

@@ -1,5 +1,8 @@
 #ifndef vcsl_cylindrical_to_cartesian_3d_h
 #define vcsl_cylindrical_to_cartesian_3d_h
+#ifdef __GNUC__
+#pragma interface
+#endif
 
 //:
 // \file
@@ -27,7 +30,7 @@ public:
   //***************************************************************************
 
   //: Destructor
-  virtual ~vcsl_cylindrical_to_cartesian_3d();
+  virtual ~vcsl_cylindrical_to_cartesian_3d() {}
 
   //***************************************************************************
   // Status report
@@ -35,10 +38,10 @@ public:
 
   //: Is `this' invertible at time `time'?
   //  REQUIRE: valid_time(time)
-  virtual bool is_invertible(const double time) const;
+  virtual bool is_invertible(double time) const;
 
   //: Is `this' correctly set ?
-  virtual bool is_valid(void) const;
+  virtual bool is_valid(void) const { return true; }
 
   //***************************************************************************
   // Basic operations
@@ -48,14 +51,14 @@ public:
   //  REQUIRE: is_valid()
   //  REQUIRE: v.size()==3
   virtual vnl_vector<double> execute(const vnl_vector<double> &v,
-                                     const double time) const;
+                                     double time) const;
 
   //: Image of `v' by the inverse of `this'
   //  REQUIRE: is_valid()
   //  REQUIRE: is_invertible(time)
   //  REQUIRE: v.size()==3
   virtual vnl_vector<double> inverse(const vnl_vector<double> &v,
-                                     const double time) const;
+                                     double time) const;
 
   //***************************************************************************
   // Singleton pattern
@@ -66,7 +69,7 @@ public:
 
 protected:
   //: Default constructor
-  explicit vcsl_cylindrical_to_cartesian_3d(void);
+  explicit vcsl_cylindrical_to_cartesian_3d(void) {}
 
   //: Reference to the unique vcsl_cylindrical_to_cartesian_3d object
   static vcsl_cylindrical_to_cartesian_3d_sptr instance_;
