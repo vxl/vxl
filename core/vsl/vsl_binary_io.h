@@ -336,7 +336,7 @@ void vsl_b_read(vsl_b_istream& is,unsigned long& n );
 inline void vsl_print_summary(vcl_ostream& os, unsigned long n )
 {  os << n; }
 
-#ifdef 0
+#if 0
 // When the macro is ready, this test will be
 // #if ! VCL_PTRDIFF_T_IS_A_STANDARD_TYPE
 
