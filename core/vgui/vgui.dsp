@@ -19,7 +19,6 @@ CFG=vgui - Win32 Debug
 !MESSAGE 
 !MESSAGE "vgui - Win32 Release" (based on "Win32 (x86) Static Library")
 !MESSAGE "vgui - Win32 Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "vgui - Win32 ReleaseWithDBInfo" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -43,7 +42,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GX /O2 /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /I "$(IUEROOT)\oxl" /D "WIN32" /D "NDEBUG" /D "_LIB" /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /I "$(IUEROOT)\oxl" /D "WIN32" /D "NDEBUG" /D "_LIB" /FD /c
 # SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
@@ -78,32 +77,6 @@ LIB32=xilink6.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo /out:"..\Debug\vgui.lib"
 
-!ELSEIF  "$(CFG)" == "vgui - Win32 ReleaseWithDBInfo"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "vgui___Win32_ReleaseWithDBInfo"
-# PROP BASE Intermediate_Dir "vgui___Win32_ReleaseWithDBInfo"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "ReleaseWithDBInfo"
-# PROP Intermediate_Dir "ReleaseWithDBInfo"
-# PROP Target_Dir ""
-MTL=midl.exe
-# ADD BASE CPP /nologo /MT /W3 /GX /O2 /Ob2 /D "WIN32" /D "NDEBUG" /D "_LIB" /FD /c
-# SUBTRACT BASE CPP /YX
-# ADD CPP /nologo /MT /W3 /GX /Zi /O2 /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /I "$(IUEROOT)\oxl" /D "WIN32" /D "NDEBUG" /D "_LIB" /FD /c
-# SUBTRACT CPP /YX
-# ADD BASE RSC /l 0x409 /d "NDEBUG"
-# ADD RSC /l 0x409 /d "NDEBUG"
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=xilink6.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\Release\vgui.lib"
-# ADD LIB32 /nologo /out:"..\Release\vgui.lib"
-
 !ENDIF 
 
 # Begin Target
@@ -120,7 +93,7 @@ SOURCE=.\internals\trackball.c
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vbl_array_2d+vgui_grid_tableau__grid_data-.cxx"
+SOURCE=".\Templates\vbl_array_2d+vgui_grid_tableau+-grid_data-.cxx"
 # End Source File
 # Begin Source File
 
@@ -140,7 +113,7 @@ SOURCE=".\Templates\vcl_list+vgui_event-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vcl_multimap+vgui_style~.vgui_soview~-.cxx"
+SOURCE=".\Templates\vcl_map+vgui_style~.vgui_soview~-.cxx"
 # End Source File
 # Begin Source File
 
@@ -148,7 +121,7 @@ SOURCE=".\Templates\vcl_vector+vcl_pair+vil_image.vcl_vector+GLuint-~-~-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vcl_vector+vgui_dialog_impl__element-.cxx"
+SOURCE=".\Templates\vcl_vector+vgui_dialog_impl+-element-.cxx"
 # End Source File
 # Begin Source File
 
@@ -160,11 +133,11 @@ SOURCE=".\Templates\vcl_vector+vgui_image_tableau~-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vcl_vector+vgui_lineseg2D~-.cxx"
+SOURCE=".\Templates\vcl_vector+vgui_soview2D_lineseg~-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vcl_vector+vgui_menu__item-.cxx"
+SOURCE=".\Templates\vcl_vector+vgui_menu_item-.cxx"
 # End Source File
 # Begin Source File
 
@@ -172,7 +145,7 @@ SOURCE=".\Templates\vcl_vector+vgui_observer~-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vcl_vector+vgui_polytab__item-.cxx"
+SOURCE=".\Templates\vcl_vector+vgui_polytab+-item-.cxx"
 # End Source File
 # Begin Source File
 
@@ -212,11 +185,11 @@ SOURCE=".\Templates\vcl_vector+vgui_tableau~-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vcl_vector+vgui_tview__icon-.cxx"
+SOURCE=".\Templates\vcl_vector+vgui_tview+-icon-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vcl_vector+vgui~-.cxx"
+SOURCE=".\Templates\vcl_vector+vgui_toolkit~-.cxx"
 # End Source File
 # Begin Source File
 
@@ -296,7 +269,7 @@ SOURCE=.\vgui_debug_tableau.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgui_deck.cxx
+SOURCE=.\vgui_deck_tableau.cxx
 # End Source File
 # Begin Source File
 
@@ -476,6 +449,10 @@ SOURCE=.\internals\vgui_rasterpos.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\vgui_roi_tableau.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=.\vgui_rubberbander.cxx
 # End Source File
 # Begin Source File
@@ -572,19 +549,19 @@ SOURCE=.\vgui_test.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgui_text.cxx
-# End Source File
-# Begin Source File
-
 SOURCE=.\vgui_text_graph.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgui_texture_hacks.cxx
+SOURCE=.\vgui_text_put.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgui_texture_hacks.h
+SOURCE=.\vgui_text_tableau.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_texture_hacks.cxx
 # End Source File
 # Begin Source File
 
@@ -1093,6 +1070,10 @@ SOURCE=.\vgui_test.h
 # Begin Source File
 
 SOURCE=.\vgui_text.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgui_texture_hacks.h
 # End Source File
 # Begin Source File
 

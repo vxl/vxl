@@ -42,7 +42,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GX /O2 /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /I "$(IUEROOT)\tbl" /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /I "$(IUEROOT)\tbl" /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -85,10 +85,6 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
-# Begin Source File
-
-SOURCE=.\vepl_convert.cxx
-# End Source File
 # Begin Source File
 
 SOURCE=.\vepl_threshold.cxx
@@ -149,6 +145,130 @@ SOURCE=.\vepl_moment.cxx
 
 SOURCE=.\vepl_histogram.cxx
 # End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vepl_convert+double-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vepl_convert+float-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vepl_convert+int-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vepl_convert+short-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vepl_convert+uchar-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vepl_convert+vil_rgb+uchar--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vipl_add_random_noise+vil_image.vil_image.double.double-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vipl_add_random_noise+vil_image.vil_image.float.float-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vipl_add_random_noise+vil_image.vil_image.vil_rgb+uchar-.vil_rgb+uchar--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vipl_filter+vil_image.vil_image.double.double-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vipl_filter+vil_image.vil_image.double.float-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vipl_filter+vil_image.vil_image.double.int-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vipl_filter+vil_image.vil_image.double.short-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vipl_filter+vil_image.vil_image.double.vil_rgb+uchar--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vipl_filter+vil_image.vil_image.float.double-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vipl_filter+vil_image.vil_image.float.float-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vipl_filter+vil_image.vil_image.float.int-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vipl_filter+vil_image.vil_image.float.short-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vipl_filter+vil_image.vil_image.float.vil_rgb+uchar--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vipl_filter+vil_image.vil_image.short.short-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vipl_filter+vil_image.vil_image.uchar.double-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vipl_filter+vil_image.vil_image.uchar.int-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vipl_filter+vil_image.vil_image.uchar.short-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vipl_filter+vil_image.vil_image.uchar.uchar-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vipl_filter+vil_image.vil_image.uchar.vil_rgb+uchar--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vipl_filter+vil_image.vil_image.vil_rgb+uchar-.double-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vipl_filter+vil_image.vil_image.vil_rgb+uchar-.float-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vipl_filter+vil_image.vil_image.vil_rgb+uchar-.int-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vipl_filter+vil_image.vil_image.vil_rgb+uchar-.short-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vipl_filter+vil_image.vil_image.vil_rgb+uchar-.uchar-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vipl_filter+vil_image.vil_image.vil_rgb+uchar-.vil_rgb+uchar--.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
@@ -160,6 +280,10 @@ SOURCE=.\vepl_add_random_noise.h
 # Begin Source File
 
 SOURCE=.\vepl_convert.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vepl_convert.txx
 # End Source File
 # Begin Source File
 

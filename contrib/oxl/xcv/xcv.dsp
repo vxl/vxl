@@ -41,8 +41,8 @@ RSC=rc.exe
 # PROP Intermediate_Dir "Release"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MD /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /Yu"stdafx.h" /FD /c
-# ADD CPP /nologo /MT /W3 /GX /O2 /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /I "$(IUEROOT)\oxl" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /FR /YX /FD /c
+# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /Yu"stdafx.h" /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /I "$(IUEROOT)\oxl" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /FR /YX /FD /c
 # ADD BASE RSC /l 0x809 /d "NDEBUG" /d "_AFXDLL"
 # ADD RSC /l 0x809 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -66,7 +66,7 @@ LINK32=xilink6.exe
 # PROP Intermediate_Dir "Debug"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /Yu"stdafx.h" /FD /GZ /c
+# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /Yu"stdafx.h" /FD /GZ /c
 # ADD CPP /nologo /MDd /W3 /Gm /Gi /GX /ZI /Od /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /I "$(IUEROOT)\oxl" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /FR /FD /GZ /c
 # SUBTRACT CPP /YX /Yc /Yu
 # ADD BASE RSC /l 0x809 /d "_DEBUG" /d "_AFXDLL"
@@ -90,15 +90,15 @@ LINK32=xilink6.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=".\Templates\vcl_vector+vgui_easy2D~-.cxx"
+SOURCE=".\Templates\vcl_vector+vgui_easy2D_sptr-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vcl_vector+vgui_rubberbander~-.cxx"
+SOURCE=".\Templates\vcl_vector+vgui_rubberbander_sptr-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vcl_vector+xcv_image_tableau~-.cxx"
+SOURCE=".\Templates\vcl_vector+xcv_image_tableau_sptr-.cxx"
 # End Source File
 # Begin Source File
 
@@ -115,6 +115,14 @@ SOURCE=".\Templates\vcl_vector+xcv_twoview_manager~-.cxx"
 # Begin Source File
 
 SOURCE=.\xcv.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\xcv_axes_limits.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\xcv_axes_tableau.cxx
 # End Source File
 # Begin Source File
 
@@ -139,6 +147,10 @@ SOURCE=.\xcv_multiview.cxx
 # Begin Source File
 
 SOURCE=.\xcv_multiview_create_multiview_menu.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\xcv_picker_tableau.cxx
 # End Source File
 # Begin Source File
 

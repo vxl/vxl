@@ -143,7 +143,7 @@ SOURCE=".\Templates\vnl_io_diag_matrix+double-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vnl_io_diag_matrix+double_complex-.cxx"
+SOURCE=".\Templates\vnl_io_diag_matrix+vcl_complex+double--.cxx"
 # End Source File
 # Begin Source File
 
@@ -151,7 +151,7 @@ SOURCE=".\Templates\vnl_io_diag_matrix+float-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vnl_io_diag_matrix+float_complex-.cxx"
+SOURCE=".\Templates\vnl_io_diag_matrix+vcl_complex+float--.cxx"
 # End Source File
 # Begin Source File
 
@@ -159,15 +159,11 @@ SOURCE=".\Templates\vnl_io_diag_matrix+int-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=.\vnl_io_diag_matrix.txx
-# End Source File
-# Begin Source File
-
 SOURCE=".\Templates\vnl_io_matrix+double-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vnl_io_matrix+double_complex-.cxx"
+SOURCE=".\Templates\vnl_io_matrix+vcl_complex+double--.cxx"
 # End Source File
 # Begin Source File
 
@@ -175,7 +171,7 @@ SOURCE=".\Templates\vnl_io_matrix+float-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vnl_io_matrix+float_complex-.cxx"
+SOURCE=".\Templates\vnl_io_matrix+vcl_complex+float--.cxx"
 # End Source File
 # Begin Source File
 
@@ -203,10 +199,6 @@ SOURCE=".\Templates\vnl_io_matrix+ulong-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=.\vnl_io_matrix.txx
-# End Source File
-# Begin Source File
-
 SOURCE=.\vnl_io_nonlinear_minimizer.cxx
 # End Source File
 # Begin Source File
@@ -224,14 +216,6 @@ SOURCE=".\Templates\vnl_io_sparse_matrix+double-.cxx"
 # Begin Source File
 
 SOURCE=".\Templates\vnl_io_sparse_matrix+float-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_io_sparse_matrix.txx
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\vnl_io_vcl_vector+vnl_vector+double--.cxx"
 # End Source File
 # Begin Source File
 
@@ -267,12 +251,36 @@ SOURCE=".\Templates\vnl_io_vector+ulong-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=.\vnl_io_vector.txx
+SOURCE=".\Templates\vnl_io_vector+vcl_complex+float--.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vnl_io_vector+vcl_complex+double--.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vsl_vector_io+vnl_vector+double--.cxx"
 # End Source File
 # End Group
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
+# Begin Source File
+
+SOURCE=.\vnl_io_diag_matrix.txx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_io_matrix.txx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_io_sparse_matrix.txx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_io_vector.txx
+# End Source File
 # Begin Source File
 
 SOURCE=.\vnl_io_diag_matrix.h

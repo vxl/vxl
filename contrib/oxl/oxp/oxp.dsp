@@ -19,7 +19,6 @@ CFG=oxp - Win32 Debug
 !MESSAGE 
 !MESSAGE "oxp - Win32 Release" (based on "Win32 (x86) Static Library")
 !MESSAGE "oxp - Win32 Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "oxp - Win32 ReleaseWithDBInfo" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -43,7 +42,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GX /O2 /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /I "$(IUEROOT)\oxl" /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /I "$(IUEROOT)\oxl" /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -77,30 +76,6 @@ LIB32=xilink6.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo /out:"..\Debug\oxp.lib"
 
-!ELSEIF  "$(CFG)" == "oxp - Win32 ReleaseWithDBInfo"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "oxp___Win32_ReleaseWithDBInfo"
-# PROP BASE Intermediate_Dir "oxp___Win32_ReleaseWithDBInfo"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "ReleaseWithDBInfo"
-# PROP Intermediate_Dir "ReleaseWithDBInfo"
-# PROP Target_Dir ""
-MTL=midl.exe
-# ADD BASE CPP /nologo /MT /W3 /GX /O2 /Ob2 /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GX /Zi /O2 /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /I "$(IUEROOT)\oxl" /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
-# ADD BASE RSC /l 0x409 /d "NDEBUG"
-# ADD RSC /l 0x409 /d "NDEBUG"
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=xilink6.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\Release\oxp.lib"
-# ADD LIB32 /nologo /out:"..\ReleaseWithDBInfo\oxp.lib"
-
 !ENDIF 
 
 # Begin Target
@@ -130,6 +105,10 @@ SOURCE=.\ImageSequenceName.cxx
 # Begin Source File
 
 SOURCE=".\Templates\ImageWarp+byte-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=.\JPEG_Decompressor.cxx
 # End Source File
 # Begin Source File
 
@@ -169,7 +148,11 @@ SOURCE=.\SGIMovieFilePrivates.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vector+SGIMV_Variables-.cxx"
+SOURCE=.\SGIMovieFileWrite.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+SGIMV_Variables-.cxx"
 # End Source File
 # Begin Source File
 
@@ -182,6 +165,14 @@ SOURCE=.\vsl_conic_as_params.cxx
 # Begin Source File
 
 SOURCE=.\vsl_conic_points.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+SGIMV_FrameIndex-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+SGIMV_FrameIndexArray-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

@@ -21,7 +21,6 @@ CFG=vnl_algo - Win32 StaticDebug
 !MESSAGE "vnl_algo - Win32 Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "vnl_algo - Win32 StaticDebug" (based on "Win32 (x86) Static Library")
 !MESSAGE "vnl_algo - Win32 StaticRelease" (based on "Win32 (x86) Static Library")
-!MESSAGE "vnl_algo - Win32 ReleaseWithDBInfo" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -45,7 +44,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GX /O2 /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c /Zl
+# ADD CPP /nologo /MD /W3 /GX /O2 /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c /Zl
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -92,7 +91,7 @@ LIB32=xilink6.exe -lib
 # PROP Intermediate_Dir "StaticDebug"
 # PROP Target_Dir ""
 MTL=midl.exe
-# ADD BASE CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /Ob2 /D "WIN32" /D "_DEBUG" /D "_LIB" /FD /GZ /c
+# ADD BASE CPP /nologo /W3 /Gm /GX /Zi /Od /Ob2 /D "WIN32" /D "_DEBUG" /D "_LIB" /FD /GZ /c
 # ADD CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "_DEBUG" /D "_LIB" /FD /GZ /c /Zl
 # ADD BASE RSC /l 0x409 /d "_DEBUG" /d "_AFXDLL"
 # ADD RSC /l 0x409 /d "_DEBUG" /d "_AFXDLL"
@@ -116,7 +115,7 @@ LIB32=xilink6.exe -lib
 # PROP Intermediate_Dir "StaticRelease"
 # PROP Target_Dir ""
 MTL=midl.exe
-# ADD BASE CPP /nologo /MT /W3 /GX /O2 /Ob2 /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
+# ADD BASE CPP /nologo /W3 /GX /O2 /Ob2 /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
 # ADD CPP /nologo /MT /W3 /GX /O2 /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c /Zl
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
@@ -126,32 +125,6 @@ BSC32=bscmake.exe
 LIB32=xilink6.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\Release\vnl_algo.lib"
 # ADD LIB32 /nologo /out:"..\..\StaticRelease\vnl_algo.lib"
-
-!ELSEIF  "$(CFG)" == "vnl_algo - Win32 ReleaseWithDBInfo"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "vnl_algo___Win32_ReleaseWithDBInfo"
-# PROP BASE Intermediate_Dir "vnl_algo___Win32_ReleaseWithDBInfo"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "ReleaseWithDBInfo"
-# PROP Intermediate_Dir "ReleaseWithDBInfo"
-# PROP Target_Dir ""
-MTL=midl.exe
-# ADD BASE CPP /nologo /MT /W3 /GX /O2 /Ob2 /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GX /Zi /O2 /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c /Zl
-# ADD BASE RSC /l 0x409 /d "NDEBUG"
-# ADD RSC /l 0x409 /d "NDEBUG"
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=xilink6.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\Release\vnl_algo.lib"
-# ADD LIB32 /nologo /out:"..\..\Release\vnl_algo.lib"
-
-!ENDIF 
 
 # Begin Target
 
@@ -201,10 +174,6 @@ SOURCE=.\vnl_cpoly_roots.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vnl_determinant.cxx
-# End Source File
-# Begin Source File
-
 SOURCE=.\vnl_discrete_diff.cxx
 # End Source File
 # Begin Source File
@@ -217,7 +186,7 @@ SOURCE=".\Templates\vnl_fft1d+float-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vnl_fft2d.cxx
+SOURCE=.\Templates\vnl_fft2d+double-.cxx
 # End Source File
 # Begin Source File
 
@@ -253,7 +222,7 @@ SOURCE=".\Templates\vnl_orthogonal_complement+double-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vnl_orthogonal_complement+double_complex-.cxx"
+SOURCE=".\Templates\vnl_orthogonal_complement+vcl_complex+double--.cxx"
 # End Source File
 # Begin Source File
 
@@ -261,7 +230,7 @@ SOURCE=".\Templates\vnl_qr+double-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vnl_qr+double_complex-.cxx"
+SOURCE=".\Templates\vnl_qr+vcl_complex+double--.cxx"
 # End Source File
 # Begin Source File
 
@@ -269,7 +238,7 @@ SOURCE=".\Templates\vnl_qr+float-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vnl_qr+float_complex-.cxx"
+SOURCE=".\Templates\vnl_qr+vcl_complex+float--.cxx"
 # End Source File
 # Begin Source File
 
@@ -301,7 +270,7 @@ SOURCE=".\Templates\vnl_svd+double-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vnl_svd+double_complex-.cxx"
+SOURCE=".\Templates\vnl_svd+vcl_complex+double--.cxx"
 # End Source File
 # Begin Source File
 
@@ -309,11 +278,155 @@ SOURCE=".\Templates\vnl_svd+float-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vnl_svd+float_complex-.cxx"
+SOURCE=".\Templates\vnl_svd+vcl_complex+float--.cxx"
 # End Source File
 # Begin Source File
 
 SOURCE=.\vnl_symmetric_eigensystem.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\fsm_qr+double-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\fsm_qr+float-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\fsm_qr+long_double-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\fsm_qr+vcl_complex+double--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\fsm_qr+vcl_complex+float--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\fsm_qr+vcl_complex+long_double--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\fsm_svdc+double-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\fsm_svdc+float-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\fsm_svdc+long_double-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\fsm_svdc+vcl_complex+double--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\fsm_svdc+vcl_complex+float--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\fsm_svdc+vcl_complex+long_double--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_determinant+double-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_determinant+float-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_determinant+long_double-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_determinant+long_double_complex-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_determinant+vcl_complex+double--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_determinant+vcl_complex+float--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_fft.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_fft2d+float-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_fft_1d+double-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_fft_1d+float-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_fft_2d+double-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_fft_2d+float-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_fft_base+1.double-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_fft_base+1.float-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_fft_base+2.double-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_fft_base+2.float-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_fft_prime_factors+double-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_fft_prime_factors+float-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_orthogonal_complement+vcl_complex+long_double--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_powell.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_qr+long_double-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_qr+vcl_complex+long_double--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_svd+long_double-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_svd+vcl_complex+long_double--.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -369,6 +482,10 @@ SOURCE=.\vnl_discrete_diff.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\vnl_fft.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\vnl_fft1d.h
 # End Source File
 # Begin Source File
@@ -402,6 +519,10 @@ SOURCE=.\vnl_matrix_inverse.h
 # Begin Source File
 
 SOURCE=.\vnl_netlib.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_powell.h
 # End Source File
 # Begin Source File
 

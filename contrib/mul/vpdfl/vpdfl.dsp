@@ -139,6 +139,18 @@ LIB32=link.exe -lib
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat;txx"
 # Begin Source File
 
+SOURCE=".\Templates\mbl_cloneable_ptr+vpdfl_builder_base-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\mbl_cloneable_ptr+vpdfl_pdf_base-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+vpdfl_sampler_base~-.cxx"
+# End Source File
+# Begin Source File
+
 SOURCE=.\vpdfl_axis_gaussian.cxx
 # End Source File
 # Begin Source File
@@ -187,6 +199,10 @@ SOURCE=.\vpdfl_pc_gaussian_builder.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\vpdfl_pc_gaussian_sampler.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=.\vpdfl_pdf_base.cxx
 # End Source File
 # Begin Source File
@@ -199,19 +215,19 @@ SOURCE=.\vpdfl_sampler_base.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vsl_binary_loader+vpdf_builder_base-.cxx"
+SOURCE=".\Templates\vsl_binary_loader+vpdfl_builder_base-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vsl_binary_loader+vpdf_pdf_base-.cxx"
+SOURCE=".\Templates\vsl_binary_loader+vpdfl_pdf_base-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vsl_vector+vpdfl_builder_base~-.cxx"
+SOURCE=".\Templates\vsl_vector_io+vpdfl_builder_base~-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vsl_vector+vpdfl_pdf_base~-.cxx"
+SOURCE=".\Templates\vsl_vector_io+vpdfl_pdf_base~-.cxx"
 # End Source File
 # End Group
 # Begin Group "Header Files"

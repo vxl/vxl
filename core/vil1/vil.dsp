@@ -21,7 +21,6 @@ CFG=vil - Win32 StaticDebug
 !MESSAGE "vil - Win32 Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "vil - Win32 StaticDebug" (based on "Win32 (x86) Static Library")
 !MESSAGE "vil - Win32 StaticRelease" (based on "Win32 (x86) Static Library")
-!MESSAGE "vil - Win32 ReleaseWithDBInfo" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -45,7 +44,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GX /O2 /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\v3p\jpeg" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c /Zl
+# ADD CPP /nologo /MD /W3 /GX /O2 /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\v3p\jpeg" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c /Zl
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -92,7 +91,7 @@ LIB32=xilink6.exe -lib
 # PROP Intermediate_Dir "StaticDebug"
 # PROP Target_Dir ""
 MTL=midl.exe
-# ADD BASE CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /Ob2 /D "WIN32" /D "_DEBUG" /D "_LIB" /FD /GZ /c
+# ADD BASE CPP /nologo /W3 /Gm /GX /Zi /Od /Ob2 /D "WIN32" /D "_DEBUG" /D "_LIB" /FD /GZ /c
 # ADD CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\v3p\jpeg" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "_DEBUG" /D "_LIB" /FD /GZ /c /Zl
 # ADD BASE RSC /l 0x409 /d "_DEBUG" /d "_AFXDLL"
 # ADD RSC /l 0x409 /d "_DEBUG" /d "_AFXDLL"
@@ -116,7 +115,7 @@ LIB32=xilink6.exe -lib
 # PROP Intermediate_Dir "StaticRelease"
 # PROP Target_Dir ""
 MTL=midl.exe
-# ADD BASE CPP /nologo /MT /W3 /GX /O2 /Ob2 /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
+# ADD BASE CPP /nologo /W3 /GX /O2 /Ob2 /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
 # ADD CPP /nologo /MT /W3 /GX /O2 /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\v3p\jpeg" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c /Zl
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
@@ -126,32 +125,6 @@ BSC32=bscmake.exe
 LIB32=xilink6.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\Release\vil.lib"
 # ADD LIB32 /nologo /out:"..\StaticRelease\vil.lib"
-
-!ELSEIF  "$(CFG)" == "vil - Win32 ReleaseWithDBInfo"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "vil___Win32_ReleaseWithDBInfo"
-# PROP BASE Intermediate_Dir "vil___Win32_ReleaseWithDBInfo"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "ReleaseWithDBInfo"
-# PROP Intermediate_Dir "ReleaseWithDBInfo"
-# PROP Target_Dir ""
-MTL=midl.exe
-# ADD BASE CPP /nologo /MT /W3 /GX /O2 /Ob2 /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GX /Zi /O2 /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\v3p\jpeg" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c /Zl
-# ADD BASE RSC /l 0x409 /d "NDEBUG"
-# ADD RSC /l 0x409 /d "NDEBUG"
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=xilink6.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\Release\vil.lib"
-# ADD LIB32 /nologo /out:"..\Release\vil.lib"
-
-!ENDIF 
 
 # Begin Target
 
@@ -229,7 +202,7 @@ SOURCE=.\vil_colour_space.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vil_convolve_1d.cxx
+SOURCE=.\Templates\vil_convolve_1d+float.uchar.float.float-.cxx
 # End Source File
 # Begin Source File
 
@@ -237,19 +210,19 @@ SOURCE=.\Templates\vil_convolve_signal.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vil_convolve_simple+byte.byte.int.int-.cxx"
+SOURCE=".\Templates\vil_convolve_simple+vil_byte.double.double.float-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vil_convolve_simple+byte.double.double.float-.cxx"
+SOURCE=".\Templates\vil_convolve_simple+vil_byte.float.float.vil_byte-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vil_convolve_simple+byte.float.byte.float-.cxx"
+SOURCE=".\Templates\vil_convolve_simple+vil_byte.float.vil_byte.float-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vil_convolve_simple+byte.float.float.byte-.cxx"
+SOURCE=".\Templates\vil_convolve_simple+vil_byte.vil_byte.int.int-.cxx"
 # End Source File
 # Begin Source File
 
@@ -282,6 +255,10 @@ SOURCE=.\vil_flipud_impl.cxx
 # Begin Source File
 
 SOURCE=.\file_formats\vil_gen.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\file_formats\vil_gif.cxx
 # End Source File
 # Begin Source File
 
@@ -321,15 +298,15 @@ SOURCE=".\Templates\vil_interpolate+uchar.uchar-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vil_interpolate+vil_rgb+uchar-.vil_rgb+double-.cxx"
+SOURCE=".\Templates\vil_interpolate+vil_rgb+uchar-.vil_rgb+double--.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vil_interpolate+vil_rgb+uchar-.vil_rgb+float-.cxx"
+SOURCE=".\Templates\vil_interpolate+vil_rgb+uchar-.vil_rgb+float--.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vil_interpolate+vil_rgb+uchar-.vil_rgb+uchar-.cxx"
+SOURCE=".\Templates\vil_interpolate+vil_rgb+uchar-.vil_rgb+uchar--.cxx"
 # End Source File
 # Begin Source File
 
@@ -377,7 +354,7 @@ SOURCE=".\Templates\vil_memory_image_of+double-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vil_memory_image_of+double_complex-.cxx"
+SOURCE=".\Templates\vil_memory_image_of+vcl_complex+double--.cxx"
 # End Source File
 # Begin Source File
 
@@ -385,7 +362,7 @@ SOURCE=".\Templates\vil_memory_image_of+float-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vil_memory_image_of+float_complex-.cxx"
+SOURCE=".\Templates\vil_memory_image_of+vcl_complex+float--.cxx"
 # End Source File
 # Begin Source File
 
@@ -413,7 +390,7 @@ SOURCE=".\Templates\vil_memory_image_of+unsigned_short-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vil_memory_image_of+vil_rgb+byte--.cxx"
+SOURCE=".\Templates\vil_memory_image_of+vil_rgb+uchar--.cxx"
 # End Source File
 # Begin Source File
 
@@ -433,11 +410,11 @@ SOURCE=.\file_formats\vil_mit.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vil_ncc.byte.byte.double.cxx
+SOURCE=.\Templates\vil_ncc+float.float.double-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vil_ncc.float.float.double.cxx
+SOURCE=.\Templates\vil_ncc+uchar.uchar.double-.cxx
 # End Source File
 # Begin Source File
 
@@ -446,6 +423,10 @@ SOURCE=.\vil_new.cxx
 # Begin Source File
 
 SOURCE=.\vil_pixel.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\file_formats\vil_png.cxx
 # End Source File
 # Begin Source File
 
@@ -461,7 +442,7 @@ SOURCE=.\vil_resample.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vil_resample_image.cxx
+SOURCE=.\Templates\vil_resample_image+vil_byte.unsigned-.cxx
 # End Source File
 # Begin Source File
 
@@ -529,7 +510,7 @@ SOURCE=.\vil_smooth.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vil_ssd+byte.byte.int-.cxx"
+SOURCE=".\Templates\vil_ssd+uchar.uchar.int-.cxx"
 # End Source File
 # Begin Source File
 
@@ -561,6 +542,10 @@ SOURCE=.\vil_test.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\file_formats\vil_tiff.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=.\file_formats\vil_viff.cxx
 # End Source File
 # Begin Source File
@@ -570,6 +555,22 @@ SOURCE=.\file_formats\vil_viff_support.c
 # Begin Source File
 
 SOURCE=.\vil_warp.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vil_memory_image_of+float--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vil_convolve_1d+float.float.float.float-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vil_convolve_1d+float.int.float.float-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vil_resample_image+vil_rgb+vil_byte-.vil_rgb+int--.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

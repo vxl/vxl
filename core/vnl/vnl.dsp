@@ -23,7 +23,6 @@ CFG=vnl - Win32 DebugSTLPort
 !MESSAGE "vnl - Win32 StaticRelease" (based on "Win32 (x86) Static Library")
 !MESSAGE "vnl - Win32 DebugSTLPort" (based on "Win32 (x86) Static Library")
 !MESSAGE "vnl - Win32 ReleaseSTLPort" (based on "Win32 (x86) Static Library")
-!MESSAGE "vnl - Win32 ReleaseWithDBInfo" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -47,7 +46,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GX /O2 /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c /Zl
+# ADD CPP /nologo /MD /W3 /GX /O2 /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c /Zl
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -94,7 +93,7 @@ LIB32=xilink6.exe -lib
 # PROP Intermediate_Dir "StaticDebug"
 # PROP Target_Dir ""
 MTL=midl.exe
-# ADD BASE CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /Ob2 /D "WIN32" /D "_DEBUG" /D "_LIB" /FD /GZ /c
+# ADD BASE CPP /nologo /W3 /Gm /GX /Zi /Od /Ob2 /D "WIN32" /D "_DEBUG" /D "_LIB" /FD /GZ /c
 # ADD CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "_DEBUG" /D "_LIB" /FD /GZ /c /Zl
 # ADD BASE RSC /l 0x409 /d "_DEBUG" /d "_AFXDLL"
 # ADD RSC /l 0x409 /d "_DEBUG" /d "_AFXDLL"
@@ -118,7 +117,7 @@ LIB32=xilink6.exe -lib
 # PROP Intermediate_Dir "StaticRelease"
 # PROP Target_Dir ""
 MTL=midl.exe
-# ADD BASE CPP /nologo /MT /W3 /GX /O2 /Ob2 /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
+# ADD BASE CPP /nologo /W3 /GX /O2 /Ob2 /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
 # ADD CPP /nologo /MT /W3 /GX /O2 /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c /Zl
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
@@ -142,7 +141,7 @@ LIB32=xilink6.exe -lib
 # PROP Intermediate_Dir "Debug-STLPort"
 # PROP Target_Dir ""
 MTL=midl.exe
-# ADD BASE CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /Ob2 /D "WIN32" /D "_DEBUG" /D "_LIB" /FD /GZ /c
+# ADD BASE CPP /nologo /W3 /Gm /GX /Zi /Od /Ob2 /D "WIN32" /D "_DEBUG" /D "_LIB" /FD /GZ /c
 # ADD CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /Ob2 /I "$(STLPORT)\stlport" /I "$(IUEROOT)\vcl\config.stlport.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "_DEBUG" /D "_LIB" /FD /GZ /c /Zl
 # ADD BASE RSC /l 0x409 /d "_DEBUG" /d "_AFXDLL"
 # ADD RSC /l 0x409 /d "_DEBUG" /d "_AFXDLL"
@@ -166,8 +165,8 @@ LIB32=xilink6.exe -lib
 # PROP Intermediate_Dir "Release-STLPort"
 # PROP Target_Dir ""
 MTL=midl.exe
-# ADD BASE CPP /nologo /MT /W3 /GX /O2 /Ob2 /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GX /O2 /Ob2 /I "$(STLPORT)\stlport" /I "$(IUEROOT)\vcl\config.stlport.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c /Zl
+# ADD BASE CPP /nologo /W3 /GX /O2 /Ob2 /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /Ob2 /I "$(STLPORT)\stlport" /I "$(IUEROOT)\vcl\config.stlport.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c /Zl
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -176,32 +175,6 @@ BSC32=bscmake.exe
 LIB32=xilink6.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\Release\vnl.lib"
 # ADD LIB32 /nologo /out:"..\Release-STLPort\vnl.lib"
-
-!ELSEIF  "$(CFG)" == "vnl - Win32 ReleaseWithDBInfo"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "vnl___Win32_ReleaseWithDBInfo"
-# PROP BASE Intermediate_Dir "vnl___Win32_ReleaseWithDBInfo"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "ReleaseWithDBInfo"
-# PROP Intermediate_Dir "ReleaseWithDBInfo"
-# PROP Target_Dir ""
-MTL=midl.exe
-# ADD BASE CPP /nologo /MT /W3 /GX /O2 /Ob2 /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GX /Zi /O2 /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c /Zl
-# ADD BASE RSC /l 0x409 /d "NDEBUG"
-# ADD RSC /l 0x409 /d "NDEBUG"
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=xilink6.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\Release\vnl.lib"
-# ADD LIB32 /nologo /out:"..\Release\vnl.lib"
-
-!ENDIF 
 
 # Begin Target
 
@@ -221,19 +194,19 @@ SOURCE=".\Templates\vcl_list+vnl_double_4-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vcl_vector+double_3-.cxx"
+SOURCE=".\Templates\vcl_vector+vnl_double_3-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vcl_vector+double_3x3-.cxx"
+SOURCE=".\Templates\vcl_vector+vnl_double_3x3-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vcl_vector+float_2-.cxx"
+SOURCE=".\Templates\vcl_vector+vnl_float_2-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vcl_vector+float_3-.cxx"
+SOURCE=".\Templates\vcl_vector+vnl_float_3-.cxx"
 # End Source File
 # Begin Source File
 
@@ -269,7 +242,7 @@ SOURCE=".\Templates\vcl_vector+vnl_matrix_fixed+double.3.4--.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vcl_vector+vnl_real_npolymial~-.cxx"
+SOURCE=".\Templates\vcl_vector+vnl_real_npolynomial~-.cxx"
 # End Source File
 # Begin Source File
 
@@ -281,7 +254,7 @@ SOURCE=".\Templates\vcl_vector+vnl_vector+double-~-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vcl_vector+vnl_vector+double_complex--.cxx"
+SOURCE=".\Templates\vcl_vector+vnl_vector+vcl_complex+double---.cxx"
 # End Source File
 # Begin Source File
 
@@ -298,6 +271,10 @@ SOURCE=.\vnl_alloc.cxx
 # Begin Source File
 
 SOURCE=.\vnl_binary.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_block.cxx
 # End Source File
 # Begin Source File
 
@@ -373,7 +350,7 @@ SOURCE=.\vnl_cross_product_matrix.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vnl_determinant+T-.cxx
+SOURCE=.\Templates\vnl_determinant+double-.cxx
 # End Source File
 # Begin Source File
 
@@ -381,7 +358,7 @@ SOURCE=".\Templates\vnl_diag_matrix+double-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vnl_diag_matrix+double_complex-.cxx"
+SOURCE=".\Templates\vnl_diag_matrix+vcl_complex+double--.cxx"
 # End Source File
 # Begin Source File
 
@@ -389,7 +366,7 @@ SOURCE=".\Templates\vnl_diag_matrix+float-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vnl_diag_matrix+float_complex-.cxx"
+SOURCE=".\Templates\vnl_diag_matrix+vcl_complex+float--.cxx"
 # End Source File
 # Begin Source File
 
@@ -453,7 +430,7 @@ SOURCE=".\Templates\vnl_fortran_copy+double-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vnl_fortran_copy+double_complex-.cxx"
+SOURCE=".\Templates\vnl_fortran_copy+vcl_complex+double--.cxx"
 # End Source File
 # Begin Source File
 
@@ -461,7 +438,7 @@ SOURCE=".\Templates\vnl_fortran_copy+float-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vnl_fortran_copy+float_complex-.cxx"
+SOURCE=".\Templates\vnl_fortran_copy+vcl_complex+float--.cxx"
 # End Source File
 # Begin Source File
 
@@ -545,7 +522,7 @@ SOURCE=".\Templates\vnl_matrix+double-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vnl_matrix+double_complex-.cxx"
+SOURCE=".\Templates\vnl_matlab_print+vcl_complex+double--.cxx"
 # End Source File
 # Begin Source File
 
@@ -553,7 +530,7 @@ SOURCE=".\Templates\vnl_matrix+float-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vnl_matrix+float_complex-.cxx"
+SOURCE=".\Templates\vnl_matlab_print+vcl_complex+float--.cxx"
 # End Source File
 # Begin Source File
 
@@ -721,7 +698,7 @@ SOURCE=".\Templates\vnl_vector+double-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vnl_vector+double_complex-.cxx"
+SOURCE=".\Templates\vnl_vector+vcl_complex+double--.cxx"
 # End Source File
 # Begin Source File
 
@@ -729,7 +706,7 @@ SOURCE=".\Templates\vnl_vector+float-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vnl_vector+float_complex-.cxx"
+SOURCE=".\Templates\vnl_vector+vcl_complex+float--.cxx"
 # End Source File
 # Begin Source File
 
@@ -757,7 +734,7 @@ SOURCE=".\Templates\vnl_vector+ulong-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vnl_vector_fixed_instances.cxx
+SOURCE=.\Templates\vnl_vector_fixed+int.1-.cxx
 # End Source File
 # Begin Source File
 
@@ -766,6 +743,166 @@ SOURCE=".\Templates\vnl_vector_ref+double-.cxx"
 # Begin Source File
 
 SOURCE=".\Templates\vnl_vector_ref+int-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vcl_vector+vnl_sparse_matrix_pair+double---.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vcl_vector+vnl_sparse_matrix_pair+float---.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vnl_matrix_fixed+float.3.4--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vnl_sparse_matrix_pair+double--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vnl_sparse_matrix_pair+float--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_c_vector+long_double-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_c_vector+long_double_complex-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_determinant+float-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_determinant+long_double-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_determinant+vcl_complex+double--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_determinant+vcl_complex+float--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_determinant+vcl_complex+long_double--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_diag_matrix+long_double-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_file_matrix+long_double-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_fortran_copy+long_double-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_fortran_copy+vcl_complex+long_double--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_matlab_print+double-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_matlab_print+float-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_matlab_print+int-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_matlab_print+long_double-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_matlab_print+vcl_complex+long_double--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_matrix+long_double-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_matrix+vcl_complex+double--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_matrix+vcl_complex+float--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_matrix+vcl_complex+long_double--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_matrix_fixed+double.2.6-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_vector+long_double-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_vector+vcl_complex+long_double--.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_vector_fixed+double.1-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_vector_fixed+double.2-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_vector_fixed+double.3-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_vector_fixed+double.4-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_vector_fixed+double.6-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_vector_fixed+float.1-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_vector_fixed+float.2-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_vector_fixed+float.3-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_vector_fixed+float.4-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_vector_fixed+int.2-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_vector_fixed+int.3-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_vector_fixed+int.4-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -778,6 +915,10 @@ SOURCE=.\dll.h
 # Begin Source File
 
 SOURCE=.\vnl_alloc.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_block.h
 # End Source File
 # Begin Source File
 

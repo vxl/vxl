@@ -21,7 +21,6 @@ CFG=vgl - Win32 StaticDebug
 !MESSAGE "vgl - Win32 Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "vgl - Win32 StaticDebug" (based on "Win32 (x86) Static Library")
 !MESSAGE "vgl - Win32 StaticRelease" (based on "Win32 (x86) Static Library")
-!MESSAGE "vgl - Win32 ReleaseWithDBInfo" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -45,7 +44,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GX /O2 /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c /Zl
+# ADD CPP /nologo /MD /W3 /GX /O2 /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c /Zl
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -92,7 +91,7 @@ LIB32=xilink6.exe -lib
 # PROP Intermediate_Dir "StaticDebug"
 # PROP Target_Dir ""
 MTL=midl.exe
-# ADD BASE CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /Ob2 /D "WIN32" /D "_DEBUG" /D "_LIB" /FD /GZ /c
+# ADD BASE CPP /nologo /W3 /Gm /GX /Zi /Od /Ob2 /D "WIN32" /D "_DEBUG" /D "_LIB" /FD /GZ /c
 # ADD CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "_DEBUG" /D "_LIB" /FD /GZ /c /Zl
 # ADD BASE RSC /l 0x409 /d "_DEBUG" /d "_AFXDLL"
 # ADD RSC /l 0x409 /d "_DEBUG" /d "_AFXDLL"
@@ -116,7 +115,7 @@ LIB32=xilink6.exe -lib
 # PROP Intermediate_Dir "StaticRelease"
 # PROP Target_Dir ""
 MTL=midl.exe
-# ADD BASE CPP /nologo /MT /W3 /GX /O2 /Ob2 /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
+# ADD BASE CPP /nologo /W3 /GX /O2 /Ob2 /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
 # ADD CPP /nologo /MT /W3 /GX /O2 /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c /Zl
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
@@ -126,30 +125,6 @@ BSC32=bscmake.exe
 LIB32=xilink6.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\Release\vgl.lib"
 # ADD LIB32 /nologo /out:"..\StaticRelease\vgl.lib"
-
-!ELSEIF  "$(CFG)" == "vgl - Win32 ReleaseWithDBInfo"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "vgl___Win32_ReleaseWithDBInfo"
-# PROP BASE Intermediate_Dir "vgl___Win32_ReleaseWithDBInfo"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "ReleaseWithDBInfo"
-# PROP Intermediate_Dir "ReleaseWithDBInfo"
-# PROP Target_Dir ""
-MTL=midl.exe
-# ADD BASE CPP /nologo /MT /W3 /GX /O2 /Ob2 /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GX /Zi /O2 /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c /Zl
-# ADD BASE RSC /l 0x409 /d "NDEBUG"
-# ADD RSC /l 0x409 /d "NDEBUG"
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=xilink6.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\Release\vgl.lib"
-# ADD LIB32 /nologo /out:"..\Release\vgl.lib"
 
 !ENDIF 
 
@@ -241,6 +216,10 @@ SOURCE=".\Templates\vgl_homg_point_2d+float-.cxx"
 # End Source File
 # Begin Source File
 
+SOURCE=".\Templates\vgl_homg_point_2d+int-.cxx"
+# End Source File
+# Begin Source File
+
 SOURCE=".\Templates\vgl_homg_point_3d+double-.cxx"
 # End Source File
 # Begin Source File
@@ -294,6 +273,10 @@ SOURCE=".\Templates\vgl_point_2d+double-.cxx"
 # Begin Source File
 
 SOURCE=".\Templates\vgl_point_2d+float-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vgl_point_2d+int-.cxx"
 # End Source File
 # Begin Source File
 

@@ -17,6 +17,10 @@ SUBDIRS += VPLAYER
 SUBDIRS += apps/vxl_vrml_viewer
 endif
 
+ifndef NOTEST
+SUBDIRS += oxltest
+endif
+
 ######################################
 include ${IUEROOT}/config/top-rules.mk
 ######################################

@@ -167,7 +167,7 @@ SOURCE=".\Templates\vil_io_memory_image_of+double-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vil_io_memory_image_of+double_complex-.cxx"
+SOURCE=".\Templates\vil_io_memory_image_of+vcl_complex+double--.cxx"
 # End Source File
 # Begin Source File
 
@@ -175,7 +175,7 @@ SOURCE=".\Templates\vil_io_memory_image_of+float-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vil_io_memory_image_of+float_complex-.cxx"
+SOURCE=".\Templates\vil_io_memory_image_of+vcl_complex+float--.cxx"
 # End Source File
 # Begin Source File
 
@@ -203,7 +203,7 @@ SOURCE=".\Templates\vil_io_memory_image_of+unsigned_short-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vil_io_memory_image_of+vil_rgb+byte--.cxx"
+SOURCE=".\Templates\vil_io_memory_image_of+vil_rgb+uchar--.cxx"
 # End Source File
 # Begin Source File
 
@@ -215,19 +215,11 @@ SOURCE=".\Templates\vil_io_memory_image_of+vil_rgb+float--.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=.\vil_io_memory_image_of.txx
-# End Source File
-# Begin Source File
-
 SOURCE=".\Templates\vil_io_rgb+double-.cxx"
 # End Source File
 # Begin Source File
 
 SOURCE=".\Templates\vil_io_rgb+float-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=.\vil_io_rgb.txx
 # End Source File
 # Begin Source File
 
@@ -237,10 +229,6 @@ SOURCE=".\Templates\vil_io_rgba+double-.cxx"
 
 SOURCE=".\Templates\vil_io_rgba+float-.cxx"
 # End Source File
-# Begin Source File
-
-SOURCE=.\vil_io_rgba.txx
-# End Source File
 # End Group
 # Begin Group "Header Files"
 
@@ -248,6 +236,18 @@ SOURCE=.\vil_io_rgba.txx
 # Begin Source File
 
 SOURCE=.\dll.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_io_memory_image_of.txx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_io_rgb.txx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_io_rgba.txx
 # End Source File
 # Begin Source File
 

@@ -147,10 +147,6 @@ SOURCE=".\Templates\vbl_io_array_1d+float-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_io_array_1d.txx
-# End Source File
-# Begin Source File
-
 SOURCE=".\Templates\vbl_io_array_2d+double-.cxx"
 # End Source File
 # Begin Source File
@@ -167,55 +163,35 @@ SOURCE=".\Templates\vbl_io_array_2d+unsignedchar-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_io_array_2d.txx
-# End Source File
-# Begin Source File
-
 SOURCE=".\Templates\vbl_io_array_3d+int-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_io_array_3d.txx
+SOURCE=".\Templates\vbl_io_bounding_box+double.2-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vbl_io_bounding_box+double-.cxx"
+SOURCE=".\Templates\vbl_io_bounding_box+float.2-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vbl_io_bounding_box+float-.cxx"
+SOURCE=".\Templates\vbl_io_bounding_box+int.2-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vbl_io_bounding_box+int-.cxx"
+SOURCE=".\Templates\vbl_io_sparse_array+double.uint-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_io_bounding_box.txx
+SOURCE=".\Templates\vbl_io_sparse_array+double.vcl_pair+uint.uint--.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_io_smart_ptr.txx
+SOURCE=".\Templates\vbl_io_sparse_array+int.uint-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vbl_io_sparse_array_1d+double-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\vbl_io_sparse_array_1d+int-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\vbl_io_sparse_array_2d+double-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\vbl_io_sparse_array_2d+int-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=.\vbl_io_sparse_array_base.txx
+SOURCE=".\Templates\vbl_io_sparse_array+int.vcl_pair+uint.uint--.cxx"
 # End Source File
 # Begin Source File
 
@@ -228,6 +204,30 @@ SOURCE=.\vbl_io_user_info.cxx
 # Begin Source File
 
 SOURCE=.\dll.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_io_array_1d.txx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_io_array_2d.txx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_io_array_3d.txx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_io_bounding_box.txx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_io_smart_ptr.txx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_io_sparse_array_base.txx
 # End Source File
 # Begin Source File
 

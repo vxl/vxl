@@ -151,19 +151,11 @@ SOURCE=".\Templates\vgl_io_box_2d+int-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgl_io_box_2d.txx
-# End Source File
-# Begin Source File
-
 SOURCE=".\Templates\vgl_io_box_3d+double-.cxx"
 # End Source File
 # Begin Source File
 
 SOURCE=".\Templates\vgl_io_box_3d+float-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgl_io_box_3d.txx
 # End Source File
 # Begin Source File
 
@@ -175,19 +167,11 @@ SOURCE=".\Templates\vgl_io_homg_line_2d+float-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgl_io_homg_line_2d.txx
-# End Source File
-# Begin Source File
-
 SOURCE=".\Templates\vgl_io_homg_line_3d_2_points+double-.cxx"
 # End Source File
 # Begin Source File
 
 SOURCE=".\Templates\vgl_io_homg_line_3d_2_points+float-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgl_io_homg_line_3d_2_points.txx
 # End Source File
 # Begin Source File
 
@@ -199,19 +183,11 @@ SOURCE=".\Templates\vgl_io_homg_plane_3d+float-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgl_io_homg_plane_3d.txx
-# End Source File
-# Begin Source File
-
 SOURCE=".\Templates\vgl_io_homg_point_2d+double-.cxx"
 # End Source File
 # Begin Source File
 
 SOURCE=".\Templates\vgl_io_homg_point_2d+float-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgl_io_homg_point_2d.txx
 # End Source File
 # Begin Source File
 
@@ -223,19 +199,11 @@ SOURCE=".\Templates\vgl_io_homg_point_3d+float-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgl_io_homg_point_3d.txx
-# End Source File
-# Begin Source File
-
 SOURCE=".\Templates\vgl_io_line_2d+double-.cxx"
 # End Source File
 # Begin Source File
 
 SOURCE=".\Templates\vgl_io_line_2d+float-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgl_io_line_2d.txx
 # End Source File
 # Begin Source File
 
@@ -247,10 +215,6 @@ SOURCE=".\Templates\vgl_io_line_segment_2d+float-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgl_io_line_segment_2d.txx
-# End Source File
-# Begin Source File
-
 SOURCE=".\Templates\vgl_io_line_segment_3d+double-.cxx"
 # End Source File
 # Begin Source File
@@ -259,7 +223,7 @@ SOURCE=".\Templates\vgl_io_line_segment_3d+float-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgl_io_line_segment_3d.txx
+SOURCE=.\vgl_io_polygon.cxx
 # End Source File
 # Begin Source File
 
@@ -271,7 +235,7 @@ SOURCE=".\Templates\vgl_io_point_2d+float-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgl_io_point_2d.txx
+SOURCE=".\Templates\vgl_io_point_2d+int-.cxx"
 # End Source File
 # Begin Source File
 
@@ -281,10 +245,6 @@ SOURCE=".\Templates\vgl_io_point_3d+double-.cxx"
 
 SOURCE=".\Templates\vgl_io_point_3d+float-.cxx"
 # End Source File
-# Begin Source File
-
-SOURCE=.\vgl_io_point_3d.txx
-# End Source File
 # End Group
 # Begin Group "Header Files"
 
@@ -292,6 +252,54 @@ SOURCE=.\vgl_io_point_3d.txx
 # Begin Source File
 
 SOURCE=.\dll.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_box_2d.txx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_box_3d.txx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_homg_line_2d.txx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_homg_line_3d_2_points.txx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_homg_plane_3d.txx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_homg_point_2d.txx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_homg_point_3d.txx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_line_2d.txx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_line_segment_2d.txx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_line_segment_3d.txx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_point_3d.txx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_point_2d.txx
 # End Source File
 # Begin Source File
 
@@ -340,10 +348,6 @@ SOURCE=.\vgl_io_point_2d.h
 # Begin Source File
 
 SOURCE=.\vgl_io_point_3d.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgl_io_polygon.cxx
 # End Source File
 # Begin Source File
 

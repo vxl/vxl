@@ -46,7 +46,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GX /O2 /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -93,7 +93,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "StaticDebug"
 # PROP Target_Dir ""
 MTL=midl.exe
-# ADD BASE CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /Ob2 /D "WIN32" /D "_DEBUG" /D "_LIB" /FD /GZ /c
+# ADD BASE CPP /nologo /W3 /Gm /GX /Zi /Od /Ob2 /D "WIN32" /D "_DEBUG" /D "_LIB" /FD /GZ /c
 # ADD CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "_DEBUG" /D "_LIB" /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG" /d "_AFXDLL"
 # ADD RSC /l 0x409 /d "_DEBUG"
@@ -117,7 +117,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "StaticRelease"
 # PROP Target_Dir ""
 MTL=midl.exe
-# ADD BASE CPP /nologo /MT /W3 /GX /O2 /Ob2 /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
+# ADD BASE CPP /nologo /W3 /GX /O2 /Ob2 /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
 # ADD CPP /nologo /MT /W3 /GX /O2 /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
@@ -141,8 +141,8 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "Release-STLPort"
 # PROP Target_Dir ""
 MTL=midl.exe
-# ADD BASE CPP /nologo /MT /W3 /GX /O2 /Ob2 /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GX /O2 /Ob2 /I "$(STLPORT)\stlport" /I "$(IUEROOT)\vcl\config.stlport.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
+# ADD BASE CPP /nologo /W3 /GX /O2 /Ob2 /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /Ob2 /I "$(STLPORT)\stlport" /I "$(IUEROOT)\vcl\config.stlport.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -165,7 +165,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "Debug-STLPort"
 # PROP Target_Dir ""
 MTL=midl.exe
-# ADD BASE CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /Ob2 /D "WIN32" /D "_DEBUG" /D "_LIB" /FD /GZ /c
+# ADD BASE CPP /nologo /W3 /Gm /GX /Zi /Od /Ob2 /D "WIN32" /D "_DEBUG" /D "_LIB" /FD /GZ /c
 # ADD CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /Ob2 /I "$(STLPORT)\stlport" /I "$(IUEROOT)\vcl\config.stlport.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "_DEBUG" /D "_LIB" /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG" /d "_AFXDLL"
 # ADD RSC /l 0x409 /d "_DEBUG" /d "_AFXDLL"
@@ -251,15 +251,19 @@ SOURCE=.\vbl_bool_ostream.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vbl_bounding_box+double-.cxx"
+SOURCE=".\Templates\vbl_bounding_box+double.2-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vbl_bounding_box+float-.cxx"
+SOURCE=".\Templates\vbl_bounding_box+float.2-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vbl_bounding_box+int-.cxx"
+SOURCE=".\Templates\vbl_bounding_box+int.2-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_deprecated.cxx
 # End Source File
 # Begin Source File
 
@@ -361,6 +365,34 @@ SOURCE=.\vbl_trace.cxx
 
 SOURCE=.\vbl_user_info.cxx
 # End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vbl_array_3d+uchar-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vbl_array_3d+void~-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vbl_binary+bool-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vbl_binary+char-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vbl_sparse_array_2d+int-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_map+vbl_index_3d.double-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_map+vbl_index_3d.void~-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
@@ -428,6 +460,10 @@ SOURCE=.\vbl_br_default.h
 # Begin Source File
 
 SOURCE=.\vbl_br_impl.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_deprecated.h
 # End Source File
 # Begin Source File
 

@@ -147,15 +147,7 @@ SOURCE=.\vsl_binary_io.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vsl_binary_loader.txx
-# End Source File
-# Begin Source File
-
 SOURCE=.\vsl_binary_loader_base.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=.\vsl_clipon_binary_loader.txx
 # End Source File
 # Begin Source File
 
@@ -167,15 +159,7 @@ SOURCE=".\Templates\vsl_complex+float-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=.\vsl_complex_io.txx
-# End Source File
-# Begin Source File
-
 SOURCE=".\Templates\vsl_deque+int-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=.\vsl_deque_io.txx
 # End Source File
 # Begin Source File
 
@@ -191,26 +175,6 @@ SOURCE=".\Templates\vsl_list+int-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=.\vsl_list_io.txx
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\vsl_map+int.int-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\vsl_map+int.string-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\vsl_map+string.int-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=.\vsl_map_io.txx
-# End Source File
-# Begin Source File
-
 SOURCE=".\Templates\vsl_pair+uint.uint-.cxx"
 # End Source File
 # Begin Source File
@@ -223,10 +187,6 @@ SOURCE=".\Templates\vsl_pair+vcl_pair+uint.uint-.int-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=.\vsl_pair_io.txx
-# End Source File
-# Begin Source File
-
 SOURCE=".\Templates\vsl_set+int-.cxx"
 # End Source File
 # Begin Source File
@@ -235,11 +195,84 @@ SOURCE=".\Templates\vsl_set+vcl_string-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=.\vsl_set_io.txx
+SOURCE=".\Templates\vsl_vector_io+vcl_string-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vsl_vector_io+uint-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vsl_vector_io+int-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vsl_vector_io+float-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vsl_vector_io+double-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vsl_map_io+vcl_string.int-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vsl_map_io+int.vcl_string-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vsl_map_io+int.int-.cxx"
+
 # End Source File
 # Begin Source File
 
 SOURCE=".\Templates\vsl_stack+int-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_test.cxx
+# End Source File
+# End Group
+# Begin Group "Header Files"
+
+# PROP Default_Filter "h;hpp;hxx;hm;inl"
+# Begin Source File
+
+SOURCE=.\dll.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_binary_loader.txx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_clipon_binary_loader.txx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_complex_io.txx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_deque_io.txx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_list_io.txx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_map_io.txx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_pair_io.txx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_set_io.txx
 # End Source File
 # Begin Source File
 
@@ -251,35 +284,7 @@ SOURCE=.\vsl_string_io.txx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vsl_test.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\vsl_vector+double-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\vsl_vector+float-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\vsl_vector+int-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\vsl_vector+uint-.cxx"
-# End Source File
-# Begin Source File
-
 SOURCE=.\vsl_vector_io.txx
-# End Source File
-# End Group
-# Begin Group "Header Files"
-
-# PROP Default_Filter "h;hpp;hxx;hm;inl"
-# Begin Source File
-
-SOURCE=.\dll.h
 # End Source File
 # Begin Source File
 

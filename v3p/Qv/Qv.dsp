@@ -41,7 +41,7 @@ RSC=rc.exe
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /W3 /GX /O2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /Zl /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /Zl /FD /c
 # ADD BASE RSC /l 0x809 /d "NDEBUG"
 # ADD RSC /l 0x809 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -64,7 +64,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /MD /W3 /Gm /GX /ZI /Od /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /Zl /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /Zl /FD /GZ /c
 # ADD BASE RSC /l 0x809 /d "_DEBUG"
 # ADD RSC /l 0x809 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -94,6 +94,14 @@ SOURCE=.\QvVisitor.cxx
 # Begin Source File
 
 SOURCE=.\QvVrmlFile.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+QvNode~-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+point2D_const~-.cxx
 # End Source File
 # Begin Source File
 

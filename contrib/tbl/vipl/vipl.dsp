@@ -42,7 +42,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GX /O2 /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /I "$(IUEROOT)\tbl" /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /I "$(IUEROOT)\tbl" /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -191,7 +191,7 @@ SOURCE=.\Templates\vipl_filter_2d+vil_image.vil_image.vil_rgb+uchar-.uchar-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vipl_filter_abs.cxx
+SOURCE=.\filter\vipl_filter_abs.cxx
 # End Source File
 # Begin Source File
 
@@ -312,6 +312,14 @@ SOURCE=.\Templates\vipl_threshold+vil_image.vil_image.ushort.ushort-.cxx
 # Begin Source File
 
 SOURCE=.\Templates\vipl_x_gradient+vil_image.vil_image.uchar.uchar-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vipl_erode_disk+vil_image.vil_image.float.float-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vipl_erode_disk+vil_image.vil_image.ushort.ushort-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

@@ -143,10 +143,6 @@ SOURCE=".\Templates\mbl_data_array_wrapper+vnl_vector+double--.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=.\mbl_data_array_wrapper.txx
-# End Source File
-# Begin Source File
-
 SOURCE=".\Templates\mbl_data_collector+vnl_vector+double--.cxx"
 # End Source File
 # Begin Source File
@@ -156,10 +152,6 @@ SOURCE=.\mbl_data_collector_base.cxx
 # Begin Source File
 
 SOURCE=".\Templates\mbl_data_wrapper+vnl_vector+double--.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=.\mbl_data_wrapper.txx
 # End Source File
 # Begin Source File
 
@@ -189,6 +181,14 @@ SOURCE=".\Templates\vsl_binary_loader+mbl_data_collector_base-.cxx"
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
+# Begin Source File
+
+SOURCE=.\mbl_data_array_wrapper.txx
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_data_wrapper.txx
+# End Source File
 # Begin Source File
 
 SOURCE=.\mbl_cloneable_ptr.h

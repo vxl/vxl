@@ -42,7 +42,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GX /O2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c /Zl
+# ADD CPP /nologo /MD /W3 /GX /O2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c /Zl
 # ADD BASE RSC /l 0x809 /d "NDEBUG"
 # ADD RSC /l 0x809 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -87,151 +87,151 @@ LIB32=link.exe -lib
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat;txx"
 # Begin Source File
 
-SOURCE=.\Templates\vbl_smart_ptr+vcsl_angle.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_angle-.cxx
 # End Source File
 
 # Begin Source File
-SOURCE=.\Templates\vbl_smart_ptr+vcsl_angle_unit.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_angle_unit-.cxx
 # End Source File
 
 # Begin Source File
-SOURCE=.\Templates\vbl_smart_ptr+vcsl_axis.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_axis-.cxx
 # End Source File
 
 # Begin Source File
-SOURCE=.\Templates\vbl_smart_ptr+vcsl_cartesian.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_cartesian-.cxx
 # End Source File
 
 # Begin Source File
-SOURCE=.\Templates\vbl_smart_ptr+vcsl_cartesian_2d.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_cartesian_2d-.cxx
 # End Source File
 
 # Begin Source File
-SOURCE=.\Templates\vbl_smart_ptr+vcsl_cartesian_3d.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_cartesian_3d-.cxx
 # End Source File
 
 # Begin Source File
-SOURCE=.\Templates\vbl_smart_ptr+vcsl_composition.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_composition-.cxx
 # End Source File
 
 # Begin Source File
-SOURCE=.\Templates\vbl_smart_ptr+vcsl_coordinate_system.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_coordinate_system-.cxx
 # End Source File
 
 # Begin Source File
-SOURCE=.\Templates\vbl_smart_ptr+vcsl_cylindrical.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_cylindrical-.cxx
 # End Source File
 
 # Begin Source File
-SOURCE=.\Templates\vbl_smart_ptr+vcsl_cylindrical_to_cartesian_3d.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_cylindrical_to_cartesian_3d-.cxx
 # End Source File
 
 # Begin Source File
-SOURCE=.\Templates\vbl_smart_ptr+vcsl_degree.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_degree-.cxx
 # End Source File
 
 # Begin Source File
-SOURCE=.\Templates\vbl_smart_ptr+vcsl_dimension.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_dimension-.cxx
 # End Source File
 
 # Begin Source File
-SOURCE=.\Templates\vbl_smart_ptr+vcsl_displacement.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_displacement-.cxx
 # End Source File
 
 # Begin Source File
-SOURCE=.\Templates\vbl_smart_ptr+vcsl_geocentric.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_geocentric-.cxx
 # End Source File
 
 # Begin Source File
-SOURCE=.\Templates\vbl_smart_ptr+vcsl_geodetic.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_geodetic-.cxx
 # End Source File
 
 # Begin Source File
-SOURCE=.\Templates\vbl_smart_ptr+vcsl_geographic.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_geographic-.cxx
 # End Source File
 
 # Begin Source File
-SOURCE=.\Templates\vbl_smart_ptr+vcsl_graph.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_graph-.cxx
 # End Source File
 
 # Begin Source File
-SOURCE=.\Templates\vbl_smart_ptr+vcsl_lambertian.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_lambertian-.cxx
 # End Source File
 
 # Begin Source File
-SOURCE=.\Templates\vbl_smart_ptr+vcsl_length.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_length-.cxx
 # End Source File
 
 # Begin Source File
-SOURCE=.\Templates\vbl_smart_ptr+vcsl_length_unit.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_length_unit-.cxx
 # End Source File
 
 # Begin Source File
-SOURCE=.\Templates\vbl_smart_ptr+vcsl_meter.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_meter-.cxx
 # End Source File
 
 # Begin Source File
-SOURCE=.\Templates\vbl_smart_ptr+vcsl_perspective.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_perspective-.cxx
 # End Source File
 
 # Begin Source File
-SOURCE=.\Templates\vbl_smart_ptr+vcsl_polar.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_polar-.cxx
 # End Source File
 
 # Begin Source File
-SOURCE=.\Templates\vbl_smart_ptr+vcsl_radian.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_radian-.cxx
 # End Source File
 
 # Begin Source File
-SOURCE=.\Templates\vbl_smart_ptr+vcsl_rotation.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_rotation-.cxx
 # End Source File
 
 # Begin Source File
-SOURCE=.\Templates\vbl_smart_ptr+vcsl_scale.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_scale-.cxx
 # End Source File
 
 # Begin Source File
-SOURCE=.\Templates\vbl_smart_ptr+vcsl_spatial.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_spatial-.cxx
 # End Source File
 
 # Begin Source File
-SOURCE=.\Templates\vbl_smart_ptr+vcsl_spatial_transformation.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_spatial_transformation-.cxx
 # End Source File
 
 # Begin Source File
-SOURCE=.\Templates\vbl_smart_ptr+vcsl_spherical.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_spherical-.cxx
 # End Source File
 
 # Begin Source File
-SOURCE=.\Templates\vbl_smart_ptr+vcsl_spheroid.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_spheroid-.cxx
 # End Source File
 
 # Begin Source File
-SOURCE=.\Templates\vbl_smart_ptr+vcsl_translation.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_translation-.cxx
 # End Source File
 
 # Begin Source File
-SOURCE=.\Templates\vbl_smart_ptr+vcsl_unit.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_unit-.cxx
 # End Source File
 
 # Begin Source File
-SOURCE=.\Templates\vbl_smart_ptr+vcsl_utm.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vcsl_utm-.cxx
 # End Source File
 
 # Begin Source File
-SOURCE=.\Templates\vcl_vector+vcsl_axis_sptr.cxx
+SOURCE=.\Templates\vcl_vector+vcsl_axis_sptr-.cxx
 # End Source File
 
 # Begin Source File
-SOURCE=.\Templates\vcl_vector+vcsl_interpolator.cxx
+SOURCE=.\Templates\vcl_vector+vcsl_interpolator-.cxx
 # End Source File
 
 # Begin Source File
-SOURCE=.\Templates\vcl_vector+vcsl_spatial_sptr.cxx
+SOURCE=.\Templates\vcl_vector+vcsl_spatial_sptr-.cxx
 # End Source File
 
 # Begin Source File
-SOURCE=.\Templates\vcl_vector+vcsl_spatial_transformation_sptr.cxx
+SOURCE=.\Templates\vcl_vector+vcsl_spatial_transformation_sptr-.cxx
 # End Source File
 
 # Begin Source File

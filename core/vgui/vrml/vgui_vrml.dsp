@@ -19,7 +19,6 @@ CFG=vgui_vrml - Win32 Debug
 !MESSAGE 
 !MESSAGE "vgui_vrml - Win32 Release" (based on "Win32 (x86) Static Library")
 !MESSAGE "vgui_vrml - Win32 Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "vgui_vrml - Win32 ReleaseWithDBInfo" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -43,7 +42,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GX /O2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\v3p" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /I "$(IUEROOT)\oxl" /D "WIN32" /D "NDEBUG" /D "_LIB" /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\v3p" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /I "$(IUEROOT)\oxl" /D "WIN32" /D "NDEBUG" /D "_LIB" /FD /c
 # SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x809 /d "NDEBUG"
 # ADD RSC /l 0x809 /d "NDEBUG"
@@ -79,32 +78,6 @@ LIB32=xilink6.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo /out:"..\..\Debug\vgui_vrml.lib"
 
-!ELSEIF  "$(CFG)" == "vgui_vrml - Win32 ReleaseWithDBInfo"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "vgui_vrml___Win32_ReleaseWithDBInfo"
-# PROP BASE Intermediate_Dir "vgui_vrml___Win32_ReleaseWithDBInfo"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "ReleaseWithDBInfo"
-# PROP Intermediate_Dir "ReleaseWithDBInfo"
-# PROP Target_Dir ""
-MTL=midl.exe
-# ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_LIB" /FD /c
-# SUBTRACT BASE CPP /YX
-# ADD CPP /nologo /MT /W3 /GX /Zi /O2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\v3p" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /I "$(IUEROOT)\oxl" /D "WIN32" /D "NDEBUG" /D "_LIB" /FD /c
-# SUBTRACT CPP /YX
-# ADD BASE RSC /l 0x809 /d "NDEBUG"
-# ADD RSC /l 0x809 /d "NDEBUG"
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=xilink6.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\Release\vgui_vrml.lib"
-# ADD LIB32 /nologo /out:"..\..\Release\vgui_vrml.lib"
-
 !ENDIF 
 
 # Begin Target
@@ -117,7 +90,7 @@ LIB32=xilink6.exe -lib
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=.\Templates\instances.cxx
+SOURCE=.\Templates\vcl_vector+QvNode~-.cxx
 # End Source File
 # Begin Source File
 
@@ -134,6 +107,22 @@ SOURCE=.\vgui_vrml_tableau.cxx
 # Begin Source File
 
 SOURCE=.\vgui_vrml_texture_map.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+point2D_const~-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+point3D~-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vector3D_const~-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vgui_vrml_tableau_sptr-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

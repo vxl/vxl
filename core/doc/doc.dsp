@@ -75,7 +75,15 @@ SOURCE=.\book\book.texi
 # End Source File
 # Begin Source File
 
+SOURCE=.\book\book.texi
+# End Source File
+# Begin Source File
+
 SOURCE=.\book\chapter_vsl.texi
+# End Source File
+# Begin Source File
+
+SOURCE=.\book\rosenbrock.png
 # End Source File
 # Begin Source File
 

@@ -19,7 +19,6 @@ CFG=mvl - Win32 DebugSTLPort
 !MESSAGE 
 !MESSAGE "mvl - Win32 Release" (based on "Win32 (x86) Static Library")
 !MESSAGE "mvl - Win32 Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "mvl - Win32 ReleaseWithDBInfo" (based on "Win32 (x86) Static Library")
 !MESSAGE "mvl - Win32 StaticDebug" (based on "Win32 (x86) Static Library")
 !MESSAGE "mvl - Win32 StaticRelease" (based on "Win32 (x86) Static Library")
 !MESSAGE "mvl - Win32 ReleaseSTLPort" (based on "Win32 (x86) Static Library")
@@ -47,7 +46,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GX /O2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /I "$(IUEROOT)\oxl" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /I "$(IUEROOT)\oxl" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -82,30 +81,6 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo /out:"..\Debug\mvl.lib"
 
-!ELSEIF  "$(CFG)" == "mvl - Win32 ReleaseWithDBInfo"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "mvl___Win32_ReleaseWithDBInfo"
-# PROP BASE Intermediate_Dir "mvl___Win32_ReleaseWithDBInfo"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "ReleaseWithDBInfo"
-# PROP Intermediate_Dir "ReleaseWithDBInfo"
-# PROP Target_Dir ""
-MTL=midl.exe
-# ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GX /Zi /O2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /I "$(IUEROOT)\oxl" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
-# ADD BASE RSC /l 0x409 /d "NDEBUG"
-# ADD RSC /l 0x409 /d "NDEBUG"
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\Release\mvl.lib"
-# ADD LIB32 /nologo /out:"..\Release\mvl.lib"
-
 !ELSEIF  "$(CFG)" == "mvl - Win32 StaticDebug"
 
 # PROP BASE Use_MFC 0
@@ -119,7 +94,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "StaticDebug"
 # PROP Target_Dir ""
 MTL=midl.exe
-# ADD BASE CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /GZ /c
+# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /GZ /c
 # SUBTRACT BASE CPP /YX
 # ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /I "$(IUEROOT)\oxl" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /GZ /c
 # SUBTRACT CPP /YX
@@ -145,7 +120,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "StaticRelease"
 # PROP Target_Dir ""
 MTL=midl.exe
-# ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
+# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
 # ADD CPP /nologo /MT /W3 /GX /O2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /I "$(IUEROOT)\oxl" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
@@ -169,8 +144,8 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "Release-STLPort"
 # PROP Target_Dir ""
 MTL=midl.exe
-# ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GX /O2 /I "$(STLPORT)\stlport" /I "$(IUEROOT)\vcl\config.stlport.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /I "$(IUEROOT)\oxl" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
+# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /I "$(STLPORT)\stlport" /I "$(IUEROOT)\vcl\config.stlport.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /I "$(IUEROOT)\oxl" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -193,7 +168,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "Debug-STLPort"
 # PROP Target_Dir ""
 MTL=midl.exe
-# ADD BASE CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /GZ /c
+# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /GZ /c
 # SUBTRACT BASE CPP /YX
 # ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "$(STLPORT)\stlport" /I "$(IUEROOT)\vcl\config.stlport.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /I "$(IUEROOT)\oxl" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /GZ /c
 # SUBTRACT CPP /YX
@@ -430,6 +405,26 @@ SOURCE=".\Templates\ModifyHandle+double-.cxx"
 # End Source File
 # Begin Source File
 
+SOURCE=.\mvl_five_point_camera_pencil.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\mvl_multi_view_matches.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\mvl_psi.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\mvl_six_point_design_matrix_row.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\mvl_three_view_six_point_structure.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=.\NViewMatches.cxx
 # End Source File
 # Begin Source File
@@ -466,6 +461,10 @@ SOURCE=.\PMatrix.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\PMatrixAffine.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=.\PMatrixCompute.cxx
 # End Source File
 # Begin Source File
@@ -483,6 +482,10 @@ SOURCE=.\PMatrixDecompAa.cxx
 # Begin Source File
 
 SOURCE=.\PMatrixDecompCR.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\PMatrixEuclidean.cxx
 # End Source File
 # Begin Source File
 
@@ -530,27 +533,27 @@ SOURCE=".\Templates\vbl_array_2d+vnl_vector+double--.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vbl_sparse_array+FMatrix~-.cxx"
+SOURCE=".\Templates\vbl_sparse_array_1d+FMatrix~-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vbl_sparse_array+HMatrix2D~-.cxx"
+SOURCE=".\Templates\vbl_sparse_array_1d+HMatrix2D~-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vbl_sparse_array+HMatrix3D-.cxx"
+SOURCE=".\Templates\vbl_sparse_array_1d+HMatrix3D-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vbl_sparse_array+ImageMetric~-.cxx"
+SOURCE=".\Templates\vbl_sparse_array_1d+ImageMetric~-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vbl_sparse_array+PairMatchSetCorner~-.cxx"
+SOURCE=".\Templates\vbl_sparse_array_1d+PairMatchSetCorner~-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vbl_sparse_array+PairMatchSetLineSeg~-.cxx"
+SOURCE=".\Templates\vbl_sparse_array_1d+PairMatchSetLineSeg~-.cxx"
 # End Source File
 # Begin Source File
 
@@ -586,11 +589,11 @@ SOURCE=".\Templates\vbl_sparse_array_3d+TriTensor~-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vcl_algo+ImageMetric~-.cxx"
+SOURCE=".\Templates\vcl_algorithm+ImageMetric~-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vcl_algo+ImageMetric~~-.cxx"
+SOURCE=".\Templates\vcl_algorithm+ImageMetric~~-.cxx"
 # End Source File
 # Begin Source File
 

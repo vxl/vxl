@@ -46,7 +46,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /Zl /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /Zl /FD /c
 # SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
@@ -71,7 +71,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /Zl /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /Zl /FD /GZ /c
 # SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
@@ -121,7 +121,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "StaticRelease"
 # PROP Target_Dir ""
 MTL=midl.exe
-# ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /FD /c
+# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # SUBTRACT BASE CPP /YX
 # ADD CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /Zl /FD /c
 # SUBTRACT CPP /YX
@@ -149,7 +149,7 @@ LIB32=link.exe -lib
 MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /GZ /c
 # SUBTRACT BASE CPP /YX
-# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /Zl /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /Zl /FD /GZ /c
 # SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
@@ -173,9 +173,9 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "Release-STLPort"
 # PROP Target_Dir ""
 MTL=midl.exe
-# ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /FD /c
+# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # SUBTRACT BASE CPP /YX
-# ADD CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /Zl /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /Zl /FD /c
 # SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
@@ -209,6 +209,10 @@ SOURCE=.\c_div.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\c_sqrt.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\cabs.c
 # End Source File
 # Begin Source File
@@ -221,11 +225,31 @@ SOURCE=.\caxpy.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\ccopy.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\cdotc.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\cdabs.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\cdsqrt.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\cg.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\cqrdc.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\cqrsl.c
 # End Source File
 # Begin Source File
 
@@ -469,19 +493,11 @@ SOURCE=.\dzasum.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\eisrsg.c
-# End Source File
-# Begin Source File
-
 SOURCE=.\exit.c
 # End Source File
 # Begin Source File
 
 SOURCE=.\F77_aloc.c
-# End Source File
-# Begin Source File
-
-SOURCE=".\full-dpoco.c"
 # End Source File
 # Begin Source File
 
@@ -518,10 +534,6 @@ SOURCE=.\izamax.c
 # Begin Source File
 
 SOURCE=.\izmax1.c
-# End Source File
-# Begin Source File
-
-SOURCE=".\lbfgs-example.c"
 # End Source File
 # Begin Source File
 
@@ -569,11 +581,11 @@ SOURCE=.\lsame.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\machineparams.c
+SOURCE=.\lsqr.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\main.c
+SOURCE=.\machineparams.c
 # End Source File
 # Begin Source File
 
@@ -693,27 +705,7 @@ SOURCE=.\sig_die.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\slabax.c
-# End Source File
-# Begin Source File
-
-SOURCE=.\slabcm.c
-# End Source File
-# Begin Source File
-
-SOURCE=.\slabfc.c
-# End Source File
-# Begin Source File
-
 SOURCE=.\slacpy.c
-# End Source File
-# Begin Source File
-
-SOURCE=.\slaeig.c
-# End Source File
-# Begin Source File
-
-SOURCE=.\slager.c
 # End Source File
 # Begin Source File
 
@@ -738,10 +730,6 @@ SOURCE=.\slapmt.c
 # Begin Source File
 
 SOURCE=.\slapy2.c
-# End Source File
-# Begin Source File
-
-SOURCE=.\slaran.c
 # End Source File
 # Begin Source File
 
@@ -773,15 +761,7 @@ SOURCE=.\slasv2.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\smvpc.c
-# End Source File
-# Begin Source File
-
 SOURCE=.\snlaso.c
-# End Source File
-# Begin Source File
-
-SOURCE=.\snppla.c
 # End Source File
 # Begin Source File
 
@@ -801,7 +781,11 @@ SOURCE=.\sormr2.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\sortqr.c
+SOURCE=.\sqrdc.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\sqrsl.c
 # End Source File
 # Begin Source File
 
@@ -826,10 +810,6 @@ SOURCE=.\sswap.c
 # Begin Source File
 
 SOURCE=.\stgsja.c
-# End Source File
-# Begin Source File
-
-SOURCE=.\svsort.c
 # End Source File
 # Begin Source File
 
@@ -978,6 +958,14 @@ SOURCE=.\zlassq.c
 # Begin Source File
 
 SOURCE=.\zlatrs.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\zqrdc.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\zqrsl.c
 # End Source File
 # Begin Source File
 
