@@ -31,6 +31,7 @@ doublereal *rdiag, *acnorm, *wa;
     static doublereal ajnorm;
     static integer jp1;
     static doublereal sum;
+    static integer failure = 44;
 
 /*     **********                                                       */
 /*                                                                      */
@@ -104,6 +105,10 @@ doublereal *rdiag, *acnorm, *wa;
 
     /* epsmch is the machine precision. */
     epsmch = dpmpar_(&c__1);
+
+    /* verify that the size of ipvt is at least n */
+    if (lipvt < n)
+        exit_(&failure);
 
     /* compute the initial column norms and initialize several arrays. */
     for (j = 0; j < *n; ++j) {
