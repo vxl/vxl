@@ -26,6 +26,7 @@
 #include <vvid/cmu_1394_camera.h>
 #include <vpro/vpro_video_process_sptr.h>
 #include <vvid/vvid_live_video_tableau.h>
+#include <bgui/bgui_histogram_tableau_sptr.h>
 
 class vgui_window;
 
@@ -55,6 +56,9 @@ class vvid_live_video_manager : public vgui_wrapper_tableau
   //: control video collection
   void start_live_video();
   void stop_live_video();
+
+  //: show/hide histograms
+  void toggle_histogram();
 
   //: capture and save a video sequence (old approach)
   void capture_sequence();
@@ -94,6 +98,7 @@ class vvid_live_video_manager : public vgui_wrapper_tableau
   //flags
   bool init_successful_;
   bool edges_;
+  bool histogram_;
   int sample_;
   unsigned width_;
   unsigned height_;
@@ -101,6 +106,7 @@ class vvid_live_video_manager : public vgui_wrapper_tableau
   vgui_window* win_;
   vcl_vector <bgui_vtol2D_tableau_sptr> vt2Ds_;
   vcl_vector <vvid_live_video_tableau_sptr> vtabs_;
+  vcl_vector <bgui_histogram_tableau_sptr> htabs_;
   cmu_1394_camera_params cp_;
   vil1_memory_image_of< vil1_rgb<unsigned char> > process_rgb_;
   vil1_memory_image_of<unsigned char> process_mono_;

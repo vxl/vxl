@@ -31,6 +31,7 @@
 #include <vpro/vpro_edge_process.h>
 #include <vpro/vpro_region_process.h>
 #include <vpro/vpro_capture_process.h>
+#include <bgui/bgui_histogram_tableau.h>
 
 //static live_video_manager instance
 vvid_live_video_manager *vvid_live_video_manager::instance_ = 0;
@@ -52,6 +53,7 @@ vvid_live_video_manager *vvid_live_video_manager::instance(unsigned num_cameras)
 vvid_live_video_manager::
 vvid_live_video_manager(unsigned num_cameras) :
   cp_(cmu_1394_camera_params()),
+  histogram_(false),
   width_(960),
   height_(480),
   win_(0),
@@ -71,7 +73,7 @@ void vvid_live_video_manager::init()
   //Determine the number of active cameras
   // for now we assume use a pre-defined _N_views
 
-  vgui_grid_tableau_sptr grid = vgui_grid_tableau_new(num_cameras_,1);
+  vgui_grid_tableau_sptr grid = vgui_grid_tableau_new(num_cameras_,2);
   grid->set_grid_size_changeable(true);
   sample_ = 1;
   init_successful_ = true;
@@ -97,6 +99,12 @@ void vvid_live_video_manager::init()
     // make a 2D viewer tableau and add it to the grid
     vgui_viewer2D_tableau_sptr v2d = vgui_viewer2D_tableau_new(vt2D);
     grid->add_at(v2d, cam, 0);
+
+  // make a histogram
+  bgui_histogram_tableau_new htab;
+    htabs_.push_back(htab);
+    vgui_viewer2D_tableau_new viewer(htab);
+  grid->add_at(viewer, cam, 1);
   }
 
   // get the camera paramaters from the last camera (assume are are the same)
@@ -255,6 +263,17 @@ void vvid_live_video_manager::stop_capture()
     vtabs_[i]->stop_capture();
 }
 
+void vvid_live_video_manager::toggle_histogram()
+{
+  if(histogram_){
+    histogram_ = false;
+    for (unsigned i=0; i<num_cameras_; ++i)
+      htabs_[i]->clear();
+  }
+  else
+    histogram_ = true;
+}
+
 void vvid_live_video_manager::display_topology()
 {
   for (unsigned i=0; i<num_cameras_; ++i)
@@ -295,6 +314,9 @@ void vvid_live_video_manager::run_frames()
     for (unsigned i=0; i<num_cameras_; ++i)
     {
       vtabs_[i]->update_frame();
+
+      if(histogram_)
+        htabs_[i]->update(vtabs_[i]->get_rgb_frame());
 
       if (!cp_.rgb_&&video_process_)//i.e. grey scale
       {
