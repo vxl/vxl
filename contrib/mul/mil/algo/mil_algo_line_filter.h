@@ -36,7 +36,7 @@ public:
   void light_lines_3x3(mil_image_2d_of<unsigned char>& line_dir,
                          mil_image_2d_of<float>& line_str,
                          const mil_image_2d_of<Type>& image,
-                         float edge_thresh=0);
+                         float edge_thresh=0.1);
 
     //: Find line like structures in image (dark lines on light backgrounds)
     //  On exit line_str contains line strength at each pixel,
@@ -46,7 +46,7 @@ public:
   void dark_lines_3x3(mil_image_2d_of<unsigned char>& line_dir,
                          mil_image_2d_of<float>& line_str,
                          const mil_image_2d_of<Type>& image,
-                         float edge_thresh=0);
+                         float edge_thresh=0.1);
 
     //: Find line like structures in image (light lines on dark backgrounds)
     //  On exit line_str contains line strength at each pixel,
@@ -57,7 +57,7 @@ public:
   void light_lines_5x5(mil_image_2d_of<unsigned char>& line_dir,
                          mil_image_2d_of<float>& line_str,
                          const mil_image_2d_of<Type>& image,
-                         float edge_thresh=0);
+                         float edge_thresh=0.1);
 
     //: Find line like structures in image (dark lines on light backgrounds)
     //  On exit line_str contains line strength at each pixel,
@@ -68,7 +68,7 @@ public:
   void dark_lines_5x5(mil_image_2d_of<unsigned char>& line_dir,
                          mil_image_2d_of<float>& line_str,
                          const mil_image_2d_of<Type>& image,
-                         float edge_thresh=0);
+                         float edge_thresh=0.1);
 
 };
 

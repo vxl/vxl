@@ -50,6 +50,8 @@ void test_algo_line_filter_byte()
   mil_image_2d_of<unsigned char> line_dir;
   mil_image_2d_of<float> line_str;
 
+  vcl_cout<<"----- light_lines_3x3() -------"<<vcl_endl;
+
   filter.light_lines_3x3(line_dir,line_str,image);
 
   print_out(n, "image:", image, "line_dir:", line_dir, "line_str:", line_str);
@@ -96,6 +98,8 @@ void test_algo_line_filter_byte()
 
 
   // ======================= dark_lines_3x3 ================
+  vcl_cout<<"----- dark_lines_3x3() -------"<<vcl_endl;
+
   image.fill(white);
   for (int i=0;i<n;++i) image(i,5)= black;
   filter.dark_lines_3x3(line_dir,line_str,image);
@@ -143,6 +147,8 @@ void test_algo_line_filter_byte()
   TEST("Reverse line str",vcl_fabs(line_str(5,4)-white)<1e-4,true);
 
   // ======================= light_lines_5x5 ================
+  vcl_cout<<"----- light_lines_5x5() -------"<<vcl_endl;
+
   image.fill(black);
   for (int i=0;i<n;++i) image(i,5)= white;
   filter.light_lines_5x5(line_dir,line_str,image);
@@ -188,6 +194,8 @@ void test_algo_line_filter_byte()
   TEST("Reverse line str",vcl_fabs(line_str(5,4)-white)<1e-4,true);
 
   // ======================= dark_lines_5x5 ================
+  vcl_cout<<"----- dark_lines_5x5() -------"<<vcl_endl;
+
   image.fill(white);
   for (int i=0;i<n;++i) image(i,5)= black;
 

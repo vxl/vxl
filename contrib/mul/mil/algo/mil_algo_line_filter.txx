@@ -250,10 +250,10 @@ void mil_algo_line_filter<Type>::light_lines_5x5(mil_image_2d_of<unsigned char>&
   int i2b = -1*i2c;
   int i2d = 2*i2c;
 
+  int i3a = -2*ystep;
+  int i3b = -1*ystep;
   int i3c = ystep;
-  int i3a = -2*i3c;
-  int i3b = -1*i3c;
-  int i3d = 2*i3c;
+  int i3d = 2*ystep;
 
   int i4c = xstep-ystep;
   int i4a = -2*i4c;
@@ -298,8 +298,8 @@ void mil_algo_line_filter<Type>::light_lines_5x5(mil_image_2d_of<unsigned char>&
       i_row+=xstep;
     }
     // Zero the last elements in the rows
-    d_row[0]=0; d_row[1]=0;
-    s_row[0]=0; s_row[1]=0;
+    d_row[0]=0; d_row[d_xstep]=0;
+    s_row[0]=0; s_row[s_xstep]=0;
 
     d_data += d_ystep;
     s_data += s_ystep;
@@ -358,10 +358,10 @@ void mil_algo_line_filter<Type>::dark_lines_5x5(mil_image_2d_of<unsigned char>& 
   int i2b = -1*i2c;
   int i2d = 2*i2c;
 
+  int i3a = -2*ystep;
+  int i3b = -1*ystep;
   int i3c = ystep;
-  int i3a = -2*i3c;
-  int i3b = -1*i3c;
-  int i3d = 2*i3c;
+  int i3d = 2*ystep;
 
   int i4c = xstep-ystep;
   int i4a = -2*i4c;
@@ -406,8 +406,8 @@ void mil_algo_line_filter<Type>::dark_lines_5x5(mil_image_2d_of<unsigned char>& 
       i_row+=xstep;
     }
     // Zero the last elements in the rows
-    d_row[0]=0; d_row[1]=0;
-    s_row[0]=0; s_row[1]=0;
+    d_row[0]=0; d_row[d_xstep]=0;
+    s_row[0]=0; s_row[s_xstep]=0;
 
     d_data += d_ystep;
     s_data += s_ystep;
