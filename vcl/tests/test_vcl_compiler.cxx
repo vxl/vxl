@@ -1,6 +1,30 @@
+// this *does* work for SGI CC 7.2.1 -- fsm
+
+template <class T>
+struct X
+{
+  int x;
+  X();
+  // declaration of static template member.
+  static X<T> *pl;
+};
+
+template <class T>
+X<T>::X() : x(1728) { }
+
+// definition (not specialization) of static template member.
+template <class T>
+X<T> *X<T>::pl = 0;
+
+// explicit instantiation of class also instantiates statics.
+template struct X<int>;
+
+// ------------------------------------------------
+
 #include <vcl_iostream.h>
 
 void vcl_test_implicit_instantiation(int n);
+
 
 int main()
 {
@@ -11,7 +35,7 @@ int main()
   
   vcl_test_implicit_instantiation(100);
   
-  return 0;
+  return (int) X<int>::pl;
 }
 
 #if defined(VCL_USE_IMPLICIT_TEMPLATES) && VCL_USE_IMPLICIT_TEMPLATES
