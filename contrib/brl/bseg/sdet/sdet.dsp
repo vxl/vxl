@@ -122,6 +122,9 @@ SOURCE=.\sdet_region_proc.cxx
 # Begin Source File
 SOURCE=.\sdet_region_proc_params.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+sdet_region_edge-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -151,6 +154,9 @@ SOURCE=.\sdet_region_proc.h
 # End Source File
 # Begin Source File
 SOURCE=.\sdet_region_proc_params.h
+# End Source File
+SOURCE=.\sdet_region_edge_sptr.h
+# Begin Source File
 # End Source File
 # End Group
 # End Target
