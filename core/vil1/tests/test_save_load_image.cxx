@@ -20,6 +20,7 @@
 #include <vcl_cstring.h>
 #include <vcl_cstdio.h> // tmpnam()
 #include <vcl_iostream.h>
+#include <vcl_iomanip.h> // vcl_flush
 #include <vcl_vector.h>
 
 #include <vpl/vpl_unistd.h> // vpl_unlink()
@@ -36,7 +37,7 @@
 #endif
 
 #if 0
-#define ww vcl_cout << "reached " __FILE__ ":" << __LINE__ << vcl_endl
+#define ww vcl_cout << "reached " __FILE__ ":" << __LINE__ << vcl_endl << vcl_flush
 #endif
 
 //: Test to see if all the pixels in two images are equal
@@ -65,21 +66,21 @@ bool test_image_equal(char const* type_name,
   TEST ("Image dimensions", sizex == sizex2 && sizey == sizey2, true);
   if (sizex != sizex2 || sizey != sizey2)
   {
-    vcl_cout << type_name << ": sizes are " << sizex2 << " x " << sizey2 << vcl_endl;
+    vcl_cout << type_name << ": sizes are " << sizex2 << " x " << sizey2 << vcl_endl << vcl_flush;
     return false;
   }
 
   TEST ("Image pixel sizes", cell_bits, cell_bits2);
   if (cell_bits != cell_bits2)
   {
-    vcl_cout << type_name << ": pixel size is " << cell_bits2 << vcl_endl;
+    vcl_cout << type_name << ": pixel size is " << cell_bits2 << vcl_endl << vcl_flush;
     return false;
   }
 
   TEST ("Image format", image.component_format(), image2.component_format());
   if (image.component_format() != image2.component_format())
   {
-    vcl_cout << type_name << ": format is " << image2.component_format() << vcl_endl;
+    vcl_cout << type_name << ": format is " << image2.component_format() << vcl_endl << vcl_flush;
     return false;
   }
 
@@ -92,7 +93,7 @@ bool test_image_equal(char const* type_name,
       image.get_size_bytes() != num_bytes ||
       image2.get_size_bytes() != num_bytes2 )
   {
-    vcl_cout << type_name << num_bits2 << "bits, " << image2.get_size_bytes() << " bytes\n";
+    vcl_cout << type_name << num_bits2 << "bits, " << image2.get_size_bytes() << " bytes\n" << vcl_flush;
     return false;
   }
 
@@ -116,9 +117,9 @@ bool test_image_equal(char const* type_name,
 #ifdef DEBUG
       if (++bad < 20)
         vcl_cout << "\n byte " << i <<  " differs: " << (int)image_buf[i] << " --> "
-             << (int) image_buf2[i];
+                 << (int) image_buf2[i] << vcl_flush;
 #else
-      ++bad; vcl_cout << ".";
+      ++bad; vcl_cout << "." << vcl_flush;
 #endif
     }
   }
@@ -126,7 +127,7 @@ bool test_image_equal(char const* type_name,
   TEST ("pixelwise comparison", bad, 0);
   if (bad)
   {
-    vcl_cout << type_name << ": number of unequal pixels: "  << bad << vcl_endl;
+    vcl_cout << type_name << ": number of unequal pixels: "  << bad << vcl_endl << vcl_flush;
     return false;
   }
   else
@@ -139,6 +140,9 @@ void vil_test_image_type(char const* type_name, // type for image to read and wr
                          vil_image const & image, // test image to save and restore
                          bool exact = true) // require read back image identical
 {
+  int n = image.bits_per_component() * image.components();
+  vcl_cout << "=== Start testing " << type_name << " (" << n << " bpp) ===\n" << vcl_flush;
+
   // Step 1) Write the image out to disk
   //
   // create a file name
@@ -146,7 +150,7 @@ void vil_test_image_type(char const* type_name, // type for image to read and wr
   fname += ".";
   if (type_name) fname += type_name;
 
-  vcl_cout << "vil_test_image_type: Save to [" << fname << "]\n";
+  vcl_cout << "vil_test_image_type: Save to [" << fname << "]\n" << vcl_flush;
 
   // Write image to disk
   bool tst = vil_save(image, fname.c_str(), type_name);
@@ -170,7 +174,7 @@ void vil_test_image_type(char const* type_name, // type for image to read and wr
   TEST ("compare image file formats", tst, true);
   if (!tst)
     vcl_cout << "read back image type is " << image2.file_format()
-             << " instead of written " << type_name << vcl_endl;
+             << " instead of written " << type_name << vcl_endl << vcl_flush;
   else
     test_image_equal(type_name, image, image2, exact);
 
