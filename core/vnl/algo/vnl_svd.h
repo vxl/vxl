@@ -32,7 +32,7 @@
 //  form a basis for range of M, while the columns of V corresponding to the
 //  zero singular values are the nullspace.
 //
-//  The SVD is computed at construction time, and enquiries may then be made
+//  The SVD is computed at construction time, and inquiries may then be made
 //  of the SVD.  In particular, this allows easy access to multiple
 //  right-hand-side solves without the bother of putting all the RHS's into a
 //  Matrix.
