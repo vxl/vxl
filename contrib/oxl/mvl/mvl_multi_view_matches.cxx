@@ -47,7 +47,7 @@ void mvl_multi_view_matches::set_views(vcl_vector<int> const& views)
 void mvl_multi_view_matches::set_views(int start, int end, int step)
 {
   views_.clear();
-  for (int i=start; i <= end; ++step)
+  for (int i=start; i <= end; i+=step)
     views_.push_back(i);
   init();
 }
@@ -128,8 +128,8 @@ void mvl_multi_view_matches::add_track(vcl_vector<int> const& views, vcl_vector<
       Map_iterator m=corner_to_track_maps_[internal_frames[i]].find(corners[i]);
       if (m != corner_to_track_maps_[internal_frames[i]].end()) {
         if ((*m).second >= tracks_.size()) {
-          vcl_cerr << __FILE__ << " : URK!" << internal_frames[i] << " "
-                   << corners[i] << " " << (*m).second << " " << tracks_.size() << vcl_endl;
+          vcl_cerr << __FILE__ << " : URK!" << internal_frames[i] << ' '
+                   << corners[i] << ' ' << (*m).second << ' ' << tracks_.size() << vcl_endl;
           vcl_abort();
         }
         friend_tracks.insert((*m).second);
@@ -228,7 +228,7 @@ vcl_ostream& mvl_multi_view_matches::print(vcl_ostream& s) const
   for (unsigned int i=0; i < tracks_.size(); ++i) {
     s << "Track " << i << " : ";
     for (Map::const_iterator m = tracks_[i].begin(); m != tracks_[i].end(); ++m)
-      s << "(" << views_[(*m).first] << "," << (*m).second << ") ";
+      s << '(' << views_[(*m).first] << ',' << (*m).second << ") ";
     s << vcl_endl;
   }
   return s;
@@ -246,7 +246,7 @@ vcl_istream& mvl_multi_view_matches::read(vcl_istream& s)
 
   vcl_cerr << __FILE__ << " : reading views ( ";
   for (unsigned int i=0; i < views_.size(); ++i)
-    vcl_cerr << views_[i] << " ";
+    vcl_cerr << views_[i] << ' ';
   vcl_cerr << ")\n";
 
   init();
@@ -277,13 +277,13 @@ vcl_ostream& mvl_multi_view_matches::write(vcl_ostream& s) const
 
   // Output the view indices on the first line
   for (unsigned int i=0; i < views_.size(); ++i)
-    s << i << " ";
+    s << i << ' ';
   s << vcl_endl;
 
   // Now output the (track, internal frame, corner_index) triplets on each line
   for (unsigned int i=0; i < tracks_.size(); ++i)
     for (Map::const_iterator m = tracks_[i].begin(); m != tracks_[i].end(); ++m)
-      s << i << " " << (*m).first << " " << (*m).second << vcl_endl;
+      s << i << ' ' << (*m).first << ' ' << (*m).second << vcl_endl;
 
   vcl_cerr << __FILE__ << " : wrote " << tracks_.size() << " tracks\n";
 
