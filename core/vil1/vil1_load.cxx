@@ -50,6 +50,12 @@ vil_image vil_load_raw(char const* filename)
 
   vil_stream *is = new vil_stream_fstream(filename, "r+");
   is->ref();
+  // the file might not be writable.
+  if (! is->ok()) {
+    is->unref();
+    is = new vil_stream_fstream(filename, "r");
+    is->ref();
+  }
   // current block scope is owner of stream.
 
   if (!is->ok()) {
