@@ -1,3 +1,6 @@
+#ifndef vgl_homg_operators_3d_txx_
+#define vgl_homg_operators_3d_txx_
+
 #include <vcl_iostream.h>
 
 #include <vcl_list.h>
@@ -26,7 +29,7 @@ double vgl_homg_operators_3d<Type>::angle_between_oriented_lines (const vgl_homg
   double n = dir1.x()*dir1.x()+dir1.y()*dir1.y()+dir1.z()*dir1.z();
   n       *= dir2.x()*dir2.x()+dir2.y()*dir2.y()+dir2.z()*dir2.z();
   // dot product of unit direction vectors:
-  n = (dir1.x()*dir2.x()+dir1.y()*dir2.y()+dir1.z()*dir2.z())/sqrt(n);
+  n = (dir1.x()*dir2.x()+dir1.y()*dir2.y()+dir1.z()*dir2.z())/vcl_sqrt(n);
   return vcl_acos(n);
 }
 
@@ -34,7 +37,7 @@ double vgl_homg_operators_3d<Type>::angle_between_oriented_lines (const vgl_homg
 //-----------------------------------------------------------------------------
 
 //: Return the squared distance between the points
-// 
+//
 template <class Type>
 Type vgl_homg_operators_3d<Type>::distance_squared (const vgl_homg_point_3d<Type>& point1,
                                                     const vgl_homg_point_3d<Type>& point2)
@@ -52,13 +55,12 @@ Type vgl_homg_operators_3d<Type>::distance_squared (const vgl_homg_point_3d<Type
   mag += d*d;
 
   return mag;
-
 }
 
 //-----------------------------------------------------------------------------
 //
 //: Return the Eucidean distance between the points
-// 
+//
 template <class Type>
 Type vgl_homg_operators_3d<Type>::distance(const vgl_homg_point_3d<Type>&point1,
                                            const vgl_homg_point_3d<Type>&point2)
@@ -69,7 +71,7 @@ Type vgl_homg_operators_3d<Type>::distance(const vgl_homg_point_3d<Type>&point1,
 //-----------------------------------------------------------------------------
 //
 //: Return the intersection point of the line and plane
-// 
+//
 template <class Type>
 vgl_homg_point_3d<Type> vgl_homg_operators_3d<Type>::intersect_line_and_plane (
                                   const vgl_homg_line_3d &line,
@@ -131,7 +133,7 @@ vgl_homg_operators_3d<Type>::lines_to_point (const vcl_vector<vgl_homg_line_3d >
 //-----------------------------------------------------------------------------
 //
 //: Return the squared perpendicular distance between the line and point
-// 
+//
 template <class Type>
 double
 vgl_homg_operators_3d<Type>::perp_distance_squared (const vgl_homg_line_3d& l,
@@ -144,7 +146,7 @@ vgl_homg_operators_3d<Type>::perp_distance_squared (const vgl_homg_line_3d& l,
 //-----------------------------------------------------------------------------
 //
 //: Return the line which is perpendicular to l and passes through p.
-// 
+//
 template <class Type>
 vgl_homg_operators_3d<Type>::vgl_homg_line_3d
 vgl_homg_operators_3d<Type>::perp_line_through_point (const vgl_homg_line_3d& l,
@@ -160,7 +162,7 @@ vgl_homg_operators_3d<Type>::perp_line_through_point (const vgl_homg_line_3d& l,
 //-----------------------------------------------------------------------------
 //
 //: Compute the perpendicular projection point of p onto l.
-// 
+//
 template <class Type>
 vgl_homg_point_3d<Type>
 vgl_homg_operators_3d<Type>::perp_projection (const vgl_homg_line_3d& l,
@@ -181,7 +183,7 @@ vgl_homg_operators_3d<Type>::perp_projection (const vgl_homg_line_3d& l,
 //-----------------------------------------------------------------------------
 //
 //: Return the intersection line of the planes
-// 
+//
 template <class Type>
 vgl_homg_operators_3d<Type>::vgl_homg_line_3d
 vgl_homg_operators_3d<Type>::planes_to_line (const vgl_homg_plane_3d<Type>& plane1,
@@ -392,3 +394,5 @@ double vgl_homg_operators_3d<Type>::CrossRatio(const vgl_homg_point_3d<Type>& a,
     vcl_cerr << "CrossRatio not defined: three of the given points coincide\n";
   return n/m;
 }
+
+#endif // vgl_homg_operators_3d_txx_
