@@ -1,22 +1,17 @@
+// This is mul/mil/algo/mil_algo_gaussian_filter.txx
 #ifndef mil_algo_gaussian_filter_txx_
 #define mil_algo_gaussian_filter_txx_
-
 //: \file
 //  \brief smooth images
 //  \author Ian Scott
 
-
 #include "mil_algo_gaussian_filter.h"
 #include <vcl_cstdlib.h>
-#include <vcl_cassert.h>
-#include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
 #include <vsl/vsl_indent.h>
 #include <mbl/mbl_gamma.h>
-#include <mil/mil_bilin_interp_2d.h>
 #include <mil/mil_image_2d_of.h>
-#include <mil/mil_image_pyramid.h>
 
 //=======================================================================
 
@@ -59,7 +54,6 @@ void mil_algo_gaussian_filter<srcT, destT>::filter(
   // Reduce plane-by-plane
 
 
-
   for (int i=0;i<n_planes;++i)
     filter(dest_im.plane(i),dest_im.ystep(),
                  src_im.plane(i),nx,ny,ystep);
@@ -69,7 +63,6 @@ void mil_algo_gaussian_filter<srcT, destT>::filter(
   workb_.print_all(vcl_cout);
   vsl_indent_dec(vcl_cout);
 #endif
-
 }
 
 
@@ -124,7 +117,7 @@ void mil_algo_gaussian_filter<srcT, destT>::filter(
   int work_ystep = worka_.ystep();
 
   // First perform horizontal smoothing
-  for (int y=0;y<ny;y++)
+  for (unsigned int y=0;y<ny;y++)
   {
     destT* worka_row = worka_im + y*work_ystep;
     const srcT* src_col3  = src_im + y*src_ystep;
@@ -165,7 +158,7 @@ void mil_algo_gaussian_filter<srcT, destT>::filter(
 
 //  worka_.print_all(vcl_cout);
   // Now perform vertical smoothing
-  for (int y=2;y<ny-2;y++)
+  for (unsigned int y=2;y<ny-2;y++)
   {
     destT* dest_row = dest_im + y*dest_ystep;
 
@@ -175,7 +168,7 @@ void mil_algo_gaussian_filter<srcT, destT>::filter(
     const destT* worka_row4  = worka_row3 + work_ystep;
     const destT* worka_row5  = worka_row3 + 2 * work_ystep;
 
-    for (int x=0; x<nx; x++)
+    for (unsigned int x=0; x<nx; x++)
       dest_row[x] = l_round(  filt2_ * worka_row1[x]
                        + filt1_ * worka_row2[x]
                        + filt0_ * worka_row3[x]
@@ -200,7 +193,7 @@ void mil_algo_gaussian_filter<srcT, destT>::filter(
   destT* dest_row_bottom    = dest_im;
   destT* dest_row_next_bottom  = dest_row_bottom + work_ystep;
 
-  for (int x=0;x<nx;x++)
+  for (unsigned int x=0;x<nx;x++)
   {
     dest_row_top[x] = l_round(  filt_edge0_ * worka_row_top_5[x]
                 + filt_edge1_ * worka_row_top_4[x]
@@ -222,7 +215,6 @@ void mil_algo_gaussian_filter<srcT, destT>::filter(
   }
 
 //  dest_im.print_all(vcl_cout);
-
 }
 
 
@@ -259,7 +251,7 @@ void mil_algo_gaussian_filter<srcT, destT>::set_width(double sigma)
   filt0_ = filt0_ / five_tap_total;
   filt1_ = filt1_ / five_tap_total;
   filt2_ = filt2_ / five_tap_total;
-};
+}
 
 
 #endif // mil_algo_gaussian_filter_txx_
