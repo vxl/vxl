@@ -23,6 +23,9 @@ SUBDIRS += vgl
 # image
 SUBDIRS += vil
 
+# image processing
+SUBDIRS += vipl
+
 # video
 SUBDIRS += vvl
 
