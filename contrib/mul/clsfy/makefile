@@ -14,6 +14,10 @@ SOURCES += clsfy_parzen_builder.cxx
 SOURCES += clsfy_random_builder.cxx
 SOURCES += clsfy_random_classifier.cxx
 SOURCES += clsfy_rbf_parzen.cxx
+SOURCES += clsfy_binary_threshold_1d.cxx
+SOURCES += clsfy_builder_1d.cxx
+SOURCES += clsfy_classifier_1d.cxx
+SOURCES += clsfy_simple_adaboost.cxx
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
