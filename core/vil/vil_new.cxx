@@ -16,7 +16,6 @@
 #include "vil2_new.h"
 
 #include <vcl_cstring.h>
-#include <vcl_cassert.h>
 
 #include <vil2/vil2_file_format.h>
 #include <vil/vil_stream_fstream.h>
