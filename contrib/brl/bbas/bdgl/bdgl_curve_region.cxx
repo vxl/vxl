@@ -3,7 +3,7 @@
 // \file
 // \author P.L. Bazin
 //-----------------------------------------------------------------------------
-#include "bdgl_curve_region.h"
+#include <bdgl/bdgl_curve_region.h>
 #include <vdgl/vdgl_edgel.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_edgel_chain_sptr.h>

@@ -1,6 +1,6 @@
 //:
 // \file
-#include "bdgl_curve_description.h"
+#include <bdgl/bdgl_curve_description.h>
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
 #include <vnl/vnl_math.h>

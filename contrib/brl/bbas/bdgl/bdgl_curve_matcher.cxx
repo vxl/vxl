@@ -3,7 +3,7 @@
 // \file
 // \author P.L. Bazin
 //-----------------------------------------------------------------------------
-#include "bdgl_curve_matcher.h"
+#include <bdgl/bdgl_curve_matcher.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_edgel_chain_sptr.h>
 #include <bdgl/bdgl_curve_tracker.h>
