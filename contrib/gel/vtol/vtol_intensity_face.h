@@ -39,6 +39,7 @@
 #include <vdgl/vdgl_digital_region.h>
 #include <vtol/vtol_topology_object.h>
 #include <vtol/vtol_face_2d.h>
+#include <vtol/vtol_intensity_face_sptr.h>
 
 class vtol_intensity_face : public vtol_face_2d
 {
@@ -47,14 +48,15 @@ class vtol_intensity_face : public vtol_face_2d
   vdgl_digital_region* region_;
  public:
   //Constructors---------------------------------------------------------------
+  vtol_intensity_face(vtol_face_2d_sptr const& face);
   vtol_intensity_face(vcl_vector<vtol_edge_sptr>* edges);
-  vtol_intensity_face(one_chain_list& one_chains);
+  vtol_intensity_face(one_chain_list const& one_chains);
   //  vtol_intensity_face(vcl_vector<vtol_edge_sptr>* edges, vdgl_digital_region& dr);
   vtol_intensity_face(vcl_vector<vtol_one_chain_sptr>* chains, vdgl_digital_region const& dr);
-  vtol_intensity_face(vtol_intensity_face const& iface);
-  vtol_intensity_face(vtol_face_2d& face, int npts, float const* xp, float const* yp,
+  vtol_intensity_face(vtol_intensity_face_sptr const& iface);
+  vtol_intensity_face(vtol_face_2d_sptr const& face, int npts, float const* xp, float const* yp,
                       unsigned short const* pix);
-  vtol_intensity_face(vtol_face_2d& face, int npts, float const* xp, float const* yp,
+  vtol_intensity_face(vtol_face_2d_sptr const& face, int npts, float const* xp, float const* yp,
                       float const* zp, unsigned short const* pix);
   ~vtol_intensity_face();
 
@@ -81,16 +83,24 @@ class vtol_intensity_face : public vtol_face_2d
   void ComputeIntensityStdev(){region_->ComputeIntensityStdev();}
   void InitPixelArrays() { region_->InitPixelArrays(); }
   void InsertInPixelArrays(float x, float y, unsigned short pix){region_->InsertInPixelArrays(x,y,pix);}
+
   float const* Xj() const { return region_->Xj(); }
   float const* Yj() const { return region_->Yj(); }
+  //:need to deprecate Z access since intensity_face is strictly 2d in VXL
   float const* Zj() const { return region_->Zj(); }
   unsigned short const* Ij() const { return region_->Ij(); }
 
   int Npix()const {return region_->Npix(); }
   float X() const { return region_->X(); }
   float Y() const { return region_->Y(); }
+  //:need to deprecate Z access since intensity_face is strictly 2d in VXL
   float Z() const { return region_->Z(); }
   unsigned short I() const {return region_->I();}
+
+  void set_X(float x){region_->set_X(x); }
+  void set_Y(float y){region_->set_Y(y); }
+  void set_I(unsigned short I){region_->set_I(I);}
+
   void reset() const {region_->reset();}
   bool next() const {return region_->next();}
   float Xo()const { return region_->Xo(); }

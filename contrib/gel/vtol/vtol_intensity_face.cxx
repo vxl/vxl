@@ -17,6 +17,14 @@
 //---------------------------------------------------------------
 //: Constructors
 //
+//----------------------------------------------------------------
+//: A constructor from an existing face
+vtol_intensity_face::vtol_intensity_face(vtol_face_2d_sptr const& f)
+  :vtol_face_2d(f),
+   region_(new vdgl_digital_region())
+{
+}
+
 #if 0
 // Looks like we don't need this -tpk
 //----------------------------------------------------------------
@@ -30,9 +38,9 @@ vtol_intensity_face::vtol_intensity_face(vcl_vector<vtol_edge*>* edges)
 #endif
 
 //: Copy constructor
-vtol_intensity_face::vtol_intensity_face(vtol_intensity_face const& f)
-  :vtol_face_2d(const_cast<vtol_face_2d*>(f.cast_to_face_2d())),
-   region_(new vdgl_digital_region(f.Npix(), f.Xj(), f.Yj(), f.Zj(), f.Ij()))
+vtol_intensity_face::vtol_intensity_face(vtol_intensity_face_sptr const& f)
+  :vtol_face_2d(f->cast_to_face_2d()),
+   region_(new vdgl_digital_region(f->Npix(), f->Xj(), f->Yj(), f->Zj(), f->Ij()))
 {
 }
 
@@ -41,10 +49,11 @@ vtol_intensity_face::vtol_intensity_face(vtol_intensity_face const& f)
 //    The list is structured with the outer boundary as the first
 //    element of one_chains and the interior hole boundaries as
 //    the remaining elements of the list.
-vtol_intensity_face::vtol_intensity_face(one_chain_list& one_chains)
+vtol_intensity_face::vtol_intensity_face(one_chain_list const& one_chains)
   :vtol_face_2d(one_chains), region_(new vdgl_digital_region())
 {
 }
+
 
 #if 0
 //: Uses given 2-d vtol_edges (not deep copy) with intensity information from dr.
@@ -64,16 +73,16 @@ vtol_intensity_face::vtol_intensity_face(vcl_vector<vtol_one_chain_sptr>* chains
 //    These constructors carry out a deep copy of the vtol_face_2d. Adjacent
 //    face topology is lost.
 
-vtol_intensity_face::vtol_intensity_face(vtol_face_2d& face, int npts, float const* xp, float const* yp,
+vtol_intensity_face::vtol_intensity_face(vtol_face_2d_sptr const& face, int npts, float const* xp, float const* yp,
                                          unsigned short const* pix)
-  :vtol_face_2d(const_cast<vtol_face_2d*>(face.cast_to_face_2d())),
+  :vtol_face_2d(face),
    region_(new vdgl_digital_region(npts, xp, yp, pix))
 {
 }
 
-vtol_intensity_face::vtol_intensity_face(vtol_face_2d& face, int npts, float const* xp, float const* yp,
+vtol_intensity_face::vtol_intensity_face(vtol_face_2d_sptr const& face, int npts, float const* xp, float const* yp,
                                          float const* zp, unsigned short const* pix)
-  :vtol_face_2d(const_cast<vtol_face_2d*>(face.cast_to_face_2d())),
+  :vtol_face_2d(face),
    region_(new vdgl_digital_region(npts, xp, yp, zp, pix))
 {
 }
@@ -89,7 +98,8 @@ vtol_intensity_face::~vtol_intensity_face()
 //---------------------------------------------------------------------------
 vsol_spatial_object_2d_sptr vtol_intensity_face::clone(void) const
 {
-  return new vtol_intensity_face(*this);
+	vtol_intensity_face_sptr f = (vtol_intensity_face*)this;
+  return new vtol_intensity_face(f);
 }
 
 //----------------------------------------------------
