@@ -8,9 +8,9 @@ void vdtop_set_structure_from_digital_graph(TMap & res,
                                             const vil_image_view<vdtop_8_neighborhood_mask> & mask,
                                             int nb_vertices, int nb_edges, vmap_2_map_tag)
 {
-  int plane = 0 ;
+  int plane = 0;
 
-  unsigned ni = mask.ni(),nj = mask.nj(),np = mask.nplanes(), nil=ni-1, njl=nj-1;
+  unsigned ni = mask.ni(), nj = mask.nj();
   // Precompute steps
   vcl_ptrdiff_t istepM=mask.istep(),jstepM=mask.jstep(),pstepM = mask.planestep();
   vcl_ptrdiff_t movesM[8] ;
@@ -26,9 +26,10 @@ void vdtop_set_structure_from_digital_graph(TMap & res,
   // build res
   res.initialise_darts(nb_edges*2) ;
 
-  int dart[mask.ni()][4] ;
-  for (int j=0; j<mask.ni(); j++)
+  int** dart = new int*[ni];
+  for (unsigned int j=0; j<ni; ++j)
   {
+    dart[j] = new int[4];
     dart[j][0]=dart[j][1]=dart[j][2]=dart[j][3]=-1 ;
   }
 
@@ -38,14 +39,14 @@ void vdtop_set_structure_from_digital_graph(TMap & res,
   const vdtop_8_neighborhood_mask* planeM=mask.top_left_ptr() ;
   planeM += plane*pstepM ;
   {
-    const vdtop_8_neighborhood_mask* rowM   = planeM, *current_mask;
+    const vdtop_8_neighborhood_mask* rowM = planeM, *current_mask;
 
     for (unsigned j=0;j<nj;j++,rowM+=jstepM)
     {
       int dart3=-1 ;
 
       current_mask=rowM;
-      for (int i=0; i<ni; ++i, current_mask+=istepM)
+      for (unsigned int i=0; i<ni; ++i, current_mask+=istepM)
       {
         int k=0 ;
         int first=-1, last=-1 ;
@@ -99,6 +100,9 @@ void vdtop_set_structure_from_digital_graph(TMap & res,
       }
     }
   }
+  for (unsigned int j=0; j<ni; j++)
+    delete[] dart[j];
+  delete[] dart;
 }
 
 template <class TMap>
@@ -108,7 +112,7 @@ void vdtop_set_structure_from_digital_graph(TMap & res,
 {
   int plane = 0 ;
 
-  unsigned ni = mask.ni(),nj = mask.nj(),np = mask.nplanes(), nil=ni-1, njl=nj-1;
+  unsigned ni = mask.ni(), nj = mask.nj();
   // Precompute steps
   vcl_ptrdiff_t istepM=mask.istep(),jstepM=mask.jstep(),pstepM = mask.planestep();
   vcl_ptrdiff_t movesM[8] ;
@@ -126,9 +130,10 @@ void vdtop_set_structure_from_digital_graph(TMap & res,
   res.initialise_darts(nb_edges*2) ;
   res.initialise_vertices(nb_vertices) ;
 
-  int dart[mask.ni()][4] ;
-  for (int j=0; j<mask.ni(); j++)
+  int** dart = new int*[ni];
+  for (unsigned int j=0; j<ni; ++j)
   {
+    dart[j] = new int[4];
     dart[j][0]=dart[j][1]=dart[j][2]=dart[j][3]=-1 ;
   }
 
@@ -139,14 +144,14 @@ void vdtop_set_structure_from_digital_graph(TMap & res,
   const vdtop_8_neighborhood_mask* planeM=mask.top_left_ptr() ;
   planeM += plane*pstepM ;
   {
-    const vdtop_8_neighborhood_mask* rowM   = planeM, *current_mask;
+    const vdtop_8_neighborhood_mask* rowM = planeM, *current_mask;
 
     for (unsigned j=0;j<nj;j++,rowM+=jstepM)
     {
       int dart3=-1 ;
 
       current_mask=rowM;
-      for (int i=0; i<ni; ++i, current_mask+=istepM)
+      for (unsigned int i=0; i<ni; ++i, current_mask+=istepM)
       {
         int k=0 ;
         int first=-1, last=-1 ;
@@ -208,6 +213,9 @@ void vdtop_set_structure_from_digital_graph(TMap & res,
     res.set_edge_cycles() ;
     res.set_face_cycles() ;
   }
+  for (unsigned int j=0; j<ni; j++)
+    delete[] dart[j];
+  delete[] dart;
 }
 
 #endif // vdtop_set_structure_from_digital_graph_txx_
