@@ -23,7 +23,7 @@
 #define INVALID_TEXTURE_NAME -1
 
 #define mb_jigerry_pokery(a,b) ((a/b)+(a%b ? 1:0))
-#define mb_is_valid(x) ((x) != INVALID_TEXTURE_NAME)
+#define mb_is_valid(x) (int(x) != INVALID_TEXTURE_NAME)
 
 bool debug = false;
 vgui_cache_wizard *vgui_cache_wizard::instance_ = 0;
