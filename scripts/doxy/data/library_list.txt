@@ -11,7 +11,7 @@
 # package: vcl :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl Cross platform STL library
 # . vcl vcl_ build
 
-search: ../search_vxl.html Search this Documentation Tree.
+search: http://www.isbe.man.ac.uk/search_vxl.html Search this Documentation Tree.
 
 
 book: core : VXL overview documentation
