@@ -32,7 +32,7 @@ include ${IUEROOT}/config/top-params.mk
 #######################################
 
 ifndef NOTEST
-SUBDIRS += tests examples
+SUBDIRS += tests
 endif
 
 ######################################
