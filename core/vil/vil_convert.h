@@ -815,7 +815,7 @@ inline vil_image_view_base_sptr vil_convert_to_grey_using_average(
       return vil_image_view_base_sptr(new vil_image_view<T >(dest)); }
 macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
 macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
-#if VXL_HAS_INT_64
+#if VXL_HAS_INT_64 && !VCL_VC60
 macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
 macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
 #endif
@@ -863,7 +863,7 @@ inline vil_image_view_base_sptr vil_convert_to_grey_using_rgb_weighting(
       return vil_image_view_base_sptr(new vil_image_view<T > (dest)); }
 macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
 macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
-#if VXL_HAS_INT_64
+#if VXL_HAS_INT_64 && !VCL_VC60
 macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
 macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
 #endif
@@ -1087,7 +1087,7 @@ inline vil_image_view_base_sptr vil_convert_stretch_range(
       break; }
 macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
 macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
-#if VXL_HAS_INT_64
+#if VXL_HAS_INT_64 && !VCL_VC60
 macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
 macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
 #endif
