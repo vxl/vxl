@@ -26,7 +26,7 @@ public:
   //: Destructor.
   virtual ~rrel_wls_obj() {}
 
-  //: Evaluate the objective function on heteroscedastic residuals.  
+  //: Evaluate the objective function on heteroscedastic residuals.
   // This version is used for heteroscedastic data, where each
   // residual has its own scale. The number of scale values must, of
   // course, equal the number of residuals.
@@ -37,7 +37,7 @@ public:
                     vect_const_iter scale_begin,
                     vect_iter wgt_begin ) const = 0;
 
-  //: Computes the weights for homoscedastic residuals.  
+  //: Computes the weights for homoscedastic residuals.
   // This version is used for homoscedastic data, where each residual
   // is distributed with a common scale. (See also the comments in
   // rrel_objective::fcn.)
@@ -47,6 +47,11 @@ public:
   virtual void wgt( vect_const_iter begin, vect_const_iter end,
                     double scale,
                     vect_iter wgt_begin ) const = 0;
+
+  //: The weight of the residual.
+  //  \a u is a normalised residual (i.e. u=r/scale). wgt(u) is
+  //  normally \f$ (1/u) (\partial{rho} / \partial{u}) \f$.
+  virtual double wgt( double u ) const = 0;
 };
 
-#endif
+#endif // rrel_wls_obj_h_
