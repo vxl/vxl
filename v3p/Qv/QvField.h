@@ -14,14 +14,14 @@ public:
 
   QvNode *      getContainer() const    { return container; }
 
-  void          setDefault(QvBool def)  { flags.hasDefault = def; }
+  void          setDefault(QvBool def) const { flags.hasDefault = def; } // mutable
   void          setContainer(QvNode *cont);
   QvBool        read(QvInput *in, const QvName &name) const;
 
   QvField()     { flags.hasDefault = TRUE; }
 
 private:
-  struct {
+  mutable struct {
     unsigned int hasDefault             : 1; // Field is set to default value
   }                     flags;
 

@@ -30,12 +30,12 @@ QvField::read(QvInput *in, const QvName &name) const
 {
   char c;
 
-  ((QvField*)this)->setDefault(FALSE); // mutable const
+  setDefault(FALSE); // mutable const
 
   // mpichler, 19950712 (re-activated from QvLib 1.0beta)
   if (in->read(c) && c == IGNORE_CHAR)
   {
-    ((QvField*)this)->setDefault(TRUE); // mutable const
+    setDefault(TRUE); // mutable const
     if (QvDB::warn_ignorechar)
     { QvReadError::post (in, IgnoreErrorMsg, name.getString ());
       QvDB::warn_ignorechar = 0;
@@ -57,7 +57,7 @@ QvField::read(QvInput *in, const QvName &name) const
       if (c == IGNORE_CHAR)
       {
         // VRML has no ignore flag - use default value
-        ((QvField*)this)->setDefault(TRUE); // mutable const
+        setDefault(TRUE); // mutable const
         if (QvDB::warn_ignorechar)
         { QvReadError::post (in, IgnoreErrorMsg, name.getString ());
           QvDB::warn_ignorechar = 0;
