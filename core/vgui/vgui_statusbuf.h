@@ -31,9 +31,6 @@ public:
   vgui_statusbuf (vgui_statusbar* s) { status = s; }
   int sync ();
   int overflow (int ch);
-#ifdef GNU_LIBSTDCXX_V3
-  unsigned
-#endif
   int underflow(){return 0;}
   //int xsputn( char* text, int n);
   //streamsize xsputn(char* text, streamsize n);
