@@ -829,7 +829,8 @@ convert_signed_int(
     if( (v & sign_bit) == 0 )
       *outp = v & mask;
     else
-      *outp = ( ~v & mask ) + 1;
+      // DICOM signed values are stored as 2s complement
+      *outp = - ( ( ~v & mask ) + 1 );
   }
 }
 
