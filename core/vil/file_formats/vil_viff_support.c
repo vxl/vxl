@@ -115,7 +115,7 @@ vil_viff_createimage(vxl_uint_32 col_size, vxl_uint_32 row_size,
     cstrlen = comment?strlen(comment):0;
     if (cstrlen > 0)
     {
-       if (cstrlen < 512)
+       if (cstrlen < LENGTH)
           strcpy(tmp_comment, comment?comment:"");
        else
        {
@@ -134,6 +134,9 @@ vil_viff_createimage(vxl_uint_32 col_size, vxl_uint_32 row_size,
     image->release = XV_IMAGE_REL_NUM;
     image->version = XV_IMAGE_VER_NUM;
     image->machine_dep = VFF_DEP_IEEEORDER; /* assume IEEE byte order */
+    memset(image->reserve, 0, VIFF_HEADERSIZE-21*sizeof(vxl_sint_32)-520*sizeof(char)-4*sizeof(float));
+    memset(image->trash, 0, 3);
+    memset(image->comment, 0, LENGTH);
     strcpy(image->comment, tmp_comment);
     image->row_size = row_size;
     image->col_size = col_size;
