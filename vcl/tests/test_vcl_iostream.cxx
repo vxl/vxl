@@ -59,21 +59,21 @@ int main()
 
   // Now the same output, using manipulators from <iomanip> :
   if (false) vcl_cin >> vcl_ws >> vcl_boolalpha;
-  vcl_cout << vcl_resetiosflags(vcl_ios_dec);
-  vcl_cout << vcl_uppercase << vcl_showbase << vcl_showpos << vcl_showpoint;
-  vcl_cout << vcl_oct << vcl_scientific << vcl_left
+  vcl_cout << vcl_resetiosflags(vcl_ios_dec)
+           << vcl_uppercase << vcl_showbase << vcl_showpos << vcl_showpoint
+           << vcl_oct << vcl_scientific << vcl_left
            << "Scientific, precision=2, width=20, pad_right : ["
            << vcl_setprecision(2) << vcl_setw(20) << vcl_setfill('x')
-           << 27182.81828 << "] oct " << 10 << vcl_endl;
-  vcl_cout << vcl_nouppercase << vcl_noshowpos;
-  vcl_cout << vcl_hex << vcl_fixed << vcl_right
+           << 27182.81828 << "] oct " << 10 << vcl_endl
+           << vcl_nouppercase << vcl_noshowpos
+           << vcl_hex << vcl_fixed << vcl_right
            << "Fixed,      precision=2, width=20, pad_left  : ["
            << vcl_setw(20)
-           << 27182.81828 << "] hex " << 10 << vcl_endl;
-  vcl_cout << vcl_noshowbase << vcl_showpos << vcl_noshowpoint;
-  vcl_cout << vcl_resetiosflags(vcl_ios_fixed | vcl_ios_scientific);
-  vcl_cout << vcl_resetiosflags(vcl_ios_right | vcl_ios_left);
-  vcl_cout << vcl_dec << vcl_internal
+           << 27182.81828 << "] hex " << 10 << vcl_endl
+           << vcl_noshowbase << vcl_showpos << vcl_noshowpoint
+           << vcl_resetiosflags(vcl_ios_fixed | vcl_ios_scientific)
+           << vcl_resetiosflags(vcl_ios_right | vcl_ios_left)
+           << vcl_dec << vcl_internal
            << "Default,    precision=2, width=20, pad_intern: ["
            << vcl_setprecision(2) << vcl_setw(20)
            << 27182.81828 << "] dec " << 10 << vcl_endl << vcl_endl;
