@@ -418,7 +418,8 @@ vil2_image_view_base_sptr vil2_pnm_image::get_copy_view(
       for (unsigned t = 0; t < (ni_-x0-ni)*nplanes(); ++t) { int a; (*vs_) >> a; }
     }
 #if 0 // see comment below
-    if (ncomponents_ == 1) {
+    if (ncomponents_ == 1)
+    {
 #endif
       if (bits_per_component_ <= 1)
         return new vil2_image_view<bool>(buf, reinterpret_cast<bool*>(buf->data()), ni, nj, nplanes(), nplanes(), ni*nplanes(), 1);
@@ -431,14 +432,17 @@ vil2_image_view_base_sptr vil2_pnm_image::get_copy_view(
        return new
          vil2_image_view<vxl_uint_32>(buf,reinterpret_cast<vxl_uint_32*>(buf->data()),ni,nj,nplanes(),nplanes(),ni*nplanes(),1);
 #if 0 // never return vil2_image_view<vil2_rgb<T> > : default image representation is planar
-    } else if (ncomponents_ == 3) {
+    }
+    else if (ncomponents_ == 3)
+    {
       if (bits_per_component_ <= 8)
-        return new vil2_image_view<vil2_rgb<vxl_byte> >(buf, reinterpret_cast<vil2_rgb<vxl_byte>*>(buf->data()), ni, nj, 1, 1, ni, 1);
+        return new vil2_image_view<vil2_rgb<vxl_byte> >(buf, reinterpret_cast<vil2_rgb<vxl_byte>*>(buf->data()), ni,nj,1, 1,ni,1);
       else if (bits_per_component_ <= 16)
-        return new vil2_image_view<vil2_rgb<vxl_uint_16> >(buf, reinterpret_cast<vil2_rgb<vxl_uint_16>*>(buf->data()),ni,nj,1,1,ni,1);
+       return new vil2_image_view<vil2_rgb<vxl_uint_16> >(buf,reinterpret_cast<vil2_rgb<vxl_uint_16>*>(buf->data()),ni,nj,1,1,ni,1);
       else
-        return new vil2_image_view<vil2_rgb<vxl_uint_32> >(buf, reinterpret_cast<vil2_rgb<vxl_uint_32>*>(buf->data()),ni,nj,1,1,ni,1);
-    } else return 0;
+       return new vil2_image_view<vil2_rgb<vxl_uint_32> >(buf,reinterpret_cast<vil2_rgb<vxl_uint_32>*>(buf->data()),ni,nj,1,1,ni,1);
+    }
+    else return 0;
 #endif // 0
   }
 }
