@@ -1,11 +1,3 @@
-#
-# crossge@crd.ge.com
-#
-
-#######################################
-include ${IUEROOT}/config/top-params.mk
-#######################################
-
 # basics
 SUBDIRS += gbl
 
@@ -33,11 +25,9 @@ SUBDIRS += gst vtol
 # digital  geometry
 SUBDIRS += vdgl
 
-# photogrammetry
-SUBDIRS += mrc/vpgl
-
-# coordinate systems addon
-SUBDIRS += mrc/vcsl
+SUBDIRS += mrc
+# photogrammetry in mrc/vpgl
+# coordinate systems addon in mrc/vcsl
 
 # Kanade-Lucas-Tomasi feature tracker
 SUBDIRS += vgel gkll
@@ -45,7 +35,6 @@ SUBDIRS += vgel gkll
 # Dense matcher
 SUBDIRS += vmal
 
-######################################
-include ${IUEROOT}/config/top-rules.mk
-######################################
-
+################################
+include ${IUEROOT}/config/top.mk
+################################
