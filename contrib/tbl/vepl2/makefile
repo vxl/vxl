@@ -1,7 +1,7 @@
 # DESCRIPTION:
 #
 #   This is the vepl2 library, containing the `easy' image processing
-# algorithm interface classes based on vipl, specialised for vil2.
+# algorithm interface classes based on vipl, specialised for new vil (aka vil2).
 #
 # These classes are derived from the vipl classes with a similar name.
 #
@@ -15,8 +15,8 @@ USE_IMPLICIT_TEMPLATES := 1
 LIBRARY := vepl2
 VERSION := 1.0
 
-MANPAGE_SOURCES += accessors/vipl_accessors_vil2_image_view_base.txx
-MANPAGE_SOURCES += section/vipl_filterable_section_container_generator_vil2_image_view_base.txx
+MANPAGE_SOURCES += accessors/vipl_accessors_vil_image_view_base.txx
+MANPAGE_SOURCES += section/vipl_filterable_section_container_generator_vil_image_view_base.txx
 
 # A. Point operators:
 MANPAGE_SOURCES += vepl2_convert.txx
