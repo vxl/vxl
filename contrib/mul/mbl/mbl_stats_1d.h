@@ -6,7 +6,6 @@
 // \brief Simple statistics on a 1D variable.
 // \author Tim Cootes
 
-#include <vcl_iomanip.h>
 #include <vcl_iostream.h>
 #include <vsl/vsl_binary_io.h>
 
