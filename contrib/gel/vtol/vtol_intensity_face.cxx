@@ -98,8 +98,7 @@ vtol_intensity_face::~vtol_intensity_face()
 //---------------------------------------------------------------------------
 vsol_spatial_object_2d_sptr vtol_intensity_face::clone(void) const
 {
-	vtol_intensity_face_sptr f = (vtol_intensity_face*)this;
-  return new vtol_intensity_face(f);
+  return new vtol_intensity_face(vtol_intensity_face_sptr(const_cast<vtol_intensity_face*>(this)));
 }
 
 //----------------------------------------------------
