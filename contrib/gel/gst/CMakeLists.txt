@@ -1,3 +1,8 @@
+#
+# ./gel/gst/CMakeLists.txt
+#
+#   geoff.cross@crd.ge.com
+#
 
 ADD_LIBRARY(gst gst_sources)
 

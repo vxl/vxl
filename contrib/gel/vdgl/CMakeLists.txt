@@ -1,3 +1,8 @@
+#
+# ./gel/vdgl/CMakeLists.txt
+#
+#   geoff.cross@crd.ge.com
+#
 
 
 ADD_LIBRARY(vdgl vdgl_sources)

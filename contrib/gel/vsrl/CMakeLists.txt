@@ -1,3 +1,8 @@
+#
+# ./gel/vsrl/CMakeLists.txt
+#
+#   geoff.cross@crd.ge.com
+#
 
 
 ADD_LIBRARY(vsrl vsrl_sources)
