@@ -32,7 +32,7 @@ MINI_PROG_SOURCES += example_satellite_tableau.cxx
 MINI_PROG_SOURCES += example_vgui_observer.cxx
 MINI_PROG_SOURCES += example_sprite.cxx
 MINI_PROG_SOURCES += example_idle_processing.cxx
-
+MINI_PROG_SOURCES += example_text_windows.cxx
 
 PROGRAM := basic_app
 SOURCES += basic_app.cxx
