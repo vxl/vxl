@@ -297,6 +297,36 @@ static void test_algo_gauss_reduce_121_float(unsigned nx, unsigned ny)
   vcl_cout<<"Value at (1,1):"<<float(test2(1,1))<<'\n';
 }
 
+static void test_algo_gauss_reduce_2_3_float(unsigned nx, unsigned ny)
+{
+  vcl_cout << "********************************************************\n"
+           << " Testing vil_algo_gauss_reduce_2_3 (float) (nx="<<nx<<", ny="<<ny<<")\n"
+           << "********************************************************\n";
+
+  vil_image_view<float> image0;
+  image0.set_size(nx,ny);
+  vil_image_view<float> reduced_x;
+  reduced_x.set_size(nx,ny);
+	reduced_x.fill(2.22f);
+
+  for (unsigned int j=0;j<image0.nj();++j)
+    for (unsigned int i=0;i<image0.ni();++i)
+      image0(i,j) = 0.1f*i+j;
+
+  vil_gauss_reduce_2_3(image0.top_left_ptr(),image0.ni(),image0.nj(),
+                       image0.istep(),image0.jstep(),
+                       reduced_x.top_left_ptr(),reduced_x.istep(),reduced_x.jstep());
+
+  vcl_cout<<"Original: "; vil_print_all(vcl_cout,image0); vcl_cout<<'\n';
+  vcl_cout<<"reduced_x : "; vil_print_all(vcl_cout,reduced_x); vcl_cout<<'\n';
+
+  TEST_NEAR("1st element",reduced_x(0,1),0.75f*image0(0,1)+0.25*image0(1,1),1e-6);
+  TEST_NEAR("2nd element",reduced_x(1,1),0.5f*image0(1,1)+0.5*image0(2,1),1e-6);
+  TEST_NEAR("3rd element",reduced_x(2,1),image0(3,1),1e-6);
+  unsigned Lx = (2*nx+1)/3;
+	TEST_NEAR("No over-run",reduced_x(Lx,1),2.22f,1e-6);
+}
+
 static void test_algo_gauss_reduce_byte_2d()
 {
   vcl_cout<<"Testing reduction in 2D\n";
@@ -318,6 +348,26 @@ static void test_algo_gauss_reduce_byte_2d()
   TEST("Corner pixel",image0(ni2*2-2,nj2*2-2),image1(ni2-1,nj2-1));
 }
 
+static void test_algo_gauss_reduce_2_3_byte_2d()
+{
+  vcl_cout<<"Testing 2/3 reduction in 2D\n";
+  unsigned ni = 20, nj = 20;
+
+  vil_image_view<vxl_byte> image0(ni,nj),image1,work_im;
+
+  for (unsigned y=0;y<image0.nj();++y)
+    for (unsigned x=0;x<image0.ni();++x)
+      image0(x,y) = x+y*10;
+
+  vil_gauss_reduce_2_3(image0,image1,work_im);
+  unsigned ni2 = (2*ni+1)/3;
+  unsigned nj2 = (2*nj+1)/3;
+  TEST("Level 1 size x",image1.ni(),ni2);
+  TEST("Level 1 size y",image1.nj(),nj2);
+  TEST("Pixel (2,2)",image1(2,2),image0(3,3));
+  TEST("Pixel (2,4)",image1(2,4),image0(3,6));
+}
+
 MAIN( test_algo_gauss_reduce )
 {
   START( "vil_algo_gauss_reduce" );
@@ -337,6 +387,12 @@ MAIN( test_algo_gauss_reduce )
   test_algo_gauss_reduce_121_float(7,7);
 
   test_algo_gauss_reduce_byte_2d();
+
+	test_algo_gauss_reduce_2_3_float(6,3);
+	test_algo_gauss_reduce_2_3_float(7,3);
+	test_algo_gauss_reduce_2_3_float(8,3);
+
+	test_algo_gauss_reduce_2_3_byte_2d();
 
   SUMMARY();
 }
