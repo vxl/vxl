@@ -1,5 +1,6 @@
 IULIBS += -lvvid
 include ${IUEROOT}/contrib/brl/bbas/bgui/config.mk
+include ${IUEROOT}/contrib/brl/bseg/strk/config.mk
 include ${IUEROOT}/contrib/brl/bseg/sdet/config.mk
 include ${IUEROOT}/contrib/brl/bseg/vpro/config.mk
 include ${IUEROOT}/contrib/brl/bseg/brip/config.mk
