@@ -111,7 +111,7 @@ void vnl_matlab_readhdr::read_hdr() {
 void vnl_matlab_readhdr::read_next() {
   if (!data_read) {
     // number of bytes to skip :
-    unsigned n = rows()*cols()*sizeof(float);
+    unsigned long n = rows()*cols()*sizeof(float);
 
     if (!is_single())
       n *= 2;
