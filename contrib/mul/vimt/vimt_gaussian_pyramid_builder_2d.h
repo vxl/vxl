@@ -2,9 +2,9 @@
 #ifndef vimt_gaussian_pyramid_builder_2d_h_
 #define vimt_gaussian_pyramid_builder_2d_h_
 //:
-//  \file
-//  \brief Build gaussian pyramids of vimt_image_2d_of<T>
-//  \author Tim Cootes
+// \file
+// \brief Build gaussian pyramids of vimt_image_2d_of<T>
+// \author Tim Cootes
 
 #include <vsl/vsl_binary_io.h>
 #include <vcl_string.h>
@@ -86,7 +86,7 @@ class vimt_gaussian_pyramid_builder_2d : public vimt_image_pyramid_builder
   // Defaults to 5.
   unsigned min_y_size() const { return minYSize_;}
 
-  //: Get the minimum Y size of the top layer of the pyramid.
+  //: Get the minimum X size of the top layer of the pyramid.
   // Defaults to 5.
   unsigned min_x_size() const { return minXSize_;}
 
