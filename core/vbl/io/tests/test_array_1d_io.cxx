@@ -29,6 +29,7 @@ void test_array_1d_io()
   vsl_b_ifstream bfs_in("vbl_array_1d_test_io.bvl.tmp");
   TEST ("Opened vbl_array_1d_test_io.bvl.tmp for reading", (!bfs_in), false);
   vsl_b_read(bfs_in, v_in);
+  TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
   //kym - double = not defined for vbl_array_1d

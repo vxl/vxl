@@ -31,6 +31,7 @@ void test_polygon_io()
   vsl_b_ifstream bfs_in("vgl_polygon_test_io.bvl.tmp");
   TEST ("Opened vgl_polygon_test_io.bvl.tmp for reading", (!bfs_in), false);
   vsl_b_read(bfs_in, p_in);
+  TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
   TEST ("p_out == p_in",

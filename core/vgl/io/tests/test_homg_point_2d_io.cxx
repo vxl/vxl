@@ -25,6 +25,7 @@ void test_homg_point_2d_double_io()
   TEST ("Opened vgl_homg_point_2d_test_double_io.bvl.tmp for reading",
         (!bfs_in), false);
   vsl_b_read(bfs_in, p_in);
+  TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
   TEST ("p_out == p_in", p_out.x()==p_in.x() && p_out.y()==p_in.y()

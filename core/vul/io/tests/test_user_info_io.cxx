@@ -27,6 +27,7 @@ void test_user_info_io()
   vsl_b_ifstream bfs_in("vul_user_info_test_io.bvl.tmp");
   TEST ("Opened vul_user_info_test_io.bvl.tmp for reading", (!bfs_in), false);
   vsl_b_read(bfs_in, p_in);
+  TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
   TEST ("p_out == p_in",p_out.uid==p_in.uid && p_out.gid==p_in.gid && 

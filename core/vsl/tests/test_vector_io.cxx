@@ -31,6 +31,7 @@ void test_vector_io()
   TEST ("Opened vsl_vector_io_test.bvl.tmp for reading", (!bfs_in), false);
   vsl_b_read(bfs_in, v_int_in);
   vsl_b_read(bfs_in, v_float_in);
+  TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
   
   TEST ("vcl_vector<int> out == vcl_vector<int> in",

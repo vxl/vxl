@@ -24,6 +24,7 @@ void test_string_io()
   vsl_b_ifstream bfs_in("vsl_string_io_test.bvl.tmp");
   TEST ("Opened vsl_string_io_test.bvl.tmp for reading", (!bfs_in), false);
   vsl_b_read(bfs_in, instring);
+  TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
   TEST ("vcl_string<int> out == vcl_string<int> in",

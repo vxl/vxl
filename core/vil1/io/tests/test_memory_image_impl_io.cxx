@@ -65,6 +65,7 @@ void test_memory_image_impl_io()
   TEST ("Opened vil_memory_image_impl_io.bvl.tmp for reading",
         (!bfs_in), false);
   io_impl.b_read_by_base(bfs_in,p_in);
+  TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
 

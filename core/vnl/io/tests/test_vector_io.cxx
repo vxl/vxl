@@ -38,6 +38,7 @@ void test_vector_double_io()
   TEST ("Opened vnl_vector_test_double_io.bvl.tmp for reading",
         (!bfs_in), false);
   vsl_b_read(bfs_in, v_in);
+  TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
   vcl_cout << "after reading in:\t"; vsl_print_summary(vcl_cout, v_in);

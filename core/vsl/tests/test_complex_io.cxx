@@ -26,6 +26,7 @@ void test_complex_io()
   TEST ("Opened vsl_complex_io_test.bvl.tmp for reading",
     (!bfs_in), false);
   vsl_b_read(bfs_in, c_float_in);
+  TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
   TEST ("vcl_complex<float> out == vcl_complex<float> in",

@@ -149,7 +149,7 @@ void test_polymorphic_io()
   test_base_class *b2_out = 0;
 
   vsl_b_ofstream bfs_out("vsl_polymorphic_io_test.bvl.tmp");
-  TEST ("Opened vsl_polymorphic_io_test.bvl.tmp for reading",
+  TEST ("Opened vsl_polymorphic_io_test.bvl.tmp for writing",
         (!bfs_out), false);
   vsl_b_write(bfs_out,d1_out);
   vsl_b_write(bfs_out,b1_out);
@@ -166,6 +166,7 @@ void test_polymorphic_io()
   vsl_b_read(bfs_in,d1_in);
   vsl_b_read(bfs_in,b1_in);
   vsl_b_read(bfs_in,b2_in);
+  TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
   TEST ("derived in = derived out", d1_in.data(), d1_out.data());

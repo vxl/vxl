@@ -38,11 +38,13 @@ void test_math() {
   vnl_test_assert("exp(d*i) == -1", vnl_math_abs(e_ipi+1.0) < 1e-10);
   vcl_cout << vcl_endl;
 
+  // Can't seem to disable the warnings in MSDEV using pragmas
   // Create Inf and -Inf:
   float a1 = 1.0e33f/1.0e-33f;
   float a2 = -1.0e33f/1.0e-33f;
   double a3 = 1.0e300/1.0e-300;
   double a4 = -1.0e300/1.0e-300;
+
 #if VCL_USE_LONG_DOUBLE
   long double a5 = (long double)1/(long double)0;
   long double a6 = -(long double)1/(long double)0;

@@ -33,6 +33,7 @@ void test_list_io()
   TEST ("Opened vsl_list_io_test.bvl.tmp for reading", (!bfs_in), false);
   vsl_b_read(bfs_in, l_int_in);
   vsl_b_read(bfs_in, l_float_in);
+  TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
   TEST ("vcl_list<int> out == vcl_list<int> in",

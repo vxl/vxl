@@ -48,6 +48,7 @@ void test_map_io()
   vsl_b_read(bfs_in, m_int_int_in);
   vsl_b_read(bfs_in, m_int_string_in);
   vsl_b_read(bfs_in, m_string_int_in);
+  TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
   TEST ("vcl_map<int,int> out == vcl_map<int,int> in",

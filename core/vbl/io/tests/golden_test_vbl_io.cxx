@@ -172,6 +172,7 @@ void golden_test_vbl_io(bool save_file)
   vsl_b_read(bfs_in, sp1_in);
   vsl_b_read(bfs_in, sp2_in);
 
+  TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
 

@@ -25,6 +25,7 @@ void test_rgb_double_io()
   TEST ("Opened vil_rgb_test_double_io.bvl.tmp for reading", 
     (!bfs_in), false);
   vsl_b_read(bfs_in, p_in);
+  TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
 

@@ -38,6 +38,7 @@ void test_set_io()
   TEST ("Opened vsl_set_io_test.bvl.tmp for reading", (!bfs_in), false);
   vsl_b_read(bfs_in, s_int_in);
   vsl_b_read(bfs_in, s_string_in);
+  TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
   TEST ("vcl_set<int> out == vcl_set<int> in", s_int_out == s_int_in, true);

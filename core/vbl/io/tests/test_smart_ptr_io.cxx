@@ -31,6 +31,7 @@ void test_smart_ptr_io()
   TEST ("Opened vbl_smart_ptr_test_io.bvl.tmp for reading", (!bfs_in), false);
   vsl_b_read(bfs_in, sp1_in);
   vsl_b_read(bfs_in, sp2_in);
+  TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
   TEST ("sp1_in == sp2_in", sp1_in == sp2_in, true);

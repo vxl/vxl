@@ -41,6 +41,7 @@ void test_diag_matrix_double_io()
   TEST ("Opened vnl_diag_matrix_test_io.bvl.tmp for reading",
         (!bfs_in), false);
   vsl_b_read(bfs_in, diag_mat_in);
+  TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
   TEST ("diag_mat_out.diagonal() == diag_mat_in.diagonal()",

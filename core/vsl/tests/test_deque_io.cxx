@@ -28,6 +28,7 @@ void test_deque_io()
   vsl_b_ifstream bfs_in("vsl_deque_io_test.bvl.tmp");
   TEST ("Opened vsl_deque_io_test.bvl.tmp for reading", (!bfs_in), false);
   vsl_b_read(bfs_in, d_int_in);
+  TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
   // kym - double equals not defined for deque??

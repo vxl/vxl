@@ -334,6 +334,7 @@ void golden_test_vgl_io(bool save_file)
   vsl_b_read(bfs_in, float_homg_plane_3d_in);
   vsl_b_read(bfs_in, polygon_in);
   vsl_b_read(bfs_in, double_point_2d_in_bis);
+  TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
   // Test that each object created is the same as read in from the file.

@@ -106,24 +106,24 @@ void vsl_b_write(vsl_b_ostream& s, const vcl_multimap<Key, T, Compare>& v)
 //====================================================================================
 //: Read multimap from binary stream
 template <class Key, class T, class Compare>
-void vsl_b_read(vsl_b_istream& s, vcl_multimap<Key, T, Compare>& v)
+void vsl_b_read(vsl_b_istream& is, vcl_multimap<Key, T, Compare>& v)
 {
   if (!is) return;
 
   v.clear();
   unsigned multimap_size;
   short ver;
-  vsl_b_read(s, ver);
+  vsl_b_read(is, ver);
   switch (ver)
   {
   case 1:
-    vsl_b_read(s, multimap_size);
+    vsl_b_read(is, multimap_size);
     for (unsigned i=0; i<multimap_size; i++)
     {
       Key first_val;
       T second_val;
-      vsl_b_read(s, first_val);
-      vsl_b_read(s, second_val);
+      vsl_b_read(is, first_val);
+      vsl_b_read(is, second_val);
       v.insert( vcl_make_pair(first_val, second_val));
     }
     break;

@@ -27,6 +27,7 @@ void test_box_2d_double_io()
   TEST ("Opened vgl_box_2d_test_double_io.bvl.tmp for reading",
                        (!bfs_in), false);
   vsl_b_read(bfs_in, p_in);
+  TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
   TEST ("p_out == p_in", p_out.min_point() == p_in.min_point()

@@ -27,6 +27,7 @@ void test_stack_io()
   vsl_b_ifstream bfs_in("vsl_stack_io_test.bvl.tmp");
   TEST ("Opened vsl_stack_io_test.bvl.tmp for reading", (!bfs_in), false);
   vsl_b_read(bfs_in, s_int_in);
+  TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
   //kym - double = not defined for stack?

@@ -184,6 +184,7 @@ void golden_test_vnl_io(bool save_file)
   vsl_b_read(bfs_in, poly_in);
   vsl_b_read(bfs_in, m_sparse_in);
   vsl_b_read(bfs_in, v_fixed_in);
+  TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
 

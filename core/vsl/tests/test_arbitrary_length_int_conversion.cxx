@@ -213,12 +213,14 @@ void test_explicit_int_io()
       vsl_b_read_uint_16(bss, n);
       if (n != i) break;
     }
+  TEST ("Finished reading file successfully", (!bss), false);
   }
 #endif
 
   TEST ("Checking that the results are correct", i == 65536, true);
   if (i != 65536)
     vcl_cout << "Failed at number " << i <<vcl_endl;
+  TEST ("Finished reading file successfully", (!bfs_in), false);
 }
 
 
@@ -254,6 +256,7 @@ void test_extreme_int_io()
   vsl_b_read(bfs_in,min_long_in);
   vsl_b_read(bfs_in,max_long_in);
   vsl_b_read(bfs_in,max_ulong_in);
+  TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
   TEST ("min_long == min_long_in", min_long == min_long_in, true);

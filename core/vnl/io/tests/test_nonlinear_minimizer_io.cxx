@@ -8,9 +8,9 @@
 
 void test_nonlinear_minimizer_io()
 {
-    vcl_cout << "***********************************" << vcl_endl;
-    vcl_cout << "Testing vnl_nonlinear_minimizer_io" << vcl_endl;
-    vcl_cout << "***********************************" << vcl_endl;
+  vcl_cout << "***********************************" << vcl_endl;
+  vcl_cout << "Testing vnl_nonlinear_minimizer_io" << vcl_endl;
+  vcl_cout << "***********************************" << vcl_endl;
 
   //// test constructors, accessors
   vnl_nonlinear_minimizer minimizer_out, minimizer_in;
@@ -18,7 +18,7 @@ void test_nonlinear_minimizer_io()
   // mininizer settings to be saved
   double xtol_out= 0.001;
   double ftol_out= xtol_out*0.01;
-    double gtol_out= 0.005;
+  double gtol_out= 0.005;
   int maxfev_out = 3000;
   double epsfcn_out = xtol_out* 0.001;
   bool trace_out = false;
@@ -27,7 +27,7 @@ void test_nonlinear_minimizer_io()
 
   minimizer_out.set_f_tolerance(ftol_out);
   minimizer_out.set_x_tolerance(xtol_out);
-    minimizer_out.set_g_tolerance(gtol_out);
+  minimizer_out.set_g_tolerance(gtol_out);
   minimizer_out.set_max_function_evals(maxfev_out);
   minimizer_out.set_epsilon_function(epsfcn_out);
   minimizer_out.set_trace(trace_out);
@@ -37,29 +37,30 @@ void test_nonlinear_minimizer_io()
   vsl_print_summary(vcl_cout, minimizer_out);
   vcl_cout << vcl_endl;
 
-    vsl_b_ofstream bfs_out("vnl_nonlinear_minimizer_io.bvl.tmp");
-    TEST ("Created vnl_nonlinear_minimizer_test_io.bvl.tmp for writing",
-            (!bfs_out), false);
-    vsl_b_write(bfs_out, minimizer_out);
-    bfs_out.close();
+  vsl_b_ofstream bfs_out("vnl_nonlinear_minimizer_io.bvl.tmp");
+  TEST ("Created vnl_nonlinear_minimizer_test_io.bvl.tmp for writing",
+          (!bfs_out), false);
+  vsl_b_write(bfs_out, minimizer_out);
+  bfs_out.close();
 
-    vsl_b_ifstream bfs_in("vnl_nonlinear_minimizer_io.bvl.tmp");
-    TEST ("Opened vnl_nonlinear_minimizer_test_io.bvl.tmp for reading",
-            (!bfs_in), false);
-    vsl_b_read(bfs_in, minimizer_in);
-    bfs_in.close();
+  vsl_b_ifstream bfs_in("vnl_nonlinear_minimizer_io.bvl.tmp");
+  TEST ("Opened vnl_nonlinear_minimizer_test_io.bvl.tmp for reading",
+          (!bfs_in), false);
+  vsl_b_read(bfs_in, minimizer_in);
+  TEST ("Finished reading file successfully", (!bfs_in), false);
+  bfs_in.close();
 
-    double ftol_in=minimizer_in.get_f_tolerance();
+  double ftol_in=minimizer_in.get_f_tolerance();
   double xtol_in=minimizer_in.get_x_tolerance();
-    double gtol_in=minimizer_in.get_g_tolerance();
+  double gtol_in=minimizer_in.get_g_tolerance();
   int maxfev_in=minimizer_in.get_max_function_evals();
   double epsfcn_in=minimizer_in.get_epsilon_function();
   bool trace_in=minimizer_in.get_trace();
   bool verbose_in=minimizer_in.get_verbose();
   int cd_in=minimizer_in.get_check_derivatives();
 
-    TEST ("ftol_in == ftol_out", ftol_in == ftol_out, true);
-    TEST ("xtol_in == xtol_out", xtol_in == xtol_out, true);
+  TEST ("ftol_in == ftol_out", ftol_in == ftol_out, true);
+  TEST ("xtol_in == xtol_out", xtol_in == xtol_out, true);
   TEST ("gtol_in == gtol_out", gtol_in == gtol_out, true);
   TEST ("maxfev_in == maxfev_out", maxfev_in == maxfev_out, true);
   TEST ("epsfcn_in == epsfcn_out", epsfcn_in == epsfcn_out, true);

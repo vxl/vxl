@@ -40,6 +40,7 @@ void test_matrix_double_io()
            false);
   vsl_b_read(bfs_in, m_in1);
   vsl_b_read(bfs_in, m_in2);
+  TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
   // m_in1 has content

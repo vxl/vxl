@@ -208,6 +208,7 @@ void test_clipon_polymorphic_io()
   vsl_b_read(bfs_in,d1_in);
   vsl_b_read(bfs_in,b1_in);
   vsl_b_read(bfs_in,b2_in);
+  TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
   TEST ("(clipon) derived in = derived out", d1_in.data(), d1_out.data());

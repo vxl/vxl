@@ -140,6 +140,7 @@ void test_binary_io()
   vsl_print_summary(vcl_cout, c_string_out);
   vcl_cout << vcl_endl;
 
+  TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
 
@@ -194,6 +195,7 @@ void test_binary_io()
     vsl_b_read(bfs_in2, string_in2);
     vsl_b_read(bfs_in2, c_string_in2);
   }
+  TEST ("Finished reading file successfully", (!bfs_in2), false);
   bfs_in2.close();
 
   TEST ("Golden bool out == bool in", b_out == b_in2, true);
