@@ -153,9 +153,11 @@ inline float    vnl_math_squared_magnitude(float x) { return x*x; }
 inline double   vnl_math_squared_magnitude(double x) { return x*x; }
 inline long double vnl_math_squared_magnitude(long double x) { return x*x; }
 
+#if 0 // deprecated
 // squareroot
 inline float  vnl_math_sqrt(float x) { return float( vcl_sqrt(double(x))); }
-inline double vnl_math_sqrt(double x) { return       vcl_sqrt(double(x)) ; }
+inline double vnl_math_sqrt(double x) { return       vcl_sqrt(double(x));  }
+#endif
 
 // cuberoot
 inline float  vnl_math_cuberoot(float a) { return float((a<0) ? -vcl_exp(vcl_log(-a)/3) : vcl_exp(vcl_log(a)/3)); }
