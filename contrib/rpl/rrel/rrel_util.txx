@@ -1,3 +1,5 @@
+#ifndef rrel_util_txx_
+#define rrel_util_txx_
 
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
@@ -28,7 +30,7 @@ rrel_util_median_abs_dev_scale( const T& begin,  const T& end, int dof, O* /*dum
 
 template <class O, class T>
 O
-rrel_util_weighted_scale( const T& residuals_first, const T& residuals_end, 
+rrel_util_weighted_scale( const T& residuals_first, const T& residuals_end,
                           const T& weights_first, int dof, O* /*dummy*/ )
 {
   O sum = 0;
@@ -44,13 +46,13 @@ rrel_util_weighted_scale( const T& residuals_first, const T& residuals_end,
   }
   assert( num > dof );
   O divisor = sum_weights * ( num - dof ) / num;
-  return sqrt( sum / divisor );
+  return vcl_sqrt( sum / divisor );
 }
 
 
 template <class T, class Ran>
 void rrel_util_median_and_scale( Ran first, Ran last,
-                                 T& median, T& scale, 
+                                 T& median, T& scale,
                                  int dof )
 {
   int count = last-first;
@@ -71,7 +73,7 @@ void rrel_util_median_and_scale( Ran first, Ran last,
 
 template <class T, class InpIter>
 void rrel_util_median_and_scale_copy( InpIter first, InpIter last,
-                                      T& median, T& scale, 
+                                      T& median, T& scale,
                                       int dof )
 {
   // FIXME: scratch should be vcl_vector<
@@ -88,7 +90,7 @@ void rrel_util_median_and_scale_copy( InpIter first, InpIter last,
 
 template <class T, class Ran>
 void rrel_util_intercept_adjustment( Ran first, Ran last,
-                                     T & center, T & half_width, 
+                                     T & center, T & half_width,
                                      int dof )
 {
   int count = last-first;
@@ -114,7 +116,7 @@ void rrel_util_intercept_adjustment( Ran first, Ran last,
 
 template <class T, class InpIter>
 void rrel_util_intercept_adjustment_copy( InpIter first, InpIter last,
-                                          T & center, T & half_width, 
+                                          T & center, T & half_width,
                                           int dof )
 {
   // FIXME: scratch should be vcl_vector<
@@ -154,14 +156,13 @@ void rrel_util_intercept_adjust_stats( Ran first, Ran last,
   int inliers = end_itr - begin_itr;
   robust_mean = sum / inliers;
   inlier_frac = T(inliers) / T(count);
-  
+
   T sum_sq=0;
   for ( Ran i=begin_itr; i!=end_itr; ++i ) {
     sum_sq += vnl_math_sqr( *i - robust_mean );
   }
-  robust_std = T( sqrt(sum_sq / (inliers-dof)) );
+  robust_std = T( vcl_sqrt(sum_sq / (inliers-dof)) );
 }
-
 
 
 template <class T, class InpIter>
@@ -219,7 +220,7 @@ void rrel_util_intercept_adjust_stats( RAN_ITER first, RAN_ITER last, \
 template \
 void rrel_util_intercept_adjust_stats_copy( RAN_ITER first, RAN_ITER last, \
                                             VALUE_T & robust_mean, VALUE_T & robust_std, VALUE_T & inlier_frac, \
-                                            int dof );
+                                            int dof )
 
 #undef RREL_UTIL_INSTANTIATE_INP_ITER
 #define RREL_UTIL_INSTANTIATE_INP_ITER(VALUE_T, INP_ITER) \
@@ -240,4 +241,6 @@ void rrel_util_intercept_adjustment_copy( INP_ITER first, INP_ITER last, \
 template \
 void rrel_util_intercept_adjust_stats_copy( INP_ITER first, INP_ITER last, \
                                             VALUE_T & robust_mean, VALUE_T & robust_std, VALUE_T & inlier_frac, \
-                                            int dof );
+                                            int dof )
+
+#endif // rrel_util_txx_

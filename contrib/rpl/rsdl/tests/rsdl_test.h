@@ -1,3 +1,5 @@
+#ifndef rsdl_test_h_
+#define rsdl_test_h_
 
 #include <vcl_iostream.h>
 #include <vcl_string.h>
@@ -8,11 +10,10 @@ static int tests_passed;
 static int tests_failed;
 static vcl_string test_name;
 
-bool rsdl_close( double x, double y ) { return vnl_math_abs(x-y) < 1.0e-6; }
+static bool rsdl_close( double x, double y ) { return vnl_math_abs(x-y) < 1.0e-6; }
 
 
-
-void 
+void
 rsdl_tests_start( const vcl_string& s)
 {
   num_tests = 0;
@@ -20,8 +21,8 @@ rsdl_tests_start( const vcl_string& s)
   tests_failed = 0;
   test_name = s;
   vcl_cout << "==========================================\n"
-	   << "Start testing " << s
-	   << "\n==========================================\n";
+           << "Start testing " << s
+           << "\n==========================================\n";
   vcl_cout.flush();
 }
 
@@ -53,7 +54,7 @@ rsdl_tests_summary()
   vcl_cout << test_name << " " << "Test Summary: ";
   if (tests_failed > 0)
     vcl_cout << tests_passed << " tests succeeded, " << tests_failed
-	     <<" tests FAILED *****";
+             <<" tests FAILED *****";
   else
     vcl_cout <<"All " << tests_passed << " tests succeeded";
   vcl_cout.flush();
@@ -67,4 +68,4 @@ rsdl_tests_summary()
    rsdl_test_perform(p); \
  }
 
- 
+#endif // rsdl_test_h_
