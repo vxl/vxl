@@ -66,8 +66,8 @@ latest released version of CMake.  From CVS, you can use the tag
 
 VXL used to have @file{CMakeListsLink.txt} files to handle library
 dependencies.  The library dependency problem is now dealt with by
-CMake (version 1.4) and the use of @file{CMakeListsLink.txt} files is
-deprecated.
+CMake (since version 1.4) and the use of @file{CMakeListsLink.txt}
+files is deprecated.
 
 In the past, VXL used @file{CMakeListsHeaders.txt} files that were only
 included for Win32 builds, but this is no longer needed and is
@@ -307,10 +307,8 @@ The Borland C++ compiler is being used.
 
 @item  @bullet{} CMake: @code{SOLARIS} (VXL top level CMakeLists.txt file)
 @itemx @bullet{} Preprocessor: [???]
-The OS is Solaris.  This variable is not set automatically by CMake,
-but it is used in VXL.  If you are compiling in Solaris you should
-set it.  When CMake 1.4 is in use, @code{SOLARIS} will be automatically set
-in the top level @file{CMakeLists.txt} file.
+The OS is Solaris.  This variable is set in the top level
+@file{CMakeLists.txt} file.
 
 @item  @bullet{} CMake: @code{MODULE_PATH} (VXL top level @file{CMakeLists.txt} file)
 @itemx @bullet{} Preprocessor: (none)
