@@ -26,6 +26,7 @@ bgui_vtol2D_tableau::~bgui_vtol2D_tableau()
 void bgui_vtol2D_tableau::init()
 {
   old_id_ = 0;
+  highlight_ = true;
   //set highlight display style parameters
   highlight_style_ = new bgui_style(0.0, 0.0, 1.0, 5.0, 5.0);
   //define default soview styles
@@ -36,7 +37,7 @@ void bgui_vtol2D_tableau::init()
   bgui_style_sptr digital_curve_style = 
     new bgui_style(0.8, 0.0, 0.8, 3.0, 0.0);
   bgui_style_sptr vertex_style = new bgui_style(1.0, 0.0, 0.0, 3.0, 0.0);
-  bgui_style_sptr edge_style = new bgui_style(0.5, 0.5, 0.0, 0.0, 3.0);
+  bgui_style_sptr edge_style = new bgui_style(0.8, 0.25, 0.8, 0.0, 3.0);
   bgui_style_sptr edge_group_style = new bgui_style(0.0, 1.0, 0.0, 0.0, 3.0);
   bgui_style_sptr face_style = new bgui_style(0.0, 1.0, 0.0, 0.0, 3.0);
   //put them into the map
@@ -64,7 +65,7 @@ void bgui_vtol2D_tableau::init()
 
 bool bgui_vtol2D_tableau::handle(vgui_event const &e)
 {
-  if (e.type == vgui_MOTION)
+  if (e.type == vgui_MOTION&&highlight_)
     {
       //retrive the previously highlighted soview and
       //restore it to its default style
@@ -119,6 +120,7 @@ bgui_vtol2D_tableau::add_vertex(vtol_vertex_2d_sptr const& v)
     {
       sty->clone_style(obj->get_style());
       int id = obj->get_id();
+      if(highlight_)
       obj_map_[id]=v->cast_to_topology_object();
     }
   return obj;
@@ -135,7 +137,8 @@ bgui_vtol2D_tableau::add_edge(vtol_edge_2d_sptr const& e)
     {
       sty->clone_style(obj->get_style());
       int id = obj->get_id();
-      obj_map_[id]=e->cast_to_topology_object();
+      if(highlight_)
+        obj_map_[id]=e->cast_to_topology_object();
     }
   return obj;
 }
@@ -164,7 +167,8 @@ bgui_vtol2D_tableau::add_face(vtol_face_2d_sptr const& f)
     {
       sty->clone_style(obj->get_style());
       int id = obj->get_id();
-      obj_map_[id]=f->cast_to_topology_object();
+      if(highlight_)
+        obj_map_[id]=f->cast_to_topology_object();
     }
   return obj;
 }
@@ -223,4 +227,15 @@ vtol_edge_2d_sptr bgui_vtol2D_tableau::get_mapped_edge(const int id)
       return 0;
     }
   return to->cast_to_edge()->cast_to_edge_2d();
+}
+
+void bgui_vtol2D_tableau::clear_all()
+{
+  bool temp = highlight_;
+  highlight_ = false;//in case of event interrupts during the clear
+  obj_map_.clear();
+  vgui_easy2D_tableau::clear();
+  this->init();
+  highlight_ = temp;
+  this->post_redraw();
 }

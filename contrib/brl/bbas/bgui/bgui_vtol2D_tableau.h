@@ -71,9 +71,15 @@ class bgui_vtol2D_tableau : public vgui_easy2D_tableau
 
   void add_faces(vcl_vector<vtol_face_2d_sptr>& faces, bool verts=false);
 
+  //: clear the tableau including the highlight map
+  void clear_all();
+
   //: Methods for getting mapped objects
+  void enable_highlight(){highlight_ = true;}
+  void disable_highlight(){highlight_ = false;}
   vtol_edge_2d_sptr get_mapped_edge(const int id);
  protected:
+  bool highlight_;
   void init();
   vcl_map<int, vtol_topology_object_sptr> obj_map_;
   vcl_map<vcl_string, bgui_style_sptr> style_map_;
