@@ -109,6 +109,14 @@ void vgui_mfc::flush() {
   run_till_idle();
 }
 
+void vgui_mfc::quit() 
+{
+  // From MFC FAQ:
+    // Same as double-clicking on main window close box.
+    ASSERT(AfxGetMainWnd() != NULL);
+    AfxGetMainWnd()->SendMessage(WM_CLOSE);
+}
+
 void vgui_mfc::add_event(const vgui_event& event) {
 }
 

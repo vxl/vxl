@@ -26,6 +26,7 @@ public:
   vgui_accelerate_mfc();
   virtual ~vgui_accelerate_mfc();
 
+  virtual bool vgui_choose_cache_format( GLenum* format, GLenum* type);
   virtual bool vgui_glDrawPixels( GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid *pixels );
   virtual bool vgui_glClear(GLbitfield mask );
 protected:

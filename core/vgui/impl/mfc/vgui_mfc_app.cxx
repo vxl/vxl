@@ -40,7 +40,7 @@ public:
   }
 };
 
-
+static void f();
 
 /////////////////////////////////////////////////////////////////////////////
 // vgui_mfc_app initialization
@@ -83,22 +83,28 @@ BOOL vgui_mfc_app::InitInstance()
 
     // *** IMPORTANT STUFF (marko) ***
 	CDocument *pDocument = pDocTemplate->CreateNewDocument();
+        // pDocument->m_bAutoDelete = FALSE; //awf added to stop segv on exit. 
+        //  probly wrong.  Then removed as it did nowt.
+
 	CFrameWnd* pFrame = (CFrameWnd *)(RUNTIME_CLASS(vgui_mfc_mainfrm)->CreateObject());
 	CCreateContext context;
-	context.m_pCurrentFrame = NULL;
+	context.m_pCurrentFrame = pFrame;
 	context.m_pCurrentDoc = pDocument;
 	context.m_pNewViewClass = RUNTIME_CLASS(vgui_mfc_view);
 	context.m_pNewDocTemplate = pDocTemplate;
-	pFrame->Create(NULL, _T("VGUI"), WS_OVERLAPPEDWINDOW|WS_HSCROLL|WS_VSCROLL, pFrame->rectDefault,NULL,NULL,0,
+	pFrame->Create(NULL, _T("VGUI"), WS_OVERLAPPEDWINDOW
+                        /*|WS_HSCROLL|WS_VSCROLL*/
+                        , pFrame->rectDefault,NULL,NULL,0,
 			&context);
 	m_pMainWnd = pFrame;
 	pDocTemplate->InitialUpdateFrame(pFrame,pDocument);
 	// The one and only window has been initialized, so show and update it.
-	m_pMainWnd->SetScrollRange(SB_HORZ,-1024,1024);
+	/*
+        m_pMainWnd->SetScrollRange(SB_HORZ,-1024,1024);
 	m_pMainWnd->SetScrollRange(SB_VERT,-1024,1024);
 	m_pMainWnd->SetScrollPos(SB_HORZ,0);
 	m_pMainWnd->SetScrollPos(SB_VERT,0);
-
+        */
 	m_pMainWnd->ShowWindow(SW_SHOW);
 	m_pMainWnd->UpdateWindow();
 
@@ -130,6 +136,7 @@ BOOL vgui_mfc_app::Run()
                         MSG tmp_msg;
                         if(::PeekMessage(&tmp_msg,NULL,NULL,NULL,PM_NOREMOVE))
                         {
+                          if (1) {
                            // Collapse multiple move events...
                            while(tmp_msg.message == WM_MOVE)
                            {
@@ -145,8 +152,26 @@ BOOL vgui_mfc_app::Run()
                                 ::TranslateMessage(&tmp_msg);
 		                ::DispatchMessage(&tmp_msg);
                              }
-                           }
+                           
+                          }
+                          }
                         }
+
+                        // Set up a breakpoint place for intrestin msgs
+                        {
+                          switch(tmp_msg.message) {
+                          case 0x036a: // kickidle
+                          case 0x0362: // setmessagestring
+                          case WM_PAINT:
+                          case WM_KEYUP:
+                            f();
+                            break;
+                          default:
+                            f();
+                            break;
+                          }
+                        }
+
 			// pump message, but quit on WM_QUIT
 			if (!PumpMessage())
 				return ExitInstance();
@@ -166,3 +191,4 @@ BOOL vgui_mfc_app::Run()
 /////////////////////////////////////////////////////////////////////////////
 // vgui_mfc_app message handlers
 
+void f() {}

@@ -34,6 +34,8 @@ public:
   virtual ~vgui_accelerate();
 
   virtual bool vgui_glClear( GLbitfield mask );
+
+  //: Fast-as-we-can version of drawpixels.
   virtual bool vgui_glDrawPixels( GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid *pixels );
   
   virtual bool vgui_choose_cache_format( GLenum* format, GLenum* type);
@@ -42,9 +44,7 @@ public:
   virtual bool vgui_copy_aux_to_back();
 
   static void register_accelerator (vgui_accelerate* p, int level);
-  // -- u97mb hack. Used by vgui_mfc_adaptor when in mfc-accel mode
-  static int image_width_;
-  static int image_height_;
+
 protected:
   vgui_accelerate();
 };

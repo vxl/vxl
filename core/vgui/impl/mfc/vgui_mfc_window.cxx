@@ -17,34 +17,35 @@
 #include <vgui/vgui.h>
 
 vgui_mfc_window::vgui_mfc_window(char const *title, 
-				   unsigned w, unsigned h, 
-				   int posx VCL_DEFAULT_VALUE(-1), int posy VCL_DEFAULT_VALUE(-1))
+				 unsigned w, unsigned h, 
+				 int posx VCL_DEFAULT_VALUE(-1), 
+				 int posy VCL_DEFAULT_VALUE(-1))
   : vgui_window()
   , mfcwin(0)
 {
-	CWinApp *app = AfxGetApp();
-	app->GetMainWnd()->SetWindowText(title);
-	POSITION pos = app->GetFirstDocTemplatePosition();
-	CDocTemplate *tmpl = app->GetNextDocTemplate(pos);
-	pos = tmpl->GetFirstDocPosition();
-	CDocument *pdoc = tmpl->GetNextDoc(pos);
-	pos = pdoc->GetFirstViewPosition();
-	mfcwin = (vgui_mfc_adaptor *)pdoc->GetNextView(pos);
-	statusbar = new vgui_mfc_statusbar();
-        CWnd *main_wnd = app->GetMainWnd();
-        ((vgui_mfc_mainfrm *)main_wnd)->SetStatusBar(statusbar);
-	vgui::out.rdbuf(statusbar->statusbuf);
-	// -- This part of code changes the window size to the one requested
-	WINDOWPLACEMENT w_placement;
-	// -- Obtain window geometry information
-	main_wnd->GetWindowPlacement(&w_placement);
-	// -- Modify bottom right corner coordinates to account for the width
-	w_placement.rcNormalPosition.right = w_placement.rcNormalPosition.left+w;
-	w_placement.rcNormalPosition.bottom = w_placement.rcNormalPosition.top+h;
-	// -- Store the geometry information back into window
-	main_wnd->SetWindowPlacement(&w_placement);
-
+  CWinApp *app = AfxGetApp();
+  app->GetMainWnd()->SetWindowText(title);
+  POSITION pos = app->GetFirstDocTemplatePosition();
+  CDocTemplate *tmpl = app->GetNextDocTemplate(pos);
+  pos = tmpl->GetFirstDocPosition();
+  CDocument *pdoc = tmpl->GetNextDoc(pos);
+  pos = pdoc->GetFirstViewPosition();
+  mfcwin = (vgui_mfc_adaptor *)pdoc->GetNextView(pos);
+  statusbar = new vgui_mfc_statusbar();
+  CWnd *main_wnd = app->GetMainWnd();
+  ((vgui_mfc_mainfrm *)main_wnd)->SetStatusBar(statusbar);
+  vgui::out.rdbuf(statusbar->statusbuf);
+  // -- This part of code changes the window size to the one requested
+  WINDOWPLACEMENT w_placement;
+  // -- Obtain window geometry information
+  main_wnd->GetWindowPlacement(&w_placement);
+  // -- Modify bottom right corner coordinates to account for the width
+  w_placement.rcNormalPosition.right = w_placement.rcNormalPosition.left+w;
+  w_placement.rcNormalPosition.bottom = w_placement.rcNormalPosition.top+h;
+  // -- Store the geometry information back into window
+  main_wnd->SetWindowPlacement(&w_placement);
 }
+
 vgui_mfc_window::vgui_mfc_window(unsigned w, unsigned h, vgui_menu const &menubar,
 								 char const *title)
   : vgui_window()
