@@ -23,7 +23,7 @@ SUBDIRS += vbl
 # numerics
 SUBDIRS += vnl
 
-# geometry
+# geometry (including computational geometry)
 SUBDIRS += vgl
 
 # image
@@ -31,9 +31,6 @@ SUBDIRS += vil
 
 # video
 SUBDIRS += vidl
-
-# computational geometry
-SUBDIRS += vcgl
 
 # coordinate systems
 SUBDIRS += vcsl
