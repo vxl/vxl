@@ -259,7 +259,7 @@ void mbl_thin_plate_spline_2d::build_pure_affine(
 
 //: Set parameters from vectors
 void mbl_thin_plate_spline_2d::set_params(const vnl_vector<double>& W1,
-                  const vnl_vector<double>& W2)
+                                          const vnl_vector<double>& W2)
 {
   int n = W1.size()-3;
 
@@ -287,8 +287,8 @@ void mbl_thin_plate_spline_2d::set_params(const vnl_vector<double>& W1,
 }
 
 void mbl_thin_plate_spline_2d::compute_energy(vnl_vector<double>& W1,
-                  vnl_vector<double>& W2,
-                  const vnl_matrix<double>& L)
+                                              vnl_vector<double>& W2,
+                                              const vnl_matrix<double>& L)
 
 {
   int n = W1.size()-3;
@@ -300,7 +300,7 @@ void mbl_thin_plate_spline_2d::compute_energy(vnl_vector<double>& W1,
   W1_data[n]=0.0;
   W1_data[n+1]=0.0;
   W1_data[n+2]=0.0;
-  vnl_vector<double> LW(n+3);
+  vnl_vector<double> LW;
   mbl_matxvec_prod_mv(L,W1,LW);
   energy_x_ = dot_product(W1,LW) / (8*vnl_math::pi);
 
@@ -313,8 +313,8 @@ void mbl_thin_plate_spline_2d::compute_energy(vnl_vector<double>& W1,
 }
 
 void mbl_thin_plate_spline_2d::set_up_rhs(vnl_vector<double>& Bx,
-                  vnl_vector<double>& By,
-                  const vcl_vector<vgl_point_2d<double> >& dest_pts)
+                                          vnl_vector<double>& By,
+                                          const vcl_vector<vgl_point_2d<double> >& dest_pts)
 {
   int n =dest_pts.size();
 
