@@ -482,7 +482,10 @@ inline void vil_math_image_abs_difference(const vil_image_view<aT>& imA,
       const bT* pixelB = rowB;
       sumT* pixelS = rowS;
       for (unsigned i=0;i<ni;++i,pixelA+=istepA,pixelB+=istepB,pixelS+=istepS)
-        *pixelS = vcl_abs(sumT(*pixelA)-sumT(*pixelB));
+      {
+        // The following construction works for all types, including unsigned
+        *pixelS = (sumT)(*pixelA>*pixelB?(*pixelA-*pixelB):(*pixelB-*pixelA));
+      }
     }
   }
 }
