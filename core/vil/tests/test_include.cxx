@@ -24,6 +24,8 @@
 #include <vil2/algo/vil2_sobel_3x3.h>
 #include <vil2/algo/vil2_structuring_element.h>
 #include <vil2/algo/vil2_threshold.h>
+#include <vil2/algo/vil2_exp_filter_2d.h>
+#include <vil2/algo/vil2_suppress_non_max.h>
 #include <vil2/vil2_bicub_interp.h>
 #include <vil2/vil2_bilin_interp.h>
 #include <vil2/vil2_clamp.h>
