@@ -88,7 +88,7 @@ FMPlanarNonLinFun::FMPlanarNonLinFun(const ImageMetric* image_metric1,
 bool FMPlanarNonLinFun::compute(FMatrixPlanar* F)
 {
   // fm_fmatrix_nagmin
-  vcl_cerr << "FMPlanarNonLinFun: matches = "<<data_size_<<", using "<<FMPlanarNonLinFun_nparams<<" parameters \n";
+  vcl_cerr << "FMPlanarNonLinFun: matches = "<<data_size_<<", using "<<FMPlanarNonLinFun_nparams<<" parameters\n";
 
   /* transform F to well-conditioned frame. */
   const vnl_matrix<double>& post = denorm_matrix_inv_.as_ref();
@@ -169,7 +169,7 @@ FMatrixPlanar FMPlanarNonLinFun::params_to_fmatrix(const vnl_vector<double>& par
 // for algorithm details.
 //
 void FMPlanarNonLinFun::fmatrix_to_params_mna(const FMatrixPlanar& F,
-                                          vnl_vector<double>& params)
+                                              vnl_vector<double>& params)
 {
   // this converts to [e2]x[l]x[e1] form - see A Zisserman
   HomgPoint2D e1,e2;
@@ -219,7 +219,7 @@ void FMPlanarNonLinFun::fmatrix_to_params_mna(const FMatrixPlanar& F,
   params[4] = e2.x()/e2.w();
   params[5] = e2.y()/e2.w();
 
-#if PARANOID
+#ifdef PARANOID
   // Check parameterization
   {
     FMatrixPlanar back = params_to_fmatrix_mna(params);
