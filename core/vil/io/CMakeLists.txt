@@ -1,4 +1,4 @@
-# mul/vil2/io/CMakeLists.txt
+# core/vil2/io/CMakeLists.txt
 
 SET(vil2_io_sources
   vil2_io_memory_chunk.cxx vil2_io_memory_chunk.h

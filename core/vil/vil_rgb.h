@@ -1,4 +1,4 @@
-// This is contrib/mul/vil2/vil2_rgb.h
+// This is core/vil2/vil2_rgb.h
 #ifndef vil2_rgb_h_
 #define vil2_rgb_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

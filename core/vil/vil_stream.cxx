@@ -1,4 +1,4 @@
-// This is contrib/mul/vil2/vil2_stream.cxx
+// This is core/vil2/vil2_stream.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif

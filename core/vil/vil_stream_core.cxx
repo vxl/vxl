@@ -1,12 +1,12 @@
-// This is contrib/mul/vil2/vil2_stream_core.cxx
-
-// @author fsm
-
+// This is core/vil2/vil2_stream_core.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-#include "vil2_stream_core.h"
+//:
+// \file
+// \author fsm
 
+#include "vil2_stream_core.h"
 #include <vcl_cassert.h>
 
 vil2_stream_core::~vil2_stream_core()

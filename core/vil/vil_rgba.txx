@@ -1,4 +1,4 @@
-// This is contrib/mul/vil2/vil2_rgba.txx
+// This is core/vil2/vil2_rgba.txx
 #ifndef vil2_rgba_txx_
 #define vil2_rgba_txx_
 

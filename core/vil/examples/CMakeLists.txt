@@ -1,4 +1,4 @@
-# mul/vil2/examples/CMakeLists.txt
+# core/vil2/examples/CMakeLists.txt
 
 LINK_LIBRARIES( vil2_algo vil2 testlib)
 

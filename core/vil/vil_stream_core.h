@@ -1,4 +1,4 @@
-// This is contrib/mul/vil2/vil2_stream_core.h
+// This is core/vil2/vil2_stream_core.h
 #ifndef vil2_stream_core_h_
 #define vil2_stream_core_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
