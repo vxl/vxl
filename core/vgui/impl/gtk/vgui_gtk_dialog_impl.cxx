@@ -122,13 +122,12 @@ struct vgui_gtk_dialog_impl_int_pair
 void choose_cb(GtkWidget* /*widget*/,
                gpointer data)
 {
-
   vgui_gtk_dialog_impl_int_pair *ip = (vgui_gtk_dialog_impl_int_pair*) data;
   *(ip->val) = ip->tmp;
   if (debug) vcl_cerr << "choose " << (ip->tmp) << vcl_endl;
 }
 
-}
+} // extern "C"
 
 //--------------------------------------------------------------------------------
 //: Changes the modality of the dialog.
@@ -274,7 +273,7 @@ void choose_color(GtkWidget* /*w*/, GtkEntry* color_entry)
   gtk_widget_show(GTK_WIDGET(colord));
 }
 
-}
+} // extern "C"
 
 //-------------------------------------------------------------------------------
 //: Display the dialog box.
@@ -435,7 +434,7 @@ bool vgui_gtk_dialog_impl::ask()
       // browser in this dialog because the latter is a top level
       // window. However, we must make sure we delete this file
       // browser widget when we close this dialog, so we have to keep
-      // an extra list of "auxillary widgets to delete".
+      // an extra list of "auxiliary widgets to delete".
       //
       // This is ugly. A better solution would be most welcome.
 
