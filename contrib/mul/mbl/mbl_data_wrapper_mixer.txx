@@ -44,7 +44,7 @@ mbl_data_wrapper_mixer<T>::mbl_data_wrapper_mixer(mbl_data_wrapper<T>& wrapper1,
 template<class T>
 void mbl_data_wrapper_mixer<T>::set(mbl_data_wrapper<T> **wrapper, unsigned long n_wrappers)
 {
-  assert (n_wrappers != ((unsigned)-1)); // a common mistake
+  assert (n_wrappers != ((unsigned long)-1)); // a common mistake
   wrapper_.resize(n_wrappers);
   n_       = 0;
   for (unsigned long i=0;i<n_wrappers;++i)
