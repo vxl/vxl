@@ -22,11 +22,11 @@ SUBDIRS(vsol)
 # topology
 SUBDIRS(gst vtol)
 
-# Multi-view database
-SUBDIRS(gmvl)
-
 # digital  geometry
 SUBDIRS(vdgl)
+
+# Multi-view database
+SUBDIRS(gmvl)
 
 # photogrammetry and
 # coordinate systems addon
