@@ -1,0 +1,570 @@
+Minutes of the vxl meeting held in Zurich, 29-30 March 2001.
+
+----------------------------------------------------------------------
+0. Historic tour - Joe Mundy
+
+Already in 1972, GE/CRD developed image processing software (Fortran;
+"operator" paradigm).  In 1980 came lisp, and the "object modeling"
+paradigm.  1990 was the birth of TargetJr when C++ was chosen to
+replace lisp.
+
+Why software environments?
+- accumulate individual efforts (hence faster development of new software)
+- direct research-to-application delivery (would be impossible in Matlab)
+- as a comparison tool for research results
+
+
+
+----------------------------------------------------------------------
+1. Research groups and their objectives
+
+Zurich:
+	Andreas Turina, Stephan Scholze, Dominique
+
+	Coming in mostly as users of vxl. Interests are in biomedical
+	modeling, using vxl for visualisation and for general
+	algorithmic support. Looking for simplicity--vxl is a tool,
+	and should therefore be easy to use. Concerns include
+	confusion with the different types of points, and the
+	inability to conveniently switch between them for different
+	algorithms.  The vxl group is currently 3. Some current TJr
+	users *may* switch, depending on the progress of vxl.
+
+Leuven:
+	Peter Vanroose
+
+	Leuven's 3D reconstruction people are using vxl the most
+	(mostly vnl/vil). vgl is not (yet) good enough for them - they
+	have their own. (They, however, removed vcl and use standard
+	C++ directly.) They work with SGIs (IRIX might be going out,
+	Linux coming in), Solaris, and a few Alphas. TJr/Parmesan
+	people shifting toward vxl. They are struggling with the
+	current GUI stuff. vtk being used by the 3D visualisation
+	people. Others will want a GUI. Peter guesses about 5 active
+	people, 15 maybes.
+
+RPI:
+	Chuck Stewart, Amitha Perera
+
+	Chuck has taught vision and programming classes using
+	TJr. Successful because of "complicated" algorithms, and
+	unsuccessful because of learning ramp. vxl will hopefully
+	avoid the latter. Some research will need to be "real time",
+	so performance and lightweight is important. RPI has many
+	relatively naive users; vxl must cater for them. RPI is going
+	towards building a web interface for retina project
+	software. Simplicity in design and reliability of code are
+	paramount; completeness and generality is much less
+	important. Multi-platform build environment is essential. The
+	retina project may move to Insight (possibly for political
+	reasons). Problem with Insight is that it may grow very big
+	very quickly; it is very dynamic.
+
+Oxford:
+	Andrew Fitzgibbon, Frederik Schaffalitzky, Karen McGaul
+
+	Basic principles of vxl: not slow, not heavy (learning and
+	compiling), not weird. Outcomes: limited scope (e.g. image
+	library just loads many formats; doesn't do much else). vxl
+	will develop and harden through use--basic stuff written,
+	others add as the need arises. vcl is important, as there is
+	no standard compiler available. They use xcv, which is meant
+	to be a program that demonstrates everything in vxl.
+
+GE:
+	Geoff Cross, Joe Mundy, Peter Tu, Don Hamilton
+
+	GE is working towards some kind of merger between vxl and
+	vtk. Not really combining, but some sort of "link" -- exchange
+	data, etc. Compute in vxl, display in vtk. GE is also working
+	on developing the topology libraries for vxl. They are
+	developing/porting, in collaboration with INRIA(?), some line
+	and curve fitting code.
+
+Manchester:
+	Tim Cootes, Ian Scott
+
+	Have about 20 people working with Radial, which is a
+	Manchester only library. Thinking about using a more general
+	and widely used library, so enable algorithm exchange,
+	etc. Research is mostly on medical and face modeling. Uses Qt
+	library for GUI. They are still evaluating vxl. Latest
+	contribution was fixing documentation, and adding the viol
+	library for binary output. If they make the switch, they would
+	contribute modeling software. Requirements: believable coding
+	standard, consistency, documentation, easy to learn (convince
+	others to use), 3D images, and possibly 4D images. Need to be
+	able to persuade people to use this and not Matlab.
+
+ANU:
+	Richard Hartley
+	Just have vxl up and running. Plan just to use it.
+
+
+----------------------------------------------------------------------
+2. Input for vxl from a new user's perspective
+
+* code should work with/without environment. That is, it should mostly
+  be a set of libraries with as few constraints as possible. It should
+  be possible to use the code in other projects/environments
+
+* vxl should try to be "popular"--be accepted by the vision community
+  in general.
+
+* need much more documentation!
+
+* representation and procedure should be separated, as in, for
+  example, vnl and vnl-algo. This is a design issue. It is not to
+  imply that representation and procedure should be in different
+  libraries. However, good algorithm implementations need not be
+  rewritten, may use internal data structures. It's important that
+  they are there.
+
+
+* need a computation geometry library.
+
+* vxl "core" consists on the "good, widely loved" code. gel/oxl/etc
+  are for works-in-progress, functional but poorly documented code,
+  etc. But criticism on this concept because looks unstable, or at
+  least "subject to change without notice".
+
+* there shouldn't be a halfway house for code promotion. (That is,
+  there is no "candidate for core" set of libraries.) Such a thing
+  would cause many libraries to just sit there. Also, the
+  definition/expectation of such a halfway house would be
+  controversial.
+
+* For new users there are currently not enough useful non-trivial
+  algorithms, s.c. "killer demos" in vxl, like Canny, ...
+
+
+
+----------------------------------------------------------------------
+3. Documentation
+
+* Use doxygen for documentation. Manchester will write a chapter of
+  The Book describing the style (below). Manchester will remove old
+  documentation generation mechanisms in favour of uniform use of
+  doxygen. Better no documentation than broken documentation.
+
+* Run doxygen on each individual library (vim, vnl, ...) and add an
+  overview page that links to those.
+
+* vxl will not provide routines to search the documentation; it will
+  be left to an external process (e.g. web search engine).
+
+* Class documentation should preferably appear in the header
+  file. (This is where doxygen pulls it from.)
+
+* Each library should have an overview document. This should appear in
+  The Book. Andrew will fix the book to compile over CVS.
+
+* The book, and other similar documentation, will continue to be
+  written in TeXinfo, since it gives the most reasonable online and
+  printed output. Andrew will provide a link for TeXinfo
+  documentation/tutorials.
+
+* Everything in core vxl must follow the style standards (below). The
+  current vxl does not. Manchester has done a lot of work to rectify
+  this, and they will incorporate the changes soon. Existing stuff
+  will slowly be modified to meet the standards. New stuff must meet
+  the standards in order to be accepted into the core.
+
+* vgl needs code level and overview documentation.
+
+* There is no vxl overview documentation, detailing the vxl
+  philosophy, etc. Andrew will do this.
+
+* sparse arrays needs tidying up. Interfaces need to be made
+  consistent.
+  * Manchester will fix this. The inconsistent interfaces will be
+    marked deprecated (see below). They will do this only for code in
+    vxl. oxl/gel people are on their own.
+
+
+----------------------------------------------------------------------
+4. Coding standards:
+
+* all global scope identifiers are lowercase with underscores separating
+  words. Various reasons. Rejected vxl_Image_template by vote.
+
+* each class, file, function and member variable should have a one
+  line description (brief line) in addition to the long description.
+
+* Private member variables should have a underscore as a suffix,
+    e.g. value_. An underscore as a prefix (_value) is not
+    allowed. Rejected by vote: prefix "m_", e.g. m_value.
+
+* Accessor functions for a variable x_ should be called x() and
+  set_x(). In particular
+     T x;
+  gives
+     void set_x(T x); // or const T&, or whatever
+     T x();
+  (Using get_x() is redundant and simply causes extra typing.) set_x()
+  should return void. It should never return the old value, as this
+  could be highly confusing. Never use x() for the purposes of setting
+  the value.
+     void x(T val) { x_ = val; }  // WRONG!
+
+* Avoid using nested classes where possible - there are subtle
+  inconsistencies between compilers.
+
+* Forward declarations for a class in a library val should be forward
+  declared in val_fwd.h at the top level of the library. All classes
+  may not be in there; only those someone feels like forward declaring
+  (because it is difficult, etc.).
+
+* Level 1 libraries should not require RTTI. High level libraries may
+  use RTTI. No decision on the work-around. Tentative suggestion to
+  use is_a(...) to support safe downcasting.
+
+* A file may have more than one class, provided they "belong". The
+  goal of the filename=class name is to make it easy to find
+  class/function declarations and definitions. As long as this holds,
+  a file may declare more than one class.
+
+* one tab (0x08) *always* expands to 8 spaces
+
+* Indentation:
+  * may use any number of indent spaces (>=2), but must be consistent.
+  * rejected proposal to fix the number of indent spaces
+  * may only use spaces for indentation (i.e. no tab characters, which
+    means 10 spaces of indentation may *not* be replaced by one tab
+    and two spaces). Reason: Visual Studio (and other editors) allow
+    the developer to set tab=n. Most people have done this to their
+    own taste. These environments convert TAB to n spaces, instead of 8.
+  * When editing someone else's source, you must use the same
+    indentation as he.
+
+* Maximum number of characters per line: 132. (Number extracted
+  primarily from vtk guidelines). 80 character lines preferred when
+  possible.
+
+
+----------------------------------------------------------------------
+5. Website
+
+* must have vxl webpage. Must find stable server name. Perhaps
+  "www.visionlibraries.org"?
+
+* vxl web presence must distinct from TJr webpage. Must make sure that
+  vxl does not inherit the reputation of being hard to
+  learn. targetjr.org cannot, therefore, be used.
+
+* Proposal: SourceForge (see below).
+
+----------------------------------------------------------------------
+6. Compilation and such.
+
+* Must make extensive use of test cases. 80% coverage (=percentage of
+  code tested by the test cases) is about the best you can expect in
+  practice. vnl has very good coverage (about 70%). Other libraries
+  should emulate this.
+
+* Have a compile dashboard (like vtk). The repository code is compiled
+  on several platforms, and the results summarised on a webpage. Red
+  boxes would provide incentive and pressure for bugs to be fixed.
+  Concerns: must have a reasonable mechanism to add a new platform for
+  testing when approved by the "vxl group". GE will try to get the
+  first version of the dashboard up and running.
+  * Dashboard should support distributed compilations.
+
+* possibly have continuous testing. Preferably this would happen on
+  the platform that gives most trouble (on HP, for example). The idea
+  is that if it works on this platform, it will probably work on all
+  other platforms. The other platforms are tested less regularly
+  (e.g. once a day).
+
+* Have a (moving) "last_good" cvs tag on all files when there are no
+  compile/test errors.
+
+* have a set of style tools. E.g. make sure vcl_cerr is used instead
+  of cerr.
+
+* Fred will document which parts of the C++ standard is and is not
+  allowed in vxl.
+
+* Build system must generate VC dsp files and Unix makefile. Should
+  have a platform independent place to specify the project information
+  (source files, etc).
+
+* there will no longer be a distinction between local and system
+  directories, as was in TJr. If a site wishes to maintain a central
+  repository, symlinks can be used to fake it.
+
+* Geoff's CMake proposal was accepted. Geoff will finish up his
+  current CMake additions and present the system for testing.
+  Don's makefile based system rejected because of dependencies on
+  gmake and perl, for example. Ideally, a Windows user should not need
+  anything outside of vxl.
+
+* Smart pointers:
+  * _ref renamed to _sptr. x_sptr should be declared in x_sptr.h. The
+  renames for the files currently in the repository should be done via
+  cvs add and delete.
+  * _sp rejected.
+
+* Fred presented some evidence that enabling implicit templates, on
+  ELF platforms, for the STL classes, decreases the size of the
+  libraries, while making template use easier. If this holds in
+  general, implicit templates should be turned on system wide.
+  * Should it be just for STL or for all vxl? It should be for all
+    vxl, since a half-measure would probably create more confusion.
+  * Implicit templates => including .txx. How does this affect the
+    compile time?
+  * Decision delayed pending further (email) discussion.
+
+* List of "supported" platforms and compilers:
+    freebsd with gcc 2.95.2
+    windows with intel, VC 6.0
+    linux with gcc 2.95.2, 3.0, egcs 2.91.66
+    SGI with MipsPro 7.2, 7.3
+    Solaris with Sunpro 5.0, gcc 2.95.2, egcs 2.91.66
+    HP with gcc 2.95.2
+    Alpha with  gcc 2.95.2
+
+
+----------------------------------------------------------------------
+7. Class IO
+
+* Philosophy: every class must be able to save and restore itself in a
+  cross-platform manner.
+
+* Manchester has written functionality to the current vxl for binary
+  IO.
+  * Uses only the public interface of the class for IO
+  * Level 1 libraries written as clip-on libraries.
+  * Level 2 libraries could use member functions for ease of
+    implementation.
+  * Manchester offers to put the code into the repository for
+    promotion into vxl, subject to testing by another group.
+
+* Decisions: basic functionality goes in a 'core' (level 1) library.
+  Name to be decided (current proposal viol, could become 3-letter).
+
+* GE is developing a general XML DTD, especially for the topology. The
+  XML structure will not necessarily correspond to the vxl class
+  hierarchy.
+
+* Need proposal(s) to be decided upon before full implementation.
+
+
+
+----------------------------------------------------------------------
+8. Image processing (vipl)
+
+* Current implementation is too complex, and therefore should be moved
+  to another top level package.
+
+* Andrew will put together templated version of vipl, while GE will
+  port "float buffer" version from TJr.
+
+
+----------------------------------------------------------------------
+9. Topology (vtol)
+
+* Peter presented GE's topology port from TJr. It is essentially a
+  direct port. Concerns: the topology classes have knowledge of
+  geometry.
+
+* Topology should be divorced from geometry. GE and ANU will take a
+  crack at developing this, and at designing a separate library to
+  embed the topology in a geometry.
+
+
+----------------------------------------------------------------------
+10. Multi-view geometry (mvl)
+
+* can't generalise on data structures, because they are very problem
+  specific, but must come up with standardized interfaces.
+
+* The cost of conversion from one data structure to another needs to
+  be paid somewhere, either inside the library implementation or by
+  the user code.
+
+* Andrew and Richard will talk to generate some sort of general
+  interface to multi-view. There will be a "mvl" mailing list (or mvl
+  sublist of the vxl list) to discuss these issues.
+
+* Oxford will put out basic multi-view algorithms (8 point algorithm,
+  etc.)
+
+
+----------------------------------------------------------------------
+11. vtk/vxl merger:
+
+* Would like to use vtk to display/manipulate results of vxl
+  computations. GE has done some basic work, such as exchanging
+  images.
+
+* GE will work toward this. vtk & vxl will be 3rd party libraries to
+  each other, so that vxl can be used without vtk.
+
+* some libraries/routines in the vxlvtk may depend on vtk routines, in
+  the same way that vnl-algo depends on netlib.
+
+* most likely vtk will need to be installed by the user, same way as
+  GTK,QT, etc, for GUI support.
+
+
+----------------------------------------------------------------------
+12. sourceforge and cvs mirrors
+
+* Geoff suggested a move to the GE version of sourceforge. Sourceforge
+  (www.sourceforge.org) provides a powerful interface for
+  collaborative software development, and is used by many Open Source
+  projects: it hosts 10500 projects and 75000 users. The sourceforge
+  software itself is open source. The GE version adds functionality
+  for licensing and such, and will be hosted *outside* the GE
+  firewall.
+
+* The cvs repository at Leuven is *the* repository. Mirrors (such as
+  those at Oxford and RPI) are, in principle, hidden to other
+  developers. That is, the burden of maintaining and syncing the
+  mirror is entirely up to the group that wants the mirror.
+
+* If the sourceforge plan should prove easy to implement, the cvs
+  repository *may* need to be moved. Also, all cvs access may need to
+  be through the sourceforge site.
+
+
+----------------------------------------------------------------------
+13. Deprecation of (public) interfaces
+
+* Ideally, the compiler should generate a warning whenever a
+  deprecated function is used. (Like Java's deprecated keyword.)  This
+  is hard (impossible?) to do in C++. Options:
+
+  * Runtime warnings only.
+
+  * Script to check and warn for deprecated calls
+
+  * Use //: DEPRECATED
+
+* Deprecated interfaces *should not* immediately break user code. That
+  is, deprecated interfaces should at least exist over the next
+  release, giving the user time to fix his code.
+
+* Deprecated interfaces should not exist forever, and so must be
+  removed at some time. Perhaps have side-by-side releases, one with
+  the deprecated interfaces + warnings, the other with such interfaces
+  removed.
+
+* Write macros vxl_compiler_warning and vxl_compiler_error (instead of
+  extern "this is an error")
+
+
+----------------------------------------------------------------------
+14. Email discussion and voting
+
+* Introduce an item to the mailing list, and specify a (reasonable)
+  resolution date.
+
+* All interested in the discussion will register their interest. If
+  no consensus is reached by the resolution date, those with
+  registered interest will vote.
+
+* The introducer is responsible for guiding the discussion and
+  providing regular summaries of current issues and stances.
+
+* If someone is unable to participate in a discussion before or vote
+  on the resolution (voting) date, and somehow (through a colleague, for
+  example) indicates interest, the resolution date will be extended
+  allow him to participate (=at least vote).
+
+* The details rules should be written up and emailed to the vxl list
+  for agreement.
+
+----------------------------------------------------------------------
+15. Configuration system
+
+* things stay in place until new build system is in place
+
+* Geoff will attempt to put the new build system config files away
+  from the top level directory, to avoid conflicts with other
+  libraries and build systems.
+
+
+----------------------------------------------------------------------
+16. vxl release
+
+* Manchester will submit documentation changes by mid-May. Release
+  soon after, when segmentation has been fully ported.
+
+* There will be a telephone conference just before the release.
+
+* Tentative date for the start of a coding week: June 4. The goal is
+  for the groups to get together and do nothing but vxl coding. This
+  will include writing documentation and maintenance changes (like
+  cleanup vbl_sparse_array*).
+
+
+
+
+----------------------------------------------------------------------
+17. What happens with old TargetJr
+
+* Segmentation must be ported, especially Van Duc's Canny
+  
+* No reason to rewrite "good" algorithm implementations (cf CompGeom)
+
+* Nobody sees the need to re-implement TargetJr in terms of vil, vnl, vbl
+
+  
+
+----------------------------------------------------------------------
+18. Immediate to-dos (as extracted from above)
+
+* Overhaul documentation generation mechanism to use doxygen
+  - Manchester
+
+* Fix up vxl documentation
+  - Manchester, by mid-May
+
+* Implement a style checking tool
+
+* Provide documentation for TexInfo
+  - Andrew
+
+* Document the parts of C++ that may be used by vxl
+  - Fred
+
+* Port TargetJr's segmentation package 
+  
+* Work out vipl proposal(s)
+  - Andrew
+
+* Fix up sparse array's inconsistent interface, depreciating the old
+  interface.
+  - Manchester
+
+* Find a website for vxl
+
+* Compile dashboard for vxl
+  - Geoff, GE
+
+* New build system (CMake)
+  - Geoff
+
+* Explore the use of sourceforge
+  - Geoff
+
+* Explore efficiency issues related to enabling implicit template
+  instantiation
+  - Fred, Amitha
+
+* Move vipl away from vxl
+  - PeterV
+
+* vtol (topology) and vtel(?) (topology embedding)
+  - GE
+
+* Discuss and create the multi-view library. Create a mailing list for
+  this purpose.
+  - Andrew, Richard, and interested others
+
+* Rename _ref to _sptr
+  - PeterV
+
+* Write up the rules for email voting
