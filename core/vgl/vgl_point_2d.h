@@ -67,12 +67,25 @@ public:
   ~vgl_point_2d () {}
   
   // -- Assignment  
+
   vgl_point_2d<Type>& operator=(const vgl_point_2d<Type>& that){
     //this->data_ = that.data_;
     data_[0] = that.data_[0];
     data_[1] = that.data_[1];
     return *this;
   }
+
+  // some convinience operators 
+
+  vgl_point_2d<Type> operator+(const vgl_point_2d<Type>& that) const;
+  vgl_point_2d<Type> operator-(const vgl_point_2d<Type>& that) const;
+  
+  Type distance(const vgl_point_2d<Type>& that) const;
+
+  
+  // the == operator
+  bool operator==(const vgl_point_2d &other) const;
+  
   
   // Data Access-------------------------------------------------------------
 
@@ -82,6 +95,8 @@ public:
   // -- Set x,y.
   inline void set (Type px, Type py){ data_[0] = px; data_[1] = py; }
   inline void set (Type const p[2]) { data_[0] = p[0]; data_[1] = p[1]; }
+  inline void set_x (Type px) { data_[0] = px;}
+  inline void set_y (Type py) { data_[1] = py;}
 
   // INTERNALS---------------------------------------------------------------
 

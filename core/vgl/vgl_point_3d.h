@@ -55,6 +55,21 @@ public:
     return *this;
   }
   
+  
+  // some convinience operators 
+
+  vgl_point_3d<Type> operator+(const vgl_point_3d<Type>& that) const;
+  vgl_point_3d<Type> operator-(const vgl_point_3d<Type>& that) const;
+  
+  Type distance(const vgl_point_3d<Type>& that) const;
+
+  
+  // the == operator
+  bool operator==(const vgl_point_3d &other) const;
+  
+  
+
+
   // Data Access-------------------------------------------------------------
   
   inline Type x() const {return data_[0];}
@@ -67,6 +82,10 @@ public:
     data_[1] = py;
     data_[2] = pz;
   }
+  inline void set_x (Type px) { data_[0] = px;}
+  inline void set_y (Type py) { data_[1] = py;}
+  inline void set_z (Type pz) { data_[2] = pz;}
+
 
   ostream& write(ostream& s) const {
     return s << this->data_[0] << " " << this->data_[1] << " " << this->data_[2];
