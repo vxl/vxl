@@ -1,5 +1,4 @@
-#include <vcl_fstream.h>
-
+// This is gel/vtol/tests/test_edge_2d.cxx
 #include <vtol/vtol_vertex_2d_sptr.h>
 #include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_edge_2d.h>

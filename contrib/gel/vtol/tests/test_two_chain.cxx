@@ -1,5 +1,4 @@
-#include <vcl_fstream.h>
-
+// This is gel/vtol/tests/test_two_chain.cxx
 #include <vtol/vtol_vertex_2d_sptr.h>
 #include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_face_2d.h>
