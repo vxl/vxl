@@ -1,3 +1,8 @@
+#
+# ./tbl/vipl/CMakeLists.txt
+#
+#   geoff.cross@crd.ge.com
+#
 
 
 ADD_LIBRARY(vipl vipl_sources)

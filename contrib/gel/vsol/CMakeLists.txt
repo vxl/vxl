@@ -1,3 +1,8 @@
+#
+# ./gel/vsol/CMakeLists.txt
+#
+#   geoff.cross@crd.ge.com
+#
 
 ADD_LIBRARY(vsol vsol_sources)
 
