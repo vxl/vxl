@@ -22,7 +22,7 @@
 bool vil2_save(const vil2_image_view_base &im, char const* filename, char const* file_format)
 {
   vil2_stream* os = vil2_open(filename, "w");
-  if (!os->ok()) {
+  if (!os || !os->ok()) {
     vcl_cerr << __FILE__ ": Invalid stream for \"" << filename << "\"\n";
     return false;
   }

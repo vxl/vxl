@@ -25,7 +25,7 @@
 bool vil_save(vil_image i, char const* filename, char const* file_format)
 {
   vil_stream* os = vil_open(filename, "w");
-  if (!os->ok()) {
+  if (!os || !os->ok()) {
     vcl_cerr << __FILE__ ": Invalid stream for \"" << filename << "\"\n";
     return false;
   }
