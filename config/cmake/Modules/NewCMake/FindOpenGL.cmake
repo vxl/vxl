@@ -16,7 +16,6 @@
 IF (WIN32)
   IF (CYGWIN)
 
-
     FIND_PATH(OPENGL_INCLUDE_DIR GL/gl.h
       /usr/include
       /usr/X11R6/include
@@ -55,7 +54,6 @@ IF (WIN32)
   ENDIF (CYGWIN)
 
 ELSE (WIN32)
-
 
   # The first line below is to make sure that the proper headers
   # are used on a Linux machine with the NVidia drivers installed.
