@@ -1,8 +1,9 @@
+#include "bgui_style.h"
 #include <vcl_iostream.h>
-#include <bgui/bgui_style.h>
 //--------------------------------------------------------------------------
-//: bgui style 
+//  bgui style 
 //--------------------------------------------------------------------------
+
 bgui_style::bgui_style(const float r, const float g, const float b, 
                        const float s, const float w)
 {
@@ -10,6 +11,7 @@ bgui_style::bgui_style(const float r, const float g, const float b,
   change_point_size(s);
   change_line_width(w);
 }
+
 void bgui_style::change_color(const float r,
                               const float g,
                               const float b)
@@ -30,12 +32,12 @@ void bgui_style::change_line_width(const float w)
 
 void bgui_style::clone_style(vgui_style* sty)
 {
-  if(!sty)
+  if (!sty)
     {
       vcl_cout << "In bgui_style::clone_style(.) - null input style\n";
-        return;
+      return;
     }
-  for(int i = 0; i<3; i++)
+  for (int i = 0; i<3; i++)
     sty->rgba[i]=rgba[i];
   sty->point_size = point_size;
   sty->line_width = line_width;

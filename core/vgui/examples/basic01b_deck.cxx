@@ -1,20 +1,21 @@
-// This example displays two images in a deck.  
-// Images are loaded from the two filenames 
+// This example displays two images in a deck.
+// Images are loaded from the two filenames
 // on the command line.
 
 #include <vcl_iostream.h>
 #include <vnl/vnl_math.h>
-#include <vgui/vgui.h> 
-#include <vgui/vgui_image_tableau.h> 
+#include <vgui/vgui.h>
+#include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
-#include <vgui/vgui_shell_tableau.h> 
+#include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_deck_tableau.h>
+
 int main(int argc, char **argv)
 {
   vgui::init(argc, argv);
   if (argc <= 2)
   {
-    vcl_cerr << "Please give two image filenames on the command line" << vcl_endl;
+    vcl_cerr << "Please give two image filenames on the command line\n";
     return 0;
   }
   // Load two images(given in the first command line param)
@@ -28,10 +29,10 @@ int main(int argc, char **argv)
   deck->add(image_tab2);
 
   vgui_viewer2D_tableau_new viewer(deck);
- 
+
   // Put the deck into a shell tableau at the top the hierarchy
   vgui_shell_tableau_new shell(viewer);
-  
+
   // Create a window, add the tableau and show it on screen.
   int width = vnl_math_max(image_tab1->width(), image_tab2->width());
   int height = vnl_math_max(image_tab1->height(), image_tab2->height());

@@ -39,10 +39,12 @@ void segv_menus::read_xml_edges_callback()
   segv_segmentation_manager::instance()->read_xml_edges();
 }
 #endif
+
 void segv_menus::test_face_callback()
 {
-segv_segmentation_manager::instance()->test_face();
+  segv_segmentation_manager::instance()->test_face();
 }
+
 //segv_menus definition
 vgui_menu segv_menus::get_menu()
 {
