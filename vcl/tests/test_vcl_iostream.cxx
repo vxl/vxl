@@ -6,7 +6,6 @@
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_sstream.h>
-#include <vcl_strstream.h>
 
 // This appears to do nothing, and it doesn't compile on MSVC with some weird error
 //      'flux' : illegal member initialization: 'fstream' is not a base or member
