@@ -27,7 +27,7 @@ public:
 
   // Data Control--------------------------------------------------------------
 
-  void Octree::InheritFromAbove();
+  void InheritFromAbove();
 
 protected:
   // Data Members--------------------------------------------------------------

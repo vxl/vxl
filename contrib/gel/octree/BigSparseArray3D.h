@@ -53,7 +53,6 @@
 #include <vcl_functional.h>
 #include <vcl_utility.h>
 #include <vcl_map.h>
-#include <vcl_iosfwd.h>
 
 template <class T>
 class BigSparseArray3D {
