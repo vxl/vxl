@@ -9,6 +9,7 @@
 #include <vcl_iostream.h>
 #include <vcl_deprecated.h>
 #include <vcl_cassert.h>
+#include <vcl_cmath.h>
 
 // Constructors/Destructor---------------------------------------------------
 
@@ -209,28 +210,49 @@ void vgl_box_3d<Type>::set_centroid_z(Type cz)
   max_pos_[2]= max_pos_[2] + delta;
 }
 
+
+
+template <class T>
+inline void set_dim(T & minv, T& maxv, T spread);
+
+
+// All this code is to avoid drift in the centroid.
+VCL_DEFINE_SPECIALIZATION 
+inline void set_dim(int & minv, int& maxv, int spread)
+{
+  int sum = minv + maxv;
+  sum = sum | (spread&1); //if width is odd, then make sum odd
+  minv = int(vcl_floor((sum-spread)/2.0));
+  maxv = minv+spread;
+
+}
+
+template <class T>
+inline void set_dim(T & minv, T& maxv, T spread)
+{
+  T x = minv + maxv;
+  minv = T( (x-spread)*0.5 );
+  maxv = minv + spread;
+}
+
+
+
 template <class Type>
 void vgl_box_3d<Type>::set_width(const Type width)
 {
-  Type x = centroid_x();
-  min_pos_[0] = Type(x-0.5*width);
-  max_pos_[0] = Type(x+0.5*width);
+  set_dim(min_pos_[0], max_pos_[0], width);
 }
 
 template <class Type>
 void vgl_box_3d<Type>::set_height(const Type height)
 {
-  Type y = centroid_y();
-  min_pos_[1] = Type(y-0.5*height);
-  max_pos_[1] = Type(y+0.5*height);
+  set_dim(min_pos_[1], max_pos_[1], height);
 }
 
 template <class Type>
 void vgl_box_3d<Type>::set_depth(const Type depth)
 {
-  Type z = centroid_z();
-  min_pos_[2] = Type(z-0.5*depth);
-  max_pos_[2] = Type(z+0.5*depth);
+  set_dim(min_pos_[2], max_pos_[2], depth);
 }
 
 template <class Type>

@@ -441,6 +441,49 @@ static void test_box_2d()
   TEST("!contains(p2)", b.contains(p2), false);
   TEST("box is empty", b.is_empty(), true);
   TEST("box has no volume", b.volume(), 0.0);
+
+  vgl_box_2d<int> ib(10, 11, 10, 11);
+  vcl_cout << ib << vcl_endl;
+  TEST("Integer box centroid", ib.centroid_x() == 10 && ib.centroid_y()==10, true);
+  ib.set_width(1); ib.set_height(1);
+  vcl_cout << ib << vcl_endl;
+  TEST("Integer box centroid drift", ib.centroid_x() == 10 && ib.centroid_y()==10, true);
+
+  ib = vgl_box_2d<int>(10, 11, 10, 11);
+  ib.set_width(4); ib.set_height(4);
+  ib.set_width(3); ib.set_height(3);
+  ib.set_width(4); ib.set_height(4);
+  ib.set_width(3); ib.set_height(3);
+  ib.set_width(4); ib.set_height(4);
+  vcl_cout << ib << ib.centroid() << vcl_endl;
+  TEST("Integer box centroid drift", ib.centroid_x() == 10 && ib.centroid_y()==10, true);
+
+  ib = vgl_box_2d<int>(9, 11, 9, 11);
+  vcl_cout << ib << ib.centroid() << vcl_endl;
+  ib.set_width(3); ib.set_height(3);
+  vcl_cout << ib << ib.centroid() << vcl_endl;
+  TEST("Integer box centroid", ib.centroid_x() == 10 && ib.centroid_y()==10, true);
+
+
+  ib = vgl_box_2d<int>(-11, -10, -11, -10);
+  vcl_cout << ib << ib.centroid() << vcl_endl;
+  ib.set_width(3); ib.set_height(3);
+  ib.set_width(4); ib.set_height(4);
+  ib.set_width(3); ib.set_height(3);
+  ib.set_width(4); ib.set_height(4);
+  ib.set_width(3); ib.set_height(3);
+  vcl_cout << ib << ib.centroid() << vcl_endl;
+  TEST("Integer box negative centroid drift", ib.centroid_x() == -10 && ib.centroid_y()==-10, true);
+
+  ib = vgl_box_2d<int>(-11, -9, -11, -9);
+  vcl_cout << ib << ib.centroid() << vcl_endl;
+  ib.set_width(3); ib.set_height(3);
+  ib.set_width(4); ib.set_height(4);
+  ib.set_width(3); ib.set_height(3);
+  ib.set_width(4); ib.set_height(4);
+  vcl_cout << ib << ib.centroid() << vcl_endl;
+  TEST("Integer box negative centroid drift", ib.centroid_x() == -10 && ib.centroid_y()==-10, true);
+
 }
 
 static void test_box_3d()
@@ -697,7 +740,6 @@ MAIN( test_cartesian )
   test_box_3d();
   vcl_cout << "-- Testing vgl_1d_basis --\n";
   test_1d_basis();
-
   SUMMARY();
 }
 
