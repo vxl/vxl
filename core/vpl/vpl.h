@@ -25,4 +25,4 @@ unsigned int    vpl_sleep( unsigned int t );
 //: Sleep for t microseconds.
 int             vpl_usleep( unsigned int t );
 
-#endif
+#endif // vpl_vpl_h_
