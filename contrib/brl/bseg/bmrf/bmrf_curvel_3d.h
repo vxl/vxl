@@ -67,13 +67,13 @@ class bmrf_curvel_3d : public bugl_gaussian_point_3d<double>, public vbl_ref_cou
   double proj_error() const { return proj_error_; }
 
   //: Return the average gamma value relative to frame 0
-  double gamma_avg() const;
+  double gamma_avg();
 
   //: Return the standard deviation of the gamma values
-  double gamma_std() const;
+  double gamma_std();
 
   //: Return the average s value projected into \p frame
-  double s_avg(unsigned int frame) const;
+  double s_avg(unsigned int frame);
 
   //: Set the projection error
   void set_proj_error(double error) { proj_error_ = error; }
@@ -95,6 +95,9 @@ class bmrf_curvel_3d : public bugl_gaussian_point_3d<double>, public vbl_ref_cou
   
   //: The sum of the squared gamma values relative to frame 0;
   double sum_sqr_gamma_;
+
+  //: Indicates that the statistics are valid
+  bool stats_valid_;
 
   //: The number of valid projections
   unsigned int num_projections_;
