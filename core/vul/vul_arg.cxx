@@ -385,14 +385,14 @@ static int list_parse(vcl_list<int> &out, char ** argv)
     // the start/end positions (ref from 0) of the
     //    current ',' separated token.
     long start= range_regexp.start(0);
-    long end  = range_regexp.end(0);
+    long endp = range_regexp.end(0);
     if (start != 0) {
       vcl_cerr << "vul_arg<vcl_list<int> >: Bad argument [" << argv[0] << "]\n";
       return 0;
     }
 
     // this is the current token.
-    vcl_string token = str.substr(start, end);
+    vcl_string token = str.substr(start, endp);
 //  vcl_cout << "KYM token = " << token << endl;
     vcl_string match1 = range_regexp.match(1);
 //  vcl_cout << "KYM match1 = " << match1 << endl;
@@ -402,7 +402,7 @@ static int list_parse(vcl_list<int> &out, char ** argv)
 //  vcl_cout << "KYM match3 = " << match3 << endl;
 
     // Remove this match from the front of string.
-    str.erase(0, end + 1);
+    str.erase(0, endp + 1);
 
 #if 0
     vcl_cerr << "Range regexp matched [" << token <<  "]: parts ["
