@@ -1,3 +1,9 @@
+# This library contains public domain routines from netlib.att.com
+
+USES = contrib/brl
+USE_STDC++ := 0
+IULIBS = # no dependencies whatsoever
+
 LIBRARY := b3p_netlib
 VERSION := 1.0
 

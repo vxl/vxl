@@ -1,2 +1,2 @@
-USES += contrib/brl/b3p/netlib
+USES = contrib/brl
 IULIBS += -lb3p_netlib
