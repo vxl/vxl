@@ -245,10 +245,11 @@ class vgui_grid_tableau : public vgui_poly_tableau
 struct vgui_grid_tableau_new : public vgui_grid_tableau_sptr {
   typedef vgui_grid_tableau_sptr base;
   vgui_grid_tableau_new(unsigned initial_columns = 1, unsigned initial_rows = 1)
-    : base(new vgui_grid_tableau(1, 1)) { }
+    : base(new vgui_grid_tableau(initial_columns,initial_rows)) { }
   vgui_grid_tableau_new(vgui_tableau_sptr const& l, vgui_tableau_sptr const& r)
     : base(new vgui_grid_tableau(l, r)) { }
-  vgui_grid_tableau_new(vgui_tableau_sptr const& l, vgui_tableau_sptr const& m,                         vgui_tableau_sptr const& r)
+  vgui_grid_tableau_new(vgui_tableau_sptr const& l, vgui_tableau_sptr const& m,
+                        vgui_tableau_sptr const& r)
     : base(new vgui_grid_tableau(l, m, r)) { }
 };
 

@@ -112,8 +112,8 @@ void vgui_dialog_impl::string_field(const char* txt, vcl_string& val) {
 //------------------------------------------------------------------------------
 //: Add a choice field to the dialog box.
 void vgui_dialog_impl::choice_field(const char* txt,
-                                          const vcl_vector<vcl_string>& labels, int& val) {
-
+                                    const vcl_vector<vcl_string>& labels, int& val)
+{
   vgui_int_field *field = new vgui_int_field(txt, val);
 
   element l;
@@ -124,7 +124,8 @@ void vgui_dialog_impl::choice_field(const char* txt,
   elements.push_back(l);
 }
 
-void vgui_dialog_impl::file_browser(const char* txt, vcl_string& regexp, vcl_string& val) {
+void vgui_dialog_impl::file_browser(const char* txt, vcl_string& regexp, vcl_string& val)
+{
   vgui_file_field *field = new vgui_file_field(txt, regexp, val);
 
   element l;
@@ -136,7 +137,7 @@ void vgui_dialog_impl::file_browser(const char* txt, vcl_string& regexp, vcl_str
 }
 
 void vgui_dialog_impl::inline_file_browser(const char *txt,vcl_string & regexp,
-vcl_string& val)
+                                           vcl_string& val)
 {
   vgui_file_field *field = new vgui_file_field(txt, regexp, val);
 
@@ -148,7 +149,8 @@ vcl_string& val)
   elements.push_back(l);
 }
 
-void vgui_dialog_impl::color_chooser(const char* txt, vcl_string& val) {
+void vgui_dialog_impl::color_chooser(const char* txt, vcl_string& val)
+{
   vgui_string_field *field = new vgui_string_field(txt, val);
 
   element l;
@@ -171,7 +173,8 @@ void vgui_dialog_impl::inline_color_chooser(const char* txt, vcl_string& val) {
 }
 
 void vgui_dialog_impl::inline_tab(const vgui_tableau_sptr tab, unsigned width,
-  unsigned height) {
+                                  unsigned height)
+{
   // kym - don't use the field - store the tableau in the widget variable(?). 
   //vgui_string_field *field = new vgui_string_field();
   element l;
@@ -184,7 +187,8 @@ void vgui_dialog_impl::inline_tab(const vgui_tableau_sptr tab, unsigned width,
 
 //------------------------------------------------------------------------------
 //: Add a text message to the dialog box.
-void vgui_dialog_impl::text_message(const char* txt) {
+void vgui_dialog_impl::text_message(const char* txt)
+{
   int dummy_int = 0;
   vgui_int_field *field = new vgui_int_field(txt, dummy_int);
 
@@ -232,8 +236,7 @@ void* vgui_dialog_impl::color_chooser_widget(const char* txt, vcl_string& val) {
 void* vgui_dialog_impl::inline_color_chooser_widget(const char* txt, vcl_string& val) {
   return string_field_widget(txt, val);
 }
-void* vgui_dialog_impl::inline_tableau_widget(const vgui_tableau_sptr tab,
-  unsigned width, unsigned height){
+void* vgui_dialog_impl::inline_tableau_widget(const vgui_tableau_sptr tab, unsigned width, unsigned height){
   return 0;
 }
 
