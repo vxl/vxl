@@ -18,11 +18,12 @@
 #include <vtol/vtol_block.h>
 #include <vtol/vtol_block_sptr.h>
 
-#define Assert(x) do { if (x) vcl_cout << "test PASSED\n"; else vcl_cout << "test FAILED [" #x "]\n"; } while (0)
+#define Assert(x) { vcl_cout << #x "\t\t\t test "; if (x) { ++success; vcl_cout << "PASSED\n"; } else { ++failures; vcl_cout << "FAILED\n"; } }
 
 
 int main(int, char **)
 {
+  int success=0, failures=0;
 
   vcl_cout << "testing block" << vcl_endl;
 
@@ -116,6 +117,7 @@ int main(int, char **)
   Assert(tc1->valid_superior_type(*b1));
 
   vcl_cout << "Finished testing block" << vcl_endl;
-  return 0;
+  vcl_cout << "Test Summary: " << success << " tests succeeded, "
+           << failures << " tests failed" << (failures?"\t***\n":"\n");
+  return failures;
 }
-

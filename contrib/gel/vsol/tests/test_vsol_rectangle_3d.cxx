@@ -13,9 +13,10 @@
 //  \file
 
 #include <vcl_iostream.h>
-#include <vcl_cassert.h>
 #include <vsol/vsol_rectangle_3d.h>
 #include <vsol/vsol_point_3d.h>
+
+#define Assert(x) { vcl_cout << #x "\t\t\t test "; if (x) { ++success; vcl_cout << "PASSED\n"; } else { ++failures; vcl_cout << "FAILED\n"; } }
 
 //-----------------------------------------------------------------------------
 //: Entry point of the test program
@@ -23,7 +24,7 @@
 int main(int argc,
          char *argv[])
 {
-  int result=0;
+  int success=0, failures=0;
 
   vcl_cout<<"Constructor"<<vcl_endl;
   vsol_point_3d_sptr p=new vsol_point_3d(0,0,10);
@@ -35,15 +36,17 @@ int main(int argc,
   vsol_rectangle_3d_sptr t=new vsol_rectangle_3d(p,q,r);
   vcl_cout<<"t created"<<vcl_endl;
   vcl_cout<<"p0()"<<vcl_endl;
-  assert(*(t->p0())==*p);
+  Assert(*(t->p0())==*p);
   vcl_cout<<"p1()"<<vcl_endl;
-  assert(*(t->p1())==*q);
+  Assert(*(t->p1())==*q);
   vcl_cout<<"p2()"<<vcl_endl;
-  assert(*(t->p2())==*r);
+  Assert(*(t->p2())==*r);
 
   vcl_cout<<"area()"<<vcl_endl;
   vcl_cout<<t->area()<<vcl_endl;
-  assert(t->area()==1);
+  Assert(t->area()==1);
 
-  return result;
+  vcl_cout << "Test Summary: " << success << " tests succeeded, "
+           << failures << " tests failed" << (failures?"\t***\n":"\n");
+  return failures;
 }

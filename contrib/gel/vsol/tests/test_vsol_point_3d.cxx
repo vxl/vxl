@@ -14,8 +14,9 @@
 
 #include <vcl_iostream.h>
 //#include <vcl_rel_ops.h>
-#include <vcl_cassert.h>
 #include <vsol/vsol_point_3d.h>
+
+#define Assert(x) { vcl_cout << #x "\t\t\t test "; if (x) { ++success; vcl_cout << "PASSED\n"; } else { ++failures; vcl_cout << "FAILED\n"; } }
 
 //-----------------------------------------------------------------------------
 //: Entry point of the test program
@@ -23,7 +24,7 @@
 int main(int argc,
          char *argv[])
 {
-  int result=0;
+  int success=0, failures=0;
 
   // Constructor from coordinates
   vcl_cout<<"Constructor from coordinates"<<vcl_endl;
@@ -31,30 +32,30 @@ int main(int argc,
 
   vcl_cout<<"x(), y() and z()"<<vcl_endl;
   vcl_cout<<"x="<<p->x()<<", y="<<p->y()<<", z="<<p->z()<<vcl_endl;
-  assert(p->x()==10);
-  assert(p->y()==4);
-  assert(p->z()==1);
+  Assert(p->x()==10);
+  Assert(p->y()==4);
+  Assert(p->z()==1);
 
   vcl_cout<<"Copy constructor"<<vcl_endl;
   vsol_point_3d_sptr q=new vsol_point_3d(*p);
 
   vcl_cout<<"== operator"<<vcl_endl;
-  assert((*p)==(*q));
+  Assert((*p)==(*q));
 
   vcl_cout<<"set_x()"<<vcl_endl;
   q->set_x(3);
-  assert(q->x()==3);
+  Assert(q->x()==3);
 
   vcl_cout<<"set_y()"<<vcl_endl;
   q->set_y(5);
-  assert(q->y()==5);
+  Assert(q->y()==5);
 
   vcl_cout<<"set_z()"<<vcl_endl;
   q->set_z(12);
-  assert(q->z()==12);
+  Assert(q->z()==12);
 
   vcl_cout<<"!= operator"<<vcl_endl;
-  assert((*p)!=(*q));
+  Assert((*p)!=(*q));
 
   vcl_cout<<"distance()="<<p->distance(q)<<vcl_endl;
 
@@ -62,9 +63,11 @@ int main(int argc,
 
   vcl_cout<<"middle()="<<r->x()<<','<<r->y()<<vcl_endl;
 
-  assert(r->x()==(p->x()+q->x())/2);
-  assert(r->y()==(p->y()+q->y())/2);
-  assert(r->z()==(p->z()+q->z())/2);
+  Assert(r->x()==(p->x()+q->x())/2);
+  Assert(r->y()==(p->y()+q->y())/2);
+  Assert(r->z()==(p->z()+q->z())/2);
 
-  return result;
+  vcl_cout << "Test Summary: " << success << " tests succeeded, "
+           << failures << " tests failed" << (failures?"\t***\n":"\n");
+  return failures;
 }

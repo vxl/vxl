@@ -11,11 +11,13 @@
 #include <vtol/vtol_zero_chain_sptr.h>
 #include <vtol/vtol_zero_chain.h>
 
-#define Assert(x) do { if (x) vcl_cout << "test PASSED\n"; else vcl_cout << "test FAILED [" #x "]\n"; } while (0)
+#define Assert(x) { vcl_cout << #x "\t\t\t test "; if (x) { ++success; vcl_cout << "PASSED\n"; } else { ++failures; vcl_cout << "FAILED\n"; } }
 
 
 int main(int, char **)
 {
+  int success=0, failures=0;
+
   vcl_cout << "testing edge 2d" << vcl_endl;
 
   vtol_vertex_2d_sptr v1 = new vtol_vertex_2d(0.0,0.0);
@@ -76,6 +78,8 @@ int main(int, char **)
   Assert(e1->cast_to_edge()!=0);
 
   vcl_cout << "finished testing edge 2d" << vcl_endl;
-  return 0;
+  vcl_cout << "Test Summary: " << success << " tests succeeded, "
+           << failures << " tests failed" << (failures?"\t***\n":"\n");
+  return failures;
 }
 

@@ -6,14 +6,14 @@
 #include <vtol/vtol_edge.h>
 #include <vtol/vtol_edge_sptr.h>
 
-
-#define Assert(x) do { if (x) vcl_cout << "test PASSED\n"; else vcl_cout << "test FAILED [" #x "]\n"; } while (0)
+#define Assert(x) { vcl_cout << #x "\t\t\t test "; if (x) { ++success; vcl_cout << "PASSED\n"; } else { ++failures; vcl_cout << "FAILED\n"; } }
 
 
 int main(int, char **)
 {
-  // we want to test the methods on vtol_vertex_2d
+  int success=0, failures=0;
 
+  // we want to test the methods on vtol_vertex_2d
   vcl_cout << "Testing vertex 2d" << vcl_endl;
 
   vtol_vertex_2d_sptr v1=new vtol_vertex_2d(1.0,2.0);
@@ -157,6 +157,7 @@ int main(int, char **)
   Assert(!(v1v->valid_inferior_type(*(new_edge))));
 
   vcl_cout << "finished testing vertex 2d" << vcl_endl;
-  return 0;
+  vcl_cout << "Test Summary: " << success << " tests succeeded, "
+           << failures << " tests failed" << (failures?"\t***\n":"\n");
+  return failures;
 }
-

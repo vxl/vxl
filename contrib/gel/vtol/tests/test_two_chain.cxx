@@ -16,12 +16,12 @@
 #include <vtol/vtol_two_chain.h>
 #include <vtol/vtol_two_chain_sptr.h>
 
-
-#define Assert(x) do { if (x) vcl_cout << "test PASSED\n"; else vcl_cout << "test FAILED [" #x "]\n"; } while (0)
+#define Assert(x) { vcl_cout << #x "\t\t\t test "; if (x) { ++success; vcl_cout << "PASSED\n"; } else { ++failures; vcl_cout << "FAILED\n"; } }
 
 
 int main(int, char **)
 {
+  int success=0, failures=0;
 
   vcl_cout << "testing two chain" << vcl_endl;
 
@@ -119,6 +119,7 @@ int main(int, char **)
   Assert(*new_copy == *tc1);
 
   vcl_cout << "Finished testing two chain " << vcl_endl;
-  return 0;
+  vcl_cout << "Test Summary: " << success << " tests succeeded, "
+           << failures << " tests failed" << (failures?"\t***\n":"\n");
+  return failures;
 }
-
