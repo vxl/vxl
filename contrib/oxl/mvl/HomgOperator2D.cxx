@@ -389,7 +389,6 @@ static vnl_vector<double> most_orthogonal_vector(const vcl_vector<HomgLine2D>& i
     scatter_matrix.add_outer_product(inpoints[i].get_vector());
 
   return scatter_matrix.minimum_eigenvector();
-  return vnl_vector<double>();
 }
 
 #include <vnl/algo/vnl_svd.h>

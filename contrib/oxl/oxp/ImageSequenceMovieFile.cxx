@@ -31,7 +31,8 @@ struct ImageSequenceMovieFilePrivates {
     if (!current_image || (current_image_index != index)) {
       // Load new image
       vcl_string newname = seqname.name(index);
-      if (MovieFileInterface::verbose) vbl_printf(cerr, "ImageSequenceMovieFile: Loading [%s]: ", newname.c_str());
+      if (MovieFileInterface::verbose)
+        vbl_printf(cerr, "ImageSequenceMovieFile: Loading [%s]: ", newname.c_str());
       current_image.load(newname.c_str(), MovieFileInterface::verbose ? vil_file_image::laconic : vil_file_image::silent);
       current_image_index = index;
     }
@@ -59,8 +60,7 @@ ImageSequenceMovieFile::~ImageSequenceMovieFile()
 // -- Will need to search...
 int ImageSequenceMovieFile::GetLength()
 {
-  cerr << "ImageSequenceMovieFile::GetLength Not implemented! Returning 100\n";
-  return 100;
+  return p->seqname.n();
 }
 
 vil_image ImageSequenceMovieFile::GetImage(int frame_index)

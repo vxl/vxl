@@ -41,7 +41,7 @@ RSC=rc.exe
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O2 /I "$(IUEROOT)/oxl" /I "$(IUEROOT)/vxl/config.win32-vc60" /I "$(IUEROOT)/vxl" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /Ob2 /I "$(IUEROOT)/oxl" /I "$(IUEROOT)/vxl/config.win32-vc60" /I "$(IUEROOT)/vxl" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -64,7 +64,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "$(IUEROOT)/oxl" /I "$(IUEROOT)/vxl/config.win32-vc60" /I "$(IUEROOT)/vxl" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /Ob2 /I "$(IUEROOT)/oxl" /I "$(IUEROOT)/vxl/config.win32-vc60" /I "$(IUEROOT)/vxl" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -109,32 +109,6 @@ SOURCE=".\Templates\ImageWarp+RGB+byte--.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=.\ImageWarp.cxx
-
-!IF  "$(CFG)" == "oxp - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "oxp - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\map+string.string-.cxx"
-
-!IF  "$(CFG)" == "oxp - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "oxp - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\Mapping_2d_2d.cxx
 # End Source File
 # Begin Source File
@@ -148,6 +122,10 @@ SOURCE=.\MovieFile.cxx
 # Begin Source File
 
 SOURCE=.\MovieFileInterface.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\oxp_parse_seqname.cxx
 # End Source File
 # Begin Source File
 
@@ -167,33 +145,7 @@ SOURCE=.\SGIMovieFilePrivates.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vector+char-.cxx"
-
-!IF  "$(CFG)" == "oxp - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "oxp - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
 SOURCE=".\Templates\vector+SGIMV_Variables-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\vector+vector+int--.cxx"
-
-!IF  "$(CFG)" == "oxp - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "oxp - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
@@ -250,6 +202,10 @@ SOURCE=.\MovieFile.h
 # Begin Source File
 
 SOURCE=.\MovieFileInterface.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\oxp_parse_seqname.h
 # End Source File
 # Begin Source File
 

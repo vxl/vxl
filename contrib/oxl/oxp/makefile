@@ -7,6 +7,7 @@ include $(IUEROOT)/vxl/vil/vil_config.mk
 
 LIBRARY = oxp
 
+SOURCES += oxp_parse_seqname.cxx
 SOURCES += Mapping_2d_2d.cxx
 SOURCES += RadialLensCorrection.cxx
 SOURCES += MedianReduceImage.cxx

@@ -18,6 +18,7 @@
 
 #include <oxp/SGIMovieFile.h>
 #include <oxp/ImageSequenceMovieFile.h>
+#include <oxp/oxp_parse_seqname.h>
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -37,18 +38,23 @@ MovieFile::MovieFile(char const* filename, int start, int step, int end):
   qt(0),
   tmp_buf_(0)
 {
+  oxp_parse_seqname range(filename);
+  vcl_string fn = range.filename;
+  if (range.start != -1) start_ = range.start;
+  if (range.step  != -1) step_  = range.step;
+  if (range.end   != -1) end_   = range.end;
 #ifndef WIN32
   // Attempt to open for reading.  If it exists, assume it's a movie file.
   // not on windows, it will create it if it doesn't exist...
-  ifstream fd(filename);
+  ifstream fd(fn.c_str());
   if (fd.good()) 
     {
-      qt = new SGIMovieFile(filename);
+      qt = new SGIMovieFile(fn.c_str());
     }
   else
 #endif
     {
-      qt = new ImageSequenceMovieFile(filename, start_);
+      qt = new ImageSequenceMovieFile(fn.c_str(), start_);
     }
 }
 
@@ -67,6 +73,21 @@ int MovieFile::index(int f)
 int MovieFile::GetLength()
 {
   return qt->GetLength();
+}
+
+int MovieFile::GetNumFrames()
+{
+  // Probe...
+  if (end_ == -1) {
+    cerr << "MovieFile: probing ";
+    int i;
+    for(i = 0; GetImage(i); ++i)
+      ;
+    --i;
+    end_ = start_ + i * step_;
+    cerr << " done\n";
+  }
+  return (end_ - start_) / step_ + 1;
 }
 
 vil_image MovieFile::GetImage(int frame_index)

@@ -44,6 +44,7 @@ public:
   int GetBitsPixel();
 
   int GetRealFrameIndex(int frame) { return start_ + frame * step_; }
+  int GetNumFrames();
 
   vil_image GetImage(int frame_index);
   
