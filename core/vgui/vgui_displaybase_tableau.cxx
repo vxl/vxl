@@ -105,7 +105,7 @@ void vgui_displaybase_tableau::remove(vgui_soview* object)
   for ( vcl_map< vcl_string , vgui_displaybase_tableau_grouping >::iterator it = groupings.begin() ;
         it != groupings.end(); it++ )  {
     vcl_vector<vgui_soview*>::iterator a = vcl_find(it->second.objects.begin(), it->second.objects.end(), object);
-    if (a != objects.end()) {
+    if (a != it->second.objects.end()) {
       it->second.objects.erase(a);
       if ( it->second.objects.size() == 0 )  {
         groupings.erase( it );
