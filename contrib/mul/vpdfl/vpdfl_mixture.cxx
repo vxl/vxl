@@ -7,8 +7,8 @@
 // \author Tim Cootes
 // \date 21-July-98
 //
-// Modifications
 // \verbatim
+//  Modifications
 //    IMS   Converted to VXL 12 May 2000
 // \endverbatim
 
@@ -282,7 +282,7 @@ void vpdfl_mixture::b_read(vsl_b_istream& bfs)
   vsl_b_read(bfs,name);
   if (name != is_a())
   {
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_mixture &) \n"
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_mixture &)\n"
              << "           Attempted to load object of type "
              << name <<" into object of type " << is_a() << '\n';
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
@@ -301,7 +301,7 @@ void vpdfl_mixture::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs, weight_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_mixture &) \n"
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_mixture &)\n"
                << "           Unknown version number "<< version << '\n';
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
