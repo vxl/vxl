@@ -58,7 +58,7 @@ vil_generic_image *vil_jpeg_file_format::make_input_image(vil_stream *vs) {
 vil_generic_image *vil_jpeg_file_format::make_output_image(vil_stream */*vs*/, 
 							   vil_generic_image const */*prototype*/)
 {
-  assert(false);
+  //assert(false);
   return 0;
 }
 
