@@ -6,7 +6,7 @@
 
 #include "vcl_compiler.h"
 
-#if defined(VCL_GCC)
+#if defined(VCL_GCC_295)
 # include <valarray> // 2.95
 # define vcl_valarray valarray
 
