@@ -3,7 +3,7 @@
 
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
-
+#include <vcl_sstream.h>
 bdgl_curve_tracking ::bdgl_curve_tracking(bdgl_curve_tracking_params &tp)
 : tp_(tp)
 {
