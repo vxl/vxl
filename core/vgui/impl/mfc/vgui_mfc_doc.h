@@ -41,6 +41,9 @@ public:
 	virtual void Serialize(CArchive& ar);
 	//}}AFX_VIRTUAL
 
+
+
+
 // Implementation
 public:
 	virtual ~vgui_mfc_doc();

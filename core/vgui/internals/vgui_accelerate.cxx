@@ -9,16 +9,14 @@
 //-----------------------------------------------------------------------------
 #ifdef WIN32
 #include <vgui/impl/mfc/stdafx.h>
-extern CDC *global;
+extern CDC *vgui_mfc_adaptor_global_dc;
 #endif
 #include "vgui_accelerate.h"
 #include <vcl_iostream.h>
 
 bool vgui_accelerate::vgui_no_acceleration = false;
-bool vgui_accelerate::vgui_mfc_acceleration = false;
+bool vgui_accelerate::vgui_mfc_acceleration = true;
 bool vgui_accelerate::vgui_mfc_ogl_acceleration = false;
-int vgui_accelerate::image_width_ = 512;
-int vgui_accelerate::image_height_ = 512;
 static int accelerator_level = 0;
 static vgui_accelerate* vgui_accelerator = 0;
 vgui_accelerate* vgui_accelerate::instance()
