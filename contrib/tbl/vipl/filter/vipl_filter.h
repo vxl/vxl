@@ -369,4 +369,8 @@ class vipl_filter          : public vipl_filter_abs {
 
 }; // end of class definition
 
+#ifdef INSTANTIATE_TEMPLATES
+#include "vipl_filter.txx"
+#endif
+
 #endif // file guard

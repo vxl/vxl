@@ -64,4 +64,8 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, VCL_DFL_TYPE_
 
 }; // end of class definition
 
+#ifdef INSTANTIATE_TEMPLATES
+#include "vipl_filter_2d.txx"
+#endif
+
 #endif // vipl_filter_2d_h_

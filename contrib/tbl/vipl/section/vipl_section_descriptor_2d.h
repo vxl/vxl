@@ -106,4 +106,8 @@ class vipl_section_descriptor_2d : public vipl_section_descriptor< DataType > {
   public: void put_i_curr_sec_size( vcl_vector< int > const & v) { hsi_curr_sec_size = v; }
 }; // end of class definition
 
+#ifdef INSTANTIATE_TEMPLATES
+#include "vipl_section_descriptor_2d.txx"
+#endif
+
 #endif // vipl_section_descriptor_2d_h_

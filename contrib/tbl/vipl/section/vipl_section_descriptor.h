@@ -138,4 +138,8 @@ public:  int dec_refcount() { if (refcount_<=1) { delete this; return 0; } retur
 
 }; // end of class definition
 
+#ifdef INSTANTIATE_TEMPLATES
+#include "vipl_section_descriptor.txx"
+#endif
+
 #endif // vipl_section_descriptor_h_

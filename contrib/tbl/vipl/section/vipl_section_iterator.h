@@ -56,4 +56,8 @@ class vipl_section_iterator {
 
 }; // end of class definition
 
+#ifdef INSTANTIATE_TEMPLATES
+#include "vipl_section_iterator.txx"
+#endif
+
 #endif // vipl_section_iterator_h_
