@@ -4,7 +4,6 @@
 #undef TESTMAIN
 #define TESTMAIN(x)
 
-
 #include <mbl/tests/test_stochastic_data_collector.cxx>
 #include <mbl/tests/test_k_means.cxx>
 #include <mbl/tests/test_mz_random.cxx>
@@ -14,6 +13,8 @@
 #include <mbl/tests/test_sum_1d.cxx>
 #include <mbl/tests/test_priority_bounded_queue.cxx>
 #include <mbl/tests/test_gamma.cxx>
+#include <mbl/tests/test_index_sort.cxx>
+#include <mbl/tests/test_lru_cache.cxx>
 
 #undef TESTMAIN
 #define TESTMAIN(x) int main() \
@@ -30,7 +31,8 @@ void run_test_mbl()
   test_stats_1d();
   test_sum_1d();
   test_gamma();
+  test_index_sort();
+  test_lru_cache();
 }
-
 
 TESTMAIN(run_test_mbl);
