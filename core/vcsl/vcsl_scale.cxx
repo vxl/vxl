@@ -1,17 +1,6 @@
 // This is core/vcsl/vcsl_scale.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
-//:
-// \file
-
 #include "vcsl_scale.h"
-
 #include <vcl_cassert.h>
-
-//***************************************************************************
-// Status report
-//***************************************************************************
 
 //---------------------------------------------------------------------------
 // Is `this' invertible at time `time'?
@@ -22,22 +11,8 @@ bool vcsl_scale::is_invertible(double time) const
   // require
   assert(valid_time(time));
 
-  return ((beat_.size()==0)&&(scale_[0]!=0.0))||(scale_value(time)!=0.0);
+  return ((this->duration()==0)&&(scale_[0]!=0.0))||(scale_value(time)!=0.0);
 }
-
-//---------------------------------------------------------------------------
-// Is `this' correctly set ?
-//---------------------------------------------------------------------------
-bool vcsl_scale::is_valid(void) const
-{
-  return (scale_.size()!=0)&&
-         ((beat_.size()==0&&interpolator_.size()==0&&scale_.size()==1) ||
-          (beat_.size()==interpolator_.size()+1&&beat_.size()==scale_.size()));
-}
-
-//***************************************************************************
-// Transformation parameters
-//***************************************************************************
 
 //---------------------------------------------------------------------------
 // Set the scale value of a static scale
@@ -48,18 +23,6 @@ void vcsl_scale::set_static(double new_scale)
   scale_.push_back(new_scale);
   vcsl_spatial_transformation::set_static();
 }
-
-//---------------------------------------------------------------------------
-//: Set the scale variation along the time
-//---------------------------------------------------------------------------
-void vcsl_scale::set_scale(vcl_vector<double> const& new_scale)
-{
-  scale_=new_scale;
-}
-
-//***************************************************************************
-// Basic operations
-//***************************************************************************
 
 //---------------------------------------------------------------------------
 // Image of `v' by `this'
@@ -104,7 +67,7 @@ vnl_vector<double> vcsl_scale::inverse(const vnl_vector<double> &v,
 //---------------------------------------------------------------------------
 double vcsl_scale::scale_value(double time) const
 {
-  if (beat_.size()==0) // static
+  if (this->duration()==0) // static
     return scale_[0];
   else
   {
