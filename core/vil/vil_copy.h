@@ -14,7 +14,7 @@
 
 
 //: Copy src to dest, without changing dest's view parameters.
-// This is useful if you want to copy on image into a window on another image.
+// This is useful if you want to copy an image into a window on another image.
 // src and dest must have identical sizes, and types.
 //  O(size).
 // \relates vil_image_view
