@@ -8,8 +8,8 @@
 // 1.0     |2002/04/04| Luis E. Galup            |Creation
 //*****************************************************************************
 
-#include <vnl/vnl_test.h>
 #include <gevd/gevd_param_mixin.h>
+#include <testlib/testlib_test.h>
 
 void
 test_gevd_param_mixin()
@@ -24,4 +24,4 @@ test_gevd_param_mixin()
   delete pgm;
 }
 
-TESTMAIN(test_gevd_param_mixin);
+TESTLIB_DEFINE_MAIN(test_gevd_param_mixin);

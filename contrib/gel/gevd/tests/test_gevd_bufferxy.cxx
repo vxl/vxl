@@ -10,9 +10,8 @@
 
 #include <vcl_iostream.h>
 #include <vcl_cstring.h> // memcpy
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <gevd/gevd_bufferxy.h>
-
 
 void
 test_gevd_bufferxy()
@@ -75,4 +74,4 @@ test_gevd_bufferxy()
   delete gbxy3;
 }
 
-TESTMAIN(test_gevd_bufferxy);
+TESTLIB_DEFINE_MAIN(test_gevd_bufferxy);

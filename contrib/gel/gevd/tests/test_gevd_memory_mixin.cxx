@@ -9,7 +9,7 @@
 //*****************************************************************************
 
 #include <vcl_cstring.h> // memcpy
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <gevd/gevd_memory_mixin.h>
 
 void
@@ -66,4 +66,4 @@ test_gevd_memory_mixin()
   delete ib2;
 }
 
-TESTMAIN(test_gevd_memory_mixin);
+TESTLIB_DEFINE_MAIN(test_gevd_memory_mixin);
