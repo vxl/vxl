@@ -376,8 +376,8 @@ vil_image sdet_edgel_regions::GetEdgeImage(vcl_vector<vtol_edge_2d_sptr>& sg)
 
   vil_memory_image_of<vil_byte> image(xs_,ys_);
 
-  for (int y = 0; y<ys_; y++)
-    for (int x = 0; x<xs_; x++)
+  for (unsigned int y = 0; y<ys_; y++)
+    for (unsigned int x = 0; x<xs_; x++)
       if (region_label_array_[y][x] == EDGE)
         image[y][x] = edge;
       else
@@ -713,13 +713,12 @@ bool sdet_edgel_regions::InitRegionArray(vcl_vector< vtol_edge_2d_sptr>& sg)
     }
 
   //Intialize the buffers
-  unsigned int x;
   if (ubuf_)
-    for (x = 0; x<this->GetXSize(); x++)
+    for (int x = 0; x<this->GetXSize(); ++x)
       ubuf_[x] = 0;
 
   if (sbuf_)
-    for (x = 0; x<this->GetXSize(); x++)
+    for (int x = 0; x<this->GetXSize(); ++x)
       sbuf_[x] = 0;
 
   //Insert edgels into arrays.
@@ -1159,7 +1158,6 @@ void sdet_edgel_regions::UpdateConnectedNeighborhood(unsigned int x, unsigned in
         vcl_cout << int(label_code(ll)) << " " << int(label_code(lr))
                  <<  "\n\n";
       }
-
     }
 }
 
@@ -1445,11 +1443,9 @@ void sdet_edgel_regions::AssignEdgeLabels(unsigned int x, unsigned int y)
     default:
       {
         vcl_cout << "In sdet_edgel_regions::UpdateNeigborhood(..)"
-                 << "impossible pattern = " << (int)nhood << vcl_endl;
-        vcl_cout << int(label_code(rul)) << " " << int(label_code(rur))
-                 <<  "\n";
-        vcl_cout << int(label_code(rll)) << " " << int(label_code(rlr))
-                 <<  "\n\n";
+                 << " impossible pattern = " << (int)nhood << '\n'
+                 << int(label_code(rul)) <<' '<< int(label_code(rur)) << '\n'
+                 << int(label_code(rll)) <<' '<< int(label_code(rlr)) << "\n\n";
       }
     }
 }
