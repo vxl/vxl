@@ -15,21 +15,19 @@
 #include <vcl_vector.h>
 #include <vcl_string.h>
 #include <vpro/vpro_video_process_sptr.h>
-//#include <vidl/vidl_movie.h>
-#include <vvid/vvid_frame_trail.h>
 #include <vul/vul_arg.h>
-#include <vidl_vil1/vidl_vil1_movie.h>
-//: A class for proccessing videos.
+#include <vidl_vil1/vidl_vil1_movie_sptr.h>
 
+//: A class for proccessing videos.
 class vvid_command_line_player
 {
  public:
   vvid_command_line_player();
   ~vvid_command_line_player();
-  
+
   //: load a video
   bool load_video_file();//vcl_string filename);
-  
+
   //: set video process
   bool set_video_process(vpro_video_process_sptr video_proc);
 
@@ -53,9 +51,8 @@ class vvid_command_line_player
                         vcl_string param_block_name);
 
   //: print performance output
-  bool print_performance_output(vcl_string video_name,
-	  vcl_vector<float> frame_scores);
-  
+  bool print_performance_output(vcl_string video_name, vcl_vector<float> frame_scores);
+
  protected:
   void write_status(vcl_string filename, int iframe);
 
@@ -64,7 +61,7 @@ class vvid_command_line_player
   vpro_video_process_sptr video_process_;
   vcl_string status_output_filename_;
   int nframes_;
- 
+
   vul_arg_info_list arg_list_;
   vul_arg<vcl_string> *parameter_output_file_;
   vul_arg<vcl_string> *input_video_file_;
