@@ -3,6 +3,7 @@
 #include <vidl/vidl_yuv_2_rgb.h>
 #include <vcl_string.h>
 #include <vcl_iostream.h>
+#undef sprintf // bug in libintl.h : defines sprintf to libintl_sprintf
 #include <vcl_cstdio.h>
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h> // for vcl_strtol()
@@ -37,25 +38,25 @@ extern "C" {
 
   extern uint32_t vo_mm_accel;
 
-  int libvo_common_alloc_frames (vo_instance_t * instance, int width, int height,
-                                 int frame_size,
-                                 void (* copy) (vo_frame_t *, uint8_t **),
-                                 void (* field) (vo_frame_t *, int),
-                                 void (* draw) (vo_frame_t *));
-  void libvo_common_free_frames (vo_instance_t * instance);
-  vo_frame_t * libvo_common_get_frame (vo_instance_t * instance, int prediction);
+  int libvo_common_alloc_frames(vo_instance_t* instance, int width, int height,
+                                int frame_size,
+                                void (*copy) (vo_frame_t*, uint8_t**),
+                                void (*field) (vo_frame_t*, int),
+                                void (*draw) (vo_frame_t*));
+  void libvo_common_free_frames(vo_instance_t* instance);
+  vo_frame_t* libvo_common_get_frame(vo_instance_t* instance, int prediction);
 
 #define MODE_RGB  0x1
 #define MODE_BGR  0x2
 
-  extern void (* yuv2rgb) (uint8_t * image, uint8_t * py,
-                           uint8_t * pu, uint8_t * pv, int h_size, int v_size,
-                           int rgb_stride, int y_stride, int uv_stride);
+  extern void (*yuv2rgb) (uint8_t* image, uint8_t* py,
+                          uint8_t* pu, uint8_t* pv, int h_size, int v_size,
+                          int rgb_stride, int y_stride, int uv_stride);
 
-  void yuv2rgb_init (int bpp, int mode);
-  int yuv2rgb_init_mmxext (int bpp, int mode);
-  int yuv2rgb_init_mmx (int bpp, int mode);
-  int yuv2rgb_init_mlib (int bpp, int mode);
+  void yuv2rgb_init(int bpp, int mode);
+  int yuv2rgb_init_mmxext(int bpp, int mode);
+  int yuv2rgb_init_mmx(int bpp, int mode);
+  int yuv2rgb_init_mlib(int bpp, int mode);
 }
 
 // and now, for something completely different...
@@ -69,9 +70,9 @@ extern "C" {
 // hence, the width gotten from the instance variable
 // below, the frame width. however, the width from
 // the request is the roi width.
-static void internal_draw_frame (vidl_mpegcodec_data * instance,
-                                 vo_frame_t * frame,
-                                 unsigned char * buf)
+static void internal_draw_frame(vidl_mpegcodec_data* instance,
+                                vo_frame_t* frame,
+                                unsigned char* buf)
 {
   uint8_t *Y = frame->base[0];
   uint8_t *U = frame->base[1];
@@ -113,10 +114,10 @@ static void internal_draw_frame (vidl_mpegcodec_data * instance,
   return;
 }
 
-static int internal_setup (vo_instance_t * instance_,
-                           int width,
-                           int height,
-                           void (* draw_frame) (vo_frame_t *))
+static int internal_setup(vo_instance_t* instance_,
+                          int width,
+                          int height,
+                          void (*draw_frame) (vo_frame_t*))
 {
   vidl_mpegcodec_data * instance;
 
@@ -134,15 +135,15 @@ static int internal_setup (vo_instance_t * instance_,
   if ((p->y0+p->h)>height) p->h = height - p->y0;
 
   int hh = height>>1;
-  vcl_sprintf(instance->header, "P5\n\n%d %d\n255\n", width, hh * 3);
-  return libvo_common_alloc_frames ((vo_instance_t *) instance,
-                                    width,
-                                    height,
-                                    sizeof (vo_frame_t),
-                                    0, 0, draw_frame);
+  vcl_sprintf(instance->header, "P5\n%d %d\n255\n", width, hh * 3);
+  return libvo_common_alloc_frames((vo_instance_t*)instance,
+                                   width,
+                                   height,
+                                   sizeof(vo_frame_t),
+                                   0, 0, draw_frame);
 }
 
-static void vil_im_draw_frame (vo_frame_t * frame)
+static void vil_im_draw_frame(vo_frame_t * frame)
 {
   vidl_mpegcodec_data * instance;
 
@@ -166,10 +167,10 @@ static void vil_im_draw_frame (vo_frame_t * frame)
     if (instance->framenum == p->position )
       p->done = true;
 
-    internal_draw_frame (instance, frame, fb->next(n));
+    internal_draw_frame(instance, frame, fb->next(n));
   }
   else if (p->rt == decode_request::FILE_GRAB)
-    internal_draw_frame (instance, frame, fb->next(n));
+    internal_draw_frame(instance, frame, fb->next(n));
 
   return;
 }
@@ -177,13 +178,13 @@ static void vil_im_draw_frame (vo_frame_t * frame)
 //another callback, called by helper class
 //after this is called, the client of this class
 //should set the decode request
-static int vil_im_setup (vo_instance_t * instance, int width, int height)
+static int vil_im_setup(vo_instance_t * instance, int width, int height)
 {
-  return internal_setup (instance, width, height, vil_im_draw_frame);
+  return internal_setup(instance, width, height, vil_im_draw_frame);
 }
 
 // this method is a callback, called by the helper class
-vo_instance_t * vo_vil_im_open (void)
+vo_instance_t * vo_vil_im_open(void)
 {
   vidl_mpegcodec_data * instance;
 
@@ -192,7 +193,7 @@ vo_instance_t * vo_vil_im_open (void)
   //set call backs
   instance->setup = vil_im_setup;
   instance->framenum = -2;
-  return (vo_instance_t *) instance;
+  return (vo_instance_t*)instance;
 }
 
 //////////////////////////////////////////////////////////////////////////////

@@ -4,9 +4,11 @@
 #include <vcl_cassert.h>
 #include <vcl_cstring.h>
 #include <vcl_fstream.h>
+#include <vcl_iostream.h>
 
 #include <vul/vul_awk.h>
 #include <vul/vul_file.h>
+#include <vul/vul_sprintf.h>
 
 vidl_file_sequence::vidl_file_sequence(char const* fmt)
 {
@@ -33,8 +35,7 @@ bool vidl_file_sequence::open(char const* fmt)
     // Assume a list.  Could start from some low number... Could glob.  hmmm.
     bool found_one = false;
     for (int i = 0; ; ++i) {
-      char buf[1024];
-      vcl_sprintf(buf, fmt, i);
+      const char* buf = vul_sprintf(fmt, i).c_str();
       int s = vul_file::size(buf);
       if (s > 0) {
         found_one = true;
@@ -62,7 +63,7 @@ bool vidl_file_sequence::open(char const* fmt)
   unsigned int n = filenames.size();
 
   if (n == 0) {
-    vcl_fprintf(stderr, "ERROR: Could not turn [%s] into a list of files\n", fmt);
+    vcl_cerr << "ERROR: Could not turn [" << fmt << "] into a list of files\n";
     return false;
   }
 
@@ -71,9 +72,8 @@ bool vidl_file_sequence::open(char const* fmt)
     filesizes.resize(n);
     for (unsigned int i = 0; i < n; ++i) {
       int s = vul_file::size(filenames[i].c_str());
-      if (s <= 0) {
-        vcl_fprintf(stderr, "WARNING: Zero size file [%s]\n", filenames[i].c_str());
-      }
+      if (s <= 0)
+        vcl_cerr << "WARNING: Zero size file [" << filenames[i] << "]\n";
       filesizes[i] = s;
     }
   }
@@ -93,17 +93,17 @@ bool vidl_file_sequence::open(char const* fmt)
     char const* fn = filenames[i].c_str();
     fps[i] = vcl_fopen(fn, "rb");
     if (!fps[i]) {
-      vcl_fprintf(stderr, "ERROR: Could not open [%s]\n", fn);
+      vcl_cerr << "ERROR: Could not open [" << fn << "]\n";
       current_file_index = -1;
       return false;
     }
   }
 
   // Summarize:
-  vcl_fprintf(stderr, "files: sizeof offset_t = %d\n", (int)sizeof(offset_t));
+  vcl_cerr << "files: sizeof offset_t = " << sizeof(offset_t) << '\n';
   for (unsigned int i = 0; i < n; ++i)
-    vcl_fprintf(stderr, "   %s  %ld\n", filenames[i].c_str(), (long)start_byte[i]);
-  vcl_fprintf(stderr, "\n");
+    vcl_cerr << "   " << filenames[i].c_str() << "  " << (long)start_byte[i] << '\n';
+  vcl_cerr << '\n';
 
   return true;
 }
@@ -125,14 +125,14 @@ void vidl_file_sequence::seek(offset_t to)
   }
 
   if (newindex == -1) {
-    vcl_fprintf(stderr, "ERROR: Could not seek to [%lu]\n", (unsigned long)to);
+    vcl_cerr << "ERROR: Could not seek to [" << to << "]\n";
     return;
   }
 
   current_file_index = newindex;
 
   offset_t file_ptr = to - start_byte[current_file_index];
-  vcl_fprintf(stderr, " si = %20g to = %20g\n", (double)start_byte[current_file_index], (double) to);
+  vcl_cerr << " si = " << (double)start_byte[current_file_index] << " to = " << (double)to << '\n';
   assert(file_ptr >= 0);
   assert(file_ptr < (offset_t)filesizes[current_file_index]);
 
