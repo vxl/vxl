@@ -16,6 +16,7 @@
 
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_tableau.h>
+#include <vgui/vgui_tableau_sptr.h>
 
 //----------------------------------------------------------------------------
 //: Tableau to turn a non-tableau into a multi-tableau (with client data).
