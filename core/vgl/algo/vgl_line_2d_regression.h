@@ -12,11 +12,8 @@
 // April 08, 2003 - J.L. Mundy, (a port of fsm's osl/osl_ortho_regress class)
 //
 // Modifications - none
-// 
+//
 // \endverbatim
-#include <vcl_vector.h>
-#include <vnl/vnl_matrix_fixed.h>
-#include <vnl/vnl_vector_fixed.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_line_2d.h>
 
@@ -64,7 +61,7 @@ class vgl_line_2d_regression
 
   //: fit a line to the current point set
   bool fit_constrained(T x, T y);
-};  
+};
 
 #define VGL_LINE_2D_REGRESSION_INSTANTIATE(T) extern "please include vgl/algo/vgl_line_2d_regression.txx first"
 
