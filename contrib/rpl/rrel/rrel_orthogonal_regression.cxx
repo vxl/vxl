@@ -115,7 +115,7 @@ rrel_orthogonal_regression::weighted_least_squares_fit( vnl_vector<double>& para
 
   assert( !weights || weights->size() == vars_.rows() );
 
-  vnl_vector<double> sum_vect(3, 0.0);
+  vnl_vector<double> sum_vect(vars_.cols(), 0.0);
   vnl_matrix<double> A(vars_.cols(), vars_.cols());
   vnl_vector<double> avg;
   vnl_matrix<double> shift_vars( vars_.rows(), vars_.cols() );
