@@ -24,6 +24,7 @@
 
 #include <vmal/vmal_multi_view_data_vertex_sptr.h>
 #include <vmal/vmal_multi_view_data_edge_sptr.h>
+#include <vil/vil_image_view.h>
 
 #include <mvl/TriTensor.h>
 
@@ -105,6 +106,17 @@ class vmal_rectifier
     vnl_double_3x3 &H0,
     vnl_double_3x3 &H1);
 
+  void conditional_rectify_rotate180 (
+    vnl_double_3x3 &H0,
+    vnl_double_3x3 &H1);
+
+  void resample (vnl_double_3x3 H0, vnl_double_3x3 H1,
+                 vil_image_view<vxl_byte> imgL,
+                 vil_image_view<vxl_byte> imgR);
+  
+  vil_image_view<vxl_byte>* GetRectifiedImageLeft() {return rectL;}
+  vil_image_view<vxl_byte>* GetRectifiedImageRight() {return rectR;}
+
  private:
   vnl_double_3* lines0_p_;
   vnl_double_3* lines0_q_;
@@ -122,6 +134,10 @@ class vmal_rectifier
   vcl_vector<vnl_double_3> epipoles_;
   bool is_f_compute_;
   vnl_double_3x3 H0_,H1_;
+
+  vil_image_view<vxl_byte>* rectL;
+  vil_image_view<vxl_byte>* rectR;
+
 };
 
 #endif // vmal_rectifier_h_
