@@ -1,4 +1,5 @@
 #include <testlib/testlib_test.h>
+
 #include <rgrl/rgrl_spline.h>
 #include <vcl_iostream.h>
 #include <vnl/vnl_random.h>
@@ -286,8 +287,8 @@ test_refine_spline()
 
     rgrl_spline_sptr refine_spline = spline.refinement( new_m );
 #ifdef DEBUG
-    vcl_cout << "the original control points: " << c << vcl_endl;
-    vcl_cout << "the refined control points: " << refine_spline.get_control_points() << vcl_endl;
+    vcl_cout << "the original control points: " << c << vcl_endl
+             << "the refined control points: " << refine_spline.get_control_points() << vcl_endl;
 #endif
     vnl_vector< double > p( 3 );
     for (unsigned i=0; i < 2; ++i ) {
@@ -303,7 +304,7 @@ test_refine_spline()
   }
 }
 
-} // namespace
+} // end anonymous namespace
 
 MAIN( test_spline )
 {
