@@ -1,4 +1,5 @@
 IULIBS += -lvvid
+USES += contrib/gel
 include ${IUEROOT}/contrib/brl/bbas/bgui/config.mk
 include ${IUEROOT}/contrib/brl/bseg/strk/config.mk
 include ${IUEROOT}/contrib/brl/bseg/sdet/config.mk

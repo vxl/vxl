@@ -1,4 +1,5 @@
 IULIBS += -lbrct
+USES += contrib/gel contrib/oxl
 include ${IUEROOT}/contrib/brl/bbas/bdgl/config.mk
 include ${IUEROOT}/contrib/brl/bbas/bugl/config.mk
 include ${IUEROOT}/contrib/gel/vdgl/config.mk

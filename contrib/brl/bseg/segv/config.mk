@@ -1,4 +1,5 @@
 IULIBS += -lsegv
+USES += contrib/gel
 include ${IUEROOT}/contrib/brl/bseg/sdet/config.mk
 include ${IUEROOT}/contrib/brl/bbas/bgui/config.mk
 include ${IUEROOT}/contrib/brl/bbas/bsol/config.mk

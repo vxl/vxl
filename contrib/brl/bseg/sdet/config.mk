@@ -1,4 +1,5 @@
 IULIBS += -lsdet
+USES += contrib/gel
 include ${IUEROOT}/contrib/brl/bseg/brip/config.mk
 include ${IUEROOT}/contrib/brl/bbas/bdgl/config.mk
 include ${IUEROOT}/contrib/brl/bbas/bsol/config.mk

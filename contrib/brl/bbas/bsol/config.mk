@@ -1,4 +1,5 @@
 IULIBS += -lbsol
+USES += contrib/gel
 include ${IUEROOT}/contrib/gel/vsol/config.mk
 include ${IUEROOT}/core/vnl/config.mk
 include ${IUEROOT}/core/vgl/config.mk
