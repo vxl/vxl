@@ -2,7 +2,10 @@
 #include <vcl_iostream.h>
 #include <vcl_algorithm.txx>
 
+VCL_SWAP_INSTANTIATE(int);
+
 VCL_SORT_INSTANTIATE(int *, int);
+VCL_SORT_INSTANTIATE(int**, int*);
 VCL_FIND_INSTANTIATE(int *, int);
 VCL_FIND_INSTANTIATE(int *, unsigned);
 VCL_COPY_INSTANTIATE(int *, vcl_ostream_iterator<int>);
