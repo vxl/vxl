@@ -1,3 +1,4 @@
+// This is mul/vil2/algo/vil2_algo_gauss_reduce.txx
 #ifndef vil2_algo_gauss_reduce_txx_
 #define vil2_algo_gauss_reduce_txx_
 //: \file
@@ -28,7 +29,7 @@ void vil2_algo_gauss_reduce(const vil2_image_view<T>& src_im,
     work_im.resize(ni2,nj);
 
   // Reduce plane-by-plane
-  for (int i=0;i<n_planes;++i)
+  for (unsigned int i=0;i<n_planes;++i)
   {
     // Smooth and subsample in x, result in work_im
     vil2_algo_gauss_reduce(src_im.top_left_ptr()+i*src_im.planestep(),ni,nj,

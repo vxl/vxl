@@ -1,3 +1,4 @@
+// This is mul/vil2/vil2_image_view.txx
 #ifndef vil2_image_view_txx_
 #define vil2_image_view_txx_
 //:
@@ -454,17 +455,17 @@ template<class T>
 bool vil2_image_view<T>::is_contiguous() const
 {
   // RRR GGG BBB
-  if (planestep_==ni_*nj_)
+  if (planestep_==int(ni_*nj_))
   {
-    if (istep_==1 && jstep_==ni_) return true;
-    if (jstep_==1 && istep_==nj_) return true;
+    if (istep_==1 && jstep_==int(ni_)) return true;
+    if (jstep_==1 && istep_==int(nj_)) return true;
   }
 
   // RGBRGBRGB
   if (planestep_==1)
   {
-    if (istep_==nplanes_ && jstep_==ni_*nplanes_) return true;
-    if (jstep_==nplanes_ && istep_==nj_*nplanes_) return true;
+    if (istep_==int(nplanes_) && jstep_==int(ni_*nplanes_)) return true;
+    if (jstep_==int(nplanes_) && istep_==int(nj_*nplanes_)) return true;
   }
 
   // Note that there may be other weird combinations
@@ -557,10 +558,10 @@ void vil2_image_view<T>::fill(T value)
   for (unsigned int p=0;p<nplanes_;++p,plane += planestep_)
   {
     T* row = plane;
-    for (int j=0;j<nj_;++j,row += jstep_)
+    for (unsigned int j=0;j<nj_;++j,row += jstep_)
     {
       T* p = row;
-      for (int i=0;i<ni_;++i,p+=istep_) *p = value;
+      for (unsigned int i=0;i<ni_;++i,p+=istep_) *p = value;
     }
   }
 }
@@ -619,7 +620,6 @@ bool vil2_image_view_deep_equality(const vil2_image_view<T> &lhs,
         if (!(rhs(i,j,p) == lhs(i,j,p))) return false;
   return true;
 }
-
 
 #define VIL2_IMAGE_VIEW_INSTANTIATE(T) \
 template class vil2_image_view<T >; \

@@ -15,6 +15,7 @@
 #include <vil2/vil2_image_resource.h>
 #include <vil2/vil2_property.h>
 
+
 //: Available options for boundary behavior
 // When convolving a finite signal the boundaries may be
 // treated in various ways which can often be expressed in terms
@@ -161,7 +162,7 @@ inline void vil2_algo_convolve_edge_1d(const srcT* src, unsigned n, int s_step,
   else
   {
     vcl_cout<<"vil2_algo_convolve_edge_1d: ";
-    vcl_cout<<"Sorry, can't deal with supplied edge option."<<vcl_endl;
+    vcl_cout<<"Sorry, can't deal with supplied edge option.\n";
     vcl_abort();
   }
 }
@@ -225,7 +226,7 @@ inline void vil2_algo_convolve_1d(const vil2_image_view<srcT>& src_im,
     destT* dest_row = dest_im.top_left_ptr()+p*dest_im.planestep();
 
     // Apply convolution to each row in turn
-    for (int j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
+    for (unsigned int j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
       vil2_algo_convolve_1d(src_row,ni,s_istep,  dest_row,d_istep,
                             kernel,k_lo,k_hi,ac,start_option,end_option);
   }
@@ -307,15 +308,16 @@ class vil2_algo_convolve_1d_resource : public vil2_image_resource
 
 
   //: Put the data in this view back into the image source.
-  virtual bool put_view(const vil2_image_view_base& im, unsigned i0,
-                        unsigned j0) {
+  virtual bool put_view(const vil2_image_view_base& im, unsigned i0, unsigned j0)
+  {
     vcl_cerr << "WARNING: vil2_algo_convolve_1d_resource::put_back\n"
-      "\t You can't push data back into a convolve filter." << vcl_endl;
+             << "\tYou can't push data back into a convolve filter.\n";
     return false;
   }
 
   //: Extra property information
-  virtual bool get_property(char const* tag, void* property_value = 0) const {
+  virtual bool get_property(char const* tag, void* property_value = 0) const
+  {
       if (0==vcl_strcmp(tag, vil2_property_read_only))
     return property_value ? (*(bool*)property_value) = true : true;
 

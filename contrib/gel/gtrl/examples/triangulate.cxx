@@ -31,11 +31,11 @@ int main()
   vcl_vector<gtrl_triangle_sptr> t = tri.get_triangles();
 
   vcl_cout << p.size() << " triangle points:\n";
-  for (int i=0; i<p.size(); ++i)
+  for (unsigned int i=0; i<p.size(); ++i)
     vcl_cout << ' ' << *(p[i]) << '\n';
 
   vcl_cout << t.size() << " triangles:\n";
-  for (int i=0; i<t.size(); ++i)
+  for (unsigned int i=0; i<t.size(); ++i)
     vcl_cout << ' ' << *(t[i]) << '\n';
 
   return 0;

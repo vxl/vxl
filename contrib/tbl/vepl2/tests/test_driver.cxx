@@ -92,7 +92,8 @@ vil2_image_view_base_sptr CreateTest3planeImage(int wd, int ht)
   vil2_image_resource_sptr im = vil2_new_image_resource(wd, ht, 3, VIL2_PIXEL_FORMAT_BYTE);
   vil2_image_view<vxl_byte>* image = new vil2_image_view<vxl_byte>(im->get_view(0,wd,0,ht));
   for (int x = 0; x < wd; x++)
-    for (int y = 0; y < ht; y++) {
+    for (int y = 0; y < ht; y++)
+    {
       (*image)(x, y, 0) = vxl_byte(x&0xff);
       (*image)(x, y, 1) = vxl_byte(((x-wd/2)*(y-ht/2)/16)&0xff);
       (*image)(x, y, 2) = vxl_byte((y/3)&0xff);
@@ -125,7 +126,7 @@ vil2_image_view_base_sptr CreateTestdoubleImage(int wd, int ht)
 // Compare two images and return true if their difference is not v
 bool difference(vil2_image_view_base_sptr const& a, vil2_image_view_base_sptr const& b, int v, vcl_string const& m)
 {
-  int sx = a->ni(),  sy = a->nj(), sp = a->nplanes();
+  unsigned int sx = a->ni(),  sy = a->nj(), sp = a->nplanes();
   TEST("# rows match", sx, b->ni());
   TEST("# columns match", sy, b->nj());
   TEST("# planes match", sp, b->nplanes());
@@ -139,9 +140,9 @@ bool difference(vil2_image_view_base_sptr const& a, vil2_image_view_base_sptr co
   vil2_image_view<T >& v2 = (vil2_image_view<T >&)(*b); \
   vil2_image_view<T >::const_iterator it1 = v1.begin(); \
   vil2_image_view<T >::const_iterator it2 = v2.begin(); \
-  for (int p=0; p<sp; ++p) \
-    for (int j=1; j<sy-1; ++j) \
-      for (int i=1; i<sx-1; ++i) { \
+  for (unsigned int p=0; p<sp; ++p) \
+    for (unsigned int j=1; j+1<sy; ++j) \
+      for (unsigned int i=1; i+1<sx; ++i) { \
         T x = (*(it1+i*v1.istep()+j*v1.jstep()+p*v1.planestep())) \
              -(*(it2+i*v2.istep()+j*v2.jstep()+p*v2.planestep())); \
         r += x<0 ? -x : x; \
@@ -154,7 +155,7 @@ bool difference(vil2_image_view_base_sptr const& a, vil2_image_view_base_sptr co
   else if (a->pixel_format() == VIL2_PIXEL_FORMAT_BYTE) { DIFF(vxl_byte); }
   else if (a->pixel_format() == VIL2_PIXEL_FORMAT_UINT_16) { DIFF(vxl_uint_16); }
   else if (a->pixel_format() == VIL2_PIXEL_FORMAT_UINT_32) { DIFF(vxl_uint_32); }
-  vcl_cout<<m<<": expected "<<v<<", found "<<ret<<vcl_endl;
+  vcl_cout<<m<<": expected "<<v<<", found "<<ret<<'\n';
   TEST(m.c_str(), ret, v);
   return v!=ret;
 }

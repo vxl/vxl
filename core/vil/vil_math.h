@@ -1,3 +1,4 @@
+// This is mul/vil2/vil2_math.h
 #ifndef vil2_math_h_
 #define vil2_math_h_
 //: \file
@@ -25,9 +26,9 @@ inline void vil2_math_value_range(const vil2_image_view<T>& view, T& min_value, 
   min_value = *(view.top_left_ptr());
   max_value = min_value;
 
-  unsigned ni = view.ni(), istep=view.istep();
-  unsigned nj = view.nj(), jstep=view.jstep();
-  unsigned np = view.nplanes(), pstep = view.planestep();
+  unsigned ni = view.ni();
+  unsigned nj = view.nj();
+  unsigned np = view.nplanes();
 
   for (unsigned p=0;p<np;++p)
     for (unsigned j=0;j<nj;++j)
@@ -36,12 +37,10 @@ inline void vil2_math_value_range(const vil2_image_view<T>& view, T& min_value, 
         const T pixel = view(i,j,p);
         if (pixel<min_value)
           min_value=pixel;
-        else
-          if (pixel>max_value)
-            max_value=pixel;
+        else if (pixel>max_value)
+          max_value=pixel;
       }
 }
-
 
 //: Compute minimum and maximum values over view
 VCL_DEFINE_SPECIALIZATION
@@ -66,7 +65,6 @@ inline void vil2_math_value_range(const vil2_image_view<vil_rgb<float> >& rgb_vi
   vil2_math_value_range(vil2_plane(plane_view,0),min_value.g,max_value.g);
   vil2_math_value_range(vil2_plane(plane_view,0),min_value.b,max_value.b);
 }
-
 
 //: Sum of squared differences between two images
 // \relates vil2_image_view
@@ -101,7 +99,6 @@ void vil2_math_mean_over_planes(const vil2_image_view<aT>& src,
       dest(i,j) = sum / src.nplanes();
     }
 }
-
 
 //: Sum of elements in plane p of image
 // \relates vil2_image_view
@@ -167,7 +164,7 @@ void vil2_math_scale_values(vil2_image_view<T>& image, double scale)
   unsigned ni = image.ni(),nj = image.nj(),np = image.nplanes();
   int istep=image.istep(),jstep=image.jstep(),pstep = image.planestep();
   T* plane = image.top_left_ptr();
-  for (int p=0;p<np;++p,plane += pstep)
+  for (unsigned p=0;p<np;++p,plane += pstep)
   {
     T* row = plane;
     for (unsigned j=0;j<nj;++j,row += jstep)
@@ -186,7 +183,7 @@ void vil2_math_scale_and_offset_values(vil2_image_view<imT>& image, double scale
   unsigned ni = image.ni(),nj = image.nj(),np = image.nplanes();
   int istep=image.istep(),jstep=image.jstep(),pstep = image.planestep();
   imT* plane = image.top_left_ptr();
-  for (int p=0;p<np;++p,plane += pstep)
+  for (unsigned p=0;p<np;++p,plane += pstep)
   {
     imT* row = plane;
     for (unsigned j=0;j<nj;++j,row += jstep)
@@ -214,7 +211,7 @@ void vil2_math_image_sum(const vil2_image_view<aT>& imA,
   const aT* planeA = imA.top_left_ptr();
   const bT* planeB = imB.top_left_ptr();
   sumT* planeS     = im_sum.top_left_ptr();
-  for (int p=0;p<np;++p,planeA += pstepA,planeB += pstepB,planeS += pstepS)
+  for (unsigned p=0;p<np;++p,planeA += pstepA,planeB += pstepB,planeS += pstepS)
   {
     const aT* rowA   = planeA;
     const bT* rowB   = planeB;
@@ -247,7 +244,7 @@ void vil2_math_image_difference(const vil2_image_view<aT>& imA,
   const aT* planeA = imA.top_left_ptr();
   const bT* planeB = imB.top_left_ptr();
   sumT* planeS     = im_sum.top_left_ptr();
-  for (int p=0;p<np;++p,planeA += pstepA,planeB += pstepB,planeS += pstepS)
+  for (unsigned p=0;p<np;++p,planeA += pstepA,planeB += pstepB,planeS += pstepS)
   {
     const aT* rowA   = planeA;
     const bT* rowB   = planeB;
@@ -280,7 +277,7 @@ void vil2_math_image_abs_difference(const vil2_image_view<aT>& imA,
   const aT* planeA = imA.top_left_ptr();
   const bT* planeB = imB.top_left_ptr();
   sumT* planeS     = im_sum.top_left_ptr();
-  for (int p=0;p<np;++p,planeA += pstepA,planeB += pstepB,planeS += pstepS)
+  for (unsigned p=0;p<np;++p,planeA += pstepA,planeB += pstepB,planeS += pstepS)
   {
     const aT* rowA   = planeA;
     const bT* rowB   = planeB;
@@ -311,7 +308,7 @@ void vil2_math_add_image_fraction(vil2_image_view<aT>& imA, scaleT fa,
   int istepB=imB.istep(),jstepB=imB.jstep(),pstepB = imB.planestep();
   aT* planeA = imA.top_left_ptr();
   const bT* planeB = imB.top_left_ptr();
-  for (int p=0;p<np;++p,planeA += pstepA,planeB += pstepB)
+  for (unsigned p=0;p<np;++p,planeA += pstepA,planeB += pstepB)
   {
     aT* rowA   = planeA;
     const bT* rowB   = planeB;
@@ -348,7 +345,7 @@ void vil2_math_integral_image(const vil2_image_view<aT>& imA,
   sumT sum=0;
   const aT* pixelA = rowA;
   sumT* pixelS = rowS;
-  for (int i=0;i<ni;++i,pixelA+=istepA,pixelS+=istepS)
+  for (unsigned i=0;i<ni;++i,pixelA+=istepA,pixelS+=istepS)
     { sum+= *pixelA; *pixelS=sum; }
 
   // For subsequent rows, include sum from row above as well
@@ -397,7 +394,7 @@ void vil2_math_integral_sqr_image(const vil2_image_view<aT>& imA,
   const aT* pixelA = rowA;
   sumT* pixelS     = rowS;
   sumT* pixelS2    = rowS2;
-  for (int i=0;i<ni;++i,pixelA+=istepA,pixelS+=istepS,pixelS2+=istepS2)
+  for (unsigned i=0;i<ni;++i,pixelA+=istepA,pixelS+=istepS,pixelS2+=istepS2)
   {
     sum+= *pixelA; *pixelS=sum;
     sum2+=sumT(*pixelA)*sumT(*pixelA); *pixelS2=sum2;

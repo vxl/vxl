@@ -9,6 +9,7 @@
 #include <vil2/algo/vil2_algo_convolve_1d.h>
 #include <vcl_compiler.h>
 #include <vcl_cstdlib.h> // for vcl_abort()
+#include <vcl_cassert.h>
 
 
 //: Evaluate dot product between kernel and src_im
@@ -33,19 +34,18 @@ inline accumT vil2_algo_convolve_2d_at_pt(const srcT *src_im,
     const srcT*  src_row  = src_im + p*s_pstep;
     const kernelT* k_row =  kernel.top_left_ptr() + p*kernel.planestep();
 
-    for (int j=0;j<nj;++j,src_row+=s_jstep,k_row+=k_jstep)
+    for (unsigned int j=0;j<nj;++j,src_row+=s_jstep,k_row+=k_jstep)
     {
       const srcT* sp = src_row;
       const kernelT* kp = k_row;
       // Sum over j-th row
-      for (int i=0;i<ni;++i, sp += s_istep, kp += k_istep)
+      for (unsigned int i=0;i<ni;++i, sp += s_istep, kp += k_istep)
         sum += accumT(*sp)*accumT(*kp);
     }
   }
 
   return sum;
 }
-
 
 //: Convolve kernel with srcT
 // dest is resized to (1+src_im.ni()-kernel.ni())x(1+src_im.nj()-kernel.nj())
@@ -58,8 +58,8 @@ inline void vil2_algo_convolve_2d(const vil2_image_view<srcT>& src_im,
                                   const vil2_image_view<kernelT>& kernel,
                                   accumT ac)
 {
-  unsigned ni = 1+src_im.ni()-kernel.ni();
-  unsigned nj = 1+src_im.nj()-kernel.nj();
+  int ni = 1+src_im.ni()-kernel.ni(); assert(ni >= 0);
+  int nj = 1+src_im.nj()-kernel.nj(); assert(nj >= 0);
   int s_istep = src_im.istep(), s_jstep = src_im.jstep();
   int s_pstep = src_im.planestep();
 
@@ -79,6 +79,5 @@ inline void vil2_algo_convolve_2d(const vil2_image_view<srcT>& src_im,
       // Convolve at src(i,j)
   }
 }
-
 
 #endif // vil2_algo_convolve_2d_h_
