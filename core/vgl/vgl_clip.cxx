@@ -9,6 +9,8 @@
 #endif
 #include "vgl_clip.h"
 #include <vcl_cmath.h> // for vcl_abs(double) and vcl_sqrt()
+#include <vcl_cstdlib.h> // for vcl_malloc() and vcl_free()
+#include <vcl_cstdio.h> // for vcl_fprintf()
 #include <vcl_algorithm.h> // for swap
 
 bool vgl_clip_lineseg_to_line(double &x1, double &y1,
