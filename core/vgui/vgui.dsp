@@ -459,9 +459,6 @@ SOURCE=.\impl/glut/vgui_glut_tag.cxx
 SOURCE=.\impl/glut/vgui_glut_window.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\impl/gtk/Templates/vcl_vector+GtkWidget~-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vcl_algorithm+vgui_rubberband_tableau_sptr-.cxx
 # End Source File
 # Begin Source File
@@ -751,6 +748,27 @@ SOURCE=.\Templates/vgui_vil2_section_buffer_apply+uint_32-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vgui_vil2_section_buffer.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\impl/gtk2/vgui_gtk2.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\impl/gtk2/vgui_gtk2_adaptor.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\impl/gtk2/vgui_gtk2_dialog_impl.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\impl/gtk2/vgui_gtk2_statusbar.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\impl/gtk2/vgui_gtk2_tag.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\impl/gtk2/vgui_gtk2_utils.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\impl/gtk2/vgui_gtk2_window.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -1276,6 +1294,24 @@ SOURCE=.\vgui_vil2_section_buffer_apply.h
 # End Source File
 # Begin Source File
 SOURCE=.\vgui_vil2_section_buffer_apply.txx
+# End Source File
+# Begin Source File
+SOURCE=.\impl/gtk2/vgui_gtk2.h
+# End Source File
+# Begin Source File
+SOURCE=.\impl/gtk2/vgui_gtk2_adaptor.h
+# End Source File
+# Begin Source File
+SOURCE=.\impl/gtk2/vgui_gtk2_dialog_impl.h
+# End Source File
+# Begin Source File
+SOURCE=.\impl/gtk2/vgui_gtk2_statusbar.h
+# End Source File
+# Begin Source File
+SOURCE=.\impl/gtk2/vgui_gtk2_utils.h
+# End Source File
+# Begin Source File
+SOURCE=.\impl/gtk2/vgui_gtk2_window.h
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
