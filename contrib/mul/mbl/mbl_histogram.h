@@ -65,6 +65,13 @@ public:
     //: Number above highest bin
   int n_above() const { return n_above_; }
 
+    //: Write out probabilities (freq/n_obs) to a named file
+	//  Can then be plotted by your favorite tool
+	//
+	//  Format: (bin-centre) prob     (one per line)
+	// \return true if successful
+  bool write_probabilities(const char* path);
+
   void print_summary(vcl_ostream& os) const;
     //: Version number for I/O
   short version_no() const;

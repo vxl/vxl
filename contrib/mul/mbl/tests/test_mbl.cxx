@@ -7,6 +7,7 @@
 #include <mbl/tests/test_arb_length_int.cxx>
 #include <mbl/tests/test_selected_data_wrapper.cxx>
 #include <mbl/tests/test_stochastic_data_collector.cxx>
+#include <mbl/tests/test_histogram.cxx>
 #include <mbl/tests/test_k_means.cxx>
 #include <mbl/tests/test_mz_random.cxx>
 #include <mbl/tests/test_matrix_products.cxx>
@@ -40,6 +41,7 @@ void run_test_mbl()
   test_index_sort();
   test_lru_cache();
   test_thin_plate_spline_2d();
+  test_histogram();
 }
 
 TESTMAIN(run_test_mbl);

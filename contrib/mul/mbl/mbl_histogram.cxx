@@ -144,6 +144,23 @@ void mbl_histogram::print_summary(vcl_ostream& os) const
   }
 }
 
+//: Write out histogram probabilities to a named file
+//  Format: (bin-centre) prob     (one per line)
+// \return true if successful
+bool mbl_histogram::write_probabilities(const char* path)
+{
+  int n = n_bins();
+  if (n==0) return false;
+
+  vcl_ofstream ofs(path);
+  if (!ofs) return false;
+  for (int i=0;i<n_bins();++i)
+  {
+    ofs<<0.5*(bins_[i]+bins_[i+1])<<"  "<<double(freq_[i])/n_obs_<<vcl_endl;
+  }
+  ofs.close();
+}
+
 vcl_ostream& operator<<(vcl_ostream& os, const mbl_histogram& histo)
 {
   histo.print_summary(os);
