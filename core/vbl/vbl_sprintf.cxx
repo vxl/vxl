@@ -18,18 +18,6 @@
 
 #include <vcl_iostream.h>
 
-const unsigned vbl_sprintf_BUFSIZE=16384;
-
-static void do_vbl_sprintf(vcl_string &str,const char *fmt,va_list ap)
-{
-  char s[vbl_sprintf_BUFSIZE];
-  vsprintf(s, fmt, ap);
-  if (strlen(s) >= vbl_sprintf_BUFSIZE)
-    vcl_cerr << "WARNING : possible memory corruption in do_vbl_sprintf(\"" << fmt << "\",...)!\n";
-  str = s;
-}
-
-
 vbl_sprintf::vbl_sprintf(char const *fmt, ...) : vcl_string("")
 {
   va_list ap;
