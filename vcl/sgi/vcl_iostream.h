@@ -48,7 +48,7 @@ struct vcl_ios_openmode
 #define vcl_ios_app    vcl_ios_openmode(ios::app)
 #undef  vcl_ios_trunc
 #define vcl_ios_trunc  vcl_ios_openmode(ios::trunc)
-// SGI CC has no ios::bin, but since UNIX makes no distinction
+// SGI CC has no ios::binary, but since UNIX makes no distinction
 // between binary and non-binary, 0 works just as well.
 #undef  vcl_ios_binary
 #define vcl_ios_binary vcl_ios_openmode(0)
