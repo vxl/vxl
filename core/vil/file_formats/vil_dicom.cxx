@@ -301,6 +301,13 @@ vil_image_view_base_sptr vil_dicom_image::get_copy_view(
   // Get the number of rows and columns to read
   int cols=header_.dimx_;
   int rows=header_.dimy_;
+  if (cols == VIL_DICOM_HEADER_UNSPECIFIED_UNSIGNED ||
+      rows == VIL_DICOM_HEADER_UNSPECIFIED_UNSIGNED)
+  {
+    vcl_cerr<< "ERROR: vil_dicom_image::get_copy_view\n"
+            << "       Could not read file header\n";
+    return 0;
+  }
 
   // The number of bytes to read at a time depends on the
   // allocated bits. If 16 or 12 are allocated, then two bytes
