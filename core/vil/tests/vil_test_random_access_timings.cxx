@@ -15,6 +15,8 @@
 const unsigned NI=256;
 const unsigned NJ=256;
 const unsigned NP=3;
+const double dx = 0.7;
+const double dy = 1.3;
 
 template <class imT>
 double method1(vil2_image_view<imT>& image,
@@ -147,7 +149,7 @@ double bilin_method1(vil2_image_view<imT>& image, int n_pts, int n_loops)
      double x = 1.3,y=1.7;
      int istep=image.istep(),jstep=image.jstep();
      imT* plane = image.top_left_ptr();
-     for (int i=0;i<n_pts;++i,x+=0.01,y+=0.02)
+     for (int i=0;i<n_pts;++i,x+=dx,y+=dy)
        sum+=(double) bilin_interp1(x,y,plane,istep,jstep);
   }
   vcl_time_t t1=vcl_clock();
@@ -162,7 +164,7 @@ double bilin_method2(vil2_image_view<imT>& image, int n_pts, int n_loops)
   for (int n=0;n<n_loops;++n)
   {
     double x = 1.3,y=1.7;
-    for (int i=0;i<n_pts;++i,x+=0.01,y+=0.02)
+    for (int i=0;i<n_pts;++i,x+=dx,y+=dy)
       sum+=(double) bilin_interp1(x,y,image.top_left_ptr(),image.istep(),image.jstep());
   }
   vcl_time_t t1=vcl_clock();
@@ -188,7 +190,7 @@ double bilin_method3(vil2_image_view<imT>& image, int n_pts, int n_loops)
   for (int n=0;n<n_loops;++n)
   {
     double x = 1.3,y=1.7;
-    for (int i=0;i<n_pts;++i,x+=0.01,y+=0.02)
+    for (int i=0;i<n_pts;++i,x+=dx,y+=dy)
       sum+=(double) bilin_interp2(x,y,raster_ptrs);
   }
   vcl_time_t t1=vcl_clock();
@@ -231,6 +233,8 @@ int main(int argc, char** argv)
     y[i]=(i*13)%NJ;
   }
 
+  n_pts = 100;
+  n_loops = 100000;
   vcl_cout<<"Times to randomly access image (in nanosecs) [Range= 0.5(max-min)]"<<vcl_endl;
   vcl_cout<<"Images of BYTE"<<vcl_endl;
   for (int i=1;i<=3;++i)

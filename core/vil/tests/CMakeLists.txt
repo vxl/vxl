@@ -62,6 +62,10 @@ ADD_EXECUTABLE( vil2_test_access_timings vil2_test_access_timings.cxx)
 TARGET_LINK_LIBRARIES( vil2_test_access_timings vil2 mbl vcl )
 ADD_TEST( vil2_test_access_timings vil2_test_access_timings )
 
+ADD_EXECUTABLE( vil2_test_pair_access_timings vil2_test_pair_access_timings.cxx)
+TARGET_LINK_LIBRARIES( vil2_test_pair_access_timings vil2 mbl vcl )
+ADD_TEST( vil2_test_pair_access_timings vil2_test_pair_access_timings )
+
 ADD_EXECUTABLE( vil2_test_random_access_timings vil2_test_random_access_timings.cxx)
 TARGET_LINK_LIBRARIES( vil2_test_random_access_timings vil2 mbl vcl )
 ADD_TEST( vil2_test_random_access_timings vil2_test_random_access_timings )
