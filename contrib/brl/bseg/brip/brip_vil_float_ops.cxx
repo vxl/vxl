@@ -1059,7 +1059,6 @@ brip_vil_float_ops::convert_to_float(vil_image_view<vil_rgb<vxl_byte> > const& i
       output(x,y) = (float)rgb.grey();
     }
   return output;
-
 }
 
 void brip_vil_float_ops::rgb_to_ihs(vil_rgb<vxl_byte> const& rgb,
@@ -1072,72 +1071,69 @@ void brip_vil_float_ops::rgb_to_ihs(vil_rgb<vxl_byte> const& rgb,
 
   float maxval = vnl_math_max(r,vnl_math_max(g,b));
   float minval = vnl_math_min(r,vnl_math_min(g,b));
-  
+
   float delta = maxval - minval;
   i = maxval;
-  if(maxval == 0)  
+  if (maxval == 0)
     s = 0;
   else
    s = delta / maxval;
-  
-  if (s== 0) 
+
+  if (s== 0)
    h = 0;                 //:      (Hue is undefined)
-  
-  if (r== maxval) 
+
+  if (r== maxval)
     h = (g - b) / delta ;//:      (between yellow and magenta)
-  if (g == maxval) 
+  if (g == maxval)
     h = 2 + (b - r)/delta ;//:(between cyan and yellow)
-  if (b == maxval) 
+  if (b == maxval)
     h = 4 + (r - g) / delta; //:   (between magenta and cyan)
   h = h * 60;//:                             (convert Hue to degrees)
-  if (h < 0) 
+  if (h < 0)
     h = h + 360 ;  //:                (Hue must be positive)
-  if(h >= 360) 
+  if (h >= 360)
     h = h - 360; //:              (Hue must be less than 360)
-  
+
   h = h * (255.0 / 360.0);
   s = s * 255.0;
 }
+
 void brip_vil_float_ops::ihs_to_rgb(vil_rgb<vxl_byte> & rgb,
-                       float i, float h, float s)
+                                    float i, float h, float s)
 {
   // Reference: page 593 of Foley & van Dam
-  h = h * (360.f / 255.f);
-  s = s * (1.f / 255.f);
+  float R = 0.0f;
+  float G = 0.0f;
+  float B = 0.0f;
 
-  float R=0.0;
-  float G=0.0;
-  float B=0.0;
-  
   if (s == 0) {
     R=i;
     G=i;
     B=i;
   }
+  else
 
-  if (s > 0.0) {
-    h = h / 60;
+  if (s > 0.0)
+  {
+    s *= 1.f / 255.f;
+    h *= 6.f / 255.f;
+
     float J = vcl_floor(h);
-
     float F = h - J;
-
     float P =( i * (1 - s));
     float Q = (i * (1 - (s * F)));
     float T = (i * (1 - (s * (1 - F))));
 
-     if (J == 0){R=i;G=T;B=P;}
-     if (J == 1){R=Q;G=i;B=P;} 
-     if (J == 2){R=P;G=i;B=T;} 
-     if (J == 3){R=P;G=Q;B=i;} 
-     if (J == 4){R=T;G=P;B=i;} 
-     if (J == 5){R=i;G=P;B=Q;}
-     
+     if (J == 0) { R=i; G=T; B=P; }
+     if (J == 1) { R=Q; G=i; B=P; }
+     if (J == 2) { R=P; G=i; B=T; }
+     if (J == 3) { R=P; G=Q; B=i; }
+     if (J == 4) { R=T; G=P; B=i; }
+     if (J == 5) { R=i; G=P; B=Q; }
   }
-
-  vil_rgb<vxl_byte> v((unsigned char)R,(unsigned char)G,(unsigned char)B);
-
-  rgb=v;
-
+  rgb.r = (vxl_byte)R;
+  rgb.g = (vxl_byte)G;
+  rgb.b = (vxl_byte)B;
 }
 
 void brip_vil_float_ops::
@@ -1147,8 +1143,8 @@ convert_to_IHS(vil_image_view<vil_rgb<vxl_byte> >const& image,
                vil_image_view<float>& S)
 {
   int w = image.ni(), h = image.nj();
-  vcl_cout<<"\n width in fucntion is "<<w;
-  vcl_cout<<"\n height in fucntion is "<<h;
+  vcl_cout << "\n width in function is " << w
+           << "\n height in function is " << h;
 
   I.set_size(w,h);
   H.set_size(w,h);
@@ -1163,6 +1159,7 @@ convert_to_IHS(vil_image_view<vil_rgb<vxl_byte> >const& image,
       S(c,r) = sat;
     }
 }
+
 void brip_vil_float_ops::
 convert_to_IHS(vil_image_view<unsigned char >const& image,
                vil_image_view<float>& I,
@@ -1170,8 +1167,8 @@ convert_to_IHS(vil_image_view<unsigned char >const& image,
                vil_image_view<float>& S)
 {
   int w = image.ni(), h = image.nj();
-  vcl_cout<<"\n width in fucntion is "<<w;
-  vcl_cout<<"\n height in fucntion is "<<h;
+  vcl_cout << "\n width in function is " << w
+           << "\n height in function is " << h;
 
   I.set_size(w,h);
   H.set_size(w,h);
@@ -1201,27 +1198,18 @@ void brip_vil_float_ops::
   for (int r = 0; r < h; r++)
     for (int c = 0; c < w; c++)
     {
-      float in, hue, sat;
-      in = I(c,r);
-      hue = H(c,r);
-      sat = S(c,r);
-      if (in<0)
-        in = 0;
-      if (sat<0)
-        sat = 0;
-      if (hue<0)
-        hue = 0;
-      if (in>255)
-        in = 255;
-      hue *=s;
-      if (hue>255)
-        hue = 255;
-      if (sat>255)
-        sat = 255;
-      unsigned char vi = (unsigned char)in, vh = (unsigned char)hue,
-        vs = (unsigned char)sat;
-      vil_rgb<vxl_byte> v(vi, vh, vs);
-      image(c,r)=v;
+      float in = I(c,r);
+      float hue = s * H(c,r);
+      float sat = S(c,r);
+      if (in<0) in = 0;
+      if (sat<0) sat = 0;
+      if (hue<0) hue = 0;
+      if (in>255) in = 255;
+      if (hue>255) hue = 255;
+      if (sat>255) sat = 255;
+      image(c,r).r = (vxl_byte)in;
+      image(c,r).g = (vxl_byte)hue;
+      image(c,r).b = (vxl_byte)sat;
     }
 }
 #endif // 0
@@ -1248,21 +1236,15 @@ display_IHS_as_RGB(vil_image_view<float> const& I,
         sat = 255.f;
       float ang = deg_to_rad*hue;
       float cs = vcl_cos(ang), si = vcl_fabs(vcl_sin(ang));
-      float red,green,blue;
-      green = si*sat;
+      float red=0.0f, blue=0.0f;
+      float green = si*sat;
       if (cs>=0)
-      {
         red = cs*sat;
-        blue = 0;
-      }
       else
-      {
-        red = 0;
         blue = sat*(-cs);
-      }
-      unsigned char rc = (unsigned char)red,
-        gc = (unsigned char)green, bc = (unsigned char)blue;
-      image(c,r)= vil_rgb<vxl_byte>(rc, gc, bc);
+      image(c,r).r = (vxl_byte)red;
+      image(c,r).g = (vxl_byte)green;
+      image(c,r).b = (vxl_byte)blue;
     }
 }
 
