@@ -283,10 +283,12 @@ foreach $f (@FILES)
     elsif ($j eq "vil1/vil1_colour_space.h") { $i="($i)_(RGB|HSV)_to_(YIQ|HSV|RGB)"; }
     elsif ($j =~ m/vil2?\/vil2?_convert\.h$/) { $i="($i)_((cast|round)(_pixel)?|(rgb|planes)_to_grey|stretch_range|to_[a-z_]+)"; }
     elsif ($j eq "vil1/vil1_convolve.h") { $i="$i(|_[a-z_]+)"; }
-    elsif ($j =~ m/vil2?\/algo\/vil2?_convolve_1d.h$/) { $i="vil2\?_convolve_(1d|edge_1d|boundary_option)"; }
+    elsif ($j =~ m/vil2?\/algo\/vil2?_convolve_1d\.h$/) { $i="vil2\?_convolve_(1d|edge_1d|boundary_option)"; }
+    elsif ($j eq "vil/algo/vil_find_peaks.h") { $i="vil_(find_peaks_3x3|is_peak_3x3)"; }
+    elsif ($j eq "vil/algo/vil_histogram.h") { $i="$i(|_byte)"; }
     elsif ($j =~ m/vil2?\/vil2?_copy\.h$/) { $i="($i)(|_deep|_to_window|_reformat)"; }
-    elsif ($j =~ m/vil2?\/algo\/vil2?_exp_filter_1d.h$/) { $i="vil2\?_exp_filter_(1d|i|j)"; }
-    elsif ($j =~ m/vil2?\/algo\/vil2?_exp_grad_filter_1d.h$/) { $i="vil2\?_exp_grad_filter_(1d|i|j)"; }
+    elsif ($j =~ m/vil2?\/algo\/vil2?_exp_filter_1d\.h$/) { $i="vil2\?_exp_filter_(1d|i|j)"; }
+    elsif ($j =~ m/vil2?\/algo\/vil2?_exp_grad_filter_1d\.h$/) { $i="vil2\?_exp_grad_filter_(1d|i|j)"; }
     elsif ($j =~ m/vil2?\/vil2?_fill\.h$/) { $i="($i)_(line|row|col|mask)"; }
     elsif ($j =~ m/vil2?\/vil2?_flip\.h$/) { $i="($i)_(ud|lr)"; }
     elsif ($j =~ m/vil2?\/algo\/vil2?_gauss_filter\.h$/) { $i="($i)_(5tap(_params)?)"; }
@@ -316,6 +318,7 @@ foreach $f (@FILES)
     elsif ($j =~ m/vil2?\/vil2?_view_as\.h$/) { $i="($i)(|_planes|_rgb)|vil2\?_view_(real|imag)_part"; }
     elsif ($j =~ m/vil2?\/vil2?_vil1\.h$/) { $i="($i)_(to_|from_)?image_(resource|view)"; }
     elsif ($j =~ m/vil2?\/file_formats\/(vil2?_dicom_header)\.h/) { $i = "($1(_type|_endian|_image_type|_info|_format))|VIL2?_DICOM_HEADER_[A-Z0-9_]+"; }
+    elsif ($j =~ m/vil2?\/file_formats\/vil_dicom_header\.h$/) { $i = "($i)_(type|endian|image_type|info|format)"; }
     elsif ($j =~ m/vil[12]?\/file_formats\/(.*)\.h$/) { $i="$1_file_format"; }
     elsif ($j eq "vipl/filter/vipl_filter_abs.h") { $i="($i|FILTER_IMPTR_(INC|DEC)_REFCOUNT)"; }
     elsif ($j =~ m/vipl\/vipl_with_vbl_array_2d\/accessors\/vipl_accessors_(vbl_array_2d)\.h/) { $i="$1"; }
@@ -339,6 +342,8 @@ foreach $f (@FILES)
     elsif ($j eq "vnl/vnl_T_n.h") { $i="($i)_[a-z_]*"; }
     elsif ($j eq "vnl/vnl_sample.h") { $i="$i(|_[a-z_]+)"; }
     elsif ($j eq "vnl/vnl_tag.h") { $i="($i)_[a-z]+"; }
+    elsif ($j eq "vnl/vnl_matrix_fixed_ref.h") { $i="$i(|_const)"; }
+    elsif ($j eq "vnl/vnl_vector_fixed_ref.h") { $i="$i(|_const)"; }
     elsif ($j eq "vpl/vpl.h") { $i="($i)_[a-z]+"; }
     elsif ($j eq "vsl/vsl_binary_io.h") { $i="vsl_b_(read|write|[io]f?stream)"; }
     elsif ($j eq "vsl/vsl_block_binary.h") { $i="($i)_(read|write)"; }
@@ -347,6 +352,7 @@ foreach $f (@FILES)
     elsif ($j eq "vsl/vsl_complex_io.h") { $i="(VNL_IO_[A-Z]+_INSTANTIATE.vcl_complex|vsl_b_(read|write))"; }
     elsif ($j eq "vsl/vsl_indent.h") { $i="$i(|_inc|_dec|_set_tab|_tab|_clear|_clear_all_data)"; }
     elsif ($j =~ m/(vsl\/vsl_[a-z]+_io|v[bginu]l[12]?\/io\/v[bginu]l[12]?_io_[a-z123_]+).h/) { $i="vsl_(b_(read|write)|print_summary)"; }
+    elsif ($j eq "vsol/vsol_point_2d.h") { $i="$i|p[01]\(\)"; }
     elsif ($j eq "vsol/vsol_spatial_object_2d.h") { $i="$i|cast_to_spatial_object_2d\(\)"; }
     elsif ($j eq "vsol/vsol_curve_2d.h") { $i="$i|cast_to_curve\(\)"; }
     elsif ($j eq "vtol/vtol_vertex_2d.h") { $i="$i|cast_to_vertex_2d\(\)"; }
@@ -669,9 +675,9 @@ foreach $f (@FILES)
   foreach $wd (split(' ',"internal left right"))
   {
     if ($cpp_file &&
-        ($wd !~ m/(left|right)/ || 
+        ($wd !~ m/(left|right)/ ||
          ($f !~ m/\bpdf1d\/pdf1d_pdf\.cxx$/ &&
-          $f !~ m/\bvnl\/(vnl_matrix(|_fixed)\.txx|algo\/vnl_complex_eigensystem\.cxx)$/ &&
+          $f !~ m/\bvnl\/(vnl_matrix(|_fixed(|_ref))\.txx|algo\/vnl_complex_eigensystem\.cxx)$/ &&
           $f !~ m/\b(oxl\/oxp\/vsl_conic_points\.cxx|gel\/gevd\/gevd_float_operators\.cxx)$/ &&
           $f !~ m/\bvcsl\/examples\/vcsl_tutor\.cxx$/ &&
           $f !~ m/\brsdl\/rsdl_(bins_2d|kd_tree)\.h$/ &&
