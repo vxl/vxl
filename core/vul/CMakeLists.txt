@@ -12,7 +12,6 @@ vul_arg
 vul_reg_exp
 vul_awk
 vul_sequence_filename_map
-vul_canonical_path
 vul_file
 vul_sprintf
 vul_file_iterator
@@ -26,6 +25,7 @@ vul_psfile
 vul_trace
 vul_user_info
 vul_redirector
+vul_expand_path
 )
 
 AUX_SOURCE_DIRECTORY(Templates vul_sources)
