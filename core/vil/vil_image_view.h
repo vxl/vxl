@@ -9,14 +9,15 @@
 // \brief A base class reference-counting view of some image data.
 // \author Ian Scott - Manchester
 
-#include <vil2/vil2_image_view_base.h>
-#include <vil2/vil2_smart_ptr.h>
 #include <vcl_iosfwd.h>
 #include <vcl_string.h>
 #include <vcl_cassert.h>
-#include <vil2/vil2_memory_chunk.h>
 #include <vil/vil_byte.h>
 #include <vil/vil_rgb.h>
+#include <vil2/vil2_image_view_base.h>
+#include <vil2/vil2_smart_ptr.h>
+#include <vil2/vil2_memory_chunk.h>
+#include <vil2/vil2_pixel_format.h>
 
 //: Concrete view of image data held in memory
 template <class T>
@@ -198,6 +199,11 @@ public:
 
     //: True if this is (or is derived from) class s
   virtual bool is_class(vcl_string const& s) const;
+
+    //: Return a description of the concrete data pixel type.
+    // The value corresponds directly to pixel_type.
+  virtual enum vil2_pixel_format pixel_format() const
+  { return vil2_pixel_format_of(T(0)); }
 
     //: True if they share same view of same image data.
     //  This does not do a deep equality on image data. If the images point

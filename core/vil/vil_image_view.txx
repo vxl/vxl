@@ -8,8 +8,9 @@
 #include "vil2_image_view.h"
 #include <vcl_string.h>
 #include <vcl_cassert.h>
-#include <vil2/vil2_smart_ptr.h>
 #include <vcl_ostream.h>
+#include <vil2/vil2_smart_ptr.h>
+#include <vil2/vil2_pixel_format.h>
 
 //=======================================================================
 
@@ -115,7 +116,7 @@ const vil2_image_view_base & vil2_image_view<T>::operator = (const vil2_image_vi
   if (static_cast<const vil2_image_view_base*>(this) == &rhs)
     return *this;
 
-  if (rhs.is_a() == is_a())
+  if (rhs.pixel_format() == pixel_format())
   {
     const vil2_image_view<T> &that = static_cast<const vil2_image_view<T>&>(rhs);
     nx_=that.nx_;
