@@ -2,6 +2,7 @@
 #pragma implementation
 #endif
 #include <vcsl/vcsl_matrix.h>
+#include <vcl_cmath.h> // for vcl_cos(), vcl_sin()
 
 //***************************************************************************
 // Status report
