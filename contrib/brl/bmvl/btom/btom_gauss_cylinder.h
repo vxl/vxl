@@ -1,11 +1,11 @@
 //--*-c++-*--tells emacs this is c++
-#ifndef _gauss_cylinder_h
-#define _gauss_cylinder_h
+#ifndef gauss_cylinder_h_
+#define gauss_cylinder_h_
 //-----------------------------------------------------------------------------
 //:
 // \file
 // \brief A formulation of a cylinder with Gaussian distribution
-//        
+//
 // \author
 //   J.L. Mundy
 //
@@ -31,13 +31,13 @@
 class btom_gauss_cylinder : public vbl_ref_count
 {
   // PUBLIC INTERFACE----------------------------------------------------------
-public:
+ public:
   // Constructors/Initializers/Destructors-------------------------------------
-  
-  btom_gauss_cylinder(float xy_sigma=1.0, float z_sigma=5.0, 
-                 float length_sigma=10.0, float density=1.0,
-                 float x_origin=0.0, float y_origin=0.0, float z_position=0.0, 
-                 float elevation=0.0, float azimuth=0.0);
+
+  btom_gauss_cylinder(float xy_sigma=1.0, float z_sigma=5.0,
+                      float length_sigma=10.0, float density=1.0,
+                      float x_origin=0.0, float y_origin=0.0, float z_position=0.0,
+                      float elevation=0.0, float azimuth=0.0);
   ~btom_gauss_cylinder();
 
   // Data Access---------------------------------------------------------------
@@ -54,7 +54,7 @@ public:
   void set_xy_sigma(float xy_sigma) {xy_sigma_=xy_sigma;}
   void set_z_sigma(float z_sigma) {z_sigma_=z_sigma;}
   void set_length_sigma(float length_sigma) {length_sigma_=length_sigma;}
-  void set_density(float density) {density = density_;}
+  void set_density(float density) {density_ = density;}
   void set_x_origin(float x_origin) {x_origin_=x_origin;}
   void set_y_origin(float y_origin) {y_origin_=y_origin;}
   void set_z_position(float z_position) {z_position_=z_position;}
@@ -66,26 +66,22 @@ public:
   float cylinder_intensity(float x, float y);
   float radon_transform(float theta, float t);
   // print params
-  friend 
+  friend
     vcl_ostream& operator << (vcl_ostream& os, const btom_gauss_cylinder& gc);
 
-   protected:
+ protected:
   // Utilities
 
   // Data Members--------------------------------------------------------------
- float xy_sigma_;
- float z_sigma_; 
- float length_sigma_;
- float density_;
- float x_origin_; 
- float y_origin_; 
- float z_position_;
- float elevation_;
- float azimuth_;
+  float xy_sigma_;
+  float z_sigma_;
+  float length_sigma_;
+  float density_;
+  float x_origin_;
+  float y_origin_;
+  float z_position_;
+  float elevation_;
+  float azimuth_;
 };
+
 #endif
-
-
-
-
-
