@@ -48,6 +48,9 @@ class vil_nitf_image_subheader_v20 : public vil_nitf_image_subheader
   virtual StatusCode Read (vil_stream*);
   virtual StatusCode Write (vil_stream*);
 
+  virtual vil_nitf_image_subheader_band * new_image_header_band (
+      vil_nitf_image_subheader_band * ish_band = 0) ;
+
   virtual unsigned long GetHeaderLength() const;
 
   // Need to generalize for NITFv2.1
