@@ -25,20 +25,16 @@
 template<class T>
 inline vil_image_view<typename T::value_type> vil_view_as_planes(const vil_image_view<T >& v)
 {
+  typedef typename T::value_type comp_type;
   if (v.nplanes()!=1) return vil_image_view<T>();
-  const unsigned ncomponents = sizeof(T) / sizeof(T::value_type);
+  const unsigned ncomponents = sizeof(T) / sizeof(comp_type);
 
   // An RGB image is RGBRGBRGB, an RGBA image is RGBARGBARGBA, and a
   // complex image is RCRCRC, so istep = ncomponents*v.istep(), and
   // jstep = ncomponents*v.jstep().
 
-#if defined(VCL_VC60) || !VCL_HAS_TYPENAME
-  return vil_image_view<T::value_type>(
-    v.memory_chunk(),reinterpret_cast<T::value_type const*>(v.top_left_ptr()),
-#else
-  return vil_image_view<typename T::value_type>(
-    v.memory_chunk(),reinterpret_cast<typename T::value_type const*>( v.top_left_ptr()),
-#endif
+  return vil_image_view<comp_type>(
+    v.memory_chunk(),reinterpret_cast<comp_type const*>(v.top_left_ptr()),
     v.ni(),v.nj(),ncomponents,
     v.istep()*ncomponents,v.jstep()*ncomponents,1);
 }
