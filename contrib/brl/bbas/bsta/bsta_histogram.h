@@ -10,7 +10,7 @@
 // A templated histogram class.  Supports entropy calculations
 //
 // \verbatim
-//  Modifications
+//  J.L. Mundy added min,max, percentile methods
 // \endverbatim
 
 #include <vcl_vector.h>
@@ -18,17 +18,62 @@
 template <class T> class bsta_histogram
 {
  public:
-  bsta_histogram(const T range = 360, const unsigned int nbins = 8,
+  //:Simple default constructor that assumes all data values are positive
+  bsta_histogram(const T range, const unsigned int nbins,
                  const T min_prob = 0.0);
+
+  //:More general constructor defining a signed value range
+  bsta_histogram(const T min, const T max, const unsigned int nbins,
+                 const T min_prob = 0.0);
+
+  //:construct from other histogram data
+  bsta_histogram(const T min, const T max, vcl_vector<T> const& data,
+                 const T min_prob = 0.0);
+
+
  ~bsta_histogram() {}
+
+ // The number of bins in the histogram
   unsigned int nbins() const { return nbins_; }
-  void upcount(T dir, T mag);
+
+  //: min,max of range
+  T min(){return min_;}
+  T max(){return max_;}
+
+  //: probability of a given bin
+  T p(unsigned int bin) const;
+
+  //: probability of a value in the range
+  T p(const T value) const;
+
+  //: Total area under the histogram
+  T area() const;
+
+  //: Fraction of area less than val
+  T fraction_below(const T value) const;
+
+  //: Fraction of area greater than val
+  T fraction_above(const T value) const;
+
+  //: Value for area fraction below value
+  T value_with_area_below(const T area_fraction) const;
+
+  //: Value for area fraction below value
+  T value_with_area_above(const T area_fraction) const;
+
+  //: Entropy of p(x)
+  T entropy() const;
+
+  //: Renyi alpha = 2 entropy of p(x)
+  T renyi_entropy() const;
+
+ //: Increase the count of the bin corresponding to val by mag
+  void upcount(T val, T mag);
+
+ //: Smooth the histogram with a Parzen window of sigma
   void parzen(const T sigma);
 
-  T p(unsigned int bin) const;
-  T area() const;
-  T entropy() const;
-  T renyi_entropy() const;
+
   void print() const;
  private:
   void compute_area() const; // mutable const
@@ -38,6 +83,8 @@ template <class T> class bsta_histogram
   T range_;
   T delta_;
   T min_prob_;
+  T min_;
+  T max_;
   vcl_vector<T> counts_;
 };
 
