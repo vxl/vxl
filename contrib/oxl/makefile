@@ -10,7 +10,6 @@ SUBDIRS += oxp
 SUBDIRS += vrml
 
 ifeq (1,$(strip $(HAS_OPENGL)))
-SUBDIRS += vgui
 SUBDIRS += xcv
 SUBDIRS += VPLAYER
 SUBDIRS += apps

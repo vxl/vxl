@@ -11,6 +11,7 @@ SOURCES += awfmfc.rc
 SOURCES += awfmfc.cpp
 SOURCES += StdAfx.cpp
 SOURCES += MainFrm.cpp
+MANPAGE_SOURCES += resource.h
 endif
 
 ######################################
