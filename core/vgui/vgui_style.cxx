@@ -100,3 +100,19 @@ vgui_style::apply_all() const
   apply_point_size();
   apply_line_width();
 }
+
+
+// DO NOT inline in header file - that may cause "instantiation before
+// specialisation" compile error when instantiating vbl_smart_ptr<vgui_style>
+vgui_style_equal::vgui_style_equal(vgui_style_sptr s1_) : s1(s1_) {}
+
+// DO NOT inline in header file - that may cause "instantiation before
+// specialisation" compile error when instantiating vbl_smart_ptr<vgui_style>
+bool vgui_style_equal::operator() (vgui_style_sptr s2)
+{
+  return s1->rgba[0] == s2->rgba[0] &&
+         s1->rgba[1] == s2->rgba[1] &&
+         s1->rgba[2] == s2->rgba[2] &&
+         s1->point_size == s2->point_size &&
+         s1->line_width == s2->line_width;
+}
