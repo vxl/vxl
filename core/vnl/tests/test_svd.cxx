@@ -33,7 +33,7 @@ void test_hilbert(T /*dummy*/, char const* type, S residual)
   vnl_matrix<T> H(5,5);
   for (int i = 0; i < 5; ++i)
     for (int j = 0; j < 5; ++j)
-      H(i,j) = T( 1.0 / (i+j+1) ); // sic, because i,j are zero based
+      H(i,j) = T(1) / T(i+j+1); // sic, because i,j are zero based
 
   vcl_cout << "H = <"<<type<<">[ " << H << "]\n";
 
