@@ -11,53 +11,80 @@
 
 #include <vnl/vnl_numeric_traits.h>
 #include <vcl_complex.h>
+#include <vxl_config.h>
+
+static const long s16 = 0x7fffL;
+static const long u16 = 0xffffL;
+static const long s32 = 0x7fffffffL;
+static const long u32 = 0xffffffffL;
+#if VXL_HAS_INT_64
+static const long s64 = 0x7fffffffffffffffL;
+static const long u64 = 0xffffffffffffffffL;
+#else // dummy
+static const long s64 = 0;
+static const long u64 = 0;
+#endif
 
 #if !VCL_CAN_STATIC_CONST_INIT_INT
 
 #ifndef NO_STD_BOOL
-const bool vnl_numeric_traits<bool>::zero = 0;
-const bool vnl_numeric_traits<bool>::one = 1;
+const bool vnl_numeric_traits<bool>::zero = false;
+const bool vnl_numeric_traits<bool>::one = true;
+const bool vnl_numeric_traits<bool>::maxval = true;
 #endif
 
 const char vnl_numeric_traits<char>::zero = 0;
 const char vnl_numeric_traits<char>::one = 1;
+const char vnl_numeric_traits<char>::maxval = 127;
 
 const unsigned char vnl_numeric_traits<unsigned char>::zero = 0;
 const unsigned char vnl_numeric_traits<unsigned char>::one = 1;
+const unsigned char vnl_numeric_traits<unsigned char>::maxval = 255;
 
 const signed char vnl_numeric_traits<signed char>::zero = 0;
 const signed char vnl_numeric_traits<signed char>::one = 1;
+const signed char vnl_numeric_traits<signed char>::maxval = 127;
+
+const short vnl_numeric_traits<short>::zero = 0;
+const short vnl_numeric_traits<short>::one = 1;
+const short vnl_numeric_traits<short>::maxval = s16;
 
 const unsigned short vnl_numeric_traits<unsigned short>::zero = 0;
 const unsigned short vnl_numeric_traits<unsigned short>::one = 1;
+const unsigned short vnl_numeric_traits<unsigned short>::maxval = u16;
 
-const signed short vnl_numeric_traits<signed short>::zero = 0;
-const signed short vnl_numeric_traits<signed short>::one = 1;
+const int vnl_numeric_traits<int>::zero = 0;
+const int vnl_numeric_traits<int>::one = 1;
 
 const unsigned int vnl_numeric_traits<unsigned int>::zero = 0;
 const unsigned int vnl_numeric_traits<unsigned int>::one = 1;
 
-const signed int vnl_numeric_traits<signed int>::zero = 0;
-const signed int vnl_numeric_traits<signed int>::one = 1;
-
-const signed long vnl_numeric_traits<signed long>::zero = 0L;
-const signed long vnl_numeric_traits<signed long>::one = 1L;
+const long vnl_numeric_traits<long>::zero = 0L;
+const long vnl_numeric_traits<long>::one = 1L;
 
 const unsigned long vnl_numeric_traits<unsigned long>::zero = 0L;
 const unsigned long vnl_numeric_traits<unsigned long>::one = 1L;
 
 #endif
 
+const int vnl_numeric_traits<int>::maxval = sizeof(int)==4?s32:s16;
+const unsigned int vnl_numeric_traits<unsigned int>::maxval = sizeof(int)==4?u32:u16;
+const long vnl_numeric_traits<long>::maxval = sizeof(long)==8?s64:s32;
+const unsigned long vnl_numeric_traits<unsigned long>::maxval = sizeof(long)==8?u64:u32;
+
 #if !VCL_CAN_STATIC_CONST_INIT_FLOAT
 
 const float vnl_numeric_traits<float>::zero = 0.0F;
 const float vnl_numeric_traits<float>::one = 1.0F;
+const float vnl_numeric_traits<float>::maxval = 3.40282346638528860e+38F;
 
 const double vnl_numeric_traits<double>::zero = 0.0;
 const double vnl_numeric_traits<double>::one = 1.0;
+const double vnl_numeric_traits<double>::maxval = 1.7976931348623157E+308;
 
 const long double vnl_numeric_traits<long double>::zero = 0.0;
 const long double vnl_numeric_traits<long double>::one = 1.0;
+const long double vnl_numeric_traits<long double>::maxval = 1.7976931348623157E+308;
 
 #endif
 
