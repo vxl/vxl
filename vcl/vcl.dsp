@@ -906,6 +906,9 @@ SOURCE=.\emulation/vcl_bool.h
 SOURCE=.\emulation/vcl_bvector.h
 # End Source File
 # Begin Source File
+SOURCE=.\emulation/vcl_ciso646.h
+# End Source File
+# Begin Source File
 SOURCE=.\emulation/vcl_defalloc.h
 # End Source File
 # Begin Source File
@@ -946,6 +949,9 @@ SOURCE=.\emulation/vcl_tree.h
 # End Source File
 # Begin Source File
 SOURCE=.\emulation/vcl_stlconf.h
+# End Source File
+# Begin Source File
+SOURCE=.\emulation/egcs-stlconf.h
 # End Source File
 # Begin Source File
 SOURCE=.\emulation/gcc-272-stlconf.h
@@ -1440,7 +1446,13 @@ SOURCE=.\win32-vc70/vcl_cstdlib.h
 SOURCE=.\borland55/vcl_cfloat.h
 # End Source File
 # Begin Source File
-SOURCE=.\borland55/vcl_ciso646.h
+SOURCE=.\borland55/vcl_cmath.h
+# End Source File
+# Begin Source File
+SOURCE=.\borland55/vcl_complex.h
+# End Source File
+# Begin Source File
+SOURCE=.\borland55/vcl_cstdlib.h
 # End Source File
 # Begin Source File
 SOURCE=.\borland56/vcl_complex.h
@@ -1453,6 +1465,9 @@ SOURCE=.\vcl_where_root_dir.h
 # End Source File
 # Begin Source File
 SOURCE=.\vcl_config_compiler.h.in
+# End Source File
+# Begin Source File
+SOURCE=.\vcl_config_compiler_cmake.h.in
 # End Source File
 # Begin Source File
 SOURCE=.\vcl_config_headers.h.in
