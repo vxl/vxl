@@ -430,9 +430,11 @@ void bgui_vtol2D_tableau::set_vertex_style(const float r, const float g,
                                            const float b,
                                            const float point_radius)
 {
-/*  bgui_style_sptr sty = new bgui_style(r, g, b, point_radius, 0.0f);
+#if 0
+  bgui_style_sptr sty = new bgui_style(r, g, b, point_radius, 0.0f);
   bgui_vtol_soview2D_vertex sv;
-  style_map_[sv.type_name()]=sty;*/
+  style_map_[sv.type_name()]=sty;
+#endif // 0
   vertex_style_.r = r;
   vertex_style_.g = g;
   vertex_style_.b = b;
@@ -441,9 +443,11 @@ void bgui_vtol2D_tableau::set_vertex_style(const float r, const float g,
 void bgui_vtol2D_tableau::set_edge_style(const float r, const float g,
                                          const float b, const float line_width)
 {
-/*  bgui_style_sptr sty = new bgui_style(r, g, b, 0.0f, line_width);
+#if 0
+  bgui_style_sptr sty = new bgui_style(r, g, b, 0.0f, line_width);
   bgui_vtol_soview2D_edge se;
-  style_map_[se.type_name()]=sty;*/
+  style_map_[se.type_name()]=sty;
+#endif // 0
   edge_style_.r = r;
   edge_style_.g = g;
   edge_style_.b = b;
@@ -454,9 +458,11 @@ void bgui_vtol2D_tableau::set_edge_group_style(const float r, const float g,
                                                const float b,
                                                const float line_width)
 {
- /* bgui_style_sptr sty = new bgui_style(r, g, b, 0.0f, line_width);
+#if 0
+  bgui_style_sptr sty = new bgui_style(r, g, b, 0.0f, line_width);
   bgui_vtol_soview2D_edge_group sg;
-  style_map_[sg.type_name()]=sty; */
+  style_map_[sg.type_name()]=sty;
+#endif // 0
   edge_group_style_.r = r;
   edge_group_style_.g = g;
   edge_group_style_.b = b;
@@ -466,9 +472,11 @@ void bgui_vtol2D_tableau::set_edge_group_style(const float r, const float g,
 void bgui_vtol2D_tableau::set_face_style(const float r, const float g,
                                          const float b, const float line_width)
 {
-/*  bgui_style_sptr sty = new bgui_style(r, g, b, 0.0f, line_width);
+#if 0
+  bgui_style_sptr sty = new bgui_style(r, g, b, 0.0f, line_width);
   bgui_vtol_soview2D_face sf;
-  style_map_[sf.type_name()]=sty; */
+  style_map_[sf.type_name()]=sty;
+#endif // 0
   face_style_.r = r;
   face_style_.g = g;
   face_style_.b = b;

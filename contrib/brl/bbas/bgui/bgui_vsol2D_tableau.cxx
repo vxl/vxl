@@ -68,7 +68,8 @@ void bgui_vsol2D_tableau::init()
 
 bool bgui_vsol2D_tableau::handle(vgui_event const &e)
 {
-/*  if (e.type == vgui_MOTION && highlight_)
+#if 0 // commented out
+  if (e.type == vgui_MOTION && highlight_)
     {
       //retrive the previously highlighted soview and
       //restore it to its default style
@@ -97,6 +98,7 @@ bool bgui_vsol2D_tableau::handle(vgui_event const &e)
           this->post_redraw();
         }
     } */
+#endif // 0
   // We aren't interested in other events so pass them to the base class.
   return bgui_easy2D_tableau::handle(e);
 }
@@ -342,9 +344,11 @@ void bgui_vsol2D_tableau::set_vsol_point_2d_style(const float r, const float g,
                                                   const float b,
                                                   const float point_radius)
 {
-/*  bgui_style_sptr sty = new bgui_style(r, g, b, point_radius, 0.0f);
+#if 0
+  bgui_style_sptr sty = new bgui_style(r, g, b, point_radius, 0.0f);
   bgui_vsol_soview2D_point p;
-  style_map_[p.type_name()]=sty;*/
+  style_map_[p.type_name()]=sty;
+#endif // 0
   point_style_.r = r;
   point_style_.g = g;
   point_style_.b = b;
@@ -355,9 +359,11 @@ void bgui_vsol2D_tableau::set_vsol_line_2d_style(const float r, const float g,
                                                  const float b,
                                                  const float line_width)
 {
-/*  bgui_style_sptr sty = new bgui_style(r, g, b, 0.0f, line_width);
+#if 0
+  bgui_style_sptr sty = new bgui_style(r, g, b, 0.0f, line_width);
   bgui_vsol_soview2D_line_seg seg;
-  style_map_[seg.type_name()]=sty;*/
+  style_map_[seg.type_name()]=sty;
+#endif // 0
   line_style_.r = r;
   line_style_.g = g;
   line_style_.b = b;
@@ -367,9 +373,11 @@ void bgui_vsol2D_tableau::set_vsol_line_2d_style(const float r, const float g,
 void bgui_vsol2D_tableau::set_vsol_polyline_2d_style(const float r, const float g,
                                                      const float b, const float line_width)
 {
-/*  bgui_style_sptr sty = new bgui_style(r, g, b, 0.0f, line_width);
+#if 0
+  bgui_style_sptr sty = new bgui_style(r, g, b, 0.0f, line_width);
   bgui_vsol_soview2D_polyline pline;
-  style_map_[pline.type_name()]=sty;*/
+  style_map_[pline.type_name()]=sty;
+#endif // 0
   polyline_style_.r = r;
   polyline_style_.g = g;
   polyline_style_.b = b;
@@ -380,9 +388,11 @@ void bgui_vsol2D_tableau::set_digital_curve_style(const float r, const float g,
                                                   const float b,
                                                   const float line_width)
 {
-/*  bgui_style_sptr sty = new bgui_style(r, g, b, 0.0f, line_width);
+#if 0
+  bgui_style_sptr sty = new bgui_style(r, g, b, 0.0f, line_width);
   bgui_vsol_soview2D_digital_curve dc;
-  style_map_[dc.type_name()]=sty;*/
+  style_map_[dc.type_name()]=sty;
+#endif // 0
   digital_curve_style_.r = r;
   digital_curve_style_.g = g;
   digital_curve_style_.b = b;
@@ -393,9 +403,11 @@ void bgui_vsol2D_tableau::set_dotted_digital_curve_style(const float r, const fl
                                                          const float b,
                                                          const float line_width, const float point_radius)
 {
-/*  bgui_style_sptr sty = new bgui_style(r, g, b, point_radius, line_width);
+#if 0
+  bgui_style_sptr sty = new bgui_style(r, g, b, point_radius, line_width);
   bgui_vsol_soview2D_dotted_digital_curve dc;
-  style_map_[dc.type_name()]=sty;*/
+  style_map_[dc.type_name()]=sty;
+#endif // 0
   dotted_digital_curve_style_.r = r;
   dotted_digital_curve_style_.g = g;
   dotted_digital_curve_style_.b = b;
