@@ -1,23 +1,13 @@
 //*****************************************************************************
-// File name: vtol_two_chain_sptr.h
-// Description: A smart pointer on a vtol_two_chain
-//-----------------------------------------------------------------------------
-// Language: C++
-//
-// Version |Date      | Author                   |Comment
-// --------+----------+--------------------------+-----------------------------
-// 1.0     |2000/05/11| François BERTEL          |Creation
+//:
+// \file
+// \brief Smart pointer on a vtol_two_chain
 //*****************************************************************************
-#ifndef VTOL_TWO_CHAIN_REF_H
-#define VTOL_TWO_CHAIN_REF_H
+#ifndef vtol_two_chain_sptr_h
+#define vtol_two_chain_sptr_h
 
 class vtol_two_chain;
-
-//*****************************************************************************
-// External declarations for values
-//*****************************************************************************
 #include <vbl/vbl_smart_ptr.h>
-
 typedef vbl_smart_ptr<vtol_two_chain> vtol_two_chain_sptr;
 
-#endif // #ifndef VTOL_TWO_CHAIN_REF_H
+#endif // vtol_two_chain_sptr_h

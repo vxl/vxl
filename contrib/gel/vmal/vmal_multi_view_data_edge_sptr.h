@@ -1,29 +1,15 @@
 //*****************************************************************************
-// File name: vmal_multi_view_data_edge_sptr.h
-// Description: A smart pointer on a vmal_multi_view_data<vtol_edge_2d_sptr>
-//-----------------------------------------------------------------------------
-// Language: C++
-//
-// Version |Date      | Author                   |Comment
-// --------+----------+--------------------------+-----------------------------
-// 1.0     |04/23/2001| Laurent Guichard         |Creation
+//:
+// \file
+// \brief A smart pointer on a vmal_multi_view_data<vtol_edge_2d_sptr>
 //*****************************************************************************
-#ifndef vmal_multi_view_data_edge_sptr_h_
-#define vmal_multi_view_data_edge_sptr_h_
+#ifndef vmal_multi_view_data_edge_sptr_h
+#define vmal_multi_view_data_edge_sptr_h
 
 #include <vtol/vtol_edge_2d_sptr.h>
-
 #include <vmal/vmal_multi_view_data.h>
-
-//*****************************************************************************
-// External declarations for values
-//*****************************************************************************
 #include <vbl/vbl_smart_ptr.h>
-
-//typedef vbl_smart_ptr<vmal_multi_view_data<>> vmal_multi_view_data_sptr;
-
-
 typedef vmal_multi_view_data<vtol_edge_2d_sptr> vmal_mvd_edge;
-
 typedef vbl_smart_ptr<vmal_mvd_edge> vmal_multi_view_data_edge_sptr;
-#endif // #ifndef vmal_multi_view_data_edge_sptr_h_
+
+#endif // #ifndef vmal_multi_view_data_edge_sptr_h

@@ -1,23 +1,13 @@
 //*****************************************************************************
-// File name: vsol_curve_2d_sptr.h
-// Description: A smart pointer on a vsol_curve_2d
-//-----------------------------------------------------------------------------
-// Language: C++
-//
-// Version |Date      | Author                   |Comment
-// --------+----------+--------------------------+-----------------------------
-// 1.0     |2000/04/27| François BERTEL          |Creation
+//:
+// \file
+// \brief Smart pointer on a vsol_curve_2d
 //*****************************************************************************
-#ifndef VSOL_CURVE_2D_REF_H
-#define VSOL_CURVE_2D_REF_H
+#ifndef vsol_curve_2d_sptr_h
+#define vsol_curve_2d_sptr_h
 
 class vsol_curve_2d;
-
-//*****************************************************************************
-// External declarations for values
-//*****************************************************************************
 #include <vbl/vbl_smart_ptr.h>
-
 typedef vbl_smart_ptr<vsol_curve_2d> vsol_curve_2d_sptr;
 
-#endif // #ifndef VSOL_CURVE_2D_REF_H
+#endif // vsol_curve_2d_sptr_h
