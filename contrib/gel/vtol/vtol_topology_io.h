@@ -9,14 +9,13 @@
 #include <vcl_ostream.h>
 #include <vcl_iostream.h>
 
-class vtol_vertex_2d;
-class vtol_zero_chain;
-class vtol_edge_2d;
-class vtol_one_chain;
-class vtol_face_2d;
-class vtol_two_chain;
-class vtol_block;
-
+#include <vtol/vtol_vertex_2d_sptr.h>
+#include <vtol/vtol_zero_chain_sptr.h>
+#include <vtol/vtol_edge_2d_sptr.h>
+#include <vtol/vtol_one_chain_sptr.h>
+#include <vtol/vtol_face_2d_sptr.h>
+#include <vtol/vtol_two_chain_sptr.h>
+#include <vtol/vtol_block_sptr.h>
 
 //: \brief topological xml writer
 
@@ -37,15 +36,16 @@ class vtol_topology_io
  private:
 
   // write out the topology objects
-  void write_vertex_2d(vtol_vertex_2d *v, vcl_ostream &strm=vcl_cout);
-  void write_zero_chain(vtol_zero_chain *zc, vcl_ostream &strm=vcl_cout);
-  void write_edge_2d(vtol_edge_2d *e, vcl_ostream &strm=vcl_cout);
-  void write_one_chain(vtol_one_chain *oc, vcl_ostream &strm=vcl_cout);
-  void write_face_2d(vtol_face_2d *f, vcl_ostream &strm=vcl_cout);
-  void write_two_chain(vtol_two_chain *tc, vcl_ostream &strm=vcl_cout);
-  void write_block(vtol_block *b, vcl_ostream &strm=vcl_cout);
+  void write_vertex_2d(vtol_vertex_2d_sptr const &v, vcl_ostream &strm=vcl_cout);
+  void write_zero_chain(vtol_zero_chain_sptr const &zc, vcl_ostream &strm=vcl_cout);
+  void write_edge_2d(vtol_edge_2d_sptr const &e, vcl_ostream &strm=vcl_cout);
+  void write_one_chain(vtol_one_chain_sptr const &oc, vcl_ostream &strm=vcl_cout);
+  void write_face_2d(vtol_face_2d_sptr const &f, vcl_ostream &strm=vcl_cout);
+  void write_two_chain(vtol_two_chain_sptr const &tc, vcl_ostream &strm=vcl_cout);
+  void write_block(vtol_block_sptr const &b, vcl_ostream &strm=vcl_cout);
 
   // write out the dtd
   void write_dtd(vcl_ostream &strm);
 };
-#endif
+
+#endif // vtol_topology_io_h
