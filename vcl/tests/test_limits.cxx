@@ -11,12 +11,6 @@ void test_if_int_defined( int )
 {
 }
 
-static
-void test_if_vnl_float_round_style_defined( vcl_float_round_style )
-{
-}
-
-
 
 
 // if this function compiles and links, then all the constants have
@@ -45,7 +39,6 @@ void test_static_const_definition()
   test_if_bool_defined( vcl_numeric_limits< int >::is_modulo ); \
   test_if_bool_defined( vcl_numeric_limits< int >::traps ); \
   test_if_bool_defined( vcl_numeric_limits< int >::tinyness_before );
-//  test_if_vnl_float_round_style_defined( vcl_numeric_limits< int >::round_style );
 
   TEST_TYPE(int);
   TEST_TYPE(long);
