@@ -699,7 +699,7 @@ double angle (vnl_vector<T> const& a, vnl_vector<T> const& b) {
   typedef typename vnl_numeric_traits<T>::abs_t abs_t;
   typedef typename vnl_numeric_traits<abs_t>::real_t abs_r;
 
-  return vcl_acos( abs_r( vnl_math_abs( cos_angle(a, b) ) ) );
+  return vcl_acos( cos_angle(a, b) );
 }
 
 //
@@ -779,7 +779,10 @@ void vnl_vector<T>::inline_function_tickler()
 
 //--------------------------------------------------------------------------------
 
-#define VNL_VECTOR_INSTANTIATE(T) \
+// The instantiation macros are split because some functions
+// (vnl_angle) shouldn't be instantiated for complex types.
+
+#define VNL_VECTOR_INSTANTIATE_COMMON(T) \
 template class vnl_vector<T >; \
 /* arithmetic, comparison etc */ \
 VCL_INSTANTIATE_INLINE(vnl_vector<T > operator+(T const, vnl_vector<T > const &)); \
@@ -794,7 +797,6 @@ template vnl_vector<T > element_quotient(vnl_vector<T > const &, vnl_vector<T > 
 template T inner_product(vnl_vector<T > const &, vnl_vector<T > const &); \
 template T dot_product(vnl_vector<T > const &, vnl_vector<T > const &); \
 template T cos_angle(vnl_vector<T > const & , vnl_vector<T > const &); \
-template double angle(vnl_vector<T > const & , vnl_vector<T > const &); \
 template T bracket(vnl_vector<T > const &, vnl_matrix<T > const &, vnl_vector<T > const &); \
 template vnl_matrix<T > outer_product(vnl_vector<T > const &,vnl_vector<T > const &); \
 /* cross products */ \
@@ -803,5 +805,12 @@ template vnl_vector<T > cross_3d(vnl_vector<T > const &, vnl_vector<T > const &)
 /* I/O */ \
 template vcl_ostream & operator<<(vcl_ostream &, vnl_vector<T > const &); \
 template vcl_istream & operator>>(vcl_istream &, vnl_vector<T >       &)
+
+#define VNL_VECTOR_INSTANTIATE(T) \
+VNL_VECTOR_INSTANTIATE_COMMON(T); \
+template double angle(vnl_vector<T > const & , vnl_vector<T > const &)
+
+#define VNL_VECTOR_INSTANTIATE_COMPLEX(T) \
+VNL_VECTOR_INSTANTIATE_COMMON(T)
 
 #endif // vnl_vector_txx_
