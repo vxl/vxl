@@ -3,7 +3,6 @@
 //:
 // \file
 
-#include <stdlib.h>
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
@@ -38,13 +37,13 @@ vcl_vector<int> Monte_Carlo(vcl_vector<HomgPoint2D> points, vcl_vector<int> inde
   double col_div = col_size/buckets;
   int no_buckets = buckets*buckets;
   if (buckets < 1) {
-    vcl_cerr << "Warning Monte Carlo sampling will not work." << vcl_endl
-             << "Not enough buckets: need 1, have " << buckets << "." << vcl_endl;
+    vcl_cerr << "Warning Monte Carlo sampling will not work.\n"
+             << "Not enough buckets: need 1, have " << buckets << ".\n";
   }
   if (index.size() < (unsigned int)samples) {
-    vcl_cerr << "Warning Monte Carlo sampling will not work." << vcl_endl
+    vcl_cerr << "Warning Monte Carlo sampling will not work.\n"
              << "Not enough points to choose from: need " << samples
-             << ", have " << index.size() << "." << vcl_endl;
+             << ", have " << index.size() << ".\n";
   }
 
   //
@@ -155,7 +154,7 @@ vcl_vector<int> Monte_Carlo(vcl_vector<HomgPoint2D> points, vcl_vector<int> inde
           i++;
         } else {
           counter++;
-          //vcl_cerr << "Failed" << vcl_endl;
+          //vcl_cerr << "Failed\n";
         }
       }
     }
@@ -212,7 +211,7 @@ double Sampsons_MLE(HomgPoint2D x1, HomgPoint2D x2, FMatrix *F)
   // This is an annoying interface
   HomgPoint2D *x1p = new HomgPoint2D(x1.x(), x1.y(), 1.0);
   HomgPoint2D *x2p = new HomgPoint2D(x2.x(), x2.y(), 1.0);
-  vcl_cerr << "2" << vcl_endl;
+  vcl_cerr << "2\n";
   r = F->image1_epipolar_distance_squared(x1p, x2p);
   vcl_cerr << "r " << r << vcl_endl;
   dist = r/GRADr;
