@@ -41,6 +41,26 @@ vgl_polygon::vgl_polygon(vcl_vector<sheet_t> const& sheets):
 //---------------------------------------------------------------------------
 // Construct with n points in the first sheet
 //---------------------------------------------------------------------------
+vgl_polygon::vgl_polygon(vcl_pair<float, float> const p[], int n):
+  sheets_(1, sheet_t(n))
+{
+  for(int i = 0; i < n; ++i)
+    sheets_[0][i].set(p[i].first, p[i].second);
+}
+
+//---------------------------------------------------------------------------
+// Construct with n points in the first sheet
+//---------------------------------------------------------------------------
+vgl_polygon::vgl_polygon(vcl_pair<double, double> const p[], int n):
+  sheets_(1, sheet_t(n))
+{
+  for(int i = 0; i < n; ++i)
+    sheets_[0][i].set(p[i].first, p[i].second);
+}
+
+//---------------------------------------------------------------------------
+// Construct with n points in the first sheet
+//---------------------------------------------------------------------------
 vgl_polygon::vgl_polygon(float const* x, float const* y, int n):
   sheets_(1, sheet_t(n))
 {
