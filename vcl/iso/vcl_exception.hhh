@@ -1,9 +1,0 @@
-#ifndef vcl_iso_exception_h_
-#define vcl_iso_exception_h_
-
-#include <exception>
-
-@exception
-@bad_exception
-
-#endif
