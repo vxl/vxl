@@ -9,7 +9,7 @@
 #include <vimt3d/vimt3d_image_3d_of.h>
 #include <vnl/vnl_fwd.h>
 #include <vcl_cstdlib.h>
-
+#include <vnl/vnl_math.h>
 
 //: Fill voxel which x,y,z is in with val
 //  Image is nx * ny * nz array of T. x,y,z element is data[z*zstep+ystep*y+x*xstep]
@@ -18,10 +18,9 @@
 // \param add_data adds data to existing values
 template<class T>
 inline void vimt3d_reconstruct_ic_safe(double val, double x, double y, double z,
-                                      T* data, int ni, int nj, int nk, 
+                                      T* data, int ni, int nj, int nk,
                                       vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep, vcl_ptrdiff_t zstep, bool add_data)
 {
-    
   int ix=vnl_math_rnd(x);
   int iy=vnl_math_rnd(y);
   int iz=vnl_math_rnd(z);
@@ -43,7 +42,7 @@ inline void vimt3d_reconstruct_ic_safe(double val, double x, double y, double z,
       {
           data[index] += T(val);
       }
-  }       
+  }
 
   return;
 }
@@ -56,10 +55,9 @@ inline void vimt3d_reconstruct_ic_safe(double val, double x, double y, double z,
 // \param add_data adds data to existing values
 template<class T>
 inline void vimt3d_reconstruct_ic_no_checks(double val, double x, double y, double z,
-                                      T* data, int ni, int nj, int nk, 
+                                      T* data, int ni, int nj, int nk,
                                       vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep, vcl_ptrdiff_t zstep, bool add_data)
 {
-    
   int ix=vnl_math_rnd(x);
   int iy=vnl_math_rnd(y);
   int iz=vnl_math_rnd(z);
@@ -73,9 +71,8 @@ inline void vimt3d_reconstruct_ic_no_checks(double val, double x, double y, doub
 }
 
 
-
 //: Reconstruct a smoothed image grid p+i.u+j.v+k.w from vector (in world coordinates)
-//  Profile points are p+i.u+j.v+k.w, where i=[0..nu-1],j=[0..nv-1], k=[0..nw-1] 
+//  Profile points are p+i.u+j.v+k.w, where i=[0..nu-1],j=[0..nv-1], k=[0..nw-1]
 //  Vector v is resized to nu*nv*nw*np elements, where np=image.n_planes().
 //  v[0]..v[np-1] are the values from point p
 //  Reconstruction occurs along direction w first
