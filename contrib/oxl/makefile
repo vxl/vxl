@@ -10,6 +10,7 @@ SUBDIRS += vrml
 ifeq (1,$(strip $(HAS_OPENGL)))
 SUBDIRS += vgui
 SUBDIRS += xcv
+SUBDIRS += xcv_ox
 #no makefile?? SUBDIRS += VPLAYER
 endif
 
