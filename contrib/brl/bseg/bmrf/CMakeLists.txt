@@ -10,13 +10,15 @@ SET(bmrf_sources
     bmrf_epi_seg.cxx           bmrf_epi_seg.h            bmrf_epi_seg_sptr.h
     bmrf_node.cxx              bmrf_node.h               bmrf_node_sptr.h
     bmrf_network.cxx           bmrf_network.h            bmrf_network_sptr.h
+    bmrf_network_builder_params.cxx   bmrf_network_builder_params.h  
+    bmrf_network_builder.cxx   bmrf_network_builder.h   
 )
 
 AUX_SOURCE_DIRECTORY(Templates bmrf_sources)
 
 ADD_LIBRARY(bmrf ${bmrf_sources})
 
-TARGET_LINK_LIBRARIES(bmrf vbl vnl vgl vsl)
+TARGET_LINK_LIBRARIES(bmrf vtol vil vbl vnl vgl vsl)
 
 
 IF(BUILD_TESTING)
