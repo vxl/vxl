@@ -9,8 +9,8 @@
 
 #include <vcl_vector.h>
 #include <vnl/vnl_vector.h>
+#include <vnl/vnl_random.h>
 #include <mbl/mbl_data_wrapper.h>
-#include <mbl/mbl_mz_random.h>
 
 // Edit these definitions to suit your taste, but
 // don't commit the changes.
@@ -23,7 +23,7 @@
 // The is the class of problems associated with Support Vector Machines
 class clsfy_smo_base
 {
-protected:
+ protected:
 
   //: Error rate on the training data
   double error_;
@@ -55,7 +55,7 @@ protected:
   //: The norm of each training vector is useful to know quickly
   vcl_vector<double> precomputed_self_dot_product_;
 
-  mbl_mz_random rng_;
+  vnl_random rng_;
 
   //: Attempt to jointly optimise Lagrange multipliers i1, and i2.
   // \param i1 first Lagrange multiplier.
@@ -77,7 +77,7 @@ protected:
   //: Calculate the classifier function learnt so far for data item k.
   virtual double learned_func(int k) ;
 
-public:
+ public:
 
   //: Get the optimised parameters
   const vnl_vector<double>& lagrange_mults() const;

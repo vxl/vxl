@@ -7,23 +7,23 @@
 
 #include <vcl_vector.h>
 #include <pdf1d/pdf1d_sampler.h>
-#include <mbl/mbl_mz_random.h>
+#include <vnl/vnl_random.h>
 class pdf1d_mixture;
 
 //: Instance class for pdf1d_mixture
 //  Implements calculation of prob, gradient, sampling etc
-class pdf1d_mixture_sampler : public pdf1d_sampler {
-private:
+class pdf1d_mixture_sampler : public pdf1d_sampler
+{
   //: workspace
   vcl_vector<pdf1d_sampler*> inst_;
 
   void init();
   void delete_stuff();
 
-protected:
+ protected:
   //: The random number generator
-  mbl_mz_random rng_;
-public:
+  vnl_random rng_;
+ public:
 
   //: Dflt ctor
   pdf1d_mixture_sampler();

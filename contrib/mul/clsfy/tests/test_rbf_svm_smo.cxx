@@ -18,8 +18,8 @@
 #include <clsfy/clsfy_rbf_parzen.h>
 #include <vpdfl/vpdfl_axis_gaussian.h>
 #include <vpdfl/vpdfl_axis_gaussian_sampler.h>
+#include <vnl/vnl_random.h>
 #include <vsl/vsl_binary_loader.h>
-#include <mbl/mbl_mz_random.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <vul/vul_timer.h>
 #include <vpl/vpl.h> // vpl_unlink()
@@ -62,7 +62,7 @@ void test_rbf_svm()
   generator[1] = (vpdfl_axis_gaussian_sampler *)PDF1.new_sampler();
   generator[2] = (vpdfl_axis_gaussian_sampler *)PDF2.new_sampler();
   generator[3] = (vpdfl_axis_gaussian_sampler *)PDF3.new_sampler();
-  mbl_mz_random rng;
+  vnl_random rng;
   rng.reseed(333248);
   const unsigned nSamples = 200;
   vcl_vector<unsigned> labels(nSamples);

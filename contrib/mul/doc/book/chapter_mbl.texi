@@ -51,7 +51,7 @@ Writing data to an @code{mbl_data_collector} is straight forward.
       // Create sampler
       vpdfl_axis_gaussian gaussian;
       gaussian.set(vnl_vector<double>(20,0.0),
-        vnl_vector<double>(20,1.0));
+                   vnl_vector<double>(20,1.0));
       vpdfl_sampler_base *sampler = gaussian.new_sampler();
 
       // set up stuff
@@ -83,10 +83,10 @@ you can only store and use subset of it.
 
 
 @section Random Number Generator
-@cindex mbl_mz_random
+@cindex vnl_random
 @cindex mz_random
 
-Rather than use @code{vnl_sample()}, @code{mbl_mz_random}, provides a superior
+Rather than use @code{vnl_sample()}, @code{vnl_random}, provides a superior
 random number generator.
 
 @itemize
@@ -97,16 +97,16 @@ adjacent samples, than some standard pseudo random number generators.
 @item It has been thoroughly tested (See below for some examples.)
 @end itemize.
 
-The downside of mbl_mz_random is that it is about 5 times slower than some other
+The downside of vnl_random is that it is about 5 times slower than some other
 pseudo-random number generators. For a discussion on speed/randomness trade-off see
 @cite{Press et al. Numerical Recipes in C, Cambridge, 1992.}
 
-@subsection The randomness of mbl_mz_random (Advanced Topic)
+@subsection The randomness of vnl_random (Advanced Topic)
 
 
 I was using a @code{vpdfl_axis_gaussian_sampler} to produce some test data, and
 there seemed to be too many outliers. I was worried about the randomness
-of the @code{mbl_mz_random::normal()}, so I ran some tests.
+of the @code{vnl_random::normal()}, so I ran some tests.
 
 @subsubsection Tim's rank diagram test
 @itemize
@@ -200,7 +200,7 @@ display common containers.
 @section Further Development
 @subsection Other Algorithms.
 It would be useful to have several random number generators all with a similar
-interface to @code{mbl_mz_random}. Adding an abstract base class, would allow the
+interface to @code{vnl_random}. Adding an abstract base class, would allow the
 use of the strategy pattern - for instance swapping in a more random generator.
 
 @subsection Input/Output

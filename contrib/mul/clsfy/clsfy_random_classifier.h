@@ -12,13 +12,13 @@
 // \date 2000/05/10
 // \verbatim
 //  Modifications
-//  2 May 2001 IMS Converted to VXL
+//   2 May 2001 IMS Converted to VXL
 // \endverbatim
 
 #include "clsfy_classifier_base.h"
 #include <vcl_vector.h>
 #include <vnl/vnl_vector.h>
-#include <mbl/mbl_mz_random.h>
+#include <vnl/vnl_random.h>
 #include <vsl/vsl_binary_io.h>
 
 //:  A common interface for 1-out-of-N classifiers
@@ -123,7 +123,7 @@ class clsfy_random_classifier : public clsfy_classifier_base
   mutable vcl_vector<double> last_outputs_;
 
   //: The random number generator used to sample classes.
-  mutable mbl_mz_random rng_;
+  mutable vnl_random rng_;
 
   //: The minimum value each class probability needs to be biased by to win.
   vcl_vector<double> min_to_win_;

@@ -20,8 +20,8 @@
 #include <clsfy/clsfy_rbf_parzen.h>
 #include <clsfy/clsfy_random_builder.h>
 #include <clsfy/clsfy_random_classifier.h>
+#include <vnl/vnl_random.h>
 #include <vsl/vsl_binary_loader.h>
-#include <mbl/mbl_mz_random.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <vpdfl/vpdfl_axis_gaussian_sampler.h>
 #include <vpdfl/vpdfl_axis_gaussian.h>
@@ -74,7 +74,7 @@ void test_k_nearest_neighbour()
   generator[1] = (vpdfl_axis_gaussian_sampler *)PDF1.new_sampler();
   generator[2] = (vpdfl_axis_gaussian_sampler *)PDF2.new_sampler();
   generator[3] = (vpdfl_axis_gaussian_sampler *)PDF3.new_sampler();
-  mbl_mz_random rng;
+  vnl_random rng;
   rng.reseed(333233);
 
   const unsigned nSamples = 200;

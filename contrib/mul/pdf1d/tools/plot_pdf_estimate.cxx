@@ -7,8 +7,8 @@
 // \author Tim Cootes
 
 #include <vcl_iostream.h>
-#include <mbl/mbl_mz_random.h>
 #include <vnl/vnl_vector.h>
+#include <vnl/vnl_random.h>
 #include <pdf1d/pdf1d_compare_to_pdf_ks.h>
 #include <pdf1d/pdf1d_compare_to_pdf_bhat.h>
 #include <pdf1d/pdf1d_calc_mean_var.h>
@@ -20,7 +20,7 @@
 #include <pdf1d/pdf1d_gaussian_kernel_pdf_builder.h>
 #include <pdf1d/pdf1d_bhat_overlap.h>
 
-mbl_mz_random mz_random;
+vnl_random mz_random;
 
 //: Generate n samples from pdf, build a pdf and generate text file of resulting pdf
 void plot_estimate(const vcl_string& true_pdf_file, const vcl_string& new_pdf_file,

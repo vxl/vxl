@@ -10,7 +10,7 @@
 // \brief Sampler class for Univariate exponential distributions
 
 #include <vcl_string.h>
-#include <mbl/mbl_mz_random.h>
+#include <vnl/vnl_random.h>
 #include <pdf1d/pdf1d_sampler.h>
 
 
@@ -22,7 +22,7 @@ class pdf1d_exponential_sampler :public pdf1d_sampler
 {
  protected:
   //: The random number generator
-  mbl_mz_random rng_;
+  vnl_random rng_;
  public:
 
   //: Dflt ctor

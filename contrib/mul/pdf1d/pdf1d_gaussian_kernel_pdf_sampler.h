@@ -5,18 +5,18 @@
 // \brief Implements sampling for a gaussian kernel_pdf model
 // \author Tim Cootes and Ian Scott
 
-#include <mbl/mbl_mz_random.h>
+#include <vnl/vnl_random.h>
 #include <pdf1d/pdf1d_sampler.h>
 #include <pdf1d/pdf1d_gaussian_kernel_pdf.h>
-
 class pdf1d_gaussian_kernel_pdf;
 
 //: Generates random samples from a gaussian kernel estimate
-class pdf1d_gaussian_kernel_pdf_sampler : public pdf1d_sampler {
-protected:
+class pdf1d_gaussian_kernel_pdf_sampler : public pdf1d_sampler
+{
+ protected:
   //: The random number generator
-  mbl_mz_random rng_;
-public:
+  vnl_random rng_;
+ public:
 
   //: Dflt ctor
   pdf1d_gaussian_kernel_pdf_sampler();

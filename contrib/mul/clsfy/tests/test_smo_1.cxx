@@ -12,12 +12,12 @@
 #include <clsfy/clsfy_smo_1.h>
 #include <clsfy/clsfy_k_nearest_neighbour.h>
 #include <clsfy/clsfy_rbf_parzen.h>
-#include <mbl/mbl_mz_random.h>
 #include <vpdfl/vpdfl_axis_gaussian_sampler.h>
 #include <vpdfl/vpdfl_axis_gaussian.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <testlib/testlib_test.h>
 #include <vnl/vnl_math.h>
+#include <vnl/vnl_random.h>
 #include <vul/vul_timer.h>
 
 //=======================================================================
@@ -67,7 +67,7 @@ void test_smo()
        generator[0]->is_class("vpdfl_sampler_base") &&
        generator[0]->is_a() == "vpdfl_axis_gaussian_sampler", true);
 
-  mbl_mz_random rng;
+  vnl_random rng;
   rng.reseed(33323335);
   const unsigned nSamples = 200;
   vcl_vector<unsigned> labels(nSamples);

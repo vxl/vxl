@@ -1,10 +1,10 @@
 //:
 // \file
 #include <vcl_iostream.h>
-#include <mbl/mbl_mz_random.h>
+#include <vcl_cmath.h>
 #include <mbl/mbl_stats_1d.h>
 #include <vnl/vnl_vector.h>
-#include <vcl_cmath.h>
+#include <vnl/vnl_random.h>
 #include <pdf1d/pdf1d_compare_to_pdf_ks.h>
 #include <pdf1d/pdf1d_compare_to_pdf_bhat.h>
 #include <pdf1d/pdf1d_calc_mean_var.h>
@@ -18,7 +18,7 @@
 // Generate samples with one pdf and test if it matches a particular form
 // Output sent to B_vs_Nsamples.txt file.
 
-mbl_mz_random mz_random;
+vnl_random mz_random;
 
 //: Generate n samples from pdf and compare with test_pdf
 void run_experiment(const pdf1d_pdf& pdf,

@@ -15,10 +15,10 @@
 #include <clsfy/clsfy_k_nearest_neighbour.h>
 #include <clsfy/clsfy_binary_hyperplane.h>
 #include <clsfy/clsfy_binary_hyperplane_ls_builder.h>
-#include <vsl/vsl_binary_loader.h>
-#include <mbl/mbl_mz_random.h>
 #include <vpdfl/vpdfl_axis_gaussian.h>
 #include <vpdfl/vpdfl_axis_gaussian_sampler.h>
+#include <vnl/vnl_random.h>
+#include <vsl/vsl_binary_loader.h>
 #include <vsl/vsl_vector_io.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <vpl/vpl.h> // vpl_unlink()
@@ -48,7 +48,7 @@ void test_binary_hyperplane()
 
   generator[0] = (vpdfl_axis_gaussian_sampler *)PDF0.new_sampler();
   generator[1] = (vpdfl_axis_gaussian_sampler *)PDF1.new_sampler();
-  mbl_mz_random rng;
+  vnl_random rng;
   rng.reseed(111333);
 
   const unsigned nSamples = 50;
