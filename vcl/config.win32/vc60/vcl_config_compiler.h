@@ -1,9 +1,7 @@
 #ifndef vcl_config_compiler_h_config_win32_vc60_
 #define vcl_config_compiler_h_config_win32_vc60_
-
 //:
 // \file
-//
 // This file is *not* generated.
 
 //----------------------------------------------------------------------
@@ -19,6 +17,13 @@
 // True if the compiler supports dynamic cast.
 //
 #define VCL_HAS_DYNAMIC_CAST 1
+
+
+//: VCL_HAS_RTTI
+//
+// True if the compiler supports RTTI, viz the 'typeid' function.
+//
+#define VCL_HAS_RTTI 0
 
 
 //: VCL_HAS_TYPENAME
@@ -81,17 +86,23 @@
 // And there is a speed advantage, so we want to use it where supported.
 // However, the standard also requires (9.4.2/4) that the constant be
 // defined in namespace scope. (That is, space must be allocated.)
-// To use the macro, use VCL_STATIC_CONST_INIT_DECL in the class
+// To make matters worse, some compilers (at least VC 7) mistakenly
+// allocate storage without the definition in namespace scope,
+// which results in multiply defined symbols.
+// To use the macro, use VCL_STATIC_CONST_INIT_INT_DECL in the class
 // definition (header file). This declares the constant.
 // \code
 //     class A {
 //       static const int x VCL_STATIC_CONST_INIT_INT_DECL(27);
 //     };
 // \endcode
-// Use VCL_STATIC_CONST_INIT_DEFN in some .cxx file to define
-// the constant.
+// Use VCL_STATIC_CONST_INIT_INT_DEFN in some .cxx file to define
+// the constant, but only if VCL_STATIC_CONST_INIT_INT_NO_DEFN
+// evaluates to false.
 // \code
-//     const int A::x VCL_STATIC_CONST_INIT_DEFN(27);
+//     #if !VCL_STATIC_CONST_INIT_INT_NO_DEFN
+//     const int A::x VCL_STATIC_CONST_INIT_INT_DEFN(27);
+//     #endif
 // \endcode
 //
 // In order to be able to query the setting of this, one actually must
@@ -100,16 +111,16 @@
 //#define VCL_CAN_STATIC_CONST_INIT_INT 1 /* allowed */
 //#define VCL_CAN_STATIC_CONST_INIT_INT 0 /* not allowed */
 #ifndef VCL_CAN_STATIC_CONST_INIT_INT
-#define VCL_CAN_STATIC_CONST_INIT_INT 0
+# define VCL_CAN_STATIC_CONST_INIT_INT 0
 #endif
 #if VCL_CAN_STATIC_CONST_INIT_INT
-#define VCL_STATIC_CONST_INIT_INT_DECL(x) = x
-#define VCL_STATIC_CONST_INIT_INT_DEFN(x) /* initialized at declaration */
-#define VCL_STATIC_CONST_INIT_INT_NO_DEFN 0
+# define VCL_STATIC_CONST_INIT_INT_DECL(x) = x
+# define VCL_STATIC_CONST_INIT_INT_DEFN(x) /* initialized at declaration */
+# define VCL_STATIC_CONST_INIT_INT_NO_DEFN 0
 #else
-#define VCL_STATIC_CONST_INIT_INT_DECL(x) /* not allowed */
-#define VCL_STATIC_CONST_INIT_INT_DEFN(x) = x
-#define VCL_STATIC_CONST_INIT_INT_NO_DEFN 0
+# define VCL_STATIC_CONST_INIT_INT_DECL(x) /* not allowed */
+# define VCL_STATIC_CONST_INIT_INT_DEFN(x) = x
+# define VCL_STATIC_CONST_INIT_INT_NO_DEFN 0
 #endif
 
 
@@ -124,16 +135,16 @@
 //#define VCL_CAN_STATIC_CONST_INIT_FLOAT 1 /* allowed */
 //#define VCL_CAN_STATIC_CONST_INIT_FLOAT 0 /* not allowed */
 #ifndef VCL_CAN_STATIC_CONST_INIT_FLOAT
-#define VCL_CAN_STATIC_CONST_INIT_FLOAT 0
+# define VCL_CAN_STATIC_CONST_INIT_FLOAT 0
 #endif
 #if VCL_CAN_STATIC_CONST_INIT_FLOAT
-#define VCL_STATIC_CONST_INIT_FLOAT_DECL(x) = x
-#define VCL_STATIC_CONST_INIT_FLOAT_DEFN(x) /* initialized at declaration */
-#define VCL_STATIC_CONST_INIT_FLOAT_NO_DEFN 0
+# define VCL_STATIC_CONST_INIT_FLOAT_DECL(x) = x
+# define VCL_STATIC_CONST_INIT_FLOAT_DEFN(x) /* initialized at declaration */
+# define VCL_STATIC_CONST_INIT_FLOAT_NO_DEFN 0
 #else
-#define VCL_STATIC_CONST_INIT_FLOAT_DECL(x) /* not allowed */
-#define VCL_STATIC_CONST_INIT_FLOAT_DEFN(x) = x
-#define VCL_STATIC_CONST_INIT_FLOAT_NO_DEFN 0
+# define VCL_STATIC_CONST_INIT_FLOAT_DECL(x) /* not allowed */
+# define VCL_STATIC_CONST_INIT_FLOAT_DEFN(x) = x
+# define VCL_STATIC_CONST_INIT_FLOAT_NO_DEFN 0
 #endif
 
 
@@ -179,9 +190,9 @@
 //#define VCL_DEFINE_SPECIALIZATION /* template <> */
 //#define VCL_DEFINE_SPECIALIZATION template <>
 #if defined(__ICL)
-#define VCL_DEFINE_SPECIALIZATION /* template <> */
+# define VCL_DEFINE_SPECIALIZATION /* template <> */
 #else
-#define VCL_DEFINE_SPECIALIZATION template <>
+# define VCL_DEFINE_SPECIALIZATION template <>
 #endif
 
 
@@ -230,6 +241,7 @@
 // if this work-around is required and 0 otherwise.
 //#define VCL_TEMPLATE_MATCHES_TOO_OFTEN 1 /* need work-around */
 //#define VCL_TEMPLATE_MATCHES_TOO_OFTEN 0 /* do not need it */
+// !!! different from VC71
 #define VCL_TEMPLATE_MATCHES_TOO_OFTEN 1
 
 
@@ -262,10 +274,11 @@
 //: VCL_NULL_TMPL_ARGS
 //
 // Define to <> for compilers that require them in friend template function
-// declarations (i.e., EGCS).
+// declarations (i.e., EGCS, VC C++.NET 2003).
 
 //#define VCL_NULL_TMPL_ARGS /* <> */
 //#define VCL_NULL_TMPL_ARGS <>
+// !!! different from VC71
 #define VCL_NULL_TMPL_ARGS /* <> */
 
 
@@ -314,7 +327,7 @@
 //#define VCL_DO_NOT_INSTANTIATE(text, ret) text { return ret; }
 //#define VCL_DO_NOT_INSTANTIATE(text, ret) template <> text { return ret; }
 //#define VCL_DO_NOT_INSTANTIATE(text, ret) /* no need -- magic compiler */
-//FIXME #define VCL_DO_NOT_INSTANTIATE(text, ret) @VCL_DO_NOT_INSTANTIATE@
+//FIXME #define VCL_DO_NOT_INSTANTIATE(text, ret)
 #define VCL_DO_NOT_INSTANTIATE(text, ret) \
 VCL_DEFINE_SPECIALIZATION \
 text { return ret; }
@@ -332,7 +345,7 @@ text { return ret; }
 
 //#define VCL_UNINSTANTIATE_SPECIALIZATION(symbol)  @pragma do_not_instantiate text@
 //#define VCL_UNINSTANTIATE_SPECIALIZATION(symbol) /* no need - sensible compiler */
-//FIXME #define VCL_UNINSTANTIATE_SPECIALIZATION(symbol) @VCL_UNINSTANTIATE_SPECIALIZATION@
+//FIXME #define VCL_UNINSTANTIATE_SPECIALIZATION(symbol)
 #define VCL_UNINSTANTIATE_SPECIALIZATION(symbol) // which compiler needs this ?
 
 
@@ -347,7 +360,7 @@ text { return ret; }
 
 //#define VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION(symbol) extern symbol;
 //#define VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION(symbol) /* no need */
-//FIXME #define VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION(symbol) @VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION@
+//FIXME #define VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION(symbol)
 #define VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION(symbol) /* never used */
 
 
@@ -367,12 +380,11 @@ text { return ret; }
 //
 //   template struct A<int>;
 // \endcode
-//
 // The way round this is to supply an explicit definition for every
 // instance of the class needed.
 //
-// \code
 // Put the templated definition like this
+// \code
 //      #if VCL_CAN_DO_STATIC_TEMPLATE_MEMBER
 //      template <class T>
 //      char *A<T>::fmt = 0;
@@ -409,14 +421,12 @@ text { return ret; }
 //
 // Some compilers (e.g. SunPro 5.0) do not accept non-type template
 // parameters in function templates. E.g.
-//
 // \code
 // template <class T, int n> struct vicky { T data[n]; } // can do
 //
 // template <class T, int n>
 // void a_function_template(vicky<T, n> const &) { ... } // cannot
 // \endcode
-//
 #define VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER 1
 
 
@@ -520,12 +530,12 @@ text { return ret; }
 //#define VCL_DFL_TYPE_PARAM_STLDECL(A,a) A = a
 //#define VCL_DFL_TYPE_PARAM_STLDECL(A,a) A /* = a */
 //#define VCL_DFL_TYPE_PARAM_STLDECL(A,a) __DFL_TYPE_PARAM(A,a)
-//FIXME #define VCL_DFL_TYPE_PARAM_STLDECL(A,a) @VCL_DFL_TYPE_PARAM_STLDECL@
+//FIXME #define VCL_DFL_TYPE_PARAM_STLDECL(A,a)
 //
 //#define VCL_DFL_TMPL_PARAM_STLDECL(A,a) A = a
 //#define VCL_DFL_TMPL_PARAM_STLDECL(A,a) A /* = a */
 //#define VCL_DFL_TMPL_PARAM_STLDECL(A,a) __STL_DFL_TMPL_PARAM(A,a)
-//FIXME #define VCL_DFL_TMPL_PARAM_STLDECL(A,a) @VCL_DFL_TMPL_PARAM_STLDECL@
+//FIXME #define VCL_DFL_TMPL_PARAM_STLDECL(A,a)
 
 
 // VCL_DFL_TMPL_ARG(class)
@@ -541,7 +551,7 @@ text { return ret; }
 //#define VCL_DFL_TMPL_ARG(classname) , classname
 //#define VCL_DFL_TMPL_ARG(classname) /* , classname */
 //#define VCL_DFL_TMPL_ARG(classname) __DFL_TMPL_ARG(classname)
-//FIXME #define VCL_DFL_TMPL_ARG(classname) @VCL_DFL_TMPL_ARG@
+//FIXME #define VCL_DFL_TMPL_ARG(classname)
 
 
 //: VCL_SUNPRO_CLASS_SCOPE_HACK(A)
@@ -578,11 +588,13 @@ text { return ret; }
 
 //: VCL_ALLOWS_NAMESPACE_STD
 // Set to true if the compiler allows namespace std:: for the standard library.
+// !!! different from VC7
 #define VCL_ALLOWS_NAMESPACE_STD 0
 
 
 //: VCL_NEEDS_NAMESPACE_STD
 // Set to true if the compiler needs namespace std:: for the standard library.
+// !!! different from VC7
 #define VCL_NEEDS_NAMESPACE_STD 0
 
 //----------------------------------------------------------------------
