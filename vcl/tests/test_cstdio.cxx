@@ -10,54 +10,36 @@ int test_cstdio_main(int argc,char* argv[])
 
   int rc; // return code
 
+#define ASSERT(x,y)    if (!(x)) { vcl_printf("FAIL: " y "\n"); fail=true; }
+#define ASSERT1(x,y,a) if (!(x)) { vcl_printf("FAIL: " y "\n",a); fail=true; }
+#define ASSERT2(x,y,a,b) if (!(x)){vcl_printf("FAIL: " y "\n",a,b);fail=true;}
+
   // Close the standard input. All reads from
   // stdin should fail after this.
   rc = close_stdin();
-  if ( rc != 0 ) {
-    vcl_printf( "FAIL: couldn't close standard input\n" );
-    fail = true;
-  }
-
+  ASSERT(rc==0, "couldn't close standard input")
 
   rc = vcl_getchar();
-  if ( rc != EOF ) {
-    vcl_printf( "FAIL: get_char read a value from a closed stream\n" );
-    fail = true;
-  }
+  ASSERT(rc==EOF, "std::getchar() read a value from a closed stream")
 
-  if ( argc < 2 ) {
-    vcl_printf( "FAIL: no file name given as the first command line argument\n" );
-    fail = true;
-  }
+  ASSERT(argc>=2, "no file name given as the first command line argument")
   FILE* fh = vcl_fopen( argv[1], "rw" );
-  if ( !fh ) {
-    vcl_printf( "FAIL: couldn't open %s\n", argv[1] );
-    vcl_printf( "      (skipping file tests)\n" );
-    fail = true;
-  } else {
+  ASSERT1(fh, "couldn't open %s\n      (skipping file tests)", argv[1])
+
+  if (fh)
+  {
     rc = vcl_getc( fh );
-    if ( rc != 't' ) {
-      vcl_printf( "FAIL: first character read was not 't'\n" );
-      fail = true;
-    }
+    ASSERT(rc=='t', "first character read was not 't'")
 
     rc = vcl_ungetc( 'x', fh );
-    if ( rc != 'x' ) {
-      vcl_printf( "FAIL: ungetc failed\n" );
-      fail = true;
-    } else {
+    ASSERT(rc=='x', "ungetc failed")
+    else {
       rc = vcl_getc( fh );
-      if ( rc != 'x' ) {
-        vcl_printf( "FAIL: getc returned %d, and not %d ('x') as expected\n", rc, 'x' );
-        fail = true;
-      }
+      ASSERT2(rc=='x', "getc returned %d, and not %d ('x') as expected",rc,'x')
     }
 
     rc = vcl_fclose( fh );
-    if ( rc != 0 ) {
-      vcl_printf( "FAIL: failed to close file\n" );
-      fail = true;
-    }
+    ASSERT(rc==0, "failed to close file")
   }
 
   return fail ? 1 : 0;
@@ -76,15 +58,8 @@ int test_cstdio_main(int argc,char* argv[])
 
 #ifdef VCL_VC
 # include <io.h>
-int close_stdin()
-{
-  return _close( 0 );
-}
+int close_stdin() { return _close(0); }
 #else
 # include <unistd.h>
-int close_stdin()
-{
-  return close( 0 );
-}
+int close_stdin() { return close(0); }
 #endif
-
