@@ -12,7 +12,7 @@
 #include <vcl_utility.h>
 
 #include <vbl/vbl_sparse_array_2d.h>
-#include <vnl/vnl_matops.h>
+#include <vnl/vnl_matrix.h>
 #include <mvl/PairMatchSet.h>
 
 typedef vbl_sparse_array_2d<double> hack ;
@@ -76,7 +76,7 @@ void PairMatchMulti::set_score(int i1, int i2, double score)
 
 bool PairMatchMulti::contains(int i1, int i2) const
 {
-  for(vcl_multimap_uint_uint::const_iterator p = _matches12.lower_bound(i1); p != _matches12.upper_bound(i1); ++p)
+  for (vcl_multimap_uint_uint::const_iterator p = _matches12.lower_bound(i1); p != _matches12.upper_bound(i1); ++p)
     if ((*p).second == (unsigned)i2)
       return true;
   return false;
@@ -96,7 +96,7 @@ double PairMatchMulti::get_score(int i1, int i2) const
 
 vcl_ostream& operator << (vcl_ostream& s, const PairMatchMulti& pm)
 {
-  for(PairMatchMultiIterator p(pm); p; ++p) {
+  for (PairMatchMultiIterator p(pm); p; ++p) {
     int i1 = p.get_i1();
     int i2 = p.get_i2();
     double score = pm.get_score(i1, i2);
@@ -142,7 +142,7 @@ bool PairMatchMulti::read_ascii(vcl_istream& s)
 
 
   int n = m.rows();
-  for(int i = 0; i < n; ++i) {
+  for (int i = 0; i < n; ++i) {
     int i1 = dbl2int(m(i,0));
     int i2 = dbl2int(m(i,1));
     if (cols == 3) {
@@ -161,11 +161,11 @@ bool PairMatchMulti::read_ascii(vcl_istream& s)
 bool PairMatchMulti::is_superset(PairMatchSet& matches)
 {
   bool allok = true;
-  for(PairMatchSet::iterator p = matches; p; ++p) {
+  for (PairMatchSet::iterator p = matches; p; ++p) {
     int i1 = p.get_i1();
     int i2 = p.get_i2();
     bool ok = false;
-    for(PairMatchMultiIterator i = get_match_12(i1); i; ++i)
+    for (PairMatchMultiIterator i = get_match_12(i1); i; ++i)
       if (i.get_i2() == i2) {
         ok = true;
         break;
@@ -180,12 +180,12 @@ bool PairMatchMulti::is_superset(PairMatchSet& matches)
     return true;
   else {
     vcl_cerr << "PairMatchMulti::is_superset() -- it ain't\n";
-    for(PairMatchSet::iterator p = matches; p; ++p) {
+    for (PairMatchSet::iterator p = matches; p; ++p) {
       int i1 = p.get_i1();
       int i2 = p.get_i2();
       vcl_cerr << i1 << ": [" << i2 << "] ";
       bool ok = false;
-      for(PairMatchMultiIterator i = get_match_12(i1); i; ++i) {
+      for (PairMatchMultiIterator i = get_match_12(i1); i; ++i) {
         vcl_cerr << i.get_i2() << " ";
         if (i.get_i2() == i2) ok = true;
       }
@@ -225,12 +225,12 @@ main()
   mm.add_match(3,2);
 
   vcl_cout << "All matches, sorted:\n";
-  for(PairMatchMulti::match_iterator p(mm); !p.done(); p.next())
+  for (PairMatchMulti::match_iterator p(mm); !p.done(); p.next())
     vcl_cout << p.get_i1() << " " << p.get_i2() << vcl_endl;
 
   for (int target = 1; target <= 7; ++target) {
     vcl_cout << "Matches for " << target << vcl_endl;
-    for(PairMatchMulti::match_iterator p = mm.get_match_12(target); !p.done(); p.next())
+    for (PairMatchMulti::match_iterator p = mm.get_match_12(target); !p.done(); p.next())
       vcl_cout << p.get_i1() << " " << p.get_i2() << vcl_endl;
   }
 }

@@ -27,7 +27,9 @@
 
 #include <vcl_iosfwd.h>
 
-#include <vnl/algo/vnl_algo_fwd.h>
+#include <vnl/algo/vnl_algo_fwd.h> // for vnl_svd
+#include <vnl/vnl_matrix.h>
+#include <vnl/vnl_vector.h>
 #include <vnl/vnl_double_3x4.h>
 #include <vbl/vbl_ref_count.h>
 

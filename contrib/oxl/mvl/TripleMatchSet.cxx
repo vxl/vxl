@@ -5,9 +5,8 @@
 //:
 //  \file
 
-#include <vnl/vnl_matops.h> // use vnl_matlab_print.h for pretty printing
 #include <vcl_cstdlib.h> // for vcl_abort()
-
+#include <vnl/vnl_matrix.h>
 #include "TripleMatchSet.h"
 #include <mvl/PairMatchSet.h>
 
@@ -54,7 +53,7 @@ void TripleMatchSet::set_from_pairwise_matches(const PairMatchSet& matches12,
                                                const PairMatchSet& matches23)
 {
   clear_matches();
-  for(PairMatchSet::iterator p12 = matches12; p12; p12.next()) {
+  for (PairMatchSet::iterator p12 = matches12; p12; p12.next()) {
     int i3 = matches23.get_match_12(p12.get_i2());
     if (matchp(i3))
       add_match(p12.get_i1(), p12.get_i2(), i3);
@@ -89,7 +88,7 @@ bool TripleMatchSet::read_ascii(vcl_istream& s)
 
   int i1_max = 0;
   int i2_max = 0;
-  for(int i = 0; i < n; ++i) {
+  for (int i = 0; i < n; ++i) {
     if (m(i,0) > i1_max) i1_max = (int)m(i,0);
     if (m(i,1) > i2_max) i2_max = (int)m(i,2);
   }
@@ -98,7 +97,7 @@ bool TripleMatchSet::read_ascii(vcl_istream& s)
   // set(new PairMatchSet(i1_max+1), new PairMatchSet(i2_max+1));
 
   {
-    for(int i = 0; i < n; ++i)
+    for (int i = 0; i < n; ++i)
       add_match(int(m(i,0)), int(m(i,1)), int(m(i,2)));
   }
 
@@ -139,7 +138,7 @@ bool TripleMatchSet::add_match(int i1, int i2, int i3)
     vcl_cerr<<"*** i1 is already in a match ("<<i1<<"/"<<old_i2<<"/"<<old_i3<<")\n";
   }
 
-  return (_match12->add_match(i1, i2) && _match23->add_match(i2, i3));
+  return _match12->add_match(i1, i2) && _match23->add_match(i2, i3);
 }
 
 //: Return the number of triplets. O(n).
@@ -352,7 +351,7 @@ TripleMatchSet::iterator::operator bool () const
 // Should never return false in normal use.
 bool TripleMatchSet::iterator::isfull() const
 {
-  return (i1 != NoMatch && i2 != NoMatch && i3 != NoMatch);
+  return i1 != NoMatch && i2 != NoMatch && i3 != NoMatch;
 }
 
 
