@@ -41,14 +41,14 @@ vgl_point_2d<Type> vgl_point_2d<Type>::operator-(const vgl_point_2d<Type>& that)
 template <class Type>
 vgl_point_2d<Type> vgl_point_2d<Type>::operator*(double d) const
 {
-   vgl_point_2d<Type> result((this->x()*d),this->y()*d);
+   vgl_point_2d<Type> result(Type(this->x()*d),Type(this->y()*d));
    return result;
 }
 
 template <class Type>
 vgl_point_2d<Type> vgl_point_2d<Type>::operator/(double d) const
 {
-   vgl_point_2d<Type> result((this->x()/d),this->y()/d);
+   vgl_point_2d<Type> result(Type(this->x()/d),Type(this->y()/d));
    return result;
 }
 
