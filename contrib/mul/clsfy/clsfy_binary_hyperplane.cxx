@@ -1,5 +1,5 @@
 
-//	Copyright: (C) 2000 British Telecommunications PLC
+// Copyright: (C) 2000 British Telecommunications PLC
 
 //:
 // \file
@@ -42,7 +42,7 @@ void clsfy_binary_hyperplane::class_probabilities(vcl_vector<double> &outputs,
   const vnl_vector<double> &input) const
 {
   outputs.resize(1);
-  outputs[0] = 1.0 / (1.0 + exp(-log_l(input)));
+  outputs[0] = 1.0 / (1.0 + vcl_exp(-log_l(input)));
 }
 
 
@@ -75,9 +75,9 @@ void clsfy_binary_hyperplane::print_summary(vcl_ostream& os) const
 
 //=======================================================================
 
-short clsfy_binary_hyperplane::version_no() const 
-{ 
-  return 1; 
+short clsfy_binary_hyperplane::version_no() const
+{
+  return 1;
 }
 
 //=======================================================================
@@ -94,20 +94,19 @@ void clsfy_binary_hyperplane::b_write(vsl_b_ostream& bfs) const
 void clsfy_binary_hyperplane::b_read(vsl_b_istream& bfs)
 {
   if (!bfs) return;
-  
+
   short version;
   vsl_b_read(bfs,version);
   switch (version)
   {
-		case (1):
+    case (1):
       vsl_b_read(bfs,weights_);
       vsl_b_read(bfs,bias_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: clsfy_binary_hyperplane::b_read(vsl_b_istream&) \n";
-      vcl_cerr << "           Unknown version number "<< version << "\n";
+      vcl_cerr << "I/O ERROR: clsfy_binary_hyperplane::b_read(vsl_b_istream&)\n"
+               << "           Unknown version number "<< version << "\n";
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-      return;
   }
 }
 
