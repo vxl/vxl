@@ -15,8 +15,6 @@
 // its image on the image plane
 //
 
-#include <mvl/HomgPoint2D.h>
-#include <mvl/HomgPoint3D.h>
 #include <mvl/PMatrix.h>
 
 class PMatrixAffine : public PMatrix

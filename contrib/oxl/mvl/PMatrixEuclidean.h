@@ -21,7 +21,6 @@
 
 #include <vnl/vnl_matrix.h>
 #include <mvl/HomgPoint2D.h>
-#include <mvl/HomgPoint3D.h>
 #include <mvl/PMatrix.h>
 
 class PMatrixEuclidean : public PMatrix {
