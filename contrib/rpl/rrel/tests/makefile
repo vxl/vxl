@@ -17,7 +17,7 @@ TESTS += test_ransac_obj.cxx
 TESTS += test_robust_util.cxx
 
 IULIBS += -lrrel_tests -lrrel -lvnl-algo -lvnl
-IULIBS += -lmbl -lvbl -lvsl -lvnl-io -lvul
+IULIBS += -lmbl -lvbl -lvsl -lvnl-io -lvgl-io -lvgl -lvul
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk

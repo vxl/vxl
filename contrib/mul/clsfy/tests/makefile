@@ -1,7 +1,7 @@
 USES += vxl mul
 include ${IUEROOT}/vxl/vnl/algo/config.mk
 
-IULIBS := -lclsfy -lvpdfl -lmbl -lvnl-io -lvnl-algo -lvnl -lvul -lvsl
+IULIBS := -lclsfy -lvpdfl -lmbl -lvnl-io -lvnl-algo -lvnl -lvgl-io -lvgl -lvul -lvsl
 
 TESTS += test_binary_hyperplane.cxx
 TESTS += test_binary_pdf_classifier.cxx
