@@ -7,9 +7,9 @@
 #include "bgrl_edge.h"
 
 
-//: Depth First Search
+//: Breadth First Search
 bgrl_edge_sptr
-bgrl_depth_search::next_vertex()
+bgrl_breadth_search::next_vertex()
 {
   if (!curr_vertex_) 
     return NULL;
@@ -39,9 +39,9 @@ bgrl_depth_search::next_vertex()
 
 //=========================================================================
 
-//: Breadth first search
+//: Depth first search
 bgrl_edge_sptr
-bgrl_breadth_search::next_vertex()
+bgrl_depth_search::next_vertex()
 {
   if (!curr_vertex_) 
     return NULL;

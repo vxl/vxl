@@ -46,7 +46,7 @@ class bgrl_breadth_search : public bgrl_search_func
  public:
   //: Constructor
   bgrl_breadth_search(const bgrl_vertex_sptr& init_vertex = NULL)
-    : bgrl_search_func(init_vertex) {}
+    : bgrl_search_func(init_vertex) {visited_.insert(init_vertex);}
 
   //: Destructor
   ~bgrl_breadth_search(){}
@@ -69,7 +69,7 @@ class bgrl_depth_search : public bgrl_search_func
  public:
   //: Constructor
   bgrl_depth_search(const bgrl_vertex_sptr& init_vertex = NULL)
-    : bgrl_search_func(init_vertex) {}
+    : bgrl_search_func(init_vertex) {visited_.insert(init_vertex);}
 
   //: Destructor
   ~bgrl_depth_search(){}

@@ -70,12 +70,6 @@ class bgrl_graph : public vbl_ref_count
   //: Returns the number of vertices in the graph
   int size() const;
 
-  //: Returns the beginning iterator to the set of vertices
-  vertex_iterator begin();
-
-  //: Returns the end iterator to the set of vertices
-  vertex_iterator end();
-
   //: Return a platform independent string identifying the class
   virtual vcl_string is_a() const;
 
@@ -105,44 +99,44 @@ class bgrl_graph : public vbl_ref_count
   {
    public:
     //: Constructor
-    iterator( bgrl_graph_sptr graph, bgrl_search_func_sptr func ) 
-      : graph_(graph), search_func_(func) {}
+    iterator( bgrl_graph_sptr graph, bgrl_search_func_sptr func );
 
     //: Destructor
     virtual ~iterator() {}
 
-    //: Increment
-    iterator& operator++ () { search_func_->next_vertex(); return *this; }
+    bgrl_graph_sptr graph() const { return graph_; }
+
+    //: Pre-Increment
+    iterator& operator++ ();
+    //: Post-Increment
+    iterator operator++ (int);
 
     //: Dereference
-    bgrl_vertex_sptr operator -> () const { return search_func_->curr_vertex(); }
+    bgrl_vertex_sptr operator -> () const;
     //: Dereference
-    bgrl_vertex_sptr operator * () const { return search_func_->curr_vertex(); }
+    bgrl_vertex_sptr operator * () const;
 
     //: Equality comparison
-    bool operator == (const iterator& rhs) const 
-    { return rhs.search_func_->curr_vertex() == this->search_func_->curr_vertex(); }
+    bool operator == (const iterator& rhs) const;
 
     //: Inequality comparison
-    bool operator != (const iterator& rhs) const 
-    { return rhs.search_func_->curr_vertex() != this->search_func_->curr_vertex(); }
+    bool operator != (const iterator& rhs) const ;
 
    protected:
-
     bgrl_graph_sptr graph_;
     bgrl_search_func_sptr search_func_;
+    
+    bool use_internal_;
+    vertex_iterator internal_;
   };
 
+  friend class bgrl_graph::iterator;
 
   //: Depth first search begin iterator
-  iterator depth_begin(bgrl_vertex_sptr vertex) { return iterator(this, new bgrl_depth_search(vertex)); }
+  iterator begin(const bgrl_search_func_sptr& func = NULL) { return iterator(this, func); }
   //: Depth first search end iterator
-  iterator depth_end()   { return iterator(this, new bgrl_depth_search(NULL)); }
+  iterator end()   { return iterator(this, NULL); }
 
-  //: Breadth first search begin iterator
-  iterator breadth_begin(bgrl_vertex_sptr vertex) { return iterator(this, new bgrl_breadth_search(vertex)); }
-  //: Breadth first search end iterator
-  iterator breadth_end()   { return iterator(this, new bgrl_breadth_search(NULL)); }
 };
 
 

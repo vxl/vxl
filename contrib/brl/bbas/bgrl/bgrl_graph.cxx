@@ -139,22 +139,6 @@ bgrl_graph::size() const
 }
 
 
-//: Returns the beginning const iterator to the vertices in frame \p frame
-bgrl_graph::vertex_iterator
-bgrl_graph::begin()
-{
-  return vertices_.begin();
-}
-
-
-//: Returns the end const iterator to the vertices in frame \p frame
-bgrl_graph::vertex_iterator
-bgrl_graph::end()
-{
-  return vertices_.end();
-}
-
-
 //: Return a platform independent string identifying the class
 vcl_string 
 bgrl_graph::is_a() const 
@@ -224,6 +208,79 @@ short
 bgrl_graph::version(  ) const
 {
   return 1;
+}
+
+
+//-----------------------------------------------------------------------------------------
+// Iterator functions
+//-----------------------------------------------------------------------------------------
+
+//: Constructor
+bgrl_graph::iterator::iterator( bgrl_graph_sptr graph, bgrl_search_func_sptr func ) 
+ : graph_(graph), search_func_(func), 
+   use_internal_(false), internal_(graph->vertices_.begin()) 
+{
+  if(!func)
+    use_internal_ = true;
+}
+
+
+//: Pre-Increment
+bgrl_graph::iterator& 
+bgrl_graph::iterator::operator++ ()
+{ 
+  if(use_internal_)
+    ++internal_;
+  else
+    search_func_->next_vertex();
+  
+  return *this; 
+}
+
+//: Post-Increment
+bgrl_graph::iterator 
+bgrl_graph::iterator::operator++ (int)
+{ 
+  iterator old(*this);
+  ++(*this);
+  return old;
+}
+
+
+//: Dereference
+bgrl_vertex_sptr 
+bgrl_graph::iterator::operator -> () const 
+{
+  return *(*this);
+}
+
+
+//: Dereference
+bgrl_vertex_sptr 
+bgrl_graph::iterator::operator * () const 
+{ 
+  if(use_internal_)
+    if(internal_ == this->graph_->vertices_.end())
+      return NULL;
+    else
+      return *internal_;
+  else
+    return search_func_->curr_vertex();
+}
+
+
+//: Equality comparison
+bool 
+bgrl_graph::iterator::operator == (const iterator& rhs) const 
+{ 
+  return *rhs == *(*this); 
+}
+
+//: Inequality comparison
+bool 
+bgrl_graph::iterator::operator != (const iterator& rhs) const 
+{ 
+  return !(rhs == *this);
 }
 
 
