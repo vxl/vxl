@@ -101,7 +101,7 @@ public:
   HomgInterestPoint& get(int i);
   HomgInterestPoint const& get(int i) const;
   vnl_double_2 const& get_2d(int i) const;
-  vnl_int_2 const& get_int(int i) const;
+  vnl_vector_fixed<int,2> const& get_int(int i) const;
   HomgPoint2D const& get_homg(int i) const;
   float              get_mean_intensity(int i) const;
 

@@ -223,7 +223,7 @@ vnl_double_2 const& HomgInterestPointSet::get_2d(int i) const
 }
 
 // -- Return the i'th corner as a 2D point
-vnl_int_2 const& HomgInterestPointSet::get_int(int i) const
+vnl_vector_fixed<int,2> const& HomgInterestPointSet::get_int(int i) const
 {
   return (*_data)[i]._int2;
 }
