@@ -15,6 +15,9 @@
 //  Modifications
 //  IMS (Manchester) 14/03/2001: Tidied up the documentation + added binary_io
 //  Amitha Perera    10/07/2001: Deprecated get_*() in favour of *(), as agreed in Zurich.
+//  Peter Vanroose    5/10/2001: Added operator==() and is_empty()
+//  Peter Vanroose    6/10/2001: Added method add(vgl_point_2d<T>) to enlarge a box
+//  Peter Vanroose    7/10/2001: Removed deprecated get_*() functions
 // \endverbatim
 
 #include <vcl_iosfwd.h>
@@ -25,6 +28,8 @@
 //  A 2d box with sides aligned with the x and y axes.
 //  Also supports operations required of a bounding box for geometric region
 //  tests.
+//  A box can be empty; this is the case when MaxPosition is to the left or
+//  below MinPosition.
 //  \verbatim
 //                                  MaxPosition
 //                    O------------O
@@ -65,16 +70,15 @@ public:
 
   // Constructors/Destructor---------------------------------------------------
 
-  //: Default constructor (creates undefined box)
-  inline vgl_box_2d() {}
+  //: Default constructor (creates empty box)
+  vgl_box_2d();
 
   //: Construct using lower-left and upper-right co-ordinates
   vgl_box_2d(const Type min_position[2],
              const Type max_position[2] );
 
-
   //: Construct using lower-left and upper-right co-ordinates
-  vgl_box_2d(const vgl_point_2d<Type>& min_position,
+  vgl_box_2d(const vgl_point_2d<Type>& min_pos,
              const vgl_point_2d<Type>& max_pos);
 
   //: Construct using ranges in x and y
@@ -93,52 +97,22 @@ public:
   //: Destructor
   inline ~vgl_box_2d() {}
 
-  //: Copy operator
-  inline vgl_box_2d& operator=(const vgl_box_2d& that){
-    // gcc 2.95 does not allow :
-    //this->min_pos_ = that.min_pos_;
-    //this->max_pos_ = that.max_pos_;
-    min_pos_[0] = that.min_pos_[0]; min_pos_[1] = that.min_pos_[1];
-    max_pos_[0] = that.max_pos_[0]; max_pos_[1] = that.max_pos_[1];
+  //: Copy assignment operator
+  inline vgl_box_2d& operator=(vgl_box_2d<Type> const& that){
+    min_pos_[0] = that.min_x(); min_pos_[1] = that.min_y();
+    max_pos_[0] = that.max_x(); max_pos_[1] = that.max_y();
     return *this;
   }
 
+  //: Equality test
+  inline bool operator==(vgl_box_2d<Type> const& that) const {
+    // All empty boxes are equal:
+    if (that.is_empty() ) return is_empty();
+    return (min_x() == that.min_x() && min_y() == that.min_y()
+         && max_x() == that.max_x() && max_y() == that.max_y());
+  }
 
   // Data Access---------------------------------------------------------------
-
-  // ---START DEPRECATED BLOCK---
-
-  //: \deprecated Use min_x()
-  inline Type get_min_x() const {VXL_DEPRECATED("vgl_box_2d<T>::get_min_x()"); return min_pos_[0];}
-  //: \deprecated Use min_y()
-  inline Type get_min_y() const {VXL_DEPRECATED("vgl_box_2d<T>::get_min_y()"); return min_pos_[1];}
-  //: \deprecated Use max_x()
-  inline Type get_max_x() const {VXL_DEPRECATED("vgl_box_2d<T>::get_max_x()"); return max_pos_[0];}
-  //: \deprecated Use max_y()
-  inline Type get_max_y() const {VXL_DEPRECATED("vgl_box_2d<T>::get_max_y()"); return max_pos_[1];}
-
-  //: \deprecated Use centroid_x()
-  Type get_centroid_x() const;
-  //: \deprecated Use centroid_y()
-  Type get_centroid_y() const;
-
-  //: \deprecated Use width()
-  Type get_width()  const;
-
-  //: \deprecated Use height()
-  Type get_height() const;
-
-  //: \deprecated Use min_point()
-  vgl_point_2d<Type> get_min_point() const;
-
-  //: \deprecated Use max_point()
-  vgl_point_2d<Type> get_max_point() const;
-
-  //: \deprecated Use centroid_point()
-  vgl_point_2d<Type> get_centroid_point() const;
-
-  // ---END DEPRECATED BLOCK---
-
 
   //: Get min x
   inline Type min_x() const {return min_pos_[0];}
@@ -149,25 +123,28 @@ public:
   //: Get max y
   inline Type max_y() const {return max_pos_[1];}
 
+  //: Get centroid point
+  vgl_point_2d<Type> centroid() const;
   //: Get x component of centroid
   Type centroid_x() const;
   //: Get y component of centroid
   Type centroid_y() const;
 
-  //: Get width of box
+  //: Get width of this box (= x dimension)
   Type width()  const;
 
-  //: Get height of box
+  //: Get height of this box (= y dimension)
   Type height() const;
+
+  //: Get volume (area) of this box
+  Type area() const { return width()*height(); }
+  Type volume() const { return width()*height(); }
 
   //: Lower left corner of box
   vgl_point_2d<Type> min_point() const;
 
   //: Upper right corner of box
   vgl_point_2d<Type> max_point() const;
-
-  //: Centroid of box
-  vgl_point_2d<Type> centroid_point() const;
 
   //: Set left side of box (other side ordinates unchanged)
   inline void set_min_x(Type min_x) {min_pos_[0]=min_x;}
@@ -178,43 +155,57 @@ public:
   //: Set top (other side ordinates unchanged)
   inline void set_max_y(Type max_y) {max_pos_[1]=max_y;}
 
-  //: Move box so centroid lies at centroid_x (width and height unchanged)
-  void set_centroid_x(Type centroid_x);
-  //: Move box so centroid lies at centroid_y (width and height unchanged)
-  void set_centroid_y(Type centroid_y);
+  //: Move box so centroid lies at cx (width and height unchanged)
+  void set_centroid_x(Type cx);
+  //: Move box so centroid lies at cy (width and height unchanged)
+  void set_centroid_y(Type cy);
 
   //: Modify width, retaining centroid at current position
   void set_width(Type width);
   //: Modify height, retaining centroid at current position
   void set_height(Type height);
 
-  //: Modify bottom left.  Top right only changed if necessary to avoid -ive size
-  void setmin_position(Type min_position[2]);
-  //: Modify top right.  Bottom left only changed if necessary to avoid -ive size
-  void setmax_position(Type max_position[2]);
-  //: Modify bottom left.  Top right only changed if necessary to avoid -ive size
-  void set_min_point(vgl_point_2d<Type>& min_point);
-  //: Modify top right.  Bottom left only changed if necessary to avoid -ive size
-  void set_max_point(vgl_point_2d<Type>& max_point);
+  //: Modify bottom left. Top right only changed if necessary to avoid empty box
+  void setmin_position(Type const min_position[2]);
+  //: Modify top right. Bottom left only changed if necessary to avoid empty box
+  void setmax_position(Type const max_position[2]);
+  //: Modify bottom left. Top right only changed if necessary to avoid empty box
+  void set_min_point(vgl_point_2d<Type> const& min_pt);
+  //: Modify top right. Bottom left only changed if necessary to avoid empty box
+  void set_max_point(vgl_point_2d<Type> const& max_pt);
 
   //: Move box so centroid lies at given position (width, height unchanged)
-  void set_centroid(Type centroid[2]);
+  void set_centroid(Type const centroid[2]);
 
   //: Move box so centroid lies at given position (width, height unchanged)
-  void set_centroid(vgl_point_2d<Type>& centroid);
+  void set_centroid(vgl_point_2d<Type> const& centroid);
 
   // Data Control--------------------------------------------------------------
 
+  //: Return true if this box is empty
+  inline bool is_empty() const {
+    return (min_x() > max_x() || min_y() > max_y());
+  }
+
+  //: Add a point to this box, by possibly enlarging the box
+  // so that the point just falls within the box.
+  // Adding a point to an empty box makes it a size zero box only containing p.
+  void add(vgl_point_2d<Type> const& p);
+
+  //: Return true iff the point p is inside this box
+  bool contains(vgl_point_2d<Type> const& p) const;
+
   //: Return true if (x,y) inside box, ie x_min<=x<=x_max etc
   inline bool contains(Type const& x, Type const& y) const {
-    return (x >= min_pos_[0] &&
-      x <= max_pos_[0] &&
-      y >= min_pos_[1] &&
-      y <= max_pos_[1]);
+    return x >= min_x() && x <= max_x() && y >= min_y() && y <= max_y();
   }
+
+  //: Make the box empty
+  void empty();
 
   //: Write "<vgl_box_2d x0,y0 to x1,y1>" to stream
   vcl_ostream& print(vcl_ostream&) const;
+
   //: Write "x0 y0 x1 y1(endl)" to stream
   vcl_ostream& write(vcl_ostream&) const;
 
@@ -226,9 +217,6 @@ protected:
   // Data Members--------------------------------------------------------------
   Type min_pos_[2];
   Type max_pos_[2];
-
-private:
-  // Helpers-------------------------------------------------------------------
 };
 
 //: Print to stream

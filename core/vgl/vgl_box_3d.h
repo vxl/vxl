@@ -13,9 +13,12 @@
 //
 // \verbatim
 // Modifications
+//  Peter Vanroose, Oct  7 2001: Removed deprecated get_*() functions
+//  Peter Vanroose, Oct  6 2001: Added method add(vgl_point_3d<T>) to enlarge a box
+//  Peter Vanroose, Oct  5 2001: Added operator==() and methods is_empty() and contains()
 //  Peter Vanroose, Jul 10 2001: Deprecated get_*() in favour of *(), and explicit casts
-//  Peter Vanroose, Feb 28 2000: lots of minor corrections
 //  NPC (Manchester) 14/03/2001: Tidied up the documentation + added binary_io
+//  Peter Vanroose, Feb 28 2000: lots of minor corrections
 // \endverbatim
 
 #include <vcl_iosfwd.h>
@@ -25,6 +28,8 @@
 //: Represents a 3D box
 //  A 3d box with sides aligned with x, y and z axes. Supports operations
 //  required of a bounding box for geometric volume tests.
+//  A box can be empty; this is the case when MaxPosition is to the left or
+//  below or before MinPosition.
 //
 //  \verbatim
 //                                 MaxPosition
@@ -50,8 +55,8 @@ class vgl_box_3d {
 
 public:
 
-  //: Default constructor (creates undefined box)
-  inline vgl_box_3d() {}
+  //: Default constructor (creates empty box)
+  vgl_box_3d();
 
   //: Construct from min corner and max corner
   vgl_box_3d(Type const min_position[3],
@@ -91,46 +96,25 @@ public:
   }
 #endif
 
+  //: Equality test
+  inline bool operator==(vgl_box_3d<Type> const& b) const {
+    // All empty boxes are equal:
+    if (b.is_empty() ) return is_empty();
+    return (min_x() == b.min_x() && min_y() == b.min_y() && min_z() == b.min_z()
+         && max_x() == b.max_x() && max_y() == b.max_y() && max_z() == b.max_z());
+  }
+
   // Data Access---------------------------------------------------------------
 
-  // ---START DEPRECATED BLOCK---
+  //: Width (x dimension)
+  Type width() const;
+  //: Height (y dimension)
+  Type height()const;
+  //: Depth (z dimension)
+  Type depth() const;
 
-  //: \deprecated Use width()
-  inline Type get_width() const { return max_pos_[0]-min_pos_[0]; }
-  //: \deprecated Use height()
-  inline Type get_height()const { return max_pos_[1]-min_pos_[1]; }
-  //: \deprecated Use depth()
-  inline Type get_depth() const { return max_pos_[2]-min_pos_[2]; }
-
-  //: \deprecated Use min_x()
-  inline Type get_min_x() const { return min_pos_[0]; }
-  //: \deprecated Use min_y()
-  inline Type get_min_y() const { return min_pos_[1]; }
-  //: \deprecated Use min_z()
-  inline Type get_min_z() const { return min_pos_[2]; }
-
-  //: \deprecated Use max_x()
-  inline Type get_max_x() const { return max_pos_[0]; }
-  //: \deprecated Use max_y()
-  inline Type get_max_y() const { return max_pos_[1]; }
-  //: \deprecated Use max_z()
-  inline Type get_max_z() const { return max_pos_[2]; }
-
-  //: \deprecated Use centroid_x()
-  inline Type get_centroid_x() const { return Type(0.5*(min_pos_[0]+max_pos_[0])); }
-  //: \deprecated Use centroid_y()
-  inline Type get_centroid_y() const { return Type(0.5*(min_pos_[1]+max_pos_[1])); }
-  //: \deprecated Use centroid_z()
-  inline Type get_centroid_z() const { return Type(0.5*(min_pos_[2]+max_pos_[2])); }
-
-  // ---END DEPRECATED BLOCK---
-
-  //: Width (x)
-  inline Type width() const { return max_pos_[0]-min_pos_[0]; }
-  //: Height (y)
-  inline Type height()const { return max_pos_[1]-min_pos_[1]; }
-  //: Depth (z)
-  inline Type depth() const { return max_pos_[2]-min_pos_[2]; }
+  //: Get volume of this box
+  inline Type volume() const { return width()*height()*depth(); }
 
   //: min x
   inline Type min_x() const { return min_pos_[0]; }
@@ -153,13 +137,39 @@ public:
   //: Get z component of centroid
   inline Type centroid_z() const { return Type(0.5*(min_pos_[2]+max_pos_[2])); }
 
-#if 0
-  vgl_point_3d<Type> centroid_point() const;
+  //: Get the centroid point
+  vgl_point_3d<Type> centroid() const;
+
+  //: (min_x,min_y,min_z)
   vgl_point_3d<Type> min_point() const;
+  
+  //: (max_x,max_y,max_z)
   vgl_point_3d<Type> max_point() const;
-#endif
 
   // Data Control--------------------------------------------------------------
+
+  //: Return true if this box is empty
+  inline bool is_empty() const {
+    return (min_x() > max_x() || min_y() > max_y() || min_z() > max_z());
+  }
+
+  //: Add a point to this box, by possibly enlarging the box
+  // so that the point just falls within the box.
+  // Adding a point to an empty box makes it a size zero box only containing p.
+  void add(vgl_point_3d<Type> const& p);
+
+  //: Return true iff the point p is inside this box
+  bool contains(vgl_point_3d<Type> const& p) const;
+
+  //: Return true if (x,y,z) is inside this box, ie x_min<=x<=x_max etc
+  inline bool contains(Type const& x, Type const& y, Type const& z) const {
+    return x >= min_x() && x <= max_x() &&
+           y >= min_y() && y <= max_y() &&
+           z >= min_z() && z <= max_z();
+  }
+
+  //: Make the box empty
+  void empty();
 
   //: Set min x ordinate of box (other sides unchanged)
   inline void set_min_x(Type min_x) {min_pos_[0]=min_x;}
@@ -175,12 +185,12 @@ public:
   //: Set max z ordinate of box (other sides unchanged)
   inline void set_max_z(Type max_z) {max_pos_[2]=max_z;}
 
-  //: Move box so centroid lies at centroid_x (size unchanged)
-  void set_centroid_x(Type centroid_x);
-  //: Move box so centroid lies at centroid_y (size unchanged)
-  void set_centroid_y(Type centroid_y);
-  //: Move box so centroid lies at centroid_z (size unchanged)
-  void set_centroid_z(Type centroid_z);
+  //: Move box so centroid lies at cx (size unchanged)
+  void set_centroid_x(Type cx);
+  //: Move box so centroid lies at cy (size unchanged)
+  void set_centroid_y(Type cy);
+  //: Move box so centroid lies at cz (size unchanged)
+  void set_centroid_z(Type cz);
 
   //: Set width (x), centroid unchanged
   void set_width( Type width);
@@ -194,9 +204,9 @@ public:
   //: Set max corner (min corner unchanged)
   inline void set_max_position(Type const m[3]) { max_pos_[0]=m[0]; max_pos_[1]=m[1]; max_pos_[2]=m[2]; }
   //: Set min corner (max corner unchanged)
-  void set_min_point(vgl_point_3d<Type> const& min_point);
+  void set_min_point(vgl_point_3d<Type> const& min_pt);
   //: Set max corner (min corner unchanged)
-  void set_max_point(vgl_point_3d<Type> const& max_point);
+  void set_max_point(vgl_point_3d<Type> const& max_pt);
   //: Move box so centroid lies at c (size unchanged)
   inline void set_centroid(Type const c[3]) { set_centroid_x(c[0]); set_centroid_y(c[1]); set_centroid_z(c[2]); }
   //: Move box so centroid lies at centroid (size unchanged)
