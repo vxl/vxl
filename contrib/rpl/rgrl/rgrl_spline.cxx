@@ -725,10 +725,9 @@ refinement( vnl_vector< unsigned > const& m ) const
     unsigned b = m_[1]+3;
     unsigned a = m_[0]+3;
     unsigned ab = a * b;
-    unsigned i=0, j=0, k=0, n=0;
-    for ( i=0; i<m_[0]+2; ++i ) {
-      for ( j=0; j<m_[1]+3; ++j ) {
-        for ( k=0, n=j*a+i; k<m_[2]+3; ++k, n+=ab ) {
+    for ( unsigned i=0; i<m_[0]+2; ++i ) {
+      for ( unsigned j=0; j<m_[1]+3; ++j ) {
+        for ( unsigned k=0, n=j*a+i; k<m_[2]+3; ++k, n+=ab ) {
           v1[i][j][k] = refine_helper_f1( c_[n], c_[n+1] );
           if ( i!=m_[0]+1 )
             v2[i][j][k] = refine_helper_f2( c_[n], c_[n+1], c_[n+2] );
@@ -736,9 +735,9 @@ refinement( vnl_vector< unsigned > const& m ) const
       }
     }
 
-    for ( i=0; i<m_[0]+2; ++i ) {
-      for ( j=0; j<m_[1]+2; ++j ) {
-        for ( k=0; k<m_[2]+3; ++k ) {
+    for ( unsigned i=0; i<m_[0]+2; ++i ) {
+      for ( unsigned j=0; j<m_[1]+2; ++j ) {
+        for ( unsigned k=0; k<m_[2]+3; ++k ) {
           v11[i][j][k] = refine_helper_f1( v1[i][j][k], v1[i][j+1][k] );
           if ( i!=m_[0]+1 )
             v21[i][j][k] = refine_helper_f1( v2[i][j][k], v2[i][j+1][k] );
@@ -750,9 +749,9 @@ refinement( vnl_vector< unsigned > const& m ) const
       }
     }
 
-    for ( i=0; i<m_[0]+2; ++i ) {
-      for ( j=0; j<m_[1]+2; ++j ) {
-        for ( k=0; k<m_[2]+2; ++k ) {
+    for ( unsigned i=0; i<m_[0]+2; ++i ) {
+      for ( unsigned j=0; j<m_[1]+2; ++j ) {
+        for ( unsigned k=0; k<m_[2]+2; ++k ) {
           // 2*k
           if ( 2*i < m[0]+3 && 2*j < m[1]+3 && 2*k < m[2]+3 )
             w[2*i + 2*j*(m[0]+3) + 2*k*(m[0]+3)*(m[1]+3)] =
@@ -784,9 +783,9 @@ refinement( vnl_vector< unsigned > const& m ) const
       }
     }
 #if 0
-    for ( i=0; i<m_[0]+2; ++i ) {
-      for ( j=0; j<m_[1]+2; ++j ) {
-        for ( k=0; k<m_[2]+2; ++k ) {
+    for ( unsigned i=0; i<m_[0]+2; ++i ) {
+      for ( unsigned j=0; j<m_[1]+2; ++j ) {
+        for ( unsigned k=0; k<m_[2]+2; ++k ) {
           // 2*k
           w[2*i + 2*j*(2*m_[0]+3) + 2*k*(2*m_[0]+3)*(2*m_[1]+3)] =
             refine_helper_f1( v11[i][j][k], v11[i][j][k+1] ) ;
@@ -859,58 +858,56 @@ operator>> (vcl_istream& is, rgrl_spline& spline )
   return is;
 }
 
-//  bool
-//  rgrl_spline::
-//  is_support( vnl_vector< double > const& pt, unsigned index )
-//  {
-//    assert( pt.size() == m_.size() );
-//    unsigned dim = pt.size();
+#if 0
+bool
+rgrl_spline::
+is_support( vnl_vector< double > const& pt, unsigned index )
+{
+  assert( pt.size() == m_.size() );
+  unsigned dim = pt.size();
 
-//    for ( unsigned i=0; i<m_.size(); ++i ) {
-//      if ( pt[i] < -3 || pt[i] >= m_[i]+3 )
-//        return false;
-//    }
+  for ( unsigned i=0; i<m_.size(); ++i )
+    if ( pt[i] < -3 || pt[i] >= m_[i]+3 )
+      return false;
 
-//    vnl_vector< int > floor(dim);
-//    vnl_vector< int > ceil(dim);
+  vnl_vector< int > floor(dim);
+  vnl_vector< int > ceil(dim);
 
-//    for ( unsigned n=0; n<dim; ++n ) {
-//      floor[n] = (int)vcl_floor( pt[n] ) ;
-//      ceil[n] = (int)vcl_ceil( pt[n] );
-//    }
+  for ( unsigned n=0; n<dim; ++n ) {
+    floor[n] = (int)vcl_floor( pt[n] ) ;
+    ceil[n] = (int)vcl_ceil( pt[n] );
+  }
 
-//    // 3D case
-//    if (dim == 3) {
-//      int a = (m_[0]+3) * (m_[1]+3);
-//      int b = m_[0]+3;
+  // 3D case
+  if (dim == 3) {
+    int a = (m_[0]+3) * (m_[1]+3);
+    int b = m_[0]+3;
 
-//      unsigned blk[ 3 ];
-//      blk[ 0 ] = index % b;
-//      blk[ 1 ] = index % a / b;
-//      blk[ 2 ] = index / a;
+    unsigned blk[ 3 ];
+    blk[ 0 ] = index % b;
+    blk[ 1 ] = index % a / b;
+    blk[ 2 ] = index / a;
 
-//      for ( unsigned i = 0; i < dim; ++i )
-//        if ( blk[i] < floor[i] || blk[i] > ceil[i]+2 )
-//          return false;
+    for ( unsigned i = 0; i < dim; ++i )
+      if ( blk[i] < floor[i] || blk[i] > ceil[i]+2 )
+        return false;
+  }
+  // 2D case
+  else if (dim == 2) {
+    int a =(m_[0]+3);
+    unsigned blk[ 2 ];
+    blk[ 0 ] = index % a;
+    blk[ 1 ] = index / a;
 
-//    }
-//    // 2D case
-//    else if (dim == 2) {
-//      int a =(m_[0]+3);
-//      unsigned blk[ 2 ];
-//      blk[ 0 ] = index % a;
-//      blk[ 1 ] = index / a;
-
-//      for ( unsigned i = 0; i < dim; ++i )
-//        if ( blk[i] < floor[i] || blk[i] > ceil[i]+2 )
-//          return false;
-
-//    }
-//    // 1D case
-//    else if (dim == 1) {
-//      if ( index < floor[0] || index > ceil[0]+2 )
-//        return false;
-
-//    }
-//    return true;
-//  }
+    for ( unsigned i = 0; i < dim; ++i )
+      if ( blk[i] < floor[i] || blk[i] > ceil[i]+2 )
+        return false;
+  }
+  // 1D case
+  else if (dim == 1) {
+    if ( index < floor[0] || index > ceil[0]+2 )
+      return false;
+  }
+  return true;
+}
+#endif // 0
