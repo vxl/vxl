@@ -102,4 +102,4 @@ template <class Type>
 istream &operator>>(istream &is,
                     vgl_homg_line_3d_2_points<Type> &p);
 
-#endif // #ifndef vgl_homg_line_3d_2_points_h_
+#endif // vgl_homg_line_3d_2_points_h_

@@ -21,7 +21,7 @@
 // disable annoying MSC warning about symbols greater than 255
 // characters (templates produce lots of these).
 #pragma warning(disable:4786)
-#endif   // #ifdef _MSC_VER
+#endif // _MSC_VER
 
 #include <vcl/vcl_list.h>
 #include <vcl/vcl_string.h>
