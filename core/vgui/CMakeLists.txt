@@ -220,7 +220,7 @@ IF (GLUT_FOUND)
       impl/glut/vgui_glut_popup_impl.cxx impl/glut/vgui_glut_popup_impl.h
       impl/glut/vgui_glut_window.cxx     impl/glut/vgui_glut_window.h
       impl/glut/vgui_glut_impl.cxx       impl/glut/vgui_glut_impl.h
-      impl/glut/vgui_glut_slab.cxx       impl/glut/vgui_glut_slab.h
+#     impl/glut/vgui_glut_slab.cxx       impl/glut/vgui_glut_slab.h
 
       impl/glut/menu_hack.h
     )
