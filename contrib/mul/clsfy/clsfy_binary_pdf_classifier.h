@@ -4,10 +4,10 @@
 
 //:
 // \file
-// \brief Describe an classifier based on single pdf.
+// \brief Describe a classifier based on a single pdf.
 // \author Ian Scott
 
-#include "clsfy/clsfy_classifier_base.h"
+#include <clsfy/clsfy_classifier_base.h>
 #include "vpdfl/vpdfl_pdf_base.h"
 #include <vcl_cassert.h>
 
@@ -73,13 +73,13 @@ public:
 
   bool has_pdf() const
   {
-    return (pdf_ != 0);
+    return pdf_!=0;
   }
   //: Get the internal PDFs
   // The object will return a reference to the internal data.
   const vpdfl_pdf_base & pdf() const
   {
-    assert (pdf_!=0);
+    assert(pdf_!=0);
     return *pdf_;
   }
 
