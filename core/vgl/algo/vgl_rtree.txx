@@ -4,12 +4,14 @@
   fsm@robots.ox.ac.uk
 */
 #include "vgl_rtree.h"
-
 #include <vcl_cassert.h>
-#define safety_assert(x) assert(x)
 
-//#include <vcl_iostream.h>
-//#define trace(str) { vcl_cerr << str << vcl_endl; }
+#ifdef DEBUG
+#include <vcl_iostream.h>
+#define trace(str) { vcl_cerr << str << vcl_endl; }
+#else
+#define trace(str)
+#endif
 
 //--------------------------------------------------------------------------------
 
@@ -148,14 +150,14 @@ vgl_rtree_node<V, B, C> *vgl_rtree_node<V, B, C>::add(V const &v) {
     child = chs[best];
   }
 #endif
-  safety_assert(child);
+  assert(child);
   return child->add(v);
 }
 
 // remove the ith element from the node.
 template <class V, class B, class C>
 void vgl_rtree_node<V, B, C>::erase(int i) {
-  safety_assert(0<=i && i<local_vts);
+  assert(0<=i && i<local_vts);
 
   if (total_vts > 1) { // there are other vertices.
 
@@ -179,7 +181,7 @@ void vgl_rtree_node<V, B, C>::erase(int i) {
 
     // this node is now empty, so attempt some pruning.
     if (parent) {
-      //trace("prune");
+      trace("prune");
 
       // move upwards as far as we need to prune. we can only prune
       // a node if it has total_vts equal to zero and has a parent.
@@ -192,7 +194,7 @@ void vgl_rtree_node<V, B, C>::erase(int i) {
 
       // find out what index n has in p :
       int j = n->find_index_in_parent();
-      safety_assert(n == p->chs[j]);
+      assert(n == p->chs[j]);
 
       // update the node counts in p :
       p->update_total_chs(- n->total_chs);
@@ -216,11 +218,11 @@ void vgl_rtree_node<V, B, C>::erase(int i) {
 
 template <class V, class B, class C>
 int vgl_rtree_node<V, B, C>::find_index_in_parent() const {
-  safety_assert(parent);
+  assert(parent);
   for (int i=0; i<parent->local_chs; ++i)
     if (parent->chs[i] == this)
       return i;
-  safety_assert(false);
+  assert(false);
   return -1;
 }
 
@@ -242,7 +244,7 @@ void vgl_rtree_node<V, B, C>::compute_bounds() {
   }
   else {
     // it can happen. this node should be pruned.
-    //safety_assert(false);
+    //assert(false);
   }
 }
 
