@@ -28,7 +28,8 @@ class CheckPixel
 {
  public:
   virtual ~CheckPixel() { }
-  virtual bool operator() ( int p, int i, int j, int k, const vcl_vector<TruePixelType>& pixel ) const = 0;
+  virtual bool operator() ( unsigned int p, unsigned int i, unsigned int j, unsigned int k,
+                            const vcl_vector<TruePixelType>& pixel ) const = 0;
 };
 
 
@@ -76,14 +77,13 @@ class CheckPixelT : public CheckPixel
 };
 
 
-
 template<class T>
 class CheckGrey : public CheckPixelT<T>
 {
  public:
   CheckGrey( const char* file ): CheckPixelT<T>(file) {}
 
-  bool operator() ( int p, int i, int j, int k,
+  bool operator() ( unsigned int p, unsigned int i, unsigned int j, unsigned int k,
                     const vcl_vector<TruePixelType>& pixel ) const
   {
     assert( p == 0 );
@@ -101,7 +101,7 @@ class CheckColourPlanes : public CheckPixelT<T>
  public:
   CheckColourPlanes( const char* file ): CheckPixelT<T>(file) {}
 
-  bool operator() ( int p, int i, int j, int k,
+  bool operator() ( unsigned int p, unsigned int i, unsigned int j, unsigned int k,
                     const vcl_vector<TruePixelType>& pixel) const
   {
     return img_ && pixel.size() == 1 && pixel[0] == img_(i,j,k,p) &&
@@ -163,9 +163,6 @@ bool test( const char* true_data_file, const CheckPixel& check )
       }
     }
   }
-
-
-
 
   return true;
 }
