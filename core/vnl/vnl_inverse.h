@@ -10,6 +10,7 @@
 // \verbatim
 //  Modifications
 //   19 April 2003 - PVr - added interface for vnl_matrix<T>
+//   19 April 2004 - PVr - made 4x4 implementation a bit more robust (but still incomplete)
 // \endverbatim
 
 #include <vnl/vnl_matrix_fixed.h>
@@ -80,48 +81,57 @@ vnl_matrix_fixed<T,4,4> vnl_inverse(vnl_matrix_fixed<T,4,4> const& m)
   d[0] = m(2,2); d[1] = m(2,3); d[2] = m(3,2); d[3] = m(3,3);
   vnl_matrix_fixed<T,2,2> A(a),B(b),C(c),D(d), zero2(T(0));
   // Now solve the matrix eqns A*Ai+B*Ci=I, A*Bi+B*Di=0=C*Ai+D*Ci, C*Bi+D*Di=I:
-  if (vnl_det(B) != 0 && vnl_det(D) != 0)
+  vnl_matrix_fixed<T,2,2> Ai, Bi, Ci, Di;
+  if (vnl_det(D) != 0)
   {
-    vnl_matrix_fixed<T,2,2> DC = vnl_inverse(D)*C,
-                            BA = vnl_inverse(B)*A;
-    vnl_matrix_fixed<T,2,2> Ai=vnl_inverse(A-B*DC),
-                            Bi=vnl_inverse(C-D*BA),
-                            Ci=-DC*Ai, Di=-BA*Bi;
-    // and fill the results into the matrix to be returned:
-    T e[16];
-    e[0] = Ai(0,0); e[1] = Ai(0,1); e[4] = Ai(1,0); e[5] = Ai(1,1); 
-    e[2] = Bi(0,0); e[3] = Bi(0,1); e[6] = Bi(1,0); e[7] = Bi(1,1); 
-    e[8] = Ci(0,0); e[9] = Ci(0,1); e[12]= Ci(1,0); e[13]= Ci(1,1); 
-    e[10]= Di(0,0); e[11]= Di(0,1); e[14]= Di(1,0); e[15]= Di(1,1); 
-    return vnl_matrix_fixed<T,4,4>(e);
+    vnl_matrix_fixed<T,2,2> DC = vnl_inverse(D)*C;
+    Ai=vnl_inverse(A-B*DC); Ci=-DC*Ai;
+    if (vnl_det(B) != 0)
+    {
+      vnl_matrix_fixed<T,2,2> BA = vnl_inverse(B)*A;
+      Bi=vnl_inverse(C-D*BA); Di=-BA*Bi;
+    }
+    else if (vnl_det(A) != 0)
+    {
+      vnl_matrix_fixed<T,2,2> AB = vnl_inverse(A)*B;
+      Di=vnl_inverse(D-C*AB); Bi=-AB*Di;
+    }
+    else if (C == zero2)
+    {
+      Di=vnl_inverse(D); Bi=-Ai*B*Di;
+    }
   }
-  else if (vnl_det(D) != 0 && C == zero2) // hence vnl_det(B) == 0
+  else if (vnl_det(C) != 0)
   {
-    vnl_matrix_fixed<T,2,2> Di=vnl_inverse(D), Ai=vnl_inverse(A), Bi=-Ai*B*Di, Ci=zero2;
-    // and fill the results into the matrix to be returned:
-    T e[16];
-    e[0] = Ai(0,0); e[1] = Ai(0,1); e[4] = Ai(1,0); e[5] = Ai(1,1); 
-    e[2] = Bi(0,0); e[3] = Bi(0,1); e[6] = Bi(1,0); e[7] = Bi(1,1); 
-    e[8] = Ci(0,0); e[9] = Ci(0,1); e[12]= Ci(1,0); e[13]= Ci(1,1); 
-    e[10]= Di(0,0); e[11]= Di(0,1); e[14]= Di(1,0); e[15]= Di(1,1); 
-    return vnl_matrix_fixed<T,4,4>(e);
-  }
-  else if (vnl_det(B) != 0 && A == zero2) // hence vnl_det(D) == 0
-  {
-    vnl_matrix_fixed<T,2,2> Ci=vnl_inverse(B), Bi=vnl_inverse(C), Ai=-Bi*D*Ci, Di=zero2;
-    // and fill the results into the matrix to be returned:
-    T e[16];
-    e[0] = Ai(0,0); e[1] = Ai(0,1); e[4] = Ai(1,0); e[5] = Ai(1,1); 
-    e[2] = Bi(0,0); e[3] = Bi(0,1); e[6] = Bi(1,0); e[7] = Bi(1,1); 
-    e[8] = Ci(0,0); e[9] = Ci(0,1); e[12]= Ci(1,0); e[13]= Ci(1,1); 
-    e[10]= Di(0,0); e[11]= Di(0,1); e[14]= Di(1,0); e[15]= Di(1,1); 
-    return vnl_matrix_fixed<T,4,4>(e);
+    vnl_matrix_fixed<T,2,2> CD = vnl_inverse(C)*D;
+    Ci=vnl_inverse(B-A*CD); Ai=-CD*Ci;
+    if (vnl_det(A) != 0)
+    {
+      vnl_matrix_fixed<T,2,2> AB = vnl_inverse(A)*B;
+      Di=vnl_inverse(D-C*AB); Bi=-AB*Di;
+    }
+    else if (vnl_det(B) != 0)
+    {
+      vnl_matrix_fixed<T,2,2> BA = vnl_inverse(B)*A;
+      Bi=vnl_inverse(C-D*BA); Di=-BA*Bi;
+    }
+    else if (D == zero2)
+    {
+      Bi=vnl_inverse(C); Di=-Ci*A*Bi;
+    }
   }
   else
   {
-    assert(!"Cannot invert 4x4 matrix with zero determinant");
+    assert(!"Cannot invert this 4x4 matrix -- implementation is not complete");
     return vnl_matrix_fixed<T,4,4>();
   }
+  // and fill the results into the matrix to be returned:
+  T e[16];
+  e[0] = Ai(0,0); e[1] = Ai(0,1); e[4] = Ai(1,0); e[5] = Ai(1,1); 
+  e[2] = Bi(0,0); e[3] = Bi(0,1); e[6] = Bi(1,0); e[7] = Bi(1,1); 
+  e[8] = Ci(0,0); e[9] = Ci(0,1); e[12]= Ci(1,0); e[13]= Ci(1,1); 
+  e[10]= Di(0,0); e[11]= Di(0,1); e[14]= Di(1,0); e[15]= Di(1,1); 
+  return vnl_matrix_fixed<T,4,4>(e);
 }
 
 template <class T>
