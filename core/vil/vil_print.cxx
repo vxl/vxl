@@ -133,6 +133,27 @@ void vil_print_value(vcl_ostream& os, const vil_rgb<vxl_byte>& value)
   os<<b;
 }
 
+//: Explicit overload of print for rgb<sbyte>
+VCL_DEFINE_SPECIALIZATION
+void vil_print_value(vcl_ostream& os, vil_rgb<vxl_sbyte> const& value)
+{
+  int r = int(value.r);
+  if (r<0) r=-r,os<<'-'; else os<<'+';
+  if (r<10)  os<<'0';
+  if (r<100) os<<'0';
+  os<<r<<'/';
+  int g = int(value.g);
+  if (g<0) g=-g,os<<'-'; else os<<'+';
+  if (g<10)  os<<'0';
+  if (g<100) os<<'0';
+  os<<g<<'/';
+  int b = int(value.b);
+  if (b<0) b=-b,os<<'-'; else os<<'+';
+  if (b<10)  os<<'0';
+  if (b<100) os<<'0';
+  os<<b;
+}
+
 //: Explicit overload of print for rgb<short>
 VCL_DEFINE_SPECIALIZATION
 void vil_print_value(vcl_ostream& os, const vil_rgb<vxl_int_16>& value)
@@ -215,9 +236,139 @@ void vil_print_value(vcl_ostream& os, const vil_rgba<vxl_byte>& value)
   os<<a;
 }
 
+//: Explicit overload of print for rgba<sbyte>
+VCL_DEFINE_SPECIALIZATION
+void vil_print_value(vcl_ostream& os, const vil_rgba<vxl_sbyte>& value)
+{
+  int r = int(value.r);
+  if (r<0) r=-r,os<<'-'; else os<<'+';
+  if (r<10)  os<<'0';
+  if (r<100) os<<'0';
+  os<<r<<'/';
+  int g = int(value.g);
+  if (g<0) g=-g,os<<'-'; else os<<'+';
+  if (g<10)  os<<'0';
+  if (g<100) os<<'0';
+  os<<g<<'/';
+  int b = int(value.b);
+  if (b<0) b=-b,os<<'-'; else os<<'+';
+  if (b<10)  os<<'0';
+  if (b<100) os<<'0';
+  os<<b<<'/';
+  int a = int(value.a);
+  if (a<0) a=-a,os<<'-'; else os<<'+';
+  if (a<10)  os<<'0';
+  if (a<100) os<<'0';
+  os<<a;
+}
+
+//: Explicit overload of print for rgba<short>
+VCL_DEFINE_SPECIALIZATION
+void vil_print_value(vcl_ostream& os, const vil_rgba<vxl_int_16>& value)
+{
+  vil_print_value(os, value.r);
+  os<<'/';
+  vil_print_value(os, value.g);
+  os<<'/';
+  vil_print_value(os, value.b);
+  os<<'/';
+  vil_print_value(os, value.a);
+}
+
+//: Explicit overload of print for rgba<unsigned short>
+VCL_DEFINE_SPECIALIZATION
+void vil_print_value(vcl_ostream& os, const vil_rgba<vxl_uint_16>& value)
+{
+  vil_print_value(os, value.r);
+  os<<'/';
+  vil_print_value(os, value.g);
+  os<<'/';
+  vil_print_value(os, value.b);
+  os<<'/';
+  vil_print_value(os, value.a);
+}
+
+//: Explicit overload of print for rgba<int>
+VCL_DEFINE_SPECIALIZATION
+void vil_print_value(vcl_ostream& os, const vil_rgba<vxl_int_32>& value)
+{
+  vil_print_value(os, value.r);
+  os<<'/';
+  vil_print_value(os, value.g);
+  os<<'/';
+  vil_print_value(os, value.b);
+  os<<'/';
+  vil_print_value(os, value.a);
+}
+
+//: Explicit overload of print for rgba<unsigned int>
+VCL_DEFINE_SPECIALIZATION
+void vil_print_value(vcl_ostream& os, const vil_rgba<vxl_uint_32>& value)
+{
+  vil_print_value(os, value.r);
+  os<<'/';
+  vil_print_value(os, value.g);
+  os<<'/';
+  vil_print_value(os, value.b);
+  os<<'/';
+  vil_print_value(os, value.a);
+}
+
 //: Explicit overload of print for rgba<float>
 VCL_DEFINE_SPECIALIZATION
 void vil_print_value(vcl_ostream& os, const vil_rgba<float>& value)
 {
   os<<value.r<<'/'<<value.g<<'/'<<value.b<<'/'<<value.a;
+}
+
+//: Explicit overload of print for rgba<double>
+VCL_DEFINE_SPECIALIZATION
+void vil_print_value(vcl_ostream& os, const vil_rgba<double>& value)
+{
+  os<<value.r<<'/'<<value.g<<'/'<<value.b<<'/'<<value.a;
+}
+
+void vil_print_all(vcl_ostream& os, vil_image_view_base_sptr const& view)
+{
+#define docase(T) \
+   case T: \
+     vil_print_all(os, static_cast<vil_image_view< vil_pixel_format_type_of<T >::type > >(view) );\
+     break
+
+  switch( view->pixel_format() ) {
+    docase( VIL_PIXEL_FORMAT_UINT_32 );
+    docase( VIL_PIXEL_FORMAT_INT_32 );
+    docase( VIL_PIXEL_FORMAT_UINT_16 );
+    docase( VIL_PIXEL_FORMAT_INT_16 );
+    docase( VIL_PIXEL_FORMAT_BYTE );
+    docase( VIL_PIXEL_FORMAT_SBYTE );
+    docase( VIL_PIXEL_FORMAT_FLOAT );
+    docase( VIL_PIXEL_FORMAT_DOUBLE );
+    docase( VIL_PIXEL_FORMAT_BOOL );
+
+    docase( VIL_PIXEL_FORMAT_RGB_UINT_32 );
+    docase( VIL_PIXEL_FORMAT_RGB_INT_32 );
+    docase( VIL_PIXEL_FORMAT_RGB_UINT_16 );
+    docase( VIL_PIXEL_FORMAT_RGB_INT_16 );
+    docase( VIL_PIXEL_FORMAT_RGB_BYTE );
+    docase( VIL_PIXEL_FORMAT_RGB_SBYTE );
+    docase( VIL_PIXEL_FORMAT_RGB_FLOAT );
+    docase( VIL_PIXEL_FORMAT_RGB_DOUBLE );
+
+    docase( VIL_PIXEL_FORMAT_RGBA_UINT_32 );
+    docase( VIL_PIXEL_FORMAT_RGBA_INT_32 );
+    docase( VIL_PIXEL_FORMAT_RGBA_UINT_16 );
+    docase( VIL_PIXEL_FORMAT_RGBA_INT_16 );
+    docase( VIL_PIXEL_FORMAT_RGBA_BYTE );
+    docase( VIL_PIXEL_FORMAT_RGBA_SBYTE );
+    docase( VIL_PIXEL_FORMAT_RGBA_FLOAT );
+    docase( VIL_PIXEL_FORMAT_RGBA_DOUBLE );
+
+    docase( VIL_PIXEL_FORMAT_COMPLEX_FLOAT );
+    docase( VIL_PIXEL_FORMAT_COMPLEX_DOUBLE );
+
+    default:
+      ;
+  }
+#undef docase
 }
