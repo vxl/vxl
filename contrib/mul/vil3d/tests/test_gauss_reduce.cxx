@@ -10,21 +10,21 @@ void test_gauss_reduce_float()
            << " Testing vil3d_gauss_reduce\n"
            << "****************************\n";
 
-  int ni = 20, nj = 20, nk = 20;
+  unsigned ni = 20, nj = 20, nk = 20;
   vcl_cout<<"Image Size: "<<ni<<" x "<<nj<<" k "<<nk<<vcl_endl;
 
   vil3d_image_view<float> image0;
   image0.set_size(ni,nj,nk);
 
-  for (int k=0;k<image0.nk();++k)
-    for (int j=0;j<image0.nj();++j)
-      for (int i=0;i<image0.ni();++i)
+  for (unsigned k=0;k<image0.nk();++k)
+    for (unsigned j=0;j<image0.nj();++j)
+      for (unsigned i=0;i<image0.ni();++i)
         image0(i,j,k) = i*0.1f+j+k*10;
 
 
-  int ni2 = (ni+1)/2;
-  int nj2 = (nj+1)/2;
-  int nk2 = (nk+1)/2;
+  unsigned ni2 = (ni+1)/2;
+  unsigned nj2 = (nj+1)/2;
+  unsigned nk2 = (nk+1)/2;
   vil3d_image_view<float> image1,work_im1,work_im2;
   vil3d_gauss_reduce(image0,image1,work_im1,work_im2);
   TEST("size i",image1.ni(),(ni+1)/2);
@@ -40,19 +40,19 @@ void test_gauss_reduce_float()
 void test_gauss_reduce_ij()
 {
   vcl_cout<<"test_gauss_reduce_ij()\n";
-  int ni = 20, nj = 20, nk = 10;
+  unsigned ni = 20, nj = 20, nk = 10;
 
   vil3d_image_view<float> image0;
   image0.set_size(ni,nj,nk);
 
-  for (int k=0;k<image0.nk();++k)
-    for (int j=0;j<image0.nj();++j)
-      for (int i=0;i<image0.ni();++i)
+  for (unsigned k=0;k<image0.nk();++k)
+    for (unsigned j=0;j<image0.nj();++j)
+      for (unsigned i=0;i<image0.ni();++i)
         image0(i,j,k) = i*0.1f+j+k*10;
 
-  int ni2 = (ni+1)/2;
-  int nj2 = (nj+1)/2;
-  int nk2 = nk;  // Shouldn't change first level
+  unsigned ni2 = (ni+1)/2;
+  unsigned nj2 = (nj+1)/2;
+  unsigned nk2 = nk;  // Shouldn't change first level
 
   vil3d_image_view<float> image1, work_im;
   vil3d_gauss_reduce_ij(image0,image1,work_im);
@@ -75,17 +75,17 @@ void test_gauss_reduce_ik()
   vil3d_image_view<float> image0;
   image0.set_size(ni,nj,nk);
 
-  for (int k=0;k<image0.nk();++k)
-    for (int j=0;j<image0.nj();++j)
-      for (int i=0;i<image0.ni();++i)
+  for (unsigned k=0;k<image0.nk();++k)
+    for (unsigned j=0;j<image0.nj();++j)
+      for (unsigned i=0;i<image0.ni();++i)
         image0(i,j,k) = i*0.1f+j+k*10;
 
   vil3d_image_view<float> image1, work_im;
   vil3d_gauss_reduce_ik(image0,image1,work_im);
 
-  int ni2 = (ni+1)/2;
-  int nj2 = nj;   // Shouldn't change first level
-  int nk2 = (nk+1)/2;
+  unsigned ni2 = (ni+1)/2;
+  unsigned nj2 = nj;   // Shouldn't change first level
+  unsigned nk2 = (nk+1)/2;
   TEST("Level 1 size i",image1.ni(),ni2);
   TEST("Level 1 size j",image1.nj(),nj2);
   TEST("Level 1 size k",image1.nk(),ni2);
@@ -99,22 +99,22 @@ void test_gauss_reduce_ik()
 void test_gauss_reduce_jk()
 {
   vcl_cout<<"test_gauss_reduce_jk()\n";
-  int ni = 10, nj = 20, nk = 20;
+  unsigned ni = 10, nj = 20, nk = 20;
 
   vil3d_image_view<float> image0;
   image0.set_size(ni,nj,nk);
 
-  for (int k=0;k<image0.nk();++k)
-    for (int j=0;j<image0.nj();++j)
-      for (int i=0;i<image0.ni();++i)
+  for (unsigned k=0;k<image0.nk();++k)
+    for (unsigned j=0;j<image0.nj();++j)
+      for (unsigned i=0;i<image0.ni();++i)
         image0(i,j,k) = i*0.1f+j+k*10;
 
   vil3d_image_view<float> image1, work_im;
   vil3d_gauss_reduce_jk(image0,image1,work_im);
 
-  int ni2 = ni;    // Shouldn't change first level
-  int nj2 = (nj+1)/2;
-  int nk2 = (nk+1)/2;
+  unsigned ni2 = ni;    // Shouldn't change first level
+  unsigned nj2 = (nj+1)/2;
+  unsigned nk2 = (nk+1)/2;
   TEST("Level 1 size i",image1.ni(),ni2);
   TEST("Level 1 size j",image1.nj(),nj2);
   TEST("Level 1 size k",image1.nk(),ni2);

@@ -10,15 +10,15 @@ void test_trilin_interp_float()
            << " Testing vil3d_trilin_interp\n"
            << "*****************************\n";
 
-  int ni = 5;
-  int nj = 5;
-  int nk = 5;
+  unsigned ni = 5;
+  unsigned nj = 5;
+  unsigned nk = 5;
   vil3d_image_view<float> image0;
   image0.set_size(ni,nj,nk);
 
-  for (int y=0;y<image0.nj();++y)
-    for (int x=0;x<image0.ni();++x)
-      for (int z=0;z<image0.nk();++z)
+  for (unsigned y=0;y<image0.nj();++y)
+    for (unsigned x=0;x<image0.ni();++x)
+      for (unsigned z=0;z<image0.nk();++z)
         image0(x,y,z) = x*0.1f+y+z*10;
 
   int istep = image0.istep();

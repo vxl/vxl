@@ -495,7 +495,7 @@ void vil3d_image_view<T>::set_to_memory(const T* top_left,
                                        int i_step, int j_step, int k_step, int plane_step)
 {
   release_memory();
-  top_left_ = (T*) top_left;  // Remove const, as view may end up manipulating data
+  top_left_ = const_cast<T*>(top_left);  // Remove const, as view may end up manipulating data
 
   ni_ = n_i;
   nj_ = n_j;

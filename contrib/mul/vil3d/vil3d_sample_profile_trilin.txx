@@ -39,7 +39,7 @@ void vil3d_sample_profile_trilin(vecType* v,
                                  const vil3d_image_view<imType>& image,
                                  double x0, double y0, double z0,
                                  double dx, double dy, double dz,
-                                 int n)
+                                 unsigned n)
 {
   bool all_in_image = vil3d_profile_in_image(x0,y0,z0,
                                              x0+(n-1)*dx,y0+(n-1)*dy,z0+(n-1)*dz,
@@ -62,14 +62,14 @@ void vil3d_sample_profile_trilin(vecType* v,
   {
     if (np==1)
     {
-      for (int k=0;k<n;++k,x+=dx,y+=dy,z+=dz)
-      v[k] = vil3d_trilin_interp_raw(x,y,z,plane0,istep,jstep,kstep);
+      for (unsigned h=0;h<n;++h,x+=dx,y+=dy,z+=dz)
+      v[h] = vil3d_trilin_interp_raw(x,y,z,plane0,istep,jstep,kstep);
     }
     else
     {
-      for (int k=0;k<n;++k,x+=dx,y+=dy,z+=dz)
+      for (unsigned h=0;h<n;++h,x+=dx,y+=dy,z+=dz)
       {
-        for (int p=0;p<np;++p,++v)
+        for (unsigned p=0;p<np;++p,++v)
           *v = vil3d_trilin_interp_raw(x,y,z,plane0+p*pstep,istep,jstep,kstep);
       }
     }
@@ -79,14 +79,14 @@ void vil3d_sample_profile_trilin(vecType* v,
     // Use safe interpolation
     if (np==1)
     {
-      for (int k=0;k<n;++k,x+=dx,y+=dy,z+=dz)
-      v[k] = vil3d_trilin_interp_safe(x,y,z,plane0,ni,nj,nk,istep,jstep,kstep);
+      for (unsigned h=0;h<n;++h,x+=dx,y+=dy,z+=dz)
+      v[h] = vil3d_trilin_interp_safe(x,y,z,plane0,ni,nj,nk,istep,jstep,kstep);
     }
     else
     {
-      for (int k=0;k<n;++k,x+=dx,y+=dy,z+=dz)
+      for (unsigned h=0;h<n;++h,x+=dx,y+=dy,z+=dz)
       {
-        for (int p=0;p<np;++p,++v)
+        for (unsigned p=0;p<np;++p,++v)
           *v = vil3d_trilin_interp_safe(x,y,z,plane0+p*pstep,ni,nj,nk,istep,jstep,kstep);
       }
     }
@@ -98,6 +98,6 @@ template void vil3d_sample_profile_trilin(vecType* v, \
                                         const vil3d_image_view<imType >& image, \
                                         double x0, double y0, double z0,\
                                         double dx, double dy, double dz,\
-                                        int n)
+                                        unsigned n)
 
 #endif // vil3d_sample_profile_trilin

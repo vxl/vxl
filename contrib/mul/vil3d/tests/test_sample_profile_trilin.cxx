@@ -15,9 +15,9 @@ void test_sample_profile_trilin_float()
   vil3d_image_view<float> image1;
   image1.set_size(10,10,10);
 
-  for (int y=0;y<image1.nj();++y)
-   for (int x=0;x<image1.ni();++x)
-     for (int z=0;z<image1.nk();++z)
+  for (unsigned y=0;y<image1.nj();++y)
+   for (unsigned x=0;x<image1.ni();++x)
+     for (unsigned z=0;z<image1.nk();++z)
        image1(x,y,z) = x*0.1f+y+z*10;
 
   double x0=5,y0=5,z0=5;
@@ -41,10 +41,10 @@ void test_sample_profile_trilin_float()
   vil3d_image_view<float> image3;
   image3.set_size(10,10,10,3);
 
-  for (int z=0;z<image3.nk();++z)
-    for (int y=0;y<image3.nj();++y)
-     for (int x=0;x<image3.ni();++x)
-       for (int k=0;k<3;++k)
+  for (unsigned z=0;z<image3.nk();++z)
+    for (unsigned y=0;y<image3.nj();++y)
+     for (unsigned x=0;x<image3.ni();++x)
+       for (unsigned k=0;k<3;++k)
          image3(x,y,z,k) = 0.1f*x+y+10*z+100*k;
 
   vil3d_sample_profile_trilin(&vec[0],image3,x0,y0,z0,dx0,dy0,dz0,3);

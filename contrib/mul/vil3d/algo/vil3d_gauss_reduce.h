@@ -20,12 +20,12 @@
 //  sub-sampled 3D image
 template<class T>
 inline void vil3d_gauss_reduce_i(const T* src_im,
-                                 int src_ni, int src_nj, int src_nk,
+                                 unsigned src_ni, unsigned src_nj, unsigned src_nk,
                                  int s_i_step, int s_j_step, int s_k_step,
                                  T* dest_im,
                                  int d_i_step, int d_j_step, int d_k_step)
 {
-  for (int k=0;k<src_nk;++k)
+  for (unsigned k=0;k<src_nk;++k)
   {
     vil2_gauss_reduce(src_im, src_ni,src_nj, s_i_step,s_j_step,
                       dest_im,d_i_step, d_j_step);
@@ -62,7 +62,7 @@ inline void vil3d_gauss_reduce(const vil3d_image_view<T>& src_im,
     work_im2.set_size(ni2,nj2,nk);
 
   // Reduce plane-by-plane
-  for (int p=0;p<n_planes;++p)
+  for (unsigned p=0;p<n_planes;++p)
   {
     // Smooth and subsample in i, result in work_im1
     vil3d_gauss_reduce_i(
@@ -109,7 +109,7 @@ inline void vil3d_gauss_reduce_ij(const vil3d_image_view<T>& src_im,
     work_im1.set_size(ni2,nj,nk);
 
   // Reduce plane-by-plane
-  for (int p=0;p<n_planes;++p)
+  for (unsigned p=0;p<n_planes;++p)
   {
     // Smooth and subsample in i, result in work_im1
     vil3d_gauss_reduce_i(
@@ -150,7 +150,7 @@ inline void vil3d_gauss_reduce_ik(const vil3d_image_view<T>& src_im,
     work_im1.set_size(ni2,nj,nk);
 
   // Reduce plane-by-plane
-  for (int p=0;p<n_planes;++p)
+  for (unsigned p=0;p<n_planes;++p)
   {
     // Smooth and subsample in i, result in work_im1
     vil3d_gauss_reduce_i(
@@ -191,7 +191,7 @@ inline void vil3d_gauss_reduce_jk(const vil3d_image_view<T>& src_im,
     work_im1.set_size(ni,nj2,nk);
 
   // Reduce plane-by-plane
-  for (int p=0;p<n_planes;++p)
+  for (unsigned p=0;p<n_planes;++p)
   {
     // Smooth and subsample in j (by implicitly transposing), result in work_im1
     vil3d_gauss_reduce_i(

@@ -49,7 +49,7 @@ inline double vil3d_trilin_interp_raw(double x, double y, double z,
 //  If (x,y,z) is outside interpolatable image region, zero is returned.
 template<class T>
 inline double vil3d_trilin_interp_safe(double x, double y, double z, const T* data,
-                     int nx, int ny, int nz,
+                     unsigned nx, unsigned ny, unsigned nz,
                      int xstep, int ystep, int zstep)
 {
   if (x<0) return 0.0;
@@ -68,7 +68,7 @@ inline double vil3d_trilin_interp_safe(double x, double y, double z, const T* da
 //  The safe interpolatable region is [0,nx)*[0,ny).
 template<class T>
 inline double vil3d_trilin_interp_assert(double x, double y, double z, const T* data,
-                     int nx, int ny, int nz,
+                     unsigned nx, unsigned ny, unsigned nz,
                      int xstep, int ystep, int zstep)
 {
   assert (x>=0);
@@ -86,7 +86,7 @@ inline double vil3d_trilin_interp_assert(double x, double y, double z, const T* 
 //  The safe interpolatable region is [0,nx)*[0,ny).
 template<class T>
 inline double vil3d_trilin_interp_safe_extend(double x, double y, double z, const T* data,
-                     int nx, int ny, int nz,
+                     unsigned nx, unsigned ny, unsigned nz,
                      int xstep, int ystep, int zstep)
 {
   if (x<0) x= 0.0;
