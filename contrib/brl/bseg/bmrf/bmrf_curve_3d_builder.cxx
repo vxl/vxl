@@ -133,7 +133,7 @@ bmrf_curve_3d_builder::build()
     if( itr->size() < 10 )
       curves_.erase(itr);
     else
-      this->reconstruct_curve(*itr);
+      this->reconstruct_curve(const_cast<vcl_list<bmrf_curvel_3d_sptr> &> (*itr));
     itr = next_itr;
   }
 
@@ -318,7 +318,7 @@ bmrf_curve_3d_builder::reconstruct_curve(vcl_list<bmrf_curvel_3d_sptr>& curve) c
   vnl_matrix<double> A(3*num_pts, 3*num_pts, 0.0);
   vnl_vector<double> b(3*num_pts, 0.0);
 
-  int cnt=0;
+  unsigned int cnt=0;
   for ( vcl_list<bmrf_curvel_3d_sptr>::iterator itr = curve.begin();
         itr != curve.end(); ++itr, ++cnt) 
   {
