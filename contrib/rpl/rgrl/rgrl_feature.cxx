@@ -19,22 +19,24 @@ geometric_error( rgrl_feature const& other ) const
 
 vnl_vector<double>
 rgrl_feature::
-signature_error_vector( rgrl_feature const& other ) const
+signature_error_vector( rgrl_feature const& ) const
 {
-  assert( "This feature doesn't implement signature_error_vector" == 0 );
+  assert( ! "This rgrl_feature doesn't implement signature_error_vector()" );
   return vnl_vector<double>(0); // to suppress compiler warnings
 }
 
 
 unsigned
-rgrl_feature::signature_error_dimension( const vcl_type_info& other_feature_type ) const
+rgrl_feature::signature_error_dimension( vcl_type_info const& ) const
 {
+  assert( ! "This rgrl_feature doesn't implement signature_error_dimension()" );
   return 0;
 }
 
 double
-rgrl_feature::absolute_signature_weight( rgrl_feature_sptr other ) const
+rgrl_feature::absolute_signature_weight( rgrl_feature_sptr ) const
 {
-  return 1;
+  assert( ! "This rgrl_feature doesn't implement absolute_signature_weight()" );
+  return -1.0;
 }
 

@@ -157,7 +157,7 @@ map_normal( vnl_vector<double> const & from_loc,
 void
 rgrl_transformation::
 map_normal( vnl_vector<double> const  & from_loc,
-            vnl_vector<double> const  & from_dir,
+            vnl_vector<double> const  & /*from_dir*/,
             vnl_matrix< double > const& tangent_subspace,
             vnl_vector<double>        & to_dir    ) const
 {
@@ -169,22 +169,18 @@ map_normal( vnl_vector<double> const  & from_loc,
     map_tangent(from_loc, tangent_subspace.get_column(i), xformed_tangent);
     xform_tangent_subspace.set_row(i, xformed_tangent);
   }
-#endif
 
-  // It is not necessary to orthogonize bases. The reason is
-  // the null space is always orthogonal to  linear combination
+  // It is not necessary to orthogonize bases.  The reason is
+  // the null space is always orthogonal to a linear combination
   // of any number of bases
-#if 0
-  // If (m == 3), make the 2 tangent vector orthogonal
   if ( tangent_subspace.columns() == 2 ) {
+    // If (m == 3), make the 2 tangent vector orthogonal
     vnl_vector< double > tangent1 = xform_tangent_subspace.get_row(0);
     vnl_vector< double > tangent2 = xform_tangent_subspace.get_row(1);
     vnl_vector< double > ortho_tangent = tangent2 - inner_product(tangent2,tangent1)* tangent1;
     xform_tangent_subspace.set_row(1, ortho_tangent.normalize());
   }
-#endif
 
-#if 0
   // Get the transformed normal from the xformed tangent subspace
   vnl_svd<double> tangent_svd( xform_tangent_subspace );
   assert ( tangent_svd.nullspace().columns() == 1 );
@@ -220,30 +216,27 @@ map_intensity( vnl_vector<double> const& /*from*/,
 
 void
 rgrl_transformation::
-inv_map( const vnl_vector<double>& to,
-         bool initialize_next,
-         const vnl_vector<double>& to_delta,
-         vnl_vector<double>& from,
-         vnl_vector<double>& from_next_est) const
+inv_map( const vnl_vector<double>& /*to*/,
+         bool /*initialize_next*/,
+         const vnl_vector<double>& /*to_delta*/,
+         vnl_vector<double>& /*from*/,
+         vnl_vector<double>& /*from_next_est*/) const
 {
-  vcl_cerr << "ERROR: rgrl_transformation::inv_map not defined\n";
-  assert (0);
+  assert ( ! "rgrl_transformation::inv_map() is not defined" );
 }
 
 void
 rgrl_transformation::
-inv_map( const vnl_vector<double>& to,
-         vnl_vector<double>& from ) const
+inv_map( const vnl_vector<double>& /*to*/,
+         vnl_vector<double>& /*from*/ ) const
 {
-  vcl_cerr << "ERROR: rgrl_transformation::inv_map not defined\n";
-  assert (0);
+  assert ( ! "rgrl_transformation::inv_map() is not defined" );
 }
 
 rgrl_transformation_sptr
 rgrl_transformation::
-scale_by( double scale ) const
+scale_by( double /*scale*/ ) const
 {
-   vcl_cerr << "ERROR: rgrl_transformation::scale_by not defined\n";
-   assert (0);
-   return 0;
+  assert ( ! "rgrl_transformation::scale_by() is not defined" );
+  return 0;
 }
