@@ -86,11 +86,12 @@ void vrml_out::epilogue()
 }
 
 #if 0
-void vrml_out::write_vertices(vcl_list<Vertex*>& points)
+void vrml_out::write_vertices(vcl_vector<vgl_point_3d<double> > const& points)
 {
   begin_pointset();
-  for (points.reset(); points.next(); )
-    point3d(points.value());
+  for (vcl_vector<vgl_point_3d<double> >::const_iterator it = points.begin();
+       it != points.end(); ++it)
+    point3d(*it);
   end_pointset();
   display_pointset();
 }
@@ -136,7 +137,7 @@ bool VRML_IO_VertexRememberer::send_vertex(void* v)
   return true;
 }
 
-int VRML_IO_VertexRememberer::vertex_id(Vertex* v)
+int VRML_IO_VertexRememberer::vertex_id(vgl_point_3d<double> v)
 {
   Map::iterator p = vertex_ids.find(v);
   if (p != vertex_ids.end())
@@ -150,7 +151,7 @@ int VRML_IO_VertexRememberer::vertex_id(Vertex* v)
 
 // -----------------------------------------------------------------------------
 
-void vrml_out::write_edges(vcl_list<Edge*>& edges)
+void vrml_out::write_edges(vcl_list<vgl_line_segment_3d<double> >& edges)
 {
   // Start sending vertices
   begin_pointset();
@@ -170,15 +171,15 @@ void vrml_out::write_edges(vcl_list<Edge*>& edges)
   end_lineset();
 }
 
-void vrml_out::write_faces(vcl_list<Face*>& triangles)
+void vrml_out::write_faces(vcl_list<vgl_polygon>& triangles)
 {
   VRML_IO_VertexRememberer vertexer(this, triangles.length() * 3/2);
 
   // Send vertices
   begin_pointset();
   for (triangles.reset(); triangles.next(); ) {
-    Face* face = triangles.value();
-    vcl_list<Vertex*>* vertices = face->Vertices();
+    vgl_polygon face = triangles.value();
+    vcl_list<vgl_point_3d<double> > vertices = face->Vertices();
     for (vertices->reset(); vertices->next();)
       vertexer.send_vertex(vertices->value());
   }
@@ -187,8 +188,8 @@ void vrml_out::write_faces(vcl_list<Face*>& triangles)
   // Now send triangles
   begin_faceset();
   for (triangles.reset(); triangles.next(); ) {
-    Face* face = triangles.value();
-    vcl_list<Vertex*>* vertices = face->Vertices();
+    vgl_polygon face = triangles.value();
+    vcl_list<vgl_point_3d<double> > vertices = face->Vertices();
     face_open();
     for (vertices->reset(); vertices->next();)
       face_index(vertexer.vertex_id(vertices->value()));
@@ -198,7 +199,7 @@ void vrml_out::write_faces(vcl_list<Face*>& triangles)
 }
 
 void vrml_out::write_faces_textured(
-        vcl_list<Face*>& triangles,
+        vcl_list<vgl_polygon>& triangles,
         char const* texfile,
         vrml_out_vertex_to_texture const& v2t
        )
@@ -210,13 +211,13 @@ void vrml_out::write_faces_textured(
 
   begin_pointset();
   for (triangles.reset(); triangles.next(); ) {
-    Face* face = triangles.value();
-    vcl_list<Vertex*>* vertices = face->Vertices();
+    vgl_polygon face = triangles.value();
+    vcl_list<vgl_point_3d<double> > vertices = face->Vertices();
     for (vertices->reset(); vertices->next();) {
       Vertex *v = vertices->value();
       if (vertexer.send_vertex(v)) {
         // Save pcp3d
-        phil3d << v->GetX() << " " << v->GetY() << " " << v->GetZ() << vcl_endl;
+        phil3d << v->GetX() << ' ' << v->GetY() << ' ' << v->GetZ() << vcl_endl;
         // Save pcp texture coord
         int xsize = v2t.image_xsize;
         int ysize = v2t.image_ysize;
@@ -224,7 +225,7 @@ void vrml_out::write_faces_textured(
         v2t.get_texture_coords(v, &ix, &iy);
         ix = ix / xsize;
         iy = 1.0 - iy / ysize;
-        phil2d << ix << " " << iy << vcl_endl;
+        phil2d << ix << ' ' << iy << vcl_endl;
       }
     }
   }
@@ -237,8 +238,8 @@ void vrml_out::write_faces_textured(
   begin_texture(texfile);
   int last_id = -1;
   for (triangles.reset(); triangles.next(); ) {
-    Face* face = triangles.value();
-    vcl_list<Vertex*>* vertices = face->Vertices();
+    vgl_polygon face = triangles.value();
+    vcl_list<vgl_point_3d<double> > vertices = face->Vertices();
     for (vertices->reset(); vertices->next();) {
       Vertex *v = vertices->value();
       int id = vertexer.vertex_id(v);
@@ -259,8 +260,8 @@ void vrml_out::write_faces_textured(
   // Now send triangles
   begin_faceset();
   for (triangles.reset(); triangles.next(); ) {
-    Face* face = triangles.value();
-    vcl_list<Vertex*>* vertices = face->Vertices();
+    vgl_polygon face = triangles.value();
+    vcl_list<vgl_point_3d<double> > vertices = face->Vertices();
     face_open();
     for (vertices->reset(); vertices->next();)
       face_index(vertexer.vertex_id(vertices->value()));
@@ -278,7 +279,7 @@ struct Hack_VertexToTexture : public vrml_out_vertex_to_texture
     {}
 
   void get_texture_coords(
-        const Vertex* vertex,
+        const vgl_point_3d<double> vertex,
         double* u, double* v) const
     {
       // Ugh - assume P matrix is [I 0];
@@ -293,7 +294,7 @@ struct Hack_VertexToTexture : public vrml_out_vertex_to_texture
 };
 
 void vrml_out::write_faces_textured(
-        vcl_list<Face*>& triangles,
+        vcl_list<vgl_polygon>& triangles,
         char const* imagefilename,
         int xsize,
         int ysize
@@ -311,7 +312,7 @@ class VTT : public vrml_out_vertex_to_texture
         : vrml_out_vertex_to_texture(xsize, ysize), Pmatrix(m) {}
 
   void get_texture_coords(
-        const Vertex* vertex,
+        const vgl_point_3d<double> vertex,
         double* u,
         double* v) const
       {
@@ -325,7 +326,7 @@ class VTT : public vrml_out_vertex_to_texture
 };
 
 void vrml_out::write_faces_textured(
-        vcl_list<Face*>& triangles,
+        vcl_list<vgl_polygon>& triangles,
         char const* imagefilename,
         int xsize,
         int ysize,
@@ -352,28 +353,28 @@ void vrml_out::write_topology(TopologyObject* topobj)
     return;
   }
 
-  Face* face = topobj->CastToFace();
+  vgl_polygon face = topobj->CastToFace();
   if (face) {
     begin_separator();
-    vcl_list<Face*> faces; faces.push(face);
+    vcl_list<vgl_polygon> faces; faces.push(face);
     write_faces(faces);
     end_separator();
     return;
   }
 
-  Edge* edge = topobj->CastToEdge();
+  vgl_line_segment_3d<double>  edge = topobj->CastToEdge();
   if (edge) {
     begin_separator();
-    vcl_list<Edge*> edges; edges.push(edge);
+    vcl_list<vgl_line_segment_3d<double> > edges(edge);
     write_edges(edges);
     end_separator();
     return;
   }
 
-  Vertex* vertex = topobj->CastToVertex();
+  vgl_point_3d<double> vertex = topobj->CastToVertex();
   if (vertex) {
     begin_separator();
-    vcl_list<Vertex*> vertices; vertices.push(vertex);
+    vcl_list<vgl_point_3d<double> > vertices(vertex);
     write_vertices(vertices);
     end_separator();
     return;
@@ -411,16 +412,9 @@ void vrml_out::begin_pointset()
   f << "  Coordinate3 { point [\n";
 }
 
-void vrml_out::point3d(vnl_vector<double> const& p)
-{
-  point3d(p[0], p[1], p[2]);
-}
-
-
 void vrml_out::point3d(double x, double y, double z)
 {
   SETUP;
-  //f << "\t" << x << " " << y << " " << z << ",\n";
   vul_printf(f, "\t %10.4f %10.4f %10.4f,\n", x, y, z);
 }
 
@@ -452,7 +446,7 @@ void vrml_out::begin_texture(char const* texture_filename)
 void vrml_out::texture2(double u, double v)
 {
   SETUP;
-  f << "\t" << u << " " << v << ",\n";
+  f << '\t' << u << ' ' << v << ",\n";
 }
 
 void vrml_out::texture2_image_coords(double u, double v, int w, int h)
@@ -475,7 +469,7 @@ void vrml_out::begin_lineset()
 void vrml_out::line(int i0, int i1)
 {
   SETUP;
-  f << "\t" << i0 << ", " << i1 << ",-1,\n";
+  f << '\t' << i0 << ", " << i1 << ",-1,\n";
 }
 
 void vrml_out::end_lineset()
@@ -493,7 +487,7 @@ void vrml_out::begin_faceset()
 void vrml_out::face_open()
 {
   SETUP;
-  f << "\t";
+  f << '\t';
 }
 
 void vrml_out::face_index(int i)
@@ -511,19 +505,19 @@ void vrml_out::face_close()
 void vrml_out::triangle(int i1, int i2, int i3)
 {
   SETUP;
-  f << "\t" << i1 << ", " << i2 << ", " << i3 << ",-1,\n";
+  f << '\t' << i1 << ", " << i2 << ", " << i3 << ",-1,\n";
 }
 
 void vrml_out::quad(int i1, int i2, int i3, int i4)
 {
   SETUP;
-  f << "\t" << i1 << ", " << i2 << ", " << i3 << ", " << i4 << ",-1,\n";
+  f << '\t' << i1 << ", " << i2 << ", " << i3 << ", " << i4 << ",-1,\n";
 }
 
 void vrml_out::face(const int* base, int n)
 {
   SETUP;
-  f << "\t";
+  f << '\t';
   for (int i = 0; i < n; ++i)
     f << base[i] << ", ";
   f << "-1,\n";
