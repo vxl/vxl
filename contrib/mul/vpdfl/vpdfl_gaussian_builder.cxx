@@ -9,13 +9,13 @@
 //    IMS   Converted to VXL 18 April 2000
 // \endverbatim
 
-//=======================================================================
-// inclusions
-//=======================================================================
-
 #ifdef __GNUC__
 #pragma implementation
 #endif
+
+//=======================================================================
+// inclusions
+//=======================================================================
 
 #include <vcl_cstdlib.h>
 #include <vcl_string.h>
@@ -236,28 +236,27 @@ void vpdfl_gaussian_builder::weighted_build(vpdfl_pdf_base& model,
   if (w_sum/n_samples<min_wt)  // ie near zero
   {
     vcl_cerr<<"vpdfl_gaussian_builder::weighted_build() ";
-  vcl_cerr<<"Weights too close to zero. Sum = "<<w_sum<<vcl_endl;
-  abort();
+    vcl_cerr<<"Weights too close to zero. Sum = "<<w_sum<<vcl_endl;
+    vcl_abort();
   }
-
 
   if (actual_samples==0)
   {
     vcl_cerr<<"vpdfl_gaussian_builder::weighted_build() All weights zero."<<vcl_endl;
-  abort();
+    vcl_abort();
   }
 
   if (actual_samples==1)
   {
-//    vcl_cerr<<"vpdfl_gaussian_builder::weighted_build()";
-//  vcl_cerr<<" Warning: Only one sample has non-zero weight."<<vcl_endl;
-
-  // Build minimal model about the mean (the one non-zero sample)
-  sum/=w_sum;
-  build(g,sum);
-  return;
+#if 0
+    vcl_cerr<<"vpdfl_gaussian_builder::weighted_build()";
+    vcl_cerr<<" Warning: Only one sample has non-zero weight."<<vcl_endl;
+#endif
+    // Build minimal model about the mean (the one non-zero sample)
+    sum/=w_sum;
+    build(g,sum);
+    return;
   }
-
 
   S*=actual_samples/((actual_samples - 1) *w_sum);
   sum/=w_sum;
