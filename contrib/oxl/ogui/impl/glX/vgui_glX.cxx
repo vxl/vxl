@@ -1,4 +1,4 @@
-// This is oxl/vgui/impl/glX/vgui_glX.cxx
+// This is oxl/ogui/impl/glX/vgui_glX.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -12,7 +12,6 @@
 
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
-#include <vcl_algorithm.h>
 
 #include <vul/vul_trace.h>
 

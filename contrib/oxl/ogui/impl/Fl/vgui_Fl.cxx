@@ -1,4 +1,4 @@
-// This is oxl/vgui/impl/Fl/vgui_Fl.cxx
+// This is oxl/ogui/impl/Fl/vgui_Fl.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -10,8 +10,6 @@
 //-----------------------------------------------------------------------------
 
 #include "vgui_Fl.h"
-
-#include <vcl_algorithm.h>
 
 #include <FL/Fl.H>
 #include "vgui_Fl_adaptor.h"
@@ -59,14 +57,14 @@ void vgui_Fl::add_event(const vgui_event& event)
 
 
 vgui_window* vgui_Fl::produce_window(int width, int height, const vgui_menu& menubar,
-                                          const char* title)
+                                     const char* title)
 {
   vcl_cerr << "vgui_FL::produce_window_impl\n";
   return new vgui_Fl_window(width, height, menubar, title);
 }
 
 vgui_window* vgui_Fl::produce_window(int width, int height,
-                                          const char* title)
+                                     const char* title)
 {
   return new vgui_Fl_window(width, height, title);
 }

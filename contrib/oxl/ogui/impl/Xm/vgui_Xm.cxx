@@ -1,4 +1,4 @@
-// This is oxl/vgui/impl/Xm/vgui_Xm.cxx
+// This is oxl/ogui/impl/Xm/vgui_Xm.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -9,8 +9,6 @@
 //-----------------------------------------------------------------------------
 
 #include "vgui_Xm.h"
-
-#include <vcl_algorithm.h>
 
 #include "vgui_Xm_window.h"
 #include "vgui_Xm_dialog_impl.h"
@@ -52,14 +50,14 @@ void vgui_Xm::run_one_event()
 }
 
 vgui_window* vgui_Xm::produce_window(int width, int height, const vgui_menu& menubar,
-                                          const char* title)
+                                     const char* title)
 {
   if (debug) vcl_cerr << "vgui_Xm::produce_window_impl\n";
   return new vgui_Xm_window(width, height, menubar, title);
 }
 
 vgui_window* vgui_Xm::produce_window(int width, int height,
-                                          const char* title)
+                                     const char* title)
 {
   if (debug) vcl_cerr << "vgui_Xm::produce_window_impl\n";
   return new vgui_Xm_window(width, height, title);
