@@ -46,6 +46,7 @@
 
 #include <vcl_cassert.h>
 #include <vcl_cstring.h>
+#include <vcl_string.h>
 
 #include <vil/vil_smart_ptr.h>
 #include <vil/vil_stream.h>
@@ -107,8 +108,8 @@ class vil_nitf_header
   int        LOCrow;
   int        LOCcolumn;
 
-  vil_nitf_version * get_version();  // SHOULD THIS BE CONST ??  MAL 2oct2003
-  void    setVersion (vil_nitf_version*);
+  const vcl_string& get_version() const ;
+  void    setVersion (const vcl_string & version);
 
   virtual vil_nitf_header* Copy();
   void    Copy (const vil_nitf_header*);
@@ -117,7 +118,7 @@ class vil_nitf_header
   void set_title (char * new_val);
 
  protected:
-  vil_nitf_version* version_;
+  vcl_string version_;
   bool verbose_;
   unsigned long data_length_;  /// Want largest integer value possible for large images.
 

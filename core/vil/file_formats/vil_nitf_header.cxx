@@ -62,7 +62,7 @@ vil_nitf_header::vil_nitf_header(unsigned long len)
     DLVL = 1;
     ALVL = LOCrow = LOCcolumn = 0;
 
-    version_ = 0;
+    version_ = "";
 
 #ifdef TRACE
     verbose_ = true;
@@ -96,7 +96,7 @@ vil_nitf_header::vil_nitf_header(const vil_nitf_header& header)
   LOCrow    = header.LOCrow;
   LOCcolumn = header.LOCcolumn;
 
-  version_ = 0;
+  version_ = "";
 }
 
 vil_nitf_header::~vil_nitf_header()
@@ -117,16 +117,9 @@ vil_nitf_header::~vil_nitf_header()
 #endif
 }
 
-void vil_nitf_header::setVersion(vil_nitf_version* v)
+void vil_nitf_header::setVersion(const vcl_string & v)
 {
-#if 0 // COMMENT OUT UNTIL I DECIDE WHAT TO DO ABOUT NITFVersion
-  vil_nitf_version* oldVers = version_;
-#endif
   version_ = v;
-#if 0 // COMMENT OUT UNTIL I DECIDE WHAT TO DO ABOUT NITFVersion
-  if (version) version->ref();
-  if (oldVers) version->unref();
-#endif
 }
 
 //====================================================================
