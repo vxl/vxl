@@ -75,7 +75,8 @@ TLevel * vpyr_2_pyramid<TLevel>::level_below(vmap_level_type type, const level_t
   {
     level_type tmp(above) ;
     tmp.set_level_index(level) ;
-    it=level_.insert(typename level_array_type::value_type(level,tmp)).first ;
+    typedef typename level_array_type::value_type value_type ;
+    it=level_.insert(value_type(level,tmp)).first ;
   }
   return &(*it) ;
 }
