@@ -38,6 +38,7 @@ class vul_arg_base
 
   static void add_to_current(vul_arg_base* a);
   static void set_help_option( char const*str);
+  static void set_help_description( char const*str);
   static void set_help_precis( char const*str);
   static void display_usage(char const* msg = 0);
   static void display_usage_and_exit(char const* msg = 0);
@@ -49,11 +50,18 @@ class vul_arg_base
   //: Returns true if arg was set on the command line.
   bool set() const;
 
- public://protected:
-  bool set_;
-  vcl_string option_;
-  vcl_string help_;
+
+ public:   // Avoid errors on some compilers that don't follow
+           // protected: directive correctly with type_
+  //: Static text describing type of option (e.g. bool or double).
   char const *type_;
+ protected:
+  //: After parsing, true iff value was set on command line.
+  bool set_;
+  //: Option flag including "-" or "--".
+  vcl_string option_;
+  //: Description of argument.
+  vcl_string help_;
 
   vul_arg_base(vul_arg_info_list& l, char const* option_string,
                  char const*helpstring);
@@ -173,11 +181,13 @@ class vul_arg_info_list
   void include(vul_arg_info_list& l);
   void verbose(bool on);
   void set_help_option(char const* str);
-  void set_help_precis( char const*str);
+  void set_help_precis(char const* str);
+  void set_help_description(char const* str);
 
  public://protected:
   vcl_vector<vul_arg_base*> args_;
   vcl_string help_;
+  vcl_string description_;
   vcl_string command_precis_;
   bool verbose_;
   autonomy autonomy_;

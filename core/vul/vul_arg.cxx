@@ -21,6 +21,7 @@
 #include "vul_arg.h"
 
 #include <vcl_cassert.h>
+#include <vcl_algorithm.h>
 #include <vcl_cstdio.h> // sprintf()
 #include <vcl_iostream.h>
 #include <vcl_cstring.h>
@@ -29,6 +30,7 @@
 #include <vcl_vector.h>
 #include <vcl_list.h>
 
+#include <vul/vul_sprintf.h>
 #include <vul/vul_string.h>
 #include <vul/vul_reg_exp.h>
 #include <vul/vul_printf.h>
@@ -106,6 +108,11 @@ void vul_arg_base::set_help_precis(char const* str)
   current_list().set_help_precis( str);
 }
 
+void vul_arg_base::set_help_description(char const* str)
+{
+  current_list().set_help_description( str);
+}
+
 void vul_arg_base::display_usage(char const* msg)
 {
   if (msg) vcl_cerr << "** WARNING ** " << msg << vcl_endl;
@@ -175,6 +182,13 @@ void vul_arg_info_list::set_help_precis(char const* str)
   command_precis_ = str;
 }
 
+//: Set the (possibly long) text used to document the command.
+// It is displayed at the end of the help page.
+void vul_arg_info_list::set_help_description(char const* str)
+{
+  description_ = str;
+}
+
 //: Add an argument to the list.
 void vul_arg_info_list::add(vul_arg_base* argmt)
 {
@@ -219,8 +233,8 @@ void vul_arg_info_list::display_help( char const*progname)
   vcl_cerr << vcl_endl << command_precis_ << vcl_endl;
 
   // Find longest option, type name, or default
-  int maxl_option  = 8; // Length of "REQUIRED"
-  int maxl_type    = 0; // Length of "Type"
+  int maxl_option  = vcl_max(8u, help_.size()); // Length of "REQUIRED" or help option
+  int maxl_type    = 4; // Length of "Type", minimum "bool"
   //  int maxl_default = 0;
   for (unsigned int i=0; i< args_.size(); i++)
     if (!args_[i]->help_.empty()) {
@@ -233,28 +247,30 @@ void vul_arg_info_list::display_help( char const*progname)
     }
 
   // Print long form of args
-  char fmtbuf[1024];
-  vcl_sprintf(fmtbuf, "%%%ds %%-%ds %%s ", maxl_option, maxl_type);
+  vcl_string fmtbuf = vul_sprintf("%%%ds %%-%ds %%s ", maxl_option, maxl_type);
 
   // Do required args first
   vul_printf(vcl_cerr, "REQUIRED:\n");
   for (unsigned int i=0; i< args_.size(); i++)
     if (!args_[i]->help_.empty())
       if (args_[i]->option_.empty()) {
-        vul_printf(vcl_cerr, fmtbuf, "", args_[i]->type_, args_[i]->help_.c_str());
+        vul_printf(vcl_cerr, fmtbuf.c_str(), "", args_[i]->type_, args_[i]->help_.c_str());
         vcl_cerr << " ["; args_[i]->print_value(vcl_cerr); vcl_cerr << "]\n"; // default
       }
   vcl_cerr << vcl_endl;
 
   // Then others
   vul_printf(vcl_cerr, "Optional:\n");
-  vul_printf(vcl_cerr, fmtbuf, "Switch", "Type", "Help [default value]") << vcl_endl << vcl_endl;
+  vul_printf(vcl_cerr, fmtbuf.c_str(), "Switch", "Type", "Help [default value]") << vcl_endl << vcl_endl;
   for (unsigned int i=0; i< args_.size(); i++)
     if (!args_[i]->help_.empty())
       if (!args_[i]->option_.empty()) {
-        vul_printf(vcl_cerr, fmtbuf, args_[i]->option(), args_[i]->type_, args_[i]->help_.c_str());
+        vul_printf(vcl_cerr, fmtbuf.c_str(), args_[i]->option(), args_[i]->type_, args_[i]->help_.c_str());
         vcl_cerr << " ["; args_[i]->print_value(vcl_cerr); vcl_cerr << "]\n"; // default
       }
+  vul_printf(vcl_cerr, fmtbuf.c_str(), help_.c_str(), "bool", "Print this message\n");
+
+  if (description_.empty()) vcl_cerr << '\n' << description_;
 }
 
 //: Parse the command line, using the current list of args.
