@@ -141,9 +141,38 @@ bmrf_node::compute_probability()
   if (weight_.empty())
     this->compute_weights();
 
-  vcl_vector<vcl_pair<double,arc_iterator> > pmf;
-  for ( arc_iterator a_itr = this->begin(TIME); a_itr != this->end(TIME); ++a_itr )
+  probability_ = 0.0;
+  for ( arc_iterator a_itr = this->begin(TIME); 
+        a_itr != this->end(TIME); ++a_itr )
   {
+    bmrf_node_sptr neighbor = (*a_itr)->to();
+    double dist_ratio = avg_distance_ratio(this->epi_seg(), neighbor->epi_seg());
+    int time_step = neighbor->frame_num() - this->frame_num();
+    double gamma = (1.0 - dist_ratio) / time_step;
+    bmrf_gamma_func_sptr gamma_func = new bmrf_const_gamma_func(gamma);
+    double prob = this->probability(gamma_func);
+
+    // select the probability of the best neighbor
+    if( prob > probability_ ){
+      probability_ = prob;
+      gamma_ = gamma_func;
+    }
+  }
+
+}
+
+
+//: Prune neighbors with a probability below \p threshold
+void 
+bmrf_node::prune_by_probability(double threshold, bool relative)
+{
+  if (weight_.empty())
+    this->compute_weights();
+
+  // Compute a probability mass function
+  vcl_vector<vcl_pair<double,arc_iterator> > pmf;
+  for ( arc_iterator a_itr = this->begin(TIME); 
+        a_itr != this->end(TIME); ++a_itr ){
     bmrf_node_sptr neighbor = (*a_itr)->to();
     double dist_ratio = avg_distance_ratio(this->epi_seg(), neighbor->epi_seg());
     int time_step = neighbor->frame_num() - this->frame_num();
@@ -155,50 +184,17 @@ bmrf_node::compute_probability()
 
   // Sort the results by probability
   vcl_sort(pmf.begin(), pmf.end(), pair_dbl_arc_gt_cmp);
-  // Threshold probability at 50% of the maximum
-  double thresh = pmf.front().first * 0.5;
+
+  // if relative, modify the threshold relative to the maximum probability
+  if( relative )
+    threshold *= pmf.front().first;
 
   // Remove arcs to neighbors that are below threshold 
-  // don't remove arcs back to this node
   vcl_vector<vcl_pair<double,arc_iterator> >::iterator p_itr = pmf.begin();
-  while( p_itr != pmf.end() && p_itr->first > thresh)  ++p_itr;
+  while( p_itr != pmf.end() && p_itr->first > threshold)  ++p_itr;
   for ( ; p_itr != pmf.end(); ++p_itr ){
-    // adjust boundaries if necessary
-    for (int type=int(TIME); type>=0 && (boundaries_[type] == p_itr->second); --type)
-      ++boundaries_[type];
-
-    out_arcs_.erase(p_itr->second); // erase the arc
-    --sizes_[TIME]; // decrease count
+    remove_helper(p_itr->second, TIME);
   }
-  
-  // Recompute weights
-  this->compute_weights();
-
-  vcl_vector<vcl_pair<double,double> > pmf2;
-  for ( arc_iterator a_itr = this->begin(TIME); a_itr != this->end(TIME); ++a_itr )
-  {
-    bmrf_node_sptr neighbor = (*a_itr)->to();
-    double dist_ratio = avg_distance_ratio(this->epi_seg(), neighbor->epi_seg());
-    int time_step = neighbor->frame_num() - this->frame_num();
-    double gamma = (1.0 - dist_ratio) / time_step;
-
-    bmrf_gamma_func_sptr gamma_func = new bmrf_const_gamma_func(gamma);
-    pmf2.push_back(vcl_pair<double,double>(this->probability(gamma_func),gamma));
-  }
-
-#ifdef DEBUG
-  vcl_cout << "Samples\n";
-  for ( vcl_vector<vcl_pair<double,double> >::iterator p_itr = pmf2.begin();
-        p_itr != pmf2.end();  ++p_itr )
-    vcl_cout << p_itr->second <<'\t'<< p_itr->first << vcl_endl;
-  vcl_cout << vcl_endl;
-#endif
-
-  // Sort the results by probability
-  vcl_sort(pmf2.begin(), pmf2.end());
-
-  probability_ = pmf2.back().first;
-  gamma_ = new bmrf_const_gamma_func(pmf2.back().second);
 }
 
 
@@ -319,25 +315,53 @@ bmrf_node::remove_neighbor( bmrf_node *node, neighbor_type type )
   {
     for (arc_iterator itr = boundaries_[t]; itr != boundaries_[t+1]; ++itr) {
       if ((*itr)->to_ == node) {
-        // adjust boundaries if necessary
-        for (int t2=t; t2>=0 && (boundaries_[t2] == itr); --t2)
-          ++boundaries_[t2];
-        arc_iterator back_itr = vcl_find((*itr)->to_->in_arcs_.begin(), (*itr)->to_->in_arcs_.end(), *itr);
-        if (back_itr != (*itr)->to_->in_arcs_.end())
-          (*itr)->to_->in_arcs_.erase(back_itr); // erase the pointer back from the other node
-        out_arcs_.erase(itr--); // erase the arc
-        --sizes_[t]; // decrease count
+        remove_helper(itr, neighbor_type(t));
         if (type != ALL) return true;
         removed = true;
       }
     }
   }
 
-  // weights must be recomputed
-  if(removed)
-    weight_.clear();
-
   return removed;
+}
+
+
+//: Remove the arc associated with the outgoing iterator
+bool 
+bmrf_node::remove_helper( arc_iterator& a_itr, neighbor_type type)
+{
+  bmrf_arc_sptr arc = *a_itr;
+  if ( arc->from_ != this )
+    return false;
+
+  // adjust boundaries if necessary
+  for (int t=int(type); t>=0 && (boundaries_[t] == a_itr); --t)
+    ++boundaries_[t];
+
+  // find the pointer back from the other node
+  arc_iterator back_itr = vcl_find( (*a_itr)->to_->in_arcs_.begin(), 
+                                    (*a_itr)->to_->in_arcs_.end(), 
+                                    *a_itr );
+
+  // erase the pointer back from the other node
+  if (back_itr != (*a_itr)->to_->in_arcs_.end())
+      (*a_itr)->to_->in_arcs_.erase(back_itr);
+
+  // erase the arc
+  out_arcs_.erase(a_itr); 
+
+  // decrease count
+  --sizes_[type]; 
+
+  // Make these pointers NULL in case someone else still has
+  // a pointer to this arc
+  arc->to_ = NULL;
+  arc->from_ = NULL;
+
+  // The weights are now invalid
+  weight_.clear();
+
+  return true;
 }
 
 

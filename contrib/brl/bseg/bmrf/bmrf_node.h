@@ -121,6 +121,9 @@ class bmrf_node : public vbl_ref_count
   //: Compute the conditional probability that this node is correct given its neighbors
   void compute_probability();
 
+  //: Prune neighbors with a probability below \p threshold
+  void prune_by_probability(double threshold, bool relative = false);
+
   //: Add \p node as a neighbor of type \p type
   // \retval true if the node was added successfully
   // \retval false if the neighbor is not valid or already exists
@@ -131,6 +134,9 @@ class bmrf_node : public vbl_ref_count
   // \retval false if the node was not a neighbor
   bool remove_neighbor( bmrf_node *node, neighbor_type type = ALL);
 
+  //: Remove the arc associated with the outgoing iterator
+  bool remove_helper( arc_iterator& a_itr, neighbor_type type );
+
   //: Strip all of the arcs from this node
   // This also removes arcs to and from this node in neighboring nodes
   void strip();
@@ -140,7 +146,6 @@ class bmrf_node : public vbl_ref_count
   // \retval false if all arcs are valid
   bool purge();
 
- protected:
   //: Compute the weights of each node for use in probability computation
   // Nodes are weighted by alpha overlap and intesity similarity
   void compute_weights();

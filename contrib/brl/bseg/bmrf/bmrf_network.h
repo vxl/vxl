@@ -77,6 +77,9 @@ class bmrf_network : public vbl_ref_count
   //: Returns the probability that the entire network is correct
   double probability();
 
+  //: Remove all nodes and arcs with probability less than \p threshold
+  void prune_by_probability(double threshold, bool relative = false);
+
   //: Set the epipole for frame \p frame
   void set_epipole(const bmrf_epipole& epipole, int frame);
 

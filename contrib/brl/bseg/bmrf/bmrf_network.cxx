@@ -137,11 +137,26 @@ bmrf_network::probability()
   for( seg_node_map::const_iterator itr = node_from_seg_.begin();
        itr != node_from_seg_.end();  ++itr, ++count ){
     double prob = itr->second->probability();
-    total_prob *= prob;
-    vcl_cout << count << "\t prob=" << prob << "\t total="<<total_prob<<vcl_endl;
+    total_prob += prob;
+    vcl_cout << count << "\t prob=" << prob <<vcl_endl;
   }
-  // We have not yet determined how to calculate this
-  return total_prob;
+  
+  return total_prob/count;
+}
+
+
+//: Remove all nodes and arcs with probability less than \p threshold
+void 
+bmrf_network::prune_by_probability(double threshold, bool relative)
+{
+  for( seg_node_map::const_iterator itr = node_from_seg_.begin();
+       itr != node_from_seg_.end();  ++itr )
+  {
+    itr->second->prune_by_probability(threshold, relative);
+    if( itr->second->out_arcs_.empty() && 
+        itr->second->in_arcs_.empty() )
+      this->remove_node(itr->second);
+  }
 }
 
 
