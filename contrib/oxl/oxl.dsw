@@ -24,7 +24,112 @@ Package=<4>
 
 ###############################################################################
 
+Project: "awfmfc"=..\vxl\vgui\examples\awf\awfmfc\awfmfc.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name mvl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name netlib
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name oxp
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vbl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vcl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vgl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vgui
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vgui_glut
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vgui_mfc
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vgui_vrml
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vil
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vnl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vpl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vrml
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "glmovie"=.\apps\glmovie\app_glmovie.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name oxp
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vbl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vcl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vgl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vidl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vil
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vnl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vnl_algo
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vpl
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "mvl"=.\mvl\mvl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "netlib"=..\v3p\netlib\netlib.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -48,6 +153,150 @@ Package=<4>
 
 ###############################################################################
 
+Project: "vbl"=..\vxl\vbl\vbl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vcl"=..\vcl\vcl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vgl"=..\vxl\vgl\vgl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vgui"=..\vxl\vgui\vgui.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vgui_glut"=..\vxl\vgui\impl\glut\vgui_glut.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vgui_mfc"=..\vxl\vgui\impl\mfc\vgui_mfc.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vgui_vrml"=..\vxl\vgui\vrml\vgui_vrml.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vidl"=..\vxl\vidl\vidl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vil"=..\vxl\vil\vil.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vnl"=..\vxl\vnl\vnl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vnl_algo"=..\vxl\vnl\algo\vnl_algo.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vpl"=..\vxl\vpl\vpl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "vrml"=.\vrml\vrml.dsp - Package Owner=<4>
 
 Package=<5>
@@ -56,6 +305,168 @@ Package=<5>
 
 Package=<4>
 {{{
+}}}
+
+###############################################################################
+
+Project: "vsl"=..\vxl\vsl\vsl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name glmovie
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "vxlcalc"=.\apps\vxlcalc\vxlcalc.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name mvl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name oxp
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vbl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vcl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vgl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vidl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vil
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vnl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vnl_algo
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vpl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vsl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name netlib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "vxlhwarp"=.\apps\vxlhwarp\vxlhwarp.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name mvl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name oxp
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vbl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vcl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vgl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vil
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vnl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vnl_algo
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vpl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name netlib
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vgui
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vgui_glut
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vgui_mfc
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vidl
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "vxlpca"=.\apps\vxlpca\vxlpca.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name mvl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name netlib
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name oxp
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vbl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vcl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vgl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vidl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vil
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vnl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vnl_algo
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vpl
+    End Project Dependency
 }}}
 
 ###############################################################################
