@@ -6,7 +6,7 @@
 #include <avifile.h>
 #include <videodecoder.h>
 #include <infotypes.h>
-#include <avm_except.h>
+//#include <avm_except.h> // older avifile versions don't have avm_except.h
 #include <version.h>
 #include <avm_default.h>
 #include <avm_fourcc.h>
