@@ -2,6 +2,8 @@
 #define vnl_fft2d_h_
 //
 // .NAME vnl_fft2d - templated 2D FFT class based on Temperton FFT routines
+// .HEADER vxl package
+// .LIBRARY vnl-algo
 // .INCLUDE vnl/algo/vnl_fft2d.h
 // .FILE vnl_fft2d.txx
 //

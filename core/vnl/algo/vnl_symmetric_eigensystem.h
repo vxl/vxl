@@ -4,6 +4,8 @@
 #pragma interface
 #endif
 // .NAME	vnl_symmetric_eigensystem - Solve $A x = \lambda x$ using vnl_qr
+// .HEADER	vxl package
+// .LIBRARY	vnl-algo
 // .INCLUDE	vnl/algo/vnl_symmetric_eigensystem.h
 // .FILE	vnl_symmetric_eigensystem.cxx
 //

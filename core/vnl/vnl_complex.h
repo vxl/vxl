@@ -6,6 +6,8 @@
 #endif
 
 // .NAME vnl_complex
+// .HEADER vxl package
+// .LIBRARY vnl
 // .INCLUDE vnl/vnl_complex.h
 // .FILE vnl_complex.cxx
 //

@@ -5,7 +5,7 @@
 #endif
 //
 // .NAME	vnl_lsqr - linear least squares
-// .LIBRARY	vnl
+// .LIBRARY	vnl-algo
 // .HEADER	vxl Package
 // .INCLUDE	vnl/algo/vnl_lsqr.h
 // .FILE	vnl_lsqr.cxx

@@ -4,6 +4,8 @@
 #pragma interface
 #endif
 // .NAME vbl_bool_ostream
+// .HEADER vxl package
+// .LIBRARY vbl
 // .INCLUDE vbl/vbl_bool_ostream.h
 // .FILE vbl_bool_ostream.cxx
 

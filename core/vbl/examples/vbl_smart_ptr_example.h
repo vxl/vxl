@@ -1,5 +1,6 @@
 #ifndef vbl_smart_ptr_example_h_
 #define vbl_smart_ptr_example_h_
+// .LIBRARY vbl-examples
 
 #include <vcl/vcl_iostream.h>
 #include <vbl/vbl_ref_count.h>

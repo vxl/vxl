@@ -1,6 +1,8 @@
 #ifndef vnl_resize_h_
 #define vnl_resize_h_
 // .NAME vnl_resize
+// .HEADER vxl package
+// .LIBRARY vnl
 // .INCLUDE vnl/vnl_resize.h
 // .FILE vnl_resize.txx
 // @author fsm@robots.ox.ac.uk

@@ -5,6 +5,8 @@
 #endif
 //
 // .NAME vnl_matlab_write
+// .HEADER vxl package
+// .LIBRARY vnl
 // .INCLUDE vnl/vnl_matlab_write.h
 // .FILE vnl_matlab_write.cxx
 // .SECTION Author

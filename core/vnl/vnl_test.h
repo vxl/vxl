@@ -13,6 +13,8 @@
 // express or implied warranty.
 //
 // .NAME vnl_test
+// .HEADER vxl package
+// .LIBRARY vnl
 // .INCLUDE vnl/vnl_test.h
 // .FILE vnl_test.cxx
 

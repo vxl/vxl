@@ -5,6 +5,8 @@
 #endif
 //
 // .NAME vbl_get_timestamp
+// .HEADER vxl package
+// .LIBRARY vbl
 // .INCLUDE vbl/vbl_get_timestamp.h
 // .FILE vbl_get_timestamp.cxx
 // .SECTION Author

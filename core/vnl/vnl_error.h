@@ -5,6 +5,8 @@
 #endif
 //
 // .NAME vnl_error
+// .HEADER vxl package
+// .LIBRARY vnl
 // .INCLUDE vnl/vnl_error.h
 // .FILE vnl_error.cxx
 // .SECTION Author

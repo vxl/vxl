@@ -5,6 +5,8 @@
 #endif
 
 // .NAME vnl_matrix
+// .HEADER vxl package
+// .LIBRARY vnl
 // .INCLUDE vnl/vnl_matrix.h
 // .FILE vnl_matrix.txx
 //

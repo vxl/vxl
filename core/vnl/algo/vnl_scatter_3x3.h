@@ -5,7 +5,7 @@
 #endif
 //
 // .NAME	vnl_scatter_3x3
-// .LIBRARY	vnl
+// .LIBRARY	vnl-algo
 // .HEADER	vxl package
 // .INCLUDE	vnl/algo/vnl_scatter_3x3.h
 // .FILE	vnl_scatter_3x3.txx

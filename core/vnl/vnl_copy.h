@@ -5,6 +5,8 @@
 #endif
 //
 // .NAME vnl_copy
+// .HEADER vxl package
+// .LIBRARY vnl
 // .INCLUDE vnl/vnl_copy.h
 // .FILE vnl_copy.cxx
 // .SECTION Author

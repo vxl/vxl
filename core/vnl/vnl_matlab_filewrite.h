@@ -5,6 +5,8 @@
 #endif
 
 // .NAME vnl_matlab_filewrite - code to perform MATLAB binary file operations
+// .HEADER vxl package
+// .LIBRARY vnl
 // .INCLUDE vnl/vnl_matlab_filewrite.h
 // .FILE vnl_matlab_filewrite.cxx
 //

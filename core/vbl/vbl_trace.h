@@ -5,6 +5,8 @@
 #endif
 //
 // .NAME vbl_trace
+// .HEADER vxl package
+// .LIBRARY vbl
 // .INCLUDE vbl/vbl_trace.h
 // .FILE vbl_trace.cxx
 // .SECTION Author

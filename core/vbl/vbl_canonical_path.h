@@ -5,6 +5,8 @@
 #endif
 //
 // .NAME vbl_canonical_path
+// .HEADER vxl package
+// .LIBRARY vbl
 // .INCLUDE vbl/vbl_canonical_path.h
 // .FILE vbl_canonical_path.cxx
 // @author fsm@robots.ox.ac.uk

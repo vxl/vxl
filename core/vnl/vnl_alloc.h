@@ -2,6 +2,8 @@
 #define vnl_alloc_h_
 
 // .NAME vnl_alloc
+// .HEADER vxl package
+// .LIBRARY vnl
 // .INCLUDE vnl/vnl_alloc.h
 // .FILE vnl_alloc.cxx
 //

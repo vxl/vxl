@@ -2,6 +2,7 @@
 #define vbl_test_smart_ptr_h_
 
 // .NAME vbl_test_classes
+// .LIBRARY vbl-test
 // .INCLUDE vbl/tests/vbl_test_classes.h
 // .FILE vbl_test_classes.cxx
 

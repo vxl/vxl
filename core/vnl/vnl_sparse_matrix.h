@@ -16,7 +16,7 @@
 //
 //    Each row is stored as a vector of vcl_pair<unsigned int,T>, where the first
 //    of the pair indicates the column index, and the second the
-//    value.  All rows are stored, as vcl_vector<row>;
+//    value.  All rows are stored, as vcl_vector< row >;
 //
 // .SECTION Author
 //     Rupert W. Curwen, GE CR&D, 20 Oct 98

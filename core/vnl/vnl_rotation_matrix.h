@@ -1,6 +1,8 @@
 #ifndef vnl_rotation_matrix_h_
 #define vnl_rotation_matrix_h_
 // .NAME vnl_rotation_matrix
+// .HEADER vxl package
+// .LIBRARY vnl
 // .INCLUDE vnl/vnl_rotation_matrix.h
 // .FILE vnl_rotation_matrix.cxx
 

@@ -2,6 +2,8 @@
 #define vbl_string_h
 
 // .NAME vbl_string - Utility functions for C strings and vcl_strings
+// .HEADER vxl package
+// .LIBRARY vbl
 // .INCLUDE vbl/vbl_string.h
 // .FILE vbl_string.cxx
 

@@ -4,6 +4,8 @@
 #pragma interface
 #endif
 // .NAME vbl_qsort - Collection of common predicates for library sort routines
+// .HEADER vxl package
+// .LIBRARY vbl
 // .INCLUDE vbl/vbl_qsort.h
 // .FILE vbl_qsort.cxx
 // .SECTION Author

@@ -4,6 +4,8 @@
 #pragma interface
 #endif
 // .NAME vnl_matlab_print
+// .HEADER vxl package
+// .LIBRARY vnl
 // .INCLUDE vnl/vnl_matlab_print.h
 // .FILE vnl_matlab_print.cxx
 // @author fsm@robots.ox.ac.uk, from awf's MatOps code.

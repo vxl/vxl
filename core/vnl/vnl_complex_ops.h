@@ -4,6 +4,8 @@
 #pragma interface
 #endif
 // .NAME vnl_complex_ops
+// .HEADER vxl package
+// .LIBRARY vnl
 // .INCLUDE vnl/vnl_complex_ops.h
 // .FILE vnl_complex_ops.txx
 // @author fsm@robots.ox.ac.uk

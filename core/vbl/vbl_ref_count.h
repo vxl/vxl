@@ -2,6 +2,8 @@
 #define vbl_ref_count_h
 
 // .NAME vbl_ref_count
+// .HEADER vxl package
+// .LIBRARY vbl
 // .INCLUDE vbl/vbl_ref_count.h
 // .FILE vbl_ref_count.cxx
 

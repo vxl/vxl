@@ -4,6 +4,8 @@
 #pragma interface
 #endif
 // .NAME vnl_matlab_read
+// .HEADER vxl package
+// .LIBRARY vnl
 // .INCLUDE vnl/vnl_matlab_read.h
 // .FILE vnl_matlab_read.cxx
 // @author fsm@robots.ox.ac.uk

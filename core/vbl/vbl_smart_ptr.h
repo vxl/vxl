@@ -1,6 +1,8 @@
 #ifndef vbl_smart_ptr_h_
 #define vbl_smart_ptr_h_
 // .NAME vbl_smart_ptr - A templated smart pointer class
+// .HEADER vxl package
+// .LIBRARY vbl
 // .INCLUDE vbl/vbl_smart_ptr.h
 // .FILE vbl_smart_ptr.txx
 // .EXAMPLE examples/vbl_smart_ptr_example.cxx

@@ -5,6 +5,8 @@
 #endif
 //
 // .NAME vnl_matlab_print2
+// .HEADER vxl package
+// .LIBRARY vnl
 // .INCLUDE vnl/vnl_matlab_print2.h
 // .FILE vnl_matlab_print2.cxx
 //

@@ -2,6 +2,8 @@
 #define vbl_psfile_h_
 
 // .NAME vbl_psfile
+// .HEADER vxl package
+// .LIBRARY vbl
 // .INCLUDE vbl/vbl_psfile.h
 // .FILE vbl_psfile.cxx
 

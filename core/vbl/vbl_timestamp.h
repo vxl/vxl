@@ -2,6 +2,8 @@
 #define vbl_timestamp_h
 
 // .NAME vbl_timestamp
+// .HEADER vxl package
+// .LIBRARY vbl
 // .INCLUDE vbl/vbl_timestamp.h
 // .FILE vbl_timestamp.cxx
 

@@ -5,6 +5,8 @@
 #endif
 
 // .NAME vnl_sample - easy ways to sample from various probability distributions
+// .HEADER vxl package
+// .LIBRARY vnl
 // .INCLUDE vnl/vnl_sample.h
 // .FILE vnl_sample.cxx
 

@@ -4,6 +4,8 @@
 #pragma interface
 #endif
 // .NAME vnl_binary
+// .HEADER vxl package
+// .LIBRARY vnl
 // .INCLUDE vnl/vnl_binary.h
 // .FILE vnl_binary.cxx
 //

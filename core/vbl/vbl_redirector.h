@@ -4,6 +4,8 @@
 #pragma interface
 #endif
 // .NAME vbl_redirector - Simplified redirection of iostreams
+// .HEADER vxl package
+// .LIBRARY vbl
 // .INCLUDE vbl/vbl_redirector.h
 // .FILE vbl_redirector.cxx
 // .SECTION Description

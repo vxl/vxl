@@ -5,6 +5,8 @@
 #endif
 
 // .NAME vnl_vector
+// .HEADER vxl package
+// .LIBRARY vnl
 // .INCLUDE vnl/vnl_vector.h
 // .FILE vnl_vector.txx
 //

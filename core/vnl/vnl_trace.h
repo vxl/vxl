@@ -4,6 +4,8 @@
 #pragma interface
 #endif
 // .NAME vnl_trace
+// .HEADER vxl package
+// .LIBRARY vnl
 // .INCLUDE vnl/vnl_trace.h
 // .FILE vnl_trace.cxx
 // .SECTION Author

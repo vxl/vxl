@@ -4,6 +4,9 @@
 #pragma interface
 #endif
 // .NAME	vnl_real_polynomial - Evaluation of real polynomials
+// .HEADER	vxl package
+// .LIBRARY	vnl
+// .INCLUDE	vnl/vnl_real_polynomial.h
 // .FILE	vnl_real_polynomial.cxx
 //
 // .SECTION Description

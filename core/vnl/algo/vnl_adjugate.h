@@ -4,6 +4,7 @@
 #pragma interface
 #endif
 // .NAME    vnl_adjugate
+// .HEADER  vxl package
 // .LIBRARY vnl-algo
 // .INCLUDE vnl/algo/vnl_adjugate.h
 // .FILE    vnl_adjugate.txx

@@ -5,6 +5,9 @@
 #endif
 //
 // .NAME	vnl_matops - A collection of Matrix operations
+// .HEADER	vxl package
+// .LIBRARY	vnl
+// .INCLUDE	vnl/vnl_matops.h
 // .FILE	vnl_matops.cxx
 //
 // .SECTION Description
