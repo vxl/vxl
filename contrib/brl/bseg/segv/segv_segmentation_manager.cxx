@@ -170,16 +170,16 @@ void segv_segmentation_manager::draw_regions(vcl_vector<vdgl_intensity_face_sptr
 }
 void segv_segmentation_manager::original_image()
 {
-  if(img_)
+  if (img_)
   {
     t2D_->get_image_tableau()->set_image(img_);
-	t2D_->post_redraw();
+    t2D_->post_redraw();
   }
 }
 
 void segv_segmentation_manager::gaussian()
 {
-  if(!img_)
+  if (!img_)
     {
       vcl_cout << "In segv_segmentation_manager::gaussian() - no image\n";
       return;
