@@ -172,7 +172,7 @@ vil2_dicom_header_type vil2_dicom_header_format::determineFileType(vil2_stream &
           // first element of the Identifying group
           fs.seek(0);
           vxl_uint_16 group, element;
-          int data_block_size, num_elements;
+          unsigned data_block_size, num_elements;
 
           fs.read((char *)&group, sizeof(vxl_uint_16));
           group = shortSwap(group);
@@ -1729,7 +1729,6 @@ vil2_dicom_header_endian vil2_dicom_header_format::determineMetaInfo(vil2_stream
 
   // The first section of the file header is always little endian,
   // so set the file endian
-  vil2_dicom_header_endian temp_end = file_endian_; // For setting back if true endian not discovered
   file_endian_ = VIL2_DICOM_HEADER_DELITTLEENDIAN;
   image_type_ = VIL2_DICOM_HEADER_DITUNKNOWN;
 

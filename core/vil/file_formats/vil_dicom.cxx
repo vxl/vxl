@@ -113,66 +113,6 @@ void imageSwap(char *in_im, int num_bytes,
 }
 
 
-void convertVoidToFloatImage(void *void_im,
-                       vil2_image_view<float> &float_im,
-                       int num_bytes,
-                       vil2_dicom_header_info dhi)
-{
-  int next_row;
-
-  // Different types to read from void into
-  signed char *char_im=0;
-  unsigned char *uchar_im=0;
-  signed short *short_im=0;
-  unsigned short *ushort_im=0;
-
-  // Size the float image
-  float_im.set_size(dhi.dimx_,dhi.dimy_);
-
-  // Move through the void pointer and put the values into
-  // the float image
-  for (unsigned i=0; i<dhi.dimy_; i++)
-  {
-    next_row = dhi.dimx_*i;
-
-    for (unsigned j=0; j<dhi.dimx_; j++)
-    {
-      // Is it signed (1) or unsigned (0)?
-      if (dhi.pix_rep_ == 0)
-      {
-        // Is it a short or char?
-        if (num_bytes == 2)
-        {
-          ushort_im = (unsigned short *)void_im;
-          float_im(j,i) =
-            (float)ushort_im[next_row+j];
-        }
-        else
-        {
-          uchar_im = (unsigned char *)void_im;
-          float_im(j,i) =
-            (float)uchar_im[next_row+j];
-        }
-      }
-      else
-      {
-        // Is it a signed short or signed char?
-        if (num_bytes == 2)
-        {
-          short_im = (signed short *)void_im;
-          float_im(j,i) =
-            (float)short_im[next_row+j];
-        }
-        else
-        {
-          char_im = (signed char *)void_im;
-          float_im(j,i) =
-            (float)char_im[next_row+j];
-        }
-      }
-    }
-  }
-}
 
 
 char *convert12to16(char *im, vil2_dicom_header_info dhi,
@@ -314,63 +254,86 @@ vil2_dicom_image::~vil2_dicom_image()
 }
 
 
-vil2_image_view_base_sptr vil2_dicom_image::get_copy_view(
-  unsigned i0, unsigned ni, unsigned j0, unsigned nj) const
+
+enum vil2_pixel_format vil2_dicom_image::pixel_format() const
 {
+  unsigned bytes_read;
+  if (header_.allocated_bits_ == 16 ||
+    header_.allocated_bits_ == 12)
+    bytes_read = 2;
+  else
+    bytes_read = 1;
+
+  if (header_.res_slope_ == VIL2_DICOM_HEADER_DEFAULTSLOPE)
+    if (header_.pix_rep_ == 0)
+      if (bytes_read == 2)
+        return VIL2_PIXEL_FORMAT_UINT_16;
+      else
+        return VIL2_PIXEL_FORMAT_BYTE;
+    else
+      if (bytes_read == 2)
+        return VIL2_PIXEL_FORMAT_INT_16;
+      else
+        return VIL2_PIXEL_FORMAT_SBYTE;
+  else return VIL2_PIXEL_FORMAT_FLOAT;
+}
+
+
+vil2_image_view_base_sptr vil2_dicom_image::get_copy_view(
+  unsigned x0, unsigned nx, unsigned y0, unsigned ny) const
+{
+  if (x0+nx > ni() || y0+ny > nj()) return 0;
+
   void *void_im=0;
-  vil2_image_view<float> float_im;
-  vil2_image_view<vxl_int_32> im;
   int bytes_read=1; // initialised to avoid compiler warning
   bool readable = checkReadableFormat(header_.image_type_);
 
   vs_->seek(start_of_pixels_);
 
   // vs_ should point at the start of the data
-  if (vs_->ok() && readable)
-  {
-    // If it's an encapsulated method, call the encapsulated reader,
-    // otherwise just read the data
-    if (isEncapsulated(header_.image_type_))
-    {
-//      bool failed = readEncapsulatedData(im, header_, *vs_);
-    }
-    else
-    {
-      // Get the number of rows and columns to read
-      int cols=header_.dimx_;
-      int rows=header_.dimy_;
-
-      // The number of bytes to read at a time depends on the
-      // allocated bits. If 16 or 12 are allocated, then two bytes
-      // should be read (with a reduced number of reads for 12
-      // bits as each value only takes up 3/4 of the actual number
-      // of bits (16) read). Otherwise, one vxl_byte at a time is read
-
-      if (header_.allocated_bits_ == 16 ||
-        header_.allocated_bits_ == 12)
-        bytes_read = 2;
-      else
-        bytes_read = 1;
-
-      // If 12 bits allocated, read enough sets of 16 bits
-      if (header_.allocated_bits_ == 12)
-        cols = (int) (3.0*(cols/4));
-
-      unsigned mem_size = (cols*bytes_read)*rows;
-      void_im = new char [mem_size];
-
-      vs_->read(void_im,mem_size);
-
-      if (!vs_->ok())
-      {
-        delete [] (char*)void_im;
-        return 0;
-      }
-    }
-  } // End of if (fs.good...
-  else
+  if (!vs_->ok() || !readable)
   {
     delete [] (char *) void_im;
+    return 0;
+  }
+
+  // If it's an encapsulated method, call the encapsulated reader,
+  // otherwise just read the data
+  if (isEncapsulated(header_.image_type_))
+  {
+    vcl_cerr << "ERROR: vil2_dicom_image::get_copy_view\n" <<
+      "       Can't read DICOM images with encapsulated image types" << vcl_endl;
+    return 0;
+  }
+
+  // Get the number of rows and columns to read
+  int cols=header_.dimx_;
+  int rows=header_.dimy_;
+
+  // The number of bytes to read at a time depends on the
+  // allocated bits. If 16 or 12 are allocated, then two bytes
+  // should be read (with a reduced number of reads for 12
+  // bits as each value only takes up 3/4 of the actual number
+  // of bits (16) read). Otherwise, one vxl_byte at a time is read
+
+  if (header_.allocated_bits_ == 16 ||
+    header_.allocated_bits_ == 12)
+    bytes_read = 2;
+  else
+    bytes_read = 1;
+
+  // If 12 bits allocated, read enough sets of 16 bits
+  if (header_.allocated_bits_ == 12)
+    cols = (int) (3.0*(cols/4));
+
+  unsigned mem_size = (cols*bytes_read)*rows;
+  void_im = new char [mem_size];
+
+  vs_->read(void_im,mem_size);
+
+  if (!vs_->ok())
+  {
+    delete [] (char*)void_im;
     return 0;
   }
 
@@ -385,224 +348,98 @@ vil2_image_view_base_sptr vil2_dicom_image::get_copy_view(
   // Do any swapping necessary
   imageSwap((char *)void_im,bytes_read,header_);
 
-  // And convert to float
-  convertVoidToFloatImage(void_im, float_im, bytes_read,
-                          header_);
 
-  // Only bother with data we have been asked for.
-  vil2_image_view<float> float_im2 = vil2_crop(float_im, i0, ni, j0, nj);
-
-  // Now convert the float from the DICOM compressed values
-  // to their real values
-  if (header_.res_slope_ != VIL2_DICOM_HEADER_DEFAULTSLOPE)
-  {
-    // Apply the slope and intercept for scaling the
-    // float values back to their original true values
-    for (unsigned i=0; i<float_im2.nj(); i++)
-      for (unsigned j=0; j<float_im2.ni(); j++)
+  if (header_.res_slope_ == VIL2_DICOM_HEADER_DEFAULTSLOPE)
+    if (header_.pix_rep_ == 0) // unsigned
+      if (bytes_read == 2) // vxl_uint_16
       {
-        float true_value = float_im(j,i);
-        true_value = true_value * header_.res_slope_ +
-                  header_.res_intercept_;
-        float_im(j,i) = true_value;
+        vil2_image_view<vxl_uint_16> view(nx, ny);
+        for (unsigned i=y0; i<ny; i++)
+        {
+          int next_row = header_.dimx_*i;
+          for (unsigned j=x0; j<nx; j++)
+            view(j-x0,i-y0) = static_cast<vxl_uint_16 *>(void_im)[next_row+j];
+        }
+        delete [] (char *) void_im;
+        return new vil2_image_view<vxl_uint_16>(view);
       }
+      else // vxl_byte
+      {
+        vil2_image_view<vxl_byte> view(nx, ny);
+        for (unsigned i=y0; i<ny; i++)
+        {
+          int next_row = header_.dimx_*i;
+          for (unsigned j=x0; j<nx; j++)
+            view(j-x0,i-y0) = static_cast<vxl_byte *>(void_im)[next_row+j];
+        }
+        delete [] (char *) void_im;
+        return new vil2_image_view<vxl_byte>(view);
+      }
+    else // signed
+      if (bytes_read == 2) // vxl_int_16
+      {
+        vil2_image_view<vxl_int_16> view(nx, ny);
+        for (unsigned i=y0; i<ny; i++)
+        {
+          int next_row = header_.dimx_*i;
+          for (unsigned j=x0; j<nx; j++)
+            view(j-x0,i-y0) = static_cast<vxl_int_16 *>(void_im)[next_row+j];
+        }
+        delete [] (char *) void_im;
+        return new vil2_image_view<vxl_int_16>(view);
+      }
+      else // vxl_sbyte
+      {
+        vil2_image_view<vxl_sbyte> view(nx, ny);
+        for (unsigned i=y0; i<ny; i++)
+        {
+          int next_row = header_.dimx_*i;
+          for (unsigned j=x0; j<nx; j++)
+            view(j-x0,i-y0) = static_cast<vxl_sbyte *>(void_im)[next_row+j];
+        }
+        delete [] (char *) void_im;
+        return new vil2_image_view<vxl_sbyte>(view);
+      }
+  else // floating point image.
+  {
+    vil2_image_view<float> view(nx, ny);
+    double f;
+    for (unsigned i=y0; i<ny; i++)
+    {
+      int next_row = header_.dimx_*i;
+      for (unsigned j=x0; j<nx; j++)
+      {
+        if (header_.pix_rep_ == 0) // unsigned data
+          if (bytes_read == 2) // 2 byte data
+            f = static_cast<vxl_uint_16 *>(void_im)[next_row+j];
+          else // 1 byte data
+            f = static_cast<vxl_byte *>(void_im)[next_row+j];
+        else // signed data
+          if (bytes_read == 2)// 2 byte data
+            f = static_cast<vxl_int_16 *>(void_im)[next_row+j];
+          else // 1 byte data
+            f = static_cast<vxl_sbyte *>(void_im)[next_row+j];
+
+        view(j,i) = f * header_.res_slope_ + header_.res_intercept_;
+      }
+    }
+    delete [] (char *) void_im;
+    return new vil2_image_view<float>(view);
   }
-
-  // Now the image floatim holds the true DICOM values,
-  // but we need it to be an int for our purposes, so convert
-  // a final time
-  vil2_convert_cast(float_im2, im);
-
-
-  delete [] (char *) void_im;
-
-  return new vil2_image_view<vxl_int_32>(im);
 }
 
 
 bool vil2_dicom_image::put_view(const vil2_image_view_base& view,
                               unsigned x0, unsigned y0)
 {
-  assert(!"vil2_dicom_image doesn't yet support output");
+  assert(!"vil2_dicom_image doesn't yet support output yet");
 
   if (!view_fits(view, x0, y0))
   {
     vcl_cerr << "ERROR: " << __FILE__ << ":\n view does not fit\n";
     return false;
   }
-#if 0
-  if ((view.pixel_format() == VIL2_PIXEL_FORMAT_UINT_32 && bits_per_component_ < 32) ||
-      (view.pixel_format() == VIL2_PIXEL_FORMAT_INT_32  && bits_per_component_ < 32) ||
-      (view.pixel_format() == VIL2_PIXEL_FORMAT_UINT_16 && bits_per_component_ < 16) ||
-      (view.pixel_format() == VIL2_PIXEL_FORMAT_INT_16  && bits_per_component_ < 16) ||
-      (view.pixel_format() == VIL2_PIXEL_FORMAT_BYTE    && bits_per_component_ <  8) ||
-      (view.pixel_format() == VIL2_PIXEL_FORMAT_SBYTE   && bits_per_component_ <  8) ||
-      (view.pixel_format() == VIL2_PIXEL_FORMAT_BOOL    && bits_per_component_ <  1) ||
-       view.pixel_format() == VIL2_PIXEL_FORMAT_DOUBLE ||
-       view.pixel_format() == VIL2_PIXEL_FORMAT_FLOAT )
-  {
-    vcl_cerr << "ERROR: " << __FILE__ << ":\n Can't fit view into dicom component size\n";
-    return false;
-  }
-
-  const vil2_image_view<bool>*  bb=0;
-  const vil2_image_view<vxl_byte>*  ob = 0;
-  const vil2_image_view<vxl_uint_16>* pb = 0;
-  const vil2_image_view<vxl_uint_32>*   qb = 0;
-
-  if (view.pixel_format() == VIL2_PIXEL_FORMAT_BOOL)
-    bb = &static_cast<const vil2_image_view<bool>& >(view);
-  else if (view.pixel_format() == VIL2_PIXEL_FORMAT_BYTE)
-    ob = &static_cast<const vil2_image_view<vxl_byte>& >(view);
-  else if (view.pixel_format() == VIL2_PIXEL_FORMAT_UINT_16)
-    pb = &static_cast<const vil2_image_view<vxl_uint_16>& >(view);
-  else if (view.pixel_format() == VIL2_PIXEL_FORMAT_UINT_32)
-    qb = &static_cast<const vil2_image_view<vxl_uint_32>& >(view);
-  else
-  {
-    vcl_cerr << "ERROR: " << __FILE__ << ":\n Do not support putting "
-             << view.is_a() << " views into dicom image_resource objects\n";
-    return false;
-  }
-
-  if (magic_ == 5) // pgm raw image ==> nplanes() == 1
-  {
-    unsigned bytes_per_sample = (bits_per_component_+7)/8;
-    unsigned bytes_per_pixel = bytes_per_sample;
-    vil2_streampos byte_start = start_of_data_ + (y0 * ni_ + x0) * bytes_per_pixel;
-    unsigned byte_width = ni_ * bytes_per_pixel;
-    unsigned byte_out_width = view.ni() * bytes_per_pixel;
-
-    if ( bytes_per_sample==1 )
-    {
-      assert(ob!=0);
-      for (unsigned y = 0; y < view.nj(); ++y)
-      {
-        vs_->seek(byte_start);
-        vs_->write(ob->top_left_ptr() + y * view.ni(), byte_out_width);
-        byte_start += byte_width;
-      }
-    } else if ( bytes_per_sample==2 && VXL_BIG_ENDIAN )
-    {
-      assert(pb!=0);
-      for (unsigned y = 0; y < view.nj(); ++y)
-      {
-        vs_->seek(byte_start);
-        vs_->write(pb->top_left_ptr() + y * view.ni(), byte_out_width);
-        byte_start += byte_width;
-      }
-    } else if ( bytes_per_sample==2 )
-    {
-      // Little endian host; must convert words to have MSB first.
-      //
-      // Convert line by line to avoid duplicating a potentially large image.
-      vcl_vector<vxl_byte> tempbuf(byte_out_width);
-      assert(pb!=0);
-      for (unsigned y = 0; y < view.nj(); ++y)
-      {
-        vs_->seek(byte_start);
-        vcl_memcpy(&tempbuf[0], pb->top_left_ptr() + y * view.ni(), byte_out_width);
-        ConvertHostToMSB(&tempbuf[0], view.ni());
-        vs_->write(&tempbuf[0], byte_out_width);
-        byte_start += byte_width;
-      }
-    } else { // This should never occur...
-      vcl_cerr << "ERROR: pgm: writing rawbits format with > 16bit samples\n";
-      return false;
-    }
-  }
-  else if (magic_ == 6) // ppm raw image; cannot be written as efficiently as pgm
-  {
-    unsigned bytes_per_sample = (bits_per_component_+7)/8;
-    unsigned bytes_per_pixel = nplanes() * bytes_per_sample;
-    vil2_streampos byte_start = start_of_data_ + (y0 * ni_ + x0) * bytes_per_pixel;
-    unsigned byte_width = ni_ * bytes_per_pixel;
-
-    if ( bytes_per_sample==1 )
-    {
-      assert(ob!=0);
-      for (unsigned y = 0; y < view.nj(); ++y)
-      {
-        vs_->seek(byte_start);
-        for (unsigned x = 0; x < view.ni(); ++x)
-          for (unsigned p = 0; p < ncomponents_; ++p)
-            vs_->write(&(*ob)(x,y,p), 1);
-        byte_start += byte_width;
-      }
-    } else if ( bytes_per_sample==2 )
-    {
-      assert(pb!=0);
-      for (unsigned y = y0; y < view.nj(); ++y)
-      {
-        vs_->seek(byte_start);
-        for (unsigned x = x0; x < view.ni(); ++x)
-        {
-          vxl_uint_16 tempbuf[3];
-          for (unsigned p = 0; p < ncomponents_; ++p)
-            tempbuf[p] = (*pb)(x,y,p);
-          ConvertHostToMSB(tempbuf, ncomponents_);
-          vs_->write(tempbuf, bytes_per_pixel);
-        }
-        byte_start += byte_width;
-      }
-    } else { // This should never occur...
-      vcl_cerr << "ERROR: pgm: writing rawbits format with > 16bit samples\n";
-      return false;
-    }
-  }
-  else if (magic_ == 4) // pbm (bitmap) raw image
-  {
-    int byte_width = (ni_+7)/8;
-
-    assert(bb!=0);
-    for (unsigned y = 0; y < view.nj(); ++y)
-    {
-      vil2_streampos byte_start = start_of_data_ + (y0+y) * byte_width + x0/8;
-      int s = x0&7; // = x0%8;
-      unsigned char a = 0;
-      if (s)
-      {
-        vs_->read(&a, 1L);
-        vs_->seek(byte_start);
-        a &= ((1<<s)-1)<<(8-s); // clear the last 8-s bits of a
-      }
-      for (unsigned x = 0; x < view.ni(); ++x)
-      {
-        if ((*bb)(x,y)) a |= 1<<(7-s); // single bit; high bit = first
-        if (s >= 7) { vs_->write(&a, 1L); ++byte_start; s = 0; a = 0; }
-        else ++s;
-      }
-      if (s)
-      {
-        if (x0+view.ni() < ni_)
-        {
-          vs_->seek(byte_start);
-          unsigned char c; vs_->read(&c, 1L);
-          vs_->seek(byte_start);
-          c &= ((1<<(8-s))-1); // clear the first s bits of c
-          a |= c;
-        }
-        vs_->write(&a, 1L);
-      }
-    }
-  }
-  else // ascii (non-raw) image data
-  {
-    if (x0 > 0 || y0 > 0 || view.ni() < ni_ || view.nj() < nj_)
-      return false; // can only write the full image in this mode
-    vs_->seek(start_of_data_);
-    for (unsigned y = 0; y < view.nj(); ++y)
-      for (unsigned x = 0; x < view.ni(); ++x)
-        for (unsigned p = 0; p < ncomponents_; ++p)
-        {
-          if (bits_per_component_ <= 1)       (*vs_) << (*bb)(x,y,p);
-          else if (bits_per_component_ <= 8)  (*vs_) << (*ob)(x,y,p);
-          else if (bits_per_component_ <= 16) (*vs_) << (*pb)(x,y,p);
-          else                                (*vs_) << (*qb)(x,y,p);
-        }
-  }
-#endif
-  return true;
+  return false;
 }
 
 #if 0

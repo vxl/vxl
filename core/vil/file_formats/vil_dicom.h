@@ -54,7 +54,7 @@ class vil2_dicom_image : public vil2_image_resource
   virtual unsigned ni() const {return header_.dimx_;}
   virtual unsigned nj() const {return header_.dimy_;}
 
-  virtual enum vil2_pixel_format pixel_format() const {return VIL2_PIXEL_FORMAT_INT_32;}
+  virtual enum vil2_pixel_format pixel_format() const;
 
   virtual vil2_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
                                                   unsigned j0, unsigned nj) const;
