@@ -386,8 +386,8 @@ void bgui_selector_tableau::get_popup(const vgui_popup_params& params,
   vgui_menu position_menu;
 
   vcl_string check;
-  vcl_vector<vcl_string>::iterator itr = render_order_.begin();
-  for ( ; itr != render_order_.end() ; ++itr) {
+  vcl_vector<vcl_string>::reverse_iterator itr = render_order_.rbegin();
+  for ( ; itr != render_order_.rend() ; ++itr) {
     if( *itr == active_child_ ) check = "[x] ";
     else check = "[ ] ";
     active_menu.add(check+(*itr), new bgui_selector_switch_command(this,*itr));
