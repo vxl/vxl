@@ -7,6 +7,7 @@
 
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h> // vcl_abort()
+#include <vcl_cassert.h>
 #include <vcl_cstdio.h>  // sprintf()
 #include <vcl_cstring.h>
 #include <vcl_iostream.h>
@@ -123,7 +124,8 @@ void vil_gen_generic_image::init(vcl_string const& s)
 
   vcl_cerr << "vil_gen_generic_image: type = ["<<type<<"]\n";
 
-  if (type == "grey" || type == "gray") {
+  if (type == "grey" || type == "gray")
+  {
     if (*p == ',') {
       ++p;
       params_[0] = read_int(&p);
@@ -135,7 +137,9 @@ void vil_gen_generic_image::init(vcl_string const& s)
     type_ = vil_gen_gray;
 
     vcl_cerr << "vil_gen_generic_image: p0 = ["<<params_[0]<<"]\n";
-  } else if (type == "rgb" || type == "gray") {
+  }
+  else if (type == "rgb")
+  {
     if (*p == ',') {
       ++p;
       params_[0] = read_int(&p);
@@ -151,10 +155,10 @@ void vil_gen_generic_image::init(vcl_string const& s)
     type_ = vil_gen_rgb;
 
     vcl_cerr << "vil_gen_generic_image: p0 = ["<<params_[0]<<"], "
-      << "p1 = ["<<params_[1]<<"], p2 = ["<<params_[2]<<"] \n";
-  } else {
-    vcl_abort();
+             << "p1 = ["<<params_[1]<<"], p2 = ["<<params_[2]<<"] \n";
   }
+  else
+    assert(!"type must be one of grey, gray or rgb");
 }
 
 bool vil_gen_generic_image::get_property(char const *tag, void *prop) const
