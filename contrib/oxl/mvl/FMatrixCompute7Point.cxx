@@ -41,8 +41,7 @@ bool FMatrixCompute7Point::compute(PairMatchSetCorner& matches, vcl_vector<FMatr
   vcl_vector<HomgPoint2D> points1(matches.count());
   vcl_vector<HomgPoint2D> points2(matches.count());
   matches.extract_matches(points1, points2);
-  compute(points1, points2, F);
-  return true;
+  return compute(points1, points2, F);
 }
 
 //-----------------------------------------------------------------------------
