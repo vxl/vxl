@@ -59,7 +59,8 @@ int test_complex_main(int /*argc*/,char* /*argv*/[])
 
   const vcl_complex<double> half(0.5,0.0);
   sqrt_neg1 = vcl_pow(neg1, half);
-  vcl_cout << "pow("<<neg1<<","<<half<<") = "<<sqrt_neg1<<" and should be (0,1)"<<vcl_endl;
+  vcl_cout << "pow("<<neg1<<","<<half<<") = "<<sqrt_neg1<<
+    " and should be (0,1)"<<vcl_endl;
   if ( vcl_abs(sqrt_neg1-1.0) > 1.0e-6
     || vcl_arg(sqrt_neg1) > 1.0e-4 || -vcl_arg(sqrt_neg1) > 1.0e-4) {}
   else
@@ -68,8 +69,11 @@ int test_complex_main(int /*argc*/,char* /*argv*/[])
     success = false;
   }
 
+
+
   vcl_complex<double> zero(0.0,0.0);
-  vcl_cout << "Implementation defines vcl_pow((0,0),(0,0)) = " << vcl_pow(zero, zero);
+  vcl_cout << "Implementation defines vcl_pow((0,0),(0,0)) = " <<
+    vcl_pow(zero, zero) << vcl_endl;
 
   return success?0:1;
 }
