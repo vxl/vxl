@@ -1,4 +1,3 @@
-
 #include <vcl_cassert.h>
 #include <vcl_cstring.h>
 #include <vcl_fstream.h>
@@ -26,36 +25,39 @@ bool oxp_bunch_of_files::open(char const* fmt)
   if (l > 4 && vcl_strcmp(fmt + l - 4, ".lst") == 0) {
     vcl_ifstream f(fmt);
     assert(f.good());
-    for(vul_awk awk(f); awk; ++awk) {
+    for (vul_awk awk(f); awk; ++awk) {
       if (awk.NF() > 0) {
         vcl_cerr << awk[0] << vcl_endl;
         filenames.push_back(awk[0]);
       }
     }
-  } else if (vcl_strchr(fmt, '%') ) {
+  }
+  else if (vcl_strchr(fmt, '%') ) {
     // Assume a list.  Could start from some low number... Could glob.  hmmm.
     bool found_one = false;
-    for(int i = 0; ; ++i) {
+    for (int i = 0; ; ++i) {
       char buf[1024];
       vcl_sprintf(buf, fmt, i);
       int s = vul_file::size(buf);
       if (s > 0) {
-	found_one = true;
-	filenames.push_back(buf);
-	filesizes.push_back(s);
-      } else {
-	// If got at least one so far, then bail now
-	if (found_one)
-	  break;
-	else {
-	  // If not found one yet, and still only tried < 10, then
-	  // keep trying.
-	  if (i > 10)
-	    break;
-	}
+        found_one = true;
+        filenames.push_back(buf);
+        filesizes.push_back(s);
       }
-    } 
-  } else {
+      else {
+        // If got at least one so far, then bail now
+        if (found_one)
+          break;
+        else {
+          // If not found one yet, and still only tried < 10, then
+          // keep trying.
+          if (i > 10)
+            break;
+        }
+      }
+    }
+  }
+  else {
     // No %, not .lst: assume it's an mpeg/vob
     filenames.push_back(fmt);
   }
@@ -66,14 +68,14 @@ bool oxp_bunch_of_files::open(char const* fmt)
     vcl_fprintf(stderr, "ERROR: Could not turn [%s] into a list of files\n", fmt);
     return false;
   }
-  
+
   // Fill in sizes if not done already
   if (filesizes.size() < n) {
     filesizes.resize(n);
-    for(int i = 0; i < n; ++i) {
+    for (int i = 0; i < n; ++i) {
       int s = vul_file::size(filenames[i].c_str());
       if (s <= 0) {
-	vcl_fprintf(stderr, "WARNING: Zero size file [%s]\n", filenames[i].c_str());
+        vcl_fprintf(stderr, "WARNING: Zero size file [%s]\n", filenames[i].c_str());
       }
       filesizes[i] = s;
     }
@@ -85,12 +87,12 @@ bool oxp_bunch_of_files::open(char const* fmt)
   // Fill start_bytes
   start_byte.resize(n);
   start_byte[0] = 0;
-  for(int i = 1; i < filenames.size(); ++i)
+  for (int i = 1; i < filenames.size(); ++i)
     start_byte[i] = (long long)start_byte[i-1] + (long long)filesizes[i-1];
 
   // Open them all
   fps.resize(n);
-  for(int i = 0; i < filenames.size(); ++i) {
+  for (int i = 0; i < filenames.size(); ++i) {
     char const* fn = filenames[i].c_str();
     fps[i] = vcl_fopen(fn, "rb");
     if (!fps[i]) {
@@ -101,10 +103,10 @@ bool oxp_bunch_of_files::open(char const* fmt)
   }
 
   // Summarize:
-  vcl_fprintf(stderr, "files: sizeof offset_t = %d\n", sizeof (offset_t));
-  for(int i = 0; i < n; ++i)
+  vcl_fprintf(stderr, "files: sizeof offset_t = %ld\n", sizeof(offset_t));
+  for (int i = 0; i < n; ++i)
     vcl_fprintf(stderr, "   %s  %g\n", filenames[i].c_str(), (double)start_byte[i]);
-  vcl_fprintf(stderr, "\n"); 
+  vcl_fprintf(stderr, "\n");
 
   return true;
 }
@@ -112,7 +114,7 @@ bool oxp_bunch_of_files::open(char const* fmt)
 void oxp_bunch_of_files::seek(offset_t to)
 {
   int newindex = -1;
-  for(int i = 1; i < filesizes.size(); ++i)
+  for (int i = 1; i < filesizes.size(); ++i)
     if (start_byte[i] > to) {
       newindex = i-1;
       break;
@@ -120,23 +122,23 @@ void oxp_bunch_of_files::seek(offset_t to)
 
   if (newindex == -1) {
     int i = filesizes.size() - 1;
-    // Know start_byte[i] <= to 
-    if (to < start_byte[i] + filesizes[i]) 
+    // Know start_byte[i] <= to
+    if (to < start_byte[i] + filesizes[i])
       newindex = i;
   }
-  
+
   if (newindex == -1) {
-    vcl_fprintf(stderr, "ERROR: Could not seek to [%ul]\n",(unsigned long)to);
+    vcl_fprintf(stderr, "ERROR: Could not seek to [%ul]\n", (unsigned long)to);
     return;
   }
 
   current_file_index = newindex;
-  
+
   offset_t file_ptr = to - start_byte[current_file_index];
   vcl_fprintf(stderr, " si = %20g to = %20g\n", (double)start_byte[current_file_index], (double) to);
   assert(file_ptr >= 0);
   assert(file_ptr < filesizes[current_file_index]);
-  
+
   vcl_fseek(fps[current_file_index], file_ptr, SEEK_SET);
 }
 
@@ -155,7 +157,7 @@ int oxp_bunch_of_files::read(void* buf, unsigned int len)
     bytes_from_curr = space_left_in_this_file;
     bytes_from_next = len - space_left_in_this_file;
   }
-  
+
   if (bytes_from_next == 0)
     return vcl_fread(buf, 1, len, fps[current_file_index]);
 
@@ -166,7 +168,7 @@ int oxp_bunch_of_files::read(void* buf, unsigned int len)
   if (current_file_index == fps.size()-1)
     // First was OK, and we've run out of files
     return n1;
-  
+
   // First read was OK.  Advance to next file.
   ++current_file_index;
   int n2 = vcl_fread((unsigned char*)buf + n1, 1, bytes_from_next, fps[current_file_index]);
@@ -175,7 +177,7 @@ int oxp_bunch_of_files::read(void* buf, unsigned int len)
 
 oxp_bunch_of_files::~oxp_bunch_of_files()
 {
-  for(int i = 0; i < fps.size(); ++i)
+  for (int i = 0; i < fps.size(); ++i)
     vcl_fclose(fps[i]);
 }
 
