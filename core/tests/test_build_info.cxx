@@ -1,8 +1,9 @@
-// vxl/core/tests/test_build_info.cxx
-
+// This is core/tests/test_build_info.cxx
+#include "test_build_info.h"
+//:
+// \file
 // Based on ITK, Testing/Code/Common/itkSystemInformationTest.cxx
 
-#include "test_build_info.h"
 #include <vcl_ios.h>
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
@@ -37,54 +38,54 @@ system_information_print_file (const char * name, vcl_ostream & os,
 
   if (fin)
   {
-      if ( ! note)
-          os << "Contents of \"" << name << "\":\n"
-             << "--------------------------------\n";
+    if ( ! note)
+      os << "Contents of \"" << name << "\":\n"
+         << "--------------------------------\n";
 
-      // Writing out character by character is potentially slow, but
-      // that's the easiest way to XMLize the output. This is not
-      // performance critical code, so it's probably okay. Besides,
-      // the output stream is buffered, which should help.
+    // Writing out character by character is potentially slow, but
+    // that's the easiest way to XMLize the output. This is not
+    // performance critical code, so it's probably okay. Besides,
+    // the output stream is buffered, which should help.
 
-      vcl_string buffer;
+    vcl_string buffer;
 
-      // Assume the string encoding is ASCII
-      vcl_map<char, char const*> mapping;
-      mapping['&'] = "&amp;";
-      mapping['<'] = "&lt;";
-      mapping['>'] = "&gt;";
+    // Assume the string encoding is ASCII
+    vcl_map<char, char const*> mapping;
+    mapping['&'] = "&amp;";
+    mapping['<'] = "&lt;";
+    mapping['>'] = "&gt;";
 
-      // Range of printable characters
-      char const lo( 32 );
-      char const hi( 126 );
-      char const cr( '\r' );
-      char const nl( '\n' );
+    // Range of printable characters
+    char const lo( 32 );
+    char const hi( 126 );
+    char const cr( '\r' );
+    char const nl( '\n' );
 
-      while( fin ) {
-        vcl_getline( fin, buffer );
-        for( unsigned i = 0; i < buffer.size(); ++i ) {
-          char const& c = buffer[i];
-          // Assume a \r at the end or a \n at the beginning is due to
-          // mixed line-ending conversions not being handled by the
-          // stream library, and so supress them.
-          if( c == nl && i == 0 ||
-              c == cr && i == buffer.size()-1 )
-            ; // do nothing
-          else if( mapping.find( c ) != mapping.end() )
-            os << mapping[c];
-          else if( buffer[i] < lo || buffer[i] > hi )
-            os << "<strong>&lt;" << unsigned(buffer[i]) << "&gt;</strong>";
-          else
-            os << buffer[i];
-        }
-        os << "\n"; // the \n is not stored by vcl_getline
+    while ( fin )
+    {
+      vcl_getline( fin, buffer );
+      for( unsigned i = 0; i < buffer.size(); ++i )
+      {
+        char const& c = buffer[i];
+        // Assume a \r at the end or a \n at the beginning is due to
+        // mixed line-ending conversions not being handled by the
+        // stream library, and so suppress them.
+        if( c == nl && i == 0 ||
+            c == cr && i == buffer.size()-1 )
+          ; // do nothing
+        else if( mapping.find( c ) != mapping.end() )
+          os << mapping[c];
+        else if( buffer[i] < lo || buffer[i] > hi )
+          os << "<strong>&lt;" << unsigned(buffer[i]) << "&gt;</strong>";
+        else
+          os << buffer[i];
       }
-      os.flush();
+      os << '\n'; // the \n is not stored by vcl_getline
+    }
+    os.flush();
   }
   else
-  {
-      os << "Could not open \"" << name << "\" for reading.\n";
-  }
+    os << "Could not open \"" << name << "\" for reading.\n";
 }
 
 static void test_build_info()
@@ -103,45 +104,42 @@ static void test_build_info()
       0
     };
 
-  const char** f;
-  for (f = files; *f; f++)
-  {
-      system_information_print_file (*f, vcl_cout);
-  }
+  for (const char** f = files; *f; f++)
+    system_information_print_file (*f, vcl_cout);
 
   vcl_ofstream outf (vxl_BUILD_INFO_NOTES, vcl_ios::out);
   if (outf)
   {
-      vcl_cout << "Also writing this information to file "
-               << vxl_BUILD_INFO_NOTES << '\n';
+    vcl_cout << "Also writing this information to file "
+             << vxl_BUILD_INFO_NOTES << '\n';
 
-      outf << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-           << "<Site BuildName=\"" << vxl_BUILD_NAME
-           << "\"  Name=\"" << vxl_SITE << "\">\n"
-           << "<BuildNameNotes>\n";
+    outf << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+         << "<Site BuildName=\"" << vxl_BUILD_NAME
+         << "\"  Name=\"" << vxl_SITE << "\">\n"
+         << "<BuildNameNotes>\n";
 
-      for (f = files; *f; ++f)
-      {
-          outf << "<Note Name=\"" << *f << "\">\n"
-               << "<DateTime>"
-               << get_current_date_time ("%a %b %d %Y %H:%M:%S %Z")
-               << "</DateTime>\n"
-               << "<Text>\n";
+    for (const char** f = files; *f; ++f)
+    {
+      outf << "<Note Name=\"" << *f << "\">\n"
+           << "<DateTime>"
+           << get_current_date_time ("%a %b %d %Y %H:%M:%S %Z")
+           << "</DateTime>\n"
+           << "<Text>\n";
 
-          system_information_print_file (*f, outf, true);
+      system_information_print_file (*f, outf, true);
 
-          outf << "</Text>\n"
-               << "</Note>\n";
-      }
+      outf << "</Text>\n"
+           << "</Note>\n";
+    }
 
-      outf << "</BuildNameNotes>\n"
-           << "</Site>\n";
+    outf << "</BuildNameNotes>\n"
+         << "</Site>\n";
   }
   else
   {
-      vcl_cerr << "Error writing this information to file "
-               << vxl_BUILD_INFO_NOTES << '\n';
-      testlib_test_perform(false);
+    vcl_cerr << "Error writing this information to file "
+             << vxl_BUILD_INFO_NOTES << '\n';
+    testlib_test_perform(false);
   }
 }
 
