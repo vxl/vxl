@@ -5,13 +5,13 @@
 #pragma interface
 #endif
 //:
-//  \file
-//  \brief
-//  \author Andrew W. Fitzgibbon, Oxford RRG
-//  \date   05 Aug 96
+// \file
+// \brief  alias for vnl_vector_fixed<double,4>
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   05 Aug 96
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   Peter Vanroose, 25 June 1999: vnl_vector_fixed<double,4> already instantiated
 // \endverbatim
 

@@ -6,12 +6,12 @@
 #endif
 //:
 // \file
-// \brief
+// \brief  alias for vnl_vector_fixed<int,3>
 // \author Andrew W. Fitzgibbon, Oxford RRG
 // \date   31 Aug 96
 //
 // \verbatim
-// Modifications:
+//  Modifications
 //   Peter Vanroose, 21 Oct 1999: vnl_vector_fixed<int,3> already instantiated
 // \endverbatim
 

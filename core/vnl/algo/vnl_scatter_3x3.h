@@ -6,12 +6,12 @@
 #endif
 //:
 // \file
-// \brief
+// \brief  3x3 scatter matrix
 // \author Andrew W. Fitzgibbon, Oxford RRG
 // \date   02 Oct 96
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   18 Feb 2000. fsm: templated.
 //   4/4/01 LSB (Manchester) documentation tidied
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line

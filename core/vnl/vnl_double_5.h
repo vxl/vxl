@@ -2,10 +2,10 @@
 #ifndef vnl_double_5_h_
 #define vnl_double_5_h_
 //:
-//  \file
-//  \brief
-//  \author Geoffrey Cross
-//  \date   2 Jun 2002
+// \file
+// \brief  alias for vnl_vector_fixed<double,5>
+// \author Geoffrey Cross
+// \date   2 Jun 2002
 
 #include <vnl/vnl_T_n.h>
 
