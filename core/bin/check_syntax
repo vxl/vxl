@@ -266,6 +266,7 @@ foreach $f (@FILES)
     elsif ($j eq "vgui/internals/vgui_simple_field.h") { $i="vgui_(simple|bool|int|long|float|double)_field"; }
     elsif ($j =~ m/vil[12]?\/vil[12]?_(stream_)?\d+bit\.h$/) { $i="($i)(|_(read|write)_(big|little)_endian)"; }
     elsif ($j =~ m/vil2?\/vil2?_bilin_interp\.h$/) { $i="($i)(|_safe|_unsafe|_raw|_safe_extend)"; }
+    elsif ($j =~ m/vil2?\/vil2?_bicub_interp\.h$/) { $i="($i)(|_safe|_unsafe|_raw|_safe_extend)"; }
     elsif ($j eq "vil/vil_clamp.h") { $i="$i(|_pixel)"; }
     elsif ($j eq "vil/vil_colour_space.h") { $i="($i)_(RGB|HSV)_to_(YIQ|HSV|RGB)"; }
     elsif ($j =~ m/vil2?\/vil2?_convert\.h$/) { $i="($i)_((cast|round)(_pixel)?|(rgb|planes)_to_grey|stretch_range|to_[a-z_]+)"; }
@@ -277,6 +278,7 @@ foreach $f (@FILES)
     elsif ($j =~ m/vil2?\/vil2?_flip\.h$/) { $i="($i)_(ud|lr)"; }
     elsif ($j =~ m/vil2?\/algo\/vil2?_gauss_filter\.h$/) { $i="($i)_(5tap(_params)?)"; }
     elsif ($j =~ m/vil2?\/algo\/vil2?_gauss_reduce\.h$/) { $i="$i(|_params|_general|_121)"; }
+    elsif ($j =~ m/vil2?\/algo\/vil2?_fft\.h$/) { $i="$i(|_2d_fwd|_2d_bwd)"; }
     elsif ($j =~ m/vil2?\/vil2?_load\.h$/) { $i="$i(|_image_resource)"; }
     elsif ($j =~ m/vil2?\/vil2?_image_view\.h$/) { $i="$i(|_deep_equality)"; }
     elsif ($j =~ m/vil2?\/vil2?_image_view_base\.h$/) { $i="$i(|_sptr)"; }
