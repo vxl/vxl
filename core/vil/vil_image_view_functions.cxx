@@ -5,10 +5,9 @@
 // \brief Various functions for manipulating image views
 // \author Tim Cootes and Ian Scott - Manchester
 
-#include <vxl_config.h>
-#include <vil/vil_rgb.h>
 #include <vil2/vil2_image_data.h>
-#include <vxl_config.h>
+#include <vil/vil_rgb.h>
+#include <vxl_config.h> // for vxl_uint_32 etc.
 
 //: Explicit overload for bool
 VCL_DEFINE_SPECIALIZATION
