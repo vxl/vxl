@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 
-#include <vul/vul_temp_filename.h>
+#include "vul_temp_filename.h"
 #include <vcl_string.h>
 #include <vcl_ctime.h>
 #include <vcl_cstdlib.h> // for rand/srand
@@ -39,7 +39,7 @@
     // randomness is that crucial.
     int init_randomizer()
     {
-      vcl_srand( time( 0 ) );
+      vcl_srand( vcl_time( 0 ) );
       return 0;
     }
     static int random_seed_trigger = init_randomizer();
