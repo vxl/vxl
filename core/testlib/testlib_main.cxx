@@ -4,7 +4,7 @@
 #include <vcl_string.h>
 #include <vcl_vector.h>
 
-#if defined(DART_BUILD) && defined(VCL_WIN32) && defined(_DEBUG)
+#if defined(VCL_WIN32)
 #  include <crtdbg.h>
 #endif
 
@@ -27,9 +27,12 @@ testlib_main( int argc, char* argv[] )
   // The caller should already have called register_tests().
 
   // Don't allow Visual Studio to open assertion error dialog boxes
-  #if defined(DART_BUILD) && defined(VCL_WIN32) && defined(_DEBUG)
-     _CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_FILE);
-     _CrtSetReportFile(_CRT_ERROR, _CRTDBG_FILE_STDERR);
+  #if defined(VCL_WIN32) 
+    char * env_var = getenv("DART_TEST_FROM_DART");
+    if( env_var ) {
+      _CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_FILE);
+      _CrtSetReportFile(_CRT_ERROR, _CRTDBG_FILE_STDERR);
+    }
   #endif
   // Assume the index type for vector<string> and
   // vector<TestMainFunction> are the same.
