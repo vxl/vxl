@@ -25,7 +25,6 @@
 #include <bdgl/bdgl_curve_tracker.h>
 #include <bdgl/bdgl_curve_matcher.h>
 
-
 #include <vidl/vidl_io.h>
 #include <vidl/vidl_frame.h>
 #include <vvid/vvid_frame_diff_process.h>
@@ -54,7 +53,6 @@ vvid_file_manager *vvid_file_manager::instance()
 //======================================================================
 void vvid_file_manager::init()
 {
-  
   grid_ = vgui_grid_tableau_new(2,1);
   grid_->set_grid_size_changeable(true);
 
@@ -81,7 +79,7 @@ vvid_file_manager::vvid_file_manager(): vgui_wrapper_tableau()
   width_ = 512;
   height_ = 512;
   track_ = false;
-	color_label_ = false;
+  color_label_ = false;
   window_ = 0;
   frame_trail_.clear();
   my_movie_=(vidl_movie*)0;
@@ -105,6 +103,7 @@ bool vvid_file_manager::handle(const vgui_event &e)
 {
   return this->child.handle(e);
 }
+
 //-------------------------------------------------------------
 //: Display a processed image
 //
@@ -123,43 +122,43 @@ void vvid_file_manager::display_spatial_objects()
 {
   if (!video_process_)
     return;
-  vcl_vector<vsol_spatial_object_2d_sptr> const& sos = 
+  vcl_vector<vsol_spatial_object_2d_sptr> const& sos =
     video_process_->get_spatial_objects();
   if (easy0_)
   {
     easy0_->clear_all();
-		if (color_label_) {
-			float r,g,b;
-			//If tracking is on then we maintain a queue of points
-			if(track_) {
-				frame_trail_.add_spatial_objects(sos);
-				vcl_vector<vsol_spatial_object_2d_sptr> temp;
-				frame_trail_.get_spatial_objects(temp);
-				for (int i=0;i<temp.size();i++) {
-					set_changing_colors( temp[i]->get_tag_id() , &r, &g, &b );
-					easy0_->set_vsol_spatial_object_2d_style(temp[i], r, g, b, 1.0, 2.0 );
-					easy0_->add_spatial_object(temp[i]);
-				}
-			} else {
-				for (int i=0;i<sos.size();i++) {
-					set_changing_colors( sos[i]->get_tag_id() , &r, &g, &b );
-					//vcl_cout<<"("<<sos[i]->get_tag_id()<<")\n";
-					easy0_->set_vsol_spatial_object_2d_style(sos[i], r, g, b, 1.0, 2.0 );
-					easy0_->add_spatial_object(sos[i]);
-				}
-			}
-		} else {
-			//If tracking is on then we maintain a queue of points
-			if(track_)
-				{
-					frame_trail_.add_spatial_objects(sos);
-					vcl_vector<vsol_spatial_object_2d_sptr> temp;
-					frame_trail_.get_spatial_objects(temp);
-					easy0_->add_spatial_objects(temp);
-				}
-			else
-				easy0_->add_spatial_objects(sos);
-		}
+    if (color_label_) {
+      float r,g,b;
+      //If tracking is on then we maintain a queue of points
+      if (track_) {
+        frame_trail_.add_spatial_objects(sos);
+        vcl_vector<vsol_spatial_object_2d_sptr> temp;
+        frame_trail_.get_spatial_objects(temp);
+        for (int i=0;i<temp.size();i++) {
+          set_changing_colors( temp[i]->get_tag_id() , &r, &g, &b );
+          easy0_->set_vsol_spatial_object_2d_style(temp[i], r, g, b, 1.0, 2.0 );
+          easy0_->add_spatial_object(temp[i]);
+        }
+      } else {
+        for (int i=0;i<sos.size();i++) {
+          set_changing_colors( sos[i]->get_tag_id() , &r, &g, &b );
+          //vcl_cout<<"("<<sos[i]->get_tag_id()<<")\n";
+          easy0_->set_vsol_spatial_object_2d_style(sos[i], r, g, b, 1.0, 2.0 );
+          easy0_->add_spatial_object(sos[i]);
+        }
+      }
+    } else {
+      //If tracking is on then we maintain a queue of points
+      if (track_)
+        {
+          frame_trail_.add_spatial_objects(sos);
+          vcl_vector<vsol_spatial_object_2d_sptr> temp;
+          frame_trail_.get_spatial_objects(temp);
+          easy0_->add_spatial_objects(temp);
+        }
+      else
+        easy0_->add_spatial_objects(sos);
+    }
   }
 }
 
@@ -188,20 +187,19 @@ void vvid_file_manager::set_changing_colors(int num, float *r, float *g, float *
 }
 
 
-
 //-------------------------------------------------------------
 //: Display topology objects
 //
 void vvid_file_manager::display_topology()
 {
   easy0_->clear_all();
-  vcl_vector<vtol_topology_object_sptr> const & topos = 
+  vcl_vector<vtol_topology_object_sptr> const & topos =
     video_process_->get_segmentation();
   if (easy0_)
   {
     easy0_->clear_all();
     //If tracking is on then we maintain a queue of points
-    if(track_)
+    if (track_)
       {
         frame_trail_.add_topology_objects(topos);
         vcl_vector<vtol_topology_object_sptr> temp;
@@ -212,6 +210,7 @@ void vvid_file_manager::display_topology()
       easy0_->add_topology_objects(topos);
   }
 }
+
 //-----------------------------------------------------------------------------
 //: Loads a video file, e.g. avi into the viewer
 //-----------------------------------------------------------------------------
@@ -356,6 +355,7 @@ void vvid_file_manager::un_cached_play()
       vgui::run_till_idle();
     }
 }
+
 void vvid_file_manager::play_video()
 {
   play_video_ = true;
@@ -480,12 +480,13 @@ void vvid_file_manager::compute_harris_corners()
     return;
 
   video_process_ = new vvid_harris_corner_process(hdp);
-  if(track_)
+  if (track_)
     {
       frame_trail_.clear();
       frame_trail_.set_window(track_window);
     }
 }
+
 void vvid_file_manager::compute_vd_edges()
 {
   static int track_window;
@@ -509,7 +510,7 @@ void vvid_file_manager::compute_vd_edges()
     dp.aggressive_junction_closure=-1;
 
   video_process_  = new vvid_edge_process(dp);
-  if(track_)
+  if (track_)
     {
       frame_trail_.clear();
       frame_trail_.set_window(track_window);
@@ -550,10 +551,10 @@ void vvid_file_manager::compute_curve_tracking()
   else
     dp.aggressive_junction_closure=0;
 
-	color_label_ = true;
+  color_label_ = true;
 
   video_process_  = new vvid_curve_tracking_process(tp,dp);
-  if(track_)
+  if (track_)
     {
       frame_trail_.clear();
       frame_trail_.set_window(track_window);

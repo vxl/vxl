@@ -7,11 +7,11 @@
 // \brief A child tableau of vgui_easy2D_tableau that knows how to display vtol objects.
 // \author
 //   J.L. Mundy
-//   
+//
 //   Default styles are defined for each geometry and topology object soview.
-//   Users can change the default style by using the set_*_style commands, 
+//   Users can change the default style by using the set_*_style commands,
 //   e.g. set_edge_style(0.0, 0.5, 0.5, 3) will define the style for each
-//   new edge added to the display.  This default is the style that the 
+//   new edge added to the display.  This default is the style that the
 //   edge appearance will resume after being highlighted.
 //
 // \verbatim
@@ -65,15 +65,15 @@ class bgui_vtol2D_tableau : public vgui_easy2D_tableau
   virtual bool handle(vgui_event const &);
 
   //: display for vsol_point_2d  (not vtol but often useful)
-  bgui_vtol_soview2D_point* 
+  bgui_vtol_soview2D_point*
     add_vsol_point_2d(vsol_point_2d_sptr const& p);
 
   //: display for digital_curve (not vtol but often useful)
-  bgui_vtol_soview2D_digital_curve* 
+  bgui_vtol_soview2D_digital_curve*
     add_digital_curve(vdgl_digital_curve_sptr const& dc);
 
   //: display for digital_curve (not vtol but often useful)
-  bgui_vtol_soview2D_dotted_digital_curve* 
+  bgui_vtol_soview2D_dotted_digital_curve*
     add_dotted_digital_curve(vdgl_digital_curve_sptr const& dc);
 
   //: the vtol display methods for individual topology classes
@@ -108,21 +108,21 @@ class bgui_vtol2D_tableau : public vgui_easy2D_tableau
   vtol_edge_2d_sptr get_mapped_edge(const int id);
 
   //: Methods for changing the default style of displayable objects
-	void bgui_vtol2D_tableau::set_vsol_spatial_object_2d_style(vsol_spatial_object_2d_sptr sos, 
-																									const float r, const float g, const float b,
-																									const float line_width, const float point_radius);
+  void bgui_vtol2D_tableau::set_vsol_spatial_object_2d_style(vsol_spatial_object_2d_sptr sos,
+                                                             const float r, const float g, const float b,
+                                                             const float line_width, const float point_radius);
   void set_vsol_point_2d_style(const float r, const float g, const float b,
                                const float point_radius);
   void set_digital_curve_style(const float r, const float g, const float b,
                                const float line_width);
   void set_dotted_digital_curve_style(const float r, const float g, const float b,
-                               const float point_radius, const float line_width);
+                                      const float point_radius, const float line_width);
 
-	void bgui_vtol2D_tableau::set_vtol_topology_object_style(vtol_topology_object_sptr tos,
-																									const float r, const float g, const float b,
-																									const float line_width, const float point_radius);
+  void bgui_vtol2D_tableau::set_vtol_topology_object_style(vtol_topology_object_sptr tos,
+                                                           const float r, const float g, const float b,
+                                                           const float line_width, const float point_radius);
   void set_vertex_style(const float r, const float g, const float b,
-                               const float point_radius);
+                        const float point_radius);
   void set_edge_style(const float r, const float g, const float b,
                       const float line_width);
   void set_edge_group_style(const float r, const float g, const float b,

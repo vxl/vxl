@@ -25,7 +25,7 @@ void bdgl_curve_tracker::track()
   // for all images:
   for (unsigned int t=0;t<input_curve_.size();t++)
   {
-		track_frame(t);
+    track_frame(t);
   }
 
   return;
@@ -50,7 +50,7 @@ void bdgl_curve_tracker::track_frame(unsigned int frame)
 
   // init : copy the first curves
   if (frame==0){
-		primitive_list.clear();
+    primitive_list.clear();
     for (unsigned int i=0;i<input_curve_[0].size();i++){
       primitive.init(i, input_curve_[0][i]);
       primitive_list.insert(primitive_list.end(), primitive);

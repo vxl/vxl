@@ -17,8 +17,8 @@
 
 vvid_curve_tracking_process::vvid_curve_tracking_process(const bdgl_curve_tracker_params & tp, const sdet_detector_params & dp)
 {
-	detect_params_ = dp;
-	params_ = tp;
+  detect_params_ = dp;
+  params_ = tp;
 }
 
 vvid_curve_tracking_process::~vvid_curve_tracking_process()
@@ -27,7 +27,7 @@ vvid_curve_tracking_process::~vvid_curve_tracking_process()
 
 bool vvid_curve_tracking_process::execute()
 {
-	// init
+  // init
   if (this->get_N_inputs()!=1)
     {
       vcl_cout << "In vvid_curve_tracking_process::execute() - not exactly one"
@@ -36,7 +36,7 @@ bool vvid_curve_tracking_process::execute()
     }
   spat_objs_.clear();
 
-	// input image
+  // input image
   vil_image img = vvid_video_process::get_input_image(0);
   vil_memory_image_of<unsigned char> cimg;
   if (img.components()==3)
@@ -60,7 +60,7 @@ bool vvid_curve_tracking_process::execute()
   if (!edges)
     return false;
 
-	// pass the edges
+  // pass the edges
   vsol_curve_2d_sptr c;
   vdgl_digital_curve_sptr dc;
   vdgl_interpolator_sptr interp;
@@ -75,19 +75,19 @@ bool vvid_curve_tracking_process::execute()
   }
   input_curve_.push_back(ecl);
 
-	// tracking
-	int t = input_curve_.size()-1;
-	track_frame(t);
+  // tracking
+  int t = input_curve_.size()-1;
+  track_frame(t);
 
-	// pass the results
+  // pass the results
 
-	// display
+  // display
   for (unsigned int i=0;i<get_output_size_at(t);i++){
     //vcl_cout<<".";
-		vdgl_interpolator_sptr  intp = new vdgl_interpolator_linear( get_output_curve_at(t,i) );
-		vdgl_digital_curve_sptr dc = new vdgl_digital_curve(intp);
-		spat_objs_.push_back( dc->cast_to_spatial_object_2d() );
-		spat_objs_[spat_objs_.size()-1]->set_tag_id( get_output_id_at(t,i) );
+    vdgl_interpolator_sptr  intp = new vdgl_interpolator_linear( get_output_curve_at(t,i) );
+    vdgl_digital_curve_sptr dc = new vdgl_digital_curve(intp);
+    spat_objs_.push_back( dc->cast_to_spatial_object_2d() );
+    spat_objs_[spat_objs_.size()-1]->set_tag_id( get_output_id_at(t,i) );
   }
 
   output_image_ = 0;//no output image is produced

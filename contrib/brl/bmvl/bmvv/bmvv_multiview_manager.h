@@ -1,4 +1,4 @@
-//this-sets-emacs-to-*-c++-*-mode
+// This is brl/bmvl/bmvv/bmvv_multiview_manager.h
 #ifndef bmvv_multiview_manager_h_
 #define bmvv_multiview_manager_h_
 //--------------------------------------------------------------------------------
@@ -58,7 +58,7 @@ class bmvv_multiview_manager : public vgui_wrapper_tableau
   virtual bool handle(const vgui_event&);
 
   void load_image_file(vcl_string image_filename, bool greyscale, unsigned col, unsigned row);
-	void draw_colored_digital_curve(unsigned col, unsigned row, vdgl_digital_curve_sptr dc, int label);
+  void draw_colored_digital_curve(unsigned col, unsigned row, vdgl_digital_curve_sptr dc, int label);
   void set_changing_colors(int num, float *r, float *g, float *b);
 
  protected:

@@ -24,7 +24,8 @@
 #include <vgui/vgui_window.h>
 #include <vidl/vidl_movie.h>
 #include <vvid/vvid_frame_trail.h>
-//:A singleton manager class for playing videos.
+
+//: A singleton manager class for playing videos.
 // A vector of images with
 // enclosing image and easy2D tableaux is cached so that computed overlays
 // such as Harris corners can be played back quickly. The cache option can be
@@ -45,7 +46,7 @@
 //     the movie gets deleted before the loop quits
 //  2) There is a continuous gl error stream from vgui_adaptor. Something to
 //     do with "setting draw buffer to back"
-//.
+//
 class vvid_file_manager : public vgui_wrapper_tableau
 {
  public:
@@ -124,7 +125,7 @@ class vvid_file_manager : public vgui_wrapper_tableau
   void display_image();
   void display_spatial_objects();
   void display_topology();
-	void set_changing_colors(int num, float *r, float *g, float *b);
+  void set_changing_colors(int num, float *r, float *g, float *b);
  private:
   //utility functions
 
@@ -136,7 +137,7 @@ class vvid_file_manager : public vgui_wrapper_tableau
   bool prev_frame_;
   bool track_;//keep trail of display items
   int window_;//frame trail time window
-	bool color_label_;//display with a different color for different labels
+  bool color_label_;//display with a different color for different labels
   float time_interval_;
   unsigned width_;
   unsigned height_;
