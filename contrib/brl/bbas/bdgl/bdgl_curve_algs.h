@@ -1,11 +1,10 @@
 #ifndef bdgl_curve_algs_h_
 #define bdgl_curve_algs_h_
-
 //-----------------------------------------------------------------------------
 //:
 // \file
 // \author J.L. Mundy
-// \brief vdgl_digital_curve algorithms 
+// \brief vdgl_digital_curve algorithms
 //
 // \verbatim
 // Initial version November 25, 2002
@@ -14,6 +13,7 @@
 //-----------------------------------------------------------------------------
 #include <btol/dll.h>
 #include <vgl/vgl_line_2d.h>
+#include <vgl/vgl_point_2d.h>
 #include <vdgl/vdgl_edgel_chain_sptr.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
 
@@ -40,7 +40,7 @@ class bdgl_curve_algs
                                  double & xc, double & yc);
 
  //: Finds the end of the edgel chain closest to the given point
- static int closest_end(vdgl_edgel_chain_sptr const & ec, 
+ static int closest_end(vdgl_edgel_chain_sptr const & ec,
                         const double x, const double y);
 
   //:Reverses the edgel chain
@@ -61,7 +61,6 @@ class bdgl_curve_algs
                                  const double x, const double y,
                                  bool debug = false);
 
-  
  private:
   bdgl_curve_algs();
 };
