@@ -8,6 +8,9 @@ SUBDIRS += vpl
 # "basics" (templates)
 SUBDIRS += vbl
 
+# utilities
+SUBDIRS += vul
+
 # numerics
 SUBDIRS += vnl
 
@@ -16,9 +19,6 @@ SUBDIRS += vgl
 
 # image
 SUBDIRS += vil
-
-# utilities
-SUBDIRS += vul
 
 # video
 SUBDIRS += vidl
