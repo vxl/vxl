@@ -4,10 +4,10 @@
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
 
 SET(cam_sources
-camera.h	camera.cpp
-CameraNode.h CameraNode.cpp
-ZhangCameraNode.h zhangCameraNode.cpp
-cam_test.cpp
+ camera.h          camera.cpp
+ CameraNode.h      CameraNode.cpp
+ ZhangCameraNode.h ZhangCameraNode.cpp
+ cam_test.cpp
 )
 
 AUX_SOURCE_DIRECTORY(Templates cam_sources)
