@@ -43,7 +43,7 @@ SOURCES += vepl_histogram.cxx
 include ${IUEROOT}/config/top-params.mk
 #######################################
 
-ifeq "$(TJ_GCC30)" "1"
+ifeq "$(TJ_GCC30)$(optimize)" "1-O2"
 # gcc 3.0 needs too much virtual memory with -O2
 FLAGS_vepl_threshold.cxx += -O1
 FLAGS_vepl_add_random_noise.cxx += -O1
@@ -53,6 +53,8 @@ FLAGS_vepl_erode_disk.cxx += -O1
 FLAGS_vepl_median.cxx += -O1
 FLAGS_vepl_moment.cxx += -O1
 FLAGS_vepl_histogram.cxx += -O1
+FLAGS_Templates/vepl_convert+short-.cxx += -O1
+FLAGS_Templates/vepl_convert+vil_rgb+uchar--.cxx += -O1
 endif
 
 # No need to compile the files in Templates when implicitly instantiating:
