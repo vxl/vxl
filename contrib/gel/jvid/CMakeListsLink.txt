@@ -1,16 +1,13 @@
-# ./gel/jvid/CMakeListsLink.txt
+# gel/jvid/CMakeListsLink.txt
 
 LINK_LIBRARIES( jvid )
 
+IF( LIBRARY_OUTPUT_PATH MATCHES '^$' )
+  LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/gel/jvid )
+ENDIF( LIBRARY_OUTPUT_PATH MATCHES '^$' )
 
-IF (LIBRARY_OUTPUT_PATH MATCHES '^$')
- LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/gel/jvid )
-ENDIF (LIBRARY_OUTPUT_PATH MATCHES '^$')
-
-
-# Immediate dependencies
 INCLUDE( ${allvxl_SOURCE_DIR}/oxl/vgui/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vidl/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vul/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vil/CMakeListsLink.txt )
-
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vul/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/vcl/CMakeListsLink.txt )
