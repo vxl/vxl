@@ -14,6 +14,7 @@
 // Modifications - none
 //
 // \endverbatim
+
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_line_2d.h>
 
@@ -21,21 +22,22 @@
 template <class T>
 class vgl_line_2d_regression
 {
- private:
-  int npts_;
-  vgl_line_2d<T> line_;//the fitted line
-  T Sx_, Sy_, Sxx_, Sxy_, Syy_;//partial sums
-  double squared_error_;//an estimate of the squared error
+  // Data members
+  unsigned int npts_;//!< number of points in the regression data
+  vgl_line_2d<T> line_;//!< the fitted line
+  T Sx_, Sy_, Sxx_, Sxy_, Syy_;//!< partial sums
+  double squared_error_;//!< an estimate of the squared error
  public:
   vgl_line_2d_regression();
   ~vgl_line_2d_regression(){};
 
-  inline int get_n_pts(){return npts_;}
+  inline unsigned int get_n_pts() { return npts_; }
 
   //: Add a point to the 2d_regression
   void increment_partial_sums(const T x, const T y);
 
   //: Remove a point from the 2d_regression
+  //  This should be a previously added point, although this cannot be verified.
   void decrement_partial_sums(const T x, const T y);
 
   //: Clear 2d_regression sums
@@ -54,7 +56,7 @@ class vgl_line_2d_regression
   double get_rms_error_est(vgl_point_2d<T> const& p, bool increment=true);
 
   //: get the fitted line
-  vgl_line_2d<T> get_line(){return line_;}
+  vgl_line_2d<T> get_line() { return line_; }
 
   //: fit a line to the current point set
   bool fit();
