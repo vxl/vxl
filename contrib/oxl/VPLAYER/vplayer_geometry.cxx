@@ -10,7 +10,7 @@
 #include <vgui/vgui.h>
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_dialog.h>
-#include <vgui/vgui_rubberbander.h>
+#include <vgui/vgui_rubberband_tableau.h>
 #include <vgui/vgui_color_text.h>
 #include <vgui/vgui_soview.h>
 #include <vgui/vgui_soview2D.h>
@@ -30,7 +30,7 @@ void vplayer_geometry::create_point()
 {
   unsigned col, row;
   get_current(&col, &row);
-  vgui_rubberbander_sptr rubber = get_rubberbander_at(col, row);
+  vgui_rubberband_tableau_sptr rubber = get_rubberbander_at(col, row);
   if (rubber)
     rubber->rubberband_point();
 }
@@ -42,7 +42,7 @@ void vplayer_geometry::create_line()
 {
   unsigned col, row;
   get_current(&col, &row);
-  vgui_rubberbander_sptr rubber = get_rubberbander_at(col, row);
+  vgui_rubberband_tableau_sptr rubber = get_rubberbander_at(col, row);
   if (rubber)
     rubber->rubberband_line();
 }
@@ -54,7 +54,7 @@ void vplayer_geometry::create_circle()
 {
   unsigned col, row;
   get_current(&col, &row);
-  vgui_rubberbander_sptr rubber = get_rubberbander_at(col, row);
+  vgui_rubberband_tableau_sptr rubber = get_rubberbander_at(col, row);
   if (rubber)
     rubber->rubberband_circle();
 }
@@ -66,7 +66,7 @@ void vplayer_geometry::create_polygon()
 {
   unsigned col, row;
   get_current(&col, &row);
-  vgui_rubberbander_sptr rubber = get_rubberbander_at(col, row);
+  vgui_rubberband_tableau_sptr rubber = get_rubberbander_at(col, row);
   if (rubber)
     rubber->rubberband_polygon();
 }
@@ -78,7 +78,7 @@ void vplayer_geometry::create_linestrip()
 {
   unsigned col, row;
   get_current(&col, &row);
-  vgui_rubberbander_sptr rubber = get_rubberbander_at(col, row);
+  vgui_rubberband_tableau_sptr rubber = get_rubberbander_at(col, row);
   if (rubber)
     rubber->rubberband_linestrip();
 }
@@ -90,7 +90,7 @@ void vplayer_geometry::create_infinite_line()
 {
   unsigned col, row;
   get_current(&col, &row);
-  vgui_rubberbander_sptr rubber = get_rubberbander_at(col, row);
+  vgui_rubberband_tableau_sptr rubber = get_rubberbander_at(col, row);
   if (rubber)
     rubber->rubberband_infinite_line();
 }
@@ -578,7 +578,7 @@ void vplayer_geometry::create_box()
 {
 unsigned col, row;
   get_current(&col, &row);
-  vgui_rubberbander_sptr rubber = get_rubberbander_at(col, row);
+  vgui_rubberband_tableau_sptr rubber = get_rubberbander_at(col, row);
   if (rubber)
     rubber->rubberband_box();
 }

@@ -17,7 +17,7 @@
 #include <vgui/vgui_error_dialog.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_easy2D_tableau.h>
-#include <vgui/vgui_rubberbander.h>
+#include <vgui/vgui_rubberband_tableau.h>
 
 #include <vidl/vidl_io.h>
 #include <vidl/vidl_frame.h>
@@ -63,8 +63,8 @@ void vplayer_file::load_video_sequence()
   }
   tableaux_.push_back(vgui_easy2D_new(vgui_image_tableau_new(pframe->get_image())));
   pframe = my_movie->first();
-  vgui_rubberbander_sptr r = get_rubberbander_at(col,row);
-  r->init(new vgui_rubberbander_easy2D_client(tableaux_.front()));
+  vgui_rubberband_tableau_sptr r = get_rubberbander_at(col,row);
+  r->init(new vgui_rubberband_easy2D_client(tableaux_.front()));
   tableaux_.front()->post_redraw();
 }
 
@@ -95,8 +95,8 @@ void vplayer_file::load_video_file()
   }
   tableaux_.push_back(vgui_easy2D_new(vgui_image_tableau_new(pframe->get_image())));
   pframe = my_movie->first();
-  vgui_rubberbander_sptr r = get_rubberbander_at(col,row);
-  r->init(new vgui_rubberbander_easy2D_client(tableaux_.front()));
+  vgui_rubberband_tableau_sptr r = get_rubberbander_at(col,row);
+  r->init(new vgui_rubberband_easy2D_client(tableaux_.front()));
   tableaux_.front()->post_redraw();
 }
 
