@@ -22,21 +22,12 @@
 #ifndef OTAGO__image_database_INCLUDED_
 #define OTAGO__image_database_INCLUDED_
 
-#if defined(unix)
-#include <unistd.h>
-#include <dirent.h>
-#include <fcntl.h>
-#include <sys/stat.h>
-#else
-#include <Windows.h>
-#endif
 #include <vcl_sys/types.h>
-#include <vcl_cstring.h> // for strcpy()
-#include <vcl_cstdio.h>
-#include <vcl_cstdlib.h>
-#include <vcl_cerrno.h>
+#include <vcl_cstring.h> // for strcpy(), strcmp()
+#include <vcl_cctype.h> // for tolower()
 #include <vcl_map.h>
 #include <vcl_utility.h>
+#include <vcl_algorithm.h>
 #include <vil/vil_memory_image.h>
 
 class ImageDatabase
@@ -47,7 +38,13 @@ public:
   {
     bool operator()(const char* s1, const char* s2) const
     {
-      return strcasecmp(s1, s2) < 0;
+      // do a case insensitive comparision. Can't use strcasecmp
+      // because it's not standard.
+      vcl_string tmp1( s1 );
+      vcl_string tmp2( s2 );
+      vcl_transform( tmp1.begin(), tmp1.end(), tmp1.begin(), vcl_tolower );
+      vcl_transform( tmp2.begin(), tmp2.end(), tmp2.begin(), vcl_tolower );
+      return vcl_strcmp( tmp1.c_str(), tmp2.c_str() ) < 0;
     }
   };
 

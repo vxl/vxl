@@ -21,6 +21,9 @@
 
 #include "image_database.h"
 #include <vcl_iostream.h>
+#include <vcl_cerrno.h> // for EEXIST
+#include <vcl_cstdio.h>
+#include <vpl/vpl.h> // for vpl_mkdir
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 
@@ -81,24 +84,13 @@ bool ImageDatabase::save(const char *name, const char *imagetype)
   char dirname[200];
   vcl_sprintf(dirname, "%s.d", name);
 
-  DIR *d;
-  // check if the directory exists
-  if ((d = opendir(dirname))==NULL)
-  {
-    int fd;
-    // if it doesn't exist
-    if (errno==ENOENT)
-    {
-      // try and create it
-      if ((fd=mkdir(dirname, S_IRWXU))==-1)
-      {
-        vcl_cerr << "can't open directory " << dirname << vcl_endl;
-        return false;
-      }
-      else close(fd);
-    }
-    else perror("ImageDatabase::save: Can't open directory for saving");
-  } else closedir(d);
+  int err;
+
+  err = vpl_mkdir( dirname, 0755 );
+  if( err != 0 && err != EEXIST ) {
+    vcl_cerr << "can't open directory " << dirname << vcl_endl;
+    return false;
+  }
 
   // now open the database file
   FILE *dbfile;
