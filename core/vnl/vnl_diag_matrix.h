@@ -25,11 +25,6 @@
 //
 //-----------------------------------------------------------------------------
 
-// forward declare friend functions
-//template <class T> class vnl_diag_matrix;
-//template<class T> bool epsilon_equals
-//        (vnl_diag_matrix<T> const& m1, vnl_diag_matrix<T> const& m2, double alt_epsilon = 0);
-
 #include <vcl_cassert.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
@@ -56,10 +51,10 @@ public:
   }
 
   // Operations----------------------------------------------------------------
-// -- In-place arithmetic operations
-  vnl_diag_matrix<T>& operator*=(T const& v) { diagonal_ *= v; return *this; }
-  vnl_diag_matrix<T>& operator/=(T const& v) { diagonal_ /= v; return *this; }
-
+  // -- In-place arithmetic operations
+  vnl_diag_matrix<T>& operator*=(T v) { diagonal_ *= v; return *this; }
+  vnl_diag_matrix<T>& operator/=(T v) { diagonal_ /= v; return *this; }
+  
   // Computations--------------------------------------------------------------
   void invert_in_place();
   T determinant() const;
@@ -75,7 +70,9 @@ public:
     assert(i == j);
     return diagonal_[i];
   }
-
+  T& operator() (unsigned i) { return diagonal_[i]; }
+  T const& operator() (unsigned i) const { return diagonal_[i]; }
+  
   // iterators
   typedef typename vnl_vector<T>::iterator iterator;
   inline iterator begin() { return diagonal_.begin(); }
@@ -87,11 +84,15 @@ public:
   unsigned size() const { return diagonal_.size(); }
   unsigned n() const { return diagonal_.size(); } // ** deprecated ? **
   unsigned rows() const { return diagonal_.size(); }
+  unsigned cols() const { return diagonal_.size(); }
   unsigned columns() const { return diagonal_.size(); }
 
   // Need this until we add a vnl_diag_matrix ctor to vnl_matrix;
   inline vnl_matrix<T> asMatrix() const;
-
+  
+  void resize(int n) { diagonal_.resize(n); }
+  void clear() { diagonal_.clear(); }
+  
   // Return pointer to the diagonal elements as a contiguous 1D C array;
   T*       data_block()       { return diagonal_.data_block(); }
   T const* data_block() const { return diagonal_.data_block(); }
@@ -102,10 +103,10 @@ protected:
   vnl_vector<T> diagonal_;
 
 private:
-  // This is private because it's not really a matrix operation.
-  T operator()(unsigned i) const {
-    return diagonal_[i];
-  }
+  //  // This is private because it's not really a matrix operation.
+  //  T operator()(unsigned i) const {
+  //    return diagonal_[i];
+  //  }
 
 #if VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD
   friend vnl_vector<T> operator*(vnl_diag_matrix<T> const&,vnl_vector<T> const&);
@@ -113,10 +114,8 @@ private:
 };
 
 
-// // Define this now,
-// #define IUE_DEFINED_vnl_diag_matrix
-
-template <class T> vcl_ostream& operator<< (vcl_ostream&, vnl_diag_matrix<T> const&);
+template <class T>
+vcl_ostream& operator<< (vcl_ostream&, vnl_diag_matrix<T> const&);
 
 // -- Convert a vnl_diag_matrix to a Matrix.
 template <class T>
@@ -237,11 +236,5 @@ inline vnl_vector<T> operator* (vnl_vector<T> const& A, vnl_diag_matrix<T> const
 {
   return element_product(D.diagonal(), A);
 }
-
-// #ifdef IUE
-// // Overloads of global IUEg_getTypeId, etc. (if using the full IUE)
-// #include<MathDex/vnl_diag_matrix_Helper.h>
-// #endif
-
 
 #endif // vnl_diag_matrix_h_
