@@ -343,7 +343,7 @@ FrostAPI::RunMeasurement( "Warnings", $totwarnings);
 FrostAPI::RunMeasurement( "FileCount", $totfiles);
 FrostAPI::RunMeasurement( "TimeStarted", $totstarttime);
 FrostAPI::RunMeasurement( "TimeElapsed", $tottime);
-FrostAPI::RunMeasurement( "BuildLog", $fullbuildlog);
+FrostAPI::RunMeasurementBase64( "BuildLog", $fullbuildlog);
 
 if( $toterrors>0)
   {
