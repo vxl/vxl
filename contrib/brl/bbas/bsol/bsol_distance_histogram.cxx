@@ -125,8 +125,9 @@ second_distance_peak(double min_peak_height_ratio)
   double tr=0;
   for (i = 0; i<nbins&&state!=fail&&state!=finish; i++)
     {
-//    vcl_cout << "State[" << state << "], H = " << h[i] << " tr = " << tr
-//             << " v = "<< v << "\n";
+//       vcl_cout << "State[" << state << "], D = " << bin_values_[i]
+//                << " C = "<< bin_counts_[i] << " tr = " << tr 
+//                << " v = "<< v << "\n";
       //Begin the scan look for a value above 0
       if (state==init)
         if (bin_counts_[i]>0)
@@ -136,9 +137,9 @@ second_distance_peak(double min_peak_height_ratio)
             continue;
           }
       //If we are in the start state set the threshold and move down.
-      if (state==start)
-        if (bin_counts_[i]>0)
-          if (bin_counts_[i]<=v)
+      if(state==start)
+        //        if(bin_counts_[i]>0)
+          if(bin_counts_[i]<=v)
             {
               state = down;
               //second peak should be a significant ratio of the starting value
@@ -170,8 +171,8 @@ second_distance_peak(double min_peak_height_ratio)
             continue;
           }
       // we are moving up, waiting to capture a peak above the threshold
-      if (state==up)
-        if (bin_counts_[i]>tr)
+      if(state==up)
+        //        if(bin_counts_[i]>tr)
           {
             if (bin_counts_[i]<=v)
               state = finish;

@@ -217,7 +217,7 @@ class bsol_hough_line_index :  public vbl_ref_count
   int dominant_directions(const int thresh, const float angle_tol, 
                           vcl_vector<int>& dirs);
 
-  //:Dominant line groups
+  //:Dominant parallel line groups
   int dominant_line_groups(const int thresh, const float angle_tol,
                            vcl_vector<vcl_vector<vsol_line_2d_sptr> >& groups);
 
