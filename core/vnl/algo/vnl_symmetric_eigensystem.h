@@ -53,13 +53,15 @@
 //     full matrix to tridiagonal form.
 // \end{quote}
 // @}
-  
 
-template <class T>
-bool vnl_symmetric_eigensystem_compute(vnl_matrix<T> const & A, 
-                                       vnl_matrix<T> & V, vnl_vector<T> & D);
+bool vnl_symmetric_eigensystem_compute(vnl_matrix<float> const & A, 
+                                       vnl_matrix<float> & V,
+				       vnl_vector<float> & D);
+bool vnl_symmetric_eigensystem_compute(vnl_matrix<double> const & A, 
+                                       vnl_matrix<double> & V,
+				       vnl_vector<double> & D);
 
-template <class T>
+export template <class T>
 class vnl_symmetric_eigensystem {
 public:
   //: @{ Solve real symmetric eigensystem $A x = \lambda x$ @}
