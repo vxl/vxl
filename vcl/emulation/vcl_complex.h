@@ -442,10 +442,4 @@ vcl_istream& operator >> (vcl_istream& o, vcl_complex<FLOAT>& x)
 // ANSI complex types
 #define __STD_COMPLEX
 
-inline vcl_complex<float> operator*(const vcl_complex<float>& c, double d)
-{
-  float f = (float)d;
-  return vcl_complex<float>(c.real() * f, c.imag() * f);
-}
-
 #endif // vcl_emulation_complex_h
