@@ -78,11 +78,11 @@ class QvName {
     static QvBool       isIdentChar(char c);
     static QvBool       isNodeNameStartChar(char c);
     static QvBool       isNodeNameChar(char c);
-    bool                operator !() const   { return (bool)(entry->isEmpty()); }
+    bool                operator !() const   { return entry->isEmpty() != 0; }
     friend bool         operator ==(const QvName &n, const char *s)
-        { return (bool)(n.entry->isEqual(s)); }
+        { return n.entry->isEqual(s) != 0; }
     friend bool         operator ==(const char *s, const QvName &n)
-        { return (bool)(n.entry->isEqual(s)); }
+        { return n.entry->isEqual(s) != 0; }
 
     friend bool         operator ==(const QvName &n1, const QvName &n2)
         { return n1.entry == n2.entry; }
