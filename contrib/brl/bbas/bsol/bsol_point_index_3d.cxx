@@ -349,8 +349,8 @@ void bsol_point_index_3d::clear_marks()
   for (int r=0; r<nrows_; ++r)
     for (int c=0; c<ncols_; ++c)
       for (int s=0; s<nslabs_; ++s)
-        for (vcl_vector<vsol_point_3d_sptr>::iterator pit = point_array_[r][c][s].begin();
-             pit != point_array_[r][c][s].end(); ++pit)
+        for (vcl_vector<vsol_point_3d_sptr>::iterator pit = (*(point_array_[r][c]))[s].begin();
+             pit != (*(point_array_[r][c]))[s].end(); ++pit)
           clear_flag(*pit);
 }
 
