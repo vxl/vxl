@@ -21,7 +21,7 @@
 #  define finitef finite
 # endif
 
-#elif VXL_MATH_HAS_FINITE
+#elif VXL_C_MATH_HAS_FINITE
 # include <math.h>  // dont_vxl_filter: this is *not* supposed to be <cmath>
 # ifndef __alpha__ // on Alpha, finitef() must be used for float args instead of finite()
 #  define finitef finite
