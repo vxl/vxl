@@ -1,8 +1,8 @@
 // Source
 // Eventually this will be core/vil/file_formats/ ???
 //
-// $Revision: 1.1 $ 
-// $Date: 2003/12/11 18:16:29 $
+// $Revision: 1.2 $ 
+// $Date: 2003/12/11 18:48:15 $
 // $Author: mlaymon $
 
 // <begin copyright notice>
@@ -38,6 +38,7 @@
 // ---------------------------------------------------------------------------
 // <end copyright notice>
 
+#include <vcl_cstdio.h>
 #include <vcl_iostream.h>
 #include <vcl_string.h>
 
@@ -571,19 +572,19 @@ void vpgl_rational_camera::verify_camera (
   double x, y ;
 
   this->world_to_image (UL, x, y, time) ;
-  fprintf (stdout, "Upper Left  (%14.6e, %14.6e, %14.6e) -> (%13.5e, %13.5e)\n",
+  vcl_fprintf (stdout, "Upper Left  (%14.6e, %14.6e, %14.6e) -> (%13.5e, %13.5e)\n",
 	UL[0], UL[1], UL[2], x, y) ;
 
   this->world_to_image (UR, x, y, time) ;
-  fprintf (stdout, "Upper Right (%14.6e, %14.6e, %14.6e) -> (%13.5e, %13.5e)\n",
+  vcl_fprintf (stdout, "Upper Right (%14.6e, %14.6e, %14.6e) -> (%13.5e, %13.5e)\n",
 	UR[0], UR[1], UR[2], x, y) ;
 
   this->world_to_image (LR, x, y, time) ;
-  fprintf (stdout, "Lower Right (%14.6e, %14.6e, %14.6e) -> (%13.5e, %13.5e)\n",
+  vcl_fprintf (stdout, "Lower Right (%14.6e, %14.6e, %14.6e) -> (%13.5e, %13.5e)\n",
 	LR[0], LR[1], LR[2], x, y) ;
 
   this->world_to_image (LL, x, y, time) ;
-  fprintf (stdout, "Lower Left  (%14.6e, %14.6e, %14.6e) -> (%13.5e, %13.5e)\n",
+  vcl_fprintf (stdout, "Lower Left  (%14.6e, %14.6e, %14.6e) -> (%13.5e, %13.5e)\n",
 	LL[0], LL[1], LL[2], x, y) ;
 
   vcl_cout << "---------------------------------------------------" << vcl_endl ;
