@@ -38,9 +38,32 @@ class rgrl_matcher_k_nearest
                    rgrl_transformation const&    current_xform,
                    rgrl_scale const&             /* current_scale */ );
 
+
   // Defines type-related functions
   rgrl_type_macro( rgrl_matcher_k_nearest, rgrl_matcher);
 
+ protected:
+
+  // nodes to be sorted based on distance
+  struct internal_dist_node{
+    double geo_err_;
+    nodes_vec_iterator itr_;
+    
+    internal_dist_node(): geo_err_(-1.0){  }
+    
+    bool operator<( internal_dist_node const& rhs ) const;
+  };
+
+
+  //: This is internal to invert matches function.
+  //  It is to restrict the number of nearest neighbors
+  virtual
+  void
+  add_one_flipped_match( rgrl_match_set_sptr&      inv_set,
+                         rgrl_view          const& current_view,
+                         nodes_vec_iterator const& begin_iter,
+                         nodes_vec_iterator const& end_iter ); 
+ 
  protected:
   unsigned int k_;
   double thres_;

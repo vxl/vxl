@@ -53,7 +53,7 @@ add_one_flipped_match( rgrl_match_set_sptr&      inv_set,
                        nodes_vec_iterator const& end_iter )
 {
   const unsigned int size = unsigned( end_iter - begin_iter );
-  rgrl_transformation_sptr const& inverse_xform = current_view.xform_estimate();
+  rgrl_transformation_sptr const& inverse_xform = current_view.inverse_xform_estimate();
 
   rgrl_feature_sptr from = begin_iter->to_;
   rgrl_feature_sptr mapped = from->transform( *inverse_xform );
@@ -99,6 +99,7 @@ invert_matches( rgrl_match_set const&    current_set,
       tmp.from_    = fitr.from_feature();
       tmp.to_      = titr.to_feature();
       tmp.sig_wgt_ = titr.signature_weight();
+      
       matches.push_back( tmp );
       //rgrl_feature_sptr mapped = from->transform( *reverse_xform );
       //vcl_vector<rgrl_feature_sptr> to_vec(1, to );
