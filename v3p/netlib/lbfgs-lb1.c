@@ -56,26 +56,26 @@ int *finish; /* logical*/
 /*IF (ITER.EQ.0)THEN*/
   if (*iter == 0) {
 /*  30   FORMAT(' F= ',1PD10.3,'   GNORM= ',1PD10.3)*/
-/*	      WRITE(MP,30)F,GNORM*/
+/*       WRITE(MP,30)F,GNORM*/
     printf(" F = %g, GNORM = %g\n", *f, *gnorm);
-/*		    IF (IPRINT(2).GE.1)THEN*/
+/*       IF (IPRINT(2).GE.1)THEN*/
     if (iprint[2] >= 1) {
 /*  40   FORMAT(' VECTOR X= ')*/
-/*			WRITE(MP,40)*/
+/*       WRITE(MP,40)*/
       printf(" VECTOR X=\n");
-/*			WRITE(MP,50) (X(I),I=1,N)*/
+/*       WRITE(MP,50) (X(I),I=1,N)*/
       write50(x, *n);
 /*  60   FORMAT(' GRADIENT VECTOR G= ')*/
-/*			WRITE(MP,60)*/
+/*       WRITE(MP,60)*/
       printf(" GRADIENT VECTOR G=\n");
-/*			WRITE(MP,50) (G(I),I=1,N)*/
+/*       WRITE(MP,50) (G(I),I=1,N)*/
       write50(g, *n);
-/*		     ENDIF*/
+/*       ENDIF*/
     }
 /*  10   FORMAT('*************************************************')*/
     printf("*************************************************\n");
 /*  70   FORMAT(/'   I   NFN',4X,'FUNC',8X,'GNORM',7X,'STEPLENGTH'/)*/
-/*	      WRITE(MP,70)*/
+/*       WRITE(MP,70)*/
     printf("   I   NFN    FUNC        GNORM       STEPLENGTH\n");
 /*ELSE*/
   } else {
@@ -145,13 +145,13 @@ int *finish; /* logical*/
 /*  ENDIF*/
     }
 /*  100  FORMAT(/' THE MINIMIZATION TERMINATED WITHOUT DETECTING ERRORS.',*/
-/*	.       /' IFLAG = 0')*/
+/* .       /' IFLAG = 0')*/
 /*  IF (FINISH) WRITE(MP,100)*/
     if (*finish)
       printf(" THE MINIMIZATION TERMINATED WITHOUT DETECTING ERRORS.\n");
   }
-/* ENDIF*/
+/*  ENDIF*/
 /* C*/
-/*	 RETURN*/
-/*	 END*/
+/*  RETURN*/
+/*  END*/
 }

@@ -2,11 +2,11 @@
 #define LineSeg_h_
 //-----------------------------------------------------------------------------
 //
-// .NAME	LineSeg
-// .LIBRARY	MViewBasics
-// .HEADER	MultiView package
-// .INCLUDE	mvl/LineSeg.h
-// .FILE	LineSeg.cxx
+// .NAME    LineSeg
+// .LIBRARY MViewBasics
+// .HEADER  MultiView package
+// .INCLUDE mvl/LineSeg.h
+// .FILE    LineSeg.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 01 Aug 96
 //

@@ -165,10 +165,10 @@ TIFFSetCompressionScheme(TIFF* tif, int scheme)
  * by this library.
  */
 typedef struct _codec {
-        struct _codec*	next;
-        TIFFCodec*	info;
+        struct _codec* next;
+        TIFFCodec*     info;
 } codec_t;
-static	codec_t* registeredCODECS = NULL;
+static  codec_t* registeredCODECS = NULL;
 
 const TIFFCodec*
 TIFFFindCODEC(uint16 scheme)

@@ -15,27 +15,27 @@ class QvAsciiText : public QvNode
 
 public:
 
-  enum Justification {	// Text justification:
-    LEFT,				// Align left edge of text to origin
-    CENTER,				// Align center of text to origin
-    RIGHT				// Align right edge of text to origin
+  enum Justification {  // Text justification:
+    LEFT,                    // Align left edge of text to origin
+    CENTER,                  // Align center of text to origin
+    RIGHT                    // Align right edge of text to origin
   };
 
   // Fields
-  QvMFString		string;		// Text string
-  QvSFFloat		spacing;	// Inter-string spacing
-  QvSFEnum		justification;	// Text justification
-  QvMFFloat		width;		// Suggested width constraint
+  QvMFString string;         // Text string
+  QvSFFloat  spacing;        // Inter-string spacing
+  QvSFEnum   justification;  // Text justification
+  QvMFFloat  width;          // Suggested width constraint
 
 private:
   // mpichler, 19960620 - 19960621
-  int requested_;			// requested fontchars
-  FontChar* fontchars_;			// character glyphs
-  point3D* roworigin_;			// row origin array
-  point3D* rowmax_;			// row max array
-  float* rowhspc_;			// row hspacing array
-  float size_;				// size (1/10 of FontStyle size)
-  int bold_, italic_;			// font attributes
+  int requested_;            // requested fontchars
+  FontChar* fontchars_;      // character glyphs
+  point3D* roworigin_;       // row origin array
+  point3D* rowmax_;          // row max array
+  float* rowhspc_;           // row hspacing array
+  float size_;               // size (1/10 of FontStyle size)
+  int bold_, italic_;        // font attributes
 };
 
 #endif // _QV_ASCII_TEXT_

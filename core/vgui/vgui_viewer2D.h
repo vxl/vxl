@@ -19,7 +19,7 @@
 //              Robotics Research Group, University of Oxford
 //
 // .SECTION Modifications
-//		23-AUG-2000 Marko Bacic, Oxford RRG -- Added support for scroll bars
+//              23-AUG-2000 Marko Bacic, Oxford RRG -- Added support for scroll bars
 //
 //-----------------------------------------------------------------------------
 

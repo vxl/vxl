@@ -30,49 +30,49 @@
 #include "tiffiop.h"
 
 static const long typemask[13] = {
-        0L,		/* TIFF_NOTYPE */
-        0x000000ffL,	/* TIFF_BYTE */
-        0xffffffffL,	/* TIFF_ASCII */
-        0x0000ffffL,	/* TIFF_SHORT */
-        0xffffffffL,	/* TIFF_LONG */
-        0xffffffffL,	/* TIFF_RATIONAL */
-        0x000000ffL,	/* TIFF_SBYTE */
-        0x000000ffL,	/* TIFF_UNDEFINED */
-        0x0000ffffL,	/* TIFF_SSHORT */
-        0xffffffffL,	/* TIFF_SLONG */
-        0xffffffffL,	/* TIFF_SRATIONAL */
-        0xffffffffL,	/* TIFF_FLOAT */
-        0xffffffffL,	/* TIFF_DOUBLE */
+        0L,             /* TIFF_NOTYPE */
+        0x000000ffL,    /* TIFF_BYTE */
+        0xffffffffL,    /* TIFF_ASCII */
+        0x0000ffffL,    /* TIFF_SHORT */
+        0xffffffffL,    /* TIFF_LONG */
+        0xffffffffL,    /* TIFF_RATIONAL */
+        0x000000ffL,    /* TIFF_SBYTE */
+        0x000000ffL,    /* TIFF_UNDEFINED */
+        0x0000ffffL,    /* TIFF_SSHORT */
+        0xffffffffL,    /* TIFF_SLONG */
+        0xffffffffL,    /* TIFF_SRATIONAL */
+        0xffffffffL,    /* TIFF_FLOAT */
+        0xffffffffL,    /* TIFF_DOUBLE */
 };
 static const int bigTypeshift[13] = {
-        0,		/* TIFF_NOTYPE */
-        24,		/* TIFF_BYTE */
-        0,		/* TIFF_ASCII */
-        16,		/* TIFF_SHORT */
-        0,		/* TIFF_LONG */
-        0,		/* TIFF_RATIONAL */
-        24,		/* TIFF_SBYTE */
-        24,		/* TIFF_UNDEFINED */
-        16,		/* TIFF_SSHORT */
-        0,		/* TIFF_SLONG */
-        0,		/* TIFF_SRATIONAL */
-        0,		/* TIFF_FLOAT */
-        0,		/* TIFF_DOUBLE */
+        0,              /* TIFF_NOTYPE */
+        24,             /* TIFF_BYTE */
+        0,              /* TIFF_ASCII */
+        16,             /* TIFF_SHORT */
+        0,              /* TIFF_LONG */
+        0,              /* TIFF_RATIONAL */
+        24,             /* TIFF_SBYTE */
+        24,             /* TIFF_UNDEFINED */
+        16,             /* TIFF_SSHORT */
+        0,              /* TIFF_SLONG */
+        0,              /* TIFF_SRATIONAL */
+        0,              /* TIFF_FLOAT */
+        0,              /* TIFF_DOUBLE */
 };
 static const int litTypeshift[13] = {
-        0,		/* TIFF_NOTYPE */
-        0,		/* TIFF_BYTE */
-        0,		/* TIFF_ASCII */
-        0,		/* TIFF_SHORT */
-        0,		/* TIFF_LONG */
-        0,		/* TIFF_RATIONAL */
-        0,		/* TIFF_SBYTE */
-        0,		/* TIFF_UNDEFINED */
-        0,		/* TIFF_SSHORT */
-        0,		/* TIFF_SLONG */
-        0,		/* TIFF_SRATIONAL */
-        0,		/* TIFF_FLOAT */
-        0,		/* TIFF_DOUBLE */
+        0,              /* TIFF_NOTYPE */
+        0,              /* TIFF_BYTE */
+        0,              /* TIFF_ASCII */
+        0,              /* TIFF_SHORT */
+        0,              /* TIFF_LONG */
+        0,              /* TIFF_RATIONAL */
+        0,              /* TIFF_SBYTE */
+        0,              /* TIFF_UNDEFINED */
+        0,              /* TIFF_SSHORT */
+        0,              /* TIFF_SLONG */
+        0,              /* TIFF_SRATIONAL */
+        0,              /* TIFF_FLOAT */
+        0,              /* TIFF_DOUBLE */
 };
 
 /*
@@ -149,10 +149,10 @@ TIFFClientOpen(
         tif->tif_name = (char *)tif + sizeof (TIFF);
         strcpy(tif->tif_name, name);
         tif->tif_mode = m &~ (O_CREAT|O_TRUNC);
-        tif->tif_curdir = (tdir_t) -1;		/* non-existent directory */
+        tif->tif_curdir = (tdir_t) -1;          /* non-existent directory */
         tif->tif_curoff = 0;
-        tif->tif_curstrip = (tstrip_t) -1;	/* invalid strip */
-        tif->tif_row = (uint32) -1;		/* read/write pre-increment */
+        tif->tif_curstrip = (tstrip_t) -1;      /* invalid strip */
+        tif->tif_row = (uint32) -1;             /* read/write pre-increment */
         tif->tif_clientdata = clientdata;
         tif->tif_readproc = readproc;
         tif->tif_writeproc = writeproc;
@@ -161,7 +161,7 @@ TIFFClientOpen(
         tif->tif_sizeproc = sizeproc;
         tif->tif_mapproc = mapproc;
         tif->tif_unmapproc = unmapproc;
-        _TIFFSetDefaultCompressionState(tif);	/* setup default state */
+        _TIFFSetDefaultCompressionState(tif);   /* setup default state */
         /*
          * Default is to return data MSB2LSB and enable the
          * use of memory-mapped files and strip chopping when
@@ -184,15 +184,15 @@ TIFFClientOpen(
          * TIFF but only supports some braindead idea of what the
          * vendor thinks TIFF is):
          *
-         * 'l'		use little-endian byte order for creating a file
-         * 'b'		use big-endian byte order for creating a file
-         * 'L'		read/write information using LSB2MSB bit order
-         * 'B'		read/write information using MSB2LSB bit order
-         * 'H'		read/write information using host bit order
-         * 'M'		enable use of memory-mapped files when supported
-         * 'm'		disable use of memory-mapped files
-         * 'C'		enable strip chopping support when reading
-         * 'c'		disable strip chopping support
+         * 'l'          use little-endian byte order for creating a file
+         * 'b'          use big-endian byte order for creating a file
+         * 'L'          read/write information using LSB2MSB bit order
+         * 'B'          read/write information using MSB2LSB bit order
+         * 'H'          read/write information using host bit order
+         * 'M'          enable use of memory-mapped files when supported
+         * 'm'          disable use of memory-mapped files
+         * 'C'          enable strip chopping support when reading
+         * 'c'          disable strip chopping support
          *
          * The use of the 'l' and 'b' flags is strongly discouraged.
          * These flags are provided solely because numerous vendors,
@@ -281,7 +281,7 @@ TIFFClientOpen(
                 tif->tif_header.tiff_version = TIFF_VERSION;
                 if (tif->tif_flags & TIFF_SWAB)
                         TIFFSwabShort(&tif->tif_header.tiff_version);
-                tif->tif_header.tiff_diroff = 0;	/* filled in later */
+                tif->tif_header.tiff_diroff = 0;        /* filled in later */
                 if (!WriteOK(tif, &tif->tif_header, sizeof (TIFFHeader))) {
                         TIFFError(name, "Error writing TIFF header");
                         goto bad;
@@ -362,7 +362,7 @@ TIFFClientOpen(
                 return (tif);
         }
 bad:
-        tif->tif_mode = O_RDONLY;	/* XXX avoid flush */
+        tif->tif_mode = O_RDONLY;       /* XXX avoid flush */
         TIFFClose(tif);
         return ((TIFF*)0);
 bad2:

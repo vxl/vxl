@@ -14,19 +14,19 @@
  * (ie, box filtering), we can save some work in color conversion by
  * calculating all the output pixels corresponding to a pair of chroma
  * samples at one time.  In the conversion equations
- *	R = Y           + K1 * Cr
- *	G = Y + K2 * Cb + K3 * Cr
- *	B = Y + K4 * Cb
+ *      R = Y           + K1 * Cr
+ *      G = Y + K2 * Cb + K3 * Cr
+ *      B = Y + K4 * Cb
  * only the Y term varies among the group of pixels corresponding to a pair
  * of chroma samples, so the rest of the terms can be calculated just once.
  * At typical sampling ratios, this eliminates half or three-quarters of the
  * multiplications needed for color conversion.
  *
  * This file currently provides implementations for the following cases:
- *	YCbCr => RGB color conversion only.
- *	Sampling ratios of 2h1v or 2h2v.
- *	No scaling needed at upsample time.
- *	Corner-aligned (non-CCIR601) sampling alignment.
+ *      YCbCr => RGB color conversion only.
+ *      Sampling ratios of 2h1v or 2h2v.
+ *      No scaling needed at upsample time.
+ *      Corner-aligned (non-CCIR601) sampling alignment.
  * Other special cases could be added, but in most applications these are
  * the only common cases.  (For uncommon cases we fall back on the more
  * general code in jdsample.c and jdcolor.c.)
@@ -42,7 +42,7 @@
 /* Private subobject */
 
 typedef struct {
-  struct jpeg_upsampler pub;	/* public fields */
+  struct jpeg_upsampler pub;    /* public fields */
 
   /* Pointer to routine to do actual upsampling/conversion of one row group */
   JMETHOD(void, upmethod, (j_decompress_ptr cinfo,
@@ -50,10 +50,10 @@ typedef struct {
                            JSAMPARRAY output_buf));
 
   /* Private state for YCC->RGB conversion */
-  int * Cr_r_tab;		/* => table for Cr to R conversion */
-  int * Cb_b_tab;		/* => table for Cb to B conversion */
-  jpegINT32 * Cr_g_tab;		/* => table for Cr to G conversion */
-  jpegINT32 * Cb_g_tab;		/* => table for Cb to G conversion */
+  int * Cr_r_tab;               /* => table for Cr to R conversion */
+  int * Cb_b_tab;               /* => table for Cb to B conversion */
+  jpegINT32 * Cr_g_tab;         /* => table for Cr to G conversion */
+  jpegINT32 * Cb_g_tab;         /* => table for Cb to G conversion */
 
   /* For 2:1 vertical sampling, we produce two output rows at a time.
    * We need a "spare" row buffer to hold the second output row if the
@@ -61,17 +61,17 @@ typedef struct {
    * to discard the dummy last row if the image height is odd.
    */
   JSAMPROW spare_row;
-  boolean spare_full;		/* T if spare buffer is occupied */
+  boolean spare_full;           /* T if spare buffer is occupied */
 
-  JDIMENSION out_row_width;	/* samples per output row */
-  JDIMENSION rows_to_go;	/* counts rows remaining in image */
+  JDIMENSION out_row_width;     /* samples per output row */
+  JDIMENSION rows_to_go;        /* counts rows remaining in image */
 } my_upsampler;
 
 typedef my_upsampler * my_upsample_ptr;
 
-#define SCALEBITS	16	/* speediest right-shift on some machines */
-#define ONE_HALF	((jpegINT32) 1 << (SCALEBITS-1))
-#define FIX(x)		((jpegINT32) ((x) * (1L<<SCALEBITS) + 0.5))
+#define SCALEBITS       16      /* speediest right-shift on some machines */
+#define ONE_HALF        ((jpegINT32) 1 << (SCALEBITS-1))
+#define FIX(x)          ((jpegINT32) ((x) * (1L<<SCALEBITS) + 0.5))
 
 
 /*
@@ -150,7 +150,7 @@ merged_2v_upsample (j_decompress_ptr cinfo,
 {
   my_upsample_ptr upsample = (my_upsample_ptr) cinfo->upsample;
   JSAMPROW work_ptrs[2];
-  JDIMENSION num_rows;		/* number of rows returned to caller */
+  JDIMENSION num_rows;          /* number of rows returned to caller */
 
   if (upsample->spare_full) {
     /* If we have a spare row saved from a previous cycle, just return it. */

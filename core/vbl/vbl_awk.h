@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	vbl_awk
-// .LIBRARY	vbl
-// .HEADER	vxl package
-// .INCLUDE	vbl/vbl_awk.h
-// .FILE	vbl_awk.cxx
+// .NAME    vbl_awk
+// .LIBRARY vbl
+// .HEADER  vxl package
+// .INCLUDE vbl/vbl_awk.h
+// .FILE    vbl_awk.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 17 May 97
 // .SECTION Modifications
@@ -45,7 +45,7 @@ public:
 
   // Operations----------------------------------------------------------------
 
-// -- Return field i.  Counting starts at 0.
+//: Return field i.  Counting starts at 0.
   char const* operator[] (unsigned i) {
     if (i < fields_.size())
       return fields_[i];
@@ -53,26 +53,26 @@ public:
       return 0;
   }
 
-// -- Return the current "record number", i.e. line number
+//: Return the current "record number", i.e. line number
   int NR() const { return line_number_; }
 
-// -- Return the number of fields on this line.
+//: Return the number of fields on this line.
   int NF() const { return fields_.size(); }
 
-// -- Return the entire line
+//: Return the entire line
   char const* line() const { return (char const*)line_.c_str(); }
 
-// -- Return the remainder of the line, starting from field_number.
+//: Return the remainder of the line, starting from field_number.
 // (0 is from the first non-whitespace character)
   char const* line_from(int field_number) const;
 
-// -- Return true if this line is not the last.
+//: Return true if this line is not the last.
   operator bool () const { return !done_; }
 
-// -- Advance to the next line
+//: Advance to the next line
   vbl_awk& operator ++ () { next(); return *this; }
 
-// -- Display error message, line number, optional field number and char within field.
+//: Display error message, line number, optional field number and char within field.
 
   void error(vcl_ostream&, char const* message, int field = -1, int char_within_field = 0);
 

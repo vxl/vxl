@@ -36,12 +36,12 @@
 
 //=========================== Basics ====================================
 //
-// .NAME	gevd_memory_mixin - Captures all functional details required to access a real computer memory
-// .HEADER	GeneralUtility Package
-// .LIBRARY	Basics
-// .INCLUDE	Basics/gevd_memory_mixin.h
-// .FILE	gevd_memory_mixin.h
-// .FILE	gevd_memory_mixin.C
+// .NAME    gevd_memory_mixin - Captures all functional details required to access a real computer memory
+// .HEADER  GeneralUtility Package
+// .LIBRARY Basics
+// .INCLUDE Basics/gevd_memory_mixin.h
+// .FILE    gevd_memory_mixin.h
+// .FILE    gevd_memory_mixin.C
 //
 // .SECTION Author:
 // Written by:       Brian DeCleene
@@ -50,8 +50,8 @@
 // .SECTION Modifications:
 // Modified by:      Burt Smith
 // Date:             June 11, 1991 - Added status and handling of touched
-//					vs. untouched space.
-//		     July  8, 1991 - Incorporated StatusMixin.
+//                                      vs. untouched space.
+//                   July  8, 1991 - Incorporated StatusMixin.
 //                   July 17, 1991 - Changed ReadBytes(..., int loc) to
 //                                   seek from offset, not from start.
 // Modified by:      Peter Vanroose
@@ -67,37 +67,37 @@
 /* Status Variables.  Certain events are always errors, hence the error */
 /* bit is set for those events.  For events which might be errors but   */
 /* are not always, the error bit is left clear; the proper choice will  */
-/* be made at the time the event occurs.				*/
+/* be made at the time the event occurs.                                */
 //======================================================================//
 #define MM_PROTECTED_FLAGS      0x000001CE // bits that may not be altered
 //                                         // except by the buffer.
 // Error conditions
 //
-#define MM_MEMORY_ERROR		0x00000083 // unable to allocate buffer
-#define MM_DATA_OVERFLOW	0x00000004 // past initialized data
-#define MM_OVERFLOW		0x00000088 // past allocated space
+#define MM_MEMORY_ERROR         0x00000083 // unable to allocate buffer
+#define MM_DATA_OVERFLOW        0x00000004 // past initialized data
+#define MM_OVERFLOW             0x00000088 // past allocated space
 #define MM_UNDERFLOW            0x000000C0 // read before allocated space
 //
 // Status conditions
 //
-#define MM_NIL_BUFFER		0x00000001 // buffer is nil buffer
-#define MM_DIRTY		0x00000010 // buffer changed since alloced
-#define MM_FOREIGN_BLOCK	0x00000020 // foreign memory used for buffer
-#define MM_ERROR		0x00000080 // error has occured
-#define MM_WARN			0x00000100 // warning has occured
+#define MM_NIL_BUFFER           0x00000001 // buffer is nil buffer
+#define MM_DIRTY                0x00000010 // buffer changed since alloced
+#define MM_FOREIGN_BLOCK        0x00000020 // foreign memory used for buffer
+#define MM_ERROR                0x00000080 // error has occured
+#define MM_WARN                 0x00000100 // warning has occured
 //
 // Buffer types, usually indicated at creation.  Note that it is important
 // NOT to use the MM_PROTECTED type unless absolutely necessary; this will
 // guarantee deallocation of resources when the buffer is no longer used.
 //
-#define MM_READ			0x00000200 // buffer can be read.
-#define MM_WRITE		0x00000400 // buffer can be written to.
-#define MM_PROTECTED		0x00000800 // buffer cannot be deleted.
-#define MM_FIXED		0x00001000 // buffer cannot be replaced.
-#define MM_CLEAR		0x00002000 // buffer cleared at creation.  A
+#define MM_READ                 0x00000200 // buffer can be read.
+#define MM_WRITE                0x00000400 // buffer can be written to.
+#define MM_PROTECTED            0x00000800 // buffer cannot be deleted.
+#define MM_FIXED                0x00001000 // buffer cannot be replaced.
+#define MM_CLEAR                0x00002000 // buffer cleared at creation.  A
                                            // supplied buffer is not cleared.
 
-#define MM_CREATION_FLAGS	0x00003E00 // Flags used at creation.
+#define MM_CREATION_FLAGS       0x00003E00 // Flags used at creation.
 
 //---------------------------------------------------------------------
 

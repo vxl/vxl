@@ -33,7 +33,7 @@ public:
     SpotLight,
 
     // Types of transformations in transformation stack
-    NoOpTransform,		// For QvTransformSeparator
+    NoOpTransform,     // For QvTransformSeparator
     MatrixTransform,
     Rotation,
     Scale,
@@ -44,18 +44,18 @@ public:
     NumNodeTypes
   };
 
-  static const char *nodeTypeNames[NumNodeTypes];	// Names of node types
+  static const char *nodeTypeNames[NumNodeTypes];       // Names of node types
 
-  int		depth;		// Depth of element in state
-  QvElement	*next;		// Next element in stack
-  QvNode	*data;		// Pointer to node containing data
-  NodeType	type;		// Type of data node
+  int           depth; // Depth of element in state
+  QvElement     *next; // Next element in stack
+  QvNode        *data; // Pointer to node containing data
+  NodeType      type;  // Type of data node
 
   QvElement();
   virtual ~QvElement();
 
   // Prints contents for debugging, mostly
-  virtual void	print();
+  virtual void  print();
 };
 
 #endif /* _QV_ELEMENT_ */

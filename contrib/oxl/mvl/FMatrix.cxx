@@ -25,7 +25,7 @@
 
 //--------------------------------------------------------------
 //
-// -- Default constructor.
+//: Default constructor.
 // Sets matrices to size 3x3, zero-filled.
 
 FMatrix::FMatrix()
@@ -35,7 +35,7 @@ FMatrix::FMatrix()
 
 //--------------------------------------------------------------
 //
-// -- Constructor.  Load from istream.
+//: Constructor.  Load from istream.
 
 FMatrix::FMatrix(vcl_istream& f)
 {
@@ -45,7 +45,7 @@ FMatrix::FMatrix(vcl_istream& f)
 
 //--------------------------------------------------------------
 //
-// -- Constructor.
+//: Constructor.
 
 FMatrix::FMatrix(const double *f_matrix)
 {
@@ -55,7 +55,7 @@ FMatrix::FMatrix(const double *f_matrix)
 
 //--------------------------------------------------------------
 //
-// -- Constructor
+//: Constructor
 
 FMatrix::FMatrix(const vnl_matrix<double>& f_matrix)
 {
@@ -66,7 +66,7 @@ FMatrix::FMatrix(const vnl_matrix<double>& f_matrix)
 
 //--------------------------------------------------------------
 //
-// -- Construct from two P matrices
+//: Construct from two P matrices
 
 FMatrix::FMatrix(const PMatrix& P1, const PMatrix& P2)
 {
@@ -76,7 +76,7 @@ FMatrix::FMatrix(const PMatrix& P1, const PMatrix& P2)
 
 //--------------------------------------------------------------
 //
-// -- Construct from one P matrix, the other is assumed to be [I 0].
+//: Construct from one P matrix, the other is assumed to be [I 0].
 
 FMatrix::FMatrix(const PMatrix& P2)
 {
@@ -86,13 +86,13 @@ FMatrix::FMatrix(const PMatrix& P2)
 
 //--------------------------------------------------------------
 //
-// -- Destructor
+//: Destructor
 FMatrix::~FMatrix()
 {
 }
 
 //---------------------------------------------------------------
-// -- Read from ASCII istream
+//: Read from ASCII istream
 bool FMatrix::read_ascii(vcl_istream& s) {
   s >> _f_matrix;
   if (!(s.good() || s.eof()))
@@ -115,14 +115,14 @@ FMatrix FMatrix::read(char const* filename)
 }
 
 //---------------------------------------------------------------
-// -- Read from ASCII istream
+//: Read from ASCII istream
 vcl_istream& operator>>(vcl_istream& s, FMatrix& F) {
   F.read_ascii(s);
   return s;
 }
 
 //---------------------------------------------------------------
-// -- Read from ASCII istream
+//: Read from ASCII istream
 FMatrix FMatrix::read(vcl_istream& s)
 {
   return FMatrix(s);
@@ -132,7 +132,7 @@ FMatrix FMatrix::read(vcl_istream& s)
 
 //--------------------------------------------------------------
 //
-// -- @{ Return the epipolar line  $l_1$ in image 1: $l_1 = F^\top x_2$@}
+//: @{ Return the epipolar line  $l_1$ in image 1: $l_1 = F^\top x_2$@}
 HomgLine2D FMatrix::image1_epipolar_line(const HomgPoint2D& x2) const
 {
   return HomgLine2D(_ft_matrix * x2.get_vector());
@@ -140,7 +140,7 @@ HomgLine2D FMatrix::image1_epipolar_line(const HomgPoint2D& x2) const
 
 //----------------------------------------------------------------
 //
-// -- @{Return the epipolar line $l_2$ in image 2: $l_2 = F x_1$@}
+//: @{Return the epipolar line $l_2$ in image 2: $l_2 = F x_1$@}
 
 HomgLine2D FMatrix::image2_epipolar_line(const HomgPoint2D& x1) const
 {
@@ -174,13 +174,13 @@ FMatrix::image2_epipolar_distance_squared(HomgPoint2D *point1_ptr,
 }
 
 //---------------------------------------------------------------
-// -- Print to ostream
+//: Print to ostream
 vcl_ostream& operator<<(vcl_ostream& os, const FMatrix& F) {
   const vnl_matrix<double>& m = F.get_matrix();
-  for (unsigned long i = 0; i < m.rows(); i++) {	// For each row in matrix
-    for (unsigned long j = 0; j < m.columns(); j++)	// For each column in matrix
-      vbl_printf(os, "%24.16e ", m(i,j));		// Output data element
-    os << "\n";						// Output newline
+  for (unsigned long i = 0; i < m.rows(); i++) {    // For each row in matrix
+    for (unsigned long j = 0; j < m.columns(); j++) // For each column in matrix
+      vbl_printf(os, "%24.16e ", m(i,j));           // Output data element
+    os << "\n";                                     // Output newline
   }
   return os;
 }
@@ -188,7 +188,7 @@ vcl_ostream& operator<<(vcl_ostream& os, const FMatrix& F) {
 // @{ COMPUTATIONS @}
 //-------------------------------------------------------------------
 
-// -- Return an FMatrix which corresponds to the reverse of this one.
+//: Return an FMatrix which corresponds to the reverse of this one.
 FMatrix FMatrix::transpose() const
 {
   return FMatrix(_ft_matrix);
@@ -213,7 +213,7 @@ FMatrix::get_epipoles(HomgPoint2D*epipole1_ptr, HomgPoint2D*epipole2_ptr) const
 
 //-----------------------------------------------------------------------------
 //
-// -- For a specified pair of matching points, find the nearest (minimum sum
+//: For a specified pair of matching points, find the nearest (minimum sum
 // of squared image distances) match which is in perfect agreement with
 // the epipolar geometry of the F matrix.
 // (see R.I. Hartley and P. Sturm, ``Triangulation''. In
@@ -232,7 +232,7 @@ FMatrix::find_nearest_perfect_match(const HomgPoint2D& point1,
   find_nearest_perfect_match(point1, point2, epipole1, epipole2, perfect_point1_ptr, perfect_point2_ptr);
 }
 
-// -- Faster Hartley-Sturm using precomputed epipoles
+//: Faster Hartley-Sturm using precomputed epipoles
 void
 FMatrix::find_nearest_perfect_match(const HomgPoint2D& point1,
                                     const HomgPoint2D& point2,
@@ -354,7 +354,7 @@ FMatrix::find_nearest_perfect_match(const HomgPoint2D& point1,
 
 //-------------------------------------------------------------------
 //
-// -- Ensure the current Fundamental matrix is rank 2 by taking its vnl_svd<double>,
+//: Ensure the current Fundamental matrix is rank 2 by taking its vnl_svd<double>,
 // setting the smallest singular value to zero, and recomposing.
 // Set the _rank2_flag to true
 
@@ -370,7 +370,7 @@ void FMatrix::set_rank2_using_svd (void)
 
 //-----------------------------------------------------------------------------
 //
-// -- Decompose F to the product of a skew-symmetric matrix and a rank 3 matrix.
+//: Decompose F to the product of a skew-symmetric matrix and a rank 3 matrix.
 
 void
 FMatrix::decompose_to_skew_rank3(vnl_matrix<double>*, vnl_matrix<double>*) const
@@ -382,7 +382,7 @@ FMatrix::decompose_to_skew_rank3(vnl_matrix<double>*, vnl_matrix<double>*) const
 
 //----------------------------------------------------------------
 //
-// -- Return the element of the matrix at the specified indices (zero-based)
+//: Return the element of the matrix at the specified indices (zero-based)
 double FMatrix::get (unsigned int row_index, unsigned int col_index) const
 {
   return _f_matrix(row_index, col_index);
@@ -401,7 +401,7 @@ void FMatrix::get (double *c) const
 
 //----------------------------------------------------------------
 //
-// -- Copy the fundamental matrix into a vnl_matrix<double>
+//: Copy the fundamental matrix into a vnl_matrix<double>
 void FMatrix::get (vnl_matrix<double>* f_matrix) const
 {
   *f_matrix = _f_matrix;
@@ -410,7 +410,7 @@ void FMatrix::get (vnl_matrix<double>* f_matrix) const
 
 //----------------------------------------------------------------
 //
-// -- Return the _rank2_flag
+//: Return the _rank2_flag
 bool FMatrix::get_rank2_flag (void) const
 {
   return _rank2_flag;
@@ -418,7 +418,7 @@ bool FMatrix::get_rank2_flag (void) const
 
 //----------------------------------------------------------------
 //
-// -- Set the _rank2_flag
+//: Set the _rank2_flag
 void FMatrix::set_rank2_flag (bool rank2_flag)
 {
   _rank2_flag = rank2_flag;
@@ -426,7 +426,7 @@ void FMatrix::set_rank2_flag (bool rank2_flag)
 
 //--------------------------------------------------------------
 //
-// -- Set the fundamental matrix using the C-storage array c_matrix,
+//: Set the fundamental matrix using the C-storage array c_matrix,
 // and cache the transpose.
 //
 // Always returns true for the base class - showing the set was a success.
@@ -448,7 +448,7 @@ bool FMatrix::set (const double *c_matrix)
 
 //--------------------------------------------------------------
 //
-// -- Set the fundamental matrix using the vnl_matrix<double>
+//: Set the fundamental matrix using the vnl_matrix<double>
 // f_matrix.  Always returns true for the base class -
 // showing the set was a success.  When overridden by derived classes
 // it may return false, to indicate that the matrix violates the
@@ -466,7 +466,7 @@ bool FMatrix::set (const vnl_matrix<double>& f_matrix)
 
 #include <vnl/vnl_cross_product_matrix.h>
 
-// -- Set from two P matrices
+//: Set from two P matrices
 void FMatrix::set (const PMatrix& P1, const PMatrix& P2)
 {
   vnl_svd<double>* svd = P1.svd();
@@ -476,7 +476,7 @@ void FMatrix::set (const PMatrix& P1, const PMatrix& P2)
   set(e2x * P2.get_matrix() * svd->inverse());
 }
 
-// -- Set from one P matrix, the second.  The first is assumed to be [I O].
+//: Set from one P matrix, the second.  The first is assumed to be [I O].
 void FMatrix::set (const PMatrix& P2)
 {
   vnl_double_3x3 A;
@@ -488,7 +488,7 @@ void FMatrix::set (const PMatrix& P2)
   set(e2x * A);
 }
 
-// -- Set from one P matrix, the second.  The first is assumed to be [I O].
+//: Set from one P matrix, the second.  The first is assumed to be [I O].
 void FMatrix::set (const FMatrix& F)
 {
   *this = F;

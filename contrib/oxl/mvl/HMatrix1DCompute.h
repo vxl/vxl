@@ -33,7 +33,7 @@ class HMatrix1DCompute {
   virtual ~HMatrix1DCompute() { }
 
   //
-  void verbose(bool);	// set this to true for verbose run-time information
+  void verbose(bool); // set this to true for verbose run-time information
 
   //
   // Compute methods :

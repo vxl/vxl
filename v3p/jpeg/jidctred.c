@@ -44,7 +44,7 @@
 #define PASS1_BITS  2
 #else
 #define CONST_BITS  13
-#define PASS1_BITS  1		/* lose a little precision to avoid overflow */
+#define PASS1_BITS  1 /* lose a little precision to avoid overflow */
 #endif
 
 /* Some C compilers fail to reduce "FIX(constant)" at compile time, thus
@@ -55,20 +55,20 @@
  */
 
 #if CONST_BITS == 13
-#define FIX_0_211164243  ((jpegINT32)  1730)	/* FIX(0.211164243) */
-#define FIX_0_509795579  ((jpegINT32)  4176)	/* FIX(0.509795579) */
-#define FIX_0_601344887  ((jpegINT32)  4926)	/* FIX(0.601344887) */
-#define FIX_0_720959822  ((jpegINT32)  5906)	/* FIX(0.720959822) */
-#define FIX_0_765366865  ((jpegINT32)  6270)	/* FIX(0.765366865) */
-#define FIX_0_850430095  ((jpegINT32)  6967)	/* FIX(0.850430095) */
-#define FIX_0_899976223  ((jpegINT32)  7373)	/* FIX(0.899976223) */
-#define FIX_1_061594337  ((jpegINT32)  8697)	/* FIX(1.061594337) */
-#define FIX_1_272758580  ((jpegINT32)  10426)	/* FIX(1.272758580) */
-#define FIX_1_451774981  ((jpegINT32)  11893)	/* FIX(1.451774981) */
-#define FIX_1_847759065  ((jpegINT32)  15137)	/* FIX(1.847759065) */
-#define FIX_2_172734803  ((jpegINT32)  17799)	/* FIX(2.172734803) */
-#define FIX_2_562915447  ((jpegINT32)  20995)	/* FIX(2.562915447) */
-#define FIX_3_624509785  ((jpegINT32)  29692)	/* FIX(3.624509785) */
+#define FIX_0_211164243  ((jpegINT32)  1730)    /* FIX(0.211164243) */
+#define FIX_0_509795579  ((jpegINT32)  4176)    /* FIX(0.509795579) */
+#define FIX_0_601344887  ((jpegINT32)  4926)    /* FIX(0.601344887) */
+#define FIX_0_720959822  ((jpegINT32)  5906)    /* FIX(0.720959822) */
+#define FIX_0_765366865  ((jpegINT32)  6270)    /* FIX(0.765366865) */
+#define FIX_0_850430095  ((jpegINT32)  6967)    /* FIX(0.850430095) */
+#define FIX_0_899976223  ((jpegINT32)  7373)    /* FIX(0.899976223) */
+#define FIX_1_061594337  ((jpegINT32)  8697)    /* FIX(1.061594337) */
+#define FIX_1_272758580  ((jpegINT32)  10426)   /* FIX(1.272758580) */
+#define FIX_1_451774981  ((jpegINT32)  11893)   /* FIX(1.451774981) */
+#define FIX_1_847759065  ((jpegINT32)  15137)   /* FIX(1.847759065) */
+#define FIX_2_172734803  ((jpegINT32)  17799)   /* FIX(2.172734803) */
+#define FIX_2_562915447  ((jpegINT32)  20995)   /* FIX(2.562915447) */
+#define FIX_3_624509785  ((jpegINT32)  29692)   /* FIX(3.624509785) */
 #else
 #define FIX_0_211164243  FIX(0.211164243)
 #define FIX_0_509795579  FIX(0.509795579)
@@ -127,7 +127,7 @@ jpeg_idct_4x4 (j_decompress_ptr cinfo, jpeg_component_info * compptr,
   JSAMPROW outptr;
   JSAMPLE *range_limit = IDCT_range_limit(cinfo);
   int ctr;
-  int workspace[DCTSIZE*4];	/* buffers data between passes */
+  int workspace[DCTSIZE*4]; /* buffers data between passes */
   SHIFT_TEMPS
 
   /* Pass 1: process columns from input, store into work array. */
@@ -209,7 +209,7 @@ jpeg_idct_4x4 (j_decompress_ptr cinfo, jpeg_component_info * compptr,
       outptr[2] = dcval;
       outptr[3] = dcval;
 
-      wsptr += DCTSIZE;		/* advance pointer to next row */
+      wsptr += DCTSIZE; /* advance pointer to next row */
       continue;
     }
 #endif
@@ -256,7 +256,7 @@ jpeg_idct_4x4 (j_decompress_ptr cinfo, jpeg_component_info * compptr,
                                           CONST_BITS+PASS1_BITS+3+1)
                             & RANGE_MASK];
 
-    wsptr += DCTSIZE;		/* advance pointer to next row */
+    wsptr += DCTSIZE; /* advance pointer to next row */
   }
 }
 
@@ -278,7 +278,7 @@ jpeg_idct_2x2 (j_decompress_ptr cinfo, jpeg_component_info * compptr,
   JSAMPROW outptr;
   JSAMPLE *range_limit = IDCT_range_limit(cinfo);
   int ctr;
-  int workspace[DCTSIZE*2];	/* buffers data between passes */
+  int workspace[DCTSIZE*2]; /* buffers data between passes */
   SHIFT_TEMPS
 
   /* Pass 1: process columns from input, store into work array. */
@@ -339,7 +339,7 @@ jpeg_idct_2x2 (j_decompress_ptr cinfo, jpeg_component_info * compptr,
       outptr[0] = dcval;
       outptr[1] = dcval;
 
-      wsptr += DCTSIZE;		/* advance pointer to next row */
+      wsptr += DCTSIZE; /* advance pointer to next row */
       continue;
     }
 #endif
@@ -364,7 +364,7 @@ jpeg_idct_2x2 (j_decompress_ptr cinfo, jpeg_component_info * compptr,
                                           CONST_BITS+PASS1_BITS+3+2)
                             & RANGE_MASK];
 
-    wsptr += DCTSIZE;		/* advance pointer to next row */
+    wsptr += DCTSIZE; /* advance pointer to next row */
   }
 }
 

@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	Mapping_2d_2d - Mapping from R^2 -> R^2
-// .LIBRARY	POX
-// .HEADER	Oxford Package
-// .INCLUDE	oxp/Mapping_2d_2d.h
-// .FILE	Mapping_2d_2d.cxx
+// .NAME    Mapping_2d_2d - Mapping from R^2 -> R^2
+// .LIBRARY oxp
+// .HEADER  Oxford Package
+// .INCLUDE oxp/Mapping_2d_2d.h
+// .FILE    Mapping_2d_2d.cxx
 //
 // .SECTION Description
 //    Mapping_2d_2d is a base class for functions from R^2 -> R^2.
@@ -27,24 +27,24 @@
 struct Mapping_2d_2d {
   virtual ~Mapping_2d_2d();
 
-  // -- Map (x1, y1) to (x2, y2)
+  //: Map (x1, y1) to (x2, y2)
   void map(double x1, double y1, double* x2, double* y2) {
     implement_map(x1, y1, x2, y2);
   }
 
-  // -- x2 = map(x1);
+  //: x2 = map(x1);
   vnl_double_2 map(const vnl_vector<double>& in) {
     vnl_double_2 ret;
     implement_map(in[0], in[1], &ret[0], &ret[1]);
     return ret;
   }
 
-  // -- Inverse map (x2, y2) to (x1, y1)
+  //: Inverse map (x2, y2) to (x1, y1)
   void inverse_map(double x1, double y1, double* x2, double* y2) {
     implement_inverse_map(x1, y1, x2, y2);
   }
 
-  // -- x1 = $map^{-1}(x1)$;
+  //: x1 = $map^{-1}(x1)$;
   vnl_double_2 inverse_map(const vnl_vector<double>& in) {
     vnl_double_2 ret;
     implement_inverse_map(in[0], in[1], &ret[0], &ret[1]);

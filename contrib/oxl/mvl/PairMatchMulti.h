@@ -25,7 +25,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_utility.h>	//vxl_filter
+#include <vcl_utility.h> //vxl_filter
 #include <vcl_functional.h>
 #include <vcl_map.h>
 #include <vcl_iosfwd.h>
@@ -57,20 +57,20 @@ public:
 
   // Operations----------------------------------------------------------------
 
-// -- @{ Add a match $(i_1, i_2)$ to the set @}
+//: @{ Add a match $(i_1, i_2)$ to the set @}
   void add_match(int i1, int i2) {
     _matches12.insert(i1, i2);
   }
 
   bool contains(int i1, int i2) const;
 
-// -- @{ Add a match $(i_1, i_2)$ to the set @}
+//: @{ Add a match $(i_1, i_2)$ to the set @}
   void add_match(int i1, int i2, double score);
 
   double get_score(int i1, int i2) const;
   void set_score(int i1, int i2, double score);
 
-// -- Clear all matches
+//: Clear all matches
   void clear() {
     _matches12.erase(_matches12.begin(), _matches12.end());
   }
@@ -112,7 +112,7 @@ private:
 
 #include "PairMatchMultiIterator.h"
 
-// -- Return an iterator which will run through the list of matches for feature
+//: Return an iterator which will run through the list of matches for feature
 // index i1.  Example usage: to print all matches for "target"
 // <verb>
 //   for(PairMatchMultiIterator p = mm.get_match_12(target); !p.done(); p.next())
@@ -124,18 +124,18 @@ inline PairMatchMultiIterator PairMatchMulti::get_match_12(int i1)
   return PairMatchMultiIterator(_matches12.lower_bound(i1), _matches12.upper_bound(i1));
 }
 
-// -- This may be expensive.  If it is used a lot, it may be worth maintaining
+//: This may be expensive.  If it is used a lot, it may be worth maintaining
 // forward and backward maps.  Right now it's not even implemented.
 inline PairMatchMultiIterator PairMatchMulti::get_match_21(int) { abort(); return iter(); }
 
-// -- Return the number of matches for i1.
+//: Return the number of matches for i1.
 inline
 unsigned PairMatchMulti::count_matches_12(int i1)
 {
   return _matches12.count(i1);
 }
 
-// -- Return an iterator that traverses the entire match set
+//: Return an iterator that traverses the entire match set
 inline
 PairMatchMultiIterator PairMatchMulti::iter()
 {

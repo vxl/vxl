@@ -117,7 +117,7 @@ output_pass_setup (j_decompress_ptr cinfo)
       (*cinfo->main->process_data) (cinfo, (JSAMPARRAY) NULL,
                                     &cinfo->output_scanline, (JDIMENSION) 0);
       if (cinfo->output_scanline == last_scanline)
-        return FALSE;		/* No progress made, must suspend */
+        return FALSE; /* No progress made, must suspend */
     }
     /* Finish up dummy pass, and set up for another one */
     (*cinfo->master->finish_output_pass) (cinfo);
@@ -208,7 +208,7 @@ jpeg_read_raw_data (j_decompress_ptr cinfo, JSAMPIMAGE data,
 
   /* Decompress directly into user's buffer. */
   if (! (*cinfo->coef->decompress_data) (cinfo, data))
-    return 0;			/* suspension forced, can do nothing more */
+    return 0; /* suspension forced, can do nothing more */
 
   /* OK, we processed one iMCU row. */
   cinfo->output_scanline += lines_per_iMCU_row;
@@ -266,7 +266,7 @@ jpeg_finish_output (j_decompress_ptr cinfo)
   while (cinfo->input_scan_number <= cinfo->output_scan_number &&
          ! cinfo->inputctl->eoi_reached) {
     if ((*cinfo->inputctl->consume_input) (cinfo) == JPEG_SUSPENDED)
-      return FALSE;		/* Suspend, come back later */
+      return FALSE; /* Suspend, come back later */
   }
   cinfo->global_state = DSTATE_BUFIMAGE;
   return TRUE;

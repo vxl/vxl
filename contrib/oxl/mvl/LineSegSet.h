@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	LineSegSet - Undocumented class FIXME
-// .LIBRARY	MViewBasics
-// .HEADER	MultiView package
-// .INCLUDE	mvl/LineSegSet.h
-// .FILE	LineSegSet.cxx
+// .NAME    LineSegSet - Undocumented class FIXME
+// .LIBRARY MViewBasics
+// .HEADER  MultiView package
+// .INCLUDE mvl/LineSegSet.h
+// .FILE    LineSegSet.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 19 Sep 96
 //

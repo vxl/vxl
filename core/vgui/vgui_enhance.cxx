@@ -143,7 +143,7 @@ bool vgui_enhance::handle(const vgui_event& e) {
 
       glEnable(GL_SCISSOR_TEST);
       int size_2 = size+size;
-      glScissor(x-size, y-size, size_2, size_2);	
+      glScissor(x-size, y-size, size_2, size_2);
 
       glMatrixMode(GL_MODELVIEW);
       glPushMatrix();

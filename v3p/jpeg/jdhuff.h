@@ -13,22 +13,22 @@
 /* Short forms of external names for systems with brain-damaged linkers. */
 
 #ifdef NEED_SHORT_EXTERNAL_NAMES
-#define jpeg_make_d_derived_tbl	jMkDDerived
-#define jpeg_fill_bit_buffer	jFilBitBuf
-#define jpeg_huff_decode	jHufDecode
+#define jpeg_make_d_derived_tbl jMkDDerived
+#define jpeg_fill_bit_buffer    jFilBitBuf
+#define jpeg_huff_decode        jHufDecode
 #endif /* NEED_SHORT_EXTERNAL_NAMES */
 
 
 /* Derived data constructed for each Huffman table */
 
-#define HUFF_LOOKAHEAD	8	/* # of bits of lookahead */
+#define HUFF_LOOKAHEAD  8       /* # of bits of lookahead */
 
 typedef struct {
   /* Basic tables: (element [0] of each array is unused) */
-  jpegINT32 mincode[17];		/* smallest code of length k */
-  jpegINT32 maxcode[18];		/* largest code of length k (-1 if none) */
+  jpegINT32 mincode[17];                /* smallest code of length k */
+  jpegINT32 maxcode[18];                /* largest code of length k (-1 if none) */
   /* (maxcode[17] is a sentinel to ensure jpeg_huff_decode terminates) */
-  int valptr[17];		/* huffval[] index of 1st symbol of length k */
+  int valptr[17];               /* huffval[] index of 1st symbol of length k */
 
   /* Link to public Huffman table (needed only in jpeg_huff_decode) */
   JHUFF_TBL *pub;
@@ -65,8 +65,8 @@ EXTERN(void) jpeg_make_d_derived_tbl JPP((j_decompress_ptr cinfo,
  * necessary.
  */
 
-typedef jpegINT32 bit_buf_type;	/* type of bit-extraction buffer */
-#define BIT_BUF_SIZE  32	/* size of buffer in bits */
+typedef jpegINT32 bit_buf_type; /* type of bit-extraction buffer */
+#define BIT_BUF_SIZE  32        /* size of buffer in bits */
 
 /* If long is > 32 bits on your machine, and shifting/masking longs is
  * reasonably fast, making bit_buf_type be long and setting BIT_BUF_SIZE
@@ -75,25 +75,25 @@ typedef jpegINT32 bit_buf_type;	/* type of bit-extraction buffer */
  * because not all machines measure sizeof in 8-bit bytes.
  */
 
-typedef struct {		/* Bitreading state saved across MCUs */
-  bit_buf_type get_buffer;	/* current bit-extraction buffer */
-  int bits_left;		/* # of unused bits in it */
-  boolean printed_eod;		/* flag to suppress multiple warning msgs */
+typedef struct {                /* Bitreading state saved across MCUs */
+  bit_buf_type get_buffer;      /* current bit-extraction buffer */
+  int bits_left;                /* # of unused bits in it */
+  boolean printed_eod;          /* flag to suppress multiple warning msgs */
 } bitread_perm_state;
 
-typedef struct {		/* Bitreading working state within an MCU */
+typedef struct {                /* Bitreading working state within an MCU */
   /* current data source state */
   const JOCTET * next_input_byte; /* => next byte to read from source */
-  size_t bytes_in_buffer;	/* # of bytes remaining in source buffer */
-  int unread_marker;		/* nonzero if we have hit a marker */
+  size_t bytes_in_buffer;       /* # of bytes remaining in source buffer */
+  int unread_marker;            /* nonzero if we have hit a marker */
   /* bit input buffer --- note these values are kept in register variables,
    * not in this struct, inside the inner loops.
    */
-  bit_buf_type get_buffer;	/* current bit-extraction buffer */
-  int bits_left;		/* # of unused bits in it */
+  bit_buf_type get_buffer;      /* current bit-extraction buffer */
+  int bits_left;                /* # of unused bits in it */
   /* pointers needed by jpeg_fill_bit_buffer */
-  j_decompress_ptr cinfo;	/* back link to decompress master record */
-  boolean * printed_eod_ptr;	/* => flag in permanent state */
+  j_decompress_ptr cinfo;       /* back link to decompress master record */
+  boolean * printed_eod_ptr;    /* => flag in permanent state */
 } bitread_working_state;
 
 /* Macros to declare and load/save bitread local variables. */
@@ -124,14 +124,14 @@ typedef struct {		/* Bitreading working state within an MCU */
  * before using GET_BITS, PEEK_BITS, or DROP_BITS.
  * The variables get_buffer and bits_left are assumed to be locals,
  * but the state struct might not be (jpeg_huff_decode needs this).
- *	CHECK_BIT_BUFFER(state,n,action);
- *		Ensure there are N bits in get_buffer; if suspend, take action.
+ *      CHECK_BIT_BUFFER(state,n,action);
+ *              Ensure there are N bits in get_buffer; if suspend, take action.
  *      val = GET_BITS(n);
- *		Fetch next N bits.
+ *              Fetch next N bits.
  *      val = PEEK_BITS(n);
- *		Fetch next N bits without removing them from the buffer.
- *	DROP_BITS(n);
- *		Discard next N bits.
+ *              Fetch next N bits without removing them from the buffer.
+ *      DROP_BITS(n);
+ *              Discard next N bits.
  * The value N should be a simple variable, not an expression, because it
  * is evaluated multiple times.
  */

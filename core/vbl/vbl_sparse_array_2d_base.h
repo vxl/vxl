@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	vbl_sparse_array_2d_base
-// .LIBRARY	vbl
-// .HEADER	vxl package
-// .INCLUDE	vbl/vbl_sparse_array_2d_base.h
-// .FILE	vbl_sparse_array_2d_base.cxx
+// .NAME    vbl_sparse_array_2d_base
+// .LIBRARY vbl
+// .HEADER  vxl package
+// .INCLUDE vbl/vbl_sparse_array_2d_base.h
+// .FILE    vbl_sparse_array_2d_base.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 29 Jun 97
 //

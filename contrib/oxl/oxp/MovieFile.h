@@ -8,11 +8,11 @@
 //    MovieFile is an interface to movie files and image sequences.
 //    It is currently read-only.
 //
-// .NAME	MovieFile - Read various movie formats
-// .LIBRARY	POX
-// .HEADER	Oxford Package
-// .INCLUDE	oxp/MovieFile.h
-// .FILE	MovieFile.cxx
+// .NAME    MovieFile - Read various movie formats
+// .LIBRARY oxp
+// .HEADER  Oxford Package
+// .INCLUDE oxp/MovieFile.h
+// .FILE    MovieFile.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 26 Aug 98
 //

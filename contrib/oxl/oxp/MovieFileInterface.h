@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	MovieFileInterface
-// .LIBRARY	POX
-// .HEADER	Oxford Package
-// .INCLUDE	oxp/MovieFileInterface.h
-// .FILE	MovieFileInterface.cxx
+// .NAME    MovieFileInterface
+// .LIBRARY oxp
+// .HEADER  Oxford Package
+// .INCLUDE oxp/MovieFileInterface.h
+// .FILE    MovieFileInterface.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 30 Dec 98
 //
@@ -19,32 +19,32 @@
 struct MovieFileInterface {
   virtual ~MovieFileInterface();
 
-  // -- Return length of movie in frames
+  //: Return length of movie in frames
   virtual int GetLength() = 0;
 
-  // -- Return size of the frame \argfont{frame_index}.
+  //: Return size of the frame \argfont{frame_index}.
   virtual int GetSizeX(int frame_index) = 0;
   virtual int GetSizeY(int frame_index) = 0;
 
-  // -- Return bits per pixel of images.
+  //: Return bits per pixel of images.
   // Assumed constant throughout the movie.
   virtual int GetBitsPixel() = 0;
 
-  // -- Return true if frames are stored as a pair of interlaced fields.
+  //: Return true if frames are stored as a pair of interlaced fields.
   virtual bool IsInterlaced() = 0;
 
-  // -- Return true if frame_index is a valid frame.
+  //: Return true if frame_index is a valid frame.
   virtual bool HasFrame(int frame_index) = 0;
 
-  // -- Grab frame into supplied buffer, which is GetBitsPixel * SizeX * SizeY
+  //: Grab frame into supplied buffer, which is GetBitsPixel * SizeX * SizeY
   virtual bool GetFrame(int frame_index, void* buffer);
 
-  // -- Grab field into supplied buffer, which is GetBitsPixel * SizeX * SizeY
+  //: Grab field into supplied buffer, which is GetBitsPixel * SizeX * SizeY
   virtual bool GetField(int field_index, void* buffer);
 
   virtual vil_image GetImage(int frame_index) = 0;
 
-  // -- General verbosity flag for various movie-related operations.
+  //: General verbosity flag for various movie-related operations.
   static bool verbose;
 };
 

@@ -273,7 +273,7 @@ void invertmatrix (matrix4D a)
         s += fabs (a [i][j]);
       q = fabs (a [i][k]) / s;
       if (q > max)
-      { max = q;  
+      { max = q;
         p [k] = i;
       }
     } // for i
@@ -468,8 +468,8 @@ void computeBoundingbox (const point3D& /*omin*/, const point3D& /*omax*/,
 //for (int i = 0;  i < 8;  i++)
 //{
 //    ge3d_transform_mc_wc (
-//	(i & 4) ? omin.x : omax.x,  (i & 2) ? omin.y : omax.y,  (i & 1) ? omin.z : omax.z,
-//	&p.x, &p.y, &p.z
+//      (i & 4) ? omin.x : omax.x,  (i & 2) ? omin.y : omax.y,  (i & 1) ? omin.z : omax.z,
+//      &p.x, &p.y, &p.z
 //    );
 //    extendBoundingbox (p, p, wmin, wmax);
 //}

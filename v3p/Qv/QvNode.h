@@ -55,32 +55,32 @@ class QvNode
 {
 public:
   enum Stage {
-    FIRST_INSTANCE,		// First real instance being constructed
-    PROTO_INSTANCE,		// Prototype instance being constructed
-    OTHER_INSTANCE		// Subsequent instance being constructed
+    FIRST_INSTANCE,             // First real instance being constructed
+    PROTO_INSTANCE,             // Prototype instance being constructed
+    OTHER_INSTANCE              // Subsequent instance being constructed
   };
 
-  QvFieldData	*fieldData;
-  QvChildList	*children;
-  QvBool	isBuiltIn;
+  QvFieldData   *fieldData;
+  QvChildList   *children;
+  QvBool        isBuiltIn;
 
-  QvName		*objName;
+  QvName                *objName;
   QvNode();
   virtual ~QvNode();
 
   // Reference counting:
-  long	refCount;
-  void	ref() const;		// Adds reference
-  void	unref() const;		// Removes reference, deletes if now 0
-  void	unrefNoDelete() const;	// Removes reference, never deletes
+  long  refCount;
+  void  ref() const;            // Adds reference
+  void  unref() const;          // Removes reference, deletes if now 0
+  void  unrefNoDelete() const;  // Removes reference, never deletes
 
-  const QvName &	getName() const;
-  void			setName(const QvName &name);
+  const QvName &        getName() const;
+  void                  setName(const QvName &name);
 
-  static void		init();
-  static QvBool		read(QvInput *in, QvNode *&node);
+  static void           init();
+  static QvBool         read(QvInput *in, QvNode *&node);
 
-  virtual QvFieldData *	getFieldData() = 0;
+  virtual QvFieldData * getFieldData() = 0;
 
   int nodeType ()  // anuss
   { return nodetype_; }
@@ -103,37 +103,37 @@ public:
 
   virtual void pass (QvGroup* parent, int childindex);  // traversal
 
-  void select ()  { selected_ = 1; }		// select node
-  void unselect ()  { selected_ = 0;  }		// unselect node
-  int selected () const  { return selected_; }	// get selected flag
+  void select ()  { selected_ = 1; }            // select node
+  void unselect ()  { selected_ = 0;  }         // unselect node
+  int selected () const  { return selected_; }  // get selected flag
 
   // pointers back to the current (VRML)Scene (mpichler)
-  static int curdrawmode_;			// current drawing mode
-  static Scene3D* scene_;			// scene (management) class
-  static VRMLScene* vrmlscene_;			// vrml scene (data)
-  static matrix4D selectedTransformation_;	// transformation of selected object
+  static int curdrawmode_;                      // current drawing mode
+  static Scene3D* scene_;                       // scene (management) class
+  static VRMLScene* vrmlscene_;                 // vrml scene (data)
+  static matrix4D selectedTransformation_;      // transformation of selected object
 
-  int hasextent_;			// flag if extent (if not, wmin_/wmax_ unset)
-  point3D wmin_, wmax_;			// bounding box (world coordinates)
-  point3D omin_, omax_;			// bounding box (object coordinates)
+  int hasextent_;                       // flag if extent (if not, wmin_/wmax_ unset)
+  point3D wmin_, wmax_;                 // bounding box (world coordinates)
+  point3D omin_, omax_;                 // bounding box (object coordinates)
 
 protected:
-  virtual QvBool	readInstance(QvInput *in);
-  int nodetype_;			// anuss: QvNodeType
-  int selected_;			// mpichler: flag whether selected
+  virtual QvBool        readInstance(QvInput *in);
+  int nodetype_;                        // anuss: QvNodeType
+  int selected_;                        // mpichler: flag whether selected
 
 private:
-  static QvDict	*nameDict;
+  static QvDict *nameDict;
 
-  static void		addName(QvNode *, const char *);
-  static void		removeName(QvNode *, const char *);
-  static QvNode *	readReference(QvInput *in);
-  static QvBool	readNode(QvInput *in, QvName &className,QvNode *&node);
-  static QvBool	readNodeInstance(QvInput *in, const QvName &className,
-      			         const QvName &refName, QvNode *&node);
-  static QvNode *	createInstance(QvInput *in, const QvName &className);
-  static QvNode *	createInstanceFromName(const QvName &className);
-  static void		flushInput(QvInput *in);
+  static void           addName(QvNode *, const char *);
+  static void           removeName(QvNode *, const char *);
+  static QvNode *       readReference(QvInput *in);
+  static QvBool readNode(QvInput *in, QvName &className,QvNode *&node);
+  static QvBool readNodeInstance(QvInput *in, const QvName &className,
+                                 const QvName &refName, QvNode *&node);
+  static QvNode *       createInstance(QvInput *in, const QvName &className);
+  static QvNode *       createInstanceFromName(const QvName &className);
+  static void           flushInput(QvInput *in);
 };
 
 #endif /* _QV_NODE_ */

@@ -3,7 +3,7 @@
 #include <vcl_iostream.h>
 
 const float vsol_spatial_object_2d::eps=1.0e-3;
-int vsol_spatial_object_2d::_tagcount=0; 
+int vsol_spatial_object_2d::_tagcount=0;
 
 char *vsol_spatial_object_2d::SpatialTypes[]=
 {
@@ -18,7 +18,7 @@ char *vsol_spatial_object_2d::SpatialTypes[]=
 
 const char *vsol_spatial_object_2d::get_name(void) const
 {
-  vsol_spatial_object_2d_type	type	=spatial_type();
+  vsol_spatial_object_2d_type type =spatial_type();
   if (type > 0 && type < vsol_spatial_object_2d::NUM_SPATIALOBJECT_TYPES)
     return SpatialTypes[type];
   else
@@ -27,7 +27,7 @@ const char *vsol_spatial_object_2d::get_name(void) const
 
 void vsol_spatial_object_2d::protected_destroy()
 {
-  
+
   if(this->get_references() <= 0)
     {
       vcl_cout << "goodbye crule world " << vcl_endl;
@@ -35,7 +35,7 @@ void vsol_spatial_object_2d::protected_destroy()
     }
 }
 
-// -- constructor initialize basic vsol_spatial_object_2d attributes.
+//: constructor initialize basic vsol_spatial_object_2d attributes.
 //   bounding_box is set to NULL.
 vsol_spatial_object_2d::vsol_spatial_object_2d(void)
 {
@@ -77,7 +77,7 @@ void  iu_delete(vsol_spatial_object_2d* so)
 }
 
 //---------------------------------------------------------------------------
-// -- The same behavior than dynamic_cast<>. Needed because VXL is not compiled with -frtti :-(
+//: The same behavior than dynamic_cast<>. Needed because VXL is not compiled with -frtti :-(
 //---------------------------------------------------------------------------
 const vsol_group_2d *vsol_spatial_object_2d::cast_to_group(void) const
 {
@@ -87,7 +87,7 @@ const vsol_group_2d *vsol_spatial_object_2d::cast_to_group(void) const
 #if 0 // following functions are not (yet) supported
 
 //------------------------------------------------------------
-// -- Perform an arbitrary projective transformation to all points of the obj.
+//: Perform an arbitrary projective transformation to all points of the obj.
 // Note that this will in general not be supported by objects which are not
 // projectively invariant, like circles or ellipses, so observing the return
 // value is important.  (E.g., circles should implement this method, but only
@@ -101,7 +101,7 @@ vsol_spatial_object_2d::Transform(CoolTransform const& )
 }
 
 //------------------------------------------------------------
-// -- Return the projective transformation needed to move GetLocation() to (0,0,0),
+//: Return the projective transformation needed to move GetLocation() to (0,0,0),
 // GetOrientation() to (1,0,0), GetNormal() to (0,0,1) and GetSize() to (1,1,1).
 CoolTransform vsol_spatial_object_2d::GetTransformation() const
 {
@@ -110,7 +110,7 @@ CoolTransform vsol_spatial_object_2d::GetTransformation() const
 }
 
 //------------------------------------------------------------
-// -- leave GetLocation() fixed, move all other points towards or away from it
+//: leave GetLocation() fixed, move all other points towards or away from it
 // by the given scale factor.  Smaller than 1 means towards.  Negative moves the
 // points to the other side of GetLocation().
 bool
@@ -121,7 +121,7 @@ vsol_spatial_object_2d::LinearScale(float )
 }
 
 //------------------------------------------------------------
-// -- leave GetOrientation() fixed, translate all points so that GetLocation()
+//: leave GetOrientation() fixed, translate all points so that GetLocation()
 // moves to (0,0,0).
 bool
 vsol_spatial_object_2d::Translate()
@@ -131,7 +131,7 @@ vsol_spatial_object_2d::Translate()
 }
 
 //------------------------------------------------------------
-// -- leave GetLocation() fixed, rotate all other points around it so that
+//: leave GetLocation() fixed, rotate all other points around it so that
 // GetOrientation() moves to (1,0,0).
 bool
 vsol_spatial_object_2d::Rotate()
@@ -141,7 +141,7 @@ vsol_spatial_object_2d::Rotate()
 }
 
 //------------------------------------------------------------
-// -- leave GetOrientation() fixed, rotate all other points around it over 180
+//: leave GetOrientation() fixed, rotate all other points around it over 180
 // degrees.
 bool
 vsol_spatial_object_2d::Reflect()
@@ -151,7 +151,7 @@ vsol_spatial_object_2d::Reflect()
 }
 
 //------------------------------------------------------------
-// -- leave GetOrientation() fixed, move all other points parallel to it,
+//: leave GetOrientation() fixed, move all other points parallel to it,
 // over a distance which is proportional to its distance to GetOrientation().
 // A right angle becomes an angle of a (in degrees).
 bool
@@ -163,7 +163,7 @@ vsol_spatial_object_2d::Shear(float )
 #endif
 
 //---------------------------------------------------------------------------
-// -- compute bounding box, do nothing in this case
+//: compute bounding box, do nothing in this case
 //---------------------------------------------------------------------------
 void vsol_spatial_object_2d::compute_bounding_box(void)
 {

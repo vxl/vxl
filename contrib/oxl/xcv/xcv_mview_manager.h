@@ -2,9 +2,9 @@
 #define xcv_mview_manager_h_
 
 //--------------------------------------------------------------------------------
-// .NAME	xcv_mview_manager
-// .INCLUDE	xcv/xcv_mview_manager.h
-// .FILE	xcv_mview_manager.cxx
+// .NAME    xcv_mview_manager
+// .INCLUDE xcv/xcv_mview_manager.h
+// .FILE    xcv_mview_manager.cxx
 // .SECTION Description:
 //
 // .SECTION Author

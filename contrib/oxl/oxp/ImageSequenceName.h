@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	ImageSequenceName
-// .LIBRARY	POX
-// .HEADER	Oxford Package
-// .INCLUDE	oxp/ImageSequenceName.h
-// .FILE	ImageSequenceName.cxx
+// .NAME    ImageSequenceName
+// .LIBRARY oxp
+// .HEADER  Oxford Package
+// .INCLUDE oxp/ImageSequenceName.h
+// .FILE    ImageSequenceName.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 31 Dec 98
 //

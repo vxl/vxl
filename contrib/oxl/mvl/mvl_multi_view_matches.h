@@ -4,12 +4,12 @@
 #pragma interface
 #endif
 //
-// .NAME	mvl_multi_view_matches - Multiple view matches
-// .LIBRARY	mvl
-// .HEADER	MultiView Package
-// .INCLUDE	mvl/mvl_multi_view_matches.h
-// .FILE	mvl_multi_view_matches.cxx
-// .EXAMPLE	examples/mvl_multi_view_matches_example.cxx
+// .NAME    mvl_multi_view_matches - Multiple view matches
+// .LIBRARY mvl
+// .HEADER  MultiView Package
+// .INCLUDE mvl/mvl_multi_view_matches.h
+// .FILE    mvl_multi_view_matches.cxx
+// .EXAMPLE examples/mvl_multi_view_matches_example.cxx
 //
 // .SECTION Description
 //    A class to hold matches over multiple views, allowing for unmatched data.
@@ -28,7 +28,7 @@
 //-----------------------------------------------------------------------------
 
 //#include <vcl_memory.h>
-#include <vcl_functional.h>	//vxl_filter
+#include <vcl_functional.h> //vxl_filter
 #include <vcl_utility.h>
 #include <vcl_vector.h>
 #include <vcl_iosfwd.h>

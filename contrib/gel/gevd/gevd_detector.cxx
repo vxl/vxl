@@ -46,7 +46,7 @@
 
 //--------------------------------------------------------------------------------
 //
-// -- Constructors.
+//: Constructors.
 //
 gevd_detector::gevd_detector(gevd_detector_params& params)
   : gevd_detector_params(params),
@@ -80,7 +80,7 @@ gevd_detector::gevd_detector(vil_image img, float smoothSigma, float noiseSigma,
 }
 
 //--------------------------------------------------------------------------
-// -- UnProtect lists that are protected by Contour::
+//: UnProtect lists that are protected by Contour::
 void gevd_detector::UnProtectLists()
 {
 #if 0 // commented out
@@ -97,7 +97,7 @@ void gevd_detector::UnProtectLists()
 
 
 //--------------------------------------------------------------------------------
-// -- Destructor. Caller has an obligation to clear all the created edges and
+//: Destructor. Caller has an obligation to clear all the created edges and
 // vertices.
 gevd_detector::~gevd_detector()
 {
@@ -107,7 +107,7 @@ gevd_detector::~gevd_detector()
 
 //--------------------------------------------------------------------------------
 //
-// -- Clear data buffer.  Protected.
+//: Clear data buffer.  Protected.
 //
 void gevd_detector::ClearData()
 {
@@ -121,7 +121,7 @@ void gevd_detector::ClearData()
 #if 0 // commented out
 //--------------------------------------------------------------------------------
 //
-// -- Detect step edges and put them to an edge list
+//: Detect step edges and put them to an edge list
 //
 void gevd_detector::DoContourDetector(CoolListP<Edge *> *the_edges)
 {
@@ -137,7 +137,7 @@ void gevd_detector::DoContourDetector(CoolListP<Edge *> *the_edges)
 
 //--------------------------------------------------------------------------------
 //
-// -- Detect step edges and put them to an EdgelGroup.
+//: Detect step edges and put them to an EdgelGroup.
 //
 void gevd_detector::DoContourDetector(EdgelGroup* edgel_group)
 {
@@ -151,7 +151,7 @@ void gevd_detector::DoContourDetector(EdgelGroup* edgel_group)
 }
 //----------------------------------------------------------------------------
 //
-// -- Detect step edges and return an EdgelGroup
+//: Detect step edges and return an EdgelGroup
 //
 EdgelGroup gevd_detector::DoContourDetector(Image* img)
 {
@@ -165,7 +165,7 @@ EdgelGroup gevd_detector::DoContourDetector(Image* img)
 
 //----------------------------------------------------------------------------
 //
-// -- Detect step edges and fill an existing EdgelGroup
+//: Detect step edges and fill an existing EdgelGroup
 //
 void gevd_detector::DoContourDetector(Image* img, EdgelGroup& edgels)
 {
@@ -178,7 +178,7 @@ void gevd_detector::DoContourDetector(Image* img, EdgelGroup& edgels)
 
 //----------------------------------------------------------------------------
 //
-// -- Detect step edges and fill an existing EdgelGroup
+//: Detect step edges and fill an existing EdgelGroup
 //
 void gevd_detector::DoFoldContourDetector(Image* img, EdgelGroup& edgels)
 {
@@ -192,7 +192,7 @@ void gevd_detector::DoFoldContourDetector(Image* img, EdgelGroup& edgels)
 
 //----------------------------------------------------------------------------
 //
-// -- Detect edgels and then find all curvature corners and endpoints
+//: Detect edgels and then find all curvature corners and endpoints
 //
 void gevd_detector::DoCornerDetector(Image* img, IUPointGroup& corners)
 {
@@ -212,13 +212,13 @@ void gevd_detector::DoCornerDetector(Image* img, IUPointGroup& corners)
 }
 //--------------------------------------------------------------------------------
 //
-// -- Delete corners, add ncorner new coners to the end of the "vertices" list.
+//: Delete corners, add ncorner new corners to the end of the "vertices" list.
 //
-bool gevd_detector::DoCorner( float corner_angle,	// smallest angle at corner
-                         float separation,	// |mean1-mean2|/sigma
-                         int length,	// min length to find corners
-                         int cycle,		// number of corners in a cycle
-                         int ndimension	// number of dimension
+bool gevd_detector::DoCorner( float corner_angle, // smallest angle at corner
+                         float separation,        // |mean1-mean2|/sigma
+                         int length,              // min length to find corners
+                         int cycle,               // number of corners in a cycle
+                         int ndimension           // number of dimension
 )
 {
   if (!DoStep() || !DoContour()) {
@@ -236,25 +236,25 @@ bool gevd_detector::DoCorner( float corner_angle,	// smallest angle at corner
 }
 
 //--------------------------------------------------------------
-// -- Take a input edgel group and detect corners on each edgel chain
+//: Take a input edgel group and detect corners on each edgel chain
 //    Note that here we don't have to unprotect the edges and vertices
 //    lists because we don't protect in the first place.
 void gevd_detector::DoBreakCorners(EdgelGroup& in_edgels, EdgelGroup& out_edgels)
 {
   edges = Edges(&in_edgels);
   CoolListP<Vertex*> vertices; //dummy argument
-  Corner corner(this->smooth,	        // spatial smoothing [0.5 2.0]
+  Corner corner(this->smooth,           // spatial smoothing [0.5 2.0]
                 this->corner_angle,     // minimum angle in degrees
                 this->separation,       // |mean1-mean2|/sigma threshold
                 this->min_corner_length,//minimum length before finding corners
                 this->cycle,            // minimum corners in a cycle
-                this->ndimension);	// 2-d or 3-d edgels
+                this->ndimension);      // 2-d or 3-d edgels
   corner.DetectCorners(*edges, vertices);
   out_edgels.Add(edges);
 }
 //-----------------------------------------------------------------------------
 //
-// -- Detect the contour, a list of edges and vertices are genrated.
+//: Detect the contour, a list of edges and vertices are genrated.
 //
 bool  gevd_detector::DoContour()
 {
@@ -264,11 +264,11 @@ bool  gevd_detector::DoContour()
     cout << "***Fail on DoContour." << endl;
     return false;
   }
-  Contour::ClearNetwork(edges, vertices);	// delete vertices/edges
+  Contour::ClearNetwork(edges, vertices);       // delete vertices/edges
   Contour contour(this->hysteresisFactor*this->noiseThreshold, this->minLength,
                   this->minJump*this->noiseThreshold, this->maxGap);
   bool t  = contour.FindNetwork(*edgel, njunction, // first, find isolated
-                                junctionx, junctiony,	// chains/cycles
+                                junctionx, junctiony,   // chains/cycles
                                 edges, vertices);
   if (!t) {
     cout << "***Fail on FindNetwork." << endl;
@@ -276,9 +276,9 @@ bool  gevd_detector::DoContour()
   }
   contour.SubPixelAccuracy(*edges, *vertices, // insert subpixel
                            *locationx, *locationy); // accuracy
-  if (this->spacingp)		// reduce zig-zags and space out pixels
+  if (this->spacingp)           // reduce zig-zags and space out pixels
     Contour::EqualizeSpacing(*edges); // in chains
-  if (this->borderp)		// insert a virtual contour to enforce
+  if (this->borderp)            // insert a virtual contour to enforce
     contour.InsertBorder(*edges, *vertices); // closure at border
   Contour::SetDepth(*edges, *vertices,
                     this->depth);
@@ -295,7 +295,7 @@ bool  gevd_detector::DoContour()
 
 //--------------------------------------------------------------------------------
 //
-// -- Detect the fold contour, a list of edges and vertices are generated.
+//: Detect the fold contour, a list of edges and vertices are generated.
 //
 bool  gevd_detector::DoFoldContour()
 {
@@ -306,13 +306,13 @@ bool  gevd_detector::DoFoldContour()
     cout << "***Fail on DoFoldContour." << endl;
     return false;
   }
-  Contour::ClearNetwork(edges, vertices);	// delete vertices/edges
+  Contour::ClearNetwork(edges, vertices);       // delete vertices/edges
   Contour contour(this->hysteresisFactor*this->noiseThreshold,
                   this->minLength, this->minJump*this->noiseThreshold,
                   this->maxGap);
 
   bool t  = contour.FindNetwork(*edgel, njunction, // first, find isolated
-                                junctionx, junctiony,	// chains/cycles
+                                junctionx, junctiony,   // chains/cycles
                                 edges, vertices);
   if (!t) {
     cout << "***Fail on FindNetwork." << endl;
@@ -320,9 +320,9 @@ bool  gevd_detector::DoFoldContour()
   }
   contour.SubPixelAccuracy(*edges, *vertices, // insert subpixel
                            *locationx, *locationy); // accuracy
-  if (this->spacingp)		// reduce zig-zags and space out pixels
+  if (this->spacingp)           // reduce zig-zags and space out pixels
     Contour::EqualizeSpacing(*edges); // in chains
-  if (this->borderp)		// insert a virtual contour to enforce
+  if (this->borderp)            // insert a virtual contour to enforce
     contour.InsertBorder(*edges, *vertices); // closure at border
   Contour::SetDepth(*edges, *vertices,
                     this->depth);
@@ -340,7 +340,7 @@ bool  gevd_detector::DoFoldContour()
 
 //---------------------------------------------------------------------------
 //
-// -- Detect step profiles in the image, using dG+NMS+extension.
+//: Detect step profiles in the image, using dG+NMS+extension.
 //
 bool gevd_detector::DoStep()
 {
@@ -355,7 +355,7 @@ bool gevd_detector::DoStep()
   gevd_step step(this->smooth, this->noise, this->contourFactor, this->junctionFactor);
   step.DetectEdgels(*source, edgel, direction, locationx, locationy, grad_mag, angle);
 
-  if (this->junctionp) {		// extension to real/virtual contours
+  if (this->junctionp) {                // extension to real/virtual contours
     njunction = step.RecoverJunctions(*source,
                                       *edgel, *direction,
                                       *locationx, *locationy,
@@ -374,7 +374,7 @@ bool gevd_detector::DoStep()
 #if 0 // commented out
 //---------------------------------------------------------------------------
 //
-// -- Detect fold profiles in the image, using dG+NMS+extension.
+//: Detect fold profiles in the image, using dG+NMS+extension.
 //
 bool gevd_detector::DoFold()
 {
@@ -393,7 +393,7 @@ bool gevd_detector::DoFold()
                     locationx, locationy, true, //Flag to compute mag, angle
                     grad_mag, angle); //Reusing grad_mag, actually |d2G|
 
-  if (this->junctionp) {		// extension to real/virtual contours
+  if (this->junctionp) {                // extension to real/virtual contours
     njunction = fold.RecoverJunctions(*source,
                                       *edgel, *direction,
                                       *locationx, *locationy,
@@ -411,7 +411,7 @@ bool gevd_detector::DoFold()
 
 //--------------------------------------------------------------------------------
 //
-// -- Transform data in the image as float buffer.
+//: Transform data in the image as float buffer.
 //
 gevd_bufferxy* gevd_detector::GetBufferFromImage()
 {
@@ -446,11 +446,11 @@ gevd_bufferxy* gevd_detector::GetBufferFromImage()
    gevd_bufferxy image_buf(sizex, sizey, image.bits_per_component());
 
 #if 0 // commented out
-  image->GetSection(image_buf.GetBuffer(),	// copy bytes image into buf
+  image->GetSection(image_buf.GetBuffer(),      // copy bytes image into buf
                     roi->GetOrigX(), roi->GetOrigY(), sizex, sizey);
 #endif
 
-   image.get_section(image_buf.GetBuffer(),	// copy bytes image into buf
+   image.get_section(image_buf.GetBuffer(),     // copy bytes image into buf
                      0, 0, sizex, sizey);
 
    if (! gevd_float_operators::BufferToFloat(image_buf, *image_float_buf))

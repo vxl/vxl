@@ -1,10 +1,10 @@
 #include "gevd_detector_params.h"
 
 #include <vcl_strstream.h>
-//#include <Basics/types.h>	// Gets AttributeValuePair
+//#include <Basics/types.h> // Gets AttributeValuePair
 
 //------------------------------------------------------------------------
-// -- Constructors
+//: Constructors
 //
 
 gevd_detector_params::gevd_detector_params(const gevd_detector_params& dp)
@@ -43,7 +43,7 @@ void gevd_detector_params::InitParams(float smooth_sigma, float noise_w,
                                       bool follow_b,  float default_d,
                                       float ang, float sep, int min_corner_len,
                                       int cyc, int ndim)
-{			
+{
   //Step contour parameters
   smooth = smooth_sigma;
   noise_weight = noise_w;
@@ -81,7 +81,7 @@ void gevd_detector_params::InitParams(float smooth_sigma, float noise_w,
 
 //-----------------------------------------------------------------------------
 //
-// -- Checks that parameters are within acceptable bounds.
+//: Checks that parameters are within acceptable bounds.
 // This method is always called after a parameter modifier has changed the prms.
 //
 bool gevd_detector_params::SanityCheck()
@@ -105,54 +105,54 @@ bool gevd_detector_params::SanityCheck()
 
   vcl_strstream msg;
   bool valid = true;
-  if (smooth <= 0)  	// Standard deviation of the smoothing kernel
+  if (smooth <= 0)      // Standard deviation of the smoothing kernel
   {
     msg<< "ERROR: Value of gaussian smoothing sigma is too low <=0" << vcl_ends;
     smooth = 1.0;
     valid = false;
   }
-  if (noise_weight < 0 || noise_weight > 1.0)  	// Noise weighting factor
+  if (noise_weight < 0 || noise_weight > 1.0)   // Noise weighting factor
   {
     msg << "ERROR: Value of noise weight must be [0 1.0]" << vcl_ends;
     noise_weight = .5;
     valid = false;
   }
-  if (noise_multiplier <= 0)	// The over all noise scale factor
+  if (noise_multiplier <= 0)    // The over all noise scale factor
   {
     msg << "ERROR: Value of noise scale factor is too low <=" << vcl_ends;
     noise_multiplier = 1.0;
     valid = false;
   }
 
-  if (minLength <= 3)	// Edgel chain length
+  if (minLength <= 3)   // Edgel chain length
   {
     msg << "ERROR: Value of minimum chain length is too low <= 3" << vcl_ends;
     minLength = 3;
     valid = false;
   }
 
-  if (maxGap <= 0)	// Chain gaps to jump
+  if (maxGap <= 0)      // Chain gaps to jump
   {
     msg << "ERROR: Value of maximum gap is too low <0" << vcl_ends;
     maxGap = 2.2;
     valid = false;
   }
 
-  if (minJump <= 0)	// Jump to close a junction
+  if (minJump <= 0)     // Jump to close a junction
   {
     msg << "ERROR: Value of min jump junction is too low <0" << vcl_ends;
     maxGap = 1.0;
     valid = false;
   }
 
-  if (contourFactor <= 0)	// Threshold in following a contour
+  if (contourFactor <= 0)       // Threshold in following a contour
   {
     msg << "ERROR: Value of contour factor is too low <0" << vcl_ends;
     contourFactor = 1.0;
     valid = false;
   }
 
-  if (junctionFactor<= 0)	// Threshold in following a junction
+  if (junctionFactor<= 0)       // Threshold in following a junction
   {
     msg << "ERROR: Value of junction factor is too low <0" << vcl_ends;
     maxGap = 1.5;
@@ -191,7 +191,7 @@ bool gevd_detector_params::SanityCheck()
 }
 
 //------------------------------------------------------------
-// -- Describe the parameters to a parameter modifier.
+//: Describe the parameters to a parameter modifier.
 void gevd_detector_params::Describe(ParamModifier& mod)
 {
 //   static UIChoice JunctionClosure[] =
@@ -208,7 +208,7 @@ void gevd_detector_params::Describe(ParamModifier& mod)
 //   mod.AddParam("Noise Weight", noise_weight);
 //   mod.AddParam("Noise Multiplier", noise_multiplier);
 //   mod.AddParam("Automatic Threshold", automatic_threshold,
-// 	       ParamModifier::OnOff);
+//             ParamModifier::OnOff);
 //   mod.AddParam("Junction Closure", aggressive_junction_closure,
-// 	       JunctionClosure);
+//             JunctionClosure);
 }

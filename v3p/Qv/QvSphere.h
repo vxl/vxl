@@ -10,7 +10,7 @@ class QvSphere : public QvNode
 
 public:
   // Fields
-  QvSFFloat		radius;		// Radius of sphere
+  QvSFFloat radius; // Radius of sphere
 };
 
 #endif /* _QV_SPHERE_ */

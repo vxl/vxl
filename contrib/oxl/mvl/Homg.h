@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	Homg - Private base class for homogeneous vectors
-// .LIBRARY	MViewBasics
-// .HEADER	MultiView Package
-// .INCLUDE	mvl/Homg.h
-// .FILE	Homg.cxx
+// .NAME    Homg - Private base class for homogeneous vectors
+// .LIBRARY MViewBasics
+// .HEADER  MultiView Package
+// .INCLUDE mvl/Homg.h
+// .FILE    Homg.cxx
 //
 // .SECTION Description:
 //
@@ -35,14 +35,14 @@ class Homg {
   // PUBLIC INTERFACE----------------------------------------------------------
 public:
 
-// -- Standard placeholder for methods that wish to return infinity.
+//: Standard placeholder for methods that wish to return infinity.
   static double infinity;
 
 
-// -- The tolerance used in "near zero" tests in the Homg subclasses.
+//: The tolerance used in "near zero" tests in the Homg subclasses.
   static double infinitesimal_tol;
 
-// -- Static method to set the default tolerance used for infinitesimal checks.
+//: Static method to set the default tolerance used for infinitesimal checks.
 // The default is 1e-12.
   static void set_infinitesimal_tol(double tol);
 };

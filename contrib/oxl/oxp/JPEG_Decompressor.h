@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	JPEG_Decompressor - Simple interface to JPEG library
-// .LIBRARY	POX
-// .HEADER	Oxford Package
-// .INCLUDE	oxp/JPEG_Decompressor.h
-// .FILE	JPEG_Decompressor.cxx
+// .NAME    JPEG_Decompressor - Simple interface to JPEG library
+// .LIBRARY oxp
+// .HEADER  Oxford Package
+// .INCLUDE oxp/JPEG_Decompressor.h
+// .FILE    JPEG_Decompressor.cxx
 //
 // .SECTION Description
 //    JPEG_Decompressor is a simplified interface to the JPEG library.

@@ -13,50 +13,50 @@ class QvInput {
     QvInput();
     ~QvInput();
 
-    static float	isASCIIHeader(const char *string);
-    void		setFilePointer(FILE *newFP);
-    FILE *		getCurFile() const { return fp; }
-    float		getVersion();
-    QvBool		get(char &c);
-    QvBool		read(char	    &c);
-    QvBool		read(QvString       &s);
-    QvBool		read(QvName	    &n, QvBool validIdent = FALSE);
-    QvBool		read(int	    &i);
-    QvBool		read(unsigned int   &i);
-    QvBool		read(short	    &s);
-    QvBool		read(unsigned short &s);
-    QvBool		read(long	    &l);
-    QvBool		read(unsigned long  &l);
-    QvBool		read(float	    &f);
-    QvBool		read(double	    &d);
-    QvBool		eof() const;
-    void		getLocationString(QvString &string) const;
-    void		putBack(char c);
-    void		putBack(const char *string);
-    void		addReference(const QvName &name, QvNode *node);
-    QvNode *		findReference(const QvName &name) const;
+    static float        isASCIIHeader(const char *string);
+    void                setFilePointer(FILE *newFP);
+    FILE *              getCurFile() const { return fp; }
+    float               getVersion();
+    QvBool              get(char &c);
+    QvBool              read(char           &c);
+    QvBool              read(QvString       &s);
+    QvBool              read(QvName         &n, QvBool validIdent = FALSE);
+    QvBool              read(int            &i);
+    QvBool              read(unsigned int   &i);
+    QvBool              read(short          &s);
+    QvBool              read(unsigned short &s);
+    QvBool              read(long           &l);
+    QvBool              read(unsigned long  &l);
+    QvBool              read(float          &f);
+    QvBool              read(double         &d);
+    QvBool              eof() const;
+    void                getLocationString(QvString &string) const;
+    void                putBack(char c);
+    void                putBack(const char *string);
+    void                addReference(const QvName &name, QvNode *node);
+    QvNode *            findReference(const QvName &name) const;
 
   private:
-    FILE		*fp;		// File pointer
-    int			lineNum;	// Number of line currently reading
-    float		version;	// Version number of file
-    QvBool		readHeader;	// TRUE if header was checked for A/B
-    QvBool		headerOk;	// TRUE if header was read ok
-    QvDict		refDict;	// Node reference dictionary
-    QvString		backBuf;
-    int			backBufIndex;		
+    FILE                *fp;            // File pointer
+    int                 lineNum;        // Number of line currently reading
+    float               version;        // Version number of file
+    QvBool              readHeader;     // TRUE if header was checked for A/B
+    QvBool              headerOk;       // TRUE if header was read ok
+    QvDict              refDict;        // Node reference dictionary
+    QvString            backBuf;
+    int                 backBufIndex;
 
-    QvBool		checkHeader();
+    QvBool              checkHeader();
 
-    QvBool		skipWhiteSpace();
+    QvBool              skipWhiteSpace();
 
-    QvBool		readInteger(long &l);
-    QvBool		readUnsignedInteger(unsigned long &l);
-    QvBool		readReal(double &d);
-    QvBool		readUnsignedIntegerString(char *str);
-    int			readDigits(char *string);
-    int			readHexDigits(char *string);
-    int			readChar(char *string, char charToRead);
+    QvBool              readInteger(long &l);
+    QvBool              readUnsignedInteger(unsigned long &l);
+    QvBool              readReal(double &d);
+    QvBool              readUnsignedIntegerString(char *str);
+    int                 readDigits(char *string);
+    int                 readHexDigits(char *string);
+    int                 readChar(char *string, char charToRead);
 
 friend class QvNode;
 friend class QvDB;

@@ -3,11 +3,11 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME	PairMatchSetMulti - Multimap of ints
-// .LIBRARY	MViewBasics
-// .HEADER	MultiView Package
-// .INCLUDE	mvl/PairMatchSetMulti.h
-// .FILE	PairMatchSetMulti.cxx
+// .NAME    PairMatchSetMulti - Multimap of ints
+// .LIBRARY MViewBasics
+// .HEADER  MultiView Package
+// .INCLUDE mvl/PairMatchSetMulti.h
+// .FILE    PairMatchSetMulti.cxx
 //
 // .SECTION Description
 //    PairMatchSetMulti is a list of tuples (i1, i2) which allows

@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	HomgPrettyPrint
-// .LIBRARY	MViewBasics
-// .HEADER	MultiView Package
-// .INCLUDE	mvl/HomgPrettyPrint.h
-// .FILE	HomgPrettyPrint.cxx
+// .NAME    HomgPrettyPrint
+// .LIBRARY MViewBasics
+// .HEADER  MultiView Package
+// .INCLUDE mvl/HomgPrettyPrint.h
+// .FILE    HomgPrettyPrint.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 12 Oct 97
 //

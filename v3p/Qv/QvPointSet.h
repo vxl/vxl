@@ -4,7 +4,7 @@
 #include "QvSFLong.h"
 #include "QvSubNode.h"
 
-#define QV_POINT_SET_USE_REST_OF_POINTS	(-1)
+#define QV_POINT_SET_USE_REST_OF_POINTS (-1)
 
 class QvPointSet : public QvNode
 {
@@ -12,15 +12,15 @@ class QvPointSet : public QvNode
 
 public:
   // Fields
-  QvSFLong		startIndex;	// Index of 1st coordinate of shape
-  QvSFLong		numPoints;	// Number of points to draw
+  QvSFLong              startIndex;     // Index of 1st coordinate of shape
+  QvSFLong              numPoints;      // Number of points to draw
 
   // mpichler, 19950512
-  const point3D* points_;		// start of point array
-  int num_;				// number of points
+  const point3D* points_;               // start of point array
+  int num_;                             // number of points
 
   // mpichler, 19951019
-  float epsilon_;			// picking tolerance
+  float epsilon_;                       // picking tolerance
 };
 
 #endif /* _QV_POINT_SET_ */

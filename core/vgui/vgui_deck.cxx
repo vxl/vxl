@@ -85,7 +85,7 @@ bool vgui_deck::key_press(int x, int y, vgui_key key, vgui_modifier) {
     }
     this->post_redraw();
     return true;
-  case vgui_PAGE_DOWN: 	
+  case vgui_PAGE_DOWN:
     this->prev();
     if (children[index_]) {
       vgui_event e(vgui_ENTER);
@@ -130,8 +130,6 @@ bool vgui_deck::remove_child(vgui_tableau_sptr const& t) {
     }
   return false;
 }
-
-
 
 
 vgui_tableau_sptr vgui_deck::current() {
@@ -224,7 +222,6 @@ vcl_string vgui_deck::pretty_name() const {
 }
 
 
-
 class vgui_deck_switch_command : public vgui_command {
 public:
   vgui_deck_switch_command(vgui_deck* d, int i) : deck(d), index(i) {}
@@ -236,7 +233,6 @@ public:
   vgui_deck *deck;
   int index;
 };
-
 
 
 void vgui_deck::get_popup(const vgui_popup_params& params, vgui_menu &menu) {
@@ -266,16 +262,15 @@ void vgui_deck::get_popup(const vgui_popup_params& params, vgui_menu &menu) {
   vgui_menu selections;
 
   int count = 0;
-  for (vcl_vector<vgui_slot>::iterator i = children.begin();
-       i!=children.end() ; ++i, ++count) {
+  vcl_vector<vgui_slot>::iterator i = children.begin();
+  for ( ; i!=children.end() ; ++i, ++count) {
     selections.add((*i)->file_name().c_str(), new vgui_deck_switch_command(this,count));
   }
 
-
   submenu.add("Select active child", selections);
 
-
-  if (params.nested) {
+  if (params.nested)
+  {
     // nested menu style
 
     vgui_tableau_sptr c = current();
@@ -283,10 +278,9 @@ void vgui_deck::get_popup(const vgui_popup_params& params, vgui_menu &menu) {
     if (c && params.defaults) submenu.separator();
     c->get_popup(params, submenu);
     menu.add(type_name(), submenu);
-
   }
-  else {
-
+  else
+  {
     menu.add(type_name(),submenu);
 
     if (params.recurse) {
@@ -294,7 +288,5 @@ void vgui_deck::get_popup(const vgui_popup_params& params, vgui_menu &menu) {
       if (c)
         c->get_popup(params, menu);
     }
-
   }
-
 }

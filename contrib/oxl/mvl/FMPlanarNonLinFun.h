@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	FMPlanarNonLinFun
-// .LIBRARY	MViewCompute
-// .HEADER	MultiView Package
-// .INCLUDE	mvl/FMPlanarNonLinFun.h
-// .FILE	FMPlanarNonLinFun.cxx
+// .NAME    FMPlanarNonLinFun
+// .LIBRARY MViewCompute
+// .HEADER  MultiView Package
+// .INCLUDE mvl/FMPlanarNonLinFun.h
+// .FILE    FMPlanarNonLinFun.cxx
 //
 // .SECTION Description
 //    FMPlanarNonLinFun is a class that contains the functions required for

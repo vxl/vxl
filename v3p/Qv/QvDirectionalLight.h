@@ -16,14 +16,14 @@ class QvDirectionalLight : public QvNode
 
 public:
   // Fields
-  QvSFBool		on;		// Whether light is on
-  QvSFFloat		intensity;	// Source intensity (0 to 1)
-  QvSFColor		color;		// RGB source color
-  QvSFVec3f		direction;	// Illumination direction vector
+  QvSFBool     on;         // Whether light is on
+  QvSFFloat    intensity;  // Source intensity (0 to 1)
+  QvSFColor    color;      // RGB source color
+  QvSFVec3f    direction;  // Illumination direction vector
 
   // mpichler, 19950523
-  colorRGB color_;			// color, multiplied by intensity
-  point3D direction_;			// direction vector (*towards* light source)
+  colorRGB color_;         // color, multiplied by intensity
+  point3D direction_;      // direction vector (*towards* light source)
 };
 
 #endif /* _QV_DIRECTIONAL_LIGHT_ */

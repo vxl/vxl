@@ -42,20 +42,20 @@
  * or 3-bit delta values are used, with the deltas packed
  * into a single byte.
  */
-#define	THUNDER_DATA		0x3f	/* mask for 6-bit data */
-#define	THUNDER_CODE		0xc0	/* mask for 2-bit code word */
+#define THUNDER_DATA            0x3f    /* mask for 6-bit data */
+#define THUNDER_CODE            0xc0    /* mask for 2-bit code word */
 /* code values */
-#define	THUNDER_RUN		0x00	/* run of pixels w/ encoded count */
-#define	THUNDER_2BITDELTAS	0x40	/* 3 pixels w/ encoded 2-bit deltas */
-#define	    DELTA2_SKIP		2	/* skip code for 2-bit deltas */
-#define	THUNDER_3BITDELTAS	0x80	/* 2 pixels w/ encoded 3-bit deltas */
-#define	    DELTA3_SKIP		4	/* skip code for 3-bit deltas */
-#define	THUNDER_RAW		0xc0	/* raw data encoded */
+#define THUNDER_RUN             0x00    /* run of pixels w/ encoded count */
+#define THUNDER_2BITDELTAS      0x40    /* 3 pixels w/ encoded 2-bit deltas */
+#define     DELTA2_SKIP         2       /* skip code for 2-bit deltas */
+#define THUNDER_3BITDELTAS      0x80    /* 2 pixels w/ encoded 3-bit deltas */
+#define     DELTA3_SKIP         4       /* skip code for 3-bit deltas */
+#define THUNDER_RAW             0xc0    /* raw data encoded */
 
 static const int twobitdeltas[4] = { 0, 1, 0, -1 };
 static const int threebitdeltas[8] = { 0, 1, 2, 3, 0, -3, -2, -1 };
 
-#define	SETPIXEL(op, v) { \
+#define SETPIXEL(op, v) { \
         lastpixel = (v) & 0xf; \
         if (npixels++ & 1) \
             *op++ |= lastpixel; \
@@ -80,7 +80,7 @@ ThunderDecode(TIFF* tif, tidata_t op, tsize_t maxpixels)
 
                 n = *bp++, cc--;
                 switch (n & THUNDER_CODE) {
-                case THUNDER_RUN:		/* pixel run */
+                case THUNDER_RUN:               /* pixel run */
                         /*
                          * Replicate the last pixel n times,
                          * where n is the lower-order 6 bits.
@@ -97,7 +97,7 @@ ThunderDecode(TIFF* tif, tidata_t op, tsize_t maxpixels)
                                 *--op &= 0xf0;
                         lastpixel &= 0xf;
                         break;
-                case THUNDER_2BITDELTAS:	/* 2-bit deltas */
+                case THUNDER_2BITDELTAS:        /* 2-bit deltas */
                         if ((delta = ((n >> 4) & 3)) != DELTA2_SKIP)
                                 SETPIXEL(op, lastpixel + twobitdeltas[delta]);
                         if ((delta = ((n >> 2) & 3)) != DELTA2_SKIP)
@@ -105,13 +105,13 @@ ThunderDecode(TIFF* tif, tidata_t op, tsize_t maxpixels)
                         if ((delta = (n & 3)) != DELTA2_SKIP)
                                 SETPIXEL(op, lastpixel + twobitdeltas[delta]);
                         break;
-                case THUNDER_3BITDELTAS:	/* 3-bit deltas */
+                case THUNDER_3BITDELTAS:        /* 3-bit deltas */
                         if ((delta = ((n >> 3) & 7)) != DELTA3_SKIP)
                                 SETPIXEL(op, lastpixel + threebitdeltas[delta]);
                         if ((delta = (n & 7)) != DELTA3_SKIP)
                                 SETPIXEL(op, lastpixel + threebitdeltas[delta]);
                         break;
-                case THUNDER_RAW:		/* raw data */
+                case THUNDER_RAW:               /* raw data */
                         SETPIXEL(op, n);
                         break;
                 }

@@ -10,7 +10,7 @@ class QvScale : public QvNode
 
 public:
   // Fields
-  QvSFVec3f		scaleFactor;	// Scale factors in x, y, and z
+  QvSFVec3f scaleFactor; // Scale factors in x, y, and z
 
   // mpichler, 19950503
   const float* scale_;

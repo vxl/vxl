@@ -2,7 +2,7 @@
 #define vplayer_geometry_h_
 
 //--------------------------------------------------------------------------------
-// .NAME	vplayer_geometry
+// .NAME    vplayer_geometry
 // .SECTION Description:
 //
 // .SECTION Author

@@ -23,14 +23,14 @@ matrix4D QvNode::selectedTransformation_ = {
 }; // set in QvNode::draw
 
 // The global name dictionary
-QvDict		*QvNode::nameDict = NULL;
+QvDict *QvNode::nameDict = NULL;
 
 // Syntax for writing instances to files
-#define OPEN_BRACE		'{'
-#define CLOSE_BRACE		'}'
-#define DEFINITION_KEYWORD	"DEF"
-#define REFERENCE_KEYWORD	"USE"
-#define NULL_KEYWORD		"NULL"
+#define OPEN_BRACE              '{'
+#define CLOSE_BRACE             '}'
+#define DEFINITION_KEYWORD      "DEF"
+#define REFERENCE_KEYWORD       "USE"
+#define NULL_KEYWORD            "NULL"
 
 #include <vcl_iostream.h>
 void
@@ -175,10 +175,10 @@ QvNode::addName(QvNode *b, const char *name)
 void
 QvNode::removeName(QvNode *b, const char *name)
 {
-    QvPList	*list;
-    QvBool	found;
-    void	*t;
-    int		i;
+    QvPList     *list;
+    QvBool      found;
+    void        *t;
+    int         i;
 
     found = nameDict->find((u_long) name, t);
 
@@ -202,8 +202,8 @@ QvNode::removeName(QvNode *b, const char *name)
 QvBool
 QvNode::read(QvInput *in, QvNode *&node)
 {
-    QvBool	ret;
-    QvName	name;
+    QvBool      ret;
+    QvName      name;
 
     if (! in->read(name, TRUE)) {
         node = NULL;
@@ -229,8 +229,8 @@ QvNode::read(QvInput *in, QvNode *&node)
 QvBool
 QvNode::readInstance(QvInput *in)
 {
-    QvName	typeString;
-    QvFieldData	*fieldData_auto = getFieldData();
+    QvName      typeString;
+    QvFieldData *fieldData_auto = getFieldData();
 
     if (in->read(typeString, TRUE)) {
         if (typeString == "fields") {
@@ -252,8 +252,8 @@ QvNode::readInstance(QvInput *in)
 QvNode *
 QvNode::readReference(QvInput *in)
 {
-    QvName	refName;
-    QvNode	*node;
+    QvName      refName;
+    QvNode      *node;
 
     if (! in->read(refName, FALSE)) {
         QvReadError::post(in, "Premature end of file after "
@@ -271,10 +271,10 @@ QvNode::readReference(QvInput *in)
 QvBool
 QvNode::readNode(QvInput *in, QvName &className, QvNode *&node)
 {
-    QvBool	gotChar;
-    QvName	refName;
-    char	c;
-    QvBool	ret = TRUE, flush = FALSE;
+    QvBool      gotChar;
+    QvName      refName;
+    char        c;
+    QvBool      ret = TRUE, flush = FALSE;
 
     node = NULL;
 
@@ -353,8 +353,8 @@ QvNode::readNodeInstance(QvInput *in, const QvName &className,
 QvNode *
 QvNode::createInstance(QvInput *in, const QvName &className)
 {
-    QvNode		*instance;
-    QvString		unknownString;
+    QvNode              *instance;
+    QvString            unknownString;
 
     instance = createInstanceFromName(className);
 
@@ -382,52 +382,52 @@ QvNode::createInstance(QvInput *in, const QvName &className)
 QvNode *
 QvNode::createInstanceFromName(const QvName &className)
 {
-#define TRY_CLASS(name, class)						      \
-    else if (className == name)						      \
+#define TRY_CLASS(name, class)                                                \
+    else if (className == name)                                               \
         inst = new class
 
     QvNode *inst = NULL;
 
-    if (0) ;			// So "else" works in first TRY_CLASS
-    TRY_CLASS("AsciiText",		QvAsciiText);
-    TRY_CLASS("Cone",			QvCone);
-    TRY_CLASS("Coordinate3",		QvCoordinate3);
-    TRY_CLASS("Cube",			QvCube);
-    TRY_CLASS("Cylinder",		QvCylinder);
-    TRY_CLASS("DirectionalLight",	QvDirectionalLight);
-    TRY_CLASS("FontStyle",		QvFontStyle);
-    TRY_CLASS("Group",			QvGroup);
-    TRY_CLASS("IndexedFaceSet",		QvIndexedFaceSet);
-    TRY_CLASS("IndexedLineSet",		QvIndexedLineSet);
-    TRY_CLASS("Info",			QvInfo);
-    TRY_CLASS("LOD",			QvLOD);
-    TRY_CLASS("Material",		QvMaterial);
-    TRY_CLASS("MaterialBinding",	QvMaterialBinding);
-    TRY_CLASS("MatrixTransform",	QvMatrixTransform);
-    TRY_CLASS("Normal",			QvNormal);
-    TRY_CLASS("NormalBinding",		QvNormalBinding);
-    TRY_CLASS("OrthographicCamera",	QvOrthographicCamera);
-    TRY_CLASS("PerspectiveCamera",	QvPerspectiveCamera);
-    TRY_CLASS("PointLight",		QvPointLight);
-    TRY_CLASS("PointSet",		QvPointSet);
-    TRY_CLASS("Rotation",		QvRotation);
-    TRY_CLASS("Scale",			QvScale);
-    TRY_CLASS("Separator",		QvSeparator);
-    TRY_CLASS("ShapeHints",		QvShapeHints);
-    TRY_CLASS("Sphere",			QvSphere);
-    TRY_CLASS("SpotLight",		QvSpotLight);
-    TRY_CLASS("Switch",			QvSwitch);
-    TRY_CLASS("Texture2",		QvTexture2);
-    TRY_CLASS("Texture2Transform",	QvTexture2Transform);
-    TRY_CLASS("TextureCoordinate2",	QvTextureCoordinate2);
-    TRY_CLASS("Transform",		QvTransform);
-    TRY_CLASS("TransformSeparator",	QvTransformSeparator);
-    TRY_CLASS("Translation",		QvTranslation);
-    TRY_CLASS("WWWAnchor",		QvWWWAnchor);
-    TRY_CLASS("WWWInline",		QvWWWInline);
+    if (0) ;                    // So "else" works in first TRY_CLASS
+    TRY_CLASS("AsciiText",              QvAsciiText);
+    TRY_CLASS("Cone",                   QvCone);
+    TRY_CLASS("Coordinate3",            QvCoordinate3);
+    TRY_CLASS("Cube",                   QvCube);
+    TRY_CLASS("Cylinder",               QvCylinder);
+    TRY_CLASS("DirectionalLight",       QvDirectionalLight);
+    TRY_CLASS("FontStyle",              QvFontStyle);
+    TRY_CLASS("Group",                  QvGroup);
+    TRY_CLASS("IndexedFaceSet",         QvIndexedFaceSet);
+    TRY_CLASS("IndexedLineSet",         QvIndexedLineSet);
+    TRY_CLASS("Info",                   QvInfo);
+    TRY_CLASS("LOD",                    QvLOD);
+    TRY_CLASS("Material",               QvMaterial);
+    TRY_CLASS("MaterialBinding",        QvMaterialBinding);
+    TRY_CLASS("MatrixTransform",        QvMatrixTransform);
+    TRY_CLASS("Normal",                 QvNormal);
+    TRY_CLASS("NormalBinding",          QvNormalBinding);
+    TRY_CLASS("OrthographicCamera",     QvOrthographicCamera);
+    TRY_CLASS("PerspectiveCamera",      QvPerspectiveCamera);
+    TRY_CLASS("PointLight",             QvPointLight);
+    TRY_CLASS("PointSet",               QvPointSet);
+    TRY_CLASS("Rotation",               QvRotation);
+    TRY_CLASS("Scale",                  QvScale);
+    TRY_CLASS("Separator",              QvSeparator);
+    TRY_CLASS("ShapeHints",             QvShapeHints);
+    TRY_CLASS("Sphere",                 QvSphere);
+    TRY_CLASS("SpotLight",              QvSpotLight);
+    TRY_CLASS("Switch",                 QvSwitch);
+    TRY_CLASS("Texture2",               QvTexture2);
+    TRY_CLASS("Texture2Transform",      QvTexture2Transform);
+    TRY_CLASS("TextureCoordinate2",     QvTextureCoordinate2);
+    TRY_CLASS("Transform",              QvTransform);
+    TRY_CLASS("TransformSeparator",     QvTransformSeparator);
+    TRY_CLASS("Translation",            QvTranslation);
+    TRY_CLASS("WWWAnchor",              QvWWWAnchor);
+    TRY_CLASS("WWWInline",              QvWWWInline);
 #ifdef VRMLEXTENSIONS
-    TRY_CLASS("Label",			QvLabel);
-    TRY_CLASS("LightModel",		QvLightModel);
+    TRY_CLASS("Label",                  QvLabel);
+    TRY_CLASS("LightModel",             QvLightModel);
 #endif
 
     return inst;
@@ -438,8 +438,8 @@ QvNode::createInstanceFromName(const QvName &className)
 void
 QvNode::flushInput(QvInput *in)
 {
-    int		nestLevel = 1;
-    char	c;
+    int         nestLevel = 1;
+    char        c;
 
     while (nestLevel > 0 && in->get(c)) {
 

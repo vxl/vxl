@@ -2,9 +2,9 @@
 #define xcv_threeview_manager_h_
 
 //--------------------------------------------------------------------------------
-// .NAME	xcv_threeview_manager
-// .INCLUDE	xcv/xcv_threeview_manager.h
-// .FILE	xcv_threeview_manager.cxx
+// .NAME    xcv_threeview_manager
+// .INCLUDE xcv/xcv_threeview_manager.h
+// .FILE    xcv_threeview_manager.cxx
 // .SECTION Description:
 //
 // .SECTION Author

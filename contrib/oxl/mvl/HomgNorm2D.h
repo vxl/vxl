@@ -4,12 +4,12 @@
 #pragma interface
 #endif
 //
-// .NAME	HomgNorm2D - Normalize homogeneous points
-// .LIBRARY	MViewCompute
-// .HEADER	MultiView Package
-// .INCLUDE	mvl/HomgNorm2D.h
-// .FILE	HomgNorm2D.cxx
-// .EXAMPLE	examples/exampleHomgNorm2D.cxx
+// .NAME    HomgNorm2D - Normalize homogeneous points
+// .LIBRARY MViewCompute
+// .HEADER  MultiView Package
+// .INCLUDE mvl/HomgNorm2D.h
+// .FILE    HomgNorm2D.cxx
+// .EXAMPLE examples/exampleHomgNorm2D.cxx
 //
 // .SECTION Description
 //    HomgNorm2D is a class that normalizes a set of homogeneous points
@@ -35,22 +35,22 @@ class HomgNorm2D : public SimilarityMetric {
 public:
   // Constructors/Destructors--------------------------------------------------
 
-// -- Construct a HomgNorm2D that will hold n normalized points.
+//: Construct a HomgNorm2D that will hold n normalized points.
   HomgNorm2D(int n, bool unit_omega = true): _normalized(n),_unit_omega(unit_omega) {}
 
-// -- Construct a HomgNorm2D from an array of homogeneous points.
+//: Construct a HomgNorm2D from an array of homogeneous points.
 // The points will be normalized as described above and the results
 // stored in this class.  If the optional parameter unit_omega is
 // set to false, then the points will not be scaled to ensure that
 // the homogeneous parameter is one.
   HomgNorm2D(const vcl_vector<HomgPoint2D>& points, bool unit_omega = true);
 
-// -- Destructor
+//: Destructor
  ~HomgNorm2D();
 
   // Computations--------------------------------------------------------------
 
-// -- Perform the normalization
+//: Perform the normalization
   void normalize(const vcl_vector<HomgPoint2D>& points);
 
   bool was_coincident(void) const { return was_coincident_; } // FSM
@@ -59,24 +59,24 @@ public:
 
   // Operations----------------------------------------------------------------
 
-// -- Apply the normalization to the given point
+//: Apply the normalization to the given point
   HomgPoint2D apply_normalization(const HomgPoint2D& p) { return imagehomg_to_homg(p); }
 
-// -- Apply the inverse normalization to the given point
+//: Apply the inverse normalization to the given point
   HomgPoint2D apply_denormalization(const HomgPoint2D& p) { return homg_to_imagehomg(p); }
 
   // Data Access---------------------------------------------------------------
 
-// -- Return the array of normalized points
+//: Return the array of normalized points
   vcl_vector<HomgPoint2D>& get_normalized_points() { return _normalized; }
 
-// -- Have the points been scaled so their third components are one?
+//: Have the points been scaled so their third components are one?
   bool points_have_unit_omega() const { return _unit_omega; }
 
-// -- Return the i'th normalized point.
+//: Return the i'th normalized point.
   HomgPoint2D& operator [] (int i) { return _normalized[i]; }
 
-// -- Return the i'th normalized point.
+//: Return the i'th normalized point.
   HomgPoint2D& get (int i) { return _normalized[i]; }
 
 protected:

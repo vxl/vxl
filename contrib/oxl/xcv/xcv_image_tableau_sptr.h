@@ -3,9 +3,9 @@
 /*
   fsm@robots.ox.ac.uk
 */
-// .NAME	xcv_image_tableau_sptr
-// .INCLUDE	xcv/xcv_image_tableau_sptr.h
-// .FILE	xcv_image_tableau_sptr.cxx
+// .NAME    xcv_image_tableau_sptr
+// .INCLUDE xcv/xcv_image_tableau_sptr.h
+// .FILE    xcv_image_tableau_sptr.cxx
 
 #include <vgui/vgui_tableau_sptr.h>
 

@@ -24,7 +24,7 @@ vtol_vertex_2d::vtol_vertex_2d(void)
 }
 
 //---------------------------------------------------------------------------
-// -- Constructor from a point (the point is not copied)
+//: Constructor from a point (the point is not copied)
 // Require: new_point.ptr()!=0
 //---------------------------------------------------------------------------
 vtol_vertex_2d::vtol_vertex_2d(vsol_point_2d &new_point)
@@ -36,7 +36,7 @@ vtol_vertex_2d::vtol_vertex_2d(vsol_point_2d &new_point)
 }
 
 //---------------------------------------------------------------------------
-// -- Constructor from a vector
+//: Constructor from a vector
 //---------------------------------------------------------------------------
 vtol_vertex_2d::vtol_vertex_2d(const vnl_double_2 &v)
 {
@@ -44,7 +44,7 @@ vtol_vertex_2d::vtol_vertex_2d(const vnl_double_2 &v)
 }
 
 //---------------------------------------------------------------------------
-// -- Constructor from abscissa `new_x' and ordinate `new_y' of the point
+//: Constructor from abscissa `new_x' and ordinate `new_y' of the point
 //---------------------------------------------------------------------------
 vtol_vertex_2d::vtol_vertex_2d(const double new_x,
                                const double new_y)
@@ -53,7 +53,7 @@ vtol_vertex_2d::vtol_vertex_2d(const double new_x,
 }
 
 //---------------------------------------------------------------------------
-// -- Copy constructor. Copy the point but not the links
+//: Copy constructor. Copy the point but not the links
 //---------------------------------------------------------------------------
 vtol_vertex_2d::vtol_vertex_2d(const vtol_vertex_2d &other)
 {
@@ -61,7 +61,7 @@ vtol_vertex_2d::vtol_vertex_2d(const vtol_vertex_2d &other)
 }
 
 //---------------------------------------------------------------------------
-// -- make a copy of the geometry
+//: make a copy of the geometry
 //---------------------------------------------------------------------------
 
 
@@ -73,7 +73,7 @@ vtol_vertex_2d::~vtol_vertex_2d()
 }
 
 //---------------------------------------------------------------------------
-// -- Clone `this': creation of a new object and initialization
+//: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
 vsol_spatial_object_3d_sptr vtol_vertex_2d::clone(void) const
@@ -88,7 +88,7 @@ vsol_spatial_object_3d_sptr vtol_vertex_2d::clone(void) const
  */
 
 //---------------------------------------------------------------------------
-// -- Return the point
+//: Return the point
 //---------------------------------------------------------------------------
 vsol_point_2d_sptr vtol_vertex_2d::point(void) const
 {
@@ -96,7 +96,7 @@ vsol_point_2d_sptr vtol_vertex_2d::point(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Set the point (the point is not copied)
+//: Set the point (the point is not copied)
 // Require: new_point.ptr()!=0
 //---------------------------------------------------------------------------
 void vtol_vertex_2d::set_point(vsol_point_2d &new_point)
@@ -108,7 +108,7 @@ void vtol_vertex_2d::set_point(vsol_point_2d &new_point)
 }
 
 //---------------------------------------------------------------------------
-// -- Return the abscissa of the point
+//: Return the abscissa of the point
 //---------------------------------------------------------------------------
 double vtol_vertex_2d::x(void) const
 {
@@ -116,7 +116,7 @@ double vtol_vertex_2d::x(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return the ordinate of the point
+//: Return the ordinate of the point
 //---------------------------------------------------------------------------
 double vtol_vertex_2d::y(void) const
 {
@@ -124,7 +124,7 @@ double vtol_vertex_2d::y(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Set the abscissa of the point with `new_x'
+//: Set the abscissa of the point with `new_x'
 //---------------------------------------------------------------------------
 void vtol_vertex_2d::set_x(const double new_x)
 {
@@ -133,7 +133,7 @@ void vtol_vertex_2d::set_x(const double new_x)
 }
 
 //---------------------------------------------------------------------------
-// -- Set the ordinate of the point with `new_y'
+//: Set the ordinate of the point with `new_y'
 //---------------------------------------------------------------------------
 void vtol_vertex_2d::set_y(const double new_y)
 {
@@ -146,7 +146,7 @@ void vtol_vertex_2d::set_y(const double new_y)
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Return `this' if `this' is a vertex, 0 otherwise
+//: Return `this' if `this' is a vertex, 0 otherwise
 //---------------------------------------------------------------------------
 const vtol_vertex_2d *vtol_vertex_2d::cast_to_vertex_2d(void) const
 {
@@ -154,7 +154,7 @@ const vtol_vertex_2d *vtol_vertex_2d::cast_to_vertex_2d(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return `this' if `this' is a vertex, 0 otherwise
+//: Return `this' if `this' is a vertex, 0 otherwise
 //---------------------------------------------------------------------------
 vtol_vertex_2d *vtol_vertex_2d::cast_to_vertex_2d(void)
 {
@@ -166,7 +166,7 @@ vtol_vertex_2d *vtol_vertex_2d::cast_to_vertex_2d(void)
  *
  *    Print Functions
  */
-// -- This method outputs a simple text representation of the vertex including its address in memory.
+//: This method outputs a simple text representation of the vertex including its address in memory.
 void vtol_vertex_2d::print(vcl_ostream &strm) const
 {
   strm<<"<vtol_vertex_2d "<<x()<<","<<y()<<","<<(void *)this<<"> with id ";
@@ -174,7 +174,7 @@ void vtol_vertex_2d::print(vcl_ostream &strm) const
 }
 
 
-// -- This method outputs a detailed description of the vertex including the inferiors and superiors.
+//: This method outputs a detailed description of the vertex including the inferiors and superiors.
 void vtol_vertex_2d::describe(vcl_ostream &strm,
                               int blanking) const
 {
@@ -192,7 +192,7 @@ void vtol_vertex_2d::describe(vcl_ostream &strm,
  */
 
 //-----------------------------------------------------------------------------
-// -- Create a line edge from `this' and `other' only if this edge does not
+//: Create a line edge from `this' and `other' only if this edge does not
 //    exist. Otherwise it just returns the existing edge
 // Require: other.ptr()!=0 and other.ptr()!=this
 //-----------------------------------------------------------------------------
@@ -207,7 +207,7 @@ vtol_edge *vtol_vertex_2d::new_edge(vtol_vertex &other)
   assert(&other != this);
 
   // awf: load vrml speed up by factor of 2 using this loop.
-  vtol_edge *result;
+  vtol_edge *result = 0;
   bool found;
 
   vcl_list<vtol_topology_object_sptr>::const_iterator zp;
@@ -234,20 +234,20 @@ vtol_edge *vtol_vertex_2d::new_edge(vtol_vertex &other)
         }
       delete sups;
     }
-  if(!found){
+  if(!found)
     result= (vtol_edge*)(new vtol_edge_2d(*this,*other2d));
-  }	
+
   return result;
 }
 
-// -- Returns the squared distance from the vertex and the vector location, v.
+//: Returns the squared distance from the vertex and the vector location, v.
 double vtol_vertex_2d::distance_from(const vnl_double_2 &v)
 {
   vsol_point_2d point(v(0),v(1));
   return _point->distance(point);
 }
 
-// -- This method returns the distance, not the squared distance, from this vertex and another vertex.
+//: This method returns the distance, not the squared distance, from this vertex and another vertex.
 double vtol_vertex_2d::euclidean_distance(vtol_vertex_2d& v)
 {
   return _point->distance(*v.point());
@@ -255,7 +255,7 @@ double vtol_vertex_2d::euclidean_distance(vtol_vertex_2d& v)
 
 
 //---------------------------------------------------------------------------
-// -- Assignment of `this' with `other' (copy the point not the links)
+//: Assignment of `this' with `other' (copy the point not the links)
 //---------------------------------------------------------------------------
 vtol_vertex_2d &vtol_vertex_2d::operator=(const vtol_vertex_2d &other)
 {
@@ -268,7 +268,7 @@ vtol_vertex_2d &vtol_vertex_2d::operator=(const vtol_vertex_2d &other)
   return *this;
 }
 
-// -- spatial object equality
+//: spatial object equality
 
 bool vtol_vertex_2d::operator==(const vsol_spatial_object_3d& obj) const
 {
@@ -281,13 +281,11 @@ bool vtol_vertex_2d::operator==(const vsol_spatial_object_3d& obj) const
 
 
 //---------------------------------------------------------------------------
-// -- Is `this' has the same coordinates for its point than `other' ?
+//: Is `this' has the same coordinates for its point than `other' ?
 //---------------------------------------------------------------------------
 bool vtol_vertex_2d::operator== (const vtol_vertex_2d &other) const
 {
-  bool result;
-
-  result=this==&other;
+  bool result = this==&other;
   if(!result)
     result=(*_point)==(*(other._point));
   return result;
@@ -299,7 +297,7 @@ bool vtol_vertex_2d::operator== (const vtol_vertex_2d &other) const
  *    Functions
  */
 
-// -- copy the geometry
+//: copy the geometry
 
 void vtol_vertex_2d::copy_geometry(const vtol_vertex &other)
 {
@@ -309,16 +307,15 @@ void vtol_vertex_2d::copy_geometry(const vtol_vertex &other)
 }
 
 //---------------------------------------------------------------------------
-// -- compare the geometry
+//: compare the geometry
 //---------------------------------------------------------------------------
 
 bool vtol_vertex_2d::compare_geometry(const vtol_vertex &other) const
 {
-  if(other.cast_to_vertex_2d()){
-    bool result = (*_point)==(*(other.cast_to_vertex_2d()->point()));
-    return result;
-  }
-  return false;
+  if(other.cast_to_vertex_2d())
+    return (*_point)==(*(other.cast_to_vertex_2d()->point()));
+  else
+    return false;
 }
 
 

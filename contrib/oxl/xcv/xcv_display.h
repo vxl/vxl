@@ -2,9 +2,9 @@
 #define xcv_display_h_
 
 //--------------------------------------------------------------------------------
-// .NAME	xcv_display
-// .INCLUDE	xcv/xcv_display.h
-// .FILE	xcv_display.cxx
+// .NAME    xcv_display
+// .INCLUDE xcv/xcv_display.h
+// .FILE    xcv_display.cxx
 // .SECTION Description:
 //   Creates a menu for, and provides an interface to operations that change
 //   the display.

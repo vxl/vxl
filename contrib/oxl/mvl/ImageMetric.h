@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	ImageMetric - Converting between image and metric coordinates
-// .LIBRARY	MViewBasics
-// .HEADER	MultiView Package
-// .INCLUDE	mvl/ImageMetric.h
-// .FILE	ImageMetric.cxx
+// .NAME    ImageMetric - Converting between image and metric coordinates
+// .LIBRARY MViewBasics
+// .HEADER  MultiView Package
+// .INCLUDE mvl/ImageMetric.h
+// .FILE    ImageMetric.cxx
 //
 // .SECTION Description
 //    ImageMetric is the baseclass for classes that define how points in image

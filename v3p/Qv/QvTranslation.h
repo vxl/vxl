@@ -10,7 +10,7 @@ class QvTranslation : public QvNode
 
 public:
   // Fields
-  QvSFVec3f		translation;	// Translation vector
+  QvSFVec3f translation; // Translation vector
 
   // mpichler, 19950503
   const vector3D* trans_;

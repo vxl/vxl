@@ -2,7 +2,7 @@
 #define vplayer_video_h_
 
 //--------------------------------------------------------------------------------
-// .NAME	vplayer_video
+// .NAME    vplayer_video
 // .SECTION Description:
 //   Imlements video menu on the movie player
 // .SECTION Author

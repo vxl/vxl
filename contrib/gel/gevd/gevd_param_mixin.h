@@ -39,12 +39,11 @@
 
 //=========================== Basics ====================================
 //
-// .NAME	gevd_param_mixin - A mixin to package algorithm parameters
-// .HEADER GeneralUtility Package
-// .LIBRARY Basics
-// .INCLUDE	Basics/gevd_param_mixin.h
-// .FILE	gevd_param_mixin.h
-// .FILE	gevd_param_mixin.C
+// .NAME    gevd_param_mixin - A mixin to package algorithm parameters
+// .HEADER  gel Package
+// .LIBRARY gevd
+// .INCLUDE Basics/gevd_param_mixin.h
+// .FILE    gevd_param_mixin.C
 //
 // .SECTION Description
 //   The base class for blocks of algorithm parameters. Algorithms,
@@ -98,36 +97,36 @@ class ParamModifier
 {
 public:
   //------------------------------------------------------------
-  // -- These are some standard boolean choice styles defined for
+  //: These are some standard boolean choice styles defined for
   // convenience.
   enum BoolChoiceStyle { TrueFalse, OnOff, YesNo };
 
   //------------------------------------------------------------
-  // -- Name those parameters which follow.
+  //: Name those parameters which follow.
   virtual void Name(const vcl_string& name) = 0;
 
   //------------------------------------------------------------
-  // -- Add a float parameter.
+  //: Add a float parameter.
   virtual void AddParam(const vcl_string& name, float& value) = 0;
 
   //------------------------------------------------------------
-  // -- Add a double parameter.
+  //: Add a double parameter.
   virtual void AddParam(const vcl_string& name, double& value) = 0;
 
   //------------------------------------------------------------
-  // -- Add an integer parameter.
+  //: Add an integer parameter.
   virtual void AddParam(const vcl_string& name, int& value) = 0;
 
   //------------------------------------------------------------
-  // -- Add a boolean parameter.
+  //: Add a boolean parameter.
   virtual void AddParam(const vcl_string& name, bool& value) = 0;
 
   //------------------------------------------------------------
-  // -- Add a choice parameter.
+  //: Add a choice parameter.
   //  virtual void AddParam(const vcl_string& name, int& value, UIChoice* choices) = 0;
 
   //------------------------------------------------------------
-  // -- Add a boolean choice parameter, using one of the convenient
+  //: Add a boolean choice parameter, using one of the convenient
   // standard styles.
   virtual void AddParam(const vcl_string& name, bool& value,
                         BoolChoiceStyle style = TrueFalse) = 0;

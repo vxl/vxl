@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	POX - Oxford image processing
-// .LIBRARY	POX
-// .HEADER	Oxford Package
-// .INCLUDE	oxp/POX.h
-// .FILE	POX.cxx
+// .NAME    POX - Oxford image processing
+// .LIBRARY oxp
+// .HEADER  Oxford Package
+// .INCLUDE oxp/POX.h
+// .FILE    POX.cxx
 // .SECTION Description
 //    POX is a collection of functions which are waiting for namespaces.
 //

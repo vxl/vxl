@@ -3,11 +3,11 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME	FManifoldProject - Fast 2-view Hartley-Sturm
-// .LIBRARY	MViewBasics
-// .HEADER	MultiView Package
-// .INCLUDE	mvl/FManifoldProject.h
-// .FILE	FManifoldProject.cxx
+// .NAME    FManifoldProject - Fast 2-view Hartley-Sturm
+// .LIBRARY MViewBasics
+// .HEADER  MultiView Package
+// .INCLUDE mvl/FManifoldProject.h
+// .FILE    FManifoldProject.cxx
 //
 // .SECTION Description
 //    FManifoldProject is a class which allows repeated fast application of the
@@ -20,7 +20,7 @@
 //   AWF 030897 Moved to MViewBasics
 //   210598 AWF Return squared error, as sqrt(|x - p|^2 + |x' - p'|^2) is meaningless.
 //   AWF Handle affine F.
-//   P. Torr added in a check for multiple solutions 
+//   P. Torr added in a check for multiple solutions
 //     this might be necessary to flag the instance when a particular correspondence
 //     might have severla possible closest points all near to each other,
 //     indicating high structure variability and high curvature in the F manifold.

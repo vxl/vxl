@@ -2,12 +2,12 @@
 #define xcv_twoview_manager_h_
 
 //--------------------------------------------------------------------------------
-// .NAME	xcv_twoview_manager
-// .INCLUDE	xcv/xcv_twoview_manager.h
-// .FILE	xcv_twoview_manager.cxx
+// .NAME    xcv_twoview_manager
+// .INCLUDE xcv/xcv_twoview_manager.h
+// .FILE    xcv_twoview_manager.cxx
 // .SECTION Description:
-//    Handles events which occur in one view but are displayed in two views 
-//    simultaneously (eg. displaying the epipolar line in one view corresponding 
+//    Handles events which occur in one view but are displayed in two views
+//    simultaneously (eg. displaying the epipolar line in one view corresponding
 //    to a mouse press in the other view.)
 //    Also holds data which links two views, eg. corner matches, FMatrix and
 //    HMatrix2D.

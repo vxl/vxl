@@ -18,7 +18,7 @@ vtol_topology_object::vtol_topology_object(void)
 }
 
 //---------------------------------------------------------------------------
-// -- Constructor with given sizes for arrays of inferiors and superiors
+//: Constructor with given sizes for arrays of inferiors and superiors
 //---------------------------------------------------------------------------
 vtol_topology_object::vtol_topology_object(const int num_inferiors,
                                                  const int num_superiors)
@@ -42,7 +42,7 @@ vtol_topology_object::~vtol_topology_object()
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Return `this' if `this' is a vertex, 0 otherwise
+//: Return `this' if `this' is a vertex, 0 otherwise
 //---------------------------------------------------------------------------
 const vtol_vertex *vtol_topology_object::cast_to_vertex(void) const
 {
@@ -50,7 +50,7 @@ const vtol_vertex *vtol_topology_object::cast_to_vertex(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return `this' if `this' is a vertex, 0 otherwise
+//: Return `this' if `this' is a vertex, 0 otherwise
 //---------------------------------------------------------------------------
 vtol_vertex *vtol_topology_object::cast_to_vertex(void)
 {
@@ -58,7 +58,7 @@ vtol_vertex *vtol_topology_object::cast_to_vertex(void)
 }
 
 //---------------------------------------------------------------------------
-// -- Return `this' if `this' is a zero_chain, 0 otherwise
+//: Return `this' if `this' is a zero_chain, 0 otherwise
 //---------------------------------------------------------------------------
 const vtol_zero_chain *
 vtol_topology_object::cast_to_zero_chain(void) const
@@ -67,7 +67,7 @@ vtol_topology_object::cast_to_zero_chain(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return `this' if `this' is a zero_chain, 0 otherwise
+//: Return `this' if `this' is a zero_chain, 0 otherwise
 //---------------------------------------------------------------------------
 vtol_zero_chain *vtol_topology_object::cast_to_zero_chain(void)
 {
@@ -75,7 +75,7 @@ vtol_zero_chain *vtol_topology_object::cast_to_zero_chain(void)
 }
 
 //---------------------------------------------------------------------------
-// -- Return `this' if `this' is an edge, 0 otherwise
+//: Return `this' if `this' is an edge, 0 otherwise
 //---------------------------------------------------------------------------
 const vtol_edge *vtol_topology_object::cast_to_edge(void) const
 {
@@ -83,7 +83,7 @@ const vtol_edge *vtol_topology_object::cast_to_edge(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return `this' if `this' is an edge, 0 otherwise
+//: Return `this' if `this' is an edge, 0 otherwise
 //---------------------------------------------------------------------------
 vtol_edge *vtol_topology_object::cast_to_edge(void)
 {
@@ -91,7 +91,7 @@ vtol_edge *vtol_topology_object::cast_to_edge(void)
 }
 
 //---------------------------------------------------------------------------
-// -- Return `this' if `this' is an one_chain, 0 otherwise
+//: Return `this' if `this' is an one_chain, 0 otherwise
 //---------------------------------------------------------------------------
 const vtol_one_chain *vtol_topology_object::cast_to_one_chain(void) const
 {
@@ -99,7 +99,7 @@ const vtol_one_chain *vtol_topology_object::cast_to_one_chain(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return `this' if `this' is an one_chain, 0 otherwise
+//: Return `this' if `this' is an one_chain, 0 otherwise
 //---------------------------------------------------------------------------
 vtol_one_chain *vtol_topology_object::cast_to_one_chain(void)
 {
@@ -107,7 +107,7 @@ vtol_one_chain *vtol_topology_object::cast_to_one_chain(void)
 }
 
 //---------------------------------------------------------------------------
-// -- Return `this' if `this' is a face, 0 otherwise
+//: Return `this' if `this' is a face, 0 otherwise
 //---------------------------------------------------------------------------
 const vtol_face *vtol_topology_object::cast_to_face(void) const
 {
@@ -115,7 +115,7 @@ const vtol_face *vtol_topology_object::cast_to_face(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return `this' if `this' is a face, 0 otherwise
+//: Return `this' if `this' is a face, 0 otherwise
 //---------------------------------------------------------------------------
 vtol_face *vtol_topology_object::cast_to_face(void)
 {
@@ -123,7 +123,7 @@ vtol_face *vtol_topology_object::cast_to_face(void)
 }
 
 //---------------------------------------------------------------------------
-// -- Return `this' if `this' is a two_chain, 0 otherwise
+//: Return `this' if `this' is a two_chain, 0 otherwise
 //---------------------------------------------------------------------------
 const vtol_two_chain *
 vtol_topology_object::cast_to_two_chain(void) const
@@ -132,7 +132,7 @@ vtol_topology_object::cast_to_two_chain(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return `this' if `this' is a two_chain, 0 otherwise
+//: Return `this' if `this' is a two_chain, 0 otherwise
 //---------------------------------------------------------------------------
 vtol_two_chain *vtol_topology_object::cast_to_two_chain(void)
 {
@@ -140,7 +140,7 @@ vtol_two_chain *vtol_topology_object::cast_to_two_chain(void)
 }
 
 //---------------------------------------------------------------------------
-// -- Return `this' if `this' is a block, 0 otherwise
+//: Return `this' if `this' is a block, 0 otherwise
 //---------------------------------------------------------------------------
 const vtol_block *vtol_topology_object::cast_to_block(void) const
 {
@@ -148,7 +148,7 @@ const vtol_block *vtol_topology_object::cast_to_block(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return `this' if `this' is a block, 0 otherwise
+//: Return `this' if `this' is a block, 0 otherwise
 //---------------------------------------------------------------------------
 vtol_block *vtol_topology_object::cast_to_block(void)
 {
@@ -160,7 +160,7 @@ vtol_block *vtol_topology_object::cast_to_block(void)
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Is `inferior' already an inferior of `this' ?
+//: Is `inferior' already an inferior of `this' ?
 //---------------------------------------------------------------------------
 bool
 vtol_topology_object::is_inferior(const vtol_topology_object &inferior) const
@@ -171,14 +171,14 @@ vtol_topology_object::is_inferior(const vtol_topology_object &inferior) const
     if((*i).ptr()== &inferior){
     // if (*(*i) == inferior){
       return true;
-    }	
+    }
   }
 
   return false;
 }
 
 //---------------------------------------------------------------------------
-// -- Is `superior' already an superior of `this' ?
+//: Is `superior' already an superior of `this' ?
 //---------------------------------------------------------------------------
 bool
 vtol_topology_object::is_superior(const vtol_topology_object &superior) const
@@ -194,7 +194,7 @@ vtol_topology_object::is_superior(const vtol_topology_object &superior) const
 }
 
 //---------------------------------------------------------------------------
-// -- Number of inferiors
+//: Number of inferiors
 //---------------------------------------------------------------------------
 int vtol_topology_object::numinf(void) const
 {
@@ -202,7 +202,7 @@ int vtol_topology_object::numinf(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Number of superiors
+//: Number of superiors
 //---------------------------------------------------------------------------
 int vtol_topology_object::numsup(void) const
 {
@@ -210,7 +210,7 @@ int vtol_topology_object::numsup(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return the superiors list
+//: Return the superiors list
 //---------------------------------------------------------------------------
 const vcl_vector<vtol_topology_object_sptr> *
 vtol_topology_object::superiors(void) const
@@ -230,7 +230,7 @@ vtol_topology_object::superiors(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return the inferiors list
+//: Return the inferiors list
 //---------------------------------------------------------------------------
 const vcl_vector<vtol_topology_object_sptr> *
 vtol_topology_object::inferiors(void) const
@@ -249,7 +249,7 @@ vtol_topology_object::spatial_type(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return the topology type
+//: Return the topology type
 //---------------------------------------------------------------------------
 vtol_topology_object::vtol_topology_object_type
 vtol_topology_object::topology_type(void) const
@@ -262,7 +262,7 @@ vtol_topology_object::topology_type(void) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Link `this' with an inferior `inferior'
+//: Link `this' with an inferior `inferior'
 // Require: valid_inferior_type(inferior) and !is_inferior(inferior)
 //---------------------------------------------------------------------------
 void vtol_topology_object::link_inferior(vtol_topology_object &inferior)
@@ -281,7 +281,7 @@ void vtol_topology_object::link_inferior(vtol_topology_object &inferior)
 }
 
 //---------------------------------------------------------------------------
-// -- Unlink `this' with the inferior `inferior'
+//: Unlink `this' with the inferior `inferior'
 // Require: valid_inferior_type(inferior) and is_inferior(inferior)
 //---------------------------------------------------------------------------
 void vtol_topology_object::unlink_inferior(vtol_topology_object &inferior)
@@ -302,7 +302,7 @@ void vtol_topology_object::unlink_inferior(vtol_topology_object &inferior)
 }
 
 //---------------------------------------------------------------------------
-// -- Unlink `this' with all its inferiors
+//: Unlink `this' with all its inferiors
 //---------------------------------------------------------------------------
 void vtol_topology_object::unlink_all_inferiors(void)
 {
@@ -315,7 +315,7 @@ void vtol_topology_object::unlink_all_inferiors(void)
 }
 
 //---------------------------------------------------------------------------
-// -- Unlink `this' of the network
+//: Unlink `this' of the network
 //---------------------------------------------------------------------------
 void vtol_topology_object::unlink(void)
 {
@@ -332,7 +332,7 @@ void vtol_topology_object::unlink(void)
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Link `this' with a superior `superior'
+//: Link `this' with a superior `superior'
 // Require: valid_superior_type(superior) and !is_superior(superior)
 //---------------------------------------------------------------------------
 void vtol_topology_object::link_superior(vtol_topology_object &superior)
@@ -350,7 +350,7 @@ void vtol_topology_object::link_superior(vtol_topology_object &superior)
 }
 
 //---------------------------------------------------------------------------
-// -- Unlink `this' with its superior `superior'
+//: Unlink `this' with its superior `superior'
 // Require: valid_superior_type(superior) and is_superior(superior)
 //---------------------------------------------------------------------------
 void vtol_topology_object::unlink_superior(vtol_topology_object &superior)
@@ -377,7 +377,7 @@ void vtol_topology_object::unlink_superior(vtol_topology_object &superior)
 }
 
 
-// -- get list of vertices
+//: get list of vertices
 
 vertex_list* vtol_topology_object::vertices(void)
 {
@@ -386,14 +386,14 @@ vertex_list* vtol_topology_object::vertices(void)
   return new_list;
 }
 
-// -- get list of vertices
+//: get list of vertices
 
 void vtol_topology_object::vertices(vertex_list& verts)
 {
   inf_sup_cache->vertices(verts);
 }
 
-// -- get list of zero_chains
+//: get list of zero_chains
 zero_chain_list* vtol_topology_object::zero_chains(void)
 {
   zero_chain_list* new_list=new zero_chain_list;
@@ -402,13 +402,13 @@ zero_chain_list* vtol_topology_object::zero_chains(void)
 }
 
 
-// -- get list of zero chains
+//: get list of zero chains
 void vtol_topology_object::zero_chains(zero_chain_list &zerochains)
 {
   inf_sup_cache->zero_chains(zerochains);
 }
 
-// -- get list of edges
+//: get list of edges
 
 edge_list* vtol_topology_object::edges(void)
 {
@@ -417,14 +417,14 @@ edge_list* vtol_topology_object::edges(void)
   return new_list;
 }
 
-// -- get list of edges
+//: get list of edges
 
 void vtol_topology_object::edges(edge_list &edges)
 {
   inf_sup_cache->edges(edges);
 }
 
-// -- get list of one chains
+//: get list of one chains
 
 one_chain_list* vtol_topology_object::one_chains(void)
 {
@@ -434,14 +434,14 @@ one_chain_list* vtol_topology_object::one_chains(void)
 
 }
 
-// -- get list of one chains
+//: get list of one chains
 
 void vtol_topology_object::one_chains(one_chain_list &onechains)
 {
   inf_sup_cache->one_chains(onechains);
 }
 
-// -- get list of faces
+//: get list of faces
 
 face_list *vtol_topology_object::faces(void)
 {
@@ -450,14 +450,14 @@ face_list *vtol_topology_object::faces(void)
   return new_list;
 }
 
-// -- get list of faces
+//: get list of faces
 
 void vtol_topology_object::faces(face_list &face_list)
 {
   inf_sup_cache->faces(face_list);
 }
 
-// -- get list of two chains
+//: get list of two chains
 
 two_chain_list *vtol_topology_object::two_chains(void)
 {
@@ -466,7 +466,7 @@ two_chain_list *vtol_topology_object::two_chains(void)
   return new_list;
 }
 
-// -- get list of two chains
+//: get list of two chains
 
 void vtol_topology_object::two_chains(two_chain_list &new_list)
 {
@@ -474,7 +474,7 @@ void vtol_topology_object::two_chains(two_chain_list &new_list)
 }
 
 
-// -- get list of blocks
+//: get list of blocks
 
 block_list *vtol_topology_object::blocks(void)
 {
@@ -484,7 +484,7 @@ block_list *vtol_topology_object::blocks(void)
 }
 
 
-// -- get list of blocks
+//: get list of blocks
 
 void vtol_topology_object::blocks(block_list &new_list)
 {
@@ -492,7 +492,7 @@ void vtol_topology_object::blocks(block_list &new_list)
 }
 
 
-// -- print the object
+//: print the object
 void vtol_topology_object::print(vcl_ostream &strm) const
 {
   strm<<"<vtol_topology_object "<<(void *)this<<">"<<vcl_endl;
@@ -546,7 +546,7 @@ void vtol_topology_object::describe(vcl_ostream &strm,
 
 
 //---------------------------------------------------------------------------
-// -- Compute lists of vertices
+//: Compute lists of vertices
 //---------------------------------------------------------------------------
 vcl_vector<vtol_vertex *> *vtol_topology_object::compute_vertices(void)
 {
@@ -556,7 +556,7 @@ vcl_vector<vtol_vertex *> *vtol_topology_object::compute_vertices(void)
 
 
 //---------------------------------------------------------------------------
-// -- Compute lists of zero chains
+//: Compute lists of zero chains
 //---------------------------------------------------------------------------
 vcl_vector<vtol_zero_chain *> *
 vtol_topology_object::compute_zero_chains(void)
@@ -566,7 +566,7 @@ vtol_topology_object::compute_zero_chains(void)
 }
 
 //---------------------------------------------------------------------------
-// -- compute lists of edges
+//: compute lists of edges
 //---------------------------------------------------------------------------
 
 vcl_vector<vtol_edge *> *vtol_topology_object::compute_edges(void)
@@ -576,7 +576,7 @@ vcl_vector<vtol_edge *> *vtol_topology_object::compute_edges(void)
 }
 
 //---------------------------------------------------------------------------
-// -- compute lists of one chains
+//: compute lists of one chains
 //---------------------------------------------------------------------------
 vcl_vector<vtol_one_chain *> *
 vtol_topology_object::compute_one_chains(void)
@@ -586,7 +586,7 @@ vtol_topology_object::compute_one_chains(void)
 }
 
 //---------------------------------------------------------------------------
-// -- compute lists of faces
+//: compute lists of faces
 //---------------------------------------------------------------------------
 vcl_vector<vtol_face *> *vtol_topology_object::compute_faces(void)
 {
@@ -595,7 +595,7 @@ vcl_vector<vtol_face *> *vtol_topology_object::compute_faces(void)
 }
 
 //---------------------------------------------------------------------------
-// -- compute lists of two chains
+//: compute lists of two chains
 //---------------------------------------------------------------------------
 vcl_vector<vtol_two_chain *> *
 vtol_topology_object::compute_two_chains(void)
@@ -605,7 +605,7 @@ vtol_topology_object::compute_two_chains(void)
 }
 
 //---------------------------------------------------------------------------
-// -- compute lists of blocks
+//: compute lists of blocks
 //---------------------------------------------------------------------------
 vcl_vector<vtol_block *> *vtol_topology_object::compute_blocks(void)
 {

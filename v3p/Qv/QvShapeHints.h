@@ -27,10 +27,10 @@ public:
   };
 
   // Fields
-  QvSFEnum		vertexOrdering;	// Ordering of face vertices
-  QvSFEnum		shapeType;	// Info about shape geometry
-  QvSFEnum		faceType;	// Info about face geometry
-  QvSFFloat		creaseAngle;	// Smallest angle for sharp edge
+  QvSFEnum   vertexOrdering; // Ordering of face vertices
+  QvSFEnum   shapeType;      // Info about shape geometry
+  QvSFEnum   faceType;       // Info about face geometry
+  QvSFFloat  creaseAngle;    // Smallest angle for sharp edge
 
   // mpichler, 19950706
   int backfaceculling_;  // for solid objects with CCW ordered vertices

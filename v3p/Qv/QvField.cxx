@@ -3,11 +3,11 @@
 #include "QvFields.h"
 
 // Special characters in files
-#define OPEN_BRACE_CHAR		'['
-#define CLOSE_BRACE_CHAR	']'
-#define VALUE_SEPARATOR_CHAR	','
+#define OPEN_BRACE_CHAR         '['
+#define CLOSE_BRACE_CHAR        ']'
+#define VALUE_SEPARATOR_CHAR    ','
 // mpichler, 19950707
-#define IGNORE_CHAR		'~'
+#define IGNORE_CHAR             '~'
 
 QvField::~QvField()
 {
@@ -72,32 +72,32 @@ QvField::read(QvInput *in, const QvName &name)
 QvField *
 QvField::createInstanceFromName(const QvName &className)
 {
-#define TRY_CLASS(name, class)						      \
-    else if (className == name)						      \
+#define TRY_CLASS(name, class)                                                \
+    else if (className == name)                                               \
         inst = new class
 
     QvField *inst = NULL;
 
-    if (0) ;			// So "else" works in first TRY_CLASS
+    if (0) ;                    // So "else" works in first TRY_CLASS
 
-    TRY_CLASS("MFColor",	QvMFColor);
-    TRY_CLASS("MFFloat",	QvMFFloat);
-    TRY_CLASS("MFLong",		QvMFLong);
-    TRY_CLASS("MFString",	QvMFString);
-    TRY_CLASS("MFVec2f",	QvMFVec2f);
-    TRY_CLASS("MFVec3f",	QvMFVec3f);
-    TRY_CLASS("SFBitMask",	QvSFBitMask);
-    TRY_CLASS("SFBool",		QvSFBool);
-    TRY_CLASS("SFColor",	QvSFColor);
-    TRY_CLASS("SFEnum",		QvSFEnum);
-    TRY_CLASS("SFFloat",	QvSFFloat);
-    TRY_CLASS("SFImage",	QvSFImage);
-    TRY_CLASS("SFLong",		QvSFLong);
-    TRY_CLASS("SFMatrix",	QvSFMatrix);
-    TRY_CLASS("SFRotation",	QvSFRotation);
-    TRY_CLASS("SFString",	QvSFString);
-    TRY_CLASS("SFVec2f",	QvSFVec2f);
-    TRY_CLASS("SFVec3f",	QvSFVec3f);
+    TRY_CLASS("MFColor",        QvMFColor);
+    TRY_CLASS("MFFloat",        QvMFFloat);
+    TRY_CLASS("MFLong",         QvMFLong);
+    TRY_CLASS("MFString",       QvMFString);
+    TRY_CLASS("MFVec2f",        QvMFVec2f);
+    TRY_CLASS("MFVec3f",        QvMFVec3f);
+    TRY_CLASS("SFBitMask",      QvSFBitMask);
+    TRY_CLASS("SFBool",         QvSFBool);
+    TRY_CLASS("SFColor",        QvSFColor);
+    TRY_CLASS("SFEnum",         QvSFEnum);
+    TRY_CLASS("SFFloat",        QvSFFloat);
+    TRY_CLASS("SFImage",        QvSFImage);
+    TRY_CLASS("SFLong",         QvSFLong);
+    TRY_CLASS("SFMatrix",       QvSFMatrix);
+    TRY_CLASS("SFRotation",     QvSFRotation);
+    TRY_CLASS("SFString",       QvSFString);
+    TRY_CLASS("SFVec2f",        QvSFVec2f);
+    TRY_CLASS("SFVec3f",        QvSFVec3f);
 
     return inst;
 
@@ -132,8 +132,8 @@ QvMField::makeRoom(int newNum)
 QvBool
 QvMField::readValue(QvInput *in)
 {
-  char	c;
-  int	curIndex = 0;
+  char  c;
+  int   curIndex = 0;
 
   // TODO: check whether enlarging array in groups speeds up parsing
 

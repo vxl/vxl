@@ -87,9 +87,9 @@ public:
   float BinSize() const { return binsize; } // size of bin in data unit
 
 protected:
-  float* hist;			// histogram curve of low responses only
-  int nbin;			// number of bins
-  float binsize;		// size of bin in data unit
+  float* hist;   // histogram curve of low responses only
+  int nbin;      // number of bins
+  float binsize; // size of bin in data unit
 
 protected:
   static bool WouldBeZeroCrossing(const float* dhist, const int nbin,

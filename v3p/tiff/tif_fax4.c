@@ -32,19 +32,19 @@
 #include "tif_fax3.h"
 
 #if USE_PROTOTYPES
-static	int Fax4Decode(TIFF*, u_char *, int, u_int);
-static	int Fax4Encode(TIFF*, u_char *, int, u_int);
-static	int Fax4PostEncode(TIFF*);
+static int Fax4Decode(TIFF*, u_char *, int, u_int);
+static int Fax4Encode(TIFF*, u_char *, int, u_int);
+static int Fax4PostEncode(TIFF*);
 #else
-static	int Fax4Decode();
-static	int Fax4Encode();
-static	int Fax4PostEncode();
+static int Fax4Decode();
+static int Fax4Encode();
+static int Fax4PostEncode();
 #endif
 
 TIFFInitCCITTFax4(tif)
         TIFF *tif;
 {
-        TIFFInitCCITTFax3(tif);		/* reuse G3 compression */
+        TIFFInitCCITTFax3(tif);         /* reuse G3 compression */
         tif->tif_decoderow = Fax4Decode;
         tif->tif_decodestrip = Fax4Decode;
         tif->tif_decodetile = Fax4Decode;
@@ -74,7 +74,7 @@ Fax4Decode(tif, buf, occ, s)
 {
         Fax3BaseState *sp = (Fax3BaseState *)tif->tif_data;
 
-        bzero(buf, occ);		/* decoding only sets non-zero bits */
+        bzero(buf, occ);                /* decoding only sets non-zero bits */
         while (occ > 0) {
                 if (!Fax3Decode2DRow(tif, buf, sp->rowpixels))
                         return (0);

@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	AffineMetric - Affine ImageMetric
-// .LIBRARY	MViewBasics
-// .HEADER	MultiView Package
-// .INCLUDE	mvl/AffineMetric.h
-// .FILE	AffineMetric.cxx
+// .NAME    AffineMetric - Affine ImageMetric
+// .LIBRARY MViewBasics
+// .HEADER  MultiView Package
+// .INCLUDE mvl/AffineMetric.h
+// .FILE    AffineMetric.cxx
 // .SECTION Description
 //    AffineMetric is an ImageMetric that is an affine transformation.
 // .SECTION Author

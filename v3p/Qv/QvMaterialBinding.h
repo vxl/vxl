@@ -21,7 +21,7 @@ public:
   };
 
   // Fields:
-  QvSFEnum		value;
+  QvSFEnum value;
 };
 
 #endif /* _QV_MATERIAL_BINDING_ */

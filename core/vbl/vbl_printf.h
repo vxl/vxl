@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 
-// .NAME	vbl_printf - vbl_printf to ostream
-// .LIBRARY	vbl
-// .HEADER	vxl package
-// .INCLUDE	vbl/vbl_printf.h
-// .FILE	vbl_printf.cxx
+// .NAME    vbl_printf - vbl_printf to ostream
+// .LIBRARY vbl
+// .HEADER  vxl package
+// .INCLUDE vbl/vbl_printf.h
+// .FILE    vbl_printf.cxx
 //
 // .SECTION Description
 //    Printf formatting is just plain handy sometimes.  This header provides
@@ -24,7 +24,7 @@
 
 #include <vcl_iosfwd.h>
 
-// -- vbl_printf(cout, "%d\n", 12);
+//: vbl_printf(cout, "%d\n", 12);
 vcl_ostream& vbl_printf(vcl_ostream&, char const* fmt, ...);
 
 #endif // vbl_printf_h_

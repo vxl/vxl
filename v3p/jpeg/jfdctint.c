@@ -79,7 +79,7 @@
 #define PASS1_BITS  2
 #else
 #define CONST_BITS  13
-#define PASS1_BITS  1		/* lose a little precision to avoid overflow */
+#define PASS1_BITS  1 /* lose a little precision to avoid overflow */
 #endif
 
 /* Some C compilers fail to reduce "FIX(constant)" at compile time, thus
@@ -90,18 +90,18 @@
  */
 
 #if CONST_BITS == 13
-#define FIX_0_298631336  ((jpegINT32)  2446)	/* FIX(0.298631336) */
-#define FIX_0_390180644  ((jpegINT32)  3196)	/* FIX(0.390180644) */
-#define FIX_0_541196100  ((jpegINT32)  4433)	/* FIX(0.541196100) */
-#define FIX_0_765366865  ((jpegINT32)  6270)	/* FIX(0.765366865) */
-#define FIX_0_899976223  ((jpegINT32)  7373)	/* FIX(0.899976223) */
-#define FIX_1_175875602  ((jpegINT32)  9633)	/* FIX(1.175875602) */
-#define FIX_1_501321110  ((jpegINT32)  12299)	/* FIX(1.501321110) */
-#define FIX_1_847759065  ((jpegINT32)  15137)	/* FIX(1.847759065) */
-#define FIX_1_961570560  ((jpegINT32)  16069)	/* FIX(1.961570560) */
-#define FIX_2_053119869  ((jpegINT32)  16819)	/* FIX(2.053119869) */
-#define FIX_2_562915447  ((jpegINT32)  20995)	/* FIX(2.562915447) */
-#define FIX_3_072711026  ((jpegINT32)  25172)	/* FIX(3.072711026) */
+#define FIX_0_298631336  ((jpegINT32)  2446)    /* FIX(0.298631336) */
+#define FIX_0_390180644  ((jpegINT32)  3196)    /* FIX(0.390180644) */
+#define FIX_0_541196100  ((jpegINT32)  4433)    /* FIX(0.541196100) */
+#define FIX_0_765366865  ((jpegINT32)  6270)    /* FIX(0.765366865) */
+#define FIX_0_899976223  ((jpegINT32)  7373)    /* FIX(0.899976223) */
+#define FIX_1_175875602  ((jpegINT32)  9633)    /* FIX(1.175875602) */
+#define FIX_1_501321110  ((jpegINT32)  12299)   /* FIX(1.501321110) */
+#define FIX_1_847759065  ((jpegINT32)  15137)   /* FIX(1.847759065) */
+#define FIX_1_961570560  ((jpegINT32)  16069)   /* FIX(1.961570560) */
+#define FIX_2_053119869  ((jpegINT32)  16819)   /* FIX(2.053119869) */
+#define FIX_2_562915447  ((jpegINT32)  20995)   /* FIX(2.562915447) */
+#define FIX_3_072711026  ((jpegINT32)  25172)   /* FIX(3.072711026) */
 #else
 #define FIX_0_298631336  FIX(0.298631336)
 #define FIX_0_390180644  FIX(0.390180644)
@@ -207,7 +207,7 @@ jpeg_fdct_islow (DCTELEM * data)
     dataptr[3] = (DCTELEM) DESCALE(tmp6 + z2 + z3, CONST_BITS-PASS1_BITS);
     dataptr[1] = (DCTELEM) DESCALE(tmp7 + z1 + z4, CONST_BITS-PASS1_BITS);
 
-    dataptr += DCTSIZE;		/* advance pointer to next row */
+    dataptr += DCTSIZE; /* advance pointer to next row */
   }
 
   /* Pass 2: process columns.
@@ -276,7 +276,7 @@ jpeg_fdct_islow (DCTELEM * data)
     dataptr[DCTSIZE*1] = (DCTELEM) DESCALE(tmp7 + z1 + z4,
                                            CONST_BITS+PASS1_BITS);
 
-    dataptr++;			/* advance pointer to next column */
+    dataptr++; /* advance pointer to next column */
   }
 }
 

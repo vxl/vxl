@@ -2,9 +2,9 @@
 #define xcv_file_h_
 
 //--------------------------------------------------------------------------------
-// .NAME	xcv_file
-// .INCLUDE	xcv/xcv_file.h
-// .FILE	xcv_file.cxx
+// .NAME    xcv_file
+// .INCLUDE xcv/xcv_file.h
+// .FILE    xcv_file.cxx
 // .SECTION Description:
 //   Creates a menu for, and provides an interface to operations for loading
 //   and saving files.

@@ -14,13 +14,13 @@
 #define JPEG_INTERNALS
 #include "jinclude.h"
 #include "jpeglib.h"
-#include "jdct.h"		/* Private declarations for DCT subsystem */
+#include "jdct.h" /* Private declarations for DCT subsystem */
 
 
 /* Private subobject for this module */
 
 typedef struct {
-  struct jpeg_forward_dct pub;	/* public fields */
+  struct jpeg_forward_dct pub; /* public fields */
 
   /* Pointer to the DCT routine actually in use */
   forward_DCT_method_ptr do_dct;
@@ -187,10 +187,10 @@ forward_DCT (j_compress_ptr cinfo, jpeg_component_info * compptr,
   my_fdct_ptr fdct = (my_fdct_ptr) cinfo->fdct;
   forward_DCT_method_ptr do_dct = fdct->do_dct;
   DCTELEM * divisors = fdct->divisors[compptr->quant_tbl_no];
-  DCTELEM workspace[DCTSIZE2];	/* work area for FDCT subroutine */
+  DCTELEM workspace[DCTSIZE2]; /* work area for FDCT subroutine */
   JDIMENSION bi;
 
-  sample_data += start_row;	/* fold in the vertical offset once */
+  sample_data += start_row; /* fold in the vertical offset once */
 
   for (bi = 0; bi < num_blocks; bi++, start_col += DCTSIZE) {
     /* Load data into workspace, applying unsigned->signed conversion */
@@ -201,7 +201,7 @@ forward_DCT (j_compress_ptr cinfo, jpeg_component_info * compptr,
       workspaceptr = workspace;
       for (elemr = 0; elemr < DCTSIZE; elemr++) {
         elemptr = sample_data[elemr] + start_col;
-#if DCTSIZE == 8		/* unroll the inner loop */
+#if DCTSIZE == 8 /* unroll the inner loop */
         *workspaceptr++ = GETJSAMPLE(*elemptr++) - CENTERJSAMPLE;
         *workspaceptr++ = GETJSAMPLE(*elemptr++) - CENTERJSAMPLE;
         *workspaceptr++ = GETJSAMPLE(*elemptr++) - CENTERJSAMPLE;
@@ -244,17 +244,17 @@ forward_DCT (j_compress_ptr cinfo, jpeg_component_info * compptr,
          * If your machine's division is fast enough, define FAST_DIVIDE.
          */
 #ifdef FAST_DIVIDE
-#define DIVIDE_BY(a,b)	a /= b
+#define DIVIDE_BY(a,b) a /= b
 #else
-#define DIVIDE_BY(a,b)	if (a >= b) a /= b; else a = 0
+#define DIVIDE_BY(a,b) if (a >= b) a /= b; else a = 0
 #endif
         if (temp < 0) {
           temp = -temp;
-          temp += qval>>1;	/* for rounding */
+          temp += qval>>1; /* for rounding */
           DIVIDE_BY(temp, qval);
           temp = -temp;
         } else {
-          temp += qval>>1;	/* for rounding */
+          temp += qval>>1; /* for rounding */
           DIVIDE_BY(temp, qval);
         }
         output_ptr[i] = (JCOEF) temp;
@@ -280,7 +280,7 @@ forward_DCT_float (j_compress_ptr cinfo, jpeg_component_info * compptr,
   FAST_FLOAT workspace[DCTSIZE2]; /* work area for FDCT subroutine */
   JDIMENSION bi;
 
-  sample_data += start_row;	/* fold in the vertical offset once */
+  sample_data += start_row; /* fold in the vertical offset once */
 
   for (bi = 0; bi < num_blocks; bi++, start_col += DCTSIZE) {
     /* Load data into workspace, applying unsigned->signed conversion */
@@ -291,7 +291,7 @@ forward_DCT_float (j_compress_ptr cinfo, jpeg_component_info * compptr,
       workspaceptr = workspace;
       for (elemr = 0; elemr < DCTSIZE; elemr++) {
         elemptr = sample_data[elemr] + start_col;
-#if DCTSIZE == 8		/* unroll the inner loop */
+#if DCTSIZE == 8 /* unroll the inner loop */
         *workspaceptr++ = (FAST_FLOAT)(GETJSAMPLE(*elemptr++) - CENTERJSAMPLE);
         *workspaceptr++ = (FAST_FLOAT)(GETJSAMPLE(*elemptr++) - CENTERJSAMPLE);
         *workspaceptr++ = (FAST_FLOAT)(GETJSAMPLE(*elemptr++) - CENTERJSAMPLE);

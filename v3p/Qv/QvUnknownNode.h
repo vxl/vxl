@@ -8,9 +8,9 @@ class QvUnknownNode : public QvGroup {
     QV_NODE_HEADER(QvUnknownNode);
 
   public:
-    const char	*className;
+    const char  *className;
     QvFieldData *instanceFieldData;
-  
+
     void setClassName(const char *name);
 };
 

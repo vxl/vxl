@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	HomgMetric - Measurments on homogeneous coordinates
-// .LIBRARY	MViewBasics
-// .HEADER	MultiView Package
-// .INCLUDE	mvl/HomgMetric.h
-// .FILE	HomgMetric.cxx
+// .NAME    HomgMetric - Measurments on homogeneous coordinates
+// .LIBRARY MViewBasics
+// .HEADER  MultiView Package
+// .INCLUDE mvl/HomgMetric.h
+// .FILE    HomgMetric.cxx
 //
 // .SECTION Description
 //    HomgMetric is a class that allows measurements to be made between

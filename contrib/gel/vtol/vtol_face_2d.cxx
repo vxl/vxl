@@ -93,7 +93,7 @@ vtol_face_2d::~vtol_face_2d()
 }
 
 //---------------------------------------------------------------------------
-// -- Clone `this': creation of a new object and initialization
+//: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
 vsol_spatial_object_3d_sptr vtol_face_2d::clone(void) const
@@ -106,7 +106,7 @@ vsol_region_2d_sptr vtol_face_2d::surface(void) const
   return _surface;
 }
 
-// -- copy with an array
+//: copy with an array
 
 vtol_face *
 vtol_face_2d::copy_with_arrays(vcl_vector<vtol_topology_object_sptr> &verts,
@@ -136,7 +136,7 @@ vtol_face_2d::copy_with_arrays(vcl_vector<vtol_topology_object_sptr> &verts,
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Return `this' if `this' is a face, 0 otherwise
+//: Return `this' if `this' is a face, 0 otherwise
 //---------------------------------------------------------------------------
 const vtol_face_2d *vtol_face_2d::cast_to_face_2d(void) const
 {
@@ -144,7 +144,7 @@ const vtol_face_2d *vtol_face_2d::cast_to_face_2d(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return `this' if `this' is a face, 0 otherwise
+//: Return `this' if `this' is a face, 0 otherwise
 //---------------------------------------------------------------------------
 vtol_face_2d *vtol_face_2d::cast_to_face_2d(void)
 {
@@ -152,7 +152,7 @@ vtol_face_2d *vtol_face_2d::cast_to_face_2d(void)
 }
 
 //---------------------------------------------------------------------------
-// -- Copy with no links. Only copy the surface if it exists
+//: Copy with no links. Only copy the surface if it exists
 //---------------------------------------------------------------------------
 vtol_face *vtol_face_2d::shallow_copy_with_no_links(void) const
 {
@@ -223,7 +223,7 @@ vtol_face_2d::vtol_face_2d(vertex_list &verts)
         directions.push_back((signed char)1);
       else
         directions.push_back((signed char)(-1));
-      v01=v02;		// in the next go around v1 is v2 of the last
+      v01=v02; // in the next go around v1 is v2 of the last
     }
 
   eloop=new vtol_one_chain(elist,directions,true);
@@ -270,7 +270,7 @@ vtol_face_2d::vtol_face_2d(one_chain_list &onechs)
     }
 }
 
-// -- Constructor of a Planar face from a vtol_one_chain.  This method uses
+//: Constructor of a Planar face from a vtol_one_chain.  This method uses
 // the vtol_one_chain, edgeloop, as the outside boundary of the face.
 
 vtol_face_2d::vtol_face_2d(vtol_one_chain &edgeloop)
@@ -293,7 +293,7 @@ vtol_face_2d::vtol_face_2d(vtol_one_chain &edgeloop)
                                     new vsol_point_2d(xmax,ymax)));
 }
 
-// -- Constructor requiring only the underlying geometric surface
+//: Constructor requiring only the underlying geometric surface
 vtol_face_2d::vtol_face_2d (vsol_region_2d &facesurf)
   : _surface(0)
 {
@@ -303,7 +303,7 @@ vtol_face_2d::vtol_face_2d (vsol_region_2d &facesurf)
 }
 
 
-// -- Set the underlying geometric surface.
+//: Set the underlying geometric surface.
 void vtol_face_2d::set_surface(vsol_region_2d *const newsurf)
 {
   _surface=newsurf;
@@ -342,7 +342,7 @@ bool vtol_face_2d::operator==(const vtol_face_2d &other) const
   return true;
 }
 
-// -- spatial object equality
+//: spatial object equality
 
 bool vtol_face_2d::operator==(const vsol_spatial_object_3d& obj) const
 {

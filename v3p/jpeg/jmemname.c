@@ -15,23 +15,23 @@
 #define JPEG_INTERNALS
 #include "jinclude.h"
 #include "jpeglib.h"
-#include "jmemsys.h"		/* import the system-dependent declarations */
+#include "jmemsys.h"            /* import the system-dependent declarations */
 
-#ifndef HAVE_STDLIB_H		/* <stdlib.h> should declare malloc(),free() */
+#ifndef HAVE_STDLIB_H           /* <stdlib.h> should declare malloc(),free() */
 extern void * malloc JPP((size_t size));
 extern void free JPP((void *ptr));
 #endif
 
-#ifndef SEEK_SET		/* pre-ANSI systems may not define this; */
-#define SEEK_SET  0		/* if not, assume 0 is correct */
+#ifndef SEEK_SET                /* pre-ANSI systems may not define this; */
+#define SEEK_SET  0             /* if not, assume 0 is correct */
 #endif
 
-#ifdef DONT_USE_B_MODE		/* define mode parameters for fopen() */
-#define READ_BINARY	"r"
-#define RW_BINARY	"w+"
+#ifdef DONT_USE_B_MODE          /* define mode parameters for fopen() */
+#define READ_BINARY     "r"
+#define RW_BINARY       "w+"
 #else
-#define READ_BINARY	"rb"
-#define RW_BINARY	"w+b"
+#define READ_BINARY     "rb"
+#define RW_BINARY       "w+b"
 #endif
 
 
@@ -61,20 +61,20 @@ extern void free JPP((void *ptr));
  *      will cause the temp files to be removed if you stop the program early.
  */
 
-#ifndef TEMP_DIRECTORY		/* can override from jconfig.h or Makefile */
+#ifndef TEMP_DIRECTORY          /* can override from jconfig.h or Makefile */
 #define TEMP_DIRECTORY  "/usr/tmp/" /* recommended setting for Unix */
 #endif
 
-static int next_file_num;	/* to distinguish among several temp files */
+static int next_file_num;       /* to distinguish among several temp files */
 
 #ifdef NO_MKTEMP
 
-#ifndef TEMP_FILE_NAME		/* can override from jconfig.h or Makefile */
+#ifndef TEMP_FILE_NAME          /* can override from jconfig.h or Makefile */
 #define TEMP_FILE_NAME  "%sJPG%03d.TMP"
 #endif
 
 #ifndef NO_ERRNO_H
-#include <errno.h>		/* to define ENOENT */
+#include <errno.h>              /* to define ENOENT */
 #endif
 
 /* ANSI C specifies that errno is a macro, but on older systems it's more
@@ -93,7 +93,7 @@ select_file_name (char * fname)
 
   /* Keep generating file names till we find one that's not in use */
   for (;;) {
-    next_file_num++;		/* advance counter */
+    next_file_num++;            /* advance counter */
     sprintf(fname, TEMP_FILE_NAME, TEMP_DIRECTORY, next_file_num);
     if ((tfile = fopen(fname, READ_BINARY)) == NULL) {
       /* fopen could have failed for a reason other than the file not
@@ -106,23 +106,23 @@ select_file_name (char * fname)
 #endif
       break;
     }
-    fclose(tfile);		/* oops, it's there; close tfile & try again */
+    fclose(tfile);              /* oops, it's there; close tfile & try again */
   }
 }
 
 #else /* ! NO_MKTEMP */
 
 /* Note that mktemp() requires the initial filename to end in six X's */
-#ifndef TEMP_FILE_NAME		/* can override from jconfig.h or Makefile */
+#ifndef TEMP_FILE_NAME          /* can override from jconfig.h or Makefile */
 #define TEMP_FILE_NAME  "%sJPG%dXXXXXX"
 #endif
 
 LOCAL(void)
 select_file_name (char * fname)
 {
-  next_file_num++;		/* advance counter */
+  next_file_num++;              /* advance counter */
   sprintf(fname, TEMP_FILE_NAME, TEMP_DIRECTORY, next_file_num);
-  mktemp(fname);		/* make sure file name is unique */
+  mktemp(fname);                /* make sure file name is unique */
   /* mktemp replaces the trailing XXXXXX with a unique string of characters */
 }
 
@@ -175,8 +175,8 @@ jpeg_free_large (j_common_ptr cinfo, void FAR * object, size_t sizeofobject)
  * a slop factor of 5% or so.
  */
 
-#ifndef DEFAULT_MAX_MEM		/* so can override from makefile */
-#define DEFAULT_MAX_MEM		1000000L /* default: one megabyte */
+#ifndef DEFAULT_MAX_MEM         /* so can override from makefile */
+#define DEFAULT_MAX_MEM         1000000L /* default: one megabyte */
 #endif
 
 GLOBAL(long)
@@ -224,8 +224,8 @@ write_backing_store (j_common_ptr cinfo, backing_store_ptr info,
 METHODDEF(void)
 close_backing_store (j_common_ptr cinfo, backing_store_ptr info)
 {
-  fclose(info->temp_file);	/* close the file */
-  unlink(info->temp_name);	/* delete the file */
+  fclose(info->temp_file);      /* close the file */
+  unlink(info->temp_name);      /* delete the file */
 /* If your system doesn't have unlink(), use remove() instead.
  * remove() is the ANSI-standard name for this function, but if
  * your system was ANSI you'd be using jmemansi.c, right?
@@ -260,8 +260,8 @@ jpeg_open_backing_store (j_common_ptr cinfo, backing_store_ptr info,
 GLOBAL(long)
 jpeg_mem_init (j_common_ptr cinfo)
 {
-  next_file_num = 0;		/* initialize temp file name generator */
-  return DEFAULT_MAX_MEM;	/* default for max_memory_to_use */
+  next_file_num = 0;            /* initialize temp file name generator */
+  return DEFAULT_MAX_MEM;       /* default for max_memory_to_use */
 }
 
 GLOBAL(void)

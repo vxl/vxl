@@ -4,36 +4,36 @@
 #include "QvFieldData.h"
 #include "QvUnknownNode.h"
 
-#define OPEN_BRACE_CHAR		'['
-#define CLOSE_BRACE_CHAR	']'
-#define VALUE_SEPARATOR_CHAR	','
+#define OPEN_BRACE_CHAR         '['
+#define CLOSE_BRACE_CHAR        ']'
+#define VALUE_SEPARATOR_CHAR    ','
 
 struct QvFieldEntry {
-    QvName		name;
-    long		offset;
+    QvName              name;
+    long                offset;
 };
 
 struct QvEnumEntry {
-    QvName		typeName;
-    int			num;
-    int			arraySize;
-    int			*vals;
-    QvName		*names;
+    QvName              typeName;
+    int                 num;
+    int                 arraySize;
+    int                 *vals;
+    QvName              *names;
     QvEnumEntry(const QvName &name);
     ~QvEnumEntry();
 
-    static int		growSize;
+    static int          growSize;
 };
 
 int QvEnumEntry::growSize = 6;
 
 QvEnumEntry::QvEnumEntry(const QvName &name)
 {
-    typeName	= name;
-    num		= 0;
-    arraySize	= growSize;
-    vals	= new int[arraySize];
-    names	= new QvName[arraySize];
+    typeName    = name;
+    num         = 0;
+    arraySize   = growSize;
+    vals        = new int[arraySize];
+    names       = new QvName[arraySize];
 }
 
 QvEnumEntry::~QvEnumEntry()
@@ -115,7 +115,7 @@ void
 QvFieldData::addEnumValue(const char *typeNameArg,
                           const char *valNameArg, int val)
 {
-    struct QvEnumEntry	*e = NULL;
+    struct QvEnumEntry  *e = NULL;
     QvName typeName = stripWhite(typeNameArg);
     QvName valName = stripWhite(valNameArg);
 
@@ -157,9 +157,9 @@ QvFieldData::getEnumData(const char *typeNameArg, int &num,
     for (int i=0; i<enums.getLength(); i++) {
         struct QvEnumEntry *e = (struct QvEnumEntry *) enums[i];
         if (e->typeName == typeName) {
-            num		= e->num;
-            vals	= e->vals;
-            names	= e->names;
+            num         = e->num;
+            vals        = e->vals;
+            names       = e->names;
             return;
         }
     }
@@ -232,8 +232,8 @@ QvFieldData::read(QvInput *in, QvNode *object,
 
       if (!foundName) {
         if (errorOnUnknownField) {
-          //	QvReadError::post(in, "Unknown field \"%s\"",
-          //			  fieldName.getString());
+          //    QvReadError::post(in, "Unknown field \"%s\"",
+          //                      fieldName.getString());
 
           // mpichler, 19950707: give warning on unknown fields, continue parsing
           QvReadError::post (in, "invalid field \"%s\" in context\n"

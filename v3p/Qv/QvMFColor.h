@@ -5,7 +5,7 @@
 
 class QvMFColor : public QvMField {
   public:
-    float *values;			// 3 per color
+    float *values; // 3 per color
     QV_MFIELD_HEADER(QvMFColor);
 };
 

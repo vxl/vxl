@@ -2,11 +2,11 @@
 #define vtol_zero_chain_H
 //-----------------------------------------------------------------------------
 //
-// .NAME        vtol_zero_chain - Represents a set of Vertices
-// .LIBRARY     vtol
-// .HEADER	gel package
-// .INCLUDE     vtol/vtol_zero_chain.h
-// .FILE        vtol_zero_chain.cxx
+// .NAME    vtol_zero_chain - Represents a set of Vertices
+// .LIBRARY vtol
+// .HEADER  gel package
+// .INCLUDE vtol/vtol_zero_chain.h
+// .FILE    vtol_zero_chain.cxx
 //
 // .SECTION Description
 //  The vtol_zero_chain class is used to represent a set of Vertices on

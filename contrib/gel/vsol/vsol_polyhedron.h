@@ -2,10 +2,10 @@
 #define vsol_polyhedron_h_
 //*****************************************************************************
 //
-// .NAME vsol_polyhedron - Polyhedral volume in 3D space
-// .LIBRARY	vsol
-// .INCLUDE	vsol/vsol_polyhedron.h
-// .FILE	vsol_polyhedron.cxx
+// .NAME    vsol_polyhedron - Polyhedral volume in 3D space
+// .LIBRARY vsol
+// .INCLUDE vsol/vsol_polyhedron.h
+// .FILE    vsol_polyhedron.cxx
 //
 // .SECTION Description
 //   Representation of an arbitrary polyhedral volume, i.e., a volume that

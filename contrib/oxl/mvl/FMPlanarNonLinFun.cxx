@@ -23,7 +23,7 @@
 const int FMPlanarNonLinFun_nparams = 9;
 
 //-----------------------------------------------------------------------------
-// -- Constructor
+//: Constructor
 //
 FMPlanarNonLinFun::FMPlanarNonLinFun(const ImageMetric* image_metric1,
                                      const ImageMetric* image_metric2,
@@ -54,7 +54,7 @@ FMPlanarNonLinFun::FMPlanarNonLinFun(const ImageMetric* image_metric1,
 #include <vcl_iomanip.h>
 
 //-----------------------------------------------------------------------------
-// -- Compute the planar F matrix and returns true if succesful.
+//: Compute the planar F matrix and returns true if succesful.
 //
 bool FMPlanarNonLinFun::compute(FMatrixPlanar* F)
 {
@@ -92,7 +92,7 @@ bool FMPlanarNonLinFun::compute(FMatrixPlanar* F)
 }
 
 //-----------------------------------------------------------------------------
-// -- The virtual function from vnl_levenberg_marquardt which returns the RMS
+//: The virtual function from vnl_levenberg_marquardt which returns the RMS
 // epipolar error and a vector of residuals.
 //
 void FMPlanarNonLinFun::f(const vnl_vector<double>& f_params, vnl_vector<double>& fx)
@@ -218,9 +218,9 @@ FMatrixPlanar FMPlanarNonLinFun::params_to_fmatrix_mna(const vnl_vector<double>&
      double ls2 = sin(params[0])*sin(params[1]);
      double ls3 = cos(params[1]);
 
-     double list1[9] = {0,		-1.0,		params[5],
-                        1,		0,		-params[4],
-                        -params[5],	params[4],	0};
+     double list1[9] = {0,              -1.0,           params[5],
+                        1,              0,              -params[4],
+                        -params[5],     params[4],      0};
      double list2[9] = {0,-ls3,ls2,ls3,0,-ls1,-ls2,ls1,0};
      double list3[9] = {0,-1.0,params[3],1,0,-params[2],-params[3],params[2],0};
 

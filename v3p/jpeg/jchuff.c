@@ -78,10 +78,10 @@ typedef huff_entropy_encoder * huff_entropy_ptr;
  */
 
 typedef struct {
-  JOCTET * next_output_byte;	/* => next byte to write in buffer */
-  size_t free_in_buffer;	/* # of byte spaces remaining in buffer */
-  savable_state cur;		/* Current bit buffer & DC state */
-  j_compress_ptr cinfo;		/* dump_buffer needs access to this */
+  JOCTET * next_output_byte;    /* => next byte to write in buffer */
+  size_t free_in_buffer;        /* # of byte spaces remaining in buffer */
+  savable_state cur;            /* Current bit buffer & DC state */
+  j_compress_ptr cinfo;         /* dump_buffer needs access to this */
 } working_state;
 
 
@@ -643,10 +643,10 @@ encode_mcu_gather (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
 GLOBAL(void)
 jpeg_gen_optimal_table (j_compress_ptr cinfo, JHUFF_TBL * htbl, long freq[])
 {
-#define MAX_CLEN 32		/* assumed maximum initial code length */
-  UINT8 bits[MAX_CLEN+1];	/* bits[k] = # of symbols with code length k */
-  int codesize[257];		/* codesize[k] = code length of symbol k */
-  int others[257];		/* next symbol in current branch of tree */
+#define MAX_CLEN 32             /* assumed maximum initial code length */
+  UINT8 bits[MAX_CLEN+1];       /* bits[k] = # of symbols with code length k */
+  int codesize[257];            /* codesize[k] = code length of symbol k */
+  int others[257];              /* next symbol in current branch of tree */
   int c1, c2;
   int p, i, j;
   long v;
@@ -739,19 +739,19 @@ jpeg_gen_optimal_table (j_compress_ptr cinfo, JHUFF_TBL * htbl, long freq[])
 
   for (i = MAX_CLEN; i > 16; i--) {
     while (bits[i] > 0) {
-      j = i - 2;		/* find length of new prefix to be used */
+      j = i - 2;                /* find length of new prefix to be used */
       while (bits[j] == 0)
         j--;
 
-      bits[i] -= 2;		/* remove two symbols */
-      bits[i-1]++;		/* one goes in this length */
-      bits[j+1] += 2;		/* two new symbols in this length */
-      bits[j]--;		/* symbol of this length is now a prefix */
+      bits[i] -= 2;             /* remove two symbols */
+      bits[i-1]++;              /* one goes in this length */
+      bits[j+1] += 2;           /* two new symbols in this length */
+      bits[j]--;                /* symbol of this length is now a prefix */
     }
   }
 
   /* Remove the count for the pseudo-symbol 256 from the largest codelength */
-  while (bits[i] == 0)		/* find largest codelength still in use */
+  while (bits[i] == 0)          /* find largest codelength still in use */
     i--;
   bits[i]--;
 

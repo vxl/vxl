@@ -19,20 +19,20 @@
 /* Private state */
 
 typedef enum {
-        main_pass,		/* input data, also do first output step */
-        huff_opt_pass,		/* Huffman code optimization pass */
-        output_pass		/* data output pass */
+        main_pass,              /* input data, also do first output step */
+        huff_opt_pass,          /* Huffman code optimization pass */
+        output_pass             /* data output pass */
 } c_pass_type;
 
 typedef struct {
-  struct jpeg_comp_master pub;	/* public fields */
+  struct jpeg_comp_master pub;  /* public fields */
 
-  c_pass_type pass_type;	/* the type of the current pass */
+  c_pass_type pass_type;        /* the type of the current pass */
 
-  int pass_number;		/* # of passes completed */
-  int total_passes;		/* total # of passes needed */
+  int pass_number;              /* # of passes completed */
+  int total_passes;             /* total # of passes needed */
 
-  int scan_number;		/* current index in scan_info[] */
+  int scan_number;              /* current index in scan_info[] */
 } my_comp_master;
 
 typedef my_comp_master * my_master_ptr;
@@ -189,10 +189,10 @@ validate_script (j_compress_ptr cinfo)
           Ah < 0 || Ah > 13 || Al < 0 || Al > 13)
         ERREXIT1(cinfo, JERR_BAD_PROG_SCRIPT, scanno);
       if (Ss == 0) {
-        if (Se != 0)		/* DC and AC together not OK */
+        if (Se != 0)            /* DC and AC together not OK */
           ERREXIT1(cinfo, JERR_BAD_PROG_SCRIPT, scanno);
       } else {
-        if (ncomps != 1)	/* AC scans must be for only one component */
+        if (ncomps != 1)        /* AC scans must be for only one component */
           ERREXIT1(cinfo, JERR_BAD_PROG_SCRIPT, scanno);
       }
       for (ci = 0; ci < ncomps; ci++) {
@@ -555,7 +555,7 @@ jinit_c_master_control (j_compress_ptr cinfo, boolean transcode_only)
     cinfo->num_scans = 1;
   }
 
-  if (cinfo->progressive_mode)	/*  TEMPORARY HACK ??? */
+  if (cinfo->progressive_mode)  /*  TEMPORARY HACK ??? */
     cinfo->optimize_coding = TRUE; /* assume default tables no good for progressive mode */
 
   /* Initialize my private state */

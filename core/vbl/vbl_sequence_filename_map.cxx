@@ -262,7 +262,7 @@ void vbl_sequence_filename_map::parse()
               image_extension_ = dir_ext_pairs[i].extension;
               found_match = true;
             }
-        }      	
+        }
       }
     }
 

@@ -359,7 +359,7 @@ void xcv_twoview_manager::handle_tjunction_event(vgui_event const& e, vgui_table
           if ((use_overlays && e.type == vgui_DRAW_OVERLAY) || (!use_overlays && e.type == vgui_DRAW))
           {
       //awfawfxxx fix this.
-      //if (child_tab == tabs[transfer_index])	
+      //if (child_tab == tabs[transfer_index])
       //  rubberbands[transfer_index]->child->handle(e);
 
             if (child_tab == tabs[transfer_index])

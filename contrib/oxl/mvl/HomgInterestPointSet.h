@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	HomgInterestPointSet - Set of interest points on an image
-// .LIBRARY	MViewBasics
-// .HEADER	MultiView Package
-// .INCLUDE	mvl/HomgInterestPointSet.h
-// .FILE	HomgInterestPointSet.cxx
+// .NAME    HomgInterestPointSet - Set of interest points on an image
+// .LIBRARY MViewBasics
+// .HEADER  MultiView Package
+// .INCLUDE mvl/HomgInterestPointSet.h
+// .FILE    HomgInterestPointSet.cxx
 //
 // .SECTION Description
 //    HomgInterestPointSet holds a set of corners (or points of interest) computed
@@ -59,7 +59,7 @@ public:
   // Data Access---------------------------------------------------------------
   unsigned size() const;
 
-  // -- Return i'th interest pt.
+  //: Return i'th interest pt.
   const HomgPoint2D& operator[](int i) const { return get_homg(i); }
 
   HomgInterestPoint& get(int i);

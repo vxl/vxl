@@ -309,7 +309,7 @@ typedef vcl_malloc_alloc multithreaded_alloc;
        // that makes convoy effects likely.  Performance may not be
        // adequate.
 #      include <pthread.h>
-//     	 pthread_mutex_t __node_allocator_lock = PTHREAD_MUTEX_INITIALIZER;
+//     pthread_mutex_t __node_allocator_lock = PTHREAD_MUTEX_INITIALIZER;
 #      define __NODE_ALLOCATOR_LOCK \
                   if (threads) pthread_mutex_lock(&__node_allocator_lock)
 #      define __NODE_ALLOCATOR_UNLOCK \
@@ -319,10 +319,10 @@ typedef vcl_malloc_alloc multithreaded_alloc;
 #    endif /* _PTHREADS */
 #    ifdef __STL_WIN32THREADS
 #      if !defined  (__STL_WINDOWS_H_INCLUDED)
-#      	define NOMINMAX
-//#      	include <windows.h>
-#      	undef min
-#      	undef max
+#        define NOMINMAX
+//#      include <windows.h>
+#        undef min
+#        undef max
 #      endif
 #      ifndef WIN32_LEAN_AND_MEAN
 #       define WIN32_LEAN_AND_MEAN
@@ -332,8 +332,8 @@ typedef vcl_malloc_alloc multithreaded_alloc;
        // to exceed the maximum supported by Visual C++ (and windows.h
        // has an #ifndef _WINDOWS_ / #endif guard)
 #      include <windows.h>
-//    	 CRITICAL_SECTION __node_allocator_lock;
-//    	 bool __node_allocator_lock_initialized;
+//       CRITICAL_SECTION __node_allocator_lock;
+//       bool __node_allocator_lock_initialized;
 //     this one is needed to ensure correct initialization order
 //     and to avoid excess instances
        struct __stl_critical_section_wrapper {
@@ -552,7 +552,7 @@ typedef vcl_malloc_alloc multithreaded_alloc;
                 // Try to make use of the left-over piece.
                 if (bytes_left > 0) {
                     obj * __VOLATILE * my_free_list =
-    	                    free_list + FREELIST_INDEX(bytes_left);
+                            free_list + FREELIST_INDEX(bytes_left);
 
                     ((obj *)start_free) -> free_list_link = *my_free_list;
                     *my_free_list = (obj *)start_free;
@@ -568,12 +568,12 @@ typedef vcl_malloc_alloc multithreaded_alloc;
                         my_free_list = free_list + FREELIST_INDEX(i);
                         p = *my_free_list;
                         if (0 != p) {
-    	                *my_free_list = p -> free_list_link;
-    	                start_free = (char *)p;
-    	                end_free = start_free + i;
-    	                return(chunk_alloc(size, nobjs));
-    	                // Any leftover piece will eventually make it to the
-    	                // right free vcl_list.
+                        *my_free_list = p -> free_list_link;
+                        start_free = (char *)p;
+                        end_free = start_free + i;
+                        return(chunk_alloc(size, nobjs));
+                        // Any leftover piece will eventually make it to the
+                        // right free vcl_list.
                         }
                     }
                     start_free = (char *)vcl_malloc_alloc::allocate(bytes_to_get);
@@ -623,8 +623,8 @@ typedef vcl_malloc_alloc multithreaded_alloc;
     template <bool threads, int inst>
     void*
     __alloc<threads, inst>::reallocate(void *p,
-    					                  size_t old_sz,
-    					                  size_t new_sz)
+                                       size_t old_sz,
+                                       size_t new_sz)
     {
             void * result;
             size_t copy_sz;
@@ -761,48 +761,48 @@ typedef vcl_malloc_alloc multithreaded_alloc;
       __DECLARE_INSTANCE(size_t, single_client_alloc::heap_size,0);
 #         if defined ( __SUNPRO_CC ) || defined ( _AIX )
       __DECLARE_INSTANCE(single_client_alloc::obj * __VOLATILE,
-  	                 single_client_alloc::free_list[__NFREELISTS],
-  	                 {0});
+                         single_client_alloc::free_list[__NFREELISTS],
+                         {0});
 #         else
       __DECLARE_INSTANCE(single_client_alloc::obj * __VOLATILE,
-  	                 single_client_alloc::free_list[single_client_alloc::__NFREELISTS],
-  	                 {0});
+                         single_client_alloc::free_list[single_client_alloc::__NFREELISTS],
+                         {0});
 #         endif
       __DECLARE_INSTANCE(char *, multithreaded_alloc::start_free,0);
       __DECLARE_INSTANCE(char *, multithreaded_alloc::end_free,0);
       __DECLARE_INSTANCE(size_t, multithreaded_alloc::heap_size,0);
 #         if defined ( __SUNPRO_CC ) || defined ( _AIX )
       __DECLARE_INSTANCE(multithreaded_alloc::obj * __VOLATILE,
-  	                 multithreaded_alloc::free_list[__NFREELISTS],
-  	                 {0});
+                         multithreaded_alloc::free_list[__NFREELISTS],
+                         {0});
 #         else
       __DECLARE_INSTANCE(multithreaded_alloc::obj * __VOLATILE,
-  	                 multithreaded_alloc::free_list[multithreaded_alloc::__NFREELISTS],
-  	                 {0});
+                         multithreaded_alloc::free_list[multithreaded_alloc::__NFREELISTS],
+                         {0});
 #         endif
 #         ifdef __STL_WIN32THREADS
             __DECLARE_INSTANCE(__stl_critical_section_wrapper,
-  	                      single_client_alloc::__node_allocator_lock,
-  	                      __stl_critical_section_wrapper());
+                              single_client_alloc::__node_allocator_lock,
+                              __stl_critical_section_wrapper());
             __DECLARE_INSTANCE(__stl_critical_section_wrapper,
-  	                      multithreaded_alloc::__node_allocator_lock,
-  	                     __stl_critical_section_wrapper());
+                              multithreaded_alloc::__node_allocator_lock,
+                             __stl_critical_section_wrapper());
 #         endif
 #         ifdef _PTHREADS
              __DECLARE_INSTANCE(pthread_mutex_t,
-  	                      single_client_alloc::__node_allocator_lock,
-  	                      PTHREAD_MUTEX_INITIALIZER);
+                              single_client_alloc::__node_allocator_lock,
+                              PTHREAD_MUTEX_INITIALIZER);
              __DECLARE_INSTANCE(pthread_mutex_t,
-  	                      multithreaded_alloc::__node_allocator_lock,
-  	                      PTHREAD_MUTEX_INITIALIZER);
+                              multithreaded_alloc::__node_allocator_lock,
+                              PTHREAD_MUTEX_INITIALIZER);
 #         endif
 #         ifdef __STL_SGI_THREADS
              __DECLARE_INSTANCE(volatile unsigned long,
-  	                      single_client_alloc::__node_allocator_lock,
-  	                      0);
+                              single_client_alloc::__node_allocator_lock,
+                              0);
              __DECLARE_INSTANCE(volatile unsigned long,
-  	                      multithreaded_alloc::__node_allocator_lock,
-  	                      0);
+                              multithreaded_alloc::__node_allocator_lock,
+                              0);
 #         endif
 
 #   endif /* __STL_STATIC_TEMPLATE_DATA */

@@ -66,23 +66,23 @@
  * State block for each open TIFF
  * file using ZIP compression/decompression.
  */
-typedef	struct {
+typedef struct {
         TIFFPredictorState predict;
-        z_stream	stream;
-        int		zipquality;		/* compression level */
-        int		state;			/* state flags */
-#define	ZSTATE_INIT	0x1		/* zlib setup successfully */
+        z_stream        stream;
+        int             zipquality;             /* compression level */
+        int             state;                  /* state flags */
+#define ZSTATE_INIT     0x1             /* zlib setup successfully */
 
-        TIFFVGetMethod	vgetparent;		/* super-class method */
-        TIFFVSetMethod	vsetparent;		/* super-class method */
+        TIFFVGetMethod  vgetparent;             /* super-class method */
+        TIFFVSetMethod  vsetparent;             /* super-class method */
 } ZIPState;
 
-#define	ZState(tif)		((ZIPState*) (tif)->tif_data)
-#define	DecoderState(tif)	ZState(tif)
-#define	EncoderState(tif)	ZState(tif)
+#define ZState(tif)             ((ZIPState*) (tif)->tif_data)
+#define DecoderState(tif)       ZState(tif)
+#define EncoderState(tif)       ZState(tif)
 
-static	int ZIPEncode(TIFF*, tidata_t, tsize_t, tsample_t);
-static	int ZIPDecode(TIFF*, tidata_t, tsize_t, tsample_t);
+static  int ZIPEncode(TIFF*, tidata_t, tsize_t, tsample_t);
+static  int ZIPDecode(TIFF*, tidata_t, tsize_t, tsample_t);
 
 static int
 ZIPSetupDecode(TIFF* tif)
@@ -302,10 +302,10 @@ ZIPVGetField(TIFF* tif, ttag_t tag, va_list ap)
 }
 
 static const TIFFFieldInfo zipFieldInfo[] = {
-    { TIFFTAG_ZIPQUALITY,	 0, 0,	TIFF_ANY,	FIELD_PSEUDO,
-      TRUE,	FALSE,	"" },
+    { TIFFTAG_ZIPQUALITY,        0, 0,  TIFF_ANY,       FIELD_PSEUDO,
+      TRUE,     FALSE,  "" },
 };
-#define	N(a)	(sizeof (a) / sizeof (a[0]))
+#define N(a)    (sizeof (a) / sizeof (a[0]))
 
 int
 TIFFInitZIP(TIFF* tif, int scheme)
@@ -332,12 +332,12 @@ TIFFInitZIP(TIFF* tif, int scheme)
          */
         _TIFFMergeFieldInfo(tif, zipFieldInfo, N(zipFieldInfo));
         sp->vgetparent = tif->tif_vgetfield;
-        tif->tif_vgetfield = ZIPVGetField;	/* hook for codec tags */
+        tif->tif_vgetfield = ZIPVGetField;      /* hook for codec tags */
         sp->vsetparent = tif->tif_vsetfield;
-        tif->tif_vsetfield = ZIPVSetField;	/* hook for codec tags */
+        tif->tif_vsetfield = ZIPVSetField;      /* hook for codec tags */
 
         /* Default values for codec-specific fields */
-        sp->zipquality = Z_DEFAULT_COMPRESSION;	/* default comp. level */
+        sp->zipquality = Z_DEFAULT_COMPRESSION; /* default comp. level */
         sp->state = 0;
 
         /*

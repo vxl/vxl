@@ -15,7 +15,7 @@
 <!-- vxl_point_[23]d
         <vxl_point_2d x="1" y="3" w="4"/>
 
-	x,y,z and w values (w defaults to 1)
+        x,y,z and w values (w defaults to 1)
         pointer (_sptr) exists
   -->
 
@@ -44,7 +44,7 @@
      vxl_vertex_[23]d_sptr
         <vxl_vertex_2d_sptr id="3">
 
-	Vertex contains a vxl_point or a pointer to a vxl_point.
+        Vertex contains a vxl_point or a pointer to a vxl_point.
   -->
 
 <!ELEMENT vxl_vertex_2d ( vxl_point_2d | vxl_point_2d_sptr )>
@@ -91,9 +91,9 @@
                 <vxl_edge_2d ...>
           </vxl_one_chain_2d>
 
-	  One_Chain is a list of edges or edge pointers.
-	  Closure is enforced by the list.
-	  Pointer (_sptr) exists.
+          One_Chain is a list of edges or edge pointers.
+          Closure is enforced by the list.
+          Pointer (_sptr) exists.
   -->
 
 <!ELEMENT vxl_one_chain_2d ( ( ( vxl_edge_2d, vxl_flip? ) | 
@@ -109,9 +109,9 @@
            <vxl_point_2d><vxl_point_2d><vxl_point_2d>
         </vxl_triangle_2d>
 
-	Three (no more, no less) vxl_vertices (The Lightweight Solution).
+        Three (no more, no less) vxl_vertices (The Lightweight Solution).
         At the same level as a one-chain.
-	Pointer (_sptr) exists.
+        Pointer (_sptr) exists.
   -->
 
 <!ELEMENT vxl_triangle_2d ( ( vxl_vertex_2d | vxl_vertex_2d_sptr ), 
@@ -128,8 +128,8 @@
                  <vxl_one_chain_2d ...>
            </vxl_face_2d>
 
-	   Face is a list of one chains or pointers to one chains.
-	   Pointer (_sptr) exists.
+           Face is a list of one chains or pointers to one chains.
+           Pointer (_sptr) exists.
   -->
 
 <!ELEMENT vxl_face_2d ( ( vxl_one_chain_2d | vxl_one_chain_2d_sptr |
@@ -145,8 +145,8 @@
                      <vxl_face_2d ...>
            </vxl_two_chain_2d>
 
-	   Two chain is a list of faces or pointers to faces.
-	   Pointer (_sptr) exists.
+           Two chain is a list of faces or pointers to faces.
+           Pointer (_sptr) exists.
   -->
 
 <!ELEMENT vxl_two_chain_2d ( ( vxl_face_2d | vxl_face_2d_sptr )+ )>

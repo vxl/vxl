@@ -4,12 +4,12 @@
 #pragma interface
 #endif
 //
-// .NAME	TripleMatchSet - Store integer triplets
-// .LIBRARY	MViewBasics
-// .HEADER	MultiView package
-// .INCLUDE	mvl/TripleMatchSet.h
-// .FILE	TripleMatchSet.cxx
-// .EXAMPLE	examples/exampleTripleMatchSet.cxx
+// .NAME    TripleMatchSet - Store integer triplets
+// .LIBRARY MViewBasics
+// .HEADER  MultiView package
+// .INCLUDE mvl/TripleMatchSet.h
+// .FILE    TripleMatchSet.cxx
+// .EXAMPLE examples/exampleTripleMatchSet.cxx
 //
 // .SECTION Description
 //    A TripleMatchSet contains "triplets": 3-tuples of integers (i1, i2, i3),

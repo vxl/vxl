@@ -32,18 +32,18 @@
  * NeXT 2-bit Grey Scale Compression Algorithm Support
  */
 
-#define SETPIXEL(op, v) {			\
-        switch (npixels++ & 3) {		\
-        case 0:	op[0]  = (v) << 6; break;	\
-        case 1:	op[0] |= (v) << 4; break;	\
-        case 2:	op[0] |= (v) << 2; break;	\
-        case 3:	*op++ |= (v);	   break;	\
-        }					\
+#define SETPIXEL(op, v) {                 \
+        switch (npixels++ & 3) {          \
+        case 0: op[0]  = (v) << 6; break; \
+        case 1: op[0] |= (v) << 4; break; \
+        case 2: op[0] |= (v) << 2; break; \
+        case 3: *op++ |= (v);      break; \
+        }                                 \
 }
 
-#define LITERALROW	0x00
-#define LITERALSPAN	0x40
-#define WHITE	        ((1<<2)-1)
+#define LITERALROW      0x00
+#define LITERALSPAN     0x40
+#define WHITE           ((1<<2)-1)
 
 static int
 NeXTDecode(TIFF* tif, tidata_t buf, tsize_t occ, tsample_t s)

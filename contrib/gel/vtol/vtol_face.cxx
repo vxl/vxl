@@ -30,7 +30,7 @@ vtol_face::~vtol_face()
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Return `this' if `this' is a face, 0 otherwise
+//: Return `this' if `this' is a face, 0 otherwise
 //---------------------------------------------------------------------------
 const vtol_face *vtol_face::cast_to_face(void) const
 {
@@ -38,7 +38,7 @@ const vtol_face *vtol_face::cast_to_face(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return `this' if `this' is a face, 0 otherwise
+//: Return `this' if `this' is a face, 0 otherwise
 //---------------------------------------------------------------------------
 vtol_face *vtol_face::cast_to_face(void)
 {
@@ -50,7 +50,7 @@ vtol_face *vtol_face::cast_to_face(void)
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Is `inferior' type valid for `this' ?
+//: Is `inferior' type valid for `this' ?
 //---------------------------------------------------------------------------
 bool
 vtol_face::valid_inferior_type(const vtol_topology_object &inferior) const
@@ -59,7 +59,7 @@ vtol_face::valid_inferior_type(const vtol_topology_object &inferior) const
 }
 
 //---------------------------------------------------------------------------
-// -- Is `superior' type valid for `this' ?
+//: Is `superior' type valid for `this' ?
 //---------------------------------------------------------------------------
 bool
 vtol_face::valid_superior_type(const vtol_topology_object &superior) const
@@ -77,7 +77,7 @@ vtol_face::valid_superior_type(const vtol_topology_object &superior) const
 
 
 //---------------------------------------------------------------------------
-// -- Return the topology type
+//: Return the topology type
 //---------------------------------------------------------------------------
 vtol_face::vtol_topology_object_type
 vtol_face::topology_type(void) const
@@ -106,13 +106,13 @@ vertex_list *vtol_face::outside_boundary_vertices(void)
 
   return new_ref_list;
 
-}							
+}
 
 vcl_vector<vtol_vertex*> *vtol_face::outside_boundary_compute_vertices(void)
 {
 
   OUTSIDE_BOUNDARY(vtol_vertex,vtol_one_chain,compute_vertices);
-}							
+}
 
 // --
 // Returns a vtol_vertex list of all the vertices on the face.
@@ -156,7 +156,7 @@ zero_chain_list *vtol_face::outside_boundary_zero_chains(void)
 }
 
 
-// -- Returns a list of zero_chains of the face.
+//: Returns a list of zero_chains of the face.
 
 vcl_vector<vtol_zero_chain*> *vtol_face::compute_zero_chains(void)
 {
@@ -174,7 +174,7 @@ vcl_vector<vtol_edge*> *vtol_face::outside_boundary_compute_edges(void)
   OUTSIDE_BOUNDARY(vtol_edge,vtol_one_chain, compute_edges);
 }
 
-// -- get the outside boundary edges
+//: get the outside boundary edges
 
 edge_list *vtol_face::outside_boundary_edges(void)
 {
@@ -192,14 +192,14 @@ edge_list *vtol_face::outside_boundary_edges(void)
   return new_ref_list;
 }
 
-// -- Returns a list of edges on the face.
+//: Returns a list of edges on the face.
 vcl_vector<vtol_edge*> *vtol_face::compute_edges(void)
 {
 
   SEL_INF(vtol_edge,compute_edges);
 }
 
-// -- Returns a list of one_chains that make up the outside boundary of the face.
+//: Returns a list of one_chains that make up the outside boundary of the face.
 
 one_chain_list *vtol_face::outside_boundary_one_chains(void)
 {
@@ -222,7 +222,7 @@ vcl_vector<vtol_one_chain*> *vtol_face::outside_boundary_compute_one_chains(void
 }
 
 
-// -- Returns a list of all Onechains of the face.
+//: Returns a list of all Onechains of the face.
 
 vcl_vector<vtol_one_chain*> *vtol_face::compute_one_chains(void)
 {
@@ -240,14 +240,14 @@ vcl_vector<vtol_face*>  *vtol_face::compute_faces(void)
   LIST_SELF(vtol_face);
 }
 
-// -- Returns a list of all the two_chains which contain the vtol_face.
+//: Returns a list of all the two_chains which contain the vtol_face.
 vcl_vector<vtol_two_chain*>  *vtol_face::compute_two_chains(void)
 {
 
   SEL_SUP(vtol_two_chain,compute_two_chains);
 }
 
-// -- Returns a list of all the blocks that contain the vtol_face.
+//: Returns a list of all the blocks that contain the vtol_face.
 
 vcl_vector<vtol_block*> *vtol_face::compute_blocks(void)
 {
@@ -256,7 +256,7 @@ vcl_vector<vtol_block*> *vtol_face::compute_blocks(void)
 }
 
 //---------------------------------------------------------------------------
-// -- Does `this' share an edge with `f' ? Comparison of edge pointers,
+//: Does `this' share an edge with `f' ? Comparison of edge pointers,
 //       not geometric values
 //---------------------------------------------------------------------------
 bool vtol_face::shares_edge_with(vtol_face &f)
@@ -291,7 +291,7 @@ void vtol_face::add_one_chain(vtol_one_chain &new_vtol_one_chain)
   link_inferior(new_vtol_one_chain);
 }
 
-// -- deep equality check on faces.  uses fuzzy equal on vertices.
+//: deep equality check on faces.  uses fuzzy equal on vertices.
 //
 
 bool vtol_face::operator==(const vtol_face &other) const
@@ -332,7 +332,7 @@ bool vtol_face::operator==(const vtol_face &other) const
   return true;
 }
 
-// -- spatial object equality
+//: spatial object equality
 
 bool vtol_face::operator==(const vsol_spatial_object_3d& obj) const
 {
@@ -343,7 +343,7 @@ bool vtol_face::operator==(const vsol_spatial_object_3d& obj) const
   : false;
 }
 
-// -- Returns the ith inferior vtol_one_chain of the vtol_face.
+//: Returns the ith inferior vtol_one_chain of the vtol_face.
 
 vtol_one_chain *vtol_face::get_one_chain(int which)
 {
@@ -356,7 +356,7 @@ vtol_one_chain *vtol_face::get_one_chain(int which)
     }
 }
 
-// -- Returns the first inferior vtol_one_chain of the vtol_face (the boundary onechain).
+//: Returns the first inferior vtol_one_chain of the vtol_face (the boundary onechain).
 
 vtol_one_chain *vtol_face::get_boundary_cycle(void)
 {
@@ -366,7 +366,7 @@ vtol_one_chain *vtol_face::get_boundary_cycle(void)
   return get_one_chain(0);
 }
 
-// -- Adds a new hole to the face
+//: Adds a new hole to the face
 
 bool vtol_face::add_hole_cycle(vtol_one_chain &new_hole)
 {
@@ -404,7 +404,7 @@ vcl_vector<vtol_one_chain_sptr> *vtol_face::get_hole_cycles(void)
   return result;
 }
 
-// -- Returns the number of edges on the vtol_face.
+//: Returns the number of edges on the vtol_face.
 //
 
 int vtol_face::get_num_edges(void) const
@@ -417,7 +417,7 @@ int vtol_face::get_num_edges(void) const
   return result;
 }
 
-// -- reverse the direction of the face
+//: reverse the direction of the face
 void vtol_face::reverse_normal(void)
 {
   topology_list::iterator ti;
@@ -427,7 +427,7 @@ void vtol_face::reverse_normal(void)
 }
 
 //-----------------------------------------------------------------
-// -- Compute bounds from the geometry of _surface. If the surface is
+//: Compute bounds from the geometry of _surface. If the surface is
 //    not fully bounded, then use the vertices.
 //
 void vtol_face::compute_bounding_box()

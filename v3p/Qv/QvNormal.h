@@ -10,7 +10,7 @@ class QvNormal : public QvNode
 
 public:
   // Fields
-  QvMFVec3f		vector;		// Normal vector(s)
+  QvMFVec3f vector; // Normal vector(s)
 };
 
 #endif /* _QV_NORMAL_ */

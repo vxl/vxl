@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	PairMatchSet2D3D
-// .LIBRARY	MViewDatabase
-// .HEADER	MultiView Package
-// .INCLUDE	mvl/PairMatchSet2D3D.h
-// .FILE	PairMatchSet2D3D.cxx
+// .NAME    PairMatchSet2D3D
+// .LIBRARY MViewDatabase
+// .HEADER  MultiView Package
+// .INCLUDE mvl/PairMatchSet2D3D.h
+// .FILE    PairMatchSet2D3D.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 19 Sep 96
 //
@@ -50,13 +50,13 @@ public:
   const HomgPoint2D& get_point_2d(int i1) const;
   const HomgPoint3D& get_point_3d(int i2) const;
 
-// -- Return the set of corners within which the i1 indices point
+//: Return the set of corners within which the i1 indices point
   const HomgInterestPointSet* get_corners() const;
 
-// -- Return the conditioner for the corners.
+//: Return the conditioner for the corners.
   HomgMetric get_conditioner() const;
 
-// -- Return the projective structure within which the i2 indices point
+//: Return the projective structure within which the i2 indices point
   vcl_vector<HomgPoint3D>* get_structure() const { return _structure; }
 
 private:

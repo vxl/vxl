@@ -61,12 +61,12 @@ static int TIFFWriteInkNames(TIFF*, TIFFDirEntry*);
 static int TIFFWriteData(TIFF*, TIFFDirEntry*, char*);
 static int TIFFLinkDirectory(TIFF*);
 
-#define WriteRationalPair(type, tag1, v1, tag2, v2) {		\
-        if (!TIFFWriteRational(tif, type, tag1, dir, v1))	\
-                goto bad;					\
-        if (!TIFFWriteRational(tif, type, tag2, dir+1, v2))	\
-                goto bad;					\
-        dir++;							\
+#define WriteRationalPair(type, tag1, v1, tag2, v2) {           \
+        if (!TIFFWriteRational(tif, type, tag1, dir, v1))       \
+                goto bad;                                       \
+        if (!TIFFWriteRational(tif, type, tag2, dir+1, v2))     \
+                goto bad;                                       \
+        dir++;                                                  \
 }
 #define TIFFWriteRational(tif, type, tag, dir, v) \
         TIFFWriteRationalArray((tif), (type), (tag), (dir), 1, &(v))
@@ -848,9 +848,9 @@ TIFFWriteTransferFunction(TIFF* tif, TIFFDirEntry* dir)
          * a single column of data won't suffice--hmm.
          */
         switch (td->td_samplesperpixel - td->td_extrasamples) {
-        default:	if (_TIFFmemcmp(tf[0], tf[2], n)) { ncols = 3; break; }
-        case 2:		if (_TIFFmemcmp(tf[0], tf[1], n)) { ncols = 3; break; }
-        case 1: case 0:	ncols = 1;
+        default:        if (_TIFFmemcmp(tf[0], tf[2], n)) { ncols = 3; break; }
+        case 2:         if (_TIFFmemcmp(tf[0], tf[1], n)) { ncols = 3; break; }
+        case 1: case 0: ncols = 1;
         }
         return (TIFFWriteShortTable(tif,
             TIFFTAG_TRANSFERFUNCTION, dir, ncols, tf));

@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	PMatrixDecompCR - Decompose PMatrix into calibration + rotation
-// .LIBRARY	MViewBasics
-// .HEADER	MultiView Package
-// .INCLUDE	mvl/PMatrixDecompCR.h
-// .FILE	PMatrixDecompCR.cxx
+// .NAME    PMatrixDecompCR - Decompose PMatrix into calibration + rotation
+// .LIBRARY MViewBasics
+// .HEADER  MultiView Package
+// .INCLUDE mvl/PMatrixDecompCR.h
+// .FILE    PMatrixDecompCR.cxx
 //
 // .SECTION Description
 //    PMatrixDecompCR decomposes a projection matrix into the form

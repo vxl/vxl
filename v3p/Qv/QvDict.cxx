@@ -1,8 +1,8 @@
 #include "QvDict.h"
 
 struct QvDictListThing {
-    QvPList	*keyList;
-    QvPList	*valueList;
+    QvPList *keyList;
+    QvPList *valueList;
 };
 
 QvDict::QvDict( int entries )
@@ -22,8 +22,8 @@ QvDict::~QvDict()
 void
 QvDict::clear()
 {
-    int		i;
-    QvDictEntry	*entry, *nextEntry;
+    int         i;
+    QvDictEntry *entry, *nextEntry;
 
     for (i = 0; i < tableSize; i++) {
 
@@ -38,7 +38,7 @@ QvDict::clear()
 QvBool
 QvDict::enter(u_long key, void *value)
 {
-    QvDictEntry		*&entry = findEntry(key);
+    QvDictEntry         *&entry = findEntry(key);
 
     if (entry == NULL) {
         entry = new QvDictEntry(key, value);
@@ -54,7 +54,7 @@ QvDict::enter(u_long key, void *value)
 QvBool
 QvDict::find(u_long key, void *&value) const
 {
-    QvDictEntry		*&entry = findEntry(key);
+    QvDictEntry         *&entry = findEntry(key);
 
     if (entry == NULL) {
         value = NULL;
@@ -69,7 +69,7 @@ QvDict::find(u_long key, void *&value) const
 QvDictEntry *&
 QvDict::findEntry(u_long key) const
 {
-    QvDictEntry		**entry;
+    QvDictEntry         **entry;
 
     entry = &buckets[key % tableSize];
 
@@ -84,8 +84,8 @@ QvDict::findEntry(u_long key) const
 QvBool
 QvDict::remove(u_long key)
 {
-    QvDictEntry		*&entry = findEntry(key);
-    QvDictEntry		*tmp;
+    QvDictEntry         *&entry = findEntry(key);
+    QvDictEntry         *tmp;
 
     if (entry == NULL)
         return FALSE;

@@ -155,7 +155,7 @@ void vgui_polytab_base::move(int id, float x, float y, float w, float h) {
   vgui_macro_warning << "no such id " << id << vcl_endl;
 }
 
-//-- Replace the tableau with the given ID by the given tableau.
+//: Replace the tableau with the given ID by the given tableau.
 //   Keep the same ID and do not change the value of 'current'.
 void vgui_polytab_base::replace(int id, vgui_tableau_sptr const& tab) {
   for (iterator i=begin(); i!=end(); ++i)
@@ -170,7 +170,7 @@ void vgui_polytab_base::replace(int id, vgui_tableau_sptr const& tab) {
   vgui_macro_warning << "no such id " << id << vcl_endl;
 }
 
-//-- Returns the tableau with the given ID.
+//: Returns the tableau with the given ID.
 vgui_tableau_sptr vgui_polytab_base::get(int id) const {
   for (const_iterator i=begin(); i!=end(); ++i)
     if (i->id == id)
@@ -178,7 +178,7 @@ vgui_tableau_sptr vgui_polytab_base::get(int id) const {
   return vgui_tableau_sptr();
 }
 
-//-- Sets the color that the tableau is outlined with .
+//: Sets the color that the tableau is outlined with .
 void vgui_polytab_base::set_outline_color(const int id, const int r, const int g,
 const int b) {
   for (unsigned i=0; i<sub.size(); ++i) {
@@ -190,7 +190,7 @@ const int b) {
   }
 }
 
-//-- Adds the given tableau to the given proportion of the viewport.
+//: Adds the given tableau to the given proportion of the viewport.
 //   x,y,w,h specify a portion of the polytab's viewport in coordinates
 //   which go from 0 to 1.
 int vgui_polytab_base::add(vgui_tableau_sptr const& t, float x, float y, float w, float h) {
@@ -210,7 +210,7 @@ int vgui_polytab_base::add(vgui_tableau_sptr const& t, float x, float y, float w
 
 //--------------------------------------------------------------------------------
 
-//-- Gets the index of the child currently under the pointer's position.
+//: Gets the index of the child currently under the pointer's position.
 int vgui_polytab_base::get_active(GLint const vp[4], int wx, int wy) const {
   int act = -1;
   for (unsigned i=0; i<sub.size(); ++i)
@@ -219,12 +219,12 @@ int vgui_polytab_base::get_active(GLint const vp[4], int wx, int wy) const {
   return act;
 }
 
-//-- Returns the ID of the current child.
+//: Returns the ID of the current child.
 int vgui_polytab_base::get_current_id() {
   return (current != -1) ? sub[current].id : -1;
 }
 
-//-- Sets the child under the pointer to current.
+//: Sets the child under the pointer to current.
 void vgui_polytab_base::set_current(GLint const vp[4], int index) {
   if (current == index)
     return;
@@ -248,7 +248,7 @@ void vgui_polytab_base::set_current(GLint const vp[4], int index) {
   }
 }
 
-//-- Handles all events for this tableau and passes unused ones to the correct child.
+//: Handles all events for this tableau and passes unused ones to the correct child.
 bool vgui_polytab_base::handle(GLint const vp[4], vgui_event const &e) {
 
   // Draw events must go to all children, in the right order.
@@ -272,7 +272,7 @@ bool vgui_polytab_base::handle(GLint const vp[4], vgui_event const &e) {
         // draw border of child.
         vgui_matrix_state::identity_gl_matrices();
         glColor3f(sub[i].outline_color[0], sub[i].outline_color[1], sub[i].outline_color[2]);
-        glLineWidth(1);	
+        glLineWidth(1);
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
         glMatrixMode(GL_MODELVIEW);

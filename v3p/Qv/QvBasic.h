@@ -8,24 +8,24 @@
 #include <vcl_cstdio.h>
 
 #ifndef FALSE
-#   define FALSE	0
-#   define TRUE		1
+#   define FALSE 0
+#   define TRUE  1
 #endif
 
 typedef int QvBool;
 
 // This uses the preprocessor to quote a string
-#if defined(WIN32) || defined(__STDC__) || defined(__ANSI_CPP__)		/* ANSI C */
-#  define QV__QUOTE(str)	#str
-#else							/* Non-ANSI C */
-#  define QV__QUOTE(str)	"str"
+#if defined(WIN32) || defined(__STDC__) || defined(__ANSI_CPP__)  /* ANSI C */
+#  define QV__QUOTE(str)        #str
+#else                                                   /* Non-ANSI C */
+#  define QV__QUOTE(str)        "str"
 #endif
 
 // This uses the preprocessor to concatenate two strings
-#if defined(__STDC__) || defined(__ANSI_CPP__)		/* ANSI C */
-#   define QV__CONCAT(str1, str2)	str1##str2
-#else							/* Non-ANSI C */
-#   define QV__CONCAT(str1, str2)	str1/**/str2
+#if defined(__STDC__) || defined(__ANSI_CPP__)          /* ANSI C */
+#   define QV__CONCAT(str1, str2)       str1##str2
+#else                                                   /* Non-ANSI C */
+#   define QV__CONCAT(str1, str2)       str1/**/str2
 #endif
 
 // changed by Gerbert Orasche 260695

@@ -27,9 +27,9 @@
 
 //<file>
 //
-// .NAME	vecutil.h - utilities for 3D vectors
-// .INCLUDE	Qv/vecutil.h
-// .FILE	vecutil.cxx
+// .NAME    vecutil.h - utilities for 3D vectors
+// .INCLUDE Qv/vecutil.h
+// .FILE    vecutil.cxx
 //
 // Created:     15 Mar 93   Michael Pichler
 // Changed:     19 Mar 96   Michael Pichler

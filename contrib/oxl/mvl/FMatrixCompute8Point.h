@@ -4,12 +4,12 @@
 #pragma interface
 #endif
 //-----------------------------------------------------------------------------
-// .NAME	FMatrixCompute8Point - FMatrix by linear least squares
-// .LIBRARY	MViewCompute
-// .HEADER	MultiView Package
-// .INCLUDE	mvl/FMatrixCompute8Point.h
-// .FILE	FMatrixCompute8Point.cxx
-// .EXAMPLE	examples/exampleFMatrixCompute.cxx
+// .NAME    FMatrixCompute8Point - FMatrix by linear least squares
+// .LIBRARY MViewCompute
+// .HEADER  MultiView Package
+// .INCLUDE mvl/FMatrixCompute8Point.h
+// .FILE    FMatrixCompute8Point.cxx
+// .EXAMPLE examples/exampleFMatrixCompute.cxx
 //
 // .SECTION Description
 //    FMatrixCompute8Point is a subclass of FMatrixCompute, and implements

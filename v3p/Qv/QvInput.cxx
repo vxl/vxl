@@ -212,25 +212,25 @@ QvInput::read(QvName &n, QvBool validIdent)
     return TRUE;
 }
 
-#define READ_NUM(reader, readType, num, type)				      \
-    QvBool ok;								      \
-    if (! skipWhiteSpace())						      \
-    ok = FALSE;								      \
-    else {								      \
-        readType _tmp;							      \
-        ok = reader(_tmp);						      \
-        if (ok)								      \
-            num = (type) _tmp;						      \
-    }									      \
+#define READ_NUM(reader, readType, num, type)               \
+    QvBool ok;                                              \
+    if (! skipWhiteSpace())                                 \
+    ok = FALSE;                                             \
+    else {                                                  \
+        readType _tmp;                                      \
+        ok = reader(_tmp);                                  \
+        if (ok)                                             \
+            num = (type) _tmp;                              \
+    }                                                       \
     return ok
 
-#define READ_INTEGER(num, type)						      \
+#define READ_INTEGER(num, type)                             \
     READ_NUM(readInteger, long, num, type)
 
-#define READ_UNSIGNED_INTEGER(num, type)				      \
+#define READ_UNSIGNED_INTEGER(num, type)                    \
     READ_NUM(readUnsignedInteger, unsigned long, num, type)
 
-#define READ_REAL(num, type)						      \
+#define READ_REAL(num, type)                                \
     READ_NUM(readReal, double, num, type)
 
 QvBool
@@ -442,10 +442,10 @@ QvInput::readUnsignedIntegerString(char *str)
 QvBool
 QvInput::readReal(double& d)
 {
-    char	str[32];
-    int		n;
-    char	*s = str;
-    QvBool	gotNum = FALSE;
+    char        str[32];
+    int         n;
+    char        *s = str;
+    QvBool      gotNum = FALSE;
 
 /* begin hard hat area */
 
@@ -548,8 +548,8 @@ QvInput::readHexDigits(char *string)
 int
 QvInput::readChar(char *string, char charToRead)
 {
-    char	c;
-    int		ret;
+    char        c;
+    int         ret;
 
     if (! get(c))
         ret = 0;

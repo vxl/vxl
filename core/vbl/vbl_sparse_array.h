@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	vbl_sparse_array - Sparse array allowing space efficient access of the form s[3000] = 2;
-// .LIBRARY	vbl
-// .HEADER	vxl package
-// .INCLUDE	vbl/vbl_sparse_array.h
-// .FILE	vbl_sparse_array.txx
+// .NAME    vbl_sparse_array - Sparse array allowing space efficient access of the form s[3000] = 2;
+// .LIBRARY vbl
+// .HEADER  vxl package
+// .INCLUDE vbl/vbl_sparse_array.h
+// .FILE    vbl_sparse_array.txx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 02 Oct 96
 //
@@ -30,7 +30,7 @@ public:
 
   typedef typename Map::const_iterator const_iterator;
 
-// -- Construct a vbl_sparse_array which can hold up to MAXINT elements.
+//: Construct a vbl_sparse_array which can hold up to MAXINT elements.
   vbl_sparse_array() {}
   // ~vbl_sparse_array() {} - defaults will do
   //vbl_sparse_array(const vbl_sparse_array<T>&);
@@ -45,7 +45,7 @@ public:
   T* get_addr(unsigned);
 
   // Computations--------------------------------------------------------------
-// -- Return number of locations that have been assigned a value using "put".
+//: Return number of locations that have been assigned a value using "put".
   unsigned count_nonempty() const { return storage_.size(); }
 
   const_iterator begin() const { return storage_.begin(); }

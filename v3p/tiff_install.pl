@@ -26,7 +26,7 @@ while (<CONFIGURE_orig>) {
   s!DIR_INC=/usr/local!DIR_INC=$prefix!;
   s!DIR_MAN=/usr/local!DIR_MAN=$prefix!;
   s!/usr/local/man!$prefix/man!;
-  
+
   print CONFIGURE;
 }
 close(CONFIGURE);
@@ -44,14 +44,14 @@ xec("$make install");
 
 sub xec
 {
-	$command = $_[0];
-	print "xec \"$command\"\n";
-	$op = `$command`;
-	print $op;
-	if  ($? != 0 )
-	{
-		print "command <$command> failed\n";
-		die;
-	}
+  $command = $_[0];
+  print "xec \"$command\"\n";
+  $op = `$command`;
+  print $op;
+  if  ($? != 0 )
+  {
+    print "command <$command> failed\n";
+    die;
+  }
 }
 

@@ -36,10 +36,10 @@ const int NSUBEXP = 10;
 //  and utilities.
 //
 //  Example: The perl code
-//  
+//
 //     $filename =~ m"([a-z]+)\.cc";
 //     print $1;
-//     
+//
 //  Is written as follows in C++
 //
 //     vbl_reg_exp re("([a-z]+)\\.cc");
@@ -52,7 +52,7 @@ const int NSUBEXP = 10;
 //  regular expression object allows specification of such  pat-
 //  terns  by using the following regular expression metacharac-
 //  ters:
-// 
+//
 //   ^        Matches at beginning of a line
 //
 //   $        Matches at end of a line
@@ -72,7 +72,7 @@ const int NSUBEXP = 10;
 //   ?        Matches preceding pattern zero or once only
 //
 //  ()        Saves a matched expression and uses it in a  later match
-// 
+//
 //  Note that more than one of these metacharacters can be  used
 //  in  a  single  regular expression in order to create complex
 //  search patterns. For example, the pattern [^ab1-9]  says  to
@@ -82,56 +82,56 @@ const int NSUBEXP = 10;
 //
 class vbl_reg_exp {
 public:
-  inline vbl_reg_exp ();			// vbl_reg_exp with program=NULL
-  inline vbl_reg_exp (char const*);	// vbl_reg_exp with compiled char*
-  vbl_reg_exp (vbl_reg_exp const&);	// Copy constructor
-  inline ~vbl_reg_exp();			// Destructor 
+  inline vbl_reg_exp ();                // vbl_reg_exp with program=NULL
+  inline vbl_reg_exp (char const*);     // vbl_reg_exp with compiled char*
+  vbl_reg_exp (vbl_reg_exp const&);     // Copy constructor
+  inline ~vbl_reg_exp();                // Destructor
 
-  void compile (char const*);		// Compiles char* --> regexp
-  bool find (char const*);		// true if regexp in char* arg
-  bool find (vcl_string const&);		// true if regexp in char* arg
-  inline long start() const;		// Index to start of first find
-  inline long end() const;		// Index to end of first find
+  void compile (char const*);           // Compiles char* --> regexp
+  bool find (char const*);              // true if regexp in char* arg
+  bool find (vcl_string const&);        // true if regexp in char* arg
+  inline long start() const;            // Index to start of first find
+  inline long end() const;              // Index to end of first find
 
-  bool operator== (vbl_reg_exp const&) const;	// Equality operator
+  bool operator== (vbl_reg_exp const&) const;        // Equality operator
   inline bool operator!= (vbl_reg_exp const&) const; // Inequality operator
-  bool deep_equal (vbl_reg_exp const&) const;	// Same regexp and state?
-  
-  inline bool is_valid() const;		// true if compiled regexp
-  inline void set_invalid();		// Invalidates regexp
+  bool deep_equal (vbl_reg_exp const&) const;        // Same regexp and state?
+
+  inline bool is_valid() const;         // true if compiled regexp
+  inline void set_invalid();            // Invalidates regexp
 
   // awf added
   int start(int n) const;
   int end(int n) const;
   vcl_string match(int n) const;
-  
-private: 
+
+private:
   const char* startp[NSUBEXP];
   const char* endp[NSUBEXP];
-  char  regstart;			// Internal use only
-  char  reganch;			// Internal use only
-  const char* regmust;			// Internal use only
-  int   regmlen;			// Internal use only
-  char* program;   
+  char  regstart;         // Internal use only
+  char  reganch;          // Internal use only
+  const char* regmust;    // Internal use only
+  int   regmlen;          // Internal use only
+  char* program;
   int   progsize;
   const char* searchstring;
-}; 
+};
 
-// -- Creates an empty regular expression.
+//: Creates an empty regular expression.
 
-inline vbl_reg_exp::vbl_reg_exp () { 
+inline vbl_reg_exp::vbl_reg_exp () {
   this->program = NULL;
 }
 
 
-// -- Creates a regular expression from string s, and compiles s.
+//: Creates a regular expression from string s, and compiles s.
 
-inline vbl_reg_exp::vbl_reg_exp (const char* s) {  
+inline vbl_reg_exp::vbl_reg_exp (const char* s) {
   this->program = NULL;
   compile(s);
 }
 
-// -- Frees space allocated for regular expression.
+//: Frees space allocated for regular expression.
 
 inline vbl_reg_exp::~vbl_reg_exp () {
 //#ifndef WIN32
@@ -139,35 +139,35 @@ inline vbl_reg_exp::~vbl_reg_exp () {
 //#endif
 }
 
-// -- 
+// --
 
 inline long vbl_reg_exp::start () const {
   return(this->startp[0] - searchstring);
 }
 
 
-// -- Returns the start/end index of the last item found.
+//: Returns the start/end index of the last item found.
 
 inline long vbl_reg_exp::end () const {
   return(this->endp[0] - searchstring);
 }
 
 
-// operator!= 
+// operator!=
 
 inline bool vbl_reg_exp::operator!= (vbl_reg_exp const& r) const {
   return(!(*this == r));
 }
 
 
-// -- Returns true if a valid regular expression is compiled and ready for pattern matching.
+//: Returns true if a valid regular expression is compiled and ready for pattern matching.
 
 inline bool vbl_reg_exp::is_valid () const {
   return (this->program != NULL);
 }
 
 
-// -- Invalidates regular expression.
+//: Invalidates regular expression.
 
 inline void vbl_reg_exp::set_invalid () {
 //#ifndef WIN32
@@ -176,21 +176,21 @@ inline void vbl_reg_exp::set_invalid () {
   this->program = NULL;
 }
 
-// -- Return start index of nth submatch. start(0) is the start of the full match.
+//: Return start index of nth submatch. start(0) is the start of the full match.
 
 inline int vbl_reg_exp::start(int n) const
 {
   return this->startp[n] - searchstring;
 }
 
-// -- Return end index of nth submatch. end(0) is the end of the full match.
+//: Return end index of nth submatch. end(0) is the end of the full match.
 
 inline int vbl_reg_exp::end(int n) const
 {
   return this->endp[n] - searchstring;
 }
 
-// -- Return nth submatch as a string.
+//: Return nth submatch as a string.
 
 inline vcl_string vbl_reg_exp::match(int n) const
 {

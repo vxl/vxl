@@ -191,10 +191,10 @@ public:
   static void BeSilent() {talkative = false;}
   static void BeTalkative() {talkative = true;}
 protected:
-  float minStrength;		// hysteresis or noise threshold
-  float minLength;		// number of pixels in shortest chain
-  float minJump;		// change in strength at junction
-  int maxSpiral;		// number of spiral search for max_gap
+  float minStrength;  // hysteresis or noise threshold
+  float minLength;    // number of pixels in shortest chain
+  float minJump;      // change in strength at junction
+  int maxSpiral;      // number of spiral search for max_gap
   gevd_bufferxy *edgeMap, *vertexMap; // map pixel to junction/chain
 
 protected:

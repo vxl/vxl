@@ -95,10 +95,10 @@
 
 /* Tables for converting to/from 11 bit coded values */
 
-#define  TSIZE	 2048		/* decode table size (11-bit tokens) */
-#define  TSIZEP1 2049		/* Plus one for slop */
-#define  ONE	 1250		/* token value of 1.0 exactly */
-#define  RATIO	 1.004		/* nominal ratio for log part */
+#define  TSIZE   2048           /* decode table size (11-bit tokens) */
+#define  TSIZEP1 2049           /* Plus one for slop */
+#define  ONE     1250           /* token value of 1.0 exactly */
+#define  RATIO   1.004          /* nominal ratio for log part */
 
 #define CODE_MASK 0x7ff         /* 11 bits. */
 
@@ -451,18 +451,18 @@ horizontalAccumulate8abgr(uint16 *wp, int n, int stride, unsigned char *op,
  * State block for each open TIFF
  * file using PixarLog compression/decompression.
  */
-typedef	struct {
-        TIFFPredictorState	predict;
-        z_stream		stream;
-        uint16			*tbuf;
-        uint16			stride;
-        int			state;
-        int			user_datafmt;
-        int			quality;
+typedef struct {
+        TIFFPredictorState      predict;
+        z_stream                stream;
+        uint16                  *tbuf;
+        uint16                  stride;
+        int                     state;
+        int                     user_datafmt;
+        int                     quality;
 #define PLSTATE_INIT 1
 
-        TIFFVSetMethod		vgetparent;	/* super-class method */
-        TIFFVSetMethod		vsetparent;	/* super-class method */
+        TIFFVSetMethod          vgetparent;     /* super-class method */
+        TIFFVSetMethod          vsetparent;     /* super-class method */
 
         float *ToLinearF;
         uint16 *ToLinear16;
@@ -500,12 +500,12 @@ PixarLogMakeTables(PixarLogState *sp)
     uint16  *From8;
 
     c = log(RATIO);
-    nlin = 1./c;	/* nlin must be an integer */
+    nlin = 1./c;        /* nlin must be an integer */
     c = 1./nlin;
-    b = exp(-c*ONE);	/* multiplicative scale factor [b*exp(c*ONE) = 1] */
+    b = exp(-c*ONE);    /* multiplicative scale factor [b*exp(c*ONE) = 1] */
     linstep = b*c*exp(1.);
 
-    LogK1 = 1./c;	/* if (v >= 2)  token = k1*log(v*k2) */
+    LogK1 = 1./c;       /* if (v >= 2)  token = k1*log(v*k2) */
     LogK2 = 1./b;
     lt2size = (2./linstep)+1;
     FromLT2 = (uint16 *)_TIFFmalloc(lt2size*sizeof(uint16));
@@ -588,14 +588,14 @@ PixarLogMakeTables(PixarLogState *sp)
     return 1;
 }
 
-#define	DecoderState(tif)	((PixarLogState*) (tif)->tif_data)
-#define	EncoderState(tif)	((PixarLogState*) (tif)->tif_data)
+#define DecoderState(tif)       ((PixarLogState*) (tif)->tif_data)
+#define EncoderState(tif)       ((PixarLogState*) (tif)->tif_data)
 
-static	int PixarLogEncode(TIFF*, tidata_t, tsize_t, tsample_t);
-static	int PixarLogDecode(TIFF*, tidata_t, tsize_t, tsample_t);
+static  int PixarLogEncode(TIFF*, tidata_t, tsize_t, tsample_t);
+static  int PixarLogDecode(TIFF*, tidata_t, tsize_t, tsample_t);
 
 #define N(a)   (sizeof(a)/sizeof(a[0]))
-#define PIXARLOGDATAFMT_UNKNOWN	-1
+#define PIXARLOGDATAFMT_UNKNOWN -1
 
 static int
 PixarLogGuessDataFmt(TIFFDirectory *td)
@@ -696,7 +696,7 @@ PixarLogDecode(TIFF* tif, tidata_t op, tsize_t occ, tsample_t s)
 
         switch (sp->user_datafmt) {
         case PIXARLOGDATAFMT_FLOAT:
-                nsamples = occ / sizeof(float);	/* XXX float == 32 bits */
+                nsamples = occ / sizeof(float); /* XXX float == 32 bits */
                 break;
         case PIXARLOGDATAFMT_16BIT:
         case PIXARLOGDATAFMT_12BITPICIO:
@@ -723,7 +723,7 @@ PixarLogDecode(TIFF* tif, tidata_t op, tsize_t occ, tsample_t s)
         do {
                 int state = inflate(&sp->stream, Z_PARTIAL_FLUSH);
                 if (state == Z_STREAM_END) {
-                        break;			/* XXX */
+                        break;                  /* XXX */
                 }
                 if (state == Z_DATA_ERROR) {
                         TIFFError(module,
@@ -850,9 +850,9 @@ horizontalDifferenceF(float *ip, int n, int stride, uint16 *wp, uint16 *FromLT2)
     register int  r1, g1, b1, a1, r2, g2, b2, a2, mask;
     register float  fltsize = Fltsize;
 
-#define  CLAMP(v) ( (v<(float)0.)   ? 0				\
-                  : (v<(float)2.)   ? FromLT2[(int)(v*fltsize)]	\
-                  : (v>(float)24.2) ? 2047			\
+#define  CLAMP(v) ( (v<(float)0.)   ? 0                         \
+                  : (v<(float)2.)   ? FromLT2[(int)(v*fltsize)] \
+                  : (v>(float)24.2) ? 2047                      \
                   : LogK1*log(v*LogK2) + 0.5 )
 
     mask = CODE_MASK;
@@ -883,8 +883,8 @@ horizontalDifferenceF(float *ip, int n, int stride, uint16 *wp, uint16 *FromLT2)
                 a1 = CLAMP(ip[3]); wp[3] = (a1-a2) & mask; a2 = a1;
             }
         } else {
-            ip += n - 1;	/* point to last one */
-            wp += n - 1;	/* point to last one */
+            ip += n - 1;        /* point to last one */
+            wp += n - 1;        /* point to last one */
             n -= stride;
             while (n > 0) {
                 REPEAT(stride, wp[0] = CLAMP(ip[0]);
@@ -936,8 +936,8 @@ horizontalDifference16(unsigned short *ip, int n, int stride,
                 a1 = CLAMP(ip[3]); wp[3] = (a1-a2) & mask; a2 = a1;
             }
         } else {
-            ip += n - 1;	/* point to last one */
-            wp += n - 1;	/* point to last one */
+            ip += n - 1;        /* point to last one */
+            wp += n - 1;        /* point to last one */
             n -= stride;
             while (n > 0) {
                 REPEAT(stride, wp[0] = CLAMP(ip[0]);
@@ -958,7 +958,7 @@ horizontalDifference8(unsigned char *ip, int n, int stride,
 {
     register int  r1, g1, b1, a1, r2, g2, b2, a2, mask;
 
-#undef	 CLAMP
+#undef   CLAMP
 #define  CLAMP(v) (From8[(v)])
 
     mask = CODE_MASK;
@@ -989,8 +989,8 @@ horizontalDifference8(unsigned char *ip, int n, int stride,
                 ip += 4;
             }
         } else {
-            wp += n + stride - 1;	/* point to last one */
-            ip += n + stride - 1;	/* point to last one */
+            wp += n + stride - 1;       /* point to last one */
+            ip += n + stride - 1;       /* point to last one */
             n -= stride;
             while (n > 0) {
                 REPEAT(stride, wp[0] = CLAMP(ip[0]);
@@ -1013,19 +1013,19 @@ PixarLogEncode(TIFF* tif, tidata_t bp, tsize_t cc, tsample_t s)
         TIFFDirectory *td = &tif->tif_dir;
         PixarLogState *sp = EncoderState(tif);
         static const char module[] = "PixarLogEncode";
-        int	i, n, llen;
+        int     i, n, llen;
         unsigned short * up;
 
         (void) s;
 
         switch (sp->user_datafmt) {
         case PIXARLOGDATAFMT_FLOAT:
-                n = cc / sizeof(float);		/* XXX float == 32 bits */
+                n = cc / sizeof(float);         /* XXX float == 32 bits */
                 break;
         case PIXARLOGDATAFMT_16BIT:
         case PIXARLOGDATAFMT_12BITPICIO:
         case PIXARLOGDATAFMT_11BITLOG:
-                n = cc / sizeof(uint16);	/* XXX uint16 == 16 bits */
+                n = cc / sizeof(uint16);        /* XXX uint16 == 16 bits */
                 break;
         case PIXARLOGDATAFMT_8BIT:
         case PIXARLOGDATAFMT_8BITABGR:
@@ -1214,7 +1214,7 @@ PixarLogVSetField(TIFF* tif, ttag_t tag, va_list ap)
          */
         tif->tif_tilesize = TIFFTileSize(tif);
         tif->tif_scanlinesize = TIFFScanlineSize(tif);
-        result = 1;		/* NB: pseudo tag */
+        result = 1;             /* NB: pseudo tag */
         break;
      default:
         result = (*sp->vsetparent)(tif, tag, ap);

@@ -121,13 +121,13 @@
 
 vbl_reg_exp::vbl_reg_exp (const vbl_reg_exp& rxp) {
   int ind;
-  this->progsize = rxp.progsize;		// Copy regular expression size
-  this->program = new char[this->progsize];	// Allocate storage
-  for(ind=this->progsize; ind-- != 0;)		// Copy regular expresion
+  this->progsize = rxp.progsize;            // Copy regular expression size
+  this->program = new char[this->progsize]; // Allocate storage
+  for(ind=this->progsize; ind-- != 0;)      // Copy regular expresion
     this->program[ind] = rxp.program[ind];
-  this->startp[0] = rxp.startp[0];		// Copy pointers into last
-  this->endp[0] = rxp.endp[0];			// Successful "find" operation
-  this->regmust = rxp.regmust;			// Copy field
+  this->startp[0] = rxp.startp[0];          // Copy pointers into last
+  this->endp[0] = rxp.endp[0];              // Successful "find" operation
+  this->regmust = rxp.regmust;              // Copy field
   if (rxp.regmust != NULL) {
     char* dum = rxp.program;
     ind = 0;
@@ -137,9 +137,9 @@ vbl_reg_exp::vbl_reg_exp (const vbl_reg_exp& rxp) {
     }
     this->regmust = this->program + ind;
   }
-  this->regstart = rxp.regstart;		// Copy starting index
-  this->reganch = rxp.reganch;			// Copy remaining private data
-  this->regmlen = rxp.regmlen;			// Copy remaining private data
+  this->regstart = rxp.regstart;            // Copy starting index
+  this->reganch = rxp.reganch;              // Copy remaining private data
+  this->regmlen = rxp.regmlen;              // Copy remaining private data
 }
 
 
@@ -147,15 +147,15 @@ vbl_reg_exp::vbl_reg_exp (const vbl_reg_exp& rxp) {
 // compiled program for pattern matching.
 
 bool vbl_reg_exp::operator== (vbl_reg_exp const& rxp) const {
-  if (this != &rxp) {				// Same address?
-    int ind = this->progsize;			// Get regular expression size
-    if (ind != rxp.progsize)			// If different size regexp
-      return false;				// Return failure
-    while(ind-- != 0)				// Else while still characters
-      if(this->program[ind] != rxp.program[ind]) // If regexp are different
-        return false;				 // Return failure
+  if (this != &rxp) {                           // Same address?
+    int ind = this->progsize;                   // Get regular expression size
+    if (ind != rxp.progsize)                    // If different size regexp
+      return false;                             // Return failure
+    while(ind-- != 0)                           // Else while still characters
+      if(this->program[ind] != rxp.program[ind])// If regexp are different
+        return false;                           // Return failure
   }
-  return true;					// Else same, return success
+  return true;                                  // Else same, return success
 }
 
 
@@ -163,14 +163,14 @@ bool vbl_reg_exp::operator== (vbl_reg_exp const& rxp) const {
 // and the same start and end pointers.
 
 bool vbl_reg_exp::deep_equal (const vbl_reg_exp& rxp) const {
-  int ind = this->progsize;			// Get regular expression size
-  if (ind != rxp.progsize)			// If different size regexp
-    return false;				// Return failure
-  while(ind-- != 0)				// Else while still characters
-    if(this->program[ind] != rxp.program[ind])	// If regexp are different
-      return false;				// Return failure
-  return (this->startp[0] == rxp.startp[0] &&	// Else if same start/end ptrs,
-          this->endp[0] == rxp.endp[0]);	// Return true
+  int ind = this->progsize;                     // Get regular expression size
+  if (ind != rxp.progsize)                      // If different size regexp
+    return false;                               // Return failure
+  while(ind-- != 0)                             // Else while still characters
+    if(this->program[ind] != rxp.program[ind])  // If regexp are different
+      return false;                             // Return failure
+  return (this->startp[0] == rxp.startp[0] &&   // Else if same start/end ptrs,
+          this->endp[0] == rxp.endp[0]);        // Return true
 }
 
 // The remaining code in this file is derived from the  regular expression code
@@ -180,22 +180,22 @@ bool vbl_reg_exp::deep_equal (const vbl_reg_exp& rxp) const {
 /*
  * compile and find
  *
- *	Copyright (c) 1986 by University of Toronto.
- *	Written by Henry Spencer.  Not derived from licensed software.
+ * Copyright (c) 1986 by University of Toronto.
+ * Written by Henry Spencer.  Not derived from licensed software.
  *
- *	Permission is granted to anyone to use this software for any
- *	purpose on any computer system, and to redistribute it freely,
- *	subject to the following restrictions:
+ * Permission is granted to anyone to use this software for any
+ * purpose on any computer system, and to redistribute it freely,
+ * subject to the following restrictions:
  *
- *	1. The author is not responsible for the consequences of use of
- *		this software, no matter how awful, even if they arise
- *		from defects in it.
+ * 1. The author is not responsible for the consequences of use of
+ *  this software, no matter how awful, even if they arise
+ *  from defects in it.
  *
- *	2. The origin of this software must not be misrepresented, either
- *		by explicit claim or by omission.
+ * 2. The origin of this software must not be misrepresented, either
+ *  by explicit claim or by omission.
  *
- *	3. Altered versions must be plainly marked as such, and must not
- *		be misrepresented as being the original software.
+ * 3. Altered versions must be plainly marked as such, and must not
+ *  be misrepresented as being the original software.
  *
  * Beware that some of this code is subtly aware of the way operator
  * precedence is structured in regular expressions.  Serious changes in
@@ -207,10 +207,10 @@ bool vbl_reg_exp::deep_equal (const vbl_reg_exp& rxp) const {
  * compile to execute that permits the execute phase to run lots faster on
  * simple cases.  They are:
  *
- * regstart	char that must begin a match; '\0' if none obvious
- * reganch	is the match anchored (at beginning-of-line only)?
- * regmust	string (pointer into program) that match must include, or NULL
- * regmlen	length of regmust string
+ * regstart  char that must begin a match; '\0' if none obvious
+ * reganch   is the match anchored (at beginning-of-line only)?
+ * regmust   string (pointer into program) that match must include, or NULL
+ * regmlen   length of regmust string
  *
  * Regstart and reganch permit very fast decisions on suitable starting points
  * for a match, cutting down the work a lot.  Regmust permits fast rejection
@@ -238,48 +238,43 @@ bool vbl_reg_exp::deep_equal (const vbl_reg_exp& rxp) const {
  * to the thing following the set of BRANCHes.)  The opcodes are:
  */
 
-// definition	number	opnd?	meaning
-#define	END	0		// no	End of program.
-#define	BOL	1		// no	Match "" at beginning of line.
-#define	EOL	2		// no	Match "" at end of line.
-#define	ANY	3		// no	Match any one character.
-#define	ANYOF	4		// str	Match any character in this string.
-#define	ANYBUT	5		// str	Match any character not in this
-                                // string.
-#define	BRANCH	6		// node	Match this alternative, or the
-                                // next...
-#define	BACK	7		// no	Match "", "next" ptr points backward.
-#define	EXACTLY	8		// str	Match this string.
-#define	NOTHING	9		// no	Match empty string.
-#define	STAR	10		// node	Match this (simple) thing 0 or more
-                                // times.
-#define	PLUS	11		// node	Match this (simple) thing 1 or more
-                                // times.
-#define	OPEN	20		// no	Mark this point in input as start of
-                                // #n.
+// definition   number  opnd?   meaning
+#define END     0    // no   End of program.
+#define BOL     1    // no   Match "" at beginning of line.
+#define EOL     2    // no   Match "" at end of line.
+#define ANY     3    // no   Match any one character.
+#define ANYOF   4    // str  Match any character in this string.
+#define ANYBUT  5    // str  Match any character not in this string.
+#define BRANCH  6    // node Match this alternative, or the next...
+#define BACK    7    // no   Match "", "next" ptr points backward.
+#define EXACTLY 8    // str  Match this string.
+#define NOTHING 9    // no   Match empty string.
+#define STAR    10   // node Match this (simple) thing 0 or more times.
+#define PLUS    11   // node Match this (simple) thing 1 or more times.
+#define OPEN    20   // no   Mark this point in input as start of #n.
 // OPEN+1 is number 1, etc.
-#define	CLOSE	30		// no	Analogous to OPEN.
+#define CLOSE   30   // no   Analogous to OPEN.
 
 /*
  * Opcode notes:
  *
- * BRANCH	The set of branches constituting a single choice are hooked
- *		together with their "next" pointers, since precedence prevents
- *		anything being concatenated to any individual branch.  The
- *		"next" pointer of the last BRANCH in a choice points to the
- *		thing following the whole choice.  This is also where the
- *		final "next" pointer of each individual branch points; each
- *		branch starts with the operand node of a BRANCH node.
+ * BRANCH       The set of branches constituting a single choice are hooked
+ *              together with their "next" pointers, since precedence prevents
+ *              anything being concatenated to any individual branch.  The
+ *              "next" pointer of the last BRANCH in a choice points to the
+ *              thing following the whole choice.  This is also where the
+ *              final "next" pointer of each individual branch points; each
+ *              branch starts with the operand node of a BRANCH node.
  *
- * BACK		Normal "next" pointers all implicitly point forward; BACK
- *		exists to make loop structures possible.
+ * BACK         Normal "next" pointers all implicitly point forward; BACK
+ *              exists to make loop structures possible.
  *
- * STAR,PLUS	'?', and complex '*' and '+', are implemented as circular
- *		BRANCH structures using BACK.  Simple cases (one character
- *		per match) are implemented with STAR and PLUS for speed
- *		and to minimize recursive plunges.
+ * STAR,PLUS    '?', and complex '*' and '+', are implemented as circular
+ *              BRANCH structures using BACK.  Simple cases (one character
+ *              per match) are implemented with STAR and PLUS for speed
+ *              and to minimize recursive plunges.
  *
- * OPEN,CLOSE	...are numbered at compile time.
+ * OPEN,CLOSE   ...are numbered at compile time.
  */
 
 /*
@@ -293,30 +288,30 @@ bool vbl_reg_exp::deep_equal (const vbl_reg_exp& rxp) const {
  * but allows patterns to get big without disasters.
  */
 
-#define	OP(p)		(*(p))
-#define	NEXT(p)		(((*((p)+1)&0377)<<8) + (*((p)+2)&0377))
-#define	OPERAND(p)	((p) + 3)
+#define OP(p)           (*(p))
+#define NEXT(p)         (((*((p)+1)&0377)<<8) + (*((p)+2)&0377))
+#define OPERAND(p)      ((p) + 3)
 
 const unsigned char MAGIC = 0234;
 /*
  * Utility definitions.
  */
 
-#define	UCHARAT(p)	((const unsigned char*)(p))[0]
+#define UCHARAT(p)      ((const unsigned char*)(p))[0]
 
 
-#define	FAIL(m)	{ regerror(m); return(NULL); }
-#define	ISMULT(c)	((c) == '*' || (c) == '+' || (c) == '?')
-#define	META	"^$.[()|?+*\\"
+#define FAIL(m) { regerror(m); return(NULL); }
+#define ISMULT(c)       ((c) == '*' || (c) == '+' || (c) == '?')
+#define META    "^$.[()|?+*\\"
 
 
 /*
  * Flags to be passed up and down.
  */
-#define	HASWIDTH	01	// Known never to match null string.
-#define	SIMPLE		02	// Simple enough to be STAR/PLUS operand.
-#define	SPSTART		04	// Starts with * or +.
-#define	WORST		0	// Worst case.
+#define HASWIDTH        01      // Known never to match null string.
+#define SIMPLE          02      // Simple enough to be STAR/PLUS operand.
+#define SPSTART         04      // Starts with * or +.
+#define WORST           0       // Worst case.
 
 
 
@@ -330,18 +325,15 @@ const unsigned char MAGIC = 0234;
 /*
  * Global work variables for compile().
  */
-static const char* regparse;	// Input-scan pointer.
-static       int   regnpar;	// () count.
+static const char* regparse; // Input-scan pointer.
+static       int   regnpar; // () count.
 static       char  regdummy;
-static       char* regcode;	// Code-emit pointer; &regdummy = don't.
-static       long  regsize;	// Code size.
+static       char* regcode; // Code-emit pointer; &regdummy = don't.
+static       long  regsize; // Code size.
 
 /*
  * Forward declarations for compile()'s friends.
  */
-// #ifndef static
-// #define	static	static
-// #endif
 static       char* reg (int, int*);
 static       char* regbranch (int*);
 static       char* regpiece (int*);
@@ -404,7 +396,7 @@ void vbl_reg_exp::compile (char const* exp) {
     this->startp[0] = this->endp[0] = this->searchstring = NULL;
 
     // Small enough for pointer-storage convention?
-    if (regsize >= 32767L) {	// Probably could be 65535L.
+    if (regsize >= 32767L) { // Probably could be 65535L.
       //RAISE Error, SYM(vbl_reg_exp), SYM(Expr_Too_Big),
       printf ("vbl_reg_exp::compile(): Expression too big.\n");
       return;
@@ -431,12 +423,12 @@ void vbl_reg_exp::compile (char const* exp) {
     reg(0, &flags);
 
     // Dig out information for optimizations.
-    this->regstart = '\0';		// Worst-case defaults.
+    this->regstart = '\0'; // Worst-case defaults.
     this->reganch = 0;
     this->regmust = NULL;
     this->regmlen = 0;
-    scan = this->program + 1;	// First BRANCH.
-    if (OP(regnext(scan)) == END) {	// Only one top-level choice.
+    scan = this->program + 1; // First BRANCH.
+    if (OP(regnext(scan)) == END) { // Only one top-level choice.
         scan = OPERAND(scan);
 
         // Starting-point info.
@@ -484,7 +476,7 @@ static char* reg (int paren, int *flagp) {
     register int   parno =0;
              int   flags;
 
-    *flagp = HASWIDTH;		// Tentatively.
+    *flagp = HASWIDTH; // Tentatively.
 
     // Make an OPEN node, if parenthesized.
     if (paren) {
@@ -505,7 +497,7 @@ static char* reg (int paren, int *flagp) {
     if (br == NULL)
         return (NULL);
     if (ret != NULL)
-        regtail(ret, br);	// OPEN -> first.
+        regtail(ret, br); // OPEN -> first.
     else
         ret = br;
     if (!(flags & HASWIDTH))
@@ -516,7 +508,7 @@ static char* reg (int paren, int *flagp) {
         br = regbranch(&flags);
         if (br == NULL)
             return (NULL);
-        regtail(ret, br);	// BRANCH -> BRANCH.
+        regtail(ret, br); // BRANCH -> BRANCH.
         if (!(flags & HASWIDTH))
             *flagp &= ~HASWIDTH;
         *flagp |= flags & SPSTART;
@@ -564,7 +556,7 @@ static char* regbranch (int *flagp) {
     register char* latest;
     int                  flags;
 
-    *flagp = WORST;		// Tentatively.
+    *flagp = WORST; // Tentatively.
 
     ret = regnode(BRANCH);
     chain = NULL;
@@ -573,13 +565,13 @@ static char* regbranch (int *flagp) {
         if (latest == NULL)
             return (NULL);
         *flagp |= flags & HASWIDTH;
-        if (chain == NULL)	// First piece.
+        if (chain == NULL) // First piece.
             *flagp |= flags & SPSTART;
         else
             regtail(chain, latest);
         chain = latest;
     }
-    if (chain == NULL)		// Loop ran zero times.
+    if (chain == NULL) // Loop ran zero times.
         regnode(NOTHING);
 
     return (ret);
@@ -622,26 +614,26 @@ static char* regpiece (int *flagp) {
         reginsert(STAR, ret);
     else if (op == '*') {
         // Emit x* as (x&|), where & means "self".
-        reginsert(BRANCH, ret);	// Either x
-        regoptail(ret, regnode(BACK));	// and loop
-        regoptail(ret, ret);	// back
-        regtail(ret, regnode(BRANCH));	// or
-        regtail(ret, regnode(NOTHING));	// null.
+        reginsert(BRANCH, ret); // Either x
+        regoptail(ret, regnode(BACK)); // and loop
+        regoptail(ret, ret); // back
+        regtail(ret, regnode(BRANCH)); // or
+        regtail(ret, regnode(NOTHING)); // null.
     }
     else if (op == '+' && (flags & SIMPLE))
         reginsert(PLUS, ret);
     else if (op == '+') {
         // Emit x+ as x(&|), where & means "self".
-        next = regnode(BRANCH);	// Either
+        next = regnode(BRANCH); // Either
         regtail(ret, next);
-        regtail(regnode(BACK), ret);	// loop back
-        regtail(next, regnode(BRANCH));	// or
-        regtail(ret, regnode(NOTHING));	// null.
+        regtail(regnode(BACK), ret); // loop back
+        regtail(next, regnode(BRANCH)); // or
+        regtail(ret, regnode(NOTHING)); // null.
     }
     else if (op == '?') {
         // Emit x? as (x|)
-        reginsert(BRANCH, ret);	// Either x
-        regtail(ret, regnode(BRANCH));	// or
+        reginsert(BRANCH, ret); // Either x
+        regtail(ret, regnode(BRANCH)); // or
         next = regnode(NOTHING);// null.
         regtail(ret, next);
         regoptail(ret, next);
@@ -668,7 +660,7 @@ static char* regatom (int *flagp) {
     register char* ret;
              int   flags;
 
-    *flagp = WORST;		// Tentatively.
+    *flagp = WORST; // Tentatively.
 
     switch (*regparse++) {
         case '^':
@@ -685,7 +677,7 @@ static char* regatom (int *flagp) {
                 register int    rxpclass;
                 register int    rxpclassend;
 
-                if (*regparse == '^') {	// Complement of range.
+                if (*regparse == '^') { // Complement of range.
                     ret = regnode(ANYBUT);
                     regparse++;
                 }
@@ -766,7 +758,7 @@ static char* regatom (int *flagp) {
                 }
                 ender = *(regparse + len);
                 if (len > 1 && ISMULT(ender))
-                    len--;	// Back off clear of ?+* operand.
+                    len--; // Back off clear of ?+* operand.
                 *flagp |= HASWIDTH;
                 if (len == 1)
                     *flagp |= SIMPLE;
@@ -799,7 +791,7 @@ static char* regnode (char op) {
 
     ptr = ret;
     *ptr++ = op;
-    *ptr++ = '\0';		// Null "next" pointer.
+    *ptr++ = '\0'; // Null "next" pointer.
     *ptr++ = '\0';
     regcode = ptr;
 
@@ -839,7 +831,7 @@ static void reginsert (char op, char* opnd) {
     while (src > opnd)
         *--dst = *--src;
 
-    place = opnd;		// Op node, where operand used to be.
+    place = opnd; // Op node, where operand used to be.
     *place++ = op;
     *place++ = '\0';
     *place++ = '\0';
@@ -897,10 +889,10 @@ static void regoptail (char* p, const char* val) {
 /*
  * Global work variables for find().
  */
-static const char*  reginput;	// String-input pointer.
-static const char*  regbol;	// Beginning of input, for ^ check.
-static const char* *regstartp;	// Pointer to startp array.
-static const char* *regendp;	// Ditto for endp.
+static const char*  reginput; // String-input pointer.
+static const char*  regbol; // Beginning of input, for ^ check.
+static const char* *regstartp; // Pointer to startp array.
+static const char* *regendp; // Ditto for endp.
 
 /*
  * Forwards.
@@ -942,10 +934,10 @@ bool vbl_reg_exp::find (char const* string) {
         s = string;
         while ((s = strchr(s, this->regmust[0])) != NULL) {
             if (strncmp(s, this->regmust, this->regmlen) == 0)
-                break;		// Found it.
+                break; // Found it.
             s++;
         }
-        if (s == NULL)		// Not present.
+        if (s == NULL) // Not present.
             return (0);
     }
 
@@ -1020,8 +1012,8 @@ static int regtry (const char* string, const char* *start,
  * 0 failure, 1 success
  */
 static int regmatch (const char* prog) {
-    register const char* scan;	// Current node.
-             const char* next;	// Next node.
+    register const char* scan; // Current node.
+             const char* next; // Next node.
 
     scan = prog;
 
@@ -1099,7 +1091,6 @@ static int regmatch (const char* prog) {
                     else
                         return (0);
                 }
-//		break;
             case CLOSE + 1:
             case CLOSE + 2:
             case CLOSE + 3:
@@ -1128,13 +1119,12 @@ static int regmatch (const char* prog) {
                     else
                         return (0);
                 }
-//		break;
             case BRANCH:{
 
               register const char* save;
 
-                    if (OP(next) != BRANCH)	// No choice.
-                        next = OPERAND(scan);	// Avoid recursion.
+                    if (OP(next) != BRANCH) // No choice.
+                        next = OPERAND(scan); // Avoid recursion.
                     else {
                         do {
                             save = reginput;
@@ -1176,9 +1166,8 @@ static int regmatch (const char* prog) {
                     }
                     return (0);
                 }
-//		break;
             case END:
-                return (1);	// Success!
+                return (1); // Success!
 
             default:
                 //RAISE Error, SYM(vbl_reg_exp), SYM(Internal_Error),
@@ -1231,7 +1220,7 @@ static int regrepeat (const char* p) {
                 scan++;
             }
             break;
-        default:		// Oh dear.  Called inappropriately.
+        default: // Oh dear.  Called inappropriately.
             //RAISE Error, SYM(vbl_reg_exp), SYM(Internal_Error),
             printf ("vbl_reg_exp::find(): Internal error.\n");
             return 0;

@@ -5,9 +5,9 @@
 #endif
 
 //--------------------------------------------------------------------------------
-// .NAME	xcv_multiview - xcv menu and interface for multiview
-// .INCLUDE	xcv/xcv_multiview.h
-// .FILE	xcv_multiview.cxx
+// .NAME    xcv_multiview - xcv menu and interface for multiview
+// .INCLUDE xcv/xcv_multiview.h
+// .FILE    xcv_multiview.cxx
 // .SECTION Description
 //   Creates a menu for, and provides an interface to multiview operations
 //   contained in mvl.

@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	ClosestImagePointFinder - HomgInterestPointSet closest points
-// .LIBRARY	MViewBasics
-// .HEADER	MultiView Package
-// .INCLUDE	mvl/ClosestImagePointFinder.h
-// .FILE	ClosestImagePointFinder.cxx
+// .NAME    ClosestImagePointFinder - HomgInterestPointSet closest points
+// .LIBRARY MViewBasics
+// .HEADER  MultiView Package
+// .INCLUDE mvl/ClosestImagePointFinder.h
+// .FILE    ClosestImagePointFinder.cxx
 //
 // .SECTION Description
 //    ClosestImagePointFinder allows fast access to closest-point

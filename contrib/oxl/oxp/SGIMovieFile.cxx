@@ -148,17 +148,17 @@ SGIMovieFilePrivates::SGIMovieFilePrivates(char const* fn):
       audio[i].print(vcl_cerr);
 
   // Video SGIMV_Variables:
-  // 	   COMPRESSION = "1": MVC1, "2": RGB32, "10": JPEG, "MVC2"
-  // 		   FPS = 25.000000
-  // 		HEIGHT = 576
-  // 	   INTERLACING = 1
-  // 	   ORIENTATION = 1100
-  // 	       PACKING = 1001
-  // 	  PIXEL_ASPECT = 1.000000
-  // 	     Q_SPATIAL = 0.750000
-  // 	    Q_TEMPORAL = 0.750000
-  // 		 WIDTH = 768
-  // 	   __DIR_COUNT = 750
+  //       COMPRESSION = "1": MVC1, "2": RGB32, "10": JPEG, "MVC2"
+  //               FPS = 25.000000
+  //            HEIGHT = 576
+  //       INTERLACING = 1
+  //       ORIENTATION = 1100
+  //           PACKING = 1001
+  //      PIXEL_ASPECT = 1.000000
+  //         Q_SPATIAL = 0.750000
+  //        Q_TEMPORAL = 0.750000
+  //             WIDTH = 768
+  //       __DIR_COUNT = 750
   //
     for(int i = 0; i < NUM_I_TRACKS; ++i)
       video[i].print(vcl_cerr);
@@ -375,9 +375,9 @@ void SGIMV_Variables::read(vcl_istream& f) {
   //     word num_vars;
   //     word pad;
   //     struct VarData {
-  //   	 byte var_buf[16];
-  //   	 word var_size;
-  //   	 byte var_data[var_size];  // Asciiish variable value
+  //     byte var_buf[16];
+  //     word var_size;
+  //     byte var_data[var_size];  // Asciiish variable value
   //     };
   //     VarData data[num_vars];
   //   };

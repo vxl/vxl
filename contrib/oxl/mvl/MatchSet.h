@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	MatchSet - Base class for correspondences
-// .LIBRARY	MViewBasics
-// .HEADER	MultiView Package
-// .INCLUDE	mvl/MatchSet.h
-// .FILE	MatchSet.cxx
+// .NAME    MatchSet - Base class for correspondences
+// .LIBRARY MViewBasics
+// .HEADER  MultiView Package
+// .INCLUDE mvl/MatchSet.h
+// .FILE    MatchSet.cxx
 //
 // .SECTION Description
 //    MatchSet is a base class for classes that store correspondences
@@ -30,7 +30,7 @@ class MatchSet {
 public:
   enum { NoMatch = -1 };
 
-// -- Return true if i is not the "NoMatch" value.
+//: Return true if i is not the "NoMatch" value.
   static inline bool matchp(int i) { return i != NoMatch; }
 
   MatchSet() {}

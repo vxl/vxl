@@ -2,11 +2,11 @@
 #define _vsol_spatial_object_3d_h_
 //-----------------------------------------------------------------------------
 //
-// .NAME        vsol_spatial_object_3d - Base class of spatial entities Topology Geometry SpatialGroup
-// .LIBRARY     vsol
-// .HEADER 	vxl package
-// .INCLUDE     vsol/vsol_spatial_object_3d.h
-// .FILE        vsol_spatial_object_3d.cxx
+// .NAME    vsol_spatial_object_3d - Base class of spatial entities Topology Geometry SpatialGroup
+// .LIBRARY vsol
+// .HEADER  vxl package
+// .INCLUDE vsol/vsol_spatial_object_3d.h
+// .FILE    vsol_spatial_object_3d.cxx
 //
 // .SECTION Description
 //   vsol_spatial_object_3d is the base class of all spatial entities: vtol, vsol.
@@ -95,9 +95,9 @@ public:
 protected:
 
   vsol_box_3d *_bounding_box; // bounding volume
-  unsigned int	_tag;		// for the COOL containers.
-  int	  	_id;
-  static int	_tagcount;	// global count of all spatial objects.
+  unsigned int  _tag;         // for the COOL containers.
+  int           _id;
+  static int    _tagcount;    // global count of all spatial objects.
 
 protected:
 
@@ -280,12 +280,12 @@ public:
   //---- transformations ----------------------------------------------
   virtual bool Transform(CoolTransform const& m);
   virtual CoolTransform GetTransformation() const; // to `standard' object
-  virtual bool LinearScale(float sf);	// leaving GetLocation() fixed
+  virtual bool LinearScale(float sf);   // leaving GetLocation() fixed
 
-  virtual bool Translate();	// moving GetLocation() to (0,0,0)
-  virtual bool Rotate();	// moving GetOrientation() to (1,0,0)
-  virtual bool Reflect();	// around GetOrientation() over 180 degrees
-  virtual bool Shear(float);	// leaving GetOrientation() fixed
+  virtual bool Translate();     // moving GetLocation() to (0,0,0)
+  virtual bool Rotate();        // moving GetOrientation() to (1,0,0)
+  virtual bool Reflect();       // around GetOrientation() over 180 degrees
+  virtual bool Shear(float);    // leaving GetOrientation() fixed
 #endif
 
   //: \brief bounding box accessors
@@ -341,7 +341,7 @@ inline void vsol_spatial_object_3d::set_tag_id(int id)
   _tag = ( (id & VSOL_DEXID_BITS)     |  ( _tag & VSOL_FLAG_BITS ));
 }
 
-// -- constructor initialize basic vsol_spatial_object_3d attributes.
+//: constructor initialize basic vsol_spatial_object_3d attributes.
 //   bounding_box is set to NULL.
 inline vsol_spatial_object_3d::vsol_spatial_object_3d(void)
 {
@@ -372,7 +372,7 @@ inline void vsol_spatial_object_3d::compute_bounding_box(void)   //Does nothing 
 }
 
 
-// -- Bounds Accessors:  min_ and max_ are provided as methods on vsol_spatial_object_3d
+//: Bounds Accessors:  min_ and max_ are provided as methods on vsol_spatial_object_3d
 //                    to be consistent with the previous interface
 //                    Additional bounds accessors are available directly
 //                    on vsol_box_3d.  - JLM
@@ -494,33 +494,33 @@ inline void vsol_spatial_object_3d::set_max_z(float zmax)
 }
 
 
-// -- set_ a flag for a spatialObject, flag can be VSOL_FLAG[1-6]
+//: set_ a flag for a spatialObject, flag can be VSOL_FLAG[1-6]
 inline void vsol_spatial_object_3d::set_user_flag(unsigned int flag)
 {
   _tag=(_tag|flag);
 }
 
-// -- get_ a flag for a spatialObject, flag can be VSOL_FLAG[1-6] return value is
+//: get_ a flag for a spatialObject, flag can be VSOL_FLAG[1-6] return value is
 //    one or zero.
 inline unsigned int  vsol_spatial_object_3d::get_user_flag(unsigned int flag)
 {
   return (_tag&flag) ? 1 : 0;
 }
 
-// -- set_ a flag for a spatialObject, flag can be VSOL_FLAG[1-6] value is
+//: set_ a flag for a spatialObject, flag can be VSOL_FLAG[1-6] value is
 //    set to zero.
 inline void vsol_spatial_object_3d::unset_user_flag(unsigned int flag)
 {
   _tag = ( _tag & (~flag) );
 }
 
-// -- set_ the flag used by TAGGED_UNION.
+//: set_ the flag used by TAGGED_UNION.
 inline void vsol_spatial_object_3d::set_tagged_union_flag()
 {
   set_user_flag(VSOL_UNIONBIT);
 }
 
-// -- get_ the flag used by TAGGED_UNION.
+//: get_ the flag used by TAGGED_UNION.
 inline unsigned int vsol_spatial_object_3d::get_tagged_union_flag(void)
 {
   return get_user_flag(VSOL_UNIONBIT);

@@ -42,15 +42,15 @@ typedef void             vxl_sint64;   // !
 
 
 #if 0
-#define VXL_HAS_JPEG   
-#define VXL_HAS_TIFF   
-#define VXL_HAS_PNG    
-#define VXL_HAS_HERMES 
+#define VXL_HAS_JPEG
+#define VXL_HAS_TIFF
+#define VXL_HAS_PNG
+#define VXL_HAS_HERMES
 #define VXL_HAS_OPENGL 1
 #define VXL_HAS_GLUT   1
-#define VXL_HAS_FLTK   
+#define VXL_HAS_FLTK
 #define VXL_HAS_GTK    1
-#define VXL_HAS_SDL    
+#define VXL_HAS_SDL
 #endif
 
 #endif

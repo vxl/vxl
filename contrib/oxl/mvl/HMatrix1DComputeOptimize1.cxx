@@ -52,8 +52,8 @@ public:
     }
   }
 
-  //	the matrix is	[ 1.0    x[0] ]
-  //			[ x[1] 1+x[2] ]
+  //    the matrix is   [ 1.0    x[0] ]
+  //                    [ x[1] 1+x[2] ]
   void f(const vnl_vector<double>& x, vnl_vector<double>& fx) {
     assert(x.size()==3);
     assert(fx.size()==N);
@@ -85,9 +85,9 @@ void foo(const vcl_vector<double> &z1,const vcl_vector<double> &z2,HMatrix1D &M)
   vnl_levenberg_marquardt LM(f);
 
   // Run minimiser :
-  //	f.boo(x);
+  //    f.boo(x);
   LM.minimize(x);
-  //	f.boo(x);
+  //    f.boo(x);
 
   // convert back to matrix format.
   vnl_double_2x2 T;

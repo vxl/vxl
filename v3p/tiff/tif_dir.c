@@ -35,10 +35,10 @@
 /*
  * These are used in the backwards compatibility code...
  */
-#define DATATYPE_VOID		0       /* !untyped data */
-#define DATATYPE_INT		1       /* !signed integer data */
-#define DATATYPE_UINT		2       /* !unsigned integer data */
-#define DATATYPE_IEEEFP		3       /* !IEEE floating point data */
+#define DATATYPE_VOID   0 /* !untyped data */
+#define DATATYPE_INT    1 /* !signed integer data */
+#define DATATYPE_UINT   2 /* !unsigned integer data */
+#define DATATYPE_IEEEFP 3 /* !IEEE floating point data */
 
 void
 _TIFFsetByteArray(void** vpp, void* vp, long n)
@@ -74,7 +74,7 @@ setExtraSamples(TIFFDirectory* td, va_list ap, int* v)
         if ((uint16) *v > td->td_samplesperpixel)
                 return (0);
         va = va_arg(ap, uint16*);
-        if (*v > 0 && va == NULL)		/* typically missing param */
+        if (*v > 0 && va == NULL)               /* typically missing param */
                 return (0);
         for (i = 0; i < *v; i++)
                 if (va[i] > EXTRASAMPLE_UNASSALPHA)
@@ -98,7 +98,7 @@ checkInkNamesString(TIFF* tif, int slen, const char* s)
                         for (; *cp != '\0'; cp++)
                                 if (cp >= ep)
                                         goto bad;
-                        cp++;				/* skip \0 */
+                        cp++; /* skip \0 */
                 }
                 return (cp-s);
         }
@@ -327,11 +327,11 @@ _TIFFVSetField(TIFF* tif, ttag_t tag, va_list ap)
         case TIFFTAG_DATATYPE:
                 v = va_arg(ap, int);
                 switch (v) {
-                case DATATYPE_VOID:	v = SAMPLEFORMAT_VOID;	break;
-                case DATATYPE_INT:	v = SAMPLEFORMAT_INT;	break;
-                case DATATYPE_UINT:	v = SAMPLEFORMAT_UINT;	break;
-                case DATATYPE_IEEEFP:	v = SAMPLEFORMAT_IEEEFP;break;
-                default:		goto badvalue;
+                case DATATYPE_VOID:     v = SAMPLEFORMAT_VOID;  break;
+                case DATATYPE_INT:      v = SAMPLEFORMAT_INT;   break;
+                case DATATYPE_UINT:     v = SAMPLEFORMAT_UINT;  break;
+                case DATATYPE_IEEEFP:   v = SAMPLEFORMAT_IEEEFP;break;
+                default:                goto badvalue;
                 }
                 td->td_sampleformat = (uint16) v;
                 break;
@@ -479,7 +479,7 @@ static int
 OkToChangeTag(TIFF* tif, ttag_t tag)
 {
         const TIFFFieldInfo* fip = _TIFFFindFieldInfo(tif, tag, TIFF_ANY);
-        if (!fip) {			/* unknown tag */
+        if (!fip) {                     /* unknown tag */
                 TIFFError("TIFFSetField", "%s: Unknown %stag %u",
                     tif->tif_name, isPseudoTag(tag) ? "pseudo-" : "", tag);
                 return (0);
@@ -800,11 +800,11 @@ TIFFVGetField(TIFF* tif, ttag_t tag, va_list ap)
             (*tif->tif_vgetfield)(tif, tag, ap) : 0);
 }
 
-#define	CleanupField(member) {		\
-    if (td->member) {			\
-        _TIFFfree(td->member);		\
-        td->member = 0;			\
-    }					\
+#define CleanupField(member) {          \
+    if (td->member) {                   \
+        _TIFFfree(td->member);          \
+        td->member = 0;                 \
+    }                                   \
 }
 
 /*
@@ -1085,8 +1085,8 @@ TIFFUnlinkDirectory(TIFF* tif, tdir_t dirn)
         tif->tif_flags &= ~(TIFF_BEENWRITING|TIFF_BUFFERSETUP|TIFF_POSTENCODE);
         TIFFFreeDirectory(tif);
         TIFFDefaultDirectory(tif);
-        tif->tif_diroff = 0;			/* force link on next write */
-        tif->tif_nextdiroff = 0;		/* next write must be at end */
+        tif->tif_diroff = 0;                    /* force link on next write */
+        tif->tif_nextdiroff = 0;                /* next write must be at end */
         tif->tif_curoff = 0;
         tif->tif_row = (uint32) -1;
         tif->tif_curstrip = (tstrip_t) -1;

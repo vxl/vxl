@@ -55,11 +55,11 @@ typedef struct {
   /* These fields are loaded into local variables at start of each MCU.
    * In case of suspension, we exit WITHOUT updating them.
    */
-  bitread_perm_state bitstate;	/* Bit buffer at start of MCU */
-  savable_state saved;		/* Other state at start of MCU */
+  bitread_perm_state bitstate;  /* Bit buffer at start of MCU */
+  savable_state saved;          /* Other state at start of MCU */
 
   /* These fields are NOT loaded into local working state. */
-  unsigned int restarts_to_go;	/* MCUs left in this restart interval */
+  unsigned int restarts_to_go;  /* MCUs left in this restart interval */
 
   /* Pointers to derived tables (these workspaces have image lifespan) */
   d_derived_tbl * dc_derived_tbls[NUM_HUFF_TBLS];
@@ -141,7 +141,7 @@ jpeg_make_d_derived_tbl (j_decompress_ptr cinfo, JHUFF_TBL * htbl,
       (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_IMAGE,
                                   SIZEOF(d_derived_tbl));
   dtbl = *pdtbl;
-  dtbl->pub = htbl;		/* fill in back link */
+  dtbl->pub = htbl; /* fill in back link */
 
   /* Figure C.1: make table of Huffman code length for each symbol */
   /* Note that this is in code-length order. */
@@ -178,7 +178,7 @@ jpeg_make_d_derived_tbl (j_decompress_ptr cinfo, JHUFF_TBL * htbl,
       p += htbl->bits[l];
       dtbl->maxcode[l] = huffcode[p-1]; /* maximum code of length l */
     } else {
-      dtbl->maxcode[l] = -1;	/* -1 if no codes of this length */
+      dtbl->maxcode[l] = -1; /* -1 if no codes of this length */
     }
   }
   dtbl->maxcode[17] = 0xFFFFFL; /* ensures jpeg_huff_decode terminates */
@@ -224,7 +224,7 @@ jpeg_make_d_derived_tbl (j_decompress_ptr cinfo, JHUFF_TBL * htbl,
  */
 
 #ifdef SLOW_SHIFT_32
-#define MIN_GET_BITS  15	/* minimum allowable value */
+#define MIN_GET_BITS  15 /* minimum allowable value */
 #else
 #define MIN_GET_BITS  (BIT_BUF_SIZE-7)
 #endif
@@ -247,7 +247,7 @@ jpeg_fill_bit_buffer (bitread_working_state * state,
   while (bits_left < MIN_GET_BITS) {
     /* Attempt to read a byte */
     if (state->unread_marker != 0)
-      goto no_more_data;	/* can't advance past a marker */
+      goto no_more_data; /* can't advance past a marker */
 
     if (bytes_in_buffer == 0) {
       if (! (*state->cinfo->src->fill_input_buffer) (state->cinfo))
@@ -294,7 +294,7 @@ jpeg_fill_bit_buffer (bitread_working_state * state,
           WARNMS(state->cinfo, JWRN_HIT_MARKER);
           *(state->printed_eod_ptr) = TRUE;
         }
-        c = 0;			/* insert a zero byte into bit buffer */
+        c = 0; /* insert a zero byte into bit buffer */
       }
     }
 
@@ -350,7 +350,7 @@ jpeg_huff_decode (bitread_working_state * state,
 
   if (l > 16) {
     WARNMS(state->cinfo, JWRN_HUFF_BAD_CODE);
-    return 0;			/* fake a zero as the safest result */
+    return 0; /* fake a zero as the safest result */
   }
 
   return htbl->pub->huffval[ htbl->valptr[l] +

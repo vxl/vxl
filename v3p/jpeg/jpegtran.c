@@ -10,16 +10,16 @@
  * different JPEG file formats.
  */
 
-#include "cdjpeg.h"		/* Common decls for cjpeg/djpeg applications */
-#include "jversion.h"		/* for version message */
+#include "cdjpeg.h"     /* Common decls for cjpeg/djpeg applications */
+#include "jversion.h"   /* for version message */
 
-#ifdef USE_CCOMMAND		/* command-line reader for Macintosh */
+#ifdef USE_CCOMMAND     /* command-line reader for Macintosh */
 #ifdef __MWERKS__
-#include <SIOUX.h>              /* Metrowerks needs this */
-#include <console.h>		/* ... and this */
+#include <SIOUX.h>      /* Metrowerks needs this */
+#include <console.h>    /* ... and this */
 #endif
 #ifdef THINK_C
-#include <console.h>		/* Think declares it here */
+#include <console.h>    /* Think declares it here */
 #endif
 #endif
 
@@ -33,8 +33,8 @@
  */
 
 
-static const char * progname;	/* program name for error messages */
-static char * outfilename;	/* for -outfile switch */
+static const char * progname;   /* program name for error messages */
+static char * outfilename;      /* for -outfile switch */
 
 
 LOCAL(void)
@@ -86,7 +86,7 @@ parse_switches (j_compress_ptr cinfo, int argc, char **argv,
   int argn;
   char * arg;
   boolean simple_progressive;
-  char * scansarg = NULL;	/* saves -scans parm if any */
+  char * scansarg = NULL;       /* saves -scans parm if any */
 
   /* Set up default JPEG parameters. */
   simple_progressive = FALSE;
@@ -100,12 +100,12 @@ parse_switches (j_compress_ptr cinfo, int argc, char **argv,
     if (*arg != '-') {
       /* Not a switch, must be a file name argument */
       if (argn <= last_file_arg_seen) {
-        outfilename = NULL;	/* -outfile applies to just one input file */
-        continue;		/* ignore this name if previously processed */
+        outfilename = NULL;     /* -outfile applies to just one input file */
+        continue;               /* ignore this name if previously processed */
       }
-      break;			/* else done parsing switches */
+      break;                    /* else done parsing switches */
     }
-    arg++;			/* advance past switch marker character */
+    arg++;                      /* advance past switch marker character */
 
     if (keymatch(arg, "arithmetic", 1)) {
       /* Use arithmetic coding. */
@@ -134,7 +134,7 @@ parse_switches (j_compress_ptr cinfo, int argc, char **argv,
       long lval;
       char ch = 'x';
 
-      if (++argn >= argc)	/* advance to next argument */
+      if (++argn >= argc)       /* advance to next argument */
         usage();
       if (sscanf(argv[argn], "%ld%c", &lval, &ch) < 1)
         usage();
@@ -154,9 +154,9 @@ parse_switches (j_compress_ptr cinfo, int argc, char **argv,
 
     } else if (keymatch(arg, "outfile", 4)) {
       /* Set output file name. */
-      if (++argn >= argc)	/* advance to next argument */
+      if (++argn >= argc)       /* advance to next argument */
         usage();
-      outfilename = argv[argn];	/* save it away for later use */
+      outfilename = argv[argn]; /* save it away for later use */
 
     } else if (keymatch(arg, "progressive", 1)) {
       /* Select simple progressive mode. */
@@ -174,7 +174,7 @@ parse_switches (j_compress_ptr cinfo, int argc, char **argv,
       long lval;
       char ch = 'x';
 
-      if (++argn >= argc)	/* advance to next argument */
+      if (++argn >= argc)       /* advance to next argument */
         usage();
       if (sscanf(argv[argn], "%ld%c", &lval, &ch) < 1)
         usage();
@@ -191,7 +191,7 @@ parse_switches (j_compress_ptr cinfo, int argc, char **argv,
     } else if (keymatch(arg, "scans", 2)) {
       /* Set scan script. */
 #ifdef C_MULTISCAN_FILES_SUPPORTED
-      if (++argn >= argc)	/* advance to next argument */
+      if (++argn >= argc)       /* advance to next argument */
         usage();
       scansarg = argv[argn];
       /* We must postpone reading the file in case -progressive appears. */
@@ -202,7 +202,7 @@ parse_switches (j_compress_ptr cinfo, int argc, char **argv,
 #endif
 
     } else {
-      usage();			/* bogus switch */
+      usage();                  /* bogus switch */
     }
   }
 
@@ -211,18 +211,18 @@ parse_switches (j_compress_ptr cinfo, int argc, char **argv,
   if (for_real) {
 
 #ifdef C_PROGRESSIVE_SUPPORTED
-    if (simple_progressive)	/* process -progressive; -scans can override */
+    if (simple_progressive)     /* process -progressive; -scans can override */
       jpeg_simple_progression(cinfo);
 #endif
 
 #ifdef C_MULTISCAN_FILES_SUPPORTED
-    if (scansarg != NULL)	/* process -scans if it was present */
+    if (scansarg != NULL)       /* process -scans if it was present */
       if (! read_scan_script(cinfo, scansarg))
         usage();
 #endif
   }
 
-  return argn;			/* return index of next arg (file name) */
+  return argn;                  /* return index of next arg (file name) */
 }
 
 
@@ -251,7 +251,7 @@ main (int argc, char **argv)
 
   progname = argv[0];
   if (progname == NULL || progname[0] == 0)
-    progname = "jpegtran";	/* in case C library doesn't provide it */
+    progname = "jpegtran";      /* in case C library doesn't provide it */
 
   /* Initialize the JPEG decompression object with default error handling. */
   srcinfo.err = jpeg_std_error(&jsrcerr);
@@ -368,5 +368,5 @@ main (int argc, char **argv)
 
   /* All done. */
   exit(jsrcerr.num_warnings + jdsterr.num_warnings ?EXIT_WARNING:EXIT_SUCCESS);
-  return 0;			/* suppress no-return-value warnings */
+  return 0;                     /* suppress no-return-value warnings */
 }

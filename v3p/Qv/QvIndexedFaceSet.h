@@ -8,7 +8,7 @@
 #include "vectors.h"
 #include "mtl.h"
 
-#define QV_END_FACE_INDEX	(-1)
+#define QV_END_FACE_INDEX (-1)
 
 class QvIndexedFaceSet : public QvNode
 {
@@ -16,10 +16,10 @@ class QvIndexedFaceSet : public QvNode
 
 public:
   // Fields:
-  QvMFLong		coordIndex;		// Coordinate indices
-  QvMFLong		materialIndex;		// Material indices
-  QvMFLong		normalIndex;		// Surface normal indices
-  QvMFLong		textureCoordIndex;	// Texture Coordinate indices
+  QvMFLong  coordIndex;               // Coordinate indices
+  QvMFLong  materialIndex;            // Material indices
+  QvMFLong  normalIndex;              // Surface normal indices
+  QvMFLong  textureCoordIndex;        // Texture Coordinate indices
 
   // mpichler, 19950508, 19950630
   const point3D* vertexlist_;         // vertex data

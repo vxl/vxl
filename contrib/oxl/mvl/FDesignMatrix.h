@@ -3,11 +3,11 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME	FDesignMatrix - Design matrix for linear FMatrix least squares
-// .LIBRARY	MViewCompute
-// .HEADER	MultiView Package
-// .INCLUDE	mvl/FDesignMatrix.h
-// .FILE	FDesignMatrix.cxx
+// .NAME    FDesignMatrix - Design matrix for linear FMatrix least squares
+// .LIBRARY MViewCompute
+// .HEADER  MultiView Package
+// .INCLUDE mvl/FDesignMatrix.h
+// .FILE    FDesignMatrix.cxx
 // .SECTION Description
 //    @{ FDesignMatrix is a subclass of Matrix that, given $n$ pairs of homogeneous
 //    2D points, creates the $n \times 9$ design matrix for the linear least squares

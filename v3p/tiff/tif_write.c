@@ -33,20 +33,20 @@
 #include <assert.h>
 #include <stdio.h>
 
-#define	STRIPINCR	20		/* expansion factor on strip array */
+#define STRIPINCR       20              /* expansion factor on strip array */
 
-#define	WRITECHECKSTRIPS(tif, module)				\
+#define WRITECHECKSTRIPS(tif, module)                           \
         (((tif)->tif_flags&TIFF_BEENWRITING) || TIFFWriteCheck((tif),0,module))
-#define	WRITECHECKTILES(tif, module)				\
+#define WRITECHECKTILES(tif, module)                            \
         (((tif)->tif_flags&TIFF_BEENWRITING) || TIFFWriteCheck((tif),1,module))
-#define	BUFFERCHECK(tif)					\
-        (((tif)->tif_flags & TIFF_BUFFERSETUP) ||		\
+#define BUFFERCHECK(tif)                                        \
+        (((tif)->tif_flags & TIFF_BUFFERSETUP) ||               \
             TIFFWriteBufferSetup((tif), NULL, (tsize_t) -1))
 
-static	int TIFFWriteCheck(TIFF*, int, const char*);
-static	int TIFFGrowStrips(TIFF*, int, const char*);
-static	int TIFFAppendToStrip(TIFF*, tstrip_t, tidata_t, tsize_t);
-static	int TIFFSetupStrips(TIFF*);
+static  int TIFFWriteCheck(TIFF*, int, const char*);
+static  int TIFFGrowStrips(TIFF*, int, const char*);
+static  int TIFFAppendToStrip(TIFF*, tstrip_t, tidata_t, tsize_t);
+static  int TIFFSetupStrips(TIFF*);
 
 int
 TIFFWriteScanline(TIFF* tif, tdata_t buf, uint32 row, tsample_t sample)
@@ -70,7 +70,7 @@ TIFFWriteScanline(TIFF* tif, tdata_t buf, uint32 row, tsample_t sample)
          * Extend image length if needed
          * (but only for PlanarConfig=1).
          */
-        if (row >= td->td_imagelength) {	/* extend image */
+        if (row >= td->td_imagelength) {        /* extend image */
                 if (td->td_planarconfig == PLANARCONFIG_SEPARATE) {
                         TIFFError(tif->tif_name,
                 "Can not change \"ImageLength\" when using separate planes");
@@ -395,7 +395,7 @@ TIFFWriteRawTile(TIFF* tif, ttile_t tile, tdata_t data, tsize_t cc)
             cc : (tsize_t) -1);
 }
 
-#define	isUnspecified(tif, f) \
+#define isUnspecified(tif, f) \
     (TIFFFieldSet(tif,f) && (tif)->tif_dir.td_imagelength == 0)
 
 static int
@@ -509,7 +509,7 @@ TIFFWriteBufferSetup(TIFF* tif, tdata_t bp, tsize_t size)
                  */
                 if (size < 8*1024)
                         size = 8*1024;
-                bp = NULL;			/* NB: force malloc */
+                bp = NULL;                      /* NB: force malloc */
         }
         if (bp == NULL) {
                 bp = _TIFFmalloc(size);

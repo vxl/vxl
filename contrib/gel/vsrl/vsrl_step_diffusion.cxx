@@ -42,7 +42,7 @@ void vsrl_step_diffusion::interpolate_disparaty()
   int x,y;
   double v;
   int x1,x2;
-  double d,d1,d2;
+  double d,d1=0.0,d2=0.0;
   double alpha,len1,len2;
   int flag1, flag2;
   int low_val=0-99;

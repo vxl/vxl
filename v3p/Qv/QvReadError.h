@@ -9,7 +9,7 @@ class QvInput;
 
 class QvReadError {
   public:
-    static void		post(const QvInput *in, const char *formatString ...);
+    static void post(const QvInput *in, const char *formatString ...);
 
     static QvReadErrorCallback callback_;
 };

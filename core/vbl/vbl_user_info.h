@@ -5,10 +5,10 @@
 #endif
 //
 // .NAME vbl_user_info - Reads information about a user from the password file
-// .LIBRARY	vbl
-// .HEADER	vxl package
-// .INCLUDE	vbl/vbl_user_info.h
-// .FILE	vbl_user_info.cxx
+// .LIBRARY vbl
+// .HEADER  vxl package
+// .INCLUDE vbl/vbl_user_info.h
+// .FILE    vbl_user_info.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 08 Apr 99
 //

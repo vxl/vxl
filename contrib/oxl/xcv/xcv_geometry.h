@@ -1,10 +1,10 @@
 #ifndef xcv_geometry_h_
 #define xcv_geometry_h_
- 
+
 //--------------------------------------------------------------------------------
-// .NAME	xcv_geometry
-// .INCLUDE	xcv/xcv_geometry.h
-// .FILE	xcv_geometry.cxx
+// .NAME    xcv_geometry
+// .INCLUDE xcv/xcv_geometry.h
+// .FILE    xcv_geometry.cxx
 // .SECTION Description:
 //   Creates a menu for, and provides an interface to geometric operations
 //   contained in vxl.
@@ -61,7 +61,7 @@ public:
   static void load_geometry();
 
   static void polygon_intersect();
-  
+
   static vgui_menu create_geometry_menu();
 
 private:

@@ -28,43 +28,43 @@
 #include "tiffiop.h"
 
 #ifdef tahoe
-typedef	struct ieeedouble {
-        u_long	sign	: 1,
-                exp	: 11,
-                mant	: 20;
-        u_long	mant2;
+typedef struct ieeedouble {
+        u_long  sign    : 1,
+                exp     : 11,
+                mant    : 20;
+        u_long  mant2;
 } ieeedouble;
-typedef	struct ieeefloat {
-        u_long	sign	: 1,
-                exp	: 8,
-                mant	: 23;
+typedef struct ieeefloat {
+        u_long  sign    : 1,
+                exp     : 8,
+                mant    : 23;
 } ieeefloat;
 
-typedef	struct {
-        u_long	sign	: 1,
-                exp	: 8,
-                mant	: 23;
-        u_long	mant2;
+typedef struct {
+        u_long  sign    : 1,
+                exp     : 8,
+                mant    : 23;
+        u_long  mant2;
 } nativedouble;
-typedef	struct {
-        u_long	sign	: 1,
-                exp	: 8,
-                mant	: 23;
+typedef struct {
+        u_long  sign    : 1,
+                exp     : 8,
+                mant    : 23;
 } nativefloat;
 /*
  * Beware, over/under-flow in conversions will
  * result in garbage values -- handling it would
  * require a subroutine call or lots more code.
  */
-#define	NATIVE2IEEEFLOAT(fp) { \
+#define NATIVE2IEEEFLOAT(fp) { \
     if ((fp)->native.exp) \
-        (fp)->ieee.exp = (fp)->native.exp - 129 + 127;	/* alter bias */\
+        (fp)->ieee.exp = (fp)->native.exp - 129 + 127;  /* alter bias */\
 }
-#define	IEEEFLOAT2NATIVE(fp) { \
+#define IEEEFLOAT2NATIVE(fp) { \
     if ((fp)->ieee.exp) \
-        (fp)->native.exp = (fp)->ieee.exp - 127 + 129;	/* alter bias */\
+        (fp)->native.exp = (fp)->ieee.exp - 127 + 129;  /* alter bias */\
 }
-#define	IEEEDOUBLE2NATIVE(dp) { \
+#define IEEEDOUBLE2NATIVE(dp) { \
     if ((dp)->native.exp = (dp)->ieee.exp) \
         (dp)->native.exp += -1023 + 129; \
     (dp)->native.mant = ((dp)->ieee.mant<<3)|((dp)->native.mant2>>29); \
@@ -73,36 +73,36 @@ typedef	struct {
 #endif /* tahoe */
 
 #ifdef vax
-typedef	struct ieeedouble {
-        u_long	mant	: 20,
-                exp	: 11,
-                sign	: 1;
-        u_long	mant2;
+typedef struct ieeedouble {
+        u_long  mant    : 20,
+                exp     : 11,
+                sign    : 1;
+        u_long  mant2;
 } ieeedouble;
-typedef	struct ieeefloat {
-        u_long	mant	: 23,
-                exp	: 8,
-                sign	: 1;
+typedef struct ieeefloat {
+        u_long  mant    : 23,
+                exp     : 8,
+                sign    : 1;
 } ieeefloat;
 
-typedef	struct {
-        u_long	mant1	: 7,
-                exp	: 8,
-                sign	: 1,
-                mant2	: 16;
-        u_long	mant3;
+typedef struct {
+        u_long  mant1   : 7,
+                exp     : 8,
+                sign    : 1,
+                mant2   : 16;
+        u_long  mant3;
 } nativedouble;
-typedef	struct {
-        u_long	mant1	: 7,
-                exp	: 8,
-                sign	: 1,
-                mant2	: 16;
+typedef struct {
+        u_long  mant1   : 7,
+                exp     : 8,
+                sign    : 1,
+                mant2   : 16;
 } nativefloat;
 /*
  * Beware, these do not handle over/under-flow
  * during conversion from ieee to native format.
  */
-#define	NATIVE2IEEEFLOAT(fp) { \
+#define NATIVE2IEEEFLOAT(fp) { \
     float_t t; \
     if (t.ieee.exp = (fp)->native.exp) \
         t.ieee.exp += -129 + 127; \
@@ -110,20 +110,20 @@ typedef	struct {
     t.ieee.mant = ((fp)->native.mant1<<16)|(fp)->native.mant2; \
     *(fp) = t; \
 }
-#define	IEEEFLOAT2NATIVE(fp) { \
+#define IEEEFLOAT2NATIVE(fp) { \
     float_t t; int v = (fp)->ieee.exp; \
-    if (v) v += -127 + 129;		/* alter bias of exponent */\
-    t.native.exp = v;			/* implicit truncation of exponent */\
+    if (v) v += -127 + 129;             /* alter bias of exponent */\
+    t.native.exp = v;                   /* implicit truncation of exponent */\
     t.native.sign = (fp)->ieee.sign; \
     v = (fp)->ieee.mant; \
     t.native.mant1 = v >> 16; \
     t.native.mant2 = v;\
     *(fp) = t; \
 }
-#define	IEEEDOUBLE2NATIVE(dp) { \
+#define IEEEDOUBLE2NATIVE(dp) { \
     double_t t; int v = (dp)->ieee.exp; \
-    if (v) v += -1023 + 129;		/* if can alter bias of exponent */\
-    t.native.exp = v;			/* implicit truncation of exponent */\
+    if (v) v += -1023 + 129;            /* if can alter bias of exponent */\
+    t.native.exp = v;                   /* implicit truncation of exponent */\
     v = (dp)->ieee.mant; \
     t.native.sign = (dp)->ieee.sign; \
     t.native.mant1 = v >> 16; \
@@ -144,18 +144,18 @@ but not defined how to convert between IEEE and native formats!"
  * conversions.  The above macros define the
  * conversion operations.
  */
-typedef	union {
-        ieeedouble	ieee;
-        nativedouble	native;
-        char		b[8];
-        double		d;
+typedef union {
+        ieeedouble      ieee;
+        nativedouble    native;
+        char            b[8];
+        double          d;
 } double_t;
 
-typedef	union {
-        ieeefloat	ieee;
-        nativefloat	native;
-        char		b[4];
-        float		f;
+typedef union {
+        ieeefloat       ieee;
+        nativefloat     native;
+        char            b[4];
+        float           f;
 } float_t;
 
 TIFFCvtIEEEFloatToNative(tif, n, f)

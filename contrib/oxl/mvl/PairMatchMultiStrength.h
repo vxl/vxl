@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	PairMatchMultiStrength - Undocumented class FIXME
-// .LIBRARY	MViewBasics
-// .HEADER	MultiView Package
-// .INCLUDE	mvl/PairMatchMultiStrength.h
-// .FILE	PairMatchMultiStrength.cxx
+// .NAME    PairMatchMultiStrength - Undocumented class FIXME
+// .LIBRARY MViewBasics
+// .HEADER  MultiView Package
+// .INCLUDE mvl/PairMatchMultiStrength.h
+// .FILE    PairMatchMultiStrength.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 16 Sep 96
 //

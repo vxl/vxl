@@ -23,8 +23,8 @@ QvReadErrorCallback QvReadError::callback_ = 0;  // mpichler, 19950713
 void
 QvReadError::post(const QvInput *in, const char *formatString ...)
 {
-    char	buf[10000];
-    va_list	ap;
+    char    buf[10000];
+    va_list ap;
 
 #if defined(SUN4) || defined(SUN4_GNU)
     va_start(ap);

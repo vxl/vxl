@@ -19,10 +19,10 @@ typedef struct {
   struct jpeg_color_deconverter pub; /* public fields */
 
   /* Private state for YCC->RGB conversion */
-  int * Cr_r_tab;		/* => table for Cr to R conversion */
-  int * Cb_b_tab;		/* => table for Cb to B conversion */
-  jpegINT32 * Cr_g_tab;		/* => table for Cr to G conversion */
-  jpegINT32 * Cb_g_tab;		/* => table for Cb to G conversion */
+  int * Cr_r_tab;               /* => table for Cr to R conversion */
+  int * Cb_b_tab;               /* => table for Cb to B conversion */
+  jpegINT32 * Cr_g_tab;         /* => table for Cr to G conversion */
+  jpegINT32 * Cb_g_tab;         /* => table for Cb to G conversion */
 } my_color_deconverter;
 
 typedef my_color_deconverter * my_cconvert_ptr;
@@ -34,9 +34,9 @@ typedef my_color_deconverter * my_cconvert_ptr;
  * YCbCr is defined per CCIR 601-1, except that Cb and Cr are
  * normalized to the range 0..MAXJSAMPLE rather than -0.5 .. 0.5.
  * The conversion equations to be implemented are therefore
- *	R = Y                + 1.40200 * Cr
- *	G = Y - 0.34414 * Cb - 0.71414 * Cr
- *	B = Y + 1.77200 * Cb
+ *      R = Y                + 1.40200 * Cr
+ *      G = Y - 0.34414 * Cb - 0.71414 * Cr
+ *      B = Y + 1.77200 * Cb
  * where Cb and Cr represent the incoming values less CENTERJSAMPLE.
  * (These numbers are derived from TIFF 6.0 section 21, dated 3-June-92.)
  *
@@ -57,9 +57,9 @@ typedef my_color_deconverter * my_cconvert_ptr;
  * together before rounding.
  */
 
-#define SCALEBITS	16	/* speediest right-shift on some machines */
-#define ONE_HALF	((jpegINT32) 1 << (SCALEBITS-1))
-#define FIX(x)		((jpegINT32) ((x) * (1L<<SCALEBITS) + 0.5))
+#define SCALEBITS       16      /* speediest right-shift on some machines */
+#define ONE_HALF        ((jpegINT32) 1 << (SCALEBITS-1))
+#define FIX(x)          ((jpegINT32) ((x) * (1L<<SCALEBITS) + 0.5))
 
 
 /*
@@ -181,7 +181,7 @@ null_convert (j_decompress_ptr cinfo,
       inptr = input_buf[ci][input_row];
       outptr = output_buf[0] + ci;
       for (count = num_cols; count > 0; count--) {
-        *outptr = *inptr++;	/* needn't bother with GETJSAMPLE() here */
+        *outptr = *inptr++;     /* needn't bother with GETJSAMPLE() here */
         outptr += num_components;
       }
     }
@@ -245,13 +245,13 @@ ycck_cmyk_convert (j_decompress_ptr cinfo,
       cb = GETJSAMPLE(inptr1[col]);
       cr = GETJSAMPLE(inptr2[col]);
       /* Range-limiting is essential due to noise introduced by DCT losses. */
-      outptr[0] = range_limit[MAXJSAMPLE - (y + Crrtab[cr])];	/* red */
-      outptr[1] = range_limit[MAXJSAMPLE - (y +			/* green */
+      outptr[0] = range_limit[MAXJSAMPLE - (y + Crrtab[cr])];   /* red */
+      outptr[1] = range_limit[MAXJSAMPLE - (y +                 /* green */
                               ((int) RIGHT_SHIFT(Cbgtab[cb] + Crgtab[cr],
                                                  SCALEBITS)))];
-      outptr[2] = range_limit[MAXJSAMPLE - (y + Cbbtab[cb])];	/* blue */
+      outptr[2] = range_limit[MAXJSAMPLE - (y + Cbbtab[cb])];   /* blue */
       /* K passes through unchanged */
-      outptr[3] = inptr3[col];	/* don't need GETJSAMPLE here */
+      outptr[3] = inptr3[col];  /* don't need GETJSAMPLE here */
       outptr += 4;
     }
   }
@@ -304,7 +304,7 @@ jinit_color_deconverter (j_decompress_ptr cinfo)
       ERREXIT(cinfo, JERR_BAD_J_COLORSPACE);
     break;
 
-  default:			/* JCS_UNKNOWN can be anything */
+  default:                      /* JCS_UNKNOWN can be anything */
     if (cinfo->num_components < 1)
       ERREXIT(cinfo, JERR_BAD_J_COLORSPACE);
     break;
@@ -355,7 +355,7 @@ jinit_color_deconverter (j_decompress_ptr cinfo)
     if (cinfo->out_color_space == cinfo->jpeg_color_space) {
       cinfo->out_color_components = cinfo->num_components;
       cconvert->pub.color_convert = null_convert;
-    } else			/* unsupported non-null conversion */
+    } else                      /* unsupported non-null conversion */
       ERREXIT(cinfo, JERR_CONVERSION_NOTIMPL);
     break;
   }

@@ -7,7 +7,7 @@
 //                            Niskayuna, NY 12309
 //                            All Rights Reserved
 //              Reproduction rights limited as described below.
-//                               
+//
 //      Permission to use, copy, modify, distribute, and sell this software
 //      and its documentation for any purpose is hereby granted without fee,
 //      provided that (i) the above copyright notice and this permission
@@ -17,7 +17,7 @@
 //      the specific, prior written permission of GE CRD, and (iii) any
 //      modifications are clearly marked and summarized in a change history
 //      log.
-//       
+//
 //      THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTY OF ANY KIND,
 //      EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
 //      WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
@@ -36,12 +36,11 @@
 
 //=========================== Basics ====================================
 //
-// .NAME	gevd_status_mixin
-// .HEADER GeneralUtility Package
-// .LIBRARY Basics
-// .INCLUDE	Basics/gevd_status_mixin.h
-// .FILE	gevd_status_mixin.h
-// .FILE	gevd_status_mixin.C
+// .NAME    gevd_status_mixin
+// .HEADER  gel Package
+// .LIBRARY gevd
+// .INCLUDE gevd/gevd_status_mixin.h
+// .FILE    gevd_status_mixin.cxx
 //
 // .SECTION Description
 //      This mixin adds a status word and methods to contol the status
@@ -50,8 +49,8 @@
 // good.
 //
 // Modified by:      Brian DeCleene
-// Date:	     June 17, 1991
-// Description:      Combined M&DSO status and CR&D status into a 
+// Date:             June 17, 1991
+// Description:      Combined M&DSO status and CR&D status into a
 //                   single object.
 //
 //
@@ -72,9 +71,9 @@ public:
    inline void ClearStatus(int x)       { status &= ~x; }
    inline void SetStatus(int x = 0)     { status |= x;  }
 
-   inline void SetStatusGood()		{ status = 0; }
-   inline void SetStatusBad(int c =-1)	{ status = c; }
-      
+   inline void SetStatusGood()          { status = 0; }
+   inline void SetStatusBad(int c =-1)  { status = c; }
+
    gevd_status_mixin() { ClearStatus(); }
 
 public:

@@ -34,7 +34,7 @@ public:
                 const vcl_vector< vcl_pair<float,float> > &corners1,
                 const vcl_vector< vcl_pair<float,float> > &corners2);
 
-  ~geml_matcher();
+  virtual ~geml_matcher();
 
   // Operations----------------------------------------------------------------
 

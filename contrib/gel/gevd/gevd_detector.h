@@ -161,11 +161,11 @@ public:
   // internal interfaces
   bool DoContour();
   bool DoFoldContour();
-  bool DoCorner( float angle = 10,	// smallest angle at corner
-                 float separation = 1,	// |mean1-mean2|/sigma
-                 int length = 5,	// min length to find cornersxo
-                 int cycle = 2,		// number of corners in a cycle
-                 int ndimension = 2	// number of dimension
+  bool DoCorner( float angle = 10,      // smallest angle at corner
+                 float separation = 1,  // |mean1-mean2|/sigma
+                 int length = 5,        // min length to find cornersxo
+                 int cycle = 2,         // number of corners in a cycle
+                 int ndimension = 2     // number of dimension
                  );
   bool DoStep();
   bool DoFold();

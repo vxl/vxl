@@ -3,18 +3,18 @@
 #include "QvSFBitMask.h"
 
 // Special characters when reading or writing value in ASCII
-#define OPEN_PAREN	'('
-#define CLOSE_PAREN	')'
-#define BITWISE_OR	'|'
+#define OPEN_PAREN      '('
+#define CLOSE_PAREN     ')'
+#define BITWISE_OR      '|'
 
 QV_SFIELD_SOURCE(QvSFBitMask);
 
 QvBool
 QvSFBitMask::readValue(QvInput *in)
 {
-    char	c;
-    QvName	n;
-    int		v;
+    char        c;
+    QvName      n;
+    int         v;
 
 #ifdef DEBUG
     if (enumValues == NULL) {

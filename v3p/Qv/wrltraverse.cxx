@@ -40,9 +40,6 @@
 //</file>
 
 
-
-
-
 #if defined(PMAX) || defined (HPUX9)
 enum Part { goofyPart };        // cfront confused about QvCone::Part and QvCylinder::Part
 enum Binding { goofyBinding };  // cfront confused about QvMaterialBinding/QvNormalBinding::Binding
@@ -83,11 +80,11 @@ announce(const char *className)
 }
 #define ANNOUNCE(className) announce(QV__QUOTE(className))
 
-#define DEFAULT_TRAVERSE(className)					      \
-void									      \
-className::traverse(QvState *)						      \
-{									      \
-    ANNOUNCE(className);						      \
+#define DEFAULT_TRAVERSE(className) \
+void                                \
+className::traverse(QvState *)      \
+{                                   \
+    ANNOUNCE(className);            \
 }
 
 
@@ -191,50 +188,50 @@ QvTransformSeparator::traverse(QvState *state)
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#define DO_PROPERTY(className, stackIndex)				      \
-void									      \
-className::traverse(QvState *state)					      \
-{									      \
-    ANNOUNCE(className);						      \
-    QvElement *elt = new QvElement;					      \
-    elt->data = this;							      \
-    state->addElement(QvState::stackIndex, elt);			      \
+#define DO_PROPERTY(className, stackIndex)                                    \
+void                                                                          \
+className::traverse(QvState *state)                                           \
+{                                                                             \
+    ANNOUNCE(className);                                                      \
+    QvElement *elt = new QvElement;                                           \
+    elt->data = this;                                                         \
+    state->addElement(QvState::stackIndex, elt);                              \
 }
 
-#define DO_TYPED_PROPERTY(className, stackIndex, eltType)		      \
-void									      \
-className::traverse(QvState *state)					      \
-{									      \
-    ANNOUNCE(className);						      \
-    QvElement *elt = new QvElement;					      \
-    elt->data = this;							      \
-    elt->type = QvElement::eltType;					      \
-    state->addElement(QvState::stackIndex, elt);			      \
+#define DO_TYPED_PROPERTY(className, stackIndex, eltType)                     \
+void                                                                          \
+className::traverse(QvState *state)                                           \
+{                                                                             \
+    ANNOUNCE(className);                                                      \
+    QvElement *elt = new QvElement;                                           \
+    elt->data = this;                                                         \
+    elt->type = QvElement::eltType;                                           \
+    state->addElement(QvState::stackIndex, elt);                              \
 }
 
-DO_PROPERTY(QvCoordinate3,		Coordinate3Index)
-DO_PROPERTY(QvFontStyle,		FontStyleIndex)
-DO_PROPERTY(QvMaterial,			MaterialIndex)
-DO_PROPERTY(QvMaterialBinding,		MaterialBindingIndex)
-DO_PROPERTY(QvNormal,			NormalIndex)
-DO_PROPERTY(QvNormalBinding,		NormalBindingIndex)
-DO_PROPERTY(QvShapeHints,		ShapeHintsIndex)
-DO_PROPERTY(QvTextureCoordinate2,	TextureCoordinate2Index)
-DO_PROPERTY(QvTexture2,			Texture2Index)
-DO_PROPERTY(QvTexture2Transform,	Texture2TransformationIndex)
+DO_PROPERTY(QvCoordinate3,              Coordinate3Index)
+DO_PROPERTY(QvFontStyle,                FontStyleIndex)
+DO_PROPERTY(QvMaterial,                 MaterialIndex)
+DO_PROPERTY(QvMaterialBinding,          MaterialBindingIndex)
+DO_PROPERTY(QvNormal,                   NormalIndex)
+DO_PROPERTY(QvNormalBinding,            NormalBindingIndex)
+DO_PROPERTY(QvShapeHints,               ShapeHintsIndex)
+DO_PROPERTY(QvTextureCoordinate2,       TextureCoordinate2Index)
+DO_PROPERTY(QvTexture2,                 Texture2Index)
+DO_PROPERTY(QvTexture2Transform,        Texture2TransformationIndex)
 
-DO_TYPED_PROPERTY(QvDirectionalLight,	LightIndex, DirectionalLight)
-DO_TYPED_PROPERTY(QvPointLight,		LightIndex, PointLight)
-DO_TYPED_PROPERTY(QvSpotLight,		LightIndex, SpotLight)
+DO_TYPED_PROPERTY(QvDirectionalLight,   LightIndex, DirectionalLight)
+DO_TYPED_PROPERTY(QvPointLight,         LightIndex, PointLight)
+DO_TYPED_PROPERTY(QvSpotLight,          LightIndex, SpotLight)
 
-DO_TYPED_PROPERTY(QvOrthographicCamera,	CameraIndex, OrthographicCamera)
-DO_TYPED_PROPERTY(QvPerspectiveCamera,	CameraIndex, PerspectiveCamera)
+DO_TYPED_PROPERTY(QvOrthographicCamera, CameraIndex, OrthographicCamera)
+DO_TYPED_PROPERTY(QvPerspectiveCamera,  CameraIndex, PerspectiveCamera)
 
-DO_TYPED_PROPERTY(QvTransform,	     TransformationIndex, Transform)
-DO_TYPED_PROPERTY(QvRotation,	     TransformationIndex, Rotation)
+DO_TYPED_PROPERTY(QvTransform,       TransformationIndex, Transform)
+DO_TYPED_PROPERTY(QvRotation,        TransformationIndex, Rotation)
 DO_TYPED_PROPERTY(QvMatrixTransform, TransformationIndex, MatrixTransform)
 DO_TYPED_PROPERTY(QvTranslation,     TransformationIndex, Translation)
-DO_TYPED_PROPERTY(QvScale,	     TransformationIndex, Scale)
+DO_TYPED_PROPERTY(QvScale,           TransformationIndex, Scale)
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -250,12 +247,12 @@ printProperties(QvState *state)
     printf("--------------------------------------------------------------\n");
 }
 
-#define DO_SHAPE(className)						      \
-void									      \
-className::traverse(QvState *state)					      \
-{									      \
-    ANNOUNCE(className);						      \
-    printProperties(state);						      \
+#define DO_SHAPE(className)         \
+void                                \
+className::traverse(QvState *state) \
+{                                   \
+    ANNOUNCE(className);            \
+    printProperties(state);         \
 }
 
 DO_SHAPE(QvAsciiText)

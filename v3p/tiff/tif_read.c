@@ -32,14 +32,14 @@
 #include <stdio.h>
 #include <assert.h>
 
-static	int TIFFFillStrip(TIFF*, tstrip_t);
-static	int TIFFFillTile(TIFF*, ttile_t);
-static	int TIFFStartStrip(TIFF*, tstrip_t);
-static	int TIFFStartTile(TIFF*, ttile_t);
-static	int TIFFCheckRead(TIFF*, int);
+static  int TIFFFillStrip(TIFF*, tstrip_t);
+static  int TIFFFillTile(TIFF*, ttile_t);
+static  int TIFFStartStrip(TIFF*, tstrip_t);
+static  int TIFFStartTile(TIFF*, ttile_t);
+static  int TIFFCheckRead(TIFF*, int);
 
-#define	NOSTRIP	((tstrip_t) -1)			/* undefined state */
-#define	NOTILE	((ttile_t) -1)			/* undefined state */
+#define NOSTRIP ((tstrip_t) -1)                 /* undefined state */
+#define NOTILE  ((ttile_t) -1)                  /* undefined state */
 
 /*
  * Seek to a random row+sample in a file.
@@ -50,7 +50,7 @@ TIFFSeek(TIFF* tif, uint32 row, tsample_t sample)
         register TIFFDirectory *td = &tif->tif_dir;
         tstrip_t strip;
 
-        if (row >= td->td_imagelength) {	/* out of range */
+        if (row >= td->td_imagelength) {        /* out of range */
                 TIFFError(tif->tif_name, "%lu: Row out of range, max %lu",
                     (u_long) row, (u_long) td->td_imagelength);
                 return (0);
@@ -65,7 +65,7 @@ TIFFSeek(TIFF* tif, uint32 row, tsample_t sample)
                 strip = sample*td->td_stripsperimage + row/td->td_rowsperstrip;
         } else
                 strip = row / td->td_rowsperstrip;
-        if (strip != tif->tif_curstrip) {	/* different strip, refill */
+        if (strip != tif->tif_curstrip) {       /* different strip, refill */
                 if (!TIFFFillStrip(tif, strip))
                         return (0);
         } else if (row < tif->tif_row) {

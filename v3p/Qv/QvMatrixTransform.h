@@ -10,10 +10,10 @@ class QvMatrixTransform : public QvNode
 
 public:
   // Fields
-  QvSFMatrix		matrix;		// Transformation matrix
+  QvSFMatrix       matrix; // Transformation matrix
 
   // mpichler, 19950509
-  const float	(* mat_)[4];		// pointer to matrix
+  const float (* mat_)[4]; // pointer to matrix
   // mpichler, 19951004
   matrix4D invmat_, invtranspmat3D_;
 };

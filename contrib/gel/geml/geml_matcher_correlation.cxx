@@ -74,7 +74,7 @@ vcl_vector< vcl_pair<int,int> > geml_matcher_correlation::get_matches()
   for( unsigned int i=0; i< corners1_.size(); ++i)
     {
       double bestscore= NO_SCORE;
-      double bestmatch= -1;
+      int bestmatch= -1;
 
       for( unsigned int j=0; j< corners2_.size(); ++j)
         {
@@ -102,7 +102,7 @@ vcl_vector< vcl_pair<int,int> > geml_matcher_correlation::get_matches()
   for( unsigned int i=0; i< corners2_.size(); ++i)
     {
       double bestscore= NO_SCORE;
-      double bestmatch= -1;
+      int bestmatch= -1;
 
       for( unsigned int j=0; j< corners1_.size(); ++j)
         {

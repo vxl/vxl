@@ -3,11 +3,11 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME	FMSkewComputeLinear - Linear fit for skew F matrix
-// .LIBRARY	MViewCompute
-// .HEADER	MultiView Package
-// .INCLUDE	mvl/FMSkewComputeLinear.h
-// .FILE	FMSkewComputeLinear.cxx
+// .NAME    FMSkewComputeLinear - Linear fit for skew F matrix
+// .LIBRARY MViewCompute
+// .HEADER  MultiView Package
+// .INCLUDE mvl/FMSkewComputeLinear.h
+// .FILE    FMSkewComputeLinear.cxx
 //
 // .SECTION Description
 //
@@ -37,18 +37,18 @@ class FMatrixSkew;
 
 class FMSkewComputeLinear : public FMatrixCompute {
 public:
-  // -- Initialize FMSkewComputeLinear object.  If precondition = false,
+  //: Initialize FMSkewComputeLinear object.  If precondition = false,
   // points are not conditioned prior to computation.
   FMSkewComputeLinear(bool precondition = true);
 
   // Computations--------------------------------------------------------------
-  // -- Compute a fundamental matrix for arrays of HomgPoint2D.
+  //: Compute a fundamental matrix for arrays of HomgPoint2D.
   // Return false if the calculation fails or there are fewer than eight point
   // matches in the list.
   bool compute(vcl_vector<HomgPoint2D>&, vcl_vector<HomgPoint2D>&, FMatrixSkew* F);
 
 private:
-  bool compute_preconditioned (	vcl_vector<HomgPoint2D>& points1,
+  bool compute_preconditioned ( vcl_vector<HomgPoint2D>& points1,
                                 vcl_vector<HomgPoint2D>& points2,
                                 FMatrixSkew *F);
 

@@ -9,10 +9,10 @@ class QvField;
 
 class QvDB {
   public:
-    static const char	*versionString;
+    static const char   *versionString;
 
-    static void		init();
-    static QvBool	read(QvInput *in, QvNode *&rootNode);
+    static void         init();
+    static QvBool       read(QvInput *in, QvNode *&rootNode);
 
     static int warn_ignorechar;  // mpichler, 19950712
 };

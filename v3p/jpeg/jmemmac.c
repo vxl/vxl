@@ -31,12 +31,12 @@
 #define JPEG_INTERNALS
 #include "jinclude.h"
 #include "jpeglib.h"
-#include "jmemsys.h"		/* import the system-dependent declarations */
+#include "jmemsys.h"            /* import the system-dependent declarations */
 
-#include <Memory.h>		/* we use the MacOS memory manager */
+#include <Memory.h>             /* we use the MacOS memory manager */
 
-#ifndef SEEK_SET		/* pre-ANSI systems may not define this; */
-#define SEEK_SET  0		/* if not, assume 0 is correct */
+#ifndef SEEK_SET                /* pre-ANSI systems may not define this; */
+#define SEEK_SET  0             /* if not, assume 0 is correct */
 #endif
 
 
@@ -103,7 +103,7 @@ jpeg_mem_available (j_common_ptr cinfo, long min_bytes_needed,
   slop = max_bytes_needed / 16 + 32768L;
   mem = CompactMem(max_bytes_needed + slop) - slop;
   if (mem < 0)
-    mem = 0;			/* sigh, couldn't even get the slop */
+    mem = 0;                    /* sigh, couldn't even get the slop */
   /* Don't take more than the application says we can have */
   if (mem > limit && limit > 0)
     mem = limit;

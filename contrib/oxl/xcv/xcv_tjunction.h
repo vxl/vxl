@@ -2,9 +2,9 @@
 #define xcv_tjunction_h_
 
 //--------------------------------------------------------------------------------
-// .NAME	xcv_tjunction
-// .INCLUDE	xcv/xcv_tjunction.h
-// .FILE	xcv_tjunction.cxx
+// .NAME    xcv_tjunction
+// .INCLUDE xcv/xcv_tjunction.h
+// .FILE    xcv_tjunction.cxx
 // .SECTION Author
 //   K.Y.McGaul
 // .SECTION Modifications:

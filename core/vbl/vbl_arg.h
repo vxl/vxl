@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 
-// .NAME	vbl_arg - command-line arguments
-// .LIBRARY	vbl
-// .HEADER	vxl package
-// .INCLUDE	vbl/vbl_arg.h
-// .FILE	vbl_arg.cxx
+// .NAME    vbl_arg - command-line arguments
+// .LIBRARY vbl
+// .HEADER  vxl package
+// .INCLUDE vbl/vbl_arg.h
+// .FILE    vbl_arg.cxx
 // .SECTION Keywords
 //     command-line arguments options switches getopt
 //
@@ -42,7 +42,7 @@ public:
 
   char const* option() { return option_; };
 
-  // -- Returns true if arg was set on the command line.
+  //: Returns true if arg was set on the command line.
   bool set() const { return set_; };
 
 public://protected:
@@ -119,7 +119,7 @@ public:
   //friend int  parse       VCL_NULL_TMPL_ARGS (vbl_arg<T>*, char**);
   T value_;// public so we don't have to worry about templated friends.
 
-  // -- Construct an vbl_arg<T> with command-line switch \arg{option_string}, and default
+  //: Construct an vbl_arg<T> with command-line switch \arg{option_string}, and default
   // value \arg{default_value}.  Add this argument to the global list of arguments
   // that vbl_arg_base::parse() uses when it eventually gets the command line.
 
@@ -132,7 +132,7 @@ public:
           T default_value = T())
     : vbl_arg_base(option_string,helpstring), value_(default_value) { settype(); }
 
-  // -- As above, but add the arg to the list \arg{l}, on which
+  //: As above, but add the arg to the list \arg{l}, on which
   // l.parse can be called later.
   vbl_arg(vbl_arg_info_list & l,
           char const * option_string = 0,

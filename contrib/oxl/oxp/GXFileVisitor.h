@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	GXFileVisitor
-// .LIBRARY	POX
-// .HEADER	Oxford Package
-// .INCLUDE	oxp/GXFileVisitor.h
-// .FILE	GXFileVisitor.cxx
+// .NAME    GXFileVisitor
+// .LIBRARY oxp
+// .HEADER  Oxford Package
+// .INCLUDE oxp/GXFileVisitor.h
+// .FILE    GXFileVisitor.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 21 May 99
 //

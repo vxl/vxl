@@ -3,11 +3,11 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME	FMPlanarComputeNonLinear - Nonlinear least squares planar fundamental matrix fit
-// .LIBRARY	MViewCompute
-// .HEADER	MultiView Package
-// .INCLUDE	mvl/FMPlanarComputeNonLinear.h
-// .FILE	FMPlanarComputeNonLinear.cxx
+// .NAME    FMPlanarComputeNonLinear - Nonlinear least squares planar fundamental matrix fit
+// .LIBRARY MViewCompute
+// .HEADER  MultiView Package
+// .INCLUDE mvl/FMPlanarComputeNonLinear.h
+// .FILE    FMPlanarComputeNonLinear.cxx
 //
 // .SECTION Description
 //

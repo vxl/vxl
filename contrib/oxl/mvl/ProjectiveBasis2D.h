@@ -4,12 +4,12 @@
 #pragma interface
 #endif
 //
-// .NAME	ProjectiveBasis2D - Canonical basis of 4 points
-// .LIBRARY	MViewBasics
-// .HEADER	MultiView Package
-// .INCLUDE	mvl/ProjectiveBasis2D.h
-// .FILE	ProjectiveBasis2D.cxx
-// .EXAMPLE	examples/exampleProjectiveBasis2D.cxx
+// .NAME    ProjectiveBasis2D - Canonical basis of 4 points
+// .LIBRARY MViewBasics
+// .HEADER  MultiView Package
+// .INCLUDE mvl/ProjectiveBasis2D.h
+// .FILE    ProjectiveBasis2D.cxx
+// .EXAMPLE examples/exampleProjectiveBasis2D.cxx
 //
 // .SECTION Description
 //    Compute planar homography that maps 4 points into the canonical projective basis.
@@ -50,11 +50,11 @@ public:
 
   // Data Access---------------------------------------------------------------
 
-// -- Return the planar homography that maps the points to the canonical frame.
+//: Return the planar homography that maps the points to the canonical frame.
   HMatrix2D& get_T() { return T_; }
   const vnl_double_3x3& get_T_matrix() const { return T_.get_matrix(); }
 
-// -- Were three of the four given basis points collinear ?
+//: Were three of the four given basis points collinear ?
   bool collinear() const { return collinear_; }
 
   // Data Control--------------------------------------------------------------

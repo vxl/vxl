@@ -25,7 +25,7 @@ if(la <= lb)
         while(b < bend)
                 if(*b != ' ')
                         return( ' ' - *b );
-                else	++b;
+                else    ++b;
         }
 
 else
@@ -38,7 +38,7 @@ else
         while(a < aend)
                 if(*a != ' ')
                         return(*a - ' ');
-                else	++a;
+                else    ++a;
         }
 return(0);
 }

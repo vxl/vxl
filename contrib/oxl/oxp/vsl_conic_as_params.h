@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	vsl_conic_as_params
-// .LIBRARY	POX
-// .HEADER	Oxford Package
-// .INCLUDE	oxp/vsl_conic_as_params.h
-// .FILE	vsl_conic_as_params.cxx
+// .NAME    vsl_conic_as_params
+// .LIBRARY oxp
+// .HEADER  Oxford Package
+// .INCLUDE oxp/vsl_conic_as_params.h
+// .FILE    vsl_conic_as_params.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 12 Nov 99
 //
@@ -16,7 +16,7 @@
 
 #include <vnl/vnl_vector_fixed.h>
 
-// -- 2D conic section, stored as a 6-vector [Axx Axy Ayy Ax Ay Ao]
+//: 2D conic section, stored as a 6-vector [Axx Axy Ayy Ax Ay Ao]
 struct vsl_conic_as_params : public vnl_vector_fixed<double, 6> {
   typedef vnl_vector_fixed<double, 6> base;
 

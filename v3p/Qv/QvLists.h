@@ -10,11 +10,11 @@ class QvNodeList : public QvPList {
   public:
     QvNodeList();
     ~QvNodeList() { truncate(0); }
-    void		append(QvNode *node);
-    void                insert (int where, QvNode* node);  // anuss: insert node before
-    void		remove(int which);
-    void		truncate(int start);
-    QvNode *		operator [](int i) const
+    void      append(QvNode *node);
+    void      insert (int where, QvNode* node);  // anuss: insert node before
+    void      remove(int which);
+    void      truncate(int start);
+    QvNode *  operator [](int i) const
         { return ( (QvNode *) ( (* (const QvPList *) this) [i]) ); }
 };
 

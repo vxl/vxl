@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	RadialLensCorrection
-// .LIBRARY	POX
-// .HEADER	Oxford Package
-// .INCLUDE	oxp/RadialLensCorrection.h
-// .FILE	RadialLensCorrection.cxx
+// .NAME    RadialLensCorrection
+// .LIBRARY oxp
+// .HEADER  Oxford Package
+// .INCLUDE oxp/RadialLensCorrection.h
+// .FILE    RadialLensCorrection.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 13 Jul 98
 //

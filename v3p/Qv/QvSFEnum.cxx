@@ -17,7 +17,7 @@ QvSFEnum::~QvSFEnum()
 QvBool
 QvSFEnum::findEnumValue(const QvName &name, int &val) const
 {
-    int	i;
+    int i;
 
     // Look through names table for one that matches
     for (i = 0; i < numEnums; i++) {

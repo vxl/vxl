@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	MapInverter
-// .LIBRARY	POX
-// .HEADER	Oxford Package
-// .INCLUDE	oxp/MapInverter.h
-// .FILE	MapInverter.cxx
+// .NAME    MapInverter
+// .LIBRARY oxp
+// .HEADER  Oxford Package
+// .INCLUDE oxp/MapInverter.h
+// .FILE    MapInverter.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 13 Jul 98
 //

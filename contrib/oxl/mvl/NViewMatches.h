@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	NViewMatches - Multiple view matches with wildcards
-// .LIBRARY	MViewBasics
-// .HEADER	MultiView Package
-// .INCLUDE	mvl/NViewMatches.h
-// .FILE	NViewMatches.cxx
+// .NAME    NViewMatches - Multiple view matches with wildcards
+// .LIBRARY MViewBasics
+// .HEADER  MultiView Package
+// .INCLUDE mvl/NViewMatches.h
+// .FILE    NViewMatches.cxx
 //
 // .SECTION Description
 //

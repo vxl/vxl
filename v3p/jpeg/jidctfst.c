@@ -78,7 +78,7 @@
 #define PASS1_BITS  2
 #else
 #define CONST_BITS  8
-#define PASS1_BITS  1		/* lose a little precision to avoid overflow */
+#define PASS1_BITS  1 /* lose a little precision to avoid overflow */
 #endif
 
 /* Some C compilers fail to reduce "FIX(constant)" at compile time, thus
@@ -89,10 +89,10 @@
  */
 
 #if CONST_BITS == 8
-#define FIX_1_082392200  ((jpegINT32)  277)		/* FIX(1.082392200) */
-#define FIX_1_414213562  ((jpegINT32)  362)		/* FIX(1.414213562) */
-#define FIX_1_847759065  ((jpegINT32)  473)		/* FIX(1.847759065) */
-#define FIX_2_613125930  ((jpegINT32)  669)		/* FIX(2.613125930) */
+#define FIX_1_082392200  ((jpegINT32)  277) /* FIX(1.082392200) */
+#define FIX_1_414213562  ((jpegINT32)  362) /* FIX(1.414213562) */
+#define FIX_1_847759065  ((jpegINT32)  473) /* FIX(1.847759065) */
+#define FIX_2_613125930  ((jpegINT32)  669) /* FIX(2.613125930) */
 #else
 #define FIX_1_082392200  FIX(1.082392200)
 #define FIX_1_414213562  FIX(1.414213562)
@@ -138,11 +138,11 @@
  */
 
 #ifdef RIGHT_SHIFT_IS_UNSIGNED
-#define ISHIFT_TEMPS	DCTELEM ishift_temp;
+#define ISHIFT_TEMPS DCTELEM ishift_temp;
 #if BITS_IN_JSAMPLE == 8
-#define DCTELEMBITS  16		/* DCTELEM may be 16 or 32 bits */
+#define DCTELEMBITS  16 /* DCTELEM may be 16 or 32 bits */
 #else
-#define DCTELEMBITS  32		/* DCTELEM must be 32 bits */
+#define DCTELEMBITS  32 /* DCTELEM must be 32 bits */
 #endif
 #define IRIGHT_SHIFT(x,shft)  \
     ((ishift_temp = (x)) < 0 ? \
@@ -150,7 +150,7 @@
      (ishift_temp >> (shft)))
 #else
 #define ISHIFT_TEMPS
-#define IRIGHT_SHIFT(x,shft)	((x) >> (shft))
+#define IRIGHT_SHIFT(x,shft) ((x) >> (shft))
 #endif
 
 #ifdef USE_ACCURATE_ROUNDING
@@ -178,9 +178,9 @@ jpeg_idct_ifast (j_decompress_ptr cinfo, jpeg_component_info * compptr,
   JSAMPROW outptr;
   JSAMPLE *range_limit = IDCT_range_limit(cinfo);
   int ctr;
-  int workspace[DCTSIZE2];	/* buffers data between passes */
-  SHIFT_TEMPS			/* for DESCALE */
-  ISHIFT_TEMPS			/* for IDESCALE */
+  int workspace[DCTSIZE2];      /* buffers data between passes */
+  SHIFT_TEMPS                   /* for DESCALE */
+  ISHIFT_TEMPS                  /* for IDESCALE */
 
   /* Pass 1: process columns from input, store into work array. */
 
@@ -212,7 +212,7 @@ jpeg_idct_ifast (j_decompress_ptr cinfo, jpeg_component_info * compptr,
       wsptr[DCTSIZE*6] = dcval;
       wsptr[DCTSIZE*7] = dcval;
 
-      inptr++;			/* advance pointers to next column */
+      inptr++; /* advance pointers to next column */
       quantptr++;
       wsptr++;
       continue;
@@ -225,13 +225,13 @@ jpeg_idct_ifast (j_decompress_ptr cinfo, jpeg_component_info * compptr,
     tmp2 = DEQUANTIZE(inptr[DCTSIZE*4], quantptr[DCTSIZE*4]);
     tmp3 = DEQUANTIZE(inptr[DCTSIZE*6], quantptr[DCTSIZE*6]);
 
-    tmp10 = tmp0 + tmp2;	/* phase 3 */
+    tmp10 = tmp0 + tmp2;        /* phase 3 */
     tmp11 = tmp0 - tmp2;
 
-    tmp13 = tmp1 + tmp3;	/* phases 5-3 */
+    tmp13 = tmp1 + tmp3;        /* phases 5-3 */
     tmp12 = MULTIPLY(tmp1 - tmp3, FIX_1_414213562) - tmp13; /* 2*c4 */
 
-    tmp0 = tmp10 + tmp13;	/* phase 2 */
+    tmp0 = tmp10 + tmp13;       /* phase 2 */
     tmp3 = tmp10 - tmp13;
     tmp1 = tmp11 + tmp12;
     tmp2 = tmp11 - tmp12;
@@ -243,19 +243,19 @@ jpeg_idct_ifast (j_decompress_ptr cinfo, jpeg_component_info * compptr,
     tmp6 = DEQUANTIZE(inptr[DCTSIZE*5], quantptr[DCTSIZE*5]);
     tmp7 = DEQUANTIZE(inptr[DCTSIZE*7], quantptr[DCTSIZE*7]);
 
-    z13 = tmp6 + tmp5;		/* phase 6 */
+    z13 = tmp6 + tmp5;          /* phase 6 */
     z10 = tmp6 - tmp5;
     z11 = tmp4 + tmp7;
     z12 = tmp4 - tmp7;
 
-    tmp7 = z11 + z13;		/* phase 5 */
+    tmp7 = z11 + z13;           /* phase 5 */
     tmp11 = MULTIPLY(z11 - z13, FIX_1_414213562); /* 2*c4 */
 
     z5 = MULTIPLY(z10 + z12, FIX_1_847759065); /* 2*c2 */
     tmp10 = MULTIPLY(z12, FIX_1_082392200) - z5; /* 2*(c2-c6) */
     tmp12 = MULTIPLY(z10, - FIX_2_613125930) + z5; /* -2*(c2+c6) */
 
-    tmp6 = tmp12 - tmp7;	/* phase 2 */
+    tmp6 = tmp12 - tmp7;        /* phase 2 */
     tmp5 = tmp11 - tmp6;
     tmp4 = tmp10 + tmp5;
 
@@ -268,7 +268,7 @@ jpeg_idct_ifast (j_decompress_ptr cinfo, jpeg_component_info * compptr,
     wsptr[DCTSIZE*4] = (int) (tmp3 + tmp4);
     wsptr[DCTSIZE*3] = (int) (tmp3 - tmp4);
 
-    inptr++;			/* advance pointers to next column */
+    inptr++; /* advance pointers to next column */
     quantptr++;
     wsptr++;
   }
@@ -304,7 +304,7 @@ jpeg_idct_ifast (j_decompress_ptr cinfo, jpeg_component_info * compptr,
       outptr[6] = dcval;
       outptr[7] = dcval;
 
-      wsptr += DCTSIZE;		/* advance pointer to next row */
+      wsptr += DCTSIZE; /* advance pointer to next row */
       continue;
     }
 #endif
@@ -330,14 +330,14 @@ jpeg_idct_ifast (j_decompress_ptr cinfo, jpeg_component_info * compptr,
     z11 = (DCTELEM) wsptr[1] + (DCTELEM) wsptr[7];
     z12 = (DCTELEM) wsptr[1] - (DCTELEM) wsptr[7];
 
-    tmp7 = z11 + z13;		/* phase 5 */
+    tmp7 = z11 + z13;           /* phase 5 */
     tmp11 = MULTIPLY(z11 - z13, FIX_1_414213562); /* 2*c4 */
 
     z5 = MULTIPLY(z10 + z12, FIX_1_847759065); /* 2*c2 */
     tmp10 = MULTIPLY(z12, FIX_1_082392200) - z5; /* 2*(c2-c6) */
     tmp12 = MULTIPLY(z10, - FIX_2_613125930) + z5; /* -2*(c2+c6) */
 
-    tmp6 = tmp12 - tmp7;	/* phase 2 */
+    tmp6 = tmp12 - tmp7;        /* phase 2 */
     tmp5 = tmp11 - tmp6;
     tmp4 = tmp10 + tmp5;
 
@@ -360,7 +360,7 @@ jpeg_idct_ifast (j_decompress_ptr cinfo, jpeg_component_info * compptr,
     outptr[3] = range_limit[IDESCALE(tmp3 - tmp4, PASS1_BITS+3)
                             & RANGE_MASK];
 
-    wsptr += DCTSIZE;		/* advance pointer to next row */
+    wsptr += DCTSIZE; /* advance pointer to next row */
   }
 }
 

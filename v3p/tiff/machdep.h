@@ -30,9 +30,9 @@
  *   o byte ordering
  *
  * NB, there are lots of assumptions here:
- *   - 32-bit natural integers	(sign extension code)
- *   - native float is 4 bytes	(floating point conversion)
- *   - native double is 8 bytes	(floating point conversion)
+ *   - 32-bit natural integers  (sign extension code)
+ *   - native float is 4 bytes  (floating point conversion)
+ *   - native double is 8 bytes (floating point conversion)
  */
 
 #if defined(sun) || defined(sparc) || defined(stellar) || defined(MIPSEB) || defined(hpux) || defined(apollo) || defined(NeXT) || defined(_IBMR2)
@@ -152,8 +152,8 @@ typedef struct {
 }
 #define IEEEFLOAT2NATIVE(fp) { \
     float_t t; int v = (fp)->ieee.exp; \
-    if (v) v += -127 + 129;		/* alter bias of exponent */\
-    t.native.exp = v;			/* implicit truncation of exponent */\
+    if (v) v += -127 + 129;             /* alter bias of exponent */\
+    t.native.exp = v;                   /* implicit truncation of exponent */\
     t.native.sign = (fp)->ieee.sign; \
     v = (fp)->ieee.mant; \
     t.native.mant1 = v >> 16; \
@@ -162,8 +162,8 @@ typedef struct {
 }
 #define IEEEDOUBLE2NATIVE(dp) { \
     double_t t; int v = (dp)->ieee.exp; \
-    if (v) v += -1023 + 129;		/* if can alter bias of exponent */\
-    t.native.exp = v;			/* implicit truncation of exponent */\
+    if (v) v += -1023 + 129;            /* if can alter bias of exponent */\
+    t.native.exp = v;                   /* implicit truncation of exponent */\
     v = (dp)->ieee.mant; \
     t.native.sign = (dp)->ieee.sign; \
     t.native.mant1 = v >> 16; \
@@ -185,72 +185,72 @@ typedef struct {
 typedef struct ieeedouble {
 #if BIGENDIAN == 1
 #if !defined(_IBMR2)
-        unsigned	sign:1;
-        unsigned	exp:11;
-        unsigned long	mant:20;
-        unsigned	mant2;
+        unsigned        sign:1;
+        unsigned        exp:11;
+        unsigned long   mant:20;
+        unsigned        mant2;
 #else /* _IBMR2 */
-        unsigned	sign:1;
-        unsigned	exp:11;
-        unsigned	mant:20;
-        unsigned	mant2;
+        unsigned        sign:1;
+        unsigned        exp:11;
+        unsigned        mant:20;
+        unsigned        mant2;
 #endif /* _IBMR2 */
 #else
 #if !defined(vax)
-#ifdef INT_16_BIT	/* MSDOS C compilers */
-        unsigned long	mant2;
-        unsigned long	mant:20;
-        unsigned long	exp:11;
-        unsigned long	sign:1;
+#ifdef INT_16_BIT       /* MSDOS C compilers */
+        unsigned long   mant2;
+        unsigned long   mant:20;
+        unsigned long   exp:11;
+        unsigned long   sign:1;
 #else /* 32 bit ints */
-        unsigned	mant2;
-        unsigned long	mant:20;
-        unsigned	exp:11;
-        unsigned	sign:1;
+        unsigned        mant2;
+        unsigned long   mant:20;
+        unsigned        exp:11;
+        unsigned        sign:1;
 #endif /* 32 bit ints */
 #else
-        unsigned long	mant:20;
-        unsigned	exp:11;
-        unsigned	sign:1;
-        unsigned	mant2;
+        unsigned long   mant:20;
+        unsigned        exp:11;
+        unsigned        sign:1;
+        unsigned        mant2;
 #endif /* !vax */
 #endif
 } ieeedouble;
 typedef struct ieeefloat {
 #if BIGENDIAN == 1
 #if !defined(_IBMR2)
-        unsigned	sign:1;
-        unsigned	exp:8;
-        unsigned long	mant:23;
+        unsigned        sign:1;
+        unsigned        exp:8;
+        unsigned long   mant:23;
 #else /* _IBMR2 */
-        unsigned	sign:1;
-        unsigned	exp:8;
-        unsigned	mant:23;
+        unsigned        sign:1;
+        unsigned        exp:8;
+        unsigned        mant:23;
 #endif /* _IBMR2 */
 #else
-#ifdef INT_16_BIT	/* MSDOS C compilers */
-        unsigned long	mant:23;
-        unsigned long	exp:8;
-        unsigned long	sign:1;
+#ifdef INT_16_BIT       /* MSDOS C compilers */
+        unsigned long   mant:23;
+        unsigned long   exp:8;
+        unsigned long   sign:1;
 #else /* 32 bit ints */
-        unsigned long	mant:23;
-        unsigned	exp:8;
-        unsigned	sign:1;
+        unsigned long   mant:23;
+        unsigned        exp:8;
+        unsigned        sign:1;
 #endif /* 32 bit ints */
 #endif
 } ieeefloat;
 
 typedef union {
-        ieeedouble	ieee;
-        nativedouble	native;
-        char		b[8];
-        double		d;
+        ieeedouble      ieee;
+        nativedouble    native;
+        char            b[8];
+        double          d;
 } double_t;
 
 typedef union {
-        ieeefloat	ieee;
-        nativefloat	native;
-        char		b[4];
-        float		f;
+        ieeefloat       ieee;
+        nativefloat     native;
+        char            b[4];
+        float           f;
 } float_t;
 #endif /* _MACHDEP_ */

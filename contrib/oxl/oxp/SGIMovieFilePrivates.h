@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	SGIMovieFilePrivates - Undocumented
-// .LIBRARY	POX
-// .HEADER	Oxford Package
-// .INCLUDE	oxp/SGIMovieFilePrivates.h
-// .FILE	SGIMovieFilePrivates.cxx
+// .NAME    SGIMovieFilePrivates - Undocumented
+// .LIBRARY oxp
+// .HEADER  Oxford Package
+// .INCLUDE oxp/SGIMovieFilePrivates.h
+// .FILE    SGIMovieFilePrivates.cxx
 //
 // .SECTION Description
 //    SGIMovieFilePrivates is deliberately undocumented.
@@ -18,8 +18,8 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_functional.h>	//vxl_filter
-#include <vcl_utility.h>	//vxl_filter
+#include <vcl_functional.h> //vxl_filter
+#include <vcl_utility.h> //vxl_filter
 #include <vcl_string.h>
 #include <vcl_vector.h>
 #include <vcl_map.h>

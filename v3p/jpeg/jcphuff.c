@@ -30,24 +30,24 @@ typedef struct {
   /* Bit-level coding status.
    * next_output_byte/free_in_buffer are local copies of cinfo->dest fields.
    */
-  JOCTET * next_output_byte;	/* => next byte to write in buffer */
-  size_t free_in_buffer;	/* # of byte spaces remaining in buffer */
-  jpegINT32 put_buffer;		/* current bit-accumulation buffer */
-  int put_bits;			/* # of bits now in it */
-  j_compress_ptr cinfo;		/* link to cinfo (needed for dump_buffer) */
+  JOCTET * next_output_byte;    /* => next byte to write in buffer */
+  size_t free_in_buffer;        /* # of byte spaces remaining in buffer */
+  jpegINT32 put_buffer;         /* current bit-accumulation buffer */
+  int put_bits;                 /* # of bits now in it */
+  j_compress_ptr cinfo;         /* link to cinfo (needed for dump_buffer) */
 
   /* Coding status for DC components */
   int last_dc_val[MAX_COMPS_IN_SCAN]; /* last DC coef for each component */
 
   /* Coding status for AC components */
-  int ac_tbl_no;		/* the table number of the single component */
-  unsigned int EOBRUN;		/* run length of EOBs */
-  unsigned int BE;		/* # of buffered correction bits before MCU */
-  char * bit_buffer;		/* buffer for correction bits (1 per char) */
+  int ac_tbl_no;                /* the table number of the single component */
+  unsigned int EOBRUN;          /* run length of EOBs */
+  unsigned int BE;              /* # of buffered correction bits before MCU */
+  char * bit_buffer;            /* buffer for correction bits (1 per char) */
   /* packing correction bits tightly would save some space but cost time... */
 
-  unsigned int restarts_to_go;	/* MCUs left in this restart interval */
-  int next_restart_num;		/* next restart number to write (0-7) */
+  unsigned int restarts_to_go;  /* MCUs left in this restart interval */
+  int next_restart_num;         /* next restart number to write (0-7) */
 
   /* Pointers to derived tables (these workspaces have image lifespan).
    * Since any one scan codes only DC or only AC, we only need one set
@@ -67,7 +67,7 @@ typedef phuff_entropy_encoder * phuff_entropy_ptr;
  * The minimum safe size is 64 bits.
  */
 
-#define MAX_CORR_BITS  1000	/* Max # of correction bits I can buffer */
+#define MAX_CORR_BITS  1000     /* Max # of correction bits I can buffer */
 
 /* IRIGHT_SHIFT is like RIGHT_SHIFT, but works on int rather than jpegINT32.
  * We assume that int right shift is unsigned if jpegINT32 right shift is,
@@ -75,14 +75,14 @@ typedef phuff_entropy_encoder * phuff_entropy_ptr;
  */
 
 #ifdef RIGHT_SHIFT_IS_UNSIGNED
-#define ISHIFT_TEMPS	int ishift_temp;
+#define ISHIFT_TEMPS    int ishift_temp;
 #define IRIGHT_SHIFT(x,shft)  \
         ((ishift_temp = (x)) < 0 ? \
          (ishift_temp >> (shft)) | ((~0) << (16-(shft))) : \
          (ishift_temp >> (shft)))
 #else
 #define ISHIFT_TEMPS
-#define IRIGHT_SHIFT(x,shft)	((x) >> (shft))
+#define IRIGHT_SHIFT(x,shft)    ((x) >> (shft))
 #endif
 
 /* Forward declarations */
@@ -150,7 +150,7 @@ start_pass_phuff (j_compress_ptr cinfo, boolean gather_statistics)
     /* Make sure requested tables are present */
     /* (In gather mode, tables need not be allocated yet) */
     if (is_DC_band) {
-      if (cinfo->Ah != 0)	/* DC refinement needs no table */
+      if (cinfo->Ah != 0)       /* DC refinement needs no table */
         continue;
       tbl = compptr->dc_tbl_no;
       if (tbl < 0 || tbl >= NUM_HUFF_TBLS ||
@@ -246,11 +246,11 @@ emit_bits (phuff_entropy_ptr entropy, unsigned int code, int size)
     ERREXIT(entropy->cinfo, JERR_HUFF_MISSING_CODE);
 
   if (entropy->gather_statistics)
-    return;			/* do nothing if we're only getting stats */
+    return;                     /* do nothing if we're only getting stats */
 
   put_buffer &= (((jpegINT32) 1)<<size) - 1; /* mask off any extra bits in code */
 
-  put_bits += size;		/* new number of bits in buffer */
+  put_bits += size;             /* new number of bits in buffer */
 
   put_buffer <<= 24 - put_bits; /* align incoming bits */
 
@@ -260,7 +260,7 @@ emit_bits (phuff_entropy_ptr entropy, unsigned int code, int size)
     int c = (int) ((put_buffer >> 16) & 0xFF);
 
     emit_byte(entropy, c);
-    if (c == 0xFF) {		/* need to stuff a zero byte? */
+    if (c == 0xFF) {            /* need to stuff a zero byte? */
       emit_byte(entropy, 0);
     }
     put_buffer <<= 8;
@@ -309,7 +309,7 @@ emit_buffered_bits (phuff_entropy_ptr entropy, char * bufstart,
                     unsigned int nbits)
 {
   if (entropy->gather_statistics)
-    return;			/* no real work */
+    return;                     /* no real work */
 
   while (nbits > 0) {
     emit_bits(entropy, (unsigned int) (*bufstart), 1);
@@ -328,7 +328,7 @@ emit_eobrun (phuff_entropy_ptr entropy)
 {
   register int temp, nbits;
 
-  if (entropy->EOBRUN > 0) {	/* if there is any pending EOBRUN */
+  if (entropy->EOBRUN > 0) {    /* if there is any pending EOBRUN */
     temp = entropy->EOBRUN;
     nbits = 0;
     while ((temp >>= 1))
@@ -419,7 +419,7 @@ encode_mcu_DC_first (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
     /* Encode the DC coefficient difference per section G.1.2.1 */
     temp2 = temp;
     if (temp < 0) {
-      temp = -temp;		/* temp is abs value of input */
+      temp = -temp;             /* temp is abs value of input */
       /* For a negative input, want temp2 = bitwise complement of abs(input) */
       /* This code assumes we are on a two's complement machine */
       temp2--;
@@ -437,7 +437,7 @@ encode_mcu_DC_first (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
 
     /* Emit that number of bits of the value, if positive, */
     /* or the complement of its magnitude, if negative. */
-    if (nbits)			/* emit_bits rejects calls with size 0 */
+    if (nbits)                  /* emit_bits rejects calls with size 0 */
       emit_bits(entropy, (unsigned int) temp2, nbits);
   }
 
@@ -487,7 +487,7 @@ encode_mcu_AC_first (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
 
   /* Encode the AC coefficients per section G.1.2.2, fig. G.3 */
 
-  r = 0;			/* r = run length of zeros */
+  r = 0;                        /* r = run length of zeros */
 
   for (k = cinfo->Ss; k <= Se; k++) {
     if ((temp = (*block)[jpeg_natural_order[k]]) == 0) {
@@ -500,12 +500,12 @@ encode_mcu_AC_first (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
      * interwoven with finding the abs value (temp) and output bits (temp2).
      */
     if (temp < 0) {
-      temp = -temp;		/* temp is abs value of input */
-      temp >>= Al;		/* apply the point transform */
+      temp = -temp;             /* temp is abs value of input */
+      temp >>= Al;              /* apply the point transform */
       /* For a negative coef, want temp2 = bitwise complement of abs(coef) */
       temp2 = ~temp;
     } else {
-      temp >>= Al;		/* apply the point transform */
+      temp >>= Al;              /* apply the point transform */
       temp2 = temp;
     }
     /* Watch out for case that nonzero coef is zero after point transform */
@@ -524,7 +524,7 @@ encode_mcu_AC_first (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
     }
 
     /* Find the number of bits needed for the magnitude of the coefficient */
-    nbits = 1;			/* there must be at least one 1 bit */
+    nbits = 1;                  /* there must be at least one 1 bit */
     while ((temp >>= 1))
       nbits++;
 
@@ -535,13 +535,13 @@ encode_mcu_AC_first (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
     /* or the complement of its magnitude, if negative. */
     emit_bits(entropy, (unsigned int) temp2, nbits);
 
-    r = 0;			/* reset zero run length */
+    r = 0;                      /* reset zero run length */
   }
 
-  if (r > 0) {			/* If there are trailing zeroes, */
-    entropy->EOBRUN++;		/* count an EOB */
+  if (r > 0) {                  /* If there are trailing zeroes, */
+    entropy->EOBRUN++;          /* count an EOB */
     if (entropy->EOBRUN == 0x7FFF)
-      emit_eobrun(entropy);	/* force it out to avoid overflow */
+      emit_eobrun(entropy);     /* force it out to avoid overflow */
   }
 
   cinfo->dest->next_output_byte = entropy->next_output_byte;
@@ -650,17 +650,17 @@ encode_mcu_AC_refine (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
      * in C, we shift after obtaining the absolute value.
      */
     if (temp < 0)
-      temp = -temp;		/* temp is abs value of input */
-    temp >>= Al;		/* apply the point transform */
-    absvalues[k] = temp;	/* save abs value for main pass */
+      temp = -temp;             /* temp is abs value of input */
+    temp >>= Al;                /* apply the point transform */
+    absvalues[k] = temp;        /* save abs value for main pass */
     if (temp == 1)
-      EOB = k;			/* EOB = index of last newly-nonzero coef */
+      EOB = k;                  /* EOB = index of last newly-nonzero coef */
   }
 
   /* Encode the AC coefficients per section G.1.2.3, fig. G.7 */
 
-  r = 0;			/* r = run length of zeros */
-  BR = 0;			/* BR = count of buffered bits added now */
+  r = 0;                        /* r = run length of zeros */
+  BR = 0;                       /* BR = count of buffered bits added now */
   BR_buffer = entropy->bit_buffer + entropy->BE; /* Append bits to buffer */
 
   for (k = cinfo->Ss; k <= Se; k++) {
@@ -707,12 +707,12 @@ encode_mcu_AC_refine (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
     emit_buffered_bits(entropy, BR_buffer, BR);
     BR_buffer = entropy->bit_buffer; /* BE bits are gone now */
     BR = 0;
-    r = 0;			/* reset zero run length */
+    r = 0;                      /* reset zero run length */
   }
 
-  if (r > 0 || BR > 0) {	/* If there are trailing zeroes, */
-    entropy->EOBRUN++;		/* count an EOB */
-    entropy->BE += BR;		/* concat my correction bits to older ones */
+  if (r > 0 || BR > 0) {        /* If there are trailing zeroes, */
+    entropy->EOBRUN++;          /* count an EOB */
+    entropy->BE += BR;          /* concat my correction bits to older ones */
     /* We force out the EOB if we risk either:
      * 1. overflow of the EOB counter;
      * 2. overflow of the correction bit buffer during the next MCU.
@@ -786,7 +786,7 @@ finish_pass_gather_phuff (j_compress_ptr cinfo)
   for (ci = 0; ci < cinfo->comps_in_scan; ci++) {
     compptr = cinfo->cur_comp_info[ci];
     if (is_DC_band) {
-      if (cinfo->Ah != 0)	/* DC refinement needs no table */
+      if (cinfo->Ah != 0)       /* DC refinement needs no table */
         continue;
       tbl = compptr->dc_tbl_no;
     } else {
@@ -827,7 +827,7 @@ jinit_phuff_encoder (j_compress_ptr cinfo)
     entropy->derived_tbls[i] = NULL;
     entropy->count_ptrs[i] = NULL;
   }
-  entropy->bit_buffer = NULL;	/* needed only in AC refinement scan */
+  entropy->bit_buffer = NULL;   /* needed only in AC refinement scan */
 }
 
 #endif /* C_PROGRESSIVE_SUPPORTED */

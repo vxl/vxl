@@ -48,13 +48,13 @@
  * On some machines it may be worthwhile to use _setjmp or sigsetjmp
  * in place of plain setjmp.  These macros will make it easier.
  */
-#define SETJMP(jbuf)		setjmp(jbuf)
-#define LONGJMP(jbuf,code)	longjmp(jbuf,code)
-#define JMP_BUF			jmp_buf
+#define SETJMP(jbuf)            setjmp(jbuf)
+#define LONGJMP(jbuf,code)      longjmp(jbuf,code)
+#define JMP_BUF                 jmp_buf
 
 typedef struct jpeg_destination_mgr jpeg_destination_mgr;
 typedef struct jpeg_source_mgr jpeg_source_mgr;
-typedef	struct jpeg_error_mgr jpeg_error_mgr;
+typedef struct jpeg_error_mgr jpeg_error_mgr;
 
 /*
  * State block for each open TIFF file using
@@ -69,63 +69,63 @@ typedef	struct jpeg_error_mgr jpeg_error_mgr;
  *     so we can safely cast JPEGState* -> jpeg_xxx_struct*
  *     and vice versa!
  */
-typedef	struct {
+typedef struct {
         union {
                 struct jpeg_compress_struct c;
                 struct jpeg_decompress_struct d;
                 struct jpeg_common_struct comm;
-        } cinfo;			/* NB: must be first */
-        jpeg_error_mgr	err;		/* libjpeg error manager */
-        JMP_BUF		exit_jmpbuf;	/* for catching libjpeg failures */
+        } cinfo;                        /* NB: must be first */
+        jpeg_error_mgr  err;            /* libjpeg error manager */
+        JMP_BUF         exit_jmpbuf;    /* for catching libjpeg failures */
         /*
          * The following two members could be a union, but
          * they're small enough that it's not worth the effort.
          */
-        jpeg_destination_mgr dest;	/* data dest for compression */
-        jpeg_source_mgr	src;		/* data source for decompression */
+        jpeg_destination_mgr dest;      /* data dest for compression */
+        jpeg_source_mgr src;            /* data source for decompression */
                                         /* private state */
-        TIFF*		tif;		/* back link needed by some code */
-        uint16		photometric;	/* copy of PhotometricInterpretation */
-        uint16		h_sampling;	/* luminance sampling factors */
-        uint16		v_sampling;
-        tsize_t		bytesperline;	/* decompressed bytes per scanline */
+        TIFF*           tif;            /* back link needed by some code */
+        uint16          photometric;    /* copy of PhotometricInterpretation */
+        uint16          h_sampling;     /* luminance sampling factors */
+        uint16          v_sampling;
+        tsize_t         bytesperline;   /* decompressed bytes per scanline */
         /* pointers to intermediate buffers when processing downsampled data */
-        JSAMPARRAY	ds_buffer[MAX_COMPONENTS];
-        int		scancount;	/* number of "scanlines" accumulated */
-        int		samplesperclump;
+        JSAMPARRAY      ds_buffer[MAX_COMPONENTS];
+        int             scancount;      /* number of "scanlines" accumulated */
+        int             samplesperclump;
 
-        TIFFVGetMethod	vgetparent;	/* super-class method */
-        TIFFVSetMethod	vsetparent;	/* super-class method */
-        TIFFStripMethod	defsparent;	/* super-class method */
-        TIFFTileMethod	deftparent;	/* super-class method */
+        TIFFVGetMethod  vgetparent;     /* super-class method */
+        TIFFVSetMethod  vsetparent;     /* super-class method */
+        TIFFStripMethod defsparent;     /* super-class method */
+        TIFFTileMethod  deftparent;     /* super-class method */
                                         /* pseudo-tag fields */
-        void*		jpegtables;	/* JPEGTables tag value, or NULL */
-        uint32		jpegtables_length; /* number of bytes in same */
-        int		jpegquality;	/* Compression quality level */
-        int		jpegcolormode;	/* Auto RGB<=>YCbCr convert? */
-        int		jpegtablesmode;	/* What to put in JPEGTables */
+        void*           jpegtables;     /* JPEGTables tag value, or NULL */
+        uint32          jpegtables_length; /* number of bytes in same */
+        int             jpegquality;    /* Compression quality level */
+        int             jpegcolormode;  /* Auto RGB<=>YCbCr convert? */
+        int             jpegtablesmode; /* What to put in JPEGTables */
 } JPEGState;
 
-#define	JState(tif)	((JPEGState*)(tif)->tif_data)
+#define JState(tif)     ((JPEGState*)(tif)->tif_data)
 
-static	int JPEGDecode(TIFF*, tidata_t, tsize_t, tsample_t);
-static	int JPEGDecodeRaw(TIFF*, tidata_t, tsize_t, tsample_t);
-static	int JPEGEncode(TIFF*, tidata_t, tsize_t, tsample_t);
-static	int JPEGEncodeRaw(TIFF*, tidata_t, tsize_t, tsample_t);
+static  int JPEGDecode(TIFF*, tidata_t, tsize_t, tsample_t);
+static  int JPEGDecodeRaw(TIFF*, tidata_t, tsize_t, tsample_t);
+static  int JPEGEncode(TIFF*, tidata_t, tsize_t, tsample_t);
+static  int JPEGEncodeRaw(TIFF*, tidata_t, tsize_t, tsample_t);
 
-#define	FIELD_JPEGTABLES	(FIELD_CODEC+0)
+#define FIELD_JPEGTABLES        (FIELD_CODEC+0)
 
 static const TIFFFieldInfo jpegFieldInfo[] = {
-    { TIFFTAG_JPEGTABLES,	 -1,-1,	TIFF_UNDEFINED,	FIELD_JPEGTABLES,
-      FALSE,	TRUE,	"JPEGTables" },
-    { TIFFTAG_JPEGQUALITY,	 0, 0,	TIFF_ANY,	FIELD_PSEUDO,
-      TRUE,	FALSE,	"" },
-    { TIFFTAG_JPEGCOLORMODE,	 0, 0,	TIFF_ANY,	FIELD_PSEUDO,
-      FALSE,	FALSE,	"" },
-    { TIFFTAG_JPEGTABLESMODE,	 0, 0,	TIFF_ANY,	FIELD_PSEUDO,
-      FALSE,	FALSE,	"" },
+    { TIFFTAG_JPEGTABLES,        -1,-1, TIFF_UNDEFINED, FIELD_JPEGTABLES,
+      FALSE,    TRUE,   "JPEGTables" },
+    { TIFFTAG_JPEGQUALITY,       0, 0,  TIFF_ANY,       FIELD_PSEUDO,
+      TRUE,     FALSE,  "" },
+    { TIFFTAG_JPEGCOLORMODE,     0, 0,  TIFF_ANY,       FIELD_PSEUDO,
+      FALSE,    FALSE,  "" },
+    { TIFFTAG_JPEGTABLESMODE,    0, 0,  TIFF_ANY,       FIELD_PSEUDO,
+      FALSE,    FALSE,  "" },
 };
-#define	N(a)	(sizeof (a) / sizeof (a[0]))
+#define N(a)    (sizeof (a) / sizeof (a[0]))
 
 /*
  * libjpeg interface layer.
@@ -144,13 +144,13 @@ static const TIFFFieldInfo jpegFieldInfo[] = {
 static void
 TIFFjpeg_error_exit(j_common_ptr cinfo)
 {
-        JPEGState *sp = (JPEGState *) cinfo;	/* NB: cinfo assumed first */
+        JPEGState *sp = (JPEGState *) cinfo;    /* NB: cinfo assumed first */
         char buffer[JMSG_LENGTH_MAX];
 
         (*cinfo->err->format_message) (cinfo, buffer);
-        TIFFError("JPEGLib", buffer);		/* display the error message */
-        jpeg_abort(cinfo);			/* clean up libjpeg state */
-        LONGJMP(sp->exit_jmpbuf, 1);		/* return to libtiff caller */
+        TIFFError("JPEGLib", buffer);           /* display the error message */
+        jpeg_abort(cinfo);                      /* clean up libjpeg state */
+        LONGJMP(sp->exit_jmpbuf, 1);            /* return to libtiff caller */
 }
 
 /*
@@ -173,8 +173,8 @@ TIFFjpeg_output_message(j_common_ptr cinfo)
  * Also, normal/error returns are converted into return
  * values per libtiff practice.
  */
-#define	CALLJPEG(sp, fail, op)	(SETJMP((sp)->exit_jmpbuf) ? (fail) : (op))
-#define	CALLVJPEG(sp, op)	CALLJPEG(sp, 0, ((op),1))
+#define CALLJPEG(sp, fail, op)  (SETJMP((sp)->exit_jmpbuf) ? (fail) : (op))
+#define CALLVJPEG(sp, op)       CALLJPEG(sp, 0, ((op),1))
 
 static int
 TIFFjpeg_create_compress(JPEGState* sp)
@@ -495,7 +495,7 @@ TIFFjpeg_data_src(JPEGState* sp, TIFF* tif)
         sp->src.skip_input_data = std_skip_input_data;
         sp->src.resync_to_restart = jpeg_resync_to_restart;
         sp->src.term_source = std_term_source;
-        sp->src.bytes_in_buffer = 0;		/* for safety */
+        sp->src.bytes_in_buffer = 0;            /* for safety */
         sp->src.next_input_byte = NULL;
 }
 
@@ -722,7 +722,7 @@ JPEGPreDecode(TIFF* tif, tsample_t s)
                 if (!alloc_downsampled_buffers(tif, sp->cinfo.d.comp_info,
                                                sp->cinfo.d.num_components))
                         return (0);
-                sp->scancount = DCTSIZE;	/* mark buffer empty */
+                sp->scancount = DCTSIZE;        /* mark buffer empty */
         }
         return (1);
 }
@@ -805,7 +805,7 @@ JPEGDecodeRaw(TIFF* tif, tidata_t buf, tsize_t cc, tsample_t s)
                  * Fastest way to unseparate the data is to make one pass
                  * over the scanline for each row of each component.
                  */
-                clumpoffset = 0;		/* first sample in clump */
+                clumpoffset = 0;                /* first sample in clump */
                 for (ci = 0, compptr = sp->cinfo.d.comp_info;
                      ci < sp->cinfo.d.num_components;
                      ci++, compptr++) {
@@ -940,7 +940,7 @@ JPEGSetupEncode(TIFF* tif)
                 }
 #endif
                 break;
-        case PHOTOMETRIC_PALETTE:		/* disallowed by Tech Note */
+        case PHOTOMETRIC_PALETTE:               /* disallowed by Tech Note */
         case PHOTOMETRIC_MASK:
                 TIFFError(module,
                           "PhotometricInterpretation %d not allowed for JPEG",
@@ -1189,7 +1189,7 @@ JPEGEncodeRaw(TIFF* tif, tidata_t buf, tsize_t cc, tsample_t s)
                  * Fastest way to separate the data is to make one pass
                  * over the scanline for each row of each component.
                  */
-                clumpoffset = 0;		/* first sample in clump */
+                clumpoffset = 0;                /* first sample in clump */
                 for (ci = 0, compptr = sp->cinfo.c.comp_info;
                      ci < sp->cinfo.c.num_components;
                      ci++, compptr++) {
@@ -1279,10 +1279,10 @@ JPEGCleanup(TIFF* tif)
 {
         if (tif->tif_data) {
                 JPEGState *sp = JState(tif);
-                TIFFjpeg_destroy(sp);		/* release libjpeg resources */
-                if (sp->jpegtables)		/* tag value */
+                TIFFjpeg_destroy(sp);           /* release libjpeg resources */
+                if (sp->jpegtables)             /* tag value */
                         _TIFFfree(sp->jpegtables);
-                _TIFFfree(tif->tif_data);	/* release local state */
+                _TIFFfree(tif->tif_data);       /* release local state */
                 tif->tif_data = NULL;
         }
 }
@@ -1308,7 +1308,7 @@ JPEGVSetField(TIFF* tif, ttag_t tag, va_list ap)
                 break;
         case TIFFTAG_JPEGQUALITY:
                 sp->jpegquality = va_arg(ap, int);
-                return (1);			/* pseudo tag */
+                return (1);                     /* pseudo tag */
         case TIFFTAG_JPEGCOLORMODE:
                 sp->jpegcolormode = va_arg(ap, int);
                 /*
@@ -1332,10 +1332,10 @@ JPEGVSetField(TIFF* tif, ttag_t tag, va_list ap)
                  * in case sampling state changed.
                  */
                 tif->tif_tilesize = TIFFTileSize(tif);
-                return (1);			/* pseudo tag */
+                return (1);                     /* pseudo tag */
         case TIFFTAG_JPEGTABLESMODE:
                 sp->jpegtablesmode = va_arg(ap, int);
-                return (1);			/* pseudo tag */
+                return (1);                     /* pseudo tag */
         default:
                 return (*sp->vsetparent)(tif, tag, ap);
         }
@@ -1420,7 +1420,7 @@ TIFFInitJPEG(TIFF* tif, int scheme)
                 return (0);
         }
         sp = JState(tif);
-        sp->tif = tif;				/* back link */
+        sp->tif = tif;                          /* back link */
 
         /*
          * Merge codec-specific tag information and
@@ -1428,15 +1428,15 @@ TIFFInitJPEG(TIFF* tif, int scheme)
          */
         _TIFFMergeFieldInfo(tif, jpegFieldInfo, N(jpegFieldInfo));
         sp->vgetparent = tif->tif_vgetfield;
-        tif->tif_vgetfield = JPEGVGetField;	/* hook for codec tags */
+        tif->tif_vgetfield = JPEGVGetField;     /* hook for codec tags */
         sp->vsetparent = tif->tif_vsetfield;
-        tif->tif_vsetfield = JPEGVSetField;	/* hook for codec tags */
-        tif->tif_printdir = JPEGPrintDir;	/* hook for codec tags */
+        tif->tif_vsetfield = JPEGVSetField;     /* hook for codec tags */
+        tif->tif_printdir = JPEGPrintDir;       /* hook for codec tags */
 
         /* Default values for codec-specific fields */
         sp->jpegtables = NULL;
         sp->jpegtables_length = 0;
-        sp->jpegquality = 75;			/* Default IJG quality */
+        sp->jpegquality = 75;                   /* Default IJG quality */
         sp->jpegcolormode = JPEGCOLORMODE_RAW;
         sp->jpegtablesmode = JPEGTABLESMODE_QUANT | JPEGTABLESMODE_HUFF;
 
@@ -1459,7 +1459,7 @@ TIFFInitJPEG(TIFF* tif, int scheme)
         tif->tif_defstripsize = JPEGDefaultStripSize;
         sp->deftparent = tif->tif_deftilesize;
         tif->tif_deftilesize = JPEGDefaultTileSize;
-        tif->tif_flags |= TIFF_NOBITREV;	/* no bit reversal, please */
+        tif->tif_flags |= TIFF_NOBITREV;        /* no bit reversal, please */
 
         /*
          * Initialize libjpeg.

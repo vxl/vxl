@@ -146,14 +146,14 @@ PredictorSetupEncode(TIFF* tif)
         return (1);
 }
 
-#define REPEAT4(n, op)		\
-    switch (n) {		\
+#define REPEAT4(n, op)          \
+    switch (n) {                \
     default: { int i; for (i = n-4; i > 0; i--) { op; } } \
-    case 4:  op;		\
-    case 3:  op;		\
-    case 2:  op;		\
-    case 1:  op;		\
-    case 0:  ;			\
+    case 4:  op;                \
+    case 3:  op;                \
+    case 2:  op;                \
+    case 1:  op;                \
+    case 0:  ;                  \
     }
 
 static void
@@ -375,13 +375,13 @@ PredictorEncodeTile(TIFF* tif, tidata_t bp0, tsize_t cc0, tsample_t s)
         return ((*sp->codetile)(tif, bp0, cc0, s));
 }
 
-#define	FIELD_PREDICTOR	(FIELD_CODEC+0)		/* XXX */
+#define FIELD_PREDICTOR (FIELD_CODEC+0)         /* XXX */
 
 static const TIFFFieldInfo predictFieldInfo[] = {
-    { TIFFTAG_PREDICTOR,	 1, 1, TIFF_SHORT,	FIELD_PREDICTOR,
-      FALSE,	FALSE,	"Predictor" },
+    { TIFFTAG_PREDICTOR,         1, 1, TIFF_SHORT,      FIELD_PREDICTOR,
+      FALSE,    FALSE,  "Predictor" },
 };
-#define	N(a)	(sizeof (a) / sizeof (a[0]))
+#define N(a)    (sizeof (a) / sizeof (a[0]))
 
 static int
 PredictorVSetField(TIFF* tif, ttag_t tag, va_list ap)
@@ -448,14 +448,14 @@ TIFFPredictorInit(TIFF* tif)
         sp->vsetparent = tif->tif_vsetfield;
         tif->tif_vsetfield = PredictorVSetField;/* hook for predictor tag */
         sp->printdir = tif->tif_printdir;
-        tif->tif_printdir = PredictorPrintDir;	/* hook for predictor tag */
+        tif->tif_printdir = PredictorPrintDir;  /* hook for predictor tag */
 
         sp->setupdecode = tif->tif_setupdecode;
         tif->tif_setupdecode = PredictorSetupDecode;
         sp->setupencode = tif->tif_setupencode;
         tif->tif_setupencode = PredictorSetupEncode;
 
-        sp->predictor = 1;			/* default value */
-        sp->pfunc = NULL;			/* no predictor routine */
+        sp->predictor = 1;                      /* default value */
+        sp->pfunc = NULL;                       /* no predictor routine */
         return (1);
 }

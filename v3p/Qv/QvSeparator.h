@@ -11,10 +11,10 @@ class QvSeparator : public QvGroup
   QV_NODE_HEADER(QvSeparator);
 
 public:
-  enum CullEnabled {	// Possible values for culling
-    OFF,		// Never cull
-    ON,			// Always cull
-    AUTO		// Decide based on some heuristic
+  enum CullEnabled { // Possible values for culling
+    OFF,             // Never cull
+    ON,              // Always cull
+    AUTO             // Decide based on some heuristic
   };
 
   // Fields

@@ -137,16 +137,16 @@ void ImageWarp<PixelType>::warp_inverse(Mapping_2d_2d& map,
           out(ox, oy) = in(ix,iy);
         else
           out(ox, oy) = vnl_numeric_traits<PixelType>::zero;
-//	break;
+//      break;
 //    }
 //    case 2: {
-//	// bilinear
-//	out(ox, oy) = vbl_clamp(in.bilinear(ixd, iyd), (PixelType*)0);
-//	break;
+//      // bilinear
+//      out(ox, oy) = vbl_clamp(in.bilinear(ixd, iyd), (PixelType*)0);
+//      break;
 //      }
 //    case 3: {
-//	out(ox, oy) = clamp(in.bicubic(ixd, iyd), (PixelType*)0);
-//	break;
+//      out(ox, oy) = vbl_clamp(in.bicubic(ixd, iyd), (PixelType*)0);
+//      break;
 //    }
 //    }
     }

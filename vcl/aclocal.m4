@@ -56,7 +56,7 @@ VCL_COMPILE_CXX
 AC_TRY_COMPILE(
 [
 struct foo { foo(); virtual ~foo(); virtual void f() =0; };
-struct boo : public foo { void f() { *(int*)0 = 1; } };	
+struct boo : public foo { void f() { *(int*)0 = 1; } };
 boo *try_dynamic_cast() { boo *b = 0; foo *f = b; return dynamic_cast<boo*>(f); }
 ],,ac_cxx_has_dynamic_cast=yes,ac_cxx_has_dynamic_cast=no)
 AC_LANG_RESTORE
@@ -318,7 +318,7 @@ namespace diced {
 
 extern "C" int printf(char const *, ...);
 
-void flegg() { 
+void flegg() {
   int a = -1;
   long b = -2;
   float c = -3;
@@ -448,7 +448,7 @@ public:
   template <class T>
   void klor(T *p) { *ptr = *p; }
 };
-void function() 
+void function()
 {
   blip<double> b;
   int s;
@@ -478,7 +478,7 @@ VCL_COMPILE_CXX
 
 AC_TRY_COMPILE([
 template <class T>
-class victor 
+class victor
 {
   T data[256];
 public:
@@ -487,7 +487,7 @@ public:
 };
 
 template <class T>
-class victor<T *> 
+class victor<T *>
 {
   T *data[256];
 public:
@@ -536,7 +536,7 @@ dnl
 
 
 
-### Check whether the compiler needs values in definitions 
+### Check whether the compiler needs values in definitions
 # of functions taking default values.
 AC_DEFUN(AC_CXX_DEFAULT_VALUE,[
 AC_LANG_SAVE
@@ -682,7 +682,7 @@ public:
 };
 template class B<int>;
 ],[
-  // function body  
+  // function body
   B<int> b;
   b.function(5);
 ],[
@@ -731,7 +731,7 @@ public:
 void print_it(vnl_vector<double> const &);
 
 void try_it(vnl_vector_fixed<3, double> const &u,
-	    vnl_vector_fixed<3, double> const &v)
+            vnl_vector_fixed<3, double> const &v)
 {
   // gcc 2.7 fails in this function.
   if (u == v)
@@ -743,7 +743,7 @@ void try_it(vnl_vector_fixed<3, double> const &u,
 }
 
 //
-template <class S, class T> 
+template <class S, class T>
 void    copy_image(S const * const *src, T * const *dst, int, int);
 
 typedef unsigned char byte;
@@ -803,7 +803,7 @@ template <class T> T dot(victor<T> const &u, victor<T> const &v)
 template double dot(victor<double> const &, victor<double> const &);
 
 double function(victor<double> const &u,
-		victor<double> const &v)
+                victor<double> const &v)
 {
   double uu = dot(u, u);
   double uv = dot(u, v);
@@ -842,7 +842,7 @@ public:
 
 protected:
   victor_base(T *p, unsigned n) : data(p), size(n) { }
-  
+
 private:
   T *data;
   unsigned size;
@@ -859,8 +859,8 @@ public:
   victor_fixed() : victor_base<T>(data_fixed, n) { }
 };
 
-int function(victor_fixed<double, 3> const &a, 
-	     victor_fixed<double, 3> const &b)
+int function(victor_fixed<double, 3> const &a,
+             victor_fixed<double, 3> const &b)
 {
   if (a == b) // 2.7 fails to resolve this.
     return 3141;
@@ -999,7 +999,7 @@ AC_MSG_CHECKING(whether the C++ compiler needs explicit instantiation of inline 
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 
-# _CXX, not _TXX as we're trying to find out if inlines are 
+# _CXX, not _TXX as we're trying to find out if inlines are
 # expanded when compiling non-template code.
 VCL_COMPILE_CXX
 
@@ -1052,32 +1052,32 @@ AC_LANG_CPLUSPLUS
 VCL_COMPILE_CXX
 
 AC_TRY_COMPILE([
-template < class T > 
-struct allocator 
-{ 
+template < class T >
+struct allocator
+{
   allocator ( ) { } ;
   allocator ( const allocator < T > & ) { } ;
-} ; 
+} ;
 
-template < class T , class Allocator = allocator < T > > 
-struct vector 
-{ 
+template < class T , class Allocator = allocator < T > >
+struct vector
+{
   vector ( ) { } ;
   ~ vector ( ) { } ;
-} ; 
+} ;
 
-template < class T > 
-struct spoof 
-{ 
-  void set_row ( unsigned , vector < T /*, allocator<T>*/ > const & ) ; 
-} ; 
+template < class T >
+struct spoof
+{
+  void set_row ( unsigned , vector < T /*, allocator<T>*/ > const & ) ;
+} ;
 
-template < class T > 
-void spoof < T > :: set_row ( unsigned , vector < T /*, allocator<T>*/ > const & ) 
-{ 
-} 
+template < class T >
+void spoof < T > :: set_row ( unsigned , vector < T /*, allocator<T>*/ > const & )
+{
+}
 
-template class spoof < double > ; 
+template class spoof < double > ;
 
 // If the program compiles, we don't need the hack
 ],,[
@@ -1111,7 +1111,7 @@ struct alloc2 { };
 template <class T, class A = alloc1> class X;
 
 template <class T, class A>
-class X { 
+class X {
 public:
   T data[3];
   A a;
@@ -1203,8 +1203,8 @@ AC_TRY_COMPILE([
 template <class T> struct less { };
 
 template <class T, class C=less<T> >
-struct X { 
-  C t1; 
+struct X {
+  C t1;
 };
 X<int> a;
 X<int, less<short> > b;
@@ -1222,7 +1222,7 @@ export VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER
 
 
 
-### 
+###
 AC_DEFUN(AC_CXX_CAN_DO_STATIC_TEMPLATE_MEMBER,[
 AC_MSG_CHECKING(whether the C++ compiler accepts templated definitions of static class template members)
 AC_LANG_SAVE
@@ -1252,7 +1252,7 @@ export VCL_CAN_DO_STATIC_TEMPLATE_MEMBER
 
 
 
-### 
+###
 AC_DEFUN(AC_CXX_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER,[
 AC_MSG_CHECKING(whether the C++ compiler accepts non-type template parameters to function templates)
 AC_LANG_SAVE

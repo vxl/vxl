@@ -13,9 +13,9 @@ class QvWWWInline : public QvGroup
 
 public:
   // Fields
-  QvSFString		name;		// URL name
-  QvSFVec3f		bboxSize;	// Size of 3D bounding box
-  QvSFVec3f		bboxCenter;	// Center of 3D bounding box
+  QvSFString            name;           // URL name
+  QvSFVec3f             bboxSize;       // Size of 3D bounding box
+  QvSFVec3f             bboxCenter;     // Center of 3D bounding box
 
   // point3D min_, max_;  // mpichler, 19950607
   // mpichler, 19951006: object coordinate bounding box now in QvNode

@@ -263,21 +263,20 @@ public:
     not_applicable("UpdateGeometry");
   }
 
-  /*
+#if 0 // commented out
   virtual  vcl_vector<double>  *GetCog()  { return NULL; }
   const vcl_vector<double> *GetCog() const  { return ((vsol_spatial_object_2d*)this)->GetCog(); }
 
   //---- transformations ----------------------------------------------
   virtual bool Transform(CoolTransform const& m);
   virtual CoolTransform GetTransformation() const; // to `standard' object
-  virtual bool LinearScale(float sf);	// leaving GetLocation() fixed
+  virtual bool LinearScale(float sf);   // leaving GetLocation() fixed
 
-  virtual bool Translate();	// moving GetLocation() to (0,0,0)
-  virtual bool Rotate();	// moving GetOrientation() to (1,0,0)
-  virtual bool Reflect();	// around GetOrientation() over 180 degrees
-  virtual bool Shear(float);	// leaving GetOrientation() fixed
-
-  */
+  virtual bool Translate();     // moving GetLocation() to (0,0,0)
+  virtual bool Rotate();        // moving GetOrientation() to (1,0,0)
+  virtual bool Reflect();       // around GetOrientation() over 180 degrees
+  virtual bool Shear(float);    // leaving GetOrientation() fixed
+#endif
 
   //: \brief bounding box accessors
   inline void check_update_bounding_box(void);  // Test consistency of bound
@@ -329,7 +328,7 @@ inline void vsol_spatial_object_2d::set_tag_id(int id)
   _tag = ( (id & VSOL_DEXID_BITS)     |  ( _tag & VSOL_FLAG_BITS ));
 }
 
-// -- Bounds Accessors:  min_ and max_ are provided as methods on vsol_spatial_object_2d
+//: Bounds Accessors:  min_ and max_ are provided as methods on vsol_spatial_object_2d
 //                    to be consistent with the previous interface
 //                    Additional bounds accessors are available directly
 //                    on vsol_box_2d.  - JLM
@@ -417,33 +416,33 @@ inline void vsol_spatial_object_2d::set_max_y(float ymax)
 }
 
 
-// -- set a flag for a spatial object, flag can be VSOL_FLAG[1-6]
+//: set a flag for a spatial object, flag can be VSOL_FLAG[1-6]
 inline void vsol_spatial_object_2d::set_user_flag(unsigned int flag)
 {
   _tag =  (_tag | flag);
 }
 
-// -- get a flag for a spatial object,
+//: get a flag for a spatial object,
 //    flag can be VSOL_FLAG[1-6], return value is one or zero.
 inline unsigned int  vsol_spatial_object_2d::get_user_flag(unsigned int flag)
 {
   return (_tag & flag) ? 1 : 0;
 }
 
-// -- set_ a flag for a spatialObject, flag can be VSOL_FLAG[1-6] value is
+//: set_ a flag for a spatialObject, flag can be VSOL_FLAG[1-6] value is
 //    set to zero.
 inline void vsol_spatial_object_2d::unset_user_flag(unsigned int flag)
 {
   _tag = ( _tag & (~flag) );
 }
 
-// -- set_ the flag used by TAGGED_UNION.
+//: set_ the flag used by TAGGED_UNION.
 inline void vsol_spatial_object_2d::set_tagged_union_flag(void)
 {
   set_user_flag(VSOL_UNIONBIT);
 }
 
-// -- get_ the flag used by TAGGED_UNION.
+//: get_ the flag used by TAGGED_UNION.
 inline unsigned int vsol_spatial_object_2d::get_tagged_union_flag(void)
 {
   return get_user_flag(VSOL_UNIONBIT);

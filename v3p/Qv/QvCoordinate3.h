@@ -12,7 +12,7 @@ class QvCoordinate3 : public QvNode
 
 public:
   // Fields
-  QvMFVec3f		point;		// Coordinate point(s)
+  QvMFVec3f point; // Coordinate point(s)
 
   // point3D min_, max_;  // mpichler, 19950510
   // mpichler, 19951006: use object boundings of QvNode

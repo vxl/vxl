@@ -596,7 +596,7 @@ template <class T , class Alloc>
 inline void
 vcl_deque<T, Alloc>::push_front_cleanup(int steps_remaining, bool allocated_at_begin)
 {
-  if (steps_remaining == 1) {	// construct succeeded?
+  if (steps_remaining == 1) { // construct succeeded?
     destroy(start.current);
     --length;
   }

@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	SequenceFileName
-// .LIBRARY	POX
-// .HEADER	Oxford Package
-// .INCLUDE	oxp/SequenceFileName.h
-// .FILE	SequenceFileName.cxx
+// .NAME    SequenceFileName
+// .LIBRARY oxp
+// .HEADER  Oxford Package
+// .INCLUDE oxp/SequenceFileName.h
+// .FILE    SequenceFileName.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 26 Jan 99
 //
@@ -28,7 +28,7 @@ public:
   vcl_string name(int frame);
   vcl_ostream& print(vcl_ostream& s) const;
 
-  // -- Set start_frame, end_frame by scanning the directory given by the
+  //: Set start_frame, end_frame by scanning the directory given by the
   // pattern, and finding limits.
   void probe_limits();
 

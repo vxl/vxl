@@ -10,7 +10,7 @@ class QvInfo : public QvNode
 
 public:
   // Fields
-  QvSFString		string;		// Info string
+  QvSFString string; // Info string
 
   // mpichler, 19951116
   int handled_;  // viewer info already handled?

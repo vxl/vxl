@@ -94,7 +94,7 @@ bool QvVisitor::Visit(QvNode* node)
   vcl_string is(indent * 4, ' ');
 
   int type = node->nodeType ();
-  
+
   if (verbose) {
     vcl_cerr << is << "Node type " << typenames[type] << vcl_endl;
     // Print fields
@@ -103,7 +103,7 @@ bool QvVisitor::Visit(QvNode* node)
     for(int f = 0; f < nfields; ++f)
       vcl_cerr << is << "Field " << fields->getFieldName(f).getString() << vcl_endl;
   }
-  
+
   QvVisitorIndenter incdecindent(&indent);
 
   switch (type) {
@@ -153,7 +153,7 @@ bool QvVisitor::Visit(QvNode* node)
       return false;
     }
   }
-}     
+}
 
 bool QvVisitor::Visit(QvGroup* node) {
   int n = node->getNumChildren();
@@ -175,13 +175,13 @@ bool QvVisitor::Visit(QvSwitch* node) {
   if (child_index == QV_SWITCH_ALL)
     for(int c = 0; c < n; ++c)
       Visit(node->getChild(c));
-  else if (child_index != QV_SWITCH_NONE) {	
+  else if (child_index != QV_SWITCH_NONE) {
     if (child_index >= 0 && child_index < n)
       Visit(node->getChild(child_index));
     else
       vcl_cerr << "QvVisitor: whichChild " << child_index << "out of range [0.."<<(n-1)<<"]\n";
   }
-      
+
   return true;
 }
 

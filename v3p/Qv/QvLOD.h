@@ -13,13 +13,13 @@ class QvLOD : public QvGroup
 
 public:
   // Fields
-  QvMFFloat		range;		// Distance ranges for LOD switching
-  QvSFVec3f		center;		// Center for distance computation
+  QvMFFloat    range;     // Distance ranges for LOD switching
+  QvSFVec3f    center;    // Center for distance computation
 
   // mpichler, 19950724
-  const point3D* center_;             // center for LOD computation
+  const point3D* center_; // center for LOD computation
   // mpichler, 19951010
-  int lastdrawn_;                     // most recently drawn child
+  int lastdrawn_;         // most recently drawn child
 };
 
 #endif /* _QV_LEVEL_OF_DETAIL_ */

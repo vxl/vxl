@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	HomgConic - Homogeneous 2D conic
-// .LIBRARY	MViewBasics
-// .HEADER	MultiView Package
-// .INCLUDE	mvl/HomgConic.h
-// .FILE	HomgConic.cxx
+// .NAME    HomgConic - Homogeneous 2D conic
+// .LIBRARY MViewBasics
+// .HEADER  MultiView Package
+// .INCLUDE mvl/HomgConic.h
+// .FILE    HomgConic.cxx
 //
 // .SECTION Description:
 //

@@ -39,9 +39,9 @@
  * as a sign bit followed by a 15-bit integer that is converted
  * to and from a linear magnitude using the transformation:
  *
- *	L = 2^( (Le+.5)/256 - 64 )		# real from 15-bit
+ *      L = 2^( (Le+.5)/256 - 64 )              # real from 15-bit
  *
- *	Le = floor( 256*(log2(L) + 64) )	# 15-bit from real
+ *      Le = floor( 256*(log2(L) + 64) )        # 15-bit from real
  *
  * The actual conversion to world luminance units in candelas per sq. meter
  * requires an additional multiplier, which is stored in the TIFFTAG_STONITS.
@@ -56,11 +56,11 @@
  * Conversion from (u,v), which is actually the CIE (u',v') system for
  * you color scientists, is accomplished by the following transformation:
  *
- *	u = 4*x / (-2*x + 12*y + 3)
- *	v = 9*y / (-2*x + 12*y + 3)
+ *      u = 4*x / (-2*x + 12*y + 3)
+ *      v = 9*y / (-2*x + 12*y + 3)
  *
- *	x = 9*u / (6*u - 16*v + 12)
- *	y = 4*v / (6*u - 16*v + 12)
+ *      x = 9*u / (6*u - 16*v + 12)
+ *      y = 4*v / (6*u - 16*v + 12)
  *
  * This process is greatly simplified by passing 32-bit IEEE floats
  * for each of three CIE XYZ coordinates.  The codec then takes care
@@ -72,28 +72,28 @@
  * or COMPRESSION_SGILOG24.  For COMPRESSION_SGILOG, greyscale data is
  * stored as:
  *
- *	 1       15
- *	|-+---------------|
+ *       1       15
+ *      |-+---------------|
  *
  * COMPRESSION_SGILOG color data is stored as:
  *
- *	 1       15           8        8
- *	|-+---------------|--------+--------|
- *	 S       Le           ue       ve
+ *       1       15           8        8
+ *      |-+---------------|--------+--------|
+ *       S       Le           ue       ve
  *
  * For the 24-bit COMPRESSION_SGILOG24 color format, the data is stored as:
  *
- *	     10           14
- *	|----------|--------------|
- *	     Le'          Ce
+ *           10           14
+ *      |----------|--------------|
+ *           Le'          Ce
  *
  * There is no sign bit in the 24-bit case, and the (u,v) chromaticity is
  * encoded as an index for optimal color resolution.  The 10 log bits are
  * defined by the following conversions:
  *
- *	L = 2^((Le'+.5)/64 - 12)		# real from 10-bit
+ *      L = 2^((Le'+.5)/64 - 12)                # real from 10-bit
  *
- *	Le' = floor( 64*(log2(L) + 12) )	# 10-bit from real
+ *      Le' = floor( 64*(log2(L) + 12) )        # 10-bit from real
  *
  * The 10 bits of the smaller format may be converted into the 15 bits of
  * the larger format by multiplying by 4 and adding 13314.  Obviously,
@@ -105,7 +105,7 @@
  * The desired user format is controlled by the setting the internal
  * pseudo tag TIFFTAG_SGILOGDATAFMT to one of:
  *  SGILOGDATAFMT_FLOAT       = IEEE 32-bit float XYZ values
- *  SGILOGDATAFMT_16BIT	      = 16-bit integer encodings of logL, u and v
+ *  SGILOGDATAFMT_16BIT       = 16-bit integer encodings of logL, u and v
  * Raw data i/o is also possible using:
  *  SGILOGDATAFMT_RAW         = 32-bit unsigned integer with encoded pixel
  * In addition, the following decoding is provided for ease of display:
@@ -131,27 +131,27 @@
  * State block for each open TIFF
  * file using LogLuv compression/decompression.
  */
-typedef	struct logLuvState LogLuvState;
+typedef struct logLuvState LogLuvState;
 
 struct logLuvState {
-        int			user_datafmt;	/* user data format */
-        int			pixel_size;	/* bytes per pixel */
+        int                     user_datafmt;   /* user data format */
+        int                     pixel_size;     /* bytes per pixel */
 
-        tidata_t*		tbuf;		/* translation buffer */
-        short			tbuflen;	/* buffer length */
+        tidata_t*               tbuf;           /* translation buffer */
+        short                   tbuflen;        /* buffer length */
         void (*tfunc)(LogLuvState*, tidata_t, int);
 
-        TIFFVSetMethod		vgetparent;	/* super-class method */
-        TIFFVSetMethod		vsetparent;	/* super-class method */
+        TIFFVSetMethod          vgetparent;     /* super-class method */
+        TIFFVSetMethod          vsetparent;     /* super-class method */
 };
 
-#define	DecoderState(tif)	((LogLuvState*) (tif)->tif_data)
-#define	EncoderState(tif)	((LogLuvState*) (tif)->tif_data)
+#define DecoderState(tif)       ((LogLuvState*) (tif)->tif_data)
+#define EncoderState(tif)       ((LogLuvState*) (tif)->tif_data)
 
 #define N(a)   (sizeof(a)/sizeof(a[0]))
-#define SGILOGDATAFMT_UNKNOWN	-1
+#define SGILOGDATAFMT_UNKNOWN   -1
 
-#define MINRUN		4	/* minimum run length */
+#define MINRUN          4       /* minimum run length */
 
 /*
  * Decode a string of 16-bit gray pixels.
@@ -184,14 +184,14 @@ LogL16Decode(TIFF* tif, tidata_t op, tsize_t occ, tsample_t s)
                                         /* get each byte string */
         for (shft = 2*8; (shft -= 8) >= 0; ) {
                 for (i = 0; i < npixels && cc > 0; )
-                        if (*bp >= 128) {		/* run */
+                        if (*bp >= 128) {               /* run */
                                 rc = *bp++ + (2-128);
                                 b = (int16)*bp++ << shft;
                                 cc -= 2;
                                 while (rc--)
                                         tp[i++] |= b;
-                        } else {			/* non-run */
-                                rc = *bp++;		/* nul is noop */
+                        } else {                        /* non-run */
+                                rc = *bp++;             /* nul is noop */
                                 while (--cc && rc--)
                                         tp[i++] |= (int16)*bp++ << shft;
                         }
@@ -285,14 +285,14 @@ LogLuvDecode32(TIFF* tif, tidata_t op, tsize_t occ, tsample_t s)
                                         /* get each byte string */
         for (shft = 4*8; (shft -= 8) >= 0; ) {
                 for (i = 0; i < npixels && cc > 0; )
-                        if (*bp >= 128) {		/* run */
+                        if (*bp >= 128) {               /* run */
                                 rc = *bp++ + (2-128);
                                 b = (uint32)*bp++ << shft;
                                 cc -= 2;
                                 while (rc--)
                                         tp[i++] |= b;
-                        } else {			/* non-run */
-                                rc = *bp++;		/* nul is noop */
+                        } else {                        /* non-run */
+                                rc = *bp++;             /* nul is noop */
                                 while (--cc && rc--)
                                         tp[i++] |= (uint32)*bp++ << shft;
                         }
@@ -381,7 +381,7 @@ LogL16Encode(TIFF* tif, tidata_t bp, tsize_t cc, tsample_t s)
                                 op = tif->tif_rawcp;
                                 occ = tif->tif_rawdatasize - tif->tif_rawcc;
                         }
-                        mask = 0xff << shft;		/* find next run */
+                        mask = 0xff << shft;            /* find next run */
                         for (beg = i; beg < npixels; beg += rc) {
                                 b = tp[beg] & mask;
                                 rc = 1;
@@ -389,10 +389,10 @@ LogL16Encode(TIFF* tif, tidata_t bp, tsize_t cc, tsample_t s)
                                                 (tp[beg+rc] & mask) == b)
                                         rc++;
                                 if (rc >= MINRUN)
-                                        break;		/* long enough */
+                                        break;          /* long enough */
                         }
                         if (beg-i > 1 && beg-i < MINRUN) {
-                                b = tp[i] & mask;	/* check short run */
+                                b = tp[i] & mask;       /* check short run */
                                 j = i+1;
                                 while ((tp[j++] & mask) == b)
                                         if (j == beg) {
@@ -403,7 +403,7 @@ LogL16Encode(TIFF* tif, tidata_t bp, tsize_t cc, tsample_t s)
                                                 break;
                                         }
                         }
-                        while (i < beg) {		/* write out non-run */
+                        while (i < beg) {               /* write out non-run */
                                 if ((j = beg-i) > 127) j = 127;
                                 if (occ < j+3) {
                                         tif->tif_rawcp = op;
@@ -419,7 +419,7 @@ LogL16Encode(TIFF* tif, tidata_t bp, tsize_t cc, tsample_t s)
                                         occ--;
                                 }
                         }
-                        if (rc >= MINRUN) {		/* write out run */
+                        if (rc >= MINRUN) {             /* write out run */
                                 *op++ = 128-2+rc;
                                 *op++ = tp[beg] >> shft & 0xff;
                                 occ -= 2;
@@ -517,7 +517,7 @@ LogLuvEncode32(TIFF* tif, tidata_t bp, tsize_t cc, tsample_t s)
                                 op = tif->tif_rawcp;
                                 occ = tif->tif_rawdatasize - tif->tif_rawcc;
                         }
-                        mask = 0xff << shft;		/* find next run */
+                        mask = 0xff << shft;            /* find next run */
                         for (beg = i; beg < npixels; beg += rc) {
                                 b = tp[beg] & mask;
                                 rc = 1;
@@ -525,10 +525,10 @@ LogLuvEncode32(TIFF* tif, tidata_t bp, tsize_t cc, tsample_t s)
                                                 (tp[beg+rc] & mask) == b)
                                         rc++;
                                 if (rc >= MINRUN)
-                                        break;		/* long enough */
+                                        break;          /* long enough */
                         }
                         if (beg-i > 1 && beg-i < MINRUN) {
-                                b = tp[i] & mask;	/* check short run */
+                                b = tp[i] & mask;       /* check short run */
                                 j = i+1;
                                 while ((tp[j++] & mask) == b)
                                         if (j == beg) {
@@ -539,7 +539,7 @@ LogLuvEncode32(TIFF* tif, tidata_t bp, tsize_t cc, tsample_t s)
                                                 break;
                                         }
                         }
-                        while (i < beg) {		/* write out non-run */
+                        while (i < beg) {               /* write out non-run */
                                 if ((j = beg-i) > 127) j = 127;
                                 if (occ < j+3) {
                                         tif->tif_rawcp = op;
@@ -555,7 +555,7 @@ LogLuvEncode32(TIFF* tif, tidata_t bp, tsize_t cc, tsample_t s)
                                         occ--;
                                 }
                         }
-                        if (rc >= MINRUN) {		/* write out run */
+                        if (rc >= MINRUN) {             /* write out run */
                                 *op++ = 128-2+rc;
                                 *op++ = tp[beg] >> shft & 0xff;
                                 occ -= 2;
@@ -603,24 +603,24 @@ LogLuvEncodeTile(TIFF* tif, tidata_t bp, tsize_t cc, tsample_t s)
  */
 #include "uvcode.h"
 
-#define U_NEU	0.210526316
-#define V_NEU	0.473684211
+#define U_NEU   0.210526316
+#define V_NEU   0.473684211
 
-#ifdef	M_LN2
-#define	LOGOF2		M_LN2
+#ifdef  M_LN2
+#define LOGOF2          M_LN2
 #else
-#define LOGOF2		0.69314718055994530942
+#define LOGOF2          0.69314718055994530942
 #endif
-#define log2(x)		((1./LOGOF2)*log(x))
-#define exp2(x)		exp(LOGOF2*(x))
+#define log2(x)         ((1./LOGOF2)*log(x))
+#define exp2(x)         exp(LOGOF2*(x))
 
-#define UVSCALE		410.
+#define UVSCALE         410.
 
 static double
 pix16toY(int p16)
 {
-        int	Le = p16 & 0x7fff;
-        double	Y;
+        int     Le = p16 & 0x7fff;
+        double  Y;
 
         if (!Le)
                 return (0.);
@@ -679,7 +679,7 @@ L16fromY(LogLuvState* sp, tidata_t op, int n)
 static void
 XYZtoRGB24(float xyz[3], uint8 rgb[3])
 {
-        double	r, g, b;
+        double  r, g, b;
                                         /* assume CCIR-709 primaries */
         r =  2.690*xyz[0] + -1.276*xyz[1] + -0.414*xyz[2];
         g = -1.022*xyz[0] +  1.978*xyz[1] +  0.044*xyz[2];
@@ -692,9 +692,9 @@ XYZtoRGB24(float xyz[3], uint8 rgb[3])
 }
 
 static int
-uv_encode(double u, double v)		/* encode (u',v') coordinates */
+uv_encode(double u, double v)           /* encode (u',v') coordinates */
 {
-        register int	vi, ui;
+        register int    vi, ui;
 
         if (v < UV_VSTART)
                 return(-1);
@@ -710,14 +710,14 @@ uv_encode(double u, double v)		/* encode (u',v') coordinates */
 }
 
 static int
-uv_decode(double *up, double *vp, int c)	/* decode (u',v') index */
+uv_decode(double *up, double *vp, int c)        /* decode (u',v') index */
 {
-        int	upper, lower;
-        register int	ui, vi;
+        int     upper, lower;
+        register int    ui, vi;
 
         if (c < 0 || c >= UV_NDIVS)
                 return(-1);
-        lower = 0;			/* binary search */
+        lower = 0;                      /* binary search */
         upper = UV_NVS;
         do {
                 vi = (lower + upper) >> 1;
@@ -739,8 +739,8 @@ uv_decode(double *up, double *vp, int c)	/* decode (u',v') index */
 static void
 pix24toXYZ(uint32 p, float XYZ[3])
 {
-        int	Le, Ce;
-        double	L, u, v, s, x, y;
+        int     Le, Ce;
+        double  L, u, v, s, x, y;
                                         /* decode luminance */
         Le = p >> 14 & 0x3ff;
         if (Le == 0) {
@@ -765,8 +765,8 @@ pix24toXYZ(uint32 p, float XYZ[3])
 static uint32
 pix24fromXYZ(float XYZ[3])
 {
-        int	Le, Ce;
-        double	L, u, v, s;
+        int     Le, Ce;
+        double  L, u, v, s;
                                         /* encode luminance */
         L = XYZ[1];
         if (L >= 16.)
@@ -877,7 +877,7 @@ Luv24fromLuv48(LogLuvState* sp, tidata_t op, int n)
 static void
 pix32toXYZ(uint32 p, float XYZ[3])
 {
-        double	L, u, v, s, x, y;
+        double  L, u, v, s, x, y;
                                         /* decode luminance */
         L = pix16toY((int)p >> 16);
         if (L == 0.) {
@@ -899,8 +899,8 @@ pix32toXYZ(uint32 p, float XYZ[3])
 static uint32
 pix32fromXYZ(float XYZ[3])
 {
-        unsigned int	Le, ue, ve;
-        double	u, v, s;
+        unsigned int    Le, ue, ve;
+        double  u, v, s;
                                         /* encode luminance */
         Le = (unsigned int)pix16fromY(XYZ[1]);
                                         /* encode color */
@@ -1002,7 +1002,7 @@ _logLuvNop(LogLuvState* sp, tidata_t op, int n)
 static int
 LogL16GuessDataFmt(TIFFDirectory *td)
 {
-#define	PACK(s,b,f)	(((b)<<6)|((s)<<3)|(f))
+#define PACK(s,b,f)     (((b)<<6)|((s)<<3)|(f))
         switch (PACK(td->td_samplesperpixel, td->td_bitspersample, td->td_sampleformat)) {
         case PACK(1, 32, SAMPLEFORMAT_IEEEFP):
                 return (SGILOGDATAFMT_FLOAT);
@@ -1065,7 +1065,7 @@ LogLuvGuessDataFmt(TIFFDirectory *td)
          * If the user didn't tell us their datafmt,
          * take our best guess from the bitspersample.
          */
-#define	PACK(a,b)	(((a)<<3)|(b))
+#define PACK(a,b)       (((a)<<3)|(b))
         switch (PACK(td->td_bitspersample, td->td_sampleformat)) {
         case PACK(32, SAMPLEFORMAT_IEEEFP):
                 guess = SGILOGDATAFMT_FLOAT;
@@ -1376,8 +1376,8 @@ LogLuvVGetField(TIFF* tif, ttag_t tag, va_list ap)
 }
 
 static const TIFFFieldInfo LogLuvFieldInfo[] = {
-    { TIFFTAG_SGILOGDATAFMT,	  0, 0,	TIFF_SHORT,	FIELD_PSEUDO,
-      TRUE,	FALSE,	"SGILogDataFmt"}
+    { TIFFTAG_SGILOGDATAFMT,      0, 0, TIFF_SHORT,     FIELD_PSEUDO,
+      TRUE,     FALSE,  "SGILogDataFmt"}
 };
 
 int

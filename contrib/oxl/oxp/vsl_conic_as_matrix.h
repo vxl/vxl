@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	vsl_conic_as_matrix
-// .LIBRARY	POX
-// .HEADER	Oxford Package
-// .INCLUDE	oxp/vsl_conic_as_matrix.h
-// .FILE	vsl_conic_as_matrix.cxx
+// .NAME    vsl_conic_as_matrix
+// .LIBRARY oxp
+// .HEADER  Oxford Package
+// .INCLUDE oxp/vsl_conic_as_matrix.h
+// .FILE    vsl_conic_as_matrix.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 12 Nov 99
 //
@@ -16,7 +16,7 @@
 
 #include <vnl/vnl_double_3x3.h>
 
-// -- 2D Conic section, stored as 3x3 matrix
+//: 2D Conic section, stored as 3x3 matrix
 // [
 //   Axx   Axy/2 Ax/2
 //   Axy/2 Ayy   Ay/2

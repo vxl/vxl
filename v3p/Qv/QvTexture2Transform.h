@@ -11,12 +11,12 @@ class QvTexture2Transform : public QvNode
 
 public:
   // Fields
-  QvSFVec2f		translation;	// Translation vector
-  QvSFFloat		rotation;	// Rotation
-  QvSFVec2f		scaleFactor;	// Scale factors
-  QvSFVec2f		center;		// Center point for scale and rotate
+  QvSFVec2f  translation; // Translation vector
+  QvSFFloat  rotation;    // Rotation
+  QvSFVec2f  scaleFactor; // Scale factors
+  QvSFVec2f  center;      // Center point for scale and rotate
 
-  matrix4D mat_;			// mpichler, 19960216
+  matrix4D mat_;          // mpichler, 19960216
 };
 
 #endif /* _QV_TEXTURE_2_TRANSFORM_ */

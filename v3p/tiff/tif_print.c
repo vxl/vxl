@@ -35,30 +35,30 @@
 #include <ctype.h>
 
 static const char *photoNames[] = {
-    "min-is-white",				/* PHOTOMETRIC_MINISWHITE */
-    "min-is-black",				/* PHOTOMETRIC_MINISBLACK */
-    "RGB color",				/* PHOTOMETRIC_RGB */
-    "palette color (RGB from colormap)",	/* PHOTOMETRIC_PALETTE */
-    "transparency mask",			/* PHOTOMETRIC_MASK */
-    "separated",				/* PHOTOMETRIC_SEPARATED */
-    "YCbCr",					/* PHOTOMETRIC_YCBCR */
+    "min-is-white",                             /* PHOTOMETRIC_MINISWHITE */
+    "min-is-black",                             /* PHOTOMETRIC_MINISBLACK */
+    "RGB color",                                /* PHOTOMETRIC_RGB */
+    "palette color (RGB from colormap)",        /* PHOTOMETRIC_PALETTE */
+    "transparency mask",                        /* PHOTOMETRIC_MASK */
+    "separated",                                /* PHOTOMETRIC_SEPARATED */
+    "YCbCr",                                    /* PHOTOMETRIC_YCBCR */
     "7 (0x7)",
-    "CIE L*a*b*",				/* PHOTOMETRIC_CIELAB */
+    "CIE L*a*b*",                               /* PHOTOMETRIC_CIELAB */
 };
-#define	NPHOTONAMES	(sizeof (photoNames) / sizeof (photoNames[0]))
+#define NPHOTONAMES (sizeof (photoNames) / sizeof (photoNames[0]))
 
 static const char *orientNames[] = {
     "0 (0x0)",
-    "row 0 top, col 0 lhs",			/* ORIENTATION_TOPLEFT */
-    "row 0 top, col 0 rhs",			/* ORIENTATION_TOPRIGHT */
-    "row 0 bottom, col 0 rhs",			/* ORIENTATION_BOTRIGHT */
-    "row 0 bottom, col 0 lhs",			/* ORIENTATION_BOTLEFT */
-    "row 0 lhs, col 0 top",			/* ORIENTATION_LEFTTOP */
-    "row 0 rhs, col 0 top",			/* ORIENTATION_RIGHTTOP */
-    "row 0 rhs, col 0 bottom",			/* ORIENTATION_RIGHTBOT */
-    "row 0 lhs, col 0 bottom",			/* ORIENTATION_LEFTBOT */
+    "row 0 top, col 0 lhs",                     /* ORIENTATION_TOPLEFT */
+    "row 0 top, col 0 rhs",                     /* ORIENTATION_TOPRIGHT */
+    "row 0 bottom, col 0 rhs",                  /* ORIENTATION_BOTRIGHT */
+    "row 0 bottom, col 0 lhs",                  /* ORIENTATION_BOTLEFT */
+    "row 0 lhs, col 0 top",                     /* ORIENTATION_LEFTTOP */
+    "row 0 rhs, col 0 top",                     /* ORIENTATION_RIGHTTOP */
+    "row 0 rhs, col 0 bottom",                  /* ORIENTATION_RIGHTBOT */
+    "row 0 lhs, col 0 bottom",                  /* ORIENTATION_LEFTBOT */
 };
-#define	NORIENTNAMES	(sizeof (orientNames) / sizeof (orientNames[0]))
+#define NORIENTNAMES (sizeof (orientNames) / sizeof (orientNames[0]))
 
 /*
  * Print the contents of the current directory

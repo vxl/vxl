@@ -16,14 +16,14 @@ class QvPointLight : public QvNode
 
 public:
   // Fields
-  QvSFBool		on;		// Whether light is on
-  QvSFFloat		intensity;	// Source intensity (0 to 1)
-  QvSFColor		color;		// RGB source color
-  QvSFVec3f		location;	// Source location
+  QvSFBool       on;        // Whether light is on
+  QvSFFloat      intensity; // Source intensity (0 to 1)
+  QvSFColor      color;     // RGB source color
+  QvSFVec3f      location;  // Source location
 
   // mpichler, 19950523
-  colorRGB color_;			// color, multiplied by intensity
-  const point3D* position_;		// position of light source
+  colorRGB color_;          // color, multiplied by intensity
+  const point3D* position_; // position of light source
 };
 
 #endif /* _QV_POINT_LIGHT_ */

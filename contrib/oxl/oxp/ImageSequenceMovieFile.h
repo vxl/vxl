@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	ImageSequenceMovieFile - MovieFile subclass
-// .LIBRARY	POX
-// .HEADER	Oxford Package
-// .INCLUDE	oxp/ImageSequenceMovieFile.h
-// .FILE	ImageSequenceMovieFile.cxx
+// .NAME    ImageSequenceMovieFile - MovieFile subclass
+// .LIBRARY oxp
+// .HEADER  Oxford Package
+// .INCLUDE oxp/ImageSequenceMovieFile.h
+// .FILE    ImageSequenceMovieFile.cxx
 //
 // .SECTION Description
 //    ImageSequenceMovieFile is a subclass of MovieFileInterface that

@@ -7,7 +7,7 @@
 //                            Niskayuna, NY 12309
 //                            All Rights Reserved
 //              Reproduction rights limited as described below.
-//                               
+//
 //      Permission to use, copy, modify, distribute, and sell this software
 //      and its documentation for any purpose is hereby granted without fee,
 //      provided that (i) the above copyright notice and this permission
@@ -17,7 +17,7 @@
 //      the specific, prior written permission of GE CRD, and (iii) any
 //      modifications are clearly marked and summarized in a change history
 //      log.
-//       
+//
 //      THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTY OF ANY KIND,
 //      EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
 //      WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
@@ -36,12 +36,11 @@
 
 //=========================== Basics ====================================
 //
-// .NAME	gevd_bufferxy
-// .HEADER GeneralUtility Package
-// .LIBRARY Basics
-// .INCLUDE	Basics/bufferxy.h
-// .FILE	bufferxy.h
-// .FILE	bufferxy.C
+// .NAME    gevd_bufferxy
+// .HEADER  gel Package
+// .LIBRARY gevd
+// .INCLUDE gevd/gevd_bufferxy.h
+// .FILE    gevd_bufferxy.C
 //
 // .SECTION Description
 //      This object is a block of memory which may be accessed by an
@@ -110,9 +109,9 @@ class gevd_bufferxy : public gevd_memory_mixin
 
       inline void* GetBuffer()        { return(GetBufferPtr()); }
       inline const void* GetBuffer() const { return(GetBufferPtr()); }
-      inline void* GetElementAddr(int x, int y)  
+      inline void* GetElementAddr(int x, int y)
           { return(xra[x] + yra[y]); }
-      inline const void* GetElementAddr(int x, int y) const  
+      inline const void* GetElementAddr(int x, int y) const
           { return(xra[x] + yra[y]); }
 
     // FILE I/O
@@ -126,11 +125,4 @@ class gevd_bufferxy : public gevd_memory_mixin
       }
 };
 
-#endif
-// Do not insert anything after this endif.
-
-
-
-
-
-
+#endif // _gevd_bufferxy_h

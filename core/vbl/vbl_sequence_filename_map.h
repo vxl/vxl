@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	vbl_sequence_filename_map - maps sequence frame indices to filenames
-// .LIBRARY	vbl
-// .HEADER	vxl package
-// .INCLUDE	vbl/vbl_sequence_filename_map.h
-// .FILE	vbl_sequence_filename_map.cxx
+// .NAME    vbl_sequence_filename_map - maps sequence frame indices to filenames
+// .LIBRARY vbl
+// .HEADER  vxl package
+// .INCLUDE vbl/vbl_sequence_filename_map.h
+// .FILE    vbl_sequence_filename_map.cxx
 //
 // .SECTION Description
 //

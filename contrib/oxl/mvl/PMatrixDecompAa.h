@@ -4,12 +4,12 @@
 #pragma interface
 #endif
 //
-// .NAME	PMatrixDecompAa - Decompose PMatrix into [A a]
-// .LIBRARY	MViewBasics
-// .HEADER	MultiView Package
-// .INCLUDE	mvl/PMatrixDecompAa.h
-// .FILE	PMatrixDecompAa.cxx
-// .EXAMPLE	examples/examplePMatrixDecompAa.cxx
+// .NAME    PMatrixDecompAa - Decompose PMatrix into [A a]
+// .LIBRARY MViewBasics
+// .HEADER  MultiView Package
+// .INCLUDE mvl/PMatrixDecompAa.h
+// .FILE    PMatrixDecompAa.cxx
+// .EXAMPLE examples/examplePMatrixDecompAa.cxx
 //
 // .SECTION Description
 //    Decompose PMatrix into [A a] where A is 3x3 and a is 3x1.
@@ -24,27 +24,27 @@
 class PMatrixDecompAa {
 public:
 
-// -- Public data members for A and a.
+//: Public data members for A and a.
   vnl_double_3x3 A;
   vnl_double_3   a;
   //{genman, do not do anything to this line -- awf}
 
-// -- Default constructor
+//: Default constructor
   PMatrixDecompAa() {}
 
-// -- Construct from PMatrix.
+//: Construct from PMatrix.
   PMatrixDecompAa(const PMatrix& P) { set(P); }
 
-// -- Construct from PMatrix.
+//: Construct from PMatrix.
   PMatrixDecompAa(const vnl_matrix<double>& P) { set(P); }
 
-// --  Set [A a] from PMatrix.
+//:  Set [A a] from PMatrix.
   void set(const PMatrix& P) { P.get(&A, &a); }
 
-// --  Set [A a] from PMatrix.
+//:  Set [A a] from PMatrix.
   void set(const vnl_matrix<double>& P);
 
-// --  Set PMatrix from [A a].
+//:  Set PMatrix from [A a].
   void get(PMatrix* P) const { P->set(A, a); }
 
 };

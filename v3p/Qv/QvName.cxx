@@ -1,17 +1,17 @@
 #include "QvString.h"
 #include <vcl_cctype.h>
 
-#define CHUNK_SIZE	4000
+#define CHUNK_SIZE 4000
 
 struct QvNameChunk {
-    char		mem[CHUNK_SIZE];
-    char		*curByte;
-    int			bytesLeft;
-    struct QvNameChunk	*next;
+    char                mem[CHUNK_SIZE];
+    char                *curByte;
+    int                 bytesLeft;
+    struct QvNameChunk  *next;
 };
 
-int		QvNameEntry::nameTableSize;
-QvNameEntry **	QvNameEntry::nameTable;
+int             QvNameEntry::nameTableSize;
+QvNameEntry **  QvNameEntry::nameTable;
 struct QvNameChunk *QvNameEntry::chunk;
 
 void
@@ -32,10 +32,10 @@ QvNameEntry::initClass()
 const QvNameEntry *
 QvNameEntry::insert(const char *s)
 {
-    u_long		h = QvString::hash(s);
-    u_long		i;
-    QvNameEntry		*entry;
-    QvNameEntry		*head;
+    u_long              h = QvString::hash(s);
+    u_long              i;
+    QvNameEntry         *entry;
+    QvNameEntry         *head;
 
     if (nameTableSize == 0)
         initClass();

@@ -318,11 +318,11 @@ emit_sos (j_compress_ptr cinfo)
        * but does not seem to be specified in the standard.
        */
       if (cinfo->Ss == 0) {
-        ta = 0;			/* DC scan */
+        ta = 0;                 /* DC scan */
         if (cinfo->Ah != 0 && !cinfo->arith_code)
-          td = 0;		/* no DC table either */
+          td = 0;               /* no DC table either */
       } else {
-        td = 0;			/* AC scan */
+        td = 0;                 /* AC scan */
       }
     }
     emit_byte(cinfo, (td << 4) + ta);
@@ -339,22 +339,22 @@ emit_jfif_app0 (j_compress_ptr cinfo)
 /* Emit a JFIF-compliant APP0 marker */
 {
   /*
-   * Length of APP0 block	(2 bytes)
-   * Block ID			(4 bytes - ASCII "JFIF")
-   * Zero byte			(1 byte to terminate the ID string)
-   * Version Major, Minor	(2 bytes - 0x01, 0x01)
-   * Units			(1 byte - 0x00 = none, 0x01 = inch, 0x02 = cm)
-   * Xdpu			(2 bytes - dots per unit horizontal)
-   * Ydpu			(2 bytes - dots per unit vertical)
-   * Thumbnail X size		(1 byte)
-   * Thumbnail Y size		(1 byte)
+   * Length of APP0 block       (2 bytes)
+   * Block ID                   (4 bytes - ASCII "JFIF")
+   * Zero byte                  (1 byte to terminate the ID string)
+   * Version Major, Minor       (2 bytes - 0x01, 0x01)
+   * Units                      (1 byte - 0x00 = none, 0x01 = inch, 0x02 = cm)
+   * Xdpu                       (2 bytes - dots per unit horizontal)
+   * Ydpu                       (2 bytes - dots per unit vertical)
+   * Thumbnail X size           (1 byte)
+   * Thumbnail Y size           (1 byte)
    */
 
   emit_marker(cinfo, M_APP0);
 
   emit_2bytes(cinfo, 2 + 4 + 1 + 2 + 1 + 2 + 2 + 1 + 1); /* length */
 
-  emit_byte(cinfo, 0x4A);	/* Identifier: ASCII "JFIF" */
+  emit_byte(cinfo, 0x4A);       /* Identifier: ASCII "JFIF" */
   emit_byte(cinfo, 0x46);
   emit_byte(cinfo, 0x49);
   emit_byte(cinfo, 0x46);
@@ -362,12 +362,12 @@ emit_jfif_app0 (j_compress_ptr cinfo)
   /* We currently emit version code 1.01 since we use no 1.02 features.
    * This may avoid complaints from some older decoders.
    */
-  emit_byte(cinfo, 1);		/* Major version */
-  emit_byte(cinfo, 1);		/* Minor version */
+  emit_byte(cinfo, 1);          /* Major version */
+  emit_byte(cinfo, 1);          /* Minor version */
   emit_byte(cinfo, cinfo->density_unit); /* Pixel size information */
   emit_2bytes(cinfo, (int) cinfo->X_density);
   emit_2bytes(cinfo, (int) cinfo->Y_density);
-  emit_byte(cinfo, 0);		/* No thumbnail image */
+  emit_byte(cinfo, 0);          /* No thumbnail image */
   emit_byte(cinfo, 0);
 }
 
@@ -377,12 +377,12 @@ emit_adobe_app14 (j_compress_ptr cinfo)
 /* Emit an Adobe APP14 marker */
 {
   /*
-   * Length of APP14 block	(2 bytes)
-   * Block ID			(5 bytes - ASCII "Adobe")
-   * Version Number		(2 bytes - currently 100)
-   * Flags0			(2 bytes - currently 0)
-   * Flags1			(2 bytes - currently 0)
-   * Color transform		(1 byte)
+   * Length of APP14 block      (2 bytes)
+   * Block ID                   (5 bytes - ASCII "Adobe")
+   * Version Number             (2 bytes - currently 100)
+   * Flags0                     (2 bytes - currently 0)
+   * Flags1                     (2 bytes - currently 0)
+   * Color transform            (1 byte)
    *
    * Although Adobe TN 5116 mentions Version = 101, all the Adobe files
    * now in circulation seem to use Version = 100, so that's what we write.
@@ -396,23 +396,23 @@ emit_adobe_app14 (j_compress_ptr cinfo)
 
   emit_2bytes(cinfo, 2 + 5 + 2 + 2 + 2 + 1); /* length */
 
-  emit_byte(cinfo, 0x41);	/* Identifier: ASCII "Adobe" */
+  emit_byte(cinfo, 0x41);       /* Identifier: ASCII "Adobe" */
   emit_byte(cinfo, 0x64);
   emit_byte(cinfo, 0x6F);
   emit_byte(cinfo, 0x62);
   emit_byte(cinfo, 0x65);
-  emit_2bytes(cinfo, 100);	/* Version */
-  emit_2bytes(cinfo, 0);	/* Flags0 */
-  emit_2bytes(cinfo, 0);	/* Flags1 */
+  emit_2bytes(cinfo, 100);      /* Version */
+  emit_2bytes(cinfo, 0);        /* Flags0 */
+  emit_2bytes(cinfo, 0);        /* Flags1 */
   switch (cinfo->jpeg_color_space) {
   case JCS_YCbCr:
-    emit_byte(cinfo, 1);	/* Color transform = 1 */
+    emit_byte(cinfo, 1);        /* Color transform = 1 */
     break;
   case JCS_YCCK:
-    emit_byte(cinfo, 2);	/* Color transform = 2 */
+    emit_byte(cinfo, 2);        /* Color transform = 2 */
     break;
   default:
-    emit_byte(cinfo, 0);	/* Color transform = 0 */
+    emit_byte(cinfo, 0);        /* Color transform = 0 */
     break;
   }
 }
@@ -514,14 +514,14 @@ write_frame_header (j_compress_ptr cinfo)
 
   /* Emit the proper SOF marker */
   if (cinfo->arith_code) {
-    emit_sof(cinfo, M_SOF9);	/* SOF code for arithmetic coding */
+    emit_sof(cinfo, M_SOF9);    /* SOF code for arithmetic coding */
   } else {
     if (cinfo->progressive_mode)
-      emit_sof(cinfo, M_SOF2);	/* SOF code for progressive Huffman */
+      emit_sof(cinfo, M_SOF2);  /* SOF code for progressive Huffman */
     else if (is_baseline)
-      emit_sof(cinfo, M_SOF0);	/* SOF code for baseline implementation */
+      emit_sof(cinfo, M_SOF0);  /* SOF code for baseline implementation */
     else
-      emit_sof(cinfo, M_SOF1);	/* SOF code for non-baseline Huffman file */
+      emit_sof(cinfo, M_SOF1);  /* SOF code for non-baseline Huffman file */
   }
 }
 

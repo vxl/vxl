@@ -13,7 +13,7 @@
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Default constructor. Empty edge. Not a valid edge.
+//: Default constructor. Empty edge. Not a valid edge.
 //---------------------------------------------------------------------------
 vtol_edge_2d::vtol_edge_2d(void)
 {
@@ -23,7 +23,7 @@ vtol_edge_2d::vtol_edge_2d(void)
 }
 
 //---------------------------------------------------------------------------
-// -- Constructor from the two endpoints `new_v1', `new_v2' and from a
+//: Constructor from the two endpoints `new_v1', `new_v2' and from a
 //    curve `new_curve'. If `new_curve' is 0, a line is created from
 //    `new_v1' and `new_v2'.
 //---------------------------------------------------------------------------
@@ -64,7 +64,7 @@ vtol_edge_2d::vtol_edge_2d(const vtol_edge_2d &other)
   for(i=other.inferiors()->begin();i!=other.inferiors()->end();++i){
     vtol_zero_chain_sptr zc = (*i)->clone()->cast_to_topology_object()->cast_to_zero_chain();
     link_inferior(*zc);
-  }	
+  }
 
   set_vertices_from_zero_chains();
   if (other._curve)
@@ -91,7 +91,7 @@ vtol_edge_2d::vtol_edge_2d(const vtol_edge_2d &other)
 }
 
 //---------------------------------------------------------------------------
-// -- Constructor from a zero-chain.
+//: Constructor from a zero-chain.
 //---------------------------------------------------------------------------
 
 // --
@@ -191,7 +191,7 @@ vtol_edge_2d::vtol_edge_2d(vsol_curve_2d &edgecurve)
 }
 
 //---------------------------------------------------------------------------
-// -- Clone `this': creation of a new object and initialization
+//: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
 vsol_spatial_object_3d_sptr vtol_edge_2d::clone(void) const
@@ -200,7 +200,7 @@ vsol_spatial_object_3d_sptr vtol_edge_2d::clone(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return the curve associated to `this'
+//: Return the curve associated to `this'
 //---------------------------------------------------------------------------
 vsol_curve_2d_sptr vtol_edge_2d::curve(void) const
 {
@@ -209,7 +209,7 @@ vsol_curve_2d_sptr vtol_edge_2d::curve(void) const
 
 
 //---------------------------------------------------------------------------
-// -- Set the curve with `new_curve'
+//: Set the curve with `new_curve'
 //---------------------------------------------------------------------------
 void vtol_edge_2d::set_curve(vsol_curve_2d &new_curve)
 {
@@ -226,7 +226,7 @@ vtol_edge_2d::~vtol_edge_2d()
 
 
 //---------------------------------------------------------------------------
-// -- Return `this' if `this' is an edge, 0 otherwise
+//: Return `this' if `this' is an edge, 0 otherwise
 //---------------------------------------------------------------------------
 const vtol_edge_2d * vtol_edge_2d::cast_to_edge_2d(void) const
 {
@@ -234,7 +234,7 @@ const vtol_edge_2d * vtol_edge_2d::cast_to_edge_2d(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return `this' if `this' is an edge, 0 otherwise
+//: Return `this' if `this' is an edge, 0 otherwise
 //---------------------------------------------------------------------------
 vtol_edge_2d * vtol_edge_2d::cast_to_edge_2d(void)
 {
@@ -270,7 +270,7 @@ bool vtol_edge_2d::operator==(const vtol_edge_2d &other) const
   return *zc1==*zc2;
 }
 
-// -- spatial object equality
+//: spatial object equality
 
 bool vtol_edge_2d::operator==(const vsol_spatial_object_3d& obj) const
 {

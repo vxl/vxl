@@ -41,7 +41,7 @@ jpeg_start_compress (j_compress_ptr cinfo, boolean write_all_tables)
     ERREXIT1(cinfo, JERR_BAD_STATE, cinfo->global_state);
 
   if (write_all_tables)
-    jpeg_suppress_tables(cinfo, FALSE);	/* mark all tables to be written */
+    jpeg_suppress_tables(cinfo, FALSE); /* mark all tables to be written */
 
   /* (Re)initialize error mgr and destination modules */
   (*cinfo->err->reset_error_mgr) ((j_common_ptr) cinfo);

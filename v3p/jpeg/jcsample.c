@@ -58,7 +58,7 @@ typedef JMETHOD(void, downsample1_ptr,
 /* Private subobject */
 
 typedef struct {
-  struct jpeg_downsampler pub;	/* public fields */
+  struct jpeg_downsampler pub; /* public fields */
 
   /* Downsampling method pointers, one per component */
   downsample1_ptr methods[MAX_COMPONENTS];
@@ -96,7 +96,7 @@ expand_right_edge (JSAMPARRAY image_data, int num_rows,
   if (numcols > 0) {
     for (row = 0; row < num_rows; row++) {
       ptr = image_data[row] + input_cols;
-      pixval = ptr[-1];		/* don't need GETJSAMPLE() here */
+      pixval = ptr[-1]; /* don't need GETJSAMPLE() here */
       for (count = numcols; count > 0; count--)
         *ptr++ = pixval;
     }
@@ -141,7 +141,7 @@ int_downsample (j_compress_ptr cinfo, jpeg_component_info * compptr,
                 JSAMPARRAY input_data, JSAMPARRAY output_data)
 {
   int inrow, outrow, h_expand, v_expand, numpix, numpix2, h, v;
-  JDIMENSION outcol, outcol_h;	/* outcol_h == outcol*h_expand */
+  JDIMENSION outcol, outcol_h; /* outcol_h == outcol*h_expand */
   JDIMENSION output_cols = compptr->width_in_blocks * DCTSIZE;
   JSAMPROW inptr, outptr;
   jpegINT32 outvalue;
@@ -228,11 +228,11 @@ h2v1_downsample (j_compress_ptr cinfo, jpeg_component_info * compptr,
   for (outrow = 0; outrow < compptr->v_samp_factor; outrow++) {
     outptr = output_data[outrow];
     inptr = input_data[outrow];
-    bias = 0;			/* bias = 0,1,0,1,... for successive samples */
+    bias = 0; /* bias = 0,1,0,1,... for successive samples */
     for (outcol = 0; outcol < output_cols; outcol++) {
       *outptr++ = (JSAMPLE) ((GETJSAMPLE(*inptr) + GETJSAMPLE(inptr[1])
                               + bias) >> 1);
-      bias ^= 1;		/* 0=>1, 1=>0 */
+      bias ^= 1; /* 0=>1, 1=>0 */
       inptr += 2;
     }
   }
@@ -267,12 +267,12 @@ h2v2_downsample (j_compress_ptr cinfo, jpeg_component_info * compptr,
     outptr = output_data[outrow];
     inptr0 = input_data[inrow];
     inptr1 = input_data[inrow+1];
-    bias = 1;			/* bias = 1,2,1,2,... for successive samples */
+    bias = 1; /* bias = 1,2,1,2,... for successive samples */
     for (outcol = 0; outcol < output_cols; outcol++) {
       *outptr++ = (JSAMPLE) ((GETJSAMPLE(*inptr0) + GETJSAMPLE(inptr0[1]) +
                               GETJSAMPLE(*inptr1) + GETJSAMPLE(inptr1[1])
                               + bias) >> 2);
-      bias ^= 3;		/* 1=>2, 2=>1 */
+      bias ^= 3; /* 1=>2, 2=>1 */
       inptr0 += 2; inptr1 += 2;
     }
     inrow += 2;

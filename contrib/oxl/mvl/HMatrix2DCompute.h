@@ -15,11 +15,11 @@
 //
 // .SECTION Modifications:
 //   08-02-98 FSM
-//	1. Added virtual compute methods that actually take arguments :
-//	generic estimator using points, lines or both.
-//	2. Obsoleted bool compute(HMatrix2D *). So don't use it!
-//	3. made arguments to compute method 'const ... &',
-//	thereby potentially breaking the code of certain other people.
+//      1. Added virtual compute methods that actually take arguments :
+//      generic estimator using points, lines or both.
+//      2. Obsoleted bool compute(HMatrix2D *). So don't use it!
+//      3. made arguments to compute method 'const ... &',
+//      thereby potentially breaking the code of certain other people.
 //
 
 class HMatrix2D;
@@ -62,7 +62,7 @@ public:
   virtual ~HMatrix2DCompute() { }
 
   //
-  void verbose(bool);	// set this to true for verbose run-time information
+  void verbose(bool);   // set this to true for verbose run-time information
 
 
   //

@@ -18,7 +18,7 @@
 #define JPEG_INTERNALS
 #include "jinclude.h"
 #include "jpeglib.h"
-#include "jdct.h"		/* Private declarations for DCT subsystem */
+#include "jdct.h" /* Private declarations for DCT subsystem */
 
 
 /*
@@ -41,7 +41,7 @@
 /* Private subobject for this module */
 
 typedef struct {
-  struct jpeg_inverse_dct pub;	/* public fields */
+  struct jpeg_inverse_dct pub; /* public fields */
 
   /* This array contains the IDCT method code that each multiplier table
    * is currently set up for, or -1 if it's not yet set up.
@@ -102,15 +102,15 @@ start_pass (j_decompress_ptr cinfo)
 #ifdef IDCT_SCALING_SUPPORTED
     case 1:
       method_ptr = jpeg_idct_1x1;
-      method = JDCT_ISLOW;	/* jidctred uses islow-style table */
+      method = JDCT_ISLOW; /* jidctred uses islow-style table */
       break;
     case 2:
       method_ptr = jpeg_idct_2x2;
-      method = JDCT_ISLOW;	/* jidctred uses islow-style table */
+      method = JDCT_ISLOW; /* jidctred uses islow-style table */
       break;
     case 4:
       method_ptr = jpeg_idct_4x4;
-      method = JDCT_ISLOW;	/* jidctred uses islow-style table */
+      method = JDCT_ISLOW; /* jidctred uses islow-style table */
       break;
 #endif
     case DCTSIZE:
@@ -153,7 +153,7 @@ start_pass (j_decompress_ptr cinfo)
     if (! compptr->component_needed || idct->cur_method[ci] == method)
       continue;
     qtbl = compptr->quant_table;
-    if (qtbl == NULL)		/* happens if no data yet for component */
+    if (qtbl == NULL) /* happens if no data yet for component */
       continue;
     idct->cur_method[ci] = method;
     switch (method) {

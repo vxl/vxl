@@ -21,7 +21,7 @@ public:
   };
 
   // Fields
-  QvSFEnum		value;		// Normal binding value
+  QvSFEnum value; // Normal binding value
 };
 
 #endif /* _QV_NORMAL_BINDING_ */

@@ -3,11 +3,11 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME	SimilarityMetric - Scale + translate ImageMetric
-// .LIBRARY	MViewBasics
-// .HEADER	MultiView Package
-// .INCLUDE	mvl/SimilarityMetric.h
-// .FILE	SimilarityMetric.cxx
+// .NAME    SimilarityMetric - Scale + translate ImageMetric
+// .LIBRARY MViewBasics
+// .HEADER  MultiView Package
+// .INCLUDE mvl/SimilarityMetric.h
+// .FILE    SimilarityMetric.cxx
 //
 // .SECTION Description
 //    An ImageMetric that simply scales and translates.  Most often used

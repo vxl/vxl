@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	HomgInterestPoint - Homogeneous interest point/corner
-// .LIBRARY	MViewBasics
-// .HEADER	MultiView Package
-// .INCLUDE	mvl/HomgInterestPoint.h
-// .FILE	HomgInterestPoint.cxx
+// .NAME    HomgInterestPoint - Homogeneous interest point/corner
+// .LIBRARY MViewBasics
+// .HEADER  MultiView Package
+// .INCLUDE mvl/HomgInterestPoint.h
+// .FILE    HomgInterestPoint.cxx
 //
 // .SECTION Description
 //    HomgInterestPoint is a representation of an interest point

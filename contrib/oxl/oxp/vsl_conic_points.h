@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	vsl_conic_points - Point sampling of 2D conic
-// .LIBRARY	POX
-// .HEADER	Oxford Package
-// .INCLUDE	oxp/vsl_conic_points.h
-// .FILE	vsl_conic_points.cxx
+// .NAME    vsl_conic_points - Point sampling of 2D conic
+// .LIBRARY oxp
+// .HEADER  Oxford Package
+// .INCLUDE oxp/vsl_conic_points.h
+// .FILE    vsl_conic_points.cxx
 //
 // .SECTION Description
 //   This class represents the point sampling of a 2D conic section
@@ -30,16 +30,16 @@ public:
   typedef vnl_double_2 point_type;
   typedef vcl_vector< point_type >::const_iterator point_iterator;
 
-  // -- Constructor makes the point samples.
+  //: Constructor makes the point samples.
   vsl_conic_points(vsl_conic_as_matrix const& conic, double xmin, double xmax, double ymin, double ymax);
 
-  // -- Number of connected components.
+  //: Number of connected components.
   int n() const { return segment_ends.size(); }
 
-  // -- Beginning of segment segment_index
+  //: Beginning of segment segment_index
   point_iterator begin(int segment_index) const { return points.begin() + segment_begin(segment_index); }
 
-  // -- End of segment segment_index
+  //: End of segment segment_index
   point_iterator end(int segment_index) const { return points.begin() + segment_ends[segment_index]; }
 
 private:

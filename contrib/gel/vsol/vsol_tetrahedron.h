@@ -2,10 +2,10 @@
 #define vsol_tetrahedron_h_
 //*****************************************************************************
 //
-// .NAME vsol_tetrahedron - tetrahedral volume in 3D space
-// .LIBRARY	vsol
-// .INCLUDE	vsol/vsol_tetrahedron.h
-// .FILE	vsol_tetrahedron.cxx
+// .NAME    vsol_tetrahedron - tetrahedral volume in 3D space
+// .LIBRARY vsol
+// .INCLUDE vsol/vsol_tetrahedron.h
+// .FILE    vsol_tetrahedron.cxx
 //
 // .SECTION Description
 // The vertices order gives the orientation of the tetrahedron

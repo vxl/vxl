@@ -10,7 +10,7 @@ class QvTextureCoordinate2 : public QvNode
 
 public:
   // Fields
-  QvMFVec2f		point;		// TextureCoordinate point(s)
+  QvMFVec2f point; // TextureCoordinate point(s)
 };
 
 #endif /* _QV_TEXTURE_COORDINATE_2_ */

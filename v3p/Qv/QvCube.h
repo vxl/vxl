@@ -10,9 +10,9 @@ class QvCube : public QvNode
 
 public:
   // Fields
-  QvSFFloat		width;		// Size in x dimension
-  QvSFFloat		height;		// Size in y dimension
-  QvSFFloat		depth;		// Size in z dimension
+  QvSFFloat   width;  // Size in x dimension
+  QvSFFloat   height; // Size in y dimension
+  QvSFFloat   depth;  // Size in z dimension
 
   // point3D min_, max_;  // mpichler, 19950502
   // mpichler, 19951006: use object boundings of QvNode

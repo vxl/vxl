@@ -633,67 +633,67 @@ gtStripSeparate(TIFFRGBAImage* img, uint32* raster, uint32 w, uint32 h)
  * pickTileSeparateCase analyze the parameters and select
  * the appropriate "put" routine to use.
  */
-#define	REPEAT8(op)	REPEAT4(op); REPEAT4(op)
-#define	REPEAT4(op)	REPEAT2(op); REPEAT2(op)
-#define	REPEAT2(op)	op; op
-#define	CASE8(x,op)			\
-    switch (x) {			\
-    case 7: op; case 6: op; case 5: op;	\
-    case 4: op; case 3: op; case 2: op;	\
-    case 1: op;				\
+#define REPEAT8(op)     REPEAT4(op); REPEAT4(op)
+#define REPEAT4(op)     REPEAT2(op); REPEAT2(op)
+#define REPEAT2(op)     op; op
+#define CASE8(x,op)                     \
+    switch (x) {                        \
+    case 7: op; case 6: op; case 5: op; \
+    case 4: op; case 3: op; case 2: op; \
+    case 1: op;                         \
     }
-#define	CASE4(x,op)	switch (x) { case 3: op; case 2: op; case 1: op; }
-#define	NOP
+#define CASE4(x,op)     switch (x) { case 3: op; case 2: op; case 1: op; }
+#define NOP
 
-#define	UNROLL8(w, op1, op2) {		\
-    uint32 _x;				\
-    for (_x = w; _x >= 8; _x -= 8) {	\
-        op1;				\
-        REPEAT8(op2);			\
-    }					\
-    if (_x > 0) {			\
-        op1;				\
-        CASE8(_x,op2);			\
-    }					\
+#define UNROLL8(w, op1, op2) {          \
+    uint32 _x;                          \
+    for (_x = w; _x >= 8; _x -= 8) {    \
+        op1;                            \
+        REPEAT8(op2);                   \
+    }                                   \
+    if (_x > 0) {                       \
+        op1;                            \
+        CASE8(_x,op2);                  \
+    }                                   \
 }
-#define	UNROLL4(w, op1, op2) {		\
-    uint32 _x;				\
-    for (_x = w; _x >= 4; _x -= 4) {	\
-        op1;				\
-        REPEAT4(op2);			\
-    }					\
-    if (_x > 0) {			\
-        op1;				\
-        CASE4(_x,op2);			\
-    }					\
+#define UNROLL4(w, op1, op2) {          \
+    uint32 _x;                          \
+    for (_x = w; _x >= 4; _x -= 4) {    \
+        op1;                            \
+        REPEAT4(op2);                   \
+    }                                   \
+    if (_x > 0) {                       \
+        op1;                            \
+        CASE4(_x,op2);                  \
+    }                                   \
 }
-#define	UNROLL2(w, op1, op2) {		\
-    uint32 _x;				\
-    for (_x = w; _x >= 2; _x -= 2) {	\
-        op1;				\
-        REPEAT2(op2);			\
-    }					\
-    if (_x) {				\
-        op1;				\
-        op2;				\
-    }					\
+#define UNROLL2(w, op1, op2) {          \
+    uint32 _x;                          \
+    for (_x = w; _x >= 2; _x -= 2) {    \
+        op1;                            \
+        REPEAT2(op2);                   \
+    }                                   \
+    if (_x) {                           \
+        op1;                            \
+        op2;                            \
+    }                                   \
 }
 
-#define	SKEW(r,g,b,skew)	{ r += skew; g += skew; b += skew; }
-#define	SKEW4(r,g,b,a,skew)	{ r += skew; g += skew; b += skew; a+= skew; }
+#define SKEW(r,g,b,skew)        { r += skew; g += skew; b += skew; }
+#define SKEW4(r,g,b,a,skew)     { r += skew; g += skew; b += skew; a+= skew; }
 
 #define A1 ((uint32)(0xffL<<24))
-#define	PACK(r,g,b)	\
+#define PACK(r,g,b)     \
         ((uint32)(r)|((uint32)(g)<<8)|((uint32)(b)<<16)|A1)
-#define	PACK4(r,g,b,a)	\
+#define PACK4(r,g,b,a)  \
         ((uint32)(r)|((uint32)(g)<<8)|((uint32)(b)<<16)|((uint32)(a)<<24))
 #define W2B(v) (((v)>>8)&0xff)
-#define	PACKW(r,g,b)	\
+#define PACKW(r,g,b)    \
         ((uint32)W2B(r)|((uint32)W2B(g)<<8)|((uint32)W2B(b)<<16)|A1)
-#define	PACKW4(r,g,b,a)	\
+#define PACKW4(r,g,b,a) \
         ((uint32)W2B(r)|((uint32)W2B(g)<<8)|((uint32)W2B(b)<<16)|((uint32)W2B(a)<<24))
 
-#define	DECLAREContigPutFunc(name) \
+#define DECLAREContigPutFunc(name) \
 static void name(\
     TIFFRGBAImage* img, \
     uint32* cp, \
@@ -1193,19 +1193,19 @@ DECLARESepPutFunc(putRGBUAseparate16bittile)
  * for more information on how it works.
  */
 
-#define	YCbCrtoRGB(dst, yc) {						\
-    int Y = (yc);							\
-    dst = PACK(								\
-        clamptab[Y+Crrtab[Cr]],						\
-        clamptab[Y + (int)((Cbgtab[Cb]+Crgtab[Cr])>>16)],		\
-        clamptab[Y+Cbbtab[Cb]]);					\
+#define YCbCrtoRGB(dst, yc) {                             \
+    int Y = (yc);                                         \
+    dst = PACK(                                           \
+        clamptab[Y+Crrtab[Cr]],                           \
+        clamptab[Y + (int)((Cbgtab[Cb]+Crgtab[Cr])>>16)], \
+        clamptab[Y+Cbbtab[Cb]]);                          \
 }
-#define	YCbCrSetup							\
-    TIFFYCbCrToRGB* ycbcr = img->ycbcr;					\
-    int* Crrtab = ycbcr->Cr_r_tab;					\
-    int* Cbbtab = ycbcr->Cb_b_tab;					\
-    int32* Crgtab = ycbcr->Cr_g_tab;					\
-    int32* Cbgtab = ycbcr->Cb_g_tab;					\
+#define YCbCrSetup                                        \
+    TIFFYCbCrToRGB* ycbcr = img->ycbcr;                   \
+    int* Crrtab = ycbcr->Cr_r_tab;                        \
+    int* Cbbtab = ycbcr->Cb_b_tab;                        \
+    int32* Crgtab = ycbcr->Cr_g_tab;                      \
+    int32* Cbgtab = ycbcr->Cb_g_tab;                      \
     TIFFRGBValue* clamptab = ycbcr->clamptab
 
 /*
@@ -1393,15 +1393,15 @@ DECLAREContigPutFunc(putcontig8bitYCbCr11tile)
         pp += fromskew;
     } while (--h);
 }
-#undef	YCbCrSetup
-#undef	YCbCrtoRGB
+#undef  YCbCrSetup
+#undef  YCbCrtoRGB
 
-#define	LumaRed			coeffs[0]
-#define	LumaGreen		coeffs[1]
-#define	LumaBlue		coeffs[2]
-#define	SHIFT			16
-#define	FIX(x)			((int32)((x) * (1L<<SHIFT) + 0.5))
-#define	ONE_HALF		((int32)(1<<(SHIFT-1)))
+#define LumaRed                 coeffs[0]
+#define LumaGreen               coeffs[1]
+#define LumaBlue                coeffs[2]
+#define SHIFT                   16
+#define FIX(x)                  ((int32)((x) * (1L<<SHIFT) + 0.5))
+#define ONE_HALF                ((int32)(1<<(SHIFT-1)))
 
 /*
  * Initialize the YCbCr->RGB conversion tables.  The conversion
@@ -1435,10 +1435,10 @@ TIFFYCbCrToRGBInit(TIFFYCbCrToRGB* ycbcr, TIFF* tif)
     _TIFFmemset(clamptab+256, 255, 2*256); /* v > 255 => 255 */
     TIFFGetFieldDefaulted(tif, TIFFTAG_YCBCRCOEFFICIENTS, &coeffs);
     _TIFFmemcpy(ycbcr->coeffs, coeffs, 3*sizeof (float));
-    { float f1 = 2-2*LumaRed;		int32 D1 = FIX(f1);
-      float f2 = LumaRed*f1/LumaGreen;	int32 D2 = -FIX(f2);
-      float f3 = 2-2*LumaBlue;		int32 D3 = FIX(f3);
-      float f4 = LumaBlue*f3/LumaGreen;	int32 D4 = -FIX(f4);
+    { float f1 = 2-2*LumaRed;           int32 D1 = FIX(f1);
+      float f2 = LumaRed*f1/LumaGreen;  int32 D2 = -FIX(f2);
+      float f3 = 2-2*LumaBlue;          int32 D3 = FIX(f3);
+      float f4 = LumaBlue*f3/LumaGreen; int32 D4 = -FIX(f4);
       int x;
 
       ycbcr->Cr_r_tab = (int*) (clamptab + 3*256);
@@ -1463,12 +1463,12 @@ TIFFYCbCrToRGBInit(TIFFYCbCrToRGB* ycbcr, TIFF* tif)
       }
     }
 }
-#undef	SHIFT
-#undef	ONE_HALF
-#undef	FIX
-#undef	LumaBlue
-#undef	LumaGreen
-#undef	LumaRed
+#undef  SHIFT
+#undef  ONE_HALF
+#undef  FIX
+#undef  LumaBlue
+#undef  LumaGreen
+#undef  LumaRed
 
 static tileContigRoutine
 initYCbCrConversion(TIFFRGBAImage* img)

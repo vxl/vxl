@@ -39,8 +39,8 @@ QvGroup::getChildren() const
 QvBool
 QvGroup::readInstance(QvInput *in)
 {
-    QvName	typeString;
-    QvFieldData	*fieldData_auto = getFieldData();
+    QvName      typeString;
+    QvFieldData *fieldData_auto = getFieldData();
 
     if (! isBuiltIn) {
         if (in->read(typeString, TRUE)) {
@@ -61,8 +61,8 @@ QvGroup::readInstance(QvInput *in)
 QvBool
 QvGroup::readChildren(QvInput *in)
 {
-    QvNode	*child;
-    QvBool	ret = TRUE;
+    QvNode      *child;
+    QvBool      ret = TRUE;
 
     while (TRUE) {
         if (read(in, child)) {
@@ -74,8 +74,8 @@ QvGroup::readChildren(QvInput *in)
         else {
 // mpichler, 19950711: continue on bad children
 // should work because QvNode::readNode cleans up after wrong nodes
-// 	    ret = FALSE;
-// 	    break;
+//          ret = FALSE;
+//          break;
         }
     }
 

@@ -1,7 +1,7 @@
 #! /bin/sh
 
 # Guess values for system-dependent variables and create Makefiles.
-# Generated automatically using autoconf version 2.12 
+# Generated automatically using autoconf version 2.12
 # Copyright (C) 1992, 93, 94, 95, 96 Free Software Foundation, Inc.
 #
 # This configure script is free software; the Free Software Foundation
@@ -583,7 +583,7 @@ else
     if test -f $ac_dir/$ac_word; then
       if test "$ac_dir/$ac_word" = "/usr/ucb/cc"; then
         ac_prog_rejected=yes
-	continue
+        continue
       fi
       ac_cv_prog_CC="cc"
       break
@@ -938,7 +938,7 @@ echo "configure:938: checking whether the C++ compiler supports the keyword 'boo
 if eval "test \"`echo '$''{'ac_cxx_has_bool'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
-  
+
 ac_ext=C
 # CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -997,7 +997,7 @@ echo "configure:997: checking whether the C++ compiler supports the keyword 'typ
 if eval "test \"`echo '$''{'ac_cxx_has_typename'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
-  
+
 
 ac_ext=C
 # CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
@@ -1043,7 +1043,7 @@ ac_compile='${CC-cc} -c $CFLAGS $CPPFLAGS conftest.$ac_ext 1>&5'
 ac_link='${CC-cc} -o conftest $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS 1>&5'
 cross_compiling=$ac_cv_prog_cc_cross
 
- 
+
 fi
 
 echo "$ac_t""$ac_cxx_has_typename" 1>&6
@@ -1061,7 +1061,7 @@ echo "configure:1061: checking whether the C++ compiler accepts the keyword 'exp
 if eval "test \"`echo '$''{'ac_cxx_has_export'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
-  
+
 
 ac_ext=C
 # CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
@@ -1118,7 +1118,7 @@ ac_compile='${CC-cc} -c $CFLAGS $CPPFLAGS conftest.$ac_ext 1>&5'
 ac_link='${CC-cc} -o conftest $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS 1>&5'
 cross_compiling=$ac_cv_prog_cc_cross
 
- 
+
 fi
 
 echo "$ac_t""$ac_cxx_has_export" 1>&6
@@ -1136,7 +1136,7 @@ echo "configure:1136: checking whether the C++ compiler supports the keyword 'mu
 if eval "test \"`echo '$''{'ac_cxx_has_mutable'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
-  
+
 
 ac_ext=C
 # CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
@@ -1181,7 +1181,7 @@ ac_compile='${CC-cc} -c $CFLAGS $CPPFLAGS conftest.$ac_ext 1>&5'
 ac_link='${CC-cc} -o conftest $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS 1>&5'
 cross_compiling=$ac_cv_prog_cc_cross
 
- 
+
 fi
 
 echo "$ac_t""$ac_cxx_has_mutable" 1>&6
@@ -1199,7 +1199,7 @@ echo "configure:1199: checking whether the C++ compiler supports the keyword 'ex
 if eval "test \"`echo '$''{'ac_cxx_has_explicit'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
-  
+
 
 ac_ext=C
 # CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
@@ -1244,7 +1244,7 @@ ac_compile='${CC-cc} -c $CFLAGS $CPPFLAGS conftest.$ac_ext 1>&5'
 ac_link='${CC-cc} -o conftest $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS 1>&5'
 cross_compiling=$ac_cv_prog_cc_cross
 
- 
+
 fi
 
 echo "$ac_t""$ac_cxx_has_explicit" 1>&6
@@ -1262,7 +1262,7 @@ echo "configure:1262: checking whether the C++ compiler supports the keyword 'dy
 if eval "test \"`echo '$''{'ac_cxx_has_dynamic_cast'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
-  
+
 
 ac_ext=C
 # CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
@@ -1282,7 +1282,7 @@ cat > conftest.$ac_ext <<EOF
 #include "confdefs.h"
 
 struct foo { foo(); virtual ~foo(); virtual void f() =0; };
-struct boo : public foo { void f() { *(int*)0 = 1; } };	
+struct boo : public foo { void f() { *(int*)0 = 1; } };
 boo *try_dynamic_cast() { boo *b = 0; foo *f = b; return dynamic_cast<boo*>(f); }
 
 int main() {
@@ -1306,7 +1306,7 @@ ac_compile='${CC-cc} -c $CFLAGS $CPPFLAGS conftest.$ac_ext 1>&5'
 ac_link='${CC-cc} -o conftest $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS 1>&5'
 cross_compiling=$ac_cv_prog_cc_cross
 
- 
+
 fi
 
 echo "$ac_t""$ac_cxx_has_dynamic_cast" 1>&6
@@ -1324,7 +1324,7 @@ echo "configure:1324: checking whether the C++ compiler supports ISO for scope" 
 if eval "test \"`echo '$''{'ac_cxx_check_for_scope'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
-  
+
 
 ac_ext=C
 # CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
@@ -1415,7 +1415,7 @@ int main() {
 EOF
 if { (eval echo configure:1417: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
-  
+
 VCL_DEFAULT_VALUE="/* no need */";
 echo "$ac_t""no" 1>&6
 
@@ -1423,7 +1423,7 @@ else
   echo "configure: failed program was:" >&5
   cat conftest.$ac_ext >&5
   rm -rf conftest*
-  
+
 VCL_DEFAULT_VALUE=" = x";
 echo "$ac_t""yes" 1>&6
 
@@ -1445,7 +1445,7 @@ echo "configure:1445: checking whether the C++ compiler supports member template
 if eval "test \"`echo '$''{'ac_cxx_has_member_templates'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
-  
+
 
 ac_ext=C
 # CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
@@ -1471,7 +1471,7 @@ public:
   template <class T>
   void klor(T *p) { *ptr = *p; }
 };
-void function() 
+void function()
 {
   blip<double> b;
   int s;
@@ -1533,7 +1533,7 @@ cat > conftest.$ac_ext <<EOF
 #include "confdefs.h"
 
 template <class T>
-class victor 
+class victor
 {
   T data[256];
 public:
@@ -1542,7 +1542,7 @@ public:
 };
 
 template <class T>
-class victor<T *> 
+class victor<T *>
 {
   T *data[256];
 public:
@@ -1573,7 +1573,7 @@ int main() {
 EOF
 if { (eval echo configure:1575: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
-  
+
 VCL_CAN_DO_PARTIAL_SPECIALIZATION="1";
 echo "$ac_t"""yes"" 1>&6
 
@@ -1581,7 +1581,7 @@ else
   echo "configure: failed program was:" >&5
   cat conftest.$ac_ext >&5
   rm -rf conftest*
-  
+
 VCL_CAN_DO_PARTIAL_SPECIALIZATION="0";
 echo "$ac_t"""no"" 1>&6
 
@@ -1638,7 +1638,7 @@ int main() {
 EOF
 if { (eval echo configure:1640: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
-  
+
 VCL_DEFINE_SPECIALIZATION="template <>";
 echo "$ac_t""yes" 1>&6
 
@@ -1646,7 +1646,7 @@ else
   echo "configure: failed program was:" >&5
   cat conftest.$ac_ext >&5
   rm -rf conftest*
-  
+
 VCL_DEFINE_SPECIALIZATION="/* template <> */";
 echo "$ac_t""no" 1>&6
 
@@ -1698,7 +1698,7 @@ int main() {
 EOF
 if { (eval echo configure:1700: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
-  
+
 VCL_ALLOWS_INLINE_INSTANTIATION="1";
 echo "$ac_t""yes" 1>&6
 
@@ -1706,7 +1706,7 @@ else
   echo "configure: failed program was:" >&5
   cat conftest.$ac_ext >&5
   rm -rf conftest*
-  
+
 VCL_ALLOWS_INLINE_INSTANTIATION="0";
 echo "$ac_t""no" 1>&6
 
@@ -1736,7 +1736,7 @@ ac_link='${CXX-g++} -o conftest $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $L
 cross_compiling=$ac_cv_prog_cxx_cross
 
 
-# _CXX, not _TXX as we're trying to find out if inlines are 
+# _CXX, not _TXX as we're trying to find out if inlines are
 # expanded when compiling non-template code.
 
 CXXFLAGS=$given_CXXFLAGS
@@ -1774,7 +1774,7 @@ int main() {
 EOF
 if { (eval echo configure:1776: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
   rm -rf conftest*
-  
+
 VCL_NEEDS_INLINE_INSTANTIATION="0";
 echo "$ac_t""no" 1>&6
 
@@ -1782,7 +1782,7 @@ else
   echo "configure: failed program was:" >&5
   cat conftest.$ac_ext >&5
   rm -rf conftest*
-  
+
 VCL_NEEDS_INLINE_INSTANTIATION="1";
 echo "$ac_t""yes" 1>&6
 
@@ -1847,7 +1847,7 @@ int main() {
 EOF
 if { (eval echo configure:1849: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
-  
+
 VCL_STATIC_CONST_INIT_INT="1";
 echo "$ac_t""yes" 1>&6
 
@@ -1855,7 +1855,7 @@ else
   echo "configure: failed program was:" >&5
   cat conftest.$ac_ext >&5
   rm -rf conftest*
-  
+
 VCL_STATIC_CONST_INIT_INT="0";
 echo "$ac_t""no" 1>&6
 
@@ -1904,7 +1904,7 @@ int main() {
 EOF
 if { (eval echo configure:1906: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
-  
+
 VCL_STATIC_CONST_INIT_FLOAT="1";
 echo "$ac_t""yes" 1>&6
 
@@ -1912,7 +1912,7 @@ else
   echo "configure: failed program was:" >&5
   cat conftest.$ac_ext >&5
   rm -rf conftest*
-  
+
 VCL_STATIC_CONST_INIT_FLOAT="0";
 echo "$ac_t""no" 1>&6
 
@@ -1967,7 +1967,7 @@ template class B<int>;
 
 int main() {
 
-  // function body  
+  // function body
   B<int> b;
   b.function(5);
 
@@ -1975,7 +1975,7 @@ int main() {
 EOF
 if { (eval echo configure:1977: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
   rm -rf conftest*
-  
+
 VCL_IMPLEMENT_STATIC_CONSTS="0";
 echo "$ac_t""no" 1>&6
 
@@ -1983,7 +1983,7 @@ else
   echo "configure: failed program was:" >&5
   cat conftest.$ac_ext >&5
   rm -rf conftest*
-  
+
 VCL_IMPLEMENT_STATIC_CONSTS="1";
 echo "$ac_t""yes" 1>&6
 
@@ -2036,7 +2036,7 @@ int main() {
 EOF
 if { (eval echo configure:2038: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
-  
+
 echo "$ac_t"""yes"" 1>&6
 VCL_CAN_DO_STATIC_TEMPLATE_MEMBER="1"
 
@@ -2044,7 +2044,7 @@ else
   echo "configure: failed program was:" >&5
   cat conftest.$ac_ext >&5
   rm -rf conftest*
-  
+
 echo "$ac_t"""no"" 1>&6
 VCL_CAN_DO_STATIC_TEMPLATE_MEMBER="0"
 
@@ -2097,7 +2097,7 @@ int main() {
 EOF
 if { (eval echo configure:2099: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
-  
+
 echo "$ac_t"""yes"" 1>&6
 VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER="1"
 
@@ -2105,7 +2105,7 @@ else
   echo "configure: failed program was:" >&5
   cat conftest.$ac_ext >&5
   rm -rf conftest*
-  
+
 echo "$ac_t"""no"" 1>&6
 VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER="0"
 
@@ -2142,7 +2142,7 @@ public:
 
 protected:
   victor_base(T *p, unsigned n) : data(p), size(n) { }
-  
+
 private:
   T *data;
   unsigned size;
@@ -2159,8 +2159,8 @@ public:
   victor_fixed() : victor_base<T>(data_fixed, n) { }
 };
 
-int function(victor_fixed<double, 3> const &a, 
-	     victor_fixed<double, 3> const &b)
+int function(victor_fixed<double, 3> const &a,
+             victor_fixed<double, 3> const &b)
 {
   if (a == b) // 2.7 fails to resolve this.
     return 3141;
@@ -2174,7 +2174,7 @@ int main() {
 EOF
 if { (eval echo configure:2176: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
-  
+
 VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD="0";
 echo "$ac_t""no" 1>&6
 
@@ -2182,7 +2182,7 @@ else
   echo "configure: failed program was:" >&5
   cat conftest.$ac_ext >&5
   rm -rf conftest*
-  
+
 VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD="1";
 echo "$ac_t""yes" 1>&6
 
@@ -2237,7 +2237,7 @@ public:
 void print_it(vnl_vector<double> const &);
 
 void try_it(vnl_vector_fixed<3, double> const &u,
-	    vnl_vector_fixed<3, double> const &v)
+            vnl_vector_fixed<3, double> const &v)
 {
   // gcc 2.7 fails in this function.
   if (u == v)
@@ -2249,7 +2249,7 @@ void try_it(vnl_vector_fixed<3, double> const &u,
 }
 
 //
-template <class S, class T> 
+template <class S, class T>
 void    copy_image(S const * const *src, T * const *dst, int, int);
 
 typedef unsigned char byte;
@@ -2265,7 +2265,7 @@ int main() {
 EOF
 if { (eval echo configure:2267: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
-  
+
 VCL_OVERLOAD_CAST="(x)";
 echo "$ac_t""no" 1>&6
 
@@ -2273,7 +2273,7 @@ else
   echo "configure: failed program was:" >&5
   cat conftest.$ac_ext >&5
   rm -rf conftest*
-  
+
 VCL_OVERLOAD_CAST="((T)(x))";
 echo "$ac_t""yes" 1>&6
 
@@ -2330,7 +2330,7 @@ template <class T> T dot(victor<T> const &u, victor<T> const &v)
 template double dot(victor<double> const &, victor<double> const &);
 
 double function(victor<double> const &u,
-		victor<double> const &v)
+                victor<double> const &v)
 {
   double uu = dot(u, u);
   double uv = dot(u, v);
@@ -2344,7 +2344,7 @@ int main() {
 EOF
 if { (eval echo configure:2346: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
   rm -rf conftest*
-  
+
 VCL_NULL_TMPL_ARGS="/* <> */";
 echo "$ac_t""no" 1>&6
 
@@ -2352,7 +2352,7 @@ else
   echo "configure: failed program was:" >&5
   cat conftest.$ac_ext >&5
   rm -rf conftest*
-  
+
 VCL_NULL_TMPL_ARGS="<>";
 echo "$ac_t""yes" 1>&6
 
@@ -2396,7 +2396,7 @@ int main() {
 EOF
 if { (eval echo configure:2398: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
-  
+
 VCL_NO_STATIC_DATA_MEMBERS="0";
 echo "$ac_t""yes" 1>&6
 
@@ -2404,7 +2404,7 @@ else
   echo "configure: failed program was:" >&5
   cat conftest.$ac_ext >&5
   rm -rf conftest*
-  
+
 VCL_NO_STATIC_DATA_MEMBERS="1";
 echo "$ac_t""no" 1>&6
 
@@ -2457,7 +2457,7 @@ int main() {
 EOF
 if { (eval echo configure:2459: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
   rm -rf conftest*
-  
+
 VCL_HAS_TEMPLATE_SYMBOLS="0";
 echo "$ac_t""no" 1>&6
 
@@ -2465,7 +2465,7 @@ else
   echo "configure: failed program was:" >&5
   cat conftest.$ac_ext >&5
   rm -rf conftest*
-  
+
 VCL_HAS_TEMPLATE_SYMBOLS="1";
 echo "$ac_t""yes" 1>&6
 
@@ -2526,7 +2526,7 @@ int main() {
 EOF
 if { (eval echo configure:2528: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
-  
+
 echo "$ac_t"""yes"" 1>&6
 VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER="1"
 
@@ -2534,7 +2534,7 @@ else
   echo "configure: failed program was:" >&5
   cat conftest.$ac_ext >&5
   rm -rf conftest*
-  
+
 echo "$ac_t"""no"" 1>&6
 VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER="0"
 
@@ -2567,8 +2567,8 @@ cat > conftest.$ac_ext <<EOF
 template <class T> struct less { };
 
 template <class T, class C=less<T> >
-struct X { 
-  C t1; 
+struct X {
+  C t1;
 };
 X<int> a;
 X<int, less<short> > b;
@@ -2580,7 +2580,7 @@ int main() {
 EOF
 if { (eval echo configure:2582: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
-  
+
 echo "$ac_t"""yes"" 1>&6
 VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER="1"
 
@@ -2588,7 +2588,7 @@ else
   echo "configure: failed program was:" >&5
   cat conftest.$ac_ext >&5
   rm -rf conftest*
-  
+
 echo "$ac_t"""no"" 1>&6
 VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER="0"
 
@@ -2623,32 +2623,32 @@ cat > conftest.$ac_ext <<EOF
 #line 2624 "configure"
 #include "confdefs.h"
 
-template < class T > 
-struct allocator 
-{ 
+template < class T >
+struct allocator
+{
   allocator ( ) { } ;
   allocator ( const allocator < T > & ) { } ;
-} ; 
+} ;
 
-template < class T , class Allocator = allocator < T > > 
-struct vector 
-{ 
+template < class T , class Allocator = allocator < T > >
+struct vector
+{
   vector ( ) { } ;
   ~ vector ( ) { } ;
-} ; 
+} ;
 
-template < class T > 
-struct spoof 
-{ 
-  void set_row ( unsigned , vector < T /*, allocator<T>*/ > const & ) ; 
-} ; 
+template < class T >
+struct spoof
+{
+  void set_row ( unsigned , vector < T /*, allocator<T>*/ > const & ) ;
+} ;
 
-template < class T > 
-void spoof < T > :: set_row ( unsigned , vector < T /*, allocator<T>*/ > const & ) 
-{ 
-} 
+template < class T >
+void spoof < T > :: set_row ( unsigned , vector < T /*, allocator<T>*/ > const & )
+{
+}
 
-template class spoof < double > ; 
+template class spoof < double > ;
 
 // If the program compiles, we don't need the hack
 
@@ -2658,7 +2658,7 @@ int main() {
 EOF
 if { (eval echo configure:2660: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
-  
+
 VCL_SUNPRO_CLASS_SCOPE_HACK="/* , A */";
 echo "$ac_t""no" 1>&6
 
@@ -2666,7 +2666,7 @@ else
   echo "configure: failed program was:" >&5
   cat conftest.$ac_ext >&5
   rm -rf conftest*
-  
+
 VCL_SUNPRO_CLASS_SCOPE_HACK=", A";
 echo "$ac_t""yes" 1>&6
 
@@ -2682,7 +2682,7 @@ echo "configure:2682: checking whether the C++ compiler has working exceptions" 
 if eval "test \"`echo '$''{'ac_cxx_has_exceptions'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
-  
+
 
 ac_ext=C
 # CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
@@ -2768,7 +2768,7 @@ echo "configure:2768: checking whether the C++ compiler has working namespaces" 
 if eval "test \"`echo '$''{'ac_cxx_has_namespaces'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
-  
+
 
 ac_ext=C
 # CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
@@ -2846,7 +2846,7 @@ namespace diced {
 
 extern "C" int printf(char const *, ...);
 
-void flegg() { 
+void flegg() {
   int a = -1;
   long b = -2;
   float c = -3;
@@ -2892,7 +2892,7 @@ echo "configure:2892: checking whether the C++ compiler allows std:: for the sta
 if eval "test \"`echo '$''{'ac_cxx_allows_namespace_std'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
-  
+
 
 ac_ext=C
 # CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
@@ -2955,7 +2955,7 @@ echo "configure:2955: checking whether the C++ compiler needs std:: for the stan
 if eval "test \"`echo '$''{'ac_cxx_needs_namespace_std'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
-  
+
 
 ac_ext=C
 # CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.

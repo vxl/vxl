@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	SGIMovieFileWrite
-// .LIBRARY	oxp
-// .HEADER	Oxford Package
-// .INCLUDE	oxp/SGIMovieFileWrite.h
-// .FILE	SGIMovieFileWrite.cxx
+// .NAME    SGIMovieFileWrite
+// .LIBRARY oxp
+// .HEADER  Oxford Package
+// .INCLUDE oxp/SGIMovieFileWrite.h
+// .FILE    SGIMovieFileWrite.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 11 Jan 99
 //

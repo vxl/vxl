@@ -42,7 +42,8 @@ typedef long ftnint;
 
 /*external read, write*/
 typedef struct
-{	flag cierr;
+{
+        flag cierr;
         ftnint ciunit;
         flag ciend;
         char *cifmt;
@@ -51,7 +52,8 @@ typedef struct
 
 /*internal read, write*/
 typedef struct
-{	flag icierr;
+{
+        flag icierr;
         char *iciunit;
         flag iciend;
         char *icifmt;
@@ -61,7 +63,8 @@ typedef struct
 
 /*open*/
 typedef struct
-{	flag oerr;
+{
+        flag oerr;
         ftnint ounit;
         char *ofnm;
         ftnlen ofnmlen;
@@ -74,50 +77,53 @@ typedef struct
 
 /*close*/
 typedef struct
-{	flag cerr;
+{
+        flag cerr;
         ftnint cunit;
         char *csta;
 } cllist;
 
 /*rewind, backspace, endfile*/
 typedef struct
-{	flag aerr;
+{
+        flag aerr;
         ftnint aunit;
 } alist;
 
 /* inquire */
 typedef struct
-{	flag inerr;
+{
+        flag inerr;
         ftnint inunit;
         char *infile;
         ftnlen infilen;
-        ftnint	*inex;	/*parameters in standard's order*/
-        ftnint	*inopen;
-        ftnint	*innum;
-        ftnint	*innamed;
-        char	*inname;
-        ftnlen	innamlen;
-        char	*inacc;
-        ftnlen	inacclen;
-        char	*inseq;
-        ftnlen	inseqlen;
-        char 	*indir;
-        ftnlen	indirlen;
-        char	*infmt;
-        ftnlen	infmtlen;
-        char	*inform;
-        ftnint	informlen;
-        char	*inunf;
-        ftnlen	inunflen;
-        ftnint	*inrecl;
-        ftnint	*innrec;
-        char	*inblank;
-        ftnlen	inblanklen;
+        ftnint  *inex; /*parameters in standard's order*/
+        ftnint  *inopen;
+        ftnint  *innum;
+        ftnint  *innamed;
+        char    *inname;
+        ftnlen  innamlen;
+        char    *inacc;
+        ftnlen  inacclen;
+        char    *inseq;
+        ftnlen  inseqlen;
+        char    *indir;
+        ftnlen  indirlen;
+        char    *infmt;
+        ftnlen  infmtlen;
+        char    *inform;
+        ftnint  informlen;
+        char    *inunf;
+        ftnlen  inunflen;
+        ftnint  *inrecl;
+        ftnint  *innrec;
+        char    *inblank;
+        ftnlen  inblanklen;
 } inlist;
 
 #define VOID void
 
-union Multitype {	/* for multiple entry points */
+union Multitype { /* for multiple entry points */
         shortint h;
         integer i;
         real r;
@@ -128,9 +134,9 @@ union Multitype {	/* for multiple entry points */
 
 typedef union Multitype Multitype;
 
-typedef long Long;	/* No longer used; formerly in Namelist */
+typedef long Long; /* No longer used; formerly in Namelist */
 
-struct Vardesc {	/* for Namelist */
+struct Vardesc { /* for Namelist */
         char *name;
         char *addr;
         ftnlen *dims;
@@ -181,10 +187,10 @@ typedef /* Character */ VOID (*H_fp)();
 typedef /* Subroutine */ int (*S_fp)();
 #endif
 /* E_fp is for real functions when -R is not specified */
-typedef VOID C_f;	/* complex function */
-typedef VOID H_f;	/* character function */
-typedef VOID Z_f;	/* double complex function */
-typedef doublereal E_f;	/* real function with -R not specified */
+typedef VOID C_f;       /* complex function */
+typedef VOID H_f;       /* character function */
+typedef VOID Z_f;       /* double complex function */
+typedef doublereal E_f; /* real function with -R not specified */
 
 /* undef any lower-case symbols that your C compiler predefines, e.g.: */
 

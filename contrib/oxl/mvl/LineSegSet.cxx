@@ -46,14 +46,14 @@ LineSegSet::~LineSegSet()
 {
 }
 
-// -- Construct from ascii file
+//: Construct from ascii file
 LineSegSet::LineSegSet(const char* filename, const HomgMetric& c)
 {
   vcl_ifstream f(filename);
   load_ascii(f, c);
 }
 
-// -- Load lines from ASCII file
+//: Load lines from ASCII file
 bool LineSegSet::load_ascii(vcl_istream& f, HomgMetric const& c)
 {
   vnl_matrix<double> L;
@@ -87,39 +87,40 @@ bool LineSegSet::load_ascii(vcl_istream& f, HomgMetric const& c)
     HomgLineSeg2D line(p1, p2);
     _hlines.push_back(c.image_to_homg(line));
   }
-  
+
   vcl_cerr << "Loaded " << _hlines.size() << " line segments\n";
   return true;
 }
-  
+
 int LineSegSet::FindNearestLineIndex(double x, double y)
 {
-  //float mindist=100000000;
-  //float dist;
-  int mini=-1;
-
   vcl_cerr <<"LineSegSet::FindNearestLineIndex AIIEEEEE\n";
-//  for (int i=0; i<int(size()); i++){
-//    ImplicitLine* dl = get_iuline(i);
-//    double t = ( dl->GetStartX() - P->x() ) * ( dl->GetEndX() - P->x() );
-//    t +=       ( dl->GetStartY() - P->y() ) * ( dl->GetEndY() - P->y() );
-//    t +=       ( dl->GetStartZ() - P->z() ) * ( dl->GetEndZ() - P->z() );
-//    // i.e.: t = dot_product ( GetStartPoint() - (*p) , GetEndPoint() - (*p) ) ;
-//
-//    if (t<0)     // P lies inbetween the two end points
-//	dist = dl->IUPoint2CurveDistance(P->x(),P->y(),P->z());  // distance to the support line
-//    else
-//	dist = dl->EndPointsDistance(*P);   // closest distance with endpoints
-//    if (dist<mindist){
-//	mindist = dist;
-//	mini = i;
-//    }
-//  }
+  return -1;
+#if 0 // commented out
+  float mindist=100000000;
+  float dist;
+  int mini=-1;
+  for (int i=0; i<int(size()); i++){
+    ImplicitLine* dl = get_iuline(i);
+    double t = ( dl->GetStartX() - P->x() ) * ( dl->GetEndX() - P->x() );
+    t +=       ( dl->GetStartY() - P->y() ) * ( dl->GetEndY() - P->y() );
+    t +=       ( dl->GetStartZ() - P->z() ) * ( dl->GetEndZ() - P->z() );
+    // i.e.: t = dot_product ( GetStartPoint() - (*p) , GetEndPoint() - (*p) ) ;
 
-  return(mini);    
+    if (t<0)     // P lies inbetween the two end points
+      dist = dl->IUPoint2CurveDistance(P->x(),P->y(),P->z());  // distance to the support line
+    else
+      dist = dl->EndPointsDistance(*P);   // closest distance with endpoints
+    if (dist<mindist){
+      mindist = dist;
+      mini = i;
+    }
+  }
+  return(mini);
+#endif
 }
 
-// -- Save lines to ASCII file
+//: Save lines to ASCII file
 bool LineSegSet::save_ascii(vcl_ostream& f) const
 {
   for(unsigned i = 0; i < _hlines.size(); ++i) {
@@ -127,7 +128,7 @@ bool LineSegSet::save_ascii(vcl_ostream& f) const
 
     vnl_double_2 p1 = _conditioner.homg_to_image(l.get_point1());
     vnl_double_2 p2 = _conditioner.homg_to_image(l.get_point2());
-    
+
     f << p1[0] << " " << p1[1] << "\t";
     f << p2[0] << " " << p2[1] << vcl_endl;
   }
@@ -135,12 +136,12 @@ bool LineSegSet::save_ascii(vcl_ostream& f) const
   return true;
 }
 
-// -- Return line selected by mouse click at (x,y) in image coordinates.
+//: Return line selected by mouse click at (x,y) in image coordinates.
 int LineSegSet::pick_line_index(double x, double y)
 {
   HomgPoint2D p(x, y);
   HomgMetric metric(_conditioner);
-  
+
   double dmin = 1e20;
   int imin = -1;
   int nlines = _hlines.size();
@@ -149,17 +150,17 @@ int LineSegSet::pick_line_index(double x, double y)
     HomgLineSeg2D l_decond = metric.homg_to_image(l);
 
     double d = l_decond.picking_distance(p);
-    
+
     if (d < dmin) {
       dmin = d;
       imin = i;
     }
   }
-  
+
   return imin;
 }
 
-// -- Return line selected by mouse click at (x,y) in image coordinates.
+//: Return line selected by mouse click at (x,y) in image coordinates.
 HomgLineSeg2D* LineSegSet::pick_line(double x, double y)
 {
   int i = pick_line_index(x,y);

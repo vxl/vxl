@@ -2,7 +2,7 @@
 #define vplayer_file_h_
 
 //--------------------------------------------------------------------------------
-// .NAME	vplayer_file
+// .NAME    vplayer_file
 // .SECTION Description:
 //   File menu implementation
 //

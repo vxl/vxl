@@ -29,7 +29,7 @@ QvString::expand(int bySize)
 u_long
 QvString::hash(const char *s)
 {
-    u_long	total, shift;
+    u_long total, shift;
 
     total = shift = 0;
     while (*s) {

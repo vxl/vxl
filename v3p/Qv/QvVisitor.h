@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	QvVisitor - Traverse a VRML 1.0 file
-// .LIBRARY	vview
-// .HEADER	Oxford Package
-// .INCLUDE	vview/QvVisitor.h
-// .FILE	QvVisitor.cxx
+// .NAME    QvVisitor - Traverse a VRML 1.0 file
+// .LIBRARY vview
+// .HEADER  Oxford Package
+// .INCLUDE vview/QvVisitor.h
+// .FILE    QvVisitor.cxx
 //
 // .SECTION Description
 //    QvVisitor is the best way to read a VRML 1.0 file.

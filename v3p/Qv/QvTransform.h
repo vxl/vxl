@@ -13,11 +13,11 @@ class QvTransform : public QvNode
 
 public:
   // Fields
-  QvSFVec3f		translation;		// Translation vector
-  QvSFRotation		rotation;		// Rotation
-  QvSFVec3f		scaleFactor;		// Scale factors
-  QvSFRotation		scaleOrientation;	// Defines rotational space for scale
-  QvSFVec3f		center;			// Center point for scale and rotate
+  QvSFVec3f     translation;      // Translation vector
+  QvSFRotation  rotation;         // Rotation
+  QvSFVec3f     scaleFactor;      // Scale factors
+  QvSFRotation  scaleOrientation; // Defines rotational space for scale
+  QvSFVec3f     center;           // Center point for scale and rotate
 
   // mpichler, 19950516
   matrix4D mat_;

@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	ByteConvertImage
-// .LIBRARY	oxp
-// .HEADER	oxl Package
-// .INCLUDE	oxp/ByteConvertImage.h
-// .FILE	ByteConvertImage.cxx
+// .NAME    ByteConvertImage
+// .LIBRARY oxp
+// .HEADER  oxl Package
+// .INCLUDE oxp/ByteConvertImage.h
+// .FILE    ByteConvertImage.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 22 Dec 98
 //

@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	HomgPoint1D - Homogeneous 1D point
-// .LIBRARY	MViewBasics
-// .HEADER	MultiView Package
-// .INCLUDE	mvl/HomgPoint1D.h
-// .FILE	HomgPoint1D.cxx
+// .NAME    HomgPoint1D - Homogeneous 1D point
+// .LIBRARY MViewBasics
+// .HEADER  MultiView Package
+// .INCLUDE mvl/HomgPoint1D.h
+// .FILE    HomgPoint1D.cxx
 //
 // .SECTION Description:
 // HomgPoint1D represents a 1D point in homogeneous coordinates
@@ -27,24 +27,24 @@ class HomgPoint1D : public Homg1D {
 public:
   // Constructors/Destructors--------------------------------------------------
 
-// -- constructors.
+//: constructors.
   HomgPoint1D() {}
   HomgPoint1D(const HomgPoint1D& that): Homg1D(that) {}
   HomgPoint1D(double px, double pw=1.0) : Homg1D(px,pw) {}
   HomgPoint1D(const vnl_vector<double>& vector_ptr): Homg1D(vector_ptr) {}
 
-// -- Destructor
+//: Destructor
  ~HomgPoint1D() {}
 
-// -- Assignment
+//: Assignment
   HomgPoint1D& operator=(const HomgPoint1D& that) { Homg1D::operator=(that); return *this; }
 
   // Operations----------------------------------------------------------------
 
-// -- @{ Return nonhomogeneous form $x/w$.   If $w < infinitesimal\_tol$, return false @}
+//: @{ Return nonhomogeneous form $x/w$.   If $w < infinitesimal\_tol$, return false @}
   bool get_nonhomogeneous(double& nonhomg) const;
 
-// -- @{ Check $|w| < \mbox{tol} \times |x|$. @}
+//: @{ Check $|w| < \mbox{tol} \times |x|$. @}
   bool check_infinity(double tol = infinitesimal_tol) const;
 };
 

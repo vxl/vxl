@@ -16,10 +16,10 @@
 //    as pread() and pwrite(). So we provide alternative definitions
 //    for those platforms where we can't get a system version.
 // 3. On windows, unlink() is called _unlink(), buth with
-//    vpl_unistd.h it's called vpl_unlink() on both UNIX and 
+//    vpl_unistd.h it's called vpl_unlink() on both UNIX and
 //    windows.
 
-// This list is from 
+// This list is from
 // http://www.opengroup.org/onlinepubs/007908799/xsh/unistd.h.html
 // and includes also the functions declared in posix sys/stat.h
 
@@ -33,17 +33,17 @@ typedef vcl_size_t vpl_size_t;
 
 // fixme this needs configging
 #ifndef _MSC_VER
-typedef ssize_t	    vpl_ssize_t;
-typedef uid_t	    vpl_uid_t;
-typedef gid_t	    vpl_gid_t;
-typedef pid_t	    vpl_pid_t; 
+typedef ssize_t     vpl_ssize_t;
+typedef uid_t       vpl_uid_t;
+typedef gid_t       vpl_gid_t;
+typedef pid_t       vpl_pid_t;
 #else
-typedef size_t	    vpl_ssize_t;
-typedef int	    vpl_uid_t;
-typedef int	    vpl_gid_t;
-typedef int	    vpl_pid_t; 
+typedef size_t      vpl_ssize_t;
+typedef int         vpl_uid_t;
+typedef int         vpl_gid_t;
+typedef int         vpl_pid_t;
 #endif
-typedef off_t	    vpl_off_t;
+typedef off_t       vpl_off_t;
 #if VXL_UNISTD_HAS_USECONDS_T
 typedef useconds_t  vpl_useconds_t;
 #else
@@ -69,15 +69,15 @@ typedef int vpl_mode_t;
 #endif
 typedef dev_t vpl_dev_t;
 
-int    		vpl_chmod(const char *, vpl_mode_t);
-int    		vpl_fchmod(int, vpl_mode_t);
-int    		vpl_fstat(int, vpl_stat_t *);
-int    		vpl_lstat(const char *, vpl_stat_t *);
-int    		vpl_mkdir(const char *, vpl_mode_t);
-int    		vpl_mkfifo(const char *, vpl_mode_t);
-int    		vpl_mknod(const char *, vpl_mode_t, vpl_dev_t);
-int    		vpl_stat(const char *, vpl_stat_t *);
-vpl_mode_t	vpl_umask(vpl_mode_t);
+int             vpl_chmod(const char *, vpl_mode_t);
+int             vpl_fchmod(int, vpl_mode_t);
+int             vpl_fstat(int, vpl_stat_t *);
+int             vpl_lstat(const char *, vpl_stat_t *);
+int             vpl_mkdir(const char *, vpl_mode_t);
+int             vpl_mkfifo(const char *, vpl_mode_t);
+int             vpl_mknod(const char *, vpl_mode_t, vpl_dev_t);
+int             vpl_stat(const char *, vpl_stat_t *);
+vpl_mode_t      vpl_umask(vpl_mode_t);
 
 // unistd.h:
 int             vpl_access(const char *, int);

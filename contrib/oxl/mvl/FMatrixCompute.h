@@ -21,10 +21,10 @@
 //
 // Currently implemented subclasses:
 //
-// * FMatrixComputeLinear	- Hartley's normalized linear method
-// * FMatrixComputeRANSAC	- Oxford robust RANSAC computation
-// * FMatrixComputeNonLinear	- Oxford nonlinear optimization
-// * FMatrixCompute7Point	- Oxford implementation of 7-point algorithm
+// * FMatrixComputeLinear    - Hartley's normalized linear method
+// * FMatrixComputeRANSAC    - Oxford robust RANSAC computation
+// * FMatrixComputeNonLinear - Oxford nonlinear optimization
+// * FMatrixCompute7Point    - Oxford implementation of 7-point algorithm
 //
 
 #include <vcl_vector.h>

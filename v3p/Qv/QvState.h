@@ -27,30 +27,30 @@ public:
     NumStacks
   };
 
-  static const char *stackNames[NumStacks];	// Names of stacks
+  static const char *stackNames[NumStacks];  // Names of stacks
 
-  int		depth;		// Current state depth
-  QvElement	**stacks;	// Stacks of elements
+  int           depth;          // Current state depth
+  QvElement     **stacks;       // Stacks of elements
 
   QvState();
   ~QvState();
 
   // Adds an element instance to the indexed stack
-  void	addElement(StackIndex stackIndex, QvElement *elt);
+  void  addElement(StackIndex stackIndex, QvElement *elt);
 
   // Returns top element on a stack
-  QvElement *	getTopElement(StackIndex stackIndex)
+  QvElement *   getTopElement(StackIndex stackIndex)
       { return stacks[stackIndex]; }
 
   // Pushes/pops the stacks
-  void	push();
-  void	pop();
+  void  push();
+  void  pop();
 
   // Pops top element off one stack
-  void	popElement(StackIndex stackIndex);
+  void  popElement(StackIndex stackIndex);
 
   // Prints contents for debugging, mostly
-  void	print();
+  void  print();
 };
 
 #endif /* _QV_STATE_ */

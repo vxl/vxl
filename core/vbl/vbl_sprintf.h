@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	vbl_sprintf - creates a formatted ANSI C++ string
-// .LIBRARY	vbl
-// .HEADER	vxl package
-// .INCLUDE	vbl/vbl_sprintf.h
-// .FILE	vbl_sprintf.cxx
+// .NAME    vbl_sprintf - creates a formatted ANSI C++ string
+// .LIBRARY vbl
+// .HEADER  vxl package
+// .INCLUDE vbl/vbl_sprintf.h
+// .FILE    vbl_sprintf.cxx
 //
 // .SECTION Description
 //
@@ -42,13 +42,13 @@ struct vbl_sprintf : vcl_string
   //   vbl_sprintf(vcl_string const& fmt, ...);
   //   vbl_sprintf(vcl_string fmt, ...);
   vbl_sprintf(char const *fmt, ...);
-  
+
 #ifndef VCL_WIN32
   // assignment
   vbl_sprintf& operator=(vcl_string const& s) { vcl_string::operator=(s); return *this; }
   vbl_sprintf& operator=(char const* s) { vcl_string::operator=(s); return *this; }
 #endif
-  
+
   operator char const* () const { return c_str(); }
 };
 

@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	PairMatchSet - Set of pairs of integers
-// .LIBRARY	MViewBasics
-// .HEADER	MultiView Package
-// .INCLUDE	mvl/PairMatchSet.h
-// .FILE	PairMatchSet.cxx
+// .NAME    PairMatchSet - Set of pairs of integers
+// .LIBRARY MViewBasics
+// .HEADER  MultiView Package
+// .INCLUDE mvl/PairMatchSet.h
+// .FILE    PairMatchSet.cxx
 //
 // .SECTION Description
 //    A PairMatchSet stores tuples of integers (i1, i2), stored as

@@ -1,10 +1,10 @@
 #ifndef xcv_segmentation_h_
 #define xcv_segmentation_h_
- 
+
 //--------------------------------------------------------------------------------
-// .NAME	xcv_segmentation - xcv menu and interface for segmentation
-// .INCLUDE	xcv/xcv_segmentation.h
-// .FILE	xcv_segmentation.cxx
+// .NAME    xcv_segmentation - xcv menu and interface for segmentation
+// .INCLUDE xcv/xcv_segmentation.h
+// .FILE    xcv_segmentation.cxx
 // .SECTION Description
 //    Creates a menu for, and provides an interface to segmentation operations
 //    contained in vxl.
@@ -30,16 +30,16 @@ public:
   static void perform_harris(vsl_harris_params&, unsigned col, unsigned row);
   static void harris();
 
-  static void draw_edges(vcl_list<vsl_edge*> detected_edges, 
+  static void draw_edges(vcl_list<vsl_edge*> detected_edges,
     unsigned col, unsigned row);
-  static void draw_straight_lines(vcl_vector<float>, vcl_vector<float>, 
+  static void draw_straight_lines(vcl_vector<float>, vcl_vector<float>,
     vcl_vector<float>, vcl_vector<float>, unsigned, unsigned);
   static bool get_canny_ox_params(vsl_canny_ox_params*);
   static void canny_ox();
   static bool get_break_lines_ox_params(double* bk_thresh);
   static void get_broken_edges(double bk_thresh, vcl_list<vsl_edge*>*);
   static void break_lines_ox();
-  static bool get_detect_lines_ox_params(float* high, int* edge_min, 
+  static bool get_detect_lines_ox_params(float* high, int* edge_min,
     int* min_lenth, int* min_fit_length);
   static void detect_lines_ox();
 

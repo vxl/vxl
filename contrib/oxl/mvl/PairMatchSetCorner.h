@@ -3,11 +3,11 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME	PairMatchSetCorner - Matches between corners
-// .LIBRARY	MViewBasics
-// .HEADER	MultiView Package
-// .INCLUDE	mvl/PairMatchSetCorner.h
-// .FILE	PairMatchSetCorner.cxx
+// .NAME    PairMatchSetCorner - Matches between corners
+// .LIBRARY MViewBasics
+// .HEADER  MultiView Package
+// .INCLUDE mvl/PairMatchSetCorner.h
+// .FILE    PairMatchSetCorner.cxx
 //
 // .SECTION Description
 //    PairMatchSetCorner is a subclass of PairMatchSet that stores matches
@@ -45,7 +45,7 @@ public:
 
   void extract_matches(vcl_vector <HomgPoint2D>& points1, vcl_vector <HomgPoint2D>& points2) const;
 
-  // -- Clear all matches and then set only those for which the corresponding
+  //: Clear all matches and then set only those for which the corresponding
   // inliers flag is set.
   void set(const vcl_vector<bool>& inliers,
            const vcl_vector<int>&  corner_index_1,
@@ -54,11 +54,11 @@ public:
   // Data Control--------------------------------------------------------------
   void set(HomgInterestPointSet const* corners1, HomgInterestPointSet const* corners2);
 
-// -- Return the set of corners within which the i1 indices point
+//: Return the set of corners within which the i1 indices point
   HomgInterestPointSet const* get_corners1() const { return _corners1; }
   // HomgInterestPointSet* get_corners1() { return _corners1; }
 
-// -- Return the set of corners within which the i2 indices point
+//: Return the set of corners within which the i2 indices point
   HomgInterestPointSet const* get_corners2() const { return _corners2; }
   //   HomgInterestPointSet* get_corners2() { return _corners2; }
 

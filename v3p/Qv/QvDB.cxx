@@ -37,7 +37,7 @@ QvDB::read(QvInput *in, QvNode *&node)
   node = root;
 
   if (ret && node == NULL && ! in->eof()) {
-      char	c;
+      char c;
       in->get(c);
       QvReadError::post(in, "Extra characters ('%c') found in input", c);
       ret = FALSE;

@@ -4,9 +4,9 @@
   u97mb@robots.ox.ac.uk
 */
 
-// .NAME	xcv_image_tableau - An image tableau with an associated region of interest
-// .INCLUDE	xcv/xcv_image_tableau.h
-// .FILE	xcv_image_tableau.cxx
+// .NAME    xcv_image_tableau - An image tableau with an associated region of interest
+// .INCLUDE xcv/xcv_image_tableau.h
+// .FILE    xcv_image_tableau.cxx
 
 #include "xcv_image_tableau_sptr.h"
 #include <vgui/vgui_image_tableau.h>

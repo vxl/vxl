@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	SGIMovieFile - Read SGI movie files
-// .LIBRARY	POX
-// .HEADER	Oxford Package
-// .INCLUDE	oxp/SGIMovieFile.h
-// .FILE	SGIMovieFile.cxx
+// .NAME    SGIMovieFile - Read SGI movie files
+// .LIBRARY oxp
+// .HEADER  Oxford Package
+// .INCLUDE oxp/SGIMovieFile.h
+// .FILE    SGIMovieFile.cxx
 //
 // .SECTION Description
 //    SGIMovieFile is an implementation of MovieFileInterface that reads

@@ -21,7 +21,7 @@
  * of a DCT block read in natural order (left to right, top to bottom).
  */
 
-#if 0				/* This table is not actually needed in v6a */
+#if 0 /* This table is not actually needed in v6a */
 
 const int jpeg_zigzag_order[DCTSIZE2] = {
    0,  1,  5,  6, 14, 15, 27, 28,
@@ -96,13 +96,13 @@ jround_up (long a, long b)
  * is not all that great, because these routines aren't very heavily used.)
  */
 
-#ifndef NEED_FAR_POINTERS	/* normal case, same as regular macros */
-#define FMEMCOPY(dest,src,size)	MEMCOPY(dest,src,size)
-#define FMEMZERO(target,size)	MEMZERO(target,size)
-#else				/* 80x86 case, define if we can */
+#ifndef NEED_FAR_POINTERS       /* normal case, same as regular macros */
+#define FMEMCOPY(dest,src,size) MEMCOPY(dest,src,size)
+#define FMEMZERO(target,size)   MEMZERO(target,size)
+#else                           /* 80x86 case, define if we can */
 #ifdef USE_FMEM
-#define FMEMCOPY(dest,src,size)	_fmemcpy((void FAR *)(dest), (const void FAR *)(src), (size_t)(size))
-#define FMEMZERO(target,size)	_fmemset((void FAR *)(target), 0, (size_t)(size))
+#define FMEMCOPY(dest,src,size) _fmemcpy((void FAR *)(dest), (const void FAR *)(src), (size_t)(size))
+#define FMEMZERO(target,size)   _fmemset((void FAR *)(target), 0, (size_t)(size))
 #endif
 #endif
 
@@ -135,7 +135,7 @@ jcopy_sample_rows (JSAMPARRAY input_array, int source_row,
     FMEMCOPY(outptr, inptr, count);
 #else
     for (count = num_cols; count > 0; count--)
-      *outptr++ = *inptr++;	/* needn't bother with GETJSAMPLE() here */
+      *outptr++ = *inptr++;     /* needn't bother with GETJSAMPLE() here */
 #endif
   }
 }

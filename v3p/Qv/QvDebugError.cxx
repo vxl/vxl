@@ -22,8 +22,8 @@ QvDebugErrorCallback QvDebugError::callback_ = 0;  // mpichler, 19950713
 void
 QvDebugError::post(const char *methodName, const char *formatString ...)
 {
-    char	buf[10000];
-    va_list	ap;
+    char    buf[10000];
+    va_list ap;
 
 #if defined(SUN4) || defined(SUN4_GNU)
     va_start(ap);
