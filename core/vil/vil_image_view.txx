@@ -585,7 +585,21 @@ void vil2_image_view<T>::fill(T value)
       for (unsigned int j=0;j<nj_;++j,row += jstep_)
       {
         int i = ni_;
-        while (i>=0) { row[--i]=value; }
+        while (i!=0) { row[--i]=value; }
+      }
+    }
+    return;
+  }
+
+  if (jstep_==1)
+  {
+    for (unsigned int p=0;p<nplanes_;++p,plane += planestep_)
+    {
+      T* col = plane;
+      for (unsigned int i=0;i<ni_;++i,col += istep_)
+      {
+        int j = nj_;
+        while (j!=0) { col[--j]=value; }
       }
     }
     return;

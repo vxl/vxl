@@ -9,6 +9,7 @@
 #include <vil2/vil2_print.h>
 #include <vil2/vil2_plane.h>
 #include <vil2/vil2_convert.h>
+#include <vil2/vil2_transpose.h>
 #include <vil2/vil2_view_as.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_new.h>
@@ -288,6 +289,34 @@ void test_contiguous()
   
 }
 
+void test_image_view_fill()
+{
+  vil2_image_view<vxl_byte> image(10,10,2);
+	image.fill(vxl_byte(17));
+	TEST("fill (contiguous) (0,0,0)",image(0,0,0),vxl_byte(17));
+	TEST("fill (contiguous) (9,9,1)",image(9,9,1),vxl_byte(17));
+
+  vil2_image_view<vxl_byte> crop_image=vil2_crop(image,4,4,4,4);
+	crop_image.fill(vxl_byte(23));
+	TEST("fill (istep==1) (0,0,0)",crop_image(0,0,0),vxl_byte(23));
+	TEST("fill (istep==1) (3,3,1)",crop_image(3,3,1),vxl_byte(23));
+	TEST("fill (original) ",image(4,4,0),vxl_byte(23));
+	TEST("fill (no i under-run) ",image(3,4,0),vxl_byte(17));
+	TEST("fill (no i over-run) ",image(8,4,0),vxl_byte(17));
+	TEST("fill (no j under-run) ",image(4,3,0),vxl_byte(17));
+	TEST("fill (no j over-run) ",image(8,4,0),vxl_byte(17));
+
+	image.fill(vxl_byte(11));
+	vil2_transpose(crop_image).fill(vxl_byte(25));
+	TEST("fill (jstep==1) (0,0,0)",crop_image(0,0,0),vxl_byte(25));
+	TEST("fill (jstep==1) (3,3,1)",crop_image(3,3,1),vxl_byte(25));
+	TEST("fill (original) ",image(4,4,0),vxl_byte(25));
+	TEST("fill (no i under-run) ",image(3,4,0),vxl_byte(11));
+	TEST("fill (no i over-run) ",image(8,4,0),vxl_byte(11));
+	TEST("fill (no j under-run) ",image(4,3,0),vxl_byte(11));
+	TEST("fill (no j over-run) ",image(8,4,0),vxl_byte(11));
+
+}
 
 MAIN( test_image_view )
 {
@@ -309,7 +338,7 @@ MAIN( test_image_view )
            << "*****************************************\n";
   test_image_view(vxl_uint_32(), "vxl_uint_32", float());
   test_contiguous();
-
+  test_image_view_fill();
 
   SUMMARY();
 }

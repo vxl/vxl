@@ -140,7 +140,7 @@ inline void vil2_math_sum_squares(sumT& sum, sumT& sum_sq, const vil2_image_view
   for (;row!=row_end;row+=jstep)
   {
     const imT* v_end = row + row_len;
-    for (const imT* v = row;v!=v_end;v+=istep) { sum+=*v; sum_sq+=(*v)*(*v); }
+    for (const imT* v = row;v!=v_end;v+=istep) { sum+=*v; sum_sq+=sumT(*v)*sumT(*v); }
   }
 }
 
