@@ -154,7 +154,7 @@ void vpdfl_mixture_builder::build(vpdfl_pdf_base& model,
 void vpdfl_mixture_builder::build(vpdfl_pdf_base& model,
             mbl_data_wrapper<vnl_vector<double> >& data) const
 {
-  vcl_vector<double> wts(data.size(), 1.0);
+  vcl_vector<double> wts(int(data.size()), 1.0);
   weighted_build(model,data,wts);
 }
 
