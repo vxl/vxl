@@ -1834,9 +1834,10 @@ namespace {
         est_H = homo_est->H();
         est_H /= est_H.array_two_norm();
         if ( est_H(0,0) < 0 ) est_H *= -1;
-
-        // vcl_cout<<"Estimated H = "<<est_H<<vcl_endl;
-        xform_is_good &= (est_H-H).array_two_norm() < tol;
+#ifdef DEBUG
+        vcl_cout<<"Estimated H = "<<est_H<<vcl_endl;
+#endif
+        xform_is_good = xform_is_good && (est_H-H).array_two_norm() < tol;
       }
     }
     TEST("Estimation of Projective xform", xform_is_good, true);
@@ -1918,7 +1919,7 @@ namespace {
         if ( est_H(0,0) < 0 ) est_H *= -1;
 
         // check homography transform
-        homography_is_good &= (est_H-H).array_two_norm() < tol_xform;
+        homography_is_good = homography_is_good && (est_H-H).array_two_norm() < tol_xform;
 
         // test on transfer error on 4 cannonical directions
         vnl_matrix<double> trans_error;
@@ -1926,16 +1927,16 @@ namespace {
 
         trans_error = est->transfer_error_covar( p[0] );
         ratio = trans_error(0,0);  // this constant shall be the same
-        cov_is_good &= (ratio*iid_cov-trans_error).array_two_norm() < tol_trans_error;
+        cov_is_good = cov_is_good && (ratio*iid_cov-trans_error).array_two_norm() < tol_trans_error;
 
         trans_error = est->transfer_error_covar( p[num/4] );
-        cov_is_good &= (ratio*iid_cov-trans_error).array_two_norm() < tol_trans_error;
+        cov_is_good = cov_is_good && (ratio*iid_cov-trans_error).array_two_norm() < tol_trans_error;
 
         trans_error = est->transfer_error_covar( p[num/2] );
-        cov_is_good &= (ratio*iid_cov-trans_error).array_two_norm() < tol_trans_error;
+        cov_is_good = cov_is_good && (ratio*iid_cov-trans_error).array_two_norm() < tol_trans_error;
 
         trans_error = est->transfer_error_covar( p[num*3/4] );
-        cov_is_good &= (ratio*iid_cov-trans_error).array_two_norm() < tol_trans_error;
+        cov_is_good = cov_is_good && (ratio*iid_cov-trans_error).array_two_norm() < tol_trans_error;
       }
     }
 
