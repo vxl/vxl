@@ -1294,7 +1294,7 @@ color_histogram(vil1_memory_image_of<float> const& hue,
   int width = hue.width(), height = hue.height();
   if (intf_->Npix() == 0)
     return color_hist;
-  for (intf_->reset(); intf_->next(); ++i)
+  for (intf_->reset(); intf_->next();)
   {
     int x = int(intf_->X()), y = int(intf_->Y());
     if (x<0||x>=width||y<0||y>=height)
