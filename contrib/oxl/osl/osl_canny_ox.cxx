@@ -170,8 +170,8 @@ void osl_canny_ox::detect_edges(vil1_image const &image_in, vcl_list<osl_edge*> 
   fsm_delete_array x_;
   fsm_delete_array y_;
 
-  if (follow_strategy_OX_ == 0)  {  //Don't do the follow stage of canny
-
+  if (follow_strategy_OX_ == 0) // Don't do the follow stage of canny
+  {
     edges->push_front( NO_FollowerOX(edgels_Hysteresis) );
     // delete the edgels that are output of Hysteresis
     fsm_delete edgels_Hysteresis;
@@ -220,7 +220,8 @@ osl_edgel_chain *osl_canny_ox::Get_NMS_edgelsOX(int n_edgels_NMS, int *x_, int *
 
   for (unsigned int y=1; y+1<ysize_; ++y)
     for (unsigned int x=1; x+1<xsize_; ++x)
-      if ( thick_[x][y] != 0 /*&& i < n_edgels_NMS*/) {
+      if ( thick_[x][y] != 0 /*&& i < n_edgels_NMS*/)
+      {
         assert(i < n_edgels_NMS);
         // fill edgels_NMS
         edgels_NMS->SetX(dx_[x][y],i);
@@ -286,13 +287,12 @@ int osl_canny_ox::HysteresisOX(osl_edgel_chain *&edgels_NMS,
   int n_edgels_Hysteresis = Get_n_edgels_hysteresisOX(edgels_NMS,status);
 
   // delete the osl_LINK * in the array 'links' :
-  for (unsigned int i=0; i<n_edgels_NMS; ++i) {
+  for (unsigned int i=0; i<n_edgels_NMS; ++i)
     for (osl_LINK *link1 = links[i]; link1; ) {
       osl_LINK *link2 = link1->nextl;
       fsm_delete link1;
       link1 = link2;
     }
-  }
 
   return n_edgels_Hysteresis;
 }
@@ -358,7 +358,8 @@ void osl_canny_ox::Link_edgelsOX(vcl_vector<unsigned> const &col,
                                  osl_LINK *links[])
   // Rewritten and inline-documented by Peter Vanroose, 30 Dec. 1999.
 {
-  for (unsigned int i=0; i<ysize_; ++i) {// for each image row
+  for (unsigned int i=0; i<ysize_; ++i) // for each image row
+  {
     for (unsigned j=rows[i]; j<rows[i+1]; ++j) // for each edgel in this row
     {
       bool e=false; // set to true if next edgel is (horiz) neighbour
@@ -373,7 +374,8 @@ void osl_canny_ox::Link_edgelsOX(vcl_vector<unsigned> const &col,
 
       // Don't go on (except for distance 2 neighbour) if there is certainly
       // no vertical neighbour edgel:
-      if (rows[i+1] == rows[ysize_]) {
+      if (rows[i+1] == rows[ysize_])
+      {
         if (e) continue;
         // Verify that there was no diagonal north-east link:
         if (i > 0) {
@@ -495,8 +497,10 @@ void osl_canny_ox::Get_hysteresis_edgelsOX(osl_edgel_chain *& edgels_NMS,
 
   unsigned int n_edgels_NMS = edgels_NMS->size();
 
-  for (unsigned int i=0,j=0; i<n_edgels_NMS; ++i) {
-    if (status[i]) {
+  for (unsigned int i=0,j=0; i<n_edgels_NMS; ++i)
+  {
+    if (status[i])
+    {
       // Fill edgels_Hysteresis
       edgels_Hysteresis->SetX(edgels_NMS->GetX(i),j);
       edgels_Hysteresis->SetY(edgels_NMS->GetY(i),j);
@@ -580,8 +584,9 @@ void osl_canny_ox::FollowerOX(vcl_list<osl_edge*> *edges)
   vcl_list<float> grad;
 
   edges->clear();
-  for (unsigned int x=border_size_OX_; x<xsize_-border_size_OX_; ++x) {
-    for (unsigned int y=border_size_OX_; y<ysize_-border_size_OX_; ++y) {
+  for (unsigned int x=border_size_OX_; x<xsize_-border_size_OX_; ++x)
+    for (unsigned int y=border_size_OX_; y<ysize_-border_size_OX_; ++y)
+    {
       // Due to Initial_hysteresis we can follow everything > edge_min_OX_
       if ( (thin_[x][y] < edge_min_OX_) || junction_[x][y] )
         continue;
@@ -621,7 +626,8 @@ void osl_canny_ox::FollowerOX(vcl_list<osl_edge*> *edges)
 
       // Write the points to the osl_edgel_chain and the end points to the Curve
       //dc->SetStart(xcoords.front()+xstart_, ycoords.front()+ystart_);
-      while (count--) {
+      while (count--)
+      {
         int tmpx = xcoords.front(); xcoords.pop_front();
         int tmpy = ycoords.front(); ycoords.pop_front();
         float val = grad.front(); grad.pop_front();
@@ -648,16 +654,15 @@ void osl_canny_ox::FollowerOX(vcl_list<osl_edge*> *edges)
 #ifdef DEBUG
         vcl_cerr << "trivial edgechain\n";
 #endif
-        delete dc;
-        dc = 0;
-        continue;
       }
-      else if ( dc->size() > 1 ) {
+      else if ( dc->size() > 1 )
+      {
         // Create an edge for the image topology
         osl_Vertex *v1 = new osl_Vertex(dc->GetX(0),dc->GetY(0));
         osl_Vertex *v2 = new osl_Vertex(dc->GetX(dc->size()-1),dc->GetY(dc->size()-1));
 
-        if (junction_option_OX_) {
+        if (junction_option_OX_)
+        {
           // Check whether each vertex is a junction
           osl_Vertex *V1 = osl_find(vlist_, *v1);
           osl_Vertex *V2 = osl_find(vlist_, *v2);
@@ -665,7 +670,8 @@ void osl_canny_ox::FollowerOX(vcl_list<osl_edge*> *edges)
           // If neither are junctions we may have formed a single
           // isolated chain that should have common vertex endpoints.
           bool single_chain = false;
-          if ( !V1 && !V2 ) {
+          if ( !V1 && !V2 )
+          {
             float dx = dc->GetX(0) - dc->GetX(dc->size()-1);
             float dy = dc->GetY(0) - dc->GetY(dc->size()-1);
             if (dc->size() < 1 || dx*dx+dy*dy < 4) {// ie. dist < 2 pixels it is closed
@@ -705,10 +711,9 @@ void osl_canny_ox::FollowerOX(vcl_list<osl_edge*> *edges)
         vcl_cerr << __FILE__ ": push\n";
 #endif
         edges->push_front(new osl_edge(*dc, v1, v2));
-        delete dc;
       }
+      delete dc;
     }
-  }
 #ifdef DEBUG
   vcl_cerr << "edges->size() : " << edges->size() << vcl_endl;
 #endif
@@ -766,8 +771,9 @@ void osl_canny_ox::Final_followOX(int x,
 
   bool junction_or_jump = false;
 
-  switch (follow_strategy_OX_) {
-  case 1: // charlie rothwell way
+  switch (follow_strategy_OX_)
+  {
+   case 1: // charlie rothwell way
     // Find one adjacent pixel;  for a closed curve, the method `guarantees'
     // a clockwise ordering of the points in the image sense
     if (false) { }
@@ -787,7 +793,8 @@ void osl_canny_ox::Final_followOX(int x,
       junction_or_jump = true;
     break;
 
-  case 2: default: // nic pillow way
+   case 2:
+   default: // nic pillow way
     if (false) { }
 #define smoo(a, b) \
     else if ( (thin_[a][b] >= edge_min_OX_) && (!junction_[a][b]) ) Final_followOX(a,b ,xc,yc,grad,0);
@@ -829,7 +836,8 @@ void osl_canny_ox::Final_followOX(int x,
   smoo(x-1, y+1)
   smoo(x+1, y+1)
 #undef smoo
-  else if ( join_flag_OX_ && (xc->size() > 1) )  {
+  else if ( join_flag_OX_ && (xc->size() > 1) )
+  {
     // Try to find a pixel to jump to,
     //  and if successful, follow from it
     int x_c = xc->front(); xc->pop_front();
@@ -883,7 +891,8 @@ int osl_canny_ox::Join_dotsOX(int x, int y, int dx, int dy, int& xNew, int& yNew
   assert( (unsigned int)x+2<xsize_ );
   assert( (unsigned int)y+2<ysize_ );
 
-  if (!dx && (vcl_abs(dy) == 1)) {
+  if (!dx && (vcl_abs(dy) == 1))
+  {
     if      (thin_[x  ][y+2*dy] >= edge_min_OX_) Set_intsOX(xNew, yNew, x  , y+2*dy);
     else if (thin_[x+1][y+2*dy] >= edge_min_OX_) Set_intsOX(xNew, yNew, x+1, y+2*dy);
     else if (thin_[x-1][y+2*dy] >= edge_min_OX_) Set_intsOX(xNew, yNew, x-1, y+2*dy);
@@ -895,7 +904,8 @@ int osl_canny_ox::Join_dotsOX(int x, int y, int dx, int dy, int& xNew, int& yNew
     else if (thin_[x-2][y     ] >= edge_min_OX_) Set_intsOX(xNew, yNew, x-2, y     );
     else return false;
   }
-  else if ((vcl_abs(dx) == 1) && !dy) {
+  else if ((vcl_abs(dx) == 1) && !dy)
+  {
     if      (thin_[x+2*dx][y  ] >= edge_min_OX_) Set_intsOX(xNew, yNew, x+2*dx, y  );
     else if (thin_[x+2*dx][y+1] >= edge_min_OX_) Set_intsOX(xNew, yNew, x+2*dx, y+1);
     else if (thin_[x+2*dx][y-1] >= edge_min_OX_) Set_intsOX(xNew, yNew, x+2*dx, y-1);
@@ -907,7 +917,8 @@ int osl_canny_ox::Join_dotsOX(int x, int y, int dx, int dy, int& xNew, int& yNew
     else if (thin_[x     ][y-2] >= edge_min_OX_) Set_intsOX(xNew, yNew, x     , y-2);
     else return false;
   }
-  else if (vcl_abs(dx*dy) == 1) {
+  else if (vcl_abs(dx*dy) == 1)
+  {
     if      (thin_[x+2*dx][y+2*dy] >= edge_min_OX_) Set_intsOX(xNew, yNew, x+2*dx, y+2*dy);
     else if (thin_[x+2*dx][y+  dy] >= edge_min_OX_) Set_intsOX(xNew, yNew, x+2*dx, y+  dy);
     else if (thin_[x+  dx][y+2*dy] >= edge_min_OX_) Set_intsOX(xNew, yNew, x+  dx, y+2*dy);
@@ -966,7 +977,8 @@ void osl_canny_ox::Find_junctionsOX()
   osl_canny_base_fill_raw_image(junction_, xsize_, ysize_, 0);
 
   for (unsigned int x=border_size_OX_; x+border_size_OX_<xsize_; ++x)
-    for (unsigned int y=border_size_OX_; y+border_size_OX_<ysize_; ++y) {
+    for (unsigned int y=border_size_OX_; y+border_size_OX_<ysize_; ++y)
+    {
       if ( thin_[x][y] < edge_min_OX_ )
         continue;
 
@@ -1000,7 +1012,8 @@ void osl_canny_ox::Find_junction_clustersOX()
   xjunc.clear();      yjunc.clear();
   for (unsigned int x=border_size_OX_; x+border_size_OX_<xsize_; ++x)
     for (unsigned int y=border_size_OX_; y+border_size_OX_<ysize_; ++y)
-      if ( junction_[x][y] ) {
+      if ( junction_[x][y] )
+      {
         // Each cluster is written to (xcoords,ycooords)
         vcl_list<int> xcoords,ycoords;
         Follow_junctions(junction_, x,y,&xcoords,&ycoords);
