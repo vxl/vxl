@@ -26,6 +26,7 @@ IF(NOT DART_ROOT)
     ENABLE_TESTING()
   ENDIF(BUILD_TESTING)
 ENDIF(NOT DART_ROOT)
+OPTION(BUILD_TESTING "Should the tests be built?" YES)
 
 # By default, build examples when building tests.
 OPTION(BUILD_EXAMPLES "Should the examples be built?" ${BUILD_TESTING})
