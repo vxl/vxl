@@ -9,22 +9,22 @@
 ADD_LIBRARY(vpdfl vpdfl_sources)
 
 SOURCE_FILES(vpdfl_sources
-vpdfl_axis_gaussian
-vpdfl_axis_gaussian_builder
-vpdfl_axis_gaussian_sampler
-vpdfl_builder_base
-vpdfl_gaussian
-vpdfl_gaussian_builder
-vpdfl_gaussian_sampler
-vpdfl_pc_gaussian
-vpdfl_pc_gaussian_builder
-vpdfl_pc_gaussian_sampler
-vpdfl_pdf_base
-vpdfl_prob_chi2
-vpdfl_sampler_base
-vpdfl_mixture
-vpdfl_mixture_builder
-vpdfl_mixture_sampler
+vpdfl_axis_gaussian.cxx
+vpdfl_axis_gaussian_builder.cxx
+vpdfl_axis_gaussian_sampler.cxx
+vpdfl_builder_base.cxx
+vpdfl_gaussian.cxx
+vpdfl_gaussian_builder.cxx
+vpdfl_gaussian_sampler.cxx
+vpdfl_pc_gaussian.cxx
+vpdfl_pc_gaussian_builder.cxx
+vpdfl_pc_gaussian_sampler.cxx
+vpdfl_pdf_base.cxx
+vpdfl_prob_chi2.cxx
+vpdfl_sampler_base.cxx
+vpdfl_mixture.cxx
+vpdfl_mixture_builder.cxx
+vpdfl_mixture_sampler.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates vpdfl_sources)
@@ -32,3 +32,9 @@ AUX_SOURCE_DIRECTORY(Templates vpdfl_sources)
 IF( BUILD_TESTS)
   SUBDIRS(tests)
 ENDIF( BUILD_TESTS)
+
+IF (WIN32)
+  IF (NOT CYGWIN)
+    INCLUDE( ${allvxl_SOURCE_DIR}/mul/vpdfl/CMakeListsHeaders.txt )
+  ENDIF (NOT CYGWIN)
+ENDIF(WIN32)

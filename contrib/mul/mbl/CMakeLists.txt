@@ -9,15 +9,15 @@
 ADD_LIBRARY(mbl mbl_sources)
 
 SOURCE_FILES(mbl_sources
-mbl_gamma
-mbl_matrix_products
-mbl_matxvec
-mbl_mz_random
-mbl_k_means
-mbl_data_collector_base
-mbl_stats_1d
-mbl_sum_1d
-mbl_read_props
+mbl_gamma.cxx
+mbl_matrix_products.cxx
+mbl_matxvec.cxx
+mbl_mz_random.cxx
+mbl_k_means.cxx
+mbl_data_collector_base.cxx
+mbl_stats_1d.cxx
+mbl_sum_1d.cxx
+mbl_read_props.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates mbl_sources)
@@ -25,3 +25,11 @@ AUX_SOURCE_DIRECTORY(Templates mbl_sources)
 IF( BUILD_TESTS)
   SUBDIRS(tests)
 ENDIF( BUILD_TESTS)
+
+
+IF (WIN32)
+  IF (NOT CYGWIN)
+    INCLUDE( ${allvxl_SOURCE_DIR}/mul/mbl/CMakeListsHeaders.txt )
+  ENDIF (NOT CYGWIN)
+ENDIF(WIN32)
+
