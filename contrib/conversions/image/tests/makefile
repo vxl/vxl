@@ -1,7 +1,7 @@
 USES := conversions vxl
 include ${IUEROOT}/vxl/vil/config.mk
 
-IULIBS := -lvil -lvbl -lvpl
+IULIBS := -lvil -lvbl -lvpl -lvul
 TESTS += test_vil_vbl_conversions.cxx
 
 ifneq (,$(wildcard $(IUEROOT)/Image))
