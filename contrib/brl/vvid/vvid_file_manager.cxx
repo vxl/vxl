@@ -324,5 +324,15 @@ void vvid_file_manager::compute_motion()
 
 void vvid_file_manager::compute_lucas_kanade()
 {
-  video_process_ = new vvid_lucas_kanade_process();
+  static bool downsample = false;
+  static int windowsize=2;
+  static double thresh=20000;
+  vgui_dialog downsample_dialog("Lucas-Kanade Params");
+  downsample_dialog.checkbox("Downsample", downsample);
+  downsample_dialog.field("WindowSize(2n+1) n=",windowsize);
+  downsample_dialog.field("Motion Factor Threshold", thresh);
+
+  if (!downsample_dialog.ask())
+    return;
+  video_process_ = new vvid_lucas_kanade_process(downsample,windowsize,thresh);
 }

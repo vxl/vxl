@@ -4,8 +4,13 @@
 #include <brip/brip_float_ops.h>
 #include <vvid/vvid_lucas_kanade_process.h>
 
-vvid_lucas_kanade_process::vvid_lucas_kanade_process()
+vvid_lucas_kanade_process::vvid_lucas_kanade_process(bool down_sample,
+                                                     int window_size,
+                                                     double thresh)
 {
+  downsample_ = down_sample;
+  window_size_ = window_size;
+  thresh_ = thresh;
   state_ = NO_IMAGE;
 }
 
@@ -20,11 +25,10 @@ compute_lucas_kanade(vil_memory_image_of<float>& image)
   vil_memory_image_of<float> vx, vy;
   vx.resize(w,h);
   vy.resize(w,h);
-  //Hard code these parameters for now.
-  int n = 2;
-  int thresh = 20000;
+
   vil_memory_image_of<float> prev(queue_[0]);
-  brip_float_ops::Lucas_KanadeMotion(image, prev, n, thresh, vx, vy);
+  brip_float_ops::Lucas_KanadeMotion(image, prev, window_size_, thresh_,
+                                     vx, vy);
   vil_memory_image_of< vil_rgb<unsigned char> > output;
   output.resize(w,h);
   vil_rgb<unsigned char> z(0,0,0);
@@ -64,7 +68,12 @@ bool vvid_lucas_kanade_process::execute()
   vil_image img = vvid_video_process::get_input_image(0);
   vil_memory_image_of<unsigned char> temp(img);
   vil_memory_image_of<float> fimg = brip_float_ops::convert_to_float(temp);
-  vil_memory_image_of<float> fsmooth = brip_float_ops::gaussian(fimg, 0.8f);
+  vil_memory_image_of<float> temp2;
+  if(downsample_)
+    temp2 = brip_float_ops::half_resolution(fimg);
+  else
+    temp2 = fimg;
+  vil_memory_image_of<float> fsmooth = brip_float_ops::gaussian(temp2, 0.8f);
   this->clear_input();
   switch(state_)
     {

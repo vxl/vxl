@@ -26,13 +26,17 @@ class vvid_lucas_kanade_process : public vvid_video_process
 {
  public:
   enum state_symbol {NO_IMAGE=0, FIRST_IMAGE, IN_PROCESS};
-  vvid_lucas_kanade_process();
+  vvid_lucas_kanade_process(bool down_sample=false, int window_size=2,
+                            double thresh=20000);
   ~vvid_lucas_kanade_process();
   virtual output_type get_output_type(){return IMAGE;}
   //: compute lucas_kanade
   virtual bool execute();
   virtual bool finish();
- private:
+  bool downsample_;
+  int window_size_;
+  double thresh_;
+private:
   //local methods
   void compute_lucas_kanade(vil_memory_image_of<float>& image);
   void update_queue(vil_image ix);
