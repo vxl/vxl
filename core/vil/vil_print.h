@@ -40,4 +40,8 @@ inline void vil_print_all(vcl_ostream& os,const vil_image_view<T>& view)
   }
 }
 
+//: Print all image data to os in a grid
+// \relates vil_image_view
+void vil_print_all(vcl_ostream& os, vil_image_view_base_sptr const& view);
+
 #endif // vil_print_h_
