@@ -133,7 +133,6 @@ class vtol_topology_object : public vsol_spatial_object_2d
   //---------------------------------------------------------------------------
   topology_list inferiors_;
 
- public:
   enum vtol_topology_object_type
   { TOPOLOGY_NO_TYPE=0,
     VERTEX,
@@ -150,6 +149,10 @@ class vtol_topology_object : public vsol_spatial_object_2d
     BLOCK,
     NUM_TOPOLOGYOBJECT_TYPES
   };
+ private: // has been superceeded by is_a()
+  //: Return the topology type
+  // To be overridden by all subclasses
+  virtual vtol_topology_object_type topology_type() const { return TOPOLOGY_NO_TYPE; }
 
  public:
   //***************************************************************************
@@ -159,7 +162,7 @@ class vtol_topology_object : public vsol_spatial_object_2d
   //---------------------------------------------------------------------------
   //: Default constructor
   //---------------------------------------------------------------------------
-  vtol_topology_object(void);
+  vtol_topology_object();
 
   //---------------------------------------------------------------------------
   //: Constructor with given sizes for arrays of inferiors and superiors
@@ -176,88 +179,88 @@ class vtol_topology_object : public vsol_spatial_object_2d
   //***************************************************************************
   // Replaces dynamic_cast<T>
   //***************************************************************************
-  virtual vtol_topology_object *cast_to_topology_object(void) { return this; }
-  virtual const vtol_topology_object *cast_to_topology_object(void) const {return this;}
+  virtual vtol_topology_object *cast_to_topology_object() { return this; }
+  virtual const vtol_topology_object*cast_to_topology_object()const{return this;}
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a vertex, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_vertex *cast_to_vertex(void) const { return 0; }
+  virtual const vtol_vertex *cast_to_vertex() const { return 0; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a vertex, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_vertex *cast_to_vertex(void) { return 0; }
+  virtual vtol_vertex *cast_to_vertex() { return 0; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a zero_chain, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_zero_chain *cast_to_zero_chain(void) const { return 0; }
+  virtual const vtol_zero_chain *cast_to_zero_chain() const { return 0; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a zero_chain, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_zero_chain *cast_to_zero_chain(void) { return 0; }
+  virtual vtol_zero_chain *cast_to_zero_chain() { return 0; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an edge, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_edge *cast_to_edge(void) const { return 0; }
+  virtual const vtol_edge *cast_to_edge() const { return 0; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an edge, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_edge *cast_to_edge(void) { return 0; }
+  virtual vtol_edge *cast_to_edge() { return 0; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a chain, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_chain *cast_to_chain(void) const { return 0; }
+  virtual const vtol_chain *cast_to_chain() const { return 0; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a chain, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_chain *cast_to_chain(void) { return 0; }
+  virtual vtol_chain *cast_to_chain() { return 0; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an one_chain, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_one_chain *cast_to_one_chain(void) const { return 0; }
+  virtual const vtol_one_chain *cast_to_one_chain() const { return 0; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an one_chain, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_one_chain *cast_to_one_chain(void) { return 0; }
+  virtual vtol_one_chain *cast_to_one_chain() { return 0; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a face, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_face *cast_to_face(void) const { return 0; }
+  virtual const vtol_face *cast_to_face() const { return 0; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a face, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_face *cast_to_face(void) { return 0; }
+  virtual vtol_face *cast_to_face() { return 0; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a two_chain, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_two_chain *cast_to_two_chain(void) const { return 0; }
+  virtual const vtol_two_chain *cast_to_two_chain() const { return 0; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a two_chain, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_two_chain *cast_to_two_chain(void) { return 0; }
+  virtual vtol_two_chain *cast_to_two_chain() { return 0; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a block, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_block *cast_to_block(void) const { return 0; }
+  virtual const vtol_block *cast_to_block() const { return 0; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a block, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_block *cast_to_block(void) { return 0; }
+  virtual vtol_block *cast_to_block() { return 0; }
 
   //***************************************************************************
   // Status report
@@ -287,37 +290,31 @@ class vtol_topology_object : public vsol_spatial_object_2d
   //---------------------------------------------------------------------------
   //: Number of inferiors
   //---------------------------------------------------------------------------
-  int numinf(void) const { return inferiors()->size(); }
+  int numinf() const { return inferiors()->size(); }
 
   //---------------------------------------------------------------------------
   //: Number of superiors
   //---------------------------------------------------------------------------
-  int numsup(void) const { return superiors_.size(); }
+  int numsup() const { return superiors_.size(); }
 
   //---------------------------------------------------------------------------
   //: Return the superiors list (must be deallocated after use)
   //---------------------------------------------------------------------------
  private:
-  const topology_list *superiors(void) const;
+  const topology_list *superiors() const;
  public:
-  const vcl_list<vtol_topology_object*> *superiors_list(void) const {return &superiors_;}
+  const vcl_list<vtol_topology_object*> *superiors_list() const {return &superiors_;}
 
   //---------------------------------------------------------------------------
   //: Return the inferiors list
   //---------------------------------------------------------------------------
-        topology_list *inferiors(void) { return &inferiors_; }
-  const topology_list *inferiors(void) const { return &inferiors_; }
+        topology_list *inferiors() { return &inferiors_; }
+  const topology_list *inferiors() const { return &inferiors_; }
 
   //---------------------------------------------------------------------------
   //: Return the spatial type
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d_type spatial_type(void) const { return TOPOLOGYOBJECT; }
-
-  //---------------------------------------------------------------------------
-  //: Return the topology type
-  // To be overridden by all subclasses
-  //---------------------------------------------------------------------------
-  virtual vtol_topology_object_type topology_type(void) const { return TOPOLOGY_NO_TYPE; }
+  virtual vsol_spatial_object_2d_type spatial_type()const{return TOPOLOGYOBJECT;}
 
   //***************************************************************************
   // Basic operations
@@ -338,60 +335,60 @@ class vtol_topology_object : public vsol_spatial_object_2d
   //---------------------------------------------------------------------------
   //: Unlink `this' from all its inferiors
   //---------------------------------------------------------------------------
-  void unlink_all_inferiors(void);
+  void unlink_all_inferiors();
 
   //---------------------------------------------------------------------------
   //: Unlink `this' of the network
   //---------------------------------------------------------------------------
-  void unlink(void);
+  void unlink();
 
   //---------------------------------------------------------------------------
   //: Get lists of vertices
   // returned list must be deleted after use.
   //---------------------------------------------------------------------------
-  vertex_list *vertices(void);
+  vertex_list *vertices();
   void vertices(vertex_list &list);
 
   //---------------------------------------------------------------------------
   //: Get lists of zero chains
   // returned list must be deleted after use.
   //---------------------------------------------------------------------------
-  zero_chain_list *zero_chains(void);
+  zero_chain_list *zero_chains();
   void zero_chains(zero_chain_list &list);
 
   //---------------------------------------------------------------------------
   //: Get lists of edges
   // returned list must be deleted after use.
   //---------------------------------------------------------------------------
-  edge_list *edges(void);
+  edge_list *edges();
   void edges(edge_list &list);
 
   //---------------------------------------------------------------------------
   //: Get lists of one chains
   // returned list must be deleted after use.
   //---------------------------------------------------------------------------
-  one_chain_list *one_chains(void);
+  one_chain_list *one_chains();
   void one_chains(one_chain_list &list);
 
   //---------------------------------------------------------------------------
   //: Get lists of faces
   // returned list must be deleted after use.
   //---------------------------------------------------------------------------
-  face_list *faces(void);
+  face_list *faces();
   void faces(face_list &list);
 
   //---------------------------------------------------------------------------
   //: Get lists of two chains
   // returned list must be deleted after use.
   //---------------------------------------------------------------------------
-  two_chain_list *two_chains(void);
+  two_chain_list *two_chains();
   void two_chains(two_chain_list &list);
 
   //---------------------------------------------------------------------------
   //: Get lists of blocks
   // returned list must be deleted after use.
   //---------------------------------------------------------------------------
-  block_list *blocks(void);
+  block_list *blocks();
   void blocks(block_list &list);
 
   //---------------------------------------------------------------------------
@@ -402,49 +399,49 @@ class vtol_topology_object : public vsol_spatial_object_2d
   void describe_superiors(vcl_ostream &strm=vcl_cout, int blanking=0) const;
   virtual void describe(vcl_ostream &strm=vcl_cout, int blanking=0) const;
 
-  virtual void compute_bounding_box(void) const; //A local implementation
+  virtual void compute_bounding_box() const; //A local implementation
 
   //---------------------------------------------------------------------------
   //: compute lists of vertices
   // \warning should not be used by clients
   //---------------------------------------------------------------------------
-  virtual vcl_vector<vtol_vertex*> *compute_vertices(void);
+  virtual vcl_vector<vtol_vertex*> *compute_vertices();
 
   //---------------------------------------------------------------------------
   //: compute lists of zero chains
   // \warning should not be used by clients
   //---------------------------------------------------------------------------
-  virtual vcl_vector<vtol_zero_chain*> *compute_zero_chains(void);
+  virtual vcl_vector<vtol_zero_chain*> *compute_zero_chains();
 
   //---------------------------------------------------------------------------
   //: compute lists of edges
   // \warning should not be used by clients
   //---------------------------------------------------------------------------
-  virtual vcl_vector<vtol_edge*> *compute_edges(void);
+  virtual vcl_vector<vtol_edge*> *compute_edges();
 
   //---------------------------------------------------------------------------
   //: compute lists of one chains
   // \warning should not be used by clients
   //---------------------------------------------------------------------------
-  virtual vcl_vector<vtol_one_chain*> *compute_one_chains(void);
+  virtual vcl_vector<vtol_one_chain*> *compute_one_chains();
 
   //---------------------------------------------------------------------------
   //: compute lists of faces
   // \warning should not be used by clients
   //---------------------------------------------------------------------------
-  virtual vcl_vector<vtol_face*> *compute_faces(void);
+  virtual vcl_vector<vtol_face*> *compute_faces();
 
   //---------------------------------------------------------------------------
   //: compute lists of two chains
   // \warning should not be used by clients
   //---------------------------------------------------------------------------
-  virtual vcl_vector<vtol_two_chain*> *compute_two_chains(void);
+  virtual vcl_vector<vtol_two_chain*> *compute_two_chains();
 
   //---------------------------------------------------------------------------
   //: compute lists of blocks
   // \warning should not be used by clients
   //---------------------------------------------------------------------------
-  virtual vcl_vector<vtol_block*> *compute_blocks(void);
+  virtual vcl_vector<vtol_block*> *compute_blocks();
 
  private:
   // declare a friend class
