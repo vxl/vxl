@@ -205,10 +205,10 @@ void gevd_clean_edgels::remove_connected_edges(vtol_vertex_2d* v, vcl_vector<vto
 
 
 //: Find the closest vertex within a given radius on a given edge
-//    If one of the edge vertices is within the radius, then choose it.
-//    Otherwise return a vertex which lies on, and interior to, the edge.
-//    Original compared end vertex distances to radius, now with actual
-//    jump span - JLM Sept. 99
+//  If one of the edge vertices is within the radius, then choose it.
+//  Otherwise return a vertex which lies on, and interior to, the edge.
+//  Original compared end vertex distances to radius, now with actual
+//  jump span - JLM Sept. 99
 bool gevd_clean_edgels::closest_vertex(vtol_edge_2d_sptr e, vsol_point_2d_sptr p, float radius, vtol_vertex_2d_sptr& v)
 {
   vdgl_digital_curve_sptr dc = e->curve()->cast_to_digital_curve();
@@ -216,6 +216,9 @@ bool gevd_clean_edgels::closest_vertex(vtol_edge_2d_sptr e, vsol_point_2d_sptr p
   vsol_point_2d_sptr sp = new vsol_point_2d ( *p );
   vsol_point_2d_sptr pc = dc->get_interpolator()->closest_point_on_curve( sp );
   double span_sq = p->distance ( pc );
+  if (radius < span_sq)
+    vcl_cerr << __FILE__ << ": closest_vertex(): Warning: ignoring radius="
+             << radius << " since span=" << span_sq << " is larger\n";
 
   vtol_vertex_2d_sptr v1 = e->v1()->cast_to_vertex_2d(), v2 = e->v2()->cast_to_vertex_2d();
   double d1 = v1->point()->distance ( p );
