@@ -2,10 +2,10 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-//
-// vnl_levenberg_marquardt
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 31 Aug 96
+//:
+// \file
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date 31 Aug 96
 //
 //-----------------------------------------------------------------------------
 
@@ -23,7 +23,7 @@
 #include "vnl_netlib.h"
 
 // see header
-vnl_vector<double> vnl_levenberg_marquardt_minimize(vnl_least_squares_function& f, 
+vnl_vector<double> vnl_levenberg_marquardt_minimize(vnl_least_squares_function& f,
                                                     vnl_vector<double> const& initial_estimate)
 {
   vnl_vector<double> x = initial_estimate;
@@ -384,18 +384,18 @@ void vnl_levenberg_marquardt::diagnose_outcome(vcl_ostream& s) const
 #undef whoami
 }
 
-/* fjac is an output m by n array. the upper n by n submatrix */
-/*         of fjac contains an upper triangular matrix r with */
-/*         diagonal elements of nonincreasing magnitude such that */
-
-/*                t     t           t */
-/*               p *(jac *jac)*p = r *r, */
-
-/*         where p is a permutation matrix and jac is the final */
-/*         calculated jacobian. column j of p is column ipvt(j) */
-/*         (see below) of the identity matrix. the lower trapezoidal */
-/*         part of fjac contains information generated during */
-/*         the computation of r. */
+// fjac is an output m by n array. the upper n by n submatrix
+//         of fjac contains an upper triangular matrix r with
+//         diagonal elements of nonincreasing magnitude such that
+//
+//                t     t           t
+//               p *(jac *jac)*p = r *r,
+//
+//         where p is a permutation matrix and jac is the final
+//         calculated jacobian. column j of p is column ipvt(j)
+//         (see below) of the identity matrix. the lower trapezoidal
+//         part of fjac contains information generated during
+//         the computation of r.
 
 // fdjac is target m*n
 
@@ -409,26 +409,26 @@ vnl_matrix<double> const& vnl_levenberg_marquardt::get_JtJ()
     vnl_matrix<double> rtr = fdjac_->extract (n, n);
     rtr = rtr.transpose () * rtr;
     vnl_matrix<double> rtrpt (n, n);
-    
+
     // Permute. First order columns.
     // Note, *ipvt_ contains 1 to n, not 0 to n-1
     vnl_vector<int> jpvt (n);
     for (int j = 0; j < n; j++) {
       int i = 0;
       for (; i < n; i++) {
-	if ((*ipvt_)[i] == j+1) {
-	  jpvt (j) = i;
-	  break;
-	}
+        if ((*ipvt_)[i] == j+1) {
+          jpvt (j) = i;
+          break;
+        }
       }
       rtrpt.set_column (j, rtr.get_column (i));
     }
-    
+
     // Now order rows
     for (int j = 0; j < n; j++) {
       covariance_->set_row (j, rtrpt.get_row (jpvt(j)));
     }
-    
+
     set_covariance_ = true;
   }
   return *covariance_;
