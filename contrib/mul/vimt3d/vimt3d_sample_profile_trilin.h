@@ -15,7 +15,7 @@
 //  Vector v is resized to n*np elements, where np=image.n_planes().
 //  v[0]..v[np-1] are the values from point p
 template <class imType, class vecType>
-void vimt3d_sample_profile_trilin(vnl_vector<vecType>& v,
+void vimt3d_sample_profile_trilin(vnl_vector<vecType>& vec,
                                const vimt3d_image_3d_of<imType>& image,
                                const vgl_point_3d<double>& p0,
                                const vgl_vector_3d<double>& u,
