@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_window.cxx
+// This is core/vgui/vgui_window.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -76,13 +76,13 @@ void vgui_window::set_title(vcl_string const&) {
   vgui_macro_warning << "vgui_window::set_title() dummy implementation\n";
 }
 
-int vgui_window::set_hscrollbar(int pos)
+int vgui_window::set_hscrollbar(int  /*pos*/)
 {
   vgui_macro_warning << "vgui_window::set_hscrollbar() dummy implementation\n";
   return 0;
 }
 
-int vgui_window::set_vscrollbar(int pos)
+int vgui_window::set_vscrollbar(int  /*pos*/)
 {
   vgui_macro_warning << "vgui_window::set_vscrollbar() dummy implementation\n";
   return 0;

@@ -62,7 +62,7 @@ vil2_bmp_image::vil2_bmp_image(vil2_stream* is)
   read_header();
 }
 
-bool vil2_bmp_image::get_property(char const *tag, void *prop) const
+bool vil2_bmp_image::get_property(char const * /*tag*/, void * /*prop*/) const
 {
   return false;
 }

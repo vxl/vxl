@@ -74,7 +74,7 @@ vil2_pnm_image::vil2_pnm_image(vil2_stream* vs):
   read_header();
 }
 
-bool vil2_pnm_image::get_property(char const *tag, void *prop) const
+bool vil2_pnm_image::get_property(char const * /*tag*/, void * /*prop*/) const
 {
   return false;
 }

@@ -1,4 +1,4 @@
-// This is vxl/vidl/vidl_mpegcodec.cxx
+// This is core/vidl/vidl_mpegcodec.cxx
 #include "vidl_mpegcodec.h"
 #include "vidl_yuv_2_rgb.h"
 #include <vcl_string.h>
@@ -207,14 +207,14 @@ vidl_mpegcodec::vidl_mpegcodec()
 
 vidl_mpegcodec::~vidl_mpegcodec()
 {
-  vcl_cout << "vidl_mpegcodec::~vidl_mpegcodec. entering" << vcl_endl;
+  vcl_cout << "vidl_mpegcodec::~vidl_mpegcodec. entering\n";
   if (decoder_) decoder_->print();
   buffers_->print();
   vcl_cout << "first frame number in memory is: " << buffers_->first_frame_num() << vcl_endl;
   delete buffers_;
   if (decoder_) delete decoder_;
 
-  vcl_cout << "vidl_mpegcodec::~vidl_mpegcodec. exiting" << vcl_endl;
+  vcl_cout << "vidl_mpegcodec::~vidl_mpegcodec. exiting\n";
 }
 
 void
@@ -234,7 +234,7 @@ vidl_mpegcodec::set_grey_scale(bool grey)
 //like height, width, number of frames, bits per pixel, etc. however,
 //i don't have the time right now to write such a header. hopefully it
 //will be done someday.
-vidl_codec_sptr vidl_mpegcodec::load(const char* fname, char mode)
+vidl_codec_sptr vidl_mpegcodec::load(const char* fname, char  /*mode*/)
 {
   vcl_string filename(fname);
 

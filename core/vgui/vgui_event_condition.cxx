@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_event_condition.cxx
+// This is core/vgui/vgui_event_condition.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -16,7 +16,8 @@
 //----------------------------------------------------------------------------
 // Initialise event condition and check for impossible events.
 void vgui_event_condition::init(vgui_key k, vgui_key a,
-  vgui_button b, vgui_modifier m,  bool is_pressed, bool is_on, event_types h)
+                                vgui_button b, vgui_modifier m,
+                                bool is_pressed, bool is_on, event_types h)
 {
   on = is_on;
   pressed = is_pressed;
@@ -46,14 +47,14 @@ void vgui_event_condition::init(vgui_key k, vgui_key a,
 //----------------------------------------------------------------------------
 //: Default constructor.
 vgui_event_condition::vgui_event_condition()
-{ 
-  init(vgui_KEY_NULL, vgui_KEY_NULL, vgui_BUTTON_NULL, vgui_MODIFIER_NULL, 
+{
+  init(vgui_KEY_NULL, vgui_KEY_NULL, vgui_BUTTON_NULL, vgui_MODIFIER_NULL,
        false, false, null_event);
 }
 
 //----------------------------------------------------------------------------
 //: Constructor for a key press event condition (using ascii char).
-vgui_event_condition::vgui_event_condition(vgui_key ascii_code, 
+vgui_event_condition::vgui_event_condition(vgui_key ascii_code,
   bool is_pressed)
 {
   init (vgui_KEY_NULL, ascii_code, vgui_BUTTON_NULL, vgui_MODIFIER_NULL,
@@ -62,7 +63,7 @@ vgui_event_condition::vgui_event_condition(vgui_key ascii_code,
 //----------------------------------------------------------------------------
 //: Constructor for a key press event condition (using key and modifier).
 vgui_event_condition::vgui_event_condition(vgui_key k, vgui_modifier m, bool p)
-{ 
+{
   init(k, vgui_KEY_NULL, vgui_BUTTON_NULL, m, p, true, key_event);
 }
 
@@ -79,7 +80,7 @@ bool vgui_event_condition::operator()(vgui_event const &e) const
 {
   if (! on)
     return false;
-  else if (e.type == vgui_KEY_PRESS)  
+  else if (e.type == vgui_KEY_PRESS)
   {
     if (how_checked == key_event)
       return pressed && e.key == key && e.modifier == modifier;
@@ -98,10 +99,10 @@ bool vgui_event_condition::operator()(vgui_event const &e) const
       return false;
   }
   else if (e.type == vgui_MOUSE_DOWN)
-    return how_checked == mouse_event && pressed && e.button == button 
+    return how_checked == mouse_event && pressed && e.button == button
     && e.modifier == modifier;
   else if (e.type == vgui_MOUSE_UP)
-    return how_checked == mouse_event && !pressed && e.button == button 
+    return how_checked == mouse_event && !pressed && e.button == button
     && e.modifier == modifier;
   else
     return false;
@@ -126,7 +127,7 @@ bool vgui_event_condition::operator()(vgui_button b, vgui_modifier m) const
 
 //----------------------------------------------------------------------------
 //: Return a string describing the event condition.
-vcl_string vgui_event_condition::as_string(int field_width) const
+vcl_string vgui_event_condition::as_string(int  /*field_width*/) const
 {
   vcl_string r;
   if (modifier & vgui_SHIFT)

@@ -1,4 +1,4 @@
-// This is mul/vil2/algo/vil2_correlate_1d.h
+// This is core/vil2/algo/vil2_correlate_1d.h
 #ifndef vil2_correlate_1d_h_
 #define vil2_correlate_1d_h_
 //:
@@ -179,7 +179,7 @@ class vil2_correlate_1d_resource : public vil2_image_resource
 
 
   //: Put the data in this view back into the image source.
-  virtual bool put_view(const vil2_image_view_base& im, unsigned i0, unsigned j0)
+  virtual bool put_view(const vil2_image_view_base&  /*im*/, unsigned  /*i0*/, unsigned  /*j0*/)
   {
     vcl_cerr << "WARNING: vil2_correlate_1d_resource::put_back\n"
              << "\tYou can't push data back into a correlate filter.\n";
@@ -210,7 +210,7 @@ class vil2_correlate_1d_resource : public vil2_image_resource
 template <class destT, class kernelT, class accumT>
 inline vil2_image_resource_sptr vil2_correlate_1d(
                          const vil2_image_resource_sptr& src_im,
-                         const destT dt,
+                         const destT  /*dt*/,
                          const kernelT* kernel, vcl_ptrdiff_t k_lo, vcl_ptrdiff_t k_hi,
                          const accumT,
                          vil2_convolve_boundary_option start_option,

@@ -1,4 +1,4 @@
-// This is mul/vil2/algo/vil2_convolve_1d.h
+// This is core/vil2/algo/vil2_convolve_1d.h
 #ifndef vil2_convolve_1d_h_
 #define vil2_convolve_1d_h_
 //:
@@ -169,8 +169,8 @@ inline void vil2_convolve_edge_1d(const srcT* src, unsigned n, vcl_ptrdiff_t s_s
   }
   else
   {
-    vcl_cout<<"vil2_convolve_edge_1d: ";
-    vcl_cout<<"Sorry, can't deal with supplied edge option.\n";
+    vcl_cout<<"vil2_convolve_edge_1d: "
+            <<"Sorry, can't deal with supplied edge option.\n";
     vcl_abort();
   }
 }
@@ -341,7 +341,7 @@ class vil2_convolve_1d_resource : public vil2_image_resource
 
 
   //: Put the data in this view back into the image source.
-  virtual bool put_view(const vil2_image_view_base& im, unsigned i0, unsigned j0)
+  virtual bool put_view(const vil2_image_view_base&  /*im*/, unsigned  /*i0*/, unsigned  /*j0*/)
   {
     vcl_cerr << "WARNING: vil2_convolve_1d_resource::put_back\n"
              << "\tYou can't push data back into a convolve filter.\n";
@@ -372,7 +372,7 @@ class vil2_convolve_1d_resource : public vil2_image_resource
 template <class destT, class kernelT, class accumT>
 inline vil2_image_resource_sptr vil2_convolve_1d(
                          const vil2_image_resource_sptr& src_im,
-                         const destT dt,
+                         const destT  /*dt*/,
                          const kernelT* kernel, int k_lo, int k_hi,
                          const accumT,
                          vil2_convolve_boundary_option start_option,

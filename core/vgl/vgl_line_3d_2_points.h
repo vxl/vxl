@@ -1,4 +1,4 @@
-// This is vxl/vgl/vgl_line_3d_2_points.h
+// This is core/vgl/vgl_line_3d_2_points.h
 #ifndef vgl_line_3d_2_points_h_
 #define vgl_line_3d_2_points_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -63,7 +63,7 @@ class vgl_line_3d_2_points
   // Utility methods
 
   //: Return true iff line is at infinity (which is always false)
-  inline bool ideal(Type tol = Type(0)) const { return false; }
+  inline bool ideal(Type  /*tol*/ = Type(0)) const { return false; }
 
   //: Return the direction vector of this line (not normalised)
   inline vgl_vector_3d<Type> direction() const { return point2()-point1(); }

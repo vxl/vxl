@@ -1,4 +1,4 @@
-// This is mul/vil2/tests/test_image_view.cxx
+// This is core/vil2/tests/test_image_view.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vcl_sstream.h>
@@ -15,7 +15,7 @@
 #include <vil2/vil2_new.h>
 
 template <class S, class T>
-void test_image_view_rgba(vil2_image_view<S> &image2, vil2_image_view<T> &image7)
+void test_image_view_rgba(vil2_image_view<S> & /*image2*/, vil2_image_view<T> & /*image7*/)
 {
   // do nothing in general case
 }
@@ -73,7 +73,7 @@ void test_image_view_rgba(vil2_image_view<float> &image2, vil2_image_view<double
 
 
 template <class S, class T>
-void test_image_view(S d1, vcl_string s_name, T d2)
+void test_image_view(S /*d1*/, vcl_string s_name, T /*d2*/)
 {
   vil2_image_view<S> image0;
   image0.set_size(10,8);

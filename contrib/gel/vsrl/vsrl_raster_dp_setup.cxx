@@ -67,7 +67,7 @@ int vsrl_raster_dp_setup::get_assignment(int x)
 void vsrl_raster_dp_setup::create_token_list(int width,
                                              vsrl_image_correlation *image_correlation,
                                              vcl_vector<vsrl_intensity_token*> &tok_list,
-                                             double step)
+                                             double /*step*/)
 {
   // we wish to create the token lists
 

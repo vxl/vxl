@@ -1,4 +1,4 @@
-// This is mul/vil2/tests/test_image_resource.cxx
+// This is core/vil2/tests/test_image_resource.cxx
 #include <testlib/testlib_test.h>
 
 #include <vcl_iostream.h>
@@ -13,7 +13,7 @@
 #include <vil2/vil2_decimate.h>
 
 template <class T>
-void test_image_resource(vcl_string type, vil2_pixel_format format, T dummy)
+void test_image_resource(vcl_string type, vil2_pixel_format format, T  /*dummy*/)
 {
   vcl_cout << "******************************************************************\n"
            << " Testing vil2_image_resource objects with pixel type = " << type << "\n"

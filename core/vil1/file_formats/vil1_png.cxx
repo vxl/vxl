@@ -1,4 +1,4 @@
-// This is vxl/vil/file_formats/vil_png.cxx
+// This is core/vil/file_formats/vil_png.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -83,8 +83,10 @@ static void user_write_data(png_structp png_ptr, png_bytep data, png_size_t leng
 
 static void user_flush_data(png_structp png_ptr)
 {
-  // IOFile* f = (IOFile*)png_get_io_ptr(png_ptr);
+#if 0 // NYI
+  IOFile* f = (IOFile*)png_get_io_ptr(png_ptr);
   // urk.  how to flush?
+#endif
 }
 
 struct vil_jmpbuf_wrapper {

@@ -1,4 +1,4 @@
-// This is mul/vil2/vil2_new.h
+// This is core/vil2/vil2_new.h
 #ifndef vil2_new_h_
 #define vil2_new_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -63,7 +63,7 @@ vil2_image_resource_sptr vil2_new_image_resource(vil2_stream* os,
 //: Create an image view whose plane step is 1.
 // i_step will by nplanes.
 template <class T>
-vil2_image_view<T> vil2_new_image_view_j_i_plane(unsigned ni, unsigned nj, unsigned nplanes, T dummy)
+vil2_image_view<T> vil2_new_image_view_j_i_plane(unsigned ni, unsigned nj, unsigned nplanes, T /*dummy*/)
 {
   vil2_memory_chunk_sptr chunk = new vil2_memory_chunk(ni*nj*nplanes*sizeof(T),
     vil2_pixel_format_component_format(vil2_pixel_format_of(T())));
@@ -73,7 +73,7 @@ vil2_image_view<T> vil2_new_image_view_j_i_plane(unsigned ni, unsigned nj, unsig
 //: Create an image view whose j step is 1.
 // i_step will be nj.
 template <class T>
-vil2_image_view<T> vil2_new_image_view_plane_i_j(unsigned ni, unsigned nj, unsigned nplanes, T dummy)
+vil2_image_view<T> vil2_new_image_view_plane_i_j(unsigned ni, unsigned nj, unsigned nplanes, T /*dummy*/)
 {
   vil2_memory_chunk_sptr chunk = new vil2_memory_chunk(ni*nj*nplanes*sizeof(T),
     vil2_pixel_format_component_format(vil2_pixel_format_of(T())));

@@ -45,7 +45,7 @@ class example_edge_3d : public vtol_edge
   T& operator=(T const& v) { v1_=v.v1(); v2_=v.v2(); return *this; }
 
   virtual void print(vcl_ostream &strm=vcl_cout) const { strm<<"<example_edge_3d> with id "<<get_id()<<'\n'; }
-  virtual void describe(vcl_ostream &strm=vcl_cout,int b=0) const { print(strm); v1_->print(strm); v2_->print(strm); }
+  virtual void describe(vcl_ostream &strm=vcl_cout,int=0) const { print(strm); v1_->print(strm); v2_->print(strm); }
   virtual void copy_geometry(vtol_edge const& e) { v1()->copy_geometry(*e.v1()); v2()->copy_geometry(*e.v2()); }
   virtual bool compare_geometry(vtol_edge const& e) const { return e.cast_to_edge_2d() == 0 && operator==(*(T const*)(&e)); }
 #undef T
@@ -132,12 +132,12 @@ class example_face_3d : public vtol_face
   }
   virtual vsol_spatial_object_2d_sptr clone() const {vertex_list* vl=(const_cast<T*>(this))->vertices();
                                                      T* f=new T(*vl);delete vl;return f;}
-  bool operator==(T const& f) const { return false; }
+  bool operator==(T const&) const { return false; }
   virtual void print(vcl_ostream &strm=vcl_cout) const { strm << "<example_face_3d>"; }
   virtual void describe(vcl_ostream &strm=vcl_cout, int=0) const { print(strm); }
-  virtual void copy_geometry(vtol_face const& f) { /* edge(0)->copy_geometry(f.edge(0)); */ } // NYI
+  virtual void copy_geometry(vtol_face const& /*f*/) { /* edge(0)->copy_geometry(f.edge(0)); */ } // NYI
   virtual bool compare_geometry(vtol_face const& f) const { return f.cast_to_face_2d()==0 && operator==(*(T const*)(&f)); }
-  virtual vtol_face* copy_with_arrays(topology_list& vl, topology_list& el) const { return new T(*this); } // NYI
+  virtual vtol_face* copy_with_arrays(topology_list&, topology_list&) const { return new T(*this); } // NYI
   virtual vtol_face* shallow_copy_with_no_links() const { return new T(*this); }
 #undef T
 };
@@ -199,9 +199,9 @@ int main()
   vcl_cout<<"Block b1 created\n";
   b1->describe(vcl_cout, 8);
 
-  vcl_cout <<"Accessors: vertices(), zero_chains() ... blocks()\n\n";
+  vcl_cout <<"Accessors: vertices(), zero_chains() ... blocks()\n\n"
 
-  vcl_cout <<"Sizes of superiors: vertex expects       1 3 3 2 2 1 1 - gets  ";
+           <<"Sizes of superiors: vertex expects       1 3 3 2 2 1 1 - gets  ";
   vertex_list *vl=v1->vertices(); vcl_cout << vl->size() << ' ';
   zero_chain_list *zcl=v1->zero_chains(); vcl_cout << zcl->size() << ' ';
   edge_list *el=v1->edges(); vcl_cout << el->size() << ' ';

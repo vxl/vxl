@@ -65,8 +65,8 @@ vil2_image_resource_sptr
 {
   if (format != VIL2_PIXEL_FORMAT_BYTE)
   {
-    vcl_cout<<"ERROR! vil2_jpeg_file_format::make_output_image()\n";
-    vcl_cout<<"Pixel format should be byte, but is "<<format<<" instead.\n";
+    vcl_cout<<"ERROR! vil2_jpeg_file_format::make_output_image()\n"
+            <<"Pixel format should be byte, but is "<<format<<" instead.\n";
     return 0;
   }
   return new vil2_jpeg_image(vs, nx, ny, nplanes, format);
@@ -84,7 +84,7 @@ vil2_jpeg_image::vil2_jpeg_image(vil2_stream *s)
   stream->ref();
 }
 
-bool vil2_jpeg_image::get_property(char const *tag, void *prop) const
+bool vil2_jpeg_image::get_property(char const * /*tag*/, void * /*prop*/) const
 {
   return false;
 }

@@ -212,7 +212,7 @@ class vsol_spatial_object_2d : public vul_timestamp, public vbl_ref_count
   virtual const vsol_region_2d* cast_to_region(void) const { return 0; }
 
   inline virtual void print(vcl_ostream &strm=vcl_cout) const { describe(strm); }
-  inline virtual void describe(vcl_ostream &strm=vcl_cout, int /*blanking*/=0) const { not_applicable("describe"); }
+  inline virtual void describe(vcl_ostream& =vcl_cout, int /*blanking*/=0) const { not_applicable("describe"); }
 
   friend inline vcl_ostream &operator<<(vcl_ostream &,
                                         const vsol_spatial_object_2d &);

@@ -11,7 +11,7 @@ vsrl_null_token::~vsrl_null_token()
 {
 }
 
-double vsrl_null_token::cost(vsrl_token *tok)
+double vsrl_null_token::cost(vsrl_token * /*tok*/)
 {
   // this is a null assignment
   return cost_;

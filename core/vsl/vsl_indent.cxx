@@ -1,4 +1,4 @@
-// This is vxl/vsl/vsl_indent.cxx
+// This is core/vsl/vsl_indent.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -65,7 +65,7 @@ void vsl_indent_clear(vcl_ostream& os)
   indent_data(os)->first =0;
 }
 
-vcl_ostream& operator<<(vcl_ostream& os, const vsl_indent& indent)
+vcl_ostream& operator<<(vcl_ostream& os, const vsl_indent& /*indent*/)
 {
   indent_data_type* data = indent_data(os);
 

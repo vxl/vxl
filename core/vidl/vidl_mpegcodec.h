@@ -30,7 +30,14 @@ class vil_image;
 //: Allows user to load MPEG files as vxl video.
 class vidl_mpegcodec : public vidl_codec
 {
-public:
+  //--- these are set by load/save
+  vidl_mpegcodec_helper * decoder_;
+  frame_buffer * buffers_;
+  bool inited;
+
+  //-------------------------------------------------
+
+ public:
   vidl_mpegcodec();
   ~vidl_mpegcodec();
 
@@ -56,7 +63,7 @@ public:
 
   virtual bool probe(const char* fname);
   virtual vidl_codec_sptr load(const char* fname, char mode = 'r' );
-  bool save(vidl_movie* movie, const char* fname){return true;};
+  bool save(vidl_movie*  /*movie*/, const char*  /*fname*/){return true;}
   virtual const char* type() {return "MPEG";}
 
   //-----------------------------------------------
@@ -68,15 +75,6 @@ public:
   void set_demux_video();
   void set_pid(vcl_string pid);
   bool init();
-
-  //-------------------------------------------------
-
-private:
-
-  //--- these are set by load/save
-  vidl_mpegcodec_helper * decoder_;
-  frame_buffer * buffers_;
-  bool inited;
 };
 
 #endif // vidl_mpegcodec_h

@@ -39,11 +39,11 @@ class vil2_image_resource_plugin : public vil2_image_resource
   virtual unsigned nj() const { return 0; }
   virtual unsigned nplanes() const { return 0; }
 
-  virtual bool get_property (char const *tag, void *property_value=0) const { return false; }
+  virtual bool get_property (char const * /*tag*/, void * /*property_value*/=0) const { return false; }
   virtual vil2_image_view_base_sptr get_copy_view (unsigned i0, unsigned ni, unsigned j0, unsigned nj) const
   { return vil2_image_view_base_sptr(0); }
 
-  virtual bool put_view (const vil2_image_view_base &im, unsigned i0, unsigned j0) { return false; }
+  virtual bool put_view (vil2_image_view_base const& /*im*/, unsigned /*i0*/, unsigned /*j0*/) { return false; }
 
   //: Attempt to load image from named file.
   // \param filetype  String hinting at what image format is
@@ -80,7 +80,7 @@ class vil2_image_resource_plugin : public vil2_image_resource
   //: Set the filetype options
   void set_filetype(const vcl_string& filetype);
 
-protected:
+ protected:
 
   //: file type
   vcl_string filetype_;
