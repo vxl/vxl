@@ -8,6 +8,12 @@
 #include <vil2/vil2_image_view_functions.h>
 #include <vil2/vil2_image_data.h>
 
+//: Explicit overload for bool
+void vil2_print_value(vcl_ostream& os, const bool& value)
+{
+  os<<int(value);
+}
+
 //: Explicit overload for unsigned char
 void vil2_print_value(vcl_ostream& os, const unsigned char& value)
 {
@@ -15,7 +21,17 @@ void vil2_print_value(vcl_ostream& os, const unsigned char& value)
   os<<int(value);
 }
 
-//: Explicit overload of print for rgb
+//: Explicit overload for unsigned short
+void vil2_print_value(vcl_ostream& os, const unsigned short& value)
+{
+  if (value<10)    os<<"0";
+  if (value<100)   os<<"0";
+  if (value<1000)  os<<"0";
+  if (value<10000) os<<"0";
+  os<<value;
+}
+
+//: Explicit overload of print for rgb<ubyte>
 void vil2_print_value(vcl_ostream& os, const vil_rgb<unsigned char>& value)
 {
   int r = int(value.r);
@@ -32,21 +48,18 @@ void vil2_print_value(vcl_ostream& os, const vil_rgb<unsigned char>& value)
   os<<b;
 }
 
-//: Explicit overload of print for rgb
+//: Explicit overload of print for rgb<ushort>
+void vil2_print_value(vcl_ostream& os, const vil_rgb<unsigned short>& value)
+{
+  vil2_print_value(os,value.r); os<<"-";
+  vil2_print_value(os,value.g); os<<"-";
+  vil2_print_value(os,value.b);
+}
+
+//: Explicit overload of print for rgb<float>
 void vil2_print_value(vcl_ostream& os, const vil_rgb<float>& value)
 {
-  int r = int(value.r);
-  if (r<10)  os<<"0";
-  if (r<100) os<<"0";
-  os<<r<<"-";
-  int g = int(value.g);
-  if (g<10)  os<<"0";
-  if (g<100) os<<"0";
-  os<<g<<"-";
-  int b = int(value.b);
-  if (b<10)  os<<"0";
-  if (b<100) os<<"0";
-  os<<b;
+  os<<value.r<<"-"<<value.g<<"-"<<value.b;
 }
 
 //: Compute minimum and maximum values over view
