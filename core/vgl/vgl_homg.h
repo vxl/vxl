@@ -24,6 +24,8 @@
 //
 //-------------------------------------------------------------------------------
 
+#include <vcl_compiler.h>
+
 //: General purpose support class for vgl_homg_ classes
 template <class T>
 class vgl_homg
