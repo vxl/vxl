@@ -109,7 +109,7 @@ template < class DataType >
 
 // postfix
 template < class DataType >
-vipl_section_iterator< DataType > vipl_section_iterator< DataType > ::operator++( int a)
+vipl_section_iterator< DataType > vipl_section_iterator< DataType > ::operator++(int )
 {
   vipl_section_iterator<DataType> rtn(*this);
   ++(*this);
