@@ -65,7 +65,7 @@ vsol_spatial_object_2d_sptr vsol_group_2d::object(const int i) const
   int k;
 
   j=storage_->begin();
-  for(k=0;k<i;++k)
+  for (k=0;k<i;++k)
     ++j;
   return *j;
 }
@@ -99,7 +99,7 @@ void vsol_group_2d::compute_bounding_box(void)
   vsol_box_2d *b;
   vcl_list<vsol_spatial_object_2d_sptr>::iterator i;
 
-  for(i=storage_->begin();i!=storage_->end();++i)
+  for (i=storage_->begin();i!=storage_->end();++i)
     {
       b=(*i)->get_bounding_box();
       if(i==storage_->begin())
@@ -145,7 +145,7 @@ int vsol_group_2d::deep_size(void) const
 {
   int result = 0;
   vcl_list<vsol_spatial_object_2d_sptr>::iterator i;
-  for(i=storage_->begin();i!=storage_->end();++i)
+  for (i=storage_->begin();i!=storage_->end();++i)
     {
       // g=dynamic_cast<vsol_group_2d const *>((*i).ptr());   // GOOD VERSION
       vsol_group_2d const* g=(vsol_group_2d const*)((*i).ptr()->cast_to_group()); // BAD HACK
@@ -190,7 +190,7 @@ void vsol_group_2d::remove_object(const int i)
   int k;
 
   j=storage_->begin();
-  for(k=0;k<i;++k)
+  for (k=0;k<i;++k)
     ++j;
   storage_->erase(j);
 }
@@ -201,19 +201,15 @@ void vsol_group_2d::remove_object(const int i)
 bool
 vsol_group_2d::is_child(const vsol_spatial_object_2d_sptr &new_object) const
 {
-  bool result;
-  vsol_group_2d *g;
-
+  bool result=false;
   vcl_list<vsol_spatial_object_2d_sptr>::iterator i;
-
-  result=false;
-  for(i=storage_->begin();(i!=storage_->end())&&!result;++i)
+  for (i=storage_->begin();(i!=storage_->end())&&!result;++i)
     {
       result=(*i).ptr()==new_object.ptr();
       if(!result)
         {
           // g=dynamic_cast<vsol_group_2d const *>((*i).ptr());   // GOOD VERSION
-          g=(vsol_group_2d *)((*i).ptr()->cast_to_group()); // BAD HACK
+          vsol_group_2d const* g=(vsol_group_2d const*)((*i).ptr()->cast_to_group()); // BAD HACK
           if(g!=0)
             g->is_child(new_object);
         }
