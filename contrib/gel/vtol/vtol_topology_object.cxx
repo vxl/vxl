@@ -167,7 +167,7 @@ void vtol_topology_object::unlink(void)
 
 //: get list of vertices
 
-vertex_list* vtol_topology_object::vertices(void)
+vertex_list* vtol_topology_object::vertices(void) const
 {
   vertex_list* new_list=new vertex_list;
   inf_sup_cache_->vertices(*new_list);
@@ -176,13 +176,13 @@ vertex_list* vtol_topology_object::vertices(void)
 
 //: get list of vertices
 
-void vtol_topology_object::vertices(vertex_list& verts)
+void vtol_topology_object::vertices(vertex_list& verts) const
 {
   inf_sup_cache_->vertices(verts);
 }
 
 //: get list of zero_chains
-zero_chain_list* vtol_topology_object::zero_chains(void)
+zero_chain_list* vtol_topology_object::zero_chains(void) const
 {
   zero_chain_list* new_list=new zero_chain_list;
   inf_sup_cache_->zero_chains(*new_list);
@@ -190,14 +190,14 @@ zero_chain_list* vtol_topology_object::zero_chains(void)
 }
 
 //: get list of zero chains
-void vtol_topology_object::zero_chains(zero_chain_list &zerochains)
+void vtol_topology_object::zero_chains(zero_chain_list &zerochains) const
 {
   inf_sup_cache_->zero_chains(zerochains);
 }
 
 //: get list of edges
 
-edge_list* vtol_topology_object::edges(void)
+edge_list* vtol_topology_object::edges(void) const
 {
   edge_list* new_list=new edge_list;
   inf_sup_cache_->edges(*new_list);
@@ -206,14 +206,14 @@ edge_list* vtol_topology_object::edges(void)
 
 //: get list of edges
 
-void vtol_topology_object::edges(edge_list &edges)
+void vtol_topology_object::edges(edge_list &edges) const
 {
   inf_sup_cache_->edges(edges);
 }
 
 //: get list of one chains
 
-one_chain_list* vtol_topology_object::one_chains(void)
+one_chain_list* vtol_topology_object::one_chains(void) const
 {
   one_chain_list* new_list=new one_chain_list;
   inf_sup_cache_->one_chains(*new_list);
@@ -222,14 +222,14 @@ one_chain_list* vtol_topology_object::one_chains(void)
 
 //: get list of one chains
 
-void vtol_topology_object::one_chains(one_chain_list &onechains)
+void vtol_topology_object::one_chains(one_chain_list &onechains) const
 {
   inf_sup_cache_->one_chains(onechains);
 }
 
 //: get list of faces
 
-face_list *vtol_topology_object::faces(void)
+face_list *vtol_topology_object::faces(void) const
 {
   face_list *new_list=new face_list;
   inf_sup_cache_->faces(*new_list);
@@ -238,14 +238,14 @@ face_list *vtol_topology_object::faces(void)
 
 //: get list of faces
 
-void vtol_topology_object::faces(face_list &face_list)
+void vtol_topology_object::faces(face_list &face_list) const
 {
   inf_sup_cache_->faces(face_list);
 }
 
 //: get list of two chains
 
-two_chain_list *vtol_topology_object::two_chains(void)
+two_chain_list *vtol_topology_object::two_chains(void) const
 {
   two_chain_list *new_list=new two_chain_list;
   inf_sup_cache_->two_chains(*new_list);
@@ -254,14 +254,14 @@ two_chain_list *vtol_topology_object::two_chains(void)
 
 //: get list of two chains
 
-void vtol_topology_object::two_chains(two_chain_list &new_list)
+void vtol_topology_object::two_chains(two_chain_list &new_list) const
 {
   inf_sup_cache_->two_chains(new_list);
 }
 
 //: get list of blocks
 
-block_list *vtol_topology_object::blocks(void)
+block_list *vtol_topology_object::blocks(void) const
 {
   block_list *new_list=new block_list;
   inf_sup_cache_->blocks(*new_list);
@@ -270,7 +270,7 @@ block_list *vtol_topology_object::blocks(void)
 
 //: get list of blocks
 
-void vtol_topology_object::blocks(block_list &new_list)
+void vtol_topology_object::blocks(block_list &new_list) const
 {
   inf_sup_cache_->blocks(new_list);
 }
@@ -405,21 +405,8 @@ vcl_vector<vtol_block *> *vtol_topology_object::compute_blocks(void)
 //---------------------------------------------------------------------------
 void vtol_topology_object::compute_bounding_box() const
 {
-  if (!this->bounding_box_)
-  {
-    vcl_cout << "In void vtol_topology_object::compute_bounding_box() -"
-             << " shouldn't happen\n";
-    return;
-  }
-  vertex_list *verts= const_cast<vtol_topology_object*>(this)->vertices();
-  if (!verts->size())
-  {
-    vcl_cout << "In void vtol_topology_object::compute_bounding_box() -"
-             << " no vertices\n";
-    return;
-  }
-  this->bounding_box_->reset_bounds();
-  for (vertex_list::iterator vit = verts->begin(); vit != verts->end(); vit++)
-    this->bounding_box_->grow_minmax_bounds(*(*vit)->get_bounding_box());
-  delete verts;
+  this->empty_bounding_box();
+  vertex_list verts; this->vertices(verts);
+  for (vertex_list::iterator vit = verts.begin(); vit != verts.end(); ++vit)
+    this->add_to_bounding_box((*vit)->get_bounding_box());
 }

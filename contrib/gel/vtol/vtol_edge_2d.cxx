@@ -281,32 +281,10 @@ bool vtol_edge_2d::compare_geometry(const vtol_edge &other) const
 
 void vtol_edge_2d::compute_bounding_box() const
 {
-  if (!this->bounding_box_)
-  {
-    vcl_cout << "In void vtol_edge_2d::compute_bounding_box() - shouldn't happen\n";
-    return;
-  }
+  this->empty_bounding_box();
   vsol_curve_2d_sptr c = this->curve();
-  if (!c)
-  {
-    vcl_cout << "In vtol_edge_2d::compute_bounding_box() - null curve\n";
+  if (c && c->cast_to_vdgl_digital_curve())
+    this->set_bounding_box(c->cast_to_vdgl_digital_curve()->get_bounding_box());
+  else // the geometry is either a line segment or unknown
     vtol_topology_object::compute_bounding_box();
-    return;
-  }
-  if (c->cast_to_vdgl_digital_curve())
-  {
-    vdgl_digital_curve_sptr dc = c->cast_to_vdgl_digital_curve();
-    vsol_box_2d_sptr dc_box = dc->get_bounding_box();
-    if (!dc_box)
-    {
-      vcl_cout << "In vtol_edge_2d::compute_bounding_box() - curve has null bounding_box\n";
-      vtol_topology_object::compute_bounding_box();
-      return;
-    }
-    this->bounding_box_->reset_bounds();
-    this->bounding_box_->grow_minmax_bounds(*dc_box);
-    return;
-  }
-  //the geometry is either a line segment or unknown so use the generic method
-  vtol_topology_object::compute_bounding_box();
 }

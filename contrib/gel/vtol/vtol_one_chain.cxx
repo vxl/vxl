@@ -11,9 +11,10 @@
 #include <vtol/vtol_macros.h>
 #include <vtol/vtol_list_functions.h>
 
-
 vtol_edge_sptr vtol_one_chain::edge(int i) const
 {
+  assert (i>=0);
+  assert (i<numinf());
   return inferiors_[i]->cast_to_edge();
 }
 
@@ -80,11 +81,11 @@ vtol_one_chain::vtol_one_chain(edge_list const& edgs,
 //---------------------------------------------------------------------------
 vtol_one_chain::vtol_one_chain(vtol_one_chain_sptr const& other)
 {
-  vertex_list *verts=other->vertices();
-  topology_list newverts(verts->size());
+  vertex_list verts; other->vertices(verts);
+  topology_list newverts(verts.size());
 
   int i=0;
-  for (vertex_list::iterator v=verts->begin();v!=verts->end();++v,++i)
+  for (vertex_list::iterator v=verts.begin();v!=verts.end();++v,++i)
   {
     vtol_vertex_sptr ve=*v;
     newverts[i]=ve->clone()->cast_to_topology_object();
@@ -106,7 +107,6 @@ vtol_one_chain::vtol_one_chain(vtol_one_chain_sptr const& other)
 
   for (chain_list::const_iterator h=hierarchy_infs->begin();h!=hierarchy_infs->end();++h)
     link_chain_inferior((*h)->clone()->cast_to_topology_object()->cast_to_one_chain());
-  delete verts;
 }
 
 //---------------------------------------------------------------------------
@@ -489,31 +489,17 @@ vcl_vector<vtol_block*> *vtol_one_chain::compute_blocks()
 
 //---------------------------------------------------------------------------
 //: Computes the bounding box of a vtol_one_chain from the edges.
-//    Just get the bounding box for each edge and update this's
-//    box accordingly. Note that the computation can be done independently of
-//    dimension.
+//  Just get the bounding box for each edge and update this's box accordingly.
+//  Note that the computation is done independently of dimension.
 //---------------------------------------------------------------------------
 
 void vtol_one_chain::compute_bounding_box() const
 {
-  if (!this->bounding_box_)
-  {
-    vcl_cout << "In void vtol_one_chain::compute_bounding_box() - shouldn't happen\n";
-    return;
-  }
+  // we need to clear the bounds of the box to correctly reflect edge bounds
+  this->empty_bounding_box();
 
-  edge_list *edgs= const_cast<vtol_one_chain*>(this)->edges();
-
-  if (edgs->size()==0)//default method, things are screwed up anyway
-  {
-    vtol_topology_object::compute_bounding_box();
-    return;
-  }
-  //at this point we need to clear the bounds of the box
-  //to correctly reflect edge bounds
-  bounding_box_->reset_bounds();
-
-  for (edge_list::iterator eit = edgs->begin(); eit != edgs->end(); eit++)
+  edge_list edgs; this->edges(edgs);
+  for (edge_list::iterator eit = edgs.begin(); eit != edgs.end(); eit++)
   {
     if (!(*eit)->get_bounding_box())
     {
@@ -521,9 +507,8 @@ void vtol_one_chain::compute_bounding_box() const
                << " edge has null bounding box\n";
       continue;
     }
-    bounding_box_->grow_minmax_bounds(*(*eit)->get_bounding_box());
+    this->add_to_bounding_box((*eit)->get_bounding_box());
   }
-  delete edgs;
 }
 
 //---------------------------------------------------------------------------
@@ -554,13 +539,13 @@ void vtol_one_chain::determine_edge_directions()
 
     second_edge=(*i)->cast_to_edge();
 
-    if (second_edge->is_endpoint1(*(first_edge->v1())))
+    if (second_edge->is_endpoint1(first_edge->v1()))
     {
       directions_.push_back((signed char)(-1));
       tweeney=second_edge->v2();
       directions_.push_back((signed char)1);
     }
-    else if (second_edge->is_endpoint2(*(first_edge->v1())))
+    else if (second_edge->is_endpoint2(first_edge->v1()))
     {
       directions_.push_back((signed char)(-1));
       directions_.push_back((signed char)(-1));
@@ -569,7 +554,7 @@ void vtol_one_chain::determine_edge_directions()
     else
     {
       directions_.push_back((signed char)1);
-      if (second_edge->is_endpoint1(*(first_edge->v2())))
+      if (second_edge->is_endpoint1(first_edge->v2()))
       {
         tweeney=second_edge->v2();
         directions_.push_back((signed char)1);
@@ -587,7 +572,7 @@ void vtol_one_chain::determine_edge_directions()
       while (i!=inferiors()->end())
       {
         cur_edge=(*i)->cast_to_edge();
-        if (cur_edge->is_endpoint1(*tweeney))
+        if (cur_edge->is_endpoint1(tweeney))
         {
           tweeney=cur_edge->v2();
           directions_.push_back((signed char)1);
