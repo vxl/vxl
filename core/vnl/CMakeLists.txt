@@ -21,6 +21,7 @@ SET( vnl_sources
   vnl_fortran_copy.txx         vnl_fortran_copy.h
   vnl_det.txx                  vnl_det.h
                                vnl_inverse.h
+  vnl_rank.txx                 vnl_rank.h
   vnl_quaternion.txx           vnl_quaternion.h
   vnl_scalar_join_iterator.txx vnl_scalar_join_iterator.h
 
