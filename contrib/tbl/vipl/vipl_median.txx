@@ -12,7 +12,7 @@ bool vipl_median <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(){
   // circular mask was generated in preop(), we just use it here
 
   // apply filter:
-  DataIn dummy = DataIn();
+  const DataIn dummy = DataIn(0);
   DataIn* v = new DataIn[(2*size+1)*(2*size+1)];
   int startx = start(X_Axis());
   int starty = start(Y_Axis());

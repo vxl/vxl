@@ -43,7 +43,7 @@ bool vipl_moment <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
 {
   const ImgIn &in = in_data(0);
   ImgOut &out = *out_data_ptr();
-
+  const DataIn dummy = DataIn(0);
 
   // We create a (double) float buffer to hold the computed values.
 
@@ -71,7 +71,7 @@ bool vipl_moment <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
   for (int i=startx-x1;i<=(startx+x2);++i)
     for (int j=starty-y1;j<=(starty+y2);++j)
     {
-      DataIn w = getpixel(in,i,j,DataIn());
+      DataIn w = getpixel(in,i,j,dummy);
       d += power(double(w),order_);
     }
   tempbuf[0] = d;
@@ -86,9 +86,9 @@ bool vipl_moment <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
     for (int j = starty-y1;j<=starty+y2;++j)
     {
       DataIn
-      w  = getpixel(in,i-1-x1,j,DataIn());
+      w  = getpixel(in,i-1-x1,j,dummy);
       d -= power(double(w),order_);
-      w  = getpixel(in,i+x2,j,DataIn());
+      w  = getpixel(in,i+x2,j,dummy);
       d += power(double(w),order_);
     }
     tempbuf[i-startx] = d;
@@ -104,9 +104,9 @@ bool vipl_moment <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
     for (int i = startx-x1;i<=startx+x2;++i)
     {
       DataIn
-      w  = getpixel(in,i,j-1-y1,DataIn());
+      w  = getpixel(in,i,j-1-y1,dummy);
       d -= power(double(w),order_);
-      w  = getpixel(in,i,j+y2,DataIn());
+      w  = getpixel(in,i,j+y2,dummy);
       d += power(double(w),order_);
     }
     tempbuf[(j-starty)*sizex] = d;
@@ -123,10 +123,10 @@ bool vipl_moment <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
       int j1 = j-starty;
       d = tempbuf[i1-1 + j1*sizex] + tempbuf[i1+(j1-1)*sizex] - tempbuf[(i1-1) + (j1-1)*sizex];
       DataIn
-      w = getpixel(in,i-x1-1,j-y1-1,DataIn());  d += power(double(w),order_);
-      w = getpixel(in,i-x1-1,j+y2,DataIn());    d -= power(double(w),order_);
-      w = getpixel(in,i+x2,j-y1-1,DataIn());    d -= power(double(w),order_);
-      w = getpixel(in,i+x2,j+y2,DataIn());      d += power(double(w),order_);
+      w = getpixel(in,i-x1-1,j-y1-1,dummy);  d += power(double(w),order_);
+      w = getpixel(in,i-x1-1,j+y2,dummy);    d -= power(double(w),order_);
+      w = getpixel(in,i+x2,j-y1-1,dummy);    d -= power(double(w),order_);
+      w = getpixel(in,i+x2,j+y2,dummy);      d += power(double(w),order_);
       tempbuf[i1+j1*sizex] = d;
       d /= size;
       fsetpixel(out,i,j,(DataOut)d);

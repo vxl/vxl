@@ -5,7 +5,7 @@
 
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
 bool vipl_threshold <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(){
-  DataIn dummy = DataIn();
+  const DataIn dummy = DataIn(0);
   const ImgIn &in = in_data();
   ImgOut &out = out_data();
 

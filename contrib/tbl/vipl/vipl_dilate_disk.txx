@@ -16,16 +16,19 @@ bool vipl_dilate_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(
   int starty = start(Y_Axis());
   int stopx = stop(X_Axis());
   int stopy = stop(Y_Axis());
-  for (int j = starty, ej =  stopy; j < ej  ; ++j)
-    for (int i = startx, ei = stopx; i < ei ; ++i) {
+  const DataIn dummy = DataIn(0); // dummy initialisation to avoid compiler warning
+  for (register int j = starty, ej =  stopy; j < ej  ; ++j)
+    for (register int i = startx, ei = stopx; i < ei ; ++i) {
       register DataIn
-      v = fgetpixel(in, i, j, DataIn()); // set v to max of surrounding pixels:
-      for (int x=0; x<=size; ++x) for (int y=0; y<=size; ++y) if (mask()[x][y]) {
-        v = vcl_max(v, getpixel(in, i+x, j+y, DataIn()));
-        v = vcl_max(v, getpixel(in, i-x, j+y, DataIn()));
-        v = vcl_max(v, getpixel(in, i+x, j-y, DataIn()));
-        v = vcl_max(v, getpixel(in, i-x, j-y, DataIn()));
-      }
+      v = fgetpixel(in, i, j, dummy); // set v to max of surrounding pixels:
+      for (register int x=0; x<=size; ++x)
+      for (register int y=0; y<=size; ++y)
+        if (mask()[x][y]) {
+          v = vcl_max(v, getpixel(in, i+x, j+y, dummy));
+          v = vcl_max(v, getpixel(in, i-x, j+y, dummy));
+          v = vcl_max(v, getpixel(in, i+x, j-y, dummy));
+          v = vcl_max(v, getpixel(in, i-x, j-y, dummy));
+        }
       fsetpixel(out, i, j, (DataOut)v);
     }
   return true;

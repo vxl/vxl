@@ -5,7 +5,7 @@
 
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
 bool vipl_add_random_noise <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(){
-  DataIn dummy = DataIn(); // dummy initialization to avoid compiler warning
+  const DataIn dummy = DataIn(0); // dummy initialization to avoid compiler warning
   int startx = start(X_Axis());
   int starty = start(Y_Axis());
   int stopx = stop(X_Axis());
@@ -16,7 +16,7 @@ bool vipl_add_random_noise <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_app
       DataOut p = fgetpixel(in_data(),i,j,dummy) + (DataOut)(distrib_->Draw(&seed_));
 #else
       seed_ *= 1366; seed_ += 150889; seed_ %= 714025;
-      DataOut p = fgetpixel(in_data(),i,j,dummy) + DataOut(maxdev_*(seed_-357012))/DataOut(357012);
+      DataOut p = fgetpixel(in_data(),i,j,dummy) + DataOut((maxdev_*(seed_-357012))/357012);
 #endif
       setpixel(out_data(), i, j, p);
   }

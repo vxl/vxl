@@ -8,14 +8,14 @@ bool vipl_y_gradient <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
   const ImgIn &in = in_data(0);
   ImgOut &out = *out_data_ptr();
 
-  register DataIn v = DataIn(0); register DataOut w;
+  const DataIn dummy = DataIn(0); // dummy initialization to avoid compiler warning
   int startx = start(X_Axis());
   int starty = start(Y_Axis());
   int stopx = stop(X_Axis());
   int stopy = stop(Y_Axis());
   for (int j = starty+1; j < stopy; ++j)
     for (int i = startx; i < stopx; ++i) {
-      w = fgetpixel(in, i, j, v) - fgetpixel(in, i, j-1, v);
+      register DataOut w = fgetpixel(in, i, j, dummy) - fgetpixel(in, i, j-1, dummy);
       fsetpixel(out, i, j, w);
     }
   return true;

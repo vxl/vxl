@@ -9,7 +9,7 @@ bool vipl_gradient_mag <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop
   const ImgIn &in = in_data(0);
   ImgOut &out = *out_data_ptr();
 
-  DataIn dummy = DataIn(); register double dx, dy;
+  const DataIn dummy = DataIn(0); register double dx, dy;
   int startx = start(X_Axis());
   int starty = start(Y_Axis());
   int stopx = stop(X_Axis());

@@ -3,14 +3,12 @@
 
 #include "vipl_sobel.h"
 
-// template<class DataIn> inline DataIn max(DataIn a,DataIn b){ return (a<b)?b:a; }
-
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
 bool vipl_sobel <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(){
   const ImgIn &in = in_data(0);
   ImgOut &out = out_data();
   // apply filter:
-  register DataIn v = DataIn(0);
+  DataIn v = DataIn(0);
   int startx = start(X_Axis());
   int starty = start(Y_Axis());
   int stopx = stop(X_Axis());
