@@ -12,6 +12,9 @@ VCL_SWAP_INSTANTIATE(unsigned int);
 #ifdef VCL_GCC_295
 template void fill(unsigned*, unsigned*, int const&);
 #endif
+#if defined (__osf__) && defined(VCL_GCC_295) && !defined(GNU_LIBSTDCXX_V3)
+template unsigned int* fill_n(unsigned int*, unsigned int, unsigned int const &);
+#endif
 
 #if defined(GNU_LIBSTDCXX_V3)
 // In V3, vector<T>::iterator is not a T *.
