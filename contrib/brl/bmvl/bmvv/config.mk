@@ -1,6 +1,7 @@
 IULIBS += -lbmvv
 USES += contrib/gel contrib/oxl
 include ${IUEROOT}/contrib/brl/bmvl/btom/config.mk
+include ${IUEROOT}/contrib/brl/bmvl/brct/config.mk
 include ${IUEROOT}/contrib/brl/bbas/bgui/config.mk
 include ${IUEROOT}/contrib/brl/bbas/bxml/config.mk
 include ${IUEROOT}/contrib/brl/bseg/sdet/config.mk
