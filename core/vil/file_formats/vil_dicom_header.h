@@ -396,8 +396,8 @@ struct vil2_dicom_header_info
 
 
 
-const int VIL2_DICOM_HEADER_UNSPECIFIED = -1;
-const unsigned VIL2_DICOM_HEADER_UNSPECIFIED_UINT = (unsigned) -1;
+const short VIL2_DICOM_HEADER_UNSPECIFIED = -1;
+const unsigned short VIL2_DICOM_HEADER_UNSPECIFIED_UNSIGNED = (unsigned short) -1;
 const double VIL2_DICOM_HEADER_DEFAULTSIZE = 1.0;
 const double VIL2_DICOM_HEADER_DEFAULTINTERCEPT = 0.0;
 const double VIL2_DICOM_HEADER_DEFAULTSLOPE = 1.0;

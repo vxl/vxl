@@ -126,7 +126,6 @@ void convertVoidToFloatImage(void *void_im,
                        vil2_dicom_header_info dhi)
 {
 
-  int i,j;
   int next_row;
 
   // Different types to read from void into

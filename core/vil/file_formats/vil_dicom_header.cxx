@@ -1841,12 +1841,12 @@ void vil2_dicom_header_format::clearInfo(void)
   /*
    * Image info
    */
-  last_read_.pix_samps_ = VIL2_DICOM_HEADER_UNSPECIFIED_UINT;
+  last_read_.pix_samps_ = VIL2_DICOM_HEADER_UNSPECIFIED;
   last_read_.photo_interp_ = "";
-  last_read_.dimx_ = VIL2_DICOM_HEADER_UNSPECIFIED_UINT;
-  last_read_.dimy_ = VIL2_DICOM_HEADER_UNSPECIFIED_UINT;
-  last_read_.dimz_ = VIL2_DICOM_HEADER_UNSPECIFIED_UINT;
-  last_read_.high_bit_ = VIL2_DICOM_HEADER_UNSPECIFIED_UINT;
+  last_read_.dimx_ = VIL2_DICOM_HEADER_UNSPECIFIED_UNSIGNED;
+  last_read_.dimy_ = VIL2_DICOM_HEADER_UNSPECIFIED_UNSIGNED;
+  last_read_.dimz_ = VIL2_DICOM_HEADER_UNSPECIFIED_UNSIGNED;
+  last_read_.high_bit_ = VIL2_DICOM_HEADER_UNSPECIFIED_UNSIGNED;
   last_read_.small_im_pix_val_ = VIL2_DICOM_HEADER_UNSPECIFIED;
   last_read_.large_im_pix_val_ = VIL2_DICOM_HEADER_UNSPECIFIED;
   last_read_.pixel_padding_val_ = VIL2_DICOM_HEADER_UNSPECIFIED;
@@ -1861,7 +1861,7 @@ void vil2_dicom_header_format::clearInfo(void)
   last_read_.slice_spacing_ = VIL2_DICOM_HEADER_DEFAULTSIZE;
   last_read_.res_intercept_ = VIL2_DICOM_HEADER_DEFAULTINTERCEPT;
   last_read_.res_slope_ = VIL2_DICOM_HEADER_DEFAULTSLOPE;
-  last_read_.pix_rep_ = VIL2_DICOM_HEADER_UNSPECIFIED_UINT;
+  last_read_.pix_rep_ = VIL2_DICOM_HEADER_UNSPECIFIED_UNSIGNED;
   last_read_.stored_bits_ = VIL2_DICOM_HEADER_UNSPECIFIED;
   last_read_.allocated_bits_ = VIL2_DICOM_HEADER_UNSPECIFIED;
 
