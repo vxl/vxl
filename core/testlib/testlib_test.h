@@ -60,5 +60,9 @@ void testlib_test_assert_near(const vcl_string& msg, double expr,
 //: declare the main function
 #define MAIN( testname ) \
   int testname ## _main( int argc, char* argv[] )
+ 
+//: a simplified version of the main test, just in one line
+#define TESTMAIN( testname ) \
+  MAIN( testname ) { START( #testname ); testname(); SUMMARY(); }
 
 #endif // testlib_test_h_
