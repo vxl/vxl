@@ -1,12 +1,23 @@
-// \file implementation file
 //
-// 13-08-2000  Marko Bacic, Oxford RRG - Fixed textures
-// 14-08-2000  FSM, Oxford RRG - Fixed double buffering/rubber banding issues
-// 14-08-2000  Marko Bacic, Oxford RRG - Added right popup menu
-// 30-08-2000  Marko Bacic, Oxford RRG - Support for Windows/MFC acceleration
-// 06-02-2001  AWF, Oxford RRG - Make acceleration work...
-// 02-03-2001  K.Y.McGaul - Add shift & ctrl modifiers to key press/release events.
-//                        - Edited and added Doxygen comments.
+// This is vgui/impl/mfc/vgui_mfc_adaptor.cxx
+// See vgui_mfc_adaptor.h for a description of this file
+//
+// \verbatim
+//  Modifications:
+//    13-08-2000  Marko Bacic, Oxford RRG - Fixed textures
+//    14-08-2000  FSM, Oxford RRG - Fixed double buffering/rubber banding issues
+//    14-08-2000  Marko Bacic, Oxford RRG - Added right popup menu
+//    30-08-2000  Marko Bacic, Oxford RRG - Support for Windows/MFC acceleration
+//    06-02-2001  AWF, Oxford RRG - Make acceleration work...
+//    02-03-2001  K.Y.McGaul - Add shift & ctrl modifiers to key press/release events.
+//                           - Edited and added Doxygen comments.
+//    14-09-2001  K.Y.McGaul - Moved stuff in OnDestroy to destructor.
+//    18-09-2001  K.Y.McGaul - Major changes to allow for multiple adaptors in an
+//                             application.  In particular using setup_adaptor we can 
+//                             now specify which window our adaptor is in.  If you 
+//                             don't call setup_adaptor it is assumed to be the main window.
+// \endverbatim
+//
 
 #include "vgui_mfc_adaptor.h"
 
@@ -29,31 +40,64 @@ static bool debug = false;
 vgui_menu vgui_mfc_adaptor::last_popup;
 IMPLEMENT_DYNCREATE(vgui_mfc_adaptor, CView)
 
+
+//: Constructor.
 vgui_mfc_adaptor::vgui_mfc_adaptor():ovl_helper(0), /*come_out_now(false),*/ redraw_posted(true)
 {
-  double_buffered = false; //kym: changed from true (because it breaks xcv);
+  if (vgui_accelerate::vgui_mfc_acceleration)
+    double_buffered = false; // kym - double buffering is not available with acceleration (it
+                             // crashes windows).
+  else
+    double_buffered = true;
+
+  // If m_pCWnd is not set (using setup_adaptor) assume we use the main window:
+  m_pCWnd = 0;
+  hOldDC = 0;
+  hOldRC = 0;
 }
 
+//: Destructor.
+//  kym - moved stuff here from OnDestroy because OnDestroy seems to only be
+//  called when the main window is deleted.
 vgui_mfc_adaptor::~vgui_mfc_adaptor()
 {
+  CView::OnDestroy();
+
+  // This call makes the current RC not current
+  if (FALSE == ::wglMakeCurrent(hOldDC, hOldRC))
+    ::AfxMessageBox("wglMakeCurrent failed" );
+  
+  // delete the RC
+  if ( m_hRC && (FALSE == ::wglDeleteContext( m_hRC )) )
+  {
+    ::AfxMessageBox("wglDeleteContext failed.");
+  }
+
+  // Release the device context:
+  HDC m_hgldc = ::GetDC(m_hWnd);
+	::ReleaseDC(m_hWnd, m_hgldc);	
+
+  // delete the DC
+  if ( m_pDC )
+    delete m_pDC;
 }
 
 BEGIN_MESSAGE_MAP(vgui_mfc_adaptor, CView)
-ON_WM_CREATE()
-ON_WM_DESTROY()
-ON_WM_ERASEBKGND()
-ON_WM_SIZE()
-ON_WM_KEYDOWN()
-ON_WM_KEYUP()
-ON_WM_LBUTTONDOWN()
-ON_WM_LBUTTONUP()
-ON_WM_MOUSEMOVE()
-ON_WM_RBUTTONDOWN()
-ON_WM_RBUTTONUP()
-ON_WM_MOUSEWHEEL()
-ON_WM_MBUTTONDOWN()
-ON_WM_MBUTTONUP()
-ON_WM_PAINT()
+  ON_WM_CREATE()
+  ON_WM_DESTROY()
+  ON_WM_ERASEBKGND()
+  ON_WM_SIZE()
+  ON_WM_KEYDOWN()
+  ON_WM_KEYUP()
+  ON_WM_LBUTTONDOWN()
+  ON_WM_LBUTTONUP()
+  ON_WM_MOUSEMOVE()  
+  ON_WM_RBUTTONDOWN()
+  ON_WM_RBUTTONUP()
+  ON_WM_MOUSEWHEEL()
+  ON_WM_MBUTTONDOWN()
+  ON_WM_MBUTTONUP()
+  ON_WM_PAINT()
 END_MESSAGE_MAP()
 
 
@@ -69,16 +113,21 @@ void vgui_mfc_adaptor::post_overlay_redraw()
 //: MFC implementation of vgui_adaptor function - redraws rendering area.
 void vgui_mfc_adaptor::post_redraw()
 {
-  if (!redraw_posted) {
-    CWnd *wnd = AfxGetApp()->GetMainWnd();
-    if (wnd) {
+  if (!redraw_posted) 
+  {
+    //CWnd *wnd = AfxGetApp()->GetMainWnd();
+    CWnd* wnd;
+    if (m_pCWnd != 0)
+      wnd = m_pCWnd;
+    else
+      wnd = AfxGetApp()->GetMainWnd();
+    if (wnd) 
       wnd->Invalidate(FALSE);
-    }
   }
   redraw_posted = true;
 }
 
-//: MFC implementation of vgui_adaptor function -
+//: MFC implementation of vgui_adaptor function - make this the current GL rendering context.
 void vgui_mfc_adaptor::make_current()
 {
   ::wglMakeCurrent( m_pDC->GetSafeHdc(), m_hRC );
@@ -103,6 +152,16 @@ vgui_menu vgui_mfc_adaptor::get_popup()
 {
   vcl_cerr<< "vgui_mfc_adaptor::get_popup"<< vcl_endl;
   return vgui_menu();
+}
+
+//: If your adaptor is not in the main window of the application call this function.
+//  The first parameter tells it which window this adaptor is associated with,
+//  the other parameters are so we can go back to our old rendering context.
+void vgui_mfc_adaptor::setup_adaptor(CWnd* this_cwnd, HDC oldDC, HGLRC oldContext)
+{
+  m_pCWnd = this_cwnd;
+  hOldDC = oldDC;
+  hOldRC = oldContext;
 }
 
 #ifdef _DEBUG
@@ -228,7 +287,7 @@ BOOL vgui_mfc_adaptor::SetupPixelFormat()
       1,                      // version number
       PFD_DOUBLEBUFFER |
       PFD_DRAW_TO_WINDOW |    // support window
-      PFD_SUPPORT_OPENGL,   // support OpenGL
+      PFD_SUPPORT_OPENGL,     // support OpenGL
       PFD_TYPE_RGBA,          // RGBA type
       GetDeviceCaps(m_pDC->GetSafeHdc(),BITSPIXEL)* //: color depth
       GetDeviceCaps(m_pDC->GetSafeHdc(),PLANES),
@@ -244,7 +303,7 @@ BOOL vgui_mfc_adaptor::SetupPixelFormat()
       0,                      // reserved
       0, 0, 0                 // layer masks ignored
   };
-
+  
   if (vgui_accelerate::vgui_mfc_acceleration)
     pfd.dwFlags = PFD_DRAW_TO_BITMAP|PFD_SUPPORT_OPENGL;
 
@@ -273,25 +332,8 @@ BOOL vgui_mfc_adaptor::SetupPixelFormat()
 //: Called by MFC when the window has been destroyed.
 void vgui_mfc_adaptor::OnDestroy()
 {
-  CView::OnDestroy();
-
-  // this call makes the current RC not current
-  if ( FALSE ==  ::wglMakeCurrent( 0, 0 ) )
-  {
-    ::AfxMessageBox("wglMakeCurrent failed.");
-  }
-
-  // delete the RC
-  if ( m_hRC && (FALSE == ::wglDeleteContext( m_hRC )) )
-  {
-    ::AfxMessageBox("wglDeleteContext failed.");
-  }
-
-  // delete the DC
-  if ( m_pDC )
-  {
-    delete m_pDC;
-  }
+  // kym - moved stuff to the destructor because this only seems
+  // to be called when the main window is destroyed.
 }
 
 //: Called by MFC when the background needs erasing.
@@ -305,22 +347,25 @@ BOOL vgui_mfc_adaptor::OnEraseBkgnd(CDC* pDC)
 //: Redraws the OpenGL area.
 void vgui_mfc_adaptor::service_redraws()
 {
-  if (redraw_posted) {
+  if (redraw_posted) 
+  {
     if(double_buffered)  // kym - changed from if(!double_buffered) - why change the buffer otherwise?
       glDrawBuffer(GL_BACK);
-    dispatch_to_tableau(vgui_DRAW);
+    dispatch_to_tableau(vgui_event(vgui_DRAW));
     if(!double_buffered)
     {
-      static CWnd *wnd = AfxGetApp()->GetMainWnd();
+      //CWnd *wnd = AfxGetApp()->GetMainWnd();
+      CWnd* wnd;
+      if (m_pCWnd)
+        wnd = m_pCWnd;
+      else
+        wnd = AfxGetApp()->GetMainWnd();
       CDC *win_dc = wnd->GetDC();
       RECT r;
       wnd->GetClientRect(&r);
-      //GdiFlush();
-      //glFlush();
       win_dc->BitBlt(0,0,r.right,r.bottom,vgui_mfc_adaptor_global_dc,0,0,SRCCOPY);
     }
 
-    //delete win_dc;
     swap_buffers();
     redraw_posted = false;
   }
@@ -329,7 +374,12 @@ void vgui_mfc_adaptor::service_redraws()
 //: Sets the timer to dispatch WM_TIME event to a mainframe every time miliseconds
 void vgui_mfc_adaptor::post_timer(float tm,int id)
 {
-  CWnd *wnd = AfxGetApp()->GetMainWnd();
+  //CWnd *wnd = AfxGetApp()->GetMainWnd();
+  CWnd* wnd;
+  if (m_pCWnd)
+    wnd = m_pCWnd;
+  else
+    wnd = AfxGetApp()->GetMainWnd();
   wnd->SetTimer(id,tm,NULL);
 }
 
@@ -490,7 +540,12 @@ void vgui_mfc_adaptor::domouse(vgui_event_type et, UINT nFlags, CPoint point, vg
     params.y = point.y;
     last_popup = get_total_popup(params);
     CMenu *popup = vgui_mfc_utils::instance()->set_popup_menu(last_popup);
-    CWnd *wnd = AfxGetApp()->GetMainWnd();
+    //CWnd *wnd = AfxGetApp()->GetMainWnd();
+    CWnd* wnd;
+    if (m_pCWnd)
+      wnd = m_pCWnd;
+    else
+      wnd = AfxGetApp()->GetMainWnd();
     //: 'point' is window coordinates whereas TrackPopup menu requires screen
     // coordinates. So translate them into screen coordinates
     ClientToScreen(&point);
@@ -555,6 +610,7 @@ void vgui_mfc_adaptor::OnMouseMove(UINT nFlags, CPoint point)
 //: Called by MFC when a user rotates a mouse wheel.
 BOOL vgui_mfc_adaptor::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 {
-  vcl_cerr << "Mouse wheel events are not handled" << vcl_endl;
+  //vcl_cerr << "Mouse wheel events are not handled" << vcl_endl;
   return FALSE;
 }
+
