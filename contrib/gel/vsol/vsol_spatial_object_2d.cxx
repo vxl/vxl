@@ -30,7 +30,7 @@ const char *vsol_spatial_object_2d::get_name(void) const
 
 void vsol_spatial_object_2d::protected_destroy()
 {
-  if(this->get_references() <= 0)
+  if (this->get_references() <= 0)
     {
       vcl_cout << "goodbye crule world " << vcl_endl;
       delete this;
@@ -61,7 +61,7 @@ vsol_spatial_object_2d::vsol_spatial_object_2d(const vsol_spatial_object_2d &oth
 
 vsol_spatial_object_2d::~vsol_spatial_object_2d()
 {
-  if(_bounding_box)
+  if (_bounding_box)
     _bounding_box->unref();
 }
 
@@ -74,17 +74,8 @@ int vsol_spatial_object_2d::not_applicable(const vcl_string &message) const
 
 void  iu_delete(vsol_spatial_object_2d* so)
 {
-  if(so)
+  if (so)
     so->protected_destroy();
-}
-
-//---------------------------------------------------------------------------
-//: The same behavior than dynamic_cast<>.
-//  Needed because VXL is not compiled with -frtti :-(
-//---------------------------------------------------------------------------
-const vsol_group_2d *vsol_spatial_object_2d::cast_to_group(void) const
-{
-  return 0;
 }
 
 #if 0 // following functions are not (yet) supported
@@ -176,14 +167,14 @@ vsol_spatial_object_2d::Shear(float )
 //---------------------------------------------------------------------------
 void vsol_spatial_object_2d::compute_bounding_box(void)
 {
-  if(_bounding_box==0)
+  if (_bounding_box==0)
     _bounding_box = new vsol_box_2d;
   _bounding_box->touch();
 }
 
 void vsol_spatial_object_2d::grow_minmax_bounds(vsol_box_2d & comp_box)
 {
-  if(_bounding_box==0)
+  if (_bounding_box==0)
     _bounding_box=new vsol_box_2d;
   _bounding_box->grow_minmax_bounds(comp_box);
 }

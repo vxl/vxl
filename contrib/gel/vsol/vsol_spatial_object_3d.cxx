@@ -28,7 +28,7 @@ const char*    vsol_spatial_object_3d::get_name() const
 
 void vsol_spatial_object_3d::protected_destroy()
 {
-  if(this->get_references() <= 0)
+  if (this->get_references() <= 0)
     {
       vcl_cout << "goodbye crule world " << vcl_endl;
       delete this;
@@ -38,24 +38,15 @@ void vsol_spatial_object_3d::protected_destroy()
 
 vsol_spatial_object_3d::~vsol_spatial_object_3d()
 {
-  if(_bounding_box)
+  if (_bounding_box)
     _bounding_box->unref();
 }
 
 
 void iu_delete(vsol_spatial_object_3d* so)
 {
-  if(so)
+  if (so)
     so->protected_destroy();
-}
-
-//---------------------------------------------------------------------------
-//: The same behavior than dynamic_cast<>.
-//  Needed because VXL is not compiled with -frtti :-(
-//---------------------------------------------------------------------------
-const vsol_group_3d *vsol_spatial_object_3d::cast_to_group(void) const
-{
-  return 0;
 }
 
 #if 0 // the following functions are not (yet) supported
@@ -145,7 +136,7 @@ vsol_spatial_object_3d::Shear(float )
 
 void vsol_spatial_object_3d::grow_minmax_bounds(vsol_box_3d & comp_box)
 {
-  if(_bounding_box==0)
+  if (_bounding_box==0)
     _bounding_box=new vsol_box_3d;
   _bounding_box->grow_minmax_bounds(comp_box);
 }

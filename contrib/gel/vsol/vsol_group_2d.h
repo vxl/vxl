@@ -118,7 +118,8 @@ public:
   //: The same behavior than dynamic_cast<>.
   //  Needed because VXL is not compiled with -frtti :-(
   //---------------------------------------------------------------------------
-  virtual const vsol_group_2d *cast_to_group(void) const;
+  virtual const vsol_group_2d *cast_to_group(void) const { return this; }
+  virtual vsol_group_2d *cast_to_group(void) { return this; }
 
   //***************************************************************************
   // Implementation
