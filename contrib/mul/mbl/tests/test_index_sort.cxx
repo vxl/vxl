@@ -20,7 +20,7 @@ void test_index_sort()
 
   mbl_index_sort(x,index);
 
-  TEST("Correct number of elements",index.size()==n,true);
+  TEST("Correct number of elements",int(index.size())==n,true);
 
   bool order_ok = true;
   for (int i=1;i<n;++i)
@@ -35,7 +35,7 @@ void test_index_sort()
 
   mbl_index_sort(x,index);
 
-  TEST("Correct number of elements",index.size()==n,true);
+  TEST("Correct number of elements",int(index.size())==n,true);
 
   order_ok = true;
   for (int i=1;i<n;++i)

@@ -15,12 +15,12 @@ void test_matxvec()
   vcl_cout << "*****************************" << vcl_endl;
 
   vnl_matrix<double> A(4,5);
-  for (int i=0;i<A.rows();++i)
-     for (int j=0;j<A.cols();++j)
+  for (unsigned int i=0;i<A.rows();++i)
+     for (unsigned int j=0;j<A.cols();++j)
          A(i,j) = double(i+j*j);
 
   vnl_vector<double> b(3),x;
-  for (int i=0;i<b.size();++i) b(i)=1+i;
+  for (unsigned int i=0;i<b.size();++i) b(i)=1+i;
 
   mbl_matxvec_prod_mv(A,b,x);
   TEST("mbl_matxvec_prod_mv size()",x.size()==4,true);
@@ -30,7 +30,7 @@ void test_matxvec()
   TEST("mbl_matxvec_prod_mv x(3)",vcl_fabs(x(3)-32)<1e-8,true);
 
   vnl_vector<double> c(5),y;
-  for (int i=0;i<c.size();++i) c(i)=1+i;
+  for (unsigned int i=0;i<c.size();++i) c(i)=1+i;
 
   mbl_matxvec_prod_vm(c,A.transpose(),x);
   TEST("mbl_matxvec_prod_vm size()",x.size()==4,true);
