@@ -35,7 +35,8 @@ class bmrf_curve_3d_builder
 
   //: Constructor
   bmrf_curve_3d_builder();
-  bmrf_curve_3d_builder(bmrf_network_sptr);
+  bmrf_curve_3d_builder(const bmrf_network_sptr&);
+  bmrf_curve_3d_builder(const bmrf_network_sptr&, const vnl_double_3x4& C0);
   //: Destructor
   ~bmrf_curve_3d_builder() {}
 
@@ -47,7 +48,7 @@ class bmrf_curve_3d_builder
   bool build(int min_prj = 3, int min_len = 10, float sigma = 0.5);
 
   //: Compute the bounding box aligned with vehicle direction
-  bool compute_bounding_box(double inlier_fraction = 0.95);
+  bool compute_bounding_box(double inlier_fraction = 0.95, bool align_ep = false);
 
   //: Return the constructed curves
   vcl_set<vcl_list<bmrf_curvel_3d_sptr> > curves() const;
@@ -65,8 +66,11 @@ class bmrf_curve_3d_builder
   //: Initialize the intrinsic camera parameters
   void init_intrinsic();
 
-  //: Initialize the camera matrices
+  //: Initialize the camera matrices (using the identity camera)
   void init_cameras();
+
+  //: Initialize the camera matrices (using a specified camera)
+  void init_cameras(const vnl_double_3x4& C0);
 
   //: Determine the alpha bounds from the network
   void find_alpha_bounds();

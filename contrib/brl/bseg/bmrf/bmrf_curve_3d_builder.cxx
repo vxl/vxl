@@ -19,6 +19,7 @@
 #include <vnl/vnl_double_3x4.h>
 #include <vnl/vnl_rotation_matrix.h>
 #include <vnl/vnl_inverse.h>
+#include <vnl/vnl_identity_3x3.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_qr.h>
 
@@ -32,11 +33,21 @@ bmrf_curve_3d_builder::bmrf_curve_3d_builder()
 
 
 //: Constructor
-bmrf_curve_3d_builder::bmrf_curve_3d_builder(bmrf_network_sptr network)
+bmrf_curve_3d_builder::bmrf_curve_3d_builder(const bmrf_network_sptr& network)
  : network_(network), min_alpha_(0.0), max_alpha_(0.0), bb_xform_(0.0)
 {
   init_intrinsic();
   init_cameras();
+}
+
+
+//: Constructor
+bmrf_curve_3d_builder::bmrf_curve_3d_builder( const bmrf_network_sptr& network,
+                                              const vnl_double_3x4& C0 )
+ : network_(network), min_alpha_(0.0), max_alpha_(0.0), bb_xform_(0.0)
+{
+  init_intrinsic();
+  init_cameras(C0);
 }
 
 
@@ -56,34 +67,42 @@ bmrf_curve_3d_builder::init_intrinsic()
 void
 bmrf_curve_3d_builder::init_cameras()
 {
+  // Use the identity camera by default
+  vnl_double_3x4 C;
+  C[0][0] = 1;  C[0][1] = 0;  C[0][2] = 0;  C[0][3] = 0;
+  C[1][0] = 0;  C[1][1] = 1;  C[1][2] = 0;  C[1][3] = 0;
+  C[2][0] = 0;  C[2][1] = 0;  C[2][2] = 1;  C[2][3] = 0;
+  this->init_cameras(K_*C);
+}
+
+//: Initialize the camera matrices
+void
+bmrf_curve_3d_builder::init_cameras(const vnl_double_3x4& C0)
+{
   C_.clear();
   if (!network_)
     return;
   vcl_set<int> frames = network_->frame_numbers();
   const vgl_point_2d<double>& ep = network_->epipole(1).location();
 
+  vnl_double_3x3 M = C0.extract(3,3);
+
   // compute the 3d direction unit vector
-  vnl_double_3 d;
-  d[0] = ep.x();
-  d[1] = ep.y();
-  d[2] = 1.0;
-  vnl_double_3 dir = vnl_inverse(K_)*d;
+  vnl_double_3 e;
+  e[0] = ep.x();
+  e[1] = ep.y();
+  e[2] = 1.0;
+  vnl_double_3 dir = vnl_inverse(M)*e;
   direction_.set(dir[0],dir[1],dir[2]);
   normalize(direction_);
 
   // compute the cameras
-  vnl_double_3x4 E;
-  E[0][0] = 1;  E[0][1] = 0;  E[0][2] = 0;  E[0][3] = ep.x();
-  E[1][0] = 0;  E[1][1] = 1;  E[1][2] = 0;  E[1][3] = ep.y();
-  E[2][0] = 0;  E[2][1] = 0;  E[2][2] = 1;  E[2][3] = 1;
 
-  vnl_double_3x4 Ef = K_*E;
+  vnl_double_3x4 Ef = C0;
   for ( vcl_set<int>::const_iterator fitr = frames.begin();
         fitr != frames.end();  ++fitr ) {
     double dt = -double(*fitr);
-    Ef[0][3] = dt*ep.x();
-    Ef[1][3] = dt*ep.y();
-    Ef[2][3] = dt;
+    Ef.set_column(3,C0.get_column(3) + dt*e);
     C_[*fitr] = Ef;
   }
 }
@@ -147,28 +166,32 @@ bool bmrf_cmp_z(const vnl_double_3& rhs, const vnl_double_3& lhs)
 
 //: Compute the bounding box aligned with vehicle direction
 bool
-bmrf_curve_3d_builder::compute_bounding_box(double inlier_fraction)
+bmrf_curve_3d_builder::compute_bounding_box(double inlier_fraction, bool align_ep)
 {
   if (curves_.empty())
     return false;
 
-  vnl_double_3 base_axis(1.0, 0.0, 0.0);
-  vnl_double_3 rot_axis(0.0, 1.0, 0.0);
-  vnl_double_3 xz_proj(direction_.x(), 0.0, direction_.z());
-  xz_proj.normalize();
-  double ang = angle(xz_proj, base_axis);
-  rot_axis *= ang;
-  vnl_double_3x3 rot_y = vnl_rotation_matrix(rot_axis);
+  
+  vnl_double_3x3 rot = vnl_identity_3x3();
 
-  rot_axis = vnl_double_3(0.0, 0.0, 1.0);
-  vnl_double_3 xy_proj = rot_y * vnl_double_3(direction_.x(), direction_.y(), direction_.z());
-  xy_proj.normalize();
-  ang = angle(xy_proj, base_axis);
-  rot_axis *= ang;
-  vnl_double_3x3 rot_z = vnl_rotation_matrix(rot_axis);
+  if( align_ep ){
+    vnl_double_3 base_axis(1.0, 0.0, 0.0);
+    vnl_double_3 rot_axis(0.0, 1.0, 0.0);
+    vnl_double_3 xz_proj(direction_.x(), 0.0, direction_.z());
+    xz_proj.normalize();
+    double ang = angle(xz_proj, base_axis);
+    rot_axis *= ang;
+    vnl_double_3x3 rot_y = vnl_rotation_matrix(rot_axis);
 
-  vnl_double_3x3 rot = rot_z*rot_y;
-  vnl_double_3x3 inv_rot = rot.transpose();
+    rot_axis = vnl_double_3(0.0, 0.0, 1.0);
+    vnl_double_3 xy_proj = rot_y * vnl_double_3(direction_.x(), direction_.y(), direction_.z());
+    xy_proj.normalize();
+    ang = angle(xy_proj, base_axis);
+    rot_axis *= ang;
+    vnl_double_3x3 rot_z = vnl_rotation_matrix(rot_axis);
+    
+    rot = rot_z*rot_y;
+  }
 
   vcl_vector<vnl_double_3> pts_x;
 
@@ -202,6 +225,8 @@ bmrf_curve_3d_builder::compute_bounding_box(double inlier_fraction)
   x_axis[0] = diag_vector[0];
   y_axis[1] = diag_vector[1];
   z_axis[2] = diag_vector[2];
+
+  vnl_double_3x3 inv_rot = rot.transpose();
 
   x_axis = inv_rot * x_axis;
   y_axis = inv_rot * y_axis;
