@@ -47,7 +47,7 @@ static void SEGV()
 
 static void BUS()
 {
-  double x  = 3.1415927;
+  double x  = 2.718281828;
   x = * (double*) (1 + (char*)&x);
 }
 
@@ -105,7 +105,7 @@ vgui_menu get_file_menu()
 int main(int argc, char **argv)
 {
   vgui::init(argc,argv);
-  
+
   // window 1
   joe_tab Joe1("Joe1");
   //vgui_shell_tableau shell1(&Joe1);
