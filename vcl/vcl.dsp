@@ -891,9 +891,6 @@ SOURCE=.\emulation/vcl_bool.h
 SOURCE=.\emulation/vcl_bvector.h
 # End Source File
 # Begin Source File
-SOURCE=.\emulation/vcl_complex_fwd.h
-# End Source File
-# Begin Source File
 SOURCE=.\emulation/vcl_defalloc.h
 # End Source File
 # Begin Source File
@@ -1275,9 +1272,6 @@ SOURCE=.\sgi/vcl_iostream.h
 SOURCE=.\sunpro/vcl_cmath.h
 # End Source File
 # Begin Source File
-SOURCE=.\sunpro/vcl_complex_fwd.h
-# End Source File
-# Begin Source File
 SOURCE=.\sunpro/vcl_cstdlib.h
 # End Source File
 # Begin Source File
@@ -1414,9 +1408,6 @@ SOURCE=.\win32-vc60/vcl_cmath.h
 # End Source File
 # Begin Source File
 SOURCE=.\win32-vc70/vcl_cmath.h
-# End Source File
-# Begin Source File
-SOURCE=.\win32-vc60/vcl_complex_fwd.h
 # End Source File
 # Begin Source File
 SOURCE=.\win32-vc60/vcl_cstdlib.h
