@@ -93,9 +93,9 @@ mbl_read_props_type mbl_read_props(vcl_istream &afs)
     afs >> vcl_ws >> label;
   }
   while (!afs.eof());
-  if (need_closing_brace)
+  if (need_closing_brace && label != "}")
     vcl_cerr << "ERROR: mbl_read_props. Unexpected end of file while "
-             << "looking for '}'\n";
+             << "looking for '}'. Last read string = \"" << label << "\"\n";
   return props;
 }
 
