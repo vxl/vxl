@@ -16,7 +16,7 @@
 //   May 15, 2003 - Added normalization computation for lines based on
 //                  the point set defined by the intersection of each line
 //                  with the perpendicular line from the origin.
-//
+//   Jun 23, 2003 - Peter Vanroose - added compute_from_points_and_lines()
 // \endverbatim
 
 #include <vnl/vnl_matrix_fixed.h>
@@ -45,6 +45,8 @@ class vgl_norm_trans_2d: public vgl_h_matrix_2d<T>
   //: compute the normalizing transform
   bool compute_from_points(vcl_vector<vgl_homg_point_2d<T> > const& points);
   bool compute_from_lines(vcl_vector<vgl_homg_line_2d<T>  > const& lines);
+  bool compute_from_points_and_lines(vcl_vector<vgl_homg_point_2d<T> > const& pts,
+                                     vcl_vector<vgl_homg_line_2d<T>  > const& lines);
 
  protected :
   //Utility functions
