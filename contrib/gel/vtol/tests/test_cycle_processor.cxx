@@ -51,8 +51,8 @@ static void test_cycle_processor()
     vcl_cout << vcl_endl;
 
     edges.erase(eit);
-    vcl_cout << "the erased edge " << *eit << **eit << vcl_endl;
-    vcl_cout << "edges after erase:\n";
+    vcl_cout << "the erased edge " << *eit << **eit << vcl_endl
+             << "edges after erase:\n";
     for (vcl_vector<vtol_edge_2d_sptr>::iterator jit = edges.begin();
          jit != edges.end(); jit++)
       vcl_cout << " " << *jit;
@@ -200,50 +200,44 @@ static void test_cycle_processor()
     vcl_vector<vtol_edge_sptr> s1, s2;
     s1.push_back(e1);   s1.push_back(e2);   s1.push_back(e3);
     s2.push_back(e4);   s2.push_back(e5);   s2.push_back(e1);
-    vcl_cout<< "e1 =" << e1 << vcl_endl;
-    vcl_cout<< "e2 =" << e2 << vcl_endl;
-    vcl_cout<< "e3 =" << e3 << vcl_endl;
-    vcl_cout<< "e4 =" << e4 << vcl_endl;
-    vcl_cout<< "e5 =" << e5 << vcl_endl;
+    vcl_cout<< "e1 =" << e1 << vcl_endl
+            << "e2 =" << e2 << vcl_endl
+            << "e3 =" << e3 << vcl_endl
+            << "e4 =" << e4 << vcl_endl
+            << "e5 =" << e5 << vcl_endl;
     //Test set intersection
     vcl_vector<vtol_edge_sptr> s1_and_s2;
     vtol_cycle_processor::intersect_edges(s1, s2, s1_and_s2);
-    vcl_cout<< "vtol_edge_2ds in s1\n";
+    vcl_cout << "\nvtol_edge_2ds in s1\n";
     for (vcl_vector<vtol_edge_sptr>::iterator eit = s1.begin();
          eit != s1.end(); eit++)
-      vcl_cout<< *eit;
-    vcl_cout<< vcl_endl;
-    vcl_cout<< "vtol_edge_2ds in s2\n";
+      vcl_cout << ' ' << *eit << vcl_endl;
+    vcl_cout << "\nvtol_edge_2ds in s2\n";
     for (vcl_vector<vtol_edge_sptr>::iterator eit = s2.begin();
          eit != s2.end(); eit++)
-      vcl_cout<< *eit;
-    vcl_cout<< vcl_endl;
-    vcl_cout<< "vtol_edge_2ds in s1_and_s2\n";
+      vcl_cout << ' ' << *eit << vcl_endl;
+    vcl_cout << "\nvtol_edge_2ds in s1_and_s2\n";
     for (vcl_vector<vtol_edge_sptr>::iterator eit = s1_and_s2.begin();
          eit != s1_and_s2.end(); eit++)
-      vcl_cout<< *eit;
-    vcl_cout<< vcl_endl;
+      vcl_cout << ' ' << *eit << vcl_endl;
     TEST("vtol_cycle_processor::intersect_edges()", s1_and_s2[0], e1);
     //Test set difference
     vcl_vector<vtol_edge_sptr> s1_diff_s2;
     vtol_cycle_processor::difference_edges(s1, s2, s1_diff_s2);
-    vcl_cout<< "vtol_edge_2ds in s1\n";
+    vcl_cout<< "\nvtol_edge_2ds in s1\n";
     for (vcl_vector<vtol_edge_sptr>::iterator eit = s1.begin();
          eit != s1.end(); eit++)
-      vcl_cout<< *eit;
-    vcl_cout<< vcl_endl;
-    vcl_cout<< "vtol_edge_2ds in s2\n";
+      vcl_cout << ' ' << *eit << vcl_endl;
+    vcl_cout<< "\nvtol_edge_2ds in s2\n";
     for (vcl_vector<vtol_edge_sptr>::iterator eit = s2.begin();
          eit != s2.end(); eit++)
-      vcl_cout<< *eit;
-    vcl_cout<< vcl_endl;
-    vcl_cout<< "vtol_edge_2ds in s1_minus_s2\n";
+      vcl_cout << ' ' << *eit << vcl_endl;
+    vcl_cout<< "\nvtol_edge_2ds in s1_minus_s2\n";
     for (vcl_vector<vtol_edge_sptr>::iterator eit = s1_diff_s2.begin();
          eit != s1_diff_s2.end(); eit++)
-      vcl_cout<< *eit;
-    vcl_cout<< vcl_endl;
-    TEST("vtol_cycle_processor::difference_edges()",
-         (s1_diff_s2[0]==e2) && (s1_diff_s2[1]==e3), true);
+      vcl_cout << ' ' << *eit << vcl_endl;
+    TEST("vtol_cycle_processor::difference_edges() [0]", s1_diff_s2[0], e2);
+    TEST("vtol_cycle_processor::difference_edges() [1]", s1_diff_s2[1], e3);
     vcl_cout << "Ending set operation tests\n\n";
   }
   //
