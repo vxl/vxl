@@ -12,3 +12,5 @@ vgui_gtk_adaptor      vgui_gtk_utils
 vgui_gtk_dialog_impl  vgui_gtk_window
 vgui_gtk_statusbar
 )
+
+AUX_SOURCE_DIRECTORY(Templates vgui_gtk_sources)
