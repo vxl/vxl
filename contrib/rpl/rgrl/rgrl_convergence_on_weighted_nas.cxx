@@ -128,5 +128,4 @@ init_status( rgrl_view       const& init_view,
   
   return status_ptr;
 }
-
  
