@@ -7,7 +7,8 @@
 // \brief vdgl_digital_curve algorithms
 //
 // \verbatim
-// Initial version November 25, 2002
+//  Modifications
+//   Initial version November 25, 2002
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
@@ -26,11 +27,11 @@ class bdgl_curve_algs
 
   //:Finds the index on a digital curve closest to the given point
   static int closest_point(vdgl_edgel_chain_sptr const& ec,
-                              const double x, const double y);
+                           const double x, const double y);
 
   //:Finds the index on a digital curve closest to the given point
   static double closest_point(vdgl_digital_curve_sptr const& dc,
-                           const double x, const double y);
+                              const double x, const double y);
 
   //:Finds the x-y coordinates on a digital curve closest to the given point
   static bool closest_point(vdgl_digital_curve_sptr const& dc,
@@ -38,14 +39,14 @@ class bdgl_curve_algs
                             double& xc, double& yc);
 
   //:Finds location on a digital curve closest to the given point at index
- static  bool closest_point_near(vdgl_edgel_chain_sptr const& ec,
-                                 const int index,
-                                 const double x, const double y,
-                                 double & xc, double & yc);
+  static  bool closest_point_near(vdgl_edgel_chain_sptr const& ec,
+                                  const int index,
+                                  const double x, const double y,
+                                  double & xc, double & yc);
 
- //: Finds the end of the edgel chain closest to the given point
- static int closest_end(vdgl_edgel_chain_sptr const & ec,
-                        const double x, const double y);
+  //: Finds the end of the edgel chain closest to the given point
+  static int closest_end(vdgl_edgel_chain_sptr const & ec,
+                         const double x, const double y);
 
   //:Reverses the edgel chain
   static vdgl_digital_curve_sptr reverse(vdgl_digital_curve_sptr const& dc);
@@ -60,12 +61,12 @@ class bdgl_curve_algs
                              vgl_line_2d<double> & line,
                              vcl_vector<vgl_point_2d<double> >& pts);
 
- //:Intersect a curve with a line and match the reference edgel point
+  //:Intersect a curve with a line and match the reference edgel point
   static bool match_intersection(vdgl_digital_curve_sptr const& dc,
-                             vgl_line_2d<double>& line,
-                             vgl_point_2d<double> const& ref_point,
-							 double ref_gradient_angle,
-                             vgl_point_2d<double>& point);
+                                 vgl_line_2d<double>& line,
+                                 vgl_point_2d<double> const& ref_point,
+                                 double ref_gradient_angle,
+                                 vgl_point_2d<double>& point);
 
 
   //:Generate points along a digital straight line
@@ -79,7 +80,7 @@ class bdgl_curve_algs
                                  bool debug = false);
 
   static void
-    smooth_curve(vcl_vector<vgl_point_2d<double> > & curve,double sigma);
+    smooth_curve(vcl_vector<vgl_point_2d<double> >& curve,double sigma);
 
   static vdgl_digital_curve_sptr
     create_digital_curves(vcl_vector<vgl_point_2d<double> > & curve);
