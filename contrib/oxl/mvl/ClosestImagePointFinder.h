@@ -12,11 +12,16 @@
 //    operations on a HomgInterestPointSet.
 //
 // \author  Andrew W. Fitzgibbon, Oxford RRG, 21 Jan 97
+//
+// \verbatim
+//  Modifications
+//   22 Jun 2003 - Peter Vanroose - added vgl_homg_point_2d interface
+// \endverbatim
 //-----------------------------------------------------------------------------
 
 #include <vcl_vector.h>
 #include <vnl/vnl_vector.h>
-#include <vgl/vgl_fwd.h> // for vgl_box_2d
+#include <vgl/vgl_fwd.h>
 
 class HomgInterestPointSet;
 class vcl_multimap_double_int;
@@ -28,6 +33,7 @@ class ClosestImagePointFinder
   // Constructors/Destructors--------------------------------------------------
 
   ClosestImagePointFinder(const HomgInterestPointSet& corners);
+  ClosestImagePointFinder(vcl_vector<vgl_homg_point_2d<double> > const& corners);
   ClosestImagePointFinder(const vcl_vector<HomgPoint2D>& corners);
   ~ClosestImagePointFinder();
 
@@ -42,11 +48,11 @@ class ClosestImagePointFinder
   int get_closest_within_distance(double cx, double cy, double r, int* out_index = 0);
 
   // Data Access---------------------------------------------------------------
-  double get_last_squared_distance() const { return _last_d2; }
-  int get_last_num_candidates() const { return _last_inrange; }
-  int get_last_match_index() const { return _last_index; }
-  double get_last_x() const { return px_[_last_index]; }
-  double get_last_y() const { return py_[_last_index]; }
+  double get_last_squared_distance() const { return last_d2_; }
+  int get_last_num_candidates() const { return last_inrange_; }
+  int get_last_match_index() const { return last_index_; }
+  double get_last_x() const { return px_[last_index_]; }
+  double get_last_y() const { return py_[last_index_]; }
 
  protected:
   // Data Members--------------------------------------------------------------
@@ -56,9 +62,9 @@ class ClosestImagePointFinder
   vnl_vector<double> px_;
   vnl_vector<double> py_;
   vcl_multimap_double_int* y2i_;
-  double _last_d2;
-  int _last_inrange;
-  int _last_index;
+  double last_d2_;
+  int last_inrange_;
+  int last_index_;
 };
 
 #endif // ClosestImagePointFinder_h_

@@ -10,9 +10,15 @@
 // \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 24 Feb 97
 //
+// \verbatim
+//  Modifications
+//   22 Jun 2003 - Peter Vanroose - added vgl_homg_point_2d interface
+// \endverbatim
+//
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_double_3x3.h>
+#include <vgl/vgl_fwd.h>
 #include <mvl/ImageMetric.h>
 #include <vcl_iosfwd.h>
 
@@ -25,9 +31,15 @@ class AffineMetric : public ImageMetric
   AffineMetric();
   AffineMetric(vnl_double_3x3 const& A);
 
+  virtual vgl_point_2d<double> homg_to_image(vgl_homg_point_2d<double> const&) const;
   virtual vnl_double_2 homg_to_image(const HomgPoint2D& p) const;
+
+  virtual vgl_homg_point_2d<double> image_to_homg(vgl_point_2d<double> const&) const;
   virtual HomgPoint2D image_to_homg(const vnl_double_2&) const;
   virtual HomgPoint2D image_to_homg(double x, double y) const;
+
+  virtual vgl_homg_point_2d<double> homg_to_imagehomg(vgl_homg_point_2d<double> const&) const;
+  virtual vgl_homg_point_2d<double> imagehomg_to_homg(vgl_homg_point_2d<double> const&) const;
 
   virtual HomgPoint2D homg_to_imagehomg(const HomgPoint2D& p) const;
   virtual HomgPoint2D imagehomg_to_homg(const HomgPoint2D& p) const;

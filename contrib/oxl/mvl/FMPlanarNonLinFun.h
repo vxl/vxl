@@ -11,6 +11,11 @@
 // \author
 //   Martin Armstrong, Oxford 21/11/96
 //
+// \verbatim
+//  Modifications
+//   22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
+// \endverbatim
+//
 //-----------------------------------------------------------------------------
 
 #include <vcl_vector.h>

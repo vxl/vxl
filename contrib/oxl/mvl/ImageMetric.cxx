@@ -12,6 +12,7 @@
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_math.h>
+#include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
@@ -29,9 +30,18 @@ static vcl_ostream& warning(char const * fn)
 
 //: Condition the 2D point p.
 //  Default implementation is simply to return p in homogeneous coordinates
+vgl_homg_point_2d<double> ImageMetric::image_to_homg(vgl_point_2d<double> const& p) const
+{
+  assert(!"ImageMetric::image_to_homg should be implemented for efficiency");
+  return vgl_homg_point_2d<double>(p.x(), p.y(), 1.0);
+}
+
+//: Condition the 2D point p.
+//  Default implementation is simply to return p in homogeneous coordinates
 HomgPoint2D ImageMetric::image_to_homg(const vnl_double_2& p) const
 {
-  return HomgPoint2D(p[0], p[1], 1.0);
+  assert(!"ImageMetric::image_to_homg should be implemented for efficiency");
+  return HomgPoint2D(p.x(), p.y(), 1.0);
 }
 
 //: Condition 2D point (x,y)
@@ -42,7 +52,7 @@ HomgPoint2D ImageMetric::image_to_homg(double x, double y) const
 }
 
 //: Convert conditioned point p to image coordinates
-vgl_homg_point_2d<double> ImageMetric::homg_to_image(vgl_homg_point_2d<double> const& p) const
+vgl_point_2d<double> ImageMetric::homg_to_image(vgl_homg_point_2d<double> const& p) const
 {
   assert(!"ImageMetric::homg_to_image should be implemented for efficiency");
   return p;

@@ -16,16 +16,17 @@
 
 #include <mvl/HomgInterestPointSet.h>
 
-class vcl_multimap_double_int : public vcl_multimap<double, int, vcl_less <double> > {
+class vcl_multimap_double_int : public vcl_multimap<double, int, vcl_less <double> >
+{
   typedef vcl_multimap<double, int, vcl_less <double> > base;
-public:
+ public:
   iterator insert(double key, int value);
   void clear();
 };
 
 vcl_multimap_double_int::iterator vcl_multimap_double_int::insert(double key, int value)
 {
-  //vcl_cerr << " ins \t" << value << "\t" << key << vcl_endl;
+  //vcl_cerr << " ins \t" << value << '\t' << key << vcl_endl;
   return base::insert(vcl_pair<const double, int>(key, value));
 }
 
@@ -48,6 +49,19 @@ ClosestImagePointFinder::ClosestImagePointFinder(const HomgInterestPointSet& cor
   }
 }
 
+//: Initialize to allow fast lookups of corners in the given set.
+ClosestImagePointFinder::ClosestImagePointFinder(vcl_vector<vgl_homg_point_2d<double> > const& corners)
+ : px_(corners.size()), py_(corners.size())
+{
+  y2i_ = new vcl_multimap_double_int;
+  for (unsigned i = 0; i < corners.size(); ++i)
+  {
+    px_[i] = corners[i].x();
+    py_[i] = corners[i].y();
+    y2i_->insert(py_[i], i);
+  }
+}
+
 ClosestImagePointFinder::~ClosestImagePointFinder()
 {
   delete y2i_;
@@ -63,12 +77,12 @@ void ClosestImagePointFinder::get_all_within_search_region(vgl_box_2d<double> co
   // Look at `point2's between y0 and y1
   vcl_multimap_double_int::iterator potential = y2i_->lower_bound(disparity_bounds.min_y());
   vcl_multimap_double_int::iterator end =       y2i_->upper_bound(disparity_bounds.max_y() + 1);
-
-  //vcl_cerr << "map:";
-  //for (vcl_multimap_double_int::iterator p = y2i_->begin(); p != y2i_->end(); ++p)
-  //  vcl_cerr << " "<< (*p).second << "[" << (*p).first << "]";
-  //vcl_cerr << vcl_endl;
-
+#if 0
+  vcl_cerr << "map:";
+  for (vcl_multimap_double_int::iterator p = y2i_->begin(); p != y2i_->end(); ++p)
+    vcl_cerr << ' '<< (*p).second << '[' << (*p).first << ']';
+  vcl_cerr << vcl_endl;
+#endif // 0
   out->erase(out->begin(), out->end());
   for (; potential != end; ++potential) {
     int point2_index = (*potential).second;
@@ -89,7 +103,7 @@ int ClosestImagePointFinder::get_closest_within_region(double cx, double cy, dou
 
   double orig_mindist_sq = mindist_sq;
 
-  _last_index = -1;
+  last_index_ = -1;
   int inrange = 0;
   for (; potential != end; ++potential) {
     int point2_index = (*potential).second;
@@ -103,14 +117,14 @@ int ClosestImagePointFinder::get_closest_within_region(double cx, double cy, dou
         ++inrange;
       if (d2 < mindist_sq) {
         mindist_sq = d2;
-        _last_index = point2_index;
+        last_index_ = point2_index;
       }
     }
   }
-  _last_d2 = mindist_sq;
-  _last_inrange = inrange;
+  last_d2_ = mindist_sq;
+  last_inrange_ = inrange;
   if (out)
-    *out = _last_index;
+    *out = last_index_;
 
   return inrange;
 }

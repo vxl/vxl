@@ -25,12 +25,14 @@
 //     indicating high structure variability and high curvature in the F manifold.
 //     These points should be treated with care, but are interesting as
 //     they are in loci of high information.
+//   22 Jun 2003 - Peter Vanroose - added vgl_homg_point_2d interface
 // \endverbatim
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_4x4.h>
 #include <vnl/vnl_double_4.h>
+#include <vgl/vgl_fwd.h>
 
 class FMatrix;
 class HomgPoint2D;
@@ -52,6 +54,10 @@ class FManifoldProject
   FManifoldProject(const FMatrix& F);
 
   void set_F(const FMatrix& F);
+  double correct(vgl_homg_point_2d<double> const& point1,
+                 vgl_homg_point_2d<double> const& point2,
+                 vgl_homg_point_2d<double>& out1,
+                 vgl_homg_point_2d<double>& out2) const;
   double correct(const HomgPoint2D& point1, const HomgPoint2D& point2, HomgPoint2D *, HomgPoint2D *) const;
   double correct(double   x1, double   y1, double   x2, double   y2,
                  double *ox1, double *oy1, double *ox2, double *oy2) const;

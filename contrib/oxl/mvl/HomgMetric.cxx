@@ -11,6 +11,7 @@
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_identity_3x3.h>
 #include <vnl/vnl_double_2.h>
+#include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_line_2d.h>
 
@@ -49,19 +50,16 @@ vcl_ostream& HomgMetric::print(vcl_ostream & s) const
 }
 
 // ** Conversion to/from homogeneous coordinates
-vgl_homg_point_2d<double> HomgMetric::homg_to_image(vgl_homg_point_2d<double> const& p) const
+vgl_point_2d<double> HomgMetric::homg_to_image(vgl_homg_point_2d<double> const& p) const
 {
   if (metric_) return metric_->homg_to_image(p);
-  return p;
+  else return vgl_point_2d<double>(p.x()/p.w(), p.y()/p.w());
 }
 
 vnl_double_2 HomgMetric::homg_to_image(const HomgPoint2D& p) const
 {
   if (metric_) return metric_->homg_to_image(p);
-
-  double x,y;
-  p.get_nonhomogeneous(x, y);
-  return vnl_double_2(x, y);
+  else return vnl_double_2(p.x()/p.w(), p.y()/p.w());
 }
 
 void HomgMetric::homg_to_image(const HomgPoint2D& homg, double* ix, double* iy) const
@@ -78,11 +76,10 @@ void HomgMetric::homg_to_image(const HomgPoint2D& homg, double* ix, double* iy) 
 void HomgMetric::homg_to_image(vgl_homg_point_2d<double> const& homg, double& ix, double& iy) const
 {
   if (metric_) {
-    vgl_homg_point_2d<double> p = metric_->homg_to_image(homg);
-    ix = p.x()/p.w(),
-    iy = p.y()/p.w();
+    vgl_point_2d<double> p = metric_->homg_to_image(homg);
+    ix = p.x(); iy = p.y();
   } else {
-    ix = homg.x()/homg.w(),
+    ix = homg.x()/homg.w();
     iy = homg.y()/homg.w();
   }
 }
@@ -100,10 +97,16 @@ HomgPoint2D HomgMetric::homg_to_imagehomg(const HomgPoint2D& p) const
 }
 
 
+vgl_homg_point_2d<double> HomgMetric::image_to_homg(vgl_point_2d<double> const& p) const
+{
+  if (metric_) return metric_->image_to_homg(p);
+  else return vgl_homg_point_2d<double>(p.x(), p.y(), 1.0);
+}
+
 HomgPoint2D HomgMetric::image_to_homg(const vnl_double_2& p) const
 {
   if (metric_) return metric_->image_to_homg(p);
-  else return HomgPoint2D(p[0], p[1], 1.0);
+  else return HomgPoint2D(p.x(), p.y(), 1.0);
 }
 
 HomgPoint2D HomgMetric::image_to_homg(double x, double y) const

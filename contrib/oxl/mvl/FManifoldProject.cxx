@@ -76,11 +76,11 @@ void FManifoldProject::set_F(const FMatrix& Fobj)
 
     // Now C is zero cos F is rank 2
     if (vnl_math_abs(Cprime) > 1e-6) {
-      vcl_cerr << "FManifoldProject: ** HartleySturm: F = " << F_ << vcl_endl;
-      vcl_cerr << "FManifoldProject: ** HartleySturm: B = " << Bprime << vcl_endl;
-      vcl_cerr << "FManifoldProject: ** HartleySturm: Cerror = " << Cprime << vcl_endl;
-      vcl_cerr << "FManifoldProject: ** HartleySturm: F not rank 2 ?\n";
-      vcl_cerr << "FManifoldProject: singular values are "  << vnl_svd<double>(F_).W() << vcl_endl;
+      vcl_cerr << "FManifoldProject: ** HartleySturm: F = " << F_ << vcl_endl
+               << "FManifoldProject: ** HartleySturm: B = " << Bprime << vcl_endl
+               << "FManifoldProject: ** HartleySturm: Cerror = " << Cprime << vcl_endl
+               << "FManifoldProject: ** HartleySturm: F not rank 2 ?\n"
+               << "FManifoldProject: singular values are "  << vnl_svd<double>(F_).W() << vcl_endl;
     }
     // **** Now have quadric x'*A*x = 0 ****
 
@@ -98,6 +98,27 @@ void FManifoldProject::set_F(const FMatrix& Fobj)
       }
     }
   }
+}
+
+//: Find the points out1, out2 which minimize d(out1,p1) + d(out2,p2) subject to out1'*F*out2 = 0.
+//  Returns the minimum distance squared: ||x[1..4] - p[1..4]||^2.
+double FManifoldProject::correct(vgl_homg_point_2d<double> const& p1,
+                                 vgl_homg_point_2d<double> const& p2,
+                                 vgl_homg_point_2d<double>& out1,
+                                 vgl_homg_point_2d<double>& out2) const
+{
+  if (p1.w()==0 || p2.w()==0) {
+    vcl_cerr << "FManifoldProject: p1 or p2 at infinity\n";
+    out1 = p1; out2 = p2; return 1e33;
+  }
+
+  double p_out[4];
+  double d = correct(p1.x()/p1.w(), p1.y()/p1.w(), p2.x()/p2.w(), p2.y()/p2.w(),
+                     p_out, p_out+1, p_out+2, p_out+3);
+
+  out1.set(p_out[0], p_out[1], 1.0);
+  out2.set(p_out[2], p_out[3], 1.0);
+  return d;
 }
 
 //: Find the points out1, out2 which minimize d(out1,p1) + d(out2,p2) subject to out1'*F*out2 = 0.
@@ -153,15 +174,16 @@ double FManifoldProject::correct(double   x1, double   y1, double   x2, double  
     vnl_double_3 l = F_ * vnl_double_3(p[2], p[3], 1.0);
     double EPIDIST = (l[0] * p[0] + l[1] * p[1] + l[2])/vcl_sqrt(l[0]*l[0]+l[1]*l[1]);
     if (EPIDIST > 1e-4) {
-      vcl_cerr << "FManifoldProject: Affine F: EPIDIST = " << EPIDIST << vcl_endl;
-      vcl_cerr << "FManifoldProject: Affine F: p = " << (dot_product(p,n) + d) << vcl_endl;
-
-      //double EPI1 = dot_product(out2->get_vector(), F_*out1->get_vector());
-      //double EPI2 = dot_product(p, n) + d;
-      //vcl_cerr << "t = " << n << " " << d << vcl_endl;
-      //vcl_cerr << "F_ = " << F_ << vcl_endl;
-      //vcl_cerr << "FManifoldProject: Affine F: E = " << (EPI1 - EPI2) << vcl_endl;
-      //abort();
+      vcl_cerr << "FManifoldProject: Affine F: EPIDIST = " << EPIDIST << vcl_endl
+               << "FManifoldProject: Affine F: p = " << (dot_product(p,n) + d) << vcl_endl;
+#if 0
+      double EPI1 = dot_product(out2->get_vector(), F_*out1->get_vector());
+      double EPI2 = dot_product(p, n) + d;
+      vcl_cerr << "t = " << n << ' ' << d << vcl_endl
+               << "F_ = " << F_ << vcl_endl
+               << "FManifoldProject: Affine F: E = " << (EPI1 - EPI2) << vcl_endl;
+      vcl_abort();
+#endif // 0
     }
 
     return distance * distance;
@@ -177,8 +199,8 @@ double FManifoldProject::correct(double   x1, double   y1, double   x2, double  
   double b4 = 1./d_[3]; double a4 = vnl_math_sqr(pprime[3])*b4;
 
   if (vnl_math_max(vnl_math_abs(b1 + b2), vnl_math_abs(b3 + b4)) > 1e-7) {
-    vcl_cerr << "FManifoldProject: B = [" <<b1<< " " <<b2<< " " <<b3<< " " <<b4<< "];\n";
-    vcl_cerr << "FManifoldProject: b1 != -b2 or b3 != -b4\n";
+    vcl_cerr << "FManifoldProject: B = [" <<b1<< ' ' <<b2<< ' ' <<b3<< ' ' <<b4<< "];\n"
+             << "FManifoldProject: b1 != -b2 or b3 != -b4\n";
   }
 
   // a11 ../ (b1 - x).^2 + a12 ../ (b1 + x).^2 + a21 ../ (b2 - x).^2 + a22 ../ (b2 + x).^2
@@ -235,11 +257,11 @@ double FManifoldProject::correct(double   x1, double   y1, double   x2, double  
       if (0 && EPIDIST > 1e-12) {
         // This can happen in reasonable circumstances -- notably when one
         // epipole is at infinity.
-        vcl_cerr << "FManifoldProject: A root has epidist = " << vcl_sqrt(EPIDIST) << vcl_endl;
-        vcl_cerr << "  coeffs: " << coeffs_ << vcl_endl;
-        vcl_cerr << "  root = " << lambda << vcl_endl;
-        vcl_cerr << "  poly residual = " << poly.evaluate(lambda) << vcl_endl;
-        vcl_cerr << "  rational poly residual = " << RATPOLY_RESIDUAL << vcl_endl;
+        vcl_cerr << "FManifoldProject: A root has epidist = " << vcl_sqrt(EPIDIST) << vcl_endl
+                 << "  coeffs: " << coeffs_ << vcl_endl
+                 << "  root = " << lambda << vcl_endl
+                 << "  poly residual = " << poly.evaluate(lambda) << vcl_endl
+                 << "  rational poly residual = " << RATPOLY_RESIDUAL << vcl_endl;
         ++ errs;
         break;
       }

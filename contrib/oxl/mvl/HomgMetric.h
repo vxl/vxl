@@ -56,10 +56,12 @@ class HomgMetric
   // Operations----------------------------------------------------------------
 
   // ** Conversion to/from homogeneous coordinates
+  vgl_point_2d<double> homg_to_image(vgl_homg_point_2d<double> const&) const;
   vnl_double_2 homg_to_image(const HomgPoint2D&) const;
-  vgl_homg_point_2d<double> homg_to_image(vgl_homg_point_2d<double> const&) const;
   void homg_to_image(const HomgPoint2D&, double* ix, double* iy) const;
   void homg_to_image(vgl_homg_point_2d<double> const&, double& ix, double& iy) const;
+
+  vgl_homg_point_2d<double> image_to_homg(vgl_point_2d<double> const&) const;
   HomgPoint2D image_to_homg(const vnl_double_2&) const;
   HomgPoint2D image_to_homg(double x, double y) const;
 

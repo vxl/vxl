@@ -56,8 +56,10 @@ class ImageMetric
 
   // The following virtuals may be overridden if desired.
   // By default they are implemented in terms of the previous two
+  virtual vgl_point_2d<double> homg_to_image(vgl_homg_point_2d<double> const&) const;
   virtual vnl_double_2 homg_to_image(const HomgPoint2D&) const;
-  virtual vgl_homg_point_2d<double> homg_to_image(vgl_homg_point_2d<double> const&) const;
+
+  virtual vgl_homg_point_2d<double> image_to_homg(vgl_point_2d<double> const&) const;
   virtual HomgPoint2D image_to_homg(const vnl_double_2&) const;
   virtual HomgPoint2D image_to_homg(double x, double y) const;
 
