@@ -210,6 +210,9 @@ SOURCE=.\Templates/vil_image_view+vil_rgba+byte--.cxx
 SOURCE=.\Templates/vil_image_view+double-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vil_copy.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vil_copy+bool-.cxx
 # End Source File
 # Begin Source File
