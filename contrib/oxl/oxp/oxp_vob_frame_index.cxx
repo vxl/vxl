@@ -10,7 +10,8 @@ bool oxp_vob_frame_index::load(char const* filename)
   vcl_vector<oxp_vob_frame_index_entry> tmp;
 
   vcl_ifstream f(filename, vcl_ios_binary);
-  if (!f.good()) {
+  if (!f.good())
+  {
     vcl_cerr << "oxp_vob_frame_index: Cannot read IDX file ["<< filename <<"]\n";
     return false;
   }
@@ -23,17 +24,16 @@ bool oxp_vob_frame_index::load(char const* filename)
     idx_type = MPEG_IDX;
   else if (tag == "LBA")
     idx_type = LBA;
-  else {
+  else
     vcl_cerr << "oxp_vob_frame_index: WARNING: unknown type [" << awk[0] << "]\n";
-  }
 
-  int frame = 0;
-  int dummy;
-  for (; awk; ++awk, ++frame) {
+  for (int frame=0; awk; ++awk, ++frame)
+  {
     // Skip comment and ----- lines
     oxp_vob_frame_index_entry e;
     if (idx_type == LBA && vcl_sscanf(awk.line(), " %x | %d", &e.lba, &e.frame) == 2)
       tmp.push_back(e);
+    int dummy;
     if (idx_type == MPEG_IDX && vcl_sscanf(awk.line(), " %x %x", &e.lba, &dummy) == 2)
     {
       e.frame = frame;
@@ -45,10 +45,9 @@ bool oxp_vob_frame_index::load(char const* filename)
   // assert that l is sorted by frame
   for (unsigned int i = 0; i+1 < l.size(); ++i)
     assert(l[i+1].frame > l[i].frame);
-  vcl_fprintf(stderr, "Loaded %d entries from [%s]\n", l.size(), filename);
-  if (l.size() == 0) {
-    vcl_fprintf(stderr, "WARNING: No index entries -- all seeks from start\n");
-  }
+  vcl_cerr << "Loaded " << l.size() << " entries from [" << filename << "]\n";
+  if (l.size() == 0)
+    vcl_cerr << "WARNING: No index entries -- all seeks from start\n";
   return true;
 }
 
@@ -60,7 +59,8 @@ int oxp_vob_frame_index::frame_to_lba_of_prev_I_frame(int f, int* f_actual)
     vcl_cerr << "urk: frame " << f << " out of IDX range\n";
     return -1;
   }
-  while (lo < hi-1) {
+  while (lo < hi-1)
+  {
     int half = (lo + hi) / 2;
     int f_half = l[half].frame;
     if (f < f_half)
