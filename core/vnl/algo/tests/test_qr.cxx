@@ -80,7 +80,7 @@ inline double eps(vcl_complex<double> *) { return 1e-12; }
 template <class T>
 void new_test(T *)
 {
-  vnl_random rng;
+  vnl_random rng(1000);
   unsigned m = 5; // m must be >= n when using the netlib QR algorithms,
   unsigned n = 5; // but n >= m for a random A and b to have exact solution.
 
