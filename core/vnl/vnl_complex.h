@@ -23,8 +23,8 @@
 
 // fsm: these three lines will disappear in the future.
 #define vnl_complex vcl_complex
-#define vnl_float_complex vcl_float_complex
-#define vnl_double_complex vcl_double_complex
+typedef vcl_complex<float>  vnl_float_complex;
+typedef vcl_complex<double> vnl_double_complex;
 
 // isnan
 bool vnl_math_isnan(const vcl_complex<float>&);
