@@ -26,15 +26,15 @@ bool vil_jpeg_file_probe(vil_stream *vs);
 //: Loader for JPEG files
 class vil_jpeg_file_format : public vil_file_format {
 public:
-  char const *tag() const;
-  vil_image_impl *make_input_image(vil_stream *vs);
-  vil_image_impl *make_output_image(vil_stream *vs,
-                                    int planes,
-                                    int width,
-                                    int height,
-                                    int components,
-                                    int bits_per_component,
-                                    vil_component_format format);
+  virtual char const *tag() const;
+  virtual vil_image_impl *make_input_image(vil_stream *vs);
+  virtual vil_image_impl *make_output_image(vil_stream *vs,
+                                            int planes,
+                                            int width,
+                                            int height,
+                                            int components,
+                                            int bits_per_component,
+                                            vil_component_format format);
 };
 
 //

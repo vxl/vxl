@@ -27,9 +27,9 @@ bool vil_gif_probe(vil_stream *s);
 
 struct vil_gif_file_format : public vil_file_format
 {
-  char const* tag() const;
-  vil_image_impl *make_input_image(vil_stream* vs);
-  vil_image_impl *make_output_image(vil_stream*, int, int, int, int, int, vil_component_format);
+  virtual char const* tag() const;
+  virtual vil_image_impl *make_input_image(vil_stream* vs);
+  virtual vil_image_impl *make_output_image(vil_stream*, int, int, int, int, int, vil_component_format);
 };
 
 struct vil_gif_color_map
