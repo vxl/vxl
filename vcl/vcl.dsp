@@ -1428,10 +1428,22 @@ SOURCE=.\win32-vc60/vcl_cmath.h
 SOURCE=.\win32-vc70/vcl_cmath.h
 # End Source File
 # Begin Source File
+SOURCE=.\win32-vc60/vcl_cstdarg.h
+# End Source File
+# Begin Source File
 SOURCE=.\win32-vc60/vcl_cstdlib.h
 # End Source File
 # Begin Source File
 SOURCE=.\win32-vc70/vcl_cstdlib.h
+# End Source File
+# Begin Source File
+SOURCE=.\borland55/vcl_cfloat.h
+# End Source File
+# Begin Source File
+SOURCE=.\borland55/vcl_ciso646.h
+# End Source File
+# Begin Source File
+SOURCE=.\borland56/vcl_complex.h
 # End Source File
 # Begin Source File
 SOURCE=.\vcl_where_root_dir.h.in
