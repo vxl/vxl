@@ -2,18 +2,26 @@
 #include <vcl_iostream.h>
 #include <vcl_sstream.h>
 
-#define Assert(x) {vcl_cout << "TEST " #x " : "; vcl_cout << ((x)?"PASSED":"FAILED")}
-
-#define AssertEq(x) {vcl_cout<<"TEST ["<<fred<<"] == ["<<x<<"] : ";vcl_cout<<(fred==(x)?"PASSED":"FAILED")<<vcl_endl;}
+#define AssertEq(x,y) {status+=((x)==(y))?0:1;vcl_cout<<"TEST ["<<x<<"] == ["<<y<<"] : "<<((x)==(y)?"PASSED":"FAILED")<<vcl_endl;}
 
 int test_sstream_main(int /*argc*/,char* /*argv*/[])
 {
+  int status = 0;
   vcl_string x = "fred";
-  vcl_stringstream ss(x);
+  vcl_istringstream ss(x);
 
   vcl_string fred;
   ss >> fred;
-  AssertEq("fred");
+  AssertEq(fred,"fred");
 
-  return 0;
+  vcl_istringstream s("wilma");
+
+  char w;
+  s >> w; AssertEq(w,'w');
+  s >> w; AssertEq(w,'i');
+  s >> w; AssertEq(w,'l');
+  s >> w; AssertEq(w,'m');
+  s >> w; AssertEq(w,'a');
+
+  return status;
 }
