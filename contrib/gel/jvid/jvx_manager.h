@@ -5,7 +5,7 @@
 // \file
 // \brief Video player
 //   the manager for playing video sequences
-// \author 
+// \author
 //   J.L. Mundy
 //
 // \verbatim
@@ -21,7 +21,7 @@
 
 #ifdef HAS_MPEG
 #include <vidl/vidl_mpegcodec.h>
- 
+
 //define mpeg callback here
 //this dialog box queries the user for info
 //necessary to initialize the codec. normally, this
@@ -36,13 +36,13 @@ jvid_load_mpegcodec_callback(vidl_codec * vc)
   bool demux_video = true;
   vcl_string pid = "0x00";
   int numframes = -1;
-  
+
   dialog.checkbox("gray scale",grey_scale);
   dialog.checkbox("demux",demux_video);
   dialog.field("pid",pid);
   dialog.field("total frames. if not known, leave it.",numframes);
 
-  if( !dialog.ask())
+  if ( !dialog.ask())
     {
       vcl_cout << "jvid_load_mpegcodec_callback. did not initialize codec." << vcl_endl;
     }
@@ -51,10 +51,9 @@ jvid_load_mpegcodec_callback(vidl_codec * vc)
   if (!mpegcodec) return;
 
   mpegcodec->set_grey_scale(grey_scale);
-  if(demux_video) mpegcodec->set_demux_video();
+  if (demux_video) mpegcodec->set_demux_video();
   mpegcodec->set_pid(pid.c_str());
   mpegcodec->set_number_frames(numframes);
-	
   mpegcodec->init();
 }
 
@@ -65,8 +64,8 @@ class jvx_manager : public vgui_grid_tableau
   jvx_manager();
   ~jvx_manager();
   virtual bool handle(const vgui_event&);
-  unsigned get_height(){return _height;}
-  unsigned get_width(){return _width;}
+  unsigned get_height(){return height_;}
+  unsigned get_width(){return width_;}
   void load_video_file();
   void play();
   void play_video();
@@ -78,9 +77,9 @@ class jvx_manager : public vgui_grid_tableau
  protected:
   vgui_viewer2D_sptr get_vgui_viewer2D_at(unsigned col, unsigned row);
  private:
-  unsigned _width;
-  unsigned _height;
-  vidl_movie_sptr _my_movie;
-  vcl_vector<vgui_viewer2D_sptr> _tabs;
+  unsigned width_;
+  unsigned height_;
+  vidl_movie_sptr my_movie_;
+  vcl_vector<vgui_viewer2D_sptr> tabs_;
 };
 #endif // jvx_manager_h_

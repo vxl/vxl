@@ -26,9 +26,9 @@
 //
 jvx_manager::jvx_manager()
 {
-  _width = 512;
-  _height = 512;
-  _my_movie=(vidl_movie*)0;
+  width_ = 512;
+  height_ = 512;
+  my_movie_=(vidl_movie*)0;
 }
 
 jvx_manager::~jvx_manager()
@@ -63,35 +63,35 @@ void jvx_manager::load_video_file()
   //need to define callbacks
   vidl_io::load_mpegcodec_callback = &jvid_load_mpegcodec_callback;
 #endif
-  _my_movie = vidl_io::load_movie(image_filename.c_str());
-  if (!_my_movie) {
+  my_movie_ = vidl_io::load_movie(image_filename.c_str());
+  if (!my_movie_) {
     vgui_error_dialog("Failed to load movie file");
     return;
   }
-  _tabs.clear();
-  
-  vidl_movie::frame_iterator pframe(_my_movie);
-  pframe = _my_movie->first();
+  tabs_.clear();
+
+  vidl_movie::frame_iterator pframe(my_movie_);
+  pframe = my_movie_->first();
 
   vil_image img = pframe->get_image();
-  _height = img.height();
-  _width = img.width();
-  vcl_cout << "Video Height " << _height
-           << " Video Width " << _width << vcl_endl;
+  height_ = img.height();
+  width_ = img.width();
+  vcl_cout << "Video Height " << height_ << vcl_endl
+           << " Video Width " << width_ << vcl_endl;
 
   int i = 0;
   int inc = 40;
-  while (pframe!=_my_movie->last())
+  while (pframe!=my_movie_->last())
   {
    //Get the image from the video and wrap it with a viewer2D tableau
    vgui_easy2D_new easy2D(vgui_image_tableau_new(pframe->get_image()));
    vgui_viewer2D_sptr t = vgui_viewer2D_new(easy2D);
    //put it in the viewer stack
-   _tabs.push_back(t);
+   tabs_.push_back(t);
 
    //reduce the display resolution
    t->zoomin(0.5f, 0, 0); // zoom out by factor 2 around pixel (0,0)
-   t->center_image(_width,_height);
+   t->center_image(width_,height_);
 
    //Display some dots on the video that move
    //This code demonstrates how to overlay dynamic stuff on the video
@@ -101,18 +101,18 @@ void jvx_manager::load_video_file()
 
    if (inc>60)
      inc = 40;
-   for (unsigned int j = 0; j<=_height; j+=inc)
-     for (unsigned int k=0; k<=_width; k+=inc)
+   for (unsigned int j = 0; j<=height_; j+=inc)
+     for (unsigned int k=0; k<=width_; k+=inc)
        easy2D->add_point(k,j);
 
    ++pframe;//next video frame
-   vcl_cout << "Loading Frame[" << i << "]:(" <<_width <<" "<<_height << ")\n";
-   inc++;
-   i++;
+   vcl_cout << "Loading Frame[" << i << "]:(" <<width_ <<" "<<height_ << ")\n";
+   ++inc;
+   ++i;
   }
   //Display the first frame
   unsigned row=0, col=0;
-  this->add_at(_tabs[0], col, row);
+  this->add_at(tabs_[0], col, row);
   this->post_redraw();
   vgui::run_till_idle();
 }
@@ -140,8 +140,8 @@ vgui_viewer2D_sptr jvx_manager::get_vgui_viewer2D_at(unsigned col, unsigned row)
 void jvx_manager::play_video()
 {
   vul_timer t;
-  for (vcl_vector<vgui_viewer2D_sptr>::iterator vit = _tabs.begin();
-       vit != _tabs.end(); vit++)
+  for (vcl_vector<vgui_viewer2D_sptr>::iterator vit = tabs_.begin();
+       vit != tabs_.end(); vit++)
   {
     //Remove the previous frame at grid position (0,0)
     unsigned row=0, col=0;
