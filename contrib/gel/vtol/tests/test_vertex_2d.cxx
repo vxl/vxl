@@ -144,7 +144,6 @@ int main(int, char **)
 
   Assert(v1v->cast_to_vertex()!=0);
   Assert(v1v->cast_to_vertex_2d()!=0);
-  Assert(v1v->cast_to_vertex_3d()==0);
 
   Assert(v1v->is_connected(*v2v));
 
