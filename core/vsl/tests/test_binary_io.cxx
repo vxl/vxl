@@ -9,9 +9,9 @@
 
 void test_binary_io()
 {
-  vcl_cout << "***********************" << vcl_endl;;
-  vcl_cout << "Testing vsl binary io" << vcl_endl;;
-  vcl_cout << "***********************" << vcl_endl;;
+  vcl_cout << "***********************" << vcl_endl;
+  vcl_cout << "Testing vsl binary io" << vcl_endl;
+  vcl_cout << "***********************" << vcl_endl;
 
   bool b_out = true;
   char c_out = 'y';
@@ -71,82 +71,81 @@ void test_binary_io()
 
   TEST ("bool out == bool in", b_out == b_in, true);
   vsl_print_summary(vcl_cout, b_out);
-  vcl_cout << vcl_endl;;
+  vcl_cout << vcl_endl;
 
   vsl_b_read(bfs_in, c_in);
   TEST ("char out == char in", c_out == c_in, true);
   vsl_print_summary(vcl_cout, c_out);
-  vcl_cout << vcl_endl;;
-   
+  vcl_cout << vcl_endl;
+
   vsl_b_read(bfs_in, sc_in);
   TEST ("signed char out == signed char in", sc_out == sc_in, true);
   vsl_print_summary(vcl_cout, sc_out);
-  vcl_cout << vcl_endl;;
+  vcl_cout << vcl_endl;
 
   vsl_b_read(bfs_in, uc_in);
   TEST ("unsigned char out == unsigned char in", uc_out == uc_in, true);
   vsl_print_summary(vcl_cout, uc_out);
-  vcl_cout << vcl_endl;;
+  vcl_cout << vcl_endl;
 
   vsl_b_read(bfs_in, i_in);
   TEST ("int out == int in", i_out == i_in, true);
   vsl_print_summary(vcl_cout, i_out);
-  vcl_cout << vcl_endl;;
+  vcl_cout << vcl_endl;
 
   vsl_b_read(bfs_in, ui_in);
   TEST ("unsigned int out == unsigned int in", ui_out == ui_in, true);
   vsl_print_summary(vcl_cout, ui_out);
-  vcl_cout << vcl_endl;;
+  vcl_cout << vcl_endl;
 
   vsl_b_read(bfs_in, short_in);
   TEST ("short int out == short int in", short_out == short_in, true);
   vsl_print_summary(vcl_cout, short_out);
-  vcl_cout << vcl_endl;;
+  vcl_cout << vcl_endl;
 
   vsl_b_read(bfs_in, ushort_in);
   TEST ("unsigned short int out == unsigned short int in",
     ushort_out == ushort_in, true);
   vsl_print_summary(vcl_cout, short_out);
-  vcl_cout << vcl_endl;;
+  vcl_cout << vcl_endl;
 
   vsl_b_read(bfs_in, long_in);
   TEST ("long out == long in", long_out == long_in, true);
   vsl_print_summary(vcl_cout, long_out);
-  vcl_cout << vcl_endl;;
+  vcl_cout << vcl_endl;
 
   vsl_b_read(bfs_in, ulong_in);
   TEST ("unsigned long out == unsigned long in",
     ulong_out == ulong_in, true);
   vsl_print_summary(vcl_cout, ulong_out);
-  vcl_cout << vcl_endl;;
+  vcl_cout << vcl_endl;
 
   vsl_b_read(bfs_in, f_in);
   TEST ("float out == float in", f_out == f_in, true);
   vsl_print_summary(vcl_cout, f_out);
-  vcl_cout << vcl_endl;;
+  vcl_cout << vcl_endl;
 
   vsl_b_read(bfs_in, d_in);
   TEST ("double out == double in", d_out == d_in, true);
   vsl_print_summary(vcl_cout, d_out);
-  vcl_cout << vcl_endl;;
+  vcl_cout << vcl_endl;
 
   vsl_b_read(bfs_in, string_in);
   TEST ("string out == string in", string_out == string_in, true);
   vsl_print_summary(vcl_cout, string_out);
-  vcl_cout << vcl_endl;;
+  vcl_cout << vcl_endl;
 
   vsl_b_read(bfs_in, c_string_in);
-  TEST ("C string out == C string in",
-    vcl_strcmp(c_string_out, c_string_in)==0, true);
+  TEST ("C string out == C string in", vcl_strcmp(c_string_out,c_string_in), 0);
   vsl_print_summary(vcl_cout, c_string_out);
-  vcl_cout << vcl_endl;;
+  vcl_cout << vcl_endl;
 
   bfs_in.close();
 
 
-  vcl_cout << "*****************************" << vcl_endl;;
-  vcl_cout << "Testing Golden vsl binary io" << vcl_endl;;
-  vcl_cout << "****************************" << vcl_endl;;
+  vcl_cout << "*****************************" << vcl_endl;
+  vcl_cout << "Testing Golden vsl binary io" << vcl_endl;
+  vcl_cout << "****************************" << vcl_endl;
 
   // Test global consistancy - can it load the golden binary output file
   // This should be identical what has just been saved, which should
@@ -214,7 +213,6 @@ void test_binary_io()
   TEST ("Golden string out == string in", string_out == string_in2, true);
   TEST ("Golden C string out == C string in",
     vcl_string(c_string_out) == vcl_string(c_string_in2), true);
-
 }
 
 TESTMAIN(test_binary_io);
