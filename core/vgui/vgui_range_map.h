@@ -68,6 +68,7 @@
 //  Modifications <none>
 // \endverbatim
 #include <vxl_config.h>
+#include <vcl_vector.h>
 #include <vgui/vgui_range_map_params.h>
 template <class Type>
 class vgui_range_map : public vgui_range_map_params
@@ -75,10 +76,6 @@ class vgui_range_map : public vgui_range_map_params
  public:
   vgui_range_map(vgui_range_map_params const& rmp);
   ~vgui_range_map();
-
-  
-  //: set the parameters for the mapping function
-  void set_map_params(vgui_range_map_params_sptr const& rmp);
 
   //: Is the pixel type mapable at all
   bool mapable(){return mapable_;}
@@ -162,6 +159,8 @@ class vgui_range_map : public vgui_range_map_params
   long double ratio_G_;    //!< scale for computed green channel mapping 
   long double ratio_B_;    //!< scale for computed blue channel mapping 
   long double ratio_A_;    //!< scale for computed alpha channel mapping 
+  vcl_vector<vxl_byte*> maps_; //!< cache maps for deletion
+  vcl_vector<float*> fmaps_; //!< cache maps for deletion
 };
 
 #define VGUI_RANGE_MAP_INSTANTIATE(T) extern "please include vgui/vgui_range_map.txx first"

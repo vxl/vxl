@@ -1,4 +1,4 @@
-// This is core/vgui/vgui_range_map_params.h
+ // This is core/vgui/vgui_range_map_params.h
 #ifndef vgui_range_map_params_h_
 #define vgui_range_map_params_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
