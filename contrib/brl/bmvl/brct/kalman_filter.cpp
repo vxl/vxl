@@ -75,7 +75,8 @@ kalman_filter::~kalman_filter()
 
 void kalman_filter::init_state_vector()
 {
-  vnl_double_3 T(X_[3],X_[4],X_[5]);
+  double dt = time_tick_[1] - time_tick_[0];
+  vnl_double_3 T(X_[3]*dt,X_[4]*dt,X_[5]*dt);
 
   // compute camera calibration matrix
   vnl_double_3x4 E1, E2;
@@ -461,12 +462,14 @@ void kalman_filter::inc()
     // update covariant matrix
     vnl_double_3 dX(X3d.x() - curve_3d_[i].x(), X3d.y() - curve_3d_[i].y(), X3d.z() - curve_3d_[i].z());
     vnl_double_3x3 Sigma3d = curve_3d_[i].get_covariant_matrix();
+
     Sigma3d = Sigma3d*(cur_pos_-1.0)/(double)cur_pos_;
-    for (int m = 0; m<3; m++)
+
+	for (int m = 0; m<3; m++)
       for (int n = 0; n<3; n++)
         Sigma3d[m][n] += dX[m]*dX[n] /(cur_pos_);
 
-    curve_3d_[i].set_point(X3d);
+	curve_3d_[i].set_point(X3d);
     curve_3d_[i].set_covariant_matrix(Sigma3d);
 
 #if 0

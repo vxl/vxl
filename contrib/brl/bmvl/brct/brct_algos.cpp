@@ -54,6 +54,7 @@ vgl_point_2d<double> brct_algos::projection_3d_point(const vgl_point_3d<double> 
   return vgl_homg_point_2d<double>(t[0],t[1],t[2]);
 }
 
+//: project a 3d gaussian distribution into a 2d gaussian
 bugl_gaussian_point_2d<double> brct_algos::project_3d_point(const vnl_double_3x4 &P,
                                                             const bugl_gaussian_point_3d<double> & X)
 {
@@ -61,7 +62,7 @@ bugl_gaussian_point_2d<double> brct_algos::project_3d_point(const vnl_double_3x4
   vnl_double_3 u = P*Y;
 
 
-  // compute week prospect matrix
+  // compute week prospect matrix, i.e., the car is far away from the camera
   vnl_double_2x3 H;
 
   // sum_{k=1}^{3} {P_{3k}Y_k + P_{34}
