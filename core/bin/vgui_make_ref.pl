@@ -62,7 +62,8 @@ $os_rm = "/bin/rm";
 $os_mv = "/bin/mv";
 #$os_cp = "/bin/cp";
 $os_diff = "/bin/diff";
-
+$os_diff = "/usr/bin/diff" unless -x $os_diff;
+die "no diff\n" unless -x $os_diff;
 
 # _init();
 exit &main(@ARGV);
