@@ -237,9 +237,7 @@ bool PairMatchSet::read_ascii(istream& s)
     if (!s.good())
       break;
     // Eat any whitespace
-#ifdef WIN32
-    s >> std :: ws;
-#else
+#ifndef VCL_WIN32
     s >> ws;
 #endif
 

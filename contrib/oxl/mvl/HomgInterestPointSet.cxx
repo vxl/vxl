@@ -276,9 +276,7 @@ bool HomgInterestPointSet::read(istream& f, const ImageMetric* c)
     if (!f.good())
       break;
     add(x, y);
-#ifdef WIN32
-    f >> std :: ws;
-#else
+#ifndef VCL_WIN32
     f >> ws;
 #endif
   }
