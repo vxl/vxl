@@ -6,6 +6,7 @@ fmk_libdeps += fmk_libC:fmk_libc,fmk_libm
 fmk_libdeps += vcl:fmk_libC
 
 fmk_libdeps += vbl:vcl
+fmk_libdeps += vtl:vcl
 fmk_libdeps += vgl:vcl
 
 fmk_libdeps += vil:vcl

@@ -8,7 +8,10 @@ SUBDIRS += vcl
 # abstract
 SUBDIRS += val
 
-# basics
+# templates
+SUBDIRS += vtl
+
+# "basics"
 SUBDIRS += vbl
 
 # numerics
