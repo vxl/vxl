@@ -38,6 +38,10 @@ MAIN(test_resample)
     vcl_cerr << "Could not use this image " << filename << " since it is too small\n";
     return 1;
   }
+  if ( wd%2 || ht%2 ) {
+    vcl_cerr << "Could not use this image " << filename << " since it has odd width or height\n";
+    return 1;
+  }
 
   int a1 = get_pixel(a,  0,  0, t);
   int a11 = (a1 + get_pixel(a, 0, 1,t) + get_pixel(a, 1, 0,t) + get_pixel(a, 1, 1,t))/4;
@@ -55,9 +59,9 @@ MAIN(test_resample)
   int b1 = get_pixel(b,  0,  0, t);
   int b2 = get_pixel(b, 12,  8, t);
   int b3 = get_pixel(b,  5, 19, t);
-  TEST("subsampled pixel value", b1, a11); if (b1!=a1) vcl_cout<<b1<<"!="<<a11<<'\n';
-  TEST("subsampled pixel value", b2, a22); if (b2!=a2) vcl_cout<<b2<<"!="<<a22<<'\n';
-  TEST("subsampled pixel value", b3, a33); if (b3!=a3) vcl_cout<<b3<<"!="<<a33<<'\n';
+  TEST("subsampled pixel value", b1, a11); if (b1!=a11) vcl_cout<<b1<<"!="<<a11<<'\n';
+  TEST("subsampled pixel value", b2, a22); if (b2!=a22) vcl_cout<<b2<<"!="<<a22<<'\n';
+  TEST("subsampled pixel value", b3, a33); if (b3!=a33) vcl_cout<<b3<<"!="<<a33<<'\n';
 
   if (argc>2) vil_save(b, argv[2]);
 
