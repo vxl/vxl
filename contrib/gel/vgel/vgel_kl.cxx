@@ -91,6 +91,24 @@ void vgel_kl::match_sequence(
   match_sequence_base (prev_img_gs, cur_img_gs, width, height, matches, use_persistent_features);
 }
 
+void vgel_kl::match_sequence(
+    vil_image_view<vxl_byte>*         prev_img,
+    vil_image_view<vxl_byte>*         cur_img,
+    vgel_multi_view_data_vertex_sptr matches,
+    bool                             use_persistent_features)
+{
+  int width = (*cur_img).ni();
+  int height = (*cur_img).nj();
+  KLT_PixelType * prev_img_gs = NULL;
+  KLT_PixelType * cur_img_gs = convert_to_gs_image(cur_img);
+  if (!prev_frame_) {
+      assert (width == int((*prev_img).ni()));
+      assert (height == int((*prev_img).nj()));
+      prev_img_gs = convert_to_gs_image(prev_img);
+  }
+  match_sequence_base (prev_img_gs, cur_img_gs, width, height, matches, use_persistent_features);
+}
+
 void vgel_kl::match_sequence_base(
     KLT_PixelType *                  prev_img_gs,
     KLT_PixelType *                  cur_img_gs,
@@ -545,6 +563,34 @@ KLT_PixelType* vgel_kl::convert_to_gs_image(vil_image_resource_sptr &image)
       vil_convert_planes_to_grey (imgv, imgg);
   else
       imgg = imgv;
+
+  assert ( 1 == imgg.nplanes() );
+
+  KLT_PixelType* tab_mono=new KLT_PixelType[ imgg.ni() * imgg.nj() ];
+
+  // view of the image using memory organized for the underlying library
+  vil_image_view<KLT_PixelType> imgc (tab_mono,
+                                      imgg.ni(), imgg.nj(), 1,
+                                      1, imgg.ni(), imgg.ni() * imgg.nj());
+
+  vil_copy_deep (imgg, imgc);
+
+  return tab_mono;
+}
+
+
+KLT_PixelType* vgel_kl::convert_to_gs_image(vil_image_view<vxl_byte>* image)
+{
+  // view of the image
+  vil_image_view<vxl_byte> imgv = *image;
+
+  // view of image converted to gray
+  vil_image_view<KLT_PixelType> imgg;
+  // only convert to gray if we have to
+  if (imgv.nplanes() == 3)
+    vil_convert_planes_to_grey (imgv, imgg); 
+  else
+    imgg = imgv;
 
   assert ( 1 == imgg.nplanes() );
 

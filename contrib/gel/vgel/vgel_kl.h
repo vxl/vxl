@@ -17,6 +17,8 @@ extern "C" {
 #include <vgel/vgel_multi_view_data_vertex_sptr.h>
 #include <vidl_vil1/vidl_vil1_movie_sptr.h>
 #include <vidl/vidl_movie_sptr.h>
+#include <vxl_config.h>
+#include <vil/vil_image_view.h>
 
 //: An interface to the C language library implementation of the
 // Kanade-Lucas-Tomasi (KLT) feature point tracker by Birchfield,
@@ -58,6 +60,10 @@ class vgel_kl
   //: get matching points from 2 images
   virtual void match_sequence(vil_image_resource_sptr&,
                               vil_image_resource_sptr&,
+                              vgel_multi_view_data_vertex_sptr, bool);
+  //: get matching points from 2 image views
+  virtual void match_sequence(vil_image_view<vxl_byte>*,
+                              vil_image_view<vxl_byte>*,
                               vgel_multi_view_data_vertex_sptr, bool);
 
   //: get matching points from a sequence of images
@@ -111,6 +117,8 @@ class vgel_kl
   virtual KLT_PixelType* convert_to_gs_image(vil1_image &);
   //: Convert a vil_image_resource_sptr to an array of grey scale
   virtual KLT_PixelType* convert_to_gs_image(vil_image_resource_sptr &);
+  //: Convert a vil_image_view<T> to an array of grey scale
+  virtual KLT_PixelType* convert_to_gs_image(vil_image_view<vxl_byte> *);
 
   virtual void set_tracking_context( KLT_TrackingContext tc);
 
