@@ -107,6 +107,9 @@ SOURCE=.\ipts_entropy_pyramid.cxx
 # Begin Source File
 SOURCE=.\ipts_local_entropy.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\ipts_orientation_pyramid.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "txx;h"
@@ -124,6 +127,9 @@ SOURCE=.\ipts_local_entropy.h
 # End Source File
 # Begin Source File
 SOURCE=.\ipts_scale_space_peaks.h
+# End Source File
+# Begin Source File
+SOURCE=.\ipts_orientation_pyramid.h
 # End Source File
 # End Group
 # End Target
