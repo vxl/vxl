@@ -84,6 +84,13 @@ void vil2_print_value(vcl_ostream& os, const float& value)
   os<<value;
 }
 
+//: Explicit overload for float
+VCL_DEFINE_SPECIALIZATION
+void vil2_print_value(vcl_ostream& os, const double& value)
+{
+  os<<value;
+}
+
 //: Explicit overload of print for rgb<ubyte>
 VCL_DEFINE_SPECIALIZATION
 void vil2_print_value(vcl_ostream& os, const vil_rgb<vil2_byte>& value)

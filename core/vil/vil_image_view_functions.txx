@@ -56,6 +56,23 @@ bool vil2_deep_equality(const vil2_image_view<T> &lhs, const vil2_image_view<T> 
 }
 
 
+//: Copy src to window in dest.
+// Size of window is defined by src.
+//  O(window.size).
+template<class T>
+void vil2_copy_to_window(const vil2_image_view<T> &src, vil2_image_view<T> &dest,
+                         unsigned i0, unsigned j0)
+{
+  // check window is within dest's bounds
+  assert(i0+src.ni() <= dest.ni() && j0+src.nj() <= dest.nj());
+  assert (src.nplanes() == dest.nplanes());
+
+  for (unsigned p = 0; p < dest.nplanes(); ++p)
+    for (unsigned j = 0; j < src.nj(); ++j)
+      for (unsigned i = 0; i < src.ni(); ++i)
+        dest(i+i0,j+j0,p) = src(i,j,p);
+}
+
 //: Return an ni x nj window of this data with offset (i0,j0)
 template<class T>
 vil2_image_view<T> vil2_window(const vil2_image_view<T> &im,
@@ -263,6 +280,8 @@ template void vil2_value_range(T& min_value, T& max_value,const vil2_image_view<
 
 // For everything else
 #define VIL2_IMAGE_VIEW_FUNCTIONS_INSTANTIATE(T) \
+template void vil2_copy_to_window(const vil2_image_view<T > &src, vil2_image_view<T > &dest, \
+  unsigned i0, unsigned j0); \
 template bool vil2_deep_equality(const vil2_image_view<T > &lhs, const vil2_image_view<T > &rhs); \
 template void vil2_reformat_copy(const vil2_image_view<T > &src, vil2_image_view<T > &dest); \
 template vil2_image_view<T > vil2_deep_copy(const vil2_image_view<T > &rhs); \
