@@ -413,6 +413,9 @@ SOURCE=.\rgrl_converge_status_nas.cxx
 # Begin Source File
 SOURCE=.\rgrl_matcher_k_nearest_random.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\rgrl_matcher_k_nearest_pick_one.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -751,6 +754,9 @@ SOURCE=.\rgrl_converge_status_nas.h
 # End Source File
 # Begin Source File
 SOURCE=.\rgrl_matcher_k_nearest_random.h
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_matcher_k_nearest_pick_one.h
 # End Source File
 # End Group
 # End Target
