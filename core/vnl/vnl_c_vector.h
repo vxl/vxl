@@ -37,6 +37,7 @@ class vnl_c_vector
 {
  public:
   typedef typename vnl_numeric_traits<T>::abs_t abs_t;
+  typedef typename vnl_numeric_traits<T>::real_t real_t;
 
   static T sum(T const* v, unsigned n);
   static inline abs_t squared_magnitude(T const *p, unsigned n)
@@ -101,6 +102,15 @@ class vnl_c_vector
   static T min_value(T const *, unsigned);
 
   static T mean(T const *p, unsigned n) { return sum(p,n)/abs_t(n); }
+ 
+  //: The standard deviation 
+  // This method uses the 1/(n-1) normalisation, assuming that your
+  // data is a sample of a population.
+  static inline T std(T const *p, unsigned n) {
+    return vcl_sqrt(real_t(sum_sq_diff_means(p, n))/real_t(n-1));}
+
+  //: The sum of squared differences from the mean
+  static T sum_sq_diff_means(T const* v, unsigned n);
 
   //:  one_norm : sum of abs values
   static inline abs_t one_norm(T const *p, unsigned n)

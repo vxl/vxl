@@ -314,6 +314,8 @@ void vnl_vector_test_float()
     TEST("squared_distance_2d", squared_distance_2d(v1,v2), 2);
     TEST("squared_distance_3d", squared_distance_3d(v1,v2), 2);
 #endif
+    TEST_NEAR("mean", vnl_c_vector<float>::mean(v.begin(), v.size()), 2.0, 1e-6);
+    TEST_NEAR("std", vnl_c_vector<float>::std(v.begin(), v.size()), 1.0, 1e-6);
   }
 
   {
