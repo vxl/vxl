@@ -10,8 +10,8 @@
 #include <vnl/vnl_vector.h>
 
 inline bool mil_profile_in_image(const vgl_point_2d<double>& p0,
-                           const vgl_point_2d<double>& p1,
-                           const mil_image_2d& image)
+                                 const vgl_point_2d<double>& p1,
+                                 const mil_image_2d& image)
 {
   if (p0.x()<1) return false;
   if (p0.y()<1) return false;
@@ -61,10 +61,10 @@ void mil_sample_profile_2d(vnl_vector<vecType>& v,
 //  Points outside image return zero.
 template <class imType, class vecType>
 void mil_sample_profile_2d_safe(vnl_vector<vecType>& vec,
-                           const mil_image_2d_of<imType>& image,
-                           const vgl_point_2d<double>& p0,
-                           const vgl_vector_2d<double>& u,
-                           int n)
+                                const mil_image_2d_of<imType>& image,
+                                const vgl_point_2d<double>& p0,
+                                const vgl_vector_2d<double>& u,
+                                int n)
 {
   int np = image.n_planes();
   int nx = image.nx();
@@ -108,10 +108,10 @@ void mil_sample_profile_2d_safe(vnl_vector<vecType>& vec,
 //  v[0]..v[np-1] are the values from point p
 template <class imType, class vecType>
 void mil_sample_profile_2d_no_checks(vnl_vector<vecType>& vec,
-                           const mil_image_2d_of<imType>& image,
-                           const vgl_point_2d<double>& p0,
-                           const vgl_vector_2d<double>& u,
-                           int n)
+                                     const mil_image_2d_of<imType>& image,
+                                     const vgl_point_2d<double>& p0,
+                                     const vgl_vector_2d<double>& u,
+                                     int n)
 {
   int np = image.n_planes();
   int xstep = image.xstep();
@@ -152,10 +152,10 @@ void mil_sample_profile_2d_no_checks(vnl_vector<vecType>& vec,
 //  Points outside image return zero.
 template <class imType, class vecType>
 void mil_sample_profile_2d_ic_safe(vnl_vector<vecType>& vec,
-                           const mil_image_2d_of<imType>& image,
-                           const vgl_point_2d<double>& p0,
-                           const vgl_point_2d<double>& p1,
-                           int n)
+                                   const mil_image_2d_of<imType>& image,
+                                   const vgl_point_2d<double>& p0,
+                                   const vgl_point_2d<double>& p1,
+                                   int n)
 {
   vgl_vector_2d<double> u;
   if (n>1) u = (p1-p0)/(n-1);
@@ -200,10 +200,10 @@ void mil_sample_profile_2d_ic_safe(vnl_vector<vecType>& vec,
 //  Points outside image return zero.
 template <class imType, class vecType>
 void mil_sample_profile_2d_ic(vnl_vector<vecType>& vec,
-                           const mil_image_2d_of<imType>& image,
-                           const vgl_point_2d<double>& p0,
-                           const vgl_point_2d<double>& p1,
-                           int n)
+                              const mil_image_2d_of<imType>& image,
+                              const vgl_point_2d<double>& p0,
+                              const vgl_point_2d<double>& p1,
+                              int n)
 {
   if (!mil_profile_in_image(p0,p1,image))
   {
@@ -244,32 +244,31 @@ void mil_sample_profile_2d_ic(vnl_vector<vecType>& vec,
   }
 }
 
-
 #define MIL_SAMPLE_PROFILE_2D_INSTANTIATE( imType, vecType ) \
-template void mil_sample_profile_2d(vnl_vector<vecType>& v, \
-                           const mil_image_2d_of<imType>& image, \
-                           const vgl_point_2d<double>& p, \
-                           const vgl_vector_2d<double>& u, \
+template void mil_sample_profile_2d(vnl_vector<vecType >& v, \
+                           const mil_image_2d_of<imType >& image, \
+                           const vgl_point_2d<double >& p, \
+                           const vgl_vector_2d<double >& u, \
                            int n); \
-template void mil_sample_profile_2d_safe(vnl_vector<vecType>& v, \
-                           const mil_image_2d_of<imType>& image, \
-                           const vgl_point_2d<double>& p, \
-                           const vgl_vector_2d<double>& u, \
+template void mil_sample_profile_2d_safe(vnl_vector<vecType >& v, \
+                           const mil_image_2d_of<imType >& image, \
+                           const vgl_point_2d<double >& p, \
+                           const vgl_vector_2d<double >& u, \
                            int n); \
-template void mil_sample_profile_2d_no_checks(vnl_vector<vecType>& v, \
-                           const mil_image_2d_of<imType>& image, \
-                           const vgl_point_2d<double>& p, \
-                           const vgl_vector_2d<double>& u, \
+template void mil_sample_profile_2d_no_checks(vnl_vector<vecType >& v, \
+                           const mil_image_2d_of<imType >& image, \
+                           const vgl_point_2d<double >& p, \
+                           const vgl_vector_2d<double >& u, \
                            int n); \
-template void mil_sample_profile_2d_ic_safe(vnl_vector<vecType>& v, \
-                           const mil_image_2d_of<imType>& image, \
-                           const vgl_point_2d<double>& p0, \
-                           const vgl_point_2d<double>& p1, \
+template void mil_sample_profile_2d_ic_safe(vnl_vector<vecType >& v, \
+                           const mil_image_2d_of<imType >& image, \
+                           const vgl_point_2d<double >& p0, \
+                           const vgl_point_2d<double >& p1, \
                            int n); \
-template void mil_sample_profile_2d_ic(vnl_vector<vecType>& v, \
-                           const mil_image_2d_of<imType>& image, \
-                           const vgl_point_2d<double>& p0, \
-                           const vgl_point_2d<double>& p1, \
-                           int n);
+template void mil_sample_profile_2d_ic(vnl_vector<vecType >& v, \
+                           const mil_image_2d_of<imType >& image, \
+                           const vgl_point_2d<double >& p0, \
+                           const vgl_point_2d<double >& p1, \
+                           int n)
 
 #endif // mil_sample_profile_2d_txx_
