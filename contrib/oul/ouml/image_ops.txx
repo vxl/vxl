@@ -1,7 +1,8 @@
 //-*-c++-*--------------------------------------------------------------
 #ifndef ouml_image_ops_txx_
 #define ouml_image_ops_txx_
-/** \file
+/**
+ * \file
  *
  * The whole shebang. Hopefully this will find and track eyes
  * predominantly using eyespiders.

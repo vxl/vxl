@@ -1,5 +1,8 @@
 //-*-c++-*--------------------------------------------------------------
-/** \file
+#ifndef OTAGO__image_database_INCLUDED_
+#define OTAGO__image_database_INCLUDED_
+/**
+ * \file
  *
  * An image database. Basically maintains a list of labels and
  * associated images. And allows for saving and loading a database.
@@ -18,9 +21,6 @@
  * Reproduction rights limited as described in the COPYRIGHT file.
  */
 //----------------------------------------------------------------------
-
-#ifndef OTAGO__image_database_INCLUDED_
-#define OTAGO__image_database_INCLUDED_
 
 #include <vcl_sys/types.h>
 #include <vcl_cstring.h> // for strcpy(), strcmp()

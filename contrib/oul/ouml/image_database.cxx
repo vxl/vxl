@@ -1,5 +1,6 @@
 //-*-c++-*--------------------------------------------------------------
-/** \file
+/**
+ * \file
  *
  * An image database. Basically maintains a list of labels and
  * associated images. And allows for saving and loading a database. 
