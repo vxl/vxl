@@ -5,7 +5,7 @@
 #include <vil1/vil1_memory_image.h>
 #include <vbl/vbl_array_2d.h>
 
-inline vil1_image vbl_array_to_vil(vbl_array_2d<unsigned char> const& im)
+inline vil1_image vbl_array_to_vil1(vbl_array_2d<unsigned char> const& im)
 {
   int width = im.columns();
   int height = im.rows();

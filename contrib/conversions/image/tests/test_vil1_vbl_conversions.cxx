@@ -42,11 +42,11 @@ void test_vil1_vbl_conversions()
   const unsigned char* buf2 = im2.begin();
   TEST("vil1_to_vbl_array data", 0, vcl_memcmp(buf1, buf2, size));
 
-  vil1_image im3 = vbl_array_to_vil(im2);
-  TEST("vbl_array_to_vil width", im3.width(), im2.columns());
-  TEST("vbl_array_to_vil height", im3.height(), im2.rows());
+  vil1_image im3 = vbl_array_to_vil1(im2);
+  TEST("vbl_array_to_vil1 width", im3.width(), im2.columns());
+  TEST("vbl_array_to_vil1 height", im3.height(), im2.rows());
   im3.get_section(buf1, 0, 0, wd, ht);
-  TEST("vbl_array_to_vil data", 0, vcl_memcmp(buf1, buf2, size));
+  TEST("vbl_array_to_vil1 data", 0, vcl_memcmp(buf1, buf2, size));
 
   delete[] buf1;
 }

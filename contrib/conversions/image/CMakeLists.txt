@@ -8,8 +8,8 @@ ENDIF (BUILD_TESTING)
 # Note that these are all header files, so no library is built here.
 
 SET(image_sources
- Image_to_vil.h
- vbl_array_to_vil.h
+ Image_to_vil1.h
+ vbl_array_to_vil1.h
  vil1_to_Image.h
  vil1_to_vbl_array.h
 )

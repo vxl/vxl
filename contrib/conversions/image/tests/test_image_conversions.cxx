@@ -10,7 +10,7 @@ void test_image_conversions()
 }
 
 #else
-#include <image/Image_to_vil.h>
+#include <image/Image_to_vil1.h>
 #include <image/vil1_to_Image.h>
 
 #include <vcl_cstring.h> // for memcmp()
@@ -54,11 +54,11 @@ void test_image_conversions()
   im2->GetSection(buf2, 0, 0, wd, ht);
   TEST("vil1_to_Image data", 0, vcl_memcmp(buf1, buf2, size));
 
-  vil1_image im3 = Image_to_vil(im2);
-  TEST("Image_to_vil width", im3.width(), im2->GetSizeX());
-  TEST("Image_to_vil height", im3.height(), im2->GetSizeY());
+  vil1_image im3 = Image_to_vil1(im2);
+  TEST("Image_to_vil1 width", im3.width(), im2->GetSizeX());
+  TEST("Image_to_vil1 height", im3.height(), im2->GetSizeY());
   im3.get_section(buf1, 0, 0, wd, ht);
-  TEST("Image_to_vil data", 0, vcl_memcmp(buf1, buf2, size));
+  TEST("Image_to_vil1 data", 0, vcl_memcmp(buf1, buf2, size));
 
   delete[] buf1; delete[] buf2;
 }

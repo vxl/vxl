@@ -10,7 +10,7 @@
 
 #include <vcl_iostream.h>
 
-inline vil1_image Image_to_vil(Image const* im)
+inline vil1_image Image_to_vil1(Image const* im)
 {
   // First try to load directly from file.  This will give wrong results
   // when im was copied into memory from a file image and then modified.
@@ -30,7 +30,7 @@ inline vil1_image Image_to_vil(Image const* im)
     (im->GetFormat() == 'Y') ? VIL1_COMPONENT_FORMAT_COMPLEX :
                                VIL1_COMPONENT_FORMAT_UNSIGNED_INT;
   if (im->GetBitsPixel() != bpc * cmpts)
-    { vcl_cerr << "Image_to_vil: Error: pixel size\n"; return 0; }
+    { vcl_cerr << "Image_to_vil1: Error: pixel size\n"; return 0; }
 
   vil1_memory_image imo(width, height, cmpts, bpc, format);
 
