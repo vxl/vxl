@@ -76,7 +76,7 @@ class CheckColourPlanes : public CheckPixel
   {
     assert( p==0 || p==1 || p==2 );
     if (!img_ || pixel.size() != 1) return false;
-    TruePixelType imp = img_(img_.width()*(img_.height()*p+y)+x,0);
+    TruePixelType imp = img_.get_buffer()[img_.width()*(img_.height()*p+y)+x];
     if (pixel[0] != imp)
       vcl_cout << "(x,y,p)=(" << x << ',' << y << ',' << p << "): true="
                << pixel[0] << ", img=" << imp << '\n' << vcl_flush;
