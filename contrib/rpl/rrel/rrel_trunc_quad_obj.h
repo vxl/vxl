@@ -5,7 +5,7 @@
 // \file
 // \author Chuck Stewaty (stewart@cs.rpi.edu)
 // \author Amitha Perera (perera@cs.rpi.edu)
-// Truncated quadratic loss function.
+// \brief Truncated quadratic loss function
 
 #include <rrel/rrel_m_est_obj.h>
 
@@ -19,7 +19,7 @@
 //      \end{array}
 //    \right.
 //  \f]
-
+//
 //  where u is a scale-normalized residual (\f$ r/\sigma \f$) and \f$
 //  T \f$ is a threshold. This has been used in a number of vision
 //  applications despite the fact that the wgt function is

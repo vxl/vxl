@@ -1,4 +1,3 @@
-
 #ifndef rrel_irls_h_
 #define rrel_irls_h_
 
@@ -6,7 +5,7 @@
 // \file
 // \author Chuck Stewart (stewart@cs.rpi.edu)
 // \date March 2001
-// Iteratively-reweighted least-squares minimization of an M-estimator.
+// \brief Iteratively-reweighted least-squares minimization of an M-estimator
 // \verbatim
 //   2001-10-22 Amitha Perera. Reorganised and added comments.
 // \endverbatim
@@ -19,7 +18,7 @@ class rrel_estimation_problem;
 class rrel_wls_obj;
 
 //: Iteratively-reweighted least-squares minimization of an M-estimator.
-
+//
 // IRLS is a search technique for solving M-estimation problems. The
 // technique is to compute weights from a given parameter estimate,
 // and use those weights to compute a new estimate via weighted least
@@ -31,7 +30,7 @@ class rrel_wls_obj;
 // may be estimated in the first few iterations of IRLS.  A parameter
 // called iterations_for_scale_est_ determines the number of iterations
 // during which scale is to be estimated.   Scale estimation is either
-// weight-based or median-based.  
+// weight-based or median-based.
 //
 // (2) The maximum number of iterations may be set, either in the
 // constructor or through parameter setting member functions.
@@ -43,8 +42,8 @@ class rrel_wls_obj;
 // change.  (The alternative, which was not implemented, is to include
 // a ln(sigma) term to the objective function.)
 //
-// (4) The parameters, the scale, both or neither may be initialized. 
-// 
+// (4) The parameters, the scale, both or neither may be initialized.
+//
 // See also rrel_estimation_problem and and rrel_wls_obj.
 
 class rrel_irls {
@@ -181,4 +180,4 @@ protected:
   int iteration_;
 };
 
-#endif
+#endif // rrel_irls_h_

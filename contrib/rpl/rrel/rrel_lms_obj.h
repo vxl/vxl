@@ -9,7 +9,7 @@
 #include <rrel/rrel_objective.h>
 
 //: The Least-Median-of-Squares (LMS) objective function.
-
+//
 //  The Least-Median-of-Squares algorithm was defined in a 1984
 //  Journal of the American Statistical Association paper by Peter
 //  Rousseeuw (vol 79, pp 871-880).  (See Stewart, "Robust Parameter
@@ -41,7 +41,7 @@ public:
                       vect_const_iter /* scale is unused */,
                       vnl_vector<double>* = 0 /* param vector is unused */ ) const;
 
-  //: Evaluate the objective function on homoscedastic residuals.  
+  //: Evaluate the objective function on homoscedastic residuals.
   //  \sa rrel_objective::fcn.
   virtual double fcn( vect_const_iter begin, vect_const_iter end,
                       double = 0 /* scale is unused */,
@@ -59,4 +59,4 @@ protected:
   double inlier_frac_;
 };
 
-#endif
+#endif // rrel_lms_obj_h_
