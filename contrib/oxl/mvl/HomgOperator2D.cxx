@@ -56,7 +56,6 @@ double HomgOperator2D::dot(const Homg2D& a, const Homg2D& b)
 
 //-----------------------------------------------------------------------------
 //: Normalize Homg2D to unit magnitude
-
 void HomgOperator2D::unitize(Homg2D* a)
 {
   double norm = a->x()*a->x() + a->y()*a->y() + a->z()*a->z();
@@ -104,10 +103,9 @@ double HomgOperator2D::distance_squared(const HomgPoint2D& point1,
 // \f\[ d = \frac{(l^\top p)}{p_z\sqrt{l_x^2 + l_y^2}} \f\]
 // If either the point or the line are at infinity an error message is
 // printed and Homg::infinity is returned.
-
 double HomgOperator2D::perp_dist_squared (const HomgPoint2D& point, const HomgLine2D& line)
 {
-  if (line.check_infinity() || point.check_infinity()) {
+  if (line.ideal(0.0) || point.ideal(0.0)) {
     vcl_cerr << "HomgOperator2D::perp_dist_squared() -- line or point at infinity\n";
     return Homg::infinity;
   }
@@ -134,57 +132,35 @@ double HomgOperator2D::distance(const HomgLineSeg2D& ls, const HomgLineSeg2D& ll
   HomgLine2D lll;
   lll.set(ll.get_line().x()/norm,ll.get_line().y()/norm,ll.get_line().w()/norm);
   double dist1 = ls.get_point1().x()/ls.get_point1().w() * lll.x() +
-    ls.get_point1().y()/ls.get_point1().w() * lll.y() + lll.w();
-
-
+                 ls.get_point1().y()/ls.get_point1().w() * lll.y() + lll.w();
   double dist2 = ls.get_point2().x()/ls.get_point2().w() * lll.x() +
-    ls.get_point2().y()/ls.get_point2().w() * lll.y() +  lll.w();
-
-  //  vcl_cerr << "dist 1 is " <<dist1 << " dist 2 is " <<dist2 << vcl_endl;
-
+                 ls.get_point2().y()/ls.get_point2().w() * lll.y() + lll.w();
+#ifdef DEBUG
+  vcl_cerr << "dist 1 is " <<dist1 << " dist 2 is " <<dist2 << vcl_endl;
+#endif
   double dist = (vcl_fabs(dist1) + vcl_fabs(dist2))/2;
 
   // compute overlap
   // if smaller than OVERLAP_THRESH then reject
 
-
   //project ls.point1 and point2 onto ll
+  vnl_double_2 p1(ls.get_point1().x()/ls.get_point1().w()-dist1*lll.x(),
+                  ls.get_point1().y()/ls.get_point1().w()-dist1*lll.y());
 
-  HomgPoint2D p1,p2,p3,p4;
-  p1.set(ls.get_point1().x()/ls.get_point1().w()-dist1*(lll.x()),
-         ls.get_point1().y()/ls.get_point1().w()-dist1*(lll.y()),1);
+  vnl_double_2 p2(ls.get_point2().x()/ls.get_point2().w()-dist2*(lll.x()),
+                  ls.get_point2().y()/ls.get_point2().w()-dist2*(lll.y()));
 
-  p2.set(ls.get_point2().x()/ls.get_point2().w()-dist2*(lll.x()),
-         ls.get_point2().y()/ls.get_point2().w()-dist2*(lll.y()),1);
+  vnl_double_2 p3(ll.get_point1().x()/ll.get_point1().w(),
+                  ll.get_point1().y()/ll.get_point1().w());
 
-  p3.set(ll.get_point1().x()/ll.get_point1().w(),
-         ll.get_point1().y()/ll.get_point1().w(),1);
+  vnl_double_2 p4(ll.get_point2().x()/ll.get_point2().w(),
+                  ll.get_point2().y()/ll.get_point2().w());
 
-  p4.set(ll.get_point2().x()/ll.get_point2().w(),
-         ll.get_point2().y()/ll.get_point2().w(),1);
+  vnl_double_2 v1 = p2 - p1, v2 = p3 - p1, v3 = p4 - p1;
+  double r3 = v2(0)/v1(0); if (r3 > 1) r3 = 1; else if (r3 < 0) r3 =0;
+  double r4 = v3(0)/v1(0); if (r4 > 1) r4 = 1; else if (r4 < 0) r4 =0;
 
-  vnl_double_2 v1(p2.x() - p1.x(), p2.y() - p1.y());
-  vnl_double_2 v2(p3.x() - p1.x(), p3.y() - p1.y());
-
-  double r3 = v2(0)/v1(0);
-
-  vnl_double_2 v3(p4.x() - p1.x(), p4.y() - p1.y());
-
-  double r4 = v3(0)/v1(0);
-
-  if (r3 > 1)
-    r3 = 1;
-  if (r3 < 0)
-    r3 =0;
-
-  if (r4 > 1)
-    r4 = 1;
-  if (r4 < 0)
-    r4 =0;
-
-  double r = vcl_fabs(r3-r4);
-
-  r = r * vcl_sqrt(v1(0)*v1(0)+v1(1)*v1(1));
+  double r = vcl_fabs(r3-r4) * v1.two_norm();
 
   if (r < OVERLAP_THRESH)
     dist = 1000000;
