@@ -1,3 +1,9 @@
+# v3p/mpeg2/CMakeLists.txt
+
+INCLUDE( ${MODULE_PATH}/FindMPEG2.cmake )
+
+IF( NOT VXL_USING_NATIVE_MPEG2 )
+
 # If RUN_CONFIGURE is used here, configure is not run when cmake is first run.
 IF( UNIX )
   EXEC_PROGRAM( ${allvxl_SOURCE_DIR}/v3p/mpeg2/configure
@@ -47,3 +53,5 @@ SET( vo_sources
   libvo/yuv2rgb_mmx.c 
 )
 ADD_LIBRARY( vo ${vo_sources} )  
+
+ENDIF( NOT VXL_USING_NATIVE_MPEG2 )
