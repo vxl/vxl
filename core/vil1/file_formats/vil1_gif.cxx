@@ -10,6 +10,7 @@
 #include <vcl_ios.h> // for vcl_hex, vcl_dec
 #include <vcl_iostream.h>
 #include <vcl_iomanip.h>
+#include <vcl_cstring.h>
 
 #include <vil/vil_stream.h>
 #include <vil/vil_16bit.h>

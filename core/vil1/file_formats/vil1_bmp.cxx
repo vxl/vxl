@@ -7,7 +7,7 @@
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
-
+#include <vcl_cstring.h>
 #include <vil/vil_stream.h>
 #include <vil/vil_image.h>
 #include <vil/vil_property.h>

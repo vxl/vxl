@@ -135,6 +135,62 @@ bool test_image_equal(char const* type_name,
 }
 
 //: Test the read and write for the given image into the image type specified in type.
+// Some image types flip data around to get default formats. This function uses
+// vil_load_raw and vil_save_raw to avoid that, so that testing can be performed.
+// The non_raw save and load functions are also called, but the images aren't compared.
+
+void vil_test_image_type_raw(char const* type_name, // type for image to read and write
+                         vil_image const & image, // test image to save and restore
+                         bool exact = true) // require read back image identical
+{
+  int n = image.bits_per_component() * image.components();
+  vcl_cout << "=== Start testing " << type_name << " (" << n << " bpp) ===\n" << vcl_flush;
+
+  // Step 1) Write the image out to disk
+  //
+  // create a file name
+  vcl_string fname(tmpnam(0));
+  fname += ".";
+  if (type_name) fname += type_name;
+
+  vcl_cout << "vil_test_image_type: Save to [" << fname << "]\n" << vcl_flush;
+
+  // Check non-raw saving and loading actually don't fail obviously.
+  bool tst = vil_save_raw(image, fname.c_str(), type_name);
+  TEST ("non-raw write image to disk", tst, true);
+  if (!tst) return; // fatal error
+  vil_image image3 = vil_load_raw(fname.c_str());
+  TEST ("non-raw load image", !image3, false);
+  if (!image3) return; // fatal error
+
+  
+  tst = vil_save_raw(image, fname.c_str(), type_name);
+  TEST ("raw write image to disk", tst, true);
+  if (!tst) return; // fatal error
+
+#if LEAVE_IMAGES_BEHIND
+  vpl_chmod(fname.c_str(), 0666); // -rw-rw-rw-
+#endif
+
+  // STEP 2) Read the image that was just saved to file
+  vil_image image2 = vil_load_raw(fname.c_str());
+  TEST ("raw load image", !image2, false);
+  if (!image2) return; // fatal error
+
+  // make sure saved image has the same pixels as the original image
+  tst = !(vcl_strcmp(type_name,image2.file_format()));
+  TEST ("compare image file formats", tst, true);
+  if (!tst)
+    vcl_cout << "read back image type is " << image2.file_format()
+             << " instead of written " << type_name << vcl_endl << vcl_flush;
+  else
+    test_image_equal(type_name, image, image2, exact);
+
+#if !LEAVE_IMAGES_BEHIND
+  vpl_unlink(fname.c_str());
+#endif
+}
+
 
 void vil_test_image_type(char const* type_name, // type for image to read and write
                          vil_image const & image, // test image to save and restore
@@ -182,6 +238,8 @@ void vil_test_image_type(char const* type_name, // type for image to read and wr
   vpl_unlink(fname.c_str());
 #endif
 }
+
+
 
 
 // create a 1 bit test image
@@ -296,6 +354,12 @@ void test_save_load_image() {
   vil_test_image_type("pnm", image24);
 #endif
 
+  // bmp
+#if 1
+  vil_test_image_type_raw("bmp", image8);
+  vil_test_image_type_raw("bmp", image24);
+#endif
+
   // lily (Leuven)
 #if 1
   //vil_test_image_type("lily", image8);
@@ -343,11 +407,6 @@ void test_save_load_image() {
   vil_test_image_type("iris", image24);
 #endif
 
-  // bmp
-#if 1
-  vil_test_image_type("bmp", image8);
-  vil_test_image_type("bmp", image24);
-#endif
 
   // mit
 #if 1

@@ -76,7 +76,7 @@ public:
 
   char const* file_format() const;
   bool get_property(char const *tag, void *prop = 0) const;
-  bool set_property(char const *tag, void const *prop = 0) const;
+  bool set_property(char const *tag, void *prop = 0) const;
 
   vil_image get_plane(int ) const;
 };
