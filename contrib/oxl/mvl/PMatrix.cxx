@@ -223,7 +223,18 @@ static bool ok(vcl_istream& f) { return f.good() || f.eof(); }
 // </pre>
 bool PMatrix::read_ascii(vcl_istream& f)
 {
-  f >> (vnl_matrix<double>&)this->p_matrix_;
+  vnl_matrix<double> hold(3,4);
+
+  f >> hold;
+  
+  int i,j;
+  for(i=0;i<3;i++){
+      for(j=0;j<4;j++){
+          p_matrix_(i,j) = hold(i,j);
+      }
+  }
+
+
   clear_svd();
 
   if (!ok(f)) {
@@ -487,6 +498,19 @@ PMatrix::set (const double p_matrix [3][4])
   for (int row_index = 0; row_index < 3; row_index++)
     for (int col_index = 0; col_index < 4; col_index++)
       p_matrix_. put (row_index, col_index, p_matrix [row_index][col_index]);
+  clear_svd();
+}
+
+
+//: Set the 3x4 projective matrix with the matrix in the array, p_matrix
+void
+PMatrix::set (const vnl_matrix<double>& p_matrix)
+{
+  assert(p_matrix.rows()==3 && p_matrix.cols()==4);
+
+  for (int row_index = 0; row_index < 3; row_index++)
+    for (int col_index = 0; col_index < 4; col_index++)
+      p_matrix_. put (row_index, col_index, p_matrix (row_index,col_index));
   clear_svd();
 }
 
