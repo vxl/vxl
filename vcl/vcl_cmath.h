@@ -38,7 +38,7 @@
 #include <vcl/vcl_compiler.h>
 
 // 1. include system header
-#if defined(VCL_GCC_27) || defined(VCL_SGI_CC_720)
+#if defined(VCL_GCC_27) || defined(VCL_SGI_CC_720) || defined(VCL_VC60)
 # include <math.h>
 #else // iso
 # include <vcl/iso/vcl_cmath.h>
@@ -68,6 +68,8 @@
 inline float       vcl_abs (float  x) { return (x >= 0.0f) ? x : -x; }
 inline double      vcl_abs (double x) { return fabs (x); }
 inline long double vcl_abs (long double x) { return fabs (x); }
+# elif defined(VCL_VC60)
+#  define vcl_abs abs
 # else
 #  define vcl_abs std::abs
 # endif

@@ -13,7 +13,7 @@
 #include <vcl/vcl_compiler.h>
 
 // Include system stdlib.h
-#if defined(VCL_GCC_27) || defined(VCL_SGI_CC_720)
+#if defined(VCL_GCC_27) || defined(VCL_SGI_CC_720) || defined(VCL_VC60)
 # include <stdlib.h>
 # define vcl_exit    exit
 # define vcl_abort   abort

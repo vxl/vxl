@@ -12,6 +12,11 @@
 # include <vector.h>
 # define vcl_vector vector
 
+// -------------------- sunpro 5.0
+#elif defined(VCL_SUNPRO_CC_50)
+# include <vcl/sunpro/vcl_vector.h>
+# define vcl_vector vcl_vector_sunpro_50
+
 // -------------------- iso
 #else
 # include <vector>

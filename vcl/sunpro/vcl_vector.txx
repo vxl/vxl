@@ -11,6 +11,7 @@ template Fwd std::copy_backward(Inp, Inp, Fwd)
 // --- Vector ---
 #define VCL_VECTOR_INSTANTIATE(T) \
 template class std::vector<T, std::allocator<T > >; \
+template struct vcl_vector_sunpro_50<T >; \
 /* member templates */ \
 template void std::vector<T, std::allocator<T > >::__insert_aux(T *, T const &); \
 /* helper functions */ \

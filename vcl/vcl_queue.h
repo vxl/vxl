@@ -1,12 +1,13 @@
-#ifndef queue_h_
-#define queue_h_
+#ifndef vcl_queue_h_
+#define vcl_queue_h_
 
 #include <vcl/vcl_compiler.h>
 
 #if !VCL_USE_NATIVE_STL
 # include <vcl/emulation/vcl_queue.h>
 
-#elif defined(VCL_GCC)
+#elif defined(VCL_GCC_which_one_question_mark)
+// egcs and 2.95 have <queue> -- fsm
 # include <stack.h>
 # define vcl_queue queue
 
@@ -15,6 +16,6 @@
 # define vcl_queue std::queue
 #endif
 
-#define VCL_QUEUE_INSTANTIATE extern "you must #include vcl/vcl_queue.txx"
+#define VCL_QUEUE_INSTANTIATE(T) extern "you must #include vcl/vcl_queue.txx"
 
 #endif
