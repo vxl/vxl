@@ -244,7 +244,7 @@ Design goals:
 Someone should put some examples in here!
 
 @comment ------------------------------------------------------------------
-@node    mbl, vpdfl, eg, Top
+@node    mbl, mil, eg, Top
 @comment node-name, next, previous,     up
 @chapter mbl: Manchester basics library.
 @cindex mbl
@@ -252,7 +252,13 @@ Someone should put some examples in here!
 
 @include chapter_mbl.texi
 
+@comment ------------------------------------------------------------------
+@node    mil, vpdfl, mbl, Top
+@comment node-name, next, previous,     up
+@chapter mil: Manchester Image library.
+@cindex mil
 
+@include chapter_mil.texi
 
 @comment ------------------------------------------------------------------
 @node    vpdfl, Conclusion, mbl, Top
@@ -283,6 +289,7 @@ The directory structure of mul is below
           /vxl
           /mul
               /mbl
+              /mil
               /vpdfl
 @end example
 
