@@ -16,8 +16,9 @@
 //   04-OCT-2002 K.Y.McGaul - Added doxygen style documentation.
 //                          - Check for impossible events in new init function.
 //                          - key is now always lower case.
-//    22-OCT-2002 A.Fitzibbon & K.Y.McGaul - Added constructor for ascii_char
-//                           event conditions.
+//   22-OCT-2002 A.Fitzibbon & K.Y.McGaul - Added constructor for ascii_char
+//                          event conditions.
+//   05-DEC-2002 K.Y.McGaul - Added Awf's comments from mailing list.
 // \verbatim
 
 #include <vcl_string.h>
@@ -31,7 +32,53 @@ class vgui_event;
 //  This makes it easy to change the key/mouse combination that causes
 //  one's tableau to do something.
 //
-//  The key is now always lower case to save confusion.  
+//  The key is now always lower case. ascii_char contains the 
+//  actual character returned by the keyboard.  To contruct a 
+//  vgui_event_condtion to detect a SHIFT+b event you can do either:
+// 
+// \verbatim
+//  1)   vgui_event_condition my_ec(vgui_key('b'), vgui_SHIFT);
+//
+//  2)   vgui_event_condition my_ec(vgui_key('B');
+// \endverbatim
+//
+//  The point about vgui_event_condition is that it should not be 
+//  constructed just before you check the event, but placed in a
+//  standard place in the object to 
+//
+//  (a) Make it easy to see the list of handled events
+//
+//  (b) Make it easy to change the keys/mouse gestures to which 
+//      an action is bound.  For example, if my 3D viewer tableau 
+//      uses left mouse to rotate in 3D, and I wish to put it into
+//      a 2D zoomer tableau which uses left mouse to zoom, I need
+//      change one of them. If you don't use vgui_event_condition,
+//      you need to edit the code, which means other people can't
+//      use left mouse.
+//
+//  Concrete example:  my_tableau spins a 3D model
+//  
+// \verbatim
+//  struct my_tableau {
+//    void handle(vgui_event);
+//  
+//    vgui_event_condition c_rotate;     // event which initiates rotating
+//    vgui_event_condition c_translate;
+//    vgui_event_condition c_scale;
+//    vgui_event_condition c_zoom;
+//  };
+// \endverbatim
+//  
+//  Note that the event conditions are stored in the object, not hard-coded
+//  in the handle routine.  This means they can be changed by client code 
+//  without modifying my_tableau.cxx
+//  
+//  One might think it would be better to have all tableaux to use unique 
+//  event codes, and maybe it is for the core tableaux, but we can't have
+//  someone use ctrl+shift+3rd button because it's the only one free, when
+//  for their application (movie player shuttle action?) it may be the
+//  application's most natural action, and should be on left-mouse.
+
 struct vgui_event_condition
 {
   enum event_types { null_event, mouse_event, ascii_char_event, key_event };
