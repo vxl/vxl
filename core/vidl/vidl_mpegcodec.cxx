@@ -190,7 +190,7 @@ vidl_mpegcodec::set_grey_scale(bool grey)
 //like height, width, number of frames, bits per pixel, etc. however,
 //i don't have the time right now to write such a header. hopefully it
 //will be done someday.
-vidl_codec_sptr vidl_mpegcodec::load(const char* fname, char mode = 'r' )
+vidl_codec_sptr vidl_mpegcodec::load(const char* fname, char mode)
 {
   vcl_string filename(fname);
 
@@ -305,7 +305,7 @@ vidl_mpegcodec::set_pid(vcl_string pid)
 {
   decoder_->_demux_pid = vcl_strtol(pid.c_str(),0,16);
 }
-
+/*
 vil_image * 
 vidl_mpegcodec::get_image(int frame_position, 
 		      int x0, 
@@ -315,7 +315,8 @@ vidl_mpegcodec::get_image(int frame_position,
 {
   vil_image * frame = 0;
 
-  unsigned char ib[width * height * this->get_bytes_pixel()];
+  int indy = width * height * this->get_bytes_pixel();
+  unsigned char ib[indy];
   this->get_section(frame_position,(void*)ib,x0,y0,width,height);
   
   if (decoder_->get_format() == vidl_mpegcodec_data::GREY)
@@ -332,7 +333,7 @@ vidl_mpegcodec::get_image(int frame_position,
     }
   return frame;
 }
-
+*/
 //called by load method
 //assumed the helper is already instantiated
 bool 

@@ -128,6 +128,7 @@ class frame_buffer
 	  //use the memory for the new frame
 	  (*_buffers)[i] = buf;
 	}
+		return true;
     }
 
  private:

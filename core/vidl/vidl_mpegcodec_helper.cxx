@@ -2,7 +2,6 @@
 
 #include "vidl_mpegcodec_helper.h"
 #include <errno.h>
-#include <getopt.h>
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_algorithm.h>
@@ -360,7 +359,9 @@ vidl_mpegcodec_helper::demux (uint8_t * buf, uint8_t * end, int flags)
 bool
 vidl_mpegcodec_helper::decode_ps(int reads)
 {
-  return demux (_buffer, _buffer+reads, 0);
+  int dem = demux (_buffer, _buffer+reads, 0);
+
+  return (dem != 0);
 }
 
 bool

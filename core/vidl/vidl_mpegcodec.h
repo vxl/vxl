@@ -77,12 +77,6 @@ public:
   bool init();
 
   //-------------------------------------------------
-  //used for testing
-   vil_image * get_image(int frame_position, 
-			int x0, 
-			int y0, 
-			int xs, 
-			int ys);
 
 private:
 
