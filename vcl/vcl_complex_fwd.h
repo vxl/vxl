@@ -15,31 +15,40 @@
 // Note: the standard complex class is just std::complex<T>, so
 // on an ISO compiler, no forward declaration header is needed.
 
-#include "vcl_compiler.h"
+// We can't do this. The standard explicitly forbids forward
+// declaration of std:: stuff, and std::complex, in particular, is a
+// thorny issue because many compilers have internal magic to
+// implement it. -- Amitha Perera
 
-// ---------- emulation
-#if !VCL_USE_NATIVE_COMPLEX
-# include "emulation/vcl_complex_fwd.h"
+#include "vcl_complex.h"
 
-// ---------- Visual Studio 6
-#elif defined(VCL_VC60)
-# include "win32-vc60/vcl_complex_fwd.h"
+#if 0
+  #include "vcl_compiler.h"
 
-// ---------- SunPro compiler
-#elif defined(VCL_SUNPRO_CC)
-# include "sunpro/vcl_complex_fwd.h"
+  // ---------- emulation
+  #if !VCL_USE_NATIVE_COMPLEX
+  # include "emulation/vcl_complex_fwd.h"
 
-#elif defined(VCL_SGI_CC)
-# include "iso/vcl_complex.h"
+  // ---------- Visual Studio 6
+  #elif defined(VCL_VC60)
+  # include "win32-vc60/vcl_complex_fwd.h"
 
-// ---------- ISO
-#else
-namespace std {
-  template <typename T> class complex;
-}
-# ifndef vcl_complex
-# define vcl_complex std::complex
-# endif
-#endif
+  // ---------- SunPro compiler
+  #elif defined(VCL_SUNPRO_CC)
+  # include "sunpro/vcl_complex_fwd.h"
+
+  #elif defined(VCL_SGI_CC)
+  # include "iso/vcl_complex.h"
+
+  // ---------- ISO
+  #else
+  namespace std {
+    template <typename T> class complex;
+  }
+  # ifndef vcl_complex
+  # define vcl_complex std::complex
+  # endif
+  #endif
+#endif // 0
 
 #endif // vcl_complex_fwd_h_
