@@ -209,13 +209,13 @@ class vgl_conic
   //: Returns the polar line of the given point, w.r.t. this conic.
   //  For a non-degenerate conic, the polar line of a point outside of the conic
   //  is the connection line of the two points on the conic that form the conic
-  //  "contour" as seem from that point, i.e., the touch points of the two
+  //  "contour" as seen from that point, i.e., the touch points of the two
   //  tangents to the conic going through the given point.
   //
   //  For a point on the conic, it is just the tangent in that point.
   //
   //  And for a point inside the conic, it is the set of all polar points of
-  //  the lines through the given point.
+  //  the lines through the given point. This set happens to be a straight line.
   vgl_homg_line_2d<T> polar_line(vgl_homg_point_2d<T> const& p) const;
 
   //: Returns the polar point of the given line, w.r.t. this conic.
