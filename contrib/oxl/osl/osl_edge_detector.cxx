@@ -371,7 +371,7 @@ void osl_edge_detector::Thicken_threshold(int x, int y) {
 // Try to do the same process using Delauney triangulation (CAR, March 1995), in
 // an attempt to image the efficiency from a memory management point of view.
 // However, the triangulation becomes so complex that the computation time
-// becomes incredibably long. Therefore putting up with the Chamfer method for
+// becomes incredibly long. Therefore putting up with the Chamfer method for
 // the moment.
 //
 // The histogram calculation was added to support
