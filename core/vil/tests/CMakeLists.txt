@@ -33,7 +33,7 @@ TARGET_LINK_LIBRARIES( vil2_test_driver vil2_algo vil2 vpl vul testlib vcl )
 
 
 ADD_TEST( vil2_test_vil1              vil2_test_driver test_vil1 ${allvxl_SOURCE_DIR}/vxl/vil/tests/file_read_data)
-ADD_TEST( vil2_test_convert                 vil2_test_driver test_convert )
+ADD_TEST( vil2_test_convert                 vil2_test_driver test_convert ${allvxl_SOURCE_DIR}/vxl/vil/tests/file_read_data)
 ADD_TEST( vil2_test_pixel_format            vil2_test_driver test_pixel_format )
 ADD_TEST( vil2_test_file_format_read  vil2_test_driver test_file_format_read ${allvxl_SOURCE_DIR}/vxl/vil/tests/file_read_data )
 ADD_TEST( vil2_test_save_load_image   vil2_test_driver test_save_load_image )
