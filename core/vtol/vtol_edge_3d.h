@@ -102,8 +102,8 @@ public:
   //---------------------------------------------------------------------------
   virtual vtol_topology_object_3d_type topology_type(void) const;
 
-  //  inline const vsol_curve_3d *get_curve(void) const { return _curve;}
-  inline vsol_curve_3d *get_curve(void) { return _curve.ptr();}
+  inline const vsol_curve_3d *get_curve(void) const { return _curve;}
+  inline vsol_curve_3d *get_curve(void) { return _curve;}
   void set_curve(vsol_curve_3d_ref newcurve);
   void set_curve(vsol_curve_3d_ref newcurve,
                  vsol_curve_3d_ref &oldcurve);
@@ -190,9 +190,8 @@ public:
  
   virtual void compute_bounding_box(void); // A local implementation
 
-  void print (ostream &strm=cout);
-  void describe(ostream &strm=cout,
-                int blanking=0);
+  void print (ostream &strm=cout) const;
+  void describe(ostream &strm=cout, int blanking=0) const;
   
 
   bool remove(vtol_zero_chain_3d *zero_chain,

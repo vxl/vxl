@@ -526,8 +526,7 @@ bool vtol_edge_3d::operator==(const vtol_edge_3d &e) const
   if(_curve!=0&&e._curve==0||_curve==0&&e._curve!=0)
     return false;
   if(_curve!=0&&e._curve!=0)
-    if(*((vsol_spatial_object_3d *)_curve.ptr())
-       !=*((vsol_spatial_object_3d *)(e._curve.ptr())))
+    if(*((vsol_spatial_object_3d*)_curve)!=*((vsol_spatial_object_3d*)(e._curve)))
       return false;
   if((_v1==e._v1)&&(_v2==e._v2))    // pointer equivalence.
     {
@@ -918,7 +917,7 @@ void vtol_edge_3d::compute_bounding_box(void)
 // This method outputs all edge information to the ostream, strm.  It
 // indents various levels of output by the number given in blanking.
 void vtol_edge_3d::describe(ostream &strm,
-                            int blanking)
+                            int blanking) const
 {
   //  BLANK_DESCRIBE;
   print(strm);
@@ -940,7 +939,7 @@ void vtol_edge_3d::describe(ostream &strm,
 //:
 // print(ostream& strm) --
 // This method outputs a brief vtol_edge_3d info with vtol_edge_3d object address.
-void vtol_edge_3d::print(ostream &strm)
+void vtol_edge_3d::print(ostream &strm) const
 {
    strm<<"<vtol_edge_3d  "<<"  "<<(void *)this <<"> with id "<<get_id()<<endl;
 }

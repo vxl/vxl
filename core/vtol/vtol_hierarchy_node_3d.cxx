@@ -30,12 +30,12 @@
 //
 // ---------------------------------------------------------------------------
 // <end copyright notice>
-#include <vtol/vtol_hierarchy_node_2d.h>
+#include <vtol/vtol_hierarchy_node_3d.h>
 #include <vcl/vcl_algorithm.h>
 
 //:
 // constructor
-vtol_hierarchy_node_2d::vtol_hierarchy_node_2d()
+vtol_hierarchy_node_3d::vtol_hierarchy_node_3d()
 {
 
 }
@@ -43,7 +43,7 @@ vtol_hierarchy_node_2d::vtol_hierarchy_node_2d()
 //:
 // destructor
 
-vtol_hierarchy_node_2d::~vtol_hierarchy_node_2d()
+vtol_hierarchy_node_3d::~vtol_hierarchy_node_3d()
 {
 
 }
@@ -57,7 +57,7 @@ vtol_hierarchy_node_2d::~vtol_hierarchy_node_2d()
 //:
 // set inferiors
 
-void vtol_hierarchy_node_2d::set_hierarchy_inferiors(const hierarchy_node_list_2d& inferiors)
+void vtol_hierarchy_node_3d::set_hierarchy_inferiors(const hierarchy_node_list_3d& inferiors)
 {
   _hierarchy_inferiors=inferiors;
 
@@ -66,7 +66,7 @@ void vtol_hierarchy_node_2d::set_hierarchy_inferiors(const hierarchy_node_list_2
 //:
 // set superiors
 
-void vtol_hierarchy_node_2d::set_hierarchy_superiors(const hierarchy_node_list_2d& superiors)
+void vtol_hierarchy_node_3d::set_hierarchy_superiors(const hierarchy_node_list_3d& superiors)
 {
   _hierarchy_superiors=superiors;
 }
@@ -74,9 +74,9 @@ void vtol_hierarchy_node_2d::set_hierarchy_superiors(const hierarchy_node_list_2
 //:
 // get inferiors
 
-hierarchy_node_list_2d* vtol_hierarchy_node_2d::hierarchy_inferiors()
+hierarchy_node_list_3d* vtol_hierarchy_node_3d::hierarchy_inferiors()
 {
-  hierarchy_node_list_2d *new_list = new hierarchy_node_list_2d();
+  hierarchy_node_list_3d *new_list = new hierarchy_node_list_3d();
   for(int i=0;i<_hierarchy_inferiors.size();i++)
     new_list->push_back(_hierarchy_inferiors[i]);
   return new_list;
@@ -86,9 +86,9 @@ hierarchy_node_list_2d* vtol_hierarchy_node_2d::hierarchy_inferiors()
 //:
 // get superiors
 
-hierarchy_node_list_2d* vtol_hierarchy_node_2d::hierarchy_superiors()
+hierarchy_node_list_3d* vtol_hierarchy_node_3d::hierarchy_superiors()
 {
-  hierarchy_node_list_2d *new_list = new hierarchy_node_list_2d();
+  hierarchy_node_list_3d *new_list = new hierarchy_node_list_3d();
   for(int i=0;i<_hierarchy_superiors.size();i++)
     {
       new_list->push_back(_hierarchy_superiors[i]);
@@ -104,7 +104,7 @@ hierarchy_node_list_2d* vtol_hierarchy_node_2d::hierarchy_superiors()
 //:
 // add inferior
 
-bool vtol_hierarchy_node_2d::add_hierarchy_inferior(vtol_hierarchy_node_2d* link)
+bool vtol_hierarchy_node_3d::add_hierarchy_inferior(vtol_hierarchy_node_3d* link)
 {
   if (link  == NULL)
     {
@@ -124,11 +124,11 @@ bool vtol_hierarchy_node_2d::add_hierarchy_inferior(vtol_hierarchy_node_2d* link
 //:
 // remove inferior
 
-bool vtol_hierarchy_node_2d::remove_hierarchy_inferior(vtol_hierarchy_node_2d*  link)
+bool vtol_hierarchy_node_3d::remove_hierarchy_inferior(vtol_hierarchy_node_3d*  link)
 {
   if (link  == NULL) return false;
 
-  hierarchy_node_list_2d::iterator i =
+  hierarchy_node_list_3d::iterator i =
     vcl_find(_hierarchy_inferiors.begin(),_hierarchy_inferiors.end(),link);
   if (i != _hierarchy_inferiors.end()) 
     {
@@ -145,7 +145,7 @@ bool vtol_hierarchy_node_2d::remove_hierarchy_inferior(vtol_hierarchy_node_2d*  
 //:
 // add superior
 
-bool vtol_hierarchy_node_2d::add_hierarchy_superior(vtol_hierarchy_node_2d* link)
+bool vtol_hierarchy_node_3d::add_hierarchy_superior(vtol_hierarchy_node_3d* link)
 {
   if (link  == NULL)
     {
@@ -155,7 +155,7 @@ bool vtol_hierarchy_node_2d::add_hierarchy_superior(vtol_hierarchy_node_2d* link
 
 
   
-  hierarchy_node_list_2d::iterator i =
+  hierarchy_node_list_3d::iterator i =
     vcl_find(_hierarchy_superiors.begin(),_hierarchy_superiors.end(),link);
   if (i != _hierarchy_superiors.end())
     {
@@ -170,13 +170,13 @@ bool vtol_hierarchy_node_2d::add_hierarchy_superior(vtol_hierarchy_node_2d* link
 //:
 // remove superior
 
-bool vtol_hierarchy_node_2d::remove_hierarchy_superior(vtol_hierarchy_node_2d* link)
+bool vtol_hierarchy_node_3d::remove_hierarchy_superior(vtol_hierarchy_node_3d* link)
 {
   if (link  == NULL) return false;
 
 
   
-  hierarchy_node_list_2d::iterator i =
+  hierarchy_node_list_3d::iterator i =
     vcl_find(_hierarchy_superiors.begin(),_hierarchy_superiors.end(),link);
   if (i != _hierarchy_superiors.end())
     {
@@ -191,7 +191,7 @@ bool vtol_hierarchy_node_2d::remove_hierarchy_superior(vtol_hierarchy_node_2d* l
 //:
 // remover inferior one way
 
-bool vtol_hierarchy_node_2d::add_hierarchy_inferior_oneway(vtol_hierarchy_node_2d* link)
+bool vtol_hierarchy_node_3d::add_hierarchy_inferior_oneway(vtol_hierarchy_node_3d* link)
 {
   if (link  == NULL)
     {
@@ -200,7 +200,7 @@ bool vtol_hierarchy_node_2d::add_hierarchy_inferior_oneway(vtol_hierarchy_node_2
     }
   
 
-  hierarchy_node_list_2d::iterator i =
+  hierarchy_node_list_3d::iterator i =
   vcl_find(_hierarchy_inferiors.begin(),_hierarchy_inferiors.end(),link);
    if (i == _hierarchy_inferiors.end()) 
      {
@@ -213,7 +213,7 @@ bool vtol_hierarchy_node_2d::add_hierarchy_inferior_oneway(vtol_hierarchy_node_2
 //:
 // remove superior one way
 
-bool vtol_hierarchy_node_2d::add_hierarchy_superior_oneway(vtol_hierarchy_node_2d* link)
+bool vtol_hierarchy_node_3d::add_hierarchy_superior_oneway(vtol_hierarchy_node_3d* link)
 {
   if (link  == NULL)
     {
@@ -222,7 +222,7 @@ bool vtol_hierarchy_node_2d::add_hierarchy_superior_oneway(vtol_hierarchy_node_2
     }
 
 
-  hierarchy_node_list_2d::iterator i =
+  hierarchy_node_list_3d::iterator i =
   vcl_find(_hierarchy_superiors.begin(),_hierarchy_superiors.end(),link);
    if (i == _hierarchy_superiors.end())
      {

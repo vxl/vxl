@@ -202,16 +202,16 @@ bool vtol_zero_chain_3d::operator==(const vsol_spatial_object_3d& obj) const
 //:
 // print the object 
 
-void vtol_zero_chain_3d::print(ostream& strm)
+void vtol_zero_chain_3d::print(ostream& strm) const
 {
   strm << "<vtol_zero_chain_3d " << _inferiors.size() << " " << (void *)this << ">" << endl;
 }
 
-void vtol_zero_chain_3d::describe(ostream& strm, int blanking)
+void vtol_zero_chain_3d::describe(ostream& strm, int blanking) const
 {
   print(strm);
-   describe_inferiors(strm, blanking);
-   describe_superiors(strm, blanking);
+  ((vtol_zero_chain_3d*)this)->describe_inferiors(strm, blanking);
+  ((vtol_zero_chain_3d*)this)->describe_superiors(strm, blanking);
 }
 
 

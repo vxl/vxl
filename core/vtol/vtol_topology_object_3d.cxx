@@ -199,7 +199,7 @@ void vtol_topology_object_3d::edges(edge_list_3d& edges)
 
 //:
 // print the object
-void vtol_topology_object_3d::print (ostream& strm)
+void vtol_topology_object_3d::print (ostream& strm) const
 {
   strm << "<vtol_topology_object_3d " << (void *)this << ">" << endl;
 }

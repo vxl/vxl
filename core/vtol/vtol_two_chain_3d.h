@@ -127,9 +127,9 @@ public:
   bool operator==(const vsol_spatial_object_3d& ) const;
   bool operator==(const vtol_two_chain_3d&) const;
 
-  void print (ostream& strm =cout);
+  void print (ostream& strm =cout) const;
   void describe_directions(ostream& strm = cout, int blanking = 0);
-  void describe(ostream& strm = cout, int blanking = 0);
+  void describe(ostream& strm = cout, int blanking = 0) const;
 
   bool remove( vtol_face_3d * vtol_face_3d,
                vcl_vector< vtol_topology_object_3d * > & changes,

@@ -34,13 +34,38 @@ class vtol_zero_chain_2d
   : public vtol_topology_object_2d
 {
 public:
+  //***************************************************************************
+  // Initialization
+  //***************************************************************************
+  
+  //---------------------------------------------------------------------------
+  //: Default constructor. Empty zero-chain
+  //---------------------------------------------------------------------------
+  explicit vtol_zero_chain_2d(void);
 
-  //: \brief  Constructors and Destructors...
-  vtol_zero_chain_2d();
-  vtol_zero_chain_2d(vtol_vertex_2d *v1, vtol_vertex_2d *v2);    // special for two vertex edge.
-  vtol_zero_chain_2d(vcl_vector<vtol_vertex_2d*>&); // special for two vertex edge.
-  vtol_zero_chain_2d(vtol_zero_chain_2d const&);   
-  ~vtol_zero_chain_2d();
+  //---------------------------------------------------------------------------
+  //: Constructor from two vertices (to make an edge creation easier)
+  //: REQUIRE: v1.ptr()!=0 and v2.ptr()!=0 and v1.ptr()!=v2.ptr()
+  //---------------------------------------------------------------------------
+  explicit vtol_zero_chain_2d(vtol_vertex_2d &v1,
+                              vtol_vertex_2d &v2);
+  
+  //---------------------------------------------------------------------------
+  //: Constructor from an array of vertices
+  //: REQUIRE: new_vertices.size()>0
+  //---------------------------------------------------------------------------
+  explicit
+  vtol_zero_chain_2d(const vcl_vector<vtol_vertex_2d_ref> &new_vertices);
+
+  //---------------------------------------------------------------------------
+  //: Copy constructor. Copy the vertices and the links
+  //---------------------------------------------------------------------------
+  vtol_zero_chain_2d(const vtol_zero_chain_2d &other);
+
+  //---------------------------------------------------------------------------
+  //: Destructor
+  //---------------------------------------------------------------------------
+  virtual ~vtol_zero_chain_2d();
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
@@ -48,53 +73,73 @@ public:
   //---------------------------------------------------------------------------
   virtual vsol_spatial_object_2d_ref clone(void) const;
 
-  //: \brief  Easy access methods
-
   //---------------------------------------------------------------------------
   //: Return the topology type
   //---------------------------------------------------------------------------
   virtual vtol_topology_object_2d_type topology_type(void) const;
 
-  inline vtol_vertex_2d* v0() { if (_inferiors.size() > 0)
-                             return (vtol_vertex_2d *)_inferiors[0];
-                             else return (vtol_vertex_2d *)0;
-                         }
+  //---------------------------------------------------------------------------
+  //: Return the first vertex of `this'. If it does not exist, return 0
+  //---------------------------------------------------------------------------
+  virtual vtol_vertex_2d *v0(void) const;
 
-  vtol_zero_chain_2d * cast_to_zero_chain_2d() { return this; }
-  void inlink_delete();
-  int length() const { return _inferiors.size(); }
-
-  vcl_vector<vtol_vertex_2d*>* vertices();
-  vcl_vector<vtol_zero_chain_2d*>* zero_chains();
-  vcl_vector<vtol_edge_2d*>* edges();
-  vcl_vector<vtol_one_chain_2d*>* one_chains();
-  vcl_vector<vtol_face_2d*>* faces();
-  vcl_vector<vtol_two_chain_2d*>* two_chains();
-  vcl_vector<vtol_block_2d*>* blocks();
-
-  vtol_zero_chain_2d * copy();
-  vtol_topology_object_2d * shallow_copy_with_no_links ( void );
-  virtual vsol_spatial_object_2d * spatial_copy() { return this->copy(); }
-
-  inline bool add_vertex(vtol_vertex_2d *v) { this->touch(); return link_inferior(v);}
-
-  inline bool remove_vertex(vtol_vertex_2d *v){this->touch(); return unlink_inferior(v);}
-
+  //***************************************************************************
+  // Replaces dynamic_cast<T>
+  //***************************************************************************
   
-  void print (ostream& strm =cout);
-  void describe (ostream& strm =cout, int blanking = 0);
+  //---------------------------------------------------------------------------
+  //: Return `this' if `this' is a zero_chain, 0 otherwise
+  //---------------------------------------------------------------------------
+  virtual const vtol_zero_chain_2d *cast_to_zero_chain(void) const;
+
+  //---------------------------------------------------------------------------
+  //: Return `this' if `this' is a zero_chain, 0 otherwise
+  //---------------------------------------------------------------------------
+  virtual vtol_zero_chain_2d *cast_to_zero_chain(void);
+
+  //***************************************************************************
+  // Status report
+  //***************************************************************************
+
+  //---------------------------------------------------------------------------
+  //: Is `inferior' type valid for `this' ?
+  //---------------------------------------------------------------------------
+  virtual bool
+  valid_inferior_type(const vtol_topology_object_2d &inferior) const;
+
+  //---------------------------------------------------------------------------
+  //: Is `superior' type valid for `this' ?
+  //---------------------------------------------------------------------------
+  virtual bool
+  valid_superior_type(const vtol_topology_object_2d &superior) const;
+
+  //---------------------------------------------------------------------------
+  //: Return the length of the zero-chain
+  //---------------------------------------------------------------------------
+  virtual int length(void) const;
+
+  //---------------------------------------------------------------------------
+  //: Is `this' equal to `other' ?
+  //---------------------------------------------------------------------------
+  virtual bool operator==(const vtol_zero_chain_2d &other) const;
+  
+  virtual void print(ostream &strm=cout) const;
+  virtual void describe(ostream &strm=cout,
+                        int blanking=0) const;
+
+  //  bool operator==(const vsol_spatial_object_2d& ) const;
+
+  // : Warning - should not be used by clients
+  
+  virtual vcl_vector<vtol_vertex_2d*> *compute_vertices(void);
+  virtual vcl_vector<vtol_edge_2d*> *compute_edges(void);
+  virtual vcl_vector<vtol_zero_chain_2d*> *compute_zero_chains(void);
+  virtual vcl_vector<vtol_one_chain_2d*> *compute_one_chains(void);
+  virtual vcl_vector<vtol_face_2d*> *compute_faces(void);
+  virtual vcl_vector<vtol_two_chain_2d*> *compute_two_chains(void);
+  virtual vcl_vector<vtol_block_2d*> *compute_blocks(void);
 
 
-  bool operator==(const vsol_spatial_object_2d& ) const;
-  bool operator== (const vtol_zero_chain_2d&) const;
-
-  bool remove( vtol_vertex_2d * vertex,
-               vcl_vector< vtol_topology_object_2d * > & changes,
-               vcl_vector< vtol_topology_object_2d * > & deleted );
-  void deep_remove( vcl_vector< vtol_topology_object_2d * > & removed );
-
-  virtual bool disconnect( vcl_vector< vtol_topology_object_2d * > & changes,
-                           vcl_vector< vtol_topology_object_2d * > & deleted );
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vtol_zero_chain_2d.
+#endif // #ifndef vtol_zero_chain_2d_H

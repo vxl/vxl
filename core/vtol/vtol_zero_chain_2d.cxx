@@ -1,42 +1,76 @@
-
-//#include <vtol/some_stubs.h>
 #include <vtol/vtol_zero_chain_2d.h>
+
 #include <vtol/vtol_macros_2d.h>
 #include <vtol/vtol_list_functions_2d.h>
 #include <vtol/vtol_edge_2d.h>
 
-vtol_zero_chain_2d::vtol_zero_chain_2d() 
+//***************************************************************************
+// Initialization
+//***************************************************************************
+
+//---------------------------------------------------------------------------
+// Name: vtol_zero_chain_2d
+// Task: Default constructor. Empty zero-chain
+//---------------------------------------------------------------------------
+vtol_zero_chain_2d::vtol_zero_chain_2d(void) 
 {
 }
 
+//---------------------------------------------------------------------------
+// Name: vtol_zero_chain_2d
+// Task: Constructor from two vertices (to make an edge creation easier)
+// Require: v1.ptr()!=0 and v2.ptr()!=0 and v1.ptr()!=v2.ptr()
+//---------------------------------------------------------------------------
+vtol_zero_chain_2d::vtol_zero_chain_2d(vtol_vertex_2d &v1,
+                                       vtol_vertex_2d &v2)
+{
+  // require
+  //  assert(v1.ptr()!=0);
+  //assert(v2.ptr()!=0);
+  assert(&v1!=&v2);
 
-vtol_zero_chain_2d::vtol_zero_chain_2d(vtol_vertex_2d* v1, vtol_vertex_2d* v2)   
- {
- link_inferior(v1); 
- link_inferior(v2); 
+  link_inferior(v1); 
+  link_inferior(v2); 
 }
 
-vtol_zero_chain_2d::vtol_zero_chain_2d(vcl_vector<vtol_vertex_2d*> & newvertices) 
+//---------------------------------------------------------------------------
+// Name: vtol_zero_chain_2d
+// Task: Constructor from an array of vertices
+// Require: new_vertices.size()>0
+//---------------------------------------------------------------------------
+vtol_zero_chain_2d::vtol_zero_chain_2d(const vcl_vector<vtol_vertex_2d_ref> &new_vertices)
 {
-  vcl_vector<vtol_vertex_2d*>::iterator i;
-  for (i=newvertices.begin();i!= newvertices.end();i++ )
-    link_inferior((*i)); 
+  // require
+  assert(new_vertices.size()>0);
+
+  vcl_vector<vtol_vertex_2d_ref>::const_iterator i;
+  for(i=new_vertices.begin();i!=new_vertices.end();i++ )
+    link_inferior(*(*i)); 
 }
 
-
-//:
-// Copy Constructor....does a deep copy.
-vtol_zero_chain_2d::vtol_zero_chain_2d (vtol_zero_chain_2d const& zchain)
+//---------------------------------------------------------------------------
+// Name: vtol_zero_chain_2d
+// Task: Copy constructor. Copy the vertices and the links
+//---------------------------------------------------------------------------
+vtol_zero_chain_2d::vtol_zero_chain_2d(const vtol_zero_chain_2d &other)
 {
-  vtol_zero_chain_2d* zc = (vtol_zero_chain_2d*)(&zchain);
-  topology_list_2d *infs = zc->get_inferiors();
-  vtol_vertex_2d *newvertex;
-  
-  for (int i = 0; i < infs->size() ; i++)
+  vtol_vertex_2d *new_vertex;
+  vcl_vector<vtol_topology_object_2d_ref>::const_iterator i;
+
+  for(i=other.inferiors()->begin();i!=other.inferiors()->end();i++)
     {
-      newvertex = ((*infs)[i])->cast_to_vertex_2d()->copy();
-      link_inferior(newvertex);
+      new_vertex=(vtol_vertex_2d *)((*i)->clone().ptr());
+      link_inferior(*new_vertex);
     }
+}
+
+//---------------------------------------------------------------------------
+// Name: ~vtol_zero_chain_2d
+// Task: Destructor
+//---------------------------------------------------------------------------
+vtol_zero_chain_2d::~vtol_zero_chain_2d()
+{
+  unlink_all_inferiors();
 }
 
 //---------------------------------------------------------------------------
@@ -49,20 +83,6 @@ vsol_spatial_object_2d_ref vtol_zero_chain_2d::clone(void) const
   return new vtol_zero_chain_2d(*this);
 }
 
-//:
-// perfrom a shallow copy 
-
-vtol_topology_object_2d* vtol_zero_chain_2d::shallow_copy_with_no_links ( void )  
-{
-    return new vtol_zero_chain_2d;
-}
-
-//:
-// destructor
-vtol_zero_chain_2d::~vtol_zero_chain_2d() 
-{
-}
-
 //---------------------------------------------------------------------------
 // Name: topology_type
 // Task: Return the topology type
@@ -73,119 +93,168 @@ vtol_zero_chain_2d::topology_type(void) const
   return ZEROCHAIN;
 }
 
+//---------------------------------------------------------------------------
+// Name: v0
+// Task: Return the first vertex of `this'. If it does not exist, return 0
+//---------------------------------------------------------------------------
+vtol_vertex_2d *vtol_zero_chain_2d::v0(void) const
+{
+  vtol_vertex_2d *result;
+  if(numinf()>0)
+    result=(vtol_vertex_2d *)(inferiors()->begin()->ptr());
+  else
+    result=0;
+  return result;
+}
+
+//***************************************************************************
+// Replaces dynamic_cast<T>
+//***************************************************************************
+
+//---------------------------------------------------------------------------
+// Name: cast_to_zero_chain
+// Task: Return `this' if `this' is a zero_chain, 0 otherwise
+//---------------------------------------------------------------------------
+const vtol_zero_chain_2d *
+vtol_zero_chain_2d::cast_to_zero_chain(void) const
+{
+  return this;
+}
+
+//---------------------------------------------------------------------------
+// Name: cast_to_zero_chain
+// Task: Return `this' if `this' is a zero_chain, 0 otherwise
+//---------------------------------------------------------------------------
+vtol_zero_chain_2d *vtol_zero_chain_2d::cast_to_zero_chain(void)
+{
+  return this;
+}
+
+//***************************************************************************
+// Status report
+//***************************************************************************
+
+//---------------------------------------------------------------------------
+// Name: valid_inferior_type
+// Task: Is `inferior' type valid for `this' ?
+//---------------------------------------------------------------------------
+bool
+vtol_zero_chain_2d::valid_inferior_type(const vtol_topology_object_2d &inferior) const
+{
+  return inferior.cast_to_vertex()!=0;
+}
+
+//---------------------------------------------------------------------------
+// Name: valid_superior_type
+// Task: Is `superior' type valid for `this' ?
+//---------------------------------------------------------------------------
+bool
+vtol_zero_chain_2d::valid_superior_type(const vtol_topology_object_2d &superior) const
+{
+  return superior.cast_to_edge()!=0;
+}
+
+//---------------------------------------------------------------------------
+//: Return the length of the zero-chain
+//---------------------------------------------------------------------------
+int vtol_zero_chain_2d::length(void) const
+{
+ return numinf();
+}
+
 //:
 // get list of vertices
-vcl_vector<vtol_vertex_2d*>* vtol_zero_chain_2d::vertices()
+vcl_vector<vtol_vertex_2d*>* vtol_zero_chain_2d::compute_vertices(void)
 {
   COPY_INF_2d(vtol_vertex_2d);
 }
 
 //:
 // get list of zero chains
-vcl_vector<vtol_zero_chain_2d*>* vtol_zero_chain_2d::zero_chains()
+vcl_vector<vtol_zero_chain_2d*>* vtol_zero_chain_2d::compute_zero_chains(void)
 {
+ 
   LIST_SELF_2d(vtol_zero_chain_2d);
 }
 
 //: 
 // get list of edges 
-vcl_vector<vtol_edge_2d*>* vtol_zero_chain_2d::edges()
+vcl_vector<vtol_edge_2d*>* vtol_zero_chain_2d::compute_edges(void)
 {
-  SEL_SUP_2d(vtol_edge_2d, edges);
+  SEL_SUP_2d(vtol_edge_2d,compute_edges);
 }
 
 //:
 // get list of one chains
 
-vcl_vector<vtol_one_chain_2d*>* vtol_zero_chain_2d::one_chains() 
+vcl_vector<vtol_one_chain_2d*>* vtol_zero_chain_2d::compute_one_chains(void)
 {
-  SEL_SUP_2d(vtol_one_chain_2d, one_chains);
+  
+  SEL_SUP_2d(vtol_one_chain_2d, compute_one_chains);
 }
 
 //: 
 // get list of faces 
 
-vcl_vector<vtol_face_2d*>* vtol_zero_chain_2d::faces()
+vcl_vector<vtol_face_2d*> *vtol_zero_chain_2d::compute_faces(void)
 {
-  SEL_SUP_2d(vtol_face_2d, faces);
+  
+  SEL_SUP_2d(vtol_face_2d, compute_faces);
 }
 
 //:
 // get list of two chain
 
-vcl_vector<vtol_two_chain_2d*>* vtol_zero_chain_2d::two_chains()
+vcl_vector<vtol_two_chain_2d*>* vtol_zero_chain_2d::compute_two_chains(void)
 {
-  SEL_SUP_2d(vtol_two_chain_2d, two_chains);
+  
+  SEL_SUP_2d(vtol_two_chain_2d, compute_two_chains);
 }
 
 //:
 // get list of blocks 
-vcl_vector<vtol_block_2d*>* vtol_zero_chain_2d::blocks()
+vcl_vector<vtol_block_2d*>* vtol_zero_chain_2d::compute_blocks(void)
 {
-  SEL_SUP_2d(vtol_block_2d, blocks);
-}
-
-
-
-/*******  Utility Methods   *************/
-
-//:
-// copy the zero chain
-
-vtol_zero_chain_2d* vtol_zero_chain_2d::copy()
-{
-  // This is a deep copy of the vtol_zero_chain_2d.
-
-  vtol_zero_chain_2d *newzerochain = new vtol_zero_chain_2d();
-  vtol_vertex_2d *newvertex;
-  
-  for (int i = 0; i < _inferiors.size() ; i++)
-    {
-      newvertex = ((vtol_vertex_2d *)_inferiors[i])->copy();
-      newzerochain->link_inferior(newvertex);
-    }
-  return newzerochain;
+   SEL_SUP_2d(vtol_block_2d, compute_blocks);
 }
 
 
 //:
 // operators
 
-bool vtol_zero_chain_2d::operator== (const vtol_zero_chain_2d & z2) const
+bool vtol_zero_chain_2d::operator==(const vtol_zero_chain_2d &other) const
 {
+  bool result;
   
-  if (this == &z2)
-    return true;
+  const vcl_vector<vtol_topology_object_2d_ref> *inf1=inferiors();
+  const vcl_vector<vtol_topology_object_2d_ref> *inf2=other.inferiors();
+  //vtol_topology_object_2d_ref v1;
+  //vtol_topology_object_2d_ref v2;
+  vcl_vector<vtol_topology_object_2d_ref>::const_iterator i1;
+  vcl_vector<vtol_topology_object_2d_ref>::const_iterator i2;
   
-  const topology_list_2d *inf1 = this->get_inferiors();
-  const topology_list_2d *inf2 = z2.get_inferiors();
-  vtol_topology_object_2d *v1, *v2;
-
+  result=this==&other;
   
-  if (inf1->size() == inf2->size())
+  if(!result)
     {
-      topology_list_2d::const_iterator i1,i2;
-
-      i2=inf2->begin(); 
-      for (i1=inf1->begin(); i1 !=inf1->end(); i1++,i2++)
-	{
-	  v1 = (*i1);
-	  v2 = (*i2);
-	  if (!(*v1 == *v2))
-	    {
-	      return false;
-	    }
-	}
+      result=inf1->size()==inf2->size();
+      if(result)
+        { 
+          for(i1=inf1->begin(),i2=inf2->begin();
+              i1!=inf1->end()&&result;
+              i1++,i2++)
+            {
+              //v1=(*i1);
+              //v2=(*i2);
+              result=*(*i1)==*(*i2);
+            }
+        }
     }
-  else
-    {
-      return false;
-    }
-  return true;
+  return result;
 }
 
 
-
+#if 0
 bool vtol_zero_chain_2d::operator==(const vsol_spatial_object_2d& obj) const
 {
  
@@ -195,158 +264,23 @@ bool vtol_zero_chain_2d::operator==(const vsol_spatial_object_2d& obj) const
   else return false;
  
 }
+#endif
 
 /*******  Print Methods   *************/
 
 //:
 // print the object 
 
-void vtol_zero_chain_2d::print(ostream& strm)
+void vtol_zero_chain_2d::print(ostream &strm) const
 {
   strm << "<vtol_zero_chain_2d " << _inferiors.size() << " " << (void *)this << ">" << endl;
 }
 
-void vtol_zero_chain_2d::describe(ostream& strm, int blanking)
+void vtol_zero_chain_2d::describe(ostream &strm,
+                                  int blanking) const
 {
+  for (int j=0; j<blanking; ++j) strm << ' ';
   print(strm);
-   describe_inferiors(strm, blanking);
-   describe_superiors(strm, blanking);
+  describe_inferiors(strm, blanking);
+  describe_superiors(strm, blanking);
 }
-
-
-//:
-// -- This method removes the object from the topological structure
-//    by unlinking it.  The removal of the object may recursively cause
-//    the removal of some of the object's superiors if these superiors
-//    are no longer valid.  In addition, inferiors of the object are
-//    recursively checked to see if they should be removed.  They
-//    are removed if all their superiors have been removed.
-//
-//    A record of the changes to the topological structure is returned 
-//    through the parameters changes and deleted.  For details on what is
-//    stored in these parameters, see vtol_edge_2d::Disconnect( changes, deleted ).
-//    (RYF 7-16-98)
-//
-bool vtol_zero_chain_2d::disconnect( vcl_vector< vtol_topology_object_2d * > & changes,
-                            vcl_vector< vtol_topology_object_2d * > & deleted )
-{
-  // Unlink this object from its superiors
-  topology_list_2d * tmp = get_superiors();
-  vcl_vector< vtol_edge_2d * > sup;
- 
-  topology_list_2d::iterator i;
-
-  for (i= tmp->begin(); i!=tmp->end(); i++ )
-      sup.push_back( (vtol_edge_2d *) (*i) );
-  
-  vcl_vector< vtol_edge_2d * >::iterator j;
-  
-
-  for (j= sup.begin();j!= sup.end();j++ )
-     ((*j))->remove( this, changes, deleted );
-  
-
-  unlink_all_superiors_twoway( this );
-  deep_remove( deleted );
-
-  return true;
-}
-
-//:
-// -- Removes the vertex from the zero chain.  If the removal of
-//    the vertex invalidates the superior edge, then the zero
-//    chain is recursively removed from the superior edge.
-//    For more details, see vtol_edge_2d::Disconnect( changes, deleted )
-//    (RYF 7-16-98)
-//
-bool vtol_zero_chain_2d::remove( vtol_vertex_2d * vertex,
-                        vcl_vector< vtol_topology_object_2d * > & changes,
-                        vcl_vector< vtol_topology_object_2d * > & deleted )
-{
-  // cout << "   Entering vtol_zero_chain_2d::Remove\n";
-
-  // Check if removing the vertex affects the superior edge.
-  // If so, remove the vtol_zero_chain_2d from the vtol_edge_2d.  This will
-  // destroy the edge.
-  topology_list_2d * tmp = get_superiors();
-  int num_superiors_prior = tmp->size();
-
-  vcl_vector< vtol_edge_2d * > sup;
-
-  topology_list_2d::iterator i;
-  for (i= tmp->begin(); i!=tmp->end(); i++ )
-      sup.push_back( (vtol_edge_2d *) (*i) );
-
-
-
-  vcl_vector< vtol_edge_2d * >::iterator s;
-  for (s= sup.begin(); s!=sup.end();s++ )
-  {
-      if ( ((vtol_edge_2d *) (*s))->is_endpoint( (vtol_vertex_2d *) vertex ) )
-          (*s)->remove( this, changes, deleted );
-  }
-
-
-  // If it had superiors prior to the removal but none now, add to changes
-  //cout << "   num_superiors before = " << num_superiors_prior  << endl
-  //     << "   num_superiors after = " << _Superiors.length() << endl;
-  if (( num_superiors_prior ) && ( !(_superiors.size()) ))
-      changes.push_back( this );
-
-  // cout << "   Exiting vtol_zero_chain_2d::Remove\n";
-
-  if ( _inferiors.size() == 1 )  // last vertex in chain
-  {
-      deleted.push_back( this );
-      unlink_all_superiors_twoway( this );
-      unlink_all_inferiors_twoway( this );
-      return false; 
-  }
-  else
-  {
-      unlink_inferior( vertex );
-      return true;
-  }
-
-}
-
-//:
-// -- For each inferior, this method unlinks the inferior
-//    from this object.  If the inferior now has zero superiors,
-//    the function is called recursively on it.  Finally, this
-//    object is pushed onto the list removed.  (RYF 7-16-98)
-//
-void vtol_zero_chain_2d::deep_remove( vcl_vector< vtol_topology_object_2d * > & removed )
-{
-  // cout << "                  Entering vtol_zero_chain_2d::DeepDeleteInferiors\n";
-
-  // Make a copy of the object's inferiors
-  topology_list_2d * tmp = get_inferiors();
-  vcl_vector< vtol_vertex_2d * > inferiors;
-  
-  topology_list_2d::iterator t;
-
-  for ( t=tmp->begin(); t!=tmp->end();t++ )
-      inferiors.push_back( (vtol_vertex_2d *) (*t) );
-  
-  vcl_vector< vtol_vertex_2d * >::iterator i;
-  for ( i=inferiors.begin(); i!=inferiors.end();i++ )
-  {
-      vtol_vertex_2d * inferior = (*i);
-
-      // Unlink inferior from its superior
-      inferior->unlink_superior( this );  
-
-      // Test if inferior now has 0 superiors.  If so, 
-      // recursively remove its inferiors.
-      /* need to fix 
-      if ( inferior->numsup() == 0 )  
-          inferior->deep_remove( removed );
-      */
-  }
-  removed.push_back( this );
-
-  // cout << "                  Exiting vtol_zero_chain_2d::DeepDeleteInferiors\n";
-}
-
-
