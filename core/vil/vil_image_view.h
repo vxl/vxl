@@ -12,8 +12,6 @@
 #include <vcl_iosfwd.h>
 #include <vcl_string.h>
 #include <vcl_cassert.h>
-#include <vil/vil_byte.h>
-#include <vil/vil_rgb.h>
 #include <vil2/vil2_image_view_base.h>
 #include <vil2/vil2_smart_ptr.h>
 #include <vil2/vil2_memory_chunk.h>

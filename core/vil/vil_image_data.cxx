@@ -11,7 +11,6 @@
 
 #include <vil2/vil2_image_data.h>
 #include <vcl_climits.h> // CHAR_BIT
-#include <vcl_iostream.h>
 #include <vil2/vil2_image_view_base.h>
 
 //--------------------------------------------------------------------------------
@@ -26,7 +25,6 @@ bool vil2_image_data::get_property(char const *, void *) const
 {
   return false;
 }
-
 
 
 //: Return the name of the class;

@@ -7,6 +7,9 @@
 // \author Tim Cootes - Manchester
 
 #include <vil2/vil2_image_view_functions.h>
+#include <vcl_cassert.h>
+#include <vil/vil_byte.h>
+#include <vil/vil_rgb.h>
 
 //: Return a 3-plane view of an RGB image
 // \return an empty view if it can't do the conversion 
@@ -77,8 +80,8 @@ void vil2_value_range(T& min_value, T& max_value,const vil2_image_view<T>& view)
   if (view.size()==0)
   {
     min_value = 0;
-	max_value = 0;
-	return;
+    max_value = 0;
+    return;
   }
 
   min_value = *(view.top_left_ptr());
@@ -96,9 +99,9 @@ void vil2_value_range(T& min_value, T& max_value,const vil2_image_view<T>& view)
     {
       const T* pixel = row;
       for (int x=0;x<nx;++x,pixel+=xstep)
-	  {
-	    if (*pixel<min_value) min_value=*pixel;
-		else if (*pixel>max_value) max_value=*pixel;
+      {
+        if (*pixel<min_value) min_value=*pixel;
+        else if (*pixel>max_value) max_value=*pixel;
       }
     }
   }
@@ -198,7 +201,7 @@ void vil2_print_all(vcl_ostream& os,const vil2_image_view<T>& view)
 #define VIL2_IMAGE_VIEW_FUNCTIONS_INSTANTIATE_FOR_SCALARS(T) \
 template vil2_image_view<T > vil2_view_as_planes(const vil2_image_view<vil_rgb<T > >&); \
 template vil2_image_view<vil_rgb<T > > vil2_view_as_rgb(const vil2_image_view<T >& plane_view); \
-template void vil2_value_range(T& min_value, T& max_value,const vil2_image_view<T>& view); \
+template void vil2_value_range(T& min_value, T& max_value,const vil2_image_view<T >& view); \
 template void vil2_print_value(vcl_ostream& os, const T& value)
 
 // For everything else
