@@ -7,7 +7,7 @@
 #include <vcl_cmath.h> // atan2()
 #include <vbl/vbl_bounding_box.h>
 #include <vnl/algo/vnl_svd.h>
-#include <vnl/algo/vnl_matrix_inverse.h>
+#include <vnl/vnl_inverse.h>
 #include <vnl/algo/vnl_determinant.h>
 #include <vnl/vnl_vector.h>
 //#include <vcl_cmath.h>
@@ -569,10 +569,8 @@ void vmal_rectifier::resample(vnl_double_3x3 H0, vnl_double_3x3 H1,
 
   // Find the mapping from rectified space back to the original
   // using the inverse of the transforms
-  vnl_matrix_inverse<double> inv0(H0);
-  vnl_double_3x3 H0inv = inv0.inverse();
-  vnl_matrix_inverse<double> inv1(H1);
-  vnl_double_3x3 H1inv = inv1.inverse();
+  vnl_double_3x3 H0inv = vnl_inverse(H0);
+  vnl_double_3x3 H1inv = vnl_inverse(H1);
 
   int img2_h = int(boxL.max()[1] - boxL.min()[1] + 1); // output image size
   int img2_w = int(boxL.max()[0] - boxL.min()[0] + 1); // (make them both the same)
