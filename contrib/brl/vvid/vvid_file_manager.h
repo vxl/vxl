@@ -163,9 +163,6 @@ class vvid_file_manager : public vgui_wrapper_tableau
   //: process_art_model
   void track_art_model();
 
-  //: epipolar_grouper
-  void epipolar_grouping();
-
   //: display intensity hue and saturation 
   void display_ihs();
 

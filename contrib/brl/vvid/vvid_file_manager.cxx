@@ -61,8 +61,6 @@
 #include <vpro/vpro_fourier_process.h>
 #include <vpro/vpro_spatial_filter_process.h>
 #include <strk/strk_art_model_display_process.h>
-#include <strk/strk_epipolar_grouper_params.h>
-#include <strk/strk_epipolar_grouper_process.h>
 #include <vpro/vpro_ihs_process.h>
 #include <vpro/vpro_half_res_process.h>
 
@@ -1017,38 +1015,6 @@ void vvid_file_manager::display_art_model_track()
   vtd->set_input_file(track_file);
 }
 
-void vvid_file_manager::epipolar_grouping()
-{
-  static bool agr = false;
-  static sdet_detector_params dp;
-  static strk_epipolar_grouper_params egp;
-  dp.borderp = false;
-  dp.automatic_threshold = false;
-  dp.junctionp = false;
-  vgui_dialog epipolar_dialog("Epipolar Grouping");
-  epipolar_dialog.field("Gaussian sigma", dp.smooth);
-  epipolar_dialog.field("Noise Threshold", dp.noise_multiplier);
-  epipolar_dialog.checkbox("Automatic Threshold", dp.automatic_threshold);
-  epipolar_dialog.checkbox("Agressive Closure", agr);
-  epipolar_dialog.checkbox("Compute Junctions", dp.junctionp);
-  epipolar_dialog.field("Epi U ", egp.eu_);
-  epipolar_dialog.field("Epi V ", egp.ev_);
-  epipolar_dialog.field("Epi Line U ", egp.elu_);
-  epipolar_dialog.field("Epi Line Vmin ", egp.elv_min_);
-  epipolar_dialog.field("Epi Line Vmax ", egp.elv_max_);
-  epipolar_dialog.field("N samples in s", egp.Ns_);
-  epipolar_dialog.field("Angle Threshold", egp.angle_thresh_);
-  if (!epipolar_dialog.ask())
-    return;
-  if (agr)
-    dp.aggressive_junction_closure=1;
-  else
-    dp.aggressive_junction_closure=0;
-
-  strk_epipolar_grouper_process* egpr
-    = new strk_epipolar_grouper_process(dp, egp);
-  video_process_  = egpr;
-}
 
 void vvid_file_manager::display_ihs()
 {

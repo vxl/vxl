@@ -214,11 +214,6 @@ void vidfpl_menus::track_art_model_callback()
   vvid_file_manager::instance()->track_art_model();
 }
 
-void vidfpl_menus::epipolar_grouping_callback()
-{
-  vvid_file_manager::instance()->epipolar_grouping();
-}
-
 void vidfpl_menus::display_ihs_callback()
 {
   vvid_file_manager::instance()->display_ihs();
@@ -310,7 +305,6 @@ vgui_menu vidfpl_menus::get_menu()
   menutrack.add( "Track Art Model", track_art_model_callback);
 
   // debug menu entries
-  menudebug.add( "Epipolar Grouping", epipolar_grouping_callback);
   menudebug.add( "Display IHS", display_ihs_callback);
   menudebug.add( "easy2D Demo", easy2D_tableau_demo_callback);
 

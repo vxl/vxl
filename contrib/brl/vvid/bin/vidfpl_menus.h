@@ -55,7 +55,6 @@ class vidfpl_menus
   static void exercise_art_model_callback();
   static void track_art_model_callback();
   static void display_art_model_track_callback();
-  static void epipolar_grouping_callback();
   static void display_ihs_callback();
   static void save_frame_callback();
   static void save_half_res_callback();
