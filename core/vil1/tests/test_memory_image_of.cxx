@@ -7,13 +7,15 @@
 #include <vil/vil_rgb.h>
 
 #include <vil/vil_test.h>
+#include <vcl_cstdio.h>
 
 const int W = 768;
 const int H = 256;
 
 void test_vil_memory_image_of()
 {
-  char const *file_name_2 = "/tmp/vil_test_memory_image_of.pgm";
+  char const* TMPNAM2 = tempnam(0,"vil_test_memory_image_of.pgm");
+  char const* file_name_2 = TMPNAM2 ? TMPNAM2 : "/tmp/vil_test_memory_image_of.pgm";
   {
     vcl_cout << "unsigned char" << vcl_endl;
     vil_memory_image_of<unsigned char> image(W,H);
@@ -22,11 +24,18 @@ void test_vil_memory_image_of()
       for(int x = 0; x < image.width(); ++x) {
         image(x,y) = ((x - W/2) * (y - H/2) / 16) % 256;
       }
-
     vil_save(image, file_name_2);
+    vcl_cout << "Saved image to " << file_name_2 << vcl_endl;
   }
 
-  char const *file_name_1 = "/tmp/vil_test_memory_image_of.ppm";
+  // Don't leave the images behind by default. If you need to debug, comment
+  // these out temporarily and make sure you put them back in before committing
+  // your changes.
+  vpl_unlink(file_name_2);
+
+  char const* TMPNAM1 = tempnam(0,"vil_test_memory_image_of.ppm");
+  char const* file_name_1 = TMPNAM1 ? TMPNAM1 : "/tmp/vil_test_memory_image_of.ppm";
+
   {
     vcl_cout << "vil_rgb_byte" << vcl_endl;
     vil_memory_image_of<vil_rgb<unsigned char> > image(W,H);
@@ -38,9 +47,15 @@ void test_vil_memory_image_of()
         p.g = ((x - W/2) * (y - H/2) / 16) % 256;
         p.b = y/3;
       }
-
     vil_save(image, file_name_1);
+    vcl_cout << "Saved image to " << file_name_1 << vcl_endl;
   }
+
+  // Don't leave the images behind by default. If you need to debug, comment
+  // these out temporarily and make sure you put them back in before committing
+  // your changes.
+  vpl_unlink(file_name_1);
+
 
   {
     vcl_cout << "bool" << vcl_endl;
@@ -65,11 +80,6 @@ void test_vil_memory_image_of()
   }
 
   {
-    // Don't leave the images behind by default. If you need to debug, comment
-    // these out temporarily and make sure you put them back in before committing
-    // your changes.
-    vpl_unlink(file_name_1);
-    vpl_unlink(file_name_2);
   }
 }
 

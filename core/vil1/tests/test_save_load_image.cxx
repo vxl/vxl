@@ -155,37 +155,39 @@ void vil_test_image_type_raw(char const* type_name, // type for image to read an
 
   vcl_cout << "vil_test_image_type: Save to [" << fname << "]\n" << vcl_flush;
 
-  // Check non-raw saving and loading actually don't fail obviously.
-  bool tst = vil_save_raw(image, fname.c_str(), type_name);
-  TEST ("non-raw write image to disk", tst, true);
-  if (!tst) return; // fatal error
-  vil_image image3 = vil_load_raw(fname.c_str());
-  TEST ("non-raw load image", !image3, false);
-  if (!image3) return; // fatal error
+
+  {
+    // Check non-raw saving and loading actually don't fail obviously.
+    bool tst = vil_save_raw(image, fname.c_str(), type_name);
+    TEST ("non-raw write image to disk", tst, true);
+    if (!tst) return; // fatal error
+    vil_image image3 = vil_load_raw(fname.c_str());
+    TEST ("non-raw load image", !image3, false);
+    if (!image3) return; // fatal error
 
   
-  tst = vil_save_raw(image, fname.c_str(), type_name);
-  TEST ("raw write image to disk", tst, true);
-  if (!tst) return; // fatal error
+    tst = vil_save_raw(image, fname.c_str(), type_name);
+    TEST ("raw write image to disk", tst, true);
+    if (!tst) return; // fatal error
 
-#if LEAVE_IMAGES_BEHIND
-  vpl_chmod(fname.c_str(), 0666); // -rw-rw-rw-
-#endif
+  #if LEAVE_IMAGES_BEHIND
+    vpl_chmod(fname.c_str(), 0666); // -rw-rw-rw-
+  #endif
 
-  // STEP 2) Read the image that was just saved to file
-  vil_image image2 = vil_load_raw(fname.c_str());
-  TEST ("raw load image", !image2, false);
-  if (!image2) return; // fatal error
+    // STEP 2) Read the image that was just saved to file
+    vil_image image2 = vil_load_raw(fname.c_str());
+    TEST ("raw load image", !image2, false);
+    if (!image2) return; // fatal error
 
-  // make sure saved image has the same pixels as the original image
-  tst = !(vcl_strcmp(type_name,image2.file_format()));
-  TEST ("compare image file formats", tst, true);
-  if (!tst)
-    vcl_cout << "read back image type is " << image2.file_format()
-             << " instead of written " << type_name << vcl_endl << vcl_flush;
-  else
-    test_image_equal(type_name, image, image2, exact);
-
+    // make sure saved image has the same pixels as the original image
+    tst = !(vcl_strcmp(type_name,image2.file_format()));
+    TEST ("compare image file formats", tst, true);
+    if (!tst)
+      vcl_cout << "read back image type is " << image2.file_format()
+               << " instead of written " << type_name << vcl_endl << vcl_flush;
+    else
+      test_image_equal(type_name, image, image2, exact);
+  }
 #if !LEAVE_IMAGES_BEHIND
   vpl_unlink(fname.c_str());
 #endif
@@ -218,21 +220,23 @@ void vil_test_image_type(char const* type_name, // type for image to read and wr
 #endif
 
   // STEP 2) Read the image that was just saved to file
-  vil_image image2 = vil_load(fname.c_str());
-  TEST ("load image", !image2, false);
-  if (!image2)
   {
-    return; // fatal error
-  }
+    vil_image image2 = vil_load(fname.c_str());
+    TEST ("load image", !image2, false);
+    if (!image2)
+    {
+      return; // fatal error
+    }
 
-  // make sure saved image has the same pixels as the original image
-  tst = !(vcl_strcmp(type_name,image2.file_format()));
-  TEST ("compare image file formats", tst, true);
-  if (!tst)
-    vcl_cout << "read back image type is " << image2.file_format()
-             << " instead of written " << type_name << vcl_endl << vcl_flush;
-  else
-    test_image_equal(type_name, image, image2, exact);
+    // make sure saved image has the same pixels as the original image
+    tst = !(vcl_strcmp(type_name,image2.file_format()));
+    TEST ("compare image file formats", tst, true);
+    if (!tst)
+      vcl_cout << "read back image type is " << image2.file_format()
+               << " instead of written " << type_name << vcl_endl << vcl_flush;
+    else
+      test_image_equal(type_name, image, image2, exact);
+  }
 
 #if !LEAVE_IMAGES_BEHIND
   vpl_unlink(fname.c_str());
