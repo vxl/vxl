@@ -1,4 +1,3 @@
-
 LINK_LIBRARIES( vsl )
 LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/vxl/vsl )
 

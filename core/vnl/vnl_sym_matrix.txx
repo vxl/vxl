@@ -53,12 +53,11 @@ bool operator==(const vnl_matrix<T> &a, const vnl_sym_matrix<T> &b)
 }
 
 
-
 #undef VNL_SYM_MATRIX_INSTANTIATE
 #define VNL_SYM_MATRIX_INSTANTIATE(T) \
 template class vnl_sym_matrix<T >; \
 template vcl_ostream& operator<< (vcl_ostream& s, vnl_sym_matrix<T > const &); \
 template bool operator==(const vnl_sym_matrix<T > &a, const vnl_sym_matrix<T > &b); \
 template bool operator==(const vnl_sym_matrix<T > &a, const vnl_matrix<T > &b); \
-template bool operator==(const vnl_matrix<T > &a, const vnl_sym_matrix<T > &b);
+template bool operator==(const vnl_matrix<T > &a, const vnl_sym_matrix<T > &b)
 #endif

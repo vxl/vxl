@@ -62,12 +62,10 @@ public:
 
   T operator () (unsigned i, unsigned j) const {
     return (i > j) ? index_[i][j] : index_[j][i];
-//    return (i > j) ? fast(i,j) : fast(j,i);
   }
 
   T& operator () (unsigned i, unsigned j) {
     return (i > j) ? index_[i][j] : index_[j][i];
-//    return (i > j) ? fast(i,j) : fast(j,i);
   }
 
   //: fast access, however i >= j
