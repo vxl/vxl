@@ -178,8 +178,8 @@
 /*                                                                           */
 /*  Modifications: Ian Scott 10 Jan 2003 - attempt to quash 64 bit           */
 /*                 conversion warnings. Replaced most (unsigned long) with   */
-/*                 (intptr_t).                                          */
-/*                 Amitha Perera 13 Jan 2003 - replace intptr_t with    */
+/*                 (ptr_sized_int).                                          */
+/*                 Amitha Perera 13 Jan 2003 - replace ptr_sized_int with    */
 /*                 intptr_t                                                  */
 /*                                                                           */
 /*****************************************************************************/
@@ -746,9 +746,13 @@ shelle *dummyshbase;         /* Keep base address so we can free() it later. */
 struct triedge recenttri;
 
 
-/* Deal with point types that anre not unsigned long                         */
+/* Deal with point types that are not unsigned long                          */
 /* The conditional test could be improved to be more cross platform          */
 #include <stddef.h> /* for intptr_t */
+#include <stdlib.h> /* for intptr_t on e.g. SGI */
+#ifdef __sgi
+# include <inttypes.h>
+#endif
 
 /*****************************************************************************/
 /*                                                                           */
