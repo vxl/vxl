@@ -31,10 +31,9 @@ ADD_EXECUTABLE( vil_test_all
   test_sample_profile_bicub.cxx
   test_sample_grid_bicub.cxx
   test_resample_bicub.cxx
-
 )
 
-TARGET_LINK_LIBRARIES( vil_test_all vil_algo vil vpl vul testlib vcl )
+TARGET_LINK_LIBRARIES( vil_test_all vil vpl vul testlib vcl )
 
 # basic things
 ADD_TEST( vil_test_image_resource           vil_test_all test_image_resource)
