@@ -765,8 +765,8 @@ int main() { int a[5]; qsort(a, 5, sizeof(int), f); return 0; }
 // numeric_limits that reports that they have no infinity.
 #include <limits>
 int main() {
-  return !(std::numeric_limits<double>::has_infinity &&
-    std::numeric_limits<float>::has_infinity);
+  return std::numeric_limits<double>::has_infinity &&
+         std::numeric_limits<float>::has_infinity ? 0 : 1;
 }
 #endif // VCL_NUMERIC_LIMITS_HAS_INFINITY
 
