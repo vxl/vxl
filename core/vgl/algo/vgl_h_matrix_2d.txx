@@ -1,5 +1,4 @@
-//--*-c++-*-----
-// This is brl/bbas/vgl/algo/vgl_h_matrix_2d.txx
+// This is core/vgl/algo/vgl_h_matrix_2d.txx
 #ifndef vgl_h_matrix_2d_txx_
 #define vgl_h_matrix_2d_txx_
 //:
@@ -62,7 +61,7 @@ vgl_h_matrix_2d<T>::vgl_h_matrix_2d(const T* H)
 {
 }
 
-  
+
 //: Destructor
 template <class T>
 vgl_h_matrix_2d<T>::~vgl_h_matrix_2d()
@@ -224,7 +223,7 @@ void vgl_h_matrix_2d<T>::set(vnl_matrix_fixed<T,3,3> const& H)
 // the canonical coordinate system.  In the canonical frame the points
 // have coordinates:
 //   p[0]p[1]p[2]p[3]
-//     1   0   0   1 
+//     1   0   0   1
 //     0   1   0   1
 //     0   0   1   1
 //
@@ -232,21 +231,21 @@ template <class T>
 bool vgl_h_matrix_2d<T>::
 projective_basis(vcl_vector<vgl_homg_point_2d<T> > const & four_points)
 {
-  if(four_points.size()!=4)
+  if (four_points.size()!=4)
     return false;
   vnl_matrix_fixed<T, 3, 4> point_matrix;
   vnl_vector_fixed<T, 3> p0(four_points[0].x(),
                             four_points[0].y(),
-                            four_points[0].w());  
+                            four_points[0].w());
   vnl_vector_fixed<T, 3> p1(four_points[1].x(),
                             four_points[1].y(),
-                            four_points[1].w());  
+                            four_points[1].w());
   vnl_vector_fixed<T, 3> p2(four_points[2].x(),
                             four_points[2].y(),
-                            four_points[2].w());  
+                            four_points[2].w());
   vnl_vector_fixed<T, 3> p3(four_points[3].x(),
                             four_points[3].y(),
-                            four_points[3].w());  
+                            four_points[3].w());
   point_matrix.set_column(0, p0);
   point_matrix.set_column(1, p1);
   point_matrix.set_column(2, p2);
@@ -255,19 +254,19 @@ projective_basis(vcl_vector<vgl_homg_point_2d<T> > const & four_points)
     if (! point_matrix.is_finite() || point_matrix.has_nans()) {
       vcl_cerr << "set from projective basis: given matrix has infinite"
                << " or NaN values\n";
-      this->set_identity(); 
+      this->set_identity();
       return false;
     }
     vnl_svd<T> svd1(point_matrix, 1e-8);
-    if(svd1.rank() < 3)
+    if (svd1.rank() < 3)
       {
         vcl_cerr << "set_from_projective basis:"
                  << " At least three out of the four points"
                  << " are nearly collinear\n";
-        this->set_identity(); 
+        this->set_identity();
         return false;
       }
-    
+
   vnl_matrix_fixed<T, 3, 3> back_matrix;
   back_matrix.set_column(0, p0);
   back_matrix.set_column(1, p1);
@@ -300,8 +299,8 @@ const vgl_h_matrix_2d<T> vgl_h_matrix_2d<T>::get_inverse() const
 
 
 //----------------------------------------------------------------------------
-#undef BVGL_H_MATRIX_2D_INSTANTIATE
-#define BVGL_H_MATRIX_2D_INSTANTIATE(T) \
+#undef VGL_H_MATRIX_2D_INSTANTIATE
+#define VGL_H_MATRIX_2D_INSTANTIATE(T) \
 template class vgl_h_matrix_2d<T >; \
 template vcl_ostream& operator << (vcl_ostream& s, const vgl_h_matrix_2d<T >& h); \
 template vcl_istream& operator >> (vcl_istream& s, vgl_h_matrix_2d<T >& h)

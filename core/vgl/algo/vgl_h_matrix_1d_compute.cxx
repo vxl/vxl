@@ -1,4 +1,4 @@
-// This is brl/bbas/vgl/algo/vgl_h_matrix_1d_compute.cxx
+// This is core/vgl/algo/vgl_h_matrix_1d_compute.cxx
 #include "vgl_h_matrix_1d_compute.h"
 
 #include <vcl_cstdlib.h>
@@ -24,9 +24,9 @@ void vgl_h_matrix_1d_compute::verbose(bool v) { verbose_=v; }
 
 bool
 vgl_h_matrix_1d_compute::compute_array_dbl(const double p1[],
-                                    const double p2[],
-                                    int N,
-                                    vgl_h_matrix_1d<double>& H)
+                                           const double p2[],
+                                           int N,
+                                           vgl_h_matrix_1d<double>& H)
 {
   vcl_vector<vgl_homg_point_1d<double> > pt1;
   vcl_vector<vgl_homg_point_1d<double> > pt2;
@@ -41,12 +41,12 @@ vgl_h_matrix_1d_compute::compute_array_dbl(const double p1[],
 
 bool
 vgl_h_matrix_1d_compute::compute_cool_homg(const vcl_vector<vgl_homg_point_1d<double> > &,
-                                    const vcl_vector<vgl_homg_point_1d<double> > &,
-                                    vgl_h_matrix_1d<double>& H)
+                                           const vcl_vector<vgl_homg_point_1d<double> > &,
+                                           vgl_h_matrix_1d<double>& H)
 {
-  vcl_cerr << "\nvgl_h_matrix_1d_compute::compute_cool_homg() :\n";
-  vcl_cerr << "This is a virtual method which should have been\n";
-  vcl_cerr << "overridden by a class derived from vgl_h_matrix_1d_compute.\n";
+  vcl_cerr << "\nvgl_h_matrix_1d_compute::compute_cool_homg() :\n"
+           << "This is a virtual method which should have been\n"
+           << "overridden by a class derived from vgl_h_matrix_1d_compute.\n";
   vcl_abort();
   return false;
 }
@@ -59,8 +59,8 @@ vgl_h_matrix_1d_compute::compute_cool_homg(const vcl_vector<vgl_homg_point_1d<do
 
 bool
 vgl_h_matrix_1d_compute::compute(const vcl_vector<vgl_homg_point_1d<double> > &p1,
-                          const vcl_vector<vgl_homg_point_1d<double> > &p2,
-                          vgl_h_matrix_1d<double>& H)
+                                 const vcl_vector<vgl_homg_point_1d<double> > &p2,
+                                 vgl_h_matrix_1d<double>& H)
 {
   return compute_cool_homg(p1,p2,H);
 }

@@ -1,21 +1,22 @@
-// This is brl/bbas/vgl/vgl_h_matrix_3d.h
+// This is core/vgl/algo/vgl_h_matrix_3d.h
 #ifndef vgl_h_matrix_3d_h_
 #define vgl_h_matrix_3d_h_
 //:
 // \file
+// \brief 4x4 3D-to-3D projectivity
 //
 // A class to hold a 3D projective transformation matrix
 // and to perform common operations using it e.g. transfer point.
 //
 // \verbatim
-// Modifications
-//    22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
-//    23 Oct 2002 - Peter Vanroose - using fixed 3x3 matrices throughout
-//    22 Mar 2003 - J. L. Mundy  - prep for moving to vgl
+//  Modifications
+//   22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
+//   23 Oct 2002 - Peter Vanroose - using fixed 3x3 matrices throughout
+//   22 Mar 2003 - J. L. Mundy  - prep for moving to vgl
 // \endverbatim
 
+#include <vnl/vnl_fwd.h> // for vnl_vector_fixed<T,3>
 #include <vnl/vnl_matrix_fixed.h>
-#include <vnl/vnl_fwd.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_homg_plane_3d.h>
 
@@ -30,9 +31,9 @@ class vgl_h_matrix_3d
  public:
   vgl_h_matrix_3d();
   vgl_h_matrix_3d(const vgl_h_matrix_3d& M);
-  vgl_h_matrix_3d(vnl_matrix_fixed<T, 4, 4> const& M);
-  vgl_h_matrix_3d(vnl_matrix_fixed<T,3, 3> const& M,
-                   vnl_vector_fixed<T, 3> const& m);
+  vgl_h_matrix_3d(vnl_matrix_fixed<T,4,4> const& M);
+  vgl_h_matrix_3d(vnl_matrix_fixed<T,3,3> const& M,
+                  vnl_vector_fixed<T,3> const& m);
   vgl_h_matrix_3d(const T* t_matrix);
   vgl_h_matrix_3d(vcl_istream&);
  ~vgl_h_matrix_3d();
@@ -68,6 +69,6 @@ template <class T> vcl_ostream& operator<<(vcl_ostream& s, vgl_h_matrix_3d<T> co
 template <class T> vcl_istream& operator>>(vcl_istream& s, vgl_h_matrix_3d<T>&       h);
 
 
-#define BVGL_H_MATRIX_3D_INSTANTIATE(T) extern "please include vgl/vgl_h_matrix_3d.txx first"
+#define VGL_H_MATRIX_3D_INSTANTIATE(T) extern "please include vgl/vgl_h_matrix_3d.txx first"
 
 #endif // vgl_h_matrix_3d_h_

@@ -1,21 +1,21 @@
-// This is brl/bbas/vgl/algo/vgl_h_matrix_1d.h
+// This is core/vgl/algo/vgl_h_matrix_1d.h
 #ifndef vgl_h_matrix_1d_h_
 #define vgl_h_matrix_1d_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
+// \brief 2x2 line-to-line projectivity
 //
 // A class to hold a line-to-line projective transformation matrix
 // and to perform common operations using it e.g. transfer point.
 //
 // \verbatim
-// Modifications
-//    22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
-//    23 Oct 2002 - Peter Vanroose - using fixed 3x3 matrices throughout
-//    22 Mar 2003 - J.L. Mundy - preparing for upgrade to vgl
+//  Modifications
+//   22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
+//   23 Oct 2002 - Peter Vanroose - using fixed 3x3 matrices throughout
+//   22 Mar 2003 - J.L. Mundy - preparing for upgrade to vgl
 // \endverbatim
 
 #include <vnl/vnl_matrix_fixed.h>
@@ -66,6 +66,6 @@ template <class T> vcl_ostream& operator<<(vcl_ostream& s, const vgl_h_matrix_1d
 template <class T> vcl_istream& operator>>(vcl_istream& s, vgl_h_matrix_1d<T>& h);
 
 
-#define BVGL_H_MATRIX_1D_INSTANTIATE(T) extern "please include vgl/algo/vgl_h_matrix_1d.txx first"
+#define VGL_H_MATRIX_1D_INSTANTIATE(T) extern "please include vgl/algo/vgl_h_matrix_1d.txx first"
 
 #endif // vgl_h_matrix_1d_h_

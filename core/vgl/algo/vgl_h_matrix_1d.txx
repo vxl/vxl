@@ -1,4 +1,4 @@
-// This is brl/bbas/vgl/algo/vgl_h_matrix_1d.txx
+// This is core/vgl/algo/vgl_h_matrix_1d.txx
 #ifndef vgl_h_matrix_1d_txx_
 #define vgl_h_matrix_1d_txx_
 //:
@@ -6,9 +6,9 @@
 
 #include "vgl_h_matrix_1d.h"
 #include <vgl/vgl_homg_point_1d.h>
+#include <vnl/vnl_inverse.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_fstream.h>
-#include <vnl/vnl_inverse.h>
 
 //--------------------------------------------------------------
 //: Default constructor
@@ -171,8 +171,8 @@ void vgl_h_matrix_1d<T>::set(vnl_matrix_fixed<T,2,2> const& H)
 
 
 //----------------------------------------------------------------------------
-#undef BVGL_H_MATRIX_1D_INSTANTIATE
-#define BVGL_H_MATRIX_1D_INSTANTIATE(T) \
+#undef VGL_H_MATRIX_1D_INSTANTIATE
+#define VGL_H_MATRIX_1D_INSTANTIATE(T) \
 template class vgl_h_matrix_1d<T >; \
 template vcl_ostream& operator << (vcl_ostream& s, const vgl_h_matrix_1d<T >& h); \
 template vcl_istream& operator >> (vcl_istream& s, vgl_h_matrix_1d<T >& h)
