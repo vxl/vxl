@@ -1,15 +1,17 @@
+#include "vepl_erode_disk.h"
+#include <vil/vil_rgb.h>
 #include <vipl/accessors/vipl_accessors_vil_image.h>
-#include <vepl/vepl_erode_disk.h>
 #include <vipl/vipl_erode_disk.h>
 #include <vil/vil_memory_image_of.h>
-#include <vil/vil_rgb.h>
 
 typedef unsigned char ubyte;
-#if VCL_ALLOWS_NAMESPACE_STD
+
+#ifdef __GNUC__
+# if VCL_ALLOWS_NAMESPACE_STD
 namespace std { static inline vil_rgb<ubyte> min
-#else
+# else
 static inline vil_rgb<ubyte> vcl_min
-#endif
+# endif
 (vil_rgb<ubyte> const& a, vil_rgb<ubyte> const& b)
   //recursive: { return vil_rgb<ubyte>(vcl_min(a.r,b.r), vcl_min(a.g,b.g), vcl_min(a.b,b.b)); }
 {
@@ -17,9 +19,14 @@ static inline vil_rgb<ubyte> vcl_min
                         a.g < b.g ? a.g : b.g,
                         a.b < b.b ? a.b : b.b);
 }
-#if VCL_ALLOWS_NAMESPACE_STD
+# if VCL_ALLOWS_NAMESPACE_STD
 }
+# endif
 #else
+static inline bool operator<(vil_rgb<ubyte> const& a, vil_rgb<ubyte> const& b)
+{
+  return a.r<b.r || (a.r==b.r && a.g<b.g) || (a.r==b.r && a.g==b.g && a.b<b.b);
+}
 #endif
 
 vil_image vepl_erode_disk(vil_image const& image, float radius)

@@ -1,15 +1,17 @@
+#include "vepl_dilate_disk.h"
+#include <vil/vil_rgb.h>
 #include <vipl/accessors/vipl_accessors_vil_image.h>
-#include <vepl/vepl_dilate_disk.h>
 #include <vipl/vipl_dilate_disk.h>
 #include <vil/vil_memory_image_of.h>
-#include <vil/vil_rgb.h>
 
 typedef unsigned char ubyte;
-#if VCL_ALLOWS_NAMESPACE_STD
+
+#ifdef __GNUC__
+# if VCL_ALLOWS_NAMESPACE_STD
 namespace std { static inline vil_rgb<ubyte> max
-#else
+# else
 static inline vil_rgb<ubyte> vcl_max
-#endif
+# endif
 (vil_rgb<ubyte> const& a, vil_rgb<ubyte> const& b)
   //recursive: { return vil_rgb<ubyte>(vcl_max(a.r,b.r), vcl_max(a.g,b.g), vcl_max(a.b,b.b)); }
 {
@@ -17,9 +19,14 @@ static inline vil_rgb<ubyte> vcl_max
                         a.g > b.g ? a.g : b.g,
                         a.b > b.b ? a.b : b.b);
 }
-#if VCL_ALLOWS_NAMESPACE_STD
+# if VCL_ALLOWS_NAMESPACE_STD
 }
+# endif
 #else
+static inline bool operator<(vil_rgb<ubyte> const& a, vil_rgb<ubyte> const& b)
+{
+  return a.r<b.r || (a.r==b.r && a.g<b.g) || (a.r==b.r && a.g==b.g && a.b<b.b);
+}
 #endif
 
 vil_image vepl_dilate_disk(vil_image const& image, float radius)
