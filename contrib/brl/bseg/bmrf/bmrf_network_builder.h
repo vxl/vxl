@@ -1,5 +1,4 @@
-//--*-c++-*--
-// This is contrib/brl/bseg/bmrf/bmrf_network_builder.h.h
+// This is brl/bseg/bmrf/bmrf_network_builder.h
 #ifndef bmrf_network_builder_h_
 #define bmrf_network_builder_h_
 //:
@@ -9,8 +8,7 @@
 // \date 1/18/04
 //
 // The builder generates bmrf_epi_seg(s) from a series of frames and adds
-// them to the network.  
-//
+// them to the network.
 //
 // \verbatim
 //  Modifications
@@ -20,7 +18,6 @@
 #include <vcl_vector.h>
 #include <vnl/vnl_double_3.h>
 #include <vgl/vgl_point_2d.h>
-#include <vsol/vsol_polyline_2d_sptr.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <bmrf/bmrf_network_builder_params.h>
@@ -43,14 +40,15 @@ class bmrf_network_builder : public bmrf_network_builder_params
   bmrf_network_sptr network();
 
   //Mutators
+
   //: specify the image for the current frame
   void set_image(vil_image_view<float> const& image);
 
   //: set the edge segmentation for the current frame
   void set_edges(int frame, vcl_vector<vtol_edge_2d_sptr> const & edges);
 
-  
   //Utility Methods
+
   //:convert image coordinates to epipolar coordinates
   void epi_coords(const double u, const double v,
                   double& alpha, double& s);
@@ -85,7 +83,7 @@ class bmrf_network_builder : public bmrf_network_builder_params
   double find_right_s(const double a, const double s,
                       vcl_vector<bmrf_epi_seg_sptr> const& cand);
   double ds(const double s);
-   
+
   double scan_interval(const double a, const double sl, const double s);
   double scan_left(double a, double s,
                    vcl_vector<bmrf_epi_seg_sptr> const& left_cand,
@@ -106,7 +104,7 @@ class bmrf_network_builder : public bmrf_network_builder_params
   bool network_valid_;
 
   //:the current frame index
-  int frame_; 
+  int frame_;
 
   //:the increment in image column dimension
   double du_;
@@ -133,7 +131,7 @@ class bmrf_network_builder : public bmrf_network_builder_params
   vnl_double_3 lower_wedge_line_;
 
   //:the image for the current frame
-  vil_image_view<float> image_; 
+  vil_image_view<float> image_;
 
   //:the edges for current frame
   vcl_vector<vtol_edge_2d_sptr> edges_;
