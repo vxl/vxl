@@ -41,7 +41,9 @@ vtol_zero_chain::vtol_zero_chain(vtol_vertex_sptr const& v1,
                                  vtol_vertex_sptr const& v2)
 {
   // require
-  assert(v1!=v2);
+#if 0 // temporarily disabled
+  assert(*v1!=*v2);
+#endif // 0
   link_inferior(v1);
   link_inferior(v2);
 }

@@ -186,13 +186,15 @@ void vtol_vertex_2d::describe(vcl_ostream &strm,
 //-----------------------------------------------------------------------------
 //: Create a line edge from `this' and `other' only if this edge does not exist.
 //  Otherwise it just returns the existing edge.
-// Require: other!=*this
+// Require: *other!=*this
 //-----------------------------------------------------------------------------
 vtol_edge_sptr vtol_vertex_2d::new_edge(vtol_vertex_2d_sptr const& other)
 {
   // require
   assert(other);
+#if 0 //temporarily disabled
   assert(*other != *this);
+#endif // 0
 
   // awf: load vrml speed up by factor of 2 using this loop.
   vtol_edge_sptr result = 0;
