@@ -9,6 +9,10 @@
 // .SECTION Author
 //    awf@robots.ox.ac.uk
 // Created: 16 Feb 00
+// .SECTION Modifications
+//     010126 BJM (mccane@cs.otago.ac.nz) added constructor from
+//            previously allocated memory. This memory is not deallocated on
+//            destruction.
 
 #include <vil/vil_pixel.h>
 #include <vil/vil_image.h>
@@ -37,6 +41,12 @@ public:
   void resize(int width, int height);
   void resize(int planes, int width, int height);
   void* get_buffer() { return rows0_[0]; }
+
+  vil_memory_image(void *buf, int planes, int w, int h, vil_memory_image_format const&);
+  vil_memory_image(void *buf, int planes, int w, int h, int components, int bits_per_component, vil_component_format);
+  vil_memory_image(void *buf, int planes, int w, int h, vil_pixel_format);
+  vil_memory_image(void *buf, int w, int h, int components, int bits_per_component, vil_component_format);
+  vil_memory_image(void *buf, int w, int h, vil_pixel_format );
 
   void assert_size(int width, int height) const;
 

@@ -45,5 +45,10 @@ int main()
 
   save_writable(m, "/tmp/vil_test_memory_image.pgm");
 
+  vil_memory_image n(data, 3, 2, VIL_BYTE);
+  p(n);
+
+  save_writable(n, "/tmp/vil_test_memory_image.pgm");
+  
   return 0;
 }

@@ -27,7 +27,7 @@
   } \
 }
 
-vil_memory_image::vil_memory_image() 
+vil_memory_image::vil_memory_image()
 {
   cache_from_impl;
 }
@@ -68,17 +68,17 @@ vil_image make_memory_image(vil_image const * thatp)
 {
   vil_image const& that = *thatp;
 #if 1
-  //noblather cerr << thatp << " ptr ";
-  //noblather cerr << that.impl() << "  ";
+  //noblather vcl_cerr << thatp << " ptr ";
+  //noblather vcl_cerr << that.impl() << "  ";
   if (that.get_property("memory"))
     return that;
   //vcl_cerr << "copying " << that.impl() << endl;
 #endif
-  vil_memory_image mem(that.planes(), 
-		       that.width(), 
+  vil_memory_image mem(that.planes(),
+		       that.width(),
 		       that.height(),
 		       that.components(),
-		       that.bits_per_component(), 
+		       that.bits_per_component(),
 		       that.component_format());
   that.get_section(mem.get_buffer(), 0, 0, that.width(), that.height());
   return mem;
@@ -124,4 +124,36 @@ void vil_memory_image::assert_size(int width, int height) const
 {
   assert(width_ == width);
   assert(height_ == height);
+}
+
+// Added by Brendan McCane for creating images with already allocated
+// memory. Useful for use with framegrabbers.
+vil_memory_image::vil_memory_image(void *buf, int planes, int w, int h, vil_memory_image_format const& format)
+  : vil_image(new vil_memory_image_impl(buf, planes, w, h, format))
+{
+  cache_from_impl;
+}
+
+vil_memory_image::vil_memory_image(void *buf, int planes, int w, int h, int components, int bits_per_component, vil_component_format component_format)
+  : vil_image(new vil_memory_image_impl(buf, planes, w, h, components, bits_per_component, component_format))
+{
+  cache_from_impl;
+}
+
+vil_memory_image::vil_memory_image(void *buf, int planes, int w, int h, vil_pixel_format pixel_format)
+  : vil_image(new vil_memory_image_impl(buf, planes, w, h, pixel_format))
+{
+  cache_from_impl;
+}
+
+vil_memory_image::vil_memory_image(void *buf, int w, int h, int components, int bits_per_component, vil_component_format component_format)
+  : vil_image(new vil_memory_image_impl(buf, 1, w, h, components, bits_per_component, component_format))
+{
+  cache_from_impl;
+}
+
+vil_memory_image::vil_memory_image(void *buf, int w, int h, vil_pixel_format pixel_format)
+  : vil_image(new vil_memory_image_impl(buf, 1, w, h, pixel_format))
+{
+  cache_from_impl;
 }

@@ -18,6 +18,9 @@
 //     981105 AWF Made bilinear/bicubic return double.
 //     990211 Peter Vanroose moved save_pgm() to Templates/ (EGCS complained)
 //     990421 FSM Added constructor from a const fast_array<T> &
+//     010126 BJM (mccane@cs.otago.ac.nz) added constructor from
+//            previously allocated memory. This memory is not deallocated on
+//            destruction.
 
 #include <vil/vil_byte.h>
 #include <vil/vil_image.h>
@@ -49,7 +52,7 @@ public:
   typedef T *iterator;
   iterator begin() { return get_buffer(); }
   iterator end  () { return get_buffer() + rows()*cols(); }
-  
+
   typedef T const *const_iterator;
   const_iterator begin() const { return get_buffer(); }
   const_iterator end  () const { return get_buffer() + rows()*cols(); }
@@ -67,27 +70,31 @@ public:
   // copy constructor (above) does.
   explicit
   vil_memory_image_of(vil_image const& image);
-  
+
   // Deprecated -- This was used to copy the ROI, which is no longer on image
   //vil_memory_image_of(vil_image const&, bool) {}
 
   //: Construct a w x h image, pixel format is determined from T
   vil_memory_image_of(int sizex, int sizey);
-  
+
+  //: Construct a w x h image, pixel format is determined from T from
+  //memory previously created and pointed to by buf
+  vil_memory_image_of(T *buf, int sizex, int sizey);
+
   //  //: Make memory imagebuffer, and fill with "value"
   //  vil_memory_image_of(int sizex, int sizey, T const& value);
-  
+
   //: Clearly, this will deallocate the memory buffer
   ~vil_memory_image_of() {}
-  
+
   //: This method hides the operator= in the base class.
   vil_memory_image_of<T>& operator=(vil_memory_image_of<T> const &);
-  
+
   //: Copy a vil_image, only if it's in an appropriate format.
   // This routine does not try to guess how to convert images which are
   // not compatible with T.
   vil_memory_image_of<T>& operator=(vil_image const &);
-  
+
   //: Load image.
   void set(vil_image const& image);
 
@@ -97,13 +104,13 @@ private:
   // don't try to use this.
   void resize(int planes, int width, int height);
 public:
-  
+
   // Data Access---------------------------------------------------------------
 
   //: Return read/write reference to pixel at (x,y)
   T&           operator () (int x, int y) { return ((T**)rows0_)[y][x]; }
   T const&     operator () (int x, int y) const { return ((T const* const*)rows0_)[y][x]; }
-  
+
   //: Return pointer to raster y.
   T*           operator [] (int y) { return ((T**)rows0_)[y]; }
   T const*     operator [] (int y) const { return ((T const* const*)rows0_)[y]; }
@@ -115,10 +122,10 @@ public:
   //: Return pointer to the memory buffer.
   T*       get_buffer() { return (T*)rows0_[0]; }
   T const* get_buffer() const { return (T*)rows0_[0]; }
- 
+
   //: Return true if (x,y) is a valid index into this buffer
   bool in_range(int x, int y) const { return (0 <= x) && (0 <= y) && (x < width_) && (y < height_); }
-  
+
   //: Return true if (x+/-w,y+/-h) are valid indices into this buffer
   bool in_range_window(int x, int y, int w) const {
     return (w <= x) && (w <= y) && (x + w < width_) && (y + w < height_);

@@ -9,6 +9,10 @@
 // .SECTION Author
 //    awf@robots.ox.ac.uk
 // Created: 16 Mar 00
+// .SECTION Modifications
+//     010126 BJM (mccane@cs.otago.ac.nz) added constructor from
+//            previously allocated memory. This memory is not deallocated on
+//            destruction.
 
 #include <vil/vil_image_impl.h>
 #include <vil/vil_memory_image.h>
@@ -38,12 +42,19 @@ public:
   virtual bool get_property(char const *tag, void *property_value = 0) const;
 
   void resize(int planes, int width, int height);
-  
+
+  // added by Brendan McCane
+  vil_memory_image_impl(void *buf, int planes, int w, int h, vil_memory_image_format const& format);
+  vil_memory_image_impl(void *buf, int planes, int w, int h, int components, int bits_per_component, vil_component_format component_format);
+  vil_memory_image_impl(void *buf, int planes, int w, int h, vil_pixel_format pixel_format);
+  vil_memory_image_impl(void *buf, int w, int h, int components, int bits_per_component, vil_component_format component_format);
+  vil_memory_image_impl(void *buf, int w, int h, vil_pixel_format pixel_format);
+
 protected:
   friend class vil_memory_image;
 
-  void init(int planes, int w, int h, vil_pixel_format pixel_format);
-  void init(int planes, int w, int h, int components, int bits_per_component, vil_component_format);
+  void init(void *buf, int planes, int w, int h, vil_pixel_format pixel_format);
+  void init(void *buf, int planes, int w, int h, int components, int bits_per_component, vil_component_format);
 
   int planes_;
   int width_;
@@ -53,7 +64,8 @@ protected:
   vil_component_format component_format_;
 
   int bytes_per_pixel_;
-  
+  bool is_foreign_buf_; // is the buffer created externally?
+
   unsigned char* buf_;
   void*** rows_;
 };
