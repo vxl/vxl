@@ -73,13 +73,12 @@ void test_math()
   testlib_test_assert("abs(f) == 7.5", vnl_math_abs(f) == 7.5);
   testlib_test_assert("abs(d) == pi", vnl_math_abs(d) == vnl_math::pi);
   testlib_test_assert("abs(i) == 1", vnl_math_abs(i) == 1.0);
-  testlib_test_assert("abs(-1+2i) == sqrt(5)",
-                  vnl_math_abs(vnl_math_abs(z)-vcl_sqrt(5.0)) < 1e-10);
-  testlib_test_assert("norm(-1+2i) == 5",
-                  vnl_math_abs(vnl_math_squared_magnitude(z)-5) < 1e-10);
-  testlib_test_assert("exp(d*i) == -1", vnl_math_abs(e_ipi+1.0) < 1e-10);
+  testlib_test_assert_near("abs(-1+2i)~=sqrt(5)",vnl_math_abs(z),vcl_sqrt(5.0));
+  testlib_test_assert_near("norm(-1+2i) ~= 5", vnl_math_squared_magnitude(z),5);
+  testlib_test_assert_near("exp(d*i) ~= -1", vnl_math_abs(e_ipi+1.0), 0);
   vcl_cout << vcl_endl;
 
+#ifndef __alpha__
   // Create Inf and -Inf:
   float a1 = one_f / zero_f;
   float a2 = (-one_f) / zero_f;
@@ -92,6 +91,21 @@ void test_math()
   float b1 = zero_f / zero_f;
   double b2 = zero_d / zero_d;
   long double b3 = zero_ld / zero_ld;
+
+#else // avoid FPE on zero division
+  // Create Inf and -Inf:
+  long inf = 0x7f800000L; float a1 = *(float*)(&inf);
+  float a2 = -a1;
+  double a3 = 1e308 / 1e-308;
+  double a4 = -1e308 / 1e-308;
+  long double a5 = 1e308 / (long double)1e-308;
+  long double a6 = -1e308 / (long double)1e-308;
+
+  // Create NaN
+  long nan = 0x7ff00000L; float b1 = *(float*)(&nan);
+  double b2 = b1;
+  long double b3 = b2;
+#endif
 
   testlib_test_assert(" isfinite(f)    ",  vnl_math_isfinite(f));
   testlib_test_assert(" isfinite(d)    ",  vnl_math_isfinite(d));
