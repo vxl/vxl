@@ -4,6 +4,7 @@
 // \file
 
 #include <vcl_cctype.h>    // Include character macros
+#include <vcl_cstdlib.h>   // for vcl_atol
 #include <vcl_cstring.h>   // for vcl_strlen
 #include <vcl_cmath.h>     // for vcl_fmod
 #include <vcl_algorithm.h> // for vcl_copy
@@ -109,6 +110,37 @@ vnl_bignum::vnl_bignum (unsigned int l)
 
   while (i--)     // Save buffer into perm. data
     this->data[i] = buf[i];
+}
+
+//: Creates a vnl_bignum from a single-precision floating point number.
+
+vnl_bignum::vnl_bignum (float f)
+: count(0), sign(1), data(0)
+{
+  double d = f;
+  if (d < 0.0) {                // Get sign of d
+    d = -d;                     // Get absolute value of d
+    this->sign = -1;
+  }
+
+  if (!vnl_math_isfinite(d)) {
+    // Infinity is represented as: count=1, data[0]=0.
+    // This is an otherwise unused representation, since 0 is represented as count=0.
+    this->count = 1;
+    this->data = new Data[1];
+    this->data[0] = 0;
+  } else if (d >= 1.0) {
+    // Note: 0x10000L == 1 >> 16: the (assumed) size of unsigned short is 16 bits.
+    vcl_vector<Data> buf;
+    while (d >= 1.0) {
+      buf.push_back( Data(vcl_fmod(d,0x10000L)) );  // Get next data "digit" from d
+      d /= 0x10000L;                                // Shift d right 1 data "digit"
+    }
+    // Allocate and copy into permanent buffer
+    this->data = buf.size()>0 ? new Data[buf.size()] : 0;
+    this->count = buf.size();
+    vcl_copy( buf.begin(), buf.end(), data );
+  }
 }
 
 //: Creates a vnl_bignum from a double floating point number.
@@ -763,7 +795,7 @@ void vnl_bignum::exptoBigNum (const char *s)
 {
   while (*s == ' ' || *s == '\t' || *s == '\n' || *s == '\r') ++s; // skip whitespace
   Counter pos = this->dtoBigNum(s) + 1; // Convert the base, skip [eE]
-  long pow = atol(s + pos);             // Convert the exponent to long
+  long pow = vcl_atol(s + pos);         // Convert the exponent to long
   while (pow-- > 0)                     // Raise vnl_bignum to the given
     *this = (*this) * 10L;              // power
 }

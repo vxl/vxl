@@ -3,7 +3,8 @@
 #include <vnl/vnl_matrix_fixed_ref.h>
 #include <vnl/vnl_vector_fixed.h>
 
-#include <vcl_algorithm.h> // for generate()
+#include <vcl_algorithm.h> // for vcl_generate()
+#include <vcl_cstdlib.h> // for vcl_rand()
 #include <testlib/testlib_test.h>
 
 void test_matrix_fixed_ref()
@@ -66,7 +67,7 @@ void test_matrix_fixed_ref()
   for (i=0;i<rows;++i)
   {
     vnl_vector_fixed<double,cols> new_row;
-    vcl_generate(new_row.begin(),new_row.end(),rand);
+    vcl_generate(new_row.begin(),new_row.end(),vcl_rand);
 
     ref.set_row(i,new_row);
     vnl_vector_fixed<double,cols> row_copy = mat.get_row(i);
@@ -76,7 +77,7 @@ void test_matrix_fixed_ref()
   for (j=0;j<cols;++j)
   {
     vnl_vector_fixed<double,rows> new_col;
-    vcl_generate(new_col.begin(),new_col.end(),rand);
+    vcl_generate(new_col.begin(),new_col.end(),vcl_rand);
 
     ref.set_column(j,new_col);
     vnl_vector_fixed<double,rows> col_copy = mat.get_column(j);
@@ -85,7 +86,7 @@ void test_matrix_fixed_ref()
 
   //    assign from mat
   mf other;
-  vcl_generate(other.begin(),other.end(),rand);
+  vcl_generate(other.begin(),other.end(),vcl_rand);
 #if 0 // cannot assign to a vnl_matrix_fixed_ref_const
   ref = other;
   TEST("assign_mf", ref, other);
@@ -95,7 +96,7 @@ void test_matrix_fixed_ref()
 
   {
   //    assign from const mfr
-  vcl_generate(other.begin(),other.end(),rand);
+  vcl_generate(other.begin(),other.end(),vcl_rand);
   mfrc cref(other);
   ref = cref;
   TEST("assign_const_ref", ref, other);
@@ -106,7 +107,7 @@ void test_matrix_fixed_ref()
   {
 #if 0 // cannot assign to a vnl_matrix_fixed_ref_const
   //    assign from mfr
-  vcl_generate(other.begin(),other.end(),rand);
+  vcl_generate(other.begin(),other.end(),vcl_rand);
   mfr ref2(other);
   ref = ref2;
   TEST("assign_ref", ref, other);
@@ -118,8 +119,8 @@ void test_matrix_fixed_ref()
   {
     // plus
     mf a,b;
-    vcl_generate(a.begin(),a.end(),rand);
-    vcl_generate(b.begin(),b.end(),rand);
+    vcl_generate(a.begin(),a.end(),vcl_rand);
+    vcl_generate(b.begin(),b.end(),vcl_rand);
     mfrc arefc(a), brefc(b);
     mf mc = arefc + brefc;
 
@@ -135,8 +136,8 @@ void test_matrix_fixed_ref()
   {
     // times
     mf a,b;
-    vcl_generate(a.begin(),a.end(),rand);
-    vcl_generate(b.begin(),b.end(),rand);
+    vcl_generate(a.begin(),a.end(),vcl_rand);
+    vcl_generate(b.begin(),b.end(),vcl_rand);
     mfrc arefc(a), brefc(b);
     mf mc = arefc + brefc;
 

@@ -77,9 +77,14 @@ class vnl_rational
   //  the denominator is allowed to be 0, to represent +Inf or -Inf.
   inline vnl_rational (long num = 0L, long den = 1L)
     : num_(num), den_(den) { assert(num!=0||den!=0); normalize(); }
-  inline vnl_rational (int num, int den = 1)
+  //: Creates a rational with given numerator and denominator.
+  //  Note these are not automatic type conversions because of a bug
+  //  in the Borland compiler.  Since these just convert their
+  //  arguments to long anyway, there is no harm in letting
+  //  the long overload be used for automatic conversions.
+  explicit inline vnl_rational (int num, int den = 1)
     : num_(num), den_(den) { assert(num!=0||den!=0); normalize(); }
-  inline vnl_rational (unsigned int num, unsigned int den = 1)
+  explicit inline vnl_rational (unsigned int num, unsigned int den = 1)
     : num_((long)num), den_((long)den) { assert(num!=0||den!=0); normalize(); }
   //: Creates a rational from a double.
   //  This is done by computing the continued fraction approximation for d.

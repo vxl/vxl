@@ -142,6 +142,7 @@ class vnl_bignum
   vnl_bignum(unsigned long);           // Unsigned Long constructor
   vnl_bignum(int);                     // Int constructor
   vnl_bignum(unsigned int);            // Unsigned Int constructor
+  vnl_bignum(float);                   // Float constructor
   vnl_bignum(double);                  // Double constructor
   vnl_bignum(long double);             // Long Double constructor
   vnl_bignum(vnl_bignum const&);       // Copy constructor
@@ -205,18 +206,18 @@ class vnl_bignum
   inline bool operator> (int r) const { return vnl_bignum(long(r)) < (*this); }
   inline bool operator<=(int r) const { return !operator>(long(r)); }
   inline bool operator>=(int r) const { return !operator<(long(r)); }
-  inline bool operator==(double r) const { return r == operator double(); }
-  inline bool operator!=(double r) const { return r != operator double(); }
-  inline bool operator< (double r) const { return r > operator double(); }
-  inline bool operator> (double r) const { return r < operator double(); }
-  inline bool operator<=(double r) const { return r >= operator double(); }
-  inline bool operator>=(double r) const { return r <= operator double(); }
-  inline bool operator==(long double r) const { return r == operator long double(); }
-  inline bool operator!=(long double r) const { return r != operator long double(); }
-  inline bool operator< (long double r) const { return r > operator long double(); }
-  inline bool operator> (long double r) const { return r < operator long double(); }
-  inline bool operator<=(long double r) const { return r >= operator long double(); }
-  inline bool operator>=(long double r) const { return r <= operator long double(); }
+  inline bool operator==(double r) const { return r == this->operator double(); }
+  inline bool operator!=(double r) const { return r != this->operator double(); }
+  inline bool operator< (double r) const { return r > this->operator double(); }
+  inline bool operator> (double r) const { return r < this->operator double(); }
+  inline bool operator<=(double r) const { return r >= this->operator double(); }
+  inline bool operator>=(double r) const { return r <= this->operator double(); }
+  inline bool operator==(long double r) const { return r == this->operator long double(); }
+  inline bool operator!=(long double r) const { return r != this->operator long double(); }
+  inline bool operator< (long double r) const { return r > this->operator long double(); }
+  inline bool operator> (long double r) const { return r < this->operator long double(); }
+  inline bool operator<=(long double r) const { return r >= this->operator long double(); }
+  inline bool operator>=(long double r) const { return r <= this->operator long double(); }
 
   inline vnl_bignum abs() const { return operator<(0L) ? operator-() : *this; }
 

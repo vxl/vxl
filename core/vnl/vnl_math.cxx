@@ -36,6 +36,15 @@ extern "C" int finitef(float);
 #  define finitef finite
 # endif
 
+#elif defined(VCL_BORLAND) 
+extern "C" {
+# include "math.h"
+# include "float.h"
+}
+# define finite _finite
+# define finitef _finite
+# define isnan _isnan
+
 #else
 #warning finite() is not declared on this platform
 #define VNL_HAS_NO_FINITE
@@ -128,11 +137,15 @@ static const int sz_l = sizeof(long double)/sizeof(int) -1;
 // Assume IEEE floating point number representation
 bool vnl_math_isnan( float x){return bMe(&x,0x7f800000L,sz_f)&&bMp(&x,0x007fffffL,sz_f);}
 bool vnl_math_isnan(double x){return bMe(&x,0x7ff00000L,sz_d)&&bMp(&x,0x000fffffL,sz_d);}
+# if defined(VCL_BORLAND)
+bool vnl_math_isnan(long double x) { return isnan(x); }
+# else
 bool vnl_math_isnan(long double x) {
   if (sizeof(long double) == 8) return bMe(&x,0x7ff00000L,sz_l) && bMp(&x,0x000fffffL,sz_l);
   else if (sizeof(long double) <= 12) return bMe(&x,0x4001ffffL,sz_l) && bMp(&x,0x40000000,sz_l-4);
   else return bMe(&x,0x7ff70000L,sz_l) && bMp(&x,0x0008ffffL,sz_l);
 }
+# endif
 #endif
 
 // fsm

@@ -84,8 +84,10 @@ class vnl_numeric_traits<bool>
   typedef double real_t;
 };
 
+#if !VCL_CANNOT_SPECIALIZE_CV
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<bool const> : public vnl_numeric_traits<bool> {};
+#endif
 #endif
 
 VCL_DEFINE_SPECIALIZATION
@@ -107,8 +109,10 @@ class vnl_numeric_traits<char>
   typedef double real_t;
 };
 
+#if !VCL_CANNOT_SPECIALIZE_CV
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<char const> : public vnl_numeric_traits<char> {};
+#endif
 
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<unsigned char>
@@ -128,8 +132,10 @@ class vnl_numeric_traits<unsigned char>
   typedef double real_t;
 };
 
+#if !VCL_CANNOT_SPECIALIZE_CV
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<unsigned char const> : public vnl_numeric_traits<unsigned char> {};
+#endif
 
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<signed char>
@@ -149,8 +155,10 @@ class vnl_numeric_traits<signed char>
   typedef double real_t;
 };
 
+#if !VCL_CANNOT_SPECIALIZE_CV
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<signed char const> : public vnl_numeric_traits<signed char> {};
+#endif
 
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<short>
@@ -170,8 +178,10 @@ class vnl_numeric_traits<short>
   typedef double real_t;
 };
 
+#if !VCL_CANNOT_SPECIALIZE_CV
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<short const> : public vnl_numeric_traits<short> {};
+#endif
 
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<unsigned short>
@@ -191,8 +201,10 @@ class vnl_numeric_traits<unsigned short>
   typedef double real_t;
 };
 
+#if !VCL_CANNOT_SPECIALIZE_CV
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<unsigned short const> : public vnl_numeric_traits<unsigned short> {};
+#endif
 
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<int>
@@ -212,8 +224,10 @@ class vnl_numeric_traits<int>
   typedef double real_t;
 };
 
+#if !VCL_CANNOT_SPECIALIZE_CV
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<int const> : public vnl_numeric_traits<int> {};
+#endif
 
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<unsigned int>
@@ -233,8 +247,10 @@ class vnl_numeric_traits<unsigned int>
   typedef double real_t;
 };
 
+#if !VCL_CANNOT_SPECIALIZE_CV
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<unsigned int const> : public vnl_numeric_traits<unsigned int> {};
+#endif
 
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<long>
@@ -254,8 +270,10 @@ class vnl_numeric_traits<long>
   typedef double real_t;
 };
 
+#if !VCL_CANNOT_SPECIALIZE_CV
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<long const> : public vnl_numeric_traits<long > {};
+#endif
 
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<unsigned long>
@@ -275,8 +293,10 @@ class vnl_numeric_traits<unsigned long>
   typedef double real_t;
 };
 
+#if !VCL_CANNOT_SPECIALIZE_CV
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<unsigned long const> : public vnl_numeric_traits<unsigned long> {};
+#endif
 
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<float>
@@ -296,8 +316,10 @@ class vnl_numeric_traits<float>
   typedef double real_t;
 };
 
+#if !VCL_CANNOT_SPECIALIZE_CV
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<float const> : public vnl_numeric_traits<float> {};
+#endif
 
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<double>
@@ -317,8 +339,10 @@ class vnl_numeric_traits<double>
   typedef double real_t;
 };
 
+#if !VCL_CANNOT_SPECIALIZE_CV
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<double const> : public vnl_numeric_traits<double> {};
+#endif
 
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<long double>
@@ -338,8 +362,10 @@ class vnl_numeric_traits<long double>
   typedef long double real_t;
 };
 
+#if !VCL_CANNOT_SPECIALIZE_CV
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<long double const> : public vnl_numeric_traits<long double> {};
+#endif
 
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits< vcl_complex<float> >
@@ -360,8 +386,10 @@ class vnl_numeric_traits< vcl_complex<float> >
   typedef vcl_complex<float> real_t;
 };
 
+#if !VCL_CANNOT_SPECIALIZE_CV
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<vcl_complex<float> const> : public vnl_numeric_traits<vcl_complex<float> > {};
+#endif
 
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits< vcl_complex<double> >
@@ -382,8 +410,10 @@ class vnl_numeric_traits< vcl_complex<double> >
   typedef vcl_complex<double> real_t;
 };
 
+#if !VCL_CANNOT_SPECIALIZE_CV
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<vcl_complex<double> const> : public vnl_numeric_traits<vcl_complex<double> > {};
+#endif
 
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits< vcl_complex<long double> >
@@ -404,7 +434,9 @@ class vnl_numeric_traits< vcl_complex<long double> >
   typedef vcl_complex<long double> real_t;
 };
 
+#if !VCL_CANNOT_SPECIALIZE_CV
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<vcl_complex<long double> const> : public vnl_numeric_traits<vcl_complex<long double> > {};
+#endif
 
 #endif // vnl_numeric_traits_h_

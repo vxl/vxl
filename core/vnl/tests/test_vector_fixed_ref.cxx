@@ -2,7 +2,8 @@
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_vector_fixed_ref.h>
 
-#include <vcl_algorithm.h> // for generate()
+#include <vcl_algorithm.h> // for vcl_generate()
+#include <vcl_cstdlib.h> // for vcl_rand()
 #include <testlib/testlib_test.h>
 
 void test_vector_fixed_ref()
@@ -44,7 +45,7 @@ void test_vector_fixed_ref()
 
   //    assign from vec
   vf other;
-  vcl_generate(other.begin(),other.end(),rand);
+  vcl_generate(other.begin(),other.end(),vcl_rand);
 #if 0 // assignment is ambiguous
   ref = other;
   TEST("assign_vf", ref, other);
@@ -54,7 +55,7 @@ void test_vector_fixed_ref()
 
   {
   //    assign from const vfr
-  vcl_generate(other.begin(),other.end(),rand);
+  vcl_generate(other.begin(),other.end(),vcl_rand);
   vfrc cref(other);
   ref = cref;
   TEST("assign_const_ref", ref, other);
@@ -65,7 +66,7 @@ void test_vector_fixed_ref()
   {
 #if 0 // cannot assign to a vnl_vector_fixed_ref_const
   //    assign from vfr
-  vcl_generate(other.begin(),other.end(),rand);
+  vcl_generate(other.begin(),other.end(),vcl_rand);
   vfr ref2(other);
   ref = ref2;
   TEST("assign_ref", ref, other);
@@ -78,8 +79,8 @@ void test_vector_fixed_ref()
   {
     // plus
     vf a,b;
-    vcl_generate(a.begin(),a.end(),rand);
-    vcl_generate(b.begin(),b.end(),rand);
+    vcl_generate(a.begin(),a.end(),vcl_rand);
+    vcl_generate(b.begin(),b.end(),vcl_rand);
     vfrc arefc(a), brefc(b);
     vf mc = arefc + brefc;
 
@@ -95,8 +96,8 @@ void test_vector_fixed_ref()
   {
     // times
     vf a,b;
-    vcl_generate(a.begin(),a.end(),rand);
-    vcl_generate(b.begin(),b.end(),rand);
+    vcl_generate(a.begin(),a.end(),vcl_rand);
+    vcl_generate(b.begin(),b.end(),vcl_rand);
     vfrc arefc(a), brefc(b);
     vf mc = arefc + brefc;
 

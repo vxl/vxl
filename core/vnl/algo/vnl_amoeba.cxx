@@ -11,6 +11,7 @@
 #include "vnl_amoeba.h"
 
 #include <vcl_cstdio.h> // for sprintf()
+#include <vcl_cstdlib.h> // for vcl_qsort
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vnl/vnl_math.h>
@@ -124,7 +125,7 @@ int compare_aux(const void * s1, const void * s2)
 static
 void sort_simplex(vcl_vector<vnl_amoeba_SimplexCorner>& simplex)
 {
-  qsort(&simplex[0], simplex.size(), sizeof simplex[0], compare_aux);
+  vcl_qsort(&simplex[0], simplex.size(), sizeof simplex[0], compare_aux);
 }
 
 static
