@@ -101,11 +101,17 @@ LIB32=link.exe -lib
 # Begin Source File
 SOURCE=.\vtol_extract_topology.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vtol_extract_topology_internals.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "txx;h"
 # Begin Source File
 SOURCE=.\vtol_extract_topology.h
+# End Source File
+# Begin Source File
+SOURCE=.\vtol_extract_topology_internals.h
 # End Source File
 # End Group
 # End Target
