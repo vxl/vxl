@@ -48,7 +48,12 @@ template <class T>
 vnl_matrix<T> vnl_matrix_exp(vnl_matrix<T> const &X)
 {
   vnl_matrix<T> expX(X.rows(), X.cols());
-  assert(vnl_matrix_exp(X, expX, 1e-10));
+#ifndef NDEBUG
+  bool retval = 
+#endif
+  vnl_matrix_exp(X, expX, 1e-10);
+
+  assert(retval);
   return expX;
 }
 
