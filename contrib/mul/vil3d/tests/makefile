@@ -28,6 +28,7 @@ TESTS += test_convert.cxx
 TESTS += test_algo_convolve_1d.cxx
 TESTS += test_algo_histogram.cxx
 TESTS += test_algo_histogram_equalise.cxx
+TESTS += test_from_image_2d.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
