@@ -1,4 +1,6 @@
 vidl_vil1 - The VXL video library (using vil1).
+vidl_vil1 has been replaced by the new vidl. vidl_vil1 is provided for compatibility
+
 
 To get started, register your codecs and use vidl_vil1_io to
 load a movie.  Here's a program which prints info about 
