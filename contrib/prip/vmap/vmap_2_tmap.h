@@ -232,7 +232,7 @@ class vmap_2_tmap: public vmap_2_map<D>,
   }
 
   //: Returns the index of the vertex "arg".
-  vmap_vertex_index index (vmap_2_tmap_vertexconst& arg) const
+  vmap_vertex_index index (vmap_2_tmap_vertex const& arg) const
   {
     return arg.sequence_index();
   }
@@ -515,7 +515,7 @@ class vmap_2_tmap: public vmap_2_map<D>,
   bool valid_permutations() const ;
 
   //:
-  virtual bool valid()const ;
+  virtual bool valid() const ;
 
   //: Deletes everything.
   virtual void clear() ;
