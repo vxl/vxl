@@ -1,4 +1,4 @@
-// This is contrib/brl/bseg/brip/brip_histogram.txx
+// This is brl/bseg/brip/brip_histogram.txx
 #ifndef brip_histogram_txx_
 #define brip_histogram_txx_
 //:
@@ -9,7 +9,6 @@
 
 #include <brip/brip_histogram.h>
 #include <vcl_cassert.h>
-#include <vxl_config.h>
 #include <vcl_algorithm.h>
 
 //: Construct histogram from pixels in the given image.
@@ -48,8 +47,7 @@ double brip_histogram(const vil_image_view<T>& image,
 }
 
 
-//: Construct weighted histogram from pixels in the given image using
-//  values in an image of weights.
+//: Construct weighted histogram from pixels in the given image using values in an image of weights.
 template<class T>
 double brip_weighted_histogram(const vil_image_view<T>& image,
                                const vil_image_view<double>& weights,
@@ -94,7 +92,6 @@ double brip_weighted_histogram(const vil_image_view<T>& image,
 }
 
 
-
 //: Construct the joint histogram between image1 and image2
 template<class T>
 double brip_joint_histogram(const vil_image_view<T>& image1,
@@ -108,9 +105,9 @@ double brip_joint_histogram(const vil_image_view<T>& image1,
 
   vcl_vector<double> empty(n_bins, 0.0);
   histo.clear();
-  for(unsigned i=0; i<n_bins; ++i)
+  for (unsigned i=0; i<n_bins; ++i)
     histo.push_back(empty);
-  
+
   double x0 = double(min);
   double s = double(n_bins-1)/(double(max)-x0);
   double total_weight = 0.0;
@@ -145,7 +142,6 @@ double brip_joint_histogram(const vil_image_view<T>& image1,
 }
 
 
-
 // Macro to perform manual instantiations
 #define BRIP_HISTOGRAM_INSTANTIATE(T) \
   template \
@@ -161,6 +157,6 @@ double brip_joint_histogram(const vil_image_view<T>& image1,
   double brip_joint_histogram(const vil_image_view<T >& image1, \
                               const vil_image_view<T >& image2, \
                               vcl_vector<vcl_vector<double> >& histo, \
-                              double min, double max, unsigned n_bins); \
+                              double min, double max, unsigned n_bins)
 
 #endif // brip_histogram_txx_

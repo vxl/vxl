@@ -1,4 +1,4 @@
-// This is contrib/brl/bseg/brip/brip_mutual_info.txx
+// This is brl/bseg/brip/brip_mutual_info.txx
 #ifndef brip_mutual_info_txx_
 #define brip_mutual_info_txx_
 //:
@@ -11,8 +11,6 @@
 #include <brip/brip_histogram.h>
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
-#include <vxl_config.h>
-#include <vcl_algorithm.h>
 
 
 //: Calculate the Mutual Information between the images.
@@ -42,13 +40,11 @@ double brip_mutual_info(const vil_image_view<T>& image1,
 }
 
 
-
 // Macro to perform manual instantiations
 #define BRIP_MUTUAL_INFO_INSTANTIATE(T) \
   template \
-  double brip_mutual_info(const vil_image_view<T>& image1, \
-                          const vil_image_view<T>& image2, \
-                          double min, double max, unsigned n_bins); 
-
+  double brip_mutual_info(const vil_image_view<T >& image1, \
+                          const vil_image_view<T >& image2, \
+                          double min, double max, unsigned n_bins)
 
 #endif // brip_mutual_info_txx_

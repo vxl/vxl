@@ -1,4 +1,4 @@
-// This is contrib/brl/bseg/brip/brip_mutual_info.h
+// This is brl/bseg/brip/brip_mutual_info.h
 #ifndef brip_mutual_info_h_
 #define brip_mutual_info_h_
 //:
@@ -26,8 +26,8 @@ inline
 double brip_hist_entropy(const vcl_vector<double>& histogram, double mag)
 {
   double entropy = 0.0;
-  for( vcl_vector<double>::const_iterator h_itr = histogram.begin();
-       h_itr != histogram.end(); ++h_itr ){
+  for ( vcl_vector<double>::const_iterator h_itr = histogram.begin();
+        h_itr != histogram.end(); ++h_itr ){
     double prob = (*h_itr)/mag;
     entropy += -(prob?prob*vcl_log(prob):0); // if prob=0 this value is defined as 0
   }
@@ -40,8 +40,8 @@ inline
 double brip_hist_entropy(const vcl_vector<vcl_vector<double> >& histogram, double mag)
 {
   double entropy = 0.0;
-  for( vcl_vector<vcl_vector<double> >::const_iterator h_itr = histogram.begin();
-       h_itr != histogram.end(); ++h_itr ){
+  for ( vcl_vector<vcl_vector<double> >::const_iterator h_itr = histogram.begin();
+        h_itr != histogram.end(); ++h_itr ){
     entropy += brip_hist_entropy(*h_itr,mag);
   }
   return entropy;

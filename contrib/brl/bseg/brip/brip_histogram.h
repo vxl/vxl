@@ -1,4 +1,4 @@
-// This is contrib/brl/bseg/brip/brip_histogram.h
+// This is brl/bseg/brip/brip_histogram.h
 #ifndef brip_histogram_h_
 #define brip_histogram_h_
 //:
@@ -9,7 +9,6 @@
 
 #include <vil/vil_image_view.h>
 #include <vcl_vector.h>
-
 
 
 //: Construct histogram from pixels in the given image.
@@ -39,6 +38,5 @@ double brip_joint_histogram(const vil_image_view<T>& image1,
                             const vil_image_view<T>& image2,
                             vcl_vector<vcl_vector<double> >& histo,
                             double min, double max, unsigned n_bins);
-
 
 #endif // brip_histogram_h_
