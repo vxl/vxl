@@ -8,12 +8,10 @@ void mbl_read_props_print(vcl_ostream &afs, mbl_read_props_type props)
   afs << vsl_indent() << "{\n";
   vsl_indent_inc(afs);
   for (ITER i = props.begin(); i != props.end(); ++i)
-    afs << vsl_indent() << i->first << ": " << i->second << vcl_endl;
+    afs << vsl_indent() << (*i).first << ": " << (*i).second << vcl_endl;
   vsl_indent_dec(afs);
   afs << vsl_indent() << "}\n";
-
 }
-
 
 
 //: Read properties from a text stream.
@@ -33,7 +31,6 @@ mbl_read_props_type mbl_read_props(vcl_istream &afs)
 
   while (afs>>vcl_ws, !afs.eof())
   {
-
     afs>>label;
     if (label.substr(0,2) =="//")
     {
@@ -90,4 +87,3 @@ mbl_read_props_type mbl_read_props(vcl_istream &afs)
     "looking for '}'" <<vcl_endl;
   return props;
 }
-
