@@ -385,7 +385,7 @@ DETERMINE_TYPE(BYTE 1 "${SIZEOF_CHAR}" "char" "${SIZEOF_CHAR}" "char" "${SIZEOF_
 DETERMINE_TYPE(INT_8 1 "${SIZEOF_CHAR}" "char" "${SIZEOF_SHORT}" "short" "${SIZEOF_CHAR}" "char")
 DETERMINE_TYPE(INT_16 2 "${SIZEOF_SHORT}" "short" "${SIZEOF_INT}" "int" "${SIZEOF_CHAR}" "char")
 DETERMINE_TYPE(INT_32 4 "${SIZEOF_INT}" "int" "${SIZEOF_LONG}" "long" "${SIZEOF_SHORT}" "short")
-DETERMINE_TYPE(INT_64 8 ""${SIZEOF_LONG}" "long" ${SIZEOF_LONG_LONG}" "long long" "${SIZEOF___INT64}" "__int64")
+DETERMINE_TYPE(INT_64 8 "${SIZEOF_LONG}" "long" "${SIZEOF_LONG_LONG}" "long long" "${SIZEOF___INT64}" "__int64")
 DETERMINE_TYPE(IEEE_32 4 "${SIZEOF_DOUBLE}" "double" "${SIZEOF_FLOAT}" "float" "${SIZEOF_LONG_DOUBLE}" "long double")
 DETERMINE_TYPE(IEEE_64 8 "${SIZEOF_DOUBLE}" "double" "${SIZEOF_LONG_DOUBLE}" "long double" "${SIZEOF_FLOAT}" "float")
 DETERMINE_TYPE(IEEE_96 12 "${SIZEOF_LONG_DOUBLE}" "long double" "${SIZEOF_DOUBLE}" "double" "${SIZEOF_FLOAT}" "float")
