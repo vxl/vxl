@@ -350,6 +350,12 @@ SOURCE=.\vil2_view_as.h
 # Begin Source File
 SOURCE=.\vil2_fill.h
 # End Source File
+# Begin Source File
+SOURCE=.\vil2_convert.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_transform.h
+# End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
