@@ -7,19 +7,12 @@
 #include "vnl_binary.h"
 
 #include <vcl/vcl_iostream.h>
+#include <vcl/vcl_new.h>
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_diag_matrix.h>
 #include <vnl/vnl_resize.h>
-
-#include <vcl/vcl_complex_fwd.h>
-template <class T> struct vnl_binary_scalar_traits;
-VCL_DEFINE_SPECIALIZATION struct vnl_binary_scalar_traits<int> { enum { id = 0x37AF98EB }; };
-VCL_DEFINE_SPECIALIZATION struct vnl_binary_scalar_traits<float> { enum { id = 0x12345678 }; };
-VCL_DEFINE_SPECIALIZATION struct vnl_binary_scalar_traits<double> { enum { id = 0x56781234 }; };
-VCL_DEFINE_SPECIALIZATION struct vnl_binary_scalar_traits<vcl_complex<float> > { enum { id = 0xABCDEF01 }; };
-VCL_DEFINE_SPECIALIZATION struct vnl_binary_scalar_traits<vcl_complex<double> > { enum { id = 0xEF01ABCD }; };
 
 // KAI C++ wants char*, so it must be correct....
 #define stream_cast (char*)
@@ -29,19 +22,37 @@ VCL_DEFINE_SPECIALIZATION struct vnl_binary_scalar_traits<vcl_complex<double> > 
 template <class T>
 bool vnl_binary_save(ostream &f, vnl_vector<T> const &v)
 {
-  unsigned tmp;
-  tmp = v.size(); f.write(stream_cast &tmp, sizeof(tmp));
-  f.write(stream_cast v.data_block(), v.size() * sizeof(T));
+  int tmp = v.size();
+  f.write(stream_cast &tmp, sizeof(tmp));
+  if(v.data_block())
+    f.write(stream_cast v.data_block(), v.size() * sizeof(T));
+  else
+    ; // FIXME: vector  has been default-constructed.
   return true;
 }
 
 template <class T>
 bool vnl_binary_load(istream &f, vnl_vector<T> &v)
 {
-  unsigned n;
+  int n = -1;
   f.read(stream_cast &n, sizeof(n));
-  vnl_resize(v, n);
-  f.read(stream_cast v.data_block(), v.size() * sizeof(T));
+  if (n > 0) {
+    vnl_resize(v, n);
+    f.read(stream_cast v.data_block(), v.size() * sizeof(T));
+  }
+  // FIXME
+  else {
+    // egcs barfs at v.~vnl_vector()
+    // SunPro is merely braindead.
+#if defined(VCL_SUNPRO_CC_50)
+    vnl_c_vector<T>::deallocate(v.begin(), v.size());
+#elif defined(VCL_EGCS)
+    (&v)->~vnl_vector();
+#else
+    v.~vnl_vector();
+#endif
+    new (&v) vnl_vector<T>;
+  }
   return true;
 }
 
@@ -50,21 +61,39 @@ bool vnl_binary_load(istream &f, vnl_vector<T> &v)
 template <class T>
 bool vnl_binary_save(ostream &f, vnl_matrix<T> const &A)
 {
-  unsigned tmp;
+  int tmp;
   tmp = A.rows(); f.write(stream_cast &tmp, sizeof(tmp));
   tmp = A.cols(); f.write(stream_cast &tmp, sizeof(tmp));
-  f.write(stream_cast A.data_block(), A.size() * sizeof(T));
+  if (A.data_array())
+    f.write(stream_cast A.data_block(), A.size() * sizeof(T));
+  else
+    ; // FIXME: matrix has been default-constructed.
   return true;
 }
 
 template <class T>
 bool vnl_binary_load(istream &f, vnl_matrix<T> &A)
 {
-  unsigned r, c;
+  int r = -1, c = -1;
   f.read(stream_cast &r, sizeof(r));
   f.read(stream_cast &c, sizeof(c));
-  vnl_resize(A, r, c);
-  f.read(stream_cast A.data_block(), A.size() * sizeof(T));
+  //vcl_cerr << "r c = " << r << ' ' << c << vcl_endl;
+  if (r > 0 || c > 0) {
+    vnl_resize(A, r, c);
+    f.read(stream_cast A.data_block(), A.size() * sizeof(T));
+  }
+  // FIXME
+  else {
+#if defined(VCL_SUNPRO_CC_50)
+    assert(!"get a proper compiler");
+#elif defined(VCL_EGCS)
+    (&A)->~vnl_matrix();
+#else
+    A.~vnl_matrix();
+#endif
+    new (&A) vnl_matrix<T>;
+    return false;
+  }
   return true;
 }
 
@@ -73,19 +102,35 @@ bool vnl_binary_load(istream &f, vnl_matrix<T> &A)
 template <class T>
 bool vnl_binary_save(ostream &f, vnl_diag_matrix<T> const &D)
 {
-  unsigned tmp;
-  tmp = D.size(); f.write(stream_cast &tmp, sizeof(tmp));
-  f.write(stream_cast D.data_block(), D.size() * sizeof(T));
+  int tmp = D.size();
+  f.write(stream_cast &tmp, sizeof(tmp));
+  if (D.data_block())
+    f.write(stream_cast D.data_block(), D.size() * sizeof(T));
+  else
+    ; // FIXME: matrix has been default-constructed.
   return true;
 }
 
 template <class T>
 bool vnl_binary_load(istream &f, vnl_diag_matrix<T> &D)
 {
-  unsigned n;
+  int n = -1;
   f.read(stream_cast &n, sizeof(n));
-  vnl_resize(D, n);
-  f.read(stream_cast D.data_block(), D.size() * sizeof(T));
+  if (n > 0) {
+    vnl_resize(D, n);
+    f.read(stream_cast D.data_block(), D.size() * sizeof(T));
+  }
+  // FIXME
+  else {
+#if defined(VCL_SUNPRO_CC_50)
+    assert(!"get a proper compiler");
+#elif defined(VCL_EGCS)
+    (&D)->~vnl_diag_matrix();
+#else
+    D.~vnl_diag_matrix();
+#endif
+    new (&D) vnl_diag_matrix<T>;
+  }
   return true;
 }
 
