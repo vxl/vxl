@@ -3,10 +3,11 @@
 //:
 // \file
 #include <vsrl/vsrl_dynamic_program.h>
+#include <vsrl/vsrl_image_correlation.h>
+#include <vsrl/vsrl_intensity_token.h>
 #include <vsrl/vsrl_parameters.h>
 #include <vsrl/vsrl_token.h>
 #include <vcl_iostream.h>
-#include <vnl/vnl_vector.h>
 
 // constructor
 vsrl_raster_dp_setup::vsrl_raster_dp_setup(int raster_line, vsrl_image_correlation *image_correlation)
@@ -20,14 +21,6 @@ vsrl_raster_dp_setup::vsrl_raster_dp_setup(int raster_line, vsrl_image_correlati
   bias_cost_=vsrl_parameters::instance()->bias_cost; // probably 0.2
   inner_cost_=1.0;
   outer_cost_=0.5;
-}
-
-
-// destructor
-vsrl_raster_dp_setup::~vsrl_raster_dp_setup()
-{
-  clear_token_list(tok_list1);
-  clear_token_list(tok_list2);
 }
 
 
@@ -70,12 +63,10 @@ void vsrl_raster_dp_setup::create_token_list(int width,
 
   //  get the number of tokens that are required
 
-
-  double x,y;
-  y= raster_line_;
+  double y= raster_line_;
   int index = 0;
 
-  for (x=0;x<width;x++)
+  for (double x=0; x<width; x+=1.0)
   {
     // create the intensity token
 
@@ -103,7 +94,6 @@ void vsrl_raster_dp_setup::clear_token_list(vcl_vector<vsrl_intensity_token*> &t
   // clear the token list
 
   vcl_vector<vsrl_intensity_token*>::iterator i;
-
   for (i=tok_list.begin();i<tok_list.end();i++)
   {
     delete *i;
@@ -165,7 +155,7 @@ double vsrl_raster_dp_setup::execute()
 }
 
 
-double vsrl_raster_dp_setup::execute(vnl_vector<int > curr_row)
+double vsrl_raster_dp_setup::execute(vnl_vector<int> curr_row)
 {
   // create the token lists
 
@@ -216,22 +206,6 @@ double vsrl_raster_dp_setup::execute(vnl_vector<int > curr_row)
 }
 
 
-void vsrl_raster_dp_setup::set_search_range(int range)
-{
-  search_range_=range;
-}
-
-void vsrl_raster_dp_setup::set_prior_raster(vsrl_raster_dp_setup *prior_raster)
-{
-  prior_raster_=prior_raster;
-}
-
-void vsrl_raster_dp_setup::set_bias_cost(double bias_cost)
-{
-  bias_cost_=bias_cost;
-}
-
-
 void vsrl_raster_dp_setup::set_token_biases()
 {
   // the idea here is to set the bias for each token based on the
@@ -279,11 +253,4 @@ void vsrl_raster_dp_setup::set_token_biases()
   int last_tok = tok_list1.size() - 1;
   (tok_list1[last_tok])->set_bias(0);
   (tok_list1[last_tok])->set_bias_cost(100.0);
-}
-
-
-//: get the raster line that this dynamic program uses
-int vsrl_raster_dp_setup::get_raster_line()
-{
-  return raster_line_;
 }
