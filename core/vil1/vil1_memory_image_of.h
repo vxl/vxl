@@ -54,6 +54,8 @@ public:
   const_iterator begin() const { return get_buffer(); }
   const_iterator end  () const { return get_buffer() + rows()*cols(); }
 
+  unsigned size() const { return rows() * cols(); }
+
   //: Empty image.
   vil_memory_image_of();
 
@@ -80,6 +82,11 @@ public:
   
   //: This method hides the operator= in the base class.
   vil_memory_image_of<T>& operator=(vil_memory_image_of<T> const &);
+  
+  //: Copy a vil_image, only if it's in an appropriate format.
+  // This routine does not try to guess how to convert images which are
+  // not compatible with T.
+  vil_memory_image_of<T>& operator=(vil_image const &);
   
   //: Load image.
   void set(vil_image const& image);

@@ -64,6 +64,14 @@ vil_memory_image_of<T>& vil_memory_image_of<T>::operator=(vil_memory_image_of<T>
   return *this;
 }
 
+template <class T>
+vil_memory_image_of<T>& vil_memory_image_of<T>::operator=(vil_image const &that)
+{
+  assert(that.bits_per_component() * that.components() == 8 * sizeof (T));
+  vil_memory_image::operator=(that);
+  return *this;
+}
+
 template <class  T>
 void vil_memory_image_of<T>::resize(int width, int height)
 {
