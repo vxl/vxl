@@ -1,5 +1,5 @@
-#ifndef vnl_alloc_h
-#define vnl_alloc_h
+#ifndef vnl_alloc_h_
+#define vnl_alloc_h_
 
 // Default node allocator.
 // With a reasonable compiler, this should be roughly as fast as the
@@ -117,4 +117,4 @@ public:
   static void * reallocate(void *p, size_t old_sz, size_t new_sz);
 };
     
-# endif /* ! __STL_USE_NEWALLOC */
+# endif // vnl_alloc_h_
