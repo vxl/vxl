@@ -100,10 +100,10 @@ void vcsl_graph::remove(const vcsl_spatial_sptr &cs)
 {
   // require
   assert(has(cs));
-  
+
   vcl_vector<vcsl_spatial_sptr>::iterator i;
 
-  for(i=vertices_->begin();i!=vertices_->end()&&((*i)!=cs);++i)
+  for(i=vertices_->begin(); i!=vertices_->end()&&((*i)!=cs); ++i)
     ;
   vertices_->erase(i);
 }

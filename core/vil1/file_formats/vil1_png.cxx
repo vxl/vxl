@@ -197,7 +197,7 @@ struct vil_png_structures {
       return (ok = problem("couldn't allocate space for image"));
 
     // Re-point rows.
-    for (unsigned int y = 1 ; y < height ; ++y)
+    for (unsigned int y = 1; y < height; ++y)
       rows[y] = rows[0] + y * linesize;
 
     return true;

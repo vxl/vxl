@@ -83,9 +83,9 @@ static bool difference(vil_image const& a, vil_image const& b, int v, const char
 {
   int sx = a.width(),  sy = a.height();
   if (sx != b.width() || sy != b.height())
-    {if (m2) vcl_cout<<m<<m2<<" FAILED: images are different size\n" ; return true;}
+    {if (m2) vcl_cout<<m<<m2<<" FAILED: images are different size\n"; return true;}
   if (a.planes() != b.planes() || a.components() != b.components())
-    {if (m2) vcl_cout<<m<<m2<<" FAILED: images have different # planes/components\n" ; return true;}
+    {if (m2) vcl_cout<<m<<m2<<" FAILED: images have different # planes/components\n"; return true;}
   if (a.component_format()   != b.component_format() ||
       a.bits_per_component() != b.bits_per_component())
     {if (m2) vcl_cout<<m<<m2<<" FAILED: images are different format\n";return true;}
@@ -128,9 +128,9 @@ static bool difference(vil_image const& a, vil_image const& b, int v, const char
   if (difference(i,r,0)) vcl_cout<<m<<m2<<"FAILED: input image changed!\n"; }
 #define ALL_TESTS(d,v,m) \
   TEST(byte_img,byte_ori,d,unsigned char,v,m,"_byte"); \
-  TEST(shrt_img,shrt_ori,d,unsigned short,v,m,"_short"); \
-//TEST(flot_img,flot_ori,d,float,v,m,"_float"); \
-//TEST(colr_img,colr_ori,d,vil_rgb_byte,v,m,"_colour")
+  TEST(shrt_img,shrt_ori,d,unsigned short,v,m,"_short")/*; \
+  TEST(flot_img,flot_ori,d,float,v,m,"_float"); \
+  TEST(colr_img,colr_ori,d,vil_rgb_byte,v,m,"_colour") */
 
 int main() {
   vil_image byte_img = CreateTest8bitImage(32,32),  byte_ori = CreateTest8bitImage(32,32);

@@ -19,12 +19,14 @@ void vil_colour_space_RGB_to_YIQ(T const in[3], T out[3])
   out[2] = T(0.212) * in[0] - T(0.523) * in[1] + T(0.311) * in[2];
 }
 
-//     green --- yellow     ;
-//    /    \     /     \    ;
-// cyan --- white ---- red  ;
-//    \    /     \     /    ;
-//     blue  --- magenta    ;
-//
+//:
+// \verbatim
+//     green --- yellow     //
+//    /    \     /     \    //
+// cyan --- white ---- red  //
+//    \    /     \     /    //
+//     blue  --- magenta    //
+//                          //
 template <class T>
 void vil_colour_space_RGB_to_HSV(T r, T g, T b, T *h, T *s, T *v)
 {

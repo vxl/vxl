@@ -253,7 +253,7 @@ struct vil_viff_xvimage {
 
         char *imagedata;        /* a pointer to the input data (straight off
                                    of disk, must be cast into the proper type */
-        } ;
+        };
 
 #define XV_FILE_MAGIC_NUM       0xab    /* Khoros file identifier */
 #define XV_FILE_TYPE_XVIFF      1       /* indicates an image file */

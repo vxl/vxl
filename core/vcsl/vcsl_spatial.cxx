@@ -125,27 +125,27 @@ void vcsl_spatial::set_parent(vcl_vector<vcsl_spatial_sptr> &new_parent)
   vcl_vector<vcsl_spatial_sptr>::iterator j;
 
   if(parent_!=&new_parent)
+  {
+    if(parent_!=0)
     {
-      if(parent_!=0)
-        {
-          for(i=parent_->begin();i!=parent_->end();++i)
-            {
-              children=(*i)->_potential_children;
-              for(j=children->begin();j!=children->end()&&(*j).ptr()!=this;++j)
-                ;
-              children->erase(j);
-            }
-        }
-      parent_=&new_parent;
       for(i=parent_->begin();i!=parent_->end();++i)
-        {
-          if((*i).ptr()!=0)
-            {
-              children=(*i)->_potential_children;
-              children->push_back(this);
-            }
-        }
+      {
+        children=(*i)->_potential_children;
+        for(j=children->begin(); j!=children->end()&&(*j).ptr()!=this; ++j)
+          ;
+        children->erase(j);
+      }
     }
+    parent_=&new_parent;
+    for(i=parent_->begin();i!=parent_->end();++i)
+    {
+      if((*i).ptr()!=0)
+      {
+        children=(*i)->_potential_children;
+        children->push_back(this);
+      }
+    }
+  }
 }
 
 //---------------------------------------------------------------------------

@@ -25,7 +25,7 @@ public:
     THIRTY_FIVE_mm};
   enum paper_orientation{
     PORTRAIT,
-    LANDSCAPE } ;
+    LANDSCAPE };
   enum paper_layout{
     CENTER,
     MAX };

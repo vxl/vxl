@@ -54,14 +54,14 @@ public:
   virtual list_of_vcsl_matrix_param_sptr *matrix_list(void) const;
 
   virtual vnl_vector<double> * execute(const vnl_vector<double> &v,
-                                       const double time) const ;
+                                       const double time) const;
 
   virtual vnl_vector<double> * inverse(const vnl_vector<double> &v,
-                                       const double time) const ;
+                                       const double time) const;
 
 protected:
 
-  vnl_matrix<double>  param_to_matrix( vcsl_matrix_param_sptr from,bool type ) const;
+  vnl_matrix<double> param_to_matrix( vcsl_matrix_param_sptr from,bool type ) const;
 
   vnl_matrix<double> matrix_value(const double time, bool type) const;
 

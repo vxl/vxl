@@ -161,7 +161,7 @@ public :
 
         friend bool operator <(const frame_iterator&fr1,
                                const frame_iterator&fr2)
-           { return fr1.frame_number_ < fr2.frame_number_ ; }
+           { return fr1.frame_number_ < fr2.frame_number_; }
         friend bool operator > (const frame_iterator &fr1,
                                 const frame_iterator& fr2)
            { return fr1.frame_number_ > fr2.frame_number_; }

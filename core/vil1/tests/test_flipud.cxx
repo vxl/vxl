@@ -1,6 +1,5 @@
 #include <vcl_iostream.h>
 
-
 #include <vil/vil_memory_image.h>
 #include <vil/vil_flipud.h>
 #include <vil/vil_test.h>
@@ -20,7 +19,6 @@ void p(vil_image const& m)
 
 void test_flipud()
 {
-
   vil_memory_image m(3, 2, VIL_BYTE);
 
   unsigned char data[] = {
@@ -43,7 +41,7 @@ void test_flipud()
   {
     unsigned char val=0;
     flip.get_section(&val, i%3, i / 3, 1, 1);
-    if (flipped_data[i] != val)  break ;
+    if (flipped_data[i] != val)  break;
   }
 
   TEST ("small get_section shows flipped data", i, 6);
@@ -51,12 +49,9 @@ void test_flipud()
   flip.get_section(data2, 0, 0, 3, 2);
 
   for (i =0; i < 6; i++)
-    if (flipped_data[i] != data2[i])  break ;
+    if (flipped_data[i] != data2[i])  break;
 
   TEST ("full get_section shows flipped data", i, 6);
-
-
-  
 }
 
 TESTMAIN(test_flipud);

@@ -61,10 +61,9 @@ vidl_image_list_codec::vidl_image_list_codec()
   // creates an instance of this class in bad shape
 }
 
-//: Destructor
+// Destructor
 vidl_image_list_codec::~vidl_image_list_codec()
 {
-
 }
 
 //: Initialize
@@ -73,7 +72,7 @@ bool vidl_image_list_codec::init()
   if (images_.empty())
     return false;
 
-//   unfinished !!!!!
+//   unfinished !!!!! TODO
 
      set_number_frames(images_.size());
      vil_image first = images_[0];
@@ -108,15 +107,13 @@ vidl_codec_sptr vidl_image_list_codec::load(const char* fname, char mode)
   // will try and load as many images as possible starting with
   //   index 0 and stopping when we run out of images
 
-  for( int i=0; ; i++)
+  for( int i=0; true; i++)
     {
       const char *name = vul_sprintf( fname, i).c_str();
       vil_image img= vil_load(name);
 
       if (img!=0)
-        {
-          images_.push_back(img);
-        }
+        images_.push_back(img);
       else
         break;
     }
@@ -138,7 +135,6 @@ vidl_codec_sptr vidl_image_list_codec::load(const vcl_list<vcl_string> &fnames, 
 
   for (vcl_list<vcl_string>::const_iterator i = fnames.begin(); i!=fnames.end(); ++i)
     {
-
       const char* name = (*i).c_str();
       vil_image img =  vil_load(name);
       if (img!=0)
@@ -167,7 +163,6 @@ vidl_codec_sptr vidl_image_list_codec::load(const vcl_vector<vcl_string> &fnames
 
   for (vcl_vector<vcl_string>::const_iterator i = fnames.begin(); i!=fnames.end(); ++i)
     {
-
       const char* name = (*i).c_str();
       vil_image img =  vil_load(name);
 
@@ -200,10 +195,10 @@ bool vidl_image_list_codec::probe(const char* fname)
 bool vidl_image_list_codec::save(vidl_movie* movie, const char* fname)
 {
   if (!default_image_type_)
-    {
-      vcl_cerr << "No default image type defined to save the video as a list of images." << vcl_endl;
-      return false;
-    }
+  {
+    vcl_cerr << "No default image type defined to save the video as a list of images." << vcl_endl;
+    return false;
+  }
 
   return save(movie, fname, default_image_type_);
 }

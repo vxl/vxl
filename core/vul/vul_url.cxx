@@ -517,7 +517,7 @@ bool vul_url::is_file(const char * fn)
   if (vul_url::is_url(fn))
     return vul_url::exists(fn);
   else
-    return vul_file::exists(fn) && ! vul_file::is_directory(fn) ;
+    return vul_file::exists(fn) && ! vul_file::is_directory(fn);
 }
 
 //=======================================================================

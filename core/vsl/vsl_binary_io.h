@@ -7,7 +7,7 @@
 // \author Ian Scott, Tim Cootes (Manchester) March 2001
 //
 // You should include this file if you want to do binary_io
-// 
+//
 // Also included are a set of functions
 // vsl_print_summary(vcl_ostream& os, bool b)
 // for basic types to ensure that templated classes
@@ -21,7 +21,7 @@
 #include <vcl_utility.h>
 #include <vcl_cstdlib.h>
 
-//: A binary output adaptor for any vcl_ostream 
+//: A binary output adaptor for any vcl_ostream
 // Currently the main use of this is to encourage streams to be opened
 // in binary mode (ie. withour CR/LF conversion)
 //
@@ -49,11 +49,11 @@ public:
   virtual ~vsl_b_ostream() {}
 
   //: Returns true if the underlying stream has its fail bit set.
-  bool operator!() const ; 
+  bool operator!() const;
 
   //: Clear the stream's record of any serialisation operations
   // Calling this function while outputing serialisable things to stream,
-  // will mean 
+  // will mean
   // that a second copy of an object may get stored to the stream.
   virtual void clear_serialisation_records();
 
@@ -93,10 +93,10 @@ protected:
   // I could have used the pointer itself as the unique identifier, but it is
   // unreasonable to expect this to work cross-platform when the platforms have
   // different pointer sizes.
-  
+
   //: The type of the serialisation records
   typedef vcl_map<void *, vcl_pair<unsigned long, int>, vcl_less<void *> >
-    serialisation_records_type; 
+    serialisation_records_type;
 
   //: The serialisation records
   // Records a pointer, a unique identifier, and an integer
@@ -132,7 +132,6 @@ public:
   //: Close the stream
   void close();
 };
-
 
 
 //: An adaptor for any vcl_istream to make it suitable for binary input
@@ -203,7 +202,7 @@ protected:
   //: The type of the serialisation records.
   typedef vcl_map<unsigned long, vcl_pair<void *, int>, vcl_less<unsigned long> >
     serialisation_records_type;
-  
+
   //: The serialisation records,
   // The record takes a unique identifier of the object (which would be
   // stored on the stream) and returns the pointer to the object, and
@@ -370,4 +369,5 @@ inline void vsl_b_read_block(vsl_b_istream &is, T* begin, unsigned nelems)
   while (nelems--)
     vsl_b_read(is, *(begin++));
 }
+
 #endif // vsl_binary_complex_io_h_

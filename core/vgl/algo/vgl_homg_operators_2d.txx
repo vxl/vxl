@@ -545,7 +545,7 @@ vgl_homg_operators_2d<T>::do_intersect(vgl_conic<T> const& c1,
     double data[]={coef(2),coef(3),coef(4), 1,0,0, 0,1,0};
     vnl_matrix<double> M(data,3,3);
     vnl_real_eigensystem eig(M);
-    vnl_diag_matrix<vcl_complex<double> >  polysolutions = eig.D ;
+    vnl_diag_matrix<vcl_complex<double> >  polysolutions = eig.D;
     vcl_list<vgl_homg_point_2d<T> > solutions;
     for (int i=0;i<3;i++)
       if(vcl_abs(vcl_imag(polysolutions(i))) < 1e-7) {// only want the real solutions
@@ -561,7 +561,7 @@ vgl_homg_operators_2d<T>::do_intersect(vgl_conic<T> const& c1,
   vnl_matrix<double> M(data,4,4);
   vnl_real_eigensystem eig(M);
 
-  vnl_diag_matrix<vcl_complex<double> >  polysolutions = eig.D ;
+  vnl_diag_matrix<vcl_complex<double> >  polysolutions = eig.D;
 
   // These are only the solutions of the fourth order equation.
   // The solutions of the intersection of the two conics are:

@@ -64,8 +64,8 @@ public:
   int length();
 
   // Get the size in pixels
-  int width() const ;
-  int height() const ;
+  int width() const;
+  int height() const;
 
   vidl_codec_sptr get_codec();
 
