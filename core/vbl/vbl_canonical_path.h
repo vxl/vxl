@@ -7,7 +7,7 @@
   fsm@robots.ox.ac.uk
 */
 
-// Given a path in the file system computes a canonical form.
+// Given a path in the file system, compute a canonical form.
 // A canonical path is one which does not
 //  - involve any symbolic links
 //  - involve any . or ..
