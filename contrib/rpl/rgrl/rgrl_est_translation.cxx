@@ -119,9 +119,10 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
 
   // Use pseudo inverse
   if ( (unsigned)svd.rank() < m ) {
-    DebugMacro(1, "rank ("<<svd.rank()<<") < "<<(m+1)*m<<"; no solution." );
+    DebugMacro(1, "rank ("<<svd.rank()<<") < "<<m<<"; no solution." );
     DebugMacro_abv(1,"  (used " << count << " correspondences)\n" );
-    DebugMacro_abv(1,"  use pseudo inverse instead\n" );
+    //DebugMacro_abv(1,"  use pseudo inverse instead\n" );
+    return 0; //no solution
   }
 
   // Compute the solution into XtWy
