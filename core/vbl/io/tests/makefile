@@ -1,6 +1,6 @@
 USES += vxl
 USES += mul
-IULIBS := -lvbl -lvsl -lvbl-io
+IULIBS := -lvbl -lvbl-io -lvsl
 
 TESTS += test_vbl_io.cxx
 # TESTS += golden_test_vbl_io.cxx
