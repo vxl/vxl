@@ -1,4 +1,6 @@
 /* vc++/config.h - manually adapted from include/config.h.in */
+#ifndef mpeg2_win32_config_h_
+#define mpeg2_win32_config_h_
 
 /* ppc architecture */
 /* #undef ARCH_PPC */
@@ -107,3 +109,5 @@
 
 /* Define to `unsigned' if <sys/types.h> does not define. */
 /* #undef size_t */
+
+#endif /* mpeg2_win32_config_h_ */

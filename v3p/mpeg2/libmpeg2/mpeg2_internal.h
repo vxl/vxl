@@ -20,6 +20,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+#ifndef mpeg2_internal_h_
+#define mpeg2_internal_h_
 
 /* macroblock modes */
 #define MACROBLOCK_INTRA 1
@@ -62,9 +64,9 @@ typedef struct picture_s {
     int16_t DCTblock[64];
 
     /* bit parsing stuff */
-    uint32_t bitstream_buf;	/* current 32 bit working set of buffer */
-    int bitstream_bits;		/* used bits in working set */
-    uint8_t * bitstream_ptr;	/* buffer with stream data */
+    uint32_t bitstream_buf;     /* current 32 bit working set of buffer */
+    int bitstream_bits;         /* used bits in working set */
+    uint8_t * bitstream_ptr;    /* buffer with stream data */
 
     uint8_t * dest[3];
     int offset;
@@ -84,9 +86,9 @@ typedef struct picture_s {
     /* predictor for DC coefficients in intra blocks */
     int16_t dc_dct_pred[3];
 
-    int quantizer_scale;	/* remove */
-    int dmv_offset;		/* remove */
-    unsigned int v_offset;	/* remove */
+    int quantizer_scale;        /* remove */
+    int dmv_offset;             /* remove */
+    unsigned int v_offset;      /* remove */
 
 
     /* now non-slice-specific information */
@@ -103,9 +105,9 @@ typedef struct picture_s {
 
     /* what type of picture this is (I, P, B, D) */
     int picture_coding_type;
-	
+
     /* picture coding extension stuff */
-	
+
     /* quantization factor for intra dc coefficients */
     int intra_dc_precision;
     /* top/bottom/both fields */
@@ -167,9 +169,9 @@ void mpeg2_idct_init (uint32_t mm_accel);
 /* idct_mlib.c */
 void mpeg2_idct_add_mlib (int16_t * block, uint8_t * dest, int stride);
 void mpeg2_idct_copy_mlib_non_ieee (int16_t * block, uint8_t * dest,
-				    int stride);
+                                    int stride);
 void mpeg2_idct_add_mlib_non_ieee (int16_t * block, uint8_t * dest,
-				   int stride);
+                                   int stride);
 
 /* idct_mmx.c */
 void mpeg2_idct_copy_mmxext (int16_t * block, uint8_t * dest, int stride);
@@ -191,7 +193,7 @@ typedef struct mpeg2_mc_s {
     void (* avg [8]) (uint8_t * dst, uint8_t *, int32_t, int32_t);
 } mpeg2_mc_t;
 
-#define MPEG2_MC_EXTERN(x) mpeg2_mc_t mpeg2_mc_##x = {			  \
+#define MPEG2_MC_EXTERN(x) mpeg2_mc_t mpeg2_mc_##x = {                    \
     {MC_put_o_16_##x, MC_put_x_16_##x, MC_put_y_16_##x, MC_put_xy_16_##x, \
      MC_put_o_8_##x,  MC_put_x_8_##x,  MC_put_y_8_##x,  MC_put_xy_8_##x}, \
     {MC_avg_o_16_##x, MC_avg_x_16_##x, MC_avg_y_16_##x, MC_avg_xy_16_##x, \
@@ -210,3 +212,5 @@ void mpeg2_slice (picture_t * picture, int code, uint8_t * buffer);
 
 /* stats.c */
 void mpeg2_stats (int code, uint8_t * buffer);
+
+#endif /* mpeg2_internal_h_ */

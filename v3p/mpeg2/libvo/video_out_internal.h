@@ -20,14 +20,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+#ifndef libvo_video_out_internal_h_
+#define libvo_video_out_internal_h_
 
 extern uint32_t vo_mm_accel;
 
 int libvo_common_alloc_frames (vo_instance_t * instance, int width, int height,
-			       int frame_size,
-			       void (* copy) (vo_frame_t *, uint8_t **),
-			       void (* field) (vo_frame_t *, int),
-			       void (* draw) (vo_frame_t *));
+                               int frame_size,
+                               void (* copy) (vo_frame_t *, uint8_t **),
+                               void (* field) (vo_frame_t *, int),
+                               void (* draw) (vo_frame_t *));
 void libvo_common_free_frames (vo_instance_t * instance);
 vo_frame_t * libvo_common_get_frame (vo_instance_t * instance, int prediction);
 
@@ -42,3 +44,5 @@ void yuv2rgb_init (int bpp, int mode);
 int yuv2rgb_init_mmxext (int bpp, int mode);
 int yuv2rgb_init_mmx (int bpp, int mode);
 int yuv2rgb_init_mlib (int bpp, int mode);
+
+#endif /* libvo_video_out_internal_h_ */

@@ -20,35 +20,37 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+#ifndef mpeg2_vlc_h_
+#define mpeg2_vlc_h_
 
-#define GETWORD(bit_buf,shift,bit_ptr)				\
-do {								\
-    bit_buf |= ((bit_ptr[0] << 8) | bit_ptr[1]) << (shift);	\
-    bit_ptr += 2;						\
+#define GETWORD(bit_buf,shift,bit_ptr)                          \
+do {                                                            \
+    bit_buf |= ((bit_ptr[0] << 8) | bit_ptr[1]) << (shift);     \
+    bit_ptr += 2;                                               \
 } while (0)
 
 static inline void bitstream_init (picture_t * picture, uint8_t * start)
 {
     picture->bitstream_buf =
-	(start[0] << 24) | (start[1] << 16) | (start[2] << 8) | start[3];
+        (start[0] << 24) | (start[1] << 16) | (start[2] << 8) | start[3];
     picture->bitstream_ptr = start + 4;
     picture->bitstream_bits = -16;
 }
 
 /* make sure that there are at least 16 valid bits in bit_buf */
-#define NEEDBITS(bit_buf,bits,bit_ptr)		\
-do {						\
-    if (bits > 0) {				\
-	GETWORD (bit_buf, bits, bit_ptr);	\
-	bits -= 16;				\
-    }						\
+#define NEEDBITS(bit_buf,bits,bit_ptr)          \
+do {                                            \
+    if (bits > 0) {                             \
+        GETWORD (bit_buf, bits, bit_ptr);       \
+        bits -= 16;                             \
+    }                                           \
 } while (0)
 
 /* remove num valid bits from bit_buf */
-#define DUMPBITS(bit_buf,bits,num)	\
-do {					\
-    bit_buf <<= (num);			\
-    bits += (num);			\
+#define DUMPBITS(bit_buf,bits,num)      \
+do {                                    \
+    bit_buf <<= (num);                  \
+    bits += (num);                      \
 } while (0)
 
 /* take num bits from the high part of bit_buf and zero extend them */
@@ -123,7 +125,7 @@ static MBtab MB_B [] = {
     {0,                 0}, {INTRA|QUANT,       6},
     {BWD|CODED|QUANT,   6}, {FWD|CODED|QUANT,   6},
     {INTER|CODED|QUANT, 5}, {INTER|CODED|QUANT, 5},
-					{INTRA,       5}, {INTRA,       5},
+                                        {INTRA,       5}, {INTRA,       5},
     {FWD,         4}, {FWD,         4}, {FWD,         4}, {FWD,         4},
     {FWD|CODED,   4}, {FWD|CODED,   4}, {FWD|CODED,   4}, {FWD|CODED,   4},
     {BWD,         3}, {BWD,         3}, {BWD,         3}, {BWD,         3},
@@ -300,7 +302,7 @@ static DCTtab DCT_B14_8 [] = {
 };
 
 static DCTtab DCT_B14AC_5 [] = {
-		 {  1, 3, 5}, {  5, 1, 5}, {  4, 1, 5},
+                 {  1, 3, 5}, {  5, 1, 5}, {  4, 1, 5},
     {  1, 2, 4}, {  1, 2, 4}, {  3, 1, 4}, {  3, 1, 4},
     {  2, 1, 3}, {  2, 1, 3}, {  2, 1, 3}, {  2, 1, 3},
     {129, 0, 2}, {129, 0, 2}, {129, 0, 2}, {129, 0, 2},
@@ -310,7 +312,7 @@ static DCTtab DCT_B14AC_5 [] = {
 };
 
 static DCTtab DCT_B14DC_5 [] = {
-		 {  1, 3, 5}, {  5, 1, 5}, {  4, 1, 5},
+                 {  1, 3, 5}, {  5, 1, 5}, {  4, 1, 5},
     {  1, 2, 4}, {  1, 2, 4}, {  3, 1, 4}, {  3, 1, 4},
     {  2, 1, 3}, {  2, 1, 3}, {  2, 1, 3}, {  2, 1, 3},
     {  1, 1, 1}, {  1, 1, 1}, {  1, 1, 1}, {  1, 1, 1},
@@ -392,7 +394,7 @@ static DCTtab DCT_B15_8 [] = {
 
 
 static MBAtab MBA_5 [] = {
-		    {6, 5}, {5, 5}, {4, 4}, {4, 4}, {3, 4}, {3, 4},
+                    {6, 5}, {5, 5}, {4, 4}, {4, 4}, {3, 4}, {3, 4},
     {2, 3}, {2, 3}, {2, 3}, {2, 3}, {1, 3}, {1, 3}, {1, 3}, {1, 3},
     {0, 1}, {0, 1}, {0, 1}, {0, 1}, {0, 1}, {0, 1}, {0, 1}, {0, 1},
     {0, 1}, {0, 1}, {0, 1}, {0, 1}, {0, 1}, {0, 1}, {0, 1}, {0, 1}
@@ -426,3 +428,5 @@ static MBAtab MBA_11 [] = {
     { 7,  7}, { 7,  7}, { 7,  7}, { 7,  7},
     { 7,  7}, { 7,  7}, { 7,  7}, { 7,  7}
 };
+
+#endif /* mpeg2_vlc_h_ */
