@@ -159,7 +159,7 @@ vnl_vector<T> vnl_quaternion<T>::axis () const {
   T mag = direc.magnitude();
   if (mag == 0) {
     vcl_cout << "Axis not well defined for zero Quaternion. Use (0,0,1) instead.\n";
-    direc.z() = 1.0;                    // or signal exception here.
+    direc[2] = 1.0;                     // or signal exception here.
   } else
     direc /= mag;                       // normalize direction vector
   return direc;
@@ -243,7 +243,7 @@ vnl_quaternion<T> vnl_quaternion<T>::operator* (const vnl_quaternion<T>& rhs) co
   T real_v = (r1 * r2) - ::dot_product(i1, i2); // real&img of product q1*q2
   vnl_vector<T> img = vnl_cross_3d(i1, i2);
   img += (i2 * r1) + (i1 * r2);
-  vnl_quaternion<T> prod(img.x(), img.y(), img.z(), real_v);
+  vnl_quaternion<T> prod(img[0], img[1], img[2], real_v);
   return prod;
 }
 
