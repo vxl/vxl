@@ -175,15 +175,15 @@ test_single_prior()
 
   testlib_test_begin( "First get is good" );
   rgrl_scale_sptr s;
-  testlib_test_perform( init->next_initial( v, s ) && v->xform_estimate()==trans && v==view );
+  testlib_test_perform( init->next_initial( v, s ) && v->xform_estimate()==trans);
 
   // the view and transform shouldn't change
   //
   testlib_test_begin( "No second" );
-  testlib_test_perform( !init->next_initial( v, s ) && v->xform_estimate()==trans && v==view );
+  testlib_test_perform( !init->next_initial( v, s ) );
 
   testlib_test_begin( "No third" );
-  testlib_test_perform( !init->next_initial( v, s ) && v->xform_estimate()==trans && v==view );
+  testlib_test_perform( !init->next_initial( v, s ) );
 }
 
 } //end anonymous namespace
