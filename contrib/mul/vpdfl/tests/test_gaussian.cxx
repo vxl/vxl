@@ -12,6 +12,7 @@
 #include <vpdfl/vpdfl_gaussian_builder.h>
 #include <vpdfl/vpdfl_gaussian_sampler.h>
 #include <mbl/mbl_data_array_wrapper.h>
+#include <mbl/mbl_test.h>
 #include <vnl/io/vnl_io_matrix.h>
 
 #ifndef LEAVE_FILES_BEHIND
@@ -122,26 +123,13 @@ void test_gaussian()
   vcl_cout<<"\n\n";
 
   TEST("Original Model == Loaded model",
-       pdf.mean()==pdf_in.mean() &&
-       pdf.variance()==pdf_in.variance() &&
-       pdf.eigenvals() == pdf_in.eigenvals() &&
-       pdf.eigenvecs() == pdf_in.eigenvecs() &&
-       pdf.log_k() == pdf_in.log_k(),
-       true);
+    mbl_test_summaries_are_equal(pdf, pdf_in), true);
   TEST("Original Model == model loaded by base ptr",
-       pdf.mean()==p_base_pdf_in->mean() &&
-       pdf.variance()==p_base_pdf_in->variance() &&
-       pdf.is_a()==p_base_pdf_in->is_a() &&
-       pdf.is_class(p_base_pdf_in->is_a()),
-       true);
+    mbl_test_summaries_are_equal(p_pdf, p_base_pdf_in), true);
   TEST("Original Builder == Loaded builder",
-       builder.min_var()==builder_in.min_var(),
-       true);
+       mbl_test_summaries_are_equal(builder, builder_in), true);
   TEST("Original Builder == Builder loaded by base ptr",
-       builder.min_var()==p_base_builder_in->min_var() &&
-       builder.is_a()==p_base_builder_in->is_a() &&
-       builder.is_class(p_base_builder_in->is_a()),
-       true);
+       mbl_test_summaries_are_equal(p_builder, p_base_builder_in), true);
 
   vcl_cout << "========Testing PDF Thresholds==========";
   vpdfl_sampler_base *p_sampler2 = p_pdf_built->new_sampler();
