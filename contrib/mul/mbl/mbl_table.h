@@ -27,7 +27,7 @@ public:
 
   //: Constructor
   // \param delim The delimiter character.
-  mbl_table(const char delim);
+  mbl_table(const char delim='\t');
 
 
   //: Constructor
