@@ -2,6 +2,8 @@
 #include <vil/algo/vil_binary_dilate.h>
 #include <vil/algo/vil_binary_erode.h>
 #include <vil/algo/vil_binary_opening.h>
+#include <vil/algo/vil_blob_finder.h>
+#include <vil/algo/vil_cartesian_differential_invariants.h>
 #include <vil/algo/vil_convolve_1d.h>
 #include <vil/algo/vil_convolve_2d.h>
 #include <vil/algo/vil_corners.h>
@@ -9,6 +11,7 @@
 #include <vil/algo/vil_correlate_2d.h>
 #include <vil/algo/vil_distance_transform.h>
 #include <vil/algo/vil_exp_filter_1d.h>
+#include <vil/algo/vil_exp_filter_2d.h>
 #include <vil/algo/vil_exp_grad_filter_1d.h>
 #include <vil/algo/vil_find_4con_boundary.h>
 #include <vil/algo/vil_find_peaks.h>
@@ -25,16 +28,14 @@
 #include <vil/algo/vil_line_filter.h>
 #include <vil/algo/vil_median.h>
 #include <vil/algo/vil_normalised_correlation_2d.h>
+#include <vil/algo/vil_region_finder.h>
 #include <vil/algo/vil_sobel_1x3.h>
 #include <vil/algo/vil_sobel_3x3.h>
 #include <vil/algo/vil_structuring_element.h>
-#include <vil/algo/vil_threshold.h>
-#include <vil/algo/vil_exp_filter_2d.h>
 #include <vil/algo/vil_suppress_non_max.h>
-#include <vil/algo/vil_blob_finder.h>
+#include <vil/algo/vil_threshold.h>
 #include <vil/algo/vil_trace_4con_boundary.h>
 #include <vil/algo/vil_trace_8con_boundary.h>
-#include <vil/algo/vil_region_finder.h>
 #include <vil/vil_bicub_interp.h>
 #include <vil/vil_bilin_interp.h>
 #include <vil/vil_clamp.h>
