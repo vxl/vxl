@@ -845,18 +845,14 @@ EightyPercentParallel()
   if (cached_80_parallel_ < 0)
   {
     SetNP();
-    float  max_angle;
-    float  std_dev;
-    float  scale;
-    int    i = 0;
 
-    for (; i < 20 && npobj_->area() > 0.3; ++i)
+    for (int i=0; i < 20 && npobj_->area() > 0.3; ++i)
     {
+      float  max_angle, std_dev, scale;
       npobj_->map_gaussian(max_angle, std_dev, scale);
       npobj_->remove_gaussian(max_angle, std_dev, scale);
+      cached_80_parallel_ = float(i);
     }
-
-    cached_80_parallel_ = i;
   }
 
   return cached_80_parallel_;

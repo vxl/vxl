@@ -350,8 +350,8 @@ area(void)
 float vifa_parallel::
 bin_variance(void)
 {
-  float*  counts = norm_h_->GetCounts();
-  float  res = norm_h_->GetRes();
+  float* counts = norm_h_->GetCounts();
+  int    res = norm_h_->GetRes();
   float  sum = 0;
   float  sum2 = 0;
   float  mean = 0;

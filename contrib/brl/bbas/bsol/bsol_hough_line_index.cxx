@@ -38,9 +38,8 @@ bsol_hough_line_index::bsol_hough_line_index(const int r_dimension,
                                              const int theta_dimension)
 {
   xo_ = 0; yo_ = 0;
-  xsize_ = (int)vcl_ceil(r_dimension/vnl_math::sqrt2);
-  ysize_ = xsize_;
-  angle_range_ = theta_dimension;
+  ysize_ = xsize_ = vcl_ceil(r_dimension/vnl_math::sqrt2);
+  angle_range_ = (float)theta_dimension;
   angle_increment_ = 1.0;
 
   this->init(r_dimension, theta_dimension);
@@ -788,7 +787,7 @@ dominant_line_groups(const int thresh, const float angle_tol,
 vbl_array_2d<unsigned char> bsol_hough_line_index::get_hough_image()
 {
   vbl_array_2d<unsigned char> out(r_dim_, th_dim_);
-  float nmax = 0;
+  int nmax = 0;
   for (int r=0;r<r_dim_;r++)
     for (int th=0;th<th_dim_;th++)
       {
@@ -797,8 +796,8 @@ vbl_array_2d<unsigned char> bsol_hough_line_index::get_hough_image()
           nmax = n_lines;
       }
   float scale = 1;
-  if (nmax)
-    scale = 1/nmax;
+  if (nmax != 0)
+    scale /= 1.0f/nmax;
   for (int r=0;r<r_dim_;r++)
     for (int th=0;th<th_dim_;th++)
       {
