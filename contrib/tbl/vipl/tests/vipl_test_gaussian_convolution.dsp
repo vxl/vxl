@@ -135,7 +135,20 @@ LINK32=link.exe
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\test_driver.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\vipl_test_gaussian_convolution.cxx
+
+# End Source File
+# End Group
+# Begin Group "Header Files"
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\test_driver.h
 
 # End Source File
 # End Group

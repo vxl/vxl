@@ -490,6 +490,11 @@ SOURCE=.\vipl_with_vnl_matrix/Templates/vipl_threshold+vnl_matrix+uchar-.vnl_mat
 # End Source File
 # Begin Source File
 
+SOURCE=.\vipl_with_vnl_matrix/Templates/vipl_gaussian_convolution+vnl_matrix+uchar-.vnl_matrix+uchar-.uchar.uchar-.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\vipl_with_mil/Templates/vipl_accessors_mil_image+float-.cxx
 
 # End Source File

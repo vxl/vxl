@@ -125,7 +125,20 @@ LINK32=link.exe
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\test_driver.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\vepl_test_threshold.cxx
+
+# End Source File
+# End Group
+# Begin Group "Header Files"
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\test_driver.h
 
 # End Source File
 # End Group
