@@ -23,6 +23,7 @@ IF( NOT BUILDING_IN_VXL_TREE )
         MAKECOMMAND
         SITE
         BUILDNAME
+        DART_ROOT
       INCLUDE_INTERNALS
         allvxl_SOURCE_DIR
         allvxl_BINARY_DIR
