@@ -28,7 +28,7 @@ vil2_image_view_base_sptr CreateTestfloatImage(int wd, int ht);
 vil2_image_view_base_sptr CreateTestdoubleImage(int wd, int ht);
 
 // Compare two images and return true if their difference is not v
-bool difference(vil2_image_view_base_sptr const& a, vil2_image_view_base_sptr const& b, int v, vcl_string const& m);
+bool difference(vil2_image_view_base_sptr const& a, vil2_image_view_base_sptr const& b, long v, vcl_string const& m);
 
 #define ONE_TEST(x,i,r,T,v,m,a) { vcl_cout << "Starting "<<m<<" test\n"; i = x(*r a); difference(i,r,v,m); }
 

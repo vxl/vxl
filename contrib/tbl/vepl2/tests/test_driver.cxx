@@ -123,7 +123,7 @@ vil2_image_view_base_sptr CreateTestdoubleImage(int wd, int ht)
 }
 
 // Compare two images and return true if their difference is not v
-bool difference(vil2_image_view_base_sptr const& a, vil2_image_view_base_sptr const& b, int v, vcl_string const& m)
+bool difference(vil2_image_view_base_sptr const& a, vil2_image_view_base_sptr const& b, long v, vcl_string const& m)
 {
   unsigned int sx = a->ni(),  sy = a->nj(), sp = a->nplanes();
   TEST("# rows match", sx, b->ni());
@@ -131,11 +131,11 @@ bool difference(vil2_image_view_base_sptr const& a, vil2_image_view_base_sptr co
   TEST("# planes match", sp, b->nplanes());
   TEST("Image formats match", a->pixel_format(), b->pixel_format());
 
-  int ret = 0;
+  long ret = 0;
   // run over all pixels except for an outer border of 1 pixel:
   // The ABSX parameter is used to suppress compiler warnings by not computing
   // the absolute value of unsigned types.
-#define DIFF(T, ABSX) {\
+#define DIFF(T) /* for non-integral types line float and double */ {\
   T r = (T)0; \
   vil2_image_view<T >& v1 = (vil2_image_view<T >&)(*a); \
   vil2_image_view<T >& v2 = (vil2_image_view<T >&)(*b); \
@@ -146,11 +146,11 @@ bool difference(vil2_image_view_base_sptr const& a, vil2_image_view_base_sptr co
       for (unsigned int i=1; i+1<sx; ++i) { \
         T x = (*(it1+i*v1.istep()+j*v1.jstep()+p*v1.planestep())) \
              -(*(it2+i*v2.istep()+j*v2.jstep()+p*v2.planestep())); \
-        r += ABSX; \
+        r += x<0?-x:x; \
       } \
-  ret = (int)(r+0.5); \
+  ret = (long)(r+0.5); \
 }
-#define DIFFB(T, ABSX) /* for very short types like e.g. bool */ {\
+#define DIFI(T) /* for integral and for very short types like e.g. bool */ {\
   ret = 0; \
   vil2_image_view<T >& v1 = (vil2_image_view<T >&)(*a); \
   vil2_image_view<T >& v2 = (vil2_image_view<T >&)(*b); \
@@ -161,15 +161,15 @@ bool difference(vil2_image_view_base_sptr const& a, vil2_image_view_base_sptr co
       for (unsigned int i=1; i+1<sx; ++i) { \
         long x = (long)(*(it1+i*v1.istep()+j*v1.jstep()+p*v1.planestep())) \
                 -(long)(*(it2+i*v2.istep()+j*v2.jstep()+p*v2.planestep())); \
-        ret += ABSX; \
+        ret += x<0?-x:x; \
       } \
 }
-  if (a->pixel_format() == VIL2_PIXEL_FORMAT_FLOAT) { DIFF(float, x<0?-x:x ); }
-  else if (a->pixel_format() == VIL2_PIXEL_FORMAT_DOUBLE) { DIFF(double, x<0?-x:x ); }
-  else if (a->pixel_format() == VIL2_PIXEL_FORMAT_BOOL) { DIFFB(bool, x); }
-  else if (a->pixel_format() == VIL2_PIXEL_FORMAT_BYTE) { DIFFB(vxl_byte, x); }
-  else if (a->pixel_format() == VIL2_PIXEL_FORMAT_UINT_16) { DIFFB(vxl_uint_16, x); }
-  else if (a->pixel_format() == VIL2_PIXEL_FORMAT_UINT_32) { DIFF(vxl_uint_32, x); }
+  if (a->pixel_format() == VIL2_PIXEL_FORMAT_FLOAT) { DIFF(float); }
+  else if (a->pixel_format() == VIL2_PIXEL_FORMAT_DOUBLE) { DIFF(double); }
+  else if (a->pixel_format() == VIL2_PIXEL_FORMAT_BOOL) { DIFI(bool); }
+  else if (a->pixel_format() == VIL2_PIXEL_FORMAT_BYTE) { DIFI(vxl_byte); }
+  else if (a->pixel_format() == VIL2_PIXEL_FORMAT_UINT_16) { DIFI(vxl_uint_16); }
+  else if (a->pixel_format() == VIL2_PIXEL_FORMAT_UINT_32) { DIFI(vxl_uint_32); }
   vcl_cout<<m<<": expected "<<v<<", found "<<ret<<'\n';
   TEST(m.c_str(), ret, v);
   return v!=ret;
