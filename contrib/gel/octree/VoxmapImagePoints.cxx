@@ -15,13 +15,15 @@
 #include <mvl/HomgPoint3D.h>
 
 #include "VoxmapImagePoints.h"
+typedef PMatrix * PMatrix_ptr;
+typedef BigSparseArray3D<vnl_double_2 *> * Array_ptr;
 
 // Default ctor
 VoxmapImagePoints::VoxmapImagePoints( int d, vnl_double_3 c, double s, int ims)
   : VoxmapPoints( d, c, s),
-    pmatrices( new (PMatrix *)[ims]),
-    imagecorners( new (BigSparseArray3D<vnl_double_2 *> *)[ims]),
-    imagecentres( new (BigSparseArray3D<vnl_double_2 *> *)[ims])
+    pmatrices( new PMatrix_ptr[ims]),
+    imagecorners( new Array_ptr[ims]),
+    imagecentres( new Array_ptr[ims])
 {
 }
 
