@@ -18,8 +18,7 @@
 // Peter Vanroose - 27 June 2001 - Added operator==
 // \endverbatim
 
-#include <vcl_cmath.h> // for vcl_abs(double) etc
-#include <vcl_cstdlib.h> // for vcl_abs(int) etc
+#include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_fwd.h> // forward declare vgl_homg_line_2d
 #include <vcl_iosfwd.h>
@@ -44,6 +43,9 @@ public:
 
   //: Construct from homogeneous 3-array.
   vgl_homg_point_2d(const Type v[3]) : x_(v[0]), y_(v[1]), w_(v[2]) {}
+
+  //: Construct point at infinity from direction vector.
+  vgl_homg_point_2d(vgl_vector_2d<Type>const& v) : x_(v.x()), y_(v.y()), w_(0) {}
 
   //: Construct from (non-homogeneous) vgl_point_2d<Type>
   explicit vgl_homg_point_2d(vgl_point_2d<Type> const& p)
@@ -88,8 +90,10 @@ public:
   //: Return true iff the point is at infinity (an ideal point).
   // The method checks whether |w| < tol * max(|x|,|y|)
   inline bool ideal(Type tol = Type(0)) const {
-    return vcl_abs(w()) <= tol * vcl_abs(x()) ||
-           vcl_abs(w()) <= tol * vcl_abs(y());
+#define vgl_Abs(x) (x<0?-x:x) // avoid #include of vcl_cmath.h AND vcl_cstdlib.h
+    return vgl_Abs(w()) <= tol * vgl_Abs(x()) ||
+           vgl_Abs(w()) <= tol * vgl_Abs(y());
+#undef vgl_Abs
   }
 
   // INTERNALS---------------------------------------------------------------
@@ -161,6 +165,27 @@ inline vgl_homg_point_2d<Type>& operator-=(vgl_homg_point_2d<Type>& p,
 }
 
 //  +-+-+ homg_point_2d geometry +-+-+
+
+//: cross ratio of four collinear points
+// This number is projectively invariant, and it is the coordinate of p4
+// in the reference frame where p2 is the origin (coordinate 0), p3 is
+// the unity (coordinate 1) and p1 is the point at infinity.
+// This cross ratio is often denoted as ((p1, p2; p3, p4)) (which also
+// equals ((p3, p4; p1, p2)) or ((p2, p1; p4, p3)) or ((p4, p3; p2, p1)) )
+// and is calculated as
+//  \verbatim
+//                      p1 - p3   p2 - p3      (p1-p3)(p2-p4)
+//                      ------- : --------  =  --------------
+//                      p1 - p4   p2 - p4      (p1-p4)(p2-p3)
+// \endverbatim
+// If three of the given points coincide, the cross ratio is not defined.
+//
+// In this implementation, a least-squares result is calculated when the
+// points are not exactly collinear.
+//
+template <class T>
+double cross_ratio(vgl_homg_point_2d<T>const& p1, vgl_homg_point_2d<T>const& p2,
+                   vgl_homg_point_2d<T>const& p3, vgl_homg_point_2d<T>const& p4);
 
 //: Are three points collinear, i.e., do they lie on a common line?
 template <class Type>

@@ -5,11 +5,54 @@
 #include <vgl/vgl_test.h>
 #include <vcl_iostream.h>
 
+#include <vgl/vgl_homg_point_1d.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgl/vgl_homg_line_3d_2_points.h>
 #include <vgl/vgl_homg_plane_3d.h>
+#include <vgl/vgl_1d_basis.h>
+
+static void test_homg_point_1d()
+{
+  float d[] = {5,1};
+  vgl_homg_point_1d<float> p1(6,3), p2(d), p3(-1,-8);
+  vcl_cout << p3 << vcl_endl;
+
+  TEST("inequality", (p1 != p3), true);
+
+  p3.set(-12,-6);
+  TEST("equality", (p1 == p3), true);
+
+  float d1 = p1 - p2;
+  TEST("sum; difference", (p2+d1), p1);
+
+  TEST("+=", (p2+=d1), p1);
+  TEST("+=", p2, p1);
+  
+  p2.set(4,1);
+  p3.set(-13,-2);
+  double r = ratio(p1,p2,p3);
+  TEST("ratio", r, 2.25);
+  vgl_homg_point_1d<float> m = midpoint(p1,p2,2.25f);
+  TEST("midpoint", m, p3);
+
+  vgl_homg_point_1d<float> c = centre(p1,p2);
+  vgl_homg_point_1d<float> cc(3); // constructor with one argument
+  TEST("centre", c, cc);
+  vcl_vector<vgl_homg_point_1d<float> > v1;
+  v1.push_back(p1); v1.push_back(p2); v1.push_back(c);
+  cc = centre(v1); // assignment
+  TEST("centre", c, cc);
+
+  cc.set(1,0);
+  r = cross_ratio(cc,p1,p2,p3); // must equal ratio(p1,p2,p3)
+  TEST("cross_ratio", r, 2.25);
+
+  TEST("is_ideal", is_ideal(p2), false);
+  p2.set(-6,0);
+  TEST("ideal", p2.ideal(), true);
+}
 
 static void test_homg_point_2d()
 {
@@ -48,6 +91,9 @@ static void test_homg_point_2d()
   v2.push_back(p2); v2.push_back(p3); v2.push_back(cc); v2.push_back(p2);
   c = centre(v2);
   TEST("centre", c, cc);
+
+  r = cross_ratio(p1,p2,c,p3);
+  TEST("cross_ratio", r, 1.5);
 
   vgl_homg_line_2d<double> l1(0,0,1), l2(0,1,0);
   vgl_homg_point_2d<double> pi(l1,l2); // intersection
@@ -94,6 +140,9 @@ static void test_homg_point_3d()
   v2.push_back(p2); v2.push_back(p3); v2.push_back(cc); v2.push_back(p2);
   c = centre(v2);
   TEST("centre", c, cc);
+
+  r = cross_ratio(p1,p2,c,p3);
+  TEST("cross_ratio", r, 1.5);
 
   vgl_homg_plane_3d<double> pl1(0,0,0,1), pl2(0,0,1,0), pl3(0,1,0,0);
   vgl_homg_point_3d<double> pi(pl1,pl2,pl3); // intersection
@@ -173,6 +222,7 @@ static void test_homg_plane_3d()
 }
 
 void test_homg() {
+  test_homg_point_1d();
   test_homg_point_2d();
   test_homg_point_3d();
   test_homg_line_2d();

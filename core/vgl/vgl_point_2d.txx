@@ -28,10 +28,23 @@ vgl_point_2d<Type>::vgl_point_2d(vgl_line_2d<Type> const& l1,
   set(p.x()/p.w(), p.y()/p.w()); // could be infinite!
 }
 
-//: Write "<vgl_point_3d x,y> " to stream
+template <class T>
+double cross_ratio(vgl_point_2d<T>const& p1, vgl_point_2d<T>const& p2,
+                   vgl_point_2d<T>const& p3, vgl_point_2d<T>const& p4)
+{
+  // least squares solution: (Num_x-CR*Den_x)^2 + (Num_y-CR*Den_y)^2 minimal.
+  double Num_x = (p1.x()-p3.x())*(p2.x()-p4.x());
+  double Num_y = (p1.y()-p3.y())*(p2.y()-p4.y());
+  double Den_x = (p1.x()-p4.x())*(p2.x()-p3.x());
+  double Den_y = (p1.y()-p4.y())*(p2.y()-p3.y());
+  if (Den_x == Den_y) return 0.5*(Num_x+Num_y)/Den_x;
+  else return (Den_x*Num_x+Den_y*Num_y)/(Den_x*Den_x+Den_y*Den_y);
+}
+
+//: Write "<vgl_point_2d x,y> " to stream
 template <class Type>
 vcl_ostream&  operator<<(vcl_ostream& s, vgl_point_2d<Type> const& p) {
-  return s << "<vgl_point_2d "<< p.x() << "," << p.y() << ">";
+  return s << "<vgl_point_2d "<< p.x() << "," << p.y() << "> ";
 }
 
 //: Read x y from stream
@@ -43,6 +56,8 @@ vcl_istream&  operator>>(vcl_istream& is,  vgl_point_2d<Type>& p) {
 #undef VGL_POINT_2D_INSTANTIATE
 #define VGL_POINT_2D_INSTANTIATE(T) \
 template class vgl_point_2d<T >; \
+template double cross_ratio(vgl_point_2d<T >const&, vgl_point_2d<T >const&, \
+                            vgl_point_2d<T >const&, vgl_point_2d<T >const&); \
 template vcl_ostream& operator<<(vcl_ostream&, const vgl_point_2d<T >&); \
 template vcl_istream& operator>>(vcl_istream&, vgl_point_2d<T >&)
 

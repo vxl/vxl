@@ -26,6 +26,7 @@
 #include <vgl/vgl_lineseg_test.h>
 #include <vgl/vgl_polygon_test.h>
 #include <vgl/vgl_triangle_test.h>
+#include <vgl/vgl_1d_basis.h>
 
 static void test_vector_2d()
 {
@@ -167,6 +168,9 @@ static void test_point_2d()
   c = centre(p2,p3,cc,p2);
   TEST("centre", c, cc);
 
+  r = cross_ratio(p1,p2,c,p3);
+  TEST("cross_ratio", r, 1.5);
+
   vgl_line_2d<double> l1(1,0,0), l2(0,1,0);
   vgl_point_2d<double> pi(l1,l2); // intersection
   vgl_point_2d<double> pp(0,0);
@@ -206,6 +210,9 @@ static void test_point_3d()
   TEST("centre", c, p2);
   c = centre(p2,p3,cc,p2);
   TEST("centre", c, cc);
+
+  r = cross_ratio(p1,p2,c,p3);
+  TEST("cross_ratio", r, 1.5);
 
   vgl_plane_3d<double> pl1(1,0,0,0), pl2(0,1,0,0), pl3(0,0,1,0);
   vgl_point_3d<double> pi(pl1,pl2,pl3); // intersection
