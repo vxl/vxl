@@ -1,7 +1,7 @@
 
-LIBRARY(vil)
+ADD_LIBRARY(vil vil_sources)
 
-SOURCE_FILES(
+SOURCE_FILES( vil_sources
 vil_16bit
 vil_32bit
 vil_block_cache_image_impl
@@ -47,6 +47,6 @@ vil_warp
 )
 
 
-AUX_SOURCE_DIRECTORY(Templates)
+AUX_SOURCE_DIRECTORY(Templates vil_sources)
 
-SUBDIRS(tests file_formats)
+SUBDIRS(file_formats)

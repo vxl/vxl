@@ -1,7 +1,7 @@
 
-LIBRARY(vil_file_formats)
+ADD_LIBRARY(vil_file_formats vil_file_formats_sources)
 
-SOURCE_FILES(
+SOURCE_FILES( vil_file_formats_sources
 vil_bmp
 vil_bmp_core_header
 vil_bmp_file_header

@@ -1,7 +1,7 @@
 
-LIBRARY( vnl_algo )
+ADD_LIBRARY( vnl_algo vnl_algo_sources)
 
-SOURCE_FILES(
+SOURCE_FILES( vnl_algo_sources
 vnl_amoeba
 vnl_brent
 vnl_chi_squared
@@ -25,5 +25,5 @@ vnl_sparse_symmetric_eigensystem
 vnl_symmetric_eigensystem
 )
 
-AUX_SOURCE_DIRECTORY(Templates)
+AUX_SOURCE_DIRECTORY(Templates vnl_algo_sources)
 
