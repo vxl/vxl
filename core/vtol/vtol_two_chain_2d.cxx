@@ -300,8 +300,8 @@ bool vtol_two_chain_2d::disconnect( vcl_vector< vtol_topology_object_2d * > & ch
   // Unlink this object from its superiors
   topology_list_2d * tmp = get_superiors();
   hierarchy_node_list_2d * htmp = get_hierarchy_superiors();
-  if( (( tmp->size() >= 0 ) && ( htmp->size() == 0 ))
-          || (( tmp->size() == 0 ) && ( htmp->size() >= 0 )) ){
+  if( (/* tmp->size() >= 0 && */ ( htmp->size() == 0 ))
+          || (( tmp->size() == 0 ) /* && htmp->size() >= 0 */) ){
 	return false;
   }
 
@@ -364,8 +364,8 @@ bool vtol_two_chain_2d::remove( vtol_face_2d * face,
   int num_superiors_before = get_superiors()->size()
                              + get_hierarchy_superiors()->size();
 
-  if( (( tmp->size() >= 0 ) && ( htmp->size() == 0 ))
-          || (( tmp->size() == 0 ) && ( htmp->size() >= 0 )) ){
+  if( (/* tmp->size() >= 0 && */ ( htmp->size() == 0 ))
+          || (( tmp->size() == 0 ) /* && htmp->size() >= 0 */) ){
     return false;
   }
 
@@ -521,10 +521,11 @@ void vtol_two_chain_2d::deep_remove( vcl_vector< vtol_topology_object_2d * > & r
 bool
 vtol_two_chain_2d::break_into_connected_components( vcl_vector<vtol_topology_object_2d*> & components )
 {
-  cout << "break into connected components not implemented yet" << endl;
+  cerr << "vtol_two_chain_2d::break_into_connected_components() not implemented yet\n";
+  return false; // TO DO
 }
 
-/* todo
+#if 0 // TO DO
 bool
 vtol_two_chain_2d::break_into_connected_components( vcl_vector<vtol_topology_object_2d*> & components )
 {
@@ -609,7 +610,7 @@ vtol_two_chain_2d::break_into_connected_components( vcl_vector<vtol_topology_obj
     else return true;
 }
 
-*/
+#endif
 
 bool vtol_two_chain_2d::add_face(vtol_face_2d* new_face, signed char dir)
 {
@@ -903,9 +904,9 @@ bool vtol_two_chain_2d::operator==(vsol_spatial_object_2d& obj)
 // correct the chain directions
 void vtol_two_chain_2d::correct_chain_directions()
 {
-  cout << "Not implemented" << endl;
-  
-  /*
+  cerr << "vtol_two_chain_2d::correct_chain_directions() not yet implemented\n";
+  // TO DO
+#if 0
   vcl_vector<vtol_face_2d*> *allfaces = this->faces();
  
 	
@@ -914,7 +915,7 @@ void vtol_two_chain_2d::correct_chain_directions()
       (*fi)->verify();
     }
   delete allfaces;
-  */
+#endif
 }
 
 /*

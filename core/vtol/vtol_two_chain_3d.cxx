@@ -300,8 +300,8 @@ bool vtol_two_chain_3d::disconnect( vcl_vector< vtol_topology_object_3d * > & ch
   // Unlink this object from its superiors
   topology_list_3d * tmp = get_superiors();
   hierarchy_node_list_3d * htmp = get_hierarchy_superiors();
-  if( (( tmp->size() >= 0 ) && ( htmp->size() == 0 ))
-          || (( tmp->size() == 0 ) && ( htmp->size() >= 0 )) ){
+  if( (/* tmp->size() >= 0 && */ ( htmp->size() == 0 ))
+          || (( tmp->size() == 0 ) /* && htmp->size() >= 0 */) ){
 	return false;
   }
 
@@ -364,8 +364,8 @@ bool vtol_two_chain_3d::remove( vtol_face_3d * face,
   int num_superiors_before = get_superiors()->size()
                              + get_hierarchy_superiors()->size();
 
-  if( (( tmp->size() >= 0 ) && ( htmp->size() == 0 ))
-          || (( tmp->size() == 0 ) && ( htmp->size() >= 0 )) ){
+  if( (/* tmp->size() >= 0 && */ ( htmp->size() == 0 ))
+          || (( tmp->size() == 0 ) /* && htmp->size() >= 0 */) ){
     return false;
   }
 
@@ -521,7 +521,8 @@ void vtol_two_chain_3d::deep_remove( vcl_vector< vtol_topology_object_3d * > & r
 bool
 vtol_two_chain_3d::break_into_connected_components( vcl_vector<vtol_topology_object_3d*> & components )
 {
-  cout << "break into connected components not implemented yet" << endl;
+  cerr << "vtol_two_chain_3d::break_into_connected_components() not implemented yet\n";
+  return false; // TO DO
 }
 
 /* todo
@@ -903,9 +904,10 @@ bool vtol_two_chain_3d::operator==(vsol_spatial_object_3d& obj)
 // correct the chain directions
 void vtol_two_chain_3d::correct_chain_directions()
 {
-  cout << "Not implemented" << endl;
+  // TO DO
+  cerr << "vtol_two_chain_3d::correct_chain_directions() not yet implemented\n";
   
-  /*
+#if 0
   vcl_vector<vtol_face_3d*> *allfaces = this->faces();
  
 	
@@ -914,7 +916,7 @@ void vtol_two_chain_3d::correct_chain_directions()
       (*fi)->verify();
     }
   delete allfaces;
-  */
+#endif
 }
 
 /*
