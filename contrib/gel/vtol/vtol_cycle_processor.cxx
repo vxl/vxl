@@ -16,7 +16,6 @@
 
 #include <vtol/vtol_vertex.h>
 #include <vtol/vtol_vertex_2d.h>
-#include <vtol/vtol_vertex_2d_sptr.h>
 #include <vtol/vtol_one_chain.h>
 #include <vtol/vtol_edge.h>
 #include <vtol/vtol_edge_2d.h>
@@ -31,14 +30,15 @@ vtol_cycle_processor::vtol_cycle_processor(vcl_vector<vtol_edge_2d_sptr>& edges,
   tolerance_ = 0;
   init(edges);
 }
-//: a more convenient interface 
+
+//: a more convenient interface
 //
 static void edge_2d_erase(vcl_vector<vtol_edge_2d_sptr>& edges,
-                                         vtol_edge_2d_sptr& e)
+                          vtol_edge_2d_sptr& e)
 {
   vcl_vector<vtol_edge_2d_sptr>::iterator eit =
     vcl_find(edges.begin(), edges.end(), e);
-  if(eit == edges.end())
+  if (eit == edges.end())
     return;
   edges.erase(eit);
   return;
@@ -48,42 +48,39 @@ static void edge_2d_erase(vcl_vector<vtol_edge_2d_sptr>& edges,
 //
 static void print_vertices(vcl_vector<vtol_vertex_sptr>& verts)
 {
-  for(vcl_vector<vtol_vertex_sptr>::iterator vit = verts.begin();
-      vit != verts.end(); vit++)
-    vcl_cout << *vit <<"(" 
-             << (*vit)->cast_to_vertex_2d()->x()<< " " 
-             << (*vit)->cast_to_vertex_2d()->y()<< ")" << vcl_endl;
-  
-            vcl_cout << vcl_endl;
+  for (vcl_vector<vtol_vertex_sptr>::iterator vit = verts.begin();
+       vit != verts.end(); vit++)
+    vcl_cout << *vit <<"("
+             << (*vit)->cast_to_vertex_2d()->x()<< " "
+             << (*vit)->cast_to_vertex_2d()->y()<< ")\n\n";
 }
+
 //: print a vector of edges_2d
 //
 static void print_edges(vcl_vector<vtol_edge_2d_sptr>& edges)
 {
-  for(vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
-      eit != edges.end(); eit++)
-    vcl_cout << *eit <<"(" 
-             << (*eit)->v1()->cast_to_vertex_2d()->x()<< " " 
-             << (*eit)->v1()->cast_to_vertex_2d()->y()<< " |" 
-             << (*eit)->v2()->cast_to_vertex_2d()->x()<< " " 
-             << (*eit)->v2()->cast_to_vertex_2d()->y()<< ")" << vcl_endl;
-  
-            vcl_cout << vcl_endl;
+  for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
+       eit != edges.end(); eit++)
+    vcl_cout << *eit <<"("
+             << (*eit)->v1()->cast_to_vertex_2d()->x()<< " "
+             << (*eit)->v1()->cast_to_vertex_2d()->y()<< " |"
+             << (*eit)->v2()->cast_to_vertex_2d()->x()<< " "
+             << (*eit)->v2()->cast_to_vertex_2d()->y()<< ")\n\n";
 }
+
 //: print a vector of edges
 //
 static void print_edges(vcl_vector<vtol_edge_sptr>& edges)
 {
-  for(vcl_vector<vtol_edge_sptr>::iterator eit = edges.begin();
-      eit != edges.end(); eit++)
-    vcl_cout << *eit <<"(" 
-             << (*eit)->v1()->cast_to_vertex_2d()->x()<< " " 
-             << (*eit)->v1()->cast_to_vertex_2d()->y()<< " |" 
-             << (*eit)->v2()->cast_to_vertex_2d()->x()<< " " 
-             << (*eit)->v2()->cast_to_vertex_2d()->y()<< ")" << vcl_endl;
-  
-            vcl_cout << vcl_endl;
+  for (vcl_vector<vtol_edge_sptr>::iterator eit = edges.begin();
+       eit != edges.end(); eit++)
+    vcl_cout << *eit <<"("
+             << (*eit)->v1()->cast_to_vertex_2d()->x()<< " "
+             << (*eit)->v1()->cast_to_vertex_2d()->y()<< " |"
+             << (*eit)->v2()->cast_to_vertex_2d()->x()<< " "
+             << (*eit)->v2()->cast_to_vertex_2d()->y()<< ")\n\n";
 }
+
 //---------------------------------------------------------------
 //
 static void pop_stacks(vertex_list& verts,
@@ -116,6 +113,7 @@ static bool unused(vtol_edge_2d_sptr& e)
 {
   return !e->get_user_flag(VSOL_FLAG1)&&!e->get_user_flag(VSOL_FLAG2);
 }
+
 static bool plus_used(vtol_edge_2d_sptr& e)
 {
   return e->get_user_flag(VSOL_FLAG1) != 0;
@@ -131,6 +129,7 @@ static bool half_used(vtol_edge_2d_sptr& e)
   return e->get_user_flag(VSOL_FLAG1) ^ e->get_user_flag(VSOL_FLAG2);
   // exclusive OR; was: return (dir1&&!dir2)||(!dir1&&dir2);
 }
+
 // Assignment of flags
 static void use_plus(vtol_edge_2d_sptr& e)
 {
@@ -141,6 +140,7 @@ static void use_minus(vtol_edge_2d_sptr& e)
 {
   e->set_user_flag(VSOL_FLAG2);
 }
+
 // One Chain flags
 // predicates
 static bool ccw(vtol_one_chain_sptr& ch)
@@ -158,10 +158,12 @@ static void set_ccw(vtol_one_chain_sptr& ch)
 {
   ch->set_user_flag(VSOL_FLAG1);
 }
+
 static void set_cw(vtol_one_chain_sptr& ch)
 {
   ch->set_user_flag(VSOL_FLAG2);
 }
+
 // other house keeping functions and predicates
 // vtol_edge functions
 static void clear(vtol_edge_2d_sptr& e)
@@ -170,6 +172,7 @@ static void clear(vtol_edge_2d_sptr& e)
   e->unset_user_flag(VSOL_FLAG2);
   e->unset_user_flag(VSOL_FLAG3);
 }
+
 #if 0 // only untouch(vtol_one_chain_sptr&) is used
 static void untouch(vtol_edge_2d_sptr& e)
 {
@@ -186,6 +189,7 @@ static bool touched(vtol_edge_2d_sptr& e)
 {
   return e->get_user_flag(VSOL_FLAG3) != 0;
 }
+
 static bool self_loop(vtol_edge_2d_sptr& e)
 {
   vtol_vertex_sptr v1 = e->v1();
@@ -206,6 +210,7 @@ static void untouch(vtol_one_chain_sptr& ch)
 {
   ch->unset_user_flag(VSOL_FLAG3);
 }
+
 #if 0 // only clear(vtol_edge_2d_sptr& ) is used
 static void clear(vtol_one_chain_sptr& ch)
 {
@@ -251,13 +256,14 @@ static void v_edges(vtol_vertex_sptr v, vcl_vector<vtol_edge_2d_sptr>& b_edges,
     }
   delete edges;
 }
+
 static double flip_y(double ang)
 {
   double rad_per_deg = vnl_math::pi/180.0;
   double rang = rad_per_deg*ang;
-  double cs = cos(rang), si = -sin(rang);//here is where y is flipped
-  ang = atan2(si, cs)/rad_per_deg;
-  if(ang<0)
+  double cs = vcl_cos(rang), si = -vcl_sin(rang);//here is where y is flipped
+  ang = vcl_atan2(si, cs)/rad_per_deg;
+  if (ang<0)
     ang+=360;
   return ang;
 }
@@ -271,7 +277,7 @@ static double tangent_angle_at_vertex(vtol_vertex_sptr v, vtol_edge_2d_sptr e)
       return ang;
     }
   //Here we assume that the edgel_chain starts at v1 and ends at v2;
-  if(v==e->v1())
+  if (v==e->v1())
     {
     ang = e->curve()->cast_to_digital_curve()->
       get_interpolator()->get_tangent_angle(0);
@@ -288,11 +294,12 @@ static double tangent_angle_at_vertex(vtol_vertex_sptr v, vtol_edge_2d_sptr e)
       if (ang>360)
         ang -= 360;
     }
-  //If we want cw and ccw to be correct senses, we flip y because the input 
-  //edges are in image coordinates that has a left-handed coordinate system. 
+  //If we want cw and ccw to be correct senses, we flip y because the input
+  //edges are in image coordinates that has a left-handed coordinate system.
   ang = flip_y(ang);
   return ang;
 }
+
 //----------------------------------------------------------------
 //:   Find the vtol_vertex, if any,  which is shared by two vtol_edge(s)
 static vtol_vertex_sptr common_vertex(vtol_edge_2d_sptr& e0, vtol_edge_2d_sptr& e1)
@@ -309,6 +316,7 @@ static vtol_vertex_sptr common_vertex(vtol_edge_2d_sptr& e0, vtol_edge_2d_sptr& 
     return v02;
   return NULL;
 }
+
 //----------------------------------------------------------------
 //:   Compute the angle between two edges at the specified vtol_vertex, v
 //    The angle is mapped to the interval [-180, 180].  The angle sense is
@@ -329,6 +337,7 @@ double vtol_cycle_processor::angle_between_edges(vtol_edge_2d_sptr e0,
     angle+=360;
   return angle;
 }
+
 //------------------------------------------------------------
 //:   Find the most counter clockwise vtol_edge at the input vtol_vertex, from.
 //
@@ -354,6 +363,7 @@ static vtol_edge_2d_sptr ccw_edge(vtol_edge_2d_sptr in_edg, vtol_vertex_sptr fro
     ccw = in_edg;
   return ccw;
 }
+
 //-----------------------------------------------------
 //:   Is an edge assignable to a path?
 //    "Assignable" is defined by
@@ -364,14 +374,13 @@ static vtol_edge_2d_sptr ccw_edge(vtol_edge_2d_sptr in_edg, vtol_vertex_sptr fro
 //
 bool vtol_cycle_processor::assignable(vtol_edge_2d_sptr edg, vtol_vertex_sptr last)
 {
-
-  if(debug2_)
-    {    
-      vcl_cout << "In assignable(..)" << vcl_endl;
-      vcl_cout << "edg " ; this->print_edge(edg);
+  if (debug2_)
+    {
+      vcl_cout << "In assignable(..)\n"
+               << "edg " ; this->print_edge(edg);
       vcl_cout << "plus used(" << plus_used(edg) << ") minus used("
-               << minus_used(edg) << ")" << vcl_endl;
-      vcl_cout << "last " << *last << vcl_endl;
+               << minus_used(edg) << ")\n"
+               << "last " << *last << vcl_endl;
     }
   if (!(edg&&last))
     return false;
@@ -387,6 +396,7 @@ bool vtol_cycle_processor::assignable(vtol_edge_2d_sptr edg, vtol_vertex_sptr la
     return true;
   return false;
 }
+
 //----------------------------------------------------------------------
 //:   Set up the first edge in a cycle (or bridge) traversal.
 //    A positive
@@ -397,12 +407,10 @@ void vtol_cycle_processor::assign_initial_edge(vtol_edge_2d_sptr& e,
                                                vtol_vertex_sptr& first,
                                                vtol_vertex_sptr& last)
 {
-  if(debug1_)
-    {
-      vcl_cout << "==== entering assign_initial_edge =====" << vcl_endl;
-      vcl_cout << "e " << *e << "plus used(" << plus_used(e) << ") minus used("
-               << minus_used(e) << ")" << vcl_endl;
-    }
+  if (debug1_)
+      vcl_cout << "==== entering assign_initial_edge =====\n"
+               << "e " << *e << "plus used(" << plus_used(e) << ") minus used("
+               << minus_used(e) << ")\n";
 
   if (used(e))
     {
@@ -429,12 +437,10 @@ void vtol_cycle_processor::assign_initial_edge(vtol_edge_2d_sptr& e,
       first = v1;
       last  = v2;
     }
-  if(debug1_)
-    {
-      vcl_cout << "==== leaving assign_initial_edge =====" << vcl_endl;
-      vcl_cout << "plus used(" << plus_used(e) << ") minus used("
-               << minus_used(e) << ")" << vcl_endl << vcl_endl;
-    }
+  if (debug1_)
+      vcl_cout << "==== leaving assign_initial_edge =====\n"
+               << "plus used(" << plus_used(e) << ") minus used("
+               << minus_used(e) << ")\n\n";
 }
 
 //------------------------------------------------------------
@@ -443,12 +449,10 @@ void vtol_cycle_processor::assign_initial_edge(vtol_edge_2d_sptr& e,
 
 void vtol_cycle_processor::assign_ends(vtol_edge_2d_sptr edg, vtol_vertex_sptr& last)
 {
-  if(debug1_)
-    {
-      vcl_cout << "==== entering assign_ends =====" << vcl_endl;
-      vcl_cout << "edg " << *edg << "plus used(" << plus_used(edg) << ") minus used("
-               << minus_used(edg) << ")" << vcl_endl;
-    }
+  if (debug1_)
+      vcl_cout << "==== entering assign_ends =====\n"
+               << "edg " << *edg << "plus used(" << plus_used(edg) << ") minus used("
+               << minus_used(edg) << ")\n";
   vtol_vertex_sptr s = edg->v1();
   vtol_vertex_sptr e = edg->v2();
   // compare to last point added
@@ -486,7 +490,6 @@ static void assign_stack_edge(vcl_vector<vtol_edge_2d_sptr>& e_stack, vtol_edge_
   next_edge = e_stack.back();
 }
 
-
 //------------------------------------------------------------------
 //:   The initial setup of the cycle process.
 //    Used by the vtol_cycle_processor
@@ -505,7 +508,6 @@ void vtol_cycle_processor::init(vcl_vector<vtol_edge_2d_sptr>& in_edges)
   this->set_bridge_vars();
   valid_ = false;
 }
-
 
 //---------------------------------------------------------------
 //:  Initializes the search for cycles starting with an unexplored vtol_edge.
@@ -527,16 +529,16 @@ void vtol_cycle_processor::set_bridge_vars()
     v_stack_.push_back(first_);//why do we put both first and last on the stack?
   else
     touch(l_);
-  if(debug1_)
+  if (debug1_)
     {
-      vcl_cout << "------init bridge vars-------" << vcl_endl;
-      vcl_cout << "oooooooo Vertex Stack ooooooooo" << vcl_endl;
+      vcl_cout << "------init bridge vars-------\n"
+               << "oooooooo Vertex Stack ooooooooo\n";
       print_vertices(v_stack_);
-      vcl_cout << "oooooooo Edge Stack ooooooooo" << vcl_endl;
+      vcl_cout << "oooooooo Edge Stack ooooooooo\n";
       print_edges(e_stack_);
     }
-
 }
+
 //------------------------------------------------------------------------
 //:   check for bridges and compute winding angle.
 //    (just convenient code packaging for use in classify_path)
@@ -552,6 +554,7 @@ static void classify_adjacent_edges(vtol_edge_2d_sptr& e0, vtol_edge_2d_sptr& e1
         all_bridge&&used(e1)&&bridge_traverse(angle);
     }
 }
+
 //------------------------------------------------------------------------
 //:  Classify two edges, it is simpler to deal with this case exhaustively.
 //   Returns true if the path is cycle (not a bridge)
@@ -564,6 +567,7 @@ static bool classify_two_edge_path(vtol_edge_2d_sptr& e0, vtol_edge_2d_sptr& e1)
   bool bridge = bridge_traverse(angle1)&&bridge_traverse(angle2);
   return !bridge;
 }
+
 //---------------------------------------------------------------------
 //:
 //   Search the set of vtol_edge(s) connected to the last path vertex for
@@ -574,9 +578,9 @@ vtol_edge_2d_sptr vtol_cycle_processor::search_for_next_edge(vcl_vector<vtol_edg
   while (edges_at_last.size())
     {
       vtol_edge_2d_sptr temp = ccw_edge(l_, last_, edges_at_last);
-      if(debug2_)
+      if (debug2_)
         {
-          vcl_cout << "next ccw_edge" << vcl_endl;
+          vcl_cout << "next ccw_edge\n";
           this->print_edge(temp);
         }
       if (!temp || assignable(temp, last_))
@@ -585,6 +589,7 @@ vtol_edge_2d_sptr vtol_cycle_processor::search_for_next_edge(vcl_vector<vtol_edg
     }
   return NULL;
 }
+
 //---------------------------------------------------------------------
 //:   A suitable vtol_edge is added to the evolving path
 //
@@ -592,27 +597,26 @@ void vtol_cycle_processor::add_edge_to_path()
 {
   vtol_vertex_sptr temp = last_;
   assign_ends(next_edge_, temp);
-  if(debug2_)
-    {
-      vcl_cout << "==== after assign_ends =====" << vcl_endl;
-      vcl_cout<< "next_edge_ "  << *next_edge_ << "plus used(" 
-              << plus_used(next_edge_) << ") minus used(" << minus_used(next_edge_)
-              << ")" << vcl_endl << vcl_endl;
-    }
+  if (debug2_)
+      vcl_cout << "==== after assign_ends =====\n"
+               << "next_edge_ "  << *next_edge_ << "plus used("
+               << plus_used(next_edge_) << ") minus used("
+               << minus_used(next_edge_) << ")\n\n";
   v_stack_.push_back(last_);
   last_ = temp;
   l_ = next_edge_;
   e_stack_.push_back(l_);
   touch(l_);
-  if(debug1_)
+  if (debug1_)
     {
-      vcl_cout << "------assign_edge_to_path-------" << vcl_endl;
-      vcl_cout << "oooooooo Vertex Stack ooooooooo" << vcl_endl;
+      vcl_cout << "------assign_edge_to_path-------\n"
+               << "oooooooo Vertex Stack ooooooooo\n";
       print_vertices(v_stack_);
-      vcl_cout << "oooooooo Edge Stack ooooooooo" << vcl_endl;
+      vcl_cout << "oooooooo Edge Stack ooooooooo\n";
       print_edges(e_stack_);
     }
 }
+
 //------------------------------------------------------------------------
 //:   Classify a closed path as a cycle or bridge.
 //    The path traverse is reversed since the vtol_edge sequence was
@@ -622,8 +626,8 @@ void vtol_cycle_processor::add_edge_to_path()
 bool vtol_cycle_processor::classify_path(vcl_vector<vtol_edge_2d_sptr>& path_edges,
                                          vtol_one_chain_sptr& chain)
 {
-      if(debug1_)
-        vcl_cout << "======= In classify_path ========" << vcl_endl;
+  if (debug1_)
+        vcl_cout << "======= In classify_path ========\n";
   if (!path_edges.size())
     return false;
   edge_list c_edges;
@@ -657,7 +661,7 @@ bool vtol_cycle_processor::classify_path(vcl_vector<vtol_edge_2d_sptr>& path_edg
     {
       classify_adjacent_edges(e0, *eit, all_bridge, angle);
 
-      if(debug1_)
+      if (debug1_)
         vcl_cout << "wind_ang " << winding_angle << " - " << angle << " = "
                  << winding_angle - angle << vcl_endl;
 
@@ -686,13 +690,14 @@ bool vtol_cycle_processor::classify_path(vcl_vector<vtol_edge_2d_sptr>& path_edg
 }
 void vtol_cycle_processor::print_edge(vtol_edge_2d_sptr& e)
 {
-  if(!e)
+  if (!e)
     return;
-  vcl_cout << e << " :[(" << e->v1()->cast_to_vertex_2d()->x() 
+  vcl_cout << e << " :[(" << e->v1()->cast_to_vertex_2d()->x()
            << " " << e->v1()->cast_to_vertex_2d()->y()<< "), ("
-           << e->v2()->cast_to_vertex_2d()->x() << " " 
-           << e->v2()->cast_to_vertex_2d()->y() << ")]" << vcl_endl;
+           << e->v2()->cast_to_vertex_2d()->x() << " "
+           << e->v2()->cast_to_vertex_2d()->y() << ")]\n";
 }
+
 //------------------------------------------------------------------------
 //:   The main cycle tracing algorithm.
 //    The input is edges_ and the output is chains_, a set of 1-cycles.
@@ -726,9 +731,9 @@ void vtol_cycle_processor::compute_cycles()
     if (found_next_edge_&&!cycle_)
       {
         bool force = false;
-        
-        if(debug1_&&last_){
-          vcl_cout << "last_ ="; last_->print(); vcl_cout <<vcl_endl;}	
+
+        if (debug1_&&last_){
+          vcl_cout << "last_ ="; last_->print(); vcl_cout <<vcl_endl;}
 
         vcl_vector<vtol_edge_2d_sptr> edges_at_last;
         v_edges(last_, edges_, force, edges_at_last);
@@ -740,23 +745,21 @@ void vtol_cycle_processor::compute_cycles()
             v_edges(last_, edges_, force, edges_at_last);
             next_edge_ = search_for_next_edge(edges_at_last);
           }
-        if(debug1_&&next_edge_){
+        if (debug1_&&next_edge_){
           vcl_cout << "next_edge_("<< force <<") = "; this->print_edge(next_edge_);}
-        
+
         if (!next_edge_)
           found_next_edge_ = false;
         else
           add_edge_to_path();
-        if(debug1_)
-          {
-            vcl_cout << "========checking for cycle ===========" << vcl_endl;
-            vcl_cout << " last_ " << last_ <<"(" 
-                     << last_->cast_to_vertex_2d()->x()<< " " 
-                     << last_->cast_to_vertex_2d()->y()<< ")" << vcl_endl;
-          }
+        if (debug1_)
+            vcl_cout << "========checking for cycle ===========\n"
+                     << " last_ " << last_ <<"("
+                     << last_->cast_to_vertex_2d()->x()<< " "
+                     << last_->cast_to_vertex_2d()->y()<< ")\n";
         cycle_ = vcl_find(v_stack_.begin(), v_stack_.end(), last_) != v_stack_.end();
-        if(debug1_&&cycle_)
-          vcl_cout << "...Found Cycle...." << vcl_endl << vcl_endl;
+        if (debug1_&&cycle_)
+          vcl_cout << "...Found Cycle....\n\n";
       }
     else
       {
@@ -765,24 +768,24 @@ void vtol_cycle_processor::compute_cycles()
             cycle_ = false;
             vcl_vector<vtol_edge_2d_sptr> cycle_edges;
             pop_stacks(v_stack_, e_stack_, last_, cycle_edges);
-            if(debug1_)
+            if (debug1_)
               {
-                vcl_cout << "======== In Cycle Classifer =======" << vcl_endl;
-                vcl_cout << "cycle_edges" << vcl_endl;
+                vcl_cout << "======== In Cycle Classifer =======\n"
+                         << "cycle_edges\n";
                 print_edges(cycle_edges);
               }
             assign_stack_edge(e_stack_, l_);
             vtol_one_chain_sptr cycle;
             bool is_cycle = classify_path(cycle_edges, cycle);
-            if(debug1_)
+            if (debug1_)
               {
-                vcl_cout << "is_cycle(" << is_cycle << ")" << vcl_endl;
-                if(cycle)
+                vcl_cout << "is_cycle(" << is_cycle << ")\n";
+                if (cycle)
                   {
-                    vcl_cout << "cycle " << cycle << "[cw(" << cw(cycle) 
-                             << "), ccw(" << ccw(cycle) << ")]" << vcl_endl;
+                    vcl_cout << "cycle " << cycle << "[cw(" << cw(cycle)
+                             << "), ccw(" << ccw(cycle) << ")]\n";
                     vcl_vector<vtol_edge_sptr>* c_edges = cycle->edges();
-                    vcl_cout << "cycle edges" << vcl_endl;
+                    vcl_cout << "cycle edges\n";
                     print_edges(*c_edges);
                     delete c_edges;
                   }
@@ -790,8 +793,8 @@ void vtol_cycle_processor::compute_cycles()
             if (is_cycle)
               chains_.push_back(cycle);
             else//path was all bridge edges, so remove them from consideration
-              for(vcl_vector<vtol_edge_2d_sptr>::iterator eit = cycle_edges.begin();
-                  eit != cycle_edges.end(); eit++)
+              for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = cycle_edges.begin();
+                   eit != cycle_edges.end(); eit++)
                 edge_2d_erase(edges_,*eit);
           }
         if (!found_next_edge_)
@@ -864,7 +867,7 @@ void vtol_cycle_processor::sort_one_cycles()
     }
   nested_one_cycles_.push_back(outer_chain);
   touch(outer_chain);
-  if(debug1_)
+  if (debug1_)
     vcl_cout << "Outer Cycle area = " << area << vcl_endl;
   //At this point, we have the outer bounding chain.
   //next we will include any cw cycles that lie inside the
@@ -888,10 +891,10 @@ void vtol_cycle_processor::sort_one_cycles()
         vsol_box_2d* bc = (*cit)->get_bounding_box();
         if ((*bc<*b)&&!bc->near_equal(*b, tolerance_))
           {
-            if(debug1_)
-              vcl_cout << "Adding inner cycle with area = " 
+            if (debug1_)
+              vcl_cout << "Adding inner cycle with area = "
                        << bc->width()*bc->height() << vcl_endl;
-  
+
             nested_one_cycles_.push_back(*cit);
             touch(*cit);
           }
@@ -921,39 +924,39 @@ bool vtol_cycle_processor::nested_one_cycles(one_chain_list& one_chains,
 //: flag mutation functions
 static void clear_flags(vcl_vector<vtol_edge_sptr>& s, unsigned int flag)
 {
-  for(vcl_vector<vtol_edge_sptr>::iterator eit = s.begin();
-      eit != s.end(); eit++)
+  for (vcl_vector<vtol_edge_sptr>::iterator eit = s.begin();
+       eit != s.end(); eit++)
     (*eit)->unset_user_flag(flag);
 }
 static void set_flags(vcl_vector<vtol_edge_sptr>& s, unsigned int flag)
 {
-  for(vcl_vector<vtol_edge_sptr>::iterator eit = s.begin();
-      eit != s.end(); eit++)
+  for (vcl_vector<vtol_edge_sptr>::iterator eit = s.begin();
+       eit != s.end(); eit++)
     (*eit)->set_user_flag(flag);
 }
 
 //---------------------------------------------------------------------------
-// --This method scans the edge sets s1, s2 and computes their set 
-// intersection. If the intersection is empty then the method returns false.
-// The method uses flags to mark edges appearing in both lists. Thus the 
+//: This method scans the edge sets s1, s2 and computes their set intersection.
+// If the intersection is empty then the method returns false.
+// The method uses flags to mark edges appearing in both lists. Thus the
 // computation is O(n1+n2).
 //
 // This method might not be needed if stl algorithms worked (small_g++ probs)
 // however with flags this might be faster than stl
 //
-bool vtol_cycle_processor::intersect_edges(vcl_vector<vtol_edge_sptr>& s1, 
+bool vtol_cycle_processor::intersect_edges(vcl_vector<vtol_edge_sptr>& s1,
                                            vcl_vector<vtol_edge_sptr>& s2,
                                            vcl_vector<vtol_edge_sptr>& s1_and_s2)
 {
   s1_and_s2.clear();
   //If either set is empty then the result is empty
-  if(!(s1.size()&&s2.size()))
+  if (!(s1.size()&&s2.size()))
     return false;
   //Get Flags
   unsigned int flag1 = VSOL_FLAG5, flag2 = VSOL_FLAG6;
   //Scan through s2 and clear the flags
-  clear_flags(s2, flag1); 
-  clear_flags(s2, flag2); 
+  clear_flags(s2, flag1);
+  clear_flags(s2, flag2);
 
   //Scan through s1 and set flag 1 which is used to indicate
   //that an edge is in s1.
@@ -961,11 +964,11 @@ bool vtol_cycle_processor::intersect_edges(vcl_vector<vtol_edge_sptr>& s1,
 
   //Scan s2 again and push edges also in s1  onto the set intersection
   //mark the edge as in the ouput list with flag2.
-  for(vcl_vector<vtol_edge_sptr>::iterator eit = s2.begin();
-      eit != s2.end(); eit++)
+  for (vcl_vector<vtol_edge_sptr>::iterator eit = s2.begin();
+       eit != s2.end(); eit++)
     {
       vtol_edge_sptr e = *eit;
-      if(e->get_user_flag(flag1)&&!e->get_user_flag(flag2))
+      if (e->get_user_flag(flag1)&&!e->get_user_flag(flag2))
         {
           e->set_user_flag(flag2);//mark the edge as in the output
           s1_and_s2.push_back(e);
@@ -979,38 +982,38 @@ bool vtol_cycle_processor::intersect_edges(vcl_vector<vtol_edge_sptr>& s1,
   return s1_and_s2.size()>0;
 }
 //---------------------------------------------------------------------------
-// --This method scans the edge sets s1, s2 and computes their set 
-// difference, i.e, s1 with any edges also in s2 removed. If the difference
-// is empty then the method returns false. The method uses flags to mark 
+//: This method scans the edge sets s1, s2 and computes their set difference.
+// i.e, s1 with any edges also in s2 removed. If the difference
+// is empty then the method returns false. The method uses flags to mark
 // edges appearing in both lists. Thus the computation is O(n1+n2).
 //
 // This method might not be needed if stl algorithms worked (small_g++ probs)
 // however with flags this might be faster than stl
 //
-bool vtol_cycle_processor::difference_edges(vcl_vector<vtol_edge_sptr>& s1, 
+bool vtol_cycle_processor::difference_edges(vcl_vector<vtol_edge_sptr>& s1,
                                             vcl_vector<vtol_edge_sptr>& s2,
                                             vcl_vector<vtol_edge_sptr>& s1_minus_s2)
 {
   s1_minus_s2.clear();
   //If either set is empty then the result is empty
-  if(!(s1.size()&&s2.size()))
+  if (!(s1.size()&&s2.size()))
     return false;
   //Get Flags
   unsigned int flag1 = VSOL_FLAG5, flag2 = VSOL_FLAG6;
   //Scan through s1 and clear the flags
-  clear_flags(s1, flag1); 
-  clear_flags(s1, flag2); 
+  clear_flags(s1, flag1);
+  clear_flags(s1, flag2);
 
   //Scan through s2 and set flag1 which marks that it is in s2.
   set_flags(s2, flag1);
 
   //Scan s1 again and push edges exclusively in s1 onto the output
   //mark the edge as in the ouput list with flag2.
-  for(vcl_vector<vtol_edge_sptr>::iterator eit = s1.begin();
-      eit != s1.end(); eit++)
+  for (vcl_vector<vtol_edge_sptr>::iterator eit = s1.begin();
+       eit != s1.end(); eit++)
     {
       vtol_edge_sptr e = *eit;
-      if(!e->get_user_flag(flag1)&&!e->get_user_flag(flag2))
+      if (!e->get_user_flag(flag1)&&!e->get_user_flag(flag2))
         {
           e->set_user_flag(flag2);//mark the edge as in the output
           s1_minus_s2.push_back(e);
@@ -1024,74 +1027,73 @@ bool vtol_cycle_processor::difference_edges(vcl_vector<vtol_edge_sptr>& s1,
   return s1_minus_s2.size()>0;
 }
 //--------------------------------------------------------------------
-//:  mark all vertices as used if they are incident on exactly two
-//    edges.  Vertices that are not incident two edges are
-//    output in the vector, bad_verts.
+//: mark all vertices as used if they are incident on exactly two edges.
+// Vertices that are not incident two edges are output in the vector, bad_verts.
 bool vtol_cycle_processor::corrupt_boundary(vcl_vector<vtol_edge_2d_sptr>& edges,
-                                       vcl_vector<vtol_vertex_sptr>& bad_verts)
+                                            vcl_vector<vtol_vertex_sptr>& bad_verts)
 {
   bool bad = false;
   //Intialize Markers
   vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
   vtol_edge_2d_sptr first_e = (*eit);
-  if(!first_e)
+  if (!first_e)
     {
-      vcl_cout << "In cycle_processor::corrupt_boundary - null edge" << vcl_endl;
+      vcl_cout << "In cycle_processor::corrupt_boundary - null edge\n";
       return false;
     }
   //setup vertex flags
   vtol_vertex_sptr first_v = first_e->v1();
   unsigned int f1=VSOL_FLAG4, f2=VSOL_FLAG5, f3=VSOL_FLAG6;
   //Initialize Flags
-  for(;eit != edges.end(); eit++)
+  for (;eit != edges.end(); eit++)
     {
       vtol_vertex_sptr v1 = (*eit)->v1();
       vtol_vertex_sptr v2 = (*eit)->v2();
-      v1->unset_user_flag(f1); 
-      v1->unset_user_flag(f2); 
-      v1->unset_user_flag(f3); 
-      v2->unset_user_flag(f1); 
-      v2->unset_user_flag(f2); 
-      v2->unset_user_flag(f3); 
+      v1->unset_user_flag(f1);
+      v1->unset_user_flag(f2);
+      v1->unset_user_flag(f3);
+      v2->unset_user_flag(f1);
+      v2->unset_user_flag(f2);
+      v2->unset_user_flag(f3);
     }
   eit = edges.begin();
   //Mark using flags that a vertex is incident on two edges
   //Flags f1 and f2 act as a counter
-  for(;eit != edges.end(); eit++)
+  for (;eit != edges.end(); eit++)
     {
       vtol_vertex_sptr v1 = (*eit)->v1();
       vtol_vertex_sptr v2 = (*eit)->v2();
-      if(!v1->get_user_flag(f1))
+      if (!v1->get_user_flag(f1))
         v1->set_user_flag(f1);
       else
         v1->set_user_flag(f2);
-      if(!v2->get_user_flag(f1))
+      if (!v2->get_user_flag(f1))
         v2->set_user_flag(f1);
       else
         v2->set_user_flag(f2);
     }
   eit = edges.begin();
-  for(;eit != edges.end(); eit++)
+  for (;eit != edges.end(); eit++)
     {
       vtol_vertex_sptr v1 = (*eit)->v1();
       vtol_vertex_sptr v2 = (*eit)->v2();
-      if((v1!=v2)&&*v1==*v2)
-        vcl_cout << "Improper Loop( " << vcl_endl << *v1 << *v2 << ")" << vcl_endl << vcl_endl;
+      if ((v1!=v2)&&*v1==*v2)
+        vcl_cout << "Improper Loop(\n" << *v1 << *v2 << ")\n\n";
       bool bad1 = !v1->get_user_flag(f2);
       bool bad2 = !v2->get_user_flag(f2);
       // flag f3 keeps track that we have already put the vertex onto the bad list
-      if(bad1)
+      if (bad1)
         {
-          if(!v1->get_user_flag(f3))
+          if (!v1->get_user_flag(f3))
             {
               bad_verts.push_back(v1);
               v1->set_user_flag(f3);
             }
           bad = true;
         }
-      if(bad2)
+      if (bad2)
         {
-          if(!v2->get_user_flag(f3))
+          if (!v2->get_user_flag(f3))
             {
               bad_verts.push_back(v2);
               v2->set_user_flag(f3);
@@ -1101,7 +1103,7 @@ bool vtol_cycle_processor::corrupt_boundary(vcl_vector<vtol_edge_2d_sptr>& edges
     }
   //release the flags
   eit = edges.begin();
-  for(;eit != edges.end(); eit++)
+  for (;eit != edges.end(); eit++)
     {
       vtol_vertex_sptr v1 = (*eit)->v1();
       vtol_vertex_sptr v2 = (*eit)->v2();
@@ -1115,21 +1117,21 @@ bool vtol_cycle_processor::corrupt_boundary(vcl_vector<vtol_edge_2d_sptr>& edges
   return bad;
 }
 //--------------------------------------------------------------------
-// -- Input is a set of edges that do not form cycles. There is a
+//:
+//    Input is a set of edges that do not form cycles. There is a
 //    set of vertices that represent the unconnected endpoints of a
 //    set of paths.  Two endpoints can be connected if there exists
-//    an edge between them that is not included in the input set of 
-//    edges. 
+//    an edge between them that is not included in the input set of
+//    edges.
 bool vtol_cycle_processor::connect_paths(vcl_vector<vtol_edge_2d_sptr>& edges,
-                                    vcl_vector<vtol_vertex_sptr>& bad_verts)
+                                         vcl_vector<vtol_vertex_sptr>& bad_verts)
 {
-  
   bool paths_connected = true;
-  if(!bad_verts.size())
+  if (!bad_verts.size())
     return paths_connected;
 
-  if(edges.size()==1)
-    vcl_cout << "One Edge" << vcl_endl;
+  if (edges.size()==1)
+    vcl_cout << "One Edge\n";
 
   //Clear the bad vertex flags
   vcl_vector<vtol_vertex_sptr> temp;//temporary bad_verts array
@@ -1142,17 +1144,17 @@ bool vtol_cycle_processor::connect_paths(vcl_vector<vtol_edge_2d_sptr>& edges,
   //that is there should be no duplicate vertices
   unsigned int flag1 = VSOL_FLAG5, flag2=VSOL_FLAG6;
   //here we assume that all vertices are uniform in flag use.
-  if(!first_v)
+  if (!first_v)
     return false;
   //make a copy of bad_verts
-  for(; vit != bad_verts.end(); vit++)
+  for (; vit != bad_verts.end(); vit++)
     {
       (*vit)->unset_user_flag(flag1);
       temp.push_back(*vit);
     }
   //Collect the vertices from edges
-  //Initialize the flags. 
-  for(vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
+  //Initialize the flags.
+  for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
       eit != edges.end(); eit++)
     {
       vtol_vertex_sptr v1 = (*eit)->v1(), v2 = (*eit)->v2();
@@ -1162,29 +1164,29 @@ bool vtol_cycle_processor::connect_paths(vcl_vector<vtol_edge_2d_sptr>& edges,
   //cache the verts for the edges already in the paths
   //flag1 keeps track of vertices added to edge_verts
   vcl_vector<vtol_vertex_sptr> edge_verts;
-  for(vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
+  for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
       eit != edges.end(); eit++)
     {
       vtol_vertex_sptr v1 = (*eit)->v1(), v2 = (*eit)->v2();
-      if(!v1->get_user_flag(flag2))
+      if (!v1->get_user_flag(flag2))
         {edge_verts.push_back(v1); v1->set_user_flag(flag2);}
-      if(!v2->get_user_flag(flag2))
+      if (!v2->get_user_flag(flag2))
         {edge_verts.push_back(v2); v2->set_user_flag(flag2);}
     }
 
   //search through the list of bad verts and attempt to connect them
-  //repaired_verts allows the successfully connected vertices to be 
+  //repaired_verts allows the successfully connected vertices to be
   //removed from the bad_verts set.  flag1 marks vertices as used.
   vcl_vector<vtol_vertex_sptr> repaired_verts;
-  for(vit=bad_verts.begin(); vit != bad_verts.end(); vit++)
+  for (vit=bad_verts.begin(); vit != bad_verts.end(); vit++)
     {
-      if((*vit)->get_user_flag(flag1))//skip used vertices
-        continue;  
+      if ((*vit)->get_user_flag(flag1))//skip used vertices
+        continue;
       bool found_edge = false;
       //find edges attached to each bad vert
       vcl_vector<vtol_edge_sptr>* vedges = (*vit)->edges();
       //scan through vedges to find a connecting edge
-      for(vcl_vector<vtol_edge_sptr>::iterator eit = vedges->begin();
+      for (vcl_vector<vtol_edge_sptr>::iterator eit = vedges->begin();
           (eit != vedges->end())&&!found_edge; eit++)
         {
           vtol_edge_sptr e = *eit;
@@ -1194,20 +1196,20 @@ bool vtol_cycle_processor::connect_paths(vcl_vector<vtol_edge_2d_sptr>& edges,
           //  2)v can't be found in bad_verts;
           //  3)v can't be found in edge_verts;
           //  4)e is already in the input edge set.
-          if(v->get_user_flag(flag1))
+          if (v->get_user_flag(flag1))
             continue; //condition 1)
           bool found_in_bad_verts =
             vcl_find(temp.begin(), temp.end(), v) != temp.end();
           //            stl_cool_topology::vcl_vector_vertex_find(temp, v);
           bool found_in_edge_verts = false;
-          if(!found_in_bad_verts) //condition 2)
+          if (!found_in_bad_verts) //condition 2)
             found_in_edge_verts=
               vcl_find(edge_verts.begin(), edge_verts.end(), v) != edge_verts.end();
               //  stl_cool_topology::vcl_vector_vertex_find(edge_verts, v);
-          if(!(found_in_bad_verts||found_in_edge_verts)) // condition 3)
+          if (!(found_in_bad_verts||found_in_edge_verts)) // condition 3)
             continue;
-          //          if(stl_cool_topology::vcl_vector_edge_find(edges, e))
-          if( vcl_find(edges.begin(), edges.end(), e) != edges.end())
+          //          if (stl_cool_topology::vcl_vector_edge_find(edges, e))
+          if ( vcl_find(edges.begin(), edges.end(), e) != edges.end())
             //stl_cool_topology::vector_edge_find(edges, e)
             continue; //condition 4)
           //Found a connecting edge, so add it to the input edges
@@ -1224,25 +1226,25 @@ bool vtol_cycle_processor::connect_paths(vcl_vector<vtol_edge_2d_sptr>& edges,
         paths_connected&&(*vit)->get_user_flag(flag1);
     }
   //Clear the flags
-  for(vcl_vector<vtol_vertex_sptr>::iterator vit = bad_verts.begin();
-      vit!=bad_verts.end(); vit++)
+  for (vcl_vector<vtol_vertex_sptr>::iterator vit = bad_verts.begin();
+       vit!=bad_verts.end(); vit++)
     {
       (*vit)->unset_user_flag(flag1);
       (*vit)->unset_user_flag(flag2);
     }
-  for(vcl_vector<vtol_vertex_sptr>::iterator vit = edge_verts.begin();
-      vit!=edge_verts.end(); vit++)
+  for (vcl_vector<vtol_vertex_sptr>::iterator vit = edge_verts.begin();
+       vit!=edge_verts.end(); vit++)
     {
       (*vit)->unset_user_flag(flag1);
       (*vit)->unset_user_flag(flag2);
     }
   //Remove the successful vertex connections
-  for(vit = repaired_verts.begin();
-      vit != repaired_verts.end(); vit++)
+  for (vit = repaired_verts.begin();
+       vit != repaired_verts.end(); vit++)
     {
       vcl_vector<vtol_vertex_sptr>::iterator erit;
       erit = vcl_find(bad_verts.begin(), bad_verts.end(), *vit);
-      if(erit != bad_verts.end())
+      if (erit != bad_verts.end())
         bad_verts.erase(erit);
     }
   return paths_connected;
