@@ -1,5 +1,7 @@
 USES = vxl oxl
 include $(IUEROOT)/vxl/vil/config.mk
+TRY_JPEG := 1
+TRY_MPEG := 1
 
 LIBRARY = oxp
 
@@ -41,7 +43,7 @@ SOURCES += vsl_conic_points.cxx
 SOURCES += oxp_bunch_of_files.cxx
 SOURCES += oxp_vidl_moviefile.cxx
 
-ifdef WIN32
+ifeq ($(HAS_MPEG),1)
 SOURCES += oxp_mpeg_codec.cxx
 SOURCES += oxp_vidl_mpeg_codec.cxx
 endif
