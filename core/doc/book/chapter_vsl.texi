@@ -1014,7 +1014,7 @@ container print the number of elements , and then no more than
 perhaps the first 5 elements, with ellipsis to indicate if there
 are more.
 
-To aid clear printing the following rule has been to be helpful.
+To aid clear printing the following rule has been found to be helpful.
 @quotation
 If a summary can be printed on a single line, then do not output a linefeed.
 If a summary contains linefeeds in the middle, then finish the summary with a linefeed.
@@ -1360,7 +1360,7 @@ memory management) for you.
 There are several reasons for doing slightly different things for
 classes that are members of a level-1 library.
 @enumerate
-@item No level one library can depend on any library except vcl.
+@item No level-one library can depend on any library except vcl.
 @item We do not wish to `break' any existing code
 @item There is a desire to keep the level 1 libraries small.  IO is available if required.
 @end enumerate
