@@ -99,10 +99,8 @@ void test_image_view_byte()
   image5.resize(5,4);
   image5.fill(vil_rgb<vil2_byte>(25,35,45));
   image5(2,2).b = 50;
-  vil2_print_all(vcl_cout, image5);
 
   image2 = image5;
-  vil2_print_all(vcl_cout, image2);
   TEST("Can assign rgb images to 3 plane view", image2, true);
   TEST("Pixels are correct", image2(2,2,1) == 35 && image2(2,2,2) == 50, true);
 
@@ -111,6 +109,31 @@ void test_image_view_byte()
 
   vil2_image_view<vil_rgba<vil2_byte> > image6 = image2;
   TEST("Can't assign a 3 plane images to rgba view", image6, false);
+
+  vcl_cout << "***********************************\n";
+  vcl_cout << " Testing vil2_image_view functions\n";
+  vcl_cout << "***********************************\n";
+
+  image2.fill(0);
+  image_win = vil2_window(image2,2,1,1,2);
+  image5.resize(1,2);
+  image5(0,0) = vil_rgb<vil2_byte>(25,35,45);
+  image5(0,1) = vil_rgb<vil2_byte>(25,35,45);
+  image0 = image5;
+
+  vil2_reformat_copy(image0, image_win);
+  vil2_print_all(vcl_cout, image2);
+  vil2_image_view<vil2_byte> test_image(5,4,3);
+  test_image.fill(0);
+  test_image(2,1,0) = test_image(2,2,0) = 25;
+  test_image(2,1,1) = test_image(2,2,1) = 35;
+  test_image(2,1,2) = test_image(2,2,2) = 45;
+  TEST("vil2_reformat_copy, vil2_window and vil2_deep_equality", vil2_deep_equality(test_image,image2), true);
+  test_image(2,2,2) = 44;
+  TEST("!vil2_deep_equality", vil2_deep_equality(test_image,image2), false);
+  test_image.resize(5,4,4);
+  TEST("!vil2_deep_equality", vil2_deep_equality(test_image,image2), false);
+
 }
 
 #if 0 // commented out

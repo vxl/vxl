@@ -22,6 +22,40 @@ vil2_image_view<T> vil2_deep_copy(const vil2_image_view<T> &rhs)
   return cpy;
 }
 
+
+//: Copy src to dest, without changing dest's view parameters.
+// This is useful if you want to copy on image into a window on another image.
+// src and dest must have identical sizes, and types.
+template<class T>
+void vil2_reformat_copy(const vil2_image_view<T> &src, vil2_image_view<T> &dest)
+{
+  assert (src.nplanes() == dest.nplanes() &&
+    src.nj() == dest.nj() &&
+    src.ni() == dest.ni());
+  for (unsigned p = 0; p < dest.nplanes(); ++p)
+    for (unsigned j = 0; j < dest.nj(); ++j)
+      for (unsigned i = 0; i < dest.ni(); ++i)
+        dest(i,j,p) = src(i,j,p);
+}
+
+//: True if the actual images are identical.
+// $\bigwedge_{i,j,p} {\textstyle src}(i,j,p) == {\textstyle dest}(i,j,p)$
+// The data may be formatted differently in each memory chunk.
+template<class T>
+bool vil2_deep_equality(const vil2_image_view<T> &lhs, const vil2_image_view<T> &rhs)
+{
+  if (lhs.nplanes() != rhs.nplanes() ||
+    lhs.nj() != rhs.nj() ||
+    lhs.ni() != rhs.ni()) return false;
+
+  for (unsigned p = 0; p < rhs.nplanes(); ++p)
+    for (unsigned j = 0; j < rhs.nj(); ++j)
+      for (unsigned i = 0; i < rhs.ni(); ++i)
+        if (!(rhs(i,j,p) == lhs(i,j,p))) return false;
+  return true;
+}
+
+
 //: Return an ni x nj window of this data with offset (i0,j0)
 template<class T>
 vil2_image_view<T> vil2_window(const vil2_image_view<T> &im,
@@ -229,6 +263,8 @@ template void vil2_value_range(T& min_value, T& max_value,const vil2_image_view<
 
 // For everything else
 #define VIL2_IMAGE_VIEW_FUNCTIONS_INSTANTIATE(T) \
+template bool vil2_deep_equality(const vil2_image_view<T > &lhs, const vil2_image_view<T > &rhs); \
+template void vil2_reformat_copy(const vil2_image_view<T > &src, vil2_image_view<T > &dest); \
 template vil2_image_view<T > vil2_deep_copy(const vil2_image_view<T > &rhs); \
 template vil2_image_view<T > vil2_window(const vil2_image_view<T > &im, \
   unsigned i0, unsigned ni, unsigned j0, unsigned nj); \

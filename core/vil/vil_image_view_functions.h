@@ -20,6 +20,20 @@ vil2_image_view<T> vil2_window(const vil2_image_view<T> &im, unsigned i0, unsign
 template<class T>
 vil2_image_view<T> vil2_plane(const vil2_image_view<T> &im, unsigned p);
 
+//: Copy src to dest, without changing dest's view parameters.
+// This is useful if you want to copy on image into a window on another image.
+// src and dest must have identical sizes, and types.
+// \relates vil2_image_view
+template<class T>
+void vil2_reformat_copy(const vil2_image_view<T> &src, vil2_image_view<T> &dest);
+
+//: True if the actual images are identical.
+// $\bigwedge_{i,j,p} {\textstyle src}(i,j,p) == {\textstyle dest}(i,j,p)$
+// The data may be formatted differently in each memory chunk.
+// \relates vil2_image_view
+template<class T>
+bool vil2_deep_equality(const vil2_image_view<T> &lhs, const vil2_image_view<T> &rhs);
+
 //: Create a copy of an image, with completly new underlying memory.
 // \relates vil2_image_view
 template<class T>
