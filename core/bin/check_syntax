@@ -297,7 +297,7 @@ foreach $f (@FILES)
     elsif ($j =~ m/vil[12]?\/vil[12]?_property\.h$/) { $i="$i(|_[a-z_]+)"; }
     elsif ($j eq "vil/vil_smooth.h") { $i="($i)_(gaussian|byte_separable_symmetric)"; }
     elsif ($j =~ m/vil2?\/vil2?_transform\.h$/) { $i="($i)2?"; }
-    elsif ($j =~ m/vil2?\/vil2?_view_as\.h$/) { $i="($i)(|_planes|_rgb)"; }
+    elsif ($j =~ m/vil2?\/vil2?_view_as\.h$/) { $i="($i)(|_planes|_rgb)|vil2_view_(real|imag)_part"; }
     elsif ($j =~ m/vil2?\/vil2?_vil1\.h$/) { $i="($i)_(to_|from_)?image_(resource|view)"; }
     elsif ($j =~ m/vil[12]?\/file_formats\/(.*)\.h$/) { $i="$1_file_format"; }
     elsif ($j eq "vipl/filter/vipl_filter_abs.h") { $i="($i|FILTER_IMPTR_(INC|DEC)_REFCOUNT)"; }
