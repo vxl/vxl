@@ -14,15 +14,15 @@ void test_algo_convolve_2d_byte()
 
   vil2_image_view<vxl_byte> src_im(n,n,1);
 
-  for (int y=0;y<src_im.nj();++y)
-    for (int x=0;x<src_im.ni();++x)
-      src_im(x,y) = 1+x+y*10;
+  for (unsigned int j=0;j<src_im.nj();++j)
+    for (unsigned int i=0;i<src_im.ni();++i)
+      src_im(i,j) = 1+i+j*n;
 
       // Create kernel1 (all ones in a single row)
   vil2_image_view<float> kernel1(m,1,1);
-  for (int y=0;y<kernel1.nj();++y)
-    for (int x=0;x<kernel1.ni();++x)
-      kernel1(x,y) = 1;
+  for (unsigned int j=0;j<kernel1.nj();++j)
+    for (unsigned int i=0;i<kernel1.ni();++i)
+      kernel1(i,j) = 1;
 
   vil2_image_view<double> dest_im;
 
@@ -33,13 +33,13 @@ void test_algo_convolve_2d_byte()
 
   TEST_NEAR("dest_im(0,0)",dest_im(0,0),0.5*m*(m+1),1e-6);
   TEST_NEAR("dest_im(1,0)",dest_im(1,0),0.5*m*(m+1)+m,1e-6);
-  TEST_NEAR("dest_im(0,1)",dest_im(0,1),0.5*m*(m+1)+10*m,1e-6);
+  TEST_NEAR("dest_im(0,1)",dest_im(0,1),0.5*m*(m+1)+n*m,1e-6);
 
   vcl_cout<<"Kernel - three rows of ones\n";
   vil2_image_view<float> kernel2(m,3,1);
-  for (int y=0;y<kernel2.nj();++y)
-    for (int x=0;x<kernel2.ni();++x)
-      kernel2(x,y) = 1;
+  for (unsigned int j=0;j<kernel2.nj();++j)
+    for (unsigned int i=0;i<kernel2.ni();++i)
+      kernel2(i,j) = 1;
 
   vil2_algo_convolve_2d(src_im,dest_im,kernel2,double());
 
@@ -52,9 +52,9 @@ void test_algo_convolve_2d_byte()
 
   vcl_cout<<"Kernel - three rows of 1s, 2s 3s\n";
   vil2_image_view<float> kernel3(m,3,1);
-  for (int y=0;y<kernel3.nj();++y)
-    for (int x=0;x<kernel3.ni();++x)
-      kernel3(x,y) = 1+y;
+  for (unsigned int j=0;j<kernel3.nj();++j)
+    for (unsigned int i=0;i<kernel3.ni();++i)
+      kernel3(i,j) = 1+j;
 
   vil2_algo_convolve_2d(src_im,dest_im,kernel3,double());
 

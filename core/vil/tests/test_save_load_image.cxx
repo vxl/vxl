@@ -93,19 +93,19 @@ bool test_image_equal(char const* type_name,
   int bad = 0;
   for (int p=0; p < planes; ++p)
   {
-    for (int y=0; y < sizey; ++y)
+    for (int j=0; j < sizey; ++j)
     {
-      for (int x=0; x < sizex; ++x)
+      for (int i=0; i < sizex; ++i)
       {
-        if ( !(image(x,y,p) == image2(x,y,p)) )
+        if ( !(image(i,j,p) == image2(i,j,p)) )
         {
     #ifndef NDEBUG
           if (++bad < 20)
           {
-            vcl_cout << "pixel (" << x << "," << y << "," << p <<  ") differs:\t";
-            vil2_print_value(vcl_cout, image(x,y,p));
+            vcl_cout << "pixel (" << i << "," << j << "," << p <<  ") differs:\t";
+            vil2_print_value(vcl_cout, image(i,j,p));
             vcl_cout << "---> ";
-            vil2_print_value(vcl_cout,image2(x,y,p));
+            vil2_print_value(vcl_cout,image2(i,j,p));
             vcl_cout << '\n';
           }
     #else
@@ -318,9 +318,9 @@ void vil_test_image_type(char const* type_name, // type for image to read and wr
 vil2_image_view<bool> CreateTest1bitImage(int wd, int ht)
 {
   vil2_image_view<bool> image(wd, ht, 1);
-  for (int y = 0; y < ht; ++y) {
-    for (int x = 0; x < wd; x++)
-      image(x,y) = (x*y)%2 ==1 ? true : false;
+  for (int j = 0; j < ht; ++j) {
+    for (int i = 0; i < wd; i++)
+      image(i,j) = (i*j)%2 ==1 ? true : false;
   }
   return image;
 }
@@ -330,9 +330,9 @@ vil2_image_view<bool> CreateTest1bitImage(int wd, int ht)
 vil2_image_view<vxl_byte> CreateTest8bitImage(int wd, int ht)
 {
   vil2_image_view<vxl_byte> image(wd, ht);
-  for (int y = 0; y < ht; y++)
-    for (int x = 0; x < wd; x++) {
-      image(x,y) = ((x-wd/2)*(y-ht/2)/16) & 0xff;
+  for (int j = 0; j < ht; j++)
+    for (int i = 0; i < wd; i++) {
+      image(i,j) = ((i-wd/2)*(j-ht/2)/16) & 0xff;
     }
   return image;
 }
@@ -341,9 +341,9 @@ vil2_image_view<vxl_byte> CreateTest8bitImage(int wd, int ht)
 vil2_image_view<vxl_uint_16> CreateTest16bitImage(int wd, int ht)
 {
   vil2_image_view<vxl_uint_16> image(wd, ht);
-  for (int y = 0; y < ht; y++)
-    for (int x = 0; x < wd; x++) {
-      image(x,y) = ((x-wd/2)*(y-ht/2)/16) & 0xffff;
+  for (int j = 0; j < ht; j++)
+    for (int i = 0; i < wd; i++) {
+      image(i,j) = ((i-wd/2)*(j-ht/2)/16) & 0xffff;
   }
   return image;
 }
@@ -353,9 +353,9 @@ vil2_image_view<vxl_uint_16> CreateTest16bitImage(int wd, int ht)
 vil2_image_view<vxl_uint_32> CreateTest32bitImage(int wd, int ht)
 {
   vil2_image_view<vxl_uint_32> image(wd, ht);
-  for (int y = 0; y < ht; y++)
-    for (int x = 0; x < wd; x++)
-      image(x, y) = x + wd*y;
+  for (int j = 0; j < ht; j++)
+    for (int i = 0; i < wd; i++)
+      image(i, j) = i + wd*j;
   return image;
 }
 
@@ -365,10 +365,9 @@ vil2_image_view<vxl_uint_32> CreateTest32bitImage(int wd, int ht)
 vil2_image_view<vil_rgb<vxl_byte> > CreateTest24bitImage(int wd, int ht)
 {
   vil2_image_view<vil_rgb<vxl_byte> > image(wd, ht);
-  for (int x = 0; x < wd; x++)
-    for (int y = 0; y < ht; y++) {
-      image(x,y) = vil_rgb<vxl_byte>(x%(1<<8), ((x-wd/2)*(y-ht/2)/16) % (1<<8), ((y/3)%(1<<8)));
-    }
+  for (int i = 0; i < wd; i++)
+    for (int j = 0; j < ht; j++)
+      image(i,j) = vil_rgb<vxl_byte>(i%(1<<8), ((i-wd/2)*(j-ht/2)/16) % (1<<8), ((j/3)%(1<<8)));
   return image;
 }
 
@@ -378,11 +377,11 @@ vil2_image_view<vil_rgb<vxl_byte> > CreateTest24bitImage(int wd, int ht)
 vil2_image_view<vxl_byte> CreateTest3planeImage(int wd, int ht)
 {
   vil2_image_view<vxl_byte> image( wd, ht, 3);
-  for (int x = 0; x < wd; x++)
-    for (int y = 0; y < ht; y++) {
-      image(x,y,0) = x%(1<<8);
-      image(x,y,1) = ((x-wd/2)*(y-ht/2)/16) % (1<<8);
-      image(x,y,2) = ((y/3)%(1<<8));
+  for (int i = 0; i < wd; i++)
+    for (int j = 0; j < ht; j++) {
+      image(i,j,0) = i%(1<<8);
+      image(i,j,1) = ((i-wd/2)*(j-ht/2)/16) % (1<<8);
+      image(i,j,2) = ((j/3)%(1<<8));
     }
   return image;
 }
@@ -392,9 +391,9 @@ vil2_image_view<vxl_byte> CreateTest3planeImage(int wd, int ht)
 vil2_image_view<float> CreateTestfloatImage(int wd, int ht)
 {
   vil2_image_view<float> image(wd, ht);
-  for (int x = 0; x < wd; x++)
-    for (int y = 0; y < ht; y++)
-      image(x,y) = 0.01 * ((x-wd/2)*(y-ht/2)/16);
+  for (int i = 0; i < wd; i++)
+    for (int j = 0; j < ht; j++)
+      image(i,j) = 0.01 * ((i-wd/2)*(j-ht/2)/16);
   return image;
 }
 

@@ -2,8 +2,8 @@
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
-#include <vil2/vil2_math.h>
 #include <vil2/vil2_copy.h>
+#include <vil2/vil2_math.h>
 
 void test_image_view_maths_byte()
 {
@@ -17,20 +17,20 @@ void test_image_view_maths_byte()
   vil2_image_view<vxl_byte> imB(n,m,1);
 
   double sum2 = 0;
-  for (int y=0;y<imA.nj();++y)
-    for (int x=0;x<imA.ni();++x)
+  for (unsigned int j=0;j<imA.nj();++j)
+    for (unsigned int i=0;i<imA.ni();++i)
     {
-      imA(x,y) = 1+x+y*10; sum2+= imA(x,y)*imA(x,y);
-      imB(x,y) = 1+y+x*10;
+      imA(i,j) = 1+i+j*n; sum2+= imA(i,j)*imA(i,j);
+      imB(i,j) = 1+j+i*n;
     }
 
   double sum;
   vil2_math_sum(sum,imA,0);
-  TEST_NEAR("Sum",sum,0.5*80*81,1e-8);
+  TEST_NEAR("Sum",sum,0.5*n*m*(n*m+1),1e-8);
 
   double mean;
   vil2_math_mean(mean,imA,0);
-  TEST_NEAR("mean",mean,0.5*80*81/80.0,1e-8);
+  TEST_NEAR("mean",mean,0.5*(n*m+1),1e-8);
 
   double sum_sq;
   vil2_math_sum_squares(sum,sum_sq,imA,0);
@@ -45,7 +45,6 @@ void test_image_view_maths_byte()
   imC = vil2_copy_deep(imA);
   vil2_math_scale_and_offset_values(imC,2.0,7);
   TEST_NEAR("Values scaled+offset",imC(3,5),imA(3,5)*2+7,1e-8);
-
 
   vil2_image_view<float> im_sum,im_sum_sqr;
   vil2_math_image_sum(imA,imB,im_sum);

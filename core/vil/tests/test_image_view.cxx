@@ -33,12 +33,12 @@ void test_image_view_byte()
   vcl_cout<<"image0: "<<image0<<vcl_endl;
 
   TEST("N.Planes",image0.nplanes(),1);
-  TEST("resize x",image0.ni(),10);
-  TEST("resize y",image0.nj(),8);
+  TEST("resize i",image0.ni(),10);
+  TEST("resize j",image0.nj(),8);
 
-  for (unsigned int y=0;y<image0.nj();++y)
-     for (unsigned int x=0;x<image0.ni();++x)
-       image0(x,y) = x+y;
+  for (unsigned int j=0;j<image0.nj();++j)
+     for (unsigned int i=0;i<image0.ni();++i)
+       image0(i,j) = i+j;
 
   vil2_print_all(vcl_cout, image0);
 
@@ -47,8 +47,10 @@ void test_image_view_byte()
     vil2_image_view<vxl_byte> image1;
     image1 = image0;
 
-    TEST("Shallow copy (size)",image0.ni()==image1.ni() && image0.nj()==image1.nj()
-                        && image0.nplanes()==image1.nplanes(), true);
+    TEST("Shallow copy (size)",
+         image0.ni()==image1.ni() &&
+         image0.nj()==image1.nj() &&
+         image0.nplanes()==image1.nplanes(), true);
 
     image0(4,6)=127;
     TEST("Shallow copy (values)",image1(4,6),image0(4,6));
@@ -182,10 +184,10 @@ void test_image_2d_byte_io()
   vil2_image_view<vxl_byte> image_out1;
   image_out0.set_nplanes(2);
   image_out0.resize(5,6);
-  for (int i=0;i<2;++i)
-    for (int y=0;y<6;++y)
-      for (int x=0;x<5;++x)
-        image_out0(x,y,i)=x+10*y+100*i;
+  for (int p=0;p<2;++p)
+    for (int j=0;j<6;++j)
+      for (int i=0;i<5;++i)
+        image_out0(i,j,p)=i+10*j+100*p;
 
   image_out1 = image_out0;
 
