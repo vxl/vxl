@@ -9,6 +9,7 @@
 // \brief Multi-variate gaussian PDF, with a diagonal covariance matrix
 
 #include <vcl_cmath.h>
+#include <vnl/vnl_math.h>
 #include <vcl_cstdlib.h>
 #include <vcl_string.h>
 #include <vsl/vsl_indent.h>
@@ -45,7 +46,7 @@ void vpdfl_axis_gaussian::calcLogK()
   for (int i=0;i<n;i++)
     log_v_sum+=log(v_data[i]);
 
-  log_k_ = -0.5 * (n*log(2 * 3.14159265) + log_v_sum);
+  log_k_ = -0.5 * (n*log(2 * vnl_math::pi) + log_v_sum);
 }
 
 void vpdfl_axis_gaussian::calcSD()
