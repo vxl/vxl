@@ -143,7 +143,7 @@ class bmrf_network : public vbl_ref_count
   {
    public:
     //: Constructor
-    iterator( bmrf_network_sptr network, bmrf_node_sptr node ) : network_(network), curr_node_(node) {}
+    iterator( bmrf_network* network, bmrf_node_sptr node ) : network_(network), curr_node_(node) {}
 
     //: Destructor
     virtual ~iterator() {}
@@ -166,7 +166,7 @@ class bmrf_network : public vbl_ref_count
     //: Increment the current node
     virtual void next_node() = 0;
 
-    bmrf_network_sptr network_;
+    bmrf_network* network_;
     bmrf_node_sptr curr_node_;
   };
 
@@ -175,7 +175,7 @@ class bmrf_network : public vbl_ref_count
   {
    public:
     //: Constructor
-    depth_iterator( bmrf_network_sptr network, bmrf_node_sptr node ) : iterator(network, node){ visited_.insert(node); }
+    depth_iterator( bmrf_network* network, bmrf_node_sptr node ) : iterator(network, node){ visited_.insert(node); }
 
    protected:
     //: Increment the current node
@@ -190,7 +190,7 @@ class bmrf_network : public vbl_ref_count
   {
    public:
     //: Constructor
-    breadth_iterator( bmrf_network_sptr network, bmrf_node_sptr node ) : iterator(network, node){ visited_.insert(node); }
+    breadth_iterator( bmrf_network* network, bmrf_node_sptr node ) : iterator(network, node){ visited_.insert(node); }
 
    protected:
     //: Increment the current node
