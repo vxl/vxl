@@ -247,19 +247,29 @@ rrel_ran_sam_search::next_sample( unsigned int taken,
     if ( num_points == 1 ) {
       sample[0] = 0;
     } else {
-      unsigned int k=0;
-      while ( k<points_per_sample ) {
-        unsigned int id = generator_->lrand32( 0, num_points-1 );
-        if ( id >= num_points ) {   //  safety check
-          vcl_cerr << "rrel_ran_sam_search::next_sample --- WARNING: random value "
-                   << "out of range\n";
+      unsigned int k=0, counter=0;
+      while ( k<points_per_sample ) // This might be an infinite loop!
+      {
+        int id = generator_->lrand32( 0, num_points-1 );
+        if ( id >= int(num_points) ) {   //  safety check
+          vcl_cerr << "rrel_ran_sam_search::next_sample --- "
+                   << "WARNING: random value out of range\n";
         }
-        else {
+        else
+        {
+          ++counter;
           bool different = true;
           for ( int i=k-1; i>=0 && different; --i )
-            different = ((int)id != sample[i]);
+            different = (id != sample[i]);
           if ( different )
-            sample[k++] = id;
+            sample[k++] = id, counter = 0;
+          else if (counter > 100)
+          {
+            vcl_cerr << "rrel_ran_sam_search::next_sample --- WARNING: "
+                     << "lrand32() generated 100x the same value "<< id
+                     << " from the range [0," << num_points-1 << "]\n";
+            sample[k++] = id+1;
+          }
         }
       }
     }
