@@ -12,10 +12,10 @@
 //---------------------------------------------------------------------------
 // Default constructor
 //---------------------------------------------------------------------------
-vcsl_spatial::vcsl_spatial(void)
+vcsl_spatial::vcsl_spatial(void):
+parent_(0), beat_(0), motion_(0),
+_potential_children(new vcl_vector<vcsl_spatial_sptr>)
 {
-  parent_=0;
-  _potential_children=new vcl_vector<vcsl_spatial_sptr>;
 }
 
 //---------------------------------------------------------------------------
