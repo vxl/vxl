@@ -30,8 +30,8 @@ class vil2_pnm_file_format : public vil2_file_format
 {
  public:
   virtual char const* tag() const;
-  virtual vil2_image_data* make_input_image(vil_stream* vs);
-  virtual vil2_image_data* make_output_image(vil_stream* vs,
+  virtual vil2_image_data_sptr make_input_image(vil_stream* vs);
+  virtual vil2_image_data_sptr make_output_image(vil_stream* vs,
                                             unsigned nx,
                                             unsigned ny,
                                             unsigned nplanes,
@@ -42,7 +42,7 @@ class vil2_pnm_file_format : public vil2_file_format
 
 
 //: Generic image implementation for PNM files
-class vil2_pnm_generic_image : public vil2_image_data
+class vil2_pnm_image : public vil2_image_data
 {
   vil_stream* vs_;
   int magic_;
@@ -60,17 +60,16 @@ class vil2_pnm_generic_image : public vil2_image_data
   friend class vil2_pnm_file_format;
  public:
 
-  vil2_pnm_generic_image(vil_stream* is);
-  vil2_pnm_generic_image(vil_stream* is, unsigned nplanes,
+  vil2_pnm_image(vil_stream* is);
+  vil2_pnm_image(vil_stream* is, unsigned nplanes,
                         unsigned nx,
                         unsigned ny,
                         unsigned bits_per_component,
                         vil_component_format format);
-  ~vil2_pnm_generic_image();
+  ~vil2_pnm_image();
 
   //: Dimensions:  planes x width x height x components
   virtual unsigned nplanes() const { return ncomponents_; }
-  virtual unsigned ncomponents() const { return 1; }
   virtual unsigned nx() const { return nx_; }
   virtual unsigned ny() const { return ny_; }
 

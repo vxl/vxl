@@ -33,7 +33,7 @@ static inline bool isws(int c)
   return c == ' ' || c == '\t' || c == 10 || c == 13;
 }
 
-vil2_image_data* vil2_pnm_file_format::make_input_image(vil_stream* vs)
+vil2_image_data_sptr vil2_pnm_file_format::make_input_image(vil_stream* vs)
 {
   // Attempt to read header
   unsigned char buf[3];
@@ -44,17 +44,17 @@ vil2_image_data* vil2_pnm_file_format::make_input_image(vil_stream* vs)
   if (!ok)
     return 0;
 
-  return new vil2_pnm_generic_image(vs);
+  return new vil2_pnm_image(vs);
 }
 
-vil2_image_data* vil2_pnm_file_format::make_output_image(vil_stream* vs, 
+vil2_image_data_sptr vil2_pnm_file_format::make_output_image(vil_stream* vs, 
                                                        unsigned nx,
                                                        unsigned ny,
                                                        unsigned nplanes,
                                                        unsigned bits_per_component,
                                                        vil_component_format format)
 {
-  return new vil2_pnm_generic_image(vs, nx, ny, nplanes, bits_per_component, format);
+  return new vil2_pnm_image(vs, nx, ny, nplanes, bits_per_component, format);
 }
 
 char const* vil2_pnm_file_format::tag() const
@@ -64,14 +64,14 @@ char const* vil2_pnm_file_format::tag() const
 
 /////////////////////////////////////////////////////////////////////////////
 
-vil2_pnm_generic_image::vil2_pnm_generic_image(vil_stream* vs):
+vil2_pnm_image::vil2_pnm_image(vil_stream* vs):
   vs_(vs)
 {
   vs_->ref();
   read_header();
 }
 
-bool vil2_pnm_generic_image::get_property(char const *tag, void *prop) const
+bool vil2_pnm_image::get_property(char const *tag, void *prop) const
 {
   if (0==vcl_strcmp(tag, vil_property_top_row_first))
     return prop ? (*(bool*)prop) = true : true;
@@ -82,12 +82,12 @@ bool vil2_pnm_generic_image::get_property(char const *tag, void *prop) const
   return false;
 }
 
-char const* vil2_pnm_generic_image::file_format() const
+char const* vil2_pnm_image::file_format() const
 {
   return vil2_pnm_format_tag;
 }
 
-vil2_pnm_generic_image::vil2_pnm_generic_image(vil_stream* vs, unsigned nplanes,
+vil2_pnm_image::vil2_pnm_image(vil_stream* vs, unsigned nplanes,
                                              unsigned nx,
                                              unsigned ny,
                                              unsigned bits_per_component,
@@ -120,7 +120,7 @@ vil2_pnm_generic_image::vil2_pnm_generic_image(vil_stream* vs, unsigned nplanes,
   write_header();
 }
 
-vil2_pnm_generic_image::~vil2_pnm_generic_image()
+vil2_pnm_image::~vil2_pnm_image()
 {
   //delete vs_;
   vs_->unref();
@@ -181,7 +181,7 @@ static void ConvertHostToMSB( void* buf, int num_words )
 
 
 //: This method accepts any valid PNM file (first 3 bytes "P1\n" to "P6\n")
-bool vil2_pnm_generic_image::read_header()
+bool vil2_pnm_image::read_header()
 {
   char temp;
 
@@ -238,13 +238,13 @@ bool vil2_pnm_generic_image::read_header()
     else if (maxval_ <= 0xFFFF) bits_per_component_ = 16;
     else if (maxval_ <= 0xFFFFFF) bits_per_component_ = 24;
     else if (maxval_ <= 0x7FFFFFFF) bits_per_component_ = 32;
-    else assert(!"vil2_pnm_generic_image: maxval is too big");
+    else assert(!"vil2_pnm_image: maxval is too big");
   }
 
   return true;
 }
 
-bool vil2_pnm_generic_image::write_header()
+bool vil2_pnm_image::write_header()
 {
   vs_->seek(0L);
 
@@ -270,7 +270,9 @@ bool operator>>(vil_stream& vs, int& a)
   return true;
 }
 
-vil2_image_view_base* vil2_pnm_generic_image::get_view(unsigned x0, unsigned y0, unsigned plane0, unsigned nx, unsigned ny, unsigned nplanes) const
+vil2_image_view_base* vil2_pnm_image::get_view(
+  unsigned x0, unsigned y0, unsigned plane0,
+  unsigned nx, unsigned ny, unsigned nplanes) const
 {
   unsigned char* ib = 0;
   unsigned short* jb = 0;
@@ -371,7 +373,9 @@ vil2_image_view_base* vil2_pnm_generic_image::get_view(unsigned x0, unsigned y0,
 }
 
 
-vil2_image_view_base* vil2_pnm_generic_image::get_copy_view(unsigned x0, unsigned y0, unsigned plane0, unsigned nx, unsigned ny, unsigned nplanes) const
+vil2_image_view_base* vil2_pnm_image::get_copy_view(
+  unsigned x0, unsigned y0, unsigned plane0,
+  unsigned nx, unsigned ny, unsigned nplanes) const
 {
   // The data is on disk, so all views are copy views.
   return get_view(x0, y0, plane0, nx, ny, nplanes);
@@ -382,7 +386,8 @@ void operator<<(vil_stream& vs, int a) {
   char buf[128]; vcl_sprintf(buf, " %d\n", a); vs.write(buf,vcl_strlen(buf));
 }
 
-bool vil2_pnm_generic_image::put_view(const vil2_image_view_base& view, unsigned x0, unsigned y0, unsigned plane0)
+bool vil2_pnm_image::put_view(const vil2_image_view_base& view,
+                                      unsigned x0, unsigned y0, unsigned plane0)
 {
   if (!view_fits(view, x0, y0, plane0)) return false;
 

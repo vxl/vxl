@@ -9,6 +9,7 @@ SET( vil2_sources
   vil2_image_data.cxx vil2_image_data.h
 
   vil2_file_format.cxx vil2_file_format.h
+  vil2_load.cxx vil2_load.h
 
 
   # file format readers/writers (see below for conditional ones)

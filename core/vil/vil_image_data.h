@@ -22,37 +22,10 @@ class vil2_image_view_base;
 
 //:
 // Abstract representation of an image source or image destination.
-//
-// \verbatim
-//                        Component   Cell     Pixel      get_section(plane=0,
-//                        example     example  example      x0=0,y0=0,w=1,h=1)
-//
-//  3 x W x H x 1
-//     +------+           r           r        r,g,b      r
-//     |r     |           g           g
-//   +-|      |           b           b
-//   |g|      |
-// +-| +------+
-// |b|      |
-// | +------+
-// |      |
-// +------+
-//
-// 1 x W x H x 3
-// +------------+         r           rgb       rgb       rgb
-// |rgb|rgb|    |
-// +---+---+    |
-// |            |
-// |            |
-// |            |
-// +------------+
-// \endverbatim
-//
-// document relationship between :
-// - Component: r, r
-// - Cell: r, rgb
-// - Pixel : spatial location,
-// - Plane
+// Most references to vil2_image_data objects should usually be done
+// through smart pointers - vil2_image_data_sptr;
+// All image data is presumed to be arranged in planes, not components.
+
 
 class vil2_image_data
 {
@@ -126,5 +99,6 @@ class vil2_image_data
   int reference_count_;
 };
 
+typedef vil2_smart_ptr<vil2_image_data> vil2_image_data_sptr;
 
 #endif // vil2_image_data_h_

@@ -132,6 +132,9 @@ vil2_image_view<vil2_byte> filtered_image = tmp_image2.transpose();
 * - vil2_file_image: Representing an image in a file
 * - vil2_memory_image: Representing an image in memory (essentially a wrapper around a view)
 *
+* Most instances of vil2_image_data objecst will be through smart pointers. So expect to see
+* lots of references to vil2_image_data_sptr types.
+*
 * \section Examples examples
 * There are plenty of working examples in the examples subdirectory - these can be
 * treated as a mini-tutorial
