@@ -32,4 +32,7 @@ IF(NOT HAS_PNG)
     ADD_DEFINITIONS( -DHAS_PNG )
   
   ENDIF(NOT HAS_NATIVE_PNG)
+
+  # libpng uses zlib for compressed PNG files
+  INCLUDE( ${allvxl_SOURCE_DIR}/config.cmake/Modules/FindZLIB.cmake )
 ENDIF(NOT HAS_PNG)
