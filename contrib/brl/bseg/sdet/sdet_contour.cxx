@@ -961,6 +961,7 @@ LoopChain(vtol_vertex_2d& junction, const int index,
 int
 NumConnectedRays(vtol_vertex_2d& v)
 {
+  return 0; //JLM prevents seg faults
   int nray = 0;
   vcl_vector<vtol_edge_sptr>* segs = v.edges();
   for ( unsigned int i=0; i< segs->size(); i++)
@@ -979,6 +980,7 @@ vtol_vertex_2d_sptr
 DetectTouch(const vtol_vertex_2d& end, const int maxSpiral,
             vbl_array_2d<vtol_vertex_2d_sptr>& vertexMap)
 {
+
   const int jx = int(end.x()), jy = int(end.y());
   for (int l = 0, n = 0; l < maxSpiral; l++) {  // increasing radius of spiral
     vtol_vertex_2d_sptr  other = NULL;      // prefer junction over endpt
