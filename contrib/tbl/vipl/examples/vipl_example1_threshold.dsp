@@ -14,7 +14,7 @@
 # $(VXLROOT)/bin/ == override in output directory
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF == compiler defines
 # vipl_example1_threshold  == name of output library
-# /libpath:"$(VXLROOT)/core/vnl/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vnl/$(OUTDIR)" /libpath:"$(VXLROOT)/vcl/$(OUTDIR)" /libpath:"$(VXLROOT)/vcl/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vbl/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vbl/$(OUTDIR)" /libpath:"$(VXLROOT)/contrib/tbl/vipl/$(OUTDIR)" /libpath:"$(VXLROOT)/contrib/tbl/vipl/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vil/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vil/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vpl/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vpl/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/jpeg/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/jpeg/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/png/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/png/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/zlib/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/zlib/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/tiff/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/tiff/$(OUTDIR)" "vnl.lib" "vcl.lib" "vbl.lib" "vipl.lib" "vil.lib" "vpl.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" /STACK:10000000  == libraries linked in 
+# /libpath:"$(VXLROOT)/core/vnl/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vnl/$(OUTDIR)" /libpath:"$(VXLROOT)/vcl/$(OUTDIR)" /libpath:"$(VXLROOT)/vcl/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vbl/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vbl/$(OUTDIR)" /libpath:"$(VXLROOT)/contrib/tbl/vipl/$(OUTDIR)" /libpath:"$(VXLROOT)/contrib/tbl/vipl/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vil/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vil/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vil1/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/jpeg/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/jpeg/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/png/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/png/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/zlib/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/zlib/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/tiff/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/tiff/$(OUTDIR)" "vnl.lib" "vcl.lib" "vbl.lib" "vipl.lib" "vil.lib" "vil1.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" /STACK:10000000  == libraries linked in 
 # TARGTYPE "Win32 (x86) Application" 0x0103
 
 CFG=vipl_example1_threshold - Win32 Debug
@@ -72,12 +72,12 @@ LINK32=link.exe
 # ADD LINK32 /libpath:"$(VXLROOT)/core/vbl/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/contrib/tbl/vipl/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/core/vil/$(OUTDIR)"
-# ADD LINK32 /libpath:"$(VXLROOT)/core/vpl/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vil1/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/jpeg/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/png/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/zlib/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/tiff/$(OUTDIR)"
-# ADD LINK32 "vnl.lib" "vcl.lib" "vbl.lib" "vipl.lib" "vil.lib" "vpl.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" /STACK:10000000 
+# ADD LINK32 "vnl.lib" "vcl.lib" "vbl.lib" "vipl.lib" "vil.lib" "vil1.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" /STACK:10000000 
 
 !ELSEIF  "$(CFG)" == "vipl_example1_threshold - Win32 Debug"
 
@@ -111,12 +111,12 @@ LINK32=link.exe
 # ADD LINK32 /libpath:"$(VXLROOT)/core/vbl/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/contrib/tbl/vipl/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/core/vil/$(OUTDIR)"
-# ADD LINK32 /libpath:"$(VXLROOT)/core/vpl/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vil1/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/jpeg/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/png/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/zlib/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/tiff/$(OUTDIR)"
-# ADD LINK32 "vnl.lib" "vcl.lib" "vbl.lib" "vipl.lib" "vil.lib" "vpl.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" /STACK:10000000 
+# ADD LINK32 "vnl.lib" "vcl.lib" "vbl.lib" "vipl.lib" "vil.lib" "vil1.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" /STACK:10000000 
 
 !ENDIF 
 

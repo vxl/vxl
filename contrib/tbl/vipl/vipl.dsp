@@ -618,6 +618,12 @@ SOURCE=.\Templates/vipl_y_gradient+vil1_image.vil1_image.vil1_rgb+uchar-.vil1_rg
 # Begin Group "Header Files"
 # PROP Default_Filter ""
 # Begin Source File
+SOURCE=.\accessors/vipl_accessors_vil_image_view.h
+# End Source File
+# Begin Source File
+SOURCE=.\accessors/vipl_accessors_vil_image_view.txx
+# End Source File
+# Begin Source File
 SOURCE=.\accessors/vipl_accessors_vil1_image.h
 # End Source File
 # Begin Source File
@@ -781,6 +787,9 @@ SOURCE=.\filter/vipl_filter_helper.h
 # End Source File
 # Begin Source File
 SOURCE=.\filter/vipl_trivial_pixeliter.h
+# End Source File
+# Begin Source File
+SOURCE=.\section/vipl_filterable_section_container_generator_vil_image_view.txx
 # End Source File
 # Begin Source File
 SOURCE=.\section/vipl_filterable_section_container_generator_vil1_image.txx
