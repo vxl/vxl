@@ -126,7 +126,7 @@ vgui_utils::get_view()
 
   // glReadPixels() reads the pixels from the bottom of the viewport up.
   // Copy them into an vil_image_view in the other order :
-  vil_image_view<GLubyte> view(w, h, 3);
+  vil_image_view<GLubyte> view(w, h, 1, 3);
   for (unsigned yy=0; yy<h; ++yy)
     for (unsigned xx=0; xx<w; ++xx) {
       view(xx, h-1-yy, 0) = pixels[xx + w*yy].r;
