@@ -53,6 +53,34 @@ int mbl_lda::classify( const vnl_vector<double>& x )
 }
 
 
+//: Comparison
+bool mbl_lda::operator==(const mbl_lda& that) const
+{
+  return ( mean_ == that.mean_ &&
+            d_mean_ == that.d_mean_ &&
+            mean_class_mean_ == that.mean_class_mean_ &&
+            n_samples_ == that.n_samples_ &&
+            withinS_ == that.withinS_ &&
+            betweenS_ == that.betweenS_ &&
+            basis_ == that.basis_ &&
+            evals_ == that.evals_ &&
+            d_m_mean_ == that.d_m_mean_ 
+            
+    );
+
+  /*
+  vcl_vector<vnl_vector<double> > mean_;
+  vcl_vector<vnl_vector<double> > d_mean_;
+  vnl_vector<double> mean_class_mean_;
+  vcl_vector<int> n_samples_;
+  vnl_matrix<double> withinS_;
+  vnl_matrix<double> betweenS_;
+  vnl_matrix<double> basis_;
+  vnl_vector<double> evals_;
+  vnl_vector<double> d_m_mean_;
+  */
+}
+
 //=======================================================================
 
 void mbl_lda::updateCovar(vnl_matrix<double>& S, const vnl_vector<double>& V)
@@ -360,8 +388,33 @@ bool mbl_lda::is_class(vcl_string const& s) const
 
 void mbl_lda::print_summary(vcl_ostream& os) const
 {
-  // os << data_; // example of data output
-  vcl_cerr << "mbl_lda::print_summary() NYI\n"; vcl_abort();
+  int n_classes= n_samples_.size();
+  os << "n_classes= "<<n_classes<<vcl_endl;
+  for (int i=0; i<n_classes; ++i)
+  {
+    vcl_cout<<"n_samples_["<<i<<"]= "<<n_samples_[i]<<vcl_endl;
+    vcl_cout<<"mean_["<<i<<"]= "<<mean_[i]<<vcl_endl;
+    vcl_cout<<"d_mean_["<<i<<"]= "<<d_mean_[i]<<vcl_endl;
+  }
+  
+  os << "withinS_= "<<withinS_<<vcl_endl;
+  os << "betweenS_= "<<betweenS_<<vcl_endl;
+  os << "basis_= "<<basis_<<vcl_endl;
+  os << "evals_= "<<evals_<<vcl_endl;
+  os << "d_m_mean_= "<<d_m_mean_<<vcl_endl;
+
+/*  
+vcl_vector<vnl_vector<double> > mean_;
+  vcl_vector<vnl_vector<double> > d_mean_;
+  vnl_vector<double> mean_class_mean_;
+  vcl_vector<int> n_samples_;
+  vnl_matrix<double> withinS_;
+  vnl_matrix<double> betweenS_;
+  vnl_matrix<double> basis_;
+  vnl_vector<double> evals_;
+  vnl_vector<double> d_m_mean_;
+*/
+
 }
 
 //=======================================================================

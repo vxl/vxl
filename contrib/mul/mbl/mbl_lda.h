@@ -21,6 +21,8 @@
 //: Class to perform linear discriminant analysis
 class mbl_lda
 {
+private:
+
   vcl_vector<vnl_vector<double> > mean_;
   vcl_vector<vnl_vector<double> > d_mean_;
   vnl_vector<double> mean_class_mean_;
@@ -50,6 +52,10 @@ class mbl_lda
 
   //: Destructor
   virtual ~mbl_lda();
+
+   //: Comparison
+  bool operator==
+    (const mbl_lda& that) const;
 
   //: Classify a new data point
   // projects into discriminant space and picks closest mean class vector
