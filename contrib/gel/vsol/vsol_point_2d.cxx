@@ -51,16 +51,6 @@ bool vsol_point_2d::operator==(const vsol_spatial_object_2d& obj) const
    : false;
 }
 
-#if 0 // this function commented out
-//---------------------------------------------------------------------------
-//: Has `this' not the same coordinates than `other' ?
-//---------------------------------------------------------------------------
-bool vsol_point_2d::operator!=(const vsol_point_2d &other) const
-{
-  return !operator==(other);
-}
-#endif
-
 //***************************************************************************
 // Status report
 //***************************************************************************

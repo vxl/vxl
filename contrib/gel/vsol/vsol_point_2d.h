@@ -87,12 +87,10 @@ public:
   virtual bool operator==(const vsol_point_2d &other) const;
   virtual bool operator==(const vsol_spatial_object_2d& obj) const; // virtual of vsol_spatial_object_2d
 
-#if 0
   //---------------------------------------------------------------------------
   //: Has `this' not the same coordinates than `other' ?
   //---------------------------------------------------------------------------
-  virtual bool operator!=(const vsol_point_2d &other) const;
-#endif
+  inline bool operator!=(const vsol_point_2d &o) const {return !operator==(o);}
 
   //***************************************************************************
   // Status report
