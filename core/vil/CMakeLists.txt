@@ -45,6 +45,7 @@ SET( vil_sources ${vil_sources}
   vil_image_view_base.cxx               vil_image_view_base.h
   vil_image_view.h                      vil_image_view.txx
   vil_image_resource.cxx                vil_image_resource.h
+                                        vil_image_resource_sptr.h
 
   vil_file_format.cxx                   vil_file_format.h
   vil_memory_image.cxx                  vil_memory_image.h

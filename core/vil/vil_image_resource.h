@@ -16,6 +16,8 @@
 #include <vil/vil_smart_ptr.h>
 #include <vil/vil_pixel_format.h>
 
+#include <vil/vil_image_resource_sptr.h>
+
 //:
 // Abstract representation of an image source or image destination.
 // Most references to vil_image_resource objects should usually be done
@@ -110,12 +112,5 @@ class vil_image_resource
     if (--reference_count_<=0) delete this;}
   int reference_count_;
 };
-
-//: Use this type to refer to and store a vil_image_resource
-// This object is used to provide safe manipulation of
-// vil_image_resource derivatives. If you want to
-// store an image resource (e.g. an image on disk, type-agnostic
-// memory image), then use this type.
-typedef vil_smart_ptr<vil_image_resource> vil_image_resource_sptr;
 
 #endif // vil_image_resource_h_
