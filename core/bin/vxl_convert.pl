@@ -21,11 +21,11 @@ exec perl -w -x $0 ${1+"$@"}
 
 # where we are
 my $IUELOCALROOT=$ENV{'VXLROOT'};
-$IUELOCALROOT =~ s+[/\\]vxl[/\\]?$++ if $IUELOCALROOT;
+$IUELOCALROOT =~ s+[/\\]core[/\\]?$++ if $IUELOCALROOT;
 $IUELOCALROOT = $ENV{'IUELOCALROOT'} unless $IUELOCALROOT;
 $IUELOCALROOT = $ENV{'IUEROOT'} unless $IUELOCALROOT;
 $IUELOCALROOT || die "Cannot find \$IUELOCALROOT";
-die "Cannot find vxl_filter.pl" unless -f "$IUELOCALROOT/vxl/bin/vxl_filter.pl";
+die "Cannot find vxl_filter.pl" unless -f "$IUELOCALROOT/core/bin/vxl_filter.pl";
 
 #
 my $dry_run = 0;
