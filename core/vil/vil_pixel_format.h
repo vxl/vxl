@@ -68,6 +68,12 @@ template <class T>
 inline vil_pixel_format vil_pixel_format_of(T dummy) { return VIL_PIXEL_FORMAT_UNKNOWN;}
 
 
+//: The C++ type corresponding to an invalid pixel format
+//
+// See vil_pixel_format_type_of.
+//
+typedef void* vil_pixel_format_invalid_type;
+
 //: The C++ type corresponding to a pixel format enumeration.
 // Use like
 // \code
@@ -76,16 +82,14 @@ inline vil_pixel_format vil_pixel_format_of(T dummy) { return VIL_PIXEL_FORMAT_U
 // This is specialized for each pixel type enumeration for which a C++
 // type exists.
 //
+// If the resulting type is vil_pixel_format_invalid_type, then the
+// pixel format enumeration is not valid.
+//
 template <vil_pixel_format pix_type>
 struct vil_pixel_format_type_of {
+  typedef vil_pixel_format_invalid_type type;
 };
 
-
-VCL_DEFINE_SPECIALIZATION
-struct vil_pixel_format_type_of<VIL_PIXEL_FORMAT_UNKNOWN> {
-  // no type associated with unknown
-  // typedef void type;
-};
 
 //: Get the vil_pixel_format value for a given type.
 #define vil_pixel_format_macro(T,V)\
