@@ -89,7 +89,7 @@ public:
   vnl_matrix(unsigned r, unsigned c);                           // r rows, c cols.
 
   //: Construct a matrix of size r rows by c columns, and all emelemnts equal to v0
-  // Complexity $O(r c)$
+  // Complexity $O(r.c)$
   vnl_matrix(unsigned r, unsigned c, T const& v0);              // r rows, c cols, value v0.
 
   //: Construct a matrix of size r rows by c columns, with a special type
@@ -192,7 +192,7 @@ public:
   void fill (T const&);
 
   //: Set all diagonal elements of matrix to specified value.
-  // Complexity $O(min(r,c))$
+  // Complexity $O(\min(r,c))$
   void fill_diagonal (T const&);
 
   //: Fill (laminate) this matrix with the given data.
@@ -215,7 +215,7 @@ public:
   vnl_matrix<T>& operator= (T const&v) { fill(v); return *this; }
 
   //: Copies all elements of rhs matrix into lhs matrix.
-  // Complexity $O(min(r,c))$
+  // Complexity $O(\min(r,c))$
   vnl_matrix<T>& operator= (vnl_matrix<T> const&);
 
 // Arithmetic ----------------------------------------------------

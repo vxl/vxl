@@ -20,7 +20,7 @@
 
 
 //: Convolve two vnl_vector<T>'s, possibly with different base types T.
-//  $res[k] := \sum_{i=-\infty}^{+\infty} v1[k-i] \cdot v2[i]$.
+//  $res[k] := \displaystyle\sum_{i=-\infty}^{+\infty} v1[k-i] \cdot v2[i]$.
 //
 //  The returned vnl_vector has base type U (the third argument).
 //  All calculations are done with type U, so take care!
@@ -56,7 +56,7 @@ vnl_convolve(vnl_vector<T> const& v1, vnl_vector<T> const& v2,
 
 
 //: Cyclically convolve two vnl_vector<T>'s of the same length.
-//  $res[k] := \sum_{i=0}^{n-1} v1[k-i] \cdot v2[i]$.
+//  $res[k] := \displaystyle\sum_{i=0}^{n-1} v1[k-i] \cdot v2[i]$.
 //
 //  A cyclic convolution requires that the lengths of the input vectors
 //  are identical.  If this is not the case, an assert failure occurs.

@@ -9,7 +9,7 @@
 // \brief Compute the exponential of a square matrix
 //
 // Compute the exponential of a square matrix, by summing its
-// exponential series $exp(X) = \displaystyle\sum_{n \ge 0} X^n/n!$
+// exponential series $\exp(X) = \displaystyle\sum_{n \ge 0} X^n/n!$
 // till a convergence requirement is met.
 //
 // Many improvements are possible.
