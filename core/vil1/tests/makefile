@@ -1,7 +1,7 @@
 USES = vxl
 include ${IUEROOT}/vxl/vil/config.mk
 
-TESTS += test_all.cxx
+TESTS += vil_test_all.cxx
 TESTS += test_assign.cxx
 
 # general reader/saver tester

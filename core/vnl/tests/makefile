@@ -1,7 +1,7 @@
 USES := vxl
 include ${IUEROOT}/vxl/vnl/algo/config.mk
 
-TESTS += test_all.cxx
+TESTS += vnl_test_all.cxx
 TESTS += test_fft.cxx
 TESTS += test_fft1d.cxx
 TESTS += test_fft2d.cxx
