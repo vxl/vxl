@@ -15,7 +15,6 @@
 //--------------------------------------------------------------------------------
 #include <vcl_vector.h>
 #include <vcl_list.h>
-#include <vtol/vtol_vertex_2d_sptr.h>
 #include <mvl/NViewMatches.h>
 #include <vcl_iostream.h>
 #include <vbl/vbl_ref_count.h>

@@ -9,11 +9,12 @@
 #include <vgel/vgel_kl.h>
 #include <vgel/vgel_multi_view_data.h>
 
+
 int main( int argc, char **argv)
 {
   vgel_kl_params kl_params;
   kl_params.numpoints=500;
-
+  
   vcl_vector<vil_image> images;
 
   vil_image im0= vil_load("c:/geoff/images/skull/a.000.jpg");
@@ -40,9 +41,9 @@ int main( int argc, char **argv)
   matched_points->get( 1,pts2);
   matched_points->get( 2,pts3);
 
-  vcl_cerr << pts1.size() << " "
-           << pts2.size() << " "
-           << pts3.size() << vcl_endl;
-
+  vcl_cerr << pts1.size() << " " 
+	   << pts2.size() << " "
+	   << pts3.size() << vcl_endl;
+  
   return 0;
 }

@@ -13,10 +13,6 @@ vgel_kl_params
 )
 
 
-
-
-
-
 AUX_SOURCE_DIRECTORY(Templates vgel_sources)
 
 INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/oxl)

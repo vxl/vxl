@@ -174,7 +174,7 @@ bool vgel_multi_view_data<T>::get_pred_match(int view_num,T obj,T & res)
       int i=(*iter)[view_num];
       int j=(*iter)[view_num+1];
       if ((i!=NViewMatch::nomatch) && (j!=NViewMatch::nomatch))
-        if (*all_pts[j]==*obj)
+        if (all_pts[j]==obj)
         {
           res=all_pts[i];
           return true;

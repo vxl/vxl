@@ -171,13 +171,14 @@ vcl_vector<vtol_vertex_2d_sptr>* vgel_kl::extract_points(vil_image & image)
 //Convert a vil_image to an array of grey scale
 KLT_PixelType* vgel_kl::convert_to_gs_image(vil_image &image)
 {
-    vcl_cerr << "Converting image to grey scale..." << vcl_endl;
     if (vil_pixel_format(image)==VIL_RGB_BYTE)
     {
+      vcl_cerr << "Converting image to grey scale..." << vcl_endl;
+
         int w=image.width();
         int h=image.height();
         KLT_PixelType* tab_mono=new KLT_PixelType[w*h];
-        vcl_cerr << "width: " <<w<< "  height"<<h<<  vcl_endl;
+        vcl_cerr << "width: " <<w<< "  height: "<<h<<  vcl_endl;
 
         vil_memory_image_of<vil_byte> ima_mono;
         ima_mono.resize(w,h);
