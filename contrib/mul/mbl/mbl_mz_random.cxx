@@ -137,8 +137,9 @@ double mbl_mz_random::normal()
 
 //: Random value from a unit normal distribution about zero
 // Uses a drand64() as its underlying generator.
-// Because the function uses a probability transform, the randomness (and quantisation) is non-linearly dependant on the
-// value. The further the sample is from zero, the lower the number of bits to which it is random.
+// Because the function uses a probability transform, the randomness (and
+// quantisation) is non-linearly dependent on the value. The further the sample
+// is from zero, the lower the number of bits on which it is random.
 double mbl_mz_random::normal64()
 {
   if (mz_previous_normal_flag)
