@@ -1,5 +1,7 @@
-//-*- c++ -*-------------------------------------------------------------------
+//:
+// \file
 #include <vnl/vnl_math.h>
+#include <vcl_cmath.h>
 #include <vcl_iostream.h>
 #include <btom/btom_gauss_cylinder.h>
 //--------------------------------------------------------------
@@ -8,44 +10,43 @@
 //
 //--------------------------------------------------------------
 
-// -- Constructor
-btom_gauss_cylinder::  btom_gauss_cylinder(float xy_sigma, float z_sigma, 
-                                 float length_sigma, float density,
-                                 float x_origin, float y_origin,
-                                 float z_position, 
-                                 float elevation, float azimuth)
+//: Constructor
+btom_gauss_cylinder::btom_gauss_cylinder(float xy_sigma, float z_sigma,
+                                         float length_sigma, float density,
+                                         float x_origin, float y_origin,
+                                         float z_position,
+                                         float elevation, float azimuth)
 {
   xy_sigma_=xy_sigma;
-  z_sigma_=z_sigma; 
+  z_sigma_=z_sigma;
   length_sigma_=length_sigma;
   density_=density;
-  x_origin_=x_origin; 
-  y_origin_=y_origin; 
+  x_origin_=x_origin;
+  y_origin_=y_origin;
   z_position_=z_position;
   elevation_=elevation;
   azimuth_=azimuth;
 }
 
-// -- Destructor
+//: Destructor
 btom_gauss_cylinder::~btom_gauss_cylinder()
 {
-
 }
 
 //-------------------------------------------------------------------------
-// -- compute the cylinder intensity at a given location
+//: compute the cylinder intensity at a given location
 //
 float btom_gauss_cylinder::cylinder_intensity(float x, float y)
 {
   //  cout << *this << endl;
   double theta = (90-elevation_)*vnl_math::pi/180.;
   double phi = azimuth_*vnl_math::pi/180.;
-  double cth = cos(theta);
+  double cth = vcl_cos(theta);
   double cths = cth*cth;
-  double tth = tan(theta);
+  double tth = vcl_tan(theta);
   double tths = tth*tth;
-  double sph = sin(phi);
-  double cph = cos(phi);
+  double sph = vcl_sin(phi);
+  double cph = vcl_cos(phi);
   double xyss = 1.0/(xy_sigma_*xy_sigma_);
   double zss = 1.0/(z_sigma_*z_sigma_);
   double wss = 1.0/(length_sigma_*length_sigma_);
@@ -65,42 +66,41 @@ float btom_gauss_cylinder::cylinder_intensity(float x, float y)
   double ay = yr/xy_sigma_;
   double axs = ax*ax;
   double ays = ay*ay;
-  double ty = exp(-ays);
-  double tx = exp(-axs*xd);
-  double tz = exp(-azs*zd);
-  double tz1 = exp(-2*ax*az*Dinv2);
+  double ty = vcl_exp(-ays);
+  double tx = vcl_exp(-axs*xd);
+  double tz = vcl_exp(-azs*zd);
+  double tz1 = vcl_exp(-2*ax*az*Dinv2);
   float pix = float(density_*tx*ty*tz*tz1);
   return pix;
 }
+
 //-------------------------------------------------------------------------
-// -- compute the radon transform of a vertical gaussian cylinder
-//    theta is in degrees on the range [0, 360] 
+//: compute the radon transform of a vertical gaussian cylinder.
+//  theta is in degrees on the range [0, 360]
 //
 float btom_gauss_cylinder::radon_transform(float theta, float t)
 {
-  double th_rad = theta*vnl_math::pi/180.;  
-  double neu = sin(th_rad)*x_origin_ +cos(th_rad)*y_origin_ -t;
+  double th_rad = theta*vnl_math::pi/180.;
+  double neu = vcl_sin(th_rad)*x_origin_ +vcl_cos(th_rad)*y_origin_ -t;
   double neusq = neu*neu;
-  double arg = neusq/(xy_sigma_*xy_sigma_);  
-  double radon = xy_sigma_*exp(-arg);
+  double arg = neusq/(xy_sigma_*xy_sigma_);
+  double radon = xy_sigma_*vcl_exp(-arg);
   return (float)radon;
 }
 
-vcl_ostream& operator << (vcl_ostream& os, const btom_gauss_cylinder& gc)
+vcl_ostream& operator<< (vcl_ostream& os, const btom_gauss_cylinder& gc)
 {
-  os << "btom_gauss_cylinder:" << "\n" << "[---" << "\n";
-  os << "xy_sigma " << gc.xy_sigma_ << "\n";
-  os << "z_sigma " << gc.z_sigma_ << "\n";
-  os << "length_sigma " << gc.length_sigma_ << "\n";
-  os << "density " << gc.density_ << "\n";  
-  os << "x_origin " << gc.x_origin_ << "\n";  
-  os << "y_origin " << gc.y_origin_ << "\n";  
-  os << "z_position " << gc.z_position_ << "\n";  
-  os << "elevation " << gc.elevation_ << "\n";  
- os << "azimuth " << gc.azimuth_ << "\n";  
-  os << "---]" << "\n";
+  os << "btom_gauss_cylinder:" << "\n" << "[---" << "\n"
+     << "xy_sigma " << gc.xy_sigma_ << "\n"
+     << "z_sigma " << gc.z_sigma_ << "\n"
+     << "length_sigma " << gc.length_sigma_ << "\n"
+     << "density " << gc.density_ << "\n"
+     << "x_origin " << gc.x_origin_ << "\n"
+     << "y_origin " << gc.y_origin_ << "\n"
+     << "z_position " << gc.z_position_ << "\n"
+     << "elevation " << gc.elevation_ << "\n"
+     << "azimuth " << gc.azimuth_ << "\n"
+     << "---]" << "\n";
   return os;
 }
-
-
 
