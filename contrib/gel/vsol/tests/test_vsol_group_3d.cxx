@@ -31,42 +31,37 @@ int main(int argc,
   vsol_point_3d_sptr p=new vsol_point_3d(10,4,5);
   vsol_group_3d_sptr group2;
 
-  vcl_cout<<"size()"<<vcl_endl;
-  vcl_cout<<group1->size()<<vcl_endl;
+  vcl_cout<<"group1->size() = "<<group1->size()<<vcl_endl;
   Assert(group1->size()==0);
 
-  vcl_cout<<"deep_size()"<<vcl_endl;
-  vcl_cout<<group1->deep_size()<<vcl_endl;
+  vcl_cout<<"group1->deep_size() = "<<group1->deep_size()<<vcl_endl;
   Assert(group1->deep_size()==0);
 
   group1->add_object(p.ptr());
 
-  vcl_cout<<"size()"<<vcl_endl;
-  vcl_cout<<group1->size()<<vcl_endl;
+  vcl_cout<<"group1->size() = "<<group1->size()<<vcl_endl;
   Assert(group1->size()==1);
 
-  vcl_cout<<"deep_size()"<<vcl_endl;
-  vcl_cout<<group1->deep_size()<<vcl_endl;
+  vcl_cout<<"group1->deep_size() = "<<group1->deep_size()<<vcl_endl;
   Assert(group1->deep_size()==1);
 
+  vcl_cout<<"add_object()"<<vcl_endl;
   group2=new vsol_group_3d;
-
   group1->add_object(group2.ptr());
 
-  vcl_cout<<"size()"<<vcl_endl;
-  vcl_cout<<group1->size()<<vcl_endl;
+  vcl_cout<<"group1->size() = "<<group1->size()<<vcl_endl;
   Assert(group1->size()==2);
 
-  vcl_cout<<"deep_size()"<<vcl_endl;
-  vcl_cout<<group1->deep_size()<<vcl_endl;
+  vcl_cout<<"group1->deep_size() = "<<group1->deep_size()<<vcl_endl;
   Assert(group1->deep_size()==1);
 
-  vcl_cout<<"object()"<<vcl_endl;
   Assert(*(group1->object(0))==*p);
 
   vcl_cout<<"remove_object()"<<vcl_endl;
   group1->remove_object(0);
+  vcl_cout<<"group1->size() = "<<group1->size()<<vcl_endl;
   Assert(group1->size()==1);
+
   Assert(group1->object(0)->cast_to_group()!=0); // It is group2 now
 
   vcl_cout << "Test Summary: " << success << " tests succeeded, "
