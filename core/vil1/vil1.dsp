@@ -228,7 +228,7 @@ SOURCE=.\Templates/vil1_ncc+float.float.double-.cxx
 SOURCE=.\Templates/vil1_ncc+uchar.uchar.double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil1_resample_image+byte.unsigned-.cxx
+SOURCE=.\Templates/vil1_resample_image+byte.uint-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vil1_resample_image+vil1_rgb+byte-.vil1_rgb+int--.cxx

@@ -108,7 +108,7 @@ SOURCE=.\Templates/osl_canny_smooth+float-.cxx
 SOURCE=.\Templates/osl_canny_smooth+ushort-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/osl_canny_smooth+vil1_byte-.cxx
+SOURCE=.\Templates/osl_canny_smooth+byte-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/osl_canny_smooth+vil1_rgb+uchar--.cxx
