@@ -1,14 +1,12 @@
 # vxl/vcsl/CMakeLists.txt
 
-
 # Please default this to "yes" in the repository so that
-# dashboards will try to compile vgui.
+# dashboards will try to compile vcsl.
 # However, I can't get it to build under intel's icc,
 # and I need a way of turning it off
 OPTION( BUILD_VCSL "Build VCSL" "YES" )
 
 IF( BUILD_VCSL )
-
 
   SET( vcsl_sources
     vcsl_dimension.cxx vcsl_dimension.h vcsl_dimension_sptr.h
@@ -74,4 +72,5 @@ IF( BUILD_VCSL )
   IF( BUILD_TESTING )
     SUBDIRS(tests)
   ENDIF( BUILD_TESTING )
+
 ENDIF (BUILD_VCSL)
