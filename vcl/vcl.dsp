@@ -781,6 +781,10 @@ SOURCE=.\vcl_cmath.cxx
 
 SOURCE=.\vcl_cstdlib.cxx
 
+# Begin Source File
+
+SOURCE=.\vcl_root_dir.cxx
+
 # End Source File
 # Begin Source File
 
