@@ -279,14 +279,18 @@ dealing with the arbitrary and complex hassles of image IO.
 
 As explained above, you should be using @code{vil_image_view<T>} to
 actually manipulate your pixels. However, in some parts of your
-code, you may want to pass images around without having to decide 
+code, you may want to pass images around without having to decide
 the pixel type at compile time. This is a role for a
 @code{vil_image_resource} derivative, in particular the
 @code{vil_memory_image}. You can wrap an existing
-@code{vil_image_view<T>} in a @code{vil_memory_image} by calling 
+@code{vil_image_view<T>} in a @code{vil_memory_image} by calling
 @code{vil_new_image_resource_of_view()}. Reference counting keeps track
 of the underlying data in memory, so you can let the original
 view go out of scope without loss.
+
+It may be tempting to use the @code{vil_image_view_base_stpr} for this
+purpose instead. That type is only intended for internal use by vil, and
+it will almost certainly not behave as you want.
 
 The @code{vil_image_resource} API has been designed to allow efficient
 access to @code{vil_memory_image}. In the example
@@ -306,7 +310,7 @@ void display_view(vil_image_resource_sptr &ir)
     vil_image_view<vxl_byte> v1 = ir->get_view();
     display_byte(v1); }
   case ...
-  @} 
+  @}
 @}
 @end example
 

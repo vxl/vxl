@@ -218,7 +218,7 @@ ENDIF( ZLIB_FOUND )
 
 # The ADD_LIBRARY command configures a new library.  The first
 # argument is again the target name, i.e., the name of the library to
-# be created, but without any possible suffix such as ".lib", ".dll",
+# be created, but without any possible suffix such as ".lib",
 # ".a" or ".so" and without the possible prefix "lib" (used in Unix).
 # The other arguments are either file names, or (as here) a variable
 # holding a list of files, specified before the ADD_LIBRARY command
@@ -552,7 +552,7 @@ program that uses the libraries. The Linker complains that there are multiple de
 
 These kinds of errors often indicate that you are linking against
 different C++ run-time libraries that you compiled VXL with (release
-vs debug, static vs DLL, etc). The flags like @code{/MP} and @code{/MD}
+vs debug, static vs DLL stdlib, etc). The flags like @code{/MP} and @code{/MD}
 much match exactly, in VXL's build and your program's build. These
 flags are set in Visual Studio under
 Settings->C/C++->Code Generation->Use run-time library.
@@ -576,4 +576,23 @@ versions. CMake also looks for lots of system tools so that it can understand
 the environment it is in. So having lots of @code{NOTFOUND} entries is quite normal.
 There is no need to worry unless CMake displays a warning or error message while
 it runs.
+
+@item Question 3
+
+@quotation
+I used CMake to create a MSVC project with @code{BUILD_SHARED_LIBRARY=ON}.
+But when I try to build, it gives message "cannot open vcl.lib". What's wrong?
+@end quotation
+
+The CMake "Shared Library" feature doesn't work with MSVC. You have to use
+static libraries. This is mostly due to MSVC's requirements to have either
+a complete list of every exportable identifier or a decoration of every
+identifier in the code. We are too lazy (or appalled at this "feature")
+to try to fix this. If you absolutely need DLLs you can build your code
+using Cygwin, which can produce shared libraries in a "normal" manner.
+Alternatively, if you only want to export a small number of classes or
+functions, then you can manually list them. See the MSVC tool documentation
+for further details.
+
+
 @end table
