@@ -8,6 +8,7 @@
 
 #include "mvl2_video_to_avi_linux.h"
 #include <vcl_cstring.h>
+#include <vil2/vil2_resample_bilin.h>
 
 mvl2_video_to_avi::mvl2_video_to_avi()
 {
@@ -106,32 +107,28 @@ void mvl2_video_to_avi::set_frame_rate(double frame_rate)
   frame_rate_=frame_rate;
 }
 
-void mvl2_video_to_avi::write_frame(vimt_image_2d_of<vxl_byte>& image)
+void mvl2_video_to_avi::write_frame(vil2_image_view<vxl_byte>& image)
 {
-  if (width_==image.image().ni() && height_==image.image().nj() &&
-      image.image().pixel_format()==VIL2_PIXEL_FORMAT_RGB_BYTE )
+  if (width_==image.ni() && height_==image.nj() &&
+      image.pixel_format()==VIL2_PIXEL_FORMAT_RGB_BYTE )
   {
     BitmapInfo bi=BitmapInfo(width_,height_,24);
     CImage* im24;
-    im24 = new CImage(&bi,image.image().top_left_ptr(),false);
+    im24 = new CImage(&bi,image.top_left_ptr(),false);
     moviestream_->AddFrame(im24);
   }
   else
   {
-    vimt_transform_2d trans;
-    double xratio=(double)width_/image.image().ni();
-    double yratio=(double)height_/image.image().nj();
-    double ratio=yratio<xratio?yratio:xratio;
-    double x_lo=yratio<xratio?width_/2.0-image.image().ni()/2.0*ratio:0.0;
-    double y_lo=yratio<xratio?0.0:height_/2.0-image.image().nj()/2.0*ratio;
-    double x_hi=x_lo+image.image().ni()*ratio;
-    double y_hi=y_lo+image.image().nj()*ratio;
-    trans.set_similarity(ratio,0.0,x_lo,y_lo);
+    double xratio=(double)width_/image.ni();
+    double yratio=(double)height_/image.nj();
+    double ratio=1.0/(yratio>xratio?yratio:xratio);
 
-    trans=trans.inverse();
+    vil2_image_view<vxl_byte> resampled_image(width_,height_,image.nplanes());
+    vil2_resample_bilin(image,resampled_image,0.0,0.0,
+        ratio,0.0,0.0,ratio,width_,height_);
 
     vcl_cout << "write frame "<< current_frame_+1 << " ... "
-             << image.image().ni()<<"x"<<image.image().nj()<<" -> "
+             << image.ni()<<"x"<<image.nj()<<" -> "
              << width_<<"x"<<height_<< vcl_endl;
 
     uint8_t data[width_*height_*3];
@@ -141,31 +138,26 @@ void mvl2_video_to_avi::write_frame(vimt_image_2d_of<vxl_byte>& image)
     CImage* im24;
     im24 = new CImage(&bi,data,false);
 
-    for (int y=(int)y_lo;y<(int)y_hi;++y)
-      for (int x=(int)x_lo;x<(int)x_hi;++x)
+    for (int y=0;y<height_;++y)
+      for (int x=0;x<width_;++x)
       {
-        int xn=(int)trans(x,y).x();
-        int yn=(int)trans(x,y).y();
-        if (upside_down_)
+        if (image.nplanes()==3)
         {
-          xn=(int)trans(x,y_hi+y_lo-y).x();
-          yn=(int)trans(x,y_hi+y_lo-y).y();
-        }
-        if (xn<0) xn=0;
-        if (yn<0) yn=0;
-        if (xn>=image.image().ni()) xn=image.image().ni()-1;
-        if (yn>=image.image().nj()) yn=image.image().nj()-1;
-        if (image.image().nplanes()==3)
-        {
-          im24->At(x,y)[bgr_?2:0] = image.image()(xn,yn,2);
-          im24->At(x,y)[1] = image.image()(xn,yn,1);
-          im24->At(x,y)[bgr_?0:2] = image.image()(xn,yn,0);
+          im24->At(x,y)[bgr_?2:0] = resampled_image(x,
+              upside_down_?y:(height_-y-1),2);
+          im24->At(x,y)[1] = resampled_image(x,
+              upside_down_?y:(height_-y-1),1);
+          im24->At(x,y)[bgr_?0:2] = resampled_image(x,
+              upside_down_?y:(height_-y-1),0);
         }
         else
         {
-          im24->At(x,y)[bgr_?2:0] = image.image()(xn,yn,0);
-          im24->At(x,y)[1] = image.image()(xn,yn,0);
-          im24->At(x,y)[bgr_?0:2] = image.image()(xn,yn,0);
+          im24->At(x,y)[bgr_?2:0] = resampled_image(x,
+              upside_down_?y:(height_-y-1),0);
+          im24->At(x,y)[1] = resampled_image(x,
+              upside_down_?y:(height_-y-1),0);
+          im24->At(x,y)[bgr_?0:2] = resampled_image(x,
+              upside_down_?y:(height_-y-1),0);
         }
       }
 

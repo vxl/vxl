@@ -15,8 +15,6 @@
 #include <avifile/avm_default.h>
 #include <avifile/avm_fourcc.h>
 
-#include <vimt/vimt_transform_2d.h>
-
 //: A class for writing videos
 
 class mvl2_video_to_avi: public mvl2_video_writer
@@ -58,7 +56,7 @@ class mvl2_video_to_avi: public mvl2_video_writer
   void set_quality(int qual);
  
     //: Put frame data into the given image
-  void write_frame(vimt_image_2d_of<vxl_byte>& image); 
+  void write_frame(vil2_image_view<vxl_byte>& image); 
 
     //: Name of the class
   vcl_string is_a() const;

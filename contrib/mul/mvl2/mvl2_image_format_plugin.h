@@ -12,7 +12,7 @@
 
 #include <vcl_string.h>
 #include <vcl_map.h>
-#include <vimt/vimt_image_2d_of.h>
+#include <vil2/vil2_image_view.h>
 #include <vil2/vil2_image_resource_plugin.h>
 #include <mvl2/mvl2_video_reader.h>
 

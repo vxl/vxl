@@ -74,7 +74,7 @@ int mvl2_video_from_avi::next_frame()
   return current_frame_;
 }
 
-bool mvl2_video_from_avi::get_frame(vimt_image_2d_of<vxl_byte>& image)
+bool mvl2_video_from_avi::get_frame(vil2_image_view<vxl_byte>& image)
 {
   if (!is_initialized_) return false;
 
@@ -101,18 +101,18 @@ bool mvl2_video_from_avi::get_frame(vimt_image_2d_of<vxl_byte>& image)
   if (!buffer_) buffer_=(vxl_byte*)malloc(sizeof(vxl_byte)*im24->Bytes());
   if (use_colour_)
     {
-    image.image().set_size(im24->Width(),im24->Height(),3);
+    image.set_size(im24->Width(),im24->Height(),3);
     vcl_memcpy(buffer_,im24->At(0,0),sizeof(vxl_byte)*im24->Bytes());
-    image.image().set_to_memory(buffer_+2,im24->Width(),im24->Height(),3,
+    image.set_to_memory(buffer_+2,im24->Width(),im24->Height(),3,
         3,3*im24->Width(),-1);
     }
   else
     {
-    image.image().set_size(im24->Width(),im24->Height(),1);
+    image.set_size(im24->Width(),im24->Height(),1);
       // takes the Y componant in the YUV space
-    for (unsigned int y=0;y<image.image().nj();++y)
-      for (unsigned int x=0;x<image.image().ni();++x)
-        image.image()(x,y,0) = (int)(0.299*(double)im24->At(x,y)[1]+
+    for (unsigned int y=0;y<image.nj();++y)
+      for (unsigned int x=0;x<image.ni();++x)
+        image(x,y,0) = (int)(0.299*(double)im24->At(x,y)[1]+
             0.587*(double)im24->At(x,y)[2]+
             0.114*(double)im24->At(x,y)[0]);
     }

@@ -150,13 +150,13 @@ bool mvl2_image_format_plugin::load_the_image (
   }
 
   (*mvl2_list_iterator).second->seek(frame_number);
-  vimt_image_2d_of<vxl_byte> the_image;
+  vil2_image_view<vxl_byte> the_image;
   bool ok=(*mvl2_list_iterator).second->get_frame(the_image);
 
   image->set_size((*mvl2_list_iterator).second->get_width(),
                   (*mvl2_list_iterator).second->get_height(),
-  the_image.image().nplanes());
-  vil2_copy_deep(the_image.image(),(vil2_image_view<vxl_byte>&)*image);
+  the_image.nplanes());
+  vil2_copy_deep(the_image,(vil2_image_view<vxl_byte>&)*image);
 
   return ok;
 }

@@ -91,10 +91,10 @@ bool mvl2_video_from_sequence::initialize( int width, int height,
 
   current_frame_=0;
   is_initialized_=true;
-  vimt_image_2d_of<vxl_byte> loc_img;
+  vil2_image_view<vxl_byte> loc_img;
   get_frame(loc_img);
-  height_=loc_img.image().nj();
-  width_=loc_img.image().ni();
+  height_=loc_img.nj();
+  width_=loc_img.ni();
   return true;
 }
 
@@ -109,7 +109,7 @@ int mvl2_video_from_sequence::next_frame()
   return ++current_frame_;
 }
 
-bool mvl2_video_from_sequence::get_frame(vimt_image_2d_of<vxl_byte>& image)
+bool mvl2_video_from_sequence::get_frame(vil2_image_view<vxl_byte>& image)
 {
   vcl_string curr_file;
 
@@ -138,15 +138,15 @@ bool mvl2_video_from_sequence::get_frame(vimt_image_2d_of<vxl_byte>& image)
   }
   if (use_colour_)
   {
-    image.image().deep_copy(image_view_sptr);
+    image.deep_copy(image_view_sptr);
   }
   else
   {
-    image.image().deep_copy(vil2_convert_to_grey_using_rgb_weighting(
+    image.deep_copy(vil2_convert_to_grey_using_rgb_weighting(
         image_view_sptr,(vxl_byte)0));
   }
-  height_=image.image().ni();
-  width_=image.image().nj();
+  height_=image.ni();
+  width_=image.nj();
   return true;
 }
 

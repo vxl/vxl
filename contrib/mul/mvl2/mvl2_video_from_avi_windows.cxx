@@ -68,7 +68,7 @@ int mvl2_video_from_avi::next_frame()
   return ++current_frame_;
 }
 
-bool mvl2_video_from_avi::get_frame(vimt_image_2d_of<vxl_byte>& image)
+bool mvl2_video_from_avi::get_frame(vil2_image_view<vxl_byte>& image)
 {
   if (!is_initialized_) return false;
   BITMAPINFO bmp_info;
@@ -95,14 +95,14 @@ bool mvl2_video_from_avi::get_frame(vimt_image_2d_of<vxl_byte>& image)
   int xstep=bpp/8;
 
   unsigned char* data=(unsigned char*)(img_data)+img->bmiHeader.biSize+img->bmiHeader.biClrUsed*sizeof(RGBQUAD);
-  vimt_image_2d_of<vxl_byte> temp_img;
+  vil2_image_view<vxl_byte> temp_img;
   if (use_colour)
-    temp_img.image().set_to_memory(data+2,nx,ny,bplanes,xstep,ystep,-1);
+    temp_img.set_to_memory(data+2,nx,ny,bplanes,xstep,ystep,-1);
   else
-    temp_img.image().set_to_memory(data,nx,ny,bplanes,xstep,ystep,0);
+    temp_img.set_to_memory(data,nx,ny,bplanes,xstep,ystep,0);
 
-  vimt_image_2d_of<vxl_byte> image_tmp_;
-  image_tmp_.image()=vil2_flip_ud(temp_img.image());
+  vil2_image_view<vxl_byte> image_tmp_;
+  image_tmp_=vil2_flip_ud(temp_img);
   image.deep_copy(image_tmp_);
 
   AVIStreamGetFrameClose(g_frame);

@@ -13,7 +13,7 @@
 #include <vcl_utility.h> // for vcl_pair
 #include <vcl_string.h>
 #include <vcl_vector.h>
-#include <vimt/vimt_image_2d_of.h>
+#include <vil2/vil2_image_view.h>
 
 
 //: A base class for cameras/virtual cameras
@@ -77,7 +77,7 @@ class mvl2_video_reader
   //  Warning: the image is only valid until the next call to get_frame,
   //  initialize or uninitialize.
   //  return false if error.
-  virtual bool get_frame(vimt_image_2d_of<vxl_byte>& image)=0;
+  virtual bool get_frame(vil2_image_view<vxl_byte>& image)=0;
 
   //: Set the brightness of the picture
   virtual void set_brightness(int value) {}
