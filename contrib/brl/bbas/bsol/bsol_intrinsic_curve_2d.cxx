@@ -21,7 +21,7 @@
 bsol_intrinsic_curve_2d::bsol_intrinsic_curve_2d()
 {
   storage_=new vcl_vector<vsol_point_2d_sptr>();
-  _isOpen=true;
+  isOpen_=true;
 }
 
 //---------------------------------------------------------------------------
@@ -31,7 +31,7 @@ bsol_intrinsic_curve_2d::bsol_intrinsic_curve_2d()
 bsol_intrinsic_curve_2d::bsol_intrinsic_curve_2d(const vcl_vector<vsol_point_2d_sptr> &new_vertices)
 {
   storage_=new vcl_vector<vsol_point_2d_sptr>(new_vertices);
-  _isOpen=true;
+  isOpen_=true;
 }
 
 //---------------------------------------------------------------------------
@@ -44,7 +44,7 @@ bsol_intrinsic_curve_2d::bsol_intrinsic_curve_2d(const bsol_intrinsic_curve_2d &
   for (unsigned int i=0;i<storage_->size();++i)
     (*storage_)[i]=new vsol_point_2d(*((*other.storage_)[i]));
 
-  _isOpen = other._isOpen;
+  isOpen_ = other.isOpen_;
 }
 
 //---------------------------------------------------------------------------
@@ -235,8 +235,7 @@ void bsol_intrinsic_curve_2d::readCONFromFile(vcl_string fileName)
 
   //2)Read in file header.
   fp.getline(buffer,2000); //CONTOUR
-  
-  
+
   //fp.getline(buffer,2000); //OPEN/CLOSE
   //char openFlag[2000];
   vcl_string openFlag;
@@ -244,10 +243,10 @@ void bsol_intrinsic_curve_2d::readCONFromFile(vcl_string fileName)
   vcl_getline(fp, openFlag);
   //if (!vcl_Strncmp(openFlag,"OPEN",4))
   if (openFlag.find("OPEN",0) != vcl_string::npos)
-    _isOpen = true;
+    isOpen_ = true;
   //else if (!vcl_Strncmp(openFlag,"CLOSE",5))
   else if (openFlag.find("CLOSE",0) != vcl_string::npos)
-    _isOpen = false;
+    isOpen_ = false;
   else{
     vcl_cerr << "Invalid File " << fileName.c_str() << vcl_endl
              << "Should be OPEN/CLOSE " << openFlag << vcl_endl;
@@ -255,7 +254,8 @@ void bsol_intrinsic_curve_2d::readCONFromFile(vcl_string fileName)
   }
 
   fp >> nPoints;
-  vcl_cout << "Number of Points from Contour:" << nPoints << "Contour flag is: " << _isOpen << " (1 for open, 0 for close)" << vcl_endl;
+  vcl_cout << "Number of Points from Contour: " << nPoints
+           << "\nContour flag is "<< isOpen_ << " (1 for open, 0 for close)\n";
 
   for (int i=0;i<nPoints;i++) {
     fp >> x >> y;
@@ -264,7 +264,6 @@ void bsol_intrinsic_curve_2d::readCONFromFile(vcl_string fileName)
 
   fp.close();
   computeProperties();
-
 }
 
 
@@ -294,11 +293,11 @@ void bsol_intrinsic_curve_2d::computeArcLength()
 
   assert (s_.size()==arcLength_.size());
 
-//: original code of TBS in /vision/projects/kimia/curve-matching/CurveMatch/CODE/CODE-IRIX6.5/Matching-Tek/c
-//  treats the starting point in no special way for closed curves, its arclength is simply 0 which is correct
+// original code of TBS in /vision/projects/kimia/curve-matching/CurveMatch/CODE/CODE-IRIX6.5/Matching-Tek/c
+// treats the starting point in no special way for closed curves, its arclength is simply 0 which is correct
 #if 0 // commented out
   //Deal with the last point for a closed curve separately.
-  if (!_isOpen)
+  if (!isOpen_)
   {
     px=(*storage_)[size()-1]->x();
     py=(*storage_)[size()-1]->y();
@@ -316,13 +315,13 @@ void bsol_intrinsic_curve_2d::computeArcLength()
     normArcLength_.push_back(arcLength_[i]/length_);
 
 #ifdef DEBUG
-  vcl_cout << "Norm arc length values: \n";
+  vcl_cout << "Norm arc length values:\n";
   for (int i = 0; i<size(); i++)
-	  vcl_cout << "normArcLength_[" << i << "]: " << normArcLength_[i] << vcl_endl;
+    vcl_cout << "normArcLength_[" << i << "]: " << normArcLength_[i] << vcl_endl;
 
-  vcl_cout << "arc length values: \n";
+  vcl_cout << "arc length values:\n";
   for (int i = 0; i<size(); i++)
-	  vcl_cout << "arcLength_[" << i << "]: " << arcLength_[i] << vcl_endl;
+    vcl_cout << "arcLength_[" << i << "]: " << arcLength_[i] << vcl_endl;
 #endif
 }
 
@@ -358,14 +357,14 @@ void bsol_intrinsic_curve_2d::computeCurvatures()
 
 #if 1 // commented out
   // Deal with the last point for a closed curve separately.
-  if (!_isOpen)
+  if (!isOpen_)
   {
     double pdx=dx_[size()-1];
     double pdy=dy_[size()-1];
     double cdx=dx_[0];
     double cdy=dy_[0];
     double dL=arcLength_[0]-arcLength_[size()-1];
-	double d2x, d2y;
+    double d2x, d2y;
     if (dL > ZERO_TOLERANCE ) {
       d2x=(cdx-pdx)/dL;
       d2y=(cdy-pdy)/dL;
@@ -373,7 +372,7 @@ void bsol_intrinsic_curve_2d::computeCurvatures()
     else
       d2x=d2y=0;
     double K;
-	if (vcl_fabs(cdx) < ZERO_TOLERANCE && vcl_fabs(cdy) < ZERO_TOLERANCE)
+    if (vcl_fabs(cdx) < ZERO_TOLERANCE && vcl_fabs(cdy) < ZERO_TOLERANCE)
       K=0;
     else
       K=(d2y*cdx-d2x*cdy)/vcl_pow((vcl_pow(cdx,2)+vcl_pow(cdy,2)),3/2);
@@ -412,7 +411,7 @@ void bsol_intrinsic_curve_2d::computeDerivatives()
 
 #if 1 // commented out
   //Deal with the last point for a closed curve separately.
-  if (!_isOpen)
+  if (!isOpen_)
   {
     double px=(*storage_)[size()-1]->x();
     double py=(*storage_)[size()-1]->y();
@@ -456,13 +455,13 @@ void bsol_intrinsic_curve_2d::computeAngles()
 
 //: IMPORTANT NOTE: in open curve matching giving the inputs as
 //  OPEN curves or CLOSE curves (i.e. in .con file)
-//  changes the cost computation 
+//  changes the cost computation
 //  due to the following operation
-//  In closed curve matching, input curves should always be given 
+//  In closed curve matching, input curves should always be given
 //  as CLOSE curves.
 #if 1
   //Deal with the last point for a closed curve separately.
-  if (!_isOpen)
+  if (!isOpen_)
   {
     double px=(*storage_)[size()-1]->x();
     double py=(*storage_)[size()-1]->y();
@@ -471,11 +470,11 @@ void bsol_intrinsic_curve_2d::computeAngles()
     double theta=vcl_atan2(cy-py,cx-px);
     angle_[0]=theta;
 
-    /*
-    //: TBS source code tests the distance between first and last points!!
-    if (sqrt(pow(cx-px,2.0)+pow(cy-py,2.0))<2)
-      c->angle[0]=atan2(cy-py,cx-px);
-    */
+#if 0 // commented out
+    // TBS source code tests the distance between first and last points!!
+    if (vcl_sqrt((cx-px)*(cx-px)+(cy-py)*(cy-py))<2)
+      c->angle[0]=vcl_atan2(cy-py,cx-px);
+#endif // 0
   }
 #endif
 }
@@ -492,16 +491,16 @@ void bsol_intrinsic_curve_2d::computeProperties()
   computeAngles();
 }
 
-//: Public function to upsample the current curve, it uses vsol_digital_curve and its interpolator 
-bool bsol_intrinsic_curve_2d::upsample(int new_size) 
+//: Public function to upsample the current curve, it uses vsol_digital_curve and its interpolator
+bool bsol_intrinsic_curve_2d::upsample(int new_size)
 {
   if (size() >= new_size) {
-    vcl_cout << "In bsol_intrinsic_curve_2d::upsample method: Curve size is larger than or equal to new_size already, exiting!";
+    vcl_cout << "In bsol_intrinsic_curve_2d::upsample method: Curve size is larger than or equal to new_size already, exiting!\n";
     return true;
   }
 
   vsol_digital_curve_2d_sptr dc = new vsol_digital_curve_2d(*storage_);
-  
+
   //: if curve is closed sample the portion between last point and first point
   if (!isOpen()) {
     dc->add_vertex((*storage_)[0]);
@@ -509,15 +508,16 @@ bool bsol_intrinsic_curve_2d::upsample(int new_size)
 
   clear();
   storage_->clear();
-  
+
   double T = dc->length()/new_size;
   vcl_cout << "T value for new_size is: " << T << vcl_endl;
 
-  for (int i=1; i<dc->size(); i++) {
+  for (unsigned int i=1; i<dc->size(); ++i)
+  {
     double len = ((dc->point(i))->get_p()-(dc->point(i-1))->get_p()).length();
     //: start with actual curve point
     storage_->push_back(dc->point(i-1));
-    //: add first point with length T apart 
+    //: add first point with length T apart
     int j = 0;
     while (len - j*T >= (T+(T/2))) {
       vcl_cout << "i: " << i << " interpolating " << (i-1)+(j+1)*T/len << vcl_endl;
@@ -530,7 +530,6 @@ bool bsol_intrinsic_curve_2d::upsample(int new_size)
   return true;
 }
 
-/*
 #if 0 // rest of file commented out
 
 //: Default Constructor:
@@ -637,7 +636,7 @@ CONTOUR
 OPEN (or CLOSE)
 20 (numPoints)
 x1 y1 x2 y2 x3 y3 ....
-
+*/
 void bsol_intrinsic_curve_2d::readDataFromFile(vcl_string fileName)
 {
   //clear the existing curve data
@@ -700,4 +699,3 @@ void bsol_intrinsic_curve_2d::readDataFromVector(vcl_vector<vcl_pair<double,doub
 }
 
 #endif // 0
-*/

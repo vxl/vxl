@@ -17,10 +17,9 @@
 //
 // \verbatim
 //  Modifications
-//   2003/11/14 Modified from the code of Thomas Sebastian
-//  \author Ozge Can Ozcanli  
-//			2004/10/25 Modified to add close curve support
-//			2004/11/01 Added method upsample that interpolates new samples linearly according to arclength
+//   2003/11/14 MingChing Chang - Modified from the code of Thomas Sebastian
+//   2004/10/25 Ozge Can Ozcanli - Modified to add close curve support
+//   2004/11/01 Ozge Can Ozcanli - Added method upsample that interpolates new samples linearly according to arclength
 // \endverbatim
 //*****************************************************************************
 
@@ -70,7 +69,7 @@ class bsol_intrinsic_curve_2d : public vsol_curve_2d
   //: Total angle change of the intrinsic curve
   double totalAngleChange_;
 
-  bool _isOpen; // true - open, false - closed
+  bool isOpen_; // true - open, false - closed
 
  public:
   //***************************************************************************
@@ -94,7 +93,7 @@ class bsol_intrinsic_curve_2d : public vsol_curve_2d
   //***************************************************************************
   // Access
 
-  bool isOpen(void) { return _isOpen; }
+  bool isOpen(void) { return isOpen_; }
   //: Return the first point of `this';  pure virtual of vsol_curve_2d
   virtual vsol_point_2d_sptr p0() const { return p0_; }
   //: Return the last point of `this';   pure virtual of vsol_curve_2d
@@ -170,13 +169,13 @@ class bsol_intrinsic_curve_2d : public vsol_curve_2d
   void computeCurvatures();
   void computeArcLength();
   void computeAngles();
- 
+
  public:
 
   //***************************************************************************
   // Status setting
 
-  void setOpen(bool flag) { _isOpen = flag; }
+  void setOpen(bool flag) { isOpen_ = flag; }
 
   //: Set the first point of the curve
   virtual void set_p0 (const vsol_point_2d_sptr &new_p0);
@@ -187,7 +186,7 @@ class bsol_intrinsic_curve_2d : public vsol_curve_2d
   //  flag bRecomputeProperties set to false, remember to call this function
   //  to recompute intrinsic properties of this curve.
   void computeProperties();
-  
+
   //: Delete all points of the intrinsic curve
   void clear();
   //: Add another point to the end of the intrinsic curve
