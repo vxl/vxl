@@ -25,7 +25,7 @@ short vimt_image::version_no() const
 bool vimt_image::operator==(const vimt_image &im) const
 {
 // Use as a proxy for existence of RTTI support.
-#if VCL_HAS_DYNAMIC_CAST && VCL_CXX_HAS_HEADER_TYPEINFO
+#if VCL_HAS_RTTI && VCL_CXX_HAS_HEADER_TYPEINFO
   if (typeid(*this) == typeid(im))
 #else
   if (this->is_class(im.is_a()))
