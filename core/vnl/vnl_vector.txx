@@ -828,7 +828,6 @@ VCL_INSTANTIATE_INLINE(vnl_vector<T > operator+(T const, vnl_vector<T > const &)
 VCL_INSTANTIATE_INLINE(vnl_vector<T > operator-(T const, vnl_vector<T > const &)); \
 VCL_INSTANTIATE_INLINE(vnl_vector<T > operator*(T const, vnl_vector<T > const &)); \
 template vnl_vector<T > operator*(vnl_matrix<T > const &, vnl_vector<T > const &); \
-VCL_INSTANTIATE_INLINE(bool operator!=(vnl_vector<T > const & , vnl_vector<T > const & )); \
 /* element-wise */ \
 template vnl_vector<T > element_product(vnl_vector<T > const &, vnl_vector<T > const &); \
 template vnl_vector<T > element_quotient(vnl_vector<T > const &, vnl_vector<T > const &); \
