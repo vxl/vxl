@@ -24,7 +24,7 @@ bool vipl_erode_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
   int startx = start(X_Axis());
   int starty = start(Y_Axis()); starty = 0;
   int stopx = stop(X_Axis());
-  int stopy = stop(Y_Axis()); stopy = out.height();
+  int stopy = stop(Y_Axis()); // stopy = height(out);
   const DataIn dummy = DataIn(0); // dummy initialisation to avoid compiler warning
 #ifdef DEBUG
   vcl_cout << " (" << startx << ':' << stopx << ',' << starty << ':' << stopy << ')';
