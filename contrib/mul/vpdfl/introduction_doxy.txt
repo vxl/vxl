@@ -8,7 +8,7 @@
 * e.g. The abstract PDF base classes
 * - vpdfl_builder_base
 * - vpdfl_pdf_base
-* - vpdfl_pdf_sampler
+* - vpdfl_pdf_sampler_base
 *
 * The multivariate Gaussian PDF classes
 *
@@ -24,4 +24,8 @@
 * Samplers are used to generate samples from a given model.
 *
 * The samples are produced with a PDF given by its model.
+*
+* Mixture models are represented using the vpdfl_mixture class.
+* The vpdfl_mixture_builder uses the EM algorithm to estimate the
+* parameters of the mixtures.
 */

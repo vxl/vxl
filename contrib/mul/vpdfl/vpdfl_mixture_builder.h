@@ -27,7 +27,7 @@
 
 class vpdfl_mixture;
 
-//: Base for classes to build vpdfl_mixture objects.
+//: Uses the EM algorithm to build vpdfl_mixture objects.
 class vpdfl_mixture_builder : public vpdfl_builder_base {
 private:
   vcl_vector<vpdfl_builder_base*> builder_;
