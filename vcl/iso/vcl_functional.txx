@@ -3,4 +3,6 @@
 
 #include <vcl_functional.h>
 
+#define VCL_LESS_INSTANTIATE(T) /* */
+
 #endif
