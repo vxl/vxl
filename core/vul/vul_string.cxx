@@ -6,7 +6,6 @@
 #include <vcl_cstring.h>
 #include <vcl_cctype.h>
 #include <vcl_algorithm.h>
-#include <vcl_iterator.h>
 
 #define TO_LOWER vcl_tolower                    // use ANSI functions
 #define TO_UPPER vcl_toupper
@@ -16,24 +15,24 @@
 #endif
 
 // Converts all alphabetical characters to uppercase.
-char* vul_string_c_upcase (char* s)      // Convert entire string to upper case
+char* vul_string_c_upcase(char* s)  // Convert entire string to upper case
 {
   char* p = s;                  // Point to beginning of string
   while (*p) {                  // While there are still valid characters
-    if (vcl_islower (*p))       // if this is lower case
-      *p = TO_UPPER (*p);       // convert to uppercase
+    if (vcl_islower(*p))        // if this is lower case
+      *p = TO_UPPER(*p);        // convert to uppercase
     p++;                        // Advance pointer
   }
   return s;                     // Return reference to modified string
 }
 
 // Converts all alphabetical characters to lowercase.
-char* vul_string_c_downcase (char* s)    // Convert entire string to lower case
+char* vul_string_c_downcase(char* s)  // Convert entire string to lower case
 {
   char* p = s;                  // Point to beginning of string
   while (*p) {                  // While there are still valid characters
-    if (vcl_isupper (*p))       // if this is upper case
-      *p = TO_LOWER (*p);       // convert to lowercase
+    if (vcl_isupper(*p))        // if this is upper case
+      *p = TO_LOWER(*p);        // convert to lowercase
     p++;                        // Advance pointer
   }
   return s;                     // Return reference to modified string
@@ -41,7 +40,7 @@ char* vul_string_c_downcase (char* s)    // Convert entire string to lower case
 
 // Capitalizes all words in a string. A word is defined as
 // a sequence of characters separated by non-alphanumerics.
-char* vul_string_c_capitalize (char* s)       // Capitalize each word in string
+char* vul_string_c_capitalize(char* s)  // Capitalize each word in string
 {
   char* p = s;                          // Point to beginning of string
   while (true) {                        // Infinite loop
@@ -49,13 +48,13 @@ char* vul_string_c_capitalize (char* s)       // Capitalize each word in string
     if (*p == END_OF_STRING)            // If end of string
       return s;                         // Return string
     *p = TO_UPPER(*p);                  // Convert character
-    while (*++p && vcl_isalnum (*p));   // Search for next word
+    while (*++p && vcl_isalnum(*p));    // Search for next word
   }
 }
 
 // Removes any occurrence of the string rem from string str,
 // and returns the modified string str.
-char* vul_string_c_trim (char* str, const char* rem) // Trim characters from string
+char* vul_string_c_trim(char* str, const char* rem) // Trim characters from string
 {
   char* s = str;
   char* result = str;
@@ -73,7 +72,7 @@ char* vul_string_c_trim (char* str, const char* rem) // Trim characters from str
 
 // Removes any prefix occurrence of the string rem from
 // the first string str, and returns the modified string str.
-char* vul_string_c_left_trim (char* str, const char* rem) // Trim prefix from string
+char* vul_string_c_left_trim(char* str, const char* rem) // Trim prefix from string
 {
   char* result = str;
   char* s;
@@ -92,7 +91,7 @@ char* vul_string_c_left_trim (char* str, const char* rem) // Trim prefix from st
 
 // Removes any suffix occurrence of the string rem
 // from the first string str, and returns the modified string str.
-char* vul_string_c_right_trim (char* str, const char* rem) // Trim suffix from string
+char* vul_string_c_right_trim(char* str, const char* rem) // Trim suffix from string
 {
   char* s = str + vcl_strlen(str) - 1;           // last character of str
   for (; s >= str; s--) {
@@ -108,31 +107,49 @@ char* vul_string_c_right_trim (char* str, const char* rem) // Trim suffix from s
 }
 
 // Reverses the order of the characters in char*.
-void vul_string_c_reverse (char* c)          // Reverse the order of characters
+char* vul_string_c_reverse(char* c)     // Reverse the order of characters
 {
-  int length = vcl_strlen (c);          // Number of characters in string
+  int length = vcl_strlen(c);           // Number of characters in string
   char temp;
  
   for (int i = 0, j = length-1;         // Counting from front and rear
-       2*i < length; ++i, --j)          // until we reach the middle
+       i < j; ++i, --j)                 // until we reach the middle
   {
     temp = c[i];                        // Save front character
     c[i] = c[j];                        // Switch with rear character
     c[j] = temp;                        // Copy new rear character
   }
+  return c;
 }
+
+// Reverses the order of the characters in string
+vcl_string& vul_string_reverse(vcl_string& s)
+{
+  for (int i=0, j=vcl_strlen(s.c_str())-1; i<j; ++i,--j)
+  {
+    char c = s[i]; s[i] = s[j]; s[j] = c;
+  }
+  return s;
+}
+
+// In some implementations of <cctype>, toupper and tolower are macros
+// instead of functions.  In that case, they cannot be passed as 4th argument
+// to std::transform.  Hence it's easier to "inline" std::transform here,
+// instead of using it explicitly. - PVr.
 
 // Converts all alphabetical characters in string s to uppercase.
 vcl_string& vul_string_upcase(vcl_string& s)
 {
-  vcl_transform( s.begin(), s.end(), s.begin(), vcl_toupper );
+  for (vcl_string::iterator i=s.begin(); i != s.end(); ++i)
+    *i = vcl_toupper(*i);
   return s;
 }
 
 // Converts all alphabetical characters in string s to lowercase.
 vcl_string& vul_string_downcase(vcl_string& s)
 {
-  vcl_transform( s.begin(), s.end(), s.begin(), vcl_tolower );
+  for (vcl_string::iterator i=s.begin(); i != s.end(); ++i)
+    *i = vcl_tolower(*i);
   return s;
 }
 
@@ -219,10 +236,9 @@ bool vul_string_to_bool(const vcl_string &str)
   const char *strue = "TRUE";
   const char *s1 = "1";
   const char *son = "ON";
-  if (myequals(begin, end, syes, syes+3)) return true;
-  if (myequals(begin, end, strue, strue+4)) return true;
-  if (myequals(begin, end, s1, s1+1)) return true;
-  if (myequals(begin, end, son, son+2)) return true;
-  return false;
+  return myequals(begin, end, syes, syes+3)
+     ||  myequals(begin, end, strue, strue+4)
+     ||  myequals(begin, end, s1, s1+1)
+     ||  myequals(begin, end, son, son+2);
 }
 
