@@ -149,7 +149,6 @@ Copyright @copyright{} 2001 Victoria University of Manchester
 * mil::
 * vpdfl::
 * clsfy::
-* Conclusion::
 * Index::
 @end menu
 

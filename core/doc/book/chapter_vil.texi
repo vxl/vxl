@@ -72,19 +72,20 @@ Now let's skip to the end to explain the pixel access method.
 @end example
 This looks up the pixel at position 100,100 and returns its value. The
 pixel type was defined on the first line to be an rgb of bytes, and
-that is what will be displayed. Where it matters (such as when loading
-an image in from disk) it is assumed that the image origin is at the
-top left of the image.
+that is what will be displayed.
 @example
 [255 128 128]
 @end example
+Where it matters (such as when loading
+an image in from disk) it is assumed that the image origin is at the
+top left of the image.
 
 Finally lets look at the middle line. This consists of two parts.
 The @code{vil2_load} function does a lot of work behind the scenes
 to determine what the image type is, and then load that image into
 memory. The assignment has several special properties.
 @itemize @bullet
-@item It does not copy the actual image data. A vil2_image_view object
+@item It does not copy the actual image data. A @code{vil2_image_view} object
 is really a view of some underlying data. The view understands where the
 real image data is in memory and how to interpret it. When you copy
 a view, you merely copy this interpretation information, not the actual
@@ -95,7 +96,7 @@ will be too.
 
 @item It can do cheap conversions between different vies of the same image.
 @code{vil2_load} by default loads the image as 3 planes, with the pixel
-type as @code<vxl_byte>. It is trivial to reconfigure a vil2_image_view
+type as @code{vxl_byte}. It is trivial to reconfigure a @code{vil2_image_view}
 so that it views the same image data as one plane of rgb pixels. The
 assignment will automatically do any cheap conversion necessary. You may
 ask then how we know that the pixel type can be viewed as RGB of bytes.
@@ -135,7 +136,7 @@ int main()
 @}
 @end example
 
-The call to @code{vil2_save} sends the modified image in @var{buf} to disk.
+The call to @code{vil2_save} sends the modified image in @var{img} to disk.
 The choice of file format is determined automatically from the extension of
 the filename.  In this case, the extension is "ppm", the Portable Pix Map
 format.  If one wants more control, a string can be appended to specify the
@@ -149,12 +150,11 @@ the user of your program may have chosen the name, so that you have no
 other option.
 
 @section Copying an image
-@anchor{sec:vil2_copy_deep}
 @cindex images, copying
 You should know by now that copying @code{vil2_image_view} objects does not
 duplicate the data they point to.  This allows images to be passed into and
 out of functions efficiently.  It also means that modifying the data in one
-vil2_image_view might change that in another.  Take this example
+@code{vil2_image_view} might change that in another.  Take this example
 @example
 ...
 vil2_image_view<float> a( vil2_load("x") );
