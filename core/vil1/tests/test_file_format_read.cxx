@@ -177,7 +177,7 @@ test_file_format_read_main( int argc, char* argv[] )
 
    vcl_cout << "Windows bitmap [bmp]\n";
    testlib_test_begin( "  8-bit RGB (xv created)" );
-   testlib_test_perform( test( "ff_bgr8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_xv.bmp" ) ) );
+   testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_xv.bmp" ) ) );
 
   vcl_cout << "TIFF [tiff]\n";
   testlib_test_begin( "  8-bit RGB uncompressed" );
