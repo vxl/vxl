@@ -23,10 +23,6 @@
 #include "vil_nitf_version_v20.h"
 #include "vil_nitf_header_v20.h"
 
-#ifdef WIN32
-#define strcasecmp _stricmp
-#endif
-
 static
 inline float atoff( const char* s )
 {
@@ -165,17 +161,17 @@ StatusCode vil_nitf_image_subheader_v20::Read (vil_stream* file)
         vcl_cout << method_name << "PVTYPE string = <" << buffer << ">\n";
 
   // MAKE SURE FLOAT AND COMPLEX BELOW SHOULD NOT BE DOUBLE.  MAL 8oct2003
-        if (!strcasecmp(buffer, "B  "))  // B = bit-mapped. TargetJr. used PVTYPE_INTEGER
+        if (!nitf_strcasecmp(buffer, "B  "))  // B = bit-mapped. TargetJr. used PVTYPE_INTEGER
           PVTYPE_ = VIL_PIXEL_FORMAT_UINT_16;
-        else if (!strcasecmp(buffer, "C  "))  // C = complex (2 32 bit values)
+        else if (!nitf_strcasecmp(buffer, "C  "))  // C = complex (2 32 bit values)
           PVTYPE_ = VIL_PIXEL_FORMAT_COMPLEX_FLOAT;  // Should this be COMPLEX_DOUBLE ?
-        else if (!strcasecmp(buffer, "INT"))
+        else if (!nitf_strcasecmp(buffer, "INT"))
           PVTYPE_ = VIL_PIXEL_FORMAT_UINT_16;  // INT and SI are 16 bit values
-        else if (!strcasecmp(buffer, "R  "))
+        else if (!nitf_strcasecmp(buffer, "R  "))
           PVTYPE_ = VIL_PIXEL_FORMAT_FLOAT;  // 32 bit IEEE floating point number.
-        else if (!strcasecmp(buffer, "SI "))
+        else if (!nitf_strcasecmp(buffer, "SI "))
             PVTYPE_ = VIL_PIXEL_FORMAT_INT_16;  // INT and SI are 16 bit values
-        else if (!strcasecmp(buffer, "U  "))
+        else if (!nitf_strcasecmp(buffer, "U  "))
             PVTYPE_ = VIL_PIXEL_FORMAT_UNKNOWN;
         else
         {
@@ -192,12 +188,12 @@ StatusCode vil_nitf_image_subheader_v20::Read (vil_stream* file)
                  << "IREP string = <" << IREP << ">  file position = "
                  << file->tell() << vcl_endl;
 
-        if (strcasecmp(IREP, "MONO    ") &&
-            strcasecmp(IREP, "RGB     ") &&
-            strcasecmp(IREP, "NODISPLY") &&
-            strcasecmp(IREP, "RGB/LUT ") &&
-            strcasecmp(IREP, "MULTI   ") &&
-            strcasecmp(IREP, "YCbCr601")) {
+        if (nitf_strcasecmp(IREP, "MONO    ") &&
+            nitf_strcasecmp(IREP, "RGB     ") &&
+            nitf_strcasecmp(IREP, "NODISPLY") &&
+            nitf_strcasecmp(IREP, "RGB/LUT ") &&
+            nitf_strcasecmp(IREP, "MULTI   ") &&
+            nitf_strcasecmp(IREP, "YCbCr601")) {
           error = true;
           break;
         }
@@ -210,15 +206,15 @@ StatusCode vil_nitf_image_subheader_v20::Read (vil_stream* file)
                  << "ICAT string = <" << ICAT << ">  file position = "
                  << file->tell() << vcl_endl;
 
-        if (strcasecmp(ICAT, "VIS     ") &&
-            strcasecmp(ICAT, "MAP     ") &&
-            strcasecmp(ICAT, "SAR     ") &&
-            strcasecmp(ICAT, "IR      ") &&
-            strcasecmp(ICAT, "FP      ") &&
-            strcasecmp(ICAT, "MRI     ") &&
-            strcasecmp(ICAT, "XRAY    ") &&
-            strcasecmp(ICAT, "CAT     ") &&
-            strcasecmp(ICAT, "MS      ") &&
+        if (nitf_strcasecmp(ICAT, "VIS     ") &&
+            nitf_strcasecmp(ICAT, "MAP     ") &&
+            nitf_strcasecmp(ICAT, "SAR     ") &&
+            nitf_strcasecmp(ICAT, "IR      ") &&
+            nitf_strcasecmp(ICAT, "FP      ") &&
+            nitf_strcasecmp(ICAT, "MRI     ") &&
+            nitf_strcasecmp(ICAT, "XRAY    ") &&
+            nitf_strcasecmp(ICAT, "CAT     ") &&
+            nitf_strcasecmp(ICAT, "MS      ") &&
             vcl_strcmp(ICAT, "        ")) {
           error = true;
           break;
@@ -968,21 +964,21 @@ StatusCode vil_nitf_image_subheader_v20::Write(vil_stream* file)
 
         if ((pvtype == 0)                       ||
             (file->write(pvtype,  3) <  3)      ||
-            (strcasecmp(IREP, "MONO    ") &&
-             strcasecmp(IREP, "RGB     ") &&
-             strcasecmp(IREP, "RGB/LUT ") &&
-             strcasecmp(IREP, "MULTI   ") &&
-             strcasecmp(IREP, "YCbCr601"))      ||
+            (nitf_strcasecmp(IREP, "MONO    ") &&
+             nitf_strcasecmp(IREP, "RGB     ") &&
+             nitf_strcasecmp(IREP, "RGB/LUT ") &&
+             nitf_strcasecmp(IREP, "MULTI   ") &&
+             nitf_strcasecmp(IREP, "YCbCr601"))      ||
             (file->write(IREP,    8) <  8)      ||
-            (strcasecmp(ICAT, "VIS     ") &&
-             strcasecmp(ICAT, "MAP     ") &&
-             strcasecmp(ICAT, "SAR     ") &&
-             strcasecmp(ICAT, "IR      ") &&
-             strcasecmp(ICAT, "FP      ") &&
-             strcasecmp(ICAT, "MRI     ") &&
-             strcasecmp(ICAT, "XRAY    ") &&
-             strcasecmp(ICAT, "CAT     ") &&
-             strcasecmp(ICAT, "MS      "))      ||
+            (nitf_strcasecmp(ICAT, "VIS     ") &&
+             nitf_strcasecmp(ICAT, "MAP     ") &&
+             nitf_strcasecmp(ICAT, "SAR     ") &&
+             nitf_strcasecmp(ICAT, "IR      ") &&
+             nitf_strcasecmp(ICAT, "FP      ") &&
+             nitf_strcasecmp(ICAT, "MRI     ") &&
+             nitf_strcasecmp(ICAT, "XRAY    ") &&
+             nitf_strcasecmp(ICAT, "CAT     ") &&
+             nitf_strcasecmp(ICAT, "MS      "))      ||
             (file->write(ICAT,    8) <  8)      ||
             (ABPP<1 || ABPP>16)                 ||
             (!PutInt(buffer, ABPP, 2, file))    ||
@@ -1704,7 +1700,7 @@ StatusCode vil_nitf_image_subheader_v20::extract_piaimc_extension()
         vcl_strncpy(temp, &work[offset], 1);           // grab string from buffer
         temp[1] = 0;                                   // ensure NULL terminator
         offset += 1;                                   // advance to next field
-        SRP = (strcasecmp(temp, "N") ? false : true);  // store value
+        SRP = (nitf_strcasecmp(temp, "N") ? false : true);  // store value
         vcl_cout << ":Standard Radiometric Product " << SRP << vcl_endl;
 
         // Grab SENSMODE
@@ -1762,7 +1758,7 @@ StatusCode vil_nitf_image_subheader_v20::extract_piaimc_extension()
         vcl_strncpy(temp, &work[offset], 1);           // grab string from buffer
         temp[1] = 0;                                   // ensure NULL terminator
         offset += 1;                                   // advance to next field
-        ESD = (strcasecmp(temp, "N") ? false : true);  // store value
+        ESD = (nitf_strcasecmp(temp, "N") ? false : true);  // store value
         vcl_cout << ":Exploitation Support Data " << ESD << vcl_endl;
 
         // Grab OTHERCOND

@@ -204,4 +204,7 @@ inline char* new_strdup (const char* str)
     return ret;
 }
 
+// case insensitive string comparison
+int nitf_strcasecmp( const char* s1, const char* s2 );
+
 #endif // vil_nitf_util_h_

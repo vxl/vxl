@@ -352,3 +352,24 @@ int geostr_to_double(const char* string, double* val, geopt_coord lat_lon_flag)
     return 0;
   }
 }  // end method geostr_to_double
+
+
+// case insensitive string comparison
+int
+nitf_strcasecmp( const char* s1, const char* s2 )
+{
+  while( *s1 != '\0' &&
+         *s2 != '\0' &&
+         vcl_toupper( *s1 ) == vcl_toupper( *s2 ) ) {
+    ++s1;
+    ++s2;
+  }
+  int us1 = vcl_toupper( *s1 );
+  int us2 = vcl_toupper( *s2 );
+  if( us1 == us2 )
+    return 0;
+  else if( us1 < us2 )
+    return -1;
+  else
+    return 1;
+}

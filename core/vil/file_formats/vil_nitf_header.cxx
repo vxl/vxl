@@ -33,10 +33,6 @@
 #include "vil_nitf_version.h"
 #include "vil_nitf_util.h"
 
-#ifdef WIN32
-#define strcasecmp _stricmp
-#endif
-
 //====================================================================
 // Generic NITF Header object.
 //====================================================================
@@ -187,16 +183,16 @@ NITFClass ConvertClassification(const char* inc)
   STRCPY(cc, inc ? inc : "");
   squeeze(cc, ' ', 0);
 
-  // NOTE:  FIGURE WHAT vcl_XXX METHOD TO USE FOR strcasecmp.  MAL 3oct2003
-  if (!strcasecmp(cc,"UNCLASSIFIED") || !strcasecmp(cc,"U"))
+  // NOTE:  FIGURE WHAT vcl_XXX METHOD TO USE FOR nitf_strcasecmp.  MAL 3oct2003
+  if (!nitf_strcasecmp(cc,"UNCLASSIFIED") || !nitf_strcasecmp(cc,"U"))
     c = UNCLASSIFIED;
-  else if (!strcasecmp(cc, "RESTRICTED") || !strcasecmp(cc,"R"))
+  else if (!nitf_strcasecmp(cc, "RESTRICTED") || !nitf_strcasecmp(cc,"R"))
     c = RESTRICTED;
-  else if (!strcasecmp(cc, "CONFIDENTIAL") || !strcasecmp(cc,"C"))
+  else if (!nitf_strcasecmp(cc, "CONFIDENTIAL") || !nitf_strcasecmp(cc,"C"))
     c = CONFIDENTIAL;
-  else if (!strcasecmp(cc, "SECRET") || !strcasecmp(cc, "S"))
+  else if (!nitf_strcasecmp(cc, "SECRET") || !nitf_strcasecmp(cc, "S"))
     c = SECRET;
-  else if (!strcasecmp(cc, "TOPSECRET") || !strcasecmp(cc, "T"))
+  else if (!nitf_strcasecmp(cc, "TOPSECRET") || !nitf_strcasecmp(cc, "T"))
     c = TOPSECRET;
 
   // MPP 5/7/2002
@@ -233,11 +229,11 @@ bool ValidClassification(const char* inc)
   STRCPY(cc, inc?inc:"");
   squeeze(cc, ' ', 0);
 
-  if (!strcasecmp(cc, "UNCLASSIFIED") || !strcasecmp(cc, "U") ||
-      !strcasecmp(cc, "RESTRICTED")   || !strcasecmp(cc, "R") ||
-      !strcasecmp(cc, "CONFIDENTIAL") || !strcasecmp(cc, "C") ||
-      !strcasecmp(cc, "SECRET")       || !strcasecmp(cc, "S") ||
-      !strcasecmp(cc, "TOPSECRET")    || !strcasecmp(cc, "T"))
+  if (!nitf_strcasecmp(cc, "UNCLASSIFIED") || !nitf_strcasecmp(cc, "U") ||
+      !nitf_strcasecmp(cc, "RESTRICTED")   || !nitf_strcasecmp(cc, "R") ||
+      !nitf_strcasecmp(cc, "CONFIDENTIAL") || !nitf_strcasecmp(cc, "C") ||
+      !nitf_strcasecmp(cc, "SECRET")       || !nitf_strcasecmp(cc, "S") ||
+      !nitf_strcasecmp(cc, "TOPSECRET")    || !nitf_strcasecmp(cc, "T"))
     rval = true;
 
   // MPP 5/7/2002
