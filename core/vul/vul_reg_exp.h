@@ -49,7 +49,7 @@ const int NSUBEXP = 10;
 // \verbatim
 //     vul_reg_exp re("([a-z]+)\\.cc");
 //     re.find(filename);
-//     cerr << re.match(1);
+//     vcl_cerr << re.match(1);
 // \endverbatim
 //
 //  The regular expression class provides a convenient mechanism

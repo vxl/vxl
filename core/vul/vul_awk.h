@@ -30,7 +30,7 @@
 // line:
 // \verbatim
 //    for(vul_awk awk(cin); awk; ++awk)
-//      cout << awk[2] << endl;
+//      vcl_cout << awk[2] << vcl_endl;
 // \endverbatim
 
 class vul_awk {

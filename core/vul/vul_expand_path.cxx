@@ -104,7 +104,7 @@ vcl_string vul_expand_path_internal(vcl_string path)
     path = "";
     for (unsigned int i=0; i<bits.size(); ++i)
       path += bits[i];
-    //cerr << "recomposed : " << path << endl;
+    //vcl_cerr << "recomposed : " << path << vcl_endl;
   }
 
   // look for symbolic links to expand
@@ -115,7 +115,7 @@ vcl_string vul_expand_path_internal(vcl_string path)
       int len = readlink(sub.c_str(), buf, sizeof buf);
       if (len != -1) {
         // it's a symlink. we should expand it and recurse.
-        //cerr << "before expansion : " << path << endl;
+        //vcl_cerr << "before expansion : " << path << vcl_endl;
 
         if (buf[0] == '/') {
           // the target of the link starts with '/' so must be an
@@ -132,9 +132,9 @@ vcl_string vul_expand_path_internal(vcl_string path)
             vcl_string a = vcl_string(path.c_str(), path.c_str()+j+1);
             vcl_string b = vcl_string(buf, buf+len);
             vcl_string c = vcl_string(path.c_str() + i, path.c_str() + path.size());
-            //cerr << "a = " << a << endl;
-            //cerr << "b = " << b << endl;
-            //cerr << "c = " << c << endl;
+            //vcl_cerr << "a = " << a << vcl_endl;
+            //vcl_cerr << "b = " << b << vcl_endl;
+            //vcl_cerr << "c = " << c << vcl_endl;
             path = a + b + c;
           }
           else {
@@ -143,7 +143,7 @@ vcl_string vul_expand_path_internal(vcl_string path)
           }
         }
 
-        //cerr << "after expansion : " << path << endl;
+        //vcl_cerr << "after expansion : " << path << vcl_endl;
 
         return vul_expand_path_internal(path);
       }

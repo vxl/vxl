@@ -26,8 +26,8 @@
 // vul_sprintf works in the same way as sprintf but is itself an ANSI C++ string
 // which can either be kept or output directly using streams  e.g.
 // \verbatim
-// cerr << vul_sprintf("int %d, float %f ", 1, 3.14)
-//      << bigobject << endl;
+// vcl_cerr << vul_sprintf("int %d, float %f ", 1, 3.14)
+//          << bigobject << vcl_endl;
 // \endverbatim
 
 struct vul_sprintf : vcl_string
