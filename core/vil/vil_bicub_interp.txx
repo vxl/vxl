@@ -15,6 +15,7 @@
 // vil_bilin_interp.txx file, see vil_bilin_interp.h instead.
 
 #include "vil_bicub_interp.h"
+#include <vcl_compiler.h>
 
 // vil_bilin_interp.h defines only inline functions, but some of the
 // corresponding vil_bicub_interp functions are a little big to be
@@ -60,6 +61,11 @@ double vil_bicub_interp_unsafe(double x, double y, const T* data,
     return val;
 }
 
+// see the comments where this variable is used below
+#if VCL_VC60
+static double vil_bicub_interp_raw_temp_hack = 0.0;
+#endif
+
 template<class T>
 double vil_bicub_interp_raw(double x, double y, const T* data,
                             vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
@@ -98,7 +104,27 @@ double vil_bicub_interp_raw(double x, double y, const T* data,
 #define vil_I(dx,dy) (pix1[(dx)*xstep+(dy)*ystep])
 
     if (normy == 0.0) {
-        double val = s0*vil_I(-1,+0) + s1*vil_I(+0,+0) + s2*vil_I(+1,+0) + s3*vil_I(+2,+0);
+        double val = 0.0;
+        val += s0*vil_I(-1,+0);
+        val += s1*vil_I(+0,+0);
+        val += s2*vil_I(+1,+0);
+
+#if VCL_VC60
+        // On some hardware platforms, with optimization, MSVC 6.0
+        // miscompiles the computation of 'val' in this section of
+        // code.  It appears that the computation of 'val' is lumped
+        // into one large operation that is not handled properly,
+        // resulting in incorrect arithmetic.  After a lot of
+        // experimentation I have found that if we force the compiler
+        // to split the computation of 'val' into two parts by
+        // assigning 'val' to a static variable here, then the
+        // compilation and tests are OK.  In the past this bug was
+        // dealt with by turning optimization off for this file under
+        // MSVC, but this is a much better solution. --Fred Wheeler
+        vil_bicub_interp_raw_temp_hack = val;
+#endif
+
+        val += s3*vil_I(+2,+0);
         val *= 0.5;
         return val;
     }
