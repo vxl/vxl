@@ -273,7 +273,7 @@ register_single_feature( rgrl_mask_box            image_region,
   vcl_vector<rgrl_estimator_sptr>   xform_estimators;
   rgrl_estimator_sptr               xform_estimator;
   bool                              failed, scale_in_range;
-  unsigned                          prev_resol;
+  unsigned                          prev_resol = 0;
 
   failed = false;
   scale_in_range = true;
