@@ -111,7 +111,7 @@ class vmap_2_map_dart
     return _isigma ;
   }
 
-  const vmap_2_map_dart* iphi()  const
+  const vmap_2_map_dart* iphi() const
   {
     return _isigma->alpha() ;
   }
@@ -180,11 +180,11 @@ class vmap_2_map_dart_base_iterator
   explicit vmap_2_map_dart_base_iterator(It arg) :_it(arg) {}
 
 #if 0 // This constructor is covered by the next one
-  vmap_2_map_dart_base_iterator(const self_type &it) :_it((It)it.reference()) {}
+  vmap_2_map_dart_base_iterator(self_type const& it) :_it((It)it.reference()) {}
 #endif // 0
 
   template< typename Ref2, typename Ptr2, typename It2 >
-  vmap_2_map_dart_base_iterator(const vmap_2_map_dart_base_iterator<Ref2,Ptr2,It2> &it)
+  vmap_2_map_dart_base_iterator(vmap_2_map_dart_base_iterator<Ref2,Ptr2,It2> const& it)
   {
     _it=(It)it.reference();
   }
@@ -192,7 +192,7 @@ class vmap_2_map_dart_base_iterator
   ~vmap_2_map_dart_base_iterator() {}
 
 #if 0 // This assignment operator is covered by the next one
-  self_type & operator=(const self_type &it)
+  self_type & operator=(self_type const& it)
   {
     _it=it._it ;
     return *this ;
@@ -200,24 +200,24 @@ class vmap_2_map_dart_base_iterator
 #endif // 0
 
   template< typename Ref2, typename Ptr2, typename It2 >
-  self_type & operator=(const vmap_2_map_dart_base_iterator<Ref2,Ptr2,It2> &it)
+  self_type & operator=(vmap_2_map_dart_base_iterator<Ref2,Ptr2,It2> const& it)
   {
     _it=(It)it.reference() ;
     return *this ;
   }
 
-  self_type & operator=(const It &it)
+  self_type & operator=(It const& it)
   {
     _it=it ;
     return *this ;
   }
 
-  bool operator==(const self_type &it) const
+  bool operator==(self_type const& it) const
   {
     return _it==it._it ;
   }
 
-  bool operator!=(const self_type &it) const
+  bool operator!=(self_type const& it) const
   {
     return _it!=it._it ;
   }
@@ -301,7 +301,7 @@ class vmap_2_map_dart_base_iterator
   }
 
  protected:
-  int offset(const vmap_2_map_dart* arg) const
+  int offset(vmap_2_map_dart const* arg) const
   {
     return arg->sequence_index()-(*_it)->sequence_index() ;
   }
@@ -328,7 +328,7 @@ class vmap_2_map : public vmap_owning_sequence<D>
   //: reference on a dart.
   typedef dart_type& dart_reference ;
   //: const reference on a dart.
-  typedef const dart_type& const_dart_reference ;
+  typedef dart_type const& const_dart_reference ;
 
   //: casts a dart into the user dart type.
   static dart_reference cast(vmap_2_map_dart & a)
@@ -337,7 +337,7 @@ class vmap_2_map : public vmap_owning_sequence<D>
   }
 
   //: casts a dart into the user dart type.
-  static const_dart_reference cast(const vmap_2_map_dart & a)
+  static const_dart_reference cast(vmap_2_map_dart const& a)
   {
     return (const_dart_reference) a ;
   }
@@ -346,22 +346,34 @@ class vmap_2_map : public vmap_owning_sequence<D>
   typedef vmap_2_map_dart_base_iterator< dart_reference,dart_type*,dart_sequence_iterator> dart_iterator ;
 
   //: An iterator iterates in read-only mode on a sequence of darts and on the topology.
-  typedef vmap_2_map_dart_base_iterator< const_dart_reference,const dart_type*,const_dart_sequence_iterator> const_dart_iterator ;
+  typedef vmap_2_map_dart_base_iterator< const_dart_reference,dart_type const*,const_dart_sequence_iterator> const_dart_iterator ;
 
  public:
 
   vmap_2_map()
   {}
 
-  vmap_2_map(const self_type &it) ;
+  vmap_2_map(self_type const& m) ;
 
   virtual ~vmap_2_map();
 
-  self_type & operator=(const self_type &it);
+  self_type & operator=(self_type const& m);
 
-  //: Sets the structure of the map identical to the structure of "it".
+  //: Sets the structure of the map identical to the structure of "m".
+  // (Inlined the implementation here, to avoid compiler error with MSVC)
   template <class M>
-  void set_structure(const M &it) ;
+  void set_structure(M const& m)
+  {
+    if ((self_type const*)&m!=this)
+    {
+      initialise_darts(m.nb_darts()) ;
+      for (vmap_dart_index i=0; i<nb_darts(); ++i)
+      {
+        set_sigma(i,m.sigma(i));
+        set_alpha(i,m.alpha(i));
+      }
+    }
+  }
 
   //: Returns the number of darts.
   int nb_darts () const
@@ -376,7 +388,7 @@ class vmap_2_map : public vmap_owning_sequence<D>
   }
 
   //: Returns the index of the dart "arg".
-  vmap_dart_index index (const vmap_2_map_dart & arg) const
+  vmap_dart_index index (vmap_2_map_dart const& arg) const
   {
     //vmap_dart_index tmp=index(*arg._edge) ;
     //return &arg==&arg._edge->_dart[0]?tmp:alpha(tmp) ;
@@ -384,7 +396,7 @@ class vmap_2_map : public vmap_owning_sequence<D>
   }
 
   //: Returns the index of a dart in the initial sequence
-  int position(const vmap_2_map_dart & arg) const
+  int position(vmap_2_map_dart const& arg) const
   {
     return dart_sequence::position(arg) ;
   }
@@ -438,13 +450,13 @@ class vmap_2_map : public vmap_owning_sequence<D>
   typedef vmap_kernel<self_type> contraction_kernel ;
 
   //: Contract all the dart of the kernel "arg_kernel".
-  void contraction(const contraction_kernel &arg_kernel) ;
+  void contraction(contraction_kernel const& arg_kernel) ;
 
   //: Kernel class for contraction.
   typedef vmap_kernel<self_type> removal_kernel ;
 
   //: Remove all the dart of the kernel "arg_kernel".
-  void removal(const removal_kernel &arg_kernel);
+  void removal(removal_kernel const& arg_kernel);
 
   //: Returns sigma("arg"), the next dart turning clockwise around the beginning vertex of the dart.
   vmap_dart_index sigma (vmap_dart_index arg) const
@@ -486,7 +498,7 @@ class vmap_2_map : public vmap_owning_sequence<D>
 
   //: Returns true if all the permutations are valid, false otherwise.
   //  May be usefull for testing permutations set by hand...
-  virtual bool valid()const ;
+  virtual bool valid() const ;
 
   //: Deletes everything.
   virtual void clear() ;
@@ -535,7 +547,7 @@ class vmap_2_map : public vmap_owning_sequence<D>
     return dart_sequence::get_pointer(arg) ;
   }
 
-  const dart_pointer & get_dart_pointer(int arg) const
+  dart_pointer const& get_dart_pointer(int arg) const
   {
     return dart_sequence::get_pointer(arg) ;
   }

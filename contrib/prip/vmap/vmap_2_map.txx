@@ -4,11 +4,10 @@
 
 #include "vmap_2_map.h"
 
-
 template <class D>
-vmap_2_map<D>::vmap_2_map(const self_type &right)
+vmap_2_map<D>::vmap_2_map(self_type const& m)
 {
-    operator=(right) ;
+    operator=(m) ;
 }
 
 template <class D>
@@ -19,33 +18,18 @@ vmap_2_map<D>::~vmap_2_map()
 
 
 template <class D>
-vmap_2_map<D> & vmap_2_map<D>::operator=(const self_type &right)
+vmap_2_map<D> & vmap_2_map<D>::operator=(self_type const& m)
 {
-    if (&right!=this)
+    if (&m!=this)
     {
-        dart_sequence::operator=(right) ;
+        dart_sequence::operator=(m) ;
         for (vmap_dart_index i=0; i<nb_darts(); i++)
         {
-            set_sigma(i,right.sigma(i)) ;
-            set_alpha(i,right.alpha(i)) ;
+            set_sigma(i,m.sigma(i)) ;
+            set_alpha(i,m.alpha(i)) ;
         }
     }
     return *this ;
-}
-
-template <class D>
-template <class M>
-void vmap_2_map<D>::set_structure(const M &right)
-{
-    if ((const self_type *)&right!=this)
-    {
-        initialise_darts(right.nb_darts()) ;
-        for (vmap_dart_index i=0; i<nb_darts(); i++)
-        {
-            set_sigma(i,right.sigma(i)) ;
-            set_alpha(i,right.alpha(i)) ;
-        }
-    }
 }
 
 template <class D>
@@ -225,7 +209,7 @@ void vmap_2_map<D>::suppress_from_sequence(dart_type * d)
 }
 
 template <class D>
-void vmap_2_map<D>::contraction(const contraction_kernel &arg_kernel)
+void vmap_2_map<D>::contraction(contraction_kernel const& arg_kernel)
 {
   int ld=get_dart_pointer.size(), id ;
 
@@ -268,7 +252,7 @@ void vmap_2_map<D>::contraction(const contraction_kernel &arg_kernel)
 }
 
 template <class D>
-void vmap_2_map<D>::removal(const removal_kernel &arg_kernel)
+void vmap_2_map<D>::removal(removal_kernel const& arg_kernel)
 {
   int ld=get_dart_pointer.size(), id ;
 
