@@ -670,6 +670,6 @@ vil_image vil_image_as_rgb_uint16(vil_image const &image) {
 }
 
 VCL_DEFINE_SPECIALIZATION
-vil_image vil_image_as<vil_rgb<vxl_uint_16> >(vil_image const &image, vil_rgb<vxl_uint_16>* ) {
+vil_image vil_image_as(vil_image const &image, vil_rgb<vxl_uint_16>* ) {
   return vil_image(new vil_image_as_impl<vil_rgb<vxl_uint_16> >(image));
 }
