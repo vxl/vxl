@@ -53,18 +53,6 @@ static vidl_clip_sptr load_from_directory(char const* fname)
   return vidl_io::load_images(filenames, 'r');
 }
 
-#if 0
-// Constructor does nothing.
-vidl_io::vidl_io()
-{
-}
-
-// Destructor does nothing.
-vidl_io::~vidl_io()
-{
-}
-#endif
-
 
 //-----------------------------------------------------------------------------
 
@@ -139,7 +127,7 @@ vidl_clip_sptr  vidl_io::load_clip(
         int end,
         int increment,
         char mode
-        )
+       )
 {
   // make sure that fname is sane
   if (!fname ||
@@ -158,28 +146,28 @@ vidl_clip_sptr  vidl_io::load_clip(
   // The file is not a directory,
   // Let us try all the known video formats,
   // hoping to find the good one
-  for (vidl_codec_sptr* i = vidl_codec::all_codecs(); *i; ++i) 
+  for (vidl_codec_sptr* i = vidl_codec::all_codecs(); *i; ++i)
   {
     if ((*i)->probe(fname))
-      {
-        vidl_codec_sptr codec = (*i)->load(fname, mode);
-        if (!codec)
-          return 0;
+    {
+      vidl_codec_sptr codec = (*i)->load(fname, mode);
+      if (!codec)
+        return 0;
 
 #ifdef HAS_MPEG2
-        //this calls the dialog box necessary for initialization
-        //of the mpeg codec.
-        vidl_mpegcodec * vmp = (*i)->castto_vidl_mpegcodec();
-        if (vmp) {
-          assert (load_mpegcodec_callback);  
-          load_mpegcodec_callback(vmp);
-        }
+      //this calls the dialog box necessary for initialization
+      //of the mpeg codec.
+      vidl_mpegcodec * vmp = (*i)->castto_vidl_mpegcodec();
+      if (vmp) {
+        assert (load_mpegcodec_callback);
+        load_mpegcodec_callback(vmp);
+      }
 #endif
 
-        vidl_clip_sptr clip = new vidl_clip(codec, start, end, increment);
-        vcl_cout << "vidl_io::load_move. just got a new clip.\n";
-        return clip;
-      }
+      vidl_clip_sptr clip = new vidl_clip(codec, start, end, increment);
+      vcl_cout << "vidl_io::load_move. just got a new clip.\n";
+      return clip;
+    }
   }
 
   // We did not find a codec corresponding
@@ -196,7 +184,7 @@ vidl_clip_sptr vidl_io::load_clip(
         int end,
         int increment,
         char mode
-        )
+       )
 {
   // Check if the input is correct
   if (fnames.empty())
@@ -218,7 +206,7 @@ vidl_clip_sptr  vidl_io::load_clip(
         int end,
         int increment,
         char mode
-        )
+       )
 {
   // Check if the input is correct
   if (fnames.empty())
@@ -241,7 +229,7 @@ vidl_clip_sptr  vidl_io::load_images(
         int end,
         int increment,
         char mode
-        )
+       )
 {
   // This should be a video represented by a set of images
   vidl_image_list_codec_sptr ImCodec = new vidl_image_list_codec();
@@ -262,7 +250,7 @@ vidl_clip_sptr  vidl_io::load_images(
         int end,
         int increment,
         char mode
-        )
+       )
 {
   // This should be a video represented by a set of images
   vidl_image_list_codec_sptr ImCodec = new vidl_image_list_codec();
@@ -281,23 +269,19 @@ bool vidl_io::save(vidl_movie_sptr movie, const char* fname, const char* type)
   // find the one of the type asked if it does exist.
   vidl_codec_sptr* i = vidl_codec::all_codecs();
   while ((*i) && (vcl_strcmp((*i)->type(), type)))
-    {
-      // const char* debug = (*i)->type();
-      // vcl_cout << "debug : " << debug << " type : " << type << vcl_endl;
-      ++i;
-    }
+  {
+    // const char* debug = (*i)->type();
+    // vcl_cout << "debug : " << debug << " type : " << type << vcl_endl;
+    ++i;
+  }
 
   // Check if the type asked really exists in the context
   // If it does not, Try the vcl_list of images mode.
   if (!(*i))
-    return save_images(movie, fname, type);//return false;
-
+    return save_images(movie, fname, type);
 
   // Try to save it
-  if ((*i)->save(movie.ptr(), fname))
-    return true;
-  else
-    return false;
+  return (*i)->save(movie.ptr(), fname);
 }
 
 // This function should be removed and integrated in save()
@@ -314,7 +298,7 @@ vcl_list<vcl_string> vidl_io::supported_types()
 {
   // Create the vcl_list with type() for all the codecs
   vcl_list<vcl_string> ret;
-  for (vidl_codec_sptr* i = vidl_codec::all_codecs(); *i; ++i) 
+  for (vidl_codec_sptr* i = vidl_codec::all_codecs(); *i; ++i)
     ret.push_back((*i)->type());
 
   // Return the vcl_list of type supported codecs
@@ -339,7 +323,8 @@ static vidl_clip_sptr load_from_file_list(char const* fname)
 
   vul_sequence_filename_map map(fname);
 
-  for (int i = 0;i < map.get_nviews(); ++i) {
+  for (int i = 0;i < map.get_nviews(); ++i)
+  {
     vcl_string fullpath = map.image_name(i);
     // check to see if file is a directory.
     if (vul_file::is_directory(fullpath))
