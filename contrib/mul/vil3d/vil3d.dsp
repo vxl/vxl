@@ -188,6 +188,12 @@ SOURCE=.\file_formats/vil3d_dicom.cxx
 # Begin Source File
 SOURCE=.\file_formats/vil3d_slice_list.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vil3d_copy.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_save.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -265,6 +271,12 @@ SOURCE=.\file_formats/vil3d_slice_list.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil3d_property.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_fwd.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_save.h
 # End Source File
 # End Group
 # End Target
