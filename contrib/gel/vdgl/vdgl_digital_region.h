@@ -32,6 +32,7 @@
 #include <vcl_string.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_float_3x3.h>
+#include <vnl/vnl_float_2.h>
 #include <vsol/vsol_region_2d.h>
 
 class vdgl_digital_region : public vsol_region_2d
@@ -117,9 +118,8 @@ class vdgl_digital_region : public vsol_region_2d
   //: Return true if this region is convex
   virtual bool is_convex() const { return false; } // virtual of vsol_region_2d
 
-#if 0
-  void PrincipalOrientation(vcl_vector<float>& major_axis);
-#endif
+  void PrincipalOrientation(vnl_float_2& major_axis);
+
   //Get Fitted Plane Coefficients
   double Ix() const;  //!< First derivative of intensity wrt x
   double Iy() const;  //!< First derivative of intensity wrt y

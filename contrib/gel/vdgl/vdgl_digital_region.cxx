@@ -308,11 +308,10 @@ float vdgl_digital_region::AspectRatio() const
   return (float)vcl_sqrt(svd.W(0)/svd.W(1));
 }
 
-#if 0 // function commented out
 //------------------------------------------------------------
 //: Compute the principal orientation of the region.
 //   major_axis is a 2-d vector representing the orientation.
-void vdgl_digital_region::PrincipalOrientation(vcl_vector<float>& major_axis)
+void vdgl_digital_region::PrincipalOrientation(vnl_float_2& major_axis)
 {
   // make sure the scatter matrix is valid
   if (!scatter_matrix_valid_)
@@ -320,7 +319,7 @@ void vdgl_digital_region::PrincipalOrientation(vcl_vector<float>& major_axis)
   if (this->Npix() < 4)
   {
     vcl_cout << "In vdgl_digital_region::PrincipalOrientation(..) Npts<4\n";
-    major_axis.x()=1.0; major_axis.y()=0.0;
+    major_axis[0]=1.0; major_axis[1]=0.0;
     return;
   }
   // construct the lower right 2x2 matrix of S, s.
@@ -329,20 +328,19 @@ void vdgl_digital_region::PrincipalOrientation(vcl_vector<float>& major_axis)
     for (int c = 1; c<=2; c++)
       s(r-1,c-1) = Si_(r,c);
   //Compute SVD of s to get aspect ratio
-  SVD svd(s);
+  vnl_svd<double> svd(s);
   if (svd.rank()!=2)
   {
     vcl_cout << "In vdgl_digital_region::PrincipalOrientation(..) Insufficient rank\n";
-    major_axis.x()=1.0; major_axis.y()=0.0;
+    major_axis[0]=1.0; major_axis[1]=0.0;
     return;
   }
   vnl_matrix<double> v = svd.V();
   //2 sigma gives a good estimate of axis length (sigma = principal eigenvalue)
   double radius = 2*vcl_sqrt(vcl_fabs(svd.W(0)));
-  major_axis.x()=float(v(0,0)*radius);
-  major_axis.y()=float(v(1,0)*radius);
+  major_axis[0]=float(v(0,0)*radius);
+  major_axis[1]=float(v(1,0)*radius);
 }
-#endif // 0
 
 double vdgl_digital_region::Ix() const
 {
