@@ -34,6 +34,7 @@ class rgrl_feature_point
   error_projector() const;
 
   //: Result is a rgrl_feature_point.
+  virtual
   rgrl_feature_sptr
   transform( rgrl_transformation const& xform ) const;
 
