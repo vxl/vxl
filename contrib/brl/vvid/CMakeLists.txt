@@ -40,7 +40,7 @@ IF(HAS_VGUI)
   ADD_LIBRARY(vvid ${vvid_sources})
  ENDIF(HAS_CMU1394CAMERA)
 
- LINK_LIBRARIES(vvid vpro strk sdet btol vtol vsol brip bgui vgui vidl_vil1 vul vil1)
+ TARGET_LINK_LIBRARIES(vvid vpro strk sdet btol vtol vsol brip bgui vgui vidl_vil1 vul vil1)
 
  # the main executables
  SUBDIRS(bin)
