@@ -6,7 +6,7 @@ INCLUDE(${BRL_INCLUDE_DIR}/bmods/find_xerces.cmake)
 SUBDIRS(bcal)
 
 # 3-d reconstruction 
-#SUBDIRS(brct)
+SUBDIRS(brct)
 
 # 3-d tomography
 SUBDIRS(btom)
