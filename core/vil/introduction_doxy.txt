@@ -1,0 +1,26 @@
+// The following text is included in the main documentation page by doxygen
+/*! \mainpage vil2 : Proposed modifications of vil
+* Provides a set of image data classes, derived from vil2_image_data, which act like a 
+* restricted version of vil_image. Calling get_view will fill a vil_image_view<> and give it
+* to you.
+*
+* Provides a set of image view classes, derived from vil2_image_view_base, which are 
+* `views' on actual image data with known type in memory.
+*
+* The image views use pointer arithmetic to get at the pixel values, so store pointers
+* to the start , and integers indicating how to get to neighbours in
+* the x, y and plane directions.
+*
+* You can either have vil2_image_view<vil_rgb<vil_byte> > with nplanes() == 1
+* or vil2_image_view<vil_byte> with nplanes() == 3, both pointing correctly
+* at the same data.
+*
+* The advantages of this approach are
+* - It is actually faster than pointer indirection on most architectures
+* - It allows one to access non-contiguous data as if it is a single plane
+* - One can use it to wrap up other image classes transparently.
+* - It is simple to extend to 3D images, and avoids huge arrays of pointers
+*
+* \subsection CAVEAT User
+* vil2 is a proposal. It may replace vil in part. 
+*/
