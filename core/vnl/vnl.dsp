@@ -686,6 +686,9 @@ SOURCE=.\vnl_erf.cxx
 # Begin Source File
 SOURCE=.\vnl_gamma.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vnl_hungarian_algorithm.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -1075,6 +1078,9 @@ SOURCE=.\vnl_float_1x2.h
 # End Source File
 # Begin Source File
 SOURCE=.\vnl_float_2x1.h
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_hungarian_algorithm.h
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
