@@ -31,7 +31,7 @@ inline bool vimt_is_peak(const T* im, int radius, vcl_ptrdiff_t i_step, vcl_ptrd
   for (int i=-radius; i<radius+1; i++)
     for (int j=-radius; j<radius+1; j++)
       if (i!=0 || j!=0)
-        if (v<=im[i_step*i+j_step*j]) return false;      // One of the 
+        if (v<=im[i_step*i+j_step*j]) return false;      // One of the
   return true;
 }
 
@@ -73,7 +73,7 @@ inline void vimt_find_image_peaks_3x3(vcl_vector<vgl_point_2d<unsigned> >& peaks
     const T* pixel = row;
     for (unsigned i=1;i<ni-1;++i,pixel+=istep)
       if (vimt_is_peak_3x3(pixel,istep,jstep))
-      { 
+      {
         peaks.push_back(vgl_point_2d<unsigned>(i,j));
         peak_value.push_back(*pixel);
       }
@@ -81,7 +81,7 @@ inline void vimt_find_image_peaks_3x3(vcl_vector<vgl_point_2d<unsigned> >& peaks
 }
 
 //: Return image co-ordinates of all points in image strictly above their neighbours
-//  in a 2*radius+1 x 2*radius+1 neighbourhood of pixels (e.g. r=2 equivalent to 5x5)
+//  In a 2*radius+1 x 2*radius+1 neighbourhood of pixels (e.g. r=2 equivalent to 5x5; default: r=1)
 // \param peak_value: Value at peak
 // \param clear_list: If true (the default) then empty list before adding new examples
 template <class T>
@@ -100,7 +100,7 @@ inline void vimt_find_image_peaks(vcl_vector<vgl_point_2d<unsigned> >& peaks,
     const T* pixel = row;
     for (unsigned i=radius;i<ni-radius;++i,pixel+=istep)
       if (vimt_is_peak(pixel,radius,istep,jstep))
-      { 
+      {
         peaks.push_back(vgl_point_2d<unsigned>(i,j));
         peak_value.push_back(*pixel);
       }
@@ -108,7 +108,7 @@ inline void vimt_find_image_peaks(vcl_vector<vgl_point_2d<unsigned> >& peaks,
 }
 
 //: Return image co-ordinates of all points in image strictly above their neighbours
-//  in a 2*radius+1 x 2*radius+1 neighbourhood of pixels (e.g. r=2 equivalent to 5x5)
+//  In a 2*radius+1 x 2*radius+1 neighbourhood of pixels (e.g. r=2 equivalent to 5x5; default: r=1)
 //  Additionally, only peaks of the value higher than threshold (thresh) are returned.
 // \param peak_value: Value at peak
 // \param clear_list: If true (the default) then empty list before adding new examples
@@ -132,10 +132,9 @@ inline void vimt_find_image_peaks(vcl_vector<vgl_point_2d<unsigned> >& peaks,
       if (*pixel>thresh)
       {
         if (vimt_is_peak(pixel,radius,istep,jstep))
-        { 
+        {
           peaks.push_back(vgl_point_2d<unsigned>(i,j));
           peak_value.push_back(*pixel);
-
         }
       }
     }
