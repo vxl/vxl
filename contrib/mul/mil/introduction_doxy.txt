@@ -33,4 +33,13 @@
 *
 * \subsection Sampling Sampling
 * Profiles can be sampled using mil_sample_profile_2d
+*
+* \subsection Filters Filters
+* Various image filters have been implemented for the mil_image_2d_of<T> classes,
+* including
+* - mil_algo_exp_filter_2d<srcT,destT>  (applies exponential filter)
+* - mil_algo_line_filter<T> (Looks for line like structures)
+*
+* Note that in general one should use classes in vipl (the image processing library)
+* for image filtering.
 */
