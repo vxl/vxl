@@ -215,6 +215,16 @@ SOURCE=.\Templates/vgl_homg_line_3d_2_points+float-.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\Templates/vgl_line_3d_2_points+double-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vgl_line_3d_2_points+float-.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\Templates/vgl_homg_line_3d_2_points+int-.cxx
 
 # End Source File
@@ -485,21 +495,6 @@ SOURCE=.\Templates/vcl_list+vgl_point_2d+double--.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vgl_homg_1d+double-.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates/vgl_homg_1d+longdouble-.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates/vgl_homg_1d+float-.cxx
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\vgl_ellipse_scan_iterator.cxx
 
 # End Source File
@@ -584,6 +579,16 @@ SOURCE=.\vgl_homg_line_3d_2_points.h
 # Begin Source File
 
 SOURCE=.\vgl_homg_line_3d_2_points.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_line_3d_2_points.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_line_3d_2_points.txx
 
 # End Source File
 # Begin Source File
@@ -759,16 +764,6 @@ SOURCE=.\vgl_window_scan_iterator.h
 # Begin Source File
 
 SOURCE=.\vgl_fwd.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgl_homg_1d.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vgl_homg_1d.txx
 
 # End Source File
 # End Group
