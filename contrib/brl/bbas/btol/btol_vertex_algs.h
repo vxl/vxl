@@ -1,14 +1,12 @@
 #ifndef btol_vertex_algs_h_
 #define btol_vertex_algs_h_
-
 //-----------------------------------------------------------------------------
 //:
 // \file
 // \author J.L. Mundy
 // \brief topology algorithms involving vertices or vertex-centric routines
-// The implementation defines static methods for all routines
 // \verbatim
-// Initial version November 25, 2002
+//  Initial version November 25, 2002
 // \endverbatim
 //
 //-----------------------------------------------------------------------------

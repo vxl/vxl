@@ -3,8 +3,7 @@
 //-----------------------------------------------------------------------------
 //:
 // \file
-// \brief tomg_menus
-//   the setup for tomg_menus for bmvv
+// \brief the setup for tomg_menus for bmvv
 // \author
 //   J.L. Mundy
 //
@@ -25,6 +24,6 @@ BMVV_DLL_DATA  static void quit_callback();
   BMVV_DLL_DATA static void sinogram_callback();
   BMVV_DLL_DATA static vgui_menu get_menu();
  private:
-  bmvv_tomg_menus(){};
+  bmvv_tomg_menus() {}
 };
 #endif // bmvv_tomg_menus_h_

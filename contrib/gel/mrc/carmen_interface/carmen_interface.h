@@ -1,10 +1,8 @@
 #ifndef carmen_interface_h_
 #define carmen_interface_h_
-
 //:
 // \file
-// \brief test interface to Carmen
-// An interface to Carmen
+// \brief an interface to Carmen
 //
 // \author
 //             J. Mundy April 3, 2001

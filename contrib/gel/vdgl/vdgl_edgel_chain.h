@@ -6,13 +6,12 @@
 #endif
 //:
 // \file
-// \brief Represents an edgel list
-//  A 2d set of edgels
+// \brief Represents an edgel list which is a 2d set of edgels
 // \author Geoff Cross
 //
 // \verbatim
-// Modifications:
-//  10-Apr-2002 Peter Vanroose - Added & implemented split(), extract_subchain()
+//  Modifications:
+//   10-Apr-2002 Peter Vanroose - Added & implemented split(), extract_subchain()
 // \endverbatim
 
 #include <vcl_iostream.h>

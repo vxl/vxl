@@ -1,13 +1,10 @@
-//----*-c++-*----tells emacs to use C++ mode----------
 // This is brl/vvid/vvid_harris_corner_process.h
 #ifndef vvid_harris_corner_process_h_
 #define vvid_harris_corner_process_h_
 //----------------------------------------------------------------------------
 //:
 // \file
-// \brief live vvid_harris_corner_process
-//   Computes Harris corners on each video frame
-//
+// \brief Computes Harris corners on each video frame
 // \author
 //   J.L. Mundy
 //

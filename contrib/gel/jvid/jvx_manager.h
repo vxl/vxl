@@ -4,8 +4,7 @@
 //--------------------------------------------------------------------------------
 //:
 // \file
-// \brief Video player
-//   the manager for playing video sequences
+// \brief Video player - the manager for playing video sequences
 // \author
 //   J.L. Mundy
 //

@@ -1,11 +1,10 @@
-//this-sets-emacs-to-*-c++-*-mode
+// This is brl/vvid/vvid_live_stereo_manager.h
 #ifndef vvid_live_stereo_manager_h_
 #define vvid_live_stereo_manager_h_
 //--------------------------------------------------------------------------------
 //:
 // \file
-// \brief Video player
-//   the live_video_manager for playing video sequences
+// \brief the live_video_manager for playing video sequences
 // \author
 //   J.L. Mundy
 //

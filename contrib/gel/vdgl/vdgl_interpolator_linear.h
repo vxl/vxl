@@ -7,7 +7,6 @@
 //:
 // \file
 // \brief Represents a linear 2D interpolator for a vdgl_edgel_chain
-//  A 2d linear edgel chain interpolator
 // \author Geoff Cross
 
 #include <vdgl/vdgl_interpolator.h>

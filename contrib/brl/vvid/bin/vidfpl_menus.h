@@ -3,9 +3,7 @@
 //--------------------------------------------------------------------------------
 //:
 // \file
-// \brief vidfpl_menus
-//   the setup for vidfpl_menus for the video file player
-//
+// \brief the setup for vidfpl_menus for the video file player
 // \author
 //   J.L. Mundy
 //

@@ -1,13 +1,10 @@
-//this-sets-emacs-to-*-c++-*-mode
+// This is brl/vvid/vvid_capture_process.h
 #ifndef vvid_capture_process_h_
 #define vvid_capture_process_h_
 //--------------------------------------------------------------------------------
 //:
 // \file
-// \brief  vvid_capture_process
-//   Captures a vidl movie from a live video feed
-//
-// \endbrief
+// \brief  Captures a vidl movie from a live video feed
 // \author
 //   J.L. Mundy
 //
@@ -22,19 +19,18 @@
 
 class vvid_capture_process : public vvid_video_process
 {
-public:
+ public:
   vvid_capture_process(vcl_string & video_file);
   ~vvid_capture_process();
   virtual output_type get_output_type(){return NOTYPE;}
   //: compute edges on the input image
   virtual bool execute();
   virtual bool finish();
-private:
+ private:
   //members
   vvid_capture_process();
   vcl_string video_file_;
   vcl_list<vil_image> frames_;
 };
-
 
 #endif // vvid_capture_process_h_

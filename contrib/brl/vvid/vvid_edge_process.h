@@ -4,8 +4,7 @@
 //--------------------------------------------------------------------------------
 //:
 // \file
-// \brief live vvid_edge_process
-//   Computes edges on each video frame
+// \brief Computes edges on each video frame
 //
 // \author
 //   J.L. Mundy

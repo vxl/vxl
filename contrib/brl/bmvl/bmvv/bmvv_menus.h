@@ -3,8 +3,7 @@
 //-----------------------------------------------------------------------------
 //:
 // \file
-// \brief menus
-//   the setup for menus for bmvv
+// \brief the setup for menus for bmvv
 // \author
 //   J.L. Mundy
 //
@@ -31,7 +30,7 @@ BMVV_DLL_DATA  static void quit_callback();
   BMVV_DLL_DATA static void select_curve_corres_callback();
   BMVV_DLL_DATA static vgui_menu get_menu();
  private:
-  bmvv_menus(){};
+  bmvv_menus() {}
 };
 
 #endif // bmvv_menus_h_

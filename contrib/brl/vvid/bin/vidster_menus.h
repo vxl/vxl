@@ -3,8 +3,7 @@
 //--------------------------------------------------------------------------------
 //:
 // \file
-// \brief menus
-//   the setup for menus for vidster
+// \brief the setup for menus for vidster
 // \author
 //   J.L. Mundy
 //

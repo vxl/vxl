@@ -3,8 +3,7 @@
 //----------------------------------------------------------------------------
 //:
 // \file
-// \brief menus
-//   the setup for menus for segv
+// \brief the setup for menus for segv
 // \author
 //   J.L. Mundy
 //
@@ -34,6 +33,6 @@ class segv_menus
   SEGV_DLL_DATA static void test_digital_lines_callback();
   SEGV_DLL_DATA static vgui_menu get_menu();
  private:
-  segv_menus(){};
+  segv_menus() {}
 };
 #endif // segv_menus_h_
