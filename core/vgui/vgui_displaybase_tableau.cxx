@@ -134,9 +134,7 @@ void vgui_displaybase_tableau::draw_soviews_render()
     {
       vgui_style* style = *s_iter;
 
-      glColor3f(style->rgba[0], style->rgba[1], style->rgba[2]);
-      glPointSize(style->point_size);
-      glLineWidth(style->line_width);
+      style->apply_all();
 
       vcl_vector<vgui_soview*> soviews;
       vgui_style_factory::get_soviews(*s_iter, soviews);
@@ -169,9 +167,9 @@ void vgui_displaybase_tableau::draw_soviews_render()
       vgui_soview* so = vgui_soview::id_to_object(*id_iter);
 
       vgui_style* style = so->get_style();
-      glPointSize(style->point_size);
-      glLineWidth(style->line_width);
-      glColor3f(1,0,0);
+      style->apply_point_size();
+      style->apply_line_width();
+      glColor3f(1.0f, 0.0f, 0.0f);
 
       so->draw();
     }
@@ -183,12 +181,10 @@ void vgui_displaybase_tableau::draw_soviews_render()
     {
       vgui_soview *so = *so_iter;
       vgui_style* style = so->get_style();
-      glColor3f(style->rgba[0], style->rgba[1], style->rgba[2]);
-      glPointSize(style->point_size);
-      glLineWidth(style->line_width);
+      style->apply_all();
 
       if (is_selected(so->get_id()))
-        glColor3f(1, 0, 0);
+        glColor3f(1.0f, 0.0f, 0.0f);
 
       so->draw();
     }//  for all soviews
@@ -200,6 +196,9 @@ void vgui_displaybase_tableau::draw_soviews_select()
 {
   // push the name of this displaylist onto the name stack
   glPushName(id);
+
+  glPushName(0); // will be replaced by the id of each object
+
   for (vcl_vector<vgui_soview*>::iterator so_iter=objects.begin();
        so_iter != objects.end(); ++so_iter)
   {
@@ -207,12 +206,13 @@ void vgui_displaybase_tableau::draw_soviews_select()
     vgui_soview* so = *so_iter;
     if ( so->get_selectable())
       {
-        vgui_soview *so = *so_iter;
-        glPushName(so->get_id());
-        so->draw();
-        glPopName();
+	so->load_name();
+        so->draw_select();
       }
   }//  for all soviews
+
+  // remove name of last object
+  glPopName();
 
   // remove the name of the displaylist from the name stack
   glPopName();

@@ -194,9 +194,9 @@ ENDIF (QV_FOUND)
 
 IF (MFC_FOUND)
   ADD_DEFINITIONS(-DHAS_MFC)
-  SET(vgui_sources ${vgui_sources}
-    internals/vgui_accelerate_mfc.cxx internals/vgui_accelerate_mfc.h
-  )
+  #SET(vgui_sources ${vgui_sources}
+  #  internals/vgui_accelerate_mfc.cxx internals/vgui_accelerate_mfc.h
+  #)
 ENDIF (MFC_FOUND)
 
 IF (X11_FOUND)

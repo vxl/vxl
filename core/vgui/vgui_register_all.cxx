@@ -49,7 +49,7 @@ extern int vgui_Xm_tag_function();
 extern int vgui_qt_tag_function();
 extern int vgui_SDL_tag_function();
 extern int vgui_accelerate_x11_tag_function();
-extern int vgui_accelerate_mfc_tag_function();
+//extern int vgui_accelerate_mfc_tag_function();
 
 //: Registers all the available toolkit implementations.
 // This function is called from vgui.cxx.
@@ -66,7 +66,7 @@ int vgui_register_all_implementations()
 #endif
 #ifdef VGUI_USE_MFC
   vgui_mfc_tag_function();
-  vgui_accelerate_mfc_tag_function();
+  //vgui_accelerate_mfc_tag_function();
 #endif
 #ifdef VGUI_USE_FLTK
   vgui_fltk_tag_function();

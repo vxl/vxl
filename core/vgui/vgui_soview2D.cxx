@@ -32,9 +32,31 @@ vcl_ostream& vgui_soview2D_point::print(vcl_ostream& s) const
 
 void vgui_soview2D_point::draw() const
 {
-  glPointSize(style->point_size);
+  style->apply_point_size();
   glBegin(GL_POINTS);
-  glVertex2f(x,y);
+    glVertex2f(x,y);
+  glEnd();
+}
+
+void vgui_soview2D_point::draw_select() const
+{
+  // It's much faster to draw a polygon than a point. (At least, it is
+  // on Win2000 OpenGL.) For selection, we just need to draw some
+  // little area in the vicinity of the point. We make the area really
+  // small to account for large zoom factors. In principle, we should
+  // take the zoom factor into account when determining the radius,
+  // but that's too much trouble. The radius should be large enough
+  // that it doesn't get swallowed up when added to x and to y.
+
+  // This will allow a 10000x zoom before the "circle" gets bigger
+  // than one pixel. Should be good enough!
+  //
+  float const rad = 0.0001f;
+  glBegin(GL_POLYGON);
+    glVertex2f( x - rad, y - rad );
+    glVertex2f( x + rad, y - rad );
+    glVertex2f( x + rad, y + rad );
+    glVertex2f( x - rad, y + rad );
   glEnd();
 }
 

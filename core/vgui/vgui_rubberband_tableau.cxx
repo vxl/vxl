@@ -150,7 +150,7 @@ void vgui_rubberband_tableau::init(vgui_rubberband_client* the_client)
 #ifdef HAS_MFC
   // Until somebody implements overlays for mfc, this
   // is the default for windows.
-  use_overlays = false;
+  use_overlays = true;
 #else
   // This is the default on non-windows platforms.
   // Please keep it that way or document clearly why

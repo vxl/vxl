@@ -40,7 +40,19 @@ class vgui_soview /*: public vgui_observable*/
   //: Render this soview on the display.
   virtual void draw() const = 0;
 
-  //: Calls OpenGL function glLoadName.
+  //: Render this soview for selection purposes.
+  //
+  // By default, this will call draw(). However, some objects take
+  // time to draw, especially in GL_SELECT mode. The routine allows
+  // such objects to render a simplified version for the selection
+  // process. Note that during selection, the object is not rendered
+  // on screen. The "rendering" is used by OpenGL internals to
+  // determine if the object is in the selection region (e.g. area
+  // around mouse pointer).
+  //
+  virtual void draw_select() const;
+
+  //: Calls OpenGL function glLoadName with this soview's id.
   virtual void load_name() const;
 
   //: Prints the ID of this soview.

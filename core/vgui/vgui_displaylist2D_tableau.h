@@ -35,7 +35,7 @@ class vgui_displaylist2D_tableau : public vgui_displaybase_tableau
 
  private:
   void get_hits(float x, float y, vcl_vector<unsigned>& my_hits);
-  unsigned find_closest(float x, float y, vcl_vector<unsigned>& hits);
+  unsigned find_closest(float x, float y, vcl_vector<unsigned> const& hits);
 };
 
 //: Create a smart-pointer to a vgui_displaylist2D_tableau.

@@ -173,6 +173,7 @@ void vgui_adaptor::config_dialog()
 //  This method performs various checks which can be performed generically for
 //  all tableaux. It is not the responsibility of this method to take care of
 //  overlay handling - the derived class must sort that out.
+//  The derived class must also ensure that the correct draw buffer is set.
 bool vgui_adaptor::dispatch_to_tableau(vgui_event const &e)
 {
   vgui_macro_report_errors;
@@ -185,20 +186,7 @@ bool vgui_adaptor::dispatch_to_tableau(vgui_event const &e)
     glViewport(0, 0, get_width(), get_height());
 
     // set projection matrices.
-    //vgui_matrix_state::clear_gl_matrices();    // to zero
     vgui_matrix_state::identity_gl_matrices(); // to identity
-
-    vgui_macro_report_errors;
-    if (e.type == vgui_DRAW && !vgui_accelerate::vgui_mfc_acceleration)
-    {
-      GLint buffer;
-      glGetIntegerv(GL_DRAW_BUFFER,&buffer);
-      if (buffer != GL_BACK)
-      {
-        vgui_macro_warning << "setting draw buffer to back\n";
-        glDrawBuffer(GL_BACK);
-      }
-    }
   }
 
   vgui_macro_report_errors;

@@ -1,3 +1,5 @@
+do not use.
+
 // This is core/vgui/internals/vgui_accelerate_mfc.h
 #ifndef vgui_accelerate_mfc_h_
 #define vgui_accelerate_mfc_h_

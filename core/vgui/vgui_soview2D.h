@@ -62,6 +62,9 @@ class vgui_soview2D_point : public vgui_soview2D
   //: Render this 2D-point on the display.
   virtual void draw() const;
 
+  // inherit documentation from base class
+  virtual void draw_select() const;
+
   //: Print details about this 2D-point to the given stream.
   virtual vcl_ostream& print(vcl_ostream&) const;
 

@@ -12,6 +12,7 @@
 
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
+#include <vcl_cassert.h>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_glu.h>
@@ -31,12 +32,8 @@ vgui_displaylist2D_tableau::~vgui_displaylist2D_tableau()
 {
 }
 
-bool vgui_displaylist2D_tableau::handle(const vgui_event& e) {
-
-  // Send to motion/drag functions
-  if (vgui_tableau::handle(e))
-    return true;
-
+bool vgui_displaylist2D_tableau::handle(const vgui_event& e)
+{
   // if mouse leaves the context then unhighlight
   // the highlit object
   if (e.type == vgui_LEAVE) {
@@ -47,14 +44,12 @@ bool vgui_displaylist2D_tableau::handle(const vgui_event& e) {
   if (e.type == vgui_OVERLAY_DRAW) {
     unsigned highlighted = this->get_highlighted();
     if (highlighted) {
-      vgui_utils::begin_sw_overlay();
       vgui_soview* so = vgui_soview::id_to_object(highlighted);
       vgui_style* style = so->get_style();
-      glPointSize(style->point_size);
-      glLineWidth(style->line_width);
+      style->apply_point_size();
+      style->apply_line_width();
       glColor3f(0.0,0.0,1.0);
       so->draw();
-      vgui_utils::end_sw_overlay();
     }
   }
   
@@ -62,8 +57,11 @@ bool vgui_displaylist2D_tableau::handle(const vgui_event& e) {
 }
 
 //: Return indices of my elements which are near (x,y)
-void vgui_displaylist2D_tableau::get_hits(float x, float y, vcl_vector<unsigned>& my_hits) {
-  GLuint *ptr = vgui_utils::enter_pick_mode(x,y,100);
+void vgui_displaylist2D_tableau::get_hits(float x, float y,
+					  vcl_vector<unsigned>& my_hits)
+{
+  // select objects within 20 pixels of the mouse
+  GLuint *ptr = vgui_utils::enter_pick_mode(x,y,20);
 
   this->gl_mode = GL_SELECT;
   this->handle(vgui_event(vgui_DRAW));
@@ -77,34 +75,46 @@ void vgui_displaylist2D_tableau::get_hits(float x, float y, vcl_vector<unsigned>
 
   // for each hit get the name of the soview if it is
   // being managed by this vcl_list
+  //
+  // Each hit from a display list has two entries. The first is the id
+  // of the display list, and the second is the id of the soview. See
+  // vgui_displaybase_tableau::draw_soviews_select(). Thus, an object
+  // belongs to this display list iff the first hit number is this
+  // list's id.
 
   for (vcl_vector<vcl_vector<unsigned> >::iterator i=hits.begin();
        i != hits.end(); ++i) {
-    vcl_vector<unsigned> names = *i;
+    vcl_vector<unsigned> const& names = *i;
 
-    for (vcl_vector<unsigned>::iterator n_iter = names.begin();
-         n_iter != names.end(); ++n_iter) {
-      unsigned name = *n_iter;
-
-      for (vcl_vector<vgui_soview*>::iterator so_iter = this->objects.begin();
-           so_iter != this->objects.end(); ++so_iter) {
-        if ((*so_iter)->get_id() == name) {
-          my_hits.push_back(name);
-          break;
-        }
-      }
+    if( ! names.empty() && names[0] == this->get_id() ) {
+      // this assertion is based on the code in
+      // vgui_displaybase_tableau::draw_soviews_select(). If this is
+      // not true, then please review the assumptions about the
+      // selection process before updating the assertion.
+      //
+      assert( names.size() == 2 );
+      my_hits.push_back( names[1] );
     }
   }
 }
 
-unsigned vgui_displaylist2D_tableau::find_closest(float x, float y, vcl_vector<unsigned>& hits) {
+unsigned vgui_displaylist2D_tableau::find_closest(float x, float y,
+						  vcl_vector<unsigned> const& hits)
+{
   unsigned closest = 0;
   float closest_dist = -1; // vnl_numeric_traits<float>::maxval;
 
-  for (vcl_vector<unsigned>::iterator h_iter = hits.begin();
+  for (vcl_vector<unsigned>::const_iterator h_iter = hits.begin();
        h_iter != hits.end(); ++h_iter) {
 
-    vgui_soview2D* so = static_cast<vgui_soview2D*>(vgui_soview::id_to_object(*h_iter));
+    // In principle, VXL shouldn't use dynamic_cast since it depends
+    // on RTTI, and so far (July 2003), we are not allowed to depend
+    // on RTTI in vxl/core code. However, dynamic_cast is *much*
+    // safer than static_cast, so I'll sneak this in. Change it to
+    // static_cast if your compiler breaks.
+    //
+    vgui_soview2D* so = dynamic_cast<vgui_soview2D*>(vgui_soview::id_to_object(*h_iter));
+    assert( so ); // NULL => something is wrong.
 
     float dist = so->distance_squared(x,y);
     //vcl_cerr << " distance to " << (void*)so << " = " << dist << vcl_endl;

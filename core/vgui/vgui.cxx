@@ -33,6 +33,7 @@ vcl_ostream vgui::out(vcl_cout.rdbuf());
 bool vgui_images_are_textures = false;
 bool vgui_emulate_overlays = false;
 bool vgui_glerrors_are_bad = false;
+bool vgui_mfc_use_bitmap = true;
 
 //----------------------------------------------------------------------------
 //: Remove an argument from a command line argument vec*tor :
@@ -159,14 +160,24 @@ void vgui::init(int &argc, char **argv)
       vgui_accelerate::vgui_no_acceleration = true;
       vgui_remove_arg(i, argc, argv);
     }
-    else if (vcl_strcmp(argv[i],"--with-mfc-accel") == 0) {
-      vgui_accelerate::vgui_mfc_acceleration = true;
+//     else if (vcl_strcmp(argv[i],"--with-mfc-accel") == 0) {
+//       vgui_accelerate::vgui_mfc_acceleration = true;
+//       vgui_remove_arg(i, argc, argv);
+//     }
+//     else if (vcl_strcmp(argv[i],"--with-no-mfc-accel") == 0) {
+//       vgui_accelerate::vgui_mfc_acceleration = false;
+//       vgui_remove_arg(i, argc, argv);
+//     }
+    else if (vcl_strcmp(argv[i],"--mfc-use-bitmap") == 0)
+    {
+      vgui_mfc_use_bitmap = true;
       vgui_remove_arg(i, argc, argv);
     }
-    else if (vcl_strcmp(argv[i],"--with-no-mfc-accel") == 0) {
-      vgui_accelerate::vgui_mfc_acceleration = false;
+    else if (vcl_strcmp(argv[i],"--mfc-use-gl") == 0)
+    {
+      vgui_mfc_use_bitmap = false;
       vgui_remove_arg(i, argc, argv);
-    }
+    }    
     else if (vcl_strcmp(argv[i],"--images-are-textures") == 0) {
       vgui_images_are_textures = true;
       vgui_remove_arg(i, argc, argv);

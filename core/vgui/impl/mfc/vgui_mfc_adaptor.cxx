@@ -19,13 +19,13 @@
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_popup_params.h>
-#include <vgui/internals/vgui_overlay_helper.h>
+#include <vgui/vgui_macro.h>
 #include <vgui/internals/vgui_accelerate.h>
 #include <vgui/impl/mfc/vgui_mfc_utils.h>
 #include <vgui/impl/mfc/vgui_mfc_mainfrm.h>
 
-CDC *vgui_mfc_adaptor_global_dc;
 static bool debug = false;
+extern bool vgui_mfc_use_bitmap;
 /////////////////////////////////////////////////////////////////////////////
 // vgui_mfc_adaptor
 
@@ -34,9 +34,12 @@ IMPLEMENT_DYNCREATE(vgui_mfc_adaptor, CView)
 
 
 //: Constructor.
-vgui_mfc_adaptor::vgui_mfc_adaptor( ):ovl_helper(0), win_(0), /*come_out_now(false),*/ redraw_posted(true)
+vgui_mfc_adaptor::vgui_mfc_adaptor( )
+  : win_(0),
+    redraw_posted_(true),
+    overlay_redraw_posted_(true)
 {
-  if (vgui_accelerate::vgui_mfc_acceleration)
+  if (vgui_mfc_use_bitmap)
     // kym - double buffering is not available with
     // acceleration (it crashes windows).
     set_double_buffering(false);
@@ -71,10 +74,6 @@ vgui_mfc_adaptor::~vgui_mfc_adaptor()
   // Delete the DC
   if ( m_pDC )
     delete m_pDC;
-
-  if (ovl_helper)
-    delete ovl_helper;
-  ovl_helper = 0;
 }
 
 BEGIN_MESSAGE_MAP(vgui_mfc_adaptor, CView)
@@ -101,16 +100,24 @@ END_MESSAGE_MAP()
 
 //: MFC implementation of vgui_adaptor function - redraws overlay buffer.
 void vgui_mfc_adaptor::post_overlay_redraw()
-{ 
-  if (!ovl_helper)
-    ovl_helper = new vgui_overlay_helper(this);
-  ovl_helper->post_overlay_redraw();
+{
+  if (!overlay_redraw_posted_)
+  {
+    CWnd* wnd;
+    if (m_pCWnd != 0)
+      wnd = m_pCWnd;
+    else
+      wnd = AfxGetApp()->GetMainWnd();
+    if (wnd)
+      wnd->Invalidate(FALSE);
+  }
+  overlay_redraw_posted_ = true;
 }
 
 //: MFC implementation of vgui_adaptor function - redraws rendering area.
 void vgui_mfc_adaptor::post_redraw()
 {
-  if (!redraw_posted)
+  if (!redraw_posted_)
   {
     //CWnd *wnd = AfxGetApp()->GetMainWnd();
     CWnd* wnd;
@@ -121,7 +128,7 @@ void vgui_mfc_adaptor::post_redraw()
     if (wnd)
       wnd->Invalidate(FALSE);
   }
-  redraw_posted = true;
+  redraw_posted_ = true;
 }
 
 //: MFC implementation of vgui_adaptor function - make this the current GL rendering context.
@@ -133,8 +140,7 @@ void vgui_mfc_adaptor::make_current()
 //: MFC implementation of vgui_adaptor function - swap buffers if using double buffering.
 void vgui_mfc_adaptor::swap_buffers()
 {
-  vgui_mfc_adaptor_global_dc = m_pDC;
-  if (use_double_buffering)
+  if( !vgui_mfc_use_bitmap )
     SwapBuffers(m_pDC->m_hDC);
 }
 
@@ -196,73 +202,29 @@ int vgui_mfc_adaptor::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
   // TODO: Add your specialized creation code here
 
-  if (vgui_accelerate::vgui_mfc_acceleration)
-  {
-    CDC *tmp = new CClientDC(this);
-    m_pDC = new CDC();
-    m_pDC->CreateCompatibleDC(tmp);
-    delete tmp;
-    lpCreateStruct->cx = 1024;
-    lpCreateStruct->cy = 768;
-    BITMAPINFOHEADER bmi = {sizeof(BITMAPINFOHEADER),
-      lpCreateStruct->cx,
-      lpCreateStruct->cy,
-      GetDeviceCaps(m_pDC->GetSafeHdc(),PLANES),
-      GetDeviceCaps(m_pDC->GetSafeHdc(),BITSPIXEL),
-      BI_RGB,/*lpCreateStruct->cx*lpCreateStruct->cy*4*/0,0,0,0,0};
-
-    void *buffer;
-    //: Create offscreen bitmap
-    // You can draw on DIB sections with GDI, and you can directly modify the bits in memory.
-    // This differs from device dependent bitmaps (on which only GDI can draw),
-    // and DIBs (which don't support GDI but which you can modify directly).
-    // DIB sections (especially large DIBs) can be blitted to the screen faster than normal
-    // DIBs and bitmaps.
-
-    HBITMAP hbmp = CreateDIBSection(m_pDC->GetSafeHdc(),(BITMAPINFO *)&bmi,
-                                    DIB_RGB_COLORS,&buffer,NULL,0);
-    m_oldbitmap = (HBITMAP)::SelectObject(m_pDC->GetSafeHdc(),hbmp);
+  if (vgui_mfc_use_bitmap) {
+    HBITMAP obmp = 0;
+    create_bitmap( 1, 1, m_pDC, obmp );
+    DeleteObject( obmp );
+    create_bitmap( 1, 1, m_pDC_aux, obmp );
+    DeleteObject( obmp );
     set_double_buffering(false);
-  }
-  else
+  } else {
     m_pDC = new CClientDC(this);
+  }
 
   if ( NULL == m_pDC ) // failure to get DC
   {
     ::AfxMessageBox("Couldn't get a valid DC.");
     return FALSE;
   }
-  vgui_mfc_adaptor_global_dc = m_pDC;
-  if ( !SetupPixelFormat() )
-  {
-    ::AfxMessageBox("SetupPixelFormat failed.\n");
-    return FALSE;
-  }
 
-  if ( 0 == (m_hRC = ::wglCreateContext( m_pDC->GetSafeHdc() ) ) )
-  {
-    ::AfxMessageBox("wglCreateContext failed.");
-    return FALSE;
-  }
-
-  if ( FALSE == ::wglMakeCurrent( m_pDC->GetSafeHdc(), m_hRC ) )
-  {
-    ::AfxMessageBox("wglMakeCurrent failed.");
-    return FALSE;
-  }
-
-  // specify black as clear color
-  ::glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
-  // specify the back of the buffer as clear depth
-  ::glClearDepth( 1.0f );
-  // enable depth testing
-  ::glEnable( GL_DEPTH_TEST );
-
-  if (0) {
-    m_pDC->SetStretchBltMode(HALFTONE);
-    ::SetBrushOrgEx(m_pDC->GetSafeHdc(), 0, 0, 0);
+  if( vgui_mfc_use_bitmap ) {
+    m_hRC = setup_for_gl( m_pDC,
+                          PFD_DRAW_TO_BITMAP | PFD_SUPPORT_OPENGL );
   } else {
-    m_pDC->SetStretchBltMode(COLORONCOLOR);
+    m_hRC = setup_for_gl( m_pDC,
+                          PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER );
   }
 
   post_redraw();
@@ -270,61 +232,95 @@ int vgui_mfc_adaptor::OnCreate(LPCREATESTRUCT lpCreateStruct)
   return 0;
 }
 
-BOOL vgui_mfc_adaptor::SetupPixelFormat()
+
+HGLRC vgui_mfc_adaptor::setup_for_gl( CDC* pDC, DWORD dwFlags )
 {
-  // default pixel format for a single-buffered,
-  // OpenGL-supporting, hardware-accelerated,
-  // RGBA-mode format. Pass in a pointer to a different
-  // pixel format if you want something else
+  PIXELFORMATDESCRIPTOR pfd;
+  ZeroMemory( &pfd, sizeof( pfd ) );
+  pfd.nSize = sizeof( pfd );
+  pfd.nVersion = 1;
+  pfd.dwFlags = dwFlags;
+  pfd.iPixelType = PFD_TYPE_RGBA;
+  pfd.cColorBits = 24;
+  pfd.cDepthBits = 16;
+  pfd.iLayerType = PFD_MAIN_PLANE;
 
-  PIXELFORMATDESCRIPTOR pfd =
-  {
-    sizeof(PIXELFORMATDESCRIPTOR),// size of this pfd
-      1,                      // version number
-      PFD_DOUBLEBUFFER |
-      PFD_DRAW_TO_WINDOW |    // support window
-      PFD_SUPPORT_OPENGL,     // support OpenGL
-      PFD_TYPE_RGBA,          // RGBA type
-      GetDeviceCaps(m_pDC->GetSafeHdc(),BITSPIXEL)* //: color depth
-      GetDeviceCaps(m_pDC->GetSafeHdc(),PLANES),
-      0, 0, 0, 0, 0, 0,       // color bits ignored
-      0,                      // no alpha buffer
-      0,                      // shift bit ignored
-      0,                      // no accumulation buffer
-      0, 0, 0, 0,             // accum bits ignored
-      32,                     // 32-bit z-buffer
-      0,                      // no stencil buffer
-      0,                      // no auxiliary buffer
-      PFD_MAIN_PLANE,         // main layer
-      0,                      // reserved
-      0, 0, 0                 // layer masks ignored
-  };
-
-  if (vgui_accelerate::vgui_mfc_acceleration)
-    pfd.dwFlags = PFD_DRAW_TO_BITMAP|PFD_SUPPORT_OPENGL;
-
-  PIXELFORMATDESCRIPTOR* pPFDtoUse;
-  // let the user override the default pixel format
-  pPFDtoUse = &pfd; //(0 == pPFD)? &pfd : pPFD;
-
-  int pixelformat = ::ChoosePixelFormat( m_pDC->GetSafeHdc(), pPFDtoUse );
-  // fixme: [awf] could now use DescribePixelFormat to find out what the screen pixel format really is.
+  int pixelformat = ChoosePixelFormat( pDC->GetSafeHdc(), &pfd );
 
   if (0 == pixelformat) {
     ::AfxMessageBox("ChoosePixelFormat failed.");
-    return FALSE;
-  }
-
-  if ( FALSE == ::SetPixelFormat( m_pDC->GetSafeHdc(), pixelformat, pPFDtoUse ) )
-  {
-    ::AfxMessageBox("SetPixelFormat failed.");
     vcl_cerr<<"Error code:"<<GetLastError();
-    ASSERT(0);
-    return FALSE;
+    return 0;
+  }
+  if ( FALSE == SetPixelFormat( pDC->GetSafeHdc(), pixelformat, &pfd ) )
+  {
+    AfxMessageBox("SetPixelFormat failed.");
+    vcl_cerr<<"Error code:"<<GetLastError();
+    return 0;
   }
 
-  return TRUE;
+  HGLRC glrc = wglCreateContext( pDC->GetSafeHdc() );
+  if ( 0 == glrc )
+  {
+    AfxMessageBox("wglCreateContext failed.");
+    return 0;
+  }
+
+  if ( FALSE == wglMakeCurrent( pDC->GetSafeHdc(), glrc ) )
+  {
+    AfxMessageBox("wglMakeCurrent failed.");
+    return 0;
+  }
+
+  // specify black as clear color
+  glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
+  // specify the back of the buffer as clear depth
+  glClearDepth( 1.0f );
+  // enable depth testing
+  glEnable( GL_DEPTH_TEST );
+
+  vgui_macro_report_errors;
+
+  return glrc;
 }
+
+
+void vgui_mfc_adaptor::create_bitmap( int cx, int cy,
+                                      CDC*& out_pDC,
+                                      HBITMAP& out_old_hbmp )
+{
+  out_pDC = 0;
+
+  BITMAPINFOHEADER bih;
+  ZeroMemory( &bih, sizeof(bih) );
+
+  bih.biSize = sizeof(bih);
+  bih.biWidth = cx;
+  bih.biHeight = cy;
+  bih.biPlanes = 1;
+  bih.biBitCount = 24;
+  bih.biCompression = BI_RGB;
+
+  CDC* pDC = new CDC();
+  pDC->CreateCompatibleDC(NULL);
+
+
+  void *buffer;
+  HBITMAP hbmp = CreateDIBSection( pDC->GetSafeHdc(),
+                                   (BITMAPINFO *)&bih,
+                                   DIB_RGB_COLORS,
+                                   &buffer,
+                                   NULL,
+                                   0 );
+  if( !hbmp ) {
+    AfxMessageBox( "Failed to create bitmap" );
+    return;
+  }
+  pDC->SetStretchBltMode(COLORONCOLOR);
+  out_old_hbmp = (HBITMAP)SelectObject( pDC->GetSafeHdc(), hbmp );
+  out_pDC = pDC;
+}
+
 
 //: Called by MFC when the main window has been destroyed.
 void vgui_mfc_adaptor::OnDestroy()
@@ -344,33 +340,62 @@ BOOL vgui_mfc_adaptor::OnEraseBkgnd(CDC* pDC)
 //: Redraws the OpenGL area.
 void vgui_mfc_adaptor::service_redraws()
 {
-  if (redraw_posted)
+  if( redraw_posted_ )
   {
-//    if (use_double_buffering)
-//      glDrawBuffer(GL_BACK);
+    vgui_macro_report_errors;
+    this->make_current();
+    dispatch_to_tableau(vgui_event(vgui_DRAW));
+    vgui_macro_report_errors;
+    redraw_posted_ = false;
+    aux_dc_valid_ = false;
+  }
 
-    if (ovl_helper)
-      ovl_helper->dispatch(vgui_event(vgui_DRAW));
-    else
-      dispatch_to_tableau(vgui_event(vgui_DRAW));
+  if( overlay_redraw_posted_ ) {
+    this->make_current();
 
-    if (!use_double_buffering)
-    {
-      CWnd* wnd;
-      if (m_pCWnd)
-        wnd = m_pCWnd;
-      else
-        wnd = AfxGetApp()->GetMainWnd();
-      CDC *win_dc = wnd->GetDC();
-      RECT r;
-      wnd->GetClientRect(&r);
-      win_dc->BitBlt(0,0,r.right,r.bottom,vgui_mfc_adaptor_global_dc,0,0,SRCCOPY);
-      wnd->ReleaseDC(win_dc);
+    if( vgui_mfc_use_bitmap ) {
+      if( aux_dc_valid_ ) {
+        // copy aux buffer to gl buffer
+        m_pDC->BitBlt( 0, 0, m_width, m_height, m_pDC_aux, 0, 0, SRCCOPY );
+      } else {
+        // copy gl buffer to aux buffer
+        m_pDC_aux->BitBlt( 0, 0, m_width, m_height, m_pDC, 0, 0, SRCCOPY );
+        aux_dc_valid_ = true;
+      }
+    } else {
+      // Determine we if just did a redraw (aux_dc_valid_==false iff
+      // just did a redraw).
+      //
+      if( aux_dc_valid_ ) {
+        // Nope. Do a redraw to delete the previous overlay
+        dispatch_to_tableau( vgui_event(vgui_DRAW) );
+      } else {
+        // Yep. But next time we won't have...
+        aux_dc_valid_ = true;
+      }
     }
 
-    swap_buffers();
-    redraw_posted = false;
+    vgui_macro_report_errors;
+    dispatch_to_tableau(vgui_event(vgui_DRAW_OVERLAY));
+    vgui_macro_report_errors;
+
+    overlay_redraw_posted_ = false;
   }
+
+  if( vgui_mfc_use_bitmap ) {
+    CWnd* wnd;
+    if (m_pCWnd)
+      wnd = m_pCWnd;
+    else
+      wnd = AfxGetApp()->GetMainWnd();
+    CDC *win_dc = wnd->GetDC();
+    RECT r;
+    wnd->GetClientRect(&r);
+    win_dc->BitBlt(0,0,r.right,r.bottom,m_pDC,0,0,SRCCOPY);
+    wnd->ReleaseDC(win_dc);
+  }
+
+  swap_buffers();
 }
 
 //: Sets timer to dispatch WM_TIME event to a mainframe every time milliseconds
@@ -405,10 +430,6 @@ void vgui_mfc_adaptor::draw()
 //: Called by MFC when the application requests part of the window is redrawn.
 void vgui_mfc_adaptor::OnPaint()
 {
-  // if i get a paint that isn't due to my posting a redraw, it must be an expose?
-  redraw_posted = true; // ensure that draw does something
-  // don't call 'post_redraw' as that invalidates the window again...
-
   CView::OnPaint();
 }
 
@@ -419,27 +440,17 @@ void vgui_mfc_adaptor::OnSize(UINT nType, int cx, int cy)
 
   m_width = cx;
   m_height = cy;
-  if (cx && cy)
-  {
-    BITMAPINFOHEADER bmi = {sizeof(BITMAPINFOHEADER),
-      cx,
-      cy,
-      GetDeviceCaps(m_pDC->GetSafeHdc(),PLANES),
-      GetDeviceCaps(m_pDC->GetSafeHdc(),BITSPIXEL),
-      BI_RGB,/*lpCreateStruct->cx*lpCreateStruct->cy*4*/0,0,0,0,0};
 
-    void *buffer;
-    //: Create offscreen bitmap
-    // You can draw on DIB sections with GDI, and you can directly modify the bits in memory.
-    // This differs from device dependent bitmaps (on which only GDI can draw),
-    // and DIBs (which don't support GDI but which you can modify directly).
-    // DIB sections (especially large DIBs) can be blitted to the screen faster than normal
-    // DIBs and bitmaps.
-
-    HBITMAP hbmp = CreateDIBSection(m_pDC->GetSafeHdc(),(BITMAPINFO *)&bmi,
-                                    DIB_RGB_COLORS,&buffer, NULL,0);
-    m_oldbitmap = (HBITMAP)SelectObject(m_pDC->GetSafeHdc(),hbmp);
-    DeleteObject(m_oldbitmap);
+  if( cx != 0 && cy != 0 && vgui_mfc_use_bitmap ) {
+    // create a new GL bitmap and aux bitmap to match the new window
+    // size.
+    HBITMAP obmp = 0;
+    create_bitmap( cx, cy, m_pDC, obmp );
+    DeleteObject( obmp );
+    m_hRC = setup_for_gl( m_pDC,
+                          PFD_DRAW_TO_BITMAP | PFD_SUPPORT_OPENGL );
+    create_bitmap( cx, cy, m_pDC_aux, obmp );
+    DeleteObject( obmp );
   }
   post_redraw();
 }
@@ -591,10 +602,7 @@ void vgui_mfc_adaptor::domouse(vgui_event_type et, UINT nFlags, CPoint point, vg
     delete popup;
   }
 
-  if (ovl_helper)
-    ovl_helper->dispatch(e);
-  else
-    dispatch_to_tableau(e);
+  dispatch_to_tableau(e);
 
   // Grab mouse?
   {

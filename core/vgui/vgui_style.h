@@ -31,6 +31,24 @@ class vgui_style
   //: Destructor.
   ~vgui_style();
 
+  //: Sets the GL colour to this style's value
+  //
+  // Does nothing if the colour is invalid.
+  void apply_color() const;
+
+  //: Sets the GL line width to this style's value
+  //
+  // Does nothing if the width is invalid (e.g. <= 0.0)
+  void apply_line_width() const;
+
+  //: Sets the GL point size to this style's value
+  //
+  // Does nothing if the point size is invalid (e.g. <= 0.0)
+  void apply_point_size() const;
+
+  //: Sets all the GL style parameters (colour, size, width).
+  void apply_all() const;
+
   //: Style colour.
   float rgba[4];
 

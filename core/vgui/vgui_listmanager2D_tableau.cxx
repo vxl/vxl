@@ -251,14 +251,14 @@ bool vgui_listmanager2D_tableau::motion(int x, int y)
   {
     vgui_soview* so = highlight_so;
     vgui_style* style = so->get_style();
-    glPointSize(style->point_size);
-    glLineWidth(style->line_width);
+    style->apply_point_size();
+    style->apply_line_width();
 
     if (highlight_list->is_selected(so->get_id()))
-      glColor3f(1.0, 0.0, 0.0);
+      glColor3f(1.0f, 0.0f, 0.0f);
     else
     {
-      glColor3f(style->rgba[0],style->rgba[1],style->rgba[2]);
+      style->apply_color();
     }
     so->draw();
   }
@@ -269,9 +269,9 @@ bool vgui_listmanager2D_tableau::motion(int x, int y)
     //vcl_cerr << "highlighting : " << closest_id << vcl_endl;
     vgui_soview* so = closest_so;
     vgui_style* style = so->get_style();
-    glPointSize(style->point_size);
-    glLineWidth(style->line_width);
-    glColor3f(0,1,1);
+    style->apply_point_size();
+    style->apply_line_width();
+    glColor3f(0.0f,1.0f,1.0f);
     so->draw();
   }
 

@@ -94,6 +94,15 @@ vcl_string vgui_soview::type_name() const  {
   return "vgui_soview";
 }
 
+
+void vgui_soview::draw_select() const {
+  // default is to draw as normal. Complex objects may override
+  // this behaviour.
+  //
+  this->draw();
+}
+
+
 void vgui_soview::load_name() const {
   glLoadName(id);
 }

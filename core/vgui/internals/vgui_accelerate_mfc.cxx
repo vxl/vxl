@@ -20,7 +20,7 @@
 #include <vgui/vgui_projection_inspector.h>
 #include <vgui/vgui_gl.h>
 
-extern CDC *vgui_mfc_adaptor_global_dc;
+CDC *vgui_mfc_adaptor_global_dc = 0;
 
 static bool debug = false;
 

@@ -29,6 +29,8 @@
 //                             overlay code will work (which requires double 
 //                             buffering). Overlays necessary to enable new
 //                             highlighting mechanism in vgui tableaux.
+//   07-21-2003  A.Perera   - Update the overlay mechanism for Windows, since copying
+//                            the frame buffer to memory is *slow*.
 // \endverbatim
 
 #if _MSC_VER > 1000
@@ -37,9 +39,8 @@
 
 #include <afxwin.h>
 #include <vgui/vgui_adaptor.h>
+#include <vgui/vgui_gl.h>
 #include <vgui/internals/vgui_adaptor_mixin.h>
-
-struct vgui_overlay_helper;
 
 //: MFC implementation of vgui_adaptor.
 //
@@ -90,9 +91,6 @@ class vgui_mfc_adaptor : public CView, public vgui_adaptor, public vgui_adaptor_
   //: Redraws the OpenGL area.
   void service_redraws();
 
-  //: True while a redraw event has been requested but not implemented.
-  bool redraw_posted;
-
   //: Change the default popup menu to the given one (not yet implemented).
   void set_default_popup(vgui_menu);
 
@@ -126,7 +124,27 @@ class vgui_mfc_adaptor : public CView, public vgui_adaptor, public vgui_adaptor_
   //  rendering context when this adaptor is deleted.
   void setup_adaptor(CWnd* this_cwnd, HDC OldDC, HGLRC oldContext);
 
- protected:
+
+private:
+  void create_bitmap( int cx, int cy,
+                      CDC*& out_pDC,
+                      HBITMAP& out_old_hbmp );
+
+  HGLRC setup_for_gl( CDC* pDC, DWORD dwFlags );
+
+  //: Device context for the auxillary buffer used for simulating overlays
+  CDC* m_pDC_aux;
+  //: True if the aux buffer is a copy of the main GL buffer
+  bool aux_dc_valid_;
+
+
+  //: True while a redraw event has been requested but not implemented.
+  bool redraw_posted_;
+
+  //: True while a overlay redraw event has been requested but not implemented.
+  bool overlay_redraw_posted_;
+
+protected:
   //: The window associated with this adaptor if it is not the main window.
   CWnd* m_pCWnd;
 
@@ -159,19 +177,14 @@ class vgui_mfc_adaptor : public CView, public vgui_adaptor, public vgui_adaptor_
   //: Handles mouse press/release events.
   void domouse(vgui_event_type e, UINT nFlags, CPoint point, vgui_button b);
 
+  //: The Win-OpenGL resource context.
   HGLRC m_hRC;
-
-  BOOL SetupPixelFormat();
 
   //: Width of rendering area.
   int m_width;
 
   //: Height of rendering area.
   int m_height;
-
-  HBITMAP m_oldbitmap;
-
-  vgui_overlay_helper *ovl_helper;
 
   vgui_window* win_;
 
