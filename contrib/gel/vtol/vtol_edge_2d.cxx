@@ -57,12 +57,9 @@ vtol_edge_2d::vtol_edge_2d(vtol_vertex_2d &new_v1,
 // data of the new vtol_edge_2d.
 
 vtol_edge_2d::vtol_edge_2d(const vtol_edge_2d &other)
+  : curve_(0)
 {
-  curve_=0;
-  vsol_curve_2d_sptr tmp_curve;
-
   vcl_vector<vtol_topology_object_sptr>::const_iterator i;
-
   for (i=other.inferiors()->begin();i!=other.inferiors()->end();++i)
   {
     vtol_zero_chain_sptr zc = (*i)->clone()->cast_to_topology_object()->cast_to_zero_chain();
@@ -169,23 +166,14 @@ vtol_edge_2d::vtol_edge_2d(double x1,
 // type, vertex locations for endpoints, v1_ and v2_, are computed from
 // the ImplicitLine parameters.  If edgecurve is of any other type, v1_
 // and v2_ are left as NULL.
-// (Actually, this description is wrong. The endpoints are retreived
+// (Actually, this description is wrong. The endpoints are retrieved
 // from the curve, regardless of its type. -JLM)
 
 vtol_edge_2d::vtol_edge_2d(vsol_curve_2d &edgecurve)
 {
-  vtol_zero_chain *newzc;
-  if (curve_)
-    {
-      // v1_ = new vtol_vertex_2d(&curve_->get_start_point());
-      // v2_ = new vtol_vertex_2d(&curve_->get_end_point());
-      newzc=new vtol_zero_chain(*v1_,*v2_);
-    } else {
-      v1_=0;
-      v2_=0;
-      curve_=0;
-      newzc=new vtol_zero_chain();
-    }
+  v1_ = new vtol_vertex_2d(*(edgecurve.p0()));
+  v2_ = new vtol_vertex_2d(*(edgecurve.p1()));
+  vtol_zero_chain *newzc=new vtol_zero_chain(*v1_,*v2_);
   link_inferior(*newzc);
 }
 
