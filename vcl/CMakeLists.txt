@@ -12,7 +12,7 @@ CONFIGURE_FILE(
 
 SET( vcl_sources
   vcl_compiler.h
-  vcl_deprecated.cxx vcl_deprecated.h
+  vcl_deprecated.cxx     vcl_deprecated.h
 
   vcl_where_root_dir.h.in
   vcl_config_compiler.h.in
@@ -22,7 +22,6 @@ SET( vcl_sources
   vcl_cmath.cxx          vcl_cmath.h
   vcl_cassert.cxx        vcl_cassert.h
   vcl_cstdlib.cxx        vcl_cstdlib.h
-  vcl_limits.cxx         vcl_limits.h
 
   vcl_algorithm.txx      vcl_algorithm.h
   vcl_bitset.h
@@ -54,9 +53,10 @@ SET( vcl_sources
   vcl_iostream.h
   vcl_istream.h
   vcl_iterator.txx       vcl_iterator.h
-  vcl_list.txx vcl_list.h
+  vcl_limits.h
+  vcl_list.txx           vcl_list.h
   vcl_locale.h
-  vcl_map.txx vcl_map.h
+  vcl_map.txx            vcl_map.h
   vcl_memory.h
   vcl_new.h
   vcl_numeric.h
@@ -127,19 +127,19 @@ SET( vcl_sources
   generic/vcl_valarray.h
   generic/vcl_vector.h
 
-  iso/vcl_algorithm.txx iso/vcl_algorithm.h
-  iso/vcl_complex.txx iso/vcl_complex.h
-  iso/vcl_deque.txx iso/vcl_deque.h
+  iso/vcl_algorithm.txx  iso/vcl_algorithm.h
+  iso/vcl_complex.txx    iso/vcl_complex.h
+  iso/vcl_deque.txx      iso/vcl_deque.h
   iso/vcl_functional.txx iso/vcl_functional.h
-  iso/vcl_iterator.txx iso/vcl_iterator.h
-  iso/vcl_list.txx iso/vcl_list.h
-  iso/vcl_map.txx iso/vcl_map.h
-  iso/vcl_queue.txx iso/vcl_queue.h
-  iso/vcl_set.txx iso/vcl_set.h
-  iso/vcl_stack.txx iso/vcl_stack.h
-  iso/vcl_string.txx iso/vcl_string.h
-  iso/vcl_utility.txx iso/vcl_utility.h
-  iso/vcl_vector.txx iso/vcl_vector.h
+  iso/vcl_iterator.txx   iso/vcl_iterator.h
+  iso/vcl_list.txx       iso/vcl_list.h
+  iso/vcl_map.txx        iso/vcl_map.h
+  iso/vcl_queue.txx      iso/vcl_queue.h
+  iso/vcl_set.txx        iso/vcl_set.h
+  iso/vcl_stack.txx      iso/vcl_stack.h
+  iso/vcl_string.txx     iso/vcl_string.h
+  iso/vcl_utility.txx    iso/vcl_utility.h
+  iso/vcl_vector.txx     iso/vcl_vector.h
   iso/vcl_bitset.h
   iso/vcl_cassert.h
   iso/vcl_cctype.h
@@ -178,33 +178,27 @@ SET( vcl_sources
   iso/vcl_typeinfo.h
   iso/vcl_valarray.h
 
-  # Can't include this, since vcl_limits.cxx (potentially) includes
-  # emulation/vcl_limits.cxx. If we do, then the same file gets
-  # compiled twice, resulting in multiply defined symbols. This
-  # comment probably applies to the other .cxx files in emulation too.
-  # Someone needs to go through this and clean it up.
-  # emulation/vcl_limits.cxx emulation/vcl_limits.h
-
+  emulation/vcl_limits.cxx            emulation/vcl_limits.h
   emulation/vcl_string_instances.cxx
-  emulation/vcl_straits.cxx emulation/vcl_straits.h
+  emulation/vcl_straits.cxx           emulation/vcl_straits.h
   emulation/vcl_rbtree_instances.cxx
-  emulation/vcl_hashtable.cxx emulation/vcl_hashtable.h
-  emulation/vcl_alloc.cxx emulation/vcl_alloc.h
-  emulation/vcl_algorithm.txx emulation/vcl_algorithm.h
-  emulation/vcl_complex.txx emulation/vcl_complex.h
-  emulation/vcl_deque.txx emulation/vcl_deque.h
-  emulation/vcl_functional.txx emulation/vcl_functional.h
+  emulation/vcl_hashtable.cxx         emulation/vcl_hashtable.h
+  emulation/vcl_alloc.cxx             emulation/vcl_alloc.h
+  emulation/vcl_algorithm.txx         emulation/vcl_algorithm.h
+  emulation/vcl_complex.txx           emulation/vcl_complex.h
+  emulation/vcl_deque.txx             emulation/vcl_deque.h
+  emulation/vcl_functional.txx        emulation/vcl_functional.h
   emulation/vcl_hash.txx
-  emulation/vcl_hash_map.txx emulation/vcl_hash_map.h
-  emulation/vcl_iterator.txx emulation/vcl_iterator.h
-  emulation/vcl_list.txx emulation/vcl_list.h
-  emulation/vcl_map.txx emulation/vcl_map.h
-  emulation/vcl_multimap.txx emulation/vcl_multimap.h
+  emulation/vcl_hash_map.txx          emulation/vcl_hash_map.h
+  emulation/vcl_iterator.txx          emulation/vcl_iterator.h
+  emulation/vcl_list.txx              emulation/vcl_list.h
+  emulation/vcl_map.txx               emulation/vcl_map.h
+  emulation/vcl_multimap.txx          emulation/vcl_multimap.h
   emulation/vcl_rbtree.txx
-  emulation/vcl_set.txx emulation/vcl_set.h
-  emulation/vcl_string.txx emulation/vcl_string.h
-  emulation/vcl_utility.txx emulation/vcl_utility.h
-  emulation/vcl_vector.txx emulation/vcl_vector.h
+  emulation/vcl_set.txx               emulation/vcl_set.h
+  emulation/vcl_string.txx            emulation/vcl_string.h
+  emulation/vcl_utility.txx           emulation/vcl_utility.h
+  emulation/vcl_vector.txx            emulation/vcl_vector.h
   emulation/vcl_algobase.h
   emulation/vcl_bool.h
   emulation/vcl_bvector.h
@@ -235,7 +229,7 @@ SET( vcl_sources
   gcc/vcl_cmath.h
   gcc/vcl_cstdlib.h
   gcc-295/vcl_algorithm.txx
-  gcc-295/vcl_complex.h gcc-295/vcl_complex.txx
+  gcc-295/vcl_complex.h               gcc-295/vcl_complex.txx
   gcc-295/vcl_deque.txx
   gcc-295/vcl_functional.txx
   gcc-295/vcl_iterator.txx
@@ -273,7 +267,7 @@ SET( vcl_sources
   sgi/vcl_algorithm.txx
   sgi/vcl_bitset.h
   sgi/vcl_cmath.h
-  sgi/vcl_complex.txx sgi/vcl_complex.h
+  sgi/vcl_complex.txx               sgi/vcl_complex.h
   sgi/vcl_cstdlib.h
   sgi/vcl_deque.txx
   sgi/vcl_functional.txx
@@ -284,23 +278,23 @@ SET( vcl_sources
   sgi/vcl_list.txx
   sgi/vcl_map.txx
   sgi/vcl_set.txx
-  sgi/vcl_string.txx sgi/vcl_string.h
+  sgi/vcl_string.txx                sgi/vcl_string.h
   sgi/vcl_utility.txx
   sgi/vcl_vector.txx
 
   sunpro/vcl_algorithm.txx
   sunpro/vcl_cmath.h
-  sunpro/vcl_complex.txx sunpro/vcl_complex.h
+  sunpro/vcl_complex.txx            sunpro/vcl_complex.h
   sunpro/vcl_cstdlib.h
   sunpro/vcl_deque.txx
   sunpro/vcl_functional.txx
-  sunpro/vcl_iterator.txx sunpro/vcl_iterator.h
+  sunpro/vcl_iterator.txx           sunpro/vcl_iterator.h
   sunpro/vcl_list.txx
-  sunpro/vcl_map.txx sunpro/vcl_map.h
+  sunpro/vcl_map.txx                sunpro/vcl_map.h
   sunpro/vcl_set.txx
   sunpro/vcl_stack.txx
   sunpro/vcl_utility.txx
-  sunpro/vcl_vector.txx sunpro/vcl_vector.h
+  sunpro/vcl_vector.txx             sunpro/vcl_vector.h
 
   win32-vc60/vcl_cmath.h
   win32-vc60/vcl_complex.h
