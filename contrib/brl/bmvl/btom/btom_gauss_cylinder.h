@@ -19,7 +19,7 @@
 //             y_origin_     - y coordinate of the cylinder origin
 //             z_origin_     - z coordinate of the cylinder origin
 //             elevation_    - elevation orientation of cylinder axis (deg)
-//             azimuth_      - azimutha orientation of the cylinder axis (deg)
+//             azimuth_      - azimuth orientation of the cylinder axis (deg)
 // \verbatim
 //  Modifications:
 //   J.L. Mundy March 04, 2003    Initial version.
