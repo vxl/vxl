@@ -55,7 +55,7 @@ static void test_vil(int argc, char* argv[])
   vil_image_view<vxl_byte> ppm_image = vil_load( (image_base+"ff_rgb8bit_raw.ppm").c_str());
   TEST("vil_load worked", ppm_image?true:false, true);
 
-  if (tiff_image && ppm_image)
+  if (bool(tiff_image) && ppm_image)
   {
     vil_image_resource_sptr resource1 = vil1_to_vil_image_resource(tiff_image);
     image1 = resource1->get_view(0, resource1->ni(), 0, resource1->nj());
