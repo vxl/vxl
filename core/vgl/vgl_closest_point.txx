@@ -86,11 +86,11 @@ int vgl_closest_point_to_non_closed_polygon(T& ret_x, T& ret_y,
                                             T x, T y)
 {
   assert(n>1);
-  double dd = vgl_distance2_to_linesegment(T(px[0]),py[0], px[1],py[1], x,y);
+  double dd = vgl_distance2_to_linesegment(px[0],py[0], px[1],py[1], x,y);
   int di = 0;
   for (unsigned i=1; i+1<n; ++i)
   {
-    double nd = vgl_distance2_to_linesegment(T(px[i]),py[i], px[i+1],py[i+1], x,y);
+    double nd = vgl_distance2_to_linesegment(px[i],py[i], px[i+1],py[i+1], x,y);
     if (nd<dd) { dd=nd; di=i; }
   }
   vgl_closest_point_to_linesegment(ret_x,ret_y, px[di],py[di], px[di+1],py[di+1], x,y);
@@ -103,11 +103,11 @@ int vgl_closest_point_to_non_closed_polygon(T& ret_x, T& ret_y, T& ret_z,
                                             T x, T y, T z)
 {
   assert(n>1);
-  double dd = vgl_distance2_to_linesegment(T(px[0]),py[0],pz[0], px[1],py[1],pz[1], x,y,z);
+  double dd = vgl_distance2_to_linesegment(px[0],py[0],pz[0], px[1],py[1],pz[1], x,y,z);
   int di = 0;
   for (unsigned i=1; i+1<n; ++i)
   {
-    double nd = vgl_distance2_to_linesegment(T(px[i]),py[i],pz[i], px[i+1],py[i+1],pz[i+1], x,y,z);
+    double nd = vgl_distance2_to_linesegment(px[i],py[i],pz[i], px[i+1],py[i+1],pz[i+1], x,y,z);
     if (nd<dd) { dd=nd; di=i; }
   }
   vgl_closest_point_to_linesegment(ret_x,ret_y,ret_z, px[di],py[di],pz[di],
@@ -121,11 +121,11 @@ int vgl_closest_point_to_closed_polygon(T& ret_x, T& ret_y,
                                         T x, T y)
 {
   assert(n>1);
-  double dd = vgl_distance2_to_linesegment(T(px[0]),py[0], px[n-1],py[n-1], x,y);
+  double dd = vgl_distance2_to_linesegment(px[0],py[0], px[n-1],py[n-1], x,y);
   int di = -1;
   for (unsigned i=0; i+1<n; ++i)
   {
-    double nd = vgl_distance2_to_linesegment(T(px[i]),py[i], px[i+1],py[i+1], x,y);
+    double nd = vgl_distance2_to_linesegment(px[i],py[i], px[i+1],py[i+1], x,y);
     if (nd<dd) { dd=nd; di=i; }
   }
   if (di == -1) di+=n,
@@ -141,11 +141,11 @@ int vgl_closest_point_to_closed_polygon(T& ret_x, T& ret_y, T& ret_z,
                                         T x, T y, T z)
 {
   assert(n>1);
-  double dd = vgl_distance2_to_linesegment(T(px[0]),py[0],pz[0], px[n-1],py[n-1],pz[n-1], x,y,z);
+  double dd = vgl_distance2_to_linesegment(px[0],py[0],pz[0], px[n-1],py[n-1],pz[n-1], x,y,z);
   int di = -1;
   for (unsigned i=0; i+1<n; ++i)
   {
-    double nd = vgl_distance2_to_linesegment(T(px[i]),py[i],pz[i], px[i+1],py[i+1],pz[i+1], x,y,z);
+    double nd = vgl_distance2_to_linesegment(px[i],py[i],pz[i], px[i+1],py[i+1],pz[i+1], x,y,z);
     if (nd<dd) { dd=nd; di=i; }
   }
   if (di == -1) di+=n,
