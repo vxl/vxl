@@ -2,6 +2,7 @@
 #define vil2_find_4con_boundary_h_
 
 #include <vil2/vil2_image_view.h>
+#include <vcl_cassert.h>
 #include <vcl_vector.h>
 
 //:
@@ -15,8 +16,8 @@
 //  On exit (i,j) and p are updated to move to neighbour
 template<class T>
 inline void vil2_next_point_below_thresh4(int& i,int& j,int& dir, const T* &p,
-                                     int ni1, int nj1,int istep,int jstep,
-                                     T threshold)
+                                          int ni1, int nj1,int istep,int jstep,
+                                          T threshold)
 {
   for (int k=0;k<4;++k)
   {
@@ -40,8 +41,8 @@ inline void vil2_next_point_below_thresh4(int& i,int& j,int& dir, const T* &p,
 //  On exit (i,j) and p are updated to move to neighbour
 template<class T>
 inline void vil2_next_point_above_thresh4(int& i,int& j,int& dir, const T* &p,
-                                     int ni1, int nj1,int istep,int jstep,
-                                     T threshold)
+                                          int ni1, int nj1,int istep,int jstep,
+                                          T threshold)
 {
   for (int k=0;k<4;++k)
   {
@@ -68,10 +69,10 @@ inline void vil2_next_point_above_thresh4(int& i,int& j,int& dir, const T* &p,
 //  On exit the boundary points are given by (bi[k],bj[k])
 template <class T>
 inline void vil2_find_4con_boundary_below_threshold(vcl_vector<int>& bi,
-                                          vcl_vector<int>& bj,
-                                          const vil2_image_view<T>& image,
-                                          const T& threshold,
-                                          int p0_i, int p0_j)
+                                                    vcl_vector<int>& bj,
+                                                    const vil2_image_view<T>& image,
+                                                    const T& threshold,
+                                                    int p0_i, int p0_j)
 {
   bi.resize(0); bj.resize(0);
   int ni1 = image.ni()-1;
@@ -111,10 +112,10 @@ inline void vil2_find_4con_boundary_below_threshold(vcl_vector<int>& bi,
 //  On exit the boundary points are given by (bi[k],bj[k])
 template <class T>
 inline void vil2_find_4con_boundary_above_threshold(vcl_vector<int>& bi,
-                                          vcl_vector<int>& bj,
-                                          const vil2_image_view<T>& image,
-                                          const T& threshold,
-                                          int p0_i, int p0_j)
+                                                    vcl_vector<int>& bj,
+                                                    const vil2_image_view<T>& image,
+                                                    const T& threshold,
+                                                    int p0_i, int p0_j)
 {
   bi.resize(0); bj.resize(0);
   int ni1 = image.ni()-1;
@@ -146,4 +147,4 @@ inline void vil2_find_4con_boundary_above_threshold(vcl_vector<int>& bi,
   while (i!=i0 || j!=j0);
 }
 
-#endif
+#endif // vil2_find_4con_boundary_h_
