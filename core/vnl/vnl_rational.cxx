@@ -1,9 +1,10 @@
-// This is ./vxl/vnl/vnl_rational.cxx
-#include <vnl/vnl_rational.h>
-
+// This is vxl/vnl/vnl_rational.cxx
+#include "vnl_rational.h"
 //:
 // \file
 
+//: Creates a rational from a double.
+//  This is done by computing the continued fraction approximation for d.
 vnl_rational::vnl_rational(double d)
 {
   bool sign = d<0;
