@@ -21,6 +21,7 @@ int main()
   bugl_gaussian_point_3d<double> p3d(100, 100, 100, s3);
 
   vnl_double_3x3 t = p3d.get_covariant_matrix();
+  vcl_cout<<t<<'\n';
 
   // test smart pointer
   bugl_normal_point_2d_sptr p2d_ptr = new bugl_normal_point_2d(1, 1, s2);
