@@ -16,6 +16,8 @@
 
 #include <vnl/vnl_matrix.h>
 
+// For a *real* scalar type T, this function computes orthogonal L, R such that
+// 
 template <class T>
 bool vnl_generalized_schur(vnl_matrix<T> *A,
                            vnl_matrix<T> *B,
