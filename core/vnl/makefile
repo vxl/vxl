@@ -37,6 +37,7 @@ SOURCES += vnl_matlab_filewrite.cxx
 SOURCES += vnl_matops.cxx
 SOURCES += vnl_real_polynomial.cxx
 SOURCES += vnl_real_npolynomial.cxx
+SOURCES += vnl_binary.cxx
 
 # ops
 SOURCES += vnl_fastops.cxx

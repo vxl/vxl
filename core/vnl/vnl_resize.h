@@ -4,15 +4,12 @@
   fsm@robots.ox.ac.uk
 */
 
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_matrix.h>
+template <class T> class vnl_vector;
+template <class T> class vnl_matrix;
+template <class T> class vnl_diag_matrix;
 
-//
 template <class T> void vnl_resize(vnl_vector<T> &v, unsigned newsize);
 template <class T> void vnl_resize(vnl_matrix<T> &M, unsigned newrows, unsigned newcols);
-
-//
-template <class T> void vnl_assign(vnl_vector<T> &lhs, vnl_vector<T> const &rhs);
-template <class T> void vnl_assign(vnl_matrix<T> &lhs, vnl_matrix<T> const &rhs);
+template <class T> void vnl_resize(vnl_diag_matrix<T> &D, unsigned newsize);
 
 #endif
