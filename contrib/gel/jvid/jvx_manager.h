@@ -16,7 +16,44 @@
 #include <vcl_vector.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_viewer2D_sptr.h>
+#include <vgui/vgui_dialog.h>
 #include <vidl/vidl_movie.h>
+#include <vidl/vidl_codec_callbacks.h>
+#include <vidl/vidl_mpegcodec.h>
+
+extern void (*load_mpegcodec_callback)(vidl_codec*);
+
+//define some callbacks here
+void
+jvid_load_mpegcodec_callback(vidl_codec * vc)
+{
+  vgui_dialog dialog( "MPEG player setup");
+
+  bool grey_scale = true;
+  bool demux_video = true;
+  vcl_string pid = "0x00";
+  int numframes = -1;
+  
+  dialog.checkbox("gray scale",grey_scale);
+  dialog.checkbox("demux",demux_video);
+  dialog.field("pid",pid);
+  dialog.field("total frames. if not known, leave it.",numframes);
+
+  if( !dialog.ask())
+    {
+      vcl_cout << "jvid_load_mpegcodec_callback. did not initialize codec." << vcl_endl;
+    }
+
+  vidl_mpegcodec * mpegcodec = vc->castto_vidl_mpegcodec();
+  if (!mpegcodec) return;
+
+  mpegcodec->set_grey_scale(grey_scale);
+  if(demux_video) mpegcodec->set_demux_video();
+  mpegcodec->set_pid(pid.c_str());
+  mpegcodec->set_number_frames(numframes);
+	
+  mpegcodec->init();
+}
 
 class jvx_manager : public vgui_grid_tableau
 {
