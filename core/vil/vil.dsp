@@ -197,6 +197,33 @@ SOURCE=.\vil2_image_view_base.cxx
 # Begin Source File
 SOURCE=.\vil2_load.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_sample_profile_bilin+uchar.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_sample_profile_bilin+float.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_sample_grid_bilin+float.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_sample_grid_bilin+uchar.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_smart_ptr+vil2_image_view_base-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_memory_image.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_new.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_pixel_format.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_save.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -247,6 +274,36 @@ SOURCE=.\vil2_crop.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil2_pixel_format.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_memory_image.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_new.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_sample_profile_bilin.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_bilin_interp.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_sample_profile_bilin.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_save.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_byte.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_pixel_traits.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_sample_grid_bilin.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_sample_grid_bilin.txx
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
