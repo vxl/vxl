@@ -7,14 +7,14 @@
 template<class BaseClass>
 vsl_binary_loader<BaseClass>& vsl_binary_loader<BaseClass>::instance()
 {
-    if (instance_ == 0)
-    {
+  if (instance_ == 0)
+  {
     instance_ = new vsl_binary_loader<BaseClass>;
-
+    
     // Register for deletion by vsl_delete_all_loaders()
     instance_->register_this();
   }
-    return *instance_;
+  return *instance_;
 }
 
 template<class BaseClass>
@@ -58,7 +58,7 @@ void vsl_binary_loader<BaseClass>::load_object( vsl_b_istream& is, BaseClass*& b
   }
   else
   {
-    vcl_cerr << "vsl_binary_loader<BaseClass>::load_object: ";
+    vcl_cerr << "EEROR: vsl_binary_loader<BaseClass>::load_object: ";
     vcl_cerr << "class name <" << name << "> not in list of loaders"<<vcl_endl;
     vcl_cerr << object_.size()<<" valid loaders: "<<vcl_endl;
     for (int j=0; j<object_.size(); ++j)
