@@ -5,12 +5,14 @@
 #include <vcl_cmath.h>   // for vcl_fabs(double)
 #include <vcl_algorithm.h>
 #include <vul/vul_timer.h>
+#include <vnl/vnl_math.h>
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vtol/vtol_intensity_face.h>
 #include <vtol/vtol_vertex_2d.h>
 #include <brip/brip_float_ops.h>
+
 sdet_correlated_face::sdet_correlated_face()
 {
   a_ = 0;
@@ -20,19 +22,20 @@ sdet_correlated_face::sdet_correlated_face()
   f_ = 0;
   intensity_mi_=0;
   gradient_dir_mi_=0;
-
 }
+
 sdet_correlated_face::~sdet_correlated_face()
 {
   delete [] Ix_;
   delete [] Iy_;
 }
+
 void sdet_correlated_face::set_face(vtol_intensity_face_sptr const& f)
 {
   f_ = f;
-  if(Ix_)
+  if (Ix_)
     delete [] Ix_;
-  if(Iy_)
+  if (Iy_)
     delete [] Iy_;
   int n = f->Npix();
   Ix_ = new float[n];
@@ -53,65 +56,70 @@ void sdet_correlated_face::set_grad_mutual_info(const float mi)
 
 sdet_byte_hist::sdet_byte_hist(int nbins)
 {
-  if(!nbins||nbins<0)
-    {
-      nbins_=0;
-      delta_=0;
-      area_valid_ = false;
-      area_=0;
-      return;
-    }
+  if (!nbins||nbins<0)
+  {
+    nbins_=0;
+    delta_=0;
+    area_valid_ = false;
+    area_=0;
+    return;
+  }
   nbins_ = nbins;
   delta_ = 256/nbins;
   counts_.resize(nbins, 0.0);
   area_valid_ = false;
   area_ = 0;
 }
+
 void sdet_byte_hist::upcount(const double x)
 {
-  if(x<0||x>255)
+  if (x<0||x>255)
     return;
-  for(int i = 0; i<nbins_;i++)
-    if((i+1)*delta_>=x)
-      {
-        counts_[i] += 1.0;
-        break;
-      }
+  for (int i = 0; i<nbins_;i++)
+    if ((i+1)*delta_>=x)
+    {
+      counts_[i] += 1.0;
+      break;
+    }
   area_valid_ = false;
 }
+
 void sdet_byte_hist::compute_area()
 {
   area_ =0;
-  for(int i = 0; i<nbins_; i++)
+  for (int i = 0; i<nbins_; i++)
     area_ += counts_[i];
   area_valid_ = true;
 }
+
 double sdet_byte_hist::p(const int bin)
 {
-  if(bin<0||bin>=nbins_)
+  if (bin<0||bin>=nbins_)
     return 0;
-  if(!area_valid_)
+  if (!area_valid_)
     compute_area();
-  if(!area_)
+  if (!area_)
     return 0;
   return counts_[bin]/area_;
 }
+
 void sdet_byte_hist::print()
 {
-  for(int i=0; i<nbins_; i++)
-    if(p(i))
-      vcl_cout << "p[" << i << "]=" << p(i) << "\n";
+  for (int i=0; i<nbins_; i++)
+    if (p(i))
+      vcl_cout << "p[" << i << "]=" << p(i) << '\n';
 }
+
 sdet_byte_joint_hist::sdet_byte_joint_hist(int nbins)
 {
-  if(!nbins||nbins<0)
-    {
-      nbins_=0;
-      delta_=0;
-      volume_valid_ = false;
-      volume_=0;
-      return;
-    }
+  if (!nbins||nbins<0)
+  {
+    nbins_=0;
+    delta_=0;
+    volume_valid_ = false;
+    volume_=0;
+    return;
+  }
   nbins_ = nbins;
   delta_ = 256/nbins;
   counts_.resize(nbins, nbins);
@@ -122,24 +130,24 @@ sdet_byte_joint_hist::sdet_byte_joint_hist(int nbins)
 
 void sdet_byte_joint_hist::upcount(const double a, const double b)
 {
-  if(a<0||a>255)
+  if (a<0||a>255)
     return;
-  if(b<0||b>255)
+  if (b<0||b>255)
     return;
   int bin_a =0, bin_b = 0;
 
-  for(int i = 0; i<nbins_;i++)
-    if((i+1)*delta_>=a)
-      {
-        bin_a = i;
-        break;
-      }
-  for(int i = 0; i<nbins_;i++)
-    if((i+1)*delta_>=b)
-      {
-        bin_b = i;
-        break;
-      }
+  for (int i = 0; i<nbins_;i++)
+    if ((i+1)*delta_>=a)
+    {
+      bin_a = i;
+      break;
+    }
+  for (int i = 0; i<nbins_;i++)
+    if ((i+1)*delta_>=b)
+    {
+      bin_b = i;
+      break;
+    }
   double v = counts_[bin_a][bin_b]+1.0;
   counts_.put(bin_a, bin_b, v);
   volume_valid_ = false;
@@ -148,96 +156,99 @@ void sdet_byte_joint_hist::upcount(const double a, const double b)
 void sdet_byte_joint_hist::compute_volume()
 {
   volume_=0;
-  for(int a = 0; a<nbins_; a++)
-    for(int b =0; b<nbins_; b++)
+  for (int a = 0; a<nbins_; a++)
+    for (int b =0; b<nbins_; b++)
       volume_ += counts_[a][b];
   volume_valid_ = true;
 }
 
 double sdet_byte_joint_hist::p(const int a, const int b)
 {
-  if(a<0||a>=nbins_)
+  if (a<0||a>=nbins_)
     return 0;
-  if(b<0||b>=nbins_)
+  if (b<0||b>=nbins_)
     return 0;
-  if(!volume_valid_)
+  if (!volume_valid_)
     compute_volume();
-  if(!volume_)
+  if (!volume_)
     return 0;
   return  counts_[a][b]/volume_;
 }
+
 void sdet_byte_joint_hist::print()
 {
-  for(int a = 0; a<nbins_; a++)
-    for(int b = 0; b<nbins_; b++)
-      if(p(a,b))
-      vcl_cout << "p[" << a << "][" << b << "]=" << p(a,b) << "\n";
+  for (int a = 0; a<nbins_; a++)
+    for (int b = 0; b<nbins_; b++)
+      if (p(a,b))
+        vcl_cout << "p[" << a << "][" << b << "]=" << p(a,b) << '\n';
 }
-
-
 
 sdet_gradient_dir_hist::sdet_gradient_dir_hist(int nbins)
 {
-  if(!nbins||nbins<0)
-    {
-      nbins_=0;
-      delta_=0;
-      area_valid_ = false;
-      area_=0;
-      return;
-    }
+  if (!nbins||nbins<0)
+  {
+    nbins_=0;
+    delta_=0;
+    area_valid_ = false;
+    area_=0;
+    return;
+  }
   nbins_ = nbins;
   delta_ = 360/nbins;
   counts_.resize(nbins, 0.0);
   area_valid_ = false;
   area_ = 0;
 }
+
 void sdet_gradient_dir_hist::upcount(const double x, const double mag)
 {
-  if(x<0||x>360)
+  if (x<0||x>360)
     return;
-  for(int i = 0; i<nbins_;i++)
-    if((i+1)*delta_>=x)
-      {
-        counts_[i] += mag;
-        break;
-      }
+  for (int i = 0; i<nbins_;i++)
+    if ((i+1)*delta_>=x)
+    {
+      counts_[i] += mag;
+      break;
+    }
   area_valid_ = false;
 }
+
 void sdet_gradient_dir_hist::compute_area()
 {
   area_ =0;
-  for(int i = 0; i<nbins_; i++)
+  for (int i = 0; i<nbins_; i++)
     area_ += counts_[i];
   area_valid_ = true;
 }
+
 double sdet_gradient_dir_hist::p(const int bin)
 {
-  if(bin<0||bin>=nbins_)
+  if (bin<0||bin>=nbins_)
     return 0;
-  if(!area_valid_)
+  if (!area_valid_)
     compute_area();
-  if(!area_)
+  if (!area_)
     return 0;
   return counts_[bin]/area_;
 }
+
 void sdet_gradient_dir_hist::print()
 {
-  for(int i=0; i<nbins_; i++)
-    if(p(i))
-      vcl_cout << "p[" << i << "]=" << p(i) << "\n";
+  for (int i=0; i<nbins_; i++)
+    if (p(i))
+      vcl_cout << "p[" << i << "]=" << p(i) << '\n';
 }
 
 sdet_gradient_dir_joint_hist::sdet_gradient_dir_joint_hist(int nbins)
 {
-  if(!nbins||nbins<0)
-    {
-      nbins_=0;
-      delta_=0;
-      volume_valid_ = false;
-      volume_=0;
-      return;
-    }
+  if (!nbins||nbins<0)
+  {
+    nbins_=0;
+    delta_=0;
+    volume_valid_ = false;
+    volume_=0;
+    return;
+  }
   nbins_ = nbins;
   delta_ = 360/nbins;
   counts_.resize(nbins, nbins);
@@ -249,23 +260,23 @@ sdet_gradient_dir_joint_hist::sdet_gradient_dir_joint_hist(int nbins)
 void sdet_gradient_dir_joint_hist::upcount(const double a, const double mag_a,
                                            const double b, const double mag_b)
 {
-  if(a<0||a>360)
+  if (a<0||a>360)
     return;
-  if(b<0||b>360)
+  if (b<0||b>360)
     return;
   int bin_a =0, bin_b = 0;
-  for(int i = 0; i<nbins_;i++)
-    if((i+1)*delta_>=a)
-      {
-        bin_a = i;
-        break;
-      }
-  for(int i = 0; i<nbins_;i++)
-    if((i+1)*delta_>=b)
-      {
-        bin_b = i;
-        break;
-      }
+  for (int i = 0; i<nbins_;i++)
+    if ((i+1)*delta_>=a)
+    {
+      bin_a = i;
+      break;
+    }
+  for (int i = 0; i<nbins_;i++)
+    if ((i+1)*delta_>=b)
+    {
+      bin_b = i;
+      break;
+    }
   double v = counts_[bin_a][bin_b]+ mag_a + mag_b;
   counts_.put(bin_a, bin_b, v);
   volume_valid_ = false;
@@ -274,30 +285,31 @@ void sdet_gradient_dir_joint_hist::upcount(const double a, const double mag_a,
 void sdet_gradient_dir_joint_hist::compute_volume()
 {
   volume_=0;
-  for(int a = 0; a<nbins_; a++)
-    for(int b =0; b<nbins_; b++)
+  for (int a = 0; a<nbins_; a++)
+    for (int b =0; b<nbins_; b++)
       volume_ += counts_[a][b];
   volume_valid_ = true;
 }
 
 double sdet_gradient_dir_joint_hist::p(const int a, const int b)
 {
-  if(a<0||a>=nbins_)
+  if (a<0||a>=nbins_)
     return 0;
-  if(b<0||b>=nbins_)
+  if (b<0||b>=nbins_)
     return 0;
-  if(!volume_valid_)
+  if (!volume_valid_)
     compute_volume();
-  if(!volume_)
+  if (!volume_)
     return 0;
   return  counts_[a][b]/volume_;
 }
+
 void sdet_gradient_dir_joint_hist::print()
 {
-  for(int a = 0; a<nbins_; a++)
-    for(int b = 0; b<nbins_; b++)
-      if(p(a,b))
-      vcl_cout << "p[" << a << "][" << b << "]=" << p(a,b) << "\n";
+  for (int a = 0; a<nbins_; a++)
+    for (int b = 0; b<nbins_; b++)
+      if (p(a,b))
+      vcl_cout << "p[" << a << "][" << b << "]=" << p(a,b) << '\n';
 }
 
 //Gives a sort on correlation score (currently decreasing values JLM)
@@ -337,11 +349,11 @@ sdet_tracker::~sdet_tracker()
   for (vcl_vector<sdet_correlated_face*>::iterator
        cit = current_samples_.begin();
        cit != current_samples_.end(); cit++)
-    delete (*cit);
+    delete *cit;
   current_samples_.clear();
-  if(model_intensity_hist_)
+  if (model_intensity_hist_)
     delete model_intensity_hist_;
-  if(model_gradient_dir_hist_)
+  if (model_gradient_dir_hist_)
     delete model_gradient_dir_hist_;
 }
 
@@ -391,12 +403,12 @@ void sdet_tracker::set_image_i(vil1_image& image)
 void sdet_tracker::set_initial_model(vtol_face_2d_sptr const& face)
 {
   initial_model_ = face;
-  if(model_intensity_hist_)
-	delete model_intensity_hist_;
+  if (model_intensity_hist_)
+    delete model_intensity_hist_;
   model_intensity_hist_ =0;
 
-  if(model_gradient_dir_hist_)
-	delete model_gradient_dir_hist_;
+  if (model_gradient_dir_hist_)
+    delete model_gradient_dir_hist_;
   model_gradient_dir_hist_=0;
 }
 
@@ -432,14 +444,14 @@ void sdet_tracker::fill_face(vtol_intensity_face_sptr const& face,
     }
   face->InitPixelArrays();
 
-  if(model_intensity_hist_)
+  if (model_intensity_hist_)
     delete model_intensity_hist_;
   model_intensity_hist_ = new sdet_byte_hist();
 
-  if(model_gradient_dir_hist_)
+  if (model_gradient_dir_hist_)
     delete model_gradient_dir_hist_;
   model_gradient_dir_hist_ = new sdet_gradient_dir_hist;
-  double deg_rad = 180.0/3.14159;
+  double deg_rad = 180.0/vnl_math::pi;
   //Got through the pixels again to actually set the face arrays X(), Y() etc
   for (psi.reset(); psi.next();)
     for (int x = psi.startx(); x<=psi.endx(); x++)
@@ -451,7 +463,7 @@ void sdet_tracker::fill_face(vtol_intensity_face_sptr const& face,
       model_intensity_hist_->upcount(v);
       face->InsertInPixelArrays(x, y, v);
       float Ix = Ix_0_(x,y), Iy = Iy_0_(x,y);
-      double ang = (deg_rad*atan2(Iy, Ix))+180.0;
+      double ang = (deg_rad*vcl_atan2(Iy, Ix))+180.0;
       //      double mag = vcl_sqrt(Ix*Ix + Iy*Iy);
       double mag = vcl_fabs(Ix)+vcl_fabs(Iy);
       model_gradient_dir_hist_->upcount(ang, mag);
@@ -459,25 +471,25 @@ void sdet_tracker::fill_face(vtol_intensity_face_sptr const& face,
   //compute the model entropy
   int nbins = model_intensity_hist_->nbins();
   double ent = 0;
-  for(int m = 0; m<nbins; m++)
-    {
-      double pm = model_intensity_hist_->p(m);
-      if(!pm)
-        continue;
-      ent -= pm*vcl_log(pm);
-    }
+  for (int m = 0; m<nbins; m++)
+  {
+    double pm = model_intensity_hist_->p(m);
+    if (!pm)
+      continue;
+    ent -= pm*vcl_log(pm);
+  }
   model_intensity_entropy_ = ent/vcl_log(2.0);
 
   //compute the gradient direction entropy
   nbins = model_gradient_dir_hist_->nbins();
   ent = 0;
-  for(int m = 0; m<nbins; m++)
-    {
-      double pm = model_gradient_dir_hist_->p(m);
-      if(!pm)
-        continue;
-      ent -= pm*vcl_log(pm);
-    }
+  for (int m = 0; m<nbins; m++)
+  {
+    double pm = model_gradient_dir_hist_->p(m);
+    if (!pm)
+      continue;
+    ent -= pm*vcl_log(pm);
+  }
   model_gradient_dir_entropy_= ent/vcl_log(2.0);
 }
 
@@ -485,17 +497,18 @@ void sdet_tracker::set_gradient(sdet_correlated_face* cf,
                                 vil1_memory_image_of<float> const& Ix,
                                 vil1_memory_image_of<float> const& Iy)
 {
-  if(!cf)
+  if (!cf)
     return;
   vtol_intensity_face_sptr f = cf->face();
   int i = 0;
-  for(f->reset(); f->next();i++)
-    {
-      int x = int(f->X()), y = int(f->Y());
-      cf->set_Ix(i, Ix(x,y));
-      cf->set_Iy(i, Iy(x,y));
-    }
+  for (f->reset(); f->next();i++)
+  {
+    int x = int(f->X()), y = int(f->Y());
+    cf->set_Ix(i, Ix(x,y));
+    cf->set_Iy(i, Iy(x,y));
+  }
 }
+
 //--------------------------------------------------------------------------
 //: Initialize the tracker
 void sdet_tracker::init()
@@ -532,7 +545,7 @@ sdet_tracker::transform_face(vtol_intensity_face_sptr const& face,
   unsigned short const* Ij = face->Ij();
   for (int i=0; i<npix; i++)
   {
-    double x = Xj[i], y = Yj[i]; 
+    double x = Xj[i], y = Yj[i];
     double xp =(x-xo)*scale, yp =(y-yo)*scale;
     X[i] = xp*c - yp*s + xo + tx;
     Y[i] = xp*s + yp*c + yo + ty;
@@ -559,22 +572,25 @@ sdet_tracker::transform_face(vtol_intensity_face_sptr const& face,
   vtol_face_2d_sptr f2d = new vtol_face_2d(new_verts);
   vtol_intensity_face_sptr new_int_face =
     new vtol_intensity_face(f2d, npix, X, Y, I);
-//   vcl_cout << "Transformed Face Centroid (" << new_int_face->Xo()<< ' '
-//            <<  new_int_face->Yo() << ")\n";
+#ifdef DEBUG
+  vcl_cout << "Transformed Face Centroid (" << new_int_face->Xo()<< ' '
+           <<  new_int_face->Yo() << ")\n";
+#endif // DEBUG
 
   delete [] X;
   delete [] Y;
   delete [] I;
   return new_int_face;
 }
+
 //------------------------------------------------------------------------
-//: Compute the local motion of the face 
+//: Compute the local motion of the face
 //
 bool sdet_tracker::compute_motion(sdet_correlated_face* cf,
                                   double& tx, double& ty, double& theta)
 {
   tx = 0; ty =0; theta =0;
-  if(!cf)
+  if (!cf)
     return false;
   int width = image_i_.width(), height = image_i_.height();
   vtol_intensity_face_sptr face = cf->face();
@@ -607,12 +623,12 @@ bool sdet_tracker::compute_motion(sdet_correlated_face* cf,
   //Solve for tx and ty
   //the determinant
   double det = IxIx*IyIy-IxIy*IxIy;
-  if(vcl_fabs(det)<1e-06||sd<1e-06)
+  if (vcl_fabs(det)<1e-06||sd<1e-06)
     return false;
-  //           -            -  
+  //           -            -
   // tx    1  | IyIy   -IxIy | bx
   //    = --- |              |
-  // ty   det |-IxIy    IxIx | by 
+  // ty   det |-IxIy    IxIx | by
   //           -            -
   //  tx = 1/det ( IyIy*bx - IxIy*by)
   //  ty = 1/det (-IxIy*bx + IyIy*by)
@@ -625,7 +641,7 @@ bool sdet_tracker::compute_motion(sdet_correlated_face* cf,
 
 double sdet_tracker::compute_gradient_angle(sdet_correlated_face* cf)
 {
-  if(!cf)
+  if (!cf)
     return false;
   int width = image_i_.width(), height = image_i_.height();
   vtol_intensity_face_sptr face = cf->face();
@@ -642,16 +658,19 @@ double sdet_tracker::compute_gradient_angle(sdet_correlated_face* cf)
     IxIy += Ix*Iy;
     IyIy += Iy*Iy;
   }
-//   vcl_cout << " G = " << "\n" << IxIx << " " << IxIy << "\n"
-//            << IxIy << " " << IyIy << "\n\n";
+#ifdef DEBUG
+  vcl_cout << " G = " << '\n' << IxIx << ' ' << IxIy << '\n'
+           << IxIy << ' ' << IyIy << "\n\n";
+#endif // DEBUG
   double theta_rad = 0.5*vcl_atan2(2*IxIy,(IyIy-IxIx));
-  double theta_deg = (180*theta_rad)/3.14159;
+  double theta_deg = (180*theta_rad)/vnl_math::pi;
   return theta_deg;
 }
-void sdet_tracker::compute_gradient_angle_hist(sdet_correlated_face* cf, 
+
+void sdet_tracker::compute_gradient_angle_hist(sdet_correlated_face* cf,
                                                vcl_vector<double>& ang_hist)
 {
-  if(!cf)
+  if (!cf)
     return;
   int width = image_i_.width(), height = image_i_.height();
   vtol_intensity_face_sptr face = cf->face();
@@ -663,22 +682,22 @@ void sdet_tracker::compute_gradient_angle_hist(sdet_correlated_face* cf,
     if (x<0||x>=width||y<0||y>=height)
       continue;
     float Ix = Ix_i_(x,y), Iy = Iy_i_(x,y);
-    double ang = 180*atan2(Iy, Ix)/3.14159;
+    double ang = 180*vcl_atan2(Iy, Ix)/vnl_math::pi;
     double mag = vcl_sqrt(Ix*Ix + Iy*Iy);
     //convert to 0->360 range
     ang +=180;
-    for(double i =0;i<8; i++)
-      if(ang<(i+1)*45)
-        {
-          ang_hist[i]+=mag;
-          break;
-        }
+    for (int i=0; i<8; ++i)
+      if (ang<(i+1)*45)
+      {
+        ang_hist[i]+=mag;
+        break;
+      }
   }
 }
 
 double sdet_tracker::compute_angle_motion(sdet_correlated_face* cf)
 {
-  if(!cf)
+  if (!cf)
     return 0;
   int width = image_i_.width(), height = image_i_.height();
   double sn = 0, sd=0;
@@ -697,15 +716,16 @@ double sdet_tracker::compute_angle_motion(sdet_correlated_face* cf)
     sn += dI*Ith;
     sd += Ith*Ith;
   }
-  double theta = 180*sn/(sd*3.14159);
+  double theta = 180*sn/(sd*vnl_math::pi);
   return theta;
 }
+
 bool sdet_tracker::
 compute_scale_motion(sdet_correlated_face* cf, double& sx, double& sy)
 {
   sx =1.0;
   sy =1.0;
-  if(!cf)
+  if (!cf)
     return false;
   int width = image_i_.width(), height = image_i_.height();
   double xxIxIx = 0, xyIxIy = 0, yyIyIy=0;
@@ -729,7 +749,7 @@ compute_scale_motion(sdet_correlated_face* cf, double& sx, double& sy)
     ydIIy -= dy*dI*Iy;
   }
   double det = xxIxIx*yyIyIy-xyIxIy*xyIxIy;
-  if(det<1e-06)
+  if (det<1e-06)
     return false;
   sx = 1+(yyIyIy*xdIIx - xyIxIy*ydIIy)/det;
   sy = 1+(xxIxIx*ydIIy - xyIxIy*xdIIx)/det;
@@ -738,7 +758,7 @@ compute_scale_motion(sdet_correlated_face* cf, double& sx, double& sy)
 
 double sdet_tracker::compute_correlation(sdet_correlated_face* cf)
 {
-  if(!cf)
+  if (!cf)
     return 0;
   int width = image_i_.width(), height = image_i_.height();
   double c = 0;
@@ -754,7 +774,7 @@ double sdet_tracker::compute_correlation(sdet_correlated_face* cf)
     c += dI*dI;
     i++;
   }
-  if(i)
+  if (i)
     return c/=i;
   else
     return 1e6;
@@ -762,18 +782,17 @@ double sdet_tracker::compute_correlation(sdet_correlated_face* cf)
 
 double sdet_tracker::compute_intensity_mutual_information(sdet_correlated_face* cf)
 {
-  if(!cf)
+  if (!cf)
     return 0;
-  if(!model_intensity_hist_)
-	return 0;
+  if (!model_intensity_hist_)
+    return 0;
   int width = image_i_.width(), height = image_i_.height();
-  double mi = 0;
   sdet_byte_hist image_hist;
   sdet_byte_joint_hist joint_hist;
 
   vtol_intensity_face_sptr face = cf->face();
   int npix = face->Npix();
-  if(!npix)
+  if (!npix)
     return 0;
   int n = 0;
   for (face->reset(); face->next();)
@@ -788,62 +807,71 @@ double sdet_tracker::compute_intensity_mutual_information(sdet_correlated_face* 
     n++;
   }
   float npixf = (float)npix, nf = (float)n;
-	float frac = nf/npixf;
-  if(frac<0.9)
+    float frac = nf/npixf;
+  if (frac<0.9)
     return 0;
-   // vcl_cout << "Model Hist \n";
-//    model_intensity_hist_->print();
-//    vcl_cout << "Image Hist \n";
-//    image_hist.print();
-//    vcl_cout << "Joint Hist \n";
-//    joint_hist.print();
-  
+#ifdef DEBUG
+  vcl_cout << "Model Hist\n";
+  model_intensity_hist_->print();
+  vcl_cout << "Image Hist\n";
+  image_hist.print();
+  vcl_cout << "Joint Hist\n";
+  joint_hist.print();
+#endif
+
   //compute the mutual information
   int nbins = image_hist.nbins();
-//   for(int m = 0; m<nbins; m++)
-//     {
-//       double pm = model_intensity_hist_->p(m);
-//       if(!pm)
-//         continue;
-//     for(int i = 0; i<nbins; i++)
-//       {
-//         double pi = image_hist.p(i);
-//         if(!pi)
-//           continue;
-// 		double jp = joint_hist.p(m,i);
-// 		if(!jp)
-// 			continue;
-//     double r = jp/(pm*pi);
-//     mi += jp*vcl_log(r);
-//       }
-//     }
-//   mi /= vcl_log(2.0);
-  double enti = 0, jent=0;
-  for(int i = 0; i<nbins; i++)
+#if 0 // old implementation
+  double mi = 0;
+  for (int m = 0; m<nbins; m++)
+  {
+    double pm = model_intensity_hist_->p(m);
+    if (!pm)
+      continue;
+    for (int i = 0; i<nbins; i++)
     {
       double pi = image_hist.p(i);
-      if(pi)
-        enti -= pi*vcl_log(pi);
-      for(int m = 0; m<nbins; m++)
-        {
-          double jp = joint_hist.p(m,i);
-          if(jp)
-            jent -= jp*vcl_log(jp);
-        }
+      if (!pi)
+        continue;
+      double jp = joint_hist.p(m,i);
+      if (!jp)
+        continue;
+      double r = jp/(pm*pi);
+      mi += jp*vcl_log(r);
     }
+  }
+  mi /= vcl_log(2.0);
+#else // 0
+  double enti = 0, jent=0;
+  for (int i = 0; i<nbins; i++)
+  {
+    double pi = image_hist.p(i);
+    if (pi)
+      enti -= pi*vcl_log(pi);
+    for (int m = 0; m<nbins; m++)
+    {
+      double jp = joint_hist.p(m,i);
+      if (jp)
+        jent -= jp*vcl_log(jp);
+    }
+  }
   enti /= vcl_log(2.0);
   jent /= vcl_log(2.0);
-  mi = model_intensity_entropy_ + enti - jent;
-//   vcl_cout << "Entropies:(M,I,J, MI)=(" << model_intensity_entropy_ << " " 
-//            << enti << " " << jent << " " << mi <<")\n";
+  double mi = model_intensity_entropy_ + enti - jent;
+#ifdef DEBUG
+  vcl_cout << "Entropies:(M,I,J, MI)=(" << model_intensity_entropy_ << ' '
+           << enti << ' ' << jent << ' ' << mi <<")\n";
+#endif
+#endif // 0
   return mi;
 }
+
 double sdet_tracker::compute_gradient_mutual_information(sdet_correlated_face* cf)
 {
-  if(!cf)
+  if (!cf)
     return 0;
-  if(!model_gradient_dir_hist_)
-	return 0;
+  if (!model_gradient_dir_hist_)
+    return 0;
   int width = image_i_.width(), height = image_i_.height();
   double mi = 0;
   sdet_gradient_dir_hist image_dir_hist;
@@ -851,9 +879,9 @@ double sdet_tracker::compute_gradient_mutual_information(sdet_correlated_face* c
 
   vtol_intensity_face_sptr face = cf->face();
   int npix = face->Npix();
-  if(!npix)
+  if (!npix)
     return 0;
-  double deg_rad = 180.0/3.14159;
+  double deg_rad = 180.0/vnl_math::pi;
   int i = 0, n = 0;
   for (face->reset(); face->next(); i++)
   {
@@ -861,57 +889,61 @@ double sdet_tracker::compute_gradient_mutual_information(sdet_correlated_face* c
     if (x<0||x>=width||y<0||y>=height)
       continue;
     float Ix0 = cf->Ix(i), Iy0 = cf->Iy(i);
-    double ang0 = (deg_rad*atan2(Iy0, Ix0))+180.0;
-    //    double mag0 = vcl_sqrt(Ix0*Ix0 + Iy0*Iy0);
-    double mag0 = vcl_fabs(Ix0)+vcl_fabs(Iy0);
-    //    vcl_cout << "ang0, mag0 " << ang0 << " " << mag0 << "\n";
+    double ang0 = (deg_rad*vcl_atan2(Iy0, Ix0))+180.0;
+    double mag0 = vcl_fabs(Ix0)+vcl_fabs(Iy0);// was: vcl_sqrt(Ix0*Ix0+Iy0*Iy0);
     float Ixi = Ix_i_(x,y), Iyi = Iy_i_(x,y);
-    //    vcl_cout << "Ixi, Iyi " << Ixi << " " << Iyi << "\n";
-    double angi = (deg_rad*atan2(Iyi, Ixi))+180.0;
-    //    double magi = vcl_sqrt(Ixi*Ixi + Iyi*Iyi);
-    double magi = vcl_fabs(Ixi)+vcl_fabs(Iyi);
-    //    vcl_cout << "angi, magi " << angi << " " << magi << "\n";
+    double angi = (deg_rad*vcl_atan2(Iyi, Ixi))+180.0;
+    double magi = vcl_fabs(Ixi)+vcl_fabs(Iyi);// was: vcl_sqrt(Ixi*Ixi+Iyi*Iyi);
+#ifdef DEBUG
+    vcl_cout << "ang0, mag0 " << ang0 << ' ' << mag0 << '\n'
+             << "Ixi, Iyi " << Ixi << ' ' << Iyi << '\n'
+             << "angi, magi " << angi << ' ' << magi << '\n';
+#endif // DEBUG
     image_dir_hist.upcount(angi, magi);
     joint_dir_hist.upcount(ang0,mag0,angi,magi);
     n++;
   }
   float npixf = (float)npix, nf = (float)n;
-	float frac = nf/npixf;
-  if(frac<0.9)
+  float frac = nf/npixf;
+  if (frac<0.9)
     return 0;
-//      vcl_cout << "Model Dir Hist \n";
-//      model_gradient_dir_hist_->print();
-//      vcl_cout << "Image Dir Hist \n";
-//      image_dir_hist.print();
-//   vcl_cout << "Joint Dir Hist \n";
-//   joint_dir_hist.print();
+#ifdef DEBUG
+  vcl_cout << "Model Dir Hist\n";
+  model_gradient_dir_hist_->print();
+  vcl_cout << "Image Dir Hist\n";
+  image_dir_hist.print();
+  vcl_cout << "Joint Dir Hist\n";
+  joint_dir_hist.print();
+#endif // DEBUG
 
   int nbins = image_dir_hist.nbins();
   double enti = 0, jent=0;
-  for(int i = 0; i<nbins; i++)
+  for (int i = 0; i<nbins; i++)
+  {
+    double pi = image_dir_hist.p(i);
+    if (pi)
+      enti -= pi*vcl_log(pi);
+    for (int m = 0; m<nbins; m++)
     {
-      double pi = image_dir_hist.p(i);
-      if(pi)
-        enti -= pi*vcl_log(pi);
-      for(int m = 0; m<nbins; m++)
-        {
-          double jp = joint_dir_hist.p(m,i);
-          if(jp)
-            jent -= jp*vcl_log(jp);
-        }
+      double jp = joint_dir_hist.p(m,i);
+      if (jp)
+        jent -= jp*vcl_log(jp);
     }
+  }
   enti /= vcl_log(2.0);
   jent /= vcl_log(2.0);
   mi = model_gradient_dir_entropy_ + enti - jent;
-//   vcl_cout << "Dir Entropies:(M,I,J, MI)=(" << model_intensity_entropy_ << " " 
-//            << enti << " " << jent << " " << mi <<")\n";
+#ifdef DEBUG
+  vcl_cout << "Dir Entropies:(M,I,J, MI)=(" << model_intensity_entropy_ << ' '
+           << enti << ' ' << jent << ' ' << mi <<")\n";
+#endif // DEBUG
   return mi;
 }
 
 void sdet_tracker::mutual_info_face(sdet_correlated_face* cf)
 {
   cf->set_int_mutual_info(this->compute_intensity_mutual_information(cf));
-  if(gradient_info_)
+  if (gradient_info_)
     cf->set_grad_mutual_info(this->compute_gradient_mutual_information(cf));
   else
     cf->set_grad_mutual_info(0.0);
@@ -925,45 +957,49 @@ void sdet_tracker::correlate_face(sdet_correlated_face* cf)
   double tx=0, ty=0, theta = 0, c = 0;
   double sx=0, sy=0;//total translations
   c = vcl_sqrt(this->compute_correlation(cf));
-  if(c>corr_thresh)
-    {
-      cf->set_correlation(c);
-      return;
-    }
+  if (c>corr_thresh)
+  {
+    cf->set_correlation(c);
+    return;
+  }
 
-  if(!this->compute_motion(cf, tx, ty, theta))
+  if (!this->compute_motion(cf, tx, ty, theta))
+  {
+    cf->set_correlation(1e6);
+    return;
+  }
+
+  sx+=tx; sy+=ty;
+#ifdef DEBUG
+  vcl_cout << "Initial corr("<< tx << ' ' << ty <<  ")= " << this->compute_correlation(cf, tx, ty)<< '\n';
+#endif // DEBUG
+  //refine the position of the sample so that translation falls below a threshold
+  bool done = false;
+  int max_iter = 3;
+  double thresh = 0.1;
+  while ((!done)&&max_iter>0)
+  {
+    this->transform_sample_in_place(cf, tx, ty, theta);
+    if (!this->compute_motion(cf, tx, ty, theta))
     {
       cf->set_correlation(1e6);
       return;
     }
-  
-  sx+=tx; sy+=ty;
-//   vcl_cout << "Initial corr("<< tx << " " << ty <<  ")= " << this->compute_correlation(cf, tx, ty)<< "\n";
-  //refine the position of the sample so that translation falls below a
-  //threshold
-  bool done = false;
-  int max_iter = 3;
-  double thresh = 0.1;
-  while((!done)&&max_iter>0)
-    {
-      this->transform_sample_in_place(cf, tx, ty, theta);
-      if(!this->compute_motion(cf, tx, ty, theta))
-        {
-          cf->set_correlation(1e6);
-          return;
-        }
-//       vcl_cout << "t["<< 3-max_iter << "] = (" << tx << " " << ty << " "
-//                << 180*theta/3.14159 << ") c = "
-//                << this->compute_correlation(cf) << "\n";
-      if((vcl_fabs(tx)<thresh)&&vcl_fabs(ty)<thresh&&vcl_fabs(theta)<0.01)
-        done=true;
-      sx+=tx; sy+=ty;
-      max_iter--;
-    }
+       vcl_cout << "t["<< 3-max_iter << "] = (" << tx << ' ' << ty << ' '
+                << 180*theta/vnl_math::pi << ") c = "
+                << this->compute_correlation(cf) << '\n';
+    if ((vcl_fabs(tx)<thresh)&&vcl_fabs(ty)<thresh&&vcl_fabs(theta)<0.01)
+      done=true;
+    sx+=tx; sy+=ty;
+    max_iter--;
+  }
   c = this->compute_correlation(cf);
-  //  vcl_cout << "Final corr(" << sx << " " << sy << ")= " << vcl_sqrt(c) << "\n";
+#ifdef DEBUG
+  vcl_cout << "Final corr(" << sx << ' ' << sy << ")= " << vcl_sqrt(c) << '\n';
+#endif // DEBUG
   cf->set_correlation(vcl_sqrt(c));
 }
+
 //--------------------------------------------------------------------------
 //: generate a randomly positioned face within a given radius
 vtol_intensity_face_sptr
@@ -976,32 +1012,33 @@ sdet_tracker::generate_sample(vtol_intensity_face_sptr const& seed)
   float scale = 1+s;
   return this->transform_face(seed, x, y, theta, scale);
 }
+
 //--------------------------------------------------------------------------
 //: generate a randomly positioned correlation face
-sdet_correlated_face* 
+sdet_correlated_face*
 sdet_tracker::generate_cf_sample(sdet_correlated_face* seed)
 {
-  if(!seed)
+  if (!seed)
     return 0;
   vtol_intensity_face_sptr f = this->generate_sample(seed->face());
   sdet_correlated_face* cf = new sdet_correlated_face();
   cf->set_face(f);
   int n = f->Npix();
   // copy the gradient values
-  for(int i = 0; i<n; i++)
-    {
-      cf->set_Ix(i, seed->Ix(i));
-      cf->set_Iy(i, seed->Iy(i));
-    }
+  for (int i = 0; i<n; i++)
+  {
+    cf->set_Ix(i, seed->Ix(i));
+    cf->set_Iy(i, seed->Iy(i));
+  }
   return cf;
 }
+
 //--------------------------------------------------------------------------
-//: Create a new sample with intensity and gradient information from 
-//  its current location in the image.
-sdet_correlated_face* 
+//: Create a new sample with intensity and gradient information from its current location in the image.
+sdet_correlated_face*
 sdet_tracker::regenerate_cf_sample(sdet_correlated_face* sample)
 {
-  if(!sample)
+  if (!sample)
     return 0;
   vtol_face_2d_sptr f = sample->face()->cast_to_face_2d();
   vtol_intensity_face_sptr intf = new vtol_intensity_face(f);
@@ -1011,47 +1048,48 @@ sdet_tracker::regenerate_cf_sample(sdet_correlated_face* sample)
   this->set_gradient(cf, Ix_i_, Iy_i_);
   return cf;
 }
+
 //--------------------------------------------------------------------------
-//: Transform a sample in place, that is, move the X and Y values to 
-//  to X+tx and Y+ty, and rotate about the face center.
+//: Transform a sample in place, that is, move the X and Y values to X+tx and Y+ty, and rotate about the face center.
 void sdet_tracker::transform_sample_in_place(sdet_correlated_face* sample,
                                              double tx, double ty,
                                              double theta)
 {
-  if(!sample)
+  if (!sample)
     return;
   vtol_intensity_face_sptr face = sample->face();
   double xo = face->Xo(), yo = face->Yo();
   double c = vcl_cos(theta), s = vcl_sin(theta);
   vcl_vector<vtol_vertex_sptr> verts;
   face->vertices(verts);
-  for(vcl_vector<vtol_vertex_sptr>::iterator vit = verts.begin();
+  for (vcl_vector<vtol_vertex_sptr>::iterator vit = verts.begin();
       vit != verts.end(); vit++)
-    {
-      vtol_vertex_2d_sptr v = (*vit)->cast_to_vertex_2d();
-      if(!v)
-        continue;
-      double x = v->x(), y = v->y();
-      v->set_x((x-xo)*c -(y-yo)*s + xo + tx); 
-      v->set_y((x-xo)*s +(y-yo)*c + yo + ty);
-    }
-  for(face->reset(); face->next();)
-    {
-      double x = face->X(), y = face->Y();
-      face->set_X((x-xo)*c -(y-yo)*s + xo + tx);
-      face->set_Y((x-xo)*s +(y-yo)*c + yo + ty);
-    }
+  {
+    vtol_vertex_2d_sptr v = (*vit)->cast_to_vertex_2d();
+    if (!v)
+      continue;
+    double x = v->x(), y = v->y();
+    v->set_x((x-xo)*c -(y-yo)*s + xo + tx);
+    v->set_y((x-xo)*s +(y-yo)*c + yo + ty);
+  }
+  for (face->reset(); face->next();)
+  {
+    double x = face->X(), y = face->Y();
+    face->set_X((x-xo)*c -(y-yo)*s + xo + tx);
+    face->set_Y((x-xo)*s +(y-yo)*c + yo + ty);
+  }
 }
+
 //--------------------------------------------------------------------------
 //: generate a random set of new faces from the existing samples
 void sdet_tracker::generate_samples()
 {
   vul_timer t;
   for (vcl_vector<sdet_correlated_face*>::iterator fit =
-         current_samples_.begin(); fit != current_samples_.end(); fit++)
+       current_samples_.begin(); fit != current_samples_.end(); fit++)
     for (int i = 0; i<n_samples_; i++)
     {
-      sdet_correlated_face* cf = this->generate_cf_sample(*fit);      
+      sdet_correlated_face* cf = this->generate_cf_sample(*fit);
       //      this->correlate_face(cf);
       this->mutual_info_face(cf);
       hypothesized_samples_.push_back(cf);
@@ -1059,7 +1097,6 @@ void sdet_tracker::generate_samples()
   //sort the hypotheses
   vcl_sort(hypothesized_samples_.begin(),
            hypothesized_samples_.end(), corr_compare);
-
 }
 
 //--------------------------------------------------------------------------
@@ -1070,31 +1107,33 @@ void sdet_tracker::cull_samples()
   for (vcl_vector<sdet_correlated_face*>::iterator
        cit = current_samples_.begin();
        cit != current_samples_.end(); cit++)
-    delete (*cit);
+    delete *cit;
   current_samples_.clear();
-  double sx =0, sy =0;
   for (int i =0; i<n_samples_; i++)
   {
-//     vcl_cout << "Corr = " << hypothesized_samples_[i]->correlation()
-//              << '\n';
+#ifdef DEBUG
+   vcl_cout << "Corr = " << hypothesized_samples_[i]->correlation() << '\n';
+#endif // DEBUG
     current_samples_.push_back(hypothesized_samples_[i]);
     vcl_cout << vcl_flush;
   }
-  //  this->compute_scale_motion(hypothesized_samples_[0], sx , sy);
   vcl_cout << "Total Inf = " << hypothesized_samples_[0]->total_info()
            << " = IntInfo(" <<  hypothesized_samples_[0]->int_mutual_info()
            << ") + GradInfo(" <<  hypothesized_samples_[0]->grad_mutual_info()
            << ")\n";
-//            << " Motion Scale = (" 
-//            << sx << " " << sy << ")\n";
-    //           << compute_gradient_angle(hypothesized_samples_[0])<< '\n';
-//           << compute_angle_motion(hypothesized_samples_[0])<< '\n';
-//  vcl_vector<double> hist(8);
-//   this->compute_gradient_angle_hist(hypothesized_samples_[0], hist);
-//   for(int i = 0; i<8; i++)
-//     vcl_cout << "H["<< i << "] = " << hist[i] << "\n";
-  for (int i=n_samples_; i<hypothesized_samples_.size(); i++)
-	delete hypothesized_samples_[i];
+#ifdef DEBUG
+  double sx =0, sy =0;
+  this->compute_scale_motion(hypothesized_samples_[0], sx , sy);
+  vcl_cout << " Motion Scale = (" << sx << ' ' << sy << ")\n"
+           << compute_gradient_angle(hypothesized_samples_[0])<< '\n'
+           << compute_angle_motion(hypothesized_samples_[0])<< '\n';
+  vcl_vector<double> hist(8);
+  this->compute_gradient_angle_hist(hypothesized_samples_[0], hist);
+  for (int i = 0; i<8; i++)
+    vcl_cout << "H["<< i << "] = " << hist[i] << '\n';
+#endif // DEBUG
+  for (unsigned int i=n_samples_; i<hypothesized_samples_.size(); ++i)
+    delete hypothesized_samples_[i];
   hypothesized_samples_.clear();
 }
 
@@ -1126,14 +1165,17 @@ void sdet_tracker::track()
   vcl_cout << "Samples generated " << t.real() << " msecs.\n";
   this->cull_samples();
 
-  //  sdet_correlated_face* best = current_samples_[0];
- //  if(best)
-//     {
-//       sdet_correlated_face* regenerated_best=this->regenerate_cf_sample(best);
-//       current_samples_[0]=regenerated_best;
-//       delete best;
-//     }
+#if 0
+  sdet_correlated_face* best = current_samples_[0];
+  if (best)
+  {
+    sdet_correlated_face* regenerated_best=this->regenerate_cf_sample(best);
+    current_samples_[0]=regenerated_best;
+    delete best;
+  }
+#endif // 0
 }
+
 void sdet_tracker::clear()
 {
   current_samples_.clear();
