@@ -3,11 +3,11 @@
 //  \author Tim Cootes
 
 #include <vimt/vimt_image_2d_of.h>
-#include <vil/vil_byte.h>
+#include <vxl_config.h> // for vxl_byte
 
-// Specialise the is_a() for vil_byte
-template<> vcl_string vimt_image_2d_of<vil_byte>::is_a() const
-{  return vcl_string("vimt_image_2d_of<vil_byte>"); }
+// Specialise the is_a() for vxl_byte
+template<> vcl_string vimt_image_2d_of<vxl_byte>::is_a() const
+{  return vcl_string("vimt_image_2d_of<vxl_byte>"); }
 
 // Specialise the is_a() for int
 template<> vcl_string vimt_image_2d_of<int>::is_a() const

@@ -6,8 +6,7 @@
 #include <vimt/vimt_image_2d_of.h>
 #include <vimt/vimt_sample_profile_bilin.h>
 #include <vil2/vil2_image_view.h>
-#include <vil2/vil2_image_view_functions.h>
-#include <vil/vil_byte.h>
+#include <vxl_config.h> // for vxl_byte
 #include <vcl_iostream.h>
 #include <vnl/vnl_vector.h>
 
@@ -16,31 +15,29 @@ int main(int argc, char** argv)
   int nx=10;
   int ny=10;
   int nplanes=1;
-  vimt_image_2d_of<vil_byte> image0(nx,ny,nplanes);
+  vimt_image_2d_of<vxl_byte> image0(nx,ny,nplanes);
 
   // Slow fill
   for (int p=0;p<nplanes;++p)
     for (int y=0;y<ny;++y)
       for (int x=0;x<nx;++x)
-        image0.image()(x,y,p) = vil_byte(x+10*y+100*p);
+        image0.image()(x,y,p) = vxl_byte(x+10*y+100*p);
 
   image0.print_all(vcl_cout);
   vcl_cout<<vcl_endl;
 
   vcl_cout<<"Create a 5 x 5 window with corner at (3,3)"<<vcl_endl;
-  vimt_image_2d_of<vil_byte> window = image0.window(3,5,3,5);
+  vimt_image_2d_of<vxl_byte> window = image0.window(3,5,3,5);
   window.print_all(vcl_cout);
   vcl_cout<<vcl_endl;
-
-
 
   vgl_point_2d<double> p0(4,4);
   vgl_vector_2d<double> u(0.5,0.25);
   vnl_vector<double> v;
   vcl_cout<<"Sampling along (0.5,0.25) starting at (4,4) : "<<vcl_endl;
-  vimt_sample_profile_bilin(v,(const vimt_image_2d_of<vil_byte>&) image0,p0,u,8);
+  vimt_sample_profile_bilin(v,(const vimt_image_2d_of<vxl_byte>&) image0,p0,u,8);
   vcl_cout<<"Original Image View: "<<v<<vcl_endl;
-  vimt_sample_profile_bilin(v,(const vimt_image_2d_of<vil_byte>&) window,p0,u,8);
+  vimt_sample_profile_bilin(v,(const vimt_image_2d_of<vxl_byte>&) window,p0,u,8);
   vcl_cout<<"Window on View     : "<<v<<vcl_endl;
 
   vcl_cout<<"Notice that the projection of the world co-ordinates ";
