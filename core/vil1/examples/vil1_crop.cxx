@@ -1,7 +1,7 @@
-// Example: format conversion.
+// This is vxl/vil/examples/vil_crop.cxx
+// Example: image cropping
 
 #include <vcl_iostream.h>
-#include <vcl_cstring.h>
 #include <vcl_cstdlib.h> // for atoi()
 
 #include <vil/vil_save.h>
@@ -16,10 +16,10 @@ int main(int argc, char ** argv)
   }
   char const* input_filename = argv[1];
   char const* output_filename = argv[2];
-  int x0 = atoi(argv[3]);
-  int y0 = atoi(argv[4]);
-  int w = atoi(argv[5]);
-  int h = atoi(argv[6]);
+  int x0 = vcl_atoi(argv[3]);
+  int y0 = vcl_atoi(argv[4]);
+  int w = vcl_atoi(argv[5]);
+  int h = vcl_atoi(argv[6]);
  
   vil_image in = vil_load(input_filename);
 
