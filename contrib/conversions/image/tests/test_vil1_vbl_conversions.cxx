@@ -16,7 +16,7 @@ static void create_image(const char* name)
   f.close();
 }
 
-void test_image_conversions()
+void test_vil_vbl_conversions()
 {
   vcl_string filename = vul_temp_filename();
   if (filename == "") filename = "vil_vbl_test.pgm";
@@ -54,6 +54,6 @@ void test_image_conversions()
 MAIN( test_vil_vbl_conversions )
 {
   START("vil to vbl conversions");
-  test_image_conversions();
+  test_vil_vbl_conversions();
   SUMMARY();
 }
