@@ -8,6 +8,8 @@
 #include <vgui/vgui_find.h>
 #include <vgui/vgui_projection_inspector.h>
 #include <vil1/vil1_image.h>
+#include <vil/vil_image_view.h>
+#include <vil/vil_image_view_base.h>
 
 // Default ctor
 vsrl_point_picker::vsrl_point_picker( vgui_tableau_sptr child)
@@ -28,6 +30,7 @@ bool vsrl_point_picker::handle( vgui_event const &e)
       vgui_projection_inspector pi;
       float ix, iy;
       pi.window_to_image_coordinates( e.wx, e.wy, ix, iy);
+      point_.set(ix,iy); // save the point that was picked.
 
       if ( (e.button== vgui_LEFT) && !m)
         {
@@ -46,7 +49,8 @@ bool vsrl_point_picker::handle( vgui_event const &e)
         }
       else if (e.button== vgui_MIDDLE && !e.modifier)
         {
-          vgui::out << '(' << ix << ' ' << iy << ")\n";
+          int value = this->get_value(ix,iy);
+          vgui::out << '(' << ix << ' ' << iy << ") I= " << value << "\n";
         }
       else
         {
@@ -88,8 +92,6 @@ vgl_point_2d<float> vsrl_point_picker::put_point(float x, float y)
   // Draw the point
   e2d->add_point(x,y);
 
-  point_.set(x,y);
-
   this->post_redraw();
 
   // return the point in case it's needed elsewhere
@@ -114,4 +116,13 @@ vgl_point_2d<float> vsrl_point_picker::put_H_line(float x, float y)
 
   // return the point in case it's needed elsewhere
   return point_;
+}
+
+int vsrl_point_picker::get_value(float x, float y)
+{
+  vgui_image_tableau_sptr img_tab = get_image_tab_pointer(this);
+  vil1_image img = img_tab->get_image();
+  unsigned int value=0;
+  img.get_section(&value,x,y,1,1);
+  return value;
 }

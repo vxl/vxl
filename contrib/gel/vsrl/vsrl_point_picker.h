@@ -19,7 +19,8 @@ class vsrl_point_picker : public vgui_wrapper_tableau
   vgl_point_2d<float> put_point(vgl_point_2d<float> const& p) { return put_point(p.x(),p.y()); }
   vgl_point_2d<float> put_H_line(float x, float y);
   vgl_point_2d<float> put_H_line(vgl_point_2d<float> const& p) { return put_H_line(p.x(),p.y()); }
-  vgl_point_2d<float> get_point() {return point_;}
+  inline vgl_point_2d<float> get_point() {return point_;}
+  int get_value(float x, float y);
  private:
   vgl_point_2d<float> point_;
 };
