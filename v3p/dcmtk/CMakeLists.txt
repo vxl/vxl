@@ -210,9 +210,9 @@ ENDMACRO(CHECK_PROTOTYPE_EXISTS)
 IF( DCMTK_HAVE_STD_NAMESPACE MATCHES "DCMTK_HAVE_STD_NAMESPACE" )
   MESSAGE(STATUS "Checking if the compiler has namespace std")
   FILE(WRITE ${CMAKE_BINARY_DIR}/CMakeTmp/test_have_namespace.cxx
-    "#include <iostream>\n"
+    "#include <string>\n"
     "using namespace std;\n"
-    "int main() { cout << \"Hello World\" << endl; return 0; }\n" )
+    "int main() { string a="a"; return 0; }\n" )
   TRY_COMPILE( DCMTK_HAVE_STD_NAMESPACE
     ${CMAKE_BINARY_DIR}
     ${CMAKE_BINARY_DIR}/CMakeTmp/test_have_namespace.cxx
@@ -334,6 +334,7 @@ ENDIF( DCMTK_HAVE_CASSERT )
 
 INCLUDE( ${MODULE_PATH}/FindZLIB.cmake )
 IF( ZLIB_FOUND )
+  INCLUDE_DIRECTORIES( ${ZLIB_INCLUDE_DIR} )
   SET( DCMTK_HAVE_ZLIB 1 )
 ELSE( ZLIB_FOUND )
   SET( DCMTK_HAVE_ZLIB )
