@@ -13,7 +13,6 @@
 #include <rgrl/rgrl_trans_homography2d.h>
 #include <rgrl/rgrl_trans_rigid.h>
 #include <rgrl/rgrl_trans_spline.h>
-#include <rgrl/rgrl_trans_homography2d.h>
 #include <rgrl/rgrl_util.h>
 #include <vcl_iostream.h>
 #include <vcl_string.h>
@@ -24,8 +23,7 @@
   if ( tag_str.find(tag) == 0 ){ \
     trans* trans_ptr = new trans(0); \
     trans_ptr->read(is); \
-    sptr = trans_ptr; \
-    return sptr; \
+    return trans_ptr; \
   }
 
 
@@ -38,8 +36,6 @@ rgrl_trans_reader( vcl_istream& is )
 {
   vcl_string tag_str;
   vcl_streampos pos;
-
-  rgrl_transformation_sptr sptr;
 
   // skip any empty lines
   rgrl_util_skip_empty_lines( is );
@@ -62,11 +58,11 @@ rgrl_trans_reader( vcl_istream& is )
   READ_THIS_TRANSFORMATION("QUADRATIC", rgrl_trans_quadratic)
   READ_THIS_TRANSFORMATION("BSPLINE", rgrl_trans_spline)
   // Read homography, macro cannot be used, because there is no constructor for rgrl_trans_homography2d,
-  // that would take one argument (dimension). The dimension is fixed.
+  // that would take one argument (dimension). The dimension is fixed to 2.
   if ( tag_str.find("HOMOGRAPHY2D") == 0 ){
     rgrl_trans_homography2d* trans_ptr = new rgrl_trans_homography2d();
     trans_ptr->read(is);
-    sptr = trans_ptr;
+    return trans_ptr;
   }
 
   // default, should never reach here
@@ -75,7 +71,7 @@ rgrl_trans_reader( vcl_istream& is )
           << "       " << "Tag " << tag_str
           << " cannot match with any existing transformations.\n"
           << "         Try to open istream in BINARY mode!" << vcl_endl;
-  return sptr;
+  return 0;
 }
 
 //: stream operator for reading transformation
