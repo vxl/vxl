@@ -10,7 +10,7 @@
 
 //: True if pixel at *im is strictly below its 8 neighbours
 template <class T>
-inline bool vimt_is_trough_3x3(const float* im, int i_step, int j_step)
+inline bool vimt_is_trough_3x3(const T* im, int i_step, int j_step)
 {
   T v = *im;
   if (v>=im[i_step]) return false;
@@ -31,7 +31,7 @@ inline void vimt_find_image_troughs_3x3(vcl_vector<vgl_point_2d<int> >& troughs,
 {
   unsigned ni=image.ni(),nj=image.nj();
   int istep = image.istep(),jstep=image.jstep();
-  const T* row = image.top_left_ptr()+plane*im.planestep()+istep+jstep;
+  const T* row = image.top_left_ptr()+plane*image.planestep()+istep+jstep;
   for (int j=1;j<nj;++j,row+=jstep)
   {
     const T* pixel = row;
