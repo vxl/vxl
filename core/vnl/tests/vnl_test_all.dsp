@@ -232,6 +232,9 @@ SOURCE=.\test_arithmetic.cxx
 SOURCE=.\test_cholesky.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_algo.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\basic_operation_timings.cxx
 # End Source File
 # End Group
