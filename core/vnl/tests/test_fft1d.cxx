@@ -45,7 +45,6 @@ void test_fft1d () {
   vnl_vector<vcl_complex<double> > fTestArray(ciArraySizeX);
   vnl_vector<vcl_complex<double> > fTestArrayConvert(ciArraySizeX);
   vnl_vector<vcl_complex<double> > fTestArrayFwd(ciArraySizeX);
-  vnl_vector<vcl_complex<double> > fZeroArray(ciArraySizeX,0.0);
 
   //fill with data
   for (int iC = 0;iC < ciArraySizeX;iC ++) {

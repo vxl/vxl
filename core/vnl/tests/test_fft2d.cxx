@@ -28,8 +28,8 @@
 
 inline static double function(unsigned i, unsigned j) { return i * j; }
 
-void test_cplx(vnl_fft_prime_factors<double> const &prx,
-               vnl_fft_prime_factors<double> const &pry,
+void test_cplx(vnl_fft_prime_factors<double> const &/*prx*/,
+               vnl_fft_prime_factors<double> const &/*pry*/,
                vnl_matrix<vcl_complex<double> > const &M,
                int dir)
 {

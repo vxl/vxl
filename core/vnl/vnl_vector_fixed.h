@@ -118,16 +118,18 @@ public:
   vnl_vector_fixed<T,n> operator- (vnl_vector<T> const& rhs) const
     { return  (vnl_vector_fixed<T,n> (*this) -= rhs); }
 
+#if 0 // no need to declare these as friend function
   friend vnl_vector_fixed<T,n> element_product VCL_NULL_TMPL_ARGS (vnl_vector_fixed_ref<T,n> const&,
                                                                    vnl_vector_fixed_ref<T,n> const&);
   friend vnl_vector_fixed<T,n> element_quotient VCL_NULL_TMPL_ARGS (vnl_vector_fixed_ref<T,n> const&,
                                                                     vnl_vector_fixed_ref<T,n> const&);
+#endif
 
 private:
   T space[n];
 };
 
-#ifndef VCL_SUNPRO_CC_50 // does not allow funtions templated over non-types.
+#ifndef VCL_SUNPRO_CC_50 // does not allow functions templated over non-types.
 // define inline friends.
 template <class T, int n>
 inline vnl_vector_fixed<T,n> operator+(T const t, vnl_vector_fixed<T,n> const & rhs)
@@ -143,7 +145,7 @@ inline vnl_vector_fixed<T,n> operator*(T const t, vnl_vector_fixed<T,n> const& r
 
 template <class T, int n>
 inline vnl_vector_fixed<T,n> element_product (vnl_vector_fixed_ref<T,n> const& a,
-                                       vnl_vector_fixed_ref<T,n> const& b)
+                                              vnl_vector_fixed_ref<T,n> const& b)
 {
   vnl_vector_fixed<T,n> ret (a);
   for (int i=0; i<n; i++) ret[i] *= b[i];
@@ -152,7 +154,7 @@ inline vnl_vector_fixed<T,n> element_product (vnl_vector_fixed_ref<T,n> const& a
 
 template <class T, int n>
 inline vnl_vector_fixed<T,n> element_quotient (vnl_vector_fixed_ref<T,n> const& a,
-                                        vnl_vector_fixed_ref<T,n> const& b)
+                                               vnl_vector_fixed_ref<T,n> const& b)
 {
   vnl_vector_fixed<T,n> ret (a);
   for (int i=0; i<n; i++) ret[i] /= b[i];

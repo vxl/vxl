@@ -77,7 +77,7 @@ public:
   inline vnl_rational (int num, int den = 1)
     : num_(num), den_(den) { assert(num!=0||den!=0); normalize(); }
   inline vnl_rational (unsigned int num, unsigned int den = 1)
-    : num_(num), den_(den) { assert(num!=0||den!=0); normalize(); }
+    : num_((long)num), den_((long)den) { assert(num!=0||den!=0); normalize(); }
   //: Creates a rational from a double.
   //  This is done by computing the continued fraction approximation for d.
   //  Note that this is explicitly *not* an automatic type conversion.
@@ -379,7 +379,7 @@ inline long floor (vnl_rational const& r) { return r.floor(); }
 inline long ceil (vnl_rational const& r) { return r.ceil(); }
 inline long round (vnl_rational const& r) { return r.round(); }
 
-#if defined(VCL_SUNPRO_CC)
+#if defined(VCL_SUNPRO_CC) || !VCL_USE_NATIVE_COMPLEX
 inline vnl_rational vcl_abs (vnl_rational const& x) { return x.abs(); }
 #else
 namespace std {
@@ -391,7 +391,7 @@ vnl_rational sqrt (vnl_rational x); // { return vnl_rational(vcl_sqrt(double(x))
 inline vnl_rational vnl_math_abs(vnl_rational const& x) { return x<0L ? -x : x; }
 inline vnl_rational vnl_math_squared_magnitude(vnl_rational const& x) { return x*x; }
 inline vnl_rational vnl_math_sqr(vnl_rational const& x) { return x*x; }
-inline bool vnl_math_isnan(vnl_rational const& x){return false;}
+inline bool vnl_math_isnan(vnl_rational const& ){return false;}
 inline bool vnl_math_isfinite(vnl_rational const& x){return x.denominator() != 0L;} 
 
 #include <vnl/vnl_complex_traits.h>
