@@ -52,9 +52,9 @@ rsdl_kd_tree::rsdl_kd_tree( const vcl_vector< rsdl_point >& points,
 
   // 1c. create the bounding box
   rsdl_bounding_box box( low, high );
-
-  // vcl_cout << "Initial bounding box: " << box << vcl_endl;
-
+#ifdef DEBUG
+  vcl_cout << "Initial bounding box: " << box << vcl_endl;
+#endif
   // 2. create the vector of ids
   vcl_vector< int > indices( points_.size() );
   for ( unsigned int i=0; i<indices.size(); ++i ) indices[ i ] = i;
@@ -82,23 +82,26 @@ rsdl_kd_tree::build_kd_tree( int points_per_leaf,
 {
   assert(points_per_leaf > 0);
   unsigned int i;
-
-  /// vcl_cout << "build_kd_tree:  \n  ids:  ";
-  //  for ( i=0; i<indices.size(); ++i )
-  //    vcl_cout << " index: " << indices[i] << ",  point:  " << points_[ indices[i] ] << "\n";
-  //  vcl_cout << "\n  outer bounding box: \n" << outer_box << vcl_endl;
-
+#ifdef DEBUG
+  vcl_cout << "build_kd_tree:\n  ids:\n";
+  for ( i=0; i<indices.size(); ++i )
+    vcl_cout << " index: " << indices[i] << ",  point:  " << points_[ indices[i] ] << '\n';
+  vcl_cout << "\n  outer bounding box:\n" << outer_box << vcl_endl;
+#endif
   // 1. Build the inner box.  This is not done inside the bounding box
   // class because of the indices.
 
   rsdl_bounding_box inner_box = this -> build_inner_box( indices );
-
-  // vcl_cout << "\n  inner bounding box: \n" << inner_box << vcl_endl;
+#ifdef DEBUG
+  vcl_cout << "\n  inner bounding box:\n" << inner_box << vcl_endl;
+#endif
 
   // 2. If the number of points is small enough, create and return a leaf node.
 
   if ( indices.size() <= (unsigned int)points_per_leaf ) {
-    // vcl_cout << "making leaf node" << vcl_endl;
+#ifdef DEBUG
+    vcl_cout << "making leaf node" << vcl_endl;
+#endif
     leaf_count_ ++ ;
     return new rsdl_kd_node ( outer_box, inner_box, depth, indices );
   }
@@ -109,10 +112,10 @@ rsdl_kd_tree::build_kd_tree( int points_per_leaf,
   bool use_cartesian;
   int dim;
   this->greatest_variation( indices, use_cartesian, dim );
-
-  // vcl_cout << "greatest_varation returned  use_cartesian = " << use_cartesian
-  //          << ", dim = " << dim << vcl_endl;
-
+#ifdef DEBUG
+  vcl_cout << "greatest_varation returned  use_cartesian = " << use_cartesian
+           << ", dim = " << dim << vcl_endl;
+#endif
   // 4. Form and then sort a vector of temporary pairs, containing the
   // indices and the values along the selected dim of the data.
   // Sort by the values.
@@ -127,16 +130,18 @@ rsdl_kd_tree::build_kd_tree( int points_per_leaf,
     }
   }
   vcl_sort( values.begin(), values.end(), first_less );
-
-  // vcl_cout << "\nsorted values/indices: \n";
-  // for ( i=0; i<values.size(); ++i )
-  //   vcl_cout << i << ":  value = " << values[i].first << ", id = " << values[i].second << vcl_endl;
-
+#ifdef DEBUG
+  vcl_cout << "\nsorted values/indices:\n";
+  for ( i=0; i<values.size(); ++i )
+    vcl_cout << i << ":  value = " << values[i].first << ", id = " << values[i].second << vcl_endl;
+#endif
   // 5. Partition the vector and the bounding box along the dimension.
 
   unsigned int med_loc = (indices.size()-1) / 2;
   double median_value = (values[med_loc].first + values[med_loc+1].first) / 2;
-  // vcl_cout << "med_loc = " << med_loc << ", median_value = " << median_value << vcl_endl;
+#ifdef DEBUG
+  vcl_cout << "med_loc = " << med_loc << ", median_value = " << median_value << vcl_endl;
+#endif
   rsdl_bounding_box left_outer_box( outer_box ), right_outer_box( outer_box );
   if ( use_cartesian ) {
     left_outer_box.max_cartesian( dim ) = median_value;
@@ -146,9 +151,10 @@ rsdl_kd_tree::build_kd_tree( int points_per_leaf,
     left_outer_box.max_angular( dim ) = median_value;
     right_outer_box.min_angular( dim ) = median_value;
   }
-
-  // vcl_cout << "new bounding boxes:  left " << left_outer_box << "\n  right "
-  //          << right_outer_box << vcl_endl;
+#ifdef DEBUG
+  vcl_cout << "new bounding boxes:  left " << left_outer_box
+           << "\n  right " << right_outer_box << vcl_endl;
+#endif
   vcl_vector< int > left_indices( med_loc+1 ), right_indices( indices.size()-med_loc-1 );
   for ( i=0; i<=med_loc; ++i ) left_indices[i] = values[i].second;
   for ( ; i<indices.size(); ++i ) right_indices[i-med_loc-1] = values[i].second;
@@ -277,7 +283,7 @@ rsdl_kd_tree::n_nearest( const rsdl_point& query_point,
     this->n_nearest_with_heap( query_point, n, root_, closest_indices, sq_distances, num_found );
   else
     this->n_nearest_with_stack( query_point, n, root_, closest_indices, sq_distances, num_found );
-#if 0
+#ifdef DEBUG
   vcl_cout << "\nAfter n_nearest, leaves_examined_ = " << leaves_examined_
            << ", fraction = " << float(leaves_examined_) / leaf_count_
            << "\n     internal_examined_ = " << internal_examined_
@@ -302,7 +308,9 @@ rsdl_kd_tree::n_nearest_with_stack( const rsdl_point& query_point,
                                     int & num_found )
 {
   assert(n>0);
-  // vcl_cout << "\n\n----------------\nn_nearest_with_stack \n";
+#ifdef DEBUG
+  vcl_cout << "\n\n----------------\nn_nearest_with_stack" << vcl_endl;
+#endif
   vcl_vector< rsdl_kd_heap_entry  > stack_vec;
   stack_vec.reserve( 100 );    // way more than will ever be needed
   double left_box_sq_dist, right_box_sq_dist;
@@ -314,17 +322,19 @@ rsdl_kd_tree::n_nearest_with_stack( const rsdl_point& query_point,
   sq_dist = 0;
 
   do {
-    // vcl_cout << "\ncurrent -- sq_dist " << sq_dist << ", depth: " << current->depth_
-    //       << "\nouter_box: "
-    //       << current->outer_box_ << "\ninner_box: "
-    //       << current->inner_box_ << vcl_endl;
-    // vcl_cout << "stack size: " << stack_vec.size() << vcl_endl;
-
+#ifdef DEBUG
+    vcl_cout << "\ncurrent -- sq_dist " << sq_dist << ", depth: " << current->depth_
+             << "\nouter_box: " << current->outer_box_
+             << "\ninner_box: " << current->inner_box_
+             << "\nstack size: " << stack_vec.size() << vcl_endl;
+#endif
     // if the distance is too large, skip node and take the next node
     // from the stack
 
     if ( num_found >= n && sq_dist >= sq_distances[ num_found-1 ] ) {
-      // vcl_cout << "skipping node\n";
+#ifdef DEBUG
+      vcl_cout << "skipping node" << vcl_endl;
+#endif
       if ( stack_vec.size() == 0 )
         return;  // DONE
       else {
@@ -338,7 +348,9 @@ rsdl_kd_tree::n_nearest_with_stack( const rsdl_point& query_point,
     //  take the next node from the stack
 
     else if ( ! current->left_ ) {
-      // vcl_cout << "At a leaf\n";
+#ifdef DEBUG
+      vcl_cout << "At a leaf" << vcl_endl;
+#endif
       leaves_examined_ ++ ;
       update_closest( query_point, n, current, closest_indices, sq_distances, num_found );
 
@@ -348,9 +360,13 @@ rsdl_kd_tree::n_nearest_with_stack( const rsdl_point& query_point,
 
       //  If we're on the first path down the tree and if we can decide there
       //  is no possibility of any other closer point, then quit.
-      else {
-        if ( initial_path ) {
-          // vcl_cout << "First leaf\n";
+      else
+      {
+        if ( initial_path )
+        {
+#ifdef DEBUG
+          vcl_cout << "First leaf" << vcl_endl;
+#endif
           initial_path = false ;
           if ( this-> bounded_at_leaf( query_point, n, current, sq_distances, num_found ) )
             return; //  done
@@ -363,21 +379,31 @@ rsdl_kd_tree::n_nearest_with_stack( const rsdl_point& query_point,
       }
     }
 
-    else {
-      // vcl_cout << "Internal node\n";
+    else
+    {
+#ifdef DEBUG
+      vcl_cout << "Internal node" << vcl_endl;
+#endif
       internal_examined_ ++ ;
       left_box_sq_dist = rsdl_dist_sq( query_point, current->left_->inner_box_ );
       right_box_sq_dist = rsdl_dist_sq( query_point, current->right_->inner_box_ );
-      // vcl_cout << "left sq distance = " << left_box_sq_dist << vcl_endl;
-      // vcl_cout << "right sq distance = " << right_box_sq_dist << vcl_endl;
+#ifdef DEBUG
+      vcl_cout << "left sq distance = " << left_box_sq_dist << vcl_endl
+               << "right sq distance = " << right_box_sq_dist << vcl_endl;
+#endif
 
-      if ( left_box_sq_dist < right_box_sq_dist ) {
-        // vcl_cout << "going left, pushing right" << vcl_endl;
+      if ( left_box_sq_dist < right_box_sq_dist )
+      {
+#ifdef DEBUG
+        vcl_cout << "going left, pushing right" << vcl_endl;
+#endif
         stack_vec.push_back( rsdl_kd_heap_entry( right_box_sq_dist, current->right_ ) );
         current = current->left_ ;
       }
       else {
-        // vcl_cout << "going right, pushing left" << vcl_endl;
+#ifdef DEBUG
+        vcl_cout << "going right, pushing left" << vcl_endl;
+#endif
         stack_vec.push_back( rsdl_kd_heap_entry( left_box_sq_dist, current->left_ ) );
         current = current->right_ ;
       }
@@ -395,7 +421,9 @@ rsdl_kd_tree::n_nearest_with_heap( const rsdl_point& query_point,
                                    int & num_found )
 {
   assert(n>0);
-  // vcl_cout << "\n\n----------------\nn_nearest_with_heap \n";
+#ifdef DEBUG
+  vcl_cout << "\n\n----------------\nn_nearest_with_heap" << vcl_endl;
+#endif
   vcl_vector< rsdl_kd_heap_entry > heap_vec;
   heap_vec.reserve( 100 );
   double left_box_sq_dist, right_box_sq_dist;
@@ -420,25 +448,32 @@ rsdl_kd_tree::n_nearest_with_heap( const rsdl_point& query_point,
   vcl_make_heap( heap_vec.begin(), heap_vec.end() );
   sq_dist = 0;
 
-  // vcl_cout << "\nAfter initial trip down the tree, here's the heap\n";
-  // int i;
-  // for ( i=0; i<heap_vec.size(); ++i )
-  //   vcl_cout << "  " << i << ":  sq distance " << heap_vec[i].dist_
-  //            << ", node depth " << heap_vec[i].p_->depth_ << vcl_endl;
+#ifdef DEBUG
+  vcl_cout << "\nAfter initial trip down the tree, here's the heap\n";
+  for ( int i=0; i<heap_vec.size(); ++i )
+    vcl_cout << "  " << i << ":  sq distance " << heap_vec[i].dist_
+             << ", node depth " << heap_vec[i].p_->depth_ << vcl_endl;
+#endif
   bool first_leaf = true;
 
   do {
-    // vcl_cout << "\ncurrent -- sq_dist " << sq_dist << ", depth: " << current->depth_
-    //         << current->outer_box_ << "\ninner_box: "
-    //      << current->inner_box_ << "\n";
-    // vcl_cout << "heap size: " << heap_vec.size() << vcl_endl;
+#ifdef DEBUG
+    vcl_cout << "\ncurrent -- sq_dist " << sq_dist << ", depth: " << current->depth_
+             << "\nouter_box: " << current->outer_box_
+             << "\ninner_box: " << current->inner_box_
+             << "\nheap size: " << heap_vec.size() << vcl_endl;
+#endif
     if ( num_found < n || sq_dist < sq_distances[ num_found-1 ] ) {
       if ( ! current->left_ ) {  // a leaf node
-        // vcl_cout << "Leaf\n";
+#ifdef DEBUG
+        vcl_cout << "Leaf" << vcl_endl;
+#endif
         leaves_examined_ ++ ;
         update_closest( query_point, n, current, closest_indices, sq_distances, num_found );
         if ( first_leaf ) {  // check if we can quit just at this leaf node.
-          // vcl_cout << "First leaf\n";
+#ifdef DEBUG
+          vcl_cout << "First leaf" << vcl_endl;
+#endif
           first_leaf = false;
           if ( this-> bounded_at_leaf( query_point, n, current, sq_distances, num_found ) )
             return;
@@ -446,27 +481,39 @@ rsdl_kd_tree::n_nearest_with_heap( const rsdl_point& query_point,
       }
 
       else {
-        // vcl_cout << "Internal\n";
+#ifdef DEBUG
+        vcl_cout << "Internal" << vcl_endl;
+#endif
         internal_examined_ ++ ;
 
         left_box_sq_dist = rsdl_dist_sq( query_point, current->left_->inner_box_ );
-        // vcl_cout << "left sq distance = " << left_box_sq_dist << vcl_endl;
+#ifdef DEBUG
+        vcl_cout << "left sq distance = " << left_box_sq_dist << vcl_endl;
+#endif
         if ( num_found < n || sq_distances[ num_found-1 ] > left_box_sq_dist ) {
-          // vcl_cout << "pushing left onto the heap\n";
+#ifdef DEBUG
+          vcl_cout << "pushing left onto the heap" << vcl_endl;
+#endif
           heap_vec.push_back( rsdl_kd_heap_entry( left_box_sq_dist, current->left_ ) );
           vcl_push_heap( heap_vec.begin(), heap_vec.end() );
         };
 
         right_box_sq_dist = rsdl_dist_sq( query_point, current->right_->inner_box_ );
-        // vcl_cout << "right sq distance = " << right_box_sq_dist << vcl_endl;
+#ifdef DEBUG
+        vcl_cout << "right sq distance = " << right_box_sq_dist << vcl_endl;
+#endif
         if ( num_found < n || sq_distances[ num_found-1 ] > right_box_sq_dist ) {
-          // vcl_cout << "pushing right onto the heap\n";
+#ifdef DEBUG
+          vcl_cout << "pushing right onto the heap" << vcl_endl;
+#endif
           heap_vec.push_back( rsdl_kd_heap_entry( right_box_sq_dist, current->right_ ) );
           vcl_push_heap( heap_vec.begin(), heap_vec.end() );
         }
       }
     }
-    // else vcl_cout << "skipping node\n";
+#ifdef DEBUG
+    else vcl_cout << "skipping node" << vcl_endl;
+#endif
 
     if ( heap_vec.size() == 0 )
       return;
@@ -488,16 +535,20 @@ rsdl_kd_tree::update_closest( const rsdl_point& query_point,
                               int & num_found )
 {
   assert(n>0);
-  // vcl_cout << "Update_closest for leaf " << vcl_endl;
-  // vcl_cout << " query_point = " << query_point << vcl_endl;
-  // vcl_cout << " inner bounding box = \n" << p->inner_box_ << vcl_endl;
-  // vcl_cout << " sq_dist = " << rsdl_dist_sq( query_point, p->inner_box_ ) << vcl_endl;
+#ifdef DEBUG
+  vcl_cout << "Update_closest for leaf\n query_point = " << query_point
+           << "\n inner bounding box =\n" << p->inner_box_
+           << "\n sq_dist = " << rsdl_dist_sq( query_point, p->inner_box_ )
+           << vcl_endl;
+#endif
 
   for ( unsigned int i=0; i < p->point_indices_.size(); ++i ) {  // check each id
     int id = p->point_indices_[i];
     double sq_dist = rsdl_dist_sq( query_point, points_[ id ] );
-    // vcl_cout << "  id = " << id << ", point = " << points_[ id ]
-    //          << ", sq_dist = " << sq_dist << vcl_endl;
+#ifdef DEBUG
+    vcl_cout << "  id = " << id << ", point = " << points_[ id ]
+             << ", sq_dist = " << sq_dist << vcl_endl;
+#endif
 
     // if enough points have been found and the distance of this point is
     // too large then skip it.
@@ -523,11 +574,13 @@ rsdl_kd_tree::update_closest( const rsdl_point& query_point,
     closest_indices[ j+1 ] = id;
     sq_distances[ j+1 ] = sq_dist;
   }
-  // vcl_cout << "  End of leaf computation, num_found =  " << num_found
-  //          << ", and they are: " << vcl_endl;
-  // for ( int k=0; k<num_found; ++k )
-  //   vcl_cout << "     " << k << ":  indices: " << closest_indices[ k ]
-  //            << ", sq_dist " << sq_distances[ k ] << vcl_endl;
+#ifdef DEBUG
+  vcl_cout << "  End of leaf computation, num_found =  " << num_found
+           << ", and they are:\n";
+  for ( int k=0; k<num_found; ++k )
+    vcl_cout << "     " << k << ":  indices: " << closest_indices[ k ]
+             << ", sq_dist " << sq_distances[ k ] << vcl_endl;
+#endif
 }
 
 
@@ -545,8 +598,9 @@ rsdl_kd_tree :: bounded_at_leaf ( const rsdl_point& query_point,
                                   int & num_found )
 {
   assert(n>0);
-  // vcl_cout << "bounded_at_leaf\n"
-  //          << "num_found = " << num_found << "\n";
+#ifdef DEBUG
+  vcl_cout << "bounded_at_leaf\n num_found = " << num_found << vcl_endl;
+#endif
 
   if ( num_found != n ) {
     return false;
