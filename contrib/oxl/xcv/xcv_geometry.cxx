@@ -452,11 +452,11 @@ void xcv_geometry::save(const char *object_type,const char *dialog_name)
       bool matched = (object_type == 0) || (sv->type_name() == object_type);
       vcl_string svtype = sv->type_name();
       vgui_style* style = sv->get_style();
-      if (style) {
-        fs << "c " << style->rgba[0] << " " << style->rgba[1] << " " << style->rgba[2] << vcl_endl;
-        fs << "r " << style->point_size << vcl_endl;
-        fs << "w " << style->line_width << vcl_endl;
-      }
+      if (style)
+        fs << "c " << style->rgba[0] << " " << style->rgba[1]
+           <<  " " << style->rgba[2] << vcl_endl
+           << "r " << style->point_size << vcl_endl
+           << "w " << style->line_width << vcl_endl;
 
       if (svtype == "vgui_soview2D_point" && matched)
       {
@@ -483,9 +483,7 @@ void xcv_geometry::save(const char *object_type,const char *dialog_name)
         vgui_soview2D_linestrip *linestrip = (vgui_soview2D_linestrip *)sv;
         fs<<"L "<<linestrip->n;
         for (unsigned int ii = 0; ii<linestrip->n; ++ii)
-        {
           fs<<" "<<linestrip->x[ii]<<" "<<linestrip->y[ii];
-        }
         fs << vcl_endl;
       }
       else if (svtype == "vgui_soview2D_polygon" && matched)
@@ -493,9 +491,7 @@ void xcv_geometry::save(const char *object_type,const char *dialog_name)
         vgui_soview2D_polygon *polygon = (vgui_soview2D_polygon *)sv;
         fs<<"y "<<polygon->n;
         for (unsigned int ii = 0; ii<polygon->n; ++ii)
-        {
           fs<<" "<<polygon->x[ii]<<" "<<polygon->y[ii];
-        }
         fs << vcl_endl;
       }
     }
@@ -556,53 +552,53 @@ void xcv_geometry::load(const char *object_type,const char *dialog_name)
     {
       vcl_string tag;
       fs >> tag >> vcl_ws;
-      if (tag == "c")
+      if (tag == "c" && (object_type == 0 || tag==vcl_string(object_type)))
       {
         // colour
         float r,g,b;
         fs>>r>>g>>b;
         easy_tab->set_foreground(r,g,b);
       }
-      else if (tag == "w")
+      else if (tag == "w" && (object_type == 0 || tag==vcl_string(object_type)))
       {
         // line width
         float w;
         fs>>w;
         easy_tab->set_line_width(w);
       }
-      else if (tag == "r")
+      else if (tag == "r" && (object_type == 0 || tag==vcl_string(object_type)))
       {
         // point radius
         float w;
         fs>>w;
         easy_tab->set_point_radius(w);
       }
-      else if (tag == "p")
+      else if (tag == "p" && (object_type == 0 || tag==vcl_string(object_type)))
       {
         float x,y;
         fs>>x;
         fs>>y;
         easy_tab->add_point(x,y);
       }
-      else if (tag == "circle")
+      else if (tag == "circle" && (object_type == 0 || tag==vcl_string(object_type)))
       {
         float x,y,r;
         fs>>x>>y>>r;
         easy_tab->add_circle(x,y,r);
       }
-      else if (tag == "l")
+      else if (tag == "l" && (object_type == 0 || tag==vcl_string(object_type)))
       {
         float x0,y0,x1,y1;
         fs>>x0>>y0>>x1>>y1;
         easy_tab->add_line(x0,y0,x1,y1);
       }
-      else if (tag == "il")
+      else if (tag == "il" && (object_type == 0 || tag==vcl_string(object_type)))
       {
         float a,b,c;
         fs>>a>>b>>c;
         easy_tab->add_infinite_line(a,b,c);
       }
-      else if (tag == "L")
+      else if (tag == "L" && (object_type == 0 || tag==vcl_string(object_type)))
       {
         int n;
         fs>>n;
@@ -617,7 +613,7 @@ void xcv_geometry::load(const char *object_type,const char *dialog_name)
           y0 = y1;
         }
       }
-      else if (tag == "y")
+      else if (tag == "y" && (object_type == 0 || tag==vcl_string(object_type)))
       {
         int n;
         fs>>n;
@@ -627,6 +623,8 @@ void xcv_geometry::load(const char *object_type,const char *dialog_name)
           fs>>x[i]>>y[i];
         easy_tab->add_polygon(n, &x[0], &y[0]);
       }
+      else vcl_cerr << "Unrecognised tag " << tag << " in file " << filename
+                    << "\nencountered in xcv_geometry::load(" << object_type << ")\n";
     }
   }
   fs.close();
