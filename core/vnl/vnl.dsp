@@ -1788,11 +1788,6 @@ SOURCE=.\vnl_identity.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vnl_matlab_file_write.h
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\vnl_matrix_ref.h
 
 # End Source File
@@ -1814,11 +1809,6 @@ SOURCE=.\vnl_vector_dereference.h
 # Begin Source File
 
 SOURCE=.\vnl_finite.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_random.h
 
 # End Source File
 # Begin Source File
