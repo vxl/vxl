@@ -1,0 +1,165 @@
+// <begin copyright notice>
+// ---------------------------------------------------------------------------
+//
+//                   Copyright (c) 1997 TargetJr Consortium
+//               GE Corporate Research and Development (GE CRD)
+//                             1 Research Circle
+//                            Niskayuna, NY 12309
+//                            All Rights Reserved
+//              Reproduction rights limited as described below.
+//                               
+//      Permission to use, copy, modify, distribute, and sell this software
+//      and its documentation for any purpose is hereby granted without fee,
+//      provided that (i) the above copyright notice and this permission
+//      notice appear in all copies of the software and related documentation,
+//      (ii) the name TargetJr Consortium (represented by GE CRD), may not be
+//      used in any advertising or publicity relating to the software without
+//      the specific, prior written permission of GE CRD, and (iii) any
+//      modifications are clearly marked and summarized in a change history
+//      log.
+//       
+//      THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTY OF ANY KIND,
+//      EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
+//      WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+//      IN NO EVENT SHALL THE TARGETJR CONSORTIUM BE LIABLE FOR ANY SPECIAL,
+//      INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND OR ANY
+//      DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
+//      WHETHER OR NOT ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, OR ON
+//      ANY THEORY OF LIABILITY ARISING OUT OF OR IN CONNECTION WITH THE
+//      USE OR PERFORMANCE OF THIS SOFTWARE.
+//
+// ---------------------------------------------------------------------------
+// <end copyright notice>
+
+//--------------------------------------------------------------
+//
+// Class : HMatrix2DComputeLinear
+//
+// Modifications : see HMatrix2DComputeLinear.h
+//
+//--------------------------------------------------------------
+
+#include <vcl/vcl_vector.h>
+#include <vcl/vcl_iostream.h>
+#include <vnl/algo/vnl_svd.h>
+#include <mvl/HMatrix2D.h>
+#include <mvl/HomgMetric.h>
+#include "HomgNorm2D.h"
+#include "HMatrix2DComputeLinear.h"
+
+// -- Construct a HMatrix2DComputeLinear object.
+// The allow_ideal_points flag is described below.
+HMatrix2DComputeLinear::HMatrix2DComputeLinear(bool allow_ideal_points):
+  _allow_ideal_points(allow_ideal_points)
+{
+}
+
+
+// Should provide:
+//   Points-only method
+//   Lines-only
+//   Points&lines
+//
+// FSM - this is now done by HMatrix2DComputeDesign.
+
+const int TM_UNKNOWNS_COUNT = 9;    
+const double DEGENERACY_THRESHOLD = 0.00001;  // FSM. see below.
+
+//-----------------------------------------------------------------------------
+//
+// -- @{ Compute a plane-plane projectivity using linear least squares.
+// Returns false if the calculation fails or there are fewer than four point
+// matches in the list.  The algorithm finds the nullvector of the $2 n \times 9$ design
+// matrix:
+// \[
+// \left(\begin{array}{ccccccccc}
+// 0 & 0 & 0 &        x_1 z_1' & y_1 z_1' & z_1 z_1' & -x_1 y_1' & -y_1 y_1' & -z_1 y_1' \cr
+// x_1 z_1' & y_1 z_1' & z_1 z_1' & 0 & 0 & 0 & -x_1 x_1' & -y_1 x_1' & -z_1 x_1' \cr
+// \multicolumn{9}{c}{\cdots} \cr
+// 0 & 0 & 0 &        x_n z_n' & y_n z_n' & z_n z_n' & -x_n y_n' & -y_n y_n' & -z_n y_n'\cr
+// x_n z_n' & y_n z_n' & z_n z_n' & 0 & 0 & 0 & -x_n x_n' & -y_n x_n' & -z_n x_n'
+// \end{array}\right)
+// \]
+// If {\tt allow\_ideal\_points} was set at construction, the $3 \times 9$ version which
+// allows for ideal points is used.
+// @}
+
+bool
+HMatrix2DComputeLinear::compute_p(const vcl_vector<HomgPoint2D>& inpoints1,
+				  const vcl_vector<HomgPoint2D>& inpoints2,
+				  HMatrix2D *H)
+{
+  // tm_tmatrix_linear_nonrobust_trivecs
+  assert(inpoints1.size() == inpoints2.size());
+  int n = inpoints1.size();
+  
+  int equ_count = n * (_allow_ideal_points ? 3 : 2);
+  if (n * 2 < TM_UNKNOWNS_COUNT - 1) {
+    cerr << "HMatrix2DComputeLinear: Need at least 4 matches.\n";
+    if (n == 0) cerr << "Could be vcl_vector setlength idiosyncrasies!\n";
+    return false;
+  }
+
+  HomgNorm2D points1(inpoints1); if (points1.was_coincident()) return false; // FSM
+  HomgNorm2D points2(inpoints2); if (points2.was_coincident()) return false; // FSM
+  
+  vnl_matrix<double> D(equ_count, TM_UNKNOWNS_COUNT);
+
+  int row = 0;
+  for (int i = 0; i < n; i++) {
+    const HomgPoint2D& p1 = points1[i];
+    const HomgPoint2D& p2 = points2[i];
+    
+    D(row, 0) = p1.get_x() * p2.get_w();
+    D(row, 1) = p1.get_y() * p2.get_w();
+    D(row, 2) = p1.get_w() * p2.get_w();
+    D(row, 3) = 0;
+    D(row, 4) = 0;
+    D(row, 5) = 0;
+    D(row, 6) = -p1.get_x() * p2.get_x();
+    D(row, 7) = -p1.get_y() * p2.get_x();
+    D(row, 8) = -p1.get_w() * p2.get_x();
+    ++row;
+
+    D(row, 0) = 0;
+    D(row, 1) = 0;
+    D(row, 2) = 0;
+    D(row, 3) = p1.get_x() * p2.get_w();
+    D(row, 4) = p1.get_y() * p2.get_w();
+    D(row, 5) = p1.get_w() * p2.get_w();
+    D(row, 6) = -p1.get_x() * p2.get_y();
+    D(row, 7) = -p1.get_y() * p2.get_y();
+    D(row, 8) = -p1.get_w() * p2.get_y();
+    ++row;
+
+    if (_allow_ideal_points) {
+      D(row, 0) = p1.get_x() * p2.get_y();
+      D(row, 1) = p1.get_y() * p2.get_y();
+      D(row, 2) = p1.get_w() * p2.get_y();
+      D(row, 3) = -p1.get_x() * p2.get_x();
+      D(row, 4) = -p1.get_y() * p2.get_x();
+      D(row, 5) = -p1.get_w() * p2.get_x();
+      D(row, 6) = 0;
+      D(row, 7) = 0;
+      D(row, 8) = 0;
+      ++row;
+    }      
+  }
+
+  D.normalize_rows();
+  vnl_svd<double> svd(D);
+
+  //
+  // FSM added :
+  //
+  if (svd.W(7)<DEGENERACY_THRESHOLD*svd.W(8)) {
+    cerr << "HMatrix2DComputeLinear : design matrix has rank < 8" << endl;
+    cerr << "HMatrix2DComputeLinear : probably due to degenerate point configuration" << endl;
+    return false;
+  }
+  H->set(svd.nullvector().data_block());
+
+  *H = HomgMetric::homg_to_image_H(*H, &points1, &points2);
+  
+  return true;
+}

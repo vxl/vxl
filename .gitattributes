@@ -1,5 +1,7 @@
 .git*            export-ignore
 
+*.dsp           -crlf
+*.dsw           -crlf
 *.pl             crlf=input
 vxl_demangle     crlf=input
 vxl_env          crlf=input

@@ -1,0 +1,64 @@
+//-*- c++ -*-------------------------------------------------------------------
+#ifdef __GNUC__
+#pragma implementation "ImageSequenceName.h"
+#endif
+//
+// Class: ImageSequenceName
+// Author: Andrew W. Fitzgibbon, Oxford RRG
+// Created: 31 Dec 98
+// Modifications:
+//   981231 AWF Initial version.
+//
+//-----------------------------------------------------------------------------
+
+#include "ImageSequenceName.h"
+
+#include <vcl/vcl_iostream.h>
+#include <vbl/vbl_reg_exp.h>
+#include <vbl/vbl_file.h>
+#include <vbl/vbl_sprintf.h>
+#include <vbl/vbl_printf.h>
+
+ImageSequenceName::ImageSequenceName(char const* s, char const* read_or_write, char const* default_extension):
+  SequenceFileName(s, read_or_write)
+{
+  init(read_or_write, default_extension);
+}
+
+ImageSequenceName::ImageSequenceName(char const* s, int start_frame, int step, char const* read_or_write, char const* default_extension):
+  SequenceFileName(s, start_frame, step, read_or_write)
+{
+  init(read_or_write, default_extension);
+}
+
+void ImageSequenceName::init(char const* read_or_write, char const* default_extension)
+{
+  // Check loading if input_file
+  if (read_or_write[0] == 'r') {
+    if (!ext_.length()) {
+      cerr << "ImageSequenceName: Searching for extension\n";
+      static char const * extensions[] = {
+	"",
+	"", // Space for default
+	".png",  // Color first
+	".ppm",  // Color first
+	".tif",
+	".jpg",
+	".rgb",
+	// Then mono
+	".pgm",
+	".mit",
+	0
+      };
+      ok_ = false;
+      if (default_extension)
+	extensions[0] = default_extension;
+      for(char const* const* p = extensions; *p; ++p)
+	if (exists(fmt_, *p, get_start_frame())) {
+	  ok_ = true;
+	  ext_ = *p;
+	  break;
+	}
+    }
+  }
+}

@@ -1,0 +1,55 @@
+//-*- c++ -*-------------------------------------------------------------------
+#ifndef MovieFileInterface_h_
+#define MovieFileInterface_h_
+#ifdef __GNUC__
+#pragma interface
+#endif
+//
+// Class : MovieFileInterface
+//
+// .SECTION Description
+//    MovieFileInterface is a class that awf hasn't documented properly. FIXME
+//
+// .NAME        MovieFileInterface - Undocumented class FIXME
+// .LIBRARY     POX
+// .HEADER	Oxford Package
+// .INCLUDE     oxp/MovieFileInterface.h
+// .FILE        MovieFileInterface.h
+// .FILE        MovieFileInterface.C
+// .SECTION Author
+//     Andrew W. Fitzgibbon, Oxford RRG, 30 Dec 98
+//
+//-----------------------------------------------------------------------------
+
+struct MovieFileInterface {
+  virtual ~MovieFileInterface();
+
+  // -- Return length of movie in frames
+  virtual int GetLength() = 0;
+
+  // -- Return size of the frame \argfont{frame_index}.
+  virtual int GetSizeX(int frame_index) = 0;
+  virtual int GetSizeY(int frame_index) = 0;
+
+  // -- Return bits per pixel of images.
+  // Assumed constant throughout the movie.
+  virtual int GetBitsPixel() = 0;
+
+  // -- Return true if frames are stored as a pair of interlaced fields.
+  virtual bool IsInterlaced() = 0;
+
+  // -- Return true if frame_index is a valid frame.
+  virtual bool HasFrame(int frame_index) = 0;
+  
+  // -- Grab frame into supplied buffer, which is GetBitsPixel * SizeX * SizeY
+  virtual bool GetFrame(int frame_index, void* buffer);
+
+  // -- Grab field into supplied buffer, which is GetBitsPixel * SizeX * SizeY
+  virtual bool GetField(int field_index, void* buffer);
+
+  // -- General verbosity flag for various movie-related operations.
+  static bool verbose;
+};
+
+#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS MovieFileInterface.
+

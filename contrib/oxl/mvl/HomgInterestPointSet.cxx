@@ -1,0 +1,330 @@
+// <begin copyright notice>
+// ---------------------------------------------------------------------------
+//
+//                   Copyright (c) 1997 TargetJr Consortium
+//               GE Corporate Research and Development (GE CRD)
+//                             1 Research Circle
+//                            Niskayuna, NY 12309
+//                            All Rights Reserved
+//              Reproduction rights limited as described below.
+//                               
+//      Permission to use, copy, modify, distribute, and sell this software
+//      and its documentation for any purpose is hereby granted without fee,
+//      provided that (i) the above copyright notice and this permission
+//      notice appear in all copies of the software and related documentation,
+//      (ii) the name TargetJr Consortium (represented by GE CRD), may not be
+//      used in any advertising or publicity relating to the software without
+//      the specific, prior written permission of GE CRD, and (iii) any
+//      modifications are clearly marked and summarized in a change history
+//      log.
+//       
+//      THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTY OF ANY KIND,
+//      EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
+//      WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+//      IN NO EVENT SHALL THE TARGETJR CONSORTIUM BE LIABLE FOR ANY SPECIAL,
+//      INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND OR ANY
+//      DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
+//      WHETHER OR NOT ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, OR ON
+//      ANY THEORY OF LIABILITY ARISING OUT OF OR IN CONNECTION WITH THE
+//      USE OR PERFORMANCE OF THIS SOFTWARE.
+//
+// ---------------------------------------------------------------------------
+// <end copyright notice>
+//-*- c++ -*-------------------------------------------------------------------
+#ifdef __GNUC__
+#pragma implementation
+#endif
+//
+// Class: HomgInterestPointSet
+// Author: Andrew W. Fitzgibbon, Oxford RRG
+// Created: 17 Aug 96
+// Modifications:
+//
+//-----------------------------------------------------------------------------
+
+#include "HomgInterestPointSet.h"
+
+#include <vcl/vcl_cassert.h>
+#include <vcl/vcl_iostream.h>
+
+#include <vcl/vcl_vector.h>
+#include <vcl/vcl_list.h>
+
+#include <mvl/HomgInterestPoint.h>
+#include <mvl/ImageMetric.h>
+
+class HomgInterestPointSetData : public vcl_vector<HomgInterestPoint> {
+public:
+  HomgInterestPointSetData() {}
+  HomgInterestPointSetData(int n):
+    vcl_vector<HomgInterestPoint>(n, HomgInterestPoint())
+  {}
+  ~HomgInterestPointSetData() { }
+  
+};
+
+// -- Construct an empty corner set.
+HomgInterestPointSet::HomgInterestPointSet()
+{
+  _data = new HomgInterestPointSetData;
+  
+  init_conditioner(0);
+}
+
+// -- Construct an empty corner set which will use the given conditioner to
+// convert from image to homogeneous coordinates.
+HomgInterestPointSet::HomgInterestPointSet(const HomgMetric& c)
+{
+  _data = new HomgInterestPointSetData;
+  
+  init_conditioner(c);
+}
+
+// -- Load corners from ASCII disk file
+HomgInterestPointSet::HomgInterestPointSet(const char* filename, const HomgMetric& c)
+{
+  _data = 0;
+  read(filename, c);
+  init_conditioner(c);
+}
+
+// -- Construct corner set from container of HomgPoint2D, and set the conditioner.
+// The HomgPoint2Ds are assumed to already be in conditioned coordinates.
+HomgInterestPointSet::HomgInterestPointSet(const vcl_vector<HomgPoint2D>& points, ImageMetric* conditioner)
+{
+  int n = points.size();
+  if (n)
+    _data = new HomgInterestPointSetData(n);
+  else
+    _data = new HomgInterestPointSetData();
+  
+  for(int i = 0; i < points.size(); ++i)
+    (*_data)[i] = HomgInterestPoint(points[i], conditioner, 0.0f);
+  
+  _conditioner = conditioner;
+}
+
+// - Untested
+HomgInterestPointSet::HomgInterestPointSet(const HomgInterestPointSet& that)
+{
+  int n = that._data->size();
+  if (n)
+    _data = new HomgInterestPointSetData(n);
+  else
+    _data = new HomgInterestPointSetData();
+
+  if (n > 0) {
+    cerr << "HomgInterestPointSet::copy ctor: size " << n << endl;
+    for (int i = 0; i < n; ++i)
+      (*_data)[i] = (*that._data)[i];
+  }
+  _conditioner = that._conditioner;
+}
+
+// - Untested
+HomgInterestPointSet& HomgInterestPointSet::operator=(const HomgInterestPointSet& that)
+{
+  int n = that._data->size();
+  delete _data;
+  if (n)
+    _data = new HomgInterestPointSetData(n);
+  else
+    _data = new HomgInterestPointSetData();
+  for(int i = 0; i < n; ++i) {
+    (*_data)[i] = (*that._data)[i];
+  }
+  _conditioner = that._conditioner;
+  return *this;
+}
+
+// -- Set conditioner
+void HomgInterestPointSet::set_conditioner(const HomgMetric& c)
+{
+  delete_conditioner();
+  init_conditioner(c);
+}
+
+void HomgInterestPointSet::init_conditioner(const HomgMetric& c)
+{
+  _conditioner = c;
+}
+
+void HomgInterestPointSet::delete_conditioner()
+{
+}
+
+// -- Clear corner set.
+void HomgInterestPointSet::clear()
+{
+  delete _data;
+  _data = new HomgInterestPointSetData;
+  set_conditioner(0);
+}
+
+// -- Destructor
+HomgInterestPointSet::~HomgInterestPointSet()
+{
+  delete _data;
+}
+
+// Operations----------------------------------------------------------------
+//
+// -- Add a corner to the end of the list
+bool HomgInterestPointSet::add(const HomgPoint2D& c)
+{
+  double x, y;
+  c.get_nonhomogeneous(x,y);
+  return add(x,y);
+}
+bool HomgInterestPointSet::add(const HomgInterestPoint& c)
+{
+  return add(c._homg);
+}
+//
+// -- Add corner (x, y), using ImageMetric to convert to homogeneous.
+bool HomgInterestPointSet::add(double x, double y)
+{
+  _data->push_back(HomgInterestPoint(x, y, _conditioner));
+  return true;
+}
+
+// -- Add a corner which has already been preconditioned by this cornerset's
+// imagemetric.
+bool HomgInterestPointSet::add_preconditioned(const HomgPoint2D& h)
+{
+  double x, y;
+  _conditioner.homg_to_image(h, &x, &y);
+  return add(x, y);
+}
+
+// -- Return the number of corners in the set.
+unsigned HomgInterestPointSet::size() const
+{
+  return _data->size();
+}
+
+// @{ACCESSORS@}
+
+// -- Return a reference to the i'th corner structure
+const HomgInterestPoint& HomgInterestPointSet::get(int i) const
+{
+  return (*_data)[i];
+}
+
+HomgInterestPoint& HomgInterestPointSet::get(int i)
+{
+  return (*_data)[i];
+}
+
+// -- Return the i'th corner as a 2D point
+vnl_double_2 const& HomgInterestPointSet::get_2d(int i) const
+{
+  return (*_data)[i]._double2;
+}
+
+// -- Return the i'th corner as a 2D point
+vnl_int_2 const& HomgInterestPointSet::get_int(int i) const
+{
+  return (*_data)[i]._int2;
+}
+
+// -- Return the i'th corner as a HomgPoint2D
+const HomgPoint2D& HomgInterestPointSet::get_homg(int i) const
+{
+  assert(i < _data->size());
+  return (*_data)[i]._homg;
+}
+
+// -- Return the i'th mean intensity
+float HomgInterestPointSet::get_mean_intensity(int i) const
+{
+  float v = (*_data)[i]._mean_intensity;
+  if (v == 0.0F) {
+    cerr << "HomgInterestPointSet: WARNING mean_intensity["<<i<<"] = 0\n";
+  }
+  return v;
+}
+
+// Input/Output--------------------------------------------------------------
+#include <vcl/vcl_fstream.h>
+
+// @{ INPUT/OUTPUT @}
+
+// -- Load a corner set from a simple ASCII file of x y pairs.
+// If ImageMetric is supplied, it is used to convert image coordinates to
+// homogeneous form.
+bool HomgInterestPointSet::read(const char* filename, const HomgMetric& c)
+{
+  ifstream f(filename);
+  if (!f.good()) {
+    cerr << "HomgInterestPointSet::read() -- Failed to open \"" << filename << "\"\n";
+    return false;
+  }
+
+  return read(f, c);
+}
+
+bool HomgInterestPointSet::read(istream& f, const ImageMetric* c)
+{
+  clear();
+
+  set_conditioner(c);
+
+  while (f.good()) {
+    double x, y;
+    f >> x >> y;
+    if (!f.good())
+      break;
+    add(x, y);
+    //f >> std :: ws;
+    f >> ws;
+  }
+  return true;
+}
+
+#include <vil/vil_memory_image_of.h>
+// #include <EasyImage/ImageWindowOps.h>
+
+// -- Load a corner set from a simple ASCII file of x y pairs,
+// and use Image to compute mean_intensities.
+// If ImageMetric is supplied, it is used to convert image coordinates to
+// homogeneous form.
+bool HomgInterestPointSet::read(const char* filename, vil_image const& src, const HomgMetric& c)
+{
+  if (!read(filename, c))
+    return false;
+
+  //cerr << "HomgInterestPointSet: Computing mean intensities\n";
+  vil_memory_image_of<unsigned char> imbuf(src);
+  for (int i=0; i< (int)size(); i++) {
+    // ImageWindowOps winops(imbuf, get_int(i), 3);
+    // (*_data)[i]._mean_intensity = winops.mean_intensity();
+    // if ((*_data)[i]._mean_intensity == 0.0F) {
+    // 	 //cerr << " note " << i << " had mi of 0\n";
+    // 	 (*_data)[i]._mean_intensity = 1e6;
+    // }
+  }
+
+  return true;
+}
+
+// -- Save a corner set as a simple ASCII file of x y pairs.
+bool HomgInterestPointSet::write(const char* filename) const
+{
+  ofstream fout(filename);
+  if (!fout.good()) {
+    cerr << "HomgInterestPointSet::write() -- Failed to open \"" << filename << "\"\n";
+    return false;
+  }
+  cerr << "HomgInterestPointSet: Saving corners to \"" << filename << "\"\n";
+  return write(fout, get_conditioner()); 
+}
+
+bool HomgInterestPointSet::write(ostream& f, ImageMetric const*) const
+{
+  for (unsigned i=0; i < size(); i++) {
+    const vnl_double_2& p = get_2d(i);
+    f << p[0] << " " << p[1] << "\n";
+  }
+  return true;
+}

@@ -25,8 +25,12 @@ SOURCES += d_imag.c
 SOURCES += z_div.c
 SOURCES += z_abs.c
 SOURCES += cabs.c
+SOURCES += c_abs.c
+SOURCES += c_div.c
 SOURCES += sig_die.c
 SOURCES += r_sign.c
+SOURCES += r_imag.c
+SOURCES += r_cnjg.c
 
 SOURCES += pow_ii.c
 SOURCES += pow_ri.c
@@ -60,6 +64,13 @@ SOURCES += sswap.c
 SOURCES += sgemv.c
 SOURCES += sger.c
 
+SOURCES += caxpy.c
+SOURCES += cdotc.c
+SOURCES += csrot.c
+SOURCES += scnrm2.c
+SOURCES += cscal.c
+SOURCES += cswap.c
+
 SOURCES += zcopy.c
 SOURCES += zdotu.c
 SOURCES += zdscal.c
@@ -71,9 +82,10 @@ SOURCES += ztrmv.c
 SOURCES += ztrsv.c
 
 # LINPACK 
-SOURCES += dsvdc.c
-SOURCES += zsvdc.c
 SOURCES += ssvdc.c
+SOURCES += dsvdc.c
+SOURCES += csvdc.c
+SOURCES += zsvdc.c
 SOURCES += dqrdc.c
 SOURCES += dqrsl.c
 SOURCES += dpofa.c
@@ -125,6 +137,7 @@ SOURCES += cg.c
 SOURCES += camsun.c
 
 # from LASO2
+#fsm:avoid conflict with my own liblaso.so, SOURCES += dnlaso.c
 SOURCES += dnlaso.c
 
 # from OPT
@@ -215,6 +228,20 @@ SOURCES += ztrevc.c
 SOURCES += zung2r.c
 SOURCES += zunghr.c
 SOURCES += zungqr.c
+
+##fsm
+#SOURCES += snlaso.c
+#SOURCES += slaeig.c
+#SOURCES += slaran.c
+#SOURCES += slager.c
+#SOURCES += slabfc.c
+#SOURCES += slabax.c
+#SOURCES += smvpc.c
+#SOURCES += slabcm.c
+#SOURCES += snppla.c
+#SOURCES += svsort.c
+#SOURCES += sortqr.c
+#SOURCES += pow_dd.c
 
 ##########################################
 include ${IUEROOT}/config/top.mk
