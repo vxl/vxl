@@ -6,7 +6,6 @@
 #endif
 //:
 //  \file
-//  \brief
 //  \author fsm
 
 //

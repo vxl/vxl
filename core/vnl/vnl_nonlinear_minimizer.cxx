@@ -4,9 +4,7 @@
 #endif
 //:
 // \file
-// \brief
 // \author Andrew W. Fitzgibbon, Oxford RRG, 22 Aug 99
-//
 
 #include "vnl_nonlinear_minimizer.h"
 #include <vcl_cstdio.h>   // sprintf()
