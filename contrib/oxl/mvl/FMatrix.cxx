@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //:
-//  \file
+// \file
 
 #include "FMatrix.h"
 
@@ -17,11 +17,12 @@
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_3.h>
+#include <vnl/vnl_transpose.h>
 
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_rpoly_roots.h>
-
 #include <vgl/algo/vgl_homg_operators_2d.h>
+
 #include <mvl/HomgOperator2D.h>
 #include <mvl/PMatrix.h>
 
@@ -95,7 +96,8 @@ FMatrix::~FMatrix()
 
 //---------------------------------------------------------------
 //: Read from ASCII vcl_istream
-bool FMatrix::read_ascii(vcl_istream& s) {
+bool FMatrix::read_ascii(vcl_istream& s)
+{
   s >> f_matrix_;
   if (!(s.good() || s.eof()))
     return false;
@@ -118,7 +120,8 @@ FMatrix FMatrix::read(char const* filename)
 
 //---------------------------------------------------------------
 //: Read from ASCII vcl_istream
-vcl_istream& operator>>(vcl_istream& s, FMatrix& F) {
+vcl_istream& operator>>(vcl_istream& s, FMatrix& F)
+{
   F.read_ascii(s);
   return s;
 }
@@ -222,12 +225,13 @@ FMatrix::image2_epipolar_distance_squared(HomgPoint2D *point1_ptr,
 
 //---------------------------------------------------------------
 //: Print to vcl_ostream
-vcl_ostream& operator<<(vcl_ostream& os, const FMatrix& F) {
+vcl_ostream& operator<<(vcl_ostream& os, const FMatrix& F)
+{
   const vnl_double_3x3& m = F.get_matrix();
   for (unsigned long i = 0; i < m.rows(); i++) {    // For each row in matrix
     for (unsigned long j = 0; j < m.columns(); j++) // For each column in matrix
       vul_printf(os, "%24.16e ", m(i,j));           // Output data element
-    os << "\n";                                     // Output newline
+    os << '\n';                                     // Output newline
   }
   return os;
 }
@@ -367,7 +371,7 @@ FMatrix::find_nearest_perfect_match(vgl_homg_point_2d<double> const& point1,
   p2_matrix(2, 1) = 0;
   p2_matrix(2, 2) = 1;
 
-  vnl_double_3x3 special_f_matrix= p2_matrix.transpose() *f_matrix_ *p1_matrix;
+  vnl_double_3x3 special_f_matrix= vnl_transpose(p2_matrix) *f_matrix_ *p1_matrix;
 
   double f = -special_f_matrix(1, 0) / special_f_matrix(1, 2);
   double f2 = -special_f_matrix(2, 0) / special_f_matrix(2, 2);
@@ -485,7 +489,7 @@ FMatrix::find_nearest_perfect_match(const HomgPoint2D& point1,
   p2_matrix(2, 1) = 0;
   p2_matrix(2, 2) = 1;
 
-  vnl_double_3x3 special_f_matrix= p2_matrix.transpose() *f_matrix_ *p1_matrix;
+  vnl_double_3x3 special_f_matrix= vnl_transpose(p2_matrix) *f_matrix_ *p1_matrix;
 
   double f = -special_f_matrix(1, 0) / special_f_matrix(1, 2);
   double f2 = -special_f_matrix(2, 0) / special_f_matrix(2, 2);

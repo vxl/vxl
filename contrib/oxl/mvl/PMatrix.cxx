@@ -13,6 +13,7 @@
 #include <vcl_cassert.h>
 
 #include <vnl/vnl_matrix.h>
+#include <vnl/vnl_transpose.h>
 #include <vnl/vnl_matlab_print.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_qr.h>
@@ -37,8 +38,8 @@
 //: Constructor. Set up a canonical P matrix.
 //
 
-PMatrix::PMatrix ():
-  svd_(0)
+PMatrix::PMatrix ()
+  : svd_(0)
 {
   for (int row_index = 0; row_index < 3; row_index++)
     for (int col_index = 0; col_index < 4; col_index++)
@@ -54,8 +55,8 @@ PMatrix::PMatrix ():
 // \code
 //   PMatrix P(cin);
 // \endcode
-PMatrix::PMatrix (vcl_istream& i) :
-  svd_(0)
+PMatrix::PMatrix (vcl_istream& i)
+  : svd_(0)
 {
   read_ascii(i);
 }
@@ -64,8 +65,8 @@ PMatrix::PMatrix (vcl_istream& i) :
 //
 //: Construct from 3x4 matrix
 
-PMatrix::PMatrix (vnl_double_3x4 const& pmatrix) :
-  p_matrix_ (pmatrix),
+PMatrix::PMatrix (vnl_double_3x4 const& pmatrix)
+  : p_matrix_ (pmatrix),
   svd_(0)
 {
 }
@@ -74,8 +75,8 @@ PMatrix::PMatrix (vnl_double_3x4 const& pmatrix) :
 //
 //: Construct from 3x3 matrix A and vector a. P = [A a].
 
-PMatrix::PMatrix (const vnl_matrix<double>& A, const vnl_vector<double>& a) :
-  svd_(0)
+PMatrix::PMatrix (const vnl_matrix<double>& A, const vnl_vector<double>& a)
+  : svd_(0)
 {
   set(A,a);
 }
@@ -84,8 +85,8 @@ PMatrix::PMatrix (const vnl_matrix<double>& A, const vnl_vector<double>& a) :
 //
 //: Construct from row-stored array of 12 doubles
 
-PMatrix::PMatrix (const double *c_matrix) :
-  p_matrix_ (c_matrix),
+PMatrix::PMatrix (const double *c_matrix)
+  : p_matrix_ (c_matrix),
   svd_(0)
 {
 }
@@ -94,10 +95,8 @@ PMatrix::PMatrix (const double *c_matrix) :
 //
 // - Copy ctor
 
-PMatrix::PMatrix (const PMatrix& that) :
-  vbl_ref_count(), 
-  p_matrix_ (that.get_matrix()),
-  svd_(0)
+PMatrix::PMatrix (const PMatrix& that)
+  : vbl_ref_count(), p_matrix_(that.get_matrix()), svd_(0)
 {
 }
 
@@ -152,10 +151,12 @@ vgl_line_segment_2d<double> PMatrix::project(vgl_line_segment_3d<double> const& 
   vgl_homg_point_3d<double> q1 (p1.x(),p1.y(),p1.z()), q2 (p2.x(),p2.y(),p2.z());
   return vgl_line_segment_2d<double>(project(q1), project(q2));
 }
+
 HomgLineSeg2D PMatrix::project (const HomgLineSeg3D& L) const
 {
   return HomgLineSeg2D(project(L.get_point1()), project(L.get_point2()));
 }
+
 //-----------------------------------------------------------------------------
 //
 //: Return the 3D point $\vec X$ which is $\vec X = P^+ \vec x$.
@@ -196,7 +197,7 @@ vgl_homg_plane_3d<double> PMatrix::backproject (const vgl_homg_line_2d<double>& 
 
 HomgPlane3D PMatrix::backproject (const HomgLine2D& l) const
 {
-  return HomgPlane3D(p_matrix_.transpose() * l.get_vector());
+  return HomgPlane3D(vnl_transpose(p_matrix_) * l.get_vector());
 }
 
 //-----------------------------------------------------------------------------
@@ -566,17 +567,14 @@ PMatrix::fix_cheirality()
   double det = vnl_qr<double>(p.A).determinant();
 
   double scale = 1;
-  // Used to scale by 1/det, but it's a bad idea if det is small
-  if (0) {
-    if (vcl_fabs(det - 1) > 1e-8) {
-      vcl_cerr << "PMatrix::fix_cheirality: Flipping, determinant is " << det << vcl_endl;
-    }
-
+#if 0  // Used to scale by 1/det, but it's a bad idea if det is small
+  if (vcl_fabs(det - 1) > 1e-8)
+    vcl_cerr << "PMatrix::fix_cheirality: Flipping, determinant is " << det << vcl_endl;
     scale = 1/det;
-  } else {
-    if (det < 0)
-      scale = -1;
-  }
+#else
+  if (det < 0)
+    scale = -1;
+#endif // 0
 
   p_matrix_ *= scale;
   if (svd_)
