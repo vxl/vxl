@@ -61,13 +61,13 @@ bool vul_file::is_directory(char const* fn)
   return stat(fn, &fs) == 0 && (fs.st_mode & S_IFMT) == S_IFDIR;
 }
 
-int vul_file::size(char const* fn)
+unsigned long vul_file::size(char const* fn)
 {
   struct stat fs;
   if (stat(fn, &fs) == 0)
     return fs.st_size;
   else
-    return 0;
+    return 0L;
 }
 
 bool vul_file::exists(char const* fn)

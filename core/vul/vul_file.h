@@ -60,8 +60,8 @@ struct vul_file
   }
 
   //: Return size of vul_file
-  static int size(char const* filename);
-  static int size(vcl_string filename) { return size(filename.c_str()); }
+  static unsigned long size(char const* filename);
+  static unsigned long size(vcl_string filename) { return size(filename.c_str()); }
 
   //: Return dirname
   static vcl_string dirname(char const* filename);
