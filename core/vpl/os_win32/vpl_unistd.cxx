@@ -35,8 +35,7 @@ static long vpl_tell(int fd) {
 #define PASSTHRU(ret, f, arglist, args) ret vpl_ ## f arglist { return _ ## f args ; }
 #define PASSTHRUvoid(f, arglist, args) void vpl_ ## f arglist { _ ## f args ; }
 
-/*
-
+#if 0 // this is emacs lisp
 (defun f ()
   (interactive)
   (re-search-forward "PASSTHRU.*(")
@@ -69,9 +68,7 @@ static long vpl_tell(int fd) {
             (t (error "zoiks")))
       )))
   ;; at end
-
-
- */
+#endif
 
 PASSTHRU(int, chmod, (const char *  a0,vpl_mode_t  a1), (a0, a1))
 UNIMP(int, fchmod, ( int  a0, vpl_mode_t  a1 ), (a0, a1))

@@ -87,7 +87,7 @@ extern "C" {
 #define PASSTHRU(ret, f, arglist, args) ret vpl_ ## f arglist { return f args ; }
 #define PASSTHRUvoid(f, arglist, args) void vpl_ ## f arglist { f args ; }
 
-/*
+#if 0 // this is emacs lisp
 
 (defun f ()
   (interactive)
@@ -121,9 +121,7 @@ extern "C" {
             (t (error "zoiks")))
       )))
   ;; at end
-
-
- */
+#endif
 
 PASSTHRU(int, chmod, (const char *  a0,vpl_mode_t  a1), (a0, a1))
 PASSTHRU(int, fchmod, ( int  a0, vpl_mode_t  a1 ), (a0, a1))
