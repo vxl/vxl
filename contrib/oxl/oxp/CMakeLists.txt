@@ -21,7 +21,7 @@ SET(oxp_sources
 )
 
 INCLUDE(${MODULE_PATH}/FindJPEG.cmake)
-IF (HAS_JPEG)
+IF (JPEG_FOUND)
   INCLUDE_DIRECTORIES(${JPEG_INCLUDE_PATH})
   SET(oxp_sources ${oxp_sources}
    JPEG_Decompressor.cxx    JPEG_Decompressor.h
@@ -29,7 +29,7 @@ IF (HAS_JPEG)
    SGIMovieFilePrivates.cxx SGIMovieFilePrivates.h
    SGIMovieFileWrite.cxx    SGIMovieFileWrite.h
   )
-ENDIF (HAS_JPEG)
+ENDIF (JPEG_FOUND)
 
 INCLUDE(${MODULE_PATH}/FindMPEG.cmake)
 IF (HAS_MPEG)
