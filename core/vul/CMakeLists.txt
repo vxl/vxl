@@ -22,24 +22,44 @@ SET(vul_sources
   vul_timer.h                 vul_timer.cxx
   vul_timestamp.h             vul_timestamp.cxx
   vul_trace.h                 vul_trace.cxx
-  vul_url.h                   vul_url.cxx
   vul_user_info.h             vul_user_info.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates vul_sources)
 
+# Some versions of Solaris (at least 5.8) has a brain-dead mechanism
+# for implementing DNS services, where the user of a library that uses
+# gethostbyname should link to -lnsl *before* linking to the
+# library. This creates a kind of "pre-dependency" that the CMake
+# dependency analysis is not equipped to handle. We cope by isolating
+# the offending code into its own library vul_network (under Solaris
+# only, of course). We can then control the dependencies of vul to
+# link nsl before this vul_network.
+#
+# This workaround also occurs in vil
+#
+SET( vul_network_sources
+  vul_url.h                   vul_url.cxx
+)  
+
+
 IF(CMAKE_COMPILER_IS_GNUCXX)
   SET_SOURCE_FILES_PROPERTIES(vul_sequence_filename_map.cxx COMPILE_FLAGS -O0)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
-ADD_LIBRARY(vul ${vul_sources})
+IF(NOT SOLARIS)
+  ADD_LIBRARY(vul ${vul_sources} ${vul_network_sources})
+ELSE(NOT SOLARIS)
+  ADD_LIBRARY(vul ${vul_sources})
+  ADD_LIBRARY(vul_network ${vul_network_sources})
+ENDIF(NOT SOLARIS)
 
 IF (NOT UNIX)
   TARGET_LINK_LIBRARIES( vul ws2_32.lib )
 ENDIF (NOT UNIX)
 
 IF (SOLARIS)
-  TARGET_LINK_LIBRARIES( vul socket )
+  TARGET_LINK_LIBRARIES( vul nsl vul_network socket )
 ENDIF (SOLARIS)
 
 TARGET_LINK_LIBRARIES( vul vcl )
