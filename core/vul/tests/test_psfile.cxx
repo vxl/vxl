@@ -65,8 +65,8 @@ void test_psfile()
       f.ellipse(150+5*i,350+5*i,10+5*i,20+10*i,45);
   }
 
-  vcl_string command = "ghostview " + filename;
 #if INTERACTIVE
+  vcl_string command = "ghostview " + filename;
   system(command.c_str());
 #endif
   // remove PostScript file
