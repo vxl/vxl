@@ -48,7 +48,7 @@ SET( vil1_sources
   # Helper specializations for               vil1_scale_intensities_image_impl
   vil1_scale_intensities_image.cxx           vil1_scale_intensities_image.h
   # Wrapper classes for vil/vil1 conversion
-  vil1_vil.cxx                               vil1_vil.h
+  vil1_vil.h
 
 
   # file format readers/writers (see below for conditional ones)
@@ -150,7 +150,7 @@ ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 ADD_LIBRARY(vil1 ${vil1_sources})
 
 
-TARGET_LINK_LIBRARIES( vil1 vil vcl )
+TARGET_LINK_LIBRARIES( vil1 vcl )
 
 
 SUBDIRS(io)
