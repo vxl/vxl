@@ -3,7 +3,7 @@ USES := vxl mul
 LIBRARY := vil2
 VERSION := 1.0
 
-SOURCES += vil2_image_data.cxx
+SOURCES += vil2_image_resource.cxx
 SOURCES += vil2_image_view.cxx
 MANPAGE_SOURCES += vil2_image_view.txx
 SOURCES += vil2_file_format.cxx
@@ -26,6 +26,8 @@ MANPAGE_SOURCES += vil2_sample_grid_bilin.txx
 MANPAGE_SOURCES += vil2_copy.txx
 MANPAGE_SOURCES += vil2_math.h
 MANPAGE_SOURCES += vil2_property.h
+SOURCES += vil2_clamp.cxx
+SOURCES += vil2_transpose.cxx
 
 SUBDIRS += algo
 
