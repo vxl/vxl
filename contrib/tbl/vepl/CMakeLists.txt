@@ -3,7 +3,6 @@
 ADD_LIBRARY(vepl vepl_sources)
 
 SOURCE_FILES(vepl_sources
-# vepl_convert.txx
   vepl_threshold.cxx
   vepl_add_random_noise.cxx
   vepl_monadic.cxx
