@@ -3,7 +3,7 @@
 #define vimt_scale_pyramid_builder_2d_txx_
 //:
 // \file
-// \brief Build Gaussian image pyramids at anj scale separation
+// \brief Build Gaussian image pyramids at any scale separation
 // \author Ian Scott
 
 #include "vimt_scale_pyramid_builder_2d.h"
