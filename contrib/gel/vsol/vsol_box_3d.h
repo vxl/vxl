@@ -75,7 +75,7 @@ class vsol_box_3d : public vbl_ref_count , public vul_timestamp
 
  protected:
 
-  vbl_bounding_box<double,3> _box;
+  vbl_bounding_box<double,3> box_;
 };
 
 #endif // vsol_box_3d_H

@@ -9,7 +9,7 @@ vsol_box_3d::vsol_box_3d()
 }
 
 vsol_box_3d::vsol_box_3d(vsol_box_3d const &b){
-  _box = b._box;
+  box_ = b.box_;
 }
 
 vsol_box_3d::~vsol_box_3d()
@@ -19,63 +19,63 @@ vsol_box_3d::~vsol_box_3d()
 
 double vsol_box_3d::get_min_x()
 {
-  return (_box.min())[0];
+  return (box_.min())[0];
 }
 
 double vsol_box_3d::get_max_x()
 {
-  return (_box.max())[0];
+  return (box_.max())[0];
 }
 
 double vsol_box_3d::get_min_y()
 {
-  return (_box.min())[1];
+  return (box_.min())[1];
 }
 
 double vsol_box_3d::get_max_y()
 {
-  return (_box.max())[1];
+  return (box_.max())[1];
 }
 
 double vsol_box_3d::get_min_z()
 {
-  return (_box.min())[2];
+  return (box_.min())[2];
 }
 
 double vsol_box_3d::get_max_z()
 {
-  return (_box.max())[2];
+  return (box_.max())[2];
 }
 
 
 void vsol_box_3d::set_min_x(const double& v)
 {
-  (_box.min())[0]=v;
+  (box_.min())[0]=v;
 }
 
 void vsol_box_3d::set_max_x(const double& v)
 {
-  (_box.max())[0]=v;
+  (box_.max())[0]=v;
 }
 
 void vsol_box_3d::set_min_y(const double& v)
 {
-  (_box.min())[1]=v;
+  (box_.min())[1]=v;
 }
 
 void vsol_box_3d::set_max_y(const double& v)
 {
-  (_box.max())[1]=v;
+  (box_.max())[1]=v;
 }
 
 void vsol_box_3d::set_min_z(const double& v)
 {
-  (_box.min())[2]=v;
+  (box_.min())[2]=v;
 }
 
 void vsol_box_3d::set_max_z(const double& v)
 {
-  (_box.max())[2]=v;
+  (box_.max())[2]=v;
 }
 
 
@@ -104,9 +104,8 @@ double vsol_box_3d::height()
 
 
 //-------------------------------------------------------------------
-//:   Determines if *this is inside the input IUBox.
-//    That is, all boundaries of *this must be on or
-//    inside the boundaries of box.
+//:   Determines if this box is inside the right hand side box.
+//    That is, all boundaries of *this must be on or inside the boundaries of b.
 bool vsol_box_3d::operator< (vsol_box_3d& b)
 {
   return 
@@ -136,9 +135,9 @@ bool vsol_box_3d::near_equal(vsol_box_3d& b, float tolerance)
 
 void vsol_box_3d::reset_bounds()
 {
-  for(int i =0; i<3; i++)
+  for (int i =0; i<3; i++)
     {
-      (_box.min())[i]=0;
-      (_box.max())[i]=0;
+      (box_.min())[i]=0;
+      (box_.max())[i]=0;
     }
 }
