@@ -7,6 +7,7 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_matlab_print.h>
+#include <vnl/vnl_random.h>
 
 #include <vnl/algo/vnl_fft_1d.h>
 #include <vnl/algo/vnl_fft_2d.h>
@@ -17,8 +18,9 @@
 
 void test_fft_1d(unsigned int N)
 {
+  vnl_random rng;
   vnl_vector<vcl_complex<double> > signal(N);
-  test_util_fill_random(signal.begin(), signal.end());
+  test_util_fill_random(signal.begin(), signal.end(), rng);
 
   vnl_fft_1d<double> fft(N);
 
@@ -38,8 +40,9 @@ void test_fft_1d(unsigned int N)
 
 void test_fft_2d(unsigned int M, unsigned int N)
 {
+  vnl_random rng;
   vnl_matrix<vcl_complex<double> > signal(M, N);
-  test_util_fill_random(signal.begin(), signal.end());
+  test_util_fill_random(signal.begin(), signal.end(), rng);
 
   vnl_fft_2d<double> fft(M, N);
 

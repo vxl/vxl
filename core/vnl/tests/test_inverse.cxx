@@ -2,13 +2,13 @@
 #include <vnl/vnl_double_2x2.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_4x4.h>
-#include <vnl/vnl_sample.h>
+#include <vnl/vnl_random.h>
 
 #include <testlib/testlib_test.h>
 
 void test_inverse() {
   double eps = 1e-11;
-
+  vnl_random rng(9667566ul);
   {
     vnl_double_2x2 id2; id2.set_identity();
     double M2[4] = {
@@ -34,7 +34,7 @@ void test_inverse() {
     TEST("2x2 vnl_inverse of Id", id2i, id2);
 
     double M2[4];
-    for (int i=0; i<4; ++i) M2[i] = vnl_sample_uniform(-1.0,1.0);
+    for (int i=0; i<4; ++i) M2[i] = rng.drand32(-1.0,1.0);
     vnl_double_2x2 m2(M2);
     vnl_double_2x2 m2i = vnl_inverse(m2);
     vnl_double_2x2 residue = m2*m2i - id2;
@@ -64,7 +64,7 @@ void test_inverse() {
   {
     vnl_double_3x3 id3; id3.set_identity();
     double M3[9];
-    for (int i=0; i<9; ++i) M3[i] = vnl_sample_uniform(-1.0,1.0);
+    for (int i=0; i<9; ++i) M3[i] = rng.drand32(-1.0,1.0);
     vnl_double_3x3 m3(M3);
     vnl_double_3x3 m3i = vnl_inverse(m3);
     vnl_double_3x3 residue = m3*m3i - id3;
@@ -95,7 +95,7 @@ void test_inverse() {
   {
     vnl_double_4x4 id4; id4.set_identity();
     double M4[16];
-    for (int i=0; i<16; ++i) M4[i] = vnl_sample_uniform(-1.0,1.0);
+    for (int i=0; i<16; ++i) M4[i] = rng.drand32(-1.0,1.0);
     vnl_double_4x4 m4(M4);
     vnl_double_4x4 m4i = vnl_inverse(m4);
     vnl_double_4x4 residue = m4*m4i - id4;

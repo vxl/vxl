@@ -3,6 +3,7 @@
 #include <vcl_complex.h>
 #include <testlib/testlib_test.h>
 #include <vnl/vnl_matrix.h>
+#include <vnl/vnl_random.h>
 #include <vnl/vnl_matlab_print.h>
 #include <vnl/algo/vnl_qr.h>
 
@@ -79,15 +80,16 @@ inline double eps(vcl_complex<double> *) { return 1e-12; }
 template <class T>
 void new_test(T *)
 {
+  vnl_random rng;
   unsigned m = 5; // m must be >= n when using the netlib QR algorithms,
   unsigned n = 5; // but n >= m for a random A and b to have exact solution.
 
   vnl_matrix<T> A(m, n);
-  test_util_fill_random(A.begin(), A.end());
+  test_util_fill_random(A.begin(), A.end(), rng);
   vnl_matlab_print(vcl_cout, A, "A");
 
   vnl_vector<T> b(m);
-  test_util_fill_random(b.begin(), b.end());
+  test_util_fill_random(b.begin(), b.end(), rng);
   vnl_matlab_print(vcl_cout, b, "b");
 
   vnl_qr<T> qr(A);

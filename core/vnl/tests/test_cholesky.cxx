@@ -4,13 +4,15 @@
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_cholesky.h>
 #include <vnl/algo/vnl_svd.h>
+#include <vnl/vnl_random.h>
 
 #include "test_util.h"
 
 void test_cholesky()
 {
+  vnl_random rng;
   vnl_matrix<double> A(3,3);
-  test_util_fill_random(A.begin(), A.end());
+  test_util_fill_random(A.begin(), A.end(), rng);
   A = A * A.transpose();
 
   vnl_matrix<double> I(3,3);

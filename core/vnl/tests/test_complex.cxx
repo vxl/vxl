@@ -8,7 +8,7 @@
 #include <vcl_complex.h>
 
 #include <vnl/vnl_vector.h>
-#include <vnl/vnl_sample.h>
+#include <vnl/vnl_random.h>
 
 #include <testlib/testlib_test.h>
 
@@ -17,9 +17,9 @@
 vcl_complex<double> tc_acos(vcl_complex<double> x);
 
 // make a vector with random, complex entries :
-static void fill_rand(vcl_complex<double> *b, vcl_complex<double> *e) {
+static void fill_rand(vcl_complex<double> *b, vcl_complex<double> *e, vnl_random &rng) {
   for (vcl_complex<double> *p=b; p<e; ++p)
-    (*p) = vcl_complex<double>( vnl_sample_uniform(-1, +1), vnl_sample_uniform(-1, +1) );
+    (*p) = vcl_complex<double>( rng.drand64(-1.0, +1.0), rng.drand64(-1.0, +1.0) );
 }
 
 // Driver
@@ -41,8 +41,9 @@ void test_complex() {
   }
 
   {
-    vnl_vector<vcl_complex<double> > a(5); fill_rand(a.begin(), a.end());
-    vnl_vector<vcl_complex<double> > b(5); fill_rand(b.begin(), b.end());
+    vnl_random rng(9667566);
+    vnl_vector<vcl_complex<double> > a(5); fill_rand(a.begin(), a.end(), rng);
+    vnl_vector<vcl_complex<double> > b(5); fill_rand(b.begin(), b.end(), rng);
 
     vcl_cout << "a=" << a << '\n'
              << "b=" << b << '\n';

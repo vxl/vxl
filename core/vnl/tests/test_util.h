@@ -1,8 +1,9 @@
 #ifndef test_util_h_
 #define test_util_h_
 
+class vnl_random;
 #include <vcl_complex.h>
-#define macro(T) void test_util_fill_random(T *begin, T *end)
+#define macro(T) void test_util_fill_random(T *begin, T *end, vnl_random &rng)
 macro(float);
 macro(double);
 macro(long double);

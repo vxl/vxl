@@ -9,7 +9,7 @@
 //-----------------------------------------------------------------------------
 
 #include <vcl_iostream.h>
-#include <vnl/vnl_sample.h>
+#include <vnl/vnl_random.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 
 //extern "C"
@@ -64,13 +64,13 @@ void test_symmetric_eigensystem()
 
   {
     // Generate a random system
-    vnl_sample_reseed();
+    vnl_random rng;
     int n = 6;
     int s = 10;
     vnl_matrix<double> D_rand(s,n);
     for (int i=0;i<s;++i)
       for (int j=0;j<n;++j)
-        D_rand(i,j)=vnl_sample_normal(1,2);
+        D_rand(i,j)=1.0 + 2.0*rng.normal64();
 
     vnl_matrix<double> S = D_rand.transpose()*D_rand;
     vnl_matrix<double> evecs(n,n);

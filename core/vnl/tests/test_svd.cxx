@@ -7,6 +7,7 @@
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_double_3.h>
+#include <vnl/vnl_random.h>
 #include <vnl/algo/vnl_svd.h>
 
 #include "test_util.h"
@@ -161,13 +162,13 @@ void test_I()
 }
 
 template <class T>
-void test_svd_recomposition(char const *type, double maxres, T* /* tag */)
+void test_svd_recomposition(char const *type, double maxres, T* /* tag */, vnl_random &rng)
 {
   // Test inversion of 5x5 matrix of T :
   vcl_cout << "----- testing vnl_svd<" << type << "> recomposition -----\n";
 
   vnl_matrix<T> A(5,5);
-  test_util_fill_random(A.begin(), A.end());
+  test_util_fill_random(A.begin(), A.end(), rng);
 
   vcl_cout << "A = [\n" << A << "]\n";
   vnl_svd<T> svd(A);
@@ -187,11 +188,11 @@ template void test_svd_recomposition(char const *, double, vcl_complex<double> *
 
 #include <vnl/vnl_matlab_print.h>
 template <class T>
-void test_nullvector(char const *type, T *)
+void test_nullvector(char const *type, T *, vnl_random &rng)
 {
   int n = 5;
   vnl_matrix<T> A(n, n+1);
-  test_util_fill_random(A.begin(), A.end());
+  test_util_fill_random(A.begin(), A.end(), rng);
   vnl_svd<T> svd(A);
   vnl_vector<T>  x = svd.nullvector();
   vnl_vector<T> Ax = A*x;
@@ -209,6 +210,7 @@ template void test_nullvector(char const *, vcl_complex<double> *);
 // Driver
 void test_svd()
 {
+  vnl_random rng;
   test_hilbert(double(), "double", 1.1e-10);
   test_hilbert(float(), "float", float(0.025));
   test_hilbert(vcl_complex<double>(), "vcl_complex<double>", double(4.4e-10));
@@ -216,15 +218,15 @@ void test_svd()
   test_ls();
   test_pmatrix();
   test_I();
-  test_svd_recomposition("float",              1e-5 , (float*)0);
-  test_svd_recomposition("double",             1e-10, (double*)0);
-  test_svd_recomposition("vcl_complex<float>",  1e-5 , (vcl_complex<float>*)0);
-  test_svd_recomposition("vcl_complex<double>", 1e-10, (vcl_complex<double>*)0);
+  test_svd_recomposition("float",              1e-5 , (float*)0, rng);
+  test_svd_recomposition("double",             1e-10, (double*)0, rng);
+  test_svd_recomposition("vcl_complex<float>",  1e-5 , (vcl_complex<float>*)0, rng);
+  test_svd_recomposition("vcl_complex<double>", 1e-10, (vcl_complex<double>*)0, rng);
 
-  test_nullvector("float",               (float*)0);
-  test_nullvector("double",              (double*)0);
-  test_nullvector("vcl_complex<float>",  (vcl_complex<float>*)0);
-  test_nullvector("vcl_complex<double>", (vcl_complex<double>*)0);
+  test_nullvector("float",               (float*)0, rng);
+  test_nullvector("double",              (double*)0, rng);
+  test_nullvector("vcl_complex<float>",  (vcl_complex<float>*)0, rng);
+  test_nullvector("vcl_complex<double>", (vcl_complex<double>*)0, rng);
 }
 
 TESTMAIN(test_svd);

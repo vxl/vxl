@@ -1,6 +1,7 @@
 #include <vcl_iostream.h>
 #include <vnl/algo/vnl_convolve.h>
 #include <vnl/vnl_double_2.h>
+#include <vnl/vnl_random.h>
 #include <vnl/vnl_int_2.h>
 #include <vul/vul_timer.h>
 
@@ -39,8 +40,9 @@ void test_convolve()
 
   // TIMING TEST on a very long convolution:
   vnl_vector<double> l(10000), k3(2000);
-  test_util_fill_random(l.begin(), l.end());
-  test_util_fill_random(k3.begin(), k3.end());
+  vnl_random rng;
+  test_util_fill_random(l.begin(), l.end(), rng);
+  test_util_fill_random(k3.begin(), k3.end(), rng);
   const unsigned ntimes = 10; // repeat some expts to get more accurate timings.
   vnl_vector<double> r9;
   vul_timer timer;
