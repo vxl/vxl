@@ -119,26 +119,24 @@ void mbl_matrix_product_at_b(vnl_matrix<double>& AtB,
 
   double const *const * A_data = A.data_array();
   double const *const * B_data = B.data_array();
-  double ** R_data = AtB.data_array();
+  double ** R_data = AtB.data_array()-1;
 
   AtB.fill(0);
 
   for (int r1 = 0; r1<nr1; ++r1)
   {
-    const double* A_row = A_data[r1];
-    const double* B_row = B_data[r1];
+    const double* A_row = A_data[r1]-1;
+    const double* B_row = B_data[r1]-1;
     double a;
-    int c1 =  nc1;
-    while (c1)
+    int c1 =  nc1+1;
+    while (--c1)
     {
-      c1--;
-      double *R_row = R_data[c1];
+      double *R_row = R_data[c1]-1;
       a = A_row[c1];
-      int c2 = nc2;
-      while (c2)
+      int c2 = nc2+1;
+      while (--c2)
       {
-        c2--;
-        R_row[c2] +=a*B_row[c2];
+         R_row[c2] +=a*B_row[c2];
       }
     }
   }
@@ -174,17 +172,16 @@ void mbl_matrix_product_adb(vnl_matrix<double>& ADB,
   for(int r=0; r < nr1; ++r)
   {
     const double* A_row = AData[r];
-    double* ADB_row = ADBdata[r];
+    double* ADB_row = ADBdata[r]-1;
     for(int c=0; c < nc1 ; ++c )
     {
       double ad = A_row[c] * d_data[c];
       if (ad==0.0) continue;
 
-      const double* B_row = BData[c];
-      int i = nc2;
-      while (i)
+      const double* B_row = BData[c]-1;
+      int i = nc2+1;
+      while (--i)
       {
-        --i;
         ADB_row[i] += ad * B_row[i];
       }
     }
