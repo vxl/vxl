@@ -1,6 +1,10 @@
 #ifndef vbl_timestamp_h
 #define vbl_timestamp_h
 
+// .NAME vbl_timestamp
+// .INCLUDE vbl/vbl_timestamp.h
+// .FILE vbl_timestamp.cxx
+
 class vbl_timestamp
 {
 public:

@@ -1,9 +1,11 @@
 #ifndef vcl_unistd_h_
 #define vcl_unistd_h_
-/*
-  fsm@robots.ox.ac.uk
-*/
-
+// .NAME vcl_unistd.h
+// .INCLUDE vcl/vcl_unistd.h
+// .FILE vcl_unistd.cxx
+// @author fsm@robots.ox.ac.uk
+//
+// .SECTION Description
 // OK, so this is not really acceptable as <unistd.h> is not
 // part of the ISO C++ standard. What vcl_unistd.h is meant
 // to do is to include <unistd.h> properly on systems that have 
@@ -22,9 +24,9 @@
 // http://www.opengroup.org/onlinepubs/007908799/xsh/unistd.h.html
 // and includes also the functions declared in posix sys/stat.h
 
+#include <vxl_unistd_config.h> // must be first!!
 #include <vcl/vcl_compiler.h>
 #include <vcl/vcl_sys/types.h>
-#include <vxl_unistd_config.h>
 
 #ifndef vcl_size_t
 typedef size_t	    vcl_size_t;

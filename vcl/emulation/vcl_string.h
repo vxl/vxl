@@ -691,8 +691,4 @@ struct vcl_string : public vcl_basic_string <char, vcl_char_traits <char> > {
 typedef vcl_basic_string <char, vcl_char_traits <char> > vcl_string;
 #endif
 
-// KYM: moved to vcl/vcl_string.h to match others
-//#define VCL_BASIC_STRING_INSTANTIATE \
-//extern "please include vcl/emulation/vcl_string.txx instead"
-
 #endif // vcl_emulation_string_h

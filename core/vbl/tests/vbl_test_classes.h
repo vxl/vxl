@@ -1,6 +1,10 @@
 #ifndef vbl_test_smart_ptr_h_
 #define vbl_test_smart_ptr_h_
 
+// .NAME vbl_test_classes
+// .INCLUDE vbl/vbl_test_classes.h
+// .FILE vbl_test_classes.cxx
+
 #include <vcl/vcl_iostream.h>
 #include <vcl/vcl_list.h>
 #include <vbl/vbl_ref_count.h>

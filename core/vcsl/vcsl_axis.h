@@ -17,6 +17,7 @@
 // 2000/06/28 François BERTEL Creation. Adapted from IUE
 //*****************************************************************************
 
+#include <vcl/vcl_string.h> // C++ specific includes first
 #include <vcsl/vcsl_axis_ref.h>
 
 //*****************************************************************************
@@ -25,7 +26,6 @@
 #include <vbl/vbl_ref_count.h>
 #include <vcsl/vcsl_dimension_ref.h>
 #include <vcsl/vcsl_unit_ref.h>
-#include <vcl/vcl_string.h>
 
 class vcsl_axis
   : public vbl_ref_count

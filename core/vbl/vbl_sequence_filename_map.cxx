@@ -6,7 +6,6 @@
 // Class: vbl_sequence_filename_map
 // Author: David Capel, Oxford RRG
 // Created: 15 April 2000
-// Modifications:
 //
 //-----------------------------------------------------------------------------
 
@@ -14,7 +13,6 @@
 
 #include <dirent.h>
 
-#include <vcl/vcl_string.h>
 #include <vcl/vcl_iostream.h>
 
 #include <vbl/vbl_sprintf.h>

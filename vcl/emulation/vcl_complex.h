@@ -1,3 +1,10 @@
+// .NAME vcl_complex - definition and instantiations macro for complex<TYPE>
+// .INCLUDE vcl/vcl_complex.h
+// .FILE vcl_complex.txx
+//
+// .SECTION Modifications
+//     200498 AWF Now GCC uses this complex as well.
+
 #ifndef vcl_emulation_complex_h
 #define vcl_emulation_complex_h
 #define VCL_COMPLEX_AVAILABLE

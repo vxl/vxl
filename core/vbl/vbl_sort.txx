@@ -3,8 +3,6 @@
 // Class: vbl_sort
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 19 Nov 97
-// Modifications:
-//   971119 AWF Initial version.
 //
 //-----------------------------------------------------------------------------
 

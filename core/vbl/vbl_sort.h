@@ -12,6 +12,9 @@
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 19 Nov 97
 //
+// .SECTION Modifications
+//    971119 AWF Initial version.
+//
 //-----------------------------------------------------------------------------
 
 #include <vcl/vcl_cstdlib.h>

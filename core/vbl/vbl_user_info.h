@@ -11,6 +11,9 @@
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 08 Apr 99
 //
+// .SECTION Modifications
+//     990408 AWF Initial version.
+//
 //-----------------------------------------------------------------------------
 
 #include <vcl/vcl_string.h>

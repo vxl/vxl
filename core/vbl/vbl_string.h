@@ -1,8 +1,9 @@
 #ifndef vbl_string_h
 #define vbl_string_h
 
-// .SECTION Description
-// Utility functions for C strings and vcl_strings.
+// .NAME vbl_string - Utility functions for C strings and vcl_strings
+// .INCLUDE vbl/vbl_string.h
+// .FILE vbl_string.cxx
 
 #include <vcl/vcl_string.h>
 

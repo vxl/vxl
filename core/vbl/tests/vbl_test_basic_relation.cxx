@@ -2,13 +2,12 @@
 // Class: test_vbl_basic_relation
 // Author: Rupert W. Curwen
 // Created: 22 Jan 98
-// Modifications:
 //
 //-----------------------------------------------------------------------------
 
+#include <vcl/vcl_string.h> // C++ specific includes first
 #include <vcl/vcl_list.h>
 #include <vcl/vcl_iostream.h>
-#include <vcl/vcl_string.h>
 #include <vcl/vcl_cstdio.h>
 #include <vbl/vbl_basic_relation.h>
 

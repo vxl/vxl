@@ -1,6 +1,6 @@
 
+#include <vcl/vcl_string.h> // C++ specific includes first
 #include <vcl/vcl_cassert.h>
-#include <vcl/vcl_string.h>
 #include <vcl/vcl_iostream.h>
 
 #define Assert(x) {cout << "TEST " #x " : "; bool b = (x); cout << (b?"PASSED":"FAILED")}

@@ -12,6 +12,9 @@
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 29 Jun 97
 //
+// .SECTION Modifications
+//    970629 AWF Initial version.
+//
 //-----------------------------------------------------------------------------
 
 //: a class that awf hasn't documented properly. FIXME

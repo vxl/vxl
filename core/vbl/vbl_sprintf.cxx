@@ -6,9 +6,6 @@
 // Class: vbl_sprintf
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 08 Aug 96
-// Modifications:
-// 10 June 1999 fsm@robots removed constructor from 'const vcl_string &' and
-//              changed remaining constructors to use do_vbl_sprintf().
 //
 //-----------------------------------------------------------------------------
 
@@ -18,7 +15,6 @@
 #include <vcl/vcl_cstdio.h>
 #include <vcl/vcl_iomanip.h>
 
-#include <vcl/vcl_string.h>
 #include <vcl/vcl_iostream.h>
 
 const unsigned vbl_sprintf_BUFSIZE=16384;

@@ -1,9 +1,9 @@
 // include all the streams headers and <string>, to 
 // ensure they are compatible.
+#include <vcl/vcl_string.h> // C++ specific includes first
 #include <vcl/vcl_iostream.h>
 #include <vcl/vcl_fstream.h>
 #include <vcl/vcl_strstream.h>
-#include <vcl/vcl_string.h>
 
 int main(int, char **) 
 {

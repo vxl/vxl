@@ -26,12 +26,13 @@
 //     Andrew W. Fitzgibbon, Oxford RRG, 08 Aug 96
 //
 // .SECTION Modifications:
-//     see vbl_sprintf.C
+// 10 June 1999 fsm@robots removed constructor from 'const vcl_string &' and
+//              changed remaining constructors to use do_vbl_sprintf().
 //
 //-----------------------------------------------------------------------------
 
+#include <vcl/vcl_string.h> // C++ specific includes first
 #include <vcl/vcl_iosfwd.h>
-#include <vcl/vcl_string.h>
 
 class vbl_sprintf : public vcl_string {
 public:

@@ -1,8 +1,9 @@
 #ifndef vcl_cassert_h_
 #define vcl_cassert_h_
-/*
-  fsm@robots.ox.ac.uk
-*/
+// .NAME vcl_cassert.h
+// .INCLUDE vcl/vcl_cassert.h
+// .FILE vcl_cassert.cxx
+// @author fsm@robots.ox.ac.uk
 
 #include <vcl/vcl_compiler.h>
 

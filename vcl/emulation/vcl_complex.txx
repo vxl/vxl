@@ -3,11 +3,9 @@
 //-*- c++ -*-------------------------------------------------------------------
 //
 // Module: complex
-// Purpose: instantiations macro for complex<TYPE>
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: MOT
-// Modifications:
-//   200498 AWF Now GCC uses this complex as well.
+//
 //-----------------------------------------------------------------------------
 #include <vcl/vcl_compiler.h>
 

@@ -25,6 +25,7 @@ void vcl_string_instance_tickler(ostream &os)
   vcl_string s("foo", "bar");
   os << s;
 }
+template class __default_alloc_template<true, 0>;
 # define bs basic_string<char, string_char_traits<char>, __default_alloc_template<true, 0> >
 template bs &bs::replace(char *, char *, char *, char *);
 template bs &bs::replace(char *, char *, char const *, char const *);
@@ -32,6 +33,7 @@ template bs &bs::replace(size_t, size_t, bs const &, size_t, size_t);
 template bs &bs::replace(size_t, size_t, char const *, size_t);
 template bs &bs::replace(size_t, size_t, size_t, char);
 # undef bs
+template class __default_alloc_template<false, 0>;
 # define bs basic_string<char, string_char_traits<char>, __default_alloc_template<false, 0> >
 template bs &bs::replace(char *, char *, char *, char *);
 template bs &bs::replace(char *, char *, char const *, char const *);

@@ -116,7 +116,6 @@
 
 #include <vbl/vbl_reg_exp.h>	// Include class specification 
 #include <vcl/vcl_cstdio.h>
-#include <vcl/vcl_string.h>
 
 // vbl_reg_exp -- Copies the given regular expression.
 

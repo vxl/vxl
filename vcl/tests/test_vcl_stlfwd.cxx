@@ -1,5 +1,5 @@
 
-#include <vcl/vcl_string.h>
+#include <vcl/vcl_string.h> // C++ specific includes first
 
 #if TEST == 1
 // Normal

@@ -30,8 +30,8 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <vcl/vcl_string.h> // C++ specific includes first
 #include <vcl/vcl_iosfwd.h>
-#include <vcl/vcl_string.h>
 #include <vcl/vcl_vector.h>
 
 class vbl_sequence_filename_map {

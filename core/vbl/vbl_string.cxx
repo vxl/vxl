@@ -2,7 +2,6 @@
 
 #include <vcl/vcl_cstdlib.h>
 #include <vcl/vcl_cstring.h>
-#include <vcl/vcl_string.h>
 
 #include <vbl/vbl_reg_exp.h>
 
