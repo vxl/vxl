@@ -17,6 +17,7 @@
 #include <vbl/vbl_ref_count.h>
 #include <vsl/vsl_binary_io.h>
 #include <bmrf/bmrf_node_sptr.h>
+#include <bmrf/bmrf_arc_sptr.h>
 
 //: Directed arc from one node to another
 class bmrf_arc : public vbl_ref_count
@@ -31,6 +32,9 @@ class bmrf_arc : public vbl_ref_count
   //: Destructor
   ~bmrf_arc() {}
 
+  //: Produce a new arc which is the reverse of this one efficiently 
+  bmrf_arc_sptr reverse() const;
+
   //: Binary save self to stream.
   void b_write(vsl_b_ostream &os) const;
 
@@ -40,7 +44,22 @@ class bmrf_arc : public vbl_ref_count
   //: Return the probability of this arc
   double probability();
 
-  double avg_intensity_error() { return avg_intensity_error_; }
+  //: Return the average intesity error
+  double avg_intensity_error() const { return avg_intensity_error_; }
+
+  //: Return the constant gamma value induced by the segment pair
+  //  \note this maps the "from" arc to the "to" arc
+  double induced_gamma() const { return (1.0 - dist_ratio_) / time_step(); }
+
+  //: Return the constant inverse gamma value induced by the segment pair
+  //  \note this maps the "to" arc to the "from" arc
+  double induced_gamma_inv() const { return (1.0 - 1.0/dist_ratio_) / -time_step(); }
+
+  //: Return the average match error given the induced gamma
+  double induced_match_error() const { return induced_match_error_; }
+
+  //: The change in time spanned by this arc
+  int time_step() const;
 
   //: Smart pointer to the node where this arc originates
   bmrf_node_sptr from() { return bmrf_node_sptr(from_); }
@@ -59,6 +78,8 @@ class bmrf_arc : public vbl_ref_count
   double probability_;
   double min_alpha_, max_alpha_;
   double avg_intensity_error_;
+  double dist_ratio_;
+  double induced_match_error_;
 };
 
 
