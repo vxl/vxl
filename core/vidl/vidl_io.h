@@ -139,7 +139,7 @@ public:
 
   static void register_codec(vidl_codec* codec); // adds to supported_types list
 
-private:
+public:
   
   static vcl_list<vidl_codec_ref> supported_types_;
 
