@@ -80,24 +80,16 @@ LIB32=link.exe -lib
 # Begin Group "Header Files"
 # PROP Default_Filter ""
 # Begin Source File
-
-SOURCE=.\Image_to_vil.h
-
+SOURCE=.\Image_to_vil1.h
 # End Source File
 # Begin Source File
-
-SOURCE=.\vbl_array_to_vil.h
-
+SOURCE=.\vbl_array_to_vil1.h
 # End Source File
 # Begin Source File
-
-SOURCE=.\vil_to_Image.h
-
+SOURCE=.\vil1_to_Image.h
 # End Source File
 # Begin Source File
-
-SOURCE=.\vil_to_vbl_array.h
-
+SOURCE=.\vil1_to_vbl_array.h
 # End Source File
 # End Group
 # End Target

@@ -14,7 +14,7 @@
 # $(VXLROOT)/bin/ == override in output directory
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF == compiler defines
 # test_image_conversions  == name of output library
-# /libpath:"$(VXLROOT)/core/$(OUTDIR)" /libpath:"$(VXLROOT)/Image/$(OUTDIR)" /libpath:"$(VXLROOT)/COOL/$(OUTDIR)" /libpath:"$(VXLROOT)/Numerics/$(OUTDIR)" /libpath:"$(VXLROOT)/GeneralUtility/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/$(OUTDIR)" /libpath:"$(VXLROOT)/vcl/$(OUTDIR)" "vil.lib" "vpl.lib" "ImageClasses.lib" "Basics.lib" "Numerics.lib" "TJCOOL.lib" "iue-math.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" "vcl.lib" /STACK:10000000  == libraries linked in 
+# /libpath:"$(VXLROOT)/core/$(OUTDIR)" /libpath:"$(VXLROOT)/Image/$(OUTDIR)" /libpath:"$(VXLROOT)/COOL/$(OUTDIR)" /libpath:"$(VXLROOT)/Numerics/$(OUTDIR)" /libpath:"$(VXLROOT)/GeneralUtility/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/$(OUTDIR)" /libpath:"$(VXLROOT)/vcl/$(OUTDIR)" "vil1.lib" "vpl.lib" "ImageClasses.lib" "Basics.lib" "Numerics.lib" "TJCOOL.lib" "iue-math.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" "vcl.lib" /STACK:10000000  == libraries linked in 
 # TARGTYPE "Win32 (x86) Application" 0x0103
 
 CFG=test_image_conversions - Win32 Debug
@@ -75,7 +75,7 @@ LINK32=link.exe
 # ADD LINK32 /libpath:"$(VXLROOT)/GeneralUtility/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/vcl/$(OUTDIR)"
-# ADD LINK32 "vil.lib" "vpl.lib" "ImageClasses.lib" "Basics.lib" "Numerics.lib" "TJCOOL.lib" "iue-math.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" "vcl.lib" /STACK:10000000 
+# ADD LINK32 "vil1.lib" "vpl.lib" "ImageClasses.lib" "Basics.lib" "Numerics.lib" "TJCOOL.lib" "iue-math.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" "vcl.lib" /STACK:10000000 
 
 
 !ELSEIF  "$(CFG)" == "test_image_conversions - Win32 Debug"
@@ -112,7 +112,7 @@ LINK32=link.exe
 # ADD LINK32 /libpath:"$(VXLROOT)/GeneralUtility/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/vcl/$(OUTDIR)"
-# ADD LINK32 "vil.lib" "vpl.lib" "ImageClasses.lib" "Basics.lib" "Numerics.lib" "TJCOOL.lib" "iue-math.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" "vcl.lib" /STACK:10000000 
+# ADD LINK32 "vil1.lib" "vpl.lib" "ImageClasses.lib" "Basics.lib" "Numerics.lib" "TJCOOL.lib" "iue-math.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" "vcl.lib" /STACK:10000000 
 
 !ENDIF 
 

@@ -1,4 +1,4 @@
-# Microsoft Developer Studio Project File - Name="test_vil_vbl_conversions" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="test_vil1_vbl_conversions" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
@@ -13,25 +13,25 @@
 # /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/conversions" /I "$(VXLROOT)/Image" /I "$(VXLROOT)/COOL" /I "$(VXLROOT)/Numerics" /I "$(VXLROOT)/GeneralUtility" /I "$(VXLROOT)/v3p/jpeg" /I "$(VXLROOT)/v3p/png" /I "$(VXLROOT)/v3p/zlib" /I "$(VXLROOT)/v3p/tiff" == include path
 # $(VXLROOT)/bin/ == override in output directory
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF == compiler defines
-# test_vil_vbl_conversions  == name of output library
-# /libpath:"$(VXLROOT)/core/$(OUTDIR)" /libpath:"$(VXLROOT)/Image/$(OUTDIR)" /libpath:"$(VXLROOT)/COOL/$(OUTDIR)" /libpath:"$(VXLROOT)/Numerics/$(OUTDIR)" /libpath:"$(VXLROOT)/GeneralUtility/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/$(OUTDIR)" /libpath:"$(VXLROOT)/vcl/$(OUTDIR)" "vil.lib" "vpl.lib" "vbl.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" "vcl.lib" /STACK:10000000  == libraries linked in 
+# test_vil1_vbl_conversions  == name of output library
+# /libpath:"$(VXLROOT)/core/$(OUTDIR)" /libpath:"$(VXLROOT)/Image/$(OUTDIR)" /libpath:"$(VXLROOT)/COOL/$(OUTDIR)" /libpath:"$(VXLROOT)/Numerics/$(OUTDIR)" /libpath:"$(VXLROOT)/GeneralUtility/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/$(OUTDIR)" /libpath:"$(VXLROOT)/vcl/$(OUTDIR)" "vil1.lib" "vpl.lib" "vbl.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" "vcl.lib" /STACK:10000000  == libraries linked in 
 # TARGTYPE "Win32 (x86) Application" 0x0103
 
-CFG=test_vil_vbl_conversions - Win32 Debug
+CFG=test_vil1_vbl_conversions - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "test_vil_vbl_conversions.mak".
+!MESSAGE NMAKE /f "test_vil1_vbl_conversions.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "test_vil_vbl_conversions.mak" CFG="test_vil_vbl_conversions - Win32 Debug"
+!MESSAGE NMAKE /f "test_vil1_vbl_conversions.mak" CFG="test_vil1_vbl_conversions - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "test_vil_vbl_conversions - Win32 Debug" (based on "Win32 (x86) Application")
-!MESSAGE "test_vil_vbl_conversions - Win32 Release" (based on "Win32 (x86) Application")
+!MESSAGE "test_vil1_vbl_conversions - Win32 Debug" (based on "Win32 (x86) Application")
+!MESSAGE "test_vil1_vbl_conversions - Win32 Release" (based on "Win32 (x86) Application")
 !MESSAGE 
 
 # Begin Project
@@ -42,7 +42,7 @@ CPP=cl.exe
 MTL=midl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "test_vil_vbl_conversions - Win32 Release"
+!IF  "$(CFG)" == "test_vil1_vbl_conversions - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -56,7 +56,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /FD /c
 # ADD CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /FD /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/conversions" /I "$(VXLROOT)/Image" /I "$(VXLROOT)/COOL" /I "$(VXLROOT)/Numerics" /I "$(VXLROOT)/GeneralUtility" /I "$(VXLROOT)/v3p/jpeg" /I "$(VXLROOT)/v3p/png" /I "$(VXLROOT)/v3p/zlib" /I "$(VXLROOT)/v3p/tiff" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF /D "test_vil_vbl_conversions_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/conversions" /I "$(VXLROOT)/Image" /I "$(VXLROOT)/COOL" /I "$(VXLROOT)/Numerics" /I "$(VXLROOT)/GeneralUtility" /I "$(VXLROOT)/v3p/jpeg" /I "$(VXLROOT)/v3p/png" /I "$(VXLROOT)/v3p/zlib" /I "$(VXLROOT)/v3p/tiff" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF /D "test_vil1_vbl_conversions_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -69,9 +69,9 @@ LINK32=link.exe
 # ADD LINK32 /libpath:"$(VXLROOT)/core/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/vcl/$(OUTDIR)"
-# ADD LINK32 "vil.lib" "vpl.lib" "vbl.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" "vcl.lib" /STACK:10000000 
+# ADD LINK32 "vil1.lib" "vpl.lib" "vbl.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" "vcl.lib" /STACK:10000000 
 
-!ELSEIF  "$(CFG)" == "test_vil_vbl_conversions - Win32 Debug"
+!ELSEIF  "$(CFG)" == "test_vil1_vbl_conversions - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -85,7 +85,7 @@ LINK32=link.exe
 # PROP Target_Dir ""
 # ADD BASE CPP   /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FD /GZ /c
 # ADD CPP /nologo  /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FD /GZ /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/conversions" /I "$(VXLROOT)/Image" /I "$(VXLROOT)/COOL" /I "$(VXLROOT)/Numerics" /I "$(VXLROOT)/GeneralUtility" /I "$(VXLROOT)/v3p/jpeg" /I "$(VXLROOT)/v3p/png" /I "$(VXLROOT)/v3p/zlib" /I "$(VXLROOT)/v3p/tiff" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF /D "test_vil_vbl_conversions_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/conversions" /I "$(VXLROOT)/Image" /I "$(VXLROOT)/COOL" /I "$(VXLROOT)/Numerics" /I "$(VXLROOT)/GeneralUtility" /I "$(VXLROOT)/v3p/jpeg" /I "$(VXLROOT)/v3p/png" /I "$(VXLROOT)/v3p/zlib" /I "$(VXLROOT)/v3p/tiff" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF /D "test_vil1_vbl_conversions_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -100,14 +100,14 @@ LINK32=link.exe
 # ADD LINK32 /libpath:"$(VXLROOT)/core/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/vcl/$(OUTDIR)"
-# ADD LINK32 "vil.lib" "vpl.lib" "vbl.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" "vcl.lib" /STACK:10000000 
+# ADD LINK32 "vil1.lib" "vpl.lib" "vbl.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" "vcl.lib" /STACK:10000000 
 
 !ENDIF 
 
 # Begin Target
 
-# Name "test_vil_vbl_conversions - Win32 Release"
-# Name "test_vil_vbl_conversions - Win32 Debug"
+# Name "test_vil1_vbl_conversions - Win32 Release"
+# Name "test_vil1_vbl_conversions - Win32 Debug"
 
 # Begin Group "Source Files"
 # PROP Default_Filter ""
@@ -118,7 +118,7 @@ SOURCE=.\test_driver.cxx
 SOURCE=.\test_include.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_vil_vbl_conversions.cxx
+SOURCE=.\test_vil1_vbl_conversions.cxx
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
