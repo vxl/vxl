@@ -151,7 +151,7 @@ vgl_h_matrix_3d<T>::preimage(vgl_homg_plane_3d<T> const& p)
 {
   vnl_vector_fixed<T, 4> v;
   v[0]=p.a();  v[1]=p.b();   v[2]=p.c();   v[3]=p.d();
-  vnl_vector_fixed<T,4> v2 = vnl_transpose(t12_matrix_) * v;
+  vnl_vector_fixed<T,4> v2 = (t12_matrix_.transpose()) * v;
   return vgl_homg_plane_3d<T>(v2[0], v2[1], v2[2], v2[3]);
 }
 

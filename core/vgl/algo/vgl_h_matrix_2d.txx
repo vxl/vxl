@@ -85,7 +85,7 @@ vgl_homg_line_2d<T>
 vgl_h_matrix_2d<T>::preimage(vgl_homg_line_2d<T> const& l) const
 {
   vnl_vector_fixed<T,3> v(l.a(), l.b(), l.c());
-  vnl_vector_fixed<T,3> v2 = vnl_transpose(t12_matrix_) * v;
+  vnl_vector_fixed<T,3> v2 = t12_matrix_.transpose() * v;
   return vgl_homg_line_2d<T>(v2[0], v2[1], v2[2]);
 }
 
@@ -115,7 +115,7 @@ vgl_conic<T> vgl_h_matrix_2d<T>::operator() (vgl_conic<T> const& C) const
   M(0,0) = a;  M(0,1) = b;  M(0,2) = d;
   M(1,0) = b;  M(1,1) = c;  M(1,2) = e;
   M(2,0) = d;  M(2,1) = e;  M(2,2) = f;
-  Mp = vnl_transpose(t12_matrix_)*M*t12_matrix_;
+  Mp = (t12_matrix_.transpose())*M*t12_matrix_;
   return   vgl_conic<T>(Mp(0,0),(Mp(0,1)+Mp(1,0)),Mp(1,1),(Mp(0,2)+Mp(2,0)),
                         (Mp(1,2)+Mp(2,1)), Mp(2,2));
 }
