@@ -23,11 +23,6 @@
 // \author Peter Vanroose, KULeuven/ESAT.
 // \date 20 September 2003
 
-#include <vcl_compiler.h>
-#ifdef VCL_VC60
-#include <vcl_limits.h> // The order of some vcl_files can cause problems: IMS
-#endif
-
 #include <vcl_complex.h>
 #include <testlib/testlib_test.h>
 
@@ -82,7 +77,7 @@ void test_algo()
   {
     class F : public vnl_cost_function
     {
-      public: F() : vnl_cost_function(2) {}
+     public: F() : vnl_cost_function(2) {}
       double f(vnl_vector<double> const& x) { double u=x[0]-x[1]*x[1], v=x[1]-1; return u*u+v*v+1; }
       void gradf(vnl_vector<double> const& x, vnl_vector<double>& g) {
         g[0]=2*x[0]-2*x[1]*x[1]; g[1]=4*x[1]*x[1]*x[1]-4*x[0]*x[1]+2*x[1]-2; }
@@ -101,10 +96,10 @@ void test_algo()
   }
   {
     vnl_sparse_matrix<double> A(2,2); vnl_vector<double> b(2);
-    A(0,0)=2; A(0,1)=3; A(1,0)=4; A(1,1)=5; b[0]=5; b[1]=9; 
+    A(0,0)=2; A(0,1)=3; A(1,0)=4; A(1,1)=5; b[0]=5; b[1]=9;
     vnl_sparse_matrix_linear_system<double> ls(A,b);
     vnl_vector<double> x(2); x[0]=x[1]=0.0;
-    vnl_lsqr lsqr(ls); lsqr.minimize(x); 
+    vnl_lsqr lsqr(ls); lsqr.minimize(x);
     TEST_NEAR("vnl_lsqr", x[1], 1.0, 1e-6);
   }
   {

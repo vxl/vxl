@@ -1,7 +1,3 @@
-#include <vcl_compiler.h>
-#ifdef VCL_VC60
-#include <vcl_limits.h> // The order of some vcl_files can cause problems: IMS
-#endif
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
 #include <vnl/vnl_vector.h>
@@ -13,7 +9,7 @@ struct cubic : public vnl_cost_function {
   cubic() : vnl_cost_function(1) {}
 
   double f(const vnl_vector<double>& x) {
-    vcl_cout << " " << x[0];
+    vcl_cout << ' ' << x[0];
     return (2 - x[0]) * (2 - x[0]) + 10;
   }
 };

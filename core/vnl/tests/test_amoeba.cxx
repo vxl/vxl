@@ -1,7 +1,3 @@
-#include <vcl_compiler.h>
-#ifdef VCL_VC60
-#include <vcl_limits.h> // The order of some vcl_files can cause problems: IMS
-#endif
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
