@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_matrix.h
+// This is core/vnl/vnl_matrix.h
 #ifndef vnl_matrix_h_
 #define vnl_matrix_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -403,17 +403,6 @@ class vnl_matrix
   //: Return mean of all matrix elements
   T mean() const { return vnl_c_vector<T>::mean(begin(), size()); }
 
-#if 0 // deprecated
-  // <deprecated>
-  // These two methods have been intentionally poisoned. The new equivalents are:
-  //   array_one_norm() / array_inf_norm()
-  // or
-  //   absolute_value_sum() / absolute_value_max()
-  abs_t one_norm(void *) const { return vnl_c_vector<T>::one_norm(begin(), size()); }
-  abs_t inf_norm(void *) const { return vnl_c_vector<T>::inf_norm(begin(), size()); }
-  // </deprecated>
-#endif
-
   // predicates
 
   //: Return true iff the size is zero.
@@ -522,24 +511,20 @@ class vnl_matrix
   //: Make the matrix as if it had been default-constructed.
   void clear();
 
+ private:
   //: Resize to r rows by c columns. Old data lost.
-  // \deprecated Use make_size instead.
+  // \deprecated Use set_size() instead.
   bool resize (unsigned r, unsigned c) { return make_size(r,c); }
 
-  //: Resize to r rows by c columns.
-  // Old data lost.
-  // Returns true if size changed.
+  //: Resize to r rows by c columns. Old data lost.
   // \deprecated in favour of set_size()
   bool make_size (unsigned r, unsigned c);
-
-  //: Resize to r rows by c columns.
-  // Old data lost.
+ public:
+  //: Resize to r rows by c columns. Old data lost.
   // Returns true if size changed.
   bool set_size (unsigned r, unsigned c) {return make_size(r,c);}
 
-
 //--------------------------------------------------------------------------------
-
 
  protected:
   unsigned num_rows;   // Number of rows

@@ -89,10 +89,6 @@ class vnl_vector
   //: Creates a vector of specified length and initialize first n elements with values. O(n).
   vnl_vector (unsigned len, int n, T const values[]);
 
-#if 0 // deprecated
-  //: Creates a vector of length 3 and initializes with the arguments, x,y,z.
-  vnl_vector (T const&, T const&, T const&);
-#endif
   //: Creates a vector of length 2 and initializes with the arguments, px,py.
   //  Requires that len==2.
   //  Consider using vnl_vector_fixed<T,2> instead!
@@ -383,17 +379,15 @@ class vnl_vector
 
   //: Inequality test
   bool operator!=(vnl_vector<T> const &that) const { return !this->operator_eq(that); }
-
-  //:
-  // \deprecated Use make_size.
+ private:
+  //: Resize to n elements.
+  // \deprecated Use set_size() instead.
   bool resize (unsigned n) { return make_size(n); };
 
   //: Resize to n elements.
   // \deprecated Use set_size.
-  // This is a destructive resize, in that the old data is lost if size() != \a n before the call.
-  // If size() is already \a n, this is a null operation.
   bool make_size (unsigned n);
-
+ public:
   //: Resize to n elements.
   // This is a destructive resize, in that the old data is lost if size() != \a n before the call.
   // If size() is already \a n, this is a null operation.
@@ -519,9 +513,7 @@ inline T vnl_vector_ssd (vnl_vector<T> const& v1, vnl_vector<T> const& v2)
   return vnl_c_vector<T>::euclid_dist_sq(v1.begin(), v2.begin(), v1.size());
 }
 
-
-// Non-vector Functions which are nevertheless very useful.
-
+// Non-vector functions which are nevertheless very useful.
 
 //: Write vector to a vcl_ostream
 // \relates vnl_vector
