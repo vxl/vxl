@@ -266,11 +266,13 @@ vil_pixel_format vil_tiff_image::pixel_format() const
 {
   if( p->sample_format == SAMPLEFORMAT_IEEEFP ) {
     return VIL_PIXEL_FORMAT_FLOAT;
-  } else if ( p->sample_format == SAMPLEFORMAT_VOID ) {
-    return VIL_PIXEL_FORMAT_UNKNOWN;
   } else {
-    //unsigned if true, signed if false
+    //only assume signed if the file header says so
+    //If the header doesn't say or doesn't know, then assume
+    //unsigned.  If nothing else, the keeps backwards compatibility 
+    //with the older version of this code
     bool isSigned = p->sample_format == SAMPLEFORMAT_INT;
+
     if (bits_per_component_ <= 1)
       return VIL_PIXEL_FORMAT_BOOL;
     else if (bits_per_component_ <= 8)
