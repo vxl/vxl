@@ -23,8 +23,12 @@
 struct vul_file_iterator_data
 {
   struct _finddata_t data_;
-  // intptr_t handle_;  // not found by msvc6
-  __int64 handle_;      // works with msvc6
+# if defined VCL_VC60 || defined VCL_VC50
+  long handle_;      // works with msvc6
+# else
+  intptr_t handle_;  // not found by msvc6
+#endif
+
   vcl_string found_;
   char const* name_;
   vul_reg_exp reg_exp_;
