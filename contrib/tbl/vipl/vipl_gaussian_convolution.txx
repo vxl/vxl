@@ -1,4 +1,5 @@
 #include "vipl_gaussian_convolution.h"
+#include <vcl_cmath.h> // for sqrt(), exp(), log()
 
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
 bool vipl_gaussian_convolution <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(){
