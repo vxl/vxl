@@ -35,8 +35,8 @@ class HomgPoint3D : public Homg3D
 
   // Data Access-------------------------------------------------------------
 
-  bool check_infinity() const;
-  bool check_infinity(double tol) const;
+  bool check_infinity(double tol=1e-12) const;
+  inline bool ideal(double tol = 1e-12) const { return check_infinity(tol); }
   bool get_nonhomogeneous(double& x, double& y, double& z) const;
   vnl_double_3 get_double3() const;
   double radius() const { return get_double3().magnitude(); }
