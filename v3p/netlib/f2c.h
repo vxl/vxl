@@ -10,7 +10,7 @@
 typedef int integer; /* awf changed from long */
 typedef char *address;
 typedef short int shortint;
-typedef double real; /* awf changed from float */
+typedef float real;
 typedef double doublereal;
 typedef struct { real r, i; } complex;
 typedef struct { doublereal r, i; } doublecomplex;

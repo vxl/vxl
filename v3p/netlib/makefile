@@ -6,12 +6,15 @@ USES =
 LIBRARY := netlib
 VERSION := 1.0
 
-APP_CFLAGS = -O2
-
 #*********************
 # Std Fortran Library 
 #*********************
-
+SOURCES += F77_aloc.c
+SOURCES += exit.c
+SOURCES += s_cmp.c
+SOURCES += d_lg10.c
+SOURCES += s_cat.c
+SOURCES += s_copy.c
 SOURCES += pow_di.c
 SOURCES += d_sign.c
 SOURCES += d_cnjg.c
@@ -77,10 +80,23 @@ SOURCES += trans.c
 # General 
 SOURCES += machineparams.c
 
+# Temperton FFT routines
+SOURCES += dgpfa.c  
+SOURCES += dgpfa3f.c  
+SOURCES += dsetgpfa.c 
+SOURCES += gpfa2f.c 
+SOURCES += gpfa5f.c
+SOURCES += dgpfa2f.c 
+SOURCES += dgpfa5f.c 
+SOURCES += gpfa.c  
+SOURCES += gpfa3f.c 
+SOURCES += setgpfa.c
+SOURCES += pow_ii.c
+
 ##########################################
 include $(SYS_IUPACKAGES)/config/top.mk
 ##########################################
 
 ifneq ($(OS),win32)
-  APP_CFLAGS = -O2
+  APP_CFLAGS = -O2 
 endif
