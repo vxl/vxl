@@ -5,6 +5,25 @@ INCLUDE( ${MODULE_PATH}/FindNetlib.cmake )
 # most of vnl_algo is simply a wrapper around netlib, so we must have netlib.
 IF(NETLIB_FOUND)
 
+# Direct netlib dependencies are:
+# vnl_chi_squared                  dchscdf_
+# vnl_cholesky                     dpoco_ dpodi_ dpofa_ dposl_
+# vnl_complex_eigensystem          zgeev_
+# vnl_conjugate_gradient           cg_
+# vnl_fft                          dgpfa_ dsetgpfa_ gpfa_ setgpfa_
+# vnl_generalized_eigensystem      rsg_
+# vnl_generalized_schur            dgges_
+# vnl_lbfgs                        lbfgs_ lb3_
+# vnl_levenberg_marquardt          lmder1_ lmdif_
+# vnl_lsqr                         lsqr_
+# vnl_qr                           cqrdc_ cqrsl_ dqrdc_ dqrsl_ sqrdc_ sqrsl_ zqrdc_ zqrsl_
+# vnl_real_eigensystem             rg_
+# vnl_rpoly_roots                  rpoly_
+# vnl_sparse_symmetric_eigensystem dnlaso_
+# vnl_svd                          csvdc_ dsvdc_ ssvdc_ zsvdc_
+# vnl_svd_economy                  csvdc_ dsvdc_ ssvdc_ zsvdc_
+# vnl_symmetric_eigensystem        rs_
+
   INCLUDE_DIRECTORIES( ${NETLIB_INCLUDE_DIR} )
 
   SET( vnl_algo_sources
