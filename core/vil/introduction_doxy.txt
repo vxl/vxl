@@ -2,8 +2,6 @@
 /*! \mainpage vil : New core image library
 * A set of classes to represent and manipulate images
 *
-* NOTE: This library will in time replace vil1 as the core image library for vxl
-*
 * Broadly there are two sorts of image one is interested in - images in memory
 * (all parts of which can be accessed directly) and external images (eg in files)
 * which can only be accessed indirectly.  In most cases images in files are loaded
