@@ -3,6 +3,8 @@
 #
 
 IF(NOT HAS_GTK)
+
+
   # don't even bother under WIN32
   IF (UNIX)
 
@@ -105,15 +107,15 @@ IF(NOT HAS_GTK)
 
         SET( HAS_GTK "YES" )
         ADD_DEFINITIONS( -DHAS_GTK )
-        INCLUDE_DIRECTORIES( ${GTK_gtk_INCLUDE_PATH}
-                             ${GTK_glibconfig_INCLUDE_PATH}
-                             ${GTK_glib_INCLUDE_PATH}
-                             ${GTK_gtkgl_INCLUDE_PATH} )
-        LINK_LIBRARIES( ${GTK_gtkgl_LIBRARY}
-                        ${GTK_gtk_LIBRARY}
-                        ${GTK_gdk_LIBRARY}
-                        ${GTK_gmodule_LIBRARY}
-                        ${GTK_glib_LIBRARY}    )
+        SET( GTK_INCLUDE_PATH  ${GTK_gtk_INCLUDE_PATH}
+                               ${GTK_glibconfig_INCLUDE_PATH}
+                               ${GTK_glib_INCLUDE_PATH}
+                               ${GTK_gtkgl_INCLUDE_PATH} )
+        SET( GTK_LIBRARIES  ${GTK_gtkgl_LIBRARY}
+                            ${GTK_gtk_LIBRARY}
+                            ${GTK_gdk_LIBRARY}
+                            ${GTK_gmodule_LIBRARY}
+                            ${GTK_glib_LIBRARY}    )
 
       ENDIF(GTK_gtkgl_LIBRARY)
       ENDIF(GTK_glib_LIBRARY)

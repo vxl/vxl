@@ -1,16 +1,8 @@
 # oxl/xcv/CMakeLists.txt
 
-INCLUDE(${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindOpenGL.cmake)
+INCLUDE( ${allvxl_SOURCE_DIR}/oxl/vgui/UseVGUI.cmake )
 
-# Build here only if OpenGL (vgui) is available:
-IF (HAS_OPENGL)
-
-ADD_EXECUTABLE(xcv xcv_sources)
-
-# This is needed for xcv_geometry.cxx
-IF (CMAKE_COMPILER_IS_GNUCXX)
-  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ftemplate-depth-50")
-ENDIF (CMAKE_COMPILER_IS_GNUCXX)
+IF (HAS_VGUI)
 
 SOURCE_FILES(xcv_sources
  xcv_image_tableau.cxx      xcv_image_tableau.h  xcv_image_tableau_sptr.h
@@ -35,19 +27,11 @@ SOURCE_FILES(xcv_sources
 
 AUX_SOURCE_DIRECTORY(Templates xcv_sources)
 
-INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindGLUT.cmake)
+IF (CMAKE_COMPILER_IS_GNUCXX)
+  SET_SOURCE_FILES_PROPERTIES( xcv_geometry.cxx COMPILE_FLAGS "-ftemplate-depth-50" )
+ENDIF (CMAKE_COMPILER_IS_GNUCXX)
 
-# Immediate dependencies
-INCLUDE(${allvxl_SOURCE_DIR}/oxl/osl/CMakeListsLink.txt)
-INCLUDE(${allvxl_SOURCE_DIR}/oxl/mvl/CMakeListsLink.txt)
-INCLUDE(${allvxl_SOURCE_DIR}/oxl/vgui/CMakeListsLink.txt)
-INCLUDE(${allvxl_SOURCE_DIR}/vxl/vgl/CMakeListsLink.txt)
-INCLUDE(${allvxl_SOURCE_DIR}/vxl/vil/CMakeListsLink.txt)
-INCLUDE(${allvxl_SOURCE_DIR}/vxl/vnl/CMakeListsLink.txt)
-INCLUDE(${allvxl_SOURCE_DIR}/vxl/vnl/algo/CMakeListsLink.txt)
-INCLUDE(${allvxl_SOURCE_DIR}/vxl/vul/CMakeListsLink.txt)
-INCLUDE(${allvxl_SOURCE_DIR}/vxl/vbl/CMakeListsLink.txt)
-INCLUDE(${allvxl_SOURCE_DIR}/vxl/vpl/CMakeListsLink.txt)
-INCLUDE(${allvxl_SOURCE_DIR}/vcl/CMakeListsLink.txt)
+ADD_EXECUTABLE(xcv xcv_sources)
+TARGET_LINK_LIBRARIES(xcv osl mvl vgui vgl vil vnl_algo vnl vul vbl vpl vcl)
 
-ENDIF (HAS_OPENGL)
+ENDIF (HAS_VGUI)

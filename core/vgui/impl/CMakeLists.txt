@@ -1,11 +1,19 @@
-# oxl/vgui/impl/CMakeLists.txt
+# ./oxl/vgui/impl/CMakeLists.txt
 
 SUBDIRS(glut)
+
 SUBDIRS(qt)
+
 SUBDIRS(mfc)
+
 SUBDIRS(X)
+
 SUBDIRS(glX)
+
 SUBDIRS(gtk)
+
 SUBDIRS(SDL)
+
 SUBDIRS(Xm)
+
 SUBDIRS(Fl)

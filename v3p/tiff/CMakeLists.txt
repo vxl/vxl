@@ -1,7 +1,7 @@
 # v3p/tiff/CMakeLists.txt
 
-# Do nothing here, unless there is no native TIFF
-INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindNativeTIFF.cmake)
+INCLUDE(${MODULE_PATH}/FindNativeTIFF.cmake)
+
 IF(NOT HAS_NATIVE_TIFF)
 
 ADD_LIBRARY( tiff tiff_sources )

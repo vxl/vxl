@@ -1,15 +1,15 @@
 # oxl/vgui/CMakeLists.txt
 
-INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindOpenGL.cmake)
-INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindGLUT.cmake)
-INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindX11.cmake)
+INCLUDE(${MODULE_PATH}/FindOpenGL.cmake)
+INCLUDE(${MODULE_PATH}/FindGLUT.cmake)
+INCLUDE(${MODULE_PATH}/FindX11.cmake)
 # Qv needed by vrml only
-INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindQv.cmake)
+INCLUDE(${MODULE_PATH}/FindQv.cmake)
 
 # Build here only if OpenGL is available:
 IF (HAS_OPENGL)
 
-ADD_LIBRARY(vgui vgui_sources)
+INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_PATH})
 
 SOURCE_FILES(vgui_sources
  vgui_fwd.h
@@ -123,6 +123,7 @@ SOURCE_FILES(vgui_sources
 )
 
 IF (HAS_QV)
+  INCLUDE_DIRECTORIES(${QV_INCLUDE_PATH})
   SOURCE_FILES(vgui_sources
    vrml/vgui_vrml_draw_visitor.cxx  vrml/vgui_vrml_draw_visitor.h
    vrml/vgui_vrml_tableau.cxx       vrml/vgui_vrml_tableau.h
@@ -137,13 +138,15 @@ IF (HAS_MFC)
 ENDIF (HAS_MFC)
 
 IF (HAS_X11)
+  INCLUDE_DIRECTORIES(${X11_INCLUDE_PATH})
   SOURCE_FILES(vgui_sources
    internals/vgui_accelerate_x11.cxx internals/vgui_accelerate_x11.h
   )
 ENDIF (HAS_X11)
 
 IF (HAS_GLUT)
-  SOURCE_FILES(vgui_sources
+  INCLUDE_DIRECTORIES(${GLUT_INCLUDE_PATH})
+  SOURCE_FILES(vgui_sources vgui_sources
    vgui_glut.cxx vgui_glut.h
   )
 ENDIF (HAS_GLUT)
@@ -153,11 +156,97 @@ AUX_SOURCE_DIRECTORY(vrml/Templates vgui_sources)
 
 IF (HAS_MFC)
   # add stuff to use MFC in this executable
-  ADD_DEFINITIONS(-D_AFXDLL)
+  ADD_DEFINITIONS( "-D_AFXDLL" )
   SET(CMAKE_MFC_FLAG 6)
 ENDIF (HAS_MFC)
 
+ADD_LIBRARY(vgui_base vgui_sources)
+
+TARGET_LINK_LIBRARIES(vgui_base vnl_algo vnl vil vgl vpl vbl vul)
+IF (HAS_GLUT)
+  TARGET_LINK_LIBRARIES(vgui_base ${GLUT_LIBRARIES})
+ENDIF (HAS_GLUT)
+IF (HAS_QV)
+  TARGET_LINK_LIBRARIES(vgui_base ${QV_LIBRARIES})
+ENDIF (HAS_QV)
+
+TARGET_LINK_LIBRARIES(vgui_base ${OPENGL_LIBRARIES})
+
+IF (HAS_X11)
+  TARGET_LINK_LIBRARIES(vgui_base ${X11_LIBRARIES})
+ENDIF (HAS_X11)
+
+
 SUBDIRS(impl)
+
+# The vgui_IMPL_* variables will be set by the different
+# implementations. The variable will be a library name or empty.
+# Unlike the general FindXXX modules, we don't have (or need) a
+# HAS_IMPL_xxx variable. If the variable is set, then we have found
+# the toolkit AND the user has allowed us to compile it in.
+
+IF (vgui_IMPL_GLUT)
+  ADD_DEFINITIONS( "-DVGUI_USE_GLUT" )
+ENDIF (vgui_IMPL_GLUT)
+IF (vgui_IMPL_QT)
+  ADD_DEFINITIONS( "-DVGUI_USE_QT" )
+ENDIF (vgui_IMPL_QT)
+IF (vgui_IMPL_MFC)
+  ADD_DEFINITIONS( "-DVGUI_USE_MFC" )
+ENDIF (vgui_IMPL_MFC)
+IF (vgui_IMPL_X)
+  ADD_DEFINITIONS( "-DVGUI_USE_X" )
+ENDIF (vgui_IMPL_X)
+IF (vgui_IMPL_GLX)
+  ADD_DEFINITIONS( "-DVGUI_USE_GLX" )
+ENDIF (vgui_IMPL_GLX)
+IF (vgui_IMPL_GTK)
+  ADD_DEFINITIONS( "-DVGUI_USE_GTK" )
+ENDIF (vgui_IMPL_GTK)
+IF (vgui_IMPL_SDL)
+  ADD_DEFINITIONS( "-DVGUI_USE_SDL" )
+ENDIF (vgui_IMPL_SDL)
+IF (vgui_IMPL_XM)
+  ADD_DEFINITIONS( "-DVGUI_USE_XM" )
+ENDIF (vgui_IMPL_XM)
+IF (vgui_IMPL_FL)
+  ADD_DEFINITIONS( "-DVGUI_USE_FL" )
+ENDIF (vgui_IMPL_FL)
+
+
+ADD_LIBRARY( vgui
+  vgui_link_all.cxx
+)
+TARGET_LINK_LIBRARIES( vgui vgui_base )
+
+IF (vgui_IMPL_GLUT)
+  TARGET_LINK_LIBRARIES(vgui ${vgui_IMPL_GLUT})
+ENDIF (vgui_IMPL_GLUT)
+IF (vgui_IMPL_QT)
+  TARGET_LINK_LIBRARIES(vgui ${vgui_IMPL_QT})
+ENDIF (vgui_IMPL_QT)
+IF (vgui_IMPL_MFC)
+  TARGET_LINK_LIBRARIES(vgui ${vgui_IMPL_MFC})
+ENDIF (vgui_IMPL_MFC)
+IF (vgui_IMPL_X)
+  TARGET_LINK_LIBRARIES(vgui ${vgui_IMPL_X})
+ENDIF (vgui_IMPL_X)
+IF (vgui_IMPL_GLX)
+  TARGET_LINK_LIBRARIES(vgui ${vgui_IMPL_GLX})
+ENDIF (vgui_IMPL_GLX)
+IF (vgui_IMPL_GTK)
+  TARGET_LINK_LIBRARIES(vgui ${vgui_IMPL_GTK})
+ENDIF (vgui_IMPL_GTK)
+IF (vgui_IMPL_SDL)
+  TARGET_LINK_LIBRARIES(vgui ${vgui_IMPL_SDL})
+ENDIF (vgui_IMPL_SDL)
+IF (vgui_IMPL_XM)
+  TARGET_LINK_LIBRARIES(vgui ${vgui_IMPL_XM})
+ENDIF (vgui_IMPL_XM)
+IF (vgui_IMPL_FL)
+  TARGET_LINK_LIBRARIES(vgui ${vgui_IMPL_FL})
+ENDIF (vgui_IMPL_FL)
+
 
 IF (BUILD_EXAMPLES)
   SUBDIRS(examples)

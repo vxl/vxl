@@ -1,7 +1,5 @@
 # ./vxl/vgl/CMakeLists.txt
 
-ADD_LIBRARY(vgl vgl_sources)
-
 SOURCE_FILES( vgl_sources
   vgl_fwd.h
 
@@ -49,6 +47,9 @@ SOURCE_FILES( vgl_sources
 )
 
 AUX_SOURCE_DIRECTORY(Templates vgl_sources)
+
+ADD_LIBRARY(vgl vgl_sources)
+TARGET_LINK_LIBRARIES( vgl vcl )
 
 SUBDIRS( algo )
 SUBDIRS( io )

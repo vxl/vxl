@@ -1,11 +1,5 @@
 # ./vxl/vil/tests/CMakeLists.txt
 
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vil/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vpl/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vul/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/testlib/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vcl/CMakeListsLink.txt )
-
 ADD_EXECUTABLE( vil_test_driver
   test_driver.cxx
 
@@ -22,6 +16,7 @@ ADD_EXECUTABLE( vil_test_driver
   test_copy.cxx
   test_file_format_read.cxx
 )
+TARGET_LINK_LIBRARIES( vil_test_driver vil vpl vul testlib vcl )
 
 ADD_TEST( vil_test_include           vil_test_driver test_include )
 ADD_TEST( vil_test_flipud            vil_test_driver test_flipud )

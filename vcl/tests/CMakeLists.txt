@@ -1,9 +1,7 @@
 # ./vcl/tests/CMakeLists.txt
 
-INCLUDE( ${allvxl_SOURCE_DIR}/vcl/CMakeListsLink.txt )
-
 # Avoid adding more test executables here, in order to keep the number
-# of projects small. (This is concern for IDEs like Visual Studio.)
+# of projects small. (This is a concern for IDEs like Visual Studio.)
 # Try to follow one of the other tests, like test_vcl_algorithm.cxx,
 # and add the test into vcl_tests.cxx.
 
@@ -31,5 +29,7 @@ ADD_EXECUTABLE( vcl_tests
      test_vcl_string.cxx
      test_vcl_vector.cxx
 )
+TARGET_LINK_LIBRARIES( vcl_tests vcl )
+
 
 ADD_TEST( vcl_tests vcl_tests)

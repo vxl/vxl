@@ -15,22 +15,15 @@
 #
 
 IF(NOT HAS_OPENGL)
+
+
   IF (WIN32)
 
     IF (CYGWIN)
   
       SET( HAS_OPENGL "NO" )
   
-      # The first line below is to make sure that the proper headers
-      # are used on a Linux machine with the NVidia drivers installed.
-      # They replace Mesa with NVidia's own library but normally do not
-      # install headers and that causes the linking of parts of vgui to
-      # fail since the compiler finds the Mesa headers but NVidia's library.
-      # Make sure the NVIDIA directory comes BEFORE the others.
-      #   -- Atanas Georgiev <atanas@cs.columbia.edu>
-  
       FIND_PATH(OPENGL_INCLUDE_PATH GL/gl.h 
-        /usr/share/doc/NVIDIA_GLX-1.0/include
         /usr/include 
         /usr/X11R6/include 
       )
@@ -52,8 +45,7 @@ IF(NOT HAS_OPENGL)
         SET( HAS_OPENGL "YES" )
         ADD_DEFINITIONS( -DHAS_OPENGL )
 
-        INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_PATH})
-        LINK_LIBRARIES( ${OPENGL_glu_LIBRARY} ${OPENGL_gl_LIBRARY} )
+        SET( OPENGL_LIBRARIES  ${OPENGL_glu_LIBRARY} ${OPENGL_gl_LIBRARY} )
 
       ENDIF(OPENGL_glu_LIBRARY)
       ENDIF(OPENGL_gl_LIBRARY)
@@ -63,7 +55,17 @@ IF(NOT HAS_OPENGL)
 
       SET (HAS_OPENGL "YES")
       ADD_DEFINITIONS( -DHAS_OPENGL )
-      LINK_LIBRARIES(opengl32 glu32)
+      SET( OPENGL_LIBRARIES opengl32 glu32 )
+
+      # No extra include path needed because OpenGL includes are with
+      # the system includes but, cmake will create makefiles with
+      # "-I${OPENGL_INCLUDE_PATH}" options if OPENGL_INCLUDE_PATH is
+      # not set.  OPENGL_INCLUDE_PATH cannot be set to "" because the
+      # resulting -I option to "cl" will eat the following
+      # "-IC:\really\needed" option.  This is a kludge to get around
+      # cmake not ignoring INCLUDE_DIRECTORIES commands with empty
+      # strings.
+      SET( OPENGL_INCLUDE_PATH "${allvxl_BINARY_DIR}/vcl" )
 
     ENDIF (CYGWIN)
 
@@ -113,8 +115,7 @@ IF(NOT HAS_OPENGL)
       SET( HAS_OPENGL "YES" )
       ADD_DEFINITIONS( -DHAS_OPENGL )
 
-      INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_PATH})
-      LINK_LIBRARIES( ${OPENGL_gl_LIBRARY} ${OPENGL_glu_LIBRARY} ${CMAKE_THREAD_LIBS} )
+      SET( OPENGL_LIBRARIES ${OPENGL_gl_LIBRARY} ${OPENGL_glu_LIBRARY} ${CMAKE_THREAD_LIBS} )
 
     ENDIF(OPENGL_glu_LIBRARY)
     ENDIF(OPENGL_gl_LIBRARY)

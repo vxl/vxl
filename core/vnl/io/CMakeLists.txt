@@ -1,7 +1,5 @@
 # vxl/vnl/io/CMakeLists.txt
 
-ADD_LIBRARY(vnl_io vnl_io_sources )
-
 SOURCE_FILES(vnl_io_sources
   vnl_io_nonlinear_minimizer.cxx vnl_io_nonlinear_minimizer.h
   vnl_io_real_npolynomial.cxx vnl_io_real_npolynomial.h
@@ -17,6 +15,9 @@ SOURCE_FILES(vnl_io_sources
 )
 
 AUX_SOURCE_DIRECTORY(Templates vnl_io_sources)
+
+ADD_LIBRARY(vnl_io vnl_io_sources )
+TARGET_LINK_LIBRARIES( vnl_io vnl vsl )
 
 IF(BUILD_TESTING)
   SUBDIRS(tests)

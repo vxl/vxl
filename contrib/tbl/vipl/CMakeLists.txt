@@ -1,7 +1,5 @@
 # tbl/vipl/CMakeLists.txt
 
-ADD_LIBRARY(vipl vipl_sources)
-
 SOURCE_FILES(vipl_sources
  filter/vipl_filter_abs.cxx  filter/vipl_filter_abs.h
                              filter/vipl_filter_helper.h
@@ -13,6 +11,7 @@ SOURCE_FILES(vipl_sources
  vipl_convert.txx              vipl_convert.h
  vipl_dilate_disk.txx          vipl_dilate_disk.h
  vipl_dyadic.txx               vipl_dyadic.h
+
  vipl_erode_disk.txx           vipl_erode_disk.h
  vipl_gaussian_convolution.txx vipl_gaussian_convolution.h
  vipl_gradient_dir.txx         vipl_gradient_dir.h
@@ -56,6 +55,9 @@ AUX_SOURCE_DIRECTORY(vipl_with_section/Templates vipl_sources)
 AUX_SOURCE_DIRECTORY(vipl_with_mil/Templates vipl_sources)
 # and for the latter, we need mul:
 INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/mul)
+
+ADD_LIBRARY(vipl vipl_sources)
+TARGET_LINK_LIBRARIES(vipl vil)
 
 IF (BUILD_EXAMPLES)
   SUBDIRS(examples)

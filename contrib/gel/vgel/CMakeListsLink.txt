@@ -1,9 +1,3 @@
 # ./gel/vgel/CMakeListsLink.txt
 
 LINK_LIBRARIES( vgel )
-
-INCLUDE(${allvxl_SOURCE_DIR}/gel/vgel/kl/CMakeListsLink.txt)
-INCLUDE(${allvxl_SOURCE_DIR}/gel/vtol/CMakeListsLink.txt)
-INCLUDE(${allvxl_SOURCE_DIR}/vxl/vil/CMakeListsLink.txt)
-INCLUDE(${allvxl_SOURCE_DIR}/vxl/vidl/CMakeListsLink.txt)
-INCLUDE(${allvxl_SOURCE_DIR}/oxl/mvl/CMakeListsLink.txt)

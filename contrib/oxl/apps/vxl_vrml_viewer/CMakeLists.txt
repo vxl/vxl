@@ -1,33 +1,18 @@
 # ./oxl/apps/vxl_vrml_viewer/CMakeLists.txt
 
-INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindOpenGL.cmake)
-INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindQv.cmake)
+INCLUDE( ${allvxl_SOURCE_DIR}/oxl/vgui/UseVGUI.cmake )
 
-# Build here only if OpenGL is available:
-IF(HAS_OPENGL)
+INCLUDE(${MODULE_PATH}/FindQv.cmake)
 
-ADD_EXECUTABLE( vxl_vrml_viewer vxl_vrml_viewer_sources )
+IF(HAS_VGUI)
+IF(HAS_QV)
+
+INCLUDE_DIRECTORIES( ${QV_INCLUDE_PATH} )
 
 SOURCE_FILES( vxl_vrml_viewer_sources main.cxx )
 
-# Immediate dependencies:
-INCLUDE( ${allvxl_SOURCE_DIR}/oxl/osl/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/oxl/mvl/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/oxl/vgui/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vgl/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vil/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vnl/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vul/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vbl/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vpl/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vcl/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/oxl/vrml/CMakeListsLink.txt )
+ADD_EXECUTABLE( vxl_vrml_viewer vxl_vrml_viewer_sources )
+TARGET_LINK_LIBRARIES( vxl_vrml_viewer osl mvl vgui vrml vgl vil vnl vul vbl vpl ${QV_LIBRARIES} vcl )
 
-# need to list a couple of libs again on the link line
-# this kludge will only be needed until cmake 1.4 link line features are used
-# Cygwin requires libs listed with dependent libs to the right
-IF(CYGWIN)
- LINK_LIBRARIES(png zlib tiff jpeg)
-ENDIF(CYGWIN)
-
-ENDIF(HAS_OPENGL)
+ENDIF(HAS_QV)
+ENDIF(HAS_VGUI)

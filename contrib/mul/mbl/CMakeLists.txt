@@ -1,7 +1,5 @@
 # mul/mbl/CMakeLists.txt
 
-ADD_LIBRARY(mbl mbl_sources)
-
 SOURCE_FILES(mbl_sources
  mbl_gamma.cxx                     mbl_gamma.h
  mbl_matrix_products.cxx           mbl_matrix_products.h
@@ -24,6 +22,7 @@ SOURCE_FILES(mbl_sources
 
  mbl_selected_data_wrapper.txx     mbl_selected_data_wrapper.h
  mbl_data_array_ptr_wrapper.txx    mbl_data_array_ptr_wrapper.h
+
  mbl_data_array_wrapper.txx        mbl_data_array_wrapper.h
  mbl_data_collector.txx            mbl_data_collector.h
  mbl_data_collector_list.txx       mbl_data_collector_list.h
@@ -40,6 +39,9 @@ SOURCE_FILES(mbl_sources
 )
 
 AUX_SOURCE_DIRECTORY(Templates mbl_sources)
+
+ADD_LIBRARY(mbl mbl_sources)
+TARGET_LINK_LIBRARIES(mbl vnl_io vnl_algo vsl vgl_io)
 
 IF (BUILD_TESTING)
   SUBDIRS(tests)

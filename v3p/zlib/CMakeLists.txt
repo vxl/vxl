@@ -1,7 +1,7 @@
 # v3p/zlib/CMakeLists.txt
 
-# Do nothing here, unless there is no native ZLIB
-INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindNativeZLIB.cmake)
+INCLUDE( ${MODULE_PATH}/FindNativeZLIB.cmake )
+
 IF(NOT HAS_NATIVE_ZLIB)
 
 ADD_LIBRARY( zlib zlib_sources )

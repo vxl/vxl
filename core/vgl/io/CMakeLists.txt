@@ -1,7 +1,5 @@
 # vxl/vgl/io/CMakeLists.txt
 
-ADD_LIBRARY(vgl_io vgl_io_sources)
-
 SOURCE_FILES(vgl_io_sources
   vgl_io_polygon.cxx vgl_io_polygon.h
 
@@ -23,6 +21,9 @@ SOURCE_FILES(vgl_io_sources
 )
 
 AUX_SOURCE_DIRECTORY(Templates vgl_io_sources)
+
+ADD_LIBRARY(vgl_io vgl_io_sources)
+TARGET_LINK_LIBRARIES( vgl_io vgl vsl )
 
 IF( BUILD_TESTING)
   SUBDIRS(tests)

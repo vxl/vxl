@@ -1,5 +1,7 @@
 # ./vxl/vcsl/tests/CMakeLists.txt
 
+LINK_LIBRARIES( vcsl vnl vbl vcl )
+
 ADD_EXECUTABLE( vcsl_test_all vcsl_test_all.cxx )
 ADD_EXECUTABLE( vcsl_test_meter test_meter.cxx )
 ADD_EXECUTABLE( vcsl_test_radian test_radian.cxx )
@@ -31,9 +33,3 @@ ADD_TEST( vcsl_test_scale vcsl_test_scale )
 ADD_TEST( vcsl_test_translation vcsl_test_translation )
 ADD_TEST( vcsl_test_rotation vcsl_test_rotation )
 ADD_TEST( vcsl_test_displacement vcsl_test_displacement )
-
-# Immediate dependencies
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vcsl/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vbl/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vnl/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vcl/CMakeListsLink.txt )

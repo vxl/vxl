@@ -3,7 +3,8 @@
 #
 
 IF(NOT HAS_JPEG)
-  INCLUDE( ${allvxl_SOURCE_DIR}/config.cmake/Modules/FindNativeJPEG.cmake )
+
+  INCLUDE( ${MODULE_PATH}/FindNativeJPEG.cmake )
   
   IF(NOT HAS_NATIVE_JPEG)
   
@@ -21,13 +22,15 @@ IF(NOT HAS_JPEG)
       SET( HAS_JPEG "YES" )
       ADD_DEFINITIONS( -DHAS_JPEG )
       INCLUDE_DIRECTORIES( ${JPEG_INCLUDE_PATH} )
-  
-      INCLUDE( ${allvxl_SOURCE_DIR}/v3p/jpeg/CMakeListsLink.txt )
+
+      SET( JPEG_LIBRARIES jpeg )  
   
     ENDIF(JPEG_INCLUDE_PATH)
   
   ELSE(NOT HAS_NATIVE_JPEG)
   
+    SET( JPEG_INCLUDE_PATH ${NATIVE_JPEG_INCLUDE_PATH} )
+    SET( JPEG_LIBRARIES ${NATIVE_JPEG_LIBRARIES} )
     SET( HAS_JPEG "YES" )
     ADD_DEFINITIONS( -DHAS_JPEG )
   

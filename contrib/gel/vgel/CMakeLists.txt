@@ -1,7 +1,5 @@
 # gel/vgel/CMakeLists.txt
 
-ADD_LIBRARY(vgel vgel_sources)
-
 SOURCE_FILES(vgel_sources
  vgel_kl.cxx              vgel_kl.h
  vgel_kl_params.cxx       vgel_kl_params.h
@@ -11,6 +9,8 @@ SOURCE_FILES(vgel_sources
 
 AUX_SOURCE_DIRECTORY(Templates vgel_sources)
 
+ADD_LIBRARY(vgel vgel_sources)
+TARGET_LINK_LIBRARIES(vgel vgel_kl vtol vil vidl mvl)
 
 INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/oxl)
 

@@ -1,11 +1,3 @@
 # ./vxl/vcsl/CMakeListsLink.txt
 
 LINK_LIBRARIES( vcsl )
-
-IF (LIBRARY_OUTPUT_PATH MATCHES '^$')
-  LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/vxl/vcsl )
-ENDIF (LIBRARY_OUTPUT_PATH MATCHES '^$')
-
-# Immediate dependencies
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vnl/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vbl/CMakeListsLink.txt )

@@ -4,8 +4,7 @@
 #   Ian Scott
 #
 
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vul/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/mul/clsfy/CMakeListsLink.txt )
+LINK_LIBRARIES( vul clsfy )
 
 ADD_EXECUTABLE (clsfy_test_binary_hyperplane test_binary_hyperplane.cxx)
 ADD_EXECUTABLE (clsfy_test_binary_pdf_classifier test_binary_pdf_classifier.cxx)

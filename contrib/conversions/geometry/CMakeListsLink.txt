@@ -1,14 +1,12 @@
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vgl/algo/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vnl/algo/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vbl/CMakeListsLink.txt )
+LINK_LIBRARIES( vgl_algo vnl_algo vbl )
 
 IF(BUILD_GEL)
   INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/gel)
-  INCLUDE( ${allvxl_SOURCE_DIR}/gel/vdgl/CMakeListsLink.txt )
+  LINK_LIBRARIES( vdgl )
 ENDIF(BUILD_GEL)
 IF(BUILD_OXL)
   INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/oxl)
-  INCLUDE( ${allvxl_SOURCE_DIR}/oxl/osl/CMakeListsLink.txt )
+  LINK_LIBRARIES( osl )
 ENDIF(BUILD_OXL)
 
 IF(HAS_SPATIALOBJECTS)

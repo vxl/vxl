@@ -1,6 +1,6 @@
 # gel/mrc/vpgl/CMakeLists.txt
 
-ADD_LIBRARY(vpgl vpgl_sources)
+INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/gel/mrc)
 
 SOURCE_FILES(vpgl_sources
  vpgl_basic_camera.cxx       vpgl_basic_camera.h       vpgl_basic_camera_sptr.h
@@ -10,6 +10,5 @@ SOURCE_FILES(vpgl_sources
 
 AUX_SOURCE_DIRECTORY(Templates vpgl_sources)
 
-INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vxl)
-INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/gel)
-INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/gel/mrc)
+ADD_LIBRARY(vpgl vpgl_sources)
+TARGET_LINK_LIBRARIES(vpgl vcsl vnl vbl vcl)

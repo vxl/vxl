@@ -1,25 +1,33 @@
 # ./oxl/apps/vxl_vrml_viewer/CMakeLists.txt
 
-INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindGLUT.cmake)
-INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindOpenGL.cmake)
-INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindMPEG.cmake)
+INCLUDE(${MODULE_PATH}/FindGLUT.cmake)
+INCLUDE(${MODULE_PATH}/FindOpenGL.cmake)
+INCLUDE(${MODULE_PATH}/FindMPEG.cmake)
 
+LINK_LIBRARIES( oxp vidl vil vul vbl vpl vcl )
+
+IF(HAS_MPEG)
+  LINK_LIBRARIES( ${MPEG_LIBRARIES} )
+ENDIF(HAS_MPEG)
+IF(HAS_GLUT)
+  LINK_LIBRARIES( ${GLUT_LIBRARIES} )
+ENDIF(HAS_GLUT)
 IF(HAS_OPENGL)
- IF (HAS_GLUT)
-  ADD_EXECUTABLE( glmovie glmovie.cxx make_index.cxx )
- ENDIF (HAS_GLUT)
- ADD_EXECUTABLE( vobgetframe vobgetframe.cxx )
+  LINK_LIBRARIES( ${OPENGL_LIBRARIES} )
 ENDIF(HAS_OPENGL)
 
 IF(WIN32)
- LINK_LIBRARIES( vfw32 )
+  LINK_LIBRARIES( vfw32 )
 ENDIF(WIN32)
 
-# Immediate dependencies:
-INCLUDE( ${allvxl_SOURCE_DIR}/oxl/oxp/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vidl/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vil/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vul/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vbl/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vpl/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vcl/CMakeListsLink.txt )
+IF(HAS_OPENGL)
+  INCLUDE_DIRECTORIES( ${OPENGL_INCLUDE_PATH} )
+
+  ADD_EXECUTABLE( vobgetframe vobgetframe.cxx )
+
+  IF (HAS_GLUT)
+    INCLUDE_DIRECTORIES( ${GLUT_INCLUDE_PATH} )
+    ADD_EXECUTABLE( glmovie glmovie.cxx make_index.cxx )
+  ENDIF (HAS_GLUT)
+
+ENDIF(HAS_OPENGL)

@@ -1,5 +1,7 @@
 # ./vxl/vsl/tests/CMakeLists.txt
 
+LINK_LIBRARIES( vsl testlib )
+
 ADD_EXECUTABLE( vsl_test_all vsl_test_all.cxx )
 
 ADD_EXECUTABLE( vsl_test_indent test_indent.cxx )
@@ -36,7 +38,3 @@ ADD_TEST( vsl_test_set_io vsl_test_set_io )
 ADD_TEST( vsl_test_stack_io vsl_test_stack_io )
 ADD_TEST( vsl_test_string_io vsl_test_string_io )
 ADD_TEST( vsl_test_vector_io vsl_test_vector_io )
-
-# Immediate dependencies
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vsl/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/testlib/CMakeListsLink.txt )

@@ -1,7 +1,5 @@
 # oxl/mvl/CMakeLists.txt
 
-ADD_LIBRARY(mvl mvl_sources)
-
 SOURCE_FILES(mvl_sources
  AffineMetric.cxx                       AffineMetric.h
  ClosestImagePointFinder.cxx            ClosestImagePointFinder.h
@@ -97,6 +95,7 @@ SOURCE_FILES(mvl_sources
 
  FMSkewComputeLinear.h
  FMatrixCompute8Point.h
+
  HomgMap2D.h
  HomgMatchPoint3D2D.h
  LineSeg.h
@@ -108,6 +107,9 @@ SOURCE_FILES(mvl_sources
 )
 
 AUX_SOURCE_DIRECTORY(Templates mvl_sources)
+
+ADD_LIBRARY(mvl mvl_sources)
+TARGET_LINK_LIBRARIES(mvl vnl_algo vnl vbl vgl vul)
 
 IF (BUILD_EXAMPLES)
   SUBDIRS(examples)

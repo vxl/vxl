@@ -281,6 +281,10 @@ SOURCE_FILES( netlib_sources
   i_dnnt.c
 )
 
+IF(UNIX)
+  TARGET_LINK_LIBRARIES( netlib m )
+ENDIF(UNIX)
+
 IF( BUILD_TESTING)
   SUBDIRS(tests)
 ENDIF( BUILD_TESTING)

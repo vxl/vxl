@@ -1,7 +1,5 @@
 # mul/mil/CMakeLists.txt
 
-ADD_LIBRARY(mil mil_sources)
-
 SOURCE_FILES(mil_sources
  mil_all.h
 
@@ -22,17 +20,20 @@ SOURCE_FILES(mil_sources
  mil_image_pyramid.txx           mil_image_pyramid.h        mil_image_pyramid.cxx
  mil_gaussian_pyramid_builder_2d_general.txx                mil_gaussian_pyramid_builder_2d_general.cxx
                                  mil_gaussian_pyramid_builder_2d_general.h
+
  mil_gaussian_pyramid_builder_2d.txx                        mil_gaussian_pyramid_builder_2d.cxx
                                  mil_gaussian_pyramid_builder_2d.h
  mil_scale_pyramid_builder_2d.txx mil_scale_pyramid_builder_2d.h mil_scale_pyramid_builder_2d.cxx
  mil_sample_profile_2d.txx       mil_sample_profile_2d.h
- mil_sample_grid_2d.txx          mil_sample_grid_2d.h
 
  mil_bilin_interp_2d.h
  mil_convert_vil.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates mil_sources)
+
+ADD_LIBRARY(mil mil_sources)
+TARGET_LINK_LIBRARIES(mil mbl vnl_algo vbl_io vnl_io vgl_io vil_io)
 
 SUBDIRS(algo)
 

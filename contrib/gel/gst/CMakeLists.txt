@@ -1,7 +1,5 @@
 # gel/gst/CMakeLists.txt
 
-ADD_LIBRARY(gst gst_sources)
-
 SOURCE_FILES(gst_sources
  gst_edge_2d.cxx              gst_edge_2d.h              gst_edge_2d_sptr.h
  gst_face_2d.cxx              gst_face_2d.h
@@ -11,3 +9,5 @@ SOURCE_FILES(gst_sources
 )
 
 AUX_SOURCE_DIRECTORY(Templates gst_sources)
+
+ADD_LIBRARY(gst gst_sources)

@@ -14,7 +14,8 @@ ADD_EXECUTABLE( vgl_test_driver
   test_ellipse_scan_iterator.cxx
   test_area.cxx
   test_clip.cxx
-)                 
+)
+TARGET_LINK_LIBRARIES( vgl_test_driver vgl_algo vgl testlib )
 
 ADD_TEST( vgl_test_includes                     vgl_test_driver test_includes )
 ADD_TEST( vgl_test_cartesian                    vgl_test_driver test_cartesian )
@@ -27,8 +28,3 @@ ADD_TEST( vgl_test_triangle_scan_iterator       vgl_test_driver test_triangle_sc
 ADD_TEST( vgl_test_ellipse_scan_iterator        vgl_test_driver test_ellipse_scan_iterator )
 ADD_TEST( vgl_test_area                         vgl_test_driver test_area )
 ADD_TEST( vgl_test_clip                         vgl_test_driver test_clip )
-
-# Immediate dependencies
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vgl/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vgl/algo/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/testlib/CMakeListsLink.txt )

@@ -1,7 +1,5 @@
 # vxl/vsl/CMakeLists.txt
 
-ADD_LIBRARY(vsl vsl_sources)
-
 SOURCE_FILES(vsl_sources
   vsl_fwd.h
   vsl_test.cxx vsl_test.h
@@ -26,6 +24,9 @@ SOURCE_FILES(vsl_sources
 )
 
 AUX_SOURCE_DIRECTORY(Templates vsl_sources)
+
+ADD_LIBRARY(vsl vsl_sources)
+TARGET_LINK_LIBRARIES( vsl vcl )
 
 IF(BUILD_TESTING)
   SUBDIRS(tests)

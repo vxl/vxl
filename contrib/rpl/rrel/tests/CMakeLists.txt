@@ -1,8 +1,5 @@
 # ./rpl/rrel/tests/CMakeLists.txt
 
-INCLUDE( ${allvxl_SOURCE_DIR}/rpl/rrel/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/testlib/CMakeListsLink.txt )
-
 AUX_SOURCE_DIRECTORY( Templates rrel_tests_sources )
 
 ADD_EXECUTABLE( rrel_test_driver
@@ -27,6 +24,7 @@ ADD_EXECUTABLE( rrel_test_driver
   test_robust_util.cxx
   test_similarity_from_matches.cxx
 )
+TARGET_LINK_LIBRARIES( rrel_test_driver rrel testlib )
 
 ADD_TEST( rrel_test_include                  rrel_test_driver test_include )
 ADD_TEST( rrel_test_homography2d_est         rrel_test_driver test_homography2d_est )

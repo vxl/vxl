@@ -1,4 +1,4 @@
-INCLUDE( ${allvxl_SOURCE_DIR}/rpl/rrel/CMakeListsLink.txt )
+LINK_LIBRARIES( rrel )
 
 ADD_EXECUTABLE( homography2d_fit   homography2d_fit.cxx )
 ADD_EXECUTABLE( homography2d_gen   homography2d_gen.cxx )

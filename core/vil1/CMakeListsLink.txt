@@ -1,22 +1,3 @@
 # ./vxl/vil/CMakeListsLink.txt
 
 LINK_LIBRARIES( vil )
-
-IF (NOT UNIX)
-  LINK_LIBRARIES(ws2_32.lib)
-ENDIF (NOT UNIX)
-
-# SOLARIS is set in the top level VXL CMakeLists.txt file
-IF (SOLARIS)
-  LINK_LIBRARIES(socket)
-ENDIF (SOLARIS)
-
-IF (LIBRARY_OUTPUT_PATH MATCHES '^$')
-  LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/vxl/vil )
-ENDIF (LIBRARY_OUTPUT_PATH MATCHES '^$')
-
-# Immediate dependencies
-INCLUDE( ${allvxl_SOURCE_DIR}/vcl/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/config.cmake/Modules/FindJPEG.cmake )
-INCLUDE( ${allvxl_SOURCE_DIR}/config.cmake/Modules/FindPNG.cmake )
-INCLUDE( ${allvxl_SOURCE_DIR}/config.cmake/Modules/FindTIFF.cmake )

@@ -1,7 +1,5 @@
 # ./oul/oufgl/CMakeLists.txt
 
-ADD_LIBRARY(oufgl oufgl_sources)
-
 SOURCE_FILES(oufgl_sources
   asyncio.h                 asyncio.cxx
   frame_grabber_pxc200.h    frame_grabber_pxc200.cxx
@@ -12,3 +10,6 @@ SOURCE_FILES(oufgl_sources
   pxc200.h
   sysdep.h
 )
+
+ADD_LIBRARY(oufgl oufgl_sources)
+TARGET_LINK_LIBRARIES( oufgl vil )

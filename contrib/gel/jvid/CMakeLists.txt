@@ -1,20 +1,26 @@
-# gel/jvid/CMakeLists.txt
+# ./gel/jvid/CMakeLists.txt
 
-INCLUDE( ${allvxl_SOURCE_DIR}/config.cmake/Modules/FindOpenGL.cmake )
-INCLUDE( ${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindMPEG.cmake )
+INCLUDE( ${allvxl_SOURCE_DIR}/oxl/vgui/UseVGUI.cmake )
+ 
+IF(HAS_VGUI)
+
 INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/oxl )
 
-# Build here only if OpenGL (and thus vgui) is available:
-IF( HAS_OPENGL )
+# Uses the vidl_avicodec, and thus will only build under Windows
+IF(WIN32)
+IF (NOT CYGWIN)
 
-  SUBDIRS( bin )
+SOURCE_FILES( jvid_sources
+ jvx_manager.cxx jvx_manager.h
+)
 
-  ADD_LIBRARY( jvid jvid_sources )
+AUX_SOURCE_DIRECTORY(Templates jvid_sources)
 
-  SOURCE_FILES( jvid_sources
-    jvx_manager.cxx jvx_manager.h
-  )
+ADD_LIBRARY(jvid jvid_sources)
+TARGET_LINK_LIBRARIES( jvid vgui vidl vul vil )
 
-  AUX_SOURCE_DIRECTORY( Templates jvid_sources )
+SUBDIRS(bin)
 
-ENDIF( HAS_OPENGL )
+ENDIF (NOT CYGWIN)
+ENDIF(WIN32)
+ENDIF(HAS_VGUI)

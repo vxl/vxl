@@ -1,10 +1,8 @@
 # v3p/jpeg/CMakeLists.txt
 
-# Do nothing here, unless there is no native JPEG
-INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindNativeJPEG.cmake)
-IF(NOT HAS_NATIVE_JPEG)
+INCLUDE( ${MODULE_PATH}/FindNativeJPEG.cmake )
 
-ADD_LIBRARY( jpeg jpeg_sources )
+IF(NOT HAS_NATIVE_JPEG)
 
 SOURCE_FILES( jpeg_sources
   jconfig.h
@@ -63,5 +61,7 @@ SOURCE_FILES( jpeg_sources
   jmemmgr.c
   jmemansi.c
 )
+
+ADD_LIBRARY( jpeg jpeg_sources )
 
 ENDIF(NOT HAS_NATIVE_JPEG)

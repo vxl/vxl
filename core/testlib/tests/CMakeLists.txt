@@ -1,5 +1,3 @@
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/testlib/CMakeListsLink.txt )
-
 ADD_EXECUTABLE( testlib_test_driver
    test_driver.cxx
 
@@ -8,9 +6,12 @@ ADD_EXECUTABLE( testlib_test_driver
    test_args.cxx
    test_root_dir.cxx
 )
+TARGET_LINK_LIBRARIES( testlib_test_driver testlib )
+
 ADD_EXECUTABLE( testlib_test_link
    test_link.cxx
 )
+TARGET_LINK_LIBRARIES( testlib_test_link testlib )
 
 ADD_TEST( testlib_assert     testlib_test_driver test_assert )
 ADD_TEST( testlib_macros     testlib_test_driver test_macros )

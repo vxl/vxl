@@ -1,7 +1,5 @@
 # vxl/vbl/io/CMakeLists.txt
 
-ADD_LIBRARY(vbl_io vbl_io_sources)
-
 SOURCE_FILES(vbl_io_sources
   vbl_io_smart_ptr.txx vbl_io_smart_ptr.h
   vbl_io_array_1d.txx vbl_io_array_1d.h
@@ -17,6 +15,9 @@ SOURCE_FILES(vbl_io_sources
 )
 
 AUX_SOURCE_DIRECTORY(Templates vbl_io_sources)
+
+ADD_LIBRARY(vbl_io vbl_io_sources)
+TARGET_LINK_LIBRARIES( vbl_io vbl vsl )
 
 IF( BUILD_TESTING)
   SUBDIRS(tests)

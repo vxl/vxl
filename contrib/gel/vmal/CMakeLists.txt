@@ -1,6 +1,6 @@
 # gel/vmal/CMakeLists.txt
 
-ADD_LIBRARY(vmal vmal_sources)
+INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/oxl)
 
 SOURCE_FILES(vmal_sources
  vmal_convert.cxx           vmal_convert.h
@@ -20,4 +20,4 @@ SOURCE_FILES(vmal_sources
 
 AUX_SOURCE_DIRECTORY(Templates vmal_sources)
 
-INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/oxl)
+ADD_LIBRARY(vmal vmal_sources)

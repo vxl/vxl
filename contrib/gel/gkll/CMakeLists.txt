@@ -1,6 +1,6 @@
 # gel/gkll/CMakeLists.txt
 
-ADD_LIBRARY(gkll gkll_sources)
+INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/oxl)
 
 SOURCE_FILES(gkll_sources
  gkll_kl.cxx              gkll_kl.h
@@ -9,4 +9,4 @@ SOURCE_FILES(gkll_sources
  gkll_multi_view_data_vertex_sptr.h
 )
 
-INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/oxl)
+ADD_LIBRARY(gkll gkll_sources)

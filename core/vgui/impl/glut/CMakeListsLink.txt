@@ -1,10 +1,1 @@
-# ./oxl/vgui/impl/glut/CMakeListsLink.txt
-
-LINK_LIBRARIES( vgui_glut )
-
-IF (LIBRARY_OUTPUT_PATH MATCHES '^$')
-  LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/oxl/vgui/impl/glut )
-ENDIF (LIBRARY_OUTPUT_PATH MATCHES '^$')
-
-# Immediate dependencies
-INCLUDE( ${allvxl_SOURCE_DIR}/config.cmake/Modules/FindX11.cmake )
+# This file will be phased out, and should be empty.

@@ -1,7 +1,5 @@
 # ./vxl/testlib/CMakeLists.txt
 
-ADD_LIBRARY(testlib testlib_sources)
-
 FIND_FILE(TESTLIB_VCL_WHERE_ROOT_DIR_H
           vcl_where_root_dir.h
           ${allvxl_BINARY_DIR}/vcl )
@@ -25,6 +23,9 @@ SOURCE_FILES( testlib_sources
   testlib_root_dir.h            testlib_root_dir.cxx
 )
 
+ADD_LIBRARY( testlib testlib_sources )
+TARGET_LINK_LIBRARIES( testlib vcl )
+
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  SUBDIRS( tests )
 ENDIF( BUILD_TESTING )

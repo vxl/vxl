@@ -1,7 +1,5 @@
 # vxl/vil/io/CMakeLists.txt
 
-ADD_LIBRARY(vil_io vil_io_sources)
-
 SOURCE_FILES(vil_io_sources
   vil_io_image.cxx vil_io_image.h
   vil_io_image_impl.cxx vil_io_image_impl.h
@@ -15,6 +13,9 @@ SOURCE_FILES(vil_io_sources
 )
 
 AUX_SOURCE_DIRECTORY(Templates vil_io_sources)
+
+ADD_LIBRARY(vil_io vil_io_sources)
+TARGET_LINK_LIBRARIES( vil_io vil vsl )
 
 IF( BUILD_TESTING)
   SUBDIRS(tests)

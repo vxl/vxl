@@ -1,7 +1,5 @@
 # mul/clsfy/CMakeLists.txt
 
-ADD_LIBRARY(clsfy clsfy_sources)
-
 SOURCE_FILES(clsfy_sources
  clsfy_binary_hyperplane.cxx                  clsfy_binary_hyperplane.h
  clsfy_binary_hyperplane_ls_builder.cxx       clsfy_binary_hyperplane_ls_builder.h
@@ -29,6 +27,9 @@ SOURCE_FILES(clsfy_sources
 )
 
 AUX_SOURCE_DIRECTORY(Templates clsfy_sources)
+
+ADD_LIBRARY(clsfy clsfy_sources)
+TARGET_LINK_LIBRARIES(clsfy vpdfl)
 
 IF (BUILD_TESTING)
   SUBDIRS(tests)

@@ -1,5 +1,7 @@
 # ./oxl/vgui/test/CMakeLists.txt
 
+LINK_LIBRARIES( vgui )
+
 ADD_EXECUTABLE( vgui_test_popup test_popup.cxx )
 #ADD_TEST( vgui_test_popup vgui_test_popup )
 ADD_EXECUTABLE( vgui_test_timer test_timer.cxx )
@@ -21,6 +23,3 @@ ENDIF(HAS_X11)
 IF(EXTRA_TESTS)
 SUBDIRS( old-tests Fl gtk Xm )
 ENDIF(EXTRA_TESTS)
-
-# Immediate dependencies
-INCLUDE( ${allvxl_SOURCE_DIR}/oxl/vgui/CMakeListsLink.txt )

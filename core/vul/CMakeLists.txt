@@ -1,6 +1,4 @@
-# vxl/vul/CMakeLists.txt
-
-ADD_LIBRARY(vul vul_sources)
+# ./vxl/vul/CMakeLists.txt
 
 SOURCE_FILES(vul_sources
   vul_fwd.h
@@ -26,18 +24,28 @@ SOURCE_FILES(vul_sources
   vul_trace.h                 vul_trace.cxx
   vul_url.h                   vul_url.cxx
   vul_user_info.h             vul_user_info.cxx
-
-#  vul_lru_helper.txx          vul_lru_helper.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates vul_sources)
 
+ADD_LIBRARY(vul vul_sources)
+
+IF (NOT UNIX)
+  TARGET_LINK_LIBRARIES( vul ws2_32.lib )
+ENDIF (NOT UNIX)
+
+IF (SOLARIS)
+  TARGET_LINK_LIBRARIES( vul socket )
+ENDIF (SOLARIS)
+
+TARGET_LINK_LIBRARIES( vul vcl )
+
 SUBDIRS(io)
 
-IF (BUILD_EXAMPLES)
-  SUBDIRS(examples)
-ENDIF (BUILD_EXAMPLES)
+IF( BUILD_EXAMPLES )
+  SUBDIRS( examples )
+ENDIF( BUILD_EXAMPLES )
 
-IF (BUILD_TESTING)
+IF( BUILD_TESTING )
   SUBDIRS(tests)
-ENDIF (BUILD_TESTING)
+ENDIF( BUILD_TESTING )

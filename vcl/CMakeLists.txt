@@ -306,6 +306,10 @@ SOURCE_FILES( vcl_sources
   win32/vcl_vector.txx
 )
 
+
+AUX_SOURCE_DIRECTORY(Templates vcl_sources)
+
+
 IF(WIN32)
   IF(NOT CYGWIN)
     ADD_DEFINITIONS( -DBUILDING_VCL_DLL )
@@ -313,7 +317,9 @@ IF(WIN32)
   ENDIF(NOT CYGWIN)
 ENDIF(WIN32)
 
-AUX_SOURCE_DIRECTORY(Templates vcl_sources)
+IF(UNIX)
+  TARGET_LINK_LIBRARIES( vcl m )
+ENDIF(UNIX)
 
 IF( BUILD_TESTING)
   SUBDIRS(tests)

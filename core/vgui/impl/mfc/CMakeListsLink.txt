@@ -1,7 +1,1 @@
-# ./oxl/vgui/impl/mfc/CMakeListsLink.txt
-
-LINK_LIBRARIES( vgui_mfc )
-
-IF (LIBRARY_OUTPUT_PATH MATCHES '^$')
-  LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/oxl/vgui/impl/mfc )
-ENDIF (LIBRARY_OUTPUT_PATH MATCHES '^$')
+# This file will be phased out, and should be empty.

@@ -10,7 +10,7 @@
 #
 #   DEPENDENCIES:  vepl vipl vil
 
-INCLUDE( ${allvxl_SOURCE_DIR}/tbl/vepl/CMakeListsLink.txt )
+LINK_LIBRARIES( vepl )
 
 ADD_EXECUTABLE(vepl_example_convert          example_convert.cxx)
 ADD_EXECUTABLE(vepl_example_add_random_noise example_add_random_noise.cxx)

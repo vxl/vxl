@@ -1,16 +1,15 @@
 # vxl/vbl/tests/CMakeLists.txt
 
-ADD_LIBRARY(vbl_test vbl_test_sources)
-
 SOURCE_FILES( vbl_test_sources
   vbl_test_classes.cxx vbl_test_classes.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates vbl_test_sources)
 
-LINK_LIBRARIES( vbl_test )
+ADD_LIBRARY(vbl_test vbl_test_sources)
+TARGET_LINK_LIBRARIES( vbl_test vbl )
 
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vbl/CMakeListsLink.txt )
+LINK_LIBRARIES( vbl_test )
 
 ADD_EXECUTABLE( vbl_test_all vbl_test_all.cxx )
 ADD_EXECUTABLE( vbl_test_array vbl_test_array.cxx )

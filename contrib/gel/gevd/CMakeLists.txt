@@ -1,7 +1,5 @@
 # gel/gevd/CMakeLists.txt
 
-ADD_LIBRARY(gevd gevd_sources)
-
 SOURCE_FILES(gevd_sources
                              gevd_pixel.h
                              gevd_xpixel.h
@@ -19,8 +17,12 @@ SOURCE_FILES(gevd_sources
  gevd_edgel_regions.cxx      gevd_edgel_regions.h
  gevd_region_edge.cxx        gevd_region_edge.h
  gevd_region_proc.cxx        gevd_region_proc.h
+
  gevd_region_proc_params.cxx gevd_region_proc_params.h
 )
+
+ADD_LIBRARY(gevd gevd_sources)
+TARGET_LINK_LIBRARIES(gevd vtol vdgl vil vnl vbl)
 
 IF (BUILD_TESTING)
   SUBDIRS(tests)

@@ -1,11 +1,12 @@
 # ./vxl/vpl/CMakeLists.txt
 
-ADD_LIBRARY(vpl vpl_sources)
-
 SOURCE_FILES( vpl_sources
   vpl.h         vpl.cxx
   vpl_mutex.h
 )
+
+ADD_LIBRARY(vpl vpl_sources)
+TARGET_LINK_LIBRARIES( vpl vcl )
 
 IF( BUILD_TESTING)
   SUBDIRS(tests)

@@ -3,7 +3,9 @@
 #
 
 IF(NOT HAS_TIFF)
-  INCLUDE( ${allvxl_SOURCE_DIR}/config.cmake/Modules/FindNativeTIFF.cmake )
+
+
+  INCLUDE( ${MODULE_PATH}/FindNativeTIFF.cmake )
   
   IF(NOT HAS_NATIVE_TIFF)
   
@@ -22,7 +24,7 @@ IF(NOT HAS_TIFF)
       SET( HAS_TIFF "YES" )
       ADD_DEFINITIONS( -DHAS_TIFF )
   
-      INCLUDE( ${allvxl_SOURCE_DIR}/v3p/tiff/CMakeListsLink.txt )
+      SET( TIFF_LIBRARIES tiff )
   
     ENDIF(TIFF_INCLUDE_PATH)
   
@@ -30,6 +32,8 @@ IF(NOT HAS_TIFF)
   
     SET( HAS_TIFF "YES" )
     ADD_DEFINITIONS( -DHAS_TIFF )
+    SET( TIFF_INCLUDE_PATH ${NATIVE_TIFF_INCLUDE_PATH} )
+    SET( TIFF_LIBRARIES ${NATIVE_TIFF_LIBRARIES} )
   
   ENDIF(NOT HAS_NATIVE_TIFF)
 ENDIF(NOT HAS_TIFF)

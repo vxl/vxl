@@ -13,12 +13,10 @@ ELSE(WIN32)
   OPTION(BUILD_SHARED_LIBS "Should shared libraries be the default?" YES)
 ENDIF(WIN32)
 
-# # CMAKE_SYSTEM is not set in "LatestRelease" tag version of CMake
-# # Add this back in after CMake 1.4 is released
-# SET(SOLARIS 0)
-# IF(CMAKE_SYSTEM MATCHES "SunOS.*")
-#   SET(SOLARIS 1)
-# ENDIF(CMAKE_SYSTEM MATCHES "SunOS.*")
+SET(SOLARIS 0)
+IF(CMAKE_SYSTEM MATCHES "SunOS.*")
+  SET(SOLARIS 1)
+ENDIF(CMAKE_SYSTEM MATCHES "SunOS.*")
 
 # Assume no MFC support
 SET(HAS_MFC 0)
@@ -73,6 +71,9 @@ IF(WARN_DEPRECATED)
      ADD_DEFINITIONS( -DVXL_WARN_DEPRECATED_ABORT )
   ENDIF(WARN_DEPRECATED_ABORT)
 ENDIF(WARN_DEPRECATED)
+
+# To avoid typing for the FindXXX.cmake modules
+SET( MODULE_PATH ${allvxl_SOURCE_DIR}/config.cmake/Modules )
 
 
 SUBDIRS(vcl v3p vxl)

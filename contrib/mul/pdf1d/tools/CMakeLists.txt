@@ -4,9 +4,7 @@
 #   Tim Cootes
 #
 
-
-
-INCLUDE( ${allvxl_SOURCE_DIR}/mul/pdf1d/CMakeListsLink.txt )
+LINK_LIBRARIES( pdf1d )
 
 ADD_EXECUTABLE(
 pdf1d_test_overlap_pdf test_overlap_pdf.cxx

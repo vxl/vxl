@@ -1,7 +1,5 @@
 # vxl/vil/CMakeLists.txt
 
-ADD_LIBRARY(vil vil_sources)
-
 SOURCE_FILES( vil_sources
   vil_fwd.h
 
@@ -101,17 +99,19 @@ SOURCE_FILES( vil_sources
 
 # vil_file_formats.cxx uses -DTIFF, etc, so we need to do this here.
 #
-INCLUDE(${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindJPEG.cmake)
-INCLUDE(${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindPNG.cmake)
-INCLUDE(${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindTIFF.cmake)
+INCLUDE(${MODULE_PATH}/FindJPEG.cmake)
+INCLUDE(${MODULE_PATH}/FindPNG.cmake)
+INCLUDE(${MODULE_PATH}/FindTIFF.cmake)
 
 IF(HAS_PNG)
+  INCLUDE_DIRECTORIES( ${PNG_INCLUDE_PATH} )
   SOURCE_FILES( vil_sources
     file_formats/vil_png.cxx file_formats/vil_png.h
   )
 ENDIF(HAS_PNG)
 
 IF(HAS_JPEG)
+  INCLUDE_DIRECTORIES( ${JPEG_INCLUDE_PATH} )
   SOURCE_FILES( vil_sources
     vil_jpeglib.h
     file_formats/vil_jpeg.cxx file_formats/vil_jpeg.h
@@ -123,6 +123,7 @@ IF(HAS_JPEG)
 ENDIF(HAS_JPEG)
 
 IF(HAS_TIFF)
+  INCLUDE_DIRECTORIES( ${TIFF_INCLUDE_PATH} )
   SOURCE_FILES( vil_sources
     file_formats/vil_tiff.cxx file_formats/vil_tiff.h
   )
@@ -130,7 +131,28 @@ ENDIF(HAS_TIFF)
 
 AUX_SOURCE_DIRECTORY(Templates vil_sources)
 
-#SUBDIRS(algo)
+ADD_LIBRARY(vil vil_sources)
+
+IF(HAS_JPEG)
+  TARGET_LINK_LIBRARIES( vil ${JPEG_LIBRARIES} )
+ENDIF(HAS_JPEG)
+IF(HAS_TIFF)
+  TARGET_LINK_LIBRARIES( vil ${TIFF_LIBRARIES} )
+ENDIF(HAS_TIFF)
+IF(HAS_PNG)
+  TARGET_LINK_LIBRARIES( vil ${PNG_LIBRARIES} )
+ENDIF(HAS_PNG)
+
+TARGET_LINK_LIBRARIES( vil vcl )
+
+IF (NOT UNIX)
+  TARGET_LINK_LIBRARIES( vil ws2_32.lib )
+ENDIF (NOT UNIX)
+
+IF (SOLARIS)
+  TARGET_LINK_LIBRARIES( vil socket )
+ENDIF (SOLARIS)
+
 SUBDIRS(io)
 
 IF( BUILD_EXAMPLES )

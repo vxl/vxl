@@ -1,7 +1,5 @@
 # gel/vsrl/CMakeLists.txt
 
-ADD_LIBRARY(vsrl vsrl_sources)
-
 SOURCE_FILES(vsrl_sources
  vsrl_3d_output.cxx             vsrl_3d_output.h
  vsrl_dense_matcher.cxx         vsrl_dense_matcher.h
@@ -22,6 +20,9 @@ SOURCE_FILES(vsrl_sources
 )
 
 AUX_SOURCE_DIRECTORY(Templates vsrl_sources)
+
+ADD_LIBRARY(vsrl vsrl_sources)
+TARGET_LINK_LIBRARIES(vsrl vil vbl vnl_algo vnl osl vcl)
 
 IF (BUILD_EXAMPLES)
   SUBDIRS(examples)

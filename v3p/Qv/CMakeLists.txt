@@ -166,9 +166,9 @@ SOURCE_FILES( Qv_sources
 
 AUX_SOURCE_DIRECTORY( Templates Qv_sources )
 
-#INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/vcl )
+TARGET_LINK_LIBRARIES( Qv vcl )
 
 IF(BUILD_TESTING)
   ADD_EXECUTABLE(test-compute-vrml-centroid test-compute-vrml-centroid.cxx)
-  INCLUDE( ${allvxl_SOURCE_DIR}/v3p/Qv/CMakeListsLink.txt )
+  TARGET_LINK_LIBRARIES( test-compute-vrml-centroid Qv )
 ENDIF(BUILD_TESTING)

@@ -1,15 +1,18 @@
 # oxl/vgui/impl/qt/CMakeLists.txt
 
-INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindQt.cmake)
+INCLUDE(${MODULE_PATH}/FindQt.cmake)
 
 SET(vgui_IMPL_QT "" CACHE INTERNAL "Set if vgui has Qt")
 
 # Build here only if Qt is available:
 IF (HAS_QT)
 
+OPTION(VGUI_USE_QT "Should Qt be compiled into vgui?" YES)
+
+IF(VGUI_USE_QT)
+
 INCLUDE_DIRECTORIES(${QT_INCLUDE_PATH})
 
-ADD_LIBRARY(vgui_qt vgui_qt_sources vgui_qt_moc_files)
 SET(vgui_IMPL_QT "vgui_qt" CACHE INTERNAL "Set if vgui has qt")
 
 SOURCE_FILES(vgui_qt_sources
@@ -28,5 +31,10 @@ QT_WRAP_CPP(vgui_qt vgui_qt_moc_files
  vgui_qt_dialog_impl.h
  vgui_qt_menu.h
 )
+
+ADD_LIBRARY(vgui_qt vgui_qt_sources vgui_qt_moc_files)
+TARGET_LINK_LIBRARIES(vgui_qt vgui_base ${QT_LIBRARIES})
+
+ENDIF(VGUI_USE_QT)
 
 ENDIF (HAS_QT)

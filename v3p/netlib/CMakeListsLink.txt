@@ -1,9 +1,3 @@
+# ./v3p/netlib/CMakeListsLink.txt
+
 LINK_LIBRARIES( netlib )
-
-IF(UNIX)
-  LINK_LIBRARIES( m )
-ENDIF(UNIX)
-
-IF (LIBRARY_OUTPUT_PATH MATCHES '^$')
-  LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/v3p/netlib )
-ENDIF (LIBRARY_OUTPUT_PATH MATCHES '^$')

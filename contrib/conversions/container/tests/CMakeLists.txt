@@ -1,5 +1,6 @@
 INCLUDE( ${allvxl_SOURCE_DIR}/conversions/container/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/testlib/CMakeListsLink.txt )
+
+LINK_LIBRARIES( testlib )
 
 IF(HAS_COOL)
 ELSE(HAS_COOL)

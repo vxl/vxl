@@ -1,5 +1,4 @@
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vnl/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vbl/CMakeListsLink.txt )
+LINK_LIBRARIES( vnl vbl )
 
 IF(HAS_COOL)
   LINK_DIRECTORIES( COOL Numerics )

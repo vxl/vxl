@@ -1,20 +1,3 @@
-INCLUDE( ${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindMPEG.cmake )
+# ./oxl/oxp/CMakeListsLink.txt
 
 LINK_LIBRARIES( oxp )
-
-# Amitha: What is vo? A Windows library? Mpeg VO library? If it is a MPEG library,
-# presumably FindMPEG above will do the right thing. Otherwise, there should
-# be a IF(WIN32) guard here. (And perhaps a corresponding guard in the CMakeLists.txt.)
-#
-#INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/oxp )
-#LINK_LIBRARIES( oxp vo mpeg2 Xv )
-#
-#INCLUDE_DIRECTORIES( ${NATIVE_MPEG_INCLUDE_PATH} )
-#LINK_LIBRARIES( ${NATIVE_MPEG_LIBRARY} )
-#LINK_LIBRARIES( ${NATIVE_MPEG_VO_LIBRARY} )
-
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vnl/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vnl/algo/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vil/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vul/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vbl/CMakeListsLink.txt )

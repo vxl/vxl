@@ -1,7 +1,5 @@
 # rpl/rrel/CMakeLists.txt
 
-ADD_LIBRARY(rrel rrel_sources)
-
 SOURCE_FILES(rrel_sources
  rrel_mlesac_obj.cxx            rrel_mlesac_obj.h
  rrel_ransac_obj.cxx            rrel_ransac_obj.h
@@ -31,6 +29,9 @@ SOURCE_FILES(rrel_sources
 )
 
 AUX_SOURCE_DIRECTORY(Templates rrel_sources)
+
+ADD_LIBRARY(rrel rrel_sources)
+TARGET_LINK_LIBRARIES(rrel vnl_algo vnl vgl mbl vbl)
 
 INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vxl)
 INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/mul)

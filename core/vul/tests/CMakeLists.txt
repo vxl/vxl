@@ -1,8 +1,3 @@
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/testlib/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vul/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vpl/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vcl/CMakeListsLink.txt )
-
 ADD_EXECUTABLE( vul_test_driver
   test_driver.cxx
 
@@ -15,6 +10,7 @@ ADD_EXECUTABLE( vul_test_driver
   test_temp_filename.cxx
   test_regexp.cxx
 )
+TARGET_LINK_LIBRARIES( vul_test_driver vul vpl testlib vcl )
 
 ADD_TEST( vul_test_include        vul_test_driver test_include )
 ADD_TEST( vul_test_arg            vul_test_driver test_arg )

@@ -1,3 +1,5 @@
+LINK_LIBRARIES( vil vpl vul vcl )
+
 ADD_EXECUTABLE( vil_convolve_1d vil_convolve_1d.cxx )
 ADD_EXECUTABLE( vil_convolve vil_convolve.cxx )
 ADD_EXECUTABLE( vil_convert vil_convert.cxx )
@@ -9,9 +11,3 @@ ADD_EXECUTABLE( vil_flipud vil_flipud.cxx )
 ADD_EXECUTABLE( vil_clamp_example vil_clamp_example.cxx )
 ADD_EXECUTABLE( vil_scale_intensities_example vil_scale_intensities_example.cxx )
 ADD_EXECUTABLE( vil_rgb_example vil_rgb_example.cxx )
-
-# Immediate dependencies
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vil/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vpl/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vul/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vcl/CMakeListsLink.txt )

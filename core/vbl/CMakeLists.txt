@@ -1,7 +1,5 @@
 # vxl/vbl/CMakeLists.txt
 
-ADD_LIBRARY(vbl vbl_sources)
-
 SOURCE_FILES( vbl_sources
   vbl_fwd.h
   vbl_test.cxx vbl_test.h
@@ -37,6 +35,9 @@ SOURCE_FILES( vbl_sources
 )
 
 AUX_SOURCE_DIRECTORY(Templates vbl_sources)
+
+ADD_LIBRARY(vbl vbl_sources)
+TARGET_LINK_LIBRARIES( vbl vcl )
 
 SUBDIRS(io)
 

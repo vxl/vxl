@@ -1,7 +1,5 @@
 # vxl/vnl/CMakeLists.txt
 
-ADD_LIBRARY(vnl vnl_sources)
-
 SOURCE_FILES( vnl_sources
   vnl_fwd.h
   vnl_config.h
@@ -117,7 +115,7 @@ SOURCE_FILES( vnl_sources
 AUX_SOURCE_DIRECTORY(Templates vnl_sources)
 
 # VNL_ALLOC is a fast but currently thread-unsafe allocator
-# used in vnl_vectors. The default is to no use it but to
+# used in vnl_vectors. The default is to use it but to
 # use the slower, thread-safe allocation, in your
 # CMakeListsLocal.txt file add the following lines
 # SET(VNL_C_VECTOR_USE_VNL_ALLOC_DEFINED 1)
@@ -126,6 +124,9 @@ AUX_SOURCE_DIRECTORY(Templates vnl_sources)
 IF(NOT VNL_C_VECTOR_USE_VNL_ALLOC_DEFINED)
   ADD_DEFINITIONS(-DVNL_C_VECTOR_USE_VNL_ALLOC=1)
 ENDIF(NOT VNL_C_VECTOR_USE_VNL_ALLOC_DEFINED)
+
+ADD_LIBRARY(vnl vnl_sources)
+TARGET_LINK_LIBRARIES( vnl vcl )
 
 SUBDIRS(algo)
 SUBDIRS(io)

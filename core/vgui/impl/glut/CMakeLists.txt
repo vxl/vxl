@@ -1,16 +1,19 @@
 # oxl/vgui/impl/glut/CMakeLists.txt
 
-INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindGLUT.cmake)
-INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindX11.cmake)
+INCLUDE(${MODULE_PATH}/FindGLUT.cmake)
+INCLUDE(${MODULE_PATH}/FindX11.cmake)
 
 SET(vgui_IMPL_GLUT "" CACHE INTERNAL "Set if vgui has glut")
 
 # Build here only if GLUT is available:
 IF (HAS_GLUT)
 
+OPTION(VGUI_USE_GLUT "Should Glut be compiled into vgui?" YES)
+
+IF(VGUI_USE_GLUT)
+
 INCLUDE_DIRECTORIES(${GLUT_INCLUDE_PATH})
 
-ADD_LIBRARY(vgui_glut vgui_glut_sources)
 SET(vgui_IMPL_GLUT "vgui_glut" CACHE INTERNAL "Set if vgui has glut")
 
 SOURCE_FILES(vgui_glut_sources
@@ -37,5 +40,13 @@ ELSE (HAS_X11)
 ENDIF (HAS_X11)
 
 AUX_SOURCE_DIRECTORY(Templates vgui_glut_sources)
+
+ADD_LIBRARY(vgui_glut vgui_glut_sources)
+TARGET_LINK_LIBRARIES(vgui_glut vgui_base ${GLUT_LIBRARIES})
+IF (HAS_X11)
+  TARGET_LINK_LIBRARIES(vgui_glut ${X11_LIBRARIES})
+ENDIF (HAS_X11)
+
+ENDIF(VGUI_USE_GLUT)
 
 ENDIF (HAS_GLUT)

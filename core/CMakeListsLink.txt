@@ -1,2 +1,1 @@
-INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vcl)
-INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vxl)
+# This file will be phased out, and should be empty.

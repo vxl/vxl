@@ -1,7 +1,5 @@
 # gel/vdgl/CMakeLists.txt
 
-ADD_LIBRARY(vdgl vdgl_sources)
-
 SOURCE_FILES(vdgl_sources
  vdgl_OrthogRegress.cxx       vdgl_OrthogRegress.h
  vdgl_digital_curve.cxx       vdgl_digital_curve.h     vdgl_digital_curve_sptr.h
@@ -16,6 +14,9 @@ SOURCE_FILES(vdgl_sources
 )
 
 AUX_SOURCE_DIRECTORY(Templates vdgl_sources)
+
+ADD_LIBRARY(vdgl vdgl_sources)
+TARGET_LINK_LIBRARIES(vdgl vsol vnl_algo vnl vgl vbl vul vcl)
 
 IF (BUILD_EXAMPLES)
   SUBDIRS(examples)

@@ -1,7 +1,5 @@
 # mul/vpdfl/CMakeLists.txt
 
-ADD_LIBRARY(vpdfl vpdfl_sources)
-
 SOURCE_FILES(vpdfl_sources
  vpdfl_all.h
  vpdfl_resample.cxx                    vpdfl_resample.h
@@ -31,6 +29,9 @@ SOURCE_FILES(vpdfl_sources
 )
 
 AUX_SOURCE_DIRECTORY(Templates vpdfl_sources)
+
+ADD_LIBRARY(vpdfl vpdfl_sources)
+TARGET_LINK_LIBRARIES(vpdfl vnl_algo vnl_io mbl)
 
 IF (BUILD_TESTING)
   SUBDIRS(tests)

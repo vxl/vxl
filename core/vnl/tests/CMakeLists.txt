@@ -1,6 +1,14 @@
 # ./vxl/vnl/tests/CMakeLists.txt
 
-ADD_EXECUTABLE(vnl_test_all                  vnl_test_all.cxx                )
+INCLUDE( ${MODULE_PATH}/FindNetlib.cmake )
+
+IF(HAS_NETLIB)
+
+INCLUDE_DIRECTORIES( ${NETLIB_INCLUDE_PATH} )
+
+LINK_LIBRARIES( vnl_algo vnl vpl vul testlib )
+
+ADD_EXECUTABLE(vnl_test_all                      vnl_test_all.cxx                )
 ADD_EXECUTABLE(vnl_test_fft                      test_fft.cxx                    )
 ADD_EXECUTABLE(vnl_test_fft1d                    test_fft1d.cxx                  )
 ADD_EXECUTABLE(vnl_test_fft2d                    test_fft2d.cxx                  )
@@ -82,9 +90,4 @@ ADD_TEST( vnl_test_finite vnl_test_finite )
 ADD_TEST( vnl_test_convolve vnl_test_convolve )
 ADD_TEST( vnl_test_real_polynomial vnl_test_real_polynomial )
 
-# Immediate dependencies
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/testlib/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vnl/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vnl/algo/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vpl/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vul/CMakeListsLink.txt )
+ENDIF(HAS_NETLIB)

@@ -5,4 +5,6 @@ INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vxl)
 INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/oul)
 
 SUBDIRS(ouel ouml)
-#SUBDIRS(oufgl) - Linux only
+IF(CMAKE_SYSTEM MATCHES "Linux*")
+  SUBDIRS(oufgl)
+ENDIF(CMAKE_SYSTEM MATCHES "Linux*")

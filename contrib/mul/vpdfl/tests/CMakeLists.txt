@@ -1,7 +1,6 @@
 # ./mul/vpdfl/tests/CMakeLists.txt
 
 ADD_EXECUTABLE( test_vpdfl test_vpdfl.cxx )
-ADD_TEST(       test_vpdfl test_vpdfl     )
+TARGET_LINK_LIBRARIES( test_vpdfl vpdfl )
 
-# Immediate dependencies
-INCLUDE( ${allvxl_SOURCE_DIR}/mul/vpdfl/CMakeListsLink.txt )
+ADD_TEST(       test_vpdfl test_vpdfl     )

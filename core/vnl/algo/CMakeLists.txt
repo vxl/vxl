@@ -1,6 +1,11 @@
 # vxl/vnl/algo/CMakeLists.txt
 
-ADD_LIBRARY( vnl_algo vnl_algo_sources)
+INCLUDE( ${MODULE_PATH}/FindNetlib.cmake )
+
+# vnl_algo is simply a wrapper around netlib, so we must have netlib.
+IF(HAS_NETLIB)
+
+INCLUDE_DIRECTORIES( ${NETLIB_INCLUDE_PATH} )
 
 SOURCE_FILES( vnl_algo_sources
   vnl_algo_fwd.h
@@ -52,4 +57,7 @@ SOURCE_FILES( vnl_algo_sources
 
 AUX_SOURCE_DIRECTORY(Templates vnl_algo_sources)
 
-INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/v3p/netlib)
+ADD_LIBRARY( vnl_algo vnl_algo_sources)
+TARGET_LINK_LIBRARIES( vnl_algo ${NETLIB_LIBRARIES} vnl )
+
+ENDIF(HAS_NETLIB)
