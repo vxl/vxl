@@ -113,7 +113,7 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
                     const vnl_matrix<double>& wS, bool compute_wS)
 {
   // Find range of class indices and count #valid
-  int lo_i=n;
+  int lo_i=label[0]; // =n causes failure if lo_i is less than n  
   int hi_i=-1;
   int n_valid = 0;
   for (int i=0;i<n;++i)
