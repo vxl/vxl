@@ -29,7 +29,7 @@ void test_memory_image_impl_io()
 
   // We need an image_of<foo> to get a sensible buffer
   vil_memory_image_of<int> imageof(height,width);
-  double val = 0;
+  int val = 0;
   for (int i=0;i<height;i++)
     for (int j=0;j<width;j++)
     {
