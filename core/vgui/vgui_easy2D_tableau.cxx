@@ -352,3 +352,13 @@ void vgui_easy2D_tableau::print_psfile(vcl_string filename, int reduction_factor
       vgui_macro_warning << "unknown soview typename = " << sv->type_name() << vcl_endl;
   }
 }
+
+//: Add an image at the given position to the display.
+vgui_soview2D_image* vgui_easy2D_tableau::add_image(float x, float y, float w, float h, char *data, unsigned int format, unsigned int type)
+{
+  vgui_soview2D_image *obj = new vgui_soview2D_image;
+  obj->set_image(x,y,w,h,data);
+  obj->set_format_type(format,type);
+  add(obj);
+  return obj;
+}

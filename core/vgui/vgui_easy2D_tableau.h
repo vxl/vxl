@@ -36,6 +36,7 @@ class vgui_soview2D_circle;
 class vgui_soview2D_ellipse;
 class vgui_soview2D_linestrip;
 class vgui_soview2D_polygon;
+class vgui_soview2D_image;
 
 //: Tableau to display two-dimensional geometric objects.
 //
@@ -164,6 +165,9 @@ class vgui_easy2D_tableau : public vgui_displaylist2D_tableau
   //  If wd or ht are 0, no image is printed at all.
   void print_psfile(vcl_string filename, int reduction_factor,
                     bool print_geom_objs, int wd=-1, int ht=-1);
+
+  //: Add a point at the given position to the display.
+  vgui_soview2D_image* add_image(float x, float y, float w, float h, char *data, unsigned int format, unsigned int type);
 
  protected:
   //: Destructor - called by vgui_easy2D_tableau_sptr.
