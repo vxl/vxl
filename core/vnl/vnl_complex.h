@@ -22,28 +22,25 @@
 #include <vcl_complex.h>
 #include <vnl/vnl_math.h>
 
-// isnan
-bool vnl_math_isnan(const vcl_complex<float>&);
-bool vnl_math_isnan(const vcl_complex<double>&);
+// these function could have been templated, if not for the
+// broken overload resolution of SGI CC 7.2.x -- fsm
 
-// isinf
-bool vnl_math_isinf(const vcl_complex<float>&);
-bool vnl_math_isinf(const vcl_complex<double>&);
+#define macro(T) \
+inline bool vnl_math_isnan(vcl_complex<T> const& z) { return vnl_math_isnan(z.real()) || vnl_math_isnan(z.imag()); } \
+inline bool vnl_math_isfinite(vcl_complex<T> const& z) { return vnl_math_isfinite(z.real()) && vnl_math_isfinite(z.imag()); } \
+inline T vnl_math_abs(vcl_complex<T> const& z) { return vcl_abs(z); } \
+inline vcl_complex<T> vnl_math_sqr(vcl_complex<T> const& z) { return z*z; } \
+inline T vnl_math_squared_magnitude(vcl_complex<T> const& z) { return vcl_norm(z); }
+macro(float)
+macro(double)
+macro(long double)
+#undef macro
 
-// isfinite
-bool vnl_math_isfinite(const vcl_complex<float>&);
-bool vnl_math_isfinite(const vcl_complex<double>&);
-
-// abs
-inline float    vnl_math_abs(vcl_complex<float> const& x) { return vcl_abs(x); }
-inline double   vnl_math_abs(vcl_complex<double> const& x) { return vcl_abs(x); }
-
-// sqr (square)
-inline vcl_complex<float>  vnl_math_sqr(vcl_complex<float> const& x) { return x*x; }
-inline vcl_complex<double> vnl_math_sqr(vcl_complex<double> const& x) { return x*x; }
-
-// squared_magnitude
-inline float    vnl_math_squared_magnitude(vcl_complex<float> const& x) { return vcl_norm(x); }
-inline double   vnl_math_squared_magnitude(vcl_complex<double> const& x) { return vcl_norm(x); }
+// // isinf
+// template <class T> inline
+// bool vnl_math_isinf(const vcl_complex<T>& z)
+// {
+//   reutrn vnl_math_isinf(z.real()) || vnl_math_isinf(z.imag());
+// }
 
 #endif // vnl_complex_h_
