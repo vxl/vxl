@@ -47,6 +47,14 @@
 #ifndef vcl_inserter
 #define vcl_inserter vcl_generic_iterator_STD :: inserter
 #endif
+// back_inserter
+#ifndef vcl_back_inserter
+#define vcl_back_inserter vcl_generic_iterator_STD :: back_inserter
+#endif
+// front_inserter
+#ifndef vcl_front_inserter
+#define vcl_front_inserter vcl_generic_iterator_STD :: front_inserter
+#endif
 // input_iterator_tag
 #ifndef vcl_input_iterator_tag
 #define vcl_input_iterator_tag vcl_generic_iterator_STD :: input_iterator_tag

@@ -9,6 +9,8 @@
 @front_insert_iterator
 @insert_iterator
 @inserter
+@back_inserter
+@front_inserter
 @input_iterator_tag
 @output_iterator_tag
 @forward_iterator_tag
