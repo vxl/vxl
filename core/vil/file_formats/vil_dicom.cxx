@@ -345,10 +345,10 @@ vil_image_view_base_sptr vil_dicom_image::get_copy_view(
       if (bytes_read == 2) // vxl_uint_16
       {
         vil_image_view<vxl_uint_16> view(nx, ny);
-        for (unsigned i=y0; i<ny; i++)
+        for (unsigned i=y0; i<(y0+ny); ++i)
         {
           int next_row = header_.dimx_*i;
-          for (unsigned j=x0; j<nx; j++)
+          for (unsigned j=x0; j<(x0+nx); ++j)
             view(j-x0,i-y0) = static_cast<vxl_uint_16 *>(void_im)[next_row+j];
         }
         delete [] (char *) void_im;
