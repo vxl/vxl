@@ -10,8 +10,6 @@
 #include <vbl/vbl_awk.h>
 #include <vbl/vbl_printf.h>
 
-//#include <vbl/vbl_sparse_array_2d.h>
-
 /////////////////////////////////////////////////////////////////////////////
 
 vcl_ostream& operator<<(vcl_ostream& s, const NViewMatch& c)
@@ -80,7 +78,6 @@ int NViewMatch::count_observations() const
 // Default ctor
 NViewMatches::NViewMatches():
   _min_overlap(2)
-  //,_indx_array(new vbl_sparse_array_2d<int>)
 {
 }
 
@@ -96,7 +93,6 @@ NViewMatches::NViewMatches(const char* filename)
 
 NViewMatches::NViewMatches(int nviews, int min_overlap):
   _nviews(nviews), _min_overlap(min_overlap)
-  //, _indx_array(new vbl_sparse_array_2d<int>)
 {
 }
 
