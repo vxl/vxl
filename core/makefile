@@ -26,12 +26,6 @@ SUBDIRS += vipl
 # video
 SUBDIRS += vidl
 
-# spatial objects
-SUBDIRS += vsol
-
-# topology
-SUBDIRS += vtol
-
 # computational geometry
 SUBDIRS += vcgl
 
