@@ -614,6 +614,15 @@ SOURCE=.\Templates/vipl_y_gradient+vil1_image.vil1_image.uchar.uchar--.cxx
 # Begin Source File
 SOURCE=.\Templates/vipl_y_gradient+vil1_image.vil1_image.vil1_rgb+uchar-.vil1_rgb+uchar---.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vipl_gaussian_convolution+vil_image_view+double-.vil_image_view+double-.double.double--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vipl_gaussian_convolution+vil_image_view+float-.vil_image_view+float-.float.float--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vipl_gaussian_convolution+vil_image_view+uchar-.vil_image_view+uchar-.uchar.uchar--.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""

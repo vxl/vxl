@@ -114,9 +114,6 @@ SOURCE=.\Templates/vepl_convert+short-.cxx
 SOURCE=.\Templates/vepl_convert+uchar-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vepl_convert+vil1_rgb+uchar--.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vepl_add_random_noise.cxx
 # End Source File
 # Begin Source File
