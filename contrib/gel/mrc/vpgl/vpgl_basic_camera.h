@@ -96,9 +96,9 @@ public:
   virtual void get_matrix(vnl_matrix<double>&) const;
 
 #if 0
-  inline friend ostream &operator<<(ostream &os, const vpgl_basic_camera& obj)
+  inline friend vcl_ostream &operator<<(vcl_ostream &os, const vpgl_basic_camera& obj)
     {obj.Print(os); return os;}
-  inline friend ostream &operator<<(ostream &os, const vpgl_basic_camera* obj)
+  inline friend vcl_ostream &operator<<(vcl_ostream &os, const vpgl_basic_camera* obj)
     {if(obj) obj->Print(os); else os << "NULL Camera"; return os;}
 #endif
 

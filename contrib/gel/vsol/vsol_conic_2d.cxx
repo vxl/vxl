@@ -320,10 +320,10 @@ void vsol_conic_2d::ellipse_parameters(double &cx,
   if (are_equal(a0,c0)&&is_zero(b0))
     phi=0; // circle
   else
-    phi=atan2(-2*b0,c0-a0)/2; //ellipse
+    phi=vcl_atan2(-2*b0,c0-a0)/2; //ellipse
 
-  const double cosphi=cos(phi);
-  const double sinphi=sin(phi);
+  const double cosphi=vcl_cos(phi);
+  const double sinphi=vcl_sin(phi);
   width=vnl_math_sqrt(1/(a0*cosphi*cosphi+2*b0*cosphi*sinphi
                          +c0*sinphi*sinphi));
   height=vnl_math_sqrt(1/(a0*sinphi*sinphi-2*b0*cosphi*sinphi

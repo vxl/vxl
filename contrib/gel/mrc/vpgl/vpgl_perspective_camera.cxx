@@ -53,7 +53,7 @@ void vpgl_perspective_camera::set_params(vcl_vector<double> new_params, const vc
 void vpgl_perspective_camera::update_intrinsic()
 {
   double alpha_u = -_params[f]*_params[ku], alpha_v = -_params[f]*_params[kv];
-  double cost = cos(_params[theta]), sint = sin(_params[theta]), cott=cost/sint;
+  double cost = vcl_cos(_params[theta]), sint = vcl_sin(_params[theta]), cott=cost/sint;
   vnl_matrix<double> M(3, 3, 0.0);
   M(0,0) = alpha_u; M(0,1) = -alpha_u*cott; M(0,2) = _params[uo];
   M(1,1) = alpha_v/sint; M(1,2) = _params[vo];

@@ -1,4 +1,3 @@
-
 #include<vsrl/vsrl_image_correlation.h>
 #include<vil/vil_image.h>
 #include<vsrl/vsrl_window_accumulator.h>
@@ -44,7 +43,6 @@ vsrl_image_correlation::~vsrl_image_correlation()
 }
 
 // set the dimensions of the correlation window
-
 
 
 void vsrl_image_correlation::set_window_width(int width)
@@ -109,18 +107,13 @@ void vsrl_image_correlation::compute_local_stats(vnl_matrix<double> &im, vnl_mat
 
   shift_multiply_matrix(0,im,im,squares);
 
-
-
   vsrl_window_accumulator ac_std;
-
 
   ac_std.set_in_matrix(&squares);
   ac_std.set_out_matrix(&std);
   ac_std.set_window_width(this->_window_width);
   ac_std.set_window_height(this->_window_height);
   ac_std.execute();
-
-
 
   int r,c;
   double xx,m;
@@ -130,7 +123,7 @@ void vsrl_image_correlation::compute_local_stats(vnl_matrix<double> &im, vnl_mat
     {
       xx=std(r,c);
       m=mean(r,c);
-      std(r,c) = sqrt(xx-m*m);
+      std(r,c) = vcl_sqrt(xx-m*m);
     }
   }
 }
@@ -166,7 +159,6 @@ void vsrl_image_correlation::shift_multiply_matrix(int offset, vnl_matrix<double
     }
   }
 }
-
 
 
 void  vsrl_image_correlation::compute_correlation(int x_offset,
@@ -454,7 +446,7 @@ void vsrl_image_correlation::compute_local_stats(vil_byte_buffer &buf, int x, in
 
     double var=sum_xx/N  - mean*mean;
 
-    std= sqrt(var);
+    std= vcl_sqrt(var);
   }
   else
   {
@@ -567,7 +559,6 @@ double vsrl_image_correlation::get_correlation(int x1, int y1, int x2, int y2)
 
     // return the correlation value
     return corr;
-
   }
   else
   {
@@ -637,7 +628,6 @@ double vsrl_image_correlation::get_sub_pixel_delta(int x1,int y1, int delta_x)
     {
       x_hat = 0.5;
     }
-
   }
   else
   {
@@ -684,6 +674,6 @@ void vsrl_image_correlation::get_correlation_stats(int x, int y, double &mean, d
   {
     mean = sum_z/N;
     var = sum_zz/N - mean*mean;
-    std = sqrt(var);
+    std = vcl_sqrt(var);
   }
 }

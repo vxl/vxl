@@ -19,7 +19,7 @@
 int main( int argc, char **argv)
 {
 //   gbl_bit_array_2d ba(5,5, false);
-//   cerr << ba << endl;
+//   vcl_cerr << ba << vcl_endl;
 //   ba.put(0,0,true);
 //   ba.put(0,4,true);
 //   ba.put(1,1,true);
@@ -33,11 +33,11 @@ int main( int argc, char **argv)
 //   ba.put(4,2,true);
 //   ba.put(4,4,true);
 
-//   cerr << ba << endl;
+//   vcl_cerr << ba << vcl_endl;
 //   ba.enlarge(12,5);
-//   cerr << ba << endl;
+//   vcl_cerr << ba << vcl_endl;
 //   gbl_bit_array_2d cd( ba);
-//   cerr << cd << endl;
+//   vcl_cerr << cd << vcl_endl;
 //   exit(1);
 
   gmvl_node_sptr image0= gmvl_load_image( "/home/crossge/images/basement/bt.000.pgm");
@@ -62,7 +62,7 @@ int main( int argc, char **argv)
 
   gmvl_database db;
 
-  cerr << "Connecting image-tag to images" << endl;
+  vcl_cerr << "Connecting image-tag to images\n";
   db.add_connection( tagnode1, image0);
   db.add_connection( tagnode1, image1);
   db.add_connection( tagnode1, image2);
@@ -70,7 +70,7 @@ int main( int argc, char **argv)
   db.add_connection( tagnode1, image4);
   db.add_connection( tagnode1, image5);
   db.add_connection( tagnode1, image6);
-  cerr << "Connecting 5th corner to first-corner-node" << endl;
+  vcl_cerr << "Connecting 5th corner to first-corner-node\n";
   db.add_connection( tagnode3, corners0[0]);
   db.add_connection( tagnode3, corners1[0]);
   db.add_connection( tagnode3, corners2[0]);
@@ -78,7 +78,7 @@ int main( int argc, char **argv)
   db.add_connection( tagnode3, corners4[0]);
   db.add_connection( tagnode3, corners5[0]);
   db.add_connection( tagnode3, corners6[0]);
-  cerr << "Connecting harris-corner-node to corners" << endl;
+  vcl_cerr << "Connecting harris-corner-node to corners\n";
   db.add_connections( tagnode2, corners0);
   db.add_connections( tagnode2, corners1);
   db.add_connections( tagnode2, corners2);
@@ -86,7 +86,7 @@ int main( int argc, char **argv)
   db.add_connections( tagnode2, corners4);
   db.add_connections( tagnode2, corners5);
   db.add_connections( tagnode2, corners6);
-  cerr << "Connecting images to corners" << endl;
+  vcl_cerr << "Connecting images to corners\n";
   db.add_connections( image0, corners0);
   db.add_connections( image1, corners1);
   db.add_connections( image2, corners2);
@@ -95,38 +95,39 @@ int main( int argc, char **argv)
   db.add_connections( image5, corners5);
   db.add_connections( image6, corners6);
 
-  cerr << "Done loading..." << endl;
+  vcl_cerr << "Done loading...\n";
 
-  ////////////////////////////////////////////////////////////////////////////
-  //   cerr << db << endl;
-  //
-  //   vcl_vector<gmvl_node_sptr> nn= db.get_nodes( "gmvl_tag_node");
-  //   for( int i=0; i< nn.size(); i++) cerr << ":" << *nn[i] << ":" << endl;
-  //
-  //   vcl_vector<gmvl_node_sptr> jj= db.get_nodes( "gmvl_image_node");
-  //   for( int i=0; i< jj.size(); i++) cerr << ":" << *jj[i] << ":" << endl;
-  ////////////////////////////////////////////////////////////////////////////
+#if 0 ////////////////////////////////////////////////////////////////////////
+  vcl_cerr << db << vcl_endl;
 
-  //  ofstream fout("/tmp/qwerty");
-  //  fout << db << endl;
+  vcl_vector<gmvl_node_sptr> nn= db.get_nodes( "gmvl_tag_node");
+  for( int i=0; i< nn.size(); i++) vcl_cerr << ":" << *nn[i] << ":\n";
 
-  //  cout << db << endl;
+  vcl_vector<gmvl_node_sptr> jj= db.get_nodes( "gmvl_image_node");
+  for( int i=0; i< jj.size(); i++) vcl_cerr << ":" << *jj[i] << ":\n";
+//////////////////////////////////////////////////////////////////////////////
 
-  //  vcl_vector<gmvl_node_sptr> tags;
-  //  tags.push_back( tagnode2); // "Harris corners"
-  //  tags.push_back( image0);   // "Image 0"
-  //  tags.push_back( tagnode3); // "First corner"
+  vcl_ofstream fout("/tmp/qwerty");
+  fout << db << vcl_endl;
+
+  vcl_cout << db << vcl_endl;
+
+  vcl_vector<gmvl_node_sptr> tags;
+  tags.push_back( tagnode2); // "Harris corners"
+  tags.push_back( image0);   // "Image 0"
+  tags.push_back( tagnode3); // "First corner"
+#endif
 
   vcl_vector<gmvl_node_sptr> nn= db.get_connected_nodes( tagnode3);
 
-  cerr << "Tagnode1 (all images) = " << *tagnode1 << endl;
-  cerr << "Tagnode2 (all corners)= " << *tagnode2 << endl;
-  cerr << "Tagnode3 (5th corners)= " << *tagnode3 << endl;
-  cerr << "Image 0               = " << *image0 << endl;
+  vcl_cerr << "Tagnode1 (all images) = " << *tagnode1 << vcl_endl;
+  vcl_cerr << "Tagnode2 (all corners)= " << *tagnode2 << vcl_endl;
+  vcl_cerr << "Tagnode3 (5th corners)= " << *tagnode3 << vcl_endl;
+  vcl_cerr << "Image 0               = " << *image0 << vcl_endl;
 
-  cerr << endl << endl;
+  vcl_cerr << vcl_endl << vcl_endl;
 
-  for( int i=0; i< nn.size(); i++) cerr << *nn[i] << endl;
+  for( int i=0; i< nn.size(); i++) vcl_cerr << *nn[i] << vcl_endl;
 
   return 0;
 }
