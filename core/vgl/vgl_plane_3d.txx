@@ -54,13 +54,15 @@ bool vgl_plane_3d<Type>::operator==(vgl_plane_3d<Type> const& p) const
           && (c()*p.d()==p.c()*d()) );
 }
 
+#define vp(os,v,s) { if ((v)>0) os<<'+'; if ((v)==-1) os<<'-';\
+                     if ((v)!=0&&(v)!=1&&(v)!=-1) os<<(v);\
+                     if ((v)!=0) os<<' '<<s<<' '; }
+
 template <class Type>
-vcl_ostream& operator<<(vcl_ostream& s, const vgl_plane_3d<Type>& p) {
-  return s << " <vgl_plane_3d "
-           << p.a() << " x + "
-           << p.b() << " y + "
-           << p.c() << " z + "
-           << p.d() << " = 0 >";
+vcl_ostream& operator<<(vcl_ostream& os, const vgl_plane_3d<Type>& p)
+{
+  os << "<vgl_plane_3d "; vp(os,p.a(),"x"); vp(os,p.b(),"y"); vp(os,p.c(),"z");
+  vp(os,p.d(),""); return os << "= 0 >";
 }
 
 template <class Type>
