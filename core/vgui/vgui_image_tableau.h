@@ -20,6 +20,7 @@
 
 class vgui_image_renderer;
 class vil1_image;
+#include <vil/vil_image_resource_sptr.h>
 
 class vgui_vil_image_renderer;
 #include <vil/vil_image_view_base.h>
@@ -57,11 +58,17 @@ class vgui_image_tableau
   //: Return the image view being rendered by this tableau.
   virtual vil_image_view_base_sptr get_image_view() const;
 
+  //: Return the image view being rendered by this tableau.
+  virtual vil_image_resource_sptr get_image_resource() const;
+
   //: Make the given image, the image rendered by this tableau.
   virtual void set_image( vil1_image const &img );
 
   //: Make the given image view, the image rendered by this tableau.
   virtual void set_image_view( vil_image_view_base const& img );
+
+  //: Make the given image resource, the image rendered by this tableau.
+  virtual void set_image_resource( vil_image_resource_sptr const& img );
 
   //: Make image loaded from the given file, the image rendered by this tableau.
   //
@@ -115,6 +122,10 @@ class vgui_image_tableau
   vgui_image_tableau( vil_image_view_base const& img );
 
   //: Constructor - don't use this, use vgui_image_tableau_new.
+  //  Creates a tableau displaying the given image resource.
+  vgui_image_tableau( vil_image_resource_sptr const& img );
+
+  //: Constructor - don't use this, use vgui_image_tableau_new.
   //  Creates a tableau which loads and displays an image from
   //  the given file. File loaded as a vil1_image.
   vgui_image_tableau( char const* filename );
@@ -139,6 +150,11 @@ struct vgui_image_tableau_new : public vgui_image_tableau_sptr {
 
   //:  Constructor - creates a tableau displaying the given image.
   vgui_image_tableau_new( vil_image_view_base const& t )
+    : vgui_image_tableau_sptr( new vgui_image_tableau(t) )
+    { }
+
+  //:  Constructor - creates a tableau displaying the given image.
+  vgui_image_tableau_new( vil_image_resource_sptr const& t )
     : vgui_image_tableau_sptr( new vgui_image_tableau(t) )
     { }
 

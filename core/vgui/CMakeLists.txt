@@ -162,16 +162,10 @@ SET(vgui_sources
   internals/vgui_multiply_4x4.cxx    internals/vgui_multiply_4x4.h
   internals/vgui_transpose_4x4.cxx   internals/vgui_transpose_4x4.h
   internals/vgui_draw_line.cxx       internals/vgui_draw_line.h
-  internals/vgui_generic_vil_image_view.cxx       internals/vgui_generic_vil_image_view.h
   # Mesa-X11-mfc accelerated functions using Hermes
   internals/vgui_accelerate.cxx      internals/vgui_accelerate.h
   internals/vgui_accelerate_tag.cxx
   internals/vgui_gl_selection_macros.h
-
-
-
-  # deprecated
-  vgui_vil_image_tableau.txx         vgui_vil_image_tableau.h         vgui_vil_image_tableau_sptr.h
 )
 
 IF( GLUT_FOUND )

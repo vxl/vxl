@@ -16,6 +16,7 @@
 #include <vil/vil_image_view_base.h>
 #include <vil1/vil1_load.h>
 #include <vil/vil_load.h>
+#include <vil/vil_new.h>
 
 #include <vgui/vgui_image_renderer.h>
 #include <vgui/vgui_vil_image_renderer.h>
@@ -57,6 +58,18 @@ vgui_image_tableau( vil_image_view_base const& I )
     vil_renderer_( 0 )
 {
   set_image_view( I );
+}
+
+//-----------------------------------------------------------------------------
+
+vgui_image_tableau::
+vgui_image_tableau( vil_image_resource_sptr const& I )
+  : vgui_tableau(),
+    pixels_centered_( true ),
+    renderer_( 0 ),
+    vil_renderer_( 0 )
+{
+  set_image_resource( I );
 }
 
 //-----------------------------------------------------------------------------
@@ -126,7 +139,16 @@ vil_image_view_base_sptr
 vgui_image_tableau::
 get_image_view() const
 {
-  return vil_renderer_->get_image_view();
+  return vil_renderer_->get_image_resource()->get_view();
+}
+
+//-----------------------------------------------------------------------------
+
+vil_image_resource_sptr
+vgui_image_tableau::
+get_image_resource() const
+{
+  return vil_renderer_->get_image_resource();
 }
 
 //-----------------------------------------------------------------------------
@@ -151,7 +173,20 @@ set_image_view( vil_image_view_base const& I )
     vil_renderer_ = new vgui_vil_image_renderer;
 
   // use the name of the image as the name of the tableau :
-  vil_renderer_->set_image_view( I );
+  vil_renderer_->set_image_resource( vil_new_image_resource_of_view( I ) );
+}
+
+//-----------------------------------------------------------------------------
+
+void
+vgui_image_tableau::
+set_image_resource( vil_image_resource_sptr const& I )
+{
+  if( !vil_renderer_ )
+    vil_renderer_ = new vgui_vil_image_renderer;
+
+  // use the name of the image as the name of the tableau :
+  vil_renderer_->set_image_resource( I );
 }
 
 //-----------------------------------------------------------------------------
@@ -198,7 +233,7 @@ width() const
   if( renderer_ ) {
     return renderer_->get_image().width();
   } else if( vil_renderer_ ) {
-    return vil_renderer_->get_image_view()->ni();
+    return vil_renderer_->get_image_resource()->ni();
   } else {
     return 0;
   }
@@ -213,7 +248,7 @@ height() const
   if( renderer_ ) {
     return renderer_->get_image().height();
   } else if( vil_renderer_ ) {
-    return vil_renderer_->get_image_view()->nj();
+    return vil_renderer_->get_image_resource()->nj();
   } else {
     return 0;
   }

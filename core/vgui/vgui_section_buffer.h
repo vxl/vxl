@@ -13,7 +13,7 @@
 
 #include <vgui/vgui_gl.h>
 class vil1_image;
-class vil_image_view_base;
+#include <vil/vil_fwd.h>
 
 //: Holds a section of a GL image with given OpenGL buffer format and types.
 //
@@ -85,13 +85,8 @@ class vgui_section_buffer
   //: Grab a section from the given image.
   void apply( vil1_image const & );
 
-  void apply( vil_image_view_base const& );
-
-//   //: Return true if the last get_section() succeeded.
-//   operator bool () const { return section_ok; }
-
-//   //: Return pointer to raster i.
-//   void *operator[](int i) { return the_rasters[i]; }
+  //: Grab a section from the given resource.
+  void apply( vil_image_resource_sptr const& );
 
   unsigned width () const { return w_; }
   unsigned height() const { return h_; }

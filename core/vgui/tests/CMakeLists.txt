@@ -29,14 +29,12 @@ IF( HAS_VGUI )
     test_driver.cxx
 
     test_displaybase.cxx
-    test_generic_image_view.cxx
     test_pixels.cxx
     test_image_tableau.cxx
   )
   TARGET_LINK_LIBRARIES( vgui_test_all vgui testlib )
 
   ADD_TEST( vgui_test_displaybase         vgui_test_all test_displaybase )
-  ADD_TEST( vgui_test_generic_image_view  vgui_test_all test_generic_image_view )
   ADD_TEST( vgui_test_pixels              vgui_test_all test_pixels )
   ADD_TEST( vgui_test_image_tableau       vgui_test_all test_image_tableau ${CMAKE_CURRENT_SOURCE_DIR}/test_image.ppm )
 

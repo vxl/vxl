@@ -15,6 +15,7 @@
 #include <vgl/vgl_distance.h>
 #include <vnl/vnl_math.h>
 #include <vil/vil_image_view_base.h>
+#include <vil/vil_new.h>
 #include <vil1/vil1_image.h>
 
 #include <vgui/vgui_gl.h>
@@ -513,7 +514,7 @@ vgui_soview2D_image::vgui_soview2D_image( float in_x, float in_y,
     blend_( in_blend ),
     buffer_( new vgui_section_buffer( 0, 0, w_, h_, format, type ) )
 {
-  buffer_->apply( img );
+  buffer_->apply( vil_new_image_resource_of_view( img ) );
 }
 
 vgui_soview2D_image::~vgui_soview2D_image()

@@ -17,7 +17,7 @@ int main(int argc, char **argv)
   if (argc <= 1)
   {
     vcl_cerr << "Please give an image filename on the command line\n";
-    return 0;
+    return 1;
   }
 
   // Except for the following two statements, this example is exactly
@@ -28,10 +28,17 @@ int main(int argc, char **argv)
   // for vil, not vgui.
   //
 
-  vil_image_view< vxl_byte > b_im = vil_load(argv[1]);
+  vil_image_resource_sptr im = vil_load_image_resource(argv[1]);
+
+  if( !im )
+  {
+    vcl_cerr << "Could not load " << argv[1] << "\n";
+    return 1;
+  }
+    
 
   // Load image (given in the first command line param) into an image tableau.
-  vgui_image_tableau_new image(b_im);
+  vgui_image_tableau_new image(im);
 
   // Put the image tableau inside a 2D viewer tableau (for zoom, etc).
   vgui_viewer2D_tableau_new viewer(image);

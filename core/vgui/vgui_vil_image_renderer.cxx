@@ -10,6 +10,8 @@
 
 #include <vcl_iostream.h>
 
+#include <vil/vil_image_resource.h>
+
 #include "vgui_gl.h"
 #include "vgui_macro.h"
 #include "vgui_section_buffer.h"
@@ -34,7 +36,7 @@ vgui_vil_image_renderer::
 
 void
 vgui_vil_image_renderer::
-set_image_view( vil_image_view_base const& image )
+set_image_resource( vil_image_resource_sptr const& image )
 {
   // delete old buffer. we could try to reuse it.
   delete buffer_;
@@ -46,11 +48,11 @@ set_image_view( vil_image_view_base const& image )
 }
 
 
-vil_image_view_base_sptr
+vil_image_resource_sptr
 vgui_vil_image_renderer::
-get_image_view() const
+get_image_resource() const
 {
-  return the_image_.make_view();
+  return the_image_;
 }
 
 
@@ -75,9 +77,9 @@ render()
   // rendering context.
   if ( !buffer_ ) {
     buffer_ = new vgui_section_buffer( 0, 0,
-                                       the_image_.ni(), the_image_.nj(),
+                                       the_image_->ni(), the_image_->nj(),
                                        GL_NONE, GL_NONE );
-    buffer_->apply( *the_image_.make_view() );
+    buffer_->apply( the_image_ );
   }
 
   buffer_->draw_as_image() || buffer_->draw_as_rectangle();

@@ -113,14 +113,8 @@
 #include <vgui/vgui_viewer3D_tableau.h>
 #include <vgui/vgui_viewer3D_tableau_sptr.h>
 #include <vgui/vgui_vil_image_renderer.h>
-#include <vgui/vgui_vil_image_tableau.h>
-#include <vgui/vgui_vil_image_tableau_sptr.h>
 #include <vgui/vgui_window.h>
 #include <vgui/vgui_wrapper_tableau.h>
 #include <vgui/vgui_wrapper_tableau_sptr.h>
-
-// deprecated
-// #include <vgui/vgui_vil_image_tableau.h>
-// #include <vgui/vgui_vil_image_tableau_sptr.h>
 
 int main() { return 0; }

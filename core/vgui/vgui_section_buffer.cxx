@@ -34,6 +34,7 @@
 #include <vil1/vil1_pixel.h>
 
 #include <vil/vil_image_view.h>
+#include <vil/vil_image_resource.h>
 #include <vil/vil_pixel_format.h>
 
 #include "vgui_macro.h"
@@ -60,31 +61,28 @@ namespace
   template <class InT, class OutT>
   bool
   convert_buffer( vil_image_view<InT> const& in,
-                  unsigned x, unsigned y, unsigned w, unsigned h,
                   OutT* out, vcl_ptrdiff_t hstep )
   {
-    assert( x+w <= in.ni() && y+h <= in.nj() );
-
     switch( in.nplanes() ) {
       case 1:
       {
-        for ( unsigned j=0; j < h; ++j )
-          for ( unsigned i=0; i < w; ++i )
-            vgui_pixel_convert( in(i+x,j+y), *(out+i+j*hstep) );
+        for ( unsigned j=0; j < in.nj(); ++j )
+          for ( unsigned i=0; i < in.ni(); ++i )
+            vgui_pixel_convert( in(i,j), *(out+i+j*hstep) );
         return true;
       }
       case 3:
       {
-        for ( unsigned j=0; j < h; ++j )
-          for ( unsigned i=0; i < w; ++i )
-            vgui_pixel_convert( in(i+x,j+y,0), in(i+x,j+y,1), in(i+x,j+y,2), *(out+i+j*hstep) );
+        for ( unsigned j=0; j < in.nj(); ++j )
+          for ( unsigned i=0; i < in.ni(); ++i )
+            vgui_pixel_convert( in(i,j,0), in(i,j,1), in(i,j,2), *(out+i+j*hstep) );
         return true;
       }
       case 4:
       {
-        for ( unsigned j=0; j < h; ++j )
-          for ( unsigned i=0; i < w; ++i )
-            vgui_pixel_convert( in(i+x,j+y,0), in(i+x,j+y,1), in(i+x,j+y,2), in(i+x,j+y,3), *(out+i+j*hstep) );
+        for ( unsigned j=0; j < in.nj(); ++j )
+          for ( unsigned i=0; i < in.ni(); ++i )
+            vgui_pixel_convert( in(i,j,0), in(i,j,1), in(i,j,2), in(i,j,3), *(out+i+j*hstep) );
         return true;
       }
       default:
@@ -100,14 +98,13 @@ namespace
   template <class InT>
   bool
   convert_image( vil_image_view<InT> const& in,
-                 unsigned x, unsigned y, unsigned w, unsigned h,
                  void* out, vcl_ptrdiff_t hstep,
                  GLenum format, GLenum type )
   {
     bool result = false;
 
 #define Code( BufferType ) \
-      result = convert_buffer( in, x, y, w, h, (BufferType*)out, hstep );
+      result = convert_buffer( in, (BufferType*)out, hstep );
     ConditionListBegin;
     ConditionListBody( format, type );
     ConditionListFail {
@@ -210,11 +207,11 @@ vgui_section_buffer::
 
 
 // ---------------------------------------------------------------------------
-//                                                      apply (vil image view)
+//                                                  apply (vil image resource)
 
 void
 vgui_section_buffer::
-apply( vil_image_view_base const& image_in )
+apply( vil_image_resource_sptr const& image_in )
 {
   // In order to display the image, we need to convert the pixels from
   // the input image format to the OpenGL buffer format (given by
@@ -225,20 +222,19 @@ apply( vil_image_view_base const& image_in )
   // function will figure out the current OpenGL pixel type and call
   // convert_buffer to actually convert the pixels.
 
-#define DoCase( T )                                                          \
-      case T:                                                                \
-      {                                                                      \
-        typedef vil_pixel_format_type_of<T>::type Type;                      \
-        vil_image_view<Type> img( image_in );                                \
-        assert( img );                                                       \
-        conversion_okay = convert_image( img, x_, y_, w_, h_,                \
-                                         buffer_, allocw_, format_, type_ ); \
-        break;                                                               \
+#define DoCase( T )                                                                \
+      case T:                                                                      \
+      {                                                                            \
+        typedef vil_pixel_format_type_of<T>::type Type;                            \
+        vil_image_view<Type> img = image_in->get_view( x_, w_, y_, h_ );           \
+        assert( img );                                                             \
+        conversion_okay = convert_image( img, buffer_, allocw_, format_, type_ );  \
+        break;                                                                     \
       }
 
   bool conversion_okay = false;
   vil_pixel_format component_format =
-          vil_pixel_format_component_format( image_in.pixel_format() );
+          vil_pixel_format_component_format( image_in->pixel_format() );
 
   switch( component_format ) {
     DoCase( VIL_PIXEL_FORMAT_UINT_32 )
@@ -282,19 +278,18 @@ apply( vil1_image const& image )
   bool conversion_ok = false;
   bool section_ok = false;
 
-#define DoCase( PixelFormat, DataType, NComp )                               \
-      case PixelFormat:                                                      \
-      {                                                                      \
-        DataType* temp_buffer = new DataType[ w_ * h_ * NComp ];             \
-        section_ok = image.get_section( temp_buffer, x_, y_, w_, h_ );       \
-        if ( section_ok ) {                                                  \
-          vil_image_view<DataType> view( temp_buffer, w_, h_, NComp,         \
-                                         NComp, NComp*w_, 1 );               \
-          conversion_ok = convert_image( view, 0, 0, w_, h_,                 \
-                                         buffer_, allocw_, format_, type_ ); \
-        }                                                                    \
-        delete[] temp_buffer;                                                \
-        break;                                                               \
+#define DoCase( PixelFormat, DataType, NComp )                                     \
+      case PixelFormat:                                                            \
+      {                                                                            \
+        DataType* temp_buffer = new DataType[ w_ * h_ * NComp ];                   \
+        section_ok = image.get_section( temp_buffer, x_, y_, w_, h_ );             \
+        if ( section_ok ) {                                                        \
+          vil_image_view<DataType> view( temp_buffer, w_, h_, NComp,               \
+                                         NComp, NComp*w_, 1 );                     \
+          conversion_ok = convert_image( view, buffer_, allocw_, format_, type_ ); \
+        }                                                                          \
+        delete[] temp_buffer;                                                      \
+        break;                                                                     \
       }
 
   switch( pixel_format ) {

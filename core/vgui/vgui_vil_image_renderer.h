@@ -8,10 +8,13 @@
 //
 // Cut-n-paste and modify from vil1_image_renderer.
 
-#include <vil/vil_image_view_base.h>
+#include <vil/vil_image_resource_sptr.h>
+class vil_image_view_base;
 class vgui_section_buffer;
 
-#include "internals/vgui_generic_vil_image_view.h"
+//#include "internals/vgui_generic_vil_image_view.h"
+
+#
 
 //: OpenGL utility to render a vil_image_view.
 //
@@ -37,7 +40,7 @@ class vgui_section_buffer;
 class vgui_vil_image_renderer
 {
   //: Stores the image data (pixels, dimensions, etc).
-  vgui_generic_vil_image_view the_image_;
+  vil_image_resource_sptr the_image_;
 
   //: Stored the GL pixels corresponding to the image data
   vgui_section_buffer* buffer_;
@@ -51,10 +54,10 @@ class vgui_vil_image_renderer
 
   //: Attach the renderer to a new view.
   //
-  void set_image_view( vil_image_view_base const& );
+  void set_image_resource( vil_image_resource_sptr const& );
 
-  //: Return the image view that this renderer draws.
-  vil_image_view_base_sptr get_image_view() const;
+  //: Return the image resource that this renderer draws.
+  vil_image_resource_sptr get_image_resource() const;
 
   //: Tell the renderer that the underlying image data has been changed.
   void reread_image();
