@@ -1,10 +1,9 @@
-//---*-c++-*---
-#ifndef _vgl_h_matrix_1d_compute_linear_h_
-#define _vgl_h_matrix_1d_compute_linear_h_
-
-// .NAME vgl_h_matrix_1d_compute_linear
-// .INCLUDE mvl/vgl_h_matrix_1d_compute_linear.h
-// .FILE vgl_h_matrix_1d_compute_linear.cxx
+// This is core/vgl/algo/vgl_h_matrix_1d_compute_linear.h
+#ifndef vgl_h_matrix_1d_compute_linear_h_
+#define vgl_h_matrix_1d_compute_linear_h_
+//:
+// \file
+// \brief find line-to-line projectivity from a set of matched points using SVD
 
 #include "vgl_h_matrix_1d_compute.h"
 
@@ -19,4 +18,4 @@ class vgl_h_matrix_1d_compute_linear : public vgl_h_matrix_1d_compute
   ~vgl_h_matrix_1d_compute_linear();
 };
 
-#endif // _vgl_h_matrix_1d_compute_linear_h_
+#endif // vgl_h_matrix_1d_compute_linear_h_

@@ -1,5 +1,5 @@
-#ifndef _vgl_h_matrix_1d_compute_optimize_h_
-#define _vgl_h_matrix_1d_compute_optimize_h_
+#ifndef vgl_h_matrix_1d_compute_optimize_h_
+#define vgl_h_matrix_1d_compute_optimize_h_
 //:
 // \file
 //
@@ -22,9 +22,8 @@
 class vgl_h_matrix_1d_compute_optimize : public vgl_h_matrix_1d_compute
 {
  protected:
-  bool 
-    compute_cool_homg(const vcl_vector<vgl_homg_point_1d<double> >& points1,
-                      const vcl_vector<vgl_homg_point_1d<double> >& points2,
+  bool compute_cool_homg(const vcl_vector<vgl_homg_point_1d<double> >& points1,
+                         const vcl_vector<vgl_homg_point_1d<double> >& points2,
                          vgl_h_matrix_1d<double>& H);
  public:
   vgl_h_matrix_1d_compute_optimize(void);
@@ -33,4 +32,4 @@ class vgl_h_matrix_1d_compute_optimize : public vgl_h_matrix_1d_compute
 
 typedef vgl_h_matrix_1d_compute_optimize vgl_h_matrix_1d_computeOptimise1;
 
-#endif // _vgl_h_matrix_1d_compute_optimize_h_
+#endif // vgl_h_matrix_1d_compute_optimize_h_
