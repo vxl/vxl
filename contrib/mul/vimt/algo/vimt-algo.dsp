@@ -116,6 +116,9 @@ SOURCE=.\vimt_find_troughs.h
 # Begin Source File
 SOURCE=.\vimt_normalised_correlation_2d.h
 # End Source File
+# Begin Source File
+SOURCE=.\vimt_pyramid_values_at_point.h
+# End Source File
 # End Group
 # End Target
 # End Project

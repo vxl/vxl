@@ -245,6 +245,12 @@ SOURCE=.\find_dog_peaks.cxx
 # Begin Source File
 SOURCE=.\find_scale_corners.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\find_scale_entropy_peaks.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\show_local_entropy.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

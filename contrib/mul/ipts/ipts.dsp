@@ -98,9 +98,30 @@ LIB32=link.exe -lib
 
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx;c"
+# Begin Source File
+SOURCE=.\ipts_corner_pyramid.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\ipts_entropy_pyramid.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\ipts_local_entropy.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "txx;h"
+# Begin Source File
+SOURCE=.\ipts_corner_pyramid.h
+# End Source File
+# Begin Source File
+SOURCE=.\ipts_draw.h
+# End Source File
+# Begin Source File
+SOURCE=.\ipts_entropy_pyramid.h
+# End Source File
+# Begin Source File
+SOURCE=.\ipts_local_entropy.h
+# End Source File
 # Begin Source File
 SOURCE=.\ipts_scale_space_peaks.h
 # End Source File
