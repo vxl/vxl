@@ -7,7 +7,7 @@
 //                            Niskayuna, NY 12309
 //                            All Rights Reserved
 //              Reproduction rights limited as described below.
-//                               
+//
 //      Permission to use, copy, modify, distribute, and sell this software
 //      and its documentation for any purpose is hereby granted without fee,
 //      provided that (i) the above copyright notice and this permission
@@ -17,7 +17,7 @@
 //      the specific, prior written permission of GE CRD, and (iii) any
 //      modifications are clearly marked and summarized in a change history
 //      log.
-//       
+//
 //      THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTY OF ANY KIND,
 //      EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
 //      WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
@@ -36,39 +36,31 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// Class : BigSparseArray3D
-//
-// .SECTION Description
+//:
+// \file
+// \brief Sparse 3D array
 //    BigSparseArray3D is a sparse 3D array allowing space efficient access of
 //    the form s(300,700,900) = 2;
-//
-// .NAME        BigSparseArray3D - Sparse 3D array.
-// .LIBRARY     Basics
-// .HEADER	GeneralUtility Package
-// .INCLUDE     Basics/BigSparseArray3D.h
-// .FILE        BigSparseArray3D.h
-// .FILE        BigSparseArray3D.C
-// .SECTION Author
+// \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 02 Oct 96
 //
-// .SECTION Modifications:
+// \verbatim
+//    Modifications:
 //     180497 AWF Moved to Basics
-//
+// \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl/vcl_functional.h>
-#include <vcl/vcl_utility.h>
-#include <vcl/vcl_map.h>
-
-class ostream;
+#include <vcl_functional.h>
+#include <vcl_utility.h>
+#include <vcl_map.h>
+#include <vcl_iosfwd.h>
 
 template <class T>
 class BigSparseArray3D {
 public:
   // Constructors/Destructors--------------------------------------------------
 
-// -- Construct a BigSparseArray3D which can hold a maximum of (n1 x n2 x n3) elements.
+//: Construct a BigSparseArray3D which can hold a maximum of (n1 x n2 x n3) elements.
 // Currently (n1*n2*n3) must be representable in 32 bits, or about 1625 per dimension.
 // Powers of two might conceivably give better performance -- they won't be worse.
   BigSparseArray3D(unsigned max_dim_1 = 2097152, unsigned max_dim_2 = 2097152, unsigned max_dim_3 = 2097152);
@@ -85,9 +77,9 @@ public:
   unsigned count_nonempty() const { return _storage.size(); }
 
   // Data Control--------------------------------------------------------------
-  ostream& print(ostream&) const;
-  //friend ostream& operator << (ostream&, const BigSparseArray3D<T>& );
-  //friend ostream& operator >> (ostream&, const BigSparseArray3D<T>& );
+  vcl_ostream& print(vcl_ostream&) const;
+  //friend vcl_ostream& operator << (vcl_ostream&, const BigSparseArray3D<T>& );
+  //friend vcl_ostream& operator >> (vcl_ostream&, const BigSparseArray3D<T>& );
 
 protected:
   // Data Members--------------------------------------------------------------
@@ -97,7 +89,7 @@ protected:
   vcl_map<unsigned long long, T, vcl_less<unsigned long long> > _storage;
 
   typedef vcl_map<unsigned long long, T, vcl_less<unsigned long long> > Map;
-  
+
 public:
   // Helpers-------------------------------------------------------------------
 
@@ -107,19 +99,18 @@ public:
 };
 
 template <class T>
-inline ostream& operator << (ostream& s, const BigSparseArray3D<T>& a)
+inline vcl_ostream& operator << (vcl_ostream& s, const BigSparseArray3D<T>& a)
 {
   return a.print(s);
 }
 
-#include <vcl/vcl_compiler.h>
+#include <vcl_compiler.h>
 
-#define INSTANTIATE_BIGSPARSEARRAY3D_base(T)\
-template class BigSparseArray3D<T>;
+#define INSTANTIATE_BIGSPARSEARRAY3D_base(T) \
+template class BigSparseArray3D<T >
 
 #define INSTANTIATE_BIGSPARSEARRAY3D(T) \
 INSTANTIATE_BIGSPARSEARRAY3D_base(T); \
-VCL_INSTANTIATE_INLINE(ostream& operator << (ostream&, const BigSparseArray3D<T> &))
+VCL_INSTANTIATE_INLINE(vcl_ostream& operator << (vcl_ostream&, const BigSparseArray3D<T > &))
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS BigSparseArray3D.
-
+#endif // BigSparseArray3D_h_

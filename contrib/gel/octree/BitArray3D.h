@@ -4,25 +4,15 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// Class : BitArray3D
-//
-// .SECTION Description
-//    BitArray3D is a class that Geoff hasn't documented properly. FIXME
-//
-// .NAME        BitArray3D - Undocumented class FIXME
-// .LIBRARY     spacecarving
-// .HEADER	src Package
-// .INCLUDE     spacecarving/BitArray3D.h
-// .FILE        BitArray3D.h
-// .FILE        BitArray3D.C
-// .SECTION Author
+//:
+// \file
+// \author
 //     Geoffrey Cross, Oxford RRG, 17 Jul 99
 //
 //-----------------------------------------------------------------------------
 
 
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_iosfwd.h>
 
 class vbl_base_array_3d
 {
@@ -48,14 +38,10 @@ class BitArray3D : public vbl_base_array_3d
 {
 public:
   // Constructors/Destructors--------------------------------------------------
-  
+
   BitArray3D( unsigned int sizex, unsigned int sizey, unsigned int sizez);
   BitArray3D( unsigned int sizex, unsigned int sizey, unsigned int sizez, const bool v);
   ~BitArray3D();
-
-  // Operations----------------------------------------------------------------
-  
-  // Computations--------------------------------------------------------------
 
   // Data Access---------------------------------------------------------------
 
@@ -65,12 +51,9 @@ public:
 
   void fill( const bool v);
 
-  // Data Control--------------------------------------------------------------
-
 protected:
   // Data Members--------------------------------------------------------------
 
-  
   unsigned char *data;
   unsigned long maxindex;
 
@@ -79,7 +62,6 @@ protected:
   void index( unsigned int x, unsigned int y, unsigned int z, unsigned long &byteindex, unsigned int &bitindex) const;
 };
 
-ostream &operator<<(ostream &os, const BitArray3D &bitarray);
+vcl_ostream &operator<<(vcl_ostream &os, const BitArray3D &bitarray);
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS BitArray3D.
-
+#endif // BitArray3D_h_

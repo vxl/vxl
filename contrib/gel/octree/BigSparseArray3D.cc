@@ -7,7 +7,7 @@
 //                            Niskayuna, NY 12309
 //                            All Rights Reserved
 //              Reproduction rights limited as described below.
-//                               
+//
 //      Permission to use, copy, modify, distribute, and sell this software
 //      and its documentation for any purpose is hereby granted without fee,
 //      provided that (i) the above copyright notice and this permission
@@ -17,7 +17,7 @@
 //      the specific, prior written permission of GE CRD, and (iii) any
 //      modifications are clearly marked and summarized in a change history
 //      log.
-//       
+//
 //      THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTY OF ANY KIND,
 //      EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
 //      WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
@@ -30,12 +30,16 @@
 //
 // ---------------------------------------------------------------------------
 // <end copyright notice>
+#ifdef __GNUC__
+#pragma implementation
+#endif
 //-*- c++ -*-------------------------------------------------------------------
 //
-// Class: BigSparseArray3D
-// Author: Andrew W. Fitzgibbon, Oxford RRG
+//:
+// \file
+// \author
+//  Andrew W. Fitzgibbon, Oxford RRG
 // Created: 02 Oct 96
-// Modifications:
 //
 //-----------------------------------------------------------------------------
 
@@ -78,11 +82,13 @@ BigSparseArray3D<T>::~BigSparseArray3D()
 // locals
 inline long long bigencode(unsigned i, unsigned j, unsigned k)
 {
-  // A bit of an arbitrary restriction, for efficiency 
+  // A bit of an arbitrary restriction, for efficiency
   // 2048 is 1 << 11, could be 1 << 21 for 64bit machines.
   // Use a map of tuples if you need bigger sparse arrays
   assert( (i < 2097152) && (j < 2097152) && (k < 2097152) );
-  return (((unsigned long long)(i)) << 42) | (((unsigned long long)(j)) << 21) | ((unsigned long long)(k));
+  return (((unsigned long long)(i)) << 42) |
+         (((unsigned long long)(j)) << 21) |
+         ((unsigned long long)(k));
 }
 
 inline void bigdecode(unsigned long long v, unsigned& i, unsigned& j, unsigned& k)
@@ -96,8 +102,10 @@ inline void bigdecode(unsigned long long v, unsigned& i, unsigned& j, unsigned& 
 template <class T>
 T& BigSparseArray3D<T>::operator () (unsigned i, unsigned j, unsigned k)
 {
-  //   cout << "{BigSparseArray3D(" << i << "," << j << "," << k << ") - " << "storage[" << encode(i,j,k) << "] - " << _storage[encode(i,j,k)] << "}";
-  
+#if 0
+  vcl_cout << "{BigSparseArray3D(" << i << "," << j << "," << k << ") - "
+           << "storage[" << encode(i,j,k) << "] - " << _storage[encode(i,j,k)] << "}\n";
+#endif
   return _storage[bigencode(i,j,k)];
 }
 
@@ -105,18 +113,21 @@ template <class T>
 const T& BigSparseArray3D<T>::operator () (unsigned i, unsigned j, unsigned k) const
 {
   Map::const_iterator p = _storage.find(bigencode(i,j,k));
-  //cout << "{BigSparseArray3D(" << i << "," << j << "," << k << ") - " << "storage[" << encode(i,j,k) << "] - " << _storage[encode(i,j,k)] << "}";
-
+#if 0
+  vcl_cout << "{BigSparseArray3D(" << i << "," << j << "," << k << ") - "
+           << "storage[" << encode(i,j,k) << "] - " << _storage[encode(i,j,k)] << "}\n";
+#endif
   assert(p != _storage.end());
-
   return (*p).second;
 }
 
 template <class T>
 bool BigSparseArray3D<T>::fullp(unsigned i, unsigned j, unsigned k) const
 {
-  // cout << "{BigSparseArray3D::fullp(" << i << "," << j << "," << k << ") - " << (_storage.find(encode(i,j,k)) != _storage.end()) << "}";
-
+#if 0
+  vcl_cout << "{BigSparseArray3D::fullp(" << i << "," << j << "," << k << ") - "
+           << (_storage.find(encode(i,j,k)) != _storage.end()) << "}\n";
+#endif
   return (_storage.find(bigencode(i,j,k)) != _storage.end());
 }
 
@@ -125,18 +136,20 @@ bool BigSparseArray3D<T>::put(unsigned i, unsigned j, unsigned k, const T& t)
 {
   unsigned int v = bigencode(i,j,k);
   vcl_pair<Map::iterator,bool> res = _storage.insert(Map::value_type(v,t));
-  //  cout << "{BigSparseArray3D::put(" << i << "," << j << "," << k << ") - " << res.second << "}";
-
+#if 0
+  vcl_cout << "{BigSparseArray3D::put(" << i << "," << j << "," << k << ") - "
+           << res.second << "}\n";
+#endif
   return res.second;
-} 
+}
 
 template <class T>
-ostream& BigSparseArray3D<T>::print(ostream& out) const
+vcl_ostream& BigSparseArray3D<T>::print(vcl_ostream& out) const
 {
   for(Map::const_iterator p = _storage.begin(); p != _storage.end(); ++p) {
     unsigned i,j,k;
     bigdecode((*p).first, i, j, k);
-    out << "(" << i << "," << j << "," << k << "): " << (*p).second << endl;
+    out << "(" << i << "," << j << "," << k << "): " << (*p).second << vcl_endl;
   }
   return out;
 }
@@ -149,11 +162,9 @@ int main()
   x(1,2,3) = 1.23;
   x(100,200,3) = 100.2003;
 
-  cout << "123 = " << x(1,2,3) << endl;
-  cout << "222 = " << x(2,2,2) << endl;
-
-  cout << "333 is full? " << x.fullp(3,3,3) << endl;
-  
-  cout << x;
+  vcl_cout << "123 = " << x(1,2,3) << vcl_endl
+           << "222 = " << x(2,2,2) << vcl_endl
+           << "333 is full? " << x.fullp(3,3,3) << vcl_endl
+           << x;
 }
 #endif

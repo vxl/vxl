@@ -1,9 +1,10 @@
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "OctreeLevel.h"
+#pragma implementation
 #endif
-//
-// Class: OctreeLevel
+//:
+// \file
+// \author
 // Author: Geoffrey Cross, Oxford RRG
 // Created: 11 May 99
 // Modifications:
@@ -19,37 +20,33 @@
 // Default ctor
 OctreeLevel::OctreeLevel( const int d= 0) :
   depth( d),
-  size( int(pow(2,depth))),
+  size( d<0 ? 0 : (1<<d)),
   color( size, size, size),
   next( NULL),
   prev( NULL)
 {
-  cout << "Size = " << size << endl;
+  vcl_cout << "Size = " << size << vcl_endl;
 }
 
 
 OctreeLevel::OctreeLevel( OctreeLevel *p) :
   depth( p->GetDepth()+1),
-  size( int(pow(2,depth))),
+  size( 1<<depth),
   color( size, size, size),
   next( NULL),
   prev( p)
 {
   prev->SetNext( this);
-  cout << "Size = " << size << endl;
+  vcl_cout << "Size = " << size << vcl_endl;
 }
 
 void Octree::InheritFromAbove()
 {
   if( !prev)
     {
-      
     }
   else
     {
-
     }
-
-
 }
 

@@ -4,22 +4,15 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// Class : RawPMatrixStore
-//
-// .SECTION Description
+//:
+// \file
+// \brief Demand-load image sequence from disk
 //    The RawPMatrixStore provides demand-based access to an image sequence.
 //    Individual images are accessed via integer indices, and the class
 //    contains a printf-style format specifier to convert indices to
 //    filenames.
 //
-// .NAME        RawPMatrixStore - Demand-load image sequence from disk.
-// .LIBRARY     MViewDatabase
-// .HEADER	MultiViewOX Package
-// .INCLUDE     MViewDatabase/RawPMatrixStore.h
-// .FILE        RawPMatrixStore.h
-// .FILE        RawPMatrixStore.C
-// .SECTION Author
+// \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 22 Aug 97
 //
 //-----------------------------------------------------------------------------
@@ -45,7 +38,7 @@ public:
   bool Load(int image_index);
   bool Save(int i);
   PMatrix *Get(int i);
-  
+
   void AddExtension(char const*);
 
 protected:
@@ -54,9 +47,7 @@ protected:
   CoolArrayP<PMatrix *> _pmatrix;
   bool check_index(int i);
 
-  FileNameGenerator fng_;  
-  // Helpers-------------------------------------------------------------------
+  FileNameGenerator fng_;
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS RawPMatrixStore.
-
+#endif // RawPMatrixStore_h_

@@ -4,38 +4,24 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// Class : VoxmapPoints
-//
-// .SECTION Description
-//    VoxmapPoints is a class that Geoff hasn't documented properly. FIXME
-//
-// .NAME        VoxmapPoints - Undocumented class FIXME
-// .LIBRARY     new
-// .HEADER	octree Package
-// .INCLUDE     new/VoxmapPoints.h
-// .FILE        VoxmapPoints.h
-// .FILE        VoxmapPoints.C
-// .SECTION Author
+//:
+// \file
+// \author
 //     Geoffrey Cross, Oxford RRG, 17 May 99
 //
 //-----------------------------------------------------------------------------
 
 #include <vbl/vbl_sparse_array_3d.h>
 #include <vnl/vnl_double_3.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 
 #include "BigSparseArray3D.h"
 
 class VoxmapPoints {
 public:
   // Constructors/Destructors--------------------------------------------------
-  
-  VoxmapPoints( int, vnl_double_3, double);
 
-  // Operations----------------------------------------------------------------
-  
-  // Computations--------------------------------------------------------------
+  VoxmapPoints( int, vnl_double_3, double);
 
   // Data Access---------------------------------------------------------------
 
@@ -66,9 +52,6 @@ private:
   vcl_vector<vnl_double_3 *> cornerpoints;
   vbl_sparse_array_3d<int> corners;
   vbl_sparse_array_3d<vnl_double_3 *> centres;
-
-  // Helpers-------------------------------------------------------------------
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS VoxmapPoints.
-
+#endif // VoxmapPoints_h_

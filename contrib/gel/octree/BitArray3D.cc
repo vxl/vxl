@@ -1,9 +1,10 @@
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "BitArray3D.h"
+#pragma implementation
 #endif
-//
-// Class: BitArray3D
+//:
+// \file
+// \author
 // Author: Geoffrey Cross, Oxford RRG
 // Created: 17 Jul 99
 // Modifications:
@@ -11,10 +12,10 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl/vcl_cstring.h>
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_climits.h>
+#include <vcl_cstring.h>
+#include <vcl_cassert.h>
+#include <vcl_iostream.h>
+#include <vcl_climits.h>
 
 #include "BitArray3D.h"
 
@@ -51,7 +52,7 @@ void BitArray3D::set( unsigned int i1, unsigned int i2, unsigned int i3, const b
 
   unsigned char mask= (((unsigned char )(v))<<bitindex);
   unsigned char nmask= ~(((unsigned char )(1))<<bitindex);
-  
+
   data[byteindex]= mask+(nmask & data[byteindex]);
 }
 
@@ -104,20 +105,20 @@ void BitArray3D::index( unsigned x, unsigned y, unsigned z, unsigned long &bytei
 
 ////////////////////////////////////////////////////////////////////////
 
-ostream &operator<<(ostream &os, const BitArray3D &bitarray)
+vcl_ostream &operator<<(vcl_ostream &os, const BitArray3D &bitarray)
 {
   for( int i=0; i< bitarray.get_row1_count(); i++)
     {
       for( int j=0; j< bitarray.get_row2_count(); j++)
-	{
-	  for( int k=0; k< bitarray.get_row3_count(); k++)
-	    {
-	      os << bitarray(k,j,i) << ' ';
-	    }
-	  
-	  os << endl;
-	}
-      os << endl;
+        {
+          for( int k=0; k< bitarray.get_row3_count(); k++)
+            {
+              os << bitarray(k,j,i) << ' ';
+            }
+
+          os << vcl_endl;
+        }
+      os << vcl_endl;
     }
 
   return os;

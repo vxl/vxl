@@ -1,9 +1,10 @@
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "RawPMatrixStore.h"
+#pragma implementation
 #endif
-//
-// Class: RawPMatrixStore
+//:
+// \file
+// \author
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 22 Aug 97
 // Modifications:
@@ -23,13 +24,15 @@
 
 static bool debug = false;
 
-// RawPMatrixStore::RawPMatrixStore( const char *format, int startframe, int):
-//   _fmt(format),
-//   _startframe(startframe)
-// {
-// }
+#if 0
+RawPMatrixStore::RawPMatrixStore( const char *format, int startframe, int):
+  _fmt(format),
+  _startframe(startframe)
+{
+}
+#endif
 
-// -- Construct an PMatrix Store given a FileNameGenerator
+//: Construct an PMatrix Store given a FileNameGenerator
 RawPMatrixStore::RawPMatrixStore(const FileNameGenerator& fng) :
   fng_(fng)
 {
@@ -51,32 +54,32 @@ bool RawPMatrixStore::Load(int image_index)
 
   CoolString filename = fng_.frame_name( image_index);
 
-  ifstream fin( filename);
+  vcl_ifstream fin( filename);
 
   if( !fin.good())
     {
-      cerr << "Read PMatrix [" << filename << "] failed" << endl;
+      vcl_cerr << "Read PMatrix [" << filename << "] failed" << vcl_endl;
       return false;
     }
 
   PMatrix P;
   P.read_ascii( fin);
 
-  cout << "Read PMatrix [" << filename << "]" << endl;
+  vcl_cout << "Read PMatrix [" << filename << "]" << vcl_endl;
 
   _pmatrix[image_index]= new PMatrix(P);
 
   return true;
 }
 
-// - Save not 
+// - Save not implemented
 bool RawPMatrixStore::Save(int)
 {
-  cerr << "RawPMatrixStore::Save not implemented\n";
+  vcl_cerr << "RawPMatrixStore::Save not implemented\n";
   return false;
 }
 
-// -- @{ Return Image for frame $i$, loading if necessary. @}
+//: Return Image for frame $i$, loading if necessary.
 PMatrix* RawPMatrixStore::Get(int i)
 {
   if( i< 0)
@@ -87,10 +90,9 @@ PMatrix* RawPMatrixStore::Get(int i)
 
   if (!_pmatrix[i])
     Load(i);
-  
+
   return _pmatrix[i];
 }
-
 
 
 bool RawPMatrixStore::check_index(int i)
@@ -101,8 +103,8 @@ bool RawPMatrixStore::check_index(int i)
 
   int l = _pmatrix.length();
 
-  if (i >= l) 
+  if (i >= l)
     _pmatrix.push((PMatrix*)0, i - l + 10);
-  
+
   return true;
 }
