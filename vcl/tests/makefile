@@ -1,4 +1,5 @@
 TESTS += test_vcl_compiler.cxx
+TESTS += test_vcl_headers.cxx
 TESTS += test_vcl_long_double.cxx
 TESTS += test_vcl_rel_ops.cxx
 TESTS += test_vcl_iterator.cxx
