@@ -66,6 +66,7 @@
 //  Joe Mundy       (1997) Added continuous edgel orientation output \and
 //  Van-Duc Nguyen  (1998) Merge from end points of dangling chains only \and
 //  Joe Mundy       (1999) Modified ::InsertBorder to use ROI bounds
+//  Peter Vanroose  (2003) removed z coord arg of Translate()
 //-----------------------------------------------------------------------------
 
 #include <vcl_vector.h>
@@ -97,8 +98,7 @@ class gevd_contour
   static void EqualizeSpacing(vcl_vector<vtol_edge_2d_sptr>& chains); // uniform spacing
   static void Translate(vcl_vector<vtol_edge_2d_sptr>& edges, // translate loc to center
                         vcl_vector<vtol_vertex_2d_sptr >& vertices, // instead of upper-left
-                        const float tx=0.5, const float ty = 0.5,
-                        const float tz = 0);
+                        const float tx=0.5, const float ty = 0.5);
   static void ClearNetwork(vcl_vector<vtol_edge_2d_sptr>*& edges, // remove network of edges
                            vcl_vector<vtol_vertex_2d_sptr >*& vertices); // and vertices
   int CheckInvariants(vcl_vector<vtol_edge_2d_sptr>& edges, // return number of errors
