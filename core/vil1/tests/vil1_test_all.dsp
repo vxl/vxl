@@ -123,6 +123,9 @@ SOURCE=.\test_save_load_image.cxx
 # Begin Source File
 SOURCE=.\test_write_endian.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_load_gen.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
