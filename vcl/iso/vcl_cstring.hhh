@@ -27,4 +27,9 @@
 @strtok
 @strxfrm
 
+using std::memcpy;
+using std::memset;
+using std::strlen;
+using std::strcmp;
+
 #endif

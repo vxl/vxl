@@ -27,6 +27,22 @@
 #include <vcl_iostream.h> 
 #include <vcl_complex.txx> 
 
+// this function will tickle implicit templates for
+// some compilers and detect missing instances for others.
+template <class T>
+vcl_complex<T> vcl_complex_instances_ticker(T *)
+{
+  vcl_complex<T> z(1, 2);
+  vcl_complex<T> x = vcl_arg(z);
+  x += vcl_conj(z);
+  x -= vcl_abs(z);
+  x *= vcl_polar(T(3), T(4));
+  x /= vcl_sqrt(z);
+  return x + vcl_norm(z);
+}
+template vcl_complex<float > vcl_complex_instances_ticker(float  *);
+template vcl_complex<double> vcl_complex_instances_ticker(double *);
+
 // macro to implement an operator>>, for compilers that need it.
 # define implement_rsh(T) \
 istream &operator>>(istream &is, vcl_complex<T > &z) { \

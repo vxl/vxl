@@ -10,8 +10,6 @@
 # include "egcs/vcl_complex.txx"
 #elif defined(VCL_GCC_295) && !defined(GNU_LIBSTDCXX_V3)
 # include "gcc-295/vcl_complex.txx"
-#elif defined(VCL_GCC_295) && defined(GNU_LIBSTDCXX_V3)
-# include "emulation/vcl_complex.txx"
 #elif defined(VCL_SUNPRO_CC)
 # include "sunpro/vcl_complex.txx"
 #elif defined(VCL_SGI_CC)

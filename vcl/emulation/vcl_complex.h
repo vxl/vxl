@@ -24,8 +24,6 @@
 
 #if defined (VCL_VC50)
 template <class FLOAT> class vcl_complex;
-typedef vcl_complex<double> vcl_double_complex;
-typedef vcl_complex<float> vcl_float_complex;
 #endif
 
 template <class FLOAT>
@@ -37,13 +35,8 @@ public:
   template <class T>  
   vcl_complex (vcl_complex<T> const& that): re(that.real()), im(that.imag()) {}
 #else
-#if defined (VCL_VC50)
-  vcl_complex (vcl_float_complex const& that): re(that.real()), im(that.imag()) {}
-  vcl_complex (vcl_double_complex const& that): re(that.real()), im(that.imag()) {}
-#else
   vcl_complex (vcl_complex<float> const& that): re(FLOAT(that.real())), im(FLOAT(that.imag())) {}
   vcl_complex (vcl_complex<double>const& that): re(FLOAT(that.real())), im(FLOAT(that.imag())) {}
-#endif
 #endif
 
   vcl_complex& operator += (const vcl_complex&);
@@ -112,28 +105,11 @@ vcl_complex<FLOAT>::operator /= (const vcl_complex<FLOAT>& y)
   return *this;
 }
 
-// in order to #define vcl_abs to std::abs it is
-// necessary to put these function in namespace
-// std. that's ok because they have vcl_complex<>s
-// as part of their signatures, so they won't clash.
-#ifdef xxGNU_LIBSTDCXX_V3 // this didn't work -- fsm
-# define fsm_std_begin namespace std {
-# define fsm_std_end   }
-#else
-# define fsm_std_begin /* */
-# define fsm_std_end   /* */
-#endif
-
-/* !! */ fsm_std_begin
+template <class FLOAT> inline FLOAT
+vcl_real (vcl_complex<FLOAT> const& x) { return x.real(); }
 
 template <class FLOAT> inline FLOAT
-real (vcl_complex<FLOAT> const& x) { return x.real(); }
-
-template <class FLOAT> inline FLOAT
-imag (vcl_complex<FLOAT> const& x) { return x.imag(); }
-
-/* !! */ fsm_std_end
-
+vcl_imag (vcl_complex<FLOAT> const& x) { return x.imag(); }
 
 template <class FLOAT> inline vcl_complex<FLOAT>
 operator + (const vcl_complex<FLOAT>& x, const vcl_complex<FLOAT>& y)
@@ -244,102 +220,98 @@ operator != (FLOAT x, const vcl_complex<FLOAT>& y)
   return x != y.real() || y.imag() != 0;
 }
 
-/* !! */ fsm_std_begin
-
 template <class FLOAT> inline FLOAT
-abs (const vcl_complex<FLOAT>& x)
+vcl_abs (const vcl_complex<FLOAT>& x)
 {
   return (FLOAT) hypot (x.real(), x.imag());
 }
 
 template <class FLOAT> inline FLOAT
-arg (const vcl_complex<FLOAT>& x)
+vcl_arg (const vcl_complex<FLOAT>& x)
 {
   return (FLOAT) atan2 (x.imag(), x.real());
 }
 
 template <class FLOAT> inline vcl_complex<FLOAT>
-polar (FLOAT r, FLOAT t)
+vcl_polar (FLOAT r, FLOAT t)
 {
   return vcl_complex<FLOAT> (r * cos (t), r * sin (t));
 }
 
 template <class FLOAT> inline vcl_complex<FLOAT>
-conj (const vcl_complex<FLOAT>& x)
+vcl_conj (const vcl_complex<FLOAT>& x)
 {
   return vcl_complex<FLOAT> (x.real(), -x.imag());
 }
 
 template <class FLOAT> inline FLOAT
-norm (const vcl_complex<FLOAT>& x)
+vcl_norm (const vcl_complex<FLOAT>& x)
 {
   return x.real() * x.real() + x.imag() * x.imag();
 }
 
 template <class FLOAT> inline vcl_complex<FLOAT>
-cos (const vcl_complex<FLOAT>& x)
+vcl_cos (const vcl_complex<FLOAT>& x)
 {
   return vcl_complex<FLOAT> (cos (x.real()) * cosh (x.imag()),
 			   - sin (x.real()) * sinh (x.imag()));
 }
 
 template <class FLOAT> inline vcl_complex<FLOAT>
-cosh (const vcl_complex<FLOAT>& x)
+vcl_cosh (const vcl_complex<FLOAT>& x)
 {
   return vcl_complex<FLOAT> (cosh (x.real()) * cos (x.imag()),
 			   sinh (x.real()) * sin (x.imag()));
 }
 
 template <class FLOAT> inline vcl_complex<FLOAT>
-exp (const vcl_complex<FLOAT>& x)
+vcl_exp (const vcl_complex<FLOAT>& x)
 {
   return polar (FLOAT (exp (x.real())), x.imag());
 }
 
 
 template <class FLOAT> inline vcl_complex<FLOAT>
-log (const vcl_complex<FLOAT>& x)
+vcl_log (const vcl_complex<FLOAT>& x)
 {
   return vcl_complex<FLOAT> (log (abs (x)), (FLOAT) atan2 (x.imag(), x.real()));
 }
 
 template <class FLOAT> inline vcl_complex<FLOAT>
-pow (const vcl_complex<FLOAT>& x, const vcl_complex<FLOAT>& y)
+vcl_pow (const vcl_complex<FLOAT>& x, const vcl_complex<FLOAT>& y)
 {
   FLOAT logr = log (abs (x));
   FLOAT t = (FLOAT) atan2 (x.imag(), x.real()); // was arg, but sunCC messed up WAH
 
-  return polar (FLOAT (exp (logr * y.real() - y.imag() * t)),
-		FLOAT (y.imag() * logr + y.real() * t));
+  return vcl_polar (FLOAT (exp (logr * y.real() - y.imag() * t)),
+		    FLOAT (y.imag() * logr + y.real() * t));
 }
 
 template <class FLOAT> inline vcl_complex<FLOAT>
-pow (const vcl_complex<FLOAT>& x, FLOAT y)
+vcl_pow (const vcl_complex<FLOAT>& x, FLOAT y)
 {
   return exp (FLOAT (y) * log (x));
 }
 
 template <class FLOAT> inline vcl_complex<FLOAT>
-pow (FLOAT x, const vcl_complex<FLOAT>& y)
+vcl_pow (FLOAT x, const vcl_complex<FLOAT>& y)
 {
   return exp (y * FLOAT (log (x)));
 }
 
 template <class FLOAT> inline vcl_complex<FLOAT>
-sin (const vcl_complex<FLOAT>& x)
+vcl_sin (const vcl_complex<FLOAT>& x)
 {
   return vcl_complex<FLOAT> (sin (x.real()) * cosh (x.imag()),
 			   cos (x.real()) * sinh (x.imag()));
 }
 
 template <class FLOAT> inline vcl_complex<FLOAT>
-sinh (const vcl_complex<FLOAT>& x)
+vcl_sinh (const vcl_complex<FLOAT>& x)
 {
   return vcl_complex<FLOAT> (sinh (x.real()) * cos (x.imag()),
 			   cosh (x.real()) * sin (x.imag()));
 }
-
-/* !! */ fsm_std_end
 
 template <class FLOAT> inline vcl_complex<FLOAT>
 operator / (const vcl_complex<FLOAT>& x, const vcl_complex<FLOAT>& y)
@@ -389,10 +361,8 @@ operator / (FLOAT x, const vcl_complex<FLOAT>& y)
   return vcl_complex<FLOAT> (nr, ni);
 }
 
-/* !! */ fsm_std_begin
-
 template <class FLOAT> inline vcl_complex<FLOAT>
-pow (const vcl_complex<FLOAT>& xin, int y)
+vcl_pow (const vcl_complex<FLOAT>& xin, int y)
 {
   if (y == 0)
     return vcl_complex<FLOAT> (1.0);
@@ -415,9 +385,9 @@ pow (const vcl_complex<FLOAT>& xin, int y)
 }
 
 template <class FLOAT> inline vcl_complex<FLOAT>
-sqrt (const vcl_complex<FLOAT>& x)
+vcl_sqrt (const vcl_complex<FLOAT>& x)
 {
-  FLOAT r = abs (x);
+  FLOAT r = vcl_abs (x);
   FLOAT nr, ni;
   if (r == 0.0)
     nr = ni = r;
@@ -436,14 +406,9 @@ sqrt (const vcl_complex<FLOAT>& x)
   return vcl_complex<FLOAT> (nr, ni); 
 }
 
-/* !! */ fsm_std_end
-
-#undef fsm_std_begin
-#undef fsm_std_end
-
 template <class FLOAT>
 inline
-ostream& operator << (ostream& o, vcl_complex<FLOAT> const& x)
+vcl_ostream& operator << (vcl_ostream& o, vcl_complex<FLOAT> const& x)
 {
   o << x.real(); 
   if (x.imag()) {
@@ -457,7 +422,7 @@ ostream& operator << (ostream& o, vcl_complex<FLOAT> const& x)
 
 template <class FLOAT>
 inline
-istream& operator >> (istream& o, vcl_complex<FLOAT>& x)
+vcl_istream& operator >> (vcl_istream& o, vcl_complex<FLOAT>& x)
 {
   FLOAT r, i;
   o >> r >> i;
@@ -472,9 +437,6 @@ istream& operator >> (istream& o, vcl_complex<FLOAT>& x)
 #endif
 // ANSI complex types
 #define __STD_COMPLEX
-typedef vcl_complex<float> vcl_float_complex;
-typedef vcl_complex<double> vcl_double_complex;
-typedef vcl_complex<long double> vcl_long_double_complex;
 
 inline vcl_complex<float> operator*(const vcl_complex<float>& c, double d)
 {

@@ -47,10 +47,6 @@
 #ifndef vcl_abort
 #define vcl_abort std::abort
 #endif
-// size_t
-#ifndef vcl_size_t
-#define vcl_size_t std::size_t
-#endif
 // qsort
 #ifndef vcl_qsort
 #define vcl_qsort std::qsort
@@ -118,7 +114,6 @@
 
 using std::exit;
 using std::abort;
-using std::size_t;
 using std::abs;
 using std::abort;
 using std::qsort;
@@ -127,5 +122,6 @@ using std::malloc;
 using std::strtol;
 using std::strtoul;
 using std::realloc;
+using std::atof;
 
-#endif // vcl_iso_cstdlib_h_
+#endif

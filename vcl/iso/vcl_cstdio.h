@@ -73,6 +73,8 @@
 #define vcl_vfprintf std::vfprintf
 #endif
 
-//using STD::FILE;
+using std::FILE;
+using std::fprintf;
+using std::fflush;
 
-#endif // vcl_iso_cstdio_h_
+#endif

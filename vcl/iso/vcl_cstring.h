@@ -96,4 +96,9 @@
 #define vcl_strxfrm std::strxfrm
 #endif
 
-#endif // vcl_iso_cstring_h_
+using std::memcpy;
+using std::memset;
+using std::strlen;
+using std::strcmp;
+
+#endif

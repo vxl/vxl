@@ -27,15 +27,10 @@ template <class T> class complex;
 # define vcl_complex complex
 
 // ---------- gcc 2.95
-#elif defined(VCL_GCC_295)
-# if !defined(GNU_LIBSTDCXX_V3)
+#elif defined(VCL_GCC_295) && !defined(GNU_LIBSTDCXX_V3)
 // old library
-   template <class T> class complex;
-#  define vcl_complex complex
-# else
-// new library (broken)
-#  include "emulation/vcl_complex_fwd.h"
-# endif
+  template <class T> class complex;
+# define vcl_complex complex
 
 // ---------- native WIN32
 #elif defined(VCL_WIN32)
@@ -54,9 +49,5 @@ namespace std {
 # define vcl_complex std::complex
 # endif
 #endif
-
-// by definition, this should work for all compilers :
-typedef vcl_complex<float>  vcl_float_complex;
-typedef vcl_complex<double> vcl_double_complex;
 
 #endif // vcl_complex_fwd_h_

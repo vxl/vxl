@@ -22,6 +22,8 @@
 @vsprintf
 @vfprintf
 
-//using STD::FILE;
+using std::FILE;
+using std::fprintf;
+using std::fflush;
 
 #endif

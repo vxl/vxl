@@ -1,10 +1,10 @@
 #ifndef vcl_algorithm_h_
 #define vcl_algorithm_h_
 
-#include "vcl_compiler.h"
+#include <vcl_compiler.h>
 
 #if !VCL_USE_NATIVE_STL
-# include "emulation/vcl_algorithm.h"
+# include <emulation/vcl_algorithm.h>
 # undef vcl_algorithm_h_STD
 
 // -------------------- gcc with old library
@@ -14,7 +14,7 @@
 
 // -------------------- iso
 #else
-# include "iso/vcl_algorithm.h"
+# include <iso/vcl_algorithm.h>
 #endif
 
 

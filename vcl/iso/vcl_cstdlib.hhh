@@ -14,7 +14,6 @@
 @system
 @exit
 @abort
-@size_t
 @qsort
 @calloc
 @malloc
@@ -34,7 +33,6 @@
 
 using std::exit;
 using std::abort;
-using std::size_t;
 using std::abs;
 using std::abort;
 using std::qsort;
@@ -43,5 +41,6 @@ using std::malloc;
 using std::strtol;
 using std::strtoul;
 using std::realloc;
+using std::atof;
 
 #endif

@@ -28,10 +28,10 @@ class ofstream;
 # define vcl_iosfwd_STD std::
 # define vcl_iosfwd_USE 
 
-#elif defined(VCL_SUNPRO_CC_50)
-# include <iosfwd>
-# define vcl_iosfwd_STD std::
-# define vcl_iosfwd_USE 
+//#elif defined(VCL_SUNPRO_CC_50)
+//# include <iosfwd>
+//# define vcl_iosfwd_STD std::
+//# define vcl_iosfwd_USE 
 
 #elif defined(VCL_WIN32)
 # include <iosfwd>

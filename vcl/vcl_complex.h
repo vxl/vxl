@@ -10,8 +10,6 @@
 //
 // A working vcl_complex<T> template.
 //
-// The typedefs vcl_float_complex, vcl_double_complex.
-//
 // Stream >> and << operators.
 //
 // Instances of the types vcl_complex<float> and vcl_complex<double>
@@ -26,67 +24,21 @@
 // ---------- all emulation
 #if !VCL_USE_NATIVE_COMPLEX 
 # include "emulation/vcl_complex.h"
-# define vcl_complex_STD /*std::*/::
-
-// ---------- egcs
-#elif defined(VCL_EGCS)
-# include <complex>
-# define vcl_complex_STD /*std::*/::
-
-// ---------- gcc 2.95
-#elif defined(VCL_GCC_295)
-# if !defined(GNU_LIBSTDCXX_V3)
-// old library
-#  include <complex>
-#  define vcl_complex_STD /*std::*/::
-# else
-// new library (broken complex)
-#  include "emulation/vcl_complex.h"
-#  define vcl_complex_STD /*std::*/::
-// paradoxically, v3 needs 'abs' and 'sqrt' here because it 
-// wants to use the emulation vcl_complex<>.
-#  undef  vcl_abs
-#  define vcl_abs abs
-   using std::abs;
-#  undef  vcl_sqrt
-#  define vcl_sqrt sqrt
-   using std::sqrt;
-# endif
 
 // ---------- native WIN32
 #elif defined(VCL_WIN32)
 # include "win32/vcl_complex.h"
-# define vcl_complex_STD std::
 
 // ---------- SunPro compiler
 #elif defined(VCL_SUNPRO_CC)
 # include "sunpro/vcl_complex.h"
-# define vcl_complex_STD std::
 
 // ---------- ISO
 #else
 # include "iso/vcl_complex.h"
 #endif
 
-#ifdef vcl_complex_STD
-# ifndef vcl_abs
-#  define vcl_abs  vcl_complex_STD abs
-# endif
-# ifndef vcl_sqrt
-#  define vcl_sqrt vcl_complex_STD sqrt
-# endif
-# define vcl_arg   vcl_complex_STD arg
-# define vcl_conj  vcl_complex_STD conj
-# define vcl_norm  vcl_complex_STD norm
-# define vcl_polar vcl_complex_STD polar
-#endif
-
 //--------------------------------------------------------------------------------
-
-// At this point we have vcl_complex<T>, so this should work for all compilers :
-typedef vcl_complex<double> vcl_double_complex;
-typedef vcl_complex<float>  vcl_float_complex;
-
 
 // bogus instantiation macro.
 #define VCL_COMPLEX_INSTANTIATE(T) extern "you must include vcl_complex.txx instead"
