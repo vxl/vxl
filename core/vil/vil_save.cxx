@@ -58,6 +58,7 @@ bool vil_save(const vil_image_view_base &im, char const* filename, char const* f
   case VIL_PIXEL_FORMAT_DOUBLE:
     return out->put_view(vil_image_view<double>(im),0,0);
   default:
+    // In case any one has an odd pixel format that actually works with this file_format.
     return out->put_view(im, 0, 0);
   }
 

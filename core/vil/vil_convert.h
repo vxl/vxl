@@ -134,10 +134,9 @@ inline void vil_convert_cast(const vil_image_view_base_sptr&src, vil_image_view<
     docase( VIL_PIXEL_FORMAT_DOUBLE );
 
     docase( VIL_PIXEL_FORMAT_BOOL );
-
-    // Skip the RGB type conversions because the vil_convert_cast are
-    // not complete. For example, a cast from vxl_uint_16 to
-    // vil_rgb<vxl_uint_32> is not defined.
+    // Skip the RGB and complex type conversions because the vil_convert_cast are
+    // not complete. For example, a cast from  vil_rgb<vxl_uint_32> to
+    // vxl_uint_16 is not defined.
 
     //docase( VIL_PIXEL_FORMAT_RGB_UINT_32 );
     //docase( VIL_PIXEL_FORMAT_RGB_INT_32 );
@@ -450,6 +449,7 @@ macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
 macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
 macro(VIL_PIXEL_FORMAT_FLOAT , float )
 macro(VIL_PIXEL_FORMAT_DOUBLE , double )
+// Don't even want to think about rgb<complex<float> >
 #undef macro
   default:
     dest.clear();
