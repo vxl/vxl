@@ -1,4 +1,4 @@
 IULIBS += -lvpgl
-include ${IUEROOT}/vxl/vcsl/config.mk
-include ${IUEROOT}/vxl/vnl/config.mk
-include ${IUEROOT}/vxl/vbl/config.mk
+include ${IUEROOT}/core/vcsl/config.mk
+include ${IUEROOT}/core/vnl/config.mk
+include ${IUEROOT}/core/vbl/config.mk

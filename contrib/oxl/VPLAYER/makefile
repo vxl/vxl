@@ -1,5 +1,9 @@
-USES = vxl oxl v3p
-include ${IUELOCALROOT}/oxl/vgui/config.mk
+USES += contrib/oxl core
+include ${IUELOCALROOT}/core/vgui/config.mk
+
+#######################################
+include $(IUEROOT)/config/top-params.mk
+#######################################
 
 ifeq ($(OS),win32)
  PROGRAM = VPLAYER
@@ -14,6 +18,6 @@ ifeq ($(OS),win32)
  IULIBS = -lnafxcw  -lopengl32 -lglu32 # -lmvox
 endif
 
-################################
-include $(IUEROOT)/config/top.mk
-################################
+######################################
+include $(IUEROOT)/config/top-rules.mk
+######################################

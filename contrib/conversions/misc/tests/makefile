@@ -1,10 +1,10 @@
-USES := conversions vxl
+USES += contrib/conversions core
 
 #TESTMAIN := test_driver.cxx
 
 TESTS += 
 
-IULIBS := 
+IULIBS += 
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk

@@ -1,4 +1,4 @@
-USES := vxl gel
+USES += contrib/gel core
 
 LIBRARY := vgel_kl
 

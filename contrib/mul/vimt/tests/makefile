@@ -1,6 +1,7 @@
-USES = vxl mul
-include ${IUEROOT}/mul/vimt/config.mk
-include ${IUEROOT}/vxl/testlib/config.mk
+USES += contrib/mul core
+include ../config.mk
+include $(IUEROOT)/core/vpl/config.mk
+include ${IUEROOT}/core/testlib/config.mk
 
 TESTMAIN := test_driver.cxx
 TESTS += test_gaussian_pyramid_builder_2d.cxx

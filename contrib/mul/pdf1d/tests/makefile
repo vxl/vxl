@@ -1,6 +1,7 @@
-USES += vxl mul
-include ${IUEROOT}/mul/pdf1d/config.mk
-include $(IUEROOT)/vxl/testlib/config.mk
+USES += contrib/mul core
+include ../config.mk
+include $(IUEROOT)/core/vpl/config.mk
+include $(IUEROOT)/core/testlib/config.mk
 
 TESTS += test_pdf1d.cxx
 

@@ -1,4 +1,4 @@
-USES := vxl mul
+USES += contrib/mul core
 
 LIBRARY := pdf1d
 VERSION := 1.0

@@ -1,6 +1,6 @@
-USES = vxl mul
-include ${IUEROOT}/mul/vil3d/config.mk
-include ${IUEROOT}/vxl/testlib/config.mk
+USES += contrib/mul core
+include ../config.mk
+include ${IUEROOT}/core/testlib/config.mk
 
 TESTMAIN = test_driver.cxx
 

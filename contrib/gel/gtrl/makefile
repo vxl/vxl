@@ -1,4 +1,4 @@
-USES += v3p/netlib vxl gel
+USES += contrib/gel v3p/netlib core
 
 LIBRARY = gtrl
 
@@ -10,10 +10,14 @@ SOURCES += gtrl_triangle.cxx
 SOURCES += gtrl_vertex.cxx
 SOURCES += gtrl_polygon.cxx
 
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
+
 ifndef NOTEST
 SUBDIRS += examples
 endif
 
-################################
-include ${IUEROOT}/config/top.mk
-################################
+######################################
+include ${IUEROOT}/config/top-rules.mk
+######################################

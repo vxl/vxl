@@ -1,5 +1,5 @@
-USES := vxl gel oxl
-USE_OPENGL:=1
+USES += contrib/gel core
+USE_OPENGL:= 1
 TRY_MPEG2 := 1
 
 IMMEDIATE_LIBS := -lvidl -lvgui -lvil -lvul

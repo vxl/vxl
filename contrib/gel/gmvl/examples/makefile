@@ -1,5 +1,5 @@
-USES += v3p vxl gel 
-include $(IUEROOT)/gel/gmvl/config.mk
+USES += contrib/gel core
+include ../config.mk
 
 MINI_PROG_SOURCES += gmvl_test.cxx
 

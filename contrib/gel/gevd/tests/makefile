@@ -1,6 +1,6 @@
-USES := vxl gel
-include $(IUEROOT)/gel/gevd/config.mk
-include $(IUEROOT)/vxl/testlib/config.mk
+USES += contrib/gel core
+include ../config.mk
+include $(IUEROOT)/core/testlib/config.mk
 
 TESTS += test_gevd_bufferxy.cxx
 TESTS += test_gevd_memory_mixin.cxx

@@ -1,7 +1,7 @@
-USES := conversions vxl gel oxl
-include ${IUEROOT}/oxl/osl/config.mk
-include ${IUEROOT}/gel/vdgl/config.mk
-include ${IUEROOT}/vxl/testlib/config.mk
+USES += contrib/conversions contrib/gel contrib/oxl core
+include ${IUEROOT}/contrib/oxl/osl/config.mk
+include ${IUEROOT}/contrib/gel/vdgl/config.mk
+include ${IUEROOT}/core/testlib/config.mk
 
 TESTMAIN := test_driver.cxx
 

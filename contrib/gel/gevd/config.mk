@@ -1,6 +1,6 @@
 IULIBS += -lgevd
-include ${IUEROOT}/gel/vtol/config.mk
-include ${IUEROOT}/gel/vdgl/config.mk
-include ${IUEROOT}/vxl/vil/config.mk
-include ${IUEROOT}/vxl/vnl/config.mk
-include ${IUEROOT}/vxl/vbl/config.mk
+include ${IUEROOT}/contrib/gel/vtol/config.mk
+include ${IUEROOT}/contrib/gel/vdgl/config.mk
+include ${IUEROOT}/core/vil/config.mk
+include ${IUEROOT}/core/vnl/config.mk
+include ${IUEROOT}/core/vbl/config.mk

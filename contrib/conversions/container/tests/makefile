@@ -1,6 +1,6 @@
-USES := conversions vxl
-include ${IUEROOT}/vxl/vnl/config.mk
-include ${IUEROOT}/vxl/testlib/config.mk
+USES += contrib/conversions core
+include ${IUEROOT}/core/vnl/config.mk
+include ${IUEROOT}/core/testlib/config.mk
 
 TESTMAIN := test_driver.cxx
 

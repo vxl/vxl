@@ -1,2 +1,2 @@
 IULIBS += -lmil3d
-include ${IUEROOT}/mul/mil/config.mk
+include ${IUEROOT}/contrib/mul/mil/config.mk

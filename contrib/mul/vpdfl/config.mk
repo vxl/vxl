@@ -1,2 +1,2 @@
 IULIBS += -lvpdfl
-include ${IUEROOT}/mul/mbl/config.mk
+include ${IUEROOT}/contrib/mul/mbl/config.mk

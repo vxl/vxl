@@ -1,4 +1,4 @@
 IULIBS += -lmil
-include ${IUEROOT}/mul/mbl/config.mk
-include ${IUEROOT}/vxl/vbl/io/config.mk
-include ${IUEROOT}/vxl/vil/io/config.mk
+include ${IUEROOT}/contrib/mul/mbl/config.mk
+include ${IUEROOT}/core/vbl/io/config.mk
+include ${IUEROOT}/core/vil/io/config.mk

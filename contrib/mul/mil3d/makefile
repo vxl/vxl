@@ -1,9 +1,4 @@
-#######################################
-include ${IUEROOT}/config/top-params.mk
-#######################################
-
-USES := vxl
-USES += mul
+USES += contrib/mul core
 
 LIBRARY := mil3d
 VERSION := 1.0
@@ -18,6 +13,10 @@ MANPAGE_SOURCES += mil3d_sample_profile_3d.txx
 MANPAGE_SOURCES += mil3d_trilin_interp_3d.h
 MANPAGE_SOURCES += mil3d_gaussian_pyramid_builder_3d.txx
 MANPAGE_SOURCES += mil3d_sample_grid_3d.txx
+
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
 
 ifndef NOTEST
  SUBDIRS += tests

@@ -1,4 +1,4 @@
-USES := vxl gel gel/mrc
+USES += contrib/gel contrib/gel/mrc core
 
 LIBRARY := vpgl
 VERSION := 1.0

@@ -1,8 +1,9 @@
-USES += vxl gel Carmen
-include $(IUEROOT)/vxl/vbl/config.mk
-include $(IUEROOT)/vxl/vul/config.mk
+USES += contrib/gel core
+include $(IUEROOT)/core/vbl/config.mk
+include $(IUEROOT)/core/vul/config.mk
 
 ifdef HAS_CARMEN
+USES += Carmen
 PROGRAM := carmen_interface
 SOURCES += carmen_interface.cpp
 SOURCES += main.cpp

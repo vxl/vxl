@@ -1,4 +1,4 @@
-USES := vxl mul
+USES += contrib/mul core
 
 LIBRARY := vil2-io
 VERSION := 1.0

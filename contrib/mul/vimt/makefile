@@ -1,4 +1,4 @@
-USES := vxl mul
+USES += contrib/mul core
 
 LIBRARY := vimt
 VERSION := 1.0
@@ -21,10 +21,15 @@ MANPAGE_SOURCES += vimt_sample_grid_bilin.txx
 MANPAGE_SOURCES += vimt_crop.h
 
 SUBDIRS += algo
+
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
+
 ifndef NOTEST
 SUBDIRS += examples tests
 endif
 
-################################
-include ${IUEROOT}/config/top.mk
-################################
+######################################
+include ${IUEROOT}/config/top-rules.mk
+######################################

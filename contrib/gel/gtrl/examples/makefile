@@ -1,5 +1,5 @@
-USES += vxl gel
-include $(IUEROOT)/gel/gtrl/config.mk
+USES += contrib/gel core
+include ../config.mk
 
 MINI_PROG_SOURCES += triangulate.cxx
 

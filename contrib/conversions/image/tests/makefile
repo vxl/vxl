@@ -1,9 +1,9 @@
-USES := conversions vxl
-include ${IUEROOT}/vxl/vil/config.mk
-include ${IUEROOT}/vxl/vul/config.mk
-include ${IUEROOT}/vxl/vbl/config.mk
-include ${IUEROOT}/vxl/vpl/config.mk
-include ${IUEROOT}/vxl/testlib/config.mk
+USES += contrib/conversions core
+include ${IUEROOT}/core/vil/config.mk
+include ${IUEROOT}/core/vul/config.mk
+include ${IUEROOT}/core/vbl/config.mk
+include ${IUEROOT}/core/vpl/config.mk
+include ${IUEROOT}/core/testlib/config.mk
 
 TESTMAIN := test_driver.cxx
 

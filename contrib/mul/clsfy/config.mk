@@ -1,2 +1,2 @@
 IULIBS += -lclsfy
-include ${IUEROOT}/mul/vpdfl/config.mk
+include ${IUEROOT}/contrib/mul/vpdfl/config.mk

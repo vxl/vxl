@@ -1,6 +1,6 @@
 # This is the matrix/vector conversions directory makefile
 
-USES := vxl
+USES += core
 IMMEDIATE_LIBS := -lvbl -lvnl
 
 MANPAGE_SOURCES += vnl_matrix_to_vbl_array.h

@@ -1,4 +1,4 @@
-USES += vxl brl gel oxl
+USES += contrib/brl contrib/gel contrib/oxl core
 USE_OPENGL:= 1
 TRY_MPEG2 := 1
 

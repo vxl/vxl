@@ -1,6 +1,6 @@
 # This is the image conversions directory makefile
 
-USES := vxl
+USES += core
 IMMEDIATE_LIBS := -lvil -lvbl
 
 MANPAGE_SOURCES += vil_to_vbl_array.h

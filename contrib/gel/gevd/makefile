@@ -1,11 +1,4 @@
-#
-# crossge@crd.ge.com
-#
-#######################################
-include ${IUEROOT}/config/top-params.mk
-#######################################
-
-USES := vxl gel
+USES += contrib/gel core
 
 IMMEDIATE_LIBS := -lvdgl -lvtol -lvil -lvnl -lvbl
 
@@ -31,10 +24,9 @@ SOURCES += gevd_region_edge.cxx
 SOURCES += gevd_region_proc.cxx
 SOURCES += gevd_region_proc_params.cxx
 
-ifeq "$(TJ_GCC30)$(optimize)" "1-O2"
-# gcc 3.0 needs too much virtual memory with -O2
-FLAGS_gevd_contour.cxx += -O0
-endif
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
 
 ifndef NOTEST
 SUBDIRS += tests
@@ -43,3 +35,8 @@ endif
 ######################################
 include ${IUEROOT}/config/top-rules.mk
 ######################################
+
+ifeq "$(TJ_GCC30)$(optimize)" "1-O2"
+# gcc 3.0 needs too much virtual memory with -O2
+FLAGS_gevd_contour.cxx := -O0
+endif

@@ -1,5 +1,5 @@
-USES = vxl oxl v3p
-include ${IUELOCALROOT}/oxl/vgui/config.mk
+USES += contrib/oxl core
+include ${IUELOCALROOT}/core/vgui/config.mk
 
 MINI_PROG_SOURCES += main.cxx
 

@@ -1,5 +1,5 @@
-USES += vxl gel oxl
-include ${IUEROOT}/gel/jvid/config.mk
+USES += contrib/gel core
+include ../config.mk
 
 MINI_PROG_SOURCES += jplayer.cxx
 

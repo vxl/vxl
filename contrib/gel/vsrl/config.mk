@@ -1,3 +1,3 @@
 IULIBS += -lvsrl
-include ${IUEROOT}/vxl/vnl/config.mk
-include ${IUEROOT}/vxl/vil/config.mk
+include ${IUEROOT}/core/vnl/config.mk
+include ${IUEROOT}/core/vil/config.mk

@@ -4,7 +4,8 @@
 #
 #   DEPENDENCIES:  libvil libvnl
 
-USES += vxl gel
+USES += contrib/gel core
+
 IMMEDIATE_LIBS := -lvil -lvnl
 
 LIBRARY := vsrl
@@ -29,10 +30,14 @@ SOURCES += vsrl_parameters.cxx
 
 DEFINES += -DBUILDING_VSRL_DLL
 
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
+
 ifndef NOTEST
 SUBDIRS += examples
 endif
 
-################################
-include ${IUEROOT}/config/top.mk
-################################
+######################################
+include ${IUEROOT}/config/top-rules.mk
+######################################

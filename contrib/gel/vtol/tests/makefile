@@ -1,5 +1,5 @@
-USES = vxl gel
-include $(IUEROOT)/gel/vtol/config.mk
+USES += contrib/gel core
+include ../config.mk
 
 TESTS += test_vertex_2d.cxx
 TESTS += test_zero_chain.cxx

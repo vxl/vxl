@@ -1,4 +1,4 @@
-USES := vxl mul
+USES += contrib/mul core
 
 LIBRARY := vil3d
 VERSION := 1.0
@@ -14,10 +14,14 @@ MANPAGE_SOURCES += vil3d_crop.h
 
 SUBDIRS += algo io
 
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
+
 ifndef NOTEST
- SUBDIRS += tests
+SUBDIRS += tests
 endif
 
-################################
-include ${IUEROOT}/config/top.mk
-################################
+######################################
+include ${IUEROOT}/config/top-rules.mk
+######################################

@@ -1,4 +1,4 @@
-USES := vxl mul
+USES += contrib/mul core
 
 LIBRARY := clsfy
 VERSION := 1.0

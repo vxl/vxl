@@ -1,6 +1,6 @@
-USES += vxl oxl gel
-include ${IUEROOT}/oxl/mvl/config.mk
-include ${IUEROOT}/vxl/vil/config.mk
+USES += contrib/gel contrib/oxl core
+include ${IUEROOT}/contrib/oxl/mvl/config.mk
+include ${IUEROOT}/core/vil/config.mk
 
 PROGRAM = octree
 

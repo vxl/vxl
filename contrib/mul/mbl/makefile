@@ -1,5 +1,4 @@
-USES := vxl
-USES += mul
+USES += contrib/mul core
 
 LIBRARY := mbl
 VERSION := 1.0

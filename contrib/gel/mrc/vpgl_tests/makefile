@@ -1,5 +1,5 @@
-USES += vxl gel gel/mrc
-include ${IUEROOT}/gel/mrc/vpgl/config.mk
+USES += contrib/gel contrib/gel/mrc core
+include ${IUEROOT}/contrib/gel/mrc/vpgl/config.mk
 
 MINI_PROG_SOURCES += main.cpp
 

@@ -1,5 +1,5 @@
-USES := gel vxl oxl v3p
-include $(IUEROOT)/gel/vgel/config.mk
+USES += contrib/gel contrib/oxl core
+include ../config.mk
 
 MINI_PROG_SOURCES += kl_tracker.cxx
 

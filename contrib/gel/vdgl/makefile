@@ -1,4 +1,5 @@
-USES := vxl gel
+USES += contrib/gel core
+
 IMMEDIATE_LIBS := -lvsol -lvgl -lvbl -lvnl -lvul
 
 LIBRARY := vdgl
@@ -30,10 +31,14 @@ MANPAGE_SOURCES += vdgl_digital_region_sptr.h
 MANPAGE_SOURCES += vdgl_intensity_face.h
 MANPAGE_SOURCES += vdgl_intensity_face_sptr.h
 
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
+
 ifndef NOTEST
 SUBDIRS += tests examples
 endif
 
-################################
-include ${IUEROOT}/config/top.mk
-################################
+######################################
+include ${IUEROOT}/config/top-rules.mk
+######################################

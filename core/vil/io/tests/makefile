@@ -1,9 +1,9 @@
-USES = vxl mul
-include ${IUEROOT}/mul/vil2/io/config.mk
-include ${IUEROOT}/vxl/testlib/config.mk
+USES += contrib/mul core
+include ../config.mk
+include $(IUEROOT)/core/vpl/config.mk
+include ${IUEROOT}/core/testlib/config.mk
 
-TESTMAIN = test_driver.cxx
-
+TESTMAIN := test_driver.cxx
 TESTS += test_image_view_io.cxx
 TESTS += test_memory_chunk_io.cxx
 

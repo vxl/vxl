@@ -1,6 +1,6 @@
 # This is the geometry conversions directory makefile
 
-USES := vxl gel oxl
+USES += contrib/gel contrib/oxl core
 IMMEDIATE_LIBS := -losl -lvdgl -vbl
 MANPAGE_SOURCES += osl_to_vdgl.h
 

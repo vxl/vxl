@@ -2,7 +2,7 @@
 #
 #   This is the vmal library.
 
-USES += vxl oxl gel
+USES += contrib/oxl contrib/gel core
 
 LIBRARY := vmal
 VERSION := 1

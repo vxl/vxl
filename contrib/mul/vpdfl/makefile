@@ -1,9 +1,4 @@
- #######################################
-include ${IUEROOT}/config/top-params.mk
-#######################################
-
-USES := vxl
-USES += mul
+USES += contrib/mul core
 
 LIBRARY := vpdfl
 VERSION := 1.0
@@ -35,8 +30,9 @@ SOURCES += vpdfl_kernel_pdf_builder.cxx
 SOURCES += vpdfl_resample.cxx
 SOURCES += vpdfl_add_all_binary_loaders.cxx
 
-# Additional files to document: (none for the moment)
-MANPAGE_SOURCES += 
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
 
 ifndef NOTEST
  SUBDIRS += tests

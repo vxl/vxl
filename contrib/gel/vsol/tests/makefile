@@ -7,8 +7,8 @@
 # 1.0     |2000/04/26| François BERTEL          |Creation
 ###############################################################################
 
-USES := vxl gel
-include $(IUEROOT)/gel/vsol/config.mk
+USES += contrib/gel core
+include ../config.mk
 
 TESTS += test_vsol_point_2d.cxx
 TESTS += test_vsol_group_2d.cxx
@@ -26,6 +26,6 @@ TESTS += test_vsol_rectangle_3d.cxx
 TESTS += test_vsol_polygon_3d.cxx
 TESTS += test_vsol_tetrahedron.cxx
 
-###############################################################################
+#########################################
 include ${IUEROOT}/config/static-tests.mk
-###############################################################################
+#########################################

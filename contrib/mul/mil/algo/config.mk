@@ -1,2 +1,2 @@
 IULIBS += -lmil-algo
-include ${IUEROOT}/mul/mil/config.mk
+include ${IUEROOT}/contrib/mul/mil/config.mk

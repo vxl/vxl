@@ -1,5 +1,5 @@
-USES := vxl mul
-include ${IUEROOT}/mul/pdf1d/config.mk
+USES += contrib/mul core
+include ../config.mk
 
 MINI_PROG_SOURCES += compare_kernel_estimates.cxx
 MINI_PROG_SOURCES += plot_pdf_estimate.cxx

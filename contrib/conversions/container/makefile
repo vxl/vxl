@@ -1,7 +1,8 @@
 # This is the container conversions directory makefile
 
-USES += vxl
+USES += core
 IMMEDIATE_LIBS += -lvnl
+
 MANPAGE_SOURCES += vcl_vector_to_vcl_list.h
 MANPAGE_SOURCES += vcl_list_to_vcl_vector.h
 MANPAGE_SOURCES += vcl_vector_to_vnl_vector.h

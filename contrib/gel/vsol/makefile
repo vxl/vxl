@@ -7,7 +7,7 @@
 # 1.0     |2000/04/26| François BERTEL          |Creation
 ###############################################################################
 
-USES := vxl gel
+USES += contrib/gel core
 
 LIBRARY := vsol
 VERSION := 1.0

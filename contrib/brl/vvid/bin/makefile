@@ -1,5 +1,5 @@
-USES += vxl gel oxl brl
-include ${IUEROOT}/brl/vvid/config.mk
+USES += contrib/brl contrib/gel contrib/oxl core
+include ../config.mk
 
 LIBRARY := vvid_bin
 SOURCES += vidfpl_menus.cxx

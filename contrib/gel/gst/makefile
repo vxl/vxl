@@ -1,11 +1,4 @@
-#
-# crossge@crd.ge.com
-#
-#######################################
-include ${IUEROOT}/config/top-params.mk
-#######################################
-
-USES := vxl
+USES += core
 
 LIBRARY := gst
 VERSION := 1.0
@@ -21,6 +14,6 @@ MANPAGE_SOURCES += gst_edge_2d_sptr.h
 MANPAGE_SOURCES += gst_polygon_2d_sptr.h
 MANPAGE_SOURCES += gst_vertex_2d_sptr.h
 
-######################################
-include ${IUEROOT}/config/top-rules.mk
-######################################
+################################
+include ${IUEROOT}/config/top.mk
+################################

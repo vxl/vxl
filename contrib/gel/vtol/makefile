@@ -4,7 +4,8 @@
 #
 #   DEPENDENCIES:  libvcl libvbl libvsol
 
-USES += vxl gel
+USES += contrib/gel core
+
 IMMEDIATE_LIBS += -lvdgl -lvsol -lvbl -lvul
 
 LIBRARY := vtol
@@ -52,10 +53,6 @@ MANPAGE_SOURCES += ../vdgl/vdgl_intensity_face_sptr.h
 include ${IUEROOT}/config/top-params.mk
 #######################################
 
-ifeq "$(TJ_GCC30)" "1"
-FLAGS_vtol_two_chain.cxx += -O1 # otherwise gcc 3.0 needs too much virtual memory
-endif
-
 ifndef NOTEST
 SUBDIRS += tests
 SUBDIRS += examples
@@ -68,4 +65,8 @@ include ${IUEROOT}/config/top-rules.mk
 # on HP unix, this library has become too big, so it needs -fPIC
 ifeq "HP-UX" "$(findstring HP-UX,$(OS))"
 pic = $(PIC)
+endif
+
+ifeq "$(TJ_GCC30)" "1"
+FLAGS_vtol_two_chain.cxx := -O1 # otherwise gcc 3.0 needs too much virtual memory
 endif

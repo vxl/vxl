@@ -1,4 +1,4 @@
-USES := vxl gel oxl
+USES += contrib/gel contrib/oxl core
 
 LIBRARY := gkll
 

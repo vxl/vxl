@@ -1,3 +1,3 @@
 USE_NETLIB := 1
 IULIBS += -lgtrl
-include ${IUEROOT}/vxl/vbl/config.mk
+include ${IUEROOT}/core/vbl/config.mk

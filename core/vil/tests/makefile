@@ -1,10 +1,10 @@
-USES = vxl mul
-include ${IUEROOT}/mul/vil2/config.mk
-include ${IUEROOT}/mul/vil2/algo/config.mk
-include ${IUEROOT}/mul/vil2/io/config.mk
-include ${IUEROOT}/vxl/vul/config.mk
-include ${IUEROOT}/vxl/vpl/config.mk
-include ${IUEROOT}/vxl/testlib/config.mk
+USES += contrib/mul core
+include ../config.mk
+include ${IUEROOT}/contrib/mul/vil2/algo/config.mk
+include ${IUEROOT}/contrib/mul/vil2/io/config.mk
+include ${IUEROOT}/core/vul/config.mk
+include ${IUEROOT}/core/vpl/config.mk
+include ${IUEROOT}/core/testlib/config.mk
 
 TESTMAIN = test_driver.cxx
 
@@ -44,11 +44,10 @@ MINI_PROG_SOURCES += vil2_test_random_access_timings.cxx
 MINI_PROG_SOURCES += vil2_test_access_timings_noplanes.cxx
 MINI_PROG_SOURCES += vil2_test_pair_access_timings.cxx
 
-include ${IUEROOT}/config/identify-os.mk
-ifeq ($(OS),OSF1V4) # with optimisation, gcc 3.x runs out of memory
-FLAGS_test_algo_convolve_1d.cxx := -O0
-endif
-
 #########################################
 include ${IUEROOT}/config/static-tests.mk
 #########################################
+
+ifeq ($(OS),OSF1V4) # with optimisation, gcc 3.x runs out of memory
+FLAGS_test_algo_convolve_1d.cxx := -O0
+endif

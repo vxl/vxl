@@ -1,4 +1,5 @@
-USES += vxl oul
+USES += contrib/oul core
+
 LIBRARY := ouel
 IMMEDIATE_LIBS += -lvnl-algo -lvnl
 
