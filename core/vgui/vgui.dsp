@@ -1091,6 +1091,9 @@ SOURCE=.\vgui_range_map_params.h
 # Begin Source File
 SOURCE=.\vgui_range_map_params_sptr.h
 # End Source File
+# Begin Source File
+SOURCE=.\vgui_command_sptr.h
+# End Source File
 # End Group
 # End Target
 # End Project
