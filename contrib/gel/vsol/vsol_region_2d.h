@@ -24,7 +24,7 @@ class vsol_polygon_2d;
 
 class vsol_region_2d : public vsol_spatial_object_2d
 {
- public:
+ protected:
   enum vsol_region_2d_type
   { REGION_NO_TYPE=0,
     POLYGON,
@@ -32,14 +32,15 @@ class vsol_region_2d : public vsol_spatial_object_2d
   };
 
   //---------------------------------------------------------------------------
-  //: Return the spatial type
-  //---------------------------------------------------------------------------
-  vsol_spatial_object_2d_type spatial_type(void) const { return vsol_spatial_object_2d::REGION; }
-
-  //---------------------------------------------------------------------------
   //: Return the region type
   //---------------------------------------------------------------------------
   virtual vsol_region_2d_type region_type(void) const { return vsol_region_2d::REGION_NO_TYPE; }
+
+ public:
+  //---------------------------------------------------------------------------
+  //: Return the spatial type
+  //---------------------------------------------------------------------------
+  vsol_spatial_object_2d_type spatial_type(void) const { return vsol_spatial_object_2d::REGION; }
 
   //***************************************************************************
   // Initialization
@@ -73,6 +74,12 @@ class vsol_region_2d : public vsol_spatial_object_2d
   //: Return true if this region is convex
   //---------------------------------------------------------------------------
   virtual bool is_convex(void) const=0;
+
+  //: Return a platform independent string identifying the class
+  virtual vcl_string is_a() const { return vcl_string("vsol_region_2d"); }
+
+  //: Return true if the argument matches the string identifying the class or any parent class
+  virtual bool is_class(const vcl_string& cls) const { return cls==is_a(); }
 };
 
 #endif // vsol_region_2d_h_
