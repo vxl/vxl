@@ -16,10 +16,7 @@
 //
 // A macro VCL_COMPLEX_INSTANTIATE(T) which allows you to instantiate
 // complex over other number types.
-//
-// If you just want to forward declare the vcl complex types, use 
-// vcl_complex_fwd.h instead.
-#include "vcl_complex_fwd.h"
+
 
 // ---------- all emulation
 #if !VCL_USE_NATIVE_COMPLEX 
