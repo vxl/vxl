@@ -9,6 +9,7 @@
 
 #include <vcl_cstring.h>
 #include <vcl_iostream.h>
+#include <vxl_config.h> // for vxl_byte
 
 #include <vil/vil_open.h>
 #include <vil2/vil2_new.h>
