@@ -1,22 +1,20 @@
-//-*-c++-*--------------------------------------------------------------
-//
-// eigenfaces.h: A simple eigenfaces class
+// This is oul/ouml/eigenfaces.h
+#ifndef OTAGO_eigenfaces__h_INCLUDED
+#define OTAGO_eigenfaces__h_INCLUDED
+//:
+// \file
+// \brief A simple eigenfaces class
 //
 // Copyright (c) 2001 Brendan McCane
 // University of Otago, Dunedin, New Zealand
 // Reproduction rights limited as described in the COPYRIGHT file.
 //----------------------------------------------------------------------
 
-#ifndef OTAGO_eigenfaces__h_INCLUDED
-#define OTAGO_eigenfaces__h_INCLUDED
-
 #include <vnl/vnl_vector.h>
 #include <vil/vil_memory_image_of.h>
 #include <vcl_vector.h>
-#include <vcl_cfloat.h>
-#include <vcl_cstdio.h>
+#include <vcl_cfloat.h> // for DBL_MAX
 #include "inlines.h"
-#include <vcl_fstream.h>
 #include "image_database.h"
 #include "io.h"
 
