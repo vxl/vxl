@@ -194,11 +194,8 @@ void osl_canny_rothwell::detect_edges(vil_image const &image, vcl_list<osl_edge*
 // image.
 //
 void osl_canny_rothwell::Non_maximal_supression() {
-  float h1,h2;
+  float h1=0,h2=0;
   float k = 180.0f/float(vnl_math::pi);
-  int orient;
-  float theta,grad;
-  float fraction,newx,newy;
 
   // Add 1 to get rid of border effects
   for (unsigned int x=w0_; x+2+w0_<xsize_; ++x)  {
@@ -211,54 +208,49 @@ void osl_canny_rothwell::Non_maximal_supression() {
     for (unsigned int y=w0_; y+2+w0_<ysize_; ++y)  {
       // First check that we have an edge
       if ( g1[y+1] > low_ ) {
-        theta = k*vcl_atan2(dy[y+1],dx[y+1]);
+        float theta = k*vcl_atan2(dy[y+1],dx[y+1]);
 
         // Now work out which direction wrt the eight-way
         // neighbours the edge normal points
-        if ( theta >= 0.0 )
-          orient = int(theta/45.0);
-        else
-          orient = int(theta/45.0+4);
-        // if theta == 180.0 we will have orient = 4
-        orient = orient%4;
+        int orient = int(theta/45.0+8) % 4;
 
         // And now compute the interpolated heights
         switch( orient ) {
-        case 0:
-          grad = dy[y+1]/dx[y+1];
+        case 0: {
+          float grad = dy[y+1]/dx[y+1];
           h1 = grad*g0[y] + (1 - grad)*g0[y+1];
           h2 = grad*g2[y] + (1 - grad)*g2[y+1];
           break;
-
-        case 1:
-          grad = dx[y+1]/dy[y+1];
+        }
+        case 1: {
+          float grad = dx[y+1]/dy[y+1];
           h1 = grad*g0[y] + (1 - grad)*g1[y];
           h2 = grad*g2[y] + (1 - grad)*g1[y];
           break;
-
-        case 2:
-          grad = -dx[y+1]/dy[y+1];
+        }
+        case 2: {
+          float grad = -dx[y+1]/dy[y+1];
           h1 = grad*g2[y] + (1 - grad)*g1[y];
           h2 = grad*g0[y] + (1 - grad)*g1[y];
           break;
-
-        case 3:
-          grad = -dy[y+1]/dx[y+1];
+        }
+        case 3: {
+          float grad = -dy[y+1]/dx[y+1];
           h1 = grad*g2[y] + (1 - grad)*g2[y+1];
           h2 = grad*g0[y] + (1 - grad)*g0[y+1];
           break;
-
+        }
         default:
-          vcl_abort();
-          //h1 = h2 = 0.0;  // Dummy values
           //vcl_cerr << "*** ERROR ON SWITCH IN NMS ***\n";
+          vcl_abort();
         }
 
         // If the edge is greater than h1 and h2 we are at a peak,
         // therefore do subpixel interpolation by fitting a parabola
         // along the NMS line and finding its peak
         if ( (g1[y+1]>h1) && (g1[y+1]>h2) ) {
-          fraction = (h1-h2)/(2.0*(h1-2.0*g1[y+1]+h2));
+          float fraction = (h1-h2)/(2.0*(h1-2.0*g1[y+1]+h2));
+          float newx=0,newy=0;
           switch( orient ) {
           case 0:
             newx = x + fraction;
@@ -281,9 +273,8 @@ void osl_canny_rothwell::Non_maximal_supression() {
             break;
 
           default:
-            vcl_abort();
-            //newx = newy = 0.0; // Dummy values
             //vcl_cerr << "*** ERROR ON SWITCH IN NMS ***\n";
+            vcl_abort();
           }
 
           // Now store the edge data, re-use dx_[][] and dy_[][]

@@ -41,7 +41,7 @@ int pdf1d_select_pdf(const double* data, int n,
   assert(pdf.size()>0);
 
   int best_i = 0;
-  double best_B;
+  double best_B = 0.0;
   for (unsigned int i=0;i<pdf.size();++i)
   {
     comparitor.set_builder(*pdf_builder[i]);
