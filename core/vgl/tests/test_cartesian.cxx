@@ -12,6 +12,7 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_line_2d.h>
 #include <vgl/vgl_line_segment_2d.h>
+#include <vgl/vgl_line_3d_2_points.h>
 #include <vgl/vgl_line_segment_3d.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_vector_2d.h>
@@ -277,8 +278,34 @@ static void test_line_3d()
 {
   vgl_point_3d<double> p1(1,0,0), p2(0,1,2);
   vgl_line_segment_3d<double> ls(p1,p2); // line segment through these two points
-  TEST("line segment", ls.point1(), p1);
-  TEST("line segment", ls.point2(), p2);
+  TEST("line segment: point1()", ls.point1(), p1);
+  TEST("line segment: point2()", ls.point2(), p2);
+  ls.set(p2,p1);
+  TEST("line segment: point1()", ls.point1(), p2);
+  TEST("line segment: point2()", ls.point2(), p1);
+
+  vgl_line_3d_2_points<double> l(p1,p2);
+  TEST("3D line: point1()", l.point1(), p1);
+  TEST("3D line: point2()", l.point2(), p2);
+  l.set(p2,p1);
+  TEST("3D line: point1()", l.point1(), p2);
+  TEST("3D line: point2()", l.point2(), p1);
+  vgl_vector_3d<double> dir = l.direction();
+  TEST("3D line direction", dir, vgl_vector_3d<double>(1,-1,-2));
+
+  TEST("line through point", collinear(l,p1), true);
+  TEST("line through point", collinear(l,p1+dir), true);
+  TEST("line through point", collinear(l,vgl_point_3d<double>(0,0,0)), false);
+
+  vgl_line_3d_2_points<double> l2(p1+dir,p2-dir*1.5);
+  TEST("3D line: equality", l, l2);
+  l2.set(vgl_point_3d<double>(1,1,2), vgl_point_3d<double>(0,0,0));
+  TEST("3D line: equality", l==l2, false);
+
+  TEST("concurrent", concurrent(l,l2), true);
+  TEST("concurrent", coplanar(l,l2), true);
+  p2 = intersection(l,l2);
+  TEST("intersection", p2, p1-dir*0.5);
 }
 
 static void test_plane_3d()
