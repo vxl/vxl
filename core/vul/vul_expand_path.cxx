@@ -9,8 +9,8 @@
 #include "vul_expand_path.h"
 
 #ifdef VCL_WIN32
-vcl_string vul_expand_path         (char const *path_) { return vcl_string(path_); }
-vcl_string vul_expand_path_uncached(char const *path_) { return vcl_string(path_); }
+vcl_string vul_expand_path         (vcl_string path) { return path; }
+vcl_string vul_expand_path_uncached(vcl_string path) { return path; }
 #else
 
 #include <vcl_functional.h>
