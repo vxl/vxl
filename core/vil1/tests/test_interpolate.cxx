@@ -5,6 +5,9 @@
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
 #include <vil/vil_interpolate.h>
+#include <testlib/testlib_test.h>
+
+static double const avg[5] = { 0.8709, 1.25178114, 1.0130145969, 1.0978098765, 1.0605102418 };
 
 double f(double i, double j, int d)
 {
@@ -29,9 +32,9 @@ double f(double i, double j, int d)
   return out;
 }
 
-int
-test_interpolate_main(int, char **)
+MAIN( test_interpolate )
 {
+  START( "interpolate" );
   vil_memory_image_of<double> I(10, 10);
 
   double r = 4.6;
@@ -52,14 +55,17 @@ test_interpolate_main(int, char **)
 #undef up
 
     double out = f(r, c, d);
-    vcl_cout << "  true    : " << out << vcl_endl;
+    vcl_cout << "  true    : " << out << "\t\t-->   ";
+    testlib_test_perform(vcl_fabs(out - avg[d]) < 1e-9);
 
     vil_interpolate_bilinear(I, c, r, &out);
-    vcl_cout << "  bilinear: " << out << vcl_endl;
+    vcl_cout << "  bilinear: " << out << "\t\t-->   ";
+    testlib_test_perform(vcl_fabs(out - avg[d]) < 0.005*avg[d]);
 
     vil_interpolate_bicubic (I, c, r, &out);
-    vcl_cout << "  bicubic : " << out << vcl_endl;
+    vcl_cout << "  bicubic : " << out << "\t\t-->   ";
+    testlib_test_perform(vcl_fabs(out - avg[d]) < 0.0005*avg[d]);
   }
 
-  return 0;
+  SUMMARY();
 }
