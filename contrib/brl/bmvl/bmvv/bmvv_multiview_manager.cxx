@@ -448,7 +448,7 @@ void bmvv_multiview_manager::track_edges()
   // get parameters
   this->clear_display();
   static bdgl_curve_matcher_params mp(1.0, 10.0, 0.31416);
-  static bdgl_curve_tracker_params tp;
+  static bdgl_curve_tracker_params tp(1e6);
 
   vgui_dialog* tr_dialog = new vgui_dialog("Edge Tracking");
   tr_dialog->field("Matching threshold", tp.match_thres_);
@@ -492,6 +492,7 @@ void bmvv_multiview_manager::track_edges()
   det1.DoContour();
   edges = det1.GetEdges();
   //display the edges
+	/*
   btab = this->get_vtol2D_tableau_at(0,0);
   if (btab)
     btab->add_edges(*edges, true);
@@ -500,6 +501,7 @@ void bmvv_multiview_manager::track_edges()
       vcl_cout << "In bmvv_multiview_manager::track_edges() - null tableau\n";
       return;
     }
+		*/
   // pass the edges
   ecl.clear();
   for (unsigned int i=0;i<edges->size();i++){
@@ -516,6 +518,7 @@ void bmvv_multiview_manager::track_edges()
   det2.DoContour();
   edges = det2.GetEdges();
   //display the edges
+	/*
   btab = this->get_vtol2D_tableau_at(1,0);
   if (btab)
     btab->add_edges(*edges, true);
@@ -524,6 +527,7 @@ void bmvv_multiview_manager::track_edges()
       vcl_cout << "In bmvv_multiview_manager::track_edges() - null tableau\n";
       return;
     }
+		*/
   ecl.clear();
   for (unsigned int i=0;i<edges->size();i++){
     c = (*edges)[i]->curve();
@@ -538,6 +542,27 @@ void bmvv_multiview_manager::track_edges()
   tracker.track();
 
   // output the results : generate links between the curves in both images
+
+  //display the edges
+  edges = det1.GetEdges();
+  //display the edges
+  btab = this->get_vtol2D_tableau_at(0,0);
+  if (btab){
+		tracker.draw_lines(0, btab);
+	} else {
+    vcl_cout << "In bmvv_multiview_manager::track_edges() - null tableau\n";
+    return;
+  }
+  edges = det2.GetEdges();
+  //display the edges
+  btab = this->get_vtol2D_tableau_at(1,0);
+  if (btab){
+		tracker.draw_lines(1, btab);
+	} else {
+      vcl_cout << "In bmvv_multiview_manager::track_edges() - null tableau\n";
+      return;
+  }
+	return;
 }
 
 //====================================================================
