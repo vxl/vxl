@@ -15,7 +15,7 @@
 
 int main(int, char **)
 {
-  vcl_cerr << "testing zero chain" << endl;
+  vcl_cerr << "testing zero chain" << vcl_endl;
 
   vtol_vertex_sptr v1 = new vtol_vertex_2d(0.0,0.0);
   vtol_vertex_sptr v2 = new vtol_vertex_2d(1.0,1.0);
@@ -44,7 +44,7 @@ int main(int, char **)
   Assert(zc1->length()==2);
   Assert(zc1->topology_type()==vtol_topology_object::ZEROCHAIN);
 
-  vcl_cerr << "Finished testing zero chain 2d" << endl;
+  vcl_cerr << "Finished testing zero chain 2d" << vcl_endl;
   return 0;
 }
 

@@ -19,7 +19,7 @@
 
 int main(int, char **)
 {
-  vcl_cerr << "testing face 2d" << endl;
+  vcl_cerr << "testing face 2d" << vcl_endl;
 
   vtol_vertex_2d_sptr v1 = new vtol_vertex_2d(0.0,0.0);
   vtol_vertex_2d_sptr v2 = new vtol_vertex_2d(1.0,1.0);
@@ -101,7 +101,7 @@ int main(int, char **)
   Assert(f1->get_num_edges()==4);
   Assert(f1->shares_edge_with(*new_f));
 
-  vcl_cerr << "Finished testing face 2d " << endl;
+  vcl_cerr << "Finished testing face 2d " << vcl_endl;
   return 0;
 }
 

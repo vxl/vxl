@@ -16,7 +16,7 @@
 
 int main(int, char **)
 {
-  vcl_cerr << "testing edge 2d" << endl;
+  vcl_cerr << "testing edge 2d" << vcl_endl;
 
   vtol_vertex_2d_sptr v1 = new vtol_vertex_2d(0.0,0.0);
   vtol_vertex_2d_sptr v2 = new vtol_vertex_2d(1.0,1.0);
@@ -75,7 +75,7 @@ int main(int, char **)
   Assert(*(e1->v1())==*v1);
   Assert(e1->cast_to_edge()!=0);
 
-  vcl_cerr << "finished testing edge 2d" << endl;
+  vcl_cerr << "finished testing edge 2d" << vcl_endl;
   return 0;
 }
 

@@ -23,7 +23,7 @@
 int main(int, char **)
 {
 
-  vcl_cerr << "testing two chain" << endl;
+  vcl_cerr << "testing two chain" << vcl_endl;
 
   vtol_vertex_2d_sptr v1 = new vtol_vertex_2d(0.0,0.0);
   vtol_vertex_2d_sptr v2 = new vtol_vertex_2d(1.0,1.0);
@@ -118,7 +118,7 @@ int main(int, char **)
   vtol_two_chain_sptr new_copy = new vtol_two_chain(*tc1);
   Assert(*new_copy == *tc1);
 
-  vcl_cerr << "Finished testing two chain " << endl;
+  vcl_cerr << "Finished testing two chain " << vcl_endl;
   return 0;
 }
 

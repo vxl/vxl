@@ -14,7 +14,7 @@ int main(int, char **)
 {
   // we want to test the methods on vtol_vertex_2d
 
-  vcl_cerr << "Testing vertex 2d" << endl;
+  vcl_cerr << "Testing vertex 2d" << vcl_endl;
 
   vtol_vertex_2d_sptr v1=new vtol_vertex_2d(1.0,2.0);
   Assert(v1->x()==1.0);
@@ -131,7 +131,7 @@ int main(int, char **)
   Assert(!(v1v->valid_superior_type(*(new_edge))));
   Assert(!(v1v->valid_inferior_type(*(new_edge))));
 
-  vcl_cerr << "finished testing vertex 2d" << endl;
+  vcl_cerr << "finished testing vertex 2d" << vcl_endl;
   return 0;
 }
 

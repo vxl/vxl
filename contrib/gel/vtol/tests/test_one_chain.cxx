@@ -16,7 +16,7 @@
 
 int main(int, char **)
 {
-  vcl_cerr << "testing one  chain" << endl;
+  vcl_cerr << "testing one  chain" << vcl_endl;
 
   vtol_vertex_2d_sptr v1 = new vtol_vertex_2d(0.0,0.0);
   vtol_vertex_2d_sptr v2 = new vtol_vertex_2d(1.0,1.0);
@@ -134,7 +134,7 @@ int main(int, char **)
   Assert(!(*oc1 == *och1));
   Assert(oc1->topology_type()==vtol_topology_object::ONECHAIN);
 
-  vcl_cerr << "Finished testing one chain" << endl;
+  vcl_cerr << "Finished testing one chain" << vcl_endl;
   return 0;
 }
 
