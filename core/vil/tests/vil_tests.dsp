@@ -96,6 +96,9 @@ SOURCE=.\test_deep_copy_3_plane.cxx
 # Begin Source File
 SOURCE=.\test_algo_grid_merge.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_algo_find_4con_boundary.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

@@ -10,6 +10,7 @@ SOURCE=.\file_example2.cxx
 SOURCE=.\file_example3.cxx
 SOURCE=.\file_example4.cxx
 SOURCE=.\algo_example1.cxx
+SOURCE=.\algo_example2.cxx
 SOURCE=.\vil2_convolve_tool.cxx
 SOURCE=.\vil2_correlate_grad_tool.cxx
 SOURCE=.\vil2_exp_grad_filter_tool.cxx
