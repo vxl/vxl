@@ -39,6 +39,30 @@ Package=<4>
 
 ###############################################################################
 
+Project: "example_mfc"=.\vgui\examples\vgui_example_mfc\example_mfc.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name allvxl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vgui
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vgui_mfc
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name netlib
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "netlib"=..\Numerics\netlib\netlib.dsp - Package Owner=<4>
 
 Package=<5>
@@ -47,6 +71,21 @@ Package=<5>
 
 Package=<4>
 {{{
+}}}
+
+###############################################################################
+
+Project: "test_allvxl"=.\test_allvxl\test_allvxl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name allvxl
+    End Project Dependency
 }}}
 
 ###############################################################################
@@ -70,18 +109,6 @@ Package=<4>
 ###############################################################################
 
 Project: "vbl"=.\vbl\vbl.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vbl_tests"=.\vbl\vbl_tests\vbl_tests.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -153,6 +180,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "vgui_mfc"=.\vgui\impl\mfc\vgui_mfc.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "vil"=.\vil\vil.dsp - Package Owner=<4>
 
 Package=<5>
@@ -197,47 +236,20 @@ Package=<5>
 
 Package=<4>
 {{{
+    Begin Project Dependency
+    Project_Dep_Name vcl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vnl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vnl_algo
+    End Project Dependency
 }}}
 
 ###############################################################################
 
 Project: "vsl"=.\vsl\vsl.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vxl_view"=.\vxl_view\vxl_view.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "w32app"=.\w32app\w32app.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "zzz"=.\zzz\zzz.dsp - Package Owner=<4>
 
 Package=<5>
 {{{

@@ -10,7 +10,7 @@ LIBDIRS += $(IUELOCALROOT_libbase)/v3p/jpeg/$(tj_libdir) # for libJPEG.so
 
 IUE_PACKAGE_LIBRARIES += -lvnl-algo
 IUE_PACKAGE_LIBRARIES += -lnetlib
-LIBDIRS += $(IUELOCALROOT_libbase)/v3p/netlib/$(tj_libdir) # for libnetlib.so
+#LIBDIRS += $(IUELOCALROOT_libbase)/v3p/netlib/$(tj_libdir) # for netlib
 
 IUE_PACKAGE_LIBRARIES += -lvnl
 

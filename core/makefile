@@ -38,8 +38,16 @@ SUBDIRS += vil
 # segmentation
 SUBDIRS += vsl
 
+ifeq (1,$(strip $(HAS_OPENGL)))
 # OpenGL ui library
 SUBDIRS += vgui
+
+#xcv must be compiled *after* mvox.
+# # new xcv
+# SUBDIRS += xcv
+
+endif
+
 
 ######################################
 include ${IUEROOT}/config/top-rules.mk
