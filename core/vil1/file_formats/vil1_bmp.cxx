@@ -253,7 +253,7 @@ cout << "nbytes  : " << nbytes<<endl;
 	 }
        
        // SetColorNum(ccount);
-       // int ncolors = GetColorNum();
+       // int ncolors = get_color_num();
        int ncolors = ccount; // good guess
        if (ncolors != 0) 
 	 {
@@ -308,7 +308,7 @@ bool vil_bmp_generic_image::write_header()
            }
 
   fbmp.bfOffBits = 14+header.biSize+used_color*rgb_length;
-  fbmp.bfSize    = fbmp.bfOffBits + GetArea()*pixsize;
+  fbmp.bfSize    = fbmp.bfOffBits + get_area()*pixsize;
   
 
   // SetSizeX(header.biWidth);
@@ -366,7 +366,7 @@ bool vil_bmp_generic_image::write_header()
   if (used_color != 0)
   {
 
-    // int** cm = GetColorMap();
+    // int** cm = get_color_map();
     int** cm = local_color_map_;
     
     for(int j=0; j<used_color; j++){
@@ -400,40 +400,40 @@ bool vil_bmp_generic_image::get_section(void* ib, int x0, int y0, int xs, int ys
   
   vil_rekt ir, x1, x2, y1, y2;
   
-  subtract(r, vil_rekt(GetSizeX(),GetSizeY()), ir, x1, x2, y1, y2);
+  subtract(r, vil_rekt(get_size_x(),get_size_y()), ir, x1, x2, y1, y2);
   
   int rowbytes=0;
   int bytes_to_read;
   
-  rowbytes  = (GetSizeX() * pixsize + 3) / 4;
+  rowbytes  = (get_size_x() * pixsize + 3) / 4;
   rowbytes *= 4;
   
-  if (ir.GetOrigX() + ir.GetSizeX() == GetSizeX())
-    bytes_to_read = ir.GetSizeX() * pixsize + rowbytes - GetSizeX() * pixsize;
+  if (ir.get_orig_x() + ir.get_size_x() == get_size_x())
+    bytes_to_read = ir.get_size_x() * pixsize + rowbytes - get_size_x() * pixsize;
   else
-    bytes_to_read  = ir.GetSizeX() * pixsize;
+    bytes_to_read  = ir.get_size_x() * pixsize;
   
   if (!ib)
     {
-      ib = new byte [r.GetSizeY()*pixsize + bytes_to_read];
+      ib = new byte [r.get_size_y()*pixsize + bytes_to_read];
       // if (!ib) { SetStatusBad(); return nil; }
     }
       
   
   uchar* dp	= (uchar*)ib;
   uchar* dp2;
-  dp2 = new byte [ir.GetSizeY() * pixsize + bytes_to_read];
+  dp2 = new byte [ir.get_size_y() * pixsize + bytes_to_read];
   
   int skip;
   if (xs >= ys) // if horizontal bytes are requested
     {
-      skip = int(offset)+(( (rowbytes * GetSizeY()) - ( (ir.GetOrigY() * rowbytes) + (rowbytes-ir.GetOrigX()) * (ir.GetSizeY())))) ;
+      skip = int(offset)+(( (rowbytes * get_size_y()) - ( (ir.get_orig_y() * rowbytes) + (rowbytes-ir.get_orig_x()) * (ir.get_size_y())))) ;
       // file->SkipToByte(skip);
       is_->seek(skip);
     }
   else
     {
-      skip = int(offset)+( (rowbytes * GetSizeY()) - (rowbytes*ir.GetOrigY() + rowbytes - ir.GetOrigX()*pixsize ))  ;
+      skip = int(offset)+( (rowbytes * get_size_y()) - (rowbytes*ir.get_orig_y() + rowbytes - ir.get_orig_x()*pixsize ))  ;
       //file->SkipToByte(skip);
       is_->seek(skip);
     }
@@ -442,13 +442,13 @@ bool vil_bmp_generic_image::get_section(void* ib, int x0, int y0, int xs, int ys
   
   if (xs >= ys)
     {
-      y1c	= y1.GetSizeX()*pixsize;
-      y2c	= y2.GetSizeX()*pixsize;
+      y1c	= y1.get_size_x()*pixsize;
+      y2c	= y2.get_size_x()*pixsize;
     }
   else
     {
-      y1c	= x1.GetSizeY()*pixsize;
-      y2c	= x2.GetSizeY()*pixsize;
+      y1c	= x1.get_size_y()*pixsize;
+      y2c	= x2.get_size_y()*pixsize;
     }
   
    ushort def	= 0;                                    // XXX
@@ -458,21 +458,21 @@ bool vil_bmp_generic_image::get_section(void* ib, int x0, int y0, int xs, int ys
    int tc,tr;
    if (xs >= ys)
      {
-       tc = ir.GetSizeY();
-       tr = ir.GetSizeX();
+       tc = ir.get_size_y();
+       tr = ir.get_size_x();
      }
    else
      {
-       tc = ir.GetSizeX(); 
-       tr = ir.GetSizeY();
+       tc = ir.get_size_x(); 
+       tr = ir.get_size_y();
      }
    
    if (xs >= ys)
      {
        
-       for (xc = x1.GetArea()*pixsize; xc; xc--) *dp++ = def;// fill x1 with default
+       for (xc = x1.get_area()*pixsize; xc; xc--) *dp++ = def;// fill x1 with default
        
-       for (yc = ir.GetSizeY(); yc; yc--)
+       for (yc = ir.get_size_y(); yc; yc--)
          {
            for (xc = y1c; xc; xc--) *dp++ = def;		// fill a row of y1
            
@@ -481,19 +481,19 @@ bool vil_bmp_generic_image::get_section(void* ib, int x0, int y0, int xs, int ys
            for (int i=0; i<bytes_to_read; i++)
              dp[i] = (uchar)dp2[i];
            
-           skip = offset + ((GetSizeX() * GetSizeY()) - ((ir.GetOrigY() * GetSizeX() + (GetSizeX()-ir.GetOrigX()) * (ir.GetSizeY())))) * pixsize;
+           skip = offset + ((get_size_x() * get_size_y()) - ((ir.get_orig_y() * get_size_x() + (get_size_x()-ir.get_orig_x()) * (ir.get_size_y())))) * pixsize;
            
            is_->seek(skip);
-           dp += ir.GetSizeX()*pixsize;
+           dp += ir.get_size_x()*pixsize;
            
            for (xc = y2c; xc; xc--) *dp++ = def;		// fill a row of y2
          }
        
-       for (xc = x2.GetArea()*pixsize; xc; xc--) *dp++ = def;	// fill x2
+       for (xc = x2.get_area()*pixsize; xc; xc--) *dp++ = def;	// fill x2
      }
    else
      {
-       //for (xc = y1.GetArea()*pixsize; xc; xc--) *dp++ = def; // fill x1 with default
+       //for (xc = y1.get_area()*pixsize; xc; xc--) *dp++ = def; // fill x1 with default
        
        int s = 0;
        for (yc = tr; yc; yc--)
@@ -508,7 +508,7 @@ bool vil_bmp_generic_image::get_section(void* ib, int x0, int y0, int xs, int ys
            is_->seek(is_->tell()-(rowbytes+tc*pixsize));
          }
        
-       //for (xc = x2.GetArea()*pixsize; xc; xc--) *dp++ = def;       // fill x2
+       //for (xc = x2.get_area()*pixsize; xc; xc--) *dp++ = def;       // fill x2
        
      }
    return ib != 0;
@@ -532,16 +532,16 @@ bool vil_bmp_generic_image::put_section(void const *ib, int x0, int y0, int xs, 
 
    vil_rekt r(x0, y0, xs, ys);		// construct rectangle from params
 
-   vil_rekt ir = r * vil_rekt(GetSizeX(),GetSizeY());	// intersect with image extent
+   vil_rekt ir = r * vil_rekt(get_size_x(),get_size_y());	// intersect with image extent
 
-   int rowbytes = (GetSizeX() * pixsize + 3) / 4;
+   int rowbytes = (get_size_x() * pixsize + 3) / 4;
    rowbytes *= 4;
    
 // int bytes_to_write;
-// if (ir.GetOrigX() + ir.GetSizeX() == GetSizeX())
-//   bytes_to_write = ir.GetSizeX() * pixsize + rowbytes - GetSizeX() * pixsize;
+// if (ir.get_orig_x() + ir.get_size_x() == get_size_x())
+//   bytes_to_write = ir.get_size_x() * pixsize + rowbytes - get_size_x() * pixsize;
 // else
-//    bytes_to_write  = ir.GetSizeX() * pixsize; 
+//    bytes_to_write  = ir.get_size_x() * pixsize; 
     
    if (!ib)
    {
@@ -549,7 +549,7 @@ bool vil_bmp_generic_image::put_section(void const *ib, int x0, int y0, int xs, 
       return false;
    }
 
-   // if (GetAccess() == 'r')
+   // if (get_access() == 'r')
    // {
    //   fprintf(stderr, "PutSection: image is read only\n");
    //   return -1;
@@ -559,35 +559,31 @@ bool vil_bmp_generic_image::put_section(void const *ib, int x0, int y0, int xs, 
 
    int skip;
 
-   skip = ( int(offset) + (( (rowbytes * GetSizeY()) - ( (ir.GetOrigY() * rowbytes) + (rowbytes - ir.GetOrigX()) * (ir.GetSizeY())))));
+   skip = ( int(offset) + (( (rowbytes * get_size_y()) - ( (ir.get_orig_y() * rowbytes) + (rowbytes - ir.get_orig_x()) * (ir.get_size_y())))));
 
    // file->SkipToByte(skip);
    is_->seek(skip);
 
 #ifndef hpux
-   //   intPoint2D ro = ir.GetOrig() - r.GetOrig();  // origin of ir relative to r
-   //   uchar* sp    = (uchar*) ib + (r.GetSizeX() * ro.X() + ro.Y());
-   uchar* sp    = (uchar*) ib + (r.GetSizeX() * (ir.GetOrigX() -r.GetOrigX()) 
-                                 + (ir.GetOrigY() -r.GetOrigY()) );
+   //   intPoint2D ro = ir.get_orig() - r.get_orig();  // origin of ir relative to r
+   //   uchar* sp    = (uchar*) ib + (r.get_size_x() * ro.X() + ro.Y());
+   uchar* sp    = (uchar*) ib + (r.get_size_x() * (ir.get_orig_x() -r.get_orig_x()) 
+                                 + (ir.get_orig_y() -r.get_orig_y()) );
 
 
 #else
-   //   int roX = ir.GetOrig().X() - r.GetOrig().X();
-   //   int roY = ir.GetOrig().Y() - r.GetOrig().Y();
-   //   uchar* sp    = (uchar*) ib + (r.GetSizeX() * roX + roY);
+   int roX = ir.get_orig_x() - r.get_orig_x();
+   int roY = ir.get_orig_y() - r.get_orig_y();
 
-   int roX = ir.GetOrigX() - r.GetOrigX();
-   int roY = ir.GetOrigY() - r.GetOrigY();
-
-   uchar* sp    = (uchar*) buf + (r.GetSizeX() * roX + roY);
+   uchar* sp    = (uchar*) buf + (r.get_size_x() * roX + roY);
 
 #endif
-   int spinc	= r.GetSizeX();
-       skip	= (rowbytes - ir.GetSizeX()) * pixsize;
-   int nshorts	= ir.GetSizeX();
+   int spinc	= r.get_size_x();
+       skip	= (rowbytes - ir.get_size_x()) * pixsize;
+   int nshorts	= ir.get_size_x();
    int nbytes	= nshorts * pixsize;
 
-   for (int yc = ir.GetSizeY(); yc; yc--)
+   for (int yc = ir.get_size_y(); yc; yc--)
    {
      // file->WriteBytes(sp, nbytes);			// write it
      // file->SkipBytes(skip);
@@ -607,29 +603,29 @@ bool vil_bmp_generic_image::put_section(void const *ib, int x0, int y0, int xs, 
 
 vil_rekt operator * (const vil_rekt& r1, const vil_rekt& r2)
 {
-  //   int x0 = max(r1.xo, r2.xo);			// upper-left of intersection
-  // int y0 = max(r1.yo, r2.yo);
-  // int x1 = min(r1.xo + r1.xs, r2.xo + r2.xs);	// lower-right of intersection
-  // int y1 = min(r1.yo + r1.ys, r2.yo + r2.ys);
+  //   int x0 = max(r1.xo_, r2.xo_);			// upper-left of intersection
+  // int y0 = max(r1.yo_, r2.yo_);
+  // int x1 = min(r1.xo_ + r1.xs_, r2.xo_ + r2.xs_);	// lower-right of intersection
+  // int y1 = min(r1.yo_ + r1.ys_, r2.yo_ + r2.ys_);
 
-  int x0 = r1.xo;
-  if(r2.xo>r1.xo){
-    x0 = r2.xo;
+  int x0 = r1.xo_;
+  if(r2.xo_>r1.xo_){
+    x0 = r2.xo_;
   }
   
-  int y0 = r1.yo;
-  if(r2.yo>r1.yo){
-    y0 = r2.yo;
+  int y0 = r1.yo_;
+  if(r2.yo_>r1.yo_){
+    y0 = r2.yo_;
   }
   
-  int x1 = r1.xo + r1.xs;
-  if(r2.xo + r2.xs <x1){
-    x1 = r2.xo + r2.xs;
+  int x1 = r1.xo_ + r1.xs_;
+  if(r2.xo_ + r2.xs_ <x1){
+    x1 = r2.xo_ + r2.xs_;
   }
 
-  int y1 = r1.yo + r1.ys;
-  if(r2.yo + r2.ys <y1){
-    y1 = r2.yo + r2.ys;
+  int y1 = r1.yo_ + r1.ys_;
+  if(r2.yo_ + r2.ys_ <y1){
+    y1 = r2.yo_ + r2.ys_;
   }
 
    if (x1 > x0 && y1 > y0)
@@ -678,35 +674,35 @@ void subtract(const vil_rekt& r1, const vil_rekt& r2,
    ir = r1 * r2;		// intersection
 
    // if (!ir)			// if r1 and r2 don't intersect
-   if(!ir.GetArea())
+   if(!ir.get_area())
    {
       x1 = r1;
       x2 = y1 = y2 = vil_rekt(0, 0, 0, 0);
    }
    else
    {
-      x1.xo = r1.xo;
-      x1.yo = r1.yo;
-      x1.xs = r1.xs;
-      x1.ys = ir.yo - r1.yo;
+      x1.xo_ = r1.xo_;
+      x1.yo_ = r1.yo_;
+      x1.xs_ = r1.xs_;
+      x1.ys_ = ir.yo_ - r1.yo_;
 
-      y1.xo = r1.xo;
-      y1.yo = r1.yo + x1.ys;
-      y1.xs = ir.xo - r1.xo;
-      y1.ys = ir.ys;
+      y1.xo_ = r1.xo_;
+      y1.yo_ = r1.yo_ + x1.ys_;
+      y1.xs_ = ir.xo_ - r1.xo_;
+      y1.ys_ = ir.ys_;
 
-      int xsum = y1.xs + ir.xs;
-      int ysum = x1.ys + ir.ys;
+      int xsum = y1.xs_ + ir.xs_;
+      int ysum = x1.ys_ + ir.ys_;
 
-      x2.xo = r1.xo;
-      x2.yo = r1.yo + ysum;
-      x2.xs = r1.xs;
-      x2.ys = r1.ys - ysum;
+      x2.xo_ = r1.xo_;
+      x2.yo_ = r1.yo_ + ysum;
+      x2.xs_ = r1.xs_;
+      x2.ys_ = r1.ys_ - ysum;
 
-      y2.xo = r1.xo + xsum;
-      y2.yo = y1.yo;
-      y2.xs = r1.xs - xsum;
-      y2.ys = ir.ys;
+      y2.xo_ = r1.xo_ + xsum;
+      y2.yo_ = y1.yo_;
+      y2.xs_ = r1.xs_ - xsum;
+      y2.ys_ = ir.ys_;
    }
 }
 

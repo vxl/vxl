@@ -149,9 +149,9 @@ private:
 
   // funcions to emulate base class image
   
-  int GetSizeX() const {return width();}
-  int GetSizeY() const {return height();}
-  int GetArea() const {return width() * height();}
+  int get_size_x() const {return width();}
+  int get_size_y() const {return height();}
+  int get_area() const {return width() * height();}
   
 };
 
@@ -164,21 +164,21 @@ class vil_rekt
 {
 protected:
    
-   int xo, yo;			// origin of rectangle
-   int xs, ys;			// size of rectangle
+   int xo_, yo_;			// origin of rectangle
+   int xs_, ys_;			// size of rectangle
    
 public:
    
-   vil_rekt(int x, int y, int xsz, int ysz)   : xo(x), yo(y), xs(xsz), ys(ysz) {}
-   vil_rekt(int xsz, int ysz)		  : xo(0), yo(0), xs(xsz), ys(ysz) {}
-   vil_rekt()				  : xo(0), yo(0), xs(0),   ys(0)   {}
+   vil_rekt(int x, int y, int xsz, int ysz)   : xo_(x), yo_(y), xs_(xsz), ys_(ysz) {}
+   vil_rekt(int xsz, int ysz)	  : xo_(0), yo_(0), xs_(xsz), ys_(ysz) {}
+   vil_rekt()			  : xo_(0), yo_(0), xs_(0),   ys_(0)   {}
    
-   int GetOrigX() const		{ return xo; }
-   int GetOrigY() const		{ return yo; }
+   int get_orig_x() const	{ return xo_; }
+   int get_orig_y() const	{ return yo_; }
    
-   int GetSizeX() const		{ return xs; }
-   int GetSizeY() const		{ return ys; }
-   int GetArea() const		{ return xs * ys; }
+   int get_size_x() const	{ return xs_; }
+   int get_size_y() const	{ return ys_; }
+   int get_area() const		{ return xs_ * ys_; }
    
    friend vil_rekt operator * (const vil_rekt& r1, const vil_rekt& r2);	// intersection
 
