@@ -18,8 +18,7 @@ bool near_eq(double x, double y)
 #define Assert(x) { vcl_cout << #x "\t\t\t test "; \
   if (x) { ++success; vcl_cout << "PASSED\n"; } else { ++failures; vcl_cout << "FAILED\n"; } }
 
-#define test_path "c:/vxl/vxl/contrib/brl/bbas/bxml/tests/"
-int main(int, char **)
+int main(int argc, char * argv[])
 {
   int success=0, failures=0;
 
@@ -27,6 +26,7 @@ int main(int, char **)
   vcl_cout << "Testing bxml_vtol_zero_chain_2d_input_converter" << vcl_endl;
 
   bxml_io::register_input_converters();
+  vcl_string test_path = (argc < 2) ? "" : argv[1];
   vcl_string test_file = "vtol_zero_chain_2d.xml";
   vcl_string full_test_file_path = test_path + test_file;
   vcl_vector<bxml_generic_ptr> pts;
