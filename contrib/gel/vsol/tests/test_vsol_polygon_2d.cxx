@@ -7,6 +7,7 @@
 // Version |Date      | Author                   |Comment
 // --------+----------+--------------------------+-----------------------------
 // 1.0     |2000/05/09| François BERTEL          |Creation
+// 1.1     |2001/07/03| Peter Vanroose           |Thorough check of is_convex
 //*****************************************************************************
 
 #include <vcl_iostream.h>
@@ -22,34 +23,22 @@
 int main(int argc,
          char *argv[])
 {
-  int result=0;
-
-  vsol_point_2d_sptr p;
-  vcl_vector<vsol_point_2d_sptr> *vertices;
-  vsol_polygon_2d_sptr poly;
-  vsol_polygon_2d_sptr poly2;
-
-  vertices=new vcl_vector<vsol_point_2d_sptr>(5);
-
-  p=new vsol_point_2d(0,0);
-  (*vertices)[0]=p;
-  p=new vsol_point_2d(3,1);
-  (*vertices)[1]=p;
-  p=new vsol_point_2d(5,3);
-  (*vertices)[2]=p;
-  p=new vsol_point_2d(3,6);
-  (*vertices)[3]=p;
-  p=new vsol_point_2d(1,4);
-  (*vertices)[4]=p;
+  vcl_vector<vsol_point_2d_sptr> vertices(5);
+  vertices[0]=new vsol_point_2d(0,0);
+  vertices[1]=new vsol_point_2d(3,1);
+  vertices[2]=new vsol_point_2d(5,3);
+  vertices[3]=new vsol_point_2d(3,6);
+  vertices[4]=new vsol_point_2d(1,4);
 
   vcl_cout<<"Constructor"<<vcl_endl;
-  poly=new vsol_polygon_2d(*vertices);
-  delete vertices;
+  vsol_polygon_2d_sptr poly=new vsol_polygon_2d(vertices);
 
   vcl_cout<<"size"<<vcl_endl;
   assert(poly->size()==5);
 
   vcl_cout<<"vertex"<<vcl_endl;
+
+  vsol_point_2d_sptr
   p=poly->vertex(0);
   assert(p->x()==0);
   assert(p->y()==0);
@@ -74,10 +63,35 @@ int main(int argc,
   assert(poly->is_convex());
 
   vcl_cout<<"Copy constructor"<<vcl_endl;
-  poly2=new vsol_polygon_2d(*poly);
+  vsol_polygon_2d_sptr poly2=new vsol_polygon_2d(*poly);
 
   vcl_cout<<"=="<<vcl_endl;
   assert(*poly2==*poly);
 
-  return result;
+  // An example of a non-convex polygon with "non-convexity" between
+  // start and end vertex.
+  // An earlier implementation of is_convex() will fail here.
+  vertices[0]=new vsol_point_2d(1,1);
+  vertices[1]=new vsol_point_2d(2,1);
+  vertices[2]=new vsol_point_2d(1,0);
+  vertices[3]=new vsol_point_2d(0,1);
+  vertices[4]=new vsol_point_2d(1,2);
+  poly=new vsol_polygon_2d(vertices);
+
+  vcl_cout<<"!is_convex"<<vcl_endl;
+  assert(!poly->is_convex());
+
+  // An example of a non-convex polygon with two consecutive parallel
+  // edges.  An earlier implementation of is_convex() will fail here.
+  vertices[0]=new vsol_point_2d(0,2);
+  vertices[1]=new vsol_point_2d(0,1);
+  vertices[2]=new vsol_point_2d(1,1);
+  vertices[3]=new vsol_point_2d(2,1);
+  vertices[4]=new vsol_point_2d(2,0);
+  poly=new vsol_polygon_2d(vertices);
+
+  vcl_cout<<"!is_convex"<<vcl_endl;
+  assert(!poly->is_convex());
+
+  return 0;
 }
