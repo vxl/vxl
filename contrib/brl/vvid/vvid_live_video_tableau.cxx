@@ -1,4 +1,9 @@
+// This is brl/vvid/vvid_live_video_tableau.cxx
 #include "vvid_live_video_tableau.h"
+//:
+// \file
+// \author J.L. Mundy
+
 #include <vcl_iostream.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_event.h>
@@ -6,7 +11,6 @@
 vvid_live_video_tableau::vvid_live_video_tableau()
   : live_(false), pixel_sample_interval_(1)
 {}
-
 
 
 vvid_live_video_tableau::vvid_live_video_tableau(int node,
@@ -72,7 +76,6 @@ bool vvid_live_video_tableau::attach_live_video()
 
 void vvid_live_video_tableau::start_live_video()
 {
-
   if (!cam_.get_camera_present())
     {
       vcl_cout << "In vvid_live_video_tableau::startlive_video() - "
