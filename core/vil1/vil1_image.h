@@ -14,9 +14,14 @@
 // All operations are delegated to the vil_image_impl object,
 // which uses class inheritance to make various file images etc.
 // For fuller documentation on any method, see vil_image_impl
+//
+// Imagine that vil_image is a class derived from 
+// vbl_smart_ptr<vil_image_impl>, but with some extra convenience
+// methods.  These methods might traditionally be attached to the ABC
+// image_impl, but this avoids cluttering that interface.
 class vil_image {
 public:
-  //: delegation macro for consistency, not convenience.
+  //undoc delegation macro for consistency, not convenience.
 #define vil_image_delegate(m, args, default) { return ptr ? ptr->m args : default; }
   
   //: Dimensions:  Planes x W x H x Components

@@ -283,6 +283,7 @@ bool vil_iris_generic_image::get_section_verbatim(void* ib, int x0, int y0, int 
   unsigned char* dp = (unsigned char*)ib;
 
   for (int channel=0; channel<planes_; ++channel) {
+    cerr << "c" << channel;
     unsigned char* cbi = dp;
     // skip cbi to point at last row of section
     cbi+=(row_len*(ys-1));
@@ -296,7 +297,6 @@ bool vil_iris_generic_image::get_section_verbatim(void* ib, int x0, int y0, int 
 
     // number of rows to read 
     for (int row = 0; row < ys; ++row) {
-
       // step to end of row and then to within next row, where next block begins
       if (row > 0) is_->seek(is_->tell() + skipbytes_end);
 
@@ -309,6 +309,7 @@ bool vil_iris_generic_image::get_section_verbatim(void* ib, int x0, int y0, int 
       cbi-=(row_len*2);
     }
   }
+  cerr << endl;
   return true;
 }//GetSectionVERBATIM
 

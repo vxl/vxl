@@ -16,13 +16,23 @@
 
 char const* vil_pnm_format_tag = "pnm";
 
+static inline bool iseol(int c)
+{
+  return c == 10 || c == 13;
+}
+
+static inline bool isws(int c)
+{
+  return c == ' ' || c == '\t' || c == 10 || c == 13;
+}
+
 vil_image_impl* vil_pnm_file_format::make_input_image(vil_stream* vs)
 {
   // Attempt to read header
   unsigned char buf[3];
   vs->read(buf, 3);
   bool ok = ((buf[0] == 'P') &&
-	     (buf[2] == '\n') &&
+	     iseol(buf[2]) &&
 	     (buf[1] >= '1' && buf[2] <= '6'));
   if (!ok)
     return 0;
@@ -110,11 +120,10 @@ vil_pnm_generic_image::~vil_pnm_generic_image()
   vs_->unref();
 }
 
-
 // Skip over spaces and comments; temp is the current vs character
 static void SkipSpaces(vil_stream* vs, signed char& temp)
 {
-  while (temp == ' ' || temp == '\t' || temp == '\n' || temp == '#')
+  while (isws(temp) || temp == '#')
   {
     if (temp == '#') // skip this line:
       while ((temp != '\n') && (temp != -1))
@@ -153,7 +162,7 @@ bool vil_pnm_generic_image::read_header()
   char buf[3];
   vs_->read(buf, 3);
   if (buf[0] != 'P') return false;
-  if (buf[2] != '\n') return false;
+  if (!iseol(buf[2])) return false;
   magic_ = buf[1] - '0';
   if (magic_ < 1 || magic_ > 6) return false;
 
@@ -179,7 +188,7 @@ bool vil_pnm_generic_image::read_header()
   maxval_ = ReadInteger(vs_,temp);
   
   //Skip over final end-of-line, before the data section begins
-  if (temp == ' ' || temp == '\t' || temp == '\n')
+  if (isws(temp))
     vs_->read(&temp,1);
 
   start_of_data_ = vs_->tell() - 1;
@@ -239,12 +248,13 @@ bool vil_pnm_generic_image::get_section(void* buf, int x0, int y0, int xs, int y
   
   unsigned char* ib = (unsigned char*) buf;
   unsigned short* jb = (unsigned short*) buf;
-  if (magic_ > 3)
+  //
+  if (magic_ > 3) {
     for(int y = 0; y < ys; ++y) {
       vs_->seek(byte_start + y * byte_width);
       vs_->read(ib + y * byte_out_width, byte_out_width);
     }
-  else {
+  } else {
     vs_->seek(start_of_data_);
     for(int t = 0; t < y0*width_*components_; ++t) { int a; (*vs_) >> a; }
     for(int y = 0; y < ys; ++y) {

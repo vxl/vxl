@@ -66,7 +66,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "$(IUEROOT)\vxl\config.win32-VC60" /I "$(IUEROOT)/vxl" /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /Ob2 /I "$(IUEROOT)\vxl\config.win32-VC60" /I "$(IUEROOT)/vxl" /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -95,6 +95,10 @@ SOURCE=".\Templates\vcl_vector+vbl_rgba+uchar--.cxx"
 # End Source File
 # Begin Source File
 
+SOURCE=.\vil_16bit.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=.\vil_block_cache_image_impl.cxx
 # End Source File
 # Begin Source File
@@ -108,6 +112,15 @@ SOURCE=.\vil_byte_swap.cxx
 # Begin Source File
 
 SOURCE=.\vil_convolve.cxx
+
+!IF  "$(CFG)" == "vil - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "vil - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
@@ -329,6 +342,10 @@ SOURCE=.\file_formats\vil_viff_support.c
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
+# Begin Source File
+
+SOURCE=.\vil_16bit.h
+# End Source File
 # Begin Source File
 
 SOURCE=.\vil_block_cache_image_impl.h
