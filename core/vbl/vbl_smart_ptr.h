@@ -58,9 +58,7 @@ class vbl_smart_ptr
   //: Pointer to object, or 0.
   T *ptr_;
 
-  //: Helper types for safe boolean conversion.
-  struct safe_bool_dummy { void dummy() {} };
-  typedef void (safe_bool_dummy::* safe_bool)();
+  VCL_SAFE_BOOL_DEFINE;
  public:
   vbl_smart_ptr ()
     : protected_(true), ptr_(0) { }
@@ -115,7 +113,7 @@ class vbl_smart_ptr
   }
 
   //: Cast to bool
-   operator safe_bool () const { return ptr_? &safe_bool_dummy::dummy : 0; }
+   operator safe_bool () const { return ptr_? VCL_SAFE_BOOL_TRUE : 0; }
 
   //: Inverse boolean value
   bool operator!() const { return ptr_? false : true; }
@@ -203,34 +201,6 @@ inline bool operator!= (T const* p, vbl_smart_ptr<T> const& a)
 {
   return a.as_pointer() != p;
 }
-
-// Work-around for Borland and safe_bool.
-#ifdef VCL_BORLAND
-template <class T>
-inline
-bool operator&&(const vbl_smart_ptr<T>& ptr, bool b)
-{
-  return b && (ptr?true:false);
-}
-template <class T>
-inline
-bool operator&&(bool b, const vbl_smart_ptr<T>& ptr)
-{
-  return b && (ptr?true:false);
-}
-template <class T>
-inline
-bool operator||(const vbl_smart_ptr<T>& ptr, bool b)
-{
-  return b || (ptr?true:false);
-}
-template <class T>
-inline
-bool operator||(bool b, const vbl_smart_ptr<T>& ptr)
-{
-  return b || (ptr?true:false);
-}
-#endif
 
 // Sunpro and GCC need a vcl_ostream operator. It need not be inline
 // because if you're about to make a system call you can afford the

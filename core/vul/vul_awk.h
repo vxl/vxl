@@ -34,9 +34,7 @@
 
 class vul_awk
 {
-  //: Helper types for safe boolean conversion.
-  struct safe_bool_dummy { void dummy() {} };
-  typedef void (safe_bool_dummy::* safe_bool)();
+  VCL_SAFE_BOOL_DEFINE;
  public:
   // Constructors/Destructors--------------------------------------------------
   enum ModeFlags {
@@ -74,7 +72,7 @@ class vul_awk
 
 //: Return true if this line is not the last.
   operator safe_bool () const
-    { return (!done_)? &safe_bool_dummy::dummy : 0; }
+    { return (!done_)? VCL_SAFE_BOOL_TRUE : 0; }
 
 //: Return false if this line is not the last.
   bool operator!() const

@@ -23,14 +23,12 @@
 export template <class T>
 class vnl_file_matrix : public vnl_matrix<T>
 {
-  //: Helper types for safe boolean conversion.
-  struct safe_bool_dummy { void dummy() {} };
-  typedef void (safe_bool_dummy::* safe_bool)();
+  VCL_SAFE_BOOL_DEFINE;
  public:
   vnl_file_matrix(char const* filename);
 
   operator safe_bool () const
-    { return (ok_)? &safe_bool_dummy::dummy : 0; }
+    { return (ok_)? VCL_SAFE_BOOL_TRUE : 0; }
   bool operator!() const
     { return !ok_; }
 

@@ -42,9 +42,7 @@ struct vul_file_iterator_data;
 
 class vul_file_iterator
 {
-  //: Helper types for safe boolean conversion.
-  struct safe_bool_dummy { void dummy() {} };
-  typedef void (safe_bool_dummy::* safe_bool)();
+  VCL_SAFE_BOOL_DEFINE;
  public:
 
   vul_file_iterator();

@@ -27,9 +27,7 @@
 
 class vil1_image
 {
-  //: Helper types for safe boolean conversion.
-  struct safe_bool_dummy { void dummy() {} };
-  typedef void (safe_bool_dummy::* safe_bool)();
+  VCL_SAFE_BOOL_DEFINE;
  public:
 // use this delegation macro for consistency, not convenience.
 #define vil1_image_delegate(m, args, default) { return ptr ? ptr->m args : default; }
@@ -142,7 +140,7 @@ class vil1_image
 
   //: conversion to bool
   operator safe_bool () const
-    { return (ptr != 0)? &safe_bool_dummy::dummy : 0; }
+    { return (ptr != 0)? VCL_SAFE_BOOL_TRUE : 0; }
 
   //: inverse conversion to bool
   bool operator!() const
@@ -156,30 +154,6 @@ class vil1_image
  protected:
   vil1_image_impl *ptr;
 };
-
-// Work-around for Borland and safe_bool.
-#ifdef VCL_BORLAND
-inline
-bool operator&&(const vil1_image& img, bool b)
-{
-  return b && (img?true:false);
-}
-inline
-bool operator&&(bool b, const vil1_image& img)
-{
-  return b && (img?true:false);
-}
-inline
-bool operator||(const vil1_image& img, bool b)
-{
-  return b || (img?true:false);
-}
-inline
-bool operator||(bool b, const vil1_image& img)
-{
-  return b || (img?true:false);
-}
-#endif
 
 //: Print a 1-line summary of contents
 inline vcl_ostream& operator<<(vcl_ostream& s, vil1_image const& i)

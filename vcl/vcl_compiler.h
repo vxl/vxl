@@ -216,4 +216,16 @@ typedef int saw_VCL_FOR_SCOPE_HACK;
 // as in return VCL_VOID_RETURN;
 #define VCL_VOID_RETURN /*empty*/
 
+//----------------------------------------------------------------------------
+// Macros for safe-bool idiom.
+#ifdef VCL_BORLAND
+# define VCL_SAFE_BOOL_TRUE true
+# define VCL_SAFE_BOOL_DEFINE typedef bool safe_bool
+#else
+# define VCL_SAFE_BOOL_TRUE (&safe_bool_dummy::dummy)
+# define VCL_SAFE_BOOL_DEFINE \
+   struct safe_bool_dummy { void dummy() {} }; \
+   typedef void (safe_bool_dummy::* safe_bool)()
+#endif
+
 #endif // vcl_compiler_h_

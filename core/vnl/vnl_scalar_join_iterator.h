@@ -68,9 +68,7 @@ class vnl_scalar_join_iterator_indexed_pair;
 template <class T>
 class vnl_scalar_join_iterator
 {
-  //: Helper types for safe boolean conversion.
-  struct safe_bool_dummy { void dummy() {} };
-  typedef void (safe_bool_dummy::* safe_bool)();
+  VCL_SAFE_BOOL_DEFINE;
  protected:
   unsigned n1;
   unsigned n2;
@@ -95,7 +93,7 @@ class vnl_scalar_join_iterator
 
   //: Return true if all pairs have been seen.
   operator safe_bool () const
-    { return (!done())? &safe_bool_dummy::dummy : 0; }
+    { return (!done())? VCL_SAFE_BOOL_TRUE : 0; }
 
   //: Return false if all pairs have been seen.
   bool operator!() const

@@ -284,7 +284,7 @@ char const* vul_file_iterator::filename()
 
 vul_file_iterator::operator vul_file_iterator::safe_bool() const
 {
-  return (p->value() != 0)? &safe_bool_dummy::dummy : 0;
+  return (p->value() != 0)? VCL_SAFE_BOOL_TRUE : 0;
 }
 
 bool vul_file_iterator::operator!() const

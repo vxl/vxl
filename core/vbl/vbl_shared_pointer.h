@@ -78,13 +78,11 @@ struct vbl_shared_pointer
   }
 
  private:
-  //: Helper types for safe boolean conversion.
-  struct safe_bool_dummy { void dummy() {} };
-  typedef void (safe_bool_dummy::* safe_bool)();
+  VCL_SAFE_BOOL_DEFINE;
  public:
   // conversion to bool
   operator safe_bool () const
-    { return (data != 0)? &safe_bool_dummy::dummy : 0; }
+    { return (data != 0)? VCL_SAFE_BOOL_TRUE : 0; }
 
   // inverse conversion to bool
   bool operator!() const

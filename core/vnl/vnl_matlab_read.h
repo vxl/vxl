@@ -42,9 +42,7 @@ template <class T> void vnl_matlab_read_data(vcl_istream &s, T *ptr, unsigned n)
 
 class vnl_matlab_readhdr
 {
-  //: Helper types for safe boolean conversion.
-  struct safe_bool_dummy { void dummy() {} };
-  typedef void (safe_bool_dummy::* safe_bool)();
+  VCL_SAFE_BOOL_DEFINE;
  public:
   vnl_matlab_readhdr(vcl_istream &);
   ~vnl_matlab_readhdr();

@@ -33,9 +33,7 @@
 template <class T>
 class vil_smart_ptr
 {
-  //: Helper types for safe boolean conversion.
-  struct safe_bool_dummy { void dummy() {} };
-  typedef void (safe_bool_dummy::* safe_bool)();
+  VCL_SAFE_BOOL_DEFINE;
  public:
   vil_smart_ptr ()
     :  ptr_(0) { }
@@ -85,7 +83,7 @@ class vil_smart_ptr
 
   //: Cast to bool
   operator safe_bool () const
-    { return (ptr_ != (T*)0)? &safe_bool_dummy::dummy : 0; }
+    { return (ptr_ != (T*)0)? VCL_SAFE_BOOL_TRUE : 0; }
 
   //: Inverse bool
   bool operator!() const
@@ -156,34 +154,6 @@ inline bool operator!= (T const* p, vil_smart_ptr<T> const& a)
 {
   return a.as_pointer() != p;
 }
-
-// Work-around for Borland and safe_bool.
-#ifdef VCL_BORLAND
-template <class T>
-inline
-bool operator&&(const vil_smart_ptr<T>& ptr, bool b)
-{
-  return b && (ptr?true:false);
-}
-template <class T>
-inline
-bool operator&&(bool b, const vil_smart_ptr<T>& ptr)
-{
-  return b && (ptr?true:false);
-}
-template <class T>
-inline
-bool operator||(const vil_smart_ptr<T>& ptr, bool b)
-{
-  return b || (ptr?true:false);
-}
-template <class T>
-inline
-bool operator||(bool b, const vil_smart_ptr<T>& ptr)
-{
-  return b || (ptr?true:false);
-}
-#endif
 
 // Sunpro and GCC need a vcl_ostream operator. It need not be inline
 // because if you're about to make a system call you can afford the

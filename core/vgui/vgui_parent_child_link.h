@@ -68,9 +68,7 @@ struct vgui_parent_child_link_impl;   // implementation class.
 struct vgui_parent_child_link
 {
  private:
-  //: Helper types for safe boolean conversion.
-  struct safe_bool_dummy { void dummy() {} };
-  typedef void (safe_bool_dummy::* safe_bool)();
+  VCL_SAFE_BOOL_DEFINE;
  public:
   //: Constructor - creates a default vgui_parent_child_link.
   vgui_parent_child_link();
@@ -156,30 +154,6 @@ struct vgui_parent_child_link
   // Pointer to implementation
   vgui_parent_child_link_impl *pimpl;
 };
-
-// Work-around for Borland and safe_bool.
-#ifdef VCL_BORLAND
-inline
-bool operator&&(const vgui_parent_child_link& link, bool b)
-{
-  return b && (link?true:false);
-}
-inline
-bool operator&&(bool b, const vgui_parent_child_link& link)
-{
-  return b && (link?true:false);
-}
-inline
-bool operator||(const vgui_parent_child_link& link, bool b)
-{
-  return b || (link?true:false);
-}
-inline
-bool operator||(bool b, const vgui_parent_child_link& link)
-{
-  return b || (link?true:false);
-}
-#endif
 
 vcl_ostream & operator<<(vcl_ostream &, vgui_parent_child_link const &);
 

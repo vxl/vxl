@@ -35,9 +35,7 @@ template <class T>
 class vil3d_image_view : public vil3d_image_view_base
 {
  private:
-  //: Helper types for safe boolean conversion.
-  struct safe_bool_dummy { void dummy() {} };
-  typedef void (safe_bool_dummy::* safe_bool)();
+  VCL_SAFE_BOOL_DEFINE;
  protected:
   //: Pointer to pixel at origin.
   T * top_left_;
@@ -159,7 +157,7 @@ class vil3d_image_view : public vil3d_image_view_base
 
   //: Cast to bool is true if pointing at some data.
   operator safe_bool () const
-    { return (top_left_ != (T*)0)? &safe_bool_dummy::dummy : 0; }
+    { return (top_left_ != (T*)0)? VCL_SAFE_BOOL_TRUE : 0; }
 
   //: Return false if pointing at some data.
   bool operator!() const
@@ -283,34 +281,6 @@ vcl_ostream& operator<<(vcl_ostream& s, vil3d_image_view<T> const& im)
 {
   im.print(s); return s;
 }
-
-// Work-around for Borland and safe_bool.
-#ifdef VCL_BORLAND
-template <class T>
-inline
-bool operator&&(const vil3d_image_view<T>& view, bool b)
-{
-  return b && (view?true:false);
-}
-template <class T>
-inline
-bool operator&&(bool b, const vil3d_image_view<T>& view)
-{
-  return b && (view?true:false);
-}
-template <class T>
-inline
-bool operator||(const vil3d_image_view<T>& view, bool b)
-{
-  return b || (view?true:false);
-}
-template <class T>
-inline
-bool operator||(bool b, const vil3d_image_view<T>& view)
-{
-  return b || (view?true:false);
-}
-#endif
 
 //: True if the actual images are identical.
 // $\bigwedge_{i,j,k,p} {\textstyle src}(i,j,k,p) == {\textstyle dest}(i,j,k,p)$

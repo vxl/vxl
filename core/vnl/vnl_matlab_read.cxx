@@ -66,7 +66,7 @@ vnl_matlab_readhdr::~vnl_matlab_readhdr()
 
 vnl_matlab_readhdr::operator vnl_matlab_readhdr::safe_bool () const
 {
-  return (s.good() && !s.eof())? &safe_bool_dummy::dummy : 0; // FIXME
+  return (s.good() && !s.eof())? VCL_SAFE_BOOL_TRUE : 0; // FIXME
 }
 
 bool vnl_matlab_readhdr::operator!() const
