@@ -35,14 +35,18 @@ my $show_diffs = 0;
 
 $mv = "mv";
 $rm = "rm -f";
+$perl= "perl";
 
 # find a suitable 'diff' command :
-my $diff = "diff";
+$diff = "diff";
 if (-f ($diff = "/bin/diff")) { }
 elsif (-f ($diff = "/usr/bin/diff")) { }
 elsif (-f ($diff = "C:/cygnus/CYGWIN~1/H-I586~1/bin/diff.exe")) {
   $mv = "rename";
   $rm = "del";
+  chop($perl = `bash -c 'type -p perl'`);
+  $perl =~ s!^/cygdrive/([a-z])/!$1:/!;
+# print STDERR "PERL=[$perl]";
 }
 else { die "no diff found\n"; }
 
@@ -59,7 +63,7 @@ if ($#ARGV>=0 && defined($ARGV[0])) {
 sub shell {
   my ($arg) = @_;
   #print STDERR "[shell: $arg";
-  #system("echo " . $arg);  
+  # system("echo " . $arg);  
   $ok = system($arg) >> 8;
   die "help [$arg]" if $ok != 0;
   #print STDERR "]\n";
@@ -75,12 +79,25 @@ sub files_differ {
   # a lot of file stats here...
   die "no such file : '$a'\n" unless -f $a;
   die "no such file : '$b'\n" unless -f $b;
-  die "no $diff\n" unless -f $diff;
 
-  system "$diff -b $a $b 2>&1 > /dev/null";
-  $error = $?;
-
-  return $error ? 1 : 0;
+  open(A, "$a") || die;
+  open(B, "$b") || die;
+  do {
+      $aline = <A>;
+      $bline = <B>;
+      if ($aline ne $bline) {
+	  # print STDERR "$aline >> $bline\n";
+          goto fail;
+      }
+  } until eof A;
+  goto fail if ! eof B;
+  close A;
+  close B;
+  return 0;
+fail:
+  close A;
+  close B;
+  return 1;
 }
 
 # entry point
@@ -117,8 +134,8 @@ sub main {
     print STDERR "examining ", $f, "... ";
     
     # filter, passing arguments through and redirecting stdout to $f.filt
-    &shell("perl -x $IUELOCALROOT/vxl/bin/vxl_filter.pl < $f @options > $f.filt");
-    
+    &shell("$perl -x $IUELOCALROOT/vxl/bin/vxl_filter.pl < $f @options > $f.filt");
+
     # compare and replace if changed
     if (&files_differ("$f", "$f.filt")) {
 	print STDERR "*changed*";
