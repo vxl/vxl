@@ -64,6 +64,34 @@ inline void vimt_find_world_peaks_3x3(vcl_vector<vgl_point_2d<double> >& peaks,
   }
 }
 
+//: Return world co-ordinates of all points in image strictly above their 8 neighbours
+// \param peak_pos: Position of each peak
+// \param peak_value: Value at peak
+// \param clear_list: If true (the default) then empty list before adding new examples
+template <class T>
+inline void vimt_find_world_peaks_3x3(vcl_vector<vgl_point_2d<double> >& peak_pos,
+                                      vcl_vector<T>& peak_value,
+                                      const vimt_image_2d_of<T>& image,
+                                      unsigned plane=0, bool clear_list=true)
+{
+  if (clear_list) { peaks.resize(0); peak_value.resize(0); }
+  const vil2_image_view<T>& im = image.image();
+  vimt_transform_2d im2w = image.world2im().inverse();
+  unsigned ni=im.ni(),nj=im.nj();
+  int istep = im.istep(),jstep=im.jstep();
+  const T* row = im.top_left_ptr()+plane*im.planestep()+istep+jstep;
+  for (unsigned j=1;j<nj;++j,row+=jstep)
+  {
+    const T* pixel = row;
+    for (unsigned i=1;i<ni;++i,pixel+=istep)
+      if (vimt_is_peak_3x3(pixel,istep,jstep))
+	  {
+	    peak_pos.push_back(im2w(i,j));
+		peak_value.push_back(*pixel);
+      }
+  }
+}
+
 //: Return image co-ordinates of maximum value in image
 //  (Or first one found if multiple equivalent maxima)
 template <class T>
