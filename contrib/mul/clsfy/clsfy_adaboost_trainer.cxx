@@ -2,13 +2,11 @@
 #pragma implementation
 #endif
 
-
-
 //:
 // \file
 // \brief Functions to train classifiers using AdaBoost algorithm
-// \author 	dac	
-// \date 	Fri Mar  1 23:49:39 2002	
+// \author dac
+// \date   Fri Mar  1 23:49:39 2002
 //  Functions to train classifiers using AdaBoost algorithm
 //  AdaBoost combines a set of (usually simple, weak) classifiers into
 //  a more powerful single classifier.  Essentially it selects the
@@ -38,16 +36,15 @@ clsfy_adaboost_trainer::~clsfy_adaboost_trainer()
 }
 
 
-
 //: Extracts the j-th element of each vector in data and puts into v
-void clsfy_adaboost_trainer::clsfy_get_elements(vnl_vector<double>& v, 
+void clsfy_adaboost_trainer::clsfy_get_elements(vnl_vector<double>& v,
                                mbl_data_wrapper<vnl_vector<double> >& data, int j)
 {
   int n = data.size();
   v.resize(n);
   data.reset();
   for (int i=0;i<n;++i)
-  {  
+  {
     v[i] = data.current()[j];
     data.next();
   }
@@ -58,13 +55,12 @@ void clsfy_adaboost_trainer::clsfy_get_elements(vnl_vector<double>& v,
 void clsfy_adaboost_trainer::clsfy_update_weights_weak(vnl_vector<double> &wts,
                                  const vnl_vector<double>& data,
                                  clsfy_classifier_1d& classifier,
-                                 int class_number, 
+                                 int class_number,
                                  double beta)
 {
   int n = wts.size();
   for (int i=0;i<n;++i)
     if (classifier.classify(data[i])==class_number) wts[i]*=beta;
-  
 }
 
 
@@ -74,16 +70,15 @@ void clsfy_adaboost_trainer::clsfy_update_weights_weak(vnl_vector<double> &wts,
 //  here egs0 are -ve examples
 //  and egs1 are +ve examples
 void clsfy_adaboost_trainer::build_strong_classifier(
-                            clsfy_simple_adaboost& strong_classifier, 
-                            int max_n_clfrs, 
+                            clsfy_simple_adaboost& strong_classifier,
+                            int max_n_clfrs,
                             clsfy_builder_1d& builder,
                             mbl_data_wrapper<vnl_vector<double> >& egs0,
                             mbl_data_wrapper<vnl_vector<double> >& egs1)
 {
-
   // remove all alphas and classifiers from strong classifier
-  strong_classifier.clear();  
-  
+  strong_classifier.clear();
+
 
   clsfy_classifier_1d* c1d = builder.new_classifier();
   clsfy_classifier_1d* best_c1d= builder.new_classifier();
@@ -98,11 +93,11 @@ void clsfy_adaboost_trainer::build_strong_classifier(
 
   // Initialise the weights on each sample
   vnl_vector<double> wts0(n0,0.5/n0);
-  vnl_vector<double> wts1(n1,0.5/n1); 
+  vnl_vector<double> wts1(n1,0.5/n1);
 
   vnl_vector<double> best_params, egs0_1d, egs1_1d;
   double beta, alpha;
-  
+
 
   for (int i=0;i<n;++i)
   {
@@ -118,7 +113,7 @@ void clsfy_adaboost_trainer::build_strong_classifier(
       //vcl_cout<<"building classifier "<<j<<" of "<<d<<vcl_endl;
       clsfy_get_elements(egs0_1d,egs0,j);
       clsfy_get_elements(egs1_1d,egs1,j);
-     
+
       double error = builder.build(*c1d,egs0_1d,wts0,egs1_1d,wts1);
       //vcl_cout<<"error= "<<error<<vcl_endl;
       if (j==0 || error<min_error)
@@ -132,11 +127,10 @@ void clsfy_adaboost_trainer::build_strong_classifier(
     vcl_cout<<"best_j= "<<best_j<<vcl_endl;
     vcl_cout<<"min_error= "<<min_error<<vcl_endl;
 
-    if (min_error<1e-10)  // Hooray! 
-    { 
-
+    if (min_error<1e-10)  // Hooray!
+    {
       vcl_cout<<"min_error<1e-10 !!!"<<vcl_endl;
-      alpha  = vcl_log(2*(n0+n1));   //is this appropriate???
+      alpha  = vcl_log(2.0*(n0+n1));   //is this appropriate???
       strong_classifier.add_classifier( best_c1d, alpha, best_j);
 
       // delete classifiers on heap, cos clones taken by strong_classifier
@@ -145,11 +139,11 @@ void clsfy_adaboost_trainer::build_strong_classifier(
       return;
     }
 
-    
+
     if (0.5-min_error<1e-10) // Oh dear, no further improvement possible
     {
       vcl_cout<<"min_error => 0.5 !!!" <<vcl_endl;
-      beta=1.0;  
+      beta=1.0;
 
       // delete classifiers on heap, cos clones taken by strong_classifier
       delete c1d;
@@ -163,14 +157,12 @@ void clsfy_adaboost_trainer::build_strong_classifier(
 
     if (i<(n-1))
     {
-      
       // apply the best weak classfier
       clsfy_get_elements(egs0_1d,egs0,best_j);
       clsfy_get_elements(egs1_1d,egs1,best_j);
-     
+
       clsfy_update_weights_weak(wts0,egs0_1d,*best_c1d,0,beta);
       clsfy_update_weights_weak(wts1,egs1_1d,*best_c1d,1,beta);
-      
 
       // normalise the weights
       double w_sum = wts0.mean()*n0 + wts1.mean()*n1;
@@ -200,7 +192,7 @@ vcl_string clsfy_adaboost_trainer::is_a() const
 //=======================================================================
 
     // required if data stored on the heap is present in this class
-#if (0)
+#if 0
 clsfy_adaboost_trainer::clsfy_adaboost_trainer(const clsfy_adaboost_trainer& new_b):
   data_ptr_(0)
 {
@@ -210,7 +202,7 @@ clsfy_adaboost_trainer::clsfy_adaboost_trainer(const clsfy_adaboost_trainer& new
 //=======================================================================
 
     // required if data stored on the heap is present in this class
-clsfy_adaboost_trainer& clsfy_adaboost_trainer::operator=(const clsfy_adaboost_trainer& new_b
+clsfy_adaboost_trainer& clsfy_adaboost_trainer::operator=(const clsfy_adaboost_trainer& new_b)
 {
   if (&new_b==this) return *this;
 
@@ -252,7 +244,7 @@ void clsfy_adaboost_trainer::b_write(vsl_b_ostream& bfs) const
 void clsfy_adaboost_trainer::b_read(vsl_b_istream& bfs)
 {
   vcl_cerr << "clsfy_adaboost_trainer::b_read() NYI" << vcl_endl;
-#if (0)
+#if 0
   if (!bfs) return;
 
   short version;
