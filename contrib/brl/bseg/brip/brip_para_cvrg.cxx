@@ -2,7 +2,7 @@
 // \file
 #include <vul/vul_timer.h>
 #include <vcl_cstdlib.h>
-#include <vcl/vcl_cmath.h>
+#include <vcl_cmath.h>
 #include <brip/brip_vil1_float_ops.h>
 #include <brip/brip_para_cvrg.h>
 
