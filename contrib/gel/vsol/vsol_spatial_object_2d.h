@@ -52,8 +52,6 @@ class vsol_curve_2d;
 class vsol_region_2d;
 class vsol_group_2d;
 
-extern void iu_delete(vsol_spatial_object_2d *);
-
 #ifndef vsol_spatial_object_flags_
 #define vsol_spatial_object_flags_
 

@@ -56,8 +56,6 @@ class vsol_region_3d;
 class vsol_volume_3d;
 class vsol_group_3d;
 
-extern void iu_delete(vsol_spatial_object_3d *);
-
 #ifndef vsol_spatial_object_flags_
 #define vsol_spatial_object_flags_
 
