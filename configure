@@ -299,7 +299,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT CXX CXXFLAGS ac_ct_CXX CXXCPP EGREP VCL_USE_NATIVE_STL VCL_USE_NATIVE_COMPLEX VCL_USE_IMPLICIT_TEMPLATES VCL_HAS_BOOL VCL_HAS_DYNAMIC_CAST VCL_HAS_RTTI VCL_HAS_TYPENAME VCL_HAS_EXPORT VCL_HAS_MUTABLE VCL_HAS_EXPLICIT VCL_STATIC_CONST_INIT_INT VCL_STATIC_CONST_INIT_NO_DEFN VCL_STATIC_CONST_INIT_FLOAT VCL_FOR_SCOPE_HACK VCL_HAS_MEMBER_TEMPLATES VCL_CAN_DO_PARTIAL_SPECIALIZATION VCL_ALLOWS_INLINE_INSTANTIATION VCL_NEEDS_INLINE_INSTANTIATION VCL_CAN_DO_STATIC_TEMPLATE_MEMBER VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD VCL_OVERLOAD_CAST VCL_DEFINE_SPECIALIZATION VCL_CANNOT_SPECIALIZE_CV VCL_NULL_TMPL_ARGS VCL_DEFAULT_VALUE VCL_NO_STATIC_DATA_MEMBERS VCL_HAS_TEMPLATE_SYMBOLS VCL_TEMPLATE_MATCHES_TOO_OFTEN VCL_HAS_SLICED_DESTRUCTOR_BUG VCL_DEFAULT_TMPL_ARG VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER VCL_SUNPRO_CLASS_SCOPE_HACK VCL_HAS_EXCEPTIONS VCL_HAS_NAMESPACES VCL_ALLOWS_NAMESPACE_STD VCL_NEEDS_NAMESPACE_STD VCL_BIG_ENDIAN VCL_LITTLE_ENDIAN VCL_CXX_HAS_HEADER_CASSERT VCL_CXX_HAS_HEADER_CISO646 VCL_CXX_HAS_HEADER_CSETJMP VCL_CXX_HAS_HEADER_CSTDIO VCL_CXX_HAS_HEADER_CTIME VCL_CXX_HAS_HEADER_CCTYPE VCL_CXX_HAS_HEADER_CLIMITS VCL_CXX_HAS_HEADER_CSIGNAL VCL_CXX_HAS_HEADER_CSTDLIB VCL_CXX_HAS_HEADER_CWCHAR VCL_CXX_HAS_HEADER_CERRNO VCL_CXX_HAS_HEADER_CLOCALE VCL_CXX_HAS_HEADER_CSTDARG VCL_CXX_HAS_HEADER_CSTRING VCL_CXX_HAS_HEADER_CWCTYPE VCL_CXX_HAS_HEADER_CFLOAT VCL_CXX_HAS_HEADER_CMATH VCL_CXX_HAS_HEADER_CSTDDEF VCL_CXX_HAS_HEADER_ALGORITHM VCL_CXX_HAS_HEADER_IOMANIP VCL_CXX_HAS_HEADER_LIST VCL_CXX_HAS_HEADER_OSTREAM VCL_CXX_HAS_HEADER_STREAMBUF VCL_CXX_HAS_HEADER_BITSET VCL_CXX_HAS_HEADER_IOS VCL_CXX_HAS_HEADER_LOCALE VCL_CXX_HAS_HEADER_QUEUE VCL_CXX_HAS_HEADER_STRING VCL_CXX_HAS_HEADER_COMPLEX VCL_CXX_HAS_HEADER_IOSFWD VCL_CXX_HAS_HEADER_MAP VCL_CXX_HAS_HEADER_SET VCL_CXX_HAS_HEADER_TYPEINFO VCL_CXX_HAS_HEADER_DEQUE VCL_CXX_HAS_HEADER_IOSTREAM VCL_CXX_HAS_HEADER_MEMORY VCL_CXX_HAS_HEADER_SSTREAM VCL_CXX_HAS_HEADER_UTILITY VCL_CXX_HAS_HEADER_EXCEPTION VCL_CXX_HAS_HEADER_ISTREAM VCL_CXX_HAS_HEADER_NEW VCL_CXX_HAS_HEADER_STACK VCL_CXX_HAS_HEADER_VALARRAY VCL_CXX_HAS_HEADER_FSTREAM VCL_CXX_HAS_HEADER_ITERATOR VCL_CXX_HAS_HEADER_NUMERIC VCL_CXX_HAS_HEADER_STDEXCEPT VCL_CXX_HAS_HEADER_VECTOR VCL_CXX_HAS_HEADER_FUNCTIONAL VCL_CXX_HAS_HEADER_LIMITS VCL_CXX_HAS_HEADER_STRSTREAM CPP VXL_HAS_PTHREAD_H VXL_HAS_SEMAPHORE_H VXL_UNISTD_HAS_USECONDS_T VXL_UNISTD_HAS_INTPTR_T VXL_UNISTD_HAS_UALARM VXL_UNISTD_HAS_USLEEP VXL_UNISTD_HAS_LCHOWN VXL_UNISTD_HAS_PREAD VXL_UNISTD_HAS_PWRITE VXL_UNISTD_HAS_TELL VXL_STDLIB_HAS_QSORT VXL_STDLIB_HAS_LRAND48 VXL_STDLIB_HAS_DRAND48 VXL_STDLIB_HAS_SRAND48 VXL_IEEEFP_HAS_FINITE VXL_C_MATH_HAS_FINITE VXL_C_MATH_HAS_SQRTF VXL_UNISTD_USLEEP_IS_VOID VXL_TWO_ARG_GETTIME VXL_HAS_IEEEFP_H VXL_BIG_ENDIAN VXL_LITTLE_ENDIAN VXL_HAS_BYTE VXL_HAS_INT_8 VXL_HAS_INT_16 VXL_HAS_INT_32 VXL_HAS_INT_64 VXL_HAS_IEEE_32 VXL_HAS_IEEE_64 VXL_HAS_IEEE_96 VXL_HAS_IEEE_128 VXL_BYTE VXL_INT_8 VXL_INT_16 VXL_INT_32 VXL_INT_64 VXL_INT_64_IS_LONG VXL_IEEE_32 VXL_IEEE_64 VXL_IEEE_96 VXL_IEEE_128 LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT CXX CXXFLAGS ac_ct_CXX CXXCPP EGREP VCL_USE_NATIVE_STL VCL_USE_NATIVE_COMPLEX VCL_USE_IMPLICIT_TEMPLATES VCL_HAS_BOOL VCL_HAS_DYNAMIC_CAST VCL_HAS_RTTI VCL_HAS_TYPENAME VCL_HAS_EXPORT VCL_HAS_MUTABLE VCL_HAS_EXPLICIT VCL_STATIC_CONST_INIT_INT VCL_STATIC_CONST_INIT_NO_DEFN VCL_STATIC_CONST_INIT_FLOAT VCL_FOR_SCOPE_HACK VCL_HAS_MEMBER_TEMPLATES VCL_CAN_DO_PARTIAL_SPECIALIZATION VCL_ALLOWS_INLINE_INSTANTIATION VCL_NEEDS_INLINE_INSTANTIATION VCL_CAN_DO_STATIC_TEMPLATE_MEMBER VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD VCL_OVERLOAD_CAST VCL_DEFINE_SPECIALIZATION VCL_CANNOT_SPECIALIZE_CV VCL_NULL_TMPL_ARGS VCL_DEFAULT_VALUE VCL_NO_STATIC_DATA_MEMBERS VCL_HAS_TEMPLATE_SYMBOLS VCL_TEMPLATE_MATCHES_TOO_OFTEN VCL_HAS_SLICED_DESTRUCTOR_BUG VCL_NUMERIC_LIMITS_HAS_INFINITY VCL_PROCESSOR_HAS_INFINITY VCL_DEFAULT_TMPL_ARG VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER VCL_SUNPRO_CLASS_SCOPE_HACK VCL_HAS_EXCEPTIONS VCL_HAS_NAMESPACES VCL_ALLOWS_NAMESPACE_STD VCL_NEEDS_NAMESPACE_STD VCL_BIG_ENDIAN VCL_LITTLE_ENDIAN VCL_CXX_HAS_HEADER_CASSERT VCL_CXX_HAS_HEADER_CISO646 VCL_CXX_HAS_HEADER_CSETJMP VCL_CXX_HAS_HEADER_CSTDIO VCL_CXX_HAS_HEADER_CTIME VCL_CXX_HAS_HEADER_CCTYPE VCL_CXX_HAS_HEADER_CLIMITS VCL_CXX_HAS_HEADER_CSIGNAL VCL_CXX_HAS_HEADER_CSTDLIB VCL_CXX_HAS_HEADER_CWCHAR VCL_CXX_HAS_HEADER_CERRNO VCL_CXX_HAS_HEADER_CLOCALE VCL_CXX_HAS_HEADER_CSTDARG VCL_CXX_HAS_HEADER_CSTRING VCL_CXX_HAS_HEADER_CWCTYPE VCL_CXX_HAS_HEADER_CFLOAT VCL_CXX_HAS_HEADER_CMATH VCL_CXX_HAS_HEADER_CSTDDEF VCL_CXX_HAS_HEADER_ALGORITHM VCL_CXX_HAS_HEADER_IOMANIP VCL_CXX_HAS_HEADER_LIST VCL_CXX_HAS_HEADER_OSTREAM VCL_CXX_HAS_HEADER_STREAMBUF VCL_CXX_HAS_HEADER_BITSET VCL_CXX_HAS_HEADER_IOS VCL_CXX_HAS_HEADER_LOCALE VCL_CXX_HAS_HEADER_QUEUE VCL_CXX_HAS_HEADER_STRING VCL_CXX_HAS_HEADER_COMPLEX VCL_CXX_HAS_HEADER_IOSFWD VCL_CXX_HAS_HEADER_MAP VCL_CXX_HAS_HEADER_SET VCL_CXX_HAS_HEADER_TYPEINFO VCL_CXX_HAS_HEADER_DEQUE VCL_CXX_HAS_HEADER_IOSTREAM VCL_CXX_HAS_HEADER_MEMORY VCL_CXX_HAS_HEADER_SSTREAM VCL_CXX_HAS_HEADER_UTILITY VCL_CXX_HAS_HEADER_EXCEPTION VCL_CXX_HAS_HEADER_ISTREAM VCL_CXX_HAS_HEADER_NEW VCL_CXX_HAS_HEADER_STACK VCL_CXX_HAS_HEADER_VALARRAY VCL_CXX_HAS_HEADER_FSTREAM VCL_CXX_HAS_HEADER_ITERATOR VCL_CXX_HAS_HEADER_NUMERIC VCL_CXX_HAS_HEADER_STDEXCEPT VCL_CXX_HAS_HEADER_VECTOR VCL_CXX_HAS_HEADER_FUNCTIONAL VCL_CXX_HAS_HEADER_LIMITS VCL_CXX_HAS_HEADER_STRSTREAM CPP VXL_HAS_PTHREAD_H VXL_HAS_SEMAPHORE_H VXL_UNISTD_HAS_USECONDS_T VXL_UNISTD_HAS_INTPTR_T VXL_UNISTD_HAS_UALARM VXL_UNISTD_HAS_USLEEP VXL_UNISTD_HAS_LCHOWN VXL_UNISTD_HAS_PREAD VXL_UNISTD_HAS_PWRITE VXL_UNISTD_HAS_TELL VXL_STDLIB_HAS_QSORT VXL_STDLIB_HAS_LRAND48 VXL_STDLIB_HAS_DRAND48 VXL_STDLIB_HAS_SRAND48 VXL_IEEEFP_HAS_FINITE VXL_C_MATH_HAS_FINITE VXL_C_MATH_HAS_SQRTF VXL_UNISTD_USLEEP_IS_VOID VXL_TWO_ARG_GETTIME VXL_HAS_IEEEFP_H VXL_BIG_ENDIAN VXL_LITTLE_ENDIAN VXL_HAS_BYTE VXL_HAS_INT_8 VXL_HAS_INT_16 VXL_HAS_INT_32 VXL_HAS_INT_64 VXL_HAS_IEEE_32 VXL_HAS_IEEE_64 VXL_HAS_IEEE_96 VXL_HAS_IEEE_128 VXL_BYTE VXL_INT_8 VXL_INT_16 VXL_INT_32 VXL_INT_64 VXL_INT_64_IS_LONG VXL_IEEE_32 VXL_IEEE_64 VXL_IEEE_96 VXL_IEEE_128 LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -3443,13 +3443,13 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  VCL_ALLOWS_INLINE_INSTANTIATION="1";echo "$as_me:$LINENO: result: yes" >&5
+  VCL_ALLOWS_INLINE_INSTANTIATION=1;echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-VCL_ALLOWS_INLINE_INSTANTIATION="0";echo "$as_me:$LINENO: result: no" >&5
+VCL_ALLOWS_INLINE_INSTANTIATION=0;echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
 rm -f conftest.$ac_objext conftest.$ac_ext
@@ -3511,13 +3511,13 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  VCL_NEEDS_INLINE_INSTANTIATION="0";echo "$as_me:$LINENO: result: no" >&5
+  VCL_NEEDS_INLINE_INSTANTIATION=0;echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-VCL_NEEDS_INLINE_INSTANTIATION="1";echo "$as_me:$LINENO: result: yes" >&5
+VCL_NEEDS_INLINE_INSTANTIATION=1;echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
 fi
 rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
@@ -3529,12 +3529,9 @@ ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 else
-VCL_NEEDS_INLINE_INSTANTIATION="0";
+VCL_NEEDS_INLINE_INSTANTIATION=0;
 export VCL_NEEDS_INLINE_INSTANTIATION;
 fi
-#AC_SUBST(VCL_DO_NOT_INSTANTIATE)
-#AC_SUBST(VCL_UNINSTANTIATE_SPECIALIZATION)
-#AC_SUBST(VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION)
 
 echo "$as_me:$LINENO: checking whether the C++ compiler allows initialization of static const int" >&5
 echo $ECHO_N "checking whether the C++ compiler allows initialization of static const int... $ECHO_C" >&6
@@ -3678,13 +3675,13 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  VCL_STATIC_CONST_INIT_FLOAT="1";echo "$as_me:$LINENO: result: yes" >&5
+  VCL_STATIC_CONST_INIT_FLOAT=1;echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-VCL_STATIC_CONST_INIT_FLOAT="0";echo "$as_me:$LINENO: result: no" >&5
+VCL_STATIC_CONST_INIT_FLOAT=0;echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
 rm -f conftest.$ac_objext conftest.$ac_ext
@@ -3730,13 +3727,13 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  VCL_CAN_DO_STATIC_TEMPLATE_MEMBER="1";echo "$as_me:$LINENO: result: yes" >&5
+  VCL_CAN_DO_STATIC_TEMPLATE_MEMBER=1;echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-VCL_CAN_DO_STATIC_TEMPLATE_MEMBER="0";echo "$as_me:$LINENO: result: no" >&5
+VCL_CAN_DO_STATIC_TEMPLATE_MEMBER=0;echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
 rm -f conftest.$ac_objext conftest.$ac_ext
@@ -3789,13 +3786,13 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER="1";echo "$as_me:$LINENO: result: yes" >&5
+  VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER=1;echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER="0";echo "$as_me:$LINENO: result: no" >&5
+VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER=0;echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
 rm -f conftest.$ac_objext conftest.$ac_ext
@@ -3867,13 +3864,13 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD="0";echo "$as_me:$LINENO: result: no" >&5
+  VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD=0;echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD="1";echo "$as_me:$LINENO: result: yes" >&5
+VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD=1;echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
 fi
 rm -f conftest.$ac_objext conftest.$ac_ext
@@ -4084,13 +4081,13 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  VCL_NO_STATIC_DATA_MEMBERS="0";echo "$as_me:$LINENO: result: yes" >&5
+  VCL_NO_STATIC_DATA_MEMBERS=0;echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-VCL_NO_STATIC_DATA_MEMBERS="1";echo "$as_me:$LINENO: result: no" >&5
+VCL_NO_STATIC_DATA_MEMBERS=1;echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
 rm -f conftest.$ac_objext conftest.$ac_ext
@@ -4147,13 +4144,13 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  VCL_HAS_TEMPLATE_SYMBOLS="0";echo "$as_me:$LINENO: result: no" >&5
+  VCL_HAS_TEMPLATE_SYMBOLS=0;echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-VCL_HAS_TEMPLATE_SYMBOLS="1";echo "$as_me:$LINENO: result: yes" >&5
+VCL_HAS_TEMPLATE_SYMBOLS=1;echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
 fi
 rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
@@ -4199,13 +4196,13 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  VCL_TEMPLATE_MATCHES_TOO_OFTEN="0";echo "$as_me:$LINENO: result: no" >&5
+  VCL_TEMPLATE_MATCHES_TOO_OFTEN=0;echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-VCL_TEMPLATE_MATCHES_TOO_OFTEN="1";echo "$as_me:$LINENO: result: yes" >&5
+VCL_TEMPLATE_MATCHES_TOO_OFTEN=1;echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
 fi
 rm -f conftest.$ac_objext conftest.$ac_ext
@@ -4265,7 +4262,6 @@ struct C
 };
 void f(A) {}
 int main() { C c; f(c); return 0; }
-
 _ACEOF
 rm -f conftest$ac_exeext
 if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
@@ -4278,7 +4274,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  VCL_HAS_SLICED_DESTRUCTOR_BUG="0";echo "$as_me:$LINENO: result: no" >&5
+  VCL_HAS_SLICED_DESTRUCTOR_BUG=0;echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
 else
   echo "$as_me: program exited with status $ac_status" >&5
@@ -4286,12 +4282,148 @@ echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
 ( exit $ac_status )
-VCL_HAS_SLICED_DESTRUCTOR_BUG="1";echo "$as_me:$LINENO: result: yes" >&5
+VCL_HAS_SLICED_DESTRUCTOR_BUG=1;echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
 fi
 rm -f core.* *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
 fi
 export VCL_HAS_SLICED_DESTRUCTOR_BUG
+ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+echo "$as_me:$LINENO: checking whether std::numeric_limits<float>::has_infinity == 1" >&5
+echo $ECHO_N "checking whether std::numeric_limits<float>::has_infinity == 1... $ECHO_C" >&6
+
+ac_ext=cc
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+CXXFLAGS=$given_CXXFLAGS
+export CXXFLAGS
+
+if test "$cross_compiling" = yes; then
+  { { echo "$as_me:$LINENO: error: cannot run test program while cross compiling
+See \`config.log' for more details." >&5
+echo "$as_me: error: cannot run test program while cross compiling
+See \`config.log' for more details." >&2;}
+   { (exit 1); exit 1; }; }
+else
+  cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+// Several versions of gcc (3.0, 3.1, and 3.2) come with a
+// numeric_limits that reports that they have no infinity.
+#include <limits>
+int main() {
+  return std::numeric_limits<double>::has_infinity &&
+         std::numeric_limits<float>::has_infinity ? 0 : 1;
+}
+_ACEOF
+rm -f conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && { ac_try='./conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  VCL_NUMERIC_LIMITS_HAS_INFINITY=1;echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+else
+  echo "$as_me: program exited with status $ac_status" >&5
+echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+( exit $ac_status )
+VCL_NUMERIC_LIMITS_HAS_INFINITY=0;echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+rm -f core.* *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
+fi
+export VCL_NUMERIC_LIMITS_HAS_INFINITY
+ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+echo "$as_me:$LINENO: checking whether the processor actually has an infinity" >&5
+echo $ECHO_N "checking whether the processor actually has an infinity... $ECHO_C" >&6
+
+ac_ext=cc
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+CXXFLAGS=$given_CXXFLAGS
+export CXXFLAGS
+
+if test "$cross_compiling" = yes; then
+  { { echo "$as_me:$LINENO: error: cannot run test program while cross compiling
+See \`config.log' for more details." >&5
+echo "$as_me: error: cannot run test program while cross compiling
+See \`config.log' for more details." >&2;}
+   { (exit 1); exit 1; }; }
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+#include <cfloat>
+union u {  double d;  unsigned char c[8]; };
+int main() {
+  if (sizeof(double) != 8) return 1;
+  // If you have an odd machine, then add your own construction of infinity.
+  u v;
+  // Can we generate an IEEE infinity artifically on a big-endian machine?
+  v.c[0] = 0x7f; v.c[1] = 0xf0;
+  v.c[2] = v.c[3] = v.c[4] = v.c[5] = v.c[6] = v.c[7] = 0x00;
+  if (v.d > DBL_MAX) return 0;
+  // Can we generate an IEEE infinity artifically on a little-endian machine?
+  v.c[7] = 0x7f; v.c[6] = 0xf0;
+  v.c[0] = v.c[1] = v.c[2] = v.c[3] = v.c[4] = v.c[5] = 0x00;
+  if (v.d > DBL_MAX) return 0;
+  return 1;
+}
+_ACEOF
+rm -f conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && { ac_try='./conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  VCL_PROCESSOR_HAS_INFINITY=1;echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+else
+  echo "$as_me: program exited with status $ac_status" >&5
+echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+( exit $ac_status )
+VCL_PROCESSOR_HAS_INFINITY=0;echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+rm -f core.* *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
+fi
+export VCL_PROCESSOR_HAS_INFINITY
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -4365,13 +4497,13 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  VCL_CAN_DO_IMPLICIT_TEMPLATES="1";echo "$as_me:$LINENO: result: yes" >&5
+  VCL_CAN_DO_IMPLICIT_TEMPLATES=1;echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-VCL_CAN_DO_IMPLICIT_TEMPLATES="0";echo "$as_me:$LINENO: result: no" >&5
+VCL_CAN_DO_IMPLICIT_TEMPLATES=0;echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
 rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
@@ -4384,7 +4516,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 if test "$VCL_CAN_DO_IMPLICIT_TEMPLATES" = "0" -a "$VCL_USE_IMPLICIT_TEMPLATES" = "1"; then
   echo "Warning: turning off implicit template instantiation";
-  VCL_USE_IMPLICIT_TEMPLATES="0";
+  VCL_USE_IMPLICIT_TEMPLATES=0;
 fi
 #VCL_DFL_TYPE_PARAM_STLDECL
 #VCL_DFL_TMPL_PARAM_STLDECL
@@ -4438,13 +4570,13 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER="1";echo "$as_me:$LINENO: result: yes" >&5
+  VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER=1;echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER="0";echo "$as_me:$LINENO: result: no" >&5
+VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER=0;echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
 rm -f conftest.$ac_objext conftest.$ac_ext
@@ -4494,13 +4626,13 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER="1";echo "$as_me:$LINENO: result: yes" >&5
+  VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER=1;echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER="0";echo "$as_me:$LINENO: result: no" >&5
+VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER=0;echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
 rm -f conftest.$ac_objext conftest.$ac_ext
@@ -4512,7 +4644,7 @@ ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 else
-VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER="0";
+VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER=0;
 export VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER;
 fi
 #VCL_CXX_DEFAULT_TMPL_ARG
@@ -4901,7 +5033,7 @@ ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 else
-VCL_NEEDS_NAMESPACE_STD="0"; export VCL_NEEDS_NAMESPACE_STD
+VCL_NEEDS_NAMESPACE_STD=0; export VCL_NEEDS_NAMESPACE_STD
 fi
 
 ## architecture
@@ -12715,19 +12847,10 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 # SUBSTITUTIONS
 
 # manual
-
 # compiler
-
-#AC_SUBST(VCL_DO_NOT_INSTANTIATE)
-#AC_SUBST(VCL_UNINSTANTIATE_SPECIALIZATION)
-#AC_SUBST(VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION) # dubious
-
 #
-
 #
-
 #
-
 # standard header files.
 
 # from vxl/configure.in
@@ -12738,9 +12861,9 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 # If so, that would mean we can remove the makefile -D flags
 # to do with time.
 if test "$ac_twoarg_timeofday" = "yes"; then
-  VXL_TWO_ARG_GETTIME="1"
+  VXL_TWO_ARG_GETTIME=1
 else
-  VXL_TWO_ARG_GETTIME="0"
+  VXL_TWO_ARG_GETTIME=0
 fi
 
 # fsm
@@ -13249,19 +13372,19 @@ eval "$ac_cpp check_vxl_unistd.c" 2>&5 > check_vxl_unistd.i;
 
 # caveat: sometimes __useconds_t is defined, hence the space
 if (egrep "typedef.* useconds_t;" check_vxl_unistd.i >/dev/null 2>&1); then
-  VXL_UNISTD_HAS_USECONDS_T="1";
+  VXL_UNISTD_HAS_USECONDS_T=1;
   echo "... for useconds_t... yes"
 else
-  VXL_UNISTD_HAS_USECONDS_T="0";
+  VXL_UNISTD_HAS_USECONDS_T=0;
   echo "... for useconds_t... no"
 fi; export VXL_UNISTD_HAS_USECONDS_T;
 
 # caveat: sometimes __intptr_t is defined, hence the space
 if (egrep "typedef.* intptr_t;" check_vxl_unistd.i >/dev/null 2>&1); then
-  VXL_UNISTD_HAS_INTPTR_T="1";
+  VXL_UNISTD_HAS_INTPTR_T=1;
   echo "... for intptr_t... yes"
 else
-  VXL_UNISTD_HAS_INTPTR_T="0";
+  VXL_UNISTD_HAS_INTPTR_T=0;
   echo "... for intptr_t... no"
 fi; export VXL_UNISTD_HAS_INTPTR_T;
 
@@ -13287,12 +13410,12 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  VXL_UNISTD_USLEEP_IS_VOID="0";
+  VXL_UNISTD_USLEEP_IS_VOID=0;
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-VXL_UNISTD_USLEEP_IS_VOID="1";
+VXL_UNISTD_USLEEP_IS_VOID=1;
 fi
 rm -f conftest.$ac_objext conftest.$ac_ext
 export VXL_UNISTD_USLEEP_IS_VOID;
@@ -14269,12 +14392,12 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  VXL_STDLIB_HAS_QSORT="1"
+  VXL_STDLIB_HAS_QSORT=1
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-VXL_STDLIB_HAS_QSORT="0"
+VXL_STDLIB_HAS_QSORT=0
 fi
 rm -f conftest.$ac_objext conftest.$ac_ext
 export VXL_STDLIB_HAS_QSORT
@@ -14466,11 +14589,11 @@ presetting ac_cv_c_bigendian=no (or yes) will help" >&2;}
 esac
 
 if test $ac_cv_c_bigendian = no; then
-  VXL_BIG_ENDIAN="0";
-  VXL_LITTLE_ENDIAN="1";
+  VXL_BIG_ENDIAN=0;
+  VXL_LITTLE_ENDIAN=1;
 else
-  VXL_BIG_ENDIAN="1";
-  VXL_LITTLE_ENDIAN="0";
+  VXL_BIG_ENDIAN=1;
+  VXL_LITTLE_ENDIAN=0;
 fi
 
 #--------------------------------------------------------------------------------
@@ -15150,6 +15273,8 @@ s,@VCL_NO_STATIC_DATA_MEMBERS@,$VCL_NO_STATIC_DATA_MEMBERS,;t t
 s,@VCL_HAS_TEMPLATE_SYMBOLS@,$VCL_HAS_TEMPLATE_SYMBOLS,;t t
 s,@VCL_TEMPLATE_MATCHES_TOO_OFTEN@,$VCL_TEMPLATE_MATCHES_TOO_OFTEN,;t t
 s,@VCL_HAS_SLICED_DESTRUCTOR_BUG@,$VCL_HAS_SLICED_DESTRUCTOR_BUG,;t t
+s,@VCL_NUMERIC_LIMITS_HAS_INFINITY@,$VCL_NUMERIC_LIMITS_HAS_INFINITY,;t t
+s,@VCL_PROCESSOR_HAS_INFINITY@,$VCL_PROCESSOR_HAS_INFINITY,;t t
 s,@VCL_DEFAULT_TMPL_ARG@,$VCL_DEFAULT_TMPL_ARG,;t t
 s,@VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER@,$VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER,;t t
 s,@VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER@,$VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER,;t t

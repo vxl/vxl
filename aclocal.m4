@@ -500,7 +500,7 @@ class A {
   static const float x = 27.0f;
   static const double y = 27.0;
 };
-],,[VCL_STATIC_CONST_INIT_FLOAT="1";AC_MSG_RESULT(yes)],[VCL_STATIC_CONST_INIT_FLOAT="0";AC_MSG_RESULT(no)])
+],,[VCL_STATIC_CONST_INIT_FLOAT=1;AC_MSG_RESULT(yes)],[VCL_STATIC_CONST_INIT_FLOAT=0;AC_MSG_RESULT(no)])
 export VCL_STATIC_CONST_INIT_FLOAT
 AC_LANG_RESTORE])
 
@@ -632,7 +632,7 @@ int function(victor_fixed<double, 3> const &a,
   else
     return 2718;
 }
-],,[VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD="0";AC_MSG_RESULT(no)],[VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD="1";AC_MSG_RESULT(yes)])
+],,[VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD=0;AC_MSG_RESULT(no)],[VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD=1;AC_MSG_RESULT(yes)])
 export VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD
 AC_LANG_RESTORE])
 
@@ -658,7 +658,7 @@ int caller()
 void function(double *, int) {}
 
 // If the program links, the compiler didn't make a distinction.
-],,[VCL_HAS_TEMPLATE_SYMBOLS="0";AC_MSG_RESULT(no)],[VCL_HAS_TEMPLATE_SYMBOLS="1";AC_MSG_RESULT(yes)])
+],,[VCL_HAS_TEMPLATE_SYMBOLS=0;AC_MSG_RESULT(no)],[VCL_HAS_TEMPLATE_SYMBOLS=1;AC_MSG_RESULT(yes)])
 export VCL_HAS_TEMPLATE_SYMBOLS
 AC_LANG_RESTORE])
 
@@ -686,7 +686,7 @@ VCL_COMPILE_TXX
 AC_TRY_COMPILE([
 template <class T> inline T dot(T const *a, T const *b) { return a[0]*b[0]; }
 template double dot(double const *, double const *);
-],,[VCL_ALLOWS_INLINE_INSTANTIATION="1";AC_MSG_RESULT(yes)],[VCL_ALLOWS_INLINE_INSTANTIATION="0";AC_MSG_RESULT(no)])
+],,[VCL_ALLOWS_INLINE_INSTANTIATION=1;AC_MSG_RESULT(yes)],[VCL_ALLOWS_INLINE_INSTANTIATION=0;AC_MSG_RESULT(no)])
 export VCL_ALLOWS_INLINE_INSTANTIATION
 AC_LANG_RESTORE])
 
@@ -701,7 +701,7 @@ AC_TRY_COMPILE([
 template <class T>
 class vvv { static T xxx; };
 template class vvv<int>;
-],,[VCL_NO_STATIC_DATA_MEMBERS="0";AC_MSG_RESULT(yes)],[VCL_NO_STATIC_DATA_MEMBERS="1";AC_MSG_RESULT(no)])
+],,[VCL_NO_STATIC_DATA_MEMBERS=0;AC_MSG_RESULT(yes)],[VCL_NO_STATIC_DATA_MEMBERS=1;AC_MSG_RESULT(no)])
 export VCL_NO_STATIC_DATA_MEMBERS
 AC_LANG_RESTORE])
 
@@ -730,7 +730,7 @@ int function()
   return int(a_b);
 }
 // If the program links, the compiler inlined the function template.
-],,[VCL_NEEDS_INLINE_INSTANTIATION="0";AC_MSG_RESULT(no)],[VCL_NEEDS_INLINE_INSTANTIATION="1";AC_MSG_RESULT(yes)])
+],,[VCL_NEEDS_INLINE_INSTANTIATION=0;AC_MSG_RESULT(no)],[VCL_NEEDS_INLINE_INSTANTIATION=1;AC_MSG_RESULT(yes)])
 export VCL_NEEDS_INLINE_INSTANTIATION
 AC_LANG_RESTORE])
 
@@ -811,7 +811,7 @@ struct X
 
 X<int> a;
 X<int, less<short> > b;
-],,[VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER="1";AC_MSG_RESULT(yes)],[VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER="0";AC_MSG_RESULT(no)])
+],,[VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER=1;AC_MSG_RESULT(yes)],[VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER=0;AC_MSG_RESULT(no)])
 export VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER
 AC_LANG_RESTORE])
 
@@ -828,7 +828,7 @@ template <class T, class C=less<T> >
 struct X { C t1; };
 X<int> a;
 X<int, less<short> > b;
-],,[VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER="1";AC_MSG_RESULT(yes)],[VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER="0";AC_MSG_RESULT(no)])
+],,[VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER=1;AC_MSG_RESULT(yes)],[VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER=0;AC_MSG_RESULT(no)])
 export VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER
 AC_LANG_RESTORE])
 
@@ -843,7 +843,7 @@ AC_TRY_COMPILE([
 template <class T>
 struct A { A() {} static char *fmt; };
 template <class T> char *A<T>::fmt = 0;
-],,[VCL_CAN_DO_STATIC_TEMPLATE_MEMBER="1";AC_MSG_RESULT(yes)],[VCL_CAN_DO_STATIC_TEMPLATE_MEMBER="0";AC_MSG_RESULT(no)])
+],,[VCL_CAN_DO_STATIC_TEMPLATE_MEMBER=1;AC_MSG_RESULT(yes)],[VCL_CAN_DO_STATIC_TEMPLATE_MEMBER=0;AC_MSG_RESULT(no)])
 export VCL_CAN_DO_STATIC_TEMPLATE_MEMBER
 AC_LANG_RESTORE])
 
@@ -865,7 +865,7 @@ void splok_that_splek(splek<T, n> &s)
 }
 template struct splek<double, 3>;
 template void splok_that_splek(splek<double, 3> &);
-],,[VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER="1";AC_MSG_RESULT(yes)],[VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER="0";AC_MSG_RESULT(no)])
+],,[VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER=1;AC_MSG_RESULT(yes)],[VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER=0;AC_MSG_RESULT(no)])
 export VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER
 AC_LANG_RESTORE])
 
@@ -912,7 +912,7 @@ void f()
   double darray[20];
   fsm_plip(darray, darray+20, 2718);
 }
-],,[VCL_CAN_DO_IMPLICIT_TEMPLATES="1";AC_MSG_RESULT(yes)],[VCL_CAN_DO_IMPLICIT_TEMPLATES="0";AC_MSG_RESULT(no)])
+],,[VCL_CAN_DO_IMPLICIT_TEMPLATES=1;AC_MSG_RESULT(yes)],[VCL_CAN_DO_IMPLICIT_TEMPLATES=0;AC_MSG_RESULT(no)])
 export VCL_CAN_DO_IMPLICIT_TEMPLATES
 AC_LANG_RESTORE])
 
@@ -928,7 +928,7 @@ class A {};
 template <class T> void f(T t) { t.compiler_selected_wrong_overload(); }
 void f(const A&) {}
 int not_main() { f(A()); return 0; }
-],,[VCL_TEMPLATE_MATCHES_TOO_OFTEN="0";AC_MSG_RESULT(no)],[VCL_TEMPLATE_MATCHES_TOO_OFTEN="1";AC_MSG_RESULT(yes)])
+],,[VCL_TEMPLATE_MATCHES_TOO_OFTEN=0;AC_MSG_RESULT(no)],[VCL_TEMPLATE_MATCHES_TOO_OFTEN=1;AC_MSG_RESULT(yes)])
 export VCL_TEMPLATE_MATCHES_TOO_OFTEN
 AC_LANG_RESTORE])
 
@@ -964,8 +964,54 @@ struct C
 };
 void f(A) {}
 int main() { C c; f(c); return 0; }
-],[VCL_HAS_SLICED_DESTRUCTOR_BUG="0";AC_MSG_RESULT(no)],[VCL_HAS_SLICED_DESTRUCTOR_BUG="1";AC_MSG_RESULT(yes)])
+],,[VCL_HAS_SLICED_DESTRUCTOR_BUG=0;AC_MSG_RESULT(no)],[VCL_HAS_SLICED_DESTRUCTOR_BUG=1;AC_MSG_RESULT(yes)])
 export VCL_HAS_SLICED_DESTRUCTOR_BUG
+AC_LANG_RESTORE])
+
+
+###
+AC_DEFUN(VCL_CXX_NUMERIC_LIMITS_HAS_INFINITY,[
+AC_MSG_CHECKING(whether std::numeric_limits<float>::has_infinity == 1)
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
+VCL_COMPILE_CXX
+AC_TRY_RUN([
+// Several versions of gcc (3.0, 3.1, and 3.2) come with a
+// numeric_limits that reports that they have no infinity.
+#include <limits>
+int main() {
+  return std::numeric_limits<double>::has_infinity &&
+         std::numeric_limits<float>::has_infinity ? 0 : 1;
+}],,[VCL_NUMERIC_LIMITS_HAS_INFINITY=1;AC_MSG_RESULT(yes)],[VCL_NUMERIC_LIMITS_HAS_INFINITY=0;AC_MSG_RESULT(no)])
+export VCL_NUMERIC_LIMITS_HAS_INFINITY
+AC_LANG_RESTORE])
+
+
+###
+AC_DEFUN(VCL_CXX_PROCESSOR_HAS_INFINITY,[
+AC_MSG_CHECKING(whether the processor actually has an infinity)
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
+VCL_COMPILE_CXX
+AC_TRY_RUN([
+#include <cfloat>
+union u {  double d;  unsigned char c[8]; };
+int main()
+{
+  if (sizeof(double) != 8) return 1;
+  // If you have an odd machine, then add your own construction of infinity.
+  u v;
+  // Can we generate an IEEE infinity artifically on a big-endian machine?
+  v.c[0] = 0x7f; v.c[1] = 0xf0;
+  v.c[2] = v.c[3] = v.c[4] = v.c[5] = v.c[6] = v.c[7] = 0x00;
+  if (v.d > DBL_MAX) return 0;
+  // Can we generate an IEEE infinity artifically on a little-endian machine?
+  v.c[7] = 0x7f; v.c[6] = 0xf0;
+  v.c[0] = v.c[1] = v.c[2] = v.c[3] = v.c[4] = v.c[5] = 0x00;
+  if (v.d > DBL_MAX) return 0;
+  return 1;
+}],,[VCL_PROCESSOR_HAS_INFINITY=1;AC_MSG_RESULT(yes)],[VCL_PROCESSOR_HAS_INFINITY=0;AC_MSG_RESULT(no)])
+export VCL_PROCESSOR_HAS_INFINITY
 AC_LANG_RESTORE])
 
 
@@ -987,35 +1033,35 @@ eval "$ac_cpp check_vxl_unistd.c" 2>&5 > check_vxl_unistd.i;
 
 # caveat: sometimes __useconds_t is defined, hence the space
 if (egrep "typedef.* useconds_t;" check_vxl_unistd.i >/dev/null 2>&1); then
-  VXL_UNISTD_HAS_USECONDS_T="1";
+  VXL_UNISTD_HAS_USECONDS_T=1;
   echo "... for useconds_t... yes"
 else
-  VXL_UNISTD_HAS_USECONDS_T="0";
+  VXL_UNISTD_HAS_USECONDS_T=0;
   echo "... for useconds_t... no"
 fi; export VXL_UNISTD_HAS_USECONDS_T;
 
 # caveat: sometimes __intptr_t is defined, hence the space
 if (egrep "typedef.* intptr_t;" check_vxl_unistd.i >/dev/null 2>&1); then
-  VXL_UNISTD_HAS_INTPTR_T="1";
+  VXL_UNISTD_HAS_INTPTR_T=1;
   echo "... for intptr_t... yes"
 else
-  VXL_UNISTD_HAS_INTPTR_T="0";
+  VXL_UNISTD_HAS_INTPTR_T=0;
   echo "... for intptr_t... no"
 fi; export VXL_UNISTD_HAS_INTPTR_T;
 
 echo "... if usleep() returns void"
 AC_TRY_COMPILE(
 [#include <unistd.h>
-],[{ int x = usleep(0); }],[VXL_UNISTD_USLEEP_IS_VOID="0";],[VXL_UNISTD_USLEEP_IS_VOID="1";])
+],[{ int x = usleep(0); }],[VXL_UNISTD_USLEEP_IS_VOID=0;],[VXL_UNISTD_USLEEP_IS_VOID=1;])
 export VXL_UNISTD_USLEEP_IS_VOID;
 
 rm -f check_vxl_unistd.c check_vxl_unistd.i
-AC_CHECK_FUNC([ualarm],[VXL_UNISTD_HAS_UALARM=1],[VXL_UNISTD_HAS_UALARM=0])
-AC_CHECK_FUNC([usleep],[VXL_UNISTD_HAS_USLEEP=1],[VXL_UNISTD_HAS_USLEEP=0])
-AC_CHECK_FUNC([lchown],[VXL_UNISTD_HAS_LCHOWN=1],[VXL_UNISTD_HAS_LCHOWN=0])
-AC_CHECK_FUNC([pread],[VXL_UNISTD_HAS_PREAD=1],[VXL_UNISTD_HAS_PREAD=0])
-AC_CHECK_FUNC([pwrite],[VXL_UNISTD_HAS_PWRITE=1],[VXL_UNISTD_HAS_PWRITE=0])
-AC_CHECK_FUNC([tell],[VXL_UNISTD_HAS_TELL=1],[VXL_UNISTD_HAS_TELL=0])
+AC_CHECK_FUNC(ualarm,VXL_UNISTD_HAS_UALARM=1,VXL_UNISTD_HAS_UALARM=0)
+AC_CHECK_FUNC(usleep,VXL_UNISTD_HAS_USLEEP=1,VXL_UNISTD_HAS_USLEEP=0)
+AC_CHECK_FUNC(lchown,VXL_UNISTD_HAS_LCHOWN=1,VXL_UNISTD_HAS_LCHOWN=0)
+AC_CHECK_FUNC(pread,VXL_UNISTD_HAS_PREAD=1,VXL_UNISTD_HAS_PREAD=0)
+AC_CHECK_FUNC(pwrite,VXL_UNISTD_HAS_PWRITE=1,VXL_UNISTD_HAS_PWRITE=0)
+AC_CHECK_FUNC(tell,VXL_UNISTD_HAS_TELL=1,VXL_UNISTD_HAS_TELL=0)
 ])
 
 
@@ -1091,7 +1137,7 @@ AC_TRY_COMPILE(
 int f(const void *a,const void *b) { return 1; }
 /* configure provides its own main(), so putting one here makes the test fail even if qsort() is available */
 int not_main(void) { int a[5]; qsort(a, 5, sizeof(int), f); return 0; }
-],,VXL_STDLIB_HAS_QSORT="1",VXL_STDLIB_HAS_QSORT="0")
+],,VXL_STDLIB_HAS_QSORT=1,VXL_STDLIB_HAS_QSORT=0)
 export VXL_STDLIB_HAS_QSORT
 AC_LANG_RESTORE])
 
