@@ -39,8 +39,6 @@ void vsl_b_read(vsl_b_istream &is, vnl_vector<T> & p)
     break;
 
   default:
-  if (!is) return;
-
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vnl_vector<T>&) \n";
     vcl_cerr << "           Unknown version number "<< ver << "\n";
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
