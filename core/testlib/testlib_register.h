@@ -32,8 +32,8 @@ typedef int ( (__cdecl *const) TestMainFunction)( int, char*[] );
 typedef int (*TestMainFunction)( int, char*[] );
 #endif
 
-extern vcl_vector<TestMainFunction> testlib_test_func_;
-extern vcl_vector<vcl_string>       testlib_test_name_;
+extern vcl_vector<TestMainFunction> *testlib_test_func_;
+extern vcl_vector<vcl_string>       *testlib_test_name_;
 
 
 //: Declare the existence of the test.
@@ -47,8 +47,8 @@ extern vcl_vector<vcl_string>       testlib_test_name_;
 //: Register the test with the driver.
 // \param testname should be the same as one of the tests declared with DECLARE.
 #define REGISTER( testname ) \
-   testlib_test_func_.push_back( & testname ## _main ); \
-   testlib_test_name_.push_back( #testname )
+   testlib_test_func_->push_back( & testname ## _main ); \
+   testlib_test_name_->push_back( #testname )
 
 //: Define the main() routine for this test driver.
 // This allows the main function to be defined in the driver code
