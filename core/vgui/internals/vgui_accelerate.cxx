@@ -44,12 +44,12 @@ void vgui_accelerate::register_accelerator(vgui_accelerate* p, int level)
 
 vgui_accelerate::vgui_accelerate()
 {
-  vcl_cerr << "vgui_accelerate::vgui_accelerate()" << vcl_endl;
+  //vcl_cerr << __FILE__ ": vgui_accelerate::vgui_accelerate()" << vcl_endl;
 }
 
 vgui_accelerate::~vgui_accelerate()
 {
-  vcl_cerr << "vgui_accelerate::~vgui_accelerate()" << vcl_endl;
+  //vcl_cerr << __FILE__ ": vgui_accelerate::~vgui_accelerate()" << vcl_endl;
 }
 
 bool
