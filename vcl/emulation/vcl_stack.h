@@ -138,10 +138,10 @@ public:
     const value_type& top() const { return c.front(); }
     void push(const value_type& x) {
         c.push_back(x);
-        push_heap(c.begin(), c.end(), comp);
+        vcl_push_heap(c.begin(), c.end(), comp);
     }
     void pop() {
-        pop_heap(c.begin(), c.end(), comp);
+        vcl_pop_heap(c.begin(), c.end(), comp);
         c.pop_back();
     }
 };

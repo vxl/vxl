@@ -55,7 +55,7 @@ inline void __push_heap_aux(RandomAccessIterator first,
 }
 
 template <class RandomAccessIterator>
-inline void push_heap(RandomAccessIterator first, RandomAccessIterator last) {
+inline void vcl_push_heap(RandomAccessIterator first, RandomAccessIterator last) {
     __push_heap_aux(first, last, distance_type(first), value_type(first));
 }
 
@@ -74,22 +74,19 @@ void __push_heap(RandomAccessIterator first, Distance holeIndex,
 
 template <class RandomAccessIterator, class Compare, class Distance, class T>
 inline void __push_heap_aux(RandomAccessIterator first,
-                            RandomAccessIterator last, Compare comp,
-                            Distance*, T*) {
+                            RandomAccessIterator last, Compare comp, Distance*, T*) {
     __push_heap(first, Distance((last - first) - 1), Distance(0),
                 T(*(last - 1)), comp);
 }
 
 template <class RandomAccessIterator, class Compare>
-inline void push_heap(RandomAccessIterator first, RandomAccessIterator last,
-                      Compare comp) {
+inline void vcl_push_heap(RandomAccessIterator first, RandomAccessIterator last, Compare comp) {
     __push_heap_aux(first, last, comp, distance_type(first), value_type(first));
 }
 
 template <class RandomAccessIterator, class Distance, class T>
 IUEi_STL_INLINE
-void __adjust_heap(RandomAccessIterator first, Distance holeIndex,
-                   Distance len, T value) {
+void __adjust_heap(RandomAccessIterator first, Distance holeIndex, Distance len, T value) {
     Distance topIndex = holeIndex;
     Distance secondChild = 2 * holeIndex + 2;
     while (secondChild < len) {
@@ -120,7 +117,7 @@ inline void __pop_heap_aux(RandomAccessIterator first,
 }
 
 template <class RandomAccessIterator>
-inline void pop_heap(RandomAccessIterator first, RandomAccessIterator last) {
+inline void vcl_pop_heap(RandomAccessIterator first, RandomAccessIterator last) {
     __pop_heap_aux(first, last, value_type(first));
 }
 
@@ -146,8 +143,7 @@ void __adjust_heap(RandomAccessIterator first, Distance holeIndex,
 
 template <class RandomAccessIterator, class T, class Compare, class Distance>
 inline void __pop_heap(RandomAccessIterator first, RandomAccessIterator last,
-                       RandomAccessIterator result, T value, Compare comp,
-                       Distance*) {
+                       RandomAccessIterator result, T value, Compare comp, Distance*) {
     *result = *first;
     __adjust_heap(first, Distance(0), Distance(last - first), value, comp);
 }
@@ -160,8 +156,7 @@ inline void __pop_heap_aux(RandomAccessIterator first,
 }
 
 template <class RandomAccessIterator, class Compare>
-inline void pop_heap(RandomAccessIterator first, RandomAccessIterator last,
-                     Compare comp) {
+inline void vcl_pop_heap(RandomAccessIterator first, RandomAccessIterator last, Compare comp) {
     __pop_heap_aux(first, last, value_type(first), comp);
 }
 
@@ -201,22 +196,20 @@ void __make_heap(RandomAccessIterator first, RandomAccessIterator last,
 }
 
 template <class RandomAccessIterator, class Compare>
-inline void make_heap(RandomAccessIterator first, RandomAccessIterator last,
-                      Compare comp) {
+inline void make_heap(RandomAccessIterator first, RandomAccessIterator last, Compare comp) {
     __make_heap(first, last, comp, value_type(first), distance_type(first));
 }
 
 template <class RandomAccessIterator>
 IUEi_STL_INLINE
 void sort_heap(RandomAccessIterator first, RandomAccessIterator last) {
-    while (last - first > 1) pop_heap(first, last--);
+    while (last - first > 1) vcl_pop_heap(first, last--);
 }
 
 template <class RandomAccessIterator, class Compare>
 IUEi_STL_INLINE
-void sort_heap(RandomAccessIterator first, RandomAccessIterator last,
-               Compare comp) {
-    while (last - first > 1) pop_heap(first, last--, comp);
+void sort_heap(RandomAccessIterator first, RandomAccessIterator last, Compare comp) {
+    while (last - first > 1) vcl_pop_heap(first, last--, comp);
 }
 
 #endif // vcl_emulation_heap_h
