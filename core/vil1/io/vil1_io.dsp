@@ -120,12 +120,12 @@ SOURCE=.\Templates/vil_io_memory_image_of+signed_char-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vil_io_memory_image_of+signed_int-.cxx
+SOURCE=.\Templates/vil_io_memory_image_of+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vil_io_memory_image_of+signed_short-.cxx
+SOURCE=.\Templates/vil_io_memory_image_of+short-.cxx
 
 # End Source File
 # Begin Source File
