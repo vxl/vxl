@@ -1,6 +1,6 @@
-The directory structure of VXL is below
+The directory structure of @vxl{} is below
 @example
-  $IUEROOT/vcl
+  $VXLSRC/vcl
            vcl/config.$BUILD
            vxl/vnl
               /vul
@@ -8,8 +8,56 @@ The directory structure of VXL is below
               /vil
               /vgl
               /vsl
-          /config
-          /Scripts
 @end example
-The last two directories are part of the IUE/TargetJr makefiles so are
-not needed by those using Visual Studio or their own build systems.
+
+@section Other modules
+
+On the repository and some @vxl{} distributions, you will find several other
+modules beside vcl and vxl.
+
+
+@cindex gel
+@cindex oxl
+@cindex mul
+@cindex tbl
+
+@table @samp
+@item gel
+Published libraries from General Electric's Corporate Research Department.
+@item oxl
+Published libraries from the Robots Research
+Group at Oxford University.
+@item mul
+Published libraries from Imaging Science and Biomedical Engineering
+at the University of Manchester.
+@item tbl
+A set of image processing libraries.
+@item Conversions
+A set of routines for converting between various @vxl{} and non-@vxl{} types.
+@end table
+
+These modules are presented as useful code, with even less guarantees
+than @vxl{},
+(which is not to suggest that we guarantee anything about @vxl{}.)
+In particular
+they may not work as advertised. They may not be documented. If you find them
+useful, and think they deserve full @vxl{}-status please contact the library's
+author to see about having the code tidied up and promoted to @vxl{}.
+
+You can find any overview documentation about these modules from the @vxl{}
+homepage.
+
+@section CVS Repository
+
+The VXL repository is provided by SourceForge - Thanks guys! You
+can get details of how to obtain the up-to-date CVS snapshot from
+@uref{https://sourceforge.net/projects/vxl/}
+
+Due to the amount of effort required to correct it, there is an
+extra @code{vxl/} in the repository's directory tree. This means
+that if you check out vxl from @code{/home/work/myvxl} you will
+get everything from the VXL repository including vxl/vcl,
+vxl/vxl, vxl/gel, etc. This also means that your vxl root
+directory will be @code{/home/work/myvxl/vxl}, and
+@code{vnl_matrix.h} will be in
+@code{/home/work/myvxl/vxl/vxl/vnl/vnl_matrix.h} - sorry.

@@ -1,0 +1,34 @@
+VXL is designed to work with any build system. However, we do have
+a @emph{default} build system - CMake. CMake is a cross platform tool
+which takes its control files (@samp{CMakeLists.txt}) and produces
+makefiles for Unix systems and
+dsp files for users of Microsoft's Developer Studio. You can find out more
+about CMake from
+@uref{http://public.kitware.com/CMake/index.html, Kitware's
+website}.
+
+We use a standard version of CMake, although several things may
+not be obvious from the CMake documentation.
+@itemize
+@item Building of the test programs, the mul, tbl, gel, or oxl modules, is
+under the control of options that can be set in the CMakeSetup GUI.
+@item Each library contains a file @samp{CMakeListsLink.txt} which can
+be included by the @samp{CMakeLists.txt} file for an executable that uses that
+library. This makes linking in multiple libraries relatively easy. Each
+library's @samp{CMakeListsLink.txt} file also includes the
+@samp{CMakeListsLink.txt} file for libraries that it depends upon.
+@item When including @samp{CMakeListsLink.txt} files, you should be careful
+only to include those that are necessary to get it to link. This will
+help reduce the size of the makefile or dsp file that CMake produces.
+@end itemize
+
+@section Other Build Systems
+
+@cindex makefile
+@cindex .dsp file
+
+Your copy of VXL may contain control files for other build systems
+such as make or Developer Studio. Copies of these control files
+(e.g. makefiles or .dsp files) do exist in the repository, although
+they may not be quite as up to date. They are tucked away in the
+@code{build-makefiles} branch of the repository.

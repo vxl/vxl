@@ -162,8 +162,14 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 
 @comment ------------------------------------------------------------------
 @appendix  Filenames and structure
-
+@cindex directories
 @include appendix_structure.texi
+
+@comment ------------------------------------------------------------------
+@appendix  Build Systems
+@cindex CMake
+
+@include appendix_build.texi
 
 @comment ------------------------------------------------------------------
 @appendix  On The Use of Templates
