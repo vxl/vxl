@@ -1,8 +1,9 @@
 // This is vxl/vgl/vgl_clip.cxx
 
-/*
-  fsm@robots.ox.ac.uk
-*/
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 #ifdef __GNUC__
 #pragma implementation
 #endif
@@ -87,11 +88,11 @@ extern "C" {
 }
 
 #define MALLOC(p, T, c, s) {if ((c) > 0) { \
-                            p= (T*)malloc(c * sizeof(T)); if (!(p)) { \
-                            fprintf(stderr, "vgl: gpc malloc failure: %s\n", s); \
-		            exit(0);}} else p= NULL;}
+                            p= (T*)vcl_malloc(c * sizeof(T)); if (!(p)) { \
+                            vcl_fprintf(stderr, "vgl: gpc malloc failure: %s\n", s); \
+                            vcl_exit(0);}} else p= NULL;}
 
-#define FREE(p)            {if (p) {free(p); (p)= NULL;}}
+#define FREE(p)            {if (p) {vcl_free(p); (p)= NULL;}}
 
 namespace {
   //: Creates a gpc polygon from a vgl_polygon.
@@ -103,11 +104,11 @@ namespace {
     gpc_poly.num_contours = vgl_poly.num_sheets();
     MALLOC( gpc_poly.hole, int, gpc_poly.num_contours, "allocating hole array" );
     MALLOC( gpc_poly.contour, gpc_vertex_list, gpc_poly.num_contours, "allocating contour array" );
-    for( int s = 0; s < gpc_poly.num_contours; ++s ) {
+    for ( int s = 0; s < gpc_poly.num_contours; ++s ) {
       gpc_poly.hole[s] = 0;
       gpc_poly.contour[s].num_vertices = vgl_poly[s].size();
       MALLOC( gpc_poly.contour[s].vertex, gpc_vertex, vgl_poly[s].size(), "allocating vertex list" );
-      for( unsigned int p = 0; p < vgl_poly[s].size(); ++p ) {
+      for ( unsigned int p = 0; p < vgl_poly[s].size(); ++p ) {
         gpc_poly.contour[s].vertex[p].x = vgl_poly[s][p].x();
         gpc_poly.contour[s].vertex[p].y = vgl_poly[s][p].y();
       }
@@ -120,9 +121,9 @@ namespace {
   void
   add_gpc_to_vgl( vgl_polygon& vgl_poly, const gpc_polygon& gpc_poly )
   {
-    for( int c=0; c < gpc_poly.num_contours; ++c ) {
+    for ( int c=0; c < gpc_poly.num_contours; ++c ) {
       vgl_poly.new_sheet();
-      for( int p=0; p < gpc_poly.contour[c].num_vertices; ++p ) {
+      for ( int p=0; p < gpc_poly.contour[c].num_vertices; ++p ) {
         vgl_poly.push_back( gpc_poly.contour[c].vertex[p].x, gpc_poly.contour[c].vertex[p].y );
       }
     }
@@ -133,9 +134,9 @@ vgl_polygon
 vgl_clip( const vgl_polygon& poly1, const vgl_polygon& poly2, vgl_clip_type op )
 {
   // Check for the null case
-  if( poly1.num_sheets() == 0 )
+  if ( poly1.num_sheets() == 0 )
     return poly2;
-  if( poly2.num_sheets() == 0 )
+  if ( poly2.num_sheets() == 0 )
     return poly1;
 
   gpc_polygon p1 = vgl_to_gpc( poly1 );
