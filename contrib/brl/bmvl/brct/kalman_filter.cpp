@@ -7,6 +7,8 @@
 #include <vcl_fstream.h>
 #include <vcl_cassert.h>
 #include <vcl_cstdio.h> // for sscanf()
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
@@ -339,14 +341,18 @@ vnl_double_2 kalman_filter::projection(const vnl_double_3x4 &P, const vnl_double
 
 void kalman_filter::update_observes(const vnl_double_3x4 &P)
 {
-  //TO DO
-  vnl_double_3 X;
+  
+  vnl_matrix<double> t(2, num_points_);
   for(int i=0; i<num_points_; i++){
-    X[0] = Xl_[0][i];
-    X[1] = Xl_[1][i];
-    X[2] = Xl_[2][i];
-   vnl_double_2 x = projection(P, X); 
+   vgl_point_3d<double> X(Xl_[0][i], Xl_[1][i], Xl_[2][i]);
+   vgl_point_2d<double> x = brct_algos::projection_3d_point(X, P);
+   vgl_point_2d<double> u = brct_algos::closest_point(curves_[cur_pos_], x);
+   
+   t[0][i] = u.x();
+   t[1][i] = u.y();
   }
+  
+  observes_[cur_pos_] = t;
 }
 
 void kalman_filter::update_covariant()

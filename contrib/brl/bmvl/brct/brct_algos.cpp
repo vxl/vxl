@@ -9,6 +9,11 @@
 #include <vnl/vnl_double_4x4.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_homg_point_2d.h>
+#include <vdgl/vdgl_interpolator.h>
+#include <vdgl/vdgl_interpolator_sptr.h>
+#include <vdgl/vdgl_edgel_chain.h>
+#include <vdgl/vdgl_edgel_chain_sptr.h>
+#include <bbas/bdgl/bdgl_curve_algs.h>
 #include <vsol/vsol_box_3d.h>
 #include <vcl_cassert.h>
 
@@ -41,8 +46,7 @@ vgl_point_3d<double> brct_algos::triangulate_3d_point(const vgl_point_2d<double>
   return X;
 }
 
-#if 0 // unused static function
-static vgl_point_2d<double> projection_3d_point(const vgl_point_3d<double> & x, const vnl_double_3x4& P)
+vgl_point_2d<double> brct_algos::projection_3d_point(const vgl_point_3d<double> & x, const vnl_double_3x4& P)
 {
   vnl_double_4 X;
   X[0] = x.x();
@@ -55,7 +59,6 @@ static vgl_point_2d<double> projection_3d_point(const vgl_point_3d<double> & x, 
 
   return u;
 }
-#endif // 0
 
 vnl_double_3 brct_algos::bundle_reconstruct_3d_point(vcl_vector<vnl_double_2> &pts,
                                                      vcl_vector<vnl_double_3x4> &Ps)
@@ -112,4 +115,14 @@ vsol_box_3d_sptr brct_algos::get_bounding_box(vcl_vector<vgl_point_3d<double> > 
 
 void brct_algos::add_box_vrml(double xmin, double ymin, double zmin, double xmax, double ymax, double zmax)
 {
+}
+
+vgl_point_2d<double> brct_algos::closest_point(vdgl_digital_curve_sptr dc, vgl_point_2d<double> pt)
+{
+  vdgl_interpolator_sptr interp = dc->get_interpolator();
+  vdgl_edgel_chain_sptr ec = interp->get_edgel_chain();
+
+  int i = bdgl_curve_algs::closest_point(ec, pt.x(), pt.y());
+
+  return (*ec)[i].get_pt();
 }
