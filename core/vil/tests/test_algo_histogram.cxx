@@ -1,13 +1,13 @@
-// This is mul/vil/tests/test_algo_histogram.cxx
+// This is core/vil/tests/test_algo_histogram.cxx
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
 #include <vil/algo/vil_histogram.h>
 
 static void test_histogram_byte()
 {
   vil_image_view<vxl_byte> image(10,10);
   for (unsigned j=0;j<image.nj();++j)
-    for (unsigned i=0;i<image.ni();++i) image(j,i) = i+j;
+    for (unsigned i=0;i<image.ni();++i)
+      image(j,i) = i+j;
 
   vcl_vector<double> histo;
   vil_histogram_byte(image,histo);
@@ -32,8 +32,6 @@ static void test_histogram_byte()
   TEST_NEAR("Histo element 1",histo3[1],7,1e-6);
   TEST_NEAR("Histo element 2",histo3[2],11,1e-6);
   TEST_NEAR("Histo element 9",histo3[9],0,1e-6);
-
-
 }
 
 MAIN( test_algo_histogram )
