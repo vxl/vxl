@@ -394,7 +394,7 @@ bool vil2_bmp_image::put_view(const vil2_image_view_base& view,
       is_->seek(bit_map_start+(j+y0)*rowlen+x0*bypp);
       is_->write(buf, rowlen);
     }
-    delete buf;
+    delete [] buf;
   }
   return true;
 }
