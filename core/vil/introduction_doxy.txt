@@ -221,6 +221,7 @@ vil_image_view<vxl_byte> filtered_image = vil_transpose(tmp_image2);
 * - vil_median        - Compute median over area described by vil_structuring_element
 * - vil_fft_2d_fwd,bwd - Perform in-place 2D FFT on an image of a complex type
 * - vil_suppress_non_max_3x3 - Zero all pixels which are not local maxima
+* - vil_corners        - Forstner/Harris cornerness operator
 *
 * See also the vipl library for a more generic image processing interface and
 * more image processing algorithms.
