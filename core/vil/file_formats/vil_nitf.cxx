@@ -768,10 +768,10 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
   display_pixels = (max_block_y - start_block_y) * get_block_size_y();
 
   if (debug_level > 1) {
-// Please do not combine the vcl_out statements below into one statement. 
+// Please do not combine the vcl_out statements below into one statement.
 // I prefer it the way it is.   -- MAL 2004mar1.
       vcl_cout << method_name << "start_block_x = " << start_block_x
-               << "  max_block_x = " << max_block_x 
+               << "  max_block_x = " << max_block_x
                << "  start_block_row_offset = " << start_block_row_offset
                << vcl_endl;
       vcl_cout << method_name << "  start_block_x_offset = " << start_block_x_offset
@@ -944,7 +944,7 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
                  << "  start_block_y = " << start_block_y << '\n'
                  << "last_image_row_num = " << last_image_row_num
                  << "  last_image_col_num = " << last_image_col_num << '\n'
-                 << "blocks_read = " << blocks_read 
+                 << "blocks_read = " << blocks_read
                  << "    bytes_copied = " << bytes_copied
                  << vcl_endl;
     }
@@ -1028,7 +1028,7 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
 bool vil_nitf_image::construct_pyramid_images(
     unsigned int levels,
     vcl_string file_name,
-    vcl_string dir_name)
+    vcl_string dir_name) // unused parameter - FIXME
 {
   static vcl_string method_name = "vil_nitf_file_format::construct_pyramid_images: ";
 
