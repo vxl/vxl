@@ -68,11 +68,11 @@ class bdgl_curve_tracking
       return output_curves_[frame].size();
   }
 
-  vcl_vector< bdgl_tracker_curve_sptr> *get_output_curves(int frame_no);
-  bdgl_tracker_curve_sptr get_output_curve(int frame_no, int set_id);
+  vcl_vector< bdgl_tracker_curve_sptr> *get_output_curves(unsigned int frame_no);
+  bdgl_tracker_curve_sptr get_output_curve(unsigned int frame_no, int set_id);
 
 
-  void get_reliable_curves(int frame_no,int win);
+  void get_reliable_curves(unsigned int frame_no, unsigned int window_sz);
   // tracking of  the sequence
   void track();
   // tracking for the given frame
@@ -82,16 +82,10 @@ class bdgl_curve_tracking
   // traversal function to get tracks
   void level_order_traversal(bdgl_tracker_curve_sptr curve,vcl_list<bdgl_tracker_curve_sptr> & tr);
 
-  int get_min_len_of_curves(){return min_len_of_curves_;}
+  int get_min_len_of_curves(){return tp_.min_length_of_curves;}
 
  protected:
-   bdgl_curve_tracking_params tp_;
- private:
-  // current frame number
-  int frame_;
-  bool clustering_;
-
-  int min_len_of_curves_;
+  bdgl_curve_tracking_params tp_;
 };
 
 #endif
