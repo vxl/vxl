@@ -3,7 +3,6 @@
 #include "test_driver.h"
 #include <vil/vil_new.h>
 #include <vil/vil_image_view.h>
-#include <vil/vil_rgb.h>
 #include <vxl_config.h> // for vxl_byte etc.
 #include <vcl_string.h>
 
@@ -42,100 +41,104 @@ register_tests()
 DEFINE_MAIN;
 
 // create a 1 bit test image
-vil_image_view_base_sptr CreateTest1bitImage(int wd, int ht)
+vil_image_resource_sptr CreateTest1bitImage(int wd, int ht)
 {
   vil_image_resource_sptr im = vil_new_image_resource(wd, ht, 1, VIL_PIXEL_FORMAT_BOOL);
-  vil_image_view<bool>* image = new vil_image_view<bool>(im->get_view(0,wd,0,ht));
+  vil_image_view<bool> image = im->get_view();
   for (int x = 0; x < wd; x++)
     for (int y = 0; y < ht; y++)
-      (*image)(x, y) = (((x-wd/2)*(y-ht/2)/16) & 1) == 1;
-  return image;
+      image(x, y) = (((x-wd/2)*(y-ht/2)/16) & 1) == 1;
+  return im;
 }
 
 // create an 8 bit test image
-vil_image_view_base_sptr CreateTest8bitImage(int wd, int ht)
+vil_image_resource_sptr CreateTest8bitImage(int wd, int ht)
 {
   vil_image_resource_sptr im = vil_new_image_resource(wd, ht, 1, VIL_PIXEL_FORMAT_BYTE);
-  vil_image_view<vxl_byte>* image = new vil_image_view<vxl_byte>(im->get_view(0,wd,0,ht));
+  vil_image_view<vxl_byte> image = im->get_view();
   for (int x = 0; x < wd; x++)
     for (int y = 0; y < ht; y++)
-      (*image)(x, y) = vxl_byte(((x-wd/2)*(y-ht/2)/16) & 0xff);
-  return image;
+      image(x, y) = vxl_byte(((x-wd/2)*(y-ht/2)/16) & 0xff);
+  return im;
 }
 
 // create a 16 bit test image
-vil_image_view_base_sptr CreateTest16bitImage(int wd, int ht)
+vil_image_resource_sptr CreateTest16bitImage(int wd, int ht)
 {
   vil_image_resource_sptr im = vil_new_image_resource(wd, ht, 1, VIL_PIXEL_FORMAT_UINT_16);
-  vil_image_view<vxl_uint_16>* image = new vil_image_view<vxl_uint_16>(im->get_view(0,wd,0,ht));
+  vil_image_view<vxl_uint_16> image = im->get_view();
   for (int x = 0; x < wd; x++)
     for (int y = 0; y < ht; y++)
-      (*image)(x, y) = vxl_uint_16 (((x-wd/2)*(y-ht/2)/16) & 0xffff);
-  return image;
+      image(x, y) = vxl_uint_16 (((x-wd/2)*(y-ht/2)/16) & 0xffff);
+  return im;
 }
 
 // create a 32 bit test image
-vil_image_view_base_sptr CreateTest32bitImage(int wd, int ht)
+vil_image_resource_sptr CreateTest32bitImage(int wd, int ht)
 {
   vil_image_resource_sptr im = vil_new_image_resource(wd, ht, 1, VIL_PIXEL_FORMAT_UINT_32);
-  vil_image_view<vxl_uint_32>* image = new vil_image_view<vxl_uint_32>(im->get_view(0,wd,0,ht));
+  vil_image_view<vxl_uint_32> image = im->get_view();
   for (int x = 0; x < wd; x++)
     for (int y = 0; y < ht; y++)
-      (*image)(x, y) = vxl_uint_32 (((x-wd/2)*(y-ht/2)/16) & 0xffff);
-  return image;
+      image(x, y) = vxl_uint_32 (((x-wd/2)*(y-ht/2)/16) & 0xffff);
+  return im;
 }
 
-// create a 24 bit color test image
-vil_image_view_base_sptr CreateTest24bitImage(int wd, int ht)
+// create a 24 bit color test image, i.e., ubyte with 3 interleaved planes
+vil_image_resource_sptr CreateTest24bitImage(int wd, int ht)
 {
   vil_image_resource_sptr im = vil_new_image_resource(wd, ht, 1, VIL_PIXEL_FORMAT_RGB_BYTE);
-  vil_image_view<vil_rgb<vxl_byte> >* image = new vil_image_view<vil_rgb<vxl_byte> >(im->get_view(0,wd,0,ht));
-  for (int x = 0; x < wd; x++)
-    for (int y = 0; y < ht; y++)
-      (*image)(x, y) = vil_rgb<vxl_byte>( x&0xff, ((x-wd/2)*(y-ht/2)/16)&0xff, (y/3)&0xff );
-  return image;
-}
-
-// create a 24 bit color test image, with 3 planes
-vil_image_view_base_sptr CreateTest3planeImage(int wd, int ht)
-{
-  vil_image_resource_sptr im = vil_new_image_resource(wd, ht, 3, VIL_PIXEL_FORMAT_BYTE);
-  vil_image_view<vxl_byte>* image = new vil_image_view<vxl_byte>(im->get_view(0,wd,0,ht));
+  vil_image_view<vxl_byte> image = im->get_view();
   for (int x = 0; x < wd; x++)
     for (int y = 0; y < ht; y++)
     {
-      (*image)(x, y, 0) = vxl_byte(x&0xff);
-      (*image)(x, y, 1) = vxl_byte(((x-wd/2)*(y-ht/2)/16)&0xff);
-      (*image)(x, y, 2) = vxl_byte((y/3)&0xff);
+      image(x, y, 0) = vxl_byte(x&0xff);
+      image(x, y, 1) = vxl_byte(((x-wd/2)*(y-ht/2)/16)&0xff);
+      image(x, y, 2) = vxl_byte((y/3)&0xff);
     }
-  return image;
+  return im;
+}
+
+// create an 8 bit color test image, with 3 ubyte planes
+vil_image_resource_sptr CreateTest3planeImage(int wd, int ht)
+{
+  vil_image_resource_sptr im = vil_new_image_resource(wd, ht, 3, VIL_PIXEL_FORMAT_BYTE);
+  vil_image_view<vxl_byte> image = im->get_view();
+  for (int x = 0; x < wd; x++)
+    for (int y = 0; y < ht; y++)
+    {
+      image(x, y, 0) = vxl_byte(x&0xff);
+      image(x, y, 1) = vxl_byte(((x-wd/2)*(y-ht/2)/16)&0xff);
+      image(x, y, 2) = vxl_byte((y/3)&0xff);
+    }
+  return im;
 }
 
 // create a float-pixel test image
-vil_image_view_base_sptr CreateTestfloatImage(int wd, int ht)
+vil_image_resource_sptr CreateTestfloatImage(int wd, int ht)
 {
   vil_image_resource_sptr im = vil_new_image_resource(wd, ht, 1, VIL_PIXEL_FORMAT_FLOAT);
-  vil_image_view<float>* image = new vil_image_view<float>(im->get_view(0,wd,0,ht));
+  vil_image_view<float> image = im->get_view();
   for (int x = 0; x < wd; x++)
     for (int y = 0; y < ht; y++)
-      (*image)(x, y) = 0.1f * ((x-wd/2)*(y-ht/2)/16);
-  return image;
+      image(x, y) = 0.1f * ((x-wd/2)*(y-ht/2)/16);
+  return im;
 }
 
 // create a double-pixel test image
-vil_image_view_base_sptr CreateTestdoubleImage(int wd, int ht)
+vil_image_resource_sptr CreateTestdoubleImage(int wd, int ht)
 {
   vil_image_resource_sptr im = vil_new_image_resource(wd, ht, 1, VIL_PIXEL_FORMAT_DOUBLE);
-  vil_image_view<double>* image = new vil_image_view<double>(im->get_view(0,wd,0,ht));
+  vil_image_view<double> image = im->get_view();
   for (int x = 0; x < wd; x++)
     for (int y = 0; y < ht; y++)
-      (*image)(x, y) = 0.1 * ((x-wd/2)*(y-ht/2)/16);
-  return image;
+      image(x, y) = 0.1 * ((x-wd/2)*(y-ht/2)/16);
+  return im;
 }
 
 // Compare two images and return true if their difference is not v
-bool difference(vil_image_view_base_sptr const& a,
-                vil_image_view_base_sptr const& b,
+bool difference(vil_image_resource_sptr a,
+                vil_image_resource_sptr b,
                 vxl_int_32 v, vcl_string const& m, bool exact)
 {
   unsigned int sx = a->ni(),  sy = a->nj(), sp = a->nplanes();
@@ -152,8 +155,8 @@ bool difference(vil_image_view_base_sptr const& a,
   // the absolute value of unsigned types.
 #define DIFF(T) /* for non-integral types like float and double */ {\
   T r = (T)0; \
-  vil_image_view<T >& v1 = (vil_image_view<T >&)(*a); \
-  vil_image_view<T >& v2 = (vil_image_view<T >&)(*b); \
+  vil_image_view<T > v1 = a->get_view(); \
+  vil_image_view<T > v2 = b->get_view(); \
   vil_image_view<T >::const_iterator it1 = v1.begin(); \
   vil_image_view<T >::const_iterator it2 = v2.begin(); \
   for (unsigned int p=0; p<sp; ++p) \
@@ -167,8 +170,8 @@ bool difference(vil_image_view_base_sptr const& a,
 }
 #define DIFI(T) /* for integral and for very short types like e.g. bool */ {\
   ret = 0; \
-  vil_image_view<T >& v1 = (vil_image_view<T >&)(*a); \
-  vil_image_view<T >& v2 = (vil_image_view<T >&)(*b); \
+  vil_image_view<T > v1 = a->get_view(); \
+  vil_image_view<T > v2 = b->get_view(); \
   vil_image_view<T >::const_iterator it1 = v1.begin(); \
   vil_image_view<T >::const_iterator it2 = v2.begin(); \
   for (unsigned int p=0; p<sp; ++p) \
@@ -185,6 +188,8 @@ bool difference(vil_image_view_base_sptr const& a,
   else if (a->pixel_format() == VIL_PIXEL_FORMAT_BYTE) { DIFI(vxl_byte); }
   else if (a->pixel_format() == VIL_PIXEL_FORMAT_UINT_16) { DIFI(vxl_uint_16); }
   else if (a->pixel_format() == VIL_PIXEL_FORMAT_UINT_32) { DIFI(vxl_uint_32); }
+#undef DIFF
+#undef DIFI
   vcl_cout<<m<<": expected "<<v<<", found "<<ret<<'\n';
   TEST(m.c_str(), ret, v);
   return v!=ret;

@@ -1,6 +1,5 @@
 #ifndef vepl2_convert_h_
 #define vepl2_convert_h_
-
 //:
 // \file
 // \brief convert between arbitrary image types
@@ -9,12 +8,17 @@
 //
 // \author Peter Vanroose, K.U.Leuven (ESAT/PSI)
 // \date   7 October 2002
+//
+// \verbatim
+//  Modifications
+//   Peter Vanroose - 20 aug 2003 - changed parameter and return types from vil_image_view_base_sptr to vil_image_resource_sptr
+// \endverbatim
 
-#include <vil/vil_image_view_base.h>
+#include <vil/vil_image_resource.h>
 
 //: convert between arbitrary image types
 template <class D>
-vil_image_view_base_sptr vepl2_convert(vil_image_view_base const& , D dummy);
+vil_image_resource_sptr vepl2_convert(vil_image_resource_sptr, D dummy);
 
 #ifdef INSTANTIATE_TEMPLATES
 #include "vepl2_convert.txx"

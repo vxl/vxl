@@ -1,6 +1,5 @@
 #ifndef vepl2_gradient_dir_h_
 #define vepl2_gradient_dir_h_
-
 //:
 // \file
 // \brief gradient direction: atan2 of x_gradient and y_gradient
@@ -10,10 +9,15 @@
 //
 // \author Peter Vanroose, K.U.Leuven (ESAT/PSI)
 // \date   7 October 2002
+//
+// \verbatim
+//  Modifications
+//   Peter Vanroose - 20 aug 2003 - changed parameter and return types from vil_image_view_base_sptr to vil_image_resource_sptr
+// \endverbatim
 
-#include <vil/vil_image_view_base.h>
+#include <vil/vil_image_resource.h>
 
 //: gradient direction: atan2 of x_gradient and y_gradient
-vil_image_view_base_sptr vepl2_gradient_dir(vil_image_view_base const& , double scale=1.0, double shift=0.0);
+vil_image_resource_sptr vepl2_gradient_dir(vil_image_resource_sptr , double scale=1.0, double shift=0.0);
 
 #endif // vepl2_gradient_dir_h_

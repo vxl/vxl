@@ -6,10 +6,15 @@
 //
 // \author Peter Vanroose, K.U.Leuven (ESAT/PSI)
 // \date   7 October 2002
+//
+// \verbatim
+//  Modifications
+//   Peter Vanroose - 20 aug 2003 - changed parameter and return types from vil_image_view_base_sptr to vil_image_resource_sptr
+// \endverbatim
 
-#include <vil/vil_image_view_base.h>
+#include <vil/vil_image_resource.h>
 
 //: Sobel convolution filter
-vil_image_view_base_sptr vepl2_sobel(vil_image_view_base const& );
+vil_image_resource_sptr vepl2_sobel(vil_image_resource_sptr );
 
 #endif // vepl2_sobel_h_

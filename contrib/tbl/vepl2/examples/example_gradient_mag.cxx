@@ -11,11 +11,9 @@
 #include <vepl2/vepl2_gradient_mag.h>
 
 // for I/O:
-#include <vil/vil_image_view.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vcl_iostream.h>
-#include <vxl_config.h> // for vxl_byte
 
 int
 main(int argc, char** argv) {
@@ -26,14 +24,14 @@ main(int argc, char** argv) {
   }
 
   // The input image:
-  vil_image_view<vxl_byte> in = vil_load(argv[1]);
+  vil_image_resource_sptr in = vil_load_image_resource(argv[1]);
   if (!in) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
 
   // The filter:
-  vil_image_view<vxl_byte> out = vepl2_gradient_mag(in);
+  vil_image_resource_sptr out = vepl2_gradient_mag(in);
 
   // Write output:
-  vil_save(out, argv[2], "pnm");
+  vil_save(*out->get_view(), argv[2], "pnm");
   vcl_cout << "Written image of type PNM to " << argv[2] << vcl_endl;
 
   return 0;

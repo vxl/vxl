@@ -1,6 +1,5 @@
 #ifndef vepl2_gaussian_convolution_h_
 #define vepl2_gaussian_convolution_h_
-
 //:
 // \file
 // \brief gaussian smoothing
@@ -20,10 +19,15 @@
 //
 // \author Peter Vanroose, K.U.Leuven (ESAT/PSI)
 // \date   7 October 2002
+//
+// \verbatim
+//  Modifications
+//   Peter Vanroose - 20 aug 2003 - changed parameter and return types from vil_image_view_base_sptr to vil_image_resource_sptr
+// \endverbatim
 
-#include <vil/vil_image_view_base.h>
+#include <vil/vil_image_resource.h>
 
 //: gaussian smoothing with given sigma (default 1)
-vil_image_view_base_sptr vepl2_gaussian_convolution(vil_image_view_base const& , double sigma=1, double cutoff=0.01);
+vil_image_resource_sptr vepl2_gaussian_convolution(vil_image_resource_sptr , double sigma=1, double cutoff=0.01);
 
 #endif // vepl2_gaussian_convolution_h_

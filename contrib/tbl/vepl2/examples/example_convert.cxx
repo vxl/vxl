@@ -14,7 +14,6 @@
 #include <vil/vil_rgb.h>
 
 // for I/O:
-#include <vil/vil_image_view.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vcl_iostream.h>
@@ -28,33 +27,29 @@ main(int argc, char** argv)
   if (argc < 3) { vcl_cerr << "Syntax: example_convert file_in file_out\n"; return 1; }
 
   // The input image:
-  vil_image_view_base_sptr in = vil_load(argv[1]);
-
-  // The output image:
-  vil_image_view<vxl_byte> out_grey(in);
-  vil_image_view<rgbcell> out_rgb(in);
+  vil_image_resource_sptr in = vil_load_image_resource(argv[1]);
 
   if (in->nplanes() == 1 && in->pixel_format() == vil_pixel_format_component_format(in->pixel_format()))
   { // monochrome
     if (vil_pixel_format_sizeof_components(in->pixel_format()) == 1)
       vcl_cerr<<"Warning: no conversion necessary\n";
-    out_grey = vepl2_convert(*in, (vxl_byte)0);
-    vil_save(out_grey, argv[2], "pnm");
+    vil_image_resource_sptr out = vepl2_convert(in, (vxl_byte)0);
+    vil_save(*out->get_view(), argv[2], "pnm");
     vcl_cout << "vepl2_convert()ed grey image to PGM image " << argv[2] << vcl_endl;
   }
   else if (in->nplanes() == 1) // colour (RGB)
   {
-    vepl2_convert(*in,rgbcell());
-    vil_save(out_rgb, argv[2], "pnm");
+    vil_image_resource_sptr out = vepl2_convert(in,rgbcell());
+    vil_save(*out->get_view(), argv[2], "pnm");
     vcl_cout << "vepl2_convert()ed RGB image to PPM image " << argv[2] << vcl_endl;
   }
   else if (in->nplanes() == 3) // colour (RGB)
   {
-    vepl2_convert(*in,rgbcell());
-    vil_save(out_rgb, argv[2], "pnm");
+    vil_image_resource_sptr out = vepl2_convert(in,rgbcell());
+    vil_save(*out->get_view(), argv[2], "pnm");
     vcl_cout << "vepl2_convert()ed RGB image to PPM image " << argv[2] << vcl_endl;
   }
-  else vcl_cerr << "Cannot handle image with "<< in->nplanes() <<" planes and format "<< in->pixel_format() << "\n";
+  else vcl_cerr << "Cannot handle image with "<< in->nplanes() <<" planes and format "<< in->pixel_format() << '\n';
 
   return 0;
 }

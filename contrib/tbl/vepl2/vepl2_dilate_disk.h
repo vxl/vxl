@@ -1,6 +1,5 @@
 #ifndef vepl2_dilate_disk_h_
 #define vepl2_dilate_disk_h_
-
 //:
 // \file
 // \brief morphological dilation with circular element
@@ -26,11 +25,12 @@
 //  Modifications
 //   12/97 updated by Tboult to use new codegen form and have valid (public
 //          agreed) ctor and to use preop and postop to define/destroy the mask.
+//   Peter Vanroose - 20 aug 2003 - changed parameter and return types from vil_image_view_base_sptr to vil_image_resource_sptr
 // \endverbatim
 
-#include <vil/vil_image_view_base.h>
+#include <vil/vil_image_resource.h>
 
 //: morphological dilation with circular element
-vil_image_view_base_sptr vepl2_dilate_disk(vil_image_view_base const& , float radius);
+vil_image_resource_sptr vepl2_dilate_disk(vil_image_resource_sptr , float radius);
 
 #endif // vepl2_dilate_disk_h_

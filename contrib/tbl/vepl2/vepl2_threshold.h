@@ -1,6 +1,5 @@
 #ifndef vepl2_threshold_h_
 #define vepl2_threshold_h_
-
 //:
 // \file
 // \brief set pixel to given value if above/below certain threshold
@@ -23,10 +22,15 @@
 //
 // \author Peter Vanroose, K.U.Leuven (ESAT/PSI)
 // \date   7 October 2002
+//
+// \verbatim
+//  Modifications
+//   Peter Vanroose - 20 aug 2003 - changed parameter and return types from vil_image_view_base_sptr to vil_image_resource_sptr
+// \endverbatim
 
-#include <vil/vil_image_view_base.h>
+#include <vil/vil_image_resource.h>
 
 //: set pixel to given value if above/below certain threshold
-vil_image_view_base_sptr vepl2_threshold(vil_image_view_base const& , double threshold=128.0, double below=1.0, double above=0.0);
+vil_image_resource_sptr vepl2_threshold(vil_image_resource_sptr , double threshold=128.0, double below=1.0, double above=0.0);
 
 #endif // vepl2_threshold_h_

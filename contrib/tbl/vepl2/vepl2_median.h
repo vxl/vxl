@@ -1,6 +1,5 @@
 #ifndef vepl2_median_h_
 #define vepl2_median_h_
-
 //:
 // \file
 // \brief median filter with circular element
@@ -21,10 +20,15 @@
 //
 // \author Peter Vanroose, K.U.Leuven (ESAT/PSI)
 // \date   7 October 2002
+//
+// \verbatim
+//  Modifications
+//   Peter Vanroose - 20 aug 2003 - changed parameter and return types from vil_image_view_base_sptr to vil_image_resource_sptr
+// \endverbatim
 
-#include <vil/vil_image_view_base.h>
+#include <vil/vil_image_resource.h>
 
 //: median filter with circular element of supplied radius
-vil_image_view_base_sptr vepl2_median(vil_image_view_base const& , float radius=1.0);
+vil_image_resource_sptr vepl2_median(vil_image_resource_sptr , float radius=1.0);
 
 #endif // vepl2_median_h_

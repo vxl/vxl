@@ -17,7 +17,6 @@
 #include <vepl2/vepl2_dyadic.h>
 
 // for I/O:
-#include <vil/vil_image_view_base.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vcl_iostream.h>
@@ -33,29 +32,27 @@ main(int argc, char** argv)
   }
 
   // The input image:
-  vil_image_view_base_sptr in = vil_load(argv[1]); // any type
-  float dummy_f = 0;
-  in = vepl2_convert(*in, dummy_f);
+  vil_image_resource_sptr in = vil_load_image_resource(argv[1]); // any type
+  in = vepl2_convert(in, 0.f); // dummy second argument ==> conversion to float
 
   // The second moment filter.  result: E(X*X).
-  vil_image_view_base_sptr out = vepl2_moment(*in, 2, 5, 5);
+  vil_image_resource_sptr out = vepl2_moment(in, 2, 5, 5);
 
   // The first moment filter.  result: E(X).
-  vil_image_view_base_sptr tmp = vepl2_moment(*in, 1, 5, 5);
+  vil_image_resource_sptr tmp = vepl2_moment(in, 1, 5, 5);
 
   // The monadic "square" point operator (input=output).  result: E(X)*E(X)
-  tmp = vepl2_monadic_sqr(*tmp);
+  tmp = vepl2_monadic_sqr(tmp);
 
   // The dyadic "minus" point operator.  result: E(X*X) - E(X)*E(X)
-  vepl2_dyadic_dif(out, *tmp);
+  vepl2_dyadic_dif(out, tmp);
 
   // The monadic "square root" point operator (input = output)
-  out = vepl2_monadic_sqrt(*out);
+  out = vepl2_monadic_sqrt(out);
 
   // vepl2_convert to ubyte and write to PGM file:
-  vxl_byte dummy = 0;
-  out = vepl2_convert(*out, dummy);
-  vil_save(*out, argv[2], "pnm");
+  out = vepl2_convert(out, (vxl_byte)0);
+  vil_save(*(out->get_view()), argv[2], "pnm");
   vcl_cout << "Written image of type PGM to " << argv[2] << vcl_endl;
 
   return 0;

@@ -15,12 +15,13 @@ int vepl2_test_monadic()
 {
   vcl_cout << "Starting vepl2_monadic tests\n"
            << "Creating test and output images ...";
-  vil_image_view_base_sptr byte_img = CreateTest8bitImage(32,32),  byte_ori = CreateTest8bitImage(32,32);
-  vil_image_view_base_sptr shrt_img = CreateTest16bitImage(32,32), shrt_ori = CreateTest16bitImage(32,32);
-  vil_image_view_base_sptr int__img = CreateTest32bitImage(32,32), int__ori = CreateTest32bitImage(32,32);
-  vil_image_view_base_sptr flot_img = CreateTestfloatImage(32,32), flot_ori = CreateTestfloatImage(32,32);
-  vil_image_view_base_sptr dble_img = CreateTestdoubleImage(32,32),dble_ori = CreateTestdoubleImage(32,32);
-  vil_image_view_base_sptr colr_img = CreateTest3planeImage(32,32),colr_ori = CreateTest3planeImage(32,32);
+  vil_image_resource_sptr byte_img = CreateTest8bitImage(32,32),  byte_ori = CreateTest8bitImage(32,32);
+  vil_image_resource_sptr shrt_img = CreateTest16bitImage(32,32), shrt_ori = CreateTest16bitImage(32,32);
+  vil_image_resource_sptr int__img = CreateTest32bitImage(32,32), int__ori = CreateTest32bitImage(32,32);
+  vil_image_resource_sptr flot_img = CreateTestfloatImage(32,32), flot_ori = CreateTestfloatImage(32,32);
+  vil_image_resource_sptr dble_img = CreateTestdoubleImage(32,32),dble_ori = CreateTestdoubleImage(32,32);
+  vil_image_resource_sptr colr_img = CreateTest24bitImage(32,32), colr_ori = CreateTest24bitImage(32,32);
+  vil_image_resource_sptr colp_img = CreateTest3planeImage(32,32),colp_ori = CreateTest3planeImage(32,32);
   vcl_cout << " done\n";
 
   vcl_string m = "vepl2_monadic";
@@ -31,6 +32,7 @@ int vepl2_test_monadic()
   ONE_TEST(vepl2_monadic_abs,flot_img,flot_ori,float,276,m+"_abs_float",args);
   ONE_TEST(vepl2_monadic_abs,dble_img,dble_ori,double,276,m+"_abs_double",args);
   ONE_TEST(vepl2_monadic_abs,colr_img,colr_ori,vil_rgb<unsigned char>,0,m+"_abs_colour",args);
+  ONE_TEST(vepl2_monadic_abs,colp_img,colp_ori,unsigned char,0,m+"_abs_planar",args);
 
   ONE_TEST(vepl2_monadic_sqr,byte_img,byte_ori,unsigned char,82410,m+"_sqr_byte",args);
   ONE_TEST(vepl2_monadic_sqr,shrt_img,shrt_ori,unsigned short,21755370,m+"_sqr_short",args);

@@ -1,6 +1,5 @@
 #ifndef vepl2_histogram_h_
 #define vepl2_histogram_h_
-
 //:
 // \file
 // \brief pixel value histogram of 2D image
@@ -16,11 +15,16 @@
 //
 // \author Peter Vanroose, K.U.Leuven (ESAT/PSI)
 // \date   7 October 2002
+//
+// \verbatim
+//  Modifications
+//   Peter Vanroose - 20 aug 2003 - changed parameter from vil_image_view_base_sptr to vil_image_resource_sptr
+// \endverbatim
 
-#include <vil/vil_image_view_base.h>
+#include <vil/vil_image_resource.h>
 #include <vcl_vector.h>
 
-//: pixel value histogram of 2D image, stored in a 256x1 output image
-vcl_vector<unsigned int> vepl2_histogram(vil_image_view_base const& );
+//: pixel value histogram of 2D image, stored in a vector
+vcl_vector<unsigned int> vepl2_histogram(vil_image_resource_sptr );
 
 #endif // vepl2_histogram_h_

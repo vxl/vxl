@@ -1,6 +1,5 @@
 #ifndef vepl2_monadic_h_
 #define vepl2_monadic_h_
-
 //:
 // \file
 // \brief apply any (fixed) function to all pixels
@@ -17,16 +16,21 @@
 //
 // \author Peter Vanroose, K.U.Leuven (ESAT/PSI)
 // \date   7 October 2002
+//
+// \verbatim
+//  Modifications
+//   Peter Vanroose - 20 aug 2003 - changed parameter and return types from vil_image_view_base_sptr to vil_image_resource_sptr
+// \endverbatim
 
-#include <vil/vil_image_view_base.h>
+#include <vil/vil_image_resource.h>
 
 //: replace pixels by their absolute value
-vil_image_view_base_sptr vepl2_monadic_abs(vil_image_view_base const& );
+vil_image_resource_sptr vepl2_monadic_abs(vil_image_resource_sptr );
 //: replace pixels by their square root
-vil_image_view_base_sptr vepl2_monadic_sqrt(vil_image_view_base const& );
+vil_image_resource_sptr vepl2_monadic_sqrt(vil_image_resource_sptr );
 //: replace pixels by their square
-vil_image_view_base_sptr vepl2_monadic_sqr(vil_image_view_base const& );
+vil_image_resource_sptr vepl2_monadic_sqr(vil_image_resource_sptr );
 //: replace pixels by a linear distortion
-vil_image_view_base_sptr vepl2_monadic_shear(vil_image_view_base const& , double shift, double scale);
+vil_image_resource_sptr vepl2_monadic_shear(vil_image_resource_sptr , double shift, double scale);
 
 #endif // vepl2_monadic_h_

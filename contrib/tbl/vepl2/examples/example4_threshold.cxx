@@ -11,7 +11,6 @@
 #include <vepl2/vepl2_threshold.h>
 
 // for I/O:
-#include <vil/vil_image_view.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vcl_iostream.h>
@@ -23,17 +22,17 @@ main(int argc, char** argv) {
   if (argc < 3) { vcl_cerr << "Syntax: example4_threshold file_in file_out [threshold]\n"; return 1; }
 
   // The input image:
-  vil_image_view<vxl_byte> in = vil_load(argv[1]);
+  vil_image_resource_sptr in = vil_load_image_resource(argv[1]);
   if (!in) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
 
   // The threshold value:
   vxl_byte threshold = (argc < 4) ? 64 : vcl_atoi(argv[3]);
 
   // perform thresholding:
-  vil_image_view<vxl_byte> out = vepl2_threshold(in,threshold,0,255);
+  vil_image_resource_sptr out = vepl2_threshold(in,threshold,0,255);
 
   // Write output:
-  vil_save(out, argv[2], "pnm");
+  vil_save(*out->get_view(), argv[2], "pnm");
   vcl_cout << "Written image of type PGM to " << argv[2] << vcl_endl;
 
   return 0;
