@@ -25,7 +25,6 @@ class vil2_image_view_base;
 // through smart pointers - vil2_image_data_sptr;
 // All image data is presumed to be arranged in planes, not components.
 
-
 class vil2_image_data
 {
  public:
@@ -49,11 +48,10 @@ class vil2_image_data
 
   //: Create a read/write view of the data.
   // Modifying this view might modify the actual data.
-  // If you want to modify this data in place, call put_view after you done, and 
+  // If you want to modify this data in place, call put_view after you done, and
   // it should work efficiently. This function will always return a
   // multi-plane scalar-pixel view of the data.
-  // \return 0 if unable to get view of correct size. Caller is responsible for
-  // deleting the view.
+  // \return 0 if unable to get view of correct size.
   virtual vil2_image_view_base_sptr get_view(unsigned x0, unsigned y0,
                                              unsigned nx, unsigned ny) const
   { return get_copy_view (x0, y0, nx, ny); }
@@ -80,7 +78,6 @@ class vil2_image_data
 
   //: Extra property information
   virtual bool get_property(char const* tag, void* property_value = 0) const =0;
-
 
   //: Return the name of the class;
   virtual vcl_string is_a() const ;
