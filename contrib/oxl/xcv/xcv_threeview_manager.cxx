@@ -65,7 +65,6 @@ void xcv_threeview_manager::draw_tri_tensor(vgui_event const& e, vgui_tableau_sp
   vgui_projection_inspector p_insp;
   float ix, iy;
   p_insp.window_to_image_coordinates(e.wx, e.wy, ix, iy);
-  HomgPoint2D hp(ix, iy);
 
   if (child_tab == tabs[0])
   {
