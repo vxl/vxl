@@ -257,9 +257,8 @@ class camera_graph
         int erase_graph()
         {
           num_vertice_ = vertice_.size();
-          assert(num_vertice_ == edges_.size());
           
-          if(num_vertice == 0) // empty graph
+          if(num_vertice_ == 0) // empty graph
             return 0; // no error
           
           for(int i=0; i<num_vertice_; i++){
