@@ -115,7 +115,7 @@ class rgrl_transformation
                         bool initialize_next,
                         const vnl_vector<double>& to_delta,
                         vnl_vector<double>& from,
-                        vnl_vector<double>& from_next_est) const = 0;
+                        vnl_vector<double>& from_next_est) const;
 
   //:  Parameter covariance matrix
   vnl_matrix<double> covar() const;

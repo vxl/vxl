@@ -1,6 +1,8 @@
 #include <rgrl/rgrl_transformation.h>
 #include <rgrl/rgrl_util.h>
 #include <vnl/vnl_math.h>
+#include <vnl/vnl_least_squares_function.h>
+#include <vnl/algo/vnl_levenberg_marquardt.h>
 //:
 // \file
 // \brief Base class for transformation representation, estimations and application in generalized registration library
@@ -58,7 +60,8 @@ map_tangent( vnl_vector<double> const& from_loc,
              vnl_vector<double> const& from_dir,
              vnl_vector<double>      & to_dir    ) const
 {
-  vnl_matrix<double> J = jacobian( from_loc );
+  vnl_matrix<double> J;
+  this->jacobian_wrt_loc( J, from_loc );
   assert ( from_loc.size() == J.cols() );
   assert ( from_dir.size() == J.cols() );
 
@@ -364,4 +367,132 @@ read( vcl_istream& is )
   
   // reset the stream pos
   is.seekg( pos );
+}
+
+
+
+class inverse_mapping_func
+: public vnl_least_squares_function
+{
+ public:
+  inverse_mapping_func( rgrl_transformation const* xform_ptr, vnl_vector<double> const& to_loc )
+    : vnl_least_squares_function( to_loc.size(), to_loc.size(), use_gradient ),
+      xform_( xform_ptr ), to_loc_( to_loc )
+  {    }
+
+  //: obj func value
+  void f(vnl_vector<double> const& x, vnl_vector<double>& fx);
+
+  //: Jacobian
+  void gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian);
+  
+ public:
+  const rgrl_transformation* xform_;
+  vnl_vector<double>   to_loc_;
+};
+
+
+void 
+inverse_mapping_func::
+f(vnl_vector<double> const& x, vnl_vector<double>& fx)
+{
+  assert( xform_ );
+
+  // x is the From location
+  // just need to apply forward transformation and 
+  xform_->map_location( x, fx );
+  
+  // get the difference
+  fx -= to_loc_;    
+}
+
+void
+inverse_mapping_func:: 
+gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian)
+{
+  assert( xform_ );
+  
+  // jacobian is just the jacobian of transformation w.r.t location
+  // x is the From location
+  xform_->jacobian_wrt_loc( jacobian, x );
+}
+
+//:  Inverse map with an initial guess
+void
+rgrl_transformation::
+inv_map( const vnl_vector<double>& to,
+         bool initialize_next,
+         const vnl_vector<double>& to_delta,
+         vnl_vector<double>& from,
+         vnl_vector<double>& from_next_est) const
+{
+  // use different objects for different dimension
+  if( to.size() == 2 ) {
+  
+    static inverse_mapping_func inv_map_func( this, to );
+    
+    // set transformation and the desired 
+    inv_map_func.to_loc_ = to;
+    inv_map_func.xform_  = this;
+    
+    // solve for from location
+    static vnl_levenberg_marquardt lm( inv_map_func );
+
+    // lm.set_trace( true );
+    // lm.set_check_derivatives( 5 );
+    // we don't need it to be super accurate
+    lm.set_f_tolerance( 1e-4 );
+    lm.set_x_tolerance( 1e-3 );
+    lm.set_max_function_evals( 100 );
+    
+    // run LM
+    bool ret = lm.minimize_using_gradient( from );
+    
+    if( !ret ) {
+      WarningMacro( "Levenberg-Marquatt in rgrl_transformation::inv_map has failed!!!" );
+      return;
+    }
+
+  } else if( to.size() == 3 ) {
+    
+    static inverse_mapping_func inv_map_func( this, to );
+    
+    // set transformation and the desired 
+    inv_map_func.to_loc_ = to;
+    inv_map_func.xform_  = this;
+    
+    // solve for from location
+    static vnl_levenberg_marquardt lm( inv_map_func );
+
+    // lm.set_trace( true );
+    // lm.set_check_derivatives( 5 );
+    // we don't need it to be super accurate
+    lm.set_f_tolerance( 1e-4 );
+    lm.set_x_tolerance( 1e-3 );
+    lm.set_max_function_evals( 100 );
+    
+    // run LM
+    bool ret = lm.minimize_using_gradient( from );
+    
+    if( !ret ) {
+      WarningMacro( "Levenberg-Marquatt in rgrl_transformation::inv_map has failed!!!" );
+      return;
+    }
+
+  } else {
+    
+    assert( ! "Other dimensioin is not implemented!" );
+    return;
+  }
+        
+  // initialize the next
+  // NOTE:
+  // no need to compute the inverse of jacobian here
+  // because the inverse using SVD is about expensive as LM.
+  // and there is extra memory allocation 
+  // Therefore, just initialize it as current from
+  //
+  if( initialize_next ) {
+    from_next_est = from; 
+  }
 }
