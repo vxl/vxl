@@ -171,7 +171,7 @@ inline void vil2_convert_stretch_range(const vil2_image_view<T>& src,
   for (unsigned p = 0; p < src.nplanes(); ++p)
     for (unsigned j = 0; j < src.nj(); ++j)
       for (unsigned i = 0; i < src.ni(); ++i)
-         dest(i,j,p) = (vxl_byte)a+b*src(i,j,p)+0.5;
+         dest(i,j,p) = (vxl_byte)(a+b*src(i,j,p)+0.5);
 }
 
 //: Create a greyscale image of specified pixel type from any image src.
