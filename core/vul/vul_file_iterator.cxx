@@ -1,4 +1,4 @@
-// This is vxl/vul/vul_file_iterator.cxx
+// This is core/vul/vul_file_iterator.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -13,11 +13,12 @@
 // for each OS
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
 #include <io.h>
-struct vul_file_iterator_data {
+struct vul_file_iterator_data
+{
   vcl_string original;
   vcl_string original_dirname;
   struct _finddata_t data;
-  long handle;
+  intptr_t handle;
   vcl_string found;
   char const* name;
 
@@ -26,7 +27,7 @@ struct vul_file_iterator_data {
     handle = _findfirst(glob, &data);
     original_dirname = vul_file::dirname(glob);
 
-    if (handle != -1)
+    if (handle != -1L)
       mkname();
   }
 
@@ -45,7 +46,7 @@ struct vul_file_iterator_data {
     } else {
       // failed to find one, done
       _findclose(handle);
-      handle = -1;
+      handle = -1L;
     }
   }
 
@@ -71,7 +72,8 @@ struct vul_file_iterator_data {
 // in libglob.  Can that do "*/*"?
 // Done just enough that "dir/*" will work....
 #include <dirent.h>
-struct vul_file_iterator_data {
+struct vul_file_iterator_data
+{
   vcl_string original_dirname;
   vcl_string baseglob;
   DIR* dir_handle;
