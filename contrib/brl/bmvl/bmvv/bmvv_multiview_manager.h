@@ -17,18 +17,17 @@
 #include <vil/vil_image.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <vdgl/vdgl_intensity_face_sptr.h>
-#include <vgui/vgui_grid_tableau.h>
-#include <vgui/vgui_shell_tableau.h>
-#include <vgui/vgui_image_tableau_sptr.h>
+#include <vgui/vgui_wrapper_tableau.h>
 #include <vgui/vgui_easy2D_tableau_sptr.h>
-#include <vgui/vgui_viewer2D_tableau_sptr.h>
-#include <vgui/vgui_window.h>
+#include <vgui/vgui_grid_tableau_sptr.h>
 #include <mvl/FMatrix.h>
 #include <bgui/bgui_vtol2D_tableau_sptr.h>
 #include <bgui/bgui_picker_tableau_sptr.h>
 
+class vgui_window;
+
 //: A manager for displaying segmentation results.
-class bmvv_multiview_manager : public vgui_grid_tableau
+class bmvv_multiview_manager : public vgui_wrapper_tableau
 {
  public:
   bmvv_multiview_manager();
@@ -50,14 +49,14 @@ class bmvv_multiview_manager : public vgui_grid_tableau
   //: access to the window
   vgui_window* get_window(){return win_;}
   void set_window(vgui_window* win){win_=win;}
-
+  void init();
   //: the virtual handle function
   virtual bool handle(const vgui_event&);
  protected:
   //:internal utility methods
   void draw_regions(vcl_vector<vdgl_intensity_face_sptr>& regions,
                     bool verts=false);
-  void init_tabs();
+
   FMatrix test_fmatrix();
   bgui_vtol2D_tableau_sptr get_vtol2D_tableau_at(unsigned col, unsigned row);
   bgui_vtol2D_tableau_sptr get_selected_vtol2D_tableau();
@@ -65,12 +64,11 @@ class bmvv_multiview_manager : public vgui_grid_tableau
   bgui_picker_tableau_sptr get_selected_picker_tableau();
   //
  private:
-  //flags
-  bool tabs_init_;
   vil_image img_;
   vgui_window* win_;
   vcl_vector<bgui_vtol2D_tableau_sptr> vtol_tabs_;
   vcl_vector<vtol_edge_2d_sptr> selected_curves_;
+  vgui_grid_tableau_sptr grid_;
   static bmvv_multiview_manager *instance_;
 };
 
