@@ -1,4 +1,5 @@
 #ifndef test_util_h_
+#define test_util_h_
 
 #include <vcl_complex_fwd.h>
 #define macro(T) void test_util_fill_random(T *begin, T *end)
