@@ -1,22 +1,18 @@
+#include "rgrl_scale_est_null.h"
 //:
 // \file
 // \author Charlene Tsai
 
-#include "rgrl_scale_est_null.h"
-
 #include <rrel/rrel_objective.h>
-#include <vnl/vnl_math.h>
 
 #include "rgrl_scale.h"
 #include "rgrl_match_set.h"
 #include "rgrl_util.h"
 
-#include <vcl_iostream.h>
-
 rgrl_scale_est_null::
 rgrl_scale_est_null( )
-{  
-  WarningMacro("No scale estimation will be performed \n");
+{
+  WarningMacro("No scale estimation will be performed\n");
 }
 
 

@@ -1,8 +1,6 @@
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
-
 #include <testlib/testlib_test.h>
 
+#include <vcl_vector.h>
 #include <rgrl/rgrl_feature.h>
 #include <rgrl/rgrl_feature_point.h>
 #include <rgrl/rgrl_feature_set_location.h>

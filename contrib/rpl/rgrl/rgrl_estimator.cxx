@@ -1,13 +1,11 @@
+#include "rgrl_estimator.h"
 //:
 // \file
 // \author Amitha Perera
 // \date   Feb 2003
 
-#include "rgrl_estimator.h"
-
 #include "rgrl_set_of.h"
 #include "rgrl_match_set_sptr.h"
-#include <vcl_iostream.h>
 
 rgrl_estimator::
 rgrl_estimator( unsigned int param_dof )

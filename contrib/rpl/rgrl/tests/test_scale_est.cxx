@@ -1,9 +1,8 @@
-#include <vcl_iostream.h>
+#include <testlib/testlib_test.h>
+
 #include <vcl_vector.h>
 #include <vcl_memory.h>
 #include <vcl_cmath.h>
-
-#include <testlib/testlib_test.h>
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
@@ -51,7 +50,7 @@ test_est()
   // "Real" scale
   //
   double var = 0.0;
-  for( unsigned i=0; i < num_pts; ++i ) {
+  for ( unsigned i=0; i < num_pts; ++i ) {
     vnl_vector<double> v( 2 );
     v[0] = rand.drand64( 0.0, 10.0 );
     v[1] = rand.drand64( 0.0, 10.0 );
@@ -70,7 +69,7 @@ test_est()
   double one_to_one_scale = 0.0;
   {
     rgrl_match_set ms( rgrl_feature_point::type_id() );
-    for( unsigned i=0; i < from.size(); ++i ) {
+    for ( unsigned i=0; i < from.size(); ++i ) {
       ms.add_feature_and_match( pf( from[i] ), 0, pf( from[i]+err[i] ) );
     }
     ms.remap_from_features( *trans );
@@ -79,7 +78,7 @@ test_est()
     rgrl_scale_sptr scale = closest_est.estimate_unweighted( ms, 0 );
     testlib_test_perform( scale->has_geometric_scale() &&
                           ! scale->has_signature_covar() );
-    
+
     TEST_NEAR( "Geometric scale is correct", scale->geometric_scale(), vcl_sqrt(var), 0.2 );
     one_to_one_scale = scale->geometric_scale();
   }
@@ -89,11 +88,11 @@ test_est()
   //
   {
     rgrl_match_set ms( rgrl_feature_point::type_id() );
-    for( unsigned i=0; i < from.size(); ++i ) {
+    for ( unsigned i=0; i < from.size(); ++i ) {
       vcl_vector< rgrl_feature_sptr > to;
       unsigned num = rand(5)+1;
       unsigned pos = rand(num);
-      for( unsigned j=0; j < num; ++j ) {
+      for ( unsigned j=0; j < num; ++j ) {
         to.push_back( pf( from[i] + err[i] * ((j+pos)%num + 1) ) );
       }
       ms.add_feature_and_matches( pf( from[i] ), 0, to );
@@ -104,7 +103,7 @@ test_est()
     rgrl_scale_sptr scale = closest_est.estimate_unweighted( ms, 0 );
     testlib_test_perform( scale->has_geometric_scale() &&
                           ! scale->has_signature_covar() );
-    
+
     TEST_NEAR( "Geometric scale is correct", scale->geometric_scale(), one_to_one_scale, 1e-8 );
   }
 
@@ -114,7 +113,7 @@ test_est()
   // Simple, one-to-one errors with unit weight
   {
     rgrl_match_set ms( rgrl_feature_point::type_id() );
-    for( unsigned i=0; i < from.size(); ++i ) {
+    for ( unsigned i=0; i < from.size(); ++i ) {
       ms.add_feature_and_match( pf( from[i] ), 0, pf( from[i]+err[i] ) );
     }
     ms.remap_from_features( *trans );
@@ -123,7 +122,7 @@ test_est()
     rgrl_scale_sptr scale = allwgt_est.estimate_weighted( ms, 0, false );
     testlib_test_perform( scale->has_geometric_scale() &&
                           ! scale->has_signature_covar() );
-    
+
     TEST_NEAR( "Geometric scale is correct", scale->geometric_scale(), vcl_sqrt(var), 1e-6 );
   }
 }
