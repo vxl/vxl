@@ -1,8 +1,0 @@
-#ifndef vcl_iso_bitset_h_
-#define vcl_iso_bitset_h_
-
-#include <bitset>
-
-@bitset
-
-#endif
