@@ -1,3 +1,6 @@
+#ifndef vgui_internals_trackball_h_
+#define vgui_internals_trackball_h_
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -82,3 +85,5 @@ axis_to_quat(float a[3], float phi, float q[4]);
 #ifdef __cplusplus
 }
 #endif
+
+#endif // vgui_internals_trackball_h_
