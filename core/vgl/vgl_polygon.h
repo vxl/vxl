@@ -15,6 +15,7 @@
 #include <vcl_vector.h>
 #include <vgl/vgl_point_2d.h>
 #include <vcl_string.h>
+#include <vcl_utility.h>
 
 //: Store a polygon.
 // May have holes or multiple sections.  The polygon is stored as a list
@@ -42,6 +43,14 @@ public:
   //: Construct setting the points in the first sheet
   // n is the number of points
   vgl_polygon(float const* x, float const* y, int n);
+
+  //: Construct setting the points in the first sheet
+  // n is the number of points
+  vgl_polygon(vcl_pair<float, float> const p[], int n);
+
+  //: Construct setting the points in the first sheet
+  // n is the number of points
+  vgl_polygon(vcl_pair<double, double> const p[], int n);
 
   //: Construct setting single sheet of points
   vgl_polygon(vcl_vector<point_t> const& points);
