@@ -17,9 +17,9 @@
 
 #include <vcl_string.h>
 
-#include <vil/vil_memory_image_of.h>
-#include <vil/vil_byte.h>
-#include <vil/vil_rgb.h>
+#include <vil1/vil1_memory_image_of.h>
+#include <vil1/vil1_byte.h>
+#include <vil1/vil1_rgb.h>
 
 struct MovieFileInterface;
 
@@ -40,14 +40,14 @@ class MovieFile
   int GetRealFrameIndex(int frame) { return start_ + frame * step_; }
   int GetNumFrames();
 
-  vil_image GetImage(int frame_index);
+  vil1_image GetImage(int frame_index);
 
   bool HasFrame(int frame_index);
-  void GetFrame(int frame_index, vil_rgb<unsigned char> * frame);
-  void GetFrame(int frame_index, vil_byte* frame);
-  void GetFrame(int frame_index, vil_memory_image_of<vil_rgb<unsigned char> >& frame);
-  void GetFrame(int frame_index, vil_memory_image_of<vil_byte>& frame);
-  void GetFrameRGB(int frame_index, vil_byte* frame);
+  void GetFrame(int frame_index, vil1_rgb<unsigned char> * frame);
+  void GetFrame(int frame_index, vil1_byte* frame);
+  void GetFrame(int frame_index, vil1_memory_image_of<vil1_rgb<unsigned char> >& frame);
+  void GetFrame(int frame_index, vil1_memory_image_of<vil1_byte>& frame);
+  void GetFrameRGB(int frame_index, vil1_byte* frame);
 
   bool ok() { return qt != 0; }
 
@@ -55,7 +55,7 @@ class MovieFile
   vcl_string filename_;
   int start_, step_, end_;
   MovieFileInterface* qt;
-  vil_memory_image_of<vil_rgb<unsigned char> >* tmp_buf_;
+  vil1_memory_image_of<vil1_rgb<unsigned char> >* tmp_buf_;
 
   int index(int);
 };

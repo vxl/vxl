@@ -12,9 +12,9 @@
 
 #include <vul/vul_printf.h>
 
-#include <vil/vil_jpeglib.h>
-#include <vil/vil_memory_image_of.h>
-#include <vil/vil_rgb.h>
+#include <vil1/vil1_jpeglib.h>
+#include <vil1/vil1_memory_image_of.h>
+#include <vil1/vil1_rgb.h>
 
 const int align = 4;
 inline int ROUNDUP(int x)
@@ -78,7 +78,7 @@ struct SGIMovieFileWriteData {
 
   bool interlaced;
 
-  vil_memory_image_of<vil_rgb<unsigned char> > buffer;
+  vil1_memory_image_of<vil1_rgb<unsigned char> > buffer;
   vcl_vector<JSAMPLE*> rows;
   FILE *fp;
   int directory_pos;

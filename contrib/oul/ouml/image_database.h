@@ -26,7 +26,7 @@
 #include <vcl_cstring.h> // for strcpy(), strcmp()
 #include <vcl_map.h>
 #include <vcl_utility.h>
-#include <vil/vil_memory_image.h>
+#include <vil1/vil1_memory_image.h>
 
 class ImageDatabase
 {
@@ -39,17 +39,17 @@ public:
 
 private:
   // the multimap to store label/image pairs
-  vcl_multimap<const char*, vil_memory_image *, ltstr> image_db;
+  vcl_multimap<const char*, vil1_memory_image *, ltstr> image_db;
 
 public:
   // typedefs for access to the image_db
-  typedef vcl_multimap<const char*, vil_memory_image *, ltstr>::iterator iterator;
-  typedef vcl_multimap<const char*, vil_memory_image *, ltstr>::const_iterator const_iterator;
-  typedef vcl_pair<const char *, vil_memory_image *> value_type;
+  typedef vcl_multimap<const char*, vil1_memory_image *, ltstr>::iterator iterator;
+  typedef vcl_multimap<const char*, vil1_memory_image *, ltstr>::const_iterator const_iterator;
+  typedef vcl_pair<const char *, vil1_memory_image *> value_type;
 
   ImageDatabase(){}
   ~ImageDatabase();
-  inline iterator insert(const char *label, vil_memory_image *image)
+  inline iterator insert(const char *label, vil1_memory_image *image)
     {char *new_label=new char[200]; vcl_strcpy(new_label, label);
     value_type ins(new_label, image); return image_db.insert(ins);}
   inline iterator begin(){return image_db.begin();}

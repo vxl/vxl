@@ -18,11 +18,11 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vil/vil_memory_image_of.h>
+#include <vil1/vil1_memory_image_of.h>
 
-struct MedianReduceImage : public vil_memory_image_of<unsigned char>
+struct MedianReduceImage : public vil1_memory_image_of<unsigned char>
 {
-  MedianReduceImage(vil_memory_image_of<unsigned char> const& in, int SCALE);
+  MedianReduceImage(vil1_memory_image_of<unsigned char> const& in, int SCALE);
 };
 
 #endif // MedianReduceImage_h_

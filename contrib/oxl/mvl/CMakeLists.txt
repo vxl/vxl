@@ -111,7 +111,7 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ADD_LIBRARY(mvl ${mvl_sources})
-TARGET_LINK_LIBRARIES(mvl vil vnl_algo vnl vbl vgl vgl_algo vul)
+TARGET_LINK_LIBRARIES(mvl vil1 vnl_algo vnl vbl vgl vgl_algo vul)
 
 IF (BUILD_EXAMPLES)
   SUBDIRS(examples)

@@ -33,6 +33,6 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ADD_EXECUTABLE(xcv ${xcv_sources})
-TARGET_LINK_LIBRARIES(xcv osl mvl vgui vgl vil vnl_algo vnl vul vbl vpl vcl)
+TARGET_LINK_LIBRARIES(xcv osl mvl vgui vgl vil1 vnl_algo vnl vul vbl vpl vcl)
 
 ENDIF (HAS_VGUI)

@@ -4,7 +4,7 @@
 // \file
 
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
-#include <vil/vil_save.h>
+#include <vil1/vil1_save.h>
 #include <vcl_queue.h>
 #include <vcl_fstream.h>
 #include <vcl_cstdio.h> // for sprintf()
@@ -323,7 +323,7 @@ void EigenFace::save_as_images(int width, int height)
         im[i][j] = (unsigned char)
           (((**iter)[i+j*width]-min)/(max-min)*255);
     vcl_sprintf(name, "eigenface%03d.pgm", index++);
-    vil_save(im, name);
+    vil1_save(im, name);
   }
 }
 

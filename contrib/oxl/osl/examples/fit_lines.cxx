@@ -1,7 +1,7 @@
 #include <osl/osl_fit_lines.h>
 #include <osl/osl_easy_canny.h>
 #include <osl/osl_save_topology.h>
-#include <vil/vil_load.h>
+#include <vil1/vil1_load.h>
 #include <vcl_iostream.h>
 
 // runs Canny on the given input image, followed by line fitting
@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
 {
   // input image
   if (argc < 2) return 1;
-  vil_image image = vil_load(argv[1]);
+  vil1_image image = vil1_load(argv[1]);
   if (!image) return 2;
 
   // Canny edgel extraction

@@ -5,9 +5,9 @@
 
 #include <vcl_string.h>
 #include <vul/vul_arg.h>
-#include <vil/vil_image.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
+#include <vil1/vil1_image.h>
+#include <vil1/vil1_load.h>
+#include <vil1/vil1_save.h>
 #include <osl/osl_harris_params.h>
 #include <osl/osl_harris.h>
 
@@ -25,15 +25,15 @@ int main(int argc,char **argv)
   vul_arg_parse(argc,argv);
 
   // load image
-  vil_image I;
+  vil1_image I;
   if (infile() == "-") {
     //vcl_cerr << "reading image from stdin\n";
-    //I = vil_load(cin);
+    //I = vil1_load(cin);
     vcl_cerr << "cannot read from stdin yet\n";
     return 1;
   }
   else
-    I = vil_load(infile().c_str());
+    I = vil1_load(infile().c_str());
 
   // parameters
   osl_harris_params params;
@@ -58,7 +58,7 @@ int main(int argc,char **argv)
 
   // cornerness map
   if (cormap.set())
-    vil_save(H.image_cornerness_buf, cormap().c_str(), "pnm");
+    vil1_save(H.image_cornerness_buf, cormap().c_str(), "pnm");
 
   return 0;
 }

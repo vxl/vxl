@@ -12,7 +12,7 @@
 #include <vcl_fstream.h>
 #include <vcl_vector.h>
 
-#include <vil/vil_memory_image_of.h>
+#include <vil1/vil1_memory_image_of.h>
 
 #include <mvl/HomgInterestPoint.h>
 #include <mvl/ImageMetric.h>
@@ -276,10 +276,10 @@ bool HomgInterestPointSet::read(vcl_istream& f, const ImageMetric* c)
   return true;
 }
 
-//: Load a corner set from a simple ASCII file of x y pairs, and use vil_image src to compute mean_intensities.
+//: Load a corner set from a simple ASCII file of x y pairs, and use vil1_image src to compute mean_intensities.
 // If ImageMetric is supplied, it is used to convert image coordinates to homogeneous form.
 // NOT YET IMPLEMENTED
-bool HomgInterestPointSet::read(const char* filename, vil_image const& /*src*/, const HomgMetric& c)
+bool HomgInterestPointSet::read(const char* filename, vil1_image const& /*src*/, const HomgMetric& c)
 {
   if (!read(filename, c))
     return false;
@@ -288,7 +288,7 @@ bool HomgInterestPointSet::read(const char* filename, vil_image const& /*src*/, 
   vcl_cerr << "HomgInterestPointSet::read() not implemented in any sense of the word\n";
 #else
   //vcl_cerr << "HomgInterestPointSet: Computing mean intensities\n";
-  vil_memory_image_of<unsigned char> imbuf(src);
+  vil1_memory_image_of<unsigned char> imbuf(src);
   for (unsigned i=0; i< size(); i++) {
     ImageWindowOps winops(imbuf, get_int(i), 3);
     (*data_)[i].mean_intensity_ = winops.mean_intensity();

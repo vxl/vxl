@@ -20,8 +20,8 @@
 
 #include <vul/vul_arg.h>
 
-#include <vil/vil_image.h>
-#include <vil/vil_load.h>
+#include <vil1/vil1_image.h>
+#include <vil1/vil1_load.h>
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_window.h>
@@ -361,7 +361,7 @@ xcv_picker_tableau_sptr get_picker_tableau_at(unsigned col, unsigned row)
 //: Gets the underlying image from the tableau at the given position and returns it in the given image pointer.
 //  Returns true if the image is OK, otherwise returns false.
 //-----------------------------------------------------------------------------
-bool get_image_at(vil_image* img, unsigned col, unsigned row)
+bool get_image_at(vil1_image* img, unsigned col, unsigned row)
 {
   xcv_image_tableau_sptr img_tab = get_image_tableau_at(col, row);
   if (img_tab)
@@ -377,7 +377,7 @@ bool get_image_at(vil_image* img, unsigned col, unsigned row)
 //-----------------------------------------------------------------------------
 //: Given an image, returns a tableau suitable to display in xcv.
 //-----------------------------------------------------------------------------
-vgui_tableau_sptr create_tableau(vil_image img)
+vgui_tableau_sptr create_tableau(vil1_image img)
 {
   xcv_image_tableau_new       image (img);
   vgui_easy2D_tableau_new     easy  (image);
@@ -393,7 +393,7 @@ vgui_tableau_sptr create_tableau(vil_image img)
 //-----------------------------------------------------------------------------
 void add_image_at(vcl_string image_filename, unsigned col, unsigned row)
 {
-  vil_image img = vil_load(image_filename.c_str());
+  vil1_image img = vil1_load(image_filename.c_str());
   vgui_tableau_sptr tab = create_tableau(img);
   xcv_tab->add_at(tab, col, row);
 }
@@ -402,7 +402,7 @@ void add_image_at(vcl_string image_filename, unsigned col, unsigned row)
 //-----------------------------------------------------------------------------
 //: Add image to next available slot
 //-----------------------------------------------------------------------------
-void add_image(vil_image& img)
+void add_image(vil1_image& img)
 {
   vgui_tableau_sptr tab = create_tableau(img);
   xcv_tab->add_next(tab);
@@ -440,7 +440,7 @@ vgui_menu create_menubar()
 // greatest as the window width (height).
 //-----------------------------------------------------------------------------
 void xcv_window_size_traditional(int rows, int cols,
-                                 vcl_vector<vil_image> const &images,
+                                 vcl_vector<vil1_image> const &images,
                                  unsigned *window_w, unsigned *window_h,
                                  double *viewer_scale)
 {
@@ -487,7 +487,7 @@ void xcv_window_size_traditional(int rows, int cols,
 //  Useful for very small or very large images.
 //-----------------------------------------------------------------------------
 void xcv_window_size_adaptive(int rows, int cols,
-                              vcl_vector<vil_image> const &images,
+                              vcl_vector<vil1_image> const &images,
                               unsigned *window_w, unsigned *window_h,
                               double *viewer_scale)
 {
@@ -569,13 +569,13 @@ int main(int argc, char** argv)
 
   {
     vcl_vector<vgui_tableau_sptr> viewers;
-    vcl_vector<vil_image> images;
+    vcl_vector<vil1_image> images;
 
     xcv_tab->set_grid_size_changeable(false);
     for (int argcount=1; argcount<argc && vcl_strcmp(argv[argcount], "-d");
       ++argcount)
     {
-      vil_image img = vil_load(argv[argcount]);
+      vil1_image img = vil1_load(argv[argcount]);
       vgui_tableau_sptr tab = create_tableau(img);
       xcv_tab->add_next(tab);
 

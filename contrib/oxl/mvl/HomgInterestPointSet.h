@@ -32,7 +32,7 @@
 #include <mvl/HomgPoint2D.h>
 #include <mvl/HomgMetric.h>
 
-class vil_image;
+class vil1_image;
 class ImageMetric;
 class HomgInterestPointSetData;
 class HomgInterestPoint;
@@ -86,12 +86,12 @@ class HomgInterestPointSet
   bool add(const HomgInterestPoint&);
   bool add_preconditioned(const HomgPoint2D&);
   bool add_preconditioned(vgl_homg_point_2d<double> const&);
-  void set_image(vil_image const& image);
+  void set_image(vil1_image const& image);
   void clear();
 
   // Input/Output--------------------------------------------------------------
   bool read(const char* filename, const HomgMetric& c = 0);
-  bool read(const char* filename, vil_image const& src, const HomgMetric& c = 0);
+  bool read(const char* filename, vil1_image const& src, const HomgMetric& c = 0);
   bool write(const char* filename) const;
 
   bool read(vcl_istream& f, const ImageMetric* c);

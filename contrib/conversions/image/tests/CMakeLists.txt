@@ -1,4 +1,4 @@
-LINK_LIBRARIES( vil vpl vul vbl testlib )
+LINK_LIBRARIES( vil1 vpl vul vbl testlib )
 
 IF(HAS_IMAGE)
   LINK_DIRECTORIES( Image COOL Numerics GeneralUtility )

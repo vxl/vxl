@@ -1,5 +1,5 @@
 // This is oxl/apps/glmovie/vobgetframe.cxx
-#include <vil/vil_save.h>
+#include <vil1/vil1_save.h>
 
 #include <vul/vul_arg.h>
 #include <vul/vul_printf.h>
@@ -50,7 +50,7 @@ int main(int argc, char ** argv)
     moviefile->get_frame(s)->get_image().get_section(buf, 0,0,0,0);
   }
 
-  vil_save(moviefile->get_frame(a_frame())->get_image(), a_outfile());
+  vil1_save(moviefile->get_frame(a_frame())->get_image(), a_outfile());
 
   vidl_io::close(); // Need to call this to avoid segvs from naughty codecs.
 

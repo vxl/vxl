@@ -14,8 +14,8 @@
 
 #include <vcl_iostream.h>
 
-#include <vil/vil_image.h>
-#include <vil/vil_save.h>
+#include <vil1/vil1_image.h>
+#include <vil1/vil1_save.h>
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_menu.h>
@@ -29,7 +29,7 @@ extern vcl_string* get_loadfile();
 extern vcl_string* get_savefile();
 extern void get_current(unsigned*, unsigned*);
 extern void add_image_at(vcl_string, unsigned, unsigned);
-extern bool get_image_at(vil_image*, unsigned, unsigned);
+extern bool get_image_at(vil1_image*, unsigned, unsigned);
 extern vgui_rubberband_tableau_sptr get_rubberbander_at(unsigned, unsigned);
 extern vgui_tableau_sptr get_top(unsigned,unsigned);
 extern void remove_image_at(unsigned, unsigned);
@@ -87,7 +87,7 @@ void xcv_file::save_image()
 #endif
     static char *format[] = {
       "jpg","tiff","pnm","png","iris","mit","viff"};
-    vil_save(imt->get_image(),image_filename->c_str(),format[choice_value]);
+    vil1_save(imt->get_image(),image_filename->c_str(),format[choice_value]);
   }
 }
 

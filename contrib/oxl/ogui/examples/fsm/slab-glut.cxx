@@ -3,8 +3,8 @@
 */
 #include <vcl_iostream.h>
 
-#include <vil/vil_load.h>
-#include <vil/vil_image.h>
+#include <vil1/vil1_load.h>
+#include <vil1/vil1_image.h>
 
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_viewer2D.h>
@@ -45,7 +45,7 @@ int main(int argc, char **argv)
   vgui_glut_slab slab(win);
 
   // some tableaux
-  vil_image I = vil_load( argc>1 ? argv[1] : "az32_10.tif" );
+  vil1_image I = vil1_load( argc>1 ? argv[1] : "az32_10.tif" );
   vgui_image_tableau_new image(I);
   vgui_viewer2D_new viewer(image);
   vgui_shell_tableau_new shell(viewer);

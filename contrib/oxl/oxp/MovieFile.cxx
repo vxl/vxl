@@ -80,7 +80,7 @@ int MovieFile::GetNumFrames()
   return (end_ - start_) / step_ + 1;
 }
 
-vil_image MovieFile::GetImage(int frame_index)
+vil1_image MovieFile::GetImage(int frame_index)
 {
   return qt->GetImage(index(frame_index));
 }
@@ -105,28 +105,28 @@ bool MovieFile::HasFrame(int frame_index)
   return qt->HasFrame(index(frame_index));
 }
 
-void MovieFile::GetFrame(int frame_index, vil_memory_image_of<vil_rgb<unsigned char> >& frame)
+void MovieFile::GetFrame(int frame_index, vil1_memory_image_of<vil1_rgb<unsigned char> >& frame)
 {
   int sx = GetSizeX(frame_index);
   int sy = GetSizeY(frame_index);
   frame.resize(sx,sy);
-  GetFrame(frame_index, (vil_rgb<unsigned char> *)frame.get_buffer());
+  GetFrame(frame_index, (vil1_rgb<unsigned char> *)frame.get_buffer());
 }
 
-void MovieFile::GetFrame(int frame_index, vil_memory_image_of<vil_byte>& frame)
+void MovieFile::GetFrame(int frame_index, vil1_memory_image_of<vil1_byte>& frame)
 {
   int sx = GetSizeX(frame_index);
   int sy = GetSizeY(frame_index);
   frame.resize(sx,sy);
-  GetFrame(frame_index, (vil_byte*)frame.get_buffer());
+  GetFrame(frame_index, (vil1_byte*)frame.get_buffer());
 }
 
-void MovieFile::GetFrameRGB(int frame_index, vil_byte* frame)
+void MovieFile::GetFrameRGB(int frame_index, vil1_byte* frame)
 {
-  GetFrame(frame_index, (vil_rgb<unsigned char> *)frame);
+  GetFrame(frame_index, (vil1_rgb<unsigned char> *)frame);
 }
 
-void MovieFile::GetFrame(int frame_index, vil_rgb<unsigned char> * frame)
+void MovieFile::GetFrame(int frame_index, vil1_rgb<unsigned char> * frame)
 {
   if (qt->GetBitsPixel() == 24)
     qt->GetFrame(index(frame_index), frame);
@@ -136,9 +136,9 @@ void MovieFile::GetFrame(int frame_index, vil_rgb<unsigned char> * frame)
     int sx = GetSizeX((frame_index));
     int sy = GetSizeY((frame_index));
     int size = sx * sy;
-    vil_byte* base = (vil_byte*)frame;
-    vil_byte* rgb_ptr = base + size*3;
-    vil_byte* gray_ptr = base + size;
+    vil1_byte* base = (vil1_byte*)frame;
+    vil1_byte* rgb_ptr = base + size*3;
+    vil1_byte* gray_ptr = base + size;
     do {
       --gray_ptr;
       *--rgb_ptr = *gray_ptr;
@@ -148,7 +148,7 @@ void MovieFile::GetFrame(int frame_index, vil_rgb<unsigned char> * frame)
   }
 }
 
-void MovieFile::GetFrame(int frame_index, vil_byte* frame)
+void MovieFile::GetFrame(int frame_index, vil1_byte* frame)
 {
   if (qt->GetBitsPixel() == 8) {
     // Grab gray directly
@@ -159,14 +159,14 @@ void MovieFile::GetFrame(int frame_index, vil_byte* frame)
 
     // Grab colour into temp buffer
     if (!tmp_buf_)
-      tmp_buf_ = new vil_memory_image_of<vil_rgb<unsigned char> >(sx, sy);
+      tmp_buf_ = new vil1_memory_image_of<vil1_rgb<unsigned char> >(sx, sy);
     else
       tmp_buf_->resize(sx, sy);
 
-    qt->GetFrame(index(frame_index), (vil_byte*)tmp_buf_->get_buffer());
+    qt->GetFrame(index(frame_index), (vil1_byte*)tmp_buf_->get_buffer());
     int size = sx * sy;
-    vil_rgb<unsigned char> * rgb_ptr = (vil_rgb<unsigned char> *)tmp_buf_->get_buffer();
-    vil_byte* gray_ptr = frame;
+    vil1_rgb<unsigned char> * rgb_ptr = (vil1_rgb<unsigned char> *)tmp_buf_->get_buffer();
+    vil1_byte* gray_ptr = frame;
     for (int i = 0; i < size; ++i)
       *gray_ptr++ = rgb_ptr++->grey();
   }

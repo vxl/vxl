@@ -18,9 +18,9 @@
 #include <vcl_vector.h>
 #include <vcl_cmath.h>
 
-#include <vil/vil_memory_image_of.h>
-#include <vil/vil_image_as.h>
-#include <vil/vil_byte.h>
+#include <vil1/vil1_memory_image_of.h>
+#include <vil1/vil1_image_as.h>
+#include <vil1/vil1_byte.h>
 #include <vnl/vnl_math.h>
 
 #include <vgui/vgui.h>
@@ -52,7 +52,7 @@ extern vgui_viewer2D_tableau_sptr get_viewer2D_at(unsigned, unsigned);
 extern xcv_image_tableau_sptr get_image_tableau_at(unsigned, unsigned);
 extern vgui_rubberband_tableau_sptr get_rubberbander_at(unsigned, unsigned);
 extern vgui_tableau_sptr get_top(unsigned,unsigned);
-extern bool get_image_at(vil_image*, unsigned, unsigned);
+extern bool get_image_at(vil1_image*, unsigned, unsigned);
 
 
 static bool debug = true;
@@ -72,7 +72,7 @@ void xcv_display::centre_image()
   get_current(&col, &row);
   vgui_viewer2D_tableau_sptr view = get_viewer2D_at(col, row);
 
-  vil_image image;
+  vil1_image image;
   if (get_image_at(&image, col, row))
     //view->center_image(image.width(), image.height());
     view->center_event();
@@ -216,7 +216,7 @@ void xcv_display::remove_roi()
 //  the coordinates of the image pixels in the slice, and one array
 //  containing the intensity values along the line.
 //-----------------------------------------------------------------------------
-void xcv_display::line_profile(const vil_image& src, float x0, float y0, float x1,float y1,
+void xcv_display::line_profile(const vil1_image& src, float x0, float y0, float x1,float y1,
   int num_points, float* xvals, float* yvals, float* ivals)
 {
   int sdepth = src.bits_per_component();
@@ -231,10 +231,10 @@ void xcv_display::line_profile(const vil_image& src, float x0, float y0, float x
   float y_step = (y1 - y0)/(num_points-1);
 
   // copy input image to byte buffer
-  //vil_memory_image_of<vil_byte> memimg(src);
-  vil_memory_image_of<vil_byte> memimg;
+  //vil1_memory_image_of<vil1_byte> memimg(src);
+  vil1_memory_image_of<vil1_byte> memimg;
   memimg.resize(src.width(), src.height());
-  vil_image_as_byte(src).get_section(memimg.get_buffer(), 0, 0, src.width(), src.height());
+  vil1_image_as_byte(src).get_section(memimg.get_buffer(), 0, 0, src.width(), src.height());
 
   for (int i = num_points-1; i>=0; i--)
   {
@@ -268,7 +268,7 @@ void xcv_display::show_line_slice()
   float fx0,fy0,fx1,fy1;
   picker->pick_line(&fx0, &fy0, &fx1, &fy1);
 
-  vil_image img;
+  vil1_image img;
   if (!get_image_at(&img, col, row)) 
     return;
 

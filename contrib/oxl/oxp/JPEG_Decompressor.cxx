@@ -6,7 +6,7 @@
 #include "JPEG_Decompressor.h"
 
 #include <vcl_fstream.h>
-#include <vil/vil_jpeglib.h>
+#include <vil1/vil1_jpeglib.h>
 #include <vpl/vpl_fdopen.h>
 
 struct JPEG_DecompressorPrivates {

@@ -6,7 +6,7 @@
 #include <vcl_set.h>
 #include <vcl_iostream.h>
 #include <vnl/vnl_vector.h>
-#include <vil/vil_rgb.h>
+#include <vil1/vil1_rgb.h>
 
 template <class T>
 vcl_ostream &operator<<(vcl_ostream &os, const vnl_vector<T> &vector);
@@ -20,6 +20,6 @@ vcl_ostream &operator<<(vcl_ostream &os, const vcl_map<T, S> &omap);
 template <class T>
 vcl_ostream &operator<<(vcl_ostream &os, const vcl_set<T> &vector);
 
-vcl_ostream &operator<<(vcl_ostream &os, const vil_rgb<unsigned char> &colour);
+vcl_ostream &operator<<(vcl_ostream &os, const vil1_rgb<unsigned char> &colour);
 
 #endif // MISC_IO__INCLUDED

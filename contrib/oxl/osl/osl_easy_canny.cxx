@@ -23,7 +23,7 @@
 #include <osl/osl_edge_detector.h>
 
 void osl_easy_canny(int which_canny,
-                    vil_image const &image,
+                    vil1_image const &image,
                     vcl_list<osl_edge*> *edges,
                     double sigma)
 {

@@ -4,8 +4,8 @@
 // \file
 // See xcv_processing.h for a description of this file.
 
-#include <vil/vil_image.h>
-#include <vil/vil_smooth.h>
+#include <vil1/vil1_image.h>
+#include <vil1/vil1_smooth.h>
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_menu.h>
@@ -14,15 +14,15 @@
 #include <xcv/xcv_image_tableau.h>
 
 extern void get_current(unsigned*, unsigned*);
-extern bool get_image_at(vil_image*, unsigned, unsigned);
-extern void add_image(vil_image& img);
+extern bool get_image_at(vil1_image*, unsigned, unsigned);
+extern void add_image(vil1_image& img);
 
 // dup image
 void xcv_processing::xcv_processing_dup()
 {
   unsigned col, row;
   get_current(&col, &row);
-  vil_image img;
+  vil1_image img;
   bool image_ok = get_image_at(&img, col, row);
   if (image_ok == false)
     return;
@@ -33,7 +33,7 @@ void xcv_processing::xcv_processing_dup()
   if (!dlg.ask())
     return;
 
-  img = vil_smooth_gaussian(img, sigma);
+  img = vil1_smooth_gaussian(img, sigma);
   add_image(img);
 }
 

@@ -10,6 +10,6 @@ ENDIF (BUILD_TESTING)
 SET(image_sources
  Image_to_vil.h
  vbl_array_to_vil.h
- vil_to_Image.h
- vil_to_vbl_array.h
+ vil1_to_Image.h
+ vil1_to_vbl_array.h
 )

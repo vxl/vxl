@@ -8,8 +8,8 @@
 #include "awfmfcDoc.h"
 #include "awfmfcView.h"
 
-#include <vil/vil_image.h>
-#include <vil/vil_load.h>
+#include <vil1/vil1_image.h>
+#include <vil1/vil1_load.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -54,7 +54,7 @@ public:
   void ParseParam( LPCTSTR lpszParam, BOOL bFlag, BOOL bLast ) {
     if (!bFlag) {
       // Image - load to find size
-      vil_image i = vil_load(lpszParam);
+      vil1_image i = vil1_load(lpszParam);
       if (i) {
         g_width=i.width();
         g_height=i.height();

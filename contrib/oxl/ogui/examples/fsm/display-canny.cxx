@@ -8,8 +8,8 @@
 
 #include <vul/vul_arg.h>
 
-#include <vil/vil_image.h>
-#include <vil/vil_load.h>
+#include <vil1/vil1_image.h>
+#include <vil1/vil1_load.h>
 
 #include <osl/osl_easy_canny.h>
 #include <osl/osl_load_topology.h>
@@ -40,12 +40,12 @@ void draw(osl_edge const &e)
 struct example_tab_canny : vgui_tableau
 {
   int canny;
-  vil_image image;
+  vil1_image image;
   vcl_string topofile;
   vcl_list<osl_edge*> edges;
   vgui_section_buffer *section;
 
-  example_tab_canny(vil_image const &image_, int canny_, vcl_string const &topofile_)
+  example_tab_canny(vil1_image const &image_, int canny_, vcl_string const &topofile_)
     : canny(canny_)
     , image(image_)
     , topofile(topofile_)
@@ -107,7 +107,7 @@ int main(int argc, char **argv)
 
   char const *i_file = argv[1] ? argv[1] : "az32_10.tif";
   char const *t_file = (argv[1] && argv[2]) ? argv[2] : "";
-  vil_image image = vil_load(i_file);
+  vil1_image image = vil1_load(i_file);
   if (!image)
     return 1;
   vcl_cerr << i_file << ": " << image << vcl_endl;

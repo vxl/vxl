@@ -35,7 +35,7 @@
 //   F. Schaffaliztky 2-apr-99   converted from Segmentation to osl
 
 #include <vcl_vector.h>
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 #include <osl/osl_canny_base.h>
 
 class osl_canny_ox_params;
@@ -49,7 +49,7 @@ struct osl_LINK {
 class osl_canny_ox : public osl_canny_base {
 public:
   osl_canny_ox(osl_canny_ox_params const &params);
-  void detect_edges(vil_image const &image, vcl_list<osl_edge*>*);
+  void detect_edges(vil1_image const &image, vcl_list<osl_edge*>*);
   ~osl_canny_ox();
 
 protected:

@@ -13,12 +13,12 @@
 #include <vcl_cfloat.h> // for DBL_MAX
 #include <vcl_vector.h>
 #include <vnl/vnl_vector.h>
-#include <vil/vil_memory_image_of.h>
+#include <vil1/vil1_memory_image_of.h>
 #include "inlines.h"
 #include "image_database.h"
 #include "io.h"
 
-typedef vil_memory_image_of<double> Image;
+typedef vil1_memory_image_of<double> Image;
 
 class EigenFace
 {

@@ -1,7 +1,7 @@
 #include <vcl_cstdlib.h>
 #include <vcl_iostream.h>
 #include <vul/vul_sprintf.h>
-#include <vil/vil_load.h>
+#include <vil1/vil1_load.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_text_tableau.h>
 #include <vgui/vgui_image_tableau.h>
@@ -101,7 +101,7 @@ int main (int argc, char** argv) {
     vcl_abort();
   }
 
-  vil_image img = vil_load(argv[1]);
+  vil1_image img = vil1_load(argv[1]);
 
   vgui_image_tableau_new img_tab(img);
   global_viewer_tab = vgui_viewer2D_new(img_tab);

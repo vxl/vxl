@@ -38,7 +38,7 @@ int SGIMovieFile::GetLength()
   return p->video_indices[0].size();
 }
 
-vil_image SGIMovieFile::GetImage(int)
+vil1_image SGIMovieFile::GetImage(int)
 {
   return 0;
 }

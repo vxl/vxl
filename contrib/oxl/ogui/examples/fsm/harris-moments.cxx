@@ -9,10 +9,10 @@
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_math.h>
 
-#include <vil/vil_load.h>
-#include <vil/vil_image.h>
-#include <vil/vil_interpolate.h>
-#include <vil/vil_memory_image_of.h>
+#include <vil1/vil1_load.h>
+#include <vil1/vil1_image.h>
+#include <vil1/vil1_interpolate.h>
+#include <vil1/vil1_memory_image_of.h>
 
 #include <osl/osl_harris.h>
 
@@ -29,11 +29,11 @@ struct example_mytab : public vgui_image_tableau
   typedef vgui_image_tableau base;
 
   float pos_x, pos_y;
-  vil_memory_image_of<float> fxx;
-  vil_memory_image_of<float> fxy;
-  vil_memory_image_of<float> fyy;
+  vil1_memory_image_of<float> fxx;
+  vil1_memory_image_of<float> fxy;
+  vil1_memory_image_of<float> fyy;
 
-  example_mytab(vil_image const &I, double sigma) : base(I) {
+  example_mytab(vil1_image const &I, double sigma) : base(I) {
     osl_harris_params params;
     params.gauss_sigma = sigma;
     osl_harris harris(params);
@@ -55,10 +55,10 @@ struct example_mytab : public vgui_image_tableau
     int y = (int) vcl_floor(pos_y);
     if (fxx.in_range(x, y) && fxx.in_range(x+1, y+1)) {
       vnl_matrix<double> S(2, 2);
-      vil_interpolate_bilinear(fxx, pos_x, pos_y, &S[0][0]);
-      vil_interpolate_bilinear(fxy, pos_x, pos_y, &S[0][1]);
-      vil_interpolate_bilinear(fxy, pos_x, pos_y, &S[1][0]);
-      vil_interpolate_bilinear(fyy, pos_x, pos_y, &S[1][1]);
+      vil1_interpolate_bilinear(fxx, pos_x, pos_y, &S[0][0]);
+      vil1_interpolate_bilinear(fxy, pos_x, pos_y, &S[0][1]);
+      vil1_interpolate_bilinear(fxy, pos_x, pos_y, &S[1][0]);
+      vil1_interpolate_bilinear(fyy, pos_x, pos_y, &S[1][1]);
 
       vnl_svd<double> svd(S);
       double l1 = vcl_sqrt(svd.W(0, 0))/64;
@@ -155,7 +155,7 @@ int main(int argc, char **argv)
 
   vgui_deck_tableau_new deck;
   for (int n=1; n<argc; ++n) {
-    vil_image I = vil_load(argv[n]);
+    vil1_image I = vil1_load(argv[n]);
     vcl_cerr << I << vcl_endl;
 
     if (!I) {

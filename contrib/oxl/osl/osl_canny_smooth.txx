@@ -13,15 +13,15 @@
 
 #include "osl_canny_smooth.h"
 #include <vcl_cmath.h>
-#include <vil/vil_rgb.h>
-#include <vil/vil_memory_image_of.h>
+#include <vil1/vil1_rgb.h>
+#include <vil1/vil1_memory_image_of.h>
 
 
 template <class T>
 inline float as_float(T const &v) { return float(v); }
 
 VCL_DEFINE_SPECIALIZATION
-inline float as_float(vil_rgb<unsigned char> const &v) { return v.grey(); }
+inline float as_float(vil1_rgb<unsigned char> const &v) { return v.grey(); }
 
 //--------------------------------------------------------------------------------
 
@@ -45,7 +45,7 @@ void osl_canny_smooth_rothwell(T const * const *image_in, int xsize_, int ysize_
                                float * unpro_const *smooth_)
 {
   // temporary buffer.
-  vil_memory_image_of<float> tmp(ysize_, xsize_);
+  vil1_memory_image_of<float> tmp(ysize_, xsize_);
   tmp.fill(0);
 
   // x direction
@@ -131,7 +131,7 @@ void osl_canny_smooth(T const * const * image_in, int xsize_, int ysize_,
                       float const *kernel_, int width_, float const *sub_area_,
                       float * unpro_const * image_out)
 {
-  vil_memory_image_of<float> tmp(ysize_, xsize_);
+  vil1_memory_image_of<float> tmp(ysize_, xsize_);
   tmp.fill(0);
 
   // x direction

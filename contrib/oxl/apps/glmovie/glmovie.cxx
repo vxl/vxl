@@ -23,12 +23,12 @@
 
 #include <vnl/vnl_math.h>
 
-#include <vil/vil_save.h>
-#include <vil/vil_load.h>
-#include <vil/vil_flipud.h>
-#include <vil/vil_memory_image_of.h>
-#include <vil/vil_rgb_byte.h>
-#include <vil/vil_pixel.h>
+#include <vil1/vil1_save.h>
+#include <vil1/vil1_load.h>
+#include <vil1/vil1_flipud.h>
+#include <vil1/vil1_memory_image_of.h>
+#include <vil1/vil1_rgb_byte.h>
+#include <vil1/vil1_pixel.h>
 
 #include <vidl/vidl_movie_sptr.h>
 #include <vidl/vidl_movie.h>
@@ -249,13 +249,13 @@ bool drawframe(int frame)
     }
 
     glRasterPos2f(rx,ry);
-    vil_image fimg = moviefile->get_frame(frame)->get_image();
-    if (vil_pixel_format(fimg) == VIL_BYTE) {
-      vil_memory_image_of<vil_byte> img(fimg);
+    vil1_image fimg = moviefile->get_frame(frame)->get_image();
+    if (vil1_pixel_format(fimg) == VIL1_BYTE) {
+      vil1_memory_image_of<vil1_byte> img(fimg);
       glDrawPixels(rw, rh, GL_LUMINANCE, GL_UNSIGNED_BYTE, img.get_buffer());
     }
     else {
-      vil_memory_image_of<vil_rgb_byte > img(fimg);
+      vil1_memory_image_of<vil1_rgb_byte > img(fimg);
       glDrawPixels(rw, rh, GL_RGB,       GL_UNSIGNED_BYTE, img.get_buffer());
     }
   }
@@ -290,16 +290,16 @@ bool drawframe(int frame)
     if (first_frame_saved == -1)
       first_frame_saved = frame;
 
-    vil_memory_image_of<vil_rgb_byte > img(window_width, window_height - TEXTHEIGHT);
+    vil1_memory_image_of<vil1_rgb_byte > img(window_width, window_height - TEXTHEIGHT);
     glReadPixels(0,0, window_width, window_height - TEXTHEIGHT, GL_RGB, GL_UNSIGNED_BYTE, img.get_buffer());
     char buf[1024];
     vcl_sprintf(buf, save_fmt, frame);
     if (buf[0] == '^') {
       // Flip
-      vil_save(img, buf+1);
+      vil1_save(img, buf+1);
     }
     else {
-      vil_save(vil_flipud(img), buf);
+      vil1_save(vil1_flipud(img), buf);
     }
     vcl_cerr << "[Saved " << buf << "]";
   }
@@ -759,7 +759,7 @@ static void convert(vidl_movie_sptr m, char const* out)
   for (vidl_movie::frame_iterator frame = m->begin(); frame != m->end(); ++frame) {
     char buf[1024];
     vcl_sprintf(buf, out, i);
-    vil_save(frame->get_image(), buf);
+    vil1_save(frame->get_image(), buf);
     vul_printf(vcl_cerr, "glmovie: saved [%s]\n", buf);
     ++i;
   }
@@ -831,7 +831,7 @@ int main(int argc, char ** argv)
 
 
   // Try to load the image
-  if (vil_image img = vil_load(filename())) {
+  if (vil1_image img = vil1_load(filename())) {
     vcl_vector<vcl_string> v(1, filename());
     moviefile = new vidl_movie(vidl_io::load_images(v));
   } else {

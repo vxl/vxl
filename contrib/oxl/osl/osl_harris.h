@@ -28,8 +28,8 @@
 #include <vcl_iosfwd.h>
 #include <vcl_vector.h>
 #include <vcl_utility.h>
-#include <vil/vil_memory_image_of.h>
-#include <vil/vil_byte.h>
+#include <vil1/vil1_memory_image_of.h>
+#include <vil1/vil1_byte.h>
 #include <osl/osl_harris_params.h>
 #include <osl/osl_roi_window.h>
 
@@ -38,7 +38,7 @@ class osl_harris {
 public:
   osl_harris(osl_harris_params const & params) : image_w(0), image_h(0), params_(params) { }
 
-  void compute(vil_image const &image) {
+  void compute(vil1_image const &image) {
     prepare_buffers(image.width(), image.height());
     compute_gradients(image);
     compute_2nd_moments();
@@ -56,23 +56,23 @@ public:
   int image_w, image_h;
 
   // the input image, as a monochrome byte bitmap.
-  vil_memory_image_of<vil_byte> image_buf;
+  vil1_memory_image_of<vil1_byte> image_buf;
 
   // gradient bitmaps.
-  vil_memory_image_of<int>      image_gradx_buf;
-  vil_memory_image_of<int>      image_grady_buf;
+  vil1_memory_image_of<int>      image_gradx_buf;
+  vil1_memory_image_of<int>      image_grady_buf;
 
   // second moment matrix of the gradient vector.
-  vil_memory_image_of<float>    image_fxx_buf;
-  vil_memory_image_of<float>    image_fxy_buf;
-  vil_memory_image_of<float>    image_fyy_buf;
+  vil1_memory_image_of<float>    image_fxx_buf;
+  vil1_memory_image_of<float>    image_fxy_buf;
+  vil1_memory_image_of<float>    image_fyy_buf;
 
   // the cornerness response map and its maximum value.
-  vil_memory_image_of<float>    image_cornerness_buf;
+  vil1_memory_image_of<float>    image_cornerness_buf;
   float corner_max;
 
   // local maximum map.
-  vil_memory_image_of<bool>     image_cornermax_buf;
+  vil1_memory_image_of<bool>     image_cornermax_buf;
 
   // region of interest ?
   osl_roi_window window_str;
@@ -81,7 +81,7 @@ public:
   // These are the stages of algorithm. Clients can call a subset of
   // these manually in order to insert algorithms of their own choice.
   void prepare_buffers(int w, int h);
-  void compute_gradients(vil_image const &);
+  void compute_gradients(vil1_image const &);
   void compute_2nd_moments();
   void compute_cornerness();
   void compute_corners();

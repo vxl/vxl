@@ -7,10 +7,10 @@
 
 #include <vnl/vnl_math.h>
 #include <vul/vul_printf.h>
-#include <vil/vil_clamp.h>
-#include <vil/vil_byte.h>
+#include <vil1/vil1_clamp.h>
+#include <vil1/vil1_byte.h>
 
-ByteConvertImage::ByteConvertImage(vil_memory_image_of<float> const& in, bool ignore_zero):
+ByteConvertImage::ByteConvertImage(vil1_memory_image_of<float> const& in, bool ignore_zero):
   base(in.width(), in.height())
 {
   ignore_zero_ = ignore_zero;
@@ -29,7 +29,7 @@ ByteConvertImage::ByteConvertImage(vil_memory_image_of<float> const& in, bool ig
   filter(in);
 }
 
-ByteConvertImage::ByteConvertImage(vil_memory_image_of<float> const& in, float min, float max):
+ByteConvertImage::ByteConvertImage(vil1_memory_image_of<float> const& in, float min, float max):
   base(in.width(), in.height())
 {
   ignore_zero_ = false;
@@ -39,7 +39,7 @@ ByteConvertImage::ByteConvertImage(vil_memory_image_of<float> const& in, float m
   filter(in);
 }
 
-ByteConvertImage::ByteConvertImage(vil_memory_image_of<double> const& in, bool ignore_zero):
+ByteConvertImage::ByteConvertImage(vil1_memory_image_of<double> const& in, bool ignore_zero):
   base(in.width(), in.height())
 {
   ignore_zero_ = ignore_zero;
@@ -58,7 +58,7 @@ ByteConvertImage::ByteConvertImage(vil_memory_image_of<double> const& in, bool i
   filter(in);
 }
 
-ByteConvertImage::ByteConvertImage(vil_memory_image_of<double> const& in, float min, float max):
+ByteConvertImage::ByteConvertImage(vil1_memory_image_of<double> const& in, float min, float max):
   base(in.width(), in.height())
 {
   ignore_zero_ = false;
@@ -68,7 +68,7 @@ ByteConvertImage::ByteConvertImage(vil_memory_image_of<double> const& in, float 
   filter(in);
 }
 
-void ByteConvertImage::filter(vil_memory_image_of<float> const& in)
+void ByteConvertImage::filter(vil1_memory_image_of<float> const& in)
 {
   float scale = 255 / (max_ - min_);
   for (int y = 0; y < in.height(); ++y)
@@ -77,11 +77,11 @@ void ByteConvertImage::filter(vil_memory_image_of<float> const& in)
       if (ignore_zero_ && v == 0.0F)
         (*this)(x,y) = 0;
       else
-        (*this)(x,y) = (vil_byte)vil_clamp_pixel((v - min_) * scale, 0, 255);
+        (*this)(x,y) = (vil1_byte)vil1_clamp_pixel((v - min_) * scale, 0, 255);
     }
 }
 
-void ByteConvertImage::filter(vil_memory_image_of<double> const& in)
+void ByteConvertImage::filter(vil1_memory_image_of<double> const& in)
 {
   double dmin = (double)min_;
   double scale = 255 / (max_ - min_);
@@ -91,7 +91,7 @@ void ByteConvertImage::filter(vil_memory_image_of<double> const& in)
       if (ignore_zero_ && v == 0.0F)
         (*this)(x,y) = 0;
       else
-        (*this)(x,y) = (vil_byte)vil_clamp_pixel((v - dmin) * scale, 0, 255);
+        (*this)(x,y) = (vil1_byte)vil1_clamp_pixel((v - dmin) * scale, 0, 255);
     }
 }
 

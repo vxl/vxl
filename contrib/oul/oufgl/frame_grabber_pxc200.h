@@ -11,10 +11,10 @@
 //----------------------------------------------------------------------
 
 #include <vcl_cstdio.h>
-#include <vil/vil_memory_image.h>
-#include <vil/vil_memory_image_of.h>
-#include <vil/vil_rgb.h>
-#include <vil/vil_byte.h>
+#include <vil1/vil1_memory_image.h>
+#include <vil1/vil1_memory_image_of.h>
+#include <vil1/vil1_rgb.h>
+#include <vil1/vil1_byte.h>
 #include "pxc200.h"
 #include "asyncio.h"
 #include "frame_grabber.h"
@@ -34,8 +34,8 @@
 class FrameGrabberPxc200RGB : public FrameGrabber
 {
  public:
-  typedef vil_rgb<vil_byte> ImageContents; 
-  typedef vil_memory_image_of< ImageContents > ImageRGB;
+  typedef vil1_rgb<vil1_byte> ImageContents; 
+  typedef vil1_memory_image_of< ImageContents > ImageRGB;
 
  private:
   ImageContents *contents[2];
@@ -52,7 +52,7 @@ class FrameGrabberPxc200RGB : public FrameGrabber
                         char *devname="/dev/pxc0rgb");
   virtual ~FrameGrabberPxc200RGB();
   // returns the current acquired frame
-  inline vil_memory_image *get_current_frame(){return im[current];}
+  inline vil1_memory_image *get_current_frame(){return im[current];}
   // acquire a new frame synchronously (ie don't return until completed)
   void acquire_frame_synch();
   // acquire a new frame asynchronously (ie start acquiring and
@@ -61,7 +61,7 @@ class FrameGrabberPxc200RGB : public FrameGrabber
   // return the current frame and start acquiring the next one. This
   // function is only useful if asynchronous acquires are going to
   // be used.
-  vil_memory_image *get_current_and_acquire();
+  vil1_memory_image *get_current_and_acquire();
 };
 
 #endif // OTAGO_frame_grabber_pxc__h_INCLUDED

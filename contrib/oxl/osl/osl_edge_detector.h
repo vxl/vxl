@@ -60,7 +60,7 @@
 
 #include <osl/osl_canny_port.h>
 #include <osl/osl_edge_detector_params.h>
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 
 struct osl_edge_detector : public osl_edge_detector_params
 {
@@ -68,7 +68,7 @@ struct osl_edge_detector : public osl_edge_detector_params
 
   ~osl_edge_detector();
 
-  void detect_edges(vil_image const &image,
+  void detect_edges(vil1_image const &image,
                     vcl_list<osl_edge*> *edges,
                     bool maintain_topology = true);
 

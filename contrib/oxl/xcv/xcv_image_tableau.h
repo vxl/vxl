@@ -31,15 +31,15 @@ class xcv_image_tableau : public vgui_image_tableau
   typedef vgui_image_tableau base;
 
   xcv_image_tableau();
-  xcv_image_tableau(vil_image const &);
+  xcv_image_tableau(vil1_image const &);
   xcv_image_tableau(char const *);
 
   vcl_string type_name() const;
 
-  //: Return the vil_image
-  vil_image get_image() const;
+  //: Return the vil1_image
+  vil1_image get_image() const;
 
-  void set_image(vil_image const &);
+  void set_image(vil1_image const &);
   void set_image(char const *);          // <- convenience
 
   //: Width of the ROI, or if not defined then the width of the whole image.
@@ -63,7 +63,7 @@ struct xcv_image_tableau_new : public xcv_image_tableau_sptr
 {
   typedef xcv_image_tableau_sptr base;
   xcv_image_tableau_new() : base(new xcv_image_tableau()) { }
-  xcv_image_tableau_new(vil_image const &i) : base(new xcv_image_tableau(i)) { }
+  xcv_image_tableau_new(vil1_image const &i) : base(new xcv_image_tableau(i)) { }
   xcv_image_tableau_new(char const *n) : base(new xcv_image_tableau(n)) { }
   operator vgui_image_tableau_sptr () const { vgui_image_tableau_sptr tt; tt.vertical_cast(*this); return tt; }
 };

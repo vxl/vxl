@@ -12,23 +12,23 @@
 
 #include <vcl_iostream.h>
 
-#include <vil/vil_memory_image_of.h>
-#include <vil/vil_byte.h>
+#include <vil1/vil1_memory_image_of.h>
+#include <vil1/vil1_byte.h>
 
-class ByteConvertImage : public vil_memory_image_of<vil_byte>
+class ByteConvertImage : public vil1_memory_image_of<vil1_byte>
 {
   bool ignore_zero_;
   float min_;
   float max_;
-  void filter(vil_memory_image_of<float> const&);
-  void filter(vil_memory_image_of<double> const&);
+  void filter(vil1_memory_image_of<float> const&);
+  void filter(vil1_memory_image_of<double> const&);
  public:
-  typedef vil_memory_image_of<vil_byte> base;
+  typedef vil1_memory_image_of<vil1_byte> base;
 
-  ByteConvertImage(vil_memory_image_of<float> const& in, bool ignore_zero = false);
-  ByteConvertImage(vil_memory_image_of<float> const& in, float min, float max);
-  ByteConvertImage(vil_memory_image_of<double> const& in, bool ignore_zero = false);
-  ByteConvertImage(vil_memory_image_of<double> const& in, float min, float max);
+  ByteConvertImage(vil1_memory_image_of<float> const& in, bool ignore_zero = false);
+  ByteConvertImage(vil1_memory_image_of<float> const& in, float min, float max);
+  ByteConvertImage(vil1_memory_image_of<double> const& in, bool ignore_zero = false);
+  ByteConvertImage(vil1_memory_image_of<double> const& in, float min, float max);
 
   void print(vcl_ostream&) const;
 };

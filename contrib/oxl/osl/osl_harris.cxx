@@ -10,9 +10,9 @@
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
 
-#include <vil/vil_image_as.h>
-#include <vil/vil_copy.h>
-#include <vil/vil_memory_image_of.h>
+#include <vil1/vil1_image_as.h>
+#include <vil1/vil1_copy.h>
+#include <vil1/vil1_memory_image_of.h>
 
 #include <osl/osl_roi_window.h>
 #include <osl/osl_convolve.h>
@@ -51,10 +51,10 @@ void osl_harris::prepare_buffers(int w, int h)
   window_str.col_end_index = image_w-1;
 }
 
-void osl_harris::compute_gradients(vil_image const &image)
+void osl_harris::compute_gradients(vil1_image const &image)
 {
   // copy input image to byte buffer
-  vil_image_as_byte(image).get_section(image_buf.get_buffer(), 0, 0, image_w, image_h);
+  vil1_image_as_byte(image).get_section(image_buf.get_buffer(), 0, 0, image_w, image_h);
 
   // compute gradients
   if (params_.verbose) {
@@ -100,7 +100,7 @@ void osl_harris::compute_2nd_moments()
   if (params_.verbose)
     vcl_cerr << " convolution" << vcl_flush;
   { // we use the cornerness map as a temporary scratch area.
-    vil_memory_image_of<float> *tmp = &image_cornerness_buf;
+    vil1_memory_image_of<float> *tmp = &image_cornerness_buf;
     osl_convolve(&window_str, &gauss_mask, &image_fxx_buf, tmp);
     osl_convolve(&window_str, &gauss_mask, &image_fxy_buf, tmp);
     osl_convolve(&window_str, &gauss_mask, &image_fyy_buf, tmp);
@@ -249,7 +249,7 @@ void osl_harris::do_adaptive() {
 
   vcl_vector<double> cornerness(maxima_count, 0.0);
 
-  vil_memory_image_of<bool> keep(image_cornermax_buf.width(), image_cornermax_buf.height());
+  vil1_memory_image_of<bool> keep(image_cornermax_buf.width(), image_cornermax_buf.height());
   keep.fill(false);
 
   // Do two passes, overlapping tiles by 1/2
@@ -266,8 +266,8 @@ void osl_harris::do_adaptive() {
         int window_col_end_index = vcl_min(window_col_start_index+TILE_WIDTH, col_max);
 
         // get corner strengths in this tile :
-        vil_memory_image_of<bool>        &corner_present  = image_cornermax_buf;
-        vil_memory_image_of<float> const &corner_strength = image_cornerness_buf;
+        vil1_memory_image_of<bool>        &corner_present  = image_cornermax_buf;
+        vil1_memory_image_of<float> const &corner_strength = image_cornerness_buf;
         int n = 0;
         for (int row = window_row_start_index; row < window_row_end_index; row++)
           for (int col = window_col_start_index; col < window_col_end_index; col++)
@@ -305,7 +305,7 @@ void osl_harris::do_adaptive() {
   vcl_cerr << vcl_endl;
 
   // Copy keep to present
-  vil_copy(keep,image_cornermax_buf);
+  vil1_copy(keep,image_cornermax_buf);
 }
 
 //-----------------------------------------------------------------------------

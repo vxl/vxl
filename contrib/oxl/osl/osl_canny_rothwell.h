@@ -34,7 +34,7 @@
 // \endverbatim
 
 #include <osl/osl_canny_base.h>
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 
 class osl_canny_rothwell_params;
 
@@ -44,7 +44,7 @@ class osl_canny_rothwell : public osl_canny_base
   osl_canny_rothwell(osl_canny_rothwell_params const &);
   ~osl_canny_rothwell();
 
-  void detect_edges(vil_image const &image, vcl_list<osl_edge*>*, bool adaptive = false);
+  void detect_edges(vil1_image const &image, vcl_list<osl_edge*>*, bool adaptive = false);
 
  protected:
   void Non_maximal_suppression();
@@ -53,7 +53,7 @@ class osl_canny_rothwell : public osl_canny_base
   void Jump_gap(int,int,int,int,int*,int*);
   void Thin_edges();
   void Jump_single_breaks();
-  void Adaptive_Canny(vil_image const &);
+  void Adaptive_Canny(vil1_image const &);
   void Compute_adaptive_images(int,int,int,float**,float**,float**);
   void Subtract_thick(int,int,int,float**);
   void Best_eight_way(int,int,float**,int*,int*);

@@ -12,4 +12,4 @@ SET(oufgl_sources
 )
 
 ADD_LIBRARY(oufgl ${oufgl_sources})
-TARGET_LINK_LIBRARIES( oufgl vil )
+TARGET_LINK_LIBRARIES( oufgl vil1 )

@@ -15,9 +15,9 @@
 #include <vcl_cmath.h>
 #include <vcl_cstdio.h> // sprintf
 
-#include <vil/vil_crop.h>
-#include <vil/vil_image.h>
-#include <vil/vil_rgba.h>
+#include <vil1/vil1_crop.h>
+#include <vil1/vil1_image.h>
+#include <vil1/vil1_rgba.h>
 
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_gl.h>
@@ -30,7 +30,7 @@ extern void post_to_status_bar(const char*);
 xcv_image_tableau::xcv_image_tableau()
   : defined_(false) { }
 
-xcv_image_tableau::xcv_image_tableau(vil_image const &I)
+xcv_image_tableau::xcv_image_tableau(vil1_image const &I)
   : base(I), defined_(false) { }
 
 xcv_image_tableau::xcv_image_tableau(char const *f)
@@ -43,12 +43,12 @@ vcl_string xcv_image_tableau::type_name() const
 
 //--------------------------------------------------------------------------------
 
-vil_image xcv_image_tableau::get_image() const
+vil1_image xcv_image_tableau::get_image() const
 {
   if (!defined_)
     return base::get_image();
   else
-    return vil_crop(base::get_image(),
+    return vil1_crop(base::get_image(),
                     int(roi_.x+0.5),int(roi_.y+0.5),
                     int(roi_.width),int(roi_.height));
 }
@@ -144,9 +144,9 @@ bool xcv_image_tableau::handle(vgui_event const &e)
 
     // Get RGB value to display on status bar:
 
-    // It's easier to get the buffer in vil_rgba format and then convert to
+    // It's easier to get the buffer in vil1_rgba format and then convert to
     // RGB, because that avoids alignment problems with glReadPixels.
-    vil_rgba<GLubyte> pixel;
+    vil1_rgba<GLubyte> pixel;
     //
     glPixelZoom(1,1);
     glPixelTransferi(GL_MAP_COLOR,0);

@@ -70,7 +70,7 @@ osl_canny_rothwell::~osl_canny_rothwell() {
 
 //-----------------------------------------------------------------------------
 
-void osl_canny_rothwell::detect_edges(vil_image const &image, vcl_list<osl_edge*> *edges, bool adaptive)
+void osl_canny_rothwell::detect_edges(vil1_image const &image, vcl_list<osl_edge*> *edges, bool adaptive)
 {
   assert(edges!=0);
 
@@ -657,7 +657,7 @@ void osl_canny_rothwell::Jump_single_breaks() {
 // its radius of influence is only two pixels; at that stage pixel-jumping should
 // fix any problems.
 //
-void osl_canny_rothwell::Adaptive_Canny(vil_image const &image) {
+void osl_canny_rothwell::Adaptive_Canny(vil1_image const &image) {
   // Reset the smoothing kernel parameters by
   // halfing the size of the smoothing sigma
   old_sigma_ = sigma_;  sigma_ /= 2.0;

@@ -12,8 +12,8 @@
 // appropriate float_mask? routine.
 void osl_convolve (osl_roi_window const *window,
                    osl_1d_half_kernel<double> const *mask,
-                   vil_memory_image_of<float> *image,
-                   vil_memory_image_of<float> *scratch)
+                   vil1_memory_image_of<float> *image,
+                   vil1_memory_image_of<float> *scratch)
 {
   switch (mask->count) {
   case 2:
@@ -42,8 +42,8 @@ void osl_convolve (osl_roi_window const *window,
 //: A convolution routine for masks of size 2.
 void osl_convolve2 (osl_roi_window const *window,
                     osl_1d_half_kernel<double> const *mask,
-                    vil_memory_image_of<float> *image,
-                    vil_memory_image_of<float> *scratch)
+                    vil1_memory_image_of<float> *image,
+                    vil1_memory_image_of<float> *scratch)
 {
   assert(mask->count == 2);
   int row_min = window->row_start_index;
@@ -84,8 +84,8 @@ void osl_convolve2 (osl_roi_window const *window,
 //: A convolution routine for masks of size 3.
 void osl_convolve3 (osl_roi_window const *window,
                     osl_1d_half_kernel<double> const *mask,
-                    vil_memory_image_of<float> *image,
-                    vil_memory_image_of<float> *scratch)
+                    vil1_memory_image_of<float> *image,
+                    vil1_memory_image_of<float> *scratch)
 {
   assert(mask->count == 3);
   int row_min = window->row_start_index;
@@ -129,8 +129,8 @@ void osl_convolve3 (osl_roi_window const *window,
 //: -- A convolution routine for masks of size 4.
 void osl_convolve4 (osl_roi_window const *window,
                     osl_1d_half_kernel<double> const *mask,
-                    vil_memory_image_of<float> *image,
-                    vil_memory_image_of<float> *scratch)
+                    vil1_memory_image_of<float> *image,
+                    vil1_memory_image_of<float> *scratch)
 {
   assert(mask->count == 4);
   int row_min = window->row_start_index;
@@ -177,8 +177,8 @@ void osl_convolve4 (osl_roi_window const *window,
 //: A convolution routine for masks of size 5.
 void osl_convolve5 (osl_roi_window const *window,
                     osl_1d_half_kernel<double> const *mask,
-                    vil_memory_image_of<float> *image,
-                    vil_memory_image_of<float> *scratch)
+                    vil1_memory_image_of<float> *image,
+                    vil1_memory_image_of<float> *scratch)
 {
   assert(mask->count == 5);
   int row_min = window->row_start_index;
@@ -228,8 +228,8 @@ void osl_convolve5 (osl_roi_window const *window,
 //: A convolution routine for masks of size 6.
 void osl_convolve6 (osl_roi_window const *window,
                     osl_1d_half_kernel<double> const *mask,
-                    vil_memory_image_of<float> *image,
-                    vil_memory_image_of<float> *scratch)
+                    vil1_memory_image_of<float> *image,
+                    vil1_memory_image_of<float> *scratch)
 {
   assert(mask->count == 6);
   int row_min = window->row_start_index;
@@ -281,8 +281,8 @@ void osl_convolve6 (osl_roi_window const *window,
 //: A convolution routine for masks of any size.
 void osl_convolven (osl_roi_window const *window,
                     osl_1d_half_kernel<double> const *mask,
-                    vil_memory_image_of<float> *image,
-                    vil_memory_image_of<float> *scratch)
+                    vil1_memory_image_of<float> *image,
+                    vil1_memory_image_of<float> *scratch)
 {
   int row_min = window->row_start_index;
   int col_min = window->col_start_index+mask->count-1;

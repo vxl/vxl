@@ -13,4 +13,4 @@ SET(ouml_sources
 )
 
 ADD_LIBRARY(ouml ${ouml_sources})
-TARGET_LINK_LIBRARIES( ouml vnl_algo vil vpl )
+TARGET_LINK_LIBRARIES( ouml vnl_algo vil1 vpl )

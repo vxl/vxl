@@ -76,7 +76,7 @@ osl_edge_detector::~osl_edge_detector() {
 
 //-----------------------------------------------------------------------------
 
-void osl_edge_detector::detect_edges(vil_image const &image,
+void osl_edge_detector::detect_edges(vil1_image const &image,
                                      vcl_list<osl_edge*> *edges,
                                      bool maintain_topology)
 {

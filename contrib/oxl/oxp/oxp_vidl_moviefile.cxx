@@ -61,7 +61,7 @@ int oxp_vidl_moviefile::GetLength()
   return p->m->length();
 }
 
-vil_image oxp_vidl_moviefile::GetImage(int frame)
+vil1_image oxp_vidl_moviefile::GetImage(int frame)
 {
   return p->m->get_frame(frame)->get_image();
 }

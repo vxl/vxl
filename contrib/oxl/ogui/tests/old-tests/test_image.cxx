@@ -6,8 +6,8 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vil/vil_image.h>
-#include <vil/vil_load.h>
+#include <vil1/vil1_image.h>
+#include <vil1/vil1_load.h>
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_shell_tableau.h>
@@ -20,7 +20,7 @@ int main(int argc, char **argv) {
   vgui::init(argc, argv); // must come before argparse.
 
   char const *file = argv[1] ? argv[1] : "az32_10.tif";
-  vil_image I = vil_load(file);
+  vil1_image I = vil1_load(file);
   vcl_cerr << "I = " << I << vcl_endl;
 
   vgui_image_tableau image(I);

@@ -9,7 +9,7 @@
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vul/vul_arg.h>
-#include <vil/vil_load.h>
+#include <vil1/vil1_load.h>
 
 #include <osl/osl_easy_canny.h>
 #include <osl/osl_save_topology.h>
@@ -34,7 +34,7 @@ int main(int argc, char **argv)
   }
   assert(*in_file != "");
 
-  vil_image image = vil_load(in_file->c_str());
+  vil1_image image = vil1_load(in_file->c_str());
   if (!image)
     return 1;
   vcl_cerr << in_file << " : " << image << vcl_endl;

@@ -23,7 +23,7 @@ class FrameGrabber
 {
  public:
   // returns the current acquired frame
-  virtual vil_memory_image *get_current_frame()=0;
+  virtual vil1_memory_image *get_current_frame()=0;
   // acquire a new frame synchronously (ie don't return until completed)
   virtual void acquire_frame_synch()=0;
   // acquire a new frame asynchronously (ie start acquiring and
@@ -32,7 +32,7 @@ class FrameGrabber
   // return the current frame and start acquiring the next one. This
   // function is only useful if asynchronous acquires are going to
   // be used.
-  virtual vil_memory_image *get_current_and_acquire()=0;
+  virtual vil1_memory_image *get_current_and_acquire()=0;
 };
 
 #endif // OTAGO_frame_grabber__h_INCLUDED

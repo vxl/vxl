@@ -1,10 +1,10 @@
 #include <image/vbl_array_to_vil.h>
-#include <image/vil_to_vbl_array.h>
+#include <image/vil1_to_vbl_array.h>
 
 #include <vcl_cstring.h> // for memcmp()
 #include <vcl_fstream.h>
 #include <vpl/vpl.h> // for vpl_unlink()
-#include <vil/vil_load.h>
+#include <vil1/vil1_load.h>
 #include <testlib/testlib_test.h>
 #include <vul/vul_temp_filename.h>
 
@@ -19,9 +19,9 @@ static void create_image(const char* name)
 void test_vil_vbl_conversions()
 {
   vcl_string filename = vul_temp_filename();
-  if (filename == "") filename = "vil_vbl_test.pgm";
+  if (filename == "") filename = "vil1_vbl_test.pgm";
   create_image(filename.c_str());
-  vil_image im1 = vil_load(filename.c_str());
+  vil1_image im1 = vil1_load(filename.c_str());
   TEST("image file", (bool)im1, true);
   if (!im1) { vcl_cerr << filename << " is not a valid image file\n"; return; }
   int size = im1.get_size_bytes();
@@ -36,13 +36,13 @@ void test_vil_vbl_conversions()
   // now remove the file
   vpl_unlink(filename.c_str());
 
-  vbl_array_2d<unsigned char> im2 = vil_to_vbl_array(im1);
-  TEST("vil_to_vbl_array width", wd, im2.columns());
-  TEST("vil_to_vbl_array height", ht, im2.rows());
+  vbl_array_2d<unsigned char> im2 = vil1_to_vbl_array(im1);
+  TEST("vil1_to_vbl_array width", wd, im2.columns());
+  TEST("vil1_to_vbl_array height", ht, im2.rows());
   const unsigned char* buf2 = im2.begin();
-  TEST("vil_to_vbl_array data", 0, vcl_memcmp(buf1, buf2, size));
+  TEST("vil1_to_vbl_array data", 0, vcl_memcmp(buf1, buf2, size));
 
-  vil_image im3 = vbl_array_to_vil(im2);
+  vil1_image im3 = vbl_array_to_vil(im2);
   TEST("vbl_array_to_vil width", im3.width(), im2.columns());
   TEST("vbl_array_to_vil height", im3.height(), im2.rows());
   im3.get_section(buf1, 0, 0, wd, ht);
@@ -53,7 +53,7 @@ void test_vil_vbl_conversions()
 
 MAIN( test_vil_vbl_conversions )
 {
-  START("vil to vbl conversions");
+  START("vil1 to vbl conversions");
   test_vil_vbl_conversions();
   SUMMARY();
 }

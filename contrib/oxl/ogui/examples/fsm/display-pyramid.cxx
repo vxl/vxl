@@ -3,9 +3,9 @@
 */
 #include <vcl_iostream.h>
 
-#include <vil/vil_load.h>
-#include <vil/vil_image.h>
-#include <vil/vil_pyramid.h>
+#include <vil1/vil1_load.h>
+#include <vil1/vil1_image.h>
+#include <vil1/vil1_pyramid.h>
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_gl.h>
@@ -16,11 +16,11 @@
 struct example_tabby : public vgui_tableau
 {
   int level;
-  vil_pyramid pyr;
+  vil1_pyramid pyr;
   vgui_image_tableau_new image_tab;
   vgui_slot slot;
 
-  example_tabby(vil_image const &image) : level(0), pyr(image), slot(this, image_tab) {
+  example_tabby(vil1_image const &image) : level(0), pyr(image), slot(this, image_tab) {
     image_tab->set_image(image);
   }
 
@@ -67,7 +67,7 @@ int main(int argc, char **argv)
     return 1;
   }
 
-  vil_image image = vil_load(argv[1]);
+  vil1_image image = vil1_load(argv[1]);
   if (!image) {
     vcl_cerr << "load failed -- invalid image?" << vcl_endl;
     return 1;

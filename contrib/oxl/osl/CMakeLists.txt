@@ -42,7 +42,7 @@ SET(osl_sources
 AUX_SOURCE_DIRECTORY(Templates osl_sources)
 
 ADD_LIBRARY(osl ${osl_sources})
-TARGET_LINK_LIBRARIES(osl vnl_algo vnl vil  vgl vbl)
+TARGET_LINK_LIBRARIES(osl vnl_algo vnl vil1  vgl vbl)
 
 IF (BUILD_EXAMPLES)
   SUBDIRS(examples)

@@ -21,7 +21,7 @@
 #include <vcl_string.h>
 #include <vcl_fstream.h>
 #include <vcl_iostream.h>
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 #include <osl/osl_harris_params.h>
 
 #include <mvl/HomgInterestPointSet.h>
@@ -53,7 +53,7 @@ extern bool get_twoviews(vcl_vector<int>*, vcl_vector<int>*);
 extern bool get_threeviews(vcl_vector<int>*, vcl_vector<int>*);
 extern vgui_rubberband_tableau_sptr get_rubberbander_at(unsigned, unsigned);
 extern vgui_easy2D_tableau_sptr get_easy2D_at(unsigned, unsigned);
-extern bool get_image_at(vil_image*, unsigned, unsigned);
+extern bool get_image_at(vil1_image*, unsigned, unsigned);
 
 //-----------------------------------------------------------------------------
 //: Gets a twoview_manager between the tableaux at the given positions.

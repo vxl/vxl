@@ -1,27 +1,27 @@
 #ifndef image_convert__INCLUDED
 #define image_convert__INCLUDED
 
-#include <vil/vil_memory_image_of.h>
-#include <vil/vil_rgb.h>
+#include <vil1/vil1_memory_image_of.h>
+#include <vil1/vil1_rgb.h>
 
 template <class T1, class T2>
-vil_memory_image_of<T2> *convert_image
+vil1_memory_image_of<T2> *convert_image
 (
-  const vil_memory_image_of<T1> &from,
+  const vil1_memory_image_of<T1> &from,
   T2 &var
 );
 
-template <> vil_memory_image_of<unsigned char> *
-convert_image<vil_rgb<unsigned char>, unsigned char>
+template <> vil1_memory_image_of<unsigned char> *
+convert_image<vil1_rgb<unsigned char>, unsigned char>
 ( 
-  const vil_memory_image_of<vil_rgb<unsigned char> > &from,
+  const vil1_memory_image_of<vil1_rgb<unsigned char> > &from,
   unsigned char &var
 );
 
-template <> vil_memory_image_of<double> *
-convert_image<vil_rgb<unsigned char>, double>
+template <> vil1_memory_image_of<double> *
+convert_image<vil1_rgb<unsigned char>, double>
 ( 
-  const vil_memory_image_of<vil_rgb<unsigned char> > &from,
+  const vil1_memory_image_of<vil1_rgb<unsigned char> > &from,
   double &var
 );
 

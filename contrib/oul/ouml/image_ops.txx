@@ -21,19 +21,19 @@
  * An in place -= operator for images. Saves from having to copy any
  * data anywhere.
  *
- * \param im1: vil_memory_image_of<T> &, the image to be modified
- * \param im2: vil_memory_image_of<T> &, the image to subtract from
- * \return vil_memory_image_of<T> &: a reference to im1
+ * \param im1: vil1_memory_image_of<T> &, the image to be modified
+ * \param im2: vil1_memory_image_of<T> &, the image to subtract from
+ * \return vil1_memory_image_of<T> &: a reference to im1
  *
  * \author Brendan McCane
  */
 //----------------------------------------------------------------------
 
 template <class T>
-vil_memory_image_of<T> &operator -=
+vil1_memory_image_of<T> &operator -=
 (
-  vil_memory_image_of<T> &im1,
-  vil_memory_image_of<T> &im2
+  vil1_memory_image_of<T> &im1,
+  vil1_memory_image_of<T> &im2
 )
 {
   assert(im1.width()==im2.width());
@@ -67,17 +67,17 @@ vil_memory_image_of<T> &operator -=
  * An in place += operator for images. Saves from having to copy any
  * data anywhere.
  *
- * \param im1: vil_memory_image_of<T> &, the image to be modified
+ * \param im1: vil1_memory_image_of<T> &, the image to be modified
  * \param constant_add: T, the amount to add to each pixel in the image
- * \return vil_memory_image_of<T> &: a reference to im1
+ * \return vil1_memory_image_of<T> &: a reference to im1
  *
  * \author Brendan McCane
  */
 //----------------------------------------------------------------------
 template <class T>
-vil_memory_image_of<T> &operator +=
+vil1_memory_image_of<T> &operator +=
 (
-  vil_memory_image_of<T> &im1,
+  vil1_memory_image_of<T> &im1,
   T constant_add
 )
 {
@@ -112,8 +112,8 @@ vil_memory_image_of<T> &operator +=
  * source_vals image, and pixels which fail the condition are set to
  * zero_val.
  *
- * \param image: vil_memory_image_of<T> &, the image to be modified
- * \param source_vals: vil_memory_image_of<T> &, the image to be modified
+ * \param image: vil1_memory_image_of<T> &, the image to be modified
+ * \param source_vals: vil1_memory_image_of<T> &, the image to be modified
  * \param threshold: T, the threshold to apply
  * \param zero_val: T, the value to set the thresholded pixels to
  *
@@ -122,8 +122,8 @@ vil_memory_image_of<T> &operator +=
 
 template <class T> void threshold_abs
 (
-  vil_memory_image_of<T> &image, 
-  vil_memory_image_of<T> &source_vals,
+  vil1_memory_image_of<T> &image, 
+  vil1_memory_image_of<T> &source_vals,
   T threshold, T zero_val
 )
 {

@@ -6,7 +6,7 @@
 //
 // \author K.Y.McGaul
 
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 #include <vcl_cmath.h>
 
 #include <osl/osl_harris_params.h>
@@ -28,10 +28,10 @@
 vcl_list<osl_edge*> xcv_segmentation::detected_edges = vcl_list<osl_edge*>();
 
 extern void get_current(unsigned*, unsigned*);
-extern bool get_image_at(vil_image*, unsigned, unsigned);
+extern bool get_image_at(vil1_image*, unsigned, unsigned);
 extern xcv_image_tableau_sptr get_image_tableau_at(unsigned,unsigned);
 extern vgui_easy2D_tableau_sptr get_easy2D_at(unsigned, unsigned);
-extern void add_image(vil_image& img);
+extern void add_image(vil1_image& img);
 
 //-----------------------------------------------------------------------------
 //: Make and display a dialog box to get Harris parameters.
@@ -56,7 +56,7 @@ bool xcv_segmentation::get_harris_params(osl_harris_params* params)
 void xcv_segmentation::perform_harris(osl_harris_params& params,
                                       unsigned col, unsigned row)
 {
-  vil_image img;
+  vil1_image img;
   bool image_ok = get_image_at(&img, col, row);
   if (image_ok == false)
     return;
@@ -208,7 +208,7 @@ void xcv_segmentation::canny_ox()
 {
   unsigned col, row;
   get_current(&col, &row);
-  vil_image img;
+  vil1_image img;
   bool image_ok = get_image_at(&img, col, row);
   if (image_ok == false)
     return;
@@ -239,7 +239,7 @@ void xcv_segmentation::get_broken_edges(double bk_thresh, vcl_list<osl_edge*>* b
 {
   unsigned col, row;
   get_current(&col, &row);
-  vil_image img;
+  vil1_image img;
   bool image_ok = get_image_at(&img, col, row);
   if (!image_ok)
     return;

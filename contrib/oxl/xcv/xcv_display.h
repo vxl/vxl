@@ -15,7 +15,7 @@
 //   Marko Bacic    19-JUL-2000    Added support for region of interest
 // \endverbatim
 
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 class vgui_menu;
 class vgui_roi_tableau_make_roi;
 
@@ -39,7 +39,7 @@ class xcv_display
 
  private:
   //: Generates intensity values along a line.
-  static void line_profile(const vil_image&, float x0, float y0, float x1, float y1,
+  static void line_profile(const vil1_image&, float x0, float y0, float x1, float y1,
                            int num_points, float* xvals, float* yvals, float* ivals);
   static vgui_roi_tableau_make_roi *roi_tableau_client_;
 };

@@ -16,7 +16,7 @@
 
 #include <vnl/vnl_math.h>
 
-#include <vil/vil_memory_image_of.h>
+#include <vil1/vil1_memory_image_of.h>
 
 #include <vgui/vgui_glut.h>
 
@@ -225,11 +225,11 @@ bool drawframe(int frame)
 
     glRasterPos2f(rx,ry);
     if (moviefile->GetBitsPixel() == 8) {
-      vil_memory_image_of<vil_byte> img(image_w, image_h);
+      vil1_memory_image_of<vil1_byte> img(image_w, image_h);
       moviefile->GetFrame(frame, img);
       glDrawPixels(rw, rh, GL_LUMINANCE, GL_UNSIGNED_BYTE, img.get_buffer());
     } else {
-      vil_memory_image_of<vil_rgb<vil_byte> > img(image_w, image_h);
+      vil1_memory_image_of<vil1_rgb<vil1_byte> > img(image_w, image_h);
       moviefile->GetFrame(frame, img);
       glDrawPixels(rw, rh, GL_RGB,       GL_UNSIGNED_BYTE, img.get_buffer());
     }

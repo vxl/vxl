@@ -5,12 +5,12 @@
 
 #include <vcl_iostream.h>
 #include <vnl/vnl_math.h>
-#include <vil/vil_memory_image_of.h>
+#include <vil1/vil1_memory_image_of.h>
 
 #include <oxp/Mapping_2d_2d.h>
 
 template <class PixelType>
-void ImageWarp<PixelType>::mean_nz_intensity(const vil_memory_image_of<PixelType>& in,
+void ImageWarp<PixelType>::mean_nz_intensity(const vil1_memory_image_of<PixelType>& in,
                                              int x, int y, int window_size,
                                              ImageWarp<PixelType>::real_t* out,
                                              //typename vnl_numeric_traits<PixelType>::real_t* out,
@@ -48,7 +48,7 @@ void ImageWarp<PixelType>::mean_nz_intensity(const vil_memory_image_of<PixelType
 }
 
 template <class PixelType>
-void ImageWarp<PixelType>::gapfill(vil_memory_image_of<PixelType>& out, int ngaps)
+void ImageWarp<PixelType>::gapfill(vil1_memory_image_of<PixelType>& out, int ngaps)
 {
   int w = out.width();
   int h = out.height();
@@ -79,8 +79,8 @@ void ImageWarp<PixelType>::gapfill(vil_memory_image_of<PixelType>& out, int ngap
 
 template <class PixelType>
 void ImageWarp<PixelType>::warp(Mapping_2d_2d& map,
-                                const vil_memory_image_of<PixelType>& in,
-                                vil_memory_image_of<PixelType>& out)
+                                const vil1_memory_image_of<PixelType>& in,
+                                vil1_memory_image_of<PixelType>& out)
 {
   // out.Clear();
 //abort(); // is not defined without #include <vcl_cstdlib.h>
@@ -109,8 +109,8 @@ void ImageWarp<PixelType>::warp(Mapping_2d_2d& map,
 
 template <class PixelType>
 void ImageWarp<PixelType>::warp_inverse(Mapping_2d_2d& map,
-                                        const vil_memory_image_of<PixelType>&in,
-                                        vil_memory_image_of<PixelType>& out)
+                                        const vil1_memory_image_of<PixelType>&in,
+                                        vil1_memory_image_of<PixelType>& out)
 {
   int w = in.width();
   int h = in.height();

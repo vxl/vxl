@@ -27,8 +27,8 @@
 #include <vcl_cstdio.h> // for fscanf()
 #include <vcl_algorithm.h> // for transform()
 #include <vpl/vpl.h> // for vpl_mkdir
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
+#include <vil1/vil1_load.h>
+#include <vil1/vil1_save.h>
 
 //----------------------------------------------------------------------
 /** destructor
@@ -108,7 +108,7 @@ bool ImageDatabase::save(const char *name, const char *imagetype)
   {
     char filename[200];
     vcl_sprintf(filename, "%s/%s_%03d.%s", dirname, (*i).first, index++, imagetype);
-    vil_save(*((*i).second), filename);
+    vil1_save(*((*i).second), filename);
 
     vcl_printf("db: %s %s\n", (*i).first, filename);
     vcl_fprintf(dbfile, "%s %s\n", (*i).first, filename);
@@ -142,9 +142,9 @@ bool ImageDatabase::load(const char *name)
   char label[200], filename[200];
   while (vcl_fscanf(db, "%s%s", label, filename)!=EOF)
   {
-    vil_image im = vil_load(filename);
+    vil1_image im = vil1_load(filename);
     if (!im) return false;
-    vil_memory_image *image = new vil_memory_image(im);
+    vil1_memory_image *image = new vil1_memory_image(im);
     insert(label, image);
   }
   vcl_fclose(db);

@@ -69,7 +69,7 @@ vcl_ostream &operator <<(vcl_ostream &os, const vcl_set<T> &vec)
 }
 
 
-vcl_ostream &operator<<(vcl_ostream &os, const vil_rgb<unsigned char> &colour)
+vcl_ostream &operator<<(vcl_ostream &os, const vil1_rgb<unsigned char> &colour)
 {
   os << "<RGB = " << (int)colour.R_ << ", " << (int)colour.G_ << ", "
      << (int)colour.B_ << ">\n";

@@ -11,13 +11,13 @@
 
 #include <vcl_list.h>
 class osl_edge;
-class vil_image;
+class vil1_image;
 
 // 0: oxford
 // 1: rothwell1
 // 2: rothwell2
 void osl_easy_canny(int which_canny,
-                    vil_image const &image,
+                    vil1_image const &image,
                     vcl_list<osl_edge*> *edges,
                     double sigma = 0);
 

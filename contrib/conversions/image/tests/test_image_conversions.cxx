@@ -11,13 +11,13 @@ void test_image_conversions()
 
 #else
 #include <image/Image_to_vil.h>
-#include <image/vil_to_Image.h>
+#include <image/vil1_to_Image.h>
 
 #include <vcl_cstring.h> // for memcmp()
 #include <vcl_fstream.h>
 #include <vpl/vpl.h> // for vpl_unlink()
 #include <vul/vul_temp_filename.h>
-#include <vil/vil_load.h>
+#include <vil1/vil1_load.h>
 
 static void create_image(const char* name)
 {
@@ -32,7 +32,7 @@ void test_image_conversions()
   vcl_string filename = vul_temp_filename();
   if (filename == "") filename = "temp_image.ppm";
   create_image(filename.c_str());
-  vil_image im1 = vil_load(filename.c_str());
+  vil1_image im1 = vil1_load(filename.c_str());
   TEST("image file", (bool)im1, true);
   if (!im1) { vcl_cerr << filename << " is not a valid image file\n"; return; }
   int size = im1.get_size_bytes();
@@ -47,14 +47,14 @@ void test_image_conversions()
   // now remove the file
   vpl_unlink(filename.c_str());
 
-  Image* im2 = vil_to_Image(im1);
-  TEST("vil_to_Image width", wd, im2->GetSizeX());
-  TEST("vil_to_Image height", ht, im2->GetSizeY());
+  Image* im2 = vil1_to_Image(im1);
+  TEST("vil1_to_Image width", wd, im2->GetSizeX());
+  TEST("vil1_to_Image height", ht, im2->GetSizeY());
   char* buf2 = new char[size];
   im2->GetSection(buf2, 0, 0, wd, ht);
-  TEST("vil_to_Image data", 0, vcl_memcmp(buf1, buf2, size));
+  TEST("vil1_to_Image data", 0, vcl_memcmp(buf1, buf2, size));
 
-  vil_image im3 = Image_to_vil(im2);
+  vil1_image im3 = Image_to_vil(im2);
   TEST("Image_to_vil width", im3.width(), im2->GetSizeX());
   TEST("Image_to_vil height", im3.height(), im2->GetSizeY());
   im3.get_section(buf1, 0, 0, wd, ht);
