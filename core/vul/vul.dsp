@@ -180,7 +180,7 @@ SOURCE=.\vul_timestamp.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vul_tmpnam.cxx
+SOURCE=.\vul_temp_filename.cxx
 
 # End Source File
 # Begin Source File
@@ -293,7 +293,7 @@ SOURCE=.\vul_timestamp.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vul_tmpnam.h
+SOURCE=.\vul_temp_filename.h
 
 # End Source File
 # Begin Source File
