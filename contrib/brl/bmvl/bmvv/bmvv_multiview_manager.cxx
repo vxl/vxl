@@ -34,7 +34,6 @@
 #include <vgui/vgui_modifier.h>
 #include <vtol/vtol_face_2d_sptr.h>
 #include <vtol/vtol_intensity_face.h>
-#include <gevd/gevd_float_operators.h>
 #include <brip/brip_float_ops.h>
 #include <sdet/sdet_region_proc_params.h>
 #include <sdet/sdet_region_proc.h>
@@ -52,10 +51,10 @@ bmvv_multiview_manager *bmvv_multiview_manager::instance_ = 0;
 bmvv_multiview_manager *bmvv_multiview_manager::instance()
 {
   if (!instance_)
-    {
-      instance_ = new bmvv_multiview_manager();
-      instance_->init();
-    }
+  {
+    instance_ = new bmvv_multiview_manager();
+    instance_->init();
+  }
   return bmvv_multiview_manager::instance_;
 }
 
@@ -79,16 +78,15 @@ void bmvv_multiview_manager::init()
 {
   grid_ = vgui_grid_tableau_new(2,1);
   grid_->set_grid_size_changeable(true);
-  unsigned int col=0, row = 0;
-  for (; col<2; col++)
-    {
-      vgui_image_tableau_sptr itab = bgui_image_tableau_new();
-      bgui_vtol2D_tableau_sptr btab = bgui_vtol2D_tableau_new(itab);
-      vtol_tabs_.push_back(btab);
-      bgui_picker_tableau_new pcktab(btab);
-      vgui_viewer2D_tableau_sptr v2d = vgui_viewer2D_tableau_new(pcktab);
-      grid_->add_at(v2d, col, row);
-    }
+  for (unsigned int col=0, row=0; col<2; ++col)
+  {
+    vgui_image_tableau_sptr itab = bgui_image_tableau_new();
+    bgui_vtol2D_tableau_sptr btab = bgui_vtol2D_tableau_new(itab);
+    vtol_tabs_.push_back(btab);
+    bgui_picker_tableau_new pcktab(btab);
+    vgui_viewer2D_tableau_sptr v2d = vgui_viewer2D_tableau_new(pcktab);
+    grid_->add_at(v2d, col, row);
+  }
   vgui_shell_tableau_sptr shell = vgui_shell_tableau_new(grid_);
   this->add_child(shell);
 }
@@ -113,13 +111,13 @@ bmvv_multiview_manager::get_picker_tableau_at(unsigned col, unsigned row)
 {
   vgui_tableau_sptr top_tab = grid_->get_tableau_at(col, row);
   if (top_tab)
-    {
-      bgui_picker_tableau_sptr tt;
-      tt.vertical_cast(vgui_find_below_by_type_name(top_tab,
-                                                    vcl_string("bgui_picker_tableau")));
-      if (tt)
-        return tt;
-    }
+  {
+    bgui_picker_tableau_sptr tt;
+    tt.vertical_cast(vgui_find_below_by_type_name(top_tab,
+                                                  vcl_string("bgui_picker_tableau")));
+    if (tt)
+      return tt;
+  }
   vgui_macro_warning << "Unable to get bgui_picker_tableau at (" << col << ", "
                      << row << ")\n";
   return 0;
@@ -175,11 +173,11 @@ void bmvv_multiview_manager::load_image_file(vcl_string image_filename, bool gre
   img_ = vil1_load(image_filename.c_str());
   bgui_vtol2D_tableau_sptr btab = this->get_vtol2D_tableau_at(col, row);
   if (btab)
-    {
-      vgui_image_tableau_sptr itab = btab->get_image_tableau();
-      itab->set_image(img_);
-      return;
-    }
+  {
+    vgui_image_tableau_sptr itab = btab->get_image_tableau();
+    itab->set_image(img_);
+    return;
+  }
   vcl_cout << "In bmvv_multiview_manager::load_image_file() - null tableau\n";
 }
 
@@ -197,23 +195,23 @@ void bmvv_multiview_manager::load_image()
   if (!load_image_dlg.ask())
     return;
   vil1_image temp = vil1_load(image_filename.c_str());
-  if(greyscale)
-    {
-      vil1_memory_image_of<unsigned char> temp1 = 
-      brip_float_ops::convert_to_grey(temp);
-      img_ = temp1;
-    }
+  if (greyscale)
+  {
+    vil1_memory_image_of<unsigned char> temp1 =
+    brip_float_ops::convert_to_grey(temp);
+    img_ = temp1;
+  }
   else
     img_ = temp;
-  
+
   bgui_vtol2D_tableau_sptr btab = this->get_selected_vtol2D_tableau();
   if (btab)
-    {
-      vgui_image_tableau_sptr itab = btab->get_image_tableau();
-      itab->set_image(img_);
-      itab->post_redraw();
-      return;
-    }
+  {
+    vgui_image_tableau_sptr itab = btab->get_image_tableau();
+    itab->set_image(img_);
+    itab->post_redraw();
+    return;
+  }
   vcl_cout << "In bmvv_multiview_manager::load_image() - null tableau\n";
 }
 
@@ -284,32 +282,32 @@ void bmvv_multiview_manager::vd_edges()
 
   bgui_vtol2D_tableau_sptr btab = this->get_selected_vtol2D_tableau();
   if (btab)
-    {
-      vgui_image_tableau_sptr itab = btab->get_image_tableau();
-      img_ = itab->get_image();
-    }
+  {
+    vgui_image_tableau_sptr itab = btab->get_image_tableau();
+    img_ = itab->get_image();
+  }
   else
-    {
-      vcl_cout << "In bmvv_multiview_manager::vd_edges() - null tableau\n";
-      return;
-    }
+  {
+    vcl_cout << "In bmvv_multiview_manager::vd_edges() - null tableau\n";
+    return;
+  }
   det.SetImage(img_);
   det.DoContour();
   vcl_vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
 
   //display the edges
   if (btab&&edges)
-    {
-      if(clear)
-        btab->clear_all();
-      btab->add_edges(*edges, true);
-      btab->post_redraw();
-    }
+  {
+    if (clear)
+      btab->clear_all();
+    btab->add_edges(*edges, true);
+    btab->post_redraw();
+  }
   else
-    {
-      vcl_cout << "In bmvv_multiview_manager::vd_edges() - null edges or null tableau\n";
-      return;
-    }
+  {
+    vcl_cout << "In bmvv_multiview_manager::vd_edges() - null edges or null tableau\n";
+    return;
+  }
 }
 
 void bmvv_multiview_manager::regions()
@@ -335,23 +333,23 @@ void bmvv_multiview_manager::regions()
   rp.extract_regions();
   //this should be somewhere else
   if (debug)
+  {
+    bgui_vtol2D_tableau_sptr btab = this->get_selected_vtol2D_tableau();
+    if (!btab)
     {
-      bgui_vtol2D_tableau_sptr btab = this->get_selected_vtol2D_tableau();
-      if (!btab)
-        {
-          vcl_cout << "In bmvv_multiview_manager::regions() - null tableau\n";
-          return;
-        }
-      vil1_image ed_img = rp.get_edge_image();
-      vgui_image_tableau_sptr itab =  btab->get_image_tableau();
-      if (!itab)
-        {
-          vcl_cout << "In bmvv_multiview_manager::regions() - null image tableau\n";
-          return;
-        }
-      itab->set_image(ed_img);
+      vcl_cout << "In bmvv_multiview_manager::regions() - null tableau\n";
       return;
     }
+    vil1_image ed_img = rp.get_edge_image();
+    vgui_image_tableau_sptr itab =  btab->get_image_tableau();
+    if (!itab)
+    {
+      vcl_cout << "In bmvv_multiview_manager::regions() - null image tableau\n";
+      return;
+    }
+    itab->set_image(ed_img);
+    return;
+  }
   vcl_vector<vtol_intensity_face_sptr>& regions = rp.get_regions();
   this->draw_regions(regions, true);
 }
@@ -368,10 +366,10 @@ void bmvv_multiview_manager::read_xml_edges()
     return;
   bgui_vtol2D_tableau_sptr btab = this->get_selected_vtol2D_tableau();
   if (!btab)
-    {
-      vcl_cout << "In bmvv_multiview_manager::regions() - null tableau\n";
-      return;
-    }
+  {
+    vcl_cout << "In bmvv_multiview_manager::regions() - null tableau\n";
+    return;
+  }
   vcl_vector<vtol_edge_2d_sptr> edges;
   if (bxml_vtol_io::read_edges(xml_filename, edges))
     btab->add_edges(edges, true);
@@ -401,10 +399,10 @@ void bmvv_multiview_manager::show_epipolar_line()
   unsigned int col=0, row=0;//left image
   bgui_picker_tableau_sptr pkt = this->get_picker_tableau_at(col, row);
   if (!pkt)
-    {
-      vcl_cout << "In bmvv_multiview_manager::show_epipolar_line() - null tableau\n";
-      return;
-    }
+  {
+    vcl_cout << "In bmvv_multiview_manager::show_epipolar_line() - null tableau\n";
+    return;
+  }
   float x = 0, y=0;
   pkt->pick_point(&x, &y);
   vgui::out << "p(" << x << ' ' << y << ")\n";
@@ -419,10 +417,10 @@ void bmvv_multiview_manager::show_epipolar_line()
   vgl_homg_line_2d<double> lr = f.image2_epipolar_line(pl);
   //end test
   if (v2D)
-    {
-      v2D->add_infinite_line(lr.a(), lr.b(), lr.c());
-      v2D->post_redraw();
-    }
+  {
+    v2D->add_infinite_line(lr.a(), lr.b(), lr.c());
+    v2D->post_redraw();
+  }
 }
 
 //===================================================================
@@ -433,24 +431,24 @@ void bmvv_multiview_manager::select_curve_corres()
   for (vcl_vector<bgui_vtol2D_tableau_sptr>::iterator bit = vtol_tabs_.begin();
        bit != vtol_tabs_.end(); bit++)
     if (*bit)
+    {
+      vcl_vector<vgui_soview*> sovs = (*bit)->get_selected_soviews();
+      for (unsigned int i = 0; i<sovs.size(); i++)
       {
-        vcl_vector<vgui_soview*> sovs = (*bit)->get_selected_soviews();
-        for (unsigned int i = 0; i<sovs.size(); i++)
-          {
-            vgui_soview* sov = sovs[i];
-            int id = sov->get_id();
-            vcl_cout << "id = " << id << '\n';
-            vtol_edge_2d_sptr e = (*bit)->get_mapped_edge(id);
-            vsol_curve_2d_sptr c = e->curve();
-            vdgl_digital_curve_sptr dc = c->cast_to_digital_curve();
-            // pilou's code
-            vdgl_interpolator_sptr interp = dc->get_interpolator();
-            vdgl_edgel_chain_sptr  ec = interp->get_edgel_chain();
-            bdgl_curve_description descr(ec);
-            descr.info();
-            if (dc) (*bit)->add_digital_curve(dc);
-          }
+        vgui_soview* sov = sovs[i];
+        int id = sov->get_id();
+        vcl_cout << "id = " << id << '\n';
+        vtol_edge_2d_sptr e = (*bit)->get_mapped_edge(id);
+        vsol_curve_2d_sptr c = e->curve();
+        vdgl_digital_curve_sptr dc = c->cast_to_digital_curve();
+        // pilou's code
+        vdgl_interpolator_sptr interp = dc->get_interpolator();
+        vdgl_edgel_chain_sptr  ec = interp->get_edgel_chain();
+        bdgl_curve_description descr(ec);
+        descr.info();
+        if (dc) (*bit)->add_digital_curve(dc);
       }
+    }
   this->clear_selected();
 }
 
@@ -511,14 +509,15 @@ void bmvv_multiview_manager::track_edges()
   if (btab)
     btab->add_edges(*edges, true);
   else
-    {
-      vcl_cout << "In bmvv_multiview_manager::track_edges() - null tableau\n";
-      return;
-    }
+  {
+    vcl_cout << "In bmvv_multiview_manager::track_edges() - null tableau\n";
+    return;
+  }
 #endif // 0
   // pass the edges
   ecl.clear();
-  for (unsigned int i=0;i<edges->size();i++){
+  for (unsigned int i=0;i<edges->size();i++)
+  {
     c = (*edges)[i]->curve();
     dc = c->cast_to_digital_curve();
     interp = dc->get_interpolator();
@@ -543,7 +542,8 @@ void bmvv_multiview_manager::track_edges()
     }
 #endif // 0
   ecl.clear();
-  for (unsigned int i=0;i<edges->size();i++){
+  for (unsigned int i=0;i<edges->size();i++)
+  {
     c = (*edges)[i]->curve();
     dc = c->cast_to_digital_curve();
     interp = dc->get_interpolator();
@@ -581,10 +581,13 @@ void bmvv_multiview_manager::draw_colored_digital_curve(unsigned col, unsigned r
   float r,g,b;
 
   bgui_vtol2D_tableau_sptr btab = this->get_vtol2D_tableau_at(col,row);
-  if (!btab){
+  if (!btab)
+  {
       vcl_cout << "In bmvv_multiview_manager::track_edges() - null tableau\n";
       return;
-  } else {
+  }
+  else
+  {
     btab->disable_highlight();
     set_changing_colors( label, &r, &g, &b );
     btab->set_digital_curve_style(r, g, b, 3.0);
@@ -628,10 +631,10 @@ vil1_image bmvv_multiview_manager::get_image_at(unsigned col, unsigned row)
 {
   bgui_vtol2D_tableau_sptr btab = this->get_vtol2D_tableau_at(col, row);
   if (btab)
-    {
-      vgui_image_tableau_sptr itab = btab->get_image_tableau();
-      return itab->get_image();
-    }
+  {
+    vgui_image_tableau_sptr itab = btab->get_image_tableau();
+    return itab->get_image();
+  }
   vcl_cout << "In bmvv_multiview_manager::get_image_at() - null tableau\n";
   return 0;
 }
