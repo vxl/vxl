@@ -550,11 +550,10 @@ T cos_angle (vnl_matrix<T> const& a, vnl_matrix<T> const& b) {
   typedef typename vnl_numeric_traits<T>::real_t real_t;
   typedef typename vnl_numeric_traits<T>::abs_t abs_t;
   real_t ab = inner_product(a,b);
-  //real_t /*abs_t*/ a_b = sqrt( vnl_math_abs(inner_product(a,a) * inner_product(b,b)) );
 #if 0 // there's no operator/(complex<float>, double)
   double a_b = sqrt( vnl_math_abs(inner_product(a,a) * inner_product(b,b)) );
 #else
-  abs_t  a_b = sqrt( vnl_math_abs(inner_product(a,a) * inner_product(b,b)) );
+  abs_t  a_b = (abs_t)sqrt( vnl_math_abs(inner_product(a,a) * inner_product(b,b)) );
 #endif
   return T( ab / a_b);
 }
@@ -709,7 +708,7 @@ vnl_matrix<T> vnl_matrix<T>::get_n_columns (unsigned column, unsigned n) const {
     vnl_error_matrix_col_index ("get_n_columns", column);
   
   vnl_matrix<T> result(this->num_rows, n);
-  for(unsigned c = 0; c < n; ++c)
+  for (unsigned c = 0; c < n; ++c)
     for (unsigned r = 0; r < this->num_rows; ++r)
       result(r, c) = data[r][column + c];
   return result;
@@ -876,8 +875,8 @@ template <class T>
 bool vnl_matrix<T>::is_identity(double tol) const
 {
   T one = vnl_numeric_traits<T>::one;
-  for(unsigned i = 0; i < this->rows(); ++i)
-    for(unsigned j = 0; j < this->columns(); ++j) {
+  for (unsigned i = 0; i < this->rows(); ++i)
+    for (unsigned j = 0; j < this->columns(); ++j) {
       T xm = (*this)(i,j);
       double absdev = (i == j) ? vnl_math_abs(xm - one) : vnl_math_abs(xm);
       if (absdev > tol)
@@ -890,8 +889,8 @@ bool vnl_matrix<T>::is_identity(double tol) const
 template <class T>
 bool vnl_matrix<T>::is_zero(double tol) const
 {
-  for(unsigned i = 0; i < this->rows(); ++i)
-    for(unsigned j = 0; j < this->columns(); ++j)
+  for (unsigned i = 0; i < this->rows(); ++i)
+    for (unsigned j = 0; j < this->columns(); ++j)
       if (vnl_math_abs((*this)(i,j)) > tol)
 	return false;
 
@@ -902,8 +901,8 @@ bool vnl_matrix<T>::is_zero(double tol) const
 template <class T>
 bool vnl_matrix<T>::has_nans() const
 {
-  for(unsigned i = 0; i < this->rows(); ++i)
-    for(unsigned j = 0; j < this->columns(); ++j)
+  for (unsigned i = 0; i < this->rows(); ++i)
+    for (unsigned j = 0; j < this->columns(); ++j)
       if (vnl_math_isnan((*this)(i,j)))
 	return true;
 
@@ -914,8 +913,8 @@ bool vnl_matrix<T>::has_nans() const
 template <class T>
 bool vnl_matrix<T>::is_finite() const
 {
-  for(unsigned i = 0; i < this->rows(); ++i)
-    for(unsigned j = 0; j < this->columns(); ++j)
+  for (unsigned i = 0; i < this->rows(); ++i)
+    for (unsigned j = 0; j < this->columns(); ++j)
       if (!vnl_math_isfinite((*this)(i,j)))
 	return false;
 
@@ -958,8 +957,8 @@ bool vnl_matrix<T>::read_ascii(istream& s)
   bool size_known = (this->rows() != 0);
 
   if (size_known) {
-    for(unsigned i = 0; i < this->rows(); ++i)
-      for(unsigned j = 0; j < this->columns(); ++j)
+    for (unsigned i = 0; i < this->rows(); ++i)
+      for (unsigned j = 0; j < this->columns(); ++j)
 	s >> this->data[i][j];
 
     return s.good() || s.eof();
@@ -1011,7 +1010,7 @@ bool vnl_matrix<T>::read_ascii(istream& s)
   {
     // Copy first row.  Can't use first_row_vals, as may be a vector of bool...
     T* row = vnl_c_vector<T>::allocate_T(colz);
-    for(int k = 0; k < colz; ++k)
+    for (int k = 0; k < colz; ++k)
       row[k] = first_row_vals[k];
     row_vals.push_back(row);
   }
@@ -1025,7 +1024,7 @@ bool vnl_matrix<T>::read_ascii(istream& s)
     s >> row[0];
     if (!s.good())
       break;
-    for(int k = 1; k < colz; ++k) {
+    for (int k = 1; k < colz; ++k) {
       if (s.eof()) {
 	cerr << "vnl_matrix<T>::read_ascii: Error, EOF on row " << row_vals.size() << ", column " << k << endl;
 	return false;
@@ -1047,8 +1046,8 @@ bool vnl_matrix<T>::read_ascii(istream& s)
   resize(rowz, colz);
 
   T* p = this->data[0];
-  for(int i = 0; i < rowz; ++i) {
-    for(int j = 0; j < colz; ++j)
+  for (int i = 0; i < rowz; ++i) {
+    for (int j = 0; j < colz; ++j)
       *p++ = row_vals[i][j];
     if (i > 0) vnl_c_vector<T>::deallocate(row_vals[i], colz);
   }
@@ -1110,10 +1109,10 @@ void vnl_matrix<T>::flipud()
   int colz = this->columns();
 
   int m = n / 2;
-  for(int r = 0; r < m; ++r) {
+  for (int r = 0; r < m; ++r) {
     int r1 = r;
     int r2 = n - 1 - r;
-    for(int c = 0; c < colz; ++c) {
+    for (int c = 0; c < colz; ++c) {
       T tmp = (*this)(r1, c);
       (*this)(r1, c) = (*this)(r2, c);
       (*this)(r2, c) = tmp;
@@ -1128,10 +1127,10 @@ void vnl_matrix<T>::fliplr()
   int rowz = this->rows();
 
   int m = n / 2;
-  for(int c = 0; c < m; ++c) {
+  for (int c = 0; c < m; ++c) {
     int c1 = c;
     int c2 = n - 1 - c;
-    for(int r = 0; r < rowz; ++r) {
+    for (int r = 0; r < rowz; ++r) {
       T tmp = (*this)(c1, r);
       (*this)(c1, r) = (*this)(c2, r);
       (*this)(c2, r) = tmp;
