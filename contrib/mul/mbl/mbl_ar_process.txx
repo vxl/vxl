@@ -6,6 +6,7 @@
 #include "mbl_ar_process.h"
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vnl/algo/vnl_qr.h>
+#include <vnl/algo/vnl_matrix_inverse.h>
 #include <mbl/mbl_mz_random.h>
 #include <vcl_cmath.h>
 
