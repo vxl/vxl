@@ -28,7 +28,7 @@ else {
     print STDERR "IUEROOT is not defined, and no command line arguments were given\n";
     exit 0;
   }
-  $FILES = `find $IUEROOT/config $IUEROOT/vcl $IUEROOT/v3p $IUEROOT/vxl $IUEROOT/mul $IUEROOT/oxl $IUEROOT/gel $IUEROOT/tbl $IUEROOT/conversions -type f \\\( -name \\\*.cxx -o -name \\\*.cc -o -name \\\*.cpp -o -name \\\*.c -o -name \\\*.h \\\) -print|grep -v /gel/v.ol\\.new/`;
+  $FILES = `find $IUEROOT/config $IUEROOT/vcl $IUEROOT/v3p $IUEROOT/vxl $IUEROOT/mul $IUEROOT/oxl $IUEROOT/gel $IUEROOT/tbl $IUEROOT/conversions -type f \\\( -name \\\*.cxx -name \\\*.txx -o -name \\\*.cc -o -name \\\*.cpp -o -name \\\*.c -o -name \\\*.h \\\) -print|grep -v /gel/v.ol\\.new/`;
   @FILES = split(' ', $FILES);
 }
 
@@ -67,8 +67,8 @@ foreach $f (@FILES)
   $file =~ s/\*\//\002/g;
   $file =~ s/(\"[^\001\n\"]{0,15})\001([^\001\n\"]{0,15}\")/$1\/\*$2/g;
   $file =~ s/(\"[^\002\n\"]{0,15})\002([^\002\n\"]{0,15}\")/$1\*\/$2/g;
-  if ($file =~ m/\/\/\s*--\s/) {
-    print "$f\t\# contains old style / -- docs\n";
+  if ($file =~ m/\/\/\s*[a-zA-Z_0_9]*\s*--\s/) {
+    print "$f\t\# contains old style // -- docs\n";
     $printed = 1;
   }
   if ($f !~ m/\.c$/ &&
@@ -96,8 +96,9 @@ foreach $f (@FILES)
   # remove string constants, incl. multiline string constants with "correct syntax":
   $file_s =~ s/\\\n//g; $file_s =~ s/([^\\])\\\"/$1/g;
   $file_s =~ s/\".*?\"/\003/g;
-  # replace :: by \005 (useful later)
+  # replace :: by \005 and -> by \006 (useful later)
   $file_s =~ s/::/\005/g;
+  $file_s =~ s/->/\006/g;
   # remove // comments
   $file_s =~ s/\/\/[^\n]*\n/\n/g;
   # remove /* ... */ comments
@@ -145,9 +146,17 @@ foreach $f (@FILES)
     $printed = 1;
   }
 
-# 9. Instantiation macro ends with ;
-  if ($file_s =~ m/\#define\s+(\S*INSTANTIATE\S*)[^\n]+;\s*\n/) {
+# 9. Instantiation macro stuff
+  if ($file_s =~ m/\#define\s+(\S*INSTANTIATE[^\s\(\)]*)[^\n]+;\s*\n/) {
     print "$f\t\# definition of $1 ends with ;\n";
+    $printed = 1;
+  }
+  if ($file_s =~ m/\#define\s+(\S*INSTANTIATE[^\s\(\)]*)\s*\([^)]*\)\S/) {
+    print "$f\t\# definition of $1 does not start with a space\n";
+    $printed = 1;
+  }
+  if ($file_s =~ m/\#define\s+(\S*INSTANTIATE[^\s\(\)]*)[^\n]+(\<[^<>\n]*[A-Za-z_][A-Za-z_0-9]*\>)/) {
+    print "$f\t\# definition of $1 has no space before > in $2\n";
     $printed = 1;
   }
 
@@ -168,9 +177,10 @@ foreach $f (@FILES)
         "$f.$wd" !~ m/\bvbl\/vbl_timer\.(h|cxx)\.real$/ &&
         "$f.$wd" !~ m/\bvnl\/vnl_quaternion\.h\.real$/ &&
         "$f.$wd" !~ m/\bvnl\/vnl_numeric_limits\.h\.(min|max)$/ &&
+        "$f.$wd" !~ m/\bvil\/vil_rgb\.(h|txx)\.(min|max)$/ &&
         "$f.$wd" !~ m/\boxl\/mvl\/HomgConic\.(h|cxx)\.polar$/ &&
         "$f.$wd" !~ m/\bvnl\/algo\/vnl_rn?poly_(solve|roots)\.h\.(real|imag)$/ &&
-        $file_s =~ m/[^.\005]\b$wd\s*(\s*)\(/) { # \005 is ::
+        $file_s =~ m/[^.\005\006]\b$wd\s*(\s*)\(/) { # \005 is :: and \006 is ->
       print "$f\t\# $wd$1() must be vcl_$wd()\n";
       $printed = 1;
     }
