@@ -9,19 +9,9 @@
 const int W = 768;
 const int H = 256;
 
-void save_writable(vil_image const &m, char const *file)
-{
-  // (try to) remove old file.
-  vpl_unlink(file);
-  // save.
-  vil_save(m, file);
-  // Make readable/writable by all. Else the vil_save() will fail
-  // if the program is run later by another user on the same machine.
-  vpl_chmod(file, 0666);
-}
-
 int main()
 {
+  char const *file_name_2 = "/tmp/vil_test_memory_image_of.pgm";
   {
     vcl_cout << "unsigned char" << vcl_endl;
     vil_memory_image_of<unsigned char> image(W,H);
@@ -31,9 +21,10 @@ int main()
         image(x,y) = ((x - W/2) * (y - H/2) / 16) % 256;
       }
 
-    save_writable(image, "/tmp/vil_test_memory_image_of.pgm");
+    vil_save(image, file_name_2);
   }
 
+  char const *file_name_1 = "/tmp/vil_test_memory_image_of.ppm";
   {
     vcl_cout << "vil_rgb_byte" << vcl_endl;
     vil_memory_image_of<vil_rgb<unsigned char> > image(W,H);
@@ -46,7 +37,7 @@ int main()
         p.b = y/3;
       }
 
-    save_writable(image, "/tmp/vil_test_memory_image_of.ppm");
+    vil_save(image, file_name_1);
   }
 
   {
@@ -69,6 +60,14 @@ int main()
     p = image(0,1); if (p != 4) vcl_cout << "*** FAILED: " << p << "!= 4\n";
     p = image(1,1); if (p != 5) vcl_cout << "*** FAILED: " << p << "!= 5\n";
     p = image(2,1); if (p != 6) vcl_cout << "*** FAILED: " << p << "!= 6\n";
+  }
+
+  {
+    // Don't leave the images behind by default. If you need to debug, comment
+    // these out temporarily and make sure you put them back in before committing
+    // your changes.
+    vpl_unlink(file_name_1);
+    vpl_unlink(file_name_2);
   }
 
   return 0;
