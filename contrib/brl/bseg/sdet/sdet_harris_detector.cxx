@@ -109,10 +109,10 @@ void sdet_harris_detector::extract_corners()
   vcl_qsort(point_array, n_corners, sizeof(sdet_harris_point),
             (int (*)(const void *, const void *))&compare);
   //ouput the corners (limit by maximum number of corners)
-  int num = (int)(percent_corners_*n_corners)/100.0;
-  if(num>n_corners)
-	  num = n_corners;
-  for(int i=0; i<num; i++)
+  int num = (int)(percent_corners_*n_corners/100.0);
+  if (num>n_corners)
+    num = n_corners;
+  for (int i=0; i<num; i++)
     {
       points_.push_back(point_array[i].point());
       // vcl_cout <<"s[" << i << "]=" << point_array[i].strength() << "\n";
