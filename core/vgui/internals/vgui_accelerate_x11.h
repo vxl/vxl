@@ -10,7 +10,7 @@
 #include <vgui/vgui_gl.h>
 #include <vgui/internals/vgui_accelerate.h>
 
-#ifdef VGUI_MESA
+#if VGUI_MESA
 #  include <GL/xmesa.h>
 #endif
 

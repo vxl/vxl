@@ -11,7 +11,7 @@
 
 //capes : there's no point starting this accelerator unless you're running Mesa at the moment
 #include <vgui/vgui_gl.h>
-#ifdef VGUI_MESA
+#if VGUI_MESA
 
 // This file uses only the following names from xmesa.h :
 //   XMesaBuffer (type)
@@ -469,4 +469,4 @@ bool vgui_accelerate_x11::vgui_copy_aux_to_back ()
   return false;
 }
 
-#endif // matches #ifdef VGUI_MESA
+#endif // matches #if VGUI_MESA

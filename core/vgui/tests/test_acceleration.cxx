@@ -136,7 +136,7 @@ int main (int /*argc*/, char** /*argv*/)
   vcl_cerr << "      alpha-bits : " << data_int << vcl_endl;
   vcl_cerr << vcl_endl;
 
-#ifndef VGUI_MESA
+#if !VGUI_MESA
   vcl_cerr << "   You are not using Mesa !!" << vcl_endl;
 #endif
 #ifndef HAS_HERMES

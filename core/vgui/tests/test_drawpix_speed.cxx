@@ -14,7 +14,7 @@
 #include <X11/Xutil.h>
 
 
-#ifdef VGUI_MESA
+#if VGUI_MESA
 #  include <GL/xmesa.h>
 #endif
 
@@ -231,7 +231,7 @@ int main (int argc, char** argv)
   glGetIntegerv(GL_ALPHA_BITS, &data_int);
   vcl_cerr << "      alpha-bits : " << data_int << vcl_endl;
 
-#if defined(VGUI_MESA)
+#if VGUI_MESA
   {
     vcl_cerr << vcl_endl;
     XMesaBuffer mesabuf = XMesaGetCurrentBuffer();
@@ -340,7 +340,7 @@ int main (int argc, char** argv)
     vcl_cerr << vcl_endl;
   }
 
-#if defined(HAS_HERMES) && defined(VGUI_MESA)
+#if defined(HAS_HERMES) && VGUI_MESA
   {
     XMesaBuffer mesabuf = XMesaGetCurrentBuffer();
     Pixmap p;

@@ -67,11 +67,11 @@ vgui_accelerate::vgui_glDrawPixels( GLsizei width, GLsizei height, GLenum format
 }
 
 // 32 bit RGBA seems to be acceptable/fast on most platforms.
-// - u97mb RGBA is not acceptable on Mesa(too slow) so we use GL_RGBA instead
+// - u97mb RGBA is not acceptable on Mesa(too slow) so we use GL_RGB instead
 bool
 vgui_accelerate::vgui_choose_cache_format( GLenum* format, GLenum* type)
 {
-#ifdef VGUI_MESA
+#if VGUI_MESA
   (*format) = GL_RGB;
 #else
   (*format) = GL_RGBA;

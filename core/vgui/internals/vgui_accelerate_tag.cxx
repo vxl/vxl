@@ -9,7 +9,7 @@
 #include <vgui/vgui_tag.h>
 #include <vul/vul_trace.h>
 
-#ifdef VGUI_MESA
+#if VGUI_MESA
 vgui_tag(accelerate_x11) {
   vul_trace;
   vgui_accelerate::register_accelerator(new vgui_accelerate_x11, 1);
