@@ -35,13 +35,71 @@ mil_byte_image_2d_io::~mil_byte_image_2d_io()
 //  Options are '' (ie rely on image), 'Grey' or 'RGB'
 void mil_byte_image_2d_io::setColour(const vcl_string& c)
 {
-  colour_ = c;
+//  colour_ = c;
+  if ( c == "" )
+  {
+    colour_code_ = mil_byte_image_2d_io_depth_image;  
+    return;
+  }
+  else if ( c == "Grey" )
+  {
+    colour_code_ = mil_byte_image_2d_io_depth_grey; 
+    return;
+  }
+  else if ( c == "RGB" )
+  {
+    colour_code_ = mil_byte_image_2d_io_depth_rgb;
+    return;
+  }
+
+  vcl_cerr << " mil_byte_image_2d_io::set_colour(int); colour depth string " << c << " not supported" << vcl_endl;
+}
+
+//: Set the colour by the depth or using the standard code in the header
+//  Only colour (3-plane) and greyscale (1-plane) curretnly supported
+//  Returns false if the depth is not suipported
+bool mil_byte_image_2d_io::set_colour_depth( int new_depth )
+{
+  if ( new_depth == mil_byte_image_2d_io_depth_image || 
+       new_depth == mil_byte_image_2d_io_depth_grey  ||
+       new_depth == mil_byte_image_2d_io_depth_rgb )
+  {
+    colour_code_ = (mil_byte_image_2d_io_std_depths &)new_depth;
+    return true;
+  }
+
+  vcl_cerr << " mil_byte_image_2d_io::set_colour(int); colour depth code " << new_depth 
+    << " not supported - NON FATAL ERROR" << vcl_endl;
+  return false;
 }
 
 //: Whether to load images as RGB, Grey-scale or leave to image format
-const vcl_string& mil_byte_image_2d_io::colour() const
+vcl_string mil_byte_image_2d_io::colour() const
 {
-  return colour_;
+  if ( colour_code_ == mil_byte_image_2d_io_depth_image )
+  {
+    return vcl_string("");
+  }
+  else if ( colour_code_ == mil_byte_image_2d_io_depth_grey )
+  {
+    return vcl_string("Grey");
+  }
+  else if ( colour_code_ == mil_byte_image_2d_io_depth_rgb )
+  {
+    return vcl_string("RGB");
+  }
+
+  vcl_cerr << " mil_byte_image_2d_io::set_colour(int); colour code " << colour_code_ 
+    << " not found in standard list - NON FATAL ERROR" << vcl_endl;
+
+  return vcl_string("Bugger");
+}
+
+//: Return the colour depth using the standard code in the header
+//  Only colour (3-plane) and greyscale (1-plane) curretnly supported
+int mil_byte_image_2d_io::colour_depth()
+{
+  return colour_code_;
 }
 
 //: Current image
@@ -108,10 +166,10 @@ bool mil_byte_image_2d_io::loadTheImage(mil_image_2d_of<vil_byte>& image,
               const vcl_string& f_type)
 {
   mil_byte_image_2d_io_plugin plugin;
-  if (plugin.loadTheImage(image,path,f_type,colour_))
-    {
+  if ( plugin.loadTheImage(image,path,f_type,colour()) )
+  {
     return true;
-    }
+  }
  
   vil_image img = vil_load(path.c_str());  // ie f_type is ignored here !!
   int nx = img.width();
@@ -125,7 +183,7 @@ bool mil_byte_image_2d_io::loadTheImage(mil_image_2d_of<vil_byte>& image,
 
   bool img_is_grey = (img.get_size_bytes()==(nx*ny));
 
-  if (colour_=="Grey")   // ie make a grey image whatever image is loaded
+  if ( colour_depth() == mil_byte_image_2d_io_depth_grey )// colour_=="Grey")   // ie make a grey image whatever image is loaded
   {
     // wish to load a grey image
     if (img_is_grey)
@@ -141,7 +199,7 @@ bool mil_byte_image_2d_io::loadTheImage(mil_image_2d_of<vil_byte>& image,
       mil_convert_vil_cv2gm(image_,buf);
     }
   }
-  else if (colour_=="RGB")
+  else if ( colour_depth() == mil_byte_image_2d_io_depth_rgb ) // colour_=="RGB")
   {
     // wish to load a colour image
     if (img_is_grey)
@@ -159,7 +217,7 @@ bool mil_byte_image_2d_io::loadTheImage(mil_image_2d_of<vil_byte>& image,
       mil_convert_vil_cv2cm(image_,buf);
     }
   }
-  else
+  else if ( colour_depth() == mil_byte_image_2d_io_depth_image ) // ie colour_="" => rely on image
   {
     // ie colour_="" => rely on image
     if (img_is_grey)
@@ -174,6 +232,12 @@ bool mil_byte_image_2d_io::loadTheImage(mil_image_2d_of<vil_byte>& image,
       vil_memory_image_of<vil_rgb_byte> buf(img);
       mil_convert_vil_cv2cm(image_,buf);
     }
+  }
+  else
+  {
+    vcl_cerr << "mil_byte_image_2d_io::loadTheImage(); colour_depth() " << colour_depth() 
+      << " not supported - NON FATAL ERROR" << vcl_endl;
+    return false;
   }
 
   image=image_;
