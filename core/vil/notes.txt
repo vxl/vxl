@@ -96,4 +96,21 @@ Notes:
 #includes to vxl/vil are simply to use old vil stuff that doesn't need to be converted. e.g. vil_stream
 
 
+ToDo: - in order of priority.
+
+Go through existing examples and VXL book and see if there are any idioms we have missed.
+
+Add a set_view function to fill someone's existing view with data (which will probably be useful for implementing vil_crop style filters)
+
+Add vil_crop style filter example for vil2_image_data.
+
+Decide where to put world to image transforms and write it.
+
+Write vil_memory_image
+
+Write some example standard image processing code.
+
+Convert rest of file_images
+
+Convert rest of vil2_image_data filters
 
