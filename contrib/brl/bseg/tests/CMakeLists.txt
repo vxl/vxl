@@ -20,3 +20,6 @@ ADD_TEST(brip_test_lucas_kanade sdet_test_all brip_test_lucas_kanade)
 ADD_TEST(sdet_test_tracker      sdet_test_all sdet_test_tracker)
 
 ADD_EXECUTABLE( bseg_test_include test_include.cxx )
+
+ADD_EXECUTABLE(brip_test_fourier brip_test_fourier.cxx)
+ADD_TEST(brip_test_fourier brip_test_fourier)
