@@ -48,3 +48,9 @@ endif
 ######################################
 include ${IUEROOT}/config/top-rules.mk
 ######################################
+
+xall:: vul_where_vxl.h
+
+vul_where_vxl.h: vul_where_vxl.h.in
+	$(IUE_PERL) -p -e 's+\$$\{allvxl_SOURCE_DIR\}+'$(IUEROOT)+ $^ > $@
+
