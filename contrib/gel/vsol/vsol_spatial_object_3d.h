@@ -43,7 +43,6 @@ class vsol_spatial_object_3d;
 #include <vcl_vector.h>
 #include <vsol/vsol_group_3d_sptr.h>
 
-class vtol_topology_object_3d;
 class vtol_topology_object;
 
 class vsol_spatial_object_3d;
@@ -172,10 +171,8 @@ public:
 
   // virtual SpatialGroup *  CastToSpatialGroup()   { return NULL;}
   // virtual SpatialGroup const* CastToSpatialGroup() const { return NULL;}
-  virtual vtol_topology_object_3d* cast_to_topology_object_3d() { return NULL;}
 
   // for the moment topology object inherits off of spatial_object_3d
-
   virtual vtol_topology_object* cast_to_topology_object() { return NULL;}
 
   //virtual GeometryObject* CastToGeometryObject() { return NULL;}
