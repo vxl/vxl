@@ -1,9 +1,8 @@
 #ifdef __GNUG__
 #pragma implementation
 #endif
-
 //:
-//  \file
+// \file
 
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
@@ -80,7 +79,7 @@ HMatrix3D::~HMatrix3D()
 {
 }
 
-// @{ OPERATIONS @}
+// == OPERATIONS ==
 
 //-----------------------------------------------------------------------------
 //
@@ -129,7 +128,7 @@ vcl_istream& operator>>(vcl_istream& s, HMatrix3D& H)
   return s;
 }
 
-// @{ DATA ACCESS @}
+// == DATA ACCESS ==
 
 //-----------------------------------------------------------------------------
 //: Get matrix element at (row_index, col_index)

@@ -1,9 +1,8 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
-
 //:
-//  \file
+// \file
 
 #include "ImageMetric.h"
 
@@ -122,7 +121,7 @@ HomgLineSeg2D ImageMetric::image_to_homg_line(const HomgLineSeg2D& l) const
   return HomgLineSeg2D(i1, i2);
 }
 
-// @{ MEASUREMENTS @}
+// == MEASUREMENTS ==
 
 //: Compute perpendicular distance in image coordinates between point p and line l, expressed in conditioned coordinates.
 double ImageMetric::perp_dist_squared(const HomgPoint2D & p, const HomgLine2D & l) const
@@ -188,7 +187,7 @@ bool ImageMetric::can_invert_distance() const
   return false;
 }
 
-// @{ MATRIX REPRESENTATION @}
+// == MATRIX REPRESENTATION ==
 
 //: Return true if the action of the conditioner can be represented as a planar homography.
 bool ImageMetric::is_linear() const

@@ -268,7 +268,7 @@ void vgui::add_event(vgui_event const& e) {
 
 //-----------------------------------------------------------------------
 
-// @{ Convenience methods @}
+// == Convenience methods ==
 
 //: Display this tableau and run till dead.
 int vgui::run(vgui_tableau_sptr const& tableau, int width, int height,

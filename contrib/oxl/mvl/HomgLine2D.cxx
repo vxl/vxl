@@ -1,9 +1,8 @@
 #ifdef __GNUG__
 #pragma implementation
 #endif
-
 //:
-//  \file
+// \file
 
 #include <vcl_iostream.h>
 
@@ -29,7 +28,7 @@ bool HomgLine2D::check_infinity() const
 
 //--------------------------------------------------------------
 //: Return true iff the line is the line at infinity.
-// This version checks @{$min(|x|,|y|) < \mbox{tol} \times |z|$@}
+// This version checks $min(|x|,|y|) < \mbox{tol} \times |z|$
 
 bool HomgLine2D::check_infinity(double tol) const
 {

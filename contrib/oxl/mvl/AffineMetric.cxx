@@ -1,9 +1,8 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
-
 //:
-//  \file
+// \file
 
 #include "AffineMetric.h"
 
@@ -59,7 +58,7 @@ void AffineMetric::set(double a11, double a13,
   A_inverse_ = vnl_svd<double>(A_).inverse();
 }
 
-// @{ Implementation of ImageMetric @}
+// == Implementation of ImageMetric ==
 
 //: Transform p
 HomgPoint2D AffineMetric::homg_to_imagehomg(const HomgPoint2D& p) const

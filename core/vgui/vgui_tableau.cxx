@@ -247,7 +247,7 @@ bool vgui_tableau::notify_replaced_child(vgui_tableau_sptr const& /*old_child*/,
 }
 
 //--------------------------------------------------------------------------------
-// @{ MENUS @}
+// == MENUS ==
 
 //:
 // This method is for tableaux to implement if they want to _add_ some items to

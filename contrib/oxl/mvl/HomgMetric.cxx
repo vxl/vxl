@@ -1,9 +1,8 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
-
 //:
-//  \file
+// \file
 
 #include "HomgMetric.h"
 
@@ -148,7 +147,7 @@ bool HomgMetric::is_within_distance(const HomgPoint2D& p1, const HomgPoint2D& p2
   else return HomgOperator2D::is_within_distance(p1, p2, distance);
 }
 
-// @{ SPEEDUPS AVAILABLE FOR CERTAIN SYSTEMS. @}
+// == SPEEDUPS AVAILABLE FOR CERTAIN SYSTEMS. ==
 
 //: Return true if the conditioner's action can be described by a planar homography.
 bool HomgMetric::is_linear() const
@@ -173,7 +172,7 @@ const vnl_matrix<double>& HomgMetric::get_C_inverse() const
   else return I;
 }
 
-// @{ CONVERTING DISTANCES @}
+// == CONVERTING DISTANCES ==
 
 //: Return true if the metric is rotationally symmetric, i.e. can invert distances.
 bool HomgMetric::can_invert_distance() const

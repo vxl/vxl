@@ -1,7 +1,6 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
-
 //:
 //  \file
 
@@ -105,7 +104,8 @@ void vrml_out::display_pointset ()
 // -----------------------------------------------------------------------------
 
 #if 0
-struct VRML_IO_VertexRememberer {
+struct VRML_IO_VertexRememberer
+{
   vrml_out* vrml_;
   typedef vcl_map<void*, int, vcl_less<void*> > Map;
   Map vertex_ids;
@@ -201,7 +201,7 @@ void vrml_out::write_faces_textured(
         vcl_list<Face*>& triangles,
         char const* texfile,
         vrml_out_vertex_to_texture const& v2t
-        )
+       )
 {
   VRML_IO_VertexRememberer vertexer(this, triangles.length() * 3/2);
 
@@ -274,7 +274,7 @@ struct Hack_VertexToTexture : public vrml_out_vertex_to_texture
   Hack_VertexToTexture(
         int xsize,
         int ysize
-        ) :vrml_out_vertex_to_texture(xsize, ysize)
+       ) :vrml_out_vertex_to_texture(xsize, ysize)
     {}
 
   void get_texture_coords(
@@ -297,7 +297,7 @@ void vrml_out::write_faces_textured(
         char const* imagefilename,
         int xsize,
         int ysize
-        )
+       )
 {
   vcl_cerr << "vrml_out::write_faces_textured() -- hacking image-world transform\n";
   Hack_VertexToTexture hack(xsize, ysize);
@@ -306,7 +306,7 @@ void vrml_out::write_faces_textured(
 
 class VTT : public vrml_out_vertex_to_texture
 {
-public:
+ public:
   VTT(int xsize, int ysize, CoolMatrix<double> const& m)
         : vrml_out_vertex_to_texture(xsize, ysize), Pmatrix(m) {}
 
@@ -331,7 +331,7 @@ void vrml_out::write_faces_textured(
         int xsize,
         int ysize,
         CoolMatrix<double> const& Pmatrix
-        )
+       )
 {
   VTT vtt(xsize, ysize, Pmatrix);
   write_faces_textured(triangles, imagefilename, vtt);
@@ -393,7 +393,7 @@ void vrml_out::write_topology(vcl_list<TopologyObject*>& topobjs)
 
 #endif // 0
 
-// @{ IMPLEMENTORS @}
+// == IMPLEMENTORS ==
 void vrml_out::begin_separator()
 {
   SETUP;

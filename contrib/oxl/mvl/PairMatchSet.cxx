@@ -1,9 +1,8 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
-
 //:
-//  \file
+// \file
 
 #include "PairMatchSet.h"
 
@@ -31,7 +30,8 @@ PairMatchSet::~PairMatchSet()
 {
 }
 
-// @{ OPERATIONS @}
+// == OPERATIONS ==
+
 PairMatchSet::PairMatchSet(const PairMatchSet& that):
   matches_(that.matches_),
   match_count_(that.match_count_)
@@ -177,11 +177,9 @@ void PairMatchSet::update(const vcl_vector<bool>& inliers)
       clear_match_1(match.get_i1());
 }
 
-// Computations--------------------------------------------------------------
-
 // Data Access---------------------------------------------------------------
 
-// @{ INPUT/OUTPUT @}
+// == INPUT/OUTPUT ==
 
 //: Write matches in ASCII to stream.
 void PairMatchSet::write_ascii(vcl_ostream& s) const
@@ -266,7 +264,7 @@ void PairMatchSet::print_brief() const
 // -----------------------------------------------------------------------------
 
 
-// @{ ITERATOR [class PairMatchSet::iterator] @}
+// == ITERATOR [class PairMatchSet::iterator] ==
 
 //: Construct an empty iterator.
 PairMatchSet::iterator::iterator(bool full_only):
@@ -327,7 +325,7 @@ int PairMatchSet::iterator::get_i2() const
 //  [Users should not need this]
 bool PairMatchSet::iterator::isfull() const
 {
-  return (i1 != NoMatch && i2 != NoMatch);
+  return i1 != NoMatch && i2 != NoMatch;
 }
 
 //: Return true if the iterator has not yet enumerated all matches.

@@ -403,10 +403,10 @@ void osl_canny_ox::Link_edgelsOX(vcl_vector<unsigned> const &col,
 
       bool se = false;
       if (!e && !s && col[j]+1==col[k])  {  // j and k are diagonal \ neigbours
-        Add_linkOX(j,k,links); se = true; };
+        Add_linkOX(j,k,links); se = true; }
       if (!w && !s && col[j]==col[k]+1)  {  // j and k are diagonal / neigbours
-        Add_linkOX(j,k,links); s = w = true; };
-      if (se) { s = e = true; };
+        Add_linkOX(j,k,links); s = w = true; }
+      if (se) s = e = true;
 
       // Verify if there was a diagonal north-east or north-west link:
       if (i > 0) {
@@ -719,22 +719,18 @@ void osl_canny_ox::FollowerOX(vcl_list<osl_edge*> *edges) {
 // Two strategies can be followed according to follow_strategy_OX_
 // if follow_strategy_OX_ = 1 then neighbours are checked in the following
 //    order (Charlie Rothwell's way)
-// @{
-// \begin{verbatim}
+// \verbatim
 //         8  7  6
 //         1  x  5
 //         2  3  4
-// \end{verbatim}
-// @}
+// \endverbatim
 // but if follow_strategy_OX_ = 2 then neighbours are checked in the following
 //    order (Nic Pillow's way)
-// @{
-// \begin{verbatim}
+// \verbatim
 //         8  6  7
 //         1  x  4
 //         3  2  5
-// \end{verbatim}
-// @}
+// \endverbatim
 //
 void osl_canny_ox::Final_followOX(int x,
                                   int y,

@@ -1,9 +1,8 @@
 #ifdef __GNUG__
 #pragma implementation
 #endif
-
 //:
-//  \file
+// \file
 
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
@@ -18,7 +17,7 @@
 #include <mvl/HomgLineSeg2D.h>
 #include <mvl/HomgOperator2D.h>
 
-// @{ BASICS @}
+// == BASICS ==
 
 //-----------------------------------------------------------------------------
 //: Cross product of two Homg2Ds
@@ -72,7 +71,7 @@ void HomgOperator2D::unitize(Homg2D* a)
   a->set(x*norm, y*norm, z*norm);
 }
 
-// @{ DISTANCE MEASUREMENTS IN IMAGE COORDINATES @}
+// == DISTANCE MEASUREMENTS IN IMAGE COORDINATES ==
 
 //: Get the square of the 2D distance between the two points.
 double HomgOperator2D::distance_squared (const HomgPoint2D& point1,
@@ -94,16 +93,16 @@ double HomgOperator2D::distance_squared (const HomgPoint2D& point1,
   double scale1 = 1.0/z1;
   double scale2 = 1.0/z2;
 
-  return (vnl_math_sqr (x1 * scale1 - x2 * scale2) +
-          vnl_math_sqr (y1 * scale1 - y2 * scale2));
+  return vnl_math_sqr (x1 * scale1 - x2 * scale2) +
+         vnl_math_sqr (y1 * scale1 - y2 * scale2);
 }
 
 //-----------------------------------------------------------------------------
 //
 //: Get the square of the perpendicular distance to a line.
 // This is just the homogeneous form of the familiar
-// @{ $ \frac{a x + b y + c}{\sqrt{a^2+b^2}} $ @}:
-// @{ \[ d = \frac{(l^\top p)}{p_z\sqrt{l_x^2 + l_y^2}} \] @}
+// $\frac{a x + b y + c}{\sqrt{a^2+b^2}}$:
+// \f\[ d = \frac{(l^\top p)}{p_z\sqrt{l_x^2 + l_y^2}} \f\]
 // If either the point or the line are at infinity an error message is
 // printed and Homg::infinity is returned.
 
@@ -227,7 +226,7 @@ double HomgOperator2D::distance_squared (const HomgLineSeg2D& lineseg, const Hom
   return perp_dist_squared(p, lineseg);
 }
 
-// @{ ANGLES @}
+// == ANGLES ==
 
 //-----------------------------------------------------------------------------
 //: Get the anticlockwise angle between a line and the x axis.
@@ -279,7 +278,7 @@ double HomgOperator2D::angle_between_oriented_lines (const HomgLine2D& line1,
   return diff;
 }
 
-// @{ JOINS/INTERSECTIONS @}
+// == JOINS/INTERSECTIONS ==
 
 //-----------------------------------------------------------------------------
 //
@@ -331,7 +330,7 @@ HomgPoint2D HomgOperator2D::intersection (const HomgLine2D& line1, const HomgLin
 
 //-----------------------------------------------------------------------------
 //
-//: @{ Get the perpendicular line to line which passes through point.
+//: Get the perpendicular line to line which passes through point.
 // Params are line $(a,b,c)$ and point $(x,y,1)$.
 // Then the cross product of $(x,y,1)$ and the line's direction $(a,b,0)$,
 // called $(p,q,r)$ satisfies
@@ -339,7 +338,6 @@ HomgPoint2D HomgOperator2D::intersection (const HomgLine2D& line1, const HomgLin
 //   $ap+bq=0$ (perpendicular condition) and
 //
 //   $px+qy+r=0$ (incidence condition).
-// @}
 
 HomgLine2D HomgOperator2D::perp_line_through_point (const HomgLine2D& line,
                                                     const HomgPoint2D& point)
@@ -372,7 +370,7 @@ HomgPoint2D HomgOperator2D::midpoint (const HomgPoint2D& p1, const HomgPoint2D& 
   return p1 * (1/(2*p1[2])) + p2*(1/(2*p2[2]));
 }
 
-// @{ FITTING @}
+// == FITTING ==
 
 // - Kanatani sect 2.2.2.
 static vnl_vector<double> most_orthogonal_vector(const vcl_vector<HomgLine2D>& inpoints)
@@ -403,9 +401,10 @@ static vnl_vector<double> most_orthogonal_vector_svd(const vcl_vector<HomgLine2D
 bool lines_to_point_use_svd = false;
 
 //: Intersect a set of 2D lines to find the least-square point of intersection.
-// @{ This finds the point $\bf x$ that minimizes $\|\tt L \bf x\|$, where $\tt L$ is the matrix whose
-// rows are the lines. The current implementation uses the vnl_scatter_3x3<double> class from
-// Numerics to accumulate and compute the nullspace of $\tt L^\top \tt L$  @}
+// This finds the point $\bf x$ that minimizes $\|\tt L \bf x\|$, where $\tt L$
+// is the matrix whose rows are the lines. The current implementation uses the
+// vnl_scatter_3x3<double> class from vnl to accumulate and compute the
+// nullspace of $\tt L^\top \tt L$.
 HomgPoint2D HomgOperator2D::lines_to_point(const vcl_vector<HomgLine2D>& lines)
 {
   // ho_triveccam_aspect_lines_to_point
@@ -417,7 +416,7 @@ HomgPoint2D HomgOperator2D::lines_to_point(const vcl_vector<HomgLine2D>& lines)
     return most_orthogonal_vector(lines);
 }
 
-// @{ MISCELLANEOUS @}
+// == MISCELLANEOUS ==
 //
 //: Clip line to lineseg.
 // The infinite line is clipped against the viewport with
@@ -490,4 +489,3 @@ Homg2D HomgOperator2D::Conjugate(const Homg2D& a, const Homg2D& b, const Homg2D&
   double ky = y1*w3 - y3*w1, my = y2*w3 - y3*w2, ny = ky*w2-cr*my*w1;
   return Homg2D((x2*kx-cr*x1*mx)*ny, (y2*ky-cr*y1*my)*nx, nx*ny);
 }
-
