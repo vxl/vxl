@@ -471,14 +471,40 @@ void brct_windows_frame::write_vrml_file()
 
     bugl_curve_3d c3d = kalman_->get_curve_3d();
     int size = c3d.get_num_points();
-    vcl_vector<vgl_point_3d<double> > pts(size);
-    for(int i=0; i<size; i++){
-      pts[i].set(c3d.get_point(i)->x(), c3d.get_point(i)->y(), c3d.get_point(i)->z());
-    }
-
+    
     //write to file
-    //brct_algos::write_vrml_file();
-  }
+    out <<  "#VRML V2.0 utf8\n";
+    out <<  "Background { \n";
+    out <<  "  skyColor [ 1 1 1 ]\n";
+    out <<  "  groundColor [ 1 1 1 ]\n";
+    out <<  "}\n";
+    out <<  "PointLight {\n";
+    out <<  "  on FALSE\n";
+    out <<  "  intensity 1 \n";
+    out <<  "ambientIntensity 0 \n";
+    out <<  "color 1 1 1 \n";
+    out <<  "location 0 0 0 \n";
+    out <<  "attenuation 1 0 0 \n";
+    out <<  "radius 100  \n";
+    out <<  "}\n";
+    out <<  "Shape {\n";
+    out <<  " #make the points white\n";
+    out <<  "  appearance Appearance {\n";
+    out <<  "   material Material { emissiveColor 1 0 0 }\n";
+    out <<  " } \n";
+    out <<  " geometry PointSet {\n";
+    out <<  "  coord Coordinate{\n";
+    out <<  "   point[\n";
 
+    for(int i=0; i<size; i++){
+      	out<<"\t\t\t"<<c3d.get_point(i)->x()<<" "<<c3d.get_point(i)->y()<<" "<<c3d.get_point(i)->z()<<",\n";
+    }
+    out <<  "   ]\n";
+    out <<  "  }\n";
+    out <<  "      color Color { color [ 1 1 1 ] }\n";
+    out <<  " }\n";
+    out <<  "}\n";
+  }
   return ;
 }
+

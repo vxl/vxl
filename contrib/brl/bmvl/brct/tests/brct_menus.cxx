@@ -27,6 +27,7 @@ vgui_menu brct_menus::get_menu()
 
   file_menu.add("save status", save_status, (vgui_key)'s', vgui_CTRL);
   file_menu.add("load status", load_status, (vgui_key)'o', vgui_CTRL);
+  file_menu.add("write vrml", write_vrml_file, (vgui_key)'w', vgui_CTRL);
   file_menu.add( "Quit", quit_callback,(vgui_key)'q', vgui_CTRL);
 
   action_menu.add("create line", create_line, (vgui_key)'n', vgui_CTRL);
@@ -96,4 +97,9 @@ void brct_menus::load_status()
 void brct_menus::save_status()
 {
   brct_windows_frame::instance()->save_status();
+}
+
+void brct_menus::write_vrml_file()
+{
+  brct_windows_frame::instance()->write_vrml_file();
 }

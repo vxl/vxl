@@ -17,6 +17,7 @@ class brct_menus
  public:
   static void load_status();
   static void save_status();
+  static void write_vrml_file();
   static void create_line();
   static void show_epipole();
   static void load_image();
