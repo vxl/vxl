@@ -19,6 +19,7 @@ DECLARE( test_resize );
 DECLARE( test_sample );
 DECLARE( test_sym_matrix );
 DECLARE( test_transpose );
+DECLARE( test_fastops );
 DECLARE( test_vector );
 DECLARE( test_vector_fixed_ref );
 DECLARE( test_gamma );
@@ -47,6 +48,7 @@ register_tests()
   REGISTER( test_sample );
   REGISTER( test_sym_matrix );
   REGISTER( test_transpose );
+  REGISTER( test_fastops );
   REGISTER( test_vector );
   REGISTER( test_vector_fixed_ref );
   REGISTER( test_gamma );

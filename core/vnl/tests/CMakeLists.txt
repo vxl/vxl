@@ -25,6 +25,7 @@ ADD_EXECUTABLE( vnl_test_all
   test_sample.cxx
   test_sym_matrix.cxx
   test_transpose.cxx
+  test_fastops.cxx
   test_vector.cxx
   test_gamma.cxx
   test_random.cxx
@@ -63,6 +64,7 @@ ADD_TEST( vnl_test_resize           vnl_test_all test_resize           )
 ADD_TEST( vnl_test_sample           vnl_test_all test_sample           )
 ADD_TEST( vnl_test_sym_matrix       vnl_test_all test_sym_matrix       )
 ADD_TEST( vnl_test_transpose        vnl_test_all test_transpose        )
+ADD_TEST( vnl_test_fastops          vnl_test_all test_fastops          )
 ADD_TEST( vnl_test_vector           vnl_test_all test_vector           )
 ADD_TEST( vnl_test_gamma            vnl_test_all test_gamma            )
 ADD_TEST( vnl_test_arithmetic       vnl_test_all test_arithmetic       )
