@@ -18,7 +18,7 @@ void test_read_props()
   }
 
   
-/*
+/* This one won't work because the { } should be on their own lines
   {
     vcl_istringstream ss("{ a: a }");
     mbl_read_props_type props = mbl_read_props( ss );
@@ -122,37 +122,6 @@ void test_read_props()
     TEST("Trivial case 11b", props[ "b" ] == b_ans && !ss.fail(), true);
   }
 
-/*
-  {
-    vcl_istringstream ss("}");
-    TEST("Trivial case 2", mbl_parse_block(ss,true) == "{}" && !ss.fail(), true);
-  }
-
-  {
-    vcl_istringstream ss(" {}");
-    TEST("Trivial case 3", mbl_parse_block(ss) == "{}" && !ss.fail(), true);
-  }
-
-  {
-    vcl_istringstream ss("{ abc }");
-    TEST("Simple case 1", mbl_parse_block(ss) == "{ abc }" && !ss.fail(), true);
-  }
-
-  {
-    vcl_istringstream ss("{ a\n bc }");
-    TEST("Simple case 2", mbl_parse_block(ss) == "{ a\n bc }" && !ss.fail(), true);
-  }
-
-  {
-    vcl_istringstream ss("{ a\n {b}c }");
-    TEST("Multi-level case 1", mbl_parse_block(ss) == "{ a\n {b}c }" && !ss.fail(), true);
-  }
-
-  {
-    vcl_istringstream ss("{ a\n {b\n  // wibble } \n}c }");
-    TEST("Comment case 1", mbl_parse_block(ss) == "{ a\n {b\n}c }" && !ss.fail(), true);
-  }
-*/
   vcl_cout << "\n\n";
 }
 
