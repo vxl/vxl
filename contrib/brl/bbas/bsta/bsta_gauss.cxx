@@ -1,4 +1,6 @@
-#include <vcl_cmath.h> // for log(), exp() ..
+//:
+// \file
+#include <vcl_cmath.h> // for exp()
 #include <bsta/bsta_gauss.h>
 
 double bsta_gauss::bsta_gaussian(const double x, const double sigma)
@@ -7,7 +9,7 @@ double bsta_gauss::bsta_gaussian(const double x, const double sigma)
   return (double)vcl_exp(- x_on_sigma * x_on_sigma / 2);
 }
 
-//:generate a 1-d Gaussian kernel  fuzz=0.02 is a good value
+//: generate a 1-d Gaussian kernel  fuzz=0.02 is a good value
 void bsta_gauss::bsta_1d_gaussian_kernel(const double sigma,
                                     const double fuzz,
                                     int& radius,
