@@ -112,7 +112,7 @@ void vsl_b_read(vsl_b_istream &is, vil_memory_image_impl & p)
     is.is().read((char*) buf,size);
     vsl_swap_bytes((char *) buf,p.bits_per_component() / CHAR_BIT, nelems);
     p.put_section(buf,0,0,width,height);
-    delete buf;
+    delete[] buf;
     break;
     }
   default:
