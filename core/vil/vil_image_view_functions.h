@@ -13,7 +13,7 @@
 template<class T>
 vil2_image_view<T> vil2_view_as_planes(const vil2_image_view<vil_rgb<T> >& rgb_view);
 
-//: Return an RGB component view of a 3-plane image
+//: Return an RGB component view of a 3-plane image.
 //  Aborts if plane image not in correct format (ie planestep()!=1)
 template<class T>
 vil2_image_view<vil_rgb<T> > vil2_view_as_rgb(const vil2_image_view<T>& plane_view);
@@ -23,12 +23,12 @@ vil2_image_view<vil_rgb<T> > vil2_view_as_rgb(const vil2_image_view<T>& plane_vi
 template<class T>
 vil2_image_view<T> vil2_transpose(const vil2_image_view<T>& view);
 
-//: Create a reflected view in which i -> (ni-1)-i
+//: Create a reflected view in which i -> ni-1-i.
 //  i.e vil2_flip_lr(view)(i,j,p) = view(ni-1-i,j,p)
 template<class T>
 vil2_image_view<T> vil2_flip_lr(const vil2_image_view<T>& view);
 
-//: Create a reflected view in which y -> (nj-1)-j
+//: Create a reflected view in which y -> nj-1-j.
 //  i.e vil2_flip_ud(view)(i,j,p) = view(i,nj-1-j,p)
 template<class T>
 vil2_image_view<T> vil2_flip_ud(const vil2_image_view<T>& view);
@@ -56,15 +56,6 @@ void vil2_value_range(T& min_value, T& max_value,const vil2_image_view<T>& view)
 //: How to print value in vil2_print_all(image_view)
 template<class T>
 void vil2_print_value(vcl_ostream& s, const T& value);
-
-//: Explicit overload for unsigned char
-void vil2_print_value(vcl_ostream& s, const unsigned char& value);
-
-//: Explicit overload of print for rgb
-void vil2_print_value(vcl_ostream& s, const vil_rgb<unsigned char>& value);
-
-//: Explicit overload of print for rgb<float>  (truncates to int)
-void vil2_print_value(vcl_ostream& s, const vil_rgb<float>& value);
 
 //: Compute minimum and maximum values over view
 void vil2_value_range(vil_rgb<unsigned char>& min_value, vil_rgb<unsigned char>& max_value,
