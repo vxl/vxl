@@ -36,14 +36,10 @@ const pdf1d_epanech_kernel_pdf& pdf1d_epanech_kernel_pdf_sampler::epanech_kernel
   return (const pdf1d_epanech_kernel_pdf&) model();
 }
 
-
 // ====================================================================
 
-
-
-
-const static double root5 = 2.23606797749978969641;
-const static double root3 = 1.73205080756887729353;
+static const double root5 = 2.23606797749978969641;
+static const double root3 = 1.73205080756887729353;
 
 //: Transform a unit uniform distribution x into a epanech distribution y
 // $0 <= x <= 1  =>  -sqrt(5) <= y <= sqrt(5)$
@@ -61,8 +57,8 @@ double pdf1d_epanech_kernel_pdf_sampler::epan_transform(double x)
   // d = dsolve('1=abs(Dy) * (3 * sqrt(5) / 20) *(1-0.2*y*y)')
   x -= 0.5;
   const vcl_complex<double> z(10.0 * root5 * x, 5 * sqrt(5-20*x*x));
-  const vcl_complex<double> cuberoot_z(vcl_pow(z, (1.0/3.0)));
-  const vcl_complex<double> recip_cuberoot_z(vcl_pow(z, (-1.0/3.0)));
+  const vcl_complex<double> cuberoot_z = vcl_pow(z,(1.0/3.0));
+  const vcl_complex<double> recip_cuberoot_z = 1.0/cuberoot_z;
   const vcl_complex<double> im(0,1);
 
 // The imaginary terms cancel out in theory, but not necessarily numerically - strip them.
@@ -94,7 +90,7 @@ double pdf1d_epanech_kernel_pdf_sampler::sample()
 //  Samples equal numbers from each kernel.
 void pdf1d_epanech_kernel_pdf_sampler::regular_samples(vnl_vector<double>& x)
 {
-	const pdf1d_epanech_kernel_pdf& kpdf = epanech_kernel_pdf();
+  const pdf1d_epanech_kernel_pdf& kpdf = epanech_kernel_pdf();
   int n = x.size();
   double* x_data = x.data_block();
   int nk = kpdf.centre().size();
@@ -115,14 +111,13 @@ void pdf1d_epanech_kernel_pdf_sampler::regular_samples(vnl_vector<double>& x)
     }
     else
     {
-	  // Spread points about
-	  // Note that this isn't quite right - should be equally spaced in CDF space
-	  int a = j/nk;
-	  double f = double(a)/(n_per_k-1);  // in [0,1]
+      // Spread points about
+      // Note that this isn't quite right - should be equally spaced in CDF space
+      int a = j/nk;
+      double f = double(a)/(n_per_k-1);  // in [0,1]
       x_data[i] = c[j] + lim*(2*f-1)*w[j];
     }
   }
-
 }
 
 //=======================================================================
@@ -132,7 +127,6 @@ void pdf1d_epanech_kernel_pdf_sampler::reseed(unsigned long seed)
 {
   rng_.reseed(seed);
 }
-
 
 //=======================================================================
 
