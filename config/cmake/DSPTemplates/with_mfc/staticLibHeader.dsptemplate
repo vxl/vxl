@@ -78,8 +78,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "LIBRARY_OUTPUT_PATHDebug"
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB"  /D "_AFXDLL" /FD /c
-# ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /GZ /c
+# ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB"  /FD /c
+# ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /D "_AFXDLL" /FD /GZ /c
 # ADD CPP BUILD_INCLUDES EXTRA_DEFINES /D "OUTPUT_LIBNAME_EXPORTS"
 # ADD CPP CMAKE_CXX_FLAGS
 # ADD CPP CMAKE_CXX_FLAGS_DEBUG
