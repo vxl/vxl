@@ -304,8 +304,8 @@ void test_algo_gauss_reduce_byte_2d()
 
   vil2_image_view<vxl_byte> image0(ni,nj),image1,work_im;
 
-  for (int y=0;y<image0.nj();++y)
-    for (int x=0;x<image0.ni();++x)
+  for (unsigned y=0;y<image0.nj();++y)
+    for (unsigned x=0;x<image0.ni();++x)
       image0(x,y) = x+y*10;
 
   vil2_gauss_reduce(image0,image1,work_im);

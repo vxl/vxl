@@ -36,8 +36,8 @@ vcl_string image_base;
 
   vil_memory_image_of<vxl_byte> vil1_mem = vil2_vil1_from_image_view(image0);
 
-  TEST ("vil2_vil1_from_image_view sizes", vil1_mem.width() == image0.ni() &&
-    vil1_mem.height() == image0.nj(), true);
+  TEST ("vil2_vil1_from_image_view sizes", vil1_mem.width() == int(image0.ni()) &&
+    vil1_mem.height() == int(image0.nj()), true);
 
   bool bad_pixels = false;
   for (unsigned int j=0;j<image0.nj();++j)

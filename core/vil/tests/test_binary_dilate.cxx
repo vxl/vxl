@@ -5,9 +5,9 @@
 
 inline void print_binary_image(const vil2_image_view<bool>& im)
 {
-  for (int j=0;j<im.nj();++j)
+  for (unsigned j=0;j<im.nj();++j)
   {
-    for (int i=0;i<im.ni();++i)
+    for (unsigned i=0;i<im.ni();++i)
       if (im(i,j)) vcl_cout<<'X';
       else         vcl_cout<<'.';
     vcl_cout<<vcl_endl;

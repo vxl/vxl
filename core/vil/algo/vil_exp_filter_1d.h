@@ -59,12 +59,12 @@ inline void vil2_exp_filter_i(const vil2_image_view<srcT>& src_im,
   int s_istep = src_im.istep(), s_jstep = src_im.jstep();
   int d_istep = dest_im.istep(),d_jstep = dest_im.jstep();
 
-  for (int p=0;p<src_im.nplanes();++p)
+  for (unsigned p=0;p<src_im.nplanes();++p)
   {
     const srcT*  src_row  = src_im.top_left_ptr()+p*src_im.planestep();
     destT* dest_row = dest_im.top_left_ptr()+p*dest_im.planestep();
     // Filter each row
-    for (int j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
+    for (unsigned j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
       vil2_exp_filter_1d(src_row,s_istep, dest_row,d_istep,   ni, k, ac);
   }
 }
@@ -84,12 +84,12 @@ inline void vil2_exp_filter_j(const vil2_image_view<srcT>& src_im,
   int s_istep = src_im.istep(), s_jstep = src_im.jstep();
   int d_istep = dest_im.istep(),d_jstep = dest_im.jstep();
 
-  for (int p=0;p<src_im.nplanes();++p)
+  for (unsigned p=0;p<src_im.nplanes();++p)
   {
     const srcT*  src_col  = src_im.top_left_ptr()+p*src_im.planestep();
     destT* dest_col = dest_im.top_left_ptr()+p*dest_im.planestep();
     // Filter each col
-    for (int i=0;i<ni;++i,src_col+=s_istep,dest_col+=d_istep)
+    for (unsigned i=0;i<ni;++i,src_col+=s_istep,dest_col+=d_istep)
       vil2_exp_filter_1d(src_col,s_jstep, dest_col,d_jstep,   nj, k, ac);
   }
 }

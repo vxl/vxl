@@ -10,7 +10,7 @@ void test_algo_convolve_2d_byte()
            << " Testing vil2_algo_convolve_2d\n"
            << "*******************************\n";
 
-  int n=10, m=5;
+  unsigned n=10, m=5;
 
   vil2_image_view<vxl_byte> src_im(n,n,1);
 
