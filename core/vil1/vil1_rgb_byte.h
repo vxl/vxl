@@ -13,18 +13,20 @@
 // .SECTION Modifications
 //     000217 AWF Initial version.
 
+#ifndef vil_rgb_byte_dont_warn
+// this message may be a bit too loud...
+#ifdef __GNUC__
+# warning "*******************************************************************"
+# warning "*                                                                 *"
+# warning "* vil_rgb_byte is deprecated. Use vil_rgb<unsigned char> instead. *"
+# warning "*                                                                 *"
+# warning "*******************************************************************"
+#endif
+#endif
+
 #include <vil/vil_byte.h>
+#include <vil/vil_rgb.h>
 
-//: A simple RGB structure
-struct vil_rgb_byte {
-  vil_byte r;
-  vil_byte g;
-  vil_byte b;
-
-  vil_rgb_byte(int ir, int ig, int ib) : r(ir), g(ig), b(ib) {}
-
-  // -- Convert vbl_rgb to gray using standard (.299, .587, .114) weighting.
-  vil_byte grey() const { return int(0.5+r*0.299+0.587*g+0.114*b); }  
-};
+typedef vil_rgb<vil_byte> vil_rgb_byte;
 
 #endif // vil_rgb_byte_h_

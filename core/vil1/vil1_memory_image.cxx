@@ -119,3 +119,9 @@ void vil_memory_image::resize(int planes, int width, int height)
   mi->resize(planes, width, height);
   cache_from_impl;
 }
+
+void vil_memory_image::assert_size(int width, int height) const
+{
+  assert(width_ == width);
+  assert(height_ == height);
+}

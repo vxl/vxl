@@ -28,6 +28,7 @@ public:
   vil_memory_image(int planes, int w, int h, vil_pixel_format);
   vil_memory_image(int w, int h, int components, int bits_per_component, vil_component_format);
   vil_memory_image(int w, int h, vil_pixel_format );
+  // this constructor *should* be 'explicit'
   vil_memory_image(vil_image const &);
   vil_memory_image(vil_memory_image const&);
 
@@ -37,13 +38,13 @@ public:
   void resize(int planes, int width, int height);
   void* get_buffer() { return rows0_[0]; }
 
+  void assert_size(int width, int height) const;
+
 protected:
   // The following informations are cached from the vil_memory_image_impl :
   int width_;
   int height_;
   void ** rows0_;
-
-  //vil_memory_image(): vil_image() { }
 };
 
 #endif // vil_memory_image_h_

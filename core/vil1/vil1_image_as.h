@@ -11,14 +11,14 @@
 
 #include <vil/vil_image.h>
 #include <vil/vil_byte.h>
-#include <vil/vil_rgb_byte.h>
+#include <vil/vil_rgb.h>
 
 // These forms are used from templates
 vil_image vil_image_as(vil_image const &, int* dummy);
 vil_image vil_image_as(vil_image const &, vil_byte* dummy);
 vil_image vil_image_as(vil_image const &, float* dummy);
 vil_image vil_image_as(vil_image const &, double* dummy);
-vil_image vil_image_as(vil_image const &, vil_rgb_byte* dummy);
+vil_image vil_image_as(vil_image const &, vil_rgb<unsigned char>* dummy);
 
 vil_image vil_image_as_int(vil_image const & i);
 vil_image vil_image_as_byte(vil_image const & i);

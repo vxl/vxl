@@ -99,6 +99,7 @@ SOURCES += vil_pyramid.cxx
 MANPAGE_SOURCES += vil_rgb.txx
 MANPAGE_SOURCES += vil_rgba.txx
 SOURCES += vil_rgb_byte.cxx
+SOURCES += vil_colour_space.cxx
 SOURCES += vil_memory_image_window.cxx
 
 ifeq ($(OS),Linux2)

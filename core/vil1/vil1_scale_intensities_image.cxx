@@ -34,9 +34,9 @@ bool vil_scale_intensities_image(vil_image const& base, double scale, double shi
   if (!base.get_section(buf, x0, y0, w, h)) return false; \
   unsigned size = w*h; \
   for (unsigned pos=0; pos < size; ++pos) { \
-    buf[pos].R_ = T(buf[pos].R_ * scale + shift); \
-    buf[pos].G_ = T(buf[pos].G_ * scale + shift); \
-    buf[pos].B_ = T(buf[pos].B_ * scale + shift); \
+    buf[pos].r = T(buf[pos].r * scale + shift); \
+    buf[pos].g = T(buf[pos].g * scale + shift); \
+    buf[pos].b = T(buf[pos].b * scale + shift); \
   } \
   return true; \
 }

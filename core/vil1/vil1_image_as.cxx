@@ -286,9 +286,9 @@ vil_image vil_image_as_double(vil_image const &image) {
 //--------------------------------------------------------------------------------
 
 VCL_DEFINE_SPECIALIZATION // specialize for rgb.
-bool vil_image_as_impl<vil_rgb_byte>::get_section(void *buf, 
-						  int x0, int y0, 
-						  int width, int height) const 
+bool vil_image_as_impl<vil_rgb<unsigned char> >::get_section(void *buf, 
+							     int x0, int y0, 
+							     int width, int height) const 
 {
   // byte greyscale
   if (vil_pixel_type(image) == VIL_BYTE) {
@@ -333,10 +333,10 @@ bool vil_image_as_impl<vil_rgb_byte>::get_section(void *buf,
   
 }
 // instantiate for vil_rgb_byte .
-template class vil_image_as_impl<vil_rgb_byte>;
+template class vil_image_as_impl<vil_rgb<unsigned char> >;
 
 vil_image vil_image_as_rgb_byte(vil_image const &image) {
-  return vil_image(new vil_image_as_impl<vil_rgb_byte>(image));
+  return vil_image(new vil_image_as_impl<vil_rgb<unsigned char> >(image));
 }
 
 //--------------------------------------------------------------------------------

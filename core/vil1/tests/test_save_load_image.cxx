@@ -7,7 +7,7 @@
 
 #include <vpl/vpl_unistd.h> // vpl_unlink()
 
-#include <vil/vil_rgb_byte.h>
+#include <vil/vil_rgb.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vil/vil_memory_image_of.h>
@@ -145,8 +145,7 @@ void vil_test_image_type(char const* type_name, // type for image to read and wr
   // Step 1) Write the image out to disk
 
   // create a file name
-  char* basename = tmpnam(0);
-  vcl_string fname(basename);
+  vcl_string fname(tmpnam(0));
   fname += ".";
   if (type_name) fname += type_name;
 
@@ -154,16 +153,20 @@ void vil_test_image_type(char const* type_name, // type for image to read and wr
 
   
   // Write image to disk
-  if (!vil_save(image, fname.data(), type_name))
+  if (!vil_save(image, fname./*data() does not null-terminate*/c_str(), type_name))
   {
     ++nr_failures;
     cout << "\nvil_save() FAILED ***\n";
     return; // fatal error
   }
+  
+#if LEAVE_IMAGES_BEHIND
+  vpl_chmod(fname.c_str(), 0666); // -rw-rw-rw-
+#endif
 
   // STEP 2) Read the image that was just saved to file
   cout << "load, ";
-  vil_image image2 = vil_load(fname.data());
+  vil_image image2 = vil_load(fname.c_str());
   if (!image2)
   {
     ++nr_failures;
@@ -189,7 +192,7 @@ void vil_test_image_type(char const* type_name, // type for image to read and wr
     ++nr_failures;
 
 #if !LEAVE_IMAGES_BEHIND
-  vpl_unlink(fname.data());
+  vpl_unlink(fname.c_str());
 #endif
   cout << "done\n";
   return;
@@ -234,10 +237,21 @@ vil_image CreateTest16bitImage(int wd, int ht)
 }
 
 
+// create a 32 bit test image
+vil_image CreateTest32bitImage(int wd, int ht)
+{
+  vil_memory_image_of<int> image(wd, ht);
+  for(int x = 0; x < wd; x++)
+    for(int y = 0; y < ht; y++)
+      image(x, y) = x + wd*y;
+  return image;
+}
+
+
 // create a 24 bit color test image
 vil_image CreateTest24bitImage(int wd, int ht)
 {
-  vil_memory_image_of<vil_rgb_byte> image(wd, ht);
+  vil_memory_image_of<vil_rgb<unsigned char> > image(wd, ht);
   for(int x = 0; x < wd; x++)
     for(int y = 0; y < ht; y++) {
       unsigned char data[3] = { x%(1<<8), ((x-wd/2)*(y-ht/2)/16) % (1<<8), ((y/3)%(1<<8)) };
@@ -280,24 +294,31 @@ int main() {
   vil_image image8 = CreateTest8bitImage(sizex, sizey);
   vil_image image16 = CreateTest16bitImage(sizex, sizey);
   vil_image image24 = CreateTest24bitImage(sizex, sizey);
+  vil_image image32 = CreateTest32bitImage(sizex, sizey);
   vil_image image3p = CreateTest3planeImage(sizex, sizey);
   vil_image imagefloat = CreateTestfloatImage(sizex, sizey);
 
   // pnm ( = PGM / PPM )
+#if 1
   vil_test_image_type("pnm", image8);
   vil_test_image_type("pnm", image16);
   vil_test_image_type("pnm", image24);
+#endif
 
   // lily (Leuven)
+#if 1
   //vil_test_image_type("lily", image8);
   //vil_test_image_type("lily", imagefloat);
+#endif
 
   // VIFF image (Khoros)
+#if 1
   //vil_test_image_type("viff", image1);
   vil_test_image_type("viff", image8);
   vil_test_image_type("viff", image16);
   //vil_test_image_type("viff", image3p);
   vil_test_image_type("viff", imagefloat);
+#endif
 
   // TIFF
 #ifdef HAS_TIFF
@@ -319,18 +340,24 @@ int main() {
 #endif
 
   // SGI "iris" rgb
+#if 1
   vil_test_image_type("iris", image8);
 //vil_test_image_type("iris", image16); // not implemented yet
   vil_test_image_type("iris", image24);
+#endif
 
   // bmp
+#if 1
   vil_test_image_type("bmp", image8);
   vil_test_image_type("bmp", image24);
+#endif
 
   // mit
+#if 1
   vil_test_image_type("mit", image8);
   vil_test_image_type("mit", image16);
   vil_test_image_type("mit", image24);
+#endif
 
   cout << "Summary: ";
   if (nr_failures > 1)

@@ -23,7 +23,7 @@ public:
 
 //: Enum which selects type of interpolation for vil_warp*
 enum vil_warp_interpolation_type {
-  vil_warp_interpolation_nearest_neighbour = 1,
+  vil_warp_interpolation_nearest_neighbour,
   vil_warp_interpolation_bilinear,
   vil_warp_interpolation_bicubic
 };

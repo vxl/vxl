@@ -40,7 +40,7 @@ void vil_warp_output_driven(vil_memory_image_of<PixelType> const& in,
       map.inverse_map(double(ox), double(oy), &ixd, &iyd);
 
       switch (interpolation) { 
-      case 1: {
+      case vil_warp_interpolation_nearest_neighbour: {
 	// nearest neigbour
 	int ix = int(ixd + 0.5);
 	int iy = int(iyd + 0.5);
@@ -48,12 +48,12 @@ void vil_warp_output_driven(vil_memory_image_of<PixelType> const& in,
 	  out(ox, oy) = in(ix,iy);
 	break;
       } 
-      case 2: {
+      case vil_warp_interpolation_bilinear: {
 	// bilinear
         vil_interpolate_bilinear(in, ixd, iyd, &out(ox,oy));
 	break;
       } 
-      case 3: {
+      case vil_warp_interpolation_bicubic: {
         vil_interpolate_bicubic(in, ixd, iyd, &out(ox,oy));
 	break;
       }
@@ -62,8 +62,8 @@ void vil_warp_output_driven(vil_memory_image_of<PixelType> const& in,
 }
 
 #define VIL_WARP_INSTANTIATE(PixelType, Mapper)\
-template void vil_warp_output_driven(vil_memory_image_of<PixelType> const&, \
-				     vil_memory_image_of<PixelType>&,\
+template void vil_warp_output_driven(vil_memory_image_of<PixelType > const&, \
+				     vil_memory_image_of<PixelType >&,\
 				     Mapper const&,\
 				     vil_warp_interpolation_type);
 

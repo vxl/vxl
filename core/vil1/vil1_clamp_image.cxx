@@ -43,9 +43,9 @@ bool vil_clamp_image(vil_image const& base, double low, double high, \
   T low_thresh = T(low); \
   T high_thresh = T(high); \
   for (unsigned pos=0; pos < size; ++pos) { \
-    VIL_CLAMP_IMAGE_THRESHOLD(buf[pos].R_, low_thresh, high_thresh); \
-    VIL_CLAMP_IMAGE_THRESHOLD(buf[pos].G_, low_thresh, high_thresh); \
-    VIL_CLAMP_IMAGE_THRESHOLD(buf[pos].B_, low_thresh, high_thresh); \
+    VIL_CLAMP_IMAGE_THRESHOLD(buf[pos].r, low_thresh, high_thresh); \
+    VIL_CLAMP_IMAGE_THRESHOLD(buf[pos].g, low_thresh, high_thresh); \
+    VIL_CLAMP_IMAGE_THRESHOLD(buf[pos].b, low_thresh, high_thresh); \
   } \
   return true; \
 }

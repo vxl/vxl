@@ -33,7 +33,7 @@ class vil_pnm_generic_image : public vil_image_impl {
   int magic_;
   int width_;
   int height_;
-  int maxval_;
+  unsigned long int maxval_;
 
   int start_of_data_;
   int components_;

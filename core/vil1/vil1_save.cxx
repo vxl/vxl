@@ -59,11 +59,14 @@ bool vil_save(vil_image const& i, char const* filename)
     // translate common extensions into known file formats.
     if (false) { }
 #define macro(ext, fmt) else if (!strcmp(dot, "." #ext)) file_format = #fmt
-    macro(ppm, pnm);
-    macro(pgm, pnm);
     macro(pbm, pnm);
+    macro(pgm, pnm);
+    macro(ppm, pnm);
+    macro(pnm, pnm);
     macro(jpg, jpeg);
     macro(tif, tiff);
+    macro(mit, mit);
+    macro(png, png);
 #undef macro
     else {
       //file_format = dot+1; // hope it works.

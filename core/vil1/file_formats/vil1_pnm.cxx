@@ -95,18 +95,16 @@ vil_pnm_generic_image::vil_pnm_generic_image(vil_stream* vs, int planes,
   if (bits_per_component_ > 8) magic_ -= 3;
 
   if (bits_per_component_ <= 8) {
-    maxval_ = (1 << 8) - 1;
+    maxval_ = 0xFF;
     bits_per_component_ = 8;
   } else if (bits_per_component_ <= 16) {
-    maxval_ = (1 << 16) - 1;
+    maxval_ = 0xFFFF;
     bits_per_component_ = 16;
   } else if (bits_per_component_ <= 24) {
-    maxval_ = (1 << 24) - 1;
+    maxval_ = 0xFFFFFF;
     bits_per_component_ = 24;
-//   } else if (bits_per_component_ <= 32) {
-//     maxval_ = 0;
-//     for (unsigned fsm=0; fsm<32; ++fsm) maxval_ = 1 + 2*maxval_;
-//     bits_per_component_ = 32;
+  } else if (bits_per_component_ <= 32) {
+    maxval_ = 0xFFFFFFFF;
   } else { 
     cerr << "vil_pnm_generic_image: cannot make  " << bits_per_component_ << " bit x " << components_ << " image\n";
   }
@@ -198,10 +196,11 @@ bool vil_pnm_generic_image::read_header()
   if (magic_ == 1 || magic_ == 4)
     bits_per_component_ = 1;
   else {
-    assert(maxval_ > 0);
-    if (maxval_ < (1<<8)) bits_per_component_ = 8;
-    else if (maxval_ < (1<<16)) bits_per_component_ = 16;
-    else if (maxval_ < (1<<24)) bits_per_component_ = 24;
+    if (maxval_ == 0) assert(!"indentation is everything");
+    else if (maxval_ <= 0xFF) bits_per_component_ = 8;
+    else if (maxval_ <= 0xFFFF) bits_per_component_ = 16;
+    else if (maxval_ <= 0xFFFFFF) bits_per_component_ = 24;
+    else if (maxval_ <= 0xFFFFFFFF) bits_per_component_ = 32;
     else assert(!"vil_pnm_generic_image: too big");
   }
   
@@ -213,7 +212,7 @@ bool vil_pnm_generic_image::write_header()
   vs_->seek(0);
 
   char buf[1024];
-  sprintf(buf, "P%d\n# VIL pnm image\n%u %u\n%u\n",
+  sprintf(buf, "P%d\n# VIL pnm image\n%u %u\n%lu\n",
           magic_, width_, height_, maxval_);
   vs_->write(buf, strlen(buf));
   start_of_data_ = vs_->tell();

@@ -367,9 +367,9 @@ template class pnmscaleT<unsigned char, long>;
 //                     char>, vil_rgb<long>>::go()" 
 static inline
 vil_rgb<long> operator*(long const &a, vil_rgb<unsigned char> const &b) {
-  return vil_rgb<long>(a*long(b.R_),
-		       a*long(b.G_),
-		       a*long(b.B_));
+  return vil_rgb<long>(a*long(b.r),
+		       a*long(b.g),
+		       a*long(b.b));
 }
 #endif
 template class pnmscaleT<vil_rgb<unsigned char>, vil_rgb<long> >;
