@@ -102,6 +102,9 @@ LIB32=link.exe -lib
 SOURCE=.\file_formats/vil2_pnm.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\file_formats/vil2_ras.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vil2_image_resource.cxx
 # End Source File
 # Begin Source File
@@ -333,6 +336,33 @@ SOURCE=.\Templates/vil2_rgba+unsignedchar-.cxx
 SOURCE=.\Templates/vil2_resample_bilin+byte.byte-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vil2_resample_bicub+byte.byte-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_resample_bicub+byte.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_resample_bicub+byte.float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_resample_bicub+float.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_sample_grid_bicub+byte.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_sample_grid_bicub+float.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_sample_grid_bicub+float.float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_sample_profile_bicub+byte.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_sample_profile_bicub+float.double-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vil2_open.cxx
 # End Source File
 # Begin Source File
@@ -364,6 +394,9 @@ SOURCE=.\vil2_image_resource_plugin.cxx
 # PROP Default_Filter ""
 # Begin Source File
 SOURCE=.\file_formats/vil2_pnm.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil2_ras.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil2_image_resource.h
@@ -487,6 +520,27 @@ SOURCE=.\vil2_resample_bilin.txx
 # End Source File
 # Begin Source File
 SOURCE=.\vil2_resample_bilin.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_bicub_interp.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_resample_bicub.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_resample_bicub.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_sample_grid_bicub.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_sample_grid_bicub.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_sample_profile_bicub.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_sample_profile_bicub.txx
 # End Source File
 # Begin Source File
 SOURCE=.\vil2_vil1.h

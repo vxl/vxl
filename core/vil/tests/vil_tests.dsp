@@ -102,6 +102,18 @@ SOURCE=.\test_algo_grid_merge.cxx
 # Begin Source File
 SOURCE=.\test_algo_find_4con_boundary.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_bicub_interp.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_resample_bicub.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_sample_grid_bicub.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_sample_profile_bicub.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
