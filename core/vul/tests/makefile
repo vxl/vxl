@@ -5,7 +5,7 @@ TESTS += vul_test_all.cxx
 TESTS += vul_test_arg.cxx
 TESTS += vul_test_sprintf.cxx
 TESTS += vul_test_root_dir.cxx
-TESTS += vul_test_tmpnam.cxx
+TESTS += vul_test_temp_filename.cxx
 
 IULIBS := -lvul -lvpl
 

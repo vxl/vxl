@@ -18,7 +18,7 @@ TESTS += test_interpolate.cxx
 TESTS += test_flipud.cxx
 TESTS += test_colour_space.cxx
 
-IULIBS = -lvil -lvpl
+IULIBS = -lvil -lvpl -lvul
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk
