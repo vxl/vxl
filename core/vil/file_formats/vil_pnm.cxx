@@ -45,7 +45,7 @@ vil_image_resource_sptr vil_pnm_file_format::make_input_image(vil_stream* vs)
   if (vs->read(buf, 3L) != 3L)
     return 0;
   bool ok = ((buf[0] == 'P') &&
-             iseol(buf[2]) &&
+             isws(buf[2]) &&
              (buf[1] >= '1' && buf[2] <= '6'));
   if (!ok)
     return 0;
@@ -214,7 +214,7 @@ bool vil_pnm_image::read_header()
   char buf[3];
   if (3L > vs_->read(buf, 3L)) return false; // at end-of-file?
   if (buf[0] != 'P') return false;
-  if (!iseol(buf[2])) return false;
+  if (!isws(buf[2])) return false;
   magic_ = buf[1] - '0';
   if (magic_ < 1 || magic_ > 6) return false;
 

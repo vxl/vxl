@@ -439,6 +439,8 @@ test_file_format_read_main( int argc, char* argv[] )
   testlib_test_perform(CheckFile(CompareGrey<vxl_byte>(), "ff_grey8bit_true.txt", "ff_grey8bit_ascii.pgm" ) );
   testlib_test_begin( "  8-bit pgm raw" );
   testlib_test_perform(CheckFile(CompareGrey<vxl_byte>(), "ff_grey8bit_true.txt", "ff_grey8bit_raw.pgm" ) );
+  testlib_test_begin( "  8-bit pgm raw 2" );
+  testlib_test_perform(CheckFile(CompareGrey<vxl_byte>(), "ff_grey8bit_true.txt", "ff_grey8bit_raw2.pgm" ) );
   testlib_test_begin( " 16-bit pgm ascii" );
   testlib_test_perform(CheckFile(CompareGrey<vxl_uint_16>(), "ff_grey16bit_true.txt", "ff_grey16bit_ascii.pgm" ) );
   testlib_test_begin( " 16-bit pgm raw" );
