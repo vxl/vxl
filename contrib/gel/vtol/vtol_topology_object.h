@@ -56,14 +56,16 @@ typedef vcl_vector<vtol_chain_sptr>           chain_list;
 //         vertex  zero_chain  edge  one_chain  face  two_chain  block
 //             |                |               |
 //        vertex_2d           edge_2d          face_2d
+// \endverbatim
 //
 // (Actually, one_chain and two_chain share a common parent class vtol_chain,
 //  but that's just a matter of convenience; conceptually, the scheme is this.)
 //
-//Incidence of:
+// \verbatim
+// Incidence of:
 //       (vsol_point)      (vsol_curve)     (vsol_surface)    (vsol_volume)
-//Directed
-//Sequence of:        vertex           edge             face
+// Directed
+// Sequence of:       vertex           edge             face
 //
 // \endverbatim
 //
@@ -88,11 +90,12 @@ typedef vcl_vector<vtol_chain_sptr>           chain_list;
 // disappear), while an object can live without its superiors (and is just
 // notified of their appearance and disappearance by the entries listed in
 // its superiors_ list).
+//
 // As a consequence, the "inferior" does not obtain a new time stamp when its
 // superiors change (hence its "superiors_" list is mutable).
 // This also explains why the "superiors_" list consists of ordinary pointers,
-// not smart pointers:  the refcount toggeling is done from superior to
-// inferior (which requires its inferiors to be kept alife), not from inferior
+// not smart pointers:  the refcount toggling is done from superior to
+// inferior (which requires its inferiors to be kept alive), not from inferior
 // to superior (which need not bother about its superiors' existence).
 //
 // \author
