@@ -5,9 +5,9 @@
 // \brief Various specialised versions of simple linear algebra operators.
 // Modifications
 // \verbatim
-// TFC		Revised version 3-Oct-97
-// TFC		Added TC_MatXVec2
-// NPC    Added NC_VecXMat 
+// TFC    Revised version 3-Oct-97
+// TFC    Added TC_MatXVec2
+// NPC    Added NC_VecXMat
 // IMS    started conversion to VXL 18 April 2001
 // \endverbatim
 
@@ -15,489 +15,484 @@
 #include <vnl/vnl_matrix.h>
 #include <mbl/mbl_matxvec.h>
 #include <vcl_cassert.h>
+#include <vcl_cstdlib.h> // for vcl_abort()
 
-/*
-// For testing
+# if 0 // For testing
 static bool HasNaN(const char* s, const vnl_matrix<double>& M)
 {
-	for (int i=1;i<=M.nrows();++i)
-	 for (int j=1;j<=M.ncols();++j)
-	{
-		if (isnan(M(i,j)))
-		{
-			vcl_cout<<s<<" has NaN at element "<<i<<","<<j;
-			vcl_cout<<" in a "<<M.nrows()<<" x "<<M.ncols()<<" matrix."<<vcl_endl;
-			return true;
-        }
+  for (int i=1;i<=M.nrows();++i)
+  for (int j=1;j<=M.ncols();++j)
+  {
+    if (isnan(M(i,j)))
+    {
+      vcl_cout<<s<<" has NaN at element "<<i<<","<<j;
+      vcl_cout<<" in a "<<M.nrows()<<" x "<<M.ncols()<<" matrix."<<vcl_endl;
+      return true;
     }
- 	return false;
+  }
+  return false;
 }
-*/
+#endif
 
-/*
-	//: Compute R = V*M
-	//  R is resized to the number of rows of V * cols of M
+#if 0 // long part commented out
+  //: Compute R = V*M
+  //  R is resized to the number of rows of V * cols of M
 void NC_VecXMat(const vnl_vector<double>& V,const vnl_matrix<double>& M,
-				vnl_matrix<double>& R)
-
+                vnl_matrix<double>& R)
 {
+  int nrows = V.size();
+  int ncols = M.ncols();
+  if (M.nrows()>1)
+  {
+    vcl_cerr << "NC_VecXMat : M is a "<<M.nrows()<<"-row matrix."<<vcl_endl;
+    vcl_cerr << "it may only be 1-row." <<vcl_endl;
+    vcl_abort();
+  }
 
-	int nrows = V.size();
-	int ncols = M.ncols();
-	if (M.nrows()>1)
-	{
-		vcl_cerr << "NC_VecXMat : M is a "<<M.nrows()<<"-row matrix."<<vcl_endl;
-		vcl_cerr << "it may only be 1-row." <<vcl_endl;
-		abort();
-	}
-	
-	R.resize(nrows,ncols);
+  R.resize(nrows,ncols);
 
 #if 0
   const double* v_data = V.dataPtr();
-	const double** M_data = M.dataPtr();
-	double** R_data = R.dataPtr();
+  const double** M_data = M.dataPtr();
+  double** R_data = R.dataPtr();
 
-	for (int i=1;i<=nrows;i++)
-	{
-		const double *m_data = M_data[i];	
-		double *r_data = R_data[i];
-		double vval = v_data[i];
-		for (int j=1;j<=ncols;j++)
-		{
-			r_data[j] = vval * m_data[j];
-		}
-	}
-#endif 
+  for (int i=1;i<=nrows;i++)
+  {
+    const double *m_data = M_data[i];
+    double *r_data = R_data[i];
+    double vval = v_data[i];
+    for (int j=1;j<=ncols;j++)
+    {
+      r_data[j] = vval * m_data[j];
+    }
+  }
+#endif
 
-	for (int i=1;i<=nrows;i++)
-		for (int j=1;j<=ncols;j++)
-			R(i,j) = V(i) * M(1,j);
-
-
+  for (int i=1;i<=nrows;i++)
+    for (int j=1;j<=ncols;j++)
+      R(i,j) = V(i) * M(1,j);
 }
 
-
-
-	//: Compute R = M*V
-	//  Only use first V.size() columns of M
-	//  R is resized to the number of rows of M
+  //: Compute R = M*V
+  //  Only use first V.size() columns of M
+  //  R is resized to the number of rows of M
 void TC_MatXVec(const vnl_matrix<double>& M,
-	    		const vnl_vector<double>& V,
-	     		vnl_vector<double>& R)
+                const vnl_vector<double>& V,
+                vnl_vector<double>& R)
 {
-	int nr = M.nrows();		
+  int nr = M.nrows();
 
-	if (R.size()!=nr) R.resize(nr);
-	
-	TC_MatXVec2(M,V,R);
+  if (R.size()!=nr) R.resize(nr);
+
+  TC_MatXVec2(M,V,R);
 }
 
-	//: Compute R = M*V
-	//  Only use first V.size() columns of M
-	//  Only use first R.size() rows of M
-	//  R is not resized - its size determines how many rows to use
+  //: Compute R = M*V
+  //  Only use first V.size() columns of M
+  //  Only use first R.size() rows of M
+  //  R is not resized - its size determines how many rows to use
 void TC_MatXVec2(const vnl_matrix<double>& M,
-	    		const vnl_vector<double>& V,
-	     		vnl_vector<double>& R)
+                 const vnl_vector<double>& V,
+                 vnl_vector<double>& R)
 {
-	if (R.size()==0) return;
-	
-	int nc = M.ncols();
-	int nr = M.nrows();		
+  if (R.size()==0) return;
 
-	int nR = R.size();
-	if (nR>nr)
-	{
-		vcl_cerr<<"TC_MatXVec() R too long."<<vcl_endl;
-		abort();
-	}
+  int nc = M.ncols();
+  int nr = M.nrows();
 
-	double *Rdata = R.dataPtr();
+  int nR = R.size();
+  if (nR>nr)
+  {
+    vcl_cerr<<"TC_MatXVec() R too long."<<vcl_endl;
+    vcl_abort();
+  }
 
-	int t = V.size();
-	if (t>nc)
-	{
-		vcl_cerr<<"TC_MatXVec() V too long. V has "<<t<<" elements. M has "<<nc<<" columns."<<vcl_endl;
-		abort();
-	}
+  double *Rdata = R.dataPtr();
 
-	if (t==0) 
-	{
-		int r = nR+1;
-		while (--r) Rdata[r]=0.0;	// Zero R	
-		return;
-	}
+  int t = V.size();
+  if (t>nc)
+  {
+    vcl_cerr<<"TC_MatXVec() V too long. V has "<<t
+            <<" elements. M has "<<nc<<" columns."<<vcl_endl;
+    vcl_abort();
+  }
 
-	if ((nr<1) || (nc<1))
-	{
-		vcl_cerr<<"TC_MatXVec - vnl_matrix<double> is 0 x 0"<<vcl_endl;
-		vcl_cerr<<"V has dimension "<<V.size()<<vcl_endl;
-		abort();
-	}
+  if (t==0)
+  {
+    int r = nR+1;
+    while (--r) Rdata[r]=0.0; // Zero R
+    return;
+  }
 
-	const double ** Mdata = M.dataPtr();
-	const double *Mdata2;
-	const double *Vdata = V.dataPtr();
+  if ((nr<1) || (nc<1))
+  {
+    vcl_cerr<<"TC_MatXVec - vnl_matrix<double> is 0 x 0"<<vcl_endl;
+    vcl_cerr<<"V has dimension "<<V.size()<<vcl_endl;
+    vcl_abort();
+  }
 
-	int r = nR+1;
-	while (--r)	// Runs from nr .. 1
-	{
-		double T=0.0;
-		Mdata2 = Mdata[r];
-		int c=t+1;
-		while (--c)	// Runs from t .. 1
-			T+=Mdata2[c] * Vdata[c];
+  const double ** Mdata = M.dataPtr();
+  const double *Mdata2;
+  const double *Vdata = V.dataPtr();
 
-		Rdata[r] = T;
-	}
+  int r = nR+1;
+  while (--r) // Runs from nr .. 1
+  {
+    double T=0.0;
+    Mdata2 = Mdata[r];
+    int c=t+1;
+    while (--c) // Runs from t .. 1
+      T+=Mdata2[c] * Vdata[c];
+
+    Rdata[r] = T;
+  }
 }
 
 
 void TC_MatXVec(const vnl_matrix<double>& M,
-	    		const vnl_vector<double>& V,
-	     		vnl_vector<double>& R,
-				const vcl_vector<int>& index)
+                const vnl_vector<double>& V,
+                vnl_vector<double>& R,
+                const vcl_vector<int>& index)
 // R = MV but only use sub-set of all rows of M
 {
-	int nc = M.ncols();
-	int nr = M.nrows();
-	if (index.lo()!=1)
-	{
-		vcl_cerr<<"TC_MatXVec(M,V,R,index) : index array must begin at 1"<<vcl_endl;
-		abort();
-	}
-	int n = index.size();
+  int nc = M.ncols();
+  int nr = M.nrows();
+  if (index.lo()!=1)
+  {
+    vcl_cerr<<"TC_MatXVec(M,V,R,index) : index array must begin at 1"<<vcl_endl;
+    vcl_abort();
+  }
+  int n = index.size();
 
 
-	if (R.size()!=n) R.resize(n);
-	double *Rdata = R.dataPtr();
+  if (R.size()!=n) R.resize(n);
+  double *Rdata = R.dataPtr();
 
-	int t = V.size();
-	if (t>nc)
-	{
-		vcl_cerr<<"TC_MatXVec() R too long."<<vcl_endl;
-		abort();
-	}
+  int t = V.size();
+  if (t>nc)
+  {
+    vcl_cerr<<"TC_MatXVec() R too long."<<vcl_endl;
+    vcl_abort();
+  }
 
-	if (t==0) 
-	{
-		int r = n+1;
-		while (--r) Rdata[r]=0.0;	// Zero R	
-		return;
-	}
+  if (t==0)
+  {
+    int r = n+1;
+    while (--r) Rdata[r]=0.0; // Zero R
+    return;
+  }
 
-	if ((nr<1) || (nc<1))
-	{
-		vcl_cerr<<"TC_MatXVec - vnl_matrix<double> is 0 x 0"<<vcl_endl;
-		vcl_cerr<<"V has dimension "<<V.size()<<vcl_endl;
-		abort();
-	}
+  if ((nr<1) || (nc<1))
+  {
+    vcl_cerr<<"TC_MatXVec - vnl_matrix<double> is 0 x 0"<<vcl_endl;
+    vcl_cerr<<"V has dimension "<<V.size()<<vcl_endl;
+    vcl_abort();
+  }
 
-	const double ** Mdata = M.dataPtr();
-	const double *Mdata2;
-	const double *Vdata = V.dataPtr();
-	const int * i_data = index.dataPtr();
+  const double ** Mdata = M.dataPtr();
+  const double *Mdata2;
+  const double *Vdata = V.dataPtr();
+  const int * i_data = index.dataPtr();
 
-	int i = n+1;
-	while (--i)	// Runs from i .. 1
-	{
-		int r = i_data[i];
-		double T=0.0;
-		Mdata2 = Mdata[r];
-		int c=t+1;
-		while (--c)	// Runs from t .. 1
-			T+=Mdata2[c] * Vdata[c];
+  int i = n+1;
+  while (--i) // Runs from i .. 1
+  {
+    int r = i_data[i];
+    double T=0.0;
+    Mdata2 = Mdata[r];
+    int c=t+1;
+    while (--c) // Runs from t .. 1
+      T+=Mdata2[c] * Vdata[c];
 
-		Rdata[i] = T;
-	}
+    Rdata[i] = T;
+  }
 }
 
 
 void TC_VecXMat(const vnl_vector<double>& V,
-	     const vnl_matrix<double>& M,
-	     vnl_vector<double>& R)
+       const vnl_matrix<double>& M,
+       vnl_vector<double>& R)
 // R = (V'M)' = M'V
 {
-	double * Rdata = R.dataPtr();
-	int t = 1 + R.size();
-	while (--t)	Rdata[t] = 0.0;
+  double * Rdata = R.dataPtr();
+  int t = 1 + R.size();
+  while (--t) Rdata[t] = 0.0;
 
-	TC_AddVecXMat(V,M,R);
+  TC_AddVecXMat(V,M,R);
 }
 
 void TC_AddVecXMat(const vnl_vector<double>& V,
-	     const vnl_matrix<double>& M,
-	     vnl_vector<double>& R)
+       const vnl_matrix<double>& M,
+       vnl_vector<double>& R)
 // R += M'V
 {
-	int nc = M.ncols();
-	int nr = M.nrows();
+  int nc = M.ncols();
+  int nr = M.nrows();
 
 #ifndef NDEBUG
-	if (nr!=V.size())
-	{
-		vcl_cerr<<"TC_AddVecXMat - V wrong length"<<vcl_endl;
-		vcl_cerr<<"Expected "<<nr<<" got "<<V.size()<<vcl_endl;
-		abort();
-	}
+  if (nr!=V.size())
+  {
+    vcl_cerr<<"TC_AddVecXMat - V wrong length"<<vcl_endl;
+    vcl_cerr<<"Expected "<<nr<<" got "<<V.size()<<vcl_endl;
+    vcl_abort();
+  }
 #endif //!NDEBUG
 
-	int t = R.size();
-	assert (t<=nc); // R too long
-	if (t==0) return;
+  int t = R.size();
+  assert (t<=nc); // R too long
+  if (t==0) return;
 
 #ifndef NDEBUG
-	if ((nr<1) || (nc<1))
-	{
-		vcl_cerr<<"TC_AddVecXMat - vnl_matrix<double> is 0 x 0"<<vcl_endl;
-		vcl_cerr<<"V has dimension "<<V.size()<<vcl_endl;
-		abort();
-	}
+  if ((nr<1) || (nc<1))
+  {
+    vcl_cerr<<"TC_AddVecXMat - vnl_matrix<double> is 0 x 0"<<vcl_endl;
+    vcl_cerr<<"V has dimension "<<V.size()<<vcl_endl;
+    vcl_abort();
+  }
 #endif //!NDEBUG
 
-   const double ** Mdata = M.dataPtr();
-   const double * Vdata = V.dataPtr();
-   double * Rdata = R.dataPtr();
+  const double ** Mdata = M.dataPtr();
+  const double * Vdata = V.dataPtr();
+  double * Rdata = R.dataPtr();
 
-	int r = nr+1;
-	while (--r)	// Runs from nr..1
-	{
-		double v = Vdata[r];
-		const double *Mdata2 = Mdata[r];
-		int c=t+1;
-		while (--c)	// Runs from t..1
-			Rdata[c]+=Mdata2[c] * v;
-	}
+  int r = nr+1;
+  while (--r) // Runs from nr..1
+  {
+    double v = Vdata[r];
+    const double *Mdata2 = Mdata[r];
+    int c=t+1;
+    while (--c) // Runs from t..1
+      Rdata[c]+=Mdata2[c] * v;
+  }
 }
 
-void TC_ProductABt(vnl_matrix<double>& ABt, 
-					const vnl_matrix<double>& A,
-					const vnl_matrix<double>& B)
+void TC_ProductABt(vnl_matrix<double>& ABt,
+                   const vnl_matrix<double>& A,
+                   const vnl_matrix<double>& B)
 // Returns A * B.transpose()
 {
-   int nr1 = A.nrows();
-   int nc1 = A.ncols();
-   int nr2 = B.nrows();
-   int nc2 = B.ncols();
+  int nr1 = A.nrows();
+  int nc1 = A.ncols();
+  int nr2 = B.nrows();
+  int nc2 = B.ncols();
 
 #ifndef NDEBUG
-   if( nc2 != nc1 )
-   {
-      vcl_cerr<<"TC_ProductABt : B.ncols != A.ncols"<<vcl_endl;
-      abort() ;
-   }
+  if( nc2 != nc1 )
+  {
+    vcl_cerr<<"TC_ProductABt : B.ncols != A.ncols"<<vcl_endl;
+    vcl_abort() ;
+  }
 #endif //!NDEBUG
 
-   if ( (ABt.nrows()!=nr1) || (ABt.ncols()!= nr2) )
-		ABt.resize( nr1, nr2 ) ;
+  if ( (ABt.nrows()!=nr1) || (ABt.ncols()!= nr2) )
+  ABt.resize( nr1, nr2 ) ;
 
-	const double ** A_data = A.dataPtr();
-	const double ** B_data = B.dataPtr();
-	double ** R_data = ABt.dataPtr();
+  const double ** A_data = A.dataPtr();
+  const double ** B_data = B.dataPtr();
+  double ** R_data = ABt.dataPtr();
 
-	int r = nr1 + 1;
-	while (--r)
-	{
-		const double* A_row = A_data[r];
-		double* R_row = R_data[r];
-		int c = nr2 + 1;
-		while (--c)
-		{
-			const double* B_row = B_data[c];
-			double sum = 0.0 ;
-			int i = nc1 + 1;
-			while (--i) { sum += A_row[i] * B_row[i]; }
-	    		
-	 		R_row[c] = sum ;
-      	}
-	}
+  int r = nr1 + 1;
+  while (--r)
+  {
+    const double* A_row = A_data[r];
+    double* R_row = R_data[r];
+    int c = nr2 + 1;
+    while (--c)
+    {
+      const double* B_row = B_data[c];
+      double sum = 0.0 ;
+      int i = nc1 + 1;
+      while (--i) { sum += A_row[i] * B_row[i]; }
+
+      R_row[c] = sum ;
+    }
+  }
 }
 
-void TC_ProductAtB(vnl_matrix<double>& AtB, 
-					const vnl_matrix<double>& A,
-					const vnl_matrix<double>& B)
+void TC_ProductAtB(vnl_matrix<double>& AtB,
+                   const vnl_matrix<double>& A,
+                   const vnl_matrix<double>& B)
 // Returns A.transpose() * B
 {
-   int nr1 = A.nrows();
-   int nc1 = A.ncols();
-   int nr2 = B.nrows();
-   int nc2 = B.ncols();
+  int nr1 = A.nrows();
+  int nc1 = A.ncols();
+  int nr2 = B.nrows();
+  int nc2 = B.ncols();
 
-   if( nr2 != nr1 )
-   {
-      vcl_cerr<<"TC_ProductAtB : B.nrows != A.nrows"<<vcl_endl;
-      abort() ;
-   }
+  if( nr2 != nr1 )
+  {
+    vcl_cerr<<"TC_ProductAtB : B.nrows != A.nrows"<<vcl_endl;
+    vcl_abort() ;
+  }
 
-   if ( (AtB.nrows()!=nc1) || (AtB.ncols()!= nc2) )
-		AtB.resize( nc1, nc2 ) ;
+  if ( (AtB.nrows()!=nc1) || (AtB.ncols()!= nc2) )
+  AtB.resize( nc1, nc2 ) ;
 
-	const double ** A_data = A.dataPtr();
-	const double ** B_data = B.dataPtr();
-	double ** R_data = AtB.dataPtr();
+  const double ** A_data = A.dataPtr();
+  const double ** B_data = B.dataPtr();
+  double ** R_data = AtB.dataPtr();
 
-	// Zero the elements of R
-	for (int r=1;r<=nc1;r++)
-	{
-		double *R_row = R_data[r];
-		int c=nc2;
-		while (c) { R_row[c] = 0.0; --c; }
-	}
+  // Zero the elements of R
+  for (int r=1;r<=nc1;r++)
+  {
+    double *R_row = R_data[r];
+    int c=nc2;
+    while (c) { R_row[c] = 0.0; --c; }
+  }
 
-	for (int r1 = 1; r1<=nr1; r1++)
-	{
-		const double* A_row = A_data[r1];
-		const double* B_row = B_data[r1];
-		double a;
-		int c1 =  nc1;
-		while (c1)
-		{
-			double *R_row = R_data[c1];
-			a = A_row[c1];
-			int c2 = nc2;
-			while (c2)
-			{
-				R_row[c2] +=a*B_row[c2];
-				c2--;
-			}
-			c1--;
-		}
-	}
+  for (int r1 = 1; r1<=nr1; r1++)
+  {
+    const double* A_row = A_data[r1];
+    const double* B_row = B_data[r1];
+    double a;
+    int c1 =  nc1;
+    while (c1)
+    {
+      double *R_row = R_data[c1];
+      a = A_row[c1];
+      int c2 = nc2;
+      while (c2)
+      {
+        R_row[c2] +=a*B_row[c2];
+        c2--;
+      }
+      c1--;
+    }
+  }
 }
 
 
 void TC_Product(vnl_matrix<double>& AB, const vnl_matrix<double>& A,
-				const vnl_matrix<double>& B)
+        const vnl_matrix<double>& B)
 // Returns AB = A * B.
 {
-   int nr1 = A.nrows();
-   int nc1 = A.ncols();
-   int nr2 = B.nrows();
-   int nc2 = B.ncols();
+  int nr1 = A.nrows();
+  int nc1 = A.ncols();
+  int nr2 = B.nrows();
+  int nc2 = B.ncols();
 
-   if( nr2 != nc1 )
-   {
-      vcl_cerr<<"Product : B.nrows != A.ncols"<<vcl_endl;
-      abort() ;
-   }
+  if( nr2 != nc1 )
+  {
+    vcl_cerr<<"Product : B.nrows != A.ncols"<<vcl_endl;
+    vcl_abort() ;
+  }
 
-   if ( (AB.nrows()!=nr1) || (AB.ncols()!= nc2) )
-		AB.resize( nr1, nc2 ) ;
+  if ( (AB.nrows()!=nr1) || (AB.ncols()!= nc2) )
+  AB.resize( nr1, nc2 ) ;
 
-	const double ** AData = A.dataPtr();
-	const double ** BData = B.dataPtr();
-	double ** RData = AB.dataPtr();
+  const double ** AData = A.dataPtr();
+  const double ** BData = B.dataPtr();
+  double ** RData = AB.dataPtr();
 
-	// Zero the elements of R
-	for (int r=1;r<=nr1;r++)
-	{
-		double *R_row = RData[r];
-		int c=nc2;
-		while (c) { R_row[c] = 0.0; --c; }
-	}
+  // Zero the elements of R
+  for (int r=1;r<=nr1;r++)
+  {
+    double *R_row = RData[r];
+    int c=nc2;
+    while (c) { R_row[c] = 0.0; --c; }
+  }
 
-	for(int r=1; r <= nr1; ++r)
-	{
-		const double* A_row = AData[r];
-		double* R_row = RData[r];
-		for(int c=1; c <= nc1 ; ++c )
-		{
-			double a = A_row[c];
-			if (a==0.0) continue;
+  for(int r=1; r <= nr1; ++r)
+  {
+    const double* A_row = AData[r];
+    double* R_row = RData[r];
+    for(int c=1; c <= nc1 ; ++c )
+    {
+      double a = A_row[c];
+      if (a==0.0) continue;
 
-			const double* B_row = BData[c];
-			int i = nc2;
-			while (i)
-			{
-				R_row[i] += a * B_row[i];
-				--i;
-			}
-		}
-	}
+      const double* B_row = BData[c];
+      int i = nc2;
+      while (i)
+      {
+        R_row[i] += a * B_row[i];
+        --i;
+      }
+    }
+  }
 }
-*/
+#endif // long part commented out
 
 void mbl_matxvec_prod_adb(vnl_matrix<double>& ADB,
-				                  const vnl_matrix<double>& A,
-				                  const vnl_vector<double>& d,
-			                  	const vnl_matrix<double>& B)
+                          const vnl_matrix<double>& A,
+                          const vnl_vector<double>& d,
+                          const vnl_matrix<double>& B)
 // Returns ADB = A * D * B
 // where D is diagonal with elements d
 {
-   int nr1 = A.nrows();
-   int nc1 = A.ncols();
-   int nr2 = B.nrows();
-   int nc2 = B.ncols();
+  int nr1 = A.nrows();
+  int nc1 = A.ncols();
+  int nr2 = B.nrows();
+  int nc2 = B.ncols();
 
-   assert ( nr2 == nc1 ); //Product : B.nrows != A.ncols
+  assert ( nr2 == nc1 ); //Product : B.nrows != A.ncols
+  assert ( nr2 == d.size() ); // Product : d.nelems != A.ncols
 
-   assert ( nr2 == d.size() ); // Product : d.nelems != A.ncols
+  if ( (ADB.nrows()!=nr1) || (ADB.ncols()!= nc2) )
+  ADB.resize( nr1, nc2 ) ;
 
-   if ( (ADB.nrows()!=nr1) || (ADB.ncols()!= nc2) )
-		ADB.resize( nr1, nc2 ) ;
+  const double ** AData = A.dataPtr();
+  const double ** BData = B.dataPtr();
+  const double *  d_data = d.dataPtr();
+  double ** RData = ADB.dataPtr();
 
-	const double ** AData = A.dataPtr();
-	const double ** BData = B.dataPtr();
-	const double *  d_data = d.dataPtr();
-	double ** RData = ADB.dataPtr();
+  // Zero the elements of R
+  for (int r=1;r<=nr1;r++)
+  {
+    double *R_row = RData[r];
+    int c=nc2;
+    while (c) { R_row[c] = 0.0; --c; }
+  }
 
-	// Zero the elements of R
-	for (int r=1;r<=nr1;r++)
-	{
-		double *R_row = RData[r];
-		int c=nc2;
-		while (c) { R_row[c] = 0.0; --c; }
-	}
+  for(int r=1; r <= nr1; ++r)
+  {
+    const double* A_row = AData[r];
+    double* R_row = RData[r];
+    for(int c=1; c <= nc1 ; ++c )
+    {
+      double ad = A_row[c] * d_data[c];
+      if (ad==0.0) continue;
 
-	for(int r=1; r <= nr1; ++r)
-	{
-		const double* A_row = AData[r];
-		double* R_row = RData[r];
-		for(int c=1; c <= nc1 ; ++c )
-		{
-			double ad = A_row[c] * d_data[c];
-			if (ad==0.0) continue;
-
-			const double* B_row = BData[c];
-			int i = nc2;
-			while (i)
-			{
-				R_row[i] += ad * B_row[i];
-				--i;
-			}
-		}
-	}
+      const double* B_row = BData[c];
+      int i = nc2;
+      while (i)
+      {
+        R_row[i] += ad * B_row[i];
+        --i;
+      }
+    }
+  }
 }
 
+#if 0 // two functions commented out
 //=======================================================================
-/*
+
 //: Computes MD where D is diagonal with elememts d(i)
 void TC_ProductMD(vnl_matrix<double>& MD, const vnl_matrix<double>& M, const vnl_vector<double>& d)
 {
-	int nr = M.nrows();
-	int nc = M.ncols();
-	if (d.size()!=nc)
-	{
-		vcl_cerr<<"TC_ProductMD() d doesnt match M"<<vcl_endl;
-		vcl_cerr<<"d is "<<d.size()<<" element vector."<<vcl_endl;
-		vcl_cerr<<"M is "<<nr<<" x "<<nc<<vcl_endl;
-		abort();
-	}
+  int nr = M.nrows();
+  int nc = M.ncols();
+  if (d.size()!=nc)
+  {
+    vcl_cerr<<"TC_ProductMD() d doesnt match M"<<vcl_endl;
+    vcl_cerr<<"d is "<<d.size()<<" element vector."<<vcl_endl;
+    vcl_cerr<<"M is "<<nr<<" x "<<nc<<vcl_endl;
+    vcl_abort();
+  }
 
-	if ((MD.nrows()!=nr) || (MD.ncols()!=nc)) MD.resize(nr,nc);
+  if ((MD.nrows()!=nr) || (MD.ncols()!=nc)) MD.resize(nr,nc);
 
-	double **MD_data = MD.dataPtr();
-	const double **M_data = M.dataPtr();
-	const double *d_data = d.dataPtr();
+  double **MD_data = MD.dataPtr();
+  const double **M_data = M.dataPtr();
+  const double *d_data = d.dataPtr();
 
-	for (int r=1;r<=nr;++r)
-	{
-		const double* M_row = M_data[r];
-		double *MR_row = MD_data[r];
-		int c=nc;
-		while (c) { MR_row[c] = M_row[c]*d_data[c]; --c; }
-	}
+  for (int r=1;r<=nr;++r)
+  {
+    const double* M_row = M_data[r];
+    double *MR_row = MD_data[r];
+    int c=nc;
+    while (c) { MR_row[c] = M_row[c]*d_data[c]; --c; }
+  }
 }
 
 //=======================================================================
@@ -505,29 +500,29 @@ void TC_ProductMD(vnl_matrix<double>& MD, const vnl_matrix<double>& M, const vnl
 //: Computes DM where D is diagonal with elememts d(i)
 void TC_ProductDM(vnl_matrix<double>& DM, const vnl_matrix<double>& M, const vnl_vector<double>& d)
 {
-	int nr = M.nrows();
-	int nc = M.ncols();
-	if (d.size()!=nr)
-	{
-		vcl_cerr<<"TC_ProductDM() d doesnt match M"<<vcl_endl;
-		vcl_cerr<<"d is "<<d.size()<<" element vector."<<vcl_endl;
-		vcl_cerr<<"M is "<<nr<<" x "<<nc<<vcl_endl;
-		abort();
-	}
+  int nr = M.nrows();
+  int nc = M.ncols();
+  if (d.size()!=nr)
+  {
+    vcl_cerr<<"TC_ProductDM() d doesnt match M"<<vcl_endl;
+    vcl_cerr<<"d is "<<d.size()<<" element vector."<<vcl_endl;
+    vcl_cerr<<"M is "<<nr<<" x "<<nc<<vcl_endl;
+    vcl_abort();
+  }
 
-	if ((DM.nrows()!=nr) || (DM.ncols()!=nc)) DM.resize(nr,nc);
+  if ((DM.nrows()!=nr) || (DM.ncols()!=nc)) DM.resize(nr,nc);
 
-	double **DM_data = DM.dataPtr();
-	const double **M_data = M.dataPtr();
-	const double *d_data = d.dataPtr();
+  double **DM_data = DM.dataPtr();
+  const double **M_data = M.dataPtr();
+  const double *d_data = d.dataPtr();
 
-	for (int r=1;r<=nr;++r)
-	{
-		const double* M_row = M_data[r];
-		double *DM_row = DM_data[r];
-		double di = d_data[r];
-		int c=nc;
-		while (c) { DM_row[c] = di * M_row[c]; --c; }
-	}
+  for (int r=1;r<=nr;++r)
+  {
+    const double* M_row = M_data[r];
+    double *DM_row = DM_data[r];
+    double di = d_data[r];
+    int c=nc;
+    while (c) { DM_row[c] = di * M_row[c]; --c; }
+  }
 }
-*/
+#endif // two functions commented out
