@@ -133,7 +133,7 @@ vil2_algo_exp_filter_1d(tmp_image2,tmp_image1.tranpose(),k,double());  // Apply 
 vil2_image_view<vxl_byte> filtered_image = vil2_transpose(tmp_image2);
 // Note that vil2_filter_rows(vil2_transpose(filtered_image),vil2_transpose(tmp_image1))
 // would only work correctly if filtered_image was already the correct size.
-// If it isn't, then the view created by vil2_flip_transpose(filtered_image) would be resized,
+// If it isn't, then the view created by vil2_transpose(filtered_image) would be resized,
 // and disconnected from filtered_image itself, which would remain unchanged.
 \endverbatim
 *
