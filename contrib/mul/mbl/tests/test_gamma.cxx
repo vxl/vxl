@@ -11,13 +11,13 @@ void test_gamma()
   vcl_cout << " Testing mbl_gamma " << vcl_endl;
   vcl_cout << "*****************************" << vcl_endl;
 
-  TEST("mbl_gamma_p(2,0)==0", vcl_fabs(mbl_gamma_p(2,0))<1e-8, true);
-  TEST("mbl_gamma_p(2,inf)==1", vcl_fabs(mbl_gamma_p(2,1e9)-1)<1e-8, true);
-  TEST("mbl_gamma_q(2,0)==1", vcl_fabs(mbl_gamma_q(2,0)-1)<1e-8, true);
-  TEST("mbl_gamma_q(2,inf)==0", vcl_fabs(mbl_gamma_q(2,1e9))<1e-8, true);
-  TEST("mbl_erf(0)==0", vcl_fabs(mbl_erf(0))<1e-8, true);
-  TEST("mbl_erf(inf)==1", vcl_fabs(mbl_erf(1e9)-1)<1e-8, true);
-  TEST("mbl_erf(-inf)==-1", vcl_fabs(mbl_erf(-1e9)+1)<1e-8, true);
+  TEST_NEAR("mbl_gamma_p(2,0)",      mbl_gamma_p(2,0),            0,  1e-8);
+  TEST_NEAR("mbl_gamma_p(2,inf)",    mbl_gamma_p(2,1e9),        1.0,  1e-8);
+  TEST_NEAR("mbl_gamma_q(2,0)",      mbl_gamma_q(2,0),          1.0,  1e-8);
+  TEST_NEAR("mbl_gamma_q(2,inf)",    mbl_gamma_q(2,1e9),          0,  1e-8);
+  TEST_NEAR("mbl_erf(0)",            mbl_erf(0),                  0,  1e-8);
+  TEST_NEAR("mbl_erf(inf)",          mbl_erf(1e9),              1.0,  1e-8);
+  TEST_NEAR("mbl_erf(-inf)",         mbl_erf(-1e9),            -1.0,  1e-8);
 }
 
 TESTLIB_DEFINE_MAIN(test_gamma);
