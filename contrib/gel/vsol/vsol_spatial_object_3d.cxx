@@ -8,7 +8,7 @@
 const float vsol_spatial_object_3d::eps = 1.0e-3f;
 int vsol_spatial_object_3d::tagcount_ = 0;
 
-char * vsol_spatial_object_3d::SpatialTypes[] =
+const char * vsol_spatial_object_3d::SpatialTypes[] =
 {
   "NO_TYPE             ",
   "TOPOLOGYOBJECT      ",
@@ -32,10 +32,10 @@ const char * vsol_spatial_object_3d::get_name() const
 void vsol_spatial_object_3d::protected_destroy()
 {
   if (this->get_references() <= 0)
-    {
-      vcl_cout << "goodbye cruel world\n";
-      delete this;
-    }
+  {
+    vcl_cout << "goodbye cruel world\n";
+    delete this;
+  }
 }
 
 vsol_spatial_object_3d::~vsol_spatial_object_3d()

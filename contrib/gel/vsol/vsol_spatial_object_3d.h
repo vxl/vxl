@@ -99,7 +99,7 @@ class vsol_spatial_object_3d : public vul_timestamp, public vbl_ref_count
     SPATIALGROUP,
     NUM_SPATIALOBJECT_TYPES
   };
-  static char *SpatialTypes[];
+  static const char *SpatialTypes[];
   static const float eps;
 
  protected:
