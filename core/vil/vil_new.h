@@ -11,7 +11,7 @@
 // If it's very big, it might make a disk image, with a temporary name in which
 // case "prototype" will be consulted about issues such as file format etc.  If
 // you want more control over the exact disk format, use one of the routines
-// with more than 3 arguments.
+// with more than 4 arguments.
 //
 // \author awf@robots.ox.ac.uk
 // \date 26 Feb 00
