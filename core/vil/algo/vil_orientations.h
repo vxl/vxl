@@ -31,7 +31,7 @@ void vil_orientations(const vil_image_view<float>& grad_i,
 
 //: Compute orientation and gradient magnitude using sobel to get gradients
 template <class T>
-void vil_orientations_from_sobel(const vil_image_view<T>& src_image,
+inline void vil_orientations_from_sobel(const vil_image_view<T>& src_image,
                       vil_image_view<float>& orient_im,
                       vil_image_view<float>& grad_mag)
 {
@@ -48,7 +48,7 @@ void vil_orientations_from_sobel(const vil_image_view<T>& src_image,
 //
 //  Images assumed to be single plane
 template <class T>
-void vil_orientations_from_sobel(const vil_image_view<T>& src_image,
+inline void vil_orientations_from_sobel(const vil_image_view<T>& src_image,
                       vil_image_view<vxl_byte>& orient_im,
                       vil_image_view<float>& grad_mag,
                       unsigned n_orientations=256)
