@@ -9,7 +9,7 @@
 // \author fsm@robots.ox.ac.uk
 
 #include <vcl_iosfwd.h>
-class vil_stream;
+class vil2_stream;
 
 struct vil2_bmp_file_header
 {
@@ -20,8 +20,8 @@ struct vil2_bmp_file_header
   unsigned bitmap_offset; // 4
 
   vil2_bmp_file_header();
-  void read(vil_stream *);
-  void write(vil_stream *) const;
+  void read(vil2_stream *);
+  void write(vil2_stream *) const;
   void print(vcl_ostream &) const;
   bool signature_valid() const;
 };

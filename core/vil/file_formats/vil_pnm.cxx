@@ -16,14 +16,14 @@
 
 #include <vxl_config.h> // for VXL_BIG_ENDIAN and vxl_byte
 
-#include <vil/vil_stream.h>
+#include <vil2/vil2_stream.h>
 #include <vil2/vil2_property.h>
 #include <vil2/vil2_image_resource.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_memory_chunk.h>
 
 #if 0 // see comment below
-# include <vil/vil_rgb.h>
+# include <vil2/vil2_rgb.h>
 #endif
 
 char const* vil2_pnm_format_tag = "pnm";
@@ -38,7 +38,7 @@ static inline bool isws(int c)
   return c == ' ' || c == '\t' || c == 10 || c == 13;
 }
 
-vil2_image_resource_sptr vil2_pnm_file_format::make_input_image(vil_stream* vs)
+vil2_image_resource_sptr vil2_pnm_file_format::make_input_image(vil2_stream* vs)
 {
   // Attempt to read header
   unsigned char buf[3];
@@ -52,7 +52,7 @@ vil2_image_resource_sptr vil2_pnm_file_format::make_input_image(vil_stream* vs)
   return new vil2_pnm_image(vs);
 }
 
-vil2_image_resource_sptr vil2_pnm_file_format::make_output_image(vil_stream* vs,
+vil2_image_resource_sptr vil2_pnm_file_format::make_output_image(vil2_stream* vs,
                                                                  unsigned ni,
                                                                  unsigned nj,
                                                                  unsigned nplanes,
@@ -68,7 +68,7 @@ char const* vil2_pnm_file_format::tag() const
 
 /////////////////////////////////////////////////////////////////////////////
 
-vil2_pnm_image::vil2_pnm_image(vil_stream* vs):
+vil2_pnm_image::vil2_pnm_image(vil2_stream* vs):
   vs_(vs)
 {
   vs_->ref();
@@ -85,7 +85,7 @@ char const* vil2_pnm_image::file_format() const
   return vil2_pnm_format_tag;
 }
 
-vil2_pnm_image::vil2_pnm_image(vil_stream* vs, unsigned ni, unsigned nj,
+vil2_pnm_image::vil2_pnm_image(vil2_stream* vs, unsigned ni, unsigned nj,
                                unsigned nplanes, vil2_pixel_format format):
   vs_(vs)
 {
@@ -139,7 +139,7 @@ vil2_pnm_image::~vil2_pnm_image()
 }
 
 // Skip over spaces and comments; temp is the current vs character
-static void SkipSpaces(vil_stream* vs, char& temp)
+static void SkipSpaces(vil2_stream* vs, char& temp)
 {
   while (isws(temp) || temp == '#')
   {
@@ -152,7 +152,7 @@ static void SkipSpaces(vil_stream* vs, char& temp)
 }
 
 // Get a nonnegative integer from the vs stream; temp is the current vs byte
-static int ReadInteger(vil_stream* vs, char& temp)
+static int ReadInteger(vil2_stream* vs, char& temp)
 {
   int n = 0;
   while ((temp >= '0') && (temp <= '9'))
@@ -290,7 +290,7 @@ bool vil2_pnm_image::write_header()
   return true;
 }
 
-static bool operator>>(vil_stream& vs, int& a)
+static bool operator>>(vil2_stream& vs, int& a)
 {
   char c; vs.read(&c,1L);
   SkipSpaces(&vs,c);
@@ -362,14 +362,14 @@ vil2_image_view_base_sptr vil2_pnm_image::get_copy_view(
         return new vil2_image_view<vxl_uint_16>(buf, jb, ni, nj, nplanes(), nplanes(), ni*nplanes(), 1);
       else
         return new vil2_image_view<vxl_uint_32>(buf, kb, ni, nj, nplanes(), nplanes(), ni*nplanes(), 1);
-#if 0 // never return vil2_image_view<vil_rgb<T> > : default image representation is planar
+#if 0 // never return vil2_image_view<vil2_rgb<T> > : default image representation is planar
     } else if (ncomponents_ == 3) {
       if (bits_per_component_ <= 8)
-        return new vil2_image_view<vil_rgb<vxl_byte> >(buf, (vil_rgb<vxl_byte>*)ib, ni, nj, 1, 1, ni, 1);
+        return new vil2_image_view<vil2_rgb<vxl_byte> >(buf, (vil2_rgb<vxl_byte>*)ib, ni, nj, 1, 1, ni, 1);
       else if (bits_per_component_ <= 16)
-        return new vil2_image_view<vil_rgb<vxl_uint_16> >(buf, (vil_rgb<vxl_uint_16>*)jb, ni, nj, 1, 1, ni, 1);
+        return new vil2_image_view<vil2_rgb<vxl_uint_16> >(buf, (vil2_rgb<vxl_uint_16>*)jb, ni, nj, 1, 1, ni, 1);
       else
-        return new vil2_image_view<vil_rgb<vxl_uint_32> >(buf, (vil_rgb<vxl_uint_32>*)kb, ni, nj, 1, 1, ni, 1);
+        return new vil2_image_view<vil2_rgb<vxl_uint_32> >(buf, (vil2_rgb<vxl_uint_32>*)kb, ni, nj, 1, 1, ni, 1);
     } else return 0;
 #endif // 0
   } else if (magic_ == 4) // pbm (bitmap) raw image
@@ -378,7 +378,7 @@ vil2_image_view_base_sptr vil2_pnm_image::get_copy_view(
 
     for (unsigned y = 0; y < nj; ++y)
     {
-      vil_streampos byte_start = start_of_data_ + (y0+y) * byte_width + x0/8;
+      vil2_streampos byte_start = start_of_data_ + (y0+y) * byte_width + x0/8;
       vs_->seek(byte_start);
       unsigned char a; vs_->read(&a, 1L);
       for (unsigned x = 0; x < ni; ++x)
@@ -430,21 +430,21 @@ vil2_image_view_base_sptr vil2_pnm_image::get_copy_view(
       else
        return new
          vil2_image_view<vxl_uint_32>(buf,reinterpret_cast<vxl_uint_32*>(buf->data()),ni,nj,nplanes(),nplanes(),ni*nplanes(),1);
-#if 0 // never return vil2_image_view<vil_rgb<T> > : default image representation is planar
+#if 0 // never return vil2_image_view<vil2_rgb<T> > : default image representation is planar
     } else if (ncomponents_ == 3) {
       if (bits_per_component_ <= 8)
-        return new vil2_image_view<vil_rgb<vxl_byte> >(buf, reinterpret_cast<vil_rgb<vxl_byte>*>(buf->data()), ni, nj, 1, 1, ni, 1);
+        return new vil2_image_view<vil2_rgb<vxl_byte> >(buf, reinterpret_cast<vil2_rgb<vxl_byte>*>(buf->data()), ni, nj, 1, 1, ni, 1);
       else if (bits_per_component_ <= 16)
-        return new vil2_image_view<vil_rgb<vxl_uint_16> >(buf, reinterpret_cast<vil_rgb<vxl_uint_16>*>(buf->data()),ni,nj,1,1,ni,1);
+        return new vil2_image_view<vil2_rgb<vxl_uint_16> >(buf, reinterpret_cast<vil2_rgb<vxl_uint_16>*>(buf->data()),ni,nj,1,1,ni,1);
       else
-        return new vil2_image_view<vil_rgb<vxl_uint_32> >(buf, reinterpret_cast<vil_rgb<vxl_uint_32>*>(buf->data()),ni,nj,1,1,ni,1);
+        return new vil2_image_view<vil2_rgb<vxl_uint_32> >(buf, reinterpret_cast<vil2_rgb<vxl_uint_32>*>(buf->data()),ni,nj,1,1,ni,1);
     } else return 0;
 #endif // 0
   }
 }
 
 
-static void operator<<(vil_stream& vs, int a)
+static void operator<<(vil2_stream& vs, int a)
 {
   char buf[128]; vcl_sprintf(buf, " %d\n", a); vs.write(buf,vcl_strlen(buf));
 }
@@ -496,7 +496,7 @@ bool vil2_pnm_image::put_view(const vil2_image_view_base& view,
   {
     unsigned bytes_per_sample = (bits_per_component_+7)/8;
     unsigned bytes_per_pixel = bytes_per_sample;
-    vil_streampos byte_start = start_of_data_ + (y0 * ni_ + x0) * bytes_per_pixel;
+    vil2_streampos byte_start = start_of_data_ + (y0 * ni_ + x0) * bytes_per_pixel;
     unsigned byte_width = ni_ * bytes_per_pixel;
     unsigned byte_out_width = view.ni() * bytes_per_pixel;
 
@@ -542,7 +542,7 @@ bool vil2_pnm_image::put_view(const vil2_image_view_base& view,
   {
     unsigned bytes_per_sample = (bits_per_component_+7)/8;
     unsigned bytes_per_pixel = nplanes() * bytes_per_sample;
-    vil_streampos byte_start = start_of_data_ + (y0 * ni_ + x0) * bytes_per_pixel;
+    vil2_streampos byte_start = start_of_data_ + (y0 * ni_ + x0) * bytes_per_pixel;
     unsigned byte_width = ni_ * bytes_per_pixel;
 
     if ( bytes_per_sample==1 )
@@ -584,7 +584,7 @@ bool vil2_pnm_image::put_view(const vil2_image_view_base& view,
     assert(bb!=0);
     for (unsigned y = 0; y < view.nj(); ++y)
     {
-      vil_streampos byte_start = start_of_data_ + (y0+y) * byte_width + x0/8;
+      vil2_streampos byte_start = start_of_data_ + (y0+y) * byte_width + x0/8;
       int s = x0&7; // = x0%8;
       unsigned char a = 0;
       if (s)

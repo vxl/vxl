@@ -9,7 +9,7 @@
 // \brief Base class for image formats
 // \author awf
 
-#include <vil/vil_fwd.h> // for vil_stream
+#include <vil2/vil2_fwd.h> // for vil2_stream
 #include <vil2/vil2_image_resource.h>
 
 //: Base class for image formats.
@@ -24,18 +24,18 @@ class vil2_file_format
   //E.g. "pnm", "jpeg", etc.
   virtual char const* tag() const = 0;
 
-  //: Attempt to make a generic_image which will read from vil_stream vs.
+  //: Attempt to make a generic_image which will read from vil2_stream vs.
   // Reads enough of vs to determine if it's this format, and if not, returns 0.
   // If it is, returns a subclass of vil2_image_resource on which get_section may
   // be applied.
-  virtual vil2_image_resource_sptr make_input_image(vil_stream* vs) = 0;
+  virtual vil2_image_resource_sptr make_input_image(vil2_stream* vs) = 0;
 
   //: Make a "generic_image" on which put_section may be applied.
   // The stream vs is assumed to be open for writing, as an image header may be
   // written to it immediately.
   // The width/height etc are explicitly specified, so that file_format implementors
   // know what they need to do...
-  virtual vil2_image_resource_sptr make_output_image(vil_stream* vs,
+  virtual vil2_image_resource_sptr make_output_image(vil2_stream* vs,
                                                  unsigned nx,
                                                  unsigned ny,
                                                  unsigned nplanes,

@@ -4,7 +4,6 @@
 #include <vimt/vimt_image_2d_of.h>
 #include <vimt/vimt_gaussian_pyramid_builder_2d_general.h>
 #include <vimt/vimt_image_pyramid.h>
-#include <vil/vil_byte.h>
 #include <vsl/vsl_binary_loader.h>
 #include <testlib/testlib_test.h>
 
@@ -20,7 +19,7 @@ void test_gaussian_pyramid_builder_2d_general_a()
            << "****************************************************************\n";
 
 
-  vimt_image_2d_of<vil_byte> image0;
+  vimt_image_2d_of<vxl_byte> image0;
   image0.image().set_size(ni,nj);
 
 #if 0 // use 2x2 chessboard pattern
@@ -40,7 +39,7 @@ void test_gaussian_pyramid_builder_2d_general_a()
      }
 #endif
 
-  vimt_gaussian_pyramid_builder_2d_general<vil_byte> builder;
+  vimt_gaussian_pyramid_builder_2d_general<vxl_byte> builder;
   int default_n_levels = builder.max_levels();
   builder.set_max_levels(2);
   builder.set_scale_step(1.2);
@@ -54,7 +53,7 @@ void test_gaussian_pyramid_builder_2d_general_a()
 
   TEST("Found correct number of levels", image_pyr.n_levels(), 2);
 
-  const vimt_image_2d_of<vil_byte>& image1 = static_cast<const vimt_image_2d_of<vil_byte>&>(image_pyr(1));
+  const vimt_image_2d_of<vxl_byte>& image1 = static_cast<const vimt_image_2d_of<vxl_byte>&>(image_pyr(1));
   TEST("Level 1 size x",image1.image().ni(),(unsigned)(ni/1.2+0.5));
   TEST("Level 1 size y",image1.image().nj(),(unsigned)(nj/1.2+0.5));
   TEST("Pixel (0,0)",image1.image()(0,0),1);
@@ -89,7 +88,7 @@ void test_gaussian_pyramid_builder_2d_general_a()
 
   vcl_cout<<"\n\n======== TESTING I/O ===========\n";
 
-  vsl_add_to_binary_loader(vimt_gaussian_pyramid_builder_2d_general<vil_byte>());
+  vsl_add_to_binary_loader(vimt_gaussian_pyramid_builder_2d_general<vxl_byte>());
 
   vcl_string test_path = "test_gaussian_pyramid_builder_2d_general.bvl.tmp";
   vsl_b_ofstream bfs_out(test_path);
@@ -98,7 +97,7 @@ void test_gaussian_pyramid_builder_2d_general_a()
   vsl_b_write(bfs_out, static_cast<vimt_image_pyramid_builder*>(&builder));
   bfs_out.close();
 
-  vimt_gaussian_pyramid_builder_2d_general<vil_byte> builder_in;
+  vimt_gaussian_pyramid_builder_2d_general<vxl_byte> builder_in;
   vimt_image_pyramid_builder* ptr_in=0;
 
   vsl_b_ifstream bfs_in(test_path);

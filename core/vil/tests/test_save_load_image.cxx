@@ -13,7 +13,7 @@
 // 10 Aug 2000 - Peter Vanroose - test TIFF and JPEG presence
 // 26 Aug 2000 - .bmp loader works (again) on solaris + linux
 // 28 Aug 2000 - Peter Vanroose - bmp write of colour images fixed
-//  6 Dec 2000 - vil_rgb_byte deprecated
+//  6 Dec 2000 - vil2_rgb<vxl_byte> deprecated
 // 21 Jan 2001 - deprecated vil_buffer<> - use vcl_vector<> instead
 //  1 May 2001 - Peter Vanroose - now using vil_test.h
 // 7 June 2001 - Peter Vanroose - test added for pbm images
@@ -308,12 +308,12 @@ vil2_image_view<vxl_uint_32> CreateTest32bitImage(int wd, int ht)
 #if 0 // read back pixel type will not match: ppm is always read in as 3-plane image
 
 // create a 24 bit color test image
-vil2_image_view<vil_rgb<vxl_byte> > CreateTest24bitImage(int wd, int ht)
+vil2_image_view<vil2_rgb<vxl_byte> > CreateTest24bitImage(int wd, int ht)
 {
-  vil2_image_view<vil_rgb<vxl_byte> > image(wd, ht);
+  vil2_image_view<vil2_rgb<vxl_byte> > image(wd, ht);
   for (int i = 0; i < wd; i++)
     for (int j = 0; j < ht; j++)
-      image(i,j) = vil_rgb<vxl_byte>(i%(1<<8), ((i-wd/2)*(j-ht/2)/16) % (1<<8), ((j/3)%(1<<8)));
+      image(i,j) = vil2_rgb<vxl_byte>(i%(1<<8), ((i-wd/2)*(j-ht/2)/16) % (1<<8), ((j/3)%(1<<8)));
   return image;
 }
 
@@ -353,7 +353,7 @@ MAIN( test_save_load_image )
   vil2_image_view<vxl_byte>            image8 = CreateTest8bitImage(sizex, sizey);
   vil2_image_view<vxl_uint_16>         image16 = CreateTest16bitImage(sizex, sizey);
 #if 0 // read back pixel type will not match: ppm is always read in as 3-plane image
-  vil2_image_view<vil_rgb<vxl_byte> >  image24 = CreateTest24bitImage(sizex, sizey);
+  vil2_image_view<vil2_rgb<vxl_byte> >  image24 = CreateTest24bitImage(sizex, sizey);
 #endif
   vil2_image_view<vxl_uint_32>         image32 = CreateTest32bitImage(sizex, sizey);
   vil2_image_view<vxl_byte>            image3p = CreateTest3planeImage(sizex, sizey);

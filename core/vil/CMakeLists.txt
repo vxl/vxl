@@ -80,6 +80,20 @@ SET( vil2_sources ${vil2_sources}
   vil2_property.h
   vil2_pixel_format.cxx vil2_pixel_format.h
   vil2_pixel_traits.h
+  vil2_rgb.txx vil2_rgb.h
+  vil2_rgba.txx vil2_rgba.h
+  vil2_fwd.h
+
+  # Streams
+  vil2_stream.cxx vil2_stream.h
+  vil2_stream_fstream.cxx vil2_stream_fstream.h
+  vil2_stream_core.cxx vil2_stream_core.h
+  vil2_stream_section.cxx vil2_stream_section.h
+  vil2_stream_url.cxx vil2_stream_url.h
+  vil2_open.cxx vil2_open.h
+  vil2_stream_16bit.cxx vil2_stream_16bit.h
+  vil2_stream_32bit.cxx vil2_stream_32bit.h
+
 
   # Conversion to from vil1 images
   vil2_vil1.cxx vil2_vil1.h

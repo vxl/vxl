@@ -22,19 +22,19 @@
 #include <vcl_cstring.h> // memcpy()
 #include <vxl_config.h> // vxl_byte
 
-#include <vil/vil_stream.h>
+#include <vil2/vil2_stream.h>
 #include <vil2/vil2_property.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_new.h>
 
 //: the file probe, as a C function.
-bool vil2_jpeg_file_probe(vil_stream *vs) {
+bool vil2_jpeg_file_probe(vil2_stream *vs) {
   char magic[2];
   vs->seek(0L);
   int n = vs->read(magic, sizeof(magic));
 
   if (n != sizeof(magic)) {
-    vcl_cerr << __FILE__ << " : vil_stream::read() failed\n";
+    vcl_cerr << __FILE__ << " : vil2_stream::read() failed\n";
     return false;
   }
 
@@ -53,12 +53,12 @@ char const* vil2_jpeg_file_format::tag() const {
 }
 
 //:
-vil2_image_resource_sptr  vil2_jpeg_file_format::make_input_image(vil_stream *vs) {
+vil2_image_resource_sptr  vil2_jpeg_file_format::make_input_image(vil2_stream *vs) {
   return vil2_jpeg_file_probe(vs) ? new vil2_jpeg_image(vs) : 0;
 }
 
 vil2_image_resource_sptr
-  vil2_jpeg_file_format::make_output_image(vil_stream* vs,
+  vil2_jpeg_file_format::make_output_image(vil2_stream* vs,
                                            unsigned nx,
                                            unsigned ny,
                                            unsigned nplanes,
@@ -73,7 +73,7 @@ vil2_image_resource_sptr
 
 // class vil2_jpeg_image
 
-vil2_jpeg_image::vil2_jpeg_image(vil_stream *s)
+vil2_jpeg_image::vil2_jpeg_image(vil2_stream *s)
   : jc(0)
   , jd(new vil2_jpeg_decompressor(s))
   , stream(s)
@@ -86,7 +86,7 @@ bool vil2_jpeg_image::get_property(char const *tag, void *prop) const
   return false;
 }
 
-vil2_jpeg_image::vil2_jpeg_image(vil_stream *s,
+vil2_jpeg_image::vil2_jpeg_image(vil2_stream *s,
                                  unsigned nx,
                                  unsigned ny,
                                  unsigned nplanes,
@@ -123,7 +123,7 @@ vil2_jpeg_image::~vil2_jpeg_image() {
 
 //--------------------------------------------------------------------------------
 
-//: decompressing from the vil_stream to a section buffer.
+//: decompressing from the vil2_stream to a section buffer.
 vil2_image_view_base_sptr vil2_jpeg_image::get_copy_view(unsigned x0,
                                                          unsigned nx,
                                                          unsigned y0,
@@ -152,7 +152,7 @@ vil2_image_view_base_sptr vil2_jpeg_image::get_copy_view(unsigned x0,
 
 //--------------------------------------------------------------------------------
 
-//: compressing a section onto the vil_stream.
+//: compressing a section onto the vil2_stream.
 bool vil2_jpeg_image::put_view(const vil2_image_view_base &view,
                                unsigned x0, unsigned y0)
 {

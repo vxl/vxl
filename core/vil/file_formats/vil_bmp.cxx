@@ -8,7 +8,7 @@
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
-#include <vil/vil_stream.h>
+#include <vil2/vil2_stream.h>
 #include <vil2/vil2_property.h>
 #include <vil2/vil2_memory_chunk.h>
 #include <vil2/vil2_image_view.h>
@@ -17,7 +17,7 @@
 
 //--------------------------------------------------------------------------------
 
-vil2_image_resource_sptr vil2_bmp_file_format::make_input_image(vil_stream* vs)
+vil2_image_resource_sptr vil2_bmp_file_format::make_input_image(vil2_stream* vs)
 {
   // Attempt to read header
   vil2_bmp_file_header hdr;
@@ -30,7 +30,7 @@ vil2_image_resource_sptr vil2_bmp_file_format::make_input_image(vil_stream* vs)
     return 0;
 }
 
-vil2_image_resource_sptr vil2_bmp_file_format::make_output_image(vil_stream* vs,
+vil2_image_resource_sptr vil2_bmp_file_format::make_output_image(vil2_stream* vs,
                                                                  unsigned nx,
                                                                  unsigned ny,
                                                                  unsigned nplanes,
@@ -53,7 +53,7 @@ char const* vil2_bmp_image::file_format() const
   return vil2_bmp_format_tag;
 }
 
-vil2_bmp_image::vil2_bmp_image(vil_stream* is)
+vil2_bmp_image::vil2_bmp_image(vil2_stream* is)
   : is_(is)
   , bit_map_start(-1L)
   //, freds_colormap(0)
@@ -68,7 +68,7 @@ bool vil2_bmp_image::get_property(char const *tag, void *prop) const
   return false;
 }
 
-vil2_bmp_image::vil2_bmp_image(vil_stream* vs, unsigned nx, unsigned ny,
+vil2_bmp_image::vil2_bmp_image(vil2_stream* vs, unsigned nx, unsigned ny,
                                unsigned nplanes, vil2_pixel_format format):
   is_(vs), bit_map_start(-1L)
 {
@@ -178,7 +178,7 @@ bool vil2_bmp_image::read_header()
   else if (info_hdr.colormapsize == 256 && core_hdr.bitsperpixel == 8)
   {
     // In this case I know how to read the colormap because I have hexdumped an example.
-    // But I ignore the color map in the get_section() routine because I don't care.
+    // But I ignore the color map in the get_view( Fix params) routine because I don't care.
     // fsm
     typedef unsigned char uchar;
     freds_colormap = new uchar *[4];

@@ -25,8 +25,8 @@ class vil2_png_file_format : public vil2_file_format
 {
  public:
   virtual char const* tag() const;
-  virtual vil2_image_resource_sptr make_input_image(vil_stream* vs);
-  virtual vil2_image_resource_sptr make_output_image(vil_stream* vs,
+  virtual vil2_image_resource_sptr make_input_image(vil2_stream* vs);
+  virtual vil2_image_resource_sptr make_output_image(vil2_stream* vs,
                                                      unsigned nx,
                                                      unsigned ny,
                                                      unsigned nplanes,
@@ -36,7 +36,7 @@ class vil2_png_file_format : public vil2_file_format
 //: Generic image implementation for PNG files
 class vil2_png_image : public vil2_image_resource
 {
-  vil_stream* vs_;
+  vil2_stream* vs_;
   int width_;
   int height_;
   int components_;
@@ -51,8 +51,8 @@ class vil2_png_image : public vil2_image_resource
   vil2_png_structures* p_;
  public:
 
-  vil2_png_image(vil_stream* is);
-  vil2_png_image(vil_stream* is, unsigned ni,
+  vil2_png_image(vil2_stream* is);
+  vil2_png_image(vil2_stream* is, unsigned ni,
                          unsigned nj, unsigned nplanes,
                          vil2_pixel_format format);
   ~vil2_png_image();

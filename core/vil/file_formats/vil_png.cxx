@@ -12,7 +12,7 @@
 #include <vcl_cstring.h>
 #include <vcl_iostream.h>
 
-#include <vil/vil_stream.h>
+#include <vil2/vil2_stream.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_property.h>
 
@@ -36,7 +36,7 @@ static bool problem(char const* msg)
   return false;
 }
 
-vil2_image_resource_sptr vil2_png_file_format::make_input_image(vil_stream* is)
+vil2_image_resource_sptr vil2_png_file_format::make_input_image(vil2_stream* is)
 {
   // Attempt to read header
   png_byte sig_buf [SIG_CHECK_SIZE];
@@ -51,7 +51,7 @@ vil2_image_resource_sptr vil2_png_file_format::make_input_image(vil_stream* is)
   return new vil2_png_image(is);
 }
 
-vil2_image_resource_sptr vil2_png_file_format::make_output_image(vil_stream* vs,
+vil2_image_resource_sptr vil2_png_file_format::make_output_image(vil2_stream* vs,
                                                                  unsigned nx,
                                                                  unsigned ny,
                                                                  unsigned nplanes,
@@ -74,13 +74,13 @@ char const* vil2_png_file_format::tag() const
 
 static void user_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
 {
-  vil_stream* f = static_cast<vil_stream*>(png_get_io_ptr(png_ptr));
+  vil2_stream* f = static_cast<vil2_stream*>(png_get_io_ptr(png_ptr));
   f->read(data, length);
 }
 
 static void user_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
 {
-  vil_stream* f = static_cast<vil_stream*>(png_get_io_ptr(png_ptr));
+  vil2_stream* f = static_cast<vil2_stream*>(png_get_io_ptr(png_ptr));
   f->write(data, length);
 }
 
@@ -251,7 +251,7 @@ struct vil2_png_structures {
 
 /////////////////////////////////////////////////////////////////////////////
 
-vil2_png_image::vil2_png_image(vil_stream* is):
+vil2_png_image::vil2_png_image(vil2_stream* is):
   vs_(is),
   p_(new vil2_png_structures(true))
 {
@@ -264,7 +264,7 @@ bool vil2_png_image::get_property(char const* /*tag*/, void* /*prop*/) const
   return false;
 }
 
-vil2_png_image::vil2_png_image(vil_stream *s,
+vil2_png_image::vil2_png_image(vil2_stream *s,
                                unsigned nx,
                                unsigned ny,
                                unsigned nplanes,

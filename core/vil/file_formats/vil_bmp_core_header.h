@@ -12,7 +12,7 @@
 //   Nick Costen added Manchester IO 16/3/01
 // \endverbatim
 
-class vil_stream;
+class vil2_stream;
 #include <vcl_iosfwd.h>
 
 struct vil2_bmp_core_header
@@ -25,8 +25,8 @@ struct vil2_bmp_core_header
   short     bitsperpixel; // 2
 
   vil2_bmp_core_header();
-  void read(vil_stream *);
-  void write(vil_stream *) const;
+  void read(vil2_stream *);
+  void write(vil2_stream *) const;
   void print(vcl_ostream &) const;
 };
 

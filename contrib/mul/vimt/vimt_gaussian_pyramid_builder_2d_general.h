@@ -14,7 +14,7 @@
 #include <vil2/algo/vil2_gauss_reduce.h>
 
 
-//: Build pyramids of vil2_image_view<vil_byte> at any scale step
+//: Build pyramids of vimt_image_2d_of<vxl_byte> at any scale step
 
 template <class T>
 class vimt_gaussian_pyramid_builder_2d_general : public vimt_gaussian_pyramid_builder_2d<T>

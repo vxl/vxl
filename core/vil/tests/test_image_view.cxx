@@ -23,7 +23,7 @@ VCL_DEFINE_SPECIALIZATION
 void test_image_view_rgba(vil2_image_view<vxl_byte> &image2, vil2_image_view<float> &image7)
 {
   image2.set_size(10,10,2);
-  vil2_image_view<vil_rgba<vxl_byte> > image6 = image2;
+  vil2_image_view<vil2_rgba<vxl_byte> > image6 = image2;
   TEST("Can't assign a 3 plane images to rgba view", image6, false);
 
   vil2_convert_cast(image7, image6);
@@ -49,7 +49,7 @@ VCL_DEFINE_SPECIALIZATION
 void test_image_view_rgba(vil2_image_view<float> &image2, vil2_image_view<double> &image7)
 {
   image2.set_size(10,10,2);
-  vil2_image_view<vil_rgba<float> > image6 = image2;
+  vil2_image_view<vil2_rgba<float> > image6 = image2;
   TEST("Can't assign a 3 plane images to rgba view", image6, false);
 
   vil2_convert_cast(image7, image6);
@@ -149,9 +149,9 @@ void test_image_view(S d1, vcl_string s_name, T d2)
   vcl_cout<<image0.is_a()<<vcl_endl;
   TEST("is_a() specialisation for S",image0.is_a(),"vil2_image_view<"+s_name+">");
 
-  vil2_image_view<vil_rgb<S> > image5;
+  vil2_image_view<vil2_rgb<S> > image5;
   image5.set_size(5,4);
-  image5.fill(vil_rgb<S>(25,35,45));
+  image5.fill(vil2_rgb<S>(25,35,45));
   image5(2,2).b = 50;
 
   image2 = image5;
@@ -183,8 +183,8 @@ void test_image_view(S d1, vcl_string s_name, T d2)
   TEST("Comparison", image_win < image2, true);
   TEST("Comparison", image_win > image2, false);
   image5.set_size(1,2);
-  image5(0,0) = vil_rgb<S>(25,35,45);
-  image5(0,1) = vil_rgb<S>(25,35,45);
+  image5(0,0) = vil2_rgb<S>(25,35,45);
+  image5(0,1) = vil2_rgb<S>(25,35,45);
   image0 = image5;
 
   vil2_copy_reformat(image0, image_win);

@@ -93,22 +93,22 @@ and you can't immediately access the pixels.
 you know the structure and you can immediately access the pixels. By keeping this
 division clean we can avoid type proliferation. There are limited exceptional cases. One is
 when you absolutely must have a function that works on a view without knowing its pixel type - e.g.
-<code>vil2_image_resource::get_view()</code> which returns a <code>vil_image_view_base_sptr</code>.
+<code>vil2_image_resource::get_view()</code> which returns a <code>vil2_image_view_base_sptr</code>.
 This means that all functions that actually work with pixels should
-take a concrete <code>vil_image_view&lt;T&gt;</code>. Anyone who wants to write super-duper 
+take a concrete <code>vil2_image_view&lt;T&gt;</code>. Anyone who wants to write super-duper 
 size-no-problem image processing code, should write functions that take 
 <code>vil2_image_resource_sptr</code>. However they will do the actual pixel processing with a 
 <code>vil2_image_view&lt;T&gt;</code>. To get the functional style, most operations on a
 <code>vil2_image_resource</code>, should be on a <code>vil2_image_resource_sptr</code>.</p>
 <h2>Design decisions:</h2>
-<h4><code>vil_image_view&lt;T&gt;::set_size(..)</code> should be virtual and in the base class</h4>
+<h4><code>vil2_image_view&lt;T&gt;::set_size(..)</code> should be virtual and in the base class</h4>
 <p>It is 
   in <code>mil_image_2d</code>. Resizing can be slow so virtual function is no problem. It can 
 be useful to set the size of a image without knowing its type. Decision IMS and 
 TFC.</p>
 <h4><code>vil2_memory_chunk</code> should not be templated.</h4>
 <p>You could have a memory chunk containing rgb, and choose to view it as
-a <code>vil2_image_view&lt;vil_rgb&lt;vxl_byte&gt;&gt;</code> with nplanes=1, or 
+a <code>vil2_image_view&lt;vil2_rgb&lt;vxl_byte&gt;&gt;</code> with nplanes=1, or 
 <code>vil2_image_view&lt;char&gt;</code> with nplanes =3; It
 is hard to get the type of the smart pointers correct without linking the types 
 T of the <code>vil2_memory_chunk&lt;T&gt;</code> and <code>vil2_image_view&lt;T&gt;</code>. 
@@ -149,7 +149,7 @@ This avoids likely source of memory leaks. However, most code in vil2 should ope
 Decision at Providence meeting.</p>
 <h4><code>vil2_image_view&lt;T&gt;</code> should not be derived from <code>vil2_image_resource</code></h4>
 <p>As explained above these are actually two different types. Efficient access 
-to ni, nj for <code>vil_image_view&lt;T&gt;</code> whilst matching interface for
+to ni, nj for <code>vil2_image_view&lt;T&gt;</code> whilst matching interface for
 <code>vil2_image_resource</code> would require a lot of complexity.
 Decision confirmed at Providence meeting.</p>
 <h4>There should  be no general <code>vil2_image_resource::set_properties(..)</code>?</h4>
@@ -193,10 +193,10 @@ have to reallocate memory on a regular basis. <code>mil_image</code> has been
 using this design for 18 months with no problems. Decision at Providence meeting.</p>
 <h4>vil2_image_view&lt;T&gt;::operator=() can be smart but should do fast view transforms only.</h4>
 <p>Allowing <br>
-<code>vil2_image_view&lt;vil_rgb&lt;vxl_byte&gt; &gt; im_rgb(ni, nj);<br>
+<code>vil2_image_view&lt;vil2_rgb&lt;vxl_byte&gt; &gt; im_rgb(ni, nj);<br>
 vil2_image_view&lt;vxl_byte&gt; im_planes = im_rgb;</code><br>
 and<br>
-<code>vil2_image_view&lt;vil_rgb&lt;vxl_byte&gt;&gt; pnm = vil2_load(&quot;filename.ppm&quot;);</code><br>
+<code>vil2_image_view&lt;vil2_rgb&lt;vxl_byte&gt;&gt; pnm = vil2_load(&quot;filename.ppm&quot;);</code><br>
 makes for easy use. However , expensive operations should not have short 
 names. So this should not include doing conversions such as byte to float 
 conversion. These conversions should be done by separately named functions. 
@@ -211,7 +211,7 @@ transformations between pixel types. Additionally
 allows for the simple conversion from the the return value of many functions
 such as vil2_load. These need to return base class sptrs to reduce memory leaks
 and because their interface cannot know the pixel type. Decision IMS</p>
-<h4>Should <code>vil_load</code>  should return a base class sptr.</h4>
+<h4>Should <code>vil2_load</code>  should return a base class sptr.</h4>
 <p>(Similarly <code>vil2_image_resource::get_view(..)</code>)
 They could return <code>vil2_image_view_base *</code> or <code>vil2_image_view_sptr</code> 
 Both appear to work. The smart pointer version has the advantage of not needing
@@ -225,7 +225,7 @@ Providence meeting. Question - do the float types need to be specific or can
 we assume IEEE standard lengths?&nbsp;</p>
 <h4>All operations will default to scalar pixels and multiple planes.
 <code>vil2_image_resource</code> hierarchy will mostly work only with scalar pixels.</h4>
-<p>Nothing prevents you from using <code>vil_rgb</code> pixels, and we will 
+<p>Nothing prevents you from using <code>vil2_rgb</code> pixels, and we will 
 provide appropriate support. However planes are more general than components, 
 and <code>vil2_image_resource</code> hierarchy can be simpler if it only thinks 
 about scalar pixels. In particular it may not be feasible to consider every
@@ -306,8 +306,6 @@ the disk access time. Note, one alternative may be to bring back the
 vil2_image_resource::fill_view(...) which modifies the contents of an existing
 view and doesn't allocate any memory.</p>
 <h2>Notes</h2>
-<p>#includes to vxl/vil are simply to use old vil stuff that doesn't need to be converted. e.g. 
-<code>vil_stream</code></p>
 <p><code>VIL2_TO_BE_FIXED</code> is a code exclusion macro which encloses code
 that has to be converted soon.</p>
 <p>Pointers to data are often passed in as const, but may have the const removed.

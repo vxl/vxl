@@ -7,14 +7,14 @@
 
 #include "vil2_load.h"
 #include <vcl_iostream.h>
-#include <vil/vil_open.h>
+#include <vil2/vil2_open.h>
 #include <vil2/vil2_file_format.h>
-#include <vil/vil_stream.h>
+#include <vil2/vil2_stream.h>
 #include <vil2/vil2_property.h>
 #include <vil2/vil2_image_resource.h>
 
 
-vil2_image_resource_sptr vil2_load_image_resource_raw(vil_stream *is)
+vil2_image_resource_sptr vil2_load_image_resource_raw(vil2_stream *is)
 {
   for (vil2_file_format** p = vil2_file_format::all(); *p; ++p) {
 #if 0 // debugging
@@ -39,7 +39,7 @@ vil2_image_resource_sptr vil2_load_image_resource_raw(vil_stream *is)
 
 vil2_image_resource_sptr vil2_load_image_resource_raw(char const* filename)
 {
-  vil_stream *is = vil_open(filename, "r");
+  vil2_stream *is = vil2_open(filename, "r");
   if (is)
     return vil2_load_image_resource_raw(is);
   else {

@@ -44,8 +44,8 @@ inline void vil2_math_value_range(const vil2_image_view<T>& view, T& min_value, 
 
 //: Compute minimum and maximum values over view
 VCL_DEFINE_SPECIALIZATION
-inline void vil2_math_value_range(const vil2_image_view<vil_rgb<vxl_byte> >& rgb_view,
-                                  vil_rgb<vxl_byte>& min_value, vil_rgb<vxl_byte>& max_value)
+inline void vil2_math_value_range(const vil2_image_view<vil2_rgb<vxl_byte> >& rgb_view,
+                                  vil2_rgb<vxl_byte>& min_value, vil2_rgb<vxl_byte>& max_value)
 {
   vil2_image_view<vxl_byte> plane_view = vil2_view_as_planes(rgb_view);
   // Get range for each plane in turn
@@ -56,8 +56,8 @@ inline void vil2_math_value_range(const vil2_image_view<vil_rgb<vxl_byte> >& rgb
 
 //: Compute minimum and maximum values over view
 VCL_DEFINE_SPECIALIZATION
-inline void vil2_math_value_range(const vil2_image_view<vil_rgb<float> >& rgb_view,
-                                  vil_rgb<float>& min_value, vil_rgb<float>& max_value)
+inline void vil2_math_value_range(const vil2_image_view<vil2_rgb<float> >& rgb_view,
+                                  vil2_rgb<float>& min_value, vil2_rgb<float>& max_value)
 {
   vil2_image_view<float> plane_view = vil2_view_as_planes(rgb_view);
   // Get range for each plane in turn

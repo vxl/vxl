@@ -68,7 +68,7 @@ public:
   virtual vcl_string is_a() const =0;
 
   //: Return a description of the concrete data pixel type.
-  // For example if the value is VIL2_PIXEL_FORMAT_VIL_BYTE,
+  // For example if the value is VIL2_PIXEL_FORMAT_BYTE,
   // you can safely cast, or assign the base class reference to
   // a vil3d_image_view<vxl_byte>.
   virtual enum vil2_pixel_format pixel_format() const=0;

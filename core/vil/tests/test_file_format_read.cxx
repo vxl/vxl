@@ -8,7 +8,7 @@
 
 #include <testlib/testlib_test.h>
 
-#include <vil/vil_rgb.h>
+#include <vil2/vil2_rgb.h>
 #include <vil2/vil2_load.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_print.h>
@@ -57,7 +57,7 @@ class CheckRGB : public CheckPixel
     return img_ && pixel.size() == 3 && pixel[0] == img_(i,j).r && pixel[1] == img_(i,j).g && pixel[2] == img_(i,j).b;
   }
  protected:
-  vil2_image_view< vil_rgb<T> > img_;
+  vil2_image_view< vil2_rgb<T> > img_;
 };
 
 template<class T>

@@ -27,8 +27,8 @@ class vil2_pnm_file_format : public vil2_file_format
 {
  public:
   virtual char const* tag() const;
-  virtual vil2_image_resource_sptr make_input_image(vil_stream* vs);
-  virtual vil2_image_resource_sptr make_output_image(vil_stream* vs,
+  virtual vil2_image_resource_sptr make_input_image(vil2_stream* vs);
+  virtual vil2_image_resource_sptr make_output_image(vil2_stream* vs,
                                                      unsigned ni,
                                                      unsigned nj,
                                                      unsigned nplanes,
@@ -59,7 +59,7 @@ class vil2_ppm_file_format : public vil2_pnm_file_format
 //: Generic image implementation for PNM files
 class vil2_pnm_image : public vil2_image_resource
 {
-  vil_stream* vs_;
+  vil2_stream* vs_;
   int magic_;
   unsigned ni_;
   unsigned nj_;
@@ -78,10 +78,10 @@ class vil2_pnm_image : public vil2_image_resource
   friend class vil2_pnm_file_format;
 
  public:
-  vil2_pnm_image (vil_stream* is, unsigned ni,
+  vil2_pnm_image (vil2_stream* is, unsigned ni,
                   unsigned nj, unsigned nplanes,
                   vil2_pixel_format format);
-  vil2_pnm_image(vil_stream* is);
+  vil2_pnm_image(vil2_stream* is);
   ~vil2_pnm_image();
 
   // Inherit the documentation from vil2_image_resource

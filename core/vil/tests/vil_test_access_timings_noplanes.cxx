@@ -11,7 +11,7 @@
 #include <vil2/vil2_image_view.h>
 #include <vcl_ctime.h>
 #include <mbl/mbl_stats_1d.h>
-#include <vil/vil_rgb.h>
+#include <vil2/vil2_rgb.h>
 
 const unsigned NI=256;
 const unsigned NJ=256;
@@ -205,7 +205,7 @@ int main(int argc, char** argv)
 {
   vil2_image_view<vxl_byte> byte_image(NI,NJ);
   vil2_image_view<float>    float_image(NI,NJ);
-  vil2_image_view<vil_rgb<vxl_byte> > rgb_image(NI,NJ);
+  vil2_image_view<vil2_rgb<vxl_byte> > rgb_image(NI,NJ);
   int n_loops = 100;
 
   vcl_cout<<"Times to fill a "<<NI<<" x "<<NJ

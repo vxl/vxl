@@ -9,9 +9,9 @@
 #include "vil2_bmp_file_header.h"
 #include <vcl_iomanip.h> // for vcl_hex, vcl_dec
 #include <vcl_iostream.h>
-#include <vil/vil_stream.h>
-#include <vil/vil_16bit.h>
-#include <vil/vil_32bit.h>
+#include <vil2/vil2_stream.h>
+#include <vil2/vil2_stream_16bit.h>
+#include <vil2/vil2_stream_32bit.h>
 
 // The signature consists of the two bytes 42, 4D in that order.
 // It is not supposed to be read as a 16-bit integer.
@@ -41,22 +41,22 @@ void vil2_bmp_file_header::print(vcl_ostream &s) const
     << vcl_dec << vcl_endl;
 }
 
-void vil2_bmp_file_header::read(vil_stream *s)
+void vil2_bmp_file_header::read(vil2_stream *s)
 {
   if (s->read(&magic, sizeof(magic)) == 0) {magic[0] = magic[1] = 0;}
-  file_size = vil_32bit_read_little_endian(s);
-  reserved1 = vil_16bit_read_little_endian(s);
-  reserved2 = vil_16bit_read_little_endian(s);
-  bitmap_offset = vil_32bit_read_little_endian(s);
+  file_size = vil2_stream_32bit_read_little_endian(s);
+  reserved1 = vil2_stream_16bit_read_little_endian(s);
+  reserved2 = vil2_stream_16bit_read_little_endian(s);
+  bitmap_offset = vil2_stream_32bit_read_little_endian(s);
 }
 
-void vil2_bmp_file_header::write(vil_stream *s) const
+void vil2_bmp_file_header::write(vil2_stream *s) const
 {
   s->write(&magic, sizeof(magic));
-  vil_32bit_write_little_endian(s, file_size);
-  vil_16bit_write_little_endian(s, reserved1);
-  vil_16bit_write_little_endian(s, reserved2);
-  vil_32bit_write_little_endian(s, bitmap_offset);
+  vil2_stream_32bit_write_little_endian(s, file_size);
+  vil2_stream_16bit_write_little_endian(s, reserved1);
+  vil2_stream_16bit_write_little_endian(s, reserved2);
+  vil2_stream_32bit_write_little_endian(s, bitmap_offset);
 }
 
 bool vil2_bmp_file_header::signature_valid() const

@@ -163,8 +163,8 @@ void test_image_view_int()
   image2.fill(0);
   image_win = vil2_crop(image2,2,1,1,2);
   image5.set_size(1,2);
-  image5(0,0) = vil_rgb<vxl_int_32>(25,35,45);
-  image5(0,1) = vil_rgb<vxl_int_32>(25,35,45);
+  image5(0,0) = vil2_rgb<vxl_int_32>(25,35,45);
+  image5(0,1) = vil2_rgb<vxl_int_32>(25,35,45);
   image0 = image5;
 
   vil2_copy_reformat(image0, image_win);

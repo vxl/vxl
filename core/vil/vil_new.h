@@ -22,7 +22,7 @@
 //     25 Sep 2002 Ian Scott - convert to vil2.
 //\endverbatim
 
-#include <vil/vil_fwd.h> // for vil_stream
+#include <vil2/vil2_fwd.h> // for vil2_stream
 #include <vil2/vil2_image_resource.h>
 #include <vil2/vil2_image_view.h>
 
@@ -38,7 +38,7 @@ vil2_image_resource_sptr vil2_new_image_resource(unsigned ni, unsigned nj,
 
 //: Make a new image.
 // \relates vil2_image_resource
-vil2_image_resource_sptr vil2_new_image_resource(vil_stream* os,
+vil2_image_resource_sptr vil2_new_image_resource(vil2_stream* os,
                                                  unsigned ni, unsigned nj,
                                                  unsigned nplanes,
                                                  vil2_pixel_format format,
@@ -54,7 +54,7 @@ vil2_image_resource_sptr vil2_new_image_resource(char const* filename,
 
 //: Make a new image.
 // \relates vil2_image_resource
-vil2_image_resource_sptr vil2_new_image_resource(vil_stream* os,
+vil2_image_resource_sptr vil2_new_image_resource(vil2_stream* os,
                                                  unsigned ni, unsigned nj,
                                                  unsigned nplanes,
                                                  vil2_image_resource_sptr const& prototype,

@@ -13,8 +13,8 @@
 // \author Tim Cootes, Ian Scott - Manchester
 
 #include <vil2/vil2_image_view.h>
-#include <vil/vil_rgb.h>
-#include <vil/vil_rgba.h>
+#include <vil2/vil2_rgb.h>
+#include <vil2/vil2_rgba.h>
 
 
 //: Return a 3-plane view of an RGB image (or a 4-plane view if RGBA)
@@ -45,13 +45,13 @@ inline vil2_image_view<typename T::value_type> vil2_view_as_planes(const vil2_im
 //  O(1).
 // \relates vil2_image_view
 template<class T>
-inline vil2_image_view<vil_rgb<T> > vil2_view_as_rgb(const vil2_image_view<T>& v)
+inline vil2_image_view<vil2_rgb<T> > vil2_view_as_rgb(const vil2_image_view<T>& v)
 {
   if ((v.nplanes()!=3) || (v.planestep()!=1) || (v.istep()!=3 && v.jstep()!=3))
-    return vil2_image_view<vil_rgb<T> >();
+    return vil2_image_view<vil2_rgb<T> >();
 
-  return vil2_image_view<vil_rgb<T> >(v.memory_chunk(),
-                                      reinterpret_cast<vil_rgb<T> const*>( v.top_left_ptr()),
+  return vil2_image_view<vil2_rgb<T> >(v.memory_chunk(),
+                                      reinterpret_cast<vil2_rgb<T> const*>( v.top_left_ptr()),
                                       v.ni(),v.nj(),1,
                                       v.istep()/3,v.jstep()/3,1);
 }
@@ -61,13 +61,13 @@ inline vil2_image_view<vil_rgb<T> > vil2_view_as_rgb(const vil2_image_view<T>& v
 //  O(1).
 // \relates vil2_image_view
 template<class T>
-inline vil2_image_view<vil_rgba<T> > vil2_view_as_rgba(const vil2_image_view<T>& v)
+inline vil2_image_view<vil2_rgba<T> > vil2_view_as_rgba(const vil2_image_view<T>& v)
 {
   if ((v.nplanes()!=4) || (v.planestep()!=1) || (v.istep()!=4 && v.jstep()!=4))
-    return vil2_image_view<vil_rgba<T> >();
+    return vil2_image_view<vil2_rgba<T> >();
 
-  return vil2_image_view<vil_rgba<T> >(v.memory_chunk(),
-                                       static_cast<vil_rgba<T> const*>( v.top_left_ptr()),
+  return vil2_image_view<vil2_rgba<T> >(v.memory_chunk(),
+                                       static_cast<vil2_rgba<T> const*>( v.top_left_ptr()),
                                        v.ni(),v.nj(),1,
                                        v.istep()/3,v.jstep()/3,1);
 }

@@ -32,7 +32,7 @@
 //     24 Sep 2002 Ian Scott - converted to vil2
 //\endverbatim
 
-#include <vil/vil_fwd.h>
+#include <vil2/vil2_fwd.h>
 #include <vil2/vil2_image_resource.h>
 
 //: Load an image data object from a file, possibly performing expected conversions.
@@ -40,7 +40,7 @@
 vil2_image_resource_sptr vil2_load_image_resource(char const* filename);
 
 //: Load raw from stream.
-vil2_image_resource_sptr vil2_load_image_resource_raw(vil_stream *);
+vil2_image_resource_sptr vil2_load_image_resource_raw(vil2_stream *);
 
 //: Load raw from a filename.
 // A convenience function.

@@ -8,6 +8,7 @@
  
 
 #include <vil/vil_fwd.h>
+#include <vil/vil_image.h>
 #include <vil2/vil2_image_resource.h>
 #include <vil2/vil2_image_view.h>
 

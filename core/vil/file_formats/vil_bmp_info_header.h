@@ -8,7 +8,7 @@
 // \file
 // \author fsm@robots.ox.ac.uk
 
-class vil_stream;
+class vil2_stream;
 #include <vcl_iosfwd.h>
 
 struct vil2_bmp_info_header
@@ -22,8 +22,8 @@ struct vil2_bmp_info_header
   unsigned colorcount;  // 4
 
   vil2_bmp_info_header();
-  void read(vil_stream *);
-  void write(vil_stream *) const;
+  void read(vil2_stream *);
+  void write(vil2_stream *) const;
   void print(vcl_ostream &) const;
 };
 

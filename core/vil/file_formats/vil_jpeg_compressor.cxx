@@ -12,10 +12,10 @@
 
 #include "vil2_jpeg_compressor.h"
 #include "vil2_jpeg_destination_mgr.h"
-#include <vil/vil_stream.h>
+#include <vil2/vil2_stream.h>
 #include <vcl_iostream.h>
 
-vil2_jpeg_compressor::vil2_jpeg_compressor(vil_stream *s)
+vil2_jpeg_compressor::vil2_jpeg_compressor(vil2_stream *s)
   : stream(s)
   , ready(false)
 {

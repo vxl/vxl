@@ -23,7 +23,7 @@ int main(int argc, char** argv)
 
   // This is how we quickly load an rgb image view.
 
-  vil2_image_view<vil_rgb<vxl_byte> > b_im = vil2_load(argv[1]);
+  vil2_image_view<vil2_rgb<vxl_byte> > b_im = vil2_load(argv[1]);
 
   if (!b_im)
   {

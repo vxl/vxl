@@ -21,15 +21,15 @@
 #include <vil2/vil2_image_resource.h>
 
 // seeks to 0, then checks for magic number. returns true if found.
-bool vil2_jpeg_file_probe(vil_stream *vs);
+bool vil2_jpeg_file_probe(vil2_stream *vs);
 
 //: Loader for JPEG files
 class vil2_jpeg_file_format : public vil2_file_format
 {
  public:
   virtual char const *tag() const;
-  virtual vil2_image_resource_sptr make_input_image(vil_stream *vs);
-  virtual vil2_image_resource_sptr make_output_image(vil_stream* vs,
+  virtual vil2_image_resource_sptr make_input_image(vil2_stream *vs);
+  virtual vil2_image_resource_sptr make_output_image(vil2_stream* vs,
                                                      unsigned nx,
                                                      unsigned ny,
                                                      unsigned nplanes,
@@ -43,8 +43,8 @@ class vil2_jpeg_decompressor;
 //: generic_image implementation for JPEG files
 class vil2_jpeg_image : public vil2_image_resource
 {
-  vil2_jpeg_image(vil_stream *is);
-  vil2_jpeg_image (vil_stream* is, unsigned ni,
+  vil2_jpeg_image(vil2_stream *is);
+  vil2_jpeg_image (vil2_stream* is, unsigned ni,
     unsigned nj, unsigned nplanes, vil2_pixel_format format);
   ~vil2_jpeg_image();
 
@@ -71,7 +71,7 @@ class vil2_jpeg_image : public vil2_image_resource
  private:
   vil2_jpeg_compressor   *jc;
   vil2_jpeg_decompressor *jd;
-  vil_stream *stream;
+  vil2_stream *stream;
   friend class vil2_jpeg_file_format;
 };
 

@@ -17,7 +17,7 @@
 #include <vcl_cstring.h>
 
 #include <vil2/vil2_file_format.h>
-#include <vil/vil_stream_fstream.h>
+#include <vil2/vil2_stream_fstream.h>
 #include <vil2/vil2_image_resource.h>
 #include <vil2/vil2_memory_image.h>
 
@@ -39,7 +39,7 @@ vil2_image_resource_sptr vil2_new_image_resource(unsigned ni, unsigned nj, vil2_
                                  prototype->pixel_format());
 }
 
-vil2_image_resource_sptr vil2_new_image_resource(vil_stream* os,
+vil2_image_resource_sptr vil2_new_image_resource(vil2_stream* os,
                                                  unsigned ni,
                                                  unsigned nj,
                                                  unsigned nplanes,
@@ -66,7 +66,7 @@ vil2_image_resource_sptr vil2_new_image_resource(vil_stream* os,
 }
 
 //: Make a new vil2_image_impl, writing to stream "os", size ni x nj, copying pixel format etc from "prototype".
-vil2_image_resource_sptr vil2_new_image_resource(vil_stream* os,
+vil2_image_resource_sptr vil2_new_image_resource(vil2_stream* os,
                                                  unsigned ni, unsigned nj,
                                                  vil2_image_resource_sptr const& prototype,
                                                  char const* file_format)
@@ -84,7 +84,7 @@ vil2_image_resource_sptr vil2_new_image_resource(char const* filename,
                                                  vil2_image_resource_sptr const& prototype,
                                                  char const* file_format)
 {
-  vil_stream_fstream* os = new vil_stream_fstream(filename, "w");
+  vil2_stream_fstream* os = new vil2_stream_fstream(filename, "w");
   return vil2_new_image_resource(os,
                                  ni, nj,
                                  prototype->nplanes(),

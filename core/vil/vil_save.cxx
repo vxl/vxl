@@ -11,7 +11,7 @@
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
 
-#include <vil/vil_open.h>
+#include <vil2/vil2_open.h>
 #include <vil2/vil2_new.h>
 #include <vil2/vil2_pixel_format.h>
 #include <vil2/vil2_image_resource.h>
@@ -21,7 +21,7 @@
 //: Send vil2_image to disk.
 bool vil2_save(const vil2_image_view_base &im, char const* filename, char const* file_format)
 {
-  vil_stream* os = vil_open(filename, "w");
+  vil2_stream* os = vil2_open(filename, "w");
   if (!os->ok()) {
     vcl_cerr << __FILE__ ": Invalid stream for \"" << filename << "\"\n";
     return false;

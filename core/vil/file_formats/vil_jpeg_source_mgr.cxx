@@ -13,7 +13,7 @@
 #include "vil2_jpeg_source_mgr.h"
 #include <vcl_cassert.h>
 #include <vcl_cstddef.h> // for vcl_size_t
-#include <vil/vil_stream.h>
+#include <vil2/vil2_stream.h>
 
 #define STATIC /*static*/
 
@@ -25,7 +25,7 @@
 //
 #define SIZEOF(object) ((vcl_size_t) sizeof(object))
 
-// Implement a jpeg_source_manager for vil_stream *.
+// Implement a jpeg_source_manager for vil2_stream *.
 // Adapted by fsm from the FILE * version in jdatasrc.c
 
 #define vil2_jpeg_INPUT_BUF_SIZE  4096 // choose an efficiently fread'able size
@@ -150,7 +150,7 @@ vil2_jpeg_term_source (j_decompress_ptr /*cinfo*/)
 
 STATIC
 void
-vil2_jpeg_stream_src_set (j_decompress_ptr cinfo, vil_stream *vs)
+vil2_jpeg_stream_src_set (j_decompress_ptr cinfo, vil2_stream *vs)
 {
   // The source object and input buffer are made permanent so that a series
   // of JPEG images can be read from the same file by calling vil2_jpeg_stream_src
@@ -191,7 +191,7 @@ vil2_jpeg_stream_src_set (j_decompress_ptr cinfo, vil_stream *vs)
 
 STATIC
 void
-vil2_jpeg_stream_src_rewind(j_decompress_ptr cinfo, vil_stream *vs)
+vil2_jpeg_stream_src_rewind(j_decompress_ptr cinfo, vil2_stream *vs)
 {
   { // verify
     vil2_jpeg_srcptr src = ( vil2_jpeg_srcptr )( cinfo->src );

@@ -12,7 +12,7 @@
 
 #include "vil2_jpeg_decompressor.h"
 #include "vil2_jpeg_source_mgr.h"
-#include <vil/vil_stream.h>
+#include <vil2/vil2_stream.h>
 #include <vcl_iostream.h>
 
 #define trace if (true) { } else vcl_cerr
@@ -31,7 +31,7 @@
 //    some of the data, call jpeg_abort_decompress().
 // -# destruct the object with jpeg_destroy_decompress().
 
-vil2_jpeg_decompressor::vil2_jpeg_decompressor(vil_stream *s)
+vil2_jpeg_decompressor::vil2_jpeg_decompressor(vil2_stream *s)
   : stream(s)
   , ready(false)
   , valid(false)

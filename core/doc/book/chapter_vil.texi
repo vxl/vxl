@@ -41,12 +41,13 @@ disk file, copies it into memory, and prints the pixel at
 @example
 #include <vcl_iostream.h>
 #include <vxl_config.h>
+#include <vil2/vil2_rgb.h>
 #include <vil2/vil2_load.h>
 #include <vil2/vil2_image_view.h>
 
 int main()
 @{
-  vil2_image_view<vil_rgb<vxl_byte> > img;
+  vil2_image_view<vil2_rgb<vxl_byte> > img;
   img = vil2_load("foo.ppm");
   vcl_cerr << "Pixel 100,100 = " << img(100,100) << vcl_endl;
 @}
@@ -107,20 +108,21 @@ to show thresholding, so let's have a look.  This program loads an image
 into memory, and creates a new image where all pixels greater than a
 threshold value are set to 255.
 @example
-#include <vil/vil_rgb_byte>
+#include <vxl_config.h>
+#include <vil2/vil2_rgb.h>
 #include <vil2/vil2_load.h>
 #include <vil2/vil2_save.h>
 #include <vil2/vil2_image_view.h>
 
 int main()
 @{
-  vil2_image_view<vil_rgb_byte > img;
+  vil2_image_view<vil2_rgb<vxl_byte> > img;
   img = vil2_load("foo.ppm");
 
   for(unsigned j = 0; j < img.height(); ++j)
     for(unsigned i = 0; i < img.width(); ++i)
       if (img(i,j).r < 200 && img(i,j).g < 200 && img(i,j).b < 200)
-        img(i,j) = vil_rgb_byte(0,0,0);
+        img(i,j) = vil2_rgb<vxl_byte>(0,0,0);
 
   vil2_save(img, "foothresh.ppm");
   return 0;
@@ -324,8 +326,54 @@ smoothing, general 1D and 2D
 convolution, morphological operations, interpolation,
 and much more.
 
+@section Converting from using the old vil to vil2.
 
-@section Optimising Image Processing Algorithms
+This section explores the major differences between using the old vil
+and using vil2, and some of the implications for converting existing code.
+
+The first and most obvious difference is that whilst there is a broad equivalent to
+vil_image, and its descendants, this class tree has been split in two. The abstract
+@code{vil_image} is now replaced with a smart pointer to a @code{vil2_image_resource}.
+The concrete @code{vil_memory_image_of} is now a @code{vil2_image_view<>}
+Previously where as you might have written code in terms of vil_image, it now
+usually makes sense to have most image manipulations working on
+@code{vil2_image_view}s. This is because whilst with the old vil_image, you had to
+do a @code{get_section}, and operate on raw memory, in vil2, the @code{vil2_image_view}
+provides a powerful view onto your image in memory.
+
+The @code{vil2_image_view} provides such facilities
+as compile-time type safety as switchable bounds checking. It also acts as a
+sort of canonicaliser. A wide range of actual memory layouts can all be treated
+identically and transparently while working through the @code{vil2_image_view}.
+Previously, in vil, the image loader often needed to have several filters placed
+on top of it to do such things as re-order the raster rows and re-order the
+component order. vil2 doesn't do this, but instead uses the vil2_image_view to provide
+a canonical view of whatever deranged image format your loader finds most efficient to
+use.
+
+The second important change is that vil2 provides full support for planes. In many cases
+accessing different image planes is directly equivalent to accessing different rasters.
+Indeed, it is often preferable to view an image a multi-planar rather than multi-component.
+If your algorithms assume a single plane, it is however trivial to provide a wrapper function
+which takes a multi-planar image and passes one plane at a time to your algorithm. This
+can be done with virtually no loss in efficiency, and indeed is how some of the code in
+@code{vil2/algo} is written.
+
+To help convert existing code there is a scripts (@code{contrib/mul/vil2/scripts/viltovil2.pl})
+It converts as much code as it can. However, it can really only deal with file and identifier
+name changes. There are large structural differences between vil and vil2, with many of the
+equivalent functions taking different parameters. The output of the conversion script
+can best be seen as a hint on which types and classes to use and which functions to call.
+You will almost certainly need to make extensive further edits to your code to get it
+to compile again.
+
+If you do not want to convert any code, but would rather use an interface to convert
+between vil and vil2 types at runtime, then take a look at @code{<vil2/vil2_vil.h>}
+which has a function for converting between @code{vil_memory_image_of} and @code{vil2_image_view}, and
+a class that wraps a @code{vil_image}, and exports a @code{vil2_image_resource} interface.
+
+
+@section Optimising Image Processing Algorithms (Advanced Topic)
 
 The design of vil2_image_view (being more flexible than the design of vil,)
 and the state of modern optimising compilers (no near as good as they
@@ -348,8 +396,9 @@ This implementation has the advantage of being simple, and easy to test.
 
 
 In an ideal world the compiler would realise that it doesn't
-have to recalculate the location of each pixel each step. (Of course, in
-an ideal world we would be programing using natural language and
+have to recalculate the location of each pixel each step, but instead keep
+a running pointer to the current pixel location. (Of course, in
+an ideal world we would be programming using natural language and
 a microphone.)
 We can make this optimisation explicit.
 
@@ -359,13 +408,13 @@ template<class T>
 void vil2_image_view<T>::fill(T value)
 @{
   T* plane = top_left_;
-  for (unsigned int p=0;p<nplanes_;++p,plane += planestep_)
+  for (unsigned p=0; p<nplanes_; ++p, plane+=planestep_)
   @{
     T* row = plane;
-    for (unsigned int j=0;j<nj_;++j,row += jstep_)
+    for (unsigned j=0; j<nj_; ++j, row+=jstep_)
     @{
       T* p = row;
-      for (unsigned int i=0;i<ni_;++i,p+=istep_) *p = value;
+      for (unsigned i=0; i<ni_; ++i, p+=istep_) *p = value;
     @}
   @}
 @}
@@ -390,10 +439,10 @@ void vil2_image_view<T>::fill(T value)
 
   if (istep_==1)
   @{
-    for (unsigned int p=0;p<nplanes_;++p,plane += planestep_)
+    for (unsigned p=0;p<nplanes_;++p,plane += planestep_)
     @{
       T* row = plane-1;
-      for (unsigned int j=0;j<nj_;++j,row += jstep_)
+      for (unsigned j=0;j<nj_;++j,row += jstep_)
       @{
         int i = ni_ ;
         while (i>=0) { row[i--]=value; }
@@ -402,13 +451,13 @@ void vil2_image_view<T>::fill(T value)
     return;
   @}
 
-  for (unsigned int p=0;p<nplanes_;++p,plane += planestep_)
+  for (unsigned p=0;p<nplanes_;++p,plane += planestep_)
   @{
     T* row = plane;
-    for (unsigned int j=0;j<nj_;++j,row += jstep_)
+    for (unsigned j=0;j<nj_;++j,row += jstep_)
     @{
       T* p = row;
-      for (unsigned int i=0;i<ni_;++i,p+=istep_) *p = value;
+      for (unsigned i=0;i<ni_;++i,p+=istep_) *p = value;
     @}
   @}
 @}
@@ -417,10 +466,10 @@ void vil2_image_view<T>::fill(T value)
 
 There are two other optimisations going on here. The first is that
 we are using the pointer indexing operator @code{[]}. Most compilers
-treat @code{while(i<n)@{*(ptr++)=v;@} } differently from
-@code{while(i<n)@{ptr[i++]=v;@} }, with the latter often
-being significantly faster. This is especially true when ptr is a pointer
-to a character sized type.
+treat @code{while(++i<n)@{*(ptr++)=v;@} } differently from
+@code{while(++i<n)@{ptr[i]=v;@} }, with the latter often
+being significantly faster. This is especially true when @code{ptr}
+is a pointer to a character sized type.
 The other optimisation makes use of the fact that it is faster to count down to
 0 than count up to n. This is because it is faster to test against a constant, 0,
 than against a variable. Sometimes a compiler figures this out itself,
@@ -458,10 +507,10 @@ void vil2_image_view<T>::fill(T value)
 
   if (istep_==1)
   @{
-    for (unsigned int p=0;p<nplanes_;++p,plane += planestep_)
+    for (unsigned p=0;p<nplanes_;++p,plane += planestep_)
     @{
       T* row = plane-1;
-      for (unsigned int j=0;j<nj_;++j,row += jstep_)
+      for (unsigned j=0;j<nj_;++j,row += jstep_)
       @{
         int i = ni_;
         while (i>=0) { row[i--]=value; }
@@ -470,13 +519,13 @@ void vil2_image_view<T>::fill(T value)
     return;
   @}
 
-  for (unsigned int p=0;p<nplanes_;++p,plane += planestep_)
+  for (unsigned p=0; p<nplanes_; ++p, plane+=planestep_)
   @{
     T* row = plane;
-    for (unsigned int j=0;j<nj_;++j,row += jstep_)
+    for (unsigned j=0; j<nj_; ++j, row+=jstep_)
     @{
       T* p = row;
-      for (unsigned int i=0;i<ni_;++i,p+=istep_) *p = value;
+      for (unsigned i=0; i<ni_; ++i, p+=istep_) *p = value;
     @}
   @}
 @}
@@ -494,6 +543,6 @@ cases that have very significant potential speed improvements.
 
 Finally as with all optimisation - be rigorous in comparing the actual
 times for your original and optimised code. Run enough experiments to
-measure the statiscal spread to see if your improvements are significant.
+measure the statical spread to see if your improvements are significant.
 It is quite common for compiler or processor
 quirks to make your optimised code slower than the original.

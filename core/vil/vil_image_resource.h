@@ -11,12 +11,10 @@
 // \author Ian Scott
 // \date 20 Sep 2002
 
+#include <vil2/vil2_image_view_base.h>
 #include <vcl_cassert.h>
 #include <vil2/vil2_smart_ptr.h>
-#include <vil2/vil2_image_view_base.h>
 #include <vil2/vil2_pixel_format.h>
-
-class vil2_image_view_base;
 
 //:
 // Abstract representation of an image source or image destination.

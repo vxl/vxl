@@ -32,10 +32,10 @@
 *
 *
 * Note that the same colour image can either be viewed as a one plane image
-* with RGB pixels (using vil2_image_view<vil_rgb<vxl_byte> >) or as a 3 plane
+* with RGB pixels (using vil2_image_view<vil2_rgb<vxl_byte> >) or as a 3 plane
 * byte image (using vil2_image_view<vxl_byte> with nplanes() == 3).
 * \verbatim
-vil2_image_view<vil_rgb<vxl_byte> > rgb_image;
+vil2_image_view<vil2_rgb<vxl_byte> > rgb_image;
 rgb_image = vil2_load("my_image.jpg");
 
 // Create a 3 plane view of rgb
@@ -46,7 +46,7 @@ three_plane_image =  vil2_view_as_planes(rgb_image);
 three_plane_image = vil2_load("my_image.jpg");
 
 // Now create rgb view of 3 plane image (note: will set view to empty if not possible)
-vil2_image_view<vil_rgb<vxl_byte> > rgb_image2 = three_plane_image;
+vil2_image_view<vil2_rgb<vxl_byte> > rgb_image2 = three_plane_image;
 // or explicitly
 rgb_image2 = vil2_view_as_rgb(three_plane_image);
 

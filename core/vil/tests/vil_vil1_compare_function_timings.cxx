@@ -18,6 +18,7 @@
 #include <mbl/mbl_stats_1d.h>
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_rgb.h>
+#include <vil2/vil2_rgb.h>
 #include <vil/vil_copy.h>
 #include <vil/vil_convolve.h>
 #include <vil/vil_image_as.h>
@@ -91,7 +92,7 @@ double copy(vil_memory_image_of<T>& image, int n_loops, bool print)
 template <class T>
 double force_to_rgb_byte(vil2_image_view<T>& image, int n_loops, bool print)
 {
-  vil2_image_view<vil_rgb<vxl_byte> > dest;
+  vil2_image_view<vil2_rgb<vxl_byte> > dest;
 
   if (print)
     vcl_cout << "Time to convert to rgb a " << image.ni() << "*" << image.nj()
@@ -156,7 +157,7 @@ double conv1d(vil2_image_view<float>& image, int n_loops, bool print)
   return 1000000*(double(t1)-double(t0))/(n_loops*CLOCKS_PER_SEC);
 }
 
-double conv1d(vil2_image_view<vil_rgb<vxl_byte> >& image, int n_loops, bool print)
+double conv1d(vil2_image_view<vil2_rgb<vxl_byte> >& image, int n_loops, bool print)
 {
   return 0.0;
 }
@@ -242,7 +243,7 @@ int main(int argc, char** argv)
   vil_memory_image_of<vil_rgb<vxl_byte> >    rgb_1image(NI,NJ);
   vil2_image_view<vxl_byte> byte_2image(NI,NJ);
   vil2_image_view<float>    float_2image(NI,NJ);
-  vil2_image_view<vil_rgb<vxl_byte> >    rgb_2image(NI,NJ);
+  vil2_image_view<vil2_rgb<vxl_byte> >    rgb_2image(NI,NJ);
   vcl_cout<<"Times to process a "<<NI<<" x "<<NJ
           <<" image (in microsecs) [Range= 0.5(max-min)]\n";
 

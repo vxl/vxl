@@ -27,47 +27,47 @@ class vil2_convert_cast_pixel
 VCL_DEFINE_SPECIALIZATION \
 inline void vil2_convert_cast_pixel<in, out >::operator () (in v, out& d) const \
 { d.r = d.g = d.b = (out::value_type)v; }
-macro( vxl_byte , vil_rgb<vxl_byte> )
-macro( float , vil_rgb<vxl_byte> )
-macro( double , vil_rgb<vxl_byte> )
-macro( vxl_sbyte , vil_rgb<vxl_sbyte> )
-macro( float , vil_rgb<vxl_sbyte> )
-macro( double , vil_rgb<vxl_sbyte> )
-macro( vxl_int_16 , vil_rgb<vxl_int_16> )
-macro( float , vil_rgb<vxl_int_16> )
-macro( double , vil_rgb<vxl_int_16> )
-macro( vxl_uint_16 , vil_rgb<vxl_uint_16> )
-macro( float , vil_rgb<vxl_uint_16> )
-macro( double , vil_rgb<vxl_uint_16> )
-macro( vxl_int_32 , vil_rgb<vxl_int_32> )
-macro( float , vil_rgb<vxl_int_32> )
-macro( double , vil_rgb<vxl_int_32> )
-macro( vxl_uint_32 , vil_rgb<vxl_uint_32> )
-macro( float , vil_rgb<vxl_uint_32> )
-macro( double , vil_rgb<vxl_uint_32> )
+macro( vxl_byte , vil2_rgb<vxl_byte> )
+macro( float , vil2_rgb<vxl_byte> )
+macro( double , vil2_rgb<vxl_byte> )
+macro( vxl_sbyte , vil2_rgb<vxl_sbyte> )
+macro( float , vil2_rgb<vxl_sbyte> )
+macro( double , vil2_rgb<vxl_sbyte> )
+macro( vxl_int_16 , vil2_rgb<vxl_int_16> )
+macro( float , vil2_rgb<vxl_int_16> )
+macro( double , vil2_rgb<vxl_int_16> )
+macro( vxl_uint_16 , vil2_rgb<vxl_uint_16> )
+macro( float , vil2_rgb<vxl_uint_16> )
+macro( double , vil2_rgb<vxl_uint_16> )
+macro( vxl_int_32 , vil2_rgb<vxl_int_32> )
+macro( float , vil2_rgb<vxl_int_32> )
+macro( double , vil2_rgb<vxl_int_32> )
+macro( vxl_uint_32 , vil2_rgb<vxl_uint_32> )
+macro( float , vil2_rgb<vxl_uint_32> )
+macro( double , vil2_rgb<vxl_uint_32> )
 #undef macro
 #define macro( in , out )\
 VCL_DEFINE_SPECIALIZATION \
 inline void vil2_convert_cast_pixel<in, out >::operator () (in v, out& d) const \
 { d.r = d.g = d.b = (out::value_type)v; d.a=1; }
-macro( vxl_byte , vil_rgba<vxl_byte> )
-macro( float , vil_rgba<vxl_byte> )
-macro( double , vil_rgba<vxl_byte> )
-macro( vxl_sbyte , vil_rgba<vxl_sbyte> )
-macro( float , vil_rgba<vxl_sbyte> )
-macro( double , vil_rgba<vxl_sbyte> )
-macro( vxl_int_16 , vil_rgba<vxl_int_16> )
-macro( float , vil_rgba<vxl_int_16> )
-macro( double , vil_rgba<vxl_int_16> )
-macro( vxl_uint_16 , vil_rgba<vxl_uint_16> )
-macro( float , vil_rgba<vxl_uint_16> )
-macro( double , vil_rgba<vxl_uint_16> )
-macro( vxl_int_32 , vil_rgba<vxl_int_32> )
-macro( float , vil_rgba<vxl_int_32> )
-macro( double , vil_rgba<vxl_int_32> )
-macro( vxl_uint_32 , vil_rgba<vxl_uint_32> )
-macro( float , vil_rgba<vxl_uint_32> )
-macro( double , vil_rgba<vxl_uint_32> )
+macro( vxl_byte , vil2_rgba<vxl_byte> )
+macro( float , vil2_rgba<vxl_byte> )
+macro( double , vil2_rgba<vxl_byte> )
+macro( vxl_sbyte , vil2_rgba<vxl_sbyte> )
+macro( float , vil2_rgba<vxl_sbyte> )
+macro( double , vil2_rgba<vxl_sbyte> )
+macro( vxl_int_16 , vil2_rgba<vxl_int_16> )
+macro( float , vil2_rgba<vxl_int_16> )
+macro( double , vil2_rgba<vxl_int_16> )
+macro( vxl_uint_16 , vil2_rgba<vxl_uint_16> )
+macro( float , vil2_rgba<vxl_uint_16> )
+macro( double , vil2_rgba<vxl_uint_16> )
+macro( vxl_int_32 , vil2_rgba<vxl_int_32> )
+macro( float , vil2_rgba<vxl_int_32> )
+macro( double , vil2_rgba<vxl_int_32> )
+macro( vxl_uint_32 , vil2_rgba<vxl_uint_32> )
+macro( float , vil2_rgba<vxl_uint_32> )
+macro( double , vil2_rgba<vxl_uint_32> )
 #undef macro
 #define macro( inout )\
 VCL_DEFINE_SPECIALIZATION \
@@ -80,8 +80,8 @@ macro( vxl_uint_32 )
 macro( vxl_int_32 )
 macro( float )
 macro( double )
-macro( vil_rgb<vxl_byte> )
-macro( vil_rgba<vxl_byte> )
+macro( vil2_rgb<vxl_byte> )
+macro( vil2_rgba<vxl_byte> )
 #undef macro
 
 // declare general case in case anyone needs something weird.
@@ -122,18 +122,18 @@ inline void vil2_convert_round_pixel<in, out >::operator () (in v, out& d) const
   d.g = (out::value_type)(v.g+0.5); \
   d.b = (out::value_type)(v.b+0.5); }
 
-macro( vil_rgb<vxl_byte> , vil_rgb<float> )
-macro( vil_rgb<vxl_byte> , vil_rgb<double> )
-macro( vil_rgb<vxl_sbyte> , vil_rgb<float> )
-macro( vil_rgb<vxl_sbyte> , vil_rgb<double> )
-macro( vil_rgb<vxl_int_16> , vil_rgb<float> )
-macro( vil_rgb<vxl_int_16> , vil_rgb<double> )
-macro( vil_rgb<vxl_uint_16> , vil_rgb<float> )
-macro( vil_rgb<vxl_uint_16> , vil_rgb<double> )
-macro( vil_rgb<vxl_int_32> , vil_rgb<float> )
-macro( vil_rgb<vxl_int_32> , vil_rgb<double> )
-macro( vil_rgb<vxl_uint_32> , vil_rgb<float> )
-macro( vil_rgb<vxl_uint_32> , vil_rgb<double> )
+macro( vil2_rgb<vxl_byte> , vil2_rgb<float> )
+macro( vil2_rgb<vxl_byte> , vil2_rgb<double> )
+macro( vil2_rgb<vxl_sbyte> , vil2_rgb<float> )
+macro( vil2_rgb<vxl_sbyte> , vil2_rgb<double> )
+macro( vil2_rgb<vxl_int_16> , vil2_rgb<float> )
+macro( vil2_rgb<vxl_int_16> , vil2_rgb<double> )
+macro( vil2_rgb<vxl_uint_16> , vil2_rgb<float> )
+macro( vil2_rgb<vxl_uint_16> , vil2_rgb<double> )
+macro( vil2_rgb<vxl_int_32> , vil2_rgb<float> )
+macro( vil2_rgb<vxl_int_32> , vil2_rgb<double> )
+macro( vil2_rgb<vxl_uint_32> , vil2_rgb<float> )
+macro( vil2_rgb<vxl_uint_32> , vil2_rgb<double> )
 #undef macro
 #define macro( in , out )\
 VCL_DEFINE_SPECIALIZATION \
@@ -141,8 +141,8 @@ inline void vil2_convert_round_pixel<in, out >::operator () (in v, out& d) const
   d.r = (out::value_type)(v.r); \
   d.g = (out::value_type)(v.g); \
   d.b = (out::value_type)(v.b); }
-macro( vil_rgb<float> , vil_rgb<float> )
-macro( vil_rgb<double> , vil_rgb<double> )
+macro( vil2_rgb<float> , vil2_rgb<float> )
+macro( vil2_rgb<double> , vil2_rgb<double> )
 #undef macro
 #define macro( in , out )\
 VCL_DEFINE_SPECIALIZATION \
@@ -151,18 +151,18 @@ inline void vil2_convert_round_pixel<in, out >::operator () (in v, out& d) const
   d.g = (out::value_type)(v.g+0.5); \
   d.b = (out::value_type)(v.b+0.5); \
   d.a = (out::value_type)(v.a+0.5); }
-macro( vil_rgba<vxl_byte> , vil_rgba<float> )
-macro( vil_rgba<vxl_byte> , vil_rgba<double> )
-macro( vil_rgba<vxl_sbyte> , vil_rgba<float> )
-macro( vil_rgba<vxl_sbyte> , vil_rgba<double> )
-macro( vil_rgba<vxl_int_16> , vil_rgba<float> )
-macro( vil_rgba<vxl_int_16> , vil_rgba<double> )
-macro( vil_rgba<vxl_uint_16> , vil_rgba<float> )
-macro( vil_rgba<vxl_uint_16> , vil_rgba<double> )
-macro( vil_rgba<vxl_int_32> , vil_rgba<float> )
-macro( vil_rgba<vxl_int_32> , vil_rgba<double> )
-macro( vil_rgba<vxl_uint_32> , vil_rgba<float> )
-macro( vil_rgba<vxl_uint_32> , vil_rgba<double> )
+macro( vil2_rgba<vxl_byte> , vil2_rgba<float> )
+macro( vil2_rgba<vxl_byte> , vil2_rgba<double> )
+macro( vil2_rgba<vxl_sbyte> , vil2_rgba<float> )
+macro( vil2_rgba<vxl_sbyte> , vil2_rgba<double> )
+macro( vil2_rgba<vxl_int_16> , vil2_rgba<float> )
+macro( vil2_rgba<vxl_int_16> , vil2_rgba<double> )
+macro( vil2_rgba<vxl_uint_16> , vil2_rgba<float> )
+macro( vil2_rgba<vxl_uint_16> , vil2_rgba<double> )
+macro( vil2_rgba<vxl_int_32> , vil2_rgba<float> )
+macro( vil2_rgba<vxl_int_32> , vil2_rgba<double> )
+macro( vil2_rgba<vxl_uint_32> , vil2_rgba<float> )
+macro( vil2_rgba<vxl_uint_32> , vil2_rgba<double> )
 #undef macro
 #define macro( in , out )\
 VCL_DEFINE_SPECIALIZATION \
@@ -171,8 +171,8 @@ inline void vil2_convert_round_pixel<in, out >::operator () (in v, out& d) const
   d.g = (out::value_type)(v.g); \
   d.b = (out::value_type)(v.b); \
   d.a = (out::value_type)(v.a); }
-macro( vil_rgba<float> , vil_rgba<float> )
-macro( vil_rgba<double> , vil_rgba<double> )
+macro( vil2_rgba<float> , vil2_rgba<float> )
+macro( vil2_rgba<double> , vil2_rgba<double> )
 #undef macro
 
 #define macro( in , out )\
@@ -231,9 +231,9 @@ public:
   vil2_convert_rgb_to_grey_pixel(double rw, double gw, double bw):
     rw_(rw), gw_(gw), bw_(bw) {}
 
-  void operator() (vil_rgb<inP> v, outP& d) const {
+  void operator() (vil2_rgb<inP> v, outP& d) const {
     vil2_convert_round_pixel<double,outP>()(rw_*v.r+gw_*v.g+bw_*v.b, d); }
-  void operator() (vil_rgba<inP> v, outP& d) const {
+  void operator() (vil2_rgba<inP> v, outP& d) const {
     vil2_convert_round_pixel<double,outP>()(rw_*v.r+gw_*v.g+bw_*v.b, d); }
 };
 

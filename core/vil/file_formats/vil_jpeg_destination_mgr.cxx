@@ -13,7 +13,7 @@
 #include "vil2_jpeg_destination_mgr.h"
 #include <vcl_cassert.h>
 #include <vcl_cstddef.h> // for vcl_size_t
-#include <vil/vil_stream.h>
+#include <vil2/vil2_stream.h>
 
 #define STATIC /*static*/
 
@@ -25,7 +25,7 @@
 
 #define SIZEOF(object) ((vcl_size_t) sizeof(object))
 
-// Implement a jpeg_destination_manager for vil_stream *.
+// Implement a jpeg_destination_manager for vil2_stream *.
 // Adapted by fsm from the FILE * version in jdatadst.c
 
 #define vil2_jpeg_OUTPUT_BUF_SIZE  4096 // choose an efficiently fwrite'able size
@@ -97,17 +97,17 @@ vil2_jpeg_term_destination (j_compress_ptr cinfo) {
 
   // Write any data remaining in the buffer
   if (datacount > 0) {
-    if (dest->stream->write(dest->buffer, datacount) != (vil_streampos)datacount)
+    if (dest->stream->write(dest->buffer, datacount) != (vil2_streampos)datacount)
       ERREXIT(cinfo, JERR_FILE_WRITE);
   }
 }
 
 
-//  * Prepare for output to a vil_stream.
+//  * Prepare for output to a vil2_stream.
 //  * The caller must have already opened the stream, and is responsible
 //  * for closing it after finishing compression.
 void
-vil2_jpeg_stream_dst_set (j_compress_ptr cinfo, vil_stream *vs) {
+vil2_jpeg_stream_dst_set (j_compress_ptr cinfo, vil2_stream *vs) {
   // The destination object is made permanent so that multiple JPEG images
   // can be written to the same file without re-executing jpeg_stdio_dest.
   // This makes it dangerous to use this manager and a different destination
@@ -132,7 +132,7 @@ vil2_jpeg_stream_dst_set (j_compress_ptr cinfo, vil_stream *vs) {
 }
 
 void
-vil2_jpeg_stream_dst_rewind(j_compress_ptr cinfo, vil_stream *vs) {
+vil2_jpeg_stream_dst_rewind(j_compress_ptr cinfo, vil2_stream *vs) {
   vil2_jpeg_dstptr dst = ( vil2_jpeg_dstptr )( cinfo->dest );
   { // verify
     assert(dst != 0);

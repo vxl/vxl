@@ -13,16 +13,16 @@
 //\endverbatim
 
 #include <vil2/file_formats/vil2_jpeglib.h>
-class vil_stream;
+class vil2_stream;
 
 class vil2_jpeg_compressor
 {
  public:
   struct jpeg_error_mgr         jerr;
   struct jpeg_compress_struct   jobj;
-  vil_stream *stream;
+  vil2_stream *stream;
 
-  vil2_jpeg_compressor(vil_stream *s);
+  vil2_jpeg_compressor(vil2_stream *s);
 
   // NB. does not delete the stream
   ~vil2_jpeg_compressor();

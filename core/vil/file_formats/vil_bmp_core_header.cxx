@@ -10,9 +10,9 @@
 
 #include <vcl_iostream.h>
 
-#include <vil/vil_stream.h>
-#include <vil/vil_16bit.h>
-#include <vil/vil_32bit.h>
+#include <vil2/vil2_stream.h>
+#include <vil2/vil2_stream_16bit.h>
+#include <vil2/vil2_stream_32bit.h>
 
 vil2_bmp_core_header::vil2_bmp_core_header()
 {
@@ -23,23 +23,23 @@ vil2_bmp_core_header::vil2_bmp_core_header()
   bitsperpixel = 8;
 }
 
-void vil2_bmp_core_header::read(vil_stream *s)
+void vil2_bmp_core_header::read(vil2_stream *s)
 {
-  header_size  = vil_32bit_read_little_endian(s);
-  width        = vil_32bit_read_little_endian(s);
-  height       = vil_32bit_read_little_endian(s);
-  planes       = vil_16bit_read_little_endian(s);
-  bitsperpixel = vil_16bit_read_little_endian(s);
+  header_size  = vil2_stream_32bit_read_little_endian(s);
+  width        = vil2_stream_32bit_read_little_endian(s);
+  height       = vil2_stream_32bit_read_little_endian(s);
+  planes       = vil2_stream_16bit_read_little_endian(s);
+  bitsperpixel = vil2_stream_16bit_read_little_endian(s);
   // allowed values for bitsperpixel are 1 4 8 16 24 32; currently we only support 8 and 24
 }
 
-void vil2_bmp_core_header::write(vil_stream *s) const
+void vil2_bmp_core_header::write(vil2_stream *s) const
 {
-  vil_32bit_write_little_endian(s, header_size);
-  vil_32bit_write_little_endian(s, width);
-  vil_32bit_write_little_endian(s, height);
-  vil_16bit_write_little_endian(s, planes);
-  vil_16bit_write_little_endian(s, bitsperpixel);
+  vil2_stream_32bit_write_little_endian(s, header_size);
+  vil2_stream_32bit_write_little_endian(s, width);
+  vil2_stream_32bit_write_little_endian(s, height);
+  vil2_stream_16bit_write_little_endian(s, planes);
+  vil2_stream_16bit_write_little_endian(s, bitsperpixel);
 }
 
 void vil2_bmp_core_header::print(vcl_ostream &s) const
