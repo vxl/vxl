@@ -2,7 +2,7 @@
 //
 // The focus of this example is to demonstrate registration of 3D
 // range data using rgrl_feature_face_pt as the feature type.
-// 
+//
 // Read in the files of the format
 //      total_number_of_features
 //      x y z nx ny nz
@@ -56,14 +56,13 @@ typedef vcl_vector< rgrl_feature_sptr >  feature_vector;
 typedef vnl_vector_fixed<double,3>       vector_3d;
 
 
-void 
+void
 read_feature_file( const char* filename,
                    feature_vector& features, int sample_spacing )
 {
-
   vcl_ifstream istr( filename );
 
-  if( !istr ) {
+  if ( !istr ) {
     vcl_cerr<<"ERROR: Cannot open "<<filename<<vcl_endl;
     return;
   }
@@ -73,7 +72,7 @@ read_feature_file( const char* filename,
 
   int total;
   istr >> total;
-  for (unsigned int i = 0; i<total; i+=sample_spacing) {
+  for (int i = 0; i<total; i+=sample_spacing) {
     istr >> location[0] >> location[1] >> location[2]
          >>normal[0]>>normal[1]>>normal[2];
     features.push_back( new rgrl_feature_face_pt(location, normal) );
@@ -85,14 +84,14 @@ read_feature_file( const char* filename,
 }
 
 // using command/observer pattern
-class command_iteration_update: public rgrl_command 
+class command_iteration_update: public rgrl_command
 {
-public:
+ public:
   void execute(rgrl_object* caller, const rgrl_event & event )
   {
     execute( (const rgrl_object*) caller, event );
   }
-  
+
   void execute(const rgrl_object* caller, const rgrl_event & event )
   {
     const rgrl_feature_based_registration* reg_engine =
@@ -100,64 +99,63 @@ public:
     rgrl_transformation_sptr trans = reg_engine->current_transformation();
     rgrl_trans_affine* a_xform = rgrl_cast<rgrl_trans_affine*>(trans);
     vcl_cout<<"xform: A = "<<a_xform->A()<<"t = "<<a_xform->t()<<vcl_endl;
-    
-    /*
+
+#if 0 // commented out
     static unsigned count = 0;
     ++count;
-    
+
     vcl_ostringstream s;
     s << "xform-dump-"<<count;
     vcl_ofstream xform_out( s.str().c_str() );
-    
+
     xform_out<<"xform: A = "<<a_xform->A()<<"t = "<<a_xform->t()<<vcl_endl;
     xform_out.close();
-    
+
     // Output the matches
     //
     typedef rgrl_match_set::from_iterator  from_iter;
     typedef from_iter::to_iterator         to_iter;
-    
+
     vcl_ostringstream ss,ss2;
     ss << "matches-dump-"<<count;
     vcl_ofstream fout( ss.str().c_str() );
     ss2 << "sub-matches-dump-"<<count;
     vcl_ofstream fout2( ss2.str().c_str() );
-    
-    for( unsigned ms=0; ms < match_sets.size(); ++ms ) {
+
+    for ( unsigned ms=0; ms < match_sets.size(); ++ms ) {
       rgrl_match_set_sptr match_set = match_sets[ms];
       //  for each from image feature being matched
-      for( from_iter fitr = match_set->from_begin();
-           fitr != match_set->from_end(); ++fitr ){
-        if( fitr.size() == 0 )  continue;
-        
+      for ( from_iter fitr = match_set->from_begin();
+            fitr != match_set->from_end(); ++fitr ){
+        if ( fitr.size() == 0 )  continue;
+
         rgrl_feature_sptr from_feature = fitr.from_feature();
-        fout<<from_feature->location()<<" ";
+        fout<<from_feature->location()<<' ';
         rgrl_feature_sptr mapped_from = fitr.mapped_from_feature();
-        fout<<" "<<mapped_from->location();
-        for( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr ) {
+        fout<<' '<<mapped_from->location();
+        for ( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr ) {
           //  for each match with a "to" image feature
           rgrl_feature_sptr to_feature = titr.to_feature();
-          fout<<" "<<to_feature->location();
-          double error = titr.to_feature()->geometric_error( *mapped_from ); 
-          fout<<" "<<error<<vcl_endl;
+          fout<<' '<<to_feature->location();
+          double error = titr.to_feature()->geometric_error( *mapped_from );
+          fout<<' '<<error<<vcl_endl;
           if (error > 1) fout2<<mapped_from->location()<<vcl_endl;
         }
       }
     }
     fout.close();
     fout2.close();
-    */
+#endif // 0
   }
 };
 
-int 
+int
 main( int argc, char* argv[] )
 {
-
-  if( argc < 3 ) {
-    vcl_cerr << "Missing Parameters " << vcl_endl;
-    vcl_cerr << "Usage: " << argv[0];
-    vcl_cerr << " FixedImageFeatureFile MovingImageFeatureFile";
+  if ( argc < 3 ) {
+    vcl_cerr << "Missing Parameters" << vcl_endl
+             << "Usage: " << argv[0]
+             << " FixedImageFeatureFile MovingImageFeatureFile\n";
     return 1;
   }
 
@@ -166,7 +164,7 @@ main( int argc, char* argv[] )
   // BeginLatex
   //
   // In the main body of the program, we first read in the features
-  // from the external files. 
+  // from the external files.
   //
   // EndLatex
 
@@ -183,25 +181,25 @@ main( int argc, char* argv[] )
   rgrl_feature_set_sptr moving_feature_set;
   rgrl_feature_set_sptr fixed_feature_set;
   bool use_bins = true;
-  moving_feature_set = 
+  moving_feature_set =
     new rgrl_feature_set_location<dimension>(moving_feature_points, !use_bins);
-  fixed_feature_set = 
+  fixed_feature_set =
     new rgrl_feature_set_location<dimension>(fixed_feature_points, !use_bins);
 
 
   // Transformation estimator
   //
-  rgrl_estimator_sptr estimator = new rgrl_est_affine(); 
+  rgrl_estimator_sptr estimator = new rgrl_est_affine();
 
   //set the initial transformation to identity
   //
   // The correct xform from the Stanford range data repository
   // (http://graphics.stanford.edu/data/3Dscanrep/) is about 27 degree
-  // around the y-axis, and 
+  // around the y-axis, and
   // translation=[-0.0520211 -0.000383981 -0.0109223]
   //
-  rgrl_transformation_sptr init_trans; 
-  vnl_matrix<double> A(3,3,vnl_matrix_identity); 
+  rgrl_transformation_sptr init_trans;
+  vnl_matrix<double> A(3,3,vnl_matrix_identity);
   double angle = 35*vnl_math::pi/180; //35 degree rotation around y-axis
   //double angle = 27*vnl_math::pi/180; //35 degree rotation around y-axis
   A(0,0) = vcl_cos(angle); A(0,2) = vcl_sin(angle);
@@ -217,10 +215,10 @@ main( int argc, char* argv[] )
   vector_3d x1(1,1,1);              //bottom right corner
   rgrl_mask_box moving_image_region(x0, x1);
   rgrl_mask_box fixed_image_region(x0, x1);
-  rgrl_initializer_sptr initializer = 
-    new rgrl_initializer_prior( moving_image_region,  
-                                fixed_image_region, 
-                                estimator, 
+  rgrl_initializer_sptr initializer =
+    new rgrl_initializer_prior( moving_image_region,
+                                fixed_image_region,
+                                estimator,
                                 init_trans);
 
   //Matcher
@@ -247,7 +245,7 @@ main( int argc, char* argv[] )
   //convergence tester
   //
   double tolerance = 0.1;
-  rgrl_convergence_tester_sptr conv_test = 
+  rgrl_convergence_tester_sptr conv_test =
     new rgrl_convergence_on_weighted_error( tolerance );
 
   // BeginCodeSnippet
@@ -271,9 +269,9 @@ main( int argc, char* argv[] )
     vcl_cout<<"Final xform: "<<vcl_endl;
     rgrl_transformation_sptr final_trans = reg.final_transformation();
     rgrl_trans_affine* a_xform = rgrl_cast<rgrl_trans_affine*>(final_trans);
-    
-    vcl_cout<<"A = \n"<<a_xform->A()<<"t = "<<a_xform->t()<<vcl_endl;
-    vcl_cout<<"Final alignment error = "<<reg.final_status()->error()<<vcl_endl;
+
+    vcl_cout<<"A =\n"<<a_xform->A()<<"t = "<<a_xform->t()<<vcl_endl
+            <<"Final alignment error = "<<reg.final_status()->error()<<vcl_endl;
   }
 
   // BeginLatex
@@ -295,6 +293,4 @@ main( int argc, char* argv[] )
   // Perform testing
   //
   test_macro( "Registration of range data", reg.final_status()->error(), 1.0e-004 );
-
-  return 0;
 }

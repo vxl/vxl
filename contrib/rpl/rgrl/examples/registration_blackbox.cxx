@@ -21,17 +21,16 @@
 // (affine transformation), shown in
 // figure~\ref{fig:simple_shapes}(a). The final alignment with a close
 // to identity transformation is in figure~\ref{fig:simple_shapes}(b).
-// 
+//
 // \begin{figure}[tbp]
 // \begin{center}
 // \begin{tabular}{cc}
 // \includegraphics[width=2.5in]{simple_shapes_init} &
-// \includegraphics[width=2.5in]{simple_shapes_final} \\
-// (a) & (b) 
+// \includegraphics[width=2.5in]{simple_shapes_final} \\ (a) & (b)
 // \end{tabular}
 // \end{center}
 // \caption{Registration of two simple images. The goal is to register
-// the green to the red image. (a) is the initial alignment, and (b) is 
+// the green to the red image. (a) is the initial alignment, and (b) is
 // the result of correct registration.}
 // \label{fig:simple_shapes}
 // \end{figure}
@@ -70,14 +69,14 @@ typedef vnl_vector_fixed<double,2>              vector_2d;
 typedef vcl_vector< rgrl_feature_sptr >         feature_vector;
 
 // using command/observer pattern
-class command_iteration_update: public rgrl_command 
+class command_iteration_update: public rgrl_command
 {
-public:
+ public:
   void execute(rgrl_object* caller, const rgrl_event & event )
   {
     execute( (const rgrl_object*) caller, event );
   }
-  
+
   void execute(const rgrl_object* caller, const rgrl_event & event )
   {
     const rgrl_feature_based_registration* reg_engine =
@@ -89,7 +88,7 @@ public:
 };
 
 // BeginLatex
-// 
+//
 // We start with features. A \emph{feature} is the basic element for
 // correspondence-based registration.  It can be as simple as a point
 // in space with a location, or as complex as a region with intensity
@@ -153,7 +152,7 @@ generate_data( feature_vector& feature_points )
   // The edge of y = org_y
   //
   for (unsigned int xi = 0; xi<200; xi+=2 ) {
-    // BeginCodeSnippet  
+    // BeginCodeSnippet
     vector_2d pt, tangent_dir;
     pt[0] = org_x + xi + random.normal()*sigma;
     pt[1] = org_y + random.normal()*sigma;
@@ -191,7 +190,7 @@ generate_data( feature_vector& feature_points )
     feature_points.push_back( new rgrl_feature_trace_pt(pt, tangent_dir) );
   }
 
-  // Draw the circle, centered at (115, 115), with radius 50 
+  // Draw the circle, centered at (115, 115), with radius 50
   //
   double radius = 50;
   double center_x = 115;
@@ -207,11 +206,10 @@ generate_data( feature_vector& feature_points )
     tangent_dir.normalize(); //make the tangent a unit vector
     feature_points.push_back( new rgrl_feature_trace_pt(pt, tangent_dir) );
   }
-  
 }
 
 // BeginLatex
-// 
+//
 // Since we're dealing with 2D images, both \code{pt} for the location
 // of the point and \code{tangent\_dir} for the direction of the
 // tangent are both 2D vectors. Let's not to worry how \code{pt} and
@@ -232,7 +230,7 @@ generate_data( feature_vector& feature_points )
 
 void
 add_outliers( feature_vector& feature_points )
-{  
+{
   vnl_random random;
 
   unsigned int num_outliers = 200;
@@ -257,7 +255,7 @@ main( int argc, char* argv[] )
 
   generate_data( moving_feature_points);
   generate_data( fixed_feature_points );
-  
+
   // Add random data points to create outliers
   //
   add_outliers(moving_feature_points);
@@ -284,10 +282,10 @@ main( int argc, char* argv[] )
   // EndLatex
 
   // BeginCodeSnippet
-  const unsigned int  dimension = 2;  
-  rgrl_feature_set_sptr moving_feature_set = 
+  const unsigned int  dimension = 2;
+  rgrl_feature_set_sptr moving_feature_set =
     new rgrl_feature_set_location<dimension>(moving_feature_points);
-  rgrl_feature_set_sptr fixed_feature_set =  
+  rgrl_feature_set_sptr fixed_feature_set =
     new rgrl_feature_set_location<dimension>(fixed_feature_points);
   rgrl_mask_box image_roi = moving_feature_set->bounding_box();
   // EndCodeSnippet
@@ -297,7 +295,7 @@ main( int argc, char* argv[] )
   //
 
   // BeginLatex
-  // 
+  //
   // Next, we initialize the registration process with a prior affine
   // transformation, and define the affine estimator. More detailed
   // discussion on other common initialization schemes will be
@@ -307,16 +305,16 @@ main( int argc, char* argv[] )
 
   // BeginCodeSnippet
   vnl_matrix<double> A(2,2);
-  A(0,0) = 0.996;   A(0,1) = -0.087; 
+  A(0,0) = 0.996;   A(0,1) = -0.087;
   A(1,0) = -0.087;  A(1,1) = 0.996;
-  vector_2d t( 10, -13 ); 
+  vector_2d t( 10, -13 );
   rgrl_transformation_sptr init_transform = new rgrl_trans_affine(A, t);
   rgrl_estimator_sptr      estimator = new rgrl_est_affine();
   // EndCodeSnippet
 
   // Store the data in the data manager. Other components in the black
   // box of registration are set to the common default techniques for
-  // robustness. 
+  // robustness.
   //
   // BeginLatex
   //
@@ -367,17 +365,15 @@ main( int argc, char* argv[] )
     vcl_cout<<"Final xform: "<<vcl_endl;
     rgrl_transformation_sptr trans = reg.final_transformation();
     rgrl_trans_affine* a_xform = rgrl_cast<rgrl_trans_affine*>(trans);
-    vcl_cout<<"A = "<<a_xform->A()<<vcl_endl;
-    vcl_cout<<"t = "<<a_xform->t()<<vcl_endl;
-    vcl_cout<<"Final alignment error = "<<reg.final_status()->error()<<vcl_endl;
+    vcl_cout<<"A = "<<a_xform->A()<<vcl_endl
+            <<"t = "<<a_xform->t()<<vcl_endl
+            <<"Final alignment error = "<<reg.final_status()->error()<<vcl_endl;
   }
 
   // Perform testing
   //
-  test_macro( "black-box Registration of simple shapes" , 
+  test_macro( "black-box Registration of simple shapes" ,
               reg.final_status()->error(), 1 );
-
-  return 0;
 }
 
 

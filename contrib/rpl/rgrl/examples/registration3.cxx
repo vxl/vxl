@@ -18,13 +18,13 @@
 //
 // \begin{figure}[t]
 // \center{\includegraphics[width=5in]{multi_resol}}
-// \caption{Multi-resolution registration. The diagram depicts the 
-// replationship among the registration engine, the initializer and 
-// the data manager. The initializer specifies the stage at which the 
-// registration begins. At each stage/resolution, the engine iterates 
-// among matching, robust estimation and convergence testing as 
-// illustrated in Figure~\ref{fb-diagram}. The registration process 
-// terminates when the stage is below 0, which is the highest resolution.}  
+// \caption{Multi-resolution registration. The diagram depicts the
+// replationship among the registration engine, the initializer and
+// the data manager. The initializer specifies the stage at which the
+// registration begins. At each stage/resolution, the engine iterates
+// among matching, robust estimation and convergence testing as
+// illustrated in Figure~\ref{fb-diagram}. The registration process
+// terminates when the stage is below 0, which is the highest resolution.}
 // \label{fig:multi-resol}
 // \end{figure}
 //
@@ -78,13 +78,13 @@
 typedef vcl_vector< rgrl_feature_sptr >  feature_vector;
 typedef vnl_vector_fixed<double,2>       vector_2d;
 
-void 
+void
 read_feature_file( const char*     filename,
                    feature_vector& trace_points )
 {
   vcl_ifstream istr( filename );
 
-  if( !istr ) {
+  if ( !istr ) {
     vcl_cerr<<"ERROR: Cannot open "<<filename<<vcl_endl;
     return;
   }
@@ -102,14 +102,14 @@ read_feature_file( const char*     filename,
 }
 
 // using command/observer pattern
-class command_iteration_update: public rgrl_command 
+class command_iteration_update: public rgrl_command
 {
-public:
+ public:
   void execute(rgrl_object* caller, const rgrl_event & event )
   {
     execute( (const rgrl_object*) caller, event );
   }
-  
+
   void execute(const rgrl_object* caller, const rgrl_event & event )
   {
     const rgrl_feature_based_registration* reg_engine =
@@ -118,24 +118,23 @@ public:
 
     if ( trans->is_type( rgrl_trans_affine::type_id() ) ) {
       rgrl_trans_affine* a_xform = rgrl_cast<rgrl_trans_affine*>(trans);
-      vcl_cout<<"xform: A = \n"<<a_xform->A()<< "t = "<<a_xform->t()<<vcl_endl;
+      vcl_cout<<"xform: A =\n"<<a_xform->A()<< "t = "<<a_xform->t()<<vcl_endl;
     }
     else if ( trans->is_type( rgrl_trans_quadratic::type_id() ) ){
       rgrl_trans_quadratic* q_xform = rgrl_cast<rgrl_trans_quadratic*>(trans);
-      vcl_cout<<"xform: Q = \n"<<q_xform->Q()<<"A = "<<q_xform->A()<<
-        "t = "<<q_xform->t()<<vcl_endl;
-    }  
+      vcl_cout<<"xform: Q =\n"<<q_xform->Q()<<"A = "<<q_xform->A()
+              <<"t = "<<q_xform->t()<<vcl_endl;
+    }
   }
-
 };
 
-int 
+int
 main( int argc, char* argv[] )
 {
-  if( argc < 5 ) {
-    vcl_cerr << "Missing Parameters " << vcl_endl;
-    vcl_cerr << "Usage: " << argv[0];
-    vcl_cerr << " FixedImageFeatureFileHighRes FixedImageFeatureFileLowRes MovingImageFeatureFileHighRes MovingImageFeatureFileLowRes";
+  if ( argc < 5 ) {
+    vcl_cerr << "Missing Parameters " << vcl_endl
+             << "Usage: " << argv[0]
+          << " FixedImageFeatureFileHighRes FixedImageFeatureFileLowRes MovingImageFeatureFileHighRes MovingImageFeatureFileLowRes";
     return 1;
   }
 
@@ -168,9 +167,9 @@ main( int argc, char* argv[] )
 
   // Set the initial transformation to be identity
   //
-  int dim = 2;                     
+  int dim = 2;
   rgrl_transformation_sptr initial_transformation = new rgrl_trans_affine(dim);
-  
+
   // BeginLatex
   //
   // We add data to each stage the same way as before. However, a few
@@ -207,7 +206,7 @@ main( int argc, char* argv[] )
   data->set_dimension_increase_for_next_stage( resolution, dimension_increase);
 
   resolution = 0;              //original resolution
-  data->add_data( resolution,                 
+  data->add_data( resolution,
                   moving_feature_set_high_res,
                   fixed_feature_set_high_res );
   rgrl_estimator_sptr quadratic_model = new rgrl_est_quadratic();
@@ -232,8 +231,8 @@ main( int argc, char* argv[] )
   //
   //EndLatex
 
-  int starting_resolution = 1;  
-  reg.run( image_roi, affine_model, initial_transformation, 0, 
+  int starting_resolution = 1;
+  reg.run( image_roi, affine_model, initial_transformation, 0,
            starting_resolution );
 
   // Output Results
@@ -242,9 +241,9 @@ main( int argc, char* argv[] )
     vcl_cout<<"Final xform: "<<vcl_endl;
     rgrl_transformation_sptr trans = reg.final_transformation();
     rgrl_trans_quadratic* q_xform = rgrl_cast<rgrl_trans_quadratic*>(trans);
-    vcl_cout<<"Q =\n"<<q_xform->Q()<<"A = "<<q_xform->A()<<
-      "t = "<<q_xform->t()<<vcl_endl;
-    vcl_cout<<"Final alignment error = "<<reg.final_status()->error()<<vcl_endl;
+    vcl_cout<<"Q =\n"<<q_xform->Q()<<"A = "<<q_xform->A()
+            <<"t = "<<q_xform->t()<<vcl_endl
+            <<"Final alignment error = "<<reg.final_status()->error()<<vcl_endl;
   }
 
   // BeginLatex
@@ -260,18 +259,18 @@ main( int argc, char* argv[] )
   //
   // \begin{verbatim}
   //
-  // xform: A = 
-  // 0.999887 -0.00609213 
-  // 0.00332669 0.998528 
+  // xform: A =
+  // 0.999887 -0.00609213
+  // 0.00332669 0.998528
   // t = -10.1254 -0.63757
   //
   //
-  // Final xform: 
+  // Final xform:
   // Q =
-  // 1.69245e-05 1.00902e-05 2.49065e-06 
-  // 2.81146e-07 3.95073e-06 8.30134e-06 
-  // A = 0.979931 -0.018122 
-  // -0.00138591 0.989724 
+  // 1.69245e-05 1.00902e-05 2.49065e-06
+  // 2.81146e-07 3.95073e-06 8.30134e-06
+  // A = 0.979931 -0.018122
+  // -0.00138591 0.989724
   // t = -13.0714 2.17319
   // Final alignment error = 0.430113
   //
@@ -282,6 +281,4 @@ main( int argc, char* argv[] )
   // Perform testing
   //
   test_macro( "Registration with multi-resolution", reg.final_status()->error(), 1);
-
-  return 0;
 }

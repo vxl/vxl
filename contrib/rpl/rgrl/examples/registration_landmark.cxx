@@ -361,6 +361,4 @@ main( int argc, char* argv[] )
   //
   test_macro( "Registration with landmarks only",
               reg.final_status()->error(), 1.1 );
-
-  return 0;
 }

@@ -23,10 +23,10 @@
 // transformation is estimated from the landmark locations and the
 // orientations and widths of the vessels that meet to form the
 // landmarks.
-// 
+//
 // \begin{figure}[tb]
 // \begin{center}
-// \includegraphics[width=2.5in]{single_invariant} 
+// \includegraphics[width=2.5in]{single_invariant}
 // \end{center}
 // \caption{A landmark is characterized by a center location $\vect{c}$,
 // the orientations of the three blood vessels that meet to form it and
@@ -50,21 +50,20 @@
 // A input landmark file contains a landmark entry in the format:
 //
 // \begin{verbatim}
-// x y       
-// dx1 dy1 w1 
+// x y
+// dx1 dy1 w1
 // dx2 dy2 w2
 // dx3 dy3 w3
 // \end{verbatim}
 //
 // The first row is the location. The 2nd to the 4th each contains a
-// vessel direction with width. 
+// vessel direction with width.
 //
 
 
 #include <vcl_fstream.h>
 #include <vcl_iostream.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vnl/vnl_matrix.h>
 
 #include <vil/vil_load.h>
 #include <vil/vil_image_view.h>
@@ -102,14 +101,14 @@ typedef vnl_vector_fixed<double,2>       vector_2d;
 typedef vcl_vector< rgrl_invariant_sptr> landmark_invaraint_vector;
 
 // using command/observer pattern
-class command_iteration_update: public rgrl_command 
+class command_iteration_update: public rgrl_command
 {
-public:
+ public:
   void execute(rgrl_object* caller, const rgrl_event & event )
   {
     execute( (const rgrl_object*) caller, event );
   }
-  
+
   void execute(const rgrl_object* caller, const rgrl_event & event )
   {
     const rgrl_feature_based_registration* reg_engine =
@@ -118,28 +117,28 @@ public:
 
     if ( trans->is_type( rgrl_trans_similarity::type_id() ) ) {
       rgrl_trans_similarity* sim_xform = rgrl_cast<rgrl_trans_similarity*>(trans);
-      vcl_cout<<"xform: A = \n"<<sim_xform->A()<<"t = "<<sim_xform->t()<<vcl_endl;}
+      vcl_cout<<"xform: A =\n"<<sim_xform->A()<<"t = "<<sim_xform->t()<<vcl_endl;}
     else if ( trans->is_type( rgrl_trans_reduced_quad::type_id() ) ) {
       rgrl_trans_reduced_quad* rq_xform = rgrl_cast<rgrl_trans_reduced_quad*>(trans);
-      vcl_cout<<"xform: Q = \n"<<rq_xform->Q()<<"A = "<<rq_xform->A()<<
-        "t = "<<rq_xform->t()<<vcl_endl;
+      vcl_cout<<"xform: Q =\n"<<rq_xform->Q()<<"A = "<<rq_xform->A()
+              <<"t = "<<rq_xform->t()<<vcl_endl;
     }
     else if ( trans->is_type( rgrl_trans_quadratic::type_id() ) ) {
       rgrl_trans_quadratic* q_xform = rgrl_cast<rgrl_trans_quadratic*>(trans);
-      vcl_cout<<"xform: Q = \n"<<q_xform->Q()<<"A = "<<q_xform->A()<<
-        "t = "<<q_xform->t()<<vcl_endl;
+      vcl_cout<<"xform: Q =\n"<<q_xform->Q()<<"A = "<<q_xform->A()
+              <<"t = "<<q_xform->t()<<vcl_endl;
     }
-    else vcl_cout<<"Unknown type"<<vcl_endl; 
+    else vcl_cout<<"Unknown type"<<vcl_endl;
   }
 };
 
-void 
+void
 read_feature_file( const char* filename,
                    feature_vector& trace_points )
 {
   vcl_ifstream istr( filename );
 
-  if( !istr ) {
+  if ( !istr ) {
     vcl_cerr<<"ERROR: Cannot open "<<filename<<vcl_endl;
     return;
   }
@@ -156,7 +155,6 @@ read_feature_file( const char* filename,
 
   istr.close();
   vcl_cout<<"There are "<<trace_points.size()<<" features"<<vcl_endl;
-
 }
 
 void
@@ -165,7 +163,7 @@ read_landmark_file( const char* filename,
 {
   vcl_ifstream istr( filename );
 
-  if( !istr ) {
+  if ( !istr ) {
     vcl_cerr<<"ERROR: Cannot open "<<filename<<vcl_endl;
     return;
   }
@@ -178,7 +176,7 @@ read_landmark_file( const char* filename,
   vector_2d direction2;
   vector_2d direction3;
   double width1, width2, width3;
-  
+
   bool done = false;
   while ( !done && istr ) {
     if ( !(istr >> location[0] >> location[1] ) )
@@ -194,8 +192,8 @@ read_landmark_file( const char* filename,
       width3 = vnl_math_max( 1.0, width3);
 
       // BeginCodeSnippet
-      rgrl_invariant_single_landmark* single =  
-        new rgrl_invariant_single_landmark( location, direction1, 
+      rgrl_invariant_single_landmark* single =
+        new rgrl_invariant_single_landmark( location, direction1,
                                             direction2, direction3,
                                             width1, width2, width3,
                                             angular_std, width_ratio_std );
@@ -205,21 +203,21 @@ read_landmark_file( const char* filename,
       // If the single constellation was ambiguous create a copy with
       // the indices shifted to releive the ambiguity
       if ( single->is_ambiguous() ) {
-        rgrl_invariant_single_landmark* copy = 
+        rgrl_invariant_single_landmark* copy =
           new rgrl_invariant_single_landmark( *single, angular_std, width_ratio_std );
         landmark_inv.push_back( copy );
-      } 
+      }
     }
   }
-}            
-      
-int 
+}
+
+int
 main( int argc, char* argv[] )
 {
-  if( argc < 5 ) {
-    vcl_cerr << "Missing Parameters " << vcl_endl;
-    vcl_cerr << "Usage: " << argv[0];
-    vcl_cerr << " FixedImageTraceFile FixedImageLandmarkFile MovingImageTraceFile MovingImageLandmarkFile MaskImage";
+  if ( argc < 5 ) {
+    vcl_cerr << "Missing Parameters" << vcl_endl
+             << "Usage: " << argv[0]
+             << " FixedImageTraceFile FixedImageLandmarkFile MovingImageTraceFile MovingImageLandmarkFile MaskImage\n";
     return 1;
   }
 
@@ -252,14 +250,14 @@ main( int argc, char* argv[] )
   mask_image = vil_load(make_file_name);
   rgrl_mask_sptr mask = new rgrl_mask_2d_image( mask_image );
 
-  moving_feature_set = 
+  moving_feature_set =
     new rgrl_feature_set_location_masked<dimension>(moving_set,
                                                     mask);
-  fixed_feature_set = 
+  fixed_feature_set =
     new rgrl_feature_set_location_masked<dimension>(fixed_set,
                                                     mask);
   rgrl_mask_box moving_image_region = moving_feature_set->bounding_box();
-  rgrl_mask_box fixed_image_region  = fixed_feature_set->bounding_box(); 
+  rgrl_mask_box fixed_image_region  = fixed_feature_set->bounding_box();
 
   // Create the initializer
   //
@@ -279,11 +277,11 @@ main( int argc, char* argv[] )
   // EndLatex
 
   // BeginCodeSnippet
-  rgrl_initializer_inv_indexing* inv_initializer = 
+  rgrl_initializer_inv_indexing* inv_initializer =
     new rgrl_initializer_inv_indexing( moving_image_region,
                                        fixed_image_region );
   double angular_std = 5.5*vnl_math::pi/180;
-  double nn_radius = angular_std * vcl_sqrt(11.0704);//95% chi-sqr uncertainty bound 
+  double nn_radius = angular_std * vcl_sqrt(11.0704);//95% chi-sqr uncertainty bound
   inv_initializer->add_data( fixed_landmark_set,
                              moving_landmark_set,
                              nn_radius );
@@ -293,7 +291,7 @@ main( int argc, char* argv[] )
   // Add the data and model hierarchy needed by the view generator.
   //
   rgrl_data_manager_sptr data = new rgrl_data_manager();
-  
+
   data->add_data( moving_feature_set,  // from data
                   fixed_feature_set);  // to data
 
@@ -319,8 +317,8 @@ main( int argc, char* argv[] )
     vcl_cout<<"Final xform: "<<vcl_endl;
     rgrl_transformation_sptr trans = reg.final_transformation();
     rgrl_trans_quadratic* q_xform = rgrl_cast<rgrl_trans_quadratic*>(trans);
-    vcl_cout<<"Q =\n"<<q_xform->Q()<<"A = "<<q_xform->A()<<"t ="<<q_xform->t()<<vcl_endl;
-    vcl_cout<<"Final alignment error = "<<reg.final_status()->error()<<vcl_endl;
+    vcl_cout<<"Q =\n"<<q_xform->Q()<<"A = "<<q_xform->A()<<"t ="<<q_xform->t()<<vcl_endl
+            <<"Final alignment error = "<<reg.final_status()->error()<<vcl_endl;
   }
 
   // BeginLatex
@@ -341,12 +339,12 @@ main( int argc, char* argv[] )
   // succeed on the second initial estimate with the final result:
   //
   // \begin{verbatim}
-  // Final xform: 
+  // Final xform:
   // Q =
-  // 0.000101439 0.000101008 8.86866e-06 
-  // 1.85556e-05 2.149e-05 -4.64715e-07 
-  // A = 0.859269 -0.0949512 
-  // -0.0495303 0.971695 
+  // 0.000101439 0.000101008 8.86866e-06
+  // 1.85556e-05 2.149e-05 -4.64715e-07
+  // A = 0.859269 -0.0949512
+  // -0.0495303 0.971695
   // t =-209.843 -7.68227
   // Final alignment error = 0.576973
   // \end{verbatim}
@@ -354,13 +352,11 @@ main( int argc, char* argv[] )
   // The improvement in accuracy over the previous example is due to
   // the use of vesel center points for refinement of the
   // transformation.
-  // 
+  //
   // EndLatex
 
   // Perform testing
   //
-  test_macro( "Registration using invariant indexing on retinal images" , 
+  test_macro( "Registration using invariant indexing on retinal images" ,
               reg.final_status()->error(), 3 );
-
-  return 0;
 }

@@ -21,10 +21,10 @@
 //
 // \begin{figure}[tbp]
 //  \center{\includegraphics[width=5in]{command_observer}}
-// \caption{Interaction between the registration engine and the command 
-// object. The command is added to the engine via a call to 
+// \caption{Interaction between the registration engine and the command
+// object. The command is added to the engine via a call to
 // add\_observer() before the registration process begins, and is
-// associated to the iteration event. In each iteration, the 
+// associated to the iteration event. In each iteration, the
 // execute() function of the command object is triggered.}
 // \label{observer}
 // \end{figure}
@@ -76,13 +76,13 @@
 typedef vcl_vector< rgrl_feature_sptr >  feature_vector;
 typedef vnl_vector_fixed<double,2>       vector_2d;
 
-void 
+void
 read_feature_file( const char* filename,
                    feature_vector& trace_points )
 {
   vcl_ifstream istr( filename );
 
-  if( !istr ) {
+  if ( !istr ) {
     vcl_cerr<<"ERROR: Cannot open "<<filename<<vcl_endl;
     return;
   }
@@ -99,47 +99,46 @@ read_feature_file( const char* filename,
 
   istr.close();
   vcl_cout<<"There are "<<trace_points.size()<<" features"<<vcl_endl;
-
 }
 
 
 // using command/observer pattern
 // BeginCodeSnippet
-class command_iteration_update: public rgrl_command 
+class command_iteration_update: public rgrl_command
 {
-public:
+ public:
   void execute(rgrl_object* caller, const rgrl_event & event )
   {
     execute( (const rgrl_object*) caller, event );
   }
-  
+
   void execute(const rgrl_object* caller, const rgrl_event & event )
   {
     const rgrl_feature_based_registration* reg_engine =
       dynamic_cast<const rgrl_feature_based_registration*>(caller);
 
-    if ( !reg_engine ) return; 
+    if ( !reg_engine ) return;
 
     rgrl_transformation_sptr trans = reg_engine->current_transformation();
-    
+
     if ( trans->is_type( rgrl_trans_quadratic::type_id() ) ) {
       rgrl_trans_quadratic* q_xform = rgrl_cast<rgrl_trans_quadratic*>(trans);
-      vcl_cout<<"xform: Q \n"<<q_xform->Q()<<"A = "<<q_xform->A()<<
-        "t = "<<q_xform->t()<<vcl_endl;
+      vcl_cout<<"xform: Q\n"<<q_xform->Q()<<"A = "<<q_xform->A()
+              <<"t = "<<q_xform->t()<<vcl_endl;
     }
-    else vcl_cout<<"ERROR: Incorrect type!"<<vcl_endl;
+    else
+      vcl_cout<<"ERROR: Incorrect type!"<<vcl_endl;
   }
 };
 // EndCodeSnippet
 
-int 
+int
 main( int argc, char* argv[] )
 {
-
-  if( argc < 3 ) {
-    vcl_cerr << "Missing Parameters " << vcl_endl;
-    vcl_cerr << "Usage: " << argv[0];
-    vcl_cerr << " FixedImageFeatureFile MovingImageFeatureFile";
+  if ( argc < 3 ) {
+    vcl_cerr << "Missing Parameters " << vcl_endl
+             << "Usage: " << argv[0]
+             << " FixedImageFeatureFile MovingImageFeatureFile\n";
     return 1;
   }
 
@@ -158,9 +157,9 @@ main( int argc, char* argv[] )
   const unsigned int dimension = 2;
   rgrl_feature_set_sptr moving_feature_set;
   rgrl_feature_set_sptr fixed_feature_set;
-  moving_feature_set = 
+  moving_feature_set =
     new rgrl_feature_set_location<dimension>(moving_feature_points);
-  fixed_feature_set = 
+  fixed_feature_set =
     new rgrl_feature_set_location<dimension>(fixed_feature_points);
   rgrl_mask_box moving_image_region = moving_feature_set->bounding_box();
 
@@ -193,7 +192,7 @@ main( int argc, char* argv[] )
   // \code{rgrl\_event\_iteration}.
   //
   // EndLatex
-  
+
   // BeginCodeSnippet
   reg.add_observer( new rgrl_event_iteration(), new command_iteration_update());
   // EndCodeSnippet
@@ -205,9 +204,9 @@ main( int argc, char* argv[] )
     vcl_cout<<"Final xform: "<<vcl_endl;
     rgrl_transformation_sptr trans = reg.final_transformation();
     rgrl_trans_quadratic* q_xform = rgrl_cast<rgrl_trans_quadratic*>(trans);
-    vcl_cout<<"Q \n"<<q_xform->Q()<<"A = "<<q_xform->A()<<
-      "t = "<<q_xform->t()<<vcl_endl;
-    vcl_cout<<"Final alignment error = "<<reg.final_status()->error()<<vcl_endl;
+    vcl_cout<<"Q\n"<<q_xform->Q()<<"A = "<<q_xform->A()
+            <<"t = "<<q_xform->t()<<vcl_endl
+            <<"Final alignment error = "<<reg.final_status()->error()<<vcl_endl;
   }
 
   // BeginLatex
@@ -221,6 +220,4 @@ main( int argc, char* argv[] )
   // Perform testing
   //
   test_macro( "Registration with robustness", reg.final_status()->error(), 1 );
-
-  return 0;
 }

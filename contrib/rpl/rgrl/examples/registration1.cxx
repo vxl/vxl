@@ -41,14 +41,14 @@
 #include <rgrl/rgrl_command.h>
 
 // using command/observer pattern
-class command_iteration_update: public rgrl_command 
+class command_iteration_update: public rgrl_command
 {
-public:
+ public:
   void execute(rgrl_object* caller, const rgrl_event & event )
   {
     execute( (const rgrl_object*) caller, event );
   }
-  
+
   void execute(const rgrl_object* caller, const rgrl_event & event )
   {
     const rgrl_feature_based_registration* reg_engine =
@@ -59,18 +59,18 @@ public:
   }
 };
 
-int 
+int
 main( int argc, char* argv[] )
 {
-  if( argc < 2 ) {
-    vcl_cerr << "Missing Parameters " << vcl_endl;
-    vcl_cerr << "Usage: " << argv[0];
-    vcl_cerr << " ImageFeatureFile ";
+  if ( argc < 2 ) {
+    vcl_cerr << "Missing Parameters " << vcl_endl
+             << "Usage: " << argv[0]
+             << " ImageFeatureFile\n";
     return 1;
   }
 
   // BeginLatex
-  // 
+  //
   // In this over-simplified example, both the moving image and the
   // fixed image are chosen to be the same image. The initial
   // transformation is a translation perturbed from the
@@ -98,7 +98,7 @@ main( int argc, char* argv[] )
 
   const char* filename = argv[1];
   vcl_ifstream istr( filename );
-  if( !istr ) {
+  if ( !istr ) {
     vcl_cerr<<"ERROR: Cannot open "<<filename<<vcl_endl;
     return 1;
   }
@@ -152,7 +152,7 @@ main( int argc, char* argv[] )
 
   // BeginCodeSnippet
   rgrl_transformation_sptr init_transform;
-  vector_2d init_parameters( 15, 15); 
+  vector_2d init_parameters( 15, 15);
   init_transform = new rgrl_trans_translation(init_parameters);
   // EndCodeSnippet
 
@@ -169,10 +169,10 @@ main( int argc, char* argv[] )
   vector_2d x0(0,0);          //upper left corner
   vector_2d x1(1023,1023);    //bottom right corner
   rgrl_mask_box moving_image_roi(x0, x1), fixed_image_roi(x0, x1);
-  rgrl_initializer_sptr initializer = 
-    new rgrl_initializer_prior(moving_image_roi, 
-                               fixed_image_roi, 
-                               estimator, 
+  rgrl_initializer_sptr initializer =
+    new rgrl_initializer_prior(moving_image_roi,
+                               fixed_image_roi,
+                               estimator,
                                init_transform);
   // EndCodeSnippet
 
@@ -189,7 +189,7 @@ main( int argc, char* argv[] )
   unsigned int k = 1;
   rgrl_matcher_sptr cp_matcher = new rgrl_matcher_k_nearest( k );
   // EndCodeSnippet
-  
+
   // BeginLatex
   //
   // The list of matches returned by the matcher may contain outliers
@@ -221,10 +221,10 @@ main( int argc, char* argv[] )
   // or the number of iterations has exceeded the limit.
   //
   // EndLatex
-  
+
   // BeginCodeSnippet
   double tolerance = 1.5;
-  rgrl_convergence_tester_sptr conv_test = 
+  rgrl_convergence_tester_sptr conv_test =
     new rgrl_convergence_on_median_error( tolerance );
   // EndCodeSnippet
 
@@ -238,7 +238,7 @@ main( int argc, char* argv[] )
   // tester are global to all stages.
   //
   // EndLatex
-  
+
   // BeginCodeSnippet
   rgrl_data_manager_sptr data = new rgrl_data_manager();
   data->add_data( moving_feature_set, // data from moving image
@@ -251,7 +251,7 @@ main( int argc, char* argv[] )
   // EndCodeSnippet
 
   // BeginLatex
-  // 
+  //
   // In the case where the estimation never converged, it is prudent
   // to establish a limit on the number of iterations, where one
   // iteration consists of matching and transformation estimation (see
@@ -294,8 +294,8 @@ main( int argc, char* argv[] )
     vcl_cout<<"Final xform: "<<vcl_endl;
     rgrl_transformation_sptr trans = reg.final_transformation();
     rgrl_trans_translation* a_xform = rgrl_cast<rgrl_trans_translation*>(trans);
-    vcl_cout<<"t = "<<a_xform->t()<<vcl_endl;
-    vcl_cout<<"Final alignment error = "<<reg.final_status()->error()<<vcl_endl;
+    vcl_cout<<"t = "<<a_xform->t()<<vcl_endl
+            <<"Final alignment error = "<<reg.final_status()->error()<<vcl_endl;
   }
   // EndCodeSnippet
 
@@ -309,6 +309,4 @@ main( int argc, char* argv[] )
   // Perform testing
   //
   test_macro( "Registration for introduction" , reg.final_status()->error(), 1e-2 );
-
-  return 0;
 }

@@ -8,7 +8,7 @@
 // estimated at each point location by gathering $m$ closest points
 // and fitting a plane. Implementation of triangularization algorithms
 // is part of the future work.
-// 
+//
 //  EndLatex
 
 // This program reads in the data file of the format
@@ -60,15 +60,14 @@ typedef vnl_vector_fixed<double,3>       vector_3d;
 // are 3D vectors).
 //
 // EndLatex
-void 
+void
 read_feature_file( const char* filename,
-                   feature_vector& feature_points, 
+                   feature_vector& feature_points,
                    int sample_spacing )
 {
-
   vcl_ifstream istr( filename );
 
-  if( !istr ) {
+  if ( !istr ) {
     vcl_cerr<<"ERROR: Cannot open "<<filename<<vcl_endl;
     return;
   }
@@ -78,7 +77,7 @@ read_feature_file( const char* filename,
 
   int total;
   istr >> total;
-  for (unsigned int i = 0; i<total; i+=sample_spacing) {
+  for (int i = 0; i<total; i+=sample_spacing) {
     istr >> location[0] >> location[1] >> location[2]
          >>normal[0]>>normal[1]>>normal[2];
     // BeginCodeSnippet
@@ -93,14 +92,14 @@ read_feature_file( const char* filename,
 }
 
 // using command/observer pattern
-class command_iteration_update: public rgrl_command 
+class command_iteration_update: public rgrl_command
 {
-public:
+ public:
   void execute(rgrl_object* caller, const rgrl_event & event )
   {
     execute( (const rgrl_object*) caller, event );
   }
-  
+
   void execute(const rgrl_object* caller, const rgrl_event & event )
   {
     const rgrl_feature_based_registration* reg_engine =
@@ -111,19 +110,19 @@ public:
   }
 };
 
-int 
+int
 main( int argc, char* argv[] )
 {
-  if( argc < 2 ) {
-    vcl_cerr << "Missing Parameters " << vcl_endl;
-    vcl_cerr << "Usage: " << argv[0];
-    vcl_cerr << " ImageFeatureFile";
+  if ( argc < 2 ) {
+    vcl_cerr << "Missing Parameters" << vcl_endl
+             << "Usage: " << argv[0]
+             << " ImageFeatureFile\n";
     return 1;
   }
 
   prepare_testing();
 
-  // Read in the features from the external files. 
+  // Read in the features from the external files.
   //
   feature_vector moving_feature_points;
   feature_vector fixed_feature_points;
@@ -134,8 +133,8 @@ main( int argc, char* argv[] )
   // Set up the feature sets using kd-tree as the underlying data
   // structure.
   //
-  // BeginLatex 
-  // 
+  // BeginLatex
+  //
   // The default underlying data structure for
   // \code{rgrl\_feature\_set\_location} is N-D bins, which, on
   // average, is quite fast for sparse and scattered data, but
@@ -152,9 +151,9 @@ main( int argc, char* argv[] )
   // BeginCodeSnippet
   const unsigned int dimension = 3;
   bool use_bins = true;
-  rgrl_feature_set_sptr moving_feature_set = 
+  rgrl_feature_set_sptr moving_feature_set =
     new rgrl_feature_set_location<dimension>(moving_feature_points, !use_bins);
-  rgrl_feature_set_sptr fixed_feature_set = 
+  rgrl_feature_set_sptr fixed_feature_set =
     new rgrl_feature_set_location<dimension>(fixed_feature_points, !use_bins);
   rgrl_mask_box image_roi = moving_feature_set->bounding_box();
   // EndCodeSnippet
@@ -164,35 +163,35 @@ main( int argc, char* argv[] )
   // transformation
   //
 
-  // The initial transform is rotation = [x_angle, y_angle, z_angle], 
+  // The initial transform is rotation = [x_angle, y_angle, z_angle],
   // t=[10, 0, 15]
   //
-  vnl_matrix<double> A(3,3,vnl_matrix_identity); 
+  vnl_matrix<double> A(3,3,vnl_matrix_identity);
 
   //y_dir
-  vnl_matrix<double> Ay(3,3,vnl_matrix_identity); 
-  double y_angle = 5*vnl_math::pi/180; 
+  vnl_matrix<double> Ay(3,3,vnl_matrix_identity);
+  double y_angle = 5*vnl_math::pi/180;
   Ay(0,0) = vcl_cos(y_angle); Ay(0,2) = vcl_sin(y_angle);
   Ay(2,0) = -vcl_sin(y_angle); Ay(2,2) = vcl_cos(y_angle);
-  
+
   //x_dir
-  vnl_matrix<double> Ax(3,3,vnl_matrix_identity); 
-  double x_angle = 0*vnl_math::pi/180; 
+  vnl_matrix<double> Ax(3,3,vnl_matrix_identity);
+  double x_angle = 0*vnl_math::pi/180;
   Ax(1,1) = vcl_cos(x_angle); Ax(1,2) = -vcl_sin(x_angle);
   Ax(2,1) = vcl_sin(x_angle); Ax(2,2) = vcl_cos(x_angle);
-  
+
   //z_dir
-  vnl_matrix<double> Az(3,3,vnl_matrix_identity); 
-  double z_angle = 10*vnl_math::pi/180; 
+  vnl_matrix<double> Az(3,3,vnl_matrix_identity);
+  double z_angle = 10*vnl_math::pi/180;
   Az(0,0) = vcl_cos(z_angle); Az(0,1) = -vcl_sin(z_angle);
   Az(1,0) = vcl_sin(z_angle); Az(1,1) =  vcl_cos(z_angle);
-  
+
   A = Ax*Ay*Az;
-  /*
+#if 0 // commented out
   A(0,0) = 0.98106; A(0,1) =  -0.172987; A(0,2)= 0.0871557;
   A(1,0) = 0.173648;  A(1,1) = 0.984808;  A(1,2)= 0;
   A(2,0) = -0.0858317; A(2,1) = 0.0151344; A(2,2)= 0.996195;
-  */
+#endif // 0
   vector_3d t(10, 0, 15);
   t *= 1/1000;
 
@@ -201,7 +200,7 @@ main( int argc, char* argv[] )
 
   // Store the data in the data manager. Other components in the black
   // box of registration are set to the common default techniques for
-  // robustness. 
+  // robustness.
   //
   rgrl_data_manager_sptr data = new rgrl_data_manager();
   data->add_data( moving_feature_set,   // data from moving image
@@ -222,8 +221,8 @@ main( int argc, char* argv[] )
     vcl_cout<<"Final xform: "<<vcl_endl;
     rgrl_transformation_sptr final_trans = reg.final_transformation();
     rgrl_trans_affine* a_xform = rgrl_cast<rgrl_trans_affine*>(final_trans);
-    vcl_cout<<"Final xform: A = \n"<<a_xform->A()<<"t = "<<a_xform->t()<<vcl_endl;
-    vcl_cout<<"Final alignment error = "<<reg.final_status()->error()<<vcl_endl;
+    vcl_cout<<"Final xform: A =\n"<<a_xform->A()<<"t = "<<a_xform->t()<<vcl_endl
+            <<"Final alignment error = "<<reg.final_status()->error()<<vcl_endl;
   }
 
   // BeginLatex
@@ -244,6 +243,4 @@ main( int argc, char* argv[] )
   // Perform testing
   //
   test_macro( "Registration of range data", reg.final_status()->error(), 1.0e-004 );
-
-  return 0;
 }

@@ -52,14 +52,14 @@ typedef vcl_vector< rgrl_feature_sptr >         feature_vector;
 
 
 // using command/observer pattern
-class command_iteration_update: public rgrl_command 
+class command_iteration_update: public rgrl_command
 {
-public:
+ public:
   void execute(rgrl_object* caller, const rgrl_event & event )
   {
     execute( (const rgrl_object*) caller, event );
   }
-  
+
   void execute(const rgrl_object* caller, const rgrl_event & event )
   {
     const rgrl_feature_based_registration* reg_engine =
@@ -118,7 +118,7 @@ generate_data( feature_vector& feature_set )
     feature_set.push_back( new rgrl_feature_trace_pt(pt, tangent_dir) );
   }
 
-  // Draw the circle, centered at (115, 115), with radius 50 
+  // Draw the circle, centered at (115, 115), with radius 50
   //
   double radius = 50;
   double center_x = 115;
@@ -134,12 +134,11 @@ generate_data( feature_vector& feature_set )
     tangent_dir.normalize(); //make the tangent a unit vector
     feature_set.push_back( new rgrl_feature_trace_pt(pt, tangent_dir) );
   }
-  
 }
 
 void
 add_outliers( feature_vector& feature_set )
-{  
+{
   vnl_random random;
 
   unsigned int num_outliers = 200;
@@ -164,17 +163,17 @@ main( int argc, char* argv[] )
 
   generate_data( moving_feature_points);
   generate_data( fixed_feature_points );
-  
+
   // Add random data points to create outliers
   //
   add_outliers(moving_feature_points);
 
   // Set up the feature sets
   //
-  const unsigned int  dimension = 2;  
-   rgrl_feature_set_sptr moving_feature_set = 
+  const unsigned int  dimension = 2;
+   rgrl_feature_set_sptr moving_feature_set =
     new rgrl_feature_set_location<dimension>(moving_feature_points);
-  rgrl_feature_set_sptr fixed_feature_set =  
+  rgrl_feature_set_sptr fixed_feature_set =
     new rgrl_feature_set_location<dimension>(fixed_feature_points);
   rgrl_mask_box image_roi = moving_feature_set->bounding_box();
 
@@ -185,7 +184,7 @@ main( int argc, char* argv[] )
   vnl_matrix<double> A(2,2);
   A(0,0) = 0.996;   A(0,1) = -0.087;
   A(1,0) = -0.087;  A(1,1) = 0.996;
-  vector_2d t( 10, -13); 
+  vector_2d t( 10, -13);
   init_transform = new rgrl_trans_affine(A, t);
   rgrl_estimator_sptr estimator = new rgrl_est_affine();
 
@@ -213,7 +212,7 @@ main( int argc, char* argv[] )
   rgrl_matcher_sptr cp_matcher = new rgrl_matcher_k_nearest( k );
   // EndCodeSnippet
 
-  // Set up the weighter 
+  // Set up the weighter
   //
   // BeginLatex
   //
@@ -250,13 +249,12 @@ main( int argc, char* argv[] )
   // EndCodeSnippet
 
   // BeginLatex
-  //  
+  //
   // \begin{figure}[tbp]
   // \begin{center}
   // \begin{tabular}{cc}
   // \includegraphics[width=2.3in]{m_est_rho} &
-  // \includegraphics[width=2.3in]{m_est_wgts} \\
-  // (a) & (b) 
+  // \includegraphics[width=2.3in]{m_est_wgts} \\ (a) & (b)
   // \end{tabular}
   // \end{center}
   // \caption{Plots of (a) the robust loss function $\rho(u)$ and (b) weight
@@ -273,7 +271,7 @@ main( int argc, char* argv[] )
 
   // Set up the scale estimators, both weighted and unweighted
   //
-  // BeginLatex 
+  // BeginLatex
   //
   // The formulation of a weight function is $w(u) = \rho'(u) / u $,
   // where $\rho(u)$ is the loss function and $u$ is the registration
@@ -285,15 +283,15 @@ main( int argc, char* argv[] )
   // providing a prior scale to the initializer, or by using an
   // unweighted scale estimator. In the example, we take the second
   // approach by declaring both types of scale estimator.
-  // 
+  //
   // EndLatex
 
   // BeginCodeSnippet
   vcl_auto_ptr<rrel_objective> muset_obj( new rrel_muset_obj(0, false) );
 
-  rgrl_scale_estimator_unwgted_sptr unwgted_scale_est = 
+  rgrl_scale_estimator_unwgted_sptr unwgted_scale_est =
     new rgrl_scale_est_closest( muset_obj );
-  rgrl_scale_estimator_wgted_sptr wgted_scale_est = 
+  rgrl_scale_estimator_wgted_sptr wgted_scale_est =
     new rgrl_scale_est_all_weights();
   // EndCodeSnippet
 
@@ -329,14 +327,14 @@ main( int argc, char* argv[] )
 
   // BeginCodeSnippet
   double tolerance = 1.5;
-  rgrl_convergence_tester_sptr conv_test = 
+  rgrl_convergence_tester_sptr conv_test =
     new rgrl_convergence_on_weighted_error( tolerance );
   // EndCodeSnippet
 
   // Store the data in the data manager
   //
   // BeginLatex
-  // 
+  //
   // As before, all the components, except the convergence tester, are
   // stored in the data manager. Table~\ref{tb:defaults} contains the
   // list of default techniques for the major components if not set.
@@ -356,7 +354,7 @@ main( int argc, char* argv[] )
   // \end{table}
   //
   // EndLatex
-  
+
   // BeginCodeSnippet
   rgrl_data_manager_sptr data = new rgrl_data_manager();
   data->add_data( moving_feature_set, // data from moving image
@@ -364,7 +362,7 @@ main( int argc, char* argv[] )
                   cp_matcher,         // matcher for this data
                   wgter,              // weighter
                   unwgted_scale_est,  // unweighted scale estimator
-                  wgted_scale_est);   // weighted scale estimator    
+                  wgted_scale_est);   // weighted scale estimator
   // EndCodeSnippet
 
   // Construct the registration engine and adjust some parameters
@@ -377,7 +375,7 @@ main( int argc, char* argv[] )
   // the maximum amount of looping in Figure~\ref{fb-diagram}.
   //
   // EndLatex
-  
+
   // BeginCodeSnippet
   rgrl_feature_based_registration reg( data, conv_test );
   reg.set_expected_min_geometric_scale( 0.1 ); //scale cannot go lower than 0.1
@@ -394,18 +392,16 @@ main( int argc, char* argv[] )
     vcl_cout<<"Final xform: "<<vcl_endl;
     rgrl_transformation_sptr trans = reg.final_transformation();
     rgrl_trans_affine* a_xform = rgrl_cast<rgrl_trans_affine*>(trans);
-    vcl_cout<<"A = "<<a_xform->A()<<vcl_endl;
-    vcl_cout<<"t = "<<a_xform->t()<<vcl_endl;
-    vcl_cout<<"Final alignment error = "<<reg.final_status()->error()<<vcl_endl;
+    vcl_cout<<"A = "<<a_xform->A()<<vcl_endl
+            <<"t = "<<a_xform->t()<<vcl_endl
+            <<"Final alignment error = "<<reg.final_status()->error()<<vcl_endl;
   }
 
 
   // Perform testing
   //
-  test_macro( "Registration of simple shapes with outliers" , 
+  test_macro( "Registration of simple shapes with outliers" ,
               reg.final_status()->error(), 1 );
-
-  return 0;
 }
 
 
