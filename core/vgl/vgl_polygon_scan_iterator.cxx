@@ -345,7 +345,7 @@ void vgl_polygon_scan_iterator::get_next_vert( vertind v, vertind & nextvert )
 {
         nextvert = v;
         nextvert.vertnum += 1;
-        if ( nextvert.vertnum == poly_[nextvert.chainnum].size() )
+        if ( nextvert.vertnum == int(poly_[nextvert.chainnum].size()) )
             nextvert.vertnum = 0; // wrap around to first vertex
 }
 
