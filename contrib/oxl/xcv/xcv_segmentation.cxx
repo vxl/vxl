@@ -54,7 +54,7 @@ bool xcv_segmentation::get_harris_params(osl_harris_params* params)
 //: Perform Harris corner detection.
 //-----------------------------------------------------------------------------
 void xcv_segmentation::perform_harris(osl_harris_params& params,
-  unsigned col, unsigned row)
+                                      unsigned col, unsigned row)
 {
   vil_image img;
   bool image_ok = get_image_at(&img, col, row);
@@ -102,7 +102,7 @@ void xcv_segmentation::harris()
 //: Draw the given edges onto the given location.
 //-----------------------------------------------------------------------------
 void xcv_segmentation::draw_edges(vcl_list<osl_edge*> lines, unsigned col,
-  unsigned row)
+                                  unsigned row)
 {
   vgui_easy2D_tableau_sptr easy_tab = get_easy2D_at(col, row);
   if (!easy_tab)
@@ -144,7 +144,8 @@ void xcv_segmentation::draw_edges(vcl_list<osl_edge*> lines, unsigned col,
 //: Draw straight lines onto the given location.
 //-----------------------------------------------------------------------------
 void xcv_segmentation::draw_straight_lines(vcl_vector<float> x1, vcl_vector<float> y1,
-  vcl_vector<float> x2, vcl_vector<float> y2, unsigned col, unsigned row)
+                                           vcl_vector<float> x2, vcl_vector<float> y2,
+                                           unsigned col, unsigned row)
 {
   vgui_easy2D_tableau_sptr easy_tab = get_easy2D_at(col, row);
   if (!easy_tab)
@@ -240,35 +241,32 @@ void xcv_segmentation::get_broken_edges(double bk_thresh, vcl_list<osl_edge*>* b
   get_current(&col, &row);
   vil_image img;
   bool image_ok = get_image_at(&img, col, row);
-  if (image_ok == false)
+  if (!image_ok)
     return;
 
-  if (detected_edges.size() == 0)
-  {
-    // Canny OX finding edges ------
-    osl_canny_ox_params params;
+  // Canny OX finding edges ------
+  osl_canny_ox_params params;
 
-    params.sigma = 1.0;
-    params.max_width = 50;
-    params.gauss_tail = 0.0001f;
-    params.low = 2.0;
-    params.border_size = 2;
-    params.border_value = 0.0;
-    params.scale = 5.0;
-    params.follow_strategy = 2;
-    params.join_flag = 1;
-    params.junction_option = 0;
-    params.high = 12.0;
-    params.edge_min = 60;
-    params.min_length = 60;
+  params.sigma = 1.0;
+  params.max_width = 50;
+  params.gauss_tail = 0.0001f;
+  params.low = 2.0;
+  params.border_size = 2;
+  params.border_value = 0.0;
+  params.scale = 5.0;
+  params.follow_strategy = 2;
+  params.join_flag = 1;
+  params.junction_option = 0;
+  params.high = 12.0;
+  params.edge_min = 60;
+  params.min_length = 60;
 
-    osl_canny_ox cox(params);
-    cox.detect_edges(img, &detected_edges);
-  }
+  osl_canny_ox cox(params);
+  cox.detect_edges(img, &detected_edges);
 
   // breaking edges -----
   for (vcl_list<osl_edge*>::iterator iter = detected_edges.begin();
-    iter!= detected_edges.end(); iter++)
+       iter!= detected_edges.end(); iter++)
     osl_break_edge(*iter, broken_edges, bk_thresh);
 }
 
