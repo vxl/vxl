@@ -1,6 +1,6 @@
 USES += contrib/gel core
 
-IMMEDIATE_LIBS := -lvdgl -lvtol -lvil -lvnl -lvbl
+IMMEDIATE_LIBS := -lvdgl -lvtol -lvil -lvil1 -lvnl -lvbl
 
 LIBRARY := gevd
 VERSION := 1.0
