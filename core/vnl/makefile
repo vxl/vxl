@@ -71,20 +71,18 @@ MANPAGE_SOURCES += vnl_finite_field_number.h
 #misc header files
 MANPAGE_SOURCES += vnl_T_n.h
 MANPAGE_SOURCES += vnl_binary.h
-MANPAGE_SOURCES += vnl_complexify.h
 MANPAGE_SOURCES += vnl_config.h
 MANPAGE_SOURCES += vnl_double_2x2.h
 MANPAGE_SOURCES += vnl_double_3x3.h
 MANPAGE_SOURCES += vnl_double_3x4.h
 MANPAGE_SOURCES += vnl_double_4x3.h
 MANPAGE_SOURCES += vnl_double_4x4.h
+MANPAGE_SOURCES += vnl_double_5.h
 MANPAGE_SOURCES += vnl_identity.h
-MANPAGE_SOURCES += vnl_imag.h
 MANPAGE_SOURCES += vnl_matlab_file_write.h
 MANPAGE_SOURCES += vnl_matrix_ref.h
 MANPAGE_SOURCES += vnl_operators.h
 MANPAGE_SOURCES += vnl_random.h
-MANPAGE_SOURCES += vnl_real.h
 MANPAGE_SOURCES += vnl_tag.h
 MANPAGE_SOURCES += vnl_vector_dereference.h
 
