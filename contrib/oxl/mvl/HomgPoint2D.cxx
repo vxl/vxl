@@ -34,7 +34,7 @@ HomgPoint2D::get_nonhomogeneous(double& ex, double& ey) const
 
 //-----------------------------------------------------------------------------
 //
-//: returns a non-homogeneous coolvector of length 2.
+//: returns a non-homogeneous vnl_vector of length 2.
 vnl_double_2 HomgPoint2D::get_double2() const
 {
   double scale = 1.0 / (*this)[2];
