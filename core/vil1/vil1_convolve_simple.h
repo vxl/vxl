@@ -1,7 +1,6 @@
+// This is vxl/vil/vil_convolve_simple.h
 #ifndef vil_convolve_simple_h_
 #define vil_convolve_simple_h_
-// This is vxl/vil/vil_convolve_simple.h
-
 //:
 // \file
 // \brief Simple convolution functions
@@ -16,7 +15,7 @@ template <class T> class vil_memory_image_of;
 //
 // The given regions of the input images are convolved and placed at
 // the given position in the output image, according to the formula :
-// $\displaystyle OUT[y][x] = \sum_{x1+x2=x, y1+y2=y} IN1[y1][x1] IN2[y2][x2] $
+// $\displaystyle OUT[y][x] = \sum_{x_1+x_2=x, y_1+y_2=y} IN_1[y_1][x_1] IN_2[y_2][x_2]$
 //
 // The dummy parameter is just for dumb compilers that do not allow
 // the use of vil_convolve_simple<...> to specify the accumulator type.
@@ -41,7 +40,7 @@ void vil_convolve_simple(I1 const* const*  in1, unsigned w1, unsigned h1, // inp
 // - AC : accumulator pixel type
 // - O  : output image type
 //
-// $\displaystyle  out_{off+k} = \sum_{i+j = k} a_{off+i} b_{off+j} $
+// $\displaystyle {\rm out}_{{\rm off}+k} = \sum_{i+j=k} a_{{\rm off}+i} b_{{\rm off}+j}$
 
 template <class I1, class I2, class AC, class O>
 void vil_convolve_simple(// input 1
@@ -62,7 +61,7 @@ void vil_convolve_simple(// input 1
 // - AC : accumulator pixel type
 // - O  : output image type
 //
-// $\displaystyle  out_{off+k} = \sum_{i+j = k} a_{off+i} b_{off+j} $
+// $\displaystyle {\rm out}_{{\rm off}+k} = \sum_{i+j=k} a_{{\rm off}+i} b_{{\rm off}+j}$
 
 template <class I1, class I2, class AC, class O>
 void vil_convolve_simple(vil_memory_image_of<I1> const &input1,

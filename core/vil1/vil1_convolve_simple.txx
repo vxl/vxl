@@ -1,10 +1,11 @@
 // This is vxl/vil/vil_convolve_simple.txx
 #ifndef vil_convolve_simple_txx_
 #define vil_convolve_simple_txx_
+//:
+// \file
+// \author
+// fsm@robots.ox.ac.uk
 
-/*
-  fsm@robots.ox.ac.uk
-*/
 #include "vil_convolve_simple.h"
 
 #include <vcl_cassert.h>
@@ -12,7 +13,9 @@
 #include <vcl_algorithm.h>
 #include <vcl_vector.h>
 
+#ifndef TRACE
 #define TRACE 0
+#endif
 #if TRACE
 #include <vcl_iostream.h>
 #endif
@@ -145,7 +148,7 @@ template void vil_convolve_simple/*<I1, I2, AC, O >*/(vil_memory_image_of<I1 > c
 
 //----------------------------------------------------------------------
 
-// out_{off+k} = \sum_{i+j = k} a_{off+i} b_{off+j}
+//: $\displaystyle {\rm out}_{{\rm off}+k} = \sum_{i+j=k} a_{{\rm off}+i} b_{{\rm off}+j}$
 template <class I1, class I2, class AC, class O>
 void vil_convolve_simple(vil_memory_image_of<I1> const &in1,
                          vil_memory_image_of<I2> const &in2,

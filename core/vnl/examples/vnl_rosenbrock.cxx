@@ -17,7 +17,7 @@
 #include <vnl/algo/vnl_lbfgs.h>
 
 // Make a compute object for the "banana" function
-// $        f(x, y) = \{ 10*(y-x*x), 1-x \}        $
+// $        f(x, y) = \{ 10(y-x^2), 1-x \}        $
 //
 // It is called the banana function because of the way the
 // curvature bends around the origin. It is notorious in

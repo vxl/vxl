@@ -101,17 +101,17 @@ public:
   //: Converts the conic type from enum (internal representation) to string.
   static vcl_string type_by_number(vgl_conic::vgl_conic_type type);
 
-  //: Returns the coefficient of $X^2$
+  //: Returns the coefficient of \f$X^2\f$
   inline T a() const { return  a_; }
-  //: Returns the coefficient of $XY$
+  //: Returns the coefficient of \f$XY\f$
   inline T b() const { return  b_; }
-  //: Returns the coefficient of $Y^2$
+  //: Returns the coefficient of \f$Y^2\f$
   inline T c() const { return  c_; }
-  //: Returns the coefficient of $XW$
+  //: Returns the coefficient of \f$XW\f$
   inline T d() const { return  d_; }
-  //: Returns the coefficient of $YW$
+  //: Returns the coefficient of \f$YW\f$
   inline T e() const { return  e_; }
-  //: Returns the coefficient of $W^2$
+  //: Returns the coefficient of \f$W^2\f$
   inline T f() const { return  f_; }
 
   // CONSTRUCTORS AND RELATED STUFF
