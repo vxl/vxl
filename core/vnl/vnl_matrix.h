@@ -61,23 +61,32 @@ template <class T> vnl_matrix<T> element_quotient(vnl_matrix<T> const&,vnl_matri
 template <class T> T             dot_product (vnl_matrix<T> const&, vnl_matrix<T> const&); 
 template <class T> T             inner_product (vnl_matrix<T> const&, vnl_matrix<T> const&); 
 template <class T> T             cos_angle(vnl_matrix<T> const&, vnl_matrix<T> const& );
-template <class T> ostream& operator<< (ostream& os, vnl_matrix<T> const& m);
-template <class T> istream& operator>> (istream& os, vnl_matrix<T>& m);
+template <class T> vcl_ostream& operator<< (vcl_ostream& os, vnl_matrix<T> const& m);
+template <class T> vcl_istream& operator>> (vcl_istream& os, vnl_matrix<T>& m);
 
 //--------------------------------------------------------------------------------
 
-struct vnl_matrix_grab_tag { };
+enum vnl_matrix_type {
+  vnl_matrix_null,
+  vnl_matrix_identity
+};
 
 template<class T>
 class vnl_matrix {
 public:
-  vnl_matrix();                                                         // empty matrix.
+  vnl_matrix () :
+    num_rows(0),
+    num_cols(0),
+    data(0)
+  {
+  }
   vnl_matrix(unsigned r, unsigned c);                           // r rows, c cols.
   vnl_matrix(unsigned r, unsigned c, T const& v0);              // r rows, c cols, value v0.
+  vnl_matrix(unsigned r, unsigned c, vnl_matrix_type t);        // r rows, c cols, special type
   vnl_matrix(unsigned r, unsigned c, int n, T const values[]);	// use automatic arrays.
   vnl_matrix(T const* data_block, unsigned r, unsigned c);      // fill row-wise.
   vnl_matrix(vnl_matrix<T> const&);                             // from another matrix.
-  vnl_matrix(vnl_matrix<T> &that, vnl_matrix_grab_tag)
+  vnl_matrix(vnl_matrix<T> &that, vnl_tag_grab)
     : num_rows(that.num_rows), num_cols(that.num_cols), data(that.data) 
     { that.num_cols=that.num_rows=0; that.data=0; }
   //vnl_matrix(const DiagMatrix<T>&); this confuses g++ 2.7.2 When an vnl_vector<int> is declared nearby...
@@ -93,8 +102,11 @@ public:
   vnl_matrix (vnl_matrix<T> const &, vnl_matrix<T> const &, vnl_tag_mul); // M * M
   vnl_matrix (vnl_matrix<T> const &, vnl_tag_grab); // magic
   // </internal>
-  ~vnl_matrix();
-
+  ~vnl_matrix() { 
+    // save some fcalls if data is 0 (i.e. in matrix_fixed)
+    if (data) destroy();
+  }
+  
   // -- Return number of rows/columns/elements
   unsigned rows ()    const { return num_rows; }
   unsigned columns () const { return num_cols; }
@@ -186,14 +198,33 @@ public:
 
   // norms etc. see vnl_c_vector<T> for the meaning of the norms.
   typedef typename vnl_c_vector<T>::abs_t abs_t;
-  abs_t fro_norm() const { return vnl_c_vector<T>::two_norm(begin(), size()); }
-  abs_t one_norm() const { return vnl_c_vector<T>::one_norm(begin(), size()); }
-  abs_t inf_norm() const { return vnl_c_vector<T>::inf_norm(begin(), size()); }
-  abs_t rms     () const { return vnl_c_vector<T>::rms_norm(begin(), size()); }
-  T min_value () const { return vnl_c_vector<T>::min_value(begin(), size()); }
-  T max_value () const { return vnl_c_vector<T>::max_value(begin(), size()); }
+  
+  abs_t array_one_norm() const { return vnl_c_vector<T>::one_norm(begin(), size()); }
+  abs_t array_inf_norm() const { return vnl_c_vector<T>::inf_norm(begin(), size()); }
+  
+  abs_t absolute_value_sum() const { return array_one_norm(); }
+  abs_t absolute_value_max() const { return array_inf_norm(); }
+  
+  abs_t operator_one_norm() const;
+  abs_t operator_inf_norm() const;
+  
+  abs_t frobenius_norm() const { return vnl_c_vector<T>::two_norm(begin(), size()); }
+  abs_t fro_norm() const { return frobenius_norm(); }
+  
+  abs_t rms() const { return vnl_c_vector<T>::rms_norm(begin(), size()); }
+  T min_value() const { return vnl_c_vector<T>::min_value(begin(), size()); }
+  T max_value() const { return vnl_c_vector<T>::max_value(begin(), size()); }
   T mean() const { return vnl_c_vector<T>::mean(begin(), size()); }
-
+  
+  // <deprecated>
+  // These two methods have been intentionally poisoned. The new equivalents are:
+  //   array_one_norm() / array_inf_norm()
+  // or
+  //   absolute_value_sum() / absolute_value_max()
+  abs_t one_norm(void *) const { return vnl_c_vector<T>::one_norm(begin(), size()); }
+  abs_t inf_norm(void *) const { return vnl_c_vector<T>::inf_norm(begin(), size()); }
+  // </deprecated>
+  
   // predicates
   bool is_identity(double tol = 0) const;
   bool is_zero(double tol = 0) const;
@@ -206,8 +237,8 @@ public:
 
   ////----------------------- Input/Output ----------------------------
 
-  static vnl_matrix<T> read(istream& s);
-  bool read_ascii(istream& s);
+  static vnl_matrix<T> read(vcl_istream& s);
+  bool read_ascii(vcl_istream& s);
 
   // (see also mat_ops)
   static void set_print_format(char const* c);
@@ -242,7 +273,7 @@ public:
   bool operator_eq (vnl_matrix<T> const &) const;
   bool operator==(vnl_matrix<T> const &that) const { return  this->operator_eq(that); }
   bool operator!=(vnl_matrix<T> const &that) const { return !this->operator_eq(that); }
-  void print(ostream& os) const;
+  void print(vcl_ostream& os) const;
 
   //--------------------------------------------------------------------------------
   bool resize (unsigned r, unsigned c); // returns true if size changed.
@@ -255,6 +286,8 @@ protected:
   // -- Holds the format for printf-style output
   static char* print_format;
 
+  void destroy();
+
 #if VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD
 # define v vnl_vector<T>
 # define m vnl_matrix<T>
@@ -266,8 +299,8 @@ protected:
   friend T dot_product       VCL_NULL_TMPL_ARGS (m const&, m const&); 
   friend T inner_product     VCL_NULL_TMPL_ARGS (m const&, m const&); 
   friend T cos_angle         VCL_NULL_TMPL_ARGS (m const&, m const&);
-  friend ostream& operator<< VCL_NULL_TMPL_ARGS (ostream&, m const&);
-  friend istream& operator>> VCL_NULL_TMPL_ARGS (istream&, m&);
+  friend vcl_ostream& operator<< VCL_NULL_TMPL_ARGS (vcl_ostream&, m const&);
+  friend vcl_istream& operator>> VCL_NULL_TMPL_ARGS (vcl_istream&, m&);
 # undef v
 # undef m
 #endif
