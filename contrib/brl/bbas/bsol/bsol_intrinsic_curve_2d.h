@@ -21,11 +21,7 @@
 // \endverbatim
 //*****************************************************************************
 
-//*****************************************************************************
-// External declarations for values
-//*****************************************************************************
 #include <vgl/vgl_fwd.h>
-
 #include <vsol/vsol_curve_2d.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
@@ -34,7 +30,6 @@
 #include <vcl_cassert.h>
 
 #define ZERO_TOLERANCE 1E-1 // used in bsol_intrinsic_curve_2d.cxx
-
 
 //: General intrinsic curve class
 
@@ -87,18 +82,17 @@ class bsol_intrinsic_curve_2d : public vsol_curve_2d
   //: Clone `this': creation of a new object and initialization
   // See Prototype pattern
   virtual vsol_spatial_object_2d* clone(void) const;
-  
+
   //: Return a platform independent string identifying the class
-  vcl_string is_a() const;
- 
+  vcl_string is_a() const { return vcl_string("bsol_intrinsic_curve_2d"); }
 
   //***************************************************************************
   // Access
 
-  //: Return the first point of `this'
-  virtual vsol_point_2d_sptr p0(void) const; // virtual of vsol_polyline_2d
-  //: Return the last point of `this'
-  virtual vsol_point_2d_sptr p1(void) const; // virtual of vsol_polyline_2d
+  //: Return the first point of `this';  pure virtual of vsol_curve_2d
+  virtual vsol_point_2d_sptr p0() const { return p0_; }
+  //: Return the last point of `this';   pure virtual of vsol_curve_2d
+  virtual vsol_point_2d_sptr p1() const { return p1_; }
   //: Is `i' a valid index for the list of vertices ?
   bool valid_index(unsigned int i) const { return i<storage_->size(); }
   //: Return vertex `i'
@@ -205,20 +199,10 @@ class bsol_intrinsic_curve_2d : public vsol_curve_2d
   void readCONFromFile(vcl_string fileName);
 
   //***************************************************************************
-  // Status report
+  // Basic operations
 
-  //: Return the curve type
-  virtual vsol_curve_2d_type curve_type() const { return vsol_curve_2d::POLYLINE; }
-  //: Return the real type of a line. It is a CURVE
-  vsol_spatial_object_2d::vsol_spatial_object_2d_type spatial_type(void) const;
-  //: Return `this' if `this' is an polyline, 0 otherwise
-  virtual bsol_intrinsic_curve_2d const*cast_to_intrinsic_curve_2d(void)const{ return this; }
-  virtual bsol_intrinsic_curve_2d *cast_to_intrinsic_curve_2d(void) { return this; }
   //: Compute the bounding box of `this'
   virtual void compute_bounding_box(void) const;
-
-  //***************************************************************************
-  // Basic operations
 
   //: output description to stream
   inline void describe(vcl_ostream &strm, int blanking=0) const {
