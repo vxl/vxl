@@ -22,7 +22,7 @@ SET(vsl_sources
   vsl_stack_io.txx vsl_stack_io.h
   vsl_string_io.txx vsl_string_io.h
   vsl_vector_io.txx vsl_vector_io.h vsl_vector_io_bool.cxx
-  vsl_vector_io.txx vsl_vector_io.h vsl_vector_io_vector_bool.cxx
+                                    vsl_vector_io_vector_bool.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates vsl_sources)
