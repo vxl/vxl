@@ -1,5 +1,5 @@
-#ifndef vil2_image_view_maths_h_
-#define vil2_image_view_maths_h_
+#ifndef vil2_math_h_
+#define vil2_math_h_
 //: \file
 //  \brief Various mathematical manipulations of 2D images
 //  \author Tim Cootes
@@ -11,7 +11,7 @@
 //: Sum of elements in plane p of image
 // \relates vil2_image_view
 template<class imT, class sumT>
-inline void vil2_sum(sumT& sum, const vil2_image_view<imT>& im, unsigned p)
+inline void vil2_math_sum(sumT& sum, const vil2_image_view<imT>& im, unsigned p)
 {
   const imT* row = im.top_left_ptr()+p*im.planestep();
   int istep = im.istep(),jstep=im.jstep();
@@ -28,17 +28,17 @@ inline void vil2_sum(sumT& sum, const vil2_image_view<imT>& im, unsigned p)
 //: Mean of elements in plane p of image
 // \relates vil2_image_view
 template<class imT, class sumT>
-inline void vil2_mean(sumT& mean, const vil2_image_view<imT>& im, unsigned p)
+inline void vil2_math_mean(sumT& mean, const vil2_image_view<imT>& im, unsigned p)
 {
   if (im.size()==0) { mean=0; return; }
-  vil2_sum(mean,im,p);
+  vil2_math_sum(mean,im,p);
   mean/=(im.ni()*im.nj());
 }
 
 //: Sum of squares of elements in plane p of image
 // \relates vil2_image_view
 template<class imT, class sumT>
-inline void vil2_sum_squares(sumT& sum, sumT& sum_sq, const vil2_image_view<imT>& im, unsigned p)
+inline void vil2_math_sum_squares(sumT& sum, sumT& sum_sq, const vil2_image_view<imT>& im, unsigned p)
 {
   const imT* row = im.top_left_ptr()+p*im.planestep();
   int istep = im.istep(),jstep=im.jstep();
@@ -55,11 +55,11 @@ inline void vil2_sum_squares(sumT& sum, sumT& sum_sq, const vil2_image_view<imT>
 //: Mean and variance of elements in plane p of image
 // \relates vil2_image_view
 template<class imT, class sumT>
-inline void vil2_mean_and_variance(sumT& mean, sumT& var, const vil2_image_view<imT>& im, unsigned p)
+inline void vil2_math_mean_and_variance(sumT& mean, sumT& var, const vil2_image_view<imT>& im, unsigned p)
 {
   if (im.size()==0) { mean=0; var=0; return; }
   sumT sum,sum_sq;
-  vil2_sum_squares(sum,sum_sq,im,p);
+  vil2_math_sum_squares(sum,sum_sq,im,p);
   mean = sum/(im.ni()*im.nj());
   var = sum_sq/(im.ni()*im.nj()) - mean*mean;
 }
@@ -67,7 +67,7 @@ inline void vil2_mean_and_variance(sumT& mean, sumT& var, const vil2_image_view<
 //: Multiply values in image view by scale
 // \relates vil2_image_view
 template<class T>
-void vil2_scale_values(vil2_image_view<T>& image, double scale)
+void vil2_math_scale_values(vil2_image_view<T>& image, double scale)
 {
   unsigned ni = image.ni(),nj = image.nj(),np = image.nplanes();
   int istep=image.istep(),jstep=image.jstep(),pstep = image.planestep();
@@ -86,7 +86,7 @@ void vil2_scale_values(vil2_image_view<T>& image, double scale)
 //: Multiply values in image view by scale and add offset
 // \relates vil2_image_view
 template<class imT, class offsetT>
-void vil2_scale_and_offset_values(vil2_image_view<imT>& image, double scale, offsetT offset)
+void vil2_math_scale_and_offset_values(vil2_image_view<imT>& image, double scale, offsetT offset)
 {
   unsigned ni = image.ni(),nj = image.nj(),np = image.nplanes();
   int istep=image.istep(),jstep=image.jstep(),pstep = image.planestep();
@@ -105,7 +105,7 @@ void vil2_scale_and_offset_values(vil2_image_view<imT>& image, double scale, off
 //: Compute sum of two images (im_sum = imA+imB)
 // \relates vil2_image_view
 template<class aT, class bT, class sumT>
-void vil2_image_sum(const vil2_image_view<aT>& imA,
+void vil2_math_image_sum(const vil2_image_view<aT>& imA,
                     const vil2_image_view<bT>& imB,
                     vil2_image_view<sumT>& im_sum)
 {
@@ -138,7 +138,7 @@ void vil2_image_sum(const vil2_image_view<aT>& imA,
 //: Compute difference of two images (im_sum = imA-imB)
 // \relates vil2_image_view
 template<class aT, class bT, class sumT>
-void vil2_image_difference(const vil2_image_view<aT>& imA,
+void vil2_math_image_difference(const vil2_image_view<aT>& imA,
                     const vil2_image_view<bT>& imB,
                     vil2_image_view<sumT>& im_sum)
 {
@@ -171,7 +171,7 @@ void vil2_image_difference(const vil2_image_view<aT>& imA,
 //: Compute absolute difference of two images (im_sum = |imA-imB|)
 // \relates vil2_image_view
 template<class aT, class bT, class sumT>
-void vil2_image_abs_difference(const vil2_image_view<aT>& imA,
+void vil2_math_image_abs_difference(const vil2_image_view<aT>& imA,
                     const vil2_image_view<bT>& imB,
                     vil2_image_view<sumT>& im_sum)
 {
@@ -206,7 +206,7 @@ void vil2_image_abs_difference(const vil2_image_view<aT>& imA,
 // to update current mean by a fraction f of new_im
 // \relates vil2_image_view
 template<class aT, class bT, class scaleT>
-void vil2_add_image_fraction(vil2_image_view<aT>& imA, scaleT fa,
+void vil2_math_add_image_fraction(vil2_image_view<aT>& imA, scaleT fa,
                              const vil2_image_view<bT>& imB, scaleT fb)
 {
   unsigned ni = imA.ni(),nj = imA.nj(),np = imA.nplanes();

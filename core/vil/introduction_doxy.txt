@@ -177,18 +177,18 @@ vil2_image_view<vil2_byte> filtered_image = vil2_flip_transpose(tmp_image2);
 *
 * \subsection maths Mathematics on images
 * Functions to evaluate image properties:
-* - vil2_value_range - Get range of values in view
-* - vil2_sum(sum,im,p) - Sum of elements in plane of view
-* - vil2_mean - Mean of elements
-* - vil2_mean_and_variance - Mean and variance over view
+* - vil2_math_value_range - Get range of values in view
+* - vil2_math_sum(sum,im,p) - Sum of elements in plane of view
+* - vil2_math_mean - Mean of elements
+* - vil2_math_mean_and_variance - Mean and variance over view
 *
 * Functions to modify images:
-* - vil2_scale_values(im,s) : im(x,y,p) = s*im(x,y,p)
-* - vil2_scale_and_offset_values(im,s,o) : im(x,y,p) = s*im(x,y,p)+o
-* - vil2_image_sum(imA,imB,im_sum) : im_sum = imA+imB
-* - vil2_image_difference(imA,imB,im_diff) : im_diff = imA-imB
-* - vil2_image_abs_difference(imA,imB,im_diff) : im_diff = |imA-imB|
-* - vil2_add_image_fraction(imA,fa,imB,fb) : imA = fa*imA + fb*imB  (Useful for moving averages!)
+* - vil2_math_scale_values(im,s) : im(x,y,p) = s*im(x,y,p)
+* - vil2_math_scale_and_offset_values(im,s,o) : im(x,y,p) = s*im(x,y,p)+o
+* - vil2_math_image_sum(imA,imB,im_sum) : im_sum = imA+imB
+* - vil2_math_image_difference(imA,imB,im_diff) : im_diff = imA-imB
+* - vil2_math_image_abs_difference(imA,imB,im_diff) : im_diff = |imA-imB|
+* - vil2_math_add_image_fraction(imA,fa,imB,fb) : imA = fa*imA + fb*imB  (Useful for moving averages!)
 *
 * \subsection interp Interpolating images
 * Bilinear interpolation (of single planes of scalar types) can be obtained using
