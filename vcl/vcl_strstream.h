@@ -19,23 +19,6 @@
 # define vcl_generic_strstream_STD /* */
 # include "generic/vcl_strstream.h"
 
-/*
-#elif defined(__GNUC__) && (__GNUC__ <= 2) && (__GNUC_MINOR__ >= 97)
-# include <sstream>
-# include "vcl_string.h"
-struct vcl_istrstream : std::stringstream
-{
-  typedef std::stringstream base;
-  vcl_istrstream(char const *s) : base(s) { }
-  vcl_istrstream(char const *s, unsigned n) : base(vcl_string(s, s+n)) { }
-};
-struct vcl_ostrstream : std::stringstream
-{
-  typedef std::stringstream base;
-  char const *str() { return base::str().c_str(); }
-};
-*/
-
 #else // -------------------- ISO
 # include "iso/vcl_strstream.h"
 #endif
