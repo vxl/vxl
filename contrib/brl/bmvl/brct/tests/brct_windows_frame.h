@@ -13,6 +13,7 @@
 #include <vgui/vgui_easy2D_tableau.h>
 #include <vgui/vgui_easy2D_tableau_sptr.h>
 #include <vgui/vgui_image_tableau_sptr.h>
+#include <vgui/vgui_composite_tableau_sptr.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_grid_tableau_sptr.h>
 #include <vgui/vgui_menu.h>
@@ -21,6 +22,8 @@
 #include <vgui/vgui_soview3D.h>
 #include <vgui/vgui_soview2D.h>
 #include <bmvl/brct/kalman_filter.h>
+#include <vil1/vil1_image.h>
+
 
 class vgui_window;
 
@@ -28,6 +31,7 @@ class vgui_window;
 class brct_windows_frame : public vgui_wrapper_tableau
 {
  public:
+	void load_image();
   void show_back_projection();
   void show_next_observes();
   void add_predicted_curve2d(vcl_vector<vgl_point_2d<double> > &pts);
@@ -77,9 +81,11 @@ class brct_windows_frame : public vgui_wrapper_tableau
 
   //: kalman filter
   kalman_filter* kalman_;
+  vgui_composite_tableau_sptr tab_cps_;
   vgui_image_tableau_sptr img_2d_;
   vgui_easy2D_tableau_sptr tab_2d_;
   vgui_easy3D_tableau_sptr tab_3d_;
+  vil1_image img_;
   vgui_grid_tableau_sptr grid_;
   static brct_windows_frame *instance_;
 };

@@ -7,6 +7,7 @@
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 #include <vgui/vgui.h>
+#include <vgui/vgui_dialog.h>
 #include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_easy3D_tableau.h>
 #include <vgui/vgui_viewer3D_tableau.h>
@@ -17,6 +18,8 @@
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
+
+#include <vil1/vil1_load.h>
 #include "brct_menus.h"
 
 //static live_video_manager instance
@@ -32,6 +35,7 @@ brct_windows_frame *brct_windows_frame::instance()
     instance_ = new brct_windows_frame();
     instance_->init();
   }
+
   return brct_windows_frame::instance_;
 }
 
@@ -84,6 +88,7 @@ void brct_windows_frame::init()
   vgui_easy2D_tableau_sptr easy2d = vgui_easy2D_tableau_new();
   vgui_composite_tableau_sptr tab2d = vgui_composite_tableau_new(easy2d, tab_img);
 
+  tab_cps_ = tab2d;
   tab_2d_ = easy2d;
   img_2d_ = tab_img;
   tab_2d_->set_foreground(0, 0, 1);
@@ -297,4 +302,25 @@ void brct_windows_frame::show_back_projection()
     }
   }
   instance_->post_redraw();
+}
+
+void brct_windows_frame::load_image()
+{
+  bool greyscale = false;
+  vgui_dialog load_image_dlg("Load Image");
+  static vcl_string image_filename = "";
+  static vcl_string ext = "*.*";
+  load_image_dlg.file("Image Filename:", ext, image_filename);
+  load_image_dlg.checkbox("greyscale ", greyscale);
+  if (!load_image_dlg.ask())
+    return;
+  img_ = vil1_load(image_filename.c_str());
+  if (img_2d_)
+  {
+      img_2d_->set_image(img_);
+      return;
+  }
+
+  tab_cps_->post_redraw();
+  vcl_cout << "In brct_windows_frame::load_image() - null tableau\n";
 }
