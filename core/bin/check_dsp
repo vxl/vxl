@@ -21,12 +21,12 @@ if (defined($ARGV[0])) {
   @DIRS = @ARGV;
 }
 else {
-  $IUEROOT = $ENV{IUEROOT};
-  unless (defined($IUEROOT)) {
-    print STDERR "IUEROOT is not defined, and no command line arguments were given\n";
+  $VXLROOT = $ENV{VXLROOT};
+  unless (defined($VXLROOT)) {
+    print STDERR "VXLROOT is not defined, and no command line arguments were given\n";
     exit 0;
   }
-  $DIRS = `find \$IUEROOT/vcl \$IUEROOT/v3p \$IUEROOT/core \$IUEROOT/contrib  -type d \\\( -name xerces-c-src\\\* -prune -o -print \\\)`;
+  $DIRS = `find \$VXLROOT/vcl \$VXLROOT/v3p \$VXLROOT/core \$VXLROOT/contrib  -type d \\\( -name xerces-c-src\\\* -prune -o -print \\\)`;
   @DIRS = grep {!/(\/CVS|\.new(\/\S+)?|awfmfc|vgui_example_mfc)$/} sort split ' ', $DIRS;
 }
 
