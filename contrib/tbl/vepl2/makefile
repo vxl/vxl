@@ -60,7 +60,7 @@ endif
 include ${IUEROOT}/config/top-rules.mk
 ######################################
 
-ifeq "$(TJ_GCC30)$(optimize)" "1-O2"
+ifeq "$(TJ_GCC30) $(OS)" "1 OSF1V4"
 # gcc 3.0 needs too much virtual memory with -O2
 FLAGS_vepl2_gaussian_convolution.cxx := -O3 # or -O0 would also work, but not -O1 or -O2
 FLAGS_vepl2_threshold.cxx := -O1
@@ -71,6 +71,7 @@ FLAGS_vepl2_erode_disk.cxx := -O1
 FLAGS_vepl2_median.cxx := -O1
 FLAGS_vepl2_moment.cxx := -O1
 FLAGS_vepl2_histogram.cxx := -O1
+FLAGS_vepl2_gradient_mag.cxx := -O1
 FLAGS_Templates/vepl2_convert+uchar-.cxx := -O1
 FLAGS_Templates/vepl2_convert+short-.cxx := -O1
 FLAGS_Templates/vepl2_convert+float-.cxx := -O1
