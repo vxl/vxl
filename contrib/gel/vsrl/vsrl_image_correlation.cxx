@@ -532,7 +532,7 @@ double vsrl_image_correlation::get_sub_pixel_delta(int x1,int y1, int delta_x)
   if (a>=0)
   {
     // this is a straight line or a minumum has
-    // occured in the interval
+    // occurred in the interval
 
     x_hat =0;
 
