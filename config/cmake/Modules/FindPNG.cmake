@@ -5,7 +5,7 @@
 IF(NOT HAS_PNG)
   INCLUDE( ${allvxl_SOURCE_DIR}/config.cmake/Modules/FindNativePNG.cmake )
   
-  IF(NOT USE_NATIVE_PNG)
+  IF(NOT HAS_NATIVE_PNG)
   
     #
     # At some point, in a "release" version, it is possible that someone
@@ -26,12 +26,12 @@ IF(NOT HAS_PNG)
   
     ENDIF(PNG_INCLUDE_PATH)
   
-  ELSE(NOT USE_NATIVE_PNG)
+  ELSE(NOT HAS_NATIVE_PNG)
   
     SET( HAS_PNG "YES" )
     ADD_DEFINITIONS( -DHAS_PNG )
   
-  ENDIF(NOT USE_NATIVE_PNG)
+  ENDIF(NOT HAS_NATIVE_PNG)
 
   # libpng uses zlib for compressed PNG files
   INCLUDE( ${allvxl_SOURCE_DIR}/config.cmake/Modules/FindZLIB.cmake )
