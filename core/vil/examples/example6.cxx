@@ -19,6 +19,19 @@ vil2_image_view<vil_byte> view_as_planes(const vil2_image_view<vil_rgb<vil_byte>
                                    v.xstep()*3,v.ystep()*3,1);
 }
 
+//: Example function to return an RGB view of a 3-plane image
+vil2_image_view<vil_rgb<vil_byte> > view_as_rgb(const vil2_image_view<vil_byte>& v)
+{
+  assert(v.nplanes()==3);
+  assert(v.planestep()==1);
+  assert(v.xstep()==3 || v.ystep()==3);
+
+  return vil2_image_view<vil_rgb<vil_byte> >(v.memory_chunk(),
+                                   (vil_rgb<vil_byte>*) v.top_left_ptr(),
+                                   v.nx(),v.ny(),1,
+                                   v.xstep()/3,v.ystep()/3,1);
+}
+
 int main(int argc, char** argv)
 {
   int nx=6;
@@ -38,6 +51,11 @@ int main(int argc, char** argv)
   vcl_cout<<"Create a view of it as a set of planes:"<<vcl_endl;
   vil2_image_view<vil_byte> plane_view = view_as_planes(rgb_image);
   plane_view.print_all(vcl_cout);
+
+  vcl_cout<<vcl_endl;
+  vcl_cout<<"Create a view of this plane view as rgb:"<<vcl_endl;
+  vil2_image_view<vil_rgb<vil_byte> > rgb_image2 = view_as_rgb(plane_view);
+  rgb_image2.print_all(vcl_cout);
 
   return 0;
 }

@@ -35,10 +35,12 @@
 * \verbatim
 vil2_image_view<vil_rgb<vil_byte> > rgb_image;
 vil2_load(rgb_image,"my_image.jpg");
-vil2_image_view<vil_byte > three_plane_image =  rgb_image; // Creates 3 plane view of rgb
+
+// Create a 3 plane view of rgb
+vil2_image_view<vil_byte > three_plane_image =  vil2_view_as_planes(rgb_image);
 
  // Now create rgb view of 3 plane image (note: will abort if not possible)
-vil2_image_view<vil_rgb<vil_byte> > rgb_image2 = three_plane_image;
+vil2_image_view<vil_rgb<vil_byte> > rgb_image2 = vil2_view_as_rgb(three_plane_image);
 \endverbatim
 *
 * \subsection copying Copying
@@ -129,6 +131,10 @@ vil2_image_view<vil2_byte> filtered_image = tmp_image2.transpose();
 * The two main derived classes are
 * - vil2_file_image: Representing an image in a file
 * - vil2_memory_image: Representing an image in memory (essentially a wrapper around a view)
+*
+* \section Examples examples
+* There are plenty of working examples in the examples subdirectory - these can be
+* treated as a mini-tutorial
 *
 * \subsection cav_user CAVEAT User
 * vil2 is a proposal. It may replace vil in part.

@@ -15,6 +15,8 @@
 #include <vcl_string.h>
 #include <vcl_cassert.h>
 #include <vil2/vil2_memory_chunk.h>
+#include <vil/vil_byte.h>
+#include <vil/vil_rgb.h>
 
 //: An abstract base class of smart pointers to actual image data in memory.
 
@@ -206,5 +208,9 @@ inline
 vcl_ostream& operator<<(vcl_ostream& s, vil2_image_view<T> const& i) {
   return i.print(s);
 }
+
+//: Explicit overload of print_all for rgb
+void vil2_image_view< vil_rgb<vil_byte> >::print_all(vcl_ostream& os) const;
+
 
 #endif // vil_image_view_h_
