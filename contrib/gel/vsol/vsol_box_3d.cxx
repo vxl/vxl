@@ -1,7 +1,7 @@
+// This is gel/vsol/vsol_box_3d.cxx
+#include "vsol_box_3d.h"
 //:
 // \file
-#include <vsol/vsol_box_3d.h>
-#include <vcl_cmath.h>
 
 vsol_box_3d::vsol_box_3d()
 {
@@ -11,6 +11,7 @@ vsol_box_3d::vsol_box_3d()
 vsol_box_3d::vsol_box_3d(vsol_box_3d const &b){
   _box = b._box;
 }
+
 vsol_box_3d::~vsol_box_3d()
 {
   // vcl_cout << "deleting a boxology object" << vcl_endl;
@@ -106,63 +107,29 @@ double vsol_box_3d::height()
 //:   Determines if *this is inside the input IUBox.
 //    That is, all boundaries of *this must be on or
 //    inside the boundaries of box.
-bool vsol_box_3d::operator< (vsol_box_3d& box)
-
+bool vsol_box_3d::operator< (vsol_box_3d& b)
 {
-  float xmin_box = box.get_min_x(), ymin_box = box.get_min_y(),
-    zmin_box = box.get_min_z();
-
-  float xmax_box = box.get_max_x(), ymax_box = box.get_max_y(),
-    zmax_box = box.get_max_z();
-
-  float xmin = this->get_min_x(),ymin = this->get_min_y(),zmin = this->get_min_z();
-
-  float xmax = this->get_max_x(),ymax = this->get_max_y(),zmax = this->get_max_z();
-
-  if (!(xmin >= xmin_box)) return false;
-  if (!(ymin >= ymin_box)) return false;
-  if (!(zmin >= zmin_box)) return false;
-
-  if (!(xmax >= xmin_box)) return false;
-  if (!(ymax >= ymin_box)) return false;
-  if (!(zmax >= zmin_box)) return false;
-
-  if (!(xmin <= xmax_box)) return false;
-  if (!(ymin <= ymax_box)) return false;
-  if (!(zmin <= zmax_box)) return false;
-
-  if (!(xmax <= xmax_box)) return false;
-  if (!(ymax <= ymax_box)) return false;
-  if (!(zmax <= zmax_box)) return false;
-
-  return true;
+  return 
+    this->get_min_x() >= b.get_min_x() &&
+    this->get_min_y() >= b.get_min_y() &&
+    this->get_min_z() >= b.get_min_z() &&
+    this->get_max_x() <= b.get_max_x() &&
+    this->get_max_y() <= b.get_max_y() &&
+    this->get_max_z() <= b.get_max_z();
 }
 
-
-static bool near_same(float f1, float f2, const float& tolerance)
+inline static bool near_same(float f1, float f2, float tolerance)
 {
-  return vcl_fabs(f1-f2)<tolerance;
+  return f1-f2<tolerance && f2-f1<tolerance;
 }
 
-
-bool vsol_box_3d:: near_equal(vsol_box_3d& box, const float& tolerance)
+bool vsol_box_3d::near_equal(vsol_box_3d& b, float tolerance)
 {
-  float xmin_box = box.get_min_x(), ymin_box = box.get_min_y(),
-    zmin_box = box.get_min_z();
-
-  float xmax_box = box.get_max_x(), ymax_box = box.get_max_y(),
-    zmax_box = box.get_max_z();
-
-  float xmin = this->get_min_x(),ymin = this->get_min_y(),zmin = this->get_min_z();
-
-  float xmax = this->get_max_x(),ymax = this->get_max_y(),zmax = this->get_max_z();
-
-  if (!near_same(xmin, xmin_box, tolerance)) return false;
-  if (!near_same(ymin, ymin_box, tolerance)) return false;
-  if (!near_same(zmin, zmin_box, tolerance)) return false;
-
-  if (!near_same(xmax, xmax_box, tolerance)) return false;
-  if (!near_same(ymax, ymax_box, tolerance)) return false;
-  if (!near_same(zmax, zmax_box, tolerance)) return false;
-  return true;
+  return 
+    near_same(this->get_min_x(), b.get_min_x(), tolerance) &&
+    near_same(this->get_min_y(), b.get_min_y(), tolerance) &&
+    near_same(this->get_min_z(), b.get_min_z(), tolerance) &&
+    near_same(this->get_max_x(), b.get_max_x(), tolerance) &&
+    near_same(this->get_max_y(), b.get_max_y(), tolerance) &&
+    near_same(this->get_max_z(), b.get_max_z(), tolerance);
 }

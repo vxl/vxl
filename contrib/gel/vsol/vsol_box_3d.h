@@ -1,3 +1,4 @@
+// This is gel/vsol/vsol_box_3d.h
 #ifndef vsol_box_3d_H
 #define vsol_box_3d_H
 //:
@@ -68,7 +69,7 @@ class vsol_box_3d : public vbl_ref_count , public vul_timestamp
 
   bool operator< (vsol_box_3d& box);  // a<b = a is inside b
 
-  bool near_equal(vsol_box_3d& box, const float& tolerance); // is box about the same as this?
+  bool near_equal(vsol_box_3d& box, float tolerance); // is box about the same as this?
 
  protected:
 
