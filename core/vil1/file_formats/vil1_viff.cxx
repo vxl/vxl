@@ -1,4 +1,4 @@
-// This is vxl/vil/file_formats/vil_viff.cxx
+// This is core/vil/file_formats/vil_viff.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -246,9 +246,10 @@ bool vil_viff_generic_image::write_header()
   }
 
   //create header
-  vil_viff_xvimage *imagep = vil_viff_createimage ( height_, width_,
-        type,1,planes_, "TargetJr VIFF image writer output",0,0,
-        VFF_MS_NONE,VFF_MAPTYP_NONE,VFF_LOC_IMPLICIT,0);
+  vil_viff_xvimage *imagep = vil_viff_createimage(height_, width_,
+                                                  type, 1, planes_,
+                                                  "vil_viff image writer output",0,0,
+                                                  VFF_MS_NONE,VFF_MAPTYP_NONE,VFF_LOC_IMPLICIT,0);
 
   //make local copy of header
   vcl_memcpy(&header_, imagep, sizeof(header_));
