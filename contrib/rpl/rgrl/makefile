@@ -96,9 +96,11 @@ SOURCES += rgrl_convergence_tester.cxx
 MANPAGE_SOURCES += rgrl_convergence_tester_sptr.h
 SOURCES += rgrl_convergence_on_median_error.cxx
 SOURCES += rgrl_convergence_on_weighted_error.cxx
+SOURCES += rgrl_convergence_on_weighted_nas.cxx
 
 SOURCES += rgrl_converge_status.cxx
 MANPAGE_SOURCES += rgrl_converge_status_sptr.h
+SOURCES += rgrl_converge_status_nas.cxx
 
 SOURCES += rgrl_feature_based_registration.cxx
 
