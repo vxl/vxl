@@ -23,17 +23,17 @@ strk_correlated_face::strk_correlated_face()
 
 strk_correlated_face::~strk_correlated_face()
 {
-  delete [] Ix_;
-  delete [] Iy_;
+  delete[] Ix_;
+  delete[] Iy_;
 }
 
 void strk_correlated_face::set_face(vtol_intensity_face_sptr const& f)
 {
   f_ = f;
   if (Ix_)
-    delete [] Ix_;
+    delete[] Ix_;
   if (Iy_)
-    delete [] Iy_;
+    delete[] Iy_;
   int n = f->Npix();
   Ix_ = new float[n];
   Iy_ = new float[n];
@@ -246,9 +246,9 @@ strk_tracker::transform_face(vtol_intensity_face_sptr const& face,
            << new_int_face->Yo() << ")\n";
 #endif // DEBUG
 
-  delete [] X;
-  delete [] Y;
-  delete [] I;
+  delete[] X;
+  delete[] Y;
+  delete[] I;
   return new_int_face;
 }
 
@@ -537,7 +537,7 @@ void strk_tracker::transform_sample_in_place(strk_correlated_face* sample,
   if (!sample)
     return;
   vtol_intensity_face_sptr face = sample->face();
-  double xo = face->Xo(), yo = face->Yo();
+  float xo = face->Xo(), yo = face->Yo();
   double c = vcl_cos(theta), s = vcl_sin(theta);
   vcl_vector<vtol_vertex_sptr> verts;
   face->vertices(verts);
@@ -554,10 +554,10 @@ void strk_tracker::transform_sample_in_place(strk_correlated_face* sample,
   }
   for (face->reset(); face->next();)
   {
-    double x = face->X(), y = face->Y();
+    float x = face->X(), y = face->Y();
     double xp =(x-xo)*scale, yp =(y-yo)*scale;
-    face->set_X(xp*c - yp*s + xo + tx);
-    face->set_Y(xp*s + yp*c + yo + ty);
+    face->set_X(float(xp*c - yp*s + xo + tx));
+    face->set_Y(float(xp*s + yp*c + yo + ty));
   }
 }
 
