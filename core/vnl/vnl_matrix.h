@@ -18,9 +18,7 @@
 #include <vnl/vnl_tag.h>
 #include <vnl/vnl_error.h>
 #include <vnl/vnl_c_vector.h>
-#ifndef NDEBUG
 #include <vcl_cassert.h>
-#endif
 
 export template <class T> class vnl_vector;
 export template <class T> class vnl_matrix;
@@ -74,16 +72,6 @@ enum vnl_matrix_type {
 // as matrix_inverse, svd, qr etc.
 //
 // Note: Use a vnl_vector<T> with these matrices.
-//
-
-// * Gcc 2.7.2 can't handle many traits, so norms are returned as the
-//   parameterizing type.  They *are* computed using abs_t, just converted to
-//   T on return.  This imposes the constraint that T must be convertible
-//   to and from the numeric_traits<T>::abs_t.
-//
-// * Should have a constructor from DiagMatrix<T>, but
-//   very weird things happen. G++ 2.7.2 compiles it and instantiates it fine,
-//   but barfs when an vnl_vector<int> is declared nearby.
 
 template<class T>
 class vnl_matrix {
@@ -124,14 +112,6 @@ public:
    // Complexity /f$O(r.c)/f$
   vnl_matrix(vnl_matrix<T> const&);                             // from another matrix.
 
-  //: Construct a matrix of size r rows by c columns, by taking ownership of another matrixes contents
-  // The other matrix is rezised to empty.
-  vnl_matrix(vnl_matrix<T> &that, vnl_tag_grab)
-    : num_rows(that.num_rows), num_cols(that.num_cols), data(that.data)
-    { that.num_cols=that.num_rows=0; that.data=0; }
-
-  //vnl_matrix(const DiagMatrix<T>&); this confuses g++ 2.7.2 When an vnl_vector<int> is declared nearby...
-
 #ifndef VXL_DOXYGEN_SHOULD_SKIP_THIS
 // <internal>
   // These constructors are here so that operator* etc can take
@@ -143,7 +123,9 @@ public:
   vnl_matrix (vnl_matrix<T> const &, T,                     vnl_tag_add); // M + s
   vnl_matrix (vnl_matrix<T> const &, T,                     vnl_tag_sub); // M - s
   vnl_matrix (vnl_matrix<T> const &, vnl_matrix<T> const &, vnl_tag_mul); // M * M
-  vnl_matrix (vnl_matrix<T> const &, vnl_tag_grab); // magic
+  vnl_matrix (vnl_matrix<T> &that, vnl_tag_grab)
+    : num_rows(that.num_rows), num_cols(that.num_cols), data(that.data)
+  { that.num_cols=that.num_rows=0; that.data=0; } // "*this" now uses "that"'s data.
 // </internal>
 #endif
 
@@ -189,10 +171,8 @@ public:
   // There are assert style boundary checks - use NDEBUG to turn them off.
   T       & operator() (unsigned r, unsigned c)
   {
-#ifndef NDEBUG
     assert(r<rows());   // Check the row index is valid
     assert(c<cols());   // Check the column index is valid
-#endif
     return this->data[r][c];
   }
 
@@ -200,10 +180,8 @@ public:
   // There are assert style boundary checks - use NDEBUG to turn them off.
   T const & operator() (unsigned r, unsigned c) const
   {
-#ifndef NDEBUG
     assert(r<rows());   // Check the row index is valid
     assert(c<cols());   // Check the column index is valid
-#endif
     return this->data[r][c];
   }
 
