@@ -21,8 +21,8 @@
 
 class bsol_point_index_2d
 {
- public:
   bsol_point_index_2d() {} //not meaningful
+ public:
   bsol_point_index_2d(int nrows, int ncols, vsol_box_2d_sptr const& bb);
   bsol_point_index_2d(int nrows, int ncols,
                       vcl_vector<vsol_point_2d_sptr> const& points);
