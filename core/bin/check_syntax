@@ -269,7 +269,8 @@ foreach $f (@FILES)
     elsif ($j eq "vgui/vgui_tag.h") { $i="$i(|_[a-z_]+)"; }
     elsif ($j eq "vgui/vgui_tableau_sptr.h") { $i="($i(|_t)|get_tableau)"; }
     elsif ($j eq "vgui/internals/vgui_simple_field.h") { $i="vgui_(simple|bool|int|long|float|double)_field"; }
-    elsif ($j =~ m/vil[12]?\/vil[12]?_(stream_)?\d+bit\.h$/) { $i="($i)(|_(read|write)_(big|little)_endian)"; }
+    elsif ($j =~ m/vil1?\/vil1?_\d+bit\.h$/) { $i="($i)(|_(read|write)_(big|little)_endian)"; }
+    elsif ($j =~ m/vil[12]?\/vil[12]?_stream_(read|write)\.h$/) { $i="($i)_(big|little)_endian_[a-z0-9_]+"; }
     elsif ($j =~ m/vil2?\/vil2?_bi(lin|cub)_interp\.h$/) { $i="($i)(|_safe|_unsafe|_raw|_safe_extend)"; }
     elsif ($j eq "vil/vil_clamp.h") { $i="$i(|_pixel)"; }
     elsif ($j eq "vil/vil_colour_space.h") { $i="($i)_(RGB|HSV)_to_(YIQ|HSV|RGB)"; }
@@ -305,6 +306,7 @@ foreach $f (@FILES)
     elsif ($j =~ m/vil2?\/vil2?_transform\.h$/) { $i="($i)2?"; }
     elsif ($j =~ m/vil2?\/vil2?_view_as\.h$/) { $i="($i)(|_planes|_rgb)|vil2_view_(real|imag)_part"; }
     elsif ($j =~ m/vil2?\/vil2?_vil1\.h$/) { $i="($i)_(to_|from_)?image_(resource|view)"; }
+    elsif ($j =~ m/vil2?\/file_formats\/(vil2?_dicom_header)\.h/) { $i = "($1(_type|_endian|_image_type|_info|_format))|VIL2?_DICOM_HEADER_[A-Z0-9_]+"; }
     elsif ($j =~ m/vil[12]?\/file_formats\/(.*)\.h$/) { $i="$1_file_format"; }
     elsif ($j eq "vipl/filter/vipl_filter_abs.h") { $i="($i|FILTER_IMPTR_(INC|DEC)_REFCOUNT)"; }
     elsif ($j =~ m/vipl\/vipl_with_vbl_array_2d\/accessors\/vipl_accessors_(vbl_array_2d)\.h/) { $i="$1"; }
