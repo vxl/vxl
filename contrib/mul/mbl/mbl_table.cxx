@@ -37,12 +37,12 @@ mbl_table::mbl_table(const char delim,
     column_headers_(headers)
 {
   unsigned ncols = column_headers_.size();
-  
+
   // Allocate column vectors
   columns_.resize(ncols);
 
   // Map each column header string to column index
-  for (int c=0; c<ncols; ++c)
+  for (unsigned int c=0; c<ncols; ++c)
   {
     header_to_column_index_[headers[c]] = c;
   }
@@ -92,8 +92,7 @@ bool mbl_table::get_column(const vcl_string& header,
   else
   {
     vcl_cerr << "ERROR: mbl_table::get_column(): column \""
-      << header << "\" does not exist in the table."
-      << vcl_endl;
+             << header << "\" does not exist in the table.\n";
   }
 
   return success;
@@ -108,11 +107,11 @@ bool mbl_table::get_row(const unsigned& r,
 {
   // Clear output data
   row.clear();
-  
+
   // Check that the specified row index is valid
   if (r < num_rows())
   {
-    int ncols = num_cols();
+    unsigned int ncols = num_cols();
     row.resize(ncols);
     for (unsigned c=0; c<ncols; ++c)
     {
@@ -123,8 +122,7 @@ bool mbl_table::get_row(const unsigned& r,
   else
   {
     vcl_cerr << "ERROR: mbl_table::get_row(): row "
-      << r << " does not exist in the table."
-      << vcl_endl;
+             << r << " does not exist in the table.\n";
     return false;
   }
 }
@@ -133,8 +131,8 @@ bool mbl_table::get_row(const unsigned& r,
 //========================================================================
 // Set the value of an existing element.
 //========================================================================
-bool mbl_table::set_element(const vcl_string& header, 
-                            const unsigned r, 
+bool mbl_table::set_element(const vcl_string& header,
+                            const unsigned r,
                             const double value)
 {
   bool success = false;
@@ -142,7 +140,7 @@ bool mbl_table::set_element(const vcl_string& header,
   // Does the map contain this column header?
   vcl_map<vcl_string, unsigned>::const_iterator iter =
     header_to_column_index_.find(header);
-  
+
   if (iter != header_to_column_index_.end())
   {
     // Does the column have sufficient rows?
@@ -156,15 +154,13 @@ bool mbl_table::set_element(const vcl_string& header,
     else
     {
       vcl_cerr << "ERROR: mbl_table::set_element(): row "
-        << r << " does not exist in the table."
-        << vcl_endl;
+               << r << " does not exist in the table.\n";
     }
   }
   else
   {
     vcl_cerr << "ERROR: mbl_table::set_element(): column \""
-      << header << "\" does not exist in the table."
-      << vcl_endl;
+             << header << "\" does not exist in the table.\n";
   }
 
   return success;
@@ -174,10 +170,10 @@ bool mbl_table::set_element(const vcl_string& header,
 //========================================================================
 // Get the value of an existing element.
 //========================================================================
-double mbl_table::get_element(const vcl_string& header, 
-                              const unsigned r, 
+double mbl_table::get_element(const vcl_string& header,
+                              const unsigned r,
                               bool* success/*=0*/) const
-{ 
+{
   double value = 1e-19;
   if (success)
     *success = false;
@@ -185,7 +181,7 @@ double mbl_table::get_element(const vcl_string& header,
   // Does the map contain this column header?
   vcl_map<vcl_string, unsigned>::const_iterator iter =
     header_to_column_index_.find(header);
-  
+
   if (iter != header_to_column_index_.end())
   {
     // Does the column have sufficient rows?
@@ -200,17 +196,15 @@ double mbl_table::get_element(const vcl_string& header,
     else
     {
       vcl_cerr << "ERROR: mbl_table::get_element(): row "
-        << r << " does not exist in the table."
-        << vcl_endl;
+               << r << " does not exist in the table.\n";
     }
   }
   else
   {
     vcl_cerr << "ERROR: mbl_table::get_element(): column \""
-      << header << "\" does not exist in the table."
-      << vcl_endl;
-  }  
-  
+             << header << "\" does not exist in the table.\n";
+  }
+
   return value;
 }
 
@@ -221,7 +215,7 @@ double mbl_table::get_element(const vcl_string& header,
 bool mbl_table::append_column(const vcl_string& header,
                               const vcl_vector<double>& column)
 {
-  // Check whether there is already a column with this heading  
+  // Check whether there is already a column with this heading
   if (header_to_column_index_.find(header) == header_to_column_index_.end())
   {
     // Check that the length of the new column matches the existing columns
@@ -235,18 +229,16 @@ bool mbl_table::append_column(const vcl_string& header,
     else
     {
       vcl_cerr << "ERROR: mbl_table::append_column(): "
-        << "new column is different length from existing columns.\n"
-        << "Column not appended."
-        << vcl_endl;
+               << "new column is different length from existing columns.\n"
+               << "Column not appended.\n";
       return false;
     }
   }
   else
   {
     vcl_cerr << "ERROR: mbl_table::append_column(): a column with header \""
-      << header << "\" already exists.\n"
-      << "Column not appended."
-      << vcl_endl;
+             << header << "\" already exists.\n"
+             << "Column not appended.\n";
     return false;
   }
 }
@@ -258,7 +250,7 @@ bool mbl_table::append_column(const vcl_string& header,
 bool mbl_table::append_column(const vcl_string& header,
                               const double val/*=0*/)
 {
-  // Check whether there is already a column with this heading  
+  // Check whether there is already a column with this heading
   if (header_to_column_index_.find(header) == header_to_column_index_.end())
   {
     // Append a new column of the same length as existing columns
@@ -272,9 +264,8 @@ bool mbl_table::append_column(const vcl_string& header,
   else
   {
     vcl_cerr << "ERROR: mbl_table::append_column(): a column with header \""
-      << header << "\" already exists.\n"
-      << "Column not appended."
-      << vcl_endl;
+             << header << "\" already exists.\n"
+             << "Column not appended.\n";
     return false;
   }
 }
@@ -298,9 +289,8 @@ bool mbl_table::append_row(const vcl_vector<double>& row)
   else
   {
     vcl_cerr << "ERROR: mbl_table::append_row(): "
-      << "new row is different length from existing row.\n"
-      << "Row not appended."
-      << vcl_endl;
+             << "new row is different length from existing row.\n"
+             << "Row not appended.\n";
     return false;
   }
 }
@@ -420,7 +410,7 @@ bool mbl_table::subtable(mbl_table &new_table,  const vcl_vector<vcl_string> &he
     new_table = mbl_table();
 
 
-    // Write column headers row 
+    // Write column headers row
     for (unsigned c=0; c<headers.size(); ++c)
     {
         // get the column for the header if available
@@ -492,34 +482,34 @@ bool mbl_table::read_delimited_string(vcl_istream& is,
 bool mbl_table::operator==(const mbl_table& rhs) const
 {
   // Are both tables the same object - do they occupy the same memory location?
-  if (this == &rhs) 
+  if (this == &rhs)
   {
     if (verbosity_>0)
-      vcl_cout << "Both tables are actually the same memory object!" << vcl_endl;      
+      vcl_cout << "Both tables are actually the same memory object!" << vcl_endl;
     return true;
   }
-  
+
   // Is the delimiter the same?
-  if (delimiter_ != rhs.delimiter_) 
+  if (delimiter_ != rhs.delimiter_)
   {
     if (verbosity_>0)
-      vcl_cout << "Tables have different delimiter characters" << vcl_endl;      
+      vcl_cout << "Tables have different delimiter characters" << vcl_endl;
     return false;
   }
 
   // Is the column headers vector the same?
-  if (column_headers_ != rhs.column_headers_)   
+  if (column_headers_ != rhs.column_headers_)
   {
     if (verbosity_>0)
-      vcl_cout << "Tables have different column headers" << vcl_endl;      
+      vcl_cout << "Tables have different column headers" << vcl_endl;
     return false;
   }
 
   // Is the header to index map the same?
-  if (header_to_column_index_ != rhs.header_to_column_index_) 
+  if (header_to_column_index_ != rhs.header_to_column_index_)
   {
     if (verbosity_>0)
-      vcl_cout << "Tables have different header-to-column index map" << vcl_endl;      
+      vcl_cout << "Tables have different header-to-column index map" << vcl_endl;
     return false;
   }
 
@@ -528,20 +518,21 @@ bool mbl_table::operator==(const mbl_table& rhs) const
   if (ncols != rhs.columns_.size())
   {
     if (verbosity_>0)
-      vcl_cout << "Tables have different number of columns" << vcl_endl;      
+      vcl_cout << "Tables have different number of columns" << vcl_endl;
     return false;
   }
-  
+
   // Is the table data the same (within the current tolerance)?
   bool values_different = false;
   for (unsigned c=0; c<ncols; ++c)
   {
     // Are the numbers of rows in this column the same?
-    unsigned nrows = columns_[c].size();  
+    unsigned nrows = columns_[c].size();
     if (nrows != rhs.columns_[c].size())
     {
       if (verbosity_>0)
-        vcl_cout << "Tables have different number of elements in some columns" << vcl_endl;      
+        vcl_cout << "Tables have different number of elements in some columns"
+                 << vcl_endl;
       return false;
     }
 
@@ -549,16 +540,16 @@ bool mbl_table::operator==(const mbl_table& rhs) const
     for (unsigned r=0; r<nrows; ++r)
     {
       double diff = columns_[c][r] - rhs.columns_[c][r];
-      if (vcl_fabs(diff) > tolerance_) 
+      if (vcl_fabs(diff) > tolerance_)
       {
         if (verbosity_>0)
-          vcl_cout << "Tables have different values in column " << c 
-            << " (" << column_headers_[c] << "), row " << r 
-            << ":  " << columns_[c][r] << ",  " 
-            << rhs.columns_[c][r] 
-            << "  (diff=" << diff << ") "
-            << vcl_endl;      
-        
+          vcl_cout << "Tables have different values in column " << c
+                   << " (" << column_headers_[c] << "), row " << r
+                   << ":  " << columns_[c][r] << ",  "
+                   << rhs.columns_[c][r]
+                   << "  (diff=" << diff << ") "
+                   << vcl_endl;
+
         if (verbosity_<=1)
           return false;     // Don't bother checking any more elements
         else
