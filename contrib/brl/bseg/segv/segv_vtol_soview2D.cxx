@@ -43,7 +43,7 @@ segv_vtol_soview2D_edge::segv_vtol_soview2D_edge(vtol_edge_2d_sptr& e)
   }
   if (c->cast_to_digital_curve())
   {
-    vdgl_digital_curve_sptr dc = c->cast_to_digital_curve();
+    vdgl_digital_curve_sptr dc = c->cast_to_vdgl_digital_curve();
     //get the edgel chain
     vdgl_interpolator_sptr itrp = dc->get_interpolator();
     vdgl_edgel_chain_sptr ech = itrp->get_edgel_chain();

@@ -755,7 +755,7 @@ bool sdet_edgel_regions::InitRegionArray(vcl_vector< vtol_edge_2d_sptr>& sg)
     if (!e)
       continue;
     e->set_id(counter++);
-    vdgl_digital_curve* dc = e->curve()->cast_to_digital_curve();
+    vdgl_digital_curve* dc = e->curve()->cast_to_vdgl_digital_curve();
     if (!dc)
       continue;
 

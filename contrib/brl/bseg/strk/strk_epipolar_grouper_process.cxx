@@ -76,7 +76,7 @@ bool strk_epipolar_grouper_process::execute()
   for (vcl_vector<vsol_polyline_2d_sptr>::iterator pit = polys.begin();
        pit != polys.end(); pit++)
   {
-    vsol_spatial_object_2d_sptr so = (*pit)->cast_to_spatial_object_2d();
+    vsol_spatial_object_2d_sptr so = (*pit)->cast_to_spatial_object();
     if (!so)
       continue;
     output_spat_objs_.push_back(so);

@@ -594,7 +594,7 @@ bool sdet_contour:: DetectJunction(vtol_vertex_2d_sptr const& endv, int& index,
   vcl_vector<vtol_edge_sptr>* edges = endv->edges();
   weaker = (*edges)[0]->cast_to_edge_2d();      // dangling edge must be a weaker contour
   delete edges;
-  vdgl_digital_curve_sptr dc = weaker->curve()->cast_to_digital_curve();
+  vdgl_digital_curve_sptr dc = weaker->curve()->cast_to_vdgl_digital_curve();
 
   const int len = dc->get_interpolator()->get_edgel_chain()->size();
 
@@ -670,7 +670,7 @@ bool sdet_contour:: DetectJunction(vtol_vertex_2d_sptr const& endv, int& index,
   // We have found an edgel on a "stronger" edge at location maxn on the
   // search spiral, i.e. at jx and jy.
   index = int(INVALID);
-  vdgl_digital_curve_sptr dc2 =(stronger->curve()->cast_to_digital_curve());
+  vdgl_digital_curve_sptr dc2 =(stronger->curve()->cast_to_vdgl_digital_curve());
   vdgl_edgel_chain_sptr ec = dc2->get_interpolator()->get_edgel_chain();
   index = bdgl_curve_algs::closest_point(ec, jx, jy);
   //
@@ -733,7 +733,7 @@ void sdet_contour::update_edgel_chain(vtol_edge_2d_sptr const& edge,
   //The new vertex position
   double x = v->x(), y = v->y();
   //Access the old edgel chain
-  vdgl_digital_curve_sptr dc_old= edge->curve()->cast_to_digital_curve();
+  vdgl_digital_curve_sptr dc_old= edge->curve()->cast_to_vdgl_digital_curve();
   vdgl_edgel_chain_sptr ec_old= dc_old->get_interpolator()->get_edgel_chain();
   int N = ec_old->size();
   //Create a new digital curve
@@ -869,7 +869,7 @@ void sdet_contour::BreakCycle(vtol_vertex_2d_sptr const& junction,
 {
   //Get the old curve
   vdgl_digital_curve_sptr old_dc =
-    (stronger->curve()->cast_to_digital_curve());
+    (stronger->curve()->cast_to_vdgl_digital_curve());
   vdgl_edgel_chain_sptr old_ec = old_dc->get_interpolator()->get_edgel_chain();
   const int N = old_ec->size();
 
@@ -962,7 +962,7 @@ ConfirmJunctionOnChain(int index, float threshold,
 
 vtol_vertex_2d_sptr get_vertex_at_index(vtol_edge_2d_sptr& e, int index)
 {
-  vdgl_digital_curve_sptr dc = e->curve()->cast_to_digital_curve();
+  vdgl_digital_curve_sptr dc = e->curve()->cast_to_vdgl_digital_curve();
   if (!dc)
     return 0;
   vdgl_edgel ed = dc->get_interpolator()->get_edgel_chain()->edgel( index);
@@ -1021,7 +1021,7 @@ void sdet_contour::BreakChain(vtol_vertex_2d_sptr const& junction,
                               vtol_edge_2d_sptr& longer,
                               vtol_edge_2d_sptr& shorter)
 {
-  vdgl_digital_curve_sptr dc = stronger->curve()->cast_to_digital_curve();
+  vdgl_digital_curve_sptr dc = stronger->curve()->cast_to_vdgl_digital_curve();
 
   const int N = dc->get_interpolator()->get_edgel_chain()->size();
 
@@ -1125,7 +1125,7 @@ sdet_contour::LoopChain(vtol_vertex_2d_sptr const& junction, int& index,
                         vtol_edge_2d_sptr& straight,
                         vtol_edge_2d_sptr& curled)
 {
-  vdgl_digital_curve_sptr dc = chain->curve()->cast_to_digital_curve();
+  vdgl_digital_curve_sptr dc = chain->curve()->cast_to_vdgl_digital_curve();
   vdgl_edgel_chain_sptr cxy= dc->get_interpolator()->get_edgel_chain();
   const int N = cxy->size();
 
@@ -1369,7 +1369,7 @@ sdet_contour::MergeEndPtsOfChain(vtol_vertex_2d_sptr const& endpt,
   // dangling edge terminating at endpt
   vtol_edge_2d_sptr edge = (*edges)[0]->cast_to_edge_2d();
   delete edges;
-  vdgl_digital_curve_sptr dc = edge->curve()->cast_to_digital_curve();
+  vdgl_digital_curve_sptr dc = edge->curve()->cast_to_vdgl_digital_curve();
   vdgl_edgel_chain_sptr cxy= dc->get_interpolator()->get_edgel_chain();
   int N = cxy->size();
 
@@ -1451,9 +1451,9 @@ sdet_contour::MergeEndPtTouchingEndPt(vtol_vertex_2d_sptr const& end1,
   delete edges;
 
   // 2. Create merged edge/chain
-  vdgl_digital_curve_sptr dc1 = edge1->curve()->cast_to_digital_curve();
+  vdgl_digital_curve_sptr dc1 = edge1->curve()->cast_to_vdgl_digital_curve();
   const int l1 = dc1->get_interpolator()->get_edgel_chain()->size();
-  vdgl_digital_curve_sptr dc2 = edge2->curve()->cast_to_digital_curve();
+  vdgl_digital_curve_sptr dc2 = edge2->curve()->cast_to_vdgl_digital_curve();
   const int l2 = dc2->get_interpolator()->get_edgel_chain()->size();
 
   //edgel chain for edge1
@@ -1615,7 +1615,7 @@ MergeEndPtTouchingJunction(vtol_vertex_2d_sptr const& endpt,
   // dangling edge terminating at end pt
   old_edge = (*edges)[0]->cast_to_edge_2d();
   delete edges;
-  vdgl_digital_curve_sptr old_dc = old_edge->curve()->cast_to_digital_curve();
+  vdgl_digital_curve_sptr old_dc = old_edge->curve()->cast_to_vdgl_digital_curve();
   vdgl_edgel_chain_sptr old_cxy= old_dc->get_interpolator()->get_edgel_chain();
   int N = old_cxy->size();
 
@@ -1759,7 +1759,7 @@ sdet_contour::FindJunctions(gevd_bufferxy& edgels,
   for (unsigned int i=0; i< edges.size(); i++)
   {
     vtol_edge_2d_sptr edge = edges[i];
-    vdgl_digital_curve_sptr dc = edge->curve()->cast_to_digital_curve();
+    vdgl_digital_curve_sptr dc = edge->curve()->cast_to_vdgl_digital_curve();
     vdgl_edgel_chain_sptr cxy= dc->get_interpolator()->get_edgel_chain();
     //the index of the last edgel in the curve
     const int last = cxy->size()-1;
@@ -1994,7 +1994,7 @@ sdet_contour::FindJunctions(gevd_bufferxy& edgels,
     vtol_edge_2d_sptr edge = edges[i];
     if (!edge->v1())    // vertices not created from 1.
     {
-      vdgl_digital_curve_sptr dc = edge->curve()->cast_to_digital_curve();
+      vdgl_digital_curve_sptr dc = edge->curve()->cast_to_vdgl_digital_curve();
       vdgl_edgel_chain_sptr cxy= dc->get_interpolator()->get_edgel_chain();
 
       const int last = cxy->size()-1;
@@ -2048,7 +2048,7 @@ sdet_contour::SubPixelAccuracy(vcl_vector<vtol_edge_2d_sptr>& edges,
   {
     vtol_edge_2d_sptr edge = edges[i];
     if (!edge) continue;
-    vdgl_digital_curve_sptr dc = edge->curve()->cast_to_digital_curve();
+    vdgl_digital_curve_sptr dc = edge->curve()->cast_to_vdgl_digital_curve();
     if (!dc) continue;
     if (!dc->get_interpolator()) continue;
     vdgl_edgel_chain_sptr cxy= dc->get_interpolator()->get_edgel_chain();
@@ -2450,7 +2450,7 @@ sdet_contour::EqualizeSpacing(vcl_vector<vtol_edge_2d_sptr>& chains)
   for (unsigned int i= 0; i< chains.size(); ++i)
   {
     vtol_edge_2d_sptr e = chains[i];
-    vdgl_digital_curve_sptr dc = e->curve()->cast_to_digital_curve();
+    vdgl_digital_curve_sptr dc = e->curve()->cast_to_vdgl_digital_curve();
     const int len = dc->get_interpolator()->get_edgel_chain()->size();
     if (len > 2*MINLENGTH)
     {   // not necessary for short chains
@@ -2506,7 +2506,7 @@ sdet_contour::Translate(vcl_vector<vtol_edge_2d_sptr>& edges, // translate loc t
   for (unsigned int i=0; i< edges.size(); ++i)
   {
     vtol_edge_2d_sptr edge = edges[i];
-    vdgl_digital_curve_sptr dc = edge->curve()->cast_to_digital_curve();
+    vdgl_digital_curve_sptr dc = edge->curve()->cast_to_vdgl_digital_curve();
 
     vdgl_edgel_chain_sptr cxy= dc->get_interpolator()->get_edgel_chain();
     for (unsigned int k = 0; k < cxy->size(); ++k)
@@ -2549,7 +2549,7 @@ sdet_contour::SetEdgelData(gevd_bufferxy& grad_mag, gevd_bufferxy& angle, vcl_ve
   for (unsigned int i=0; i< edges.size(); ++i)
   {
     vtol_edge_2d_sptr e = edges[i];
-    vdgl_digital_curve_sptr dc= e->curve()->cast_to_digital_curve();
+    vdgl_digital_curve_sptr dc= e->curve()->cast_to_vdgl_digital_curve();
 
     if (dc)
     {
