@@ -43,3 +43,6 @@ SUBDIRS(vgel gkll)
 
 # Experiments with the vidl library and vgui (JLM)
 SUBDIRS(jvid)
+
+# Intensity face attributes (MPP)
+SUBDIRS(vifa)
