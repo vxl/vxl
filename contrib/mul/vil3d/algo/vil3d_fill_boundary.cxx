@@ -97,7 +97,7 @@ void label_boundary_and_bkg(vil3d_image_view<int> &image,int i,int j, int k, int
     {
       i1 = i0+x_offset[offset];
       j1 = j0+y_offset[offset];
-      if (i1 >= ni || j1 >= nj || i1 < 0 || j1 < 0)
+      if (i1 >= int(ni) || j1 >= int(nj) || i1 < 0 || j1 < 0)
         offset = ++offset%8;
       else
       {
@@ -129,8 +129,8 @@ void fill_boundary(vil3d_image_view<int> &image, int j, int k, int boundary_labe
 
   // push all boundary pixels onto stack. Needed for degenerate cases
 
-  for (;j<nj;j++,i=0)
-    for (;i<ni;i++)
+  for (;j<int(nj);++j,i=0)
+    for (;i<int(ni);++i)
     {
       if (image(i,j,k) == boundary_label)
       {
@@ -163,7 +163,7 @@ void fill_boundary(vil3d_image_view<int> &image, int j, int k, int boundary_labe
       {
         i1 = i+x_offset[m];
         j1 = j+y_offset[m];
-        if (i1<ni && i1>=0 && j1<nj && j1 >=0)
+        if (i1<int(ni) && i1>=0 && j1<int(nj) && j1 >=0)
         {
           if (image(i1,j1,k) != boundary_label && image(i1,j1,k) != background_label)
           {
