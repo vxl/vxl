@@ -253,7 +253,7 @@ void test_contiguous()
       if( d2==d1 ) continue;
       for( unsigned d3 = 0; d3 < 3; ++d3 ) {
         if( d3==d1 || d3==d2 ) continue;
-        int step[3];
+        vcl_ptrdiff_t step[3];
         step[d1] = 1;
         step[d2] = 3;
         step[d3] = 15;
@@ -270,7 +270,7 @@ void test_contiguous()
       if( d2==d1 ) continue;
       for( unsigned d3 = 0; d3 < 3; ++d3 ) {
         if( d3==d1 || d3==d2 ) continue;
-        int step[3];
+        vcl_ptrdiff_t step[3];
         step[d1] = 2;
         step[d2] = 3;
         step[d3] = 15;

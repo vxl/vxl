@@ -13,8 +13,8 @@
 //  No bound checks are done.
 template<class T>
 inline double vil3d_trilin_interp_raw(double x, double y, double z,
-                                      const T* data,
-                                      int xstep, int ystep, int zstep)
+                                      const T* data, vcl_ptrdiff_t xstep,
+                                      vcl_ptrdiff_t ystep, vcl_ptrdiff_t zstep)
 {
   int p1x,p1y,p1z;
   double normx,normy,normz;
@@ -50,7 +50,7 @@ inline double vil3d_trilin_interp_raw(double x, double y, double z,
 template<class T>
 inline double vil3d_trilin_interp_safe(double x, double y, double z, const T* data,
                      unsigned nx, unsigned ny, unsigned nz,
-                     int xstep, int ystep, int zstep)
+                     vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep, vcl_ptrdiff_t zstep)
 {
   if (x<0) return 0.0;
   if (y<0) return 0.0;
@@ -69,7 +69,7 @@ inline double vil3d_trilin_interp_safe(double x, double y, double z, const T* da
 template<class T>
 inline double vil3d_trilin_interp_assert(double x, double y, double z, const T* data,
                      unsigned nx, unsigned ny, unsigned nz,
-                     int xstep, int ystep, int zstep)
+                     vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep, vcl_ptrdiff_t zstep)
 {
   assert(x>=0);
   assert(y>=0);
@@ -87,7 +87,7 @@ inline double vil3d_trilin_interp_assert(double x, double y, double z, const T* 
 template<class T>
 inline double vil3d_trilin_interp_safe_extend(double x, double y, double z, const T* data,
                      unsigned nx, unsigned ny, unsigned nz,
-                     int xstep, int ystep, int zstep)
+                     vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep, vcl_ptrdiff_t zstep)
 {
   if (x<0) x= 0.0;
   if (y<0) y= 0.0;

@@ -7,6 +7,7 @@
 
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
+#include <vcl_cstddef.h>
 
 //: Structuring element for morphology represented as a list of non-zero pixels
 // Elements in box bounded by [min_i(),max_i()][min_j(),max_j()]
@@ -68,6 +69,7 @@ vcl_ostream& operator<<(vcl_ostream& os, const vil2_structuring_element& element
 //  On exit offset[k] = element.p_i()[k]*istep +  element.p_j()[k]*jstep
 //  Gives an efficient way of looping through all the pixels in the structuring element
 void vil2_compute_offsets(vcl_vector<int>& offset,
-                          const vil2_structuring_element& element, int istep, int jstep);
+                          const vil2_structuring_element& element,
+                          vcl_ptrdiff_t istep, vcl_ptrdiff_t jstep);
 
 #endif

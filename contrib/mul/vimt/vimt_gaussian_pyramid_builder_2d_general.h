@@ -52,15 +52,6 @@ public:
     // The first layer of the pyramid must already be set.
     void extend(vimt_image_pyramid& image_pyr) const;
 
-    //: Smooth and subsample src_im to produce dest_im
-    //  Applies 5 element FIR filter in x and y, then samples
-    //  Assumes dest_im has sufficient data allocated
-    void gauss_reduce(T* dest_im, int dest_ystep,
-                      const T* src_im,
-                      int src_nx, int src_ny,
-                      int dest_nx, int dest_ny,
-                      int src_ystep) const;
-
     vimt_image_pyramid_builder* clone() const;
     //: Version number for I/O
     short version_no() const ;

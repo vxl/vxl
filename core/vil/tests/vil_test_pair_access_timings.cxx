@@ -60,8 +60,8 @@ double method3(const vil2_image_view<imT>& src_image,
   for (int n=0;n<n_loops;++n)
   {
    unsigned ni=src_image.ni(),nj=src_image.nj(),np=src_image.nplanes();
-   int sistep=src_image.istep(),sjstep=src_image.jstep(),spstep=src_image.planestep();
-   int distep=dest_image.istep(),djstep=dest_image.jstep(),dpstep=dest_image.planestep();
+   vcl_ptrdiff_t sistep=src_image.istep(),sjstep=src_image.jstep(),spstep=src_image.planestep();
+   vcl_ptrdiff_t distep=dest_image.istep(),djstep=dest_image.jstep(),dpstep=dest_image.planestep();
    const imT* splane = src_image.top_left_ptr();
    imT* dplane = dest_image.top_left_ptr();
    for (unsigned p=0;p<np;++p,splane += spstep, dplane+=dpstep)
@@ -89,8 +89,8 @@ double method4(const vil2_image_view<imT>& src_image,
   for (int n=0;n<n_loops;++n)
   {
    unsigned ni=src_image.ni(),nj=src_image.nj(),np=src_image.nplanes();
-   int sistep=src_image.istep(),sjstep=src_image.jstep(),spstep=src_image.planestep();
-   int distep=dest_image.istep(),djstep=dest_image.jstep(),dpstep=dest_image.planestep();
+   vcl_ptrdiff_t sistep=src_image.istep(),sjstep=src_image.jstep(),spstep=src_image.planestep();
+   vcl_ptrdiff_t distep=dest_image.istep(),djstep=dest_image.jstep(),dpstep=dest_image.planestep();
    const imT* splane = src_image.top_left_ptr();
    imT* dplane = dest_image.top_left_ptr();
    for (unsigned p=0;p<np;++p,splane += spstep, dplane+=dpstep)
@@ -116,8 +116,8 @@ double method5(const vil2_image_view<imT>& src_image,
   for (int n=0;n<n_loops;++n)
   {
    unsigned ni=src_image.ni(),nj=src_image.nj(),np=src_image.nplanes();
-   int sjstep=src_image.jstep(),spstep=src_image.planestep();
-   int djstep=dest_image.jstep(),dpstep=dest_image.planestep();
+   vcl_ptrdiff_t sjstep=src_image.jstep(),spstep=src_image.planestep();
+   vcl_ptrdiff_t djstep=dest_image.jstep(),dpstep=dest_image.planestep();
    const imT* splane = src_image.top_left_ptr();
    imT* dplane = dest_image.top_left_ptr();
    for (unsigned p=0;p<np;++p,splane += spstep, dplane+=dpstep)
@@ -143,8 +143,8 @@ double method6(const vil2_image_view<imT>& src_image,
   for (int n=0;n<n_loops;++n)
   {
    unsigned ni=src_image.ni(),nj=src_image.nj(),np=src_image.nplanes();
-   int sistep=src_image.istep(),sjstep=src_image.jstep(),spstep=src_image.planestep();
-   int distep=dest_image.istep(),djstep=dest_image.jstep(),dpstep=dest_image.planestep();
+   vcl_ptrdiff_t sistep=src_image.istep(),sjstep=src_image.jstep(),spstep=src_image.planestep();
+   vcl_ptrdiff_t distep=dest_image.istep(),djstep=dest_image.jstep(),dpstep=dest_image.planestep();
    const imT* splane = src_image.top_left_ptr();
    imT* dplane = dest_image.top_left_ptr();
    for (unsigned p=0;p<np;++p,splane += spstep, dplane+=dpstep)

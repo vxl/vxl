@@ -8,9 +8,9 @@
 //: Compute gradients of single plane of 2D data using 3x3 Sobel filters
 //  Computes both i and j gradients of an ni x nj plane of data
 void vil2_sobel_3x3_1plane(const unsigned char* src,
-                           int s_istep, int s_jstep,
-                           float* gi, int gi_istep, int gi_jstep,
-                           float* gj, int gj_istep, int gj_jstep,
+                           vcl_ptrdiff_t s_istep, vcl_ptrdiff_t s_jstep,
+                           float* gi, vcl_ptrdiff_t gi_istep, vcl_ptrdiff_t gi_jstep,
+                           float* gj, vcl_ptrdiff_t gj_istep, vcl_ptrdiff_t gj_jstep,
                            unsigned ni, unsigned nj)
 {
   const unsigned char* s_data = src;
@@ -112,9 +112,9 @@ void vil2_sobel_3x3_1plane(const unsigned char* src,
 //: Compute gradients of single plane of 2D data using 3x3 Sobel filters
 //  Computes both x and j gradients of an nx x nj plane of data
 void vil2_sobel_3x3_1plane(const float* src,
-                           int s_istep, int s_jstep,
-                           float* gi, int gi_istep, int gi_jstep,
-                           float* gj, int gj_istep, int gj_jstep,
+                           vcl_ptrdiff_t s_istep, vcl_ptrdiff_t s_jstep,
+                           float* gi, vcl_ptrdiff_t gi_istep, vcl_ptrdiff_t gi_jstep,
+                           float* gj, vcl_ptrdiff_t gj_istep, vcl_ptrdiff_t gj_jstep,
                            unsigned ni, unsigned nj)
 {
   const float* s_data = src;
@@ -212,9 +212,9 @@ void vil2_sobel_3x3_1plane(const float* src,
 //: Compute gradients of single plane of 2D data using 3x3 Sobel filters
 //  Computes both x and j gradients of an nx x nj plane of data
 void vil2_sobel_3x3_1plane(const double* src,
-                           int s_istep, int s_jstep,
-                           double* gi, int gi_istep, int gi_jstep,
-                           double* gj, int gj_istep, int gj_jstep,
+                           vcl_ptrdiff_t s_istep, vcl_ptrdiff_t s_jstep,
+                           double* gi, vcl_ptrdiff_t gi_istep, vcl_ptrdiff_t gi_jstep,
+                           double* gj, vcl_ptrdiff_t gj_istep, vcl_ptrdiff_t gj_jstep,
                            unsigned ni, unsigned nj)
 {
   const double* s_data = src;

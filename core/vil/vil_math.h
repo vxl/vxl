@@ -106,7 +106,7 @@ template<class imT, class sumT>
 inline void vil2_math_sum(sumT& sum, const vil2_image_view<imT>& im, unsigned p)
 {
   const imT* row = im.top_left_ptr()+p*im.planestep();
-  int istep = im.istep(),jstep=im.jstep();
+  vcl_ptrdiff_t istep = im.istep(),jstep=im.jstep();
   const imT* row_end = row + im.nj()*jstep;
   int row_len = im.ni()*im.istep();
   sum = 0;
@@ -133,7 +133,7 @@ template<class imT, class sumT>
 inline void vil2_math_sum_squares(sumT& sum, sumT& sum_sq, const vil2_image_view<imT>& im, unsigned p)
 {
   const imT* row = im.top_left_ptr()+p*im.planestep();
-  int istep = im.istep(),jstep=im.jstep();
+  vcl_ptrdiff_t istep = im.istep(),jstep=im.jstep();
   const imT* row_end = row + im.nj()*jstep;
   int row_len = im.ni()*im.istep();
   sum = 0; sum_sq = 0;
@@ -162,7 +162,7 @@ template<class T>
 inline void vil2_math_scale_values(vil2_image_view<T>& image, double scale)
 {
   unsigned ni = image.ni(),nj = image.nj(),np = image.nplanes();
-  int istep=image.istep(),jstep=image.jstep(),pstep = image.planestep();
+  vcl_ptrdiff_t istep=image.istep(),jstep=image.jstep(),pstep = image.planestep();
   T* plane = image.top_left_ptr();
   for (unsigned p=0;p<np;++p,plane += pstep)
   {
@@ -181,7 +181,7 @@ template<class imT, class offsetT>
 inline void vil2_math_scale_and_offset_values(vil2_image_view<imT>& image, double scale, offsetT offset)
 {
   unsigned ni = image.ni(),nj = image.nj(),np = image.nplanes();
-  int istep=image.istep(),jstep=image.jstep(),pstep = image.planestep();
+  vcl_ptrdiff_t istep=image.istep(),jstep=image.jstep(),pstep = image.planestep();
   imT* plane = image.top_left_ptr();
   for (unsigned p=0;p<np;++p,plane += pstep)
   {
@@ -218,9 +218,9 @@ inline void vil2_math_image_sum(const vil2_image_view<aT>& imA,
   assert(imB.ni()==ni && imB.nj()==nj && imB.nplanes()==np);
   im_sum.set_size(ni,nj,np);
 
-  int istepA=imA.istep(),jstepA=imA.jstep(),pstepA = imA.planestep();
-  int istepB=imB.istep(),jstepB=imB.jstep(),pstepB = imB.planestep();
-  int istepS=im_sum.istep(),jstepS=im_sum.jstep(),pstepS = im_sum.planestep();
+  vcl_ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),pstepA = imA.planestep();
+  vcl_ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),pstepB = imB.planestep();
+  vcl_ptrdiff_t istepS=im_sum.istep(),jstepS=im_sum.jstep(),pstepS = im_sum.planestep();
   const aT* planeA = imA.top_left_ptr();
   const bT* planeB = imB.top_left_ptr();
   sumT* planeS     = im_sum.top_left_ptr();
@@ -251,9 +251,9 @@ inline void vil2_math_image_difference(const vil2_image_view<aT>& imA,
   assert(imB.ni()==ni && imB.nj()==nj && imB.nplanes()==np);
   im_sum.set_size(ni,nj,np);
 
-  int istepA=imA.istep(),jstepA=imA.jstep(),pstepA = imA.planestep();
-  int istepB=imB.istep(),jstepB=imB.jstep(),pstepB = imB.planestep();
-  int istepS=im_sum.istep(),jstepS=im_sum.jstep(),pstepS = im_sum.planestep();
+  vcl_ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),pstepA = imA.planestep();
+  vcl_ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),pstepB = imB.planestep();
+  vcl_ptrdiff_t istepS=im_sum.istep(),jstepS=im_sum.jstep(),pstepS = im_sum.planestep();
   const aT* planeA = imA.top_left_ptr();
   const bT* planeB = imB.top_left_ptr();
   sumT* planeS     = im_sum.top_left_ptr();
@@ -284,9 +284,9 @@ inline void vil2_math_image_abs_difference(const vil2_image_view<aT>& imA,
   assert(imB.ni()==ni && imB.nj()==nj && imB.nplanes()==np);
   im_sum.set_size(ni,nj,np);
 
-  int istepA=imA.istep(),jstepA=imA.jstep(),pstepA = imA.planestep();
-  int istepB=imB.istep(),jstepB=imB.jstep(),pstepB = imB.planestep();
-  int istepS=im_sum.istep(),jstepS=im_sum.jstep(),pstepS = im_sum.planestep();
+  vcl_ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),pstepA = imA.planestep();
+  vcl_ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),pstepB = imB.planestep();
+  vcl_ptrdiff_t istepS=im_sum.istep(),jstepS=im_sum.jstep(),pstepS = im_sum.planestep();
   const aT* planeA = imA.top_left_ptr();
   const bT* planeB = imB.top_left_ptr();
   sumT* planeS     = im_sum.top_left_ptr();
@@ -317,8 +317,8 @@ inline void vil2_math_add_image_fraction(vil2_image_view<aT>& imA, scaleT fa,
   unsigned ni = imA.ni(),nj = imA.nj(),np = imA.nplanes();
   assert(imB.ni()==ni && imB.nj()==nj && imB.nplanes()==np);
 
-  int istepA=imA.istep(),jstepA=imA.jstep(),pstepA = imA.planestep();
-  int istepB=imB.istep(),jstepB=imB.jstep(),pstepB = imB.planestep();
+  vcl_ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),pstepA = imA.planestep();
+  vcl_ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),pstepB = imB.planestep();
   aT* planeA = imA.top_left_ptr();
   const bT* planeB = imB.top_left_ptr();
   for (unsigned p=0;p<np;++p,planeA += pstepA,planeB += pstepB)
@@ -349,8 +349,8 @@ inline void vil2_math_integral_image(const vil2_image_view<aT>& imA,
   unsigned ni = imA.ni(),nj = imA.nj();
   im_sum.set_size(ni,nj,1);
 
-  int istepA=imA.istep(),jstepA=imA.jstep();
-  int istepS=im_sum.istep(),jstepS=im_sum.jstep();
+  vcl_ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep();
+  vcl_ptrdiff_t istepS=im_sum.istep(),jstepS=im_sum.jstep();
   const aT* rowA = imA.top_left_ptr();
   sumT* rowS     = im_sum.top_left_ptr();
 
@@ -395,9 +395,9 @@ inline void vil2_math_integral_sqr_image(const vil2_image_view<aT>& imA,
   im_sum.set_size(ni,nj,1);
   im_sum_sq.set_size(ni,nj,1);
 
-  int istepA=imA.istep(),jstepA=imA.jstep();
-  int istepS=im_sum.istep(),jstepS=im_sum.jstep();
-  int istepS2=im_sum_sq.istep(),jstepS2=im_sum_sq.jstep();
+  vcl_ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep();
+  vcl_ptrdiff_t istepS=im_sum.istep(),jstepS=im_sum.jstep();
+  vcl_ptrdiff_t istepS2=im_sum_sq.istep(),jstepS2=im_sum_sq.jstep();
   const aT* rowA = imA.top_left_ptr();
   sumT* rowS     = im_sum.top_left_ptr();
   sumT* rowS2    = im_sum_sq.top_left_ptr();

@@ -49,10 +49,10 @@ void vil3d_sample_profile_trilin(vecType* v,
   const unsigned nj = image.nj();
   const unsigned nk = image.nk();
   const unsigned np = image.nplanes();
-  const int istep = image.istep();
-  const int jstep = image.jstep();
-  const int kstep = image.kstep();
-  const int pstep = image.planestep();
+  const vcl_ptrdiff_t istep = image.istep();
+  const vcl_ptrdiff_t jstep = image.jstep();
+  const vcl_ptrdiff_t kstep = image.kstep();
+  const vcl_ptrdiff_t pstep = image.planestep();
   double x=x0;
   double y=y0;
   double z=z0;

@@ -21,9 +21,11 @@
 template<class T>
 inline void vil3d_gauss_reduce_i(const T* src_im,
                                  unsigned src_ni, unsigned src_nj, unsigned src_nk,
-                                 int s_i_step, int s_j_step, int s_k_step,
+                                 vcl_ptrdiff_t s_i_step, vcl_ptrdiff_t s_j_step,
+                                 vcl_ptrdiff_t s_k_step,
                                  T* dest_im,
-                                 int d_i_step, int d_j_step, int d_k_step)
+                                 vcl_ptrdiff_t d_i_step,
+                                 vcl_ptrdiff_t d_j_step, vcl_ptrdiff_t d_k_step)
 {
   for (unsigned k=0;k<src_nk;++k)
   {

@@ -10,7 +10,7 @@
 
 //: True if pixel at *im is strictly below its 8 neighbours
 template <class T>
-inline bool vimt_is_trough_3x3(const T* im, int i_step, int j_step)
+inline bool vimt_is_trough_3x3(const T* im, vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step)
 {
   T v = *im;
   if (v>=im[i_step]) return false;
@@ -33,7 +33,7 @@ inline void vimt_find_image_troughs_3x3(vcl_vector<vgl_point_2d<unsigned> >& tro
 {
   if (clear_list) troughs.resize(0);
   unsigned ni=image.ni(),nj=image.nj();
-  int istep = image.istep(),jstep=image.jstep();
+  vcl_ptrdiff_t istep = image.istep(),jstep=image.jstep();
   const T* row = image.top_left_ptr()+plane*image.planestep()+istep+jstep;
   for (unsigned j=1;j<nj;++j,row+=jstep)
   {
@@ -54,7 +54,7 @@ inline void vimt_find_world_troughs_3x3(vcl_vector<vgl_point_2d<double> >& troug
   const vil2_image_view<T>& im = image.image();
   vimt_transform_2d im2w = image.world2im().inverse();
   unsigned ni=im.ni(),nj=im.nj();
-  int istep = im.istep(),jstep=im.jstep();
+  vcl_ptrdiff_t istep = im.istep(),jstep=im.jstep();
   const T* row = im.top_left_ptr()+plane*im.planestep()+istep+jstep;
   for (unsigned j=1;j<nj;++j,row+=jstep)
   {

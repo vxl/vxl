@@ -16,8 +16,8 @@
 // and unit variance
 // \relates vil2_image_view
 template <class srcT, class kernelT, class accumT>
-inline accumT vil2_norm_corr_2d_at_pt(const srcT *src_im,
-                                      int s_istep, int s_jstep, int s_pstep,
+inline accumT vil2_norm_corr_2d_at_pt(const srcT *src_im, vcl_ptrdiff_t s_istep,
+                                      vcl_ptrdiff_t s_jstep, vcl_ptrdiff_t s_pstep,
                                       const vil2_image_view<kernelT>& kernel,
                                       accumT)
 {
@@ -25,7 +25,7 @@ inline accumT vil2_norm_corr_2d_at_pt(const srcT *src_im,
   unsigned nj = kernel.nj();
   unsigned np = kernel.nplanes();
 
-  int k_istep = kernel.istep(), k_jstep = kernel.jstep();
+  vcl_ptrdiff_t k_istep = kernel.istep(), k_jstep = kernel.jstep();
 
   accumT sum=0;
   accumT mean=0;
@@ -50,7 +50,7 @@ inline accumT vil2_norm_corr_2d_at_pt(const srcT *src_im,
     }
   }
 
-  int n=ni*nj*np;
+  long n=ni*nj*np;
   mean/=n;
   accumT var = sum_sq/n - mean*mean;
   return var<=0 ? 0 : sum/vcl_sqrt(var);
@@ -70,23 +70,23 @@ inline void vil2_normalised_correlation_2d(const vil2_image_view<srcT>& src_im,
                                            const vil2_image_view<kernelT>& kernel,
                                            accumT ac)
 {
-  int ni = 1+src_im.ni()-kernel.ni(); assert(ni >= 0);
-  int nj = 1+src_im.nj()-kernel.nj(); assert(nj >= 0);
-  int s_istep = src_im.istep(), s_jstep = src_im.jstep();
-  int s_pstep = src_im.planestep();
+  unsigned ni = 1+src_im.ni()-kernel.ni(); assert(1+src_im.ni()-kernel.ni() >= 0);
+  unsigned nj = 1+src_im.nj()-kernel.nj(); assert(1+src_im.nj()-kernel.nj() >= 0);
+  vcl_ptrdiff_t s_istep = src_im.istep(), s_jstep = src_im.jstep();
+  vcl_ptrdiff_t s_pstep = src_im.planestep();
 
   dest_im.set_size(ni,nj,1);
-  int d_istep = dest_im.istep(),d_jstep = dest_im.jstep();
+  vcl_ptrdiff_t d_istep = dest_im.istep(),d_jstep = dest_im.jstep();
 
   // Select first row of p-th plane
   const srcT*  src_row  = src_im.top_left_ptr();
   destT* dest_row = dest_im.top_left_ptr();
 
-  for (int j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
+  for (unsigned j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
   {
     const srcT* sp = src_row;
     destT* dp = dest_row;
-    for (int i=0;i<ni;++i, sp += s_istep, dp += d_istep)
+    for (unsigned i=0;i<ni;++i, sp += s_istep, dp += d_istep)
       *dp =(destT)vil2_norm_corr_2d_at_pt(sp,s_istep,s_jstep,s_pstep,kernel,ac);
     // Convolve at src(i,j)
   }

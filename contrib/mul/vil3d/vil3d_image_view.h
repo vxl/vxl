@@ -12,6 +12,7 @@
 #include <vcl_iosfwd.h>
 #include <vcl_string.h>
 #include <vcl_cassert.h>
+#include <vcl_cstddef.h>
 #include <vil3d/vil3d_image_view_base.h>
 #include <vil2/vil2_smart_ptr.h>
 #include <vil2/vil2_memory_chunk.h>
@@ -39,13 +40,13 @@ class vil3d_image_view : public vil3d_image_view_base
   //: Pointer to pixel at origin.
   T * top_left_;
   //: Add this to a pixel pointer to move one column left.
-  int istep_;
+  vcl_ptrdiff_t istep_;
   //: Add this to a pixel pointer to move one row down.
-  int jstep_;
+  vcl_ptrdiff_t jstep_;
   //: Add this to a pixel pointer to move one slice down.
-  int kstep_;
+  vcl_ptrdiff_t kstep_;
   //: Add this to a pixel pointer to move one plane back.
-  int planestep_;
+  vcl_ptrdiff_t planestep_;
 
   //: Reference to actual image data.
   vil2_memory_chunk_sptr ptr_;
@@ -67,7 +68,8 @@ class vil3d_image_view : public vil3d_image_view_base
   //  there's no way of knowing until its too late - so take care!
   vil3d_image_view(const T* top_left,
                    unsigned ni, unsigned nj, unsigned nk, unsigned nplanes,
-                   int i_step, int j_step, int k_step, int plane_step);
+                   vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step,
+                   vcl_ptrdiff_t k_step, vcl_ptrdiff_t plane_step);
 
   //: Set this view to look at another view's data
   //  Typically used by functions which generate a manipulated view of
@@ -76,7 +78,8 @@ class vil3d_image_view : public vil3d_image_view_base
   vil3d_image_view(const vil2_memory_chunk_sptr& mem_chunk,
                    const T* top_left,
                    unsigned ni, unsigned nj, unsigned nk, unsigned nplanes,
-                   int i_step, int j_step, int k_step, int plane_step);
+                   vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step,
+                   vcl_ptrdiff_t k_step, vcl_ptrdiff_t plane_step);
 
   //: Construct from various vil3d_image_view types.
   // The new object will point to the same underlying image as the rhs
@@ -132,16 +135,16 @@ class vil3d_image_view : public vil3d_image_view_base
 
   //: Add this to your pixel pointer to get next i pixel.
   //  Note that istep() may well be negative;
-  inline int istep() const { return istep_; }
+  inline vcl_ptrdiff_t istep() const { return istep_; }
   //: Add this to your pixel pointer to get next j pixel.
   //  Note that jstep() may well be negative;
-  inline int jstep() const { return jstep_; }
+  inline vcl_ptrdiff_t jstep() const { return jstep_; }
   //: Add this to your pixel pointer to get next k pixel.
   //  Note that kstep() may well be negative;
-  inline int kstep() const { return kstep_; }
+  inline vcl_ptrdiff_t kstep() const { return kstep_; }
   //: Add this to your pixel pointer to get pixel on next plane.
   //  Note that planestep() may well be negative, e.g. with BMP file images
-  inline int planestep() const { return planestep_; }
+  inline vcl_ptrdiff_t planestep() const { return planestep_; }
 
   //: Cast to bool is true if pointing at some data.
   operator bool () const { return top_left_ != (T*)0; }
@@ -211,7 +214,8 @@ class vil3d_image_view : public vil3d_image_view_base
   //  through the view.
   void set_to_memory(const T* top_left,
                      unsigned ni, unsigned nj, unsigned nk, unsigned nplanes,
-                     int i_step, int j_step, int k_step, int plane_step);
+                     vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step,
+                     vcl_ptrdiff_t k_step, vcl_ptrdiff_t plane_step);
 
   //: Fill view with given value
   void fill(T value);

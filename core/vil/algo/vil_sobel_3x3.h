@@ -30,27 +30,27 @@ void vil2_sobel_3x3(const vil2_image_view<srcT>& src,
 //  Computes both i and j gradients of an ni x nj plane of data
 //  1 pixel border around grad images is set to zero
 void vil2_sobel_3x3_1plane(const unsigned char* src,
-                           int s_istep, int s_jstep,
-                           float* gi, int gi_istep, int gi_jstep,
-                           float* gj, int gj_istep, int gj_jstep,
+                           vcl_ptrdiff_t s_istep, vcl_ptrdiff_t s_jstep,
+                           float* gi, vcl_ptrdiff_t gi_istep, vcl_ptrdiff_t gi_jstep,
+                           float* gj, vcl_ptrdiff_t gj_istep, vcl_ptrdiff_t gj_jstep,
                            unsigned ni, unsigned nj);
 
 //: Compute gradients of single plane of 2D data using 3x3 Sobel filters
 //  Computes both i and j gradients of an ni x nj plane of data.
 //  1 pixel border around grad images is set to zero
 void vil2_sobel_3x3_1plane(const float* src,
-                           int s_istep, int s_jstep,
-                           float* gi, int gi_istep, int gi_jstep,
-                           float* gj, int gj_istep, int gj_jstep,
+                           vcl_ptrdiff_t s_istep, vcl_ptrdiff_t s_jstep,
+                           float* gi, vcl_ptrdiff_t gi_istep, vcl_ptrdiff_t gi_jstep,
+                           float* gj, vcl_ptrdiff_t gj_istep, vcl_ptrdiff_t gj_jstep,
                            unsigned ni, unsigned nj);
 
 //: Compute gradients of single plane of 2D data using 3x3 Sobel filters
 //  Computes both i and j gradients of an ni x nj plane of data.
 //  1 pixel border around grad images is set to zero
 void vil2_sobel_3x3_1plane(const double* src,
-                           int s_istep, int s_jstep,
-                           double* gi, int gi_istep, int gi_jstep,
-                           double* gj, int gj_istep, int gj_jstep,
+                           vcl_ptrdiff_t s_istep, vcl_ptrdiff_t s_jstep,
+                           double* gi, vcl_ptrdiff_t gi_istep, vcl_ptrdiff_t gi_jstep,
+                           double* gj, vcl_ptrdiff_t gj_istep, vcl_ptrdiff_t gj_jstep,
                            unsigned ni, unsigned nj);
 
 #endif // vil2_sobel_3x3_h_

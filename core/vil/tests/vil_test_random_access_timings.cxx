@@ -110,7 +110,7 @@ void compute_stats(int i, vil2_image_view<imT>& image,
 // ================== Bilinear ========================
 
 template<class T>
-inline double bilin_interp1(double x, double y, const T* data, int xstep, int ystep)
+inline double bilin_interp1(double x, double y, const T* data, vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
 {
   int p1x=int(x);
   double normx = x-p1x;
@@ -150,7 +150,7 @@ double bilin_method1(vil2_image_view<imT>& image, int n_pts, int n_loops, double
   for (int n=0;n<n_loops;++n)
   {
      double x = 1.3,y=1.7;
-     int istep=image.istep(),jstep=image.jstep();
+     vcl_ptrdiff_t istep=image.istep(),jstep=image.jstep();
      imT* plane = image.top_left_ptr();
      for (int i=0;i<n_pts;++i,x+=dx,y+=dy)
        sum+=(double) bilin_interp1(x,y,plane,istep,jstep);

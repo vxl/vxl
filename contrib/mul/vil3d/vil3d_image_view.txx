@@ -39,7 +39,8 @@ vil3d_image_view<T>::vil3d_image_view(unsigned ni, unsigned nj,
 template<class T>
 vil3d_image_view<T>::vil3d_image_view(const T* top_left,
                                       unsigned n_i, unsigned n_j, unsigned n_k, unsigned n_planes,
-                                      int i_step, int j_step, int k_step, int plane_step)
+                                      vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step,
+                                      vcl_ptrdiff_t k_step, vcl_ptrdiff_t plane_step)
 {
   set_to_memory(top_left,n_i,n_j,n_k,n_planes,i_step,j_step,k_step,plane_step);
 }
@@ -50,7 +51,8 @@ template<class T>
 vil3d_image_view<T>::vil3d_image_view(const vil2_memory_chunk_sptr& mem_chunk,
                                       const T* top_left, unsigned n_i, unsigned n_j,
                                       unsigned n_k, unsigned n_planes,
-                                      int i_step, int j_step, int k_step, int plane_step)
+                                      vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step,
+                                      vcl_ptrdiff_t k_step, vcl_ptrdiff_t plane_step)
  : vil3d_image_view_base(n_i, n_j, n_k, n_planes)
  , top_left_(const_cast<T*>( top_left))
  , istep_(i_step), jstep_(j_step), kstep_(k_step)
@@ -93,10 +95,10 @@ void vil3d_image_view<T>::deep_copy(const vil3d_image_view<T>& src)
 {
   set_size(src.ni(),src.nj(),src.nk(),src.nplanes());
 
-  int s_planestep = src.planestep();
-  int s_istep = src.istep();
-  int s_jstep = src.jstep();
-  int s_kstep = src.kstep();
+  vcl_ptrdiff_t s_planestep = src.planestep();
+  vcl_ptrdiff_t s_istep = src.istep();
+  vcl_ptrdiff_t s_jstep = src.jstep();
+  vcl_ptrdiff_t s_kstep = src.kstep();
 
   // Do a deep copy
   // This is potentially inefficient
@@ -492,7 +494,8 @@ template<class T>
 void vil3d_image_view<T>::set_to_memory(const T* top_left,
                                         unsigned n_i, unsigned n_j,
                                         unsigned n_k, unsigned n_planes,
-                                        int i_step, int j_step, int k_step, int plane_step)
+                                        vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step,
+                                        vcl_ptrdiff_t k_step, vcl_ptrdiff_t plane_step)
 {
   release_memory();
   top_left_ = const_cast<T*>(top_left);  // Remove const, as view may end up manipulating data

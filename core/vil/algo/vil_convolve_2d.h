@@ -14,8 +14,8 @@
 //: Evaluate dot product between kernel and src_im
 // Returns  sum_ijp src_im[i*istep+j*jstep+p*pstep]*kernel(i,j,p)
 template <class srcT, class kernelT, class accumT>
-inline accumT vil2_convolve_2d_at_pt(const srcT *src_im,
-                                     int s_istep, int s_jstep, int s_pstep,
+inline accumT vil2_convolve_2d_at_pt(const srcT *src_im, vcl_ptrdiff_t s_istep,
+                                     vcl_ptrdiff_t s_jstep, vcl_ptrdiff_t s_pstep,
                                      const vil2_image_view<kernelT>& kernel,
                                      accumT)
 {
@@ -23,7 +23,7 @@ inline accumT vil2_convolve_2d_at_pt(const srcT *src_im,
   unsigned nj = kernel.nj();
   unsigned np = kernel.nplanes();
 
-  int k_istep = kernel.istep(), k_jstep = kernel.jstep();
+  vcl_ptrdiff_t k_istep = kernel.istep(), k_jstep = kernel.jstep();
 
   accumT sum=0;
   for (unsigned p = 0; p<np; ++p)
@@ -58,11 +58,11 @@ inline void vil2_convolve_2d(const vil2_image_view<srcT>& src_im,
 {
   int ni = 1+src_im.ni()-kernel.ni(); assert(ni >= 0);
   int nj = 1+src_im.nj()-kernel.nj(); assert(nj >= 0);
-  int s_istep = src_im.istep(), s_jstep = src_im.jstep();
-  int s_pstep = src_im.planestep();
+  vcl_ptrdiff_t s_istep = src_im.istep(), s_jstep = src_im.jstep();
+  vcl_ptrdiff_t s_pstep = src_im.planestep();
 
   dest_im.set_size(ni,nj,1);
-  int d_istep = dest_im.istep(),d_jstep = dest_im.jstep();
+  vcl_ptrdiff_t d_istep = dest_im.istep(),d_jstep = dest_im.jstep();
 
   // Select first row of p-th plane
   const srcT*  src_row  = src_im.top_left_ptr();

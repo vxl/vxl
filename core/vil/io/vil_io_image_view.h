@@ -39,7 +39,7 @@ inline void vsl_b_read(vsl_b_istream &is, vil2_image_view<T>& image)
   if (!is) return;
 
   unsigned ni,nj,np;
-  int istep,jstep,pstep;
+  vcl_ptrdiff_t istep,jstep,pstep;
   vil2_memory_chunk_sptr chunk;
   vcl_ptrdiff_t offset;
 

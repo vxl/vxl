@@ -7,12 +7,14 @@
 //  \author Tim Cootes
 
 #include <vcl_cassert.h>
+#include <vcl_cstddef.h>
 
 //: Compute bilinear interpolation at (x,y), no bound checks
 //  Image is nx * ny array of Ts. x,y element is data[xstep*x+ystep*y]
 //  No bound checks are done.
 template<class T>
-inline double vil2_bilin_interp_raw(double x, double y, const T* data, int xstep, int ystep)
+inline double vil2_bilin_interp_raw(double x, double y, const T* data,
+                                    vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
 {
     int p1x=int(x);
     double normx = x-p1x;
@@ -39,7 +41,8 @@ inline double vil2_bilin_interp_raw(double x, double y, const T* data, int xstep
 //  The safe interpolatable region is [0,nx-1]*[0,ny-1].
 template<class T>
 inline double vil2_bilin_interp_safe(double x, double y, const T* data,
-                                     int nx, int ny, int xstep, int ystep)
+                                     int nx, int ny,
+                                     vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
 {
     if (x<0) return 0.0;
     if (y<0) return 0.0;
@@ -69,7 +72,8 @@ inline double vil2_bilin_interp_safe(const vil2_image_view<T> &view,
 //  The safe interpolatable region is [0,nx-1]*[0,ny-1].
 template<class T>
 inline double vil2_bilin_interp(double x, double y, const T* data,
-                                int nx, int ny, int xstep, int ystep)
+                                int nx, int ny,
+                                vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
 {
     assert (x>=0);
     assert (y>=0);
@@ -98,7 +102,9 @@ inline double vil2_bilin_interp(const vil2_image_view<T> &view,
 //  If (x,y) is outside safe interpolatable image region, nearest pixel value is returned.
 //  The safe interpolatable region is [0,nx-1]*[0,ny-1].
 template<class T>
-inline double vil2_bilin_interp_safe_extend(double x, double y, const T* data, int nx, int ny, int xstep, int ystep)
+inline double vil2_bilin_interp_safe_extend(double x, double y, const T* data,
+                                            int nx, int ny,
+                                            vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
 {
     if (x<0) x= 0.0;
     if (y<0) y= 0.0;

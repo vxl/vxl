@@ -17,8 +17,8 @@ void vil2_binary_erode(const vil2_image_view<bool>& src_image,
   unsigned nj = src_image.nj();
   dest_image.set_size(ni,nj,1);
 
-  int s_istep = src_image.istep(),  s_jstep = src_image.jstep();
-  int d_istep = dest_image.istep(), d_jstep = dest_image.jstep();
+  vcl_ptrdiff_t s_istep = src_image.istep(),  s_jstep = src_image.jstep();
+  vcl_ptrdiff_t d_istep = dest_image.istep(), d_jstep = dest_image.jstep();
 
   const bool* src_row0 = src_image.top_left_ptr();
   bool* dest_row0 = dest_image.top_left_ptr();

@@ -47,7 +47,7 @@ public:
   unsigned nplanes() const {return nplanes_;}
 
   //: The number of pixels.
-  unsigned size() const { return ni_ * nj_ * nplanes_; }
+  unsigned long size() const { return ni_ * nj_ * nplanes_; }
 
   //: set_size current planes to width x height.
   // If already correct size, this function returns quickly

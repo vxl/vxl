@@ -69,9 +69,9 @@ void vimt_sample_grid_bilin(vnl_vector<vecType>& vec,
   const imType* plane0 = image.image().top_left_ptr();
   unsigned ni = image.image().ni();
   unsigned nj = image.image().nj();
-  int istep = image.image().istep();
-  int jstep = image.image().jstep();
-  int pstep = image.image().planestep();
+  vcl_ptrdiff_t istep = image.image().istep();
+  vcl_ptrdiff_t jstep = image.image().jstep();
+  vcl_ptrdiff_t pstep = image.image().planestep();
 
   if (all_in_image)
   {

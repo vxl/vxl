@@ -35,7 +35,7 @@ void vil2_fill(vil2_image_view<T>& view, T value)
 //: Fill data[i*step] (i=0..n-1) with given value
 // \relates vil2_image_view
 template<class T>
-void vil2_fill_line(T* data, unsigned n, int step, T value)
+void vil2_fill_line(T* data, unsigned n, vcl_ptrdiff_t step, T value)
 {
   T* end_data = data + n*step;
   while (data!=end_data) { *data=value; data+=step; }

@@ -71,11 +71,11 @@ enum vil2_convolve_boundary_option
 //: Convolve edge with kernel[x*kstep] x in [k_lo,k_hi] (k_lo<=0)
 //  Fills only edge: dest[i], i=0..(-k_lo-1)
 template <class srcT, class destT, class kernelT, class accumT>
-inline void vil2_convolve_edge_1d(const srcT* src, unsigned n, int s_step,
-                                  destT* dest, int d_step,
+inline void vil2_convolve_edge_1d(const srcT* src, unsigned n, vcl_ptrdiff_t s_step,
+                                  destT* dest, vcl_ptrdiff_t d_step,
                                   const kernelT* kernel,
-                                  int k_lo, int k_hi, int kstep,
-                                  accumT,
+                                  vcl_ptrdiff_t k_lo, vcl_ptrdiff_t k_hi,
+                                  vcl_ptrdiff_t kstep, accumT,
                                   vil2_convolve_boundary_option option)
 {
   if (option==vil2_convolve_ignore_edge) return;
@@ -172,9 +172,10 @@ inline void vil2_convolve_edge_1d(const srcT* src, unsigned n, int s_step,
 //: Convolve kernel[x] (x in [k_lo,k_hi]) with srcT
 // Assumes dest and src same size (nx)
 template <class srcT, class destT, class kernelT, class accumT>
-inline void vil2_convolve_1d(const srcT* src0, unsigned nx, int s_step,
-                             destT* dest0, int d_step,
-                             const kernelT* kernel, int k_lo, int k_hi,
+inline void vil2_convolve_1d(const srcT* src0, unsigned nx, vcl_ptrdiff_t s_step,
+                             destT* dest0, vcl_ptrdiff_t d_step,
+                             const kernelT* kernel,
+                             vcl_ptrdiff_t k_lo, vcl_ptrdiff_t k_hi,
                              accumT ac,
                              vil2_convolve_boundary_option start_option,
                              vil2_convolve_boundary_option end_option)
@@ -209,17 +210,18 @@ inline void vil2_convolve_1d(const srcT* src0, unsigned nx, int s_step,
 template <class srcT, class destT, class kernelT, class accumT>
 inline void vil2_convolve_1d(const vil2_image_view<srcT>& src_im,
                              vil2_image_view<destT>& dest_im,
-                             const kernelT* kernel, int k_lo, int k_hi,
+                             const kernelT* kernel,
+                             vcl_ptrdiff_t k_lo, vcl_ptrdiff_t k_hi,
                              accumT ac,
                              vil2_convolve_boundary_option start_option,
                              vil2_convolve_boundary_option end_option)
 {
   unsigned ni = src_im.ni();
   unsigned nj = src_im.nj();
-  int s_istep = src_im.istep(), s_jstep = src_im.jstep();
+  vcl_ptrdiff_t s_istep = src_im.istep(), s_jstep = src_im.jstep();
 
   dest_im.set_size(ni,nj,src_im.nplanes());
-  int d_istep = dest_im.istep(),d_jstep = dest_im.jstep();
+  vcl_ptrdiff_t d_istep = dest_im.istep(),d_jstep = dest_im.jstep();
 
   for (unsigned int p=0;p<src_im.nplanes();++p)
   {

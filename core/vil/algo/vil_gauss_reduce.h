@@ -115,10 +115,10 @@ inline void vil2_gauss_reduce_general(const vil2_image_view<T>& src_im,
 //  By applying twice we can obtain a full gaussian smoothed and
 //  sub-sampled 2D image
 void vil2_gauss_reduce(const vxl_byte* src_im,
-                       int src_nx, int src_ny,
-                       int s_x_step, int s_y_step,
+                       unsigned src_nx, unsigned src_ny,
+                       vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
                        vxl_byte* dest_im,
-                       int d_x_step, int d_y_step);
+                       vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step);
 
 
 //: Smooth and subsample single plane src_im in x to produce dest_im
@@ -131,10 +131,10 @@ void vil2_gauss_reduce(const vxl_byte* src_im,
 //  By applying twice we can obtain a full gaussian smoothed and
 //  sub-sampled 2D image.
 void vil2_gauss_reduce(const float* src_im,
-                       int src_nx, int src_ny,
-                       int s_x_step, int s_y_step,
+                       unsigned src_nx, unsigned src_ny,
+                       vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
                        float* dest_im,
-                       int d_x_step, int d_y_step);
+                       vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step);
 
 
 //: Smooth and subsample single plane src_im in x to produce dest_im
@@ -147,33 +147,33 @@ void vil2_gauss_reduce(const float* src_im,
 //  By applying twice we can obtain a full gaussian smoothed and
 //  sub-sampled 2D image.
 void vil2_gauss_reduce(const int* src_im,
-                       int src_nx, int src_ny,
-                       int s_x_step, int s_y_step,
+                       unsigned src_nx, unsigned src_ny,
+                       vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
                        int* dest_im,
-                       int d_x_step, int d_y_step);
+                       vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step);
 
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
 //  Smoothes with a 3x3 filter and subsamples
 void vil2_gauss_reduce_121(const vxl_byte* src_im,
-                           int src_nx, int src_ny,
-                           int s_x_step, int s_y_step,
+                           unsigned src_nx, unsigned src_ny,
+                           vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
                            vxl_byte* dest_im,
-                           int d_x_step, int d_y_step);
+                           vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step);
 
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
 //  Smoothes with a 3x3 filter and subsamples
 void vil2_gauss_reduce_121(const float* src_im,
-                           int src_nx, int src_ny,
-                           int s_x_step, int s_y_step,
+                           unsigned src_nx, unsigned src_ny,
+                           vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
                            float* dest_im,
-                           int d_x_step, int d_y_step);
+                           vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step);
 
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
 //  Smoothes with a 3x3 filter and subsamples
 void vil2_gauss_reduce_121(const int* src_im,
-                           int src_nx, int src_ny,
-                           int s_x_step, int s_y_step,
+                           unsigned src_nx, unsigned src_ny,
+                           vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
                            int* dest_im,
-                           int d_x_step, int d_y_step);
+                           vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step);
 
 #endif // vil2_gauss_reduce_h_

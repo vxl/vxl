@@ -76,7 +76,7 @@ double method4(vil2_image_view<imT>& image, int n_loops)
   for (int n=0;n<n_loops;++n)
   {
    unsigned ni=image.ni(),nj=image.nj(),np=image.nplanes();
-   int istep=image.istep(),jstep=image.jstep(),pstep=image.planestep();
+   vcl_ptrdiff_t istep=image.istep(),jstep=image.jstep(),pstep=image.planestep();
    imT* plane = image.top_left_ptr();
    for (unsigned p=0;p<np;++p,plane += pstep)
    {
@@ -100,7 +100,7 @@ double method5(vil2_image_view<imT>& image, int n_loops)
   for (int n=0;n<n_loops;++n)
   {
     unsigned ni=image.ni(),nj=image.nj(),np=image.nplanes();
-    int istep=image.istep(),jstep=image.jstep(),pstep=image.planestep();
+    vcl_ptrdiff_t istep=image.istep(),jstep=image.jstep(),pstep=image.planestep();
     imT* plane = image.top_left_ptr();
     for (unsigned p=0;p<np;++p,plane += pstep)
     {
@@ -126,7 +126,7 @@ double method6(vil2_image_view<imT>& image, int n_loops)
   for (int n=0;n<n_loops;++n)
   {
    unsigned ni=image.ni(),nj=image.nj(),np=image.nplanes();
-   int istep=image.istep(),jstep=image.jstep(),pstep=image.planestep();
+   vcl_ptrdiff_t istep=image.istep(),jstep=image.jstep(),pstep=image.planestep();
    imT* plane = image.top_left_ptr();
    for (unsigned p=0;p<np;++p,plane += pstep)
    {
@@ -183,7 +183,7 @@ double method8(vil2_image_view<imT>& image, int n_loops)
   for (int n=0;n<n_loops;++n)
   {
    unsigned ni=image.ni(),nj=image.nj(),np=image.nplanes();
-   int istep=image.istep(),jstep=image.jstep(),pstep=image.planestep();
+   vcl_ptrdiff_t istep=image.istep(),jstep=image.jstep(),pstep=image.planestep();
    imT* plane = image.top_left_ptr();
    for (unsigned p=0;p<np;++p,plane += pstep)
    {

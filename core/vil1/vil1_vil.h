@@ -22,7 +22,7 @@ vil2_image_view<T> vil2_vil1_to_image_view(const vil_memory_image_of<T> &vil1_im
 {
   const T* tl = &vil1_im(0,0);
 
-  int planestep;
+  vcl_ptrdiff_t planestep;
 
   if (vil1_im.planes() == 1)
     planestep = vil1_im.cols()* vil1_im.rows();

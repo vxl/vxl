@@ -21,9 +21,9 @@ void test_trilin_interp_float()
       for (unsigned z=0;z<image0.nk();++z)
         image0(x,y,z) = x*0.1f+y+z*10;
 
-  int istep = image0.istep();
-  int jstep = image0.jstep();
-  int kstep = image0.kstep();
+  vcl_ptrdiff_t istep = image0.istep();
+  vcl_ptrdiff_t jstep = image0.jstep();
+  vcl_ptrdiff_t kstep = image0.kstep();
 
    {
      double v1 = vil3d_trilin_interp_raw(3,3,3,image0.origin_ptr(),istep,jstep,kstep);

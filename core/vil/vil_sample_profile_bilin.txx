@@ -41,9 +41,9 @@ void vil2_sample_profile_bilin(vecType* v,
   const unsigned ni = image.ni();
   const unsigned nj = image.nj();
   const unsigned np = image.nplanes();
-  const int istep = image.istep();
-  const int jstep = image.jstep();
-  const int pstep = image.planestep();
+  const vcl_ptrdiff_t istep = image.istep();
+  const vcl_ptrdiff_t jstep = image.jstep();
+  const vcl_ptrdiff_t pstep = image.planestep();
   double x=x0;
   double y=y0;
   const imType* plane0 = image.top_left_ptr();
