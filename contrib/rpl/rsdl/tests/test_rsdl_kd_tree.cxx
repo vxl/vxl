@@ -17,11 +17,13 @@ static bool less_first( const vcl_pair<double,int>& left,
 {
   return left.first < right.first;
 }
+#if 0 // unused
 static bool less_second( const vcl_pair<double,int>& left,
                          const vcl_pair<double,int>& right )
 {
   return left.second < right.second;
 }
+#endif
 
 int
 main()
