@@ -43,7 +43,7 @@ public:
 
   //: copy constructor
   rgrl_object( const rgrl_object& that )
-    : debug_flag_(that.debug_flag_), warning_(that.warning_),
+    : vbl_ref_count(), debug_flag_(that.debug_flag_), warning_(that.warning_),
       observers_(that.observers_), observer_count_(that.observer_count_)
   {    }   //suppress copying of reference count between objects 
   
