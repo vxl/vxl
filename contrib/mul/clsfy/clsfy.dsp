@@ -223,6 +223,26 @@ SOURCE=.\clsfy_smo_1.cxx
 SOURCE=.\clsfy_smo_base.cxx
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\clsfy_adaboost_sorted_trainer.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\clsfy_adaboost_trainer.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\clsfy_binary_threshold_1d_builder.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\clsfy_binary_threshold_1d_sorted_builder.cxx
+
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -319,6 +339,26 @@ SOURCE=.\clsfy_smo_1.h
 # Begin Source File
 
 SOURCE=.\clsfy_smo_base.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\clsfy_adaboost_sorted_trainer.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\clsfy_adaboost_trainer.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\clsfy_binary_threshold_1d_builder.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\clsfy_binary_threshold_1d_sorted_builder.h
 
 # End Source File
 # End Group

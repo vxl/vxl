@@ -348,6 +348,11 @@ SOURCE=.\Templates/vbl_smart_ptr+mil_image_data+long--.cxx
 SOURCE=.\Templates/vsl_vector_io+mil_image_2d_of+vil_byte--.cxx
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\mil_normalise_image_2d.cxx
+
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -464,6 +469,11 @@ SOURCE=.\mil_sample_profile_2d.h
 # Begin Source File
 
 SOURCE=.\mil_sample_profile_2d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil_normalise_image_2d.h
 
 # End Source File
 # End Group
