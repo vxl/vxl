@@ -57,8 +57,10 @@ void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(
 
   // Reduce plane-by-plane
 
-  double init_x = 0.5 * (src_nx - 1 - dest_nx*scale_step());
-  double init_y = 0.5 * (src_ny - 1 - dest_ny*scale_step());
+  // use n-1 because we are trying to align inter-pixel spaces, so that the 
+  // centre pixel is most accurately registered despite buildup of rounding errors.
+  double init_x = 0.5 * (src_nx - 1 - (dest_nx-1)*scale_step());
+  double init_y = 0.5 * (src_ny - 1 - (dest_ny-1)*scale_step());
 
 
   for (int i=0;i<n_planes;++i)
