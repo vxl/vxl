@@ -117,8 +117,8 @@ class vtol_face
   //---------------------------------------------------------------------------
   virtual bool valid_inferior_type(vtol_topology_object const* inferior) const
   { return inferior->cast_to_one_chain()!=0; }
-  bool valid_inferior_type(vtol_one_chain_sptr ) const { return true; }
-  bool valid_superior_type(vtol_two_chain_sptr ) const { return true; }
+  bool valid_inferior_type(vtol_one_chain_sptr const& ) const { return true; }
+  bool valid_superior_type(vtol_two_chain_sptr const& ) const { return true; }
 
   //: accessors for boundary elements
   virtual vertex_list *outside_boundary_vertices(void);

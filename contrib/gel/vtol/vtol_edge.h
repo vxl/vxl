@@ -158,8 +158,8 @@ class vtol_edge
   //---------------------------------------------------------------------------
   virtual bool valid_inferior_type(vtol_topology_object const* inferior) const
   { return inferior->cast_to_zero_chain() != 0; }
-  bool valid_inferior_type(vtol_zero_chain_sptr ) const { return true; }
-  bool valid_superior_type(vtol_one_chain_sptr ) const { return true; }
+  bool valid_inferior_type(vtol_zero_chain_sptr const& ) const { return true; }
+  bool valid_superior_type(vtol_one_chain_sptr const& ) const { return true; }
 
   //:
   // Inferior/Superior Accessor Methods

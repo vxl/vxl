@@ -21,7 +21,7 @@
 //  LEG May 2000. ported to vxl
 // \endverbatim
 
-#include <vtol/vtol_topology_object.h>
+#include "vtol_topology_object.h"
 
 class vtol_vertex_2d;
 class vtol_edge;
@@ -106,7 +106,7 @@ class vtol_vertex
   //---------------------------------------------------------------------------
   virtual bool valid_inferior_type(vtol_topology_object const* /*inf*/) const
   { return false; } // a vertex can never have an inferior
-  bool valid_superior_type(vtol_zero_chain_sptr ) const { return true; }
+  bool valid_superior_type(vtol_zero_chain_sptr const& ) const { return true; }
 
   //---------------------------------------------------------------------------
   //: Is `this' connected with `v2' ?

@@ -113,7 +113,7 @@ class vtol_block
   //---------------------------------------------------------------------------
   virtual bool valid_inferior_type(vtol_topology_object const* inferior) const
   { return inferior->cast_to_two_chain()!=0; }
-  bool valid_inferior_type(vtol_two_chain_sptr ) const { return true; }
+  bool valid_inferior_type(vtol_two_chain_sptr const& ) const { return true; }
 
   virtual vertex_list *outside_boundary_vertices(void);
   virtual zero_chain_list *outside_boundary_zero_chains(void);

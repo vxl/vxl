@@ -125,17 +125,17 @@ class vtol_one_chain
   //---------------------------------------------------------------------------
   virtual bool valid_inferior_type(vtol_topology_object const* inferior) const
   { return inferior->cast_to_edge() != 0; }
-  bool valid_inferior_type(vtol_edge_sptr )    const { return true; }
-  bool valid_inferior_type(vtol_edge_2d_sptr ) const { return true; }
-  bool valid_superior_type(vtol_face_sptr )    const { return true; }
-  bool valid_superior_type(vtol_face_2d_sptr ) const { return true; }
+  bool valid_inferior_type(vtol_edge_sptr const& )    const { return true; }
+  bool valid_inferior_type(vtol_edge_2d_sptr const& ) const { return true; }
+  bool valid_superior_type(vtol_face_sptr const& )    const { return true; }
+  bool valid_superior_type(vtol_face_2d_sptr const& ) const { return true; }
 
   //---------------------------------------------------------------------------
   //: Is `chain_inf_sup' type valid for `this' ?
   //---------------------------------------------------------------------------
   virtual bool valid_chain_type(vtol_chain_sptr chain_inf_sup) const
   { return chain_inf_sup->cast_to_one_chain() != 0; }
-  bool valid_chain_type(vtol_one_chain_sptr ) const { return true; }
+  bool valid_chain_type(vtol_one_chain_sptr const& ) const { return true; }
 
   //: accessors for outside boundary elements
 
