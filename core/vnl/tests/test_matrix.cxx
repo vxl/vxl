@@ -55,7 +55,7 @@ void test_int ()
   TEST ("vnl_matrix<int> m4(m3)", (m3==m4), true);
   TEST ("m0=m2", (m0=m2, (m0==m2)), true);
 
-  /// test additions and substractions
+  // test additions and subtractions
   TEST ("m0=m2+3",
         ((m0=m2+3),
          (m0.get(0,0)==5 && m0.get(0,1)==5 && m0.get(1,0)==5 && m0.get(1,1)==5)), true);
@@ -244,7 +244,7 @@ void test_float ()
   TEST ("d3(1,3,3,{1.0,2.0,3.0})",
         (d3.get(0,0)==1.0 && d3.get(0,1)==2.0 && d3.get(0,2)==3.0), true);
   vnl_matrix<float> d4(d3);
-  TEST ("vnl_matrix<float> d4(d3)", (d3 == d4), true);
+  TEST ("vnl_matrix<float> d4(d3)", d3, d4);
   TEST ("d0=d2", (d0=d2,  (d0==d2)), true);
   TEST ("d0=d2+3.0",
         ((d0=d2+(float)3.0),
@@ -432,11 +432,11 @@ void test_leak () {   // use top4.1 to watch memory usage.
 
 static
 void test_matrix() {
-  test_int ();
-  test_float ();
-  test_double ();
+  test_int();
+  test_float();
+  test_double();
 #ifdef LEAK
-  test_leak ();
+  test_leak();
 #endif
 }
 
