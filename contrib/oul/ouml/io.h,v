@@ -1,0 +1,101 @@
+head	1.4;
+access;
+symbols
+	last_grey:1.4
+	locate_and_track:1.4
+	rigid_optimised:1.3
+	no_structure_preservation:1.3
+	somewhat_optimised:1.3
+	partially_optimised:1.3
+	limited_endsegment_rotation2:1.3
+	limited_endsegment_rotation:1.3
+	slow_segment:1.2;
+locks
+	mccane:1.4; strict;
+comment	@ * @;
+
+
+1.4
+date	2000.12.13.20.00.38;	author mccane;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2000.12.06.00.35.07;	author mccane;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2000.12.05.01.57.35;	author mccane;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2000.11.29.21.20.14;	author mccane;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.4
+log
+@Modified to work with colour images. Seems to work OK, but it's hard to
+tell if it's any better than with just greyscale. Also goes a bit slower -
+about 19ms/frame compared to 13ms/frame for greyscale.
+@
+text
+@
+#ifndef MISC_IO__INCLUDED
+#define MISC_IO__INCLUDED 1
+
+#include <vcl/vcl_vector.h>
+#include <vcl/vcl_map.h>
+#include <iostream.h>
+#include "eye_spider_typedefs.h"
+
+template <class T>
+ostream &operator<<(ostream &os, const vcl_vector<T> &vector);
+
+template <class T, class S>
+ostream &operator<<(ostream &os, const vcl_map<T, S> &omap);
+
+template <class T>
+ostream &operator<<(ostream &os, const vcl_set<T> &vector);
+
+ostream &operator<<(ostream &os, const vil_rgb<unsigned char> &colour);
+
+#endif
+@
+
+
+1.3
+log
+@Added an ostream for a set.
+@
+text
+@d18 3
+@
+
+
+1.2
+log
+@Don't know
+@
+text
+@d16 2
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d6 1
+a9 1
+
+d12 3
+@
