@@ -1,5 +1,5 @@
 // This is oxl/vgui/vgui_glut.cxx
-
+#include "vgui_glut.h"
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
