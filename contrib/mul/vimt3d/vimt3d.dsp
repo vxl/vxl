@@ -178,6 +178,9 @@ SOURCE=.\vimt3d_load.h
 # Begin Source File
 SOURCE=.\vimt3d_slice.h
 # End Source File
+# Begin Source File
+SOURCE=.\vimt3d_crop.h
+# End Source File
 # End Group
 # End Target
 # End Project
