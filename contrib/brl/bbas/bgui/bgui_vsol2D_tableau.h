@@ -20,7 +20,7 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 #include <vcl_vector.h>
-#include <vcl_map.h>
+//#include <vcl_map.h>
 #include <vgui/vgui_style.h>
 
 #include <vsol/vsol_spatial_object_2d_sptr.h>
@@ -75,18 +75,18 @@ class bgui_vsol2D_tableau : public bgui_easy2D_tableau
 
   bgui_vsol_soview2D_point*
     add_vsol_point_2d(vsol_point_2d_sptr const& p);
-  
+
   //: display for vsol_line_2d
   bgui_vsol_soview2D_line_seg*
     add_vsol_line_2d(vsol_line_2d_sptr const& line,
                      const float r,
                      const float g,
-                     const float b, 
+                     const float b,
                      const float line_width);
 
   bgui_vsol_soview2D_line_seg*
     add_vsol_line_2d(vsol_line_2d_sptr const& line);
-  
+
   //: display for vsol_polyline_2d
   bgui_vsol_soview2D_polyline*
     add_vsol_polyline_2d(vsol_polyline_2d_sptr const& pline,
@@ -97,7 +97,7 @@ class bgui_vsol2D_tableau : public bgui_easy2D_tableau
 
   bgui_vsol_soview2D_polyline*
     add_vsol_polyline_2d(vsol_polyline_2d_sptr const& pline);
-         
+
   //: display for digital_curve
   bgui_vsol_soview2D_digital_curve*
     add_digital_curve(vdgl_digital_curve_sptr const& dc,
@@ -108,7 +108,7 @@ class bgui_vsol2D_tableau : public bgui_easy2D_tableau
 
   bgui_vsol_soview2D_digital_curve*
     add_digital_curve(vdgl_digital_curve_sptr const& dc);
-  
+
   //: display for digital_curve
   bgui_vsol_soview2D_dotted_digital_curve*
     add_dotted_digital_curve(vdgl_digital_curve_sptr const& dc,
@@ -122,14 +122,14 @@ class bgui_vsol2D_tableau : public bgui_easy2D_tableau
     add_dotted_digital_curve(vdgl_digital_curve_sptr const& dc);
 
   void add_spatial_object(vsol_spatial_object_2d_sptr const& sos);
-  
+
   void add_spatial_object(vsol_spatial_object_2d_sptr const& sos,
                           const float r,
                           const float g,
                           const float b,
                           const float line_width,
                           const float point_radius);
-  
+
   //: display methods for vectors of vsol classes (not grouped)
   void add_spatial_objects(vcl_vector<vsol_spatial_object_2d_sptr> const& sos);
 
