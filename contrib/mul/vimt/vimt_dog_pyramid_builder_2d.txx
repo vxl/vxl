@@ -152,8 +152,7 @@ void vimt_dog_pyramid_builder_2d<T>::build_dog(vimt_image_pyramid& dog_pyr,
   vimt_image_2d_of<T>& smooth0 = static_cast<vimt_image_2d_of<T>&>( smooth_pyr(0));
   vimt_image_2d_of<T>& dog0 = static_cast<vimt_image_2d_of<T>&>( dog_pyr(0));
 
-  vil_gauss_filter_5tap_params smooth_params(1.5);
-               // Perhaps should use wider filter?
+  vil_gauss_filter_5tap_params smooth_params(0.75);
 
   vil_gauss_filter_5tap(base_image.image(),smooth0.image(),smooth_params,
                         dog0.image());  // Workspace
