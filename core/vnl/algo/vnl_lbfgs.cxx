@@ -11,8 +11,8 @@
 
 #include "vnl_lbfgs.h"
 #include <vcl_cmath.h>
-#include <vcl_cstdio.h>   // sprintf()
 #include <vcl_iostream.h>
+#include <vcl_iomanip.h> // for setw (replaces cout.form())
 
 //: Default constructor.
 // memory is set to 5, line_search_accuracy to 0.9.
@@ -134,10 +134,12 @@ bool vnl_lbfgs::minimize(vnl_vector<double>& x)
       best_f = f;
     }
 
+#define print_(i,a,b,c,d) vcl_cerr<<vcl_setw(6)<<i<<' '<<vcl_setw(20)<<a<<' '\
+           <<vcl_setw(20)<<b<<' '<<vcl_setw(20)<<c<<' '<<vcl_setw(20)<<d<<'\n'
+
     if (verbose_ && check_derivatives_) {
       vcl_cerr << "vnl_lbfgs: f = " << f_->reported_error(f) << ", computing FD gradient\n";
       vnl_vector<double> fdg = f_->fdgradf(x);
-#if defined(__GNUG__) && !defined(GNU_LIBSTDCXX_V3)
       int l = n;
       int limit = 100;
       int limit_tail = 10;
@@ -145,16 +147,15 @@ bool vnl_lbfgs::minimize(vnl_vector<double>& x)
         vcl_cerr << " [ Showing only first " <<limit<< " components ]\n";
         l = limit;
       }
-      vcl_cerr.form("%6s %20s %20s %20s %20s\n", "i", "x", "g", "fdg", "dg");
-      vcl_cerr.form("%6s %20s %20s %20s %20s\n", "-", "-", "-", "---", "--");
+      print_("i","x","g","fdg","dg");
+      print_("-","-","-","---","--");
       for(int i = 0; i < l; ++i)
-        vcl_cerr.form("%6d %20g %20g %20g %20g\n", i, x[i], g[i], fdg[i], g[i] - fdg[i]);
+        print_(i, x[i], g[i], fdg[i], g[i]-fdg[i]);
       if (n > limit) {
         vcl_cerr << "   ...\n";
         for(int i = n - limit_tail; i < n; ++i)
-          vcl_cerr.form("%6d %20g %20g %20g %20g\n", i, x[i], g[i], fdg[i], g[i] - fdg[i]);
+          print_(i, x[i], g[i], fdg[i], g[i]-fdg[i]);
       }
-#endif
       vcl_cerr << "   ERROR = " << (fdg - g).squared_magnitude() / vcl_sqrt(double(n)) << "\n";
     }
 
