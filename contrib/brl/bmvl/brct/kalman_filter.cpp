@@ -267,7 +267,7 @@ vnl_double_3x4 kalman_filter::get_projective_matrix()
   return M_in_*M_ex;
 }
 
-kalman_filter::set_H_matrix(vnl_double_3x4 &P, vnl_vector_fixed<double, 3> &X)
+void kalman_filter::set_H_matrix(vnl_double_3x4 &P, vnl_vector_fixed<double, 3> &X)
 {
   // compute \sum {P_{4k} X_k } + P_{44}
   double temp = 0;
@@ -312,13 +312,13 @@ vnl_vector_fixed<double, 2> kalman_filter::projection(vnl_double_3x4 &P, vnl_vec
     return z;
 }
 
-kalman_filter::update_covariant()
+void kalman_filter::update_covariant()
 {
   P_ = A_*P_*A_.transpose() + Q_;
   K_ = P_*H_.transpose()*(H_*P_*H_.transpose()+R_);
 }
 
-kalman_filter::inc()
+void kalman_filter::inc()
 {
   //
   // prediction step:
@@ -401,7 +401,7 @@ kalman_filter::inc()
 
 }
 
-kalman_filter::adjust_state_vector(vnl_vector_fixed<double, 2> &pred, vnl_vector_fixed<double, 2> &meas)
+void kalman_filter::adjust_state_vector(vnl_vector_fixed<double, 2> &pred, vnl_vector_fixed<double, 2> &meas)
 {
   X_pred_ += K_*(meas - pred); 
 }
@@ -472,7 +472,7 @@ void kalman_filter::read_data(char *fname)
   
 }
 
-kalman_filter::init_velocity()
+void kalman_filter::init_velocity()
 {
 
   vcl_list<vgl_homg_line_2d<double> > lines;

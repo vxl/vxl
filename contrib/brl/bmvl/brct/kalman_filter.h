@@ -24,7 +24,7 @@ public:
 	void inc();
 	void update_covariant();
 	vnl_vector_fixed<double, 2> projection(vnl_double_3x4 &P, vnl_vector_fixed<double, 3> &X);
-	int prediction();
+	void prediction();
 	kalman_filter(char* fname);
 	virtual ~kalman_filter();
 
