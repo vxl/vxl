@@ -16,7 +16,7 @@
 #include <mvl/PMatrix.h>
 
 #include "VoxmapPoints.h"
-#include "BigSparseArray3D.h"
+#include <vbl/vbl_sparse_array_3d.h>
 
 class VoxmapImagePoints : public VoxmapPoints{
 public:
@@ -30,15 +30,15 @@ public:
 
   // Computations--------------------------------------------------------------
 
-  vnl_double_2 *GetCentreImage( int x, int y, int z, int d, int im);
-  vnl_double_2 *GetCornerImage( int x, int y, int z, int dx, int dy, int dz, int d, int im);
+  vnl_double_2 *GetCentreImage( int x, int y, int z, int d, int im) const;
+  vnl_double_2 *GetCornerImage( int x, int y, int z, int dx, int dy, int dz, int d, int im) const;
 
 protected:
   // Data Members--------------------------------------------------------------
 
   PMatrix                  **pmatrices;
-  BigSparseArray3D<vnl_double_2 *> **imagecorners;
-  BigSparseArray3D<vnl_double_2 *> **imagecentres;
+  vbl_sparse_array_3d<vnl_double_2 *> **imagecorners;
+  vbl_sparse_array_3d<vnl_double_2 *> **imagecentres;
 };
 
 #endif // VoxmapImagePoints_h_

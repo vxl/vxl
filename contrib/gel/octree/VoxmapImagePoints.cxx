@@ -16,7 +16,7 @@
 
 #include "VoxmapImagePoints.h"
 typedef PMatrix * PMatrix_ptr;
-typedef BigSparseArray3D<vnl_double_2 *> * Array_ptr;
+typedef vbl_sparse_array_3d<vnl_double_2 *> * Array_ptr;
 
 // Default ctor
 VoxmapImagePoints::VoxmapImagePoints( int d, vnl_double_3 c, double s, int ims)
@@ -30,11 +30,11 @@ VoxmapImagePoints::VoxmapImagePoints( int d, vnl_double_3 c, double s, int ims)
 void VoxmapImagePoints::SetPMatrix( PMatrix &P, int im)
 {
   pmatrices[im]   = new PMatrix(P);
-  imagecorners[im]= new BigSparseArray3D<vnl_double_2 *>(nocorners,nocorners,nocorners);
-  imagecentres[im]= new BigSparseArray3D<vnl_double_2 *>(nocentres,nocentres,nocentres);
+  imagecorners[im]= new vbl_sparse_array_3d<vnl_double_2 *>;
+  imagecentres[im]= new vbl_sparse_array_3d<vnl_double_2 *>;
 }
 
-vnl_double_2 *VoxmapImagePoints::GetCentreImage( int x, int y, int z, int d, int im)
+vnl_double_2 *VoxmapImagePoints::GetCentreImage( int x, int y, int z, int d, int im) const
 {
   if( d!= depth)
     return GetCornerImage( x*2,y*2,z*2,1,1,1,d+1,im);
@@ -51,7 +51,7 @@ vnl_double_2 *VoxmapImagePoints::GetCentreImage( int x, int y, int z, int d, int
   return np;
 }
 
-vnl_double_2 *VoxmapImagePoints::GetCornerImage( int x, int y, int z, int dx, int dy, int dz, int d, int im)
+vnl_double_2 *VoxmapImagePoints::GetCornerImage( int x, int y, int z, int dx, int dy, int dz, int d, int im) const
 {
   //  cout << x << " " << y << " " << z << endl;
 
