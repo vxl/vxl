@@ -437,7 +437,7 @@ void segv_segmentation_manager::fit_lines()
   static sdet_fit_lines_params flp;
   static float nm = 2.0;
   static bool detect_grid=true;
-  static bool grid_debug=false;
+//static bool grid_debug=false;
   static bool matched_lines = false;
   vgui_dialog vd_dialog("Fit Lines");
   vd_dialog.field("Gaussian sigma", dp.smooth);
@@ -480,12 +480,12 @@ void segv_segmentation_manager::fit_lines()
       sdet_grid_finder gf(gfp);
       if (!gf.set_lines(img_.width(), img_.height(), lines))
         {
-          vcl_cout << "Less than two dominant groups \n";
+          vcl_cout << "Less than two dominant groups\n";
           return;
         }
       vcl_vector<vsol_line_2d_sptr> mapped_lines;
       gf.compute_homography();
-      if(!gfp.debug_state_)
+      if (!gfp.debug_state_)
         //        gf.get_mapped_lines(mapped_lines);
         gf.get_backprojected_grid(mapped_lines);
       else
