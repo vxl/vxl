@@ -62,7 +62,19 @@ void vgel_kl::match_sequence(vcl_vector<vil1_image> &image_list,vgel_multi_view_
 
     // Store the values
     KLTStoreFeatureList(fl, ft, i);
+
+	// MPP 9/24/2003
+	// We're done with the image -- plug memory leak!
+	delete img2;
   }
+
+  // MPP 9/24/2003
+  // We're done with the image & tracking context -- plug memory leaks!
+  delete img1;
+  img1 = NULL;
+  KLTFreeTrackingContext(tc);
+  tc = NULL;
+
   // Go through the feature table and store them
   int matchnum = -1;
   int pointnum, viewnum;
@@ -106,6 +118,11 @@ void vgel_kl::match_sequence(vcl_vector<vil1_image> &image_list,vgel_multi_view_
     }
   // Finally, renumber the matches
 //   matches.renumber();
+
+  // MPP 9/24/2003
+  // We're done with the feature list & feature table -- plug memory leaks!
+  KLTFreeFeatureList(fl);
+  KLTFreeFeatureTable(ft);
 }
 
 

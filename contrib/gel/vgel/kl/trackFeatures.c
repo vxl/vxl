@@ -569,11 +569,22 @@ void KLTTrackFeatures(
     }
   }
 
-  if (tc->sequentialMode)  {
+  if (tc->sequentialMode)
+  {
+    // MPP 9/24/2003
+    // Free any existing previous pyramids -- plug memory leak!
+    if (tc->pyramid_last != NULL)
+      _KLTFreePyramid(tc->pyramid_last);
     tc->pyramid_last = pyramid2;
+    if (tc->pyramid_last_gradx != NULL)
+      _KLTFreePyramid(tc->pyramid_last_gradx);
     tc->pyramid_last_gradx = pyramid2_gradx;
+    if (tc->pyramid_last_grady != NULL)
+      _KLTFreePyramid(tc->pyramid_last_grady);
     tc->pyramid_last_grady = pyramid2_grady;
-  } else  {
+  }
+  else
+  {
     _KLTFreePyramid(pyramid2);
     _KLTFreePyramid(pyramid2_gradx);
     _KLTFreePyramid(pyramid2_grady);
