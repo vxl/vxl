@@ -39,7 +39,7 @@ class rgrl_initializer_inv_indexing
                                  int max_num_matches_tried = -1);
 
   //: Destructor
-  ~rgrl_initializer_inv_indexing(){}
+  ~rgrl_initializer_inv_indexing() {}
 
   //: Add the set of invariants from the fixed image and the set from one moving image
   //
@@ -63,7 +63,7 @@ class rgrl_initializer_inv_indexing
   //  \param nn_radius nearest-neighbors in nn_radius.
   //  \param k_nn k-nearest-neighbor(s)
   virtual void add_multiple_data( vcl_vector<rgrl_invariant_sptr> fixed_set,
-						                      vcl_vector<vcl_vector<rgrl_invariant_sptr> > moving_sets,
+                                  vcl_vector<vcl_vector<rgrl_invariant_sptr> > moving_sets,
                                   double nn_radius = 0,
                                   unsigned int k_nn = 1);
 
@@ -74,8 +74,8 @@ class rgrl_initializer_inv_indexing
   const vcl_vector<rgrl_invariant_match_sptr>& matches_for_moving_image( unsigned int moving_image_index);
 
   //: Get and remove the next initial estimate from the end of the list for the current moving_set
-  bool next_initial( rgrl_view_sptr           & view,
-                     rgrl_scale_sptr          & prior_scale);
+  bool next_initial( rgrl_view_sptr  & view,
+                     rgrl_scale_sptr & prior_scale);
 
   //: Get and remove the next initial estimate from the end of the list for the current moving_set
   //  Return this match in best_match
