@@ -58,6 +58,7 @@ int main(int argc, char** argv)
   vul_arg<double> sigma(arg_list,"-sigma","sigma for Gaussian smoothing",1.0);
   vul_arg<float> thresh1(arg_list,"-t1","Threshold for truncating motion",0.001f);
   vul_arg<float> thresh2(arg_list,"-t2","Threshold for detecting motion",0.0001f);
+  vul_arg<bool> no_output(arg_list,"-no_output","Disable output",false);
   vul_arg<vcl_string> parameter_output_file(arg_list,"-X","parameter output file","");
   vul_arg<vcl_string> input_video_file(arg_list,"-V","video input file","");
   vul_arg<vcl_string> status_block_file(arg_list,"-S","status block file","");
@@ -149,7 +150,10 @@ int main(int argc, char** argv)
     print_xml_performance( performance_output_file(), input_video_file(), scores );
 
   vidl_movie_sptr result_movie = new vidl_movie(new vidl_clip(results, 0, results.size()));
-  vidl_io::save(result_movie.ptr(), output_directory().c_str(), "ImageList");
+  if (output_directory() != "" && !no_output() ){
+    vcl_string output_name = output_directory()+"/output";
+    vidl_io::save(result_movie.ptr(), output_name.c_str(), "ImageList");
+  }
 
   vcl_cout << "done!" << vcl_endl;
 
