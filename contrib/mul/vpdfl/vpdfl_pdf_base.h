@@ -72,7 +72,7 @@ public:
   virtual vpdfl_sampler_base* new_sampler()const=0 ;
 
     //: Compute threshold for PDF to pass a given proportion
-  virtual double log_prob_thresh(double pass_proportion)const =0;
+  virtual double log_prob_thresh(double pass_proportion)const;
 
     //: Compute nearest point to x which has a density above a threshold
     //  If log_p(x)>log_p_min then x unchanged.  Otherwise x is moved
@@ -80,8 +80,12 @@ public:
     // \param x This may be modified to the nearest plausible position.
   virtual void nearest_plausible(vnl_vector<double>& x, double log_p_min)const =0;
 
+    //: Return true if the object represents a valid PDF.
+    // This will return false, if n_dims() is 0, for example just ofter
+    // default construction.
+  virtual bool is_valid_pdf() const;
 
-  //========= methods which do not change state (const) ==========//
+
 
     //: Version number for I/O
   short version_no() const;

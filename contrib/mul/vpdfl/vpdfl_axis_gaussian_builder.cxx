@@ -137,10 +137,9 @@ void vpdfl_axis_gaussian_builder::weighted_build(vpdfl_pdf_base& model,
             <<n_samples<<" not "<<wts.size()<<vcl_endl;
     vcl_abort();
   }
-
+  data.reset();
   int n_dims = data.current().size();
 
-  data.reset();
   vnl_vector<double> sum = wts[0] * data.current();
   double w_sum = wts[0];
 
@@ -154,7 +153,7 @@ void vpdfl_axis_gaussian_builder::weighted_build(vpdfl_pdf_base& model,
   vnl_vector<double> mean = sum/w_sum;
 
 
-  vnl_vector<double> sum_sq(n_dims),var(n_dims);
+  vnl_vector<double> sum_sq(n_dims), var(n_dims);
   double* var_data = var.data_block();
   double* m_data = mean.data_block();
   double* sum_sq_data = sum_sq.data_block();

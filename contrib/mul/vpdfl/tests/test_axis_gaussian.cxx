@@ -105,6 +105,42 @@ void test_axis_gaussian()
        (gauss0.variance()-gauss0_in.variance()).squared_magnitude()<1e-8,true);
   TEST("Load model by base ptr",base_pdf_ptr_in->is_a()==gauss0.is_a(),true);
   TEST("Load builder by base ptr",base_builder_ptr_in->is_a()==builder0.is_a(),true);
+
+
+	vcl_cout << "========Testing PDF Thresholds==========";
+	vpdfl_sampler_base *p_sampler2 = gauss1.new_sampler();
+	unsigned pass=0, fail=0;
+	vnl_vector<double> x;
+	double thresh = gauss1.log_prob_thresh(0.9);
+	vcl_cout << vcl_endl << "log density threshold for passing 90%: " << thresh << vcl_endl;
+	for (unsigned i=0; i < 1000; i++)
+	{
+		p_sampler2->sample(x);
+		if (gauss1.log_p(x) > thresh)
+			pass ++;
+		else
+			fail ++; 
+	}
+	vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed." << vcl_endl;
+  TEST("880 < pass < 920", pass > 880 && pass < 920, true);
+	pass=0; fail=0;
+	thresh = gauss1.log_prob_thresh(0.1);
+	vcl_cout << vcl_endl << vcl_endl << "log density threshold for passing 10%: " << thresh << vcl_endl;
+	for (unsigned i=0; i < 1000; i++)
+	{
+		p_sampler2->sample(x);
+		if (gauss1.log_p(x) > thresh)
+			pass ++;
+		else
+			fail ++; 
+	}
+	vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed." << vcl_endl;
+  TEST("70 < pass < 130", pass > 70 && pass < 130, true);
+  delete p_sampler2;
+
+
+  delete base_pdf_ptr_in;
+  delete base_builder_ptr_in;
 }
 
 TESTMAIN(test_axis_gaussian);

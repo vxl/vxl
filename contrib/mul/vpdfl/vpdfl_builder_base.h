@@ -62,7 +62,6 @@ public:
                               const vcl_vector<double>& wts) const = 0;
 
 
-  /*========= methods which do not change state (const) ==========*/
 
     //: Version number for I/O
   short version_no() const;
@@ -82,7 +81,6 @@ public:
     //!in: bfs: Target binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const = 0;
 
-  /*========== methods which change state (non-const) ============*/
 
     //: Load class from binary file stream
     //!out: bfs: Target binary file stream

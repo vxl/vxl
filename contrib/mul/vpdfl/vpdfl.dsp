@@ -167,6 +167,18 @@ SOURCE=.\vpdfl_gaussian_sampler.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\vpdfl_mixture.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vpdfl_mixture_builder.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vpdfl_mixture_sampler.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=.\vpdfl_pc_gaussian.cxx
 # End Source File
 # Begin Source File
@@ -192,6 +204,14 @@ SOURCE=".\Templates\vsl_binary_loader+vpdf_builder_base-.cxx"
 # Begin Source File
 
 SOURCE=".\Templates\vsl_binary_loader+vpdf_pdf_base-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vsl_vector+vpdfl_builder_base~-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vsl_vector+vpdfl_pdf_base~-.cxx"
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -224,6 +244,18 @@ SOURCE=.\vpdfl_gaussian_builder.h
 # Begin Source File
 
 SOURCE=.\vpdfl_gaussian_sampler.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vpdfl_mixture.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vpdfl_mixture_builder.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vpdfl_mixture_sampler.h
 # End Source File
 # Begin Source File
 

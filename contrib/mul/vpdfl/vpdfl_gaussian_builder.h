@@ -13,7 +13,6 @@
 //    IMS   Converted to VXL 18 April 2000
 // \endverbatim
 
-// Conditional inclusion control
 
 
 //=======================================================================
@@ -80,7 +79,6 @@ public:
                       const vnl_matrix<double>& covar) const;
 
 
-  //========= methods which do not change state (const) ==========
 
     //: Version number for I/O
   short version_no() const;
@@ -102,7 +100,6 @@ public:
   virtual void b_write(vsl_b_ostream& bfs) const;
 
 
-  //========== methods which change state (non-const) ============
 
     //: Load class from binary file stream
     //!out: bfs: Target binary file stream

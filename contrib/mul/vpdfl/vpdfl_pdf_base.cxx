@@ -13,6 +13,9 @@
 #include <vpdfl/vpdfl_pdf_base.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
+#include <vcl_queue.h>
+#include <vcl_ctime.h>
+#include <vpdfl/vpdfl_sampler_base.h>
 
 //=======================================================================
 // Dflt ctor
@@ -38,8 +41,92 @@ double vpdfl_pdf_base::operator()(const vnl_vector<double>& x) const
   return vcl_exp(log_p(x));
 }
 
+
+double vpdfl_pdf_base::log_prob_thresh(double pass_proportion) const
+{
+	assert(pass_proportion >= 0.0);
+	assert(pass_proportion < 1.0);
+
+  // The number of samples on the less likely side of the boundary.
+  // Increse the number for greater reliabililty
+  const unsigned n_stat = 20;
+
+	double above, below, lP;
+	unsigned int nSamples, i;
+	vnl_vector<double> x;
+
+  vpdfl_sampler_base *sampler = new_sampler();
+	if (pass_proportion > 0.5) 
+	{
+	  vcl_priority_queue<double, vcl_vector<double>, vcl_less<double> > pq;
+		//We want at n_stat samples outside the cut-off.
+		nSamples = (unsigned)(((double)n_stat / (1.0 - pass_proportion)) + 0.5);
+
+		for (i = 0; i < n_stat+1; i++)
+		{ 
+			sampler->sample(x);
+			pq.push(log_p(x));
+		}
+
+		for (; i < nSamples; i++)
+		{
+			sampler->sample(x);
+			lP = log_p(x);
+      // pq.top() should be the greatest value in the queue
+			if (lP < pq.top())
+			{
+				pq.pop();
+				pq.push(lP);
+			}
+		}
+	  // get two values either side of boundary;
+	  above = pq.top();
+	  pq.pop();
+	  below = pq.top();
+	}
+	else
+	{
+	  vcl_priority_queue<double, vcl_vector<double>, vcl_greater<double> > pq;
+		//We want at n_stat samples inside the cut-off.
+		nSamples = (unsigned)(((double)n_stat / pass_proportion) + 0.5);
+
+		for (i = 0; i < n_stat+1; i++)
+		{ 
+			sampler->sample(x);
+			pq.push(log_p(x));
+		}
+
+		for (; i < nSamples; i++)
+		{
+			sampler->sample(x);
+			lP = log_p(x);
+			if (lP > pq.top())  // pq.top() should be the smallest value in the queue.
+			{
+				pq.pop();
+				pq.push(lP);
+			}
+		}
+	  // get two values either side of boundary;
+	  above = pq.top();
+	  pq.pop();
+	  below = pq.top();
+	}
+
+  delete sampler;
+ 
+	// Find geometric mean of probability densities to get boundary (arithmetic mean of logProbs.)
+//	return (above + below)/2.0;
+  return below;
+}
+
 //=======================================================================
-// Method: version_no
+
+bool vpdfl_pdf_base::is_valid_pdf() const
+{
+  return mean_.size() == var_.size() && mean_.size() > 0;
+}
+
+
 //=======================================================================
 
 short vpdfl_pdf_base::version_no() const

@@ -5,6 +5,7 @@
 #define TESTMAIN(x)
 
 
+#include <vpdfl/tests/test_mixture.cxx>
 #include <vpdfl/tests/test_gaussian.cxx>
 #include <vpdfl/tests/test_axis_gaussian.cxx>
 #include <vpdfl/tests/test_pc_gaussian.cxx>
@@ -15,6 +16,7 @@
 
 void run_test_vpdfl()
 {
+  test_mixture();
   test_axis_gaussian();
   test_gaussian();
   test_pc_gaussian();

@@ -103,7 +103,6 @@ public:
     // \param x This may be modified to the nearest plausible position.
   virtual void nearest_plausible(vnl_vector<double>& x, double log_p_min) const;
 
-  //========= methods which do not change state (const) ==========
 
     //: Version number for I/O
   short version_no() const;
@@ -123,7 +122,6 @@ public:
     //!in: bfs: Target binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;
 
-  //========== methods which change state (non-const) ============
 
     //: Load class from binary file stream
     //!out: bfs: Target binary file stream

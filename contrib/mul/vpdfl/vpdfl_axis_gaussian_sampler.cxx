@@ -20,7 +20,7 @@
 //=======================================================================
 
 vpdfl_axis_gaussian_sampler::vpdfl_axis_gaussian_sampler():
- rng_(456123)
+ rng_(9667566ul)
 {
 }
 
@@ -82,7 +82,7 @@ void vpdfl_axis_gaussian_sampler::sample(vnl_vector<double>& x)
   const double *m = gauss.mean().data_block();
   int n = gauss.n_dims();
 
-  if (x.size()!=n) x.resize(n);
+  x.resize(n);
 
   double* x_data = x.data_block();
   for (int i=0;i<n;++i)

@@ -35,7 +35,6 @@ public:
     //: Calculate the log probability density at position x.
   double log_p(const vnl_vector<double>& x);
 
-  /*========= methods which do not change state (const) ==========*/
 
     //: Version number for I/O
   short version_no() const;

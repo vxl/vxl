@@ -47,7 +47,6 @@ public:
     // \endverbatim
   virtual void reseed(unsigned long);
 
-  //========= methods which do not change state (const) ==========//
 
     //: Return a reference to the pdf model
     // This is properly cast.

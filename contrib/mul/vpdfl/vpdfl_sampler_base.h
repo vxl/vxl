@@ -53,7 +53,6 @@ public:
     // \endverbatim
   virtual void reseed(unsigned long)=0;
 
-  //========= methods which do not change state (const) ==========//
 
     //: Name of the class
   virtual vcl_string is_a() const = 0;
