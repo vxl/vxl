@@ -36,12 +36,14 @@ MANPAGE_SOURCES += vcl_vector.txx
 include ${IUEROOT}/config/top-params.mk
 #######################################
 
-ifndef USE_NATIVE_STL
+# It is OK to compile these sources with native
+# STLs because they won't generate any code.
 SOURCES += emulation/vcl_straits.cxx
 SOURCES += emulation/vcl_hashtable.cxx
 SOURCES += emulation/vcl_string_instances.cxx
 SOURCES += emulation/vcl_alloc.cxx
 SOURCES += emulation/vcl_rbtree_instances.cxx
+ifndef USE_NATIVE_STL
 MANPAGE_SOURCES += emulation/vcl_algorithm.txx
 MANPAGE_SOURCES += emulation/vcl_complex.txx
 MANPAGE_SOURCES += emulation/vcl_deque.txx
