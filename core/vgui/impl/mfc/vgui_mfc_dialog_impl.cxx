@@ -86,12 +86,12 @@ struct vgui_mfc_dialog_inline_tab
 //------------------------------------------------------------------------------
 //: Make a tableau widget.
 void* vgui_mfc_dialog_impl::inline_tableau_widget(const vgui_tableau_sptr tab,
-  unsigned width, unsigned height)
+                                                  float width, float height)
 {
   vgui_mfc_dialog_inline_tab* tab_data = new vgui_mfc_dialog_inline_tab;
   tab_data->tab = tab;
   tab_data->height = height;
-  tab_data->width = width;
+  tab_data->width =  width;
   TempsNewClass = AfxRegisterWndClass(CS_HREDRAW|CS_VREDRAW|CS_OWNDC|CS_GLOBALCLASS);
   return (void*)tab_data;
 }
