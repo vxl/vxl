@@ -167,7 +167,7 @@ The @vxl{} collection's portability and efficiency are traits which are due
 in large part to its parentage.  The package was built by extracting the
 core functionalities of two large systems: the ``Image Understanding
 Environment'' (IUE) and ``Target junior'' (TargetJr).  Although these
-environments contained a wealth of useful code, and have facilitated much
+environments contain a wealth of useful code, and have facilitated much
 research, they are widely known for their bulk, and the difficulty of
 learning to use them.  Common complaints have been
 @itemize @bullet
@@ -233,12 +233,13 @@ new format.
 It is in geometry that the spartan aesthetic of the core of @vxl{} becomes
 most apparent.  The library deals with the geometry of points, curves, and
 other objects in 2 or more dimensions, but may not call on the numerics
-library.  Therefore, it is  restricted to operations which it is reaonable
+library.  Therefore, it is  restricted to operations which it is reasonable
 to express in standard C++, which places a useful limit on what may be
 placed there.  For example, surface fitting cannot be in geometry as it
 would require the singular value decomposition.  However, there is much
 here that is useful, and the library is quite large enough already.  The
-@code{vgl_algo} library contains the higher-level code.
+@code{vgl_algo} library contains the higher-level code, which is allowed
+to depend on @code{vnl} (and if necessary even on @code{vbl}).
 
 @section Documentation
 @cindex book
@@ -255,10 +256,10 @@ providing one monolithic document with, we hope, a good index.
 
 @subsection The VXL Book
 
-The book (in subdirectory book) is a human-written collection of VXL
+The book (in subdirectory @code{vxl/doc/book}) is a human-written collection of VXL
 documentation, suitable for printing.  It is intended to be readable as an
 introduction to the various facilities provided by the @vxl{} libraries,
-and the be browsable as a first source of examples and tips.
+and to be browsable as a first source of examples and tips.
 
 @subsubheading Why texinfo?
 @cindex texinfo
@@ -270,7 +271,7 @@ formats, but none match texinfo in the three main formats: paper,
 hypertext, and ASCII.  This is because it's difficult to target such
 disparate formats, and texinfo has evolved over many years to do it well.
 
-On the other hand, texinfo is hard to learn for those who don't know @TeX{}
+On the other hand, texinfo is maybe hard to learn for those who don't know @TeX{}
 or @LaTeX{}, so we are keeping an eye on formats such as @emph{DocBook}.
 
 @subsection Automatically generated documentation
@@ -352,9 +353,9 @@ comfortable, but no more".
 
 Names are always the biggest issue in programming environments.  Uniform
 naming is one of the most important aspects of a library, and part of the
-design effort in @vxl{} lay in choosing a good, workable scheme for the
+design effort in @vxl{} lays in choosing a good, workable scheme for the
 naming of classes, functions and files.  On the other hand, few issues
-cause as much debate as the choice of naming conventionts.  However, we are
+cause as much debate as the choice of naming conventions.  However, we are
 lucky for two reasons: first, because we wish to run cross-platform, many
 options are restricted; second, as we can never please everybody, we can
 just choose a convention and pretend we all hate it.
@@ -373,13 +374,14 @@ link.  For this reason, we chose the other ugly solution.
 @cindex cxx
 @cindex txx
 For related reasons, source files in @vxl{} all end in @code{.cxx}.
-Template definitions, which are essentially header files (as they are not
-separately compiled) but look like source files, are suffixed @code{.txx}.
+Template definitions, which look like source files but are essentially
+header files (or actually #include files, as they are not separately
+compiled), are suffixed @code{.txx}.
 
 Each class or function in a @vxl{} library begins with the name of that
-library, for example @code{vnl_matrix}.  This makes it easy to locate the
-source code for any class, and easy to see the list of libraries on which
-one's program depends.
+library, followed by an underscore, for example @code{vnl_matrix}.
+This makes it easy to locate the source code for any class, and easy to
+see the list of libraries on which one's program depends.
 
 @cindex namespaces, why not
 This scheme was chosen over namespaces because few compilers support
@@ -397,7 +399,7 @@ discomfort, thus chaos.  A rule that is still useful, and easier to adhere
 to is used:
 @quotation
 The file @code{vxl/vxl_stuff.h} exports only identifiers which
-begin @code{vxl_stuff}.
+begin with @code{vxl_stuff_}, and possibly @code{vxl_stuff} itself.
 @end quotation
 An example of a header file which obeys this rule is shown in figure 1.
 
@@ -416,14 +418,14 @@ class vxl_stuff @{
 @};
 
 bool vxl_stuff_grok(vxl_stuff);
-extern int vxl_stuffing;
+extern int vxl_stuff_val;
 
 #endif
 @end smallexample
 @end cartouche
 @caption{1}
 Example of a header file @code{vxl_stuff.h} which obeys the naming
-convention. Only identifiers that begin with @code{vxl_stuff} may be
+convention. Only identifiers that begin with @code{vxl_stuff_} may be
 defined.
 @endcaption
 
@@ -607,6 +609,11 @@ standard library.  You might think that the designers of @vxl{} would have
 been clever enough to avoid the vcl_ prefix by using fancy compiler flags,
 and many #defines.  However, that way lies madness---trying to confuse a
 C++ compiler always rebounds on one.
+
+Also, when time comes when all compilers will implement ansi STL classes
+in a consistent way, it's very easy to `perl away' the @code{vcl_} prefixes,
+or replace them with @code{std::}; it's much more difficult, if not impossible,
+to insert @code{std::} prefixes when there are no @code{vcl_} prefixes.
 
 @section Example
 This program is exemplary.  It shows how every identifier in the ISO
