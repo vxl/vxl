@@ -47,3 +47,6 @@ gel vsol vsol_ build
 gel vsrl vsrl_ build
 gel vtol vtol_ build
 
+package: rpl RPI libraries
+rrel rrel rrel_ build
+rsdl rsdl rsdl_ build
