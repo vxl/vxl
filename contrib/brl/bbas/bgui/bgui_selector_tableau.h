@@ -72,13 +72,13 @@ class bgui_selector_tableau : public vgui_tableau
   void clear();
 
   //: Returns a smart pointer to the active tableau
-  vgui_tableau_sptr active_tableau();
+  vgui_tableau_sptr active_tableau() const;
 
   //: Returns the name of the active tableau
   const vcl_string& active_name() const { return active_child_; }
 
   //: Returns a smart pointer to the tableau with the given name
-  vgui_tableau_sptr get_tableau(const vcl_string& name);
+  vgui_tableau_sptr get_tableau(const vcl_string& name) const;
 
   //: Make the child tableau with the given name the active child.
   void set_active(const vcl_string& name);

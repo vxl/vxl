@@ -193,9 +193,18 @@ void bgui_selector_tableau::clear()
 
 //----------------------------------------------------------------------------
 //: Returns a smart pointer to the active tableau
-vgui_tableau_sptr bgui_selector_tableau::active_tableau()
+vgui_tableau_sptr bgui_selector_tableau::active_tableau() const
 {
-  vcl_map<vcl_string, vgui_parent_child_link>::iterator itr = child_map_.find(active_child_);
+  vcl_map<vcl_string, vgui_parent_child_link>::const_iterator itr = child_map_.find(active_child_);
+  if (itr == child_map_.end()) return NULL;
+  return itr->second;
+}
+
+//----------------------------------------------------------------------------
+//: Returns a smart pointer to the tableau with the given name
+vgui_tableau_sptr bgui_selector_tableau::get_tableau(const vcl_string& name) const
+{
+  vcl_map<vcl_string, vgui_parent_child_link>::const_iterator itr = child_map_.find(name);
   if (itr == child_map_.end()) return NULL;
   return itr->second;
 }
