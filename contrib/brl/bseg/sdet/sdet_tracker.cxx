@@ -274,7 +274,7 @@ void sdet_tracker::generate_samples()
       sdet_correlated_face* cf = new sdet_correlated_face();
       cf->set_face(f);
       cf->set_correlation(float(c));
-      cf->set_avg_intensity(avg_int);
+      cf->set_avg_intensity(float(avg_int));
 
       hypothesized_samples_.push_back(cf);
     }
