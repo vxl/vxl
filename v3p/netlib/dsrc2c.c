@@ -1,6 +1,6 @@
 #include "f2c.h"
 #include "netlib.h"
-#include <math.h>
+extern double log(double), sqrt(double); /* #include <math.h> */
 
 /***** BEGIN VXL ADDITIONS ****/
 /* Define functions so we do not have to link -lf2c.  */
