@@ -105,9 +105,19 @@ sub do_dirs
 sub print_header()
 
 {
+
+
+print OF  "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">"
+
+
 print OF  "<html>\n";
+print OF  "<HEAD>\n"
+print OF  "<TITLE>VXL Documentation</TITLE>\n"
+print OF  "</HEAD>\n"
 print OF  "<body>\n";
 print OF  "<h1>VXL Documentation</h1>\n";
+print OF  "<p>C++ Libraries for Computer Vision Research and Implementation</p>\n";
+
 print OF  "<HR>";
 }
 
