@@ -173,7 +173,12 @@ We may use vcl on v3p for portability as needed on C++ code, but not
 C.  netlib currently has a small exception to this rule.
 
 Because v3p is to support core libraries, we should not put an XML
-library there.
+library there. Ian points out that the amount of effort required to
+add a library to v3p is likely to outweigh the benefits for anything other
+than core libraries even for users of that library. Also adding a
+library to v3p imposes costs (if only in terms of compile time) to
+other users, which goes against the C++/VXL priniple of avoiding imposing
+costs on anyone who doesn't use the relevant feature.
 
 ----------------------------------------------------------------------------
 
@@ -198,11 +203,7 @@ vcsl -
 v3p  - "owner" of corresponding core library
 
 This information will be added to developers.html and
-introduction_doxy.txt by Ian.
-
-The comfort of existing developers when seeing new names on the commit
-list was raised by Ian. In particular he encouraged anyone who wanted to
-edit the core to put their names and details in developers.html. 
+introduction_doxy.txt by Ian. - Done.
 
 ----------------------------------------------------------------------------
 
@@ -219,9 +220,13 @@ http://164.214.2.51/ntb/
 http://www.fas.org/irp/program/core/nitfs.htm
 
 GE is adding NITF support now.  It is OK to put this vil2 so long as it does
-not break other parts of vil2.  Ian suggests checking the code in, but
-not having it link in so he can have a look at how it is integrated
-into vil2.  Ian also recommends the use of sample images and tests.
+not break other parts of vil2.  In general the standard for adding a new
+format to the vil loader is "Don't break the build." If an author wants
+peer review/advice on some code in progress, new files can always be added
+to the repository without being added to the CMakeLists.txt files. Ian also
+recommends that such code be developed in the
+vil/tests/test_file_format_read.cxx harness rather than a GUI, because
+inaccuracies in the pixel values can often be hard to see.
 
 ----------------------------------------------------------------------------
 
@@ -244,6 +249,6 @@ Support exceptions.
 
 Make VXL reentrant.
 
-Ian will add these items to TODO.txt.
+Ian will add these items to TODO.txt. - Done.
 
 ----------------------------------------------------------------------------
