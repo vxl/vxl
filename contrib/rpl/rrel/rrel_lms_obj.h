@@ -5,6 +5,10 @@
 // \file
 // \author Chuck Stewart (stewart@cs.rpi.edu)
 // \brief The Least-Median-of-Squares (LMS) objective function
+// 
+// \verbatim
+//   2004-04, Charlene Tsai (tsaic@cs.rpi.edu). Added scale(.) function.
+// \endverbatim
 
 #include <rrel/rrel_objective.h>
 
@@ -52,6 +56,14 @@ public:
   //  require any scale parameter, estimated or otherwise.
   virtual bool requires_prior_scale() const
     { return false; }
+
+  //: True. The scale is estimated as MAD (Median Absolute Deviation)
+  //  \sa rrel_objective::can_estimate_scale.
+  virtual bool can_estimate_scale() const { return true; }
+
+  //: Scale estimate (median absolute deviation -- MAD).
+  //  \sa rrel_util_median_abs_dev_scale(.)
+  virtual double scale( vect_const_iter res_begin, vect_const_iter res_end ) const;
 
 protected:
   //: Number of samples needed for a unique fit = number of dependent residuals.

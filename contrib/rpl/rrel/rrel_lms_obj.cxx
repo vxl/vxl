@@ -1,5 +1,6 @@
 // This is rpl/rrel/rrel_lms_obj.cxx
 #include "rrel_lms_obj.h"
+#include "rrel_util.h"
 
 #include <vnl/vnl_math.h>
 
@@ -65,4 +66,18 @@ rrel_lms_obj::fcn( vect_const_iter begin, vect_const_iter end,
   vcl_nth_element( sq_res.begin(), loc, sq_res.end() );
 
   return *loc;
+}
+
+double
+rrel_lms_obj::scale( vect_const_iter begin, vect_const_iter end ) const
+{
+  // Work on a copy of the vector, since the MAD scale estimator
+  // will change the content of the vector
+  vcl_vector<double> vec_copy;
+  vec_copy.reserve( end - begin );
+  for ( ; begin != end; ++begin ) {
+    vec_copy.push_back( *begin);
+  }
+
+  return rrel_util_median_abs_dev_scale( vec_copy.begin(), vec_copy.end(), num_sam_inst_);
 }
