@@ -109,10 +109,11 @@ template <class T>
 vgl_homg_point_2d<T> operator*(vnl_matrix_fixed<T,3,4> const& m,
                                vgl_homg_point_3d<T> const& p);
 
-//: Project a plane to a 2D line through a 3x4 projective transformation matrix
-template <class T>
-vgl_homg_line_2d<T> operator*(vnl_matrix_fixed<T,3,4> const& m,
-                              vgl_homg_plane_3d<T> const& l);
+// does not make sense -- fsm
+// //: Project a plane to a 2D line through a 3x4 projective transformation matrix
+// template <class T>
+// vgl_homg_line_2d<T> operator*(vnl_matrix_fixed<T,3,4> const& m,
+//                               vgl_homg_plane_3d<T> const& l);
 
 //: Backproject a 2D line through a 4x3 projective transformation matrix
 template <class T>
