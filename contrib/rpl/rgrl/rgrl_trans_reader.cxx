@@ -21,7 +21,7 @@
 #undef READ_THIS_TRANSFORMATION
 #define READ_THIS_TRANSFORMATION(tag, trans) \
   if ( tag_str.find(tag) == 0 ){ \
-    trans* trans_ptr = new trans(0); \
+    trans* trans_ptr = new trans(); \
     trans_ptr->read(is); \
     return trans_ptr; \
   }
@@ -57,13 +57,7 @@ rgrl_trans_reader( vcl_istream& is )
   READ_THIS_TRANSFORMATION("RIGID", rgrl_trans_rigid)
   READ_THIS_TRANSFORMATION("QUADRATIC", rgrl_trans_quadratic)
   READ_THIS_TRANSFORMATION("BSPLINE", rgrl_trans_spline)
-  // Read homography, macro cannot be used, because there is no constructor for rgrl_trans_homography2d,
-  // that would take one argument (dimension). The dimension is fixed to 2.
-  if ( tag_str.find("HOMOGRAPHY2D") == 0 ){
-    rgrl_trans_homography2d* trans_ptr = new rgrl_trans_homography2d();
-    trans_ptr->read(is);
-    return trans_ptr;
-  }
+  READ_THIS_TRANSFORMATION("HOMOGRAPHY2D", rgrl_trans_homography2d)
 
   // default, should never reach here
   vcl_cout<< "WARNING: " << RGRL_HERE << " ( line "
