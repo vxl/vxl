@@ -18,6 +18,7 @@ void test_node()
        node_1->add_neighbor(node_3.ptr(), bmrf_node::TIME) &&
        node_2->add_neighbor(node_3.ptr(), bmrf_node::SPACE) &&
        node_2->add_neighbor(node_3.ptr(), bmrf_node::ALPHA) &&
+       node_2->add_neighbor(node_1.ptr(), bmrf_node::TIME) &&
        node_2->add_neighbor(node_1.ptr(), bmrf_node::ALPHA) &&
        !node_2->add_neighbor(node_1.ptr(), bmrf_node::ALPHA), // can't add the same thing twice
        true);
@@ -26,6 +27,11 @@ void test_node()
        node_2->remove_neighbor(node_1.ptr(), bmrf_node::ALPHA) &&
        !node_2->remove_neighbor(node_1.ptr(), bmrf_node::ALPHA), // can't remove twice
        true);
+
+  int count = 0;
+  for(int i=0; i<bmrf_node::ALL; ++i)
+    count += node_2->num_neighbors(bmrf_node::neighbor_type(i));
+  TEST("Testing num_neighbors()", node_2->num_neighbors(), count );
 
   testlib_test_begin("Testing frame_num() ");
   testlib_test_perform( node_1->frame_num() == 1 &&
@@ -44,6 +50,7 @@ void test_node()
   // binary test output file stream
   vsl_b_ofstream bfs_out("test_node_io.tmp");
   TEST ("Created test_node_io.tmp for writing",(!bfs_out), false);
+  node_1->b_write(bfs_out);
   vsl_b_write(bfs_out, node_1);
   bfs_out.close();
 
@@ -52,6 +59,8 @@ void test_node()
   // binary test input file stream
   vsl_b_ifstream bfs_in("test_node_io.tmp");
   TEST ("Opened test_node_io.tmp for reading",(!bfs_in), false);
+  bmrf_node * temp = new bmrf_node();
+  temp->b_read(bfs_in);
   vsl_b_read(bfs_in, node_in_1);
   bfs_in.close();
 
