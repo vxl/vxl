@@ -1,0 +1,8 @@
+SOURCE_FILES(ouml_sources
+  eigenfaces.h
+  image_database.h
+  polygon_mesh.h
+  image_ops.h
+  inlines.h
+  io.h
+)

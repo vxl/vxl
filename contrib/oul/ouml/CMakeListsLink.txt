@@ -1,0 +1,11 @@
+# ./oul/ouml/CMakeListsLink.txt
+
+LINK_LIBRARIES( ouml )
+
+IF (LIBRARY_OUTPUT_PATH MATCHES '^$')
+  LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/oul/ouml )
+ENDIF (LIBRARY_OUTPUT_PATH MATCHES '^$')
+
+# Immediate dependencies
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vnl/algo/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vll/CMakeListsLink.txt )

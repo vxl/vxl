@@ -1,0 +1,8 @@
+SOURCE_FILES(oufgl_sources
+  asyncio.h
+  bt848.h
+  frame_grabber.h
+  frame_grabber_pxc200.h
+  pxc200.h
+  sysdep.h
+)
