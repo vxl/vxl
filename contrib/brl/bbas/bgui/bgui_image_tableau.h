@@ -36,7 +36,7 @@ class bgui_image_tableau : public vgui_image_tableau
   bgui_image_tableau(vil1_image const &);
   bgui_image_tableau(char const *);
 
-  vcl_string type_name() const;
+  vcl_string type_name() const { return "vgui_image_tableau"; }
 
   //: Return the vil1_image
   vil1_image get_image() const;

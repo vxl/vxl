@@ -47,7 +47,7 @@ class bgui_selector_tableau : public vgui_tableau
   virtual bool handle(const vgui_event&);
 
   //: Returns the type of this tableau ('bgui_selector_tableau').
-  vcl_string type_name() const;
+  vcl_string type_name() const { return "bgui_selector_tableau"; }
 
   //: There is no obvious filename, so this just returns the type.
   vcl_string file_name() const;
@@ -79,7 +79,7 @@ class bgui_selector_tableau : public vgui_tableau
 
   //: Returns a smart pointer to the tableau with the given name
   vgui_tableau_sptr get_tableau(const vcl_string& name);
-  
+
   //: Make the child tableau with the given name the active child.
   void set_active(const vcl_string& name);
 
@@ -88,13 +88,13 @@ class bgui_selector_tableau : public vgui_tableau
 
   //: Returns true if the child tableau with the given name is active.
   bool is_visible(const vcl_string& name) const;
-  
+
   //: Move the active tableau to the top of the display list.
   void active_to_top();
-  
+
   //: Move the active tableau up one position in the display list.
   void active_raise();
-  
+
   //: Move the active tableau down one position in the display list.
   void active_lower();
 

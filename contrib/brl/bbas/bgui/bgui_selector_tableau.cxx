@@ -1,13 +1,10 @@
-// This is core/bgui/bgui_selector_tableau.cxx
-
+// This is brl/bbas/bgui/bgui_selector_tableau.cxx
+#include <bgui/bgui_selector_tableau.h>
 //:
 // \file
 // \author Matthew Leotta
 // \date   11-5-2003
 // \brief  See bgui_selector_tableau.h for a description of this file.
-
-
-#include <bgui/bgui_selector_tableau.h>
 
 #include <vcl_iostream.h>
 #include <vcl_sstream.h>
@@ -48,20 +45,13 @@ bgui_selector_tableau::~bgui_selector_tableau()
 }
 
 //----------------------------------------------------------------------------
-//: Returns the type of this tableau ('bgui_selector_tableau').
-vcl_string bgui_selector_tableau::type_name() const
-{
-  return "bgui_selector_tableau";
-}
-
-//----------------------------------------------------------------------------
 //: Return the file name of the active tableau or just return the type.
 vcl_string bgui_selector_tableau::file_name() const
 {
   vcl_map<vcl_string, vgui_parent_child_link>::const_iterator itr = child_map_.find(active_child_);
   if (itr != child_map_.end())
     return itr->second->file_name();
-    
+
   return type_name();
 }
 
@@ -103,7 +93,7 @@ bool bgui_selector_tableau::handle(const vgui_event& event)
   vcl_map<vcl_string, vgui_parent_child_link>::iterator itr = child_map_.find(active_child_);
   if (itr == child_map_.end())
     return false;
-    
+
   return itr->second->handle(event);
 }
 
@@ -127,7 +117,7 @@ bool bgui_selector_tableau::get_bounding_box(float lo[3], float hi[3]) const
     }
   }
   // See if any children where visible
-  if(o_itr == render_order_.end())
+  if (o_itr == render_order_.end())
     return false;
 
   for (; o_itr!=render_order_.end(); ++o_itr ){
@@ -152,17 +142,17 @@ bool bgui_selector_tableau::get_bounding_box(float lo[3], float hi[3]) const
 //----------------------------------------------------------------------------
 void bgui_selector_tableau::add(vgui_tableau_sptr const& tab, vcl_string name)
 {
-  if(name == "") name = tab->file_name();
-  
+  if (name == "") name = tab->file_name();
+
   vcl_map<vcl_string, vgui_parent_child_link>::iterator itr = child_map_.find(name);
   bool exists = (itr != child_map_.end());
-  
+
   child_map_[name] = vgui_parent_child_link(this,tab);
-  if(!exists){
+  if (!exists){
     render_order_.push_back(name);
     visible_[name] = true;
   }
-  if(active_child_ == "") active_child_ = name;
+  if (active_child_ == "") active_child_ = name;
 }
 
 //----------------------------------------------------------------------------
@@ -214,27 +204,27 @@ vgui_tableau_sptr bgui_selector_tableau::active_tableau()
 // virtual
 bool bgui_selector_tableau::remove_child(vgui_tableau_sptr const &t)
 {
-  for( vcl_map<vcl_string, vgui_parent_child_link>::iterator itr=child_map_.begin();
+  for (vcl_map<vcl_string, vgui_parent_child_link>::iterator itr=child_map_.begin();
        itr!=child_map_.end(); ++itr )
     if ( (itr->second.child()) == t ) {
       vcl_string name = itr->first;
       child_map_.erase(itr);
-      
+
       vcl_map<vcl_string, bool>::iterator v_itr = visible_.find(name);
-      if(v_itr != visible_.end())
+      if (v_itr != visible_.end())
         visible_.erase(v_itr);
-        
-      for( vcl_vector<vcl_string>::iterator o_itr = render_order_.begin();
+
+      for (vcl_vector<vcl_string>::iterator o_itr = render_order_.begin();
            o_itr!=render_order_.end(); ++o_itr ){
         if (name == *o_itr)
           render_order_.erase(o_itr--);
       }
-      
+
       if (active_child_ == name){
         active_child_ = "";
-        for( vcl_vector<vcl_string>::iterator o_itr = render_order_.begin();
+        for (vcl_vector<vcl_string>::iterator o_itr = render_order_.begin();
              o_itr!=render_order_.end(); ++o_itr ){
-          if(visible_[*o_itr]){
+          if (visible_[*o_itr]){
             active_child_ = *o_itr;
             break;
           }
@@ -348,7 +338,7 @@ class bgui_selector_toggle_command : public vgui_command
 //----------------------------------------------------------------------------
 class bgui_selector_position_command : public vgui_command
 {
-  public:
+ public:
   enum motion { TO_TOP, RAISE, LOWER, TO_BOTTOM };
   bgui_selector_position_command(bgui_selector_tableau* s, motion m) : selector(s), m_type(m) {}
   void execute()
@@ -371,14 +361,14 @@ class bgui_selector_position_command : public vgui_command
   }
 
   bgui_selector_tableau *selector;
-  motion m_type; 
+  motion m_type;
 };
 
 
 //----------------------------------------------------------------------------
 //: Builds a popup menu for the user to select the active child.
 void bgui_selector_tableau::get_popup(const vgui_popup_params& params,
-                                            vgui_menu &menu)
+                                      vgui_menu &menu)
 {
   vgui_menu submenu;
 
@@ -390,20 +380,19 @@ void bgui_selector_tableau::get_popup(const vgui_popup_params& params,
   vcl_string check;
   vcl_vector<vcl_string>::reverse_iterator itr = render_order_.rbegin();
   for ( ; itr != render_order_.rend() ; ++itr) {
-    if( *itr == active_child_ ) check = "[x] ";
+    if ( *itr == active_child_ ) check = "[x] ";
     else check = "[ ] ";
     active_menu.add(check+(*itr), new bgui_selector_switch_command(this,*itr));
 
-    if( is_visible(*itr) ) check = "[x] ";
+    if ( is_visible(*itr) ) check = "[x] ";
     else check = "[ ] ";
     visible_menu.add(check+(*itr), new bgui_selector_toggle_command(this,*itr));
   }
-  
+
   position_menu.add("Move to Top", new bgui_selector_position_command(this, bgui_selector_position_command::TO_TOP));
   position_menu.add("Move Up", new bgui_selector_position_command(this, bgui_selector_position_command::RAISE));
   position_menu.add("Move Down", new bgui_selector_position_command(this,bgui_selector_position_command::LOWER));
   position_menu.add("Move to Bottom", new bgui_selector_position_command(this,bgui_selector_position_command::TO_BOTTOM));
-  
 
   submenu.add("Toggle Visible", visible_menu);
   submenu.add("Select Active", active_menu);

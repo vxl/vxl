@@ -44,11 +44,6 @@ static void print_edgels(vtol_edge_2d_sptr const & e)
 }
 #endif
 
-vcl_string bgui_vtol2D_tableau::type_name() const
-{
-  return "bgui_vtol2D_tableau";
-}
-
 void bgui_vtol2D_tableau::init()
 {
   //define default soview styles
@@ -82,7 +77,7 @@ bgui_vtol2D_tableau::add_vertex(vtol_vertex_2d_sptr const& v,
     obj->set_style( style );
   else
     obj->set_style( vertex_style_ );
-    
+
   if (obj) {
     int id = obj->get_id();
     obj_map_[id]=v->cast_to_topology_object();
@@ -92,10 +87,9 @@ bgui_vtol2D_tableau::add_vertex(vtol_vertex_2d_sptr const& v,
 
 
 bgui_vtol_soview2D_edge*
-bgui_vtol2D_tableau::add_edge(vtol_edge_2d_sptr const& e , 
+bgui_vtol2D_tableau::add_edge(vtol_edge_2d_sptr const& e,
                               const vgui_style_sptr& style)
 {
-
 #ifdef DEBUG
   print_edgels(e);
 #endif
@@ -126,7 +120,7 @@ bgui_vtol2D_tableau::add_edge_group(vcl_vector<vtol_edge_2d_sptr>& edges,
     obj->set_style( style );
   else
     obj->set_style( edge_group_style_ );
-  
+
   return obj;
 }
 
@@ -142,7 +136,7 @@ bgui_vtol2D_tableau::add_face(vtol_face_2d_sptr const& f,
     obj->set_style( style );
   else
     obj->set_style( face_style_ );
-    
+
   if (obj) {
     int id = obj->get_id();
     obj_map_[id]=f->cast_to_topology_object();
@@ -299,7 +293,7 @@ void bgui_vtol2D_tableau::set_face_style(const vgui_style_sptr& style)
 //  bgui_vtol2D_rubberband_client methods
 //--------------------------------------------------------------
 bgui_vtol2D_rubberband_client::
-bgui_vtol2D_rubberband_client(bgui_vtol2D_tableau_sptr const& vtol2D) 
+bgui_vtol2D_rubberband_client(bgui_vtol2D_tableau_sptr const& vtol2D)
   : vtol2D_(vtol2D)
 {
 }
@@ -349,7 +343,7 @@ bgui_vtol2D_rubberband_client::
 add_polygon(int n, float const* x, float const* y)
 {
   vcl_vector<vtol_vertex_sptr> verts;
-  for(int i =0; i<n-1; i++)
+  for (int i =0; i<n-1; i++)
     verts.push_back(new vtol_vertex_2d(x[i], y[i]));
   vtol_face_2d_sptr f2d = new vtol_face_2d(verts);
   vtol2D_->add_face(f2d);
@@ -361,10 +355,10 @@ void
 bgui_vtol2D_rubberband_client::
 add_box(float x0, float y0, float x1, float y1)
 {
-  vtol_vertex_sptr v0 = new vtol_vertex_2d(x0, y0);  
-  vtol_vertex_sptr v1 = new vtol_vertex_2d(x1, y0);  
-  vtol_vertex_sptr v2 = new vtol_vertex_2d(x1, y1);  
-  vtol_vertex_sptr v3 = new vtol_vertex_2d(x0, y1); 
+  vtol_vertex_sptr v0 = new vtol_vertex_2d(x0, y0);
+  vtol_vertex_sptr v1 = new vtol_vertex_2d(x1, y0);
+  vtol_vertex_sptr v2 = new vtol_vertex_2d(x1, y1);
+  vtol_vertex_sptr v3 = new vtol_vertex_2d(x0, y1);
   vcl_vector<vtol_vertex_sptr> verts;
   verts.push_back(v0);   verts.push_back(v1);
   verts.push_back(v2);   verts.push_back(v3);

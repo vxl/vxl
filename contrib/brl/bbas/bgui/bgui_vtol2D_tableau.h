@@ -63,7 +63,7 @@ class bgui_vtol2D_tableau : public bgui_vsol2D_tableau
 
   ~bgui_vtol2D_tableau();
 
-  virtual vcl_string type_name() const;
+  virtual vcl_string type_name() const { return "bgui_vtol2D_tableau"; }
 
   //:virtual handle method for events
   virtual bool handle(vgui_event const &);
@@ -177,7 +177,6 @@ class bgui_vtol2D_rubberband_client : public vgui_rubberband_client
   //  This turns off the highlighting of geometry objects to eliminate
   //  flickering highlights while drawing temporary objects.
   void clear_highlight();
-
 };
 
 #endif // bgui_vtol2D_tableau_h_

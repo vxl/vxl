@@ -1,4 +1,4 @@
-// This is oxl/xcv/bgui_image_tableau.cxx
+// This is brl/bbas/bgui/bgui_image_tableau.cxx
 #include "bgui_image_tableau.h"
 //:
 // \file
@@ -11,7 +11,6 @@
 //    06-AUG-2002 K.Y.McGaul - Print RGB value on status bar.
 // \endverbatim
 
-#include <vcl_string.h>
 #include <vcl_cmath.h>
 #include <vcl_cstdio.h> // sprintf
 
@@ -35,11 +34,6 @@ bgui_image_tableau::bgui_image_tableau(vil1_image const &I)
 bgui_image_tableau::bgui_image_tableau(char const *f)
   : base(f), defined_(false) { }
 
-vcl_string bgui_image_tableau::type_name() const
-{
-  return "vgui_image_tableau";
-}
-
 //--------------------------------------------------------------------------------
 
 vil1_image bgui_image_tableau::get_image() const
@@ -48,8 +42,8 @@ vil1_image bgui_image_tableau::get_image() const
     return base::get_image();
   else
     return vil1_crop(base::get_image(),
-                    int(roi_.x+0.5),int(roi_.y+0.5),
-                    int(roi_.width),int(roi_.height));
+                     int(roi_.x+0.5),int(roi_.y+0.5),
+                     int(roi_.width),int(roi_.height));
 }
 
 void bgui_image_tableau::set_roi(float x,float y,float w,float h)
@@ -127,7 +121,7 @@ bool bgui_image_tableau::handle(vgui_event const &e)
   else if (e.type == vgui_BUTTON_DOWN)
   {
     button_down = true;
-    vgui::out << " " << vcl_endl;
+    vgui::out << ' ' << vcl_endl;
   }
   else if (e.type == vgui_BUTTON_UP)
   {
@@ -167,7 +161,7 @@ bool bgui_image_tableau::handle(vgui_event const &e)
     // Display on status bar:
     char msg[100];
     vcl_sprintf(msg, "(%d, %d)   R=%d,G=%d,B=%d", intx, inty,
-      (int)pixel.r, (int)pixel.g, (int)pixel.b);
+                (int)pixel.r, (int)pixel.g, (int)pixel.b);
     vgui::out << msg << vcl_endl;
   }
 
