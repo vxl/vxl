@@ -4,7 +4,7 @@
 //:
 // \file
 //
-// Created: VDN 02/21/92 new lite version adapted from Matrix.h
+// \date VDN 02/21/92 new lite version adapted from Matrix.h
 //
 // The parameterized vnl_vector<T> class implements 1D arithmetic vectors of a
 // user specified type. The only constraint placed on the type is that
@@ -25,7 +25,7 @@
 // Methods   are  provided   for destructive   scalar   and vector  addition,
 // multiplication, check for equality  and inequality, fill, reduce, and access
 // and set individual elements.  Finally, both  the  input and output operators
-// are overloaded to allow for fomatted input and output of vector elements.
+// are overloaded to allow for formatted input and output of vector elements.
 //
 // vnl_vector is a special type of matrix, and is implemented for space and time
 // efficiency. When vnl_vector is pre_multiplied by/with matrix, m*v, vnl_vector is
@@ -447,7 +447,7 @@ vnl_vector<T>& vnl_vector<T>::operator+= (vnl_vector<T> const& rhs) {
 }
 
 
-//:  Mutates lhs vector with its substraction with rhs vector. O(n).
+//:  Mutates lhs vector with its subtraction with rhs vector. O(n).
 
 template<class T>
 vnl_vector<T>& vnl_vector<T>::operator-= (vnl_vector<T> const& rhs) {
@@ -825,7 +825,7 @@ bool vnl_vector<T>::operator_eq (vnl_vector<T> const& rhs) const {
 template<class T>
 vcl_ostream& operator<< (vcl_ostream& s, vnl_vector<T> const& v) {
   for (unsigned i = 0; i+1 < v.size(); ++i)   // For each index in vector
-    s << v[i] << " ";                              // Output data element
+    s << v[i] << ' ';                              // Output data element
   if (v.size() > 0)  s << v[v.size()-1];
   return s;
 }
