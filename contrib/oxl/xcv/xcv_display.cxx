@@ -301,6 +301,10 @@ void xcv_display::show_line_slice()
   profile_dialog.set_ok_button("close");
   profile_dialog.set_cancel_button(0);
   profile_dialog.ask();
+  
+  delete [] x;
+  delete [] y;
+  delete [] val;
 }
 
 //-----------------------------------------------------------------------------
