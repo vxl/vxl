@@ -107,8 +107,7 @@ double clsfy_binary_hyperplane_ls_builder::build(
   // However it is easier to find X' X w = X' Y;
   // because X is n_train x n_elems whereas X'X is n_elems x n_elems
 
-  vnl_svd<double> svd(XtX, 1.0e-12); // 1.0e-12 the zero-tolerance for singular values
-  // suggested by Numerical Recipes
+  vnl_svd<double> svd(XtX, 1.0e-12); // 1e-12 = zero-tolerance for singular values
   vnl_vector<double> w = svd.solve(XtY);
 #if 0
   vcl_cerr << "XtX: " << XtX << vcl_endl
@@ -158,7 +157,7 @@ void clsfy_binary_hyperplane_ls_builder::b_read(vsl_b_istream &bfs)
       break;
     default:
       vcl_cerr << "I/O ERROR: clsfy_binary_hyperplane_ls_builder::b_read(vsl_b_istream&)\n"
-               << "           Unknown version number "<< version << "\n";
+               << "           Unknown version number "<< version << '\n';
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
   }
 }
