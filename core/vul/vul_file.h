@@ -55,6 +55,7 @@ struct vul_file {
 
   //: Return size of vul_file
   static int size(char const* filename);
+  static int size(vcl_string filename) { return size(filename.c_str()); }
 
   //: Return dirname
   static vcl_string dirname(char const* filename);
@@ -82,5 +83,11 @@ struct vul_file {
   // \return true if successful.
   static bool delete_file_glob(char const* file_glob);
 };
+
+inline bool vul_file_exists(char const *f) { return vul_file::exists(f); }
+inline bool vul_file_exists(vcl_string  f) { return vul_file::exists(f); }
+
+inline bool vul_file_size(char const *f) { return vul_file::size(f); }
+inline bool vul_file_size(vcl_string  f) { return vul_file::size(f); }
 
 #endif // vul_file_h_
