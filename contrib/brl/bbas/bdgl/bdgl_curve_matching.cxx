@@ -165,8 +165,6 @@ double bdgl_curve_matching::match_DP(bdgl_curve_description * desc1,
                                      vnl_matrix<double> & Tbar,double & scale,vcl_vector<int> & tail1,
                                      vcl_vector<int> & tail2,vgl_point_2d<double> & /* e */)
 {
-  double dist = -1; // dummy initialisation, to avoid compiler warning
-
   vcl_vector<vcl_pair<double,double> > v1,v2;
 
   // getting points from curves into vectors
@@ -212,6 +210,7 @@ double bdgl_curve_matching::match_DP(bdgl_curve_description * desc1,
  }
   if (sign11*sign12<0 && sign21*sign22<0)
   {
+    double dist;
     if (sign11*sign21>0) // hence sign12*sign22>0
     {
       alignment.clear();
@@ -235,6 +234,8 @@ double bdgl_curve_matching::match_DP(bdgl_curve_description * desc1,
         tail2.push_back(sizeofv2-tail_reversed[i]-1);
       }
     }
+    vcl_cout<<". ";
+    return dist;
   }
   else
   {
@@ -247,6 +248,7 @@ double bdgl_curve_matching::match_DP(bdgl_curve_description * desc1,
     double dist1 = curveMatch(euc1,v1,v2,alignment1,R1,T1,Tbar1,tail_old1,tail_new1,scale1,epipole_);
     vcl_reverse(v2.begin(),v2.end());
     double dist2 = curveMatch(euc2,v1,v2,alignment2,R2,T2,Tbar2,tail_old2,tail_new2,scale2,epipole_);
+    double dist;
 
     if (dist1<dist2)
     {
@@ -279,9 +281,9 @@ double bdgl_curve_matching::match_DP(bdgl_curve_description * desc1,
       tail1=tail_old2;
       scale=scale2;
     }
+    vcl_cout<<". ";
+    return dist;
   }
-  vcl_cout<<". ";
-  return dist;
 }
 
 double bdgl_curve_matching::match_stat(bdgl_curve_description * desc1,
