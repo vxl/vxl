@@ -51,7 +51,7 @@ void kalman_filter::init()
   memory_size_ = 0;
 
   // initialize the default queue size
-  queue_size_ = 15;
+  queue_size_ = 100;
   observes_.resize(queue_size_);
   motions_.resize(queue_size_);
 
@@ -340,6 +340,7 @@ void kalman_filter::update_observes(const vnl_double_3x4 &P, int iframe)
   for (int i=0; i<num_points_; i++)
   {
     bugl_gaussian_point_2d<double> x = brct_algos::project_3d_point(P, curve_3d_[i]);
+
     vgl_point_2d<double> u = brct_algos::most_possible_point(curves_[iframe], x);
     observes_[iframe%queue_size_][i].set_point(u);
     vnl_double_2x2 sigma;

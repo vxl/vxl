@@ -10,7 +10,10 @@
 #include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_easy3D_tableau.h>
 #include <vgui/vgui_viewer3D_tableau.h>
+#include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_easy2D_tableau.h>
+#include <vgui/vgui_composite_tableau.h>
+#include <vgui/vgui_composite_tableau_sptr.h>
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
@@ -77,12 +80,15 @@ void brct_windows_frame::init()
   grid_->add_at(v3d, col+1, row);
 
   // initialize the easy 2d grid
-  vgui_easy2D_tableau_new tab2d;
+  vgui_image_tableau_sptr tab_img = vgui_image_tableau_new();
+  vgui_easy2D_tableau_sptr easy2d = vgui_easy2D_tableau_new();
+  vgui_composite_tableau_sptr tab2d = vgui_composite_tableau_new(easy2d, tab_img);
 
-  tab_2d_ = tab2d;
+  tab_2d_ = easy2d;
+  img_2d_ = tab_img;
   tab_2d_->set_foreground(0, 0, 1);
 
-  vgui_viewer2D_tableau_sptr v2d = vgui_viewer2D_tableau_new(tab_2d_);
+  vgui_viewer2D_tableau_sptr v2d = vgui_viewer2D_tableau_new(tab2d);
   grid_->add_at(v2d, col, row);
 
   vgui_shell_tableau_sptr shell = vgui_shell_tableau_new(grid_);

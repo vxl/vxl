@@ -1,19 +1,18 @@
 #ifndef brct_windows_frame_h_
 #define brct_windows_frame_h_
-//--------------------------------------------------------------------------------
+
 //:
 // \file
 // \brief Manager for multiview 3d reconstruction gui applications
-// \author
-//   Kongbin Kang
+// \author Kongbin Kang
 //
-//--------------------------------------------------------------------------------
 
 #include <vgui/vgui_wrapper_tableau.h>
 #include <vgui/vgui_easy3D_tableau.h>
 #include <vgui/vgui_easy3D_tableau_sptr.h>
 #include <vgui/vgui_easy2D_tableau.h>
 #include <vgui/vgui_easy2D_tableau_sptr.h>
+#include <vgui/vgui_image_tableau_sptr.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_grid_tableau_sptr.h>
 #include <vgui/vgui_menu.h>
@@ -78,6 +77,7 @@ class brct_windows_frame : public vgui_wrapper_tableau
 
   //: kalman filter
   kalman_filter* kalman_;
+  vgui_image_tableau_sptr img_2d_;
   vgui_easy2D_tableau_sptr tab_2d_;
   vgui_easy3D_tableau_sptr tab_3d_;
   vgui_grid_tableau_sptr grid_;
