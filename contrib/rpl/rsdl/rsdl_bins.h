@@ -31,7 +31,7 @@
 template<unsigned N, typename CoordType, typename ValueType>
 class rsdl_bins
 {
-public:
+ public:
   //:
   typedef CoordType                       coord_type;
 
@@ -41,7 +41,7 @@ public:
   //:
   typedef vnl_vector_fixed<CoordType,N>   point_type;
 
-public:
+ public:
 
   //:
   // Construct bins of size \a bin_sizes with enough bins to span \a
@@ -133,7 +133,7 @@ public:
                                vcl_vector< point_type >& points,
                                vcl_vector< value_type >& values  ) const;
 
-private:
+ private:
   //:
   // Essentially a (location,value) pair with equality checking on the
   // location.
@@ -224,15 +224,15 @@ private:
                                     vcl_vector< point_type >* points ) const;
 
   // documentation in .txx
-  unsigned scan_region( int lo[Ndim], int hi[Ndim], int cur[Ndim], unsigned dim,
+  unsigned scan_region( int lo[N], int hi[N], int cur[N], unsigned dim,
                         bin_index_vector& indices ) const;
 
   // documentation in .txx
-  unsigned scan_bdy( int lo[Ndim], int hi[Ndim], int cur[Ndim], unsigned dim,
+  unsigned scan_bdy( int lo[N], int hi[N], int cur[N], unsigned dim,
                      bin_index_vector& indices ) const;
 
 
-private:
+ private:
   //:
   // The number of bins along each dimension. The numbers are ints and
   // not unsigned ints because the logic for off-the-bottom is easier
