@@ -66,10 +66,9 @@ const float    vnl_math::maxfloat  = 3.40282346638528860e+38F;
 //--------------------------------------------------------------------------------
 
 // -- Return true iff x is "Not a Number"
-bool vnl_math_isnan(double x) 
-{
-  return x != x;
-}
+bool vnl_math_isnan(float x) { return x != x; }
+bool vnl_math_isnan(double x) { return x != x; }
+bool vnl_math_isnan(long double x) { return x != x; }
 
 // fsm@robots.ox.ac.uk
 // On linux noshared builds, with optimisation on, calling 'finite' within the
@@ -86,14 +85,13 @@ bool vnl_math_isnan(double x)
 # endif
 #endif
 // -- Return true if x is neither NaN nor Inf.
-bool vnl_math_isfinite(double x) 
-{
 #if defined(_MSC_VER)
-  return finite(x) != 0; // quell performance warning -- fsm
+bool vnl_math_isfinite(double x) { return finite(x) != 0; } // quell performance warning -- fsm
 #else
-  return finite(x);
+bool vnl_math_isfinite(float x) { return finite(x); }
+bool vnl_math_isfinite(double x) { return finite(x); }
+bool vnl_math_isfinite(long double x) { return finite(x); }
 #endif
-}
 
 #if defined(_MSC_VER)
 inline bool isnan(double x)
@@ -103,10 +101,9 @@ inline bool isnan(double x)
 #endif
 
 // -- Return true if x is inf
-bool vnl_math_isinf(double x) 
-{
-  return !finite(x) && !isnan(x);
-}
+bool vnl_math_isinf(float x) { return !finite(x) && !isnan(x); }
+bool vnl_math_isinf(double x) { return !finite(x) && !isnan(x); }
+bool vnl_math_isinf(long double x) { return !finite(x) && !isnan(x); }
 
 //----------------------------------------------------------------------
 
