@@ -1,9 +1,5 @@
-#######################################
-include ${IUEROOT}/config/top-params.mk
-#######################################
+SUBDIRS += netlib jpeg tiff
 
-SUBDIRS += netlib
-
-######################################
-include ${IUEROOT}/config/top-rules.mk
-######################################
+################################
+include ${IUEROOT}/config/top.mk
+################################
