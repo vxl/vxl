@@ -11,7 +11,7 @@
 #include <osl/osl_edgel_chain.h>
 #include <osl/osl_vertex.h>
 
-struct osl_edge : osl_topology_base, osl_edgel_chain
+struct osl_edge : public osl_topology_base, public osl_edgel_chain
 {
   // end-vertices (ref-counted)
   osl_vertex *v1, *v2;

@@ -61,7 +61,7 @@
 #include <osl/osl_canny_port.h>
 #include <osl/osl_edge_detector_params.h>
 
-struct osl_edge_detector : osl_edge_detector_params
+struct osl_edge_detector : public osl_edge_detector_params
 {
   osl_edge_detector(osl_edge_detector_params const &);
 

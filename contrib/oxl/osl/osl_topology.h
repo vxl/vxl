@@ -26,7 +26,7 @@ inline T fsm_pop(vcl_list<T> *l)
 
 struct osl_stash_link;
 
-struct osl_topology_base : vbl_ref_count
+struct osl_topology_base : public vbl_ref_count
 {
   int id;
   osl_topology_base();
