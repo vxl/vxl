@@ -17,7 +17,8 @@ rgrl_initializer_reader(vcl_istream& istr,
                         rgrl_scale_sptr            const& prior_scale,
                         rgrl_estimator_sptr        const& estimator,
                         unsigned int                      resolution )
-  : from_image_roi_( from_image_roi ),
+  : xform_index_(0),
+    from_image_roi_( from_image_roi ),
     to_image_roi_( to_image_roi ),
     prior_scale_( prior_scale ),
     estimator_( estimator ),
@@ -40,6 +41,7 @@ rgrl_initializer_reader(vcl_istream& istr,
     // read in transformation
     init_record one;
     rgrl_mask_box region(2), global_region(2);
+    bool is_global_region_set = false;
     
     rgrl_transformation_sptr xform = rgrl_trans_reader( istr );
     if( !istr || !xform ) {
@@ -83,6 +85,7 @@ rgrl_initializer_reader(vcl_istream& istr,
         
         global_region.set_x0( x0 );
         global_region.set_x1( x1 );
+        is_global_region_set = true;
         
       } else if( tag_str.find( "GEOMETRIC_SCALE" ) == 0 ) {
   
@@ -106,6 +109,19 @@ rgrl_initializer_reader(vcl_istream& istr,
     
     }
 
+    // estimate global region
+    if( !is_global_region_set ) {
+      global_region =
+        rgrl_util_estimate_global_region(from_image_roi_,
+                                         to_image_roi_,
+                                         from_image_roi_,
+                                         *one.xform_);
+    }
+    
+    // should use general prior_scale?
+    if( !one.scale_ ) 
+      one.scale_ = prior_scale_;
+    
     //inverse transformation
     rgrl_transformation_sptr inverse_xform;
     if( xform->is_invertible() ) 
