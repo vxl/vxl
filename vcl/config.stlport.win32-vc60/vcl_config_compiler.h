@@ -602,6 +602,12 @@ text { return ret; }
 // numeric_limits<double> imply that there is no infinity, when there is.
 #define VCL_PROCESSOR_HAS_INFINITY 1
 
+//----------------------------------------------------------------------
+// signedness of char
+
+//: VCL_CHAR_IS_SIGNED
+// Set to true if the type "char" is signed.
+#define VCL_CHAR_IS_SIGNED 1
 
 //----------------------------------------------------------------------
 // architecture macros removed -- they're not in the C++ standard

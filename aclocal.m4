@@ -973,6 +973,20 @@ int main() { C c; f(c); return 0; }
 export VCL_HAS_SLICED_DESTRUCTOR_BUG
 AC_LANG_RESTORE])
 
+###
+AC_DEFUN(VCL_CXX_CHAR_IS_SIGNED,[
+AC_MSG_CHECKING(whether char is signed)
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
+VCL_COMPILE_CXX
+AC_TRY_RUN([
+// Return 0 for char signed and 1 for char unsigned.
+int main() {
+  unsigned char uc = 255;
+  return (*reinterpret_cast<char*>(&uc) < 0)?0:1;
+}],,[VCL_CHAR_IS_SIGNED=1;AC_MSG_RESULT(yes)],[VCL_CHAR_IS_SIGNED=0;AC_MSG_RESULT(no)])
+export VCL_CHAR_IS_SIGNED
+AC_LANG_RESTORE])
 
 ###
 AC_DEFUN(VCL_CXX_NUMERIC_LIMITS_HAS_INFINITY,[
