@@ -16,7 +16,7 @@ int main(int argc, char**argv)
 {
   vcl_vector<HomgPoint2D> points1;
   vcl_vector<HomgPoint2D> points2;
-  int ishomg = (argc > 1 && argv[1][0] == 'h');
+  bool ishomg = (argc > 1 && argv[1][0] == 'h');
 
   // Read points
   while (vcl_cin.good()) {
@@ -91,4 +91,6 @@ int main(int argc, char**argv)
       d += f.image1_epipolar_distance_squared(&points1[i], &points2[i]);
     vcl_cout << "Error = " << d/points1.size() << vcl_endl;
   }
+
+  return 0;
 }
