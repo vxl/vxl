@@ -178,12 +178,18 @@ SET( vcl_sources
   iso/vcl_typeinfo.h
   iso/vcl_valarray.h
 
+  # Can't include this, since vcl_limits.cxx (potentially) includes
+  # emulation/vcl_limits.cxx. If we do, then the same file gets
+  # compiled twice, resulting in multiply defined symbols. This
+  # comment probably applies to the other .cxx files in emulation too.
+  # Someone needs to go through this and clean it up.
+  # emulation/vcl_limits.cxx emulation/vcl_limits.h
+
   emulation/vcl_string_instances.cxx
   emulation/vcl_straits.cxx emulation/vcl_straits.h
   emulation/vcl_rbtree_instances.cxx
   emulation/vcl_hashtable.cxx emulation/vcl_hashtable.h
   emulation/vcl_alloc.cxx emulation/vcl_alloc.h
-  emulation/vcl_limits.cxx emulation/vcl_limits.h
   emulation/vcl_algorithm.txx emulation/vcl_algorithm.h
   emulation/vcl_complex.txx emulation/vcl_complex.h
   emulation/vcl_deque.txx emulation/vcl_deque.h
