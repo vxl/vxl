@@ -73,6 +73,7 @@ ELSE (WIN32)
   )
 
   FIND_PATH(OPENGL_xmesa_INCLUDE_DIR GL/xmesa.h
+    ${OPENGL_INCLUDE_DIR}
     /usr/share/doc/NVIDIA_GLX-1.0/include
     /usr/include
     /usr/local/include
