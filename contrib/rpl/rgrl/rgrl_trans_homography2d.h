@@ -41,7 +41,7 @@ class rgrl_trans_homography2d
   vnl_matrix<double> transfer_error_covar( vnl_vector<double> const& p  ) const;
 
   //: The scaling and rotation component of the transform
-  vnl_matrix_fixed<double, 3, 3> const& H() const {return H_;}
+  vnl_matrix_fixed<double, 3, 3> H() const;
 
   //: Inverse map using pseudo-inverse of H_.
   void inv_map( const vnl_vector<double>& to,
@@ -79,6 +79,10 @@ class rgrl_trans_homography2d
   // for input
   void read(vcl_istream& is );
 
+  // uncenter H matrix
+  vnl_matrix_fixed<double, 3, 3>  
+  uncenter_H_matrix( ) const;
+
  protected:
   void map_loc( vnl_vector<double> const& from,
                 vnl_vector<double>      & to ) const;
@@ -90,6 +94,7 @@ class rgrl_trans_homography2d
  private:
   vnl_matrix_fixed<double, 3, 3> H_;
   vnl_vector_fixed<double, 2> from_centre_;
+  vnl_vector_fixed<double, 2> to_centre_;
 };
 
 #endif

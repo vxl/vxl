@@ -15,7 +15,8 @@
 rgrl_trans_homography2d::
 rgrl_trans_homography2d()
   : H_( 0.0 ),
-    from_centre_( 0.0, 0.0 )
+    from_centre_( 0.0, 0.0 ),
+    to_centre_( 0.0, 0.0 )
 {}
 
 rgrl_trans_homography2d::
@@ -23,7 +24,8 @@ rgrl_trans_homography2d( vnl_matrix<double> const& H,
                         vnl_matrix<double> const& covar )
   : rgrl_transformation( covar ),
     H_( H ),
-    from_centre_( 0.0, 0.0 )
+    from_centre_( 0.0, 0.0 ),
+    to_centre_( 0.0, 0.0 )
 {
   assert( H.rows() == 3 );
   assert( H.cols() == 3 );
@@ -42,24 +44,55 @@ rgrl_trans_homography2d( vnl_matrix<double> const& H,
                         vnl_matrix<double> const& covar,
                         vnl_vector<double> const& from_centre,
                         vnl_vector<double> const& to_centre )
-  : rgrl_transformation( covar )
+  : rgrl_transformation( covar ),
+    from_centre_( from_centre ),
+    to_centre_( to_centre )
 {
   assert( to_centre.size() == 2 );
 
   //Uncenter the H_ = to_matrix^-1 * H * from_matrix
   //
-  vnl_matrix<double> to_inv(3,3, vnl_matrix_identity);
-  to_inv(0,2) = to_centre[0];
-  to_inv(1,2) = to_centre[1];
-
-  vnl_matrix<double> from_matrix(3,3, vnl_matrix_identity);
-  from_matrix(0,2) = -from_centre[0];
-  from_matrix(1,2) = -from_centre[1];
-
-  H_ = to_inv * H * from_matrix;
-  from_centre_ = from_centre;
+  //vnl_matrix<double> to_inv(3,3, vnl_matrix_identity);
+  //to_inv(0,2) = to_centre[0];
+  //to_inv(1,2) = to_centre[1];
+  //
+  //vnl_matrix<double> from_matrix(3,3, vnl_matrix_identity);
+  //from_matrix(0,2) = -from_centre[0];
+  //from_matrix(1,2) = -from_centre[1];
+  //
+  //H_ = to_inv * H * from_matrix;
+  //from_centre_ = from_centre;
+  
+  H_ = H;
 }
 
+vnl_matrix_fixed<double, 3, 3> 
+rgrl_trans_homography2d::
+H() const
+{
+  return uncenter_H_matrix();
+}
+
+vnl_matrix_fixed<double, 3, 3>
+rgrl_trans_homography2d::
+uncenter_H_matrix( ) const 
+{
+  vnl_matrix_fixed<double, 3, 3> H;
+  
+  // uncenter To image
+  vnl_matrix_fixed<double, 3, 3> to_inv(vnl_matrix_identity);
+  to_inv(0,2) = to_centre_[0];
+  to_inv(1,2) = to_centre_[1];
+  
+  // uncenter From image
+  vnl_matrix_fixed<double, 3, 3> from_matrix(vnl_matrix_identity);
+  from_matrix(0,2) = -from_centre_[0];
+  from_matrix(1,2) = -from_centre_[1];
+  
+  H = to_inv * H_ * from_matrix;
+  
+  return H;
+}
 
 vnl_matrix<double>
 rgrl_trans_homography2d::
@@ -68,7 +101,7 @@ transfer_error_covar( vnl_vector<double> const& from_loc  ) const
   assert ( is_covar_set() );
   assert ( from_loc.size() ==2 );
 
-  vnl_matrix_fixed<double, 2, 9 > base_jac, jac;
+  vnl_matrix_fixed<double, 2, 9 > jac;
   vnl_matrix_fixed<double, 3, 9 > jf(0.0); // homogeneous coordinate
   vnl_matrix_fixed<double, 2, 3 > jg(0.0); // inhomo, [u/w, v/w]^T
   vnl_double_3 from_homo( from_loc[0]-from_centre_[0],
@@ -99,12 +132,16 @@ rgrl_trans_homography2d::
 inv_map( const vnl_vector<double>& to,
          vnl_vector<double>& from ) const
 {
-  vnl_svd<double> svd_h(H_);
-  vnl_matrix<double> H_inv = svd_h.inverse();
-  vnl_vector<double> homo_to(3,1), homo_from(3,1);
+  vnl_svd<double> svd_h( uncenter_H_matrix().as_ref() );
+  vnl_matrix_fixed<double, 3, 3> H_inv = svd_h.inverse();
+  
+  vnl_double_3 homo_to(0, 0, 1.0), homo_from(0, 0, 1.0);
   homo_to[0] = to[0];
   homo_to[1] = to[1];
+  
+  // apply inverse homography
   homo_from = H_inv*homo_to;
+  
   from[0] = homo_from[0]/homo_from[2];
   from[1] = homo_from[1]/homo_from[2];
 
@@ -176,9 +213,10 @@ rgrl_transformation_sptr
 rgrl_trans_homography2d::
 inverse_transform() const
 {
-  vnl_svd<double> svd_h(H_);
+  vnl_svd<double> svd_h( H_ );
   vnl_matrix<double> H_inv = svd_h.inverse();
-  rgrl_transformation_sptr result = new rgrl_trans_homography2d( H_inv );
+  rgrl_transformation_sptr result = 
+    new rgrl_trans_homography2d( H_inv, vnl_matrix<double>(), to_centre_, from_centre_ );
 
   const unsigned m = scaling_factors_.size();
   if( m > 0 ) {
@@ -204,7 +242,7 @@ homo_jacobian( vnl_vector<double> const& from_loc ) const
   //  d(f_1)/dx   d(f_1)/dy   d(f_1)/dw]
   //
 
-  vnl_vector_fixed<double,3> p(from_loc[0], from_loc[1], 1);
+  vnl_vector_fixed<double,3> p(from_loc[0]-from_centre_[0], from_loc[1]-from_centre_[1], 1);
   vnl_vector<double> h_0 = H_.get_row(0);
   vnl_vector<double> h_1 = H_.get_row(1);
   vnl_vector<double> h_2 = H_.get_row(2);
@@ -228,16 +266,18 @@ jacobian( vnl_vector<double> const& from_loc ) const
   // [d(f_0)/dx   d(f_0)/dy;
   //  d(f_1)/dx   d(f_1)/dy]
   //
-
-  double mapped_w = H_(2,0)*from_loc[0] + H_(2,1)*from_loc[1] + H_(2,2);
+  vnl_double_2 centered_from = from_loc;
+  centered_from -= from_centre_;
+  
+  double mapped_w = H_(2,0)*centered_from[0] + H_(2,1)*centered_from[1] + H_(2,2);
 
   vnl_matrix<double> jacobian(2, 2);
   // w/ respect to x
-  jacobian(0,0) = H_(0,0)*( H_(2,1)*from_loc[1]+H_(2,2) ) - H_(2,0)*( H_(0,1)*from_loc[1] + H_(0,2) );
-  jacobian(1,0) = H_(1,0)*( H_(2,1)*from_loc[1]+H_(2,2) ) - H_(2,0)*( H_(1,1)*from_loc[1] + H_(1,2) );
+  jacobian(0,0) = H_(0,0)*( H_(2,1)*centered_from[1]+H_(2,2) ) - H_(2,0)*( H_(0,1)*centered_from[1] + H_(0,2) );
+  jacobian(1,0) = H_(1,0)*( H_(2,1)*centered_from[1]+H_(2,2) ) - H_(2,0)*( H_(1,1)*centered_from[1] + H_(1,2) );
   // w/ respect to y
-  jacobian(0,1) = H_(0,1)*( H_(2,0)*from_loc[0]+H_(2,2) ) - H_(2,1)*( H_(0,0)*from_loc[0] + H_(0,2) );
-  jacobian(1,1) = H_(1,1)*( H_(2,0)*from_loc[0]+H_(2,2) ) - H_(2,1)*( H_(1,0)*from_loc[0] + H_(1,2) );
+  jacobian(0,1) = H_(0,1)*( H_(2,0)*centered_from[0]+H_(2,2) ) - H_(2,1)*( H_(0,0)*centered_from[0] + H_(0,2) );
+  jacobian(1,1) = H_(1,1)*( H_(2,0)*centered_from[0]+H_(2,2) ) - H_(2,1)*( H_(1,0)*centered_from[0] + H_(1,2) );
   
   jacobian *= (1/(mapped_w*mapped_w));
   return jacobian;
@@ -248,12 +288,13 @@ void
 rgrl_trans_homography2d::
 write(vcl_ostream& os ) const
 {
-  vnl_vector<double> origin(from_centre_.size(), 0.0);
+  //vnl_vector<double> origin(from_centre_.size(), 0.0);
+  
   // tag
   os << "HOMOGRAPHY2D\n"
   // parameters
      << 2 << vcl_endl
-     << H_<< origin << vcl_endl;
+     << H_ << from_centre_ << "  " << to_centre_ << vcl_endl;
 
   // parent
   rgrl_transformation::write( os );
@@ -282,7 +323,7 @@ read(vcl_istream& is )
   dim=-1;
   is >> dim;
   if ( dim > 0 ) {
-    is >> H_ >> from_centre_;
+    is >> H_ >> from_centre_ >> to_centre_;
   }
 
   // parent
@@ -296,10 +337,10 @@ map_loc( vnl_vector<double> const& from,
 {
   to.set_size(2);
   // convert "from" to homogeneous co-cord
-  vnl_vector_fixed<double,3> h_from(from[0], from[1], 1);
+  vnl_vector_fixed<double,3> h_from(from[0]-from_centre_[0], from[1]-from_centre_[1], 1);
   vnl_vector_fixed<double,3> h_to = H_*h_from;
-  to[0] = h_to[0]/h_to[2];
-  to[1] = h_to[1]/h_to[2];
+  to[0] = h_to[0]/h_to[2] + to_centre_[0];
+  to[1] = h_to[1]/h_to[2] + to_centre_[1];
 }
 
 void
