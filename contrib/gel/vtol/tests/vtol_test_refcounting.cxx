@@ -96,15 +96,56 @@ static void vtol_test_refcounting()
 
   f3->describe(vcl_cout,8);
 
+  // create a block from the 3 faces created above
+  face_list fl1;
+  fl1.push_back(f1); fl1.push_back(f2); fl1.push_back(f3);
+  vtol_block* b1 = new vtol_block(fl1); b1->ref();
+  fl1.clear();
+  TEST("single block has refcount 0", b1->get_references(), 1);
+  // This new block should not increment the refcounts 2 levels down:
+  TEST("face on block has refcount 1", f1->get_references(), 1);
+  TEST("face on block has refcount 1", f2->get_references(), 1);
+  TEST("face on block has refcount 1", f3->get_references(), 1);
+
+  // create a block from a two-chain
+  fl1.push_back(f1); fl1.push_back(f2); fl1.push_back(f3);
+  vtol_two_chain* tc1 = f1->superiors_list()->front()->cast_to_two_chain();
+  TEST("non-shared 2-chain has refcount 1", tc1->get_references(), 1);
+  two_chain_list tl1; tl1.push_back(tc1);
+  vtol_block* b2 = new vtol_block(tl1); b2->ref();
+  fl1.clear(); tl1.clear();
+  TEST("single block has refcount 0", b2->get_references(), 1);
+  TEST("other block still has refcount 0", b1->get_references(), 1);
+  // This new block should not increment the refcounts 2 levels down:
+  TEST("face on block has refcount 1", f1->get_references(), 1);
+  TEST("face on block has refcount 1", f2->get_references(), 1);
+  TEST("face on block has refcount 1", f3->get_references(), 1);
+  // But it should increment the refcount of the shared 2-chain:
+  TEST("shared 2-chain has refcount 2", tc1->get_references(), 2);
+
+  // The two blocks should be identical:
+  TEST("blocks are identical", *b1, *b2);
+  TEST("single block still has refcount 0", b1->get_references(), 1);
+  TEST("single block still has refcount 0", b2->get_references(), 1);
+
   // Now removing the objects one by one, and watching the refcounts:
-  delete f1;
+  b1->unref();
+  TEST("face on block has refcount 1", f1->get_references(), 1);
+  TEST("face on block has refcount 1", f2->get_references(), 1);
+  TEST("face on block has refcount 1", f3->get_references(), 1);
+  TEST("non-shared 2-chain has refcount 1", tc1->get_references(), 1);
+  // before deleting the last block, protect the faces from being deleted;
+  // the 2-chains are automatically deleted, so no memory leaks.
+  f1->ref(); f2->ref(); f3->ref(); b2->unref();
+  // And the same thing for the faces:
+  f1->unref();
   TEST("vertex on triangle has refcount 4", v1->get_references(), 4);
   TEST("vertex on triangle has refcount 4", v2->get_references(), 4);
   TEST("vertex on triangle has refcount 4", v3->get_references(), 4);
   TEST("edge on triangle has refcount 1", e1->get_references(), 1);
   TEST("edge on triangle has refcount 1", e2->get_references(), 1);
   TEST("edge on triangle has refcount 1", e3->get_references(), 1);
-  delete f2;
+  f2->unref();
   TEST("vertex on triangle has refcount 4", v1->get_references(), 4);
   TEST("vertex on triangle has refcount 4", v2->get_references(), 4);
   TEST("vertex on triangle has refcount 4", v3->get_references(), 4);
@@ -113,7 +154,7 @@ static void vtol_test_refcounting()
   TEST("edge on triangle has refcount 1", e3->get_references(), 1);
   // before deleting the last face, protect the edges from being deleted:
   e1->ref(); e2->ref(); e3->ref();
-  delete f3;
+  f3->unref();
   TEST("vertex on 2 edges has refcount 4", v1->get_references(), 4);
   TEST("vertex on 2 edges has refcount 4", v2->get_references(), 4);
   TEST("vertex on 2 edges has refcount 4", v3->get_references(), 4);
