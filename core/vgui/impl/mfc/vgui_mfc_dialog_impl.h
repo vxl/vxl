@@ -11,12 +11,12 @@
 // \brief   The MFC implementation of vgui_dialog_impl.
 //
 // \verbatim
-//  Modifications:
-//  31-JUL-2000 Marko Bacic - Initial version.
-//  03-MAR-2001 K.Y.McGaul - Added correct modifiers to key press/release events
-//                         - Set checkboxes to display current value correctly
-//  22-AUG-2001 K.Y.McGaul - Fixed memory leak: font is now deleted.
-//  19-SEP-2001 K.Y.McGaul & Marko Bacic - Finally got inline tableau working!
+//  Modifications
+//   31-JUL-2000 Marko Bacic - Initial version.
+//   03-MAR-2001 K.Y.McGaul - Added correct modifiers to key press/release events
+//                          - Set checkboxes to display current value correctly
+//   22-AUG-2001 K.Y.McGaul - Fixed memory leak: font is now deleted.
+//   19-SEP-2001 K.Y.McGaul & Marko Bacic - Finally got inline tableau working!
 // \endverbatim
 
 class CFont;
@@ -56,7 +56,7 @@ class vgui_mfc_dialog_impl : public CWnd,public vgui_dialog_impl
   virtual void OnBrowse(UINT uID);
   //: Called by MFC when the user clicks the colour chooser button.
   virtual void OnChooseColour(UINT uID);
-  //: Called by MFC when the appication is about to terminate.
+  //: Called by MFC when the application is about to terminate.
   afx_msg void OnClose();
  private:
   int nResult;

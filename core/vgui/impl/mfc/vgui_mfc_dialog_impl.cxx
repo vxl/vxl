@@ -165,7 +165,7 @@ void vgui_mfc_dialog_impl::OnChooseColour(UINT uID)
   csrs[which]->SetWindowText(s);
 }
 
-//: Called by MFC when the appication is about to terminate.
+//: Called by MFC when the application is about to terminate.
 void vgui_mfc_dialog_impl::OnClose()
 {
   OnCancel();
