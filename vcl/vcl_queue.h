@@ -16,5 +16,6 @@
 #endif
 
 #define VCL_QUEUE_INSTANTIATE(T) extern "you must #include vcl_queue.txx"
+#define VCL_PRIORITY_QUEUE_INSTANTIATE(T) extern "you must #include vcl_queue.txx"
 
 #endif // vcl_queue_h_
