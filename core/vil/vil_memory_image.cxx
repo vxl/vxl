@@ -5,6 +5,11 @@
 //:
 // \file
 // \author Ian Scott
+//
+// \verbatim
+//  Modifications
+//   23 Oct.2003 - Peter Vanroose - Added support for 64-bit int pixels
+// \endvarbatim
 
 #include "vil_memory_image.h"
 #include <vcl_cassert.h>
@@ -25,12 +30,17 @@ vil_memory_image::vil_memory_image(unsigned ni, unsigned nj, unsigned nplanes, v
   {
 #define macro( F , T  ) \
   case F :     view_ = new vil_image_view<T >(ni, nj, nplanes, \
-    vil_pixel_format_num_components(format)); break;
+                                              vil_pixel_format_num_components(format)); \
+               break;
 macro(VIL_PIXEL_FORMAT_BYTE ,   vxl_byte)
 macro(VIL_PIXEL_FORMAT_SBYTE ,  vxl_sbyte)
+#if VXL_HAS_INT_64
+macro(VIL_PIXEL_FORMAT_UINT_64, vxl_uint_64)
+macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64)
+#endif
 macro(VIL_PIXEL_FORMAT_UINT_32, vxl_uint_32)
-macro(VIL_PIXEL_FORMAT_UINT_16, vxl_uint_16)
 macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32)
+macro(VIL_PIXEL_FORMAT_UINT_16, vxl_uint_16)
 macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16)
 macro(VIL_PIXEL_FORMAT_BOOL ,   bool)
 macro(VIL_PIXEL_FORMAT_FLOAT ,  float)
@@ -55,9 +65,13 @@ vil_memory_image::vil_memory_image(vil_image_view_base const &view)
   case F :  view_ = new vil_image_view<T >(view); break;
 macro(VIL_PIXEL_FORMAT_BYTE ,   vxl_byte )
 macro(VIL_PIXEL_FORMAT_SBYTE ,  vxl_sbyte )
+#if VXL_HAS_INT_64
+macro(VIL_PIXEL_FORMAT_UINT_64, vxl_uint_64 )
+macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
+#endif
 macro(VIL_PIXEL_FORMAT_UINT_32, vxl_uint_32 )
-macro(VIL_PIXEL_FORMAT_UINT_16, vxl_uint_16 )
 macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
+macro(VIL_PIXEL_FORMAT_UINT_16, vxl_uint_16 )
 macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
 macro(VIL_PIXEL_FORMAT_BOOL ,   bool )
 macro(VIL_PIXEL_FORMAT_FLOAT ,  float )
@@ -66,9 +80,8 @@ macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  vcl_complex<float>)
 macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
 #undef macro
   default:
-    vcl_cerr << "ERROR: vil_memory_image::vil_memory_image\n"
-                "\t unknown format " << 
-      vil_pixel_format_component_format(view.pixel_format()) << vcl_endl;
+    vcl_cerr << "ERROR: vil_memory_image::vil_memory_image\n\tunknown format "
+             << vil_pixel_format_component_format(view.pixel_format()) << '\n';
     vcl_abort();
   }
   assert (view_->ni() == view.ni() && view_->nj() == view.nj());
@@ -95,9 +108,13 @@ vil_image_view_base_sptr vil_memory_image::get_copy_view(unsigned i0, unsigned n
       return new vil_image_view< T >(vil_copy_deep(w)); }
 macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
 macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
+#if VXL_HAS_INT_64
+macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
+macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
+#endif
 macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
-macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
 macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
+macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
 macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
 macro(VIL_PIXEL_FORMAT_BOOL , bool )
 macro(VIL_PIXEL_FORMAT_FLOAT , float )
@@ -128,9 +145,13 @@ vil_image_view_base_sptr vil_memory_image::get_view(unsigned i0, unsigned ni,
                                      v.istep(), v.jstep(), v.planestep()); }
 macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )
 macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
+#if VXL_HAS_INT_64
+macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
+macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
+#endif
 macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
-macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
 macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
+macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
 macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
 macro(VIL_PIXEL_FORMAT_BOOL , bool )
 macro(VIL_PIXEL_FORMAT_FLOAT , float )
@@ -163,7 +184,7 @@ bool vil_memory_image::put_view(const vil_image_view_base& im,unsigned i0, unsig
       { \
         if (&v(i0,j0) != w.top_left_ptr()) { \
           vcl_cerr << "ERROR: vil_memory_image::put_view()\n" \
-            "different window from that used in get_view()" << vcl_endl; \
+            "different window from that used in get_view()\n"; \
           vcl_abort(); } \
         else return true; /* The user has already modified the data in place. */ \
       } \
@@ -172,9 +193,13 @@ bool vil_memory_image::put_view(const vil_image_view_base& im,unsigned i0, unsig
 
 macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )
 macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
+#if VXL_HAS_INT_64
+macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
+macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
+#endif
 macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
-macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
 macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
+macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
 macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
 macro(VIL_PIXEL_FORMAT_BOOL , bool )
 macro(VIL_PIXEL_FORMAT_FLOAT , float )

@@ -12,6 +12,11 @@
 // will be more usefully provided as external functions. - IMS.
 // In that case, use the "relates" keyword of Doxygen to link the documentation
 // of that function to the vil_image_view class.
+//
+// \verbatim
+//  Modifications
+//   23 Oct.2003 - Peter Vanroose - Added support for 64-bit int pixels
+// \endvarbatim
 
 #include "vil_image_view.h"
 #include <vcl_string.h>
@@ -228,6 +233,19 @@ inline bool convert_components_from_planes(vil_image_view<vxl_uint_32> & /*lhs*/
                                            const vil_image_view_base & /*rhs_base*/)
 {return false;}
 
+#if VXL_HAS_INT_64
+
+VCL_DEFINE_SPECIALIZATION
+inline bool convert_components_from_planes(vil_image_view<vxl_int_64> & /*lhs*/,
+                                           const vil_image_view_base & /*rhs_base*/)
+{return false;}
+
+VCL_DEFINE_SPECIALIZATION
+inline bool convert_components_from_planes(vil_image_view<vxl_uint_64> & /*lhs*/,
+                                           const vil_image_view_base & /*rhs_base*/)
+{return false;}
+
+#endif
 
 //: Convert components to planes from planes, or do nothing if types are wrong.
 template <class T>

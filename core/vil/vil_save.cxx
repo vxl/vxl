@@ -4,6 +4,11 @@
 #endif
 //:
 // \file
+//
+// \verbatim
+//  Modifications
+//   23 Oct.2003 - Peter Vanroose - Added support for 64-bit int pixels
+// \endvarbatim
 
 #include "vil_save.h"
 
@@ -28,8 +33,8 @@ bool vil_save(const vil_image_view_base &im, char const* filename, char const* f
     return false;
   }
   vil_image_resource_sptr out = vil_new_image_resource(os, im.ni(), im.nj(),
-    im.nplanes() * vil_pixel_format_num_components(im.pixel_format()),
-    im.pixel_format(), file_format);
+                                                       im.nplanes() * vil_pixel_format_num_components(im.pixel_format()),
+                                                       im.pixel_format(), file_format);
   if (!out) {
     vcl_cerr << __FILE__ ": (vil_save) Cannot save to type [" << file_format << "]\n";
     return false;
@@ -49,6 +54,12 @@ bool vil_save(const vil_image_view_base &im, char const* filename, char const* f
     return out->put_view(vil_image_view<vxl_uint_32>(im),0,0);
   case VIL_PIXEL_FORMAT_INT_32:
     return out->put_view(vil_image_view<vxl_int_32>(im),0,0);
+#if VXL_HAS_INT_64
+  case VIL_PIXEL_FORMAT_UINT_64:
+    return out->put_view(vil_image_view<vxl_uint_64>(im),0,0);
+  case VIL_PIXEL_FORMAT_INT_64:
+    return out->put_view(vil_image_view<vxl_int_64>(im),0,0);
+#endif
   case VIL_PIXEL_FORMAT_FLOAT:
     return out->put_view(vil_image_view<float>(im),0,0);
   case VIL_PIXEL_FORMAT_BOOL:
@@ -61,9 +72,7 @@ bool vil_save(const vil_image_view_base &im, char const* filename, char const* f
     // In case any one has an odd pixel format that actually works with this file_format.
     return out->put_view(im, 0, 0);
   }
-
 }
-
 
 static
 char const *guess_file_format(char const* filename)
@@ -112,11 +121,9 @@ bool vil_save(const vil_image_view_base & i, char const* filename)
   return vil_save(i, filename, guess_file_format(filename));
 }
 
-
-
 //: Send vil_image to disk.
 bool vil_save_image_resource(const vil_image_resource_sptr &ir, char const* filename,
-  char const* file_format)
+                             char const* file_format)
 {
   vil_stream* os = vil_open(filename, "w");
   if (!os || !os->ok()) {
@@ -124,8 +131,8 @@ bool vil_save_image_resource(const vil_image_resource_sptr &ir, char const* file
     return false;
   }
   vil_image_resource_sptr out = vil_new_image_resource(os, ir->ni(), ir->nj(),
-    ir->nplanes(),
-    ir->pixel_format(), file_format);
+                                                       ir->nplanes(),
+                                                       ir->pixel_format(), file_format);
   if (!out) {
     vcl_cerr << __FILE__ ": (vil_save) Cannot save to type [" << file_format << "]\n";
     return false;

@@ -3,6 +3,11 @@
 //:
 // \file
 // \author Ian Scott.
+//
+// \verbatim
+//  Modifications
+//   23 Oct.2003 - Peter Vanroose - Added support for 64-bit int pixels
+// \endvarbatim
 
 #include <vcl_cassert.h>
 #include <vcl_complex.h>
@@ -10,8 +15,13 @@
 static unsigned component_size[]={
   0,                   //  VIL_PIXEL_FORMAT_UNKNOWN
 
+#if VXL_HAS_INT_64
+  sizeof(vxl_uint_64), //  VIL_PIXEL_FORMAT_UINT_64
+  sizeof(vxl_int_64),  //  VIL_PIXEL_FORMAT_INT_64
+#else
   0,                   //  VIL_PIXEL_FORMAT_UINT_64
   0,                   //  VIL_PIXEL_FORMAT_INT_64
+#endif
   sizeof(vxl_uint_32), //  VIL_PIXEL_FORMAT_UINT_32
   sizeof(vxl_int_32),  //  VIL_PIXEL_FORMAT_INT_32
   sizeof(vxl_uint_16), //  VIL_PIXEL_FORMAT_UINT_16
@@ -23,8 +33,13 @@ static unsigned component_size[]={
   0,                   //  VIL_PIXEL_FORMAT_LONG_DOUBLE
   sizeof(bool),        //  VIL_PIXEL_FORMAT_BOOL
 
+#if VXL_HAS_INT_64
+  sizeof(vxl_uint_64), //  VIL_PIXEL_FORMAT_RGB_UINT_64
+  sizeof(vxl_int_64),  //  VIL_PIXEL_FORMAT_RGB_INT_64
+#else
   0,                   //  VIL_PIXEL_FORMAT_RGB_UINT_64
   0,                   //  VIL_PIXEL_FORMAT_RGB_INT_64
+#endif
   sizeof(vxl_uint_32), //  VIL_PIXEL_FORMAT_RGB_UINT_32
   sizeof(vxl_int_32),  //  VIL_PIXEL_FORMAT_RGB_INT_32
   sizeof(vxl_uint_16), //  VIL_PIXEL_FORMAT_RGB_UINT_16
@@ -35,8 +50,13 @@ static unsigned component_size[]={
   sizeof(double),      //  VIL_PIXEL_FORMAT_RGB_DOUBLE
   0,                   //  VIL_PIXEL_FORMAT_RGB_LONG_DOUBLE
 
+#if VXL_HAS_INT_64
+  sizeof(vxl_uint_64), //  VIL_PIXEL_FORMAT_RGBA_UINT_64
+  sizeof(vxl_int_64),  //  VIL_PIXEL_FORMAT_RGBA_INT_64
+#else
   0,                   //  VIL_PIXEL_FORMAT_RGBA_UINT_64
   0,                   //  VIL_PIXEL_FORMAT_RGBA_INT_64
+#endif
   sizeof(vxl_uint_32), //  VIL_PIXEL_FORMAT_RGBA_UINT_32
   sizeof(vxl_int_32),  //  VIL_PIXEL_FORMAT_RGBA_INT_32
   sizeof(vxl_uint_16), //  VIL_PIXEL_FORMAT_RGBA_UINT_16
@@ -54,8 +74,13 @@ static unsigned component_size[]={
 static unsigned num_components[]={
   0,  //  VIL_PIXEL_FORMAT_UNKNOWN
 
+#if VXL_HAS_INT_64
+  1,  //  VIL_PIXEL_FORMAT_UINT_64
+  1,  //  VIL_PIXEL_FORMAT_INT_64
+#else
   0,  //  VIL_PIXEL_FORMAT_UINT_64
   0,  //  VIL_PIXEL_FORMAT_INT_64
+#endif
   1,  //  VIL_PIXEL_FORMAT_UINT_32
   1,  //  VIL_PIXEL_FORMAT_INT_32
   1,  //  VIL_PIXEL_FORMAT_UINT_16
@@ -67,8 +92,13 @@ static unsigned num_components[]={
   0,  //  VIL_PIXEL_FORMAT_LONG_DOUBLE
   1,  //  VIL_PIXEL_FORMAT_BOOL
 
+#if VXL_HAS_INT_64
+  3,  //  VIL_PIXEL_FORMAT_RGB_UINT_64
+  3,  //  VIL_PIXEL_FORMAT_RGB_INT_64
+#else
   0,  //  VIL_PIXEL_FORMAT_RGB_UINT_64
   0,  //  VIL_PIXEL_FORMAT_RGB_INT_64
+#endif
   3,  //  VIL_PIXEL_FORMAT_RGB_UINT_32
   3,  //  VIL_PIXEL_FORMAT_RGB_INT_32
   3,  //  VIL_PIXEL_FORMAT_RGB_UINT_16
@@ -79,8 +109,13 @@ static unsigned num_components[]={
   3,  //  VIL_PIXEL_FORMAT_RGB_DOUBLE
   0,  //  VIL_PIXEL_FORMAT_RGB_LONG_DOUBLE
 
+#if VXL_HAS_INT_64
+  4,  //  VIL_PIXEL_FORMAT_RGBA_UINT_64
+  4,  //  VIL_PIXEL_FORMAT_RGBA_INT_64
+#else
   0,  //  VIL_PIXEL_FORMAT_RGBA_UINT_64
   0,  //  VIL_PIXEL_FORMAT_RGBA_INT_64
+#endif
   4,  //  VIL_PIXEL_FORMAT_RGBA_UINT_32
   4,  //  VIL_PIXEL_FORMAT_RGBA_INT_32
   4,  //  VIL_PIXEL_FORMAT_RGBA_UINT_16
@@ -99,8 +134,13 @@ static unsigned num_components[]={
 static vil_pixel_format component_format[]={
   VIL_PIXEL_FORMAT_UNKNOWN,  //  VIL_PIXEL_FORMAT_UNKNOWN
 
+#if VXL_HAS_INT_64
+  VIL_PIXEL_FORMAT_UINT_64,  //  VIL_PIXEL_FORMAT_UINT_64
+  VIL_PIXEL_FORMAT_INT_64,   //  VIL_PIXEL_FORMAT_INT_64
+#else
   VIL_PIXEL_FORMAT_UNKNOWN,  //  VIL_PIXEL_FORMAT_UINT_64
   VIL_PIXEL_FORMAT_UNKNOWN,  //  VIL_PIXEL_FORMAT_INT_64
+#endif
   VIL_PIXEL_FORMAT_UINT_32,  //  VIL_PIXEL_FORMAT_UINT_32
   VIL_PIXEL_FORMAT_INT_32,   //  VIL_PIXEL_FORMAT_INT_32
   VIL_PIXEL_FORMAT_UINT_16,  //  VIL_PIXEL_FORMAT_UINT_16
@@ -112,8 +152,13 @@ static vil_pixel_format component_format[]={
   VIL_PIXEL_FORMAT_UNKNOWN,  //  VIL_PIXEL_FORMAT_LONG_DOUBLE
   VIL_PIXEL_FORMAT_BOOL,     //  VIL_PIXEL_FORMAT_BOOL
 
+#if VXL_HAS_INT_64
+  VIL_PIXEL_FORMAT_UINT_64,  //  VIL_PIXEL_FORMAT_RGB_UINT_64
+  VIL_PIXEL_FORMAT_INT_64,   //  VIL_PIXEL_FORMAT_RGB_INT_64
+#else
   VIL_PIXEL_FORMAT_UNKNOWN,  //  VIL_PIXEL_FORMAT_RGB_UINT_64
   VIL_PIXEL_FORMAT_UNKNOWN,  //  VIL_PIXEL_FORMAT_RGB_INT_64
+#endif
   VIL_PIXEL_FORMAT_UINT_32,  //  VIL_PIXEL_FORMAT_RGB_UINT_32
   VIL_PIXEL_FORMAT_INT_32,   //  VIL_PIXEL_FORMAT_RGB_INT_32
   VIL_PIXEL_FORMAT_UINT_16,  //  VIL_PIXEL_FORMAT_RGB_UINT_16
@@ -124,8 +169,13 @@ static vil_pixel_format component_format[]={
   VIL_PIXEL_FORMAT_DOUBLE,   //  VIL_PIXEL_FORMAT_RGB_DOUBLE
   VIL_PIXEL_FORMAT_UNKNOWN,  //  VIL_PIXEL_FORMAT_RGB_LONG_DOUBLE
 
+#if VXL_HAS_INT_64
+  VIL_PIXEL_FORMAT_UINT_64,  //  VIL_PIXEL_FORMAT_RGBA_UINT_64
+  VIL_PIXEL_FORMAT_INT_64,   //  VIL_PIXEL_FORMAT_RGBA_INT_64
+#else
   VIL_PIXEL_FORMAT_UNKNOWN,  //  VIL_PIXEL_FORMAT_RGBA_UINT_64
   VIL_PIXEL_FORMAT_UNKNOWN,  //  VIL_PIXEL_FORMAT_RGBA_INT_64
+#endif
   VIL_PIXEL_FORMAT_UINT_32,  //  VIL_PIXEL_FORMAT_RGBA_UINT_32
   VIL_PIXEL_FORMAT_INT_32,   //  VIL_PIXEL_FORMAT_RGBA_INT_32
   VIL_PIXEL_FORMAT_UINT_16,  //  VIL_PIXEL_FORMAT_RGBA_UINT_16
@@ -136,8 +186,8 @@ static vil_pixel_format component_format[]={
   VIL_PIXEL_FORMAT_DOUBLE,   //  VIL_PIXEL_FORMAT_RGBA_DOUBLE
   VIL_PIXEL_FORMAT_UNKNOWN,  //  VIL_PIXEL_FORMAT_RGBA_LONG_DOUBLE
 
-  VIL_PIXEL_FORMAT_COMPLEX_FLOAT,       //  VIL_PIXEL_FORMAT_COMPLEX_FLOAT
-  VIL_PIXEL_FORMAT_COMPLEX_DOUBLE,      //  VIL_PIXEL_FORMAT_COMPLEX_DOUBLE
+  VIL_PIXEL_FORMAT_COMPLEX_FLOAT, //  VIL_PIXEL_FORMAT_COMPLEX_FLOAT
+  VIL_PIXEL_FORMAT_COMPLEX_DOUBLE,//  VIL_PIXEL_FORMAT_COMPLEX_DOUBLE
 };
 
 
@@ -170,6 +220,8 @@ vcl_ostream & operator << (vcl_ostream &os, vil_pixel_format f)
   switch(f) {
     case VIL_PIXEL_FORMAT_UNKNOWN: os << "VIL_PIXEL_FORMAT_UNKNOWN";  break;
 
+    case VIL_PIXEL_FORMAT_UINT_64: os << "vxl_uint_64";  break;
+    case VIL_PIXEL_FORMAT_INT_64:  os << "vxl_int_64";  break;
     case VIL_PIXEL_FORMAT_UINT_32: os << "vxl_uint_32";  break;
     case VIL_PIXEL_FORMAT_INT_32:  os << "vxl_int_32";  break;
     case VIL_PIXEL_FORMAT_UINT_16: os << "vxl_uint_16";  break;
@@ -180,6 +232,8 @@ vcl_ostream & operator << (vcl_ostream &os, vil_pixel_format f)
     case VIL_PIXEL_FORMAT_DOUBLE:  os << "double";  break;
     case VIL_PIXEL_FORMAT_BOOL:    os << "bool";  break;
 
+    case VIL_PIXEL_FORMAT_RGB_INT_64:  os << "vil_rgb<vxl_int_64>";  break;
+    case VIL_PIXEL_FORMAT_RGB_UINT_64: os << "vil_rgb<vxl_uint_64>";  break;
     case VIL_PIXEL_FORMAT_RGB_INT_32:  os << "vil_rgb<vxl_int_32>";  break;
     case VIL_PIXEL_FORMAT_RGB_UINT_32: os << "vil_rgb<vxl_uint_32>";  break;
     case VIL_PIXEL_FORMAT_RGB_INT_16:  os << "vil_rgb<vxl_int_16>";  break;
@@ -189,6 +243,8 @@ vcl_ostream & operator << (vcl_ostream &os, vil_pixel_format f)
     case VIL_PIXEL_FORMAT_RGB_FLOAT:   os << "vil_rgb<float>";  break;
     case VIL_PIXEL_FORMAT_RGB_DOUBLE:  os << "vil_rgb<double>";  break;
 
+    case VIL_PIXEL_FORMAT_RGBA_INT_64:  os << "vil_rgba<vxl_int_64>";  break;
+    case VIL_PIXEL_FORMAT_RGBA_UINT_64: os << "vil_rgba<vxl_uint_64>";  break;
     case VIL_PIXEL_FORMAT_RGBA_INT_32:  os << "vil_rgba<vxl_int_32>";  break;
     case VIL_PIXEL_FORMAT_RGBA_UINT_32: os << "vil_rgba<vxl_uint_32>";  break;
     case VIL_PIXEL_FORMAT_RGBA_INT_16:  os << "vil_rgba<vxl_int_16>";  break;

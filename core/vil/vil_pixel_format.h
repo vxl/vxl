@@ -6,6 +6,11 @@
 // \author Ian Scott.
 // Note that a vcl_complex<float> is thought of as a scalar
 // pixel type for vil's purposes.
+//
+// \verbatim
+//  Modifications
+//   23 Oct.2003 - Peter Vanroose - Added support for 64-bit int pixels
+// \endvarbatim
 
 #include <vil/vil_rgb.h>
 #include <vil/vil_rgba.h>
@@ -17,8 +22,10 @@
 enum vil_pixel_format {
   VIL_PIXEL_FORMAT_UNKNOWN = 0,
 
-//  VIL_PIXEL_FORMAT_UINT_64 = 1,
-//  VIL_PIXEL_FORMAT_INT_64 = 2,
+#if VXL_HAS_INT_64
+  VIL_PIXEL_FORMAT_UINT_64 = 1,
+  VIL_PIXEL_FORMAT_INT_64 = 2,
+#endif
   VIL_PIXEL_FORMAT_UINT_32 = 3,
   VIL_PIXEL_FORMAT_INT_32 = 4,
   VIL_PIXEL_FORMAT_UINT_16 = 5,
@@ -30,8 +37,10 @@ enum vil_pixel_format {
 //  VIL_PIXEL_FORMAT_LONG_DOUBLE = 11,
   VIL_PIXEL_FORMAT_BOOL = 12,
 
-//  VIL_PIXEL_FORMAT_RGB_UINT_64 = 13,
-//  VIL_PIXEL_FORMAT_RGB_INT_64 = 14,
+#if VXL_HAS_INT_64
+  VIL_PIXEL_FORMAT_RGB_UINT_64 = 13,
+  VIL_PIXEL_FORMAT_RGB_INT_64 = 14,
+#endif
   VIL_PIXEL_FORMAT_RGB_UINT_32 = 15,
   VIL_PIXEL_FORMAT_RGB_INT_32 = 16,
   VIL_PIXEL_FORMAT_RGB_UINT_16 = 17,
@@ -42,8 +51,10 @@ enum vil_pixel_format {
   VIL_PIXEL_FORMAT_RGB_DOUBLE = 22,
 //  VIL_PIXEL_FORMAT_RGB_LONG_DOUBLE = 23,
 
-//  VIL_PIXEL_FORMAT_RGBA_UINT_64 = 24,
-//  VIL_PIXEL_FORMAT_RGBA_INT_64 = 25,
+#if VXL_HAS_INT_64
+  VIL_PIXEL_FORMAT_RGBA_UINT_64 = 24,
+  VIL_PIXEL_FORMAT_RGBA_INT_64 = 25,
+#endif
   VIL_PIXEL_FORMAT_RGBA_UINT_32 = 26,
   VIL_PIXEL_FORMAT_RGBA_INT_32 = 27,
   VIL_PIXEL_FORMAT_RGBA_UINT_16 = 28,
@@ -101,6 +112,10 @@ struct vil_pixel_format_type_of {
 VCL_DEFINE_SPECIALIZATION inline vil_pixel_format vil_pixel_format_of(T /*dummy*/) { return V; }\
 VCL_DEFINE_SPECIALIZATION struct vil_pixel_format_type_of<V> { typedef T type; typedef C component_type; }
 
+#if VXL_HAS_INT_64
+vil_pixel_format_macro(vxl_uint_64, vxl_uint_64, VIL_PIXEL_FORMAT_UINT_64);
+vil_pixel_format_macro(vxl_int_64,  vxl_int_64,  VIL_PIXEL_FORMAT_INT_64);
+#endif
 vil_pixel_format_macro(vxl_uint_32, vxl_uint_32, VIL_PIXEL_FORMAT_UINT_32);
 vil_pixel_format_macro(vxl_int_32,  vxl_int_32,  VIL_PIXEL_FORMAT_INT_32);
 vil_pixel_format_macro(vxl_uint_16, vxl_uint_16, VIL_PIXEL_FORMAT_UINT_16);
@@ -111,6 +126,10 @@ vil_pixel_format_macro(float,       float,       VIL_PIXEL_FORMAT_FLOAT);
 vil_pixel_format_macro(double,      double,      VIL_PIXEL_FORMAT_DOUBLE);
 vil_pixel_format_macro(bool,        bool,        VIL_PIXEL_FORMAT_BOOL);
 
+#if VXL_HAS_INT_64
+vil_pixel_format_macro(vil_rgb<vxl_uint_64>, vxl_uint_64, VIL_PIXEL_FORMAT_RGB_UINT_64);
+vil_pixel_format_macro(vil_rgb<vxl_int_64>,  vxl_int_64,  VIL_PIXEL_FORMAT_RGB_INT_64);
+#endif
 vil_pixel_format_macro(vil_rgb<vxl_uint_32>, vxl_uint_32, VIL_PIXEL_FORMAT_RGB_UINT_32);
 vil_pixel_format_macro(vil_rgb<vxl_int_32>,  vxl_int_32,  VIL_PIXEL_FORMAT_RGB_INT_32);
 vil_pixel_format_macro(vil_rgb<vxl_uint_16>, vxl_uint_16, VIL_PIXEL_FORMAT_RGB_UINT_16);
@@ -120,6 +139,10 @@ vil_pixel_format_macro(vil_rgb<vxl_sbyte>,   vxl_sbyte,   VIL_PIXEL_FORMAT_RGB_S
 vil_pixel_format_macro(vil_rgb<float>,       float,       VIL_PIXEL_FORMAT_RGB_FLOAT);
 vil_pixel_format_macro(vil_rgb<double>,      double,      VIL_PIXEL_FORMAT_RGB_DOUBLE);
 
+#if VXL_HAS_INT_64
+vil_pixel_format_macro(vil_rgba<vxl_uint_64>, vxl_uint_64, VIL_PIXEL_FORMAT_RGBA_UINT_64);
+vil_pixel_format_macro(vil_rgba<vxl_int_64>,  vxl_int_64,  VIL_PIXEL_FORMAT_RGBA_INT_64);
+#endif
 vil_pixel_format_macro(vil_rgba<vxl_uint_32>, vxl_uint_32, VIL_PIXEL_FORMAT_RGBA_UINT_32);
 vil_pixel_format_macro(vil_rgba<vxl_int_32>,  vxl_int_32,  VIL_PIXEL_FORMAT_RGBA_INT_32);
 vil_pixel_format_macro(vil_rgba<vxl_uint_16>, vxl_uint_16, VIL_PIXEL_FORMAT_RGBA_UINT_16);

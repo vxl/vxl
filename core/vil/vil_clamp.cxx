@@ -6,6 +6,11 @@
 // \file
 // \author Ian Scott.
 //
+// \verbatim
+//  Modifications
+//   23 Oct.2003 - Peter Vanroose - Added support for 64-bit int pixels
+// \endvarbatim
+//
 //-----------------------------------------------------------------------------
 
 #include "vil_clamp.h"
@@ -53,9 +58,13 @@ vil_image_view_base_sptr vil_clamp_image_resource::get_copy_view(unsigned i0, un
 
       macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )
       macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
+#if VXL_HAS_INT_64
+      macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
+      macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
+#endif
       macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
-      macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
       macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
+      macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
       macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
       macro(VIL_PIXEL_FORMAT_FLOAT , float )
       macro(VIL_PIXEL_FORMAT_DOUBLE , double )
