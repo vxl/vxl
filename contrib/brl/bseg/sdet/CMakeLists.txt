@@ -23,7 +23,7 @@ SET(sdet_sources
     sdet_champher.h
     sdet_region.cxx    sdet_region.h sdet_region_sptr.h
     sdet_watershed_region_proc_params.cxx   sdet_watershed_region_proc_params.h
-    sdet_watershed_region_proc.cxx   sdet_watershed_region_proc.h	
+    sdet_watershed_region_proc.cxx   sdet_watershed_region_proc.h
     sdet_vehicle_finder_params.cxx      sdet_vehicle_finder_params.h 
     sdet_vehicle_finder.cxx      sdet_vehicle_finder.h 
 )
