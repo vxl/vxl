@@ -58,6 +58,8 @@
 #define VCL_CXX_HAS_HEADER_LIMITS     1
 #define VCL_CXX_HAS_HEADER_STRSTREAM  1
 
+#define VCL_CXX_HAS_HEADER_ISO646_H   1
+
 //--------------------------------------------------------------------------------
 
 #endif // vcl_config_headers_h_config_win32_vc70_

@@ -346,11 +346,17 @@ else
 fi
 
 # fsm
-AC_CHECK_HEADER(pthread.h,[VXL_HAS_PTHREAD_H=1],[VXL_HAS_PTHREAD_H=0])
-AC_CHECK_HEADER(semaphore.h,[VXL_HAS_SEMAPHORE_H=1],[VXL_HAS_SEMAPHORE_H=0])
+VCL_CXX_HAS_HEADER(pthread.h,VXL_HAS_PTHREAD_H)
+AC_SUBST(VXL_HAS_PTHREAD_H)
+VCL_CXX_HAS_HEADER(semaphore.h,VXL_HAS_SEMAPHORE_H)
+AC_SUBST(VXL_HAS_SEMAPHORE_H)
 VXL_CXX_UNISTD
 VXL_CXX_WORDS
-AC_CHECK_HEADER(ieeefp.h,[VXL_HAS_IEEEFP_H=1],[VXL_HAS_IEEEFP_H=0])
+VCL_CXX_HAS_HEADER(ieeefp.h,VXL_HAS_IEEEFP_H)
+AC_SUBST(VXL_HAS_IEEEFP_H)
+# brad king
+VCL_CXX_HAS_HEADER(iso646.h,VCL_CXX_HAS_HEADER_ISO646_H)
+AC_SUBST(VCL_CXX_HAS_HEADER_ISO646_H)
 
 # these math functions are probably defined in libm, so make sure the
 # library can be found before trying to link against it.
@@ -374,10 +380,6 @@ fi
 #--------------------------------------------------------------------------------
 # complete list of substitutions:
 
-# ...
-AC_SUBST(VXL_HAS_PTHREAD_H)
-AC_SUBST(VXL_HAS_SEMAPHORE_H)
-
 # libraries
 AC_SUBST(VXL_UNISTD_HAS_USECONDS_T)
 AC_SUBST(VXL_UNISTD_HAS_INTPTR_T)
@@ -396,7 +398,6 @@ AC_SUBST(VXL_C_MATH_HAS_FINITE)
 AC_SUBST(VXL_C_MATH_HAS_SQRTF)
 AC_SUBST(VXL_UNISTD_USLEEP_IS_VOID)
 AC_SUBST(VXL_TWO_ARG_GETTIME)
-AC_SUBST(VXL_HAS_IEEEFP_H)
 
 # architecture
 AC_SUBST(VXL_BIG_ENDIAN)
