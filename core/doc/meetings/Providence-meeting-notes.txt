@@ -1,26 +1,3 @@
-----------------------------------------------------------------------------
-
-* Temporary section
-
-If you would like to correct an error or omission, or clarify
-something in these minutes, feel free to do so.  Places where I think
-a correction is needed are marked with '???'.
-
-These minutes will be a record of the actual meeting.  If you would
-like to add additional helpful information that *should* have come up
-at the meeting, but did not, please put it in an appendix or somewhere
-else.
-
-If you participated in the meeting please search for your name and
-check that you agree with everything I attributed to you.
-
-To avoid CVS merging problems, avoid reformatting paragraphs as you
-add text.  I will go through this document and clean up formatting in
-one month, after everyone has had a chance to modify the content.  At
-that time I will remove this note.
-
--Fred Wheeler
-
 ============================================================================
 
 Minutes of the VXL meeting held at Brown University, Providence, Rhode
@@ -73,8 +50,9 @@ vessels in retinal images.  They make heavy use of VIL.  Rensselaer
 has developed and uses robust estimation techniques (in vxl/vnl and
 rpl).
 
-Ian Scott: Using VXL for object finding and recognition. We indirectly force some
-students to use VXL. Some of these students have no CS background.
+Ian Scott: Using VXL for object finding and recognition. We indirectly
+force some students to use VXL. Some of these students have no CS
+background.
 
 Luis Galup: Used TargetJr in the past.  Working on video and tracking.
 Would like to do 3D image processing in VXL.
