@@ -15,6 +15,7 @@ void test_DigitalCurve_to_vdgl() {
   TEST("p0()", p0->x()==1 && p0->y()==0, true);
   vsol_point_2d_sptr p1 = vdc.p1();
   TEST("p1()", p1->x()==-1 && p1->y()==-1, true);
+  TEST("midpt", vdc.get_x(0.5)==2 && vdc.get_y(0.5)==2, true);
 }
 
 TESTMAIN(test_DigitalCurve_to_vdgl);
