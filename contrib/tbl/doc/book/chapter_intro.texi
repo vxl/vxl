@@ -2,14 +2,15 @@
  VXL is efficient, simple, and fun to use.
 @endchapsummary
 
-This document describes the image processing libraries in @vxl{}. @vxl{} is
- a collection of C++ libraries designed for
+
+ @vxl{} is a collection of C++ libraries designed for
 computer vision research.  Because it's for computer vision it needs to be
 @emph{efficient}, handling large quantities of numerical data with little
 overhead.  Because it's for research it must be @emph{portable}, so that
 one can write and run one's program on any machine available, for example
 in order to access a special camera or fast image processing hardware.
 
+This document describes the image processing libraries in @vxl{}.
 These libraries were largely written by Terry Boult at Lehigh University
 in 1997/8. They have were adapted for use in VXL by Peter Vanroose.
 
