@@ -718,8 +718,8 @@ Eventually the answer to this will be "all parts" but until compilers
 catch up with the language standard, the answer is "all but the following":
 
 @itemize @bullet
-@item run-time type information (RTTI).
-@item exceptions.
+@item run-time type information (RTTI) in core libraries.
+@item exceptions in core libraries.
 @item wide characters (not supported by FreeBSD).
 @item member templates (not supported by SGI CC 7.2.x).
 @item partial template specializations (not supported by SGI CC 7.2.x).
@@ -729,6 +729,13 @@ catch up with the language standard, the answer is "all but the following":
 
 Of course, if you are just using VXL for your own purposes you may use whatever
 C++ constructs you like, you just can't put them in the core VXL libraries.
+
+The justification for banning certain things in core libraries is to encourage
+the adoption of the core by reducing the possiblility of porting problems.
+The justification for allowing it for Level 2 and greater libraries is that
+they are really pretty useful and hard to do without in more complex libraries
+than those in the core (e.g. RTTI for doing things like strategy patterns, or 
+managing polymorphic class trees).
 
 
 @comment fsm
