@@ -29,6 +29,10 @@ SOURCE_FILES( vnl_sources
   vnl_quaternion.txx vnl_quaternion.h
   vnl_scalar_join_iterator.txx vnl_scalar_join_iterator.h
 
+  vnl_complexify.h
+  vnl_imag.h
+  vnl_real.h
+
   #
   vnl_alloc.cxx vnl_alloc.h
   vnl_block.cxx vnl_block.h
@@ -117,7 +121,7 @@ SOURCE_FILES( vnl_sources
 AUX_SOURCE_DIRECTORY(Templates vnl_sources)
 
 # VNL_ALLOC is a fast but currently thread-unsafe allocator
-# used in vnl_vectors. The default is to use it but to
+# used in vnl_vectors. The default is to no use it but to
 # use the slower, thread-safe allocation, in your
 # CMakeListsLocal.txt file add the following lines
 # SET(VNL_C_VECTOR_USE_VNL_ALLOC_DEFINED 1)
