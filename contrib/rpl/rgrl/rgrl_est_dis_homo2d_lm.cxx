@@ -405,6 +405,10 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   vnl_levenberg_marquardt lm( dis_homo_func );
   lm.set_trace( true );
   //lm.set_check_derivatives( 3 );
+  // we don't need it to be super accurate
+  lm.set_f_tolerance( 1e-4 );
+  lm.set_max_function_evals( 30 );
+
   bool ret;
   if ( with_grad_ )
     ret = lm.minimize_using_gradient(p);
