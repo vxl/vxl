@@ -38,6 +38,7 @@ class vgl_h_matrix_3d
                   vnl_vector_fixed<T,3> const& m);
   vgl_h_matrix_3d(const T* t_matrix);
   vgl_h_matrix_3d(vcl_istream&);
+  vgl_h_matrix_3d(char const* filename);
  ~vgl_h_matrix_3d();
 
   // Operations----------------------------------------------------------------

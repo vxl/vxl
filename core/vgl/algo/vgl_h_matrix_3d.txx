@@ -44,7 +44,18 @@ vgl_h_matrix_3d<T>::vgl_h_matrix_3d(vcl_istream& s)
 {
   read(s);
 }
-
+//--------------------------------------------------------------
+//
+//: Load from file
+template <class T>
+vgl_h_matrix_3d<T>::vgl_h_matrix_3d(char const* filename)
+{
+  vcl_ifstream f(filename);
+  if (!f.good())
+    vcl_cerr << "vgl_h_matrix_3d::read: Error opening " << filename << vcl_endl;
+  else
+    t12_matrix_.read_ascii(f);
+}
 
 //--------------------------------------------------------------
 //
