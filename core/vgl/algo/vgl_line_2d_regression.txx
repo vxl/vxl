@@ -6,6 +6,7 @@
 // \file
 
 #include "vgl_line_2d_regression.h"
+#include <vcl_cmath.h>
 #include <vgl/vgl_distance.h>
 #include <vnl/vnl_inverse.h>
 #include <vnl/vnl_vector_fixed.h>
