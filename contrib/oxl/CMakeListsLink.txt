@@ -4,18 +4,29 @@
 #   geoff.cross@crd.ge.com
 #
 
-LINK_LIBRARIES(osl osl_internals vgui vgui_internals vgui_mfc glu32 opengl32)
+LINK_LIBRARIES(osl osl_internals vgui vgui_internals vgui_gtk)
 
 LINK_DIRECTORIES(
 ${allvxl_BINARY_DIR}/oxl/osl
 ${allvxl_BINARY_DIR}/oxl/osl/internals
 ${allvxl_BINARY_DIR}/oxl/vgui
 ${allvxl_BINARY_DIR}/oxl/vgui/impl/mfc
+${allvxl_BINARY_DIR}/oxl/vgui/impl/gtk
 ${allvxl_BINARY_DIR}/oxl/vgui/internals
 )
 
-IF(vgui)
-  LINK_DIRECTORIES(${allvxl_BINARY_DIR}/oxl/vgui/impl/gtk)
-  LINK_LIBRARIES(vgui_gtk);
-ENDIF(vgui_gtk)
+IF(WIN32)
+  LINK_LIBRARIES(vgui_mfc)
+ENDIF(WIN32)
+
+
+#FIND_LIBRARY(HAS_VGUI_GTK vgui_gtk
+#${allvxl_BINARY_DIR}/oxl/vgui/impl/gtk )
+
+#IF(HAS_VGUI_GTK)
+
+#  LINK_DIRECTORIES(${allvxl_BINARY_DIR}/oxl/vgui/impl/gtk)
+#  LINK_LIBRARIES(vgui_gtk);
+
+#ENDIF(HAS_VGUI_GTK)
 
