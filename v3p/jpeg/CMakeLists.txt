@@ -1,8 +1,8 @@
 # v3p/jpeg/CMakeLists.txt
 
-INCLUDE( ${MODULE_PATH}/FindNativeJPEG.cmake )
+INCLUDE( ${MODULE_PATH}/FindJPEG.cmake )
 
-IF(NOT HAS_NATIVE_JPEG)
+IF(VXL_USING_NATIVE_JPEG)
 
 SET( jpeg_sources
   jconfig.h
@@ -64,4 +64,4 @@ SET( jpeg_sources
 
 ADD_LIBRARY( jpeg ${jpeg_sources} )
 
-ENDIF(NOT HAS_NATIVE_JPEG)
+ENDIF(VXL_USING_NATIVE_JPEG)
