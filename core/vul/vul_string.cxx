@@ -2,6 +2,7 @@
 
 #include "vul_string.h"
 
+#include <vcl_cassert.h>
 #include <vcl_cstdlib.h>
 #include <vcl_cstring.h>
 #include <vcl_cctype.h>
@@ -246,4 +247,107 @@ bool vul_string_to_bool(const vcl_string &str)
      ||  myequals(begin, end, s1, s1+1)
      ||  myequals(begin, end, son, son+2);
 }
+
+//: Expand any environment variables in the string.
+// Expands "foo$VARfoo" to "foobarfoo" when $VAR=bar. If
+// both $VAR and $VARfoo exists, an arbitrary choice will
+// be made of which variable to use. This problem can
+// be avoided by using the syntax "foo${VAR}foo." There
+// are no inbuilt variables like in shell scripting, and
+// variable names cannot contain whitespace or "$"s. "$$"
+// can be used to insert a literal "$" in to the output.
+// \returns false if a matching variable could not be found.
+bool vul_string_expand_var(vcl_string &str)
+{
+  vcl_string::size_type i = 0; // index to current char.
+  
+  // If there is a problem, carry on trying to convert rest
+  bool success=true; //  of string, but remember failure.
+
+  enum {not, start_var, in_var, in_bracket_var} state = not;
+  vcl_string::size_type var_begin;
+
+  while (i<str.size())
+  {
+    switch (state)
+    {
+    case not: // not currently in a variable
+      if (str[i] == '$')
+      {
+        state = start_var;
+        var_begin = i;
+      }
+      break;
+    case start_var: // just started a variable
+      if (str[i] == '$')
+      {
+        str.erase(i,1);
+        state=not;
+        continue;
+      }
+      else if (str[i] == '{')
+      {
+        state=in_bracket_var;
+        break;
+      }
+      else // or this is the first letter of the variable, in which case go through
+        state=in_var;
+    case in_var:  // in a non-bracketed variable
+      assert(var_begin+1 < str.size());
+      assert(i > var_begin);
+      if (str[i] == '$')
+      { // no dollars allowed - assume we missed last variable and this is a new one.
+        success=false;
+        state = start_var;
+        var_begin = i;
+        break;
+      }
+      else
+      {
+        const char * value= vcl_getenv(str.substr(var_begin+1, i-var_begin).c_str());
+        if (value)
+        {
+          str.replace(var_begin, i+1-var_begin, value);
+          i = var_begin + vcl_strlen(value);
+          state=not;
+          continue;
+        }
+      }
+      break;
+    case in_bracket_var:  // in a bracketed variable
+      if (str[i] == '}')
+      {
+        assert(var_begin+2 < str.size());
+        assert(i > var_begin+1);
+        state=not;
+        if (i==var_begin+2) // empty variable name
+        {
+          success=false;
+          break;
+        }
+        else
+        {
+          const char * value= vcl_getenv(str.substr(var_begin+2, i-var_begin-2).c_str());
+          if (value)
+          {
+            str.replace(var_begin, i+1-var_begin, value);
+            i = var_begin + vcl_strlen(value);
+            continue;
+          }
+          else
+            success=false;
+        }
+      }
+      break;
+    }
+    ++i;
+  }
+  return success;
+}
+
+
+
+
+
+
 

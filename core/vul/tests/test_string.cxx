@@ -2,6 +2,7 @@
 #include <vcl_iostream.h>
 #include <testlib/testlib_test.h>
 #include <vul/vul_string.h>
+#include <vpl/vpl.h>
 
 void test_string()
 {
@@ -64,6 +65,26 @@ void test_string()
   TEST("vul_string_to_bool(Not \"FALSE\")", vul_string_to_bool("FALSE"), false);
   TEST("vul_string_to_bool(Not \"0\")", vul_string_to_bool("0"), false);
   TEST("vul_string_to_bool(Not \"onwibble\")", vul_string_to_bool("onwibble"), false);
+
+
+  vpl_putenv("VUL_1=foo");
+  vpl_putenv("VUL_2=bar");
+  {
+    vcl_string s("wibble$VUL_1wobble");
+    TEST("vul_string_expand_var", vul_string_expand_var(s), true);
+    TEST("vul_string_expand_var", s, "wibblefoowobble");
+  }
+  {
+    vcl_string s("wibble$VUL_3wobble$VUL_2splat${VUL_1}");
+    TEST("vul_string_expand_var", vul_string_expand_var(s), false);
+    TEST("vul_string_expand_var", s, "wibble$VUL_3wobblebarsplatfoo");
+  }
+  {
+    vcl_string s("wibble$$$VUL_1 wobble${}");
+    TEST("vul_string_expand_var", vul_string_expand_var(s), false);
+    TEST("vul_string_expand_var", s, "wibble$foo wobble${}");
+  }
+
 }
 
 TESTMAIN(test_string);

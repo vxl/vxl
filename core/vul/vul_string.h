@@ -54,4 +54,15 @@ extern double vul_string_atof(vcl_string const& s);
 // It ignores leading and trailing whitespace and capitalisation.
 extern bool vul_string_to_bool(const vcl_string &str);
 
+//: Expand any environment variables in the string.
+// Expands "foo$VARfoo" to "foobarfoo" when $VAR=bar. If
+// both $VAR and $VARfoo exists, an arbitrary choice will
+// be made of which variable to use. This problem can
+// be avoided by using the syntax "foo${VAR}foo." There
+// are no inbuilt variables like in shell scripting. "$$"
+// can be used to insert a literal "$" in to the output.
+// \returns false if a matching variable could not be found.
+extern bool vul_string_expand_var(vcl_string &str);
+
+
 #endif // vul_string_h
