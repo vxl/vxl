@@ -343,22 +343,12 @@ SOURCE=.\vnl_io_vector.txx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vnl_io_matrix_fixed.h
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\vnl_io_sym_matrix.h
 
 # End Source File
 # Begin Source File
 
 SOURCE=.\vnl_io_sym_matrix.txx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_io_vector_fixed.h
 
 # End Source File
 # End Group
