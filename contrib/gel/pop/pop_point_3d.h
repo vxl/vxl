@@ -12,15 +12,12 @@
 //            Peter Tu April 2003
 //            General Electric
 //
-// \verbatim
-// \endverbatim
-//
 //-------------------------------------------------------------------------------
-//: this is a 2d point with a coordinate system
 
 #include<vgl/vgl_point_3d.h>
 #include<pop/pop_geometric_object.h>
 
+//: this is a 2d point with a coordinate system
 
 class pop_point_3d:public vgl_point_3d<double>, public pop_geometric_object
 {
@@ -28,7 +25,7 @@ class pop_point_3d:public vgl_point_3d<double>, public pop_geometric_object
   //: constructor
   pop_point_3d(pop_vertex *coordinate_system,vcl_vector<pop_parameter*> &params);
 
-  //: used when this is not a parameteric object
+  //: used when this is not a parametric object
   pop_point_3d(pop_vertex *coordinate_system, double x, double y, double z);
 
   //: destructor
