@@ -117,6 +117,9 @@ public:
 
 // -+-+- required method for filters: -+-+-
   bool section_applyop();
+  
+  //: Use the preop stageto zero this histogram.
+  bool section_preop();
 };
 
 #ifdef INSTANTIATE_TEMPLATES

@@ -47,7 +47,7 @@ int vipl_test_histogram() {
   {
     const unsigned expected_n = 45;
     const int scale = 2;
-    vnl_vector<unsigned> byte_out(expected_n / scale + 1,0);
+    vnl_vector<unsigned> byte_out(expected_n / scale + 1);
     vipl_histogram<vil_image,vnl_vector<unsigned>, unsigned char,unsigned> op(scale);
     op.put_in_data_ptr(&byte_img); op.put_out_data_ptr(&byte_out); op.filter();
 
@@ -61,7 +61,7 @@ int vipl_test_histogram() {
     vcl_cout << byte_out << vcl_endl;
   }
   {
-    vcl_vector<unsigned> byte_out(46,0);
+    vcl_vector<unsigned> byte_out(46);
     vipl_histogram<vil_image,vcl_vector<unsigned>, unsigned char,unsigned> op;
     op.put_in_data_ptr(&byte_img); op.put_out_data_ptr(&byte_out); op.filter();
 

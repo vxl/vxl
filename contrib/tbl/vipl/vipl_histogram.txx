@@ -2,6 +2,7 @@
 #define vipl_histogram_txx_
 
 #include "vipl_histogram.h"
+#include <vcl_algorithm.h>
 
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
 bool vipl_histogram <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(){
@@ -47,6 +48,26 @@ bool vipl_histogram <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(){
   }
   return true;
 }
+
+template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
+bool vipl_histogram <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_preop(){
+  vcl_fill(out_data_ptr()->begin(), out_data_ptr()->end(), DataOut());
+ /* const ImgIn &in = in_data(0);
+  DataIn dummy = DataIn(); // dummy initialization to avoid compiler warning
+  ImgOut &out = *out_data_ptr();
+  int index = indexout();
+//if (index < 0) index = 0;
+//if (index > out.y_size()) index = out.y_size();
+
+//  int maxval = out.x_size()-1;
+  for (Xiterator i = start(X_Axis(),0), ei = stop(X_Axis(),0) ; i < ei ; ++i)
+  {
+    // not fsetpixel !!! cannot assume `bin' will lie inside output image section
+    //setpixel(out, bin, index, 0);
+  }*/
+  return true;
+}
+
 
 
 #endif // vipl_histogram_txx_

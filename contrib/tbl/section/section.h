@@ -102,6 +102,12 @@ public:
   uint   Position(const vcl_size_t pos, const uint i)  const { vcl_size_t p = pos % Offset(i+1); p /= Offset(i); return uint(p); }
   vcl_size_t ROI_start_pos()  const { return Position(ROI_start); }
   vcl_size_t ROI_end_pos()  const { return Position(ROI_end); }
+  
+  const T* begin() const {return buffer;}
+  T*       begin()       {return buffer;}
+
+  const T* end() const {return buffer + GetSize();}
+  T*       end()       {return buffer + GetSize();}
 
 // CONSTRUCTORS / DESTRUCTORS:
 
