@@ -15,14 +15,14 @@
 // Fields are -1 if not matched.
 class oxp_parse_seqname {
 public:
-  vcl_string filename;
-  int start;
-  int step;
-  int end;
-  
+  vcl_string filename_;
+  int start_;
+  int step_;
+  int end_;
+
   oxp_parse_seqname(char const* s);
   oxp_parse_seqname(vcl_string const& s);
-  
+
   void parse(char const* s);
 };
 

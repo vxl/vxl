@@ -26,12 +26,12 @@ oxp_parse_seqname::oxp_parse_seqname(vcl_string const& s)
 // Assignment
 void oxp_parse_seqname::parse(char const* s)
 {
-  start = -1;
-  step = -1;
-  end = -1;
+  start_ = -1;
+  step_ = -1;
+  end_ = -1;
 
   // First match any trailing ",n[:n]:[n]" (can use ; or ,)
-  filename = s;
+  filename_ = s;
   vul_reg_exp re("[,;]([0-9]+)(:[0-9]+)?:([0-9]+)?$");
   if (re.find(s)) {
     vcl_string match_start = re.match(1);
@@ -39,26 +39,25 @@ void oxp_parse_seqname::parse(char const* s)
     vcl_string match_end = re.match(3);
 
     int last = re.start(0);
-    filename = filename.substr(0,last);
+    filename_ = filename_.substr(0,last);
 
     vul_printf(vcl_cerr, "oxp_parse_seqname: %s [%s:%s:%s]  -> ",
-           filename.c_str(),
+           filename_.c_str(),
            match_start.c_str(), match_step.c_str()+1, match_end.c_str());
 
 
     if (match_start.length() > 0)
-      start = vcl_atoi(match_start.c_str());
+      start_ = vcl_atoi(match_start.c_str());
 
     if (match_step.length() > 0)
-      step = vcl_atoi(match_step.c_str()+1);
+      step_ = vcl_atoi(match_step.c_str()+1);
 
     if (match_end.length() > 0)
-      end = vcl_atoi(match_end.c_str());
+      end_ = vcl_atoi(match_end.c_str());
 
-    vul_printf(vcl_cerr, "[%d:%d:%d]\n", start, step, end);
+    vul_printf(vcl_cerr, "[%d:%d:%d]\n", start_, step_, end_);
 
   } else if (vcl_strchr(s, ',')) {
     vul_printf(vcl_cerr, "oxp_parse_seqname: Warning: \"%s\" contains a comma, but didn't match my regexp.\n", s);
   }
-
 }

@@ -30,10 +30,10 @@ MovieFile::MovieFile(char const* filename, int start, int step, int end):
   tmp_buf_(0)
 {
   oxp_parse_seqname range(filename);
-  vcl_string fn = range.filename;
-  if (range.start != -1) start_ = range.start;
-  if (range.step  != -1) step_  = range.step;
-  if (range.end   != -1) end_   = range.end;
+  vcl_string fn = range.filename_;
+  if (range.start_ != -1) start_ = range.start_;
+  if (range.step_  != -1) step_  = range.step_;
+  if (range.end_   != -1) end_   = range.end_;
 #ifndef WIN32
   // Attempt to open for reading.  If it exists, assume it's a movie file.
   // not on windows, it will create it if it doesn't exist...

@@ -27,14 +27,14 @@ void SequenceFileName::init(char const* s, int start_frame, int step, char const
 {
   // First match any trailing ",n[:n]:[n]" (can use ; or ,)
   oxp_parse_seqname range(s);
-  if (range.start != -1) start_frame = range.start;
-  if (range.step != -1) step = range.step;
-  end_ = range.end;
+  if (range.start_ != -1) start_frame = range.start_;
+  if (range.step_ != -1) step = range.step_;
+  end_ = range.end_;
 
   if (end_ == -1)
     end_ = 9999999;
 
-  fmt_ = range.filename;
+  fmt_ = range.filename_;
   ext_ = "";
   start_frame_ = start_frame;
   step_ = step;
