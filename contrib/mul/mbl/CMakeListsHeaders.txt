@@ -9,6 +9,7 @@ SOURCE_FILES(mbl_sources
   mbl_data_collector_list.h
   mbl_data_wrapper.h
   mbl_gamma.h
+  mbl_histogram.h
   mbl_k_means.h
   mbl_matrix_products.h
   mbl_matxvec.h
