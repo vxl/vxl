@@ -11,8 +11,12 @@ INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/oxl)
 SUBDIRS(mvl oxp vrml osl)
 
 
-FIND_INCLUDE( HAS_OPENGL GL/gl.h /usr/local/include )
+INCLUDE(${CMAKE_SOURCE_DIR}/CMake/Modules/FindOpenGL.cmake)
 
-IF(HAS_OPENGL)
+
+IF(OPENGL_INCLUDE_PATH)
+
   SUBDIRS(vgui)
-END(HAS_OPENGL)
+
+ENDIF(OPENGL_INCLUDE_PATH)
+
