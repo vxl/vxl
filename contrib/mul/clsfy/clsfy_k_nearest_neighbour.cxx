@@ -1,26 +1,28 @@
 //    Copyright: (C) 2000 British Telecommunications plc
 
 
+#include "clsfy_k_nearest_neighbour.h"
+
 #include <vcl_queue.h>
 #include <vcl_string.h>
-#include <vcl_algorithm.h>
-
-#include <vcl_cassert.h>
-#include <vsl/vsl_indent.h>
-#include <clsfy/clsfy_k_nearest_neighbour.h>
 #include <vcl_utility.h>
+#include <vcl_cassert.h>
+
+#include <vsl/vsl_indent.h>
 #include <vnl/vnl_math.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_vector_io.h>
+
 #include <mbl/mbl_priority_bounded_queue.h>
 
 //: Set the training data.
 void clsfy_k_nearest_neighbour::set(const vcl_vector<vnl_vector<double> > &inputs,
   const vcl_vector<unsigned> &outputs)
 {
-  assert(*vcl_max_element(outputs.begin(), outputs.end()) <= 1); // The class laberls must be 0 or 1.
+  assert(inputs.size() == outputs.size());
   trainInputs_ = inputs;
   trainOutputs_ = outputs;
+
 }
 
 // stuff to get the priority queue to work happily
@@ -86,6 +88,7 @@ unsigned clsfy_k_nearest_neighbour::n_dims() const
 
 
 
+//=======================================================================
 
 //: This value has properties of a Log likelyhood of being in class (binary classifiers only)
 // class probability = exp(logL) / (1+exp(logL))
