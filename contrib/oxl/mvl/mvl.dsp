@@ -627,10 +627,28 @@ SOURCE=".\Templates\vcl_vector+TriTensor-.cxx"
 # Begin Source File
 
 SOURCE=".\Templates\vcl_vector+vcl_map+int.int--.cxx"
+
+!IF  "$(CFG)" == "mvl - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "mvl - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=".\Templates\vcl_vector+vcl_map+uint.uint--.cxx"
+
+!IF  "$(CFG)" == "mvl - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "mvl - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 

@@ -110,10 +110,28 @@ SOURCE=".\Templates\ImageWarp+RGB+byte--.cxx"
 # Begin Source File
 
 SOURCE=.\ImageWarp.cxx
+
+!IF  "$(CFG)" == "oxp - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "oxp - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=".\Templates\map+string.string-.cxx"
+
+!IF  "$(CFG)" == "oxp - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "oxp - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
@@ -150,6 +168,15 @@ SOURCE=.\SGIMovieFilePrivates.cxx
 # Begin Source File
 
 SOURCE=".\Templates\vector+char-.cxx"
+
+!IF  "$(CFG)" == "oxp - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "oxp - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
@@ -158,6 +185,15 @@ SOURCE=".\Templates\vector+SGIMV_Variables-.cxx"
 # Begin Source File
 
 SOURCE=".\Templates\vector+vector+int--.cxx"
+
+!IF  "$(CFG)" == "oxp - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "oxp - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
