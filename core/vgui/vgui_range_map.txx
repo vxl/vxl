@@ -101,17 +101,17 @@ compute_byte_table(const Type min, const Type max, const Type gamma,
     for (unsigned int i = 0; i < size_; i++)
       bmap[i] = map_pixel_byte(Type(i), min, max, gamma, ratio);
   else
+  {
+    //The values have to be shifted by min
+    int mint = vil_pixel_traits<Type>::minval();
+    int maxt = vil_pixel_traits<Type>::maxval();
+    for (int i = mint; i <= maxt; i++)
     {
-      //The values have to be shifted by min
-      int mint = vil_pixel_traits<Type>::minval();
-      int maxt = vil_pixel_traits<Type>::maxval();
-      for(int i = mint; i <= maxt; i++) 
-        {
-          Type arg = (Type)i;//eliminate warnings
-          bmap[i-mint] = map_pixel_byte(arg, min, max, gamma, ratio);
-        }
+      Type arg = (Type)i;//eliminate warnings
+      bmap[i-mint] = map_pixel_byte(arg, min, max, gamma, ratio);
     }
-	return bmap;
+  }
+  return bmap;
 }
 
 // Hardware mapping cannot support signed Types
@@ -125,14 +125,13 @@ compute_float_table(const Type min, const Type max, const Type gamma,
     return null;
   vcl_vector<float> fmap(size_);
   unsigned maxt = vil_pixel_traits<Type>::maxval();
-  for(int i = 0; i <= maxt; i++) 
-    {
-      Type arg = (Type)i;//eliminate warnings
-      fmap[i] = map_pixel_float(arg, min, max, gamma, ratio);
-    }
+  for (int i = 0; i <= maxt; i++)
+  {
+    Type arg = (Type)i;//eliminate warnings
+    fmap[i] = map_pixel_float(arg, min, max, gamma, ratio);
+  }
   return fmap;
 }
-
 
 template <class Type>
 vgui_range_map<Type>::vgui_range_map(vgui_range_map_params const& rmp)
@@ -153,17 +152,17 @@ vgui_range_map<Type>::vgui_range_map(vgui_range_map_params const& rmp)
 
   //The table is not mapable so it will be necessary to compute
   //the mapping on the fly
-  if(!table_mapable_)
+  if (!table_mapable_)
     size_ = 0;
 }
 
 template <class Type>
 vgui_range_map<Type>::~vgui_range_map()
 {
-
 }
-//: The offset for signed, non field, types so that negative values can be 
-//  used as table index entries.
+
+// The offset for signed, non field, types so that negative values can be
+// used as table index entries.
 template <class Type>
 int vgui_range_map<Type>::offset()
 {
