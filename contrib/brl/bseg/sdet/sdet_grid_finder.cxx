@@ -268,7 +268,8 @@ double grid_profile_matcher::calculate_grid_offset(int n_grid_lines, double spac
   {
     for (int offset = -max_offset; offset < max_offset; offset++)
     {
-      grid_profile[i*spacing+offset] = ((double)(max_offset - vcl_abs(offset)))/(max_offset);
+      grid_profile[i*spacing+offset] = ((double)(max_offset - 
+						 vcl_abs(double(offset))))/(max_offset);
     }
   }
   //  vcl_cout << "___GRID PROFILE__\n";
