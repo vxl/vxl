@@ -44,7 +44,7 @@ class vgui_displaylist3D_tableau : public vgui_displaybase_tableau, public vgui_
 };
 
 //: Creates a smart-pointer to a vgui_displaylist3D_tableau.
-struct vgui_displaylist3D_tableau_new : vgui_displaylist3D_tableau_sptr
+struct vgui_displaylist3D_tableau_new : public vgui_displaylist3D_tableau_sptr
 {
   //: Constructor - create a default vgui_displaylist3D_tableau.
   vgui_displaylist3D_tableau_new( ) 

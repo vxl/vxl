@@ -85,7 +85,7 @@
 // the satellites call dob::handle with a 1 or a 2, so dob knows
 // which way to pass it on...
 template <class object, class data>
-struct vgui_satellite_tableau_t : vgui_tableau
+struct vgui_satellite_tableau_t : public vgui_tableau
 {
   typedef bool (object::*method)(vgui_event const &, data );
 
@@ -130,7 +130,7 @@ protected:
 //
 //  See vgui_satellite_tableau_t to see what a satellite does.
 template <class object>
-struct vgui_satellite_tableau : vgui_tableau
+struct vgui_satellite_tableau : public vgui_tableau
 {
   typedef bool (object::*method)(vgui_event const &);
 
@@ -165,7 +165,7 @@ protected:
 #endif
 
 template <class object, class data>
-struct vgui_satellite_tableau_t_new : vgui_tableau_sptr_t<vgui_satellite_tableau_t<object, data> quirk(vgui_tableau_sptr)>
+struct vgui_satellite_tableau_t_new : public vgui_tableau_sptr_t<vgui_satellite_tableau_t<object, data> quirk(vgui_tableau_sptr)>
 {
   // no vgui_make_sptr: this file must be maintained manually.
   typedef vgui_satellite_tableau_t<object, data> impl;
@@ -177,7 +177,7 @@ struct vgui_satellite_tableau_t_new : vgui_tableau_sptr_t<vgui_satellite_tableau
 
 //----------------------------------------------------------------------------
 template <class object>
-struct vgui_satellite_tableau_new : vgui_tableau_sptr_t<vgui_satellite_tableau<object> quirk(vgui_tableau_sptr)>
+struct vgui_satellite_tableau_new : public vgui_tableau_sptr_t<vgui_satellite_tableau<object> quirk(vgui_tableau_sptr)>
 {
   // no vgui_make_sptr: this file must be maintained manually.
   typedef vgui_satellite_tableau<object> impl;

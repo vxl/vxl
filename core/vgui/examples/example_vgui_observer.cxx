@@ -18,7 +18,7 @@
 #include <vgui/vgui_window.h>
 #include <vgui/vgui_macro.h>
 
-struct example_window_title_setter : vgui_observer
+struct example_window_title_setter : public vgui_observer
 {
   char **argv;
   vgui_deck_tableau_sptr deck;

@@ -10,7 +10,7 @@
 #include <vgui/vgui_tableau.h>
 
 // example of a tableau which has an associated menu :
-struct joe_tab : vgui_tableau
+struct joe_tab : public vgui_tableau
 {
   vcl_string msg;
   vgui_menu the_menu;

@@ -45,7 +45,7 @@ class vgui_drag_tableau : public vgui_tableau, public vgui_drag_mixin
 };
 
 //: Creates a smart-pointer to a vgui_drag_tableau.
-struct vgui_drag_tableau_new : vgui_drag_tableau_sptr
+struct vgui_drag_tableau_new : public vgui_drag_tableau_sptr
 {
   //: Constructor - create a default vgui_drag_tableau.
   vgui_drag_tableau_new() : vgui_drag_tableau_sptr(new vgui_drag_tableau) { }
