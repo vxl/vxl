@@ -448,7 +448,7 @@ void strk_tracker::correlate_face(strk_correlated_face* cf)
 
   sx+=tx; sy+=ty;
 #ifdef DEBUG
-  vcl_cout << "Initial corr("<< tx << ' ' << ty << ")= " << this->compute_correlation(cf, tx, ty)<< '\n';
+  vcl_cout << "Initial corr("<< tx << ' ' << ty << ")= " << this->compute_correlation(cf)<< '\n';
 #endif // DEBUG
   //refine the position of the sample so that translation falls below a threshold
   bool done = false;
@@ -473,8 +473,8 @@ void strk_tracker::correlate_face(strk_correlated_face* cf)
   }
   c = this->compute_correlation(cf);
 #ifdef DEBUG
-  vcl_cout << "Final corr(" << sx << " " << sy << " " << sth << " " << psc
-           << ")= " << vcl_sqrt(c) << '\n';
+  vcl_cout << "Final corr(" << sx << ' ' << sy << ' ' << sth << ' ' << psc
+           << ") = " << vcl_sqrt(c) << '\n';
 #endif //DEBUG
   cf->set_correlation((float)vcl_sqrt(c));
 }
