@@ -8,7 +8,7 @@
 #include "gevd_bufferxy.h"
 
 #include <vcl_compiler.h>
-#if defined(VCL_VC) || defined(VCL_SUNPRO_CC_50) || defined(VCL_SGI_CC) || defined(VCL_GCC_30)
+#if defined(VCL_VC) || defined(VCL_SUNPRO_CC_50) || defined(VCL_SGI_CC) || defined(VCL_GCC_30) || defined(__INTEL_COMPILER)
 #define iostream_char char
 #else
 #define iostream_char unsigned char
@@ -22,7 +22,7 @@ void gevd_bufferxy::Init(int x, int y, int b)
   SetSizeX(x);
   SetSizeY(y);
 
-  // Set the pointers apropriately
+  // Set the pointers appropriately
   typedef unsigned char * byteptr;
   yra = new byteptr[y];
   xra = new unsigned int[x];
