@@ -10,6 +10,7 @@ DECLARE( test_triangle_scan_iterator );
 DECLARE( test_ellipse_scan_iterator );
 DECLARE( test_area );
 DECLARE( test_clip );
+DECLARE( test_h_matrix_2d );
 
 void
 register_tests()
@@ -24,6 +25,7 @@ register_tests()
   REGISTER( test_ellipse_scan_iterator );
   REGISTER( test_area );
   REGISTER( test_clip );
+  REGISTER( test_h_matrix_2d );
 }
 
 
