@@ -13,15 +13,21 @@
 #include <vcl_cassert.h>
 
 //: Least recently used cache
-// I is the index type
-// V is the value type
+// This cache is optimised for speed and is not very memory efficient.
+// \param I is the index type
+// \param V is the value type
 template <class I, class V>
 class mbl_lru_cache
 {
+  //: Allow least recently used item to be found quickly $O(1)$.
   typedef vcl_list<I> list_type;
-  typedef vcl_map<I, vcl_pair<V, list_type::iterator> > map_type;
+  //: Allow least recently used item to be found quickly $O(1)$.
   list_type l_;
+
+  //: Allow value to be looked up quickly $O(\log(n))$ given index.
+  typedef vcl_map<I, vcl_pair<V, list_type::iterator> > map_type;
   map_type m_;
+  //: Limit of cache size.
   unsigned long n_;
 
 public:
@@ -32,15 +38,17 @@ public:
   //: Create a cache of size n.
   // The actual memory size of the cache will be
   // n * (sizeof(V) + 2*sizeof(I) + overhead(map element) + overhead(list element).
-  // for many implementations overhead(list element) = 2 * sizeof(void *), and
-  // overhead(list element) = 3 * sizeof(void *) + sizeof(enum).
+  //
+  // For many implementations overhead(list element) = 2 * sizeof(void *), and
+  // overhead(map element) = 3 * sizeof(void *) + sizeof(enum).
+  //
   // e.g. on a 32 bit computer, where I is a pair<unsigned, unsigned> and
   // V is a double, memory size = n * (8 + 16 + 16 + 8).
   // This makes the cache 17% space efficient - not very good.
   mbl_lru_cache(unsigned n):  n_(n) {}
 
-  //: lookup index in the cache
-  // \return 0 if not in the cache.
+  //: Lookup index in the cache
+  // \return A pointer ot the value if it is in the cache, or 0 if not .
   const V* lookup(const I& index)
   {
     assert (m_.size() == l_.size());
@@ -57,8 +65,8 @@ public:
 
 
   //: Insert this value into the cache.
-  // For speed this method assumes that the index isn;t already in the cache.
-  // \param dont_if_full if true, and the cache is full,
+  // For speed this method assumes that the index isn't already in the cache.
+  // \param dont_if_full If true, and the cache is full,
   // then the cache will not be modified.
   void insert(const I& index, const V& value, bool dont_if_full=false)
   {

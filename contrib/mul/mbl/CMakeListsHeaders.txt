@@ -23,5 +23,6 @@ mbl_rbf_network.h
 mbl_index_sort.h
 mbl_read_int.h
 mbl_read_double.h
+mbl_lru_cache.h
 )
 
