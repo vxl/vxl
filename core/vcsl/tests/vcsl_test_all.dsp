@@ -88,14 +88,6 @@ LINK32=link.exe
 
 SOURCE=.\vcsl_test_all.cxx
 # End Source File
-# Begin Source File
-
-SOURCE=.\Templates/vbl_smart_ptr+derived_impl-.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates/vbl_smart_ptr+base_impl-.cxx
-# End Source File
 # End Group
 # Begin Group "Header Files"
 
