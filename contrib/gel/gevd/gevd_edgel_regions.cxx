@@ -712,10 +712,10 @@ bool gevd_edgel_regions::InitRegionArray(vcl_vector< vtol_edge_2d_sptr>& sg)
   if (!this->GroupContainsEdges(sg))
     return false;
 
-  double xmin;
-  double ymin;
-  double xmax;
-  double ymax;
+  double xmin = 1e33; // dummy initialisation
+  double ymin = 1e33;
+  double xmax = -1e33;
+  double ymax = -1e33;
   vsol_box_2d_sptr b;
   vcl_vector<vtol_edge_2d_sptr>::iterator i;
 
