@@ -1,18 +1,15 @@
 #include "vsl_harris.h"
 
-#include <vcl/vcl_climits.h> // CHAR_BIT
 #include <vcl/vcl_cmath.h>
 #include <vcl/vcl_cstdlib.h>
 #include <vcl/vcl_cassert.h>
 #include <vcl/vcl_iostream.h>
+#include <vcl/vcl_iomanip.h>
 #include <vcl/vcl_fstream.h>
 #include <vcl/vcl_vector.h>
 #include <vcl/vcl_algorithm.h>
 #include <vcl/vcl_functional.h>
 
-#include <vbl/vbl_printf.h>
-
-#include <vil/vil_image.h>
 #include <vil/vil_image_as.h>
 #include <vil/vil_memory_image_of.h>
 
@@ -20,168 +17,140 @@
 #include <vsl/vsl_convolve.h>
 #include <vsl/internals/droid.h> //name
 
-//--------------------------------------------------------------
-
-vsl_harris::vsl_harris(vsl_harris_params const & params) 
-  : vsl_harris_params(params) 
-  , image_ptr(0) 
-  , image_gradx_ptr(0) 
-  , image_grady_ptr(0) 
-  , image_fxx_ptr(0) 
-  , image_fxy_ptr(0) 
-  , image_fyy_ptr(0) 
-  , image_cornerness_ptr(0) 
-  , image_cornermax_ptr(0)
-  , _params(*this)
-  , image_w(0)
-  , image_h(0)
-{ 
-}
-
-vsl_harris::~vsl_harris() {
-  uninit_module();
-}
-
 //------------------------------------------------------------
 
-//: initialization of buffers.
-void vsl_harris::init_module (vil_image const &image) {
-  // only reallocate if the size changes :
-  if ((image_h != image.height ()) || (image_w !=image.width ())) {
-    // store size :
-    image_h = image.height();
-    image_w = image.width();
-    
-    if (image_ptr) 
-      uninit_module();
-    
-    // set up response images etc.
-    image_ptr            = new vil_byte_buffer   (image_w, image_h);
-    image_gradx_ptr      = new vil_int_buffer    (image_w, image_h);
-    image_grady_ptr      = new vil_int_buffer    (image_w, image_h);
-    image_fxx_ptr        = new vil_float_buffer  (image_w, image_h);
-    image_fxy_ptr        = new vil_float_buffer  (image_w, image_h);
-    image_fyy_ptr        = new vil_float_buffer  (image_w, image_h);
-    image_cornerness_ptr = new vil_float_buffer  (image_w, image_h);
-    image_cornermax_ptr  = new vil_bool_buffer   (image_w, image_h);
-  }
+void vsl_harris::prepare_buffers(int w, int h)
+{
+  // remember size.
+  image_h = h;
+  image_w = w;
+
+  if (params_.verbose)
+    cerr << "Doing harris on image region "
+	 << image_h << " by " << image_w << endl
+	 << "Maximum no of corners                     = " << params_.corner_count_max << endl
+	 << "Gaussian sigma                            = " << params_.gauss_sigma << endl
+	 << "Expected ratio lowest/max corner strength = " << params_.relative_minimum << endl
+	 << "Auto-correlation scale factor             = " << params_.scale_factor << endl
+	 << "Computing cornerness operator response...." << flush;
   
-  /* set up window. */
+  // response images (no realloc performed unless size actually changes).
+  image_buf           .resize(image_w, image_h);
+  image_gradx_buf     .resize(image_w, image_h);
+  image_grady_buf     .resize(image_w, image_h);
+  image_fxx_buf       .resize(image_w, image_h);
+  image_fxy_buf       .resize(image_w, image_h);
+  image_fyy_buf       .resize(image_w, image_h);
+  image_cornerness_buf.resize(image_w, image_h);
+  image_cornermax_buf .resize(image_w, image_h);
+  
+  // set up window
   window_str.row_start_index = 0;
   window_str.col_start_index = 0;
   window_str.row_end_index = image_h-1;
   window_str.col_end_index = image_w-1;
+}
   
-  // copy input image to byte buffer.
-  vil_image_as_byte(image).get_section(image_ptr->get_buffer(), 0, 0, image_w, image_h);
-}
-
-void vsl_harris::uninit_module() {
-#define macro(ptr) { delete ptr; ptr=0; }
-  macro(image_ptr);
-  macro(image_fxx_ptr);
-  macro(image_fxy_ptr);
-  macro(image_fyy_ptr);
-  macro(image_gradx_ptr);
-  macro(image_grady_ptr);
-  macro(image_cornerness_ptr);
-  macro(image_cornermax_ptr);
-#undef macro
-}
-
-//-----------------------------------------------------------------------------
-
-void vsl_harris::compute(vil_image const &image) {
-  // set up bitmaps etc :
-  this->init_module(image);
+void vsl_harris::compute_gradients(vil_image const &image) 
+{
+  // copy input image to byte buffer
+  vil_image_as_byte(image).get_section(image_buf.get_buffer(), 0, 0, image_w, image_h);
   
-  // compute cornerness map :
-  if (verbose)
-    cerr << "Doing harris on image region "
-	 << image_h << " by " << image_w << endl
-	 << "Maximum no of corners                     = " << _params.corner_count_max << endl
-	 << "Gaussian sigma                            = " << _params.gauss_sigma << endl
-	 << "Expected ratio lowest/max corner strength = " << _params.relative_minimum << endl
-	 << "Auto-correlation scale factor             = " << _params.scale_factor << endl
-	 << "Computing cornerness operator response...." << flush;
-  compute_response(); // sets corner_max
-  if (verbose)
-    cerr << "  done" << endl;
-
-  // do the relevant harris flavours :
-  int final;
-
-  if (_params.adaptive) {
-    do_adaptive(); 
-    // cryptic comment: OK, now thresholding on thresh_lo will get only the goodies.
-    final = dr_store_corners (0.0);
-  }
-  else {
-    double corner_min = _params.relative_minimum * corner_max;
-    do_non_adaptive(&corner_min);
-    final = dr_store_corners (corner_min);
-  }
-  cerr << "vsl_harris: Final corner count " << final << endl;
-}
-
-
-//--------------------------------------------------------------------------------
-
-//: compute the cornerness map and its maximum value.
-void vsl_harris::compute_response() {
-  if (verbose)
+  // compute gradients
+  if (params_.verbose)
     cerr << " gradient" << flush;
+
+  // trim the window
   window_str.row_start_index += 2;
   window_str.col_start_index += 2;
   window_str.row_end_index   -= 2;
   window_str.col_end_index   -= 2;
   droid::compute_gradx_grady (&window_str,
-			      image_ptr,
-			      image_gradx_ptr,
-			      image_grady_ptr);
+			      &image_buf,
+			      &image_gradx_buf,
+			      &image_grady_buf);
+}
 
-  if (verbose)
+void vsl_harris::compute_2nd_moments()
+{
+  // compute 2nd moment matrices
+  if (params_.verbose)
     cerr << " fxx,fxy,fyy" << flush;
   window_str.row_start_index += 2;
   window_str.col_start_index += 2;
   window_str.row_end_index   -= 2;
   window_str.col_end_index   -= 2;
   droid::compute_fxx_fxy_fyy (&window_str,
-			      image_gradx_ptr,
-			      image_grady_ptr,
-			      image_fxx_ptr,
-			      image_fxy_ptr,
-			      image_fyy_ptr);
+			      &image_gradx_buf,
+			      &image_grady_buf,
+			      &image_fxx_buf,
+			      &image_fxy_buf,
+			      &image_fyy_buf);
   
-  if (verbose)
-    cerr << " convolution" << flush;
-
   // create smoothing kernel
   vsl_1d_half_kernel<double> gauss_mask;
-  vsl_create_gaussian (double(_params.gauss_sigma), &gauss_mask);
+  vsl_create_gaussian (double(params_.gauss_sigma), &gauss_mask);
 
-  // use as temporary. *** overwrites current cornerness map ***.
-  vil_float_buffer *tmp = image_cornerness_ptr;
-  // we don't need this.
-  vsl_roi_window dummy_window_str;
-  if (_params.pab_emulate) {
-    vsl_convolve(&window_str, &dummy_window_str, &gauss_mask, image_fxx_ptr, tmp);// This was 
-    vsl_convolve(&window_str, &dummy_window_str, &gauss_mask, image_fxy_ptr, tmp);// probably
-    vsl_convolve(&window_str, &window_str,       &gauss_mask, image_fyy_ptr, tmp);// <- a bug.
+  // smoothe the 2nd moment matrix maps
+  if (params_.verbose)
+    cerr << " convolution" << flush;
+  { // we use the cornerness map as a temporary scratch area.
+    vil_memory_image_of<float> *tmp = &image_cornerness_buf;
+    vsl_convolve(&window_str, &gauss_mask, &image_fxx_buf, tmp);
+    vsl_convolve(&window_str, &gauss_mask, &image_fxy_buf, tmp);
+    vsl_convolve(&window_str, &gauss_mask, &image_fyy_buf, tmp);
   }
-  else {
-    vsl_convolve(&window_str, &dummy_window_str, &gauss_mask, image_fxx_ptr, tmp);
-    vsl_convolve(&window_str, &dummy_window_str, &gauss_mask, image_fxy_ptr, tmp);
-    vsl_convolve(&window_str, &dummy_window_str, &gauss_mask, image_fyy_ptr, tmp);
-  }
-  
-  if (verbose)
+
+  // trim the window :
+  window_str.row_start_index += (gauss_mask.count-1);
+  window_str.row_end_index   -= (gauss_mask.count-1);
+  window_str.col_start_index += (gauss_mask.count-1);
+  window_str.col_end_index   -= (gauss_mask.count-1);
+}
+
+void vsl_harris::compute_cornerness()
+{
+  // compute cornerness map
+  if (params_.verbose)
     cerr << " cornerness" << flush;
   corner_max = droid::compute_cornerness (&window_str,
-					  image_fxx_ptr,image_fxy_ptr,image_fyy_ptr,
-					  _params.scale_factor,
-					  image_cornerness_ptr);
+					  &image_fxx_buf,
+					  &image_fxy_buf,
+					  &image_fyy_buf,
+					  params_.scale_factor,
+					  &image_cornerness_buf);
+  //
+  if (params_.verbose)
+    cerr << "  done" << endl;
+}
 
+void vsl_harris::compute_corners()
+{
+  // do the relevant harris flavours :
+  double corner_min;
+  if (params_.adaptive) {
+    corner_min = 0.0;
+    do_adaptive(); 
+  }
+  else {
+    corner_min = params_.relative_minimum * corner_max;
+    do_non_adaptive(&corner_min);
+  }
+
+
+  // store the corners found.
+  cc.clear();
+  for (int row = window_str.row_start_index; row < window_str.row_end_index; row++) {
+    for (int col = window_str.col_start_index; col < window_str.col_end_index; col++) {
+      if (image_cornermax_buf[row][col] && image_cornerness_buf[row][col] > corner_min) {
+	double x, y;
+	if (droid::compute_subpixel_max (&image_cornerness_buf, row, col, x,y, params_.pab_emulate))
+	  cc.push_back(vcl_pair<float, float>(params_.col_start_index+x, 
+					      params_.row_start_index+y));
+      }
+    }
+  }
+  cerr << "vsl_harris: Final corner count " << cc.size() << endl;
 }
 
 //--------------------------------------------------------------------------------
@@ -190,43 +159,43 @@ void vsl_harris::compute_response() {
 void vsl_harris::do_non_adaptive(double *corner_min) {
   int maxima_count = droid::find_corner_maxima (*corner_min,
 						&window_str,
-						image_cornerness_ptr,
-						image_cornermax_ptr);
+						&image_cornerness_buf,
+						&image_cornermax_buf);
 
   // iterate if not enough corners.
   
-  if (verbose) 
+  if (params_.verbose) 
     cerr << "Found " << maxima_count << " corners\n";
   
-  if (maxima_count < (float) _params.corner_count_max * 0.9) {
-    for (int i=0 ; i<10 && maxima_count < (float) _params.corner_count_max * 0.9; i++) {
-      _params.relative_minimum *= 0.5;
-      *corner_min = _params.relative_minimum * corner_max;
-      if (verbose) 
+  if (maxima_count < (float) params_.corner_count_max * 0.9) {
+    for (int i=0 ; i<10 && maxima_count < (float) params_.corner_count_max * 0.9; i++) {
+      params_.relative_minimum *= 0.5;
+      *corner_min = params_.relative_minimum * corner_max;
+      if (params_.verbose) 
 	cerr << "Found " << maxima_count
-	     << "... iterating with relmin = " << _params.relative_minimum
+	     << "... iterating with relmin = " << params_.relative_minimum
 	     << endl;
       maxima_count = droid::find_corner_maxima (*corner_min,
 						&window_str,
-						image_cornerness_ptr,
-						image_cornermax_ptr);
+						&image_cornerness_buf,
+						&image_cornermax_buf);
     }
   }
   
   // too many corners - reset parameters to get max number.
 
-  if (maxima_count > _params.corner_count_max) {
+  if (maxima_count > params_.corner_count_max) {
     *corner_min = droid::compute_corner_min (*corner_min, 
-					    corner_max,
-					    _params.corner_count_max,
-					    &window_str,
-					    image_cornerness_ptr,
-					    image_cornermax_ptr);
+					     corner_max,
+					     params_.corner_count_max,
+					     &window_str,
+					     &image_cornerness_buf,
+					     &image_cornermax_buf);
     
-    _params.relative_minimum = *corner_min / corner_max;
-    if (verbose) 
+    params_.relative_minimum = *corner_min / corner_max;
+    if (params_.verbose) 
       cerr << "vsl_harris: Too many: " << maxima_count
-	   << "... iterating with relmin = " << _params.relative_minimum
+	   << "... iterating with relmin = " << params_.relative_minimum
 	   << endl;
   }
 }
@@ -235,34 +204,36 @@ void vsl_harris::do_non_adaptive(double *corner_min) {
 
 //: internal
 void vsl_harris::do_adaptive() {
-  if (verbose)
-    cerr << "No. of corners before density thresholding= " << _params.corner_count_max << endl;
+  if (params_.verbose)
+    cerr << "No. of corners before density thresholding= " << params_.corner_count_max << endl;
 
-  double corner_min = _params.relative_minimum * corner_max;
+  double corner_min = params_.relative_minimum * corner_max;
   int maxima_count = droid::find_corner_maxima (corner_min,
 						&window_str,
-						image_cornerness_ptr,
-						image_cornermax_ptr);
+						&image_cornerness_buf,
+						&image_cornermax_buf);
   cerr << "harris: " << maxima_count << " corners with response above " << corner_min << endl;
 
   // Store all corners in an array.
-  int TILE_WIDTH = _params.adaptive_window_size; // 32
+  int TILE_WIDTH = params_.adaptive_window_size; // 32
   int row_min = window_str.row_start_index;
   int col_min = window_str.col_start_index;
   int row_max = window_str.row_end_index;
   int col_max = window_str.col_end_index;
 
-  int n_tiles_x = (int)ceil((double)(col_max-col_min) / TILE_WIDTH);
-  int n_tiles_y = (int)ceil((double)(row_max-row_min) / TILE_WIDTH);
+  // number of tiles to use in the x and y directions.
+  int n_tiles_x = (int) ceil(double(col_max-col_min) / TILE_WIDTH);
+  int n_tiles_y = (int) ceil(double(row_max-row_min) / TILE_WIDTH);
 
   double TILE_AREA = TILE_WIDTH*TILE_WIDTH;
 
-  int IDEAL_NUM_PER_TILE = _params.corner_count_max / (n_tiles_x*n_tiles_y);
+  int IDEAL_NUM_PER_TILE = params_.corner_count_max / (n_tiles_x*n_tiles_y);
 
-  if (_params.corner_count_max == 0)
-    IDEAL_NUM_PER_TILE = _params.corner_count_low;
+  if (params_.corner_count_max == 0)
+    IDEAL_NUM_PER_TILE = params_.corner_count_low;
 
-  vbl_printf(cerr, "Tiles %d x %d, NUM_PER_TILE %d\n", n_tiles_x, n_tiles_y, IDEAL_NUM_PER_TILE);
+  cerr << "Tiles " << n_tiles_x << " x " << n_tiles_y 
+       << ", NUM_PER_TILE " << IDEAL_NUM_PER_TILE << endl;
   
   vcl_vector<double> cornerness(maxima_count, 0.0);
 
@@ -275,14 +246,14 @@ void vsl_harris::do_adaptive() {
       int window_col_end_index = vcl_min(window_col_start_index+TILE_WIDTH, col_max);
 
       // get corner strengths in this tile :
-      vil_memory_image_of<bool>        &corner_present  = *image_cornermax_ptr;
-      vil_memory_image_of<float> const &corner_strength = *image_cornerness_ptr;
+      vil_memory_image_of<bool>        &corner_present  = image_cornermax_buf;
+      vil_memory_image_of<float> const &corner_strength = image_cornerness_buf;
       int n = 0;
       for(int row = window_row_start_index; row < window_row_end_index; row++)
 	for(int col = window_col_start_index; col < window_col_end_index; col++)
 	  if (corner_present[row][col])
 	    cornerness[n++] = corner_strength[row][col];
-      vbl_printf(cerr, "%3d ", n);
+      cerr << setw(3) << n << ' ';
 
       //
       double THIS_TILE_AREA = 
@@ -309,20 +280,6 @@ void vsl_harris::do_adaptive() {
 }
 
 //-----------------------------------------------------------------------------
-
-int vsl_harris::dr_store_corners (float corner_min) {
-  cc.clear();
-  typedef vcl_pair<float, float> pair_ff;
-  for (int row = window_str.row_start_index; row < window_str.row_end_index; row++)
-    for (int col = window_str.col_start_index; col < window_str.col_end_index; col++)
-      if ((*image_cornermax_ptr) [row][col] && (*image_cornerness_ptr) [row][col] > corner_min) {
-	double x, y;
-	if (droid::compute_subpixel_max (image_cornerness_ptr, row, col, x,y, _params.pab_emulate))
-	  cc.push_back(pair_ff(col_start_index+x, row_start_index+y));
-      }
-  
-  return cc.size();
-}
 
 // ?? should we append, and not assign ??
 void vsl_harris::get_corners(vcl_vector<vcl_pair<float, float> > &cor) const {

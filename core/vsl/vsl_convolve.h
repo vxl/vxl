@@ -5,42 +5,44 @@
 #include <vsl/vsl_roi_window.h>
 #include <vil/vil_memory_image_of.h>
 
-// fancy :
+// this routine will select the appropriate routine from the ones
+// listed below.
 void vsl_convolve  (vsl_roi_window const *window,
-		    vsl_roi_window *new_window,
 		    vsl_1d_half_kernel<double> const *mask,
-		    vil_float_buffer *image, 
-		    vil_float_buffer *scratch);
+		    vil_memory_image_of<float> *image, 
+		    vil_memory_image_of<float> *scratch);
 
-// plain :
+// there's no good reason why these should be available to clients.
+#if 1
 void vsl_convolve2 (vsl_roi_window const *window, 
 		    vsl_1d_half_kernel<double> const *mask,
-		    vil_float_buffer *image, 
-		    vil_float_buffer *scratch);
+		    vil_memory_image_of<float> *image, 
+		    vil_memory_image_of<float> *scratch);
 
 void vsl_convolve3 (vsl_roi_window const *window, 
 		    vsl_1d_half_kernel<double> const *mask,
-		    vil_float_buffer *image, 
-		    vil_float_buffer *scratch);
+		    vil_memory_image_of<float> *image, 
+		    vil_memory_image_of<float> *scratch);
 
 void vsl_convolve4 (vsl_roi_window const *window,
 		    vsl_1d_half_kernel<double> const *mask,
-		    vil_float_buffer *image,
-		    vil_float_buffer *scratch);
+		    vil_memory_image_of<float> *image,
+		    vil_memory_image_of<float> *scratch);
 
 void vsl_convolve5 (vsl_roi_window const *window, 
 		    vsl_1d_half_kernel<double> const *mask,
-		    vil_float_buffer *image, 
-		    vil_float_buffer *scratch);
+		    vil_memory_image_of<float> *image, 
+		    vil_memory_image_of<float> *scratch);
 
 void vsl_convolve6 (vsl_roi_window const *window, 
 		    vsl_1d_half_kernel<double> const *mask,
-		    vil_float_buffer *image, 
-		    vil_float_buffer *scratch);
+		    vil_memory_image_of<float> *image, 
+		    vil_memory_image_of<float> *scratch);
 
 void vsl_convolven (vsl_roi_window const *window, 
 		    vsl_1d_half_kernel<double> const *mask,
-		    vil_float_buffer *image, 
-		    vil_float_buffer *scratch);
+		    vil_memory_image_of<float> *image, 
+		    vil_memory_image_of<float> *scratch);
+#endif
 
 #endif

@@ -1,6 +1,5 @@
 #ifndef vsl_harris_h
 #define vsl_harris_h
-
 //: The harris corner detector.
 // Parameters :
 //   corner_count_max - maximum no of corners required.
@@ -20,74 +19,73 @@
 //   P.Vanroose  Aug97  _point_list now safer (added AddPoint(); SetPointList() out of use now)
 //   J.Mundy     Jan98  slight modified the interface to correspond to new
 //               style  using parameter blocks and image dispatch
-//   F.Schaffalitzky
-//               Feb 1998 rewrite.
-//               Feb 2000 yet another rewrite, this time for vxl.
-
-#include <vsl/vsl_harris_params.h>
-#include <vsl/vsl_roi_window.h>
 #include <vcl/vcl_iosfwd.h>
 #include <vcl/vcl_vector.h>
 #include <vcl/vcl_utility.h>
-#include <vil/vil_fwd.h>
+#include <vil/vil_memory_image_of.h>
+#include <vsl/vsl_harris_params.h>
+#include <vsl/vsl_roi_window.h>
 
 //: A vsl_harris object stores the internal buffers used by the harris corner detector.
-class vsl_harris : public vsl_harris_params {
+class vsl_harris {
 public:
-  vsl_harris(vsl_harris_params const & params);
-  ~vsl_harris();
+  vsl_harris(vsl_harris_params const & params) : image_w(0), image_h(0), params_(params) { }
   
-  void compute(vil_image const &image);
+  void compute(vil_image const &image) {
+    prepare_buffers(image.width(), image.height());
+    compute_gradients(image);
+    compute_2nd_moments();
+    compute_cornerness();
+    compute_corners();
+  }
+
   void get_corners(vcl_vector<vcl_pair<float, float> > &) const;
   void get_corners(vcl_vector<float> &, vcl_vector<float> &) const;
   void save_corners(ostream &stream) const;
   void save_corners(char const *file) const;
 
-  //------------------------------ computed things ------------------------------
-
-  // These buffers persist between invocations so that 
+  // these buffers persist between invocations so that 
   // unnecessary allocation is not performed (a.stoddart).
+  int image_w, image_h;
 
   // the input image, as a monochrome byte bitmap.
-  vil_byte_buffer *image_ptr;
+  vil_memory_image_of<vil_byte> image_buf;
 
   // gradient bitmaps.
-  vil_int_buffer *image_gradx_ptr;
-  vil_int_buffer *image_grady_ptr;
+  vil_memory_image_of<int>      image_gradx_buf;
+  vil_memory_image_of<int>      image_grady_buf;
 
   // second moment matrix of the gradient vector.
-  vil_float_buffer *image_fxx_ptr;
-  vil_float_buffer *image_fxy_ptr;
-  vil_float_buffer *image_fyy_ptr;
+  vil_memory_image_of<float>    image_fxx_buf;
+  vil_memory_image_of<float>    image_fxy_buf;
+  vil_memory_image_of<float>    image_fyy_buf;
 
   // the cornerness response map and its maximum value.
-  vil_float_buffer *image_cornerness_ptr;
+  vil_memory_image_of<float>    image_cornerness_buf;
   float corner_max;
 
   // local maximum map.
-  vil_bool_buffer *image_cornermax_ptr;
+  vil_memory_image_of<bool>     image_cornermax_buf;
 
   // region of interest ?
   vsl_roi_window window_str;
 
+
+  // These are the stages of algorithm. Clients can call a subset of
+  // these manually in order to insert algorithms of their own choice.
+  void prepare_buffers(int w, int h);
+  void compute_gradients(vil_image const &);
+  void compute_2nd_moments();
+  void compute_cornerness();
+  void compute_corners();
+
+protected:
+  vsl_harris_params params_;
+  vcl_vector<vcl_pair<float, float> > cc; // corners
 private:
-  //------------------------------ private ------------------------------
-
-  vsl_harris_params &_params; // FIXME
-  unsigned image_w, image_h;  // size of input image.
-
-  //
-  void init_module (vil_image const &image);
-  void uninit_module ();
-
-  // these routines driven by compute() :
-  void compute_response();
-
+  // these routines called by compute() :
   void do_non_adaptive(double *corner_min);
   void do_adaptive();
-
-  int  dr_store_corners (float corner_min);
-  vcl_vector<vcl_pair<float, float> > cc; // corners
 };
 
 #endif

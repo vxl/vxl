@@ -1,21 +1,14 @@
 #include "vsl_convolve.h"
-
-#include <vcl/vcl_cmath.h>
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_iostream.h>
-
 #include <vsl/vsl_roi_window.h>
 
 //-----------------------------------------------------------------------------
 
-//: A convolution routine which sets 'new_window'
 // Depending on the mask size, this routine will call the 
 // appropriate float_mask? routine.
 void vsl_convolve (vsl_roi_window const *window, 
-		   vsl_roi_window *new_window,
 		   vsl_1d_half_kernel<double> const *mask,
-		   vil_float_buffer *image,
-		   vil_float_buffer *scratch)
+		   vil_memory_image_of<float> *image,
+		   vil_memory_image_of<float> *scratch)
 {
   switch (mask->count) {
   case 2:
@@ -37,12 +30,6 @@ void vsl_convolve (vsl_roi_window const *window,
     vsl_convolven (window, mask, image, scratch);
     break;
   }
-  
-  // do this at the end because window might be the same as new window.
-  new_window->row_start_index = window->row_start_index+(mask->count-1);
-  new_window->row_end_index = window->row_end_index-(mask->count-1);
-  new_window->col_start_index = window->col_start_index+(mask->count-1);
-  new_window->col_end_index = window->col_end_index-(mask->count-1);
 }
 
 //-----------------------------------------------------------------------------
@@ -50,8 +37,8 @@ void vsl_convolve (vsl_roi_window const *window,
 //: A convolution routine for masks of size 2.
 void vsl_convolve2 (vsl_roi_window const *window,
 		    vsl_1d_half_kernel<double> const *mask,
-		    vil_float_buffer *image,
-		    vil_float_buffer *scratch)
+		    vil_memory_image_of<float> *image,
+		    vil_memory_image_of<float> *scratch)
 {
   int row_min = window->row_start_index;
   int col_min = window->col_start_index+mask->count-1;
@@ -92,8 +79,8 @@ void vsl_convolve2 (vsl_roi_window const *window,
 //: A convolution routine for masks of size 3.
 void vsl_convolve3 (vsl_roi_window const *window,
 		    vsl_1d_half_kernel<double> const *mask,
-		    vil_float_buffer *image,
-		    vil_float_buffer *scratch)
+		    vil_memory_image_of<float> *image,
+		    vil_memory_image_of<float> *scratch)
 {
   int row_min = window->row_start_index;
   int col_min = window->col_start_index+mask->count-1;
@@ -137,8 +124,8 @@ void vsl_convolve3 (vsl_roi_window const *window,
 //: -- A convolution routine for masks of size 4.
 void vsl_convolve4 (vsl_roi_window const *window,
 		    vsl_1d_half_kernel<double> const *mask,
-		    vil_float_buffer *image,
-		    vil_float_buffer *scratch)
+		    vil_memory_image_of<float> *image,
+		    vil_memory_image_of<float> *scratch)
 {
   int row_min = window->row_start_index;
   int col_min = window->col_start_index+mask->count-1;
@@ -185,8 +172,8 @@ void vsl_convolve4 (vsl_roi_window const *window,
 //: A convolution routine for masks of size 5.
 void vsl_convolve5 (vsl_roi_window const *window,
 		    vsl_1d_half_kernel<double> const *mask,
-		    vil_float_buffer *image,
-		    vil_float_buffer *scratch)
+		    vil_memory_image_of<float> *image,
+		    vil_memory_image_of<float> *scratch)
 {
   int row_min = window->row_start_index;
   int col_min = window->col_start_index+mask->count-1;
@@ -236,8 +223,8 @@ void vsl_convolve5 (vsl_roi_window const *window,
 //: A convolution routine for masks of size 7.
 void vsl_convolve6 (vsl_roi_window const *window,
 		    vsl_1d_half_kernel<double> const *mask,
-		    vil_float_buffer *image,
-		    vil_float_buffer *scratch)
+		    vil_memory_image_of<float> *image,
+		    vil_memory_image_of<float> *scratch)
 {
   int row_min = window->row_start_index;
   int col_min = window->col_start_index+mask->count-1;
@@ -288,8 +275,8 @@ void vsl_convolve6 (vsl_roi_window const *window,
 //: A convolution routine for masks of any size.
 void vsl_convolven (vsl_roi_window const *window,
 		    vsl_1d_half_kernel<double> const *mask,
-		    vil_float_buffer *image,
-		    vil_float_buffer *scratch)
+		    vil_memory_image_of<float> *image,
+		    vil_memory_image_of<float> *scratch)
 {    
   int row_min = window->row_start_index;
   int col_min = window->col_start_index+mask->count-1;

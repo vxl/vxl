@@ -1,6 +1,3 @@
-#include <vsl/vsl_harris_params.h>
-#include <vsl/vsl_harris.h>
-
 #include <vcl/vcl_cassert.h>
 #include <vcl/vcl_string.h>
 #include <vbl/vbl_arg.h>
@@ -8,6 +5,8 @@
 #include <vil/vil_image.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
+#include <vsl/vsl_harris_params.h>
+#include <vsl/vsl_harris.h>
 
 // ** please don't make this program interactive. it must be
 // usable in a script, as a filter. **
@@ -22,9 +21,15 @@ int main(int argc,char **argv) {
   vbl_arg_parse(argc,argv);
   
   // load image
-  if (infile() == "-")
-    cerr << "reading image from stdin" << endl;
-  vil_image I = vil_load(infile().c_str());
+  vil_image I;
+  if (infile() == "-") {
+    //cerr << "reading image from stdin" << endl;
+    //I = vil_load(cin);
+    cerr << "cannot read from stdin yet" << endl;
+    return 1;
+  }
+  else
+    I = vil_load(infile().c_str());
   
   // parameters
   vsl_harris_params params;
@@ -49,7 +54,7 @@ int main(int argc,char **argv) {
 
   // cornerness map
   if (cormap.set())
-    vil_save(*H.image_cornerness_ptr, cormap().c_str(), "pnm");
+    vil_save(H.image_cornerness_buf, cormap().c_str(), "pnm");
   
   return 0;
 }
