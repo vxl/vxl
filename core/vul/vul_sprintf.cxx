@@ -13,6 +13,7 @@
 #include <vcl_cstdarg.h>
 #include <vcl_cstring.h>
 #include <vcl_iostream.h>
+#include <vcl_cstdio.h> // for vsprintf()
 
 vul_sprintf::vul_sprintf(char const *fmt, ...) : vcl_string("")
 {
@@ -20,7 +21,7 @@ vul_sprintf::vul_sprintf(char const *fmt, ...) : vcl_string("")
   va_start(ap, fmt);
 
   char s[65536];
-  vsprintf(s, fmt, ap);
+  vcl_vsprintf(s, fmt, ap);
   if (vcl_strlen(s) >= sizeof s)
     vcl_cerr << __FILE__ ": WARNING! Possible memory corruption after call to vsprintf()\n";
   vcl_string::operator=(s);
