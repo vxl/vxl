@@ -46,12 +46,13 @@ main(int argc, char** argv) {
   // The output image:
   vil_memory_image_of<ubyte> out(*src);
   vil_image* dst = &out;
-  
+
   // The noise `width':
   double sigma = (argc < 4) ? 1 : atof(argv[3]);
+  ubyte s = (ubyte)(sigma+0.5); // round to integer
 
   // The filter:
-  vipl_add_random_noise<vil_image,vil_image,ubyte,ubyte VCL_DFL_TMPL_ARG(vipl_trivial_pixeliter)> op(GAUSSIAN_NOISE,sigma);
+  vipl_add_random_noise<vil_image,vil_image,ubyte,ubyte VCL_DFL_TMPL_ARG(vipl_trivial_pixeliter)> op(GAUSSIAN_NOISE,s);
   op.put_in_data_ptr(src);
   op.put_out_data_ptr(dst);
   op.filter();
