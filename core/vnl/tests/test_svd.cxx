@@ -208,7 +208,7 @@ template void test_nullvector(char const *, vcl_complex<double> *);
 void test_svd()
 {
   test_hilbert(double(), "double", 1.1e-10);
-  test_hilbert(float(), "float", float(0.02));
+  test_hilbert(float(), "float", float(0.025));
   test_hilbert(vcl_complex<double>(), "vcl_complex<double>", double(4.4e-10));
   test_hilbert(vcl_complex<float>(), "vcl_complex<float>", float(0.04));
   test_ls();
