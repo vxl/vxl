@@ -73,8 +73,8 @@ vessels in retinal images.  They make heavy use of VIL.  Rensselaer
 has developed and uses robust estimation techniques (in vxl/vnl and
 rpl).
 
-Ian Scott: Using VXL for object finding and recognition.  Forcing
-students to use VXL.  Some of these students have no CS background.
+Ian Scott: Using VXL for object finding and recognition. We indirectly force some
+students to use VXL. Some of these students have no CS background.
 
 Luis Galup: Used TargetJr in the past.  Working on video and tracking.
 Would like to do 3D image processing in VXL.
