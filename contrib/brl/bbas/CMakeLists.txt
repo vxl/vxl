@@ -1,6 +1,9 @@
 # ./brl/bbas/CMakeLists.txt
 # main package for basic operations common to all libraries
 
+# spatial object  algorithms
+SUBDIRS(bsol)
+
 # topology algorithms
 SUBDIRS(btol)
 
