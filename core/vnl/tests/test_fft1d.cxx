@@ -12,8 +12,8 @@
 //-----------------------------------------------------------------------------
 #include <vcl_cstdlib.h> // for abort
 #include <vcl_iostream.h>
+#include <vcl_complex.h>
 
-#include <vnl/vnl_complex.h>
 #include <vnl/vnl_test.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_complex_ops.h>
@@ -48,16 +48,16 @@ void test_fft1d () {
    * create a number of arrays for testing the different constructors
    ************************************************************/
 
-  vnl_vector<vnl_complex<fsm_real> > fTestArrayComplex(ciArraySizeX);
+  vnl_vector<vcl_complex<fsm_real> > fTestArrayComplex(ciArraySizeX);
   vnl_vector<fsm_real> fTestArray(ciArraySizeX);
   vnl_vector<fsm_real> fZeroArray(ciArraySizeX,0.0); // imag == 0.0
   fsm_real *realArray = new fsm_real[ciArraySizeX];
   fsm_real *imagArray = new fsm_real[ciArraySizeX];
-  vnl_complex<fsm_real> *complArray = new vnl_complex<fsm_real>[ciArraySizeX];
+  vcl_complex<fsm_real> *complArray = new vcl_complex<fsm_real>[ciArraySizeX];
   
   //fill with data
   for (int iC = 0;iC < ciArraySizeX;iC ++) {
-      fTestArrayComplex(iC) = vnl_complex<fsm_real> (iC,0.0);
+      fTestArrayComplex(iC) = vcl_complex<fsm_real> (iC,0.0);
       fTestArray(iC) = iC; // for complex default = (iC,0.0)
       realArray[iC] = iC;
       imagArray[iC] = 0.0;
@@ -106,11 +106,11 @@ void test_fft1d () {
   /*
    * the whole thing backwards
    **************************************************/
-  vnl_vector<fsm_real> fBackRealMat = real(VCL_OVERLOAD_CAST(vnl_vector<vnl_complex<fsm_real> >&, oFFTSimple));
-  vnl_vector<fsm_real> fBackImagMat = imag(VCL_OVERLOAD_CAST(vnl_vector<vnl_complex<fsm_real> >&, oFFTSimple));
+  vnl_vector<fsm_real> fBackRealMat = real(VCL_OVERLOAD_CAST(vnl_vector<vcl_complex<fsm_real> >&, oFFTSimple));
+  vnl_vector<fsm_real> fBackImagMat = imag(VCL_OVERLOAD_CAST(vnl_vector<vcl_complex<fsm_real> >&, oFFTSimple));
   fsm_real *realBackArray = fBackRealMat.data_block ();
   fsm_real *imagBackArray = fBackImagMat.data_block ();
-  vnl_complex<fsm_real> *complBackArray = oFFTSimple.data_block ();
+  vcl_complex<fsm_real> *complBackArray = oFFTSimple.data_block ();
 
   // second simplest: a complex array
   vnl_fft1d<fsm_real> oFFTBackSimpleComplex (oFFTSimple, -1);  
