@@ -1,4 +1,4 @@
-USES += contrib/brl contrib/brl/bbas contrib/brl/b3p core v3p/netlib
+USES += contrib/brl contrib/brl/bbas core v3p/netlib
 
 LIBRARY := bnl-algo
 VERSION := 1.0
