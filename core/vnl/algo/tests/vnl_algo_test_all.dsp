@@ -1,24 +1,24 @@
-# Microsoft Developer Studio Project File - Name="vnl_test_all" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="vnl_algo_test_all" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Console Application" 0x0103
 
-CFG=vnl_test_all - Win32 Debug
+CFG=vnl_algo_test_all - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "vnl_test_all.mak".
+!MESSAGE NMAKE /f "vnl_algo_test_all.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "vnl_test_all.mak" CFG="vnl_test_all - Win32 Debug"
+!MESSAGE NMAKE /f "vnl_algo_test_all.mak" CFG="vnl_algo_test_all - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "vnl_test_all - Win32 Release" (based on "Win32 (x86) Console Application")
-!MESSAGE "vnl_test_all - Win32 Debug" (based on "Win32 (x86) Console Application")
+!MESSAGE "vnl_algo_test_all - Win32 Release" (based on "Win32 (x86) Console Application")
+!MESSAGE "vnl_algo_test_all - Win32 Debug" (based on "Win32 (x86) Console Application")
 !MESSAGE 
 
 # Begin Project
@@ -28,7 +28,7 @@ CFG=vnl_test_all - Win32 Debug
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "vnl_test_all - Win32 Release"
+!IF  "$(CFG)" == "vnl_algo_test_all - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -51,7 +51,7 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
 # ADD LINK32 /libpath:"$(VXLROOT)/vcl/$(OUTDIR)" vcl.lib
 
-!ELSEIF  "$(CFG)" == "vnl_test_all - Win32 Debug"
+!ELSEIF  "$(CFG)" == "vnl_algo_test_all - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -79,8 +79,8 @@ LINK32=link.exe
 
 # Begin Target
 
-# Name "vnl_test_all - Win32 Release"
-# Name "vnl_test_all - Win32 Debug"
+# Name "vnl_algo_test_all - Win32 Release"
+# Name "vnl_algo_test_all - Win32 Debug"
 
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx;c"
@@ -91,85 +91,82 @@ SOURCE=.\test_driver.cxx
 SOURCE=.\test_include.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_bignum.cxx
+SOURCE=.\test_util.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_complex.cxx
+SOURCE=.\test_amoeba.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_inverse.cxx
+SOURCE=.\test_complex_eigensystem.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_file_matrix.cxx
+SOURCE=.\test_convolve.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_finite.cxx
+SOURCE=.\test_cpoly_roots.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_math.cxx
+SOURCE=.\test_determinant.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_matlab.cxx
+SOURCE=.\test_fft.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_matrix.cxx
+SOURCE=.\test_fft1d.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_matrix_exp.cxx
+SOURCE=.\test_fft2d.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_matrix_fixed.cxx
+SOURCE=.\test_functions.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_matrix_fixed_ref.cxx
+SOURCE=.\test_generalized_eigensystem.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_vector_fixed_ref.cxx
+SOURCE=.\test_levenberg_marquardt.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_numeric_traits.cxx
+SOURCE=.\test_minimizers.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_rational.cxx
+SOURCE=.\test_qr.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_real_polynomial.cxx
+SOURCE=.\test_qsvd.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_resize.cxx
+SOURCE=.\test_real_eigensystem.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_sample.cxx
+SOURCE=.\test_rnpoly_roots.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_random.cxx
+SOURCE=.\test_rpoly_roots.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_diag_matrix.cxx
+SOURCE=.\test_rank.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_sym_matrix.cxx
+SOURCE=.\test_sparse_matrix.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_transpose.cxx
+SOURCE=.\test_svd.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_vector.cxx
+SOURCE=.\test_symmetric_eigensystem.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_gamma.cxx
+SOURCE=.\test_cholesky.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_arithmetic.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\basic_operation_timings.cxx
+SOURCE=.\test_algo.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "txx;h"
 # Begin Source File
-SOURCE=.\test_arithmetic_body.h
+SOURCE=.\test_util.h
 # End Source File
 # End Group
 # End Target
