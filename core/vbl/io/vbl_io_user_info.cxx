@@ -1,7 +1,9 @@
 // This is vxl/vbl/io/vbl_io_user_info.cxx
 
+#include <vcl_cstdlib.h> // vcl_abort()
 #include <vbl/vbl_user_info.h>
 #include <vbl/io/vbl_io_user_info.h>
+
 //=========================================================================
 //: Binary save self to stream.
 void vsl_b_write(vsl_b_ostream &os, const vbl_user_info & p)
@@ -15,7 +17,6 @@ void vsl_b_write(vsl_b_ostream &os, const vbl_user_info & p)
   vsl_b_write(os, p.full_name);
   vsl_b_write(os, p.shell);
   vsl_b_write(os, p.passwd);
-
 }
 //=========================================================================
 //: Binary load self from stream.
@@ -37,9 +38,8 @@ void vsl_b_read(vsl_b_istream &is, vbl_user_info & p)
 
   default:
     vcl_cerr << "vsl_b_read() Unknown version number "<< v << vcl_endl;
-    abort();
+    vcl_abort();
   }
-
 }
 
 
@@ -49,10 +49,9 @@ void vsl_print_summary(vcl_ostream& os,const vbl_user_info & p)
 {
       os<<"( uid,gid,name,home_directory,full_name,shell,passwd="<<
       p.uid<<","<<p.gid<<","<<p.name<<
-      " home_directory,full_name,shell=" << 
+      " home_directory,full_name,shell=" <<
       p.home_directory<<","<< p.full_name<<","<<p.shell<<
       " passwd="<<
       p.passwd<<")";
-
 }
 
