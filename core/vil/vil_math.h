@@ -21,7 +21,7 @@ inline void vil2_math_sum(sumT& sum, const vil2_image_view<imT>& im, unsigned p)
   for (;row!=row_end;row+=jstep)
   {
     const imT* v_end = row + row_len;
-	for (const imT* v = row;v!=v_end;v+=istep) sum+=*v;
+    for (const imT* v = row;v!=v_end;v+=istep) sum+=*v;
   }
 }
 
@@ -48,7 +48,7 @@ inline void vil2_math_sum_squares(sumT& sum, sumT& sum_sq, const vil2_image_view
   for (;row!=row_end;row+=jstep)
   {
     const imT* v_end = row + row_len;
-	for (const imT* v = row;v!=v_end;v+=istep) { sum+=*v; sum_sq+=(*v)*(*v); }
+    for (const imT* v = row;v!=v_end;v+=istep) { sum+=*v; sum_sq+=(*v)*(*v); }
   }
 }
 
@@ -106,8 +106,8 @@ void vil2_math_scale_and_offset_values(vil2_image_view<imT>& image, double scale
 // \relates vil2_image_view
 template<class aT, class bT, class sumT>
 void vil2_math_image_sum(const vil2_image_view<aT>& imA,
-                    const vil2_image_view<bT>& imB,
-                    vil2_image_view<sumT>& im_sum)
+                         const vil2_image_view<bT>& imB,
+                         vil2_image_view<sumT>& im_sum)
 {
   unsigned ni = imA.ni(),nj = imA.nj(),np = imA.nplanes();
   assert(imB.ni()==ni && imB.nj()==nj && imB.nplanes()==np);
@@ -130,7 +130,7 @@ void vil2_math_image_sum(const vil2_image_view<aT>& imA,
       const bT* pixelB = rowB;
       sumT* pixelS = rowS;
       for (unsigned i=0;i<ni;++i,pixelA+=istepA,pixelB+=istepB,pixelS+=istepS)
-	    *pixelS = sumT(*pixelA)+sumT(*pixelB);
+        *pixelS = sumT(*pixelA)+sumT(*pixelB);
     }
   }
 }
@@ -139,8 +139,8 @@ void vil2_math_image_sum(const vil2_image_view<aT>& imA,
 // \relates vil2_image_view
 template<class aT, class bT, class sumT>
 void vil2_math_image_difference(const vil2_image_view<aT>& imA,
-                    const vil2_image_view<bT>& imB,
-                    vil2_image_view<sumT>& im_sum)
+                                const vil2_image_view<bT>& imB,
+                                vil2_image_view<sumT>& im_sum)
 {
   unsigned ni = imA.ni(),nj = imA.nj(),np = imA.nplanes();
   assert(imB.ni()==ni && imB.nj()==nj && imB.nplanes()==np);
@@ -163,7 +163,7 @@ void vil2_math_image_difference(const vil2_image_view<aT>& imA,
       const bT* pixelB = rowB;
       sumT* pixelS = rowS;
       for (unsigned i=0;i<ni;++i,pixelA+=istepA,pixelB+=istepB,pixelS+=istepS)
-	    *pixelS = sumT(*pixelA)-sumT(*pixelB);
+        *pixelS = sumT(*pixelA)-sumT(*pixelB);
     }
   }
 }
@@ -172,8 +172,8 @@ void vil2_math_image_difference(const vil2_image_view<aT>& imA,
 // \relates vil2_image_view
 template<class aT, class bT, class sumT>
 void vil2_math_image_abs_difference(const vil2_image_view<aT>& imA,
-                    const vil2_image_view<bT>& imB,
-                    vil2_image_view<sumT>& im_sum)
+                                    const vil2_image_view<bT>& imB,
+                                    vil2_image_view<sumT>& im_sum)
 {
   unsigned ni = imA.ni(),nj = imA.nj(),np = imA.nplanes();
   assert(imB.ni()==ni && imB.nj()==nj && imB.nplanes()==np);
@@ -196,7 +196,7 @@ void vil2_math_image_abs_difference(const vil2_image_view<aT>& imA,
       const bT* pixelB = rowB;
       sumT* pixelS = rowS;
       for (unsigned i=0;i<ni;++i,pixelA+=istepA,pixelB+=istepB,pixelS+=istepS)
-	    *pixelS = vcl_fabs(sumT(*pixelA)-sumT(*pixelB));
+        *pixelS = vcl_fabs(sumT(*pixelA)-sumT(*pixelB));
     }
   }
 }
@@ -207,7 +207,7 @@ void vil2_math_image_abs_difference(const vil2_image_view<aT>& imA,
 // \relates vil2_image_view
 template<class aT, class bT, class scaleT>
 void vil2_math_add_image_fraction(vil2_image_view<aT>& imA, scaleT fa,
-                             const vil2_image_view<bT>& imB, scaleT fb)
+                                  const vil2_image_view<bT>& imB, scaleT fb)
 {
   unsigned ni = imA.ni(),nj = imA.nj(),np = imA.nplanes();
   assert(imB.ni()==ni && imB.nj()==nj && imB.nplanes()==np);
@@ -225,7 +225,7 @@ void vil2_math_add_image_fraction(vil2_image_view<aT>& imA, scaleT fa,
       aT* pixelA = rowA;
       const bT* pixelB = rowB;
       for (unsigned i=0;i<ni;++i,pixelA+=istepA,pixelB+=istepB)
-	    *pixelA = aT(fa*(*pixelA)+fb*(*pixelB));
+        *pixelA = aT(fa*(*pixelA)+fb*(*pixelB));
     }
   }
 }
@@ -238,7 +238,7 @@ void vil2_math_add_image_fraction(vil2_image_view<aT>& imA, scaleT fa,
 // \relates vil2_image_view
 template<class aT, class sumT>
 void vil2_math_integral_image(const vil2_image_view<aT>& imA,
-                        vil2_image_view<sumT>& im_sum)
+                              vil2_image_view<sumT>& im_sum)
 {
   assert(imA.nplanes()==1);
   unsigned ni = imA.ni(),nj = imA.nj();
@@ -259,11 +259,11 @@ void vil2_math_integral_image(const vil2_image_view<aT>& imA,
   // For subsequent rows, include sum from row above as well
   int prev_j = -jstepS;
   rowA += jstepA; rowS += jstepS;
-  for (unsigned j=0;j<nj;++j,rowA += jstepA,rowS += jstepS)
+  for (unsigned j=1;j<nj;++j,rowA += jstepA,rowS += jstepS)
   {
     pixelA = rowA;
     pixelS = rowS;
-	sum = 0;
+    sum = 0;
     for (unsigned i=0;i<ni;++i,pixelA+=istepA,pixelS+=istepS)
     { sum+= *pixelA; *pixelS=sum + pixelS[prev_j];}
   }
@@ -305,27 +305,27 @@ void vil2_math_integral_sqr_image(const vil2_image_view<aT>& imA,
   for (int i=0;i<ni;++i,pixelA+=istepA,pixelS+=istepS,pixelS2+=istepS2)
   {
     sum+= *pixelA; *pixelS=sum;
-	sum2+=sumT(*pixelA)*sumT(*pixelA); *pixelS2=sum2;
+    sum2+=sumT(*pixelA)*sumT(*pixelA); *pixelS2=sum2;
   }
 
   // For subsequent rows, include sum from row above as well
   int prev_j = -jstepS;
   int prev_j2 = -jstepS2;
   rowA += jstepA; rowS += jstepS; rowS2 += jstepS2;
-  for (unsigned j=0;j<nj;++j,rowA += jstepA,rowS += jstepS,rowS2 += jstepS2)
+  for (unsigned j=1;j<nj;++j,rowA += jstepA,rowS += jstepS,rowS2 += jstepS2)
   {
     pixelA  = rowA;
     pixelS  = rowS;
     pixelS2 = rowS2;
-	sum = 0; sum2 = 0;
+    sum = 0; sum2 = 0;
     for (unsigned i=0;i<ni;++i,pixelA+=istepA,pixelS+=istepS,pixelS2+=istepS2)
     {
-	  sum+= *pixelA;
-	  *pixelS=sum + pixelS[prev_j];
-	  sum2+=sumT(*pixelA)*sumT(*pixelA);
-	  *pixelS2 = sum2 + pixelS2[prev_j2];
-	}
+      sum+= *pixelA;
+      *pixelS=sum + pixelS[prev_j];
+      sum2+=sumT(*pixelA)*sumT(*pixelA);
+      *pixelS2 = sum2 + pixelS2[prev_j2];
+    }
   }
 }
 
-#endif
+#endif // vil2_math_h_
