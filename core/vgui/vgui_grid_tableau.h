@@ -1,6 +1,6 @@
+// This is oxl/vgui/vgui_grid_tableau.h
 #ifndef vgui_grid_tableau_h_
 #define vgui_grid_tableau_h_
-// This is oxl/vgui/vgui_grid_tableau.h
 
 //:
 // \file
@@ -40,13 +40,13 @@ bool operator==(vgui_grid_tableau_data const &a,
 //  and (m-1,n-1) in the bottom right.
 //
 //  The default behaviour of vgui_grid is to keep a list of every tableau
-//  added to the grid (using add_next to add to the next free position 
+//  added to the grid (using add_next to add to the next free position
 //  or add_at to add at a specific grid position).  Users can flip through
 //  this list of tableaux, 'tabs', by clicking in the grid position they
 //  wish to change, and using PageUp and PageDown to go through the list.
-//  When a new tableau is added using add_at the old tableau at that position 
-//  is kept in the 'tabs' list and can still be viewed by using PageUp and 
-//  PageDown.  Each grid position provides a view of the deck of tableaux kept 
+//  When a new tableau is added using add_at the old tableau at that position
+//  is kept in the 'tabs' list and can still be viewed by using PageUp and
+//  PageDown.  Each grid position provides a view of the deck of tableaux kept
 //  in 'tabs'.  A tableau will only be removed from 'tabs' by using remove_at.
 //
 //  By default, the user can make the grid larger or smaller by using
@@ -54,17 +54,18 @@ bool operator==(vgui_grid_tableau_data const &a,
 //
 //  These default behaviours can be changed using set_uses_paging_events and
 //  set_grid_size_changeable.  This stops vgui_grid using the events, but
-//  still passes them down to the child tableaux.  By disabling PageUp and 
-//  PageDown you can prevent users from changing the displayed tableau - this 
-//  could also be useful if you want to show two vgui_deck tableau and so want 
-//  the PageUp and PageDown events to pass through vgui_grid and be used by the 
-//  child decks. Disabling plus and minus events gives a grid tableau of fixed size.  
+//  still passes them down to the child tableaux.  By disabling PageUp and
+//  PageDown you can prevent users from changing the displayed tableau - this
+//  could also be useful if you want to show two vgui_deck tableau and so want
+//  the PageUp and PageDown events to pass through vgui_grid and be used by the
+//  child decks. Disabling plus and minus events gives a grid tableau of fixed size.
 //
 //  This tableau was originally written for xcv, so look at this application to get
 //  a better idea what it does.
+
 class vgui_grid_tableau : public vgui_polytab
 {
-public:
+ public:
   typedef vgui_grid_tableau_data grid_data;
 
   //: Returns the type name of the tableau (vgui_grid_tableau in this case).
@@ -158,10 +159,10 @@ public:
   //: Handle any events matching the {vgui_event_condition}s.
   bool handle(const vgui_event&);
 
-protected:
+ protected:
   ~vgui_grid_tableau();
 
-private:
+ private:
   // The number of rows and columns can be changed.
   vgui_event_condition cond_row_add;     // CTRL =
   vgui_event_condition cond_row_remove;  // CTRL -
