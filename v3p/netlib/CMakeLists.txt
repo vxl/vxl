@@ -203,6 +203,40 @@ SOURCE_FILES( netlib_sources
   zung2r
   zunghr
   zungqr
+# Added by fsm for generalized chur
+  dgecon.c
+  dgemm.c
+  dgeqrf.c
+  dgesc2.c
+  dgetc2.c
+  dggbak.c
+  dggbal.c
+  dgges.c
+  dgghrd.c
+  dhgeqz.c
+  dlacon.c
+  dlag2.c
+  dlagv2.c
+  dlanhs.c
+  dlarfb.c
+  dlarft.c
+  dlascl.c
+  dlaswp.c
+  dlatdf.c
+  dlatrs.c
+  dorgqr.c
+  dorgr2.c
+  dormqr.c
+  drscl.c
+  dtgex2.c
+  dtgexc.c
+  dtgsen.c
+  dtgsy2.c
+  dtgsyl.c
+  dtrmm.c
+  dtrmv.c
+  dtrsv.c
+  i_dnnt.c
 )
 
 IF( BUILD_TESTS)
