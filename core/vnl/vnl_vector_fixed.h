@@ -25,6 +25,7 @@
 #include "vnl_vector.h"
 #include "vnl_vector_ref.h"
 #include "vnl_matrix.h" // outerproduct
+#include <vcl_deprecated.h> // mark x(), y(), z(), t() as deprecated
 
 
 //: Fixed length  stack-stored, space-efficient vector.
@@ -211,33 +212,31 @@ class vnl_vector_fixed
   //  data_block()[0] is the first element of the vector
   T      * data_block() { return data_; }
 
- private:
   //:
   // \deprecated Use v[0] instead
-  const T& x() const { return (*this)[0]; }
+  const T& x() const { VXL_DEPRECATED("vnl_vector_fixed<T>::x()"); return (*this)[0]; }
   //:
   // \deprecated Use v[1] instead
-  const T& y() const { return (*this)[1]; }
+  const T& y() const { VXL_DEPRECATED("vnl_vector_fixed<T>::y()"); assert(n>=1); return (*this)[1]; }
   //:
   // \deprecated Use v[2] instead
-  const T& z() const { return (*this)[2]; }
+  const T& z() const { VXL_DEPRECATED("vnl_vector_fixed<T>::z()"); assert(n>=2); return (*this)[2]; }
   //:
   // \deprecated Use v[3] instead
-  const T& t() const { return (*this)[3]; }
+  const T& t() const { VXL_DEPRECATED("vnl_vector_fixed<T>::t()"); assert(n>=3); return (*this)[3]; }
 
   //:
   // \deprecated Use v[0] instead
-  T& x() { return (*this)[0]; }
+  T& x() { VXL_DEPRECATED("vnl_vector_fixed<T>::x()"); return (*this)[0]; }
   //:
   // \deprecated Use v[1] instead
-  T& y() { return (*this)[1]; }
+  T& y() { VXL_DEPRECATED("vnl_vector_fixed<T>::y()"); assert(n>=1); return (*this)[1]; }
   //:
   // \deprecated Use v[2] instead
-  T& z() { return (*this)[2]; }
+  T& z() { VXL_DEPRECATED("vnl_vector_fixed<T>::z()"); assert(n>=2); return (*this)[2]; }
   //:
   // \deprecated Use v[3] instead
-  T& t() { return (*this)[3]; }
- public:
+  T& t() { VXL_DEPRECATED("vnl_vector_fixed<T>::t()"); assert(n>=3); return (*this)[3]; }
 
   //----------------------------------------------------------------------
   // Conversion to vnl_vector_ref.
