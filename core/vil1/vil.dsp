@@ -101,15 +101,23 @@ SOURCE=".\Templates\vil_convolve_simple+byte.byte.int.int-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vil_convolve_simple+byte.float.float.byte-.cxx"
+SOURCE=".\Templates\vil_convolve_simple+byte.float.byte.float-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vil_convolve_simple+byte.float.float.int-.cxx"
+SOURCE=".\Templates\vil_convolve_simple+byte.float.float.float-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vil_convolve_simple+byte.float.float.short-.cxx"
+SOURCE=".\Templates\vil_convolve_simple+byte.float.int.float-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vil_convolve_simple+byte.float.short.float-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vil_convolve_simple+byte.short.short.int-.cxx"
 # End Source File
 # Begin Source File
 

@@ -16,7 +16,7 @@
 
 //--------------------------------------------------------------------------------
 
-template <class I1, class I2, class AC, class O>
+template <class I1, class I2, class O, class AC>
 void vil_convolve_simple(I1 const* const* input1, unsigned w1, unsigned h1,
 			 I2 const* const* input2, unsigned w2, unsigned h2,
 			 O       * const* out,
@@ -58,7 +58,7 @@ void vil_convolve_simple(I1 const* const* input1, unsigned w1, unsigned h1,
   }
 }
 
-template <class I1, class I2, class AC, class O>
+template <class I1, class I2, class O, class AC>
 void vil_convolve_simple(vil_memory_image_of<I1> const &input1,    // input 1
 			 int x1, int y1, unsigned w1, unsigned h1,
 			 vil_memory_image_of<I2> const &input2,    // input 2
@@ -91,20 +91,20 @@ void vil_convolve_simple(vil_memory_image_of<I1> const &input1,    // input 1
   trace << out.size() << " rasters in out" << endl;
 
   // call the even simpler routine
-  vil_convolve_simple/*<I1, I2, AC, O>*/(in1.begin(), w1, h1,
+  vil_convolve_simple/*<I1, I2, O, AC>*/(in1.begin(), w1, h1,
 					 in2.begin(), w2, h2,
 					 out.begin(),
 					 (AC*)0);
 }
 
 // out_{off+k} = \sum_{i+j = k} a_{off+i} b_{off+j}
-template <class I1, class I2, class AC, class O>
+template <class I1, class I2, class O, class AC>
 void vil_convolve_simple(vil_memory_image_of<I1> const &in1,
 			 vil_memory_image_of<I2> const &in2,
 			 vil_memory_image_of<O>        &out,
 			 AC *)
 {
-  vil_convolve_simple/*<I1, I2, AC, O>*/(in1.row_array(), in1.width(), in1.height(),
+  vil_convolve_simple/*<I1, I2, O, AC>*/(in1.row_array(), in1.width(), in1.height(),
 					 in2.row_array(), in2.width(), in2.height(),
 					 out.row_array(),
 					 (AC*)0);
@@ -113,14 +113,14 @@ void vil_convolve_simple(vil_memory_image_of<I1> const &in1,
 
 //--------------------------------------------------------------------------------
 
-#define VIL_CONVOLVE_SIMPLE_INSTANTIATE0(I1, I2, AC, O) \
-template void vil_convolve_simple/*<I1, I2, AC, O >*/(I1 const * const [], unsigned, unsigned,  \
+#define VIL_CONVOLVE_SIMPLE_INSTANTIATE0(I1, I2, O, AC) \
+template void vil_convolve_simple/*<I1, I2, O, AC >*/(I1 const * const [], unsigned, unsigned,  \
                                                       I2 const * const [], unsigned, unsigned,  \
                                                       O * const [], \
                                                       AC *);
 
-#define VIL_CONVOLVE_SIMPLE_INSTANTIATE1(I1, I2, AC, O) \
-template void vil_convolve_simple/*<I1, I2, AC, O >*/(vil_memory_image_of<I1> const &, \
+#define VIL_CONVOLVE_SIMPLE_INSTANTIATE1(I1, I2, O, AC) \
+template void vil_convolve_simple/*<I1, I2, O, AC >*/(vil_memory_image_of<I1> const &, \
                                                       int, int, unsigned, unsigned,    \
                                                       vil_memory_image_of<I2> const &, \
                                                       int, int, unsigned, unsigned,    \
@@ -128,8 +128,8 @@ template void vil_convolve_simple/*<I1, I2, AC, O >*/(vil_memory_image_of<I1> co
                                                       int, int, \
                                                       AC *);
 
-#define VIL_CONVOLVE_SIMPLE_INSTANTIATE2(I1, I2, AC, O) \
-template void vil_convolve_simple/*<I1, I2, AC, O >*/(vil_memory_image_of<I1> const &, \
+#define VIL_CONVOLVE_SIMPLE_INSTANTIATE2(I1, I2, O, AC) \
+template void vil_convolve_simple/*<I1, I2, O, AC >*/(vil_memory_image_of<I1> const &, \
                                                       vil_memory_image_of<I2> const &, \
                                                       vil_memory_image_of<O>        &, \
                                                       AC *);
@@ -139,11 +139,11 @@ template void vil_convolve_simple/*<I1, I2, AC, O >*/(vil_memory_image_of<I1> co
 // if someone works out what is going wrong I'd be interested to know.
 #if defined(VCL_GCC_27)
 #undef VIL_CONVOLVE_SIMPLE_INSTANTIATE0
-#define VIL_CONVOLVE_SIMPLE_INSTANTIATE0(I1, I2, AC, O) /* */
+#define VIL_CONVOLVE_SIMPLE_INSTANTIATE0(I1, I2, O, AC) /* */
 #endif
 
 // at last, the macro we've all been waiting for :
-#define VIL_CONVOLVE_SIMPLE_INSTANTIATE(I1, I2, AC, O) \
-VIL_CONVOLVE_SIMPLE_INSTANTIATE0(I1, I2, AC, O); \
-VIL_CONVOLVE_SIMPLE_INSTANTIATE1(I1, I2, AC, O); \
-VIL_CONVOLVE_SIMPLE_INSTANTIATE2(I1, I2, AC, O)
+#define VIL_CONVOLVE_SIMPLE_INSTANTIATE(I1, I2, O, AC) \
+VIL_CONVOLVE_SIMPLE_INSTANTIATE0(I1, I2, O, AC); \
+VIL_CONVOLVE_SIMPLE_INSTANTIATE1(I1, I2, O, AC); \
+VIL_CONVOLVE_SIMPLE_INSTANTIATE2(I1, I2, O, AC)

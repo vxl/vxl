@@ -64,9 +64,11 @@ SOURCES += vil_memory_image_window.cxx
 
 # turn on optimization for the convolution code
 FLAGS_Templates/vil_convolve_simple+byte.byte.int.int-.cxx := $(optimize)
-FLAGS_Templates/vil_convolve_simple+byte.float.float.byte-.cxx := $(optimize)
-FLAGS_Templates/vil_convolve_simple+byte.float.float.int-.cxx := $(optimize)
-FLAGS_Templates/vil_convolve_simple+byte.float.float.short-.cxx := $(optimize)
+FLAGS_Templates/vil_convolve_simple+byte.float.byte.float-.cxx := $(optimize)
+FLAGS_Templates/vil_convolve_simple+byte.float.float.float-.cxx := $(optimize)
+FLAGS_Templates/vil_convolve_simple+byte.float.int.float-.cxx := $(optimize)
+FLAGS_Templates/vil_convolve_simple+byte.float.short.float-.cxx := $(optimize)
+FLAGS_Templates/vil_convolve_simple+byte.short.short.int-.cxx := $(optimize)
 
 # subdirectories
 ifndef NOTEST

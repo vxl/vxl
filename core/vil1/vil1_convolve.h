@@ -22,9 +22,9 @@ template <class T> class vil_memory_image_of;
 //
 // I1 : input image type
 // I2 : input image type
-// AC : accumulator pixel type
 // O  : output image type
-template <class I1, class I2, class AC, class O>
+// AC : accumulator pixel type
+template <class I1, class I2, class O, class AC>
 void vil_convolve_simple(I1 const* const*  in1, unsigned w1, unsigned h1, // input 1
 			 I2 const* const*  in2, unsigned w2, unsigned h2, // input 2
 			 O       * const*  out,                           // ouput
@@ -35,11 +35,11 @@ void vil_convolve_simple(I1 const* const*  in1, unsigned w1, unsigned h1, // inp
 //
 // I1 : input pixel type
 // I2 : input pixel type
-// AC : accumulator pixel type
 // O  : output pixel type
+// AC : accumulator pixel type
 //
 // out_{off+k} = \sum_{i+j = k} a_{off+i} b_{off+j}
-template <class I1, class I2, class AC, class O>
+template <class I1, class I2, class O, class AC>
 void vil_convolve_simple(// input 1
 			 vil_memory_image_of<I1> const &IN1, // input 1
 			 int x1, int y1, unsigned w1, unsigned h1,
@@ -53,7 +53,7 @@ void vil_convolve_simple(// input 1
 // specified regions.
 //
 // out_{off+k} = \sum_{i+j = k} a_{off+i} b_{off+j}
-template <class I1, class I2, class AC, class O>
+template <class I1, class I2, class O, class AC>
 void vil_convolve_simple(vil_memory_image_of<I1> const &input1,
 			 vil_memory_image_of<I2> const &input2,
 			 vil_memory_image_of<O>        &output,
