@@ -43,7 +43,7 @@ public:
   vnl_amoeba(vnl_cost_function& f);
 
   void minimize(vnl_vector<double>& x);
-  int get_num_evaluations() { return num_evaluations_; }
+  int get_num_evaluations() const { return num_evaluations_; }
   
 public:
   static void minimize(vnl_cost_function& f, vnl_vector<double>& x);
