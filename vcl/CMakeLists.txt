@@ -200,7 +200,6 @@ SET( vcl_sources
   emulation/vcl_algobase.h
   emulation/vcl_bool.h
   emulation/vcl_bvector.h
-  emulation/vcl_complex_fwd.h
   emulation/vcl_defalloc.h
   emulation/vcl_functionx.h
   emulation/vcl_hash_set.h
@@ -284,7 +283,6 @@ SET( vcl_sources
   sunpro/vcl_algorithm.txx
   sunpro/vcl_cmath.h
   sunpro/vcl_complex.txx sunpro/vcl_complex.h
-  sunpro/vcl_complex_fwd.h
   sunpro/vcl_cstdlib.h
   sunpro/vcl_deque.txx
   sunpro/vcl_functional.txx
@@ -298,7 +296,6 @@ SET( vcl_sources
 
   win32-vc60/vcl_cmath.h
   win32-vc60/vcl_complex.h
-  win32-vc60/vcl_complex_fwd.h
   win32-vc60/vcl_cstdlib.h
   win32-vc60/vcl_string.h
 
