@@ -206,7 +206,7 @@ light, fast, and not weird.
 
 @section Contents
 
-The core of @vxl{} was defined in Feburary 2000, and comprises five
+The core of @vxl{} was defined in February 2000, and comprises five
 libraries.
 
 @subsection vcl: The C++ compatibility layer.
@@ -218,7 +218,7 @@ vcl would not be necessary, as all compiler vendors would ship perfectly
 compliant systems.  But then, in a perfect world, C++ wouldn't be the only
 choice for high efficiency high-level programming.
 
-Note that vcl is not (any longer) a subirectory of vxl, but sits next to it.
+Note that vcl is not (any longer) a subdirectory of vxl, but sits next to it.
 
 @subsection vbl: Basic Templates.
 The basic templates library contains a small set of generally useful templated
@@ -740,7 +740,7 @@ Of course, if you are just using VXL for your own purposes you may use whatever
 C++ constructs you like, you just can't put them in the core VXL libraries.
 
 The justification for banning certain things in core libraries is to encourage
-the adoption of the core by reducing the possiblility of porting problems.
+the adoption of the core by reducing the possibility of porting problems.
 The justification for allowing it for Level 2 and greater libraries is that
 they are really pretty useful and hard to do without in more complex libraries
 than those in the core (e.g. RTTI for doing things like strategy patterns, or
@@ -818,7 +818,7 @@ using two kinds of templates:
 @item "Export" templates which are explicitly instantiated in the program (despite
       being exported). In VXL, these instantiations all live in the @code{Templates/}
       directories in the source tree and include things like @code{vnl_svd<T>}
-      which only need to be instantiated for a handfull of types anyway.
+      which only need to be instantiated for a handful of types anyway.
 @end itemize
 
 Now, it gets worse. For various reasons it is sometimes advantageous to turn
@@ -942,7 +942,7 @@ class my_class @{
 @end example
 
 In this case you should just include <vcl_string.h>. In the case of stream
-stuff, there is an include file of froward declarations that will work.
+stuff, there is an include file of forward declarations that will work.
 @example
 #include <vcl_iosfwd.h>
 @end example
@@ -1175,7 +1175,7 @@ Optional:
 
 @subsection Lists of numbers
 A very useful specialization also exists to read ranges of numbers.
-Imagine a progam called makemovie which operates on a list of frames,
+Imagine a program called makemovie which operates on a list of frames,
 specified on the command line:
 @example
 makemovie -frames 1:10,9:-1:1,0,0,0,0
@@ -1238,7 +1238,7 @@ using a lot of memory, the system will swap pages in and out of virtual
 memory, and your program will run slowly, but @code{user()} will not report
 it.
 
-Finally, there's a super-convienient @code{print} method, which is used
+Finally, there's a super-convenient @code{print} method, which is used
 to just print the real and user times to a stream without any
 formatting, for quick testing purposes.  Here's an example
 @example
@@ -1390,7 +1390,7 @@ The current draft of the ANSI standard (as at May 1996) includes classes
 for 1-dimensional vectors (@code{valarray<T>}) and complex numbers (@code{
 complex<T>}).  There is no standard for matrices.  The current vnl classes
 are not implemented in terms of @code{valarray}, as there is a potential
-perfomance hit, but in the future they might be.
+performance hit, but in the future they might be.
 
 @section Example: Basic matrix and vector operations
 
@@ -1704,7 +1704,7 @@ your problem so that the leading coefficient (i.e. poly[0]) is equal to 1.
 It is not uncommon in computer vision research to meet problems for which
 there is no known closed-form solution, and a common class of such problems
 are of the form "find @math{x}, @math{y} and @math{z}, such that the
-function @math{f(x,y,z)} takes its minmimum value".  For example, fitting a
+function @math{f(x,y,z)} takes its minimum value".  For example, fitting a
 line to a set of 2D points @{(x_i,y_i) | i=1..n@}. The problem is then
 to find a,b,c to minimize the sum of distances of each point to the line
 (@math{a x + b y + c = 0})
@@ -1899,8 +1899,8 @@ well as more self-documenting) than the equivalent referring to a
 @subsection Transposing for Fortran
 In calling Fortran code, the first difficulty that becomes apparent is that
 Fortran arrays are stored column-wise, while traditional `C' arrays are
-stored rowwise -- a trend that is followed by the @code{vnl_matrix} class.
-One solution is simply to store C++ arrays columnwise, and this was an
+stored row-wise -- a trend that is followed by the @code{vnl_matrix} class.
+One solution is simply to store C++ arrays column-wise, and this was an
 early plan for the IUE.
 
 I have not done anything to alleviate this for two reasons -- most routines
@@ -1923,7 +1923,7 @@ B' A'} from the point of view of the caller.
 
 This however, doesn't apply to the vnl_svd<double>, as algorithms generally require only the
 ``economy-size'' version where size(U) = size(M) in @math{U S V' = M}.  This
-is @math{O(mn^2)} flops rather than @math{O(m^2n)} for the fullsize one.  Using the
+is @math{O(mn^2)} flops rather than @math{O(m^2n)} for the full size one.  Using the
 transpose-equivalence would mean a doubling of the computation time, as the
 ``economy-size'' decomposition is only implemented for @math{m > n}.  If someone
 does need the full size decomposition, a flag could be added or a new @code{vnl_svd}
@@ -1977,7 +1977,7 @@ class written.
 @c @c @page
 @c
 @c @c %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-@c @section Function minimizatio
+@c @section Function minimization
 @c @inputclass{vnl_least_squares_function}
 @c @c @page
 @c
@@ -2005,7 +2005,7 @@ included, listed roughly in order of priority:
 Additional matrix decompositions in the same vein, including an updateable
 QR, a basic LU, etc.
 
-@item Choice of backend functions---for optimization one might prefer Powell,
+@item Choice of back-end functions---for optimization one might prefer Powell,
 or even simulated annealing.  For matrix decompositions, particular users
 might prefer to interface to NAG or IMSL routines.  These choices must be
 allowed to be made easily, thereby encouraging the comparison of algorithms

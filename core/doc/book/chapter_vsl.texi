@@ -155,7 +155,7 @@ If you want to load or save a @code{vgl_point_2d}, you will need to include
 will need to include the vgl_io library.
 For Level-2 libraries, the situation varies. If binary io has been defined at all for a
 level-2 library, it might be included in the library itself, e.g. the io functions for
-vpdfl_gaussian are declared in the same file as the gaussian, @code{vpdfl/vpdfl_gaussian.h>.
+vpdfl_gaussian are declared in the same file as the Gaussian, @code{vpdfl/vpdfl_gaussian.h>}.
 Alternatively, it might be in a clip-on library in the same form as the Level-1 libraries
 above.
 
@@ -173,10 +173,10 @@ There are two cases to consider
 
 The former is the preferred method.
 
-The latter is provided to allow binary IO for thirdparty libraries which cannot be
+The latter is provided to allow binary IO for third-party libraries which cannot be
 modified.  However, for technical reasons (see design notes below) it is also
 used to provide binary IO for the polymorphic hierarchies in the VXL core
-libaries.
+libraries.
 
 @subsubsection IO provided within the class
 
@@ -580,7 +580,7 @@ of complex members and parent classes to that class, only if it is sensible.
 
 Do not give too much information. For instance if your class is a
 container print the number of elements , and then no more than
-perhaps the first 5 elements, with eclipsis to indicate if there
+perhaps the first 5 elements, with ellipsis to indicate if there
 are more.
 
 To aid clear printing the following rule has been to be helpful.
@@ -742,11 +742,11 @@ as pure virtual methods in the .h file.
 There is problem when you want to save an object whose ownership is shared by
 several other objects. The most common way this happens is if several objects
 (A1, A2, ..., An) contain pointers to a single other object B. If all the objects save B,
-when the stream is reloaded, there wil be n copies of B in memory, instead of the
+when the stream is reloaded, there wile be n copies of B in memory, instead of the
 single shared one there was before saving.
 
 If one object can be designated the @emph{owner} (for example if one object, say A1,
-is resposible for deleting B,) then A1 is responsible for saving and loading
+is responsible for deleting B,) then A1 is responsible for saving and loading
 object B. This prevents multiple copies of B being created during loading, but all the
 other A objects do not have their pointer set up correctly.
 
@@ -853,7 +853,7 @@ void vsl_b_read(vsl_b_istream &is, vbl_smart_ptr<T> &p)
   @{
   case 1:
     @{
-      unsigned long id; // Unique serial number indentifying object
+      unsigned long id; // Unique serial number identifying object
       vsl_b_read(is, id);
 
       T * pointer = (T *) is.get_serialisation_pointer(id);
@@ -926,7 +926,7 @@ classes that are members of a level-1 library.
 @enumerate
 @item No level one library can depend on any library except vcl.
 @item We do not wish to `break' any existing code
-@item There is a desire to keep the level 1 libaries small.  IO is available if required.
+@item There is a desire to keep the level 1 libraries small.  IO is available if required.
 @end enumerate
 
 Binary IO for the level-1 libraries (@code{vbl},@code{vil},@code{vgl},@code{vnl})
@@ -1052,7 +1052,7 @@ template void vsl_b_write(vsl_b_ostream &, const vgl_point_2d<T >&)
 
 Here are some examples:
 
-@subsubsection Clipon IO BaseClass Header
+@subsubsection Clip-on IO BaseClass Header
 
 Here is an example of a @file{BaseClassIO.h}
 
@@ -1126,7 +1126,7 @@ void vsl_print_summary(vcl_ostream& os,const BaseClass & b);
 
 @end example
 
-@subsubsection Clipon IO BaseClass Implementation
+@subsubsection Clip-on IO BaseClass Implementation
 
 For a BaseClass, one creates @file{BaseClassIO.cxx} as follows
 
@@ -1260,7 +1260,7 @@ VSL_CLIPON_BINARY_LOADER_INSTANTIATE(BaseClass, BaseClassIO);
 
 @end example
 
-@subsubsection Clipon IO Derived Class Header
+@subsubsection Clip-on IO Derived Class Header
 
 For a DerivedClass, one creates DerivedClassIO header as follows
 
@@ -1322,7 +1322,7 @@ void vsl_print_summary(vcl_ostream& os, const DerivedClass & b);
 
 @end example
 
-@subsubsection Clipon IO Derived Class Implementation
+@subsubsection Clip-on IO Derived Class Implementation
 
 For a DerivedClass, one creates @file{DerivedClassIO.cxx} as follows
 
@@ -1796,7 +1796,7 @@ replaced with something more tolerant. The authors suggest that a suitable behav
 error message, set the error flag on the stream, and return.
 @item Design a format for @code{long double} and add it @code{to vsl_binary_io.h}.
 @item Many of the function and file names do not conform to VXL standards - that each
-function and class should be named after the filestem that declares and defines it.
+function and class should be named after the file-stem that declares and defines it.
 @end enumerate
 
 @section Credits
