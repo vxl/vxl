@@ -171,7 +171,6 @@ inline void vil2_convolve_edge_1d(const srcT* src, unsigned n, int s_step,
 
 //: Convolve kernel[x] (x in [k_lo,k_hi]) with srcT
 // Assumes dest and src same size (nx)
-// \relates vil2_image_view
 template <class srcT, class destT, class kernelT, class accumT>
 inline void vil2_convolve_1d(const srcT* src0, unsigned nx, int s_step,
                              destT* dest0, int d_step,
@@ -205,7 +204,8 @@ inline void vil2_convolve_1d(const srcT* src0, unsigned nx, int s_step,
 //: Convolve kernel[i] (i in [k_lo,k_hi]) with srcT in i-direction
 // On exit dest_im(i,j) = sum src(i+x,j)*kernel(x)  (x=k_lo..k_hi)
 // \param kernel should point to tap 0.
-// dest_im resized to size of src_im.
+// \param dest_im will be resized to size of src_im.
+// \relates vil2_image_view
 template <class srcT, class destT, class kernelT, class accumT>
 inline void vil2_convolve_1d(const vil2_image_view<srcT>& src_im,
                              vil2_image_view<destT>& dest_im,

@@ -16,7 +16,8 @@ inline T vil2_sorted_value(const T* im, const int* offset, T* values,
                            unsigned n, unsigned r)
 {
   for (unsigned i=0;i<n;++i) values[i]=im[offset[i]];
-  vcl_sort(values,values+n);
+//  vcl_sort(values,values+n);
+  vcl_nth_element(values, values+r, values+n);
   return values[r];
 }
 
@@ -38,7 +39,9 @@ inline T vil2_sorted_value(const vil2_image_view<T>& image, unsigned plane,
     if (i<image.ni() && j<image.nj())
       values.push_back(image(i,j,plane));
   }
-  vcl_sort(values.begin(),values.end());
+//  vcl_sort(values.begin(),values.end());
+  vcl_nth_element(values.begin(),values.begin()+unsigned(r*(values.size()-1)),
+    values.end());
   return values[unsigned(r*(values.size()-1))];
 }
 

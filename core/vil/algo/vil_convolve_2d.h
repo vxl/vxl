@@ -13,7 +13,6 @@
 
 //: Evaluate dot product between kernel and src_im
 // Returns  sum_ijp src_im[i*istep+j*jstep+p*pstep]*kernel(i,j,p)
-// \relates vil2_image_view
 template <class srcT, class kernelT, class accumT>
 inline accumT vil2_convolve_2d_at_pt(const srcT *src_im,
                                      int s_istep, int s_jstep, int s_pstep,
