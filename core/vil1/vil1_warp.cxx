@@ -1,5 +1,8 @@
-
 // This is vxl/vil/vil_warp.cxx
+
+#ifdef __GNUC__
+#pragma implementation
+#endif
 
 #include <vcl_cassert.h>
 
