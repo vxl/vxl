@@ -1324,9 +1324,10 @@ main(int argc, char *argv[])
    if (strcmp(png_libpng_ver, PNG_LIBPNG_VER_STRING))
    {
       fprintf(STDERR,
-         "Warning: versions are different between png.h and png.c\n");
+         "Warning: versions are different between png.h and png.c - FAIL\n");
       fprintf(STDERR, "  png.h version: %s\n", PNG_LIBPNG_VER_STRING);
       fprintf(STDERR, "  png.c version: %s\n\n", png_libpng_ver);
+      fprintf(STDERR, "Please make sure that PNG_LIBRARY and PNG_PNG_INCLUDE_DIR are compatible\n");
       ++ierror;
    }
 
@@ -1536,6 +1537,3 @@ main(int argc, char *argv[])
       fprintf(STDERR, "libpng FAILS test\n");
    return (int)(ierror != 0);
 }
-
-/* Generate a compiler error if there is an old png.h in the search path. */
-typedef version_1_2_5 your_png_h_is_not_version_1_2_5;
