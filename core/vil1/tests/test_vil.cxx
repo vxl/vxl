@@ -10,8 +10,9 @@
 
 MAIN( test_vil )
 {
-vcl_string image_base;
-  if ( argc >= 2 ) {
+  vcl_string image_base;
+  if ( argc >= 2 )
+  {
     image_base = argv[1];
 #ifdef VCL_WIN32
     image_base += "\\";
@@ -22,10 +23,9 @@ vcl_string image_base;
 
   START( "vil1_vil" );
 
-  vcl_cout << "*************************\n"
+  vcl_cout << "************************\n"
            << " Testing vil1_vil_*(..)\n"
-           << "*************************\n";
-
+           << "************************\n";
 
   vil_image_view<vxl_byte> image0(10,8);
 
