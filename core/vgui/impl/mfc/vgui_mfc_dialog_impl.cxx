@@ -201,12 +201,14 @@ bool vgui_mfc_dialog_impl::ask()
 
   // -- Ok button
   CButton* accept = 0;
+  int right_of_ok_button;
   if (ok_button_text_.size() > 0) {
     CRect r;
     r.left = width-2*10*8-3*8;
     r.right = r.left+10*8;
     r.top = height-9*8;
     r.bottom = height-5*8;
+    right_of_ok_button = r.right;
     accept = new CButton();
     accept->Create(_T(ok_button_text_.c_str()),
 		   WS_VISIBLE|WS_CHILD|WS_TABSTOP|BS_PUSHBUTTON,
@@ -219,7 +221,7 @@ bool vgui_mfc_dialog_impl::ask()
   CButton* cancel = 0;
   if (cancel_button_text_.size() > 0) {
     CRect r;
-    r.left = r.right+1*8;
+    r.left = right_of_ok_button+1*8;
     r.right = r.left+10*8;
     r.top = height-9*8;
     r.bottom = height-5*8;
