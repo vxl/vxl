@@ -211,7 +211,7 @@ vpdfl_pdf_base* vpdfl_axis_gaussian::clone() const
 
 void vpdfl_axis_gaussian::print_summary(vcl_ostream& os) const
 {
-  os<<vcl_endl;
+  os<<vcl_endl << vsl_indent();
   vpdfl_pdf_base::print_summary(os);
 }
 

@@ -58,7 +58,6 @@ void test_axis_gaussian()
 
   vcl_cout<<"Original Model: "; vsl_print_summary(vcl_cout, gauss0); vcl_cout<<vcl_endl;
   vcl_cout<<"Rebuild  Model: "; vsl_print_summary(vcl_cout, gauss1); vcl_cout<<vcl_endl;
-  vcl_cout<<"  Mean: "; vsl_print_summary(vcl_cout,gauss1.mean()); vcl_cout<<vcl_endl;
 
   TEST("mean of built model",(gauss0.mean()-gauss1.mean()).squared_magnitude()<0.1,true);
   TEST("var. of built model",(gauss0.variance()-gauss1.variance()).squared_magnitude()<0.1,true);

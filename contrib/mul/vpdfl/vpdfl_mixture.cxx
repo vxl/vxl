@@ -198,7 +198,7 @@ vpdfl_pdf_base* vpdfl_mixture::clone() const
 
 void vpdfl_mixture::print_summary(vcl_ostream& os) const
 {
-  os<<vcl_endl;
+  os<<vcl_endl<<vsl_indent();
   vpdfl_pdf_base::print_summary(os);
   os<<vcl_endl;
   for (int i=0;i<component_.size();++i)
