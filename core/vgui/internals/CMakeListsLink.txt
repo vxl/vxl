@@ -2,9 +2,3 @@ LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/oxl/vgui/internals )
 LINK_LIBRARIES( vgui_internals )
 
 INCLUDE(${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindX11.cmake)
-
-IF(WIN32)
-  LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/oxl/vgui/internals/mfc )
-  LINK_LIBRARIES( vgui_mfc )
-ENDIF(WIN32)
-
