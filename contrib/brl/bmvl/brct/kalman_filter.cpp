@@ -328,8 +328,8 @@ void kalman_filter::update_observes(const vnl_double_3x4 &P, int iframe)
     vnl_double_2 z(u.x(), u.y());
     vnl_double_2 z_pred(x.x(), x.y());
 
-    if (is_outlier(z, z_pred))
-      u.set(this->large_num_, this->large_num_);
+    //if (is_outlier(z, z_pred))
+    //  u.set(this->large_num_, this->large_num_);
 
     // set point
     observes_[iframe%queue_size_][i].set_point(u);
@@ -349,21 +349,18 @@ void kalman_filter::update_confidence()
   double normalization_factor = 0;
   for (int i=0; i<num_points_; i++)
   {
-    double dist2 = 0; // square distance
+    double prob = 1; // square distance
 
     for (int f = 0; f<memory_size_; ++f)
     {
-      vgl_point_3d<double> X(curve_3d_[i].x(), curve_3d_[i].y(), curve_3d_[i].z());
-      vgl_point_2d<double> x = brct_algos::projection_3d_point(X, cams[f]);
-      vgl_point_2d<double> u = brct_algos::closest_point(curves_[cur_pos_ - f], x);
+      bugl_gaussian_point_2d<double> x = brct_algos::project_3d_point(cams[f], curve_3d_[i]);
+      vgl_point_2d<double> u = brct_algos::most_possible_point(curves_[cur_pos_ - f], x);
 
-      double dx = x.x() - u.x();
-      double dy = x.y() - u.y();
+	  vnl_double_2 z(x.x(), x.y()), z_matched(u.x(), u.y());
+	  prob *= matched_point_prob(z, z_matched);
+     }
 
-      dist2 += (dx*dx + dy*dy);
-    }
-
-    prob_[i] = vcl_exp(-dist2);
+    prob_[i] = prob;
     normalization_factor += prob_[i];
   }
 
@@ -416,13 +413,11 @@ void kalman_filter::inc()
     //
     // go to the correction step
     //
-    if (!is_outlier(z, z_pred)){
-      Xpred = Xpred +  G_*(z - z_pred)*prob_[i];
+    Xpred = Xpred +  G_*(z - z_pred)*prob_[i];
 
-      vnl_matrix_fixed<double, 6, 6> I;
-      I.set_identity();
-      Q_ = (I - G_*H)*Qpred;
-    }
+    vnl_matrix_fixed<double, 6, 6> I;
+    I.set_identity();
+    Q_ = (I - G_*H)*Qpred;
   }
 
   double dt = time_tick_[cur_pos_] - time_tick_[cur_pos_-1];
@@ -582,7 +577,7 @@ void kalman_filter::init_velocity()
 
 vcl_vector<vgl_point_3d<double> > kalman_filter::get_local_pts()
 {
-  vcl_vector<vgl_point_3d<double> > pts(num_points_);
+  vcl_vector<vgl_point_3d<double> > pts;
 
   double xc=0, yc=0, zc=0;
 
@@ -597,8 +592,12 @@ vcl_vector<vgl_point_3d<double> > kalman_filter::get_local_pts()
   yc /= num_points_;
   zc /= num_points_;
 
-  for (int i=0; i<num_points_; i++)
-    pts[i].set(curve_3d_[i].x()-xc, curve_3d_[i].y()-yc, curve_3d_[i].z()-zc);
+  for (int i=0; i<num_points_; i++){
+	  if(prob_[i] > 0){
+	    vgl_point_3d<double> pt(curve_3d_[i].x()-xc, curve_3d_[i].y()-yc, curve_3d_[i].z()-zc);
+		pts.push_back(pt);
+	  }
+  }
 
   return pts;
 }
@@ -732,12 +731,19 @@ void kalman_filter::init_epipole(double x, double y)
 }
 
 
-bool kalman_filter::is_outlier(vnl_double_2& z, vnl_double_2& z_pred)
+double kalman_filter::matched_point_prob(vnl_double_2& z, vnl_double_2& z_pred)
 {
   // a brutal-force implementation
+  // a more sophisticated one will be implemented in the next phase.
+  // a truncated Gaussian distribution is used.
+
   vnl_double_2 dz = z - z_pred;
-  // no need for sqrt here:
-  return dz[0]*dz[0] + dz[1]*dz[1] > 9.0;
+  double d2 = dz[0]*dz[0] + dz[1]*dz[1];
+
+  if( d2 > 1)
+	  return 0;
+  else
+	  return exp(-d2/2);
 }
 
 

@@ -56,8 +56,8 @@ class kalman_filter
   virtual ~kalman_filter();
 
  protected:
-  //: check whether the matched point is a outlier
-  bool is_outlier(vnl_double_2& z, vnl_double_2& z_pred);
+  //: if the zero probability returned, the matched point is a outlier
+  double matched_point_prob(vnl_double_2& z, vnl_double_2& z_pred);
 
   //: get time interval from ith frame to j-th frame
   vnl_matrix_fixed<double, 6, 6> get_transit_matrix(int i, int j);
