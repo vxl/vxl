@@ -30,7 +30,7 @@
 #endif /* not SINGLE */
 
 #include <stdio.h>
-#include "triangle.h"
+#include "../triangle.h"
 
 #ifndef _STDLIB_H_
 extern void *malloc();
