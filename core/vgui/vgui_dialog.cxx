@@ -14,7 +14,7 @@
 #include <vgui/vgui.h>
 
 #include <vgui/internals/vgui_dialog_impl.h>
-#include <vgui/internals/vgui_dialog_field.h>
+//#include <vgui/internals/vgui_dialog_field.h>
 #include <vgui/internals/vgui_simple_field.h>
 #include <vgui/internals/vgui_string_field.h>
 
@@ -108,6 +108,12 @@ void vgui_dialog::inline_color(const char* label, vcl_string& v){
 }
 void vgui_dialog::message(const char* txt) {
   if (impl) impl->text_message(txt);
+}
+
+void vgui_dialog::inline_tableau(const vgui_tableau_sptr tab, unsigned width, 
+  unsigned height)
+{
+  if (impl) impl->inline_tab(tab, width, height);
 }
 
 void vgui_dialog::set_cancel_button(const char* txt) {

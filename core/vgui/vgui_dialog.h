@@ -44,7 +44,8 @@
 
 #include <vcl_string.h>
 #include <vcl_vector.h>
-class vgui_dialog_field;
+#include <vgui/vgui_tableau.h>
+//class vgui_dialog_field;
 class vgui_dialog_impl;
 
 class vgui_dialog 
@@ -70,17 +71,20 @@ public:
 
   //void choices(const vcl_vector<vcl_string> &,vcl_vector<int> &); // get indices in vcl_vector of strings.
 
-  // file browsers
+  //: File browsers
   void file (const char* label, vcl_string& regexp, vcl_string& filepath);
   //void files(const char *label,vcl_string& regexp, vcl_vector<vcl_string> &);
-  // inline file browser
+  //: inline file browser
   void inline_file(const char* label, vcl_string& regexp,vcl_string& filepath);
-  // color chooser
+  //: Color chooser
   void color (const char* label, vcl_string&);
-  // inline color chooser
+  //: Inline color chooser
   void inline_color(const char *label, vcl_string &);
-  // Text message
+  //: Text message
   void message(const char*);
+
+  //: Display a tableau in the dialog
+  void inline_tableau(const vgui_tableau_sptr tab, unsigned width, unsigned height);
 
   // Set the labels on each button, if 0 that button does not appear.
   void set_cancel_button(const char* label);

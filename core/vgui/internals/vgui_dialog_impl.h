@@ -4,25 +4,20 @@
 #pragma interface
 #endif
 //
-// .NAME vgui_dialog_impl - abstract base class for dialog implementation
-// .LIBRARY vgui
-// .HEADER vxl Package
-// .INCLUDE vgui/internals/vgui_dialog_impl.h
-// .FILE internals/vgui_dialog_impl.cxx
+// This is vgui/internals/vgui_dialog_impl.h
 //
-// .SECTION Description:
-//
-// vgui_dialog_impl is the abstract base class for dialog implementation.
-// It contains methods for adding fields corresponding to those in
-//  vgui_dialog. It also contains a vcl_vector of elements which are tuples of vgui_dialog_field
-// and a variable indicating what type of field they are. The elements also contain
-// void* for implementors to add any gui specific information/class to the element.
-//
-// .SECTION Author:
-//              Philip C. Pritchett, 25 Oct 99
-//              Robotics Research Group, University of Oxford
-//
-// .SECTION Modifications
+//:
+// \file
+// \author Philip C. Pritchett, RRG, University of Oxford
+// \date   25 Oct 99
+// \brief vgui_dialog_impl is the abstract base class for dialog implementation.
+//  It contains methods for adding fields corresponding to those in
+//  vgui_dialog. It also contains a vcl_vector of elements which are tuples of 
+//  vgui_dialog_field and a variable indicating what type of field they are. The 
+//  elements also contain void* for implementors to add any gui specific 
+//  information/class to the element.
+// \verbatim
+//  Modifications:
 //   K.Y.McGaul  25-JAN-00    Moved field functions to this class to save repetition.
 //                            Added virtual _widget functions.
 //                            Added text_message function.
@@ -30,10 +25,13 @@
 //   Marko Bacic 11-JUL-00    Added support for inline file browser
 //   Marko Bacic 12-JUL-00    Added support for inline color chooser
 //   Joris S.    09-NOV-00    Fixed weird color browser things
-//-----------------------------------------------------------------------------
+//   K.Y.McGaul  22-MAY-01    Added tableau field.
+// \endverbatim
+//
 
 #include <vcl_string.h>
 #include <vcl_vector.h>
+#include <vgui/vgui_tableau.h>
 
 class vgui_dialog_field;
 
@@ -56,6 +54,7 @@ public:
   void inline_file_browser(const char *, vcl_string&, vcl_string&);
   void color_chooser(const char*, vcl_string&);
   void inline_color_chooser(const char*, vcl_string&);
+  void inline_tab(const vgui_tableau_sptr tab, unsigned width, unsigned height);
 
   virtual void* bool_field_widget(const char*, bool&);
   virtual void* int_field_widget(const char*, int&);
@@ -69,6 +68,8 @@ public:
   virtual void* inline_file_browser_widget(const char *,vcl_string&, vcl_string&);
   virtual void* color_chooser_widget(const char*, vcl_string&);
   virtual void* inline_color_chooser_widget(const char *,vcl_string&);
+  virtual void* inline_tableau_widget(const vgui_tableau_sptr tab, unsigned width,
+    unsigned height);
   virtual void modal(const bool);
   virtual void set_cancel_button(const char* msg);
   virtual void set_ok_button(const char* msg);
@@ -77,7 +78,8 @@ public:
 
   enum element_type {bool_elem, int_elem, long_elem, float_elem,
                      double_elem, string_elem, choice_elem, text_msg,
-                     file_bsr, color_csr,inline_file_bsr,inline_color_csr};
+                     file_bsr, color_csr,inline_file_bsr,inline_color_csr,
+                     inline_tabl};
 
   struct element {
     element_type type;

@@ -3,11 +3,12 @@
 #pragma implementation
 #endif
 //
-// .NAME vgui_dialog_impl
-// Author: Philip C. Pritchett, RRG, University of Oxford
-// Created: 25 Oct 99
+// This is vgui/internals/vgui_dialog_impl.cxx
+// See vgui_dialog_impl.h for a description of this file
 //
-//-----------------------------------------------------------------------------
+// \author Philip C. Pritchett, RRG, University of Oxford
+// \date 25 Oct 99
+//
 
 #include "vgui_dialog_impl.h"
 #include <vcl_iostream.h>
@@ -170,6 +171,17 @@ void vgui_dialog_impl::inline_color_chooser(const char* txt, vcl_string& val) {
   elements.push_back(l);
 }
 
+void vgui_dialog_impl::inline_tab(const vgui_tableau_sptr tab, unsigned width,
+  unsigned height) {
+  // kym - don't use the field - store the tableau in the widget variable(?). 
+  //vgui_string_field *field = new vgui_string_field();
+  element l;
+  l.type = inline_tabl;
+  l.widget = inline_tableau_widget(tab, width, height);
+  //l.field = field;
+
+  elements.push_back(l);
+}
 
 //--------------------------------------------------------------------------------
 //: Add a text message to the dialog box.
@@ -221,6 +233,11 @@ void* vgui_dialog_impl::color_chooser_widget(const char* txt, vcl_string& val) {
 void* vgui_dialog_impl::inline_color_chooser_widget(const char* txt, vcl_string& val) {
   return string_field_widget(txt, val);
 }
+void* vgui_dialog_impl::inline_tableau_widget(const vgui_tableau_sptr tab,
+  unsigned width, unsigned height){
+  return 0;
+}
+
 //--------------------------------------------------------------------------------
 //: Changes the modality of the dialog.  True makes the dialog modal
 // (i.e. the dialog 'grabs' all events), this is the default.
