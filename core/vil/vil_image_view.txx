@@ -470,40 +470,40 @@ bool vil2_image_view<T>::is_contiguous() const
   // corresponding widths.
 
   int s1, s2, s3;
-  unsigned n1, n2, n3;
+  unsigned n1, n2;
   if( istep_ < jstep_ )
     if( jstep_ < planestep_ )
       {
         s1 = istep_; s2 = jstep_; s3 = planestep_;
-        n1 = ni_;    n2 = nj_;    n3 = nplanes_;
+        n1 = ni_;    n2 = nj_;  //  n3 = nplanes_;
       }
     else // planestep_ < jstep_
       if( istep_ < planestep_ )
         {
           s1 = istep_; s2 = planestep_; s3 = jstep_;
-          n1 = ni_;    n2 = nplanes_;   n3 = nj_;
+          n1 = ni_;    n2 = nplanes_; //  n3 = nj_;
         }
       else // planestep_ < istep_
         {
           s1 = planestep_; s2 = istep_; s3 = jstep_;
-          n1 = nplanes_;   n2 = ni_;    n3 = nj_;
+          n1 = nplanes_;   n2 = ni_;  //  n3 = nj_;
         }
   else // jstep < istep_
     if( jstep_ < planestep_ )
       if( istep_ < planestep_ )
         {
           s1 = jstep_; s2 = istep_; s3 = planestep_;
-          n1 = nj_;    n2 = ni_;    n3 = nplanes_;
+          n1 = nj_;    n2 = ni_;  //  n3 = nplanes_;
         }
       else // planestep_ < istep_
         {
           s1 = jstep_; s2 = planestep_; s3 = istep_;
-          n1 = nj_;    n2 = nplanes_;   n3 = ni_;
+          n1 = nj_;    n2 = nplanes_;  // n3 = ni_;
         }
     else // planestep_ < jstep_
       {
         s1 = planestep_; s2 = jstep_; s3 = istep_;
-        n1 = nplanes_;   n2 = nj_;    n3 = ni_;
+        n1 = nplanes_;   n2 = nj_;  //  n3 = ni_;
       }
 
   return ( s1 == 1 &&

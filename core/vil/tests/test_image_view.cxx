@@ -11,6 +11,7 @@
 #include <vil2/vil2_convert.h>
 #include <vil2/vil2_view_as.h>
 #include <vil2/vil2_image_view.h>
+#include <vil2/vil2_new.h>
 
 template <class S, class T>
 void test_image_view_rgba(vil2_image_view<S> &image2, vil2_image_view<T> &image7)
@@ -280,6 +281,11 @@ void test_contiguous()
       }
     }
   }
+  vil2_image_view<float> im2 = vil2_new_image_view_plane_i_j(4, 5, 6, float());
+  TEST( "vil2_new_image_view_plane_i_j is_continuous", im2.is_contiguous(), true );
+  vil2_image_view<double> im3 = vil2_new_image_view_j_i_plane(4, 5, 6, double());
+  TEST( "vil2_new_image_view_i_j_plane is_continuous", im2.is_contiguous(), true);
+  
 }
 
 
