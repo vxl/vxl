@@ -10,6 +10,7 @@ SET(rsdl_sources
 
  rsdl_bins_2d.txx      rsdl_bins_2d.h
  rsdl_borgefors.txx    rsdl_borgefors.h
+ rsdl_bins.txx         rsdl_bins.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates rsdl_sources)
