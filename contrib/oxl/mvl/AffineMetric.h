@@ -38,8 +38,8 @@ class AffineMetric : public ImageMetric
   void set(double a11, double a13, double a22, double a23, double a33);
 
   // Data Access---------------------------------------------------------------
-  virtual const vnl_matrix<double>& get_C() const { return A_; }
-  virtual const vnl_matrix<double>& get_C_inverse() const { return A_inverse_; }
+  virtual const vnl_matrix_ref<double> get_C() const { return A_; }
+  virtual const vnl_matrix_ref<double> get_C_inverse() const { return A_inverse_; }
 
   virtual bool is_linear() const { return true; }
   virtual bool can_invert_distance() const { return false; }

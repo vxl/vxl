@@ -357,10 +357,14 @@ class vnl_vector
   //: Inequality test
   bool operator!=(vnl_vector<T> const &that) const { return !this->operator_eq(that); }
 
+  //:
+  // \deprecated Use make_size.
+  bool resize (unsigned n) { return make_size(n); };
+
   //: Resize to n elements.
-  // Checks early and does nothing if already size n, otherwise
-  // old data is discarded.  Returns true if size change successful.
-  bool resize (unsigned n);
+  // This is a destructive resize, in that the old data is lost if size() != \a n before the call.
+  // If size() is already \a n, this is a null operation.
+  bool make_size (unsigned n);
 
   //: Make the vector as if it had been default-constructed.
   void clear();

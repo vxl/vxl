@@ -18,7 +18,7 @@
 // \endverbatim
 
 #include <vnl/vnl_matrix.h>
-
+#include <vnl/vnl_matrix_fixed.h>
 
 //: direct evaluation for 2x2 matrix
 template <class T> T vnl_determinant(T const *row0,
@@ -38,6 +38,14 @@ template <class T> T vnl_determinant(T const *row0,
 //: evaluation using direct methods for sizes of 2x2, 3x3, and 4x4 or qr decompostion for other matrices.
 template <class T>
 T vnl_determinant(vnl_matrix<T> const &M, bool balance = false);
+
+//: convenience overload
+// See other vnl_determinant.
+template <class T, unsigned m, unsigned n>
+T vnl_determinant(vnl_matrix_fixed<T,m,n> const &M, bool balance = false)
+{
+  return vnl_determinant( M.as_ref(), balance );
+}
 
 #define VNL_DETERMINANT_INSTANTIATE(T) \
 extern "you must include vnl/algo/vnl_determinant.txx first"

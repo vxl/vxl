@@ -36,7 +36,7 @@ class PMatrixDecompAa
   PMatrixDecompAa(const vnl_matrix<double>& P) { set(P); }
 
 //:  Set [A a] from PMatrix.
-  void set(const PMatrix& P) { P.get(&A, &a); }
+  void set(const PMatrix& P) { P.get(&A.as_ref().non_const(), &a.as_ref().non_const()); }
 
 //:  Set [A a] from PMatrix.
   void set(const vnl_matrix<double>& P);

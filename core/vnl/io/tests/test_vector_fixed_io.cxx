@@ -1,7 +1,7 @@
 // This is vxl/vnl/io/tests/test_vector_fixed_io.cxx
 #include <vcl_iostream.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vnl/io/vnl_io_vector.h>
+#include <vnl/io/vnl_io_vector_fixed.h>
 #include <vsl/vsl_binary_io.h>
 #include <testlib/testlib_test.h>
 

@@ -45,16 +45,41 @@ class vnl_matrix_ref : public vnl_matrix<T>
 
  public:
   // Constructors/Destructors--------------------------------------------------
-  vnl_matrix_ref(int m, int n, T *datablck) {
+  vnl_matrix_ref(unsigned int m, unsigned int n, T *datablck) {
     Base::data = vnl_c_vector<T>::allocate_Tptr(m);
-    for (int i = 0; i < m; ++i)
+    for (unsigned int i = 0; i < m; ++i)
       Base::data[i] = datablck + i * n;
     Base::num_rows = m;
     Base::num_cols = n;
   }
+
+  vnl_matrix_ref(vnl_matrix_ref<T> const & other) : vnl_matrix<T>() {
+    Base::data = vnl_c_vector<T>::allocate_Tptr(other.rows());
+    for (unsigned int i = 0; i < other.rows(); ++i)
+      Base::data[i] = const_cast<T*>(other.data_block()) + i * other.cols();
+    Base::num_rows = other.rows();
+    Base::num_cols = other.cols();
+  }
+
   ~vnl_matrix_ref() {
     Base::data[0] = 0; // Prevent base dtor from releasing our memory
   }
+
+  //: Reference to self to make non-const temporaries.
+  // This is intended for passing vnl_matrix_fixed objects to
+  // functions that expect non-const vnl_matrix references:
+  // \code
+  //   void mutator( vnl_matrix<double>& );
+  //   ...
+  //   vnl_matrix_fixed<double,5,3> my_m;
+  //   mutator( m );        // Both these fail because the temporary vnl_matrix_ref
+  //   mutator( m.as_ref() );  // cannot be bound to the non-const reference
+  //   mutator( m.as_ref().non_const() ); // works
+  // \endcode
+  // \attention Use this only to pass the reference to a
+  // function. Otherwise, the underlying object will be destructed and
+  // you'll be left with undefined behaviour.
+  vnl_matrix_ref& non_const() { return *this; }
 
  private:
   // Private operator new because deleting a pointer to
@@ -74,6 +99,8 @@ class vnl_matrix_ref : public vnl_matrix<T>
  private:
   //: Resizing is disallowed
   bool resize (unsigned int, unsigned int) { return false; }
+  //: Resizing is disallowed
+  bool make_size (unsigned int, unsigned int) { return false; }
 
 
   //: Copy constructor from vnl_matrix<T> is disallowed
@@ -81,10 +108,6 @@ class vnl_matrix_ref : public vnl_matrix<T>
   vnl_matrix_ref(vnl_matrix<T> const &) {}
 
 
-  //: Copy constructor and assignment operator are disallowed.
-  // You can't assign one of these from a matrix, cos' you don't have any space
-  vnl_matrix_ref(vnl_matrix_ref<T> const &) {}
-  vnl_matrix_ref<T>& operator=(vnl_matrix<T> const &) { return *this; }
 };
 
 #endif // vnl_matrix_ref_h_

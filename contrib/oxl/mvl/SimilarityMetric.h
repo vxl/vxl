@@ -61,8 +61,8 @@ class SimilarityMetric : public ImageMetric
   virtual double distance_squared(HomgLineSeg2D const& segment, HomgLine2D const& line) const;
 
   virtual bool is_linear() const { return true; }
-  virtual const vnl_matrix<double>& get_C() const { return cond_matrix; }
-  virtual const vnl_matrix<double>& get_C_inverse() const { return inv_cond_matrix; }
+  virtual const vnl_matrix_ref<double> get_C() const { return cond_matrix; }
+  virtual const vnl_matrix_ref<double> get_C_inverse() const { return inv_cond_matrix; }
 
   virtual bool can_invert_distance() const;
   virtual double image_to_homg_distance(double image_distance) const;

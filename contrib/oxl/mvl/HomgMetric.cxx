@@ -160,14 +160,14 @@ bool HomgMetric::is_linear() const
 static vnl_identity_3x3 I;
 
 //: Return the planar homography C s.t. C x converts x from conditioned to image coordinates.
-const vnl_matrix<double>& HomgMetric::get_C() const
+const vnl_matrix_ref<double> HomgMetric::get_C() const
 {
   if (metric_) return metric_->get_C();
   else return I;
 }
 
 //: Return $C^{-1}$.
-const vnl_matrix<double>& HomgMetric::get_C_inverse() const
+const vnl_matrix_ref<double> HomgMetric::get_C_inverse() const
 {
   if (metric_) return metric_->get_C_inverse();
   else return I;

@@ -29,6 +29,7 @@ class HomgPoint2D : public Homg2D
   HomgPoint2D (const HomgPoint2D& that): Homg2D(that) {}
   HomgPoint2D (double px, double py, double pw = 1.0): Homg2D(px,py,pw) {}
   HomgPoint2D (const vnl_vector<double>& vector_ptr): Homg2D(vector_ptr) {}
+  HomgPoint2D (const vnl_vector_fixed<double,3>& vector_ptr): Homg2D(vector_ptr) {}
 
   HomgPoint2D& operator=(const HomgPoint2D& that)
   {

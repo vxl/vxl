@@ -170,11 +170,7 @@ vcsl_spatial_transformation::lqi(const vnl_quaternion<double> &v0,
   double t=(time-t0)/(t1-t0);
 
   double cosangle;
-  { // sunpro 5.0 is overload challenged
-    vnl_vector<double> const &v0_ = v0;
-    vnl_vector<double> const &v1_ = v1;
-    cosangle=dot_product(v0_, v1_);
-  }
+  cosangle=dot_product(v0.as_ref(), v1.as_ref());
   double angle=vcl_acos(cosangle);
   double invsin=1/vcl_sin(angle);
   double coef1=vcl_sin((1-t)*angle)*invsin;

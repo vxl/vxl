@@ -512,8 +512,15 @@ class vnl_matrix
   void clear();
 
   //: Resize to r rows by c columns. Old data lost.
+  // \deprecated Use make_size instead.
+  bool resize (unsigned r, unsigned c) { return make_size(r,c); }
+
+  //: Resize to r rows by c columns.
+  // Old data lost.
   // Returns true if size changed.
-  bool resize (unsigned r, unsigned c);
+  bool make_size (unsigned r, unsigned c);
+
+
 //--------------------------------------------------------------------------------
 
 

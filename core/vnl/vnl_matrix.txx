@@ -350,7 +350,7 @@ void vnl_matrix<T>::clear()
 // Elements are not initialized. Returns true if size is changed.
 
 template<class T>
-bool vnl_matrix<T>::resize (unsigned rowz, unsigned colz)
+bool vnl_matrix<T>::make_size (unsigned rowz, unsigned colz)
 {
   if (this->data) {
     // if no change in size, do not reallocate.
@@ -410,7 +410,7 @@ template<class T>
 vnl_matrix<T>& vnl_matrix<T>::operator= (vnl_matrix<T> const& rhs) {
   if (this != &rhs) { // make sure *this != m
     if (rhs.data) {
-      this->resize(rhs.num_rows, rhs.num_cols);
+      this->make_size(rhs.num_rows, rhs.num_cols);
       for (unsigned int i = 0; i < this->num_rows; i++)
         for (unsigned int j = 0; j < this->num_cols; j++)
           this->data[i][j] = rhs.data[i][j];

@@ -76,7 +76,7 @@ void vmal_rectifier::rectification_matrix(vnl_double_3x3& H0,
     FMatrixComputeLinear tmp_fcom;
     FMatrix tmp_f;
     tmp_fcom.compute(v_points0,v_points1,& tmp_f);
-    tmp_f.get(&_F12);
+    tmp_f.get(&_F12.as_ref().non_const());
 
     HomgPoint2D epi1;
     HomgPoint2D epi2;
@@ -144,7 +144,7 @@ void vmal_rectifier::set_tritensor(TriTensor &tri)
   tmp_epi[2]=1.0;
 
   _epipoles.push_back(tmp_epi);
-  F12.get(&_F12);
+  F12.get(&_F12.as_ref().non_const());
 }
 
 void vmal_rectifier::compute_joint_epipolar_transform_new (

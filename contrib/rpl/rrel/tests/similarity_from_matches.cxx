@@ -3,6 +3,7 @@
 #include <vcl_cassert.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix.h>
+#include <vnl/vnl_matrix_fixed.h> // for matrix * vector_fixed operator
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_svd.h>
 

@@ -1294,14 +1294,14 @@ FMatrix TriTensor::get_fmatrix_13() const
 // next two routines retired as caching introduced.  awf, aug97
 FMatrix TriTensor::get_fmatrix_13(const HomgPoint2D& e2, const HomgPoint2D& e3) const
 {
-  return vnl_cross_product_matrix(e3.get_vector()) * dot2(e2.get_vector()).transpose();
+  return vnl_cross_product_matrix(e3.get_vector()) * dot2(e2.get_vector()).transpose().as_ref();
 }
 
 //  More efficient than above if both F matrices are required.  The epipoles ought
 // to be computed once and the passed twice to get_fmatrix_12 and get_fmatrix_13.
 FMatrix TriTensor::get_fmatrix_12(const HomgPoint2D& e2, const HomgPoint2D& e3) const
 {
-  return vnl_cross_product_matrix(e2.get_vector()) * dot3(e3.get_vector()).transpose();
+  return vnl_cross_product_matrix(e2.get_vector()) * dot3(e3.get_vector()).transpose().as_ref();
 }
 
 FMatrix TriTensor::compute_fmatrix_23() const

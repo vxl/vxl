@@ -81,7 +81,6 @@
 #include <vnl/vnl_transpose.h>
 #include <vnl/vnl_unary_function.h>
 #include <vnl/vnl_vector.h>
-#include <vnl/vnl_vector_dereference.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_vector_fixed_ref.h>
 #include <vnl/vnl_vector_ref.h>

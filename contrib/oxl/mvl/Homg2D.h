@@ -41,6 +41,9 @@ class Homg2D : public vnl_double_3, public Homg
   Homg2D (double px, double py, double pw) { set(px,py,pw); }
 
   //: Construct from 3-vector.
+  Homg2D (const vnl_vector_fixed<double,3>& v) { set(v); }
+
+  //: Construct from 3-vector.
   Homg2D (const vnl_vector<double>& v) { set(v); }
 
   //: Destructor
@@ -58,33 +61,36 @@ class Homg2D : public vnl_double_3, public Homg
 
   //: Retrieve components.
   void get (double *x_ptr, double *y_ptr, double *w_ptr) const {
-    *x_ptr = data[0];
-    *y_ptr = data[1];
-    *w_ptr = data[2];
+    *x_ptr = (*this)[0];
+    *y_ptr = (*this)[0];
+    *w_ptr = (*this)[0];
   }
 
   //: Return x
-  double get_x () const { return data[0]; }
+  double get_x () const { return (*this)[0]; }
 
   //: Return y
-  double get_y () const { return data[1]; }
+  double get_y () const { return (*this)[1]; }
 
   //: Return w
-  double get_w () const { return data[2]; }
+  double get_w () const { return (*this)[2]; }
 
   //: Set x,y,w.
   void set (double px, double py, double pw) {
-    data[0] = px;
-    data[1] = py;
-    data[2] = pw;
+    (*this)[0] = px;
+    (*this)[1] = py;
+    (*this)[2] = pw;
   }
+
+  //: Set from vector
+  void set (const vnl_vector_fixed<double,3>& v) { vnl_double_3::operator = (v); }
 
   //: Set from vector
   void set (const vnl_vector<double>& v) { vnl_double_3::operator = (v); }
 
   //: Set element.
   void set (unsigned int element_index, double element) {
-    data[element_index] = element;
+    (*this)[element_index] = element;
   }
 
   // Data Control------------------------------------------------------------
@@ -92,19 +98,19 @@ class Homg2D : public vnl_double_3, public Homg
 // @{ ACCESS TO COMPONENTS: @}
 
   //:
-  double& x() { return data[0]; }
+  double& x() { return (*this)[0]; }
   //:
-  double  x() const { return data[0]; }
+  double  x() const { return (*this)[0]; }
 
   //:
-  double& y() { return data[1]; }
+  double& y() { return (*this)[1]; }
   //:
-  double  y() const { return data[1]; }
+  double  y() const { return (*this)[1]; }
 
   //:
-  double& w() { return data[2]; }
+  double& w() { return (*this)[2]; }
   //:
-  double  w() const { return data[2]; }
+  double  w() const { return (*this)[2]; }
 };
 
 #endif // _Homg2D_h

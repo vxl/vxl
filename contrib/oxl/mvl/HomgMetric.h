@@ -75,8 +75,8 @@ class HomgMetric
 
   // ** Speedups available for certain systems.
   bool is_linear() const;
-  const vnl_matrix<double>& get_C() const;
-  const vnl_matrix<double>& get_C_inverse() const;
+  const vnl_matrix_ref<double> get_C() const;
+  const vnl_matrix_ref<double> get_C_inverse() const;
 
   bool can_invert_distance() const;
   double image_to_homg_distance(double image_distance) const;

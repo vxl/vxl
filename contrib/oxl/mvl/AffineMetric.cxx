@@ -75,7 +75,7 @@ HomgPoint2D AffineMetric::imagehomg_to_homg(const HomgPoint2D& p) const
 
 HomgPoint2D AffineMetric::image_to_homg(double x, double y) const
 {
-  const double*const* a = A_inverse_.data_array();
+  const vnl_double_3x3& a = A_inverse_;
   double h1 = a[0][0] * x + a[0][1] * y + a[0][2];
   double h2 = a[1][0] * x + a[1][1] * y + a[1][2];
   double h3 = a[2][0] * x + a[2][1] * y + a[2][2];

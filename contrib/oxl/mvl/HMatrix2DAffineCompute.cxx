@@ -83,7 +83,7 @@ HMatrix2DAffineCompute::tmp_fun(const PointArray &pts1,
   vnl_double_2x2 N = (svd.V().extract(2,2,0,2)).transpose();
   vnl_double_2x2 M = (svd.V().extract(2,2,2,2)).transpose();
 
-  vnl_double_2x2 Aff = -1.0*(vnl_matrix_inverse<double>(M)*N);
+  vnl_double_2x2 Aff = -1.0*(vnl_matrix_inverse<double>(M)*N.as_ref());
   vnl_double_2 t = mn2 - Aff*mn1;
 
   vnl_double_3x3 T;

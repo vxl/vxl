@@ -29,7 +29,7 @@ class vnl_vector_ref : public vnl_vector<T>
 
   //: Constructor
   // Do *not* call anything else than the default constructor of vnl_vector<T>
-  vnl_vector_ref(int n, T *space) : vnl_vector<T>() {
+  vnl_vector_ref(unsigned n, T *space) : vnl_vector<T>() {
     Base::data = space;
     Base::num_elmts = n;
   }
@@ -38,7 +38,7 @@ class vnl_vector_ref : public vnl_vector<T>
   // Do *not* call anything else than the default constructor of vnl_vector<T>
   // (That is why the default copy constructor is *not* good.)
   vnl_vector_ref(vnl_vector_ref<T> const& v) : vnl_vector<T>() {
-    Base::data = (T*)(v.data_block()); // const incorrect!
+    Base::data = const_cast<T*>(v.data_block()); // const incorrect!
     Base::num_elmts = v.size();
   }
 
@@ -47,6 +47,22 @@ class vnl_vector_ref : public vnl_vector<T>
   ~vnl_vector_ref() {
     Base::data = 0;
   }
+
+  //: Reference to self to make non-const temporaries.
+  // This is intended for passing vnl_vector_fixed objects to
+  // functions that expect non-const vnl_vector references:
+  // \code
+  //   void mutator( vnl_vector<double>& );
+  //   ...
+  //   vnl_vector_fixed<double,5> my_v;
+  //   mutator( v );          // Both these fail because the temporary vnl_vector_ref
+  //   mutator( v.as_ref() ); // cannot be bound to the non-const reference
+  //   mutator( v.as_ref().non_const() ); // works
+  // \endcode
+  // \attention Use this only to pass the reference to a
+  // function. Otherwise, the underlying object will be destructed and
+  // you'll be left with undefined behaviour.
+  vnl_vector_ref& non_const() { return *this; }
 
  private:
 

@@ -63,10 +63,11 @@ template <class T>
 void vnl_scatter_3x3<T>::compute_eigensystem()
 {
   vnl_scatter_3x3<T> &S = *this;
-  if (symmetricp)
-    vnl_symmetric_eigensystem_compute(S, V_, D);
-  else
+  if (symmetricp) {
+    vnl_symmetric_eigensystem_compute(S, V_.as_ref().non_const(), D.as_ref().non_const());
+  } else {
     vcl_cerr << "Unsymmetric scatter not handled now\n";
+  }
 
   eigenvectors_currentp = true;
 }

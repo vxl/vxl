@@ -28,6 +28,7 @@ class HomgPoint3D : public Homg3D
   HomgPoint3D ();
   HomgPoint3D (const HomgPoint3D& p): Homg3D(p) {}
   HomgPoint3D (const vnl_vector<double>& p): Homg3D(p) {}
+  HomgPoint3D (const vnl_vector_fixed<double,4>& p): Homg3D(p) {}
   HomgPoint3D (double x, double y, double z);
   HomgPoint3D (double x, double y, double z, double w);
   ~HomgPoint3D ();

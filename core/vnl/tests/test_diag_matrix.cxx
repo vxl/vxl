@@ -54,11 +54,11 @@ void test_diag_matrix()
   vnl_vector_fixed<double,N> th; th(0)=2.0; th(1)=-3.0; th(2)=6.0;
   vcl_cout << "vector = " << th << '\n';
 
-  vnl_vector<double> vec = m1 * th;
+  vnl_vector<double> vec = m1 * th.as_ref();
   vcl_cout << "vector product (post-multiplied) = " << vec << '\n';
   TEST("vector product", vec(0) == -0.5 && vec(1) == 0.0 && vec(2) == 1.5, true);
 
-  vec = th * m1;
+  vec = th.as_ref() * m1;
   vcl_cout << "vector product (pre-multiplied) = " << vec << '\n';
   TEST("vector product", vec(0) == -0.5 && vec(1) == 0.0 && vec(2) == 1.5, true);
 
@@ -68,32 +68,32 @@ void test_diag_matrix()
   mat(2,0)=-th(1); mat(2,1)= th(0); mat(2,2)=0.0;
   vcl_cout << "matrix = \n" << mat;
 
-  vnl_matrix_fixed<double,N,N> s1=m1+mat;
+  vnl_matrix_fixed<double,N,N> s1=m1+mat.as_ref();
   vcl_cout << "m1+matrix = \n" << s1;
   TEST("matrix sum", s1(0,0) == -0.25 && s1(0,1) == -6.0 && s1(0,2) == -3.0
                   && s1(1,0) ==  6.0  && s1(1,1) ==  0.0 && s1(1,2) == -2.0
                   && s1(2,0) ==  3.0  && s1(2,1) ==  2.0 && s1(2,2) == 0.25, true);
-  vnl_matrix_fixed<double,N,N> s2=mat+m1;
+  vnl_matrix_fixed<double,N,N> s2=mat.as_ref()+m1;
   vcl_cout << "matrix+m1 = \n" << s2;
   TEST("matrix sum", s2(0,0) == -0.25 && s2(0,1) == -6.0 && s2(0,2) == -3.0
                   && s2(1,0) ==  6.0  && s2(1,1) ==  0.0 && s2(1,2) == -2.0
                   && s2(2,0) ==  3.0  && s2(2,1) ==  2.0 && s2(2,2) == 0.25, true);
-  vnl_matrix_fixed<double,N,N> d1=m1-mat;
+  vnl_matrix_fixed<double,N,N> d1=m1-mat.as_ref();
   vcl_cout << "m1-matrix = \n" << d1;
   TEST("matrix difference", d1(0,0) == -0.25 && d1(0,1) ==  6.0 && d1(0,2) == 3.0
                          && d1(1,0) == -6.0  && d1(1,1) ==  0.0 && d1(1,2) == 2.0
                          && d1(2,0) == -3.0  && d1(2,1) == -2.0 && d1(2,2) == 0.25, true);
-  vnl_matrix_fixed<double,N,N> d2=mat-m1;
+  vnl_matrix_fixed<double,N,N> d2=mat.as_ref()-m1;
   vcl_cout << "matrix-m1 = \n" << d2;
   TEST("matrix difference", d2(0,0) == 0.25 && d2(0,1) == -6.0 && d2(0,2) == -3.0
                          && d2(1,0) == 6.0  && d2(1,1) == -0.0 && d2(1,2) == -2.0
                          && d2(2,0) == 3.0  && d2(2,1) ==  2.0 && d2(2,2) == -0.25, true);
-  vnl_matrix_fixed<double,N,N> p1=m1*mat;
+  vnl_matrix_fixed<double,N,N> p1=m1*mat.as_ref();
   vcl_cout << "m1*matrix = \n" << p1;
   TEST("matrix product", p1(0,0) == 0.0  && p1(0,1) == 1.5 && p1(0,2) == 0.75
                       && p1(1,0) == 0.0  && p1(1,1) == 0.0 && p1(1,2) == 0.0
                       && p1(2,0) == 0.75 && p1(2,1) == 0.5 && p1(2,2) == 0.0, true);
-  vnl_matrix_fixed<double,N,N> p2=mat*m1;
+  vnl_matrix_fixed<double,N,N> p2=mat.as_ref()*m1;
   vcl_cout << "matrix*m1 = \n" << p2;
   TEST("matrix product", p2(0,0) ==  0.0  && p2(0,1) == 0.0 && p2(0,2) == -0.75
                       && p2(1,0) == -1.5  && p2(1,1) == 0.0 && p2(1,2) == -0.5

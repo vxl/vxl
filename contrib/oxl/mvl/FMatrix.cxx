@@ -480,7 +480,7 @@ void FMatrix::set (const PMatrix& P2)
 {
   vnl_double_3x3 A;
   vnl_double_3 a;
-  P2.get(&A, &a);
+  P2.get(&A.as_ref().non_const(), &a.as_ref().non_const());
 
   vnl_cross_product_matrix e2x(a);
 

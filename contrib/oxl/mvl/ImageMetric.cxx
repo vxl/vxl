@@ -10,6 +10,7 @@
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 #include <vnl/vnl_double_2.h>
+#include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_math.h>
 #include <mvl/HomgPoint2D.h>
 #include <mvl/HomgLineSeg2D.h>
@@ -202,14 +203,14 @@ static vnl_identity_3x3 I;
 
 //: Return conditioning matrix C that converts homogeneous image points to homogeneous conditioned points.
 //  If the ImageMetric used is nonlinear, then we'll have to make other arrangements...
-const vnl_matrix<double>& ImageMetric::get_C() const
+const vnl_matrix_ref<double> ImageMetric::get_C() const
 {
   warning("ImageMetric::get_C()") << "returning identity\n";
   return I;
 }
 
 //: Return conditioning matrix C that converts homogeneous conditioned points to image coords.
-const vnl_matrix<double>& ImageMetric::get_C_inverse() const
+const vnl_matrix_ref<double> ImageMetric::get_C_inverse() const
 {
   warning("ImageMetric::get_C_inverse()") << "returning identity\n";
   return I;

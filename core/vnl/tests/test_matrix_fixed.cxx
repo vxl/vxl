@@ -57,8 +57,8 @@ void test_matrix_fixed()
 #endif
 
   vcl_printf("Now watch the mallocs\n");
-  vnl_matrix<double>& CX = X;
-  vnl_vector<double>& cv = v;
+  vnl_matrix_ref<double> CX = X;
+  vnl_vector_ref<double> cv = v;
   vnl_vector<double> Xv = CX * (cv + cv);
   vcl_printf("X v = [ %g %g %g ]\n", Xv[0], Xv[1], Xv[2]);
 

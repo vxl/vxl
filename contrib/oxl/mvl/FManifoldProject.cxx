@@ -203,7 +203,7 @@ double FManifoldProject::correct(const HomgPoint2D& p1, const HomgPoint2D& p2, H
 
     vnl_diag_matrix<double> Dinv(1.0 - lambda * d_);
     Dinv.invert_in_place();
-    vnl_double_4 Xp = Dinv * pprime;
+    vnl_double_4 Xp = Dinv * pprime.as_ref();
     vnl_double_4 X = V_ * Xp + t_;
 
     // Paranoia check

@@ -103,7 +103,7 @@ class PMatrix : public vbl_ref_count
   void set (const double p_matrix [3][4]);
   void set (const vnl_matrix<double>& p_matrix);
 
-  const vnl_matrix<double>& get_matrix() const { return p_matrix_; }
+  const vnl_matrix_ref<double> get_matrix() const { return p_matrix_; }
   // Can't implement this as it will blow the svd cache.
   // vnl_matrix<double>& get_matrix() { return p_matrix_; }
 

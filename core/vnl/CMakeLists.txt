@@ -61,7 +61,6 @@ SET( vnl_sources
   vnl_identity.h
   vnl_operators.h
   vnl_tag.h
-  vnl_vector_dereference.h
 
   # ops
   vnl_fastops.cxx              vnl_fastops.h

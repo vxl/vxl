@@ -29,7 +29,9 @@ int main()
   vnl_rosenbrock f;
 
   // Set up the initial guess
-  vnl_double_2 x(-1.9, 2);
+  vnl_vector<double> x(2);
+  x[0] = -1.9;
+  x[1] = 2.0;
 
   // Make a Levenberg Marquardt minimizer, attach f to it, and
   // run the minimization

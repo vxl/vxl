@@ -62,7 +62,7 @@ int main()
   vnl_double_2 x0(-1.9, 2);
 
   // Temp variable.
-  vnl_double_2 x;
+  vnl_vector<double> x(2);
 
   // Make a Levenberg Marquardt minimizer, attach f to it, and
   // run the minimization

@@ -35,6 +35,7 @@ class Homg3D : public Homg
   Homg3D (const Homg3D& that):_homg_vector(that._homg_vector) {}
   Homg3D (double px, double py, double pz, double pw = 1): _homg_vector(px,py,pz,pw) {}
   Homg3D (const vnl_vector<double>& v): _homg_vector(v) { }
+  Homg3D (const vnl_vector_fixed<double,4>& v): _homg_vector(v) { }
  ~Homg3D () {}
 
   Homg3D& operator=(const Homg3D& that) { _homg_vector = that._homg_vector; return *this; }

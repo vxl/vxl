@@ -41,6 +41,7 @@ DECLARE( test_symmetric_eigensystem );
 DECLARE( test_transpose );
 DECLARE( test_vector );
 DECLARE( test_gamma );
+DECLARE( test_arithmetic );
 
 void
 register_tests()
@@ -86,6 +87,7 @@ register_tests()
   REGISTER( test_transpose );
   REGISTER( test_vector );
   REGISTER( test_gamma );
+  REGISTER( test_arithmetic );
 }
 
 DEFINE_MAIN;

@@ -12,6 +12,7 @@
 #include <vcl_cstdio.h> // for fscanf()
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
+#include <vnl/vnl_cross.h>
 
 //----------------------------------------------------------------------
 //: add_vertex
@@ -229,7 +230,7 @@ PolygonMesh::DVector3D PolygonMesh::get_face_normal
          face[0].z()-face[1].z());
   DVector3D v2(face[0].x()-face[2].x(), face[0].y()-face[2].y(),
          face[0].z()-face[2].z());
-  DVector3D cross = cross_3d(v1, v2);
+  DVector3D cross = vnl_cross_3d(v1, v2);
   cross.normalize();
   return cross;
 }

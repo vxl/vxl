@@ -3,6 +3,7 @@
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
+#include <vnl/vnl_cross.h>
 #include <testlib/testlib_test.h>
 
 void vnl_vector_test_int() {
@@ -109,13 +110,13 @@ void vnl_vector_test_int() {
     TEST("dot_product(v1,v1)",
          (dot_product(v1,v1)==1 && dot_product(v2,v2)==1 && dot_product(v3,v3)==1), true);
     TEST("4d-v=3d-v", ((v = v3), v.size()==3 && v==v3), true);
-    TEST("cross_3d(v1,v2)", cross_3d(v1,v2), v3);
-    TEST("cross_3d(v2,v3)", cross_3d(v2,v3), v1);
-    TEST("cross_3d(v1,v3)", cross_3d(v1,v3), -v2);
+    TEST("vnl_cross_3d(v1,v2)", vnl_cross_3d(v1,v2), v3);
+    TEST("vnl_cross_3d(v2,v3)", vnl_cross_3d(v2,v3), v1);
+    TEST("vnl_cross_3d(v1,v3)", vnl_cross_3d(v1,v3), -v2);
     vnl_vector<int> vv(2,0);
     v1 = vv; v1[0]=1;
     v2 = vv; v2[1]=1;
-    TEST("cross_2d(v1,v2)", cross_2d(v1,v2)==1, true);
+    TEST("vnl_cross_2d(v1,v2)", vnl_cross_2d(v1,v2)==1, true);
   }
 
   {
@@ -261,13 +262,13 @@ void vnl_vector_test_float() {
     TEST("dot_product(v1,v2)",
          (dot_product(v1,v2)==0 && dot_product(v1,v3)==0 && dot_product(v2,v3)==0), true);
     TEST("4d-v=3d-v", ((v = v3), v.size()==3 && v==v3), true);
-    TEST("cross_3d(v1,v2)", cross_3d(v1,v2), v3);
-    TEST("cross_3d(v2,v3)", cross_3d(v2,v3), v1);
-    TEST("cross_3d(v1,v3)", cross_3d(v1,v3), -v2);
+    TEST("vnl_cross_3d(v1,v2)", vnl_cross_3d(v1,v2), v3);
+    TEST("vnl_cross_3d(v2,v3)", vnl_cross_3d(v2,v3), v1);
+    TEST("vnl_cross_3d(v1,v3)", vnl_cross_3d(v1,v3), -v2);
     vnl_vector<float> vv(2,0);
     v1 = vv; v1[0]=1;
     v2 = vv; v2[1]=1;
-    TEST("cross_2d(v1,v2)", cross_2d(v1,v2), 1);
+    TEST("vnl_cross_2d(v1,v2)", vnl_cross_2d(v1,v2), 1);
   }
 
   {
@@ -298,8 +299,10 @@ void vnl_vector_test_float() {
     vcl_cout << "angle(v1,v2) = " << ang << vcl_endl;
     ang *= 180*vnl_math::one_over_pi;
     vcl_cout << "angle(v1,v2) in degrees = " << ang << vcl_endl;
-    vcl_cout << "cross_2d(v1,v2) = " << cross_2d(v1,v2) << vcl_endl;
-    vcl_cout << "cross_3d(v1,v2) = " << cross_3d(v1,v2) << vcl_endl;
+    vcl_cout << "v1.size()=" << v1.size() << "\n";
+    vcl_cout << "v2.size()=" << v2.size() << "\n";
+    vcl_cout << "vnl_cross_2d(v1,v2) = " << vnl_cross_2d(v1,v2) << vcl_endl;
+    vcl_cout << "vnl_cross_3d(v1,v2) = " << vnl_cross_3d(v1,v2) << vcl_endl;
     TEST_NEAR("angle(v1,v2)", ang, 90.0, 1e-15);
     double ang2 = angle(v1,v3);
     vcl_cout << "angle(v1,v3) = " << ang << vcl_endl;

@@ -13,12 +13,12 @@ template <class T> class vnl_c_vector;
 
 template <class T> class vnl_vector;
 template <class T> class vnl_vector_ref;
-template <class T, int n> class vnl_vector_fixed;
+template <class T, unsigned n> class vnl_vector_fixed;
 template <class T, int n> class vnl_vector_fixed_ref;
 
 template <class T> class vnl_matrix;
 template <class T> class vnl_matrix_ref;
-template <class T, int m, int n> class vnl_matrix_fixed;
+template <class T, unsigned m, unsigned n> class vnl_matrix_fixed;
 template <class T, int m, int n> class vnl_matrix_fixed_ref;
 
 template <class T> class vnl_quaternion;

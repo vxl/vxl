@@ -2,6 +2,7 @@
 #include "vmal_operators.h"
 #include <vcl_cmath.h>
 #include <vnl/vnl_double_2.h>
+#include <vnl/vnl_cross.h>
 
 vmal_operators::vmal_operators()
 {
@@ -121,7 +122,7 @@ bool vmal_operators::line_cross_seg(vnl_double_3 start_seg,
   seg_equ[2]=-(seg_equ[0]*start_seg[0]+
          seg_equ[1]*start_seg[1]);
 
-  inter=cross_3d(line_equ,seg_equ);
+  inter=vnl_cross_3d(line_equ,seg_equ);
   inter[0]=inter[0]/inter[2];
   inter[1]=inter[1]/inter[2];
   inter[2]=1;

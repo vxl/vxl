@@ -27,7 +27,7 @@ class vnl_vector_fixed_ref : public vnl_vector_ref<T>
     assert(rhs.size() >= offset + n);
   }
 
-  vnl_vector_fixed_ref(T *space) : vnl_vector_ref<T>(n, space)
+  explicit vnl_vector_fixed_ref(T *space) : vnl_vector_ref<T>(n, space)
   {
   }
 

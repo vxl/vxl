@@ -37,6 +37,8 @@
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
 
+#include "vnl_cross.h"
+
 //: Creates a quaternion from its ordered components.
 // x, y, z denote the imaginary part, which are the  coordinates
 // of the rotation axis multiplied by the sine of half the
@@ -49,10 +51,10 @@
 template <class T>
 vnl_quaternion<T>::vnl_quaternion (T x, T y, T z, T r)
 {
-  this->operator()(0) = x;  // 3 first elmts are
-  this->operator()(1) = y;  // imaginary parts
-  this->operator()(2) = z;
-  this->operator()(3) = r;  // last element is real part
+  this->operator[](0) = x;  // 3 first elmts are
+  this->operator[](1) = y;  // imaginary parts
+  this->operator[](2) = z;
+  this->operator[](3) = r;  // last element is real part
 }
 
 //: Creates a quaternion from the normalized axis direction and the angle of rotation in radians.
@@ -63,8 +65,8 @@ vnl_quaternion<T>::vnl_quaternion (const vnl_vector<T>& axis, T angle)
   double a = angle / 2.0;  // half angle
   double s = vcl_sin(a);
   for (int i = 0; i < 3; i++)           // imaginary vector is sine of
-    this->operator()(i) = s * axis(i);  // half angle multiplied with axis
-  this->operator()(3) = vcl_cos(a);     // real part is cosine of half angle
+    this->operator[](i) = s * axis(i);  // half angle multiplied with axis
+  this->operator[](3) = vcl_cos(a);     // real part is cosine of half angle
 }
 
 //: Creates a quaternion from a vector.
@@ -77,9 +79,9 @@ vnl_quaternion<T>::vnl_quaternion (const vnl_vector<T>& vec)
 {
   unsigned i = 0;
   for (; i < vec.size(); i++)    // 1-1 layout between vector & quaternion
-    this->operator()(i) = vec.get(i);
+    this->operator[](i) = vec.get(i);
   for (; i < 4; i++)
-    this->operator()(i) = 0.0;
+    this->operator[](i) = 0.0;
 }
 
 //: Creates a quaternion from a transform matrix.
@@ -208,7 +210,7 @@ vnl_quaternion<T> vnl_quaternion<T>::conjugate () const {
 template <class T>
 vnl_quaternion<T> vnl_quaternion<T>::inverse () const {
   vnl_quaternion<T> inv = this->conjugate();
-  inv /= vnl_c_vector<T>::dot_product(data, data, 4);
+  inv /= vnl_c_vector<T>::dot_product(data_, data_, 4);
   return inv;
 }
 
@@ -228,7 +230,7 @@ vnl_quaternion<T> vnl_quaternion<T>::operator* (const vnl_quaternion<T>& rhs) co
   vnl_vector<T> i1 = this->imaginary();
   vnl_vector<T> i2 = rhs.imaginary();
   T real_v = (r1 * r2) - ::dot_product(i1, i2); // real&img of product q1*q2
-  vnl_vector<T> img = cross_3d(i1, i2);
+  vnl_vector<T> img = vnl_cross_3d(i1, i2);
   img += (i2 * r1) + (i1 * r2);
   vnl_quaternion<T> prod(img.x(), img.y(), img.z(), real_v);
   return prod;
@@ -242,7 +244,7 @@ template <class T>
 vnl_vector<T> vnl_quaternion<T>::rotate (const vnl_vector<T>& v) const {
   T r = this->real();
   vnl_vector<T> i = this->imaginary();
-  vnl_vector<T> rotated = v+ cross_3d(i, v) * T(2*r)- cross_3d(cross_3d(i, v), i) * T(2);
+  vnl_vector<T> rotated = v+ vnl_cross_3d(i, v) * T(2*r)- vnl_cross_3d(vnl_cross_3d(i, v), i) * T(2);
   return rotated;
 }
 

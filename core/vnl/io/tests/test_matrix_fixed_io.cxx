@@ -1,7 +1,7 @@
 // This is vxl/vnl/io/tests/test_matrix_fixed_io.cxx
 #include <vcl_iostream.h>
 #include <vnl/vnl_matrix_fixed.h>
-#include <vnl/io/vnl_io_matrix.h>
+#include <vnl/io/vnl_io_matrix_fixed.h>
 #include <testlib/testlib_test.h>
 
 void test_matrix_fixed_double_2_2_io()

@@ -53,6 +53,7 @@ IF(NETLIB_FOUND)
     test_transpose.cxx
     test_vector.cxx
     test_gamma.cxx
+    test_arithmetic.cxx  test_arithmetic_body.h
   )
   TARGET_LINK_LIBRARIES( vnl_test_driver vnl_algo vnl vpl vul testlib )
 

@@ -39,7 +39,7 @@ class Homg1D : public vnl_double_2 , public Homg
 
 //: Assignment
   Homg1D& operator=(const Homg1D& that) { vnl_double_2::operator=(that); return *this; }
-  void set (double px, double pw) { data[0] = px; data[1] = pw; }
+  void set (double px, double pw) { (*this)[0] = px; (*this)[1] = pw; }
 
   // Operations----------------------------------------------------------------
 

@@ -3,6 +3,7 @@
 
 #include <testlib/testlib_test.h>
 #include <vnl/vnl_matrix.h>
+#include <vnl/vnl_matrix_fixed.h> // for matrix * vector_fixed operator
 #include <vnl/vnl_vector.h>
 
 #include <rrel/tests/similarity_from_matches.h>

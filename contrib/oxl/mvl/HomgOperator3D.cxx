@@ -126,9 +126,9 @@ HomgOperator3D::intersect_line_and_plane (const HomgLine3D &line, const HomgPlan
   //
   /* use P.(S + lambda D) = 0 to find lambda, and hence a point on the plane. */
 
-  const vnl_vector<double>& x1 = line.get_point_finite().get_vector();
-  const vnl_vector<double>& x2 = line.get_point_infinite().get_vector();
-  const vnl_vector<double>& p = plane.get_vector();
+  const vnl_double_4& x1 = line.get_point_finite().get_vector();
+  const vnl_double_4& x2 = line.get_point_infinite().get_vector();
+  const vnl_double_4& p  = plane.get_vector();
 
   double numerator = -dot_product (x1, p);
   double denominator = dot_product (x2, p);

@@ -17,7 +17,7 @@ void vnl_cross_product_matrix::set(const double* v)
   double e2 = v[1];
   double e3 = v[2];
 
-  vnl_matrix<double> & E = *this; //win32 doesn't like E(*this);
+  vnl_cross_product_matrix & E = *this;
 
   E(0,0) =   0; E(0,1) = -e3; E(0,2) =  e2;
   E(1,0) =  e3; E(1,1) =   0; E(1,2) = -e1;

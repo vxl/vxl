@@ -21,6 +21,7 @@
 #include <vcl_map.h>
 
 #include <vnl/vnl_float_3.h>
+#include <vnl/vnl_cross.h>
 #include <vnl/vnl_math.h>
 
 #include <vul/vul_printf.h>
@@ -370,7 +371,7 @@ bool vgui_vrml_draw_visitor::Visit(QvIndexedFaceSet* node)
       vnl_float_3 a(polyverts[0]->x, polyverts[0]->y, polyverts[0]->z);
       vnl_float_3 b(polyverts[1]->x, polyverts[1]->y, polyverts[1]->z);
       vnl_float_3 c(polyverts[2]->x, polyverts[2]->y, polyverts[2]->z);
-      normal = cross_3d(b - a, c - b);
+      normal = vnl_cross_3d(b - a, c - b);
       normal *= -1.0 / normal.magnitude();
 
       glBegin(GL_POLYGON);
