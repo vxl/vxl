@@ -42,9 +42,7 @@
 // ------------------------------------------------------------
 
 #if defined(VCL_SGI_CC_720)
-# include <iostream.h>
-# define vcl_generic_iostream_STD /* */
-# include "generic/vcl_iostream.h"
+# include "sgi/vcl_iostream.h"
 
 #else // -------------------- ISO
 # include "iso/vcl_iostream.h"
@@ -52,33 +50,11 @@
 
 // -------------------- miscellaneous fixes which can go at the end:
 
-#if defined(VCL_SGI_CC_720)
-inline istream& operator>>(istream& s, signed char& c) 
-{
-  char i;
-  s >> i;
-  c = i;
-  return s;
-}
-# undef  vcl_ios_openmode
-# define vcl_ios_openmode   ios::open_mode
-// SGI CC has no ios::bin, but since UNIX makes no distinction
-// between binary and non-binary, 0 works just as well.
-# undef  vcl_ios_binary
-# define vcl_ios_binary   ios::open_mode(0)/*ios::bin*/
-#endif
-
 // Need std::ios::nocreate to avoid creating an empty file on 
 // attempts to read a non-existent one. Don't we? -- fsm
 #if defined(VCL_VC50)
 # undef  vcl_ios_in
 # define vcl_ios_in      (std::ios::in | std::ios::nocreate)
-#endif
-
-#if defined(VCL_SGI_CC_720)
-// This is not there.
-# undef  vcl_streamsize
-# define vcl_streamsize   unsigned
 #endif
 
 #endif // vcl_iostream_h_
