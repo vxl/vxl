@@ -8,12 +8,37 @@
 
 
 //: Constructor
-bmrf_node::bmrf_node( int frame_num, double probability )
-  : frame_num_(frame_num), probability_(probability),
+bmrf_node::bmrf_node( const bmrf_epi_seg_sptr& epi_seg, int frame_num, double probability )
+  : segment_(epi_seg), frame_num_(frame_num), probability_(probability),
     out_arcs_(), in_arcs_(), boundaries_(ALL+1, out_arcs_.end()), sizes_(ALL,0)
 {
 }
 
+//: Strip all of the arcs from this node
+void
+bmrf_node::strip()
+{
+  neighbor_iterator itr = out_arcs_.begin();
+  for(; itr != out_arcs_.end(); ++itr){
+    if((*itr)->to){
+      bmrf_node_sptr other = (*itr)->to;
+      neighbor_iterator itr2 = other->in_arcs_.begin();
+      for(; itr2 != other->in_arcs_.end(); ++itr2)
+        other->in_arcs_.erase(itr2);  
+    }
+  }
+  out_arcs_.clear();
+  for(int t = 0; t<=ALL; ++t)
+    boundaries_[t] = out_arcs_.end();
+
+  itr = in_arcs_.begin();
+  for(; itr != in_arcs_.end(); ++itr){
+    if((*itr)->from){
+      (*itr)->from->remove_neighbor(this, ALL);
+    }
+  } 
+}
+  
 
 //: Calculate the conditional probability that this node is correct give its neighbors
 double
@@ -39,6 +64,7 @@ bmrf_node::add_neighbor( bmrf_node *node, neighbor_type type )
   // add the arc
   bmrf_arc_sptr new_arc = new bmrf_arc(this, node);
   out_arcs_.insert(boundaries_[type+1], new_arc);
+  node->in_arcs_.push_back(new_arc);
   ++sizes_[type];
 
   // adjust boundaries if necessary
@@ -107,7 +133,8 @@ bmrf_node::num_neighbors( neighbor_type type )
 void
 bmrf_node::b_write( vsl_b_ostream& os ) const
 {
-  vsl_b_write(os, version());
+  vsl_b_write(os, version());                                 
+  vsl_b_write(os, this->segment_);
   vsl_b_write(os, this->frame_num_);
   vsl_b_write(os, this->probability_);
 
@@ -143,6 +170,7 @@ bmrf_node::b_read( vsl_b_istream& is )
   {
   case 1:
     {
+      vsl_b_read(is, this->segment_);
       vsl_b_read(is, this->frame_num_);
       vsl_b_read(is, this->probability_);
 

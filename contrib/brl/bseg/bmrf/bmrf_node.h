@@ -35,7 +35,7 @@ public:
     //: Constructor
     bmrf_arc() : from(NULL), to(NULL) {}
     //: Constructor
-    bmrf_arc(bmrf_node* f, bmrf_node* t) : from(f), to(t) {}
+    bmrf_arc( bmrf_node* f, bmrf_node* t) : from(f), to(t) {}
     //: Destructor
     ~bmrf_arc() {}
     
@@ -60,10 +60,14 @@ public:
   enum neighbor_type { SPACE, TIME, ALPHA, /*<--add new types here*/  ALL };
   
   //: Constructor
-  bmrf_node( int frame_num = 0, double probability = 0.0 );
+  bmrf_node( const bmrf_epi_seg_sptr& epi_seg = NULL, int frame_num = 0, double probability = 0.0 );
   
   //: Destructor
   ~bmrf_node(){}
+
+  //: Strip all of the arcs from this node
+  // This also removes arcs to and from this node in neighboring nodes
+  void strip();
 
   //: Calculate the conditional probability that this node is correct give its neighbors  
   double probability();
@@ -86,6 +90,9 @@ public:
   // \note if \param type is ALL then iteration is over all types
   neighbor_iterator end(neighbor_type type = ALL);
 
+  //: Return the frame number at which this node is found
+  bmrf_epi_seg_sptr epi_seg() const { return segment_; }
+
   //: Returns the number of outgoing neighbors to this node of type \param type
   // \note if \param type is ALL then this returns the total number of neighbors
   int num_neighbors( neighbor_type type = ALL );
@@ -106,15 +113,15 @@ public:
   void print_summary(vcl_ostream &os) const;
 
 private:
+  //: A smart pointer to the underlying epi-segment data
+  bmrf_epi_seg_sptr segment_;
+  
   //: The frame number associated with this node
   int frame_num_;
   
   //: The cached probability value
   double probability_;
-  
-  //: A smart pointer to the underlying epi-segment data
-  bmrf_epi_seg_sptr segment_;
-  
+
   //: The pointers to outgoing arcs
   vcl_list<bmrf_arc_sptr> out_arcs_;
 
