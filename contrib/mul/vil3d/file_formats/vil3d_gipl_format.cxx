@@ -8,7 +8,8 @@
 // \author Tim Cootes - Manchester
 
 #include "vil3d_gipl_format.h"
-#include <vcl_cstdlib.h>
+#include <vcl_cstdlib.h> // for vcl_abort()
+#include <vcl_cstring.h> // for vcl_strcmp()
 #include <vil/vil_stream_read.h>
 #include <vil/vil_stream_fstream.h>
 #include <vil3d/vil3d_image_view.h>
@@ -286,7 +287,7 @@ vil3d_image_view_base_sptr vil3d_gipl_image::get_copy_view(
 //: Get the properties (of the first slice)
 bool vil3d_gipl_image::get_property(char const *key, void * value) const
 {
-  if (strcmp(vil3d_property_voxel_size, key)==0)
+  if (vcl_strcmp(vil3d_property_voxel_size, key)==0)
   {
     float* array =  static_cast<float*>(value);
     // gipl stores data in mm
@@ -296,7 +297,7 @@ bool vil3d_gipl_image::get_property(char const *key, void * value) const
     return true;
   }
 
-  if (strcmp(vil3d_property_origin_offset, key)==0)
+  if (vcl_strcmp(vil3d_property_origin_offset, key)==0)
   {
     float* array =  static_cast<float*>(value);
     array[0] = (float)dim1_ * 0.5;
@@ -310,7 +311,7 @@ bool vil3d_gipl_image::get_property(char const *key, void * value) const
 
 //: Set the contents of the volume.
 bool vil3d_gipl_image::put_view(const vil3d_image_view_base& vv,
-  unsigned i0, unsigned j0, unsigned k0)
+                                unsigned i0, unsigned j0, unsigned k0)
 {
   vcl_cerr << "ERROR: vil3d_gipl_image::put_view NYI\n\n";
   return false;
