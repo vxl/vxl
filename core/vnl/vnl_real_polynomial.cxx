@@ -30,11 +30,14 @@ T vnl_real_polynomial_evaluate(double const *a, int n, T const& x)
   return acc;
 }
 
-#ifdef VCL_WIN32
-#define SELECT(T) <T >
-#else
-#define SELECT(T)
-#endif
+// The following code confuses doxygen, causing it to link every
+// mention of double to vnl_real_polynomial::evaluate
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+# ifdef VCL_WIN32
+#  define SELECT(T) <T >
+# else
+#  define SELECT(T)
+# endif
 
 //: Instantiate templates before use
 template double vnl_real_polynomial_evaluate SELECT(double )
@@ -55,6 +58,7 @@ vcl_complex<double> vnl_real_polynomial::evaluate(vcl_complex<double> const& x) 
   return vnl_real_polynomial_evaluate SELECT(vcl_complex<double>)
      (coeffs_.data_block(), coeffs_.size(), x);
 }
+#endif // DOXYGEN_SHOULD_SKIP_THIS
 
 //: Evaluate derivative at value x.
 double vnl_real_polynomial::devaluate(double x) const
