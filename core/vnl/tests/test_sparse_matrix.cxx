@@ -9,7 +9,7 @@
 #include <testlib/testlib_test.h>
 
 // Test the sparse matrix operations.
-int doTest1()
+void doTest1()
 {
   const unsigned int n = 20;
 
@@ -68,11 +68,9 @@ int doTest1()
       vcl_cout << diff(i,j) << " ";
     vcl_cout << vcl_endl;
   }
-
-  return 0;
 }
 
-int doTest2()
+void doTest2()
 {
   vcl_clock_t t = clock();
   for (unsigned int n = 1000; n<4000; n+=1000) {
@@ -95,11 +93,9 @@ int doTest2()
     vcl_cout << n << " " << tn - t << vcl_endl;
     t = tn;
   }
-
-  return 0;
 }
 
-int doTest3()
+void doTest3()
 {
   const unsigned int n = 20;
 
@@ -134,11 +130,9 @@ int doTest3()
     vcl_cout << "Sparse[" << i << "]: " << es.get_eigenvalue(i) << " -> "
              << es.get_eigenvector(i) << vcl_endl;
   }
-
-  return 0;
 }
 
-int doTest4()
+void doTest4()
 {
   const unsigned int n = 20;
 
@@ -168,21 +162,18 @@ int doTest4()
     vcl_cout << "Error: " << err << vcl_endl;
     testlib_test_assert("vnl_sparse_symmetric_eigensystem eigenvalue error", err < 1e-10);
   }
-  return 0;
 }
 
-extern "C"
-int test_sparse_matrix()
+static void test_sparse_matrix()
 {
   vcl_cout << "Starting test 1\n";
-  int r = doTest1();
+  doTest1();
   vcl_cout << "Starting test 2\n";
-  r = r + doTest2();
+  doTest2();
   vcl_cout << "Starting test 3\n";
-  r = r + doTest3();
+  doTest3();
   vcl_cout << "Starting test 4\n";
-  r = r + doTest4();
-  return r;
+  doTest4();
 }
 
 TESTMAIN(test_sparse_matrix);

@@ -4,7 +4,8 @@
 #include <vnl/algo/vnl_rnpoly_solve.h>
 #include <testlib/testlib_test.h>
 
-int test_rnpoly_roots() {
+static void test_rnpoly_roots()
+{
   // Intersection of two unit circles, centered in (0,0) and in (1,0):
 
   vnl_vector<double> f1(3);    f1(0) = 1;   f1(1) = 1;    f1(2) = -1;
@@ -82,8 +83,6 @@ int test_rnpoly_roots() {
   roots_r = solver3.real(); roots_i = solver3.imag();
   for (rp=roots_r.begin(),ip=roots_i.begin(); rp!=roots_r.end(); ++rp,++ip)
     vcl_cout << "  REAL " << *((*rp)) << " IMAG " << *((*ip)) << vcl_endl;
-
-  return 0;
 }
 
 TESTMAIN(test_rnpoly_roots);
