@@ -1,7 +1,3 @@
-#######################################
-include ${IUEROOT}/config/top-params.mk
-#######################################
-
 MANPAGE_SOURCES += vxl_copyright.h
 MANPAGE_SOURCES += vxl_config.h.in
 
@@ -35,12 +31,17 @@ SUBDIRS += vidl
 # coordinate systems
 SUBDIRS += vcsl
 
-# examples
+# multi-platform GUI toolkit
+SUBDIRS += vgui
+
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
+
+# global examples and tests
 ifndef NOTEST
 SUBDIRS += tests
 SUBDIRS += examples
-##currently empty: SUBDIRS += test_allvxl
-##needs libvgui-vrml from oxl: SUBDIRS += apps/vxl_vrml_viewer
 endif
 
 ######################################
