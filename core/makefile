@@ -29,14 +29,14 @@ SUBDIRS += vsl vul/io vbl/io vnl/io vgl/io vil/io vil1/io
 # coordinate systems
 SUBDIRS += vcsl
 
-# multi-platform GUI toolkit
-SUBDIRS += vgui
-
 # video
 SUBDIRS += vidl
 
 # video (using vil1)
 SUBDIRS += vidl_vil1
+
+# multi-platform GUI toolkit
+SUBDIRS += vgui
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
