@@ -1,12 +1,10 @@
-//--*-c++-*--
 // This is brl/bseg/vpro/vpro_ihs_process.h
 #ifndef vpro_ihs_process_h_
 #define vpro_ihs_process_h_
 //----------------------------------------------------------------------------
 //:
 // \file
-// \brief Displays color information derived from IHS encoding as 
-//        a video stream.
+// \brief Displays color information derived from IHS encoding as a video stream.
 // \author
 //   J.L. Mundy
 //
@@ -15,10 +13,6 @@
 //   J.L. Mundy January, 8, 2004    Initial version.
 // \endverbatim
 //---------------------------------------------------------------------------
-#include <vcl_fstream.h>
-#include <vcl_string.h>
-#include <vgl/vgl_point_2d.h>
-#include <vtol/vtol_face_2d_sptr.h>
 #include <vpro/vpro_video_process.h>
 
 class vpro_ihs_process : public vpro_video_process
@@ -35,6 +29,5 @@ class vpro_ihs_process : public vpro_video_process
   //members
   bool failure_;
 };
-
 
 #endif // vpro_ihs_process_h_
