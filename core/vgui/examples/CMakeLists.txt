@@ -1,8 +1,54 @@
-# ./oxl/vgui/examples/CMakeLists.txt
-#
+LINK_LIBRARIES( vgui vidl vul vbl )
 
-#SUBDIRS( kym fsm capes geoff tmp) 
-#IF(MFC_FOUND)
-#  SUBDIRS( vgui_example_mfc )
-#ENDIF(MFC_FOUND)
-#SUBDIRS(awf) 
+ADD_EXECUTABLE( basic01_display_image basic01_display_image.cxx)
+ADD_EXECUTABLE( basic02_display_line basic02_display_line.cxx)
+ADD_EXECUTABLE( basic03_display_text basic03_display_text.cxx)
+ADD_EXECUTABLE( basic04_display_2d basic04_display_2d.cxx)
+ADD_EXECUTABLE( basic05_menubar basic05_menubar.cxx)
+ADD_EXECUTABLE( basic06_popup basic06_popup.cxx)
+ADD_EXECUTABLE( basic07_dialog basic07_dialog.cxx)
+ADD_EXECUTABLE( basic08_printing basic08_printing.cxx)
+ADD_EXECUTABLE( basic09_mouse_position basic09_mouse_position.cxx)
+ADD_EXECUTABLE( basic10_draw_line basic10_draw_line.cxx)
+ADD_EXECUTABLE( basic11_display_3d basic11_display_3d.cxx)
+ADD_EXECUTABLE( example_display_pyramid example_display_pyramid.cxx)
+ADD_EXECUTABLE( example_draw_polygon example_draw_polygon.cxx)
+ADD_EXECUTABLE( example_get_highlighted example_get_highlighted.cxx)
+ADD_EXECUTABLE( example_multiple_windows example_multiple_windows.cxx)
+ADD_EXECUTABLE( example_vgui_observer example_vgui_observer.cxx)
+ADD_EXECUTABLE( example_satellite_tableau example_satellite_tableau.cxx)
+ADD_EXECUTABLE( example_blender_tableau example_blender_tableau.cxx)
+
+# GTK examples
+#-------------
+INCLUDE(${MODULE_PATH}/NewCMake/FindGTK.cmake)
+IF(GTK_FOUND)
+ INCLUDE_DIRECTORIES( ${GTK_INCLUDE_DIR} )
+
+ ADD_EXECUTABLE( gtk1_display_image gtk1_display_image.cxx)
+ TARGET_LINK_LIBRARIES( gtk1_display_image ${GTK_LIBRARIES} )
+
+ ADD_EXECUTABLE( gtk2_movie_player gtk2_movie_player.cxx )
+ TARGET_LINK_LIBRARIES( gtk2_movie_player ${GTK_LIBRARIES} )
+
+ ADD_EXECUTABLE( gtk3_vidl gtk3_vidl.cxx)
+ TARGET_LINK_LIBRARIES( gtk3_vidl vidl ${GTK_LIBRARIES} )
+ENDIF(GTK_FOUND)
+
+# GLUT examples
+#--------------
+INCLUDE( ${MODULE_PATH}/NewCMake/FindGLUT.cmake )
+IF(GLUT_FOUND)
+ ADD_EXECUTABLE( glut1_raw glut1_raw.cxx )
+ TARGET_LINK_LIBRARIES( glut1_raw ${GLUT_LIBRARIES} )
+
+ ADD_EXECUTABLE( glut2_raw glut2_raw.cxx )
+ TARGET_LINK_LIBRARIES( glut2_raw ${GLUT_LIBRARIES} )
+ENDIF (GLUT_FOUND)
+
+# MFC example
+#------------
+INCLUDE(${MODULE_PATH}/NewCMake/FindMFC.cmake)
+IF(MFC_FOUND)
+   SUBDIRS( mfc_example )
+ENDIF(MFC_FOUND)
