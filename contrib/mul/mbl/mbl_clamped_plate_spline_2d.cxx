@@ -91,7 +91,7 @@ static void build_L(vnl_matrix<double>& L,
                     const vcl_vector<vgl_point_2d<double> >& pts)
 {
   unsigned int n = pts.size();
-  if ( (L.rows()!=n) | (L.columns()!=n) ) L.resize(n,n);
+  if ( (L.rows()!=n) || (L.columns()!=n) ) L.resize(n,n);
 
   const vgl_point_2d<double> * pts_data = &pts[0];
   double** K_data = L.data_array();
