@@ -1,18 +1,20 @@
+// This is ./vxl/vnl/vnl_linear_operators_3.h
 #ifndef vnl_linear_operators_3_h_
 #define vnl_linear_operators_3_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// This is vxl/vnl/vnl_linear_operators_3.h
 
 //: \file
 //  \brief 3D linear algebra operations
+//
 //    Specialized linear operators for 3D vectors and matrices.
 //    Include this file if you're inlining or compiling linear algebra
 //    code for speed.
 //
 //  \author Andrew W. Fitzgibbon, Oxford RRG
 //  \date   04 Aug 96
+//
 // \verbatim
 // Modifications:
 // LSB (Manchester) 23/3/01 Tidied documentation

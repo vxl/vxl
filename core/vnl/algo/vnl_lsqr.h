@@ -1,3 +1,4 @@
+// This is ./vxl/vnl/algo/vnl_lsqr.h
 #ifndef vnl_lsqr_h_
 #define vnl_lsqr_h_
 #ifdef __GNUC__
@@ -14,12 +15,12 @@
 //
 // \author David Capel, capes@robots
 // \date   July 2000
+//
 // \verbatim
 // Modifications
 //   000705 capes@robots initial version.
 //   4/4/01 LSB (Manchester) Documentation tidied
 // \endverbatim
-//
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_vector.h>

@@ -5,9 +5,6 @@
 // \file 
 // \author awf
 // \date Dec 2001
-// Modifications
-// \verbatim
-// \endverbatim
 
 struct oxp_mpeg_codec_data;
 

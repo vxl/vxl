@@ -1,6 +1,10 @@
-// This is vxl/vbl/vbl_sparse_array_1d.txx
+// This is ./vxl/vbl/vbl_sparse_array_1d.txx
 #ifndef vbl_sparse_array_1d_txx_
 #define vbl_sparse_array_1d_txx_
+
+
+//:
+// \file
 
 #include "vbl_sparse_array_1d.h"
 #include "vbl_sparse_array_base.txx"

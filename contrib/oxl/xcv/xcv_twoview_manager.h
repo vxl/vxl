@@ -1,17 +1,18 @@
+// This is ./oxl/xcv/xcv_twoview_manager.h
 #ifndef xcv_twoview_manager_h_
 #define xcv_twoview_manager_h_
-//
-// This is xcv/xcv_twoview_manager.h
 
 //:
 // \file
 // \author   K.Y.McGaul
 // \brief Handles events which occur in one view but are displayed in two views.
+//
 //  (eg. displaying the epipolar line in one view corresponding
 //  to a mouse press in the other view.)
 //  Also holds data which links two views, eg. corner matches, FMatrix and
 //  HMatrix2D.
 //  Each set of two views will have its own twoview_manager.
+//
 // \verbatim
 //  Modifications:
 //    K.Y.McGaul     05-MAY-2000    Initial version.

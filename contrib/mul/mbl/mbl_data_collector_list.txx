@@ -1,6 +1,9 @@
 #ifndef mbl_data_collector_list_txx_
 #define mbl_data_collector_list_txx_
 
+//:
+//  \file
+
 #include <vcl_cstdlib.h>
 #include <vcl_cassert.h>
 #include <mbl/mbl_data_collector_list.h>

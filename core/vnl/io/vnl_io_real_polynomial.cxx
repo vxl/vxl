@@ -1,7 +1,10 @@
-// This is vxl/vnl/io/vnl_io_real_polynomial.cxx
+// This is ./vxl/vnl/io/vnl_io_real_polynomial.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
+
+//:
+// \file
 
 #include "vnl_io_real_polynomial.h"
 #include <vsl/vsl_binary_io.h>
@@ -50,4 +53,3 @@ void vsl_print_summary(vcl_ostream & os,const vnl_real_polynomial & p)
 {
   p.print(os);
 }
-

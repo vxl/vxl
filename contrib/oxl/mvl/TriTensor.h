@@ -3,24 +3,22 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+//:
+//  \file
+// \brief The trifocal tensor
 //
-// .NAME TriTensor - The trifocal tensor
-// .LIBRARY MViewBasics
-// .HEADER MultiView package
-// .INCLUDE mvl/TriTensor.h
-// .FILE TriTensor.cxx
-//
-// .SECTION Description:
 // A class to hold a Trifocal Tensor and perform common operations, such as
 // point and line transfer, coordinate-frame transformation and I/O.
 //
-// .SECTION Author:
+// \author
 //             Paul Beardsley, 29.03.96
 //             Oxford University, UK
 //
-// .SECTION Modifications:
+// \verbatim
+//  Modifications:
 //   AWF - Added composition, transformation, homography generation.
 //   Peter Vanroose - 11 Mar 97 - added operator==
+// \endverbatim
 //
 //------------------------------------------------------------------------------
 

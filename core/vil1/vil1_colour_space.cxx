@@ -1,4 +1,7 @@
-// This is vxl/vil/vil_colour_space.cxx
+// This is ./vxl/vil/vil_colour_space.cxx
+
+//:
+// \file
 
 /*
   fsm@robots.ox.ac.uk
@@ -69,7 +72,7 @@ void vil_colour_space_HSV_to_RGB(T h, T s, T v, T *r, T *g, T *b)
   float xh;
 
   v = v/255;
-        
+
   //extern float hue,  s,  v;  /* hue (0.0 to 360.0, is circular, 0=360)
   //                                    s and v are from 0.0 - 1.0) */
   //extern long  r2,  g2,  b2; /* values from 0 to 63 */

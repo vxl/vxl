@@ -1,19 +1,16 @@
 #ifndef _vsol_spatial_object_3d_h_
 #define _vsol_spatial_object_3d_h_
 //-----------------------------------------------------------------------------
+//:
+//  \file
+// \brief Base class of spatial entities Topology Geometry SpatialGroup
 //
-// .NAME    vsol_spatial_object_3d - Base class of spatial entities Topology Geometry SpatialGroup
-// .LIBRARY vsol
-// .HEADER  vxl package
-// .INCLUDE vsol/vsol_spatial_object_3d.h
-// .FILE    vsol_spatial_object_3d.cxx
-//
-// .SECTION Description
 //   vsol_spatial_object_3d is the base class of all spatial entities: vtol, vsol.
 //
-// .SECTION Author
+// \author
 //     Patricia A. Vrobel
-// .SECTION Modifications
+// \verbatim
+// Modifications
 // 2000/05/12 François BERTEL  add cast_to_group() because VXL is not compiled
 //                             with -frtti :-(
 // 2000/05/03 Peter TU         ported
@@ -26,6 +23,7 @@
 //           if the vsol_spatial_object_3d is modified it is "touched" to
 //           set the timestamp.  Then, any request to bounding information
 //           automatically updates the bounding volume if necessary.
+// \endverbatim
 //-----------------------------------------------------------------------------
 
 class vsol_spatial_object_3d;

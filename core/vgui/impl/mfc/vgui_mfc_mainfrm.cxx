@@ -1,8 +1,11 @@
+// This is ./oxl/vgui/impl/mfc/vgui_mfc_mainfrm.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
+
+//:
+//  \file
 //
-// This is vgui/impl/mfc/vgui_mfc_mainfrm.cxx
 // See vgui_mfc_mainfrm.h for a description of this file.
 //
 

@@ -1,19 +1,16 @@
 #ifndef topology_object_h
 #define topology_object_h
 
+//:
+//  \file
+// \brief base class for topology objects
 //
-// .NAME        vtol_topology_object - base class for topology objects
-// .LIBRARY     vtol
-// .HEADER      gel package
-// .INCLUDE     vtol/vtol_topology_object.h
-// .FILE        vtol_topology_object.cxx
-// .SECTION Description
 //  The TopologyObject class is the interface base class for all
 //  topological entites. There are only access methods in this class.
 //  TopologyObject inherits both SpatialObject and TopologyHierarchyNode.
 //  SpatialObject is the base class for all Topology and Geometry.
 //  The Topology class hierarchy:
-//
+// \verbatim
 //                             TopologyObject+
 //                                   |
 //             ---------------------------------------------------
@@ -26,6 +23,7 @@
 //Sequence of:        Vertex           Edge            Face
 //
 // + checked bounding box and timestamp -JLM
+// \endverbatim
 //
 // The Vertex, Edge and Face entities account for incidence between
 // points, curves and surfaces, respectively. For example, two Edge(s)
@@ -38,7 +36,7 @@
 // a surface region. Two adjacent surface regions (Face(s)) use an
 // Edge in the opposite sense in their bounding OneChain(s).
 //
-// .SECTION Author
+// \author
 //    Patricia A. Vrobel.
 //    ported by Luis E. Galup
 

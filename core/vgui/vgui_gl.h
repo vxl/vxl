@@ -1,6 +1,9 @@
 #ifndef vgui_gl_h
 #define vgui_gl_h
 
+//:
+//  \file
+
 #include <vcl_compiler.h>
 
 #ifdef VCL_WIN32

@@ -1,4 +1,4 @@
-//This is vxl/vsl/vsl_vector_io.txx
+// This is ./vxl/vsl/vsl_vector_io.txx
 #ifndef vsl_vector_io_txx_
 #define vsl_vector_io_txx_
 
@@ -6,6 +6,7 @@
 // \file
 // \brief binary IO functions for vcl_vector<T>
 // \author Tim Cootes
+//
 // Implementation
 
 #include <vsl/vsl_vector_io.h>

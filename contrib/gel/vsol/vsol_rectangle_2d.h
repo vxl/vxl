@@ -1,21 +1,21 @@
 #ifndef vsol_rectangle_2d_h
 #define vsol_rectangle_2d_h
 //*****************************************************************************
+//:
+//  \file
+// \brief Rectangle of a 2D space
 //
-// .NAME vsol_rectangle_2d - Rectangle of a 2D space
-// .LIBRARY vsol
-// .INCLUDE vsol/vsol_rectangle_2d.h
-// .FILE    vsol/vsol_rectangle_2d.cxx
-//
-// .SECTION Description
 // The vertices are defined in the counterclockwise.
-// .SECTION Author
+//
+// \author
 // François BERTEL
 //
-// .SECTION Modifications
+// \verbatim
+// Modifications
 // 2001/07/03 Peter Vanroose  Replaced vnl_double_2 by vgl_vector_2d
 // 2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
 // 2000/05/08 François BERTEL Creation
+// \endverbatim
 //*****************************************************************************
 
 class vsol_rectangle_2d;

@@ -1,3 +1,6 @@
+//:
+//  \file
+
 /*
   fsm@robots.ox.ac.uk
 */

@@ -7,8 +7,9 @@
 //:
 // \file
 // \author François BERTEL
-// Modifications
+//
 // \verbatim
+// Modifications
 // 2000/07/19 François BERTEL Creation.
 // 2002/01/22 Peter Vanroose - return type of execute() and inverse() changed to non-ptr
 // 2002/01/28 Peter Vanroose - vcl_vector member matrix_ changed to non-ptr

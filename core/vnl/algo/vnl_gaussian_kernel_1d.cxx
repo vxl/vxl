@@ -1,11 +1,12 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is ./vxl/vnl/algo/vnl_gaussian_kernel_1d.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// vnl_gaussian_kernel_1d
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 07 Aug 97
+
+//:
+// \file
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   07 Aug 97
 //
 //-----------------------------------------------------------------------------
 

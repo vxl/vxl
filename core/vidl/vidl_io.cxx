@@ -1,3 +1,6 @@
+//:
+// \file
+
 #include "vidl_io.h"
 #include <vidl/vidl_movie.h>
 #include <vidl/vidl_clip.h>

@@ -1,3 +1,8 @@
+// This is ./vxl/vsl/tests/test_clipon_polymorphic_io.cxx
+
+//:
+// \file
+
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_utility.h>

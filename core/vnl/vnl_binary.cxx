@@ -1,11 +1,14 @@
-// This is vxl/vnl/vnl_binary.cxx
+// This is ./vxl/vnl/vnl_binary.cxx
+#ifdef __GNUC__
+#pragma implementation
+#endif
+
+//:
+// \file
 
 /*
   fsm@robots.ox.ac.uk
 */
-#ifdef __GNUC__
-#pragma implementation
-#endif
 #include "vnl_binary.h"
 
 #include <vcl_iostream.h>

@@ -3,18 +3,13 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+//:
+//  \file
+// \brief Decompose PMatrix into [A a]
 //
-// .NAME    PMatrixDecompAa - Decompose PMatrix into [A a]
-// .LIBRARY MViewBasics
-// .HEADER  MultiView Package
-// .INCLUDE mvl/PMatrixDecompAa.h
-// .FILE    PMatrixDecompAa.cxx
-// .EXAMPLE examples/examplePMatrixDecompAa.cxx
-//
-// .SECTION Description
 //    Decompose PMatrix into [A a] where A is 3x3 and a is 3x1.
 //
-// .SECTION Author
+// \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 14 Feb 97
 
 #include <vnl/vnl_double_3x3.h>
@@ -46,7 +41,6 @@ public:
 
 //:  Set PMatrix from [A a].
   void get(PMatrix* P) const { P->set(A, a); }
-
 };
 
 #endif // PMatrixDecompAa_h_

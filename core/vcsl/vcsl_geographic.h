@@ -2,12 +2,13 @@
 #define VCSL_GEOGRAPHIC_H
 
 //:
-// \file 
+// \file
 // \author François BERTEL
-// Modifications
+//
 // \verbatim
+// Modifications
 // 2000/06/29 François BERTEL Creation. Adapted from IUE
-// 10/4/2001 Ian Scott (Manchester) Coverted perceps header to doxygen
+// 10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
 // \endverbatim
 
 
@@ -57,7 +58,7 @@ protected:
   //***************************************************************************
   // Implementation
   //***************************************************************************
-  
+
   //: Spheroid
   vcsl_spheroid_sptr spheroid_;
 };

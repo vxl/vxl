@@ -1,15 +1,15 @@
+// This is ./vxl/vil/vil_memory_image_impl.h
 #ifndef vil_memory_image_impl_h_
 #define vil_memory_image_impl_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// This is vxl/vil/vil_memory_image_impl.h
-
 
 //:
 // \file
 // \author awf@robots.ox.ac.uk
 // \date 16 Mar 00
+//
 //\verbatim
 // Modifications
 //     010126 BJM (mccane@cs.otago.ac.nz) added constructor from

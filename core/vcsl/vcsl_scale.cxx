@@ -1,6 +1,10 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
+
+//:
+// \file
+
 #include <vcsl/vcsl_scale.h>
 
 #include <vcl_cassert.h>

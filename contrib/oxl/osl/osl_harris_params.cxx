@@ -1,5 +1,8 @@
 #include "osl_harris_params.h"
 
+//:
+//  \file
+
 //: Make default osl_harris_params object
 osl_harris_params::osl_harris_params()
 {

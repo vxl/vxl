@@ -3,6 +3,9 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+
+//:
+//  \file
 //
 // \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 30 Dec 98

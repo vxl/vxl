@@ -1,10 +1,9 @@
+// This is ./vxl/vgl/vgl_vector_2d.h
 #ifndef vgl_vector_2d_h_
 #define vgl_vector_2d_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-
-// This is vxl/vgl/vgl_vector_2d.h
 
 //:
 // \file
@@ -38,7 +37,7 @@ public:
   //: Creates the vector (0,0) of zero length.
   inline vgl_vector_2d () : x_(0) , y_(0) {}
 
-  //: Creates the vector (x,y).
+  //: Creates the vector \a (x,y).
   inline vgl_vector_2d (T x, T y) : x_(x) , y_(y) {}
 
 #if 0 // The defaults do exactly what they should do...

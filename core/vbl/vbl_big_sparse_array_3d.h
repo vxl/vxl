@@ -1,3 +1,4 @@
+// This is ./vxl/vbl/vbl_big_sparse_array_3d.h
 #ifndef vbl_big_sparse_array_3d_h_
 #define vbl_big_sparse_array_3d_h_
 #ifdef __GNUC__
@@ -6,6 +7,7 @@
 //:
 // \file
 // \brief Sparse 3D array
+//
 //  vbl_big_sparse_array_3d is a sparse 3D array allowing space efficient
 //  access of the form    s(300,700,900) = 2;
 //  It uses the 64-bit integer type "long long" (whenever supported by the
@@ -15,7 +17,7 @@
 //  (Actually, for some dimensions, it could be a factor 2 higher.)
 //
 // Example usage:
-// \verbatim
+// \code
 //  vbl_big_sparse_array_3d<double> x;
 //
 //  x(1,2,3) = 1.23;
@@ -26,7 +28,7 @@
 //           << "222 = " << x(2,2,2) << vcl_endl
 //           << "333 is full? " << x.fullp(3,3,3) << vcl_endl
 //           << x;
-// \endverbatim
+// \endcode
 //
 // \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 02 Oct 96

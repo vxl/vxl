@@ -1,12 +1,13 @@
+// This is ./vxl/vnl/vnl_real_npolynomial.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
-// This is vxl/vnl/vnl_real_npolynomial.cxx
 
 //:
 //  \file
 //  \brief a degree n real polynomial
 //  \author Marc Pollefeys, ESAT-VISICS, K.U.Leuven, 12-08-97
+//
 //  Implements a polynomial with N variables
 
 #include <vcl_cassert.h>
@@ -221,4 +222,3 @@ vcl_ostream& operator<<(vcl_ostream& os, vnl_real_npolynomial const& P)
   }
   os << vcl_endl; return os;
 }
-

@@ -1,9 +1,9 @@
+// This is ./vxl/vbl/vbl_bounding_box.h
 #ifndef vbl_bounding_box_h_
 #define vbl_bounding_box_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// This is vxl/vbl/vbl_bounding_box.h
 
 //:
 // \file
@@ -154,9 +154,9 @@ private:
 
 //: A class to hold and update a bounding box.
 //  Save valuable time not writing
-// \verbatim
+// \code
 //    if (x > xmax).....
-// \endverbatim
+// \endcode
 
 template <class T, int DIM>
 class vbl_bounding_box : public vbl_bounding_box_base<T, vbl_bounding_box_DIM<DIM> >

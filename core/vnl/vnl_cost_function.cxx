@@ -1,13 +1,12 @@
-// This is vxl/vnl/vnl_cost_function.cxx
-
-//-*- c++ -*-------------------------------------------------------------------
+// This is ./vxl/vnl/vnl_cost_function.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// vnl_cost_function
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 23 Oct 97
+
+//:
+// \file
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   23 Oct 97
 //
 //-----------------------------------------------------------------------------
 

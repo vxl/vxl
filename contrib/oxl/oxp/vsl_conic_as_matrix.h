@@ -3,15 +3,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// .NAME    vsl_conic_as_matrix
-// .LIBRARY oxp
-// .HEADER  Oxford Package
-// .INCLUDE oxp/vsl_conic_as_matrix.h
-// .FILE    vsl_conic_as_matrix.cxx
-// .SECTION Author
+//:
+// \file
+// \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 12 Nov 99
-//
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_double_3x3.h>

@@ -1,6 +1,9 @@
 #ifndef mbl_data_array_wrapper_txx_
 #define mbl_data_array_wrapper_txx_
 
+//:
+//  \file
+
 #include <mbl/mbl_data_array_wrapper.h>
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h>
@@ -33,7 +36,6 @@ mbl_data_array_wrapper<T>::mbl_data_array_wrapper(const vcl_vector<T > &data)
   assert(data.size() == 0|| &data[data.size() - 1] - &data[0] + 1 == data.size());
   set(&data[0], data.size());
 }
-
 
 
 //: Initialise to return elements from data[i]

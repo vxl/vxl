@@ -1,6 +1,9 @@
 #ifndef mbl_stochastic_data_collector_txx_
 #define mbl_stochastic_data_collector_txx_
 
+//:
+//  \file
+
 #include <vcl_string.h>
 #include <vsl/vsl_indent.h>
 #include <mbl/mbl_stochastic_data_collector.h>

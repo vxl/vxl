@@ -1,14 +1,15 @@
+// This is ./oxl/xcv/xcv_geometry.h
 #ifndef xcv_geometry_h_
 #define xcv_geometry_h_
-//
-// This is xcv/xcv_geometry.h
 
 //:
 // \file
 // \author   K.Y.McGaul
 // \brief  Interface to geometry functions.
+//
 //  Creates a menu for, and provides an interface to geometric operations
 //  contained in vxl.
+//
 // \verbatim
 //  Modifications:
 //   K.Y.McGaul     27-JAN-2000    Initial version.

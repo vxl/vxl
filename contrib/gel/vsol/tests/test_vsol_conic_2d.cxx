@@ -9,6 +9,9 @@
 // 1.0     |2000/05/16| François BERTEL          |Creation
 //*****************************************************************************
 
+//:
+//  \file
+
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 #include <vsol/vsol_conic_2d.h>

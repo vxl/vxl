@@ -1,4 +1,4 @@
-// This is vsl_set_io.txx
+// This is ./vxl/vsl/vsl_set_io.txx
 #ifndef vsl_set_io_txx_
 #define vsl_set_io_txx_
 
@@ -6,6 +6,7 @@
 // \file
 // \brief  binary IO functions for vcl_set<T>
 // \author K.Y.McGaul
+//
 // Implementation
 
 #include <vsl/vsl_set_io.h>

@@ -1,3 +1,4 @@
+// This is ./vxl/vgl/vgl_conic.h
 #ifndef vgl_conic_h_
 #define vgl_conic_h_
 //:
@@ -6,11 +7,11 @@
 //
 //  This example tells you the type of the given conic equation,
 //  and prints the equation in readable form:
-// \verbatim
+// \code
 //   vgl_conic<double> c(1, 0, 2, 0, 0, -3);
 //   vcl_cout << c.real_type() << '\n'; // prints "real ellipse"
 //   vcl_cout << c << '\n'; // prints the equation: X^2 + 2 Y^2 - 3 = 0
-// \endverbatim
+// \endcode
 //
 // \verbatim
 // Modifications
@@ -231,17 +232,17 @@ public:
   //: Returns the dual or tangential representation of this conic.
   vgl_conic tangential_form() const { return dual_conic(); }
 
-  //: Modify this conic by translating it over distance x in the X direction and distance y in the Y direction.
+  //: Modify this conic by translating it over distance \a x in the \a X direction and distance \a y in the \a Y direction.
   void translate_by(T x, T y);
 
 private:
   vgl_conic_type type_;
-  T a_; // coefficient of x^2
-  T b_; // coefficient of xy
-  T c_; // coefficient of y^2
-  T d_; // coefficient of xw
-  T e_; // coefficient of yw
-  T f_; // coefficient of w^2
+  T a_; //: coefficient of \a x^2
+  T b_; //: coefficient of \a xy
+  T c_; //: coefficient of \a y^2
+  T d_; //: coefficient of \a xw
+  T e_; //: coefficient of \a yw
+  T f_; //: coefficient of \a w^2
 
   //--------------------------------------------------------------------------
   //: set conic type from polynomial coefficients and store in member type_

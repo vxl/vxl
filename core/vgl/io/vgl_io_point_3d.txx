@@ -1,6 +1,9 @@
-// This is vxl/vgl/io/vgl_io_point_3d.txx
+// This is ./vxl/vgl/io/vgl_io_point_3d.txx
 #ifndef vgl_io_point_3d_txx_
 #define vgl_io_point_3d_txx_
+
+//:
+// \file
 
 #include <vgl/vgl_point_3d.h>
 #include <vsl/vsl_binary_io.h>

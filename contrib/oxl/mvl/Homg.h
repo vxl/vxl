@@ -3,26 +3,22 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// .NAME    Homg - Private base class for homogeneous vectors
-// .LIBRARY MViewBasics
-// .HEADER  MultiView Package
-// .INCLUDE mvl/Homg.h
-// .FILE    Homg.cxx
-//
-// .SECTION Description:
+//:
+// \file
+// \brief Private base class for homogeneous vectors
 //
 // This is the private base class for homogeneous vectors.  It provides the
 // get/set interface, and also a static variable Homg::infinity which is used
 // throughout when returning infinite nonhomogeneous values.
 //
-// .SECTION Author:
-//             Paul Beardsley, 29.03.96
-//             Oxford University, UK
+// \author
+//   Paul Beardsley, 29.03.96
+//   Oxford University, UK
 //
-// .SECTION Modifications:
+// \verbatim
+//  Modifications:
 //    210297 AWF Switched to fixed-length vectors for speed.
-//
+// \endverbatim
 //-------------------------------------------------------------------------------
 
 #include <vcl_cassert.h>

@@ -2,11 +2,12 @@
 #define vcsl_cartesian_3d_h
 
 //:
-// \file 
+// \file
 // \brief 3D Cartesian coordinate system
 // \author François BERTEL
-// Modifications
+//
 // \verbatim
+// Modifications
 // 2000/06/28 François BERTEL Creation. Adapted from IUE
 // \endverbatim
 
@@ -34,7 +35,7 @@ public:
   //***************************************************************************
   // Because VXL does not use dynamic_cast<> :-(
   //***************************************************************************
-  
+
   virtual const vcsl_cartesian_3d *cast_to_cartesian_3d(void) const;
 
   //***************************************************************************

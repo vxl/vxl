@@ -1,23 +1,22 @@
+// This is ./oxl/xcv/xcv_multiview.h
 #ifndef xcv_multiview_h_
 #define xcv_multiview_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// This is xcv/xcv_multiview.h
 
 //:
 // \file
 // \author   K.Y.McGaul
 // \brief Interface for multiview functions.
+//
 //  Creates a menu for, and provides an interface to multiview operations
 //  contained in mvl.
-//  NOTE that multiview computations are not included in this file because of
-//  licencing problems with the code, however, the compiled versions of xcv do
-//  include computations for FMatrix, HMatrix2D and TriTensor.
+//
 // \verbatim
 //  Modifications
 //   K.Y.McGaul     27-JAN-2000    Initial version.
+//   Peter Vanroose 18-JAN-2002    Added compute methods for F-matrix & H-matrix
 // \endverbatim
 
 #include "xcv_twoview_manager.h"
@@ -32,6 +31,13 @@ class HomgPoint2D;
 class xcv_multiview
 {
 public:
+  //: Compute an FMatrix for the two selected views.
+  static void compute_f_matrix();
+  //: Compute an HMatrix2D for the two selected views.
+  static void compute_h_matrix2d();
+  //: Compute corner matches for the two selected views.
+  static void compute_corner_matches();
+
   //: Load an FMatrix for the two selected views from a file.
   static void load_f_matrix();
   //: Load an HMatrix2D for the two selected views from a file.

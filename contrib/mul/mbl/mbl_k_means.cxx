@@ -1,3 +1,6 @@
+//:
+//  \file
+
 #include "mbl_k_means.h"
 #include <vcl_cmath.h>
 #include <vcl_algorithm.h>
@@ -352,4 +355,3 @@ unsigned mbl_k_means_weighted(mbl_data_wrapper<vnl_vector<double> > &data, unsig
 
   return iterations;
 }
-

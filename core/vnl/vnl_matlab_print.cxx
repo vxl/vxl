@@ -1,11 +1,14 @@
-// This is vxl/vnl/vnl_matlab_print.cxx
+// This is ./vxl/vnl/vnl_matlab_print.cxx
+#ifdef __GNUC__
+#pragma implementation
+#endif
+
+//:
+// \file
 
 /*
   fsm@robots.ox.ac.uk
 */
-#ifdef __GNUC__
-#pragma implementation
-#endif
 
 // Adapted from awf's MatOps class.
 

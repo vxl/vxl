@@ -2,6 +2,9 @@
 #pragma implementation
 #endif
 
+//:
+//  \file
+
 #include "HMatrix1D.h"
 
 #include <vcl_fstream.h>
@@ -78,7 +81,7 @@ HMatrix1D::~HMatrix1D()
 
 //-----------------------------------------------------------------------------
 //
-//: Return the transformed point given by @{ $x_2 = {\tt H} x_1$ @}
+//: Return the transformed point given by $x_2 = {\tt H} x_1$
 
 HomgPoint1D HMatrix1D::transform_to_plane2(const HomgPoint1D& x1) const
 {
@@ -86,7 +89,7 @@ HomgPoint1D HMatrix1D::transform_to_plane2(const HomgPoint1D& x1) const
 }
 
 //
-//: Return the transformed point given by @{ $x_1 = {\tt H}^{-1} x_2$ @}
+//: Return the transformed point given by $x_1 = {\tt H}^{-1} x_2$
 
 HomgPoint1D HMatrix1D::transform_to_plane1(const HomgPoint1D& x2) const
 {
@@ -99,7 +102,7 @@ HomgPoint1D HMatrix1D::operator()(const HomgPoint1D& x1) const
 }
 
 //
-//: Return the transformed point given by @{ $x_1 = {\tt H}^{-1} x_2$ @}
+//: Return the transformed point given by $x_1 = {\tt H}^{-1} x_2$
 
 HomgPoint1D HMatrix1D::preimage(const HomgPoint1D& x2) const
 {
@@ -188,4 +191,3 @@ void HMatrix1D::set_inverse (const vnl_matrix<double>& H)
 }
 
 //--------------------------------------------------------------------------------
-

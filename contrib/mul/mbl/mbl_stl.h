@@ -37,9 +37,9 @@ inline T mbl_stl_increments_n(Out first, Size n, T init)
 //: Produces a first order sequence from the supplied unary function.
 // The value produced at a given step is a function of the previous value.
 // E.g. the following is equivalent to using mbl_stl_increments
-// \verbatim
+// \code
 // mbl_stl_sequence(A.begin(), A.end(), vcl_bind1st(vcl_plus<unsigned>(), 1u), 0u);
-// \endverbatim
+// \endcode
 // \return the next value in the sequence.
 template<class Out, class T, class UnOp>
 inline T mbl_stl_sequence(Out first, Out last, UnOp op, T init)
@@ -60,4 +60,3 @@ inline T mbl_stl_sequence_n(Out first, Size n, UnOp op, T init)
 }
 
 #endif // mbl_functions_h_
-

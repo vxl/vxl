@@ -1,18 +1,19 @@
+// This is ./vxl/vnl/vnl_real_npolynomial.h
 #ifndef vnl_real_npolynomial_h_
 #define vnl_real_npolynomial_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 
-// This is vxl/vnl/vnl_real_npolynomial.h
-
 //:
 //  \file
 //  \brief contains class for polynomials with N variables
+//
 //  Implements a polynomial with N variables
 //
 //  \author Marc Pollefeys, ESAT-VISICS, K.U.Leuven
 //  \date   12-08-97
+//
 //  \verbatim
 //  Modifications
 //  Peter Vanroose 10 Oct 1999 - added simplify();

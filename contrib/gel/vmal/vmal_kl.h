@@ -1,14 +1,11 @@
 #ifndef vmal_kl_h_
 #define vmal_kl_h_
 //--------------------------------------------------------------------------------
-// .NAME        vmal_kl
-// .INCLUDE     vmal/vmal_kl.h
-// .FILE        vmal_kl.cxx
-// .SECTION Description:
-//   Interface to use Kanade-Lucas algorithm
-// .SECTION Author
+//:
+// \file
+// \brief Interface to use Kanade-Lucas algorithm
+// \author
 //   L. Guichard
-// .SECTION Modifications:
 //--------------------------------------------------------------------------------
 extern "C" {
 #include <vgel/kl/klt.h>

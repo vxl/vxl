@@ -1,16 +1,16 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is ./oxl/xcv/xcv_picker_tableau.h
 #ifndef xcv_picker_tableau_h_
 #define xcv_picker_tableau_h_
-//
-// This is xcv/xcv_picker_tableau.h
 
 //:
 // \file
 // \author K.Y.McGaul
 // \brief  Tableau to pick points and lines.
+//
 //  The difference between this picker tableau and vgui_rubberbander is that this
 //  keeps control of the event loop until the object has been picked.  The functions
 //  pick_point/pick_line will only return once the user has picked a point/line.
+//
 // \verbatim
 //  Modifications:
 //   K.Y.McGaul   23-MAR-2001  Initial version.

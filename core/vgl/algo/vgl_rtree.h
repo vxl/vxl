@@ -1,10 +1,9 @@
+// This is ./vxl/vgl/algo/vgl_rtree.h
 #ifndef vgl_rtree_h_
 #define vgl_rtree_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-
-// This is vgl_tree.h
 
 //:
 // \file
@@ -207,28 +206,28 @@ public:
 // optimize heavily when compiling this source file.
 //
 // V must have the following signatures:
-// \verbatim
+// \code
 //   V::V();
 //   V::V(V const &);
 //   V::operator==(V const &) or operator==(V const &, V const &);
-// \endverbatim
+// \endcode
 //
 // B must have the following signatures :
-// \verbatim
+// \code
 //   B::B();
 //   B::B(const &);
 //   B::operator==(V const &) or operator==(B const &, B const &);
-// \endverbatim
+// \endcode
 //
 // C must have the following (static method) signatures :
-// \verbatim
+// \code
 //   void  C::init  (B &, V const &);
 //   void  C::update(B &, V const &);
 //   void  C::update(B &, B const &);
 //   bool  C::meet  (B const &, V const &) const;
 //   bool  C::meet  (B const &, B const &) const;
 //   float C::volume(B const &) const;
-// \endverbatim
+// \endcode
 //
 // The volume() method is used by the rtree to make decisions
 // about where to put new elements.

@@ -1,26 +1,23 @@
 #ifndef vsol_point_2d_h
 #define vsol_point_2d_h
 //*****************************************************************************
+//:
+//  \file
+// \brief Point of a 2D space
 //
-// .NAME vsol_point_2d - Point of a 2D space
-// .LIBRARY vsol
-// .INCLUDE vsol/vsol_point_2d.h
-// .FILE    vsol/vsol_point_2d.cxx
-//
-// .SECTION Author
+// \author
 // François BERTEL
 //
-// .SECTION Modifications
+// \verbatim
+// Modifications
 // 2001/07/03 Peter Vanroose  Replaced new/delete by vgl_point_2d as member
 // 2001/07/03 Peter Vanroose  Replaced vnl_double_2 by vgl_vector_2d
 // 2001/06/30 Peter Vanroose  Added constructor from vgl_point_2d
-// 2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
-// 2000/05/12 François BERTEL Replacement of vnl_vector_fixed<double,2> by
-//                            vnl_double_2
-// 2000/04/14 François BERTEL Creation
 // 2000/09/18 Peter Tu        using vgl_point_2d instead of vnl_vector
-
-
+// 2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
+// 2000/05/12 François BERTEL Replacement of vnl_vector_fixed<double,2> by vnl_double_2
+// 2000/04/14 François BERTEL Creation
+// \endverbatim
 //*****************************************************************************
 
 class vsol_point_2d;

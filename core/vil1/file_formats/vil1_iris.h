@@ -1,13 +1,14 @@
+// This is ./vxl/vil/file_formats/vil_iris.h
 #ifndef vil_iris_file_format_h_
 #define vil_iris_file_format_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-
 //:
 // \file
 // \author joris.schouteden@esat.kuleuven.ac.be
 // \date 17 Feb 2000
+//
 //\verbatim
 //  Modifications
 //  17-Feb-2000 JS - Initial version, copied from IrisRGBImage.C
@@ -103,7 +104,6 @@ public:
 
   // Read a plain section
   bool get_section_verbatim(void* ib, int x0, int y0, int xs, int ys) const;
-
 };
 
 #endif // vil_iris_file_format_h_

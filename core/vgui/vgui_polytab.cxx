@@ -16,18 +16,21 @@
 #include <vgui/vgui_popup_params.h>
 #include <vgui/vgui_command.h>
 
-// Class polytab_base is a tableau which renders its children into sub-rectangles
+//:
+//  \file
+//
+// Class vgui_polytab_base is a tableau which renders its children into sub-rectangles
 // of its given viewport. The subrectangles are given as relative coordinates
 // on [0,1]x[0,1], with (0,0) being the lower left corner and (1,1) the upper
-// right corner. polytab_base has a concept of which child is 'current', meaning
+// right corner. vgui_polytab_base has a concept of which child is 'current', meaning
 // roughly which child is getting the mouse events.
 //
-// Class polytab is derived from polytab_base and automatically switches current
+// Class vgui_polytab is derived from vgui_polytab_base and automatically switches current
 // child, according to where the pointer is, in a sensible way.
 //
 // This can be used to emulate two adaptors side by side.
 
-// Implementation notes:
+// \par Implementation notes:
 // Many methods take an argument "GLint const vp[4]", which is the viewport (in
 // the format returned by OpenGL) as it was when the last event reached the
 // tableau. For example, it is not possible to switch 'current' child without
@@ -191,7 +194,7 @@ const int b) {
 }
 
 //: Adds the given tableau to the given proportion of the viewport.
-//   x,y,w,h specify a portion of the polytab's viewport in coordinates
+//   x,y,w,h specify a portion of the vgui_polytab's viewport in coordinates
 //   which go from 0 to 1.
 int vgui_polytab_base::add(vgui_tableau_sptr const& t, float x, float y, float w, float h) {
   static int counter = 0;
@@ -387,7 +390,6 @@ bool vgui_polytab::handle(vgui_event const &e) {
   // Handle in base class (piglet).
   return vgui_polytab_base::handle(snap.vp, e);
 }
-
 
 
 void vgui_polytab::get_popup(vgui_popup_params const &params, vgui_menu &menu) {

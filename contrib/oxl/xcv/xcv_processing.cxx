@@ -1,7 +1,8 @@
-//
-// This is xcv/xcv_processing.cxx
+// This is ./oxl/xcv/xcv_processing.cxx
+
+//:
+//  \file
 // See xcv_processing.h for a description of this file.
-//
 
 #include "xcv_processing.h"
 
@@ -53,4 +54,3 @@ vgui_menu xcv_processing::create_processing_menu()
 
   return pro_menu;
 }
-

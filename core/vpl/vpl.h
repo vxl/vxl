@@ -1,5 +1,8 @@
+// This is ./vxl/vpl/vpl.h
 #ifndef vpl_h_
 #define vpl_h_
+//:
+// \file
 
 #include <vcl_cstddef.h>
 

@@ -1,3 +1,5 @@
+//:
+//  \file
 
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
@@ -146,4 +148,3 @@ vcl_ostream& operator<< ( vcl_ostream& ostr, const rsdl_point& pt )
   vcl_cout << "]";
   return ostr;
 }
-

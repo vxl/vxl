@@ -1,3 +1,6 @@
+//:
+// \file
+
 #include "gevd_detector_params.h"
 
 #include <vcl_strstream.h>

@@ -1,7 +1,10 @@
-// This is vxl/vnl/io/vnl_io_nonlinear_minimizer.cxx
+// This is ./vxl/vnl/io/vnl_io_nonlinear_minimizer.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
+
+//:
+// \file
 
 #include <vsl/vsl_binary_io.h>
 #include <vnl/io/vnl_io_nonlinear_minimizer.h>
@@ -173,4 +176,3 @@ void vsl_print_summary(vcl_ostream &os, const vnl_nonlinear_minimizer * b)
 // Explicitly instantiate loader
 VSL_CLIPON_BINARY_LOADER_INSTANTIATE(vnl_nonlinear_minimizer, \
                                      vnl_io_nonlinear_minimizer);
-

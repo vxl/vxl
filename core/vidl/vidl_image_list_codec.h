@@ -2,13 +2,14 @@
 #define vidl_image_list_codec_h
 
 //:
-// \file 
+// \file
 // \author Nicolas Dano, september 1999
-// Modifications
+//
 // \verbatim
+// Modifications
 // Julien ESTEVE, June 2000
 //     Ported from TargetJr
-// 10/4/2001 Ian Scott (Manchester) Coverted perceps header to doxygen
+// 10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
 // \endverbatim
 
 
@@ -73,7 +74,6 @@ protected:
 private:
   char* default_image_type_;
   static char* default_initialization_image_type_;
-
 };
 
 #endif // vidl_image_list_codec_h

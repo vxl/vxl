@@ -2,6 +2,9 @@
 #pragma implementation
 #endif
 
+//:
+//  \file
+
 #include "AffineMetric.h"
 
 #include <vcl_iostream.h>

@@ -1,13 +1,14 @@
+// This is ./vxl/vnl/vnl_det.h
 #ifndef vnl_det_h_
 #define vnl_det_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// This is vxl/vnl/vnl_det.h
 
 //: \file
 //  \brief Direct evaluation of 2x2, 3x3 and 4x4 determinants.
 //  \author fsm@robots.ox.ac.uk
+//
 // \verbatim
 //  Modifications
 //  Peter Vanroose - 15 Oct. 2001 - Renamed from vnl_determinant to vnl_det

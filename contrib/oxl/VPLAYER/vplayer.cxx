@@ -1,3 +1,6 @@
+//:
+//  \file
+
 #include <vcl_vector.h>
 
 #include <vil/vil_image.h>

@@ -1,4 +1,4 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is ./vxl/vnl/algo/vnl_brent.h
 #ifndef vnl_brent_h_
 #define vnl_brent_h_
 #ifdef __GNUC__
@@ -8,6 +8,7 @@
 // \file
 // \author awf@robots.ox.ac.uk
 // \date   07 Dec 00
+//
 // \verbatim
 // Modifications
 // 31 May 2001 Ian Scott (Manchester). Added some documentation

@@ -1,14 +1,18 @@
+// This is ./vxl/vsl/vsl_indent.h
 #ifndef vsl_indent_h_
 #define vsl_indent_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
+//:
+// \file
+// \author Tim Cootes
 
 #include <vcl_iosfwd.h>
 
 //: Put indents into output streams, to produce more legible printed output
 //  Its use is best described by example:
-// \verbatim
+// \code
 // vcl_cout<<vsl_indent()<<"No Indent"<<vcl_endl;
 // vsl_indent_inc(vcl_cout);
 // vcl_cout<<vsl_indent()<<"1 Indent"<<vcl_endl;
@@ -18,7 +22,7 @@
 // vcl_cout<<vsl_indent()<<"1 Indent"<<vcl_endl;
 // vsl_indent_dec(vcl_cout);
 // vcl_cout<<vsl_indent()<<"No Indent"<<vcl_endl;
-// \endverbatim
+// \endcode
 //
 // This produces output of the form
 // \verbatim
@@ -30,7 +34,7 @@
 // \endverbatim
 //
 // Example of use in class output:
-// \verbatim
+// \code
 // class Fred
 // {
 // public:
@@ -45,7 +49,6 @@
 //  vsl_indent_dec(os);
 //  return os;
 // }
-//
 //
 // class Jim
 // {
@@ -72,7 +75,7 @@
 //  Jim jim;
 //  vcl_cout<<jim<<vcl_endl;
 // }
-// \endverbatim
+// \endcode
 //
 // This produces output:
 // \verbatim
@@ -80,8 +83,6 @@
 //    Fred's data
 //    Jim's other data
 // \endverbatim
-//
-// \author Tim Cootes
 class vsl_indent {
 };
 

@@ -1,7 +1,10 @@
-// This is vxl/vgl/io/vgl_io_homg_line_3d_2_points.txx
+// This is ./vxl/vgl/io/vgl_io_homg_line_3d_2_points.txx
 #ifndef vgl_io_homg_line_3d_2_points_txx_
 #define vgl_io_homg_line_3d_2_points_txx_
-// Author: John Kang (Manchester)
+
+//:
+// \file
+// \author: John Kang (Manchester)
 
 #include <vgl/io/vgl_io_homg_line_3d_2_points.h>
 #include <vgl/io/vgl_io_homg_point_3d.h>

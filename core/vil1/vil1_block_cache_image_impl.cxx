@@ -1,17 +1,11 @@
-//--------------------------------------------------------------
-//
-// Class : vxl/vil/vil_block_cache_image_impl.cxx
-//
-//
-//--------------------------------------------------------------
-
-/*
-  fsm@robots.ox.ac.uk
-*/
-
+// This is ./vxl/vil/vil_block_cache_image_impl.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 #include "vil_block_cache_image_impl.h"
 #include <vcl_cstring.h>  // strcmp()
 
@@ -65,14 +59,14 @@ bool vil_block_cache_image_impl::get_property(char const *tag,
 
 /* START_MANCHESTER_BINARY_IO_CODE */
 
-  //: Return the name of the class;
+//: Return the name of the class;
 vcl_string vil_block_cache_image_impl::is_a() const
 {
   static const vcl_string class_name_="vil_block_cache_image_impl";
   return class_name_;
 }
 
-  //: Return true if the name of the class matches the argument
+//: Return true if the name of the class matches the argument
 bool vil_block_cache_image_impl::is_class(vcl_string const& s) const
 {
   static const vcl_string class_name_="vil_block_cache_image_impl";
@@ -80,4 +74,3 @@ bool vil_block_cache_image_impl::is_class(vcl_string const& s) const
 }
 
 /* END_MANCHESTER_BINARY_IO_CODE */
-

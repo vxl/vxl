@@ -1,6 +1,9 @@
-// This is vxl/vgl/vgl_homg_line_2d.txx
+// This is ./vxl/vgl/vgl_homg_line_2d.txx
 #ifndef vgl_homg_line_2d_txx_
 #define vgl_homg_line_2d_txx_
+
+//:
+// \file
 
 #include <vcl_iostream.h>
 #include "vgl_homg_line_2d.h"
@@ -16,7 +19,7 @@ vgl_homg_line_2d<Type>::vgl_homg_line_2d (vgl_line_2d<Type> const& l)
 //: get two points on the line.
 //  These two points are normally the intersections with the Y axis and X axis,
 //  respectively.  When the line is parallel to one of these, the point with
-//  y/w=1 or x/w=1, resp. are taken.  When the line goes through the origin,
+//  \a y/w=1 or \a x/w=1, resp. are taken.  When the line goes through the origin,
 //  the second point is (b, -a, 1).  Finally, when the line is the line at
 //  infinity, the returned points are (1,0,0) and (0,1,0).
 //

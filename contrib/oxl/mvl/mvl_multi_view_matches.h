@@ -3,15 +3,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+//:
+//  \file
+// \brief Multiple view matches
 //
-// .NAME    mvl_multi_view_matches - Multiple view matches
-// .LIBRARY mvl
-// .HEADER  MultiView Package
-// .INCLUDE mvl/mvl_multi_view_matches.h
-// .FILE    mvl_multi_view_matches.cxx
-// .EXAMPLE examples/mvl_multi_view_matches_example.cxx
-//
-// .SECTION Description
 //    A class to hold matches over multiple views, allowing for unmatched data.
 //    With each 3d feature there is associated a multiple-view match. A
 //    multiple-view match is a vector of integers which identify
@@ -21,10 +16,8 @@
 //    Xmatches[v] = i implies that the image of X in view "v" is the corner
 //    with index "i" in view "v".
 //
-// .SECTION Author
+// \author
 //     David Capel, Oxford RRG, 16 April 2000
-// .SECTION Modifications:
-//
 //-----------------------------------------------------------------------------
 
 //#include <vcl_memory.h>

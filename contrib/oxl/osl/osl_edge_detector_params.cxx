@@ -2,6 +2,9 @@
 //#include <vcl_sstream.h>
 //#include <vcl_fstream.h>
 
+//:
+//  \file
+
 
 osl_edge_detector_params::osl_edge_detector_params()
   : _sigma(3.0f)

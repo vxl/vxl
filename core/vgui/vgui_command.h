@@ -3,14 +3,15 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vgui_command
-// .INCLUDE vgui/vgui_command.h
-// .FILE vgui_command.cxx
-//
+//:
+// \file
+// \author
 // fsm@robots.ox.ac.uk \and pcp@robots.ox.ac.uk
-// awf renamed derived classes to be consistent with
-// header-file naming convention.
-// fsm fixed everything afterwards....
+// \verbatim
+// Modifications
+//  awf renamed derived classes to be consistent with header-file naming convention.
+//  fsm fixed everything afterwards....
+// \endverbatim
 
 #include <vbl/vbl_ref_count.h>
 

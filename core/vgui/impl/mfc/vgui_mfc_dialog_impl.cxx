@@ -1,13 +1,14 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is ./oxl/vgui/impl/mfc/vgui_mfc_dialog_impl.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// This is vgui/impl/mfc/vgui_mfc_dialog_impl.cxx
-// See vgui_mfc_dialog_impl.h for a description of this file.
-//
+
+//:
+//  \file
 // \author Marko Bacic, Oxford RRG
 // \date   31 July 2000
+//
+// See vgui_mfc_dialog_impl.h for a description of this file.
 //
 // \verbatim
 // Modifications:
@@ -20,7 +21,7 @@
 
 #include <vcl_string.h>
 #include <vcl_vector.h>
-#include <vcl_cstdio.h>
+#include <vcl_cstdio.h> // for sprintf()
 
 #include <vgui/internals/vgui_dialog_field.h>
 #include <vgui/internals/vgui_simple_field.h>
@@ -160,13 +161,13 @@ void vgui_mfc_dialog_impl::OnChooseColour(UINT uID)
   CColorDialog colour_dialog(0,0, this);
   colour_dialog.DoModal();
   COLORREF colour = colour_dialog.GetColor();
-  sprintf(buffer,"%4.3f",float(colour&0xff)/255.0);
+  vcl_sprintf(buffer,"%4.3f",float(colour&0xff)/255.0);
   CString s(buffer);
   s+=" ";
-  sprintf(buffer,"%4.3f",float((colour>>8)&0xff)/255.0);
+  vcl_sprintf(buffer,"%4.3f",float((colour>>8)&0xff)/255.0);
   s+=buffer;
   s+=" ";
-  sprintf(buffer,"%4.3f",float((colour>>16)&0xff)/255.0);
+  vcl_sprintf(buffer,"%4.3f",float((colour>>16)&0xff)/255.0);
   s+=buffer;
   csrs[which]->SetWindowText(s);
 }
@@ -310,7 +311,6 @@ bool vgui_mfc_dialog_impl::ask()
   for (vcl_vector<element>::iterator e_iter2 = elements.begin();
        e_iter2 != elements.end(); ++e_iter2) 
   {
-
     element l = *e_iter2;
     vgui_dialog_field *field = l.field;
 

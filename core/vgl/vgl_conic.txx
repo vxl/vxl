@@ -1,5 +1,8 @@
+// This is ./vxl/vgl/vgl_conic.txx
 #ifndef vgl_conic_txx_
 #define vgl_conic_txx_
+//:
+// \file
 // Written by Peter Vanroose, ESAT, K.U.Leuven, Belgium, 30 August 2001.
 
 #include "vgl_conic.h"

@@ -1,11 +1,11 @@
 //-*- c++ -*-------------------------------------------------------------------
-//
+
 //:
 //  \file
-
+//
 // Module: glmovie
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 21 May 99
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   21 May 99
 //
 //-----------------------------------------------------------------------------
 

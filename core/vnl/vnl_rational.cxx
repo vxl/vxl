@@ -1,5 +1,9 @@
+// This is ./vxl/vnl/vnl_rational.cxx
 #include <vnl/vnl_rational.h>
 #include <vcl_cmath.h> // for sqrt
+
+//:
+// \file
 
 vnl_rational::vnl_rational(double d)
 {
@@ -27,11 +31,13 @@ vnl_rational sqrt(vnl_rational x)
   return vnl_rational(vcl_sqrt(double(x)));
 }
 
-const vnl_rational vnl_numeric_traits<vnl_rational>::zero = 0L;
-const vnl_rational vnl_numeric_traits<vnl_rational>::one = 1L;
+const vnl_rational vnl_numeric_traits<vnl_rational>::zero = vnl_rational(0L,1L);
+const vnl_rational vnl_numeric_traits<vnl_rational>::one = vnl_rational(1L,1L);
 
-const vcl_complex<vnl_rational> vnl_numeric_traits<vcl_complex<vnl_rational> >::zero = vcl_complex<vnl_rational>(0L,0L);
-const vcl_complex<vnl_rational> vnl_numeric_traits<vcl_complex<vnl_rational> >::one = vcl_complex<vnl_rational>(1L,0L);
+const vcl_complex<vnl_rational> vnl_numeric_traits<vcl_complex<vnl_rational> >::zero
+  = vcl_complex<vnl_rational>(vnl_rational(0L,1L),vnl_rational(0L,1L));
+const vcl_complex<vnl_rational> vnl_numeric_traits<vcl_complex<vnl_rational> >::one
+  = vcl_complex<vnl_rational>(vnl_rational(1L,1L),vnl_rational(0L,1L));
 
 #ifdef VCL_GCC_EGCS // this includes egcs, gcc 2.8 and gcc 2.95
 #include <std/complext.cc>

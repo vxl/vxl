@@ -1,9 +1,8 @@
-// This is vgui/impl/mfc/vgui_mfc_adaptor.cxx
-// See vgui_mfc_adaptor.h for a description of this file
-//
+// This is ./oxl/vgui/impl/mfc/vgui_mfc_adaptor.cxx
+
 //:
 //  \file
-
+// See vgui_mfc_adaptor.h for a description of this file
 
 #include "vgui_mfc_adaptor.h"
 
@@ -599,4 +598,3 @@ BOOL vgui_mfc_adaptor::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
   //vcl_cerr << "Mouse wheel events are not handled" << vcl_endl;
   return FALSE;
 }
-

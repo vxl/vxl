@@ -7,7 +7,6 @@
 // \author Ian Scott
 
 
-
 //=======================================================================
 
 #include <mbl/mbl_data_collector.h>
@@ -25,91 +24,90 @@
 //
 // If calculating the values to be stored is expensive, this class
 // can be used as follows.
-// \verbatim
+// \code
 // mbl_stochastic_data_collector<double> c(100);
 // while(..)
 // {
 //   if (c.store_next()) c.force_record(f());
 // }
-// \endverbatim
+// \endcode
 template <class T>
 class mbl_stochastic_data_collector: public mbl_data_collector<T>
 {
-
 private:
-    //: Recorded samples are stored here
+  //: Recorded samples are stored here
   vcl_vector<T > samples_;
 
-    //: Provides iterator access to the data via data_wrapper()
+  //: Provides iterator access to the data via data_wrapper()
   mbl_data_array_wrapper<T > v_data_;
 
-    //: The number of samples presented to record() so far.
+  //: The number of samples presented to record() so far.
   unsigned long nPresented_;
 
-    //: Random number generator used to decide whether to store a particular vector.
+  //: Random number generator used to decide whether to store a particular vector.
   mbl_mz_random rand;
 
 public:
 
-    //: Dflt ctor
+  //: Dflt ctor
   mbl_stochastic_data_collector();
 
-    //: Set number of samples to be stored.
-    // This is the nuber of vectors that can be actually retrieved.
+  //: Set number of samples to be stored.
+  // This is the nuber of vectors that can be actually retrieved.
   mbl_stochastic_data_collector(unsigned n);
 
-    //: Destructor
+  //: Destructor
   virtual ~mbl_stochastic_data_collector();
 
-    //: Clear any stored data
+  //: Clear any stored data
   virtual void clear();
 
-    //: Set number of samples to be stored
-    // If not set, the value defaults to 1000.
-    // Calling this function implicity calls clean().
+  //: Set number of samples to be stored
+  // If not set, the value defaults to 1000.
+  // Calling this function implicity calls clean().
   virtual void set_n_samples(int n);
 
-    //: Record given value
+  //: Record given value
   virtual void record(const T& v);
 
-    //: Force recording of this given value
-    // This does not increment n_presented()
-    // Used with next(), to avoid calculating values that will not be stored.
+  //: Force recording of this given value
+  // This does not increment n_presented()
+  // Used with next(), to avoid calculating values that will not be stored.
   void force_record(const T& v);
 
-    //: Will decide whether to store the next value
-    // This will increment n_presented()  
-    // \return true if the value was actually stored.
+  //: Will decide whether to store the next value
+  // This will increment n_presented()
+  // \return true if the value was actually stored.
   bool store_next();
 
-    //: Return object describing stored data
+  //: Return object describing stored data
   virtual mbl_data_wrapper<T >& data_wrapper();
-  
-    //: Reseed the internal random number generator.
+
+  //: Reseed the internal random number generator.
   void  reseed (unsigned long seed);
 
-    //: The number of vectors that have been presented so far.
+  //: The number of vectors that have been presented so far.
   unsigned long n_presented() const {return nPresented_;}
 
-    //: Version number for I/O
+  //: Version number for I/O
   short version_no() const;
 
-    //: Name of the class
+  //: Name of the class
   virtual vcl_string is_a() const;
 
   //: Does the name of the class match the argument?
   virtual bool is_class(vcl_string const& s) const;
 
-    //: Create a copy on the heap and return base class pointer
+  //: Create a copy on the heap and return base class pointer
   virtual mbl_data_collector_base* clone() const;
 
-    //: Print class to os
+  //: Print class to os
   virtual void print_summary(vcl_ostream& os) const;
 
-    //: Save class to binary file stream
+  //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;
 
-    //: Load class from binary file stream
+  //: Load class from binary file stream
   virtual void b_read(vsl_b_istream& bfs);
 };
 

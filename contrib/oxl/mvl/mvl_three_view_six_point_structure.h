@@ -8,6 +8,9 @@
 */
 
 //:
+//  \file
+
+//:
 // Code for computing projective structure from 3 views of 6 points.
 //
 // The six points are assumed to be:
@@ -25,18 +28,18 @@
 struct mvl_three_view_six_point_structure
 {
   mvl_three_view_six_point_structure();
-  
+
   // this flag is currently ignored.
   bool verbose;
-  
+
   // These matrices have one row per view and 6 columns.
   // The ith view of the jth point is (u(i, j), v(i, j)).
   vnl_matrix<double> u;
   vnl_matrix<double> v;
-  
+
   // Call this once you have filled in 'u' and 'v'.
   bool compute();
-  
+
   // output data.
   struct solution_t {
     bool valid;

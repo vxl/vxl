@@ -1,7 +1,10 @@
-// This is vxl/vil/vil_save.cxx
+// This is ./vxl/vil/vil_save.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
+
+//:
+// \file
 
 #include "vil_save.h"
 

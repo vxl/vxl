@@ -1,3 +1,4 @@
+// This is ./vxl/doc/vxl_doc_rules.h
 #ifndef vxl_doc_rules_h_
 #define vxl_doc_rules_h_
 #ifdef __GNUC__
@@ -22,9 +23,7 @@
 //            (A simple perl script converts this notation        )
 //            ( to full doxygen format on the fly.                )
 
-// This is vxl_doc_rules.h
-
-//            (The above line indicates the file name             )
+//            (The top line indicates the file name               )
 //            ( the \file command below tells Doxygen which       )
 //            ( file the comments correspond to, so should        )
 //            ( be left blank in general to minimise the          )
@@ -37,24 +36,34 @@
 // \author Whoever, (erehwon)
 // \date 01/01/01
 // \author Someone else
+//   Possibly multiple lines.  Don't forget to end the \author, \date and
+//   \brief sections with an empty line (i.e., just //).
+//
 // Here you can write the long description of what's in this file
 // Doxygen will add this to the extended documentation of the file
 // Put the data and author tags immediately following the brief tag,
 // as doxygen (poor thing) is easily confused otherwise.
 //
 // \verbatim
-// Modifications
-// IMS (Manchester) 14/03/2001: Tidied up the documentation
+//  Modifications
+//   IMS (Manchester) 14/03/2001: Tidied up the documentation
 // \endverbatim
 
 //: Brief description of the class
 // The long description starts here
-// \verbatim// Everything between these tags is not formatted but kept "as is".
+// \verbatim
+// // Everything between these tags is not formatted but kept "as is".
 // This is similar to the \verbatim command in LaTeX.
 // \endverbatim
 // For a list of items, you do not need verbatim:
 // - first item
 // - second item
+// For code fragments, use the following instead of \verbatim:
+// \code
+//   // This is how to use my_class:
+//   my_class a;
+//   a.my_value = 1.0;
+// \endcode
 // The long description ends here
 
 class my_class {
@@ -63,7 +72,7 @@ public:
   //: Brief description of the member variable.
   double my_value;
 
-  //: Brief description of method. Don't forget the colon
+  //: Brief description of method. Don't forget the colon, and don't continue on next line.
   // Do not leave any blank lines without the //, or doxygen
   // will think you have ended the documentation comment, and
   // started an ordinary code comment.

@@ -1,8 +1,12 @@
+// This is ./vxl/vbl/examples/vbl_smart_ptr_example.cxx
 #include <vcl_iostream.h>
 #include <vcl_list.h>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 
+//:
+// \file
+//
 // The code parts below are normally put into several files, as indicated by
 // the "start of" and "end of" lines.  Here, for this example, everything is
 // put in a single file, which is a perfectly valid (but less standard) way.

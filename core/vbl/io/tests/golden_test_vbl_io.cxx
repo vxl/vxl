@@ -1,4 +1,4 @@
-// This is vxl/vnl/io/tests/golden_test_vbl_io.cxx
+// This is ./vxl/vbl/io/tests/golden_test_vbl_io.cxx
 
 #include <vsl/vsl_binary_io.h>
 
@@ -22,12 +22,12 @@
 //:
 // \file
 // \brief Read in a golden data file, and check the values are correct.
+//
 // If you need to recreate the golden data file build this as a
-// standalone program, and run it with the single parameter create
+// standalone program, and run it with the single parameter create:
 // \verbatim
 // golden_test_vnl_io create
 // \verbatim
-
 
 void golden_test_vbl_io(bool save_file=false);
 

@@ -1,6 +1,9 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
+//:
+//  \file
+
 #include "vdgl_ortho_regress.h"
 #include <vcl_cmath.h>
 

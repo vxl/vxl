@@ -4,7 +4,9 @@
 //: \file
 //  \author Bess Lee (leey@cs.rpi.edu)
 //  \date   Oct 2001
+//
 //  MLESAC objective function.
+//
 //  \verbatim
 //     25 Oct 2001  Amitha Perera: added comments
 //  \endverbatim
@@ -52,7 +54,7 @@ public:
                      vect_const_iter scale_begin,
                      vnl_vector<double>* param_vector=0 ) const;
 
-  //: Evaluate the objective function on homoscedastic residuals.  
+  //: Evaluate the objective function on homoscedastic residuals.
   //  \sa rrel_objective::fcn.
   virtual double fcn(vect_const_iter begin, vect_const_iter end,
                      double scale,
@@ -69,4 +71,4 @@ protected:
   unsigned int residual_dof_;
 };
 
-#endif
+#endif // rrel_mlesac_obj_h_

@@ -3,15 +3,15 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vgui_tableau
-// .INCLUDE vgui/vgui_tableau.h
-// .FILE vgui_tableau.cxx
+//:
+//  \file
 //
-// .SECTION Author:
+// \author
 //              Philip C. Pritchett, 11 Sep 99
 //              Robotics Research Group, University of Oxford
 //
-// .SECTION Modifications:
+// \verbatim
+// Modifications:
 //  21 September 1999  fsm@robots various changes.
 //   5 October   1999  fsm@robots
 //  11 October   1999  fsm@robots. removed old build_chain code.
@@ -21,6 +21,7 @@
 //                     methods. added get_popup().
 //  11 November  1999  fsm@robots. added add_popup() now that get_popup() has a
 //                     different meaning. Added exists().
+// \endverbatim
 
 #include <vcl_string.h>
 #include <vcl_vector.h>

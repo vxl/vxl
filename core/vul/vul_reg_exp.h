@@ -1,4 +1,4 @@
-// This is vxl/vul/vul_reg_exp.h
+// This is ./vxl/vul/vul_reg_exp.h
 #ifndef vul_reg_exph
 #define vul_reg_exph
 
@@ -42,16 +42,16 @@ const int NSUBEXP = 10;
 //  and utilities.
 //
 //  Example: The perl code
-// \verbatim
+// \code
 //     $filename =~ m"([a-z]+)\.cc";
 //     print $1;
-// \endverbatim
+// \endcode
 //  is written as follows in C++
-// \verbatim
+// \code
 //     vul_reg_exp re("([a-z]+)\\.cc");
 //     re.find(filename);
 //     vcl_cerr << re.match(1);
-// \endverbatim
+// \endcode
 //
 //  The regular expression class provides a convenient mechanism
 //  for  specifying  and  manipulating  regular expressions. The

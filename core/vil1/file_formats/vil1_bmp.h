@@ -1,14 +1,14 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is ./vxl/vil/file_formats/vil_bmp.h
 #ifndef vil_bmp_file_format_h_
 #define vil_bmp_file_format_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-
 //:
 // \file
 // \author Don Hamilton, Peter Tu
 // \date 17 Feb 2000
+//
 //\verbatim
 //  Modifications
 // 27 May 2000 fsm@robots.ox.ac.uk Numerous endianness and structure-packing bugs fixed.

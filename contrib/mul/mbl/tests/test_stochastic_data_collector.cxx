@@ -23,14 +23,13 @@ void configure()
 //=======================================================================
 
 
-    //: The main control program
+//: The main control program
 void test_stochastic_data_collector()
 {
   vcl_cout <<"\n\n***************************************\n"
            <<    " Testing mbl_stochastic_data_collector \n"
            <<    "***************************************\n";
 
-  
   configure();
 
   vnl_vector<double> v(1);
@@ -116,4 +115,3 @@ void test_stochastic_data_collector()
 
 
 TESTMAIN(test_stochastic_data_collector);
-

@@ -1,6 +1,10 @@
-// This is vxl/vgl/vgl_point_2d.txx
+// This is ./vxl/vgl/vgl_point_2d.txx
 #ifndef vgl_point_2d_txx_
 #define vgl_point_2d_txx_
+
+
+//:
+// \file
 
 #include "vgl_point_2d.h"
 #include <vgl/vgl_homg_point_2d.h>

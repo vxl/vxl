@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_numeric_limits.h
+// This is ./vxl/vnl/vnl_numeric_limits.h
 #ifndef vnl_numeric_limits_h_
 #define vnl_numeric_limits_h_
 #ifdef __GNUC__
@@ -15,6 +15,7 @@
 //
 //  \author Andrew W. Fitzgibbon, Oxford RRG
 //  \date   28 Aug 96
+//
 // \verbatim
 //  Modifications:
 //  LSB (Manchester) 23/3/01 Documentation tidied

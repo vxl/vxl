@@ -1,22 +1,21 @@
 #ifndef vsol_line_3d_h
 #define vsol_line_3d_h
 //*****************************************************************************
+//:
+//  \file
+// \brief Straight line segment in a 3D space.
 //
-// .NAME vsol_line_3d - Straight line segment in a 3D space.
-// .LIBRARY vsol
-// .INCLUDE vsol/vsol_line_3d.h
-// .FILE    vsol/vsol_line_3d.cxx
-//
-// .SECTION Description
 // The direction gives the orientation and the length of the segment
 //
-// .SECTION Author
+// \author
 // François BERTEL
 //
-// .SECTION Modifications
-// 2001/07/03 Peter Vanroose  Replaced vnl_double_3 by vgl_vector_3d
-// 2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
-// 2000/05/03 François BERTEL Creation
+// \verbatim
+// Modifications
+//  2001/07/03 Peter Vanroose  Replaced vnl_double_3 by vgl_vector_3d
+//  2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
+//  2000/05/03 François BERTEL Creation
+// \endverbatim
 //*****************************************************************************
 
 class vsol_line_3d;

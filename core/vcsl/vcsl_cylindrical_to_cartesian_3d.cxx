@@ -1,6 +1,10 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
+
+//:
+// \file
+
 #include <vcsl/vcsl_cylindrical_to_cartesian_3d.h>
 #include <vcl_cmath.h> // for sqrt(), cos(), sin()
 

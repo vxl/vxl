@@ -1,6 +1,6 @@
+// This is ./vxl/vul/vul_sprintf.h
 #ifndef vul_sprintf_h_
 #define vul_sprintf_h_
-// This is vxl/vul/vul_sprintf.h
 #ifdef __GNUC__
 #pragma interface
 #endif
@@ -25,10 +25,10 @@
 //: C++ conforming replacement to the ANSI C functions sprintf and printf.
 // vul_sprintf works in the same way as sprintf but is itself an ANSI C++ string
 // which can either be kept or output directly using streams  e.g.
-// \verbatim
+// \code
 // vcl_cerr << vul_sprintf("int %d, float %f ", 1, 3.14)
 //          << bigobject << vcl_endl;
-// \endverbatim
+// \endcode
 
 struct vul_sprintf : vcl_string
 {

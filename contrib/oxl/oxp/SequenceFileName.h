@@ -3,18 +3,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
 //:
-//  \file
-
-// .NAME    SequenceFileName
-// .LIBRARY oxp
-// .HEADER  Oxford Package
-// .INCLUDE oxp/SequenceFileName.h
-// .FILE    SequenceFileName.cxx
-// .SECTION Author
+// \file
+// \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 26 Jan 99
-//
 //-----------------------------------------------------------------------------
 
 #include <vcl_string.h>

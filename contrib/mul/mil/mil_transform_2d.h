@@ -38,7 +38,7 @@
 //
 //
 //  Example:
-// \verbatim
+// \code
 // mil_transform_2d T1;
 // mil_transform_2d T2;
 // T1.set_zoom(scale,translation.x(),translation.y());
@@ -50,7 +50,7 @@
 // vgl_point_2d<double>  p_new = T3(p);
 //
 // mil_transform_2d T_inverse = T3.inverse();
-// \endverbatim
+// \endcode
 class mil_transform_2d {
 public:
     //: Defines form of transformation

@@ -1,10 +1,9 @@
+// This is ./oxl/vgui/impl/mfc/vgui_mfc.h
 #ifndef vgui_mfc_h_
 #define vgui_mfc_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// This is vgui/impl/mfc/vgui_mfc.h
 
 //:
 // \file
@@ -14,6 +13,7 @@
 // vgui_mfc is the mfc++ implementation of vgui.
 // Provides functions for controlling the event loop.
 // Based upon vgui_gtk.
+//
 // \verbatim
 //  Modifications:
 //   Marko Bacic,Oxford RRG  July 2000 -- Implemented support for MFC

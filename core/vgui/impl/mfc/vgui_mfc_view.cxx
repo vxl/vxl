@@ -1,6 +1,9 @@
 // awfmfcView.cpp : implementation of the vgui_mfc_view class
 //
 
+//:
+//  \file
+
 #include "stdafx.h"
 //#include "vgui_mfc_app.h"
 

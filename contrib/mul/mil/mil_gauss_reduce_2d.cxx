@@ -1,4 +1,5 @@
-//: \file
+//:
+//  \file
 //  \brief Functions to smooth and sub-sample image in one direction
 //  \author Tim Cootes
 
@@ -218,4 +219,3 @@ void mil_gauss_reduce_121_2d(float* dest_im,
     }
   }
 }
-

@@ -1,11 +1,13 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is ./vxl/vnl/algo/vnl_lbfgs.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
+
+//:
+// \file
 //
-// vnl_lbfgs
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 22 Aug 99
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   22 Aug 99
 //
 //-----------------------------------------------------------------------------
 

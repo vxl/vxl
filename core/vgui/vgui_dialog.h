@@ -3,14 +3,9 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// .NAME vgui_dialog - Abstract dialog class
-// .LIBRARY vgui
-// .HEADER vxl Package
-// .INCLUDE vgui/vgui_dialog.h
-// .FILE vgui_dialog.cxx
-//
-// .SECTION Description
+//:
+//  \file
+// \brief Abstract dialog class
 //
 // vgui_dialog allows the user to build a dialog from a collection of fields.
 // A field in this context consists of a vcl_string label and a variable.
@@ -19,8 +14,8 @@
 // Each vgui_dialog contains an instance of a concrete subclass of vgui_dialog_impl.
 // The type of the subclass will be determined by the GUI being used.
 //
-// .SECTION Example
-//
+// \par Example
+// \code
 //   vgui_dialog params("My params");
 //   params.field("Table number", the_table);
 //   params.choice("Dressing", "French", "Thousand Island", the_dressing);
@@ -29,17 +24,20 @@
 //   if (!params.ask())
 //     return; // cancelled
 //   send_order(the_table, the_dressing, has_mayo);
+// \endcode
 //
-// .SECTION Author
+// \author
 //              Philip C. Pritchett, 23 Oct 99
 //              Robotics Research Group, University of Oxford
 //
-// .SECTION Modifications
+// \verbatim
+//  Modifications
 //   K.Y.McGaul 25-JAN-00   Added message function to allow text messages in dialogs.
 //   K.Y.McGaul 27-JAN-00   Added set_modal function to allow non-modal dialogs.
 //   K.Y.McGaul 24-FEB-00   Added file browser and color chooser.
 //   Marko Bacic 11-JUL-00  Added inline file browser
 //   Marko Bacic 12-JUL-00  Added inline color chooser
+// \endverbatim
 //-----------------------------------------------------------------------------
 
 #include <vcl_string.h>

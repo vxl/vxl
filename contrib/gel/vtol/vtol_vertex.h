@@ -1,27 +1,25 @@
 #ifndef vtol_vertex_h
 #define vtol_vertex_h
-// .NAME vtol_vertex - Topological container for a spatial point
-// .LIBRARY vtol
-// .HEADER gel Package
-// .INCLUDE vtol/vtol_vertex.h
-// .FILE vtol_vertex.cxx
+//:
+//  \file
+// \brief Topological container for a spatial point
 //
-// .SECTION Description
 //  The vtol_vertex class is used to represent either a 2D or 3D point on
 //  a topological structure.  A vtol_vertex does not actually maintain a pointer
 //  to the vsol_point which is the actual spatial point, since this could either
 //  be a vsol_point_2d or a vsol_point_3d.
 //
-// .SECTION Modifications:
-//     JLM December 1995, Added timeStamp (touch) to
-//                        operations which affect bounds.
+// \verbatim
+// Modifications:
+//  JLM December 1995, Added timeStamp (touch) to
+//                     operations which affect bounds.
 //
-//     JLM October 1996,  Added the method EuclideanDistance(vtol_vertex &)
+//  JLM October 1996,  Added the method EuclideanDistance(vtol_vertex &)
 //     to permit Charlie Rothwell's Polyhedra code to be more
 //     generic.  Note this is distance, NOT squared distance.
-//     LEG May 2000. ported to vxl
-//
-/// .EXAMPLE vtol_vertex.example
+//  LEG May 2000. ported to vxl
+// \endverbatim
+
 #include <vtol/vtol_vertex_sptr.h>
 
 #include <vtol/vtol_topology_object.h>

@@ -3,9 +3,8 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME osl_kernel
-// .INCLUDE osl/osl_kernel.h
-// .FILE osl_kernel.cxx
+//:
+// \file
 // \author fsm@robots.ox.ac.uk
 
 //: Compute one half of the 1st Derivative Of a Gaussian.

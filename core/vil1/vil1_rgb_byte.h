@@ -1,14 +1,15 @@
+// This is ./vxl/vil/vil_rgb_byte.h
 #ifndef vil_rgb_byte_h_
 #define vil_rgb_byte_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// This is vxl/vil/vil_rgb_byte.h
 
 //:
 // \file
 // \author   awf@robots.ox.ac.uk
 // \date 17 Feb 00
+//
 //\verbatim
 //  Modifications
 //     000217 AWF Initial version.

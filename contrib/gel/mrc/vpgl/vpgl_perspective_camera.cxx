@@ -1,3 +1,6 @@
+//:
+//  \file
+
 #include <vcsl/vcsl_cartesian_3d.h>
 #include <vcsl/vcsl_graph.h>
 #include <vpgl/vpgl_perspective_camera.h>

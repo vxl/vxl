@@ -1,3 +1,6 @@
+//:
+//  \file
+
 #include "vplayer.h"
 #include "vplayer_file.h"
 #include "easy2D_sequencer.h"
@@ -161,4 +164,3 @@ vgui_menu vplayer_file::create_file_menu()
   file_menu.add("Exit", exit_vplayer);
   return file_menu;
 }
-

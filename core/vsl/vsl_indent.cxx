@@ -1,6 +1,9 @@
+// This is ./vxl/vsl/vsl_indent.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
+//:
+// \file
 
 #include <vsl/vsl_indent.h>
 #include <vcl_iostream.h>

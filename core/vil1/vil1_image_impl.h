@@ -1,10 +1,9 @@
+// This is ./vxl/vil/vil_image_impl.h
 #ifndef vil_image_impl_h_
 #define vil_image_impl_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-
-// This is vxl/vil/vil_image_impl.h
 
 //:
 // \file
@@ -15,6 +14,7 @@
 //
 // \author AWF
 // \date 17 Feb 2000
+//
 //\verbatim
 //  Modifications
 //     000216 AWF Initial version.

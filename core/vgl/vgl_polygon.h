@@ -1,9 +1,9 @@
+// This is ./vxl/vgl/vgl_polygon.h
 #ifndef vgl_polygon_h_
 #define vgl_polygon_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// This is vxl/vgl/vgl_polygon.h
 
 //:
 // \file
@@ -69,7 +69,7 @@ public:
   //: Destructor
   ~vgl_polygon();
 
-  //: Returns true if x,y is inside the polyon, else false
+  //: Returns true if \a x,y is inside the polyon, else false
   bool contains(float x, float y) const;
 
   // creation

@@ -2,6 +2,9 @@
 #pragma implementation
 #endif
 
+//:
+//  \file
+
 #include "PairMatchMulti.h"
 
 #include <vcl_cassert.h>

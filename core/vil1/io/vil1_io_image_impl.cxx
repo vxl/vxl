@@ -1,7 +1,10 @@
-// This is vxl/vil/io/vil_io_image_impl.cxx
+// This is ./vxl/vil/io/vil_io_image_impl.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
+
+//:
+// \file
 
 #include <vsl/vsl_binary_io.h>
 #include "vil_io_image_impl.h"
@@ -121,4 +124,3 @@ void vsl_print_summary(vcl_ostream &os, const vil_image_impl * b)
 
 // Explicitly instantiate loader
 VSL_CLIPON_BINARY_LOADER_INSTANTIATE(vil_image_impl, vil_io_image_impl);
-

@@ -3,9 +3,8 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vgui_key
-// .INCLUDE vgui/vgui_key.h
-// .FILE vgui_key.cxx
+//:
+// \file
 
 #include <vcl_iosfwd.h>
 

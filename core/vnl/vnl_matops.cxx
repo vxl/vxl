@@ -1,12 +1,12 @@
+// This is ./vxl/vnl/vnl_matops.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
-// This is vxl/vnl/vnl_matops.cxx
 
-//
-// vnl_matops
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 05 Aug 96
+//:
+// \file
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   05 Aug 96
 //
 //-----------------------------------------------------------------------------
 

@@ -1,10 +1,9 @@
+// This is ./vxl/vgl/vgl_point_3d.h
 #ifndef vgl_point_3d_h
 #define vgl_point_3d_h
 #ifdef __GNUC__
 #pragma interface
 #endif
-
-// This is vxl/vgl/vgl_point_3d.h
 
 //:
 // \file
@@ -71,11 +70,11 @@ public:
   inline Type y() const {return y_;}
   inline Type z() const {return z_;}
 
-  //: Set x, y and z
-  //  Note that x, y, or z cannot be set individually
+  //: Set \a x, \a y and \a z
+  //  Note that \a x, \a y, or \a z cannot be set individually
   inline void set (Type px, Type py, Type pz){ x_ = px; y_ = py; z_ = pz; }
-  //: Set x, y and z
-  //  Note that x, y, or z cannot be set individually
+  //: Set \a x, \a y and \a z
+  //  Note that \a x, \a y, or \a z cannot be set individually
   inline void set (Type const p[3]) { x_ = p[0]; y_ = p[1]; z_ = p[2]; }
 
   //: Return true iff the point is at infinity (an ideal point).

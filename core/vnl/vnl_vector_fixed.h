@@ -1,10 +1,9 @@
+// This is ./vxl/vnl/vnl_vector_fixed.h
 #ifndef vnl_vector_fixed_h_
 #define vnl_vector_fixed_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-
-// This is vxl/vnl/vnl_vector_fixed.h
 
 //:
 // \file
@@ -17,6 +16,7 @@
 //
 // \author Andrew W. Fitzgibbon, Oxford RRG
 // \date   04 Aug 96
+//
 // \verbatim
 // Modifications
 // LSB Manchester 16/3/01 Binary I/O added

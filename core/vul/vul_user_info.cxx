@@ -1,13 +1,12 @@
-// This is vxl/vul/vul_user_info.cxx
-
-//-*- c++ -*-------------------------------------------------------------------
+// This is ./vxl/vul/vul_user_info.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
 
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 08 Apr 99
+//:
+// \file
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   08 Apr 99
 //
 //-----------------------------------------------------------------------------
 

@@ -1,9 +1,10 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is ./oxl/vgui/impl/mfc/vgui_mfc_utils.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// This is vgui/impl/mfc/vgui_mfc_utils.cxx
+
+//:
+//  \file
 // See vgui_mfc_utils.h for a description of this file.
 //
 // \author  Marko Bacic, Oxford RRG

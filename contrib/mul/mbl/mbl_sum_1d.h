@@ -10,7 +10,7 @@
 #include <vsl/vsl_binary_io.h>
 
 //: Computes running sum of 1D variable, so mean accessable.
-// \verbatim
+// \code
 // // A rather trivial example
 // mbl_sum_1d stats,stats2;
 //
@@ -25,7 +25,7 @@
 // vcl_cout<<"Mean of numbers 0..9:"<<stats.mean()<<vcl_endl;
 // mbl_sum_1d stats3 = stats+stats2;
 // vcl_cout<<"Mean of numbers 0..19:"<<stats3.mean()<<vcl_endl;
-// \endverbatim
+// \endcode
 class mbl_sum_1d
 {
   double sum_;

@@ -1,6 +1,9 @@
 #include "osl_fit_lines_params.h"
 #include <vcl_strstream.h>
 
+//:
+//  \file
+
 osl_fit_lines_params::osl_fit_lines_params(int min_fit_len,
                                            bool use_sqr,
                                            double thresh,

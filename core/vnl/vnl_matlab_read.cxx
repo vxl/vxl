@@ -1,11 +1,14 @@
-// This is vxl/vnl/vnl_matlab_read.cxx
+// This is ./vxl/vnl/vnl_matlab_read.cxx
+#ifdef __GNUC__
+#pragma implementation
+#endif
+
+//:
+// \file
 
 /*
   fsm@robots.ox.ac.uk
 */
-#ifdef __GNUC__
-#pragma implementation
-#endif
 #include "vnl_matlab_read.h"
 #include <vcl_ios.h> // for vcl_ios_cur
 #include <vcl_iostream.h>

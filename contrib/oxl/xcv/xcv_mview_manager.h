@@ -1,12 +1,12 @@
+// This is ./oxl/xcv/xcv_mview_manager.h
 #ifndef xcv_mview_manager_h_
 #define xcv_mview_manager_h_
-//
-// This is xcv/xcv_mview_manager.h
 
 //:
 // \file
 // \author  K.Y.McGaul
 // \brief   Base class for multiview managers.
+//
 // \verbatim
 //  Modifications:
 //   K.Y.McGaul     05-MAY-2000    Initial version.

@@ -1,15 +1,15 @@
+// This is ./vxl/vgl/vgl_point_2d.h
 #ifndef vgl_point_2d_h
 #define vgl_point_2d_h
 #ifdef __GNUC__
 #pragma interface
 #endif
 
-// This is vxl/vgl/vgl_point_2d.h
-
 //:
 // \file
 // \brief a point in 2D nonhomogeneous space
 // \author Don Hamilton, Peter Tu
+//
 // \verbatim
 // Modifications :
 //  2 July 2001 Peter Vanroose implemented constructor from homg point
@@ -68,15 +68,15 @@ public:
 
   inline Type &x() {return x_;}
   inline Type &y() {return y_;}
-  
+
   inline Type x() const {return x_;}
   inline Type y() const {return y_;}
 
-  //: Set x and y
-  //  Note that x and y can also be set individually.
+  //: Set \a x and \a y
+  //  Note that \a x and \a y can also be set individually.
   inline void set (Type px, Type py){ x_ = px; y_ = py; }
-  //: Set x and y
-  //  Note that x and y can also be set individually.
+  //: Set \a x and \a y
+  //  Note that \a x and \a y can also be set individually.
   inline void set (Type const p[2]) { x_ = p[0]; y_ = p[1]; }
 
   //: Return true iff the point is at infinity (an ideal point).

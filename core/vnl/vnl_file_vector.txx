@@ -1,6 +1,9 @@
-// This is vxl/vnl/vnl_file_vector.txx
+// This is ./vxl/vnl/vnl_file_vector.txx
 #ifndef vnl_file_vector_txx_
 #define vnl_file_vector_txx_
+
+//:
+// \file
 
 #include "vnl_file_vector.h"
 

@@ -6,6 +6,7 @@
 // \author Chuck Stewart (stewart@cs.rpi.edu)
 // \date March 2001
 // \brief Iteratively-reweighted least-squares minimization of an M-estimator
+//
 // \verbatim
 //   2001-10-22 Amitha Perera. Reorganised and added comments.
 // \endverbatim

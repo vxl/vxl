@@ -9,12 +9,12 @@
 //
 // To mark a function as deprecated, use the macro VXL_DEPRECATED as
 // the first line of that function:
-// \verbatim
+// \code
 //    void a::f() {
 //       VXL_DEPRECATED( "a::f()" );
 //       ...
 //    }
-// \endverbatim
+// \endcode
 //
 // If VXL_WARN_DEPRECATED was not defined at compile time, nothing
 // happens. If it was defined, then executing the function will result

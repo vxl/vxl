@@ -2,10 +2,10 @@
 #pragma implementation
 #endif
 
-//-----------------------------------------------------------------------------
-//
-// Author: David N. McKinnon, UQ I.R.I.S
-// Created: 25 Nov 00
+//:
+//  \file
+// \author David N. McKinnon, UQ I.R.I.S
+// \date   25 Nov 00
 //
 //-----------------------------------------------------------------------------
 

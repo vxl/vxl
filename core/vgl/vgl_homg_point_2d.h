@@ -1,10 +1,9 @@
+// This is ./vxl/vgl/vgl_homg_point_2d.h
 #ifndef vgl_homg_point_2d_h_
 #define vgl_homg_point_2d_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-
-// This is vxl/vgl/vgl_homg_point_2d.h
 
 //:
 // \file
@@ -83,8 +82,8 @@ public:
   inline Type y() const { return y_; }
   inline Type w() const { return w_; }
 
-  //: Set x,y,w
-  // Note that it does not make sense to set x, y or w individually.
+  //: Set \a x,y,w
+  // Note that it does not make sense to set \a x, \a y or \a w individually.
   inline void set(Type px, Type py, Type pw = Type(1))
   { x_ = px, y_ = py, w_ = pw; }
 

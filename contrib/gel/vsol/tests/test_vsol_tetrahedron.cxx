@@ -9,6 +9,9 @@
 // 1.0     |2001/06/06| Peter Vanroose           |Creation
 //*****************************************************************************
 
+//:
+//  \file
+
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 #include <vsol/vsol_tetrahedron.h>

@@ -1,20 +1,19 @@
-//
-// This is vgui/impl/mfc/vgui_mfc_mainfrm.h
+// This is ./oxl/vgui/impl/mfc/vgui_mfc_mainfrm.h
+#ifndef AFX_VGUI_MFC_MAINFRM_H__B3175B74_0F91_44DD_8EFD_41CEA35852A1__INCLUDED_
+#define AFX_VGUI_MFC_MAINFRM_H__B3175B74_0F91_44DD_8EFD_41CEA35852A1__INCLUDED_
 
 //:
 // \file
 // \author  Marko Bacic, Oxford RRG
 // \date    27 July 2000
 // \brief   Defines main window of the application
+//
 // \verbatim
 //  Modifications:
 //   22-AUG-2000 - Marko Bacic, Oxford RRG -- Added support for horizontal and
 //                                            vertical scroll bars
 // \endverbatim
 //
-
-#ifndef AFX_VGUI_MFC_MAINFRM_H__B3175B74_0F91_44DD_8EFD_41CEA35852A1__INCLUDED_
-#define AFX_VGUI_MFC_MAINFRM_H__B3175B74_0F91_44DD_8EFD_41CEA35852A1__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once

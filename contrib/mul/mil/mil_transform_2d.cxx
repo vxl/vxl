@@ -2,6 +2,9 @@
 #pragma implementation
 #endif
 
+//:
+//  \file
+
 #include <mil/mil_transform_2d.h>
 #include <vsl/vsl_indent.h>
 #include <vcl_cassert.h>

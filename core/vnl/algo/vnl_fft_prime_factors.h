@@ -1,6 +1,6 @@
+// This is ./vxl/vnl/algo/vnl_fft_prime_factors.h
 #ifndef vnl_fft_prime_factors_h_
 #define vnl_fft_prime_factors_h_
-
 //:
 // \file
 // \brief Holds prime factor information
@@ -9,9 +9,8 @@
 //
 // \verbatim
 // Modifications
-// 10/4/2001 Ian Scott (Manchester) Coverted perceps header to doxygen
+// 10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
 // \endverbatim
-
 
 #include <vnl/algo/vnl_fft.h>
 

@@ -1,24 +1,21 @@
 #ifndef vtol_one_chain_h_
 #define vtol_one_chain_h_
 //-----------------------------------------------------------------------------
+//:
+//  \file
+// \brief Represents a set of edges
 //
-// .NAME        vtol_one_chain - Represents a set of edges
-// .LIBRARY     vtol
-// .HEADER      gel package
-// .INCLUDE     vtol/vtol_one_chain.h
-// .FILE        vtol_one_chain.cxx
-//
-// .SECTION Description
 //  The vtol_one_chain class is used to represent a set of edges on a topological
 //  structure.  A vtol_one_chain consists of its inferior edges and the superiors
 //  on which it lies.  A vtol_one_chain may or may not be an ordered cycle.  If
 //  the chain of edges encloses an area, then the vtol_one_chain may be used as
 //  the boundary of a topological Face in a 3D structure.
 //
-// .SECTION Author
+// \author
 //     Patricia A. Vrobel
 //
-// .SECTION Modifications:
+// \verbatim
+// Modifications:
 //     JLM Dec 1995, Added timeStamp (Touch) to operations which affect bounds.
 //     JLM Dec 1995, no local method for ComputeBoundingBox
 //                   Should use edge geometry recursively to be proper.
@@ -27,6 +24,7 @@
 //     JLM Jan 1998  Added method to get direction of an edge
 //     JLM Feb 1999  Added correct method for ComputeBoundingBox()
 //     PTU May 2000  ported to vxl
+// \endverbatim
 //-----------------------------------------------------------------------------
 #include <vtol/vtol_one_chain_sptr.h>
 

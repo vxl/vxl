@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_quaternion.h
+// This is ./vxl/vnl/vnl_quaternion.h
 #ifndef vnl_quaternion_h_
 #define vnl_quaternion_h_
 #ifdef __GNUC__
@@ -25,11 +25,11 @@
 //: 4-element vector that represents rotation in 3D.
 // Quaternion is a 4-element vector with 1 real and 3 imaginary
 // components:
-// \verbatim
+// \code
 //    q = r + (i*x + j*y + k*z)
 //    r = cos(theta/2)
 //    (x, y, z) = sin(theta/2) (kx, ky, kz)
-// \endverbatim
+// \endcode
 // where theta and k are  respectively the angle and axis of rotation.
 // 3D vectors can be  thought  of  as  imaginary  quaternions, and  so  a
 // quaternion is represented as a Vector<T> with the imaginary

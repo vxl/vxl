@@ -1,9 +1,10 @@
-//
-// This is xcv/xcv_segmentation.cxx
+// This is ./oxl/xcv/xcv_segmentation.cxx
+
+//:
+//  \file
 // See xcv_segmentation.h for a description of this file.
 //
 // \author K.Y.McGaul
-//
 
 #include "xcv_segmentation.h"
 
@@ -377,4 +378,3 @@ vgui_menu xcv_segmentation::create_segmentation_menu()
 
   return seg_menu;
 }
-

@@ -1,18 +1,18 @@
 #ifndef VSOL_REGION_2D_H
 #define VSOL_REGION_2D_H
 //*****************************************************************************
+//:
+//  \file
+// \brief  Region of a 2D space
 //
-// .NAME vsol_region_2d -  Region of a 2D space
-// .LIBRARY vsol
-// .INCLUDE vsol/vsol_region_2d.h
-// .FILE    vsol/vsol_region_2d.cxx
-//
-// .SECTION Author
+// \author
 // François BERTEL
 //
-// .SECTION Modifications
+// \verbatim
+// Modifications
 // 2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
 // 2000/05/02 François BERTEL Creation
+// \endverbatim
 //*****************************************************************************
 
 class vsol_region_2d;

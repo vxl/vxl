@@ -1,13 +1,18 @@
-//-*- c++ -*-------------------------------------------------------------------
-//
-// This is vgui/impl/mfc/vgui_mfc_window.h
+// This is ./oxl/vgui/impl/mfc/vgui_mfc_window.h
+#ifndef vgui_mfc_window_h_
+#define vgui_mfc_window_h_
+#ifdef __GNUC__
+#pragma interface
+#endif
 
 //:
 // \file
 // \author  Marko Bacic, Oxford RRG
 // \date    24-JUL-2000
 // \brief   The mfc+ implementation of vgui_window
+//
 //  Based on vgui_glut_win.
+//
 // \verbatim
 //  Modifications:
 //    24-JUL-2000  Marko Bacic, Oxford RRG - Initial version.
@@ -15,12 +20,6 @@
 //    23-AUG-2000  Marko Bacic, Oxford RRG - Added support for scrollbars
 // \endverbatim
 //
-
-#ifndef vgui_mfc_window_h_
-#define vgui_mfc_window_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
 
 class vgui_mfc_adaptor;
 class vgui_mfc_statusbar;
@@ -35,7 +34,7 @@ public:
   vgui_mfc_window(char const *title, unsigned w, unsigned h, int posx =-1, int posy=-1);
   vgui_mfc_window(unsigned w,unsigned h,vgui_menu const &menubar,char const *title);
   ~vgui_mfc_window();
-  
+
   vgui_menu menubar;
   void set_menubar(vgui_menu const &m) { menubar = m; }
 

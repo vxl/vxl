@@ -1,3 +1,6 @@
+//:
+//  \file
+
 #include <vcl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_svd.h>
@@ -15,9 +18,9 @@
 // Return false if the calculation fails or there are fewer than six point
 // matches in the list.
 //
-// @{ The algorithm finds the nullvector of the following design matrix, where
+// The algorithm finds the nullvector of the following design matrix, where
 // the 3d points $\vec X^i$ are projected into 2d points $\vec u^i$.
-// \[
+// \f[
 // \left(
 // \begin{array}{ccc}
 // \vec X^1 u^1_3        & 0_{4}             & -\vec X^1 u^1_1 \cr
@@ -27,8 +30,7 @@
 // 0_4                   & \vec X^n u^n_3    & -\vec X^n u^n_2 \cr
 // \end{array}
 // \right)
-// \]
-// @}
+// \f]
 
 bool
 PMatrixComputeLinear::compute (vcl_vector<HomgPoint2D> const& points1, vcl_vector<HomgPoint3D> const& points2, PMatrix *P)

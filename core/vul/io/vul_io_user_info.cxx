@@ -1,7 +1,10 @@
-// This is vxl/vul/io/vul_io_user_info.cxx
+// This is ./vxl/vul/io/vul_io_user_info.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
+
+//:
+// \file
 
 #include "vul_io_user_info.h"
 #include <vul/vul_user_info.h>
@@ -60,4 +63,3 @@ void vsl_print_summary(vcl_ostream& os,const vul_user_info & p)
       " passwd="<<
       p.passwd<<")";
 }
-

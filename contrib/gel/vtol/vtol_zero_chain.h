@@ -1,26 +1,23 @@
 #ifndef vtol_zero_chain_h
 #define vtol_zero_chain_h
 //-----------------------------------------------------------------------------
+//:
+//  \file
+// \brief Represents a set of Vertices
 //
-// .NAME    vtol_zero_chain - Represents a set of Vertices
-// .LIBRARY vtol
-// .HEADER  gel package
-// .INCLUDE vtol/vtol_zero_chain.h
-// .FILE    vtol_zero_chain.cxx
-//
-// .SECTION Description
 //  The vtol_zero_chain class is used to represent a set of Vertices on
 //  a topological structure. A vtol_zero_chain maintains only the inferiors and
 //  superiors. It is the topological inferior of an Edge.
 //
-// .SECTION Author
+// \author
 //     Patricia A. Vrobel
-//     PTU - ported may 2000
 //
-// .SECTION Modifications:
+// \verbatim
+// Modifications:
 //   JLM Dec 1995, Added timeStamp (Touch) to operations which affect bounds.
-//   02-26-97 Added implementation for virtual Transform() - Peter Vanroose
-//
+//   Peter Vanroose - 02-26-97 Added implementation for virtual Transform()
+//   PTU - ported may 2000
+// \endverbatim
 //-----------------------------------------------------------------------------
 
 #include <vtol/vtol_topology_object.h>

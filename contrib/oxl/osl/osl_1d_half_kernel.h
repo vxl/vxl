@@ -3,9 +3,8 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME osl_1d_half_kernel
-// .INCLUDE osl/osl_1d_half_kernel.h
-// .FILE osl_1d_half_kernel.txx
+//:
+//  \file
 // \author fsm@robots.ox.ac.uk
 
 //: This structure holds half of a symmetric convolution kernel.
@@ -16,11 +15,11 @@ struct osl_1d_half_kernel {
     : capacity(capacity_)
     , count(0)
     , array(new T[capacity]) { }
-  
+
   ~osl_1d_half_kernel() { delete [] array; array = 0; }
-  
+
   unsigned const capacity;
-  
+
   unsigned count;
   T *array;
 };

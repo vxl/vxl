@@ -1,27 +1,25 @@
 #ifndef vtol_block_h
 #define vtol_block_h
 //-----------------------------------------------------------------------------
+//:
+//  \file
+// \brief Highest node in a 3D topological structure
 //
-// .NAME        vtol_block - Highest node in a 3D topological structure
-// .LIBRARY     vtol
-// .HEADER      gel package
-// .INCLUDE     vtol/vtol_block.h
-// .FILE        vtol_block.cxx
-//
-// .SECTION Description
 //   The vtol_block class is used to represent the highest node in a 3D topological
 //   structure. A vtol_block consists of its inferior vtol_two_chains which must be
 //   cyclic, and no topological superiors.
 //
-// .SECTION Author
+// \author
 //     Patricia A. Vrobel
 //
-// .SECTION Modifications:
+// \verbatim
+// Modifications:
 //     JLM Dec 1995, Added timeStamp (Touch) to operations which affect bounds.
 //     JLM Dec 1995  (Need to decide proper policy for curved volumes
 //                   and possibly inconsistent polyhedra volume geometry)
 //     JNS Dec 1998, Added is_within functions (used in 2D display of a block,
 //                   these functions must be wrong for 3D use)
+//     \endverbatim
 //-----------------------------------------------------------------------------
 #include <vtol/vtol_block_sptr.h>
 

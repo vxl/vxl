@@ -1,20 +1,18 @@
+// This is ./vxl/vsl/vsl_binary_explicit_io.h
 #ifndef vsl_binary_explicit_io_h_
 #define vsl_binary_explicit_io_h_
-
 //:
 // \file
 // \brief Byte-swapping, arbitrary length integer conversion, and explicit I/O
 // \author Ian Scott (Manchester) April 2001
+//
 // Include this file if you wish to do binary IO for large numbers of
 // multi-byte fundamental types (short, int, long, float, double) at the same
 // time, or if you want to perform integer IO using fixed size encoding.
 //
 // If you want to read or write a large number of floating points, then;
-// \verbatim
-// Floats and doubles need byte swapped, and this can be done in situ.
-//
-// Shorts, ints and longs need converted to/from the arbitrary length format.
-// \endverbatim
+// - Floats and doubles need byte swapped, and this can be done in situ.
+// - Shorts, ints and longs need converted to/from the arbitrary length format.
 //
 // \par Implementation details:
 // The arbitrary length encoding takes the number and breaks it into 7 bit
@@ -108,8 +106,8 @@ inline void vsl_swap_bytes_to_buffer( const char * source, char * dest, int nbyt
   vcl_memcpy(dest, source, nbyte * nelem);
 #else
 
-  assert(source != dest);  
-  
+  assert(source != dest);
+
   // If the byte order of the file
   // does not match the intel byte order
   // then the bytes should be swapped
@@ -729,7 +727,7 @@ inline void vsl_b_write_block(vsl_b_ostream &os, const signed int* begin, unsign
 {
   char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(signed int)) * nelems];
   unsigned long nbytes = vsl_convert_to_arbitrary_length(begin, (unsigned char *)block, nelems);
-  
+
   vsl_b_write(os, nbytes);
 
   os.os().write( block, nbytes);

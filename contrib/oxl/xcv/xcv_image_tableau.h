@@ -1,12 +1,12 @@
+// This is ./oxl/xcv/xcv_image_tableau.h
 #ifndef xcv_image_tableau_h_
 #define xcv_image_tableau_h_
-//
-// This is xcv/xcv_image_tableau.h
 
 //:
 // \file
 // \author  Marko Bacic (u97mb@robots.ox.ac.uk)
 // \brief An image tableau with an associated region of interest.
+//
 // \verbatim
 //  Modifications:
 //    Marko Bacic   AUG-2000   Initial version.

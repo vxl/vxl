@@ -1,7 +1,9 @@
-//
-// This is xcv/xcv_geometry.cxx
+// This is ./oxl/xcv/xcv_geometry.cxx
+
+//:
+//  \file
 // See xcv_geometry.h for a description of this file.
-// 
+//
 // \author K.Y.McGaul
 //
 

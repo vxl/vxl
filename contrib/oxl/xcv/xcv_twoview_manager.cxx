@@ -1,9 +1,10 @@
-//
-// This is xcv/xcv_twoview_manager.cxx
+// This is ./oxl/xcv/xcv_twoview_manager.cxx
+
+//:
+//  \file
 // See xcv_twoview_manager.h for a description of this file.
 //
 // \author  K.Y.McGaul
-//
 
 #include "xcv_twoview_manager.h"
 

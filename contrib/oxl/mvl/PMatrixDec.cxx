@@ -2,6 +2,9 @@
 #pragma implementation
 #endif
 
+//:
+//  \file
+
 #include "PMatrixDec.h"
 
 #include <vcl_cmath.h>

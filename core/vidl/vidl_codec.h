@@ -1,15 +1,16 @@
 #ifndef vidl_codec_h
 #define vidl_codec_h
+
 //:
-// \file 
+// \file
 // \author Nicolas Dano, september 1999
-// Modifications
+//
 // \verbatim
+// Modifications
 // Julien ESTEVE, June 2000
 //     Ported from TargetJr
-// 10/4/2001 Ian Scott (Manchester) Coverted perceps header to doxygen
+// 10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
 // \endverbatim
-
 
 
 #include <vcl_string.h>
@@ -52,10 +53,7 @@ public:
 
   inline int length() const {return numberframes; }
   inline const char* get_name() const  { return(name)?name:""; }
-  inline const char* get_description() const
-        {
-        return(description)?description:"";
-        }
+  inline const char* get_description() const { return(description)?description:""; }
 
   inline char get_image_class()const { return(Class); }
   inline char get_format() const     { return(format); }
@@ -99,7 +97,6 @@ private:
   int        B;                // Pixel Precision
   int        X,Y,Z,T;          // Frame Size (width,height,up,time)
   int        numberframes;     // Length of the sequence
-
 };
 
 #endif // vidl_codec_h

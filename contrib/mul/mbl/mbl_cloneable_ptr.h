@@ -4,6 +4,9 @@
 #pragma interface
 #endif
 
+//:
+//  \file
+
 #include <vsl/vsl_binary_loader.h>
 #include <vcl_cassert.h>
 

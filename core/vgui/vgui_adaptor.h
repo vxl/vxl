@@ -1,14 +1,8 @@
 #ifndef vgui_adaptor_h_
 #define vgui_adaptor_h_
-
 //:
 //  \file
-
-// .NAME vgui_adaptor
-// .INCLUDE vgui/vgui_adaptor.h
-// .FILE vgui_adaptor.cxx
 //
-// .SECTION Description
 // Class adaptor. Provides an abstract interface to an OpenGL rendering state
 // (context) producing events. Events from adaptor (eg. when someone presses a
 // mouse button over the window) will be dispatched to the associated
@@ -20,9 +14,10 @@
 // chooses, but that would be a bad idea as it would stop post()s from tableaux
 // reaching the adaptor.
 //
-// .SECTION Author
+// \author
 //   fsm@robots.ox.ac.uk
-// .SECTION Modifications
+// \verbatim
+// Modifications
 // 20 October  1999 pcp@robots. removed derivation from tableau.
 // 20 Octover  1999 fsm@robots. detach()ed the adaptor from the tableau in
 //                  the destuctor to avoid leaving a dangling pointer in the
@@ -31,11 +26,12 @@
 //  7 January  1999 fsm@robots. new observer/observable method of getting
 //                  redraw from tableau to adaptor.
 //  2 February 1999 fsm@robots. more overlay documentation.
-// 23-AUG-2000      Marko Bacic,Oxford RRG -- Added post_message
+// 23-AUG-2000      Marko Bacic,Oxford RRG - Added post_message
 // 31 August   2000 u97mb@robots. Support for mfc acceleration
-// 07-SEP-2000      Marko Bacic,Oxford RRG -- Added pure virtual method "draw"
+// 07-SEP-2000      Marko Bacic,Oxford RRG - Added pure virtual method "draw"
 // 20 Sept     2000 capes@robots. added post_destroy() method.
-//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
+// Feb.2002         Peter Vanroose - brief doxygen comment placed on single line
+// \endverbatim
 
 #include "dll.h"
 #include <vgui/vgui_menu.h>

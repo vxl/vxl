@@ -1,9 +1,12 @@
-// This is vgui/impl/mfc/vgui_mfc_adaptor.h
+// This is ./oxl/vgui/impl/mfc/vgui_mfc_adaptor.h
+#ifndef AFX_VGUI_MFC_ADAPTOR_H__6BE405F7_0910_4C83_A175_5E8FBDCE88A5__INCLUDED_
+#define AFX_VGUI_MFC_ADAPTOR_H__6BE405F7_0910_4C83_A175_5E8FBDCE88A5__INCLUDED_
 
 //:
 // \file
 // \author RRG Oxford
 // \brief  Specialization of vgui_adaptor for MFC.
+//
 // \verbatim
 //  Modifications:
 //    13-08-2000  Marko Bacic, Oxford RRG - Fixed textures
@@ -19,9 +22,6 @@
 //                             now specify which window our adaptor is in.  If you
 //                             don't call setup_adaptor it is assumed to be the main window.
 // \endverbatim
-
-#ifndef AFX_VGUI_MFC_ADAPTOR_H__6BE405F7_0910_4C83_A175_5E8FBDCE88A5__INCLUDED_
-#define AFX_VGUI_MFC_ADAPTOR_H__6BE405F7_0910_4C83_A175_5E8FBDCE88A5__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once

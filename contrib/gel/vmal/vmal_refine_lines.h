@@ -1,10 +1,9 @@
 #ifndef vmal_refine_lines_h_
 #define vmal_refine_lines_h_
 //--------------------------------------------------------------------------------
-// .NAME        vmal_refine_lines
-// .INCLUDE     vmal/vmal_refine_lines.h
-// .FILE        vmal_refine_lines.cxx
-// .SECTION Description:
+//:
+//  \file
+//
 //   Refine two lines using different methods:
 //   - with this homography between the two images
 //       * refine at the minimum: keep only the common part of the lines (intersection)
@@ -14,9 +13,9 @@
 //       to the epipolar lines, big errors occured.
 //   It could be useful#include <vnl/vnl_double_3.h) to overload the methods to make them handle vgl_point_2d
 //   and vgl_lines_segment_2d.
-// .SECTION Author
+//
+// \author
 //   L. Guichard
-// .SECTION Modifications:
 //--------------------------------------------------------------------------------
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_3x3.h>

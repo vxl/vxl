@@ -1,13 +1,14 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is ./oxl/vgui/impl/mfc/vgui_mfc_statusbar.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// This is vgui/impl/mfc/vgui_mfc_statusbar.cxx
-// See vgui_mfc_statusbar.h for a description of this file.
-//
+
+//:
+//  \file
 // \author  Marko Bacic, RRG, University of Oxford
 // \date    10 Aug 2000
+//
+// See vgui_mfc_statusbar.h for a description of this file.
 //
 // \verbatim
 // Modifications:

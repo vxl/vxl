@@ -1,21 +1,21 @@
 #ifndef vsol_polygon_2d_h
 #define vsol_polygon_2d_h
 //*****************************************************************************
+//:
+//  \file
+// \brief Polygon of a 2D space
 //
-// .NAME vsol_polygon_2d - Polygon of a 2D space
-// .LIBRARY vsol
-// .INCLUDE vsol/vsol_polygon_2d.h
-// .FILE    vsol/vsol_polygon_2d.cxx
-//
-// .SECTION Description
 // The vertices are defined in the counterclockwise.
-// .SECTION Author
+//
+// \author
 // François BERTEL
 //
-// .SECTION Modifications
+// \verbatim
+// Modifications
 // 2001/07/03 Peter Vanroose  Corrected the implementation of is_convex()
 // 2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
 // 2000/05/09 François BERTEL Creation
+// \endverbatim
 //*****************************************************************************
 
 class vsol_polygon_2d;

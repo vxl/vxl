@@ -3,9 +3,8 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME osl_break_edge
-// .INCLUDE osl/osl_break_edge.h
-// .FILE osl_break_edge.cxx
+//:
+// \file
 // \author fsm@robots.ox.ac.uk
 
 struct osl_edge;

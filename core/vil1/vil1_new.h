@@ -1,9 +1,9 @@
+// This is ./vxl/vil/vil_new.h
 #ifndef vil_new_h_
 #define vil_new_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// This is vxl/vil/vil_new.h
 
 //:
 // \file
@@ -16,6 +16,7 @@
 //
 // \author awf@robots.ox.ac.uk
 // \date 26 Feb 00
+//
 //\verbatim
 //  Modifications
 //     000216 AWF Initial version.

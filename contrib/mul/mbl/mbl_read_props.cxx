@@ -1,3 +1,6 @@
+//:
+//  \file
+
 #include "mbl/mbl_read_props.h"
 #include <vsl/vsl_indent.h>
 

@@ -1,18 +1,18 @@
 #ifndef VSOL_CURVE_3D_H
 #define VSOL_CURVE_3D_H
 //*****************************************************************************
+//:
+//  \file
+// \brief Abstract curve in a 3D space
 //
-// .NAME vsol_curve_3d - Abstract curve in a 3D space
-// .LIBRARY vsol
-// .INCLUDE vsol/vsol_curve_3d.h
-// .FILE    vsol/vsol_curve_3d.cxx
-//
-// .SECTION Author
+// \author
 // François BERTEL
 //
-// .SECTION Modifications
-// 2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
-// 2000/05/03 François BERTEL Creation
+// \verbatim
+// Modifications
+//  2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
+//  2000/05/03 François BERTEL Creation
+// \endverbatim
 //*****************************************************************************
 
 class vsol_curve_3d;

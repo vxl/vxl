@@ -1,13 +1,9 @@
 #ifndef vtol_edge_2d_h
 #define vtol_edge_2d_h
-
-// .NAME vtol_edge_2d - Represents the basic 1D topological entity
-// .LIBRARY vtol
-// .HEADER gel package
-// .INCLUDE vtol/vtol_edge_2d.h
-// .FILE vtol_edge_2d.cxx
+//:
+//  \file
+// \brief Represents the basic 1D topological entity
 //
-// .SECTION Description
 //  The vtol_edge_2d class is used to represent a topological edge.  An vtol_edge_2d
 //  maintains a data pointer to the specific mathematical curve geometry
 //  which describes the point set that makes up the edge.  For convenience
@@ -18,7 +14,8 @@
 //  topological hierarchy.  In rare cases, an edge will be used to represent
 //  a Ray.  In this case, only _v1 will be valid and _v2 will be NULL.
 //
-// .SECTION Modifications:
+// \verbatim
+// Modifications:
 //     JLM December 1995, Added timeStamp (Touch) to
 //         operations which affect bounds.
 //     JLM December 1995 Added method for ComputeBoundingBox
@@ -39,6 +36,7 @@
 //
 //   02-26-97 Added implementation for virtual Transform() - Peter Vanroose
 //   PTU ported to vxl may 2000.
+// \endverbatim
 
 #include <vtol/vtol_edge_2d_sptr.h>
 

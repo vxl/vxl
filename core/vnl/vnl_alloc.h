@@ -1,10 +1,9 @@
+// This is ./vxl/vnl/vnl_alloc.h
 #ifndef vnl_alloc_h_
 #define vnl_alloc_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-
-// This is vxl/vnl/vnl_alloc.h
 
 //:
 // \file
@@ -24,7 +23,6 @@
 //    ROUND_UP(requested_size).  Thus the client has enough size
 //    information that we can return the object to the proper free li*st
 //    without permanently losing part of the object.
-//
 //
 // The first template parameter specifies whether more than one thread
 // may use this allocator.  It is safe to allocate an object from

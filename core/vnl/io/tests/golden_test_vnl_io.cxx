@@ -1,4 +1,4 @@
-// This is vxl/vnl/io/tests/test_all_vnl_io.cxx
+// This is ./vxl/vnl/io/tests/golden_test_vnl_io.cxx
 #include <vcl_cassert.h>
 #include <vcl_string.h>
 #include <vcl_fstream.h>
@@ -20,8 +20,9 @@ void golden_test_vnl_io(bool save_file=false);
 //:
 // \file
 // \brief Read in a golden data file, and check the values are correct.
+//
 // If you need to recreate the golden data file build this as a
-// standalone program, and run it with the single parameter create
+// standalone program, and run it with the single parameter create:
 // \verbatim
 // golden_test_vnl_io create
 // \verbatim
@@ -217,4 +218,3 @@ void golden_test_vnl_io(bool save_file)
   TEST ("m_sparse_out == m_sparse_in",test_result , true);
   TEST ("v_fixed_out == v_fixed_in", v_fixed_out == v_fixed_in, true);
 }
-

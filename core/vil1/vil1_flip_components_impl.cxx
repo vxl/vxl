@@ -1,7 +1,11 @@
-// This is vxl/vil/vil_flip_components_impl.cxx
+// This is ./vxl/vil/vil_flip_components_impl.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
+
+//:
+// \file
+
 #include "vil_flip_components_impl.h"
 #include <vcl_cstring.h> // for memcpy
 

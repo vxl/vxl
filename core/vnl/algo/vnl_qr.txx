@@ -1,8 +1,11 @@
-// This is vxl/vnl/algo/vnl_qr.txx
+// This is ./vxl/vnl/algo/vnl_qr.txx
 #ifndef vnl_qr_txx_
 #define vnl_qr_txx_
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 08 Dec 96
+
+//:
+// \file
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   08 Dec 96
 
 #include "vnl_qr.h"
 #include <vcl_iostream.h>

@@ -1,5 +1,8 @@
+// This is ./vxl/vsl/vsl_clipon_binary_loader.txx
 #ifndef vsl_clipon_binary_loader_txx_
 #define vsl_clipon_binary_loader_txx_
+//:
+// \file
 
 #include <vsl/vsl_clipon_binary_loader.h>
 #include <vcl_vector.txx>

@@ -1,9 +1,9 @@
+// This is ./vxl/vnl/vnl_sparse_matrix_linear_system.h
 #ifndef vnl_sparse_matrix_linear_system_h_
 #define vnl_sparse_matrix_linear_system_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// This is vxl/vnl/vnl_sparse_matrix_linear_system.h
 
 //: \file
 //  \brief vnl_sparse_matrix -> vnl_linear_system adaptor
@@ -12,6 +12,7 @@
 //
 //  \author David Capel, capes@robots
 //  \date   July 2000
+//
 // \verbatim
 //  Modifications
 //  LSB (Manchester) 19/3/01 Documentation tidied

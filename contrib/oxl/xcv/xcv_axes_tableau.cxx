@@ -1,13 +1,15 @@
+// This is ./oxl/xcv/xcv_axes_tableau.cxx
+
+//:
+//  \file
+// \author   K.Y.McGaul
 //
-// This is xcv/xcv_axes_tableau.cxx
 // See xcv_axes_tableau.h for a description of this file.
 //
-// \author   K.Y.McGaul
 // \verbatim
 //  Modifications:
 //   K.Y.McGaul 26-APR-2001   Initial version.
 // \endverbatim
-//
 
 #include <xcv/xcv_axes_tableau.h>
 
@@ -55,12 +57,12 @@ xcv_axes_tableau::~xcv_axes_tableau()
 //  Note - once all points are added call compute_axes to draw the graph.
 void xcv_axes_tableau::add_point(float x, float y)
 {
-  if (xpoints_.size() == 0) 
+  if (xpoints_.size() == 0)
   {
     xhigh_ = x;
     xlow_ = x;
     yhigh_ = y;
-    ylow_ = y; 
+    ylow_ = y;
   }
   if (x > xhigh_)
     xhigh_ = x;
@@ -69,7 +71,7 @@ void xcv_axes_tableau::add_point(float x, float y)
   if (y > yhigh_)
     yhigh_ = y;
   if (y < ylow_)
-    ylow_ = y; 
+    ylow_ = y;
 
   xpoints_.push_back(x);
   ypoints_.push_back(y);
@@ -78,7 +80,7 @@ void xcv_axes_tableau::add_point(float x, float y)
 //========================================================================
 //: Lay out the graph.
 //  xcv_axes_limits is called to compute the numbering and tick spacing for the
-//  graph.  Then the graph is drawn by adding objects to an easy2D and a 
+//  graph.  Then the graph is drawn by adding objects to an easy2D and a
 //  text_tableau.
 void xcv_axes_tableau::compute_axes()
 {
@@ -97,18 +99,18 @@ void xcv_axes_tableau::compute_axes()
 
   // Draw a square around the graph:
   vcl_vector<float> x_corners, y_corners;
-  x_corners.push_back(left_offset); 
-  x_corners.push_back(left_offset+graph_width); 
-  x_corners.push_back(left_offset+graph_width); 
   x_corners.push_back(left_offset);
-  y_corners.push_back(top_offset); 
+  x_corners.push_back(left_offset+graph_width);
+  x_corners.push_back(left_offset+graph_width);
+  x_corners.push_back(left_offset);
   y_corners.push_back(top_offset);
-  y_corners.push_back(top_offset+graph_height); 
+  y_corners.push_back(top_offset);
+  y_corners.push_back(top_offset+graph_height);
   y_corners.push_back(top_offset+graph_height);
   easy_->add_polygon(4, &x_corners[0]/*.begin()*/, &y_corners[0]/*.begin()*/);
 
   // Add text (headings, axes labels and numbering):
-  text_->add(left_offset,top_offset-10, heading_); 
+  text_->add(left_offset,top_offset-10, heading_);
   text_->add(left_offset + graph_width/2, top_offset+graph_height+40, x_axes_label_);
   text_->add(0, top_offset+graph_height/2, y_axes_label_);
 
@@ -116,12 +118,12 @@ void xcv_axes_tableau::compute_axes()
   for (int xcounter = 0; xcounter < xlimits_.tick_n+1; xcounter++)
   {
     float tmp_width = left_offset + (2*xcounter*xspacing);
-  
+
     // tick marks:
-    easy_->add_line(tmp_width, top_offset+graph_height+tick_width, 
+    easy_->add_line(tmp_width, top_offset+graph_height+tick_width,
                     tmp_width, top_offset+graph_height);
     if (xcounter != xlimits_.tick_n)
-      easy_->add_line(tmp_width+xspacing, top_offset+graph_height+tick_width, 
+      easy_->add_line(tmp_width+xspacing, top_offset+graph_height+tick_width,
                       tmp_width+xspacing, top_offset+graph_height);
 
     // numbering:
@@ -130,8 +132,8 @@ void xcv_axes_tableau::compute_axes()
     {
       float tmp_number = xlimits_.tick_start + (xcounter*xlimits_.tick_spacing);
       vcl_sprintf(tmp_number_string, "%.1f", tmp_number);
-    } 
-    else 
+    }
+    else
     {
       int tmp_number = (int)vcl_ceil(xlimits_.tick_start + (xcounter*xlimits_.tick_spacing));
       vcl_sprintf(tmp_number_string, "%d", tmp_number);
@@ -147,20 +149,20 @@ void xcv_axes_tableau::compute_axes()
     // tick marks:
     easy_->add_line(left_offset-tick_width, tmp_height, left_offset, tmp_height);
     if (ycounter != ylimits_.tick_n)
-      easy_->add_line(left_offset-tick_width, tmp_height+yspacing, 
+      easy_->add_line(left_offset-tick_width, tmp_height+yspacing,
                       left_offset, tmp_height+yspacing);
 
     // numbering:
     char tmp_number_string[20];
     if (ylimits_.tick_spacing < 1)
     {
-      float tmp_number = ylimits_.tick_end - (ycounter*ylimits_.tick_spacing); 
+      float tmp_number = ylimits_.tick_end - (ycounter*ylimits_.tick_spacing);
       vcl_sprintf(tmp_number_string, "%.1f", tmp_number);
     }
     else
     {
-      int tmp_number = (int)vcl_ceil(ylimits_.tick_end - (ycounter*ylimits_.tick_spacing)); 
-      vcl_sprintf(tmp_number_string, "%d", tmp_number); 
+      int tmp_number = (int)vcl_ceil(ylimits_.tick_end - (ycounter*ylimits_.tick_spacing));
+      vcl_sprintf(tmp_number_string, "%d", tmp_number);
     }
     text_->add(left_offset-40, tmp_height+3, tmp_number_string);
   }
@@ -177,13 +179,13 @@ void xcv_axes_tableau::compute_axes()
     ycalib.push_back(
       top_offset + graph_height - ((ypoints_[i]-ylimits_.tick_start)*yscaling));
   }
- 
+
   easy_->add_linestrip(xcalib.size(), &xcalib[0]/*.begin()*/, &ycalib[0]/*.begin()*/);
 }
 
 //========================================================================
 //: Handles all events for this tableau.
-bool xcv_axes_tableau::handle(const vgui_event& event) 
+bool xcv_axes_tableau::handle(const vgui_event& event)
 {
   // Pass events on down to the child tableaux:
   //child_tab->handle(event);

@@ -3,23 +3,15 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+//:
+//  \file
+// \brief Iterator for PairMatchMulti
 //
-// .NAME    PairMatchMultiIterator - Iterator for PairMatchMulti
-// .LIBRARY MViewBasics
-// .HEADER  MultiView Package
-// .INCLUDE mvl/PairMatchMultiIterator.h
-// .FILE    PairMatchMultiIterator.cxx
-//
-// .SECTION Description
 //    PairMatchMultiIterator is a helper class that iterates through
 //    a set of matches in a PairMatchMulti.
 //
-// .SECTION Author
+// \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 17 Sep 96
-//
-// .SECTION Modifications:
-//     <none yet>
-//
 //-----------------------------------------------------------------------------
 
 #include "PairMatchMulti.h"

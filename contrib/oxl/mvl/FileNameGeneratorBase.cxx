@@ -5,6 +5,9 @@
 //
 //-----------------------------------------------------------------------------
 
+//:
+//  \file
+
 #include "FileNameGeneratorBase.h"
 
 #include <vnl/vnl_identity.h>
@@ -37,4 +40,3 @@ int FileNameGeneratorBase::get_real_index(int index) const
 {
   return indexer_->f(index);
 }
-

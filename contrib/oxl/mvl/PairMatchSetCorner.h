@@ -5,22 +5,18 @@
 #endif
 //:
 //  \file
-
-// .NAME    PairMatchSetCorner - Matches between corners
-// .LIBRARY MViewBasics
-// .HEADER  MultiView Package
-// .INCLUDE mvl/PairMatchSetCorner.h
-// .FILE    PairMatchSetCorner.cxx
+// \brief Matches between corners
 //
-// .SECTION Description
 //    PairMatchSetCorner is a subclass of PairMatchSet that stores matches
 //    between corner features.
 //
-// .SECTION Author
+// \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 09 Aug 96
 //
-// .SECTION Modifications:
+// \verbatim
+//  Modifications:
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
+// \endverbatim
 //
 //-----------------------------------------------------------------------------
 

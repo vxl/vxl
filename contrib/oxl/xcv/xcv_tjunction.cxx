@@ -1,9 +1,10 @@
-//
-// This is xcv/xcv_tjunction.cxx
+// This is ./oxl/xcv/xcv_tjunction.cxx
+
+//:
+//  \file
 // See xcv_tjunction.h for a description of this file.
 //
 // \author  K.Y.McGaul
-//
 
 #include "xcv_tjunction.h"
 

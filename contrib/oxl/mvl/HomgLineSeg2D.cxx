@@ -2,6 +2,9 @@
 #pragma implementation
 #endif
 
+//:
+//  \file
+
 #include <vcl_iostream.h>
 
 #include <mvl/HomgLine2D.h>

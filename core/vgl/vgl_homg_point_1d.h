@@ -1,16 +1,16 @@
+// This is ./vxl/vgl/vgl_homg_point_1d.h
 #ifndef vgl_homg_point_1d_h_
 #define vgl_homg_point_1d_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 
-// This is vxl/vgl/vgl_homg_point_1d.h
-
 //:
 // \file
-// \brief a point in homogeneous 1-D space, i.e., a homogeneous pair (x,w)
+// \brief a point in homogeneous 1-D space, i.e., a homogeneous pair \a (x,w)
 // \author Peter Vanroose
 // \date   8 July 2001
+//
 // \verbatim
 // Modifications
 // \endverbatim
@@ -19,7 +19,7 @@
 #include <vcl_cassert.h>
 #include <vcl_vector.h>
 
-//: Represents a homogeneous 1-D point, i.e., a homogeneous pair (x,w)
+//: Represents a homogeneous 1-D point, i.e., a homogeneous pair \a (x,w)
 template <class T>
 class vgl_homg_point_1d
 {
@@ -55,8 +55,8 @@ public:
   inline T x() const { return x_; }
   inline T w() const { return w_; }
 
-  //: Set x,w
-  // Note that it does not make sense to set x or w individually.
+  //: Set \a x,w
+  // Note that it does not make sense to set \a x or \a w individually.
   inline void set(T px, T pw) { x_ = px, w_ = pw; }
   inline void set(T const p[2]) { x_ = p[0]; w_ = p[1]; }
 

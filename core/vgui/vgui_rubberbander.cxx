@@ -2,6 +2,9 @@
 #pragma implementation
 #endif
 
+//:
+//  \file
+
 #include "vgui_rubberbander.h"
 
 #include <vcl_cassert.h>

@@ -1,9 +1,9 @@
+// This is ./vxl/vil/vil_16bit.h
 #ifndef vil_16bit_h_
 #define vil_16bit_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// This is vxl/vil/vil_16bit.h
 
 //:
 // \file
@@ -14,6 +14,7 @@
 // native format of the compiler or execution environment.
 //
 // \author  fsm
+//
 // \verbatim
 // Modifications
 // Peter Vanroose, July 2000: corrected serious bug: VXL_LITTLE_ENDIAN not needed

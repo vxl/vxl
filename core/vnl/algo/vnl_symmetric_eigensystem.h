@@ -1,9 +1,9 @@
+// This is ./vxl/vnl/algo/vnl_symmetric_eigensystem.h
 #ifndef vnl_symmetric_eigensystem_h_
 #define vnl_symmetric_eigensystem_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief Find eigenvalues of a symmetric matrix
@@ -100,11 +100,11 @@ public:
 
   //: Return the matrix $V  D  V^\top$.
   //  This can be useful if you've modified $D$.  So an inverse is obtained using
-  // \verbatim
+  // \code
   //   vnl_symmetric_eigensystem} eig(A);
   //   eig.D.invert_in_place}();
   //   vnl_matrix<double> Ainverse = eig.recompose();
-  // \endverbatim
+  // \endcode
 
   vnl_matrix<T> recompose() const { return V * D * V.transpose(); }
 

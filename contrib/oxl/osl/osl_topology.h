@@ -3,13 +3,12 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME osl_topology
-// .INCLUDE osl/osl_topology.h
-// .FILE osl_topology.cxx
+//:
+// \file
 // \author fsm@robots.ox.ac.uk
-
+//
 // *** This is a permanent conversion hack ***
-// Do not expect that future cannies will provide output in this form.
+// Do not expect that future Canny's will provide output in this form.
 // Do not expect this code to be supported in any way whatsoever.
 
 #include <vcl_list.h>

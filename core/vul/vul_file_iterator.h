@@ -1,6 +1,4 @@
-// This is vxl/vul/vul_file_iterator.h
-
-//-*- c++ -*-------------------------------------------------------------------
+// This is ./vxl/vul/vul_file_iterator.h
 #ifndef vul_file_iterator_h_
 #define vul_file_iterator_h_
 #ifdef __GNUC__
@@ -25,18 +23,18 @@ struct vul_file_iterator_data;
 
 //: Iterate through directories and/or "glob" patterns (*.*)
 // It is efficient to use
-// \verbatim
+// \code
 //   for(vul_file_iterator fn("/dir/*"); fn; ++fn) {
 //     ... use fn() as filename
 //   }
-// \endverbatim
+// \endcode
 // simply to list the contents of a directory.  If you really
 // want just the *.ext files, it is efficient to use
-// \verbatim
+// \code
 //   for(vul_file_iterator fn("/dir/*.ext"); fn; ++fn) {
 //     ... use fn() as filename
 //   }
-// \endverbatim
+// \endcode
 // rather than opendir/glob/etc.
 // Valid glob patterns are unix-like.
 

@@ -1,7 +1,10 @@
-// This is vxl/vgl/io/vgl_io_polygon.cxx
+// This is ./vxl/vgl/io/vgl_io_polygon.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
+
+//:
+// \file
 
 #include "vgl_io_polygon.h"
 
@@ -68,4 +71,3 @@ void vsl_print_summary(vcl_ostream& os,const vgl_polygon & p)
       os<<vcl_endl;
   }
 }
-

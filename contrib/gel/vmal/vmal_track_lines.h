@@ -6,17 +6,16 @@
 //--------------------------------------------------------------------------------
 //:
 //  \file
-
-// .NAME        vmal_track_lines
-// .INCLUDE     vmal/vmal_track_lines.h
-// .FILE        vmal_track_lines.cxx
-// .SECTION Description:
+//
 //   Match lines that have been detected in a sequence of images. To achieve
 //   this, it uses the homographies between the images.
-// .SECTION Author
+//
+// \author
 //   L. Guichard
-// .SECTION Modifications:
+// \verbatim
+// Modifications:
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
+// \endverbatim
 //--------------------------------------------------------------------------------
 #include <vcl_vector.h>
 #include <vtol/vtol_edge_2d_sptr.h>

@@ -3,25 +3,19 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
 //:
 //  \file
-
-// .NAME vgui_accelerate
-// .LIBRARY vgui
-// .HEADER vxl Package
-// .INCLUDE vgui/internals/vgui_accelerate.h
-// .FILE internals/vgui_accelerate.cxx
 //
-// .SECTION Author
+// \author
 //              David Capel
 //              Robotics Research Group, University of Oxford
 //
-// .SECTION Modifications
+// \verbatim
+//  Modifications
 //   01-APR-2000   initial version
 //   10-JUL-2000   Marko Bacic, Oxford RRG - Speeded up rendering on Mesa by using GL_RGB instead of GL_RGBA
-//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
-//
+//   Feb.2002    - Peter Vanroose - brief doxygen comment placed on single line
+// \endverbatim
 
 #include <vgui/vgui_gl.h>
 

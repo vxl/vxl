@@ -3,23 +3,15 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
 //:
-//  \file
-
-// .NAME    ImageWarp - namespace for static functions
-// .LIBRARY oxp
-// .HEADER  Oxford Package
-// .INCLUDE oxp/ImageWarp.h
-// .FILE    ImageWarp.txx
+// \file
+// \brief namespace for static functions
 //
-// .SECTION Description
 //    ImageWarp is a namespace for static `image warping' functions
 //    warp, warp_inverse, gapfill, and mean_nz_intensity.
 //
-// .SECTION Author
+// \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 23 Jan 99
-//
 //-----------------------------------------------------------------------------
 
 #include <vil/vil_memory_image_of.h>

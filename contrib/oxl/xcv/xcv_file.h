@@ -1,6 +1,6 @@
+// This is ./oxl/xcv/xcv_file.h
 #ifndef xcv_file_h_
 #define xcv_file_h_
-// This is xcv/xcv_file.h
 
 //:
 // \file
@@ -9,8 +9,10 @@
 //
 // \author  K.Y.McGaul
 // \brief Interface to file functions.
+//
 //  Creates a menu for, and provides an interface to operations for loading
 //  and saving files.
+//
 // \verbatim
 //  Modifications:
 //   K.Y.McGaul     27-JAN-2000    Initial version.

@@ -1,11 +1,11 @@
+// This is ./vxl/vsl/vsl_binary_io.cxx
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_binary_explicit_io.h>
 #include <vxl_config.h>
 #include <vcl_map.txx>
 #include <vcl_cstdlib.h> // abort()
 #include <vcl_cstring.h> // memcpy()
-
-
+//:
 // \file
 // \brief Functions to perform consistent binary IO within vsl
 // \author Tim Cootes and Ian Scott
@@ -561,4 +561,3 @@ void vsl_b_ifstream::close()
   ((vcl_ifstream *)is_)->close();
   clear_serialisation_records();
 }
-

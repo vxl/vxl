@@ -1,9 +1,10 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is ./oxl/vgui/internals/vgui_dialog_impl.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// This is vgui/internals/vgui_dialog_impl.cxx
+
+//:
+//  \file
 // See vgui_dialog_impl.h for a description of this file
 //
 // \author Philip C. Pritchett, RRG, University of Oxford

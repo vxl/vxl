@@ -1,3 +1,5 @@
+//:
+//  \file
 
 #include <vtol/vtol_topology_cache.h>
 
@@ -177,4 +179,3 @@ void vtol_topology_cache::blocks(block_list& oblocks)
     oblocks.push_back(*it);
   }
 }
-

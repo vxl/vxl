@@ -1,9 +1,10 @@
-//
-// This is xcv/xcv_threeview_manager.cxx
+// This is ./oxl/xcv/xcv_threeview_manager.cxx
+
+//:
+//  \file
 // See xcv_threeview_manager.h for a description of this file.
 //
 // \author K.Y.McGaul
-//
 
 #include "xcv_threeview_manager.h"
 

@@ -1,6 +1,9 @@
 #ifndef vsrl_diffusion_h
 #define vsrl_diffusion_h
 
+//:
+//  \file
+
 #include <vnl/vnl_matrix.h>
 #include <vsrl/vsrl_dense_matcher.h>
 

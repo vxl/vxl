@@ -2,6 +2,9 @@
 #pragma implementation
 #endif
 
+//:
+//  \file
+
 #include <vcl_functional.h> //vxl_filter
 #include <vcl_utility.h>    //vxl_filter
 #include "vrml_out.h"

@@ -1,7 +1,9 @@
+//:
+//  \file
+
 #include <vtol/vtol_list_functions.h>
 #include <vsol/vsol_spatial_object_3d.h>
 #include <vtol/vtol_topology_object.h>
-
 
 //: Note if you really want a tagged union...this is it...
 // otherwise you can call remove_duplicates and get the

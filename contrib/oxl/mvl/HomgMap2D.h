@@ -3,23 +3,16 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME    HomgMap2D - General 2D projective map
-// .LIBRARY MViewBasics
-// .HEADER  MultiView Package
-// .INCLUDE mvl/HomgMap2D.h
-// .FILE    HomgMap2D.cxx
+//:
+//  \file
+// \brief General 2D projective map
 //
-// .SECTION Description
 //    HomgMap2D represents a mapping between two 2D spaces.
 //    It is used to represent a variety of such mappings, including
 //    camera calibration and numerical conditioning.
 //
-// .SECTION Author
+// \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 06 Nov 96
-//
-// .SECTION Modifications:
-//     <none yet>
-//
 //-----------------------------------------------------------------------------
 
 class HomgMap2D {

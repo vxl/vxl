@@ -1,11 +1,14 @@
-// This is vxl/vil/vil_image_proxy.cxx
+// This is ./vxl/vil/vil_image_proxy.cxx
+#ifdef __GNUC__
+#pragma implementation
+#endif
+
+//:
+// \file
 
 /*
   fsm@robots.ox.ac.uk
 */
-#ifdef __GNUC__
-#pragma implementation
-#endif
 #include "vil_image_proxy.h"
 
 #include <vcl_string.h>
@@ -80,13 +83,14 @@ vil_image_proxy::vil_image_proxy(char const *file)
 
 /* START_MANCHESTER_BINARY_IO_CODE */
 
-  //: Return the name of the class;
+//: Return the name of the class;
 vcl_string vil_image_proxy_impl::is_a() const
 {
   static const vcl_string class_name_="vil_image_proxy_impl";
   return class_name_;
 }
 
+//: Return true if the name of the class matches the argument
 bool vil_image_proxy_impl::is_class(vcl_string const& s) const
 {
   static const vcl_string class_name_="vil_image_proxy_impl";
@@ -94,4 +98,3 @@ bool vil_image_proxy_impl::is_class(vcl_string const& s) const
 }
 
 /* END_MANCHESTER_BINARY_IO_CODE */
-

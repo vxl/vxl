@@ -1,8 +1,10 @@
+// This is ./vxl/vnl/vnl_math.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
 
-// This is vxl/vnl/vnl_math.cxx
+//:
+// \file
 
 #include <vnl/vnl_math.h>
 #include <vxl_config.h>

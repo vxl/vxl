@@ -1,7 +1,6 @@
+// This is ./vxl/vgl/vgl_homg_line_3d_2_points.h
 #ifndef vgl_homg_line_3d_2_points_h_
 #define vgl_homg_line_3d_2_points_h_
-
-// This is vxl/vgl/vgl_homg_line_3d_2_points.h
 
 //:
 // \file
@@ -32,7 +31,7 @@ class vgl_homg_line_3d_2_points
   // Initialization
   //+**************************************************************************
 public:
-  //: Default constructor with (0,0,0,1) and (1,0,0,0), which is the line y=z=0
+  //: Default constructor with (0,0,0,1) and (1,0,0,0), which is the line \a y=z=0
   inline vgl_homg_line_3d_2_points(void)
   : point_finite_(0,0,0,1), point_infinite_(1,0,0,0) {}
 

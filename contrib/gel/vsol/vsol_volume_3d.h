@@ -1,18 +1,17 @@
 #ifndef vsol_volume_3d_h_
 #define vsol_volume_3d_h_
 //*****************************************************************************
+//:
+//  \file
+// \brief Abstract volume in a 3D space
 //
-// .NAME vsol_volume_3d - Abstract volume in a 3D space
-// .LIBRARY vsol
-// .HEADER  vxl package
-// .INCLUDE vsol/vsol_volume_3d.h
-// .FILE    vsol_volume_3d.cxx
-//
-// .SECTION Author
+// \author
 // Peter Vanroose
 //
-// .SECTION Modifications
+// \verbatim
+// Modifications
 // 2000/06/28 Peter Vanroose  First version
+// \endverbatim
 //*****************************************************************************
 
 class vsol_volume_3d;

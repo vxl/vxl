@@ -78,11 +78,11 @@ double clsfy_smo_base::bias()
 
 //: Reseeds the internal random number generator.
 // To achieve quasi-random initialisation use;
-// \verbatim
+// \code
 // #include <vcl_ctime.h>
 // ..
 // sampler.reseed(vcl_time(0));
-// \endverbatim
+// \endcode
 void clsfy_smo_base::reseed(unsigned long seed)
 {
   rng_.reseed(seed);

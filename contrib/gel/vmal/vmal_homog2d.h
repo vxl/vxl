@@ -1,23 +1,18 @@
 #ifndef vmal_homog2d_h_
 #define vmal_homog2d_h_
 
-//--------------------------------------------------------------------------------
-// .NAME        vmal_homog2d
-// .INCLUDE     vmal/vmal_homog2d.h
-// .FILE        vmal_homog2d.cxx
-// .SECTION Description:
-//
-// .SECTION Author
+//:
+//  \file
+// \author
 //   L. Guichard
-// .SECTION Modifications:
 //--------------------------------------------------------------------------------
 
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vcl_vector.h>
+
 class vmal_homog2d
 {
-
 //***************************************************************************
 // Initialization
 //***************************************************************************

@@ -1,6 +1,9 @@
 #include "osl_convolve.h"
 #include <osl/osl_roi_window.h>
 
+//:
+//  \file
+
 //-----------------------------------------------------------------------------
 
 // Depending on the mask size, this routine will call the
@@ -73,7 +76,6 @@ void osl_convolve2 (osl_roi_window const *window,
 }
 
 
-
 //-----------------------------------------------------------------------------
 
 //: A convolution routine for masks of size 3.
@@ -116,7 +118,6 @@ void osl_convolve3 (osl_roi_window const *window,
     }
   }
 }
-
 
 
 //-----------------------------------------------------------------------------
@@ -164,7 +165,6 @@ void osl_convolve4 (osl_roi_window const *window,
     }
   }
 }
-
 
 
 //-----------------------------------------------------------------------------
@@ -215,7 +215,6 @@ void osl_convolve5 (osl_roi_window const *window,
     }
   }
 }
-
 
 
 //-----------------------------------------------------------------------------

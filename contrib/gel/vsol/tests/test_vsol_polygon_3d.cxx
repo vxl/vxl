@@ -10,6 +10,9 @@
 // 1.1     |2001/07/03| Peter Vanroose           |Thorough check of is_convex
 //*****************************************************************************
 
+//:
+//  \file
+
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 #include <vcl_vector.h>

@@ -1,14 +1,13 @@
+// This is ./vxl/vgl/vgl_line_2d.h
 #ifndef vgl_line_2d_h_
 #define vgl_line_2d_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 
-// This is vxl/vgl/vgl_line_2d.h
-
 //:
 // \file
-// \author Don Hamilton, Peter Tu, Peter VANROOSE, François BERTEL, Franck Bettinger
+// \author Don Hamilton, Peter Tu, Peter Vanroose, François BERTEL, Franck Bettinger
 //
 // \verbatim
 // Modifications :
@@ -17,9 +16,9 @@
 // 2001/06/27 Peter Vanroose         Added operator==
 // 2001/03/19 Franck Bettinger       added Manchester binary IO code
 // 2000/12/01 Peter Vanroose         moved dist_origin() to vgl_distance.h
-// 2000/05/09 Peter VANROOSE         dist_origin() re-implemented
+// 2000/05/09 Peter Vanroose         dist_origin() re-implemented
 // 2000/05/05 François BERTEL        Several minor bugs fixed
-// 2000/02/29 Peter VANROOSE         Several minor fixes
+// 2000/02/29 Peter Vanroose         Several minor fixes
 // 2000/02/16 Don HAMILTON, Peter TU Creation
 // \endverbatim
 
@@ -90,17 +89,17 @@ public:
   inline vgl_vector_2d<double> normal() const
   { return normalized(vgl_vector_2d<double>(a_,b_)); }
 
-protected: // \deprecated
-  //: x component of unit vector describing direction of line
+private: // \deprecated
+  //: \deprecated \a x component of unit vector describing direction of line
   inline double dir_x() const { return direction().x(); }
 
-  //: y component of unit vector describing direction of line
+  //: \deprecated \a y component of unit vector describing direction of line
   inline double dir_y() const { return direction().y(); }
 
-  //: x component of unit vector orthogonal to line
+  //: \deprecated \a x component of unit vector orthogonal to line
   inline double normal_x() const { return normal().x(); }
 
-  //: y component of unit vector orthogonal to line
+  //: \deprecated \a y component of unit vector orthogonal to line
   inline double normal_y() const { return normal().y(); }
 
 public:
@@ -115,7 +114,7 @@ public:
 
   //: Get two points on the line; normally the intersection with X and Y axes.
   // When the line is parallel to one of these,
-  // the point with y=1 or x=1, resp. are taken.  When the line goes
+  // the point with \a y=1 or \a x=1, resp. are taken.  When the line goes
   // through the origin, the second point is (b, -a).
   void get_two_points(vgl_point_2d<Type> &p1, vgl_point_2d<Type> &p2);
 

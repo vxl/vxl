@@ -1,6 +1,9 @@
+// This is ./vxl/vsl/vsl_binary_loader_base.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
+//:
+// \file
 
 #include <vsl/vsl_binary_loader_base.h>
 #include <vcl_vector.h>
@@ -50,4 +53,3 @@ void vsl_delete_all_loaders()
   delete loader_list_;
   loader_list_=0;
 }
-

@@ -5,8 +5,11 @@
 #include <mvl/ProjectiveBasis2D.h>
 
 //-----------------------------------------------------------------------------
+
+//:
+//  \file
+// \brief Compute a plane-plane projectivity using linear least squares.
 //
-// - Compute a plane-plane projectivity using linear least squares.
 // Returns false if the calculation fails or there are fewer than four point
 // matches in the list.
 //
@@ -35,4 +38,3 @@ HMatrix2DCompute4Point::compute_p(PointArray const& points1,
   H->set(basis2.get_T().get_inverse().get_matrix() * basis1.get_T_matrix());
   return true;
 }
-

@@ -4,17 +4,13 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+//:
+// \file
+// \brief Function for rendering text at the current raster position.
 //
-// .NAME vgui_text_put
-// .INCLUDE vgui/vgui_text_put.h
-// .FILE vgui_text_put.cxx
-//
-// .SECTION Description
-// Function for rendering text at the current raster position.
-//
-// .SECTION Author
+// \author
 //    Philip C. Pritchett, RRG, University of Oxford
-//    Created: 19 Oct 99
+// \date   19 Oct 99
 
 //: put the given text at the current raster position.
 void vgui_text_put(char const *s);

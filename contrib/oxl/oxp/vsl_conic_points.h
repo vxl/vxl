@@ -3,20 +3,15 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+//:
+//  \file
+// \brief Point sampling of 2D conic
 //
-// .NAME    vsl_conic_points - Point sampling of 2D conic
-// .LIBRARY oxp
-// .HEADER  Oxford Package
-// .INCLUDE oxp/vsl_conic_points.h
-// .FILE    vsl_conic_points.cxx
-//
-// .SECTION Description
 //   This class represents the point sampling of a 2D conic section
 //   which has been clipped to a viewport.
 //
-// .SECTION Author
+// \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 12 Nov 99
-//
 //-----------------------------------------------------------------------------
 
 #include <vcl_vector.h>

@@ -7,6 +7,9 @@
   fsm@robots.ox.ac.uk
 */
 
+//:
+//  \file
+
 #include <vnl/vnl_matrix.h>
 
 //:

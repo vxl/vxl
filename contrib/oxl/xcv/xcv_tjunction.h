@@ -1,13 +1,15 @@
+// This is ./oxl/xcv/xcv_tjunction.h
 #ifndef xcv_tjunction_h_
 #define xcv_tjunction_h_
-// This is xcv/xcv_tjunction.h
 
 //:
 // \file
 // \author  K.Y.McGaul
 // \brief Passes events to a tableau and a xcv_mview_manager.
+//
 //  Events sent to this tableau are passed on to both its child tableau
 //  and to the xcv_mview_manager registered in the constructor.
+//
 // \verbatim
 //  Modifications:
 //   K.Y.McGaul     05-MAY-2000    Initial version.

@@ -1,6 +1,9 @@
-// This is vxl/vnl/io/vnl_io_diag_matrix.txx
+// This is ./vxl/vnl/io/vnl_io_diag_matrix.txx
 #ifndef vnl_io_diag_matrix_txx_
 #define vnl_io_diag_matrix_txx_
+
+//:
+// \file
 
 #include <vsl/vsl_binary_io.h>
 #include <vnl/io/vnl_io_diag_matrix.h>

@@ -1,10 +1,13 @@
+// This is ./vxl/vnl/algo/vnl_rpoly_roots.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
+
+//:
+// \file
 //
-// vnl_rpoly_roots
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 06 Aug 96
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   06 Aug 96
 //
 //-----------------------------------------------------------------------------
 

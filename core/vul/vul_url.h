@@ -1,8 +1,11 @@
+// This is ./vxl/vul/vul_url.h
 #ifndef vul_url_h_
 #define vul_url_h_
 #ifdef __GNUC__
 #pragma interface 
 #endif
+//:
+// \file
 
 #include <vcl_istream.h>
 #include <vcl_iostream.h> // needed for vcl_ios_in and vcl_ios_openmode

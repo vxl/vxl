@@ -1,4 +1,4 @@
-// This is vxl/vil/io/tests/test_all_vil_io.cxx
+// This is ./vxl/vil/io/tests/golden_test_vil_io.cxx
 #include <vcl_cassert.h>
 #include <vcl_string.h>
 #include <vcl_fstream.h>
@@ -16,12 +16,12 @@
 //:
 // \file
 // \brief Read in a golden data file, and check the values are correct.
+//
 // If you need to recreate the golden data file build this as a
-// standalone program, and run it with the single parameter create
+// standalone program, and run it with the single parameter create:
 // \verbatim
 // golden_test_vnl_io create
-// \verbatim
-
+// \endverbatim
 
 void golden_test_vil_io(bool save_file=false);
 
@@ -184,4 +184,3 @@ void golden_test_vil_io(bool save_file)
       p_out_rgba.B()==p_in_rgba.B() &&
       p_out_rgba.A()==p_in_rgba.A() , true);
 }
-

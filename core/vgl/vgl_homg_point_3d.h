@@ -1,7 +1,6 @@
+// This is ./vxl/vgl/vgl_homg_point_3d.h
 #ifndef vgl_homg_point_3d_h_
 #define vgl_homg_point_3d_h_
-
-// This is vxl/vgl/vgl_homg_point_3d.h
 
 //:
 // \file
@@ -79,8 +78,8 @@ public:
   inline Type z() const { return z_; }
   inline Type w() const { return w_; }
 
-  //: Set x,y,z,w
-  // Note that it does not make sense to set x, y, z or w individually.
+  //: Set \a x,y,z,w
+  // Note that it does not make sense to set \a x, \a y, \a z or \a w individually.
   inline void set(Type px, Type py, Type pz, Type pw = Type(1))
   { x_=px; y_=py; z_=pz; w_=pw; }
 

@@ -2,6 +2,9 @@
 #ifndef vcl_emulation_string_h_
 #define vcl_emulation_string_h_
 
+//:
+// \file
+//
 // Main templates for the -*- C++ -*- vcl_string classes.
 // Copyright (C) 1994, 1995 Free Software Foundation
 

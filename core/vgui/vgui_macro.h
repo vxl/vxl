@@ -3,19 +3,12 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-
 //:
-//  \file
-
-// .NAME vgui_macro
-// .INCLUDE vgui/vgui_macro.h
-// .FILE vgui_macro.cxx
-/*
-  fsm@robots.ox.ac.uk
-*/
-
-// \file collect together some handy preprocessor macros commonly used in vgui
-
+// \file
+// \author fsm@robots.ox.ac.uk
+//
+// collect together some handy preprocessor macros commonly used in vgui
+//
 // Do not include <vcl_iostream.h> from this file.
 
 

@@ -1,8 +1,10 @@
+// This is ./vxl/vnl/vnl_matlab_filewrite.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
 
-// This is vxl/vnl/vnl_matlab_filewrite.cxx
+//:
+// \file
 
 #include "vnl_matlab_filewrite.h"
 

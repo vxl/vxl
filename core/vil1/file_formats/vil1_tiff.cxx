@@ -1,21 +1,25 @@
-//
-// This is vil/vil_tiff.cxx
-// See vil_tiff.h for a description of this file.
-//
-// \author  awf@robots.ox.ac.uk
-// \verbatim
-// Modifications:
-//   09-NOV-2001  K.Y.McGaul  Use default value for orientation when it can't be read.
-// \endverbatim    
-//
+// This is ./vxl/vil/file_formats/vil_tiff.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
 
+//:
+// \file
+// See vil_tiff.h for a description of this file.
+//
+// \author  awf@robots.ox.ac.uk
+//
+// \verbatim
+// Modifications:
+//   09-NOV-2001  K.Y.McGaul  Use default value for orientation when it can't be read.
+// \endverbatim
+
 #include "vil_tiff.h"
 
 #include <vcl_cassert.h>
+#if 0 // commented out
 #include <vcl_cstdio.h> // sprintf
+#endif
 #include <vcl_cstring.h>
 #include <vcl_iostream.h>
 
@@ -90,7 +94,6 @@ bool vil_tiff_file_format_probe(vil_stream* is)
 
 vil_image_impl* vil_tiff_file_format::make_input_image(vil_stream* is)
 {
-
   if (!vil_tiff_file_format_probe(is))
     return 0;
 
@@ -246,11 +249,11 @@ bool vil_tiff_generic_image::get_property(char const *tag, void *prop) const
     orientation = 1;
   }
 
-  bool topdown = (orientation==ORIENTATION_TOPLEFT || 
+  bool topdown = (orientation==ORIENTATION_TOPLEFT ||
                   orientation==ORIENTATION_TOPRIGHT ||
                   orientation==ORIENTATION_LEFTTOP ||
                   orientation==ORIENTATION_RIGHTTOP);
-  bool leftright=(orientation==ORIENTATION_TOPLEFT || 
+  bool leftright=(orientation==ORIENTATION_TOPLEFT ||
                   orientation==ORIENTATION_BOTLEFT ||
                   orientation==ORIENTATION_LEFTTOP ||
                   orientation==ORIENTATION_LEFTBOT);
@@ -634,7 +637,7 @@ bool vil_tiff_generic_image::write_header()
   char tmp[20];
   char datetime[20];
   strftime(tmp,sizeof(datetime),"%c",t_m);
-  sprintf(datetime,"%19s",tmp);
+  vcl_sprintf(datetime,"%19s",tmp);
   TIFFSetField(p->tif, TIFFTAG_DATETIME, datetime);
 #endif
 

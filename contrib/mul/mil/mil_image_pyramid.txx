@@ -1,6 +1,9 @@
 #ifndef mil_image_pyramid_txx_
 #define mil_image_pyramid_txx_
 
+//:
+//  \file
+
 #include <mil/mil_image_pyramid.h>
 #include <mil/mil_image.h>
 #include <vcl_cstdlib.h> // for abort()

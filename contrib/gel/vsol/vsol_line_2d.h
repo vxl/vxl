@@ -1,23 +1,22 @@
 #ifndef vsol_line_2d_h
 #define vsol_line_2d_h
 //*****************************************************************************
+//:
+//  \file
+// \brief Straight line segment in a 2D space.
 //
-// .NAME vsol_line_2d - Straight line segment in a 2D space.
-// .LIBRARY vsol
-// .INCLUDE vsol/vsol_line_2d.h
-// .FILE    vsol/vsol_line_2d.cxx
-//
-// .SECTION Description
 // The direction gives the orientation and the length of the segment
 //
-// .SECTION Author
+// \author
 // François BERTEL
 //
-// .SECTION Modifications
-// 2001/07/03 Peter Vanroose  Replaced vnl_double_2 by vgl_vector_2d
-// 2001/07/03 Peter Vanroose  Added constructor from vgl_line_segment_2d
-// 2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
-// 2000/04/28 François BERTEL Creation
+// \verbatim
+// Modifications
+//  2001/07/03 Peter Vanroose  Replaced vnl_double_2 by vgl_vector_2d
+//  2001/07/03 Peter Vanroose  Added constructor from vgl_line_segment_2d
+//  2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
+//  2000/04/28 François BERTEL Creation
+// \endverbatim
 //*****************************************************************************
 
 class vsol_line_2d;

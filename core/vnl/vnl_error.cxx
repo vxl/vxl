@@ -1,8 +1,10 @@
+// This is ./vxl/vnl/vnl_error.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
-// This is vxl/vnl/vnl_error.cxx
 
+//:
+// \file
 //
 // Copyright (C) 1991 Texas Instruments Incorporated.
 // Copyright (C) 1993 General Electric Company.

@@ -1,9 +1,9 @@
+// This is ./vxl/vil/vil_rgb.h
 #ifndef vil_rgb_h_
 #define vil_rgb_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// This is vxl/vil/vil_rgb.h
 
 //:
 // \file
@@ -16,6 +16,7 @@
 //
 // \author Peter Vanroose, K.U.Leuven, ESAT/VISICS
 // \date   15 nov. 1997
+//
 //\verbatim
 //  Modifications:
 //    250198 AWF Templated.
@@ -236,8 +237,7 @@ vil_rgb<T> vil_clamp_pixel(vil_rgb<T> const& b, double range_min , double range_
 }
 #endif
 
-// capes@robots : These vil_clamp functions are deprecated. See vil_clamp.h
-#if 0
+#if 0 // capes@robots : These vil_clamp functions are deprecated. See vil_clamp.h
 inline
 vil_rgb<unsigned char> vil_clamp(vil_rgb<double> const & d, vil_rgb<unsigned char>* dummy)
 {

@@ -3,25 +3,22 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+//:
+// \file
+// \brief Set of interest points on an image
 //
-// .NAME    HomgInterestPointSet - Set of interest points on an image
-// .LIBRARY MViewBasics
-// .HEADER  MultiView Package
-// .INCLUDE mvl/HomgInterestPointSet.h
-// .FILE    HomgInterestPointSet.cxx
-//
-// .SECTION Description
 //    HomgInterestPointSet holds a set of corners (or points of interest) computed
 //    from an image.  The current implementation provides a moderately
 //    abstract interface, but assumes that it is efficient to associate
 //    an index with each corner.  I *know* this ought to be elsewhere.
 //
-// .SECTION Author
+// \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 17 Aug 96
 //
-// .SECTION Modifications:
-//     Peter Vanroose - 27 aug.97 - moved vcl_vector<HomgInterestPoint> instantiation to Templates package
-//
+// \verbatim
+// Modifications:
+//   Peter Vanroose - 27 aug.97 - moved vcl_vector<HomgInterestPoint> instantiation to Templates
+// \endverbatim
 //-----------------------------------------------------------------------------
 
 #include <vcl_vector.h>

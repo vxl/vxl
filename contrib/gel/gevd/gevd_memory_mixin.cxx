@@ -31,6 +31,9 @@
 // ---------------------------------------------------------------------------
 // <end copyright notice>
 
+//:
+// \file
+
 #include <vcl_cstring.h>   // memset() and memcpy() live here
 //#include <vcl_memory.h>
 #include <vcl_algorithm.h>
@@ -336,4 +339,3 @@ gevd_memory_mixin::Clear()
         offset = 0;
         vcl_memset((char*)buffer,0,size);
 }
-

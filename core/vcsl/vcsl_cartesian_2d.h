@@ -2,11 +2,12 @@
 #define vcsl_cartesian_2d_h
 
 //:
-// \file 
+// \file
 // \brief 2D Cartesian coordinate system
 // \author François BERTEL
-// Modifications
+//
 // \verbatim
+// Modifications
 // 2000/06/28 François BERTEL Creation. Adapted from IUE
 // \endverbatim
 
@@ -35,13 +36,13 @@ public:
   //***************************************************************************
   // Because VXL does not use dynamic_cast<> :-(
   //***************************************************************************
-  
+
   virtual const vcsl_cartesian_2d *cast_to_cartesian_2d(void) const;
 
   //***************************************************************************
   // Status report
   //***************************************************************************
-  
+
   //: Are the axes of `this' right handed ?
   virtual bool is_right_handed(void) const;
 

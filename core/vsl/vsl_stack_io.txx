@@ -1,4 +1,4 @@
-// This is vxl/vsl/vsl_stack_io.txx
+// This is ./vxl/vsl/vsl_stack_io.txx
 #ifndef vsl_stack_io_txx_
 #define vsl_stack_io_txx_
 
@@ -6,6 +6,7 @@
 // \file
 // \brief  binary IO functions for vcl_stack<T>
 // \author K.Y.McGaul
+//
 // Implementation
 
 #include <vsl/vsl_stack_io.h>

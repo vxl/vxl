@@ -1,5 +1,8 @@
 //  Copyright: (C) 2000 British Telecommunications plc
 
+//:
+// \file
+
 #include "clsfy_k_nearest_neighbour.h"
 
 #include <vcl_queue.h>
@@ -164,4 +167,3 @@ void clsfy_k_nearest_neighbour::b_read(vsl_b_istream& bfs)
     return;
   }
 }
-

@@ -1,9 +1,9 @@
+// This is ./vxl/vul/vul_awk.h
 #ifndef vul_awk_h_
 #define vul_awk_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// This is vxl/vul/vul_awk.h
 
 //:
 // \file
@@ -28,10 +28,10 @@
 // its methods---except that this C++ version uses zero-based fields.  The
 // usage is exemplified in this example, to print the second field in every
 // line:
-// \verbatim
+// \code
 //    for(vul_awk awk(cin); awk; ++awk)
 //      vcl_cout << awk[2] << vcl_endl;
-// \endverbatim
+// \endcode
 
 class vul_awk {
 public:

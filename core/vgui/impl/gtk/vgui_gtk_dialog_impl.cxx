@@ -1,15 +1,10 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
 //:
-//  \file
-
-// .NAME vgui_gtk_dialog_impl
-// Author: Philip C. Pritchett, RRG, University of Oxford
-// Created: 28 Dec 99
-//
+// \file
+// \author Philip C. Pritchett, RRG, University of Oxford
+// \date   28 Dec 99
 //-----------------------------------------------------------------------------
 
 #define private public
@@ -538,4 +533,3 @@ bool vgui_gtk_dialog_impl::ask() {
 
   return false;
 }
-

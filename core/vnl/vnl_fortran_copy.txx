@@ -1,8 +1,12 @@
-// This is vxl/vnl/vnl_fortran_copy.txx
+// This is ./vxl/vnl/vnl_fortran_copy.txx
 #ifndef vnl_fortran_copy_txx_
 #define vnl_fortran_copy_txx_
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 29 Aug 96
+
+//:
+// \file
+//
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   29 Aug 96
 //
 //-----------------------------------------------------------------------------
 

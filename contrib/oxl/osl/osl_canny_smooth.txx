@@ -6,7 +6,7 @@
 
 //:
 //  \file
-
+//
 // Notes
 // 1. if this file is not in Templates, gcc 2.7 does not instantiate.
 // 2. even if this file is in Templates, SunPro 5.0 will fail to
@@ -115,8 +115,7 @@ void osl_canny_smooth_rothwell_adaptive(T const * const *_image, int /*_xsize*/,
 //    It is the probability that the variable will assume a value <= x
 //    in the distribution function. It is the hashed area under the
 //    distribution profile.
-// @{
-// \begin{verbatim}
+// \verbatim
 //                     . .
 //                   . ### .
 //                 .  #####| .
@@ -125,8 +124,7 @@ void osl_canny_smooth_rothwell_adaptive(T const * const *_image, int /*_xsize*/,
 //         __ .############|      .__
 //       __________________|___________
 //                         x
-// \end{verbatim}
-// @}
+// \endverbatim
 //
 
 #define thePixel(b,x,y) as_float(b[x][y])

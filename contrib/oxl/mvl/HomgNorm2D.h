@@ -3,15 +3,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+//:
+//  \file
+// \brief Normalize homogeneous points
 //
-// .NAME    HomgNorm2D - Normalize homogeneous points
-// .LIBRARY MViewCompute
-// .HEADER  MultiView Package
-// .INCLUDE mvl/HomgNorm2D.h
-// .FILE    HomgNorm2D.cxx
-// .EXAMPLE examples/exampleHomgNorm2D.cxx
-//
-// .SECTION Description
 //    HomgNorm2D is a class that normalizes a set of homogeneous points
 //    by subtracting their centroid and uniformly scaling them so that
 //    the average length (nonhomogenous) is $\sqrt2$.
@@ -19,12 +14,13 @@
 //    In addition the class stores the matrices that describe the
 //    transformations between normalized and unnormalized representations.
 //
-// .SECTION Author
+// \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 18 Aug 96
 //
-// .SECTION Modifications:
+// \verbatim
+//  Modifications:
 //     200598 FSM added diagnostic method allowing caller to detect coincident points.
-//
+// \endverbatim
 //-----------------------------------------------------------------------------
 
 #include <vcl_vector.h>

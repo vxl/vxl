@@ -10,7 +10,7 @@
 #include <vsl/vsl_binary_io.h>
 
 //: Prints items to the screen to represent events.
-// \verbatim
+// \code
 // // A rather trivial example
 // mbl_screen_counter counter;
 //
@@ -19,7 +19,7 @@
 // {
 //   counter(vcl_cout);
 // }
-// \endverbatim
+// \endcode
 class mbl_screen_counter
 {
   unsigned long count_;

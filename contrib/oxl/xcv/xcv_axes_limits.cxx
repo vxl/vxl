@@ -1,9 +1,12 @@
-//
-// This is xcv/xcv_axes_limits.cxx
+// This is ./oxl/xcv/xcv_axes_limits.cxx
+
+//:
+//  \file
 // See xcv_axes_limits.h for a description of this file.
 //
 // \author   Andrew Fitzgibbon <andrewfg@ed.ac.uk>
 // \date     23 Apr 96
+//
 // \verbatim
 //   Modifications:
 //     Andrew Fitzgibbon 23-APR-1996   Initial version.

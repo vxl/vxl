@@ -1,10 +1,9 @@
+// This is ./vxl/vnl/vnl_matrix_fixed.h
 #ifndef vnl_matrix_fixed_h_
 #define vnl_matrix_fixed_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-
-// This is vxl/vnl/vnl_matrix_fixed.h
 
 //:
 // \file
@@ -15,6 +14,7 @@
 //
 // \author Andrew W. Fitzgibbon, Oxford RRG
 // \date   04 Aug 96
+//
 // \verbatim
 // Modifications:
 // Peter Vanroose, 23 Nov 1996:  added explicit copy constructor

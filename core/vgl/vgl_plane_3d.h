@@ -1,10 +1,9 @@
+// This is ./vxl/vgl/vgl_plane_3d.h
 #ifndef vgl_plane_3d_h
 #define vgl_plane_3d_h
 #ifdef __GNUC__
 #pragma interface
 #endif
-
-// This is vxl/vgl/vgl_plane_3d.h
 
 //:
 //  \file
@@ -77,19 +76,19 @@ public:
 
   // Data Access-------------------------------------------------------------
 
-  //: Return x coefficient
+  //: Return \a x coefficient
   inline Type a()  const {return a_;}
   inline Type nx() const {return a_;}
-  //: Return y coefficient
+  //: Return \a y coefficient
   inline Type b()  const {return b_;}
   inline Type ny() const {return b_;}
-  //: Return z coefficient
+  //: Return \a z coefficient
   inline Type c()  const {return c_;}
   inline Type nz() const {return c_;}
   //: Return constant coefficient
   inline Type d()  const {return d_;}
 
-  //: Set equation a*x+b*y+c*z+d=0
+  //: Set equation \a a*x+b*y+c*z+d=0
   inline void set(Type a,Type b,Type c,Type d){assert(a||b||c);a_=a;b_=b;c_=c;d_=d;}
 
   //: the comparison operator

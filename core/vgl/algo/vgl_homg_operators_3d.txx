@@ -1,5 +1,8 @@
+// This is ./vxl/vgl/algo/vgl_homg_operators_3d.txx
 #ifndef vgl_homg_operators_3d_txx_
 #define vgl_homg_operators_3d_txx_
+//:
+// \file
 
 #include <vcl_iostream.h>
 

@@ -7,8 +7,9 @@
 //:
 // \file
 // \author François BERTEL
-// Modifications
+//
 // \verbatim
+// Modifications
 // 2000/08/01 François BERTEL Creation.
 // 2001/04/10 Ian Scott (Manchester) Converted perceps header to doxygen
 // 2002/01/28 Peter Vanroose - vcl_vector member vertices_ changed to non-ptr

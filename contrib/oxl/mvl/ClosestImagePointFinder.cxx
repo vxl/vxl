@@ -2,6 +2,9 @@
 #pragma implementation
 #endif
 
+//:
+//  \file
+
 #include "ClosestImagePointFinder.h"
 #include <vcl_vector.h>
 #include <vcl_map.h>

@@ -1,11 +1,11 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// .NAME vgui_mfc_app
+//:
+// \file
 // \author  Marko Bacic, Oxford RRG
 // \date    27 July 2000
+//
 // \verbatim
 //  Modifications:
 //    K.Y.McGaul  18-SEP-2001   Changed indentation from 8 spaces to 2 spaces.

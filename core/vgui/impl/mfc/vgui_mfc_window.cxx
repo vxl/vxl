@@ -1,33 +1,34 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is ./oxl/vgui/impl/mfc/vgui_mfc_window.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// This is vgui/impl/mfc/vgui_mfc_window
+
+//:
+//  \file
 // See vgui_mfc_window.h for a description of this file.
 //
 // \author  Marko Bacic, Oxford RRG
 // \date    24 July 2000
 // \verbatim
 //  Modifications:
-//    20-JUL-2001  K.Y.McGaul  Added init_window function carry out common 
+//    20-JUL-2001  K.Y.McGaul  Added init_window function carry out common
 //                             functionality from all constructors.
 // \endverbatim
 
 #include "vgui_mfc_window.h"
 #include "vgui_mfc_adaptor.h"
 #include "vgui_mfc_mainfrm.h"
-#include "vgui_mfc.h"    
+#include "vgui_mfc.h"
 #include "vgui_mfc_utils.h"
 #include "vgui_mfc_statusbar.h"
 #include <vgui/vgui.h>
 #include <vgui/vgui_gl.h>
-           
+
 static bool first_window = true;
 
 vgui_mfc_window::init_window(char const *title,
                              vgui_menu const &menubar,
-                             bool has_menu, 
+                             bool has_menu,
                              unsigned width, unsigned height,
                              int posx,
                              int posy)
@@ -91,16 +92,16 @@ vgui_mfc_window::~vgui_mfc_window() {
 }
 
 //: Return the vgui_mfc_adaptor associated with this window.
-vgui_adaptor* vgui_mfc_window::get_adaptor() 
+vgui_adaptor* vgui_mfc_window::get_adaptor()
 {
   return mfcwin;
 }
 
-void vgui_mfc_window::show() 
+void vgui_mfc_window::show()
 {
 }
 
-void vgui_mfc_window::hide() 
+void vgui_mfc_window::hide()
 {
 }
 
@@ -116,18 +117,18 @@ void vgui_mfc_window::enable_vscrollbar(bool show)
         wnd->ShowScrollBar(SB_VERT,show);
 }
 
-void vgui_mfc_window::iconify() 
+void vgui_mfc_window::iconify()
 {
 }
 
-void vgui_mfc_window::reshape(unsigned w, unsigned h) 
+void vgui_mfc_window::reshape(unsigned w, unsigned h)
 {
 }
 
-void vgui_mfc_window::reposition(int x,int y) 
+void vgui_mfc_window::reposition(int x,int y)
 {
 }
 
-void vgui_mfc_window::set_title(const vcl_string &s) 
+void vgui_mfc_window::set_title(const vcl_string &s)
 {
 }

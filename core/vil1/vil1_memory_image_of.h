@@ -1,14 +1,15 @@
+// This is ./vxl/vil/vil_memory_image_of.h
 #ifndef vil_memory_image_of_h_
 #define vil_memory_image_of_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// This is vxl/vil/vil_memory_image_of.h
 
 //:
 // \file
 // \author awf@robots.ox.ac.uk
 // \date 16 Feb 00
+//
 //\verbatim
 // Modifications
 //     960916 AWF Added save_pgm and more comments.

@@ -1,8 +1,10 @@
+// This is ./vxl/vnl/vnl_sym_matrix.txx
 #ifndef vnl_sym_matrix_txx_
 #define vnl_sym_matrix_txx_
+//:
+// \file
 
 #include "vnl_sym_matrix.h"
-
 #include <vcl_iostream.h>
 
 

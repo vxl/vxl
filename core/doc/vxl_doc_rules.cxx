@@ -1,8 +1,10 @@
+// This is ./vxl/doc/vxl_doc_rules.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
 
-// This is vxl_doc_rules.cxx
+//:
+// \file
 
 #include "vxl_doc_rules.h"
 
@@ -14,4 +16,3 @@ my_class::my_class()
 {
   // This class does absolutely nothing
 }
-

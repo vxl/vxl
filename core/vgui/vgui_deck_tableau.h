@@ -3,24 +3,17 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// .NAME vgui_deck_tableau - A deck of tableaux
-// .LIBRARY vgui
-// .INCLUDE vgui/vgui_deck_tableau.h
-// .FILE vgui_deck_tableau.cxx
-//
-// .SECTION Description
+//:
+//  \file
+// \brief A deck of tableaux
 //
 // vgui_deck_tableau holds an ordered collection of child tableaux, only one of which is
 // passed all events that the vgui_deck_tableau receives. The effect is a flick-book of
 // tableaux where the currently active tableau can be changed using PageUp and PageDown
 //
-// .SECTION Author
+// \author
 //              Philip C. Pritchett, 13 Sep 99
 //              Robotics Research Group, University of Oxford
-//
-// .SECTION Modifications
-//
 //-----------------------------------------------------------------------------
 
 #include "vgui_deck_tableau_sptr.h"

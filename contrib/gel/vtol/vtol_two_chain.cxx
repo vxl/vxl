@@ -1,5 +1,8 @@
 // 05/13/98  RIH replaced append by insert_after to avoid n^2 behavior
 
+//:
+//  \file
+
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
 

@@ -22,7 +22,7 @@
 //  at once.
 //
 //  Example:
-//  \verbatim
+//  \code
 //  vnl_vector<double> my_sum(mbl_data_wrapper<vnl_vector<double> >& data)
 //  {
 //    data.reset();
@@ -30,7 +30,7 @@
 //    while (data.next())
 //      sum += data.current();
 //  }
-//  \endverbatim
+//  \endcode
 //
 //  Note: It should be fairly simple to provide an iterator type object
 //  which steps through the examples in a standard STL way by using this class.
@@ -74,7 +74,6 @@ public:
 
   //: Name of the class
   virtual vcl_string is_a() const =0;
-
 };
 
 #endif // mbl_data_wrapper_h

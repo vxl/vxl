@@ -1,5 +1,9 @@
+// This is ./vxl/vnl/algo/Templates/vnl_qr+vcl_complex+float--.cxx
 #include <vcl_complex.h>
 #include <vnl/algo/vnl_qr.txx>
+
+//:
+// \file
 
 #if 1
 VNL_QR_INSTANTIATE(vcl_complex<float>);

@@ -1,24 +1,20 @@
-
 #ifndef VTOL_TOPOLOGY_CACHE_H
 #define VTOL_TOPOLOGY_CACHE_H
 
-//-----------------------------------------------------------------------------
+//:
+//  \file
+// \brief Cache inferiors of TopologyObject
 //
-// .NAME        vtol_topology_cache - Cache inferiors of TopologyObject
-// .LIBRARY     vtol
-// .HEADER      gel package
-// .INCLUDE     vtol/vtol_topology_cache.h
-// .FILE        vtol_topology_cache.cxx
-// .SECTION Description
 //  The vtol_topology_cache is a class used to cache vertices, edges, faces, blocks, etc.
-// .SECTION Author
+//
+// \author
 //     William A. Hoffman
 //     ported by Luis E. Galup
 //
 //-----------------------------------------------------------------------------
-//#include <vtol/vtol_topology_cache_sptr.h>
 
 #include <vtol/vtol_topology_object.h>
+//#include <vtol/vtol_topology_cache_sptr.h>
 #include <vcl_vector.h>
 #include <vul/vul_timestamp.h>
 

@@ -3,9 +3,8 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME osl_canny_gradient
-// .INCLUDE osl/osl_canny_gradient.h
-// .FILE osl_canny_gradient.cxx
+//:
+// \file
 // \author fsm@robots.ox.ac.uk
 
 //: compute x,y-derivatives and absolute value of gradient.

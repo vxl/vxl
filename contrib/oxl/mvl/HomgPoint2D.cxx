@@ -2,6 +2,9 @@
 #pragma implementation
 #endif
 
+//:
+//  \file
+
 #include <vcl_iostream.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_double_2.h>
@@ -9,8 +12,8 @@
 
 //--------------------------------------------------------------
 //
-//: @{ Return true if the point is at infinity (an ideal point).
-// The method checks that $|w| < \mbox{infinitesimal\_tol} \times \mbox{min}\{|x|, |y|\}$ @}
+//: Return true if the point is at infinity (an ideal point).
+// The method checks that $|w| < \mbox{infinitesimal\_tol} \times \mbox{min}\{|x|, |y|\}$
 bool
 HomgPoint2D::check_infinity(double tol) const
 {

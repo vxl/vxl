@@ -1,28 +1,30 @@
 #ifndef osl_harris_h
 #define osl_harris_h
-// .NAME osl_harris - The harris corner detector
-// .INCLUDE osl/osl_harris.h
-// .FILE osl_harris.cxx
+//:
+//  \file
+// \brief The harris corner detector
 //
-// .SECTION Description
-// Parameters :
-//   corner_count_max - maximum no of corners required.
-//   gauss_sigma      - sigma for the Gaussian smoothing.
-//   relative minimum - a guidance term: first attempt will be to collect all
+// \par Parameters :
+// - corner_count_max - maximum no of corners required.
+// - gauss_sigma      - sigma for the Gaussian smoothing.
+// - relative minimum - a guidance term: first attempt will be to collect all
 //                      corners whose corner strength is greater than (max
 //                      strength * relative  minimum).
-//   scale factor     - the 'k' from the harris auto-correlation expression.
+// - scale factor     - the 'k' from the harris auto-correlation expression.
 //
-// .SECTION Author
+// \author
 //    Paul Beardsley, Robotics Research Group, Oxford University
-// Created: 16.10.95
+// \date   16.10.95
 //
-// .SECTION Modifications:
+// \verbatim
+// Modifications:
 //       First version generated from C code with minimal modification for C++/
 //       Target data structures.
 //   P.Vanroose  Mar97  corrected memory management (_point_list & *_free_*())
 //   P.Vanroose  Aug97  _point_list now safer (added AddPoint(); SetPointList() out of use now)
 //   J.Mundy     Jan98  slight modified the interface to correspond to new style using parameter blocks and image dispatch
+// \endverbatim
+
 #include <vcl_iosfwd.h>
 #include <vcl_vector.h>
 #include <vcl_utility.h>

@@ -3,14 +3,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+//:
+//  \file
+// \brief Mapping from R^2 -> R^2
 //
-// .NAME    Mapping_2d_2d - Mapping from R^2 -> R^2
-// .LIBRARY oxp
-// .HEADER  Oxford Package
-// .INCLUDE oxp/Mapping_2d_2d.h
-// .FILE    Mapping_2d_2d.cxx
-//
-// .SECTION Description
 //    Mapping_2d_2d is a base class for functions from R^2 -> R^2.
 //    Operations such as warping can take a Mapping_2d_2d object
 //    and therefore be able to perform arbitrary warps.
@@ -18,9 +14,8 @@
 //    The user should subclass from Mapping_2d_2d, and write
 //    the virtual functions implement_map, and implement_inverse_map.
 //
-// .SECTION Author
+// \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 16 Mar 97
-//
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_double_2.h>

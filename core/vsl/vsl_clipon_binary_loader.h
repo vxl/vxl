@@ -1,14 +1,16 @@
+// This is ./vxl/vsl/vsl_clipon_binary_loader.h
 #ifndef vsl_clipon_binary_loader_h_
 #define vsl_clipon_binary_loader_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
+//:
+// \file
 
 #include <vsl/vsl_binary_loader_base.h>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_vector.h>
 #include <vcl_string.h>
-
 
 //: Class to load objects by baseclass pointer using `clipon' classes
 // An example of a singleton design pattern for loading
@@ -23,7 +25,7 @@
 // class is able to read and write the corresponding XXXX class.
 //
 // BaseClassIO must implement the following functions:
-// \verbatim
+// \code
 // //: Base for objects which provide IO for classes derived from BaseClass
 // class BaseClassIO {
 // public:
@@ -45,7 +47,7 @@
 //   //  However, third party libraries may use a different system
 // virtual bool is_io_for(const BaseClass& b) const;
 // };
-// \endverbatim
+// \endcode
 //
 // To handle the actual IO we define a loader
 // which has a list of BaseClassIO pointers,

@@ -1,3 +1,6 @@
+//:
+//  \file
+
 #include "HMatrix2DComputeRobust.h"
 #include <mvl/Probability.h>
 #include <mvl/AffineMetric.h>

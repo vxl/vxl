@@ -3,17 +3,12 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+//:
+//  \file
+// \brief General fundamental matrix
 //
-// .NAME FMatrix - General fundamental matrix
-// .LIBRARY MViewBasics
-// .HEADER MultiView package
-// .INCLUDE mvl/FMatrix.h
-// .FILE FMatrix.cxx
-//
-// .SECTION Description:
 // A class to hold a Fundamental Matrix of the general form and to
 // perform common operations e.g. generate epipolar lines
-//
 
 #include <mvl/HomgLine2D.h>
 #include <mvl/HomgPoint2D.h>
@@ -23,6 +18,9 @@
 
 class PMatrix;
 
+//:
+// A class to hold a Fundamental Matrix of the general form and to
+// perform common operations e.g. generate epipolar lines
 class FMatrix {
 
   // PUBLIC INTERFACE-------------------------------------------------------

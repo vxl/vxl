@@ -1,12 +1,9 @@
 #ifndef vtol_face_h
 #define vtol_face_h
-// .NAME vtol_face - Represents the basic 2D topological entity
-// .LIBRARY vtol
-// .HEADER gel Package
-// .INCLUDE vtol/vtol_face.h
-// .FILE vtol_face.cxx
+//:
+//  \file
+// \brief Represents the basic 2D topological entity
 //
-// .SECTION Description
 //  The vtol_face class is used to represent a topological face.
 //  A vtol_face maintains a pointer to the Surface which describes the
 //  mathematical geometry of the face.  The connectivity between
@@ -14,7 +11,8 @@
 //  The boundary of the face may be obtained from the inferior vtol_one_chains
 //  of the face.
 //
-// .SECTION Modifications:
+// \verbatim
+// Modifications:
 //    JLM Dec 1995: Added timeStamp (Touch) to
 //        operations which affect bounds.
 //    JLM Dec 1995: Added method for ComputeBoundingBox
@@ -33,8 +31,8 @@
 //        vertices() et al with iterators.  Benchmark: constructing
 //        40K triangles, old: 37 sec, new: 9 sec.
 //     PTU ported to vxl may-20
-//
-///
+// \endverbatim
+
 #include <vtol/vtol_face_sptr.h>
 
 #include <vtol/vtol_topology_object.h>

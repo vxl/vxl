@@ -1,14 +1,14 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is ./vxl/vil/file_formats/vil_pnm.h
 #ifndef vil_pnm_file_format_h_
 #define vil_pnm_file_format_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-
 //:
 // \file
 // \author awf@robots.ox.ac.uk
 // \date 16 Feb 00
+//
 // \verbatim
 // Modifications
 // 7 June 2001 - Peter Vanroose - made pbm (magic P4) working

@@ -1,6 +1,9 @@
+// This is ./vxl/vil/file_formats/vil_pnm.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
+//:
+// \file
 
 #include "vil_pnm.h"
 

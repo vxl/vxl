@@ -1,7 +1,9 @@
 #ifndef vgui_image_renderer_h_
 #define vgui_image_renderer_h_
 
-//: OpenGL utility to render a vil_image.
+//:
+//  \file
+// \brief OpenGL utility to render a vil_image.
 // This is not a tableau.
 //
 // The image_renderer provides an easy way to render sections of an

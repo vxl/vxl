@@ -184,12 +184,12 @@ FMatrixPlanar::set_rank2_flag (bool) const
 // This function is rreuiqred as trying to set FMatrixPlanar using a
 // general fundamental matrix
 // will fail as it does not satisfy the extra constraint of
-// @{\(\det ({\tt F} + {\tt F}^\top) = 0\)@}.
+// \f$\det ({\tt F} + {\tt F}^\top) = 0\f$.
 
 void FMatrixPlanar::init(const FMatrix& F)
 {
      // this converts to 6 parameter form of [e2]x[ls]x[e1]x - see A Zisserman
-     // HACK this is not the most efficient/accurate way to covert to this form
+     // HACK this is not the most efficient/accurate way to convert to this form
      // as it goes via the Armstrong inplementation of the
      // Lingrand Veiville formula (ECCV96).
      // This should be redone at some point.

@@ -2,12 +2,13 @@
 #define VCSL_SPHEROID_H
 
 //:
-// \file 
+// \file
 // \author François BERTEL
-// Modifications
+//
 // \verbatim
+// Modifications
 // 2000/06/28 François BERTEL Creation. Adapted from IUE
-// 10/4/2001 Ian Scott (Manchester) Coverted perceps header to doxygen
+// 10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
 // \endverbatim
 
 #include <vcsl/vcsl_spheroid_sptr.h>
@@ -49,7 +50,7 @@ public:
 
   //: Default constructor. Clark_1866 spheroid
   explicit vcsl_spheroid(void);
-  
+
   //: Constructor from a standard spheroid
   explicit vcsl_spheroid(const vcsl_std_spheroid new_std_spheroid);
 
@@ -105,7 +106,7 @@ public:
   //***************************************************************************
   // Duplication
   //***************************************************************************
-  
+
   //: Assignement
   virtual vcsl_spheroid &operator=(const vcsl_spheroid &other);
 

@@ -3,20 +3,15 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+//:
+//  \file
+// \brief Three-view line matches
 //
-// .NAME TripleMatchSetLineSeg - Three-view line matches
-// .LIBRARY MViewBasics
-// .HEADER MultiView package
-// .INCLUDE mvl/TripleMatchSetLineSeg.h
-// .FILE TripleMatchSetLineSeg.cxx
-//
-// .SECTION Description
 //    TripleMatchSetLineSeg is a TripleMatchSet that holds matches
 //    between corners in three LineSegSets.
 //
-// .SECTION Author
+// \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 09 Aug 96
-//
 //-----------------------------------------------------------------------------
 
 //////////////#include <cool/decls.h>

@@ -3,6 +3,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+
+//:
+//  \file
+
 /*
   crossge@crd.ge.com
 */
@@ -46,7 +50,6 @@ protected:
 
   //: unordered, but oriented, list of edges
   vcl_vector<gst_edge_2d_sptr> edges_;
-
 };
 
 vcl_ostream &operator<<( vcl_ostream &os, gst_polygon_2d &p);

@@ -3,20 +3,17 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+//:
+//  \file
+// \brief Homogeneous 2D line segment
 //
-// .NAME    HomgLineSeg2D - Homogeneous 2D line segment
-// .LIBRARY MViewBasics
-// .HEADER  MultiView package
-// .INCLUDE mvl/HomgLineSeg2D.h
-// .FILE    HomgLineSeg2D.cxx
-//
-// .SECTION Description:
 // A class to hold homogeneous 3-vectors for the two endpoints and
 // line for a 2D line segment.
 //
-// .SECTION Modifications:
+// \verbatim
+// Modifications:
 //   Peter Vanroose - 11 Mar 97 - added operator==
-//
+// \endverbatim
 
 #include <mvl/HomgLine2D.h>
 #include <mvl/HomgPoint2D.h>

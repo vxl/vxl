@@ -1,6 +1,8 @@
-//    Copyright: (C) 2000 British Telecommunications plc
+//:
+// \file
+// \author
+//   Copyright: (C) 2000 British Telecommunications plc
 
-// inclusions
 #include "clsfy_rbf_parzen.h"
 
 #include <vcl_string.h>
@@ -230,4 +232,3 @@ void clsfy_rbf_parzen::b_read(vsl_b_istream& bfs)
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
   }
 }
-

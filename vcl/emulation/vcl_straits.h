@@ -28,6 +28,9 @@
 #ifndef vcl_emulation_straits_h
 #define vcl_emulation_straits_h
 
+//:
+// \file
+
 #include "vcl_stlconf.h"
 
 #ifdef __GNUG__

@@ -9,6 +9,9 @@
 // 1.0     |2000/04/26| François BERTEL          |Creation
 //*****************************************************************************
 
+//:
+//  \file
+
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 #include <vsol/vsol_group_2d.h>

@@ -1,3 +1,9 @@
+// This is ./tbl/vipl/filter/vipl_filter_abs.h
+#ifndef vipl_filter_abs_h_
+#define vipl_filter_abs_h_
+#ifdef __GNUG__
+#pragma interface
+#endif
 //:
 // \file
 //   This class provides a non-templated abstract class for all filters.  It
@@ -5,16 +11,12 @@
 //   composition methods.
 // \author
 //   Terry Boult, Lehigh University 1997, 1998.
+//
 // \verbatim
 // Modifications
 //   Peter Vanroose - Aug.2000 - converted to vxl
 // \endverbatim
 
-#ifndef vipl_filter_abs_h_
-#define vipl_filter_abs_h_
-#ifdef __GNUG__
-#pragma interface
-#endif
 #include <vipl/filter/vipl_trivial_pixeliter.h>
 
 #ifndef FILTER_IMPTR_DEC_REFCOUNT

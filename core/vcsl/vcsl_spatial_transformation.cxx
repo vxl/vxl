@@ -1,6 +1,10 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
+
+//:
+// \file
+
 #include <vcsl/vcsl_spatial_transformation.h>
 #include <vcl_cmath.h> // for acos(), sin()
 

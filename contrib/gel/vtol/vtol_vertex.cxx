@@ -1,3 +1,6 @@
+//:
+//  \file
+
 #include <vtol/vtol_vertex.h>
 #include <vtol/vtol_zero_chain.h>
 #include <vtol/vtol_edge.h>

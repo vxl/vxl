@@ -1,7 +1,6 @@
-// This is vxl/vgl/algo/vgl_homg_operators_2d.txx
+// This is ./vxl/vgl/algo/vgl_homg_operators_2d.txx
 #ifndef vgl_homg_operators_2d_txx_
 #define vgl_homg_operators_2d_txx_
-
 
 //:
 // \file
@@ -137,7 +136,7 @@ vgl_homg_operators_2d<T>::distance_squared(
 //: Get the square of the perpendicular distance to a line.
 // This is just the homogeneous form of the familiar
 // \f$ \frac{a x + b y + c}{\sqrt{a^2+b^2}} \f$ :
-// \f\[ d = \frac{(l^\top p)}{p_z\sqrt{l_x^2 + l_y^2}} \f\]
+// \f[ d = \frac{(l^\top p)}{p_z\sqrt{l_x^2 + l_y^2}} \f]
 // If either the point or the line are at infinity an error message is
 // printed and Homg::infinity is returned.
 template <class T>
@@ -164,7 +163,7 @@ vgl_homg_operators_2d<T>::perp_dist_squared(
 //  ANGLES
 
 //-----------------------------------------------------------------------------
-//: Get the anticlockwise angle between a line and the x axis.
+//: Get the anticlockwise angle between a line and the \a x axis.
 template <class T>
 double
 vgl_homg_operators_2d<T>::line_angle(const vgl_homg_line_2d<T>& line)

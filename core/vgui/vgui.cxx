@@ -1,12 +1,10 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// .NAME vgui
-// Author: Philip C. Pritchett, RRG, University of Oxford
-// Created: 30 Sep 99
-//
+//:
+//  \file
+// \author Philip C. Pritchett, RRG, University of Oxford
+// \date   30 Sep 99
 //-----------------------------------------------------------------------------
 
 #include "vgui.h"

@@ -1,12 +1,12 @@
-
-//	Copyright: (C) 2000 British Telecommunications PLC
+// This is ./vxl/vul/tests/vul_test_url.cxx
+// Copyright: (C) 2000 British Telecommunications PLC
 
 //:
 // \file
 // \brief Tests vul_url http access, base64 encoding, etc.
 // \author Ian Scott
+//
 // Test construction, IO etc.
-
 
 #include <vul/vul_url.h>
 
@@ -96,7 +96,6 @@ void test_url()
     vcl_cout << a;
   }
 #endif
-
 }
 
 TESTMAIN(test_url)

@@ -1,6 +1,4 @@
-// This is vxl/vil/vil_copy.cxx
-
-//-*- c++ -*-------------------------------------------------------------------
+// This is ./vxl/vil/vil_copy.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
@@ -10,6 +8,7 @@
 // vil_copy
 // \author Andrew W. Fitzgibbon, Oxford RRG
 // \date 16 Feb 00
+//
 // \verbatim
 // Modifications:
 // 7 June 2001 - Peter Vanroose - fixed rowsize_bytes for 1-bit pixel type

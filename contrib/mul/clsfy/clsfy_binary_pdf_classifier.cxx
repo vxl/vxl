@@ -1,5 +1,8 @@
 //  Copyright: (C) 2000 British Telecommunications PLC
 
+//:
+// \file
+
 #include <clsfy/clsfy_binary_pdf_classifier.h>
 #include <vcl_string.h>
 #include <vcl_cmath.h>
@@ -150,4 +153,3 @@ void clsfy_binary_pdf_classifier::b_read(vsl_b_istream& bfs)
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
   }
 }
-

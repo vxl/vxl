@@ -4,11 +4,12 @@
 //:
 // \file
 // \author Nicolas Dano, september 1999
-// Modifications
+//
 // \verbatim
+// Modifications
 // Julien ESTEVE, June 2000
 //     Ported from TargetJr
-// 10/4/2001 Ian Scott (Manchester) Coverted perceps header to doxygen
+// 10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
 // \endverbatim
 
 #include <vbl/vbl_ref_count.h>

@@ -1,7 +1,10 @@
+// This is ./vxl/vil/tests/test_save_load_image.cxx
+
 //:
 // \file
 // \author Peter.Vanroose@esat.kuleuven.ac.be
 // \date 17 February, 2000
+//
 // \verbatim
 // Modifications
 // 18 Jul 2000 - add vil_buffer, and mit bug fix.
@@ -155,7 +158,6 @@ void vil_test_image_type_raw(char const* type_name, // type for image to read an
 
   vcl_cout << "vil_test_image_type: Save to [" << fname << "]\n" << vcl_flush;
 
-
   {
     // Check non-raw saving and loading actually don't fail obviously.
     bool tst = vil_save_raw(image, fname.c_str(), type_name);
@@ -165,7 +167,6 @@ void vil_test_image_type_raw(char const* type_name, // type for image to read an
     TEST ("non-raw load image", !image3, false);
     if (!image3) return; // fatal error
 
-  
     tst = vil_save_raw(image, fname.c_str(), type_name);
     TEST ("raw write image to disk", tst, true);
     if (!tst) return; // fatal error
@@ -242,8 +243,6 @@ void vil_test_image_type(char const* type_name, // type for image to read and wr
   vpl_unlink(fname.c_str());
 #endif
 }
-
-
 
 
 // create a 1 bit test image

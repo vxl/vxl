@@ -2,6 +2,9 @@
 #pragma implementation
 #endif
 
+//:
+//  \file
+
 #include "vsl_conic_points.h"
 
 #include <vcl_vector.h>

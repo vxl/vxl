@@ -1,24 +1,23 @@
 #ifndef vsol_point_3d_h
 #define vsol_point_3d_h
 //*****************************************************************************
+//:
+//  \file
+// \brief Point of a 3D space
 //
-// .NAME vsol_point_3d - Point of a 3D space
-// .LIBRARY vsol
-// .INCLUDE vsol/vsol_point_3d.h
-// .FILE    vsol/vsol_point_3d.cxx
-//
-// .SECTION Author
+// \author
 // François BERTEL
 //
-// .SECTION Modifications
+// \verbatim
+// Modifications
 // 2001/07/03 Peter Vanroose  Replaced new/delete by vgl_point_3d as member
 // 2001/07/03 Peter Vanroose  Replaced vnl_double_3 by vgl_vector_3d
 // 2001/06/30 Peter Vanroose  Added constructor from vgl_point_3d
 // 2000/09/18 Peter Tu        connected to vgl
 // 2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
-// 2000/05/12 François BERTEL Replacement of vnl_vector_fixed<double,3> by
-//                            vnl_double_3
+// 2000/05/12 François BERTEL Replacement of vnl_vector_fixed<double,3> by vnl_double_3
 // 2000/05/03 François BERTEL Creation
+// \endverbatim
 //*****************************************************************************
 
 class vsol_point_3d;

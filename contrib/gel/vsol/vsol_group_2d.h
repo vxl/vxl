@@ -1,18 +1,18 @@
 #ifndef vsol_group_2d_h
 #define vsol_group_2d_h
 //*****************************************************************************
+//:
+//  \file
+// \brief Group of Spatial object in a 2D space
 //
-// .NAME vsol_group_2d - Group of Spatial object in a 2D space
-// .LIBRARY vsol
-// .INCLUDE vsol/vsol_group_2d.h
-// .FILE    vsol/vsol_group_2d.cxx
-//
-// .SECTION Author
+// \author
 // François BERTEL
 //
-// .SECTION Modifications
-// 2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
-// 2000/04/14 François BERTEL Creation
+// \verbatim
+// Modifications
+//  2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
+//  2000/04/14 François BERTEL Creation
+// \endverbatim
 //*****************************************************************************
 
 class vsol_group_2d;

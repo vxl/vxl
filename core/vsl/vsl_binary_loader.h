@@ -1,8 +1,11 @@
+// This is ./vxl/vsl/vsl_binary_loader.h
 #ifndef vsl_binary_loader_h_
 #define vsl_binary_loader_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
+//:
+// \file
 
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_binary_loader_base.h>

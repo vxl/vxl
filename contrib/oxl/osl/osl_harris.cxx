@@ -1,5 +1,8 @@
 #include "osl_harris.h"
 
+//:
+//  \file
+
 #include <vcl_cmath.h>
 #include <vcl_cstdlib.h>
 #include <vcl_cassert.h>

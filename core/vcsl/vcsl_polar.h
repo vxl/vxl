@@ -2,12 +2,13 @@
 #define VCSL_POLAR_H
 
 //:
-// \file 
+// \file
 // \author François BERTEL
-// Modifications
+//
 // \verbatim
+// Modifications
 // 2000/06/28 François BERTEL Creation. Adapted from IUE
-// 10/4/2001 Ian Scott (Manchester) Coverted perceps header to doxygen
+// 10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
 // \endverbatim
 
 
@@ -36,7 +37,7 @@ public:
   //***************************************************************************
   // Because VXL does not use dynamic_cast<> :-(
   //***************************************************************************
-  
+
   virtual const vcsl_polar *cast_to_polar(void) const;
 };
 

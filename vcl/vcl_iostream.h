@@ -7,7 +7,7 @@
 // \author awf@robots.ox.ac.uk
 //
 //  In particular, define the following
-// \verbatim
+// \code
 //   vcl_ostream
 //   vcl_ios_X (as in ios::X)
 //   operator>>(vcl_ostream &, T &) for T in {signed char, bool}
@@ -21,7 +21,7 @@
 //   vcl_cin
 //   vcl_cout
 //   vcl_cerr
-// \endverbatim
+// \endcode
 //
 
 // Include this to ensure the two are consistent.

@@ -1,10 +1,11 @@
-//
-// This is xcv/xcv_display.cxx
-// See xcv_display.h for a description of this file.
+// This is ./oxl/xcv/xcv_display.cxx
 
 //:
 // \file
 // \author K.Y.McGaul
+//
+// See xcv_display.h for a description of this file.
+//
 // \verbatim
 //  Modifications:
 //    K.Y.McGaul  27-JAN-2000    Initial version.
@@ -115,7 +116,7 @@ void xcv_display::toggle_enhance()
     is_enhancing = true;
 
     char msg[100];
-    sprintf(msg, "Enhance lens added to position (%d, %d).", col, row);
+    vcl_sprintf(msg, "Enhance lens added to position (%d, %d).", col, row);
     post_to_status_bar(msg);
   }
   else
@@ -282,8 +283,8 @@ void xcv_display::show_line_slice()
   line_profile(img, fx0, fy0, fx1, fy1, num_points+1, x, y, val);
 
   char tmp_heading[200];
-  sprintf(tmp_heading, "Image Intensity Profile across (%.0f, %.0f) to (%.0f, %.0f)",
-    fx0, fy0, fx1, fy1);
+  vcl_sprintf(tmp_heading, "Image Intensity Profile across (%.0f, %.0f) to (%.0f, %.0f)",
+              fx0, fy0, fx1, fy1);
 
   xcv_axes_tableau_new axes(tmp_heading, "X", "Intensity");
   for (int i=0; i<num_points+1; i++)
@@ -323,4 +324,3 @@ vgui_menu xcv_display::create_display_menu()
   display_menu.add("Show line slice", show_line_slice);
   return display_menu;
 }
-

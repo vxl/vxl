@@ -1,11 +1,12 @@
+// This is ./vxl/vbl/io/vbl_io_triple.txx
 #ifndef vbl_io_triple_txx_
 #define vbl_io_triple_txx_
-// This is vxl/vbl/vbl_io_triple.txx
 
 //:
-// \file   
+// \file
 // \brief  binary IO functions for vbl_triple<S, T, U>
 // \author Ian Scott
+//
 // Implementation
 
 #include <vsl/vbl_io_triple.h>
@@ -49,12 +50,10 @@ void vsl_print_summary(vcl_ostream& os, const vbl_triple<S, T, U> &v)
 }
 
 
-
-
 #undef VBL_TRIPLE_INSTANTIATE
 #define VBL_TRIPLE_INSTANTIATE(S, T, U ) \
 template void vsl_print_summary(vcl_ostream& s, const vbl_triple<S, T, U >& v); \
 template void vsl_b_write(vsl_b_ostream& s, const vbl_triple<S, T, U > & v); \
 template void vsl_b_read(vsl_b_istream& s, vbl_triple<S, T, U > & v)
 
-#endif
+#endif // vbl_io_triple_txx_

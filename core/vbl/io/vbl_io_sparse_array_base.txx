@@ -1,6 +1,9 @@
+// This is ./vxl/vbl/io/vbl_io_sparse_array_base.txx
 #ifndef vbl_io_sparse_array_base_txx_
 #define vbl_io_sparse_array_base_txx_
-// This is vxl/vbl/io/vbl_io_sparse_array_base.txx
+
+//:
+// \file
 
 #include "vbl_io_sparse_array_base.h"
 #include <vsl/vsl_pair_io.h>

@@ -1,12 +1,13 @@
+// This is ./vxl/vnl/vnl_binary.h
 #ifndef vnl_binary_h_
 #define vnl_binary_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// This is vxl/vnl/vnl_binary.h
 
 //: \file
 //  \brief Functions for saving and loading matrices and vectors in binary format.
+//  \author fsm@robots.ox.ac.uk
 //  \deprecated Use vsl instead
 //
 // The point of doing that is to 1) make it
@@ -14,7 +15,6 @@
 // process of saving to disk. It doesn't matter that the
 // format is architecture dependent.
 //
-//  \author fsm@robots.ox.ac.uk
 // \verbatim
 // Modifications
 //  LSB (Manchester) 23/3/01

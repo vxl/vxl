@@ -1,6 +1,10 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
+
+//:
+//  \file
+
 #include <vcl_iostream.h>
 #include <vcl_ctime.h>
 #include <vcl_cmath.h>
@@ -215,4 +219,3 @@ double mbl_mz_random::drand64(double lower, double upper)
   assert(lower <= upper);
   return  (double(lrand32())/0xffffffff + double(lrand32())/(double(0xffffffff)*double(0xffffffff)))*(upper-lower) + lower;
 }
-

@@ -4,6 +4,9 @@
   fsm@robots.ox.ac.uk
 */
 
+//:
+//  \file
+
 #include "osl_1d_half_kernel.h"
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>

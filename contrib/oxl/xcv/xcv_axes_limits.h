@@ -1,16 +1,17 @@
+// This is ./oxl/xcv/xcv_axes_limits.h
 #ifndef xcv_axes_limits_h_
 #define xcv_axes_limits_h_
-//
-// This is xcv/xcv_axes_limits.h
 
 //:
 // \file
 // \author   Andrew Fitzgibbon <andrewfg@ed.ac.uk>
 // \date     23 Apr 96
 // \brief Compute marks for the axes of a graph.
+//
 //  Given a range (from the number low to high) this class computes
 //  a suitable spacing, start value and end value for tick marks
 //  for the axes of a graph.
+//
 // \verbatim
 //   Modifications:
 //     Andrew Fitzgibbon 23-APR-1996   Initial version.

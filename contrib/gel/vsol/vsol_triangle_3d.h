@@ -1,22 +1,21 @@
 #ifndef vsol_triangle_3d_h
 #define vsol_triangle_3d_h
 //*****************************************************************************
+//:
+//  \file
+// \brief Triangle of a 3D space.
 //
-// .NAME vsol_triangle_3d - Triangle of a 3D space.
-// .LIBRARY vsol
-// .INCLUDE vsol/vsol_triangle_3d.h
-// .FILE    vsol/vsol_triangle_3d.cxx
-//
-// .SECTION Description
 // The vertices order gives the orientation of the triangle
 //
-// .SECTION Author
+// \author
 // François BERTEL
 //
-// .SECTION Modifications
+// \verbatim
+// Modifications
 // 2001/07/03 Peter Vanroose  Replaced vnl_double_3 by vgl_vector_3d
 // 2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
 // 2000/05/04 François BERTEL Creation
+// \endverbatim
 //*****************************************************************************
 
 class vsol_triangle_3d;

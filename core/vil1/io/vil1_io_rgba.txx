@@ -1,6 +1,9 @@
-// This is vxl/vil/io/vil_io_rgba.txx
+// This is ./vxl/vil/io/vil_io_rgba.txx
 #ifndef vil_io_rgba_txx_
 #define vil_io_rgba_txx_
+
+//:
+// \file
 
 #include <vil/io/vil_io_rgba.h>
 

@@ -1,17 +1,18 @@
-// This is xcv/xcv.cxx
+// This is ./oxl/xcv/xcv.cxx
 
 //:
 // \file
 // \author  K.Y.McGaul
 // \brief Main function for xcv.
+//
 //  This contains the main function for xcv, a program designed to demonstrate
 //  the functionality of vxl.
+//
 // \verbatim
 //  Modifications:
 //   K.Y.McGaul     27-JAN-2000    Initial version.
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
-//
 
 #include <vcl_iostream.h>
 #include <vcl_vector.h>

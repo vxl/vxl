@@ -1,12 +1,13 @@
-// This is vxl/vul/vul_awk.cxx
-
-//-*- c++ -*-------------------------------------------------------------------
+// This is ./vxl/vul/vul_awk.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
+
+//:
+// \file
 //
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 17 May 97
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   17 May 97
 //
 //-----------------------------------------------------------------------------
 
@@ -24,11 +25,11 @@ vul_awk::vul_awk(vcl_istream& s, ModeFlags mode):
   done_ = false;
   line_number_ = 0;
   split_line_ = 0;
-  
+
   next();
 }
 
-vul_awk::~vul_awk() 
+vul_awk::~vul_awk()
 {
   delete [] split_line_;
 }
@@ -40,7 +41,7 @@ void vul_awk::next()
   int l = 0;
   //bool do_backslash_continuations = (int(mode_) & int(backslash_continuations)) != 0;
   //  bool do_strip_comments = (int(mode_) & int(strip_comments)) != 0;
-  
+
   while (1) {
     int c = fd_.get();
     if (c == EOF) {
@@ -56,7 +57,7 @@ void vul_awk::next()
   }
 
   char const* linep = line_.c_str();
-  
+
   // copy string
   delete [] split_line_;
   split_line_ = new char[line_.size() + 1];
@@ -71,7 +72,7 @@ void vul_awk::next()
     while (*cp && isspace(*cp))
       ++cp;
     if (!*cp) break;
-  
+
     // Push
     fields_.push_back(cp);
 
@@ -97,7 +98,7 @@ char const* vul_awk::line_from(int field_number) const
     vcl_cerr << "vul_awk::line_from("<< field_number <<") -- ZOIKS\n";
     return line();
   }
-  
+
   return p + (fields_[field_number] - split_line_);
 }
 

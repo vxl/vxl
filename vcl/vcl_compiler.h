@@ -2,6 +2,9 @@
 #ifndef vcl_compiler_h_
 #define vcl_compiler_h_
 
+//:
+// \file
+//
 // It's much better to determine the compiler automatically here than to depend
 // on command-line flags being set.
 

@@ -1,10 +1,9 @@
+// This is ./vxl/vgl/vgl_vector_3d.h
 #ifndef vgl_vector_3d_h_
 #define vgl_vector_3d_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-
-// This is vxl/vgl/vgl_vector_3d.h
 
 //:
 // \file
@@ -40,7 +39,7 @@ public:
   //: Creates the vector (0,0,0) of zero length.
   inline vgl_vector_3d () : x_(0) , y_(0) , z_(0) {}
 
-  //: Creates the vector (x,y,z).
+  //: Creates the vector \a (x,y,z).
   inline vgl_vector_3d (T x, T y, T z) : x_(x) , y_(y) , z_(z) {}
 
 #if 0 // The defaults do exactly what they should do...

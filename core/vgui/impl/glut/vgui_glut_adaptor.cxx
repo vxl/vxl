@@ -1,3 +1,6 @@
+//:
+//  \file
+
 /*
   fsm@robots.ox.ac.uk
 */
@@ -627,7 +630,7 @@ void vgui_glut_adaptor::post_timer(float timeout, int name)
     if (value <= (*i).second)
       value = (*i).second + 1;
   timer_posts->push_front(pair_Pv_i(ff, value));
-  
+
   // pass 'value' to the GLUT api.
   glutTimerFunc(int(timeout*1000), vgui_glut_adaptor::timer_callback, value);
 }
@@ -644,7 +647,7 @@ void vgui_glut_adaptor::timer_callback(int value)
       break;
     }
   assert(ff);
-  
+
   ff->org->timer(ff->val);
   delete ff;                               // <*> release resource
 }

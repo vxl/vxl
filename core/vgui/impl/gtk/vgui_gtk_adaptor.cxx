@@ -1,12 +1,10 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// .NAME vgui_gtk_adaptor
-// Author: Philip C. Pritchett, RRG, University of Oxford
-// Created: 19 Dec 99
-//
+//:
+// \file
+// \author Philip C. Pritchett, RRG, University of Oxford
+// \date   19 Dec 99
 //-----------------------------------------------------------------------------
 
 #include "vgui_gtk_adaptor.h"

@@ -1,5 +1,8 @@
+// This is ./vxl/vbl/examples/vbl_smart_ptr_example.h
 #ifndef vbl_smart_ptr_example_h_
 #define vbl_smart_ptr_example_h_
+//:
+// \file
 
 #include <vcl_iostream.h>
 #include <vbl/vbl_ref_count.h>

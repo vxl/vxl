@@ -4,10 +4,9 @@
 #pragma interface
 #endif
 //--------------------------------------------------------------------------------
-// .NAME        vmal_rectifier
-// .INCLUDE     vmal/vmal_rectifier.h
-// .FILE        vmal_rectifier.cxx
-// .SECTION Description:
+//:
+//  \file
+//
 //   Take a set of matched points and matched lines into 2 images
 //   and transform them so that the epipoles of the 2 images are at infinity.
 //   This transformation is called a rectification of the images.
@@ -16,9 +15,9 @@
 //   It also now tranform lines.
 //   The method 'factor_Q_matrix_SR' should be removed from here and put in a more
 //   suitable place (for example, a class which would handle the fundamental matrix).
-// .SECTION Author
+//
+// \author
 //   L. Guichard 17-MAY-2001
-// .SECTION Modifications:
 //--------------------------------------------------------------------------------
 
 

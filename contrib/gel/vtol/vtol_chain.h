@@ -1,24 +1,18 @@
 #ifndef vtol_chain_h_
 #define vtol_chain_h_
 //-----------------------------------------------------------------------------
+//:
+//  \file
+// \brief Base class for representation of holes
 //
-// .NAME        vtol_chain - Base class for representation of holes
-// .LIBRARY     vtol
-// .HEADER      gel package
-// .INCLUDE     vtol/vtol_chain.h
-// .FILE        vtol_chain.cxx
-//
-// .SECTION Author
-//     Patricia A. Vrobel
-// .SECTION Description
 //   The vtol_chain class is a base class of vtol_one_chain and vtol_two_chain.  It
 //   provides the data and methods for creating the doubly linked subhierarchy
 //   of holes in Blocks and Faces respectively.  (Warning:: this class and
 //   philosophy of holes may not be around after evaluation of the necessity
 //   for Boolean operations....pav).
 //
-// .SECTION Author
-//     Patricia A. Vrobel Peter Tu
+// \author
+//     Patricia A. Vrobel
 //-----------------------------------------------------------------------------
 #include <vtol/vtol_chain_sptr.h>
 

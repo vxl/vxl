@@ -1,8 +1,11 @@
-//
-// This is xcv/xcv_file.cxx
-// See xcv_file.h for a description of this file.
-// 
+// This is ./oxl/xcv/xcv_file.cxx
+
+//:
+//  \file
 // \author  K.Y.McGaul
+//
+// See xcv_file.h for a description of this file.
+//
 // \verbatim
 //  Modifications
 //    K.Y.McGaul  27-JAN-2000   Initial version.
@@ -162,4 +165,3 @@ vgui_menu xcv_file::create_file_menu()
   file_menu.add("Exit", exit_xcv);
   return file_menu;
 }
-

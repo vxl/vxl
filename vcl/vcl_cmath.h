@@ -10,7 +10,7 @@
 // The following signatures should be available for float, 
 // double and long double :
 //
-// \verbatim
+// \code
 //  T abs(T );
 //  T acos(T );
 //  T asin(T );
@@ -35,7 +35,7 @@
 //  T sqrt(T );
 //  T tan(T );
 //  T tanh(T );
-// \endverbatim
+// \endcode
 
 #include "vcl_compiler.h"
 

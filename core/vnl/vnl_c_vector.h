@@ -1,9 +1,9 @@
+// This is ./vxl/vnl/vnl_c_vector.h
 #ifndef vnl_c_vector_h_
 #define vnl_c_vector_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// This is vxl/vnl/vnl_c_vector.h
 
 //: \file
 //  \brief Math on blocks of memory
@@ -12,6 +12,7 @@
 //
 // \author Andrew W. Fitzgibbon, Oxford RRG
 // \date   12 Feb 98
+//
 // \verbatim
 // Modifications
 //     980212 AWF Initial version.

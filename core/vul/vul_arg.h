@@ -1,10 +1,9 @@
+// This is ./vxl/vul/vul_arg.h
 #ifndef vul_arg_h_
 #define vul_arg_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-
-// This is vxl/vul/vul_arg.h
 
 //:
 // \file
@@ -69,14 +68,14 @@ public://protected:
 // the variables with the option specifications.  To get a variable, you
 // simply name it along with its flag, a help string, and an optional
 // default value:
-// \verbatim
+// \code
 //      vul_arg<double> threshold("-t", "Intensity threshold", 1.25);
-// \endverbatim
+// \endcode
 // Repeat this for any other arguments and then ask the base class to parse
 // the lot:
-// \verbatim
+// \code
 //      vul_arg_parse(argc,argv);
-// \endverbatim
+// \endcode
 //
 // Now parameters such as threshold above can be referred to and will have
 // either the default value or the one supplied on the command line.
@@ -85,12 +84,12 @@ public://protected:
 // themselves into a global pool, so that the static vul_arg_base::parse can
 // find them, or whether there should be a local argPool which is passed to
 // each arg in order that it may add itself.  That would give a syntax like
-// \verbatim
+// \code
 //      argList args;
 //      vul_arg<double> threshold(args, "-t", 1.25);
 //                                ^^^^^ passing args in
 //      args.parse(argc, argv);
-// \endverbatim
+// \endcode
 // The latter is "better" but the former is easier to use so I chose it.
 //
 // Added by Geoff: call to vul_arg_base::set_help_option("-?") means that a

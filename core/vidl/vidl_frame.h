@@ -4,10 +4,11 @@
 //:
 // \file 
 // \author Nicolas Dano, march 1999
-// Modifications
+//
 // \verbatim
+// Modifications
 // Julien Esteve, May 2000 Ported from TargetJr
-// 10/4/2001 Ian Scott (Manchester) Coverted perceps header to doxygen
+// 10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
 // \endverbatim
 
 
@@ -18,7 +19,7 @@
 
 //: A single frame of a Video Sequence.
 class vidl_frame : public vbl_ref_count
-   {
+{
    // PUBLIC INTERFACE
    public:
 
@@ -48,6 +49,6 @@ class vidl_frame : public vbl_ref_count
         const int position_;
         vidl_codec_sptr coder_;
         vil_image image_;
-   };
-#endif // vidl_frame_h
+};
 
+#endif // vidl_frame_h

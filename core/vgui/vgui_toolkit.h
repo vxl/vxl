@@ -3,12 +3,9 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
-// .NAME vgui_toolkit
-// .INCLUDE vgui/vgui_toolkit.h
-// .FILE vgui_toolkit.cxx
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
 
 #include "dll.h"
 #include <vcl_string.h>

@@ -1,10 +1,9 @@
+// This is ./vxl/vul/vul_printf.h
 #ifndef vul_printf_h_
 #define vul_printf_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-
-// This is vxl/vul/vul_printf.h
 
 //:
 // \file
@@ -24,11 +23,11 @@
 
 #include <vcl_iosfwd.h>
 
-//: Print using printf format specifiers to a ostream
-// \verbatim
-// e.g.
+//: Print using printf format specifiers to a ostream.
+// E.g.
+// \code
 // vul_printf(cout, "%d\n", 12);
-// \endverbatim
+// \endcode
 vcl_ostream& vul_printf(vcl_ostream&, char const* fmt, ...);
 
 #endif // vul_printf_h_

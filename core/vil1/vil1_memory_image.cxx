@@ -1,8 +1,10 @@
+// This is ./vxl/vil/vil_memory_image.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
 
-// This is vxl/vil/vil_memory_image.cxx
+//:
+// \file
 
 #include "vil_memory_image.h"
 

@@ -1,3 +1,6 @@
+//:
+// \file
+
 #include "vidl_frame_as_image.h"
 #include <vidl/vidl_frame.h>
 #include <vidl/vidl_codec.h>

@@ -3,15 +3,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+//:
+//  \file
+// \brief Store integer triplets
 //
-// .NAME    TripleMatchSet - Store integer triplets
-// .LIBRARY MViewBasics
-// .HEADER  MultiView package
-// .INCLUDE mvl/TripleMatchSet.h
-// .FILE    TripleMatchSet.cxx
-// .EXAMPLE examples/exampleTripleMatchSet.cxx
-//
-// .SECTION Description
 //    A TripleMatchSet contains "triplets": 3-tuples of integers (i1, i2, i3),
 //    and methods to access and modify the set.    Access is fast only for
 //    "forward" matches of the form i1->i2->i3, but this has proved to be
@@ -24,11 +19,13 @@
 //    Modifying the TripleMatchSet by adding or removing tuples will modify
 //    the underlying PairMatchSets.
 //
-// .SECTION Author
+// \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 09 Aug 96
 //
-// .SECTION Modifications:
+// \verbatim
+//  Modifications:
 //   8 jun 97: PVr - removed vcl_vector<bool> instantiation (is in Templates/stl_bool.C)
+// \endverbatim
 //
 //-----------------------------------------------------------------------------
 

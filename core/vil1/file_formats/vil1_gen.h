@@ -1,13 +1,13 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is ./vxl/vil/file_formats/vil_gen.h
 #ifndef vil_gen_file_format_h_
 #define vil_gen_file_format_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-
 //:
 // \file
 // \author awf@robots.ox.ac.uk 16 Feb 00
+//
 // \verbatim
 // Modifications
 // 10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen

@@ -1,10 +1,9 @@
+// This is ./vxl/vgl/vgl_box_3d.h
 #ifndef vgl_box_3d_h
 #define vgl_box_3d_h
 #ifdef __GNUC__
 #pragma interface
 #endif
-
-// This is vxl/vgl/vgl_box_3d.h
 
 //:
 // \file
@@ -27,7 +26,7 @@
 #include <vgl/vgl_fwd.h> // forward declare vgl_point_3d
 
 //: Represents a 3D box
-//  A 3d box with sides aligned with x, y and z axes. Supports operations
+//  A 3d box with sides aligned with \a x, \a y and \a z axes. Supports operations
 //  required of a bounding box for geometric volume tests.
 //  A box can be empty; this is the case when MaxPosition is to the left or
 //  below or before MinPosition.
@@ -67,7 +66,7 @@ public:
   vgl_box_3d(vgl_point_3d<Type> const& min_pos,
              vgl_point_3d<Type> const& max_pos);
 
-  //: Construct from ranges in x,y,z (take care with order of inputs)
+  //: Construct from ranges in \a x,y,z (take care with order of inputs)
   vgl_box_3d(Type xmin, Type ymin, Type zmin,
              Type xmax, Type ymax, Type zmax);
 
@@ -117,25 +116,25 @@ public:
   //: Get volume of this box
   inline Type volume() const { return width()*height()*depth(); }
 
-  //: min x
+  //: min \a x
   inline Type min_x() const { return min_pos_[0]; }
-  //: min y
+  //: min \a y
   inline Type min_y() const { return min_pos_[1]; }
-  //: min z
+  //: min \a z
   inline Type min_z() const { return min_pos_[2]; }
 
-  //: max x
+  //: max \a x
   inline Type max_x() const { return max_pos_[0]; }
-  //: max y
+  //: max \a y
   inline Type max_y() const { return max_pos_[1]; }
-  //: max z
+  //: max \a z
   inline Type max_z() const { return max_pos_[2]; }
 
-  //: Get x component of centroid
+  //: Get \a x component of centroid
   inline Type centroid_x() const { return Type(0.5*(min_pos_[0]+max_pos_[0])); }
-  //: Get y component of centroid
+  //: Get \a y component of centroid
   inline Type centroid_y() const { return Type(0.5*(min_pos_[1]+max_pos_[1])); }
-  //: Get z component of centroid
+  //: Get \a z component of centroid
   inline Type centroid_z() const { return Type(0.5*(min_pos_[2]+max_pos_[2])); }
 
   //: Get the centroid point
@@ -162,7 +161,7 @@ public:
   //: Return true iff the point p is inside this box
   bool contains(vgl_point_3d<Type> const& p) const;
 
-  //: Return true if (x,y,z) is inside this box, ie x_min<=x<=x_max etc
+  //: Return true if \a (x,y,z) is inside this box, ie \a x_min <= \a x <= \a x_max etc
   inline bool contains(Type const& x, Type const& y, Type const& z) const {
     return x >= min_x() && x <= max_x() &&
            y >= min_y() && y <= max_y() &&
@@ -172,18 +171,18 @@ public:
   //: Make the box empty
   void empty();
 
-  //: Set min x ordinate of box (other sides unchanged)
+  //: Set min \a x ordinate of box (other sides unchanged)
   inline void set_min_x(Type min_x) {min_pos_[0]=min_x;}
-  //: Set min y ordinate of box (other sides unchanged)
+  //: Set min \a y ordinate of box (other sides unchanged)
   inline void set_min_y(Type min_y) {min_pos_[1]=min_y;}
-  //: Set min z ordinate of box (other sides unchanged)
+  //: Set min \a z ordinate of box (other sides unchanged)
   inline void set_min_z(Type min_z) {min_pos_[2]=min_z;}
 
-  //: Set max x ordinate of box (other sides unchanged)
+  //: Set max \a x ordinate of box (other sides unchanged)
   inline void set_max_x(Type max_x) {max_pos_[0]=max_x;}
-  //: Set max y ordinate of box (other sides unchanged)
+  //: Set max \a y ordinate of box (other sides unchanged)
   inline void set_max_y(Type max_y) {max_pos_[1]=max_y;}
-  //: Set max z ordinate of box (other sides unchanged)
+  //: Set max \a z ordinate of box (other sides unchanged)
   inline void set_max_z(Type max_z) {max_pos_[2]=max_z;}
 
   //: Move box so centroid lies at cx (size unchanged)

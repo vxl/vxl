@@ -3,12 +3,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
-// .NAME vgui_pixel
-// .INCLUDE vgui/vgui_pixel.h
-// .FILE vgui_pixel.cxx
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 #include <vgui/vgui_gl.h>
 #include <vxl_config.h>
 

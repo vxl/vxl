@@ -2,10 +2,11 @@
 #define VCSL_DIMENSION_H
 
 //:
-// \file 
+// \file
 // \author François BERTEL
-// Modifications
+//
 // \verbatim
+// Modifications
 // 2000/06/28 François BERTEL Creation. Adapted from IUE
 // \endverbatim
 
@@ -23,7 +24,7 @@ public:
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
-  
+
   //: Default constructor
   explicit vcsl_dimension(void);
 

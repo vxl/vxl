@@ -2,11 +2,12 @@
 #define vcsl_angle_h
 
 //:
-// \file 
+// \file
 // \brief Angle dimension
 // \author François BERTEL
-// Modifications
+//
 // \verbatim
+// Modifications
 // 2000/06/28 François BERTEL Creation. Adapted from IUE
 // \endverbatim
 
@@ -22,7 +23,7 @@ public:
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
-  
+
   //: Destructor
   virtual ~vcsl_angle();
 

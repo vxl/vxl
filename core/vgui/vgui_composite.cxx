@@ -1,12 +1,10 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// .NAME vgui_composite
-// Author: Philip C. Pritchett, RRG, University of Oxford
-// Created: 15 Sep 99
-//
+//:
+// \file
+// \author Philip C. Pritchett, RRG, University of Oxford
+// \date   15 Sep 99
 //-----------------------------------------------------------------------------
 
 
@@ -242,4 +240,3 @@ bool vgui_composite::is_active(int v) {
   if (!index_ok(v)) return false;
   return active[v];
 }
-

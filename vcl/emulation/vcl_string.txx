@@ -4,6 +4,9 @@
 #ifndef vcl_emulation_string_txx_
 #define vcl_emulation_string_txx_
 
+//:
+// \file
+//
 // This file is part of the GNU ANSI C++ Library.  This library is free
 // software; you can redistribute it and/or modify it under the
 // terms of the GNU General Public License as published by the

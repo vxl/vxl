@@ -3,21 +3,14 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+//:
+//  \file
+// \brief Base class for 1D homogeneous primitives
 //
-// .NAME    Homg1D - Base class for 1D homogeneous primitives
-// .LIBRARY MViewBasics
-// .HEADER  MultiView Package
-// .INCLUDE mvl/Homg1D.h
-// .FILE    Homg1D.cxx
-//
-// .SECTION Description:
 // Homg1D is the base class for one-dimensional homogeneous primitives.
 //
-// .SECTION Author:
+// \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 15 Oct 96
-//
-// .SECTION Modifications:
-//
 //-----------------------------------------------------------------------------
 
 #include <mvl/Homg.h>

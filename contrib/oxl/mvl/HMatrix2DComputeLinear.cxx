@@ -6,6 +6,9 @@
 #include "HomgNorm2D.h"
 #include "HMatrix2DComputeLinear.h"
 
+//:
+//  \file
+
 //: Construct a HMatrix2DComputeLinear object.
 // The allow_ideal_points flag is described below.
 HMatrix2DComputeLinear::HMatrix2DComputeLinear(bool allow_ideal_points):
@@ -30,7 +33,7 @@ const double DEGENERACY_THRESHOLD = 0.00001;  // FSM. see below.
 // Returns false if the calculation fails or there are fewer than four point
 // matches in the list.  The algorithm finds the nullvector of the $2 n \times 9$ design
 // matrix:
-// \f\[
+// \f[
 // \left(\begin{array}{ccccccccc}
 // 0 & 0 & 0 &        x_1 z_1' & y_1 z_1' & z_1 z_1' & -x_1 y_1' & -y_1 y_1' & -z_1 y_1' \cr
 // x_1 z_1' & y_1 z_1' & z_1 z_1' & 0 & 0 & 0 & -x_1 x_1' & -y_1 x_1' & -z_1 x_1' \cr
@@ -38,7 +41,7 @@ const double DEGENERACY_THRESHOLD = 0.00001;  // FSM. see below.
 // 0 & 0 & 0 &        x_n z_n' & y_n z_n' & z_n z_n' & -x_n y_n' & -y_n y_n' & -z_n y_n'\cr
 // x_n z_n' & y_n z_n' & z_n z_n' & 0 & 0 & 0 & -x_n x_n' & -y_n x_n' & -z_n x_n'
 // \end{array}\right)
-// \f\]
+// \f]
 // If \t allow_ideal_points was set at construction, the $3 \times 9$ version which
 // allows for ideal points is used.
 

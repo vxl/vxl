@@ -1,3 +1,6 @@
+//:
+//  \file
+
 #include "vplayer.h"
 #include "vplayer_video.h"
 

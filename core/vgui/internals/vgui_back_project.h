@@ -3,14 +3,9 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-
 //:
-//  \file
-
-// .NAME vgui_back_project
-// .INCLUDE vgui/internals/vgui_back_project.h
-// .FILE internals/vgui_back_project.cxx
-// @author fsm@robots.ox.ac.uk
+// \file
+// \author fsm@robots.ox.ac.uk
 
 //: given a 3x4 camera, project a point x back onto a plane pi.
 // The given point x is in normalize device coordinates.

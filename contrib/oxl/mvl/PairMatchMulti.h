@@ -3,30 +3,24 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
 //:
 //  \file
-
-// .NAME    PairMatchMulti - Set of pairs of integers
-// .LIBRARY MViewBasics
-// .HEADER  MultiView Package
-// .INCLUDE mvl/PairMatchMulti.h
-// .FILE    PairMatchMulti.cxx
+// \brief Set of pairs of integers
 //
-// .SECTION Description
-//    @{PairMatchMulti is a binary relationship between integers
+//    PairMatchMulti is a binary relationship between integers
 //    $i_1 \rightarrow i_2$ where there may be multiple $i_2$ for
-//    each $i_1$. @}
+//    each $i_1$.
 //
 //    The current implementation uses an STL multimap.
 //
-// .SECTION Author
+// \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 16 Sep 96
 //
-// .SECTION Modifications:
-//     June 97 - Peter Vanroose - operator==() added
+// \verbatim
+//  Modifications:
+//    June 97 - Peter Vanroose - operator==() added
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
-//
+// \endverbatim
 //-----------------------------------------------------------------------------
 
 #include <vcl_utility.h> //vxl_filter

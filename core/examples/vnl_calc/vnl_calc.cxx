@@ -1,8 +1,10 @@
+// This is ./vxl/examples/vnl_calc/vnl_calc.cxx
 
 //:
-// \file 
+// \file
 // \brief vnl_calc - Simple command-line matrix calculator
 // \author Andrew W. Fitzgibbon, Oxford RRG 23 Jan 99
+//
 // Use matcalc to perform simple calculations on the command line.
 // It is reverse-polish notation, and matrices are loaded from files.
 // e.g.
@@ -10,13 +12,11 @@
 // % vnl-calc 1 2 +
 // \endverbatim
 // prints 3
-// \endverbatim
 //
-// Modifications
 // \verbatim
-// 10/4/2001 Ian Scott (Manchester) Coverted perceps header to doxygen
+// Modifications
+// 10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
 // \endverbatim
-
 
 #include <vcl_cstdio.h>
 #include <vcl_cstdlib.h>
@@ -89,7 +89,7 @@ int main(int argc, char ** argv)
 {
   mystack<Matrix> stack;
   int cout_precision = 0;
-  
+
   //Matrix::set_print_format("%20.16e");
   vcl_string print_format = "%20.16e";
 

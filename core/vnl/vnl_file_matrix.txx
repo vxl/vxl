@@ -1,8 +1,12 @@
-// This is vxl/vnl/vnl_file_matrix.txx
+// This is ./vxl/vnl/vnl_file_matrix.txx
 #ifndef vnl_file_matrix_txx_
 #define vnl_file_matrix_txx_
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 23 Dec 96
+
+//:
+// \file
+//
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   23 Dec 96
 //
 //-----------------------------------------------------------------------------
 

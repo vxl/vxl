@@ -1,14 +1,15 @@
+// This is ./vxl/vgl/algo/vgl_homg_operators_2d.h
 #ifndef vgl_homg_operations_2d_h
 #define vgl_homg_operations_2d_h
 #ifdef __GNUC__
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief 2D homogeneous operations
 // \author Don Hamilton, Peter Tu
 // \date   Feb 16 2000
+//
 // \verbatim
 // Modifications
 //   31-Oct-00 Peter Vanroose - signatures fixed, and vcl_list iterator used
@@ -64,7 +65,7 @@ public:
     return distance_squared(p1, p2) < d*d;
   }
 
-  //: Get the anticlockwise angle between a line and the x axis.
+  //: Get the anticlockwise angle between a line and the \a x axis.
   static double line_angle (const vgl_homg_line_2d<T>& line);
 
   //: Get the line through two points (the cross-product).

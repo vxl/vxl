@@ -1,10 +1,12 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
-// Created: 17 Feb 2000
+// This is ./vxl/vil/file_formats/vil_jpeg.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+// \date   17 Feb 2000
+
 #include "vil_jpeg.h"
 #include "vil_jpeg_source_mgr.h"
 #include "vil_jpeg_decompressor.h"

@@ -1,20 +1,20 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is ./vxl/vnl/algo/vnl_amoeba.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
+
 //:
 // \file
-
-// vnl_amoeba
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 23 Oct 97
+//
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   23 Oct 97
 //
 //-----------------------------------------------------------------------------
 
 #include "vnl_amoeba.h"
 
 #include <vcl_cstdlib.h>
-#include <vcl_cstdio.h>
+#include <vcl_cstdio.h> // for sprintf()
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vnl/vnl_math.h>
@@ -371,7 +371,7 @@ void vnl_amoebaFit::amoeba(vnl_vector<double>& x,
     // Print debugging info
     if (verbose) {
       char buf[16383];
-      sprintf(buf, "iter %5d: %s ", cnt, how);
+      vcl_sprintf(buf, "iter %5d: %s ", cnt, how);
       vcl_cerr << buf;
       if (verbose > 1)
         vcl_cerr << vcl_endl << simplex << vcl_endl;

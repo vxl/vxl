@@ -1,8 +1,10 @@
+// This is ./vxl/vul/vul_redirector.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
 
-// This is vxl/vul/vul_redirector.cxx
+//:
+// \file
 
 #include <vcl_compiler.h>
 #if defined(VCL_SGI_CC)

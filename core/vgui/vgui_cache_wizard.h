@@ -4,24 +4,17 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
 //:
 //  \file
-
-// .NAME vgui_cache_wizard
-// .LIBRARY vgui
-// .HEADER vxl Package
-// .INCLUDE vgui/vgui_cache_wizard.h
-// .FILE vgui_cache_wizard.cxx
+//  \brief Provides support for caching of large images
 //
-// .SECTION Description
-//    Provides support for caching of large images
-//
-// .SECTION Author
+// \author
 //    17-AUG-2000 Initial version. Marko Bacic,Oxford RRG
 //
-// .SECTION Modifications
+// \verbatim
+//  Modifications
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
+// \endverbatim
 //-----------------------------------------------------------------------------
 #include <vcl_vector.h>
 #include <vcl_list.h>

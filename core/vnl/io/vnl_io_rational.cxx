@@ -1,7 +1,10 @@
-// This is vxl/vnl/io/vnl_io_rational.cxx
+// This is ./vxl/vnl/io/vnl_io_rational.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
+
+//:
+// \file
 
 #include "vnl_io_rational.h"
 #include <vsl/vsl_binary_io.h>

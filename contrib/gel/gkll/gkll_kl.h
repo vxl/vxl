@@ -1,14 +1,11 @@
 #ifndef gkll_kl_h_
 #define gkll_kl_h_
 //--------------------------------------------------------------------------------
-// .NAME        gkll_kl
-// .INCLUDE     gkll/gkll_kl.h
-// .FILE        gkll_kl.cxx
-// .SECTION     Description:
-//   Interface to use Kanade-Lucas algorithm
-// .SECTION Author
+//:
+// \file
+// \brief Interface to use Kanade-Lucas algorithm
+// \author
 //   L. Guichard
-// .SECTION Modifications:
 //--------------------------------------------------------------------------------
 extern "C" {
 #include <vgel/kl/klt.h>

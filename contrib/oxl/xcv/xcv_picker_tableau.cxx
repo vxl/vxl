@@ -1,8 +1,11 @@
+//  This is ./oxl/xcv/xcv_picker_tableau.cxx
+
+//:
+//  \file
+// \author K.Y.McGaul
 //
-//  This is xcv/xcv_picker_tableau.cxx
 //  See xcv_picker_tableau.h for a description of this file.
 //
-// \author K.Y.McGaul
 // \verbatim
 //  Modifications:
 //    K.Y.McGaul 26-APR-2001   Initial version.
@@ -50,16 +53,16 @@ bool xcv_picker_tableau::pick_point(float* x, float* y)
   point_ret = true;
   vgui::flush();  // handle any pending events before we grab the event loop.
 
-  // Grab event loop until picking is completed: 
+  // Grab event loop until picking is completed:
   while (picking_completed == false)
-    next(); 
+    next();
 
-  *x = pointx; 
+  *x = pointx;
   *y = pointy;
-  obj_type = none_enum; 
+  obj_type = none_enum;
   return point_ret;
 }
- 
+
 //========================================================================
 //: Draw a line to help the user pick it.
 void xcv_picker_tableau::draw_line()
@@ -72,7 +75,7 @@ void xcv_picker_tableau::draw_line()
     glBegin(GL_LINES);
     glVertex2f(pointx1, pointy1);
     glVertex2f(pointx2, pointy2);
-    glEnd();  
+    glEnd();
   }
 }
 
@@ -89,7 +92,7 @@ void xcv_picker_tableau::pick_line(float* x1, float* y1, float* x2,
 
   vgui::flush();  // handle any pending events before we grab the event loop.
 
-  // Grab event loop until picking is completed: 
+  // Grab event loop until picking is completed:
   while (picking_completed == false)
     next();
 
@@ -101,7 +104,7 @@ void xcv_picker_tableau::pick_line(float* x1, float* y1, float* x2,
   // Reset everything ready for the next pick:
   FIRSTPOINT=true;
   post_redraw();
-  obj_type = none_enum; 
+  obj_type = none_enum;
 }
 
 //========================================================================
@@ -111,9 +114,9 @@ void xcv_picker_tableau::pick_line(float* x1, float* y1, float* x2,
 //  associated with those events will have changed.  This means for a
 //  draw_overlay event we would end up drawing into the wrong buffer.
 //  For a mouse event we would not be able to get the position in the image
-//  using the projection_inspector (if e.g. the image was zoomed) since all 
+//  using the projection_inspector (if e.g. the image was zoomed) since all
 //  the gl matrices would have been reset.
-bool xcv_picker_tableau::handle(const vgui_event& event) 
+bool xcv_picker_tableau::handle(const vgui_event& event)
 {
   // Pass events on down to the child tableaux:
   child_tab->handle(event);
@@ -124,10 +127,10 @@ bool xcv_picker_tableau::handle(const vgui_event& event)
   if (obj_type == point_enum)
   {
     if (event.type == vgui_BUTTON_DOWN)
-    { 
+    {
       vgui_projection_inspector p_insp;
       p_insp.window_to_image_coordinates(event.wx, event.wy, pointx, pointy);
- 
+
       if (event.button != vgui_LEFT)
         point_ret= false;
       picking_completed = true;
@@ -149,7 +152,7 @@ bool xcv_picker_tableau::handle(const vgui_event& event)
       if(FIRSTPOINT)
       {
         vgui_projection_inspector p_insp;
-        p_insp.window_to_image_coordinates(event.wx, event.wy, 
+        p_insp.window_to_image_coordinates(event.wx, event.wy,
           pointx1, pointy1);
         pointx2 = pointx1;
         pointy2 = pointy1;
@@ -166,10 +169,10 @@ bool xcv_picker_tableau::handle(const vgui_event& event)
 
 //========================================================================
 //: Get next event in event loop
-bool xcv_picker_tableau::next() 
+bool xcv_picker_tableau::next()
 {
   use_event_ = false;
-  while (!use_event_) 
+  while (!use_event_)
     vgui::run_one_event();
   return true;
 }

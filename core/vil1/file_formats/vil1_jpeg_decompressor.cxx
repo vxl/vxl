@@ -1,9 +1,11 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
+// This is ./vxl/vil/file_formats/vil_jpeg_decompressor.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 #include "vil_jpeg_decompressor.h"
 #include "vil_jpeg_source_mgr.h"
 #include <vil/vil_stream.h>

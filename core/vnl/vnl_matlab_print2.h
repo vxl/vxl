@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_matlab_print2.h
+// This is ./vxl/vnl/vnl_matlab_print2.h
 #ifndef vnl_matlab_print2_h_
 #define vnl_matlab_print2_h_
 #ifdef __GNUC__
@@ -8,22 +8,22 @@
 //: \file
 //
 // After including this header file, the client should be able to say :
-// \verbatim
+// \code
 //   vnl_matrix<double> foo(3, 14);
 //  ....
 //   vcl_cerr << "and the blasted matrix is :" << endl
 //            << vnl_matlab_print(foo)
 //            << vnl_matlab_print(foo, "foo")
 //            << vnl_matlab_print(foo, 0, vnl_matlab_fmt_long);
-// \endverbatim
+// \endcode
 // instead of
-// \verbatim
+// \code
 //  ....
 //   vcl_cerr << "and the blasted matrix is :" << endl;
 //   vnl_matlab_print(vcl_cerr, foo);
 //   vnl_matlab_print(vcl_cerr, foo, "foo");
 //   vnl_matlab_print(vcl_cerr, foo, 0, vnl_matlab_fmt_long);
-// \endverbatim
+// \endcode
 //
 //  \author fsm@robots.ox.ac.uk
 

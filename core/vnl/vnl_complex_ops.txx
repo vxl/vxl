@@ -1,7 +1,9 @@
+// This is ./vxl/vnl/vnl_complex_ops.txx
 #ifndef vnl_complex_ops_txx_
 #define vnl_complex_ops_txx_
 
-// This is vxl/vnl/vnl_complex_ops.txx
+//:
+// \file
 
 /*
   fsm@robots.ox.ac.uk

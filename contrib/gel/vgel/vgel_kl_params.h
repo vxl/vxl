@@ -4,14 +4,11 @@
 #pragma interface
 #endif
 //--------------------------------------------------------------------------------
-// .NAME        vgel_kl_params
-// .INCLUDE     vgel/vgel_kl_params.h
-// .FILE        vgel_kl_params.cxx
-// .SECTION     Description:
-//   Interface to set Kanade-Lucas parametres
-// .SECTION Author
+//:
+// \file
+// \brief Interface to set Kanade-Lucas parameters
+// \author
 //   L. Guichard
-// .SECTION Modifications:
 //--------------------------------------------------------------------------------
 #include <vgel/kl/klt.h>
 

@@ -1,11 +1,8 @@
 #ifndef vgui_slot_h_
 #define vgui_slot_h_
-
-// .NAME vgui_slot
-// .INCLUDE vgui/vgui_slot.h
-// .FILE vgui_slot.cxx
+//:
+//  \file
 //
-// .SECTION Description
 // Q: what is a vgui_slot?
 // A: These are essentially specialized smart pointers. A slot
 // refers to an edge in the tableau [di]graph. A tableau acquires
@@ -21,19 +18,25 @@
 // to the edge it used to refer to.
 // Calling set_child(t) on a slot changes the graph (the given
 // tableau *t becomes the new child of the slot).
-// eg:
+// E.g.:
+// \code
 //   slot left (this,child);
 //   slot right(this,child);
 //   bool v = (left == right); // this is false
+// \endcode
 // or :
+// \code
 //   slot e(this,child);
 //   slot f=e;
 //   bool v = (e == f); // this is true
+// \endcode
 //
 // You can use a slot much like a pointer to tableaux. It
 // will behave like the child of the slot :
+// \code
 //   left->handle(e);   // same as left.child()->handle(e);
 //   right->method();   // same as right.child()->method();
+// \endcode
 // In particular, you may put your slots into vectors, trees,
 // stacks etc if that is useful for your purposes. Repeat :
 // copying a slot does not create a new edge in the graph, only
@@ -42,9 +45,8 @@
 // Attempting to create a non-empty slot whose parent and child
 // are the same tableau causes an abort().
 //
-// .SECTION Author
+// \author
 //   fsm@robots.ox.ac.uk
-//
 //--------------------------------------------------------------------------------
 
 #include <vcl_iosfwd.h>

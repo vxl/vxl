@@ -2,13 +2,14 @@
 #define vidl_frame_as_image_h
 
 //:
-// \file 
+// \file
 // \author Nicolas Dano, september 1999
-// Modifications
+//
 // \verbatim
+// Modifications
 // Julien ESTEVE, June 2000
 //     Ported from TargetJr
-// 10/4/2001 Ian Scott (Manchester) Coverted perceps header to doxygen
+// 10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
 // \endverbatim
 
 
@@ -30,8 +31,8 @@ class vidl_frame_as_image : public vil_image_impl
      int bits_per_component() const { return 8; }
      int components() const;
      int planes() const { return 1; }
-     int width() const { return frame_->width(); }    
-     int height() const { return frame_->height(); }    
+     int width() const { return frame_->width(); }
+     int height() const { return frame_->height(); }
      bool get_section(void* ib, int x0, int y0, int width, int height) const;
      bool put_section(void const* ib, int x0, int y0, int width, int height) { return false; }
 
@@ -40,6 +41,5 @@ class vidl_frame_as_image : public vil_image_impl
   // Dumb ptr to avoid cycle
      vidl_frame* frame_;
 };
+
 #endif // vidl_frame_as_image_h
-
-

@@ -1,28 +1,26 @@
 #ifndef vgui_rubberbander_h_
 #define vgui_rubberbander_h_
-
 #ifdef __GNUC__
 #pragma interface
 #endif
-
 //--------------------------------------------------------------------------------
-// .NAME vgui_rubberbander
-// .INCLUDE vgui/vgui_rubberbander.h
-// .FILE vgui_rubberbander.cxx
+//:
+//  \file
 //
-// .SECTION Description
 //   Rubberbanding of circles, lines etc.  The values captured (eg. two points
 //   defining a line) are passed to the appropriate function (eg. add_line) in the
 //   client passed in to the constructor.  This client is derived from
 //   vgui_rubberbander_client.
-// .SECTION Author
+// \author
 //   K.Y.McGaul
-// .SECTION Modifications
+// \verbatim
+//  Modifications
 //   K.Y.McGaul     31-MAR-2000    Initial version.
 //   F.S. de M.     31-MAR-2000    Minor cosmetic changes.
 //   Marko Bacic    07-JUL-2000    Added support for linestrip
 //   Marko Bacic    19-JUL-2000    Now supports vgui_rubberbander_client
 //   FSM            14-AUG-2000    Fixed so that it works with Windows
+// \endverbatim
 //--------------------------------------------------------------------------------
 
 #include <vgui/vgui_tableau.h>

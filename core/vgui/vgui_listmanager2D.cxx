@@ -1,15 +1,10 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
 //:
-//  \file
-
-// .NAME vgui_listmanager2D
-// Author: Philip C. Pritchett, RRG, University of Oxford
-// Created: 21 Oct 99
-//
+// \file
+// \author Philip C. Pritchett, RRG, University of Oxford
+// \date   21 Oct 99
 //-----------------------------------------------------------------------------
 
 #include "vgui_listmanager2D.h"

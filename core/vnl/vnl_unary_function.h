@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_unary_function.h
+// This is ./vxl/vnl/vnl_unary_function.h
 #ifndef vnl_unary_function_h_
 #define vnl_unary_function_h_
 #ifdef __GNUC__
@@ -13,6 +13,7 @@
 //
 //  \author Andrew W. Fitzgibbon, Oxford RRG
 //  \date   28 Nov 98
+//
 // \verbatim
 // Modifications
 //  981128 AWF Initial version.

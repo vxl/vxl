@@ -1,14 +1,14 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is ./vxl/vnl/algo/vnl_real_eigensystem.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
+
 //:
 // \file
-
-// vnl_real_eigensystem
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 23 Jan 97
 //
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   23 Jan 97
+
 //-----------------------------------------------------------------------------
 
 #include "vnl_real_eigensystem.h"

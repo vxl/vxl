@@ -1,6 +1,6 @@
+// This is ./vxl/vbl/vbl_smart_ptr.h
 #ifndef vbl_smart_ptr_h_
 #define vbl_smart_ptr_h_
-// This is vxl/vbl/vbl_smart_ptr.h
 
 //:
 // \file
@@ -23,22 +23,22 @@
 //: A templated smart pointer class
 // This class requires that the class being templated over has
 // the following signatures (methods) :
-// \verbatim
+// \code
 //   void T::ref();
 //   void T::unref();
-// \endverbatim
+// \endcode
 //
 // By default, the vbl_smart_ptr<T> will ref() the object given
 // to it upon construction and unref() it upon destruction. In
 // some cases, however, it is useful to cause an unref() immediately
 // and to avoid an unref() in the constructor. For example, in the
 // cyclic data structure
-// \verbatim
+// \code
 // start -> A -> B -> C -> D -> E
 //          ^                   |
 //          |                   |
 //          +-------------------+
-// \endverbatim
+// \endcode
 //
 // The refcounts on A, B, C, D, E are 2, 1, 1, 1, 1 so when 'start'
 // goes out of scope, the refcount will be 1, 1, 1, 1, 1 and therefore

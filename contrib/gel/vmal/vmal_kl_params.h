@@ -4,14 +4,11 @@
 #pragma interface
 #endif
 //--------------------------------------------------------------------------------
-// .NAME        vmal_kl_params
-// .INCLUDE     vmal/vmal_kl_params.h
-// .FILE        vmal_kl_params.cxx
-// .SECTION Description:
-//   Interface to set Kanade-Lucas parametres
-// .SECTION Author
+//:
+// \file
+// \brief Interface to set Kanade-Lucas parameters
+// \author
 //   L. Guichard
-// .SECTION Modifications:
 //--------------------------------------------------------------------------------
 extern "C" {
 #include <vgel/kl/klt.h>
@@ -68,8 +65,6 @@ public:
   int nPyramidLevels;
   int subsampling;
   bool verbose;
-
-
 };
 
 #endif // vmal_kl_params

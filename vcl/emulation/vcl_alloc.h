@@ -31,8 +31,8 @@
 //:
 // \file
 // \brief This implements some standard node allocators
-// These are
-// NOT the same as the allocators in the C++ draft standard or in
+//
+// These are \b NOT the same as the allocators in the C++ draft standard or in
 // in the original STL.  They do not encapsulate different pointer
 // types; indeed we assume that there is only one pointer type.
 // The allocation primitives are intended to allocate individual objects,

@@ -20,6 +20,9 @@
 // 1.1     |2002/01/22| Peter Vanroose           |Made compiling with gcc 3.0
 //*****************************************************************************
 
+//:
+// \file
+
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 #include <vcsl/vcsl_cartesian_3d.h>

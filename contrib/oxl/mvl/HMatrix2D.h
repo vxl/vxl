@@ -3,20 +3,13 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-
-//-*- c++ -*-------------------------------------------------------------------
-//
-// .NAME HMatrix2D - 3x3 plane-to-plane projectivity
-// .LIBRARY MViewBasics
-// .HEADER MultiView package
-// .INCLUDE mvl/HMatrix2D.h
-// .FILE HMatrix2D.cxx
-//
-// .SECTION Description:
+//:
+//  \file
+// \brief 3x3 plane-to-plane projectivity
 //
 // A class to hold a plane-to-plane projective transformation matrix
 // and to perform common operations using it e.g. transfer point.
-//
+
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_4.h>
 #include <mvl/HomgPoint2D.h>
@@ -24,6 +17,9 @@
 #include <mvl/HomgLineSeg2D.h>
 #include <vcl_iosfwd.h>
 
+//:
+// A class to hold a plane-to-plane projective transformation matrix
+// and to perform common operations using it e.g. transfer point.
 
 class HMatrix2D {
 

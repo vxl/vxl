@@ -1,9 +1,9 @@
+// This is ./vxl/vgl/vgl_box_2d.h
 #ifndef vgl_box_2d_h
 #define vgl_box_2d_h
 #ifdef __GNUC__
 #pragma interface
 #endif
-
 //:
 //  \file
 //  \brief Contains class to implement a bounding box.
@@ -26,7 +26,7 @@
 #include <vcl_deprecated.h>
 
 //: Represents a 2D box
-//  A 2d box with sides aligned with the x and y axes.
+//  A 2d box with sides aligned with the \a x and \a y axes.
 //  Also supports operations required of a bounding box for geometric region
 //  tests.
 //  A box can be empty; this is the case when MaxPosition is to the left or
@@ -82,7 +82,7 @@ public:
   vgl_box_2d(const vgl_point_2d<Type>& min_pos,
              const vgl_point_2d<Type>& max_pos);
 
-  //: Construct using ranges in x and y
+  //: Construct using ranges in \a x and \a y
   vgl_box_2d(Type xmin, Type xmax, Type ymin, Type ymax);
 
   //: Construct using lower-left, width and height
@@ -115,26 +115,26 @@ public:
 
   // Data Access---------------------------------------------------------------
 
-  //: Get min x
+  //: Get min \a x
   inline Type min_x() const {return min_pos_[0];}
-  //: Get min y
+  //: Get min \a y
   inline Type min_y() const {return min_pos_[1];}
-  //: Get max x
+  //: Get max \a x
   inline Type max_x() const {return max_pos_[0];}
-  //: Get max y
+  //: Get max \a y
   inline Type max_y() const {return max_pos_[1];}
 
   //: Get centroid point
   vgl_point_2d<Type> centroid() const;
-  //: Get x component of centroid
+  //: Get \a x component of centroid
   Type centroid_x() const;
-  //: Get y component of centroid
+  //: Get \a y component of centroid
   Type centroid_y() const;
 
-  //: Get width of this box (= x dimension)
+  //: Get width of this box (= \a x dimension)
   Type width()  const;
 
-  //: Get height of this box (= y dimension)
+  //: Get height of this box (= \a y dimension)
   Type height() const;
 
   //: Get volume (area) of this box
@@ -196,7 +196,7 @@ public:
   //: Return true iff the point p is inside this box
   bool contains(vgl_point_2d<Type> const& p) const;
 
-  //: Return true if (x,y) inside box, ie x_min<=x<=x_max etc
+  //: Return true if \a (x,y) inside box, ie \a x_min <= \a x <= \a x_max etc
   inline bool contains(Type const& x, Type const& y) const {
     return x >= min_x() && x <= max_x() && y >= min_y() && y <= max_y();
   }

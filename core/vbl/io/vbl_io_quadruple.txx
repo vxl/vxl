@@ -1,11 +1,12 @@
+// This is ./vxl/vbl/io/vbl_io_quadruple.txx
 #ifndef vbl_io_quadruple_txx_
 #define vbl_io_quadruple_txx_
-// This is vxl/vbl/vbl_io_quadruple.txx
 
 //:
-// \file   
+// \file
 // \brief  binary IO functions for vbl_quadruple<S, T, U, V>
 // \author Ian Scott
+//
 // Implementation
 
 #include <vsl/vbl_io_quadruple.h>
@@ -53,12 +54,10 @@ void vsl_print_summary(vcl_ostream& os, const vbl_quadruple<S, T, U, V> &v)
 }
 
 
-
-
 #undef VBL_QUADRUPLE_INSTANTIATE
 #define VBL_QUADRUPLE_INSTANTIATE(S, T, U, V ) \
 template void vsl_print_summary(vcl_ostream& s, const vbl_quadruple<S, T, U, V >& v); \
 template void vsl_b_write(vsl_b_ostream& s, const vbl_quadruple<S, T, U, V > & v); \
 template void vsl_b_read(vsl_b_istream& s, vbl_quadruple<S, T, U, V > & v)
 
-#endif
+#endif // vbl_io_quadruple_txx_

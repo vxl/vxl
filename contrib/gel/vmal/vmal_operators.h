@@ -6,16 +6,13 @@
 //--------------------------------------------------------------------------------
 //:
 //  \file
-
-// .NAME        vmal_operators
-// .INCLUDE     vmal/vmal_operators.h
-// .FILE        vmal_operators.cxx
-// .SECTION Description:
 //
-// .SECTION Author
+// \author
 //   L. Guichard
-// .SECTION Modifications:
+// \verbatim
+// Modifications:
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
+// \endverbatim
 //--------------------------------------------------------------------------------
 #include <vnl/vnl_double_3.h>
 

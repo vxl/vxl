@@ -3,14 +3,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+//:
+//  \file
+// \brief Base class for correspondences
 //
-// .NAME    MatchSet - Base class for correspondences
-// .LIBRARY MViewBasics
-// .HEADER  MultiView Package
-// .INCLUDE mvl/MatchSet.h
-// .FILE    MatchSet.cxx
-//
-// .SECTION Description
 //    MatchSet is a base class for classes that store correspondences
 //    between tuples of geometric entities.
 //
@@ -18,12 +14,8 @@
 //    which is used by the subclasses as a dummy index to signify that an
 //    entity has no matching feature.
 //
-// .SECTION Author
+// \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 09 Aug 96
-//
-// .SECTION Modifications:
-//     <none yet>
-//
 //-----------------------------------------------------------------------------
 
 class MatchSet {

@@ -2,12 +2,9 @@
 #define oxp_vidl_mpeg_codec_h
 
 //:
-// \file 
+// \file
 // \author awf
 // \date Dec 2001
-// Modifications
-// \verbatim
-// \endverbatim
 
 #include <vidl/vidl_codec.h>
 #include <vidl/vidl_frame_sptr.h>
@@ -17,7 +14,7 @@
 // use set_demux if mpeg is a VOB
 class oxp_vidl_mpeg_codec : public vidl_codec {
 public:
-  
+
   oxp_vidl_mpeg_codec() {}
   ~oxp_vidl_mpeg_codec() {}
 
@@ -32,7 +29,7 @@ public:
 
   //-----------------------------------------------------
   virtual bool probe(const char* fname) {
-    return p.probe(fname); 
+    return p.probe(fname);
   }
   virtual vidl_codec_sptr load(const char* fname, char mode = 'r' );
   virtual bool save(vidl_movie* movie, const char* fname);

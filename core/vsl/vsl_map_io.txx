@@ -1,4 +1,4 @@
-// This is vxl/vsl/vsl_map_io.txx
+// This is ./vxl/vsl/vsl_map_io.txx
 #ifndef vsl_map_io_txx_
 #define vsl_map_io_txx_
 
@@ -7,8 +7,8 @@
 // \brief Implementation binary IO functions for vcl_(multi)map<Key, T, Compare>
 // \author K.Y.McGaul
 //
-// Modifications
 // \verbatim
+// Modifications:
 // IMS - 22 June 2001 - Added IO for multimap
 // \endverbatim
 

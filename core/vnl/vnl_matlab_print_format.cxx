@@ -1,4 +1,7 @@
-// This is vxl/vnl/vnl_matlab_print_format.cxx
+// This is ./vxl/vnl/vnl_matlab_print_format.cxx
+
+//:
+// \file
 
 #include "vnl_matlab_print.h"
 

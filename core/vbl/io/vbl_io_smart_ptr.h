@@ -1,10 +1,9 @@
+// This is ./vxl/vbl/io/vbl_io_smart_ptr.h
 #ifndef vbl_io_smart_ptr_h
 #define vbl_io_smart_ptr_h
 #ifdef __GNUC__
 #pragma interface
 #endif
-
-// This is vxl/vbl/io/vbl_io_smart_ptr.h
 
 //:
 // \file 
@@ -12,14 +11,13 @@
 // \author Ian Scott (Manchester)
 // \date 26-Mar-2001
 //
-//
 // In order to use IO for smart pointers you will need to have
 // the IO functions defined for pointers to MY_CLASS (class T.)
 // If you have written io for polymorphic classes, some of these
 // functions may already be defined.
 //
 // If you need to write them, you can use the following as examples
-// \verbatim
+// \code
 // void vsl_b_read(vsl_b_istream& is, impl * &p)
 // {
 //   delete p;
@@ -58,10 +56,9 @@
 //     vsl_print_summary(os, *p);
 //   } 
 // };
-// \endverbatim
+// \endcode
 //
-// Objects using I/O via a smart ptr, should not save the objects 
-//                                                   refrence count.
+// Objects using I/O via a smart ptr, should not save the objects reference count.
 
 
 #include <vsl/vsl_binary_io.h>

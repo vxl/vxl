@@ -2,6 +2,9 @@
 #pragma implementation
 #endif
 
+//:
+//  \file
+
 #include <vcl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>

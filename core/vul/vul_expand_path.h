@@ -1,9 +1,9 @@
+// This is ./vxl/vul/vul_expand_path.h
 #ifndef vul_expand_path_h_
 #define vul_expand_path_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// This is vxl/vul/vul_expand_path.h
 
 //:
 // \file
@@ -21,6 +21,7 @@
 // involve any system calls.
 //
 // \author fsm@robots.ox.ac.uk
+//
 // \verbatim
 // Modifications
 // PDA (Manchester) 21/03/2001: Tidied up the documentation

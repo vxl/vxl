@@ -1,7 +1,6 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is ./oxl/vgui/vgui_text_tableau.h
 #ifndef vgui_text_tableau_h_
 #define vgui_text_tableau_h_
-// This is vgui/vgui_text_tableau.h
 #ifdef __GNUC__
 #pragma interface
 #endif
@@ -13,6 +12,7 @@
 // \brief  Tableau for rendering text.
 // Each piece of text is associated with an integer handle through
 // which it can be retrieved, moved about, changed or removed.
+//
 // \verbatim
 //  Modifications:
 //   30 Dec 1999 fsm@robots. modified to render arbitrary text.

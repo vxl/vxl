@@ -3,9 +3,8 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME osl_chamfer
-// .INCLUDE osl/osl_chamfer.h
-// .FILE osl_chamfer.cxx
+//:
+// \file
 // \author fsm@robots.ox.ac.uk
 
 //: Chamfer transform routines taken from osl_edge_detector.

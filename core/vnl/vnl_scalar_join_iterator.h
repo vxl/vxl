@@ -1,13 +1,14 @@
+// This is ./vxl/vnl/vnl_scalar_join_iterator.h
 #ifndef vnl_scalar_join_iterator_h_
 #define vnl_scalar_join_iterator_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// This is vxl/vnl/vnl_scalar_join_iterator.h
 
 //:
 //  \file
 //  \brief  Database join on matrix columns
+//
 //    vnl_scalar_join_iterator implements a fast database join on columns
 //    of matrices of scalars.  "Scalar" here really means that the
 //    objects have comparison operators.  The cost is O(n log n) where

@@ -3,15 +3,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// .NAME    vsl_conic_as_params
-// .LIBRARY oxp
-// .HEADER  Oxford Package
-// .INCLUDE oxp/vsl_conic_as_params.h
-// .FILE    vsl_conic_as_params.cxx
-// .SECTION Author
+//:
+// \file
+// \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 12 Nov 99
-//
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_vector_fixed.h>

@@ -3,24 +3,21 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+//:
+//  \file
+// \brief Base class for 3D homogeneous features
 //
-// .NAME Homg3D - Base class for 3D homogeneous features
-// .LIBRARY MViewBasics
-// .HEADER MultiView package
-// .INCLUDE mvl/Homg3D.h
-// .FILE Homg3D.cxx
-//
-// .SECTION Description
 // Base class for 3D homogeneous features.
 //
-// .SECTION Author
-//             Paul Beardsley, 29.03.96
-//             Oxford University, UK
+// \author
+//   Paul Beardsley, 29.03.96
+//   Oxford University, UK
 //
-// .SECTION Modifications
+// \verbatim
+//  Modifications
 //    210297 AWF Switched to fixed-length vectors for speed.
 //    110397 Peter Vanroose - added operator==
-//
+// \endverbatim
 //-----------------------------------------------------------------------------
 
 #include <mvl/Homg.h>

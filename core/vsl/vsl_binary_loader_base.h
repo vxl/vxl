@@ -1,8 +1,11 @@
+// This is ./vxl/vsl/vsl_binary_loader_base.h
 #ifndef vsl_binary_loader_base_h_
 #define vsl_binary_loader_base_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
+//:
+// \file
 
 //: Base class for vsl_binary_loader objects
 //  Available to keep a record of all the loaders, so that they
@@ -24,6 +27,5 @@ protected:
 //: Deletes all the loaders derived from this class
 //  Deletes every loader for which register_this() has been called
 void vsl_delete_all_loaders();
-
 
 #endif // vsl_binary_loader_base_h_

@@ -1,11 +1,12 @@
+// This is ./vxl/vnl/vnl_copy.h
 #ifndef vnl_copy_h_
 #define vnl_copy_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// This is vxl/vnl/vnl_copy.h
 
-//:  \file
+//:
+//   \file
 //   \brief Easy conversion between vectors and matrices templated over different types.
 //   \author fsm@robots.ox.ac.uk
 //

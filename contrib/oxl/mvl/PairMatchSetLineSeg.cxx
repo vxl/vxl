@@ -2,6 +2,9 @@
 #pragma implementation
 #endif
 
+//:
+//  \file
+
 #include "PairMatchSetLineSeg.h"
 
 #include <vcl_cstdlib.h>

@@ -3,6 +3,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+
+//:
+//  \file
+
 /*
   fsm@robots.ox.ac.uk
 */
@@ -29,24 +33,24 @@ struct vgui_event_condition
   vgui_key key : 16;
   vgui_button button : 3;
   vgui_modifier modifier : 4;
-  
+
   vgui_event_condition()
     : on(false) { } //: key(vgui_KEY_NULL), button(vgui_BUTTON_NULL), modifier(vgui_MODIFIER_NULL) { }
-  
+
   vgui_event_condition(vgui_key k, vgui_modifier m = vgui_MODIFIER_NULL, bool p = true)
     : on(true), pressed(p), key(k), button(vgui_BUTTON_NULL), modifier(m) { }
-  
+
   vgui_event_condition(vgui_button b, vgui_modifier m = vgui_MODIFIER_NULL, bool p = true)
     : on(true), pressed(p), key(vgui_KEY_NULL), button(b), modifier(m) { }
-  
+
   void enable(bool v = true) { on = v; }
   void disable(bool v = true) { on = !v; }
-  
+
   //: E.g. if (c_mouse_spin(e))
   bool operator()(vgui_event const &e) const;
   bool operator()(vgui_key k, vgui_modifier m) const;
   bool operator()(vgui_button b, vgui_modifier m) const;
-  
+
   //: Text representation such as "shift-middle" or "ctrl-K".
   // If field_width is supplied, pad to that width.
   vcl_string as_string(int field_width = 0) const;

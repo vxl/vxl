@@ -48,11 +48,11 @@ public:
 
   //: Reseeds the internal random number generator
   // To achieve quasi-random initialisation use;
-  // \verbatim
+  // \code
   // #include <vcl_ctime.h>
   // ..
   // sampler.reseed(vcl_time(0));
-  // \endverbatim
+  // \endcode
   virtual void reseed(unsigned long);
 
 

@@ -2,6 +2,9 @@
 #pragma implementation
 #endif
 
+//:
+//  \file
+
 
 #include <vcl_cstdlib.h>
 #include <mil/mil_image_pyramid.h>

@@ -1,22 +1,17 @@
 #ifndef vsol_polyhedron_h_
 #define vsol_polyhedron_h_
 //*****************************************************************************
+//:
+//  \file
+// \brief Polyhedral volume in 3D space
 //
-// .NAME    vsol_polyhedron - Polyhedral volume in 3D space
-// .LIBRARY vsol
-// .INCLUDE vsol/vsol_polyhedron.h
-// .FILE    vsol_polyhedron.cxx
-//
-// .SECTION Description
 //   Representation of an arbitrary polyhedral volume, i.e., a volume that
 //   is bounded by any set of flat polygons.
 //   A sufficient minimal representation for this is the set of corner points
 //   together with the polygonal faces they form.
 //
-// .SECTION Author
+// \author
 //   Peter Vanroose, 5 July 2000.
-//
-// .SECTION Modifications
 //*****************************************************************************
 
 class vsol_polyhedron;

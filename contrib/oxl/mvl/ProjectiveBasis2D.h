@@ -3,29 +3,25 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+//:
+//  \file
+// \brief Canonical basis of 4 points
 //
-// .NAME    ProjectiveBasis2D - Canonical basis of 4 points
-// .LIBRARY MViewBasics
-// .HEADER  MultiView Package
-// .INCLUDE mvl/ProjectiveBasis2D.h
-// .FILE    ProjectiveBasis2D.cxx
-// .EXAMPLE examples/exampleProjectiveBasis2D.cxx
-//
-// .SECTION Description
 //    Compute planar homography that maps 4 points into the canonical projective basis.
 //    The returned H is such that
-//    @{
-//    \[ H \mmatrix{4}{& & & \\ p_1 & p_2 & p_3 & p_4 \\  &  & & } \sim
-//    \mmatrix{4}{1 & 0 & 0 & 1 \cr
-//                0 & 1 & 0 & 1 \cr
-//                0 & 0 & 1 & 1}
-//    \] @}
+//    \f[ H \begin{array}{cccc}&&& \\ p_1 & p_2 & p_3 & p_4 \\ &&& \end{array} \sim
+//    \begin{array}{cccc}1 & 0 & 0 & 1 \cr
+//                       0 & 1 & 0 & 1 \cr
+//                       0 & 0 & 1 & 1 \end{array}
+//    \f]
 //
-// .SECTION Author
+// \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 26 Sep 96
 //
-// .SECTION Modifications:
+// \verbatim
+//  Modifications:
 //     Peter Vanroose - 3 dec 1998 - "collinear_" implemented
+// \endverbatim
 //
 //-----------------------------------------------------------------------------
 

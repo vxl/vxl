@@ -1,10 +1,9 @@
+// This is ./vxl/vgl/vgl_homg_line_2d.h
 #ifndef vgl_homg_line_2d_h
 #define  vgl_homg_line_2d_h
 #ifdef __GNUC__
 #pragma interface
 #endif
-
-// This is vxl/vgl/vgl_homg_line_2d.h
 
 //:
 // \file
@@ -85,17 +84,17 @@ public:
   //: unit vector orthogonal to line, or (0,0) if line at infinity
   inline vgl_vector_2d<double> normal() const { return normalized(vgl_vector_2d<double>(a_,b_)); }
 
-protected: // \deprecated
-  //: x component of unit vector describing direction of line
+private: // \deprecated
+  //: \deprecated x component of unit vector describing direction of line
   inline double dir_x() const { return direction().x(); }
 
-  //: y component of unit vector describing direction of line
+  //: \deprecated y component of unit vector describing direction of line
   inline double dir_y() const { return direction().y(); }
 
-  //: x component of unit vector orthogonal to line
+  //: \deprecated x component of unit vector orthogonal to line
   inline double normal_x() const { return normal().x(); }
 
-  //: y component of unit vector orthogonal to line
+  //: \deprecated y component of unit vector orthogonal to line
   inline double normal_y() const { return normal().y(); }
 
 public:

@@ -3,15 +3,9 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-
 //:
 //  \file
-
-// .NAME vgui_section_buffer
-// .INCLUDE vgui/vgui_section_buffer.h
-// .FILE vgui_section_buffer.cxx
 //
-// .SECTION Description
 // A section_buffer is an object which holds a section of a GL image
 // with given OpenGL buffer format and types. The constructor is
 // responsible for allocating a suitably sized (and aligned) buffer.
@@ -24,7 +18,7 @@
 // the section buffer should not be created until a GL state has been
 // created.
 //
-// @author fsm@robots.ox.ac.uk
+// \author fsm@robots.ox.ac.uk
 
 #include <vgui/vgui_gl.h>
 class vil_image;

@@ -1,13 +1,12 @@
-// This is vxl/vnl/vnl_fastops.cxx
-
-//-*- c++ -*-------------------------------------------------------------------
+// This is ./vxl/vnl/vnl_fastops.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// vnl_fastops
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 08 Dec 96
+
+//:
+// \file
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   08 Dec 96
 //
 //-----------------------------------------------------------------------------
 
@@ -26,12 +25,12 @@ void vnl_fastops::AtA(const vnl_matrix<double>& A, vnl_matrix<double>* AtA)
     vcl_cerr << "vnl_fastops::AtA: " << AtA->rows() << "x" << AtA->columns() << " is not " << n << "x" << n << vcl_endl;
     vcl_abort();
   }
-  
+
   int m = A.rows();
-  
+
   double const* const* a = A.data_array();
   double** ata = AtA->data_array();
-  
+
   if (0) {
     for(unsigned i = 0; i < n; ++i)
       for(unsigned j = i; j < n; ++j) {
@@ -194,15 +193,15 @@ void vnl_fastops::inc_X_by_AtA(vnl_matrix<double>& X, const vnl_matrix<double>& 
   unsigned m = X.rows();
   unsigned n = X.columns();
   unsigned l = A.rows();
-  
+
   if (m != n || m != A.columns()) {
     vcl_cerr << "vnl_fastops::inc_X_by_AtA: size error\n";
     vcl_abort();
   }
-  
+
   double const* const* a = A.data_array();
   double** x = X.data_array();
-  
+
   if (l == 2) {
     for(unsigned i = 0; i < n; ++i) {
       x[i][i] += (a[0][i] * a[0][i] +

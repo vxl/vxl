@@ -1,6 +1,9 @@
-// This is vxl/vnl/io/vnl_io_sparse_matrix.txx
+// This is ./vxl/vnl/io/vnl_io_sparse_matrix.txx
 #ifndef vnl_io_sparse_matrix_txx_
 #define vnl_io_sparse_matrix_txx_
+
+//:
+// \file
 
 #include <vnl/vnl_sparse_matrix.h>
 #include <vsl/vsl_binary_io.h>

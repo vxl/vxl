@@ -10,7 +10,7 @@
 #include <vsl/vsl_binary_io.h>
 
 //: Simple statistics on a 1D variable
-// \verbatim
+// \code
 // // A rather trivial example
 // mbl_stats_1d stats,odd_stats,even_stats,sum_stats;
 //
@@ -30,7 +30,7 @@
 //
 // vcl_cout<<"Sum of odd and even stats"<<vcl_endl;
 // vcl_cout<<sum_stats;
-// \endverbatim
+// \endcode
 class mbl_stats_1d
 {
   double sum_;

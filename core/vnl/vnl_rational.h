@@ -1,3 +1,7 @@
+// This is ./vxl/vnl/vnl_rational.h
+#ifndef vnl_rational_h_
+#define vnl_rational_h_
+
 //:
 // \file
 // \brief Infinite precision rational numbers
@@ -39,9 +43,6 @@
 //  Peter Vanroose, 10 July 2001: removed state data member and added Inf repres
 //  Peter Vanroose,  9 July 2001: ported to vnl from COOL
 // \endverbatim
-
-#ifndef vnl_rational_h_
-#define vnl_rational_h_
 
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>

@@ -7,8 +7,9 @@
 //:
 // \file
 // \author François BERTEL
-// Modifications
+//
 // \verbatim
+// Modifications
 // 2000/06/28 François BERTEL Creation. Adapted from IUE
 // 2002/01/22 Peter Vanroose - return type of execute() and inverse() changed to non-ptr
 // \endverbatim

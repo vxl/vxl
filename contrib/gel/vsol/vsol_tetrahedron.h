@@ -1,19 +1,14 @@
 #ifndef vsol_tetrahedron_h_
 #define vsol_tetrahedron_h_
 //*****************************************************************************
+//:
+//  \file
+// \brief tetrahedral volume in 3D space
 //
-// .NAME    vsol_tetrahedron - tetrahedral volume in 3D space
-// .LIBRARY vsol
-// .INCLUDE vsol/vsol_tetrahedron.h
-// .FILE    vsol_tetrahedron.cxx
-//
-// .SECTION Description
 // The vertices order gives the orientation of the tetrahedron
 //
-// .SECTION Author
+// \author
 // Peter Vanroose, 5 July 2000.
-//
-// .SECTION Modifications
 //*****************************************************************************
 
 class vsol_tetrahedron;

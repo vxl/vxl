@@ -1,13 +1,13 @@
+// This is ./vxl/vbl/vbl_sparse_array_3d.txx
 #ifndef vbl_sparse_array_3d_txx_
 #define vbl_sparse_array_3d_txx_
 
-// This is vxl/vbl/vbl_sparse_array_3d.txx
-
+//:
+// \file
 
 #include "vbl_sparse_array_3d.h"
 #include "vbl_sparse_array_base.txx"
 #include <vcl_iostream.h>
-
 
 //: Print the array to a stream in "(i,j,k): value" format.
 template <class T>

@@ -1,7 +1,9 @@
+// This is ./vxl/vnl/vnl_diag_matrix.txx
 #ifndef vnl_diag_matrix_txx_
 #define vnl_diag_matrix_txx_
 
-// This is vxl/vnl/vnl_diag_matrix.txx
+//:
+// \file
 
 #include "vnl_diag_matrix.h"
 

@@ -1,3 +1,5 @@
+#ifndef vil_viffheader_h_
+#define vil_viffheader_h_
 /*
  *----------------------------------------------------------------------
  *
@@ -26,15 +28,13 @@
  *----------------------------------------------------------------------
  */
 
-#ifndef vil_viffheader_h_
-#define vil_viffheader_h_
-
 /* this is a C header file. you cannot use // comments in it
 //:
 // \file
 // \brief  Khoros Visualization/Image File Format.
 // \author John Rassure
 // \date 5/5/88
+//
 // Design considerations included the need
 // for portability, expandability and simplicity.
 //

@@ -1,20 +1,17 @@
-//-*- c++ -*-------------------------------------------------------------------
-//
-// This is vgui/impl/mfc/vgui_mfc_doc.h
+// This is ./oxl/vgui/impl/mfc/vgui_mfc_doc.h
+#ifndef AFX_VGUI_MFC_DOC_H__AB1D93B0_8FC7_4E71_ABD0_FA4AA666D5CD__INCLUDED_
+#define AFX_VGUI_MFC_DOC_H__AB1D93B0_8FC7_4E71_ABD0_FA4AA666D5CD__INCLUDED_
 
 //:
 // \file
 // \author  Marko Bacic, Oxford RRG
 // \date    27 July 2000
 // \brief  Defines a main application document
+//
 // \verbatim
 //  Modifications:
 //    Marko Bacic   27-JUL-2000   Initial version.
 // \endverbatim
-//
-
-#ifndef AFX_VGUI_MFC_DOC_H__AB1D93B0_8FC7_4E71_ABD0_FA4AA666D5CD__INCLUDED_
-#define AFX_VGUI_MFC_DOC_H__AB1D93B0_8FC7_4E71_ABD0_FA4AA666D5CD__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
@@ -55,7 +52,6 @@ protected:
   // awf: we store our main tableau in the document -- the
   // adaptor(s) view this tableau.
   vgui_tableau* tableau;
-
 };
 
 /////////////////////////////////////////////////////////////////////////////

@@ -1,31 +1,29 @@
 #ifndef vtol_two_chain_h
 #define vtol_two_chain_h
 //-----------------------------------------------------------------------------
+//:
+//  \file
+// \brief Represents a set of vtol_face
 //
-// .NAME        vtol_two_chain - Represents a set of vtol_face
-// .LIBRARY     vtol
-// .HEADER      gel  package
-// .INCLUDE     vtol/vtol_two_chain.h
-// .FILE        vtol_two_chain.cxx
-//
-// .SECTION Description
 //  The vtol_two_chain class is used to represent a set of vtol_faces on a topological
 //  structure.  A vtol_two_chain consists of its inferior onechains and the superiors
 //  on which it lies.  A vtol_two_chain may or may not be an ordered cycle.  If
 //  the chain of vtol_face encloses a volume, then the vtol_two_chain may be used as
 //  the boundary of a topological vtol_block in a 3D structure.
 //
-// .SECTION Author
+// \author
 //     Patricia A. Vrobel
 //
-// .SECTION Modifications:
-//               JLM December 1995, Added timeStamp (Touch) to
-//                   operations which affect bounds.
-//               JLM December 1995, no local method for ComputeBoundingBox
-//                   Should use vtol_face geometry recursively to be proper.
-//                   Currently reverts to bounds on vertices from
-//                   vtol_topology_object::ComputeBoundingBox()
-//               PTU ported to vxl May 2000
+// \verbatim
+// Modifications:
+//  JLM December 1995, Added timeStamp (Touch) to
+//      operations which affect bounds.
+//  JLM December 1995, no local method for ComputeBoundingBox
+//      Should use vtol_face geometry recursively to be proper.
+//      Currently reverts to bounds on vertices from
+//      vtol_topology_object::ComputeBoundingBox()
+//  PTU ported to vxl May 2000
+// \endverbatim
 //-----------------------------------------------------------------------------
 #include <vtol/vtol_two_chain_sptr.h>
 

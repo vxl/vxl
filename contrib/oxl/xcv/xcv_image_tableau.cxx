@@ -1,5 +1,7 @@
-//
-// This is xcv/xcv_image_tableau.cxx
+// This is ./oxl/xcv/xcv_image_tableau.cxx
+
+//:
+//  \file
 // See xcv_image_tableau.h for a description of this file.
 //
 // \author  Marko Bacic (u97mb@robots.ox.ac.uk)

@@ -1,12 +1,10 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// .NAME vgui_image_blender
-// Author: Philip C. Pritchett, RRG, University of Oxford
-// Created: 27 Oct 99
-//
+//:
+// \file
+// \author Philip C. Pritchett, RRG, University of Oxford
+// \date   27 Oct 99
 //-----------------------------------------------------------------------------
 
 #include "vgui_image_blender.h"

@@ -1,8 +1,12 @@
-// This is vxl/vnl/vnl_scalar_join_iterator.txx
+// This is ./vxl/vnl/vnl_scalar_join_iterator.txx
 #ifndef vnl_scalar_join_iterator_txx_
 #define vnl_scalar_join_iterator_txx_
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 27 Dec 96
+
+//:
+// \file
+//
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   27 Dec 96
 //
 //-----------------------------------------------------------------------------
 

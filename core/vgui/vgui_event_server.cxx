@@ -1,12 +1,10 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// .NAME vgui_event_server
-// Author: Philip C. Pritchett, RRG, University of Oxford
-// Created: 29 Sep 99
-//
+//:
+// \file
+// \author Philip C. Pritchett, RRG, University of Oxford
+// \date   29 Sep 99
 //-----------------------------------------------------------------------------
 
 #include "vgui_event_server.h"

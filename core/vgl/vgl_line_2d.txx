@@ -1,7 +1,6 @@
-// This is vxl/vgl/vgl_line_2d.txx
+// This is ./vxl/vgl/vgl_line_2d.txx
 #ifndef vgl_line_2d_txx_
 #define vgl_line_2d_txx_
-
 
 //:
 // \file
@@ -31,8 +30,8 @@ vgl_line_2d<Type>::vgl_line_2d (vgl_homg_line_2d<Type> const& l)
 //: Get two points on the line.
 // These two points are normally the intersections
 // with the Y axis and X axis, respectively.  When the line is parallel to one
-// of these, the point with y=1 or x=1, resp. are taken.  When the line goes
-// through the origin, the second point is (b, -a).
+// of these, the point with \a y=1 or \a x=1, resp. are taken.
+// When the line goes through the origin, the second point is \a (b,-a).
 template <class Type>
 void vgl_line_2d<Type>::get_two_points(vgl_point_2d<Type> &p1, vgl_point_2d<Type> &p2)
 {

@@ -1,13 +1,15 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is ./oxl/vgui/impl/mfc/vgui_mfc.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// This is vgui/impl/mfc/vgui_mfc.cxx
+
+//:
+//  \file
 // See vgui_mfc.h for a description of this file.
 //
 // \author awf@robots.ox.ac.uk
 // \date   July 2000
+//
 // \verbatim
 //  Modifications:
 //    K.Y.McGaul  29-AUG-2001  Add destructor to remove Purify mem leak.

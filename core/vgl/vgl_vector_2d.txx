@@ -1,6 +1,9 @@
-// This is vxl/vgl/vgl_vector_2d.txx
+// This is ./vxl/vgl/vgl_vector_2d.txx
 #ifndef vgl_vector_2d_txx_
 #define vgl_vector_2d_txx_
+
+//:
+// \file
 
 #include "vgl_vector_2d.h"
 

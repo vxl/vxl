@@ -1,18 +1,18 @@
 #ifndef vsol_surface_3d_h
 #define vsol_surface_3d_h
 //*****************************************************************************
+//:
+//  \file
+// \brief Abstract surface in a 3D space
 //
-// .NAME vsol_surface_3d - Abstract surface in a 3D space
-// .LIBRARY vsol
-// .INCLUDE vsol/vsol_surface_3d.h
-// .FILE    vsol/vsol_surface_3d.cxx
-//
-// .SECTION Author
+// \author
 // François BERTEL
 //
-// .SECTION Modifications
+// \verbatim
+// Modifications
 // 2001/07/03 Peter Vanroose  Replaced vnl_double_3 by vgl_vector_3d
 // 2000/05/04 François BERTEL Creation
+// \endverbatim
 //*****************************************************************************
 
 class vsol_surface_3d;

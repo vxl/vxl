@@ -1,5 +1,8 @@
 #include "HomgOperator3D.h"
 
+//:
+//  \file
+
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
 #include <vcl_list.h>

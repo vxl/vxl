@@ -1,12 +1,10 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// .NAME vgui_displaylist2D
-// Author: Philip C. Pritchett, RRG, University of Oxford
-// Created: 14 Sep 99
-//
+//:
+// \file
+// \author Philip C. Pritchett, RRG, University of Oxford
+// \date   14 Sep 99
 //-----------------------------------------------------------------------------
 
 #include "vgui_displaylist2D.h"
@@ -115,9 +113,7 @@ void vgui_displaylist2D::get_hits(float x, float y, vcl_vector<unsigned>& my_hit
           break;
         }
       }
-
     }
-
   }
 }
 
@@ -159,7 +155,6 @@ bool vgui_displaylist2D::motion(int x, int y) {
 
   posted_redraw_ = false;
 
-
   vgui_utils::begin_sw_overlay();
 
   unsigned highlighted = this->get_highlighted();
@@ -177,12 +172,7 @@ bool vgui_displaylist2D::motion(int x, int y) {
       glColor3f(style->rgba[0],style->rgba[1],style->rgba[2]);
     }
     so->draw();
-
   }
-
-
-
-
 
   if (closest_id) {
     //vcl_cerr << "highlighting : " << closest_id << vcl_endl;
@@ -203,16 +193,16 @@ bool vgui_displaylist2D::motion(int x, int y) {
   return false;
 }
 
-bool vgui_displaylist2D::mouse_down(int x, int y, vgui_button button, vgui_modifier modifier) {
-
+bool vgui_displaylist2D::mouse_down(int x, int y, vgui_button button, vgui_modifier modifier)
+{
   float ix, iy;
   vgui_projection_inspector().window_to_image_coordinates(x,y, ix,iy);
 
-
-
   // selecting
   if (button == vgui_LEFT && modifier == 0) {
-//  if (debug) vcl_cerr << vul_sprintf("selecting at %f %f", x, y) << vcl_endl;
+#if 0
+    if (debug) vcl_cerr << vul_sprintf("selecting at %f %f", x, y) << vcl_endl;
+#endif
 
     vcl_vector<unsigned> hits;
     get_hits(x,y,hits);
@@ -231,7 +221,9 @@ bool vgui_displaylist2D::mouse_down(int x, int y, vgui_button button, vgui_modif
   else if (button == vgui_MIDDLE) {
 
     if (modifier & vgui_SHIFT) {
-//    if (debug) vcl_cerr << "deselecting all" << vcl_endl;
+#if 0
+      if (debug) vcl_cerr << "deselecting all" << vcl_endl;
+#endif
       this->deselect_all();
       this->post_redraw();
       posted_redraw_ = true;

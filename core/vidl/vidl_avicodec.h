@@ -5,14 +5,15 @@
 // \file 
 // \author Andy Molnar
 // \date October 1998
-// Modifications
+//
 // \verbatim
+// Modifications
 // Nicolas Dano, september 1999
 //     - Transformed the basic AVI image reading into AVI Video
 //     - Added the possibility to save video in AVI format
 // Julien ESTEVE, June 2000
 //     Ported from TargetJr
-// 10/4/2001 Ian Scott (Manchester) Coverted perceps header to doxygen
+// 10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
 // \endverbatim
 
 

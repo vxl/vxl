@@ -3,21 +3,19 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+//:
+//  \file
+// \brief Homogeneous 1D point
 //
-// .NAME    HomgPoint1D - Homogeneous 1D point
-// .LIBRARY MViewBasics
-// .HEADER  MultiView Package
-// .INCLUDE mvl/HomgPoint1D.h
-// .FILE    HomgPoint1D.cxx
-//
-// .SECTION Description:
 // HomgPoint1D represents a 1D point in homogeneous coordinates
 //
-// .SECTION Author
+// \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 15 Oct 96
 //
-// .SECTION Modifications:
+// \verbatim
+//  Modifications:
 //     Peter Vanroose - 22 nov 98 - Constructor with 1/2 floats added
+// \endverbatim
 //
 //-----------------------------------------------------------------------------
 

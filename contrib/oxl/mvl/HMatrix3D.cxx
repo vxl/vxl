@@ -2,6 +2,9 @@
 #pragma implementation
 #endif
 
+//:
+//  \file
+
 #include <vcl_iostream.h>
 
 #include <vnl/vnl_matlab_print.h>
@@ -45,10 +48,8 @@ HMatrix3D::HMatrix3D(vcl_istream& s)
 
 //--------------------------------------------------------------
 //
-//: @{ Construct an affine HMatrix3D from 3x3 M and 3x1 m.
-// \[H = \pmatrix{ M & m\cr
-//                0 & 1}\]
-// @}
+//: Construct an affine HMatrix3D from 3x3 M and 3x1 m.
+// \f[ H = \begin{array}{cc} M & m\\ 0 & 1 \end{array} \f]
 HMatrix3D::HMatrix3D(const vnl_matrix<double>& M, const vnl_vector<double>& m)
 {
   assert(M.rows() == 3);
@@ -82,7 +83,7 @@ HMatrix3D::~HMatrix3D()
 
 //-----------------------------------------------------------------------------
 //
-// - Return the transformed point given by @{$ x_2 = T x_1 $@}
+// - Return the transformed point given by $ x_2 = T x_1 $
 
 HomgPoint3D HMatrix3D::transform(const HomgPoint3D& x1) const
 {
@@ -91,7 +92,7 @@ HomgPoint3D HMatrix3D::transform(const HomgPoint3D& x1) const
 
 //-----------------------------------------------------------------------------
 //
-//: Return the transformed line given by @{$ l_2 = T \ast l_1 $@}
+//: Return the transformed line given by $ l_2 = T \ast l_1 $
 
 HomgLine3D HMatrix3D::transform(const HomgLine3D& l1) const
 {

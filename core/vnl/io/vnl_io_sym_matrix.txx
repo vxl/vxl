@@ -1,6 +1,9 @@
-// This is vxl/vnl/io/vnl_io_sym_matrix.txx
+// This is ./vxl/vnl/io/vnl_io_sym_matrix.txx
 #ifndef vnl_io_sym_matrix_txx_
 #define vnl_io_sym_matrix_txx_
+
+//:
+// \file
 
 #include <vnl/vnl_sym_matrix.h>
 #include <vnl/io/vnl_io_sym_matrix.h>

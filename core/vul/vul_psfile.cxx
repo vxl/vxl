@@ -1,4 +1,7 @@
-// This is vxl/vul/vul_psfile.cxx
+// This is ./vxl/vul/vul_psfile.cxx
+
+//:
+// \file
 
 #include "vul_psfile.h"
 #include <vcl_iomanip.h>

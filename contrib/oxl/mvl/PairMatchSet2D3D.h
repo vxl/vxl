@@ -3,18 +3,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// .NAME    PairMatchSet2D3D
-// .LIBRARY MViewDatabase
-// .HEADER  MultiView Package
-// .INCLUDE mvl/PairMatchSet2D3D.h
-// .FILE    PairMatchSet2D3D.cxx
-// .SECTION Author
+//:
+//  \file
+// \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 19 Sep 96
-//
-// .SECTION Modifications:
-//     <none yet>
-//
 //-----------------------------------------------------------------------------
 
 #include <mvl/PairMatchSet.h>

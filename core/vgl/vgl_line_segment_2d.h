@@ -1,10 +1,9 @@
+// This is ./vxl/vgl/vgl_line_segment_2d.h
 #ifndef vgl_line_segment_2d_h_
 #define vgl_line_segment_2d_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-
-// This is vxl/vgl/vgl_line_segment_2d.h
 
 //:
 // \file

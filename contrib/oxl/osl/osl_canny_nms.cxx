@@ -1,6 +1,10 @@
 /*
   fsm@robots.ox.ac.uk
 */
+
+//:
+//  \file
+
 #ifdef __GNUC__
 #pragma implementation
 #endif

@@ -1,3 +1,9 @@
+#ifdef __GNUC__
+#pragma implementation
+#endif
+//:
+//  \file
+
 /*
   fsm@robots.ox.ac.uk
 */
@@ -11,9 +17,6 @@
 //  the_same_day F. Schaffalitzky
 //               Imposed my rigid ways on Marko's changes.
 //               Fixes for SolarisGL.
-#ifdef __GNUC__
-#pragma implementation
-#endif
 #include "vgui_section_buffer.h"
 
 #include <vcl_cassert.h>
@@ -652,10 +655,8 @@ bool vgui_section_buffer::load_image_as_textures()
                    type,
                    /* xxx */&sub_image[0]);
       vgui_macro_report_errors;
-
     }
     orig_image += allocw*texture_size*4;
-
   }
   return true;
 }
@@ -737,6 +738,7 @@ bool vgui_section_buffer::draw_image_as_textures() const
 
   return true;
 }
+
 bool vgui_section_buffer::draw_image_as_cached_textures(float x0, float y0,  float w, float h)
 {
   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);

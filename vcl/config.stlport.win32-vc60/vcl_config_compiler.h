@@ -1,6 +1,9 @@
 #ifndef vcl_config_compiler_h_config_stlport_win32_vc60_
 #define vcl_config_compiler_h_config_stlport_win32_vc60_
 
+//:
+// \file
+//
 // This file is *not* generated.
 
 //----------------------------------------------------------------------

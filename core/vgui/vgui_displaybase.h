@@ -3,24 +3,11 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// .NAME vgui_displaybase - Undocumented class FIXME
-// .LIBRARY vgui
-// .HEADER vxl Package
-// .INCLUDE vgui/vgui_displaybase.h
-// .FILE vgui_displaybase.cxx
-//
-// .SECTION Description:
-//
-// vgui_displaybase is a class that Phil hasnt documented properly. FIXME
-//
-// .SECTION Author:
+//:
+//  \file
+// \author
 //              Philip C. Pritchett, 14 Sep 99
 //              Robotics Research Group, University of Oxford
-//
-// .SECTION Modifications:
-//     <none yet>
-//
 //-----------------------------------------------------------------------------
 
 #include <vcl_string.h>

@@ -1,6 +1,9 @@
 #ifndef mbl_data_array_ptr_wrapper_txx_
 #define mbl_data_array_ptr_wrapper_txx_
 
+//:
+//  \file
+
 #include <mbl/mbl_data_array_ptr_wrapper.h>
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h>
@@ -33,7 +36,6 @@ mbl_data_array_ptr_wrapper<T>::mbl_data_array_ptr_wrapper(const vcl_vector<const
   assert(data.size() == 0|| &data[data.size() - 1] - &data[0] + 1 == data.size());
   set(&data[0], data.size());
 }
-
 
 
 //: Initialise to return elements from data[i]
@@ -122,4 +124,4 @@ vcl_string mbl_data_array_ptr_wrapper<T>::is_a() const
 #define MBL_DATA_ARRAY_PTR_WRAPPER_INSTANTIATE(T) \
 template class mbl_data_array_ptr_wrapper< T >
 
-#endif
+#endif // mbl_data_array_ptr_wrapper_txx_

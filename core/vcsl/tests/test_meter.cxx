@@ -9,6 +9,9 @@
 // 1.0     |2000/06/16| François BERTEL          |Creation
 //*****************************************************************************
 
+//:
+// \file
+
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 #include <vcsl/vcsl_meter.h>

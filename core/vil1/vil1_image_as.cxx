@@ -1,11 +1,14 @@
-// This is vxl/vil/vil_image_as.cxx
+// This is ./vxl/vil/vil_image_as.cxx
+#ifdef __GNUC__
+#pragma implementation
+#endif
+
+//:
+// \file
 
 /*
   fsm@robots.ox.ac.uk
 */
-#ifdef __GNUC__
-#pragma implementation
-#endif
 #include "vil_image_as.h"
 
 #include <vcl_cassert.h>
@@ -168,7 +171,6 @@ bool convert_rgba_to_grey( const vil_image& image, void* buf, int x0, int y0, in
   }
   return true;
 }
-
 
 
 // Explicitly instantiate the ones we use

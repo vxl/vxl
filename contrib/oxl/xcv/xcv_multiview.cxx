@@ -1,11 +1,14 @@
+// This is ./oxl/xcv/xcv_multiview.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
+
+//:
+//  \file
+// \author K.Y.McGaul
 //
-// This is xcv/xcv_multiview.cxx
 // See xcv_multiview.h for a description of this file.
 //
-// \author K.Y.McGaul
 // \verbatim
 //  Modifications:
 //    K.Y.McGaul     27-JAN-2000  Initial version.
@@ -180,6 +183,48 @@ xcv_threeview_manager* xcv_multiview::get_threeview_manager(vcl_vector<int>& col
     mgr->set_tableau(tee, j);
   }
   return mgr;
+}
+
+//-----------------------------------------------------------------------------
+//: Compute an FMatrix for the two selected views.
+//-----------------------------------------------------------------------------
+void xcv_multiview::compute_f_matrix()
+{
+  vcl_vector<int> col_pos, row_pos;
+  if (!get_twoviews(&col_pos, &row_pos))
+    return;
+
+  FMatrix* fmat = new FMatrix;
+
+  xcv_twoview_manager* mgr = get_twoview_manager(col_pos, row_pos);
+  mgr->set_f_matrix(fmat);
+}
+
+//-----------------------------------------------------------------------------
+//: Compute an HMatrix2D for the two selected views.
+//-----------------------------------------------------------------------------
+void xcv_multiview::compute_h_matrix2d()
+{
+  vcl_vector<int> col_pos, row_pos;
+  if (!get_twoviews(&col_pos, &row_pos))
+    return;
+
+  HMatrix2D* hmat = new HMatrix2D;
+
+  xcv_twoview_manager* mgr = get_twoview_manager(col_pos, row_pos);
+  mgr->set_h_matrix(hmat);
+}
+
+//-----------------------------------------------------------------------------
+//: Compute corner matches for the two selected views.
+//-----------------------------------------------------------------------------
+void xcv_multiview::compute_corner_matches()
+{
+  vcl_vector<int> col_pos, row_pos;
+  if (!get_twoviews(&col_pos, &row_pos))
+    return;
+
+  // FIXME
 }
 
 //-----------------------------------------------------------------------------

@@ -1,3 +1,6 @@
+//:
+//  \file
+
 #include <vtol/vtol_topology_object.h>
 #include <vtol/vtol_topology_cache.h>
 #include <vcl_cassert.h>
@@ -167,12 +170,9 @@ vtol_topology_object::is_inferior(const vtol_topology_object &inferior) const
 {
   vcl_vector<vtol_topology_object_sptr>::const_iterator i;
 
-  for (i=_inferiors.begin(); i!=_inferiors.end(); ++i){
-    if((*i).ptr()== &inferior){
-    // if (*(*i) == inferior){
+  for (i=_inferiors.begin(); i!=_inferiors.end(); ++i)
+    if((*i).ptr()== &inferior)
       return true;
-    }
-  }
 
   return false;
 }
@@ -184,12 +184,10 @@ bool
 vtol_topology_object::is_superior(const vtol_topology_object &superior) const
 {
   vcl_list<vtol_topology_object_sptr>::const_iterator i;
-  for (i=_superiors.begin(); i!=_superiors.end(); ++i){
-    // if ( *(*i) == superior){
-    if ((*i).ptr() == &superior){
+  for (i=_superiors.begin(); i!=_superiors.end(); ++i)
+    if ((*i).ptr() == &superior)
       return true;
-    }
-  }
+
   return false;
 }
 
@@ -272,7 +270,7 @@ void vtol_topology_object::link_inferior(vtol_topology_object &inferior)
 
   // Is this true?
   if ( is_inferior ( inferior ) ) { return; }
-  
+
   assert(!is_inferior(inferior));
 
   _inferiors.push_back(&inferior);
@@ -295,7 +293,7 @@ void vtol_topology_object::unlink_inferior(vtol_topology_object &inferior)
 
   // Is this true?
   if ( !is_inferior ( inferior ) ) { return; }
-  
+
   assert(is_inferior(inferior));
 
   vcl_vector<vtol_topology_object_sptr>::iterator i;
@@ -363,8 +361,6 @@ void vtol_topology_object::link_superior(vtol_topology_object &superior)
 //---------------------------------------------------------------------------
 void vtol_topology_object::unlink_superior(vtol_topology_object &superior)
 {
-
-
   // require
   assert(valid_superior_type(superior));
   assert(is_superior(superior));
@@ -380,8 +376,6 @@ void vtol_topology_object::unlink_superior(vtol_topology_object &superior)
 
   _superiors.erase(i); // unlink
   touch();
-
-
 }
 
 
@@ -439,7 +433,6 @@ one_chain_list* vtol_topology_object::one_chains(void)
   one_chain_list* new_list=new one_chain_list;
   inf_sup_cache->one_chains(*new_list);
   return new_list;
-
 }
 
 //: get list of one chains
@@ -621,5 +614,7 @@ vcl_vector<vtol_block *> *vtol_topology_object::compute_blocks(void)
   return 0;
 }
 
-//#include <vcl_rel_ops.h> // gcc 2.7
-//VCL_INSTANTIATE_INLINE(bool operator!=(vtol_topology_object const &, vtol_topology_object const &));
+#ifdef VCL_GCC_27
+#include <vcl_rel_ops.h>
+VCL_INSTANTIATE_INLINE(bool operator!=(vtol_topology_object const &, vtol_topology_object const &));
+#endif

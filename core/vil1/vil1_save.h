@@ -1,14 +1,15 @@
+// This is ./vxl/vil/vil_save.h
 #ifndef vil_save_h_
 #define vil_save_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// This is vxl/vil/vil_save.h
 
 //:
 // \file
 // \author    awf@robots.ox.ac.uk
 // \date 16 Feb 00
+//
 //\verbatim
 //  Modifications
 //     000216 AWF Initial version.

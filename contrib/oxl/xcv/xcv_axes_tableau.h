@@ -1,17 +1,17 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is ./oxl/xcv/xcv_axes_tableau.h
 #ifndef xcv_axes_tableau_h_
 #define xcv_axes_tableau_h_
-//
-// This is xcv/xcv_axes_tableau.h
 
 //:
 // \file
 // \author  K.Y.McGaul
 // \brief   A tableau to display points on a set of axes.
+//
 //  The graph is displayed using a text_tableau and an easy2D inside
 //  a composite tableau.
 //  Each point to be plotted is added using add_point and when all points
 //  are added compute_axes should be called to lay out the graph.
+//
 // \verbatim
 //  Modifications:
 //    K.Y.McGaul   26-APR-2001  Initial version.

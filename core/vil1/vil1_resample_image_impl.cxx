@@ -1,11 +1,14 @@
-// This is vxl/vil/vil_resample_image_impl.cxx
+// This is ./vxl/vil/vil_resample_image_impl.cxx
+#ifdef __GNUC__
+#pragma implementation
+#endif
+
+//:
+// \file
 
 /*
   fsm@robots.ox.ac.uk
 */
-#ifdef __GNUC__
-#pragma implementation
-#endif
 #include "vil_resample_image_impl.h"
 #include "vil_resample_image.h"
 #include <vil/vil_byte.h>
@@ -86,14 +89,14 @@ bool vil_resample_image_impl::get_section(void *buf, int x0, int y0, int w, int 
 
 /* START_MANCHESTER_BINARY_IO_CODE */
 
-  //: Return the name of the class;
+//: Return the name of the class;
 vcl_string vil_resample_image_impl::is_a() const
 {
   static const vcl_string class_name_="vil_resample_image_impl";
   return class_name_;
 }
 
-  //: Return true if the name of the class matches the argument
+//: Return true if the name of the class matches the argument
 bool vil_resample_image_impl::is_class(vcl_string const& s) const
 {
   static const vcl_string class_name_="vil_resample_image_impl";
@@ -101,4 +104,3 @@ bool vil_resample_image_impl::is_class(vcl_string const& s) const
 }
 
 /* END_MANCHESTER_BINARY_IO_CODE */
-

@@ -1,11 +1,6 @@
+// This is ./vxl/vgl/vgl_polygon_scan_iterator.h
 #ifndef vgl_polygon_scan_iterator_h
 #define vgl_polygon_scan_iterator_h
-
-// This is vxl/vgl/vgl_polygon_scan_iterator.h
-
-#include <vgl/vgl_polygon.h>
-#include <vgl/vgl_box_2d.h>
-#include <vgl/vgl_point_2d.h>
 
 //:
 // \file
@@ -16,6 +11,10 @@
 //  Binary IO added and documentation tidied up NPC, 20/03/01
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
+
+#include <vgl/vgl_polygon.h>
+#include <vgl/vgl_box_2d.h>
+#include <vgl/vgl_point_2d.h>
 
 #include <vgl/vgl_region_scan_iterator.h>
 
@@ -46,7 +45,7 @@
 // scanned area.
 //
 // Example usage:
-// \verbatim
+// \code
 //  vgl_polygon_scan_iterator psi(mypoints);
 //  psi.set_include_boundary(true); // optional flag, default is true
 //  for(psi.reset(); psi.next(); ) {
@@ -54,7 +53,7 @@
 //    for(int x = psi.startx(); x <= psi.endx(); ++x)
 //         ....
 //  }
-// \endverbatim
+// \endcode
 class vgl_polygon_scan_iterator : public vgl_region_scan_iterator
 {
 public:

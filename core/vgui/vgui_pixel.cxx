@@ -1,9 +1,10 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
 #ifdef __GNUC__
 #pragma implementation
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 #include "vgui_pixel.h"
 #include <vgui/vgui_gl.h>
 

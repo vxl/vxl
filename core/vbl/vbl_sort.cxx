@@ -1,13 +1,12 @@
-// This is vxl/vbl/vbl_sort.cxx
+// This is ./vxl/vbl/vbl_sort.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
 
-//-*- c++ -*-------------------------------------------------------------------
-//
-
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 19 Nov 97
+//:
+// \file
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   19 Nov 97
 //
 //-----------------------------------------------------------------------------
 

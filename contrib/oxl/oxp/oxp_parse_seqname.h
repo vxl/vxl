@@ -3,11 +3,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME oxp_parse_seqname
-// .INCLUDE oxp/oxp_parse_seqname.h
-// .FILE oxp_parse_seqname.cxx
-// @author awf@robots.ox.ac.uk
-// Created: 22 Jul 00
+//:
+// \file
+// \author awf@robots.ox.ac.uk
+// \date   22 Jul 00
 
 #include <vcl_string.h>
 

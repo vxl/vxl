@@ -1,9 +1,9 @@
+// This is ./vxl/vnl/vnl_math.h
 #ifndef vnl_math_h_
 #define vnl_math_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// This is vxl/vnl/vnl_math.h
 
 //: \file
 //  \brief Namespace with standard math functions
@@ -26,6 +26,7 @@
 //
 //  \author Andrew W. Fitzgibbon, Oxford RRG
 //  \date   July 13, 1996
+//
 // \verbatim
 // Modifications
 //  210598 AWF Removed conditional VCL_IMPLEMENT_STATIC_CONSTS, sometimes gcc needs them.

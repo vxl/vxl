@@ -3,23 +3,20 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+//:
+//  \file
+// \brief Three-view corner matches
 //
-// .NAME TripleMatchSetCorner - Three-view corner matches
-// .LIBRARY MViewBasics
-// .HEADER MultiView package
-// .INCLUDE mvl/TripleMatchSetCorner.h
-// .FILE TripleMatchSetCorner.cxx
-//
-// .SECTION Description
 //    TripleMatchSetCorner is a TripleMatchSet that holds matches
 //    between corners in three HomgInterestPointSets.
 //
-// .SECTION Author
+// \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 09 Aug 96
 //
-// .SECTION Modifications:
+// \verbatim
+//  Modifications:
 //     260297 AWF Added documentation
-//
+// \endverbatim
 //-----------------------------------------------------------------------------
 
 #include <mvl/PairMatchSetCorner.h>

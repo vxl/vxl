@@ -1,13 +1,12 @@
-// This is vxl/vil/vil_memory_image_window.cxx
-
-//-*- c++ -*-------------------------------------------------------------------
+// This is ./vxl/vil/vil_memory_image_window.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// vil_memory_image_window
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 19 Aug 96
+
+//:
+// \file
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   19 Aug 96
 //
 //-----------------------------------------------------------------------------
 
@@ -113,7 +112,6 @@ int vil_memory_image_window::ncc(const vil_memory_image_of<vil_byte>& image2,
 double vil_memory_image_window::normalised_cross_correlation(const vil_memory_image_of<vil_byte>& image2,
                                                              int centre2_x, int centre2_y)
 {
-
   // set mask size
   int n = (int)mask_size_/2;
   int m = (int)mask_size_/2;

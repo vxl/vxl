@@ -1,3 +1,6 @@
+//:
+// \file
+
 #include "vidl_movie.h"
 
 #include <vcl_iostream.h>
@@ -13,12 +16,12 @@
 // CONSTRUCTOR(S) AND DESTRUCTOR
 
 //: Constructor
-vidl_movie::vidl_movie() 
+vidl_movie::vidl_movie()
   : frame_rate_ ( 30 ) {}
 
 //: Constructor, build a movie with the single given clip
 vidl_movie::vidl_movie(vidl_clip_sptr clip)
-  : frame_rate_ ( 30 ) 
+  : frame_rate_ ( 30 )
 {
   // Check validity of initialisation
   if (!clip_.empty())
@@ -30,7 +33,6 @@ vidl_movie::vidl_movie(vidl_clip_sptr clip)
 //: destructor
 vidl_movie::~vidl_movie()
 {
-
 }
 
 //: Get the frame numbered n (frames are numbered from 0 to total-1)
@@ -40,17 +42,16 @@ vidl_frame_sptr vidl_movie::get_frame(int n)
 
   vcl_list<vidl_clip_sptr>::iterator i = clip_.begin();
 
-  while ((i!=clip_.end()) && 
+  while ((i!=clip_.end()) &&
          (!(ret_frame=(*i)->get_frame(n))))
-    {
+  {
     n = n - (**i).length();
     i++;
-    }
+  }
 
   // one can note that if the frame was not in the clip (n too big),
   // Then, NULL is returned.
   return ret_frame;
-  
 }
 
 //: Add a clip at the end of the movie
@@ -63,7 +64,7 @@ void vidl_movie::add_clip(vidl_clip_sptr clip)
 //: Give back the number of frames of the movie
 int vidl_movie::length() const
 {
-  int number = 0; 
+  int number = 0;
   for (vcl_list<vidl_clip_sptr>::const_iterator i=clip_.begin(); i!= clip_.end(); ++i)
     number += (*i)->length();
 
@@ -74,7 +75,7 @@ int vidl_movie::length() const
 // Check that all the movies do have the same size, output
 // an error if not
 int vidl_movie::width() const
-{ 
+{
   // Get the size X of the first clip
   int sizeX = 0;
   vcl_list<vidl_clip_sptr>::const_iterator i=clip_.begin();
@@ -83,22 +84,20 @@ int vidl_movie::width() const
   // Check that the (eventually) other clips have the same size
   for (; i!= clip_.end(); ++i)
     if ((*i)->width() != sizeX)
-      {
-        vcl_cerr << "SizeX of the movie asked. But the different clips have different sizes." 
-             << vcl_endl;
-        return 0;
-      }
+    {
+      vcl_cerr << "SizeX of the movie asked. But the different clips have different sizes.\n";
+      return 0;
+    }
 
   // Return the size X
   return sizeX;
-
 }
 
 //: Return the vertical size of the frames in the movie
 // Check that all the movies do have the same size, output
 // an error if not
 int vidl_movie::height() const
-{ 
+{
   // Get the size Y of the first clip
   int sizeY = 0;
   vcl_list<vidl_clip_sptr>::const_iterator i = clip_.begin();
@@ -107,13 +106,11 @@ int vidl_movie::height() const
   // Check that the (eventually) other clips have the same size
   for (; i!= clip_.end(); ++i)
     if ((*i)->height() != sizeY)
-      {
-        vcl_cerr << "SizeY of the movie asked. But the different clips have different sizes." 
-             << vcl_endl;
-        return 0;
-      }
+    {
+      vcl_cerr << "SizeY of the movie asked. But the different clips have different sizes.\n";
+      return 0;
+    }
 
   // Return the size Y
   return sizeY;
 }
-

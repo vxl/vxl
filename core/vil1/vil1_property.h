@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_property.h
+// This is ./vxl/vil/vil_property.h
 #ifndef vil_property_h_
 #define vil_property_h_
 
@@ -8,10 +8,10 @@
 // There is no class called vil_property.
 //
 // The image class vil_image has the methods :
-// \verbatim
+// \code
 //   bool get_property(char const *tag, void *property_value = 0) const;
 //   bool set_property(char const *tag, void const *property_value = 0)
-// \endverbatim
+// \endcode
 // which allow format extensions to be added without cluttering the
 // interface to vil_image. The idea is that properties can be
 // identified by a "tag" (some name or other textual description)
@@ -44,7 +44,7 @@
 // red/green/blue/alpha part of the pixel in plane p, row i, column j
 // of the whole image. E.g. to fill a 256x256 3-plane memory image from
 // a 256x256 disk image which supports r,g,b packing:
-// \verbatim
+// \code
 //   char buf[3][256][256]
 //   char bif[3*256*256];
 //   image.get_section(bif, 0, 0, 256, 256);
@@ -60,7 +60,7 @@
 //       for (int j=0; j<256; ++j)
 //         buf[p][i][j] = bif[ a[0]*p + a[1]*i + a[2]*j ];
 //   }
-// \endverbatim
+// \endcode
 // preferred direction for access.
 // tags:
 // - "vil_property_preferred_x_direction"

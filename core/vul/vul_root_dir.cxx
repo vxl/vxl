@@ -1,7 +1,11 @@
+// This is ./vxl/vul/vul_root_dir.cxx
 #include <vul/vul_root_dir.h>
 #include <vcl_cstdlib.h>
 #include <vcl_iostream.h>
 
+//:
+// \file
+//
 // The following should have been created automatically by the
 // configuration scripts from vcl_where_root_dir.h.in
 // If it isn't we need to check for its existence and do something else.

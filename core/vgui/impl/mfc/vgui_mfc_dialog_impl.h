@@ -1,18 +1,19 @@
+// This is ./oxl/vgui/impl/mfc/vgui_mfc_dialog_impl.h
 #ifndef vgui_mfc_dialog_impl_h_
 #define vgui_mfc_dialog_impl_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// This is vgui/impl/mfc/vgui_mfc_dialog_impl.h
 
 //:
 // \file
 // \author  Marko Bacic, RRG, University of Oxford
 // \date    31 Jul 2000
 // \brief   Provides support for a dialog box
+//
 //  Specialization of vgui_dialog_impl for mfc. Creates a mfc dialog box.
 //  Based on vgui_gtk_dialog_impl
+//
 // \verbatim
 //  Modifications:
 //    Marko Bacic    31-JUL-2000   Initial version.

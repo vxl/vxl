@@ -1,6 +1,9 @@
-// This is vxl/vgl/io/vgl_io_conic.txx
+// This is ./vxl/vgl/io/vgl_io_conic.txx
 #ifndef vgl_io_conic_txx_
 #define vgl_io_conic_txx_
+
+//:
+// \file
 
 #include <vgl/vgl_conic.h>
 #include <vsl/vsl_binary_io.h>

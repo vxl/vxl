@@ -3,10 +3,9 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vgui_invert_homg4x4
-// .INCLUDE vgui/internals/vgui_invert_homg4x4.h
-// .FILE internals/vgui_invert_homg4x4.cxx
-// @author fsm@robots.ox.ac.uk
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
 
 //: A, B are 4x4 matrices.
 bool vgui_invert_homg4x4(double const * const *A, double **B);

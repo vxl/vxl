@@ -1,9 +1,4 @@
-// This is vxl/vgl/io/tests/golden_test_vgl_io.cxx
-
-//:
-// /brief This by default reads a golden test file and checks the values.
-// You can make it generate a new golden file by running it with the
-// create option.
+// This is ./vxl/vgl/io/tests/golden_test_vgl_io.cxx
 
 #include <vcl_cassert.h>
 #include <vcl_string.h>
@@ -28,8 +23,13 @@
 //:
 // \file
 // \brief Read in a golden data file, and check the values are correct.
+//
+// This by default reads a golden test file and checks the values.
+// You can make it generate a new golden file by running it with the
+// create option.
+//
 // If you need to recreate the golden data file build this as a
-// standalone program, and run it with the single parameter create
+// standalone program, and run it with the single parameter create:
 // \verbatim
 // golden_test_vnl_io create
 // \verbatim

@@ -1,11 +1,14 @@
-// This is vxl/vil/vil_flipud_impl.cxx
+// This is ./vxl/vil/vil_flipud_impl.cxx
+#ifdef __GNUC__
+#pragma implementation
+#endif
+
+//:
+// \file
 
 /*
   fsm@robots.ox.ac.uk
 */
-#ifdef __GNUC__
-#pragma implementation
-#endif
 #include "vil_flipud_impl.h"
 #include <vcl_climits.h>
 
@@ -32,14 +35,14 @@ bool vil_flipud_impl::put_section(void const *buf, int x0, int y0, int w, int h)
 
 /* START_MANCHESTER_BINARY_IO_CODE */
 
-  //: Return the name of the class;
+//: Return the name of the class;
 vcl_string vil_flipud_impl::is_a() const
 {
   static const vcl_string class_name_="vil_flipud_impl";
   return class_name_;
 }
 
-  //: Return true if the name of the class matches the argument
+//: Return true if the name of the class matches the argument
 bool vil_flipud_impl::is_class(vcl_string const& s) const
 {
   static const vcl_string class_name_="vil_flipud_impl";
@@ -47,4 +50,3 @@ bool vil_flipud_impl::is_class(vcl_string const& s) const
 }
 
 /* END_MANCHESTER_BINARY_IO_CODE */
-

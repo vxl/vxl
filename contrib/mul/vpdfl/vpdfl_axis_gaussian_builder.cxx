@@ -2,6 +2,9 @@
 #pragma implementation
 #endif
 
+//:
+//  \file
+
 #include <vcl_cassert.h>
 #include <vcl_string.h>
 #include <vcl_cstdlib.h> // vcl_abort()
@@ -261,4 +264,3 @@ void vpdfl_axis_gaussian_builder::b_read(vsl_b_istream& bfs)
       return;
   }
 }
-
