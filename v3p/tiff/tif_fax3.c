@@ -797,7 +797,7 @@ static const u_char oneruns[256] = {
 #ifdef VAXC
 static int32 find0span(u_char*, int32, int32);
 static int32 find1span(u_char*, int32, int32);
-#pragma inline(find0span,find1span)
+# pragma inline(find0span,find1span)
 #endif
 
 /*

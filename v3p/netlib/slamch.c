@@ -541,7 +541,7 @@ static void slamc2_(integer *beta, integer *t, logical *rnd,
 /* routine and turn back on any optimizations after this routine. */
 #if defined(_WIN32) || defined(WIN32)
 #if (_MSC_VER >= 1310)
-#pragma optimize("", off)
+# pragma optimize("", off)
 #endif
 #endif
 
@@ -574,7 +574,7 @@ static real slamc3_(real *a, real *b)
 /* Turn the optimizations back on for Visual Studio .NET 2003 */
 #if defined(_WIN32) || defined(WIN32)
 #if (_MSC_VER >= 1310)
-#pragma optimize("", on)
+# pragma optimize("", on)
 #endif
 #endif
 
