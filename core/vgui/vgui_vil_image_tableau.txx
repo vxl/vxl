@@ -1,16 +1,16 @@
-// This is core/vgui/vgui_vil2_image_tableau.txx
-#ifndef vgui_vil2_image_tableau_txx_
-#define vgui_vil2_image_tableau_txx_
-#include "vgui_vil2_image_tableau.h"
+// This is core/vgui/vgui_vil_image_tableau.txx
+#ifndef vgui_vil_image_tableau_txx_
+#define vgui_vil_image_tableau_txx_
+#include "vgui_vil_image_tableau.h"
 //:
 // \file
 // \author Amitha Perera
-// \brief  See vgui_vil2_image_tableau.h for a description of this file.
+// \brief  See vgui_vil_image_tableau.h for a description of this file.
 
 #include <vcl_string.h>
 #include <vcl_sstream.h>
 
-#include <vgui/vgui_vil2_image_renderer.h>
+#include <vgui/vgui_vil_image_renderer.h>
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_gl.h>
 
@@ -33,25 +33,25 @@ const char* to_string<T>::name = "<(no name)>";
 
 //-----------------------------------------------------------------------------
 template<typename T>
-vgui_vil2_image_tableau<T>::vgui_vil2_image_tableau()
+vgui_vil_image_tableau<T>::vgui_vil_image_tableau()
   : pixels_centered_( true ),
-    renderer_( new vgui_vil2_image_renderer<T> )
+    renderer_( new vgui_vil_image_renderer<T> )
 { }
 
 //-----------------------------------------------------------------------------
 template<typename T>
-vgui_vil2_image_tableau<T>::vgui_vil2_image_tableau(vil_image_view<T> const &I)
+vgui_vil_image_tableau<T>::vgui_vil_image_tableau(vil_image_view<T> const &I)
   : pixels_centered_( true ),
-    renderer_( new vgui_vil2_image_renderer<T> )
+    renderer_( new vgui_vil_image_renderer<T> )
 { 
   set_image( I ); 
 }
 
 
 //-----------------------------------------------------------------------------
-//: Destructor - called by vgui_vil2_image_tableau_sptr.
+//: Destructor - called by vgui_vil_image_tableau_sptr.
 template<typename T>
-vgui_vil2_image_tableau<T>::~vgui_vil2_image_tableau()
+vgui_vil_image_tableau<T>::~vgui_vil_image_tableau()
 {
   delete renderer_;
   renderer_ = 0;
@@ -60,16 +60,16 @@ vgui_vil2_image_tableau<T>::~vgui_vil2_image_tableau()
 //-----------------------------------------------------------------------------
 template<typename T>
 vcl_string
-vgui_vil2_image_tableau<T>::type_name() const
+vgui_vil_image_tableau<T>::type_name() const
 {
-  return "vgui_vil2_image_tableau";
+  return "vgui_vil_image_tableau";
 }
 
 
 //-----------------------------------------------------------------------------
 template<typename T>
 vcl_string
-vgui_vil2_image_tableau<T>::pretty_name() const
+vgui_vil_image_tableau<T>::pretty_name() const
 {
   vcl_ostringstream s;
   s << type_name() << "<" << to_string<T>::name << ">" << "[" << renderer_->get_image() << "]";
@@ -80,7 +80,7 @@ vgui_vil2_image_tableau<T>::pretty_name() const
 //: Return the image being rendered by this tableau.
 template<typename T>
 vil_image_view<T>
-vgui_vil2_image_tableau<T>::get_image() const
+vgui_vil_image_tableau<T>::get_image() const
 {
   return renderer_->get_image();
 }
@@ -89,7 +89,7 @@ vgui_vil2_image_tableau<T>::get_image() const
 //: Make the given image, the image rendered by this tableau.
 template<typename T>
 void
-vgui_vil2_image_tableau<T>::set_image( vil_image_view<T> const &I )
+vgui_vil_image_tableau<T>::set_image( vil_image_view<T> const &I )
 {
   renderer_->set_image( I );
 }
@@ -98,7 +98,7 @@ vgui_vil2_image_tableau<T>::set_image( vil_image_view<T> const &I )
 //: Width of the image (0 if none).
 template<typename T>
 unsigned
-vgui_vil2_image_tableau<T>::width() const
+vgui_vil_image_tableau<T>::width() const
 {
   return renderer_->get_image().ni();
 }
@@ -107,7 +107,7 @@ vgui_vil2_image_tableau<T>::width() const
 //: Height of the image (0 if none).
 template<typename T>
 unsigned
-vgui_vil2_image_tableau<T>::height() const
+vgui_vil_image_tableau<T>::height() const
 {
   return renderer_->get_image().nj();
 }
@@ -116,7 +116,7 @@ vgui_vil2_image_tableau<T>::height() const
 //: Returns the bounding box of the rendered image.
 template<typename T>
 bool
-vgui_vil2_image_tableau<T>::get_bounding_box( float low[3], float high[3] ) const
+vgui_vil_image_tableau<T>::get_bounding_box( float low[3], float high[3] ) const
 {
   low[0] = 0; high[0] = width();
   low[1] = 0; high[1] = height();
@@ -130,7 +130,7 @@ vgui_vil2_image_tableau<T>::get_bounding_box( float low[3], float high[3] ) cons
 //  this tableau.
 template<typename T>
 bool
-vgui_vil2_image_tableau<T>::handle( vgui_event const &e )
+vgui_vil_image_tableau<T>::handle( vgui_event const &e )
 {
   if ( e.type == vgui_DRAW )
   {
@@ -161,9 +161,9 @@ vgui_vil2_image_tableau<T>::handle( vgui_event const &e )
     return false;
 }
 
-#undef VGUI_VIL2_IMAGE_TABLEAU_INSTANTIATE
-#define VGUI_VIL2_IMAGE_TABLEAU_INSTANTIATE(T) \
+#undef VGUI_VIL_IMAGE_TABLEAU_INSTANTIATE
+#define VGUI_VIL_IMAGE_TABLEAU_INSTANTIATE(T) \
 namespace { const char* to_string<T >::name = "<##T##>"; } \
-template class vgui_vil2_image_tableau<T >
+template class vgui_vil_image_tableau<T >
 
-#endif // vgui_vil2_image_tableau_txx_
+#endif // vgui_vil_image_tableau_txx_

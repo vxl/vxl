@@ -1,6 +1,6 @@
-// This is core/vgui/vgui_vil2_section_buffer.h
-#ifndef vgui_vil2_section_buffer_h_
-#define vgui_vil2_section_buffer_h_
+// This is core/vgui/vgui_vil_section_buffer.h
+#ifndef vgui_vil_section_buffer_h_
+#define vgui_vil_section_buffer_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -41,10 +41,10 @@ class vgui_accelerate_cached_image;
 // Usually 'format'=GL_RGBA, 'type'=GL_UNSIGNED_BYTE works well.
 //
 // Since we aren't allowed member templates, we get from a
-// vil_image_view to a vgui_vil2_section_buffer the non-member
-// vgui_vil2_section_buffer_apply.
+// vil_image_view to a vgui_vil_section_buffer the non-member
+// vgui_vil_section_buffer_apply.
 //
-class vgui_vil2_section_buffer
+class vgui_vil_section_buffer
 {
   vgui_accelerate_cached_image* cache_;
 
@@ -68,12 +68,12 @@ class vgui_vil2_section_buffer
   bool conversion_okay_;
 
  public:
-  vgui_vil2_section_buffer(unsigned x, unsigned y,
+  vgui_vil_section_buffer(unsigned x, unsigned y,
                            unsigned w, unsigned h,
                            GLenum format_ = GL_NONE,
                            GLenum type_   = GL_NONE );
 
-  ~vgui_vil2_section_buffer();
+  ~vgui_vil_section_buffer();
 
   //: These methods take arguments in original image coordinates and return false on failure.
   // See .cxx file for more details.
@@ -94,29 +94,29 @@ class vgui_vil2_section_buffer
   // internals. Please don't use these interfaces.  (Are templated
   // friend declarations considered member templates?)
 
-  //: Only for use by vgui_vil2_section_buffer_apply
+  //: Only for use by vgui_vil_section_buffer_apply
   void* internal_buffer() { return buffer_; }
 
-  //: Only for use by vgui_vil2_section_buffer_apply
+  //: Only for use by vgui_vil_section_buffer_apply
   unsigned& internal_x() { return x_; }
 
-  //: Only for use by vgui_vil2_section_buffer_apply
+  //: Only for use by vgui_vil_section_buffer_apply
   unsigned& internal_y() { return y_; }
 
-  //: Only for use by vgui_vil2_section_buffer_apply
+  //: Only for use by vgui_vil_section_buffer_apply
   unsigned& internal_allocw() { return allocw_; }
 
-  //: Only for use by vgui_vil2_section_buffer_apply
+  //: Only for use by vgui_vil_section_buffer_apply
   unsigned& internal_alloch() { return alloch_; }
 
-  //: Only for use by vgui_vil2_section_buffer_apply
+  //: Only for use by vgui_vil_section_buffer_apply
   bool& internal_conversion_okay() { return conversion_okay_; }
 
-  //: Only for use by vgui_vil2_section_buffer_apply
+  //: Only for use by vgui_vil_section_buffer_apply
   GLenum& internal_format() { return format_; }
 
-  //: Only for use by vgui_vil2_section_buffer_apply
+  //: Only for use by vgui_vil_section_buffer_apply
   GLenum& internal_type() { return type_; }
 };
 
-#endif // vgui_vil2_section_buffer_h_
+#endif // vgui_vil_section_buffer_h_

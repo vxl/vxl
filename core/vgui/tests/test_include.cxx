@@ -113,11 +113,11 @@
 #include <vgui/vgui_viewer2D_tableau_sptr.h>
 #include <vgui/vgui_viewer3D_tableau.h>
 #include <vgui/vgui_viewer3D_tableau_sptr.h>
-#include <vgui/vgui_vil2_image_renderer.h>
-#include <vgui/vgui_vil2_image_tableau.h>
-#include <vgui/vgui_vil2_image_tableau_sptr.h>
-#include <vgui/vgui_vil2_section_buffer.h>
-#include <vgui/vgui_vil2_section_buffer_apply.h>
+#include <vgui/vgui_vil_image_renderer.h>
+#include <vgui/vgui_vil_image_tableau.h>
+#include <vgui/vgui_vil_image_tableau_sptr.h>
+#include <vgui/vgui_vil_section_buffer.h>
+#include <vgui/vgui_vil_section_buffer_apply.h>
 #include <vgui/vgui_window.h>
 #include <vgui/vgui_wrapper_tableau.h>
 #include <vgui/vgui_wrapper_tableau_sptr.h>

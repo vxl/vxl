@@ -93,10 +93,10 @@ SET(vgui_sources
   vgui_blender_tableau.cxx      vgui_blender_tableau.h    vgui_blender_tableau_sptr.h
 
   # vil support
-  vgui_vil2_image_tableau.txx         vgui_vil2_image_tableau.h         vgui_vil2_image_tableau_sptr.h
-  vgui_vil2_image_renderer.txx        vgui_vil2_image_renderer.h
-  vgui_vil2_section_buffer.cxx        vgui_vil2_section_buffer.h
-  vgui_vil2_section_buffer_apply.txx  vgui_vil2_section_buffer_apply.h
+  vgui_vil_image_tableau.txx         vgui_vil_image_tableau.h         vgui_vil_image_tableau_sptr.h
+  vgui_vil_image_renderer.txx        vgui_vil_image_renderer.h
+  vgui_vil_section_buffer.cxx        vgui_vil_section_buffer.h
+  vgui_vil_section_buffer_apply.txx  vgui_vil_section_buffer_apply.h
 
   # tableau mixins and miscellaneous
   vgui_wrapper_tableau.cxx      vgui_wrapper_tableau.h    vgui_wrapper_tableau_sptr.h

@@ -1,6 +1,6 @@
-// This is core/vgui/vgui_vil2_image_renderer.h
-#ifndef vgui_vil2_image_renderer_h_
-#define vgui_vil2_image_renderer_h_
+// This is core/vgui/vgui_vil_image_renderer.h
+#ifndef vgui_vil_image_renderer_h_
+#define vgui_vil_image_renderer_h_
 //:
 // \file
 // \brief OpenGL utility to render a vil_image_view.
@@ -9,7 +9,7 @@
 // Cut-n-paste and modify from vil1_image_renderer.
 
 #include <vil/vil_image_view.h>
-class vgui_vil2_section_buffer;
+class vgui_vil_section_buffer;
 
 //: OpenGL utility to render a vil_image_view.
 //
@@ -33,17 +33,17 @@ class vgui_vil2_section_buffer;
 //  to mark all previous sections as invalid.
 //
 template<typename T>
-class vgui_vil2_image_renderer
+class vgui_vil_image_renderer
 {
   vil_image_view<T> the_image_;
-  vgui_vil2_section_buffer* buffer_;
+  vgui_vil_section_buffer* buffer_;
 
  public:
   //: Constructor - create an empty image renderer.
-  vgui_vil2_image_renderer();
+  vgui_vil_image_renderer();
 
   //: Destructor - delete image buffer.
-  ~vgui_vil2_image_renderer();
+  ~vgui_vil_image_renderer();
 
   //: Attach the renderer to a new vil_image_view.
   void set_image(vil_image_view<T> const &);
@@ -58,4 +58,4 @@ class vgui_vil2_image_renderer
   void render();
 };
 
-#endif // vgui_vil2_image_renderer_h_
+#endif // vgui_vil_image_renderer_h_

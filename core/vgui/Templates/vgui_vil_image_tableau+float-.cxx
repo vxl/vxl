@@ -1,2 +1,2 @@
-#include <vgui/vgui_vil2_image_tableau.txx>
-VGUI_VIL2_IMAGE_TABLEAU_INSTANTIATE(float);
+#include <vgui/vgui_vil_image_tableau.txx>
+VGUI_VIL_IMAGE_TABLEAU_INSTANTIATE(float);

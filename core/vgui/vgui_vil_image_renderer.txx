@@ -1,21 +1,21 @@
-// This is core/vgui/vgui_vil2_image_renderer.txx
-#ifndef vgui_vil2_image_renderer_txx_
-#define vgui_vil2_image_renderer_txx_
+// This is core/vgui/vgui_vil_image_renderer.txx
+#ifndef vgui_vil_image_renderer_txx_
+#define vgui_vil_image_renderer_txx_
 //:
 // \file
 // \author Amitha Perera
-// \brief  See vgui_vil2_image_renderer.h for a description of this file.
+// \brief  See vgui_vil_image_renderer.h for a description of this file.
 //
 // Cut-n-paste and modify from vil1_image_renderer.cxx
 
-#include "vgui_vil2_image_renderer.h"
+#include "vgui_vil_image_renderer.h"
 
 #include <vcl_iostream.h>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_macro.h>
-#include <vgui/vgui_vil2_section_buffer.h>
-#include <vgui/vgui_vil2_section_buffer_apply.h>
+#include <vgui/vgui_vil_section_buffer.h>
+#include <vgui/vgui_vil_section_buffer_apply.h>
 #include <vgui/vgui_projection_inspector.h>
 
 // Only check-in false:
@@ -26,7 +26,7 @@ static const bool debug = false;
 //-----------------------------------------------------------------------------
 //: Constructor - create an empty image renderer.
 template<typename T>
-vgui_vil2_image_renderer<T>::vgui_vil2_image_renderer()
+vgui_vil_image_renderer<T>::vgui_vil_image_renderer()
   : buffer_(0)
 {
 }
@@ -34,7 +34,7 @@ vgui_vil2_image_renderer<T>::vgui_vil2_image_renderer()
 //-----------------------------------------------------------------------------
 //: Destructor - delete image buffer.
 template<typename T>
-vgui_vil2_image_renderer<T>::~vgui_vil2_image_renderer() 
+vgui_vil_image_renderer<T>::~vgui_vil_image_renderer() 
 {
   delete buffer_;
 }
@@ -43,7 +43,7 @@ vgui_vil2_image_renderer<T>::~vgui_vil2_image_renderer()
 //: Attach the renderer to a new vil1_image.
 template<typename T>
 void
-vgui_vil2_image_renderer<T>::set_image( vil_image_view<T> const &image )
+vgui_vil_image_renderer<T>::set_image( vil_image_view<T> const &image )
 {
   if ( image == the_image_ )
     return; // same image -- do nothing.
@@ -62,7 +62,7 @@ vgui_vil2_image_renderer<T>::set_image( vil_image_view<T> const &image )
 //: Tell the image renderer that the image has been changed, and should be re-read.
 template<typename T>
 void
-vgui_vil2_image_renderer<T>::reread_image()
+vgui_vil_image_renderer<T>::reread_image()
 {
   delete buffer_;
   buffer_ = 0;
@@ -72,7 +72,7 @@ vgui_vil2_image_renderer<T>::reread_image()
 // draw the image :
 template<typename T>
 void
-vgui_vil2_image_renderer<T>::render()
+vgui_vil_image_renderer<T>::render()
 {
   if ( !the_image_ )
     return;
@@ -81,13 +81,13 @@ vgui_vil2_image_renderer<T>::render()
   // buffer to decide on a cache format which depends on the current GL
   // rendering context.
   if ( !buffer_ ) {
-    buffer_ = new vgui_vil2_section_buffer(0, 0,
+    buffer_ = new vgui_vil_section_buffer(0, 0,
                                            the_image_.ni(), the_image_.nj(),
                                            GL_NONE, GL_NONE );
-    vgui_vil2_section_buffer_apply( *buffer_, the_image_ );
+    vgui_vil_section_buffer_apply( *buffer_, the_image_ );
   }
 
   buffer_->draw_as_image() || buffer_->draw_as_rectangle();
 }
 
-#endif // vgui_vil2_image_renderer_txx_
+#endif // vgui_vil_image_renderer_txx_

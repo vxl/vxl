@@ -1,15 +1,15 @@
-// This is core/vgui/vgui_vil2_section_buffer.cxx
+// This is core/vgui/vgui_vil_section_buffer.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //:
 // \file
 // \author Amitha Perera
-// \brief  See vgui_vil2_section_buffer.h for a description of this file.
+// \brief  See vgui_vil_section_buffer.h for a description of this file.
 //
 // cut-n-paste and modify from vgui_section_buffer.cxx
 
-#include "vgui_vil2_section_buffer.h"
+#include "vgui_vil_section_buffer.h"
 
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
@@ -27,8 +27,8 @@
 //
 // Determine the size of the buffer and allocate it.
 //
-vgui_vil2_section_buffer::
-vgui_vil2_section_buffer( unsigned x, unsigned y,
+vgui_vil_section_buffer::
+vgui_vil_section_buffer( unsigned x, unsigned y,
                           unsigned w, unsigned h,
                           GLenum format,
                           GLenum type )
@@ -77,8 +77,8 @@ vgui_vil2_section_buffer( unsigned x, unsigned y,
 
 //: Destructor.
 
-vgui_vil2_section_buffer::
-~vgui_vil2_section_buffer()
+vgui_vil_section_buffer::
+~vgui_vil_section_buffer()
 {
 #define Code( BufferType ) \
       delete[] (BufferType*)buffer_;
@@ -96,7 +96,7 @@ vgui_vil2_section_buffer::
 
 //: just draw the outline of the given region.
 bool
-vgui_vil2_section_buffer::
+vgui_vil_section_buffer::
 draw_as_rectangle(float x0, float y0,  float x1, float y1) const
 {
   glColor3i(0, 1, 0); // is green good for everyone?
@@ -112,7 +112,7 @@ draw_as_rectangle(float x0, float y0,  float x1, float y1) const
 
 //: draw the given region using glDrawPixels(), possibly accelerated.
 bool
-vgui_vil2_section_buffer::
+vgui_vil_section_buffer::
 draw_as_image(float x0, float y0,  float x1, float y1) const
 {
   if ( !conversion_okay_ ) {

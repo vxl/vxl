@@ -1,12 +1,12 @@
-// This is core/vgui/vgui_vil2_section_buffer_apply.txx
-#ifndef vgui_vil2_section_buffer_apply_txx_
-#define vgui_vil2_section_buffer_apply_txx_
+// This is core/vgui/vgui_vil_section_buffer_apply.txx
+#ifndef vgui_vil_section_buffer_apply_txx_
+#define vgui_vil_section_buffer_apply_txx_
 //:
 // \file
 // \author Amitha Perera
 
-#include "vgui_vil2_section_buffer_apply.h"
-#include "vgui_vil2_section_buffer.h"
+#include "vgui_vil_section_buffer_apply.h"
+#include "vgui_vil_section_buffer.h"
 #include "internals/vgui_gl_selection_macros.h"
 
 #include <vcl_cassert.h>
@@ -20,7 +20,7 @@ namespace
   //
   // This handles multi-plane images with scalar-valued pixels.
   //
-  // This is a helper routine for vgui_vil2_section_buffer_apply
+  // This is a helper routine for vgui_vil_section_buffer_apply
   //
   template<typename InT, typename OutT>
   bool
@@ -67,7 +67,7 @@ namespace
 
 template<typename T>
 void
-vgui_vil2_section_buffer_apply( vgui_vil2_section_buffer& sec_buf,
+vgui_vil_section_buffer_apply( vgui_vil_section_buffer& sec_buf,
                                 vil_image_view<T> const& image_in )
 {
   unsigned x = sec_buf.internal_x();
@@ -103,16 +103,16 @@ vgui_vil2_section_buffer_apply( vgui_vil2_section_buffer& sec_buf,
 // VC6 Release version has problem with this tickler function.
 // For VC6, the solution is to instantiate it explicitly.
 #if VCL_VC60
-#define INSTANTIATE_VGUI_VIL2_SECTION_BUFFER( T ) \
+#define INSTANTIATE_VGUI_VIL_SECTION_BUFFER( T ) \
   template void                                   \
-  vgui_vil2_section_buffer_apply( vgui_vil2_section_buffer& sec_buf, \
+  vgui_vil_section_buffer_apply( vgui_vil_section_buffer& sec_buf, \
                                   vil_image_view<T > const& image_in)
 
 #else
-#define INSTANTIATE_VGUI_VIL2_SECTION_BUFFER( T ) \
-  void vgui_vil2_section_buffer_tickler( vgui_vil2_section_buffer& sec_buf, vil_image_view<T >& view ) \
+#define INSTANTIATE_VGUI_VIL_SECTION_BUFFER( T ) \
+  void vgui_vil_section_buffer_tickler( vgui_vil_section_buffer& sec_buf, vil_image_view<T >& view ) \
   { \
-    vgui_vil2_section_buffer_apply( sec_buf, view ); \
+    vgui_vil_section_buffer_apply( sec_buf, view ); \
   }
 #endif
-#endif // vgui_vil2_section_buffer_apply_txx_
+#endif // vgui_vil_section_buffer_apply_txx_

@@ -1,6 +1,6 @@
-// This is core/vgui/vgui_vil2_image_tableau.h
-#ifndef vgui_vil2_image_tableau_h_
-#define vgui_vil2_image_tableau_h_
+// This is core/vgui/vgui_vil_image_tableau.h
+#ifndef vgui_vil_image_tableau_h_
+#define vgui_vil_image_tableau_h_
 
 //:
 // \file
@@ -11,24 +11,24 @@
 //
 
 #include <vgui/vgui_tableau.h>
-#include <vgui/vgui_vil2_image_tableau_sptr.h>
+#include <vgui/vgui_vil_image_tableau_sptr.h>
 
 template<class T>
-class vgui_vil2_image_renderer;
+class vgui_vil_image_renderer;
 
 #include <vil/vil_fwd.h>
 
-//: Captures the non-templated functionality of vgui_vil2_image_tableau.
+//: Captures the non-templated functionality of vgui_vil_image_tableau.
 //
 // This is useful to deal with the tableau without worrying about the
 // type of image displayed by the tableau. Typically, you will search
-// the tableau hierarchy for "vgui_vil2_image_tableau" and vertical
-// cast the resulting pointer to a "vgui_vil2_image_tableau_base".
+// the tableau hierarchy for "vgui_vil_image_tableau" and vertical
+// cast the resulting pointer to a "vgui_vil_image_tableau_base".
 //
-class vgui_vil2_image_tableau_base : public vgui_tableau
+class vgui_vil_image_tableau_base : public vgui_tableau
 {
 public:
-  //: Returns the type of this tableau ('vgui_vil2_image_tableau').
+  //: Returns the type of this tableau ('vgui_vil_image_tableau').
   virtual vcl_string type_name() const = 0;
 
   //: Returns a nice version of the name, including details of the image type.
@@ -53,21 +53,21 @@ public:
   //  this tableau.
   virtual bool handle( vgui_event const &e ) = 0;
 
-  virtual ~vgui_vil2_image_tableau_base() { };
+  virtual ~vgui_vil_image_tableau_base() { };
 };
 
 
 template<typename T>
-struct vgui_vil2_image_tableau_new;
+struct vgui_vil_image_tableau_new;
 
 //: Tableau which renders the given image view using an image_renderer.
 //
-// Use vgui_vil2_image_tableau_new to construct objects of this class.
+// Use vgui_vil_image_tableau_new to construct objects of this class.
 template<typename T>
-class vgui_vil2_image_tableau : public vgui_vil2_image_tableau_base
+class vgui_vil_image_tableau : public vgui_vil_image_tableau_base
 {
 public:
-  //: Returns the type of this tableau ('vgui_vil2_image_tableau').
+  //: Returns the type of this tableau ('vgui_vil_image_tableau').
   //
   // The image type name is *not* encoded, because encoding it means
   // that you will generally be unable to find this tableau in the
@@ -104,32 +104,32 @@ public:
   bool handle( vgui_event const &e );
 
  protected:
-  //: Destructor - called by vgui_vil2_image_tableau_sptr.
-  ~vgui_vil2_image_tableau();
+  //: Destructor - called by vgui_vil_image_tableau_sptr.
+  ~vgui_vil_image_tableau();
 
 private:
-  vgui_vil2_image_tableau();
+  vgui_vil_image_tableau();
 
-  vgui_vil2_image_tableau( vil_image_view<T> const &img );
+  vgui_vil_image_tableau( vil_image_view<T> const &img );
 
-  friend struct vgui_vil2_image_tableau_new<T>;
+  friend struct vgui_vil_image_tableau_new<T>;
 
 private:
   bool pixels_centered_;
-  vgui_vil2_image_renderer<T>* renderer_;
+  vgui_vil_image_renderer<T>* renderer_;
 };
 
-//: Creates a smart-pointer to a vgui_vil2_image_tableau.
+//: Creates a smart-pointer to a vgui_vil_image_tableau.
 template<typename T>
-struct vgui_vil2_image_tableau_new : public vgui_vil2_image_tableau_sptr<T> {
+struct vgui_vil_image_tableau_new : public vgui_vil_image_tableau_sptr<T> {
 
   //: Constructor - creates an empty image tableau.
-  vgui_vil2_image_tableau_new()
-    : vgui_vil2_image_tableau_sptr<T>( new vgui_vil2_image_tableau<T> ) { }
+  vgui_vil_image_tableau_new()
+    : vgui_vil_image_tableau_sptr<T>( new vgui_vil_image_tableau<T> ) { }
 
   //: Constructor - creates a tableau displaying the given image.
-  vgui_vil2_image_tableau_new( vil_image_view<T> const &t )
-    : vgui_vil2_image_tableau_sptr<T>( new vgui_vil2_image_tableau<T>(t) ) { }
+  vgui_vil_image_tableau_new( vil_image_view<T> const &t )
+    : vgui_vil_image_tableau_sptr<T>( new vgui_vil_image_tableau<T>(t) ) { }
 };
 
-#endif // vgui_vil2_image_tableau_h_
+#endif // vgui_vil_image_tableau_h_
