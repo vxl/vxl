@@ -17,16 +17,18 @@ SET(vsrl_sources
  vsrl_token.cxx                 vsrl_token.h
  vsrl_token_saliency.cxx        vsrl_token_saliency.h
  vsrl_window_accumulator.cxx    vsrl_window_accumulator.h
- vsrl_manager.h
- vsrl_menus.h
- vsrl_point_picker.h
+ vsrl_manager.cxx               vsrl_manager.h
+ vsrl_point_picker.cxx          vsrl_point_picker.h
  vsrl_point_picker_sptr.h
+ vsrl_menus.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates vsrl_sources)
+INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(${TBL_INCLUDE_DIR})
 
 ADD_LIBRARY(vsrl ${vsrl_sources})
-TARGET_LINK_LIBRARIES(vsrl vil vnl)
+TARGET_LINK_LIBRARIES(vsrl sdet vtol vdgl vgui vepl vgl vil vnl)
 
 IF (BUILD_EXAMPLES)
   SUBDIRS(examples)
