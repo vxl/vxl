@@ -73,7 +73,7 @@ bool vgl_clip_line_to_box(T a, T b, T c, // line coefficients.
     bx = x1; by = -(a*x1+c)/b;
     b_set =  by >= y1 && by <= y2;
     if (b_set && e_set) return true;
-    if (b_set) { vcl_swap(bx,ex); vcl_swap(by,ey); vcl_swap(b_set,e_set); }
+    if (b_set) { vcl_swap(bx,ex); vcl_swap(by,ey); e_set=true; }
 
     // Intersection point with the line x=x2:
     bx = x2; by = -(a*x2+c)/b;
