@@ -26,9 +26,13 @@
 bool vil_save(vil_image i, char const* filename, char const* file_format)
 {
   vil_stream_fstream* os = new vil_stream_fstream(filename, "w");
+  if (!os->ok()) {
+    vcl_cerr << __FILE__ ": Invalid stream for \"" << filename << "\"" << vcl_endl;
+    return false;
+  }
   vil_image out = vil_new(os, i.width(), i.height(), i, file_format);
   if (!out) {
-    vcl_cerr << "vil_save: Cannot save to type [" << file_format << "]\n";
+    vcl_cerr << __FILE__ ": (vil_save) Cannot save to type [" << file_format << "]\n";
     return false;
   }
   bool top_first;
@@ -55,7 +59,7 @@ bool vil_save_raw(vil_image const& i, vil_stream* os, char const* file_format)
   vil_image out = vil_new(os, i.width(), i.height(), i, file_format);
 
   if (!out) {
-    vcl_cerr << "vil_save_raw: Cannot save to type [" << file_format << "]\n";
+    vcl_cerr << __FILE__ ": (vil_save_raw) Cannot save to type [" << file_format << "]\n";
     return false;
   }
 
