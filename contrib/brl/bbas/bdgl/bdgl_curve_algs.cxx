@@ -346,32 +346,32 @@ bdgl_curve_algs::match_intersection(vdgl_digital_curve_sptr const& dc,
   if (!bdgl_curve_algs::intersect_line(dc, line, indices))
     return false;
   vgl_homg_point_2d<double> rph(ref_point.x(), ref_point.y());
-  double dist = 1e10, best_ind = 0, best_delt=0;
+  double dist = 1e10;
   bool found_valid_intersection = false;
   for (vcl_vector<double>::iterator iit = indices.begin();
        iit != indices.end(); iit++)
+  {
+    double grad_angle = dc->get_theta(*iit);
+    if (vcl_fabs(ref_gradient_angle-grad_angle)>angle_tol)
+      continue;
+    double ca = dc->get_tangent_angle(*iit);
+    if (ca<0)
+      ca+=180;
+    double delt = vcl_fabs(180*vcl_sin(vcl_fabs(vnl_math::pi*(ca-la)/180.0))/vnl_math::pi);
+    if (delt<angle_thresh)
+      continue;
+    vgl_homg_point_2d<double> ph(dc->get_x(*iit), dc->get_y(*iit));
+    double d = vgl_homg_operators_2d<double>::distance_squared(rph, ph);
+    d = vcl_sqrt(d);
+    found_valid_intersection = true;
+    if (d<dist)
     {
-      double grad_angle = dc->get_theta(*iit);
-      if (vcl_fabs(ref_gradient_angle-grad_angle)>angle_tol)
-        continue;
-      double ca = dc->get_tangent_angle(*iit);
-      if (ca<0)
-        ca+=180;
-      double delt = vcl_fabs(180*vcl_sin(vcl_fabs(vnl_math::pi*(ca-la)/180.0))/vnl_math::pi);
-      if (delt<angle_thresh)
-        continue;
-      vgl_homg_point_2d<double> ph(dc->get_x(*iit), dc->get_y(*iit));
-      double d = vgl_homg_operators_2d<double>::distance_squared(rph, ph);
-      d = vcl_sqrt(d);
-      found_valid_intersection = true;
-      if (d<dist)
-      {
-        best_delt = delt;
-        best_ind = *iit;
-        dist = d;
-        point = vgl_point_2d<double>(dc->get_x(*iit), dc->get_y(*iit));
-      }
+      //double best_delt = delt;
+      //double best_ind = *iit;
+      dist = d;
+      point = vgl_point_2d<double>(dc->get_x(*iit), dc->get_y(*iit));
     }
+  }
   return found_valid_intersection;
 }
 
