@@ -100,3 +100,8 @@ contrib/brl/bseg segv   segv_   build contrib/brl/bseg/sdet contrib/brl/bbas/bgu
 contrib/brl/bseg vpro   vpro_   build contrib/brl/bseg/sdet core/vidl
 contrib/brl      vvid   vvid_   build contrib/brl/bbas/bgui contrib/brl/bseg/sdet contrib/brl/bseg/vpro 
 
+package: :pserver:anonymous@cvs.sourceforge.net:/cvsroot/vxl contrib/oul Otago University libraries
+contrib/brl/ouel ouel   ouel_   build core/vnl
+contrib/brl/oufgl oufgl oufgl_  build core/vil1
+contrib/brl/ouml ouml   ouml_   build core/vil1 core/vpl
+
