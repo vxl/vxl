@@ -34,13 +34,14 @@ class mvl2_image_format_plugin : public vil_image_resource_plugin
   virtual vcl_string is_a() const;
 
   //: Attempt to load image from named file.
-  // \param filetype  String hinting at what image format is
+  // \param filetype  String hinting at what image format is (currently unused)
   // \param colour define whether to load images as colour or grey-scale
   //        Options are '' (ie rely on image), 'Grey' or 'RGB'
   //!ret: true if successful
   virtual bool load_the_image (vil_image_view_base_sptr& image,
-                               const vcl_string & path, const vcl_string & filetype,
-                               const vcl_string & colour);
+                               vcl_string const& path,
+                               vcl_string const& filetype="",
+                               vcl_string const& colour="");
 
   //: Check whether a filename is a potential candidate for loading and if it is available.
   virtual bool can_be_loaded(const vcl_string& filename);
