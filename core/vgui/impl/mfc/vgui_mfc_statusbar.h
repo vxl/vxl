@@ -30,15 +30,21 @@
 class vgui_mfc_statusbar : public vgui_statusbar {
 public:
   
-  // Constructors/Destructors--------------------------------------------------
-  
+  //: Constructor, creates an MFC status bar object and displays it.
   vgui_mfc_statusbar();
+  //: Destructor.
  ~vgui_mfc_statusbar();
 
+  //: Append given text (of given length) to the status bar
   int write(const char* text, int n);
+  //: Append given text (of given length) to the status bar
   int write(const char* text);
+  //: Updates the status bar by calling OnUpdateStatusBar of vgui_mfc_mainfrm
   void update();
+
+  //: MFC status bar object
   CStatusBar *statusbar;
+  //: Text displayed on the statusbar
   vcl_string linebuffer;
   vgui_statusbuf* statusbuf;
   vcl_ostream out;  
