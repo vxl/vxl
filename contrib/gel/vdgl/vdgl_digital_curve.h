@@ -18,7 +18,7 @@
 
 #include <vdgl/vdgl_digital_curve_sptr.h>
 #include <vsol/vsol_curve_2d.h>
-#include <vsol/vsol_point_2d_sptr.h>
+#include <vsol/vsol_point_2d.h>
 #include <vdgl/vdgl_interpolator_sptr.h>
 
 class vdgl_digital_curve : public vsol_curve_2d
@@ -27,7 +27,7 @@ class vdgl_digital_curve : public vsol_curve_2d
 
   // Constructors/Destructors--------------------------------------------------
   vdgl_digital_curve( vdgl_interpolator_sptr interpolator);
-  vdgl_digital_curve(vsol_point_2d_sptr& p0, vsol_point_2d_sptr& p1);
+  vdgl_digital_curve(vsol_point_2d& p0, vsol_point_2d& p1);
   // Operators----------------------------------------------------------------
 
   // these must be defined as they are virtual in vsol_curve_2d
