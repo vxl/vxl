@@ -344,7 +344,7 @@ inverse object:
 @example
 #include <vnl/algo/vnl_matrix_inverse.h>
 main() @{
-  vcl_cerr << vnl_matrix_inverse(A) * B;
+  vcl_cerr << vnl_matrix_inverse<double>(A) * B;
 @}
 @end example
 
