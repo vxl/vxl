@@ -20,8 +20,9 @@ template <class Type>
 bool vgl_homg_point_3d<Type>::operator==(const vgl_homg_point_3d<Type> &other) const
 {
   return (this==&other) ||
-         (   (this->x()==other.x()) && (this->y()==other.y())
-          && (this->z()==other.z()) && (this->w()==other.w()));
+         (   this->x()*other.w() == this->w()*other.x()
+          && this->y()*other.w() == this->w()*other.y()
+          && this->z()*other.w() == this->w()*other.z());
 }
 
 #define VGL_HOMG_POINT_3D_INSTANTIATE(T) \
