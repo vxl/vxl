@@ -96,3 +96,26 @@ vgl_point_2d<double> brct_algos::closest_point(vdgl_digital_curve_sptr dc, vgl_p
 
   return (*ec)[i].get_pt();
 }
+
+
+vnl_double_2 brct_algos::projection_3d_point(const vnl_double_3x4 &P, const vnl_double_3 &X)
+{
+    vnl_double_2 z;
+    double t1 = 0;
+    for (int k=0; k<3; k++)
+      t1 += P[2][k]*X[k];
+    t1 += P[2][3];
+
+    for (int i=0; i<2; i++)
+    {
+      double t0 =0;
+      for (int k=0; k<3; k++)
+        t0 += P[i][k]*X[k];
+      t0 += P[i][3];
+
+      z[i] = t0/t1;
+    }
+
+    return z;
+}
+
