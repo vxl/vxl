@@ -12,14 +12,14 @@ struct vnl_rosenbrock : vnl_least_squares_function
 {
   vnl_rosenbrock(bool with_grad): vnl_least_squares_function(2, 2, with_grad ? use_gradient : no_gradient) {}
   
-  void f(vnl_vector<double> const &x, vnl_vector<double> &y) {
+  void f(vnl_vector<double> const& x, vnl_vector<double>& y) {
     //vnl_test_assert("size of x", x.size() == 2);
     //vnl_test_assert("size of y", y.size() == 2);
     y[0] = 10*(x[1] - x[0]*x[0]);
     y[1] = 1 - x[0];
   }
   
-  void gradf(vnl_vector<double> const &x, vnl_matrix<double> &J) {
+  void gradf(vnl_vector<double> const& x, vnl_matrix<double> &J) {
     //vnl_test_assert("size of x", x.size() == 2);
     //vnl_test_assert("size of J", J.rows() == 2 && J.cols() == 2);
     J[0][0] = -20 * x[0]; J[0][1] = 10;
