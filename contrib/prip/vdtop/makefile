@@ -15,7 +15,6 @@ MANPAGE_SOURCES += vdtop_8_upper_homotopic_kernel.h
 MANPAGE_SOURCES += vdtop_8_upper_leveling_kernel.h
 MANPAGE_SOURCES += vdtop_construct_well_composed.h
 MANPAGE_SOURCES += vdtop_draw_digital_graph.h
-MANPAGE_SOURCES += vdtop_image_view.h
 MANPAGE_SOURCES += vdtop_kernel.h
 MANPAGE_SOURCES += vdtop_misc.txx
 MANPAGE_SOURCES += vdtop_neighborhood.h
