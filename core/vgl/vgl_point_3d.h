@@ -204,7 +204,9 @@ template <class Type> inline
 vgl_point_3d<Type> midpoint(vgl_point_3d<Type> const& p1,
                             vgl_point_3d<Type> const& p2,
                             Type f = 0.5) {
-  return p1 + f*(p2-p1);
+  return vgl_point_3d<Type>((1.0-f)*p1.x() + f*p2.x(),
+                            (1.0-f)*p1.y() + f*p2.y(),
+                            (1.0-f)*p1.z() + f*p2.z());
 }
 
 
