@@ -558,8 +558,10 @@ bool
 ConfirmJunctionOnCycle(int index, float threshold,
                        vtol_edge_2d& cycle, const gevd_bufferxy& edgels)
 {
+  vcl_cerr << "ConfirmJunctionOnCycle() returning 'TRUE'\n";
   return true;//JLM
-  vdgl_digital_curve_sptr dc =(cycle.curve()->cast_to_digital_curve());
+
+  vdgl_digital_curve_sptr dc = cycle.curve()->cast_to_digital_curve();
   const int len = dc->get_interpolator()->get_edgel_chain()->size();
   const int wrap = 10*len;      // for positive index
   const int radius = 3;         // gap < 3, around junction pixel
@@ -635,12 +637,14 @@ bool
 ConfirmJunctionOnChain(int index, float threshold,
                        vtol_edge_2d& chain, const gevd_bufferxy& edgels)
 {
+  vcl_cerr << "ConfirmJunctionOnChain() returning 'TRUE'\n";
   return true; //JLM
+
   vdgl_digital_curve_sptr dc = chain.curve()->cast_to_digital_curve();
   const int len = dc->get_interpolator()->get_edgel_chain()->size()-1;
 
   if (len < 2*MINLENGTH-1) // will merge vertices instead of
-    return false;               // breaking up chains
+    return false;          // breaking up chains
 
   const int fuzz = MINLENGTH-1; // from min length of broken chains
   const int radius = 3;         // gap < 3, around junction pixel
@@ -655,7 +659,7 @@ ConfirmJunctionOnChain(int index, float threshold,
       //if there is a location where the difference is above
       // a threshold then the junction can be formed.
       if (vcl_fabs(floatPixel(edgels, int(cp1.x()), int(cp1.y())) -
-                   floatPixel(edgels, int(cp1.x()), int(cm1.y())))
+                   floatPixel(edgels, int(cm1.x()), int(cm1.y())))
           > threshold)
         {
           return true;
@@ -961,7 +965,9 @@ LoopChain(vtol_vertex_2d& junction, const int index,
 int
 NumConnectedRays(vtol_vertex_2d& v)
 {
+  vcl_cerr << "NumConnectedRays() returning 0\n";
   return 0; //JLM prevents seg faults
+
   int nray = 0;
   vcl_vector<vtol_edge_sptr>* segs = v.edges();
   for ( unsigned int i=0; i< segs->size(); i++)
@@ -1206,7 +1212,6 @@ sdet_contour::FindJunctions(gevd_bufferxy& edgels,
             }
 
           edge->set_v1(v1->cast_to_vertex());         // link both directions v-e
-          int junk = v1->numsup();
           _test_verts.push_back(new vtol_vertex_2d(x, y));
 #if 0
           vcl_cout << "adding vertex (" << x << " " << y << ")\n";
