@@ -3,6 +3,7 @@
 *.dsp           -crlf
 *.dsw           -crlf
 *.pl             crlf=input
+configure        crlf=input
 time_fastops.mk  crlf=input
 vxl_demangle     crlf=input
 vxl_env          crlf=input
