@@ -191,7 +191,7 @@ static double scale_xyroot2(const vcl_vector<HomgPoint2D>& in,
     }
     if (numfinite > 0) magnitude /= numfinite;
     const double expected = sqrt(2.0);
-    if (vnl_math_abs(expected - magnitude) > 1e-14)
+    if (vnl_math_abs(expected - magnitude) > 1e-13) // 1e-14 gave false alarm -- fsm
       vcl_cerr << "HomgNorm2D: Expected magnitude " << expected << " computed magnitude " << magnitude << vcl_endl;
   }
 
