@@ -3,11 +3,16 @@
 #pragma implementation
 #endif
 //
-// .NAME vgui_mfc
-// Author: awf@robots.ox.ac.uk
-// Created: July 2000
+// This is vgui/impl/mfc/vgui_mfc.cxx
+// See vgui_mfc.h for a description of this file.
 //
-//
+// \author awf@robots.ox.ac.uk
+// \date   July 2000
+// \verbatim
+//  Modifications:
+//    K.Y.McGaul  29-AUG-2001  Add destructor to remove Purify mem leak.
+//                             Tidy up indentation and documentation.
+// \endverbatim
 //-----------------------------------------------------------------------------
 
 #include "vgui_mfc.h"
@@ -43,33 +48,39 @@ vgui_mfc* vgui_mfc::instance() {
 //: Default constructor
 vgui_mfc::vgui_mfc()
 {
-        utils = vgui_mfc_utils::instance();
+  utils = vgui_mfc_utils::instance();
+}
+
+//: Destructor
+vgui_mfc::~vgui_mfc()
+{
+  for (int i=0; i<windows_to_delete.size(); i++)
+    delete windows_to_delete[i];
 }
 
 //--------------------------------------------------------------------------------
-//: Pure virtual function from vgui (this must be implemented).  Returns the
-// name of the GUI toolkit.
+//: Pure virtual function from vgui - returns the name of the GUI toolkit.
 vcl_string vgui_mfc::name() const { return "mfc"; }
 
 
 //--------------------------------------------------------------------------------
-//: Virtual function from vgui.  Initialise the implementation of vgui.
+//: Virtual function from vgui - initialise the implementation of vgui.
 void vgui_mfc::init(int &argc, char **argv) {
   if (debug) vcl_cerr << "vgui_mfc::init()" << vcl_endl;
 
-        //: Initialise MFC foundation classes
-        if (!AfxWinInit(::GetModuleHandle(NULL), NULL, ::GetCommandLine(), SW_SHOW))
-        {
-                // TODO: change error code to suit your needs
-                vcl_cerr << _T("Fatal Error: MFC initialization failed") << vcl_endl;
-                assert(0);
-        }
-        AfxGetApp()->InitInstance();
+  //: Initialise MFC foundation classes
+  if (!AfxWinInit(::GetModuleHandle(NULL), NULL, ::GetCommandLine(), SW_SHOW))
+  {
+    // TODO: change error code to suit your needs
+    vcl_cerr << _T("Fatal Error: MFC initialization failed") << vcl_endl;
+    assert(0);
+  }
+  AfxGetApp()->InitInstance();
 }
 
 
 //--------------------------------------------------------------------------------
-//: Virtual function from vgui.   Runs the event loop.
+//: Virtual function from vgui - runs the event loop.
 void vgui_mfc::run() {
   if (debug) vcl_cerr << "vgui_mfc::run()" << vcl_endl;
 
@@ -122,25 +133,29 @@ void vgui_mfc::add_event(const vgui_event& event) {
 
 
 //--------------------------------------------------------------------------------
-//: Virtual function from vgui.  Creates a new window with a menubar.
+//: Virtual function from vgui - creates a new window with a menubar.
 vgui_window* vgui_mfc::produce_window(int width, int height, const vgui_menu& menubar,
                                            const char* title) {
-  return new vgui_mfc_window(width, height, menubar, title);
-  return 0;
+  vgui_window* a_window = new vgui_mfc_window(width, height, menubar, title);
+  windows_to_delete.push_back(a_window);
+  return a_window;
+  //return new vgui_mfc_window(width, height, menubar, title);
 }
 
 
 //--------------------------------------------------------------------------------
-//: Virtual function from vgui.  Creates a new window.
+//: Virtual function from vgui - creates a new window.
 vgui_window* vgui_mfc::produce_window(int width, int height,
                                            const char* title) {
-
-  return new vgui_mfc_window(title,width, height);
+  vgui_window* a_window = new vgui_mfc_window(title, width, height);
+  windows_to_delete.push_back(a_window);
+  return a_window;
+  //return new vgui_mfc_window(title,width, height);
 }
 
 
 //--------------------------------------------------------------------------------
-//: Virtual function from vgui.  Creates a new dialog box.
+//: Virtual function from vgui - creates a new dialog box.
 vgui_dialog_impl* vgui_mfc::produce_dialog(const char* name) {
   return new vgui_mfc_dialog_impl(name);
   return 0;

@@ -4,25 +4,22 @@
 #pragma interface
 #endif
 //
-// .NAME vgui_mfc - the mfc++ implementation of vgui
-// .LIBRARY vgui-mfc
-// .HEADER vxl Package
-// .INCLUDE vgui/impl/mfc/vgui_mfc.h
-// .FILE vgui_mfc.cxx
-//
-// .SECTION Description:
-//
+// This is vgui/impl/mfc/vgui_mfc.h
+
+//:
+// \file
+// \author  awf@robots.ox.ac.uk 
+// \date    July 2000
+// \brief   The mfc++ implementation of vgui
 // vgui_mfc is the mfc++ implementation of vgui.
 // Provides functions for controlling the event loop.
 // Based upon vgui_gtk.
-//
-// .SECTION Author:
-//              awf@robots.ox.ac.uk, July 2000
-//
-// .SECTION Modifications:
+// \verbatim
+//  Modifications:
 //   Marko Bacic,Oxford RRG  July 2000 -- Implemented support for MFC
-//   15-AUG-200 Marko Bacic, Oxford RRG -- Implemented run_one_event.
-//
+//   15-AUG-2000 Marko Bacic, Oxford RRG -- Implemented run_one_event.
+//   K.Y.McGaul  29-AUG-2001  Added destructor to remove Purify mem leak.
+// \endverbatim
 //-----------------------------------------------------------------------------
 
 #include <vcl_vector.h>
@@ -57,9 +54,10 @@ public:
   vgui_mfc_utils *utils;
 protected:
   vgui_mfc();
+  ~vgui_mfc();
   void init(int &, char **);
   static vgui_mfc* instance_;
-
+  vcl_vector<vgui_window*> windows_to_delete;
 };
 
 #endif // vgui_mfc_h_
