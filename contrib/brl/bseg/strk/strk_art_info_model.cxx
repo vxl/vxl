@@ -11,11 +11,20 @@
 #include <vcl_cmath.h> // for sqrt()
 
 //------------------------------------------------------------------------
-// Constructors
+// Constructor
 //
 strk_art_info_model::strk_art_info_model()
 {
 }
+
+//------------------------------------------------------------------------
+// Accessors
+//
+strk_tracking_face_2d_sptr strk_art_info_model::face(int i) { return faces_[i]; }
+strk_tracking_face_2d_sptr strk_art_info_model::stem() { return faces_[STEM]; }
+strk_tracking_face_2d_sptr strk_art_info_model::left_tip() { return faces_[LONG_TIP]; }
+strk_tracking_face_2d_sptr strk_art_info_model::right_tip() { return faces_[SHORT_TIP]; }
+vsol_point_2d_sptr strk_art_info_model::stem_pivot() { return stem_pivot_; }
 
 double strk_art_info_model::arm_radius(strk_tracking_face_2d_sptr const& face)
 {
@@ -104,14 +113,18 @@ bool strk_art_info_model::transform(const double stem_tx,
                                     const double long_tip_angle,
                                     const double short_tip_angle)
 {
-//   vcl_cout << " long_radius btrans "<< arm_radius(faces_[LONG_TIP])
-//            << " short_radius btrans"<< arm_radius(faces_[SHORT_TIP]) << "\n";
+#ifdef DEBUG
+  vcl_cout << " long_radius btrans "<< arm_radius(faces_[LONG_TIP])
+           << " short_radius btrans"<< arm_radius(faces_[SHORT_TIP]) << '\n';
+#endif
 
   // move the pivot
   if (!stem_pivot_)
     return false;
-//   stem_pivot_->set_x(stem_pivot_->x()+stem_tx);
-//   stem_pivot_->set_y(stem_pivot_->y()+stem_ty);
+#if 0
+  stem_pivot_->set_x(stem_pivot_->x()+stem_tx);
+  stem_pivot_->set_y(stem_pivot_->y()+stem_ty);
+#endif
 
   //transform all the faces since the stem transform is considered global
   //for now we assume that the stem_pivot is the same as the centroid
@@ -140,7 +153,7 @@ bool strk_art_info_model::transform(const double stem_tx,
     return false;
 #ifdef DEBUG
   vcl_cout << " long_radius_atrans "<< arm_radius(faces_[LONG_TIP])
-           << " short_radius_atrans "<< arm_radius(faces_[SHORT_TIP]) << "\n";
+           << " short_radius_atrans "<< arm_radius(faces_[SHORT_TIP]) << '\n';
 #endif
 
   //transform the arms around the pivot
