@@ -1,10 +1,10 @@
 #!/bin/sh
 perl -pe 's/__(default|uninit)/_.$1/' |\
-/homes/39/pkg/bin/c++filt |\
+c++filt |\
 perl -pe '
 s!_.default_alloc_template\<0, 0\>!alloc!g;
 s!basic_string<char, string_char_traits<char>, alloc >!vcl_string!g;
-s!/homes/39/pkg/gcc-2.95-build/lib/gcc-lib/sparc-sun-solaris2.6/2.95.1/../../../../include/g\+\+\-3!G++INCLUDE!g;
+s!\b/\S*/../../../../include/g\+\+\-3!G++INCLUDE!g;
 s!vcl_bS<char, *vcl_sCt<char> >!vcl_string!g;
 s!basic_string<char, *string_char_traits<char>, *__default_alloc_template<false, *0> >!vcl_string!g;
 s!,vbl_basic_optional!!g;
