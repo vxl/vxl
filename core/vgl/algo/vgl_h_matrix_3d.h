@@ -66,7 +66,7 @@ class vgl_h_matrix_3d
   void set_identity();
   void set_translation(T tx, T ty, T tz);
   void set_rotation_about_axis(const vnl_vector_fixed<T,3>& axis, T angle);
-  void set_rotation_roll_pitch_yaw(T rx, T ry, T rz);
+  void set_rotation_roll_pitch_yaw(T yaw, T pitch, T roll);
   void set_rotation_euler(T rz1, T ry, T rz2);
 };
 

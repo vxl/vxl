@@ -248,13 +248,17 @@ set_rotation_about_axis(const vnl_vector_fixed<T,3>& axis, T angle)
       t12_matrix_[r][c]=R[c][r];
 }
 
-//: Set to roll, pitch and yaw specified rotation
+//: Set to roll, pitch and yaw specified rotation. 
+//   roll is rotation about z
+//   pitch is rotation about y
+//   yaw is rotation about x
+
 template <class T>
 void vgl_h_matrix_3d<T>::
-set_rotation_roll_pitch_yaw(T rx, T ry, T rz)
+set_rotation_roll_pitch_yaw(T yaw, T pitch, T roll)
 {
   typedef typename vnl_numeric_traits<T>::real_t real_t;
-  real_t ax = rx/2, ay = ry/2, az = rz/2;
+  real_t ax = yaw/2, ay = pitch/2, az = roll/2;
   
   vnl_quaternion<T> qx(vcl_sin(ax),0,0,vcl_cos(ax));
   vnl_quaternion<T> qy(0,vcl_sin(ay),0,vcl_cos(ay));
