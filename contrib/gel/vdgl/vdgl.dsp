@@ -241,6 +241,16 @@ SOURCE=.\vdgl_interpolator_sptr.h
 SOURCE=.\vdgl_digital_region_sptr.h
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\vdgl_intensity_face.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vdgl_intensity_face_sptr.h
+
+# End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
