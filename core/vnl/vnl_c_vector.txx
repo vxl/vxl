@@ -32,9 +32,12 @@ void vnl_c_vector<T>::normalize(T* v, unsigned n)
   abs_t tmp(0);
   for (unsigned i = 0; i < n; ++i)
     tmp += vnl_math_squared_magnitude(v[i]);
-  tmp = abs_t(real_t(1) / vcl_sqrt(real_t(tmp)));
-  for (unsigned i = 0; i < n; ++i)
-    v[i] = T(tmp*v[i]);
+  if (tmp!=0)
+  {
+    tmp = abs_t(real_t(1) / vcl_sqrt(real_t(tmp)));
+	for (unsigned i = 0; i < n; ++i)
+	    v[i] = T(tmp*v[i]);		
+  }
 }
 
 template <class T>
