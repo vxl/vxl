@@ -12,7 +12,6 @@
 #include <vcl_iostream.h>
 #include <vsrl/vsrl_stereo_dense_matcher.h>
 #include <vtol/vtol_intensity_face.h>
-#include <vsrl/vsrl_results_dense_matcher.h>
 
 vsrl_region_disparity::vsrl_region_disparity()
 {
