@@ -1,13 +1,10 @@
+// This is vxl/vnl/vnl_fwd.h
 #ifndef vnl_fwd_h_
 #define vnl_fwd_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-// This is vxl/vnl/vnl_fwd.h
 
-/*
-  fsm@robots.ox.ac.uk
-*/
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
 
 template <class T> struct vnl_complex_traits;
 template <class T> class vnl_numeric_traits;

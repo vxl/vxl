@@ -1,9 +1,6 @@
+// This is vxl/vil/vil_byte.h
 #ifndef vil_byte_h_
 #define vil_byte_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-// This is vxl/vil/vil_byte.h
 
 //:
 // \file

@@ -1,9 +1,6 @@
+// This is vxl/vil/vil_jpeglib.h
 #ifndef vil_jpeglib_h_
 #define vil_jpeglib_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-// This is vxl/vil/vil_jpeglib.h
 
 //:
 // \file
