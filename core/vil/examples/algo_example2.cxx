@@ -58,7 +58,7 @@ int main( int argc, char* argv[] )
   // convolution of the input image in y-direction
   vcl_cout << "Convolving in y-direction..." << vcl_endl;
   vil2_convolve_1d( vil2_transpose( imageIn ), tmp,
-                 &kernel[1], -halfSupport, halfSupport,
+                 &kernel[halfSupport], -halfSupport, halfSupport,
                  float(),
                  vil2_convolve_constant_extend,
                  vil2_convolve_constant_extend );
