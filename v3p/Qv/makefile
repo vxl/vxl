@@ -174,6 +174,15 @@ endif
 
 # DEFINES += -D__PC__
 
-################################
-include ${IUEROOT}/config/top.mk
-################################
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
+
+ifeq "$(TJ_GCC30)" "1"
+# gcc 3.1 needs too much virtual memory with -O2
+FLAGS_QvLib.cxx += -O1
+endif
+
+######################################
+include ${IUEROOT}/config/top-rules.mk
+######################################
