@@ -1,8 +1,9 @@
-// This is brl/bmvl/brct/tests/brct_test_synthetic_data.cxx
+// This is brl/bseg/sdet/tests/brct_test_synthetic_data.cxx
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_vector.h>
 #include <vcl_string.h>
+#include <testlib/testlib_test.h>
 #include <vil1/vil1_save.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vdgl/vdgl_edgel_chain.h>
@@ -11,7 +12,6 @@
 #include <vdgl/vdgl_digital_curve_sptr.h>
 #include <vsol/vsol_point_2d.h>
 #include "../brct_epi_reconstructor.h"
-
 static double x1(double t)
 {
   return 0.707*t;
@@ -149,7 +149,8 @@ write_track_to_file(vcl_vector<vdgl_digital_curve_sptr> const& track,
   str.close();
 }
 
-int main(int argc, char* argv[])
+
+static void brct_test_synthetic_data(int argc, char * argv[])
 {
   vcl_string path = argc<2 ? vcl_string("") : vcl_string(argv[1]) + "/";
   int success=0, failures=0;
@@ -170,5 +171,6 @@ int main(int argc, char* argv[])
 
   vcl_cout << "Test Summary: " << success << " tests succeeded, "
            << failures << " tests failed" << (failures?"\t***\n":"\n");
-  return failures;
 }
+
+TESTMAIN_ARGS(brct_test_synthetic_data);
