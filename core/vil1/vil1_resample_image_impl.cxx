@@ -69,12 +69,12 @@ bool vil_resample_image_impl::get_section(void *buf, int x0, int y0, int w, int 
   switch ( vil_pixel_format(base) ) {
   case VIL_BYTE:
     return vil_resample_image(base, new_width, new_height,
-                        (vil_byte*)buf, (unsigned*)0,
-                        x0, y0, w, h);
+                              (vil_byte*)buf, (unsigned*)0,
+                              x0, y0, w, h);
   case VIL_RGB_BYTE:
     return vil_resample_image(base, new_width, new_height,
-                        (vil_rgb<vil_byte>*)buf, (vil_rgb<int>*)0,
-                        x0, y0, w, h);
+                              (vil_rgb<vil_byte>*)buf, (vil_rgb<int>*)0,
+                              x0, y0, w, h);
 
   default:
     vcl_cerr << __FILE__ ": not implemented for this pixel type\n";

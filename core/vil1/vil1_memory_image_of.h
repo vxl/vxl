@@ -107,12 +107,12 @@ class vil_memory_image_of : public vil_memory_image
   // Data Access---------------------------------------------------------------
 
   //: Return read/write reference to pixel at (x,y)
-  inline T&           operator () (int x, int y) { return ((T**)rows0_)[y][x]; }
-  inline T const&     operator () (int x, int y) const { return ((T const* const*)rows0_)[y][x]; }
+  inline T&       operator () (int x, int y) { return ((T**)rows0_)[y][x]; }
+  inline T const& operator () (int x, int y) const { return ((T const* const*)rows0_)[y][x]; }
 
   //: Return pointer to raster y.
-  inline T*           operator [] (int y) { return ((T**)rows0_)[y]; }
-  inline T const*     operator [] (int y) const { return ((T const* const*)rows0_)[y]; }
+  inline T*       operator [] (int y) { return ((T**)rows0_)[y]; }
+  inline T const* operator [] (int y) const { return ((T const* const*)rows0_)[y]; }
 
   //: Return pointer to array of rasters. aka known as data_array() for matrices.
   inline T*        const* row_array() { return (T**)rows0_; }

@@ -1,7 +1,6 @@
+// This is vxl/vil/vil_convolve.txx
 #ifndef vil_convolve_txx_
 #define vil_convolve_txx_
-// This is vxl/vil/vil_convolve.txx
-
 /*
   fsm@robots.ox.ac.uk
 */
@@ -11,10 +10,10 @@
 template <class pixel_type, class float_type>
 void
 vil_convolve_separable(float const kernel[], unsigned N,
-                                 vil_memory_image_of<pixel_type>& buf,
-                                 vil_memory_image_of<float_type>& tmp,
-                                 vil_memory_image_of<float_type>& out
-                                 )
+                       vil_memory_image_of<pixel_type>& buf,
+                       vil_memory_image_of<float_type>& tmp,
+                       vil_memory_image_of<float_type>& out
+                      )
 {
   vil_convolve_signal_1d<float const> K(kernel, 0, N/2, N);
 
