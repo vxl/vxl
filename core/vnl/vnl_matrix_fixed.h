@@ -30,8 +30,10 @@
 #include "vnl_matrix.h"
 #include "vnl_matrix_ref.h"
 #include "vnl_vector.h"
-#include "vnl_vector_fixed.h"
 #include "vnl_c_vector.h"
+
+export template <class T, unsigned int n> class vnl_vector_fixed;
+export template <class T, unsigned int m, unsigned int n> class vnl_matrix_fixed;
 
 // This mess is for a MSVC6 workaround.
 //
@@ -863,6 +865,11 @@ vcl_istream& operator>> (vcl_istream& is, vnl_matrix_fixed<T,m,n>& mat)
   mat.read_ascii(is);
   return is;
 }
+
+//:
+// \relates vnl_vector_fixed
+template <class T, unsigned m, unsigned n>
+vnl_matrix_fixed<T,m,n> outer_product(vnl_vector_fixed<T,m> const& a, vnl_vector_fixed<T,n> const& b);
 
 
 #define VNL_MATRIX_FIXED_INSTANTIATE(T, M, N) \

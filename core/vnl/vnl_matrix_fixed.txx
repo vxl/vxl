@@ -682,10 +682,21 @@ void vnl_matrix_fixed<T,nrows,ncols>::inplace_transpose()
   }
 }
 
+template <class T, unsigned m, unsigned n>
+vnl_matrix_fixed<T,m,n>
+outer_product(vnl_vector_fixed<T,m> const& a, vnl_vector_fixed<T,n> const& b)
+{
+  vnl_matrix_fixed<T,m,n> out; // = a.column() * b.row()
+  for (unsigned int i = 0; i < m; i++)
+    for (unsigned int j = 0; j < n; j++)
+      out[i][j] = a[i] * b[j];
+  return out;
+}
+
 
 #undef VNL_MATRIX_FIXED_INSTANTIATE
 #define VNL_MATRIX_FIXED_INSTANTIATE(T, M, N) \
-template class vnl_matrix_fixed<T ,M ,N >
-
+template vnl_matrix_fixed<T,M,N > outer_product(vnl_vector_fixed<T,M > const&, vnl_vector_fixed<T,N > const&); \
+template class vnl_matrix_fixed<T,M,N >
 
 #endif // vnl_matrix_fixed_txx_

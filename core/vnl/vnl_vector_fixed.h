@@ -34,6 +34,9 @@
 #include "vnl_c_vector.h"
 #include "vnl_matrix.h" // outerproduct
 
+export template <class T, unsigned int n> class vnl_vector_fixed;
+export template <class T, unsigned int m, unsigned int n> class vnl_matrix_fixed;
+
 //: Fixed length  stack-stored, space-efficient vector.
 // vnl_vector_fixed is a fixed-length, stack storage vector. It has
 // the same storage size as a C-style array. It is not related via
@@ -721,14 +724,6 @@ template<class T, unsigned n>
 inline T dot_product( const vnl_vector<T>& a, const vnl_vector_fixed<T,n>& b )
 {
   return dot_product( a, b.as_ref() );
-}
-
-//:
-// \relates vnl_vector_fixed
-template<class T, unsigned int n>
-inline vnl_matrix<T> outer_product( const vnl_vector_fixed<T,n>& a, const vnl_vector_fixed<T,n>& b )
-{
-  return outer_product( a.as_ref(), b.as_ref());
 }
 
 //:

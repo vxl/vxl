@@ -3,6 +3,7 @@
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_float_3.h>
+#include <vnl/vnl_float_3x3.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_cross.h>
 #include <testlib/testlib_test.h>
@@ -124,8 +125,7 @@ void vnl_vector_test_int()
   {
     int vvalues [] = {1, 2, 3};
     vnl_vector<int> v (3, 3, vvalues);
-    vnl_matrix<int> m;
-    m = outer_product(v, v);
+    vnl_matrix<int> m = outer_product(v, v);
     TEST("outer_product",
          (m(0,0)==1 && m(0,1)==2 && m(0,2)==3 &&
           m(1,0)==2 && m(1,1)==4 && m(1,2)==6 &&
@@ -142,7 +142,8 @@ void vnl_vector_test_int()
 }
 
 
-bool float_equal(const float& f1, const float& f2){
+bool float_equal(const float& f1, const float& f2)
+{
   return vcl_fabs(f1 - f2) < 1.0e-6;
 }
 
@@ -275,7 +276,7 @@ void vnl_vector_test_float()
 
   {
     vnl_float_3 v(1.f,2.f,3.f);
-    vnl_matrix<float> m = outer_product(v, v);
+    vnl_float_3x3 m = outer_product(v, v);
     TEST("outer_product",
          (m(0,0)==1 && m(0,1)==2 && m(0,2)==3 &&
           m(1,0)==2 && m(1,1)==4 && m(1,2)==6 &&
