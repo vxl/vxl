@@ -37,6 +37,17 @@ vil2_image_view<vil_rgb<T> > vil2_view_as_rgb(const vil2_image_view<T>& v)
                                              v.xstep()/3,v.ystep()/3,1);
 }
 
+//: Create a view which appears as the transpose of this view.
+//  i.e transpose(x,y,p) = view(y,x,p)
+template<class T>
+vil2_image_view<T> vil2_transpose(const vil2_image_view<T>& v)
+{
+  // Create view with x and y switched
+  return vil2_image_view<T>(v.memory_chunk(),v.top_left_ptr(),
+                                   v.ny(),v.nx(),v.nplanes(),
+                                   v.ystep(),v.xstep(),v.planestep());
+}
+
 //: How to print value in vil2_print_all(image_view)
 template<class T>
 void vil2_print_value(vcl_ostream& os, const T& value)
@@ -70,13 +81,14 @@ void vil2_print_all(vcl_ostream& os,const vil2_image_view<T>& view)
 }
 
 // For things which must not be composites
-#define VIL2_IMAGE_VIEW_FUNCTIONS_INSTANTIATE_NON_COMP(T) \
+#define VIL2_IMAGE_VIEW_FUNCTIONS_INSTANTIATE_FOR_SCALARS(T) \
 template vil2_image_view<T > vil2_view_as_planes(const vil2_image_view<vil_rgb<T > >&); \
 template vil2_image_view<vil_rgb<T > > vil2_view_as_rgb(const vil2_image_view<T >& plane_view); \
 template void vil2_print_value(vcl_ostream& os, const T& value)
 
 // For everything else
-#define VIL2_IMAGE_VIEW_FUNCTIONS_INSTANTIATE_2(T) \
+#define VIL2_IMAGE_VIEW_FUNCTIONS_INSTANTIATE(T) \
+template vil2_image_view<T> vil2_transpose(const vil2_image_view<T>& v); \
 template void vil2_print_all(vcl_ostream& os,const vil2_image_view<T >& view)
 
 #endif

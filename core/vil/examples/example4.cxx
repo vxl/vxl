@@ -9,7 +9,7 @@
 #include <vcl_iostream.h>
 
 //: Example function to return a transpose of the view
-vil2_image_view<vil_byte> vil2_transpose(const vil2_image_view<vil_byte>& v)
+vil2_image_view<vil_byte> transpose_view(const vil2_image_view<vil_byte>& v)
 {
   // Create view with x and y switched
   return vil2_image_view<vil_byte>(v.memory_chunk(),v.top_left_ptr(),
@@ -33,7 +33,7 @@ int main(int argc, char** argv)
 
   vcl_cout<<vcl_endl;
   vcl_cout<<"Create transposed view of plane"<<vcl_endl;
-  vil2_image_view<vil_byte> transpose = vil2_transpose(image);
+  vil2_image_view<vil_byte> transpose = transpose_view(image);
   vil2_print_all(vcl_cout,transpose);
 
   return 0;

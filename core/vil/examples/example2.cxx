@@ -44,7 +44,7 @@ int main(int argc, char** argv)
 
   vcl_cout<<vcl_endl;
   vcl_cout<<"Create transposed view of plane"<<vcl_endl;
-  vil2_image_view<vil_byte> transpose = plane.transpose();
+  vil2_image_view<vil_byte> transpose = vil2_transpose(plane);
   vil2_print_all(vcl_cout,transpose);
 
   return 0;

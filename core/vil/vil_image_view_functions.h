@@ -18,6 +18,11 @@ vil2_image_view<T> vil2_view_as_planes(const vil2_image_view<vil_rgb<T> >& rgb_v
 template<class T>
 vil2_image_view<vil_rgb<T> > vil2_view_as_rgb(const vil2_image_view<T>& plane_view);
 
+//: Create a view which appears as the transpose of this view.
+//  i.e vil2_transpose(view)(x,y,p) = view(y,x,p)
+template<class T>
+vil2_image_view<T> vil2_transpose(const vil2_image_view<T>& view);
+
 //: How to print value in vil2_print_all(image_view)
 template<class T>
 void vil2_print_value(vcl_ostream& s, const T& value);
