@@ -132,15 +132,15 @@ foreach $dir (@DIRS)
       }
       if (m/^\s*(SOURCES|MINI_PROG_SOURCES|TESTS|TESTMAIN)\s*\:?\=\s*(\S+)/) {
         $file = "$2";
-        print "$file\t\#specified in $makef does not exist\n" unless (-f "$dir/$file");
+        print "$file\tspecified in $makef does not exist\n" unless (-f "$dir/$file");
         @sources = ($file);
         @tests = ($file) if ($1 eq "TESTS");
         $file =~ s/\.(c|cxx|cc|cpp|C)$/.h/;
-        push @hsources, $file if (-f "$dir/$file");
+        push @hsources, $file if (-f "$dir/$file" && $file =~ m/\.h$/);
       }
       if (m/^\s*(MANPAGE_SOURCES)\s*\:?\=\s*(\S+)/) {
         $file = "$2";
-        print "$file\t\#specified in $makef does not exist\n" unless (-f "$dir/$file");
+        print "$file\tspecified in $makef does not exist\n" unless (-f "$dir/$file");
         push @hsources, $file;
         if ($file =~ m/\.txx$/) {
           $file =~ s/\.txx$/.h/;
@@ -156,17 +156,17 @@ foreach $dir (@DIRS)
           }
         }
         else {
-          print "$file\t\#specified in $makef does not exist\n" unless (-f "$dir/$file");
+          print "$file\tspecified in $makef does not exist\n" unless (-f "$dir/$file");
           push @sources, $file;
           push @tests, $file if ($1 eq "TESTS");
           $file =~ s/\.(c|cxx|cc|cpp|C)$/.h/;
-          push @hsources, $file if (-f "$dir/$file" && grep(/^$file$/, @hsources) == 0);
+          push @hsources, $file if (-f "$dir/$file" && $file =~ m/\.h$/ && grep(/^$file$/, @hsources) == 0);
           # I.e.: .h files which are not explicitly present in makefile are added only once.
         }
       }
       if (m/^\s*(MANPAGE_SOURCES)\s*\+\=\s*(\S+)/) {
         $file = "$2";
-        print "$file\t\#specified in $makef does not exist\n" unless (-f "$dir/$file");
+        print "$file\tspecified in $makef does not exist\n" unless (-f "$dir/$file");
         push @hsources, $file;
         if ($file =~ m/\.txx$/) {
           $file =~ s/\.txx$/.h/;
@@ -234,7 +234,6 @@ foreach $dir (@DIRS)
       next if ($x eq "\$\{$moc_files\}");
       if ( $x =~ m/^\$\{(\S+sources)\}$/ ) { ; }
       elsif (-f "$dir/$x" && $x =~ m/\.h(\.in)?$/) { push @hsource_files, "$x"; }
-      elsif (-f "$dir/$x" && $x =~ m/\.rc$/) { push @hsource_files, "$x"; }
       elsif (-f "$dir/$x" && $x =~ m/\.txx$/) { push @hsource_files, "$x"; }
       elsif (-f "$dir/$x") { push @source_files, "$x"; }
       elsif (-f "$dir/$x.cxx") { printf "Should replace $x by $x.cxx in $cmakef\n"; push @source_files, "$x.cxx"; }
@@ -259,7 +258,6 @@ foreach $dir (@DIRS)
         next;
       }
       if ( $y =~ m/\.h(\.in)?$/) { push @hsource_files, "$y"; }
-      elsif ( $y =~ m/\.rc$/) { push @hsource_files, "$y"; }
       elsif ( $y =~ m/\.txx$/) { push @hsource_files, "$y"; }
       elsif (-f "$dir/$y") { push @source_files, "$y"; }
       elsif (-f "$dir/$y.cxx") { printf "Should replace $y by $y.cxx in $cmakef\n"; push @source_files, "$y.cxx"; }
@@ -267,7 +265,7 @@ foreach $dir (@DIRS)
       elsif (-f "$dir/$y.cc") { printf "Should replace $y by $y.cc in $cmakef\n"; push @source_files, "$y.cc"; }
       elsif (-f "$dir/$y.C") { printf "Should replace $y by $y.C in $cmakef\n"; push @source_files, "$y.C"; }
       elsif (-f "$dir/$y.cpp") { printf "Should replace $y by $y.cpp in $cmakef\n"; push @source_files, "$y.cpp"; }
-      else { printf "No source file $y.* found in $dir\n"; }
+      else { printf "No source file $y.* found in $dir\n" unless ($y eq "WIN32"); }
     }
   }
   while ($cmakefile =~ s/\bADD_TEST\s*\(\s*\S+\s+(\S+)\s*(([^\s()]+)?)((\s+[^()]+)?)\s*\)//) {
