@@ -33,6 +33,7 @@ MANPAGE_SOURCES += vbl_sparse_array_base.txx
 MANPAGE_SOURCES += vbl_sparse_array_1d.txx
 MANPAGE_SOURCES += vbl_sparse_array_2d.txx
 MANPAGE_SOURCES += vbl_sparse_array_3d.txx
+MANPAGE_SOURCES += vbl_big_sparse_array_3d.txx
 SOURCES += vbl_bit_array_3d.cxx
 
 # debugging
