@@ -222,9 +222,8 @@ void vnl_sparse_matrix<T>::mult(const vnl_vector<T>& rhs, vnl_vector<T>& result)
 {
   assert(rhs.size() == columns());
   
-  vnl_vector<T> tmp( rows() );
-  result = tmp;
-  result = 0;
+  result.resize( rows() );
+  result.fill(0.0);
 
   int rhs_row_id =0;
   for ( vcl_vector<row>::const_iterator lhs_row_iter = elements.begin(); lhs_row_iter != elements.end(); ++lhs_row_iter, rhs_row_id++ ) {
@@ -249,9 +248,8 @@ void vnl_sparse_matrix<T>::pre_mult(const vnl_vector<T>& lhs, vnl_vector<T>& res
   assert(lhs.size() == rows());
 
   // Resize and clear result vector
-  vnl_vector<T> tmp( columns() );
-  result = tmp;  // makes length same as tmp
-  result = 0;    // initializes result to the zero vector
+  result.resize( columns() );
+  result.fill(0.0);
  
   // Now, iterate over lhs values and rows of rhs
   unsigned lhs_col_id = 0;
@@ -406,8 +404,7 @@ T& vnl_sparse_matrix<T>::operator()(unsigned int r, unsigned int c)
 template <class T>
 void vnl_sparse_matrix<T>::diag_AtA(vnl_vector<T> & result) const
 {
-  assert (result.size() == columns());
-
+  result.resize( columns() );
   result.fill(0.0);
 
   for (vcl_vector<row>::const_iterator row_iter = elements.begin(); row_iter != elements.end(); ++row_iter) {
