@@ -14,6 +14,7 @@ SET(vimt3d_sources
                                          vimt3d_crop.h
   vimt3d_vil3d_v3i.cxx                   vimt3d_vil3d_v3i.h
   vimt3d_add_all_loaders.cxx             vimt3d_add_all_loaders.h
+                                         vimt3d_from_image_2d.h
 )
 AUX_SOURCE_DIRECTORY(Templates vimt3d_sources)
 
