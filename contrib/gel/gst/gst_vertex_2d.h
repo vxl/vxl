@@ -8,31 +8,36 @@
 // \file
 // \author crossge@crd.ge.com
 
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 #include <vbl/vbl_ref_count.h>
 
 class gst_vertex_2d : public vbl_ref_count
 {
  public:
 
-  // constructors and destructors
-  gst_vertex_2d();
-  gst_vertex_2d( const double x, const double y);
-  gst_vertex_2d( const gst_vertex_2d &v);
-  ~gst_vertex_2d();
+  // default constructor
+  gst_vertex_2d() {}
 
-  // getters and setters
-  double get_x() const;
-  double get_y() const;
-  void set_x( const double x);
-  void set_y( const double y);
-  void set( const double x, const double y);
+  // useful constructor
+  gst_vertex_2d(double x, double y) : vbl_ref_count(), x_(x), y_(y) {}
+
+  // copy constructor
+  gst_vertex_2d( const gst_vertex_2d &v) : vbl_ref_count(), x_(v.get_x()), y_(v.get_y()) {}
+
+  // destructor
+  ~gst_vertex_2d() {}
+
+  // getters
+  double get_x() const { return x_; }
+  double get_y() const { return y_; }
+
+  // setters
+  void set_x(double x) { x_= x; }
+  void set_y(double y) { y_= y; }
+  void set(double x, double y) { x_=x; y_=y; }
 
   // operators
-  friend bool operator==( const gst_vertex_2d& a, const gst_vertex_2d& b);
-
-  // output
-  friend vcl_ostream &operator <<( vcl_ostream &os, const gst_vertex_2d &v);
+  friend inline bool operator==(const gst_vertex_2d& a, const gst_vertex_2d& b);
 
  protected:
 
@@ -40,7 +45,10 @@ class gst_vertex_2d : public vbl_ref_count
   double x_, y_;
 };
 
-bool operator==( const gst_vertex_2d& a, const gst_vertex_2d& b);
+// operators
+bool operator==(const gst_vertex_2d& a, const gst_vertex_2d& b)
+{ return a.x_== b.x_ && a.y_== b.y_; }
+
 vcl_ostream &operator <<( vcl_ostream &os, const gst_vertex_2d &v);
 
 #endif // gst_vertex_2d_h_
