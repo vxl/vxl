@@ -126,6 +126,7 @@ void test_image_2d_byte_io()
            (!bfs_in), false);
   vsl_b_read(bfs_in, image_in0);
   vsl_b_read(bfs_in, image_in1);
+  TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
   TEST("Binary IO", Equal(image_in0,image_out0),true);

@@ -107,6 +107,7 @@ void test_gaussian()
   vsl_b_read(bfs_in, builder_in);
   vsl_b_read(bfs_in, p_base_pdf_in);
   vsl_b_read(bfs_in, p_base_builder_in);
+  TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
   vcl_cout<<"Original PDF: "; vsl_print_summary(vcl_cout, pdf); vcl_cout<<vcl_endl;

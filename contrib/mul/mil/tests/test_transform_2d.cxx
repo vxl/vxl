@@ -138,6 +138,7 @@ void test_transform_2d()
   TEST ("Opened test_transform_2d.bvl.tmp for reading",
            (!bfs_in), false);
   vsl_b_read(bfs_in, trans0_in);
+  TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
   vnl_vector<double> v0,v0_in;

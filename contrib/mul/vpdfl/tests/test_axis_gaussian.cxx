@@ -89,6 +89,7 @@ void test_axis_gaussian()
   vsl_b_read(bfs_in, builder0_in);
   vsl_b_read(bfs_in, base_pdf_ptr_in);
   vsl_b_read(bfs_in, base_builder_ptr_in);
+  TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
   vcl_cout<<"Loaded: "<<vcl_endl;

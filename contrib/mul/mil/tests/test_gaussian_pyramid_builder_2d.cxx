@@ -81,6 +81,7 @@ void test_gaussian_pyramid_builder_2d()
            (!bfs_in), false);
   vsl_b_read(bfs_in, builder_in);
   vsl_b_read(bfs_in, ptr_in);
+  TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
   TEST ("saved builder = loaded builder",

@@ -82,6 +82,7 @@ void test_stochastic_data_collector()
   TEST (("Opened " + path + " for reading").c_str(), (!bfs_in ), false);
   vsl_b_read(bfs_in,collector2);
   vsl_b_read(bfs_in,collector3);
+  TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
   vcl_cout << "Loaded : " << collector2 << vcl_endl;

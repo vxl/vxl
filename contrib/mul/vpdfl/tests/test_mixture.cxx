@@ -142,6 +142,7 @@ void test_mixture()
   vsl_b_read(bfs_in, p_builder2);
   vsl_b_read(bfs_in, p_pdf2);
   vsl_b_read(bfs_in, p_pdf3);
+  TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
   vcl_cout<<"Original builder: "; vsl_print_summary(vcl_cout, builder); vcl_cout<<vcl_endl;
