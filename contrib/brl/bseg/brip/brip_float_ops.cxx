@@ -96,7 +96,7 @@ brip_float_ops::half_resolution(vil1_memory_image_of<float> const & input,
   float* out0 = new float[half_w];  float* out1 = new float[half_w];
   float* out2 = new float[half_w];  float* out3 = new float[half_w];
   float* out4 = new float[half_w];
-  //Intitialize arrays
+  //Initialize arrays
   fill_1d_array(input, n++, in0);   fill_1d_array(input, n++, in1);
   fill_1d_array(input, n++, in2);   fill_1d_array(input, n++, in3);
   fill_1d_array(input, n++, in4);
@@ -146,7 +146,7 @@ brip_float_ops::gaussian(vil1_memory_image_of<float> const & input, float sigma)
   return output;
 }
 //-------------------------------------------------------------------
-// Determine if the center of a (2n+1)x(2n+1) neighborhood is a local maxium
+// Determine if the center of a (2n+1)x(2n+1) neighborhood is a local maximum
 //
 bool brip_float_ops::
 local_maximum(vbl_array_2d<float> const & neighborhood,
@@ -286,8 +286,7 @@ brip_float_ops::difference(vil1_memory_image_of<float> const & image_1,
   vil1_memory_image_of<float> temp(w1, h1);
   if (w1!=w2||h1!=h2)
     {
-      vcl_cout << "In brip_float_ops::difference(..) - images are not"
-               << " the same dimensions\n";
+      vcl_cout << "In brip_float_ops::difference(..) - images are not the same dimensions\n";
       return temp;
     }
   vil1_memory_image_of<float> out;
@@ -611,8 +610,7 @@ void brip_float_ops::fill_y_border(vil1_memory_image_of<float> & image,
   int width = image.width(), height = image.height();
   if (2*h>height)
     {
-      vcl_cout << "In brip_float_ops::fill_y_border(..) - 2xborder"
-               << " exceeds image height\n";
+      vcl_cout << "In brip_float_ops::fill_y_border(..) - 2xborder exceeds image height\n";
       return;
     }
   for (int y = 0; y<h; y++)
@@ -749,8 +747,7 @@ brip_float_ops::convert_to_float(vil1_image const & image)
     }
   else
     {
-      vcl_cout << "In brip_float_ops::convert_to_float - "
-               << "input not color or grey\n";
+      vcl_cout << "In brip_float_ops::convert_to_float - input not color or grey\n";
       return vil1_memory_image_of<float>();
   }
   return fimg;
@@ -794,7 +791,7 @@ vbl_array_2d<float> brip_float_ops::load_kernel(vcl_string const & file)
           float t = output[x][y];
           vcl_cout << t << " ";
         }
-      vcl_cout << "\n";
+      vcl_cout << '\n';
     }
   return output;
 }
