@@ -5,7 +5,7 @@
 #   DEPENDENCIES:  libvcl libvbl libvsol
 
 USES += vxl gel
-IMMEDIATE_LIBS += -lvsol -lvbl
+IMMEDIATE_LIBS += -lvsol -lvbl -lvul
 
 LIBRARY := vtol
 VERSION := 1.0
