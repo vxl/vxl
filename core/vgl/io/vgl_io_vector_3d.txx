@@ -49,7 +49,7 @@ void vsl_print_summary(vcl_ostream& os,const vgl_vector_3d<T> & v)
     os<<"("<<v.x()<<","<<v.y()<<","<<v.z()<<")";
 }
 
-#define VGL_IO_POINT_3D_INSTANTIATE(T) \
+#define VGL_IO_VECTOR_3D_INSTANTIATE(T) \
 template void vsl_print_summary(vcl_ostream &, const vgl_vector_3d<T > &); \
 template void vsl_b_read(vsl_b_istream &, vgl_vector_3d<T > &); \
 template void vsl_b_write(vsl_b_ostream &, const vgl_vector_3d<T > &)
