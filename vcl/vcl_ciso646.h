@@ -9,7 +9,7 @@
 #if !VCL_CXX_HAS_HEADER_CISO646
 # include <iso646.h>
 #else
-# include "iso/vcl_iso646.h"
+# include "iso/vcl_ciso646.h"
 #endif
 
 #endif // vcl_ciso646_h_
