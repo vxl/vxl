@@ -235,6 +235,8 @@ vil2_image_view<vxl_byte> filtered_image = vil2_transpose(tmp_image2);
 * - vil2_math_image_sum(imA,imB,im_sum)             : im_sum = imA+imB
 * - vil2_math_image_difference(imA,imB,im_diff)     : im_diff = imA-imB
 * - vil2_math_image_abs_difference(imA,imB,im_diff) : im_diff = |imA-imB|
+* - vil2_math_image_product(imA,imB,imP)            : imP(x,y,p) = imA(x,y,p)*imB(x,y,p)
+* - vil2_math_image_ratio(imA,imB,imP)              : imP(x,y,p) = imA(x,y,p)/imB(x,y,p)
 * - vil2_math_add_image_fraction(imA,fa,imB,fb)     : imA = fa*imA + fb*imB  (Useful for moving averages!)
 *
 * Morphological functions  (using vil2_structuring_element)

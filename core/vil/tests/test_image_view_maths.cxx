@@ -51,7 +51,24 @@ void test_image_view_maths_byte()
   vil2_math_image_sum(imA,imB,im_sum);
   TEST("Width of im_sum",im_sum.ni(),imA.ni());
   TEST("Height of im_sum",im_sum.nj(),imA.nj());
-  TEST_NEAR("im_sum(5,7)",im_sum(5,7),float(imA(5,7))+float(imB(5,7)),1e-6);
+  TEST_NEAR("vil2_math_image_sum : im_sum(5,7)",
+            im_sum(5,7),float(imA(5,7))+float(imB(5,7)),1e-6);
+
+  vil2_image_view<float> im_product;
+  vil2_math_image_product(imA,imB,im_product);
+  TEST("Width of im_sum",im_product.ni(),imA.ni());
+  TEST("Height of im_sum",im_product.nj(),imA.nj());
+  TEST_NEAR("vil2_math_image_product : im_product(5,7)",
+            im_product(5,7),float(imA(5,7))*float(imB(5,7)),1e-6);
+
+
+  vil2_image_view<float> im_ratio;
+  vil2_math_image_ratio(imA,imB,im_ratio);
+  TEST("Width of im_ratio",im_ratio.ni(),imA.ni());
+  TEST("Height of im_ratio",im_ratio.nj(),imA.nj());
+  TEST_NEAR("vil2_math_image_product : im_ratio(5,7)",
+            im_ratio(5,7),float(imA(5,7))/float(imB(5,7)),1e-6);
+
 
   vil2_image_view<float> im_diff;
   vil2_math_image_difference(imA,imB,im_diff);

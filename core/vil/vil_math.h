@@ -260,6 +260,76 @@ inline void vil2_math_image_sum(const vil2_image_view<aT>& imA,
   }
 }
 
+//: Compute pixel-wise product of two images (im_prod(i,j) = imA(i,j)*imB(i,j)
+// \relates vil2_image_view
+template<class aT, class bT, class sumT>
+inline void vil2_math_image_product(const vil2_image_view<aT>& imA,
+                         const vil2_image_view<bT>& imB,
+                         vil2_image_view<sumT>& im_product)
+{
+  unsigned ni = imA.ni(),nj = imA.nj(),np = imA.nplanes();
+  assert(imB.ni()==ni && imB.nj()==nj && imB.nplanes()==np);
+  im_product.set_size(ni,nj,np);
+
+  vcl_ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),pstepA = imA.planestep();
+  vcl_ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),pstepB = imB.planestep();
+  vcl_ptrdiff_t istepP=im_product.istep(),jstepP=im_product.jstep(),
+                pstepP = im_product.planestep();
+  const aT* planeA = imA.top_left_ptr();
+  const bT* planeB = imB.top_left_ptr();
+  sumT* planeP     = im_product.top_left_ptr();
+  for (unsigned p=0;p<np;++p,planeA += pstepA,planeB += pstepB,planeP += pstepP)
+  {
+    const aT* rowA   = planeA;
+    const bT* rowB   = planeB;
+    sumT* rowP = planeP;
+    for (unsigned j=0;j<nj;++j,rowA += jstepA,rowB += jstepB,rowP += jstepP)
+    {
+      const aT* pixelA = rowA;
+      const bT* pixelB = rowB;
+      sumT* pixelP = rowP;
+      for (unsigned i=0;i<ni;++i,pixelA+=istepA,pixelB+=istepB,pixelP+=istepP)
+        *pixelP = sumT(*pixelA)*sumT(*pixelB);
+    }
+  }
+}
+
+//: Compute pixel-wise ratio of two images : im_ratio(i,j) = imA(i,j)/imB(i,j)
+//  Pixels cast to type sumT before calculation.  If imB(i,j)==0, im_ration(i,j)=0
+// \relates vil2_image_view
+template<class aT, class bT, class sumT>
+inline void vil2_math_image_ratio(const vil2_image_view<aT>& imA,
+                         const vil2_image_view<bT>& imB,
+                         vil2_image_view<sumT>& im_ratio)
+{
+  unsigned ni = imA.ni(),nj = imA.nj(),np = imA.nplanes();
+  assert(imB.ni()==ni && imB.nj()==nj && imB.nplanes()==np);
+  im_ratio.set_size(ni,nj,np);
+
+  vcl_ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),pstepA = imA.planestep();
+  vcl_ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),pstepB = imB.planestep();
+  vcl_ptrdiff_t istepR=im_ratio.istep(),jstepR=im_ratio.jstep(),
+                pstepR = im_ratio.planestep();
+  const aT* planeA = imA.top_left_ptr();
+  const bT* planeB = imB.top_left_ptr();
+  sumT* planeR     = im_ratio.top_left_ptr();
+  for (unsigned p=0;p<np;++p,planeA += pstepA,planeB += pstepB,planeR += pstepR)
+  {
+    const aT* rowA   = planeA;
+    const bT* rowB   = planeB;
+    sumT* rowR = planeR;
+    for (unsigned j=0;j<nj;++j,rowA += jstepA,rowB += jstepB,rowR += jstepR)
+    {
+      const aT* pixelA = rowA;
+      const bT* pixelB = rowB;
+      sumT* pixelR = rowR;
+      for (unsigned i=0;i<ni;++i,pixelA+=istepA,pixelB+=istepB,pixelR+=istepR)
+      if (*pixelB==0) *pixelR=0;
+      else *pixelR = sumT(*pixelA)/sumT(*pixelB);
+    }
+  }
+}
+
 //: Compute difference of two images (im_sum = imA-imB)
 // \relates vil2_image_view
 template<class aT, class bT, class sumT>
