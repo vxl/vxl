@@ -31,6 +31,7 @@ class brct_windows_frame : public vgui_wrapper_tableau
    //: method for file menu callback
   void save_status();
   void load_status();
+  void write_vrml_file();
 
   // methods for debug menu callbacks
   void show_epipole();

@@ -454,3 +454,31 @@ void brct_windows_frame::load_status()
     status_info_ += ss.str();
   }
 }
+
+void brct_windows_frame::write_vrml_file()
+{
+  vgui_dialog save_file_dlg("save vrml file");
+  static vcl_string filename = "";
+  static vcl_string ext = "*.*";
+  save_file_dlg.file("file name", ext, filename);
+
+  if(!save_file_dlg.ask())
+    return ;
+
+  if(filename != "")
+  {
+    vcl_ofstream out(filename.c_str());
+
+    bugl_curve_3d c3d = kalman_->get_curve_3d();
+    int size = c3d.get_num_points();
+    vcl_vector<vgl_point_3d<double> > pts(size);
+    for(int i=0; i<size; i++){
+      pts[i].set(c3d.get_point(i)->x(), c3d.get_point(i)->y(), c3d.get_point(i)->z());
+    }
+
+    //write to file
+    //brct_algos::write_vrml_file();
+  }
+
+  return ;
+}
