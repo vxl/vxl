@@ -8,7 +8,7 @@ exec perl -w -x $0 ${1+"$@"}
 # Authors:
 #         Dave Cooper
 #         Maarten Vergauwen
-# Date:   
+# Date:
 #      17/02/2000
 # Modified:
 # 11 April 2001 Ian Scott.   Remove support for old perceps commands
@@ -37,12 +37,7 @@ $verbatim = 0;
 $should_end_verbatim = 0;
 
 
-
-
-
-
-
-# mainloop     
+# mainloop
 while (<>)
 {
     if ( $should_end_verbatim )
@@ -58,15 +53,15 @@ while (<>)
     if ( m/$endverbpatt/ ) { $should_end_verbatim = 1; };
 
     # found start of comment: "//:"  ?
-    if ( s/$slashslashcolonpatt/$slashstarstarpatt/ )
+    if ( s!$slashslashcolonpatt!$slashstarstarpatt! )
     {
         chomp;
         # escape all dots, and add a dot at the end:
         s/\./\\\./g; s/\\\.\s*$//; s/$/.\n/;
         if ($comment)
         {
-            # Previous comment hasn't ended--two contiguous comment blocks. (Happens at the top of .txx
-            # files, for example.)
+            # Previous comment hasn't ended--two contiguous comment blocks.
+            # (Happens at the top of .txx files, for example.)
             print "*\/ \n";
         }
         $comment = 1;
@@ -74,22 +69,23 @@ while (<>)
     }
 
     # found continuation of comment WITH verbatim -> no "*"
-    if ( /$slashslashpatt/ && $verbatim && $comment)
+    if ( m!$slashslashpatt! && $verbatim && $comment)
     {
-        s/$slashslashpatt/$spacespacepatt/;
+        s!$slashslashpatt!$spacespacepatt!;
         print; next;
     }
 
     # found continuation of comment WITHOUT verbatim -> start line with "*"
-    if ( /$slashslashpatt/ && $comment )
+    if ( m!$slashslashpatt! && $comment )
     {
-        s/$slashslashpatt/$starpatt/;
-        print;
-        next;
+        s!$slashslashpatt!$starpatt!;
+        print; next;
     }
 
     # found end of comment -> start line with */
-    if ( $comment && ! /$slashslashpatt/  )
+    # NOTE that *every* line within a comment (also empty lines) *must* start with // !
+    # (In an earlier version of this script, empty lines were allowed inside comments.)
+    if ( $comment && ! m!$slashslashpatt!  )
     {
         print "$starslashpatt\n";
         $comment = 0;
@@ -99,7 +95,6 @@ while (<>)
     # just print line if not in comment or in file
     if ( !$comment ) { print; next; }
 
-    # debug - print unpocessed lines (s.b. none)
-    #print "LNP:"; print;
-
+    # debug - print unprocessed lines (s.b. none)
+    if ($debug) { print "LNP:\t"; print; }
 }
