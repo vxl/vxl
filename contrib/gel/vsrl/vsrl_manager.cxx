@@ -355,8 +355,8 @@ bool vsrl_manager::do_dense_matching()
 {
   if (!imgL_ || !imgR_) return false;
 
-  static float sig = 1.0;
-  static float cutoff = 0.01;
+  static float sig = 1.0f;
+  static float cutoff = 0.01f;
   static bool smoothing = false;
   vgui_dialog gs_dialog("Gaussian Smoothing");
   gs_dialog.field("Sigma:",sig);
@@ -823,7 +823,7 @@ void vsrl_manager::find_shadows(vcl_vector<vdgl_digital_region*> regions)
 
         // For now, this is what we'll use...
         float m2 = shadow_mean_; // m2 is the reference shadow mean.
-        float v2 = 1.0; // v2 is the reference shadow stdev.
+        float v2 = 1.0f; // v2 is the reference shadow stdev.
 
         if (m1==0 || m2==0)
           *sm=0.0;
@@ -855,9 +855,9 @@ vsrl_manager::run_jseg(vil1_image image_in)
   return empty;
 #else
   // Set up the JSEG parameters
-  static float TQUAN=-1.0;
+  static float TQUAN=-1.0f;
   static int NSCALE=-1;
-  static float threshcolor=-1.0;
+  static float threshcolor=-1.0f;
   vgui_dialog jseg_dialog("JSEG Parameters");
   jseg_dialog.field("Color Quantization Threshold (-1=automatic): ",TQUAN);
   jseg_dialog.field("Number of Scales (-1=automatic): ",NSCALE);
@@ -1065,8 +1065,8 @@ void vsrl_manager::raw_correlation()
   if (!imgL_ || !imgR_) return;
 
   // Gaussian Smoothing (if needed)...
-  static float sig = 1.0;
-  static float cutoff = 0.01;
+  static float sig = 1.0f;
+  static float cutoff = 0.01f;
   static bool smoothing = false;
   vgui_dialog gs_dialog("Gaussian Smoothing");
   gs_dialog.field("Sigma:",sig);
@@ -1095,8 +1095,8 @@ void vsrl_manager::raw_correlation()
   for (int y=0; y<imgL_.rows(); y++) {
     vcl_cout << "Row: " << y << vcl_endl;
     for (int x=0; x<imgL_.cols(); x++) {
-      float result=0;
-      float max=-1e10;
+      float result=0.f;
+      float max=-1e10f;
       // when the disparities are written to the buffer, they are offset by "range"
       // to keep them positive.
       disp(x,y) = range; // default value (i.e. disparity=0+offset)
@@ -1149,9 +1149,9 @@ void vsrl_manager::boundary_matching()
   return;
 #else
   // Set up the JSEG parameters
-  static float TQUAN=-1.0;
+  static float TQUAN=-1.0f;
   static int NSCALE=-1;
-  static float threshcolor=-1.0;
+  static float threshcolor=-1.0f;
   vgui_dialog jseg_dialog("JSEG Parameters");
   jseg_dialog.field("Color Quantization Threshold (-1=automatic): ",TQUAN);
   jseg_dialog.field("Number of Scales (-1=automatic): ",NSCALE);
