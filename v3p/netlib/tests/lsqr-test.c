@@ -104,9 +104,9 @@ doublereal *rw;
 /*     ------------------------------------------------------------------ */
 
     if (*mode == 1)
-        aprod1_(m, n, x, y, rw, &rw[*n], &rw[*n + *m], &rw[*n + *m + *n]);
+        aprod1_(m, n, x, y, rw, rw + *n, rw + *n + *m, rw + *n + *m + *n);
     else
-        aprod2_(m, n, x, y, rw, &rw[*n], &rw[*n + *m], &rw[*n + *m + *n]);
+        aprod2_(m, n, x, y, rw, rw + *n, rw + *n + *m, rw + *n + *m + *n);
 } /* aprod_ */
 
 /* Subroutine */ void aprod1_(m, n, x, y, d, hy, hz, w)
@@ -310,7 +310,7 @@ doublereal *damp;
         printf("\n XXX  Insufficient workspace.  The length of  RW  should be at least %d\n", ltotal);
         return;
     }
-    lstp_(m, n, nduplc, npower, damp, xtrue, b, rw, &rw[*n], &rw[*n + *m], &rw[*n + *m + *n], &acond, &rnorm);
+    lstp_(m, n, nduplc, npower, damp, xtrue, b, rw, rw + *n, rw + *n + *m, rw + *n + *m + *n, &acond, &rnorm);
 /*     Solve the problem defined by APROD, DAMP and B.                    */
 /*     Copy the rhs vector B into U  (LSQR will overwrite U)              */
 /*     and set the other input parameters for LSQR.                       */
