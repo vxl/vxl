@@ -5,9 +5,9 @@
 #include <mil/mil_invert_image_2d.h>
 #include <vcl_cmath.h>
 
-//: creates a variance normalised version of an input image  
+//: creates an inverted version of an input image  
 void mil_invert_image_2d(mil_image_2d_of<float>& dest,
-                          const mil_image_2d_of<float>& src)
+                         const mil_image_2d_of<float>& src)
 {
 
   int n = src.n_planes();
@@ -37,10 +37,7 @@ void mil_invert_image_2d(mil_image_2d_of<float>& dest,
 
       s_row += systep;
     }
-
-
   }
-
 
   // calculate the inverted image
   for (int i=0;i<n;++i)
@@ -67,9 +64,3 @@ void mil_invert_image_2d(mil_image_2d_of<float>& dest,
 
   dest.setWorld2im(src.world2im());
 }
-
-
-
-
-
-
