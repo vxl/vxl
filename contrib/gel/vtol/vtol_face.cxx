@@ -188,21 +188,14 @@ vcl_vector<vtol_block*> *vtol_face::compute_blocks(void)
 //: Does `this' share an edge with `f' ?
 //  Comparison of edge pointers, not geometric values
 //---------------------------------------------------------------------------
-bool vtol_face::shares_edge_with(vtol_face &f)
+bool vtol_face::shares_edge_with(vtol_face_sptr const& f)
 {
-  if (this==&f) return true;
-
-  edge_list *thisedges=edges();
-  edge_list *fedges=f.edges();
-  edge_list::const_iterator ei1;
-  edge_list::const_iterator ei2;
-  bool result=false;
-  for (ei1=thisedges->begin();!result&&ei1!=thisedges->end();++ei1)
-    for (ei2= fedges->begin();!result&&ei2!=fedges->end();++ei2)
-      result=(*ei1)==(*ei2);
-  delete thisedges;
-  delete fedges;
-  return result;
+  edge_list thised; this->edges(thised);
+  edge_list fedges; f->edges(fedges);
+  for (edge_list::const_iterator ei1=thised.begin(); ei1!=thised.end(); ++ei1)
+    for (edge_list::const_iterator ei2=fedges.begin(); ei2!=fedges.end(); ++ei2)
+      if ((*ei1)==(*ei2)) return true;
+  return false;
 }
 
 //:
@@ -383,27 +376,22 @@ void vtol_face::print(vcl_ostream &strm) const
 //  the boundary of the face.
 void vtol_face::compute_bounding_box() const
 {
-  edge_list* edges = const_cast<vtol_face*>(this)->edges();
-
-  for (edge_list::iterator eit = edges->begin();eit != edges->end(); eit++)
-    this->grow_minmax_bounds(*((*eit)->get_bounding_box()));
-  delete edges;
+  this->empty_bounding_box();
+  edge_list edges; this->edges(edges);
+  for (edge_list::iterator eit = edges.begin();eit != edges.end(); ++eit)
+    this->add_to_bounding_box((*eit)->get_bounding_box());
 }
 
 //: This method determines if a vtol_face is a hole of another vtol_face.
 bool vtol_face::IsHoleP() const
 {
   edge_list* edges = const_cast<vtol_face*>(this)->outside_boundary_edges();
-  if (edges->size() == 0)
-    return false;
+  if (edges->size() == 0) { delete edges; return false; }
   vtol_edge_sptr e = edges->front();
+  delete edges;
   vcl_list<vtol_topology_object*> const* chains = e->superiors_list();
   for (vcl_list<vtol_topology_object*>::const_iterator i=chains->begin(); i!=chains->end(); ++i)
     if ((*i)->cast_to_one_chain()->numsup() > 0)
-    {
-      delete edges;
       return true;
-    }
-  delete edges;
   return false;
 }
