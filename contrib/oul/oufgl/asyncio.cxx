@@ -17,8 +17,8 @@ void AsyncIO_Shared_State::signal_handler(int)
   complete = 1;
 }
 
-//: Constructor - perform I/O on file descriptor fd, using sig as completion
-// signal. Note that SIGUSR1,2 may be used by the linuxthreads library.
+//: Constructor - perform I/O on file descriptor fd, using sig as completion signal.
+// Note that SIGUSR1,2 may be used by the linuxthreads library.
 
 AsyncIO::AsyncIO(int fd, int sig)
 {
