@@ -1,6 +1,5 @@
 // This is vxl/vul/io/vul_io_user_info.cxx
 
-#include <vcl_cstdlib.h> // vcl_abort()
 #include <vul/vul_user_info.h>
 #include <vul/io/vul_io_user_info.h>
 
@@ -22,6 +21,8 @@ void vsl_b_write(vsl_b_ostream &os, const vul_user_info & p)
 //: Binary load self from stream.
 void vsl_b_read(vsl_b_istream &is, vul_user_info & p)
 {
+  if (!is) return;
+
   short v;
   vsl_b_read(is, v);
   switch(v)
@@ -37,8 +38,10 @@ void vsl_b_read(vsl_b_istream &is, vul_user_info & p)
    break;
 
   default:
-    vcl_cerr << "vsl_b_read() Unknown version number "<< v << vcl_endl;
-    vcl_abort();
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vul_user_info&) \n";
+    vcl_cerr << "           Unknown version number "<< v << "\n";
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
   }
 }
 

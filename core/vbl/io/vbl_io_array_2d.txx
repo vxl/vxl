@@ -35,6 +35,8 @@ void vsl_b_write(vsl_b_ostream & os, const vbl_array_2d<T> &p)
 template<class T>
 void vsl_b_read(vsl_b_istream &is, vbl_array_2d<T> &p)
 {
+  if (!is) return;
+
   short ver;
   int array_rows, array_cols;
   vsl_b_read(is, ver);
@@ -52,10 +54,10 @@ void vsl_b_read(vsl_b_istream &is, vbl_array_2d<T> &p)
     break;
 
   default:
-
-    vcl_cerr << "ERROR: vsl_b_read(s, vbl_array_2d&): Unknown version number "<<
-                                                   ver << vcl_endl;
-    vcl_abort();
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_array_2d<T>&) \n";
+    vcl_cerr << "           Unknown version number "<< ver << "\n";
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
   }
 }
 

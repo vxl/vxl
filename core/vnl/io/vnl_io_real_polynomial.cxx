@@ -1,6 +1,5 @@
 // This is vxl/vnl/io/vnl_io_real_npolynomial.cxx
 
-#include <vcl_cstdlib.h> // vcl_abort()
 #include <vsl/vsl_binary_io.h>
 #include <vnl/io/vnl_io_real_polynomial.h>
 #include <vnl/io/vnl_io_vector.h>

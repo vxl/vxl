@@ -607,6 +607,8 @@ solely to give as much backwards compatibility as you are willing to program.
 //: Binary load self from stream.
 void vanyl_my_class::b_read(vsl_b_istream &is)
 @{
+  if (!is) return;
+
   short ver;
   vsl_b_read(is, ver);
   switch(ver)
@@ -618,8 +620,10 @@ void vanyl_my_class::b_read(vsl_b_istream &is)
   break;
 
   default:
-    vcl_cerr << "vanyl_my_class::b_read() Unknown version number "<< ver << vcl_endl;
-    vcl_abort();
+    vcl_cerr << "I/O ERROR: vanyl_my_class::b_read(vsl_b_istream&) \n";
+    vcl_cerr << "           Unknown version number "<< ver << "\n";
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
   @}
 @}
 @end example
@@ -1060,6 +1064,8 @@ void vsl_b_write(vsl_b_ostream &os, const vgl_point_2d<T>& p)
 template<class T>
 void vsl_b_read(vsl_b_istream &is, vgl_point_2d<T>& p)
 @{
+  if (!is) return;
+
   short w;
   vsl_b_read(is, w);
   switch(w)
@@ -1070,9 +1076,12 @@ void vsl_b_read(vsl_b_istream &is, vgl_point_2d<T>& p)
     break;
 
   default:
-    vcl_cerr << "b_read(vsl_b_istream &, const vgl_point_2d<T>&)"
-                 << " Unknown version number "<< v << vcl_endl;
-    vcl_abort();
+  if (!is) return;
+
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_point_2d<T>&) \n";
+    vcl_cerr << "           Unknown version number "<< w << "\n";
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
   @}
 
 @}
@@ -1255,6 +1264,8 @@ void vsl_b_write(vsl_b_ostream &os, const BaseClass & p)
 //: Binary load from stream.
 void vsl_b_read(vsl_b_istream &is, BaseClass & p)
 @{
+  if (!is) return;
+
   short v;
   vsl_b_read(is, v);
   switch(v)
@@ -1266,8 +1277,10 @@ void vsl_b_read(vsl_b_istream &is, BaseClass & p)
     break;
 
   default:
-    vcl_cerr << "vsl_b_read(is,BaseClass) Unknown version number "<< v << vcl_endl;
-    vcl_abort();
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, BaseClass&) \n";
+    vcl_cerr << "           Unknown version number "<< v << "\n";
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
   @}
 
 @}
@@ -1452,6 +1465,8 @@ void vsl_b_write(vsl_b_ostream &os, const DerivedClass & p)
 //: Binary load from stream.
 void vsl_b_read(vsl_b_istream &is, DerivedClass & p)
 @{
+  if (!is) return;
+
   short v;
   vsl_b_read(is, v);
   switch(v)
@@ -1463,8 +1478,10 @@ void vsl_b_read(vsl_b_istream &is, DerivedClass & p)
     break;
 
   default:
-    vcl_cerr << "vsl_b_read(is,DerivedClass) Unknown version number "<< v << vcl_endl;
-    vcl_abort();
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, DerivedClass&) \n";
+    vcl_cerr << "           Unknown version number "<< v << "\n";
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
   @}
 
 @}
@@ -1581,6 +1598,40 @@ Harry:
 and so forth.  The author humbly suggests that this makes the summaries
 quite readable.
 
+@section Error Detection
+IO is often prone to errors beyond the control of the programmer. In
+particular, files can be come corrupted, given to programs that can't read
+a new format, read on platforms that do not support large enough numbers.
+
+vsl attempts to detect as many error conditions as possible.
+It prints an error message to @code{vcl_cerr} and sets the fail bit
+on the input stream. Any objects that were being loaded when the error
+occurred should be consistent at least as far as being able to delete the
+object safely.
+
+During the opening of a binary input stream, vsl also checks
+for a schema version number, and magic number that confirm that
+the stream was written by vsl.
+
+It is easy to detect the error condition as the example shows
+@example
+  vsl_b_ifstream bfs_in(path);
+  if (!bfs_in)
+  @{
+    vcl_cout << "Could not open " << path
+             << " for reading as binary IO" << vcl_endl;
+    return;
+  @}
+  vsl_b_read(bfs_in, my_obj);
+  if (!bfs_in)
+  @{
+    vcl_cout << "Unable to read my_obj" << vcl_endl;
+    return;
+  @}
+  bfs_in.close();
+@end example
+
+
 
 @section Test Programs
 
@@ -1626,6 +1677,7 @@ void test_point_2d_double_io()
     vsl_b_ifstream bfs_in("vgl_point_2d_test_double_io.bvl.tmp");
     TEST ("Opened vgl_point_2d_test_double_io.bvl.tmp for reading", (!bfs_in), false);
     vsl_b_read(bfs_in, p_in);
+    TEST ("Finished reading file successfully", (!bfs_in), false);
     bfs_in.close();
 
 
@@ -1840,10 +1892,9 @@ avoids having to modify the shared object.
 @subsection Future Work
 
 @enumerate
-@item Currently, too many error checks in the IO simply result in a error message and @code{abort()}. Since
+@item Currently, a few error checks in the IO still result in a error message and @code{abort()}. Since
 IO code is error prone for reasons often beyond the control of the programmer, this behaviour should be
-replaced with something more tolerant. The authors suggest that a suitable behaviour would be to print the
-error message, set the error flag on the stream, and return.
+replaced with a standard error message a setting of the stream's fail flag, and return.
 @item Design a format for @code{long double} and add it @code{to vsl_binary_io.h}.
 @item Many of the function and file names do not conform to VXL standards - that each
 function and class should be named after the file-stem that declares and defines it.

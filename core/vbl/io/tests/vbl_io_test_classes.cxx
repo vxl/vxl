@@ -1,7 +1,6 @@
 #ifndef vbl_io_test_classes_cxx_
 #define vbl_io_test_classes_cxx_
 
-#include <vcl_cstdlib.h> // vcl_abort()
 #include <vbl/vbl_smart_ptr.h>
 #include <vbl/io/vbl_io_smart_ptr.h>
 #include <vbl/io/tests/vbl_io_test_classes.h>
@@ -63,6 +62,8 @@ void vsl_b_write(vsl_b_ostream& os, const impl &p)
 
 void vsl_b_read(vsl_b_istream& is, impl &p)
 {
+  if (!is) return;
+
   short ver;
   vsl_b_read(is, ver);
   switch(ver)
@@ -73,9 +74,10 @@ void vsl_b_read(vsl_b_istream& is, impl &p)
     }
     break;
   default:
-    vcl_cerr << "vsl_b_read(is, impl &) Unknown version number "
-      << ver << vcl_endl;
-    vcl_abort();
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, impl&) \n";
+    vcl_cerr << "           Unknown version number "<< ver << "\n";
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
   }
 }
 

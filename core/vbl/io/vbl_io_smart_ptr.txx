@@ -83,6 +83,8 @@ void vsl_b_write(vsl_b_ostream & os, const vbl_smart_ptr<T> &p)
 template<class T>
 void vsl_b_read(vsl_b_istream &is, vbl_smart_ptr<T> &p)
 {
+  if (!is) return;
+
   short ver;
   vsl_b_read(is, ver);
   switch(ver)
@@ -96,14 +98,28 @@ void vsl_b_read(vsl_b_istream &is, vbl_smart_ptr<T> &p)
       bool first_time; // true if the object is about to be loaded
       vsl_b_read(is, first_time);
 
-      assert (!first_time || is_protected); // This should have been
-                                            //checked during saving
-
+      if (first_time && !is_protected)  // This should have been
+      {                                  //checked during saving
+        vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_smart_ptr<T>&)\n";
+        vcl_cerr << "           De-serialisation failure of non-protected smart_ptr\n";
+        is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+        return;
+      }
       unsigned long id; // Unique serial number indentifying object
       vsl_b_read(is, id);
 
       T * pointer = (T *) is.get_serialisation_pointer(id);
-      assert(first_time == (pointer == 0));
+      if(first_time != (pointer == 0))
+      {
+        // This checks that the saving stream and reading stream
+        // both agree on whether or not this is the first time they
+        // have seen this object.
+        vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_smart_ptr<T>&)\n";
+        vcl_cerr << "           De-serialisation failure\n";
+        is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+        return;
+      }
+
       if (pointer == 0)
       {
 // If you get an error in the next line, it could be because your type T
@@ -120,10 +136,10 @@ void vsl_b_read(vsl_b_istream &is, vbl_smart_ptr<T> &p)
     }
     break;
   default:
-
-    vcl_cerr << "ERROR: vsl_b_read(s, vbl_smart_ptr&): Unknown version number "<<
-    ver << vcl_endl;
-    vcl_abort();
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_smart_ptr<T>&) \n";
+    vcl_cerr << "           Unknown version number "<< ver << "\n";
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
   }
 }
 

@@ -3,7 +3,6 @@
 #pragma implementation
 #endif
 
-#include <vcl_cstdlib.h> // vcl_abort()
 #include <vsl/vsl_binary_io.h>
 #include "vil_io_image_impl.h"
 #include <vsl/vsl_clipon_binary_loader.txx>
@@ -65,6 +64,8 @@ void vsl_b_write(vsl_b_ostream & os, const vil_image_impl & p)
 //: Binary load self from stream.
 void vsl_b_read(vsl_b_istream &is, vil_image_impl & p)
 {
+  if (!is) return;
+
   short ver;
 
   vsl_b_read(is, ver);
@@ -73,9 +74,10 @@ void vsl_b_read(vsl_b_istream &is, vil_image_impl & p)
   case 1:
     // Nothing to load.
   default:
-    vcl_cerr << "vsl_b_read(vsl_b_istream &, vil_image_impl & ): ";
-    vcl_cerr << "Unknown version number "<< ver << vcl_endl;
-    vcl_abort();
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_image_impl&) \n";
+    vcl_cerr << "           Unknown version number "<< ver << "\n";
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
   }
 }
 

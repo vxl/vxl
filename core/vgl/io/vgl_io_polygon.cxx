@@ -1,6 +1,5 @@
 // This is vxl/vgl/io/vgl_io_polygon.cxx
 
-#include <vcl_cstdlib.h> // vcl_abort()
 #include <vgl/io/vgl_io_polygon.h>
 
 //====================================================================================

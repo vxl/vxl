@@ -4,7 +4,6 @@
 
 // This is vil/io/vil_io_image.txx
 
-#include <vcl_cstdlib.h> // vcl_abort()
 #include <vcl_cassert.h>
 #include "vil_io_image.h"
 #include <vil/io/vil_io_image_impl.h>
@@ -59,8 +58,10 @@ void vsl_b_write(vsl_b_ostream &os, const vil_image & p)
 
 //============================================================================
 //: Binary load from stream.
-void vsl_b_read(vsl_b_istream &is, vil_image & p)
+void vsl_b_read(vsl_b_istream &is,  vil_image& p)
 {
+  if (!is) return;
+
   short v;
   vsl_b_read(is, v);
   switch(v)
@@ -76,7 +77,16 @@ void vsl_b_read(vsl_b_istream &is, vil_image & p)
 
       vil_image_impl * impl = (vil_image_impl *)
                                is.get_serialisation_pointer(id);
-      assert(first_time == (impl == 0));
+      if (first_time != (impl == 0))
+      {
+        // This checks that the saving stream and reading stream
+        // both agree on whether or not this is the first time they
+        // have seen this object.
+        vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_image&) \n";
+        vcl_cerr << "           De-serialisation failure\n";
+        is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+        return;
+      }
 
       if (impl == 0)
       {
@@ -90,9 +100,10 @@ void vsl_b_read(vsl_b_istream &is, vil_image & p)
     break;
 
   default:
-    vcl_cerr << "vsl_b_read(is,vil_image) Unknown version number ";
-    vcl_cerr << v << vcl_endl;
-    vcl_abort();
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_image&) \n";
+    vcl_cerr << "           Unknown version number "<< v << "\n";
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
   }
 }
 

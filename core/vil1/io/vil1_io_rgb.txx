@@ -21,6 +21,8 @@ void vsl_b_write(vsl_b_ostream &os, const vil_rgb<T>& v)
 template<class T>
 void vsl_b_read(vsl_b_istream &is, vil_rgb<T>& v)
 {
+  if (!is) return;
+
   short w;
   vsl_b_read(is, w);
   switch(w)
@@ -32,9 +34,10 @@ void vsl_b_read(vsl_b_istream &is, vil_rgb<T>& v)
     break;
 
   default:
-    vcl_cerr << "vsl_b_read(vsl_b_istream_adpt &is, vil_rgb<T>& v) ";
-    vcl_cerr << "Unknown version number "<< v << vcl_endl;
-    vcl_abort();
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_rgb<T>&) \n";
+    vcl_cerr << "           Unknown version number "<< w << "\n";
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
   }
 }
 

@@ -3,7 +3,6 @@
 #pragma implementation
 #endif
 
-#include <vcl_cstdlib.h> // vcl_abort()
 #include <vil/io/vil_io_memory_image.h>
 #include <vil/io/vil_io_image.h>
 #include <vil/vil_memory_image.h>
@@ -29,6 +28,8 @@ void vsl_b_write(vsl_b_ostream &os, const vil_memory_image & p)
 //: Binary load from stream.
 void vsl_b_read(vsl_b_istream &is, vil_memory_image & p)
 {
+  if (!is) return;
+
   short v;
   vsl_b_read(is, v);
   switch(v)
@@ -41,9 +42,10 @@ void vsl_b_read(vsl_b_istream &is, vil_memory_image & p)
     break;
 
   default:
-    vcl_cerr << "vsl_b_read(is,vil_memory_image) ";
-    vcl_cerr << "Unknown version number "<< v << vcl_endl;
-    vcl_abort();
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_memory_image&) \n";
+    vcl_cerr << "           Unknown version number "<< v << "\n";
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
   }
 }
 

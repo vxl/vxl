@@ -3,7 +3,6 @@
 #pragma implementation
 #endif
 
-#include <vcl_cstdlib.h> // vcl_abort()
 #include <vsl/vsl_binary_io.h>
 #include <vnl/io/vnl_io_nonlinear_minimizer.h>
 #include <vsl/vsl_clipon_binary_loader.txx>

@@ -25,6 +25,8 @@ void vsl_b_write(vsl_b_ostream &os, const vbl_sparse_array<T> & p)
 template<class T>
 void vsl_b_read(vsl_b_istream &is, vbl_sparse_array<T> & p)
 {
+  if (!is) return;
+
   short v;
   vsl_b_read(is, v);
   switch(v)
@@ -44,8 +46,10 @@ void vsl_b_read(vsl_b_istream &is, vbl_sparse_array<T> & p)
     break;
 
   default:
-    vcl_cerr << "vsl_b_read() Unknown version number "<< v << vcl_endl;
-    vcl_abort();
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_sparse_array<T>&) \n";
+    vcl_cerr << "           Unknown version number "<< v << "\n";
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
   }
 }
 

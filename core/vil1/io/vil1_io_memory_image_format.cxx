@@ -1,6 +1,5 @@
 // This is vxl/vil/io/vil_io_memory_image_format.txx
 
-#include <vcl_cstdlib.h> // vcl_abort()
 #include "vil_io_memory_image_format.h"
 
 //========================================================================
@@ -18,6 +17,8 @@ void vsl_b_write(vsl_b_ostream &os, const vil_memory_image_format& v)
 //: Binary load vil_memory_image_format from stream.
 void vsl_b_read(vsl_b_istream &is, vil_memory_image_format& v)
 {
+  if (!is) return;
+
   int cf;
   short w;
   vsl_b_read(is, w);
@@ -31,10 +32,10 @@ void vsl_b_read(vsl_b_istream &is, vil_memory_image_format& v)
     break;
 
   default:
-    vcl_cerr << "vsl_b_read(vsl_b_istream_adpt &is, ";
-    vcl_cerr << "vil_memory_image_format& v) Unknown version number ";
-    vcl_cerr << vcl_endl;
-    vcl_abort();
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_memory_image_format&) \n";
+    vcl_cerr << "           Unknown version number "<< w << "\n";
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
   }
 }
 

@@ -4,7 +4,6 @@
 
 // This is vxl/vil/io/vil_io_memory_image_impl.txx
 
-#include <vcl_cstdlib.h> // vcl_abort()
 #include <vil/vil_memory_image_impl.h>
 #include <vil/io/vil_io_memory_image_format.h>
 #include <vil/io/vil_io_memory_image_impl.h>
@@ -92,6 +91,8 @@ void vsl_b_write(vsl_b_ostream &os, const vil_memory_image_impl & p)
 //: Binary load self from stream.
 void vsl_b_read(vsl_b_istream &is, vil_memory_image_impl & p)
 {
+  if (!is) return;
+
   short v;
   vsl_b_read(is, v);
   switch(v)
@@ -118,9 +119,10 @@ void vsl_b_read(vsl_b_istream &is, vil_memory_image_impl & p)
     break;
     }
   default:
-  vcl_cerr << "vsl_b_read(vil_memory_image_impl) Unknown version number ";
-  vcl_cerr << v << vcl_endl;
-  vcl_abort();
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_memory_image_impl&) \n";
+    vcl_cerr << "           Unknown version number "<< v << "\n";
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
   }
 }
 
