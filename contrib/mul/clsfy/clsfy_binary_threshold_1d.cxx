@@ -17,6 +17,7 @@
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/io/vnl_io_matrix.h>
 #include <vsl/vsl_binary_io.h>
+#include <vsl/vsl_indent.h>
 
 //=======================================================================
 
@@ -119,3 +120,34 @@ void clsfy_binary_threshold_1d::b_read(vsl_b_istream& bfs)
   }
 }
 
+//=======================================================================
+
+void vsl_b_write(vsl_b_ostream& bfs, const clsfy_binary_threshold_1d& b)
+{
+  b.b_write(bfs);
+}
+
+//=======================================================================
+
+void vsl_b_read(vsl_b_istream& bfs, clsfy_binary_threshold_1d& b)
+{
+  b.b_read(bfs);
+}
+
+//=======================================================================
+
+void vsl_print_summary(vcl_ostream& os,const clsfy_binary_threshold_1d& b)
+{
+  os << b.is_a() << ": ";
+  vsl_indent_inc(os);
+  b.print_summary(os);
+  vsl_indent_dec(os);
+}
+
+//=======================================================================
+
+vcl_ostream& operator<<(vcl_ostream& os,const clsfy_binary_threshold_1d& b)
+{
+  vsl_print_summary(os,b);
+  return os;
+}
