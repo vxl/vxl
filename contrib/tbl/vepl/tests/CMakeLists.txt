@@ -3,8 +3,8 @@
 ADD_EXECUTABLE( vepl_test_driver
   test_driver.cxx
 
-  test_threshold.cxx
-  test_erode_disk.cxx
+  vepl_test_threshold.cxx
+  vepl_test_erode_disk.cxx
 )
 
 ADD_TEST(vepl_test_threshold  vepl_test_driver vepl_test_threshold)
