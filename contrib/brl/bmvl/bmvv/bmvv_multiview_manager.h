@@ -42,7 +42,7 @@ class bmvv_multiview_manager : public vgui_wrapper_tableau
   void clear_selected();
   void vd_edges();
   void regions();
-	void track_edges();
+  void track_edges();
 #ifdef HAS_XERCES
   void read_xml_edges();
 #endif
@@ -55,7 +55,7 @@ class bmvv_multiview_manager : public vgui_wrapper_tableau
   //: the virtual handle function
   virtual bool handle(const vgui_event&);
 
-	void load_image_file(vcl_string image_filename, bool greyscale, unsigned col, unsigned row);
+  void load_image_file(vcl_string image_filename, bool greyscale, unsigned col, unsigned row);
 
  protected:
   //:internal utility methods
@@ -67,7 +67,7 @@ class bmvv_multiview_manager : public vgui_wrapper_tableau
   bgui_vtol2D_tableau_sptr get_selected_vtol2D_tableau();
   bgui_picker_tableau_sptr get_picker_tableau_at(unsigned col, unsigned row);
   bgui_picker_tableau_sptr get_selected_picker_tableau();
-	vil_image get_image_at(unsigned col, unsigned row);
+  vil_image get_image_at(unsigned col, unsigned row);
 
   //
  private:

@@ -14,6 +14,7 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 #include <bmvv/dll.h>
+
 class bmvv_menus
 {
  public:
@@ -32,4 +33,5 @@ BMVV_DLL_DATA  static void quit_callback();
  private:
   bmvv_menus(){};
 };
+
 #endif // bmvv_menus_h_

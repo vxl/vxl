@@ -28,10 +28,10 @@ int main(int argc, char** argv)
   bmvv_multiview_manager::instance()->set_window(win);
   bmvv_multiview_manager::instance()->post_redraw();
 
-	// Custom instructions
-  //bmvv_multiview_manager::instance()->load_image_file("C:\\user\\bazin\\data\\rondpoint\\rond_point020.pgm", true, 0,0);
-  //bmvv_multiview_manager::instance()->load_image_file("C:\\user\\bazin\\data\\rondpoint\\rond_point021.pgm", true, 1,0);
-  //bmvv_multiview_manager::instance()->track_edges();
+  // Custom instructions
+//bmvv_multiview_manager::instance()->load_image_file("C:\\user\\bazin\\data\\rondpoint\\rond_point020.pgm", true, 0,0);
+//bmvv_multiview_manager::instance()->load_image_file("C:\\user\\bazin\\data\\rondpoint\\rond_point021.pgm", true, 1,0);
+//bmvv_multiview_manager::instance()->track_edges();
 
   return  vgui::run();
 }

@@ -84,14 +84,14 @@ class gevd_bufferxy;
 
 class sdet_detector : public sdet_detector_params
 {
-public:
+ public:
   // So far, not all parameters are included in the constructor.  These seem to
   // be the most important in controlling performance - JLM
   //
   sdet_detector(sdet_detector_params& params);
   sdet_detector(vil_image, float smoothSigma = 1.0, float noiseSigma =2.0,
-           float contourFactor = 1.0, float junctionFactor = 1.5,
-           int minLength = 6, float maxGap = 2.23606, float minJump=1.0);
+                float contourFactor = 1.0, float junctionFactor = 1.5,
+                int minLength = 6, float maxGap = 2.23606, float minJump=1.0);
   ~sdet_detector();
 
   // External interfaces
@@ -126,10 +126,10 @@ public:
 
   void print(vcl_ostream &strm=vcl_cout) const;
 
-protected:
+ protected:
   void ClearData(); // clear buffer
 
-protected:
+ protected:
   vil_image image;
 
   float noise; // noise estimation/threshold
@@ -137,8 +137,8 @@ protected:
   gevd_bufferxy *edgel,                      // output from DoStep
     *direction, *locationx, *locationy, *grad_mag, *angle; // detect step/fold
   int *junctionx, *junctiony, njunction; // junctions found
-  
-  vcl_vector<vtol_vertex_2d_sptr >* vertices;//network of linked 
+
+  vcl_vector<vtol_vertex_2d_sptr >* vertices;//network of linked
   vcl_vector<vtol_edge_2d_sptr >* edges; // edges and vertices
 
   float filterFactor;     // factor in convolution filter

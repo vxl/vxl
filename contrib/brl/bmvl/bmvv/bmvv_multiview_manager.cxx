@@ -252,7 +252,6 @@ void bmvv_multiview_manager::draw_regions(vcl_vector<vdgl_intensity_face_sptr>& 
 //========================================================================
 void bmvv_multiview_manager::vd_edges()
 {
-  
   static bool agr = true;
   static sdet_detector_params dp;
   vgui_dialog* vd_dialog = new vgui_dialog("VD Edges");
@@ -261,7 +260,7 @@ void bmvv_multiview_manager::vd_edges()
   vd_dialog->checkbox("Automatic Threshold", dp.automatic_threshold);
   vd_dialog->checkbox("Agressive Closure", agr);
    vd_dialog->checkbox("Compute Junctions", dp.junctionp);
- if (!vd_dialog->ask())
+  if (!vd_dialog->ask())
     return;
   if (agr)
     dp.aggressive_junction_closure=1;
@@ -430,11 +429,11 @@ void bmvv_multiview_manager::select_curve_corres()
             vsol_curve_2d_sptr c = e->curve();
             vdgl_digital_curve_sptr dc = c->cast_to_digital_curve();
             // pilou's code
-						vdgl_interpolator_sptr interp = dc->get_interpolator();
-					  vdgl_edgel_chain_sptr  ec = interp->get_edgel_chain();
-						bdgl_curve_description descr(ec);
-						descr.info();
-						if (dc) (*bit)->add_digital_curve(dc);
+            vdgl_interpolator_sptr interp = dc->get_interpolator();
+            vdgl_edgel_chain_sptr  ec = interp->get_edgel_chain();
+            bdgl_curve_description descr(ec);
+            descr.info();
+            if (dc) (*bit)->add_digital_curve(dc);
           }
       }
   this->clear_selected();
@@ -446,10 +445,10 @@ void bmvv_multiview_manager::select_curve_corres()
 //-----------------------------------------------------------
 void bmvv_multiview_manager::track_edges()
 {
-	// get parameters
+  // get parameters
   this->clear_display();
   static bdgl_curve_matcher_params mp(1.0, 10.0, 0.31416);
-	static bdgl_curve_tracker_params tp;
+  static bdgl_curve_tracker_params tp;
 
   vgui_dialog* tr_dialog = new vgui_dialog("Edge Tracking");
   tr_dialog->field("Matching threshold", tp.match_thres_);
@@ -458,11 +457,11 @@ void bmvv_multiview_manager::track_edges()
   tr_dialog->field("Angle scale", mp.angle_scale_);
   if (!tr_dialog->ask())
     return;
-	tp.match_params_ = mp;
+  tp.match_params_ = mp;
   bdgl_curve_tracker tracker(tp);
 
-	// embedded VD edges computations
-	// VD parameters
+  // embedded VD edges computations
+  // VD parameters
   static bool agr = true;
   static sdet_detector_params dp;
   vgui_dialog* vd_dialog = new vgui_dialog("VD Edges");
@@ -479,20 +478,20 @@ void bmvv_multiview_manager::track_edges()
   sdet_detector det1(dp);
   sdet_detector det2(dp);
 
-	// passing types
+  // passing types
   vcl_vector<vtol_edge_2d_sptr>* edges;
-	vsol_curve_2d_sptr c;
-	vdgl_digital_curve_sptr dc;
-	vdgl_interpolator_sptr interp;
-	vdgl_edgel_chain_sptr  ec;
-	vcl_vector< vdgl_edgel_chain_sptr > ecl;
-	bgui_vtol2D_tableau_sptr btab;
-	int i;
+  vsol_curve_2d_sptr c;
+  vdgl_digital_curve_sptr dc;
+  vdgl_interpolator_sptr interp;
+  vdgl_edgel_chain_sptr  ec;
+  vcl_vector< vdgl_edgel_chain_sptr > ecl;
+  bgui_vtol2D_tableau_sptr btab;
+  int i;
 
-	// first image
+  // first image
   det1.SetImage(this->get_image_at(0,0));
   det1.DoContour();
-	edges = det1.GetEdges();
+  edges = det1.GetEdges();
   //display the edges
   btab = this->get_vtol2D_tableau_at(0,0);
   if (btab)
@@ -502,18 +501,18 @@ void bmvv_multiview_manager::track_edges()
       vcl_cout << "In bmvv_multiview_manager::track_edges() - null tableau\n";
       return;
     }
-	// pass the edges
-	ecl.clear();
-	for (i=0;i<edges->size();i++){
-		c = (*edges)[i]->curve();
-		dc = c->cast_to_digital_curve();
-		interp = dc->get_interpolator();
-		ec = interp->get_edgel_chain();
-		ecl.push_back(ec);
-	}
-	tracker.input_curve_.push_back(ecl);
+  // pass the edges
+  ecl.clear();
+  for (i=0;i<edges->size();i++){
+    c = (*edges)[i]->curve();
+    dc = c->cast_to_digital_curve();
+    interp = dc->get_interpolator();
+    ec = interp->get_edgel_chain();
+    ecl.push_back(ec);
+  }
+  tracker.input_curve_.push_back(ecl);
 
-	// second image
+  // second image
   det2.SetImage(this->get_image_at(1,0));
   det2.DoContour();
   edges = det2.GetEdges();
@@ -526,22 +525,20 @@ void bmvv_multiview_manager::track_edges()
       vcl_cout << "In bmvv_multiview_manager::track_edges() - null tableau\n";
       return;
     }
-	ecl.clear();
-	for (i=0;i<edges->size();i++){
-		c = (*edges)[i]->curve();
-		dc = c->cast_to_digital_curve();
-		interp = dc->get_interpolator();
-		ec = interp->get_edgel_chain();
-		ecl.push_back(ec);
-	}
-	tracker.input_curve_.push_back(ecl);
+  ecl.clear();
+  for (i=0;i<edges->size();i++){
+    c = (*edges)[i]->curve();
+    dc = c->cast_to_digital_curve();
+    interp = dc->get_interpolator();
+    ec = interp->get_edgel_chain();
+    ecl.push_back(ec);
+  }
+  tracker.input_curve_.push_back(ecl);
 
-	// compute the tracking/matching
-	tracker.track();
+  // compute the tracking/matching
+  tracker.track();
 
-	// output the results : generate links between the curves in both images
-
-	
+  // output the results : generate links between the curves in both images
 }
 
 //====================================================================
@@ -558,5 +555,5 @@ vil_image bmvv_multiview_manager::get_image_at(unsigned col, unsigned row)
       return itab->get_image();
     }
   vcl_cout << "In bmvv_multiview_manager::get_image_at() - null tableau\n";
-	return 0;
+  return 0;
 }

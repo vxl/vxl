@@ -16,28 +16,25 @@
 #include <vdgl/vdgl_edgel_chain_sptr.h>
 
 
-
 //-----------------------------------------------------------------------------
 class bdgl_curve_region
 {
-public:
+ public:
 
-	vgl_point_2d<double> center_;
-	double							 radius_;
+  vgl_point_2d<double> center_;
+  double               radius_;
 
-	bdgl_curve_region(){}
-	bdgl_curve_region(vdgl_edgel_chain_sptr curve){ init(curve); }
-	~bdgl_curve_region(){}
+  bdgl_curve_region(){}
+  bdgl_curve_region(vdgl_edgel_chain_sptr curve){ init(curve); }
+  ~bdgl_curve_region(){}
 
-	void init(vdgl_edgel_chain_sptr curve);
+  void init(vdgl_edgel_chain_sptr curve);
 
-	vgl_point_2d<double> get_center(){ return center_ ;}
-	double get_radius(){ return radius_ ;}
-	double x(){ return center_.x() ;}
-	double y(){ return center_.y() ;}
-	double r(){ return radius_ ;}
-
+  vgl_point_2d<double> get_center(){ return center_ ;}
+  double get_radius(){ return radius_ ;}
+  double x(){ return center_.x() ;}
+  double y(){ return center_.y() ;}
+  double r(){ return radius_ ;}
 };
 
-
-#endif bdgl_curve_region_h_
+#endif // bdgl_curve_region_h_
