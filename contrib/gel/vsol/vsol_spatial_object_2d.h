@@ -46,7 +46,6 @@ class vsol_spatial_object_2d;
 #include <vul/vul_timestamp.h>
 #include <vbl/vbl_ref_count.h>
 #include <vsl/vsl_fwd.h>
-#include <vsl/vsl_binary_loader.h>
 #include <vsol/vsol_box_2d.h>
 #include <vsol/vsol_box_2d_sptr.h>
 
@@ -80,7 +79,7 @@ const unsigned int VSOL_FLAG_BITS      = 0xFF000000;
 
 class vsol_spatial_object_2d : public vul_timestamp, public vbl_ref_count
 {
-// Data Members--------------------------------------------------------------
+  // Data Members--------------------------------------------------------------
  protected:
   mutable vsol_box_2d_sptr bounding_box_; // rectangular bounding area
   unsigned int tag_; // for the COOL containers.
@@ -98,12 +97,11 @@ class vsol_spatial_object_2d : public vul_timestamp, public vbl_ref_count
     SPATIALGROUP,
     NUM_SPATIALOBJECT_TYPES
   };
-  static char *SpatialTypes[];
+  static const char *SpatialTypes[];
   static const float eps;
 
+  // Constructors/Destructors--------------------------------------------------
 
-
-// Constructors/Destructors--------------------------------------------------
  public:
   virtual ~vsol_spatial_object_2d();
 
@@ -113,7 +111,7 @@ class vsol_spatial_object_2d : public vul_timestamp, public vbl_ref_count
   void not_applicable(const vcl_string &message) const;
 
  public:
-// Data Access---------------------------------------------------------------
+  // Data Access---------------------------------------------------------------
 
   //: get the spatial type
   virtual vsol_spatial_object_2d_type spatial_type(void) const=0;
@@ -135,14 +133,14 @@ class vsol_spatial_object_2d : public vul_timestamp, public vbl_ref_count
   //: protect and unprotect
   inline void un_protect(void) { ref_count--; iu_delete(this); }
 
-// Binary I/O------------------------------------------------------------------
+  // Binary I/O------------------------------------------------------------------
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   //---------------------------------------------------------------------------
   virtual vsol_spatial_object_2d* clone(void) const=0;
-  
+
   //: Return a platform independent string identifying the class
   virtual vcl_string is_a() const=0;
 
@@ -167,7 +165,7 @@ class vsol_spatial_object_2d : public vul_timestamp, public vbl_ref_count
   inline int get_tag_id(void);
   inline void set_tag_id(int id);
 
-// Data Control--------------------------------------------------------------
+  // Data Control--------------------------------------------------------------
 
  public:
   //: protected destroy
@@ -195,30 +193,16 @@ class vsol_spatial_object_2d : public vul_timestamp, public vbl_ref_count
   inline void add_to_bounding_box(double x, double y) const
   { if (!bounding_box_) bounding_box_=new vsol_box_2d; bounding_box_->add_point(x,y); }
 
-  // deprecated interface:
- private:
-  void set_min_x(double xmin) const { add_to_bounding_box(xmin,0); }
-  void set_max_x(double xmax) const { add_to_bounding_box(xmax,0); }
-  void set_min_y(double ymin) const { add_to_bounding_box(0,ymin); }
-  void set_max_y(double ymax) const { add_to_bounding_box(0,ymax); }
-
- public:
   // operators
 
-  virtual bool operator==(const vsol_spatial_object_2d &obj) const
-  {
-    return this==&obj;
-  }
-  bool operator!=(vsol_spatial_object_2d &obj)
-  {
-    return !(*this==obj);
-  }
+  virtual bool operator==(const vsol_spatial_object_2d &obj) const { return this==&obj; }
+  bool operator!=(vsol_spatial_object_2d &obj) { return !(*this==obj); }
 
   //-------------------------------------------------------------------------
 
   //---------------------------------------------------------------------------
   //: The same behavior than dynamic_cast<>.
-  // Needed because VXL is not compiled with -frtti :-(
+  // Needed because VXL is not necessarily compiled with -frtti
   //---------------------------------------------------------------------------
 
   vsol_spatial_object_2d* cast_to_spatial_object_2d() {return this;}
@@ -260,17 +244,17 @@ inline void vsol_spatial_object_2d::set_tag_id(int id)
 inline void vsol_spatial_object_2d::check_update_bounding_box(void) const
 {
   if (!bounding_box_)
-    {
-      bounding_box_ = new vsol_box_2d;
-      this->compute_bounding_box();
-      bounding_box_->touch();
-      return;
-    }
+  {
+    bounding_box_ = new vsol_box_2d;
+    this->compute_bounding_box();
+    bounding_box_->touch();
+    return;
+  }
   if (bounding_box_->older(this))
-    { // NOTE: first touch then compute, to avoid infinite loop!! - PVr
-      bounding_box_->touch();
-      this->compute_bounding_box();
-    }
+  { // NOTE: first touch then compute, to avoid infinite loop!! - PVr
+    bounding_box_->touch();
+    this->compute_bounding_box();
+  }
 }
 
 //: set a flag for a spatial object; flag can be VSOL_FLAG[1-6]
@@ -309,7 +293,6 @@ inline void vsol_spatial_object_2d::unset_tagged_union_flag(void)
   unset_user_flag(VSOL_UNIONBIT);
 }
 
-
 inline int vsol_spatial_object_2d::get_tag_id()
 {
   return tag_ & VSOL_DEXID_BITS;
@@ -328,7 +311,7 @@ inline vcl_ostream &operator<<(vcl_ostream &strm,
   if (so!=0)
     ((vsol_spatial_object_2d const*)so)->print(strm);
   else
-    strm << " NULL Spatial Object. ";
+    strm << "NULL Spatial Object.\n";
   return strm;
 }
 
@@ -337,7 +320,6 @@ inline void vsl_print_summary(vcl_ostream& os, const vsol_spatial_object_2d* so)
 {
   os << so;
 }
-
 
 
 //: Allows derived class to be loaded by base-class pointer

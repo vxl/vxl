@@ -4,11 +4,12 @@
 // \file
 
 #include <vcl_iostream.h>
+#include <vsl/vsl_binary_loader.h>
 
 const float vsol_spatial_object_2d::eps=1.0e-3f;
 int vsol_spatial_object_2d::tagcount_=0;
 
-char * vsol_spatial_object_2d::SpatialTypes[] =
+const char * vsol_spatial_object_2d::SpatialTypes[] =
 {
   "NO_TYPE             ",
   "TOPOLOGYOBJECT      ",
