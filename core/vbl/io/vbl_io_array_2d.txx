@@ -1,4 +1,6 @@
 // This is vxl/vbl/io/vbl_io_array_2d.txx
+#ifndef vbl_io_array_2d_txx_
+#define vbl_io_array_2d_txx_
 
 //:
 // \file
@@ -51,9 +53,9 @@ void vsl_b_read(vsl_b_istream &is, vbl_array_2d<T> &p)
 
   default:
 
-    vcl_cerr << "ERROR: vsl_b_read(s, vbl_array_2d&): Unknown version number "<< 
+    vcl_cerr << "ERROR: vsl_b_read(s, vbl_array_2d&): Unknown version number "<<
                                                    ver << vcl_endl;
-    abort();
+    vcl_abort();
   }
 }
 
@@ -69,18 +71,19 @@ void vsl_print_summary(vcl_ostream & os,const vbl_array_2d<T> & p)
     for (unsigned j=0; j<p.cols() && j<5; j++)
     {
       os << " ";
-      vsl_print_summary(os, p(i,j)); 
+      vsl_print_summary(os, p(i,j));
     }
     if (p.cols() > 5)
       os << "...";
     os << vcl_endl;
   }
-  if (p.rows() > 5) 
+  if (p.rows() > 5)
     os << " ..." << vcl_endl;
 }
 
 #define VBL_IO_ARRAY_2D_INSTANTIATE(T) \
 template void vsl_print_summary(vcl_ostream &, const vbl_array_2d<T> &); \
 template void vsl_b_read(vsl_b_istream &, vbl_array_2d<T> &); \
-template void vsl_b_write(vsl_b_ostream &, const vbl_array_2d<T> &); \
-;
+template void vsl_b_write(vsl_b_ostream &, const vbl_array_2d<T> &)
+
+#endif // vbl_io_array_2d_txx_

@@ -1,4 +1,6 @@
 // This is vxl/vnl/io/vnl_io_sparse_matrix.txx
+#ifndef vnl_io_sparse_matrix_txx_
+#define vnl_io_sparse_matrix_txx_
 
 #include <vnl/vnl_sparse_matrix.h>
 #include <vsl/vsl_binary_io.h>
@@ -18,7 +20,6 @@ void vsl_b_write(vsl_b_ostream &os, const vnl_sparse_matrix_pair<T> & p)
   vsl_b_write(os, io_version_no);
   vsl_b_write(os, p.first);
   vsl_b_write(os, p.second);
-  
 }
 
 //=================================================================================
@@ -34,12 +35,11 @@ void vsl_b_read(vsl_b_istream &is, vnl_sparse_matrix_pair<T> & p)
     vsl_b_read(is, p.first);
     vsl_b_read(is, p.second);
     break;
-    
+
   default:
     vcl_cerr << "ERROR: vsl_b_read(s, vnl_sparse_matrix_pair&): Unknown version number "<< ver << vcl_endl;
-    abort();
+    vcl_abort();
   }
-  
 }
 
 //====================================================================================
@@ -57,7 +57,6 @@ void vsl_print_summary(vcl_ostream& os,const vnl_sparse_matrix_pair<T>& p)
 template<class T>
 void vsl_b_write(vsl_b_ostream & os, const vnl_sparse_matrix<T> & p)
 {
-  
   typedef vnl_sparse_matrix_pair<T> pair_t;
 #if defined(VCL_SUNPRO_CC)
   // SunPro is the broken one.
@@ -67,16 +66,15 @@ void vsl_b_write(vsl_b_ostream & os, const vnl_sparse_matrix<T> & p)
   typedef vcl_vector < pair_t > row ;
   typedef vcl_vector < row > vnl_sparse_matrix_elements;
 #endif
-  
-  
+
   row rw;
   vnl_sparse_matrix<T> v=p;
-  
+
   const short io_version_no = 1;
   vsl_b_write(os, io_version_no);
-  vsl_b_write(os, v.rows()); 
+  vsl_b_write(os, v.rows());
   vsl_b_write(os, v.columns());
-  
+
   for (int i=0;i<v.rows();i++)
   {
     rw=v.get_row(i);
@@ -86,9 +84,6 @@ void vsl_b_write(vsl_b_ostream & os, const vnl_sparse_matrix<T> & p)
       vsl_b_write(os, rw[j]);
     }
   }
-  
-  
-  
 }
 
 //=================================================================================
@@ -96,8 +91,6 @@ void vsl_b_write(vsl_b_ostream & os, const vnl_sparse_matrix<T> & p)
 template<class T>
 void vsl_b_read(vsl_b_istream &is, vnl_sparse_matrix<T> & p)
 {
-  
-  
   typedef vnl_sparse_matrix_pair<T> pair_t;
 #if defined(VCL_SUNPRO_CC)
   // SunPro is the broken one.
@@ -107,8 +100,7 @@ void vsl_b_read(vsl_b_istream &is, vnl_sparse_matrix<T> & p)
   typedef vcl_vector < pair_t > row ;
   typedef vcl_vector < row > vnl_sparse_matrix_elements;
 #endif
-  
-  
+
   short ver;
   int n_rows;
   int n_cols;
@@ -120,7 +112,7 @@ void vsl_b_read(vsl_b_istream &is, vnl_sparse_matrix<T> & p)
   switch(ver)
   {
   case 1:
-    vsl_b_read(is, n_rows); 
+    vsl_b_read(is, n_rows);
     vsl_b_read(is, n_cols);
     // As we cannot resize the matrix, check that it is the correct size.
     assert (n_rows==p.rows());
@@ -128,25 +120,24 @@ void vsl_b_read(vsl_b_istream &is, vnl_sparse_matrix<T> & p)
     for(int i=0;i<n_rows;i++)
     {
       vsl_b_read(is,row_size);
-      indexes.resize(row_size);	 
-      values.resize(row_size);	 
-      
+      indexes.resize(row_size);
+      values.resize(row_size);
+
       for(int j=0;j<row_size;j++)
-      {  
+      {
         pair_t p;
         vsl_b_read(is, p);
         indexes[j] = p.first;
         values[j] = p.second;
       }
       p.set_row(i, indexes, values);
-    }   
+    }
     break;
-    
+
   default:
     vcl_cerr << "ERROR: vsl_b_read(s, vnl_sparse_matrix&): Unknown version number "<< ver << vcl_endl;
-    abort();
+    vcl_abort();
   }
-  
 }
 
 //====================================================================================
@@ -156,8 +147,8 @@ void vsl_print_summary(vcl_ostream & os,const vnl_sparse_matrix<T> & p)
 {
   os<<"Rows x Columns: "<<p.rows()<<" x "<<p.columns()<<vcl_endl;
   vnl_sparse_matrix<T> v=p;
-  v.reset(); 
-  v.next();   
+  v.reset();
+  v.next();
   for (int i=0;i<5;i++)
   {
     os<<" (" << v.getrow() <<"," << v.getcolumn() << ") value " << v.value() <<vcl_endl;
@@ -168,5 +159,6 @@ void vsl_print_summary(vcl_ostream & os,const vnl_sparse_matrix<T> & p)
 #define VNL_IO_SPARSE_MATRIX_INSTANTIATE(T) \
   template void vsl_print_summary(vcl_ostream &, const vnl_sparse_matrix<T> &); \
   template void vsl_b_read(vsl_b_istream &, vnl_sparse_matrix<T> &); \
-  template void vsl_b_write(vsl_b_ostream &, const vnl_sparse_matrix<T> &); \
-;
+  template void vsl_b_write(vsl_b_ostream &, const vnl_sparse_matrix<T> &)
+
+#endif // vnl_io_sparse_matrix_txx_

@@ -1,4 +1,6 @@
 // This is vxl/vbl/io/vbl_io_array_1d.txx
+#ifndef vbl_io_array_1d_txx_
+#define vbl_io_array_1d_txx_
 
 //:
 // \file
@@ -18,8 +20,8 @@ void vsl_b_write(vsl_b_ostream & os, const vbl_array_1d<T> & p)
   vsl_b_write(os, io_version_no);
 
   int array_size = p.size();
-  vsl_b_write(os, array_size);   
-  int array_capacity = p.capacity(); 
+  vsl_b_write(os, array_size);
+  int array_capacity = p.capacity();
   vsl_b_write(os, array_capacity);
   for (unsigned i=0; i < array_size; ++i)
     vsl_b_write(os, p[i]);
@@ -50,9 +52,9 @@ void vsl_b_read(vsl_b_istream &is, vbl_array_1d<T> & p)
 
   default:
 
-    vcl_cerr << "ERROR: vsl_b_read(s, vbl_array_1d&): Unknown version number "<< 
+    vcl_cerr << "ERROR: vsl_b_read(s, vbl_array_1d&): Unknown version number "<<
                                                    ver << vcl_endl;
-    abort();
+    vcl_abort();
   }
 }
 
@@ -65,16 +67,17 @@ void vsl_print_summary(vcl_ostream & os,const vbl_array_1d<T> & p)
   os<<"Length: "<<p.size()<<vcl_endl;
   for ( int i =0; i < p.size() && i < 5; i++ )
   {
-    os << " " << i << ": "; 
+    os << " " << i << ": ";
     vsl_print_summary(os, p[i]);
     os << vcl_endl;
   }
-  if (p.size() > 5) 
+  if (p.size() > 5)
     os << " ..." << vcl_endl;
 }
 
 #define VBL_IO_ARRAY_1D_INSTANTIATE(T) \
 template void vsl_print_summary(vcl_ostream &, const vbl_array_1d<T> &); \
 template void vsl_b_read(vsl_b_istream &, vbl_array_1d<T> &); \
-template void vsl_b_write(vsl_b_ostream &, const vbl_array_1d<T> &); \
-;
+template void vsl_b_write(vsl_b_ostream &, const vbl_array_1d<T> &)
+
+#endif // vbl_io_array_1d_txx_

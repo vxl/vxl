@@ -1,5 +1,6 @@
 // This is vxl/vnl/io/vnl_io_matrix.txx
-
+#ifndef vnl_io_matrix_txx_
+#define vnl_io_matrix_txx_
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/io/vnl_io_matrix.h>
@@ -39,18 +40,13 @@ void vsl_b_read(vsl_b_istream &is, vnl_matrix<T> & p)
     vcl_cerr << "vsl_b_read(s, vnl_matrix&) Unknown version number "<< v << vcl_endl;
     vcl_abort();
   }
-
 }
-
-
-
 
 //====================================================================================
 //: Output a human readable summary to the stream
 template<class T>
 void vsl_print_summary(vcl_ostream & os,const vnl_matrix<T> & p)
 {
-
   os<<"Size: "<<p.rows()<<" x "<<p.cols()<<vcl_endl;
 
   int m = 5; int n = 5;
@@ -73,8 +69,10 @@ void vsl_print_summary(vcl_ostream & os,const vnl_matrix<T> & p)
   vsl_dec_indent(os);
 }
 
+
 #define VNL_IO_MATRIX_INSTANTIATE(T) \
 template void vsl_print_summary(vcl_ostream &, const vnl_matrix<T > &); \
 template void vsl_b_read(vsl_b_istream &, vnl_matrix<T > &); \
-template void vsl_b_write(vsl_b_ostream &, const vnl_matrix<T > &); \
-;
+template void vsl_b_write(vsl_b_ostream &, const vnl_matrix<T > &)
+
+#endif // vnl_io_matrix_txx_

@@ -1,7 +1,9 @@
 // This is vxl/vsl/vsl_stack_io.txx
+#ifndef vsl_stack_io_txx_
+#define vsl_stack_io_txx_
 
 //:
-// \file   
+// \file
 // \brief  binary IO functions for vcl_stack<T>
 // \author K.Y.McGaul
 // Implementation
@@ -87,5 +89,6 @@ void vsl_print_summary(vcl_ostream& os, const vcl_stack<T> &v)
 #define VSL_STACK_INSTANTIATE(T) \
 template void vsl_print_summary(vcl_ostream& s, const vcl_stack<T >& v); \
 template void vsl_b_write(vsl_b_ostream& s, const vcl_stack<T >& v); \
-template void vsl_b_read(vsl_b_istream& s, vcl_stack<T >& v); \
-;
+template void vsl_b_read(vsl_b_istream& s, vcl_stack<T >& v)
+
+#endif // vsl_stack_io_txx_

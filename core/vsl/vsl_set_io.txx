@@ -1,7 +1,9 @@
 // This is vsl_set_io.txx
+#ifndef vsl_set_io_txx_
+#define vsl_set_io_txx_
 
 //:
-// \file   
+// \file
 // \brief  binary IO functions for vcl_set<T>
 // \author K.Y.McGaul
 // Implementation
@@ -38,7 +40,7 @@ void vsl_b_read(vsl_b_istream& s, vcl_set<T>& v)
       T tmp;
       vsl_b_read(s,tmp);
       v.insert(tmp);
-    } 
+    }
     break;
   default:
     vcl_cerr << "vsl_b_read(s, vcl_set<T>&) Unknown version number "<< ver << vcl_endl;
@@ -53,8 +55,8 @@ void vsl_print_summary(vcl_ostream& os, const vcl_set<T> &v)
 {
   os << "Set length: " << v.size() << vcl_endl;
   unsigned i =0;
-  for (vcl_set<T>::const_iterator iter = v.begin(); iter != v.end() 
-    && i<5; iter++, i++)
+  for (vcl_set<T>::const_iterator iter = v.begin();
+       iter != v.end() && i<5; ++iter,++i)
   {
     os << " " << i << ": ";
     vsl_print_summary(os, *iter);
@@ -64,8 +66,10 @@ void vsl_print_summary(vcl_ostream& os, const vcl_set<T> &v)
     os << " ..." << vcl_endl;
 }
 
+
 #define VSL_SET_INSTANTIATE(T) \
 template void vsl_print_summary(vcl_ostream& s, const vcl_set<T >& v); \
 template void vsl_b_write(vsl_b_ostream& s, const vcl_set<T >& v); \
-template void vsl_b_read(vsl_b_istream& s, vcl_set<T >& v); \
-;
+template void vsl_b_read(vsl_b_istream& s, vcl_set<T >& v)
+
+#endif // vsl_set_io_txx_

@@ -1,4 +1,6 @@
 // This is vxl/vgl/io/vgl_io_line_segment_2d.txx
+#ifndef vgl_io_line_segment_2d_txx_
+#define vgl_io_line_segment_2d_txx_
 
 #include <vgl/io/vgl_io_line_segment_2d.h>
 #include <vgl/io/vgl_io_point_2d.h>
@@ -31,9 +33,8 @@ void vsl_b_read(vsl_b_istream &is, vgl_line_segment_2d<T> & p)
 
   default:
     vcl_cerr << "vsl_b_read() Unknown version number "<< v << vcl_endl;
-    abort();
+    vcl_abort();
   }
-
 }
 
 
@@ -49,8 +50,8 @@ void vsl_print_summary(vcl_ostream& os,const vgl_line_segment_2d<T> & l)
 }
 
 #define VGL_IO_LINE_SEGMENT_2D_INSTANTIATE(T) \
-template void vsl_print_summary(vcl_ostream &, \
-                                 const vgl_line_segment_2d<T> &); \
+template void vsl_print_summary(vcl_ostream &, vgl_line_segment_2d<T>const&); \
 template void vsl_b_read(vsl_b_istream &, vgl_line_segment_2d<T> &); \
-template void vsl_b_write(vsl_b_ostream &, const vgl_line_segment_2d<T> &); \
-;
+template void vsl_b_write(vsl_b_ostream &, const vgl_line_segment_2d<T> &)
+
+#endif // vgl_io_line_segment_2d_txx_

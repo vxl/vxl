@@ -1,8 +1,6 @@
-#ifdef __GNUC__
-#pragma implementation
-#endif
-
 // This is vxl/vbl/io/vbl_io_smart_ptr.txx
+#ifndef vbl_io_smart_ptr_txx_
+#define vbl_io_smart_ptr_txx_
 
 //:
 // \file
@@ -19,7 +17,6 @@
 template<class T>
 void vsl_b_write(vsl_b_ostream & os, const vbl_smart_ptr<T> &p)
 {
-
   // write version number
   const short io_version_no = 1;
   vsl_b_write(os, io_version_no);
@@ -28,21 +25,21 @@ void vsl_b_write(vsl_b_ostream & os, const vbl_smart_ptr<T> &p)
 
   // Get a serial_number for object being pointed to
   unsigned long id = os.get_serial_number(p.ptr());
-  // Find out if this is the first time the object being pointed to is 
+  // Find out if this is the first time the object being pointed to is
   // being saved
   if (id == 0)
   {
     // <rant> IMS
-    // It is not clear how to deal fully satisfactorily with unprotected 
-    // smart_ptrs. For example is we save and reload them without any error 
+    // It is not clear how to deal fully satisfactorily with unprotected
+    // smart_ptrs. For example is we save and reload them without any error
     // checks we could restore the object with a reference count of 0.
-    // To be honest, I think the idea of an unprotected smart_ptr is 
-    // not so smart. Either it is a smart pointer, in which case it should 
-    // be protected, or it is unprotected in which case you should use a 
+    // To be honest, I think the idea of an unprotected smart_ptr is
+    // not so smart. Either it is a smart pointer, in which case it should
+    // be protected, or it is unprotected in which case you should use a
     // ordinary pointer. Cycles in the pointer network, are best dealt with
-    // by avoiding them. You have to be aware they are happening to unprotect 
+    // by avoiding them. You have to be aware they are happening to unprotect
     // the pointer anyway.
-    // <\rant> 
+    // <\rant>
     if (!p.is_protected())
     {
         vcl_cerr << "vsl_b_write(vsl_b_ostream & os, const vbl_smart_ptr<T>:"
@@ -61,12 +58,12 @@ void vsl_b_write(vsl_b_ostream & os, const vbl_smart_ptr<T> &p)
       // that this object is being saved.
       // This isn't really necessary but
       // it is useful as an error check
-    vsl_b_write(os, true); 
+    vsl_b_write(os, true);
     vsl_b_write(os, id);     // Save the serial number
 // If you get an error in the next line, it could be because your type T
 // has no vsl_b_write(vsl_b_ostream &,const T*)  defined on it.
 // See the documentation in the .h file to see how to add it.
-    vsl_b_write(os, p.ptr());    // Only save the actual object if it 
+    vsl_b_write(os, p.ptr());    // Only save the actual object if it
                                   //hasn't been saved before to this stream
   }
   else
@@ -79,7 +76,6 @@ void vsl_b_write(vsl_b_ostream & os, const vbl_smart_ptr<T> &p)
     vsl_b_write(os, false);
     vsl_b_write(os, id);         // Save the serial number
   }
-  
 }
 
 //=====================================================================
@@ -93,15 +89,14 @@ void vsl_b_read(vsl_b_istream &is, vbl_smart_ptr<T> &p)
   {
   case 1:
     {
-
-      bool is_protected; // true if the smart_ptr is to be 
+      bool is_protected; // true if the smart_ptr is to be
                          //responsible for the object
       vsl_b_read(is, is_protected);
 
       bool first_time; // true if the object is about to be loaded
       vsl_b_read(is, first_time);
 
-      assert (!first_time || is_protected); // This should have been 
+      assert (!first_time || is_protected); // This should have been
                                             //checked during saving
 
       unsigned long id; // Unique serial number indentifying object
@@ -117,8 +112,8 @@ void vsl_b_read(vsl_b_istream &is, vbl_smart_ptr<T> &p)
         vsl_b_read(is, pointer);
         is.add_serialisation_record(id, pointer);
       }
-           
-      p = pointer; // This operator method will set the internal 
+
+      p = pointer; // This operator method will set the internal
                    //pointer in vbl_smart_ptr.
       if (!is_protected)
         p.unprotect();
@@ -126,9 +121,9 @@ void vsl_b_read(vsl_b_istream &is, vbl_smart_ptr<T> &p)
     break;
   default:
 
-    vcl_cerr << "ERROR: vsl_b_read(s, vbl_smart_ptr&): Unknown version number "<< 
+    vcl_cerr << "ERROR: vsl_b_read(s, vbl_smart_ptr&): Unknown version number "<<
     ver << vcl_endl;
-    abort();
+    vcl_abort();
   }
 }
 
@@ -142,10 +137,9 @@ void vsl_print_summary(vcl_ostream & os,const vbl_smart_ptr<T> & p)
   os << "Smart ptr to ";
   if (p.ptr())
   {
-
-// If you get an error in the next line, it could be because your type T
-// has no vsl_print_summary(vsl_b_ostream &, const T*)  defined on it.
-// See the documentation in the .h file to see how to add it.
+    // If you get an error in the next line, it could be because your type T
+    // has no vsl_print_summary(vsl_b_ostream &, const T*)  defined on it.
+    // See the documentation in the .h file to see how to add it.
     vsl_print_summary(os, (p.ptr()));
   }
   else
@@ -153,7 +147,7 @@ void vsl_print_summary(vcl_ostream & os,const vbl_smart_ptr<T> & p)
 }
 
 
-/*
+#if 0 // commented out
 //===========================================
 // Deal with base class pointers
 template<class T>
@@ -167,20 +161,20 @@ void vsl_b_read(vsl_b_istream& is, vbl_smart_ptr<T> * &p)
     p = new vbl_smart_ptr<T>;
     vsl_b_read(is, *p);
   }
-  else 
+  else
     p = 0;
-} 
+}
 
 template<class T>
 void vsl_b_write(vsl_b_ostream& os, const vbl_smart_ptr<T> *p)
 {
   if (p==0)
   {
-    vsl_b_write(os, false); // Indicate null pointer stored 
+    vsl_b_write(os, false); // Indicate null pointer stored
   }
   else
   {
-    vsl_b_write(os,true); // Indicate non-null pointer stored 
+    vsl_b_write(os,true); // Indicate non-null pointer stored
     vsl_b_write(os,*p);
   }
 }
@@ -192,15 +186,16 @@ void vsl_print_summary(vcl_ostream, const vbl_smart_ptr<T> *p)
     os << "NULL PTR";
   else
   {
-    os << "vbl_smart_ptr: "; 
+    os << "vbl_smart_ptr: ";
     vsl_print_summary(*p);
-  } 
-};
-*/
+  }
+}
+#endif
 
 #undef VBL_IO_SMART_PTR_INSTANTIATE
 #define VBL_IO_SMART_PTR_INSTANTIATE(T) \
 template void vsl_print_summary(vcl_ostream &, const vbl_smart_ptr<T > &); \
 template void vsl_b_read(vsl_b_istream &, vbl_smart_ptr<T > &); \
-template void vsl_b_write(vsl_b_ostream &, const vbl_smart_ptr<T > &); \
+template void vsl_b_write(vsl_b_ostream &, const vbl_smart_ptr<T > &)
 
+#endif // vbl_io_smart_ptr_txx_

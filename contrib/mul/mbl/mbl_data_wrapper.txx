@@ -1,3 +1,6 @@
+#ifndef mbl_data_wrapper_txx_
+#define mbl_data_wrapper_txx_
+
 #include <mbl/mbl_data_wrapper.h>
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h>
@@ -32,4 +35,6 @@ void mbl_data_wrapper<T>::set_index(int n)
 }
 
 #define MBL_DATA_WRAPPER_INSTANTIATE(T) \
-template class mbl_data_wrapper< T >;
+template class mbl_data_wrapper< T >
+
+#endif // mbl_data_wrapper_txx_

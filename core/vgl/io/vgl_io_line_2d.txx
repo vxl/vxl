@@ -1,4 +1,6 @@
 // This is vxl/vgl/io/vgl_io_line_2d.txx
+#ifndef vgl_io_line_2d_txx_
+#define vgl_io_line_2d_txx_
 
 #include <vgl/io/vgl_io_line_2d.h>
 
@@ -33,17 +35,16 @@ void vsl_b_read(vsl_b_istream &is, vgl_line_2d<T>& v)
 
   default:
     vcl_cerr << "vsl_b_read(vsl_b_istream_adpt &is, vgl_line_2d<T>& v) ";
-  vcl_cerr << "Unknown version number "<< w << vcl_endl;
-    abort();
+    vcl_cerr << "Unknown version number "<< w << vcl_endl;
+    vcl_abort();
   }
-
 }
 
 
 //======================================================================
 //: Output a human readable summary of a vgl_line_2d object to the stream
 template<class T>
-void vsl_print_summary(vcl_ostream &os, const vgl_line_2d<T>& v) 
+void vsl_print_summary(vcl_ostream &os, const vgl_line_2d<T>& v)
 {
     os<<"Line: ( "<<v.a()<<"x + "<<v.b()<<"y + "<<v.c()<<"=0 )";
 }
@@ -51,6 +52,6 @@ void vsl_print_summary(vcl_ostream &os, const vgl_line_2d<T>& v)
 #define VGL_IO_LINE_2D_INSTANTIATE(T) \
 template void vsl_print_summary(vcl_ostream &, const vgl_line_2d<T>&); \
 template void vsl_b_read(vsl_b_istream &, vgl_line_2d<T>&); \
-template void vsl_b_write(vsl_b_ostream &, const vgl_line_2d<T>&); \
-;
+template void vsl_b_write(vsl_b_ostream &, const vgl_line_2d<T>&)
 
+#endif // vgl_io_line_2d_txx_

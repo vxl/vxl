@@ -1,7 +1,9 @@
 // This is vxl/vsl/vsl_map_io.txx
+#ifndef vsl_map_io_txx_
+#define vsl_map_io_txx_
 
 //:
-// \file  
+// \file
 // \brief  binary IO functions for vcl_map<Key, T, Compare>
 // \author K.Y.McGaul
 // Implementation
@@ -43,7 +45,7 @@ void vsl_b_read(vsl_b_istream& s, vcl_map<Key, T, Compare>& v)
       vsl_b_read(s, first_val);
       vsl_b_read(s, second_val);
       v[first_val] = second_val;
-    } 
+    }
     break;
   default:
     vcl_cerr << "vsl_b_read(s, vcl_map<>&) Unknown version number "<< ver << vcl_endl;
@@ -58,8 +60,8 @@ void vsl_print_summary(vcl_ostream& os, const vcl_map<Key, T, Compare> &v)
 {
   os << "Map size: " << v.size() << vcl_endl;
   unsigned i=0;
-  for (vcl_map<Key, T, Compare>::const_iterator iter = v.begin(); iter != v.end() 
-    && i< 5; iter++,i++)
+  for (vcl_map<Key, T, Compare>::const_iterator iter = v.begin();
+       iter != v.end() && i< 5; ++iter,++i)
   {
     os << " " << i << ": ";
     vsl_print_summary(os, (*iter).first);
@@ -75,5 +77,6 @@ void vsl_print_summary(vcl_ostream& os, const vcl_map<Key, T, Compare> &v)
 #define VSL_MAP_IO_INSTANTIATE(Key, T, Compare) \
 template void vsl_print_summary(vcl_ostream&, const vcl_map<Key, T, Compare >&); \
 template void vsl_b_write(vsl_b_ostream& s, const vcl_map<Key, T, Compare >& v); \
-template void vsl_b_read(vsl_b_istream& s, vcl_map<Key, T, Compare >& v); \
-;
+template void vsl_b_read(vsl_b_istream& s, vcl_map<Key, T, Compare >& v)
+
+#endif // vsl_map_io_txx_

@@ -1,11 +1,13 @@
 // This is vxl/vil/io/vil_io_rgba.txx
+#ifndef vil_io_rgba_txx_
+#define vil_io_rgba_txx_
 
 #include <vil/io/vil_io_rgba.h>
 
 //========================================================================
 //: Binary save vil_rgba to stream.
 template<class T>
-void vsl_b_write(vsl_b_ostream &os, const vil_rgba<T>& v) 
+void vsl_b_write(vsl_b_ostream &os, const vil_rgba<T>& v)
 {
   const short io_version_no = 1;
   vsl_b_write(os, io_version_no);
@@ -33,17 +35,16 @@ void vsl_b_read(vsl_b_istream &is, vil_rgba<T>& v)
 
   default:
     vcl_cerr << "vsl_b_read(vsl_b_istream_adpt &is, vil_rgba<T>& v) ";
-  vcl_cerr << "Unknown version number "<< v << vcl_endl;
-    abort();
+    vcl_cerr << "Unknown version number "<< v << vcl_endl;
+    vcl_abort();
   }
-
 }
 
 
 //========================================================================
 //: Output a human readable summary of a vil_rgba object to the stream
 template<class T>
-void vsl_print_summary(vcl_ostream &os, const vil_rgba<T>& v) 
+void vsl_print_summary(vcl_ostream &os, const vil_rgba<T>& v)
 {
     os<<"Rgba : ( "<<v.R()<<" , "<<v.G()<<" , "<<v.B()<<" , "<<v.A()<<" )";
 }
@@ -51,6 +52,6 @@ void vsl_print_summary(vcl_ostream &os, const vil_rgba<T>& v)
 #define VIL_IO_RGBA_INSTANTIATE(T) \
 template void vsl_print_summary(vcl_ostream &, const vil_rgba<T >&); \
 template void vsl_b_read(vsl_b_istream &, vil_rgba<T >&); \
-template void vsl_b_write(vsl_b_ostream &, const vil_rgba<T >&); \
-;
+template void vsl_b_write(vsl_b_ostream &, const vil_rgba<T >&)
 
+#endif // vil_io_rgba_txx_

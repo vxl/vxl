@@ -1,3 +1,6 @@
+#ifndef mbl_data_array_wrapper_txx_
+#define mbl_data_array_wrapper_txx_
+
 #include <mbl/mbl_data_array_wrapper.h>
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h>
@@ -72,7 +75,7 @@ int mbl_data_array_wrapper<T>::index() const
 template<class T>
 mbl_data_wrapper< T >* mbl_data_array_wrapper<T>::clone() const
 {
-	return new mbl_data_array_wrapper<T>(*this);
+  return new mbl_data_array_wrapper<T>(*this);
 }
 
 //: Move to element n
@@ -91,4 +94,6 @@ void mbl_data_array_wrapper<T>::set_index(int n)
 }
 
 #define MBL_DATA_ARRAY_WRAPPER_INSTANTIATE(T) \
-template class mbl_data_array_wrapper< T >;
+template class mbl_data_array_wrapper< T >
+
+#endif // mbl_data_array_wrapper_txx_

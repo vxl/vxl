@@ -1,9 +1,10 @@
 // This is vxl/vnl/io/vnl_io_vector_fixed.txx
+#ifndef vnl_io_vector_fixed_txx_
+#define vnl_io_vector_fixed_txx_
 
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/io/vnl_io_vector_fixed.h>
 #include <vsl/vsl_indent.h>
-
 
 
 //=================================================================================
@@ -17,7 +18,6 @@ void vsl_b_write(vsl_b_ostream & os, const vnl_vector_fixed<T,n> & p)
   {
     vsl_b_write(os, p.operator()(i));
   }
-  
 }
 
 //=================================================================================
@@ -25,7 +25,6 @@ void vsl_b_write(vsl_b_ostream & os, const vnl_vector_fixed<T,n> & p)
 template<class T, int n>
 void vsl_b_read(vsl_b_istream &is, vnl_vector_fixed<T,n> & p)
 {
-  
   short ver;
   T val;
   vsl_b_read(is, ver);
@@ -38,14 +37,11 @@ void vsl_b_read(vsl_b_istream &is, vnl_vector_fixed<T,n> & p)
       p.put(i, val);
     }
     break;
-    
+
   default:
     vcl_cerr << "ERROR: vsl_b_read(s, vnl_vector_fixed&): Unknown version number "<< ver << vcl_endl;
-    abort();
+    vcl_abort();
   }
-  
-  
-  
 }
 
 //====================================================================================
@@ -67,11 +63,11 @@ void vsl_print_summary(vcl_ostream & os,const vnl_vector_fixed<T,n> & p)
 
     if (n > elems_out) os<<"...";
     os<<")"<<vcl_endl;
-
 }
 
 #define VNL_IO_VECTOR_FIXED_INSTANTIATE(T,n) \
 template void vsl_print_summary(vcl_ostream &, const vnl_vector_fixed<T,n> &); \
 template void vsl_b_read(vsl_b_istream &, vnl_vector_fixed<T,n> &); \
-template void vsl_b_write(vsl_b_ostream &, const vnl_vector_fixed<T,n> &); \
-;
+template void vsl_b_write(vsl_b_ostream &, const vnl_vector_fixed<T,n> &)
+
+#endif // vnl_io_vector_fixed_txx_

@@ -1,4 +1,6 @@
 // This is vxl/vgl/io/vgl_io_box_2d.txx
+#ifndef vgl_io_box_2d_txx_
+#define vgl_io_box_2d_txx_
 
 #include <vgl/io/vgl_io_box_2d.h>
 #include <vsl/vsl_binary_io.h>
@@ -43,10 +45,9 @@ void vsl_b_read(vsl_b_istream &is, vgl_box_2d<T> & p)
 
   default:
     vcl_cerr << "vgl_box_2d<T>::vsl_b_read()";
-  vcl_cerr << " Unknown version number "<< v << vcl_endl;
-    abort();
+    vcl_cerr << " Unknown version number "<< v << vcl_endl;
+    vcl_abort();
   }
-
 }
 
 //============================================================================
@@ -54,7 +55,7 @@ void vsl_b_read(vsl_b_istream &is, vgl_box_2d<T> & p)
 template<class T>
 void vsl_print_summary(vcl_ostream& os,const vgl_box_2d<T> & p)
 {
-  os<<"2d Box with opposite corners at (" <<p.get_min_x() << "," << 
+  os<<"2d Box with opposite corners at (" <<p.get_min_x() << "," <<
     p.get_min_y() <<vcl_endl;
   os<<"and (" << p.get_max_x() << "," << p.get_max_y() << ")" <<vcl_endl;
 }
@@ -62,5 +63,6 @@ void vsl_print_summary(vcl_ostream& os,const vgl_box_2d<T> & p)
 #define VGL_IO_BOX_2D_INSTANTIATE(T) \
 template void vsl_print_summary(vcl_ostream &, const vgl_box_2d<T> &); \
 template void vsl_b_read(vsl_b_istream &, vgl_box_2d<T> &); \
-template void vsl_b_write(vsl_b_ostream &, const vgl_box_2d<T> &); \
-;
+template void vsl_b_write(vsl_b_ostream &, const vgl_box_2d<T> &)
+
+#endif // vgl_io_box_2d_txx_

@@ -1,7 +1,9 @@
 // This is vxl/vsl/vsl_list_io.txx
+#ifndef vsl_list_io_txx_
+#define vsl_list_io_txx_
 
 //:
-// \file   
+// \file
 // \brief  binary IO functions for vcl_list<T>
 // \author K.Y.McGaul
 // Implementation
@@ -39,7 +41,7 @@ void vsl_b_read(vsl_b_istream& s, vcl_list<T>& v)
       T tmp;
       vsl_b_read(s,tmp);
       v.push_back(tmp);
-    } 
+    }
     break;
   default:
     vcl_cerr << "vsl_b_read(s, vcl_list<T>&) Unknown version number "<< ver << vcl_endl;
@@ -54,8 +56,8 @@ void vsl_print_summary(vcl_ostream& os, const vcl_list<T> &v)
 {
   unsigned i=0;
   os << "List length: " << v.size() << vcl_endl;
-  for (vcl_list<T>::const_iterator iter = v.begin(); iter != v.end()
-    && i<5; iter++, i++)
+  for (vcl_list<T>::const_iterator iter = v.begin();
+       iter != v.end() && i<5; ++iter,++i)
   {
     os << " " << i << ": ";
     vsl_print_summary(os, *iter);
@@ -68,5 +70,6 @@ void vsl_print_summary(vcl_ostream& os, const vcl_list<T> &v)
 #define VSL_LIST_INSTANTIATE(T) \
 template void vsl_print_summary(vcl_ostream&, const vcl_list<T >&); \
 template void vsl_b_write(vsl_b_ostream& s, const vcl_list<T >& v); \
-template void vsl_b_read(vsl_b_istream& s, vcl_list<T >& v); \
-;
+template void vsl_b_read(vsl_b_istream& s, vcl_list<T >& v)
+
+#endif // vsl_list_io_txx_

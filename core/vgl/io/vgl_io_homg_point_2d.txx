@@ -1,4 +1,6 @@
 // This is vxl/vgl/io/vgl_io_homg_point_2d.txx
+#ifndef vgl_io_homg_point_2d_txx_
+#define vgl_io_homg_point_2d_txx_
 
 #include <vgl/vgl_homg_point_2d.h>
 #include <vsl/vsl_binary_io.h>
@@ -34,7 +36,6 @@ void vsl_b_read(vsl_b_istream &is, vgl_homg_point_2d<T> & p)
     vcl_cerr << "vsl_b_read() Unknown version number "<< v << vcl_endl;
     vcl_abort();
   }
-
 }
 
 
@@ -51,3 +52,4 @@ template void vsl_print_summary(vcl_ostream &, const vgl_homg_point_2d<T> &); \
 template void vsl_b_read(vsl_b_istream &, vgl_homg_point_2d<T> &); \
 template void vsl_b_write(vsl_b_ostream &, const vgl_homg_point_2d<T> &)
 
+#endif // vgl_io_homg_point_2d_txx_

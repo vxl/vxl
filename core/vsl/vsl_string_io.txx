@@ -1,7 +1,9 @@
 // This is vxl/vsl/vsl_string_io.txx
+#ifndef vsl_string_io_txx_
+#define vsl_string_io_txx_
 
 //:
-// \file   
+// \file
 // \brief  binary IO functions for vcl_basic_string<T>
 // \author K.Y.McGaul
 // Implementation
@@ -44,7 +46,9 @@ void vsl_b_read(vsl_b_istream& s, vcl_basic_string<T>& v)
   }
 }
 
+
 #define VSL_STRING_INSTANTIATE(T) \
 template void vsl_b_write(vsl_b_ostream& s, const vcl_basic_string<T >& v); \
-template void vsl_b_read(vsl_b_istream& s, vcl_basic_string<T >& v); \
-;
+template void vsl_b_read(vsl_b_istream& s, vcl_basic_string<T >& v)
+
+#endif // vsl_string_io_txx_

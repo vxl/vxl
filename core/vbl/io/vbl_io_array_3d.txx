@@ -1,4 +1,6 @@
 // This is vxl/vbl/io/vbl_io_array_3d.txx
+#ifndef vbl_io_array_3d_txx_
+#define vbl_io_array_3d_txx_
 
 //:
 // \file
@@ -51,10 +53,10 @@ void vsl_b_read(vsl_b_istream &is, vbl_array_3d<T> &p)
     break;
 
   default:
-  
-    vcl_cerr << "ERROR: vsl_b_read(s, vbl_array_3d&): Unknown version number "<< 
+
+    vcl_cerr << "ERROR: vsl_b_read(s, vbl_array_3d&): Unknown version number "<<
                                                    ver << vcl_endl;
-    abort();
+    vcl_abort();
   }
 }
 
@@ -73,7 +75,7 @@ void vsl_print_summary(vcl_ostream & os,const vbl_array_3d<T> & p)
       for (unsigned k=0; k<p.get_row3_count() && k<5; k++)
       {
         os << " ";
-        vsl_print_summary(os, p(i,j,k)); 
+        vsl_print_summary(os, p(i,j,k));
       }
       if (p.get_row3_count() > 5)
         os << " ..." << vcl_endl;
@@ -83,12 +85,13 @@ void vsl_print_summary(vcl_ostream & os,const vbl_array_3d<T> & p)
     os << vcl_endl;
     os << vcl_endl;
   }
-  if (p.get_row1_count() > 5) 
+  if (p.get_row1_count() > 5)
     os << " ..." << vcl_endl;
 }
 
 #define VBL_IO_ARRAY_3D_INSTANTIATE(T) \
 template void vsl_print_summary(vcl_ostream &, const vbl_array_3d<T> &); \
 template void vsl_b_read(vsl_b_istream &, vbl_array_3d<T> &); \
-template void vsl_b_write(vsl_b_ostream &, const vbl_array_3d<T> &); \
-;
+template void vsl_b_write(vsl_b_ostream &, const vbl_array_3d<T> &)
+
+#endif // vbl_io_array_3d_txx_

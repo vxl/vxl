@@ -1,4 +1,6 @@
 // This is vil/io/vil_io_memory_image_of.txx
+#ifndef vil_io_memory_image_of_txx_
+#define vil_io_memory_image_of_txx_
 
 #include <vil/io/vil_io_memory_image_of.h>
 #include <vil/io/vil_io_memory_image.h>
@@ -34,15 +36,14 @@ void vsl_b_read(vsl_b_istream &is, vil_memory_image_of<T> & p)
     {
       vsl_b_read(is, (vil_memory_image &) p);
       p.recache_from_impl();
-    }        
+    }
     break;
 
   default:
     vcl_cerr << "vsl_b_read(is,vil_memory_image_of<T>) ";
     vcl_cerr << "Unknown version number "<< v << vcl_endl;
-    abort();
+    vcl_abort();
   }
-
 }
 
 
@@ -56,10 +57,8 @@ void vsl_print_summary(vcl_ostream& os,const vil_memory_image_of<T> & p)
 
 
 #define VIL_IO_MEMORY_IMAGE_OF_INSTANTIATE(T) \
-template void vsl_print_summary(vcl_ostream &, \
-  const vil_memory_image_of<T >&); \
-template void vsl_b_read(vsl_b_istream &, \
-  vil_memory_image_of<T >&); \
-template void vsl_b_write(vsl_b_ostream &, \
-  const vil_memory_image_of<T >&); \
-;
+template void vsl_print_summary(vcl_ostream&, vil_memory_image_of<T >const&); \
+template void vsl_b_read(vsl_b_istream &, vil_memory_image_of<T >&); \
+template void vsl_b_write(vsl_b_ostream &, const vil_memory_image_of<T >&)
+
+#endif // vil_io_memory_image_of_txx_
