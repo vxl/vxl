@@ -8,7 +8,7 @@
 // Test construction, IO etc.
 
 
-#include <limits>
+#include <vcl_limits.h>
 #include <vcl_iostream.h>
 #include <vcl_strstream.h>
 #include <vcl_iomanip.h>
