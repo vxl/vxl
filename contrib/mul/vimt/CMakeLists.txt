@@ -6,6 +6,7 @@ SET(vimt_sources
     vimt_image_2d.h                               vimt_image_2d.cxx
     vimt_image_2d_of.txx                          vimt_image_2d_of.h
     vimt_crop.h
+    vimt_dog_pyramid_builder_2d.txx               vimt_dog_pyramid_builder_2d.h
     vimt_image_pyramid.cxx vimt_image_pyramid.txx vimt_image_pyramid.h
     vimt_image_pyramid_builder.cxx                vimt_image_pyramid_builder.h
     vimt_gaussian_pyramid_builder_2d.txx          vimt_gaussian_pyramid_builder_2d.h
