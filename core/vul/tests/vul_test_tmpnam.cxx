@@ -13,7 +13,10 @@ int main()
   {
     vcl_string filename = P_tmpdir; // defined in stdio.h
     vcl_cout << "P_tmpdir = " << filename << vcl_endl;
-    filename += "/testtmpXXX";
+    char lastchar = filename.c_str()[strlen(filename.c_str())-1];
+    if (lastchar != '/' && lastchar != '\\')
+      filename += "/";
+    filename += "testtmpXXX";
     unsigned int count = 0;
     while( count < 10 ) {
       if( tmpnam( filename ) ) {
