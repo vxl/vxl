@@ -25,25 +25,28 @@
 static bool debug = false;
 #define trace if (true) { } else vcl_cerr
 
-//------------------------------------------------------------------------------
-
 // defined in vgui.cxx
 extern bool vgui_images_are_textures;
 
+//-----------------------------------------------------------------------------
+//: Constructor - create an empty image renderer.
 vgui_image_renderer::vgui_image_renderer()
   : use_texture_mapping(vgui_images_are_textures)
   , buffer(0)
 {
 }
 
-vgui_image_renderer::~vgui_image_renderer() {
+//-----------------------------------------------------------------------------
+//: Destructor - delete image buffer.
+vgui_image_renderer::~vgui_image_renderer() 
+{
   if (buffer)
     delete buffer;
 }
 
-//------------------------------------------------------------------------------
-
-void vgui_image_renderer::need_resection() const {
+//-----------------------------------------------------------------------------
+void vgui_image_renderer::need_resection() const 
+{
   // Not implemented since we use only one section buffer at the moment.
   // Ideally, the set_image() method should be implemented by :
   // {
@@ -54,6 +57,8 @@ void vgui_image_renderer::need_resection() const {
   // would then be resectioned first.
 }
 
+//-----------------------------------------------------------------------------
+//: Attach the renderer to a new vil_image.
 void vgui_image_renderer::set_image(vil_image const &image_) {
   if (image_ == the_image)
     return; // same image -- do nothing.
@@ -69,6 +74,7 @@ void vgui_image_renderer::set_image(vil_image const &image_) {
     trace << "image : " << the_image << vcl_flush;
 }
 
+//-----------------------------------------------------------------------------
 //: Tell the image renderer that the image has been changed, and should be re-read.
 void vgui_image_renderer::reread_image()
 {
@@ -76,8 +82,7 @@ void vgui_image_renderer::reread_image()
   buffer = 0;
 }
 
-//------------------------------------------------------------------------------
-
+//-----------------------------------------------------------------------------
 // draw the image :
 void vgui_image_renderer::render() {
   if (!the_image)
@@ -102,7 +107,8 @@ void vgui_image_renderer::render() {
     GLint vp[4];
     glGetIntegerv(GL_VIEWPORT, vp);
     if (debug)
-      vcl_cerr << vp[0] << ", " << vp[1] << ", " << vp[0]+vp[2] << ", " << vp[1]+vp[3] << vcl_endl;
+      vcl_cerr << vp[0] << ", " << vp[1] << ", " << vp[0]+vp[2] << ", " 
+      << vp[1]+vp[3] << vcl_endl;
 
     vgui_projection_inspector pi;
 
@@ -123,7 +129,8 @@ void vgui_image_renderer::render() {
     if (debug) vcl_cerr << "New x1 y1:" << x1 << ", " << y1 << vcl_endl;
     if (debug) vcl_cerr << "New x0 y0:" << x0 << ", " << y0 << vcl_endl;
 
-    buffer->draw_image_as_cached_textures(x0, y0, vcl_fabs(x1-x0), vcl_fabs(y1-y0)) || buffer->draw_as_rectangle();
+    buffer->draw_image_as_cached_textures(x0, y0, vcl_fabs(x1-x0), 
+      vcl_fabs(y1-y0)) || buffer->draw_as_rectangle();
     vgui_macro_report_errors;
   }
   else {
@@ -131,6 +138,3 @@ void vgui_image_renderer::render() {
     buffer->draw_as_image() || buffer->draw_as_rectangle();
   }
 }
-
-
-//------------------------------------------------------------------------------
