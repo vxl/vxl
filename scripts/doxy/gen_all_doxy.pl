@@ -10,6 +10,7 @@ exec perl -w -x $0 ${1+"$@"}
 
 use Cwd;
 use Getopt::Std;
+use File::Path;
 
 #-----------------------------------------------------------
 #  gen_all_doxy.pl -v vxlsrc -s script_dir -l ctrl_file -u -f  [-o outputdir]
@@ -126,7 +127,7 @@ sub update_library
   if (! -e $package)
   {
     print "Creating package directory: $package\n";
-    mkdir $package,0777 || die "Can't create directory $package\n";
+    mkpath ($package,1,0777);
     $buildit = "true";
   }
 
