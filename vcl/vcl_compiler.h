@@ -202,6 +202,20 @@
 
 //--------------------------------------------------------------------------------
 
+// work-around to deal with some cases where some compilers (and the standard)
+// requires an explicit typename qualifier. MSVC6.0 on the other had cannot cope
+// with a typename in those places.
+// VCL_DISAPPEARING_TYPENAME should only be used where either a hardcoded use
+// or abscence of "typename" does not work over all platforms.
+
+#if defined(VCL_VC60) || !VCL_HAS_TYPENAME
+# define VCL_DISAPPEARING_TYPENAME /* */
+#else
+# define VCL_DISAPPEARING_TYPENAME typename
+#endif
+
+//--------------------------------------------------------------------------------
+
 #if VCL_FOR_SCOPE_HACK
 # undef for
 # define for if (false) { } else for

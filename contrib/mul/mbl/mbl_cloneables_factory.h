@@ -25,7 +25,7 @@
 // mbl_cloneables_factory<vimt_image>::add(vimt_image_2d());
 // mbl_cloneables_factory<vimt_image>::add(vimt_image_3d());
 //
-// vimt_image *p = mbl_cloneables_factory<vimt_image>::get("vimt_image_2d()");
+// vcl_auto_ptr<vimt_image> p = mbl_cloneables_factory<vimt_image>::get("vimt_image_2d()");
 // assert(dynamic_cast<vimt_image_2d>(p));
 // \endcode
 
@@ -68,30 +68,30 @@ class mbl_cloneables_factory
   }
 
   //: Get a pointer to a new copy of the object identified by name.
-  // The caller is responsible for the object's deletion.
   //
   // There MUST be an object labelled name in the factory,
   // otherwise behaviour is undefined.
-  static BASE* get(const vcl_string & name)
+  static vcl_auto_ptr<BASE > get_clone(const vcl_string & name)
   {
-    typedef MAP::const_iterator IT;
+    typedef VCL_DISAPPEARING_TYPENAME MAP::const_iterator IT;
 
-    IT found = objects().lower_bound(name);
-    if (found == objects().end())
+    IT found = objects().find(name);
+    const IT end = objects().end();
+
+    if (found == end)
     {
       vcl_ostringstream ss;
       typename IT it = objects().begin();
       if (!objects().empty())
       {
         ss << it->first;
-        const IT end = objects().end();
         while ( ++it != end)
-          ss << it->first << ", ";
+          ss << ", " << it->first;
       }
       mbl_exception_warning(mbl_exception_no_name_in_factory(name, ss.str()));
-      return 0;
+      return vcl_auto_ptr<BASE >();
     }
-    return found->second->clone();
+    return vcl_auto_ptr<BASE >(found->second->clone());
   }
 };
 
@@ -99,8 +99,8 @@ class mbl_cloneables_factory
 #define MBL_CLONEABLES_FACTORY_INSTANTIATE(T) \
 template class mbl_cloneables_factory< T >; \
 template <class BASE > \
-vcl_auto_ptr<mbl_cloneables_factory<BASE >::MAP > \
+vcl_auto_ptr<VCL_DISAPPEARING_TYPENAME mbl_cloneables_factory<BASE >::MAP > \
   mbl_cloneables_factory<BASE >::objects_ =  \
-    vcl_auto_ptr<mbl_cloneables_factory<BASE >::MAP >(0);
+    vcl_auto_ptr<VCL_DISAPPEARING_TYPENAME mbl_cloneables_factory<BASE >::MAP >(0);
 
 #endif  // mbl_cloneables_factory_h

@@ -38,22 +38,40 @@ void test_cloneables_factory()
            << "  Testing mbl_cloneables_factory\n"
            << "**********************************\n";
 
+// Add objects using their default is_a() names.
   mbl_cloneables_factory<mbl_test_cf_base>::add(mbl_test_cf_A());
   mbl_cloneables_factory<mbl_test_cf_base>::add(mbl_test_cf_B());
+// Add object using arbitrary name.
   mbl_cloneables_factory<mbl_test_cf_base>::add(mbl_test_cf_A(), "wibble");
   
-  mbl_test_cf_base * p1 = mbl_cloneables_factory<mbl_test_cf_base>::get("mbl_test_cf_A");
-  mbl_test_cf_base * p2 = mbl_cloneables_factory<mbl_test_cf_base>::get("mbl_test_cf_B");
-  mbl_test_cf_base * p3 = mbl_cloneables_factory<mbl_test_cf_base>::get("wibble");
+// Check we can get all objects.
+  {
+    vcl_auto_ptr<mbl_test_cf_base> p = mbl_cloneables_factory<mbl_test_cf_base>::get_clone("mbl_test_cf_A");
+    TEST("get A == A",dynamic_cast<mbl_test_cf_A*>(p.get())!=0,true);
+  }
+  {
+    vcl_auto_ptr<mbl_test_cf_base> p = mbl_cloneables_factory<mbl_test_cf_base>::get_clone("mbl_test_cf_B");
+    TEST("get B == B",dynamic_cast<mbl_test_cf_B*>(p.get())!=0,true);
+// Check the tests would fail if there was a problem.
+    TEST("get B != A",dynamic_cast<mbl_test_cf_A*>(p.get())==0,true);
+  }
+  {
+    vcl_auto_ptr<mbl_test_cf_base> p = mbl_cloneables_factory<mbl_test_cf_base>::get_clone("wibble");
+    TEST("get wibble == A",dynamic_cast<mbl_test_cf_A*>(p.get())!=0,true);
+  }
 
-  TEST("get A",dynamic_cast<mbl_test_cf_A*>(p1)!=0,true);
-  TEST("get B",dynamic_cast<mbl_test_cf_B*>(p2)!=0,true);
-  TEST("!get B",dynamic_cast<mbl_test_cf_A*>(p2)==0,true);
-  TEST("get wibble",dynamic_cast<mbl_test_cf_A*>(p3)!=0,true);
-  
-  delete p1;
-  delete p2;
-  delete p3;
+// Test the error reporting mechanism  
+#if VCL_HAS_EXCEPTIONS
+  {
+    testlib_test_begin("!get foo");
+    vcl_auto_ptr<mbl_test_cf_base> p;
+    bool caught_error = false;
+    try { p = mbl_cloneables_factory<mbl_test_cf_base>::get_clone("foo");  }
+    catch (const mbl_exception_no_name_in_factory &) { caught_error=true; }
+    testlib_test_perform(caught_error);
+  }
+#endif
+
 }
 
 TESTMAIN(test_cloneables_factory);
