@@ -70,7 +70,7 @@ public:
   // Elements are not initialized
   explicit vnl_vector (unsigned len);
 
-  //: Creates vector of len elements, all sest to v0
+  //: Creates vector of len elements, all set to v0
   vnl_vector (unsigned len, T const& v0);
 
   //: Creates a vector of specified length and initialize first n elements with values. O(n).
