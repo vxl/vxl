@@ -11,6 +11,7 @@
 #include <vcl_cmath.h>
 
 #include <vnl/vnl_test.h>
+#include <vnl/vnl_sample.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 
 extern "C"
@@ -32,6 +33,11 @@ void test_symmetric_eigensystem()
     vcl_cout << "V'*D*V - S = " << res << vcl_endl;
     vcl_cout << "residual = " << res.fro_norm() << vcl_endl;
     vnl_test_assert("recompose residual",  res.fro_norm() < 1e-12);
+
+	vcl_cout<<"Eigenvalues: ";
+    for (int i=0;i<6;++i)
+       vcl_cout<<eig.get_eigenvalue(i)<<" ";
+	vcl_cout<<vcl_endl;
   }
 
   double Cdata[36] = {
@@ -51,6 +57,31 @@ void test_symmetric_eigensystem()
     vcl_cout << "V'*D*V - C = " << res << vcl_endl;
     vcl_cout << "residual = " << res.fro_norm() << vcl_endl;
     vnl_test_assert("recompose residual", res.fro_norm() < 1e-12);
+
+	vcl_cout<<"Eigenvalues: ";
+    for (int i=0;i<6;++i)
+       vcl_cout<<eig.get_eigenvalue(i)<<" ";
+	vcl_cout<<vcl_endl;
+  }
+
+  {
+    // Generate a random system
+    vnl_sample_reseed();
+    int n = 6;
+    int s = 10;
+    vnl_matrix<double> D_rand(s,n);
+    for (int i=0;i<s;++i)
+    	for (int j=0;j<n;++j)
+	      D_rand(i,j)=vnl_sample_normal(1,2);
+
+    vnl_matrix<double> S = D_rand.transpose()*D_rand;
+    vnl_matrix<double> evecs(n,n);
+    vnl_vector<double> evals(n);
+    vnl_symmetric_eigensystem_compute(S,evecs,evals);
+	vcl_cout<<"Testing random system: "<<vcl_endl;
+    vcl_cout<<"evals: "<<evals<<vcl_endl;
+	for (int i=1;i<n;++i)
+      TEST("Eigenvalue increases",evals(i)>=evals(i-1),true);
   }
 
 }
