@@ -10,7 +10,7 @@
 // ONLY, in your source file (myarg.cxx, say), define these three global
 // functions (which can by static if you like) in myarg.cxx
 // -  void settype(vbl_arg<T> &);
-// -  void print_value(vbl_arg<T> const &, ostream &);
+// -  void print_value(vbl_arg<T> const &, vcl_ostream &);
 // -  int  parse(vbl_arg<T>*, char**);
 // and then instantiate the class vbl_arg<T> as usual (in myarg.cxx).
 

@@ -47,8 +47,8 @@ void vnl_matlab_read_data(vcl_istream &s, vcl_complex<T > *ptr, unsigned n) { \
 
 //#if VCL_CAN_DO_PARTIAL_SPECIALIZATION
 //template <class T> implement_read_complex_data(T)
-//template void vnl_matlab_read_data(istream &, vcl_complex<float > *, unsigned);
-//template void vnl_matlab_read_data(istream &, vcl_complex<double> *, unsigned);
+//template void vnl_matlab_read_data(vcl_istream &, vcl_complex<float > *, unsigned);
+//template void vnl_matlab_read_data(vcl_istream &, vcl_complex<double> *, unsigned);
 //#else
 implement_read_complex_data(float )
 implement_read_complex_data(double)

@@ -39,10 +39,12 @@ vil_stream_fstream::vil_stream_fstream(char const* fn, char const* mode):
   }
 }
 
-//vil_stream_fstream::vil_stream_fstream(fstream& f):
-//  f_(f.rdbuf()->fd())
-//{
-//}
+#if 0
+vil_stream_fstream::vil_stream_fstream(vcl_fstream& f):
+  f_(f.rdbuf()->fd())
+{
+}
+#endif // 0
 
 vil_stream_fstream::~vil_stream_fstream()
 {

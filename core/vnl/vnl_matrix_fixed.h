@@ -57,6 +57,12 @@ public:
     vcl_memcpy(space, rhs.data_block(), m*n*sizeof(T));
   }
 
+//  Destruct the m*n matrix.
+// An explicit destructor seems to be necessary, at least for gcc 3.0.0,
+// to avoid the compiler generating multiple versions of it.
+// (This way, a weak symbol is generated; otherwise not.  A bug of gcc 3.0.)
+  ~vnl_matrix_fixed() {}
+
 //: Copy a vnl_matrix into this.   Abort if rhs is
 // not the same size.
   vnl_matrix_fixed<T,m,n>& operator=(const vnl_matrix<T>& rhs) {

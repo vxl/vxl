@@ -186,7 +186,7 @@ inline bool operator!= (T const* p, vbl_smart_ptr<T> const& a)
   return a.as_pointer() != p;
 }
 
-// Sunpro and GCC need an ostream operator. It need not be inline
+// Sunpro and GCC need a vcl_ostream operator. It need not be inline
 // because if you're about to make a system call you can afford the
 // cost of a function call.
 template <class T>

@@ -30,20 +30,24 @@
 // only the specializations make sense.
 template <class T>
 class vnl_numeric_traits;
-////: Additive identity
-//  static const T zero;
-//
-////: Multiplicative identity
-//  static const T one;
-//
-////: Return value of abs()
-//  typedef T abs_t;
-//
-////: Name of a type twice as long as this one for accumulators and products.
-//  typedef /* long */ double double_t;
-//
-////: Name of type which results from multiplying this type with a double
-//  typedef double real_t;
+#if 0
+{
+//: Additive identity
+  static const T zero;
+
+//: Multiplicative identity
+  static const T one;
+
+//: Return value of abs()
+  typedef T abs_t;
+
+//: Name of a type twice as long as this one for accumulators and products.
+  typedef /* long */ double double_t;
+
+//: Name of type which results from multiplying this type with a double
+  typedef double real_t;
+};
+#endif
 
 #ifndef NO_STD_BOOL
 VCL_DEFINE_SPECIALIZATION

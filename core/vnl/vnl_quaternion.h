@@ -231,12 +231,14 @@ inline vcl_ostream& operator<< (vcl_ostream& os, const vnl_quaternion<T>& q) {
   return os << *((vnl_vector<T>*) &q);
 }
 
+#if 0
 // operator<<  -- Print the components of Quaternion.
 //  awf removed : pointers should never be printed dereffed.
-// template <class T>
-// inline ostream& operator<< (ostream& os, const vnl_quaternion<T>* q) {
-//   return os << *((vnl_vector<T>*) q);
-// }
+template <class T>
+inline vcl_ostream& operator<< (vcl_ostream& os, const vnl_quaternion<T>* q) {
+  return os << *((vnl_vector<T>*) q);
+}
+#endif
 
 #define VNL_QUATERNION_INSTANTIATE(T) extern "you must include vnl/vnl_quaternion.txx first"
 

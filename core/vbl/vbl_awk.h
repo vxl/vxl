@@ -23,7 +23,7 @@
 #include <vcl_vector.h>
 
 //: The core of awk
-// vbl_awk reads lines from an istream and breaks them into whitespace-separated
+// vbl_awk reads lines from a vcl_istream and breaks them into whitespace-separated
 // fields.  Its primary advantage is that its name defines the semantics of
 // its methods---except that this C++ version uses zero-based fields.  The
 // usage is exemplified in this example, to print the second field in every

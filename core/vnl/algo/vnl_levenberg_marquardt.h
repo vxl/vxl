@@ -61,7 +61,7 @@ public:
 
   // Coping with failure-------------------------------------------------------
 
-//: Provide an ASCII diagnosis of the last minimization on ostream.
+//: Provide an ASCII diagnosis of the last minimization on vcl_ostream.
   void diagnose_outcome(/*vcl_cerr*/) const;
   void diagnose_outcome(vcl_ostream&) const;
 

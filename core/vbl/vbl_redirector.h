@@ -26,7 +26,7 @@ struct vbl_redirector_data;
 class vbl_redirector {
 public:
 
-  //: Attach redirector to ostream s,
+  //: Attach redirector to vcl_ostream s,
   // so that all future output to s goes through this->putchunk
    vbl_redirector(vcl_ostream& s);
 

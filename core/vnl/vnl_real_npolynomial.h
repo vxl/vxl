@@ -17,7 +17,7 @@
 //  Modifications
 //  Peter Vanroose 10 Oct 1999 - added simplify();
 //                               determine nterms_ nvar_ ideg_ automatically
-//  Peter Vanroose 20 Oct 1999 - Added operator+(), - * and ostream <<
+//  Peter Vanroose 20 Oct 1999 - Added operator+(), - * and vcl_ostream <<
 //  dac (Manchester) 15/03/2001: Tidied up the documentation + added binary_io
 //  \endverbatim
 

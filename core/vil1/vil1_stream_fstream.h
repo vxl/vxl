@@ -7,14 +7,14 @@
 
 //:
 // \file
-// \brief A vil_stream implementation using fstream
+// \brief A vil_stream implementation using vcl_fstream
 // \author    awf@robots.ox.ac.uk
 // \date 16 Feb 00
 
 #include <vcl_fstream.h>
 #include <vil/vil_stream.h>
 
-//: A vil_stream implementation using fstream
+//: A vil_stream implementation using vcl_fstream
 class vil_stream_fstream : public vil_stream {
 public:
   vil_stream_fstream(char const* filename, char const* mode);

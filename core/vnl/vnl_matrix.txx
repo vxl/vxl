@@ -444,7 +444,7 @@ vcl_ostream& operator<< (vcl_ostream& os, vnl_matrix<T> const& m) {
   return os;
 }
 
-//: Read an vnl_matrix from an ascii istream, automatically
+//: Read an vnl_matrix from an ascii vcl_istream, automatically
 // determining file size if the input matrix has zero size.
 template<class T>
 vcl_istream& operator>>(vcl_istream& s, vnl_matrix<T>& M) {
@@ -1095,7 +1095,7 @@ void vnl_matrix<T>::assert_size(unsigned rs,unsigned cs) const
   }
 }
 
-//: Read a vnl_matrix from an ascii istream, automatically
+//: Read a vnl_matrix from an ascii vcl_istream, automatically
 // determining file size if the input matrix has zero size.
 template <class T>
 bool vnl_matrix<T>::read_ascii(vcl_istream& s)
@@ -1207,7 +1207,7 @@ bool vnl_matrix<T>::read_ascii(vcl_istream& s)
   return true;
 }
 
-//: Read a vnl_matrix from an ascii istream, automatically
+//: Read a vnl_matrix from an ascii vcl_istream, automatically
 // determining file size if the input matrix has zero size.
 // This is a static method so you can type
 // <verb>

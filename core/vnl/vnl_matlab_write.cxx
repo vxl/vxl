@@ -20,7 +20,7 @@
 # define native_BYTE_ORDER vnl_matlab_header::vnl_BIG_ENDIAN
 #endif
 
-// SGI needs char * as first argument to ostream::write
+// SGI needs char * as first argument to vcl_ostream::write
 void vnl_write_bytes(vcl_ostream &s, void const *p, unsigned bytes) {
   s.write((char const *)p, bytes);
 }
@@ -41,7 +41,7 @@ long vnl_is_complex(double const &) { return 0; }
 long vnl_is_complex(vcl_complex<float>  const &) { return 1; }
 long vnl_is_complex(vcl_complex<double> const &) { return 1; }
 
-// template <class T> void vnl_write_real(ostream &, T const *, unsigned );
+// template <class T> void vnl_write_real(vcl_ostream &, T const *, unsigned );
 void vnl_write_real(vcl_ostream &s, float const *data, unsigned n)
 { ::vnl_write_bytes(s, data, n*sizeof(*data)); }
 void vnl_write_real(vcl_ostream &s, double const *data, unsigned n)
@@ -61,7 +61,7 @@ void vnl_write_real(vcl_ostream &s, vcl_complex<double> const *data, unsigned n)
   }
 }
 
-// template <class T> void vnl_write_imag(ostream &, T const *, unsigned );
+// template <class T> void vnl_write_imag(vcl_ostream &, T const *, unsigned );
 void vnl_write_imag(vcl_ostream &, float const *, unsigned ) { }
 void vnl_write_imag(vcl_ostream &, double const *, unsigned ) { }
 void vnl_write_imag(vcl_ostream &s, vcl_complex<float> const *data, unsigned n) {

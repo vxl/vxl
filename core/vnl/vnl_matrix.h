@@ -425,11 +425,11 @@ public:
 
   ////----------------------- Input/Output ----------------------------
 
-    // : Read a vnl_matrix from an ascii istream, automatically
+    // : Read a vnl_matrix from an ascii vcl_istream, automatically
     // determining file size if the input matrix has zero size.
   static vnl_matrix<T> read(vcl_istream& s);
 
-    // : Read a vnl_matrix from an ascii istream, automatically
+    // : Read a vnl_matrix from an ascii vcl_istream, automatically
     // determining file size if the input matrix has zero size.
   bool read_ascii(vcl_istream& s);
 

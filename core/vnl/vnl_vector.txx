@@ -287,7 +287,7 @@ bool vnl_vector<T>::resize(unsigned n)
 
 //------------------------------------------------------------
 
-//: Read a vnl_vector from an ascii istream.
+//: Read a vnl_vector from an ascii vcl_istream.
 // If the vector has nonzero size on input, read that many values.
 // Otherwise, read to EOF.
 template <class T>
@@ -761,7 +761,7 @@ vcl_ostream& operator<< (vcl_ostream& s, vnl_vector<T> const& v) {
   return s;
 }
 
-//: Read a vnl_vector from an ascii istream.
+//: Read a vnl_vector from an ascii vcl_istream.
 // If the vector has nonzero size on input, read that many values.
 // Otherwise, read to EOF.
 template <class T>

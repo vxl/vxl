@@ -437,7 +437,7 @@ inline T vnl_vector_ssd (vnl_vector<T> const& v1, vnl_vector<T> const& v2)
 }
 
 
-//: Read/write vector from/to an istream :
+//: Read/write vector from/to a vcl_istream :
 export template <class T> vcl_ostream& operator<< (vcl_ostream &, vnl_vector<T> const&);
 export template <class T> vcl_istream& operator>> (vcl_istream &, vnl_vector<T>      &);
 

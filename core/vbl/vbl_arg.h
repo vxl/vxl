@@ -120,7 +120,7 @@ template <class T>
 class vbl_arg : public vbl_arg_base {
 public:
   //friend void settype     VCL_NULL_TMPL_ARGS (vbl_arg<T> &);
-  //friend void print_value VCL_NULL_TMPL_ARGS (ostream &, vbl_arg<T> const &);
+  //friend void print_value VCL_NULL_TMPL_ARGS (vcl_ostream &, vbl_arg<T> const &);
   //friend int  parse       VCL_NULL_TMPL_ARGS (vbl_arg<T>*, char**);
   T value_;// public so we don't have to worry about templated friends.
 

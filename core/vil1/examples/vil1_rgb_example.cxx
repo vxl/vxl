@@ -21,7 +21,7 @@ int main(int /*argc*/, char** /*argv*/)
   // Conversely, an vil_rgb_cell can be converted to its ubyte grey equivalent:
   unsigned char orange_grey = orange.grey();
 
-  // Write to an ostream: the output as the format [R G B].
+  // Write to a vcl_ostream: the output as the format [R G B].
   vcl_cout << "/* XPM */\n"
            << "/* " << orange << black << white << grey
            << (int)orange_grey << " */" << vcl_endl;
