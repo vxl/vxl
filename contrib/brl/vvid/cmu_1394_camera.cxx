@@ -208,10 +208,11 @@ void cmu_1394_camera::init_control()
   max_gain_ = C1394Camera::m_controlGain.m_max;
   gain_ = int((max_gain_-min_gain_)/2.0) + min_gain_;
 
-  //Brightness control
+  //Brightness control (make this minimum by default since we don't usually
+  // want an offset);
   min_brightness_ = C1394Camera::m_controlBrightness.m_min;
   max_brightness_ = C1394Camera::m_controlBrightness.m_max;
-  brightness_ = int((max_brightness_-min_brightness_)/2.0) + min_brightness_;
+  brightness_ = min_brightness_;
 
   //Auto exposure
   auto_exposure_control_ = C1394Camera::m_controlAutoExposure.m_present;
