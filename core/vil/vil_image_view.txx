@@ -58,8 +58,8 @@ vil2_image_view<T>::vil2_image_view(const vil2_smart_ptr<vil2_memory_chunk>& mem
   assert(mem_chunk->size() >= n_planes*n_i*n_j*sizeof(T));
   if (top_left < (const T*)mem_chunk->data() ||
       top_left >= (const T*)mem_chunk->data() + mem_chunk->size())
-    vcl_cerr << "top_left at " << (void*)top_left << ", memory_chunk at "
-             << (void*)mem_chunk->data() << ", size " << mem_chunk->size()
+    vcl_cerr << "top_left at " << (const void*)top_left << ", memory_chunk at "
+             << (const void*)mem_chunk->data() << ", size " << mem_chunk->size()
              << ", size of data type " << sizeof(T) << '\n';
   assert(top_left >= (const T*)mem_chunk->data() &&
          top_left  < (const T*)mem_chunk->data() + mem_chunk->size());
