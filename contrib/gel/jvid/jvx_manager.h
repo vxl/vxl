@@ -27,7 +27,7 @@
 //necessary to initialize the codec. normally, this
 //would be done by reading the header, but that is
 //not implemented here.
-static void
+inline void
 jvid_load_mpegcodec_callback(vidl_codec * vc)
 {
   vgui_dialog dialog( "MPEG player setup");
@@ -57,7 +57,8 @@ jvid_load_mpegcodec_callback(vidl_codec * vc)
   mpegcodec->init();
 }
 
-#endif
+#endif // HAS_MPEG2
+
 class jvx_manager : public vgui_grid_tableau
 {
  public:
