@@ -236,7 +236,7 @@ vnl_matrix_fixed<T,nrows,ncols>::copy_in(T const *p)
 template<class T, unsigned nrows, unsigned ncols>
 void vnl_matrix_fixed<T,nrows,ncols>::copy_out(T *p) const
 {
-  T* dp = this->data_block();
+  T const* dp = this->data_block();
   unsigned int i = nrows*ncols;
   while (i--)
     *p++ = *dp++;
