@@ -40,7 +40,7 @@ struct vbl_timer_data
   tms usage0;                    // usage mark.
   struct timeval real0;          // wall clock mark.
 #else
- clock_t usage0;
+ vcl_clock_t usage0;
  struct _timeb real0;
 #endif
 };
@@ -148,7 +148,7 @@ long vbl_timer::user()
   times(&usage);  // new user/system time
   return (usage.tms_utime - data->usage0.tms_utime) * 1000 / CLK_TCK;
 #else
-  clock_t usage = clock();
+  vcl_clock_t usage = clock();
   return (usage - data->usage0) / (CLOCKS_PER_SEC/1000);
 #endif
 }
@@ -178,7 +178,7 @@ long vbl_timer::all()
   return (usage.tms_utime + usage.tms_stime -
           data->usage0.tms_utime - data->usage0.tms_stime)  * 1000 / CLK_TCK;
 #else
-  clock_t usage = clock();
+  vcl_clock_t usage = clock();
   return (usage - data->usage0) / (CLOCKS_PER_SEC/1000);
 #endif
 }
@@ -186,5 +186,5 @@ long vbl_timer::all()
 //: Display user and real time since the last mark.
 void vbl_timer::print(vcl_ostream& s)
 {
-  s << "Time: user " << user() / 1000.0 << ", real " << real() / 1000.0 << vcl_endl;
+  s << "Time: user " << user() / 1000.0 << ", real " << this->real() / 1000.0 << vcl_endl;
 }

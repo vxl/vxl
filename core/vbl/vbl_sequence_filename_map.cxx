@@ -12,6 +12,7 @@
 //-----------------------------------------------------------------------------
 
 #include "vbl_sequence_filename_map.h"
+#include <vcl_cstddef.h> // for vcl_size_t
 
 #define xxx 0
 
@@ -97,7 +98,7 @@ vcl_string vbl_sequence_filename_map::triplet_name (int i, int j, int k)
 {
   vcl_string index_str = vbl_sprintf((index_format_ + "." +
     index_format_ + "." + index_format_).c_str(), indices_[i],
-    indices_[j], indices_[k]); 
+    indices_[j], indices_[k]);
   return basename_ + index_str;
 }
 
@@ -142,11 +143,11 @@ void vbl_sequence_filename_map::parse()
       temp.erase(re.start(0));
     }
     // This should have the form "img.%03d" or "img.###". Split it into basename and index format
-    size_t pos;
+    vcl_size_t pos;
     if ( (pos = bt.find('%')) != vcl_string::npos)
       index_format_ = bt.substr(pos);
     else if ( (pos = bt.find('#')) != vcl_string::npos) {
-      size_t last_pos = bt.rfind('#');
+      vcl_size_t last_pos = bt.rfind('#');
       index_format_ = vbl_sprintf("0%id",last_pos - pos + 1);
       index_format_ = "%" + index_format_;
     } else

@@ -38,7 +38,7 @@ public:
 
 struct vcl_hash<TestType*>
 {
-  size_t operator()(TestType* t) const { return (int)t; }
+  vcl_size_t operator()(TestType* t) const { return (int)t; }
 };
 
 #include <vbl/vbl_protection_traits.txx>

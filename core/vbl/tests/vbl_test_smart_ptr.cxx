@@ -58,7 +58,7 @@ int doit ()
   p = q;
   // They should be the same
   if (p == q)
-    vcl_cout << "p and q are the same\n" << vcl_endl;
+    vcl_cout << "p and q are the same\n\n";
   else
     vcl_cout << "FAILED: p == q" << vcl_endl;
 
@@ -75,7 +75,7 @@ int doit ()
     printval (r);
     printval (p);
   }
-  
+
   // Now test lists of base_impl
   {
     vcl_list<base_sptr> videos;
@@ -87,7 +87,7 @@ int doit ()
 
     // Print out the list
     vcl_cout << "List of video sequences" << vcl_endl;
-    for (vcl_list<base_sptr>::const_iterator i = videos.begin(); i != videos.end(); i++) 
+    for (vcl_list<base_sptr>::const_iterator i = videos.begin(); i != videos.end(); i++)
       vcl_cout << " " << *i << vcl_endl;
     //cout << videos << endl;
 
@@ -104,7 +104,7 @@ int doit ()
 
     // Print out the list
     vcl_cout << "List of video sequences" << vcl_endl;
-    for (vcl_list<base_sptr>::const_iterator i = videos.begin(); i != videos.end(); i++) 
+    for (vcl_list<base_sptr>::const_iterator i = videos.begin(); i != videos.end(); i++)
       vcl_cout << " " << *i << vcl_endl;
     //cout << videos << endl;
   }

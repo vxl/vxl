@@ -1,4 +1,6 @@
 // This is vxl/vbl/vbl_basic_relation.txx
+#ifndef vbl_basic_relation_txx_
+#define vbl_basic_relation_txx_
 
 #include <vbl/vbl_basic_relation.h>
 #include <vbl/vbl_basic_optional.h>
@@ -81,7 +83,7 @@ vbl_basic_relation<T1,T2,T3,T4,T5>::vbl_basic_relation(vbl_basic_relation<T1,T2,
   if (!impl)
     {
       vcl_cerr << "Copy constructor called with invalid easy relation\n";
-      abort();
+      vcl_abort();
     }
   impl->ref();
 
@@ -295,3 +297,5 @@ vbl_basic_relation<T1,T2,T3,T4,T5>::cast(vbl_basic_relation_type* r)
   else
     return NULL;
 }
+
+#endif // vbl_basic_relation_txx_

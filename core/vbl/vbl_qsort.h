@@ -1,10 +1,9 @@
+// This is vxl/vbl/vbl_qsort.h
 #ifndef vbl_qsort_h_
 #define vbl_qsort_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// This is vxl/vbl/vbl_qsort.h
-
 
 //:
 // \file
@@ -14,11 +13,9 @@
 // \verbatim
 // Modifications
 //971119 AWF Initial version
-//  
+//
 // PDA (Manchester) 23/03/2001: Tidied up the documentation
 // \endverbatim
-
-
 
 
 #include <vxl_config.h> // VXL_STDLIB_HAS_QSORT
@@ -88,7 +85,7 @@ void vbl_qsort_descending(vcl_vector<T>& v)
 {
 #if VXL_STDLIB_HAS_QSORT
   //vector<>::iterator
-  qsort(&v[0], v.size(), sizeof v[0], vbl_qsort_helper<T>::descend); 
+  qsort(&v[0], v.size(), sizeof v[0], vbl_qsort_helper<T>::descend);
 #else
   vcl_sort(v.begin(), v.end(), vcl_greater<T>());
 #endif
@@ -101,7 +98,7 @@ void vbl_qsort(vcl_vector<T>& v, int (*compare)(T const& a, T const& b))
 {
 #if VXL_STDLIB_HAS_QSORT
   //vector<>::iterator
-  qsort(&v[0], v.size(), sizeof v[0], (vbl_qsort_compare_t)compare); 
+  qsort(&v[0], v.size(), sizeof v[0], (vbl_qsort_compare_t)compare);
 #else
   vcl_cerr << "Sorry, this type of qsort has not been implemented\n";
 #endif
@@ -109,7 +106,7 @@ void vbl_qsort(vcl_vector<T>& v, int (*compare)(T const& a, T const& b))
 
 #define VBL_QSORT_INSTANTIATE(T)\
 VCL_INSTANTIATE_INLINE(void vbl_qsort_ascending(T*,int));\
-VCL_INSTANTIATE_INLINE(void vbl_qsort_descending(T*,int));
+VCL_INSTANTIATE_INLINE(void vbl_qsort_descending(T*,int))
 
 #define VBL_QSORT_INSTANTIATE_vector(T)\
 VCL_INSTANTIATE_INLINE(void vbl_qsort(vcl_vector<T>& v, \

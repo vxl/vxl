@@ -13,7 +13,7 @@
 // Texas Instruments Incorporated provides this software "as is" without
 // express or implied warranty.
 //:
-// \file 
+// \file
 // \brief vbl_timer - A timing facility for C++.
 //
 // \verbatim
@@ -43,7 +43,7 @@
 // time  as  appropriate. See the Timer header file for system-
 // specific notes.
 //
-// The Timer class provides timing code  for performance evaluation.  
+// The Timer class provides timing code  for performance evaluation.
 // This code
 // was originally written by Joe Rahmeh at UT Austin.
 // \verbatim
@@ -60,16 +60,16 @@ struct vbl_timer_data;
 
 #include <vcl_iosfwd.h>
 
-//: The Timer class provides timing code  for performance evaluation.  
+//: The Timer class provides timing code  for performance evaluation.
 class vbl_timer {
 public:
   //: construct and mark
-  vbl_timer(); 
+  vbl_timer();
   ~vbl_timer();
   //: mark timer
   void mark();
   //: real        time (ms) since last mark
-  long real();   
+  long real();
   //: user        time (ms) since last mark
   long user();
   //: system      time (ms) since last mark

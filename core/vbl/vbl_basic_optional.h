@@ -32,8 +32,8 @@ class vbl_basic_optional
 public:
   vbl_basic_optional() {}
   vbl_basic_optional(const vbl_basic_optional&) {}
-  inline static void Error(const char* message) 
-  { vcl_cerr << message << vcl_endl; abort(); }
+  inline static void Error(const char* message)
+  { vcl_cerr << message << vcl_endl; vcl_abort(); }
 };
 
 // Here is the general case for the traits class used to determine
@@ -72,7 +72,7 @@ inline bool operator!=(const vbl_basic_optional&, const vbl_basic_optional&)
 
 #include <vbl/vbl_hash_map.h>
 struct vcl_hash<vbl_basic_optional> {
-  size_t operator()(const vbl_basic_optional& /*s*/) const { return 0; }
+  vcl_size_t operator()(const vbl_basic_optional& /*s*/) const { return 0; }
 };
 
 #endif // vbl_basic_optional_h

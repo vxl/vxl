@@ -138,8 +138,8 @@ void vbl_psfile::compute_bounding_box()
     sz_iny = (double) box_height / PIX2INCH * (scale_y / 100.0);
 
     // round to integer .001ths of an inch
-    sz_inx = floor(sz_inx * 1000.0 + 0.5) / 1000.0;
-    sz_iny = floor(sz_iny * 1000.0 + 0.5) / 1000.0;
+    sz_inx = vcl_floor(sz_inx * 1000.0 + 0.5) / 1000.0;
+    sz_iny = vcl_floor(sz_iny * 1000.0 + 0.5) / 1000.0;
     // from xv xvps.c subroutine: centerimage
     pos_inx = psizex/2 - sz_inx/2;
     pos_iny = psizey/2 - sz_iny/2;
@@ -150,8 +150,8 @@ void vbl_psfile::compute_bounding_box()
     RANGE(pos_iny, -hsy, psizey-hsy);
 
     // round to integer .001ths of an inch
-    pos_inx = floor(pos_inx * 1000.0 + 0.5) / 1000.0;
-    pos_iny = floor(pos_iny * 1000.0 + 0.5) / 1000.0;
+    pos_inx = vcl_floor(pos_inx * 1000.0 + 0.5) / 1000.0;
+    pos_iny = vcl_floor(pos_iny * 1000.0 + 0.5) / 1000.0;
   }
 
   if (printer_paper_layout == vbl_psfile::MAX)
@@ -182,14 +182,14 @@ void vbl_psfile::compute_bounding_box()
     sz_iny = (double) box_height / PIX2INCH * (scale_y / 100.0);
 
     // round to integer .001ths of an inch
-    sz_inx = floor(sz_inx * 1000.0 + 0.5) / 1000.0;
-    sz_iny = floor(sz_iny * 1000.0 + 0.5) / 1000.0;
+    sz_inx = vcl_floor(sz_inx * 1000.0 + 0.5) / 1000.0;
+    sz_iny = vcl_floor(sz_iny * 1000.0 + 0.5) / 1000.0;
     pos_inx = psizex/2 - sz_inx/2;
     pos_iny = psizey/2 - sz_iny/2;
 
     // round to integer .001ths of an inch
-    pos_inx = floor(pos_inx * 1000.0 + 0.5) / 1000.0;
-    pos_iny = floor(pos_iny * 1000.0 + 0.5) / 1000.0;
+    pos_inx = vcl_floor(pos_inx * 1000.0 + 0.5) / 1000.0;
+    pos_iny = vcl_floor(pos_iny * 1000.0 + 0.5) / 1000.0;
   }
 
   // printed image will have size iw,ih (in picas)
@@ -659,8 +659,8 @@ bool vbl_psfile::set_parameters(int sizex,int sizey)
     sz_iny = (double) height / PIX2INCH * (scale_y / 100.0);
 
     // round to integer .001ths of an inch
-    sz_inx = floor(sz_inx * 1000.0 + 0.5) / 1000.0;
-    sz_iny = floor(sz_iny * 1000.0 + 0.5) / 1000.0;
+    sz_inx = vcl_floor(sz_inx * 1000.0 + 0.5) / 1000.0;
+    sz_iny = vcl_floor(sz_iny * 1000.0 + 0.5) / 1000.0;
     // from xv xvps.c subroutine: centerimage
     pos_inx = psizex/2 - sz_inx/2;
     pos_iny = psizey/2 - sz_iny/2;
@@ -671,8 +671,8 @@ bool vbl_psfile::set_parameters(int sizex,int sizey)
     RANGE(pos_iny, -hsy, psizey-hsy);
 
     // round to integer .001ths of an inch
-    pos_inx = floor(pos_inx * 1000.0 + 0.5) / 1000.0;
-    pos_iny = floor(pos_iny * 1000.0 + 0.5) / 1000.0;
+    pos_inx = vcl_floor(pos_inx * 1000.0 + 0.5) / 1000.0;
+    pos_iny = vcl_floor(pos_iny * 1000.0 + 0.5) / 1000.0;
   }
 
   else if (printer_paper_layout == vbl_psfile::MAX)
@@ -693,14 +693,14 @@ bool vbl_psfile::set_parameters(int sizex,int sizey)
     sz_iny = (double) height / PIX2INCH * (scale_y / 100.0);
 
     // round to integer .001ths of an inch
-    sz_inx = floor(sz_inx * 1000.0 + 0.5) / 1000.0;
-    sz_iny = floor(sz_iny * 1000.0 + 0.5) / 1000.0;
+    sz_inx = vcl_floor(sz_inx * 1000.0 + 0.5) / 1000.0;
+    sz_iny = vcl_floor(sz_iny * 1000.0 + 0.5) / 1000.0;
     pos_inx = psizex/2 - sz_inx/2;
     pos_iny = psizey/2 - sz_iny/2;
 
     // round to integer .001ths of an inch
-    pos_inx = floor(pos_inx * 1000.0 + 0.5) / 1000.0;
-    pos_iny = floor(pos_iny * 1000.0 + 0.5) / 1000.0;
+    pos_inx = vcl_floor(pos_inx * 1000.0 + 0.5) / 1000.0;
+    pos_iny = vcl_floor(pos_iny * 1000.0 + 0.5) / 1000.0;
   }
   else
   {
@@ -817,13 +817,13 @@ void vbl_psfile::point(float x, float y, float point_size)
 void vbl_psfile::ellipse(float x, float y, float a_axis, float b_axis, int angle)
 {
   #ifndef PI // should already be defined in math.h - PVR
-  #define PI 3.141592654
+  #define PI 3.14159265358979323846
   #endif
 
-  set_min_max_xy((int) (x+a_axis*cos(((float)angle)*PI/180.0) + 0.5),
-                (int) (y+a_axis*sin(((float)angle)*PI/180.0) + 0.5) );
-  set_min_max_xy((int) (x-a_axis*cos(((float)angle)*PI/180.0) + 0.5),
-                (int) (y-a_axis*sin(((float)angle)*PI/180.0) + 0.5) );
+  set_min_max_xy((int) (x+a_axis*vcl_cos(((float)angle)*PI/180.0) + 0.5),
+                (int) (y+a_axis*vcl_sin(((float)angle)*PI/180.0) + 0.5) );
+  set_min_max_xy((int) (x-a_axis*vcl_cos(((float)angle)*PI/180.0) + 0.5),
+                (int) (y-a_axis*vcl_sin(((float)angle)*PI/180.0) + 0.5) );
   compute_bounding_box();
 
   print_graphics_prolog();
