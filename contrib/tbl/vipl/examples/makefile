@@ -19,6 +19,9 @@ TRY_TIFF := 1
 TRY_JPEG := 1
 TRY_PNG := 1
 
+## vil_stream_url uses tcp sockets.
+USE_SOCKETS := 1
+
 # A. using vil_image as 2D storage class:
 MINI_PROG_SOURCES += example_convert.cxx
 MINI_PROG_SOURCES += example_add_random_noise.cxx
