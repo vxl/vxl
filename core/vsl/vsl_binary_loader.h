@@ -110,5 +110,4 @@ inline void vsl_b_read( vsl_b_istream& bfs, BaseClass*& b)
 template<class BaseClass>
 void vsl_b_write(vsl_b_ostream& bfs, const BaseClass* b);
 
-
 #endif // vsl_binary_loader_h_

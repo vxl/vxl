@@ -36,7 +36,6 @@ vsl_binary_loader<BaseClass>::~vsl_binary_loader()
 template<class BaseClass>
 void vsl_binary_loader<BaseClass>::load_object( vsl_b_istream& is, BaseClass*& b)
 {
-
   // HELP ON RUN-TIME ERROR HERE
   // If you get a run-time error here it is most-likely because you called
   // vsl_b_read with an uninitialised null base_class pointer. The base class
@@ -72,12 +71,27 @@ void vsl_binary_loader<BaseClass>::load_object( vsl_b_istream& is, BaseClass*& b
   }
 }
 
-template <class BaseClass>
-vsl_binary_loader<BaseClass>* vsl_binary_loader<BaseClass>::instance_ = 0;
+// This specialisation is needed since otherwise the more general template
+// void vsl_b_write(vsl_b_ostream& bfs, const BaseClass* b)
+// would be used for const char*, which is not correct.
+// This specialisation must of course precede the more general definition.
+//
+// Note that this must be declared "inline", since this function is already
+// implemented (and exported) in vsl_binary_io.cxx; exporting it from here
+// as well would give linker errors (multiple definition of the same symbol).
 
+inline void vsl_b_write(vsl_b_ostream& bfs, const char* b)
+{
+  if (b)
+  {
+    while (*b) { vsl_b_write(bfs, *b); ++b; }
+    vsl_b_write(bfs, *b); // '\0'
+  }
+  else
+    vsl_b_write(bfs, vcl_string("VSL_NULL_PTR"));
+}
 
-//: Binary file stream output operator for pointer to class
-//  This works correctly even if b is a NULL pointer
+// For pointer types, but *not* for char* !
 template<class BaseClass>
 void vsl_b_write(vsl_b_ostream& bfs, const BaseClass* b)
 {
@@ -90,13 +104,18 @@ void vsl_b_write(vsl_b_ostream& bfs, const BaseClass* b)
     vsl_b_write(bfs, vcl_string("VSL_NULL_PTR"));
 }
 
+template <class BaseClass>
+vsl_binary_loader<BaseClass>* vsl_binary_loader<BaseClass>::instance_ = 0;
+
 
 #undef VSL_BINARY_LOADER_INSTANTIATE
-#define VSL_BINARY_LOADER_INSTANTIATE(T) \
+#define VSL_BINARY_LOADER_WITH_SPECIALIZATION_INSTANTIATE(T) \
 template class vsl_binary_loader<T >; \
-template void vsl_b_read( vsl_b_istream& bfs, T*& b); \
-template void vsl_b_write(vsl_b_ostream& bfs, const T* b); \
 VCL_VECTOR_INSTANTIATE(T*)
+#define VSL_BINARY_LOADER_INSTANTIATE(T) \
+VSL_BINARY_LOADER_WITH_SPECIALIZATION_INSTANTIATE(T); \
+VCL_INSTANTIATE_INLINE(void vsl_b_read( vsl_b_istream& bfs, T*& b)); \
+template void vsl_b_write(vsl_b_ostream& bfs, const T* b)
 
 
 #endif // vsl_binary_loader_txx_
