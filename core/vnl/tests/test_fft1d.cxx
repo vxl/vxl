@@ -102,8 +102,8 @@ void test_fft1d () {
 
   // the whole thing backwards
   //==========================
-  vnl_vector<fsm_real> fBackRealMat = vcl_real(VCL_OVERLOAD_CAST(vnl_vector<vcl_complex<fsm_real> >&, oFFTSimple));
-  vnl_vector<fsm_real> fBackImagMat = vcl_imag(VCL_OVERLOAD_CAST(vnl_vector<vcl_complex<fsm_real> >&, oFFTSimple));
+  vnl_vector<fsm_real> fBackRealMat = vnl_real(VCL_OVERLOAD_CAST(vnl_vector<vcl_complex<fsm_real> >&, oFFTSimple));
+  vnl_vector<fsm_real> fBackImagMat = vnl_imag(VCL_OVERLOAD_CAST(vnl_vector<vcl_complex<fsm_real> >&, oFFTSimple));
   fsm_real *realBackArray = fBackRealMat.data_block ();
   fsm_real *imagBackArray = fBackImagMat.data_block ();
   vcl_complex<fsm_real> *complBackArray = oFFTSimple.data_block ();
