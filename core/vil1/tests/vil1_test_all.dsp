@@ -1,24 +1,24 @@
-# Microsoft Developer Studio Project File - Name="test_load" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="vil_test_all" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Console Application" 0x0103
 
-CFG=test_load - Win32 Debug
+CFG=vil_test_all - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "test_load.mak".
+!MESSAGE NMAKE /f "vil_test_all.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "test_load.mak" CFG="test_load - Win32 Debug"
+!MESSAGE NMAKE /f "vil_test_all.mak" CFG="vil_test_all - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "test_load - Win32 Release" (based on "Win32 (x86) Console Application")
-!MESSAGE "test_load - Win32 Debug" (based on "Win32 (x86) Console Application")
+!MESSAGE "vil_test_all - Win32 Release" (based on "Win32 (x86) Console Application")
+!MESSAGE "vil_test_all - Win32 Debug" (based on "Win32 (x86) Console Application")
 !MESSAGE 
 
 # Begin Project
@@ -28,7 +28,7 @@ CFG=test_load - Win32 Debug
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "test_load - Win32 Release"
+!IF  "$(CFG)" == "vil_test_all - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -51,7 +51,7 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
 # ADD LINK32 /libpath:"$(VXLROOT)/vxl/vil/$(OUTDIR)" /libpath:"$(VXLROOT)/vxl/vpl/$(OUTDIR)" /libpath:"$(VXLROOT)/vcl/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/jpeg/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/png/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/zlib/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/tiff/$(OUTDIR)" "vil.lib" "vpl.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" "vcl.lib"
 
-!ELSEIF  "$(CFG)" == "test_load - Win32 Debug"
+!ELSEIF  "$(CFG)" == "vil_test_all - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -79,14 +79,49 @@ LINK32=link.exe
 
 # Begin Target
 
-# Name "test_load - Win32 Release"
-# Name "test_load - Win32 Debug"
+# Name "vil_test_all - Win32 Release"
+# Name "vil_test_all - Win32 Debug"
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
-
+SOURCE=.\test_driver.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_assign.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_colour_space.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_copy.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_file_format_read.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_flipud.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_include.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_interpolate.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_load.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_memory_image.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_memory_image_of.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_save_load_image.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_write_endian.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

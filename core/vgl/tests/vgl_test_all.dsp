@@ -82,19 +82,51 @@ LINK32=link.exe
 # Name "vgl_test_all - Win32 Release"
 # Name "vgl_test_all - Win32 Debug"
 # Begin Group "Source Files"
-
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
-
-SOURCE=.\vgl_test_all.cxx
+SOURCE=.\test_driver.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_area.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_cartesian.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_clip.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_conic.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_distance.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_ellipse_scan_iterator.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_homg.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_includes.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_polygon.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_polygon_scan_iterator.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_triangle_scan_iterator.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
-
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
+# Begin Source File
+SOURCE=.\test_driver.h
+# End Source File
 # End Group
 # Begin Group "Resource Files"
-
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
