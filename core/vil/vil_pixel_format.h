@@ -19,7 +19,8 @@
 #include <vcl_complex.h>
 
 //: Describes the type of the concrete data.
-enum vil_pixel_format {
+enum vil_pixel_format
+{
   VIL_PIXEL_FORMAT_UNKNOWN = 0,
 
 #if VXL_HAS_INT_64
@@ -80,7 +81,7 @@ enum vil_pixel_format {
 //: The pixel format enumeration corresponding to the C++ type.
 //
 template <class T>
-inline vil_pixel_format vil_pixel_format_of(T dummy) { return VIL_PIXEL_FORMAT_UNKNOWN;}
+inline vil_pixel_format vil_pixel_format_of(T){return VIL_PIXEL_FORMAT_UNKNOWN;}
 
 
 //: The C++ type corresponding to an invalid pixel format
@@ -101,7 +102,8 @@ typedef void* vil_pixel_format_invalid_type;
 // pixel format enumeration is not valid.
 //
 template <vil_pixel_format pix_type>
-struct vil_pixel_format_type_of {
+struct vil_pixel_format_type_of
+{
   typedef vil_pixel_format_invalid_type type;
   typedef vil_pixel_format_invalid_type component_type;
 };
