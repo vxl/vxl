@@ -1,6 +1,8 @@
 #include <bdgl/bdgl_tracker_curve.h>
 #include <bdgl/bdgl_curve_algs.h>
 #include <vdgl/vdgl_edgel_chain.h>
+#include <vdgl/vdgl_digital_curve.h>
+#include <vdgl/vdgl_interpolator.h>
 #include <vcl_cmath.h>
 
 bdgl_tracker_curve  :: bdgl_tracker_curve()

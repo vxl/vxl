@@ -5,6 +5,9 @@
 #include <vcl_iostream.h>
 #include <vnl/vnl_math.h>
 #include <vdgl/vdgl_edgel_chain.h>
+#include <vdgl/vdgl_interpolator_linear.h>
+#include <vdgl/vdgl_digital_curve_sptr.h>
+#include <vdgl/vdgl_digital_curve.h>
 #include <bdgl/bdgl_curve_algs.h>
 
 //: Constructor
@@ -29,96 +32,88 @@ void bdgl_curve_description::init(vdgl_edgel_chain_sptr const& ec)
     return;
   }
 
-
-  vgl_point_2d<double> current_point;
-  center_.set(0.0, 0.0);
-  curvature_ = 0.0;
-  int N = ec->size();
-  double m_val=0.0, m_dir=0.0, m_curv=0.0, curv;
-  vdgl_edgel ed,ep,en;
-  points_.clear();
+  unsigned int N = ec->size();
+  points_.clear(); angles_.clear(); grad_.clear();
   // means
-  for (int i = 0; i<N; i++) {
-    ed = ec->edgel(i);
-  current_point.set(ed.get_x(),ed.get_y());
+  center_.set(0.0, 0.0);
+  gradient_mean_val_=0.0;
+  gradient_mean_dir_=0.0;
+  for (unsigned int i=0; i<N; ++i)
+  {
+    vdgl_edgel ed = ec->edgel(i);
     center_.set(center_.x() + ed.get_x(), center_.y() + ed.get_y());
-    m_val += ed.get_grad();
-    m_dir += ed.get_theta();
-  points_.push_back(current_point);
-
-  angles_.push_back(ed.get_theta());
-  grad_.push_back(ed.get_grad());
-
+    gradient_mean_val_ += ed.get_grad();
+    gradient_mean_dir_ += ed.get_theta();
+    points_.push_back(vgl_point_2d<double>(ed.get_x(),ed.get_y()));
+    angles_.push_back(ed.get_theta());
+    grad_.push_back(ed.get_grad());
     //vcl_cout<<"grad:("<<ed.get_grad()<<", "<<ed.get_theta()<<")\n";
   }
-  center_.set( center_.x()/(double)N , center_.y()/(double)N );
-  gradient_mean_val_ = (m_val/(double)N);
-  gradient_mean_dir_ = (m_dir/(double)N);
-  int smooth_=0;
+  center_.set( center_.x()/double(N) , center_.y()/double(N) );
+  gradient_mean_val_ /= double(N);
+  gradient_mean_dir_ /= double(N);
+  static int smooth_=0;
   if (smooth_)
     bdgl_curve_algs::smooth_curve(points_,1);
 
   // standard deviations
-  m_val = 0.0;
-  m_dir = 0.0;
+  gradient_std_val_ = 0.0;
+  gradient_std_dir_ = 0.0;
+  for (unsigned int i=0; i<N; ++i)
+  {
+    vdgl_edgel ed = ec->edgel(i);
+    gradient_std_val_ += vnl_math_sqr(ed.get_grad()-gradient_mean_val_);
+    gradient_std_dir_ += vnl_math_sqr(ed.get_theta()-gradient_mean_dir_);
+  }
   if (N>1)
   {
-    for (int i = 0; i<N; i++)
-    {
-      ed = ec->edgel(i);
-
-      m_val += vnl_math_sqr(ed.get_grad()-gradient_mean_val_);
-      m_dir += vnl_math_sqr(ed.get_theta()-gradient_mean_dir_);
-    }
-    gradient_std_val_ = vcl_sqrt(m_val/(double)(N-1));
-    gradient_std_dir_ = vcl_sqrt(m_dir/(double)(N-1));
-  } else {
-    gradient_std_val_ = 0.0;
-    gradient_std_dir_ = 0.0;
+    gradient_std_val_ = vcl_sqrt(gradient_std_val_/double(N-1));
+    gradient_std_dir_ = vcl_sqrt(gradient_std_dir_/double(N-1));
   }
 
   // length
-  double dist=0.0;
-  if (N>1) {
-    for (int i = 1; i<N; i++) {
-      ed = ec->edgel(i);
-      ep = ec->edgel(i-1);
-
-      dist += vcl_sqrt( (ed.x() - ep.x())*(ed.x() - ep.x()) + (ed.y() - ep.y())*(ed.y() - ep.y()) );
-    }
-    length_ = (dist);
-  } else {
-    length_ = 0.0;
+  length_=0.0;
+  for (unsigned int i=1; i<N; ++i)
+  {
+    vdgl_edgel ed = ec->edgel(i);
+    vdgl_edgel ep = ec->edgel(i-1);
+    length_ += vcl_sqrt( (ed.x() - ep.x())*(ed.x() - ep.x()) + (ed.y() - ep.y())*(ed.y() - ep.y()) );
   }
   // curvature estimate
-  if (N>2) {
-    for (int i = 1; i<N-1; i++) {
-      ed = ec->edgel(i);
-      ep = ec->edgel(i-1);
-      en = ec->edgel(i+1);
+  curvature_ = 0.0;
+  for (unsigned int i=1; i+1<N; ++i)
+  {
+    vdgl_edgel ed = ec->edgel(i);
+    vdgl_edgel ep = ec->edgel(i-1);
+    vdgl_edgel en = ec->edgel(i+1);
 
-      // sort of curvature function ... to be properly defined later
-      curv = ( 2.0*ed.x() - ep.x() - en.x() )
-            *( 2.0*ed.x() - ep.x() - en.x() )
-           + ( 2.0*ed.y() - ep.y() - en.y() )
-            *( 2.0*ed.y() - ep.y() - en.y() );
-      //vcl_cout<<curv<<"\n";
-      m_curv += vcl_sqrt( curv );
-    }
-    curvature_ = (m_curv/(double)(N-2));
-  } else {
-    curvature_ = 0.0;
+    // sort of curvature function ... to be properly defined later
+    double curv = ( 2.0*ed.x() - ep.x() - en.x() )
+                 *( 2.0*ed.x() - ep.x() - en.x() )
+                + ( 2.0*ed.y() - ep.y() - en.y() )
+                 *( 2.0*ed.y() - ep.y() - en.y() );
+    //vcl_cout<<curv<<'\n';
+    curvature_ += vcl_sqrt(curv);
   }
+  if (N>2)
+    curvature_ /= double(N-2);
+
   return;
 }
 
 // text description
 void bdgl_curve_description::info()
 {
-  vcl_cout<<"curve: c ("<<center_.x()<<", "<<center_.y()<<") | l "<<length_<<" | grad "
-          <<gradient_mean_val_<<" th "<<gradient_mean_dir_<<" | dg "
-          <<gradient_std_val_<<" dth "<<gradient_std_dir_<<" | curv "<<curvature_<<"\n";
-
+  vcl_cout<<"curve: c ("<<center_.x()<<", "<<center_.y()<<") | l "<<length_
+          <<" | grad "<<gradient_mean_val_<<" th "<<gradient_mean_dir_
+          <<" | dg "<<gradient_std_val_<<" dth "<<gradient_std_dir_
+          <<" | curv "<<curvature_<<'\n';
   return;
 }
 
+void bdgl_curve_description::compute_bounding_box(vdgl_edgel_chain_sptr const& ec)
+{
+  vdgl_digital_curve_sptr dc = new vdgl_digital_curve(new vdgl_interpolator_linear(ec));
+  dc->compute_bounding_box();
+  box_=dc->get_bounding_box();
+}
