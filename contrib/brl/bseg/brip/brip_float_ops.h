@@ -129,10 +129,11 @@ class brip_float_ops
     convert_to_byte(vil1_memory_image_of<float> const & image,
                     const float min_val, const float max_val);
 
-  //: converts an RGB image to a float image
+  //: converts an float image to an unsigned short image within a range
   static vil1_memory_image_of<unsigned short>
     convert_to_short(vil1_memory_image_of<float> const & image,
                      const float min_val, const float max_val);
+
 
   //: converts a vil1_image to a float image
   static vil1_memory_image_of<float>
@@ -145,6 +146,20 @@ class brip_float_ops
   //: converts an RGB image to a float image
   static vil1_memory_image_of<float>
     convert_to_float(vil1_memory_image_of<vil1_rgb<unsigned char> > const& image);
+  //: convert a color image to float IHS images
+  static void
+    convert_to_IHS(vil1_memory_image_of<vil1_rgb<unsigned char> >const& image, 
+                   vil1_memory_image_of<float>& I,
+                   vil1_memory_image_of<float>& H,
+                   vil1_memory_image_of<float>& S);
+
+  //: display IHS images as RGB (not conversion from IHS to RGB)
+  static void
+    display_IHS_as_RGB(vil1_memory_image_of<float> const& I,
+                       vil1_memory_image_of<float> const& H,
+                       vil1_memory_image_of<float> const& S,
+                       vil1_memory_image_of<vil1_rgb<unsigned char> >& image);
+
   //: converts a generic image to greyscale (RGB<unsigned char>)
   static vil1_memory_image_of<unsigned char>
     convert_to_grey(vil1_image const& img);
@@ -191,6 +206,7 @@ class brip_float_ops
   static double 
     bilinear_interpolation(vil1_memory_image_of<float> const & input,
                             const double x, const double y);
+
     
  private:
 

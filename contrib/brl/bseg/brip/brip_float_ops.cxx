@@ -750,6 +750,168 @@ brip_float_ops::convert_to_float(vil1_memory_image_of<vil1_rgb<unsigned char> > 
   return output;
 }
 
+static void rgb_to_ihs(vil1_rgb<unsigned char> const & rgb,
+                       float& i, float& h, float& s)
+{
+  // Reference: figure 13.36, page 595 of Foley & van Dam 
+  float r = rgb.R(), g = rgb.G(), b = rgb.B();
+  i = rgb.grey();
+  float maxval;
+  float minval;
+  float delta;
+
+  maxval = vnl_math_max(r, vnl_math_max(g, b));
+  minval = vnl_math_min(r, vnl_math_min(g, b));
+
+  //lightness
+  float la = (maxval + minval) / 2.0;
+  // Achromatic case, intensity is grey or near black or white
+  if (maxval == minval||i<20||i>235)
+    {
+      s = -1.0;
+      h = 0.0;	
+    }
+  else//the chromatic case
+    {
+      // Calculate the saturation.
+      if (la <= 127)
+        {
+          s = (255.0*(maxval - minval))/(maxval + minval);
+        }
+      else
+        {
+          s = (255.0*(maxval - minval)) / (512 - maxval - minval);
+          if(s<0)
+            s=0;
+          if(s>255)
+            s=255;
+        }
+
+      // Calculate the hue. 
+      delta = maxval - minval;
+      if (r == maxval)
+        {
+          // The resulting color is between yellow and magenta. 
+          h = (60*(g - b))/ delta;
+        }
+      else if (g == maxval) 
+        {
+          // The resulting color is between cyan and yellow.
+          h = 120.0 + (60*(b - r))/delta;
+        }
+      else
+        {
+          // The resulting color is between magenta and cyan.
+          h = 240.0 + (60*(r - g))/delta;
+        }
+      // Be sure 0.0 <= hue <= 360.0 
+      if(h < 0.0)
+        h += 360;
+      if(h > 360.0)
+        h -= 360.0;
+    }	
+}
+
+
+void brip_float_ops::
+convert_to_IHS(vil1_memory_image_of<vil1_rgb<unsigned char> >const& image, 
+               vil1_memory_image_of<float>& I,
+               vil1_memory_image_of<float>& H,
+               vil1_memory_image_of<float>& S)
+{
+  int w = image.width(), h = image.height();
+  I.resize(w,h);
+  H.resize(w,h);
+  S.resize(w,h);
+  for(int r = 0; r < h; r++)
+    for(int c = 0; c < w; c++)
+      {
+        float in, hue, sat;
+        rgb_to_ihs(image(c,r), in, hue, sat);
+        I(c,r) = in;
+        H(c,r) = hue;
+        S(c,r) = sat;
+      }
+}
+#if 0
+void brip_float_ops::
+display_IHS_as_RGB(vil1_memory_image_of<float> const& I,
+                       vil1_memory_image_of<float> const& H,
+                       vil1_memory_image_of<float> const& S,
+                       vil1_memory_image_of<vil1_rgb<unsigned char> >& image)
+{
+  int w = I.width(), h = I.height();
+  image.resize(w,h);
+  float s = 255.0f/360.0f;
+  for(int r = 0; r < h; r++)
+    for(int c = 0; c < w; c++)
+      {
+        float in, hue, sat;
+        in = I(c,r);
+        hue = H(c,r); 
+        sat = S(c,r);
+        if(in<0)
+          in = 0;
+        if(sat<0)
+          sat = 0;
+        if(hue<0)
+          hue = 0;
+        if(in>255)
+          in = 255;
+        hue *=s;
+        if(hue>255)
+          hue = 255;
+        if(sat>255)
+          sat = 255;
+        unsigned char vi = (unsigned char)in, vh = (unsigned char)hue, 
+          vs = (unsigned char)sat;
+        vil1_rgb<unsigned char> v(vi, vh, vs);
+        image(c,r)=v;
+      }
+}
+#endif
+
+//: map so that intensity is proportional to saturation and hue is color
+void brip_float_ops::
+display_IHS_as_RGB(vil1_memory_image_of<float> const& I,
+                       vil1_memory_image_of<float> const& H,
+                       vil1_memory_image_of<float> const& S,
+                       vil1_memory_image_of<vil1_rgb<unsigned char> >& image)
+{
+  int w = I.width(), h = I.height();
+  image.resize(w,h);
+
+  float deg_to_rad = vnl_math::pi/180.0f; 
+  for(int r = 0; r < h; r++)
+    for(int c = 0; c < w; c++)
+      {
+        float hue, sat;
+        hue = H(c,r); 
+        sat = 2.0*S(c,r);
+        if(sat<0)
+          sat = 0;
+        if(sat>255)
+          sat = 255;
+        float ang = deg_to_rad*hue;
+        float cs = vcl_cos(ang), si = vcl_fabs(vcl_sin(ang));
+        float red,green,blue;
+        green = si*sat;
+        if(cs>=0)
+          {
+            red = cs*sat;
+            blue = 0;
+          }
+        else
+          {
+            red = 0;
+            blue = sat*(-cs);
+          }
+        unsigned char rc = (unsigned char)red,
+          gc = (unsigned char)green, bc = (unsigned char)blue;
+        image(c,r)= vil1_rgb<unsigned char>(rc, gc, bc);
+      }
+}
+
 vil1_memory_image_of<float>
 brip_float_ops::convert_to_float(vil1_image const & image)
 {
