@@ -7,7 +7,7 @@ bool vipl_sobel <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(){
   const ImgIn &in = in_data(0);
   ImgOut &out = out_data();
   // apply filter:
-  register DataIn v;
+  register DataIn v /* quell gcc warning : */ = DataIn();
   for(int j = start(Y_Axis()), ej =  stop(Y_Axis()); j < ej  ; ++j)
     for(int i = start(X_Axis(),j), ei = stop(X_Axis(),j); i < ei ; ++i) {
       v = fgetpixel(in, i, j, v); v *= 4;
