@@ -5,20 +5,19 @@
 
 #include <testlib/testlib_test.h>
 
-static
-void p(vil1_image const& m)
+static void p(vil1_image const& m)
 {
   for (int y = 0; y < m.height(); ++y) {
     for (int x = 0; x < m.width(); ++x) {
       unsigned char val = 0;
       m.get_section(&val, x, y, 1, 1);
-      vcl_cout << "\t" << (int)val;
+      vcl_cout << '\t' << (int)val;
     }
     vcl_cout << vcl_endl << vcl_endl;
   }
 }
 
-void test_flipud()
+static void test_flipud()
 {
   vil1_memory_image m(3, 2, VIL1_BYTE);
 
@@ -55,7 +54,4 @@ void test_flipud()
   TEST ("full get_section shows flipped data", i, 6);
 }
 
-MAIN( test_flipud )
-{
-  RUN_TEST_FUNC(test_flipud);
-}
+TESTMAIN(test_flipud);

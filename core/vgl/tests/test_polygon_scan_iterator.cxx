@@ -19,7 +19,7 @@ typedef vgl_polygon::point_t       Point_type;
 typedef vgl_polygon                Polygon_type;
 typedef vgl_polygon_scan_iterator  Polygon_scan;
 
-void
+static void
 test_without_boundary()
 {
   Polygon_type poly;
@@ -39,7 +39,7 @@ test_without_boundary()
   testlib_test_perform( count == 6 );
 }
 
-void
+static void
 test_with_boundary()
 {
   Polygon_type poly;
@@ -61,7 +61,7 @@ test_with_boundary()
   testlib_test_perform( count == 16  );
 }
 
-void
+static void
 test_denegrate_polygon()
 {
   {
@@ -97,13 +97,11 @@ test_denegrate_polygon()
 }
 
 
-MAIN( test_polygon_scan_iterator )
+static void test_polygon_scan_iterator()
 {
-  START("vgl_polygon_scan_iterator");
-
   test_without_boundary();
   test_with_boundary();
   test_denegrate_polygon();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_polygon_scan_iterator);

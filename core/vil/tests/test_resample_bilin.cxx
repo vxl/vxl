@@ -80,11 +80,9 @@ static void test_resample_bilin_byte()
   TEST_NEAR("dest_im(3,2,1)",dest_im(3,2,1),0,1e-6);
 }
 
-MAIN( test_resample_bilin )
+static void test_resample_bilin()
 {
-  START( "Bilinear Image Resampling" );
-
   test_resample_bilin_byte();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_resample_bilin);

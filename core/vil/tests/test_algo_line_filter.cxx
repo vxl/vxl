@@ -239,11 +239,9 @@ static void test_line_filter_byte()
   TEST_NEAR("Reverse line str",line_str(5,4),white,1e-4);
 }
 
-MAIN( test_algo_line_filter )
+static void test_algo_line_filter()
 {
-  START( "Line Filter" );
-
   test_line_filter_byte();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_algo_line_filter);

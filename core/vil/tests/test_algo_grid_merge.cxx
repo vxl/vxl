@@ -24,11 +24,9 @@ static void test_grid_merge_byte()
   TEST("(6,4)",dest_image(6,4),image1(0,0));
 }
 
-MAIN( test_algo_grid_merge )
+static void test_algo_grid_merge()
 {
-  START( "vil_grid_merge" );
-
   test_grid_merge_byte();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_algo_grid_merge);

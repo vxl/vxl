@@ -161,11 +161,9 @@ static void test_algo_convolve_1d_double()
                                     vil_image_view<vxl_byte>(conv->get_view(n-4,4,n-4,4))), true);
 }
 
-MAIN( test_algo_convolve_1d )
+static void test_algo_convolve_1d()
 {
-  START( "vil_convolve_1d" );
-
   test_algo_convolve_1d_double();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_algo_convolve_1d);

@@ -2,7 +2,7 @@
 
 #include <vcl_string.h>
 
-MAIN( test_args )
+MAIN_ARGS( test_args )
 {
   START( "argument passing" );
   TEST( "argument count (should be 3)", argc, 3 );

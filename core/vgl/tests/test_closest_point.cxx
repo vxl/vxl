@@ -11,7 +11,7 @@
 #include <vcl_iostream.h>
 #include <vcl_cmath.h> // for sqrt()
 
-void testLine2DClosestPoint()
+static void testLine2DClosestPoint()
 {
   vgl_homg_point_2d<double> p, q;
   vgl_homg_line_2d<double> l;
@@ -35,7 +35,7 @@ void testLine2DClosestPoint()
 }
 
 // Test for closest points on two 3D lines, by Brendan McCane
-void testLine3DClosestPoints()
+static void testLine3DClosestPoints()
 {
   vgl_homg_point_3d<double> p1, p2;
   vgl_homg_line_3d_2_points<double> l1;
@@ -49,11 +49,11 @@ void testLine3DClosestPoints()
   // result should be (1,0,0,0) for both pts
   if (pts.first!=pts.second)
     vcl_cout << "parallel test failed, points should be equal.\n"
-             << "points are: " << pts.first << ' ' << pts.second 
+             << "points are: " << pts.first << ' ' << pts.second
              << vcl_endl;
   else if (pts.first!=p2)
     vcl_cout << "parallel test failed, points should be " << p2 << '\n'
-             << "points are: " << pts.first << ' ' << pts.second 
+             << "points are: " << pts.first << ' ' << pts.second
              << vcl_endl;
   TEST("Parallel test", pts.first==pts.second && pts.first==p2, true);
   TEST_NEAR("Parallel distance test", vgl_distance(l1,l2), 5.0, 1e-8);
@@ -68,18 +68,18 @@ void testLine3DClosestPoints()
   // result should be (1,1,1) for both pts
   if (pts.first != pts.second)
     vcl_cout << "Intersect test failed, points should be equal\n"
-             << "points are: " << pts.first << ' ' << pts.second 
+             << "points are: " << pts.first << ' ' << pts.second
              << vcl_endl;
   else if (pts.first != p2)
     vcl_cout << "Intersect test failed, points should be " << p2 << '\n'
-             << "points are: " << pts.first << ' ' << pts.second 
+             << "points are: " << pts.first << ' ' << pts.second
              << vcl_endl;
   TEST("Intersect test", pts.first==pts.second && pts.first==p2, true);
   TEST_NEAR("Intersect distance test", vgl_distance(l1,l2), 0.0, 1e-8);
 
   // now test for skew lines
   //
-  // The lines are diagonals on neighbouring faces of a unit cube. 
+  // The lines are diagonals on neighbouring faces of a unit cube.
   // The diagonals are chosen so they do not meet. The closest
   // distance between the two lines is 1/sqrt(3). There is actually
   // a way of visualising the problem that makes the answer obvious
@@ -96,7 +96,7 @@ void testLine3DClosestPoints()
   TEST_NEAR("Skew lines distance test", vgl_distance(pts.first,l2),1/vcl_sqrt(3.0),1e-8);
 }
 
-void testPlane3DClosestPoint()
+static void testPlane3DClosestPoint()
 {
   vgl_homg_point_3d<double> p, q;
   vgl_homg_plane_3d<double> l;
@@ -119,11 +119,11 @@ void testPlane3DClosestPoint()
   TEST_NEAR("Distance test", vgl_distance(q,l), 1.0, 1e-8);
 }
 
-MAIN( test_closest_point )
+static void test_closest_point()
 {
-  START("test closest_point");
   testLine2DClosestPoint();
   testLine3DClosestPoints();
   testPlane3DClosestPoint();
-  SUMMARY();
 }
+
+TESTMAIN(test_closest_point);

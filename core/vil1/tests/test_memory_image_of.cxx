@@ -12,10 +12,8 @@
 const int W = 768;
 const int H = 256;
 
-MAIN( test_memory_image_of )
+static void test_memory_image_of()
 {
-  START( "vil1_memory_image_of" );
-
   vcl_string tmp_nam = vul_temp_filename() + ".pgm";
   char const *file_name_2 = tmp_nam!="" ? tmp_nam.c_str() : "vil1_test_memory_image_of.pgm";
   {
@@ -86,6 +84,6 @@ MAIN( test_memory_image_of )
     p = image(1,1); TEST ("p == 5", p, 5);
     p = image(2,1); TEST ("p == 6", p, 6);
   }
-
-  SUMMARY();
 }
+
+TESTMAIN(test_memory_image_of);

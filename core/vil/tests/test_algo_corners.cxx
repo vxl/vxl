@@ -46,11 +46,9 @@ static void test_algo_corners_byte_float()
   TEST("Peak just inside corner",vil_is_peak_3x3(&corner_im(12,12),corner_im.istep(),corner_im.jstep()),true);
 }
 
-MAIN( test_algo_corners )
+static void test_algo_corners()
 {
-  START( "Testing Corners" );
-
   test_algo_corners_byte_float();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_algo_corners);

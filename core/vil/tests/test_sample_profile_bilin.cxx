@@ -55,11 +55,9 @@ static void test_sample_profile_bilin_byte()
   TEST_NEAR("Last value (outside image)",vec4[23],0.f,1e-6);
 }
 
-MAIN( test_sample_profile_bilin )
+static void test_sample_profile_bilin()
 {
-  START( "Bilinear Profile Sampling" );
-
   test_sample_profile_bilin_byte();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_sample_profile_bilin);

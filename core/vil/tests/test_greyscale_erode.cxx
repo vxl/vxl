@@ -53,11 +53,9 @@ static void test_greyscale_erode_byte()
   TEST("image2(2,1)",image2(2,1),0);
 }
 
-MAIN( test_greyscale_erode )
+static void test_greyscale_erode()
 {
-  START( "Greyscale Dilate" );
-
   test_greyscale_erode_byte();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_greyscale_erode);

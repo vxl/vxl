@@ -80,11 +80,9 @@ static void test_resample_bicub_byte()
   TEST_NEAR("dest_im(3,2,1)",dest_im(3,2,1),0,1e-6);
 }
 
-MAIN( test_resample_bicub )
+static void test_resample_bicub()
 {
-  START( "Bicubic Image Resampling" );
-
   test_resample_bicub_byte();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_resample_bicub);

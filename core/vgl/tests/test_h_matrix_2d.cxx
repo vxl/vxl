@@ -178,7 +178,7 @@ static void test_compute_linear_lines()
   //solve the same problem with weighted least squares
   vcl_vector<double> w(6,1.0);
   vgl_h_matrix_2d<double> Hwls = hmcl.compute(lines1, lines2, w);
-  vcl_cout << "The resulting transform from weighted least squares\n" 
+  vcl_cout << "The resulting transform from weighted least squares\n"
            << Hwls << '\n';
   vnl_matrix_fixed<double,3,3> Mwls=H.get_matrix();
   vgl_homg_point_2d<double> hdiag_wls(Mwls[0][0], Mwls[1][1], Mwls[2][2]);
@@ -214,9 +214,8 @@ static void test_compute_4point()
   TEST_NEAR("recover 2x scale matrix", length(hdiag-p23), 0.0, 1e-06);
 }
 
-MAIN( test_h_matrix_2d )
+static void test_h_matrix_2d()
 {
-  START( "test_vgl_h_matrix_2d" );
   test_identity_transform();
   test_perspective_transform();
   test_projective_basis();
@@ -224,5 +223,6 @@ MAIN( test_h_matrix_2d )
   test_compute_linear_points();
   test_compute_linear_lines();
   test_compute_4point();
-  SUMMARY();
 }
+
+TESTMAIN(test_h_matrix_2d);

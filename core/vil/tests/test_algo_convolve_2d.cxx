@@ -68,11 +68,9 @@ static void test_algo_convolve_2d_byte()
   TEST_NEAR("dest_im(0,1)",dest_im(0,1),0.5*m*(m+1)*6 + 10*m*n,1e-6);
 }
 
-MAIN( test_algo_convolve_2d )
+static void test_algo_convolve_2d()
 {
-  START( "vil_algo_convolve_2d" );
-
   test_algo_convolve_2d_byte();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_algo_convolve_2d);

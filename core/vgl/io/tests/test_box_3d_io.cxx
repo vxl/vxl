@@ -6,11 +6,11 @@
 #include <testlib/testlib_test.h>
 #include <vpl/vpl.h>
 
-void test_box_3d_double_io()
+static void test_box_3d_double_io()
 {
-  vcl_cout << "*****************************\n"
-           << "Testing vgl_box_3d<double> io\n"
-           << "*****************************\n";
+  vcl_cout << "*******************************\n"
+           << " Testing vgl_box_3d<double> io\n"
+           << "*******************************\n";
 
   //// test constructors, accessors
   vgl_box_3d<double> p_out(1.2,3.4,5.6,2.3,4.5,6.7), p_in;
@@ -37,9 +37,9 @@ void test_box_3d_double_io()
   vsl_indent_clear_all_data();
 }
 
-MAIN( test_box_3d_io )
+static void test_box_3d_io()
 {
-  START( "test box_3d IO" );
   test_box_3d_double_io();
-  SUMMARY();
 }
+
+TESTMAIN(test_box_3d_io);

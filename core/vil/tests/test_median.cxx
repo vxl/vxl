@@ -58,11 +58,9 @@ static void test_median_byte()
   TEST("image2(2,1)",image2(2,1),0);
 }
 
-MAIN( test_median )
+static void test_median()
 {
-  START( "Median Filter" );
-
   test_median_byte();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_median);

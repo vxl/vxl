@@ -5,9 +5,9 @@
 #include <vcl_iostream.h>
 
 
-void test_simple_polygon()
+static void test_simple_polygon()
 {
-  vcl_cout << "Simple polygon" << vcl_endl;
+  vcl_cout << "Simple polygon\n";
 
   // Simple triangle
   vgl_polygon p;
@@ -25,9 +25,9 @@ void test_simple_polygon()
 }
 
 
-void test_disjoint_polygon()
+static void test_disjoint_polygon()
 {
-  vcl_cout << "Disjoint polygons" << vcl_endl;
+  vcl_cout << "Disjoint polygons\n";
 
   // Simple triangle
   vgl_polygon p;
@@ -53,9 +53,9 @@ void test_disjoint_polygon()
   TEST("outside (7)", p.contains( 15.1f, 10.0f ), false );
 }
 
-void test_holey_polygon()
+static void test_holey_polygon()
 {
-  vcl_cout << "Polygon with holes" << vcl_endl;
+  vcl_cout << "Polygon with holes\n";
 
   // Simple triangle
   vgl_polygon p;
@@ -80,13 +80,11 @@ void test_holey_polygon()
 }
 
 
-MAIN( test_polygon )
+static void test_polygon()
 {
-  START( "test polygon" );
-
   test_simple_polygon();
   test_disjoint_polygon();
   test_holey_polygon();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_polygon);

@@ -181,14 +181,12 @@ static void test_convert_to_n_planes()
 //  vil_print_all(vcl_cout, u16_image_expected);
 }
 
-MAIN( test_convert )
+static void test_convert(int argc, char* argv[])
 {
-  START( "vil_convert" );
-
   test_convert_to_n_planes();
   test_convert1(argc>1 ? argv[1] : "file_read_data");
   test_convert_stretch_range();
   test_convert_diff_types(argc>1 ? argv[1] : "file_read_data");
-
-  SUMMARY();
 }
+
+TESTMAIN_ARGS(test_convert);

@@ -9,7 +9,7 @@
 
 static double const avg[5] = { 0.8709, 1.25178114, 1.0130145969, 1.0978098765, 1.0605102418 };
 
-double f(double i, double j, int d)
+static double f(double i, double j, int d)
 {
   static double const taylor[5][5] = {
     {  0.8709,   -0.2943,   -0.6026,    0.4936,    0.6924 },
@@ -32,15 +32,15 @@ double f(double i, double j, int d)
   return out;
 }
 
-MAIN( test_interpolate )
+static void test_interpolate()
 {
-  START( "interpolate" );
   vil1_memory_image_of<double> I(10, 10);
 
   double r = 4.6;
   double c = 4.3;
 
-  for (int d=0; d<=4; ++d) {
+  for (int d=0; d<=4; ++d)
+  {
     vcl_cout << "d=" << d << vcl_endl;
 
     for (int i=0; i<I.rows(); ++i)
@@ -66,6 +66,6 @@ MAIN( test_interpolate )
     vcl_cout << "  bicubic : " << out << "\t\t-->   ";
     testlib_test_perform(vcl_fabs(out - avg[d]) < 0.0005*avg[d]);
   }
-
-  SUMMARY();
 }
+
+TESTMAIN(test_interpolate);

@@ -25,11 +25,9 @@ static void test_find_peaks_byte()
   TEST("Peak at (7,5)",pi[0]==7 && pj[0]==5, true);
 }
 
-MAIN( test_algo_find_peaks )
+static void test_algo_find_peaks()
 {
-  START( "find_peaks" );
-
   test_find_peaks_byte();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_algo_find_peaks);

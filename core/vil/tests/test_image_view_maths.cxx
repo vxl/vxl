@@ -6,7 +6,7 @@
 #include <vil/vil_math.h>
 #include <vil/vil_print.h>
 
-void test_image_view_maths_byte()
+static void test_image_view_maths_byte()
 {
   vcl_cout << "******************************\n"
            << " Testing vil_image_view_maths\n"
@@ -182,11 +182,9 @@ void test_image_view_maths_byte()
   TEST_NEAR("vil_math_sqrt (8)",bim_sqrt(1,2),3,1e-6);
 }
 
-MAIN( test_image_view_maths )
+static void test_image_view_maths()
 {
-  START( "vil_image_view_maths" );
-
   test_image_view_maths_byte();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_image_view_maths);

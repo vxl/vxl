@@ -28,9 +28,10 @@ static void test_line_segment_methods()
            << "direction " << dir << '\n'
            << "normal " << norm << '\n';
 }
+
 static void test_line_2d_regression()
 {
-  vcl_cout << "Testing line regression \n";
+  vcl_cout << "Testing line regression\n";
   vgl_point_2d<double> p0(0.1,0.9), p1(0.5,1.6), p2(1.2,2.0);
   vgl_line_2d_regression<double> reg;
   reg.increment_partial_sums(p0.x(), p0.y());
@@ -42,6 +43,7 @@ static void test_line_2d_regression()
   double dist = vcl_fabs(0.1-reg.get_rms_error());
   TEST_NEAR("identity", dist, 0.0, 1e-04);
 }
+
 static void test_fit_simple_chain()
 {
   vcl_vector<vgl_point_2d<double> > curve;
@@ -76,11 +78,11 @@ static void test_fit_simple_chain()
   TEST("last endpoint x", segs[1].point2().x(), 29);
 }
 
-MAIN( test_fit_lines_2d )
+static void test_fit_lines_2d()
 {
-  START( "test_vgl_fit_lines_2d" );
   test_line_segment_methods();
   test_line_2d_regression();
   test_fit_simple_chain();
-  SUMMARY();
 }
+
+TESTMAIN(test_fit_lines_2d);

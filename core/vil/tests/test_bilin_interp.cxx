@@ -44,11 +44,9 @@ static void test_bilin_interp_byte()
   }
 }
 
-MAIN( test_bilin_interp )
+static void test_bilin_interp()
 {
-  START( "Bilinear Interpolation" );
-
   test_bilin_interp_byte();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_bilin_interp);

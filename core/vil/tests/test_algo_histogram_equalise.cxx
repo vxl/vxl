@@ -2,7 +2,7 @@
 #include <testlib/testlib_test.h>
 #include <vil/algo/vil_histogram_equalise.h>
 
-void test_histogram_equalise_byte()
+static void test_histogram_equalise_byte()
 {
   vil_image_view<vxl_byte> image(10,10);
   for (unsigned j=0;j<image.nj();++j)
@@ -27,11 +27,9 @@ void test_histogram_equalise_byte()
   TEST("Equalised pixel (8,1)",image(8,1),255);
 }
 
-MAIN( test_algo_histogram_equalise )
+static void test_algo_histogram_equalise()
 {
-  START( "vil_equalise_histogram" );
-
   test_histogram_equalise_byte();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_algo_histogram_equalise);

@@ -6,10 +6,8 @@
 #include <vpl/vpl.h>  // for vpl_unlink and vpl_sleep
 #include <vcl_fstream.h>
 
-MAIN( test_temp_filename )
+static void test_temp_filename()
 {
-  START("Temporary filename");
-
   {
     vcl_string filename = vul_temp_filename();
     vcl_cout << "vul_temp_filename() returns '" << filename << "'\n";
@@ -19,17 +17,17 @@ MAIN( test_temp_filename )
 
     // Writing to temporary file:
     ostr << 1;
+    TEST("Writing to temporary file", ostr.good(), true);
     ostr.close();
     // now reading back, to see if the file really exists:
     {
       vcl_ifstream istr( filename.c_str() );
       TEST("Opening temporary file", istr.good(), true);
       int i=0; istr >> i;
-      TEST("Writing to temporary file", i, 1);
+      TEST("Reading from temporary file", i, 1);
     }
     TEST("Removing temporary file", vpl_unlink(filename.c_str()) == -1, false);
   }
-
 
   {
     vcl_string filename1 = vul_temp_filename();
@@ -39,6 +37,6 @@ MAIN( test_temp_filename )
 
     TEST("Testing multiple calls", filename1 == filename2, false);
   }
-
-  SUMMARY();
 }
+
+TESTMAIN(test_temp_filename);

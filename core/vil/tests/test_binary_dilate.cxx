@@ -68,11 +68,9 @@ static void test_binary_dilate_byte()
   print_binary_image(image3);
 }
 
-MAIN( test_binary_dilate )
+static void test_binary_dilate()
 {
-  START( "Binary Dilate" );
-
   test_binary_dilate_byte();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_binary_dilate);

@@ -29,30 +29,11 @@
 #include <testlib/testlib_root_dir.h>
 #include <testlib/testlib_test.h>
 
-void golden_test_vil1_io(bool save_file=false);
-
-
-MAIN( golden_test_vil1_io )
+static void golden_test_vil1_io(bool save_file=false)
 {
-  bool save_file=false;
-
-  if (argc==2)
-  {
-    vcl_string conf = argv[1];
-    vcl_string ref="create";
-    if (conf==ref)
-      save_file =true;
-  }
-  golden_test_vil1_io(save_file);
-  SUMMARY();
-}
-
-
-void golden_test_vil1_io(bool save_file)
-{
-  vcl_cout << "*********************************************************\n"
-           << "Testing a golden data file for cross platform consistency\n"
-           << "*********************************************************\n";
+  vcl_cout << "***********************************************************\n"
+           << " Testing a golden data file for cross platform consistency\n"
+           << "***********************************************************\n";
 
   //----------------------------------------------------------------------
   // Create objects:
@@ -186,3 +167,10 @@ void golden_test_vil1_io(bool save_file)
           p_out_rgba.B()==p_in_rgba.B() &&
           p_out_rgba.A()==p_in_rgba.A() , true);
 }
+
+static void golden_test_vil1_io(int argc, char* argv[])
+{
+  golden_test_vil1_io(argc==2 && vcl_string(argv[1])==vcl_string("create"));
+}
+
+TESTMAIN_ARGS(golden_test_vil1_io);

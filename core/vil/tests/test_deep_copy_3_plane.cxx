@@ -16,7 +16,7 @@ bool equal_image(const vil_image_view< vxl_byte >& im0,
     return true;
 }
 
-void test_deep_copy_3_plane()
+static void test_deep_copy_3_plane()
 {
   vxl_byte dummy(1);
 
@@ -41,11 +41,4 @@ void test_deep_copy_3_plane()
   TEST("Deep Copy rrggbb",equal_image(rrggbb_im,rrggbb_im_new),true);
 }
 
-MAIN( test_deep_copy_3_plane )
-{
-  START( "vil_test_deep_copy_3_plane" );
-
-  test_deep_copy_3_plane();
-
-  SUMMARY();
-}
+TESTMAIN(test_deep_copy_3_plane);

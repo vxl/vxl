@@ -66,11 +66,9 @@ static void test_algo_exp_grad_filter_1d_byte_float()
   vil_print_all(vcl_cout,dest_im);
 }
 
-MAIN( test_algo_exp_grad_filter_1d )
+static void test_algo_exp_grad_filter_1d()
 {
-  START( "vil_algo_exp_grad_filter_1d" );
-
   test_algo_exp_grad_filter_1d_byte_float();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_algo_exp_grad_filter_1d);

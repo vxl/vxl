@@ -3,9 +3,8 @@
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
 
-MAIN( test_root_dir )
+static void test_root_dir()
 {
-  START("Find Root Dir");
   // Check that a file exists
   vcl_string path = testlib_root_dir() + "/core/testlib/testlib_root_dir.h";
 
@@ -16,12 +15,13 @@ MAIN( test_root_dir )
   if (!is)
   {
     vcl_cerr<<"Unable to open "<<path<<"\ntestlib_root_dir() is probably wrong.\n"
-              "Try setting $VXLSRC to the source root directory."<<vcl_endl;
+              "Try setting $VXLSRC to the source root directory.\n";
   }
   else
   {
     is.close();
-    vcl_cout<<"Root Dir: "<<testlib_root_dir()<<" appears to be correct."<<vcl_endl;
+    vcl_cout<<"Root Dir: "<<testlib_root_dir()<<" appears to be correct.\n";
   }
-  SUMMARY();
 }
+
+TESTMAIN(test_root_dir);

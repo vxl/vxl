@@ -5,7 +5,7 @@
 #include <vgl/vgl_triangle_scan_iterator.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
 
-MAIN( test_triangle_scan_iterator )
+static void test_triangle_scan_iterator()
 {
   vcl_cout << "Test triangle scan iterator\n";
 
@@ -21,10 +21,9 @@ MAIN( test_triangle_scan_iterator )
   vgl_polygon_scan_iterator pi(p, false);
 
   bool failed = false;
-  ti.reset();
-  pi.reset();
-  bool ti_more = ti.next();
-  bool pi_more = pi.next();
+  ti.reset(); bool ti_more = ti.next();
+  pi.reset(); bool pi_more = pi.next();
+
   while ( ti_more && pi_more && !failed )
   {
     failed = failed || ti.scany() != pi.scany() || ti.startx() != pi.startx() || ti.endx() != pi.endx();
@@ -33,10 +32,7 @@ MAIN( test_triangle_scan_iterator )
   }
   if ( ti_more != pi.next() ) failed = true;
 
-  if ( failed )
-    vcl_cout << "Triangle scan iterator != polygon scan iterator -> **FAILED**\n";
-  else
-    vcl_cout << "Triangle scan iterator = polygon scan iterator  -> PASSED\n";
-
-  return failed;
+  TEST("Triangle scan iterator == polygon scan iterator", failed, false);
 }
+
+TESTMAIN(test_triangle_scan_iterator);

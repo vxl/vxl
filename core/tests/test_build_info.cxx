@@ -87,10 +87,8 @@ system_information_print_file (const char * name, vcl_ostream & os,
   }
 }
 
-MAIN( test_build_info )
+static void test_build_info()
 {
-  START("build_info");
-
   const char* files[] =
     {
       // Note.txt is meant to be created by hand if desired for a build
@@ -115,7 +113,7 @@ MAIN( test_build_info )
   if (outf)
   {
       vcl_cout << "Also writing this information to file "
-               << vxl_BUILD_INFO_NOTES << "\n";
+               << vxl_BUILD_INFO_NOTES << '\n';
 
       outf << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
            << "<Site BuildName=\"" << vxl_BUILD_NAME
@@ -142,9 +140,9 @@ MAIN( test_build_info )
   else
   {
       vcl_cerr << "Error writing this information to file "
-               << vxl_BUILD_INFO_NOTES << "\n";
-      return 1;
+               << vxl_BUILD_INFO_NOTES << '\n';
+      testlib_test_perform(false);
   }
-
-  SUMMARY();
 }
+
+TESTMAIN(test_build_info);

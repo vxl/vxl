@@ -26,11 +26,11 @@
 #include <testlib/testlib_root_dir.h>
 #include <testlib/testlib_test.h>
 
-void golden_test_vnl_io(bool save_file)
+static void golden_test_vnl_io(bool save_file)
 {
-  vcl_cout << "*********************************************************\n"
-           << "Testing a golden data file for cross platform consistency\n"
-           << "*********************************************************\n";
+  vcl_cout << "***********************************************************\n"
+           << " Testing a golden data file for cross platform consistency\n"
+           << "***********************************************************\n";
 
 
   //-----------------------------------------------------------------------------------
@@ -194,19 +194,9 @@ void golden_test_vnl_io(bool save_file)
 }
 
 
-MAIN( golden_test_vnl_io )
+static void golden_test_vnl_io(int argc, char* argv[])
 {
-  START( "golden test" );
-
-  bool save_file=false;
-
-  if (argc==2) {
-    vcl_string conf = argv[1];
-    vcl_string ref="create";
-    if (conf==ref)
-      save_file =true;
-  }
-  golden_test_vnl_io(save_file);
-
-  SUMMARY();
+  golden_test_vnl_io(argc==2 && vcl_string(argv[1])==vcl_string("create"));
 }
+
+TESTMAIN_ARGS(golden_test_vnl_io);

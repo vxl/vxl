@@ -4,39 +4,37 @@
 
 #include <testlib/testlib_test.h>
 
-MAIN( test_colour_space )
+static void test_colour_space()
 {
-  START( "colour space" );
+  double r=10;
+  double g=120;
+  double b=240;
 
-  double r, g, b, h ,s ,v, nr, ng, nb;
-  r=10;
-  g=120;
-  b=240;
+  vcl_cout<<"r= "<<r<<vcl_endl
+          <<"g= "<<g<<vcl_endl
+          <<"b= "<<b<<vcl_endl;
 
-  vcl_cout<<"r= "<<r<<vcl_endl;
-  vcl_cout<<"g= "<<g<<vcl_endl;
-  vcl_cout<<"b= "<<b<<vcl_endl;
-
+  double h, s, v;
   vil1_colour_space_RGB_to_HSV(r,g,b,&h,&s,&v);
 
-  vcl_cout<<"h= "<<h<<vcl_endl;
-  vcl_cout<<"s= "<<s<<vcl_endl;
-  vcl_cout<<"v= "<<v<<vcl_endl;
+  vcl_cout<<"h= "<<h<<vcl_endl
+          <<"s= "<<s<<vcl_endl
+          <<"v= "<<v<<vcl_endl;
 
+  double nr, ng, nb;
   vil1_colour_space_HSV_to_RGB(h,s,v,&nr,&ng,&nb);
 
-  vcl_cout<<"nr= "<<nr<<vcl_endl;
-  vcl_cout<<"ng= "<<ng<<vcl_endl;
-  vcl_cout<<"nb= "<<nb<<vcl_endl;
+  vcl_cout<<"nr= "<<nr<<vcl_endl
+          <<"ng= "<<ng<<vcl_endl
+          <<"nb= "<<nb<<vcl_endl;
 
-  double d;
-  d= vcl_fabs (r-nr);
-  d+= vcl_fabs (g-ng);
-  d+= vcl_fabs (b-nb);
+  double d = vcl_fabs (r-nr)
+           + vcl_fabs (g-ng)
+           + vcl_fabs (b-nb);
 
   vcl_cout<<"d= "<<d<<vcl_endl;
 
-  TEST ("test r g b values", d<0.1, true);
-
-  SUMMARY();
+  TEST_NEAR("test r g b values", d, 0.0, 0.1);
 }
+
+TESTMAIN(test_colour_space);

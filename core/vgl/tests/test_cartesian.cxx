@@ -721,9 +721,8 @@ static void test_1d_basis()
 }
 
 
-MAIN( test_cartesian )
+static void test_cartesian()
 {
-  START( "test cartesian" );
   vcl_cout << "--- test_vector_2d ---\n";
   test_vector_2d();
   vcl_cout << "--- test_vector_3d ---\n";
@@ -744,8 +743,9 @@ MAIN( test_cartesian )
   test_box_3d();
   vcl_cout << "-- Testing vgl_1d_basis --\n";
   test_1d_basis();
-  SUMMARY();
 }
+
+TESTMAIN(test_cartesian);
 
 #include <vgl/vgl_1d_basis.txx>
 VGL_1D_BASIS_INSTANTIATE(float);

@@ -10,7 +10,7 @@ static void show_boundary(const vcl_vector<int>& bi,const vcl_vector<int>& bj)
   vcl_cout<<vcl_endl;
 }
 
-void test_algo_blob_finder1()
+static void test_algo_blob_finder()
 {
   vcl_cout<<"=== Testing vil_blob_finder ===\n";
   vil_image_view<bool> image(10,11);
@@ -70,9 +70,4 @@ void test_algo_blob_finder1()
 }
 
 
-MAIN( test_algo_blob_finder )
-{
-  START( "vil_blob_finder" );
-  test_algo_blob_finder1();
-  SUMMARY();
-}
+TESTMAIN(test_algo_blob_finder);

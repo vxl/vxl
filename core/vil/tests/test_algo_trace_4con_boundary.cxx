@@ -10,7 +10,7 @@ static void show_boundary(const vcl_vector<int>& bi,const vcl_vector<int>& bj)
   vcl_cout<<vcl_endl;
 }
 
-void test_algo_trace_4con_boundary1()
+static void test_algo_trace_4con_boundary()
 {
   vcl_cout<<"=== Testing vil_trace_4con_boundary ===\n";
   vil_image_view<bool> image(10,11);
@@ -88,9 +88,4 @@ void test_algo_trace_4con_boundary1()
 }
 
 
-MAIN( test_algo_trace_4con_boundary )
-{
-  START( "vil_trace_4con_boundary" );
-  test_algo_trace_4con_boundary1();
-  SUMMARY();
-}
+TESTMAIN(test_algo_trace_4con_boundary);

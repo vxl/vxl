@@ -55,11 +55,9 @@ static void test_sample_profile_bicub_byte()
   TEST_NEAR("Last value (outside image)",vec4[23],0.f,1e-6);
 }
 
-MAIN( test_sample_profile_bicub )
+static void test_sample_profile_bicub()
 {
-  START( "Bicubic Profile Sampling" );
-
   test_sample_profile_bicub_byte();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_sample_profile_bicub);

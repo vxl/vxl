@@ -35,10 +35,8 @@ print <<EOF;
 #define quote0(x) #x
 #define quote(x) quote0((x))
 
-MAIN( test_config )
+static void test_config()
 {
-  START("config");
-
   // This test does not actually test anything.  Instead, it prints
   // configuration macros so they can be viewed through Dart.
 
@@ -309,8 +307,8 @@ EOF
 ############################################################################
 
 print <<EOF;
-  SUMMARY();
 }
+TESTMAIN(test_config);
 EOF
 
 ############################################################################

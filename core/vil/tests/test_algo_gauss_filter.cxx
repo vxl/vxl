@@ -71,7 +71,7 @@ static void test_algo_gaussian_filter_5tap_byte_float()
 }
 
 
-void test_algo_vil_gauss_filter_gen_ntaps()
+static void test_algo_vil_gauss_filter_gen_ntaps()
 {
   vcl_cout << "***********************************\n"
            << " Testing vil_gauss_filter_gen_ntap\n"
@@ -132,12 +132,10 @@ void test_algo_vil_gauss_filter_gen_ntaps()
 }
 
 
-MAIN( test_algo_gauss_filter )
+static void test_algo_gauss_filter()
 {
-  START( "test_algo_gaussian_filter" );
-
   test_algo_gaussian_filter_5tap_byte_float();
   test_algo_vil_gauss_filter_gen_ntaps();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_algo_gauss_filter);

@@ -6,11 +6,11 @@
 #include <testlib/testlib_test.h>
 #include <vpl/vpl.h>
 
-void test_polygon_io()
+static void test_polygon_io()
 {
-  vcl_cout << "**********************\n"
-           << "Testing vgl_polygon io\n"
-           << "**********************\n";
+  vcl_cout << "************************\n"
+           << " Testing vgl_polygon io\n"
+           << "************************\n";
 
   //// test constructors, accessors
   vgl_polygon p_out(1), p_in;
@@ -46,9 +46,4 @@ void test_polygon_io()
   vsl_indent_clear_all_data();
 }
 
-MAIN( test_polygon_io )
-{
-  START( "test polygon io" );
-  test_polygon_io();
-  SUMMARY();
-}
+TESTMAIN(test_polygon_io);

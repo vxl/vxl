@@ -44,11 +44,9 @@ static void test_bicub_interp_byte()
   }
 }
 
-MAIN( test_bicub_interp )
+static void test_bicub_interp()
 {
-  START( "Bicubic Interpolation" );
-
   test_bicub_interp_byte();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_bicub_interp);

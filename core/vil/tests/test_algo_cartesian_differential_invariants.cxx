@@ -174,12 +174,4 @@ static void test_algo_cartesian_differential_invariants()
               vcl_fabs(dest2(n/2,n/2,i)*1.e-4f));
 }
 
-
-MAIN( test_algo_cartesian_differential_invariants )
-{
-  START( "test_algo_cartesian_differential_invariants" );
-
-  test_algo_cartesian_differential_invariants();
-
-  SUMMARY();
-}
+TESTMAIN(test_algo_cartesian_differential_invariants);

@@ -10,10 +10,8 @@
 
 static char default_filename[] = "square.pgm";
 
-MAIN( test_copy )
+static void test_copy(int argc, char* argv[])
 {
-  START("vil1_copy");
-
   const char* filename = argv[1];
   if ( argc<2 ) {
     filename = default_filename;
@@ -23,7 +21,8 @@ MAIN( test_copy )
   vil1_image img = vil1_load( filename );
   if ( !img ) {
     vcl_cerr << "Could not load image " << filename << vcl_endl;
-    return 1;
+    testlib_test_perform(false);
+    return;
   }
   vil1_memory_image_of<vxl_uint_8> a( img );
   vil1_memory_image_of<vxl_uint_8> b( a.width(), a.height() );
@@ -33,6 +32,6 @@ MAIN( test_copy )
   b(0,0) = 1;
   c(0,0) = 2;
   TEST("", a(0,0) != b(0,0) && a(0,0) != c(0,0) && b(0,0) != c(0,0) , true);
-
-  SUMMARY();
 }
+
+TESTMAIN_ARGS(test_copy);

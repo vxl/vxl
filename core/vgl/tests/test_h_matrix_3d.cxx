@@ -39,7 +39,7 @@ static void test_perspective_transform()
   vgl_h_matrix_3d<double> Tproj(M);
   pp = Tproj(p);
   ppp = Tproj.preimage(pp);
-  vcl_cout << "Tproj \n" << Tproj << '\n'
+  vcl_cout << "Tproj\n" << Tproj << '\n'
            << "p = " << p << " , Tproj(p) = pp = " << pp << '\n'
            << " , Tproj.preimage(pp) = " << ppp << '\n';
   vgl_point_3d<double> xp(p), xppp(ppp);
@@ -62,23 +62,23 @@ static void test_rotation_about_axis()
   R.set_identity();
   vnl_vector_fixed<double, 3> v(0,0,1.0);
   R.set_rotation_about_axis(v, .785398);//rotate 45 degrees
-  vcl_cout << "Rotation Matrix \n" << R << '\n';
+  vcl_cout << "Rotation Matrix\n" << R << '\n';
   vgl_homg_point_3d<double> p(1,0,0,1), pp; //point on x axis
   pp = R(p);
   vcl_cout << "p = " << p << " , R(p) = " << pp << '\n';
   vgl_point_3d<double> xpp(pp);
-  double distance = vcl_sqrt((xpp.x()-0.707)*(xpp.x()-0.707) + 
+  double distance = vcl_sqrt((xpp.x()-0.707)*(xpp.x()-0.707) +
                              (xpp.y()-0.707)*(xpp.y()-0.707) +
                              xpp.z()*xpp.z());
   TEST_NEAR("rotation",distance , 0.0, 1e-03);
 }
 
-MAIN( test_h_matrix_3d )
+static void test_h_matrix_3d()
 {
-  START( "test_vgl_h_matrix_3d" );
   test_identity_transform();
   test_perspective_transform();
   test_projective_basis();
   test_rotation_about_axis();
-  SUMMARY();
 }
+
+TESTMAIN(test_h_matrix_3d);

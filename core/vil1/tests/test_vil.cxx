@@ -8,7 +8,7 @@
 #include <vil/vil_load.h>
 
 
-MAIN( test_vil )
+static void test_vil(int argc, char* argv[])
 {
   vcl_string image_base;
   if ( argc >= 2 )
@@ -20,8 +20,6 @@ MAIN( test_vil )
     image_base += "/";
 #endif
   }
-
-  START( "vil1_vil" );
 
   vcl_cout << "************************\n"
            << " Testing vil1_vil_*(..)\n"
@@ -79,8 +77,6 @@ MAIN( test_vil )
       if (vil_mem(i,j) != (double)i-(double)j) bad_pixels = true;
 
   TEST ("vil1_vil_image_resource::putview(..)", bad_pixels, false);
-
-//  vcl_cout << vil_mem << vcl_endl;
-
-  SUMMARY();
 }
+
+TESTMAIN_ARGS(test_vil);

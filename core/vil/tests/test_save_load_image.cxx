@@ -371,7 +371,7 @@ vil_image_view<double> CreateTestdoubleImage(int wd, int ht)
 }
 
 
-void test_vil_save_image_resource()
+static void test_vil_save_image_resource()
 {
   vil_image_view<vxl_byte> view = CreateTest8bitImage(251, 153);
   vil_image_resource_sptr mem = vil_new_image_resource_of_view(view);
@@ -385,10 +385,8 @@ void test_vil_save_image_resource()
 }
 
 
-MAIN( test_save_load_image )
+static void test_save_load_image()
 {
-  START( "save/load" );
-
   // create test images
   int sizex = 253;
   int sizey = 155;
@@ -520,6 +518,6 @@ MAIN( test_save_load_image )
 #if 1
   test_vil_save_image_resource();
 #endif
-
-  SUMMARY();
 }
+
+TESTMAIN(test_save_load_image);

@@ -5,12 +5,8 @@
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_load.h>
 
-MAIN( test_image_tableau )
+static void test_image_tableau(int argc, char* argv[])
 {
-  // Supply a test image as the first argument
-
-  START( "test_image_tableau" );
-
   // Make sure that constructing a vgui_image_tableau with a filename
   // results in the vil1_image being loaded, since this is expected by
   // older code.
@@ -61,6 +57,8 @@ MAIN( test_image_tableau )
 
     testlib_test_perform( okay );
   }
-
-  SUMMARY();
 }
+
+// Supply a test image as the first argument
+
+TESTMAIN_ARGS(test_image_tableau);

@@ -83,17 +83,21 @@ do { \
   testlib_test_perform((p)==(v)); \
 } while (0)
 
-//: summarise test
+//: Summarise test
 #define SUMMARY() return testlib_test_summary()
 
-//: run a singleton test function
+//: Run a singleton test function
 #define RUN_TEST_FUNC(x) \
   testlib_test_start(#x); x(); return testlib_test_summary()
 
-//: declare the main function
+//: Declare the main function.
 #define MAIN( testname ) \
-  int testname ## _main( int argc, char* argv[] )
- 
+  int testname ## _main(int,char*[])
+
+//: Declare the main function with parameter passing.
+#define MAIN_ARGS( testname ) \
+  int testname ## _main(int argc, char* argv[])
+
 //: A simplified version of the main test, just in one line.
 // Avoids compiler warnings about "unused argc and argv".
 #define TESTMAIN( testname ) \

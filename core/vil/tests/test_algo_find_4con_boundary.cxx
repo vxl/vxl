@@ -4,16 +4,16 @@
 #include <vil/algo/vil_find_4con_boundary.h>
 #include <vil/vil_crop.h>
 
-void show_boundary(const vcl_vector<int>& bi,const vcl_vector<int>& bj)
+static void show_boundary(const vcl_vector<int>& bi,const vcl_vector<int>& bj)
 {
   for (unsigned int i=0;i<bi.size();++i)
-    vcl_cout<<"("<<bi[i]<<","<<bj[i]<<")";
+    vcl_cout<<'('<<bi[i]<<','<<bj[i]<<')';
   vcl_cout<<vcl_endl;
 }
 
-void test_algo_find_4con_boundary_below_byte()
+static void test_algo_find_4con_boundary_below_byte()
 {
-  vcl_cout<<"=== Testing vil_find_4con_boundary_below_threshold ==="<<vcl_endl;
+  vcl_cout<<"=== Testing vil_find_4con_boundary_below_threshold ===\n";
   vil_image_view<vxl_byte> image(10,11);
 
   // Create 3 x 3 square
@@ -86,9 +86,9 @@ void test_algo_find_4con_boundary_below_byte()
 }
 
 
-void test_algo_find_4con_boundary_above_byte()
+static void test_algo_find_4con_boundary_above_byte()
 {
-  vcl_cout<<"=== Testing vil_find_4con_boundary_above_threshold ==="<<vcl_endl;
+  vcl_cout<<"=== Testing vil_find_4con_boundary_above_threshold ===\n";
   vil_image_view<vxl_byte> image(10,11);
 
   // Create 3 x 3 square
@@ -160,10 +160,10 @@ void test_algo_find_4con_boundary_above_byte()
   TEST("Length of boundary (Horizontal line)",bi.size(),18);
 }
 
-MAIN( test_algo_find_4con_boundary )
+static void test_algo_find_4con_boundary()
 {
-  START( "vil_find_4con_boundary" );
   test_algo_find_4con_boundary_below_byte();
   test_algo_find_4con_boundary_above_byte();
-  SUMMARY();
 }
+
+TESTMAIN(test_algo_find_4con_boundary);

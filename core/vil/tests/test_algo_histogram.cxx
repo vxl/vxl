@@ -34,11 +34,9 @@ static void test_histogram_byte()
   TEST_NEAR("Histo element 9",histo3[9],0,1e-6);
 }
 
-MAIN( test_algo_histogram )
+static void test_algo_histogram()
 {
-  START( "vil_histogram_*" );
-
   test_histogram_byte();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_algo_histogram);

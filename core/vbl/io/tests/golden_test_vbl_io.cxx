@@ -26,7 +26,7 @@
 #include <vcl_string.h>
 #include <testlib/testlib_root_dir.h>
 
-void golden_test_vbl_io(bool save_file)
+static void golden_test_vbl_io(bool save_file)
 {
   //------------------------------------------------------------------------
   // Create objects:
@@ -35,9 +35,9 @@ void golden_test_vbl_io(bool save_file)
   // for comparison to the values read in.
   //------------------------------------------------------------------------
 
-  vcl_cout << "*********************************************************\n"
-           << "Testing a golden data file for cross platform consistency\n"
-           << "*********************************************************\n";
+  vcl_cout << "***********************************************************\n"
+           << " Testing a golden data file for cross platform consistency\n"
+           << "***********************************************************\n";
 
   // vbl_bounding_box
   vbl_bounding_box<double,2> b_box_in, b_box_out;
@@ -227,21 +227,11 @@ void golden_test_vbl_io(bool save_file)
   TEST("vbl_smart_ptr: sp1_in == sp2_in", sp1_in == sp2_in, true);
   TEST("vbl_smart_ptr: sp1_in->get_references() == 2",
        ((sp1_in) && (sp1_in->get_references() ==2)), true);
-
-  return;
 }
 
-MAIN(golden_test_vbl_io)
+static void golden_test_vbl_io(int argc, char* argv[])
 {
-  START("golden_test_vbl_io");
-  bool save_file=false;
-  if (argc==2)
-  {
-    vcl_string conf = argv[1];
-    vcl_string ref="create";
-    if (conf==ref)
-      save_file =true;
-  }
-  golden_test_vbl_io(save_file);
-  SUMMARY();
+  golden_test_vbl_io(argc==2 && vcl_string(argv[1])==vcl_string("create"));
 }
+
+TESTMAIN_ARGS(golden_test_vbl_io);

@@ -6,10 +6,8 @@
 #include <vil/algo/vil_fft.h>
 #include <vcl_ctime.h> // seed for random number generator
 
-MAIN( test_algo_fft )
+static void test_algo_fft()
 {
-  START( "vil_algo_fft" );
-
   vil_image_view<vcl_complex<double> > img0(4, 8, 2);
   unsigned int seed = (unsigned int)vcl_time(0);
 
@@ -46,6 +44,6 @@ MAIN( test_algo_fft )
     if (i==0 && j==0) i=1;
     TEST_NEAR("any other FFT coeff. is 0", img0(i,j,p), 0.0, 1e-9);
   }
-
-  SUMMARY();
 }
+
+TESTMAIN(test_algo_fft);

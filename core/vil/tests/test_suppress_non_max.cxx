@@ -28,11 +28,9 @@ static void test_suppress_non_max_byte()
   TEST("No peak at 0,1",dest_im(3,3),0);
 }
 
-MAIN( test_suppress_non_max )
+static void test_suppress_non_max()
 {
-  START( "vil_suppress_non_max_3x3" );
-
   test_suppress_non_max_byte();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_suppress_non_max);

@@ -68,11 +68,9 @@ static void test_sample_grid_bicub_byte()
   TEST_NEAR("Last value",vec2[23],0,1e-6);
 }
 
-MAIN( test_sample_grid_bicub )
+static void test_sample_grid_bicub()
 {
-  START( "Bicubic Grid Sampling" );
-
   test_sample_grid_bicub_byte();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_sample_grid_bicub);

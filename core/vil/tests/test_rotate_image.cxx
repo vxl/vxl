@@ -52,11 +52,4 @@ static void test_rotate_image()
 }
 
 
-MAIN( test_rotate_image )
-{
-  START( "vil_rotate_image" );
-
-  test_rotate_image();
-
-  SUMMARY();
-}
+TESTMAIN(test_rotate_image);

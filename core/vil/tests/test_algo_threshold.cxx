@@ -51,11 +51,9 @@ static void test_threshold_byte()
   test_threshold_byte(crop_image);
 }
 
-MAIN( test_algo_threshold )
+static void test_algo_threshold()
 {
-  START( "vil_threshold_*" );
-
   test_threshold_byte();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_algo_threshold);

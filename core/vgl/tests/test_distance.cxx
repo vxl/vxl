@@ -9,7 +9,7 @@
 #include <vcl_cmath.h> // for vcl_sqrt()
 
 
-void test_point_to_polygon()
+static void test_point_to_polygon()
 {
   vgl_polygon p;
   p.new_sheet();
@@ -18,7 +18,7 @@ void test_point_to_polygon()
   p.push_back( 5.0f, 5.0f );
 
   testlib_test_begin( "point to polygon 1" );
-  testlib_test_assert_near( "distance", 
+  testlib_test_assert_near( "distance",
                             vgl_distance( p, vgl_point_2d<float>( 6.0f, 1.0f ) ),
                             1.0f, 1e-5 );
   testlib_test_begin( "point to polygon 2" );
@@ -36,9 +36,9 @@ void test_point_to_polygon()
                         vgl_distance( vgl_point_2d<float>( 3.0f, 4.0f ), p ) );
 }
 
-MAIN( test_distance )
+static void test_distance()
 {
-  START("test distance");
   test_point_to_polygon();
-  SUMMARY();
 }
+
+TESTMAIN(test_distance);

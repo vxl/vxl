@@ -64,7 +64,7 @@ static void test_algo_exp_filter_1d_byte_float()
   TEST_NEAR("dest_im(5,5)",dest_im(5,5),55,1e-2);
 }
 
-void test_algo_exp_filter_1d_float_float()
+static void test_algo_exp_filter_1d_float_float()
 {
   vcl_cout << "********************************************\n"
            << " Testing vil_algo_exp_filter_1d float-float\n"
@@ -92,12 +92,10 @@ void test_algo_exp_filter_1d_float_float()
   TEST_NEAR("Sum unchanged",sum,100,1e-4);
 }
 
-MAIN( test_algo_exp_filter_1d )
+static void test_algo_exp_filter_1d()
 {
-  START( "vil_algo_exp_filter_1d" );
-
   test_algo_exp_filter_1d_byte_float();
   test_algo_exp_filter_1d_float_float();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_algo_exp_filter_1d);

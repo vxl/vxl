@@ -440,9 +440,8 @@ vil1_image CreateTestdoubleImage(int wd, int ht)
   return image;
 }
 
-MAIN( test_save_load_image )
+static void test_save_load_image()
 {
-  START( "save/load" );
   // create test images
   int sizex = 253;
   int sizey = 155;
@@ -527,6 +526,6 @@ MAIN( test_save_load_image )
   vil1_test_image_type("mit", image16);
   vil1_test_image_type("mit", image24);
 #endif
-
-  SUMMARY();
 }
+
+TESTMAIN(test_save_load_image);

@@ -10,21 +10,20 @@
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_vector.h>
 
-static
-inline double sqr(double x) { return x*x; }
+static inline double sqr(double x) { return x*x; }
 
-static
-void testlib_test_assert_near(const vcl_string& msg, vgl_homg_point_2d<double> const& p2,
-                              vgl_homg_point_2d<double> const& p1, double tol = 1e-6)
+static void
+testlib_test_assert_near(const vcl_string& msg, vgl_homg_point_2d<double> const& p2,
+                         vgl_homg_point_2d<double> const& p1, double tol = 1e-6)
 {
   double expr = (p1.w() == 0 && p2.w() == 0) ? sqr(p1.x()*p2.y()-p1.y()*p2.x()) :
                 vgl_homg_operators_2d<double>::distance_squared(p1,p2);
   testlib_test_assert_near(msg, expr, 0.0, tol);
 }
 
-static
-void testlib_test_assert_near(const vcl_string& msg, vgl_homg_line_2d<double> const& l2,
-                              vgl_homg_line_2d<double> const& l1, double tol = 1e-6)
+static void
+testlib_test_assert_near(const vcl_string& msg, vgl_homg_line_2d<double> const& l2,
+                         vgl_homg_line_2d<double> const& l1, double tol = 1e-6)
 {
   double expr = sqr(l1.a()/l1.b()-l2.a()/l2.b())
                +sqr(l1.a()/l1.c()-l2.a()/l2.c())
@@ -32,9 +31,9 @@ void testlib_test_assert_near(const vcl_string& msg, vgl_homg_line_2d<double> co
   testlib_test_assert_near(msg, expr, 0.0, tol);
 }
 
-static
-void testlib_test_assert_near(const vcl_string& msg, vgl_box_2d<double> const& b1,
-                              vgl_box_2d<double> const& b2, double tol = 1e-6)
+static void
+testlib_test_assert_near(const vcl_string& msg, vgl_box_2d<double> const& b1,
+                         vgl_box_2d<double> const& b2, double tol = 1e-6)
 {
   double expr = sqr(b1.min_x()-b2.min_x())
                +sqr(b1.min_y()-b2.min_y())
@@ -43,8 +42,8 @@ void testlib_test_assert_near(const vcl_string& msg, vgl_box_2d<double> const& b
   testlib_test_assert_near(msg, expr, 0.0, tol);
 }
 
-static
-double conic_distance(vgl_conic<double> const& c1, vgl_conic<double> const& c2)
+static double
+conic_distance(vgl_conic<double> const& c1, vgl_conic<double> const& c2)
 {
   double k;  // multiplicative factor for coefficients
 
@@ -67,24 +66,22 @@ double conic_distance(vgl_conic<double> const& c1, vgl_conic<double> const& c2)
   return expr;
 }
 
-static
-void testlib_test_assert_near(const vcl_string& msg, vgl_conic<double> const& c2,
-                              vgl_conic<double> const& c1, double tol = 1e-6)
+static void
+testlib_test_assert_near(const vcl_string& msg, vgl_conic<double> const& c2,
+                         vgl_conic<double> const& c1, double tol = 1e-6)
 {
   testlib_test_assert_near(msg, conic_distance(c1,c2), 0.0, tol);
 }
 
-static
-void testlib_test_assert_far(const vcl_string& msg, vgl_conic<double> const& c2,
-                             vgl_conic<double> const& c1, double tol = 1e-6)
+static void
+testlib_test_assert_far(const vcl_string& msg, vgl_conic<double> const& c2,
+                        vgl_conic<double> const& c1, double tol = 1e-6)
 {
   testlib_test_assert_far(msg, conic_distance(c1,c2), 0.0, tol);
 }
 
-MAIN( test_conic )
+static void test_conic()
 {
-  START( "test conic" );
-
   // "global" variables, actually constants
   vgl_homg_point_2d<double> const centre(1,2,1);
   vgl_homg_point_2d<double> const direction(4,-3,0);
@@ -130,8 +127,7 @@ MAIN( test_conic )
   npt = vgl_homg_point_2d<double>(0,1,1);
   double dst = vgl_homg_operators_2d<double>::distance_squared(c,npt);
   TEST_NEAR("distance point to circle (outside)", dst, 3-2*vcl_sqrt(2.0), 1e-6);
-  vcl_list<vgl_homg_line_2d<double> > lines = 
-    vgl_homg_operators_2d<double>::tangent_from(c, npt);
+  vcl_list<vgl_homg_line_2d<double> > lines = vgl_homg_operators_2d<double>::tangent_from(c, npt);
   TEST("tangent lines count = 2", lines.size(), 2);
   TEST("first tangent line", lines.front(), vgl_homg_line_2d<double>(1,0,0));
   TEST("second tangent line", lines.back(), vgl_homg_line_2d<double>(0,1,-1));
@@ -590,6 +586,6 @@ MAIN( test_conic )
   TEST("intersection of hyperbola with concentric larger circle = 4 points", pts.size(), 4);
   for (it = pts.begin(); it != pts.end(); ++it)
     vcl_cout << (*it) << '\n';
-
-  SUMMARY();
 }
+
+TESTMAIN(test_conic);

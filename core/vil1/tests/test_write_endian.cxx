@@ -9,10 +9,8 @@
 
 #include <testlib/testlib_test.h>
 
-MAIN( test_write_endian )
+static void test_write_endian()
 {
-  START( "write endian" );
-
   vcl_string tmp_nam = vul_temp_filename() + ".bin";
   char const *file = tmp_nam!="" ? tmp_nam.c_str() : "smoo.bin";
   vil1_stream *s = 0;
@@ -52,6 +50,6 @@ MAIN( test_write_endian )
         bytes[1] == 0x01 &&
         bytes[2] == 0x03 &&
         bytes[3] == 0x04,  true);
-
-  SUMMARY();
 }
+
+TESTMAIN(test_write_endian);

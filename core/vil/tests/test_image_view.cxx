@@ -404,9 +404,8 @@ static void test_image_view_assignment_operator()
 }
 
 
-MAIN( test_image_view )
+static void test_image_view()
 {
-  START( "vil_image_view" );
   vcl_cout << "****************************************\n"
            << " Testing vil_image_view<byte and float>\n"
            << "****************************************\n";
@@ -415,18 +414,24 @@ MAIN( test_image_view )
            << " Testing vil_image_view<float and double>\n"
            << "******************************************\n";
   test_image_view(float(), "float", double());
-  vcl_cout << "*******************************************\n"
-           << " Testing vil_image_view<int_16 and double>\n"
-           << "*******************************************\n";
+  vcl_cout << "******************************************\n"
+           << " Testing vil_image_view<int_16 and float>\n"
+           << "******************************************\n";
   test_image_view(vxl_int_16(), "vxl_int_16", float());
-  vcl_cout << "********************************************\n"
-           << " Testing vil_image_view<uint_32 and double>\n"
-           << "********************************************\n";
+  vcl_cout << "*******************************************\n"
+           << " Testing vil_image_view<uint_32 and float>\n"
+           << "*******************************************\n";
   test_image_view(vxl_uint_32(), "vxl_uint_32", float());
+#if VXL_HAS_INT_64
+  vcl_cout << "*******************************************\n"
+           << " Testing vil_image_view<uint_64 and float>\n"
+           << "*******************************************\n";
+  test_image_view(vxl_uint_64(), "vxl_uint_64", float());
+#endif
   test_contiguous();
   test_image_view_fill();
   test_image_view_assignment_operator();
   test_complex_image_view();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_image_view);

@@ -368,10 +368,8 @@ static void test_algo_gauss_reduce_2_3_byte_2d()
   TEST("Pixel (2,4)",image1(2,4),image0(3,6));
 }
 
-MAIN( test_algo_gauss_reduce )
+static void test_algo_gauss_reduce()
 {
-  START( "vil_algo_gauss_reduce" );
-
   test_algo_gauss_reduce_byte(7);
   test_algo_gauss_reduce_byte(6);
   test_algo_gauss_reduce_int_32(7);
@@ -393,6 +391,6 @@ MAIN( test_algo_gauss_reduce )
   test_algo_gauss_reduce_2_3_float(8,3);
 
   test_algo_gauss_reduce_2_3_byte_2d();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_algo_gauss_reduce);

@@ -16,10 +16,8 @@ T get_pixel(vil1_image const& i, int x, int y, T* /*dummy*/) { T t; i.get_sectio
 
 static unsigned char* t = (unsigned char*)0;
 
-MAIN(test_resample)
+static void test_resample(int argc, char* argv[])
 {
-  START("vil1_resample");
-
   char* filename = argv[1];
   if (argc<2) {
     filename = default_filename;
@@ -29,18 +27,21 @@ MAIN(test_resample)
   vil1_image a = vil1_load(filename);
   if ( !a ) {
     vcl_cerr << "Could not load image " << filename << '\n';
-    return 1;
+    testlib_test_perform(false);
+    return;
   }
 
   int wd=a.width(), ht=a.height();
 
   if ( wd < 25 || ht < 31 ) {
     vcl_cerr << "Could not use this image " << filename << " since it is too small\n";
-    return 1;
+    testlib_test_perform(false);
+    return;
   }
   if ( wd%2 || ht%2 ) {
     vcl_cerr << "Could not use this image " << filename << " since it has odd width or height\n";
-    return 1;
+    testlib_test_perform(false);
+    return;
   }
 
   int a1 = get_pixel(a,  0,  0, t);
@@ -99,6 +100,6 @@ MAIN(test_resample)
   TEST("intermediate pixel value", c3, a3); if (c3!=a3) vcl_cout<<c3<<"!="<<a3<<'\n';
 
   if (argc>3) vil1_save(c, argv[3]);
-
-  SUMMARY();
 }
+
+TESTMAIN_ARGS(test_resample);

@@ -5,11 +5,11 @@
 #include <testlib/testlib_test.h>
 #include <vpl/vpl.h>
 
-void test_box_2d_double_io()
+static void test_box_2d_double_io()
 {
-  vcl_cout << "*****************************\n"
-           << "Testing vgl_box_2d<double> io\n"
-           << "*****************************\n";
+  vcl_cout << "*******************************\n"
+           << " Testing vgl_box_2d<double> io\n"
+           << "*******************************\n";
 
   double min_pos[2]={1.2,4.2};
   double max_pos[2]={2.2,3.2};
@@ -39,9 +39,9 @@ void test_box_2d_double_io()
   vsl_indent_clear_all_data();
 }
 
-MAIN( test_box_2d_io )
+static void test_box_2d_io()
 {
-  START( "test box_2d IO" );
   test_box_2d_double_io();
-  SUMMARY();
 }
+
+TESTMAIN(test_box_2d_io);

@@ -2,8 +2,7 @@
 
 #include <vgl/vgl_ellipse_scan_iterator.h>
 
-void
-test_circle()
+static void test_circle()
 {
   // Scan convert the unit circle
   vgl_ellipse_scan_iterator circle1( 0, 0, 1, 1, 0 );
@@ -25,8 +24,7 @@ test_circle()
   TEST("offset, rotated radius 3 circle", circle6.count(), 29 );
 }
 
-void
-test_ellipse()
+static void test_ellipse()
 {
   // Scan convert simple ellipses
   vgl_ellipse_scan_iterator ellipse1( 0, 0, 1, 2, 0 );
@@ -42,8 +40,7 @@ test_ellipse()
   TEST("centred, rotated ellipse radius 2,3", ellipse4.count(), 19 );
 }
 
-void
-test_sliver()
+static void test_sliver()
 {
   vgl_ellipse_scan_iterator ellipse1( 0, 0, 0.1, 3, 0 );
   TEST("vertical sliver: 0.1,3", ellipse1.count(), 7 );
@@ -59,8 +56,7 @@ test_sliver()
 }
 
 
-void
-test_degenerate()
+static void test_degenerate()
 {
   vgl_ellipse_scan_iterator ellipse1( 0.5, 0.5, 0.3, 0.1, 0 );
   TEST("empty ellipse", ellipse1.count(), 0 );
@@ -78,14 +74,12 @@ test_degenerate()
   TEST("point at non-integer coordinates", ellipse5.count(), 0 );
 }
 
-MAIN( test_ellipse_scan_iterator )
+static void test_ellipse_scan_iterator()
 {
-  START("Ellipse scan iterator");
-
   test_circle();
   test_ellipse();
   test_sliver();
   test_degenerate();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_ellipse_scan_iterator);

@@ -87,11 +87,9 @@ static void test_binary_erode_byte()
   TEST("image1(7,5)",image1(7,5),false);
 }
 
-MAIN( test_binary_erode )
+static void test_binary_erode()
 {
-  START( "Binary Erosion" );
-
   test_binary_erode_byte();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_binary_erode);

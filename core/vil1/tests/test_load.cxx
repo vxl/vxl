@@ -82,9 +82,8 @@ static void test(char const* magic, int comps, int bits, int maxval)
 #endif
 }
 
-MAIN( test_load )
+static void test_load()
 {
-  START( "vil1_load" );
   test("P1", 1,  1, 1);
   test("P2", 1,  8, 255);
   test("P2", 1, 16, 65535);
@@ -101,5 +100,6 @@ MAIN( test_load )
   test("P5", 1, 16, 65535);
   test("P6", 3,  8, 255);
   test("P6", 3, 16, 65535);
-  SUMMARY();
 }
+
+TESTMAIN(test_load);

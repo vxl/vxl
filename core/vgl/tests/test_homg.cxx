@@ -471,10 +471,8 @@ static void test_1d_basis()
   TEST("point at -1", p, vgl_homg_point_1d<double>(-1.0));
 }
 
-MAIN( test_homg )
+static void test_homg()
 {
-  START( "Test homg" );
-
   vcl_cout << "-- Testing vgl_homg_point_1d --\n";
   test_homg_point_1d();
   vcl_cout << "-- Testing vgl_homg_point_2d --\n";
@@ -489,9 +487,9 @@ MAIN( test_homg )
   test_homg_plane_3d();
   vcl_cout << "-- Testing vgl_1d_basis --\n";
   test_1d_basis();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_homg);
 
 #include <vgl/vgl_1d_basis.txx>
 VGL_1D_BASIS_INSTANTIATE(vgl_homg_point_1d<float>);

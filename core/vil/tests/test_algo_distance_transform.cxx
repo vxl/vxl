@@ -2,7 +2,7 @@
 #include <vcl_iostream.h>
 #include <vil/algo/vil_distance_transform.h>
 
-void test_distance_transform1()
+static void test_algo_distance_transform()
 {
   vcl_cout << "********************************\n"
            << " Testing vil_distance_transform\n"
@@ -41,11 +41,4 @@ void test_distance_transform1()
   TEST_NEAR("(7,20)",src_im(7,20),2,1e-6);
 }
 
-MAIN( test_algo_distance_transform )
-{
-  START( "vil_distance_transform" );
-
-  test_distance_transform1();
-
-  SUMMARY();
-}
+TESTMAIN(test_algo_distance_transform);

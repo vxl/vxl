@@ -3,7 +3,7 @@
 #include <vcl_iostream.h>
 #include <vil/vil_memory_chunk.h>
 
-static void test_memory_chunk1()
+static void test_memory_chunk()
 {
   vcl_cout << "**************************\n"
            << " Testing vil_memory_chunk\n"
@@ -27,10 +27,4 @@ static void test_memory_chunk1()
   TEST_NEAR("Deep Copy",data1[3],data2[3],1e-8);
 }
 
-MAIN( test_memory_chunk )
-{
-  START( "vil_memory_chunk" );
-  test_memory_chunk1();
-
-  SUMMARY();
-}
+TESTMAIN(test_memory_chunk);

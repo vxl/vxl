@@ -14,7 +14,7 @@
 #define ROOT_PATH "/tmp"
 #endif
 
-MAIN( test_unistd )
+static void test_unistd()
 {
   vpl_mkdir(ROOT_PATH "/vpltest", 0777);
   vpl_chdir(ROOT_PATH "/vpltest");
@@ -27,12 +27,12 @@ MAIN( test_unistd )
     vcl_ifstream f(ROOT_PATH "/vpltest/file");
     int s;
     f >> s;
-    Assert("Create file in directory", s == 1234);
+    TEST("Create file in directory", s, 1234);
   }
   vpl_unlink("file");
   {
     vcl_ifstream f(ROOT_PATH "/vpltest/file");
-    Assert("Unlink", !f.good());
+    TEST("Unlink", f.good(), false);
   }
 
   vpl_chdir(ROOT_PATH);
@@ -44,7 +44,7 @@ MAIN( test_unistd )
   vcl_string value("GOOD");
 
   vpl_putenv((var + "=" + value).c_str());
-  Assert("putenv", vcl_strcmp(vcl_getenv("VPL_PUTENV_TEST"), "GOOD") == 0);
-
-  return 0;
+  TEST("putenv", vcl_strcmp(vcl_getenv("VPL_PUTENV_TEST"), "GOOD"), 0);
 }
+
+TESTMAIN(test_unistd);
