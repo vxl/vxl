@@ -27,9 +27,9 @@
 
 //: Compute how well data in x matches true pdf using n different comparitors
 void test_comparison(vcl_vector<mbl_stats_1d>& B_stats,
-                      const vnl_vector<double>& x,
-					  const pdf1d_pdf& true_pdf,
-					  vcl_vector<pdf1d_compare_to_pdf*> comparitor)
+                     const vnl_vector<double>& x,
+                     const pdf1d_pdf& true_pdf,
+                     vcl_vector<pdf1d_compare_to_pdf*> comparitor)
 {
   int n = comparitor.size();
   B_stats.resize(n);
@@ -37,15 +37,15 @@ void test_comparison(vcl_vector<mbl_stats_1d>& B_stats,
   for (int i=0;i<n;++i)
   {
     double B = comparitor[i]->compare(x.data_block(),x.size(),true_pdf);
-	B_stats[i].obs(B);
+    B_stats[i].obs(B);
   }
 }
 
 //: Compute how well data sampled from true_pdf matches true_pdf using n different comparitors
 void test_comparison(vcl_vector<mbl_stats_1d>& B_stats,
-                      int n_samples, int n_repeats,
-					  const pdf1d_pdf& true_pdf,
-					  vcl_vector<pdf1d_compare_to_pdf*> comparitor)
+                     int n_samples, int n_repeats,
+                     const pdf1d_pdf& true_pdf,
+                     vcl_vector<pdf1d_compare_to_pdf*> comparitor)
 {
   vnl_vector<double> x(n_samples);
   pdf1d_sampler *sampler = true_pdf.new_sampler();
@@ -53,16 +53,16 @@ void test_comparison(vcl_vector<mbl_stats_1d>& B_stats,
   for (int i=0;i<n_repeats;++i)
   {
     sampler->get_samples(x);
-	test_comparison(B_stats,x,true_pdf,comparitor);
+    test_comparison(B_stats,x,true_pdf,comparitor);
   }
 
   delete sampler;
 }
 
 void test_comparison(int n_samples, int n_trials,
-					  const pdf1d_pdf& true_pdf,
-					  vcl_vector<pdf1d_compare_to_pdf*> comparitor,
-					  const vcl_vector<vcl_string>& name)
+                     const pdf1d_pdf& true_pdf,
+                     vcl_vector<pdf1d_compare_to_pdf*> comparitor,
+                     const vcl_vector<vcl_string>& name)
 {
   vcl_vector<mbl_stats_1d> B_stats;
 
@@ -81,11 +81,10 @@ void test_comparison(int n_samples, int n_trials,
 
 int main()
 {
-
   vcl_vector<pdf1d_compare_to_pdf*> comparitor;
   vcl_vector<vcl_string> name;
 
-/*
+#if 0
   // Set up gaussian estimator
   pdf1d_compare_to_pdf_bhat comp1;
   comp1.set_builder(pdf1d_gaussian_builder());
@@ -100,7 +99,7 @@ int main()
   comp2.set_builder(k_builder2);
   comparitor.push_back(&comp2);
   name.push_back("Gaussian kernel estimate, width=0.1");
-*/
+#endif
 
   // Set up gaussian kernel estimator
   pdf1d_compare_to_pdf_bhat comp3;
@@ -118,7 +117,7 @@ int main()
   comparitor.push_back(&comp4);
   name.push_back("Bhat. using Gaussian kernel estimate, width depends on local sample separation");
 
-    // Set up adaptive gaussian kernel estimator
+  // Set up adaptive gaussian kernel estimator
   pdf1d_compare_to_pdf_bhat comp5;
   pdf1d_gaussian_kernel_pdf_builder k_builder5;
   k_builder5.set_use_adaptive();
@@ -126,7 +125,7 @@ int main()
   comparitor.push_back(&comp5);
   name.push_back("Bhat. using Adaptive Gaussian kernel estimate");
 
-    // Try with KS statistic
+  // Try with KS statistic
   pdf1d_compare_to_pdf_ks comp_ks;
   comparitor.push_back(&comp_ks);
   name.push_back("KS Statistic");

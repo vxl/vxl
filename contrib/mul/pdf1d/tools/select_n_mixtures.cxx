@@ -9,7 +9,6 @@
 // gives the largest mean overlap.
 
 #include <vcl_iostream.h>
-#include <mbl/mbl_stats_1d.h>
 #include <vnl/vnl_vector.h>
 #include <vcl_cmath.h>
 #include <pdf1d/pdf1d_compare_to_pdf_bhat.h>
@@ -26,12 +25,12 @@
 
 vcl_ofstream ofs;
 
-//: Compute how well different forms of pdf match to data x
+//: Compute how well different forms of pdf match to data x.
 //  pdf[i] is the model built by builder[i]
 void test_form(vcl_vector<double>& B,
                const vnl_vector<double>& x,
-			   vcl_vector<pdf1d_builder*>& builder,
-				pdf1d_compare_to_pdf_bhat& comparitor)
+               vcl_vector<pdf1d_builder*>& builder,
+               pdf1d_compare_to_pdf_bhat& comparitor)
 {
   // This is inefficient
   int n = builder.size();
@@ -41,18 +40,18 @@ void test_form(vcl_vector<double>& B,
   {
 //    B[i] = comparitor.compare_form(x.data_block(),x.size(),*builder[i]);
     B[i] = comparitor.bootstrap_compare_form(b,x.data_block(),x.size(),*builder[i],10);
-	vcl_cout<<i+1<<") B: "<<B[i]<<vcl_endl;
-	ofs<<i+1<<" "<<B[i]<<vcl_endl;
-	for (int j=0;j<b.size();++j) ofs<<i+1<<" "<<b[j]<<vcl_endl;
+    vcl_cout<<i+1<<") B: "<<B[i]<<vcl_endl;
+    ofs<<i+1<<" "<<B[i]<<vcl_endl;
+    for (int j=0;j<b.size();++j) ofs<<i+1<<" "<<b[j]<<vcl_endl;
   }
   vcl_cout<<"------------------------"<<vcl_endl;
 }
 
 void select_form(vnl_vector<int>& histo,
-               int n_samples, int n_trials,
-			   const pdf1d_pdf& true_pdf,
-			   vcl_vector<pdf1d_builder*>& builder,
-				pdf1d_compare_to_pdf_bhat& comparitor)
+                 int n_samples, int n_trials,
+                 const pdf1d_pdf& true_pdf,
+                 vcl_vector<pdf1d_builder*>& builder,
+                 pdf1d_compare_to_pdf_bhat& comparitor)
 {
   vnl_vector<double> x(n_samples);
   pdf1d_sampler *sampler = true_pdf.new_sampler();
@@ -61,7 +60,7 @@ void select_form(vnl_vector<int>& histo,
   if (histo.size()!=n)
   {
     histo.resize(n);
-	histo.fill(0);
+    histo.fill(0);
   }
 
   vcl_vector<double> B(n);
@@ -69,15 +68,15 @@ void select_form(vnl_vector<int>& histo,
   for (int i=0;i<n_trials;++i)
   {
     sampler->get_samples(x);
-	test_form(B,x,builder,comparitor);
+    test_form(B,x,builder,comparitor);
 
-	int best_j=0;
-	double best_B = B[0];
-	for (int j=1;j<n;++j)
-	  if (B[j]>best_B)
-	  {
-	    best_B=B[j];
-		best_j=j;
+    int best_j=0;
+    double best_B = B[0];
+    for (int j=1;j<n;++j)
+      if (B[j]>best_B)
+      {
+        best_B=B[j];
+        best_j=j;
       }
 
     histo[best_j]+=1;
@@ -87,8 +86,8 @@ void select_form(vnl_vector<int>& histo,
 }
 
 void select_form(int n_samples, int n_trials, int max_comp,
-					  const pdf1d_pdf& true_pdf,
-				pdf1d_compare_to_pdf_bhat& comparitor)
+                 const pdf1d_pdf& true_pdf,
+                 pdf1d_compare_to_pdf_bhat& comparitor)
 {
   vnl_vector<int> histo;
   pdf1d_gaussian_builder gauss_builder;
@@ -97,8 +96,8 @@ void select_form(int n_samples, int n_trials, int max_comp,
   for (int i=0;i<max_comp;++i)
   {
     pdf1d_mixture_builder *b = new pdf1d_mixture_builder;
-	b->init(gauss_builder,i+1);
-	builder[i] = b;
+    b->init(gauss_builder,i+1);
+    builder[i] = b;
   }
 
   select_form(histo,n_samples,n_trials,true_pdf,builder,comparitor);
