@@ -1,6 +1,7 @@
 # mul/mbl/CMakeLists.txt
 
 SET(mbl_sources
+ mbl_add_all_loaders.cxx           mbl_add_all_loaders.h
  mbl_gamma.cxx                     mbl_gamma.h
  mbl_matrix_products.cxx           mbl_matrix_products.h
  mbl_matxvec.cxx                   mbl_matxvec.h

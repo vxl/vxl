@@ -144,14 +144,6 @@ void mbl_stochastic_data_collector<T>::reseed (unsigned long seed)
 //=======================================================================
 
 template <class T>
-vcl_string mbl_stochastic_data_collector<T>::is_a() const
-{
-  return vcl_string("mbl_stochastic_data_collector<T>");
-}
-
-//=======================================================================
-
-template <class T>
 bool mbl_stochastic_data_collector<T>::is_class(vcl_string const& s) const
 {
   return s==mbl_stochastic_data_collector<T>::is_a() || mbl_data_collector<T>::is_class(s);
@@ -217,6 +209,8 @@ void mbl_stochastic_data_collector<T>::b_read(vsl_b_istream& bfs)
 }
 
 #define MBL_STOCHASTIC_DATA_COLLECTOR_INSTANTIATE(T) \
+VCL_DEFINE_SPECIALIZATION vcl_string mbl_stochastic_data_collector<T >::is_a() const \
+{  return vcl_string("mbl_stochastic_data_collector<" #T ">"); }\
 template class mbl_stochastic_data_collector< T >
 
 #endif // mbl_data_collector_txx_

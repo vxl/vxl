@@ -65,11 +65,6 @@ mbl_data_wrapper<T >& mbl_data_collector_list<T>::data_wrapper()
   return wrapper_;
 }
 
-template <class T>
-vcl_string mbl_data_collector_list<T>::is_a() const
-{
-  return vcl_string("mbl_data_collector_list<T>");
-}
 
 template <class T>
 bool mbl_data_collector_list<T>::is_class(vcl_string const& s) const
@@ -128,5 +123,7 @@ void mbl_data_collector_list<T>::b_read(vsl_b_istream& bfs)
 
 
 #define MBL_DATA_COLLECTOR_LIST_INSTANTIATE(T) \
+VCL_DEFINE_SPECIALIZATION vcl_string mbl_data_collector_list<T >::is_a() const \
+{  return vcl_string("mbl_data_collector_list<" #T ">"); }\
 template class mbl_data_collector_list< T >
 #endif // mbl_data_collector_list_txx_
