@@ -1,4 +1,4 @@
-USES += core
+USES += core contrib/gel
 
 LIBRARY := gst
 VERSION := 1.0

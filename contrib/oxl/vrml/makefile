@@ -1,6 +1,6 @@
 # VRML IO library
 
-USES += core
+USES += core contrib/oxl
 
 LIBRARY := vrml
 VERSION := 1.0

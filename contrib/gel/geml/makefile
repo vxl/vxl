@@ -1,4 +1,4 @@
-USES += core
+USES += core contrib/gel
 
 IMMEDIATE_LIBS := -lvil -lvnl
 
