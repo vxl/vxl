@@ -20,17 +20,10 @@
 //
 
 #include <vcl_vector.h>
-
-#if defined(VCL_GCC_27)
-# include <mvl/HomgPoint2D.h>
-# include <mvl/HomgLine2D.h>
-# include <mvl/HomgLineSeg2D.h>
-#else
 class Homg2D;
 class HomgLine2D;
 class HomgPoint2D;
 class HomgLineSeg2D;
-#endif
 
 class HomgOperator2D {
 

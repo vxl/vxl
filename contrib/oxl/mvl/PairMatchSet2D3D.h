@@ -19,9 +19,6 @@
 
 #include <mvl/PairMatchSet.h>
 #include <mvl/HomgPoint2D.h>
-#if defined(VCL_GCC_27)
-# include <mvl/HomgPoint3D.h> // for vcl_vector<> of undefined type.
-#endif
 
 class HomgInterestPointSet;
 class HomgMetric;
