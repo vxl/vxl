@@ -8,6 +8,7 @@ SET(mil3d_sources
  mil3d_sample_profile_3d.txx           mil3d_sample_profile_3d.h
  mil3d_gaussian_pyramid_builder_3d.txx mil3d_gaussian_pyramid_builder_3d.h mil3d_gaussian_pyramid_builder_3d.cxx
  mil3d_trilin_interp_3d.h
+ mil3d_sample_grid_3d.txx mil3d_sample_grid_3d.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates mil3d_sources)
