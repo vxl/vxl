@@ -15,8 +15,10 @@
 
 
 vdgl_digital_curve::vdgl_digital_curve()
-  : interpolator_(NULL)
+  : interpolator_(new vdgl_interpolator_linear(new vdgl_edgel_chain))
 {
+  // This object must have an interpolator, even if it is useless
+  assert(interpolator_);
 }
 
 vdgl_digital_curve::vdgl_digital_curve( vdgl_interpolator_sptr interpolator)

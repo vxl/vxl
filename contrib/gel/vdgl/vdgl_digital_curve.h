@@ -30,14 +30,12 @@ class vdgl_digital_curve : public vsol_curve_2d
   vdgl_interpolator_sptr interpolator_;
 
  public:
-  // Constructors/Destructors--------------------------------------------------
+  // Constructors/Destructors-------------------------------------------------- 
+  vdgl_digital_curve(); // for use by binary I/O only
   vdgl_digital_curve( vdgl_interpolator_sptr interpolator);
   vdgl_digital_curve(vsol_point_2d_sptr const& p0,
                      vsol_point_2d_sptr const& p1);
- private:
-   //: Default Constructor - for use by binary I/O only
-   vdgl_digital_curve();
- public:
+
   // Operators----------------------------------------------------------------
   short order() const {return interpolator_->order();}
   // these must be defined as they are virtual in vsol_curve_2d
@@ -113,7 +111,6 @@ class vdgl_digital_curve : public vsol_curve_2d
   //: Return true if the argument matches the string identifying the class or any parent class
   bool is_class(const vcl_string& cls) const;
 
-  friend void vsl_b_read(vsl_b_istream &is, vdgl_digital_curve* &dc);
 };
 
 //: Stream operator
