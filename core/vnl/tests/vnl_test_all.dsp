@@ -190,6 +190,9 @@ SOURCE=.\test_rpoly_roots.cxx
 SOURCE=.\test_sample.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_diag_matrix.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_sparse_matrix.cxx
 # End Source File
 # Begin Source File
