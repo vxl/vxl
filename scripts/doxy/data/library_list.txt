@@ -18,7 +18,7 @@ book: core : VXL overview documentation
 book: contrib/mul : Manchester University Library overview documentation
 book: contrib/tbl : The Image Processing Library
 
-package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl core Core Vision Libraries
+package: :pserver:anonymous@cvs.sourceforge.net:/cvsroot/vxl core Core Vision Libraries
 core vsl     vsl_     build
 core vnl     vnl_     build core/vsl
 core vbl     vbl_     build core/vsl
@@ -27,16 +27,16 @@ core vil     vil_     build core/vnl
 core vul     vul_     build core/vsl
 core vpl     vpl_     build
 
-package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl core Level-2 Vision Libraries
+package: :pserver:anonymous@cvs.sourceforge.net:/cvsroot/vxl core Level-2 Vision Libraries
 core vil1    vil1_    build core/vil
 core vidl    vidl_    build core/vbl core/vul core/vil1
 core vcsl    vcsl_    build core/vnl core/vbl
 core vgui    vgui_    build core/vgl core/vpl core/vbl core/vul core/vnl core/vil core/vil1
 
-package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl core Test Framework
+package: :pserver:anonymous@cvs.sourceforge.net:/cvsroot/vxl core Test Framework
 core testlib testlib_ build
 
-package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl contrib/mul Manchester University Libraries
+package: :pserver:anonymous@cvs.sourceforge.net:/cvsroot/vxl contrib/mul Manchester University Libraries
 contrib/mul mbl    mbl_    build core/vnl core/vgl
 # Don't document mil or mil3d anymore, they are deprecated.
 # contrib/mul mil    mil_    build contrib/mul/mbl core/vbl core/vil1
@@ -50,18 +50,18 @@ contrib/mul vimt3d vimt3d_ build contrib/mul/vil3d contrib/mul/vimt
 contrib/mul mvl2   mvl2_   build contrib/mul/vimt contrib/mul/mbl core/vul
 contrib/mul ipts   ipts_   build contrib/mul/vimt contrib/mul/mbl core/vgl
 
-package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl contrib/tbl Various Image Processing Libraries
+package: :pserver:anonymous@cvs.sourceforge.net:/cvsroot/vxl contrib/tbl Various Image Processing Libraries
 contrib/tbl vipl   vipl_   build core/vil1 core/vnl
 contrib/tbl vepl   vepl_   build contrib/tbl/vipl
 contrib/tbl vepl2  vepl2_  build contrib/tbl/vipl core/vil
 
-package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl contrib/oxl Oxford University Libraries
+package: :pserver:anonymous@cvs.sourceforge.net:/cvsroot/vxl contrib/oxl Oxford University Libraries
 contrib/oxl mvl    mvl_    build core/vnl core/vbl core/vgl core/vul
 contrib/oxl osl    osl_    build core/vnl core/vil1 core/vgl core/vbl
 contrib/oxl oxp    oxp_    build core/vnl core/vil1 core/vul core/vbl core/vpl
 contrib/oxl vrml   vrml_   build core/vbl
 
-package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl contrib/gel GE Libraries
+package: :pserver:anonymous@cvs.sourceforge.net:/cvsroot/vxl contrib/gel GE Libraries
 contrib/gel geml   geml_   build core/vil1 core/vnl
 contrib/gel gtrl   gtrl_   build core/vbl
 contrib/gel vsol   vsol_   build core/vgl core/vnl core/vbl core/vul
@@ -77,11 +77,11 @@ contrib/gel gevd   gevd_   build contrib/gel/vtol core/vil1
 contrib/gel jvid   jvid_   build core/vgui core/vidl
 contrib/gel pop    pop_    build core/vgl
 
-package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl contrib/rpl RPI libraries
+package: :pserver:anonymous@cvs.sourceforge.net:/cvsroot/vxl contrib/rpl RPI libraries
 contrib/rpl rrel   rrel_   build contrib/mul/mbl core/vbl
 contrib/rpl rsdl   rsdl_   build core/vnl core/vbl
 
-package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl contrib/brl Brown University libraries
+package: :pserver:anonymous@cvs.sourceforge.net:/cvsroot/vxl contrib/brl Brown University libraries
 contrib/brl/bbas bdgl   bdgl_   build contrib/gel/vtol core/vil1 core/vbl
 contrib/brl/bbas bgrl   bgrl_   build core/vbl core/vsl
 contrib/brl/bbas bgui   bgui_   build contrib/gel/vtol core/vgui
@@ -98,5 +98,5 @@ contrib/brl/bseg sdet   sdet_   build contrib/brl/bseg/brip contrib/brl/bbas/bto
 contrib/brl/bmvl bmvv   bmvv_   build contrib/brl/bmvl/btom contrib/brl/bseg/sdet contrib/brl/bbas/bgui contrib/brl/bbas/bxml contrib/oxl/mvl
 contrib/brl/bseg segv   segv_   build contrib/brl/bseg/sdet contrib/brl/bbas/bgui
 contrib/brl/bseg vpro   vpro_   build contrib/brl/bseg/sdet core/vidl
-contrib/brl      vvid   vvid_   build contrib/brl/bbas/bgui contrib/brl/bseg/sdet contrib/brl/bseg/vpro contrib/brl/bseg/brip contrib/gel/vtol core/vidl core/vul
+contrib/brl      vvid   vvid_   build contrib/brl/bbas/bgui contrib/brl/bseg/sdet contrib/brl/bseg/vpro 
 
