@@ -645,12 +645,12 @@ test_one_file(PNG_CONST char *inname, PNG_CONST char *outname)
 
    png_debug(0, "Allocating read and write structures\n");
 #ifdef PNG_USER_MEM_SUPPORTED
-   read_ptr = png_create_read_struct_2(PNG_LIBPNG_VER_STRING, png_voidp_NULL,
-      png_error_ptr_NULL, png_error_ptr_NULL, png_voidp_NULL,
+   read_ptr = png_create_read_struct_2(PNG_LIBPNG_VER_STRING, NULL,
+      NULL, NULL, NULL,
       (png_malloc_ptr)png_debug_malloc, (png_free_ptr)png_debug_free);
 #else
-   read_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, png_voidp_NULL,
-      png_error_ptr_NULL, png_error_ptr_NULL);
+   read_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL,
+      NULL, NULL);
 #endif
 #if defined(PNG_NO_STDIO)
    png_set_error_fn(read_ptr, (png_voidp)inname, pngtest_error,
@@ -658,12 +658,12 @@ test_one_file(PNG_CONST char *inname, PNG_CONST char *outname)
 #endif
 #ifdef PNG_WRITE_SUPPORTED
 #ifdef PNG_USER_MEM_SUPPORTED
-   write_ptr = png_create_write_struct_2(PNG_LIBPNG_VER_STRING, png_voidp_NULL,
-      png_error_ptr_NULL, png_error_ptr_NULL, png_voidp_NULL,
+   write_ptr = png_create_write_struct_2(PNG_LIBPNG_VER_STRING, NULL,
+      NULL, NULL, NULL,
       (png_malloc_ptr)png_debug_malloc, (png_free_ptr)png_debug_free);
 #else
-   write_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, png_voidp_NULL,
-      png_error_ptr_NULL, png_error_ptr_NULL);
+   write_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL,
+      NULL, NULL);
 #endif
 #if defined(PNG_NO_STDIO)
    png_set_error_fn(write_ptr, (png_voidp)inname, pngtest_error,
@@ -753,9 +753,9 @@ test_one_file(PNG_CONST char *inname, PNG_CONST char *outname)
    else
    {
 #ifdef PNG_WRITE_SUPPORTED
-      png_set_write_status_fn(write_ptr, png_write_status_ptr_NULL);
+      png_set_write_status_fn(write_ptr, NULL);
 #endif
-      png_set_read_status_fn(read_ptr, png_read_status_ptr_NULL);
+      png_set_read_status_fn(read_ptr, NULL);
    }
 
 #if defined(PNG_READ_USER_TRANSFORM_SUPPORTED)
@@ -775,11 +775,11 @@ test_one_file(PNG_CONST char *inname, PNG_CONST char *outname)
 #define HANDLE_CHUNK_ALWAYS       3
 #if defined(PNG_READ_UNKNOWN_CHUNKS_SUPPORTED)
    png_set_keep_unknown_chunks(read_ptr, HANDLE_CHUNK_ALWAYS,
-      png_bytep_NULL, 0);
+      NULL, 0);
 #endif
 #if defined(PNG_WRITE_UNKNOWN_CHUNKS_SUPPORTED)
    png_set_keep_unknown_chunks(write_ptr, HANDLE_CHUNK_IF_SAFE,
-      png_bytep_NULL, 0);
+      NULL, 0);
 #endif
 
    png_debug(0, "Reading info struct\n");
@@ -1084,7 +1084,7 @@ test_one_file(PNG_CONST char *inname, PNG_CONST char *outname)
          png_debug2(0, "0x%08lx (%ld bytes)\n", (unsigned long)row_buf,
             png_get_rowbytes(read_ptr, read_info_ptr));
 #endif /* !SINGLE_ROWBUF_ALLOC */
-         png_read_rows(read_ptr, (png_bytepp)&row_buf, png_bytepp_NULL, 1);
+         png_read_rows(read_ptr, (png_bytepp)&row_buf, NULL, 1);
 
 #ifdef PNG_WRITE_SUPPORTED
 #ifdef PNGTEST_TIMING
