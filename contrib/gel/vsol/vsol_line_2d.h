@@ -21,9 +21,6 @@
 // \endverbatim
 //*****************************************************************************
 
-//*****************************************************************************
-// External declarations for values
-//*****************************************************************************
 #include <vsol/vsol_curve_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsl/vsl_binary_io.h>
@@ -60,20 +57,21 @@ class vsol_line_2d : public vsol_curve_2d
   //---------------------------------------------------------------------------
   //: Constructor from the direction and the middle point
   //---------------------------------------------------------------------------
-  vsol_line_2d(const vgl_vector_2d<double> &new_direction,
+  vsol_line_2d(vgl_vector_2d<double> const& new_direction,
                const vsol_point_2d_sptr &new_middle);
 
   //---------------------------------------------------------------------------
   //: Constructor from the direction and the middle point
   //---------------------------------------------------------------------------
-  vsol_line_2d(const vgl_vector_2d<double> &new_direction,
+  vsol_line_2d(vgl_vector_2d<double> const& new_direction,
                const vgl_point_2d<double> &new_middle);
 
   //---------------------------------------------------------------------------
   //: Constructor from the first and the last point of the straight line
   //---------------------------------------------------------------------------
-  vsol_line_2d(const vsol_point_2d_sptr &new_p0,
-               const vsol_point_2d_sptr &new_p1);
+  vsol_line_2d(vsol_point_2d_sptr const& new_p0,
+               vsol_point_2d_sptr const& new_p1)
+    : vsol_curve_2d(), p0_(new_p0), p1_(new_p1) {}
 
   //---------------------------------------------------------------------------
   //: Constructor from two vgl_point_2d (end points)
@@ -83,35 +81,36 @@ class vsol_line_2d : public vsol_curve_2d
   //---------------------------------------------------------------------------
   //: Constructor from a vgl_line_segment_2d
   //---------------------------------------------------------------------------
-  vsol_line_2d(const vgl_line_segment_2d<double> &l);
+  vsol_line_2d(vgl_line_segment_2d<double> const& l);
 
   //---------------------------------------------------------------------------
   //: Copy constructor
   //  no duplication of the points
   //---------------------------------------------------------------------------
-  vsol_line_2d(const vsol_line_2d &other);
+  vsol_line_2d(vsol_line_2d const& other)
+    : vsol_curve_2d(other), p0_(other.p0_), p1_(other.p1_) {}
 
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
-  virtual ~vsol_line_2d();
+  virtual ~vsol_line_2d() {}
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a line_2d, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vsol_line_2d const*cast_to_line(void)const{return this;}
-  virtual vsol_line_2d *cast_to_line(void) {return this;}
+  virtual vsol_line_2d const*cast_to_line()const{return this;}
+  virtual vsol_line_2d *cast_to_line() {return this;}
 
   //---------------------------------------------------------------------------
   //: Return the curve type
   //---------------------------------------------------------------------------
-  virtual vsol_curve_2d_type curve_type(void) const { return vsol_curve_2d::LINE; }
+  virtual vsol_curve_2d_type curve_type() const { return vsol_curve_2d::LINE; }
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d* clone(void) const;
+  virtual vsol_spatial_object_2d* clone() const;
 
   //***************************************************************************
   // Access
@@ -120,22 +119,22 @@ class vsol_line_2d : public vsol_curve_2d
   //---------------------------------------------------------------------------
   //: Middle point of the straight line segment
   //---------------------------------------------------------------------------
-  vsol_point_2d_sptr middle(void) const;
+  vsol_point_2d_sptr middle() const;
 
   //---------------------------------------------------------------------------
   //: direction of the straight line segment.
   //---------------------------------------------------------------------------
-  vgl_vector_2d<double> direction(void) const;
+  vgl_vector_2d<double> direction() const;
 
   //---------------------------------------------------------------------------
   //: First point of the straight line segment
   //---------------------------------------------------------------------------
-  virtual vsol_point_2d_sptr p0(void) const;
+  virtual vsol_point_2d_sptr p0() const { return p0_; }
 
   //---------------------------------------------------------------------------
   //: Last point of the straight line segment
   //---------------------------------------------------------------------------
-  virtual vsol_point_2d_sptr p1(void) const;
+  virtual vsol_point_2d_sptr p1() const { return p1_; }
 
   //---------------------------------------------------------------------------
   //: Get an unbounded vgl_homg_line_2d
@@ -154,37 +153,32 @@ class vsol_line_2d : public vsol_curve_2d
   //---------------------------------------------------------------------------
   //: Has `this' the same points than `other' ?
   //---------------------------------------------------------------------------
-  virtual bool operator==(const vsol_line_2d &other) const;
-  virtual bool operator==(const vsol_spatial_object_2d& obj) const; // virtual of vsol_spatial_object_2d
+  virtual bool operator==(vsol_line_2d const& other) const;
+  virtual bool operator==(vsol_spatial_object_2d const& obj) const; // virtual of vsol_spatial_object_2d
 
   //---------------------------------------------------------------------------
   //: Has `this' not the same points than `other' ?
   //---------------------------------------------------------------------------
-  inline bool operator!=(const vsol_line_2d &o) const {return !operator==(o);}
+  inline bool operator!=(vsol_line_2d const& o) const {return !operator==(o);}
 
   //***************************************************************************
   // Status report
   //***************************************************************************
 
   //---------------------------------------------------------------------------
-  //: Return the real type of a line. It is a CURVE
-  //---------------------------------------------------------------------------
-  vsol_spatial_object_2d_type spatial_type(void) const;
-
-  //---------------------------------------------------------------------------
   //: Compute the bounding box of `this'
   //---------------------------------------------------------------------------
-  virtual void compute_bounding_box(void) const;
+  virtual void compute_bounding_box() const;
 
   //---------------------------------------------------------------------------
   //: Return the length of `this'
   //---------------------------------------------------------------------------
-  virtual double length(void) const;
+  virtual double length() const;
 
   //---------------------------------------------------------------------------
   //: Return the tangent angle (in degrees) of `this'. 0<angle<360
   //---------------------------------------------------------------------------
-  double tangent_angle(void) const;
+  double tangent_angle() const;
 
   //***************************************************************************
   // Status setting
@@ -193,12 +187,12 @@ class vsol_line_2d : public vsol_curve_2d
   //---------------------------------------------------------------------------
   //: Set the first point of the straight line segment
   //---------------------------------------------------------------------------
-  virtual void set_p0(const vsol_point_2d_sptr &new_p0);
+  virtual void set_p0(vsol_point_2d_sptr const& new_p0);
 
   //---------------------------------------------------------------------------
   //: Set the last point of the straight line segment
   //---------------------------------------------------------------------------
-  virtual void set_p1(const vsol_point_2d_sptr &new_p1);
+  virtual void set_p1(vsol_point_2d_sptr const& new_p1);
 
   //---------------------------------------------------------------------------
   //: Set the length of `this'. Doesn't change middle point and orientation.
@@ -214,13 +208,13 @@ class vsol_line_2d : public vsol_curve_2d
   //---------------------------------------------------------------------------
   //: Is `p' in `this' ?
   //---------------------------------------------------------------------------
-  virtual bool in(const vsol_point_2d_sptr &p) const;
+  virtual bool in(vsol_point_2d_sptr const& p) const;
 
   //---------------------------------------------------------------------------
   //: Return the tangent to `this' at `p'. Has to be deleted manually
   //  REQUIRE: in(p)
   //---------------------------------------------------------------------------
-  virtual vgl_homg_line_2d<double>* tangent_at_point(const vsol_point_2d_sptr &p) const;
+  virtual vgl_homg_line_2d<double>* tangent_at_point(vsol_point_2d_sptr const& p) const;
 
   // ==== Binary IO methods ======
 
@@ -240,7 +234,7 @@ class vsol_line_2d : public vsol_curve_2d
   vcl_string is_a() const { return vcl_string("vsol_line_2d"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  bool is_class(const vcl_string& cls) const { return cls==is_a(); }
+  bool is_class(vcl_string const& cls) const { return cls==is_a(); }
 
   //---------------------------------------------------------------------------
   //: output description to stream

@@ -18,9 +18,6 @@
 // \endverbatim
 //*****************************************************************************
 
-//*****************************************************************************
-// External declarations for values
-//*****************************************************************************
 #include <vgl/vgl_fwd.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsol/vsol_curve_2d.h>
@@ -65,12 +62,12 @@ class vsol_polyline_2d : public vsol_curve_2d
   //---------------------------------------------------------------------------
   //: Constructor from a vcl_vector of points
   //---------------------------------------------------------------------------
-  vsol_polyline_2d(const vcl_vector<vsol_point_2d_sptr> &new_vertices);
+  vsol_polyline_2d(vcl_vector<vsol_point_2d_sptr> const& new_vertices);
 
   //---------------------------------------------------------------------------
   //: Copy constructor
   //---------------------------------------------------------------------------
-  vsol_polyline_2d(const vsol_polyline_2d &other);
+  vsol_polyline_2d(vsol_polyline_2d const& other);
 
   //---------------------------------------------------------------------------
   //: Destructor
@@ -81,21 +78,21 @@ class vsol_polyline_2d : public vsol_curve_2d
   //: Clone `this': creation of a new object and initialization
   // See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d* clone(void) const;
+  virtual vsol_spatial_object_2d* clone() const;
 
   //***************************************************************************
   // Access
   //***************************************************************************
 
   //---------------------------------------------------------------------------
-  //: Return the first point of `this'
+  //: Return the first point of `this';  pure virtual of vsol_curve_2d
   //---------------------------------------------------------------------------
-  virtual vsol_point_2d_sptr p0(void) const; // virtual of vsol_polyline_2d
+  virtual vsol_point_2d_sptr p0() const { return p0_; }
 
   //---------------------------------------------------------------------------
-  //: Return the last point of `this'
+  //: Return the last point of `this';  pure virtual of vsol_curve_2d
   //---------------------------------------------------------------------------
-  virtual vsol_point_2d_sptr p1(void) const; // virtual of vsol_polyline_2d
+  virtual vsol_point_2d_sptr p1() const { return p1_; }
 
   //---------------------------------------------------------------------------
   //: Return vertex `i'
@@ -110,13 +107,13 @@ class vsol_polyline_2d : public vsol_curve_2d
   //---------------------------------------------------------------------------
   //: Has `this' the same points than `other' in the same order ?
   //---------------------------------------------------------------------------
-  virtual bool operator==(const vsol_polyline_2d &other) const;
-  virtual bool operator==(const vsol_spatial_object_2d& obj) const; // virtual of vsol_spatial_object_2d
+  virtual bool operator==(vsol_polyline_2d const& other) const;
+  virtual bool operator==(vsol_spatial_object_2d const& obj) const; // virtual of vsol_spatial_object_2d
 
   //---------------------------------------------------------------------------
   //: Has `this' the same points than `other' in the same order ?
   //---------------------------------------------------------------------------
-  inline bool operator!=(const vsol_polyline_2d &o) const {return !operator==(o);}
+  inline bool operator!=(vsol_polyline_2d const& o) const {return !operator==(o);}
 
 
   //***************************************************************************
@@ -127,18 +124,18 @@ class vsol_polyline_2d : public vsol_curve_2d
   //: Set the first point of the curve
   //  REQUIRE: in(new_p0)
   //---------------------------------------------------------------------------
-  virtual void set_p0(const vsol_point_2d_sptr &new_p0);
+  virtual void set_p0(vsol_point_2d_sptr const& new_p0);
 
   //---------------------------------------------------------------------------
   //: Set the last point of the curve
   //  REQUIRE: in(new_p1)
   //---------------------------------------------------------------------------
-  virtual void set_p1(const vsol_point_2d_sptr &new_p1);
+  virtual void set_p1(vsol_point_2d_sptr const& new_p1);
 
   //---------------------------------------------------------------------------
   //: Add another point to the curve
   //---------------------------------------------------------------------------
-  void add_vertex(const vsol_point_2d_sptr &new_p);
+  void add_vertex(vsol_point_2d_sptr const& new_p);
 
   //***************************************************************************
   // Status report
@@ -150,30 +147,25 @@ class vsol_polyline_2d : public vsol_curve_2d
   virtual vsol_curve_2d_type curve_type() const { return vsol_curve_2d::POLYLINE; }
 
   //---------------------------------------------------------------------------
-  //: Return the real type of a line. It is a CURVE
-  //---------------------------------------------------------------------------
-  vsol_spatial_object_2d::vsol_spatial_object_2d_type spatial_type(void) const;
-
-  //---------------------------------------------------------------------------
   //: Return `this' if `this' is an polyline, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vsol_polyline_2d const*cast_to_polyline(void)const{return this;}
-  virtual vsol_polyline_2d *cast_to_polyline(void) {return this;}
+  virtual vsol_polyline_2d const*cast_to_polyline()const{return this;}
+  virtual vsol_polyline_2d *cast_to_polyline() {return this;}
 
   //---------------------------------------------------------------------------
   //: Return the length of `this'
   //---------------------------------------------------------------------------
-  virtual double length(void) const; // virtual of vsol_curve_2d
+  virtual double length() const; // pure virtual of vsol_curve_2d
 
   //---------------------------------------------------------------------------
   //: Compute the bounding box of `this'
   //---------------------------------------------------------------------------
-  virtual void compute_bounding_box(void) const;
+  virtual void compute_bounding_box() const;
 
   //---------------------------------------------------------------------------
   //: Return the number of vertices
   //---------------------------------------------------------------------------
-  unsigned int size(void) const { return storage_->size(); }
+  unsigned int size() const { return storage_->size(); }
 
   //---------------------------------------------------------------------------
   //: Is `i' a valid index for the list of vertices ?
@@ -207,7 +199,7 @@ class vsol_polyline_2d : public vsol_curve_2d
   vcl_string is_a() const { return vcl_string("vsol_polyline_2d"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  bool is_class(const vcl_string& cls) const { return cls==is_a(); }
+  bool is_class(vcl_string const& cls) const { return cls==is_a(); }
 };
 
 //: Binary save vsol_polyline_2d* to stream.

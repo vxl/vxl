@@ -33,9 +33,6 @@
 // \endverbatim
 //*****************************************************************************
 
-//*****************************************************************************
-// External declarations for values
-//*****************************************************************************
 #include <vgl/vgl_fwd.h>
 #include <vgl/vgl_conic.h> // parent class
 #include <vsl/vsl_binary_io.h>
@@ -98,13 +95,14 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   //: Default Constructor
   //  produces and invalid conic (needed for binary I/O)
   //---------------------------------------------------------------------------
-  vsol_conic_2d();
+  vsol_conic_2d() : vsol_curve_2d(), vgl_conic<double>() {}
 
   //---------------------------------------------------------------------------
   //: Constructor from coefficients of the cartesian equation
   //  `a'x^2+`b'xy+`c'y^2+`d'x+`e'y+`f'
   //---------------------------------------------------------------------------
-  vsol_conic_2d(double a, double b, double c, double d, double e, double f);
+  vsol_conic_2d(double a, double b, double c, double d, double e, double f)
+    : vsol_curve_2d(), vgl_conic<double>(a, b, c, d, e, f) {}
 
   //---------------------------------------------------------------------------
   //: Ellipse/hyperbola constructor from centre, size and orientation.
@@ -150,32 +148,32 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   //---------------------------------------------------------------------------
   //: Copy constructor
   //---------------------------------------------------------------------------
-  vsol_conic_2d(const vsol_conic_2d &other);
+  vsol_conic_2d(vsol_conic_2d const& c):vsol_curve_2d(c),vgl_conic<double>(c) {}
 
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
-  virtual ~vsol_conic_2d();
+  virtual ~vsol_conic_2d() {}
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
   // See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d* clone(void) const;
+  virtual vsol_spatial_object_2d* clone() const;
 
   //***************************************************************************
   // Access
   //***************************************************************************
 
   //---------------------------------------------------------------------------
-  //: Return the first point of `this'
+  //: Return the first point of `this';  pure virtual of vsol_curve_2d
   //---------------------------------------------------------------------------
-  virtual vsol_point_2d_sptr p0(void) const; // virtual of vsol_curve_2d
+  virtual vsol_point_2d_sptr p0() const { return p0_; }
 
   //---------------------------------------------------------------------------
-  //: Return the last point of `this'
+  //: Return the last point of `this';  pure virtual of vsol_curve_2d
   //---------------------------------------------------------------------------
-  virtual vsol_point_2d_sptr p1(void) const; // virtual of vsol_curve_2d
+  virtual vsol_point_2d_sptr p1() const { return p1_; }
 
   //***************************************************************************
   // Comparison
@@ -184,72 +182,67 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   //---------------------------------------------------------------------------
   //: Has `this' the same coefficients and the same end points than `other' ?
   //---------------------------------------------------------------------------
-  virtual bool operator==(const vsol_conic_2d &other) const;
-  virtual bool operator==(const vsol_spatial_object_2d& obj) const; // virtual of vsol_spatial_object_2d
+  virtual bool operator==(vsol_conic_2d const& other) const;
+  virtual bool operator==(vsol_spatial_object_2d const&) const; // virtual of vsol_spatial_object_2d
 
   //---------------------------------------------------------------------------
   //: Has `this' not the same coeffs than `other', or different end points ?
   //---------------------------------------------------------------------------
-  inline bool operator!=(const vsol_conic_2d &o) const {return !operator==(o);}
+  inline bool operator!=(vsol_conic_2d const& o) const {return !operator==(o);}
 
   //***************************************************************************
   // Status report
   //***************************************************************************
 
   //---------------------------------------------------------------------------
-  //: Return the real type of a line. It is a CURVE
-  //---------------------------------------------------------------------------
-  vsol_spatial_object_2d_type spatial_type(void) const;
-
-  //---------------------------------------------------------------------------
   //: Return the real type of the conic from its coefficients
   //---------------------------------------------------------------------------
-  vsol_conic_type real_type(void) const;
+  vsol_conic_type real_type() const;
 
   //---------------------------------------------------------------------------
   //: Is `this' an real ellipse ?
   //---------------------------------------------------------------------------
-  bool is_real_ellipse(void) const;
+  bool is_real_ellipse() const;
 
   //---------------------------------------------------------------------------
   //: Is `this' a real circle ?
   //---------------------------------------------------------------------------
-  bool is_real_circle(void) const;
+  bool is_real_circle() const;
 
   //---------------------------------------------------------------------------
   //: Is `this' a complex ellipse ?
   //---------------------------------------------------------------------------
-  bool is_complex_ellipse(void) const;
+  bool is_complex_ellipse() const;
 
   //---------------------------------------------------------------------------
   //: Is `this' a complex circle ?
   //---------------------------------------------------------------------------
-  bool is_complex_circle(void) const;
+  bool is_complex_circle() const;
 
   //---------------------------------------------------------------------------
   //: Is `this' a parabola ?
   //---------------------------------------------------------------------------
-  bool is_parabola(void) const;
+  bool is_parabola() const;
 
   //---------------------------------------------------------------------------
   //: Is `this' a hyperbola ?
   //---------------------------------------------------------------------------
-  bool is_hyperbola(void) const;
+  bool is_hyperbola() const;
 
   //---------------------------------------------------------------------------
   //: Is `this' an real intersecting lines ?
   //---------------------------------------------------------------------------
-  bool is_real_intersecting_lines(void) const;
+  bool is_real_intersecting_lines() const;
 
   //---------------------------------------------------------------------------
   //: Is `this' an complex intersecting lines ?
   //---------------------------------------------------------------------------
-  bool is_complex_intersecting_lines(void) const;
+  bool is_complex_intersecting_lines() const;
 
   //---------------------------------------------------------------------------
   //: Is `this' an coincident lines ?
   //---------------------------------------------------------------------------
-  bool is_coincident_lines(void) const;
+  bool is_coincident_lines() const;
 
   //---------------------------------------------------------------------------
   //: Return 3 ellipse parameters:
@@ -291,12 +284,12 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   //---------------------------------------------------------------------------
   //: Return the length of `this'
   //---------------------------------------------------------------------------
-  virtual double length(void) const; // virtual of vsol_curve_2d
+  virtual double length() const; // pure virtual of vsol_curve_2d
 
   //---------------------------------------------------------------------------
   //: Return the matrix associated with the coefficients.
   //---------------------------------------------------------------------------
-  vnl_double_3x3 matrix(void) const;
+  vnl_double_3x3 matrix() const;
 
   //***************************************************************************
   // Status setting
@@ -306,13 +299,13 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   //: Set the first point of the curve
   //  REQUIRE: in(new_p0)
   //---------------------------------------------------------------------------
-  virtual void set_p0(const vsol_point_2d_sptr &new_p0);
+  virtual void set_p0(vsol_point_2d_sptr const& new_p0);
 
   //---------------------------------------------------------------------------
   //: Set the last point of the curve
   //  REQUIRE: in(new_p1)
   //---------------------------------------------------------------------------
-  virtual void set_p1(const vsol_point_2d_sptr &new_p1);
+  virtual void set_p1(vsol_point_2d_sptr const& new_p1);
 
   //***************************************************************************
   // Basic operations
@@ -331,7 +324,7 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   //---------------------------------------------------------------------------
   //: Is `p' in `this' ? (ie `p' verifies the equation, within some margin)
   //---------------------------------------------------------------------------
-  virtual bool in(const vsol_point_2d_sptr &p) const;
+  virtual bool in(vsol_point_2d_sptr const& p) const;
 
   //---------------------------------------------------------------------------
   //: Returns the tangent to the conic in the point p, if p is on the conic.
@@ -372,8 +365,8 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an conic, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vsol_conic_2d const*cast_to_conic(void)const{return this;}
-  virtual vsol_conic_2d *cast_to_conic(void) {return this;}
+  virtual vsol_conic_2d const*cast_to_conic()const{return this;}
+  virtual vsol_conic_2d *cast_to_conic() {return this;}
 
   // ==== Binary IO methods ======
 
@@ -393,7 +386,7 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   void print_summary(vcl_ostream &os) const;
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  bool is_class(const vcl_string& cls) const { return cls==is_a(); }
+  bool is_class(vcl_string const& cls) const { return cls==is_a(); }
 };
 
 //: Binary save vsol_conic_2d* to stream.
