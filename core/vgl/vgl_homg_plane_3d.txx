@@ -45,7 +45,10 @@ template <class Type>
 bool vgl_homg_plane_3d<Type>::operator==(vgl_homg_plane_3d<Type> const& p) const
 {
   return (this==&p) ||
-         (   (a()*p.d()==p.a()*d())
+         (   (a()*p.b()==p.a()*b())
+          && (a()*p.c()==p.a()*c())
+          && (a()*p.d()==p.a()*d())
+          && (b()*p.c()==p.b()*c())
           && (b()*p.d()==p.b()*d())
           && (c()*p.d()==p.c()*d()) );
 }
