@@ -158,9 +158,9 @@ extern "C" {
   int dpofa_(doublereal *m, const int& lda, const int& n, int* info);
   int dposl_(const doublereal *a, const int& lda, const int& n, doublereal *b);
   int dpoco_(doublereal *a, const int& lda, const int& n,
-      doublereal* rcond, doublereal *z, int *info);
-  int dpodi_(doublereal *a, const int& lda, const int& n,
-      doublereal* det, const int& job);
+             doublereal* rcond, doublereal *z, int *info);
+  int dpodi_(const doublereal *a, const int& lda, const int& n,
+             doublereal* det, const int& job);
 
   // roots of real polynomial
   void rpoly_(const doublereal* op, int* degree, doublereal *zeror,

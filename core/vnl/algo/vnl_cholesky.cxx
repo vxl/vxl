@@ -71,7 +71,7 @@ double vnl_cholesky::determinant() const
 {
   unsigned n = A_.columns();
   double det[2];
-  dpodi_((double*)A_.data_block(), n, n, det, 10);
+  dpodi_(A_.data_block(), n, n, det, 10);
   return det[0] * vcl_pow(10, det[1]);
 }
 
