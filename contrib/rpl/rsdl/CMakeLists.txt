@@ -2,7 +2,6 @@
 
 SET(rsdl_sources
  rsdl_fwd.h
- rsdl_test.h
 
  rsdl_bounding_box.cxx rsdl_bounding_box.h
  rsdl_dist.cxx         rsdl_dist.h
