@@ -41,6 +41,7 @@ IF (WIN32)
     mil_image_pyramid_builder.h
     mil_sample_profile_2d.h
     mil_transform_2d.h
+    mil_convert_vil.h
     )
   ENDIF (NOT CYGWIN)
 ENDIF(WIN32)
