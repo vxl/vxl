@@ -1,7 +1,7 @@
 // This is oxl/osl/osl_canny_rothwell.cxx
 #include "osl_canny_rothwell.h"
 //:
-//  \file
+// \file
 
 #include <osl/osl_canny_rothwell_params.h>
 #include <osl/osl_kernel.h>
@@ -142,7 +142,7 @@ void osl_canny_rothwell::detect_edges(vil1_image const &image, vcl_list<osl_edge
     if (verbose) vcl_cerr << "searching for dangling ends\n";
     Find_dangling_ends();
     if (verbose) vcl_cerr << xdang_->size() << " dangling edges found initially\n"
-                      << "looking for single pixel breaks - ";
+                          << "looking for single pixel breaks - ";
     Jump_single_breaks();
     Thin_edges();   // Must thin after jumping
     Find_dangling_ends();
@@ -162,7 +162,7 @@ void osl_canny_rothwell::detect_edges(vil1_image const &image, vcl_list<osl_edge
 
       Find_dangling_ends();
       if (verbose) vcl_cerr << xdang_->size() << " dangling edges found after scale reduction\n"
-                        << "looking for single pixel breaks - ";
+                            << "looking for single pixel breaks - ";
       Jump_single_breaks();
       Thin_edges();
       Find_dangling_ends();
@@ -527,27 +527,26 @@ void osl_canny_rothwell::Thin_edges() {
   // Now do the thinning. Do it twice: the first time to try to remove
   // dummy_ edges, and then other edges -- 0.001 turns <= to <
 
-  for (threshold=dummy_-0.001f,i=0; i<2; threshold=low_,i++)  {
-
+  for (threshold=dummy_-0.001f,i=0; i<2; threshold=low_,++i)
+  {
     count = 1;     // count set to dummy value
     while ( count )  { //  Thin until no Pixels are removed
 
       count = 0;
       for (unsigned int x=w0_; x+w0_<xsize_; ++x)
-        for (unsigned int y=w0_; y+w0_<ysize_; ++y)  {
-
+        for (unsigned int y=w0_; y+w0_<ysize_; ++y)
+        {
           if ( thin_[x][y] <= threshold )
             continue;
 
-          int a,b,c,d,e,f,g,h;
-          if ( thin_[x-1][y-1] > low_ )  a = 1; else a = 0;
-          if ( thin_[x  ][y-1] > low_ )  b = 1; else b = 0;
-          if ( thin_[x+1][y-1] > low_ )  c = 1; else c = 0;
-          if ( thin_[x+1][y  ] > low_ )  d = 1; else d = 0;
-          if ( thin_[x+1][y+1] > low_ )  e = 1; else e = 0;
-          if ( thin_[x  ][y+1] > low_ )  f = 1; else f = 0;
-          if ( thin_[x-1][y+1] > low_ )  g = 1; else g = 0;
-          if ( thin_[x-1][y  ] > low_ )  h = 1; else h = 0;
+          int a = thin_[x-1][y-1] > low_ ? 1 : 0;
+          int b = thin_[x  ][y-1] > low_ ? 1 : 0;
+          int c = thin_[x+1][y-1] > low_ ? 1 : 0;
+          int d = thin_[x+1][y  ] > low_ ? 1 : 0;
+          int e = thin_[x+1][y+1] > low_ ? 1 : 0;
+          int f = thin_[x  ][y+1] > low_ ? 1 : 0;
+          int g = thin_[x-1][y+1] > low_ ? 1 : 0;
+          int h = thin_[x-1][y  ] > low_ ? 1 : 0;
 
           int genus = a+b+c+d+e+f+g+h;
 
@@ -673,9 +672,9 @@ void osl_canny_rothwell::Adaptive_Canny(vil1_image const &image) {
   int half_size = (image_size - 1)/2;
 
   if (verbose) vcl_cerr << "new image region "
-                    << image_size << " by " << image_size << vcl_endl
-                    << "Sigma           = " << sigma_ << vcl_endl
-                    << "Kernel size     = " << k_size_ << vcl_endl;
+                        << image_size << " by " << image_size << vcl_endl
+                        << "Sigma           = " << sigma_ << vcl_endl
+                        << "Kernel size     = " << k_size_ << vcl_endl;
 
   // Set up the new images
   float **dx   = osl_canny_base_make_raw_image(image_size,image_size, (float*)0);
@@ -686,7 +685,8 @@ void osl_canny_rothwell::Adaptive_Canny(vil1_image const &image) {
   int count=0;
   if (verbose) vcl_cerr << "percentage of endings examined =   0";
   typedef vcl_list<int>::iterator it;
-  for (it i=xdang_->begin(), j=ydang_->begin(); i!=xdang_->end() && j!=ydang_->end(); ++i, ++j) {
+  for (it i=xdang_->begin(), j=ydang_->begin(); i!=xdang_->end() && j!=ydang_->end(); ++i, ++j)
+  {
     //xdang_->reset(),ydang_->reset(); xdang_->next(),ydang_->next(); )  {
 
     int X = (*i)/*xdang_->value()*/, Y = (*j)/*ydang_->value()*/;
@@ -700,33 +700,33 @@ void osl_canny_rothwell::Adaptive_Canny(vil1_image const &image) {
     if ( !Junction_neighbour(junction_, X, Y) &&
          (x0>=0) && ((unsigned int)x0+image_size<=xsize_) &&
          (y0>=0) && ((unsigned int)y0+image_size<=ysize_) )
+    {
+      // Compute the new image intensity gradients
+      osl_canny_smooth_rothwell_adaptive(image, x0,y0,image_size, kernel_, width_, k_size_, dx,dy,grad);
+
+      // Delete the effects of the thick_ image - we don't want to
+      // locate edges in the same places as before
+      Subtract_thick(x0,y0,image_size,grad);
+
+      // Now, if possible, grow the edgelchain out from (X,Y) in a
+      // one dimensional direction up to the boundary of the old kernel
+      int newx,newy;
+      X -= x0;  Y -= y0;   // Do a coordinate shift; centre in local coords
+      for (int ii=1; ii<=old_k_size_ && Dangling_end(X+x0,Y+y0)==1; ++ii)
       {
-        // Compute the new image intensity gradients
-        osl_canny_smooth_rothwell_adaptive(image, x0,y0,image_size, kernel_, width_, k_size_, dx,dy,grad);
-
-        // Delete the effects of the thick_ image - we don't want to
-        // locate edges in the same places as before
-        Subtract_thick(x0,y0,image_size,grad);
-
-        // Now, if possible, grow the edgelchain out from (X,Y) in a
-        // one dimensional direction up to the boundary of the old kernel
-        int newx,newy;
-        X -= x0;  Y -= y0;   // Do a coordinate shift; centre in local coords
-        for (int ii=1; (ii<=old_k_size_) && Dangling_end(X+x0,Y+y0); ++ii)  {
-
-          // Find the eight-way neighbour with the strongest edge
-          newx = X;  newy = Y;
-          Best_eight_way(X,Y,grad,&newx,&newy);
-          // If no new edge has been found we should break
-          if ( (newx==X) && (newy==Y) )
-            break;
-          // Else record a dummy edgel
-          else {
-            thin_[newx+x0][newy+y0] = dummy_;  thick_[newx+x0][newy+y0] = dummy_;
-            X = newx;  Y = newy;
-          }
+        // Find the eight-way neighbour with the strongest edge
+        newx = X;  newy = Y;
+        Best_eight_way(X,Y,grad,&newx,&newy);
+        // If no new edge has been found we should break
+        if ( (newx==X) && (newy==Y) )
+          break;
+        // Else record a dummy edgel
+        else {
+          thin_[newx+x0][newy+y0] = dummy_;  thick_[newx+x0][newy+y0] = dummy_;
+          X = newx;  Y = newy;
         }
       }
+    }
     if (verbose) vcl_fprintf(stderr,"\b\b\b%3d", int(10*((++count)*10/xdang_->size())));
   }
   if (verbose)   vcl_cerr << vcl_endl;
@@ -785,55 +785,38 @@ void osl_canny_rothwell::Find_dangling_ends() {
   ydang_->clear();
   osl_canny_base_fill_raw_image(dangling_, xsize_, ysize_, 0);
 
-  for (unsigned int x=w0_; x+w0_<xsize_; ++x) {
-    for (unsigned int y=w0_; y+w0_<ysize_; ++y) {
-
-      if ( thin_[x][y] <= low_ )
-        continue;
-
-      int a,b,c,d,e,f,g,h;
-      if ( thin_[x-1][y-1] > low_ )  a = 1; else a = 0;
-      if ( thin_[x  ][y-1] > low_ )  b = 1; else b = 0;
-      if ( thin_[x+1][y-1] > low_ )  c = 1; else c = 0;
-      if ( thin_[x+1][y  ] > low_ )  d = 1; else d = 0;
-      if ( thin_[x+1][y+1] > low_ )  e = 1; else e = 0;
-      if ( thin_[x  ][y+1] > low_ )  f = 1; else f = 0;
-      if ( thin_[x-1][y+1] > low_ )  g = 1; else g = 0;
-      if ( thin_[x-1][y  ] > low_ )  h = 1; else h = 0;
-
-      if ( (a+b+c+d+e+f+g+h) == 1 ) {
+  for (unsigned int x=w0_; x+w0_<xsize_; ++x)
+    for (unsigned int y=w0_; y+w0_<ysize_; ++y)
+    {
+      if (Dangling_end(x,y) == 1) {
         xdang_->push_front(x);
         ydang_->push_front(y);
         dangling_[x][y] = 1;
       }
     }
-  }
 }
 
 
 //-----------------------------------------------------------------------------
 //
-//: Tests whether a points is a dangling end.
+//: Tests whether a point is a dangling end and return 1 in that case.
+//  Otherwise the return value could be 0 or between 2 and 8.
 //
 int osl_canny_rothwell::Dangling_end(int x, int y)
 {
   if ( thin_[x][y] <= low_ )
     return 0;
 
-  int a,b,c,d,e,f,g,h;
-  if ( thin_[x-1][y-1] > low_ )  a = 1; else a = 0;
-  if ( thin_[x  ][y-1] > low_ )  b = 1; else b = 0;
-  if ( thin_[x+1][y-1] > low_ )  c = 1; else c = 0;
-  if ( thin_[x+1][y  ] > low_ )  d = 1; else d = 0;
-  if ( thin_[x+1][y+1] > low_ )  e = 1; else e = 0;
-  if ( thin_[x  ][y+1] > low_ )  f = 1; else f = 0;
-  if ( thin_[x-1][y+1] > low_ )  g = 1; else g = 0;
-  if ( thin_[x-1][y  ] > low_ )  h = 1; else h = 0;
+  int a = thin_[x-1][y-1] > low_ ? 1 : 0;
+  int b = thin_[x  ][y-1] > low_ ? 1 : 0;
+  int c = thin_[x+1][y-1] > low_ ? 1 : 0;
+  int d = thin_[x+1][y  ] > low_ ? 1 : 0;
+  int e = thin_[x+1][y+1] > low_ ? 1 : 0;
+  int f = thin_[x  ][y+1] > low_ ? 1 : 0;
+  int g = thin_[x-1][y+1] > low_ ? 1 : 0;
+  int h = thin_[x-1][y  ] > low_ ? 1 : 0;
 
-  if ( (a+b+c+d+e+f+g+h) == 1 )
-    return 1;
-  else
-    return 0;
+  return a+b+c+d+e+f+g+h;
 }
 
 
@@ -841,31 +824,17 @@ int osl_canny_rothwell::Dangling_end(int x, int y)
 //
 //: Searches for the junctions in the image.
 //
-void osl_canny_rothwell::Find_junctions() {
-
-  int a,b,c,d,e,f,g,h;
-
+void osl_canny_rothwell::Find_junctions()
+{
   // Reset the junction variables
   xjunc_->clear();
   yjunc_->clear();
   osl_canny_base_fill_raw_image(junction_, xsize_, ysize_, 0);
 
   for (unsigned int x=w0_; x+w0_<xsize_; ++x)
-    for (unsigned int y=w0_; y+w0_<ysize_; ++y)  {
-
-      if ( thin_[x][y] <= low_ )
-        continue;
-
-      if ( thin_[x-1][y-1] > low_ )  a = 1; else a = 0;
-      if ( thin_[x  ][y-1] > low_ )  b = 1; else b = 0;
-      if ( thin_[x+1][y-1] > low_ )  c = 1; else c = 0;
-      if ( thin_[x+1][y  ] > low_ )  d = 1; else d = 0;
-      if ( thin_[x+1][y+1] > low_ )  e = 1; else e = 0;
-      if ( thin_[x  ][y+1] > low_ )  f = 1; else f = 0;
-      if ( thin_[x-1][y+1] > low_ )  g = 1; else g = 0;
-      if ( thin_[x-1][y  ] > low_ )  h = 1; else h = 0;
-
-      if ( (a+b+c+d+e+f+g+h) > 2 ) {
+    for (unsigned int y=w0_; y+w0_<ysize_; ++y)
+    {
+      if (Dangling_end(x,y) > 2) {
         xjunc_->push_front(x);
         yjunc_->push_front(y);
         junction_[x][y] = 1;
