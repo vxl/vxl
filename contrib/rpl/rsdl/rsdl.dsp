@@ -119,6 +119,12 @@ SOURCE=.\Templates/rsdl_borgefors+vnl_vector_fixed+double.2--.cxx
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+rsdl_kd_tree-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/rsdl_bins+2.double.int-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/rsdl_bins+3.double.int-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -148,6 +154,12 @@ SOURCE=.\rsdl_point.h
 # End Source File
 # Begin Source File
 SOURCE=.\rsdl_fwd.h
+# End Source File
+# Begin Source File
+SOURCE=.\rsdl_bins.h
+# End Source File
+# Begin Source File
+SOURCE=.\rsdl_bins.txx
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
