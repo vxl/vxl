@@ -52,7 +52,7 @@ ifeq "$(TJ_GCC30)" "1"
 FLAGS_test_rational.cxx += -O1
 endif
 
-IULIBS += -lvnl-algo -lvnl -lvpl -lvul # vpl_unlink used in test_matlab; vul_timer used
+IULIBS += -lvnl-algo -lvnl -lvpl -lvul -ltestlib # vpl_unlink used in test_matlab; vul_timer used
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk

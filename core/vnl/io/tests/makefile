@@ -1,6 +1,5 @@
 USES += vxl 
-USE_SOCKETS := 1 # for libvul
-IULIBS := -lvnl-io -lvnl -lvsl -lvul
+IULIBS := -lvnl-io -lvnl -lvsl -ltestlib
 
 TESTS += vnl_io_test_all.cxx
 

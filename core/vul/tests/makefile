@@ -1,15 +1,16 @@
 USES = vxl
 include ${IUEROOT}/vxl/vul/config.mk
 
-TESTS += vul_test_all.cxx
-TESTS += vul_test_arg.cxx
-TESTS += vul_test_sprintf.cxx
-TESTS += vul_test_temp_filename.cxx
-TESTS += vul_test_psfile.cxx
-TESTS += vul_test_url.cxx
-TESTS += vul_test_file_iterator.cxx
+TESTMAIN := test_driver.cxx
+TESTS += test_include.cxx
+TESTS += test_arg.cxx
+TESTS += test_file_iterator.cxx
+TESTS += test_psfile.cxx
+TESTS += test_sprintf.cxx
+TESTS += test_url.cxx
+TESTS += test_temp_filename.cxx
 
-IULIBS := -lvul -lvpl
+IULIBS := -lvul -lvpl -ltestlib
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk
