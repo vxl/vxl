@@ -41,7 +41,7 @@ inline void vimt3d_reconstruct_ic_safe(double val, double x, double y, double z,
       if (ix>=0 && iy>=0 && iz>=0
           && ix<=(ni-1) && iy<=(nj-1) && iz<(nk-1) )
       {
-          data[index] += T(val);
+          data[index] = T(val);
       }
   }
 
