@@ -1,3 +1,5 @@
+//:
+// \file
 // \author  fsm@robots.ox.ac.uk
 //
 // This example is given an image filename on the command line and displays

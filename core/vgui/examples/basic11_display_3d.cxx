@@ -1,3 +1,5 @@
+//:
+// \file
 // \author K.Y.McGaul
 //
 // This example displays a point with 3 lines radiating from it in different
