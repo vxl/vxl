@@ -159,8 +159,8 @@ bool vnl_levenberg_marquardt::minimize(vnl_vector<double>& x)
   }
 
   // e04fcf
-  unsigned m = f_->get_number_of_residuals();        // I     Number of residuals, must be > #unknowns
-  unsigned n = f_->get_number_of_unknowns();         // I     Number of unknowns
+  int m = f_->get_number_of_residuals();        // I     Number of residuals, must be > #unknowns
+  int n = f_->get_number_of_unknowns();         // I     Number of unknowns
 
   if (m < n) {
     cerr << "vnl_levenberg_marquardt: Number of unknowns("<<n<<") greater than number of data ("<<m<<")\n";
@@ -168,7 +168,7 @@ bool vnl_levenberg_marquardt::minimize(vnl_vector<double>& x)
     return false;
   }
 
-  if (x.size() != n) {
+  if (int(x.size()) != n) {
     cerr << "vnl_levenberg_marquardt: Input vector length ("<<x.size()<<") not equal to num unknowns ("<<n<<")\n";
     failure_code_ = ERROR_DODGY_INPUT;
     return false;
