@@ -39,20 +39,29 @@ void gmvl_connection_cache::add( const gmvl_node_ref node1, const gmvl_node_ref 
 
       if( biggest>= cachebool_.rows())
 	{
-	  vnl_matrix<bool> temp( (biggest+1)*2, (biggest+1)*2, false);
+	  cerr << "Creating stuff..." << endl;
 
-	  for( int ci=0; ci< cachebool_.rows(); ci++) 
-	    for( int cj=0; cj< cachebool_.cols(); cj++)
-	      temp(ci,cj)= cachebool_(ci,cj);
+	  //	  gbl_bit_array_2d temp( (biggest+1)*2, (biggest+1)*2, false);
 
-	  cachebool_= temp;
+	  cachebool_.enlarge( (biggest+1)*2, (biggest+1)*2);
+
+	  cerr << "Size = " << cachebool_.rows();
+	  //	  cerr << "Size = " << temp.rows();
+	  
+	  // 	  for( int ci=0; ci< cachebool_.rows(); ci++) 
+	  // 	    for( int cj=0; cj< cachebool_.cols(); cj++)
+	  // 	      temp.put(ci,cj, cachebool_(ci,cj));
+
+	  cerr << " done" << endl;
+
+	  //	  cachebool_= temp;
 	}
 
       cache_[node1->ref_].push_back( node2->ref_);
       cache_[node2->ref_].push_back( node1->ref_);
 
-      cachebool_( node1->ref_, node2->ref_) = true;
-      cachebool_( node2->ref_, node1->ref_) = true;
+      cachebool_.put( node1->ref_, node2->ref_, true);
+      cachebool_.put( node2->ref_, node1->ref_, true);
     }
 }
 
@@ -106,11 +115,11 @@ void gmvl_connection_cache::rebuild()
 
       if( biggest>= cachebool_.rows())
 	{
-	  vnl_matrix<bool> temp( biggest+1, biggest+1, false);
+	  gbl_bit_array_2d temp( biggest+1, biggest+1, false);
 
 	  for( int ci=0; ci< cachebool_.rows(); ci++) 
 	    for( int cj=0; cj< cachebool_.cols(); cj++)
-	      temp(ci,cj)= cachebool_(ci,cj);
+	      temp.put(ci,cj, cachebool_(ci,cj));
 
 	  cachebool_= temp;
 	}
@@ -118,8 +127,8 @@ void gmvl_connection_cache::rebuild()
       cache_[node1->ref_].push_back( node2->ref_);
       cache_[node2->ref_].push_back( node1->ref_);
 
-      cachebool_( node1->ref_, node2->ref_) = true;
-      cachebool_( node2->ref_, node1->ref_) = true;
+      cachebool_.put( node1->ref_, node2->ref_, true);
+      cachebool_.put( node2->ref_, node1->ref_, true);
     }
 }
 

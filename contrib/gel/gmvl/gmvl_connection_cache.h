@@ -8,7 +8,8 @@
 */
 
 #include <vcl/vcl_vector.h>
-#include <vnl/vnl_matrix.h>
+
+#include <gbl/gbl_bit_array_2d.h>
 #include <gmvl/gmvl_connection_ref.h>
 
 class gmvl_connection_cache
@@ -44,7 +45,7 @@ protected:
   vcl_vector<vcl_vector<int> > cache_;
 
   // and more caching...
-  vnl_matrix<bool> cachebool_;
+  gbl_bit_array_2d cachebool_;
 };
 
 ostream &operator<<( ostream &os, const gmvl_connection_cache c);

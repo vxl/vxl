@@ -11,7 +11,7 @@ USES := vxl
 LIBRARY := gmvl
 VERSION := 1.0
 
-INCDIRS = ..
+INCDIRS += ..
 
 SOURCES += gmvl_database.cxx
 SOURCES += gmvl_node.cxx
