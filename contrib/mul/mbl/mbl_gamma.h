@@ -1,10 +1,10 @@
-#ifndef vpdfl_gamma_h
-#define vpdfl_gamma_h
+#ifndef mbl_gamma_h
+#define mbl_gamma_h
 
 //:
 // \file
 // \author Tim Cootes
-// \date 12-Apr-2001
+// \date 18-Apr-2001
 // \brief Gamma and Incomplete Gamma functions
 
 
@@ -20,4 +20,4 @@ double mbl_gamma_q(double a, double x);
 //: log of Incomplete gamma function, Q(a,x)
 double mbl_log_gamma_q(double a, double x);
 
-#endif // vpdfl_gamma_h
+#endif // mbl_gamma_h
