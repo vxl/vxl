@@ -57,16 +57,17 @@ bool QvVrmlFile::load(char const* filename)
   //TopologyHierarchyNode::DEFER_SUPERIORS = true;
 
   vcl_cerr << "VRML_IO: ";
-  while (1) {
+  while (true)
+  {
     QvNode* node = 0;
-    vcl_cerr << "R";
+    vcl_cerr << 'R';
     if (!QvNode::read(&in, node)) break;
     if (!node) break;
     QvState state;
-    vcl_cerr << "B";
+    vcl_cerr << 'B';
     node->build(&state);
     p->nodes.push_back(node);
-    vcl_cerr << " ";
+    vcl_cerr << ' ';
   }
   vcl_cerr << "\nVRML_IO: Loaded " << p->nodes.size() << " topology objects\n";
   return true;
@@ -87,14 +88,16 @@ void QvVrmlFile::traverse(QvVisitor* visitor)
 #include "QvIndexedLineSet.h"
 #include "QvIndexedFaceSet.h"
 
-struct VrmlCentroidVisitor : public QvVisitor {
+struct VrmlCentroidVisitor : public QvVisitor
+{
   float centroid[3];
   int n;
   int pass;
 
   double radius;
 
-  void visit(QvVrmlFile& f) {
+  void visit(QvVrmlFile& f)
+  {
     pass = 0;
     centroid[0] = centroid[1] = centroid[2] = 0;
     n = 0;
@@ -114,7 +117,8 @@ struct VrmlCentroidVisitor : public QvVisitor {
     radius = vcl_sqrt(radius);
   }
 
-  void inc(const point3D& p) {
+  void inc(const point3D& p)
+  {
     if (pass == 0) {
       centroid[0] += p.x;
       centroid[1] += p.y;
@@ -132,7 +136,8 @@ struct VrmlCentroidVisitor : public QvVisitor {
 
   // ----
 
-  bool Visit(QvPointSet* ps) {
+  bool Visit(QvPointSet* ps)
+  {
     int nn = (ps->numPoints.value == -1) ? ps->num_ : ps->numPoints.value;
     nn += ps->startIndex.value;
     for (int i = ps->startIndex.value; i < nn; ++i)
@@ -140,8 +145,8 @@ struct VrmlCentroidVisitor : public QvVisitor {
     return true; // ??
   }
 
-  bool Visit(QvIndexedLineSet* node) {
-
+  bool Visit(QvIndexedLineSet* node)
+  {
     const point3D* vertexlist = node->vertexlist_;   // vertex data
     int numvertinds = node->numvertinds_;            // no. of vertex indices
     const int* vertindices = node->vertindices_;     // vertex index list
@@ -153,13 +158,52 @@ struct VrmlCentroidVisitor : public QvVisitor {
     return true; // ??
   }
 
-  bool Visit(QvIndexedFaceSet* node) {
+  bool Visit(QvIndexedFaceSet* node)
+  {
     for (int i = 0; i < node->numvertinds_; ++i) {
       int vert_index = node->vertindices_[i];
       if (vert_index != -1) inc(node->vertexlist_[vert_index]);
     }
     return true; // ??
   }
+
+  bool Visit(QvNode*) { return false; }
+  bool Visit(QvGroup*) { return false; }
+  bool Visit(QvAsciiText*) { return false; }
+  bool Visit(QvCone*) { return false; }
+  bool Visit(QvCoordinate3*) { return false; }
+  bool Visit(QvCube*) { return false; }
+  bool Visit(QvCylinder*) { return false; }
+  bool Visit(QvDirectionalLight*) { return false; }
+  bool Visit(QvFontStyle*) { return false; }
+  bool Visit(QvInfo*) { return false; }
+  bool Visit(QvLOD*) { return false; }
+  bool Visit(QvMaterial*) { return false; }
+  bool Visit(QvMaterialBinding*) { return false; }
+  bool Visit(QvMatrixTransform*) { return false; }
+  bool Visit(QvNormal*) { return false; }
+  bool Visit(QvNormalBinding*) { return false; }
+  bool Visit(QvOrthographicCamera*) { return false; }
+  bool Visit(QvPerspectiveCamera*) { return false; }
+  bool Visit(QvPointLight*) { return false; }
+  bool Visit(QvRotation*) { return false; }
+  bool Visit(QvScale*) { return false; }
+  bool Visit(QvSeparator*) { return false; }
+  bool Visit(QvShapeHints*) { return false; }
+  bool Visit(QvSphere*) { return false; }
+  bool Visit(QvSpotLight*) { return false; }
+  bool Visit(QvSwitch*) { return false; }
+  bool Visit(QvTexture2*) { return false; }
+  bool Visit(QvTexture2Transform*) { return false; }
+  bool Visit(QvTextureCoordinate2*) { return false; }
+  bool Visit(QvTransform*) { return false; }
+  bool Visit(QvTransformSeparator*) { return false; }
+  bool Visit(QvTranslation*) { return false; }
+  bool Visit(QvWWWAnchor*) { return false; }
+  bool Visit(QvWWWInline*) { return false; }
+  bool Visit(QvUnknownNode*) { return false; }
+  bool Visit(QvLabel*) { return false; }
+  bool Visit(QvLightModel*) { return false; }
 };
 
 void QvVrmlFile::compute_centroid_radius()
@@ -171,6 +215,6 @@ void QvVrmlFile::compute_centroid_radius()
   centroid[2] = vcv.centroid[2];
   radius = (float)vcv.radius;
   vcl_cerr << "QvVrmlFile::compute_centroid_radius: c = "
-           << centroid[0] << " " << centroid[1] << " " << centroid[2]
+           << centroid[0] << ' ' << centroid[1] << ' ' << centroid[2]
            << ", r = " << radius << vcl_endl;
 }
