@@ -1468,8 +1468,9 @@ bool sdet_grid_finder::get_square_pixel_stats(vil1_image img,
   lr = grid_to_image(glr); lr.set(lr.x()/lr.w(), lr.y()/lr.w(),1.0);
   ll = grid_to_image(gll); ll.set(ll.x()/ll.w(), ll.y()/ll.w(),1.0);
   //vcl_cout << "ul "<<ul<<" ur "<<ur<<" lr "<<lr<<" ll "<<ll<<"\n";
-  int min_y = vnl_math_rnd(vnl_math_max(ul.y(),ur.y()));
-  int max_y = vnl_math_rnd(vnl_math_min(lr.y(),ll.y()));
+  // add/subtract 1 from min_y and max_y to account for possible rounding error
+  int min_y = vnl_math_rnd(vnl_math_min(ul.y(),ur.y())) - 1;
+  int max_y = vnl_math_rnd(vnl_math_max(lr.y(),ll.y())) + 1;
   int n_scan_rows = max_y - min_y + 1;
 
   vnl_matrix<int> scan_rows(n_scan_rows,2);
