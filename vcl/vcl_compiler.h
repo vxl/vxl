@@ -38,7 +38,7 @@
 # endif
 #endif
 
-#if defined(__GNUC__)
+#if defined(__GNUC__) && !defined(__ICC) // icc 8.0 defines __GNUC__
 # define VCL_GCC
 # if (__GNUC__<=1)
 #  error "forget it."
