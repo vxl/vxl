@@ -62,7 +62,7 @@ static void _computeKernels(
   ConvolutionKernel *gauss,
   ConvolutionKernel *gaussderiv)
 {
-  const float factor = 0.01;   /* for truncating tail */
+  const float factor = 0.01f;   /* for truncating tail */
   int i;
 
   assert(MAX_KERNEL_WIDTH % 2 == 1);
@@ -71,11 +71,11 @@ static void _computeKernels(
   /* Compute kernels, and automatically determine widths */
   {
     const int hw = MAX_KERNEL_WIDTH / 2;
-    float max_gauss = 1.0f, max_gaussderiv = sigma*exp(-0.5f);
+    float max_gauss = 1.0f, max_gaussderiv = sigma*(float)exp(-0.5);
 
     /* Compute gauss and deriv */
     for (i = -hw ; i <= hw ; i++)  {
-      gauss->data[i+hw]      = exp(-i*i / (2*sigma*sigma));
+      gauss->data[i+hw]      = (float)exp(-i*i / (2*sigma*sigma));
       gaussderiv->data[i+hw] = -i * gauss->data[i+hw];
     }
 

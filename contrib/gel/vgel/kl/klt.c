@@ -37,13 +37,13 @@ http://www-leland.stanford.edu/group/OTL, (415) 723-0651.
 static const int mindist = 10;
 static const int window_size = 7;
 static const int min_eigenvalue = 1;
-static const float min_determinant = 0.01;
-static const float min_displacement = 0.1;
+static const float min_determinant = 0.01f;
+static const float min_displacement = 0.1f;
 static const int max_iterations = 10;
-static const float max_residue = 10.0;
-static const float grad_sigma = 1.0;
-static const float smooth_sigma_fact = 0.1;
-static const float pyramid_sigma_fact = 0.9;
+static const float max_residue = 10.0f;
+static const float grad_sigma = 1.0f;
+static const float smooth_sigma_fact = 0.1f;
+static const float pyramid_sigma_fact = 0.9f;
 static const KLT_BOOL sequentialMode = FALSE;
 static const KLT_BOOL smoothBeforeSelecting = TRUE;
 static const KLT_BOOL writeInternalImages = FALSE;
@@ -299,15 +299,15 @@ void KLTChangeTCPyramid(
   }
   if (tc->window_width < 3) {
     tc->window_width = 3;
-    KLTWarning("(KLTChangeTCPyramid) Window width must be at least three.  \n"
+    KLTWarning("(KLTChangeTCPyramid) Window width must be at least three.\n"
                "Changing to %d.\n", tc->window_width);
   }
   if (tc->window_height < 3) {
     tc->window_height = 3;
-    KLTWarning("(KLTChangeTCPyramid) Window height must be at least three.  \n"
+    KLTWarning("(KLTChangeTCPyramid) Window height must be at least three.\n"
                "Changing to %d.\n", tc->window_height);
   }
-  window_halfwidth = min(tc->window_width,tc->window_height)/2;
+  window_halfwidth = 0.5f*min(tc->window_width,tc->window_height);
 
   subsampling = ((float) search_range) / window_halfwidth;
 
@@ -330,7 +330,7 @@ void KLTChangeTCPyramid(
        search_range =
        window_halfwidth * (8^nPyramidLevels - 1)/(8 - 1).
        Then, the value is rounded up to the nearest integer. */
-    float val = log(7.0*subsampling+1.0)/log(8.0);
+    float val = (float)log(7.0*subsampling+1.0)/log(8.0);
     tc->nPyramidLevels = (int) (val + 0.99);
     tc->subsampling = 8;
   }
@@ -381,12 +381,12 @@ void KLTUpdateTCBorder(
   }
   if (tc->window_width < 3) {
     tc->window_width = 3;
-    KLTWarning("(KLTUpdateTCBorder) Window width must be at least three.  \n"
+    KLTWarning("(KLTUpdateTCBorder) Window width must be at least three.\n"
                "Changing to %d.\n", tc->window_width);
   }
   if (tc->window_height < 3) {
     tc->window_height = 3;
-    KLTWarning("(KLTUpdateTCBorder) Window height must be at least three.  \n"
+    KLTWarning("(KLTUpdateTCBorder) Window height must be at least three.\n"
                "Changing to %d.\n", tc->window_height);
   }
   window_hw = max(tc->window_width, tc->window_height)/2;

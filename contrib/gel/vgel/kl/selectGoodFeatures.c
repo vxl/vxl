@@ -269,7 +269,7 @@ static void _sortPointList(
 
 static float _minEigenvalue(float gxx, float gxy, float gyy)
 {
-  return (gxx + gyy - sqrt((gxx - gyy)*(gxx - gyy) + 4*gxy*gxy))/2.0;
+  return (gxx + gyy - sqrt((gxx - gyy)*(gxx - gyy) + 4*gxy*gxy))/2.0f;
 }
 
 
@@ -397,7 +397,7 @@ void _KLTSelectGoodFeatures(
           KLTWarning("(_KLTSelectGoodFeatures) minimum eigenvalue %f is "
                      "greater than the capacity of an int; setting "
                      "to maximum value", val);
-          val = limit;
+          val = (float)limit;
         }
         *ptr++ = (int) val;
         npoints++;

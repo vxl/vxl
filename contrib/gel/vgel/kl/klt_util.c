@@ -96,7 +96,7 @@ void _KLTWriteFloatImageToPGM(
   char *filename)
 {
   int npixs = img->ncols * img->nrows;
-  float mmax = -999999.9, mmin = 999999.9;
+  float mmax = -999999.9f, mmin = 999999.9f;
   float fact;
   float *ptr;
   uchar *byteimg, *ptrout;
@@ -114,7 +114,7 @@ void _KLTWriteFloatImageToPGM(
   byteimg = (uchar *) malloc(npixs * sizeof(uchar));
 
   /* Convert image from float to uchar */
-  fact = 255.0 / (mmax-mmin);
+  fact = 255.0f / (mmax-mmin);
   ptr = img->data;
   ptrout = byteimg;
   for (i = 0 ; i < npixs ; i++)  {
