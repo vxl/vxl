@@ -6,6 +6,9 @@ effect. If you change something in VXL, please document it here.
 
 ---------------------------------------------------------------------------
 
+      - Added several options (e.g. BUILD_CORE_NUMERICS) to the CMakeBuild
+        tree to make it easy to build just small parts of VXL.
+
       - vgel_kl (KLT feature point tracker) now accepts vil1 or vil2 images.
 
       - Added vil_warp and vil_nearest_neighbour_interp functions
