@@ -25,6 +25,6 @@ void camera_node::set_beat(vcl_vector<double> const& new_beat)
 {
   nViews_ = new_beat.size();
 
-  vcl_vector<vcsl_spatial_transformation_sptr> & motions = camera_node::motion();
-  motions.clear();
+  // clear motion vector:
+  camera_node::set_motion(vcl_vector<vcsl_spatial_transformation_sptr>());
 }
