@@ -36,6 +36,7 @@ HMatrix2DSimilarityCompute::compute(PairMatchSetCorner const& matches)
  tmp_fun(pts1,pts2,&H);
  return H;
 }
+
 HMatrix2D
 HMatrix2DSimilarityCompute::compute(PointArray const& p1,
                                     PointArray const& p2)
@@ -44,6 +45,7 @@ HMatrix2DSimilarityCompute::compute(PointArray const& p1,
   tmp_fun(p1,p2,&H);
   return H;
 }
+
 bool
 HMatrix2DSimilarityCompute::compute_p(PointArray const& pts1,
                                       PointArray const& pts2,
@@ -66,7 +68,7 @@ HMatrix2DSimilarityCompute::tmp_fun(PointArray const& pts1,
   sub_rows(p1,mn1);
   sub_rows(p2,mn2);
 
-  vnl_double_2x2 scatter = vnl_transpose(p2).operator*(p1);
+  vnl_double_2x2 scatter = vnl_transpose(p2)*p1;
   vnl_svd<double> svd(scatter);
 
   vnl_double_2x2 R = svd.U() * vnl_transpose(svd.V());
