@@ -24,32 +24,32 @@
 
 class vpro_video_process : public vbl_ref_count
 {
-public:
+ public:
   enum process_data_type {NOTYPE=0, IMAGE, SPATIAL_OBJECT, TOPOLOGY};
-  
+
   vpro_video_process();
-  ~vpro_video_process();
+ ~vpro_video_process();
   void clear_input();
   void clear_output();
 
-  void add_input_image(vil1_image&  im){input_images_.push_back(im);}
+  void add_input_image(vil1_image const& im) { input_images_.push_back(im); }
 
   void add_input_spatial_objects(vcl_vector<vsol_spatial_object_2d_sptr> const& spat_objs);
 
   void add_input_topology(vcl_vector<vtol_topology_object_sptr> const& topo_objes);
 
-  int get_N_input_images(){return input_images_.size();}
+  int get_N_input_images() { return input_images_.size(); }
   vil1_image get_input_image(int i);
-  vil1_image get_output_image(){return output_image_;}
+  vil1_image get_output_image() { return output_image_; }
 
 
-  int get_N_input_spat_objs(){return input_spat_objs_.size();}
+  int get_N_input_spat_objs() { return input_spat_objs_.size(); }
   vcl_vector<vsol_spatial_object_2d_sptr> const&
-  get_input_spatial_objects(){return input_spat_objs_;}
+      get_input_spatial_objects() { return input_spat_objs_; }
 
-  int get_N_input_topo_objs(){return input_topo_objs_.size();}
-  vcl_vector<vtol_topology_object_sptr> const & 
-  get_input_topology(){return input_topo_objs_;}
+  int get_N_input_topo_objs() { return input_topo_objs_.size(); }
+  vcl_vector<vtol_topology_object_sptr> const &
+      get_input_topology() { return input_topo_objs_; }
 
   //:output handling may depend on the specific process
   virtual vcl_vector<vsol_spatial_object_2d_sptr> const& get_output_spatial_objects();
@@ -57,9 +57,9 @@ public:
 
   virtual process_data_type get_input_type(){return NOTYPE;}
   virtual process_data_type get_output_type(){return NOTYPE;}
-  virtual bool execute()=0;  
-  virtual bool finish()=0;  
-protected: 
+  virtual bool execute()=0;
+  virtual bool finish()=0;
+ protected:
   //members
   vcl_vector<vil1_image> input_images_;
   vcl_vector<vsol_spatial_object_2d_sptr> input_spat_objs_;
