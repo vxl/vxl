@@ -259,34 +259,44 @@ int main(int argc, char** argv)
 
   compute_stats(1,byte_1image,n_loops);
   compute_stats(1,byte_2image,n_loops);
+  vcl_cout<<"------------------------------"<<vcl_endl;
   compute_stats(1,float_1image,n_loops);
   compute_stats(1,float_2image,n_loops);
+  vcl_cout<<"------------------------------"<<vcl_endl;
   compute_stats(1,rgb_1image,n_loops);
   compute_stats(1,rgb_2image,n_loops);
+  vcl_cout<<"------------------------------"<<vcl_endl;
   vcl_cout << "\n\n";
 
   compute_stats(2,byte_1image,n_loops);
   compute_stats(2,byte_2image,n_loops);
+  vcl_cout<<"------------------------------"<<vcl_endl;
   compute_stats(2,float_1image,n_loops);
   compute_stats(2,float_2image,n_loops);
+  vcl_cout<<"------------------------------"<<vcl_endl;
   compute_stats(2,rgb_1image,n_loops);
   compute_stats(2,rgb_2image,n_loops);
+  vcl_cout<<"------------------------------"<<vcl_endl;
   vcl_cout << "\n\n";
 
   n_loops/=5;
   compute_stats(3,byte_1image,n_loops);
   compute_stats(3,byte_2image,n_loops);
+  vcl_cout<<"------------------------------"<<vcl_endl;
   compute_stats(3,float_1image,n_loops);
   compute_stats(3,float_2image,n_loops);
+  vcl_cout<<"------------------------------"<<vcl_endl;
   vcl_cout << "\n\n";
 
   compute_stats(4,byte_1image,n_loops);
   compute_stats(4,byte_2image,n_loops);
+  vcl_cout<<"------------------------------"<<vcl_endl;
   compute_stats(4,float_1image,n_loops);
   compute_stats(4,float_2image,n_loops);
+  vcl_cout<<"------------------------------"<<vcl_endl;
   compute_stats(4,rgb_1image,n_loops);
   compute_stats(4,rgb_2image,n_loops);
-  vcl_cout << "\n\n";
+  vcl_cout<<"------------------------------"<<vcl_endl;
 
   return 0;
 }

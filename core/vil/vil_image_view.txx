@@ -20,6 +20,7 @@
 #include <vcl_ostream.h>
 #include <vil2/vil2_smart_ptr.h>
 #include <vil2/vil2_pixel_format.h>
+#include <vcl_cstring.h>
 
 //=======================================================================
 
@@ -96,30 +97,35 @@ void vil2_image_view<T>::deep_copy(const vil2_image_view<T>& src)
   vcl_ptrdiff_t s_planestep = src.planestep();
   vcl_ptrdiff_t s_istep = src.istep();
   vcl_ptrdiff_t s_jstep = src.jstep();
+  
+  if (src.is_contiguous())
+  {
+    if (src.istep()>0 && src.jstep()>0 && src.planestep()>=0)
+    {
+      vcl_memcpy(top_left_,src.top_left_ptr(),src.size()*sizeof(T));
+      return;
+    }
+    vil2_image_view<T>::const_iterator s_it = src.begin();
+    vil2_image_view<T>::iterator d_it = begin();
+    vil2_image_view<T>::const_iterator end_it = src.end();
+    while (s_it!=end_it) {*d_it = *s_it; ++s_it; ++d_it; }
+    return;
+  }
 
   // Do a deep copy
   // This is potentially inefficient
   const T* src_data = src.top_left_ptr();
   T* data = top_left_;
-  for (unsigned int p=0;p<nplanes_;++p)
+  for (unsigned int p=0;p<nplanes_;++p,src_data += s_planestep,data += planestep_)
   {
     T* row = data;
     const T* src_row = src_data;
-    for (unsigned int j=0;j<nj_;++j)
+    for (unsigned int j=0;j<nj_;++j,row += jstep_,src_row += s_jstep)
     {
       T* p = row;
       const T* sp = src_row;
-      for (unsigned int i=0;i<ni_;++i)
-      {
-        *p = *sp;
-        p+=istep_;
-        sp+=s_istep;
-      }
-      row += jstep_;
-      src_row += s_jstep;
+      for (unsigned int i=0;i<ni_;++i,p+=istep_,sp+=s_istep) *p = *sp;
     }
-    src_data += s_planestep;
-    data += planestep_;
   }
 }
 
@@ -576,7 +582,7 @@ void vil2_image_view<T>::fill(T value)
       for (unsigned int j=0;j<nj_;++j,row += jstep_)
       {
         int i = ni_;
-        while (i>=0) { row[i--]=value; }
+        while (i>=0) { row[--i]=value; }
       }
     }
     return;
