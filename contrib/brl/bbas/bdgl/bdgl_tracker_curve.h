@@ -22,7 +22,7 @@ class bdgl_tracker_curve;
 class match_data : public vbl_ref_count
 {
  public:
-	 match_data(bdgl_tracker_curve_sptr c,match_data_sptr m);
+  match_data(bdgl_tracker_curve_sptr c,match_data_sptr m);
   match_data()
   {
     curve_set=0;
@@ -63,7 +63,7 @@ class bdgl_tracker_curve  : public vbl_ref_count
   void init_set( vtol_edge_2d_sptr const &c,int id);
   // initialize the curve using a set of points
   void init_set(vcl_vector<vgl_point_2d<double> > p,int id);
-  //intializing tails as curves
+  //initializing tails as curves
   void init_set(bdgl_tracker_curve_sptr c,vcl_vector<int> ks,int id);
 
   void set_curve(vtol_edge_2d_sptr c) { c_=c; }
@@ -104,7 +104,7 @@ class bdgl_tracker_curve  : public vbl_ref_count
   //bool ismatched_;
  protected :
   vtol_edge_2d_sptr c_;
-  
+
   int id_;
 
   match_data_sptr best_match_next_;

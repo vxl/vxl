@@ -1,14 +1,10 @@
 #ifndef curve_Match_h_
 #define curve_Match_h_
 
-
 #define MAX_LEN 2000
-//#define INFINITY 1e20
 
 #include <vnl/vnl_matrix.h>
-#include <vnl/vnl_double_2.h>
 #include <vcl_utility.h>
-
 
 #include "DPMatch.h"
 #include "curve.h"
@@ -40,10 +36,9 @@ double curveMatch(double &euc_dist,                        //!< out
   Curve c1; c1.readDataFromVector(v1);
   Curve c2; c2.readDataFromVector(v2);
 
- 
   DPMatch d1(c1,c2,e);
   //DPMatch d1(c1,c2);
-	
+
   if (endPointMatch)
     d1.endPointMatch();
   else
@@ -51,15 +46,15 @@ double curveMatch(double &euc_dist,                        //!< out
 
   vcl_vector< vcl_pair <int,int> > fmap = d1.finalMap();
   vcl_vector <double> fmapCost = d1.finalMapCost();
-  
-    //transformed and then computed euclidean distance
+
+  //transformed and then computed euclidean distance
   euc_dist = d1.transformed_euclidean_distance();
   mapping  = d1.alignment;
   R_       = d1.R;
   T_       = d1.T;
   d1.detect_tail(tail1,tail2);
-  int n1=c1.numPoints();
-  int n2=c2.numPoints();
+//int n1=c1.numPoints();
+//int n2=c2.numPoints();
   Tbar     = d1.Tbar;
   scale    = d1.scale;
   return d1.normfinalCost();

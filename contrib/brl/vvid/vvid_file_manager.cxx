@@ -641,7 +641,6 @@ void vvid_file_manager::compute_grid_match()
   if (!grid_dialog.ask())
     return;
 
-
   if (agr)
     dp.aggressive_junction_closure=1;
   else
@@ -653,7 +652,6 @@ void vvid_file_manager::compute_grid_match()
 void vvid_file_manager::compute_curve_tracking()
 {
   // get parameters
- 
 
   static int track_window;
   static bdgl_curve_tracking_params tp;
@@ -683,63 +681,51 @@ void vvid_file_manager::compute_curve_tracking()
   dp_dialog->checkbox("Automatic Threshold", dp.automatic_threshold);
   dp_dialog->checkbox("Compute Junctions", dp.junctionp);
   dp_dialog->checkbox("Agressive Closure", agr);
-  
+
   if (!tr_dialog->ask())
     return;
   if (!dp_dialog->ask())
     return;
-  
-  tp.mp.e_.set(ex,ey);	
+
+  tp.mp.e_.set(ex,ey);
 
   if (agr)
     dp.aggressive_junction_closure=1;
   else
     dp.aggressive_junction_closure=0;
 
-
   color_label_ = true;
 
-  
-  if(cache_frames_)
-  {
-	  video_process_  = new vpro_curve_tracking_process(tp,dp);
-	  for (vcl_vector<bgui_vtol2D_tableau_sptr>::iterator vit = tabs_.begin();
-       vit != tabs_.end()&&play_video_; vit++)
-	   {
-			vgui_image_tableau_sptr temp_img=(*vit)->get_image_tableau();
-			vil1_image temp1_img=temp_img->get_image();
-			vil1_memory_image_of<unsigned char> image(temp1_img);
-			video_process_->add_input_image(image);
-			if (video_process_->execute())
-            {
-              if (video_process_->get_output_type()==vpro_video_process::IMAGE)
-                vcl_cout<<"\n output is image";//display_image();
-              if (video_process_->get_output_type()==
-                  vpro_video_process::SPATIAL_OBJECT)
-				 {	
-				cached_spat_objs_.push_back(video_process_->get_output_spatial_objects());
-			  }
-				
-              if (video_process_->get_output_type()==
-                  vpro_video_process::TOPOLOGY)
-                vcl_cout<<"\n output is topology_objects";//display_topology();
-            }
-	   }
-	   
-
-  }
-  else
+  if (cache_frames_)
   {
     video_process_  = new vpro_curve_tracking_process(tp,dp);
-  }
- 
-  if (track_)
+    for (vcl_vector<bgui_vtol2D_tableau_sptr>::iterator vit = tabs_.begin();
+         vit != tabs_.end()&&play_video_; vit++)
     {
-      frame_trail_.clear();
-      frame_trail_.set_window(track_window);
-    }
-  
+      vgui_image_tableau_sptr temp_img=(*vit)->get_image_tableau();
+      vil1_image temp1_img=temp_img->get_image();
+      vil1_memory_image_of<unsigned char> image(temp1_img);
+      video_process_->add_input_image(image);
+      if (video_process_->execute())
+      {
+        if (video_process_->get_output_type()==vpro_video_process::IMAGE)
+          vcl_cout<<"\n output is image";//display_image();
+        if (video_process_->get_output_type()==vpro_video_process::SPATIAL_OBJECT)
+          cached_spat_objs_.push_back(video_process_->get_output_spatial_objects());
 
+        if (video_process_->get_output_type()==vpro_video_process::TOPOLOGY)
+          vcl_cout<<"\n output is topology_objects";//display_topology();
+      }
+    }
+  }
+  else
+    video_process_ = new vpro_curve_tracking_process(tp,dp);
+
+  if (track_)
+  {
+    frame_trail_.clear();
+    frame_trail_.set_window(track_window);
+  }
 }
 
 void vvid_file_manager::compute_corr_tracking()

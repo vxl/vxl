@@ -2,7 +2,7 @@
 #ifndef __TBS_DPMATCH_DEF__
 #define __TBS_DPMATCH_DEF__
 #include <vcl_map.h>
-#include <vcl_vector.h> 
+#include <vcl_vector.h>
 #include <vcl_utility.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_double_2.h>
@@ -21,7 +21,7 @@ class DPMatch
   DPMatch(Curve &c1, Curve &c2,vgl_point_2d<double> & e);
   DPMatch(vcl_vector<vcl_pair<double,double> > v1,
           vcl_vector<vcl_pair<double,double> > v2,
-		  vnl_double_2 & e);
+          vnl_double_2 & e);
   void init();
   ~DPMatch(){};
   //access functions
@@ -59,7 +59,7 @@ class DPMatch
   void deformation_cost();
   int matched_len1;
   int matched_len2;
-  
+
   double ds1_;
   double ds2_;
   double dt1_;
@@ -68,7 +68,6 @@ class DPMatch
   Curve curve2_;
  protected:
   //Data
-  
 
   vdgl_digital_curve_sptr dc1;
   vdgl_digital_curve_sptr dc2;

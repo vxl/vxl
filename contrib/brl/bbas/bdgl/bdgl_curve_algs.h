@@ -83,7 +83,6 @@ class bdgl_curve_algs
                                  double ref_gradient_angle,
                                  vgl_point_2d<double>& point);
 
-
   //:Generate points along a digital straight line
   static  bool line_gen(float xs, float ys, float xe, float ye,
                         bool& init, bool& done,
@@ -99,12 +98,13 @@ class bdgl_curve_algs
 
   static vdgl_digital_curve_sptr
     create_digital_curves(vcl_vector<vgl_point_2d<double> > & curve);
-  static double compute_transformed_euclidean_distance
-							(bdgl_tracker_curve_sptr c1,
-							 bdgl_tracker_curve_sptr c2,
-							 vnl_matrix<double> R,
-							 vnl_matrix<double> T,
-							 double s,vcl_map<int,int> alignment);
+  static double
+    compute_transformed_euclidean_distance(bdgl_tracker_curve_sptr c1,
+                                           bdgl_tracker_curve_sptr c2,
+                                           vnl_matrix<double> R,
+                                           vnl_matrix<double> T,
+                                           double s,
+                                           vcl_map<int,int> alignment);
  private:
   bdgl_curve_algs();
 };

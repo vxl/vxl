@@ -11,7 +11,6 @@
 #include <vgl/vgl_homg_line_2d.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_interpolator.h>
-#include <vdgl/vdgl_interpolator_linear.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vsol/vsol_curve_2d.h>
 #include <bxml/bxml_vtol_io.h>
@@ -459,19 +458,18 @@ void bmvv_multiview_manager::select_curve_corres()
 //-----------------------------------------------------------
 void bmvv_multiview_manager::track_edges()
 {
-  
-	// get parameters
+  // get parameters
   this->clear_display();
   static int track_window;
   //static bool track;
   bdgl_curve_tracking_params tp_;
-  
+
   static bdgl_curve_clustering_params cp;
   static bdgl_curve_matching_params mp;
   static double ex,ey;
   static int third=1;
   //static bdgl_curve_tracking_params tp;
- 
+
   vgui_dialog* tr_dialog = new vgui_dialog("Curve Tracking");
   tr_dialog->checkbox("Matching", tp_.mp.matching_);
   tr_dialog->checkbox("Transitive closure", tp_.transitive_closure);
@@ -486,7 +484,6 @@ void bmvv_multiview_manager::track_edges()
   tr_dialog->field("No of clusters ",tp_.cp.no_of_clusters);
   tr_dialog->field("Min Euc Distance",tp_.cp.min_cost_threshold);
   tr_dialog->field("Fg and Bg Threshold",tp_.cp.foreg_backg_threshold);
-
 
   // edge detecttor params
   static sdet_detector_params dp;
@@ -508,108 +505,92 @@ void bmvv_multiview_manager::track_edges()
 
   sdet_detector det1(dp);
   sdet_detector det2(dp);
-  
+
   bdgl_curve_tracking tracks (tp_);
   // passing types
   vcl_vector<vtol_edge_2d_sptr> * edges;
   vil1_image img =this->get_image_at(0,0);
-   vil1_memory_image_of<unsigned char> cimg;
-	if (img.components()==3)
-    {
-      vil1_memory_image_of<float> fimg = brip_float_ops::convert_to_float(img);
-      //convert a color image to grey
-      cimg = brip_float_ops::convert_to_byte(fimg);
-    }
-	else
-		cimg = vil1_memory_image_of<unsigned char>(img);
+  vil1_memory_image_of<unsigned char> cimg;
+  if (img.components()==3)
+  {
+    vil1_memory_image_of<float> fimg = brip_float_ops::convert_to_float(img);
+    //convert a color image to grey
+    cimg = brip_float_ops::convert_to_byte(fimg);
+  }
+  else
+    cimg = vil1_memory_image_of<unsigned char>(img);
 
   img =this->get_image_at(0,0);
-  vsol_curve_2d_sptr c;
-  vdgl_digital_curve_sptr dc;
-  vdgl_interpolator_sptr interp;
-  vdgl_edgel_chain_sptr  ec;
   vcl_vector<vtol_edge_2d_sptr> ecl;
-  
-  
+
   // first image
   det1.SetImage(cimg);//this->get_image_at(0,0));
   det1.DoContour();
   edges = det1.GetEdges();
-  ecl.clear();
 
-  for (unsigned int i=0;i<(*edges).size();i++){
-    c  = (*edges)[i]->curve();
-    dc = c->cast_to_digital_curve();
-	if(dc->length()>tp_.min_length_of_curves)
-	{
-	ecl.push_back((*edges)[i]);
-	}
+  for (unsigned int i=0;i<(*edges).size();i++)
+  {
+    vsol_curve_2d_sptr c  = (*edges)[i]->curve();
+    vdgl_digital_curve_sptr dc = c->cast_to_digital_curve();
+    if (dc->length()>tp_.min_length_of_curves)
+      ecl.push_back((*edges)[i]);
   }
   tracks.input_curves_.push_back(ecl);
-  
   ecl.clear();
-
 
   //  edges from 2nd image
   img =this->get_image_at(1,0);
   //img = vil1_load("c:\\data\\minivan\\00071.tiff");
   if (img.components()==3)
-    {
-      vil1_memory_image_of<float> fimg = brip_float_ops::convert_to_float(img);
-      //convert a color image to grey
-      cimg = brip_float_ops::convert_to_byte(fimg);
-    }
-	else
-		cimg = vil1_memory_image_of<unsigned char>(img);
+  {
+    vil1_memory_image_of<float> fimg = brip_float_ops::convert_to_float(img);
+    //convert a color image to grey
+    cimg = brip_float_ops::convert_to_byte(fimg);
+  }
+  else
+    cimg = vil1_memory_image_of<unsigned char>(img);
 
   det2.SetImage(cimg);
   det2.DoContour();
   edges = det2.GetEdges();
-  
-  for (unsigned int i=0;i<(*edges).size();i++){
-    c  = (*edges)[i]->curve();
-    dc = c->cast_to_digital_curve();
-	if(dc->length()>tp_.min_length_of_curves)
-	{
-		ecl.push_back((*edges)[i]);
-	}
+
+  for (unsigned int i=0;i<(*edges).size();i++)
+  {
+    vsol_curve_2d_sptr c  = (*edges)[i]->curve();
+    vdgl_digital_curve_sptr dc = c->cast_to_digital_curve();
+    if (dc->length()>tp_.min_length_of_curves)
+      ecl.push_back((*edges)[i]);
   }
   tracks.input_curves_.push_back(ecl);
+  ecl.clear();
   // second image
-  
- 
 
   // compute the tracking/matching
   tracks.track();
   return;
-	
+
   // display curves
 
-   for (int i=0;i<tracks.get_output_size_at(0);++i)
+  for (int i=0;i<tracks.get_output_size_at(0);++i)
   {
     //vcl_cout<<'.';
-	bdgl_tracker_curve_sptr test_curve1=tracks.get_output_curve(0,i);
-	vdgl_digital_curve_sptr dc = bdgl_curve_algs::create_digital_curves
-								(test_curve1->desc->points_);
+    bdgl_tracker_curve_sptr test_curve1=tracks.get_output_curve(0,i);
+    vdgl_digital_curve_sptr dc = bdgl_curve_algs::create_digital_curves
+            (test_curve1->desc->points_);
 
     draw_colored_digital_curve(0,0, dc, test_curve1->match_id_ );
   }
   // frame 1
-  
- for (int i=0;i<tracks.get_output_size_at(1);++i)
+
+  for (int i=0;i<tracks.get_output_size_at(1);++i)
   {
     //vcl_cout<<'.';
-	bdgl_tracker_curve_sptr test_curve1=tracks.get_output_curve(0,i);
-	vdgl_digital_curve_sptr dc = bdgl_curve_algs::create_digital_curves
-								(test_curve1->desc->points_);
+    bdgl_tracker_curve_sptr test_curve1=tracks.get_output_curve(0,i);
+    vdgl_digital_curve_sptr dc = bdgl_curve_algs::create_digital_curves
+        (test_curve1->desc->points_);
 
     draw_colored_digital_curve(1,0, dc, test_curve1->match_id_ );
   }
-
-
-
-	
-
 }
 
 //-----------------------------------------------------------------------------
@@ -620,8 +601,8 @@ void bmvv_multiview_manager::draw_colored_digital_curve(unsigned col, unsigned r
   bgui_vtol2D_tableau_sptr btab = this->get_vtol2D_tableau_at(col,row);
   if (!btab)
   {
-      vcl_cout << "In bmvv_multiview_manager::track_edges() - null tableau\n";
-      return;
+    vcl_cout << "In bmvv_multiview_manager::track_edges() - null tableau\n";
+    return;
   }
   else
   {

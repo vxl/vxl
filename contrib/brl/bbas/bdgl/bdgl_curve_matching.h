@@ -30,13 +30,14 @@ class bdgl_curve_matching_params
   bdgl_curve_matching_params(){motion_in_pixels=0;no_of_top_choices=0;e_.set(0,0);}
   bdgl_curve_matching_params(int motion,int top_ranks)
   {
-	 motion_in_pixels=motion;
-	 no_of_top_choices=top_ranks;
-	e_.set(0,0);
+    motion_in_pixels=motion;
+    no_of_top_choices=top_ranks;
+    e_.set(0,0);
   }
 
   ~bdgl_curve_matching_params(){}
 };
+
 class bdgl_curve_matching
 {
  public:
@@ -44,15 +45,12 @@ class bdgl_curve_matching
   bdgl_curve_matching();
   // constructor initializing the estimated motion of object
   bdgl_curve_matching(bdgl_curve_matching_params & mp)
-    {
+  {
     motion_in_pixels_=mp.motion_in_pixels;
     no_of_top_choices_=mp.no_of_top_choices;
-	if(mp.e_.x()!=0 && mp.e_.y()!=0)
-	{
-		epipole_=mp.e_;
-	}
-
-   }
+    if (mp.e_.x()!=0 && mp.e_.y()!=0)
+      epipole_=mp.e_;
+  }
   ~bdgl_curve_matching(){}
 
   // takes two sets of curves and returns the best corresponding(matching) curves
@@ -63,7 +61,7 @@ class bdgl_curve_matching
  // candidates of curve-matching
   double coarse_match_DP(bdgl_curve_description * desc1,
                          bdgl_curve_description * desc2,
-						 vgl_point_2d<double> epi);
+                         vgl_point_2d<double> epi);
  // curve-matching algorithm
   double match_DP(bdgl_curve_description  * desc1,
                   bdgl_curve_description  * desc2,
@@ -71,7 +69,7 @@ class bdgl_curve_matching
                   vnl_matrix<double> & R,vnl_matrix<double> & T,
                   vnl_matrix<double> & Tbar,double & scale,
                   vcl_vector<int> & tail1,vcl_vector<int> & tail2,
-				  vgl_point_2d<double> &e);
+                  vgl_point_2d<double> &e);
 
   // compute the euclidean dist of  b using transformation of a
   double compute_euc_dist(bdgl_tracker_curve_sptr a,
@@ -81,8 +79,8 @@ class bdgl_curve_matching
                     vcl_vector<bdgl_tracker_curve_sptr> * old_curves);
 
   void best_matches_tc(vcl_vector<bdgl_tracker_curve_sptr> * current_curves,
-					   vcl_vector<bdgl_tracker_curve_sptr> * past_curves,
-					   vcl_vector<bdgl_tracker_curve_sptr> * future_curves);
+                       vcl_vector<bdgl_tracker_curve_sptr> * past_curves,
+                       vcl_vector<bdgl_tracker_curve_sptr> * future_curves);
  protected:
     // compute the best match of tail in previous curve
   void match_prev_tail_curve(bdgl_tracker_curve_sptr parent_curve,

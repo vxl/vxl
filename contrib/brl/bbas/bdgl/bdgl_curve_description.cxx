@@ -49,9 +49,9 @@ void bdgl_curve_description::init(vdgl_edgel_chain_sptr const& ec)
     points_.push_back(vgl_point_2d<double>(ed.get_x(),ed.get_y()));
     angles_.push_back(ed.get_theta());
     grad_.push_back(ed.get_grad());
-	if(j%10==0)
-		coarser_points_.push_back(vgl_point_2d<double>(ed.get_x(),ed.get_y()));
-	j++;
+    if (j%10==0)
+      coarser_points_.push_back(vgl_point_2d<double>(ed.get_x(),ed.get_y()));
+    j++;
     //vcl_cout<<"grad:("<<ed.get_grad()<<", "<<ed.get_theta()<<")\n";
   }
   center_.set( center_.x()/double(N) , center_.y()/double(N) );
