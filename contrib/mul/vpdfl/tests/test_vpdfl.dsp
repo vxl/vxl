@@ -84,7 +84,19 @@ LINK32=link.exe
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
-SOURCE=.\test_vpdfl.cxx
+SOURCE=.\test_axis_gaussian.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_driver.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_gaussian.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_mixture.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_pc_gaussian.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_include.cxx
