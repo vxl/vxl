@@ -1,11 +1,10 @@
 # v3p/mpeg2/CMakeLists.txt
-
 INCLUDE( ${MODULE_PATH}/FindMPEG2.cmake )
 
 IF( NOT VXL_USING_NATIVE_MPEG2 )
 
 
-OPTION(VXL_MPEG_USE_CONFIGURE "Should v3p/mpeg2 setup be done with configure (or cmake if NO)" YES)
+OPTION(VXL_MPEG_USE_CONFIGURE "Should v3p/mpeg2 setup be done with configure (or cmake if NO)" NO)
 MARK_AS_ADVANCED( VXL_MPEG_USE_CONFIGURE )
 
 IF( VXL_MPEG_USE_CONFIGURE )
