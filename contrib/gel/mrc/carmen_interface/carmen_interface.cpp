@@ -58,21 +58,21 @@
 //
 //--------------------------------------------------------------
 
-// -- Constructor
+//: Constructor
 carmen_interface::carmen_interface()
 {
   PerspectiveCamera::Enregister();
   _carmen = new Carmen;
 }
 
-// -- Destructor
+//: Destructor
 carmen_interface::~carmen_interface()
 {
   delete _carmen;
 }
 
 //-----------------------------------------------------------------------
-// -- intialize carmen
+//: intialize carmen
 void carmen_interface::set_carmen_camera(int view_no)
 {
   if(!_carmen)
@@ -85,7 +85,7 @@ void carmen_interface::set_carmen_camera(int view_no)
     }
 }
 //----------------------------------------------------------------------
-// -- add a full 3d correspondence to Carmen
+//: add a full 3d correspondence to Carmen
 //
 bool carmen_interface::add_full_correspondence(int view_no, int point_id,
                                                double x, double y, double z,
@@ -129,7 +129,7 @@ bool carmen_interface::add_full_correspondence(int view_no, int point_id,
   return stat;
 }
 //-------------------------------------------------------------------------
-// -- load a correspondence file
+//: load a correspondence file
 //
 bool carmen_interface::load_correspondence_file(const string& file_path)
 {
@@ -175,7 +175,7 @@ bool carmen_interface::load_correspondence_file(const string& file_path)
 }
 
 //-----------------------------------------------------------------------
-// -- solve for a perspective camera
+//: solve for a perspective camera
 //
 void carmen_interface::solve()
 {
@@ -193,14 +193,14 @@ void carmen_interface::solve()
 }
 
 //--------------------------------------------------------------------
-// -- save camera
+//: save camera
 //
 void carmen_interface::save_camera(const string& file_path)
 {
 }
 
 //--------------------------------------------------------------------
-// -- Print Carmen results
+//: Print Carmen results
 //
 void carmen_interface::print_results()
 {
