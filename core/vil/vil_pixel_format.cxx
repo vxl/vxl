@@ -1,14 +1,13 @@
 // This is mul/vil2/vil2_pixel_format.cxx
-
+#include "vil2_pixel_format.h"
 //:
 // \file
 // \author Ian Scott.
 
-#include "vil2_pixel_format.h"
-
+#include <vcl_cassert.h>
 
 static unsigned component_size[]={
-  0,                //  VIL2_PIXEL_FORMAT_UNSIGNED_INT
+  0,                //  VIL2_PIXEL_FORMAT_UNKNOWN
 
   sizeof(int),      //  VIL2_PIXEL_FORMAT_UNSIGNED_INT
   sizeof(int),      //  VIL2_PIXEL_FORMAT_SIGNED_INT
@@ -32,10 +31,8 @@ static unsigned component_size[]={
 };
 
 
-
-
 static unsigned num_components[]={
-  0,  //  VIL2_PIXEL_FORMAT_UNSIGNED_INT
+  0,  //  VIL2_PIXEL_FORMAT_UNKNOWN
 
   1,  //  VIL2_PIXEL_FORMAT_UNSIGNED_INT
   1,  //  VIL2_PIXEL_FORMAT_SIGNED_INT
