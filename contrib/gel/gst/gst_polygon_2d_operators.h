@@ -20,4 +20,9 @@
 //  difficult).
 vcl_vector<gst_polygon_2d_ref> gst_make_polygons_2d( const vcl_vector<gst_edge_2d_ref> edges);
 
+// Turn a list of edges into a list of polygons.  Each edge can only be used
+//   once, BUT orientation is not important.
+vcl_vector<gst_polygon_2d_ref> gst_make_polygons_2d_unoriented( const vcl_vector<gst_edge_2d_ref> edges);
+
+
 #endif

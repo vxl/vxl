@@ -7,6 +7,7 @@
   crossge@crd.ge.com
 */
 
+#include <vcl/vcl_iostream.h>
 #include <vbl/vbl_ref_count.h>
 
 #include <gst/gst_vertex_2d_ref.h>
@@ -20,6 +21,12 @@ public:
   gst_vertex_2d_ref get_start() const;
   gst_vertex_2d_ref get_end() const;
 
+  // operations
+  void flip();
+
+  // display
+  friend ostream &operator<<( ostream &os, gst_edge_2d &e);
+
 protected:
 
   gst_vertex_2d_ref start_;
@@ -27,6 +34,6 @@ protected:
 
 };
 
-
+ostream &operator<<( ostream &os, gst_edge_2d &e);
 
 #endif

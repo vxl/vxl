@@ -23,3 +23,17 @@ gst_vertex_2d_ref gst_edge_2d::get_end() const
 {
   return end_;
 }
+
+// operations
+void gst_edge_2d::flip()
+{
+  gst_vertex_2d_ref temp= start_;
+  start_= end_;
+  end_= temp;
+}
+
+// output
+ostream &operator<<( ostream &os, gst_edge_2d &e)
+{
+  return os << "<" << e.start_.ptr() << "," << e.end_.ptr() << ">";
+}

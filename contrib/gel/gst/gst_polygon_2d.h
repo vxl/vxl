@@ -7,6 +7,7 @@
   crossge@crd.ge.com
 */
 
+#include <vcl/vcl_iostream.h>
 #include <vcl/vcl_vector.h>
 #include <vbl/vbl_ref_count.h>
 #include <gst/gst_edge_2d_ref.h>
@@ -29,6 +30,12 @@ public:
   //                 if there is more than one possible cycle
   bool check_validity() const;
 
+  // useful computational accessors
+  bool inside( const gst_vertex_2d_ref v) const;
+
+  // output
+  friend ostream &operator<<( ostream &os, gst_polygon_2d &p);
+
 protected:
 
   // unordered, but oriented, list of edges
@@ -36,5 +43,6 @@ protected:
 
 };
 
+ostream &operator<<( ostream &os, gst_polygon_2d &p);
 
 #endif

@@ -48,3 +48,42 @@ bool gst_polygon_2d::check_validity() const
 
   return false;
 }
+
+// simple and efficient point in polygon test.
+//   from comp.graphics.algorithms faq
+//   should only call if validity passes (no check
+//   for efficiency)
+bool gst_polygon_2d::inside( const gst_vertex_2d_ref v) const
+{
+  bool c= false;
+
+  for( int i=0, j= edges_.size()-1; i< edges_.size(); j= i++)
+    {
+      if ((((edges_[i]->get_start()->get_y()<= v->get_y()) && 
+	    (v->get_y()< edges_[j]->get_start()->get_y())) ||
+	   ((edges_[j]->get_start()->get_y()<= v->get_y()) && 
+	    (v->get_y()< edges_[i]->get_start()->get_y()))) &&
+	  (v->get_x()< (edges_[j]->get_start()->get_x() - 
+			edges_[i]->get_start()->get_x()) * (v->get_y() - 
+							    edges_[i]->get_start()->get_y()) / 
+	   (edges_[j]->get_start()->get_y() - edges_[i]->get_start()->get_y()) + 
+	   edges_[i]->get_start()->get_x()))
+	{
+	  c=!c;
+	}
+      
+    }
+  
+  return c;
+}
+
+
+ostream &operator<<( ostream &os, gst_polygon_2d &p)
+{
+  for( int i=0; i< p.edges_.size(); i++)
+    {
+      os << (*p.edges_[i]) << " ";
+    }
+
+  return os << endl;
+}
