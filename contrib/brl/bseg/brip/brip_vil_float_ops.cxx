@@ -831,7 +831,7 @@ brip_vil_float_ops::Horn_SchunckMotion(vil_image_view<float> & current_frame,
 
   double err;
   double preverr = 0.0f;
-  double differr;
+  double differr = err_thresh+1;
   do {
     for (int y = 0; y<h; y++)
       for (int x = 0; x<w; x++)
@@ -862,7 +862,7 @@ brip_vil_float_ops::Horn_SchunckMotion(vil_image_view<float> & current_frame,
         vx(x,y) = tempx - (gx *  term);
         vy(x,y) = tempy - (gy *  term);
       }
-      vcl_cout << '\n' << count << '\n';
+    vcl_cout << '\n' << count << '\n';
 
     //Calc error term
 
@@ -883,7 +883,7 @@ brip_vil_float_ops::Horn_SchunckMotion(vil_image_view<float> & current_frame,
         //  vcl_cout << "err1:" << err << '\n';
         err += (alpha_coef*(vxx(x , y)*vxx(x , y) + 2* vxy(x , y)*vxy(x , y) + vyy(x , y)*vyy(x , y) ) );
         if (count != 0)
-        differr=vnl_math_abs(err-preverr)/preverr;
+          differr=vnl_math_abs(err-preverr)/preverr;
         else
           differr = 1.0f;
         ++count;
@@ -900,14 +900,14 @@ brip_vil_float_ops::Horn_SchunckMotion(vil_image_view<float> & current_frame,
         }
 #endif
       }
-      vcl_cout << "\nAmount of error " << err <<'\n';
+    vcl_cout << "\nAmount of error " << err <<'\n';
 
-      brip_vil_float_ops::fill_x_border(vx, 1, 0.0f);
-      brip_vil_float_ops::fill_y_border(vx, 1, 0.0f);
-      brip_vil_float_ops::fill_x_border(vy, 1, 0.0f);
-      brip_vil_float_ops::fill_y_border(vy, 1, 0.0f);
-      vcl_cout << "\nCompute Horn-Schunck in " << t.real() << " msecs.\n";
-      preverr = err;
+    brip_vil_float_ops::fill_x_border(vx, 1, 0.0f);
+    brip_vil_float_ops::fill_y_border(vx, 1, 0.0f);
+    brip_vil_float_ops::fill_x_border(vy, 1, 0.0f);
+    brip_vil_float_ops::fill_y_border(vy, 1, 0.0f);
+    vcl_cout << "\nCompute Horn-Schunck in " << t.real() << " msecs.\n";
+    preverr = err;
   }
   while (differr > err_thresh);
 
