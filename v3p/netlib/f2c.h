@@ -224,7 +224,9 @@ typedef doublereal E_f; /* real function with -R not specified */
 #undef u3b
 #undef u3b2
 #undef u3b5
+#ifndef como4301 /* Comeau C++ does not allow #undef of "unix" */
 #undef unix
+#endif
 #undef vax
 #endif
 #endif

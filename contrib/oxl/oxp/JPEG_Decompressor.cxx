@@ -7,6 +7,7 @@
 
 #include <vcl_fstream.h>
 #include <vil/vil_jpeglib.h>
+#include <vpl/vpl_fdopen.h>
 
 struct JPEG_DecompressorPrivates {
   jpeg_decompress_struct jinfo;
@@ -39,7 +40,7 @@ void JPEG_Decompressor::init(int fd)
   jpeg_create_decompress( &pd->jinfo);
 
   // read the header
-  pd->fileid = fdopen(fd, "r");
+  pd->fileid = vpl_fdopen(fd, "r");
   jpeg_stdio_src(&pd->jinfo, pd->fileid);
   jpeg_read_header( &pd->jinfo, TRUE);
   jpeg_start_decompress( &pd->jinfo);

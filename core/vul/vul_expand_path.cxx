@@ -8,7 +8,7 @@
 
 #include "vul_expand_path.h"
 
-#ifdef VCL_WIN32
+#if defined(VCL_WIN32) || defined(como4301)
 vcl_string vul_expand_path         (vcl_string path) { return path; }
 vcl_string vul_expand_path_uncached(vcl_string path) { return path; }
 #else

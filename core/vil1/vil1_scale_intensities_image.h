@@ -18,9 +18,10 @@ bool vil_scale_intensities_image(vil_image const &base, double scale, double shi
 
 template <class T> vil_decl(T);
 
-#ifdef VCL_KAI
+#if defined(VCL_KAI) || defined(VCL_COMO)
 template <typename T> struct vil_rgb;
 template <> vil_decl(vil_rgb<unsigned char>);
+template <> vil_decl(vil_rgb<unsigned short>);
 template <> vil_decl(vil_rgb<float>);
 template <> vil_decl(vil_rgb<double>);
 #endif

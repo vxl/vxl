@@ -100,12 +100,16 @@
 #  endif
 #endif
 
-#if defined(__KCC)
+#if defined(__KCC) // KAI compiler
 # define VCL_KAI
 #endif
 
-#if defined(__ICC)
+#if defined(__ICC) // Intel compiler?
 # define VCL_ICC
+#endif
+
+#if defined(como4301) // Comeau C/C++ 4.3.0.1
+# define VCL_COMO
 #endif
 
 

@@ -2,6 +2,8 @@
 
 SET( vpl_sources
   vpl.h         vpl.cxx
+  vpl_fdopen.h  vpl_fdopen.cxx
+  vpl_fileno.h  vpl_fileno.cxx
   vpl_mutex.h
 )
 

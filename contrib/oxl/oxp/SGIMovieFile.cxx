@@ -15,6 +15,7 @@
 #include <vul/vul_printf.h>
 #include <oxp/JPEG_Decompressor.h>
 #include <vxl_config.h>
+#include <vpl/vpl_fileno.h>
 
 /////////////////////////////////////////////////////////////////////////////
 static int get_u16(vcl_istream& f);
@@ -264,7 +265,7 @@ bool SGIMovieFile::GetFrame(int frame_index, void* buffer)
     // JPEG
     if (MovieFileInterface::verbose) vul_printf(vcl_cerr, "[JPEG %d @ %d ", frame_index, s);
 
-    JPEG_Decompressor jpeg(fileno(fp));
+    JPEG_Decompressor jpeg(vpl_fileno(fp));
     for (int i = 0; i < interlace_factor; ++i) {
       if (MovieFileInterface::verbose) vul_printf(vcl_cerr, "fld %d ", i);
       if (i > 0) jpeg.StartNextJPEG();

@@ -22,6 +22,15 @@
 #include <unistd.h>
 #endif
 
+#if defined(como4301) && defined(__linux__)
+# ifndef S_IFMT
+#  define S_IFMT 0170000
+# endif
+# ifndef S_IFDIR
+#  define S_IFDIR 0040000
+# endif
+#endif
+
 #include <vul/vul_user_info.h>
 
 vcl_string vul_file::get_cwd()

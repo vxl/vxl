@@ -188,7 +188,7 @@ class vul_arg_info_list
   void operator=(vul_arg_info_list const &) { }
 };
 
-#ifdef VCL_KAI
+#if defined(VCL_KAI) || defined(VCL_COMO)
 #define declare_specialization(T) \
 template<> void settype(vul_arg<T > &); \
 template<> void print_value(vcl_ostream &, vul_arg<T > const &); \
