@@ -66,7 +66,7 @@
 # endif
 #   define __THROW_BAD_ALLOC throw bad_alloc()
 #elif !defined(__THROW_BAD_ALLOC)
-#   include <iostream.h>
+#   include <vcl/vcl_iostream.h>
 #   define __THROW_BAD_ALLOC cerr << "out of memory" << endl; exit(1)
 #endif
 

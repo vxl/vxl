@@ -41,8 +41,8 @@
 #define vcl_emulation_iterator_h
 
 #include <stddef.h>
-#include <iostream.h>
-#include <vcl/emulation/vcl_functional.h>
+#include <vcl/vcl_iostream.h>
+#include "vcl_functional.h"
 
 #include <vcl/vcl_compiler.h>	// for configuration macros
 
