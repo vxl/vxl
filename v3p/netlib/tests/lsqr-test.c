@@ -599,13 +599,12 @@ L900:
     s_wsfe(&io___55);
     do_fio(&c__1, (char *)&ltotal, (ftnlen)sizeof(integer));
     e_wsfe();
-/*     End of TEST */
 } /* test_ */
 
 /*     ------------- */
 /*     Main program. */
 /*     ------------- */
-/* Main program */ main()
+/* Main program */ int main()
 {
     /* Builtin functions */
     /* Subroutine */ void s_stop();
@@ -627,9 +626,8 @@ L900:
     test_(&c__40, &c__40, &c__4, &c__4, &damp2);
     test_(&c__80, &c__40, &c__4, &c__4, &damp2);
     return 0;
-    //    s_stop("", 0L);
-/*     End of main program for testing LSQR */
-} /* main */
+ /* s_stop("", 0L); */
+} /* End of main program for testing LSQR */
 
 int abort();
 
@@ -639,7 +637,7 @@ int abort();
 {
   int i;
   if (*fp !=1) { printf("Unable to output\n"); abort();}
-//  FILE* f = fdopen(*fp, "w");
+/*  FILE* f = fdopen(*fp, "w"); */
   if (len==sizeof(integer))
     printf( "%d\n", *((integer*)buf));
   else if (len==sizeof(doublereal))
