@@ -238,7 +238,6 @@ gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian)
   vnl_double_3x3  H;
   h2H( x, H );
 
-  vnl_double_3 homo;
   vnl_double_2x2 pu_pd;
   vnl_double_2 pu_k1_from;
   vnl_double_2x2 qu_pu;
