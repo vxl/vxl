@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_math.cxx
+// This is core/vnl/vnl_math.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -133,7 +133,7 @@ bool vnl_math_isnan(long double x) {
 // macro called 'isinf'.
 #if defined(isinf)
 # if defined(__GNUC__) || defined(VCL_METRO_WERKS)
-// I dont know if MW accepts #warning. Comment out the #undef if not.
+// I do not know if MW accepts #warning. Comment out the #undef if not.
 #  warning macro isinf is defined
 #  undef isinf
 # else
