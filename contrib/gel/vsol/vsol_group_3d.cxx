@@ -107,7 +107,7 @@ void vsol_group_3d::compute_bounding_box(void)
     if ((*i)->get_max_y()>ymax) ymax=(*i)->get_max_y();
     if ((*i)->get_max_z()>zmax) zmax=(*i)->get_max_z();
   }
-  if (bounding_box_==0)
+  if (!bounding_box_)
     bounding_box_=new vsol_box_3d;
   bounding_box_->set_min_x(xmin);
   bounding_box_->set_max_x(xmax);

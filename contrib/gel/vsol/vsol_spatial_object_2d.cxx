@@ -61,8 +61,6 @@ vsol_spatial_object_2d::vsol_spatial_object_2d(const vsol_spatial_object_2d &oth
 
 vsol_spatial_object_2d::~vsol_spatial_object_2d()
 {
-  if (bounding_box_)
-    bounding_box_->unref();
 }
 
 int vsol_spatial_object_2d::not_applicable(const vcl_string &message) const
@@ -167,14 +165,14 @@ vsol_spatial_object_2d::Shear(float )
 //---------------------------------------------------------------------------
 void vsol_spatial_object_2d::compute_bounding_box(void)
 {
-  if (bounding_box_==0)
+  if (!bounding_box_)
     bounding_box_ = new vsol_box_2d;
   bounding_box_->touch();
 }
 
 void vsol_spatial_object_2d::grow_minmax_bounds(vsol_box_2d & comp_box)
 {
-  if (bounding_box_==0)
+  if (!bounding_box_)
     bounding_box_=new vsol_box_2d;
   bounding_box_->grow_minmax_bounds(comp_box);
 }

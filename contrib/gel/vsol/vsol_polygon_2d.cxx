@@ -137,7 +137,7 @@ void vsol_polygon_2d::compute_bounding_box(void)
        else if (y>ymax) ymax=y;
     }
 
-  if (bounding_box_==0)
+  if (!bounding_box_)
     bounding_box_=new vsol_box_2d;
   bounding_box_->set_min_x(xmin);
   bounding_box_->set_max_x(xmax);

@@ -40,6 +40,7 @@ class vsol_spatial_object_2d;
 #include <vul/vul_timestamp.h>
 #include <vbl/vbl_ref_count.h>
 #include <vsol/vsol_box_2d.h>
+#include <vsol/vsol_box_2d_sptr.h>
 #include <vcl_vector.h>
 class vsol_curve_2d;
 class vsol_region_2d;
@@ -90,7 +91,7 @@ public:
   static const float eps;
 protected:
 
-  vsol_box_2d *bounding_box_; // bounding volume
+  vsol_box_2d_sptr bounding_box_; // bounding volume
   unsigned int tag_; // for the COOL containers.
   int id_;
   static int tagcount_;// global count of all spatial objects.
@@ -117,7 +118,7 @@ public:
   virtual void compute_bounding_box(void);
 
   //: get bounding box
-  inline virtual vsol_box_2d *get_bounding_box(void);
+  inline virtual vsol_box_2d_sptr get_bounding_box(void);
 
   //: get id
   inline int get_id(void) const { return id_; }
@@ -320,7 +321,7 @@ inline void vsol_spatial_object_2d::set_tag_id(int id)
 
 inline void vsol_spatial_object_2d::check_update_bounding_box(void)  // Test consistency of bound
 {
-  if (bounding_box_==0)
+  if (!bounding_box_)
     {
       bounding_box_ = new vsol_box_2d;
       this->compute_bounding_box();
@@ -334,7 +335,7 @@ inline void vsol_spatial_object_2d::check_update_bounding_box(void)  // Test con
     }
 }
 
-inline vsol_box_2d *vsol_spatial_object_2d::get_bounding_box(void)
+inline vsol_box_2d_sptr vsol_spatial_object_2d::get_bounding_box(void)
 {
   this->check_update_bounding_box();
   return bounding_box_;

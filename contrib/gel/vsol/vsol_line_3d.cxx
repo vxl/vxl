@@ -158,7 +158,7 @@ void vsol_line_3d::compute_bounding_box(void)
   if      (p1_->z()<zmin) zmin=p1_->z();
   else if (p1_->z()>zmax) zmax=p1_->z();
 
-  if (bounding_box_==0)
+  if (!bounding_box_)
     bounding_box_=new vsol_box_3d;
   bounding_box_->set_min_x(xmin);
   bounding_box_->set_max_x(xmax);

@@ -103,7 +103,7 @@ void vsol_group_2d::compute_bounding_box(void)
     if ((*i)->get_max_x()>xmax) xmax=(*i)->get_max_x();
     if ((*i)->get_max_y()>ymax) ymax=(*i)->get_max_y();
   }
-  if (bounding_box_==0)
+  if (!bounding_box_)
     bounding_box_=new vsol_box_2d;
   bounding_box_->set_min_x(xmin);
   bounding_box_->set_max_x(xmax);

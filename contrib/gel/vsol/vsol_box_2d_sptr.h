@@ -17,7 +17,7 @@ class vsol_box_2d;
 // External declarations for values
 //*****************************************************************************
 #include <vbl/vbl_smart_ptr.h>
-
+class vsol_box_2d;
 typedef vbl_smart_ptr<vsol_box_2d> vsol_box_2d_sptr;
 
 #endif // #ifndef VSOL_BOX_2D_REF_H

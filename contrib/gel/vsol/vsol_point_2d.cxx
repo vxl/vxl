@@ -68,7 +68,7 @@ vsol_point_2d::spatial_type(void) const
 //---------------------------------------------------------------------------
 void vsol_point_2d::compute_bounding_box(void)
 {
-  if (bounding_box_==0)
+  if (!bounding_box_)
     bounding_box_=new vsol_box_2d;
   bounding_box_->set_min_x(p_.x());
   bounding_box_->set_max_x(p_.x());

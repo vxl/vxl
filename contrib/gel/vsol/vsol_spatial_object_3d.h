@@ -36,6 +36,7 @@
 #include <vcl_iostream.h>
 #include <vul/vul_timestamp.h>
 #include <vbl/vbl_ref_count.h>
+#include <vsol/vsol_box_3d_sptr.h>
 #include <vsol/vsol_box_3d.h>
 #include <vcl_vector.h>
 class vsol_curve_3d;
@@ -92,7 +93,7 @@ public:
 
 protected:
 
-  vsol_box_3d *bounding_box_; // bounding volume
+  vsol_box_3d_sptr bounding_box_; // bounding volume
   unsigned int  tag_;         // for the COOL containers.
   int           id_;
   static int    tagcount_;    // global count of all spatial objects.
@@ -122,7 +123,7 @@ public:
 
   inline virtual void compute_bounding_box(void);
 
-  vsol_box_3d *get_bounding_box(void);
+  vsol_box_3d_sptr get_bounding_box(void);
 
   //: get set id of objects
 
@@ -342,7 +343,7 @@ inline vsol_spatial_object_3d::vsol_spatial_object_3d(vsol_spatial_object_3d con
 
 inline void vsol_spatial_object_3d::compute_bounding_box(void)   //Does nothing in this case
 {
-  if (bounding_box_==0)
+  if (!bounding_box_)
     bounding_box_=new vsol_box_3d();
   bounding_box_->touch();
 }
@@ -355,7 +356,7 @@ inline void vsol_spatial_object_3d::compute_bounding_box(void)   //Does nothing 
 
 inline void vsol_spatial_object_3d::check_update_bounding_box(void)  // Test consistency of bound
 {
-  if (bounding_box_==0)
+  if (!bounding_box_)
     {
       bounding_box_=new vsol_box_3d;
       this->compute_bounding_box();
@@ -369,7 +370,7 @@ inline void vsol_spatial_object_3d::check_update_bounding_box(void)  // Test con
     }
 }
 
-inline vsol_box_3d *vsol_spatial_object_3d::get_bounding_box(void)
+inline vsol_box_3d_sptr vsol_spatial_object_3d::get_bounding_box(void)
 {
   this->check_update_bounding_box();
   return bounding_box_;
@@ -427,35 +428,35 @@ inline double vsol_spatial_object_3d::get_max_z(void)
 
 inline void vsol_spatial_object_3d::set_min_x(double xmin)
 {
-  if (bounding_box_==0)
+  if (!bounding_box_)
     bounding_box_=new vsol_box_3d();
   bounding_box_->set_min_x(xmin);
 }
 
 inline void vsol_spatial_object_3d::set_max_x(double xmax)
 {
-  if (bounding_box_==0)
+  if (!bounding_box_)
     bounding_box_=new vsol_box_3d();
   bounding_box_->set_max_x(xmax);
 }
 
 inline void vsol_spatial_object_3d::set_min_y(double ymin)
 {
-  if (bounding_box_==0)
+  if (!bounding_box_)
     bounding_box_=new vsol_box_3d();
   bounding_box_->set_min_y(ymin);
 }
 
 inline void vsol_spatial_object_3d::set_max_y(double ymax)
 {
-  if (bounding_box_==0)
+  if (!bounding_box_)
     bounding_box_=new vsol_box_3d();
   bounding_box_->set_max_y(ymax);
 }
 
 inline void vsol_spatial_object_3d::set_min_z(double zmin)
 {
-  if (bounding_box_==0)
+  if (!bounding_box_)
     bounding_box_=new vsol_box_3d();
   bounding_box_->set_min_z(zmin);
 }
@@ -463,7 +464,7 @@ inline void vsol_spatial_object_3d::set_min_z(double zmin)
 
 inline void vsol_spatial_object_3d::set_max_z(double zmax)
 {
-  if (bounding_box_==0)
+  if (!bounding_box_)
     bounding_box_=new vsol_box_3d();
   bounding_box_->set_max_z(zmax);
 }

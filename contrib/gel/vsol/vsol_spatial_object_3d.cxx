@@ -38,8 +38,6 @@ void vsol_spatial_object_3d::protected_destroy()
 
 vsol_spatial_object_3d::~vsol_spatial_object_3d()
 {
-  if (bounding_box_)
-    bounding_box_->unref();
 }
 
 
@@ -136,7 +134,7 @@ vsol_spatial_object_3d::Shear(float )
 
 void vsol_spatial_object_3d::grow_minmax_bounds(vsol_box_3d & comp_box)
 {
-  if (bounding_box_==0)
+  if (!bounding_box_)
     bounding_box_=new vsol_box_3d;
   bounding_box_->grow_minmax_bounds(comp_box);
 }

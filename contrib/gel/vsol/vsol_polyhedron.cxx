@@ -101,7 +101,7 @@ void vsol_polyhedron::compute_bounding_box(void)
     else if (z>zmax) zmax=z;
   }
 
-  if (bounding_box_==0)
+  if (!bounding_box_)
     bounding_box_ = new vsol_box_3d;
   bounding_box_->set_min_x(xmin);
   bounding_box_->set_max_x(xmax);
