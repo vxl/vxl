@@ -6,7 +6,7 @@
 #include <vsol/vsol_point_2d.h>
 #include <vcl_iostream.h>
 #include <vgl/vgl_vector_2d.h>
-#include <vgl/vgl_distance.h>
+#include <vgl/vgl_closest_point.h>
 #include <vsl/vsl_vector_io.h>
 #include <vcl_cmath.h>
 
@@ -157,7 +157,7 @@ bool vsol_digital_curve_2d::operator==(const vsol_spatial_object_2d& obj) const
 {
   return
    obj.spatial_type() == vsol_spatial_object_2d::CURVE &&
-   ((vsol_curve_2d const&)obj).curve_type() == vsol_curve_2d::DIGITAL
+   ((vsol_curve_2d const&)obj).curve_type() == vsol_curve_2d::DIGITAL_CURVE
   ? *this == (vsol_digital_curve_2d const&) (vsol_digital_curve_2d const&) obj
   : false;
 }
@@ -310,39 +310,20 @@ void vsol_digital_curve_2d::describe(vcl_ostream &strm, int blanking) const
 }
 
 
-//: Return the floating point index of the point on the curve nearest to \p point
+//: Return the floating point index of the point on the curve nearest to \p pt
 double closest_index(const vgl_point_2d<double>& pt,
                      const vsol_digital_curve_2d_sptr& curve)
 {
-  int index = 0;
-  const int n = curve->size();
-  double x1=curve->point(0)->x(),  y1=curve->point(0)->y(),
-         x2=curve->point(1)->x(),  y2=curve->point(1)->y();
-  double d = vgl_distance2_to_linesegment(x1,y1,x2,y2,pt.x(),pt.y());
-
-  // find the closest line segment of on the curve
-  for (int i=1; i<n-1; ++i)
-  {
-    x1=curve->point(i)->x();   y1=curve->point(i)->y(),
-    x2=curve->point(i+1)->x(); y2=curve->point(i+1)->y();
-
-    // skip duplicate points
-    if (x1 == x2 && y1 == y2)
-      continue;
-
-    double e = vgl_distance2_to_linesegment(x1,y1,x2,y2,pt.x(),pt.y());
-    if (e < d) { d=e; index = i;}
-  }
-
-  // find the closest point on the closest line segment
-  vgl_vector_2d<double> v1 = curve->point(index+1)->get_p() - curve->point(index)->get_p();
-  vgl_vector_2d<double> v2 = pt - curve->point(index)->get_p();
-  // project the point onto the line segment
-  double fraction = dot_product(normalized(v1),v2) / v1.length();
-  if (fraction < 0.0) fraction = 0.0;
-  if (fraction > 1.0) fraction = 1.0;
-
-  return (double)index + fraction;
+  const unsigned int n = curve->size();
+  double *px = new double[n], *py = new double[n];
+  for (unsigned int i=0; i<n; ++i)
+    px[i]=curve->point(i)->x(), py[i]=curve->point(i)->y();
+  double x, y;
+  int index=vgl_closest_point_to_non_closed_polygon(x,y,px,py,n,pt.x(),pt.y());
+  double dx = px[index+1]-px[index], dy = py[index+1]-py[index];
+  double f = dx==0 ? (dy==0 ? 0.5 : (y-py[index])/dy) : (x-px[index])/dx;
+  delete [] px; delete[] py;
+  return f + index;
 }
 
 
