@@ -147,8 +147,9 @@ similarity_from_matches::weighted_least_squares_fit( vnl_vector<double>& params,
     Xi( 0, 1 ) = -Xi(1, 0 );
 
     // vcl_cout << "Xi = " << Xi << vcl_endl;
-    wXtX += (*weights)[i] * Xi.transpose() * Xi;
-    wXtu += (*weights)[i] * Xi.transpose() * matches_[i].to_loc_;
+    double wt = (*weights)[i];
+    wXtX += wt * Xi.transpose() * Xi;
+    wXtu += wt * Xi.transpose() * matches_[i].to_loc_;
   }
 
   // vcl_cout << "wXtX matrix = " << wXtX << '\n'
