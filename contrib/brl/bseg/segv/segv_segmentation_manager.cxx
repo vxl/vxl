@@ -46,6 +46,7 @@
 #include <vsol/vsol_curve_2d_sptr.h>
 #include <vtol/vtol_one_chain_sptr.h>
 #include <vtol/vtol_one_chain.h>
+#include <vtol/vtol_intensity_face.h>
 #include <bgui/bgui_vtol2D_tableau.h>
 #include <gevd/gevd_float_operators.h>
 #include <brip/brip_float_ops.h>
