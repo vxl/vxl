@@ -1553,7 +1553,8 @@ void test_homography2d()
         est_param[i*3+j] = est_H(i,j);
     est_param /= est_param.two_norm();
     vcl_cout<<"Estimated H = "<<est_param<<vcl_endl;
-    TEST("Estimation of Projective xform", (est_param-true_param).two_norm() <tol, true);
+    TEST("Estimation of Projective xform", (est_param-true_param).two_norm() <tol ||
+                                           (est_param+true_param).two_norm() <tol, true);
 
     // Test inverse_mapping
     bool initialize_next = false;
