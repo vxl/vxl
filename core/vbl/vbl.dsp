@@ -298,11 +298,6 @@ SOURCE=.\vbl_shared_pointer.cxx
 SOURCE=.\vbl_sort.cxx
 
 # End Source File
-# Begin Source File
-
-SOURCE=.\vbl_test.cxx
-
-# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -429,11 +424,6 @@ SOURCE=.\vbl_qsort.h
 # Begin Source File
 
 SOURCE=.\vbl_ref_count.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vbl_test.h
 
 # End Source File
 # Begin Source File
