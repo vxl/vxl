@@ -37,6 +37,8 @@ void mil_convert_image_2d(mil_image_2d_of<float>& dest,
 			d_row += dystep;
 		}
 	}
+
+	dest.setWorld2im(src.world2im());
 }
 
 //: Copys src_im (of float) into dest_im (of byte)
@@ -81,6 +83,9 @@ void mil_convert_image_2d(mil_image_2d_of<vil_byte>& dest,
 			d_row += dystep;
 		}
 	}
+
+	dest.setWorld2im(src.world2im());
+
 }
 
 
