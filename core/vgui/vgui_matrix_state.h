@@ -6,13 +6,13 @@
 // \author  fsm
 // \brief   Stores and retrieves the current projection and modelview matrices.
 //
-//  Contains classes:  vgui_matrix_state
+//  Contains class vgui_matrix_state
 //
 // \verbatim
 //  Modifications
-//    AWF Renamed store, and made it save and restore on
-//        construction/desctruction.
-//    FSM Renamed method names for consistency with projection_inspector.
+//   AWF Renamed store, and made it save and restore on
+//       construction/destruction.
+//   FSM Renamed method names for consistency with projection_inspector.
 // \endverbatim
 
 #include <vcl_iosfwd.h>
