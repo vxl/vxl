@@ -62,6 +62,7 @@ SET( rgrl_sources
   rgrl_trans_quadratic.h               rgrl_trans_quadratic.cxx
   rgrl_trans_reduced_quad.h            rgrl_trans_reduced_quad.cxx
   rgrl_trans_homography2d.h            rgrl_trans_homography2d.cxx
+  rgrl_trans_rad_dis_homo2d.h          rgrl_trans_rad_dis_homo2d.cxx
   rgrl_trans_reader.h                  rgrl_trans_reader.cxx
 
   rgrl_estimator.h                     rgrl_estimator.cxx            
@@ -74,7 +75,8 @@ SET( rgrl_sources
   rgrl_est_quadratic.h                 rgrl_est_quadratic.cxx
   rgrl_est_reduced_quad2d.h            rgrl_est_reduced_quad2d.cxx
   rgrl_est_homography2d.h              rgrl_est_homography2d.cxx
-  rgrl_est_homo2d_lm.h                rgrl_est_homo2d_lm.cxx
+  rgrl_est_homo2d_lm.h                 rgrl_est_homo2d_lm.cxx
+  rgrl_est_dis_homo2d_lm.h             rgrl_est_dis_homo2d_lm.cxx
                                      
   rgrl_scale.h                         rgrl_scale.cxx                
   rgrl_scale_sptr.h

@@ -11,6 +11,7 @@
 #include <rgrl/rgrl_trans_reduced_quad.h>
 #include <rgrl/rgrl_trans_quadratic.h>
 #include <rgrl/rgrl_trans_homography2d.h>
+#include <rgrl/rgrl_trans_rad_dis_homo2d.h>
 #include <rgrl/rgrl_trans_rigid.h>
 #include <rgrl/rgrl_trans_spline.h>
 #include <rgrl/rgrl_util.h>
@@ -58,6 +59,7 @@ rgrl_trans_reader( vcl_istream& is )
   READ_THIS_TRANSFORMATION("QUADRATIC", rgrl_trans_quadratic)
   READ_THIS_TRANSFORMATION("BSPLINE", rgrl_trans_spline)
   READ_THIS_TRANSFORMATION("HOMOGRAPHY2D", rgrl_trans_homography2d)
+  READ_THIS_TRANSFORMATION("HOMOGRAPHY2D_WITH_RADIAL_DISTORTION", rgrl_trans_rad_dis_homo2d)
 
   // default, should never reach here
   vcl_cout<< "WARNING: " << RGRL_HERE << " ( line "
