@@ -23,11 +23,6 @@
 #include <vidl/vidl_io.h>
 #include <vidl/vidl_avicodec.h>
 
-#ifdef HAS_MFC
-# include <vgui/impl/mfc/vgui_mfc_app_init.h>
-vgui_mfc_app_init theAppinit;
-#endif
-
 class xcv_tableau : public vgui_grid_tableau
 {
 public:
