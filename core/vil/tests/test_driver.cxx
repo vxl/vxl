@@ -41,6 +41,8 @@ DECLARE( test_suppress_non_max );
 void
 register_tests()
 {
+
+  REGISTER( test_image_view_maths );
   REGISTER( test_vil1 );
   REGISTER( test_convert );
   REGISTER( test_pixel_format );
@@ -64,7 +66,6 @@ register_tests()
   REGISTER( test_algo_exp_filter_1d );
   REGISTER( test_algo_gauss_filter );
   REGISTER( test_algo_exp_grad_filter_1d );
-  REGISTER( test_image_view_maths );
   REGISTER( test_memory_chunk );
   REGISTER( test_binary_dilate );
   REGISTER( test_binary_erode );
@@ -78,6 +79,7 @@ register_tests()
   REGISTER( test_algo_find_4con_boundary );
   REGISTER( test_algo_fft );
   REGISTER( test_suppress_non_max );
+
 }
 
 DEFINE_MAIN;
