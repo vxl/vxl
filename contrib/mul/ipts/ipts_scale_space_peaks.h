@@ -9,6 +9,7 @@
 #include <vimt/algo/vimt_find_peaks.h>
 #include <vgl/vgl_point_3d.h>
 #include <vimt/vimt_image_pyramid.h>
+#include <vcl_cmath.h> // for sqrt(double)
 
 //: True if value is strictly above *im and its 8 neighbours
 template <class T>
