@@ -85,9 +85,9 @@ inline void vimt_find_world_peaks_3x3(vcl_vector<vgl_point_2d<double> >& peak_po
     const T* pixel = row;
     for (unsigned i=1;i<ni;++i,pixel+=istep)
       if (vimt_is_peak_3x3(pixel,istep,jstep))
-	  {
-	    peak_pos.push_back(im2w(i,j));
-		peak_value.push_back(*pixel);
+      {
+        peak_pos.push_back(im2w(i,j));
+        peak_value.push_back(*pixel);
       }
   }
 }
