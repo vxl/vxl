@@ -57,6 +57,7 @@ TESTS += test_algo_line_filter.cxx
 TESTS += test_algo_threshold.cxx
 TESTS += test_algo_grid_merge.cxx
 TESTS += test_algo_find_4con_boundary.cxx
+TESTS += test_algo_fft.cxx
 
 #MINI_PROG_SOURCES += vil2_mil_gauss_general_timings.cxx
 #MINI_PROG_SOURCES += vil2_vil_compare_access_timings.cxx

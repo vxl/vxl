@@ -20,6 +20,7 @@ MINI_PROG_SOURCES += vil2_correlate_grad_tool.cxx
 MINI_PROG_SOURCES += vil2_exp_grad_filter_tool.cxx
 MINI_PROG_SOURCES += vil2_image_copy.cxx
 MINI_PROG_SOURCES += example_interpolate.cxx
+MINI_PROG_SOURCES += example_complex.cxx
 
 ################################
 include ${IUEROOT}/config/top.mk
