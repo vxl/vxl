@@ -3,6 +3,7 @@
 //:
 // \file
 #include <vcl_cstdlib.h>   // for vcl_abs(int) and vcl_qsort()
+#include <vsol/vsol_line_2d.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
 #include <vdgl/vdgl_digital_curve.h>
@@ -68,7 +69,10 @@ bool sdet_fit_lines::fit_lines()
       vcl_vector<vgl_line_segment_2d<double> >& segs = fitter_.get_line_segs();
       for(vcl_vector<vgl_line_segment_2d<double> >::iterator sit=segs.begin();
           sit != segs.end(); sit++)
-        line_segs_.push_back(*sit);
+        {
+          vsol_line_2d_sptr line = new vsol_line_2d(*sit);
+          line_segs_.push_back(line);
+        }
     }
   segs_valid_ = true;
   return true;
@@ -76,7 +80,7 @@ bool sdet_fit_lines::fit_lines()
 //-------------------------------------------------------------------------
 //: Get the line segments
 //
-vcl_vector<vgl_line_segment_2d<double> >& sdet_fit_lines::get_line_segs()
+vcl_vector<vsol_line_2d_sptr>& sdet_fit_lines::get_line_segs()
 {
   if(segs_valid_)
     return line_segs_;
