@@ -99,161 +99,94 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+vdgl_digital_curve-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+vdgl_edgel_chain-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vbl_smart_ptr+vdgl_interpolator-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_vector+vdgl_edgel-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vdgl_OrthogRegress.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vdgl_digital_curve.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vdgl_digital_region.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vdgl_edgel.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vdgl_edgel_chain.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vdgl_fit_line.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vdgl_interpolator.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vdgl_interpolator_cubic.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vdgl_interpolator_linear.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vdgl_ortho_regress.cxx
-
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
 # Begin Source File
-
 SOURCE=.\vdgl_OrthogRegress.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vdgl_digital_curve.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vdgl_digital_region.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vdgl_edgel.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vdgl_edgel_chain.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vdgl_fit_line.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vdgl_interpolator.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vdgl_interpolator_cubic.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vdgl_interpolator_linear.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vdgl_ortho_regress.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vdgl_digital_curve_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vdgl_edgel_chain_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vdgl_interpolator_sptr.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vdgl_digital_region_sptr.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vdgl_intensity_face.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vdgl_intensity_face_sptr.h
-
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project
-
