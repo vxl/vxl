@@ -25,4 +25,22 @@ double vnl_sample_normal(double mean, double sigma);
 // P(X = k) = [kth term in binomial expansion of (p + (1-p))^n]
 //int vnl_sample_binomial(int n, int k, double p);
 
+// ----------------------------------------
+
+//: handy function to fill a range of values.
+template <class I>
+inline void vnl_sample_uniform(I begin, I end, double a, double b)
+{
+  for (I p=begin; p!=end; ++p)
+    (*p) = vnl_sample_uniform(a, b);
+}
+
+//: handy function to fill a range of values.
+template <class I>
+inline void vnl_sample_normal(I begin, I end, double mean, double sigma)
+{
+  for (I p=begin; p!=end; ++p)
+    (*p) = vnl_sample_normal(mean, sigma);
+}
+
 #endif // vnl_sample_h_
