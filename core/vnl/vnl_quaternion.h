@@ -109,6 +109,7 @@ public:
 
  //: 3x3 rotation matrix
   vnl_matrix_fixed<T,3,3> rotation_matrix () const;
+  vnl_matrix_fixed<T,3,3> rotation_matrix_transpose () const { return rotation_matrix().transpose(); }
 
  //: 4x4 rotation matrix
   vnl_matrix_fixed<T,4,4> rotation_matrix_4 () const;
