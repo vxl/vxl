@@ -100,6 +100,11 @@ LIB32=link.exe -lib
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\vnl_io_bignum.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\Templates/vnl_io_diag_matrix+double-.cxx
 
 # End Source File
@@ -271,6 +276,11 @@ SOURCE=.\vnl_io_real_polynomial.cxx
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\vnl_io_bignum.h
+
+# End Source File
 # Begin Source File
 
 SOURCE=.\vnl_io_diag_matrix.h
