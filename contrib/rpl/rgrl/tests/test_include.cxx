@@ -75,6 +75,7 @@
 #include <rgrl/rgrl_matcher_fixed.h>
 #include <rgrl/rgrl_matcher_k_nearest.h>
 #include <rgrl/rgrl_matcher_k_nearest_boundary.h>
+#include <rgrl/rgrl_matcher_k_nearest_pick_one.h>
 #include <rgrl/rgrl_matcher_k_nearest_random.h>
 #include <rgrl/rgrl_matcher_pseudo.h>
 #include <rgrl/rgrl_matcher_pseudo_3d.h>
