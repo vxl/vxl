@@ -62,10 +62,8 @@
 #include <vil/vil_byte.h>
 #include <vnl/vnl_math.h>     // for sqrt(2)
 
-#include <vdgl/vdgl_digital_curve_sptr.h>
-#include <vdgl/vdgl_edgel_chain_sptr.h>
-#include <vdgl/vdgl_interpolator_sptr.h>
-#include <vdgl/vdgl_interpolator.h>
+#include <vdgl/vdgl_digital_curve.h>
+#include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_interpolator_linear.h>
 
 #include "gevd_float_operators.h"
