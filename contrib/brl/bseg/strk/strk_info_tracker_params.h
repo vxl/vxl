@@ -23,8 +23,10 @@ class strk_info_tracker_params : public gevd_param_mixin
                            const float sigma = 1.0,
                            const bool gradient_info = true,
                            const bool color_info = false,
-                           const float min_gradient = 5,
-                           const float parzen_sigma = 1,
+                           const float min_gradient = 0,
+                           const float parzen_sigma = 0,
+                           const bool use_background = false,
+                           const bool renyi_joint_entropy = false,
                            const bool verbose = false,
                            const bool debug = false
                           );
@@ -45,6 +47,8 @@ class strk_info_tracker_params : public gevd_param_mixin
                  bool color_info,
                  float min_gradient,
                  float parzen_sigma,
+                 bool use_background,
+                 bool renyi_joint_entropy,
                  bool verbose,
                  bool debug
                 );
@@ -61,6 +65,8 @@ class strk_info_tracker_params : public gevd_param_mixin
   bool color_info_;        //!< Combine color and intensity info
   float min_gradient_;     //!< minimum gradient magnitude to be considered
   float parzen_sigma_;     //!< smoothing for the histogram density
+  bool use_background_;    //!< employ a background model 
+  bool renyi_joint_entropy_; //!< use renyi entropy for joint distributions
   bool verbose_;           //!< informative messages to cout
   bool debug_;             //!< informative debug messages to cout
 };

@@ -24,6 +24,8 @@ strk_info_tracker_params(const strk_info_tracker_params& tp)
              tp.color_info_,
              tp.min_gradient_,
              tp.parzen_sigma_,
+             tp.use_background_,
+             tp.renyi_joint_entropy_,
              tp.verbose_,
              tp.debug_
              );
@@ -39,6 +41,8 @@ strk_info_tracker_params(const int n_samples,
                          const bool color_info,
                          const float min_gradient,
                          const float parzen_sigma,
+                         const bool use_background,
+                         const bool renyi_joint_entropy,
                          const bool verbose,
                          const bool debug)
 {
@@ -51,6 +55,8 @@ strk_info_tracker_params(const int n_samples,
              color_info,
              min_gradient,
              parzen_sigma,
+             use_background,
+             renyi_joint_entropy,
              verbose,
              debug);
 }
@@ -64,6 +70,8 @@ void strk_info_tracker_params::InitParams(int n_samples,
                                           bool color_info,
                                           float min_gradient,
                                           float parzen_sigma,
+                                          bool use_background,
+                                          bool renyi_joint_entropy,
                                           bool verbose,
                                           bool debug)
 {
@@ -76,6 +84,8 @@ void strk_info_tracker_params::InitParams(int n_samples,
   color_info_ = color_info;
   min_gradient_ = min_gradient;
   parzen_sigma_ = parzen_sigma;
+  use_background_ =   use_background;
+  renyi_joint_entropy_ = renyi_joint_entropy;
   verbose_ = verbose;
   debug_ = debug;
 }
@@ -99,18 +109,20 @@ bool strk_info_tracker_params::SanityCheck()
 
 vcl_ostream& operator << (vcl_ostream& os, const strk_info_tracker_params& tp)
 {
-  return
-  os << "strk_info_tracker_params:\n[---\n"
-     << "n_samples " << tp.n_samples_ << vcl_endl
-     << "search_radius " << tp.search_radius_ << vcl_endl
-     << "angle_range " << tp.angle_range_ << vcl_endl
-     << "scale_range " << tp.scale_range_ << vcl_endl
-     << "sigma " << tp.sigma_ << vcl_endl
-     << "gradient_info " << tp.gradient_info_ << vcl_endl
-     << "color_info " << tp.color_info_ << vcl_endl
-     << "min_gradient " << tp.min_gradient_ << vcl_endl
-     << "parzen_sigma " << tp.parzen_sigma_ << vcl_endl
-     << "verbose " << tp.verbose_ << vcl_endl
-     << "debug " << tp.debug_ << vcl_endl
-     << "---]" << vcl_endl;
+  os << "strk_info_tracker_params:" << vcl_endl << "[---" << vcl_endl;
+  os << "n_samples " << tp.n_samples_ << vcl_endl;
+  os << "search_radius " << tp.search_radius_ << vcl_endl;
+  os << "angle_range " << tp.angle_range_ << vcl_endl;
+  os << "scale_range " << tp.scale_range_ << vcl_endl;
+  os << "sigma " << tp.sigma_ << vcl_endl;
+  os << "gradient_info " << tp.gradient_info_ << vcl_endl;
+  os << "color_info " << tp.color_info_ << vcl_endl;
+  os << "min_gradient " << tp.min_gradient_ << vcl_endl;
+  os << "parzen_sigma " << tp.parzen_sigma_ << vcl_endl;
+  os << "use background model " << tp.use_background_ << vcl_endl;
+  os << "renyi joint entropy " << tp.renyi_joint_entropy_ << vcl_endl;
+  os << "verbose " << tp.verbose_ << vcl_endl;
+  os << "debug " << tp.debug_ << vcl_endl;
+  os << "---]" << vcl_endl;
+  return os;
 }

@@ -9,15 +9,17 @@
 //  The info_tracker operates by randomly generating a set of hypotheses in the
 //  vicinity of the previous best n matches. These new hypotheses are tested,
 //  (for now by normalized cross-correlation) and ranked to select the best
-//  matches for the next iteration.  The current algorithm only adjusts the
-//  translation each tracked face.
+//  matches for the next iteration.  The current algorithm assumes an 
+//  equiform transform between frames.
 //
 // \author
 //  J.L. Mundy - August 20, 2003
 //
 // \verbatim
 //  Modifications
-//   <none>
+//   Restructured to use tracking face - Oct 30, 2003
+//   Add Parzen window smoothing - Jan 15, 2004
+//   Add Background model - Mar 21, 2004
 // \endverbatim
 //
 //-------------------------------------------------------------------------
@@ -25,6 +27,7 @@
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vtol/vtol_face_2d_sptr.h>
+#include <vtol/vtol_topology_object_sptr.h>
 #include <strk/strk_tracking_face_2d_sptr.h>
 #include <strk/strk_info_tracker_params.h>
 
@@ -39,11 +42,14 @@ class strk_info_tracker : public strk_info_tracker_params
   void set_image_0(vil1_image& image);
   void set_image_i(vil1_image& image);
   void set_initial_model(vtol_face_2d_sptr const& face);
+  void set_background(vtol_face_2d_sptr const& face);
   vtol_face_2d_sptr get_best_sample();
+  vtol_face_2d_sptr current_background();
   void get_samples(vcl_vector<vtol_face_2d_sptr> & samples);
   strk_tracking_face_2d_sptr tf(int i){return current_samples_[i];}
+  void get_best_face_points(vcl_vector<vtol_topology_object_sptr>& points);
   //Utility Methods
-  void init();
+  bool init();
   void generate_samples();
   void cull_samples();
   void track();
@@ -62,8 +68,8 @@ class strk_info_tracker : public strk_info_tracker_params
   //: Generate a new tracking face with refreshed data
   strk_tracking_face_2d_sptr
   clone_and_refresh_data(strk_tracking_face_2d_sptr const& sample);
-
-
+  //: Construct a multiply connected background face
+  bool construct_background_face(vtol_face_2d_sptr& face);
   //  void refine_best_sample();
   //members
   vil1_memory_image_of<float> image_0_;  //frame 0 intensity
@@ -76,10 +82,14 @@ class strk_info_tracker : public strk_info_tracker_params
   vil1_memory_image_of<float> Iy_0_;  //y derivative of image_0 intensity
   vil1_memory_image_of<float> Ix_i_;  //x derivative of image_i intensity
   vil1_memory_image_of<float> Iy_i_;  //y derivative of image_i intensity
-  vtol_face_2d_sptr initial_model_;//initial model position
+  vtol_face_2d_sptr initial_model_;   //initial model region
+  vtol_face_2d_sptr orig_background_face_; //includes model pixels
+  vtol_face_2d_sptr background_face_;//multiply connected
+  strk_tracking_face_2d_sptr background_model_;//current position
   vcl_vector<strk_tracking_face_2d_sptr> current_samples_;
   vcl_vector<strk_tracking_face_2d_sptr> hypothesized_samples_;
   vcl_vector<strk_tracking_face_2d_sptr> track_history_;
+
 };
 
 #endif // strk_info_tracker_h_

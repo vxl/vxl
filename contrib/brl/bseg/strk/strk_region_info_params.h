@@ -20,8 +20,8 @@ class strk_region_info_params : public gevd_param_mixin
   strk_region_info_params(const float sigma = 1.0,
                           const bool gradient_info = true,
                           const bool color_info = false,
-                          const float min_gradient = 5,
-                          const float parzen_sigma = 1,
+                          const float min_gradient = 0,
+                          const float parzen_sigma = 0,
                           const bool verbose = false,
                           const bool debug = false
                           );

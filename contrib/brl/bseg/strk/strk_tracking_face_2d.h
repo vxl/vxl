@@ -20,58 +20,11 @@
 //-----------------------------------------------------------------------------
 #include<vbl/vbl_ref_count.h>
 #include<vbl/vbl_array_2d.h>
+#include<vnl/vnl_matrix_fixed.h>
 #include<vil1/vil1_memory_image_of.h>
 #include<vsol/vsol_line_2d_sptr.h>
 #include<vtol/vtol_intensity_face.h>
 #include<strk/strk_tracking_face_2d_sptr.h>
-
-//===================== HISTOGRAM DEFS ===================================
-template <class T> class strk_hist
-{
- public:
-  strk_hist(const T range = 360, const unsigned int nbins = 8);
- ~strk_hist() {}
-  unsigned int nbins() const { return nbins_; }
-  void upcount(T dir, T mag);
-  void parzen(const T sigma);
-
-  T p(unsigned int bin) const;
-  T area() const;
-
-  void print() const;
- private:
-  void compute_area() const; // mutable const
-  mutable bool area_valid_;
-  mutable T area_;
-  unsigned int nbins_;
-  T range_;
-  T delta_;
-  vcl_vector<T> counts_;
-};
-
-template <class T> class strk_joint_hist
-{
- public:
-  strk_joint_hist(const T range = 360, const unsigned int nbins = 8);
- ~strk_joint_hist() {}
-  unsigned int nbins() const { return nbins_; }
-  void upcount(T a, T mag_a,
-               T b, T mag_b);
-  void parzen(const T sigma);
-
-  T p(unsigned int a, unsigned int b) const;
-  T volume() const;
-
-  void print() const;
- private:
-  void compute_volume() const; // mutable const
-  mutable bool volume_valid_;
-  mutable T volume_;
-  unsigned int nbins_;
-  T range_;
-  T delta_;
-  vbl_array_2d<T> counts_;
-};
 
 //
 //========================TRACKING_FACE_2D==================================
@@ -104,7 +57,7 @@ class strk_tracking_face_2d : public vbl_ref_count
   float grad_mutual_info() const { return gradient_dir_mi_; }
   float color_mutual_info() const { return color_mi_; }
   float total_info() const { return total_info_; }
-
+  vnl_matrix_fixed<double, 3, 3>& trans(){return trans_;}
   //:mutators
   void set_min_gradient(const float min_gradient){min_gradient_=min_gradient;}
   void set_parzen_sigma(const float parzen_sigma){parzen_sigma_=parzen_sigma;}
@@ -115,7 +68,9 @@ class strk_tracking_face_2d : public vbl_ref_count
   void set_int_mutual_info(float mi);
   void set_grad_mutual_info(float mi);
   void set_color_mutual_info(float mi);
-
+  //:controls
+  void set_renyi_joint_entropy(){renyi_joint_entropy_=true;}
+  void unset_renyi_joint_entropy(){renyi_joint_entropy_=false;}
   //:histogram properties
   unsigned int intensity_hist_bins() const { return intensity_hist_bins_;}
   unsigned int gradient_dir_hist_bins() const {return gradient_dir_hist_bins_;}
@@ -134,6 +89,9 @@ class strk_tracking_face_2d : public vbl_ref_count
   float color_entropy(){return color_entropy_;}
   float color_joint_entropy(){return color_joint_entropy_;}
   
+  float intensity_info_diff(){return intensity_info_diff_;}
+  float color_info_diff(){return color_info_diff_;}
+  float total_info_diff(){return intensity_info_diff_+color_info_diff_;}
   //: utilities
   bool compute_mutual_information(vil1_memory_image_of<float> const& image,
                                   vil1_memory_image_of<float> const& Ix,
@@ -158,6 +116,38 @@ class strk_tracking_face_2d : public vbl_ref_count
 
   //: transformation: translate by (tx,ty), rotate by theta, zoom by scale
   void transform(double tx, double ty, double theta, double scale);
+
+  void transform(vnl_matrix_fixed<double,3,3> const& T);
+
+  //: utilities involving another tracking face (background)
+
+  //: select a random set of intensities from the interior
+  vcl_vector<float> random_intensities(int& n_pix);
+
+  //: select a random set of colors from the interior
+  bool random_colors(int& n_pix, 
+                     vcl_vector<float>& hue, vcl_vector<float>& sat);
+
+  //:an alternative model for explaining current intensity values inside *this
+  float intensity_mutual_info_diff(strk_tracking_face_2d_sptr const& other,
+                                   vil1_memory_image_of<float> const& image,
+                                   bool verbose = false);
+
+  float color_mutual_info_diff(strk_tracking_face_2d_sptr const& other,
+                               vil1_memory_image_of<float> const& hue,
+                               vil1_memory_image_of<float> const& sat,
+                               bool verbose = false);
+
+  //: for debugging 
+  void print_pixels(vil1_memory_image_of<float> const& image);
+
+  void face_points(vcl_vector<vtol_topology_object_sptr>& points);
+  
+  void print_intensity_histograms(vil1_memory_image_of<float> const& image);
+  void print_gradient_histograms(vil1_memory_image_of<float> const& Ix,
+                                  vil1_memory_image_of<float> const& Iy);
+  void print_color_histograms(vil1_memory_image_of<float> const& Ix,
+                              vil1_memory_image_of<float> const& Iy);
 
  private:
   // local functions
@@ -187,6 +177,18 @@ class strk_tracking_face_2d : public vbl_ref_count
     compute_color_mutual_information(vil1_memory_image_of<float> const& hue,
                                      vil1_memory_image_of<float> const& sat);
 
+  float 
+    compute_intensity_joint_entropy(strk_tracking_face_2d_sptr const& other,
+                                    vil1_memory_image_of<float> const& image);
+float 
+  compute_model_intensity_joint_entropy(strk_tracking_face_2d_sptr const& other);
+
+  float compute_color_joint_entropy(strk_tracking_face_2d_sptr const& other,
+                                    vil1_memory_image_of<float> const& hue,
+                                    vil1_memory_image_of<float> const& sat);
+                                    
+                                    
+
   //: helper function for transform(): transformation: rotate gradients by theta
   void transform_gradients(double theta);
 
@@ -197,6 +199,7 @@ class strk_tracking_face_2d : public vbl_ref_count
   vtol_intensity_face_sptr intf_;
   bool gradient_info_;
   bool color_info_;
+  bool renyi_joint_entropy_;
   float intensity_mi_;
   float gradient_dir_mi_;
   float color_mi_;
@@ -215,8 +218,12 @@ class strk_tracking_face_2d : public vbl_ref_count
   float gradient_dir_entropy_;
   float color_entropy_;
   float intensity_joint_entropy_;
+  float model_intensity_joint_entropy_;
   float gradient_joint_entropy_;
   float color_joint_entropy_;
+  float intensity_info_diff_;
+  float color_info_diff_;
+  vnl_matrix_fixed<double, 3, 3> trans_;
 };
 
 #endif // strk_tracking_face_2d_h_

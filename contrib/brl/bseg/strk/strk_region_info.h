@@ -43,7 +43,7 @@ class strk_region_info : public strk_region_info_params
   void set_image_i(vil1_image& image);
   void set_face_0(vtol_face_2d_sptr const& face);
   void set_face_i(vtol_face_2d_sptr const& face);
-
+  void set_background_face(vtol_face_2d_sptr const& face);
   //Utility Methods
 
   void init();
@@ -52,7 +52,10 @@ class strk_region_info : public strk_region_info_params
 
   //: Evalutate the information at the initial region
   void evaluate_info();
-
+  
+  //: Evalutate the information for the background region
+  void evaluate_background_info();
+  
   //Protected methods
 
  protected:
@@ -72,6 +75,7 @@ class strk_region_info : public strk_region_info_params
   vil1_memory_image_of<float> Iy_i_;  //!< y derivative of image_i intensity
   vtol_face_2d_sptr face_0_;//!< initial model
   vtol_face_2d_sptr face_i_;//!< observation model
+  vtol_face_2d_sptr background_face_;
   strk_tracking_face_2d_sptr info_face_;
 };
 

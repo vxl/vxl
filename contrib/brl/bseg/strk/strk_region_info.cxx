@@ -82,12 +82,10 @@ void strk_region_info::set_image_i(vil1_image& image)
     vcl_cout <<"In strk_region_info::set_image_i(.) - null input\n";
     return;
   }
+  bool mapi = true;
   vgl_h_matrix_2d<double> H;
-  if (!this->map_i_to_0(H))
-  {
-    vcl_cout <<"In strk_region_info::set_image_i(.) - mapping failed\n";
-    return;
-  }
+  mapi = this->map_i_to_0(H);
+    
   vil1_memory_image_of<float> in, hue, sat;
   int w = image.width(), h = image.height();
 
@@ -95,7 +93,10 @@ void strk_region_info::set_image_i(vil1_image& image)
   {
     vil1_memory_image_of<float> in=brip_vil1_float_ops::convert_to_float(image);
     vil1_memory_image_of<float> out(w, h);
-    brip_vil1_float_ops::homography(in, H, out, true);
+    if(mapi)
+      brip_vil1_float_ops::homography(in, H, out, true);
+    else
+      out = in;
     image_i_= brip_vil1_float_ops::gaussian(out, sigma_);
   }
 
@@ -104,9 +105,18 @@ void strk_region_info::set_image_i(vil1_image& image)
     vil1_memory_image_of<vil1_rgb<unsigned char> > temp(image);
     brip_vil1_float_ops::convert_to_IHS(temp, in, hue, sat);
     vil1_memory_image_of<float> in_out(w, h), hue_out(w,h), sat_out(w,h);
-    brip_vil1_float_ops::homography(in, H, in_out, true);
-    brip_vil1_float_ops::homography(hue, H, hue_out, true);
-    brip_vil1_float_ops::homography(sat, H, sat_out, true);
+    if(mapi)
+      {
+        brip_vil1_float_ops::homography(in, H, in_out, true);
+        brip_vil1_float_ops::homography(hue, H, hue_out, true);
+        brip_vil1_float_ops::homography(sat, H, sat_out, true);
+      }
+    else
+      {
+        in_out = in;
+        hue_out = hue;
+        sat_out = sat;
+      }
     image_i_= brip_vil1_float_ops::gaussian(in_out, sigma_);
     hue_i_ = brip_vil1_float_ops::gaussian(hue_out, sigma_);
     sat_i_ = brip_vil1_float_ops::gaussian(sat_out, sigma_);
@@ -133,19 +143,42 @@ void strk_region_info::set_face_i(vtol_face_2d_sptr const& face)
 {
   face_i_ = face;
 }
+//--------------------------------------------------------------------------
+//: Set the background region for image i
+void strk_region_info::set_background_face(vtol_face_2d_sptr const& face)
+{
+  background_face_ = face;
+}
 
+static vtol_face_2d_sptr image_face(vil1_memory_image_of<float> const& image)
+{
+  int w = image.width()-1, h = image.height()-1;
+  vtol_vertex_sptr v0 = new vtol_vertex_2d(0, 0);
+  vtol_vertex_sptr v1 = new vtol_vertex_2d(w, 0);
+  vtol_vertex_sptr v2 = new vtol_vertex_2d(w, h);
+  vtol_vertex_sptr v3 = new vtol_vertex_2d(0, h);
+  vcl_vector<vtol_vertex_sptr> verts;
+  verts.push_back(v0);   verts.push_back(v1);
+  verts.push_back(v2);   verts.push_back(v3);
+  vtol_face_2d_sptr f = new vtol_face_2d(verts);
+  return f;
+}
 //--------------------------------------------------------------------------
 //: Evaluate information between I_0 and I_i at the initial region
 //  Useful for debugging purposes.
 void strk_region_info::evaluate_info()
 {
-  if (!face_0_||!image_0_||!image_i_)
+  if (!image_0_||!image_i_)
     return;
-  strk_tracking_face_2d_sptr tf =
-    new strk_tracking_face_2d(face_0_, image_0_,
-                              Ix_0_, Iy_0_, hue_0_, sat_0_,
-                              min_gradient_,
-                              parzen_sigma_);
+  vtol_face_2d_sptr f = face_0_; 
+  if(!f)
+    f = image_face(image_0_);
+  
+  strk_tracking_face_2d_sptr tf
+    = new strk_tracking_face_2d(f, image_0_,
+                                Ix_0_, Iy_0_, hue_0_, sat_0_,
+                                min_gradient_,
+                                parzen_sigma_);
   if (!tf->compute_mutual_information(image_i_, Ix_i_, Iy_i_, hue_i_, sat_i_))
     return;
 
@@ -168,13 +201,37 @@ void strk_region_info::evaluate_info()
              << "\ncolor_joint_entropy = " << tf->color_joint_entropy()
              << "\n\n\n"<< vcl_flush;
 }
+//--------------------------------------------------------------------------
+//: Evaluate background/forground information in image_0_
+//  Useful for debugging purposes.
+void strk_region_info::evaluate_background_info()
+{
+  if (!image_0_||!face_0_||!background_face_)
+    return;
+
+  strk_tracking_face_2d_sptr tf
+    = new strk_tracking_face_2d(face_0_, image_0_,
+                                Ix_0_, Iy_0_, hue_0_, sat_0_,
+                                min_gradient_,
+                                parzen_sigma_);
+
+  //  tf->print_intensity_histograms(image_0_);
+  strk_tracking_face_2d_sptr bf
+    = new strk_tracking_face_2d(background_face_, image_0_,
+                                Ix_0_, Iy_0_, hue_0_, sat_0_,
+                                min_gradient_,
+                                parzen_sigma_);
+  //  bf->print_intensity_histograms(image_0_);
+  float x = tf->intensity_mutual_info_diff(bf, image_0_, true);
+  vcl_cout << vcl_flush;
+}
 
 //: map the intensities from image i to the coordinate frame of image 0.
 // assumes a homography between the images is defined by a face with
 // 4 vertices
 bool strk_region_info::map_i_to_0(vgl_h_matrix_2d<double>& H)
 {
-  if (!face_0_&&face_i_)
+  if(!face_0_||!face_i_)
     return false;
   //get the vertices
   vcl_vector<vtol_vertex_sptr> verts0, vertsi;
