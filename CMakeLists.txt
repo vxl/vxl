@@ -25,3 +25,5 @@ IF(RUN_CONFIGURE)
   EXEC_PROGRAM( ${allvxl_SOURCE_DIR}/config.cmake/configure
                 ${allvxl_BINARY_DIR} )
 ENDIF(RUN_CONFIGURE)
+
+INCLUDE( ${allvxl_SOURCE_DIR}/CMakeListsLocal.txt OPTIONAL )
