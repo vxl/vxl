@@ -2,6 +2,7 @@
   fsm@robots.ox.ac.uk
 */
 #include <vcl_iostream.h>
+#include <vcl_root_dir.h>
 
 #include <vnl/vnl_test.h>
 #include <vnl/vnl_file_matrix.h>
@@ -9,7 +10,9 @@
 
 void test_file_matrix()
 {
-  vnl_file_matrix<double> H("data_3x3_matrix");
+
+  vnl_file_matrix<double> H((vcl_root_dir()+
+    "/vxl/vnl/tests/data_3x3_matrix").c_str());
 
   vnl_matlab_print(vcl_cout, H, "H");
   TEST("file_matrix 3x3", H.rows(), 3);
