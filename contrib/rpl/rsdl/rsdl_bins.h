@@ -11,6 +11,18 @@
 #include <vcl_vector.h>
 #include <vnl/vnl_vector_fixed.h>
 
+// these two classes are helper classes for rsdl_bins, and should ideally
+// be declared in rsdl_bins and defined only in the .txx, but MSVC6 and 7
+// don't handle nested templated classes well. So, they become external
+// classes.
+//
+template<unsigned N, typename C, typename V>
+struct rsdl_bins_point_dist_entry;
+template<unsigned N, typename C, typename V>
+struct rsdl_bins_bin_entry_type;
+
+
+
 //: N-dimensional bin structure for fast point retrieval.
 //
 // This data structure stores point locations in larger bins so that
@@ -35,10 +47,10 @@ class rsdl_bins
   //:
   typedef CoordType                       coord_type;
 
-  //:
+  //: The type of data object associated with each location.
   typedef ValueType                       value_type;
 
-  //:
+  //: The location object type.
   typedef vnl_vector_fixed<CoordType,N>   point_type;
 
  public:
@@ -133,15 +145,11 @@ class rsdl_bins
                                vcl_vector< point_type >& points,
                                vcl_vector< value_type >& values  ) const;
 
- private:
-  //:
-  // Essentially a (location,value) pair with equality checking on the
-  // location.
-  //
-  struct bin_entry_type;
+ public:
+  typedef rsdl_bins_bin_entry_type<N,CoordType,ValueType> bin_entry_type;
 
   // See comment in .txx
-  struct point_dist_entry;
+  typedef rsdl_bins_point_dist_entry<N,CoordType,ValueType> point_dist_entry;
 
   //:
   // Data stored at each bin
@@ -266,14 +274,17 @@ class rsdl_bins
 // points in the bins.
 //
 template<unsigned N, typename CoordType, typename ValueType>
-struct rsdl_bins<N,CoordType,ValueType>::bin_entry_type
+struct rsdl_bins_bin_entry_type
 {
-  typedef rsdl_bins<N,CoordType,ValueType> bin_class;
-  typedef typename bin_class::coord_type coord_type;
-  typedef typename bin_class::value_type value_type;
-  typedef typename bin_class::point_type point_type;
+  // For some reason, MSVC7 doesn't like rsdl_bins<N,CoordType,ValueType>::coord_type.
+  // It complains that rsdl_bins is undefined, but doesn't complain about the same 
+  // declaration in rsdl_bins_point_dist_entry (in the .txx). Go figure.
 
-  bin_entry_type( point_type const& pt, const value_type val );
+  typedef CoordType                       coord_type;
+  typedef ValueType                       value_type;
+  typedef vnl_vector_fixed<CoordType,N>   point_type;
+
+  rsdl_bins_bin_entry_type( point_type const& pt, const value_type val );
 
   inline bool equal( point_type const& pt, double tol_sqr ) const;
 

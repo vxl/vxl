@@ -19,22 +19,25 @@
 // the query point. It supports ordering by ascending distance.
 //
 template<unsigned N, typename CoordType, typename ValueType>
-struct rsdl_bins<N,CoordType,ValueType>::point_dist_entry
+struct rsdl_bins_point_dist_entry
 {
-  typedef rsdl_bins<N,CoordType,ValueType>    bin_class;
-  typedef typename bin_class::bin_entry_type  bin_entry_type;
-  typedef typename bin_class::coord_type      coord_type;
-  typedef typename bin_class::point_type      point_type;
+  typedef rsdl_bins<N,CoordType,ValueType>                 bin_class;
+  typedef rsdl_bins_bin_entry_type<N,CoordType,ValueType>  bin_entry_type;
+  typedef typename bin_class::coord_type                   coord_type;
+  typedef typename bin_class::point_type                   point_type;
 
-  point_dist_entry( point_type const& query_pt,
-                    bin_entry_type const* entry );
+  rsdl_bins_point_dist_entry( point_type const& query_pt,
+                              bin_entry_type const* entry );
 
-  inline bool operator<( point_dist_entry const& other );
+  inline bool operator<( rsdl_bins_point_dist_entry const& other );
 
   bin_entry_type const* entry_;
   coord_type            dist_;
 };
 
+
+// ---------------------------------------------------------------------------
+//                                                                   rsdl bins
 
 template<unsigned N, typename C, typename V>
 rsdl_bins<N,C,V>::
@@ -582,8 +585,8 @@ scan_bdy( int lo[N], int hi[N], int cur[N], unsigned dim,
 
 
 template<unsigned N, typename C, typename V>
-rsdl_bins<N,C,V>::bin_entry_type::
-bin_entry_type( point_type const& pt, const value_type val )
+rsdl_bins_bin_entry_type<N,C,V>::
+rsdl_bins_bin_entry_type( point_type const& pt, const value_type val )
   : point_( pt ),
     value_( val )
 {
@@ -591,7 +594,7 @@ bin_entry_type( point_type const& pt, const value_type val )
 
 template<unsigned N, typename C, typename V>
 bool
-rsdl_bins<N,C,V>::bin_entry_type::
+rsdl_bins_bin_entry_type<N,C,V>::
 equal( point_type const& pt, double tol_sqr ) const
 {
   return vnl_vector_ssd( pt, point_ ) < tol_sqr;
@@ -603,9 +606,9 @@ equal( point_type const& pt, double tol_sqr ) const
 //
 
 template<unsigned N, typename C, typename V>
-rsdl_bins<N,C,V>::point_dist_entry::
-point_dist_entry( point_type const& query_pt,
-                  bin_entry_type const* entry )
+rsdl_bins_point_dist_entry<N,C,V>::
+rsdl_bins_point_dist_entry( point_type const& query_pt,
+                            bin_entry_type const* entry )
  : entry_( entry ),
    dist_( vnl_vector_ssd( query_pt, entry->point_ ) )
 {
@@ -614,10 +617,15 @@ point_dist_entry( point_type const& query_pt,
 
 template<unsigned N, typename C, typename V>
 bool
-rsdl_bins<N,C,V>::point_dist_entry::
-operator<( point_dist_entry const& other )
+rsdl_bins_point_dist_entry<N,C,V>::
+operator<( rsdl_bins_point_dist_entry const& other )
 {
   return this->dist_ < other.dist_;
 }
+
+#define INSTANTIATE_RSDL_BINS( n, V, C ) \
+  template class rsdl_bins< n, V, C >; \
+  template struct rsdl_bins_bin_entry_type< n, V, C >; \
+  template struct rsdl_bins_point_dist_entry< n, V, C >
 
 #endif // rsdl_bins_txx_
