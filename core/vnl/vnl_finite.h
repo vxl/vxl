@@ -364,10 +364,11 @@ inline bool vnl_math_isfinite(vnl_finite_int<N> const& x){return true;}
 //
 template <int N, int M>
 class vnl_finite_int_poly {
-  vcl_vector<Scalar> val_; //!< M-tuple (or degree M-1 polynomial) representing this
-
   typedef vnl_finite_int_poly<N,M> Base;
   typedef vnl_finite_int<N> Scalar;
+
+  vcl_vector<Scalar> val_; //!< M-tuple (or degree M-1 polynomial) representing this
+
   // This essentially implements std::pow(int,int) which is not always available
   static unsigned int Ntothe(unsigned int m) { return m==0?1:N*Ntothe(m-1); }
  public:
