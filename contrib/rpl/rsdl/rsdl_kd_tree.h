@@ -59,7 +59,7 @@ class rsdl_kd_tree : public vbl_ref_count
 {
  private:
     //: \brief copy ctor is private, for now, to prevent its use
-  rsdl_kd_tree( const rsdl_kd_tree& /*old*/ ) {}
+  rsdl_kd_tree( const rsdl_kd_tree& /*old*/ ): vbl_ref_count() {}
 
     //: \brief operator= is private, for now, to prevent its use
   rsdl_kd_tree& operator=( const rsdl_kd_tree& /*old*/ ) { return *this; }
