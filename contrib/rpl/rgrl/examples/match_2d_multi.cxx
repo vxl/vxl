@@ -1,3 +1,5 @@
+//:
+// \file
 // An executable of pseudo-matching using a set of edge features. The
 // input file contains data of different resolutions, and the
 // transformation is estimated at each resolution, and passed to the
@@ -10,6 +12,7 @@
 #include <vcl_cmath.h>
 #include <vcl_algorithm.h>
 #include <vcl_list.h>
+#include <vcl_cstdlib.h> // for exit()
 
 #include <vnl/vnl_double_2.h>
 #include <vnl/algo/vnl_svd.h>
@@ -59,23 +62,23 @@ void testlib_enter_stealth_mode(); // defined in core/testlib/testlib_main.cxx
 typedef vxl_byte pixel_type;
 
 // adding observer to view change
-class command_iteration_update: public rgrl_command 
+class command_iteration_update: public rgrl_command
 {
-public:
+ public:
   void execute(rgrl_object* caller, const rgrl_event & event )
   {
     execute( (const rgrl_object*) caller, event );
   }
-  
+
   void execute(const rgrl_object* caller, const rgrl_event & event )
   {
     const rgrl_feature_based_registration* reg_engine =
       dynamic_cast<const rgrl_feature_based_registration*>(caller);
-    
+
     // set precision
     vcl_cout.precision( 10 );
-      
-    // get stage 
+
+    // get stage
     int stage = reg_engine->current_stage();
     vcl_cout <<"Current stage = " << stage << vcl_endl;
 
@@ -83,49 +86,50 @@ public:
     rgrl_transformation_sptr trans = reg_engine->current_transformation()->scale_by( double(1<<stage) );
 
     // Now output the xform
-    if( trans->is_type( rgrl_trans_quadratic::type_id() ) ) {
+    if ( trans->is_type( rgrl_trans_quadratic::type_id() ) ) {
       rgrl_trans_quadratic* xform = rgrl_cast<rgrl_trans_quadratic*>(trans);
-      vcl_cout<<"Xform Q = \n"<<xform->Q()
-              <<"      A = \n"<<xform->A()
-              <<"      t = \n"<<xform->t() << vcl_endl;
-    } else if( trans->is_type( rgrl_trans_affine::type_id() ) ) {
+      vcl_cout<<"Xform Q =\n"<<xform->Q()
+              <<"      A =\n"<<xform->A()
+              <<"      t =\n"<<xform->t() << vcl_endl;
+    } else if ( trans->is_type( rgrl_trans_affine::type_id() ) ) {
       rgrl_trans_affine* xform = rgrl_cast<rgrl_trans_affine*>(trans);
-      vcl_cout<<"Xfrom A = \n"<<xform->A()
-              <<"      t = \n"<<xform->t() << vcl_endl;
+      vcl_cout<<"Xfrom A =\n"<<xform->A()
+              <<"      t =\n"<<xform->t() << vcl_endl;
     } else {
-      vcl_cerr << "Fatal error: unexpected transform." << vcl_endl;
-      exit(3);
+      vcl_cerr << "Fatal error: unexpected transform.\n";
+      vcl_exit(3);
     }
   }
 };
 
 
-rgrl_feature_sptr 
+rgrl_feature_sptr
 scale_location_by( const rgrl_feature_sptr& before_sptr, const double& scale )
 {
   rgrl_feature_sptr after;
-  if( before_sptr->is_type( rgrl_feature_face_region::type_id() ) ) {
+  if ( before_sptr->is_type( rgrl_feature_face_region::type_id() ) ) {
     const rgrl_feature_face_region* before = rgrl_cast< rgrl_feature_face_region* >(before_sptr);
-    after = new rgrl_feature_face_region( before->location()*scale, before->normal(), before->thickness()*scale, before->radius()*scale );
+    after = new rgrl_feature_face_region( before->location()*scale, before->normal(),
+                                          before->thickness()*scale, before->radius()*scale );
   } else {
-    vcl_cerr << "Warning: cannot recognize this type of feature. The result will be unpredictable. " << vcl_endl;
+    vcl_cerr << "Warning: cannot recognize this type of feature. The result will be unpredictable.\n";
   }
-  
+
   return after;
-} 
+}
 
 
 struct scaled_feature_node {
-  //: scale at this level  
+  //: scale at this level
   double sigma_;
-  
+
   //: mask_box
   //  should be enough to set it as image size
   rgrl_mask_box roi_;
-  
+
   //: a vector containing all features at this level
   vcl_vector< rgrl_feature_sptr >  features_;
-  
+
   //: ctor
   scaled_feature_node() : sigma_(0.0), roi_(2)  {   }
 
@@ -140,7 +144,7 @@ struct scaled_feature_node {
 // associated normal direction. The file contains features of
 // different resolutions. However, all features are expressed in the
 // physical co-ordinate. The contents of the text file is:
-// 
+//
 // face
 // [ # of features]
 // [ smoothing scale of the image ]
@@ -151,64 +155,64 @@ struct scaled_feature_node {
 // [ loc_x loc_y norm_x norm_y ]
 // [ ...]
 //
-void 
-read_feature_file( char const* filename, 
+void
+read_feature_file( char const* filename,
                    vcl_list<scaled_feature_node>& feature_list,
                    unsigned spacing )
 {
   // when spacing==1, it means every other point
   spacing++;
-  
+
   vcl_ifstream istr( filename );
-  if( !istr ) {
+  if ( !istr ) {
     vcl_cerr << "Cannot open file to read: " << filename << vcl_endl;
-    exit(3);
+    vcl_exit(3);
   }
-  
+
   vcl_string type_str;
   vcl_getline( istr, type_str );
-  
-  if( type_str=="face" ) { // for face features
+
+  if ( type_str=="face" ) { // for face features
     vcl_string s;
     double sigma;
     int num_of_features;
     // obtain features of various scale until end of file
-    while( !istr.eof() ) {
+    while ( !istr.eof() ) {
       // init
       sigma = -1;
       num_of_features = -1;
       istr >> num_of_features >> sigma;
-      
+
       // sanity check
-      if( num_of_features<=0 || sigma < 0 ) 
+      if ( num_of_features<=0 || sigma < 0 )
         continue;
-      
+
       // push it into list
       feature_list.push_back( scaled_feature_node() );
       scaled_feature_node& this_node = feature_list.back();
       this_node.sigma_ = sigma;
-      
+
       // define thickness & radius, using magic number
       const double thickness = sigma * 10.0;   // thickness is diameter
-      const double radius    = sigma * 2.0; 
+      const double radius    = sigma * 2.0;
       // read in these features
       vnl_double_2 loc, normal;
       rgrl_feature_sptr fea_sptr;
-      for( unsigned int i=0; i<num_of_features; ++i ){
+      for ( int i=0; i<num_of_features; ++i ) {
         // read in data no matter if it is used or not
         istr >> loc >> normal;
-    		if( i%spacing == 0 ){
+        if ( i%spacing == 0 ) {
           fea_sptr = new rgrl_feature_face_region( loc.as_ref(), normal.as_ref(), thickness, radius );
           this_node.push_back( fea_sptr );
         }
       }
     }
-    
+
     // end of reading
     istr.close();
   } else {
     // the point, or trace feature is to be implemented.
-    vcl_cerr << "this feature type(" << type_str << ") is not yet implemented." << vcl_endl;
+    vcl_cerr << "this feature type(" << type_str << ") is not yet implemented.\n";
   }
 }
 
@@ -226,18 +230,18 @@ read_affine_trans_2d( const char* trans_file, vnl_matrix< double > & A, vnl_vect
   T.set_size( 2 );
 
   vcl_ifstream ifs( trans_file );
-  if( !ifs ) {
+  if ( !ifs ) {
     vcl_cerr << "Cannot open file to read: " << trans_file << vcl_endl;
-    exit(2);
+    vcl_exit(2);
   }
   vcl_string str;
-  for( unsigned i=0; i<A.rows(); ++i ) {
-    for( unsigned j=0; j<A.columns(); ++j ) {
+  for ( unsigned i=0; i<A.rows(); ++i ) {
+    for ( unsigned j=0; j<A.columns(); ++j ) {
       ifs >> A( i, j ) ;
     }
   }
   vcl_cerr << A << "\n";
-  for( unsigned i=0; i<T.size(); ++i ) {
+  for ( unsigned i=0; i<T.size(); ++i ) {
     ifs >> T( i );
   }
   vcl_cerr << T << "\n";
@@ -268,16 +272,16 @@ main( int argc, char* argv[] )
   vil_image_view< pixel_type > from_image, to_image;
   {
     from_image = vil_load( from_files() );
-    if( !from_image ) {
-      vcl_cerr << "reading from images failed" << vcl_endl;
+    if ( !from_image ) {
+      vcl_cerr << "reading from images failed\n";
       return 1;
     }
     vcl_cout << "from image size: " << from_image.ni() << " " << from_image.nj() << " " << from_image.nplanes() << "\n";
-    
-    vcl_cout << "reading to images..." << vcl_endl;    
+
+    vcl_cout << "reading to images..." << vcl_endl;
     to_image = vil_load( to_files() );
-    if( !to_image ) {
-      vcl_cerr << "reading to images failed" << vcl_endl;
+    if ( !to_image ) {
+      vcl_cerr << "reading to images failed\n";
       return 1;
     }
     vcl_cout << "to image size: " << to_image.ni() << " " << to_image.nj() << " " << to_image.nplanes() << "\n";
@@ -286,15 +290,15 @@ main( int argc, char* argv[] )
   // load the mask image. If not supplied, assume valid in image dimension
   //
   vil_image_view<vxl_byte> mask_image;
-  if( mask_file.set() ) {
+  if ( mask_file.set() ) {
     mask_image = vil_load( mask_file() );
-    if( !mask_image.ni() || !mask_image.nj() ) {
+    if ( !mask_image.ni() || !mask_image.nj() ) {
       vcl_cerr << "Error: Cannot loading mask file: " << mask_file() << vcl_endl;
       return 2;
     } else {
       vcl_cout << "mask image size: " << mask_image.ni() << ' ' << mask_image.nj() << vcl_endl;
     }
-    
+
     // if mask pixel value is 255, it could cause problem when
     // downsample image, where it smooth the mask boundary and cause
     // mask larger than it should be the way to avoid it is to
@@ -308,14 +312,14 @@ main( int argc, char* argv[] )
     mask_image.set_size( from_image.ni(), from_image.nj() );
     mask_image.fill( vxl_byte(1) );
   }
-  
-  // 1. Load data into rgrl_feature_sets and 
+
+  // 1. Load data into rgrl_feature_sets and
   //    the "global" is set to image size
   //
   vcl_list< scaled_feature_node > feature_sets;
   read_feature_file( feature_file(), feature_sets, spacing() );
 
-  // 1.5 Determine the number of "stages" to use 
+  // 1.5 Determine the number of "stages" to use
   //     in multi-resolution registration.
   //     And downsample images
   vil_image_view<pixel_type> dest, prev_from, prev_to, prev_mask;
@@ -332,23 +336,23 @@ main( int argc, char* argv[] )
   prev_mask=mask_image;
 
   unsigned int min_dim = vcl_min( from_image.ni(), from_image.nj() );
-  int num_stages=0;
+  unsigned int num_stages=0;
   vcl_list<scaled_feature_node>::const_iterator it;
-  for(it=feature_sets.begin(); 
-      min_dim>128 && it!=feature_sets.end(); 
+  for (it=feature_sets.begin();
+      min_dim>128 && it!=feature_sets.end();
       num_stages++) {
-    // downsample image 
+    // downsample image
     vil_gauss_reduce( prev_from, dest, work_space );
     from_images.push_back( dest );
     prev_from = dest;
     dest.clear();  // clear the link underneath, to prevent misoperation
-    
+
     // to image
     vil_gauss_reduce( prev_to, dest, work_space );
     to_images.push_back( dest );
     prev_to = dest;
     dest.clear( );  // clear the link underneath, to prevent misoperation
-    
+
     // to image
     vil_gauss_reduce( prev_mask, dest, work_space );
     mask_images.push_back( dest );
@@ -357,14 +361,13 @@ main( int argc, char* argv[] )
 
     // reduce dimension
     min_dim >>= 1;
-    
+
     // two scales per resolution
     ++it;
-    if( it==feature_sets.end() ) break; 
+    if ( it==feature_sets.end() ) break;
     ++it;
   }
-  
-  
+
   // 2. robust weighting
   //
   rgrl_weighter_sptr wgter;
@@ -375,14 +378,14 @@ main( int argc, char* argv[] )
 
   // 3. Scale estimator
   //
-  // Estimate scales based on weighted match. 
+  // Estimate scales based on weighted match.
   //
   rgrl_scale_estimator_unwgted_sptr unwgted_scale_est;
   rgrl_scale_estimator_wgted_sptr wgted_scale_est;
   {
     // muse and unwgted_scale_est are not used
     vcl_auto_ptr<rrel_objective> obj( new rrel_muset_obj( 1 ) );
-    unwgted_scale_est = new rgrl_scale_est_closest( obj ); 
+    unwgted_scale_est = new rgrl_scale_est_closest( obj );
     wgted_scale_est = new rgrl_scale_est_all_weights( );
     wgted_scale_est->set_debug_flag( 1 );
   }
@@ -392,25 +395,25 @@ main( int argc, char* argv[] )
   rgrl_evaluator_sptr evaluator = new rgrl_evaluator_ssd();
   rgrl_estimator_sptr affine_sptr = new rgrl_est_affine();
   rgrl_estimator_sptr quadratic_sptr = new rgrl_est_quadratic();
-  
+
   // 5. create multi-resolution data manager
   //
   // Set up the data manager
   rgrl_data_manager_sptr data_sptr = new rgrl_data_manager( true );  //activate multi-resolution
   it=feature_sets.begin(); // init
-  for( unsigned int i=0; i<=num_stages; ++i ) {
+  for ( unsigned int i=0; i<=num_stages; ++i ) {
     // 5.0 create mask
     //
-    rgrl_mask_sptr mask_sptr = new rgrl_mask_2d_image(mask_images[i]); 
+    rgrl_mask_sptr mask_sptr = new rgrl_mask_2d_image(mask_images[i]);
 
     // 5.1 create matcher at this resolution
     //
     // Pseudo matching
     rgrl_matcher_sptr matcher;
-    matcher = new rgrl_matcher_pseudo< pixel_type> 
+    matcher = new rgrl_matcher_pseudo< pixel_type>
               ( from_images[i], to_images[i], evaluator, mask_sptr, mask_sptr);
     matcher->set_debug_flag( 0 );
-    
+
     // 5.2 create from features
     //
     // It is a problem since there are two scales within one resolution.
@@ -427,9 +430,9 @@ main( int argc, char* argv[] )
     double scaling_factor = 1.0 / double(1<<i);
     from_features.reserve( 3* it->size()  );
 
-    for( unsigned int j=0; j<2&&it!=feature_sets.end(); ++j,++it) {
-      // Now copying features with corresponding coordinate scale 
-      for(vcl_vector< rgrl_feature_sptr >::const_iterator jt=it->features_.begin();
+    for ( unsigned int j=0; j<2&&it!=feature_sets.end(); ++j,++it) {
+      // Now copying features with corresponding coordinate scale
+      for (vcl_vector< rgrl_feature_sptr >::const_iterator jt=it->features_.begin();
           jt!=it->features_.end(); ++jt ) {
         from_features.push_back( scale_location_by( *jt, scaling_factor ) );
       }
@@ -449,34 +452,34 @@ main( int argc, char* argv[] )
       to_features[0] = new rgrl_feature_face_region
         ( vnl_vector< double > ( 2, 0.0 ), vnl_vector< double > (2, 0.0), 0.0, 0.0 );
     else {
-      vcl_cerr << " Wrong type of feature points! \n";
-      exit( 1 );
+      vcl_cerr << " Wrong type of feature points!\n";
+      vcl_exit(1);
     }
     rgrl_feature_set_sptr to_set = new rgrl_feature_set_location<2>( to_features );
-    
+
     // 5.5 add data
     //
     data_sptr->add_data( i,          // stage
                          from_set,   // data from moving image
                          to_set,     // data from fixed image
                          matcher,    // matching mechanism
-                         wgter,      // robust weighting 
+                         wgter,      // robust weighting
                          unwgted_scale_est,  // unweighted scale estimator
-                         wgted_scale_est  );  
+                         wgted_scale_est  );
     // 5.6 add estimator
     //
     // use quadratic transformation only at the finest stage
-    if( (i==0 || i==1 ) && model() == vcl_string("quadratic") )
+    if ( (i==0 || i==1 ) && model() == vcl_string("quadratic") )
       data_sptr->add_estimator( i, quadratic_sptr );
     else {
       data_sptr->add_estimator( i, affine_sptr );
-      
     }
+
     // 5.7 set dimension increase
     //
     data_sptr->set_dimension_increase_for_next_stage( i, 2 );
   }
-  
+
   // 6. Create the initializer
   //
   // We will initialize to an affine transform with an affine
@@ -485,14 +488,13 @@ main( int argc, char* argv[] )
   //
   // Estimator for initial transform estimate type.
 
-  rgrl_initializer_sptr initializer; 
+  rgrl_initializer_sptr initializer;
   {
-
     vnl_matrix<double> A( 2, 2, vnl_matrix_identity );
     vnl_vector<double> t( 2, 0.0 );
-    if( trans_file.set() )
+    if ( trans_file.set() )
       read_affine_trans_2d( trans_file(), A, t );
-    vcl_cout << "A = \n" << A << ", T = " << t << vcl_endl;
+    vcl_cout << "A =\n" << A << ", T = " << t << vcl_endl;
 
     rgrl_transformation_sptr init_trans = new rgrl_trans_affine( A, t, vnl_matrix<double>( 6, 6, 0.0 ) );
 
@@ -512,17 +514,15 @@ main( int argc, char* argv[] )
     const unsigned ni = from_images[num_stages].ni();
     const unsigned nj = from_images[num_stages].nj();
     box.set_x1( vnl_double_2( double(ni-1), double(nj-1) ).as_ref() );
-    
+
     initializer = new rgrl_initializer_prior( box, box, affine_sptr, init_trans, num_stages, prior_scale );
   }
-
-
 
   // 7. Convergence: how to determine when we are done
   //
   rgrl_convergence_tester_sptr conv_test = new rgrl_convergence_on_weighted_error( 1.5 );
 
-  // 8. Setup engine 
+  // 8. Setup engine
   //
   rgrl_feature_based_registration reg( data_sptr, conv_test );
   // enforce lower bound of geometric scale
@@ -530,10 +530,10 @@ main( int argc, char* argv[] )
   reg.add_observer( new rgrl_event_iteration(), new command_iteration_update());
   // before running reg engine, release unnecessary space
   feature_sets.clear();
-  
+
   // Get an estimate
   //
-  vcl_cerr << "Start registering...\n" << vcl_endl;
+  vcl_cerr << "Start registering...\n\n";
   reg.run( initializer );
 
   // Output the xform
@@ -543,7 +543,7 @@ main( int argc, char* argv[] )
 
   vcl_cout << "Final objective = " << reg.final_status()->objective_value() << "\n";
 
-  if( output_xform.set() ) {
+  if ( output_xform.set() ) {
     vcl_ofstream ofs( output_xform() );
 
     if ( final_trans->is_type( rgrl_trans_affine::type_id() ) ) {
@@ -572,7 +572,7 @@ main( int argc, char* argv[] )
 
     vcl_cout << final_scale->geometric_scale() << "\n\n";
   }
-  
+
   // Compute errors
   {
     rgrl_scale_sptr scale;   //  dummy scale ... unused
@@ -585,8 +585,8 @@ main( int argc, char* argv[] )
     unsigned num = 0;
     typedef rgrl_match_set::const_from_iterator from_iter;
     typedef from_iter::to_iterator              to_iter;
-    for( from_iter fitr = ms.from_begin(); fitr != ms.from_end(); ++fitr ) {
-      for( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr ) {
+    for ( from_iter fitr = ms.from_begin(); fitr != ms.from_end(); ++fitr ) {
+      for ( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr ) {
         rgrl_feature_sptr m = fitr.from_feature()->transform( *final_trans );
         double error = titr.to_feature()->geometric_error( *m );
         d.push_back( error );
@@ -599,10 +599,9 @@ main( int argc, char* argv[] )
     vcl_nth_element( d.begin(), d.begin()+d.size()/2, d.end() );
     e = d[d.size()/2];
 
-    vcl_cout << "CP match set from size = " << ms.from_size() << "\n";
-    vcl_cout << "Final median of alignment error: " << e << vcl_endl;
-    vcl_cout << "Final average of alignment error: " << sum / num << vcl_endl;
-
+    vcl_cout << "CP match set from size = " << ms.from_size() << "\n"
+             << "Final median of alignment error: " << e << vcl_endl
+             << "Final average of alignment error: " << sum / num << vcl_endl;
   }
 
   // Perform testing

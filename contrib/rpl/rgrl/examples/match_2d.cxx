@@ -11,6 +11,7 @@
 #include <vcl_sstream.h>
 #include <vcl_cmath.h>
 #include <vcl_algorithm.h>
+#include <vcl_cstdlib.h> // for exit()
 
 #include <vnl/vnl_double_2.h>
 #include <vnl/algo/vnl_svd.h>
@@ -58,14 +59,14 @@ void testlib_enter_stealth_mode(); // defined in core/testlib/testlib_main.cxx
 typedef vxl_byte pixel_type;
 
 // adding observer to view change
-class command_iteration_update: public rgrl_command 
+class command_iteration_update: public rgrl_command
 {
-public:
+ public:
   void execute(rgrl_object* caller, const rgrl_event & event )
   {
     execute( (const rgrl_object*) caller, event );
   }
-  
+
   void execute(const rgrl_object* caller, const rgrl_event & event )
   {
     const rgrl_feature_based_registration* reg_engine =
@@ -81,7 +82,6 @@ public:
       rgrl_trans_quadratic* final = rgrl_cast<rgrl_trans_quadratic*>(trans);
       vcl_cout << final->Q() << final->A() << final->t() << "\n" << vcl_endl;
     }
-
   }
 };
 
@@ -93,9 +93,9 @@ make_mask_box_hold( rgrl_mask_box& box,
   vnl_vector<double> x0 = box.x0();
   vnl_vector<double> x1 = box.x1();
 
-  for( unsigned i=0; i < p.size(); ++i ) {
-    if( x0[i] > p[i] )   x0[i] = p[i];
-    if( x1[i] < p[i] )   x1[i] = p[i];
+  for ( unsigned i=0; i < p.size(); ++i ) {
+    if ( x0[i] > p[i] )   x0[i] = p[i];
+    if ( x1[i] < p[i] )   x1[i] = p[i];
   }
 
   box.set_x0( x0 );
@@ -107,7 +107,7 @@ make_mask_box_hold( rgrl_mask_box& box,
 // different resolutions. However, all features are expressed in the
 // physical co-ordinate and are treated as features from the same
 // resolution. The contents of the text file is:
-// 
+//
 // face
 // [ # of features]
 // [ smoothing scale of the image ]
@@ -118,64 +118,64 @@ make_mask_box_hold( rgrl_mask_box& box,
 // [ loc_x loc_y norm_x norm_y ]
 // [ ...]
 //
-void 
-read_feature_file( char const* filename, 
+void
+read_feature_file( char const* filename,
                    vcl_vector< rgrl_feature_sptr >& features,
                    rgrl_mask_box &roi,
                    unsigned spacing )
 {
   // when spacing==1, it means every other point
   spacing++;
-  
+
   vcl_ifstream istr( filename );
-  if( !istr ) {
+  if ( !istr ) {
     vcl_cerr << "Cannot open file to read: " << filename << vcl_endl;
-    exit(3);
+    vcl_exit(3);
   }
-  
+
   const double min_sigma=1.3; // don't want to take the lowest sigma=1
   const double max_sigma=6;   // stop after the 5th resolution
   vcl_string type_str;
   vcl_getline( istr, type_str );
   vbl_bounding_box<double, 2> box;
-  
-  if( type_str=="face" ) { // for face features
+
+  if ( type_str=="face" ) { // for face features
     vcl_string s;
     double sigma;
     int num_of_features;
     // obtain features of various scale until end of file
-    while( !istr.eof() ) {
+    while ( !istr.eof() ) {
       // init
       sigma = -1;
       num_of_features = -1;
       istr >> num_of_features >> sigma;
-      
+
       // sanity check
-      if( num_of_features<=0 || sigma < 0 ) 
+      if ( num_of_features<=0 || sigma < 0 )
         continue;
-      
+
       // check min & max conditions
-      if( sigma > max_sigma ) 
+      if ( sigma > max_sigma )
         break;
-      if( sigma < min_sigma ) {
+      if ( sigma < min_sigma ) {
         // skip the rest of the line
         vcl_getline( istr, s );
         // have to skip the records
-        for( unsigned int i=0; i<num_of_features; ++i ) 
+        for ( int i=0; i<num_of_features; ++i )
           vcl_getline( istr, s );
         continue;
-      }  
-      
+      }
+
       // define thickness & radius, using magic number
       const double thickness = sigma * 11.0;   // thickness is diameter
-      const double radius    = sigma * 3.0; 
+      const double radius    = sigma * 3.0;
       // read in these features
       vnl_double_2 loc, normal;
       rgrl_feature_sptr fea_sptr;
-      for( unsigned int i=0; i<num_of_features; ++i ){
+      for ( int i=0; i<num_of_features; ++i ){
         // read in data no matter if it is used or not
         istr >> loc >> normal;
-        if( i%spacing == 0 ){
+        if ( i%spacing == 0 ){
           fea_sptr = new rgrl_feature_face_region( loc.as_ref(), normal.as_ref(), thickness, radius );
           features.push_back( fea_sptr );
           // update the mask box
@@ -183,14 +183,14 @@ read_feature_file( char const* filename,
         }
       }
     }
-    
+
     // end of reading
     istr.close();
   } else {
     // the point, or trace feature is to be implemented.
-    vcl_cerr << "this feature type(" << type_str << ") is not yet implemented." << vcl_endl;
+    vcl_cerr << "this feature type(" << type_str << ") is not yet implemented.\n";
   }
-  
+
   // update mask box
   vnl_vector<double> p(2, 0.0);
   p[0] = box.xmin();
@@ -215,18 +215,18 @@ read_affine_trans_2d( const char* trans_file, vnl_matrix< double > & A, vnl_vect
   T.set_size( 2 );
 
   vcl_ifstream ifs( trans_file );
-  if( !ifs ) {
+  if ( !ifs ) {
     vcl_cerr << "Cannot open file to read: " << trans_file << vcl_endl;
-    exit(2);
+    vcl_exit(2);
   }
   vcl_string str;
-  for( unsigned i=0; i<A.rows(); ++i ) {
-    for( unsigned j=0; j<A.columns(); ++j ) {
+  for ( unsigned i=0; i<A.rows(); ++i ) {
+    for ( unsigned j=0; j<A.columns(); ++j ) {
       ifs >> A( i, j ) ;
     }
   }
   vcl_cerr << A << "\n";
-  for( unsigned i=0; i<T.size(); ++i ) {
+  for ( unsigned i=0; i<T.size(); ++i ) {
     ifs >> T( i );
   }
   vcl_cerr << T << "\n";
@@ -258,16 +258,16 @@ main( int argc, char* argv[] )
   vil_image_view< pixel_type > from_image, to_image;
   {
     from_image = vil_load( from_files() );
-    if( !from_image ) {
-      vcl_cerr << "reading from images failed" << vcl_endl;
+    if ( !from_image ) {
+      vcl_cerr << "reading from images failed\n";
       return 1;
     }
     vcl_cout << "from image size: " << from_image.ni() << " " << from_image.nj() << " " << from_image.nplanes() << "\n";
-    
-    vcl_cout << "reading to images..." << vcl_endl;    
+
+    vcl_cout << "reading to images..." << vcl_endl;
     to_image = vil_load( to_files() );
-    if( !to_image ) {
-      vcl_cerr << "reading to images failed" << vcl_endl;
+    if ( !to_image ) {
+      vcl_cerr << "reading to images failed\n";
       return 1;
     }
     vcl_cout << "to image size: " << to_image.ni() << " " << to_image.nj() << " " << to_image.nplanes() << "\n";
@@ -276,9 +276,9 @@ main( int argc, char* argv[] )
   // load the mask image. If not supplied, assume valid in image dimension
   //
   vil_image_view<vxl_byte> mask_image;
-  if( mask_file.set() ) {
+  if ( mask_file.set() ) {
     mask_image = vil_load( mask_file() );
-    if( !mask_image.ni() || !mask_image.nj() ) {
+    if ( !mask_image.ni() || !mask_image.nj() ) {
       vcl_cerr << "Error: Cannot loading mask file: " << mask_file() << vcl_endl;
       return 2;
     } else {
@@ -290,7 +290,7 @@ main( int argc, char* argv[] )
     mask_image.set_size( from_image.ni(), from_image.nj() );
     mask_image.fill( vxl_byte(1) );
   }
-  
+
   // 1. Load data into rgrl_feature_sets and determine the "global"
   // ROI for each data set.
   //
@@ -312,8 +312,8 @@ main( int argc, char* argv[] )
       to_pts[0] = new rgrl_feature_face_region
         ( vnl_vector< double > ( 2, 0.0 ), vnl_vector< double > (2, 0.0), 0.0, 0.0 );
     else {
-      vcl_cerr << " Wrong type of feature points! \n";
-      exit( 1 );
+      vcl_cerr << " Wrong type of feature points!\n";
+      vcl_exit(1);
     }
 
     // Feature sets of "from" and "to"
@@ -321,7 +321,7 @@ main( int argc, char* argv[] )
     from_set = new rgrl_feature_set_location<2>( from_pts );
     to_set = new rgrl_feature_set_location<2>( to_pts );
 
-    if( !from_set || !to_set) {
+    if ( !from_set || !to_set) {
       vcl_cerr << "Couldn't read data\n";
       return 1;
     }
@@ -336,22 +336,20 @@ main( int argc, char* argv[] )
   rgrl_estimator_sptr est_p;
   rgrl_initializer_sptr initializer;
   {
-    unsigned dof = 6;
-    unsigned num_sample_for_fit = 6;
     if ( model() == vcl_string("quadratic") )
       est_p = new rgrl_est_quadratic( 2 );
     else if ( model() == vcl_string("affine") )
       est_p = new rgrl_est_affine( 2 );
     else {
       vcl_cerr<<"Unknown model "<<model()<<vcl_endl;
-      exit(1);
+      vcl_exit(1);
     }
 
     vnl_matrix<double> A( 2, 2, vnl_matrix_identity );
     vnl_vector<double> t( 2, 0.0 );
-    if( trans_file.set() )
+    if ( trans_file.set() )
       read_affine_trans_2d( trans_file(), A, t );
-    vcl_cout << "A = \n" << A << ", T = " << t << vcl_endl;
+    vcl_cout << "A =\n" << A << ", T = " << t << vcl_endl;
     rgrl_transformation_sptr init_trans = new rgrl_trans_affine( A, t, vnl_matrix<double>( 6, 6, 0.0 ) );
 
     unsigned resolution = 0;
@@ -367,9 +365,10 @@ main( int argc, char* argv[] )
   // Pseudo matching
   rgrl_matcher_sptr matcher;
   {
-
     rgrl_evaluator_sptr evaluator = new rgrl_evaluator_ssd();
-    matcher = new rgrl_matcher_pseudo< pixel_type> ( from_image, to_image, evaluator, new rgrl_mask_2d_image(mask_image), new rgrl_mask_2d_image(mask_image) );
+    matcher = new rgrl_matcher_pseudo< pixel_type> ( from_image, to_image, evaluator,
+                                                     new rgrl_mask_2d_image(mask_image),
+                                                     new rgrl_mask_2d_image(mask_image) );
     matcher->set_debug_flag( 0 );
   }
 
@@ -383,14 +382,14 @@ main( int argc, char* argv[] )
 
   // 5. Scale estimator
   //
-  // Estimate scales based on weighted match. 
+  // Estimate scales based on weighted match.
   //
   rgrl_scale_estimator_unwgted_sptr unwgted_scale_est;
   rgrl_scale_estimator_wgted_sptr wgted_scale_est;
   {
     // muse and unwgted_scale_est are not used
     vcl_auto_ptr<rrel_objective> obj( new rrel_muset_obj( 1 ) );
-    unwgted_scale_est = new rgrl_scale_est_closest( obj ); 
+    unwgted_scale_est = new rgrl_scale_est_closest( obj );
     wgted_scale_est = new rgrl_scale_est_all_weights( );
   }
 
@@ -407,16 +406,16 @@ main( int argc, char* argv[] )
   data_sptr->add_data( from_set,   // data from moving image
                        to_set,     // data from fixed image
                        matcher,    // matching mechanism
-                       wgter,      // robust weighting 
+                       wgter,      // robust weighting
                        unwgted_scale_est,  // unweighted scale estimator
-                       wgted_scale_est  );  
+                       wgted_scale_est  );
   rgrl_feature_based_registration reg( data_sptr, conv_test );
   // enforce lower bound of geometric scale
   reg.set_expected_min_geometric_scale( 0.25 );
   reg.add_observer( new rgrl_event_iteration(), new command_iteration_update());
   // Get an estimate
   //
-  vcl_cerr << "Start registering...\n" << vcl_endl;
+  vcl_cerr << "Start registering...\n\n";
   reg.run( initializer );
 
   // Output the xform
@@ -426,7 +425,7 @@ main( int argc, char* argv[] )
 
   vcl_cout << "Final objective = " << reg.final_status()->objective_value() << "\n";
 
-  if( output_xform.set() ) {
+  if ( output_xform.set() ) {
     vcl_ofstream ofs( output_xform() );
 
     if ( final_trans->is_type( rgrl_trans_affine::type_id() ) ) {
@@ -467,8 +466,8 @@ main( int argc, char* argv[] )
     unsigned num = 0;
     typedef rgrl_match_set::const_from_iterator from_iter;
     typedef from_iter::to_iterator              to_iter;
-    for( from_iter fitr = ms.from_begin(); fitr != ms.from_end(); ++fitr ) {
-      for( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr ) {
+    for ( from_iter fitr = ms.from_begin(); fitr != ms.from_end(); ++fitr ) {
+      for ( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr ) {
         rgrl_feature_sptr m = fitr.from_feature()->transform( *final_trans );
         double error = titr.to_feature()->geometric_error( *m );
         d.push_back( error );
@@ -481,10 +480,9 @@ main( int argc, char* argv[] )
     vcl_nth_element( d.begin(), d.begin()+d.size()/2, d.end() );
     e = d[d.size()/2];
 
-    vcl_cout << "CP match set from size = " << ms.from_size() << "\n";
-    vcl_cout << "Final median of alignment error: " << e << vcl_endl;
-    vcl_cout << "Final average of alignment error: " << sum / num << vcl_endl;
-
+    vcl_cout << "CP match set from size = " << ms.from_size() << "\n"
+             << "Final median of alignment error: " << e << vcl_endl
+             << "Final average of alignment error: " << sum / num << vcl_endl;
   }
 
   // Perform testing
