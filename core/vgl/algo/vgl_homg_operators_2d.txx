@@ -1,7 +1,6 @@
-// This is ./vxl/vgl/algo/vgl_homg_operators_2d.txx
+// This is vxl/vgl/algo/vgl_homg_operators_2d.txx
 #ifndef vgl_homg_operators_2d_txx_
 #define vgl_homg_operators_2d_txx_
-
 //:
 // \file
 
@@ -107,7 +106,7 @@ void vgl_homg_operators_2d<T>::unitize(vgl_homg_point_2d<T>& a)
     return;
   }
   norm = 1.0/norm;
-  a.set(a.x()*norm, a.y()*norm, a.w()*norm);
+  a.set(T(a.x()*norm), T(a.y()*norm), T(a.w()*norm));
 }
 
 //  DISTANCE MEASUREMENTS IN EUCLIDEAN COORDINATES
@@ -297,6 +296,8 @@ vgl_homg_point_2d<T> vgl_homg_operators_2d<T>::perp_projection(
 }
 
 //: Return the midpoint of the line joining two homogeneous points
+//  When one of the points is at infinity, that point is returned.
+//  When both points are at infinity, the invalid point (0,0,0) is returned.
 template <class T>
 vgl_homg_point_2d<T>
 vgl_homg_operators_2d<T>::midpoint( const vgl_homg_point_2d<T>& p1,
@@ -304,9 +305,9 @@ vgl_homg_operators_2d<T>::midpoint( const vgl_homg_point_2d<T>& p1,
 {
   // return p1 * (1/(2*p1[2])) + p2*(1/(2*p2[2]));
 
-  double x = p1.x() /(2*p1.w()) + p2.x() / (2*p2.w());
-  double y = p1.y() /(2*p1.w()) + p2.y() / (2*p2.w());
-  double w = p1.w() /(2*p1.w()) + p2.w() / (2*p2.w());
+  T x = p1.x() * p2.w() + p2.x() * p1.w();
+  T y = p1.y() * p2.w() + p2.y() * p1.w();
+  T w = p1.w() * p2.w() + p2.w() * p1.w();
 
   return vgl_homg_point_2d<T>(x,y,w);
 }
@@ -423,12 +424,12 @@ vgl_homg_point_2d<T> vgl_homg_operators_2d<T>::conjugate(
                                   double cr)
 // Default for cr is -1.
 {
-  double x1 = a.x(), y1 = a.y(), w1 = a.w();
-  double x2 = b.x(), y2 = b.y(), w2 = b.w();
-  double x3 = c.x(), y3 = c.y(), w3 = c.w();
-  double kx = x1*w3 - x3*w1, mx = x2*w3 - x3*w2, nx = kx*w2-cr*mx*w1;
-  double ky = y1*w3 - y3*w1, my = y2*w3 - y3*w2, ny = ky*w2-cr*my*w1;
-  return vgl_homg_point_2d<T>((x2*kx-cr*x1*mx)*ny,(y2*ky-cr*y1*my)*nx,nx*ny);
+  T x1 = a.x(), y1 = a.y(), w1 = a.w();
+  T x2 = b.x(), y2 = b.y(), w2 = b.w();
+  T x3 = c.x(), y3 = c.y(), w3 = c.w();
+  T kx = x1*w3 - x3*w1, mx = x2*w3 - x3*w2, nx = T(kx*w2-cr*mx*w1);
+  T ky = y1*w3 - y3*w1, my = y2*w3 - y3*w2, ny = T(ky*w2-cr*my*w1);
+  return vgl_homg_point_2d<T>(T(x2*kx-cr*x1*mx)*ny,T(y2*ky-cr*y1*my)*nx,nx*ny);
 }
 
 //: returns the vgl_conic which has the given matrix as its matrix
@@ -516,11 +517,11 @@ vgl_homg_operators_2d<T>::do_intersect(vgl_conic<T> const& c1,
     T dis = coef(3)*coef(3)-4*coef(2)*coef(4); // discriminant
     if (dis < 0) return vcl_list<vgl_homg_point_2d<T> >(); // no real solutions.
     T y;
-    if (coef(2) == 0) dis=0, y=-coef(4)/coef(3);
-    else              y = -0.5*coef(3)/coef(2);
+    if (coef(2) == 0) dis=0, y = - coef(4) / coef(3);
+    else                     y = - coef(3) / coef(2) / 2;
     T x = -(y*y*ac+y*ae+af)/(y*ab+ad);
     if (dis == 0) {return vcl_list<vgl_homg_point_2d<T> >(1,vgl_homg_point_2d<T>(x,y,1));}
-    dis = 0.5 * vcl_sqrt(dis) / coef(2);
+    dis = vcl_sqrt(dis) / coef(2) / 2;
     vcl_list<vgl_homg_point_2d<T> > solutions;
     y -= dis; x = -(y*y*ac+y*ae+af)/(y*ab+ad);
     solutions.push_back(vgl_homg_point_2d<T>(x,y,1));
@@ -537,8 +538,8 @@ vgl_homg_operators_2d<T>::do_intersect(vgl_conic<T> const& c1,
     vcl_list<vgl_homg_point_2d<T> > solutions;
     for (int i=0;i<3;i++)
       if (vcl_abs(vcl_imag(polysolutions(i))) < 1e-7) {// only want the real solutions
-        double y = vcl_real(polysolutions(i));
-        double x = -(y*y*ac+y*ae+af)/(y*ab+ad);
+        T y = (T)vcl_real(polysolutions(i));
+        T x = -(y*y*ac+y*ae+af)/(y*ab+ad);
         solutions.push_back(vgl_homg_point_2d<T>(x,y,1));
       }
     return solutions;
@@ -558,8 +559,8 @@ vgl_homg_operators_2d<T>::do_intersect(vgl_conic<T> const& c1,
 
   for (int i=0;i<4;i++)
     if (vcl_abs(vcl_imag(polysolutions(i))) < 1e-7) { // only want the real solutions
-      double y = vcl_real(polysolutions(i));
-      double x = -(y*y*ac+y*ae+af)/(y*ab+ad);
+      T y = (T)vcl_real(polysolutions(i));
+      T x = -(y*y*ac+y*ae+af)/(y*ab+ad);
       solutions.push_back(vgl_homg_point_2d<T>(x,y,1));
     }
   return solutions;

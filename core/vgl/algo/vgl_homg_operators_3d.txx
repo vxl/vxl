@@ -101,7 +101,7 @@ vgl_homg_point_3d<Type> vgl_homg_operators_3d<Type>::intersect_line_and_plane (
   numerator *= scale;
   denominator *= scale;
 
-  vnl_vector<Type> r = x1 * denominator + x2 * numerator;
+  vnl_vector<Type> r = x1 * Type(denominator) + x2 * Type(numerator);
   return vgl_homg_point_3d<Type>(r[0], r[1], r[2], r[3]);
 }
 
