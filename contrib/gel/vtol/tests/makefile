@@ -10,6 +10,7 @@ TESTS += test_face_2d.cxx
 TESTS += test_two_chain.cxx
 TESTS += test_block.cxx
 TESTS += vtol_test_refcounting.cxx
+TESTS += test_cycle_processor.cxx
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk
