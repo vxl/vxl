@@ -179,7 +179,7 @@ void vsrl_step_diffusion::diffuse_disparity()
 
    for (dif_num=0;dif_num<100;dif_num++)
    {
-     vcl_cout << "Iteration " << dif_num << vcl_endl;
+     vcl_cout << "Iteration " << dif_num << "\r";
 
      for (x=1;x<get_width() -1;x++)
      {
@@ -225,7 +225,7 @@ void vsrl_step_diffusion::diffuse_disparity()
    // copy the new results
    (*disparity_matrix_)=(*mstar1);
 
-   vcl_cout << "Finished the diffusion\n";
+   vcl_cout << vcl_endl << "Finished the diffusion" << vcl_endl;
 }
 
 void vsrl_step_diffusion::execute()
