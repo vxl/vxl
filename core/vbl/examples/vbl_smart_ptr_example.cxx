@@ -63,7 +63,7 @@ void main1()
       vcl_cout << *sp << " put on list\n";
 
       example_sp_sptr sp2 = sp; // copy constructor: refcount incremented
-      vcl_cout << *sp << " copied to sp2\n";
+      vcl_cout << *sp << " copied to sp2" << *sp2 << '\n';
 
     } // sp2 goes out of scope: refcount goes down
     vcl_cout << "Copy of " << *sp << " is now out of scope\n";

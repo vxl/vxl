@@ -1,3 +1,4 @@
+// This is oxl/vgui/examples/example_vgui_observer.cxx
 // This example displays some images in a window (the image filenames are
 // given as parameters on the command line).  An observer is attached to the
 // vgui_deck_tableau containing the images.  As the user flips through the
@@ -83,7 +84,7 @@ int main(int argc, char **argv)
 
   // Make an observer of the deck. It will set the window title
   // every time the deck's observers are notified.
-  example_window_title_setter wawa(argv, deck);
+  new example_window_title_setter(argv, deck);
 
   vgui_viewer2D_tableau_new viewer(deck);
   vgui_shell_tableau_new shell(viewer);

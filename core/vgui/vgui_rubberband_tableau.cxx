@@ -211,7 +211,7 @@ void vgui_rubberband_tableau::draw_polygon(float px, float py)
   if (n==0)
     return;
 
-  vgui_matrix_state M;
+  vgui_matrix_state M;  M.save();
 
   glLineWidth(1);
   glColor3f(1,1,1);
@@ -253,7 +253,7 @@ void vgui_rubberband_tableau::draw_linestrip(float px,float py)
   if (n==0)
     return;
 
-  vgui_matrix_state M;
+  vgui_matrix_state M;  M.save();
 
   glLineWidth(1);
   glColor3f(1,1,1);

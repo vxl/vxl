@@ -311,7 +311,7 @@ bool vgui_viewer2D_tableau::mouse_drag(int x, int y,  vgui_button /*button*/, vg
     // this is called during the sweep zoom operation. we have
     // to (a) repair the front buffer, (b) draw the new rectangle
     // and (c) remember where the mouse pointer was (in new_x, new_y).
-    vgui_matrix_state gl_state;
+    vgui_matrix_state gl_state;  gl_state.save();
 
     //vcl_cerr << "begin_sw_overlay..." << flush;
     vgui_utils::begin_sw_overlay();
@@ -424,8 +424,7 @@ bool vgui_viewer2D_tableau::mouse_up(int /*x*/, int /*y*/,  vgui_button button, 
 
 bool vgui_viewer2D_tableau::help()
 {
-  vcl_cerr << vcl_endl;
-  vcl_cerr << "-- vgui_viewer2D_tableau ----------\n";
+  vcl_cerr << "\n-- vgui_viewer2D_tableau ----------\n";
   vcl_cerr << "|     mouse               |\n";
   vcl_cerr << "| ctrl+left       zoom in |\n";
   vcl_cerr << "| ctrlt+middle        pan |\n";
@@ -439,8 +438,7 @@ bool vgui_viewer2D_tableau::help()
   vcl_cerr << "| `n'     toggle aliasing |\n";
   vcl_cerr << "| `z'    toggle zoom type |\n";
   vcl_cerr << "| `d'          sweep zoom |\n";
-  vcl_cerr << "--------------------------\n";
-  vcl_cerr << vcl_endl;
+  vcl_cerr << "--------------------------\n\n";
   return false;
 }
 
@@ -462,7 +460,7 @@ void vgui_viewer2D_tableau::center_event()
 bool vgui_viewer2D_tableau::key_press(int /*x*/, int /*y*/, vgui_key key, vgui_modifier modifier)
 {
 #ifdef DEBUG
-  vcl_cerr << "vgui_viewer2D_tableau_handler::key_press " << key << vcl_endl;
+  vcl_cerr << "vgui_viewer2D_tableau_handler::key_press " << key << '\n';
 #endif
   switch(key) {
   case 'x':
@@ -486,16 +484,17 @@ bool vgui_viewer2D_tableau::key_press(int /*x*/, int /*y*/, vgui_key key, vgui_m
     /* else return false; */
   case '-':
     zoom_factor -= 0.1f;
-    vgui::out << "viewer2D : zoom_factor = " << zoom_factor << vcl_endl;
+    vgui::out << "viewer2D : zoom_factor = " << zoom_factor << '\n';
     return true;
   case '=':
     zoom_factor += 0.1f;
-    vgui::out << "viewer2D : zoom_factor = " << zoom_factor << vcl_endl;
+    vgui::out << "viewer2D : zoom_factor = " << zoom_factor << '\n';
     return true;
   case 'n':
     this->nice_points = !this->nice_points;
     this->nice_lines = !this->nice_lines;
-    vgui::out << "viewer2D : antialiased points & lines " << vbl_bool_ostream::on_off(this->nice_points) << vcl_endl;
+    vgui::out << "viewer2D : antialiased points & lines "
+              << vbl_bool_ostream::on_off(this->nice_points) << '\n';
     this->post_redraw();
     return true;
   case 'd':
