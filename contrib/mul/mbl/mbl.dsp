@@ -230,6 +230,11 @@ SOURCE=.\mbl_read_int.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\mbl_read_str.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\mbl_read_props.cxx
 
 # End Source File
@@ -339,6 +344,11 @@ SOURCE=.\mbl_read_double.h
 # Begin Source File
 
 SOURCE=.\mbl_read_int.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_read_str.h
 
 # End Source File
 # Begin Source File
