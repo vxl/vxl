@@ -26,6 +26,7 @@
 #else
 # undef VNL_CONFIG_CHECK_BOUNDS
 # define VNL_CONFIG_CHECK_BOUNDS 0
+# undef ERROR_CHECKING
 #endif
 
 export template <class T> class vnl_vector;
