@@ -102,7 +102,7 @@ template<class T>
 void mbl_data_array_wrapper<T>::set_index(unsigned long n)
 {
   assert(n != ((unsigned)-1));
-  if (n>=size())
+  if (n>=n_)
   {
     vcl_cerr<<"TC_VectorDataBase::set_index(n) ";
     vcl_cerr<<"n = "<<n<<" not in range 0<=n<"<<size()<<vcl_endl;
