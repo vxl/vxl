@@ -19,6 +19,10 @@ SOURCE_FILES(oxp_sources
   vsl_conic_as_matrix.h
   vsl_conic_as_params.h
   vsl_conic_points.h
+  oxp_bunch_of_files.h
+  oxp_mpeg_codec.h
+  oxp_vidl_moviefile.h
+  oxp_vidl_mpeg_codec.h
 
   ImageWarp.txx
 )
