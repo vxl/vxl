@@ -47,16 +47,13 @@ void test_url()
     //Can be renambled to help track down errors.
     vcl_pair<vcl_string::iterator,vcl_string::iterator> x
       = vcl_mismatch(decoded.begin(), decoded.end(), data.begin());
-    long k = x.first - decoded.begin();
-    if (k!=long(i+1))
+    if (x.first != decoded.begin() + i+1)
       correct_decode = false;
     if (decoded != data)
     {
       //Can be renambled to help track down errors.
-      vcl_pair<vcl_string::iterator,vcl_string::iterator> x
-        = vcl_mismatch(decoded.begin(), decoded.end(), data.begin());
-      k = x.first - decoded.begin();
-
+      x = vcl_mismatch(decoded.begin(), decoded.end(), data.begin());
+      vcl_cout << "mismatch offset " << decoded.begin() +i+1 - x.first << '\n';
       correct_decode = false;
     }
   }
@@ -85,7 +82,7 @@ void test_url()
          vul_url::exists("http://vxl.sourceforge.net/foobarwobble.html"), false);
 
     vcl_istream* i = vul_url::open("http://vxl.sourceforge.net/");
-    TEST("vul_url::open(\"http://vxl.sourceforge.net/\")", bool(i), true);
+    TEST("vul_url::open(\"http://vxl.sourceforge.net/\")", i==0, false);
 
     char b[]="<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n<html>\n  <head>\n    <title>VXL homepage</title>";
     if (i)
