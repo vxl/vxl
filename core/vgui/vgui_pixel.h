@@ -12,8 +12,6 @@
 #include <vgui/vgui_gl.h>
 #include <vxl_config.h>
 
-// This header 
-
 //: Now we define a bunch of pixel-type structs
 // These are *empty* templates. only the specializations make sense.
 template <int r, int g, int b> struct vgui_pixel_rgb;
