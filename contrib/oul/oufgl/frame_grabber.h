@@ -1,6 +1,7 @@
 //-*-c++-*--------------------------------------------------------------
 //
-// \file frame_grabber.h: A base class for frame grabbers
+// \file
+// \brief A base class for frame grabbers
 //
 // Copyright (c) 2001 Brendan McCane
 // University of Otago, Dunedin, New Zealand
@@ -8,11 +9,8 @@
 //----------------------------------------------------------------------
 
 #ifndef OTAGO_frame_grabber__h_INCLUDED
-#define OTAGO_frame_grabber__h_INCLUDED 1
+#define OTAGO_frame_grabber__h_INCLUDED
 //----------------------------------------------------------------------
-//: The FrameGrabber class 
-// \file frame_grabber.h
-//
 // This is the base class for frame grabbers. It is a pure virtual
 // class that acts as an interface really. Subclasses should provide
 // methods for acquiring new frames both synchronously and
@@ -24,17 +22,17 @@
 class FrameGrabber
 {
  public:
-	// returns the current acquired frame
-	virtual vil_memory_image *get_current_frame()=0;
-	// acquire a new frame synchronously (ie don't return until completed)
-	virtual void acquire_frame_synch()=0;
-	// acquire a new frame asynchronously (ie start acquiring and
-	// return immediately )
-	virtual void acquire_frame_asynch()=0;
-	// return the current frame and start acquiring the next one. This
-	// function is only useful if asynchronous acquires are going to
-	// be used.
-	virtual vil_memory_image *get_current_and_acquire()=0;
+  // returns the current acquired frame
+  virtual vil_memory_image *get_current_frame()=0;
+  // acquire a new frame synchronously (ie don't return until completed)
+  virtual void acquire_frame_synch()=0;
+  // acquire a new frame asynchronously (ie start acquiring and
+  // return immediately )
+  virtual void acquire_frame_asynch()=0;
+  // return the current frame and start acquiring the next one. This
+  // function is only useful if asynchronous acquires are going to
+  // be used.
+  virtual vil_memory_image *get_current_and_acquire()=0;
 };
 
-#endif
+#endif // OTAGO_frame_grabber__h_INCLUDED

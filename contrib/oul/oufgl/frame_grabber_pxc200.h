@@ -23,7 +23,6 @@
 
 //----------------------------------------------------------------------
 //: The FrameGrabberPxcRGB class 
-// \file frame_grabber_pxc200.h
 //
 // This class provides an interface with the pxc200 framegrabber on a
 // linux system. I have not attempted at all to provide

@@ -1,6 +1,7 @@
 //-*-c++-*--------------------------------------------------------------
 //:
-// \file asyncio.h: A simple wrapper around POSIX.1b aynchronous I/O
+// \file
+// \brief A simple wrapper around POSIX.1b aynchronous I/O
 //
 // Copyright (c) 2001 Simon Brady
 // University of Otago, Dunedin, New Zealand

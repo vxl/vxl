@@ -14,9 +14,9 @@
 
 //----------------------------------------------------------------------
 //:
-// \file kalman_filter.h
+// \file
+// \brief The Kalman filter class
 // \verbatim
-// The Kalman filter class
 //
 // Implementation of a linear Kalman filter. We want to estimate the
 // value of a time-varying signal from a measurement and predict the
