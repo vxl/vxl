@@ -10,7 +10,7 @@
 
 
 //: Return true if any im[offset[k]] is non-zero
-inline bool vil2_binary_dilate(const bool* im, const int* offset, unsigned n)
+inline bool vil2_binary_dilate(const bool* im, const vcl_ptrdiff_t* offset, unsigned n)
 {
   for (unsigned i=0;i<n;++i) if (im[offset[i]]) return true;
   return false;

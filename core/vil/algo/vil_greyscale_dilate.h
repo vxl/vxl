@@ -10,7 +10,7 @@
 
 //: Return maximum value of im[offset[k]]
 template <class T>
-inline T vil2_greyscale_dilate(const T* im, const int* offset, unsigned n)
+inline T vil2_greyscale_dilate(const T* im, const vcl_ptrdiff_t* offset, unsigned n)
 {
   T max_v = im[offset[0]];
   for (unsigned i=1;i<n;++i)

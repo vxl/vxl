@@ -27,7 +27,7 @@ void vil2_median(const vil2_image_view<T>& src_image,
   const T* src_row0 = src_image.top_left_ptr();
   T* dest_row0 = dest_image.top_left_ptr();
 
-  vcl_vector<int> offset;
+  vcl_vector<vcl_ptrdiff_t> offset;
   vil2_compute_offsets(offset,element,s_istep,s_jstep);
 
   vcl_vector<T> value_wkspce;

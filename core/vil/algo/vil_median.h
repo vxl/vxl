@@ -12,7 +12,7 @@
 //: Return r-th sorted value of im[offset[k]]
 //  Values im[offset[k]] placed into values[k] then sorted
 template <class T>
-inline T vil2_sorted_value(const T* im, const int* offset, T* values,
+inline T vil2_sorted_value(const T* im, const vcl_ptrdiff_t* offset, T* values,
                            unsigned n, unsigned r)
 {
   for (unsigned i=0;i<n;++i) values[i]=im[offset[i]];

@@ -1,16 +1,16 @@
 #ifndef vil2_binary_erode_h_
 #define vil2_binary_erode_h_
 //:
-//  \file
-//  \brief Perform binary erosion on images
-//  \author Tim Cootes
+// \file
+// \brief Perform binary erosion on images
+// \author Tim Cootes
 
 #include <vil2/algo/vil2_structuring_element.h>
 #include <vil2/vil2_image_view.h>
 
 
 //: Return false if any im[offset[k]] is zero
-inline bool vil2_binary_erode(const bool* im, const int* offset, unsigned n)
+inline bool vil2_binary_erode(const bool* im, const vcl_ptrdiff_t* offset, unsigned n)
 {
   for (unsigned i=0;i<n;++i) if (!im[offset[i]]) return false;
   return true;
