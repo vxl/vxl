@@ -62,7 +62,7 @@ struct xcv_image_tableau_new : public xcv_image_tableau_sptr
   xcv_image_tableau_new() : base(new xcv_image_tableau()) { }
   xcv_image_tableau_new(vil1_image const &i) : base(new xcv_image_tableau(i)) { }
   xcv_image_tableau_new(char const *n) : base(new xcv_image_tableau(n)) { }
-  operator vgui_image_tableau_sptr () const { vgui_image_tableau_sptr tt; tt.vertical_cast(*this); return tt; }
+  //operator vgui_image_tableau_sptr () const { vgui_image_tableau_sptr tt; tt.vertical_cast(*this); return tt; }
 };
 
 class vgui_roi_tableau_make_roi : public vgui_rubberband_client
