@@ -79,7 +79,7 @@ same_int_region( unsigned i, unsigned j,
 //                                                                       image
 
 template<typename pix_type>
-vil_region_finder<pix_type>::image_view const&
+typename vil_region_finder<pix_type>::image_view const&
 vil_region_finder<pix_type>::
 image() const
 {
