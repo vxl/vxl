@@ -1,11 +1,6 @@
 ADD_EXECUTABLE(  example_create_image_vil
    create_image_vil.cxx
 )
-TARGET_LINK_LIBRARIES( example_create_image_vil vul vil1 )
-
-ADD_EXECUTABLE(  example_create_image_vil2
-   create_image_vil2.cxx
-)
-TARGET_LINK_LIBRARIES( example_create_image_vil2 vul vil )
+TARGET_LINK_LIBRARIES( example_create_image_vil vul vil )
 
 SUBDIRS( vnl_calc )
