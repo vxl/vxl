@@ -329,9 +329,11 @@ vgl_homg_operators_2d<T>::most_orthogonal_vector_svd(const vcl_vector<vgl_homg_l
 }
 
 //: Intersect a set of 2D lines to find the least-square point of intersection.
-// This finds the point $\bf x$ that minimizes $\|\tt L \bf x\|$, where $\tt L$ is the matrix whose
-// rows are the lines. The current implementation uses the Scatter3x3 class from
-// Numerics to accumulate and compute the nullspace of $\tt L^\top \tt L$.
+// This finds the point $\bf x$ that minimizes $\|\tt L \bf x\|$, where $\tt L$
+// is the matrix whose rows are the lines. The implementation uses either
+// vnl_scatter_3x3 (default) or vnl_svd (when at compile time
+// VGL_HOMG_OPERATORS_2D_LINES_TO_POINT_USE_SVD has been set) to accumulate and
+// compute the nullspace of $\tt L^\top \tt L$.
 template <class T>
 vgl_homg_point_2d<T>
 vgl_homg_operators_2d<T>::lines_to_point(const vcl_vector<vgl_homg_line_2d<T> >& lines)
@@ -773,7 +775,7 @@ vgl_homg_operators_2d<T>::closest_point(vgl_conic<T> const& c,
   // connection line with the given point; all points with this property form
   // a certain conic  (actually an orthogonal hyperbola) :
   vcl_list<vgl_homg_point_2d<T> > candidates; // all intersection points
-  if (pt.w() == 0) { // givel point is at infinity
+  if (pt.w() == 0) { // given point is at infinity
     // ==> degenerate hyperbola: line + line at infinity
     vgl_homg_line_2d<T> l(c.a()*pt.y()*2-c.b()*pt.x(),
                          -c.c()*pt.x()*2+c.b()*pt.y(),

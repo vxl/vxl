@@ -11,7 +11,7 @@ CMLIB and TOMS routines are also public domain and good.
 
 @item Add the routine to the Imakefile in the netlib library.
 
-@item Encapsulate the routine in a class in Numerics, after determining a
+@item Encapsulate the routine in a class in vnl, after determining a
 suitable interface.
 
 @item Read the module documentation and determine the calling sequence.
@@ -67,7 +67,7 @@ applied to the results in order to complete the process.
 @end itemize
 
 @subsection Example conversion -- QR decomposition
-Given the need for an algorithm that is not yet included in the Numerics
+Given the need for an algorithm that is not yet included in the vnl
 package, say a routine to compute the QR decomposition, your first stop is
 the GAMS decision tree.  Class ``D'' is Linear Algebra, and class ``D5'' is
 QR decomposition.  The SLATEC implementation is called DQRDC (Double
