@@ -5,19 +5,39 @@
 // \author Amitha Perera
 // \date   July 2003
 //
+// \verbatim
+// Modifications:
+//   29sep04 - templated over label image type for >256 labels;
+//             some bug fixes found w/ Amitha [roddy collins]
+//
+// \endverbatim
+
 
 #include <vxl_config.h>
 #include <vcl_vector.h>
 
+#include <vbl/vbl_ref_count.h>
+
 #include <vil/vil_image_view.h>
+#include <vil/algo/vil_region_finder.h>
+
+#include <vdgl/vdgl_edgel_chain_sptr.h>
 
 #include <vtol/vtol_vertex_2d_sptr.h>
 #include <vtol/vtol_intensity_face_sptr.h>
+#include <vtol/vtol_edge_2d_sptr.h>
+#include <vtol/vtol_one_chain_sptr.h>
 
 // A class in the test harness that will test some of the internal
 // methods
 //
 class test_vtol_extract_topology;
+
+//: Some data types, further aliased in the definitions and implementations.
+
+typedef vxl_byte vtol_extract_topology_data_pixel_type;
+typedef vil_image_view< vtol_extract_topology_data_pixel_type > 
+         vtol_extract_topology_data_image_type;
 
 //: Controls the behaviour of vtol_extract_topology
 struct vtol_extract_topology_params
@@ -48,6 +68,103 @@ struct vtol_extract_topology_params
   vtol_extract_topology_params() : num_for_smooth( 0 ) {}
 };
 
+//: Stores an edgel chain and a corresponding topological edge
+//
+// Although the edgel chain can be recovered from the edge, we will
+// need the edgel chain often enough that it is worthwhile to cache
+// the information.
+//
+struct vtol_extract_topology_edgel_chain
+  : public vbl_ref_count
+{
+  vdgl_edgel_chain_sptr chain;
+  vtol_edge_2d_sptr edge;
+};
+
+//: Stores the boundary of a region
+//
+// This stores the one chain corresponding to a complete region
+// boundary. It also stores a point completely inside that
+// region. This point is used to perform containment checks between
+// regions.
+//
+// \sa contains
+//
+class vtol_extract_topology_region_type
+  : public vbl_ref_count
+{
+ public:
+  typedef vbl_smart_ptr< vtol_extract_topology_edgel_chain > edgel_chain_sptr;
+
+  //: Add an edge to this region
+  void
+  push_back( edgel_chain_sptr chain );
+
+  //: The number of edges in the boundary
+  unsigned
+  size() const;
+
+  //: Extract segment \a i of the boundary one chain
+  vdgl_edgel_chain_sptr const&
+  operator[]( unsigned i ) const;
+
+  //: Create a vtol_one_chain describing the boundary
+  vtol_one_chain_sptr
+  make_one_chain() const;
+
+  //: Location of a pixel inside the region
+  unsigned i, j;
+
+ private:
+
+  //: The list of bounday edges (which are edgel chains)
+  vcl_vector< edgel_chain_sptr > list_;
+};
+
+//: A node in the graph of vertices.
+//
+// The links correspond to edges between the vertices. Each vertex
+// is located at the corner of the pixel.
+//
+struct vtol_extract_topology_vertex_node
+{
+  //: Create a node for vertex at (i,j).
+  vtol_extract_topology_vertex_node( unsigned i, unsigned j );
+  
+  //: Location
+  unsigned i, j;
+  
+  //: vtol vertex in pixel coordinates.
+  vtol_vertex_2d_sptr vertex;
+  
+  //: Neighbouring vertices in the graph.
+  unsigned link[4];
+  
+  //: Direction in which we exit the neighbouring node to get back to this node.
+  //
+  // That is, (this->link)[n].link[ this->back_dir[n] ] == indexof(this).
+  //
+  unsigned back_dir[4];
+  
+  //: Edgel chains leading to neighbouring vertices.
+  vbl_smart_ptr< vtol_extract_topology_edgel_chain > edgel_chain[4];
+
+  //: Null index value.
+  //
+  // A vertex with an index value >= this value does not correspond to
+  // a node in the graph.
+  //
+  static const unsigned null_index   VCL_STATIC_CONST_INIT_INT_DECL( unsigned(-2) );
+
+  //: "Processed" index value
+  //
+  // This is used to indicate that the boundary edge following went
+  // through a vertex.
+  //
+  static const unsigned done_index   VCL_STATIC_CONST_INIT_INT_DECL( unsigned(-1) );
+
+};
+
 //: Extracts the topology from a segmentation label image.
 //
 // This class contains the functionality to extract a set of regions
@@ -63,17 +180,62 @@ struct vtol_extract_topology_params
 // indexed (0,0) to (M,N). A vertex (i,j) is positioned at
 // (i-0.5,j-0.5) in pixel coordinates.
 //
+// Now templated; LABEL_TYPE can be vxl_byte, vxl_uint_16, etc.
+//
+
+template< typename LABEL_TYPE >
 class vtol_extract_topology
 {
  public: // public types
 
-  //: Input label image type
-  typedef vil_image_view< vxl_byte > label_image_type;
+  //: alias for the region type
+  typedef vtol_extract_topology_region_type region_type;
+  typedef vbl_smart_ptr< region_type > region_type_sptr;
 
-  typedef vxl_byte  data_pixel_type;
+  //: Input label image type
+  typedef vil_image_view< LABEL_TYPE > label_image_type;
+  typedef vil_region_finder< LABEL_TYPE > finder_type;
 
   //: Input data image type
-  typedef vil_image_view< data_pixel_type > data_image_type;
+  typedef vtol_extract_topology_data_image_type data_image_type;
+
+
+  // Holds the tree describing the containment structure for a set of
+  // chains bounding regions with the same label.
+  //
+  struct chain_tree_node
+  {
+    // The region for the current node. Can be null only for the root
+    // node. The root node represents the universe. All regions are
+    // contained in the universe.
+    //
+    region_type_sptr region;
+    
+    // The regions from all child nodes are spatially contained in the
+    // region for this node.
+    //
+    vcl_vector<chain_tree_node*> children;
+    
+    chain_tree_node( region_type_sptr region );
+    ~chain_tree_node();
+    
+    // Add a new region below this node. Prerequiste: the new region is
+    // contained within this chain.
+    //
+    void
+    add( region_type_sptr new_region );
+
+
+    
+    // Create a face from the regions at this node and its children.
+    //
+    vtol_intensity_face_sptr
+    make_face( finder_type* find, data_image_type const* img ) const;
+    
+    void
+    print( vcl_ostream& ostr, unsigned indent ) const;
+  };
+
 
  public: // public methods
 
@@ -103,78 +265,81 @@ class vtol_extract_topology
   vcl_vector< vtol_intensity_face_sptr >
   faces( data_image_type const& data_img ) const;
 
- private:   // internal classes and constants
+  // Adds the faces contained in the tree rooted at node. Essentially,
+  // it will create a face from each node at an even depth. (The root
+  // node, the universe, is at an odd depth.) At an even depth, the
+  // chain for the node represents the outer boundary while the chains
+  // of the children represent inner boundaries. (Grandchildren
+  // represent the outer boundaries of smaller faces.)
+  //
+
+  void
+  add_faces( vcl_vector<vtol_intensity_face_sptr>& faces,
+             finder_type* find,
+             data_image_type const* img,
+             chain_tree_node* node,
+             bool even_level = false ) const ;
+
+
+  // Returns true if the region bounded by a contains the region bounded
+  // by b.  Assumes that (1) the chains are cycles and thus bound a
+  // region, (2) that a containment relationship holds (i.e. no partial
+  // overlap). A special case allows for a "universe": if a is null,
+  // then the function will return true. Currently, b cannot be null.
+  //
+  static 
+  bool
+  contains( region_type_sptr a, region_type_sptr b );
+  
+  // Computes the number of times that a ray in the positive x direction
+  // originating from (x,y) intersects the edgel chain.
+  //
+  // The implementation assumes that (1) the neighbouring edgels form
+  // vertical or horizontal lines only, and (2) the ray does not go
+  // through a vertex (i.e. \a y is not equal to the y-coordinate of any
+  // edgel).
+  //
+  static
+  unsigned
+  num_crosses_x_pos_ray( double x, double y, vdgl_edgel_chain const& chain );
+  
+  // Smoothes an edgel chain by fitting a line to the local
+  // neighbourhood and projecting onto that line
+  //
+  vdgl_edgel_chain_sptr
+  smooth_chain( vdgl_edgel_chain_sptr chain,
+                unsigned int num_pts ) const;
+  
+private:   // internal classes and constants
+  
+  //: Queries into label_img_ return either (label, true) or (0, false)
+  // ...this avoids using one of the possible labels as an off-image flag
+
+  struct LabelPoint
+  {
+    LABEL_TYPE label;
+    bool valid;
+    LabelPoint(): label(0), valid(false) {}
+    LabelPoint(LABEL_TYPE const& lt, bool v): label(lt), valid(v) {}
+    bool operator==( LabelPoint const& lp ) { 
+      return (lp.valid == this->valid) && ( (lp.valid) ? lp.label == this->label : true );
+    }
+    bool operator!=( LabelPoint const& lp ) {
+      return !(*this == lp);
+    }
+  };
+
+  typedef vtol_extract_topology_edgel_chain edgel_chain;
+  typedef vbl_smart_ptr< edgel_chain > edgel_chain_sptr;
 
   //: Image of indices into the vertex node list
   typedef vil_image_view< unsigned > index_image_type;
 
- public:
-  // These types are implementation details, and should be private to
-  // the class. However, there are some issues with creating smart
-  // pointers to private classes. Until I have it figured out, I'm
-  // making them public. -- Amitha Perera
-
-  // Defined in the .cxx file
-  struct edgel_chain;
-
-  typedef vbl_smart_ptr< edgel_chain > edgel_chain_sptr;
-
-  // Defined in the .cxx file
-  class region_type;
-
-  // internal typedef. Needs to be public for implementation reasons.
-
-  typedef vbl_smart_ptr< region_type > region_type_sptr;
-
- private:
-
-  //: A node in the graph of vertices.
-  //
-  // The links correspond to edges between the vertices. Each vertex
-  // is located at the corner of the pixel.
-  //
-  struct vertex_node
-  {
-    //: Create a node for vertex at (i,j).
-    vertex_node( unsigned i, unsigned j );
-
-    //: Location
-    unsigned i, j;
-
-    //: vtol vertex in pixel coordinates.
-    vtol_vertex_2d_sptr vertex;
-
-    //: Neighbouring vertices in the graph.
-    unsigned link[4];
-
-    //: Direction in which we exit the neighbouring node to get back to this node.
-    //
-    // That is, (this->link)[n].link[ this->back_dir[n] ] == indexof(this).
-    //
-    unsigned back_dir[4];
-
-    //: Edgel chains leading to neighbouring vertices.
-    edgel_chain_sptr edgel_chain[4];
-  };
-
-  //: Null index value.
-  //
-  // A vertex with an index value >= this value does not correspond to
-  // a node in the graph.
-  //
-  static const unsigned null_index   VCL_STATIC_CONST_INIT_INT_DECL( unsigned(-2) );
-
-  //: "Processed" index value
-  //
-  // This is used to indicate that the boundary edge following went
-  // through a vertex.
-  //
-  static const unsigned done_index   VCL_STATIC_CONST_INIT_INT_DECL( unsigned(-1) );
+  //: shorthand for the vertex node
+  typedef vtol_extract_topology_vertex_node vertex_node;
 
   // For VC6, to give access to the constants
   friend struct vertex_node;
-
- private: // internal methods
 
   // Allow the test harness to call on the "internal" member function is_edge()
   // for thorough testing.
@@ -190,7 +355,7 @@ class vtol_extract_topology
   // If (i,j) falls inside the input image, return the value of pixel (i,j) of the
   // input image. Otherwise, it will return min_label_ - 1.
   //
-  int
+  LabelPoint
   label( unsigned i, unsigned j ) const;
 
   //: Is this a vertex bordering at least three regions?
@@ -231,7 +396,7 @@ class vtol_extract_topology
   //
   void
   edge_labels( unsigned i, unsigned j, unsigned dir,
-               int& left, int& right ) const;
+               LabelPoint& left, LabelPoint& right ) const;
 
   //: The node index of the vertex at coordinate (i,j)
   unsigned
@@ -303,7 +468,7 @@ class vtol_extract_topology
                        unsigned index,
                        unsigned dir,
                        region_type& chain,
-                       int& region_label ) const;
+                       LabelPoint& region_label ) const;
 
   typedef vcl_vector< vcl_vector< region_type_sptr > > region_collection;
 
@@ -336,13 +501,13 @@ class vtol_extract_topology
  private: // internal data
 
   //: The input label image
-  label_image_type const& img_;
+  label_image_type const& label_img_;
 
   //: Parameters
   vtol_extract_topology_params params_;
 
   //: The label ranges in the image
-  int min_label_, max_label_;
+  LABEL_TYPE min_label_, max_label_;
 
   //: List of vertices (which form the nodes of the graph)
   vcl_vector< vertex_node > node_list_;
