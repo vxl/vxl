@@ -63,7 +63,7 @@ class vimt3d_transform_3d
   virtual ~vimt3d_transform_3d() {}
 
   //: True if identity.
-  bool isIdentity() const { return form_==Identity; }
+  bool is_identity() const { return form_==Identity; }
 
   //: Form of transformation.
   Form form() const { return form_; }
