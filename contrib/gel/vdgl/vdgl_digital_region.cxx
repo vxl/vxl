@@ -35,7 +35,8 @@ vcl_string vdgl_digital_region::is_a() const
 // Constructors
 //
 vdgl_digital_region::vdgl_digital_region()
-  : npts_(0), pixel_size_(1.f), xp_(0), yp_(0), zp_(0), pix_(0),
+  : vsol_region_2d(),
+    npts_(0), pixel_size_(1.f), xp_(0), yp_(0), zp_(0), pix_(0),
     max_(0), min_((unsigned short)(-1)), xo_(0.f), yo_(0.f), zo_(0.f),
     io_(0.f), io_stdev_(0.0f), pix_index_(0),
     fit_valid_(false), scatter_matrix_valid_(false),
@@ -44,7 +45,7 @@ vdgl_digital_region::vdgl_digital_region()
 }
 
 vdgl_digital_region::vdgl_digital_region(vdgl_digital_region const& r)
-  : vsol_region_2d(),
+  : vsol_region_2d(r),
     npts_(0), pixel_size_(1.f), xp_(0), yp_(0), zp_(0), pix_(0),
     max_(0), min_((unsigned short)(-1)), xo_(0.f), yo_(0.f), zo_(0.f),
     io_(0.f), io_stdev_(0.0f), pix_index_(0),
@@ -61,7 +62,8 @@ vdgl_digital_region::vdgl_digital_region(vdgl_digital_region const& r)
 
 vdgl_digital_region::vdgl_digital_region(int npts, const float* xp, const float* yp,
                                          const unsigned short *pix)
-  : npts_(0), pixel_size_(1.f), xp_(0), yp_(0), zp_(0), pix_(0),
+  : vsol_region_2d(),
+    npts_(0), pixel_size_(1.f), xp_(0), yp_(0), zp_(0), pix_(0),
     max_(0), min_((unsigned short)(-1)), xo_(0.f), yo_(0.f), zo_(0.f),
     io_(0.f), io_stdev_(0.0f), pix_index_(0),
     fit_valid_(false), scatter_matrix_valid_(false),
@@ -78,7 +80,8 @@ vdgl_digital_region::vdgl_digital_region(int npts, const float* xp, const float*
 
 vdgl_digital_region::vdgl_digital_region(int npts, const float* xp, const float* yp,
                                          const float* zp, const unsigned short *pix)
-  : npts_(0), pixel_size_(1.f), xp_(0), yp_(0), zp_(0), pix_(0),
+  : vsol_region_2d(),
+    npts_(0), pixel_size_(1.f), xp_(0), yp_(0), zp_(0), pix_(0),
     max_(0), min_((unsigned short)(-1)), xo_(0.f), yo_(0.f), zo_(0.f),
     io_(0.f), io_stdev_(0.0f), pix_index_(0),
     fit_valid_(false), scatter_matrix_valid_(false),
@@ -143,43 +146,47 @@ bool vdgl_digital_region::next() const
 //: The X pixel coordinate
 float vdgl_digital_region::X() const
 {
-  if (pix_index_<0)
+  if (pix_index_<0 || pix_index_ >= npts_)
     return 0.0f;
-  return xp_[pix_index_];
+  else
+    return xp_[pix_index_];
 }
 
 //-------------------------------------------------------
 //: The Y pixel coordinate
 float vdgl_digital_region::Y() const
 {
-  if (pix_index_<0)
+  if (pix_index_<0 || pix_index_ >= npts_)
     return 0.0f;
-  return yp_[pix_index_];
+  else
+    return yp_[pix_index_];
 }
 
 //-------------------------------------------------------
 //: The Z pixel coordinate
 float vdgl_digital_region::Z() const
 {
-  if (pix_index_<0)
+  if (pix_index_<0 || pix_index_ >= npts_)
     return 0.0f;
-  return zp_[pix_index_];
+  else
+    return zp_[pix_index_];
 }
 
 //-------------------------------------------------------
 //: The pixel Intensity
 unsigned short vdgl_digital_region::I() const
 {
-  if (pix_index_<0)
-    return 0;
-  return pix_[pix_index_];
+  if (pix_index_<0 || pix_index_ >= npts_)
+    return (unsigned short)0;
+  else
+    return pix_[pix_index_];
 }
 
 //-------------------------------------------------------
 //: Modify the X pixel coordinate
 void vdgl_digital_region::set_X(float x)
 {
-  if (pix_index_<0)
+  if (pix_index_<0 || pix_index_ >= npts_)
     return;
   xp_[pix_index_]=x;
 }
@@ -188,7 +195,7 @@ void vdgl_digital_region::set_X(float x)
 //: Modify the Y pixel coordinate
 void vdgl_digital_region::set_Y(float y)
 {
-  if (pix_index_<0)
+  if (pix_index_<0 || pix_index_ >= npts_)
     return;
   yp_[pix_index_]=y;
 }
@@ -197,7 +204,7 @@ void vdgl_digital_region::set_Y(float y)
 //: Modify the pixel intensity
 void vdgl_digital_region::set_I(unsigned short I)
 {
-  if (pix_index_<0)
+  if (pix_index_<0 || pix_index_ >= npts_)
     return;
   pix_[pix_index_]=I;
 }
@@ -588,7 +595,7 @@ IntensityCoef_ref vdgl_digital_region::GetIntCoef() const
 //: The Residual Intensity
 float vdgl_digital_region::Ir() const
 {
-  if (pix_index_<0)
+  if (pix_index_<0 || pix_index_ >= npts_)
     return 0.0f;
   if (npts_<4)
     return 0.0f;
