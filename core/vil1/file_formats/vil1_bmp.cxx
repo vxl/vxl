@@ -239,7 +239,9 @@ bool vil_bmp_generic_image::read_header()
 
   // remember the position of the start of the bitmap data
   bit_map_start = is_->tell();
+#ifdef DEBUG
   where << "bit_map_start = " << bit_map_start << vcl_endl; // blather
+#endif
   assert(bit_map_start == file_hdr.bitmap_offset); // I think they're supposed to be the same -- fsm.
 
   return true;
