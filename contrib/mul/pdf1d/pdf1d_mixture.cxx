@@ -97,13 +97,13 @@ void pdf1d_mixture::add_component(const pdf1d_pdf& comp)
 {
   vcl_vector<pdf1d_pdf*> old_comps = component_;
   vcl_vector<double> old_wts = weight_;
-  int n = component_.size();
+  unsigned int n = component_.size();
   assert(n == weight_.size());
 
   component_.resize(n+1);
   weight_.resize(n+1);
 
-  for (int i=0;i<n;++i)
+  for (unsigned int i=0;i<n;++i)
   {
     component_[i] = old_comps[i];
     weight_[i] = old_wts[i];
@@ -187,7 +187,7 @@ void pdf1d_mixture::print_summary(vcl_ostream& os) const
   os<<vcl_endl<<vsl_indent();
   pdf1d_pdf::print_summary(os);
   os<<vcl_endl;
-  for (int i=0;i<component_.size();++i)
+  for (unsigned int i=0;i<component_.size();++i)
   {
     os<<vsl_indent()<<"Component "<<i<<" :  Wt: "<<weight_[i] <<vcl_endl;
     os<<vsl_indent()<<"PDF: " << component_[i]<<vcl_endl;
@@ -260,7 +260,7 @@ double pdf1d_mixture::log_p(double x) const
   for (int i=0;i<n;++i)
   {
     if (weight_[i]>0.0)
-	{
+    {
       log_ps[i] = component_[i]->log_p(x);
       if (i==0 || log_ps[i]>max_log_p) max_log_p = log_ps[i];
     }
@@ -304,7 +304,7 @@ double pdf1d_mixture::gradient(double x, double& p) const
   double g = g1*weight_[0];
   p = p1*weight_[0];
 
-  for (int i=1;i<n_components();i++)
+  for (unsigned int i=1;i<n_components();i++)
   {
     g1 = component_[i]->gradient(x,p1);
     g += g1*weight_[i];
@@ -352,6 +352,7 @@ double pdf1d_mixture::nearest_plausible(double x, double log_p_min) const
 {
   vcl_cerr << "ERROR: pdf1d_mixture::nearest_plausible NYI" << vcl_endl;
   vcl_abort();
+  return 0.0; // dummy return
 }
 
 

@@ -11,9 +11,6 @@
 #include <vcl_cmath.h>
 #include <vcl_cassert.h>
 #include <vcl_queue.h>
-#include <vsl/vsl_indent.h>
-#include <mbl/mbl_mz_random.h>
-#include <vnl/io/vnl_io_vector.h>
 #include <pdf1d/pdf1d_sampler.h>
 #include <pdf1d/pdf1d_mixture_sampler.h>
 
@@ -115,7 +112,7 @@ double pdf1d_mixture_sampler::sample()
 void pdf1d_mixture_sampler::reseed(unsigned long seed)
 {
   rng_.reseed(seed);
-  for (int i=0; i<inst_.size(); ++i)
+  for (unsigned int i=0; i<inst_.size(); ++i)
     inst_[i]->reseed(rng_.lrand32());
 }
 

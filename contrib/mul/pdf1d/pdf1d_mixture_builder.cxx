@@ -10,11 +10,9 @@
 #include <pdf1d/pdf1d_mixture.h>
 #include <mbl/mbl_data_wrapper.h>
 #include <mbl/mbl_data_array_wrapper.h>
-#include <mbl/mbl_mz_random.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
 #include <vcl_algorithm.h>
-#include <vnl/vnl_math.h>
 #include <vsl/vsl_binary_loader.h>
 
 // Weights smaller than this are assumed to be zero
@@ -56,8 +54,8 @@ pdf1d_mixture_builder& pdf1d_mixture_builder::operator=(const pdf1d_mixture_buil
     builder_[i] = b.builder_[i]->clone();
 
   min_var_ = b.min_var_;
-	max_its_ = b.max_its_;
-	weights_fixed_ = b.weights_fixed_;
+  max_its_ = b.max_its_;
+  weights_fixed_ = b.weights_fixed_;
 
   return *this;
 }
@@ -148,7 +146,7 @@ void pdf1d_mixture_builder::build(pdf1d_pdf& model,
                                   mbl_data_wrapper<double>& data) const
 {
   vcl_vector<double> wts(data.size());
-	vcl_fill(wts.begin(),wts.end(),1.0);
+  vcl_fill(wts.begin(),wts.end(),1.0);
   weighted_build(model,data,wts);
 }
 
@@ -162,7 +160,7 @@ void pdf1d_mixture_builder::weighted_build(pdf1d_pdf& base_model,
   assert(base_model.is_class("pdf1d_mixture"));
   pdf1d_mixture& model = (pdf1d_mixture&) base_model;
 
-  int n = builder_.size();
+  unsigned int n = builder_.size();
 
   bool model_setup = (model.n_components()==n);
 
@@ -172,7 +170,7 @@ void pdf1d_mixture_builder::weighted_build(pdf1d_pdf& base_model,
     model.clear();
     model.components().resize(n);
     model.weights().resize(n);
-    for (int i=0;i<n;++i)
+    for (unsigned int i=0;i<n;++i)
     {
       builder_[i]->set_min_var(min_var_);
       model.components()[i] = builder_[i]->new_model();
@@ -276,36 +274,36 @@ void pdf1d_mixture_builder::e_step(pdf1d_mixture& model,
         const double* data,
         const vcl_vector<double>& wts) const
 {
-  int n_comp = builder_.size();
-  int n_egs = wts.size();
+  unsigned int n_comp = builder_.size();
+  unsigned int n_egs = wts.size();
   const vcl_vector<double>& m_wts = model.weights();
 
   if (probs.size()!=n_comp) probs.resize(n_comp);
 
   // Compute log probs
   // probs(i)(j+1) is logProb that eg j was drawn from component i
-  for (int i=0;i<n_comp;++i)
+  for (unsigned int i=0;i<n_comp;++i)
   {
     if (probs[i].size()!=n_egs) probs[i].resize(n_egs);
 
-	// Any components with zero weights are ignored.
-	// Eventually they should be pruned.
+    // Any components with zero weights are ignored.
+    // Eventually they should be pruned.
     if (m_wts[i]<=0) continue;
 
     double *p_data = probs[i].begin();
     double log_wt_i = vcl_log(model.weights()[i]);
 
-    for (int j=0;j<n_egs;++j)
+    for (unsigned int j=0;j<n_egs;++j)
       p_data[j] = log_wt_i + model.components()[i]->log_p(data[j]);
   }
 
   // Turn into probabilities and normalise.
   // Normalise so that sum_i probs(i)(j) = 1.0;
-  for (int j=0;j<n_egs;++j)
+  for (unsigned int j=0;j<n_egs;++j)
   {
     // To minimise rounding errors, first find largest value
     double max_log_p = 0;
-    for (int i=0;i<n_comp;++i)
+    for (unsigned int i=0;i<n_comp;++i)
     {
       if (m_wts[i]<=0) continue;
       if (i==0 || probs[i](j)>max_log_p) max_log_p = probs[i](j);
@@ -313,7 +311,7 @@ void pdf1d_mixture_builder::e_step(pdf1d_mixture& model,
 
     // Turn into probabilities and sum
     double sum = 0.0;
-    for (int i=0;i<n_comp;++i)
+    for (unsigned int i=0;i<n_comp;++i)
     {
       if (m_wts[i]<=0) continue;
       double p = vcl_exp(probs[i](j)-max_log_p);
@@ -323,7 +321,7 @@ void pdf1d_mixture_builder::e_step(pdf1d_mixture& model,
 
     // Divide through by sum to normalise
     if (sum>0.0)
-      for (int i=0;i<n_comp;++i)
+      for (unsigned int i=0;i<n_comp;++i)
         probs[i](j)/=sum;
   }
 }
@@ -348,27 +346,27 @@ double pdf1d_mixture_builder::m_step(pdf1d_mixture& model,
     double w_sum = 0.0;
     // update the model weights
     for (int i=0;i<n_comp;++i)
-	{
+    {
       model.weights()[i]=probs[i].mean();
 
-	  // Elliminate tiny components
-	  if (model.weights()[i]<min_wt) model.weights()[i]=0.0;
+      // Elliminate tiny components
+      if (model.weights()[i]<min_wt) model.weights()[i]=0.0;
 
-	  w_sum += model.weights()[i];
+      w_sum += model.weights()[i];
     }
 
-	// Ensure they add up to one
+    // Ensure they add up to one
     for (int i=0;i<n_comp;++i)
-	  model.weights()[i]/=w_sum;
+      model.weights()[i]/=w_sum;
   }
 
   for (int i=0;i<n_comp;++i)
   {
     // Any components with zero weights are ignored.
-	// Eventually they should be pruned.
+    // Eventually they should be pruned.
     if (model.weights()[i]<=0) continue;
 
-	// Compute weights
+    // Compute weights
     const double* p = probs[i].begin();
     for (int j=0;j<n_egs;++j)
       wts_i[j] = wts[j]*p[j];
@@ -397,7 +395,7 @@ void pdf1d_mixture_builder::calc_mean_and_variance(pdf1d_mixture& model)
     double wi = model.weight(i);
     double mean_i = model.component(i).mean();
     sum += mean_i * wi;
-	sum2 += (model.component(i).variance()+mean_i*mean_i)*wi;
+    sum2 += (model.component(i).variance()+mean_i*mean_i)*wi;
   }
 
   double mean = sum;
@@ -439,7 +437,7 @@ pdf1d_builder* pdf1d_mixture_builder::clone() const
 void pdf1d_mixture_builder::print_summary(vcl_ostream& os) const
 {
   os<<vcl_endl;
-  for (int i=0;i<builder_.size();++i)
+  for (unsigned int i=0;i<builder_.size();++i)
   {
     os<<vsl_indent()<<"Builder "<<i<<": ";
     vsl_print_summary(os, builder_[i]); os << vcl_endl;
