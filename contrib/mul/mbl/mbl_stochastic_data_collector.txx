@@ -1,5 +1,5 @@
-#ifndef mbl_data_collector_txx_
-#define mbl_data_collector_txx_
+#ifndef mbl_stochastic_data_collector_txx_
+#define mbl_stochastic_data_collector_txx_
 
 #include <vcl_string.h>
 #include <vsl/vsl_indent.h>
@@ -10,7 +10,7 @@
 
 template <class T>
 mbl_stochastic_data_collector<T>::
-mbl_stochastic_data_collector<T>()
+mbl_stochastic_data_collector()
 {
   samples_.resize(1000);
   nPresented_=0;
@@ -20,7 +20,7 @@ mbl_stochastic_data_collector<T>()
 
 template <class T>
 mbl_stochastic_data_collector<T>::
-mbl_stochastic_data_collector<T>(unsigned n)
+mbl_stochastic_data_collector(unsigned n)
 {
   samples_.resize(n);
   nPresented_=0;
@@ -30,7 +30,7 @@ mbl_stochastic_data_collector<T>(unsigned n)
 
 template <class T>
 mbl_stochastic_data_collector<T>::
-~mbl_stochastic_data_collector<T>()
+~mbl_stochastic_data_collector()
 {
 }
 //=======================================================================
@@ -216,7 +216,6 @@ void mbl_stochastic_data_collector<T>::b_read(vsl_b_istream& bfs)
 }
 
 #define MBL_STOCHASTIC_DATA_COLLECTOR_INSTANTIATE(T) \
-template class mbl_stochastic_data_collector< T >; \
+template class mbl_stochastic_data_collector< T >
 
 #endif // mbl_data_collector_txx_
-

@@ -52,14 +52,14 @@ private:
 public:
 
     //: Dflt ctor
-  mbl_stochastic_data_collector<T >();
+  mbl_stochastic_data_collector();
 
     //: Set number of samples to be stored.
     // This is the nuber of vectors that can be actually retrieved.
-  mbl_stochastic_data_collector<T >(unsigned n);
+  mbl_stochastic_data_collector(unsigned n);
 
     //: Destructor
-  virtual ~mbl_stochastic_data_collector<T >();
+  virtual ~mbl_stochastic_data_collector();
 
     //: Clear any stored data
   virtual void clean();
