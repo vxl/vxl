@@ -1,0 +1,152 @@
+#!/bin/sh
+# -*- perl -*-
+exec perl -x $0 ${1+"$@"}
+#!perl
+$\="";
+$nl = "; ";
+
+
+# Read from environment
+$IUELOCALROOT = $ENV{'IUELOCALROOT'};
+$IUEOSTYPE = $ENV{'IUEOSTYPE'};
+$BASEPATH = $ENV{'BASEPATH'};
+$PREFIXPATH  = $ENV{'PREFIXPATH'};
+$PATH  = $ENV{'PATH'};
+
+# tjspy costs too much on a rsh. awf
+
+#
+print STDERR "WARNING : CPU is set\n" if ($ENV{'CPU'});
+
+$had_iupackagehome = $IUELOCALROOT;
+$had_local = 0;
+
+$csh = 1;
+$forced_shell = 0;
+
+sub setenv {
+    local($var, $val) = @_;
+    if ($csh) {
+	print "setenv $var $val $nl";
+    } else {
+	print "$var=$val $nl export $var $nl";
+    }
+}
+
+while ($_ = shift) {
+    if (m/^-local$/ ) {
+	$IUELOCALROOT = shift;
+	$had_local = 1;
+	if ($IUELOCALROOT ne $had_iupackagehome) {
+	    print STDERR "tj-env: Warning: You already have an IUELOCALROOT.\n";
+	    print STDERR "tj-env: Warning:  Old IUELOCALROOT = $had_iupackagehome.\n";
+	    print STDERR "tj-env: Warning:  New '-local' one  = $IUELOCALROOT.\n";
+	}
+	
+    } elsif (m/^-sys$/) {
+	$IUEROOT = shift;
+
+    } elsif (m/^-nl$/) {
+	$nl = "\n";
+
+    } elsif (m/^-bash/) {
+	$csh = 0;
+	$forced_shell = 1;
+	
+    } elsif (/^-csh/) {
+	$csh = 1;
+	$forced_shell = 1;
+	
+    } else {
+	print STDERR "tj-env: Warning: Unknown argument [$_]\n";
+    }
+}
+
+## Check if we appear to be running the wrong shell
+if (!$forced_shell) { 
+    if ($csh) {
+	# bash sets $_
+	if (defined $ENV{'_'}) {
+	    print STDERR
+"tj-env: Warning: You appear to be running bash or ksh,
+tj-env: Warning: this script assumes a csh-like shell.
+tj-env: Please disambiguate by using `tj-env -bash' or `tj-env -csh'.
+";
+	}
+    }
+}
+
+## Find the parent directory of this script
+chop($base = `dirname $0`);
+
+# check that dirname is OK
+chdir($base) || die "chdir($base) failed";
+
+# Used to use pwd here, but I can't see why -- it gets the paths all wrong.
+#  chop($here = `pwd`); $here =~ s:^/(auto|a)/:/:;
+$here = $base;
+
+## Sanity-check on parent
+if (!($here =~ m!/vxl/bin$!)) {
+    print STDERR "tj-env: I expect to be in vxl/bin, not $here";
+    exit 1;
+}
+
+## Set IUEROOT from parent directory.
+$IUEROOT = $`;
+&setenv ("IUEROOT", $IUEROOT);
+
+if ($had_iupackagehome && !$had_local && ($IUEROOT ne $had_iupackagehome)) {
+    print STDERR "tj-env: Warning: You have an IUELOCALROOT, but have not specified -local \n";
+    print STDERR "tj-env: Warning: Ignoring the enviroment variable \n";
+    $IUELOCALROOT = $IUEROOT;
+}
+
+## Set IUELOCALROOT
+if ($IUELOCALROOT) {
+    &setenv ("IUELOCALROOT", $IUELOCALROOT);
+} else {
+    &setenv("IUELOCALROOT", $IUEROOT);
+}
+
+## Set IUEOSTYPE
+if (! $IUEOSTYPE) {
+    $IUEOSTYPE = `uname -s` . `uname -r|cut -d. -f1`;
+    $IUEOSTYPE =~ s/\n//g;
+    $IUEOSTYPE =~ s/IRIX64/IRIX/;
+    $IUEOSTYPE =~ s/CYGWIN.*/win32/;
+}
+&setenv ("IUEOSTYPE", $IUEOSTYPE);
+
+## Locate Scripts directory.  If it is in IUELOCALROOT, use that, otherwise use
+## IUEROOT.
+
+if ($IUELOCALROOT && -d "$IUELOCALROOT/Scripts/Shell" ) {
+    $pathbase = $IUELOCALROOT; 
+} else {
+    $pathbase = $IUEROOT;
+}
+
+## Make path
+$VXLROOT="$IUEROOT/vxl";
+$VXLPATH = "$VXLROOT/bin/${IUEOSTYPE}:$VXLROOT/bin";
+$TARGETPATH = $VXLPATH. ":" . "$IUEROOT/bin/${IUEOSTYPE}:$IUELOCALROOT/bin/${IUEOSTYPE}:$IUELOCALROOT/bin:$IUEROOT/bin:$pathbase/Scripts/Shell:$pathbase/Scripts/Perl";
+&setenv ("TARGETPATH", $TARGETPATH);
+
+if ($csh) {
+    $_ = $TARGETPATH;
+    s/:/ /g;
+    print "set targetpath = ( $_ ) $nl";
+}
+
+if (defined $BASEPATH && defined $PREFIXPATH) {
+    &setenv ("PATH", "${PREFIXPATH}:${TARGETPATH}:${BASEPATH}");
+} else {
+    if (defined $BASEPATH || defined $PREFIXPATH) {
+	print STDERR 
+"tj-env: Won't deal with PREFIXPATH and BASEPATH 
+tj-env: when one is defined and the other isn't.  Ignoring.
+";
+    }
+    &setenv ("PATH", "${TARGETPATH}:${PATH}");
+}

@@ -1,0 +1,28 @@
+//-*- c++ -*-------------------------------------------------------------------
+#ifndef vbl_printf_h_
+#define vbl_printf_h_
+#ifdef __GNUC__
+#pragma interface
+#endif
+
+// .SECTION Description
+//    Printf formatting is just plain handy sometimes.  This header provides
+//    it for C++ programs in a standard-conforming manner.
+//
+// .NAME        vbl_printf - vbl_printf to ostream
+// .LIBRARY     vbl
+// .HEADER	Basics Package
+// .INCLUDE     vbl/vbl_printf.h
+// .FILE        vbl/vbl_printf.cxx
+// .SECTION Author
+//     Andrew W. Fitzgibbon, Oxford RRG, 03 Jul 97
+//
+//-----------------------------------------------------------------------------
+
+#include <stdio.h> // just to ensure no clashes with weirdo stdios
+#include <vcl/vcl_iosfwd.h>
+
+// -- vbl_printf(cout, "%d\n", 12);
+ostream& vbl_printf(ostream&, const char* fmt, ...);
+
+#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vbl_printf.

@@ -1,0 +1,169 @@
+// <begin copyright notice>
+// ---------------------------------------------------------------------------
+//
+//                   Copyright (c) 1997 TargetJr Consortium
+//               GE Corporate Research and Development (GE CRD)
+//                             1 Research Circle
+//                            Niskayuna, NY 12309
+//                            All Rights Reserved
+//              Reproduction rights limited as described below.
+//                               
+//      Permission to use, copy, modify, distribute, and sell this software
+//      and its documentation for any purpose is hereby granted without fee,
+//      provided that (i) the above copyright notice and this permission
+//      notice appear in all copies of the software and related documentation,
+//      (ii) the name TargetJr Consortium (represented by GE CRD), may not be
+//      used in any advertising or publicity relating to the software without
+//      the specific, prior written permission of GE CRD, and (iii) any
+//      modifications are clearly marked and summarized in a change history
+//      log.
+//       
+//      THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTY OF ANY KIND,
+//      EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
+//      WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+//      IN NO EVENT SHALL THE TARGETJR CONSORTIUM BE LIABLE FOR ANY SPECIAL,
+//      INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND OR ANY
+//      DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
+//      WHETHER OR NOT ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, OR ON
+//      ANY THEORY OF LIABILITY ARISING OUT OF OR IN CONNECTION WITH THE
+//      USE OR PERFORMANCE OF THIS SOFTWARE.
+//
+// ---------------------------------------------------------------------------
+// <end copyright notice>
+//-*- c++ -*-------------------------------------------------------------------
+//#ifdef __GNUC__
+//#pragma implementation
+//#endif
+//
+// Class: vbl_array_2d
+// Author: Andrew W. Fitzgibbon, Oxford RRG
+// Created: 05 Aug 96
+// Modifications: see vbl_array_2d.h
+//
+//-----------------------------------------------------------------------------
+
+#include <vcl/vcl_iostream.h>
+
+#include "vbl_array_2d.h"
+
+// Default ctor
+template <class T>
+vbl_array_2d<T>::vbl_array_2d()
+  : num_rows_(0), num_cols_(0)
+{
+  rows_ = 0;
+}
+
+// -- Construct num_rows x num_cols array
+template <class T>
+vbl_array_2d<T>::vbl_array_2d(int num_rows, int num_cols)
+{
+  create(num_rows, num_cols);
+}
+
+// -- Copy that
+template <class T>
+vbl_array_2d<T>::vbl_array_2d(const vbl_array_2d<T>& that)
+{
+  create(that.num_rows_, that.num_cols_);
+  for (int i=0;i<num_rows_;i++)
+    for (int j=0;j<num_cols_;j++)
+      operator()(i,j) = that(i,j);
+}
+
+// -- Copy that
+template <class T>
+vbl_array_2d<T>& vbl_array_2d<T>::operator=(const vbl_array_2d<T>& that)
+{
+  if (num_rows_ != that.num_rows_ ||
+      num_cols_ != that.num_cols_)
+    resize(that.num_rows_, that.num_cols_);
+  for (int i=0;i<num_rows_;i++)
+    for (int j=0;j<num_cols_;j++)
+      operator()(i,j) = that(i,j);
+  return *this;
+}
+
+// Destructor
+template <class T>
+vbl_array_2d<T>::~vbl_array_2d()
+{
+  destroy();
+}
+
+// -- Delete contents and resize to num_rows x num_cols
+template <class T>
+void vbl_array_2d<T>::resize(int num_rows, int num_cols)
+{
+  destroy();
+  create(num_rows, num_cols);
+}
+
+// -- Fill with value
+template <class T>
+void vbl_array_2d<T>::fill(T value)
+{
+  for (int i=0;i<num_rows_;i++)
+    for (int j=0;j<num_cols_;j++)
+      operator()(i,j)=value;
+}
+
+// -- Return number of rows
+template <class T>
+int vbl_array_2d<T>::rows(void) const
+{
+  return num_rows_;
+}
+
+// -- Return number of columns
+template <class T>
+int vbl_array_2d<T>::columns(void) const
+{
+  return num_cols_;
+}
+
+template <class T>
+void vbl_array_2d<T>::create(int num_rows, int num_cols)
+{
+  num_rows_ = num_rows;
+  num_cols_ = num_cols;
+  rows_ = new T*[num_rows];
+  T* p = new T[num_rows*num_cols];
+  for(int i = 0; i < num_rows; ++i) {
+    rows_[i] = p;
+    p += num_cols;
+  }
+}
+
+template <class T>
+void vbl_array_2d<T>::destroy()
+{
+  if (rows_) {
+    delete [] rows_[0];
+    delete [] rows_;
+  }
+}
+
+//
+template<class T> 
+ostream& operator<< (ostream &os, const vbl_array_2d<T> &array)
+{
+  for( int i=0; i< array.rows(); i++)
+    {
+      for( int j=0; j< array.columns(); j++)
+	os << array(i,j) << " ";
+
+      os << endl;
+    }
+
+  return os;
+} 
+
+//--------------------------------------------------------------------------------
+
+// instantiation macros belong in the implementation (.txx) file,
+// not the interface (.h) file.
+#undef VBL_ARRAY_2D_INSTANTIATE
+#define VBL_ARRAY_2D_INSTANTIATE(type) \
+template class vbl_array_2d<type >;\
+template ostream& operator<< (ostream& , const vbl_array_2d<type >& );

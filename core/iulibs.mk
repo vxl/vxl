@@ -1,0 +1,19 @@
+IUE_PACKAGE_LIBRARIES += -lvsl
+
+#IUE_PACKAGE_LIBRARIES += -lvgl-algo
+IUE_PACKAGE_LIBRARIES += -lvgl
+
+#IUE_PACKAGE_LIBRARIES += -lvil-algo
+IUE_PACKAGE_LIBRARIES += -lvil
+
+IUE_PACKAGE_LIBRARIES += -lvnl-algo
+IUE_PACKAGE_LIBRARIES += -lnetlib
+LIBDIRS += $(IUELOCALROOT_libbase)/Numerics/$(tj_libdir) # for netlib
+
+IUE_PACKAGE_LIBRARIES += -lvnl
+
+IUE_PACKAGE_LIBRARIES += -lvbl
+
+IUE_PACKAGE_LIBRARIES += -lval
+
+IUE_PACKAGE_LIBRARIES += -lvcl

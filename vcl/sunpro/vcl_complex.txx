@@ -1,0 +1,1 @@
+#define VCL_COMPLEX_INSTANTIATE(T)

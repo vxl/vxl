@@ -1,0 +1,8 @@
+
+Conversions
+
+old					new
+
+<cool/char.h>				<vcl/vcl_cstring.h>
+<cool/Array.h>				<vcl/vcl_vector.h>
+<cool/HashTable.h>			<vcl/vcl_hash_map.h>
