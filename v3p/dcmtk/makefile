@@ -1,4 +1,4 @@
-USES = # nothing
+USES := v3p/zlib
 USE_STDC++ := 0
 
 LIBRARY := dcmtk
