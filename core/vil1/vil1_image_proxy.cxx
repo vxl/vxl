@@ -81,7 +81,7 @@ vil_image_proxy::vil_image_proxy(char const *file)
   //: Return the name of the class;
 const vcl_string& vil_image_proxy_impl::is_a() const
 {
-  const static vcl_string class_name_="vil_image_proxy_impl";
+  static const vcl_string class_name_="vil_image_proxy_impl";
   return class_name_;
 }
 

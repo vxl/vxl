@@ -137,7 +137,7 @@ bool vil_image_as_impl<int>::get_section(void *buf, int x0, int y0, int width, i
 VCL_DEFINE_SPECIALIZATION
 const vcl_string& vil_image_as_impl<int>::is_a() const 
 { 
-  const static vcl_string class_name_="vil_image_as_impl<int>"; 
+  static const vcl_string class_name_="vil_image_as_impl<int>"; 
   return class_name_; 
 }
 

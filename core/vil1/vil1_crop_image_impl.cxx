@@ -24,7 +24,7 @@ vil_crop_image_impl::~vil_crop_image_impl()
   //: Return the name of the class;
 const vcl_string& vil_crop_image_impl::is_a() const
 {
-  const static vcl_string class_name_="vil_crop_image_impl";
+  static const vcl_string class_name_="vil_crop_image_impl";
   return class_name_;
 }
 

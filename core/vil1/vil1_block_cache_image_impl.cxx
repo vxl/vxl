@@ -68,7 +68,7 @@ bool vil_block_cache_image_impl::get_property(char const *tag,
   //: Return the name of the class;
 const vcl_string& vil_block_cache_image_impl::is_a() const
 {
-  const static vcl_string class_name_="vil_block_cache_image_impl";
+  static const vcl_string class_name_="vil_block_cache_image_impl";
   return class_name_;
 }
 

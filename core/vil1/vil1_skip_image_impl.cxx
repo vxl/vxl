@@ -85,7 +85,7 @@ bool vil_skip_image_impl::get_section(void * buf, int x0, int y0, int w, int h) 
   //: Return the name of the class;
 const vcl_string& vil_skip_image_impl::is_a() const
 {
-  const static vcl_string class_name_="vil_skip_image_impl";
+  static const vcl_string class_name_="vil_skip_image_impl";
   return class_name_;
 }
 
