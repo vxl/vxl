@@ -1,11 +1,11 @@
 // This is mul/vimt3d/vimt3d_reconstruct_from_grid.txx
 #ifndef vimt3d_reconstruct_from_grid_txx_
 #define vimt3d_reconstruct_from_grid_txx_
-
+//:
+// \file
 #include "vimt3d_reconstruct_from_grid.h"
 #include <vimt3d/vimt3d_trilin_interp.h>
 #include <vnl/vnl_vector.h>
-#include <vnl/vnl_math.h>
 
 //: True if p clearly inside the image
 template<class T>
@@ -46,18 +46,18 @@ inline bool vimt3d_grid_in_image_ic(const vgl_point_3d<double>& im_p,
 }
 
 //: Reconstruct a smoothed image grid p+i.u+j.v+k.w from vector (in world coordinates)
-//  Profile points are p+i.u+j.v+k.w, where i=[0..nu-1],j=[0..nv-1], k=[0..nw-1] 
+//  Profile points are p+i.u+j.v+k.w, where i=[0..nu-1],j=[0..nv-1], k=[0..nw-1]
 //  Vector v is resized to nu*nv*nw*np elements, where np=image.n_planes().
 //  v[0]..v[np-1] are the values from point p
 //  Reconstruction occurs along direction w first
 template <class imType, class vecType>
 void vimt3d_reconstruct_from_grid(vimt3d_image_3d_of<imType>& image,
-                               const vnl_vector<vecType>& vec,
-                               const vgl_point_3d<double>& p,
-                               const vgl_vector_3d<double>& u,
-                               const vgl_vector_3d<double>& v,
-                               const vgl_vector_3d<double>& w,
-                               int nu, int nv, int nw, bool add_data)
+                                  const vnl_vector<vecType>& vec,
+                                  const vgl_point_3d<double>& p,
+                                  const vgl_vector_3d<double>& u,
+                                  const vgl_vector_3d<double>& v,
+                                  const vgl_vector_3d<double>& w,
+                                  int nu, int nv, int nw, bool add_data)
 {
   // convert to image coordinates
   vgl_point_3d<double> im_p0 = image.world2im()(p);
@@ -79,12 +79,12 @@ void vimt3d_reconstruct_from_grid(vimt3d_image_3d_of<imType>& image,
 //  Reconstruction occurs along direction w first
 template <class imType, class vecType>
 void vimt3d_reconstruct_from_grid_ic(vil3d_image_view<imType>& image,
-                                  const vnl_vector<vecType>& vec,
-                                  const vgl_point_3d<double>& im_p,
-                                  const vgl_vector_3d<double>& im_u,
-                                  const vgl_vector_3d<double>& im_v,
-                                  const vgl_vector_3d<double>& im_w,
-                                  int nu, int nv, int nw, bool add_data)
+                                     const vnl_vector<vecType>& vec,
+                                     const vgl_point_3d<double>& im_p,
+                                     const vgl_vector_3d<double>& im_u,
+                                     const vgl_vector_3d<double>& im_v,
+                                     const vgl_vector_3d<double>& im_w,
+                                     int nu, int nv, int nw, bool add_data)
 {
   if (vimt3d_grid_in_image_ic(im_p,im_u,im_v,im_w,nu,nv,nw,image))
     vimt3d_reconstruct_from_grid_ic_no_checks(image,vec,im_p,im_u,im_v,im_w,nu,nv,nw,add_data);
@@ -101,12 +101,12 @@ void vimt3d_reconstruct_from_grid_ic(vil3d_image_view<imType>& image,
 //  Reconstruction occurs along direction w first
 template <class imType, class vecType>
 void vimt3d_reconstruct_from_grid_ic_no_checks(vil3d_image_view<imType>& image,
-                                            const vnl_vector<vecType>& vec,
-                                            const vgl_point_3d<double>& p0,
-                                            const vgl_vector_3d<double>& u,
-                                            const vgl_vector_3d<double>& v,
-                                            const vgl_vector_3d<double>& w,
-                                            int nu, int nv, int nw, bool add_data)
+                                               const vnl_vector<vecType>& vec,
+                                               const vgl_point_3d<double>& p0,
+                                               const vgl_vector_3d<double>& u,
+                                               const vgl_vector_3d<double>& v,
+                                               const vgl_vector_3d<double>& w,
+                                               int nu, int nv, int nw, bool add_data)
 {
   int np = image.nplanes();
   int ni = image.ni();
@@ -115,9 +115,8 @@ void vimt3d_reconstruct_from_grid_ic_no_checks(vil3d_image_view<imType>& image,
   vcl_ptrdiff_t istep = image.istep();
   vcl_ptrdiff_t jstep = image.jstep();
   vcl_ptrdiff_t kstep = image.kstep();
-  vcl_ptrdiff_t pstep = image.planestep();
-  const vecType* vc = vec.begin();
 
+  const vecType* vc = vec.begin();
   vgl_point_3d<double> p1 = p0;
 
   if (np==1)
@@ -164,12 +163,12 @@ void vimt3d_reconstruct_from_grid_ic_no_checks(vil3d_image_view<imType>& image,
 //  Reconstruction occurs along direction w first
 template <class imType, class vecType>
 void vimt3d_reconstruct_from_grid_ic_safe(vil3d_image_view<imType>& image,
-                                       const vnl_vector<vecType>& vec,
-                                       const vgl_point_3d<double>& p0,
-                                       const vgl_vector_3d<double>& u,
-                                       const vgl_vector_3d<double>& v,
-                                       const vgl_vector_3d<double>& w,
-                                       int nu, int nv, int nw, bool add_data)
+                                          const vnl_vector<vecType>& vec,
+                                          const vgl_point_3d<double>& p0,
+                                          const vgl_vector_3d<double>& u,
+                                          const vgl_vector_3d<double>& v,
+                                          const vgl_vector_3d<double>& w,
+                                          int nu, int nv, int nw, bool add_data)
 {
   int np = image.nplanes();
   int ni = image.ni();
@@ -178,7 +177,6 @@ void vimt3d_reconstruct_from_grid_ic_safe(vil3d_image_view<imType>& image,
   vcl_ptrdiff_t istep = image.istep();
   vcl_ptrdiff_t jstep = image.jstep();
   vcl_ptrdiff_t kstep = image.kstep();
-  vcl_ptrdiff_t pstep = image.planestep();
 
   const vecType* vc = vec.begin();
   vgl_point_3d<double> p1 = p0;
@@ -222,32 +220,32 @@ void vimt3d_reconstruct_from_grid_ic_safe(vil3d_image_view<imType>& image,
 
 #define VIMT3D_RECONSTRUCT_FROM_GRID_INSTANTIATE( imType, vecType ) \
 template void vimt3d_reconstruct_from_grid(vimt3d_image_3d_of<imType >& image, \
-                                        const vnl_vector<vecType >& vec, \
-                                        const vgl_point_3d<double >& p, \
-                                        const vgl_vector_3d<double >& u, \
-                                        const vgl_vector_3d<double >& v, \
-                                        const vgl_vector_3d<double >& w, \
-                                        int nu, int nv, int nw, bool add_data); \
-template void vimt3d_reconstruct_from_grid_ic(vil3d_image_view<imType >& image, \
                                            const vnl_vector<vecType >& vec, \
-                                           const vgl_point_3d<double >& im_p, \
-                                           const vgl_vector_3d<double >& im_u, \
-                                           const vgl_vector_3d<double >& im_v, \
-                                           const vgl_vector_3d<double >& im_w, \
+                                           const vgl_point_3d<double >& p, \
+                                           const vgl_vector_3d<double >& u, \
+                                           const vgl_vector_3d<double >& v, \
+                                           const vgl_vector_3d<double >& w, \
                                            int nu, int nv, int nw, bool add_data); \
-template void vimt3d_reconstruct_from_grid_ic_safe(vnl_vector<vecType >& vec, \
-                                                const vil3d_image_view<imType >& image, \
-                                                const vgl_point_3d<double >& p, \
-                                                const vgl_vector_3d<double >& u, \
-                                                const vgl_vector_3d<double >& v, \
-                                                const vgl_vector_3d<double >& w, \
-                                                int nu, int nv, int nw, bool add_data); \
-template void vimt3d_reconstruct_from_grid_ic_no_checks(vnl_vector<vecType >& vec, \
-                                                     const vil3d_image_view<imType >& image, \
-                                                     const vgl_point_3d<double >& p0, \
-                                                     const vgl_vector_3d<double >& u, \
-                                                     const vgl_vector_3d<double >& v, \
-                                                     const vgl_vector_3d<double >& w, \
-                                                     int nu, int nv, int nw, bool add_data)
+template void vimt3d_reconstruct_from_grid_ic(vil3d_image_view<imType >& image, \
+                                              const vnl_vector<vecType >& vec, \
+                                              const vgl_point_3d<double >& im_p, \
+                                              const vgl_vector_3d<double >& im_u, \
+                                              const vgl_vector_3d<double >& im_v, \
+                                              const vgl_vector_3d<double >& im_w, \
+                                              int nu, int nv, int nw, bool add_data); \
+template void vimt3d_reconstruct_from_grid_ic_safe(vil3d_image_view<imType>& image, \
+                                                   const vnl_vector<vecType>& vec, \
+                                                   const vgl_point_3d<double>& p0, \
+                                                   const vgl_vector_3d<double>& u, \
+                                                   const vgl_vector_3d<double>& v, \
+                                                   const vgl_vector_3d<double>& w, \
+                                                   int nu, int nv, int nw, bool add_data); \
+template void vimt3d_reconstruct_from_grid_ic_no_checks(vil3d_image_view<imType>& image, \
+                                                        const vnl_vector<vecType>& vec, \
+                                                        const vgl_point_3d<double>& p0, \
+                                                        const vgl_vector_3d<double>& u, \
+                                                        const vgl_vector_3d<double>& v, \
+                                                        const vgl_vector_3d<double>& w, \
+                                                        int nu, int nv, int nw, bool add_data)
 
 #endif // vimt3d_reconstruct_from_grid_txx_
