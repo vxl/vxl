@@ -3687,18 +3687,6 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vul_test_root_dir"=.\vxl\vul\tests\vul_test_root_dir.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
 Project: "vul_test_sprintf"=.\vxl\vul\tests\vul_test_sprintf.dsp - Package Owner=<4>
 
 Package=<5>
