@@ -3,17 +3,17 @@
 
 // .NAME clean - Run Through the results of edgel segmentation and remove
 //               edgel chains that do not satisfy the following criteria:
-//               1: No vertices closer than 3 pixels 2: No bridges 
-//               3:No self-intersection 
+//               1: No vertices closer than 3 pixels 2: No bridges
+//               3:No self-intersection
 // .LIBRARY CAD_Detection
 // .HEADER CAD package
 // .INCLUDE CAD_Detection/clean.h
 // .FILE CAD_Detection/clean.h
 // .FILE CAD_Detection/clean.C
-// 
+//
 // .SECTION Description
 //  In using an edge segmentation for region analysis it is necessary to
-//  eliminate edges that do not perimit the extraction of valid region 
+//  eliminate edges that do not perimit the extraction of valid region
 //  topology. There are a number of conditions that would defeat a region
 //  analysis algorithm:
 //   1: Too short edges.  If the vertices of an edge closer than 3 pixels,
@@ -24,7 +24,7 @@
 //
 //   2: Insufficient edgels.  In some cases the VDEdgeDetector does not
 //     suppy enough edgels to form a continuous chain between vertices.
-//     This problem appears to happen for n_edgels<=2.  
+//     This problem appears to happen for n_edgels<=2.
 //
 //   3: Bridges.  There is no point in passing edges which have a vertex
 //   of order 1. That is, there is only one edge incident on the vertex.
@@ -32,7 +32,7 @@
 //
 //   4: Self intersection. An edge should never intersect itself in any case,
 //   but it might be possible that an edge-detection algorithm could produce
-//   such edges. For example, the VanDuc edge-detector does currently 
+//   such edges. For example, the VanDuc edge-detector does currently
 //   form self-intersecting edges.(not yet implemented)
 // .SECTION Authors
 //  J.L. Mundy - Feb 20, 1999
@@ -48,8 +48,8 @@
 class gevd_clean_edgels
 {
 public:
-  gevd_clean_edgels();	
-  ~gevd_clean_edgels();	  
+  gevd_clean_edgels();
+  ~gevd_clean_edgels();
   void DoCleanEdgelChains(vcl_vector<vtol_edge_2d_sptr>& in_edgels, vcl_vector<vtol_edge_2d_sptr>& out_edgels, int steps = 10);
   void JumpGaps();
   void RemoveBridges();
@@ -60,12 +60,12 @@ public:
 protected:
   void print_protection();
   void detect_similar_edges(vcl_vector<vtol_edge_2d_sptr>& common_edges, float tolerance,
-			   vcl_vector<vtol_edge_2d_sptr>& deleted_edges);
+                            vcl_vector<vtol_edge_2d_sptr>& deleted_edges);
   void remove_similar_edges(vtol_vertex_2d*& v1, vcl_vector<vtol_edge_2d_sptr>& deleted_edges);
   bool edge_exists(vtol_vertex_2d_sptr v1, vtol_vertex_2d_sptr v2, vcl_vector<vtol_edge_2d_sptr>& intersection);
   void remove_connected_edges(vtol_vertex_2d* v, vcl_vector<vtol_edge_2d_sptr>& edges);
   bool closest_vertex(vtol_edge_2d_sptr e, vsol_point_2d_sptr p, float radius, vtol_vertex_2d_sptr& v);
   bool split_edge(vtol_edge_2d_sptr e, vtol_vertex_2d_sptr v, vtol_edge_2d_sptr& e1, vtol_edge_2d_sptr& e2);
-  vcl_vector<vtol_edge_2d_sptr>* _out_edgels;
+  vcl_vector<vtol_edge_2d_sptr>* out_edgels_;
 };
 #endif
