@@ -13,13 +13,13 @@
 
 int vgui_statusbuf::sync()
 {
-  int n = pptr () - pbase ();
+  long n = pptr () - pbase ();
   return (n && status->write(pbase(), n) != n) ? EOF : 0;
 }
 
 int vgui_statusbuf::overflow(int ch)
 { 
-  int n = pptr() - pbase();
+  long n = pptr() - pbase();
 
   if (n && sync())
     return EOF;
