@@ -5,7 +5,7 @@
 #   the class "vnl_matrix" (instead of vil_image) as 2D pixel container.
 #
 
-USES += vxl
+USES += vxl tbl
 
 LIBRARY := vipl_with_vnl_matrix
 VERSION := 1.0

@@ -5,7 +5,7 @@
 #   the class "vbl_array_2d" (instead of vil_image) as 2D pixel container.
 #
 
-USES += vxl
+USES += vxl tbl
 
 LIBRARY := vipl_with_vbl_array_2d
 VERSION := 1.0
