@@ -26,7 +26,7 @@ rgrl_invariant::
 region() const
 {
   assert( "region() not implemented in the base class" == 0 );
-  return rgrl_mask_box(vnl_vector<double>(0), vnl_vector<double>(0)); // to supress compiler warnings
+  return rgrl_mask_box(vnl_vector<double>(0), vnl_vector<double>(0)); // to suppress compiler warnings
 }
 
 bool

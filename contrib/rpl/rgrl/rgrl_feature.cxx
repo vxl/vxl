@@ -1,9 +1,8 @@
+#include "rgrl_feature.h"
 //:
 // \file
 // \author Amitha Perera
 // \date Feb 2002
-
-#include "rgrl_feature.h"
 
 #include "rgrl_transformation.h"
 
@@ -23,7 +22,7 @@ rgrl_feature::
 signature_error_vector( rgrl_feature const& other ) const
 {
   assert( "This feature doesn't implement signature_error_vector" == 0 );
-  return vnl_vector<double>(0); // to supress compiler warnings
+  return vnl_vector<double>(0); // to suppress compiler warnings
 }
 
 
