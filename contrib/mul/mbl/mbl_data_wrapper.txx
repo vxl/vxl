@@ -20,12 +20,12 @@ mbl_data_wrapper<T>::~mbl_data_wrapper()
 //: Move to element n
 //  First example has index 0
 template<class T>
-void mbl_data_wrapper<T>::set_index(int n)
+void mbl_data_wrapper<T>::set_index(unsigned n)
 {
   if ((n<0) || (n>=size()))
   {
     vcl_cerr<<"TC_VectorDataBase::set_index(n) ";
-    vcl_cerr<<"n = "<<n<<" not in range 0 .. "<<((int)size())-1<<vcl_endl;
+    vcl_cerr<<"n = "<<n<<" not in range 0 <= n < "<<size()<<vcl_endl;
     vcl_abort();
   }
 

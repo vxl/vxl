@@ -44,7 +44,7 @@ public:
   virtual ~mbl_data_wrapper();
 
   //: Number of objects available
-  virtual int size() const = 0;
+  virtual unsigned size() const = 0;
 
   //: Reset so that current() returns first object
   virtual void reset() = 0;
@@ -57,11 +57,11 @@ public:
 
   //: Return current index
   //  First example has index 0
-  virtual int index() const =0;
+  virtual unsigned index() const =0;
 
   //: Move to element n
   //  First example has index 0
-  virtual void set_index(int n);
+  virtual void set_index(unsigned n);
 
   //: Create copy on heap and return base pointer
   virtual mbl_data_wrapper< T >* clone() const = 0;

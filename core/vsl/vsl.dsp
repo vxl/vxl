@@ -139,6 +139,10 @@ LIB32=link.exe -lib
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat;txx"
 # Begin Source File
 
+SOURCE=".\Templates\vcl_vector+vsl_binary_loader_base~-.cxx"
+# End Source File
+# Begin Source File
+
 SOURCE=.\vsl_binary_io.cxx
 # End Source File
 # Begin Source File

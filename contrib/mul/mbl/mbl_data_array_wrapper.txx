@@ -8,13 +8,13 @@
 //: Default constructor
 template<class T>
 mbl_data_array_wrapper<T>::mbl_data_array_wrapper()
-  : data_(0),n_(0),index_(-1)
+  : data_(0),n_(0),index_(0)
 {
 }
 
 //: Constructor
 template<class T>
-mbl_data_array_wrapper<T>::mbl_data_array_wrapper(const T* data, int n)
+mbl_data_array_wrapper<T>::mbl_data_array_wrapper(const T* data, unsigned n)
 {
   set(data,n);
 }
@@ -32,8 +32,9 @@ mbl_data_array_wrapper<T>::mbl_data_array_wrapper(const vcl_vector<T > &data)
 
 //: Initialise to return elements from data[i]
 template<class T>
-void mbl_data_array_wrapper<T>::set(const T* data, int n)
+void mbl_data_array_wrapper<T>::set(const T* data, unsigned  n)
 {
+  assert (n != ((unsigned)-1)); // a common mistake
   data_    = data;
   n_       = n;
   index_ = 0;
@@ -47,7 +48,7 @@ mbl_data_array_wrapper<T>::~mbl_data_array_wrapper()
 
 //: Number of objects available
 template<class T>
-int mbl_data_array_wrapper<T>::size() const
+unsigned mbl_data_array_wrapper<T>::size() const
 {
   return n_;
 }
@@ -76,7 +77,7 @@ bool mbl_data_array_wrapper<T>::next()
 
 //: Return current index
 template<class T>
-int mbl_data_array_wrapper<T>::index() const
+unsigned mbl_data_array_wrapper<T>::index() const
 {
   return index_;
 }
@@ -92,12 +93,13 @@ mbl_data_wrapper< T >* mbl_data_array_wrapper<T>::clone() const
 //: Move to element n
 //  First example has index 0
 template<class T>
-void mbl_data_array_wrapper<T>::set_index(int n)
+void mbl_data_array_wrapper<T>::set_index(unsigned n)
 {
-  if ((n<0) || (n>=size()))
+  assert(n != ((unsigned)-1));
+  if (n>=size())
   {
     vcl_cerr<<"TC_VectorDataBase::set_index(n) ";
-    vcl_cerr<<"n = "<<n<<" not in range 0 .. "<<((int)size())-1<<vcl_endl;
+    vcl_cerr<<"n = "<<n<<" not in range 0<=n<"<<size()<<vcl_endl;
     vcl_abort();
   }
 
