@@ -53,14 +53,14 @@
 #define vcl_emulation_algobase_h
 
 #include <vcl/emulation/vcl_string.h>
-#include <limits.h>
+#include <vcl/vcl_climits.h>
 #include <vcl/emulation/vcl_functional.h>
 #include <vcl/emulation/vcl_pair.h>
 #include <vcl/emulation/vcl_iterator.h>
-#include <new.h>
+#include <vcl/vcl_new.h>
 
 # if defined ( __BORLANDC__ ) && defined ( __NO_NAMESPACES )
-#  include <stdlib.h>
+#  include <vcl/vcl_cstdlib.h>
 # endif
 
 template <class T>

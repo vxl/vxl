@@ -27,10 +27,10 @@
 #ifndef vcl_emulation_defalloc_h
 #define vcl_emulation_defalloc_h
 
-#include <new.h>
+#include <vcl/vcl_new.h>
 #include <stddef.h>
-#include <stdlib.h>
-#include <limits.h>
+#include <vcl/vcl_cstdlib.h>
+#include <vcl/vcl_climits.h>
 #include <vcl/emulation/vcl_alloc.h>
 #include <vcl/emulation/vcl_algobase.h>
 

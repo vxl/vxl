@@ -50,9 +50,9 @@
 #ifndef vcl_emulation_tempbuf_h
 #define vcl_emulation_tempbuf_h
 
-#include <limits.h>
+#include <vcl/vcl_climits.h>
 #include <stddef.h>
-#include <stdlib.h>
+#include <vcl/vcl_cstdlib.h>
 #include <vcl/emulation/vcl_pair.h>
 
 template <class T>

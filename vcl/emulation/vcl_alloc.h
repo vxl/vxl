@@ -43,9 +43,9 @@
 #endif
 
 #include <stddef.h>
-#include <stdlib.h>
+#include <vcl/vcl_cstdlib.h>
 #include <vcl/emulation/vcl_string.h>
-#include <assert.h>
+#include <vcl/vcl_cassert.h>
 
 #ifndef __RESTRICT
 #  define __RESTRICT
@@ -60,7 +60,7 @@
 
 #if !defined ( __STL_NO_EXCEPTIONS )
 # if defined (__STL_BAD_ALLOC_DEFINED)
-#   include <new.h>
+#   include <vcl/vcl_new.h>
 # else
     struct bad_alloc {};
 # endif
@@ -636,7 +636,7 @@ typedef malloc_alloc multithreaded_alloc;
     
 #   ifdef __STL_SGI_THREADS
 #    include <mutex.h>
-#    include <time.h>
+#    include <vcl/vcl_ctime.h>
     // Somewhat generic lock implementations.  We need only test-and-set
     // and some way to sleep.  These should work with both SGI pthreads
     // and sproc threads.  They may be useful on other systems.

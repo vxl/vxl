@@ -52,7 +52,7 @@
 
 #else
 
-#include <assert.h>
+#include <vcl/vcl_cassert.h>
 #define OUTOFRANGE(cond) assert (!(cond))
 #define LENGTHERROR(cond) assert (!(cond))
 
@@ -687,5 +687,8 @@ struct vcl_string : public vcl_basic_string <char, vcl_string_char_traits <char>
 #define VCL_STRING_IS_TYPEDEF 1
 typedef vcl_basic_string <char, vcl_string_char_traits <char> > vcl_string;
 #endif
+
+#define VCL_BASIC_STRING_INSTANTIATE \
+extern "please include vcl/emulation/vcl_string.txx instead"
 
 #endif // vcl_emulation_string_h
