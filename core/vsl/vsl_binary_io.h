@@ -293,28 +293,25 @@ inline void vsl_print_summary(vcl_ostream& os, const char* s )
 // On a real 64-bit platform, there will presumably be an overloaded
 // vsl_b_write for the 64-bit integral type. We don't want to suppress
 // the warning (C4244) completely, because it is a useful warning.
-
-#if VCL_VC70 && defined(VCL_WIN32)
+// 08/20/2003: Added macro that defines whether or not attribute needs
+//             to be used. A new version of MS .NET compiler required this change.
+//             Add compilers as needed. This could be moved to vcl_compiler.h. 
+//             [Nils Krahnstoever]
+#if defined(VCL_WIN32) && (defined(VCL_VC70) || defined(VCL_VC71))
+# define VCL_64BIT_ATTR __w64
+#else
+# define VCL_64BIT_ATTR /* */
+#endif
 
 //: Write  to vsl_b_ostream
-void vsl_b_write(vsl_b_ostream& os, int __w64 n );
+void vsl_b_write(vsl_b_ostream& os, int VCL_64BIT_ATTR n );
 //: Read  from vsl_b_istream
-void vsl_b_read(vsl_b_istream& is, int __w64& n );
+void vsl_b_read(vsl_b_istream& is, int VCL_64BIT_ATTR &n );
 //: Print to a stream
-inline void vsl_print_summary(vcl_ostream& os, int __w64 n )
+inline void vsl_print_summary(vcl_ostream& os, int VCL_64BIT_ATTR n )
 {  os << int(n); }
 
-#else  // non-Windows, non-warning, normal code
-
-//: Write  to vsl_b_ostream
-void vsl_b_write(vsl_b_ostream& os, int n );
-//: Read  from vsl_b_istream
-void vsl_b_read(vsl_b_istream& is, int& n );
-//: Print to a stream
-inline void vsl_print_summary(vcl_ostream& os, int n )
-{  os << n; }
-
-#endif // VCL_VC70 && defined(VCL_WIN32)
+#undef VCL_64BIT_ATTR
 
 //: Write  to vsl_b_ostream
 void vsl_b_write(vsl_b_ostream& os,unsigned int n );
