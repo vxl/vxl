@@ -231,6 +231,10 @@ MANPAGE_SOURCES += sgi/vcl_string.txx
 MANPAGE_SOURCES += sgi/vcl_utility.txx
 MANPAGE_SOURCES += sgi/vcl_vector.txx
 
+MANPAGE_SOURCES += stlport/vcl_cmath.h
+MANPAGE_SOURCES += stlport/vcl_complex.h
+MANPAGE_SOURCES += stlport/vcl_cstdlib.h
+
 MANPAGE_SOURCES += sunpro/vcl_cmath.h
 MANPAGE_SOURCES += sunpro/vcl_cstdlib.h
 MANPAGE_SOURCES += sunpro/vcl_stack.txx
