@@ -195,6 +195,7 @@ inline void vil_convolve_edge_1d(const srcT* src, unsigned n, vcl_ptrdiff_t s_st
 
 //: Convolve kernel[x] (x in [k_lo,k_hi]) with srcT
 // Assumes dest and src same size (nx)
+// Kernel must not be smaller than nx;
 template <class srcT, class destT, class kernelT, class accumT>
 inline void vil_convolve_1d(const srcT* src0, unsigned nx, vcl_ptrdiff_t s_step,
                             destT* dest0, vcl_ptrdiff_t d_step,
@@ -204,6 +205,8 @@ inline void vil_convolve_1d(const srcT* src0, unsigned nx, vcl_ptrdiff_t s_step,
                             vil_convolve_boundary_option start_option,
                             vil_convolve_boundary_option end_option)
 {
+  assert(k_hi - k_lo +1 <= nx);
+
   // Deal with start (fill elements 0..1+k_hi of dest)
   vil_convolve_edge_1d(src0,nx,s_step,dest0,d_step,kernel,k_lo,k_hi,1,ac,start_option);
 
@@ -229,7 +232,8 @@ inline void vil_convolve_1d(const srcT* src0, unsigned nx, vcl_ptrdiff_t s_step,
 //: Convolve kernel[i] (i in [k_lo,k_hi]) with srcT in i-direction
 // On exit dest_im(i,j) = sum src(i-x,j)*kernel(x)  (x=k_lo..k_hi)
 // \note  This function reverses the kernel. If you don't want the
-// kernel reversed, use vil_correlate_1d instead.
+// kernel reversed, use vil_correlate_1d instead. The kernel must
+// not be larger than src_im.ni()
 // \param kernel should point to tap 0.
 // \param dest_im will be resized to size of src_im.
 // \relates vil_image_view
@@ -244,6 +248,7 @@ inline void vil_convolve_1d(const vil_image_view<srcT>& src_im,
 {
   unsigned ni = src_im.ni();
   unsigned nj = src_im.nj();
+  assert(k_hi - k_lo +1 <= ni);
   vcl_ptrdiff_t s_istep = src_im.istep(), s_jstep = src_im.jstep();
 
   dest_im.set_size(ni,nj,src_im.nplanes());

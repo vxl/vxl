@@ -6,7 +6,7 @@
 // \author Ian Scott
 // Based on some Matlab code by K. Walker 1999.
 
-#include <vil/algo/vil_cartesian_differential_invariants.h>
+#include "vil_cartesian_differential_invariants.h"
 #include <vil/vil_image_view.h>
 #include <vil/algo/vil_gauss_filter.h>
 #include <vil/algo/vil_convolve_1d.h>
@@ -18,10 +18,16 @@
 // The input must be 1 plane, the output will be 8 planes.
 template <class S, class T>
 inline void vil_cartesian_differential_invariants_3_1plane(
-  const vil_image_view<S>& src, vil_image_view<T>& dest, double scale)
+  const vil_image_view<S>& src, vil_image_view<T>& dest, double scale,
+  unsigned max_kernel_width /*=0*/)
 {
   assert(src.nplanes()==1);
-  const unsigned filt_n=int(3*scale + 0.5)*2+1;
+  
+  unsigned filt_n=int(3*scale + 0.5)*2+1;
+  
+  if (max_kernel_width!=0 && filt_n > max_kernel_width)
+    filt_n = (max_kernel_width | 1); // make sure it is an odd number
+
   const unsigned filt_c=filt_n/2;
 
   vcl_vector<double> filt_0(filt_n), filt_2(filt_n), filt_1(filt_n), filt_3(filt_n);
@@ -143,7 +149,7 @@ inline void vil_cartesian_differential_invariants_3_1plane(
 //: Compute 1st, 2nd, and 3rd order C.d.i.s of an image.
 template <class S, class T>
 void vil_cartesian_differential_invariants_3(
-  const vil_image_view<S>& src, vil_image_view<T>& dest, double scale)
+  const vil_image_view<S>& src, vil_image_view<T>& dest, double scale, unsigned max_kernel_width /*=0*/)
 {
   dest.set_size(src.ni(), src.nj(), src.nplanes()*8);
   assert(dest.planestep() >= int(dest.ni() * dest.nj()));
@@ -154,7 +160,7 @@ void vil_cartesian_differential_invariants_3(
 #ifndef NDEBUG
     vil_image_view<T> check = destplanes;
 #endif
-    vil_cartesian_differential_invariants_3_1plane(vil_plane(src, p), destplanes, scale);
+    vil_cartesian_differential_invariants_3_1plane(vil_plane(src, p), destplanes, scale, max_kernel_width);
     assert(destplanes == check);
   }
 }
@@ -163,6 +169,6 @@ void vil_cartesian_differential_invariants_3(
 #define VIL_CARTESIAN_DIFFERENTIAL_INVARIANTS_INSTANTIATE(S, T) \
 template void \
 vil_cartesian_differential_invariants_3( const vil_image_view< S >& src, \
-                                         vil_image_view< T >& dest, double )
+  vil_image_view< T >& dest, double, unsigned )
 
 #endif // vil_cartesian_differential_invariants_txx_
