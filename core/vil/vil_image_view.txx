@@ -139,7 +139,7 @@ inline bool convert_components_from_planes(vil2_image_view<T> &lhs,
     lhs = vil2_image_view<T >(rhs.memory_chunk(),
                               (T const*) rhs.top_left_ptr(),
                               rhs.ni(),rhs.nj(),1,
-                              rhs.istep()/3,rhs.jstep()/3,1);
+                              rhs.istep()/ncomp,rhs.jstep()/ncomp,1);
     return true;
   }
   else
