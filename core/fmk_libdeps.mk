@@ -37,5 +37,5 @@ fmk_libdeps += lib_vgui-X:lib_vgui,lib_X11
 fmk_libdeps += lib_vgui-Xm:lib_vgui,lib_vgui-X
 fmk_libdeps += lib_vgui-glX:lib_vgui,lib_vgui-X
 fmk_libdeps += lib_vgui-glut:lib_vgui,lib_glut
-fmk_libdeps += lib_vgui-gtk:lib_vgui,lib_gtk
+fmk_libdeps += lib_vgui-gtk:lib_vgui,lib_gtkgl
 fmk_libdeps += lib_vgui-qt:lib_vgui,lib_qt
