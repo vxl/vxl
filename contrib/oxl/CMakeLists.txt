@@ -10,5 +10,9 @@ INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/oxl)
 
 SUBDIRS(mvl oxp vrml osl)
 
-SUBDIRS(vgui)
 
+FIND_INCLUDE( HAS_OPENGL GL/gl.h /usr/local/include )
+
+IF(HAS_OPENGL)
+  SUBDIRS(vgui)
+END(HAS_OPENGL)
