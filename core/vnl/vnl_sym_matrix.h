@@ -61,11 +61,13 @@ public:
   // Data Access---------------------------------------------------------------
 
   T operator () (unsigned i, unsigned j) const {
-    return (i < j) ? index_[i][j] : index_[j][i];
+    return (i > j) ? index_[i][j] : index_[j][i];
+//    return (i > j) ? fast(i,j) : fast(j,i);
   }
 
   T& operator () (unsigned i, unsigned j) {
-    return (i < j) ? index_[i][j] : index_[j][i];
+    return (i > j) ? index_[i][j] : index_[j][i];
+//    return (i > j) ? fast(i,j) : fast(j,i);
   }
 
   //: fast access, however i >= j
@@ -98,7 +100,6 @@ public:
   inline vnl_matrix<T> as_matrix() const;
 
   void resize(int n);
-  void clear();
 
   //: Return pointer to the lower triangular elements as a contiguous 1D C array;
   T*       data_block()       { return data_; }
@@ -184,7 +185,29 @@ inline vnl_matrix<T> vnl_sym_matrix<T>::as_matrix() const
 }
 
 
+template <class T>
+void vnl_sym_matrix<T>::resize(int n)
+{
+  if (n == nn_) return;
 
+  vnl_c_vector<T>::deallocate(data_, size());
+  vnl_c_vector<T>::deallocate(index_, nn_);
+
+  nn_ = n;
+  data_ = vnl_c_vector<T>::allocate_T(size());
+  index_ = vnl_c_vector<T>::allocate_Tptr(n);
+
+  setup_index();
+}
+
+template <class T>
+bool operator==(const vnl_sym_matrix<T> &a, const vnl_sym_matrix<T> &b);
+
+template <class T>
+bool operator==(const vnl_sym_matrix<T> &a, const vnl_matrix<T> &b);
+
+template <class T>
+bool operator==(const vnl_matrix<T> &a, const vnl_sym_matrix<T> &b);
 
 
 #endif // vnl_sym_matrix_h_

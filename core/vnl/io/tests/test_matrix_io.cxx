@@ -11,9 +11,9 @@
 
 void test_matrix_double_io()
 {
-  vcl_cout << "***********************" << vcl_endl;
+  vcl_cout << "*****************************" << vcl_endl;
   vcl_cout << "Testing vnl_matrix<double> io" << vcl_endl;
-  vcl_cout << "***********************" << vcl_endl;
+  vcl_cout << "*****************************" << vcl_endl;
   //// test constructors, accessors
   const int m = 10;
   const int n = 6;
