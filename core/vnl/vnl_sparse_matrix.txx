@@ -404,6 +404,23 @@ T& vnl_sparse_matrix<T>::operator()(unsigned int r, unsigned int c)
 }
 
 template <class T>
+void vnl_sparse_matrix<T>::diag_AtA(vnl_vector<T> & result) const
+{
+  assert (result.size() == columns());
+
+  result.fill(0.0);
+
+  for (vcl_vector<row>::const_iterator row_iter = elements.begin(); row_iter != elements.end(); ++row_iter) {
+    row const& this_row = *row_iter;
+    for (row::const_iterator col_iter = this_row.begin(); col_iter != this_row.end(); ++col_iter) {
+      vnl_sparse_matrix_pair<T> const& entry = *col_iter;
+      unsigned const col_id = entry.first;
+      result[col_id] += entry.second * entry.second;
+    }
+  }
+}
+
+template <class T>
 void vnl_sparse_matrix<T>::set_row(unsigned int r,
 				   vcl_vector<VCL_SUNPRO_ALLOCATOR_HACK(int)> const& cols, 
 				   vcl_vector<VCL_SUNPRO_ALLOCATOR_HACK(T)> const& vals)

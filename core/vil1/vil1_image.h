@@ -11,21 +11,6 @@
 
 #include <vil/vil_image_impl.h>
 
-#if 0
-//: Convenient descriptions of format combinations.
-// Combinations of component format and bits and planes and components
-enum vil_pixel_format {
-  VIL_PIXEL_FORMAT_UNKNOWN,
-  VIL_BYTE,       /*!< 1 x W x H x 1 of UINT x 8*/
-  VIL_RGB_BYTE,   /*!< 1 x W x H x 3 of UINT x 8*/
-  VIL_UINT16,     /*!< 1 x W x H x 1 of UINT x 16*/
-  VIL_UINT32,     /*!< 1 x W x H x 1 of UINT x 32*/
-  VIL_FLOAT,      /*!< 1 x W x H x 1 of IEEE_FLOAT x 32*/
-  VIL_DOUBLE,     /*!< 1 x W x H x 1 of IEEE_DOUBLE x 64*/
-  VIL_COMPLEX    /*!< 1 x W x H x 1 of COMPLEX x 64*/
-};
-#endif
-
 class vil_image;
 
 #define VIL_IMAGE_USE_SAFETY_NET (1)
@@ -80,27 +65,9 @@ public:
 #undef vil_image_delegate
   // -------------------- convenience --------------------
 
-#if 0
-  //: Convenience method.
-  //  converts (bits_per_component x component_format)
-  // to one of the `vil_pixel_format's. 
-  // A standard RGB RGB RGB image has pixel_type() == VIL_RGB_BYTE
-  enum vil_pixel_format pixel_type() const;
-#endif
-
   //: return size in bytes.
   int get_size_bytes() const;
     
-#if 0
-  //: \brief Return the image interpreted as rgb bytes.
-  bool get_section_rgb_byte(void *buf, int x0, int y0, int width, int height) const;
-
-  //: Return the image interpreted as floats.
-  bool get_section_float(void *buf, int x0, int y0, int width, int height) const;
-
-  //: Return the image interpreted as bytes.
-  bool get_section_byte(void *buf, int x0, int y0, int width, int height) const;
-#endif
   //: Print a 1-line summary of contents
   ostream& print(ostream&) const;
   

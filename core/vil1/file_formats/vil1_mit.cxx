@@ -21,47 +21,71 @@
 
 static char const* vil_mit_format_tag = "mit";
 
-#define MIT_UNSIGNED    1
-#define MIT_RGB         2
-#define MIT_HSB         3
-#define MIT_CAP         4
-#define MIT_SIGNED      5
-#define MIT_FLOAT       6
-#define MIT_EDGE        7
+#define MIT_UNSIGNED    0x0001
+#define MIT_RGB         0x0002
+#define MIT_HSB         0x0003
+#define MIT_CAP         0x0004
+#define MIT_SIGNED      0x0005
+#define MIT_FLOAT       0x0006
+#define MIT_EDGE        0x0007
 
-#define MIT_UCOMPLEX    0x101
-#define MIT_SCOMPLEX    0x105
-#define MIT_FCOMPLEX    0x106
+#define MIT_UCOMPLEX    0x0101
+#define MIT_SCOMPLEX    0x0105
+#define MIT_FCOMPLEX    0x0106
 
-#define MIT_UNSIGNED_E  0x201
-#define MIT_SIGNED_E    0x205
-#define MIT_FLOAT_E     0x206
+#define MIT_UNSIGNED_E  0x0201
+#define MIT_SIGNED_E    0x0205
+#define MIT_FLOAT_E     0x0206
 
-#define MIT_UCOMPLEX_E  0x301
-#define MIT_SCOMPLEX_E  0x305
-#define MIT_FCOMPLEX_E  0x306
+#define MIT_UCOMPLEX_E  0x0301
+#define MIT_SCOMPLEX_E  0x0305
+#define MIT_FCOMPLEX_E  0x0306
 
 #define EDGE_HOR 0200           /* Edge direction codes */
 #define EDGE_VER 0100
 
-inline unsigned short swapShort(unsigned short v)
+// The mit image format is encoded (in little-endian format) as follows :
+//   2 bytes : magic number
+//   2 bytes : number of bits per pixel
+//   2 bytes : width
+//   2 bytes : height
+//   raw image data follows.
+//
+// E.g. :
+// 00000000: 01 00 08 00 67 01 5A 01 6D 6D 6D 6D 6D 6D 6D 6D ....g.Z.mmmmmmmm
+// 00000010: 6D 6D 6D 6D 6D 6D 6D 6D 6D 6D 6D 6D 6D 6D 6D 6D mmmmmmmmmmmmmmmm
+
+//----------------------------------------------------------------------
+// endian issues
+
+// this will fail at compile time if sizeof(short) != 2
+template <int N> struct compile_time_assert;
+VCL_DEFINE_SPECIALIZATION struct compile_time_assert<2> { };
+compile_time_assert<sizeof(unsigned short)> clever_clogs;
+
+unsigned short read_little_endian_short(vil_stream *s)
 {
-   return (v << 8)
-        | (v >> 8);
+  unsigned short tmp;
+  s->read(&tmp, sizeof(tmp));
+#if VXL_BIG_ENDIAN
+  tmp = (tmp << 8) | (tmp >> 8);
+#endif
+  return tmp;
 }
 
-#if defined(i386) || defined(VAX)
-// Assume intel/vax byte ordering
-#define swapShort(x) x
+void write_little_endian_short(vil_stream *s, unsigned short tmp)
+{
+#if VXL_BIG_ENDIAN
+  tmp = (tmp << 8) | (tmp >> 8);
 #endif
+  s->write(&tmp, sizeof(tmp));
+}
+//----------------------------------------------------------------------
 
 vil_image_impl* vil_mit_file_format::make_input_image(vil_stream* is)
 {
   is->seek(0);
-
-  unsigned short temp;
-  is->read(&temp, sizeof(unsigned short));
-  int type = swapShort(temp);
+  int type = read_little_endian_short(is);
   
   if (!(type == MIT_UNSIGNED ||
 	type == MIT_RGB      ||
@@ -72,21 +96,15 @@ vil_image_impl* vil_mit_file_format::make_input_image(vil_stream* is)
 	type == MIT_EDGE      ))
     return 0;
   
-  
-  is->read(&temp, sizeof(unsigned short));
-  int bits_per_pixel = swapShort(temp);
+  int bits_per_pixel = read_little_endian_short(is);
   if (bits_per_pixel > 32) {
     cerr << "vil_mit_file_format:: Thought it was MIT, but bpp = " << bits_per_pixel << endl;
     return 0;
   }
   
-
-  is->read(&temp, sizeof(unsigned short));
-  //int width = swapShort(temp);
+  /*int width =*/ read_little_endian_short(is);
+  /*int height=*/ read_little_endian_short(is);
   
-  is->read(&temp, sizeof(unsigned short));
-  //int height = swapShort(temp);
-
   //cerr << __FILE__ " : here we go:\n";
   //cerr << __FILE__ " : type_ = " << type << endl;
   //cerr << __FILE__ " : bits_per_pixel_ = " << bits_per_pixel << endl;
@@ -97,11 +115,11 @@ vil_image_impl* vil_mit_file_format::make_input_image(vil_stream* is)
 }
 
 vil_image_impl* vil_mit_file_format::make_output_image(vil_stream* is, int planes,
-					       int width,
-					       int height,
-					       int components,
-					       int bits_per_component,
-					       vil_component_format format)
+						       int width,
+						       int height,
+						       int components,
+						       int bits_per_component,
+						       vil_component_format format)
 {
   return new vil_mit_generic_image(is, planes, width, height, components, bits_per_component, format);
 }
@@ -125,11 +143,11 @@ char const* vil_mit_generic_image::file_format() const
 }
 
 vil_mit_generic_image::vil_mit_generic_image(vil_stream* is, int planes,
-					       int width,
-					       int height,
-					       int components,
-					       int bits_per_component,
-					       vil_component_format format):
+					     int width,
+					     int height,
+					     int components,
+					     int bits_per_component,
+					     vil_component_format format):
   is_(is)
 {
   width_ = width;
@@ -158,42 +176,28 @@ bool vil_mit_generic_image::read_header()
 {
   is_->seek(0);
 
-  unsigned short temp;
-  is_->read(&temp, sizeof(unsigned short));
-  type_ = swapShort(temp);
-
-  is_->read(&temp, sizeof(unsigned short));
-  bits_per_pixel_ = swapShort(temp);
-
-  is_->read(&temp, sizeof(unsigned short));
-  width_ = swapShort(temp);
-
-  is_->read(&temp, sizeof(unsigned short));
-  height_ = swapShort(temp);
-
+  type_ = read_little_endian_short(is_);
+  bits_per_pixel_ = read_little_endian_short(is_);
+  width_ = read_little_endian_short(is_);
+  height_ = read_little_endian_short(is_);
+  
   if (type_ > 7 || type_ < 1)
     return false;
-
+  
   if (type_ == 1) components_ = 1;   // gray
   else if (type_ == 2) components_ = 3;  // rgb
   else if (type_ == 6) components_ = 1;  // float 
-
+  
   return true; 
 }
 
 bool vil_mit_generic_image::write_header()
 {
   is_->seek(0);
-  unsigned short temp;
-  temp = swapShort(type_);  
-  is_->write((void*)&temp, 2);
-  temp = swapShort(bits_per_pixel_);
-  is_->write((void*)&temp, 2);
-  temp = swapShort(width_);
-  is_->write((void*)&temp, 2);
-  temp = swapShort(height_); 
-  is_->write((void*)&temp, 2);
-
+  write_little_endian_short(is_, type_);
+  write_little_endian_short(is_, bits_per_pixel_);
+  write_little_endian_short(is_, width_);
+  write_little_endian_short(is_, height_);
   return true;
 }
 
@@ -201,7 +205,7 @@ bool vil_mit_generic_image::get_section(void* buf, int x0, int y0, int xs, int y
 {
   assert(buf);
 
-  int offset = 4; 
+  int offset = 8; // fsm: was 4
   
   int skip = bytes_per_pixel() * (width_ - xs);
 

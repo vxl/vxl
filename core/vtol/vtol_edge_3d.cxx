@@ -12,6 +12,9 @@
 //#include <vtol/some_stubs.h>
 #include <vsol/vsol_curve_3d.h>
 #include <vsol/vsol_line_3d.h>
+
+#include <vcl/vcl_rel_ops.h>
+
 /*
  ******************************************************
  *

@@ -73,20 +73,6 @@ void vbl_array_2d<T>::fill(T value)
       operator()(i,j)=value;
 }
 
-// -- Return number of rows
-template <class T>
-int vbl_array_2d<T>::rows(void) const
-{
-  return num_rows_;
-}
-
-// -- Return number of columns
-template <class T>
-int vbl_array_2d<T>::columns(void) const
-{
-  return num_cols_;
-}
-
 template <class T>
 void vbl_array_2d<T>::create(int num_rows, int num_cols)
 {

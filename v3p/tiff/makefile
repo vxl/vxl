@@ -11,7 +11,7 @@
 
 USES = Image
 
-LIBRARY := TIFF
+LIBRARY := tiff
 VERSION := 1.0
 
 ##########################################
@@ -149,7 +149,7 @@ APP_CFLAGS +=  -DJPEG_SUPPORT \
 endif
 
 
-IULIBS += -lJPEG
+IULIBS += -ljpeg
 
 ##########################################
 include ${IUEROOT}/config/top-rules.mk

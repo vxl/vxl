@@ -1,4 +1,4 @@
-USES = oxl vxl
+USES = v3p vxl oxl
 
 ald_libs += mvl
 IULIBS += -lmvl -lvgl -lvil -lvnl-algo -lvnl -lvbl -lvcl

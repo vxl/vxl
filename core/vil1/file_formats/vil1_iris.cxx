@@ -87,6 +87,7 @@ char const* vil_iris_file_format::tag() const
 vil_iris_generic_image::vil_iris_generic_image(vil_stream* is):
   is_(is)
 {
+  is_->ref();
   read_header();
 }
 
@@ -103,6 +104,7 @@ vil_iris_generic_image::vil_iris_generic_image(vil_stream* is, int planes,
 					       vil_component_format format):
   is_(is)
 {
+  is_->ref();
   if (bits_per_component == 8 || 
       bits_per_component == 16)
   {
@@ -140,6 +142,10 @@ vil_iris_generic_image::vil_iris_generic_image(vil_stream* is, int planes,
   else cerr << "Cannot write iris image, they want 8 or 16 bits per component\n";
 }
 
+vil_iris_generic_image::~vil_iris_generic_image()
+{
+  is_ -> unref();
+}
 
 bool vil_iris_generic_image::read_header()
 {

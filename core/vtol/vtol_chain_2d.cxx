@@ -1,6 +1,6 @@
 #include <vtol/vtol_chain_2d.h>
-
 #include <vcl/vcl_algorithm.h>
+#include <vcl/vcl_cassert.h>
 
 //***************************************************************************
 // Initialization

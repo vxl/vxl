@@ -10,7 +10,7 @@ struct X {
 
 #include <vcl/vcl_rel_ops.h>
 
-int main(int, char **)
+int function()
 {
   X x(2), y(3);
   if (x == y) return 1;
@@ -19,6 +19,11 @@ int main(int, char **)
   if (x >  y) return 4;
   if (x <= y) return 5;
   if (x >= y) return 6;
+}
+
+int main(int, char **)
+{
+  function();
   return 0;
 }
 

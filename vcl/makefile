@@ -12,6 +12,7 @@ SUBDIRS = tests
 endif
 
 SOURCES += vcl_cmath.cxx
+SOURCES += vcl_cassert.cxx
 SOURCES += vcl_unistd.cxx
 SOURCES += $(wildcard vcl_rtti.cxx)
 SOURCES += $(wildcard vcl_debug.cxx)

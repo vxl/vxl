@@ -1,7 +1,7 @@
 #######################################
 include ${IUEROOT}/config/top-params.mk
 #######################################
-USES += vxl
+USES += v3p vxl
 IULIBS += -lvsl -lvil -lvnl-algo -lvnl -lvbl -lvcl
 
 # Harris corner detector

@@ -2,7 +2,7 @@
   fsm@robots.ox.ac.uk
 */
 #ifdef __GNUC__
-#pragma implementation
+#pragma implementation "vil_skip_image_impl"
 #endif
 #include "vil_skip_image_impl.h"
 #include <vcl/vcl_climits.h> // CHAR_BIT
@@ -20,17 +20,32 @@ vil_skip_image_impl::vil_skip_image_impl(vil_image const &underlying, unsigned s
   assert(skipy>0);
 }
 
-vil_skip_image_impl::~vil_skip_image_impl() {
+vil_skip_image_impl::~vil_skip_image_impl() 
+{
 }
 
 //--------------------------------------------------------------------------------
 
-vil_image vil_skip_image_impl::get_plane(int p) const {
+vil_image vil_skip_image_impl::get_plane(int p) const 
+{
   vil_image_impl *i = new vil_skip_image_impl(base.get_plane(p), skipx, skipy);
   return i; //
 }
 
-bool vil_skip_image_impl::get_section(void * buf, int x0, int y0, int w, int h) const {
+bool vil_skip_image_impl::put_section(void const * , int, int, int, int) 
+{
+  return false;
+}
+
+bool vil_skip_image_impl::get_property(char const *, void * VCL_DEFAULT_VALUE(0)) const 
+{
+  return false;
+}
+
+//--------------------------------------------------------------------------------
+
+bool vil_skip_image_impl::get_section(void * buf, int x0, int y0, int w, int h) const 
+{
   if (base.bits_per_component() % CHAR_BIT) {
     cerr << __FILE__ " : urgh!" << endl;
     return false; // FIXME
@@ -61,13 +76,3 @@ bool vil_skip_image_impl::get_section(void * buf, int x0, int y0, int w, int h) 
 
   return true;
 }
-
-bool vil_skip_image_impl::put_section(void const * , int, int, int, int) {
-  return false;
-}
-
-bool vil_skip_image_impl::get_property(char const *, void * VCL_DEFAULT_VALUE(0)) const {
-  return false;
-}
-
-//--------------------------------------------------------------------------------

@@ -3,6 +3,7 @@
 
 #include <vcl/vcl_vector.h>
 #include <vcl/vcl_algorithm.h>
+#include <vcl/vcl_rel_ops.h>
  
 #include <vtol/vtol_list_functions_3d.h>
 #include <vtol/vtol_two_chain_3d.h>

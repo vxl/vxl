@@ -85,6 +85,9 @@ SOURCES += ztrmm.c
 SOURCES += ztrmv.c
 SOURCES += ztrsv.c
 
+# LINALG
+SOURCES += lsqr.c
+
 # LINPACK 
 SOURCES += ssvdc.c # xSVD
 SOURCES += dsvdc.c

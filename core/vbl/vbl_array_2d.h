@@ -24,40 +24,41 @@
 template <class T>
 class vbl_array_2d {
 public:
-  // Constructors/Destructors--------------------------------------------------
-  
   vbl_array_2d();
   vbl_array_2d(int m, int n);    
-  vbl_array_2d(const vbl_array_2d<T>&);
+  vbl_array_2d(vbl_array_2d<T> const &);
  ~vbl_array_2d();
 
   vbl_array_2d& operator=(const vbl_array_2d<T>&);
 
   // Operations----------------------------------------------------------------
-  void resize(int m, int n);
-  
-  // Computations--------------------------------------------------------------
-  
-  // Data Access---------------------------------------------------------------
-  const T& operator() (int i, int j) const { return rows_[i][j]; }
-  T& operator() (int i, int j) { return rows_[i][j]; }
-
   void fill(T value);
-  int rows() const;
-  int columns() const;
+  void resize(int m, int n);
+    
+  // Data Access---------------------------------------------------------------
+  T const& operator() (int i, int j) const { return rows_[i][j]; }
+  T      & operator() (int i, int j) { return rows_[i][j]; }
 
-  // Data Control--------------------------------------------------------------
-  T** get_rows() { return rows_; }
+  void put(int i, int j, T const &x) { rows_[i][j] = x; }
+  T get(int i, int j) const { return rows_[i][j]; }
+
+  T const* operator[] (int i) const { return rows_[i]; }
+  T      * operator[] (int i) { return rows_[i]; }
+
+  int rows() const { return num_rows_; }
+  int cols() const { return num_cols_; }
+  int columns() const { return num_cols_; }
+
+  T      *      * get_rows() { return rows_; }
   T const* const* get_rows() const { return rows_; }
 
-protected:
-  // Data Members--------------------------------------------------------------
+private: 
+  //protected:
   T** rows_;
   int num_rows_;
   int num_cols_;
   
-protected:
-  // Helpers-------------------------------------------------------------------
+  //protected:
   void destroy();
   void create(int m, int n);
 };

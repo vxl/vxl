@@ -12,9 +12,6 @@ SUBDIRS += val
 SUBDIRS += vbl
 
 # numerics
-ifneq (1,$(strip $(HAS_NATIVE_NETLIB)))
-SUBDIRS += ../Numerics/netlib
-endif
 SUBDIRS += vnl
 
 # geometry
@@ -27,12 +24,6 @@ SUBDIRS += vsol
 SUBDIRS += vtol
 
 # image
-ifneq (1,$(strip $(HAS_NATIVE_JPEG)))
-SUBDIRS += ../Image/JPEG
-endif
-ifneq (1,$(strip $(HAS_NATIVE_TIFF)))
-SUBDIRS += ../Image/TIFF
-endif
 SUBDIRS += vil
 
 # segmentation

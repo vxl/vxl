@@ -32,6 +32,7 @@
 // <end copyright notice>
 #include <vtol/vtol_hierarchy_node_3d.h>
 #include <vcl/vcl_algorithm.h>
+#include <vcl/vcl_iostream.h>
 
 //:
 // constructor

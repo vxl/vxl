@@ -41,6 +41,7 @@ public:
 					       int components,
 					       int bits_per_component,
 					       vil_component_format format);
+  ~vil_iris_generic_image();
 
   //: Dimensions.  Planes x W x H x Components
   virtual int planes() const { return planes_; }

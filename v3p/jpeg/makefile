@@ -1,6 +1,6 @@
 USES = # completely independent!
 
-LIBRARY := JPEG
+LIBRARY := jpeg
 VERSION := 1.0
 
 SOURCES += jcapimin.c

@@ -7,6 +7,7 @@
 #include <vtol/vtol_list_functions_3d.h>
 //#include <vtol/some_stubs.h>
 #include <vcl/vcl_algorithm.h>
+#include <vcl/vcl_rel_ops.h>
 
 //:
 // constructors for the vtol_one_chain_3d

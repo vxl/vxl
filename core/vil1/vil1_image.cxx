@@ -10,33 +10,6 @@
 #include <vcl/vcl_climits.h>
 #include <vcl/vcl_iostream.h>
 
-#if 0
-//   VIL_BYTE,       /*!< 1 x W x H x 1 of UINT x 8*/
-//   VIL_RGB_BYTE,   /*!< 1 x W x H x 3 of UINT x 8*/
-//   VIL_UINT16,     /*!< 1 x W x H x 1 of UINT x 16*/
-//   VIL_UINT32,     /*!< 1 x W x H x 1 of UINT x 32*/
-//   VIL_FLOAT,      /*!< 1 x W x H x 1 of IEEE_FLOAT x 32*/
-//   VIL_DOUBLE,     /*!< 1 x W x H x 1 of IEEE_DOUBLE x 64*/
-//   VIL_COMPLEX     /*!< 1 x W x H x 1 of COMPLEX x 64*/
-
-vil_pixel_format vil_image::pixel_type() const
-{
-  int c = components();
-  int b = bits_per_component();
-  int f = component_format();
-
-  if (c == 1 && b == 8 && f == VIL_COMPONENT_FORMAT_UNSIGNED_INT) return VIL_BYTE;
-  if (c == 3 && b == 8 && f == VIL_COMPONENT_FORMAT_UNSIGNED_INT) return VIL_RGB_BYTE;
-  if (c == 1 && b == 16 && f == VIL_COMPONENT_FORMAT_UNSIGNED_INT) return VIL_UINT16;
-  if (c == 1 && b == 32 && f == VIL_COMPONENT_FORMAT_UNSIGNED_INT) return VIL_UINT32;
-  if (c == 1 && b == 32 && f == VIL_COMPONENT_FORMAT_IEEE_FLOAT) return VIL_FLOAT;
-  if (c == 1 && b == 64 && f == VIL_COMPONENT_FORMAT_IEEE_FLOAT) return VIL_DOUBLE;
-  if (c == 1 && b == 64 && f == VIL_COMPONENT_FORMAT_COMPLEX) return VIL_COMPLEX;
-
-  return VIL_PIXEL_FORMAT_UNKNOWN;
-}
-#endif
-
 ostream& vil_image::print(ostream& s) const
 {
   s << "[vil_image: size " << width() << " x " << height();

@@ -14,6 +14,7 @@
 
 vil_stream::vil_stream()
 {
+  refcount = 0;
 #if log_xtor
   cerr << __FILE__ ", vil_stream ctor : this = " << (void*)this << endl;
 #endif

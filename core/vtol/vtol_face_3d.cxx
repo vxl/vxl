@@ -12,6 +12,7 @@
 #include <vsol/vsol_point_3d.h>
 
 // #include <vtol/some_stubs.h>
+#include <vcl/vcl_rel_ops.h>
 
 
 

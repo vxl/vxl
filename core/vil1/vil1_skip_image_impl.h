@@ -1,7 +1,7 @@
 #ifndef vil_skip_image_h_
 #define vil_skip_image_h_
 #ifdef __GNUC__
-#pragma interface
+#pragma interface "vil_skip_image_impl"
 #endif
 /*
   fsm@robots.ox.ac.uk

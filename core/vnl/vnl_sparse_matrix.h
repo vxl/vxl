@@ -110,6 +110,10 @@ public:
   //: Get a reference to an entry in the matrix.
   T& operator()(unsigned int row, unsigned int column);
 
+  //: Get diag(A_tranpose * A).
+  // Useful for forming Jacobi preconditioners for linear solvers.
+  void diag_AtA(vnl_vector<T>& result) const;
+
   //: Set a whole row at once. Much faster.
   void set_row(unsigned int r, 
 	       vcl_vector<VCL_SUNPRO_ALLOCATOR_HACK(int)> const& cols, 

@@ -165,6 +165,7 @@ vil_bmp_generic_image::vil_bmp_generic_image(vil_stream* is, int planes,
 					       vil_component_format format):
   is_(is)
 {
+  is_->ref();
   local_color_map_=0;
 
   width_ = width;  // TODO what is this suppposed to do?
@@ -205,6 +206,7 @@ vil_bmp_generic_image::~vil_bmp_generic_image()
     delete [] local_color_map_[2];
     delete local_color_map_;
   }
+  is_->unref();
 }
 
 bool vil_bmp_generic_image::read_header()

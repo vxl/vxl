@@ -26,6 +26,7 @@ SOURCES += vnl_levenberg_marquardt.cxx
 SOURCES += vnl_conjugate_gradient.cxx
 SOURCES += vnl_lbfgs.cxx
 SOURCES += vnl_amoeba.cxx
+SOURCES += vnl_lsqr.cxx
 
 # equation solvers
 SOURCES += vnl_rpoly_roots.cxx

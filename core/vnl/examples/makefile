@@ -1,7 +1,7 @@
 #######################################
 include ${IUEROOT}/config/top-params.mk
 #######################################
-USES += vxl
+USES += v3p vxl
 USE_NETLIB := 1
 
 IULIBS := -lvbl -lvnl-algo -lnetlib -lvnl -lvcl
@@ -14,6 +14,7 @@ MINI_PROG_SOURCES += vnl_planefit.cxx
 MINI_PROG_SOURCES += vnl_polyroots.cxx
 MINI_PROG_SOURCES += vnl_rosenbrock.cxx
 MINI_PROG_SOURCES += vnl_svd.cxx
+MINI_PROG_SOURCES += vnl_lsqr_test.cxx
 
 ######################################
 include ${IUEROOT}/config/top-rules.mk

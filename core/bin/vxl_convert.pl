@@ -38,8 +38,8 @@ my $diff = "diff";
 if (-f ($diff = "/bin/diff")) { }
 elsif (-f ($diff = "/usr/bin/diff")) { }
 elsif (-f ($diff = "C:/cygnus/CYGWIN~1/H-I586~1/bin/diff.exe")) {
-    $mv = "rename";
-$rm = "del";
+  $mv = "rename";
+  $rm = "del";
 }
 else { die "no diff found\n"; }
 

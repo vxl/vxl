@@ -69,6 +69,10 @@ SOURCES += vnl_least_squares_function.cxx
 SOURCES += vnl_least_squares_cost_function.cxx
 SOURCES += vnl_nonlinear_minimizer.cxx
 
+# linear systems
+SOURCES += vnl_linear_system.cxx
+SOURCES += vnl_sparse_matrix_linear_system.cxx
+
 # special matrices
 SOURCES += vnl_rotation_matrix.cxx
 SOURCES += vnl_cross_product_matrix.cxx

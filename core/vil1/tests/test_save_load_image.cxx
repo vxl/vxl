@@ -268,26 +268,32 @@ int main() {
   vil_test_image_type("pnm", image8);
   vil_test_image_type("pnm", image16);
   vil_test_image_type("pnm", image24);
+
   // test the lily image read write
   //vil_test_image_type("lily", image8);
   //vil_test_image_type("lily", imagefloat);
+
   // test the VIFF image read write
   //vil_test_image_type("viff", image1);
   vil_test_image_type("viff", image8);
   vil_test_image_type("viff", image16);
   //vil_test_image_type("viff", image3p);
   vil_test_image_type("viff", imagefloat);
+
   // test the TIFF read write
   vil_test_image_type("tiff", image8);
   vil_test_image_type("tiff", image24);
+
 #if 0 // lossy format
   // test the JPEG read write
   vil_test_image_type("jpeg", image8);
   vil_test_image_type("jpeg", image24);
 #endif
+
   // test the PNG read write
   vil_test_image_type("png", image8);
   vil_test_image_type("png", image24);
+
   // test the sgi read write
   vil_test_image_type("iris", image8);
   vil_test_image_type("iris", image16);

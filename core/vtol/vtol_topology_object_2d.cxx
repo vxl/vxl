@@ -1,6 +1,6 @@
 #include <vtol/vtol_topology_object_2d.h>
-
 #include <vtol/vtol_topology_cache_2d.h>
+#include <vcl/vcl_cassert.h>
 
 //***************************************************************************
 // Initialization
@@ -184,9 +184,10 @@ bool
 vtol_topology_object_2d::is_inferior(const vtol_topology_object_2d &inferior) const
 {
   vcl_vector<vtol_topology_object_2d_ref>::const_iterator i;
-  for(i=_inferiors.begin();(i!=_inferiors.end())&&(*(*i)!=inferior); ++i)
-    ;
-  return i!=_inferiors.end();
+  for (i=_inferiors.begin(); i!=_inferiors.end(); ++i)
+    if (*(*i) == inferior)
+      return true;
+  return false;
 }
 
 //---------------------------------------------------------------------------
@@ -197,9 +198,10 @@ bool
 vtol_topology_object_2d::is_superior(const vtol_topology_object_2d &superior) const
 {
   vcl_list<vtol_topology_object_2d_ref>::const_iterator i;
-  for(i=_superiors.begin();(i!=_superiors.end())&&(*(*i)!=superior); ++i)
-    ;
-  return i!=_superiors.end();
+  for (i=_superiors.begin(); i!=_superiors.end(); ++i)
+    if ( *(*i) == superior)
+      return true;
+  return false;
 }
 
 //---------------------------------------------------------------------------
