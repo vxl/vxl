@@ -29,10 +29,6 @@
 #define vcl_emulation_straits_h
 
 #include "vcl_stlconf.h"
-// .NAME vcl_straits
-// .INCLUDE emulation/vcl_straits.h
-// .FILE emulation/vcl_straits.cxx
-//
 
 #ifdef __GNUG__
 // For vcl_char_traits <char>
