@@ -750,9 +750,9 @@ vnl_vector<T> cross_3d (vnl_vector<T> const& v1, vnl_vector<T> const& v2) {
 #endif
   vnl_vector<T> result(v1.size());
 
-  result.x() = v1.y() * v2.z() - v1.z() * v2.y(); // work for both col/row
-  result.y() = v1.z() * v2.x() - v1.x() * v2.z(); // representation
-  result.z() = v1.x() * v2.y() - v1.y() * v2.x();
+  result[0] = v1[1] * v2[2] - v1[2] * v2[1]; // work for both col/row
+  result[1] = v1[2] * v2[0] - v1[0] * v2[2]; // representation
+  result[2] = v1[0] * v2[1] - v1[1] * v2[0];
   return result;
 }
 
