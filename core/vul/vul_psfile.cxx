@@ -7,6 +7,7 @@
 #include <vcl_iostream.h>
 #include <vcl_iomanip.h> // for setw()
 #include <vcl_algorithm.h> // for vcl_min()
+#include <vcl_cassert.h>
 
 #define RANGE(a,b,c) { if (a < b) a = b;  if (a > c) a = c; }
 #define in_range(a) (a < (1 << 8))
