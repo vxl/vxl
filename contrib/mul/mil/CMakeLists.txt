@@ -36,7 +36,7 @@ AUX_SOURCE_DIRECTORY(Templates mil_sources)
 ADD_LIBRARY(mil ${mil_sources})
 TARGET_LINK_LIBRARIES(mil mbl vnl_algo vbl_io vgl vil)
 
-SUBDIRS(algo tools)
+SUBDIRS(algo)
 
 IF (BUILD_TESTING)
   SUBDIRS(tests)
