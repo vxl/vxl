@@ -20,6 +20,7 @@
 #include <vcl_cassert.h>
 #include <vcl_string.h>
 #include <vcl_fstream.h>
+#include <vcl_root_dir.h>
 
 //:
 // \file
@@ -159,8 +160,8 @@ void golden_test_vbl_io(bool save_file)
 
   vcl_cout << "Did we get this far ?" << vcl_endl;
 
-  vsl_b_ifstream bfs_in("golden_test_vbl_io.bvl");
-
+  vcl_string gold_path=vcl_root_dir()+"/vxl/vbl/io/tests/golden_test_vbl_io.bvl";
+  vsl_b_ifstream bfs_in(gold_path.c_str());
 
   TEST ("Opened golden_test_vbl_io.bvl for reading ", ! bfs_in, false);
 
