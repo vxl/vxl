@@ -62,8 +62,19 @@ void vsrl_token::get_position(double &x, double &y)
   y= _y;
 }
 
+//: what is the direct cost of assigning this token to tok
+double vsrl_token::cost(vsrl_token *tok)
+{
+  return 0;
+}
 
+//: what is the incremental cost of going from from this -> tok2 given 
+//: the assignment going from tok_p -> tok_2p
 
+double vsrl_token::incremental_cost(vsrl_token *tok2, vsrl_token *tok_p, vsrl_token *tok_2p)
+{
+  return 0;
+}
 
 
 

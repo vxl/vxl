@@ -29,7 +29,12 @@ class vsrl_token
   virtual bool intensity_token() {return false;}
 
   // what is the direct cost of assigning this token to tok
-  virtual double cost(vsrl_token *tok)=0;
+  virtual double cost(vsrl_token *tok);
+
+  //: what is the incremental cost of going from from this -> tok2 given 
+  //: the assignment going from tok_p -> tok_2p
+  
+  virtual double incremental_cost(vsrl_token *tok2, vsrl_token *tok_p, vsrl_token *tok_2p);
 
   // get the index of this token
   int get_index();
