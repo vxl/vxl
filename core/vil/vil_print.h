@@ -16,6 +16,60 @@
 template<class T>
 void vil_print_value(vcl_ostream& s, const T& value);
 
+// Specializations must be declared before use, so they need to be
+// declared here.
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+
+#define vil_print_declare_specialization( T ) \
+  VCL_DEFINE_SPECIALIZATION \
+  void vil_print_value(vcl_ostream& os, const T & value)
+
+vil_print_declare_specialization( bool );
+vil_print_declare_specialization( vxl_byte );
+vil_print_declare_specialization( vxl_sbyte );
+vil_print_declare_specialization( vxl_int_16 );
+vil_print_declare_specialization( vxl_uint_16 );
+vil_print_declare_specialization( vxl_int_32 );
+vil_print_declare_specialization( vxl_uint_32 );
+#if VXL_HAS_INT_64
+vil_print_declare_specialization( vxl_int_64 );
+vil_print_declare_specialization( vxl_uint_64 );
+#endif
+vil_print_declare_specialization( float );
+vil_print_declare_specialization( double );
+vil_print_declare_specialization( vcl_complex<float> );
+vil_print_declare_specialization( vcl_complex<double> );
+vil_print_declare_specialization( vil_rgb<vxl_byte> );
+vil_print_declare_specialization( vil_rgb<vxl_sbyte> );
+vil_print_declare_specialization( vil_rgb<vxl_int_16> );
+vil_print_declare_specialization( vil_rgb<vxl_uint_16> );
+vil_print_declare_specialization( vil_rgb<vxl_int_32> );
+vil_print_declare_specialization( vil_rgb<vxl_uint_32> );
+#if VXL_HAS_INT_64
+vil_print_declare_specialization( vil_rgb<vxl_int_64> );
+vil_print_declare_specialization( vil_rgb<vxl_uint_64> );
+#endif
+vil_print_declare_specialization( vil_rgb<float> );
+vil_print_declare_specialization( vil_rgb<double> );
+vil_print_declare_specialization( vil_rgba<vxl_byte> );
+vil_print_declare_specialization( vil_rgba<vxl_sbyte> );
+vil_print_declare_specialization( vil_rgba<vxl_int_16> );
+vil_print_declare_specialization( vil_rgba<vxl_uint_16> );
+vil_print_declare_specialization( vil_rgba<vxl_int_32> );
+vil_print_declare_specialization( vil_rgba<vxl_uint_32> );
+#if VXL_HAS_INT_64
+vil_print_declare_specialization( vil_rgba<vxl_int_64> );
+vil_print_declare_specialization( vil_rgba<vxl_uint_64> );
+#endif
+vil_print_declare_specialization( vil_rgba<float> );
+vil_print_declare_specialization( vil_rgba<double> );
+
+#undef vil_print_declare_specialization
+
+#endif // DOXYGEN_SHOULD_SKIP_THIS
+
+
 //: Print all image data to os in a grid (rounds output to int)
 // \relates vil_image_view
 template<class T>
