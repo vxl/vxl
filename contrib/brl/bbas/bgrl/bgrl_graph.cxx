@@ -41,12 +41,12 @@ bgrl_graph::remove_vertex(const bgrl_vertex_sptr& vertex)
 bgrl_edge_sptr
 bgrl_graph::add_edge( const bgrl_vertex_sptr& v1, const bgrl_vertex_sptr& v2 )
 {
-  if (!v1 || !v2) return false;
-
+  if (!v1 || !v2)
+    return 0;
   if ( vertices_.count(v1) == 0 && !this->add_vertex(v1) )
-    return bgrl_edge_sptr(NULL);
+    return 0;
   if ( vertices_.count(v2) == 0 && !this->add_vertex(v2) )
-    return bgrl_edge_sptr(NULL);
+    return 0;
 
   return v1->add_edge_to(v2);
 }
