@@ -19,7 +19,6 @@
 static const long mbl_arb_length_int_max_long = (unsigned char) (0xff);
 
 
-
 //: Arbitrary length integer numbers.
 // Provides infinite length integer numbers and
 // arithmetic, using a vcl_vector of unsigned chars.
@@ -31,7 +30,7 @@ public:
     : val_(val), sign_(sign) {}
   //: Default constructor gives 0.
   explicit mbl_arb_length_int (long v= 0)
-    : sign_(v>0), val_(sizeof(long))
+    : val_(sizeof(long)), sign_(v>0)
   {
     v = vnl_math_abs(v);
     unsigned i = sizeof(long);
@@ -41,7 +40,7 @@ public:
   }
   //: Default constructor gives 0.
   explicit mbl_arb_length_int (unsigned long v)
-    : sign_(false), val_(sizeof(long))
+    : val_(sizeof(long)), sign_(false)
   {
     unsigned i = sizeof(unsigned long);
     while (i-->0)
@@ -113,7 +112,7 @@ public:
 
   bool fits_in_long() const { return (val_.size()==4 && val_.back()&0x80==0) || val_.size() < 3;}
   bool fits_in_unsigned_long() const {return sign_ && val_.size() <= sizeof(unsigned long);}
-  
+
   operator long () {
     assert(fits_in_long());
     long n=0;
@@ -144,13 +143,12 @@ public:
     return r;
   }
 
-
 private:
   //: The value is sign_ * Sum K^i * val_[i], where K = MAX_CHAR.
   vcl_vector<unsigned char> val_;
   //: True if positive.
   bool sign_;
-  void normalise(){ 
+  void normalise(){
     while (!val_.empty() && val_.back() ==0) val_.pop_back();
     if (val_.empty()) sign_ = true;
   }
@@ -185,10 +183,9 @@ namespace std {
 
 inline mbl_arb_length_int vnl_math_abs(mbl_arb_length_int const& x) { return x<0L ? -x : x; }
 inline bool vnl_math_isnan(mbl_arb_length_int const& x){return false;}
-inline bool vnl_math_isfinite(mbl_arb_length_int const& x){return true;} 
+inline bool vnl_math_isfinite(mbl_arb_length_int const& x){return true;}
 
 void vsl_b_read(vsl_b_istream &, mbl_arb_length_int &);
 void vsl_b_write(vsl_b_istream &, mbl_arb_length_int &);
-
 
 #endif // mbl_arb_length_int_h_
