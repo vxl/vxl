@@ -4,6 +4,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+// .NAME vil_warp
+// .INCLUDE vil/vil_warp.h
+// .FILE vil_warp.txx
+// .FILE vil_warp.cxx
 // Author: awf@robots.ox.ac.uk
 // Created: 04 Dec 00
 
@@ -30,17 +34,15 @@ enum vil_warp_interpolation_type {
 vil_image vil_warp(vil_image const& in, vil_warp_mapping const& mapper);
 
 //: Warp, specifying interpolation
-vil_image vil_warp(vil_image const& in, vil_warp_mapping const& mapper, 
+vil_image vil_warp(vil_image const& in, vil_warp_mapping const& mapper,
 		   vil_warp_interpolation_type i);
 
 
 //: Templated warper
 template <class PixelType, class Mapper>
-void vil_warp_output_driven(vil_memory_image_of<PixelType> const& in, 
+void vil_warp_output_driven(vil_memory_image_of<PixelType> const& in,
 			    vil_memory_image_of<PixelType>& out,
 			    Mapper const& mapper,
 			    vil_warp_interpolation_type);
 
-
-
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vil_warp.
+#endif // vil_warp_h_
