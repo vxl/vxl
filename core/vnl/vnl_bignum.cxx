@@ -1066,3 +1066,13 @@ vnl_bignum right_shift (const vnl_bignum& b1, int l) {
   vnl_bignum& result = *((vnl_bignum*) &rslt);  // same physical object
   return result;                                // shallow swap on return
 }
+
+#ifdef VCL_GCC_EGCS // this includes egcs, gcc 2.8 and gcc 2.95
+#include <std/complext.cc>
+template complex<vnl_bignum>& __doadv<vnl_bignum>(complex<vnl_bignum>*, complex<vnl_bignum> const&);
+template complex<vnl_bignum> operator/(complex<vnl_bignum> const&, complex<vnl_bignum> const&);
+// sqrt implementation uses double * bignum. Too many possible conversions,
+// so we need to provide an exact match.
+vnl_bignum operator*( double d, vnl_bignum n ) { return vnl_bignum(d)*n; }
+template complex<vnl_bignum> sqrt(complex<vnl_bignum> const&);
+#endif
