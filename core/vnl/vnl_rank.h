@@ -55,7 +55,7 @@ vnl_matrix<T> vnl_rank_column_reduce(vnl_matrix<T> const& mat,
 
 //: Row and column reduce a matrix.
 //  Perform both row reduction and column reduction on a matrix.
-//  The resulting matrix wil in general no longer span the same row space
+//  The resulting matrix will in general no longer span the same row space
 //  (or column space) as the original matrix, but the rank will not have
 //  changed, and the number of nonzero elements will be minimal (viz at most
 //  one per row and one per column).
