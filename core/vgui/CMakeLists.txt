@@ -372,39 +372,32 @@ SET( vgui_sources ${vgui_sources}
 
 ADD_LIBRARY(vgui ${vgui_sources})
 
+# Dependencies on other vxl libraries
+TARGET_LINK_LIBRARIES(vgui vnl_algo vnl vil vgl vpl vbl vul)
 
 # Dependencies created by the toolkit implementations
 
 IF (VGUI_USE_GLUT)
-  TARGET_LINK_LIBRARIES(vgui vil vul ${GLUT_LIBRARIES})
+  # vil and vul listed above, and glut listed below. Don't repeat.
+  # TARGET_LINK_LIBRARIES(vgui ${GLUT_LIBRARIES})
 ENDIF (VGUI_USE_GLUT)
 IF (VGUI_USE_QT)
-  TARGET_LINK_LIBRARIES(vgui vul vbl ${QT_LIBRARIES})
+  # vul and vbl listed above. Don't repeat
+  TARGET_LINK_LIBRARIES(vgui ${QT_LIBRARIES})
 ENDIF (VGUI_USE_QT)
 IF (VGUI_USE_MFC)
-  TARGET_LINK_LIBRARIES(vgui vul)
+  # vul listed above. Don't repeat
+  #TARGET_LINK_LIBRARIES(vgui vul)
 ENDIF (VGUI_USE_MFC)
-IF (VGUI_USE_X)
-  TARGET_LINK_LIBRARIES(vgui ${X11_LIBRARIES})
-ENDIF (VGUI_USE_X)
-IF (VGUI_USE_GLX)
-  TARGET_LINK_LIBRARIES(vgui vul)
-ENDIF (VGUI_USE_GLX)
 IF (VGUI_USE_GTK)
-  TARGET_LINK_LIBRARIES(vgui vul ${GTK_LIBRARIES})
+  # vul listed above. Don't repeat.
+  TARGET_LINK_LIBRARIES(vgui ${GTK_LIBRARIES})
 ENDIF (VGUI_USE_GTK)
-IF (VGUI_USE_SDL)
-  TARGET_LINK_LIBRARIES(vgui vul)
-ENDIF (VGUI_USE_SDL)
-IF (VGUI_USE_XM)
-  TARGET_LINK_LIBRARIES(vgui vul)
-ENDIF (VGUI_USE_XM)
 
 # Basic vgui dependencies.
 # These should appear after the above, because most of
 # the toolkits depend on OpenGL.
 
-TARGET_LINK_LIBRARIES(vgui vnl_algo vnl vil vgl vpl vbl vul)
 IF (GLUT_FOUND)
   TARGET_LINK_LIBRARIES(vgui ${GLUT_LIBRARIES})
 ENDIF (GLUT_FOUND)
