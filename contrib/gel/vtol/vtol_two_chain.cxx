@@ -108,11 +108,12 @@ vtol_two_chain::vtol_two_chain(vtol_two_chain const &other)
       vtol_face *f=(*tti)->cast_to_face();
 
       vtol_face_sptr new_f = f->copy_with_arrays(newverts,newedges);
+#ifdef DEBUG
       vcl_cout << "f\n";
       f->describe();
       vcl_cout << "new f\n";
       new_f->describe();
-
+#endif
       assert(*new_f == *f);
 
       link_inferior(*new_f);
