@@ -1,4 +1,4 @@
-// This is mul/vil2/vil2_property.h
+// This is core/vil2/vil2_property.h
 #ifndef vil2_property_h_
 #define vil2_property_h_
 //:
@@ -33,9 +33,17 @@
 // \author  fsm
 
 //: Indicate whether this is an in-memory image or an on-disk image
+//  By default an image is not in-memory, and since this is a boolean property
+//  the return value of get_property(), which is "false" by default, will be
+//  correct.  Only in-memory images must implement this property, and return
+//  "true".
 #define vil2_property_memory "memory"
 
 //: Indicate that you can't call put_view on this image.
+//  By default an image is not read-only, and since this is a boolean property
+//  the return value of get_property(), which is "false" by default, will be
+//  correct.  Only images which do not allow put_view must implement this
+//  property, and return "true".
 #define vil2_property_read_only "read-only"
 
 #endif // vil2_property_h_
