@@ -109,6 +109,7 @@ void test_lda()
   vec2mat( mat0, d0 );
   vcl_ofstream of0( "mat0.txt" );
   vnl_matlab_print(of0,mat0);
+  of0.close();
 #if !LEAVE_FILES_BEHIND
   vpl_unlink("mat0.txt");
 #endif
@@ -117,6 +118,7 @@ void test_lda()
   vec2mat( mat1, d1 );
   vcl_ofstream of1( "mat1.txt" );
   vnl_matlab_print(of1,mat1);
+  of1.close();
 #if !LEAVE_FILES_BEHIND
   vpl_unlink("mat1.txt");
 #endif
