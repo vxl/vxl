@@ -102,7 +102,7 @@ vnl_vector<T> vnl_symmetric_eigensystem<T>::solve(vnl_vector<T> const& b)
 {
   //vnl_vector<T> ret(b.length());
   //FastOps::AtB(V, b, &ret);
-  vnl_vector<T> ret(b*V); // same as V.tranpose()*b
+  vnl_vector<T> ret(b*V); // same as V.transpose()*b
 
   vnl_vector<T> tmp(b.size());
   D.solve(ret, &tmp);
