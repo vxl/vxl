@@ -15,6 +15,7 @@
 
 #include <vepl/vepl_threshold.h>
 #include <vcl_cstdlib.h> // for atoi()
+#include <vcl_vector.h>
 
 typedef unsigned char ubyte;
 
@@ -35,9 +36,9 @@ main(int argc, char** argv) {
 
   // In-memory version:
   vil_memory_image_of<ubyte> out(in);
-  ubyte buf[in.get_size_bytes()];
-  in.get_section(buf,0,0,xs,ys);
-  out.put_section(buf,0,0,xs,ys);
+  vcl_vector<ubyte> buf(in.get_size_bytes());
+  in.get_section(&buf[0],0,0,xs,ys);
+  out.put_section(&buf[0],0,0,xs,ys);
 
   // The threshold value:
   ubyte threshold = (argc < 4) ? 10 : vcl_atoi(argv[3]);
