@@ -23,7 +23,7 @@
 
 #include <vnl/vnl_vector.h>
 
-template <class T>
+export template <class T>
 class vnl_vector_ref : public vnl_vector<T> {
 public:
   typedef vnl_vector<T> Base;
