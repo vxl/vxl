@@ -198,7 +198,7 @@ public:
       vcl_cerr << "Valid range is (0.."<<rows()-1<<", "<<cols()-1<<")." << vcl_endl;
       vcl_abort();
     }
-#endif;
+#endif
     return this->data[r][c];
   }
 
@@ -213,7 +213,7 @@ public:
       vcl_cerr << "Valid range is (0.."<<rows()-1<<", "<<cols()-1<<")." << vcl_endl;
       vcl_abort();
     }
-#endif;
+#endif
     return this->data[r][c];
   }
 

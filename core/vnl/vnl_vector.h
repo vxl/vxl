@@ -148,7 +148,7 @@ public:
       vcl_cerr << "Valid range is 0.."<<size()-1<<vcl_endl;
       vcl_abort();
     }
-#endif;
+#endif
     return data[i];
   }
   //: Return reference to the element at specified index. No range checking.
@@ -162,7 +162,7 @@ public:
       vcl_cerr << "Valid range is 0.."<<size()-1<<vcl_endl;
       vcl_abort();
     }
-#endif;
+#endif
     return data[i];
   }
 
