@@ -336,6 +336,13 @@ public:
     sub( data_, v.data_block(), data_ ); return *this;
   }
 
+  //:
+  vnl_vector_fixed<T,n> operator-() const {
+    vnl_vector_fixed<T,n> result;
+    sub( (T)0, data_, result.data_ );
+    return result;
+  }
+
 
   //: Returns a subvector specified by the start index and length. O(n).
   vnl_vector<T> extract (unsigned int len, unsigned int start=0) const;

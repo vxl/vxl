@@ -279,4 +279,19 @@
 
     TEST( "element_quotient(m,m)", element_quotient(m1,m2) == m_eq1, true );
   }
+
+  // Negation
+  {
+    // Vector
+    double v_neg1_data[] = { -3, -2 };
+    NewVec( v_neg1, 2, v_neg1_data );
+
+    TEST( "-v", -v1 == v_neg1 && v1 == v1_orig, true );
+
+    // Matrix
+    double m_neg1_data[] = { -1, -2, -3, -4, -5, -6 };
+    NewMat( m_neg1, 3, 2, m_neg1_data );
+
+    TEST( "-m", -m1 == m_neg1 && m1 == m1_orig, true );
+  }
 //}
