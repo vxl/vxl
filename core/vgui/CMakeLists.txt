@@ -10,7 +10,7 @@ ENDIF( DART_ROOT )
 
 IF( BUILD_VGUI )
 
-INCLUDE(${MODULE_PATH}/NewCMake/FindOpenGL.cmake)
+INCLUDE(${CMAKE_ROOT}/Modules/FindOpenGL.cmake)
 
 # Build here only if OpenGL is available:
 IF (OPENGL_FOUND)
@@ -19,12 +19,12 @@ IF (OPENGL_FOUND)
   # For (not) reporting an error below
   SET( CAN_BUILD_VGUI "YES" )
 
-  INCLUDE(${MODULE_PATH}/NewCMake/FindX11.cmake)
+  INCLUDE(${CMAKE_ROOT}/Modules/FindX11.cmake)
   # Qv needed by vrml only
   INCLUDE(${MODULE_PATH}/FindQv.cmake)
   # glut optionally used by vgui_text and by the glut toolkit
   # implementation
-  INCLUDE(${MODULE_PATH}/NewCMake/FindGLUT.cmake)
+  INCLUDE(${CMAKE_ROOT}/Modules/FindGLUT.cmake)
 
   # The following are for the optional toolkit
   # implementations

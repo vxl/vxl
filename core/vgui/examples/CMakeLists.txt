@@ -61,7 +61,7 @@ ENDIF(VGUI_USE_GTK)
 
 # GLUT examples
 #--------------
-INCLUDE( ${MODULE_PATH}/NewCMake/FindGLUT.cmake )
+INCLUDE( ${CMAKE_ROOT}/Modules/FindGLUT.cmake )
 IF(GLUT_FOUND)
  ADD_EXECUTABLE( glut1_raw glut1_raw.cxx )
  TARGET_LINK_LIBRARIES( glut1_raw ${GLUT_LIBRARIES} )

@@ -1,6 +1,6 @@
 LINK_LIBRARIES( vgui osl )
 
-INCLUDE( ${MODULE_PATH}/NewCMake/FindGLUT.cmake )
+INCLUDE( ${CMAKE_ROOT}/Modules/FindGLUT.cmake )
 
 ADD_EXECUTABLE( satellite satellite.cxx )
 

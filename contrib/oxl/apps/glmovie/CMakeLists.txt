@@ -1,7 +1,7 @@
 # oxl/apps/glmovie/CMakeLists.txt
 
-INCLUDE(${MODULE_PATH}/NewCMake/FindGLUT.cmake)
-INCLUDE(${MODULE_PATH}/NewCMake/FindOpenGL.cmake)
+INCLUDE(${CMAKE_ROOT}/Modules/FindGLUT.cmake)
+INCLUDE(${CMAKE_ROOT}/Modules/FindOpenGL.cmake)
 INCLUDE(${CMAKE_ROOT}/Modules/FindMPEG2.cmake)
 
 LINK_LIBRARIES( oxp vidl_vil1 vil1 vnl vul )
