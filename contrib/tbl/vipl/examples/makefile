@@ -14,7 +14,7 @@
 #                  vipl_with_vbl_array_2d vbl   (for group C)
 #                  vipl_with_section            (for group D)
 
-USES = vxl
+USES = vxl tbl
 TRY_TIFF := 1
 TRY_JPEG := 1
 TRY_PNG := 1
