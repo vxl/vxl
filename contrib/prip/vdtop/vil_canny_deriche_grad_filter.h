@@ -65,8 +65,8 @@ inline void vil_canny_deriche_grad_filter(const vil_image_view<srcT>& src_im,
   vcl_ptrdiff_t gj_istep = grad_j.istep(), gj_jstep = grad_j.jstep();
 
   accumT e = vcl_exp(-alpha) ;
-  accumT me2 = (1.0-e)*(1.0-e) ;
-  accumT b1 = 2.0*e , b2 = -e*e ;
+  accumT me2 = (1-e)*(1-e) ;
+  accumT b1 = 2*e , b2 = -e*e ;
   accumT k = me2/(1+2*alpha*e-e*e) ;
   accumT a1=0,a2=1,a3=-1,a4=0,c1=-me2,
         a5=k,a6=k*e*(alpha-1),a7=k*e*(alpha+1),a8=-k*e*e,c2=1 ;
