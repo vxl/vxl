@@ -1,21 +1,22 @@
-// This is core/vidl/example/vidl_player_menus.h
+// This is core/vidl/examples/vidl_player_menus.h
 #ifndef vidl_player_menus_h_
 #define vidl_player_menus_h_
 //--------------------------------------------------------------------------------
 //:
 // \file
-// \author
-//   Matt Leotta
+// \author Matt Leotta
 // \brief The setup for vidl_player_menus for the vidl video player
+//
 //  This is essentially a namespace for static methods;
 //  there is no public constructor.  Refer to "10.7 Building an Application"
 //  in the VXL Book.
 //
 //--------------------------------------------------------------------------------
+class vgui_menu;
 
 //: Menu callbacks are represented as static methods
 //  The key method is ::get_menu, which does the work of
-//  assembling the menu bar for the main executable 
+//  assembling the menu bar for the main executable
 class vidl_player_menus
 {
  public:
