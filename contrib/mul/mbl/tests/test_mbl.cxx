@@ -18,6 +18,7 @@
 #include "test_index_sort.cxx"
 #include "test_lru_cache.cxx"
 #include "test_thin_plate_spline_2d.cxx"
+#include "test_clamped_plate_spline_2d.cxx"
 
 #undef TESTMAIN
 #define TESTMAIN(x) int main() \
@@ -38,6 +39,7 @@ void run_test_mbl()
   test_index_sort();
   test_lru_cache();
   test_thin_plate_spline_2d();
+  test_clamped_plate_spline_2d();
   test_histogram();
 }
 
