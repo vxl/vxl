@@ -15,9 +15,9 @@
 //   Peter Vanroose, Aug.2000 - adapted to vxl
 //
 #include <vil/vil_memory_image_of.h>
+#include <vil/vil_rgb.h>
 #include <vipl/accessors/vipl_accessors_vil_image.h>
 #include <vipl/vipl_convert.h>
-#include <vil/vil_rgb.h>
 
 // for I/O:
 #include <vil/vil_load.h>

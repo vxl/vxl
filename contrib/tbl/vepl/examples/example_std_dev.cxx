@@ -13,10 +13,11 @@
 //
 #include <vil/vil_pixel.h>
 #include <vil/vil_memory_image_of.h>
+
+#include <vepl/vepl_convert.h>
 #include <vepl/vepl_moment.h>
 #include <vepl/vepl_monadic.h>
 #include <vepl/vepl_dyadic.h>
-#include <vepl/vepl_convert.h>
 
 // for I/O:
 #include <vil/vil_load.h>

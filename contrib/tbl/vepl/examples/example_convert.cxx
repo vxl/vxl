@@ -11,8 +11,9 @@
 //   Peter Vanroose, K.U.Leuven, ESAT/PSI, 15 May 2001, from vipl/examples
 //
 #include <vil/vil_memory_image_of.h>
-#include <vepl/vepl_convert.h>
 #include <vil/vil_rgb.h>
+
+#include <vepl/vepl_convert.h> // this one last!
 
 // for I/O:
 #include <vil/vil_load.h>
