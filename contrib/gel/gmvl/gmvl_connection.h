@@ -25,7 +25,7 @@ public:
   gmvl_node_ref get_node1() const { return n1_; }
   gmvl_node_ref get_node2() const { return n2_; }
 
-  friend ostream &operator<<( ostream &os, const gmvl_connection &c);
+  friend vcl_ostream &operator<<( vcl_ostream &os, const gmvl_connection &c);
 
 protected:
 
@@ -33,6 +33,6 @@ protected:
 
 };
 
-ostream &operator<<( ostream &os, const gmvl_connection &c);
+vcl_ostream &operator<<( vcl_ostream &os, const gmvl_connection &c);
 
 #endif

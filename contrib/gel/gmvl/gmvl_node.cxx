@@ -16,7 +16,7 @@ gmvl_node::~gmvl_node()
 {
 }
 
-ostream &operator<<( ostream &os, gmvl_node &node)
+vcl_ostream &operator<<( vcl_ostream &os, gmvl_node &node)
 {
   return ( os << "<Node " << &node << " ref=" << node.ref_ << " type=\"" << node.type_ << "\">");
 }

@@ -218,14 +218,14 @@ gevd_noise::EstimateSensorTexture(float& sensor, float& texture) const
   
   // 2. Estimate sensor from first downward slope of dh(x)  
   if (!WouldBeZeroCrossing(dhist, nbin, sensor)) {
-    cerr << "Can not estimate sensor" << endl;
+    vcl_cerr << "Can not estimate sensor" << vcl_endl;
     return false;
   }
   sensor *= binsize;
 
   // 3. Find texture as zero-crossing of dh(x)
   if (!RealZeroCrossing(dhist, nbin, texture)) {
-    cerr << "Can not estimate texture" << endl;
+    vcl_cerr << "Can not estimate texture" << vcl_endl;
     return false; 
   }
   texture *= binsize;

@@ -17,7 +17,7 @@
 int main(int argc, char ** argv)
 {
   if(argc < 2){
-    cout << "make_3d_output im1 im2 disp_image 3d_outfile (params.dat) (transform.dat) " << endl;
+    vcl_cout << "make_3d_output im1 im2 disp_image 3d_outfile (params.dat) (transform.dat) " << vcl_endl;
     return 0;
   }
   

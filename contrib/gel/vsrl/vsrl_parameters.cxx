@@ -72,7 +72,7 @@ void vsrl_parameters::load(char *filename)
 {
   // read in the parameters
 
-  ifstream file(filename);
+  vcl_ifstream file(filename);
   
   // read in the parameters 
   
@@ -85,48 +85,48 @@ void vsrl_parameters::load(char *filename)
     file >> val;
      
     if(!strcmp(tag,"correlation_range")){
-      cout << "setting correlation_range to " << val << endl;
+      vcl_cout << "setting correlation_range to " << val << vcl_endl;
       this->correlation_range=(int)val;
     }
 
     if(!strcmp(tag,"inner_cost")){
-      cout << "setting inner_cost to " << val << endl;
+      vcl_cout << "setting inner_cost to " << val << vcl_endl;
       this->inner_cost=(double)val;
     }
     
     
     if(!strcmp(tag,"outer_cost")){
-      cout << "setting outer_cost to " << val << endl;
+      vcl_cout << "setting outer_cost to " << val << vcl_endl;
       this->outer_cost=(double)val;
     }
     
     
     if(!strcmp(tag,"continuity_cost")){
-      cout << "setting continuity_cost to " << val << endl;
+      vcl_cout << "setting continuity_cost to " << val << vcl_endl;
       this->continuity_cost=(double)val;
     }
     
     
     if(!strcmp(tag,"correlation_window_width")){
-      cout << "setting correlation_window_width to " << val << endl;
+      vcl_cout << "setting correlation_window_width to " << val << vcl_endl;
       this->correlation_window_width=(int)val;
     }
 
     
     if(!strcmp(tag,"correlation_window_height")){
-      cout << "setting correlation_window_height to " << val << endl;
+      vcl_cout << "setting correlation_window_height to " << val << vcl_endl;
       this->correlation_window_height=(int)val;
     }
     
     
     if(!strcmp(tag,"bias_cost")){
-      cout << "setting bias_cost to " << val << endl;
+      vcl_cout << "setting bias_cost to " << val << vcl_endl;
       this->bias_cost=(double)val;
     }
     
 
     if(!strcmp(tag,"common_intensity_diff")){
-      cout << "setting common_intensity_diff to " << val << endl;
+      vcl_cout << "setting common_intensity_diff to " << val << vcl_endl;
       this->common_intensity_diff=(double)val;
     }
     

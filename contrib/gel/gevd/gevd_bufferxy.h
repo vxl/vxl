@@ -120,7 +120,7 @@ class gevd_bufferxy : public gevd_memory_mixin
       void dump(const char* filename); // write to file
       gevd_bufferxy(const char* filename);  // read from file
 
-      friend ostream& operator<<(ostream& os, gevd_bufferxy const& b) {
+      friend vcl_ostream& operator<<(vcl_ostream& os, gevd_bufferxy const& b) {
         return os << "gevd_bufferxy(width=" << b.GetSizeX() << ",height="
                << b.GetSizeY() << ",bits_per_pixel=" << b.GetBitsPixel() << ")";
       }

@@ -32,7 +32,7 @@ public:
   vdgl_edgel& operator=(const vdgl_edgel& that);
 
   friend bool operator==( const vdgl_edgel &e1, const vdgl_edgel &e2);
-  friend ostream& operator<<(ostream& s, const vdgl_edgel& p);
+  friend vcl_ostream& operator<<(vcl_ostream& s, const vdgl_edgel& p);
   // Data Access---------------------------------------------------------------
   
   // getters
@@ -68,6 +68,6 @@ private:
 
 
 bool operator==( const vdgl_edgel &e1, const vdgl_edgel &e2);
-ostream& operator<<(ostream& s, const vdgl_edgel& p);
+vcl_ostream& operator<<(vcl_ostream& s, const vdgl_edgel& p);
 
 #endif // _vdgl_edgel_h

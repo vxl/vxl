@@ -74,7 +74,7 @@ int main()
       double x= digital_curve->get_x(i);
       double y= digital_curve->get_y(i);
 
-      cerr << x << "\t" << y << endl;
+      vcl_cerr << x << "\t" << y << vcl_endl;
     }
 
   // And now play with the digital region
@@ -83,7 +83,7 @@ int main()
 //   digitalregion.add_point( vgl_point_2d<double>(4,3));
 //   digitalregion.add_point( vgl_point_2d<double>(5,6));
 
-//   cerr << digitalregion << endl;
+//   vcl_cerr << digitalregion << vcl_endl;
 
   return 0;
 }

@@ -35,7 +35,7 @@ public:
   void rebuild();
 
   // input output
-  friend ostream &operator<<( ostream &os, const gmvl_connection_cache &c);
+  friend vcl_ostream &operator<<( vcl_ostream &os, const gmvl_connection_cache &c);
 
 protected:
 
@@ -49,6 +49,6 @@ protected:
   gbl_bit_array_2d cachebool_;
 };
 
-ostream &operator<<( ostream &os, const gmvl_connection_cache &c);
+vcl_ostream &operator<<( vcl_ostream &os, const gmvl_connection_cache &c);
 
 #endif

@@ -128,17 +128,17 @@ vcl_vector<gmvl_node_ref> gmvl_database::get_connected_nodes( const vcl_vector<g
 
 // input / output
 
-ostream &operator<<( ostream &os, const gmvl_database &db)
+vcl_ostream &operator<<( vcl_ostream &os, const gmvl_database &db)
 {
-  os << "gmvl_database:" << endl;
+  os << "gmvl_database:" << vcl_endl;
 
-  os << "  nodes:" << endl;
+  os << "  nodes:" << vcl_endl;
 
-  os << "    " << db.nodecache_ << endl;
+  os << "    " << db.nodecache_ << vcl_endl;
 
-  os << "  connections:" << endl;
+  os << "  connections:" << vcl_endl;
 
-  os << "    " << db.connectioncache_ << endl;
+  os << "    " << db.connectioncache_ << vcl_endl;
 
   return os;
 }

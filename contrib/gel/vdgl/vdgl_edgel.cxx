@@ -27,7 +27,7 @@ bool operator==( const vdgl_edgel &e1, const vdgl_edgel &e2)
 	  ( e2.theta_== e2.theta_));
 }
 
-ostream&  operator<<(ostream& s, const vdgl_edgel& p) 
+vcl_ostream&  operator<<(vcl_ostream& s, const vdgl_edgel& p) 
 {
   return s << "<vdgl_edgel (" << p.p_.x() << ", " << p.p_.y() << "),(" 
 	   << p.grad_ << ", " << p.theta_ <<  ")>";

@@ -40,7 +40,7 @@ public:
   bool add_edgels( const vcl_vector<vdgl_edgel> &es, const int index);
   bool set_edgel( const int index, const vdgl_edgel &e);
 
-  friend ostream& operator<<(ostream& s, const vdgl_edgel_chain& p);
+  friend vcl_ostream& operator<<(vcl_ostream& s, const vdgl_edgel_chain& p);
 
   // Data Access---------------------------------------------------------------
 
@@ -66,7 +66,7 @@ private:
   // Helpers-------------------------------------------------------------------
 };
 
-ostream& operator<<(ostream& s, const vdgl_edgel_chain& p) ;
+vcl_ostream& operator<<(vcl_ostream& s, const vdgl_edgel_chain& p) ;
 
 
 #endif // _blank_file_h

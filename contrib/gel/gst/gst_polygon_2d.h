@@ -40,7 +40,7 @@ public:
   double area() const;
 
   // output
-  friend ostream &operator<<( ostream &os, gst_polygon_2d &p);
+  friend vcl_ostream &operator<<( vcl_ostream &os, gst_polygon_2d &p);
 
 protected:
 
@@ -49,6 +49,6 @@ protected:
 
 };
 
-ostream &operator<<( ostream &os, gst_polygon_2d &p);
+vcl_ostream &operator<<( vcl_ostream &os, gst_polygon_2d &p);
 
 #endif

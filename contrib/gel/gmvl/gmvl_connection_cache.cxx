@@ -145,7 +145,7 @@ void gmvl_connection_cache::rebuild()
 
 // input / output
 
-ostream &operator<<( ostream &os, const gmvl_connection_cache &c)
+vcl_ostream &operator<<( vcl_ostream &os, const gmvl_connection_cache &c)
 {
   //  for( int i=0; i< c.connections_.size(); i++)
   //    os << *c.connections_[i];

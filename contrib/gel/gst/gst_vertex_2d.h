@@ -31,7 +31,7 @@ public:
   friend bool operator==( const gst_vertex_2d& a, const gst_vertex_2d& b);
 
   // output
-  friend ostream &operator <<( ostream &os, const gst_vertex_2d &v);
+  friend vcl_ostream &operator <<( vcl_ostream &os, const gst_vertex_2d &v);
 
 protected:
 
@@ -40,6 +40,6 @@ protected:
 };
 
 bool operator==( const gst_vertex_2d& a, const gst_vertex_2d& b);
-ostream &operator <<( ostream &os, const gst_vertex_2d &v);
+vcl_ostream &operator <<( vcl_ostream &os, const gst_vertex_2d &v);
 
 #endif // gst_vertex_2d_h_

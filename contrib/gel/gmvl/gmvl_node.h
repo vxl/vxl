@@ -32,7 +32,7 @@ public:
   vcl_string &type() { return type_; }
 
   // input output
-  friend ostream &operator<<( ostream &os, gmvl_node &node);
+  friend vcl_ostream &operator<<( vcl_ostream &os, gmvl_node &node);
 
   // to allow the cache to access ref 
   friend class gmvl_node_cache;
@@ -47,6 +47,6 @@ protected:
   int ref_;
 };
 
-ostream &operator<<( ostream &os, gmvl_node &node);
+vcl_ostream &operator<<( vcl_ostream &os, gmvl_node &node);
 
 #endif

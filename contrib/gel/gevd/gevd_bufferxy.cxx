@@ -32,7 +32,7 @@
 // <end copyright notice>
 
 #include <vcl_fstream.h>
-#include <stdio.h>
+#include <vcl_cstdio.h>
 
 #include "gevd_bufferxy.h"
 //#include <memory.h>	// For memcpy()
@@ -41,7 +41,7 @@
 //#include <stdio.h>	// For sscanf()
 
 #include <vcl_compiler.h>
-#if defined(VCL_SUNPRO_CC_50) || defined(VCL_SGI_CC)
+#if defined(VCL_SUNPRO_CC_50) || defined(VCL_SGI_CC) || defined(VCL_GCC_30)
 #define iostream_char char
 #else
 #define iostream_char unsigned char
@@ -95,11 +95,11 @@ gevd_bufferxy::gevd_bufferxy(gevd_bufferxy const& buf) : gevd_memory_mixin(buf)
 void gevd_bufferxy::dump(const char* filename)
 {
 #ifdef VCL_WIN32
-  ofstream f(filename,ios::out|ios::binary);
+  vcl_ofstream f(filename,ios::out|ios::binary);
 #else
-  ofstream f(filename);
+  vcl_ofstream f(filename);
 #endif
-  if (!f) { cerr << "Cannot open "<< filename <<" for writing\n"; return; }
+  if (!f) { vcl_cerr << "Cannot open "<< filename <<" for writing\n"; return; }
   f << "BUFFERXYDUMP "<< GetSizeX() <<" "<< GetSizeY() <<" "<< GetBitsPixel()
 #ifdef WORDS_BIGENDIAN
     << " BIGENDIAN DATA\n";
@@ -113,23 +113,23 @@ void gevd_bufferxy::dump(const char* filename)
 static int read_from_file(const char* filename)
 {
 #ifdef VCL_WIN32
-  ifstream f(filename,ios::in|ios::binary|ios::nocreate);
+  vcl_ifstream f(filename,ios::in|ios::binary|ios::nocreate);
 #else
-  ifstream f(filename);
+  vcl_ifstream f(filename);
 #endif
-  if (!f) { cerr <<"Cannot open "<< filename <<" for reading\n"; return -1; }
+  if (!f) { vcl_cerr <<"Cannot open "<< filename <<" for reading\n"; return -1; }
   char l[1024];
   f.get(l, 1024); // read single line
   int x=-1, y=-1, b=-1; char w;
-  if ( 4 > sscanf(l, "BUFFERXYDUMP %d %d %d %c", &x, &y, &b, &w)
+  if ( 4 > vcl_sscanf(l, "BUFFERXYDUMP %d %d %d %c", &x, &y, &b, &w)
        || x <= 0 || y <= 0 || b <= 0 )
-    { cerr << filename << " is not a gevd_bufferxy dump file\n"; return -1; }
+    { vcl_cerr << filename << " is not a gevd_bufferxy dump file\n"; return -1; }
 #ifdef WORDS_BIGENDIAN
   if (w != 'B')
 #else
   if (w != 'L')
 #endif
-    cerr << "Warning: "<<filename<<" was created on a different platform\n";
+    vcl_cerr << "Warning: "<<filename<<" was created on a different platform\n";
   return x*y*(int)((b+7)/8);
 }
 
@@ -139,9 +139,9 @@ gevd_bufferxy::gevd_bufferxy(const char* filename) : gevd_memory_mixin(read_from
 {
   if (gevd_memory_mixin::GetSize() > 0) {
 #ifdef VCL_WIN32
-    ifstream f(filename,ios::in|ios::binary|ios::nocreate);
+    vcl_ifstream f(filename,ios::in|ios::binary|ios::nocreate);
 #else
-    ifstream f(filename);
+    vcl_ifstream f(filename);
 #endif
     char l[1024];
     f.get(l, 1024); // read single line
@@ -153,6 +153,6 @@ gevd_bufferxy::gevd_bufferxy(const char* filename) : gevd_memory_mixin(read_from
     f.read(buf, gevd_memory_mixin::GetSize());
   }
   else
-    cerr<< "ERROR: This should not happen in gevd_bufferxy::gevd_bufferxy(char const*)\n";
+    vcl_cerr<< "ERROR: This should not happen in gevd_bufferxy::gevd_bufferxy(char const*)\n";
 }
 

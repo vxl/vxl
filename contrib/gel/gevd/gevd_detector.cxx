@@ -344,7 +344,7 @@ bool gevd_detector::DoStep()
   
   const gevd_bufferxy* source = GetBufferFromImage();
   if (!source) {
-    cout << " cannot get image buffer" << endl;
+    vcl_cout << " cannot get image buffer" << vcl_endl;
     return false;
   }
   
@@ -415,7 +415,7 @@ gevd_bufferxy* gevd_detector::GetBufferFromImage()
   
   if (!image) 
     {
-      cout << "No image" << endl;
+      vcl_cout << "No image" << vcl_endl;
       return 0;
     }
 

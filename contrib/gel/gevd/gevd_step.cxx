@@ -118,14 +118,14 @@ gevd_step::gevd_step(float smooth_sigma,	// width of filter dG
    filterFactor(2)		// factor from gevd_float_operators::Gradient
 {
   if (smoothSigma < 0.5)	// no guarrantee for 2-pixel separation
-    cerr << "gevd_step::gevd_step -- too small smooth_sigma: " 
-	 << smoothSigma << endl;
+    vcl_cerr << "gevd_step::gevd_step -- too small smooth_sigma: " 
+	 << smoothSigma << vcl_endl;
   if (smoothSigma > 3)		// smooth out too much the junctions
-    cerr << "gevd_step::gevd_step -- too large smooth_sigma: " 
-	 << smoothSigma << endl;
+    vcl_cerr << "gevd_step::gevd_step -- too large smooth_sigma: " 
+	 << smoothSigma << vcl_endl;
   if (noiseSigma < -1) {
-    cerr << "gevd_step::gevd_step -- noiseSigma out of range -[0 1]: " 
-	 << noiseSigma << ". Reset to -1." << endl;
+    vcl_cerr << "gevd_step::gevd_step -- noiseSigma out of range -[0 1]: " 
+	 << noiseSigma << ". Reset to -1." << vcl_endl;
     noiseSigma = -1;    
   }
 }
@@ -156,10 +156,10 @@ gevd_step::DetectEdgels(const gevd_bufferxy& image,
 		   gevd_bufferxy*& locationx, gevd_bufferxy*& locationy, 
 		   gevd_bufferxy*& grad_mag, gevd_bufferxy*& angle)
 {
-  cout << "*** Detect step profiles with first-derivative of Gaussian"
-       << endl;
+  vcl_cout << "*** Detect step profiles with first-derivative of Gaussian"
+       << vcl_endl;
   if (image.GetBitsPixel() != bits_per_float) {
-    cerr << "gevd_step::DetectEdgels requires float image" << endl;
+    vcl_cerr << "gevd_step::DetectEdgels requires float image" << vcl_endl;
     return false;
   }
   
@@ -205,14 +205,14 @@ gevd_step::DetectEdgels(const gevd_bufferxy& image,
 	noiseSigma = ((1-k)*sensorNoise + k*textureNoise) /
 	  NoiseResponseToFilter(1, smoothSigma, filterFactor);
       } else {
-        cout << "Can not estimate sensor & texture noise" << endl;
+        vcl_cout << "Can not estimate sensor & texture noise" << vcl_endl;
 	noiseSigma = 1;		// reasonable default for 8-bit
       }
     } else {
-      cout << "Not enough edge elements to estimate noise" << endl;
+      vcl_cout << "Not enough edge elements to estimate noise" << vcl_endl;
       noiseSigma = 1; 
     }
-    cout << "Set noise sigma = " << noiseSigma << endl;
+    vcl_cout << "Set noise sigma = " << noiseSigma << vcl_endl;
   }
 
   // 4. Find contour pixels as local maxima along slope direction
@@ -385,7 +385,7 @@ gevd_step::RecoverJunctions(const gevd_bufferxy& image,
 {
   //  CoolTimer t;
   if (image.GetBitsPixel() != bits_per_float) {
-    cerr << "gevd_step::RecoverJunction requires float image" << endl;
+    vcl_cerr << "gevd_step::RecoverJunction requires float image" << vcl_endl;
     return false;
   }
   const int rmax = 1+FRAME;	// 1 + kernel radius of BestStepExtension 

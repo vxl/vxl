@@ -68,7 +68,7 @@ double vsrl_intensity_token::cost(vsrl_token *tok)
     
     else{
       // we don't know how to compare these tokens 
-      cout << "warning cannot compare tokens" << endl;
+      vcl_cout << "warning cannot compare tokens" << vcl_endl;
     }
   }
   

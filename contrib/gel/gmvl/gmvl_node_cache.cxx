@@ -120,7 +120,7 @@ void gmvl_node_cache::rebuild()
 }
 
 // input and output
-ostream &operator<<( ostream &os, const gmvl_node_cache &c)
+vcl_ostream &operator<<( vcl_ostream &os, const gmvl_node_cache &c)
 {
   for( unsigned int i=0; i< c.nodes_.size(); ++i)
     os << *c.nodes_[i];

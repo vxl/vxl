@@ -71,7 +71,7 @@ bool vdgl_edgel_chain::add_edgels( const vcl_vector<vdgl_edgel> &es, const int i
   return true;
 }
 
-ostream& operator<<(ostream& s, const vdgl_edgel_chain& p) 
+vcl_ostream& operator<<(vcl_ostream& s, const vdgl_edgel_chain& p) 
 {
   s << "<vdgl_edgel_chain (";
   for( int i=0; i< p.es_.size(); i++)

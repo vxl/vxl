@@ -12,7 +12,7 @@
 #include <gmvl/gmvl_node_ref.h>
 
 //: to print out a lot of nodes
-ostream &operator<<( ostream &os, const vcl_vector<gmvl_node_ref> &r);
+vcl_ostream &operator<<( vcl_ostream &os, const vcl_vector<gmvl_node_ref> &r);
 
 // standard input and output
 

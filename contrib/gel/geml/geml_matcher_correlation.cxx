@@ -11,6 +11,7 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <vcl_iostream.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix.h>
 
@@ -131,17 +132,17 @@ vcl_vector< vcl_pair<int,int> > geml_matcher_correlation::get_matches()
 
       if((int)i==b)
 	{
-	  cerr << i << " " << a << endl;
-	  cout << corners1_[i].first << " " << corners1_[i].second << " "
-	       << corners2_[a].first << " " << corners2_[a].second << endl;
+	  vcl_cerr << i << " " << a << vcl_endl;
+	  vcl_cout << corners1_[i].first << " " << corners1_[i].second << " "
+	       << corners2_[a].first << " " << corners2_[a].second << vcl_endl;
 	}
     
 
     }
 
 
-  //  cerr << bestimage1match << endl;
-  //  cerr << bestimage2match << endl;
+  //  vcl_cerr << bestimage1match << vcl_endl;
+  //  vcl_cerr << bestimage2match << vcl_endl;
 
   // dummy return value for the moment
   vcl_vector< vcl_pair<int,int> > l;

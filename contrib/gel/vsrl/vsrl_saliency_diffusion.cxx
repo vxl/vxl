@@ -51,7 +51,7 @@ void vsrl_saliency_diffusion::difuse_disparaty(int num_iter)
   // will propogate from stong regions of salienct
   // to regions of low disparaty
 
-  cout << "Starting to diffuse" << endl;
+  vcl_cout << "Starting to diffuse" << vcl_endl;
 
   vnl_matrix<double> mat1= (*_disparaty_matrix);
   vnl_matrix<double> mat2= mat1;
@@ -72,8 +72,8 @@ void vsrl_saliency_diffusion::difuse_disparaty(int num_iter)
   double val;
  
    for(dif_num=0;dif_num<num_iter;dif_num++){
-     cout << "Saliency Diffusion Iteration " << dif_num << endl;
-     cout << " disparaty for pixel 700,353 is " << (*mstar1)(700,353) << endl; 
+     vcl_cout << "Saliency Diffusion Iteration " << dif_num << vcl_endl;
+     vcl_cout << " disparaty for pixel 700,353 is " << (*mstar1)(700,353) << vcl_endl; 
 
      // make an image of the current disparaty
 
@@ -143,7 +143,7 @@ void vsrl_saliency_diffusion::difuse_disparaty(int num_iter)
    // copy the new results 
    (*_disparaty_matrix)=(*mstar1);
    
-   cout << "Finished the diffusion " << endl;
+   vcl_cout << "Finished the diffusion " << vcl_endl;
 
 }
 

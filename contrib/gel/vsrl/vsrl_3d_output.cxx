@@ -75,7 +75,7 @@ void vsrl_3d_output::write_output(char *filename)
 
   // determine the saliency of each point in the image
   
-  // cout << "Perform the image correlation routines" << endl;
+  // vcl_cout << "Perform the image correlation routines" << endl;
   // _image_correlation.initial_calculations();
 
   // vsrl_token_saliency ts(&_image_correlation);
@@ -197,9 +197,9 @@ void vsrl_3d_output::write_output(char *filename)
 
   // O.K we can now write out the data;
   
-  ofstream file(filename);
+  vcl_ofstream file(filename);
   int length = X_out.size();
-  file << length << endl;
+  file << length << vcl_endl;
 
 
   
@@ -212,12 +212,12 @@ void vsrl_3d_output::write_output(char *filename)
   for(iX=X_out.begin();iX!=X_out.end();iX++, iY++, iZ++,itx++, ity++)
     {
       file << (*iX) << " " << (*iY) << " " << (*iZ) << " " << *itx << " " << *ity <<
-	endl; 
+	vcl_endl; 
     }
 
   // OK we can now compute the conectivity between points 
 
-  cout << "computing the triangles" << endl;
+  vcl_cout << "computing the triangles" << vcl_endl;
 
   // these are the vertex lists 
 
@@ -258,18 +258,18 @@ void vsrl_3d_output::write_output(char *filename)
     }
   }
   
-  cout << "writing triangles" << endl;
+  vcl_cout << "writing triangles" << vcl_endl;
   
   // write the number of triangles 
   length = vert1.size();
-  file << length << endl;
+  file << length << vcl_endl;
 
   vcl_vector<int>::iterator v1,v2,v3;
 
   for(v1=vert1.begin(), v2=vert2.begin(), v3=vert3.begin(); v1<vert1.end();
       v1++,v2++,v3++){
     
-    file << *v1 << " " << *v2 << " " << *v3 << endl;
+    file << *v1 << " " << *v2 << " " << *v3 << vcl_endl;
   }
 }
   
@@ -284,8 +284,8 @@ void vsrl_3d_output::read_projective_transform(char *filename)
   // column of H must be swapped
 
 
-  cout << "opening file " << filename << endl;
-  ifstream file(filename);
+  vcl_cout << "opening file " << filename << vcl_endl;
+  vcl_ifstream file(filename);
 
   // get rid of the header
 
@@ -305,7 +305,7 @@ void vsrl_3d_output::read_projective_transform(char *filename)
   for(row=0;row<4;row++){
     for(col=0;col<4;col++){
       file >> value;
-      cout << "Point r c " << value << " " << row << " " << col << endl;
+      vcl_cout << "Point r c " << value << " " << row << " " << col << vcl_endl;
 
       if(col==2 || col==3){
 	H(row,col)=value;
@@ -320,7 +320,7 @@ void vsrl_3d_output::read_projective_transform(char *filename)
     }
   }
 
-  cout << "Seting transform to " << endl << H << endl;
+  vcl_cout << "Seting transform to " << vcl_endl << H << vcl_endl;
   this->set_projective_transform(H);
 }
 

@@ -137,13 +137,13 @@ void vsrl_token_saliency::print_saliency_stats(int x, int y)
   
   get_saliency_stats(x,y,mean,std);
   
-  cout << "Pixel " << x << " " << y << " has a local corelation mean and std " << mean << " " << std << endl;
+  vcl_cout << "Pixel " << x << " " << y << " has a local corelation mean and std " << mean << " " << std << vcl_endl;
 }
 
 void vsrl_token_saliency::print_saliency(int x, int y)
 {
     
-  cout << "Pixel " << x << " " << y << " has saliency " << get_saliency(x,y)  << endl;
+  vcl_cout << "Pixel " << x << " " << y << " has saliency " << get_saliency(x,y)  << vcl_endl;
 
 }
 

@@ -128,12 +128,12 @@ bool gst_polygon_2d::inside( const gst_vertex_2d_ref v) const
 }
 
 
-ostream &operator<<( ostream &os, gst_polygon_2d &p)
+vcl_ostream &operator<<( vcl_ostream &os, gst_polygon_2d &p)
 {
   for( int i=0; i< p.edges_.size(); i++)
     {
       os << (*p.edges_[i]) << " ";
     }
 
-  return os << endl;
+  return os << vcl_endl;
 }

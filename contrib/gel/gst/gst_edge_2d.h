@@ -25,7 +25,7 @@ public:
   void flip();
 
   // display
-  friend ostream &operator<<( ostream &os, gst_edge_2d &e);
+  friend vcl_ostream &operator<<( vcl_ostream &os, gst_edge_2d &e);
 
 protected:
 
@@ -34,6 +34,6 @@ protected:
 
 };
 
-ostream &operator<<( ostream &os, gst_edge_2d &e);
+vcl_ostream &operator<<( vcl_ostream &os, gst_edge_2d &e);
 
 #endif

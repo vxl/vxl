@@ -38,7 +38,7 @@ void vsrl_stereo_dense_matcher::execute()
  
   // start the dynamic program for each raster
 
-  cout << "Performing dynamic programs " << endl;
+  vcl_cout << "Performing dynamic programs " << vcl_endl;
   
   int i;
     
@@ -55,7 +55,7 @@ void vsrl_stereo_dense_matcher::initial_calculations()
   // step 1 - compute the correlations between the two images
   //          so that the dynamic programs can perform their calculations efficiently
   
-  cout << "Performing image correlations " << endl;
+  vcl_cout << "Performing image correlations " << vcl_endl;
   
   _image_correlation.set_correlation_range(_correlation_range);
 
@@ -110,12 +110,12 @@ int vsrl_stereo_dense_matcher::get_assignment(int x, int y)
 void vsrl_stereo_dense_matcher::evaluate_raster(int i)
 {
   if(i<0 || i>= _num_raster){
-    cout << "Warning tried to evaluate inapropriate raster " << endl;
+    vcl_cout << "Warning tried to evaluate inapropriate raster " << vcl_endl;
   }
   
   // we want to evaulate the raster i
   
-  cout << "evaluating raster " << i << endl;
+  vcl_cout << "evaluating raster " << i << vcl_endl;
   
   // set up the i'th raster array 
   vsrl_raster_dp_setup *raster = new vsrl_raster_dp_setup(i, &_image_correlation);
@@ -190,11 +190,11 @@ void vsrl_stereo_dense_matcher::write_disparaty_image(char *filename)
 
 void vsrl_stereo_dense_matcher::print_correlation_cost(int x, int y)
 {
-  cout << "Correlation costs for pixel " << x << " " << y << endl;
+  vcl_cout << "Correlation costs for pixel " << x << " " << y << vcl_endl;
   int disp;
   
   for(disp = 0-_correlation_range;disp < _correlation_range;disp++){
     
-    cout << disp << " -> " << _image_correlation.get_correlation(x,y,disp) << endl;
+    vcl_cout << disp << " -> " << _image_correlation.get_correlation(x,y,disp) << vcl_endl;
   }
 }
