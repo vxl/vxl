@@ -13,7 +13,7 @@
 #include <vgui/vgui_tableau.h>
 
 //-----------------------------------------------------------------------------
-//: Sends a text description of the tableau heirachy beneath the given tableau.
+//: Sends a text description of the tableau hierarchy beneath the given tableau.
 static
 void vgui_text_graph(vcl_ostream &s, vcl_string const &prefix,
                      vgui_tableau_sptr const &t)
@@ -32,7 +32,7 @@ void vgui_text_graph(vcl_ostream &s, vcl_string const &prefix,
 }
 
 //-----------------------------------------------------------------------------
-//: Sends a text description of the tableau heirachy beneath the given tableau.
+//: Sends a text description of the tableau hierarchy beneath the given tableau.
 void vgui_text_graph(vcl_ostream &s, vgui_tableau_sptr const &t)
 {
   vgui_text_graph(s, "", t);
