@@ -1,14 +1,14 @@
-# ./oxl/apps/vxl_vrml_viewer/CMakeLists.txt
+# oxl/apps/glmovie/CMakeLists.txt
 
 INCLUDE(${MODULE_PATH}/NewCMake/FindGLUT.cmake)
 INCLUDE(${MODULE_PATH}/NewCMake/FindOpenGL.cmake)
-INCLUDE(${MODULE_PATH}/NewCMake/FindMPEG.cmake)
+INCLUDE(${MODULE_PATH}/NewCMake/FindMPEG2.cmake)
 
-LINK_LIBRARIES( oxp vidl vil vul vbl vpl vcl )
+LINK_LIBRARIES( oxp vidl vil vnl vul )
 
-IF(MPEG_FOUND)
-  LINK_LIBRARIES( ${MPEG_LIBRARIES} )
-  ADD_DEFINITIONS(-DHAS_MPEG)
+IF(MPEG2_FOUND)
+  LINK_LIBRARIES( ${MPEG2_LIBRARIES} )
+  ADD_DEFINITIONS(-DHAS_MPEG2)
 ENDIF(MPEG_FOUND)
 IF(GLUT_FOUND)
   LINK_LIBRARIES( ${GLUT_LIBRARIES} )
