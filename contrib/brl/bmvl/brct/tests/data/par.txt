@@ -1,0 +1,10 @@
+data/police/time_stamps.txt
+
+
+#data/police/curve391.txt
+data/police/curve400.txt
+data/police/curve403.txt
+data/police/curve408.txt
+#data/police/curve464.txt
+data/police/curve474.txt
+#data/police/curve476.txt
