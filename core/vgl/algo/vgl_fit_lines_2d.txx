@@ -25,7 +25,9 @@ template <class T>
 void vgl_fit_lines_2d<T>::add_point(vgl_point_2d<T> const& p)
 {
   curve_.push_back(p);
-  //  vcl_cout << p << "\n";
+#ifdef DEBUG
+  vcl_cout << p << '\n';
+#endif
 }
 
 //: add point
@@ -48,7 +50,9 @@ void vgl_fit_lines_2d<T>::output(unsigned int start_index, unsigned int end_inde
 {
   assert(start_index < curve_.size() && end_index <= curve_.size());
   vgl_line_segment_2d<T> line(curve_[start_index], curve_[end_index-1]);
-  //  vcl_cout << "output " << line << "\n";
+#ifdef DEBUG
+  vcl_cout << "output " << line << '\n';
+#endif
   segs_.push_back(line);
 }
 
@@ -57,8 +61,8 @@ bool vgl_fit_lines_2d<T>::fit()
 {
   if (curve_.size()<min_length_)
     {
-      vcl_cout << "In vgl_fit_lines_2d<T>::fit()"
-               << " - number of points < min_length " << min_length_ << '\n';
+      vcl_cout << "In vgl_fit_lines_2d<T>::fit() - number of points < min_length "
+               << min_length_ << '\n';
       return false;
     }
   //A helper to hold points and do the linear regression

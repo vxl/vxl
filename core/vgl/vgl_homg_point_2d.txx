@@ -33,7 +33,7 @@ template <class Type>
 vcl_ostream& operator<<(vcl_ostream& s, vgl_homg_point_2d<Type> const& p)
 {
   return s << " <vgl_homg_point_2d ("
-           << p.x() << "," << p.y() << "," << p.w() << ") >";
+           << p.x() << ',' << p.y() << ',' << p.w() << ") >";
 }
 
 template <class Type>

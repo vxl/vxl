@@ -8,7 +8,7 @@
 template <class Type>
 vcl_ostream& operator<<(vcl_ostream& s, vgl_homg_point_1d<Type> const& p)
 {
-  return s << "<vgl_homg_point_1d (" << p.x() << "," << p.w() << ") > ";
+  return s << "<vgl_homg_point_1d (" << p.x() << ',' << p.w() << ") > ";
 }
 
 template <class Type>

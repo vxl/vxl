@@ -38,7 +38,7 @@ void vsl_b_read(vsl_b_istream& is, vgl_homg_point_1d<T> & p)
     break;
 
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_homg_point_1d<T>&) \n"
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_homg_point_1d<T>&)\n"
              << "           Unknown version number "<< v << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;

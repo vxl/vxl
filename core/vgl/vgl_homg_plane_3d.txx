@@ -71,7 +71,8 @@ bool vgl_homg_plane_3d<Type>::operator==(vgl_homg_plane_3d<Type> const& p) const
 }
 
 template <class Type>
-vcl_ostream& operator<<(vcl_ostream& s, const vgl_homg_plane_3d<Type>& p) {
+vcl_ostream& operator<<(vcl_ostream& s, const vgl_homg_plane_3d<Type>& p)
+{
   return s << " <vgl_homg_plane_3d "
            << p.a() << " x + "
            << p.b() << " y + "
@@ -80,7 +81,8 @@ vcl_ostream& operator<<(vcl_ostream& s, const vgl_homg_plane_3d<Type>& p) {
 }
 
 template <class Type>
-vcl_istream& operator>>(vcl_istream& s, vgl_homg_plane_3d<Type>& p) {
+vcl_istream& operator>>(vcl_istream& s, vgl_homg_plane_3d<Type>& p)
+{
   Type a, b, c, d;
   s >> a >> b >> c >> d;
   p.set(a,b,c,d);

@@ -45,7 +45,7 @@ double cross_ratio(vgl_point_2d<T>const& p1, vgl_point_2d<T>const& p2,
 //: Write "<vgl_point_2d x,y> " to stream
 template <class Type>
 vcl_ostream&  operator<<(vcl_ostream& s, vgl_point_2d<Type> const& p) {
-  return s << "<vgl_point_2d "<< p.x() << "," << p.y() << "> ";
+  return s << "<vgl_point_2d "<< p.x() << ',' << p.y() << "> ";
 }
 
 //: Read x y from stream

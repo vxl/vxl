@@ -78,8 +78,8 @@ template <class Type>
 vcl_ostream& operator<<(vcl_ostream& s, vgl_homg_point_3d<Type> const& p)
 {
   return s << " <vgl_homg_point_3d ("
-           << p.x() << "," << p.y() << ","
-           << p.z() << "," << p.w() << ") >";
+           << p.x() << ',' << p.y() << ','
+           << p.z() << ',' << p.w() << ") >";
 }
 
 template <class Type>

@@ -32,8 +32,8 @@ vgl_homg_point_1d<double> vgl_1d_basis<T>::project(T const& p)
 template <class T>
 vcl_ostream& operator<<(vcl_ostream& s, vgl_1d_basis<T> const& b)
 {
-  s << "<vgl_1d_basis "<< b.origin() << " " << b.unity();
-  if (!b.affine()) s << " " << b.inf_pt();
+  s << "<vgl_1d_basis "<< b.origin() << ' ' << b.unity();
+  if (!b.affine()) s << ' ' << b.inf_pt();
   s <<  " > ";
   return s;
 }

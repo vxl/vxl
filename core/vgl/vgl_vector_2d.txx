@@ -44,7 +44,7 @@ bool parallel(vgl_vector_2d<T> const& a, vgl_vector_2d<T> const& b, double eps)
 template <class T>
 vcl_ostream&  operator<<(vcl_ostream& s, vgl_vector_2d<T> const& p)
 {
-  return s << "<vgl_vector_2d "<< p.x() << "," << p.y() <<  "> ";
+  return s << "<vgl_vector_2d "<< p.x() << ',' << p.y() <<  "> ";
 }
 
 //: Read x y from stream

@@ -35,7 +35,7 @@ class vgl_line_2d_regression
   vgl_line_2d<T> line_;//!< the fitted line
   T Sx_, Sy_, Sxx_, Sxy_, Syy_;//!< partial sums
   double squared_error_;//!< an estimate of the squared error
-public:
+ public:
   vgl_line_2d_regression();
   ~vgl_line_2d_regression(){};
 
