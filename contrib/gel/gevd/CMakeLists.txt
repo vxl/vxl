@@ -13,10 +13,16 @@ SOURCE_FILES( gevd_sources
   gevd_noise.cxx
   gevd_step.cxx
   gevd_contour.cxx
+  gevd_clean_edgels.cxx
 )
+#  gevd_edgel_regions.cxx
 
 IF (WIN32)
   IF (NOT CYGWIN)
     INCLUDE(${allvxl_SOURCE_DIR}/gel/gevd/CMakeListsHeaders.txt)
   ENDIF (NOT CYGWIN)
 ENDIF(WIN32)
+
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )
