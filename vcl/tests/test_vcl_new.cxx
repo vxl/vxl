@@ -3,19 +3,19 @@
 */
 #include <vcl_new.h>
 
-struct X 
+struct X_s
 {
   double *p;
-  X() { p = new double[37]; }
-  ~X() { delete [] p; }
+  X_s() { p = new double[37]; }
+  ~X_s() { delete [] p; }
 };
 
 int main() 
 {
-  X my_x;
+  X_s my_x;
   
   vcl_destroy(&my_x);
-  new (&my_x) X; // vcl_construct(&my_x);
+  new (&my_x) X_s; // vcl_construct(&my_x);
 
   return 0;
 }
