@@ -39,6 +39,7 @@
 #include <mbl/mbl_stats_1d.h>
 #include <mbl/mbl_stats_nd.h>
 #include <mbl/mbl_stl.h>
+#include <mbl/mbl_stl_pred.h>
 #include <mbl/mbl_stochastic_data_collector.h>
 #include <mbl/mbl_sum_1d.h>
 #include <mbl/mbl_test.h>
