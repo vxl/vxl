@@ -3,3 +3,237 @@
 Probability is the only calculus of uncertainty.
 @endchapsummary
 
+The vpdfl several classes for representing and using
+multivariate probability density functions (PDFs).
+
+Each pdf comes as a builder-model-sampler triplet of objects.
+
+@itemize
+@item vpdfl_builder_base</td>
+
+<td>vpdfl_pdf_base</td>
+
+<td>TC_MVPDFInstanceBase</td>
+</tr>
+
+<tr>
+<td>Derived Classes:</td>
+
+<td>vpdfl_axis_gaussian_builder</td>
+
+<td>vpdfl_axis_gaussian</td>
+
+<td>TC_MVAxisGaussianInstance</td>
+</tr>
+
+<tr>
+<td></td>
+
+<td>vpdfl_gaussian_builder</td>
+
+<td>vpdfl_gaussian</td>
+
+<td>TC_MVGaussianInstance</td>
+</tr>
+</table>
+
+<p>The builders are used to compute the model data (eg the means, variances
+etc) for the models.&nbsp; The Instances are used to assess vectors to
+calculate their probability etc.&nbsp; Note that unlike other instance
+types in the library, they don't contain useful state, only workspace.
+<br>&nbsp;
+<h1>
+<a NAME="vpdfl_pdf_base"></a>vpdfl_pdf_base</h1>
+Base class for Multi-Variate Probability Density Function classes.
+<br>Records the mean and variance in each dimension. Derived classes may
+record more information (eg covariance matrix etc).
+<br>Also, for cases where the distributions of parameters are multi-modal,
+the number and centres of each peak can be recorded.&nbsp; This is particularly
+useful for non-linear and mixture model representations of the parameter
+distributions.
+<p>Main functions:
+<br>&nbsp;
+<table BORDER COLS=2 WIDTH="100%" NOSAVE >
+<tr>
+<td>TC_MVPDFInstanceBase* instance()</td>
+
+<td>Create appropriate instance class on heap and return pointer</td>
+</tr>
+
+<tr>
+<td>int n_dims() const</td>
+
+<td>Dimensionality of vector space represented</td>
+</tr>
+
+<tr>
+<td>const vnl_vector<double>&amp; mean() const</td>
+
+<td>Mean vector for distribution</td>
+</tr>
+
+<tr>
+<td>const vnl_vector<double>&amp; variance()</td>
+
+<td>Vector giving variance along each dimension</td>
+</tr>
+
+<tr>
+<td>int n_peaks() const</td>
+
+<td>Number of peaks of distribution (1 unless multimodal)</td>
+</tr>
+
+<tr>
+<td>const vnl_vector<double>&amp; peak(int i) const</td>
+
+<td>Position of the i'th peak (useful for multi-modal PDFs)</td>
+</tr>
+</table>
+
+<h2>
+<a NAME="vpdfl_builder_base"></a>vpdfl_builder_base</h2>
+A base class for objects which build Multivariate PDF models from sets
+of vectors supplied in a mbl_data_wrapper<vnl_vector<double> > derived iterator.
+<br>They have three main functions:
+<br>&nbsp;
+<table BORDER WIDTH="100%" NOSAVE >
+<tr>
+<td><tt>vpdfl_pdf_base* new_model()</tt></td>
+
+<td>Create a new model of appropriate type on heap and return pointer</td>
+</tr>
+
+<tr>
+<td><tt>void build(vpdfl_pdf_base&amp; model, mbl_data_wrapper<vnl_vector<double> >&amp; data)</tt></td>
+
+<td>Build the model from the vectors supplied in data</td>
+</tr>
+
+<tr>
+<td><tt>void weighted_build(vpdfl_pdf_base&amp; model,</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+mbl_data_wrapper<vnl_vector<double> >&amp; data,</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+const vcl_vector&lt;double>&amp; wts)</tt></td>
+
+<td>Build the model from the supplied vectors, allowing for given weights</td>
+</tr>
+</table>
+
+<h2>
+<a NAME="TC_MVPDFInstanceBase"></a>TC_MVPDFInstanceBase</h2>
+Supplies functions to compute the probability of a given vector.
+<br>Also to test the plausibility of a vector or et of parameters, to modify
+a set of parameters so it is plausible and to choose a threshold of plausibility.
+<br>The instance object is used in case workspace variables etc required,
+and to keep to the Builder-Model-Instance pattern used elsewhere.
+<p>The main functions are:
+<table BORDER COLS=2 WIDTH="100%" NOSAVE >
+<tr>
+<td>const vpdfl_pdf_base&amp; model() const</td>
+
+<td>PDF of which this is an instance</td>
+</tr>
+
+<tr>
+<td>void setModel(const vpdfl_pdf_base&amp;)</td>
+
+<td>Set model for which this is an instance</td>
+</tr>
+
+<tr>
+<td>double log_p(const vnl_vector<double>&amp; x)</td>
+
+<td>Log of probability density at x</td>
+</tr>
+
+<tr>
+<td>double operator()(const vnl_vector<double>&amp; x)</td>
+
+<td>Probability density at x</td>
+</tr>
+
+<tr>
+<td>void gradient(vnl_vector<double>&amp; g,&nbsp;
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const vnl_vector<double>&amp; x,
+double&amp; p)</td>
+
+<td>Gradient of PDF at x</td>
+</tr>
+
+<tr>
+<td>void sample(vnl_vector<double>&amp; x)</td>
+
+<td>Draw random sample from distribution</td>
+</tr>
+
+<tr>
+<td>double log_prob_thresh(double pass_proportion)</td>
+
+<td>Compute threshold for PDF to pass a given proportion</td>
+</tr>
+
+<tr>
+<td>void plausible(vnl_vector<double>&amp; x)</td>
+
+<td>Compute nearest point to x which has a density above a threshold</td>
+</tr>
+</table>
+
+<h2>
+<a NAME="Derived Classes"></a>Derived Classes</h2>
+&nbsp;
+<table BORDER WIDTH="100%" NOSAVE >
+<tr>
+<td>vpdfl_axis_gaussian</td>
+
+<td>Gaussian PDF aligned with axes</td>
+</tr>
+
+<tr>
+<td>vpdfl_gaussian</td>
+
+<td>General gaussian at arbitrary orientation.&nbsp;&nbsp;&nbsp; Axes are
+defined by a set of eigenvectors, eigenvecs(), and their associated eigenvalues,
+eigenvals() of the covariance matrix of the original data.</td>
+</tr>
+
+<tr>
+<td>vpdfl_mixture_pdf</td>
+
+<td>Mixture model containing two or more components (each a vpdfl_pdf_base derived class)</td>
+</tr>
+</table>
+
+<h2>
+<a NAME="Examples"></a>Examples</h2>
+
+<p><br>Suppose we wish to compute a multivariate gaussian from a set of
+vectors, then estimate the probability that each vector was generated by
+the distribution.
+<br>&nbsp;
+<blockquote><tt>vcl_vector&lt;vnl_vector<double>> data(n);</tt><tt></tt>
+<p><tt>// Load in the vectors</tt>
+<br><tt>....</tt><tt></tt>
+<p><tt>// Define what type of builder to use.&nbsp; In this case we want
+a MVGaussian</tt>
+<br><tt>vpdfl_gaussian_builder mvgauss_builder;</tt>
+<br><tt>vpdfl_builder_base *builder = &amp;mvgauss_builder;</tt><tt></tt>
+<p><tt>// Create an iterator object to pass the data in</tt>
+<br><tt>mbl_data_array_wrapper<vnl_vector<double> > v_data(data.dataPtr(),data.size());</tt><tt></tt>
+<p><tt>// Generate model to build</tt>
+<br><tt>vpdfl_pdf_base *model = builder->new_model();</tt>
+<br><tt>// Build the model from the data</tt>
+<br><tt>builder->build(*model,v_data);</tt><tt></tt>
+<p><tt>// Now test each vector</tt>
+<br><tt>TC_MVPDFInstanceBase *inst = model->instance();</tt>
+<br><tt>for (int i=0;i&lt;data.size();++i)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; vcl_cout&lt;&lt;"vcl_log(P(v(i))) = "&lt;&lt;inst->log_p(data(i))&lt;&lt;vcl_endl;</tt><tt></tt>
+<p><tt>// Tidy up</tt>
+<br><tt>delete model;</tt>
+<br><tt>delete inst;</tt>
+<br><tt></tt>&nbsp;</blockquote>
+
+</body>
+</html>
