@@ -36,7 +36,7 @@
 #include "vil_nitf_util.h"
 
 // Constants
-char const* vil_nitf_format_tag = "NITF v2.0";
+char const* const vil_nitf_format_tag = "NITF v2.0";
 
 static const unsigned long TOTAL_BYTE_LIMIT = 100000000;  // 100MB - glutMainLoop seems to choke with images larger than this.
 
@@ -422,7 +422,7 @@ bool vil_nitf_image::get_property(char const * tag, void * value) const
     static vcl_string method_name = "vil_nitf_file_format::get_property: ";
     bool found_property = false;
 
-    if (vcl_strcmp(vil_property_quantisation_depth, tag) == 0) {
+    if (vcl_strcmp (vil_property_quantisation_depth, tag) == 0) {
       found_property = true;
       if (value != 0) {
         unsigned int * depth = static_cast<unsigned int*>(value);
@@ -1374,7 +1374,7 @@ int vil_nitf_image::check_image_data_offset() const
     // so file position should be equal to sum of length of these two headers.
 
     unsigned header_length_sum = message_header_->GetHeaderLength()
-      + message_header_->IMAGESH[0]->LISH;
+      + message_header_->get_image_header_length() ;
 
     // For now, assume file position is correct, because someone might have
     // mucked with the header.  Do put out warning message.
@@ -1390,7 +1390,7 @@ int vil_nitf_image::check_image_data_offset() const
                  << "  message header length = "
                  << message_header_->GetHeaderLength() << vcl_endl
                  << "  image header length   = "
-                 << message_header_->IMAGESH[0]->LISH << vcl_endl
+                 << message_header_->get_image_header_length() << vcl_endl
                  << "  sum           = " << header_length_sum << vcl_endl
                  << "  file_position = " << get_image_data_offset() << vcl_endl;
     }
