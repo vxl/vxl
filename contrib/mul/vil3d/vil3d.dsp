@@ -149,6 +149,48 @@ SOURCE=.\vil3d_header_data.cxx
 # Begin Source File
 SOURCE=.\vil3d_load.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_smart_ptr+vil3d_image_resource-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil3d_copy+bool-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil3d_copy+byte-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil3d_copy+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil3d_copy+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil3d_copy+int_16-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil3d_copy+int_32-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil3d_copy+sbyte-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil3d_copy+uint_16-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil3d_copy+uint_32-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil3d_image_view+sbyte-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_image_resource.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_memory_image.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_new.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -202,6 +244,21 @@ SOURCE=.\vil3d_load.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil3d_transform.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_copy.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_copy.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_image_resource.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_memory_image.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_new.h
 # End Source File
 # End Group
 # End Target

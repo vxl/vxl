@@ -274,6 +274,9 @@ SOURCE=.\test_switch_axes.cxx
 # Begin Source File
 SOURCE=.\test_trilin_interp.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_image_resource.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
