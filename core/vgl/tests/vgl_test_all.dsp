@@ -143,6 +143,9 @@ SOURCE=.\test_window_scan_iterator.cxx
 # Begin Source File
 SOURCE=.\test_convex.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_convex_hull_2d.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

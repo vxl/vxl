@@ -134,6 +134,12 @@ SOURCE=.\Templates/vgl_fit_lines_2d+double-.cxx
 SOURCE=.\Templates/vgl_line_2d_regression+double-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vgl_p_matrix+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_convex_hull_2d+double-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vgl_h_matrix_1d_compute.cxx
 # End Source File
 # Begin Source File
@@ -153,9 +159,6 @@ SOURCE=.\vgl_h_matrix_2d_compute_4point.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vgl_h_matrix_2d_compute_linear.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vgl_p_matrix+double-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -249,6 +252,12 @@ SOURCE=.\vgl_p_matrix.h
 # End Source File
 # Begin Source File
 SOURCE=.\vgl_p_matrix.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_convex_hull_2d.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_convex_hull_2d.txx
 # End Source File
 # End Group
 # End Target
