@@ -297,7 +297,7 @@ IF (QT_WRAP_CPP)
     SET( vgui_sources ${vgui_sources} ${vgui_qt_sources} ${vgui_qt_moc_files} )
 
     IF(CMAKE_COMPILER_IS_GNUCXX)
-      SET_SOURCE_FILES_PROPERTIES(${vxl_BINARY_DIR}/core/vgui/moc_vgui_qt_adaptor.cxx GENERATED COMPILE_FLAGS -O0)
+      SET_SOURCE_FILES_PROPERTIES(${CMAKE_CURRENT_BINARY_DIR}/moc_vgui_qt_adaptor.cxx GENERATED COMPILE_FLAGS -O0)
     ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
   ENDIF(VGUI_USE_QT)
@@ -427,7 +427,7 @@ SET( vgui_sources ${vgui_sources}
 ADD_LIBRARY(vgui ${vgui_sources})
 
 # Dependencies on other vxl libraries
-TARGET_LINK_LIBRARIES(vgui vnl vil1 vil vgl vpl vbl vul)
+TARGET_LINK_LIBRARIES(vgui vnl_algo vnl vil1 vil vgl vpl vbl vul)
 
 # Dependencies created by the toolkit implementations
 

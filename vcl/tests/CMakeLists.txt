@@ -50,7 +50,7 @@ ADD_TEST( vcl_test_set         vcl_test_all test_set )
 ADD_TEST( vcl_test_string      vcl_test_all test_string )
 ADD_TEST( vcl_test_sstream     vcl_test_all test_sstream )
 ADD_TEST( vcl_test_vector      vcl_test_all test_vector )
-ADD_TEST( vcl_test_cstdio      vcl_test_all test_cstdio ${vxl_SOURCE_DIR}/vcl/tests/test_cstdio.txt )
+ADD_TEST( vcl_test_cstdio      vcl_test_all test_cstdio ${CMAKE_CURRENT_SOURCE_DIR}/test_cstdio.txt )
 # Only a compiler test:
 #ADD_TEST( vcl_test_stlfwd      vcl_test_all test_stlfwd )
 

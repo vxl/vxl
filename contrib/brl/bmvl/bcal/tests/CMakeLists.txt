@@ -2,4 +2,4 @@
 
 LINK_LIBRARIES(bcal)
 ADD_EXECUTABLE(bcal_test bcal_test.cxx)
-ADD_TEST(      bcal_test bcal_test ${BRL_INCLUDE_DIR}/bmvl/bcal/tests)
+ADD_TEST(      bcal_test bcal_test ${CMAKE_CURRENT_SOURCE_DIR})
