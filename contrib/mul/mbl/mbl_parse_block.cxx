@@ -1,13 +1,15 @@
-
+// This is mul/mbl/mbl_parse_block.cxx
+#include "mbl_parse_block.h"
 //:
 // \file
 // \author Ian Scott
 // \date  25-Feb-2003
 // \brief Load a block of text from a file.
 
-#include "mbl_parse_block.h"
 #include <vcl_cctype.h>
 #include <vcl_cstring.h>
+#include <vcl_iostream.h>
+
 //: Read a block of text from a stream.
 // This function will read through a stream, and store the text found to a string.
 // The function terminates when it finds the closing brace.
@@ -19,6 +21,7 @@
 // \return the text including the opening and closing braces.
 // \param comment Lines begining with white space followed by this string will be ignored.
 // Set to empty for no comment stripping.
+
 vcl_string mbl_parse_block(vcl_istream &afs, bool open_already /*= false*/, const char * comment /*= "//"*/)
 {
   if (!afs) return "{}";
@@ -30,7 +33,7 @@ vcl_string mbl_parse_block(vcl_istream &afs, bool open_already /*= false*/, cons
     if (c != '{')
     {
       vcl_cerr << " WARNING: mbl_parse_block()\n" <<
-        "First non-ws char is '" << c <<"'. Should be '{'\n" << vcl_endl;
+                  "First non-ws char is '" << c <<"'. Should be '{'\n\n";
       afs.clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return "{}";
     }
@@ -66,9 +69,9 @@ vcl_string mbl_parse_block(vcl_istream &afs, bool open_already /*= false*/, cons
       else if (vcl_isspace(c))
         comment_position = 0;
       else if (newline && comment_position < comment_length
-                &&  c==comment[comment_position])
+               &&  c==comment[comment_position])
       {
-        if(++comment_position == 2)
+        if (++comment_position == 2)
         {
           vcl_string dummy;
           vcl_getline(afs, dummy);
@@ -86,12 +89,10 @@ vcl_string mbl_parse_block(vcl_istream &afs, bool open_already /*= false*/, cons
           if (--level==0) return s+s2;
       }
     }
-
   }
   vcl_cerr << " WARNING: mbl_parse_block()\n" <<
-    "Read problem (possibly end-of-file) before closing '}'\n" <<
-    "Text parsed so far:\n" << s << vcl_endl;
+              "Read problem (possibly end-of-file) before closing '}'\n" <<
+              "Text parsed so far:\n" << s << vcl_endl;
   afs.clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
   return "{}";
-
 }
