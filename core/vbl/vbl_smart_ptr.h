@@ -146,11 +146,23 @@ public:
   }
 #endif
 
-  //: Relational operators.
+  // Relational operators.
   //There's no need for casts to void* or any other pointer type than T* here.
+
+  //: Do a shallow equality
+  // Do they point to the same object.
   bool operator==(T const *p) const { return ptr_ == p; }
+
+  //: Do a shallow inequality
+  // Do the smart pointers not point to the same object.
   bool operator!=(T const *p) const { return ptr_ != p; }
+
+  //: Do a shallow equality
+  // Do they point to the same object.
   bool operator==(vbl_smart_ptr<T>const&p)const{return ptr_ == p.as_pointer();}
+
+  //: Do a shallow inequality
+  // Do the smart pointers not point to the same object.
   bool operator!=(vbl_smart_ptr<T>const&p)const{return ptr_ != p.as_pointer();}
   bool operator< (vbl_smart_ptr<T>const&p)const{return ptr_ <  p.as_pointer();}
   bool operator> (vbl_smart_ptr<T>const&p)const{return ptr_ >  p.as_pointer();}
