@@ -14,6 +14,7 @@
 #include <rrel/rrel_lms_obj.h>
 #include <rrel/rrel_ran_sam_search.h>
 #include <rrel/rrel_ransac_obj.h>
+#include <rrel/rrel_ransac_obj_smooth_cost.h>
 #include <rrel/rrel_trunc_quad_obj.h>
 #include <rrel/rrel_mlesac_obj.h>
 #include <rrel/rrel_muset_obj.h>
@@ -97,6 +98,31 @@ main()
     delete ransac;
     delete ransam;
   }
+
+ //
+  //  RANSAC with smooth cost function
+  //
+
+    {
+    rrel_ransac_obj* ransac = new rrel_ransac_obj_smooth_cost();
+    hg->set_prior_scale( 1.0 );
+
+    rrel_ran_sam_search* ransam = new rrel_ran_sam_search;
+    ransam->set_trace_level(trace_level);
+    ransam->set_sampling_params( max_outlier_frac, desired_prob_good, max_pops);
+
+    if ( !ransam->estimate( hg, ransac ) )
+      vcl_cout << "RANSAC with smooth cost failed!!\n";
+    else {
+      vcl_cout << "RANSAC with smooth cost succeeded.\n"
+               << "estimate = " << ransam->params() << vcl_endl
+               << "scale = " << ransam->scale() << vcl_endl;
+    }
+    vcl_cout << vcl_endl;
+    delete ransac;
+    delete ransam;
+  }
+
 
   //
   //  MSAC
