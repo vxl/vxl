@@ -23,7 +23,7 @@ else {
     print STDERR "IUEROOT is not defined, and no command line arguments were given\n";
     exit 0;
   }
-  $DIRS = `find \$IUEROOT/vcl \$IUEROOT/v3p \$IUEROOT/vxl \$IUEROOT/mul \$IUEROOT/oxl \$IUEROOT/gel \$IUEROOT/tbl \$IUEROOT/conversions -type d -print`;
+  $DIRS = `find \$IUEROOT/vcl \$IUEROOT/v3p \$IUEROOT/core \$IUEROOT/contrib -type d -print`;
   @DIRS = grep {!/(\/CVS|\.new(\/\S+)?|awfmfc|vgui_example_mfc)$/} sort split ' ', $DIRS;
 }
 
@@ -200,7 +200,7 @@ foreach $dir (@DIRS)
   #     @tmpl_list = grep(/\.cxx$/, @tmpl_list);
         foreach $x (@tmpl_list) {
           push @sources, "$subd/$x"
-            unless ($x eq "." || $x eq ".." || $x eq "CVS");
+            unless ($x eq "." || $x eq ".." || $x eq "CVS" || $x eq ".NoDartCoverage");
         }
       }
     }
@@ -289,7 +289,7 @@ foreach $dir (@DIRS)
 #     @tmpl_list = grep(/\.cxx$/, @tmpl_list);
       foreach $x (@tmpl_list) {
         push @source_files, "$file/$x"
-          unless ($x eq "." || $x eq ".." || $x eq "CVS");
+          unless ($x eq "." || $x eq ".." || $x eq "CVS" || $x eq ".NoDartCoverage");
       }
     }
   }

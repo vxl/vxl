@@ -34,7 +34,7 @@ else
     print STDERR "IUEROOT is not defined, and no command line arguments were given\n";
     exit 0;
   }
-  $FILES = `find $IUEROOT/config $IUEROOT/vcl $IUEROOT/v3p $IUEROOT/vxl $IUEROOT/mul $IUEROOT/oxl $IUEROOT/gel $IUEROOT/tbl $IUEROOT/conversions $IUEROOT/rpl $IUEROOT/oul $IUEROOT/brl -type f \\\( -name \\\*.cxx -o -name \\\*.txx -o -name \\\*.cc -o -name \\\*.cpp -o -name \\\*.c -o -name \\\*.h \\\) -print|grep -v /gel/\.v.ol\\.new/`;
+  $FILES = `find $IUEROOT/config $IUEROOT/vcl $IUEROOT/v3p $IUEROOT/core $IUEROOT/contrib -type f \\\( -name \\\*.cxx -o -name \\\*.txx -o -name \\\*.cc -o -name \\\*.cpp -o -name \\\*.c -o -name \\\*.h \\\) -print|grep -v /gel/\.v.ol\\.new/`;
   @FILES = split(' ', $FILES);
 }
 
@@ -61,8 +61,8 @@ foreach $f (@FILES)
                $f !~ m/\bv3p\/(netlib|[jm]peg2?|tiff|png|zlib|Qv)\// &&
                $f !~ m/vil\/file_formats\/vil_viff(header|_support)/ &&
                $f !~ m/\bvgui\/internals\/trackball/ &&
-               $f !~ m/\bvxl\/vgl\/internals\/gpc.h$/ &&
-               $f !~ m/\bvxl\/vidl\/vidl_mpegcodec_helper.cxx$/ &&
+               $f !~ m/\bcore\/vgl\/internals\/gpc.h$/ &&
+               $f !~ m/\bcore\/vidl\/vidl_mpegcodec_helper.cxx$/ &&
                $f !~ m/\/oufgl\/(pxc200|bt848(-addons)?)\.h$/ &&
                $f !~ m/\bgel\/vgel\/kl\/.*\.h$/ &&
                $f !~ m/\bvcl(\/[^\/]+)?\/vcl_(c|[siof]+stream|io|strstream|streambuf)/ &&
@@ -187,8 +187,8 @@ foreach $f (@FILES)
     elsif ($j eq "vcl_csetjmp.h") { $i="(setjmp|vcl_(jmp_buf|longjmp))"; }
     elsif ($j eq "vcl_csignal.h") { $i="vcl_(sig_atomic_t|raise|signal)"; }
     elsif ($j eq "vcl_cstdarg.h") { $i="(vcl_|)va_list"; }
-    elsif ($j eq "vcl_cstddef.h") { next if ($f =~ m/\b(vxl\/vil|mul\/vil2)(\/file_formats)?\/vil2?_jpeglib\.h$/); $i="vcl_(ptrdiff_t|size_t)"; }
-    elsif ($j eq "vcl_cstdio.h") { next if ($f =~ m/\b(vcl\/vcl_cassert|vxl\/vil\/vil_jpeglib|mul\/vil2\/file_formats\/vil2_jpeglib)\.h$/); $i="vcl_(FILE|fpos_t|fopen|fclose|feof|ferror|fflush|fgetc|fgetpos|fgets|fwrite|fread|fseek|ftell|perror|clearerr|rename|fputc|fputs|freopen|fsetpos|getc|getchar|gets|putc|putchar|puts|remove|rewind|setbuf|setvbuf|tmpfile|tmpnam|ungetc|printf|sprintf|fprintf|vprintf|vsprintf|vfprintf|scanf|sscanf|fscanf|vscanf|vsscanf|vfscanf)"; }
+    elsif ($j eq "vcl_cstddef.h") { next if ($f =~ m/\b(core\/vil|mul\/vil2)(\/file_formats)?\/vil2?_jpeglib\.h$/); $i="vcl_(ptrdiff_t|size_t)"; }
+    elsif ($j eq "vcl_cstdio.h") { next if ($f =~ m/\b(vcl\/vcl_cassert|core\/vil\/vil_jpeglib|mul\/vil2\/file_formats\/vil2_jpeglib)\.h$/); $i="vcl_(FILE|fpos_t|fopen|fclose|feof|ferror|fflush|fgetc|fgetpos|fgets|fwrite|fread|fseek|ftell|perror|clearerr|rename|fputc|fputs|freopen|fsetpos|getc|getchar|gets|putc|putchar|puts|remove|rewind|setbuf|setvbuf|tmpfile|tmpnam|ungetc|printf|sprintf|fprintf|vprintf|vsprintf|vfprintf|scanf|sscanf|fscanf|vscanf|vsscanf|vfscanf)"; }
     elsif ($j eq "vcl_cstdlib.h") { next if ($f =~ m/\bvcl\/vcl_cassert\.h$/); $i="(vcl_(abs|div|labs|ldiv|srand|rand|atexit|getenv|system|exit|abort|qsort|calloc|malloc|free|realloc|atol|atof|atoi|mblen|mbstowcs|mbtowc|strtod|strtol|strtoul|wctomb|wcstombs)|[sd]rand48)"; }
     elsif ($j eq "vcl_cstring.h") { $i="vcl_(memchr|memcmp|memcpy|memmove|memset|strcat|strchr|strcmp|strcoll|strcpy|strcspn|strerror|strlen|strncat|strncmp|strncpy|strpbrk|strrchr|strspn|strstr|strtok|strxfrm)"; }
     elsif ($j eq "vcl_ctime.h") { $i="vcl_(clock_t|time_t|tm|asctime|clock|difftime|localtime|strftime|ctime|gmtime|mktime|time)"; }
@@ -393,7 +393,7 @@ foreach $f (@FILES)
     print "$f\t\# contains old style // -- docs\n";
     $printed = 1;
   }
-  if ($cpp_file && $f !~ m/\bvidl\/vidl_mpegcodec\.cxx$/ &&
+  if ($cpp_file && $f !~ m/\bvidl\/vidl_mpegcodec\.cxx$/ && $f !~ m/\bvul\/vul_url\.cxx$/ &&
       $file =~ m/\001[^\001\002]{111,}/)
   {
     print "$f\t\# contains long /*...*/ comments\n";
@@ -446,7 +446,7 @@ foreach $f (@FILES)
     print "$f\t\# contains multi-line string constant\n";
     $printed = 1;
   }
-# 11. Inclusion guard
+# 11. Inclusion guard and file name
   if ($file_s =~ m/^\s*\#ifndef\s+(\S+)\s*\n#define\s+\1\s*(\s[^\n]*)?\n/)
   {
     $guard = $1;
@@ -473,8 +473,19 @@ foreach $f (@FILES)
     }
   }
 
+  if ($file =~ m/\/\/\s*This\s+is\s+([^\s]+)\n/)
+  {
+    $filename = $1; $pwd = `pwd`; chop($pwd);
+    $file_ = $f; $file_ = "$pwd/$f" unless $f =~ m+^/+;
+    while ($file_ =~ m!/\.\./!) { $file_ =~ s![^/]+/\.\./!!g; }
+    while ($file_ =~ m!/\./!) { $file_ =~ s!/\./!/!g; }
+    $file_ =~ s!^.*/(config|vcl|v3p|core|contrib)/!$1/!; $file_ =~ s!^contrib/!!;
+    print "$f\t\# has // This is $filename, should be $file_\n"
+      unless ("$filename" eq "$file_" || !$printed);
+  }
+
 # 12. Constant pi written as 3.1415...
-  if ($f !~ m/\b(v[cuib]l|v3p)\// && $f !~ m/\bvxl\/vnl\/vnl_math\./ &&
+  if ($f !~ m/\b(v[cuib]l|v3p)\// && $f !~ m/\bcore\/vnl\/vnl_math\./ &&
       $cpp_file && $file_s =~ m/\b(3\.14159\d*)/)
   {
     print "$f\t\# should maybe use vnl_math::pi instead of $1\n";
@@ -500,7 +511,8 @@ foreach $f (@FILES)
 # Presence of VCL_*_INSTANTIATE in *.cxx files outside Templates directories
   if ($f !~ m!/Templates/! &&
       $f !~ m!vcl/tests/test_rel_ops\.cxx$! &&
-      $f !~ m!vxl/vsl/tests/test_polymorphic_io\.cxx$! &&
+      $f !~ m!core/vsl/tests/test_polymorphic_io\.cxx$! &&
+      $f !~ m!core/vbl/tests/vbl_test_classes\.cxx$! &&
       $f !~ m!oxl/ogui/examples/awf/glmovie\.cxx$! &&
       $f !~ m!oxl/apps/glmovie/glmovie.cxx$! &&
       $file_s =~ m+\n\s*(VCL_[_A-Z]*INSTANTIATE[_A-Z]*)+ &&
@@ -513,9 +525,9 @@ foreach $f (@FILES)
   $file_s =~ s/VCL_DO_NOT_INSTANTIATE/VCL_do_not_INSTANTIATE/g;
   if ($f =~ m!/Templates/! &&
       $f !~ m!vcl/Templates/(complex|string)-instances\.cxx$! &&
-      $f !~ m!vxl/vnl/algo/Templates/fsm_pack\.cxx$! &&
-      $f !~ m!vxl/vbl/examples/Templates/smartptr-instances\.cxx$! &&
-      $f !~ m!vxl/vnl/Templates/vnl_matrix_fixed_pairwise_ops\.cxx$! &&
+      $f !~ m!core/vnl/algo/Templates/fsm_pack\.cxx$! &&
+      $f !~ m!core/vbl/examples/Templates/smartptr-instances\.cxx$! &&
+      $f !~ m!core/vnl/Templates/vnl_matrix_fixed_pairwise_ops\.cxx$! &&
       $file_s =~ m/\b([_A-Z0-9]*)_INSTANTIATE\s*\((.*)\)/)
   {
     $class=$1; $class =~ tr/A-Z/a-z/; $class="$class<$2>";
@@ -626,7 +638,7 @@ foreach $f (@FILES)
     if ($cpp_file &&
         ($wd !~ m/(left|right)/ || 
          ($f !~ m/\bpdf1d\/pdf1d_pdf\.cxx$/ &&
-          $f !~ m/\bvnl\/(vnl_matrix\.txx|algo\/vnl_complex_eigensystem\.cxx)$/ &&
+          $f !~ m/\bvnl\/(vnl_matrix(|_fixed)\.txx|algo\/vnl_complex_eigensystem\.cxx)$/ &&
           $f !~ m/\b(oxl\/oxp\/vsl_conic_points\.cxx|gel\/gevd\/gevd_float_operators\.cxx)$/ &&
           $f !~ m/\bvcsl\/examples\/vcsl_tutor\.cxx$/ &&
           $f !~ m/\brsdl\/rsdl_(bins_2d|kd_tree)\.h$/ &&
@@ -741,7 +753,7 @@ foreach $f (@FILES)
     if ($printed && $file =~ m/\bdelete\s*\([^;()]*(\([^;()]*\)[^;()]*)*\)\s*;/);
   $file =~ s/^\#[^\n]*//g; $file =~ s/\n\#[^\n]*//g;
   print "$f\t\# $2 starts with underscore\n"
-    if ($cpp_file && $printed && $file =~ m/([^\"# ] *\b|^)(_[a-z][a-zA-Z0-9_]*)/);
+    if ($cpp_file && $printed && $file_s =~ m/([^\"# ] *\b|^)(_[a-z][a-zA-Z0-9_]*)/);
 
 # 16. no end-of-line at end-of-file
   $file =~ s/[^\n]*\n//g;
