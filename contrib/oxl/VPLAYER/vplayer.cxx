@@ -17,8 +17,8 @@
 #include <vgui/vgui_easy2D_tableau.h>
 #include <vgui/vgui_rubberband_tableau.h>
 #include <vgui/vgui_adaptor.h>
-#include <vgui/vgui_composite.h>
-#include <vgui/vgui_viewer2D.h>
+#include <vgui/vgui_composite_tableau.h>
+#include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_image_tableau.h>
 
@@ -152,10 +152,10 @@ int main(int argc, char** argv)
   unsigned window_height = 0;
 
   vgui_image_tableau_new image;
-  vgui_easy2D_new easy(image);
+  vgui_easy2D_tableau_new easy(image);
   vgui_rubberband_tableau_new rubber(new vgui_rubberband_easy2D_client(easy));
-  vgui_composite_new c(easy, rubber);
-  vgui_viewer2D_new view(c);
+  vgui_composite_tableau_new c(easy, rubber);
+  vgui_viewer2D_tableau_new view(c);
   xcv_tab->add_next(view);
   argcount++;
   if (image->height() > window_height)
