@@ -112,19 +112,19 @@ double FManifoldProject::correct(const HomgPoint2D& p1, const HomgPoint2D& p2, H
     *out2 = p2;
     return 1e30;
   }
-  
+
   double p_out[4];
   double d = correct(p[0], p[1], p[2], p[3], &p_out[0], &p_out[1], &p_out[2], &p_out[3]);
-  
+
   out1->set(p_out[0], p_out[1], 1.0);
   out2->set(p_out[2], p_out[3], 1.0);
   return d;
 }
 
-//: Find the points out1, out2 which minimize d(out1,p1) + d(out2,p2) subject to
-// out1'*F*out2 = 0.  Returns the minimum distance squared: ||x[1..4] - p[1..4]||^2.
+//: Find the points out1, out2 which minimize d(out1,p1) + d(out2,p2) subject to out1'*F*out2 = 0.
+//  Returns the minimum distance squared: ||x[1..4] - p[1..4]||^2.
 double FManifoldProject::correct(double   x1, double   y1, double   x2, double   y2,
-				 double *ox1, double *oy1, double *ox2, double *oy2) const
+                                 double *ox1, double *oy1, double *ox2, double *oy2) const
 {
   // Make the query point
   vnl_double_4 p;
@@ -151,7 +151,7 @@ double FManifoldProject::correct(double   x1, double   y1, double   x2, double  
     *oy2 = p[3];
 
     vnl_double_3 l = F_ * vnl_double_3(p[2], p[3], 1.0);
-    double EPIDIST = (l[0] * p[0] + l[1] * p[1] + l[2])/sqrt(l[0]*l[0]+l[1]*l[1]);
+    double EPIDIST = (l[0] * p[0] + l[1] * p[1] + l[2])/vcl_sqrt(l[0]*l[0]+l[1]*l[1]);
     if (EPIDIST > 1e-4) {
       vcl_cerr << "FManifoldProject: Affine F: EPIDIST = " << EPIDIST << vcl_endl;
       vcl_cerr << "FManifoldProject: Affine F: p = " << (dot_product(p,n) + d) << vcl_endl;
