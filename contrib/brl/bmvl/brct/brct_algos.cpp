@@ -820,7 +820,7 @@ scale_and_translate_world(vcl_vector<vgl_point_3d<double> > const& world_points,
     xmin = vnl_math_min(xmin, (*pit).x());
     ymin = vnl_math_min(ymin, (*pit).y());
   }
-  brct_algos::scale_and_translate_world(xmin, ymin, 10.0, H);
+  brct_algos::scale_and_translate_world(xmin, ymin, magnification, H);
 }
 
 void brct_algos::scale_and_translate_world( const double world_x_min,

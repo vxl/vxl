@@ -98,8 +98,7 @@ class brct_plane_sweeper : public brct_plane_sweeper_params
                                  vil1_image& back,
                                  vcl_vector<vsol_point_2d_sptr>& matched_cnrs,
                                  vcl_vector<vsol_point_2d_sptr>& back_prj_cnrs,
-                                 vcl_vector<vsol_point_2d_sptr>& orig_cnrs0,
-                                 bool reset_flags=false);
+                                 vcl_vector<vsol_point_2d_sptr>& orig_cnrs0);
 
   //: Compute a depth image based on max cross-correlation.
   bool depth_image(vil1_memory_image_of<unsigned char>& depth_out,

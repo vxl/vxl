@@ -424,8 +424,7 @@ cross_correlate_proj_corners(const double z,
                              vil1_image& back,
                              vcl_vector<vsol_point_2d_sptr>& matched_corners,
                              vcl_vector<vsol_point_2d_sptr>& back_proj_cnrs,
-                             vcl_vector<vsol_point_2d_sptr>& orig_cnrs0,
-                             bool reset_flags) // unused - FIXME
+                             vcl_vector<vsol_point_2d_sptr>& orig_cnrs0)
 {
   if (n_cams_<2)
   {
