@@ -2,6 +2,9 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \brief  See vgui_file_field.h for a description of this file.
 
 #include "vgui_file_field.h"
 

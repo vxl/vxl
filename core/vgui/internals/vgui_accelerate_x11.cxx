@@ -6,7 +6,7 @@
 // \file
 // \author David Capel
 // \date   28 Mar 2000
-//-----------------------------------------------------------------------------
+// \brief  See vgui_accelerate_x11.h for a description of this file.
 
 #include <vgui/vgui_gl.h>
 //capes : there's no point starting this accelerator unless you're running Mesa at the moment

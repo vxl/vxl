@@ -2,11 +2,11 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-//
-// Author: Philip C. Pritchett, RRG, University of Oxford
-// Created: 23 Oct 99
-//
-//-----------------------------------------------------------------------------
+//:
+// \file
+// \author Philip C. Pritchett, RRG, University of Oxford
+// \date   23 Oct 99
+// \brief  See vgui_simple_field.h for a description of this file.
 
 #include "vgui_simple_field.h"
 

@@ -5,6 +5,7 @@
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
+// \brief  See vgui_adaptor_tableau.h for a description of this file.
 
 #include "vgui_adaptor_tableau.h"
 #include <vcl_iostream.h>

@@ -7,6 +7,7 @@
 //:
 // \file
 // \author VGG, Oxford
+// \brief  Accelerated OpenGL functions for X11.
 
 #include <vgui/vgui_gl.h>
 #include <vgui/internals/vgui_accelerate.h>
@@ -19,6 +20,7 @@
 #  include <Hermes/Hermes.h>
 #endif
 
+//: Accelerated OpenGL functions for X11.
 class vgui_accelerate_x11 : public vgui_accelerate
 {
  public:

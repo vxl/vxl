@@ -4,7 +4,7 @@
 // \file
 // \author Marko Bacic, Oxford RRG
 // \date   29 Aug 2000
-// \brief  Provides support for acceleration - fast and smooth glDrawPixels routine.
+// \brief  Accelerated OpenGL functions for MFC.
 //
 // \verbatim
 //  Modifications:
@@ -18,14 +18,24 @@
 #include <vgui/vgui_gl.h>
 #include <vgui/internals/vgui_accelerate.h>
 
-//: Provides support for acceleration - fast and smooth glDrawPixels routine
+//: Accelerated OpenGL functions for MFC.
+//  Provides support for acceleration - fast and smooth glDrawPixels routine
 class vgui_accelerate_mfc : public vgui_accelerate {
 public:
+  //: Constructor.
   vgui_accelerate_mfc();
+
+  //: Destructor.
   virtual ~vgui_accelerate_mfc();
 
+  //: Set the OpenGL cache format.
   virtual bool vgui_choose_cache_format( GLenum* format, GLenum* type);
-  virtual bool vgui_glDrawPixels( GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid *pixels );
+
+  //: Fast and smooth glDrawPixels routine for MFC.
+  virtual bool vgui_glDrawPixels( GLsizei width, GLsizei height, 
+    GLenum format, GLenum type, const GLvoid *pixels );
+
+  //: OpenGL clearing.
   virtual bool vgui_glClear(GLbitfield mask );
 protected:
   char* aux_buffer;

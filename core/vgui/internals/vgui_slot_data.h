@@ -4,10 +4,9 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// .NAME vgui_slot_data
-// .INCLUDE vgui/internals/vgui_slot_data.h
-// .FILE internals/vgui_slot_data.cxx
-// @author fsm@robots.ox.ac.uk
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
 
 #include <vcl_vector.h>
 

@@ -4,32 +4,26 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-//
-// .NAME vgui_simple_field - templated dialog fields
-// .LIBRARY vgui
-// .HEADER vxl Package
-// .INCLUDE vgui/internals/vgui_simple_field.h
-// .FILE internals/vgui_simple_field.cxx
-//
-// .SECTION Description:
+//:
+// \file
+// \author Philip C. Pritchett, Robotics Research Group, University of Oxford
+// \date   23 Oct 99
+// \brief  Templated fields for dialog boxes.
+// \verbatim
+//  Modifications:
+//    23-OCT-1999  P.Pritchett - Initial version.
+//    13-SEP-2002  K.Y.McGaul - Converted to doxygen style comments
+// \verbatim
+
+#include <vcl_string.h>
+#include "vgui_dialog_field.h"
+
+//: Templated fields for dialog boxes.
 //
 // vgui_simple_field is templated over the type of variable it stores.
 // The given template instances are all for fundamental types, but the
 // template can be used for any data type that has the input and output
 // stream operators defined (<< and >>)
-//
-// .SECTION Author:
-//              Philip C. Pritchett, 23 Oct 99
-//              Robotics Research Group, University of Oxford
-//
-// .SECTION Modifications:
-//     <none yet>
-//
-//-----------------------------------------------------------------------------
-
-#include <vcl_string.h>
-#include "vgui_dialog_field.h"
-
 template <class T>
 class vgui_simple_field : public vgui_dialog_field
 {

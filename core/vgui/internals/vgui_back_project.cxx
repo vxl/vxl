@@ -5,6 +5,7 @@
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
+// \brief  See vgui_back_project.h for a description of this file.
 
 #include "vgui_back_project.h"
 #include <vgui/vgui_gl.h>

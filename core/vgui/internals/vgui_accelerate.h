@@ -19,30 +19,46 @@
 
 #include <vgui/vgui_gl.h>
 
-//: (Potentially) Accelerated functions
+//: (Potentially) Accelerated functions for OpenGL.
 class vgui_accelerate
 {
  public:
+  //: Set to true for no acceleration.
   static bool vgui_no_acceleration;
-  static bool vgui_mfc_acceleration;
 
+  //: Set to true to use MFC acceleration.
+  static bool vgui_mfc_acceleration;
+ 
+  //: Singleton instance of this class. 
   static vgui_accelerate* instance();
 
+  //: Destructor.
   virtual ~vgui_accelerate();
 
+  //: OpenGL clearing.
   virtual bool vgui_glClear( GLbitfield mask );
 
-  //:
-  // If you pass stuff to vgui_glDrawPixels, and the format and type are what you
-  // got from an earlier call to this baby, then it might go faster.
+  //: Set the OpenGL cache format.
+  //  If you pass stuff to vgui_glDrawPixels, and the format and type are what 
+  //  you got from an earlier call to this baby, then it might go faster.
   virtual bool vgui_choose_cache_format( GLenum* format, GLenum* type);
 
   //: Fast-as-we-can version of drawpixels.
   virtual bool vgui_glDrawPixels( GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid *pixels );
 
+  //: For X11/Mesa - copy back buffer to auxilary buffer.
+  //  This function is used in X11/Mesa to speed up overlay emulation.  It
+  //  returns false to indicate to overlay_biscuit that a default emulation 
+  //  must be used.
   virtual bool vgui_copy_back_to_aux();
-  virtual bool vgui_copy_aux_to_back();
 
+  //: For X11/Mesa - copy auxilary buffer to back buffer.
+  //  This function is used in X11/Mesa to speed up overlay emulation.  It
+  //  returns false to indicate to overlay_biscuit that a default emulation 
+  //  must be used.
+  virtual bool vgui_copy_aux_to_back();
+ 
+  //: If level is higher than current level, then change to given accelerator.
   static void register_accelerator (vgui_accelerate* p, int level);
 
  protected:

@@ -1,5 +1,10 @@
+// This is oxl/vgui/internals/vgui_accelerate_mfc.cxx
+
 //:
-//  \file
+// \file
+// \author Marko Bacic, Oxford RRG.
+// \date   29-Aug-2000
+// \brief  See vgui_accelerate_mfc.h for a description of this file.
 
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>

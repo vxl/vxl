@@ -2,11 +2,11 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-//
-// Author: David Capel
-// Created: 01 Apr 2000
-//
-//-----------------------------------------------------------------------------
+//:
+// \file
+// \author David Capel
+// \date   01 Apr 2000
+// \brief  See vgui_accelerate.h for a description of this file.
 
 #include <vcl_iostream.h>
 

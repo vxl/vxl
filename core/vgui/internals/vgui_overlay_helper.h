@@ -7,19 +7,19 @@
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
-//
-// A helper class which emulates overlays using an auxiliary buffer.
-// The auxiliary buffer may be an OpenGL "aux buffer", the OpenGL
-// back buffer, a Mesa pixmap or some other resource.
-
-// To use it, the adaptor must relinquish control of event dispatch
-// to the vgui_overlay_helper using the dispatch method and also
-// call post_overlay_redraw() when an overlay redraw is posted on
-// the adaptor.
+// \brief  Helper class to emulate overlays using an auxilary buffer.
 
 class vgui_event;
 class vgui_adaptor;
 
+//: A helper class which emulates overlays using an auxiliary buffer.
+//  The auxiliary buffer may be an OpenGL "aux buffer", the OpenGL
+//  back buffer, a Mesa pixmap or some other resource.
+//
+//  To use it, the adaptor must relinquish control of event dispatch
+//  to the vgui_overlay_helper using the dispatch method and also
+//  call post_overlay_redraw() when an overlay redraw is posted on
+//  the adaptor.
 struct vgui_overlay_helper
 {
   vgui_overlay_helper(vgui_adaptor *);

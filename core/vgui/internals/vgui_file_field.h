@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \author  VGG, Oxford University
+// \author  K.Y.McGaul, VGG, Oxford University
 // \brief   File browser in a dialog.
 
 #include <vcl_string.h>
