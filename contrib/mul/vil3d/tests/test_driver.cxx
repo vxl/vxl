@@ -7,6 +7,9 @@ DECLARE( test_trilin_interp );
 DECLARE( test_sample_profile_trilin );
 DECLARE( test_gauss_reduce );
 DECLARE( test_switch_axes );
+DECLARE( test_convert );
+DECLARE( test_from_image_2d );
+
 DECLARE( test_algo_threshold );
 DECLARE( test_algo_structuring_element );
 DECLARE( test_algo_binary_dilate );
@@ -16,10 +19,9 @@ DECLARE( test_algo_grad_1x3 );
 DECLARE( test_image_resource );
 DECLARE( test_algo_normalised_correlation_3d );
 DECLARE( test_algo_convolve_1d );
-DECLARE( test_convert );
 DECLARE( test_algo_histogram_equalise );
 DECLARE( test_algo_histogram );
-DECLARE( test_from_image_2d );
+DECLARE( test_algo_anisotropic_filter );
 
 void
 register_tests()
@@ -33,6 +35,8 @@ register_tests()
   REGISTER( test_gauss_reduce );
   REGISTER( test_switch_axes );
   REGISTER( test_convert );
+  REGISTER( test_from_image_2d );
+
   REGISTER( test_algo_threshold );
   REGISTER( test_algo_structuring_element );
   REGISTER( test_algo_binary_dilate );
@@ -43,7 +47,7 @@ register_tests()
   REGISTER( test_algo_convolve_1d );
   REGISTER( test_algo_histogram_equalise );
   REGISTER( test_algo_histogram );
-  REGISTER( test_from_image_2d );
+  REGISTER( test_algo_anisotropic_filter );
 }
 
 DEFINE_MAIN;
