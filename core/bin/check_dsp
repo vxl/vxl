@@ -1,0 +1,119 @@
+#! /bin/sh
+exec perl -w -x $0 ${1+"$@"}
+#!perl
+#line 5
+
+# Purpose: verify that the SOURCE lines in a .dsp file correspond to
+# the SOURCES lines in the makefile PLUS the list of Templates files.
+
+while (defined($ARGV[0]) && $ARGV[0] =~ m/^-/) {
+  $_ = shift(@ARGV);
+  printf STDERR "Unrecognised command line option $_ ignored\n";
+}
+
+if (defined($ARGV[0])) {
+  @FILES = @ARGV;
+}
+else {
+  $IUEROOT = $ENV{IUEROOT};
+  unless (defined($IUEROOT)) {
+    print STDERR "IUEROOT is not defined, and no command line arguments were given\n";
+    exit 0;
+  }
+  $FILES = `find $IUEROOT/vcl $IUEROOT/v3p $IUEROOT/vxl $IUEROOT/mul $IUEROOT/oxl $IUEROOT/gel $IUEROOT/tbl $IUEROOT/conversions -type f -name \\\*.dsp -print|egrep -v '/(Qvtest|vcl_tests|test_save_load_image|test_vsl_io|w32app|vdgl_tests|examples/osl_harris)\\.dsp'`;
+  @FILES = split(' ', $FILES);
+}
+
+foreach $f (@FILES)
+{
+  unless (open(FILE, $f)) {
+    print STDERR "File $f does not exist\n";
+    next;
+  }
+  @source = ();
+  $start = "";
+  while(<FILE>) {
+    $start = 1  if (m/^\# Begin Group \"Source Files\"/);
+    $start = "" if (m/^\# End Group/);
+    next if (! $start);
+    if (m/^SOURCE=\"?\.\\([^\s\"]+)/) {
+      $file = "$1";
+      $file =~ s/\\/\//g;
+      @source = (@source, $file);
+    }
+  }
+  close FILE;
+
+  $dir = $f; $dir =~ s!/[^/]+$!!;
+  $makef = $dir . "/makefile";
+  unless (open(MAKEFILE, $makef)) {
+    print STDOUT "File $makef does not exist\n";
+    next;
+  }
+  @sources = ();
+  while(<MAKEFILE>) {
+    s/\$\(wildcard (.*)\)/$1/g; s/\#.*//;
+    if (m/^\s*(SOURCES|MINI_PROG_SOURCES|TESTS)\s*\+?=\s*([^\s]+)/) {
+      $file = "$2";
+      @sources = (@sources, $file)
+        unless ($file =~ m/\$.MOCSOURCES/ ||
+                $file =~ m/^tif_unix\.c$/ ||
+                $file =~ m/^menu_hack_X11\.cxx$/ ||
+                $file =~ m/^internals\/vgui_accelerate_x11\.cxx$/);
+    }
+  }
+  close MAKEFILE;
+
+  # add Templates to sources
+  if (opendir(TMPL,"$dir/Templates")) {
+    @tmpl_list = readdir(TMPL);
+    closedir(TMPL);
+    @tmpl_list = grep(/\.cxx$/, @tmpl_list);
+    foreach $x (@tmpl_list) {
+      @sources = (@sources, "Templates/$x");
+    }
+  }
+
+  @source = sort(@source);
+  @sources = sort(@sources);
+
+  # compare lists
+  while (@source || @sources) {
+    $source = pop(@source);
+    $sources = pop(@sources);
+    next if ($source && $sources && $source eq $sources);
+    while ($source && $sources && $source gt $sources) {
+      if (-f "$dir/$source") {
+        print STDOUT "$source is missing in $makef\n";
+      } else {
+        print STDOUT "$source must be removed from $f\n";
+      }
+      $source = pop(@source);
+    }
+    next if ($source && $sources && $source eq $sources);
+    while ($source && $sources && $source lt $sources) {
+      if (-f "$dir/$sources") {
+        print STDOUT "$sources is missing in $f\n";
+      } else {
+        print STDOUT "$sources must be removed from $makef\n";
+      }
+      $sources = pop(@sources);
+    }
+    while ($sources && !$source) {
+      if (-f "$dir/$sources") {
+        print STDOUT "$sources is missing in $f\n";
+      } else {
+        print STDOUT "$sources must be removed from $makef\n";
+      }
+      $sources = pop(@sources);
+    }
+    while ($source && !$sources) {
+      if (-f "$dir/$source") {
+        print STDOUT "$source is missing in $makef\n";
+      } else {
+        print STDOUT "$source must be removed from $f\n";
+      }
+      $source = pop(@source);
+    }
+  }
+}
