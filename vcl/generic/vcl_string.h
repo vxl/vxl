@@ -1,7 +1,7 @@
 #ifndef vcl_generic_string_h_
 #define vcl_generic_string_h_
 
-// THIS IS A GENERATED FILE. DO NOT EDIT! -- Edit the source .hhh and run make instead
+// THIS IS A GENERATED FILE. DO NOT EDIT! -- Instead, edit vcl_string.hhh and run make
 
 // char_traits
 #ifndef vcl_char_traits

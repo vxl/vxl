@@ -1,7 +1,7 @@
 #ifndef vcl_generic_csignal_h_
 #define vcl_generic_csignal_h_
 
-// THIS IS A GENERATED FILE. DO NOT EDIT! -- Edit the source .hhh and run make instead
+// THIS IS A GENERATED FILE. DO NOT EDIT! -- Instead, edit vcl_csignal.hhh and run make
 
 // sig_atomic_t
 #ifndef vcl_sig_atomic_t

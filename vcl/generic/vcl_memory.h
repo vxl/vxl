@@ -1,7 +1,7 @@
 #ifndef vcl_generic_memory_h_
 #define vcl_generic_memory_h_
 
-// THIS IS A GENERATED FILE. DO NOT EDIT! -- Edit the source .hhh and run make instead
+// THIS IS A GENERATED FILE. DO NOT EDIT! -- Instead, edit vcl_memory.hhh and run make
 
 // [20.4] lib.memory
 // allocator

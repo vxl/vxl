@@ -1,7 +1,7 @@
 #ifndef vcl_generic_cwctype_h_
 #define vcl_generic_cwctype_h_
 
-// THIS IS A GENERATED FILE. DO NOT EDIT! -- Edit the source .hhh and run make instead
+// THIS IS A GENERATED FILE. DO NOT EDIT! -- Instead, edit vcl_cwctype.hhh and run make
 
 // wctrans_t
 #ifndef vcl_wctrans_t

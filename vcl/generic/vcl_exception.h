@@ -1,7 +1,7 @@
 #ifndef vcl_generic_exception_h_
 #define vcl_generic_exception_h_
 
-// THIS IS A GENERATED FILE. DO NOT EDIT! -- Edit the source .hhh and run make instead
+// THIS IS A GENERATED FILE. DO NOT EDIT! -- Instead, edit vcl_exception.hhh and run make
 
 // exception
 #ifndef vcl_exception

@@ -1,7 +1,7 @@
 #ifndef vcl_generic_utility_h_
 #define vcl_generic_utility_h_
 
-// THIS IS A GENERATED FILE. DO NOT EDIT! -- Edit the source .hhh and run make instead
+// THIS IS A GENERATED FILE. DO NOT EDIT! -- Instead, edit vcl_utility.hhh and run make
 
 // pair
 #ifndef vcl_pair

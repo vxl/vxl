@@ -1,7 +1,7 @@
 #ifndef vcl_generic_map_h_
 #define vcl_generic_map_h_
 
-// THIS IS A GENERATED FILE. DO NOT EDIT! -- Edit the source .hhh and run make instead
+// THIS IS A GENERATED FILE. DO NOT EDIT! -- Instead, edit vcl_map.hhh and run make
 
 // map
 #ifndef vcl_map

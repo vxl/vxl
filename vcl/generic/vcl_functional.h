@@ -1,7 +1,7 @@
 #ifndef vcl_generic_functional_h_
 #define vcl_generic_functional_h_
 
-// THIS IS A GENERATED FILE. DO NOT EDIT! -- Edit the source .hhh and run make instead
+// THIS IS A GENERATED FILE. DO NOT EDIT! -- Instead, edit vcl_functional.hhh and run make
 
 // unary_function
 #ifndef vcl_unary_function
@@ -184,13 +184,13 @@
 #define vcl_transform vcl_generic_functional_STD :: transform
 #endif
 //not in the standard:
-//@identity            
-//@select1st           
-//@select2nd           
-//@project1st          
-//@project2nd          
-//@constant_void_fun   
-//@constant_unary_fun  
-//@constant_binary_fun 
+// @identity
+// @select1st
+// @select2nd
+// @project1st
+// @project2nd
+// @constant_void_fun
+// @constant_unary_fun
+// @constant_binary_fun
 
 #endif // vcl_generic_functional_h_

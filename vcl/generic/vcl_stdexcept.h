@@ -1,7 +1,7 @@
 #ifndef vcl_generic_stdexcept_h_
 #define vcl_generic_stdexcept_h_
 
-// THIS IS A GENERATED FILE. DO NOT EDIT! -- Edit the source .hhh and run make instead
+// THIS IS A GENERATED FILE. DO NOT EDIT! -- Instead, edit vcl_stdexcept.hhh and run make
 
 // logic_error
 #ifndef vcl_logic_error

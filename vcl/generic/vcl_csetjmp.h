@@ -1,7 +1,7 @@
 #ifndef vcl_generic_csetjmp_h_
 #define vcl_generic_csetjmp_h_
 
-// THIS IS A GENERATED FILE. DO NOT EDIT! -- Edit the source .hhh and run make instead
+// THIS IS A GENERATED FILE. DO NOT EDIT! -- Instead, edit vcl_csetjmp.hhh and run make
 
 // jmp_buf
 #ifndef vcl_jmp_buf

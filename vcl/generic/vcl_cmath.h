@@ -1,7 +1,7 @@
 #ifndef vcl_generic_cmath_h_
 #define vcl_generic_cmath_h_
 
-// THIS IS A GENERATED FILE. DO NOT EDIT! -- Edit the source .hhh and run make instead
+// THIS IS A GENERATED FILE. DO NOT EDIT! -- Instead, edit vcl_cmath.hhh and run make
 
 // abs
 #ifndef vcl_abs

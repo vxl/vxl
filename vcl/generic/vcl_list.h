@@ -1,7 +1,7 @@
 #ifndef vcl_generic_list_h_
 #define vcl_generic_list_h_
 
-// THIS IS A GENERATED FILE. DO NOT EDIT! -- Edit the source .hhh and run make instead
+// THIS IS A GENERATED FILE. DO NOT EDIT! -- Instead, edit vcl_list.hhh and run make
 
 // list
 #ifndef vcl_list

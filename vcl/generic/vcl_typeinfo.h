@@ -1,7 +1,7 @@
 #ifndef vcl_generic_typeinfo_h_
 #define vcl_generic_typeinfo_h_
 
-// THIS IS A GENERATED FILE. DO NOT EDIT! -- Edit the source .hhh and run make instead
+// THIS IS A GENERATED FILE. DO NOT EDIT! -- Instead, edit vcl_typeinfo.hhh and run make
 
 // type_info
 #ifndef vcl_type_info

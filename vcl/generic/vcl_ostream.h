@@ -1,7 +1,7 @@
 #ifndef vcl_generic_ostream_h_
 #define vcl_generic_ostream_h_
 
-// THIS IS A GENERATED FILE. DO NOT EDIT! -- Edit the source .hhh and run make instead
+// THIS IS A GENERATED FILE. DO NOT EDIT! -- Instead, edit vcl_ostream.hhh and run make
 
 // basic_ostream
 #ifndef vcl_basic_ostream

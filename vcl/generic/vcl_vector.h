@@ -1,7 +1,7 @@
 #ifndef vcl_generic_vector_h_
 #define vcl_generic_vector_h_
 
-// THIS IS A GENERATED FILE. DO NOT EDIT! -- Edit the source .hhh and run make instead
+// THIS IS A GENERATED FILE. DO NOT EDIT! -- Instead, edit vcl_vector.hhh and run make
 
 // vector
 #ifndef vcl_vector

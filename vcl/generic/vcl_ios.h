@@ -1,7 +1,7 @@
 #ifndef vcl_generic_ios_h_
 #define vcl_generic_ios_h_
 
-// THIS IS A GENERATED FILE. DO NOT EDIT! -- Edit the source .hhh and run make instead
+// THIS IS A GENERATED FILE. DO NOT EDIT! -- Instead, edit vcl_ios.hhh and run make
 
 // the std::ios::(in|out|etc) flags should
 // live in this header file (27.4.2).

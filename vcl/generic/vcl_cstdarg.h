@@ -1,7 +1,7 @@
 #ifndef vcl_generic_cstdarg_h_
 #define vcl_generic_cstdarg_h_
 
-// THIS IS A GENERATED FILE. DO NOT EDIT! -- Edit the source .hhh and run make instead
+// THIS IS A GENERATED FILE. DO NOT EDIT! -- Instead, edit vcl_cstdarg.hhh and run make
 
 // va_list
 #ifndef vcl_va_list

@@ -1,7 +1,7 @@
 #ifndef vcl_generic_cstring_h_
 #define vcl_generic_cstring_h_
 
-// THIS IS A GENERATED FILE. DO NOT EDIT! -- Edit the source .hhh and run make instead
+// THIS IS A GENERATED FILE. DO NOT EDIT! -- Instead, edit vcl_cstring.hhh and run make
 
 // NB: size_t is declared in <cstddef>, not <cstring>
 // memchr
