@@ -1,9 +1,10 @@
+#include "brip_float_ops.h"
 #include <vcl_fstream.h>
 #include <vul/vul_timer.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_math.h>
 #include <vil/vil_smooth.h>
-#include "brip_float_ops.h"
+
 //------------------------------------------------------------
 //  Convolve with a kernel
 //   It's assumed that the kernel is square with odd dimensions
@@ -185,8 +186,8 @@ brip_float_ops::Lucas_KanadeMotion(vil_memory_image_of<float> & current_frame,
         double det = (IxIx*IyIy-IxIy*IxIy);
         //Eliminate small motion factors
         double dif = diff(x,y);
-        double motion_factor = fabs(det*dif);
-        if(motion_factor<thresh)
+        double motion_factor = vcl_fabs(det*dif);
+        if (motion_factor<thresh)
           {
             vx(x,y) = 0.0;
             vy(x,y) = 0.0;
