@@ -1,11 +1,12 @@
 // This is mul/vimt/algo/vimt_pyramid_values_at_point.h
 #ifndef vimt_pyramid_values_at_point_h_
 #define vimt_pyramid_values_at_point_h_
-
 //:
 // \file
 // \brief Function to sample a point at each level of an image pyramid
 // \author Tim Cootes
+
+#include <vimt/vimt_image_pyramid.h>
 
 //: Use bilinear to sample from each level of the image pyramid
 //  \param samples: Filled with image_pyr.n_levels() values
@@ -26,5 +27,3 @@ void vimt_pyramid_values_at_point(const vimt_image_pyramid& image_pyr,
 }
 
 #endif // vimt_pyramid_values_at_point_h_
-
-
