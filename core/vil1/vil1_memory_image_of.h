@@ -42,20 +42,30 @@
 template <class T>
 class vil_memory_image_of : public vil_memory_image {
 public:
-  // -- The pixel type of this image
+  // The pixel type of this image
   typedef T pixel_type;
+
+  // iterators
+  typedef T *iterator;
+  iterator begin() { return get_buffer(); }
+  iterator end  () { return get_buffer() + rows()*cols(); }
+  
+  typedef T const *const_iterator;
+  const_iterator begin() const { return get_buffer(); }
+  const_iterator end  () const { return get_buffer() + rows()*cols(); }
 
   //: Empty image.
   vil_memory_image_of();
 
-  //: 
-  vil_memory_image_of(vil_memory_image_of const &);
+  //: This is a copy constructor, but it doesn't make a new buffer.
+  vil_memory_image_of(vil_memory_image_of<T> const &);
 
   //: Copy given image into a memory buffer.
   // If it's already a memory image, do as the 
   // copy constructor (above) does.
+  explicit
   vil_memory_image_of(vil_image const& image);
-
+  
   // Deprecated -- This was used to copy the ROI, which is no longer on image
   //vil_memory_image_of(vil_image const&, bool) {}
 
@@ -69,7 +79,7 @@ public:
   ~vil_memory_image_of() {}
   
   //: This method hides the operator= in the base class.
-  vil_memory_image_of& operator=(vil_memory_image_of const &);
+  vil_memory_image_of<T>& operator=(vil_memory_image_of<T> const &);
   
   //: Load image.
   void set(vil_image const& image);

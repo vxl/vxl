@@ -49,9 +49,18 @@ public:
   int rows() const { return num_rows_; }
   int cols() const { return num_cols_; }
   int columns() const { return num_cols_; }
+  int size() const { return num_rows_ * num_cols_; }
 
   T      *      * get_rows() { return rows_; }
   T const* const* get_rows() const { return rows_; }
+
+  typedef T       *iterator;
+  iterator begin() { return rows_[0]; }
+  iterator end  () { return rows_[0] + num_cols_ * num_rows_; }
+
+  typedef T const *const_iterator;
+  const_iterator begin() const { return rows_[0]; }
+  const_iterator end  () const { return rows_[0] + num_cols_ * num_rows_; }
 
 private:
   //protected:
