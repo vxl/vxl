@@ -1,32 +1,32 @@
 IF(BUILD_TESTS)
   # test
-  ADD_EXECUTABLE( test_meter test_meter )
+  ADD_EXECUTABLE( test_meter test_meter.cxx )
   # test
-  ADD_EXECUTABLE( test_radian test_radian )
+  ADD_EXECUTABLE( test_radian test_radian.cxx )
   # test
-  ADD_EXECUTABLE( test_degree test_degree )
+  ADD_EXECUTABLE( test_degree test_degree.cxx )
   # test
-  ADD_EXECUTABLE( test_cartesian_2d test_cartesian_2d )
+  ADD_EXECUTABLE( test_cartesian_2d test_cartesian_2d.cxx )
   # test
-  ADD_EXECUTABLE( test_cartesian_3d test_cartesian_3d )
+  ADD_EXECUTABLE( test_cartesian_3d test_cartesian_3d.cxx )
   # test
-  ADD_EXECUTABLE( test_polar test_polar )
+  ADD_EXECUTABLE( test_polar test_polar.cxx )
   # test
-  ADD_EXECUTABLE( test_cylindrical test_cylindrical )
+  ADD_EXECUTABLE( test_cylindrical test_cylindrical.cxx )
   # test
-  ADD_EXECUTABLE( test_spherical test_spherical )
+  ADD_EXECUTABLE( test_spherical test_spherical.cxx )
   # test
-  ADD_EXECUTABLE( test_transformation_graph test_transformation_graph )
+  ADD_EXECUTABLE( test_transformation_graph test_transformation_graph.cxx )
   # test
-  ADD_EXECUTABLE( test_composition test_composition )
+  ADD_EXECUTABLE( test_composition test_composition.cxx )
   # test
-  ADD_EXECUTABLE( test_scale test_scale )
+  ADD_EXECUTABLE( test_scale test_scale.cxx )
   # test
-  ADD_EXECUTABLE( test_translation test_translation )
+  ADD_EXECUTABLE( test_translation test_translation.cxx )
   # test
-  ADD_EXECUTABLE( test_rotation test_rotation )
+  ADD_EXECUTABLE( test_rotation test_rotation.cxx )
   # test
-  ADD_EXECUTABLE( test_displacement test_displacement )
+  ADD_EXECUTABLE( test_displacement test_displacement.cxx )
 ENDIF(BUILD_TESTS)
 
 

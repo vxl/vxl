@@ -1,6 +1,6 @@
 INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/vxl )
 
-ADD_EXECUTABLE( example2d example2d )
+ADD_EXECUTABLE( example2d example2d.cxx )
 
 # Immediate dependencies
 INCLUDE( ${allvxl_SOURCE_DIR}/gel/vtol/CMakeListsLink.txt )

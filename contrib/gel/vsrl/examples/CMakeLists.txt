@@ -1,7 +1,7 @@
 INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/vxl )
 
-ADD_EXECUTABLE( dense_matcher_full dense_matcher_full )
-ADD_EXECUTABLE( make_3d_output make_3d_output )
+ADD_EXECUTABLE( dense_matcher_full dense_matcher_full.cxx )
+ADD_EXECUTABLE( make_3d_output make_3d_output.cxx )
 
 # Immediate dependencies
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vil/CMakeListsLink.txt )

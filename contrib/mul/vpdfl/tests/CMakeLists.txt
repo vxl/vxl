@@ -6,6 +6,4 @@
 
 INCLUDE( ${allvxl_SOURCE_DIR}/mul/vpdfl/CMakeListsLink.txt )
 
-ADD_EXECUTABLE(
-test_vpdfl test_vpdfl
-)
+ADD_EXECUTABLE( test_vpdfl test_vpdfl.cxx )

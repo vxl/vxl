@@ -1,4 +1,4 @@
-ADD_EXECUTABLE( example1 example1 )
+ADD_EXECUTABLE( example1 example1.cxx )
 
 # Immediate dependencies
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vcsl/CMakeListsLink.txt )

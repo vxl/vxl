@@ -6,7 +6,4 @@
 
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vbl/io/CMakeListsLink.txt )
 
-
-ADD_EXECUTABLE(
-test_vbl_io test_vbl_io
-)
+ADD_EXECUTABLE( test_vbl_io test_vbl_io.cxx)

@@ -1,4 +1,4 @@
-ADD_EXECUTABLE( vnl_calc vnl_calc )
+ADD_EXECUTABLE( vnl_calc vnl_calc.cxx )
 
 # Immediate dependencies
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vbl/CMakeListsLink.txt )

@@ -1,7 +1,7 @@
 INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/vxl )
 INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/gel )
 
-ADD_EXECUTABLE( gmvl_test gmvl_test )
+ADD_EXECUTABLE( gmvl_examples gmvl_test.cxx )
 
 # Immediate dependencies
 INCLUDE( ${allvxl_SOURCE_DIR}/gel/vtol/CMakeListsLink.txt )

@@ -2,19 +2,19 @@ INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/vxl )
 
 IF(BUILD_TESTS)
   # test
-  ADD_EXECUTABLE( test_vertex_2d test_vertex_2d )
+  ADD_EXECUTABLE( test_vertex_2d test_vertex_2d.cxx )
   # test
-  ADD_EXECUTABLE( test_zero_chain test_zero_chain )
+  ADD_EXECUTABLE( test_zero_chain test_zero_chain.cxx )
   # test
-  ADD_EXECUTABLE( test_edge_2d test_edge_2d )
+  ADD_EXECUTABLE( test_edge_2d test_edge_2d.cxx )
   # test
-  ADD_EXECUTABLE( test_one_chain test_one_chain )
+  ADD_EXECUTABLE( test_one_chain test_one_chain.cxx )
   # test
-  ADD_EXECUTABLE( test_face_2d test_face_2d )
+  ADD_EXECUTABLE( test_face_2d test_face_2d.cxx )
   # test
-  ADD_EXECUTABLE( test_two_chain test_two_chain )
+  ADD_EXECUTABLE( test_two_chain test_two_chain.cxx )
   # test
-  ADD_EXECUTABLE( test_block test_block )
+  ADD_EXECUTABLE( test_block test_block.cxx )
 ENDIF(BUILD_TESTS)
 
 
