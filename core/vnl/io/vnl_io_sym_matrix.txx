@@ -7,6 +7,7 @@
 #include "vnl_io_sym_matrix.h"
 #include <vnl/vnl_sym_matrix.h>
 #include <vsl/vsl_binary_explicit_io.h>
+#include <vsl/vsl_block_binary.h>
 #include <vsl/vsl_indent.h>
 
 //=================================================================================
@@ -14,13 +15,13 @@
 template<class T>
 void vsl_b_write(vsl_b_ostream & os, const vnl_sym_matrix<T> & p)
 {
-  const short version_no = 1;
+  const short version_no = 2;
   vsl_b_write(os, version_no);
   vsl_b_write(os, p.rows());
 
   // Calling p.begin() on empty matrix causes segfault
   if (p.size()>0)
-    vsl_b_write_block(os, p.data_block(), p.size());
+    vsl_block_binary_write(os, p.data_block(), p.size());
 }
 
 //=================================================================================
@@ -42,6 +43,15 @@ void vsl_b_read(vsl_b_istream &is, vnl_sym_matrix<T> & p)
     if (n>0)
       vsl_b_read_block(is, p.data_block(), p.size());
     break;
+
+  case 2:
+    vsl_b_read(is, n);
+    p.resize(n);
+    // Calling begin() on empty matrix causes segfault
+    if (n>0)
+      vsl_block_binary_read(is, p.data_block(), p.size());
+    break;
+
   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vnl_sym_matrix<T>&) \n";
     vcl_cerr << "           Unknown version number "<< v << "\n";

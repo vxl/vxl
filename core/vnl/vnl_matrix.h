@@ -529,7 +529,13 @@ class vnl_matrix
   //: Resize to r rows by c columns.
   // Old data lost.
   // Returns true if size changed.
+  // \deprecated in favour of set_size()
   bool make_size (unsigned r, unsigned c);
+
+  //: Resize to r rows by c columns.
+  // Old data lost.
+  // Returns true if size changed.
+  bool set_size (unsigned r, unsigned c) {return make_size(r,c);}
 
 
 //--------------------------------------------------------------------------------

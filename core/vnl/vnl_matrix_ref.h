@@ -98,6 +98,8 @@ class vnl_matrix_ref : public vnl_matrix<T>
   bool resize (unsigned int, unsigned int) { return false; }
   //: Resizing is disallowed
   bool make_size (unsigned int, unsigned int) { return false; }
+  //: Resizing is disallowed
+  bool set_size (unsigned int, unsigned int) { return false; }
 
 
   //: Copy constructor from vnl_matrix<T> is disallowed

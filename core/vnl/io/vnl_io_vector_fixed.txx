@@ -7,17 +7,18 @@
 #include "vnl_io_vector_fixed.h"
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_binary_explicit_io.h>
+#include <vsl/vsl_block_binary.h>
 
 //=================================================================================
 //: Binary save self to stream.
 template<class T, unsigned int n>
 void vsl_b_write(vsl_b_ostream & os, const vnl_vector_fixed<T,n> & p)
 {
-  const short io_version_no = 1;
+  const short io_version_no = 2;
   vsl_b_write(os, io_version_no);
   vsl_b_write(os, p.size());
   if (p.size())
-    vsl_b_write_block(os, p.begin(), p.size());
+    vsl_block_binary_write(os, p.data_block(), p.size());
 }
 
 //=================================================================================
@@ -36,6 +37,18 @@ void vsl_b_read(vsl_b_istream &is, vnl_vector_fixed<T,n> & p)
     vsl_b_read(is, stream_n);
     if( n == stream_n ) {
       vsl_b_read_block(is, p.begin(), n);
+    } else {
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vnl_vector_fixed<T,n>&)\n"
+               << "           Expected n="<<n<<", got "<<stream_n<<"\n";
+      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      return;
+    }
+    break;
+
+  case 2:
+    vsl_b_read(is, stream_n);
+    if( n == stream_n ) {
+      vsl_block_binary_read(is, p.data_block(), n);
     } else {
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vnl_vector_fixed<T,n>&)\n"
                << "           Expected n="<<n<<", got "<<stream_n<<"\n";

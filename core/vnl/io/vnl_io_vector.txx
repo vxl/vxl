@@ -7,17 +7,18 @@
 #include "vnl_io_vector.h"
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_binary_explicit_io.h>
+#include <vsl/vsl_block_binary.h>
 
 //=================================================================================
 //: Binary save self to stream.
 template<class T>
 void vsl_b_write(vsl_b_ostream & os, const vnl_vector<T> & p)
 {
-  const short io_version_no = 1;
+  const short io_version_no = 2;
   vsl_b_write(os, io_version_no);
   vsl_b_write(os, p.size());
   if (p.size())
-    vsl_b_write_block(os, p.begin(), p.size());
+    vsl_block_binary_write(os, p.begin(), p.size());
 }
 
 //=================================================================================
@@ -34,9 +35,16 @@ void vsl_b_read(vsl_b_istream &is, vnl_vector<T> & p)
   {
   case 1:
     vsl_b_read(is, n);
-    p.resize(n);
+    p.set_size(n);
     if (n)
-      vsl_b_read_block(is, p.begin(), n);
+      vsl_b_read_block(is, p.data_block(), n);
+    break;
+
+  case 2:
+    vsl_b_read(is, n);
+    p.set_size(n);
+    if (n)
+      vsl_block_binary_read(is, p.data_block(), n);
     break;
 
   default:

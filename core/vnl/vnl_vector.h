@@ -373,9 +373,15 @@ class vnl_vector
   bool resize (unsigned n) { return make_size(n); };
 
   //: Resize to n elements.
+  // \deprecated Use set_size.
   // This is a destructive resize, in that the old data is lost if size() != \a n before the call.
   // If size() is already \a n, this is a null operation.
   bool make_size (unsigned n);
+
+  //: Resize to n elements.
+  // This is a destructive resize, in that the old data is lost if size() != \a n before the call.
+  // If size() is already \a n, this is a null operation.
+  bool set_size (unsigned n) {return make_size(n);}
 
   //: Make the vector as if it had been default-constructed.
   void clear();

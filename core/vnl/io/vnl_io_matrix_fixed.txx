@@ -7,6 +7,7 @@
 #include "vnl_io_matrix_fixed.h"
 #include <vnl/vnl_matrix_fixed.h>
 #include <vsl/vsl_binary_explicit_io.h>
+#include <vsl/vsl_block_binary.h>
 #include <vsl/vsl_indent.h>
 
 //=================================================================================
@@ -14,14 +15,14 @@
 template<class T, unsigned m, unsigned n>
 void vsl_b_write(vsl_b_ostream & os, const vnl_matrix_fixed<T,m,n> & p)
 {
-  const short version_no = 1;
+  const short version_no = 2;
   vsl_b_write(os, version_no);
   vsl_b_write(os, p.rows());
   vsl_b_write(os, p.cols());
 
   // Calling p.begin() on empty matrix_fixed causes segfault
   if (p.size()>0)
-    vsl_b_write_block(os, p.begin(), p.size());
+    vsl_block_binary_write(os, p.data_block(), m*n);
 }
 
 //=================================================================================
@@ -37,7 +38,6 @@ void vsl_b_read(vsl_b_istream &is, vnl_matrix_fixed<T,m,n> & p)
   switch(v)
   {
   case 1:
-    // version 2 is identical to version 1 for unspecialised versions
     vsl_b_read(is, stream_m);
     vsl_b_read(is, stream_n);
     if( stream_n != n || stream_m != m ) {
@@ -50,6 +50,21 @@ void vsl_b_read(vsl_b_istream &is, vnl_matrix_fixed<T,m,n> & p)
     if (m*n>0)
       vsl_b_read_block(is, p.begin(), p.size());
     break;
+
+  case 2:
+    vsl_b_read(is, stream_m);
+    vsl_b_read(is, stream_n);
+    if( stream_n != n || stream_m != m ) {
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vnl_matrix_fixed<T>&) \n";
+      vcl_cerr << "           Expected size " << m << "," << n << "; got " << stream_m << "," << stream_n << "\n";
+      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      return;
+    }
+    // Calling begin() on empty matrix_fixed causes segfault
+    if (m*n>0)
+      vsl_block_binary_read(is, p.data_block(), m*n);
+    break;
+
   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vnl_matrix_fixed<T>&) \n";
     vcl_cerr << "           Unknown version number "<< v << "\n";
