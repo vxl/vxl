@@ -13,7 +13,6 @@
 // \date   15 May 2001, from vipl/examples
 //
 #include <vil/vil_image.h>
-#include <vil/vil_pixel.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vil/vil_memory_image_of.h>
@@ -30,7 +29,6 @@ main(int argc, char** argv) {
 
   // The input image:
   vil_image in = vil_load(argv[1]);
-  if (vil_pixel_format(in) != VIL_BYTE) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
   vil_image& src = in;
 #ifndef NO_MEMORY_IMAGE // otherwise get_pixel() would be very slow!!
   vil_memory_image_of<ubyte> mem (in);
@@ -43,7 +41,7 @@ main(int argc, char** argv) {
   // The filter:
   vil_image out = vepl_add_random_noise(src,sigma);
 
-  vil_save(out, argv[2], "pnm");
-  vcl_cout << "Written image of type PGM to " << argv[2] << vcl_endl;
+  vil_save(out, argv[2]);
+  vcl_cout << "Noisy image written to " << argv[2] << vcl_endl;
   return 0;
 }

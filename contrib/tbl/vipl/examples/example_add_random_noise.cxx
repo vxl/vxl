@@ -53,12 +53,12 @@ main(int argc, char** argv) {
   ubyte s = (ubyte)(sigma+0.5); // round to integer
 
   // The filter:
-  vipl_add_random_noise<vil_image,vil_image,ubyte,ubyte VCL_DFL_TMPL_ARG(vipl_trivial_pixeliter)> op(GAUSSIAN_NOISE,s);
+  vipl_add_random_noise<vil_image,vil_image,ubyte,ubyte> op(GAUSSIAN_NOISE,s);
   op.put_in_data_ptr(src);
   op.put_out_data_ptr(dst);
   op.filter();
 
-  vil_save(out, argv[2], "pnm");
-  vcl_cout << "Written image of type PGM to " << argv[2] << vcl_endl;
+  vil_save(out, argv[2]);
+  vcl_cout << "Noisy image written to " << argv[2] << vcl_endl;
   return 0;
 }
