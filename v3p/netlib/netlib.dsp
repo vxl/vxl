@@ -815,6 +815,15 @@ SOURCE=.\dznrm2.c
 # Begin Source File
 SOURCE=.\triangle.c
 # End Source File
+# Begin Source File
+SOURCE=.\adaquad.c
+# End Source File
+# Begin Source File
+SOURCE=.\simpson.c
+# End Source File
+# Begin Source File
+SOURCE=.\trapezod.c
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
