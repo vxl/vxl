@@ -332,6 +332,9 @@ SOURCE=.\Templates/vgl_distance+float-.cxx
 # Begin Source File
 SOURCE=.\Templates/vgl_convex+double-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_box_2d+unsigned-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
