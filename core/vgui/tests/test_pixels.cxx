@@ -13,7 +13,7 @@ void print_byte(GLubyte w) {
       vcl_cerr << '0';
 }
 
-/*
+#if 0
 void print_word(GLuint w) {
   for (int i=31; i>=0; --i)
     if ( (w & (0x1 << i)) )
@@ -21,7 +21,8 @@ void print_word(GLuint w) {
     else
       vcl_cerr << '0';
 }
-*/
+#endif
+
 void print_binary(char const *fmt, void const *addr, unsigned bytes) {
   if (fmt)
     vcl_cerr << fmt << " : ";

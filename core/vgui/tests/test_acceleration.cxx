@@ -23,7 +23,7 @@ static int attribs[] = { GLX_RGBA,
 
 unsigned char data[512*512*4];
 
-/*static*/ Bool WaitForNotify(Display */*d*/, XEvent *e, char *arg)
+/*static*/ Bool WaitForNotify(Display* /*d*/, XEvent *e, char *arg)
 {
   return (e->type == MapNotify) && (e->xmap.window == (Window)arg);
 }
@@ -32,8 +32,9 @@ void pattern_RGB16 (unsigned char* data) {
   unsigned short* my_data = (unsigned short *)data;
   unsigned short r = 0xf800;
   unsigned short g = 0x07e0;
-//unsigned short b = 0x001f;
-  /*
+#if 0
+  unsigned short b = 0x001f;
+
   for (int y = 0; y < 512; ++y) {
     for (int x = 0; x < 170; ++x) {
       my_data[y*512 +     x] = r;
@@ -41,7 +42,7 @@ void pattern_RGB16 (unsigned char* data) {
       my_data[y*512 + 340+x] = b;
     }
   }
-  */
+#endif
   for (int y = 0; y < 512; ++y)
     for (int x = 0; x < 512; ++x)
       my_data[y*512 + x] = ((x << 7) & r) + ((y << 2) & g);
@@ -89,7 +90,8 @@ int main (int /*argc*/, char** /*argv*/)
   vbl_printf(vcl_cerr, "chosen format %0x\n", format);
   vbl_printf(vcl_cerr, "chosen type   %0x\n", type);
 
-  // GLX window code straight out of http://www.eecs.tulane.edu/www/graphics/doc/OpenGL-Man-Pages/glXIntro.html
+  // GLX window code straight out of
+  // http://www.eecs.tulane.edu/www/graphics/doc/OpenGL-Man-Pages/glXIntro.html
   vcl_cerr << "Opening double-buffered, RGBA GLX context...\n" << vcl_endl;
   Display* display = XOpenDisplay(0);
   XVisualInfo* visualinfo = glXChooseVisual (display, DefaultScreen(display), attribs);
@@ -97,7 +99,7 @@ int main (int /*argc*/, char** /*argv*/)
 
   Colormap cmap = XCreateColormap(display, RootWindow(display, visualinfo->screen), visualinfo->visual, AllocNone);
 
-  /* create a window */
+  // create a window
   XSetWindowAttributes swa;
   swa.colormap = cmap;
   swa.border_pixel = 0;
@@ -152,7 +154,7 @@ int main (int /*argc*/, char** /*argv*/)
 
   glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
   glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
-  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);      // Mesa glDrawPixels needs this set to 1 !!
+  glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // Mesa glDrawPixels needs this set to 1 !!
   glPixelStorei(GL_UNPACK_ROW_LENGTH, 512);
 
   glDisable(GL_ALPHA_TEST);
@@ -162,7 +164,7 @@ int main (int /*argc*/, char** /*argv*/)
   glPixelZoom(1.0,1.0);
   glDrawBuffer(GL_BACK_LEFT);
 
-  /*
+#if 0
   {
     vcl_cerr << "\nvgui_glClear - ";
     int draws=0;
@@ -187,8 +189,7 @@ int main (int /*argc*/, char** /*argv*/)
     } while (elapsed < 3000);
     vcl_cerr << 512*512*draws / (elapsed / 1000.0) << " pixels per second" << vcl_endl;
   }
-  */
-
+#endif
 
   {
     vcl_cerr << "\nUsing default (RGBA) format with glDrawPixels - ";
@@ -261,7 +262,7 @@ int main (int /*argc*/, char** /*argv*/)
   glXSwapBuffers(display, window);
   vpl_sleep(1);
 
-  /*
+#if 0
   vcl_cerr << "Rendering 24-bit RGB pattern - " << vcl_endl;
   pattern_RGB24(data);
   vcl_cerr << "  glDrawPixels..." << vcl_endl;
@@ -283,7 +284,7 @@ int main (int /*argc*/, char** /*argv*/)
   vgui_accelerate::instance()->vgui_glDrawPixels(512,512,GL_RGBA,GL_UNSIGNED_BYTE,data);
   glXSwapBuffers(display, window);
   vpl_sleep(1);
-  */
+#endif
 
   vpl_sleep(5);
 }
