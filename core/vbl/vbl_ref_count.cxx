@@ -1,3 +1,6 @@
+#ifdef __GNUC__
+#pragma implementation
+#endif
 // This is vxl/vbl/vbl_ref_count.cxx
 
 #include <vbl/vbl_ref_count.h>
