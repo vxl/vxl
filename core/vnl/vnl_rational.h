@@ -350,7 +350,13 @@ inline long floor (vnl_rational const& r) { return r.floor(); }
 inline long ceil (vnl_rational const& r) { return r.ceil(); }
 inline long round (vnl_rational const& r) { return r.round(); }
 
-inline vnl_rational abs (vnl_rational const& x) { return x<0L ? -x : x; }
+#if defined(VCL_SGI_CC_720) || defined(VCL_SUNPRO_CC)
+inline vnl_rational vcl_abs (vnl_rational const& x) { return x.abs(); }
+#else
+namespace std {
+  inline vnl_rational abs (vnl_rational const& x) { return x.abs(); }
+}
+#endif
 vnl_rational sqrt (vnl_rational x); // { return vnl_rational(vcl_sqrt(double(x))); }
 
 inline vnl_rational vnl_math_abs(vnl_rational const& x) { return x<0L ? -x : x; }
