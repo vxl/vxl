@@ -29,6 +29,8 @@
 #include <vil3d/vil3d_plane.h>
 #include <vil3d/vil3d_print.h>
 #include <vil3d/vil3d_property.h>
+#include <vil3d/vil3d_resample_simple.h>
+#include <vil3d/vil3d_resample_trilinear.h>
 #include <vil3d/vil3d_sample_profile_trilin.h>
 #include <vil3d/vil3d_save.h>
 #include <vil3d/vil3d_slice.h>
