@@ -318,6 +318,7 @@ void vsol_conic_2d::ellipse_parameters(double &cx,
   const double b0=-b2/f0;
   const double c0=-c()/f0;
 
+  // Now rotate the ellipse such that the main axis is horizontal.
   if (are_equal(a0,c0)&&is_zero(b0))
     phi=0; // circle
   else
@@ -352,18 +353,24 @@ void vsol_conic_2d::hyperbola_parameters(double &cx,
 
   double f0=a()*cx*cx+b()*cx*cy+c()*cy*cy+d()*cx+e()*cy+f();
 
-  if (is_zero(f0)) // avoid dividing by zero
+  if (is_zero(f0)) // this should not happen
     f0=1;
   const double a0=-a()/f0;
   const double b0=-b2/f0;
   const double c0=-c()/f0;
 
-  phi=vcl_atan2(-2*b0,c0-a0)/2;
+  // Now rotate the hyperbola such that the main axis is horizontal.
+  if (is_zero(b0)) { // axis already horizontal or vertical
+    if (a0 > 0) phi = 0;
+    else        phi = vcl_atan2(0.0,1.0); // 90 degrees
+  }
+  else
+    phi=vcl_atan2(2*b0,a0-c0)/2;
 
   const double cosphi=vcl_cos(phi);
   const double sinphi=vcl_sin(phi);
-  width =vcl_sqrt(1.0/(a0*cosphi*cosphi+2*b0*cosphi*sinphi+c0*sinphi*sinphi));
-  height=-vcl_sqrt(1.0/(a0*sinphi*sinphi-2*b0*cosphi*sinphi+c0*cosphi*cosphi));
+  width = vcl_sqrt( 1.0/(a0*cosphi*cosphi+2*b0*cosphi*sinphi+c0*sinphi*sinphi));
+  height=-vcl_sqrt(-1.0/(a0*sinphi*sinphi-2*b0*cosphi*sinphi+c0*cosphi*cosphi));
 }
 
 //---------------------------------------------------------------------------
