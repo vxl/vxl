@@ -93,7 +93,8 @@ bool vgui_image_renderer::
 render_directly(vgui_range_map_params_sptr const& rmp)
 {
   //hardware mapping not currently supported for vil1 images
-  vcl_cout << "No hardware mapping support for vil1 images\n";
+  if(rmp)//test needed to eliminate warning of unused parameter
+    vcl_cout << "No hardware mapping support for vil1 images\n";
   return false;
 }
 

@@ -40,6 +40,7 @@ bool vgui_section_render(void const *pixels,
                          vbl_array_1d<float>* fBmap,
                          vbl_array_1d<float>* fAmap)
 {
+  assert(h>0);//eliminates warning of unused h
   assert(pixels);
   assert(x0 <= x1);
   assert(y0 <= y1);
