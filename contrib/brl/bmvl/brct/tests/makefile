@@ -1,5 +1,6 @@
 USES += contrib/brl contrib/gel contrib/oxl core
 include ../config.mk
+include ${IUEROOT}/core/vgui/config.mk
 
 LIBRARY := bcrt_test
 SOURCES += brct_windows_frame.cxx
