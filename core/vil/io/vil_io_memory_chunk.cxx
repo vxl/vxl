@@ -60,13 +60,18 @@ void vsl_b_write(vsl_b_ostream &os, const vil2_memory_chunk& chunk)
 
 #undef write_case_macro
 
+
+
+// This file never users the fast versions of vsl_b_read_block, so just locally
+//implement the old slow version.
 #define read_case_macro_v1(T)\
 chunk.set_size(n*sizeof(T ),pixel_format); \
-vsl_b_read_block(is,(T *)chunk.data(),n)
+  for(unsigned i=0; i<n; ++i)\
+    vsl_b_read(is, static_cast<T *>(chunk.data())[i]);
 
 #define read_case_macro_v2(T)\
 chunk.set_size(n*sizeof(T ),pixel_format); \
-vsl_block_binary_read(is,(T *)chunk.data(),n)
+vsl_block_binary_read(is,static_cast<T *>(chunk.data()),n)
 
 //: Binary load vil2_memory_chunk from stream.
 void vsl_b_read(vsl_b_istream &is, vil2_memory_chunk& chunk)
