@@ -15,6 +15,7 @@
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 #include <vsol/vsol_conic_2d.h>
+#include <vsol/vsol_point_2d.h>
 
 void f(const vsol_conic_2d::vsol_conic_type &t)
 {
@@ -70,14 +71,10 @@ int main(int argc,
 {
   int result=0;
 
-  vsol_conic_2d_sptr p;
-  double cx;
-  double cy;
-  double phi;
-  double width;
-  double height;
+  vsol_conic_2d_sptr p, q;
+  double cx, cy, phi, cosphi, sinphi, width, height;
 
-  p=new vsol_conic_2d(1,2,3,4,5,6);
+  p=q=new vsol_conic_2d(1,2,3,4,5,6);
 
   assert(p->a()==1);
   assert(p->b()==2);
@@ -89,13 +86,15 @@ int main(int argc,
   p=new vsol_conic_2d(1,0,1,0,0,-1); // circle center=(0,0) r=1
   f(p->real_type());
   assert(p->is_real_circle());
-
   p->ellipse_parameters(cx,cy,phi,width,height);
   assert(cx==0);
   assert(cy==0);
   assert(phi==0);
   assert(width==1);
   assert(height==1);
+  q->set_central_parameters(vsol_point_2d(cx,cy), width, height, phi);
+  assert(*q == *p);
+
   p=new vsol_conic_2d(0.25,0,1,0,0,-1); // ellipse center=(0,0) rx=2 ry=1
   f(p->real_type());
   assert(p->is_real_ellipse());
@@ -106,9 +105,17 @@ int main(int argc,
   assert(phi==0);
   assert(width==2);
   assert(height==1);
+  q->set_central_parameters(vsol_point_2d(cx,cy), width, height, phi);
+  assert(*q == *p);
+
   p=new vsol_conic_2d(1,0,0,0,-1,0); // parabola: y=x^2, x^2-y=0
   f(p->real_type());
   assert(p->is_parabola());
+
+  p->parabola_parameters(cx,cy,cosphi,sinphi);
+  phi = -0.5;
+  q->set_parabola_parameters(vgl_vector_2d<double>(cosphi,sinphi), vsol_point_2d(cx,cy), phi);
+  assert(*q == *p);
 
   p=new vsol_conic_2d(0,0,1,-1,0,0); // parabola: x=y^2, y^2-x=0
   f(p->real_type());
@@ -117,6 +124,9 @@ int main(int argc,
   p=new vsol_conic_2d(0,1,0,0,0,-1); // hyperbola: y=1/x, xy-1=0
   f(p->real_type());
   assert(p->is_hyperbola());
+  p->hyperbola_parameters(cx,cy,phi,width,height);
+  q->set_central_parameters(vsol_point_2d(cx,cy), width, height, phi);
+  assert(*q == *p);
 
   return result;
 }

@@ -112,6 +112,27 @@ public:
   vsol_conic_2d(vgl_vector_2d<double> const& dir, vsol_point_2d const& top, double theta);
 
   //---------------------------------------------------------------------------
+  //: Set ellipse/hyperbola from centre, size and orientation.
+  //  Can only be used for non-degenerate, real ellipses and
+  //  hyperbolas: if rx and ry have the same sign, an ellipse is defined
+  //  (and any ellipse can uniquely be specified this way);
+  //  rx is the length of one main axis, ry of the other axis.
+  //  Hyperbolas are obtained if rx and ry have opposite sign; the positive
+  //  one determines the distance from bots tops to the centre, and the other
+  //  one specified the 'minor' axis length.
+  //---------------------------------------------------------------------------
+  void set_central_parameters(vsol_point_2d const& c, double rx, double ry, double theta);
+
+  //---------------------------------------------------------------------------
+  //: Set parabola from direction, top and excentricity parameter.
+  //  This can only be used for non-degenerate parabolas:
+  //  specify the direction of the symmetry axis, the top, and an excentricity
+  //  parameter theta.
+  //---------------------------------------------------------------------------
+  void set_parabola_parameters(vgl_vector_2d<double> const& dir,
+                               vsol_point_2d const& top, double theta);
+
+  //---------------------------------------------------------------------------
   //: Copy constructor
   //---------------------------------------------------------------------------
   vsol_conic_2d(const vsol_conic_2d &other);

@@ -1,8 +1,10 @@
+// This is ./gel/vsol/vsol_conic_2d.cxx
 
 //:
 //  \file
 
 #include <vsol/vsol_conic_2d.h>
+#include <vsol/vsol_point_2d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
 
 //*****************************************************************************
@@ -45,6 +47,22 @@ vsol_conic_2d::vsol_conic_2d(vsol_point_2d const& c, double rx, double ry, doubl
 }
 
 //---------------------------------------------------------------------------
+//: Set ellipse/hyperbola from centre, size and orientation.
+//  Can only be used for non-degenerate, real ellipses and
+//  hyperbolas: if rx and ry have the same sign, an ellipse is defined
+//  (and any ellipse can uniquely be specified this way);
+//  rx is the length of one main axis, ry of the other axis.
+//  Hyperbolas are obtained if rx and ry have opposite sign; the positive
+//  one determines the distance from bots tops to the centre, and the other
+//  one specified the 'minor' axis length.
+//---------------------------------------------------------------------------
+void vsol_conic_2d::set_central_parameters(vsol_point_2d const& c, double rx, double ry, double theta)
+{
+  vgl_conic<double> g(vgl_homg_point_2d<double>(c.x(),c.y(),1.0), rx, ry, theta);
+  set(g.a(),g.b(),g.c(),g.d(),g.e(),g.f());
+}
+
+//---------------------------------------------------------------------------
 //: Parabola constructor from direction, top and excentricity parameter.
 //  This constructor can only be used for non-degenerate parabolas:
 //  specify the direction of the symmetry axis, the top, and an excentricity
@@ -54,6 +72,19 @@ vsol_conic_2d::vsol_conic_2d(vgl_vector_2d<double> const& dir,
                              vsol_point_2d const& top, double theta) :
   vgl_conic<double>(vgl_homg_point_2d<double>(dir.x(),dir.y(),0.0), top.x(), top.y(), theta)
 {
+}
+
+//---------------------------------------------------------------------------
+//: Set parabola from direction, top and excentricity parameter.
+//  This can only be used for non-degenerate parabolas:
+//  specify the direction of the symmetry axis, the top, and an excentricity
+//  parameter theta.
+//---------------------------------------------------------------------------
+void vsol_conic_2d::set_parabola_parameters(vgl_vector_2d<double> const& dir,
+                                            vsol_point_2d const& top, double theta)
+{
+  vgl_conic<double> g(vgl_homg_point_2d<double>(dir.x(),dir.y(),0.0), top.x(), top.y(), theta);
+  set(g.a(),g.b(),g.c(),g.d(),g.e(),g.f());
 }
 
 //---------------------------------------------------------------------------
