@@ -110,7 +110,7 @@ vnl_vector<double> vgui_projection_inspector::back_project(vnl_vector<double> co
   vnl_vector_fixed<double,4> X;
   if (!back_project(x.data_block(), p.data_block(), X.data_block()))
     X.fill(0);
-  return X;
+  return X.as_ref();
 }
 
 vnl_vector<double> vgui_projection_inspector::back_project(double x,double y,
