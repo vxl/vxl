@@ -122,8 +122,12 @@ void vil_memory_image::resize(int planes, int width, int height)
 
 void vil_memory_image::assert_size(int width, int height) const
 {
-  assert(width_ == width);
-  assert(height_ == height);
+  if ((width != width_) || (height != height_)) {
+    vcl_cerr << __FILE__ ": In vil_memory_image::assert_size():" << vcl_endl;
+    vcl_cerr << __FILE__ ": Image has size   " << width_ << 'x' << height_ << vcl_endl;
+    vcl_cerr << __FILE__ ": but it should be " << width  << 'x' << height  << vcl_endl;
+    assert(false);
+  }
 }
 
 // Added by Brendan McCane for creating images with already allocated
