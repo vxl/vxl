@@ -6,20 +6,20 @@
 // \date 17 February, 2000
 //
 // \verbatim
-// Modifications
-// 18 Jul 2000 - add vil1_buffer, and mit bug fix.
-// 10 Aug 2000 - Peter Vanroose - added non-exact match
-// 10 Aug 2000 - Peter Vanroose - added bmp and mit tests
-// 10 Aug 2000 - Peter Vanroose - test TIFF and JPEG presence
-// 26 Aug 2000 - .bmp loader works (again) on solaris + linux
-// 28 Aug 2000 - Peter Vanroose - bmp write of colour images fixed
-//  6 Dec 2000 - vil_rgb<vxl_byte> deprecated
-// 21 Jan 2001 - deprecated vil1_buffer<> - use vcl_vector<> instead
-//  1 May 2001 - Peter Vanroose - now using vil1_test.h
-// 7 June 2001 - Peter Vanroose - test added for pbm images
-// 14 Apr 2002 - Amitha Perera - switched from vil1_test to testlib
-// 26 Aug 2002 - Ian Scott - Started conversion to vil
-//  2 Oct 2002 - Peter Vanroose - replaced image24 tests by image3p
+//  Modifications
+//   18 Jul 2000 - add vil1_buffer, and mit bug fix.
+//   10 Aug 2000 - Peter Vanroose - added non-exact match
+//   10 Aug 2000 - Peter Vanroose - added bmp and mit tests
+//   10 Aug 2000 - Peter Vanroose - test TIFF and JPEG presence
+//   26 Aug 2000 - .bmp loader works (again) on solaris + linux
+//   28 Aug 2000 - Peter Vanroose - bmp write of colour images fixed
+//    6 Dec 2000 - vil_rgb<vxl_byte> deprecated
+//   21 Jan 2001 - deprecated vil1_buffer<> - use vcl_vector<> instead
+//    1 May 2001 - Peter Vanroose - now using vil1_test.h
+//   7 June 2001 - Peter Vanroose - test added for pbm images
+//   14 Apr 2002 - Amitha Perera - switched from vil1_test to testlib
+//   26 Aug 2002 - Ian Scott - Started conversion to vil
+//    2 Oct 2002 - Peter Vanroose - replaced image24 tests by image3p
 // \endverbatim
 
 #include <vcl_cstring.h>
