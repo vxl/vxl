@@ -67,7 +67,7 @@ const int FRAME = 4; // 3 for NMS and extension, 4 for contour
 //    NoiseThreshold(shortp) = 3*K*noiseSigma
 //
 // For edgels at junctions, shortp = true, the threshold is computed
-// using different factors.  The difference is controled by the parameters:
+// using different factors.  The difference is controlled by the parameters:
 // contour_factor and junction_factor.  smoothSigma when extending the
 // boundary at junctions is 1/2 the value along contours.
 //
