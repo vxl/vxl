@@ -36,7 +36,7 @@ void golden_test_vnl_io(bool save_file=false);
   }
 #else
   #include <vnl/vnl_test.h>
-#endif;
+#endif
 
 
 void golden_test_vnl_io(bool save_file)

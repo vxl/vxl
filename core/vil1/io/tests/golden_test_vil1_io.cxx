@@ -36,7 +36,7 @@ int main( int argc, char* argv[] )
 }
 #else
 #include <vil/vil_test.h>
-#endif;
+#endif
 
 
 void golden_test_vil_io(bool save_file)

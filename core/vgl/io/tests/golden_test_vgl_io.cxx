@@ -51,7 +51,7 @@ void golden_test_vgl_io(bool save_file=false);
   }
 #else
   #include <vgl/vgl_test.h>
-#endif;
+#endif
 
 float epsilon(float f)
 {
