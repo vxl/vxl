@@ -47,7 +47,7 @@ void mbl_data_wrapper_mixer<T>::set(mbl_data_wrapper<T> **wrapper, unsigned long
   assert (n_wrappers != ((unsigned)-1)); // a common mistake
   wrapper_.resize(n_wrappers);
   n_       = 0;
-  for (int i=0;i<n_wrappers;++i)
+  for (unsigned long i=0;i<n_wrappers;++i)
   {
     wrapper_[i] = wrapper[i];
     n_ += wrapper[i]->size();
