@@ -5,6 +5,8 @@
 
 #include "f2c.h"
 
+/* Modified by Peter Vanroose, Sept 2001: manual optimisation and clean-up */
+
 /* Table of constant values */
 
 static doublereal c_b130 = 0.;
@@ -23,9 +25,6 @@ integer *iv1;
 doublereal *fv1;
 integer *ierr;
 {
-    /* System generated locals */
-    integer a_dim1, a_offset, z_dim1, z_offset;
-
     /* Local variables */
     extern /* Subroutine */ void balbak_(), balanc_(), elmhes_(), eltran_();
     static integer is1, is2;
@@ -74,25 +73,11 @@ integer *ierr;
 /*        iv1  and  fv1  are temporary storage arrays. */
 
 /*     questions and comments should be directed to burton s. garbow, */
-/*     mathematics and computer science div, argonne national laboratory
-*/
+/*     mathematics and computer science div, argonne national laboratory */
 
 /*     this version dated august 1983. */
 
-/*     ------------------------------------------------------------------
-*/
-
-    /* Parameter adjustments */
-    --fv1;
-    --iv1;
-    z_dim1 = *nm;
-    z_offset = z_dim1 + 1;
-    z -= z_offset;
-    --wi;
-    --wr;
-    a_dim1 = *nm;
-    a_offset = a_dim1 + 1;
-    a -= a_offset;
+/*     ------------------------------------------------------------------ */
 
     /* Function Body */
     if (*n <= *nm) {
@@ -102,23 +87,22 @@ integer *ierr;
     goto L50;
 
 L10:
-    balanc_(nm, n, &a[a_offset], &is1, &is2, &fv1[1]);
-    elmhes_(nm, n, &is1, &is2, &a[a_offset], &iv1[1]);
+    balanc_(nm, n, a, &is1, &is2, fv1);
+    elmhes_(nm, n, &is1, &is2, a, iv1);
     if (*matz != 0) {
         goto L20;
     }
 /*     .......... find eigenvalues only .......... */
-    hqr_(nm, n, &is1, &is2, &a[a_offset], &wr[1], &wi[1], ierr);
+    hqr_(nm, n, &is1, &is2, a, wr, wi, ierr);
     goto L50;
 /*     .......... find both eigenvalues and eigenvectors .......... */
 L20:
-    eltran_(nm, n, &is1, &is2, &a[a_offset], &iv1[1], &z[z_offset]);
-    hqr2_(nm, n, &is1, &is2, &a[a_offset], &wr[1], &wi[1], &z[z_offset], ierr)
-            ;
+    eltran_(nm, n, &is1, &is2, a, iv1, z);
+    hqr2_(nm, n, &is1, &is2, a, wr, wi, z, ierr);
     if (*ierr != 0) {
         goto L50;
     }
-    balbak_(nm, n, &is1, &is2, &fv1[1], n, &z[z_offset]);
+    balbak_(nm, n, &is1, &is2, fv1, n, z);
 L50:
     return;
 } /* rg_ */
@@ -129,16 +113,11 @@ doublereal *a;
 integer *low, *igh;
 doublereal *scale;
 {
-    /* System generated locals */
-    integer a_dim1, a_offset;
-    doublereal d__1;
-
     /* Local variables */
     static integer iexc;
     static doublereal c, f, g;
     static integer i, j, k, l, m;
     static doublereal r, s, radix, b2;
-    static integer jj;
     static logical noconv;
 
 
@@ -189,45 +168,37 @@ doublereal *scale;
 /*     k,l have been reversed.) */
 
 /*     questions and comments should be directed to burton s. garbow, */
-/*     mathematics and computer science div, argonne national laboratory
-*/
+/*     mathematics and computer science div, argonne national laboratory */
 
 /*     this version dated august 1983. */
 
-/*     ------------------------------------------------------------------
-*/
-
-    /* Parameter adjustments */
-    --scale;
-    a_dim1 = *nm;
-    a_offset = a_dim1 + 1;
-    a -= a_offset;
+/*     ------------------------------------------------------------------ */
 
     /* Function Body */
     radix = 16.;
 
     b2 = radix * radix;
-    k = 1;
+    k = 0;
     l = *n;
     goto L100;
 /*     .......... in-line procedure for row and */
 /*                column exchange .......... */
 L20:
-    scale[m] = (doublereal) j;
+    scale[m] = (doublereal) j+1;
     if (j == m) {
         goto L50;
     }
 
-    for (i = 1; i <= l; ++i) {
-        f = a[i + j * a_dim1];
-        a[i + j * a_dim1] = a[i + m * a_dim1];
-        a[i + m * a_dim1] = f;
+    for (i = 0; i < l; ++i) {
+        f = a[i + j * *nm];
+        a[i + j * *nm] = a[i + m * *nm];
+        a[i + m * *nm] = f;
     }
 
-    for (i = k; i <= *n; ++i) {
-        f = a[j + i * a_dim1];
-        a[j + i * a_dim1] = a[m + i * a_dim1];
-        a[m + i * a_dim1] = f;
+    for (i = k; i < *n; ++i) {
+        f = a[j + i * *nm];
+        a[j + i * *nm] = a[m + i * *nm];
+        a[m + i * *nm] = f;
     }
 
 L50:
@@ -244,20 +215,19 @@ L80:
     --l;
 /*     .......... for j=l step -1 until 1 do -- .......... */
 L100:
-    for (jj = 1; jj <= l; ++jj) {
-        j = l + 1 - jj;
-        for (i = 1; i <= l; ++i) {
+    for (j = l-1; j >= 0; --j) {
+        for (i = 0; i < l; ++i) {
             if (i == j) {
                 goto L110;
             }
-            if (a[j + i * a_dim1] != 0.) {
+            if (a[j + i * *nm] != 0.) {
                 goto L120;
             }
 L110:
             ;
         }
 
-        m = l;
+        m = l-1;
         iexc = 1;
         goto L20;
 L120:
@@ -271,12 +241,12 @@ L130:
     ++k;
 
 L140:
-    for (j = k; j <= l; ++j) {
-        for (i = k; i <= l; ++i) {
+    for (j = k; j < l; ++j) {
+        for (i = k; i < l; ++i) {
             if (i == j) {
                 goto L150;
             }
-            if (a[i + j * a_dim1] != 0.) {
+            if (a[i + j * *nm] != 0.) {
                 goto L170;
             }
 L150:
@@ -290,21 +260,21 @@ L170:
         ;
     }
 /*     .......... now balance the submatrix in rows k to l .......... */
-    for (i = k; i <= l; ++i) {
+    for (i = k; i < l; ++i) {
         scale[i] = 1.;
     }
 /*     .......... iterative loop for norm reduction .......... */
 L190:
     noconv = FALSE_;
 
-    for (i = k; i <= l; ++i) {
+    for (i = k; i < l; ++i) {
         c = 0.;
         r = 0.;
 
-        for (j = k; j <= l; ++j) {
+        for (j = k; j < l; ++j) {
             if (j != i) {
-                c += abs(a[j + i * a_dim1]);
-                r += abs(a[i + j * a_dim1]);
+                c += abs(a[j + i * *nm]);
+                r += abs(a[i + j * *nm]);
             }
         }
 /*     .......... guard against zero c or r due to underflow .......... */
@@ -339,14 +309,12 @@ L240:
         scale[i] *= f;
         noconv = TRUE_;
 
-        for (j = k; j <= *n; ++j) {
-/* L250: */
-            a[i + j * a_dim1] *= g;
+        for (j = k; j < *n; ++j) {
+            a[i + j * *nm] *= g;
         }
 
-        for (j = 1; j <= l; ++j) {
-/* L260: */
-            a[j + i * a_dim1] *= f;
+        for (j = 0; j < l; ++j) {
+            a[j + i * *nm] *= f;
         }
 
 L270:
@@ -358,7 +326,7 @@ L270:
     }
 
 L280:
-    *low = k;
+    *low = k+1;
     *igh = l;
     return;
 } /* balanc_ */
@@ -369,14 +337,10 @@ doublereal *scale;
 integer *m;
 doublereal *z;
 {
-    /* System generated locals */
-    integer z_dim1, z_offset;
-
     /* Local variables */
     static integer i, j, k;
     static doublereal s;
     static integer ii;
-
 
 
 /*     this subroutine is a translation of the algol procedure balbak, */
@@ -419,12 +383,6 @@ doublereal *z;
 /*     ------------------------------------------------------------------
 */
 
-    /* Parameter adjustments */
-    z_dim1 = *nm;
-    z_offset = z_dim1 + 1;
-    z -= z_offset;
-    --scale;
-
     /* Function Body */
     if (*m == 0) {
         return; /* exit from balbak_ */
@@ -433,39 +391,36 @@ doublereal *z;
         goto L120;
     }
 
-    for (i = *low; i <= *igh; ++i) {
+    for (i = *low-1; i < *igh; ++i) {
         s = scale[i];
 /*     .......... left hand eigenvectors are back transformed */
 /*                if the foregoing statement is replaced by */
 /*                s=1.0d0/scale(i). .......... */
-        for (j = 1; j <= *m; ++j) {
-/* L100: */
-            z[i + j * z_dim1] *= s;
+        for (j = 0; j < *m; ++j) {
+            z[i + j * *nm] *= s;
         }
 
-/* L110: */
     }
 /*     ......... for i=low-1 step -1 until 1, */
 /*               igh+1 step 1 until n do -- .......... */
 L120:
-    for (ii = 1; ii <= *n; ++ii) {
+    for (ii = 0; ii < *n; ++ii) {
         i = ii;
-        if (i >= *low && i <= *igh) {
+        if (i+1 >= *low && i < *igh) {
             goto L140;
         }
-        if (i < *low) {
-            i = *low - ii;
+        if (i+1 < *low) {
+            i = *low - ii - 2;
         }
-        k = (integer) scale[i];
+        k = (integer) scale[i] - 1;
         if (k == i) {
             goto L140;
         }
 
-        for (j = 1; j <= *m; ++j) {
-            s = z[i + j * z_dim1];
-            z[i + j * z_dim1] = z[k + j * z_dim1];
-            z[k + j * z_dim1] = s;
-/* L130: */
+        for (j = 0; j < *m; ++j) {
+            s = z[i + j * *nm];
+            z[i + j * *nm] = z[k + j * *nm];
+            z[k + j * *nm] = s;
         }
 
 L140:
@@ -476,9 +431,6 @@ L140:
 /* Subroutine */ void cdiv_(ar, ai, br, bi, cr, ci)
 doublereal *ar, *ai, *br, *bi, *cr, *ci;
 {
-    /* System generated locals */
-    doublereal d__1, d__2;
-
     /* Local variables */
     static doublereal s, ais, bis, ars, brs;
 
@@ -490,11 +442,7 @@ doublereal *ar, *ai, *br, *bi, *cr, *ci;
     ais = *ai / s;
     brs = *br / s;
     bis = *bi / s;
-/* Computing 2nd power */
-    d__1 = brs;
-/* Computing 2nd power */
-    d__2 = bis;
-    s = d__1 * d__1 + d__2 * d__2;
+    s = brs * brs + bis * bis;
     *cr = (ars * brs + ais * bis) / s;
     *ci = (ais * brs - ars * bis) / s;
     return;
@@ -505,14 +453,10 @@ integer *nm, *n, *low, *igh;
 doublereal *a;
 integer *int_;
 {
-    /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
-    doublereal d__1;
-
     /* Local variables */
     static integer i, j, m;
     static doublereal x, y;
-    static integer la, mm1, kp1;
+    static integer la, mm1;
 
 
 /*     this subroutine is a translation of the algol procedure elmhes, */
@@ -555,86 +499,66 @@ integer *int_;
 
 /*     ------------------------------------------------------------------ */
 
-    /* Parameter adjustments */
-    --int_;
-    a_dim1 = *nm;
-    a_offset = a_dim1 + 1;
-    a -= a_offset;
-
     /* Function Body */
     la = *igh - 1;
-    kp1 = *low + 1;
-    if (la < kp1) {
+    if (la < *low + 1) {
         return; /* exit from elmhes_ */
     }
 
-    i__1 = la;
-    for (m = kp1; m <= i__1; ++m) {
-        mm1 = m - 1;
+    for (m = *low; m < la; ++m) {
+        mm1 = m-1;
         x = 0.;
         i = m;
 
-        i__2 = *igh;
-        for (j = m; j <= i__2; ++j) {
-            if ((d__1 = a[j + mm1 * a_dim1], abs(d__1)) <= abs(x)) {
+        for (j = m; j < *igh; ++j) {
+            if (abs(a[j + mm1 * *nm]) <= abs(x)) {
                 goto L100;
             }
-            x = a[j + mm1 * a_dim1];
+            x = a[j + mm1 * *nm];
             i = j;
 L100:
             ;
         }
 
-        int_[m] = i;
+        int_[m] = i+1;
         if (i == m) {
             goto L130;
         }
 /*     .......... interchange rows and columns of a .......... */
-        i__2 = *n;
-        for (j = mm1; j <= i__2; ++j) {
-            y = a[i + j * a_dim1];
-            a[i + j * a_dim1] = a[m + j * a_dim1];
-            a[m + j * a_dim1] = y;
-/* L110: */
+        for (j = mm1; j < *n; ++j) {
+            y = a[i + j * *nm];
+            a[i + j * *nm] = a[m + j * *nm];
+            a[m + j * *nm] = y;
         }
 
-        i__2 = *igh;
-        for (j = 1; j <= i__2; ++j) {
-            y = a[j + i * a_dim1];
-            a[j + i * a_dim1] = a[j + m * a_dim1];
-            a[j + m * a_dim1] = y;
-/* L120: */
+        for (j = 0; j < *igh; ++j) {
+            y = a[j + i * *nm];
+            a[j + i * *nm] = a[j + m * *nm];
+            a[j + m * *nm] = y;
         }
 /*     .......... end interchange .......... */
 L130:
         if (x == 0.) {
             goto L180;
         }
-        i__2 = *igh;
-        for (i = m+1; i <= i__2; ++i) {
-            y = a[i + mm1 * a_dim1];
+        for (i = m+1; i < *igh; ++i) {
+            y = a[i + mm1 * *nm];
             if (y == 0.) {
                 goto L160;
             }
             y /= x;
-            a[i + mm1 * a_dim1] = y;
+            a[i + mm1 * *nm] = y;
 
-            i__3 = *n;
-            for (j = m; j <= i__3; ++j) {
-/* L140: */
-                a[i + j * a_dim1] -= y * a[m + j * a_dim1];
+            for (j = m; j < *n; ++j) {
+                a[i + j * *nm] -= y * a[m + j * *nm];
             }
 
-            i__3 = *igh;
-            for (j = 1; j <= i__3; ++j) {
-/* L150: */
-                a[j + m * a_dim1] += y * a[j + i * a_dim1];
+            for (j = 0; j < *igh; ++j) {
+                a[j + m * *nm] += y * a[j + i * *nm];
             }
-
 L160:
             ;
         }
-
 L180:
         ;
     }
@@ -646,16 +570,10 @@ doublereal *a;
 integer *int_;
 doublereal *z;
 {
-    /* System generated locals */
-    integer a_dim1, a_offset, z_dim1, z_offset, i__1, i__2;
-
     /* Local variables */
-    static integer i, j, kl, mm, mp;
+    static integer i, j, kl, mp;
 
-
-
-/*     this subroutine is a translation of the algol procedure elmtrans,
-*/
+/*     this subroutine is a translation of the algol procedure elmtrans, */
 /*     num. math. 16, 181-204(1970) by peters and wilkinson. */
 /*     handbook for auto. comp., vol.ii-linear algebra, 372-395(1971). */
 
@@ -689,31 +607,21 @@ doublereal *z;
 /*          reduction by  elmhes. */
 
 /*     questions and comments should be directed to burton s. garbow, */
-/*     mathematics and computer science div, argonne national laboratory
-*/
+/*     mathematics and computer science div, argonne national laboratory */
 
 /*     this version dated august 1983. */
 
-/*     ------------------------------------------------------------------
-*/
+/*     ------------------------------------------------------------------ */
 
 /*     .......... initialize z to identity matrix .......... */
-    /* Parameter adjustments */
-    z_dim1 = *nm;
-    z_offset = z_dim1 + 1;
-    z -= z_offset;
-    --int_;
-    a_dim1 = *nm;
-    a_offset = a_dim1 + 1;
-    a -= a_offset;
 
     /* Function Body */
-    for (j = 1; j <= *n; ++j) {
-        for (i = 1; i <= *n; ++i) {
-            z[i + j * z_dim1] = 0.;
+    for (j = 0; j < *n; ++j) {
+        for (i = 0; i < *n; ++i) {
+            z[i + j * *nm] = 0.;
         }
 
-        z[j + j * z_dim1] = 1.;
+        z[j + j * *nm] = 1.;
     }
 
     kl = *igh - *low - 1;
@@ -721,23 +629,22 @@ doublereal *z;
         return;
     }
 /*     .......... for mp=igh-1 step -1 until low+1 do -- .......... */
-    for (mm = 1; mm <= kl; ++mm) {
-        mp = *igh - mm;
-        for (i = mp+1; i <= *igh; ++i) {
-            z[i + mp * z_dim1] = a[i + (mp - 1) * a_dim1];
+    for (mp = *igh - 2; mp > *igh -kl-2; --mp) {
+        for (i = mp+1; i < *igh; ++i) {
+            z[i + mp * *nm] = a[i + (mp - 1) * *nm];
         }
 
-        i = int_[mp];
+        i = int_[mp] - 1;
         if (i == mp) {
             continue;
         }
 
-        for (j = mp; j <= *igh; ++j) {
-            z[mp + j * z_dim1] = z[i + j * z_dim1];
-            z[i + j * z_dim1] = 0.;
+        for (j = mp; j < *igh; ++j) {
+            z[mp + j * *nm] = z[i + j * *nm];
+            z[i + j * *nm] = 0.;
         }
 
-        z[i + mp * z_dim1] = 1.;
+        z[i + mp * *nm] = 1.;
     }
 } /* eltran_ */
 
@@ -747,8 +654,7 @@ doublereal *h, *wr, *wi;
 integer *ierr;
 {
     /* System generated locals */
-    integer h_dim1, h_offset, i__1, i__2, i__3;
-    doublereal d__1, d__2;
+    doublereal d__1;
 
     /* Builtin functions */
     double sqrt(), d_sign();
@@ -757,10 +663,10 @@ integer *ierr;
     static doublereal norm;
     static integer i, j, k, l, m;
     static doublereal p, q, r, s, t, w, x, y;
-    static integer na, en, ll, mm;
+    static integer na, en;
     static doublereal zz;
     static logical notlas;
-    static integer mp2, itn, its, enm2;
+    static integer itn, its, enm2;
     static doublereal tst1, tst2;
 
 /*  RESTORED CORRECT INDICES OF LOOPS (200,210,230,240). (9/29/89 BSG) */
@@ -810,52 +716,40 @@ integer *ierr;
 /*                     while the j-th eigenvalue is being sought. */
 
 /*     questions and comments should be directed to burton s. garbow, */
-/*     mathematics and computer science div, argonne national laboratory
-*/
+/*     mathematics and computer science div, argonne national laboratory */
 
 /*     this version dated september 1989. */
 
-/*     ------------------------------------------------------------------
-*/
-
-    /* Parameter adjustments */
-    --wi;
-    --wr;
-    h_dim1 = *nm;
-    h_offset = h_dim1 + 1;
-    h -= h_offset;
+/*     ------------------------------------------------------------------ */
 
     /* Function Body */
     *ierr = 0;
     norm = 0.;
-    k = 1;
+    k = 0;
 /*     .......... store roots isolated by balanc */
 /*                and compute matrix norm .......... */
-    i__1 = *n;
-    for (i = 1; i <= i__1; ++i) {
+    for (i = 0; i < *n; ++i) {
 
-        i__2 = *n;
-        for (j = k; j <= i__2; ++j) {
-/* L40: */
-            norm += (d__1 = h[i + j * h_dim1], abs(d__1));
+        for (j = k; j < *n; ++j) {
+            norm += abs(h[i + j * *nm]);
         }
 
         k = i;
-        if (i >= *low && i <= *igh) {
+        if (i+1 >= *low && i < *igh) {
             goto L50;
         }
-        wr[i] = h[i + i * h_dim1];
+        wr[i] = h[i + i * *nm];
         wi[i] = 0.;
 L50:
         ;
     }
 
-    en = *igh;
+    en = *igh - 1;
     t = 0.;
     itn = *n * 30;
 /*     .......... search for next eigenvalues .......... */
 L60:
-    if (en < *low) {
+    if (en+1 < *low) {
         goto L1001;
     }
     its = 0;
@@ -864,32 +758,24 @@ L60:
 /*     .......... look for single small sub-diagonal element */
 /*                for l=en step -1 until low do -- .......... */
 L70:
-    i__1 = en;
-    for (ll = *low; ll <= i__1; ++ll) {
-        l = en + *low - ll;
-        if (l == *low) {
-            goto L100;
-        }
-        s = (d__1 = h[l - 1 + (l - 1) * h_dim1], abs(d__1)) + (d__2 = h[l + l
-                * h_dim1], abs(d__2));
+    for (l = en; l+1 >= *low; --l) {
+        s = abs(h[l-1 + (l-1) * *nm]) + abs(h[l + l * *nm]);
         if (s == 0.) {
             s = norm;
         }
         tst1 = s;
-        tst2 = tst1 + (d__1 = h[l + (l - 1) * h_dim1], abs(d__1));
+        tst2 = tst1 + abs(h[l + (l-1) * *nm]);
         if (tst2 == tst1) {
-            goto L100;
+            break;
         }
-/* L80: */
     }
 /*     .......... form shift .......... */
-L100:
-    x = h[en + en * h_dim1];
+    x = h[en + en * *nm];
     if (l == en) {
         goto L270;
     }
-    y = h[na + na * h_dim1];
-    w = h[en + na * h_dim1] * h[na + en * h_dim1];
+    y = h[na + na * *nm];
+    w = h[en + na * *nm] * h[na + en * *nm];
     if (l == na) {
         goto L280;
     }
@@ -902,14 +788,11 @@ L100:
 /*     .......... form exceptional shift .......... */
     t += x;
 
-    i__1 = en;
-    for (i = *low; i <= i__1; ++i) {
-/* L120: */
-        h[i + i * h_dim1] -= x;
+    for (i = *low - 1; i <= en; ++i) {
+        h[i + i * *nm] -= x;
     }
 
-    s = (d__1 = h[en + na * h_dim1], abs(d__1)) + (d__2 = h[na + enm2 *
-            h_dim1], abs(d__2));
+    s = abs(h[en + na * *nm]) + abs(h[na + enm2 * *nm]);
     x = s * .75;
     y = x;
     w = s * -.4375 * s;
@@ -919,15 +802,13 @@ L130:
 /*     .......... look for two consecutive small */
 /*                sub-diagonal elements. */
 /*                for m=en-2 step -1 until l do -- .......... */
-    i__1 = enm2;
-    for (mm = l; mm <= i__1; ++mm) {
-        m = enm2 + l - mm;
-        zz = h[m + m * h_dim1];
+    for (m = enm2; m >= l; --m) {
+        zz = h[m + m * *nm];
         r = x - zz;
         s = y - zz;
-        p = (r * s - w) / h[m + 1 + m * h_dim1] + h[m + (m + 1) * h_dim1];
-        q = h[m + 1 + (m + 1) * h_dim1] - zz - r - s;
-        r = h[m + 2 + (m + 1) * h_dim1];
+        p = (r * s - w) / h[m+1 + m * *nm] + h[m + (m+1) * *nm];
+        q = h[m+1 + (m+1) * *nm] - zz - r - s;
+        r = h[m+2 + (m+1) * *nm];
         s = abs(p) + abs(q) + abs(r);
         p /= s;
         q /= s;
@@ -935,42 +816,35 @@ L130:
         if (m == l) {
             goto L150;
         }
-        tst1 = abs(p) * ((d__1 = h[m - 1 + (m - 1) * h_dim1], abs(d__1)) +
-                abs(zz) + (d__2 = h[m + 1 + (m + 1) * h_dim1], abs(d__2)));
-        tst2 = tst1 + (d__1 = h[m + (m - 1) * h_dim1], abs(d__1)) * (abs(q) +
-                abs(r));
+        tst1 = abs(p) * (abs(h[m-1 + (m-1) * *nm]) + abs(zz) + abs(h[m+1 + (m+1) * *nm]));
+        tst2 = tst1 + abs(h[m + (m-1) * *nm]) * (abs(q) + abs(r));
         if (tst2 == tst1) {
             goto L150;
         }
-/* L140: */
     }
 
 L150:
-    mp2 = m + 2;
-
-    i__1 = en;
-    for (i = mp2; i <= i__1; ++i) {
-        h[i + (i - 2) * h_dim1] = 0.;
-        if (i == mp2) {
+    for (i = m+2; i <= en; ++i) {
+        h[i + (i-2) * *nm] = 0.;
+        if (i == m+2) {
             goto L160;
         }
-        h[i + (i - 3) * h_dim1] = 0.;
+        h[i + (i-3) * *nm] = 0.;
 L160:
         ;
     }
 /*     .......... double qr step involving rows l to en and */
 /*                columns m to en .......... */
-    i__1 = na;
-    for (k = m; k <= i__1; ++k) {
+    for (k = m; k <= na; ++k) {
         notlas = k != na;
         if (k == m) {
             goto L170;
         }
-        p = h[k + (k - 1) * h_dim1];
-        q = h[k + 1 + (k - 1) * h_dim1];
+        p = h[k + (k-1) * *nm];
+        q = h[k+1 + (k-1) * *nm];
         r = 0.;
         if (notlas) {
-            r = h[k + 2 + (k - 1) * h_dim1];
+            r = h[k+2 + (k-1) * *nm];
         }
         x = abs(p) + abs(q) + abs(r);
         if (x == 0.) {
@@ -985,11 +859,11 @@ L170:
         if (k == m) {
             goto L180;
         }
-        h[k + (k - 1) * h_dim1] = -s * x;
+        h[k + (k-1) * *nm] = -s * x;
         goto L190;
 L180:
         if (l != m) {
-            h[k + (k - 1) * h_dim1] = -h[k + (k - 1) * h_dim1];
+            h[k + (k-1) * *nm] = -h[k + (k-1) * *nm];
         }
 L190:
         p += s;
@@ -1002,49 +876,36 @@ L190:
             goto L225;
         }
 /*     .......... row modification .......... */
-        i__2 = en;
-        for (j = k; j <= i__2; ++j) {
-            p = h[k + j * h_dim1] + q * h[k + 1 + j * h_dim1];
-            h[k + j * h_dim1] -= p * x;
-            h[k + 1 + j * h_dim1] -= p * y;
+        for (j = k; j <= en; ++j) {
+            p = h[k + j * *nm] + q * h[k+1 + j * *nm];
+            h[k + j * *nm] -= p * x;
+            h[k+1 + j * *nm] -= p * y;
         }
 
-/* Computing MIN */
-        i__2 = en, i__3 = k + 3;
-        j = min(i__2,i__3);
+        j = min(en,k+3);
 /*     .......... column modification .......... */
-        i__2 = j;
-        for (i = l; i <= i__2; ++i) {
-            p = x * h[i + k * h_dim1] + y * h[i + (k + 1) * h_dim1];
-            h[i + k * h_dim1] -= p;
-            h[i + (k + 1) * h_dim1] -= p * q;
-/* L210: */
+        for (i = l; i <= j; ++i) {
+            p = x * h[i + k * *nm] + y * h[i + (k+1) * *nm];
+            h[i + k * *nm] -= p;
+            h[i + (k+1) * *nm] -= p * q;
         }
         goto L255;
 L225:
 /*     .......... row modification .......... */
-        i__2 = en;
-        for (j = k; j <= i__2; ++j) {
-            p = h[k + j * h_dim1] + q * h[k + 1 + j * h_dim1] + r * h[k + 2 +
-                    j * h_dim1];
-            h[k + j * h_dim1] -= p * x;
-            h[k + 1 + j * h_dim1] -= p * y;
-            h[k + 2 + j * h_dim1] -= p * zz;
-/* L230: */
+        for (j = k; j <= en; ++j) {
+            p = h[k + j * *nm] + q * h[k+1 + j * *nm] + r * h[k+2 + j * *nm];
+            h[k + j * *nm] -= p * x;
+            h[k+1 + j * *nm] -= p * y;
+            h[k+2 + j * *nm] -= p * zz;
         }
 
-/* Computing MIN */
-        i__2 = en, i__3 = k + 3;
-        j = min(i__2,i__3);
+        j = min(en,k+3);
 /*     .......... column modification .......... */
-        i__2 = j;
-        for (i = l; i <= i__2; ++i) {
-            p = x * h[i + k * h_dim1] + y * h[i + (k + 1) * h_dim1] + zz * h[
-                    i + (k + 2) * h_dim1];
-            h[i + k * h_dim1] -= p;
-            h[i + (k + 1) * h_dim1] -= p * q;
-            h[i + (k + 2) * h_dim1] -= p * r;
-/* L240: */
+        for (i = l; i <= j; ++i) {
+            p = x * h[i + k * *nm] + y * h[i + (k+1) * *nm] + zz * h[i + (k+2) * *nm];
+            h[i + k * *nm] -= p;
+            h[i + (k+1) * *nm] -= p * q;
+            h[i + (k+2) * *nm] -= p * r;
         }
 L255:
 
@@ -1063,7 +924,7 @@ L270:
 L280:
     p = (y - x) / 2.;
     q = p * p + w;
-    zz = sqrt((abs(q)));
+    zz = sqrt(abs(q));
     x += t;
     if (q < 0.) {
         goto L320;
@@ -1090,7 +951,7 @@ L330:
 /*     .......... set error -- all eigenvalues have not */
 /*                converged after 30*n iterations .......... */
 L1000:
-    *ierr = en;
+    *ierr = en-1;
 L1001:
     return;
 } /* hqr_ */
@@ -1101,8 +962,7 @@ doublereal *h, *wr, *wi, *z;
 integer *ierr;
 {
     /* System generated locals */
-    integer h_dim1, h_offset, z_dim1, z_offset, i__1, i__2, i__3;
-    doublereal d__1, d__2, d__3, d__4;
+    doublereal d__1, d__2;
 
     /* Builtin functions */
     double sqrt(), d_sign();
@@ -1112,9 +972,8 @@ integer *ierr;
     static doublereal norm;
     static integer i, j, k, l, m;
     static doublereal p, q, r, s, t, w, x, y;
-    static integer na, ii, en, jj;
+    static integer na, en;
     static doublereal ra, sa;
-    static integer ll, mm, nn;
     static doublereal vi, vr, zz;
     static logical notlas;
     static integer mp2, itn, its, enm2;
@@ -1167,13 +1026,11 @@ integer *ierr;
 
 /*        z contains the real and imaginary parts of the eigenvectors. */
 /*          if the i-th eigenvalue is real, the i-th column of z */
-/*          contains its eigenvector.  if the i-th eigenvalue is complex
-*/
+/*          contains its eigenvector.  if the i-th eigenvalue is complex */
 /*          with positive imaginary part, the i-th and (i+1)-th */
 /*          columns of z contain the real and imaginary parts of its */
 /*          eigenvector.  the eigenvectors are unnormalized.  if an */
-/*          error exit is made, none of the eigenvectors has been found.
-*/
+/*          error exit is made, none of the eigenvectors has been found.  */
 
 /*        ierr is set to */
 /*          zero       for normal return, */
@@ -1183,55 +1040,38 @@ integer *ierr;
 /*     calls cdiv for complex division. */
 
 /*     questions and comments should be directed to burton s. garbow, */
-/*     mathematics and computer science div, argonne national laboratory
-*/
+/*     mathematics and computer science div, argonne national laboratory */
 
 /*     this version dated august 1983. */
 
-/*     ------------------------------------------------------------------
-*/
-
-    /* Parameter adjustments */
-    z_dim1 = *nm;
-    z_offset = z_dim1 + 1;
-    z -= z_offset;
-    --wi;
-    --wr;
-    h_dim1 = *nm;
-    h_offset = h_dim1 + 1;
-    h -= h_offset;
+/*     ------------------------------------------------------------------ */
 
     /* Function Body */
     *ierr = 0;
     norm = 0.;
-    k = 1;
+    k = 0;
 /*     .......... store roots isolated by balanc */
 /*                and compute matrix norm .......... */
-    i__1 = *n;
-    for (i = 1; i <= i__1; ++i) {
-
-        i__2 = *n;
-        for (j = k; j <= i__2; ++j) {
-/* L40: */
-            norm += (d__1 = h[i + j * h_dim1], abs(d__1));
+    for (i = 0; i < *n; ++i) {
+        for (j = k; j < *n; ++j) {
+            norm += abs(h[i + j * *nm]);
         }
-
         k = i;
-        if (i >= *low && i <= *igh) {
+        if (i+1 >= *low && i < *igh) {
             goto L50;
         }
-        wr[i] = h[i + i * h_dim1];
+        wr[i] = h[i + i * *nm];
         wi[i] = 0.;
 L50:
         ;
     }
 
-    en = *igh;
+    en = *igh - 1;
     t = 0.;
     itn = *n * 30;
 /*     .......... search for next eigenvalues .......... */
 L60:
-    if (en < *low) {
+    if (en+1 < *low) {
         goto L340;
     }
     its = 0;
@@ -1240,32 +1080,24 @@ L60:
 /*     .......... look for single small sub-diagonal element */
 /*                for l=en step -1 until low do -- .......... */
 L70:
-    i__1 = en;
-    for (ll = *low; ll <= i__1; ++ll) {
-        l = en + *low - ll;
-        if (l == *low) {
-            goto L100;
-        }
-        s = (d__1 = h[l - 1 + (l - 1) * h_dim1], abs(d__1)) + (d__2 = h[l + l
-                * h_dim1], abs(d__2));
+    for (l = en; l+1 > *low; --l) {
+        s = abs(h[l-1 + (l-1) * *nm]) + abs(h[l + l * *nm]);
         if (s == 0.) {
             s = norm;
         }
         tst1 = s;
-        tst2 = tst1 + (d__1 = h[l + (l - 1) * h_dim1], abs(d__1));
+        tst2 = tst1 + abs(h[l + (l-1) * *nm]);
         if (tst2 == tst1) {
-            goto L100;
+            break;
         }
-/* L80: */
     }
 /*     .......... form shift .......... */
-L100:
-    x = h[en + en * h_dim1];
+    x = h[en + en * *nm];
     if (l == en) {
         goto L270;
     }
-    y = h[na + na * h_dim1];
-    w = h[en + na * h_dim1] * h[na + en * h_dim1];
+    y = h[na + na * *nm];
+    w = h[en + na * *nm] * h[na + en * *nm];
     if (l == na) {
         goto L280;
     }
@@ -1278,14 +1110,11 @@ L100:
 /*     .......... form exceptional shift .......... */
     t += x;
 
-    i__1 = en;
-    for (i = *low; i <= i__1; ++i) {
-/* L120: */
-        h[i + i * h_dim1] -= x;
+    for (i = *low - 1; i <= en; ++i) {
+        h[i + i * *nm] -= x;
     }
 
-    s = (d__1 = h[en + na * h_dim1], abs(d__1)) + (d__2 = h[na + enm2 *
-            h_dim1], abs(d__2));
+    s = abs(h[en + na * *nm]) + abs(h[na + enm2 * *nm]);
     x = s * .75;
     y = x;
     w = s * -.4375 * s;
@@ -1295,15 +1124,13 @@ L130:
 /*     .......... look for two consecutive small */
 /*                sub-diagonal elements. */
 /*                for m=en-2 step -1 until l do -- .......... */
-    i__1 = enm2;
-    for (mm = l; mm <= i__1; ++mm) {
-        m = enm2 + l - mm;
-        zz = h[m + m * h_dim1];
+    for (m = enm2; m >= l; --m) {
+        zz = h[m + m * *nm];
         r = x - zz;
         s = y - zz;
-        p = (r * s - w) / h[m + 1 + m * h_dim1] + h[m + (m + 1) * h_dim1];
-        q = h[m + 1 + (m + 1) * h_dim1] - zz - r - s;
-        r = h[m + 2 + (m + 1) * h_dim1];
+        p = (r * s - w) / h[m+1 + m * *nm] + h[m + (m+1) * *nm];
+        q = h[m+1 + (m+1) * *nm] - zz - r - s;
+        r = h[m+2 + (m+1) * *nm];
         s = abs(p) + abs(q) + abs(r);
         p /= s;
         q /= s;
@@ -1311,42 +1138,33 @@ L130:
         if (m == l) {
             goto L150;
         }
-        tst1 = abs(p) * ((d__1 = h[m - 1 + (m - 1) * h_dim1], abs(d__1)) +
-                abs(zz) + (d__2 = h[m + 1 + (m + 1) * h_dim1], abs(d__2)));
-        tst2 = tst1 + (d__1 = h[m + (m - 1) * h_dim1], abs(d__1)) * (abs(q) +
-                abs(r));
+        tst1 = abs(p) * (abs(h[m-1 + (m-1) * *nm]) + abs(zz) + abs(h[m+1 + (m+1) * *nm]));
+        tst2 = tst1 + abs(h[m + (m-1) * *nm]) * (abs(q) + abs(r));
         if (tst2 == tst1) {
             goto L150;
         }
-/* L140: */
     }
 
 L150:
-    mp2 = m + 2;
-
-    i__1 = en;
-    for (i = mp2; i <= i__1; ++i) {
-        h[i + (i - 2) * h_dim1] = 0.;
-        if (i == mp2) {
-            goto L160;
+    for (i = m+2; i <= en; ++i) {
+        h[i + (i-2) * *nm] = 0.;
+        if (i == m+2) {
+            continue;
         }
-        h[i + (i - 3) * h_dim1] = 0.;
-L160:
-        ;
+        h[i + (i-3) * *nm] = 0.;
     }
 /*     .......... double qr step involving rows l to en and */
 /*                columns m to en .......... */
-    i__1 = na;
-    for (k = m; k <= i__1; ++k) {
+    for (k = m; k <= na; ++k) {
         notlas = k != na;
         if (k == m) {
             goto L170;
         }
-        p = h[k + (k - 1) * h_dim1];
-        q = h[k + 1 + (k - 1) * h_dim1];
+        p = h[k + (k-1) * *nm];
+        q = h[k+1 + (k-1) * *nm];
         r = 0.;
         if (notlas) {
-            r = h[k + 2 + (k - 1) * h_dim1];
+            r = h[k+2 + (k-1) * *nm];
         }
         x = abs(p) + abs(q) + abs(r);
         if (x == 0.) {
@@ -1361,11 +1179,11 @@ L170:
         if (k == m) {
             goto L180;
         }
-        h[k + (k - 1) * h_dim1] = -s * x;
+        h[k + (k-1) * *nm] = -s * x;
         goto L190;
 L180:
         if (l != m) {
-            h[k + (k - 1) * h_dim1] = -h[k + (k - 1) * h_dim1];
+            h[k + (k-1) * *nm] = -h[k + (k-1) * *nm];
         }
 L190:
         p += s;
@@ -1378,67 +1196,49 @@ L190:
             goto L225;
         }
 /*     .......... row modification .......... */
-        i__2 = *n;
-        for (j = k; j <= i__2; ++j) {
-            p = h[k + j * h_dim1] + q * h[k + 1 + j * h_dim1];
-            h[k + j * h_dim1] -= p * x;
-            h[k + 1 + j * h_dim1] -= p * y;
+        for (j = k; j < *n; ++j) {
+            p = h[k + j * *nm] + q * h[k+1 + j * *nm];
+            h[k + j * *nm] -= p * x;
+            h[k+1 + j * *nm] -= p * y;
         }
 
-/* Computing MIN */
-        i__2 = en, i__3 = k + 3;
-        j = min(i__2,i__3);
+        j = min(en,k+3);
 /*     .......... column modification .......... */
-        i__2 = j;
-        for (i = 1; i <= i__2; ++i) {
-            p = x * h[i + k * h_dim1] + y * h[i + (k + 1) * h_dim1];
-            h[i + k * h_dim1] -= p;
-            h[i + (k + 1) * h_dim1] -= p * q;
-/* L210: */
+        for (i = 0; i <= j; ++i) {
+            p = x * h[i + k * *nm] + y * h[i + (k+1) * *nm];
+            h[i + k * *nm] -= p;
+            h[i + (k+1) * *nm] -= p * q;
         }
 /*     .......... accumulate transformations .......... */
-        i__2 = *igh;
-        for (i = *low; i <= i__2; ++i) {
-            p = x * z[i + k * z_dim1] + y * z[i + (k + 1) * z_dim1];
-            z[i + k * z_dim1] -= p;
-            z[i + (k + 1) * z_dim1] -= p * q;
-/* L220: */
+        for (i = *low - 1; i < *igh; ++i) {
+            p = x * z[i + k * *nm] + y * z[i + (k+1) * *nm];
+            z[i + k * *nm] -= p;
+            z[i + (k+1) * *nm] -= p * q;
         }
         goto L255;
 L225:
 /*     .......... row modification .......... */
-        i__2 = *n;
-        for (j = k; j <= i__2; ++j) {
-            p = h[k + j * h_dim1] + q * h[k + 1 + j * h_dim1] + r * h[k + 2 +
-                    j * h_dim1];
-            h[k + j * h_dim1] -= p * x;
-            h[k + 1 + j * h_dim1] -= p * y;
-            h[k + 2 + j * h_dim1] -= p * zz;
-/* L230: */
+        for (j = k; j < *n; ++j) {
+            p = h[k + j * *nm] + q * h[k+1 + j * *nm] + r * h[k+2 + j * *nm];
+            h[k + j * *nm] -= p * x;
+            h[k+1 + j * *nm] -= p * y;
+            h[k+2 + j * *nm] -= p * zz;
         }
 
-/* Computing MIN */
-        i__2 = en, i__3 = k + 3;
-        j = min(i__2,i__3);
+        j = min(en,k+3);
 /*     .......... column modification .......... */
-        i__2 = j;
-        for (i = 1; i <= i__2; ++i) {
-            p = x * h[i + k * h_dim1] + y * h[i + (k + 1) * h_dim1] + zz * h[
-                    i + (k + 2) * h_dim1];
-            h[i + k * h_dim1] -= p;
-            h[i + (k + 1) * h_dim1] -= p * q;
-            h[i + (k + 2) * h_dim1] -= p * r;
-/* L240: */
+        for (i = 0; i <= j; ++i) {
+            p = x * h[i + k * *nm] + y * h[i + (k+1) * *nm] + zz * h[i + (k+2) * *nm];
+            h[i + k * *nm] -= p;
+            h[i + (k+1) * *nm] -= p * q;
+            h[i + (k+2) * *nm] -= p * r;
         }
 /*     .......... accumulate transformations .......... */
-        i__2 = *igh;
-        for (i = *low; i <= i__2; ++i) {
-            p = x * z[i + k * z_dim1] + y * z[i + (k + 1) * z_dim1] + zz * z[
-                    i + (k + 2) * z_dim1];
-            z[i + k * z_dim1] -= p;
-            z[i + (k + 1) * z_dim1] -= p * q;
-            z[i + (k + 2) * z_dim1] -= p * r;
-/* L250: */
+        for (i = *low - 1; i < *igh; ++i) {
+            p = x * z[i + k * *nm] + y * z[i + (k+1) * *nm] + zz * z[i + (k+2) * *nm];
+            z[i + k * *nm] -= p;
+            z[i + (k+1) * *nm] -= p * q;
+            z[i + (k+2) * *nm] -= p * r;
         }
 L255:
 
@@ -1449,8 +1249,8 @@ L260:
     goto L70;
 /*     .......... one root found .......... */
 L270:
-    h[en + en * h_dim1] = x + t;
-    wr[en] = h[en + en * h_dim1];
+    h[en + en * *nm] = x + t;
+    wr[en] = h[en + en * *nm];
     wi[en] = 0.;
     en = na;
     goto L60;
@@ -1458,10 +1258,10 @@ L270:
 L280:
     p = (y - x) / 2.;
     q = p * p + w;
-    zz = sqrt((abs(q)));
-    h[en + en * h_dim1] = x + t;
-    x = h[en + en * h_dim1];
-    h[na + na * h_dim1] = y + t;
+    zz = sqrt(abs(q));
+    h[en + en * *nm] = x + t;
+    x = h[en + en * *nm];
+    h[na + na * *nm] = y + t;
     if (q < 0.) {
         goto L320;
     }
@@ -1474,7 +1274,7 @@ L280:
     }
     wi[na] = 0.;
     wi[en] = 0.;
-    x = h[en + na * h_dim1];
+    x = h[en + na * *nm];
     s = abs(x) + abs(zz);
     p = x / s;
     q = zz / s;
@@ -1482,28 +1282,22 @@ L280:
     p /= r;
     q /= r;
 /*     .......... row modification .......... */
-    i__1 = *n;
-    for (j = na; j <= i__1; ++j) {
-        zz = h[na + j * h_dim1];
-        h[na + j * h_dim1] = q * zz + p * h[en + j * h_dim1];
-        h[en + j * h_dim1] = q * h[en + j * h_dim1] - p * zz;
-/* L290: */
+    for (j = na; j < *n; ++j) {
+        zz = h[na + j * *nm];
+        h[na + j * *nm] = q * zz + p * h[en + j * *nm];
+        h[en + j * *nm] = q * h[en + j * *nm] - p * zz;
     }
 /*     .......... column modification .......... */
-    i__1 = en;
-    for (i = 1; i <= i__1; ++i) {
-        zz = h[i + na * h_dim1];
-        h[i + na * h_dim1] = q * zz + p * h[i + en * h_dim1];
-        h[i + en * h_dim1] = q * h[i + en * h_dim1] - p * zz;
-/* L300: */
+    for (i = 0; i <= en; ++i) {
+        zz = h[i + na * *nm];
+        h[i + na * *nm] = q * zz + p * h[i + en * *nm];
+        h[i + en * *nm] = q * h[i + en * *nm] - p * zz;
     }
 /*     .......... accumulate transformations .......... */
-    i__1 = *igh;
-    for (i = *low; i <= i__1; ++i) {
-        zz = z[i + na * z_dim1];
-        z[i + na * z_dim1] = q * zz + p * z[i + en * z_dim1];
-        z[i + en * z_dim1] = q * z[i + en * z_dim1] - p * zz;
-/* L310: */
+    for (i = *low - 1; i < *igh; ++i) {
+        zz = z[i + na * *nm];
+        z[i + na * *nm] = q * zz + p * z[i + en * *nm];
+        z[i + en * *nm] = q * z[i + en * *nm] - p * zz;
     }
 
     goto L330;
@@ -1523,37 +1317,27 @@ L340:
         goto L1001;
     }
 /*     .......... for en=n step -1 until 1 do -- .......... */
-    i__1 = *n;
-    for (nn = 1; nn <= i__1; ++nn) {
-        en = *n + 1 - nn;
-        p = wr[en];
-        q = wi[en];
+    for (en = *n - 1; en >= 0; --en) {
+        p = wr[en]; q = wi[en];
         na = en - 1;
         if (q < 0.) {
             goto L710;
-        } else if (q == 0) {
-            goto L600;
-        } else {
+        } else if (q != 0) {
             goto L800;
         }
 /*     .......... real vector .......... */
-L600:
         m = en;
-        h[en + en * h_dim1] = 1.;
-        if (na == 0) {
+        h[en + en * *nm] = 1.;
+        if (en == 0) {
             goto L800;
         }
 /*     .......... for i=en-1 step -1 until 1 do -- .......... */
-        i__2 = na;
-        for (ii = 1; ii <= i__2; ++ii) {
-            i = en - ii;
-            w = h[i + i * h_dim1] - p;
+        for (i = na; i >= 0; --i) {
+            w = h[i + i * *nm] - p;
             r = 0.;
 
-            i__3 = en;
-            for (j = m; j <= i__3; ++j) {
-/* L610: */
-                r += h[i + j * h_dim1] * h[j + en * h_dim1];
+            for (j = m; j <= en; ++j) {
+                r += h[i + j * *nm] * h[j + en * *nm];
             }
 
             if (wi[i] >= 0.) {
@@ -1580,26 +1364,26 @@ L632:
                 goto L632;
             }
 L635:
-            h[i + en * h_dim1] = -r / t;
+            h[i + en * *nm] = -r / t;
             goto L680;
 /*     .......... solve real equations .......... */
 L640:
-            x = h[i + (i + 1) * h_dim1];
-            y = h[i + 1 + i * h_dim1];
+            x = h[i + (i+1) * *nm];
+            y = h[i+1 + i * *nm];
             q = (wr[i] - p) * (wr[i] - p) + wi[i] * wi[i];
             t = (x * s - zz * r) / q;
-            h[i + en * h_dim1] = t;
+            h[i + en * *nm] = t;
             if (abs(x) <= abs(zz)) {
                 goto L650;
             }
-            h[i + 1 + en * h_dim1] = (-r - w * t) / x;
+            h[i+1 + en * *nm] = (-r - w * t) / x;
             goto L680;
 L650:
-            h[i + 1 + en * h_dim1] = (-s - y * t) / zz;
+            h[i+1 + en * *nm] = (-s - y * t) / zz;
 
 /*     .......... overflow control .......... */
 L680:
-            t = (d__1 = h[i + en * h_dim1], abs(d__1));
+            t = abs(h[i + en * *nm]);
             if (t == 0.) {
                 goto L700;
             }
@@ -1608,10 +1392,8 @@ L680:
             if (tst2 > tst1) {
                 goto L700;
             }
-            i__3 = en;
-            for (j = i; j <= i__3; ++j) {
-                h[j + en * h_dim1] /= t;
-/* L690: */
+            for (j = i; j <= en; ++j) {
+                h[j + en * *nm] /= t;
             }
 
 L700:
@@ -1624,39 +1406,32 @@ L710:
         m = na;
 /*     .......... last vector component chosen imaginary so that */
 /*                eigenvector matrix is triangular .......... */
-        if ((d__1 = h[en + na * h_dim1], abs(d__1)) <= (d__2 = h[na + en *
-                h_dim1], abs(d__2))) {
+        if (abs(h[en + na * *nm]) <= abs(h[na + en * *nm])) {
             goto L720;
         }
-        h[na + na * h_dim1] = q / h[en + na * h_dim1];
-        h[na + en * h_dim1] = -(h[en + en * h_dim1] - p) / h[en + na * h_dim1]
-                ;
+        h[na + na * *nm] = q / h[en + na * *nm];
+        h[na + en * *nm] = -(h[en + en * *nm] - p) / h[en + na * *nm];
         goto L730;
 L720:
-        d__1 = -h[na + en * h_dim1];
-        d__2 = h[na + na * h_dim1] - p;
-        cdiv_(&c_b130, &d__1, &d__2, &q, &h[na + na * h_dim1], &h[na + en *
-                h_dim1]);
+        d__1 = -h[na + en * *nm];
+        d__2 = h[na + na * *nm] - p;
+        cdiv_(&c_b130, &d__1, &d__2, &q, &h[na + na * *nm], &h[na + en * *nm]);
 L730:
-        h[en + na * h_dim1] = 0.;
-        h[en + en * h_dim1] = 1.;
+        h[en + na * *nm] = 0.;
+        h[en + en * *nm] = 1.;
         enm2 = na - 1;
-        if (enm2 == 0) {
+        if (na == 0) {
             goto L800;
         }
 /*     .......... for i=en-2 step -1 until 1 do -- .......... */
-        i__2 = enm2;
-        for (ii = 1; ii <= i__2; ++ii) {
-            i = na - ii;
-            w = h[i + i * h_dim1] - p;
+        for (i = enm2; i >= 0; --i) {
+            w = h[i + i * *nm] - p;
             ra = 0.;
             sa = 0.;
 
-            i__3 = en;
-            for (j = m; j <= i__3; ++j) {
-                ra += h[i + j * h_dim1] * h[j + na * h_dim1];
-                sa += h[i + j * h_dim1] * h[j + en * h_dim1];
-/* L760: */
+            for (j = m; j <= en; ++j) {
+                ra += h[i + j * *nm] * h[j + na * *nm];
+                sa += h[i + j * *nm] * h[j + en * *nm];
             }
 
             if (wi[i] >= 0.) {
@@ -1673,13 +1448,12 @@ L770:
             }
             d__1 = -ra;
             d__2 = -sa;
-            cdiv_(&d__1, &d__2, &w, &q, &h[i + na * h_dim1], &h[i + en *
-                    h_dim1]);
+            cdiv_(&d__1, &d__2, &w, &q, &h[i + na * *nm], &h[i + en * *nm]);
             goto L790;
 /*     .......... solve complex equations .......... */
 L780:
-            x = h[i + (i + 1) * h_dim1];
-            y = h[i + 1 + i * h_dim1];
+            x = h[i + (i+1) * *nm];
+            y = h[i+1 + i * *nm];
             vr = (wr[i] - p) * (wr[i] - p) + wi[i] * wi[i] - q * q;
             vi = (wr[i] - p) * 2. * q;
             if (vr != 0. || vi != 0.) {
@@ -1696,28 +1470,22 @@ L783:
 L784:
             d__1 = x * r - zz * ra + q * sa;
             d__2 = x * s - zz * sa - q * ra;
-            cdiv_(&d__1, &d__2, &vr, &vi, &h[i + na * h_dim1], &h[i + en *
-                    h_dim1]);
+            cdiv_(&d__1, &d__2, &vr, &vi, &h[i + na * *nm], &h[i + en * *nm]);
             if (abs(x) <= abs(zz) + abs(q)) {
                 goto L785;
             }
-            h[i + 1 + na * h_dim1] = (-ra - w * h[i + na * h_dim1] + q * h[i
-                    + en * h_dim1]) / x;
-            h[i + 1 + en * h_dim1] = (-sa - w * h[i + en * h_dim1] - q * h[i
-                    + na * h_dim1]) / x;
+            h[i+1 + na * *nm] = (-ra - w * h[i + na * *nm] + q * h[i + en * *nm]) / x;
+            h[i+1 + en * *nm] = (-sa - w * h[i + en * *nm] - q * h[i + na * *nm]) / x;
             goto L790;
 L785:
-            d__1 = -r - y * h[i + na * h_dim1];
-            d__2 = -s - y * h[i + en * h_dim1];
-            cdiv_(&d__1, &d__2, &zz, &q, &h[i + 1 + na * h_dim1], &h[i + 1 +
-                    en * h_dim1]);
+            d__1 = -r - y * h[i + na * *nm];
+            d__2 = -s - y * h[i + en * *nm];
+            cdiv_(&d__1, &d__2, &zz, &q, &h[i+1 + na * *nm], &h[i+1 + en * *nm]);
 
 /*     .......... overflow control .......... */
 L790:
-/* Computing MAX */
-            d__3 = (d__1 = h[i + na * h_dim1], abs(d__1)), d__4 = (d__2 = h[i
-                    + en * h_dim1], abs(d__2));
-            t = max(d__3,d__4);
+            d__1 = abs(h[i + na * *nm]), d__2 = abs(h[i + en * *nm]);
+            t = max(d__1,d__2);
             if (t == 0.) {
                 goto L795;
             }
@@ -1726,11 +1494,9 @@ L790:
             if (tst2 > tst1) {
                 goto L795;
             }
-            i__3 = en;
-            for (j = i; j <= i__3; ++j) {
-                h[j + na * h_dim1] /= t;
-                h[j + en * h_dim1] /= t;
-/* L792: */
+            for (j = i; j <= en; ++j) {
+                h[j + na * *nm] /= t;
+                h[j + en * *nm] /= t;
             }
 
 L795:
@@ -1742,16 +1508,13 @@ L800:
     }
 /*     .......... end back substitution. */
 /*                vectors of isolated roots .......... */
-    i__1 = *n;
-    for (i = 1; i <= i__1; ++i) {
-        if (i >= *low && i <= *igh) {
+    for (i = 0; i < *n; ++i) {
+        if (i+1 >= *low && i < *igh) {
             goto L840;
         }
 
-        i__2 = *n;
-        for (j = i; j <= i__2; ++j) {
-/* L820: */
-            z[i + j * z_dim1] = h[i + j * h_dim1];
+        for (j = i; j < *n; ++j) {
+            z[i + j * *nm] = h[i + j * *nm];
         }
 
 L840:
@@ -1760,23 +1523,17 @@ L840:
 /*     .......... multiply by transformation matrix to give */
 /*                vectors of original full matrix. */
 /*                for j=n step -1 until low do -- .......... */
-    i__1 = *n;
-    for (jj = *low; jj <= i__1; ++jj) {
-        j = *n + *low - jj;
-        m = min(j,*igh);
+    for (j = *n - 1; j+1 >= *low; --j) {
+        m = min(j,*igh-1);
 
-        i__2 = *igh;
-        for (i = *low; i <= i__2; ++i) {
+        for (i = *low - 1; i < *igh; ++i) {
             zz = 0.;
 
-            i__3 = m;
-            for (k = *low; k <= i__3; ++k) {
-/* L860: */
-                zz += z[i + k * z_dim1] * h[k + j * h_dim1];
+            for (k = *low - 1; k <= m; ++k) {
+                zz += z[i + k * *nm] * h[k + j * *nm];
             }
 
-            z[i + j * z_dim1] = zz;
-/* L880: */
+            z[i + j * *nm] = zz;
         }
     }
 
@@ -1784,7 +1541,7 @@ L840:
 /*     .......... set error -- all eigenvalues have not */
 /*                converged after 30*n iterations .......... */
 L1000:
-    *ierr = en;
+    *ierr = en-1;
 L1001:
     return;
 } /* hqr2_ */
