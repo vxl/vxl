@@ -375,8 +375,8 @@ void vvid_file_manager::un_cached_play()
     grid_->post_redraw();
     vgui::run_till_idle();
   }
-  if(video_process_)
-	  video_process_->finish();
+  if (video_process_)
+    video_process_->finish();
 }
 
 void vvid_file_manager::play_video()
@@ -689,7 +689,7 @@ void vvid_file_manager::compute_curve_tracking()
 void vvid_file_manager::compute_info_tracking()
 {
   static bool output_track = false;
-  static sdet_info_tracker_params tp;  
+  static sdet_info_tracker_params tp;
   vgui_dialog tracker_dialog("Mutual Information Tracker V1.3");
   tracker_dialog.field("Number of Samples", tp.n_samples_);
   tracker_dialog.field("Search Radius", tp.search_radius_);
@@ -702,15 +702,15 @@ void vvid_file_manager::compute_info_tracking()
   if (!tracker_dialog.ask())
     return;
   static vcl_string track_file;
-  if(output_track)
+  if (output_track)
   {
-  vgui_dialog output_dialog("Track Data File");
-  static vcl_string ext = "*.*";
-  output_dialog.file("Track File:", ext, track_file);
-  if (!output_dialog.ask())
-    return;
+    vgui_dialog output_dialog("Track Data File");
+    static vcl_string ext = "*.*";
+    output_dialog.file("Track File:", ext, track_file);
+    if (!output_dialog.ask())
+      return;
   }
-  vcl_cout << tp << "\n";
+  vcl_cout << tp << '\n';
   vtol_topology_object_sptr to = easy0_->get_temp();
   if (!to)
     vcl_cout << "In vvid_file_manager::compute_info_tracking() - no model\n";
@@ -719,8 +719,8 @@ void vvid_file_manager::compute_info_tracking()
     vpro_info_tracker_process* vitp = new vpro_info_tracker_process(tp);
     video_process_ = vitp;
     video_process_->add_input_topology_object(to);
-    if(output_track)
-      if(!vitp->set_output_file(track_file))
+    if (output_track)
+      if (!vitp->set_output_file(track_file))
         return;
   }
 }
