@@ -1,0 +1,237 @@
+============================================================================
+
+Minutes of the VXL meeting held via teleconference on 11 Nov. 2003
+from 9:00 AM EST to 11:30 AM EST.
+
+The first draft of these minutes is from Amitha Perera and Fred
+Wheeler.  Please make any corrections or additions you see fit.
+
+----------------------------------------------------------------------------
+
+The following people attended:
+
+Cedilnik, Andy (Kitware)
+Cootes, Tim (Manchester)
+Hoffman, Bill (Kitware)
+Kaucic, Bob (GE)
+King, Brad (Kitware)
+Krahnstoever, Nils (GE)
+Laymon, Marc (GE)
+McCane, Brendan (Alberta)
+Perera, Amitha (GE)
+Rittscher, Jens (GE)
+Scott, Ian (Manchester)
+Sofka, Michal (Rensselaer)
+Tu, Peter (GE)
+Wheeler, Fred (GE)
+Yang, Gehua (Rensselaer)
+
+----------------------------------------------------------------------------
+
+0. VXL Copyright and License
+
+It is agreed that VXL should be very open, but not public domain, as
+in the BSD license.  Anyone may use VXL so long as they do not claim
+it is their work.  Commits are essentially "owned" by the VXL
+Consortium.
+
+There is some concern as to whether files are being marked adequately
+for copyright and licensing.
+
+Fred Wheeler will scan the VXL files for copyright assertions and
+license information and report to the e-mail list about our actual
+status.
+
+----------------------------------------------------------------------------
+
+1. VXL becoming like TargetJr
+
+There is some concern that as people add just what they need to VXL
+core, there is a danger that VXL will go the way of TargetJr and
+become bloated and inconsistent.
+
+We have to stand against such problems by relying on the library
+isolation policy for core libraries - first level libraries in the
+core may not call each other.  Ian notes that he is careful to add
+only what is necessary to core libraries and adds complete and
+documented code.  He expects that other maintainers are doing the
+same.
+
+It is expected that anyone who adds code to the core libraries take
+reasonable responsibility for maintaining that code.
+
+----------------------------------------------------------------------------
+
+2. Backwards compatibility and releases
+
+The only requirement for deprecating something will be to document in
+comments and in CHANGES.txt that it will be deprecated.
+
+We would like to also have a deprecation preprocessor variable like
+VTK, say VXL_LEGACY_CODE.  Deprecated code should be wrapped in
+#ifdefs using this variable.  By default the variable will be false,
+but users may set it to true using a CMake setting.
+
+Deprecated code will stay in place for at least one release cycle.
+Comments should indicate at which release deprecated code may be
+removed.
+
+Ian notes that the releases will have numbers like
+"MAJOR.MINOR.PATCH".  The MAJOR number may never change.  The MINOR
+number should be changed any time there is a new release with an API
+change.  The PATCH number will not likely be used, unless a release is
+somehow botched.
+
+We need someone to manage the releases.  Amitha Perera volunteered to
+do the next one.
+
+We should have a release every few months, when the dashboard is very
+green.
+
+----------------------------------------------------------------------------
+
+3. CMake
+
+Everyone is happy with the new CMake package export mechanism and
+try-compile configuration process.  Nobody has any concern about VXL
+relying entirely on CMake for configuration.
+
+Ian Scott had some concern/issue about text substitution affecting the
+CMake config files wholly and the autoconf files partially that we
+cannot fully recall. (fixme)
+
+Agreed that unless someone is willing to maintain autoconf
+configuration, support for it may be dropped.
+
+Some of the Cmake Find*.cmake files are not carefully maintained by
+Kitware, so we may have to help fix them occasionally.
+
+----------------------------------------------------------------------------
+
+4. Windows DLLs
+
+Amitha Perera is currently working on this problem using the TargetJr
+approach because GE has a particular interest.  Some of the benefits
+of being able to create DLLs are reduced rebuild times, product
+shipping, and the enabling of external language wrapping.
+
+----------------------------------------------------------------------------
+
+5. Language bindings
+
+Everyone would be happy to see Python/TCL/Matlab binding in VXL, but
+nobody at this time is sufficiently motivated to do it.  In Windows,
+binding is dependent on getting DLLs built.
+
+ITK is a good example for VXL to follow.  ITK has a lot of templates
+and is bound to Python and TCL by Swig-CABLE and gcc-xml.  There is no
+code markup to do this.  The process is mostly automatic.  By-hand
+configuration is required to do special conversions, like vnl vectors
+to Matlab vectors.
+
+----------------------------------------------------------------------------
+
+6. Moving netlib from LINPACK to LAPACK
+
+In the numerical processing community there is no contesting that
+LAPACK is superior to LINPACK.  LAPACK is faster and more accurate.
+It is possible that LAPACK is reentrant, but that needs confirmation.
+
+It is desirable for vnl to use LAPACK instead of LINPACK.  This
+transition could be done incrementally.  Ian will write this up in the
+TODO.txt file.
+
+Switching to LAPACK may go a long way toward making VXL reentrant.
+Ian notes that vil and vil1 also need some work to be reentrant, but
+not much work.  There are a few static lists that need initialization.
+
+----------------------------------------------------------------------------
+
+7. Borland Compiler
+
+Brad King has made much of VXL core compile with Borland 5.5 and 5.6.
+There are still a lot of warnings and failing tests.  Brad will not be
+working much more on this.
+
+There is probably just a single common assertion about a pixel size
+that is causing all the vil tests to fail.
+
+----------------------------------------------------------------------------
+
+8. VCLizing V3P
+
+Packages are put into v3p to support core libraries.  They are
+generally mature packages that will not need upgrading, so it is OK to
+modify the code to eliminate warnings and port to new systems.
+
+We may use vcl on v3p for portability as needed on C++ code, but not
+C.  netlib currently has a small exception to this rule.
+
+Because v3p is to support core libraries, we should not put an XML
+library there.
+
+----------------------------------------------------------------------------
+
+9. "Ownership" of core libraries
+
+For the times when it is nice to a single "authoritative" contact for
+core libraries, the following people have volunteered to be the
+"owner" of these core libraries.  Each "owner" will keep an eye on
+changes made to the library and watch for bit-rot.
+
+vcl  - Fred Schaffalitzky
+vidl - someone from Brown hopefully
+vgl  - Peter Vanroose
+vgui - Amitha Perera
+vnl  - Amitha Perera
+vil  - Ian Scott and Tim Cootes
+vsl  - Ian Scott
+vpl  - Fred Wheeler
+vbl  - Fred Wheeler
+vul  - Fred Wheeler
+vcsl - 
+v3p  - "owner" of corresponding core library
+
+This information will be added to developers.html and
+introduction_doxy.txt by Ian.
+
+----------------------------------------------------------------------------
+
+10. vidl upgrade to vil2
+
+The new vidl has some bugs that Nils Krahnstoever will attempt to
+correct.
+
+----------------------------------------------------------------------------
+
+11. NITF support in vil
+
+GE is doing this now.  It is OK to put this vil2 so long as it does
+not break other parts of vil2.  Ian suggests checking the code in, but
+not having it link in so he can have a look at how it is integrated
+into vil2.  Ian also recommends the use of sample images and tests.
+
+----------------------------------------------------------------------------
+
+12. Upgrade candidates
+
+rrel is a candidate to be upgraded to core.  The requirements are:
+
+1. Used by multiple sites
+2. Doxygen up to snuff
+3. VXL book chapter
+
+1 and 2 are already done for rrel.  Amitha or someone at Rensselaer
+will likely do this soon.
+
+----------------------------------------------------------------------------
+
+13. Brainstorm ideas for To Do list
+
+Support exceptions.
+
+Make VXL reentrant.
+
+Ian will add these items to TODO.txt.
+
+----------------------------------------------------------------------------
