@@ -108,7 +108,7 @@ SOURCE=.\brct_structure_estimator.cxx
 SOURCE=.\brct_epi_reconstructor.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+brct_corr_sptr-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+brct_corr-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vcl_vector+brct_corr_sptr-.cxx
