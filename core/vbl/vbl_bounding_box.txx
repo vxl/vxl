@@ -3,8 +3,6 @@
 // Class: vbl_bounding_box
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 07 Aug 97
-// Modifications:
-//   970807 AWF Initial version.
 //
 //-----------------------------------------------------------------------------
 

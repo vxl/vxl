@@ -1,9 +1,13 @@
 #ifndef vbl_psfile_h_
 #define vbl_psfile_h_
 
+// .NAME vbl_psfile
+// .INCLUDE vbl/vbl_psfile.h
+// .FILE vbl_psfile.cxx
+
+#include <vcl/vcl_string.h> // C++ specific includes first
 #include <vcl/vcl_fstream.h>
 #include <vcl/vcl_iostream.h>
-#include <vcl/vcl_string.h>
 
 class vbl_psfile: public vcl_ofstream
 {

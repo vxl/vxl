@@ -4,9 +4,15 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+// .NAME vbl_qsort
+// .INCLUDE vbl/vbl_qsort.h
+// .FILE vbl_qsort.cxx
 // .SECTION Author
 //    awf@robots.ox.ac.uk
 // Created: 15 Mar 00
+//
+// .SECTION Modifications
+//     971119 AWF Initial version.
 
 #include <vxl_misc_config.h> // VXL_HAS_QSORT
 

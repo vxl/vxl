@@ -1,5 +1,4 @@
 #include "vbl_psfile.h"
-#include <vcl/vcl_string.h>
 #include <vcl/vcl_iomanip.h>
 #include <vcl/vcl_cmath.h>
 #include <vcl/vcl_fstream.h>

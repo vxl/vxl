@@ -7,6 +7,9 @@
 // .SECTION Author
 //    awf@robots.ox.ac.uk
 // Created: 17 Mar 00
+//
+// .SECTION Modifications
+//     970807 AWF Initial version.
 
 #include <vcl/vcl_iosfwd.h>
 

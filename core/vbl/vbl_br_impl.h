@@ -16,7 +16,7 @@
 //     None Yet
 //
 //-----------------------------------------------------------------------------
-#include <vcl/vcl_string.h>
+#include <vcl/vcl_string.h> // C++ specific includes first
 #include <vcl/vcl_hash_string.h>
 
 #include <vbl/vbl_hash_map.h>

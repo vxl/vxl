@@ -14,7 +14,8 @@
 //             GE Corporate Research and Development
 //
 // .SECTION Modifications
-//     None Yet
+//     260498 AWF Conditionalized for gcc/sgi native.
+//              I can't find a mutually acceptable syntax at the moment.
 //
 //-----------------------------------------------------------------------------
 
@@ -24,8 +25,8 @@
 #pragma warning(disable:4786)
 #endif // _MSC_VER
 
+#include <vcl/vcl_string.h> // C++ specific includes first
 #include <vcl/vcl_list.h>
-#include <vcl/vcl_string.h>
 
 #include <vbl/vbl_br_impl.h>
 #include <vbl/vbl_basic_relation.h>

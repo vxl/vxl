@@ -1,9 +1,3 @@
-// -*- c++ -*-
-//
-// Modifications:
-//   260498 AWF Conditionalized for gcc/sgi native.
-//              I can't find a mutually acceptable syntax at the moment.
-
 #include <vbl/vbl_br_default.h>
 #include <vbl/vbl_basic_optional.h>
 #include <vcl/vcl_cassert.h>

@@ -11,6 +11,8 @@
 // .FILE        vbl/vbl_file.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 02 Nov 98
+// .SECTION Modifications
+//   981102 AWF Initial version.
 //
 //-----------------------------------------------------------------------------
 

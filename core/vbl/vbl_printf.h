@@ -18,6 +18,9 @@
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 03 Jul 97
 //
+// .SECTION Modifications
+//    970703 AWF Initial version.
+//
 //-----------------------------------------------------------------------------
 
 //#include <vcl/vcl_cstdio.h> // just to ensure no clashes with weirdo stdios

@@ -1,6 +1,10 @@
 #ifndef vbl_ref_count_h
 #define vbl_ref_count_h
 
+// .NAME vbl_ref_count
+// .INCLUDE vbl/vbl_ref_count.h
+// .FILE vbl_ref_count.cxx
+
 #include "dll.h"
 
 class vbl_ref_count {
