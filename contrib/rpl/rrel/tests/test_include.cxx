@@ -21,6 +21,7 @@
 #include <rrel/rrel_trunc_quad_obj.h>
 #include <rrel/rrel_tukey_obj.h>
 #include <rrel/rrel_util.h>
+#include <rrel/rrel_wgted_ran_sam_search.h>
 #include <rrel/rrel_wls_obj.h>
 
 int main() { return 0; }
