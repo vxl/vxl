@@ -22,6 +22,16 @@
 #include <vnl/vnl_least_squares_function.h>
 #include <vnl/algo/vnl_netlib.h>
 
+// see header
+vnl_vector<double> vnl_levenberg_marquardt_minimize(vnl_least_squares_function& f, 
+						    vnl_vector<double> const& initial_estimate)
+{
+  vnl_vector<double> x = initial_estimate;
+  vnl_levenberg_marquardt lm(f);
+  lm.minimize(x);
+  return x;
+}
+
 // ctor
 void vnl_levenberg_marquardt::init(vnl_least_squares_function* f)
 {
@@ -88,7 +98,7 @@ int vnl_levenberg_marquardt::lmdif_lsqfun(int* n,          // I    Number of res
   vnl_least_squares_function* f = active->f_;
   assert(*p == f->get_number_of_unknowns());
   assert(*n == f->get_number_of_residuals());
-  vnl_vector_ref<double> ref_x(*p, (double*)x); // const violation!
+  vnl_vector_ref<double> ref_x(*p, const_cast<double*>(x));
   vnl_vector_ref<double> ref_fx(*n, fx);
 
   if (*iflag == 0) {
