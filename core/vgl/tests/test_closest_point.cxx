@@ -192,6 +192,81 @@ static void testPlane3DClosestPoint()
   TEST_NEAR("Distance test", vgl_distance(q,l), 1.0, 1e-8);
 }
 
+static void testPoly2DClosestPoint()
+{
+  double poly_x[] = {0.0, 0.0, 2.0, 2.0};
+  double poly_y[] = {0.0, 1.0, 1.0, 0.0}; // rectangle
+  double px,py;
+
+  // test for coincident with non-closed polygon
+  int idx = vgl_closest_point_to_non_closed_polygon(px,py, poly_x,poly_y,4, 1.5,1.0);
+  TEST("2D non-closed polygon coincident test: index", idx, 1);
+  TEST("2D non-closed polygon coincident test: point x", px, 1.5);
+  TEST("2D non-closed polygon coincident test: point y", py, 1.0);
+  TEST_NEAR("Distance test", vgl_distance_to_non_closed_polygon(poly_x,poly_y,4, 1.5,1.0), 0.0, 1e-8);
+
+  // test for non-coincident with non-closed polygon
+  idx = vgl_closest_point_to_non_closed_polygon(px,py, poly_x,poly_y,4, 1.5,0.25);
+  TEST("2D non-closed polygon non-coincident test: index", idx, 2);
+  TEST("2D non-closed polygon non-coincident test: point x", px, 2.0);
+  TEST("2D non-closed polygon non-coincident test: point y", py, 0.25);
+  TEST_NEAR("Distance test", vgl_distance_to_non_closed_polygon(poly_x,poly_y,4, 1.5,0.25), 0.5, 1e-8);
+
+  // test for coincident with closed polygon
+  idx = vgl_closest_point_to_closed_polygon(px,py, poly_x,poly_y,4, 1.5,1.0);
+  TEST("2D closed polygon coincident test: index", idx, 1);
+  TEST("2D closed polygon coincident test: point x", px, 1.5);
+  TEST("2D closed polygon coincident test: point y", py, 1.0);
+  TEST_NEAR("Distance test", vgl_distance_to_closed_polygon(poly_x,poly_y,4, 1.5,1.0), 0.0, 1e-8);
+
+  // test for non-coincident with closed polygon
+  idx = vgl_closest_point_to_closed_polygon(px,py, poly_x,poly_y,4, 1.5,0.25);
+  TEST("2D closed polygon non-coincident test: index", idx, 3);
+  TEST("2D closed polygon non-coincident test: point x", px, 1.5);
+  TEST("2D closed polygon non-coincident test: point y", py, 0.0);
+  TEST_NEAR("Distance test", vgl_distance_to_closed_polygon(poly_x,poly_y,4, 1.5,0.25), 0.25, 1e-8);
+}
+
+static void testPoly3DClosestPoint()
+{
+  double poly_x[] = {0.0, 0.0, 2.0, 2.0};
+  double poly_y[] = {0.0, 0.0, 2.0, 2.0};
+  double poly_z[] = {0.0, 1.0, 1.0, 0.0}; // rectangle
+  double px,py,pz;
+
+  // test for coincident with non-closed polygon
+  int idx = vgl_closest_point_to_non_closed_polygon(px,py,pz, poly_x,poly_y,poly_z,4, 1.5,1.5,1.0);
+  TEST("3D non-closed polygon coincident test: index", idx, 1);
+  TEST("3D non-closed polygon coincident test: point x", px, 1.5);
+  TEST("3D non-closed polygon coincident test: point y", py, 1.5);
+  TEST("3D non-closed polygon coincident test: point z", pz, 1.0);
+  TEST_NEAR("Distance test", vgl_distance_to_non_closed_polygon(poly_x,poly_y,poly_z,4, 1.5,1.5,1.0), 0.0, 1e-8);
+
+  // test for non-coincident with non-closed polygon
+  idx = vgl_closest_point_to_non_closed_polygon(px,py,pz, poly_x,poly_y,poly_z,4, 1.5,1.5,0.25);
+  TEST("3D non-closed polygon non-coincident test: index", idx, 2);
+  TEST("3D non-closed polygon non-coincident test: point x", px, 2.0);
+  TEST("3D non-closed polygon non-coincident test: point y", py, 2.0);
+  TEST("3D non-closed polygon non-coincident test: point z", pz, 0.25);
+  TEST_NEAR("Distance test", vgl_distance_to_non_closed_polygon(poly_x,poly_y,poly_z,4, 1.5,1.5,0.25), vcl_sqrt(0.5), 1e-8);
+
+  // test for coincident with closed polygon
+  idx = vgl_closest_point_to_closed_polygon(px,py,pz, poly_x,poly_y,poly_z,4, 1.5,1.5,1.0);
+  TEST("3D closed polygon coincident test: index", idx, 1);
+  TEST("3D closed polygon coincident test: point x", px, 1.5);
+  TEST("3D closed polygon coincident test: point y", py, 1.5);
+  TEST("3D closed polygon coincident test: point z", pz, 1.0);
+  TEST_NEAR("Distance test", vgl_distance_to_closed_polygon(poly_x,poly_y,poly_z,4, 1.5,1.5,1.0), 0.0, 1e-8);
+
+  // test for non-coincident with closed polygon
+  idx = vgl_closest_point_to_closed_polygon(px,py,pz, poly_x,poly_y,poly_z,4, 1.5,1.5,0.25);
+  TEST("3D closed polygon non-coincident test: index", idx, 3);
+  TEST("3D closed polygon non-coincident test: point x", px, 1.5);
+  TEST("3D closed polygon non-coincident test: point y", py, 1.5);
+  TEST("3D closed polygon non-coincident test: point z", pz, 0.0);
+  TEST_NEAR("Distance test", vgl_distance_to_closed_polygon(poly_x,poly_y,poly_z,4, 1.5,1.5,0.25), 0.25, 1e-8);
+}
+
 static void test_closest_point()
 {
   testHomgLine2DClosestPoint();
@@ -200,6 +275,8 @@ static void test_closest_point()
   testLine2DClosestPoint();
   testLine3DClosestPoint();
   testPlane3DClosestPoint();
+  testPoly2DClosestPoint();
+  testPoly3DClosestPoint();
 }
 
 TESTMAIN(test_closest_point);
