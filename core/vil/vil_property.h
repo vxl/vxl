@@ -63,4 +63,13 @@
 // Measured down from top - i.e. in j direction. Type is float.
 #define vil_property_offset_j "offset_j"
 
+//: The quantisation depth of pixel components.
+// This is the maximum information per pixel component. (Bear in mind that particular image
+// may not even be using all of it.) e.g. an image with true vil_rgb<vxl_byte> style
+// pixels would return 8. If a file image has this property implemented, and purports to
+// supply an unsigned-type you can assume that it will give you pixels valued between
+// 0 and 2^quantisation_depth - 1.
+// Type is unsigned int.
+#define vil_property_quantisation_depth "quantisation_depth"
+
 #endif // vil_property_h_

@@ -14,6 +14,7 @@
 
 #include <vil/vil_stream.h>
 #include <vil/vil_image_view.h>
+#include <vil/vil_property.h>
 
 #include <png.h>
 #if (PNG_LIBPNG_VER_MAJOR == 0)
@@ -263,9 +264,15 @@ vil_png_image::vil_png_image(vil_stream* is):
   read_header();
 }
 
-bool vil_png_image::get_property(char const* /*tag*/, void* /*prop*/) const
+bool vil_png_image::get_property(char const *key, void * value) const
 {
-  // This is not an in-memory image type, nor is it read-only:
+  if (vcl_strcmp(vil_property_quantisation_depth, key)==0)
+  {
+    unsigned* depth =  static_cast<unsigned*>(value);
+    *depth = bits_per_component_;
+    return true;
+  }
+
   return false;
 }
 
@@ -469,10 +476,9 @@ bool vil_png_image::put_view(const vil_image_view_base &view,
   png_byte** rows = p_->get_rows();
   if (!rows) return false;
 
-  int bit_depth = png_get_bit_depth(p_->png_ptr,p_->info_ptr);
   // int bytes_per_pixel = bit_depth  * p_->channels / 8;
   // int bytes_per_row_dst = view.ni()*bytes_per_pixel;
-  if (bit_depth == 8)
+  if (bits_per_component_ == 8)
   {
     if (view.pixel_format() != VIL_PIXEL_FORMAT_BYTE) return false;
     const vil_image_view<vxl_byte> &view2 = static_cast<const vil_image_view<vxl_byte>&>(view);
@@ -494,7 +500,7 @@ bool vil_png_image::put_view(const vil_image_view_base &view,
         }
     }
   }
-  else if (bit_depth == 16)
+  else if (bits_per_component_ == 16)
   {
     if (view.pixel_format() != VIL_PIXEL_FORMAT_UINT_16) return false;
     const vil_image_view<vxl_uint_16> &view2 = static_cast<const vil_image_view<vxl_uint_16>&>(view);

@@ -310,6 +310,12 @@ This is the 3rd place where we allow the use of <code>vil_image_view_base_ptr</c
 Decision IMS and TFC.</p>
 <p>n.b. consistency suggests providing <code>vil_convert(vil_image_resource_sptr)</code>
 versions.</p>
+<h4>file resources should return pixel values in least significant bit position.</h4>
+<p>File types that have odd pixel widths (e.g. DICOM can use 12-bit images)
+should not scale those pixels to fill the full range of the C++ pixel-type that
+they return. So our 12-bit DICOM image may return vxl_uint_16 pixels with values
+from 0 to 4095. Decision IMS, TFC and Marc Laymon (GE).</p>
+<p>&nbsp;</p>
 <h2>Remaining questions</h2>
 <p>There is now no way to get a bit-compressed pbm file into memory efficiently. Is this a problem?
 We could solve it by deriving a <code>vil_image_view_of_compressed_bits</code>, or similar.</p>
