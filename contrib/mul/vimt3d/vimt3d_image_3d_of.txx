@@ -1,9 +1,11 @@
 #ifndef vimt3d_image_3d_of_txx_
 #define vimt3d_image_3d_of_txx_
+
 //:
 // \file
 // \brief Container for vil_image_view<T> + transform
 // \author Tim Cootes
+
 
 #include "vimt3d_image_3d_of.h"
 #include <vcl_string.h>
@@ -14,31 +16,40 @@
 #include <vil3d/vil3d_print.h>
 #include <vil3d/io/vil3d_io_image_view.h>
 
-//=======================================================================
 
+//=======================================================================
 template<class T>
 vimt3d_image_3d_of<T>::vimt3d_image_3d_of()
 {
 }
 
+
+//=======================================================================
 template<class T>
-vimt3d_image_3d_of<T>::vimt3d_image_3d_of(unsigned ni, unsigned nj, unsigned nk, unsigned nplanes)
-: image_(ni,nj,nk,nplanes)
+vimt3d_image_3d_of<T>::vimt3d_image_3d_of(unsigned ni, unsigned nj, 
+                                          unsigned nk, unsigned nplanes)
+  : image_(ni,nj,nk,nplanes)
 {
 }
 
+
+//=======================================================================
 //: Perform deep copy of src into this image
 template<class T>
 void vimt3d_image_3d_of<T>::deep_copy(const vimt3d_image_3d_of& src)
 {
-  world2im_     = src.world2im_;
+  world2im_ = src.world2im_;
   image_.deep_copy(src.image_);
 }
 
+
+//=======================================================================
 template<class T> vimt3d_image_3d_of<T>::~vimt3d_image_3d_of()
 {
 }
 
+
+//=======================================================================
 //: Shallow equality tester.
 //  The parameter must be identical type to this.
 template<class T>
@@ -49,6 +60,7 @@ bool vimt3d_image_3d_of<T>::equals(const vimt_image &im) const
 }
 
 
+//=======================================================================
 //: Define valid data region (including transform).
 //  Resizes and sets the transformation so that
 //  worldToIm(x,y) is valid for all points in range
@@ -61,19 +73,22 @@ void vimt3d_image_3d_of<T>::set_valid_region(int i0, unsigned ni,
   world2im_.set_translation(-i0,-j0,-k0);
 }
 
+
+//=======================================================================
 template<class T>
 bool vimt3d_image_3d_of<T>::is_class(vcl_string const& s) const
 {
   return s==vimt3d_image_3d_of<T>::is_a() || vimt3d_image_3d::is_class(s);
 }
 
-//=======================================================================
 
+//=======================================================================
 template<class T>
 short vimt3d_image_3d_of<T>::version_no() const
 {
   return 1;
 }
+
 
 //=======================================================================
 template<class T>
@@ -82,14 +97,15 @@ vimt_image* vimt3d_image_3d_of<T>::clone() const
   return new vimt3d_image_3d_of(*this);
 }
 
-//=======================================================================
 
+//=======================================================================
 template<class T>
 void vimt3d_image_3d_of<T>::print_summary(vcl_ostream& os) const
 {
   os<<vsl_indent() << "Transform: "<<world2im_
     <<vsl_indent() << image_<<vcl_endl;
 }
+
 
 //=======================================================================
 //: print all data to os
@@ -103,7 +119,6 @@ void vimt3d_image_3d_of<T>::print_all(vcl_ostream& os) const
 
 
 //=======================================================================
-
 template<class T>
 void vimt3d_image_3d_of<T>::b_write(vsl_b_ostream& bfs) const
 {
@@ -112,8 +127,8 @@ void vimt3d_image_3d_of<T>::b_write(vsl_b_ostream& bfs) const
   vsl_b_write(bfs,world2im_);
 }
 
-//=======================================================================
 
+//=======================================================================
 template<class T>
 void vimt3d_image_3d_of<T>::b_read(vsl_b_istream& bfs)
 {
@@ -135,6 +150,8 @@ void vimt3d_image_3d_of<T>::b_read(vsl_b_istream& bfs)
   }
 }
 
+
+//=======================================================================
 //: True if transforms, etc. are equal, and they share same image data.
 //  This does not do a deep equality on image data. If the images point
 //  to different image data objects that contain identical images, then
@@ -146,9 +163,36 @@ bool vimt3d_image_3d_of<T>::operator==(const vimt3d_image_3d_of<T> &other) const
       world2im_ == other.world2im_;
 }
 
+
+//=======================================================================
+//: True if the transforms and the actual image data are identical.
+// The image pointers need not be identical, 
+// provided that the underlying image data are the same.
+// \relates vimt3d_image_3d_of<T>
+// \relates vil3d_image_view
+template<class T>
+bool vimt3d_image_3d_deep_equality(const vimt3d_image_3d_of<T>& lhs,
+                                   const vimt3d_image_3d_of<T>& rhs)
+{
+  // First check the transforms are the same
+  if (!(lhs.world2im() == rhs.world2im()))
+    return false;
+
+  // Now check that the underlying image data are identical
+  return vil3d_image_view_deep_equality(lhs.image(), rhs.image());  
+}
+
+
+//=======================================================================
+
+
 #define VIMT3D_IMAGE_3D_OF_INSTANTIATE(T) \
 VCL_DEFINE_SPECIALIZATION vcl_string vimt3d_image_3d_of<T >::is_a() const \
-{ return vcl_string("vimt3d_image_3d_of<" #T ">"); }\
-template class vimt3d_image_3d_of<T >
+{ return vcl_string("vimt3d_image_3d_of<" #T ">"); } \
+template class vimt3d_image_3d_of<T >; \
+template bool vimt3d_image_3d_deep_equality(const vimt3d_image_3d_of<T>& lhs, \
+                                            const vimt3d_image_3d_of<T>& rhs);
 
 #endif // vimt3d_image_3d_of_txx_
+
+

@@ -1,14 +1,18 @@
 // This is mul/vimt3d/vimt3d_image_3d_of.h
+
 #ifndef vimt3d_image_3d_of_h_
 #define vimt3d_image_3d_of_h_
+
 //:
 // \file
 // \brief Container for vil3d_image_view<T> + transform
 // \author Tim Cootes
 
+
 #include <vimt3d/vimt3d_image_3d.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vcl_iosfwd.h>
+
 
 //: Represent 2D image of type T together with a transform.
 //  Each plane is ni() x nj() Ts, with the (x,y) element
@@ -16,12 +20,17 @@
 template<class T>
 class vimt3d_image_3d_of : public vimt3d_image_3d
 {
+private:
+  
   vil3d_image_view<T> image_;
 
   //: Shallow equality tester.
   //  The parameter must be identical type to this.
   bool equals(const vimt_image &) const;
- public:
+ 
+
+public:
+  
   //: Dflt ctor
   //  Creates an empty one-plane image.
   vimt3d_image_3d_of();
@@ -86,5 +95,17 @@ class vimt3d_image_3d_of : public vimt3d_image_3d
   //: Load class from binary file stream
   virtual void b_read(vsl_b_istream& bfs);
 };
+
+
+//=======================================================================
+//: True if the transforms and the actual image data are identical.
+// The image pointers need not be identical, 
+// provided that the underlying image data are the same.
+// \relates vimt3d_image_3d_of<T>
+// \relates vil3d_image_view
+template<class T>
+bool vimt3d_image_3d_deep_equality(const vimt3d_image_3d_of<T>& lhs,
+                                   const vimt3d_image_3d_of<T>& rhs);
+
 
 #endif // vimt3d_image_3d_of_h_
