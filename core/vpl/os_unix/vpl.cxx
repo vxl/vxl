@@ -58,6 +58,7 @@ vpl_usleep( unsigned int t )
 #endif
 }
 
+#include <stdlib.h>
 
 int vpl_putenv ( const char * envvar )
 {
