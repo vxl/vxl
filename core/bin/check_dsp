@@ -122,7 +122,7 @@ foreach $dir (@DIRS)
       last if ($updir_files eq "~END" && $inc_files eq "~END");
       while ($inc_files lt $updir_files) {
         print STDOUT "#include <$inc_files>\tmust be removed from $dir/test_include.cxx\n"
-          unless ($inc_files eq "vxl_config.h");
+          unless ($inc_files eq "vxl_config.h" || $inc_files eq "vcl_compiler.h");
         $inc_files = shift(@inc_files);
       }
       last if ($updir_files eq "~END" && $inc_files eq "~END");
