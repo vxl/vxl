@@ -17,7 +17,7 @@ int main(int argc, char **argv)
   vgui_menu bar = brct_menus::get_menu();
   vgui_window* win = vgui::produce_window(800, 600, bar, title);
   win->get_adaptor()->set_tableau(brct_windows_frame::instance());
-  win->get_adaptor()->bind_popups(vgui_CTRL);
+  win->get_adaptor()->bind_popups(vgui_ALT);
   win->set_statusbar(true);
   win->enable_vscrollbar(true);
   win->enable_hscrollbar(true);
