@@ -3,7 +3,7 @@
 // Test the functionality, and also cause a link to make sure the
 // function exists.
 
-int main()
+int test_vcl_cctype_main()
 {
   return ! ( vcl_isspace(' ') && vcl_isspace('\n') && !vcl_isspace('a') &&
              vcl_isalnum('1') && vcl_isalnum('z') && !vcl_isalnum('@') &&

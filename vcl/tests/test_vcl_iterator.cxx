@@ -5,7 +5,7 @@
 
 void f(vcl_iterator<float, int> *) { }
 
-int main()
+int test_vcl_iterator_main()
 {
   // invent some more tests.
   return 0;

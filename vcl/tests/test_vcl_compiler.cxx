@@ -41,7 +41,7 @@ struct A
 void vcl_test_implicit_instantiation(int n);
 
 
-int main()
+int test_vcl_compiler_main()
 {
   for (int i = 0; i < 2; ++i)
     vcl_cout << i << vcl_endl;

@@ -3,7 +3,7 @@
 #include <vcl_iostream.h>
 #include <vcl_map.h>
 
-int main()
+int test_vcl_map_main()
 {
   bool okay = true;
   typedef vcl_map<int, double, vcl_less<int> > mymap;

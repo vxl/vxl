@@ -6,7 +6,7 @@
 
 #define AssertEq(x) {vcl_cout<<"TEST ["<<fred<<"] == ["<<x<<"] : ";vcl_cout<<(fred==(x)?"PASSED":"FAILED")<<vcl_endl;}
 
-int main()
+int test_vcl_string_main()
 {
   vcl_string fred;
   fred = "fred";

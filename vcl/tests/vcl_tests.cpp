@@ -3,94 +3,109 @@
 //  awf, mar 2000
 //
 
-#define main test_vcl_compiler
-#include "test_vcl_compiler.cxx"
-#undef main
 
-#define main test_vcl_iterator
-#include "test_vcl_iterator.cxx"
-#undef main
-
-#define main test_vcl_iostream
-#include "test_vcl_iostream.cxx"
-#undef main
-
-#define main test_vcl_fstream
-#include "test_vcl_fstream.cxx"
-#undef main
-
-#define main test_vcl_map
-#include "test_vcl_map.cxx"
-#undef main
-
-#define main test_vcl_multimap
-#include "test_vcl_multimap.cxx"
-#undef main
-
-#define main test_vcl_vector
-#include "test_vcl_vector.cxx"
-#undef main
-
-#define main test_vcl_list
-#include "test_vcl_list.cxx"
-#undef main
-
-#define main test_vcl_string
-#include "test_vcl_string.cxx"
-#undef main
-
-#define main test_vcl_set
-#include "test_vcl_set.cxx"
-#undef main
-
-#define main test_vcl_deque
-#include "test_vcl_deque.cxx"
-#undef main
-
-#define main test_vcl_complex
-#include "test_vcl_complex.cxx"
-#undef main
-
-#ifndef VCL_GCC_30 // ambiguous overload for != with vcl_vector<>::iterator
-#define main test_vcl_rel_ops
-#include "test_vcl_rel_ops.cxx"
-#undef main
-#endif
-
-#define main test_vcl_algorithm
 #include "test_vcl_algorithm.cxx"
-#undef main
-
-#define main test_vcl_new
-#include "test_vcl_new.cxx"
-#undef main
-
-#define main test_vcl_cmath
+#include "test_vcl_cctype.cxx"
 #include "test_vcl_cmath.cxx"
-#undef main
+#include "test_vcl_compiler.cxx"
+#include "test_vcl_complex.cxx"
+#include "test_vcl_deque.cxx"
+#include "test_vcl_exception.cxx"
+#include "test_vcl_fstream.cxx"
+#include "test_vcl_headers.cxx"
+#include "test_vcl_iostream.cxx"
+#include "test_vcl_iterator.cxx"
+#include "test_vcl_list.cxx"
+#include "test_vcl_map.cxx"
+#include "test_vcl_multimap.cxx"
+#include "test_vcl_new.cxx"
+#include "test_vcl_rel_ops.cxx"
+#include "test_vcl_set.cxx"
+#include "test_vcl_stlfwd.cxx"
+#include "test_vcl_string.cxx"
+#include "test_vcl_vector.cxx"
+
+int result;
+
+void testname( char* testname )
+{
+  vcl_cout << "   Testing " << testname << "...";
+  vcl_cout.flush();
+}
+
+void testresult( int testresult )
+{
+  result |= testresult;
+  if( testresult==0 ) {
+    vcl_cout << "    PASSED" << vcl_endl;
+  } else {
+    vcl_cout << "  **FAILED**" << vcl_endl;
+  }
+}
 
 int main(int argc, char* argv[])
 {
-  vcl_cout << "Hello World!\n";
-  test_vcl_compiler();
-#ifndef VCL_GCC_30 // ambiguous overload for != with vcl_vector<>::iterator
-  test_vcl_rel_ops();
-#endif
-  test_vcl_iterator();
-  test_vcl_iostream();
-  test_vcl_fstream();
-  test_vcl_map();
-  test_vcl_multimap();
-  test_vcl_vector();
-  test_vcl_list();
-  test_vcl_string();
-  test_vcl_set();
-  test_vcl_deque();
-  test_vcl_complex();
-  test_vcl_algorithm();
-  test_vcl_new();
-  test_vcl_cmath();
+  result = 0;
 
-  return 0;
+  testname( "test_vcl_algorithm" );
+  testresult( test_vcl_algorithm_main() );
+
+  testname( "test_vcl_cctype" );
+  testresult( test_vcl_cctype_main() );
+
+  testname( "test_vcl_cmath" );
+  testresult( test_vcl_cmath_main() );
+
+  testname( "test_vcl_compiler" );
+  testresult( test_vcl_compiler_main() );
+
+  testname( "test_vcl_complex" );
+  testresult( test_vcl_complex_main() );
+
+  testname( "test_vcl_deque" );
+  testresult( test_vcl_deque_main() );
+
+  testname( "test_vcl_exception" );
+  testresult( test_vcl_exception_main() );
+
+  testname( "test_vcl_fstream" );
+  testresult( test_vcl_fstream_main() );
+
+  testname( "test_vcl_headers" );
+  testresult( test_vcl_headers_main(argc, argv) );
+
+  testname( "test_vcl_iostream" );
+  testresult( test_vcl_iostream_main() );
+
+  testname( "test_vcl_iterator" );
+  testresult( test_vcl_iterator_main() );
+
+  testname( "test_vcl_list" );
+  testresult( test_vcl_list_main() );
+
+  testname( "test_vcl_map" );
+  testresult( test_vcl_map_main() );
+
+  testname( "test_vcl_multimap" );
+  testresult( test_vcl_multimap_main() );
+
+  testname( "test_vcl_new" );
+  testresult( test_vcl_new_main() );
+
+  testname( "test_vcl_rel_ops" );
+  testresult( test_vcl_rel_ops_main() );
+
+  testname( "test_vcl_set" );
+  testresult( test_vcl_set_main() );
+
+  testname( "test_vcl_stlfwd" );
+  testresult( test_vcl_stlfwd_main() );
+
+  testname( "test_vcl_string" );
+  testresult( test_vcl_string_main() );
+
+  testname( "test_vcl_vector" );
+  testresult( test_vcl_vector_main() );
+
+  return result;
 }
-

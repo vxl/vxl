@@ -2,7 +2,7 @@
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h>
 
-int main()
+int test_vcl_exception_main()
 {
   int result = 0;
 #if VCL_HAS_EXCEPTIONS

@@ -10,7 +10,7 @@
 
 #include <vcl_iostream.h>
 
-int main()
+int test_vcl_cmath_main()
 {
   {
     int    xi = 314159265;

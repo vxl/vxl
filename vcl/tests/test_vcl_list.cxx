@@ -2,7 +2,7 @@
 #include <vcl_iostream.h>
 #include <vcl_list.h>
 
-int main()
+int test_vcl_list_main()
 {
   typedef vcl_list<int> container;
   container m;

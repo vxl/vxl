@@ -12,7 +12,7 @@ vcl_complex<double> doublify(vcl_complex<float> const &z)
 
 #include <vcl_iostream.h>
 
-int main()
+int test_vcl_complex_main()
 {
   vcl_complex<double> dc1(1.1,1.2), dc2(2.1,2.2);
   vcl_complex<float> fc1(1.1f,1.2f), fc2(2.1f,2.2f);
