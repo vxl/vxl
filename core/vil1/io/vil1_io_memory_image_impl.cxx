@@ -119,10 +119,9 @@ void vsl_b_read(vsl_b_istream &is, vil_memory_image_impl & p)
     break;
     }
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_memory_image_impl&) \n";
-    vcl_cerr << "           Unknown version number "<< v << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_memory_image_impl&)\n"
+             << "           Unknown version number "<< v << "\n";
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-    return;
   }
 }
 
@@ -130,13 +129,13 @@ void vsl_b_read(vsl_b_istream &is, vil_memory_image_impl & p)
 //: Output a human readable summary to the stream
 void vsl_print_summary(vcl_ostream& os,const vil_memory_image_impl & p)
 {
-  os<<"vil_memory_image_impl : "<<vcl_endl;
-  os<<"Num planes : "<<p.planes();
-  os<<" Num rows : "<<p.height();
-  os<<" Num cols "<<p.width();
-  os<<" Num components : "<<p.components()<<vcl_endl;
-  os<<"Num bits per comp : "<<p.bits_per_component();
-  os<<" Component format ";
+  os<<"vil_memory_image_impl :"
+    <<"\nNum planes : "<<p.planes()
+    <<" Num rows : "<<p.height()
+    <<" Num cols "<<p.width()
+    <<" Num components : "<<p.components()
+    <<"\nNum bits per comp : "<<p.bits_per_component()
+    <<" Component format ";
   switch (p.component_format())
   {
   case VIL_COMPONENT_FORMAT_UNKNOWN:

@@ -107,17 +107,21 @@ bool vidl_avicodec::get_section(
   DIB = (byte*) AVIStreamGetFrame(avi_get_frame_, position);
 
   WORD BitsPerPixel = ((LPBITMAPINFOHEADER)DIB)->biBitCount;
-  //vcl_cout << "Number of bits : " << BitsPerPixel << "  Number of bytes : " << get_bytes_pixel() << vcl_endl;
+#if 0
+  vcl_cout << "Number of bits : " << BitsPerPixel << "  Number of bytes : " << get_bytes_pixel() << vcl_endl;
+#endif
 
   WORD ColorsUsed = ((LPBITMAPINFOHEADER)DIB)->biClrUsed;
-  //vcl_cout << "Number of colors used : " << ColorsUsed << vcl_endl;
+#if 0
+  vcl_cout << "Number of colors used : " << ColorsUsed << vcl_endl;
+#endif
   // Not sure we can handle the stream if ColorsUsed!=0
 
   //For the moment
   if ((BitsPerPixel!=16) && (BitsPerPixel!=24))
     {
       vcl_cerr << "vidl_avicodec : Don't know how to process a "
-           << BitsPerPixel<< " bits per pixel AVI File.\n";
+               << BitsPerPixel<< " bits per pixel AVI File.\n";
       return false;
     }
 
@@ -172,7 +176,7 @@ bool vidl_avicodec::get_section(
       break;
     default:
       vcl_cerr << "vidl_avicodec : Don't know how to process a "
-           << BitsPerPixel << " bits per pixel AVI File.\n";
+               << BitsPerPixel << " bits per pixel AVI File.\n";
     } // end switch Bits per pixel
 
   db = NULL;
@@ -378,8 +382,8 @@ bool vidl_avicodec::save(vidl_movie* movie, const char* fname)
                             lpbi->biClrUsed * sizeof(RGBQUAD));
     if (hr != AVIERR_OK)
     {
-      vcl_cerr << "vidl_avicodec : Could not set the AVI stream format.\n";
-      vcl_cerr << "           The chosen compression mode may not be installed well.\n";
+      vcl_cerr << "vidl_avicodec : Could not set the AVI stream format.\n"
+               << "                The chosen compression mode may not be installed well.\n";
       return false;
     }
   }
@@ -394,8 +398,8 @@ bool vidl_avicodec::save(vidl_movie* movie, const char* fname)
         (LPBITMAPINFOHEADER)GlobalLock(make_dib(pframe, 24));
       if (!lpbi)
       {
-        vcl_cerr << "vidl_avicodec : DIB (Device Independent Bitmap) creation failed.\n";
-        vcl_cerr << "vidl_avicodec : Frame number " << i << vcl_endl;
+        vcl_cerr << "vidl_avicodec : DIB (Device Independent Bitmap) creation failed.\n"
+                 << "vidl_avicodec : Frame number " << i << vcl_endl;
         return false;
       }
 
@@ -490,7 +494,7 @@ HANDLE  vidl_avicodec::make_dib(vidl_frame_sptr frame, UINT bits)
       break;
     default:
       vcl_cerr << "vidl_avicodec : Don't know how to deal with "
-           << frame->get_bytes_pixel() << " bytes per pixel.\n";
+               << frame->get_bytes_pixel() << " bytes per pixel.\n";
 
     } // end switch byte per pixel
 
@@ -498,14 +502,14 @@ HANDLE  vidl_avicodec::make_dib(vidl_frame_sptr frame, UINT bits)
   delete TjSection;
 
   // 3st, Create the Bitmap and stick the datas in it
-  HDC hdc = GetDC(NULL) ;
+  HDC hdc = GetDC(NULL);
   HBITMAP hbitmap;
   if (!(hbitmap = CreateCompatibleBitmap(hdc,frame->width(),frame->height())))
   {
     vcl_cerr << "vidl_avicodec : Could not create a compatible bitmap for frame.\n";
     return NULL;
   }
-  BITMAP bitmap ;
+  BITMAP bitmap;
   GetObject(hbitmap,sizeof(BITMAP),&bitmap);
   int wColSize = sizeof(RGBQUAD)*((bits <= 8) ? 1<<bits : 0);
   int dwSize = sizeof(BITMAPINFOHEADER) + wColSize +
@@ -516,23 +520,23 @@ HANDLE  vidl_avicodec::make_dib(vidl_frame_sptr frame, UINT bits)
   //
   HANDLE hdib = GlobalAlloc(GHND,dwSize);
   if (!hdib)
-    return hdib ;
+    return hdib;
 
-  LPBITMAPINFOHEADER lpbi = (LPBITMAPINFOHEADER)GlobalLock(hdib) ;
+  LPBITMAPINFOHEADER lpbi = (LPBITMAPINFOHEADER)GlobalLock(hdib);
 
-  lpbi->biSize = sizeof(BITMAPINFOHEADER) ;
-  lpbi->biWidth = bitmap.bmWidth ;
-  lpbi->biHeight = bitmap.bmHeight ;
-  lpbi->biPlanes = 1 ;
-  lpbi->biBitCount = (WORD) bits ;
-  lpbi->biCompression = BI_RGB ;
-  lpbi->biSizeImage = dwSize - sizeof(BITMAPINFOHEADER) - wColSize ;
-  lpbi->biXPelsPerMeter = 0 ;
-  lpbi->biYPelsPerMeter = 0 ;
+  lpbi->biSize = sizeof(BITMAPINFOHEADER);
+  lpbi->biWidth = bitmap.bmWidth;
+  lpbi->biHeight = bitmap.bmHeight;
+  lpbi->biPlanes = 1;
+  lpbi->biBitCount = (WORD) bits;
+  lpbi->biCompression = BI_RGB;
+  lpbi->biSizeImage = dwSize - sizeof(BITMAPINFOHEADER) - wColSize;
+  lpbi->biXPelsPerMeter = 0;
+  lpbi->biYPelsPerMeter = 0;
   lpbi->biClrUsed = (bits <= 8) ? 1<<bits : 0;
-  lpbi->biClrImportant = 0 ;
+  lpbi->biClrImportant = 0;
 
-  hdc = CreateCompatibleDC(NULL) ; // Create Device Context
+  hdc = CreateCompatibleDC(NULL); // Create Device Context
 
    // Put the bits in the bitmap
   int error_code = SetDIBits(hdc,hbitmap,0,bitmap.bmHeight,newbits,(LPBITMAPINFO)lpbi, DIB_RGB_COLORS);
@@ -545,7 +549,7 @@ HANDLE  vidl_avicodec::make_dib(vidl_frame_sptr frame, UINT bits)
   //
   // Get the bits from the bitmap and stuff them after the LPBI
   //
-  LPBYTE lpBits = (LPBYTE)(lpbi+1)+wColSize ;
+  LPBYTE lpBits = (LPBYTE)(lpbi+1)+wColSize;
 
   // 4th, Stick the bits in the DIB
   error_code = GetDIBits(hdc,hbitmap,0,bitmap.bmHeight,lpBits,(LPBITMAPINFO)lpbi, DIB_RGB_COLORS);
@@ -564,5 +568,5 @@ HANDLE  vidl_avicodec::make_dib(vidl_frame_sptr frame, UINT bits)
   ReleaseDC(NULL,hdc);
   GlobalUnlock(hdib);
 
-  return hdib ;
+  return hdib;
 }

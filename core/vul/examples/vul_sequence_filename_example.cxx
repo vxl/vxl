@@ -24,10 +24,10 @@ int main (int argc, char** argv)
     }
     {
       vul_sequence_filename_map map("im.###,:5:");
-      vcl_cerr << map.name(10) << vcl_endl;
-      vcl_cerr << map.pair_name(10,11) << vcl_endl;
-      vcl_cerr << map.triplet_name(10,11,12) << vcl_endl;
-      vcl_cerr << map.image_name(10) << vcl_endl;
+      vcl_cerr << map.name(10) << vcl_endl
+               << map.pair_name(10,11) << vcl_endl
+               << map.triplet_name(10,11,12) << vcl_endl
+               << map.image_name(10) << vcl_endl;
     }
   }
   return 0;

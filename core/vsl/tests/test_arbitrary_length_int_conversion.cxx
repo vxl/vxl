@@ -11,19 +11,16 @@
 
 void test_arbitrary_length_int_conversion_int()
 {
-  vcl_cout << "*********************************************************"
-           << vcl_endl;
-  vcl_cout << "Testing arbitrary length int conversion for unsigned ints"
-           << vcl_endl;
-  vcl_cout << "*********************************************************"
-           << vcl_endl;
+  vcl_cout << "*********************************************************\n"
+           << "Testing arbitrary length int conversion for unsigned ints\n"
+           << "*********************************************************\n";
 
   signed int  * a = new signed int [25000000];
   signed int  * b = new signed int [25000000];
 
   int i;
   for (i = 0; i < 25000000; ++i)
-    a[i] = ((i-12500000)*160) ;
+    a[i] = ((i-12500000)*160);
 
   unsigned maxbuf =  VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(signed int)) *
     25000000;
@@ -32,26 +29,26 @@ void test_arbitrary_length_int_conversion_int()
 
   vcl_clock_t t1, t2;
 
-  vcl_cout << " Starting encode " << vcl_endl;
+  vcl_cout << " Starting encode\n";
 
   t1 = clock();
   unsigned long len = vsl_convert_to_arbitrary_length(a, buf, 25000000);
   t2 = clock();
 
   vcl_cout << " Required " << (double)(t2-t1) / CLOCKS_PER_SEC
-           << " seconds to encode 25M ints." <<vcl_endl;
+           << " seconds to encode 25M ints.\n";
 
   vcl_cout << " Max required buffer size is " << maxbuf << " bytes. Used "
            << len << vcl_endl;
 
   TEST ("Checking that the buffer didn't overflow", len < maxbuf, true);
 
-  vcl_cout << " Starting decode " << vcl_endl;
+  vcl_cout << " Starting decode\n";
   t1 = clock();
   unsigned long len2 = vsl_convert_from_arbitrary_length(buf, b, 25000000);
   t2 = clock();
   vcl_cout << " Required " << (double)(t2-t1) / CLOCKS_PER_SEC
-           << " seconds to decode and test 25M ints." <<vcl_endl;
+           << " seconds to decode and test 25M ints.\n";
 
   TEST ("Checking len == len2", len == len2, true);
 
@@ -69,12 +66,9 @@ void test_arbitrary_length_int_conversion_int()
 
 void test_arbitrary_length_int_conversion_short()
 {
-  vcl_cout << "*********************************************************"
-           << vcl_endl;
-  vcl_cout << "Testing arbitrary length int conversion for signed shorts"
-           << vcl_endl;
-  vcl_cout << "*********************************************************"
-           << vcl_endl;
+  vcl_cout << "*********************************************************\n"
+           << "Testing arbitrary length int conversion for signed shorts\n"
+           << "*********************************************************\n";
 
   signed short  a[65538];
   signed short  b[65540];
@@ -120,12 +114,9 @@ void test_arbitrary_length_int_conversion_short()
 
 void test_arbitrary_length_int_conversion_ushort()
 {
-  vcl_cout << "***********************************************************"
-           << vcl_endl;
-  vcl_cout << "Testing arbitrary length int conversion for unsigned shorts"
-           << vcl_endl;
-  vcl_cout << "***********************************************************"
-           << vcl_endl;
+  vcl_cout << "***********************************************************\n"
+           << "Testing arbitrary length int conversion for unsigned shorts\n"
+           << "***********************************************************\n";
 
   unsigned short  a[65538];
   unsigned short  b[65540];
@@ -169,9 +160,9 @@ void test_arbitrary_length_int_conversion_ushort()
 
 void test_explicit_int_io()
 {
-  vcl_cout << "**********************************" << vcl_endl;
-  vcl_cout << "Testing explicit length integer io" << vcl_endl;
-  vcl_cout << "**********************************" << vcl_endl;
+  vcl_cout << "**********************************\n"
+           << "Testing explicit length integer io\n"
+           << "**********************************\n";
 
   unsigned long i;
 
@@ -226,9 +217,9 @@ void test_explicit_int_io()
 
 void test_extreme_int_io()
 {
-  vcl_cout << "*************************************" << vcl_endl;
-  vcl_cout<<  "Testing largest/smallest integer I/O"<<vcl_endl;
-  vcl_cout << "************************************" << vcl_endl;
+  vcl_cout << "************************************\n"
+           << "Testing largest/smallest integer I/O\n"
+           << "************************************\n";
 
   // Some fudges to get the max values
   // vcl_numeric_limits doesn't seem to work yet

@@ -200,8 +200,7 @@ void vul_arg_info_list::display_help( char const*progname)
   // Print "prog [-a int] string string"
   for ( int i=0; i< nargs; i++) {
     if (args[i]->option()) {
-      vcl_cerr << "[";
-      vcl_cerr << args[i]->option();
+      vcl_cerr << "[" << args[i]->option();
       if (vcl_strlen(args[i]->type_)> 0)
         vcl_cerr << " " << args[i]->type_;
       vcl_cerr << "] ";
@@ -364,9 +363,8 @@ void vul_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
     // Print outcome
     for (int i = 0; i < nargs; ++i)
       if (args[i]->option_) {
-        vcl_cerr << "Switch " << args[i]->option_ << ": ";
-        vcl_cerr << (!done_once[i]? "not ":"") << "done, ";
-        vcl_cerr << "value [";
+        vcl_cerr << "Switch " << args[i]->option_ << ": "
+                 << (!done_once[i]? "not ":"") << "done, value [";
         args[i]->print_value(vcl_cerr);
         vcl_cerr << "]\n";
       }
@@ -381,8 +379,7 @@ void vul_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
     vcl_cerr << "args remaining [argc = " << argc << "]:";
     for(char ** av = argv; *av; ++av)
       vcl_cerr << " " << *av;
-    vcl_cerr << vcl_endl;
-    vcl_cerr << "--------------\n";
+    vcl_cerr << "\n--------------\n";
   }
 }
 
@@ -442,7 +439,7 @@ static int list_parse(vcl_list<int> &out, char ** argv)
 #if 0
     vcl_cerr << "Range regexp matched [" << token <<  "]: parts ["
              << match1<<"] ["<<match2<<"] ["<<match3<<"]\n"
-             << "  str->[" << str << "]" << vcl_endl;
+             << "  str->[" << str << "]\n";
 #endif
 
     bool matched2 = range_regexp.match(2).size() > 0;
@@ -635,7 +632,7 @@ VDS int parse(vul_arg<vcl_vector<int> >* argmt, char ** argv) {
   int retval = list_parse(tmp,argv);
   // Defaults should be cleared when the user supplies a value
   argmt->value_.clear();
-  for (vcl_list<int>::iterator i=tmp.begin() ; i!=tmp.end() ; ++i)
+  for (vcl_list<int>::iterator i=tmp.begin(); i!=tmp.end(); ++i)
     argmt->value_.push_back( *i );
   return retval;
 }
@@ -652,7 +649,7 @@ VDS int parse(vul_arg<vcl_vector<unsigned> >* argmt, char ** argv) {
   int retval = list_parse(tmp,argv);
   // Defaults should be cleared when the user supplies a value
   argmt->value_.clear();
-  for (vcl_list<int>::iterator i=tmp.begin() ; i!=tmp.end() ; ++i)
+  for (vcl_list<int>::iterator i=tmp.begin(); i!=tmp.end(); ++i)
     argmt->value_.push_back( unsigned(*i) );
   return retval;
 }

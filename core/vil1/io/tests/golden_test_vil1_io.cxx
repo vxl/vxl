@@ -51,11 +51,9 @@ int main( int argc, char* argv[] )
 
 void golden_test_vil_io(bool save_file)
 {
-  vcl_cout << "***********************" << vcl_endl;
-  vcl_cout << "Testing a golden data file for cross platform consistency";
-  vcl_cout << vcl_endl;
-  vcl_cout << "***********************" << vcl_endl;
-
+  vcl_cout << "*********************************************************\n"
+           << "Testing a golden data file for cross platform consistency\n"
+           << "*********************************************************\n";
 
   //----------------------------------------------------------------------
   // Create objects:

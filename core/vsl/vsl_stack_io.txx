@@ -64,8 +64,8 @@ void vsl_b_read(vsl_b_istream& is, vcl_stack<T>& v)
     }
     break;
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vcl_stack<T>&) \n";
-    vcl_cerr << "           Unknown version number "<< ver << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vcl_stack<T>&)\n"
+             << "           Unknown version number "<< ver << "\n";
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -80,7 +80,7 @@ void vsl_print_summary(vcl_ostream& os, const vcl_stack<T> &v)
   os << "Stack length: " << v.size() << vcl_endl;
 
   unsigned stack_size = v.size();
-  for (unsigned i=0; i<stack_size && i<5 ; i++)
+  for (unsigned i=0; i<stack_size && i<5; i++)
   {
     os << " " << i << ": ";
     vsl_print_summary(os, tmp_stack.top());

@@ -211,7 +211,7 @@ void vul_psfile::compute_bounding_box()
   oy = (int) (pos_iny * PIX2INCH + 0.5);
 
   if (debug) vcl_cerr << "vul_psfile::compute_bounding_box, box_width = " << box_width
-    << ", box_height = " << box_height << vcl_endl;
+                      << ", box_height = " << box_height << vcl_endl;
 }
 
 //-----------------------------------------------------------------------------
@@ -243,8 +243,10 @@ void vul_psfile::set_min_max_xy(int x, int y)
 //-----------------------------------------------------------------------------
 void vul_psfile::print_greyscale_image(byte* buffer, int sizex, int sizey)
 {
-  if (debug) vcl_cerr << "vul_psfile::print_greyscale_image, width = " << sizex <<
-    ", height = " << sizey  << ", reduction_factor = " << reduction_factor << vcl_endl;
+  if (debug)
+    vcl_cerr << "vul_psfile::print_greyscale_image, width = " << sizex
+             << ", height = " << sizey  << ", reduction_factor = "
+             << reduction_factor << vcl_endl;
 
   exist_image = true;
   width = sizex;
@@ -255,16 +257,17 @@ void vul_psfile::print_greyscale_image(byte* buffer, int sizex, int sizey)
   int new_height= (int)(height/reduction_factor);
 
   output_filestream << "\n%%Page: 1 1\n\n"
-          << "% remember original state\n"
-          << "/origstate save def\n"
-          << "\n% build a temporary dictionary\n"
-          << "20 dict begin\n\n"
-          << "% define string to hold a scanline's worth of data\n"
-          << "/pix " << new_width << " string def\n";
+                    << "% remember original state\n"
+                    << "/origstate save def\n"
+                    << "\n% build a temporary dictionary\n"
+                    << "20 dict begin\n\n"
+                    << "% define string to hold a scanline's worth of data\n"
+                    << "/pix " << new_width << " string def\n";
+
   if (printer_paper_orientation == vul_psfile::LANDSCAPE)
   {
-    output_filestream << "% print in landscapey mode\n";
-    output_filestream << "90 rotate 0 " << (int) (-psizey*PIX2INCH) << " translate\n\n";
+    output_filestream << "% print in landscapey mode\n"
+                      << "90 rotate 0 " << (int) (-psizey*PIX2INCH) << " translate\n\n";
   }
   output_filestream << "% lower left corner\n";
   translate_pos = output_filestream.tellp();
@@ -272,13 +275,13 @@ void vul_psfile::print_greyscale_image(byte* buffer, int sizex, int sizey)
   image_translate_and_scale();
 
   output_filestream << new_width << " "
-          << new_height << " "
-          << "8                      % dimensions of data\n"
-          << "[" << new_width << " 0 0 -"
-          << new_height << " 0 "
-          << new_height << "]           % mapping matrix\n"
-          << "{currentfile pix readhexstring pop}\n"
-          << "image\n\n";
+                    << new_height << " "
+                    << "8                      % dimensions of data\n"
+                    << "[" << new_width << " 0 0 -"
+                    << new_height << " 0 "
+                    << new_height << "]           % mapping matrix\n"
+                    << "{currentfile pix readhexstring pop}\n"
+                    << "image\n\n";
   int linesize = 72;
   int index;
   int height_left;
@@ -322,7 +325,7 @@ void vul_psfile::print_greyscale_image(byte* buffer, int sizex, int sizey)
         }
         else
         {
-          for (int m=0; m <= width % reduction_factor ;m++)
+          for (int m=0; m <= width % reduction_factor; m++)
           {
             height_left = new_height - j;
             if( height_left >= 1)
@@ -370,9 +373,9 @@ void vul_psfile::print_greyscale_image(byte* buffer, int sizex, int sizey)
     output_filestream << vcl_endl;
   }
   output_filestream << "% stop using temporary dictionary\n"
-    << "end\n\n"
-    << "% restore original state\n"
-    << "origstate restore\n\n";
+                    << "end\n\n"
+                    << "% restore original state\n"
+                    << "origstate restore\n\n";
 }
 
 //-----------------------------------------------------------------------------
@@ -390,27 +393,28 @@ void vul_psfile::print_color_image(byte* data, int width_arg, int height_arg)
 
   // This part uses xv outfile as a reference:
   output_filestream << "\n%%Page: 1 1\n\n"
-    << "% remember original state\n"
-    << "/origstate save def\n"
-    << "\n% build a temporary dictionary\n"
-    << "20 dict begin\n\n"
-    << "% define string to hold a scanline's worth of data\n"
-    << "/pix " << 3 * width_arg << " string def\n"
-    << "\n% define space for color conversions\n"
-    << "/grays " << width_arg
-    << " string def  % space for gray scale line\n"
-    << "/npixls 0 def\n"
-    << "/rgbindx 0 def\n\n";
+                    << "% remember original state\n"
+                    << "/origstate save def\n"
+                    << "\n% build a temporary dictionary\n"
+                    << "20 dict begin\n\n"
+                    << "% define string to hold a scanline's worth of data\n"
+                    << "/pix " << 3 * width_arg << " string def\n"
+                    << "\n% define space for color conversions\n"
+                    << "/grays " << width_arg
+                    << " string def  % space for gray scale line\n"
+                    << "/npixls 0 def\n"
+                    << "/rgbindx 0 def\n\n";
   if (printer_paper_orientation == vul_psfile::LANDSCAPE)
   {
-    output_filestream << "% print in landscape mode\n";
-    output_filestream << "90 rotate 0 " << (int) (-psizey*PIX2INCH) << " translate\n\n";
+    output_filestream << "% print in landscape mode\n"
+                      << "90 rotate 0 " << (int) (-psizey*PIX2INCH) << " translate\n\n";
   }
   output_filestream << "% lower left corner\n";
   translate_pos = output_filestream.tellp();
   image_translate_and_scale();
 
-  output_filestream << vcl_endl
+  output_filestream
+    << vcl_endl
     << "% define 'colorimage' if it isn't defined\n"
     << "%   ('colortogray' and 'mergeprocs' come from xwd2ps\n"
     << "%     via xgrab)\n"
@@ -516,7 +520,7 @@ void vul_psfile::print_color_image(byte* data, int width_arg, int height_arg)
         }
         else // width_left < 1
         {
-          for (int m=0; m <= width_arg % reduction_factor ;m++)
+          for (int m=0; m <= width_arg % reduction_factor; m++)
           {
             height_left = new_height - j;
             if( height_left >= 1)
@@ -571,9 +575,9 @@ void vul_psfile::print_color_image(byte* data, int width_arg, int height_arg)
   }
 
   output_filestream << "% stop using temporary dictionary\n"
-    << "end\n\n"
-    << "% restore original state\n"
-    << "origstate restore\n\n";
+                    << "end\n\n"
+                    << "% restore original state\n"
+                    << "origstate restore\n\n";
 }
 
 //-----------------------------------------------------------------------------
@@ -583,8 +587,8 @@ void vul_psfile::graphic_header()
 {
   if (printer_paper_orientation == vul_psfile::LANDSCAPE)
   {
-    output_filestream << "% print in landscape mode\n";
-    output_filestream << "90 rotate 0 " << (int) (-psizey*PIX2INCH) << " translate\n\n";
+    output_filestream << "% print in landscape mode\n"
+                      << "90 rotate 0 " << (int) (-psizey*PIX2INCH) << " translate\n\n";
   }
 
   output_filestream.flush();
@@ -603,9 +607,10 @@ void vul_psfile::image_translate_and_scale()
   int scale_min_x  = (int) ((float) min_x * scale_x/100.0);
   int scale_max_y  = (int) ((float) max_y * scale_y/100.0);
 
-  if (debug) vcl_cerr << "vul_psfile::image_translate_and_scale, scale_height= " <<
-    scale_height << ", scale_min_x = " << scale_min_x << ", scale_max_y = " <<
-    scale_max_y << vcl_endl;
+  if (debug)
+    vcl_cerr << "vul_psfile::image_translate_and_scale, scale_height= "
+             << scale_height << ", scale_min_x = " << scale_min_x
+             << ", scale_max_y = " << scale_max_y << vcl_endl;
 
   vul_printf(output_filestream, "%d %d translate\n", ox - scale_min_x, oy + scale_max_y - scale_height);
   vul_printf(output_filestream, "\n%% size of image (on paper, in 1/72inch coords)\n");
@@ -733,9 +738,9 @@ void vul_psfile::postscript_header()
   }
 
   output_filestream << "%!PS-Adobe-2.0 EPSF-2.0\n"
-          << "%%Title: " << filename.c_str() << vcl_endl
-          << "%%Creator: GE Targetjr - by Alan S. Liu\n"
-          << "%%compute_bounding_box: " ;
+                    << "%%Title: " << filename.c_str() << vcl_endl
+                    << "%%Creator: vul_psfile - by Alan S. Liu\n"
+                    << "%%compute_bounding_box: ";
 
   header_pos = output_filestream.tellp();
   reset_postscript_header();
@@ -760,8 +765,8 @@ void vul_psfile::reset_postscript_header()
     vul_printf(output_filestream, "%d %d %d %d\n", ox,oy,ox+iw,oy+ih);
   }
   output_filestream << "%%Pages: 1\n"
-    << "%%DocumentFonts:\n"
-    << "%%EndComments\n";
+                    << "%%DocumentFonts:\n"
+                    << "%%EndComments\n";
 }
 
 //-----------------------------------------------------------------------------
@@ -770,12 +775,12 @@ void vul_psfile::reset_postscript_header()
 void vul_psfile::sobj_rgb_params(char const* obj_str, bool filled)
 {
   print_graphics_prolog();
-  output_filestream << "\nBegin %I " << obj_str << vcl_endl;
-  output_filestream << "2 0 0 [] 0 SetB\n";
-  output_filestream << fg_r << " " << fg_g << " " << fg_b << " SetCFg\n";
-  output_filestream << bg_r << " " << bg_g << " " << bg_b << " SetCBg\n";
-  output_filestream << line_width << " setlinewidth\n";
-  output_filestream << (filled ? "0": "none") << " SetP %I p n\n";
+  output_filestream << "\nBegin %I " << obj_str << vcl_endl
+                    << "2 0 0 [] 0 SetB\n"
+                    << fg_r << " " << fg_g << " " << fg_b << " SetCFg\n"
+                    << bg_r << " " << bg_g << " " << bg_b << " SetCBg\n"
+                    << line_width << " setlinewidth\n"
+                    << (filled ? "0": "none") << " SetP %I p n\n";
 }
 
 //-----------------------------------------------------------------------------
@@ -792,8 +797,8 @@ void vul_psfile::line(float x1, float y1, float x2, float y2)
   sobj_rgb_params("Line", false);
 
   output_filestream << (int) x1 << " " << (int) y1 << " "
-                     << (int) x2 << " " << (int) y2 << " Line\n";
-  output_filestream << "End\n";
+                    << (int) x2 << " " << (int) y2 << " Line\n"
+                    << "End\n";
 }
 
 //-----------------------------------------------------------------------------
@@ -830,17 +835,17 @@ void vul_psfile::ellipse(float x, float y, float a_axis, float b_axis, int angle
   sobj_rgb_params("Ellipse", false);
   if (angle)
   {
-    output_filestream << (int) x << " " << (int) y << " translate \n";
-    output_filestream << -angle << " rotate\n";
-    output_filestream << "0 0 " << (int) a_axis << " "
-      << (int) b_axis << " Elli\nEnd\n";
+    output_filestream << (int) x << " " << (int) y << " translate \n"
+                      << -angle << " rotate\n"
+                      << "0 0 " << (int) a_axis << " "
+                      << (int) b_axis << " Elli\nEnd\n";
   }
   else
   {
     output_filestream << (int) x << " "
-      << (int) y << " "
-      << (int) a_axis << " "
-      << (int) b_axis << " Elli\nEnd\n";
+                      << (int) y << " "
+                      << (int) a_axis << " "
+                      << (int) b_axis << " Elli\nEnd\n";
   }
 }
 
@@ -1149,7 +1154,7 @@ void vul_psfile::print_graphics_prolog()
     << "brushDashArray brushDashOffset setdash\n"
     << "fgred fggreen fgblue setrgbcolor\n"
     << "} ifelse\n"
-//    << "brushWidth setlinewidth\n"
+//  << "brushWidth setlinewidth\n"
     << "originalCTM setmatrix\n"
     << "stroke\n"
     << "grestore\n"

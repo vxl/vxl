@@ -24,22 +24,22 @@ int main(int /*argc*/, char** /*argv*/)
   // Write to a vcl_ostream: the output as the format [R G B].
   vcl_cout << "/* XPM */\n"
            << "/* " << orange << black << white << grey
-           << (int)orange_grey << " */" << vcl_endl;
+           << (int)orange_grey << " */\n";
 
   // And now an .xpm file using these vil_rgb_cells, and the function as_hex:
-  vcl_cout << "static char* example_rgb[] = {\n\"20 8 4 1\",\n";
-  vcl_cout << "\" \tc " << as_hex(white) << "\",\n";
-  vcl_cout << "\"*\tc " << as_hex(black) << "\",\n";
-  vcl_cout << "\".\tc " << as_hex(orange)<< "\",\n";
-  vcl_cout << "\"/\tc " << as_hex(grey)  << "\",\n";
-  vcl_cout << "\"/ /.*** / /.* /.* / \",\n"
-       << "\" /.* /.* / .*/.* / /\",\n"
-       << "\"/.* / /.* /.*.* / / \",\n"
-       << "\" .*/ / .*/ .** / / /\",\n"
-       << "\"/.* / /.* /.*.* / / \",\n"
-       << "\" .*/ / .*/ .*/.* / /\",\n"
-       << "\"/ .*/ .*/ /.* /.* / \",\n"
-       << "\" / .***/.* .*/ /.* .\"\n};\n";
+  vcl_cout << "static char* example_rgb[] = {\n\"20 8 4 1\",\n"
+           << "\" \tc " << as_hex(white) << "\",\n"
+           << "\"*\tc " << as_hex(black) << "\",\n"
+           << "\".\tc " << as_hex(orange)<< "\",\n"
+           << "\"/\tc " << as_hex(grey)  << "\",\n"
+           << "\"/ /.*** / /.* /.* / \",\n"
+           << "\" /.* /.* / .*/.* / /\",\n"
+           << "\"/.* / /.* /.*.* / / \",\n"
+           << "\" .*/ / .*/ .** / / /\",\n"
+           << "\"/.* / /.* /.*.* / / \",\n"
+           << "\" .*/ / .*/ .*/.* / /\",\n"
+           << "\"/ .*/ .*/ /.* /.* / \",\n"
+           << "\" / .***/.* .*/ /.* .\"\n};\n";
   return 0;
 }
 

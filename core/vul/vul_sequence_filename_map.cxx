@@ -291,15 +291,14 @@ void vul_sequence_filename_map::parse()
       indices_.push_back(i);
   }
 
-  if (debug) {
-    vcl_cerr << seq_template_ << vcl_endl;
-    vcl_cerr << "    image dir : " << image_dir_ << vcl_endl;
-    vcl_cerr << "    basename  : " << basename_ << vcl_endl;
-    vcl_cerr << " index format : " << index_format_ << vcl_endl;
-    vcl_cerr << "    extension : " << image_extension_ << vcl_endl;
-    vcl_cerr << "    indices   : " << start_ << ":" << step_ << ":" << end_ << vcl_endl;
-    vcl_cerr << vcl_endl;
-  }
+  if (debug)
+    vcl_cerr << seq_template_ << vcl_endl
+             << "    image dir : " << image_dir_ << vcl_endl
+             << "    basename  : " << basename_ << vcl_endl
+             << " index format : " << index_format_ << vcl_endl
+             << "    extension : " << image_extension_ << vcl_endl
+             << "    indices   : " << start_ << ":" << step_ << ":" << end_
+             << vcl_endl << vcl_endl;
 }
 
 int vul_sequence_filename_map::get_mapped_index(int real) const
@@ -316,8 +315,9 @@ int vul_sequence_filename_map::get_mapped_index(int real) const
 
 vcl_ostream& vul_sequence_filename_map::print (vcl_ostream& s) const
 {
-  s << "vul_sequence_filename_map : " << image_dir_ << basename_ << index_format_ << image_extension_ << " ";
-  s << "[" << indices_[0] << ":" << indices_[1] - indices_[0] << ":" << indices_.back() << "]" << vcl_endl;
+  s << "vul_sequence_filename_map : " << image_dir_ << basename_
+    << index_format_ << image_extension_ << " [" << indices_[0] << ":"
+    << indices_[1] - indices_[0] << ":" << indices_.back() << "]\n";
 
 #if 0
   s << vul_sprintf("vul_sequence_filename_map : %s%s%s [%i:%i:%i]",

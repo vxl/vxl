@@ -187,7 +187,7 @@ bool vil_iris_generic_image::read_header()
   if (magic_ != 474)
   {
     vcl_cerr << "This is not an Iris RGB file: magic number is incorrect: "
-         << magic_ << vcl_endl;
+             << magic_ << vcl_endl;
     return false;
   }
 
@@ -219,21 +219,21 @@ bool vil_iris_generic_image::read_header()
 bool vil_iris_generic_image::write_header()
 {
 #ifdef DEBUG
-  vcl_cerr << "vil_iris_generic_image::write_header()\n";
-  vcl_cerr << "Here we go : \n";
-  vcl_cerr << "magic_      = " << magic_    << vcl_endl;
-  vcl_cerr << "storage_    = " << storage_ << vcl_endl;
-  vcl_cerr << "bytes_per_c = " << bytes_per_component_ << vcl_endl;
-  vcl_cerr << "dimension_  = " << dimension_ << vcl_endl;
-  vcl_cerr << "width_      = " << width_ << vcl_endl;
-  vcl_cerr << "height_     = " << height_ << vcl_endl;
-  vcl_cerr << "planes_     = " << planes_ << vcl_endl;
-  vcl_cerr << "pixmin_     = " << pixmin_ << vcl_endl;
-  vcl_cerr << "pixmax_     = " << pixmax_ << vcl_endl;
-  vcl_cerr << "colormap_   = " << colormap_ << vcl_endl;
-  vcl_cerr << "components_ = " << components_ << vcl_endl;
-  vcl_cerr << "imagename_  = " << imagename_ << vcl_endl;
-  vcl_cerr << vcl_endl;
+  vcl_cerr << "vil_iris_generic_image::write_header()\n"
+           << "Here we go : \n"
+           << "magic_      = " << magic_    << vcl_endl
+           << "storage_    = " << storage_ << vcl_endl
+           << "bytes_per_c = " << bytes_per_component_ << vcl_endl
+           << "dimension_  = " << dimension_ << vcl_endl
+           << "width_      = " << width_ << vcl_endl
+           << "height_     = " << height_ << vcl_endl
+           << "planes_     = " << planes_ << vcl_endl
+           << "pixmin_     = " << pixmin_ << vcl_endl
+           << "pixmax_     = " << pixmax_ << vcl_endl
+           << "colormap_   = " << colormap_ << vcl_endl
+           << "components_ = " << components_ << vcl_endl
+           << "imagename_  = " << imagename_ << vcl_endl
+           << vcl_endl;
 #endif
 
   char dummy[410];
@@ -258,14 +258,12 @@ bool vil_iris_generic_image::write_header()
 }
 
 
-
 vil_image vil_iris_generic_image::get_plane(int plane) const
 {
   assert(plane < planes_); // should this be 'plane <= planes_'? planes start at 0.
   vcl_cerr << "do something for vil_iris_generic_image::get_plane\n";
   return 0;
 }
-
 
 
 bool vil_iris_generic_image::get_section(void* buf, int x0, int y0, int xs, int ys) const
