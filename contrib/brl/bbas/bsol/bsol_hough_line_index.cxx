@@ -403,8 +403,7 @@ bsol_hough_line_index::parallel_lines(const float angle,
     ang -= 180.0;
   if (ang>angle_range_)
     {
-      vcl_cout << "The line angle was outside the range "
-               << " of bsol_hough_line_index Space!\n";
+      vcl_cout << "The line angle was outside the range of bsol_hough_line_index Space!\n";
       return;
     }
   int theta = (int)vcl_floor(ang/angle_increment_);
@@ -611,8 +610,8 @@ static int get_extended_count(int bin, vcl_vector<int> const& ang_hist)
 }
 
 //---------------------------------------------------------------------
-//: Prune any sequences of more than one maxium value.
-// That is, it is possible to have a "flat" top peak with an arbitarily
+//: Prune any sequences of more than one maximum value.
+// That is, it is possible to have a "flat" top peak with an arbitrarily
 // long sequence of equal, but maximum values.
 static void remove_flat_peaks(vcl_vector<int>& angle_hist)
 {
@@ -712,7 +711,7 @@ bsol_hough_line_index::non_maximum_suppress(const int radius,
   vcl_vector<int> out(num);
   if ((2*radius +1)> num/2)
     {
-      vcl_cout << "In bsol_hough_line_index::non_maximum_suppress(.)-"
+      vcl_cout << "In bsol_hough_line_index::non_maximum_suppress(.) - "
                << " the radius is too large\n";
       return out;
     }
@@ -724,7 +723,7 @@ bsol_hough_line_index::non_maximum_suppress(const int radius,
   //Find local maxima
   for (int indx = 0; indx<num; indx++)
     {
-      //find the maxium value in the current kernel
+      //find the maximum value in the current kernel
       int max_count = bins[indx];
       for (int k = -radius; k <= radius ;k++)
         {
@@ -733,7 +732,7 @@ bsol_hough_line_index::non_maximum_suppress(const int radius,
           if ( c > max_count)
             max_count = c;
         }
-      //Is position th a local maxium?
+      //Is position th a local maximum?
       if (max_count == bins[indx])
         out[indx] = max_count;//Yes. So set the counts to the max value
     }
