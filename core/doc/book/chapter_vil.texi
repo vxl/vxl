@@ -34,7 +34,7 @@ optimisations that only a human can apply.
 @end itemize
 
 @section Loading and saving
-Let's look at an example of vil in use.  This program makes an image from a
+Let's look at an example of vil2 in use.  This program makes an image from a
 disk file, copies it into memory, and prints the pixel at
 100,100.
 
@@ -106,7 +106,7 @@ automatically.
 Anyway, the usual next step in demonstrating an image handling library is
 to show thresholding, so let's have a look.  This program loads an image
 into memory, and creates a new image where all pixels greater than a
-threshold value are set to 255.
+threshold value are set to 0.
 @example
 #include <vxl_config.h>
 #include <vil2/vil2_rgb.h>
