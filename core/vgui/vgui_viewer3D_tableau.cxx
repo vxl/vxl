@@ -320,10 +320,6 @@ bool vgui_viewer3D_tableau::mouse_drag(int x, int y, vgui_button button, vgui_mo
 
   // TRANSLATION
   if (c_mouse_translate(button, modifier)) {
-    if (debug) vcl_cerr << "vgui_trackball_handle::right\n";
-
-  vcl_cerr << "handle! "<< button << "\n";
-
     GLint vp[4];
     glGetIntegerv(GL_VIEWPORT, vp); // ok
     double width = (double)vp[2];
@@ -384,22 +380,19 @@ bool vgui_viewer3D_tableau::mouse_up(int x, int y, vgui_button button, vgui_modi
 bool vgui_viewer3D_tableau::help() {
   // awfawf fixme these need to come from this->c_*
   vcl_cerr << "\n-- vgui_viewer3D_tableau ---------\n"
-           << "|     mouse              |\n"
-           << "| shift+left        zoom |\n"
-           << "| shift+middle    rotate |\n"
-           << "| shift+right  translate |\n"
-           << "|                        |\n"
-           << "|     keys               |\n"
-           << "| `D'         lock dolly |\n"
-           << "| `Z'          lock zoom |\n"
-           << "| `l'           lighting |\n"
-           << "| `s'            shading |\n"
-           << "| `p'           spinning |\n"
-           << "| `n'           niceness |\n"
-           << "| `h'          headlight |\n"
-           << "| `>'          save home |\n"
-           << "| `<'       restore home |\n"
-           << "--------------------------\n\n";
+           << "  rotate:    " << c_mouse_rotate.as_string() << "\n"
+           << "  translate: " << c_mouse_translate.as_string() << "\n"
+           << "  zoom: " << c_mouse_zoom.as_string() << "\n"
+           << "  lock dolly: " << c_lock_dolly.as_string() << "\n"
+           << "  lock zoom: " << c_lock_zoom.as_string() << "\n"
+           << "  lighting: " << c_lighting.as_string() << "\n"
+           << "  shading: " << c_shading.as_string() << "\n"
+           << "  spinning: " << c_spinning.as_string() << "\n"
+           << "  render_mode: " << c_render_mode.as_string() << "\n"
+           << "  niceness: " << c_niceness.as_string() << "\n"
+           << "  headlight: " << c_headlight.as_string() << "\n"
+           << "  save_home: " << c_save_home.as_string() << "\n"
+           << "  restore_home: " << c_restore_home.as_string() << "\n";
 
   return false;
 }
