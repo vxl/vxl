@@ -144,24 +144,28 @@ The colour threshold program looks like this:
 #include <vil/vil_save.h>
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_rgb_byte.h>
+#include <vil/vil_image_as.h>
 
 int main()
 @{
-  vil_image img = vil_load_rgb("foo.ppm");
+  vil_image img = vil_load("foo.ppm");
 
-  vil_memory_image_of<vil_rgb_byte> buf(img);
+  vil_image img_rgb = vil_image_as_rgb_byte(img);
+
+  vil_memory_image_of<vil_rgb_byte> buf(img_rgb);
 
   for(int y = 0; y < buf.height(); ++y)
     for(int x = 0; x < buf.width(); ++x)
-      if (buf(x,y).R < 200 && buf(x,y).G < 200 && buf(x,y).B < 200)
+      if (buf(x,y).r < 200 && buf(x,y).g < 200 && buf(x,y).b < 200)
         buf(x,y) = vil_rgb_byte(0,0,0);
 
   vil_save(buf, "foothresh.ppm");
 @}
 @end example
-@cindex vil_load_rgb
-This code introduces @code{vil_load_rgb}, which forces any format it is
-given into RGB.  It also uses the @code{vil_rgb_byte} class, which is a
+@cindex vil_image_as
+This code introduces @code{vil_image_as}, a set of functions
+which force any image into the desired format.
+It also uses the @code{vil_rgb_byte} class, which is a
 simple way to handle RGB triples.
 
 @section Creating images from scratch
