@@ -1,0 +1,58 @@
+QV: a quick VRML parser
+Version 1.0
+Author: Paul S. Strauss of Silicon Graphics
+
+------------------------
+
+QV is an implementation of a VRML 1.0 parser that was created by
+extracting the necessary classes and stuff from the Open Inventor
+2.0.1 source.
+
+------------------------
+
+To compile the QV parser "library":
+
+	cd src ; make
+
+This will create QvLib.o, which contains everything in QV. (It should
+be about 400K, including debugging information from the -g flag in
+the Makefile.)
+
+------------------------
+
+To test QV parsing:
+
+	cd test ; make readTest
+
+Then, run it on the data file:
+
+	./readTest < AllNodes.wrl
+
+The AllNodes.wrl file contains 1 of each supported node. It also has
+an extender node or two to test that capability. If the parsing was
+successful, the program prints "Read was ok". Otherwise, it prints
+"Read was bad" after at least one more specific error message.
+
+------------------------
+
+To test QV traversal:
+
+	cd test ; make travTest
+
+Then, run it on the sample data file:
+
+	./travTest < AllNodes.wrl
+
+This should print out each node type that is traversed and prints the
+current traversal state at each shape node. This program uses the
+sample traversal code found in src/QvTraverse.c++, which is intended
+only as a demonstration of how traversal is implemented. VRML
+developers may use this code as a basis for a real traversal
+implementation.
+
+------------------------
+
+*** IMPORTANT NOTE:
+
+* This file and the QV class header files are the only current sources
+* of documentation for QV.

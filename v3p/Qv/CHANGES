@@ -1,0 +1,32 @@
+This file documents changes made to QV between releases.
+
+------------------------------------------------------------------
+Changes from Version 0.0 to Version 1.0:
+------------------------------------------------------------------
+
+- Ignore flags in fields are gone.
+
+- Added QvMFString class
+
+- Added QvAsciiText class
+
+- Added QvFontStyle class
+
+- Removed trailing comma from last enum type in definition - some compilers
+  prohibit it.
+
+- Changed QvLevelOfDetail to QvLOD.
+
+- Removed "NONE" from QvMaterialBinding and QvNormalBinding value enums.
+
+- Added comments for QvTexture2 Wrap enum choices.
+
+- Added "description" field to QvWWWAnchor.
+
+- Added "valueHasConstructor" argument to QV_MFIELD_SOURCE() macro. This
+  allows for multiple-value fields whose values need constructors to be
+  called. (It uses new() instead of malloc(), which is a little slower
+  but correct for these types.)
+
+- Added reference counting and automatic deletion of nodes when reference
+  count reaches zero.
