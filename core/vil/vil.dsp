@@ -281,6 +281,15 @@ SOURCE=.\vil2_clamp.cxx
 # Begin Source File
 SOURCE=.\vil2_transpose.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vil2_flip.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_plane.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_print.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -370,6 +379,18 @@ SOURCE=.\vil2_clamp.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil2_transpose.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_flip.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_plane.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_print.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_view_as.h
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"

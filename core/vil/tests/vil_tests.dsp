@@ -13,7 +13,7 @@ SOURCE=.\test_pixel_format.cxx
 SOURCE=.\test_image_resource.cxx
 SOURCE=.\test_image_view.cxx
 SOURCE=.\test_image_view_maths.cxx
+SOURCE=.\test_memory_chunk.cxx
 # End Group
 # Begin Group "Header Files"
 # End Group
-
