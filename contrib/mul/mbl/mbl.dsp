@@ -254,6 +254,9 @@ SOURCE=.\mbl_correspond_points.cxx
 # Begin Source File
 SOURCE=.\mbl_stats_nd.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\mbl_table.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -433,6 +436,9 @@ SOURCE=.\mbl_test.h
 # End Source File
 # Begin Source File
 SOURCE=.\mbl_stats_nd.h
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_table.h
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
