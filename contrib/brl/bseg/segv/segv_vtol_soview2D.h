@@ -43,7 +43,7 @@ class segv_vtol_soview2D_edge : public vgui_soview2D_linestrip
   segv_vtol_soview2D_edge() {}
 
   //: Constructor - creates a view of a vtol_vertex_2d
-  segv_vtol_soview2D_edge(vtol_edge_2d_sptr& e);
+  segv_vtol_soview2D_edge(vtol_edge_2d_sptr const& e);
 
   //: Print details about this vtol_vertex_2d to the given stream.
   virtual vcl_ostream& print(vcl_ostream&) const;
