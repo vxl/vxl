@@ -14,6 +14,7 @@
 //  Modifications
 // \endverbatim
 
+#include <vcl_list.h>
 #include <vcl_vector.h>
 #include <vsl/vsl_binary_io.h>
 #include <vbl/vbl_ref_count.h>
@@ -23,10 +24,12 @@
 class bmrf_node : public vbl_ref_count
 {
 public:
+  //: iterator over neighboring nodes
+  typedef vcl_list<bmrf_node*>::iterator neighbor_iterator;
+  
   //: The values of this enum categorize the neighbors
-  enum neighbor_type { SPACE, TIME, ALPHA };
-  //: The number of neighbor types defined in the neighbor_type enum
-  static const int number_of_types;
+  // \note ALL is a special type and should be kept last
+  enum neighbor_type { SPACE, TIME, ALPHA, /*<--add new types here*/  ALL };
   
   //: Constructor
   bmrf_node( int frame_num = 0, double probability = 0.0 );
@@ -46,6 +49,18 @@ public:
   // \return true if the node is removed successfully
   // \return false if the node was not a neighbor
   bool remove_neighbor( bmrf_node *node, neighbor_type type );
+
+  //: Returns an iterator to the beginning of the type \param type neighbors
+  // \note if \param type is ALL then iteration is over all types
+  neighbor_iterator begin(neighbor_type type = ALL);
+
+  //: Returns an iterator to the end of the type \param type neighbors
+  // \note if \param type is ALL then iteration is over all types
+  neighbor_iterator end(neighbor_type type = ALL);
+
+  //: Returns the number of outgoing neighbors to this node of type \param type
+  // \note if \param type is ALL then this returns the total number of neighbors
+  int num_neighbors( neighbor_type type = ALL );
 
   //: Return the frame number at which this node is found
   int frame_num() const { return frame_num_; }
@@ -80,7 +95,13 @@ private:
   
   //: The pointers to neighboring nodes
   // \note these are not smart pointer because there will be many cycles in the network
-  vcl_vector<vcl_vector<bmrf_node*> > neighbors_;
+  vcl_list<bmrf_node*> neighbors_;
+  
+  //: The the iterators into neighbors_ that represent the boundary between types
+  vcl_vector<neighbor_iterator> boundaries_;
+
+  //: The number of neighbors for each type
+  vcl_vector<int> sizes_;
 };
 
 //: Binary save bmrf_node* to stream.
