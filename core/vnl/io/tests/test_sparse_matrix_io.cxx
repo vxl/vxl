@@ -26,10 +26,9 @@ static bool Compare(vnl_sparse_matrix<double>& M1, vnl_sparse_matrix<double>& M2
 
 void test_sparse_matrix_double_io()
 {
-
   vcl_cout << "***********************" << vcl_endl;
   vcl_cout << "Testing vnl_sparse_matrix<double> io" << vcl_endl;
-  vcl_cout << "***********************" << vcl_endl;  
+  vcl_cout << "***********************" << vcl_endl;
   //// test constructors, accessors
 
   vnl_sparse_matrix<double>  m_out(3,3), m_in0(3,3), m_in1(3,3);
@@ -58,51 +57,44 @@ void test_sparse_matrix_double_io()
   m_out.set_row(0, col_1, val_1);
   m_out.set_row(1, col_2, val_2);
   m_out.set_row(2, col_3, val_3);
-  
+
   vsl_b_ofstream bfs_out("vnl_sparse_matrix_io.tmp");
   TEST ("vnl_sparse_matrix_io.tmp for writing", (!bfs_out), false);
   vsl_b_write(bfs_out, m_out);
   vsl_b_write(bfs_out, m_out);
   bfs_out.close();
-    
+
   vsl_b_ifstream bfs_in("vnl_sparse_matrix_io.tmp");
   TEST ("vnl_sparse_matrix_io.tmp for reading", (!bfs_in), false);
   vsl_b_read(bfs_in, m_in0);
   vsl_b_read(bfs_in, m_in1);
   bfs_in.close();
-  
 
-
-/*
+#if 0
   bool test_result=true;
   m_out.reset();
   m_in.reset();
 
   while(m_out.next() && m_in.next())
   {
-    if (m_out.getrow()!=m_in.getrow() || m_out.getcolumn() != m_in.getcolumn()
-              ||  m_out.value()!= m_in.value())
-     {
-    test_result=false;
-    break;
+    if (m_out.getrow()!=m_in.getrow()
+        || m_out.getcolumn() != m_in.getcolumn()
+        || m_out.value()!= m_in.value())
+    {
+      test_result=false;
+      break;
     }
-
   }
-*/
+#endif
 
   TEST ("m_out == m_in0",Compare(m_out,m_in0) , true);
   TEST ("m_out == m_in1",Compare(m_out,m_in1) , true);
 
   vsl_print_summary(vcl_cout, m_out);
   vcl_cout << vcl_endl;
-
-  
 }
 
 
-
-
-   
 void test_sparse_matrix_prime()
 {
   test_sparse_matrix_double_io();
