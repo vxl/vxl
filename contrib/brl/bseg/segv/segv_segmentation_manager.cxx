@@ -149,25 +149,25 @@ segv_segmentation_manager::draw_edges(vcl_vector<vtol_edge_2d_sptr>& edges,
 }
 
 void segv_segmentation_manager::draw_regions(vcl_vector<vdgl_intensity_face_sptr>& regions,
-											 bool verts)
+                                             bool verts)
 {
-   for(vcl_vector<vdgl_intensity_face_sptr>::iterator rit = regions.begin();
-       rit != regions.end(); rit++)
+   for (vcl_vector<vdgl_intensity_face_sptr>::iterator rit = regions.begin();
+        rit != regions.end(); rit++)
      {
        vtol_face_2d_sptr f = (*rit)->cast_to_face_2d();
        t2D_->set_foreground(0.0, 1.0, 0.0);
        t2D_->add_face(f);
-       if(verts)
+       if (verts)
          {
            vcl_vector<vtol_vertex_sptr>* vts = f->vertices();
-           for(vcl_vector<vtol_vertex_sptr>::iterator vit = vts->begin();
-               vit != vts->end(); vit++)
+           for (vcl_vector<vtol_vertex_sptr>::iterator vit = vts->begin();
+                vit != vts->end(); vit++)
              {
                vtol_vertex_2d_sptr v = (*vit)->cast_to_vertex_2d();
                t2D_->set_foreground(1.0, 0, 0.0);
                t2D_->add_vertex(v);
              }
-		delete vts;
+           delete vts;
          }
      }
 }
@@ -212,9 +212,9 @@ void segv_segmentation_manager::regions()
   vd_dialog->field("Noise Threshold", dp.noise_multiplier);
   vd_dialog->checkbox("Automatic Threshold", dp.automatic_threshold);
   vd_dialog->checkbox("Agressive Closure", agr);
-  if(!vd_dialog->ask())
+  if (!vd_dialog->ask())
     return;
-  if(agr)
+  if (agr)
     dp.aggressive_junction_closure=1;
   else
     dp.aggressive_junction_closure=0;
@@ -223,19 +223,18 @@ void segv_segmentation_manager::regions()
   sdet_region_proc rp(rpp);
   rp.set_image(img_);
   rp.extract_regions();
-  if(debug)
+  if (debug)
     {
       vil_image ed_img = rp.get_edge_image();
       vgui_image_tableau_sptr itab =  t2D_->get_image_tableau();
-	  if(!itab)
-	  {
-		  vcl_cout << "In segv_segmentation_manager::regions() - null image tableau"
-			  << vcl_endl;
-		  return;
-	  }
+      if (!itab)
+      {
+          vcl_cout << "In segv_segmentation_manager::regions() - null image tableau\n";
+          return;
+      }
       itab->set_image(ed_img);
     }
-  if(!debug)
+  if (!debug)
     {
    vcl_vector<vdgl_intensity_face_sptr>& regions = rp.get_regions();
    this->draw_regions(regions, true);
@@ -251,6 +250,6 @@ void segv_segmentation_manager::read_xml_edges()
   if (!load_image_dlg.ask())
     return;
   vcl_vector<vtol_edge_2d_sptr> edges;
-  if(bxml_vtol_io::read_edges(xml_filename, edges))
+  if (bxml_vtol_io::read_edges(xml_filename, edges))
     this->draw_edges(edges, true);
 }

@@ -4,8 +4,7 @@
 //--------------------------------------------------------------------------------
 //:
 // \file
-// \brief A generic pointer mechanism so that all class hierarchies of interest
-//        can be represented without requiring a common base class.
+// \brief A generic pointer mechanism s.t all class hierarchies of interest can be represented without requiring a common base class
 // \author
 //   J.L. Mundy
 //
@@ -27,15 +26,15 @@ class bxml_generic_ptr
   ~bxml_generic_ptr(){};
   //:type enumeration
   enum ptr_type{NO_TYPE=0, VECT, VSOL_SO}; 
-  ptr_type type() const{return _type;}
+  ptr_type type() const{return type_;}
 
   //:Constructing generic pointers from specific class hierarchies
-  bxml_generic_ptr():_type(NO_TYPE){_ptrs._anyobject = 0;}
-  bxml_generic_ptr(vcl_vector* v):_type(VECT){_ptrs._vec_ptr =v;}
-  bxml_generic_ptr(vsol_spatial_object_2d* so):_type(VSOL_SO){_ptrs._vso_ptr =so;}
+  bxml_generic_ptr():type_(NO_TYPE){ptrs_.anyobject_ = 0;}
+  bxml_generic_ptr(vcl_vector* v):type_(VECT){ptrs_.vec_ptr_ =v;}
+  bxml_generic_ptr(vsol_spatial_object_2d* so):type_(VSOL_SO){ptrs_.vso_ptr_ =so;}
 
   //:Accessing specific classes from a generic pointer
-  inline void* get_anyobject() const {return _ptrs._anyobject;}
+  inline void* get_anyobject() const {return ptrs_.anyobject_;}
   inline vcl_vector* get_vector() const; 
   inline vsol_spatial_object_2d* get_vsol_spatial_object() const; 
 
@@ -44,15 +43,15 @@ class bxml_generic_ptr
  private:
   union type_union
   {
-    void*  _anyobject;
-    vcl_vector* _vec_ptr;
-    vsol_spatial_object_2d* _vso_ptr;
+    void*  anyobject_;
+    vcl_vector* vec_ptr_;
+    vsol_spatial_object_2d* vso_ptr_;
   };
   //:utility functions
 
   //:members
-  ptr_type _type;
-  type_union _ptrs;
+  ptr_type type_;
+  type_union ptrs_;
 };
 
 //: Ostream inline function implementation
@@ -64,8 +63,8 @@ class bxml_generic_ptr
 //: access for vcl_vector
 inline vcl_vector* bxml_generic_ptr::get_vector() const 
 {
-  if(_type==VECT)
-    return _ptrs._vec_ptr;
+  if (type_==VECT)
+    return ptrs_.vec_ptr_;
   else
     return 0;
 }
@@ -73,8 +72,8 @@ inline vcl_vector* bxml_generic_ptr::get_vector() const
 //: access for vsol_spatial_object
 inline vsol_spatial_object_2d* bxml_generic_ptr::get_vsol_spatial_object() const 
 {
-  if(_type==VSOL_SO)
-    return _ptrs._vso_ptr;
+  if (type_==VSOL_SO)
+    return ptrs_.vso_ptr_;
   else
     return 0;
 }
