@@ -23,18 +23,18 @@ void test_cholesky()
     vnl_svd<double> svd(A);
     vcl_cout << "cholesky inverse:\n" << chol.inverse() << '\n'
              << "svd inverse:\n" << svd.inverse() << '\n';
-    testlib_test_assert_near("svd.inverse() ~= cholesky.inverse()",
-                             (chol.inverse() - svd.inverse()).fro_norm());
+    TEST_NEAR("svd.inverse() ~= cholesky.inverse()",
+              (chol.inverse() - svd.inverse()).fro_norm(), 0.0, 1e-10);
   }
   {
     vnl_cholesky chol(A);
-    testlib_test_assert_near("Ai * A - I", (chol.inverse() * A - I).fro_norm());
-    testlib_test_assert_near("Ai * A - I", (A * chol.inverse() - I).fro_norm());
+    TEST_NEAR("Ai * A ~= I", (chol.inverse() * A - I).fro_norm(), 0.0, 1e-11);
+    TEST_NEAR("Ai * A ~= I", (A * chol.inverse() - I).fro_norm(), 0.0, 1e-11);
   }
   {
     vnl_cholesky chol(A, vnl_cholesky::estimate_condition);
-    testlib_test_assert_near("Ai * A - I", (chol.inverse() * A - I).fro_norm());
-    testlib_test_assert_near("Ai * A - I", (A * chol.inverse() - I).fro_norm());
+    TEST_NEAR("Ai * A ~= I", (chol.inverse() * A - I).fro_norm(), 0.0, 1e-11);
+    TEST_NEAR("Ai * A ~= I", (A * chol.inverse() - I).fro_norm(), 0.0, 1e-11);
   }
 }
 
