@@ -1,7 +1,6 @@
 #include <vcl_iostream.h>
 #include <vcl_string.h>
 #include <vcl_sstream.h>
-#include <vcl_fstream.h>
 #include <sdet/sdet_detector_params.h>
 #include <sdet/sdet_fit_lines_params.h>
 #include <sdet/sdet_grid_finder_params.h>
@@ -33,28 +32,28 @@ int main(int argc, char** argv)
   vul_arg<float> angle_tolerance(arg_list,"-at","angle tolerance",(float)5.0);
   vul_arg<int> line_cnt_threshold(arg_list,"-lct","line count threshold",1);
 
-  // sytem_info args
+  // system_info args
   player.add_system_info_args(arg_list);
   player.add_output_file(output_file);
-  
+
   vul_arg_include(arg_list);
   vul_arg_parse(argc, argv);
-  
 
-  
+
   // if print_xml_params returns 0, exit with no error
   vcl_string param_block_name("grid_finder_params");
   player.print_xml_params(arg_list,param_block_name);
   if (player.print_params_only())
     return 0;
-  
-  //if (parameter_output_file() != "")
-  //  {
-  //   vcl_string param_block_name("grid_finder_params");
-  //   player.print_xml_params(parameter_output_file(), arg_list, 
-  //                           param_block_name);
-  //   return 0;
-  // }
+
+#if 0
+  if (parameter_output_file() != "")
+  {
+    vcl_string param_block_name("grid_finder_params");
+    player.print_xml_params(parameter_output_file(), arg_list, param_block_name);
+    return 0;
+  }
+#endif
 
   sdet_detector_params dp;
   sdet_fit_lines_params flp;
@@ -72,13 +71,13 @@ int main(int argc, char** argv)
   flp.rms_distance_ = rms_distance();
   gfp.angle_tol_ = angle_tolerance();
   gfp.thresh_ = line_cnt_threshold();
- 
+
   // create video process
   vpro_grid_finder_process* gfpro = new vpro_grid_finder_process(dp,flp,gfp);
   vpro_video_process_sptr gf_process = gfpro;
   // set output file
   vcl_stringstream output_file_stream;
-  //output_file_stream << output_directory() <<"/"<< output_file();
+  //output_file_stream << output_directory() << '/';
   output_file_stream << output_file();
   gfpro->set_output_file(output_file_stream.str());
   // set video process
@@ -89,11 +88,11 @@ int main(int argc, char** argv)
   //player.set_status_output_file(status_block_file());
 
   vcl_cout << "playing video..\n";
-  if(!player.play_video())
-    {
-      // error
-      return 1;
-    }
+  if (!player.play_video())
+  {
+    // error
+    return 1;
+  }
   vcl_cout << "...done.\n";
   player.print_performance_output("calibration video",gfpro->frame_scores_);
   vcl_cout << "wrote performance file\n";
