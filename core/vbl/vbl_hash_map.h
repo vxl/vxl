@@ -7,15 +7,15 @@
 
 #include <vcl/vcl_iosfwd.h>
 #include <vcl/vcl_functional.h> // vcl_equal_to()
-#include <vcl/vcl_hash_map.h>
+#include <vcl/vcl_map.h>
 #include <vcl/vcl_pair.h>
 
 //: Simpler hashtable
 //
 template <class Key, class T>
-class vbl_hash_map : public vcl_hash_map<Key, T, vcl_hash<Key>, vcl_equal_to<Key> > {
+class vbl_hash_map : public vcl_map<Key, T, vcl_hash<Key>, vcl_equal_to<Key> > {
  public:
-  typedef vcl_hash_map<Key, T, vcl_hash<Key>, vcl_equal_to<Key> > base;
+  typedef vcl_map<Key, T, vcl_hash<Key>, vcl_equal_to<Key> > base;
   typedef typename base::value_type value_type;
   typedef typename base::iterator   iterator;
   typedef typename base::const_iterator const_iterator;
