@@ -1,3 +1,6 @@
+#ifndef vcl_vector_to_vcl_list_h_
+#define vcl_vector_to_vcl_list_h_
+
 #include <vcl_list.h>
 #include <vcl_vector.h>
 
@@ -11,3 +14,5 @@ vcl_list<T> vcl_vector_to_vcl_list(vcl_vector<T> const& cl)
     l.push_back(*it);
   return l;
 }
+
+#endif // vcl_vector_to_vcl_list_h_

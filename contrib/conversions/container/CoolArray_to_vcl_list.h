@@ -1,3 +1,6 @@
+#ifndef CoolArray_to_vcl_list_h_
+#define CoolArray_to_vcl_list_h_
+
 #include <cool/ArrayP.h>
 #include <vcl_list.h>
 
@@ -22,3 +25,5 @@ vcl_list<T> CoolArray_to_vcl_list(CoolArrayP<T> const& cl)
     l.push_back(*it);
   return l;
 }
+
+#endif // CoolArray_to_vcl_list_h_

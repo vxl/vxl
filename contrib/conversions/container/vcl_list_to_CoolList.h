@@ -1,3 +1,6 @@
+#ifndef vcl_list_to_CoolList_h_
+#define vcl_list_to_CoolList_h_
+
 #include <cool/List.h>
 #include <vcl_list.h>
 
@@ -11,3 +14,5 @@ CoolList<T> vcl_list_to_CoolList(vcl_list<T> const& cl)
     l.push_end(*it);
   return l;
 }
+
+#endif // vcl_list_to_CoolList_h_

@@ -1,3 +1,6 @@
+#ifndef CoolList_to_vcl_vector_h_
+#define CoolList_to_vcl_vector_h_
+
 #include <cool/ListP.h>
 #include <vcl_vector.h>
 
@@ -22,3 +25,5 @@ vcl_vector<T> CoolList_to_vcl_vector(CoolListP<T> const& cl)
     l.push_back(*it);
   return l;
 }
+
+#endif // CoolList_to_vcl_vector_h_

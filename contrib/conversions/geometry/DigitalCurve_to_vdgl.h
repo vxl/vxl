@@ -1,3 +1,6 @@
+#ifndef DigitalCurve_to_vdgl_h_
+#define DigitalCurve_to_vdgl_h_
+
 #include <DigitalGeometry/DigitalCurve.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_interpolator_linear.h>
@@ -21,3 +24,5 @@ inline vdgl_digital_curve DigitalCurve_to_vdgl(DigitalCurve const& dc)
   }
   return vdgl_digital_curve(new vdgl_interpolator_linear(new vdgl_edgel_chain(edgels)));
 }
+
+#endif // DigitalCurve_to_vdgl_h_

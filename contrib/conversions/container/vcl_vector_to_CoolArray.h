@@ -1,3 +1,6 @@
+#ifndef vcl_vector_to_CoolArray_h_
+#define vcl_vector_to_CoolArray_h_
+
 #include <cool/Array.h>
 #include <vcl_vector.h>
 
@@ -11,3 +14,5 @@ CoolArray<T> vcl_vector_to_CoolArray(vcl_vector<T> const& cl)
     l.push(*it);
   return l;
 }
+
+#endif // vcl_vector_to_CoolArray_h_

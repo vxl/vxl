@@ -1,3 +1,6 @@
+#ifndef vnl_matrix_to_vbl_array_h_
+#define vnl_matrix_to_vbl_array_h_
+
 #include <vnl/vnl_matrix.h>
 #include <vbl/vbl_array_2d.h>
 
@@ -11,3 +14,5 @@ inline vbl_array_2d<T> vnl_matrix_to_vbl_array(vnl_matrix<T> m)
     *j = *i;
   return a;
 }
+
+#endif // vnl_matrix_to_vbl_array_h_

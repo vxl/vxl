@@ -1,3 +1,6 @@
+#ifndef CoolList_to_CoolArray_h_
+#define CoolList_to_CoolArray_h_
+
 #include <cool/ListP.h>
 #include <cool/Array.h>
 
@@ -33,3 +36,5 @@ CoolArray<T> CoolArrayP_to_CoolArray(CoolArrayP<T> const& cl)
     l.push(*it);
   return l;
 }
+
+#endif // CoolList_to_CoolArray_h_

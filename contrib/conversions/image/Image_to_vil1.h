@@ -1,3 +1,6 @@
+#ifndef Image_to_vil_h_
+#define Image_to_vil_h_
+
 #include <ImageClasses/Image.h>
 #include <vil/vil_image.h>
 
@@ -33,3 +36,5 @@ inline vil_image Image_to_vil(Image const* im)
   delete[] (char*)buf;
   return imo;
 }
+
+#endif // Image_to_vil_h_
