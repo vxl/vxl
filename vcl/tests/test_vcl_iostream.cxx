@@ -6,6 +6,12 @@
 #include <vcl_sstream.h>
 #include <vcl_strstream.h>
 
+struct flux : vcl_fstream
+{
+  flux(vcl_ios_openmode mode = vcl_ios_in | vcl_ios_binary)
+    : vcl_fstream("/tmp/flux", mode) { }
+};
+
 int main()
 {
   vcl_cout << vcl_string("hello, vcl") << vcl_endl
