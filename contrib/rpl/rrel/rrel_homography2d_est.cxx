@@ -6,10 +6,8 @@
 #include <vnl/algo/vnl_svd.h>
 
 #include <vcl_iostream.h>
-#include <vcl_vector.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
-
 
 rrel_homography2d_est :: rrel_homography2d_est( const vcl_vector< vgl_homg_point_2d<double> > & from_pts,
                                                 const vcl_vector< vgl_homg_point_2d<double> > & to_pts )
@@ -49,14 +47,14 @@ rrel_homography2d_est::~rrel_homography2d_est()
 }
 
 
-unsigned int 
+unsigned int
 rrel_homography2d_est :: num_samples( ) const
 {
   return from_pts_.size();
 }
 
 
-bool 
+bool
 rrel_homography2d_est :: fit_from_minimal_set( const vcl_vector<int>& point_indices,
                                                vnl_vector<double>& params ) const
 {
@@ -79,7 +77,7 @@ rrel_homography2d_est :: fit_from_minimal_set( const vcl_vector<int>& point_indi
   vnl_svd<double> svd( A, 1.0e-8 );
 
   if ( svd.rank() < 8 ) {
-    return false;    // singular fit 
+    return false;    // singular fit
   }
   else {
     params = svd.nullvector();
@@ -87,7 +85,7 @@ rrel_homography2d_est :: fit_from_minimal_set( const vcl_vector<int>& point_indi
   }
 }
 
-void 
+void
 rrel_homography2d_est :: compute_residuals( const vnl_vector<double>& params,
                                             vcl_vector<double>& residuals ) const
 {
@@ -110,7 +108,7 @@ rrel_homography2d_est :: compute_residuals( const vnl_vector<double>& params,
 
   for ( unsigned int i=0; i<from_pts_.size(); ++i ) {
     trans_pt = H * from_pts_[ i ];
-    inv_trans_pt = H_inv * to_pts_[ i ]; 
+    inv_trans_pt = H_inv * to_pts_[ i ];
 
     if ( from_pts_[ i ][ 2 ] == 0 || to_pts_[ i ][ 2 ] == 0
          || trans_pt[ 2 ] == 0 || inv_trans_pt[ 2 ] == 0 ) {
@@ -121,14 +119,14 @@ rrel_homography2d_est :: compute_residuals( const vnl_vector<double>& params,
       del_y = trans_pt[ 1 ] / trans_pt[ 2 ] - to_pts_[ i ][ 1 ] / to_pts_[ i ][ 2 ];
       inv_del_x = inv_trans_pt[ 0 ] / inv_trans_pt[ 2 ] - from_pts_[ i ][ 0 ] / from_pts_[ i ][ 2 ];
       inv_del_y = inv_trans_pt[ 1 ] / inv_trans_pt[ 2 ] - from_pts_[ i ][ 1 ] / from_pts_[ i ][ 2 ];
-      residuals [ i ] = vnl_math_sqrt( vnl_math_sqr(del_x) + vnl_math_sqr(del_y) 
+      residuals [ i ] = vnl_math_sqrt( vnl_math_sqr(del_x) + vnl_math_sqr(del_y)
                               + vnl_math_sqr(inv_del_x) + vnl_math_sqr(inv_del_y) );
     }
   }
 }
 
 
-bool 
+bool
 rrel_homography2d_est :: weighted_least_squares_fit( vnl_vector<double>& params,
                                                      vnl_matrix<double>& norm_covar,
                                                      vcl_vector<double>* weights ) const
@@ -141,7 +139,7 @@ rrel_homography2d_est :: weighted_least_squares_fit( vnl_vector<double>& params,
 
   vcl_vector< vnl_vector<double> > norm_from, norm_to;
   vnl_matrix< double > norm_matrix_from(3,3), norm_matrix_to(3,3);
-  
+
   this -> normalize( from_pts_, *w, norm_from, norm_matrix_from );
   this -> normalize( to_pts_, *w, norm_to, norm_matrix_to );
 
@@ -171,7 +169,7 @@ rrel_homography2d_est :: weighted_least_squares_fit( vnl_vector<double>& params,
     for ( r=0; r<3; ++r )
       for ( c=0; c<3; ++c )
         normH( r, c ) = nparams( 3*r + c );
-  
+
     vnl_svd<double> svd_norm_to( norm_matrix_to );
     assert( svd_norm_to.rank() == 3 );
     vnl_matrix< double > H = svd_norm_to.inverse() * normH * norm_matrix_from;
@@ -179,7 +177,7 @@ rrel_homography2d_est :: weighted_least_squares_fit( vnl_vector<double>& params,
     for ( r=0; r<3; ++r )
       for ( c=0; c<3; ++c )
         params( 3*r + c ) = H( r, c );
-   
+
     result = true;
   }
 
@@ -229,8 +227,7 @@ rrel_homography2d_est :: normalize( const vcl_vector< vnl_vector<double> >& pts,
 }
 
 
-void 
+void
 rrel_homography2d_est :: print_points() const
 {
-  
 }

@@ -5,9 +5,9 @@
 // \file
 // \author Chuck Stewart
 // \date March 2001
-// Base class for an estimation problem in the robust estimation library.
+// \brief Base class for an estimation problem in the robust estimation library.
 
-#include <vcl_stlfwd.h>
+#include <vcl_vector.h>
 #include <vnl/vnl_fwd.h>
 
 class rrel_wls_obj;
@@ -78,7 +78,7 @@ public:
   // number of possible correspondences (= num_samples()) generally
   // much greater than the number of "unique samples" (which would be
   // the number of points from one image).
-  // 
+  //
   // This is used by random sampling techinques to determine the
   // number of samples required to get a given probability of success.
   virtual unsigned int num_unique_samples( ) const { return num_samples(); }
@@ -90,10 +90,10 @@ public:
   // parameter vector.
   //
   // Default behaviour is to call abort().
-  virtual bool fit_from_minimal_set( const vcl_vector<int>& /* point_indices */, 
+  virtual bool fit_from_minimal_set( const vcl_vector<int>& /* point_indices */,
                                      vnl_vector<double>& /* params */ ) const;
 
-  //: Compute the residuals relative to the given parameter vector. 
+  //: Compute the residuals relative to the given parameter vector.
   // The number of residuals must be equal to the value returned
   // by num_samples().
   //
@@ -141,7 +141,7 @@ public:
   //: Compute the parameter vector and the normalised covariance matrix.
   //  (Multiplying this matrix by the variance in the measurements
   //  gives the covariance matrix.)
-  // 
+  //
   // If the weights are provided they are used in the process.  Note
   // that if the weights are in fact given, the number of weights
   // (num_wgts) MUST be equal to "num_residuals" returned by the
@@ -172,5 +172,5 @@ private:
   double single_scale_;
   vcl_vector<double>* multiple_scales_;
 };
-  
+
 #endif

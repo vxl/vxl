@@ -5,9 +5,9 @@
 // \file
 // \author Chuck Stewart
 // \date March 2001
-// Class to maintain data and optimization model for 2d homography estimation.
+// \brief Class to maintain data and optimization model for 2d homography estimation
 
-#include <vcl_stlfwd.h>
+#include <vcl_vector.h>
 #include <vgl/vgl_fwd.h>
 #include <vnl/vnl_fwd.h>
 
@@ -19,7 +19,7 @@
 //  2d homography estimation.  It probably isn't the best thing to do
 //  in practice, though, because correspondences are hard to find
 //  without knowing the transformation and robust estimation can pick
-//  out the correct correspondences even when they aren't unique. 
+//  out the correct correspondences even when they aren't unique.
 //
 //  The corresponding data points are provided as a vectors of
 //  vgl_homg_point_2d.  Corresponding points are assumed to share the
@@ -50,7 +50,7 @@ public:
   virtual ~rrel_homography2d_est();
 
   //: Total number of correspondences.
-  unsigned int num_samples( ) const; 
+  unsigned int num_samples( ) const;
 
   //: The degrees of freedom in the residual.
   // Each coordinate of the correspondence pair has Gaussian error, so
@@ -80,10 +80,10 @@ protected:
                   const vcl_vector< double >& wgts,
                   vcl_vector< vnl_vector<double> > & norm_pts,
                   vnl_matrix< double > & norm_matrix ) const;
-  
+
 protected:
   vcl_vector< vnl_vector< double > > from_pts_;
   vcl_vector< vnl_vector< double > > to_pts_;
 };
-  
-#endif
+
+#endif // rrel_homography2d_est_h_
