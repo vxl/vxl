@@ -1,5 +1,7 @@
 # brl/bbas/bdgl/tests/CMakeLists.txt
 
+INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR} )
+
 LINK_LIBRARIES( bdgl vdgl vtol vnl testlib )
 
 ADD_EXECUTABLE(bdgl_test_all  test_curve_algs.cxx)
