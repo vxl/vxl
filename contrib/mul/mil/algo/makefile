@@ -11,6 +11,7 @@ MANPAGE_SOURCES += mil_algo_line_filter.txx
 MANPAGE_SOURCES += mil_algo_grad_filter_2d.txx
 MANPAGE_SOURCES += mil_algo_gaussian_filter.txx
 MANPAGE_SOURCES += mil_algo_brighten_image_2d.txx
+MANPAGE_SOURCES += mil_algo_convolve_1d.h
 
 ################################
 include ${IUEROOT}/config/top.mk
