@@ -73,6 +73,8 @@
 # define vxl_uint_64 void
 #endif
 
+#define VXL_INT_64_IS_LONG @VXL_INT_64_IS_LONG@
+
 #define VXL_HAS_IEEE_32 @VXL_HAS_IEEE_32@
 #define VXL_IEEE_32_STRING "@VXL_IEEE_32@"
 #if @VXL_HAS_IEEE_32@

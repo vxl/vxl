@@ -4,6 +4,8 @@
 /* This file was *not* generated from vxl_config.h.in */
 /* It is maintained manually. */
 
+/* -------------------- machine word characteristics */
+
 /* these are 0 or 1, never empty. */
 #define VXL_LITTLE_ENDIAN 1
 #define VXL_BIG_ENDIAN    0
@@ -61,16 +63,19 @@
 #endif
 
 #define VXL_HAS_INT_64 0
+/* !!! different from VC7 */
 #define VXL_INT_64_STRING "void"
 #if 0
   typedef          void vxl_int_64;
-  typedef          void vxl_sint_64;
-  typedef          void vxl_uint_64;
+  typedef   signed void vxl_sint_64;
+  typedef unsigned void vxl_uint_64;
 #else
 # define vxl_int_64  void
 # define vxl_sint_64 void
 # define vxl_uint_64 void
 #endif
+
+#define VXL_INT_64_IS_LONG 0
 
 #define VXL_HAS_IEEE_32 1
 #define VXL_IEEE_32_STRING "float"
@@ -127,6 +132,7 @@
 #define VXL_STDLIB_HAS_QSORT      1
 
 /* true if <stdlib.h> declares lrand48() */
+/* !!! different from VC7 */
 #define VXL_STDLIB_HAS_LRAND48    1 /* ? */
 
 /* true if <stdlib.h> declares drand48() */
@@ -142,7 +148,7 @@
 #define VXL_C_MATH_HAS_FINITE     0 /* ? */
 
 /* true if <math.h> declares sqrtf() for the C compiler */
-#define VXL_C_MATH_HAS_SQRTF      0
+#define VXL_C_MATH_HAS_SQRTF      0 /* ? */
 
 /* true if usleep() returns void */
 #define VXL_UNISTD_USLEEP_IS_VOID 0
@@ -151,6 +157,7 @@
 #define VXL_TWO_ARG_GETTIME       0
 
 /* true if <ieeefp.h> is available */
+/* !!! different from VC7 */
 #define VXL_HAS_IEEEFP_H          1
 
 #endif /* vxl_config_h_config_win32_vc60_ */

@@ -74,6 +74,8 @@
 # define vxl_uint_64 void
 #endif
 
+#define VXL_INT_64_IS_LONG 0
+
 #define VXL_HAS_IEEE_32 1
 #define VXL_IEEE_32_STRING "float"
 #if 1
