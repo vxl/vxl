@@ -59,6 +59,7 @@ public:
   void get_last_selected_position(unsigned* col_pos, unsigned* row_pos);
   int get_selected_positions(vcl_vector<int>* col_pos, vcl_vector<int>* row_pos,
     vcl_vector<int>* times);
+  void set_selected(int r, int c, bool onoff = true);
   
   void set_grid_size_changeable(bool v) {
     cond_row_add   .enable(v);
