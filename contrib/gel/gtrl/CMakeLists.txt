@@ -16,13 +16,14 @@ IF(NETLIB_FOUND)
   SET(gtrl_sources
     gtrl_triangulation.cxx gtrl_triangulation.h
   )
-
-  TARGET_LINK_LIBRARIES(gtrl ${NETLIB_LIBRARIES})
 ENDIF(NETLIB_FOUND)
 
 ADD_LIBRARY(gtrl ${gtrl_sources})
 
 TARGET_LINK_LIBRARIES(gtrl vbl)
+IF(NETLIB_FOUND)
+  TARGET_LINK_LIBRARIES(gtrl ${NETLIB_LIBRARIES})
+ENDIF(NETLIB_FOUND)
 
 IF (BUILD_EXAMPLES)
   SUBDIRS(examples)
