@@ -15,6 +15,8 @@
 // \endverbatim
 //--------------------------------------------------------------------------------
 
+class vgui_menu;
+
 //: Menu callbacks are represented as static methods
 //  The key method is ::get_menu, which does the work of
 //  assembling the menu bar for the main executable 
