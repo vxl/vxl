@@ -26,16 +26,16 @@
 //  A drag event occurs when the user moves the mouse with one of the 
 //  mouse buttons pressed down.  In VGUI there is no vgui_DRAG event (there
 //  is only vgui_MOTION for when the mouse is moving).  So if you want to
-//  capture drag events you may find this tableau handy.
+//  capture drag events you may find this class handy.
 //  
 //  The drag_mixin records the last mouse button to be pressed and will 
 //  send vgui_MOTION events to the function mouse_drag() if the mouse is being 
 //  moved  with a button depressed.
 //
-//  The easiest way to use vgui_drag_mixin is to derive your tableau from
+//  An easy way to use vgui_drag_mixin is to derive your tableau from
 //  vgui_drag_tableau. You would then be able to implement mouse_drag and
 //  all the other function like key_press, mouse_down in vgui_tableau to 
-//  handle events..
+//  handle events.
 class vgui_drag_mixin
 {
  public:

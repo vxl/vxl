@@ -7,11 +7,15 @@
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
+// \brief  Text descriptions of the tableau heirachy.
 
 #include <vcl_iosfwd.h>
 #include <vgui/vgui_tableau_sptr.h>
 
+//: Sends a text description of the whole tableau hierachy to the given stream.
 void vgui_text_graph(vcl_ostream &);
+
+//: Sends a text description of tableau heirachy beneath the given tableau.
 void vgui_text_graph(vcl_ostream &, vgui_tableau_sptr const &);
 
 #endif // vgui_text_graph_h_

@@ -16,8 +16,8 @@
 //  Modifications
 //    000111 AWF Initial version.
 //    26-APR-2002 K.Y.McGaul - Converted to doxygen style comments.
-//    01-OCT-2002 K.Y.McGaul - Moved vgui_image_blender to vgui_blender_tableau.
-//    02-OCT-2002 K.Y.McGaul - Added vgui_blender_tableau_new.
+//    01-OCT-2002 K.Y.McGaul - Moved vgui_drag to vgui_drag_tableau.
+//    02-OCT-2002 K.Y.McGaul - Added vgui_drag_tableau_new.
 // \endverbatim
 
 #include <vgui/vgui_tableau.h>

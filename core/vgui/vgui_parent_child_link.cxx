@@ -5,31 +5,6 @@
 // \author fsm@robots.ox.ac.uk
 // \brief  See vgui_parent_child_link.h for a description of this file.
 //
-// Implementation notes:
-//
-// [1]
-// Since tableaux will hold parent_child_links and use them to refer to 
-// children, each parent_child_link must ref()erence its child.
-//
-// [2]
-// A parent_child_link should not ref()erence its parent as that would lead to 
-// cyclic dependencies and hence core leaks. Thus, we use a raw pointer to hold
-// the parent.
-//
-// [3]
-// A vgui_tableau_sptr could be used to hold the child, but there is no real
-// advantage in that.
-//
-// [4]
-// A parent_child_link's parent pointer must never be zero because a 
-// parent_child_link which does not have a parent is a useless 
-// parent_child_link (and so is most likely an error). Thus 'p' is a private 
-// data member of vgui_parent_child_link_impl and the constructor will
-// cause assertion failure if given a null parent pointer.
-//
-// [5]
-// A parent_child_link's parent pointer cannot be changed because there is no 
-// legitimite use for that.
 
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
@@ -40,7 +15,6 @@
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_macro.h>
 
-//:
 // For efficiency (e.g. when posting redraws), the parents of a tableau
 // may be cached in the vgui_parent_child_link_data baseclass of vgui_tableau. 
 // This macro enables that optimization. If caching is not enabled, parents
@@ -48,11 +22,37 @@
 // existence which could obviously be quite slow.
 #define cache_parents 1
 
-//:
-// this container holds a single pointer for every impl object.
-// the pointers are cast to and from void* to avoid (a) exposing the
-// implementation class and (b) instantiating an extra class template.
-
+//: Smart-pointer implementation of vgui_parent_child_link.
+//
+//  This container holds a single pointer for every impl object.
+//  The pointers are cast to and from void* to avoid (a) exposing the
+//  implementation class and (b) instantiating an extra class template.
+//
+//  Implementation notes:
+//
+//  [1]
+//  Since tableaux will hold parent_child_links and use them to refer to 
+//  children, each parent_child_link must ref()erence its child.
+//
+//  [2]
+//  A parent_child_link should not ref()erence its parent as that would lead to 
+//  cyclic dependencies and hence core leaks. Thus, we use a raw pointer to hold
+//  the parent.
+//
+//  [3]
+//  A vgui_tableau_sptr could be used to hold the child, but there is no real
+//  advantage in that.
+//
+//  [4]
+//  A parent_child_link's parent pointer must never be zero because a 
+//  parent_child_link which does not have a parent is a useless 
+//  parent_child_link (and so is most likely an error). Thus 'p' is a private 
+//  data member of vgui_parent_child_link_impl and the constructor will
+//  cause assertion failure if given a null parent pointer.
+//
+//  [5]
+//  A parent_child_link's parent pointer cannot be changed because there is no 
+//  legitimite use for that.
 struct vgui_parent_child_link_impl
 {
   // all is stored as a pointer as it must live longer than any static 
@@ -64,14 +64,14 @@ struct vgui_parent_child_link_impl
   inline vgui_parent_child_link_impl(vgui_tableau *p_, vgui_tableau *c_);
   inline ~vgui_parent_child_link_impl();
 
-  // this changes the child, not the parent.
+  // This changes the child, not the parent.
   inline void assign(vgui_tableau *t);
 
-  // there's nothing tricky here. we just return the raw pointers.
+  // There's nothing tricky here. we just return the raw pointers.
   vgui_tableau *parent() const { return p; }
   vgui_tableau *child () const { return c; }
 
-  // reference counting. deriving from vbl_ref_count would make the
+  // Reference counting. Deriving from vbl_ref_count would make the
   // methods virtual and hence non-inlineable.
   inline void acquire();
   inline void release();
@@ -81,7 +81,7 @@ private:
   vgui_tableau *c; // child
   int use_count;   // reference count
 
-  // helpers. the purpose of these functions is to perform
+  // Helpers. the purpose of these functions is to perform
   // the double link/unlink required to cache the parent-child
   // relation on tableaux. they are static because they may be
   // invoked when the impl object is in a dubious state.

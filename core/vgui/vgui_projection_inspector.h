@@ -23,7 +23,7 @@ public:
   //: Constructor - with default projection and modelview matrices.
   vgui_projection_inspector();
 
-  //: Destructor - currently does nothing.
+  //: Destructor.
   ~vgui_projection_inspector();
 
   //: Returns the projection matrix.

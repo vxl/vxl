@@ -43,7 +43,8 @@ class vgui_easy3D_tableau : public vgui_displaylist3D_tableau
   vgui_point3D* add_point(float x, float y, float z);
 
   //: Add a 3D-line with the given start and end points.
-  vgui_lineseg3D* add_line(float x0, float y0, float z0, float x1, float y1, float z1);
+  vgui_lineseg3D* add_line(float x0, float y0, float z0, float x1, 
+    float y1, float z1);
 
   //: Set the colour of objects to the given RGB value.
   void set_foreground(float red, float green, float blue);
@@ -59,6 +60,7 @@ class vgui_easy3D_tableau : public vgui_displaylist3D_tableau
 
 
  protected:
+  //: Destructor - called by vgui_easy3D_tableau_sptr.
   ~vgui_easy3D_tableau() { }
 
   float fg[3];

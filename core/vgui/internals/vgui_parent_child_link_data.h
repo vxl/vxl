@@ -7,6 +7,7 @@
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
+// \brief  Cache of parents of a tableau (makes posting redraws more efficient).
 
 #include <vcl_vector.h>
 
@@ -14,6 +15,7 @@ struct vgui_parent_child_link_impl;
 struct vgui_parent_child_link;
 class vgui_tableau;
 
+//: Cache of parents of a tableau (makes posting redraws more efficient).
 class vgui_parent_child_link_data
 {
  private:

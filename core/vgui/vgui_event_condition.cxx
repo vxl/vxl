@@ -29,8 +29,8 @@ void vgui_event_condition::init(vgui_key k, vgui_button b, vgui_modifier m,
   if (k > 0 && k < 32) 
   {
     // Convert control character to lower case
-    // (operator!= doesn't work for bitfields with gcc 2.95)
     key = vgui_key(k + 'a' -1);
+    // (operator!= doesn't work for bitfields with gcc 2.95)
     if (! (modifier == vgui_CTRL))
     {
       vcl_cerr << "ERROR attempting to make an impossible vgui_event_condition."
@@ -42,8 +42,8 @@ void vgui_event_condition::init(vgui_key k, vgui_button b, vgui_modifier m,
   if (k >= 'A' && k <= 'Z')
   {
     // Convert upper to lower case:
-    // (operator!= doesn't work for bitfields with gcc 2.95)
     key = vgui_key(k + 'a' - 'A');
+    // (operator!= doesn't work for bitfields with gcc 2.95)
     if (! (modifier == vgui_SHIFT))
     {
       vcl_cerr << "ERROR attempting to make an impossible vgui_event_condition"
@@ -53,13 +53,13 @@ void vgui_event_condition::init(vgui_key k, vgui_button b, vgui_modifier m,
   } 
 }
  
-
 //----------------------------------------------------------------------------
 //: Default constructor.
 vgui_event_condition::vgui_event_condition()
 {
   init(vgui_KEY_NULL, vgui_BUTTON_NULL, vgui_MODIFIER_NULL, false, false);
 }
+
 //----------------------------------------------------------------------------
 //: Constructor for a key press event condition.
 vgui_event_condition::vgui_event_condition(vgui_key k, vgui_modifier m, bool p)
@@ -68,6 +68,7 @@ vgui_event_condition::vgui_event_condition(vgui_key k, vgui_modifier m, bool p)
 }
 
 //----------------------------------------------------------------------------
+//: Constructor for a mouse button press event condition.
 vgui_event_condition::vgui_event_condition(vgui_button b, vgui_modifier m, 
   bool p)
 {
@@ -109,6 +110,7 @@ bool vgui_event_condition::operator()(vgui_button b, vgui_modifier m) const
 }
 
 //----------------------------------------------------------------------------
+//: Return a string describing the event condition.
 vcl_string vgui_event_condition::as_string(int field_width) const
 {
   vcl_string r;
