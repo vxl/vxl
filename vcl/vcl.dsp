@@ -248,6 +248,10 @@ SOURCE=.\vcl_cstdlib.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\vcl_deprecated.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=".\Templates\vcl_deque+int-.cxx"
 # End Source File
 # Begin Source File
