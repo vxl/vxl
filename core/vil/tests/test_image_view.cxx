@@ -13,7 +13,7 @@
 #include <vil2/vil2_image_view.h>
 
 template <class S, class T>
-void test_image_view_rgba(vil2_image_view<S> image2, vil2_image_view<T> image7)
+void test_image_view_rgba(vil2_image_view<S> &image2, vil2_image_view<T> &image7)
 {
 // do nothing in general case
 }
@@ -48,7 +48,7 @@ VCL_DEFINE_SPECIALIZATION
 void test_image_view_rgba(vil2_image_view<float> &image2, vil2_image_view<double> &image7)
 {
   image2.resize(10,10,2);
-  vil2_image_view<vil_rgba<vxl_byte> > image6 = image2;
+  vil2_image_view<vil_rgba<float> > image6 = image2;
   TEST("Can't assign a 3 plane images to rgba view", image6, false);
 
   vil2_convert_grey_to_rgba(image7, image6);
@@ -56,18 +56,18 @@ void test_image_view_rgba(vil2_image_view<float> &image2, vil2_image_view<double
 
   image2 = vil2_plane(vil2_view_as_planes(image6),1);
   vil2_transform(vil2_plane(vil2_view_as_planes(image6),1), image2,
-                 vcl_bind2nd(vcl_plus<vxl_byte>(),1));
+                 vcl_bind2nd(vcl_plus<float>(),1));
 
   vil2_print_all(vcl_cout, image6);
   image7.clear();
   vil2_convert_rgb_to_grey(image6, image7);
+  vil2_print_all(vcl_cout, image7);
   TEST("vil2_convert_rgb_to_grey(vil2_rgba)", image7, true);
 
-  TEST_NEAR("Conversion rgba to grey", image7(0,0),  1.3154, 1e-5);
+  TEST_NEAR("Conversion rgba to grey wibble", image7(0,0),  1.3154, 1e-5);
 
   TEST_NEAR("Conversion rgba to grey", image7(2,1), 34.9114, 1e-5);
 
-  vil2_print_all(vcl_cout, image7);
 }
 
 
