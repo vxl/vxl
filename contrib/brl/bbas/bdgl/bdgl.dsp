@@ -101,11 +101,41 @@ LIB32=link.exe -lib
 # Begin Source File
 SOURCE=.\bdgl_curve_algs.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\bdgl_curve_description.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bdgl_curve_matcher.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bdgl_curve_region.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bdgl_curve_tracker.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bdgl_curve_tracker_primitive.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
 SOURCE=.\bdgl_curve_algs.h
+# End Source File
+# Begin Source File
+SOURCE=.\bdgl_curve_description.h
+# End Source File
+# Begin Source File
+SOURCE=.\bdgl_curve_matcher.h
+# End Source File
+# Begin Source File
+SOURCE=.\bdgl_curve_region.h
+# End Source File
+# Begin Source File
+SOURCE=.\bdgl_curve_tracker.h
+# End Source File
+# Begin Source File
+SOURCE=.\bdgl_curve_tracker_primitive.h
 # End Source File
 # End Group
 # End Target
