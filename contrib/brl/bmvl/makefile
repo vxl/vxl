@@ -1,5 +1,5 @@
 # camera calibration
-#SUBDIRS += bcal
+SUBDIRS += bcal
 
 # 3-d reconstruction 
 #SUBDIRS += brct
