@@ -92,7 +92,8 @@ public:
   // in the estimation of the transformation. It is often independent
   // of the \a signature_error_vector. Defaults to 1.
   //
-  virtual double absolute_signature_weight( rgrl_feature_sptr other ) const;
+  virtual double absolute_signature_weight( rgrl_feature_sptr /*other*/ ) const
+  { return 1.0; }
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_feature, rgrl_object );
