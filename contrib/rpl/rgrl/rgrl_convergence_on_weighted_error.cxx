@@ -41,7 +41,7 @@ compute_status( rgrl_converge_status_sptr               prev_status,
     DebugMacro(1, "geometric_error_scaling = "<<scaling<<'\n');
   }
 
-  double new_error = scaling * compute_alignment_error( current_view, current_match_sets );
+  double new_error = scaling * compute_alignment_error( current_match_sets );
 
   bool good = new_error < tolerance_;
 
@@ -50,8 +50,7 @@ compute_status( rgrl_converge_status_sptr               prev_status,
 
 double
 rgrl_convergence_on_weighted_error::
-compute_alignment_error( rgrl_view                        const& /*current_view*/,
-                         rgrl_set_of<rgrl_match_set_sptr> const& current_match_sets ) const
+compute_alignment_error( rgrl_set_of<rgrl_match_set_sptr> const& current_match_sets ) const
 {
   typedef rgrl_match_set::const_from_iterator from_iter;
   typedef from_iter::to_iterator              to_iter;
@@ -80,11 +79,44 @@ compute_alignment_error( rgrl_view                        const& /*current_view*
   return error_sum/weight_sum;  
 }
 
+
+double
+rgrl_convergence_on_weighted_error::
+compute_alignment_error( rgrl_match_set_sptr const& current_match_set ) const
+{
+  assert( current_match_set );
+  
+  typedef rgrl_match_set::const_from_iterator from_iter;
+  typedef from_iter::to_iterator              to_iter;
+
+  // Step1: Compute the errors of all matches. The weights of the
+  //        matches are precomputed.
+  //
+  double error_sum = 0, weight_sum = 0;
+  double error, weight;
+  rgrl_match_set const& ms = *current_match_set;
+  for ( from_iter fitr = ms.from_begin(); fitr != ms.from_end(); ++fitr ) {
+    //rgrl_feature_sptr mapped = fitr.from_feature()->transform( *current_xform );
+    rgrl_feature_sptr mapped = fitr.mapped_from_feature();
+    for ( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr ) {
+
+      error = titr.to_feature()->geometric_error( *mapped );
+      weight = titr.cumulative_weight(); //take the precomputed wgt
+      
+      error_sum += error * weight;
+      weight_sum += weight;
+    }
+  }
+
+  return error_sum/weight_sum;  
+}
+
 rgrl_converge_status_sptr 
 rgrl_convergence_on_weighted_error::
-verify( rgrl_view                        const& current_view,
+  //: verify the final alignment
+verify( rgrl_transformation_sptr         const& xform_estimate,
         rgrl_set_of<rgrl_match_set_sptr> const& current_match_sets,
-        rgrl_set_of<rgrl_scale_sptr>     const& /*current_scales*/ )const
+        rgrl_set_of<rgrl_scale_sptr>     const& current_scales )const
 {
   // 
   // this should be penalized by the scaling as well.
@@ -94,7 +126,7 @@ verify( rgrl_view                        const& current_view,
   // time.
   // GY
 
-  double error = compute_alignment_error( current_view, current_match_sets );
+  double error = compute_alignment_error( current_match_sets );
   
   bool good_enough = error < tolerance_;
   rgrl_converge_status_sptr status = new rgrl_converge_status( true, false, good_enough, !good_enough, error, 0, 0 );
