@@ -3,7 +3,7 @@
 LINK_LIBRARIES( mil_algo mil vpl testlib )
 
 ADD_EXECUTABLE(mil_test_all test_mil.cxx)
-ADD_TEST(test_mil mil_test_all)
+ADD_TEST(mil_test_all mil_test_all)
 
 IF(CMAKE_COMPILER_IS_GNUCXX)
   SET_SOURCE_FILES_PROPERTIES(test_mil.cxx PROPERTIES COMPILE_FLAGS -O0)
