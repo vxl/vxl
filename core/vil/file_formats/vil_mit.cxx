@@ -59,6 +59,7 @@ static char const* vil_mit_format_tag = "mit";
 vil_image_resource_sptr vil_mit_file_format::make_input_image(vil_stream* is)
 {
   is->seek(0L);
+  if (is->file_size() < 8L) return 0;
   unsigned int type = vil_stream_read_little_endian_uint_16(is);
 
   if (!(type == MIT_UNSIGNED ||

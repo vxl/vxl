@@ -41,7 +41,7 @@ char const* vil_iris_format_tag = "iris";
 vil_image_resource_sptr vil_iris_file_format::make_input_image(vil_stream* is)
 {
   is->seek(0L);
-
+  if (is->file_size() < 84L) return 0;
   int colormap_;
 
   vxl_sint_16 magic_      = get_short(is);
@@ -485,9 +485,9 @@ vxl_sint_32 get_long(vil_stream* file, int location)
   file->read((void*)buff, 4L);
 
   // Decode from two's complement to machine format
-  vxl_uint_32 bits = ( vxl_uint_32(buff[0]) << 24 ) +
-                     ( vxl_uint_32(buff[1]) << 16 ) +
-                     ( vxl_uint_32(buff[2]) <<  8 ) +
+  vxl_uint_32 bits = ( vxl_uint_32(buff[0]) << 24 ) |
+                     ( vxl_uint_32(buff[1]) << 16 ) |
+                     ( vxl_uint_32(buff[2]) <<  8 ) |
                                    buff[3];
 
   if( ( bits & 0x80000000L ) != 0 )

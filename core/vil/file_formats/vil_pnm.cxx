@@ -42,7 +42,8 @@ vil_image_resource_sptr vil_pnm_file_format::make_input_image(vil_stream* vs)
 {
   // Attempt to read header
   unsigned char buf[3];
-  vs->read(buf, 3L);
+  if (vs->read(buf, 3L) != 3L)
+    return 0;
   bool ok = ((buf[0] == 'P') &&
              iseol(buf[2]) &&
              (buf[1] >= '1' && buf[2] <= '6'));
