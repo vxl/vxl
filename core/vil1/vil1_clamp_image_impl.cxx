@@ -21,7 +21,7 @@ bool vil_clamp_image_impl::put_section(void const * , int, int, int, int)
 
 bool vil_clamp_image_impl::get_section(void * buf, int x0, int y0, int w, int h) const 
 {
-  switch ( vil_pixel_type(base) ) {
+  switch (vil_pixel_format(base) ) {
   case VIL_BYTE:
     return vil_clamp_image(base, low_, high_, (vil_byte*)buf, x0, y0, w, h);
   case VIL_RGB_BYTE:
