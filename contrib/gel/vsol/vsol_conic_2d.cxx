@@ -13,10 +13,9 @@
 //*****************************************************************************
 #include <vcl_cassert.h>
 
-  
 //---------------------------------------------------------------------------
 //: Are `x' and `y' almost equal ?
-//  the comparison uses an adaptive epsilon
+//  The comparison uses an adaptive epsilon
 //---------------------------------------------------------------------------
 inline static bool are_equal(double x, double y)
 {
@@ -28,7 +27,7 @@ inline static bool are_equal(double x, double y)
 
 //---------------------------------------------------------------------------
 //: Is `x' almost zero ?
-//  the comparison uses a fixed epsilon, as the adaptive one from
+//  The comparison uses a fixed epsilon, as the adaptive one from
 //  are_equal() makes no sense here.
 //---------------------------------------------------------------------------
 inline static bool is_zero(double x) { return vcl_abs(x)<=1e-6; }
@@ -39,15 +38,15 @@ inline static bool is_zero(double x) { return vcl_abs(x)<=1e-6; }
 
 
 //---------------------------------------------------------------------------
-//: Default Constructor
-//  produces and invalid conic (needed for binary I/O)
+//: Default Constructor.
+//  Produces and invalid conic (needed for binary I/O)
 //---------------------------------------------------------------------------
 vsol_conic_2d::vsol_conic_2d()
 {
 }
 
 //---------------------------------------------------------------------------
-//: Constructor from coefficient of the cartesian equation
+//: Constructor from coefficients of the cartesian equation.
 // Description: `new_a'x^2+`new_b'xy+`new_c'y^2+`new_d'x+`new_e'y+`new_f'
 //---------------------------------------------------------------------------
 vsol_conic_2d::vsol_conic_2d(double new_a,
@@ -165,12 +164,12 @@ vsol_point_2d_sptr vsol_conic_2d::p1(void) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-//: Has `this' the same coefficients and the same(geometrically) end points
-//  than `other' ?  The test anticipates that the conic may have null endpoints
+//: Has `this' the same coefficients and (geometrical) end points than `other'?
+//  The test anticipates that the conic may have null endpoints
 //---------------------------------------------------------------------------
 bool vsol_conic_2d::operator==(const vsol_conic_2d &other) const
 {
-  if(this==&other)
+  if (this==&other)
     return true;
   // Delegate to both parent classes:
   bool conic_eq = vgl_conic<double>::operator==(other);
@@ -508,7 +507,7 @@ bool vsol_conic_2d::in(const vsol_point_2d_sptr &p) const
 }
 
 //---------------------------------------------------------------------------
-//: Returns the tangent to the conic in the point p, if p is on the conic.
+//: Return the tangent to the conic in the point p, if p is on the conic.
 //  In general, returns the polar line of the point w.r.t. the conic.
 //---------------------------------------------------------------------------
 vgl_homg_line_2d<double> *
@@ -637,25 +636,23 @@ void vsol_conic_2d::b_write(vsl_b_ostream &os) const
 //: Binary load self from stream (not typically used)
 void vsol_conic_2d::b_read(vsl_b_istream &is)
 {
-  if(!is)
+  if (!is)
     return;
   short ver;
   vsl_b_read(is, ver);
-  switch(ver)
+  switch (ver)
   {
-  case 1:
-    {
-      vgl_conic<double> q;
-      vsl_b_read(is, q);
-      vsol_point_2d_sptr p0, p1;
-      vsl_b_read(is, p0);
-      vsl_b_read(is, p1);
-      this->set(q.a(), q.b(), q.c(), q.d(), q.e(), q.f());
-      p0_=p0;
-      p1_=p1;
-    }
+   default:
+    assert(!"vsol_conic I/O version should be 1");
+   case 1:
+    vgl_conic<double> q;
+    vsl_b_read(is, q);
+    vsl_b_read(is, p0_);
+    vsl_b_read(is, p1_);
+    this->set(q.a(), q.b(), q.c(), q.d(), q.e(), q.f());
   }
 }
+
 //: Return IO version number;
 short vsol_conic_2d::version() const
 {
