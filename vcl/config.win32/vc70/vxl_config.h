@@ -139,7 +139,7 @@
 /* true if <math.h> declares finite() */
 #define VXL_MATH_HAS_FINITE       0 
 
-/* true if <math.h> declares sqrtf() */
+/* true if <math.h> declares sqrtf() for the C compiler */
 #define VXL_MATH_HAS_SQRTF        0
 
 /* true if usleep() returns void */

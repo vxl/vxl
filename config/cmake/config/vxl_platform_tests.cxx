@@ -810,6 +810,8 @@ int main() { finite(4.0); return 0; }
 
 //-------------------------------------
 
+// This section is not currently used.  sqrtf() is checked for with
+// the C compiler.
 #ifdef   VXL_MATH_HAS_SQRTF
 // (VXL_MATH_HAS_SQRTF=1; echo yes)
 // (VXL_MATH_HAS_SQRTF=0; echo no)

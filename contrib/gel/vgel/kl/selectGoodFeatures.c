@@ -8,7 +8,7 @@
 #include <stdlib.h> /* malloc(), qsort() */
 #include <stdio.h>  /* fflush()          */
 #include <string.h> /* memset()          */
-#include <math.h>   /* fsqrt()           */
+#include <math.h>   /* sqrtf()           */
 
 /* Our includes */
 #include "base.h"
@@ -24,9 +24,6 @@
  */
 #include <vxl_config.h>
 #if ! VXL_MATH_HAS_SQRTF
-#define sqrtf(x) (float)sqrt((double)(x))
-#else
-/* see comments in v3p/netlib/netlib.h */
 #define sqrtf(x) (float)sqrt((double)(x))
 #endif
 

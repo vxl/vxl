@@ -22,38 +22,8 @@ extern "C" {
 
 #include <vxl_config.h>
 #if VXL_MATH_HAS_SQRTF
-
-    /*
-
-    There is a problem with the (now commented out) "float
-    sqrtf(float);" below.
-
-    If VXL_MATH_HAS_SQRTF is set, that means that in C++, if we do
-    "#include <math.h>", we can do "sqrtf(2.0)".  However, sqrtf's
-    availability might be different with the C compiler, or it might
-    be a macro.  Something like this must be happening in the MSVC
-    math.h headers.
-
-    We used to set VXL_MATH_HAS_SQRTF to 0 manually under MSVC, but
-    the new CMake try-compile system seems to be rightfully setting it
-    to 1.
-
-    Until we can find the right way to solve this problem, I removed
-    "float sqrtf(float);" below and insert the macro definition in its
-    place.
-
-    I tried to do "#include <math.h>" in this file, but it seems it
-    cannot be used after the other netlib headers in MSVC.
-
-    Perhaps the configuration system should define (or not define)
-    VXL_MATH_HAS_SQRTF_C and VXL_MATH_HAS_SQRTF_CXX?  For C and C++
-    compilers.
-
-    */
-
-/* float sqrtf(float); */
-# define sqrtf(f) ((float)sqrt((double)(f)))
-
+/* It would be more appropriate to #include <math.h> to get this declaration */
+float sqrtf(float);
 #else
 # define sqrtf(f) ((float)sqrt((double)(f)))
 #endif

@@ -225,7 +225,8 @@ PERFORM_CMAKE_TEST(vxl_platform_tests.cxx vcl_cv_cxx_needs_namespace_std)
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_UNISTD_USLEEP_IS_VOID)
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx ac_vxl_has_qsort)
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_MATH_HAS_FINITE)
-PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_MATH_HAS_SQRTF)
+# sqrtf() is checked for with the C compiler elsewhere in this file
+# PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_MATH_HAS_SQRTF)
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_IEEEFP_HAS_FINITE)
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_STDLIB_HAS_LRAND48)
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_STDLIB_HAS_DRAND48)
@@ -305,7 +306,14 @@ PERFORM_CHECK_HEADER(ieeefp.h VXL_HAS_IEEEFP_H)
 IF(UNIX)
   SET(CMAKE_REQUIRED_LIBRARIES "${CMAKE_REQUIRED_LIBRARIES};m")
 ENDIF(UNIX)
-CHECK_SYMBOL_EXISTS(sqrtf "math.h" VXL_C_MATH_HAS_SQRTF)
+CHECK_SYMBOL_EXISTS(sqrtf "math.h" VXL_MATH_HAS_SQRTF)
+# VXL_MATH_HAS_SQRTF needs to be "0" or "1"
+IF(VXL_MATH_HAS_SQRTF)
+  SET(VXL_MATH_HAS_SQRTF "1")
+ELSE(VXL_MATH_HAS_SQRTF)
+  SET(VXL_MATH_HAS_SQRTF "0")
+ENDIF(VXL_MATH_HAS_SQRTF)
+
 
 TEST_BIG_ENDIAN(VXL_BIG_ENDIAN)
 
