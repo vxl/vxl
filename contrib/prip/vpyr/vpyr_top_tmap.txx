@@ -9,14 +9,6 @@ vpyr_top_tmap< TPyramid , V , E , F , D >::~vpyr_top_tmap()
 {
 }
 
-template < class TPyramid , class V , class E , class F , class D >
-template <class M >
-void vpyr_top_tmap< TPyramid , V , E , F , D >::set_structure(const M & arg)
-{
-  pyramid_.set_base_structure(arg) ;
-  Base_::set_structure(arg) ;
-}
-
 template < class TPyramid  , class V , class E , class F , class D >
 void vpyr_top_tmap< TPyramid , V , E , F , D >::contraction(const contraction_kernel & arg)
 {

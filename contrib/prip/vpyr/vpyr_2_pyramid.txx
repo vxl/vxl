@@ -81,16 +81,6 @@ TLevel * vpyr_2_pyramid<TLevel>::level_below(vmap_level_type type, const level_t
 }
 
 template <class TLevel>
-template <class M>
-void vpyr_2_pyramid<TLevel>::set_base_structure(const M & arg)
-{
-  base_map_.set_structure(arg) ;
-  level_.clear() ;
-  level_.insert(level_array_type::value_type(::vmap_top_level_index(),
-                level_type(::vmap_top_level_index(),(typename level_type::pyramid_type&) *this))) ;
-}
-
-template <class TLevel>
 bool vpyr_2_pyramid<TLevel>::valid()
 {
   return false;

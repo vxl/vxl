@@ -40,8 +40,13 @@ class vpyr_top_tmap : public vmap_2_tmap<V,E,F,D>
   virtual ~vpyr_top_tmap();
 
   //:
+  //  Must be inlined here to circumvent a bug in MSVC.
   template <class M >
-  void set_structure(const M & arg) ;
+  void set_structure(M const& arg)
+  {
+    pyramid_.set_base_structure(arg) ;
+    Base_::set_structure(arg) ;
+  }
 
   //:
   virtual void contraction(const contraction_kernel & arg) ;

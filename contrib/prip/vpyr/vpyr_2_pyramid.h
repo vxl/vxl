@@ -79,8 +79,15 @@ class vpyr_2_pyramid
   virtual ~vpyr_2_pyramid();
 
   //: Erases everything and sets the base level of the pyramid .
+  //  Must be inlined here to circumvent a bug in MSVC.
   template <class M>
-  void set_base_structure(const M & arg) ;
+  void set_base_structure(M const& arg)
+  {
+    base_map_.set_structure(arg) ;
+    level_.clear() ;
+    level_.insert(level_array_type::value_type(::vmap_top_level_index(),
+                  level_type(::vmap_top_level_index(),(typename level_type::pyramid_type&) *this))) ;
+  }
 
   //: Returns the base level of the pyramid.
   const base_map_type & base_map() const
