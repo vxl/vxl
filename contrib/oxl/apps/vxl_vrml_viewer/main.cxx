@@ -9,9 +9,9 @@
 // vgui basics:
 #include <vgui/vgui.h>
 // tableaux:
-#include <vgui/vgui_easy3D.h>
-#include <vgui/vgui_viewer3D.h>
-#include <vgui/vgui_composite.h>
+#include <vgui/vgui_easy3D_tableau.h>
+#include <vgui/vgui_viewer3D_tableau.h>
+#include <vgui/vgui_composite_tableau.h>
 #include <vgui/vgui_deck_tableau.h>
 #include <vgui/vgui_text_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
@@ -20,20 +20,16 @@
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_dialog.h>
 
-//#ifdef VCL_WIN32
-//# include <vgui/impl/mfc/vgui_mfc_app_init.h>
-//#endif
-
 vgui_deck_tableau_sptr thedeck;
 vcl_vector<vgui_vrml_tableau_sptr> thevrmls;
-vgui_viewer3D_sptr theviewer;
+vgui_viewer3D_tableau_sptr theviewer;
 
 vgui_tableau_sptr make_3d_tableau(char const* filename)
 {
   vgui_vrml_tableau_new vrml(filename, true);
 
   // Create a easy3D tableau:
-  vgui_easy3D_new list3D;
+  vgui_easy3D_tableau_new list3D;
 
   list3D->set_point_radius(1);
   // Add a point at the origin
@@ -61,7 +57,7 @@ vgui_tableau_sptr make_3d_tableau(char const* filename)
   vgui_text_tableau_new text;
   text->add(-.8f,-.8f, filename);
 
-  vgui_composite_new c(vrml, text);
+  vgui_composite_tableau_new c(vrml, text);
 
   thevrmls.push_back(vrml);
 
@@ -141,7 +137,7 @@ int main(int argc, char **argv)
     thedeck->add(tab3d);
   }
 
-  vgui_viewer3D_new viewer(deck);
+  vgui_viewer3D_tableau_new viewer(deck);
   theviewer = viewer;
 
   vgui_shell_tableau_new shell(viewer);
