@@ -125,6 +125,9 @@ SOURCE=.\Templates/rsdl_bins+2.double.int-.cxx
 # Begin Source File
 SOURCE=.\Templates/rsdl_bins+3.double.int-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/rsdl_bins+2.float.int-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
