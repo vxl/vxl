@@ -249,7 +249,14 @@ int main(int argc, char** argv)
   // Estimate time so we can set n_loops appropriately
   double t = fill(byte_1image,5000,false);
 
-  int n_loops = int(100000/t); // Number required for about half a sec running time
+  int n_loops = int(300000/t); // Number required for about half a sec running time
+  
+  vcl_cout << "Float alignment ";
+  if ((((unsigned long)float_2image.top_left_ptr()) % 4ul)>0)
+    vcl_cout << "not on 4-byte boundary " << vcl_endl;
+  else
+    vcl_cout << "on 4-byte boundary " << vcl_endl;
+
   compute_stats(1,byte_1image,n_loops);
   compute_stats(1,byte_2image,n_loops);
   compute_stats(1,float_1image,n_loops);

@@ -559,6 +559,29 @@ template<class T>
 void vil2_image_view<T>::fill(T value)
 {
   T* plane = top_left_;
+  
+  if (is_contiguous())
+  {
+    vil2_image_view<T>::iterator it = begin();
+    vil2_image_view<T>::const_iterator end_it = end();
+    while (it!=end_it) {*it = value; ++it; }
+    return;
+  }
+
+  if (istep_==1)
+  {
+    for (unsigned int p=0;p<nplanes_;++p,plane += planestep_)
+    {
+      T* row = plane;
+      for (unsigned int j=0;j<nj_;++j,row += jstep_)
+      {
+        int i = ni_;
+        while (i>=0) { row[i--]=value; }
+      }
+    }
+    return;
+  }
+
   for (unsigned int p=0;p<nplanes_;++p,plane += planestep_)
   {
     T* row = plane;
