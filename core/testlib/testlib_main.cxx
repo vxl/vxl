@@ -42,7 +42,7 @@ LONG WINAPI vxl_exception_filter( struct _EXCEPTION_POINTERS *ExceptionInfo )
 
 #if defined(VCL_BORLAND)
 # include <math.h>
-# include <float.h>
+# include <float.h> // for _control87()
 #endif // defined(VCL_BORLAND)
 
 static vcl_vector<TestMainFunction> testlib_test_func_;
@@ -82,9 +82,9 @@ testlib_main( int argc, char* argv[] )
 
   // Disable Borland's floating point exceptions.
 #if defined(VCL_BORLAND)
-  _control87(MCW_EM, MCW_EM);  
+  _control87(MCW_EM, MCW_EM);
 #endif // defined(VCL_BORLAND)
-  
+
   // Assume the index type for vector<string> and
   // vector<TestMainFunction> are the same.
   typedef vcl_vector<vcl_string>::size_type vec_size_t;
@@ -133,13 +133,13 @@ testlib_main( int argc, char* argv[] )
       int result = testlib_test_func_[i]( argc, argv );
       vcl_cout << "----------------------------------------\n"
                << testlib_test_name_[i] << " returned " << result << ' '
-               << ( result==0?"(PASS)":"(FAIL)") << '\n'
+               << ( result==0 ? "(PASS)" : "(FAIL)" ) << '\n'
                << "----------------------------------------\n" << vcl_flush;
       all_pass &= (result == 0);
     }
 
     vcl_cout << "\n\nCombined result of " << testlib_test_name_.size() << " tests: "
-             << ( all_pass?"PASS":"FAIL" ) << vcl_endl;
+             << ( all_pass ? "PASS" : "FAIL" ) << vcl_endl;
     return all_pass ? 0 : 1;
   }
 
