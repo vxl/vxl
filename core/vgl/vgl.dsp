@@ -420,7 +420,12 @@ SOURCE=.\vgl_region_scan_iterator.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgl_test.cxx
+SOURCE=.\internals/gpc.c
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_area.cxx
 
 # End Source File
 # Begin Source File
@@ -703,7 +708,12 @@ SOURCE=.\vgl_region_scan_iterator.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgl_test.h
+SOURCE=.\internals/gpc.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_area.h
 
 # End Source File
 # Begin Source File
