@@ -3,7 +3,7 @@
 INCLUDE(${BRL_INCLUDE_DIR}/bmods/find_xerces.cmake)
 
 # camera calibration
-#SUBDIRS(bcal)
+SUBDIRS(bcal)
 
 # 3-d reconstruction 
 #SUBDIRS(brct)
