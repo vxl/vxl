@@ -10,5 +10,5 @@ INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vul/CMakeListsLink.txt )
 
 
 ADD_EXECUTABLE(
-test_mbl test_mbl
+test_mbl test_mbl.cxx
 )

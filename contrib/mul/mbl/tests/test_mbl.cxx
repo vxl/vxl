@@ -12,6 +12,7 @@
 #include <mbl/tests/test_matxvec.cxx>
 #include <mbl/tests/test_stats_1d.cxx>
 #include <mbl/tests/test_sum_1d.cxx>
+#include <mbl/tests/test_priority_bounded_queue.cxx>
 
 #undef TESTMAIN
 #define TESTMAIN(x) int main() \
@@ -19,6 +20,7 @@
 
 void run_test_mbl()
 {
+  test_priority_bounded_queue();
   test_stochastic_data_collector();
   test_k_means();
   test_mz_random();
