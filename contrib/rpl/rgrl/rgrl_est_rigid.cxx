@@ -30,8 +30,13 @@ rgrl_est_rigid( unsigned int dimension )
 rgrl_transformation_sptr
 rgrl_est_rigid::
 estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
-          rgrl_transformation const& cur_trans ) const
+          rgrl_transformation const& cur_trans_in ) const
 {
+  // Get the current rgrl_trans_rigid instance.
+  const rgrl_trans_rigid* cur_trans =
+    dynamic_cast<const rgrl_trans_rigid*>(&cur_trans_in);
+  assert(cur_trans);
+
   // so we want to have some sort of state, but we dont really want to un-const-ize this method,
   // so we implement a quick hack by making by using const_cast to change the value of stats
   vcl_vector<vcl_vector<double> >* pp =
@@ -41,8 +46,9 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   pp->clear();
   vcl_vector<double> cur_stat;
 
-  rgrl_transformation_sptr current_trans = new rgrl_trans_rigid(3);
-  *current_trans = cur_trans;
+  // Make a copy of the current transform that we can modify.
+  rgrl_transformation_sptr current_trans =
+    new rgrl_trans_rigid(cur_trans->R(), cur_trans->t());
 
   // Iterators to go over the matches
   //
