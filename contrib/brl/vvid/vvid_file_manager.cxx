@@ -172,10 +172,12 @@ void vvid_file_manager::display_spatial_objects()
   if (easy0_)
   {
     //easy0_->clear_all();
-    if (color_label_) {
+    if (color_label_)
+    {
       float r,g,b;
       //If tracking is on then we maintain a queue of points
-      if (track_) {
+      if (track_)
+      {
         frame_trail_.add_spatial_objects(sos);
         vcl_vector<vsol_spatial_object_2d_sptr> temp;
         frame_trail_.get_spatial_objects(temp);
@@ -184,7 +186,9 @@ void vvid_file_manager::display_spatial_objects()
           easy0_->set_vsol_spatial_object_2d_style(temp[i], r, g, b, 1.0, 2.0 );
           easy0_->add_spatial_object(temp[i]);
         }
-      } else {
+      }
+      else
+      {
         for (unsigned int i=0;i<sos.size();i++) {
           set_changing_colors( sos[i]->get_tag_id() , &r, &g, &b );
 #ifdef DEBUG
@@ -194,7 +198,9 @@ void vvid_file_manager::display_spatial_objects()
           easy0_->add_spatial_object(sos[i]);
         }
       }
-    } else {
+    }
+    else
+    {
       //If tracking is on then we maintain a queue of points
       if (track_)
       {
@@ -204,18 +210,18 @@ void vvid_file_manager::display_spatial_objects()
         easy0_->add_spatial_objects(temp);
       }
       else
+      {
+        if (toggle)
         {
-          if(toggle)
-            {
-              easy0_->add_spatial_objects(sos, 1.0, 0.0, 0.0, 3.0, 4.0);
-              toggle = !toggle;
-            }
-          else
-            {
-              easy0_->add_spatial_objects(sos, 0.0, 1.0, 0.0, 3.0, 4.0);
-              toggle = !toggle;
-            }
+          easy0_->add_spatial_objects(sos, 1.0, 0.0, 0.0, 3.0, 4.0);
+          toggle = !toggle;
         }
+        else
+        {
+          easy0_->add_spatial_objects(sos, 0.0, 1.0, 0.0, 3.0, 4.0);
+          toggle = !toggle;
+        }
+      }
     }
   }
 }
@@ -342,32 +348,32 @@ void vvid_file_manager::cached_play()
   vul_timer t;
   for (vcl_vector<bgui_vtol2D_tableau_sptr>::iterator vit = tabs_.begin();
        vit != tabs_.end()&&play_video_; vit++)
+  {
+    //pause by repeating the same frame
+    if (pause_video_&&play_video_)
     {
-      //pause by repeating the same frame
-      if (pause_video_&&play_video_)
+      if (next_frame_&&vit!=tabs_.end()-2)
       {
-        if (next_frame_&&vit!=tabs_.end()-2)
-        {
-          vit+=2;
-          next_frame_ = false;
-        }
-        if (prev_frame_&&vit!=tabs_.begin()+2)
-        {
-          vit--;
-          prev_frame_ = false;
-        }
-        vit--;
+        vit+=2;
+        next_frame_ = false;
       }
-
-      v2D0_->child.assign(*vit);
-        //Here we can put some stuff to control the frame rate. Hard coded to
-        //a delay of 10 for now
-      while (t.all()<time_interval_) ;
-      //force the new frame to be displayed
-      grid_->post_redraw();
-      vgui::run_till_idle();
-      t.mark();
+      if (prev_frame_&&vit!=tabs_.begin()+2)
+      {
+        vit--;
+        prev_frame_ = false;
+      }
+      vit--;
     }
+
+    v2D0_->child.assign(*vit);
+      //Here we can put some stuff to control the frame rate. Hard coded to
+      //a delay of 10 for now
+    while (t.all()<time_interval_) ;
+    //force the new frame to be displayed
+    grid_->post_redraw();
+    vgui::run_till_idle();
+    t.mark();
+  }
 }
 
 //----------------------------------------------
@@ -379,7 +385,7 @@ void vvid_file_manager::un_cached_play()
     return;
   }
   int nframes = my_movie_->length();
-  if(video_process_)
+  if (video_process_)
     video_process_->set_n_frames(my_movie_->length());
   for (vidl_vil1_movie::frame_iterator pframe=my_movie_->begin();
        pframe!=my_movie_->end() && play_video_;
@@ -425,9 +431,9 @@ void vvid_file_manager::un_cached_play()
     this->save_display(frame_index);
   }
   
-  if(video_process_)
-	  video_process_->finish();
-  if(save_display_)
+  if (video_process_)
+    video_process_->finish();
+  if (save_display_)
     this->end_save_display();
   save_display_ = false;
 }
@@ -450,7 +456,7 @@ void vvid_file_manager::play_video()
     this->un_cached_play();
     if (!my_movie_)
       return;
-    if(video_process_&&video_process_->get_output_image())
+    if (video_process_&&video_process_->get_output_image())
       itab1_->set_image(video_process_->get_output_image());
     else
       itab1_->set_image(my_movie_->get_image(0));
