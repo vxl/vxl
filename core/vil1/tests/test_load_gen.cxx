@@ -1,7 +1,6 @@
 #include <vcl_fstream.h>
 #include <vcl_vector.h>
 
-#include <vpl/vpl.h>
 #include <vul/vul_temp_filename.h>
 
 #include <vil/vil_load.h>
@@ -11,7 +10,7 @@
 
 #include <testlib/testlib_test.h>
 
-static void test_rgb(char const *name, unsigned w, unsigned h,
+static void test_rgb(char const *name, int w, int h,
                      unsigned r, unsigned g, unsigned b)
 {
   vcl_string tmp_nam = vul_temp_filename() + ".pgm";
@@ -24,27 +23,30 @@ static void test_rgb(char const *name, unsigned w, unsigned h,
     ", " << i.bits_per_component() << " bit" <<
     vcl_endl;
 
-  TEST("components", i.components(), 3);
-  TEST("bits per component", i.bits_per_component(), 8);
-  TEST("size", i.width() == w && i.height()==h, true);
+  TEST("width", i.width(), w);
+  TEST("height", i.height(), h);
+  TEST("size", i.get_size_bytes(), 3*w*h);
+  TEST("# planes", i.planes(), 1);
+  TEST("# components", i.components(), 3);
+  TEST("# bits per component", i.bits_per_component(), 8);
+  TEST("component format", i.component_format(), VIL_COMPONENT_FORMAT_UNSIGNED_INT);
 
   vcl_vector<vil_rgb<vil_byte> > image_buf(w*h);
-  TEST ("get_section() on image", ! i.get_section(&image_buf[0], 0, 0, w, h), false);
+  TEST("get_section() on image", i.get_section(&image_buf[0], 0, 0, w, h), true);
 
   bool result = true;
 
   for (vcl_vector<vil_rgb<vil_byte> >::iterator
-    it= image_buf.begin(); it!=image_buf.end(); ++it)
-  {
+       it= image_buf.begin(); it!=image_buf.end(); ++it)
     if (!(*it == vil_rgb<vil_byte>(r, g, b)))
-      result = false;
-  }
+    {
+      result = false; break;
+    }
 
   TEST("Pixel values", result, true);
 }
 
-static void test_gray(char const *name, unsigned w, unsigned h,
-                     unsigned v)
+static void test_gray(char const *name, int w, int h, unsigned v)
 {
   vcl_string tmp_nam = vul_temp_filename() + ".pgm";
 
@@ -56,21 +58,25 @@ static void test_gray(char const *name, unsigned w, unsigned h,
     ", " << i.bits_per_component() << " bit" <<
     vcl_endl;
 
-  TEST("components", i.components(), 1);
-  TEST("bits per component", i.bits_per_component(), 8);
-  TEST("size", i.width() == w && i.height()==h, true);
+  TEST("width", i.width(), w);
+  TEST("height", i.height(), h);
+  TEST("size", i.get_size_bytes(), w*h);
+  TEST("# planes", i.planes(), 1);
+  TEST("# components", i.components(), 1);
+  TEST("# bits per component", i.bits_per_component(), 8);
+  TEST("component format", i.component_format(), VIL_COMPONENT_FORMAT_UNSIGNED_INT);
 
   vcl_vector<vil_byte> image_buf(w*h);
-  TEST ("get_section() on image", ! i.get_section(&image_buf[0], 0, 0, w, h), false);
+  TEST ("get_section() on image", i.get_section(&image_buf[0], 0, 0, w, h), true);
 
   bool result = true;
 
   for (vcl_vector<vil_byte>::iterator
-    it= image_buf.begin(); it!=image_buf.end(); ++it)
-  {
+       it= image_buf.begin(); it!=image_buf.end(); ++it)
     if (*it != v)
-      result = false;
-  }
+    {
+      result = false; break;
+    }
 
   TEST("Pixel values", result, true);
 }
