@@ -10,6 +10,8 @@ USES += vxl tbl
 LIBRARY := vipl_with_section
 VERSION := 1.0
 
+MANPAGE_SOURCES += accessors/vipl_accessors_section.txx
+
 ################################
 include ${IUEROOT}/config/top.mk
 ################################
