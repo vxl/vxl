@@ -74,6 +74,26 @@ static void test_algo_correlate_1d_double()
   TEST_NEAR("No overrun start",dest[0],999,1e-6);
   TEST_NEAR("No overrun end",dest[n+1],999,1e-6);
 
+    
+  vcl_cout << "Test vil_correlate_zero_extend end type with 5-tap filter\n";
+  double kernel2[5] = {1.0, 5.0, 8.0, 5.0, -1.0};
+  for (int i=0;i<n+2;++i) dest[i]=999;
+  vil_correlate_1d(&src[0],n,1, &dest[1],1,
+                   &kernel2[2],-2,2,
+                   double(), // indicates accumulator type
+                   vil_convolve_zero_extend,vil_convolve_zero_extend);
+
+  TEST_NEAR("Start",dest[1],15.0,1e-6);
+  TEST_NEAR("Next",dest[2],32.0,1e-6);
+  TEST_NEAR("First full value",dest[3],50.0,1e-6);
+  TEST_NEAR("Last full value",dest[n-2],18.0*n-40.0,1e-6);
+  TEST_NEAR("Next",dest[n-1],19.0*n-21.0,1e-6);
+  TEST_NEAR("End",dest[n],14.0*n-7.0,1e-6);
+  TEST_NEAR("No overrun start",dest[0],999,1e-6);
+  TEST_NEAR("No overrun end",dest[n+1],999,1e-6);
+ 
+   
+  
   vcl_cout<<"Testing vil_correlate_constant_extend end type\n";
   for (int i=0;i<n+2;++i) dest[i]=999;
   vil_correlate_1d(&src[0],n,1, &dest[1],1,

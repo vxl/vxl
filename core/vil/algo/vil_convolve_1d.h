@@ -73,7 +73,7 @@ enum vil_convolve_boundary_option
   //: Extend the signal by reflection about the boundary.
   // \verbatim
   //     |                               |
-  // K                               ----*--------
+  // K                              ----*--------
   // in   ... -------------------...edcbabcde...
   // out  ... ---------------------------
   // \endverbatim
@@ -109,12 +109,13 @@ inline void vil_convolve_edge_1d(const srcT* src, unsigned n, vcl_ptrdiff_t s_st
     return;
    case vil_convolve_zero_extend:
     // Assume src[i]==0 for i<0
-    for (vcl_ptrdiff_t i=-k_hi+1;i<=0;++i,dest+=d_step,src+=s_step)
+//    for (vcl_ptrdiff_t i=-k_hi+1;i<=0;++i,dest+=d_step,src+=s_step)
+    for (vcl_ptrdiff_t i=0;i<k_hi;++i,dest+=d_step)
     {
       accumT sum = 0;
       const srcT* s = src;
-      const kernelT* k = kernel-i*kstep;
-      for (vcl_ptrdiff_t j=i;j<=-k_lo;++j,s+=s_step,k-=kstep)
+      const kernelT* k = kernel+i*kstep;
+      for (vcl_ptrdiff_t j=i;j>=k_lo;--j,s+=s_step,k-=kstep)
         sum+= (accumT)((*s)*(*k));
       *dest=(destT)sum;
     }
@@ -166,7 +167,7 @@ inline void vil_convolve_edge_1d(const srcT* src, unsigned n, vcl_ptrdiff_t s_st
    }
    case vil_convolve_trim:
    {
-    // Truncate and reweigh kernel
+    // Truncate and reweight kernel
     accumT k_sum_all=0;
     for (vcl_ptrdiff_t j=-k_hi;j<=-k_lo;++j) k_sum_all+=(accumT)(kernel[j*(-kstep)]);
 
@@ -220,7 +221,8 @@ inline void vil_convolve_1d(const srcT* src0, unsigned nx, vcl_ptrdiff_t s_step,
   {
     accumT sum = 0;
     const srcT* s= src;
-    for (const kernelT *k = k_rbegin;k!=k_rend;--k,s+=s_step) sum+= (accumT)((*k)*(*s));
+    for (const kernelT *k = k_rbegin;k!=k_rend;--k,s+=s_step)
+      sum+= (accumT)((*k)*(*s));
     *dest = destT(sum);
   }
 
