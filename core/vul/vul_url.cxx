@@ -6,6 +6,10 @@
 // \file
 // \author Ian Scott
 // Based on vil_stream_url by fsm
+// \verbatim
+// Modifications
+// 8 Nov 2002 - Peter Vanroose - corrected HTTP client request syntax
+// \endverbatim
 
 #include "vul_url.h"
 #include <vcl_cstdio.h>  // sprintf()
@@ -24,7 +28,7 @@
 # include <sys/socket.h>
 # include <netinet/in.h>   // htons()
 # ifdef __alpha
-#  include <fp.h>           // htons() [ on e.g. DEC alpha, htons is in machine/endian.h]
+#  include <fp.h>          // htons() [ on e.g. DEC alpha, htons is in machine/endian.h ]
 # endif
 # define SOCKET int
 
@@ -113,13 +117,13 @@ vcl_istream * vul_http_open(char const *url)
 
   // create socket endpoint.
   SOCKET tcp_socket = socket(PF_INET,      // IPv4 protocols.
-                          SOCK_STREAM,  // two-way, reliable,
-                                 // connection-based stream socket.
-                          PF_UNSPEC);   // protocol number.
+                             SOCK_STREAM,  // two-way, reliable,
+                                           // connection-based stream socket.
+                             PF_UNSPEC);   // protocol number.
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
   if (tcp_socket == INVALID_SOCKET) {
 # ifndef NDEBUG
-    vcl_cerr << "error code : " << WSAGetLastError() << vcl_endl;
+    vcl_cerr << __FILE__ "error code : " << WSAGetLastError() << '\n';
 # endif
 #else
   if (tcp_socket < 0) {
@@ -129,7 +133,7 @@ vcl_istream * vul_http_open(char const *url)
   }
 
 #ifdef DEBUG
-  vcl_cerr << __FILE__ ": tcp_sockect = " << tcp_socket << vcl_endl;
+  vcl_cerr << __FILE__ ": tcp_socket = " << tcp_socket << '\n';
 #endif
 
   // get network address of server.
@@ -171,12 +175,15 @@ vcl_istream * vul_http_open(char const *url)
   char buffer[4096];
 
   // send HTTP 1.1 request.
-  vcl_sprintf(buffer, "GET /%s / HTTP/1.1\n", path.c_str());
+  vcl_sprintf(buffer, "GET %s HTTP/1.1\r\nUser-Agent: vul_url\r\nHost: %s\r\nAccept: */*\r\n",
+              url, host.c_str());
 
   if (auth != "")
     vcl_sprintf(buffer+vcl_strlen(buffer),
-     "Authorization: Basic %s\n",
+     "Authorization: Basic %s\r\n",
      vul_url::encode_base64(auth).c_str());
+
+  vcl_sprintf(buffer+vcl_strlen(buffer), "\r\n");
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
   if (send(tcp_socket, buffer, vcl_strlen(buffer), 0) < 0) {
@@ -221,6 +228,10 @@ vcl_istream * vul_http_open(char const *url)
   close(tcp_socket);
 #endif
 
+#ifdef DEBUG
+  vcl_cerr << "HTTP server returned:\n" << contents << '\n';
+#endif
+
   if ( (contents.find("HTTP/1.1 200")) == contents.npos)
   {
     return 0;
@@ -232,6 +243,9 @@ vcl_istream * vul_http_open(char const *url)
   }
 
   contents.erase(0,n+4);
+#ifdef DEBUG
+  vcl_cerr << "vul_url::vul_http_open() returns:\n" << contents << '\n';
+#endif
   return new vcl_istringstream(contents);
 }
 
@@ -324,7 +338,7 @@ bool vul_http_exists(char const *url)
   }
 
 #ifdef DEBUG
-  vcl_cerr << __FILE__ ": tcp_sockect = " << tcp_socket << vcl_endl;
+  vcl_cerr << __FILE__ ": tcp_socket = " << tcp_socket << vcl_endl;
 #endif
 
   // get network address of server.
@@ -359,11 +373,12 @@ bool vul_http_exists(char const *url)
   char buffer[4096];
 
   // send HTTP 1.1 request.
-  vcl_sprintf(buffer, "HEAD /%s / HTTP/1.1\n", path.c_str());
+  vcl_sprintf(buffer, "HEAD %s HTTP/1.1\r\nUser-Agent: vul_url\r\nHost: %s\r\nAccept: */*\r\n",
+              url, host.c_str());
   if (auth != "")
-    vcl_sprintf(buffer+vcl_strlen(buffer),
-      "Authorization: Basic %s\n",
-      vul_url::encode_base64(auth).c_str());
+    vcl_sprintf(buffer+vcl_strlen(buffer), "Authorization: Basic %s\r\n",
+                vul_url::encode_base64(auth).c_str());
+  vcl_sprintf(buffer+vcl_strlen(buffer),"\r\n");
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
   if (send(tcp_socket, buffer, vcl_strlen(buffer), 0) < 0) {
@@ -415,6 +430,10 @@ bool vul_http_exists(char const *url)
   closesocket(tcp_socket);
 #else
   close(tcp_socket);
+#endif
+
+#ifdef DEBUG
+  vcl_cerr << "HTTP server returned:\n" << contents << '\n';
 #endif
 
   return contents.find("HTTP/1.1 200") != contents.npos;

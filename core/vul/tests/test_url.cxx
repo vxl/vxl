@@ -14,6 +14,7 @@
 #include <vcl_string.h>
 #include <vcl_algorithm.h>
 #include <vcl_utility.h>
+#include <vcl_cstring.h> // for strncmp()
 
 #include <testlib/testlib_test.h>
 
@@ -72,27 +73,29 @@ void test_url()
 
   vcl_cout<<"======== http downloading ===========\n";
 
-#ifndef DOWNLOAD
-  vcl_cout<<"Tests disabled, because too " <<
-    "many users are behind mandatory caches\n";
-  vcl_cout<<"vul_url does not support HTTP via a cache\n";
+#ifdef NO_DOWNLOAD
+  vcl_cout<<"Tests disabled, because too many users are behind mandatory caches;\n"
+          <<"vul_url does not support HTTP via a cache\n";
 #else
-  TEST("vul_url::exists(http://vxl.sourceforge.net/index.html)",
+  TEST("vul_url::exists(\"http://vxl.sourceforge.net/index.html\")",
        vul_url::exists("http://vxl.sourceforge.net/index.html"), true);
 
-  TEST("! vul_url::exists(http://vxl.sourceforge.net/foobarwobble.html)",
+  TEST("! vul_url::exists(\"http://vxl.sourceforge.net/foobarwobble.html\")",
        vul_url::exists("http://vxl.sourceforge.net/foobarwobble.html"), false);
 
   vcl_istream* i = vul_url::open("http://vxl.sourceforge.net/");
-  TEST("vul_url::open(http://vxl.sourceforge.net/)", bool(i), true);
+  TEST("vul_url::open(\"http://vxl.sourceforge.net/\")", bool(i), true);
 
   if (i)
   {
-    char a[1024];
-    i->read(a,1024);
+    char b[]="<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n<html>\n  <head>\n    <title>VXL homepage</title>";
+    int l = vcl_strlen(b);
+    char a[256];
+    i->read(a,1+l); a[1+l] = '\0';
     vcl_cout << a;
+    TEST("test contents", vcl_strncmp(a,b,vcl_strlen(b)), 0);
   }
 #endif
 }
 
-TESTMAIN(test_url)
+TESTMAIN(test_url);
