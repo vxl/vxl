@@ -15,7 +15,7 @@ void vsl_b_write(vsl_b_ostream &os, const vil_memory_image_format& v)
   vsl_b_write(os, io_version_no);
   vsl_b_write(os, v.components);
   vsl_b_write(os, v.bits_per_component);
-  vsl_b_write(os, v.component_format);
+  vsl_b_write(os, int(v.component_format));
 }
 
 //========================================================================
