@@ -82,7 +82,8 @@ protected:
   vcl_vector<Map> corner_to_track_maps_;  // one map<corner, track> per internal_frame
 
   void init();
-  void update_maps(int track_index);      // iterate over tracks_[track_index] and update the corner_to_track_maps_ to point to track_index
+  void update_maps(int track_index);      // iterate over tracks_[track_index]
+                                          // and update the corner_to_track_maps_ to point to track_index
   void remove_maps(int track_index);      // iterate over tracks_[track_index] and remove the corner_to_track_maps_
 };
 

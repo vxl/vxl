@@ -105,8 +105,10 @@ protected:
 struct vgui_deck_new : public vgui_deck_sptr {
   typedef vgui_deck_sptr base;
   vgui_deck_new() : base(new vgui_deck()) { }
-  vgui_deck_new(vgui_tableau_sptr const& child0, vgui_tableau_sptr const& child1) : base(new vgui_deck(child0, child1)) { }
-  vgui_deck_new(vgui_tableau_sptr const& child0, vgui_tableau_sptr const& child1, vgui_tableau_sptr const& child2) : base(new vgui_deck(child0, child1, child2)) { }
+  vgui_deck_new(vgui_tableau_sptr const& child0,vgui_tableau_sptr const& child1)
+    : base(new vgui_deck(child0, child1)) { }
+  vgui_deck_new(vgui_tableau_sptr const& child0, vgui_tableau_sptr const& child1, vgui_tableau_sptr const& child2)
+    : base(new vgui_deck(child0, child1, child2)) { }
 };
 
 #endif // vgui_deck_h_

@@ -15,7 +15,8 @@
 // .SECTION Author
 //    fsm
 // .SECTION Modifications
-// Peter Vanroose, July 2000: corrected serious bug: VXL_LITTLE_ENDIAN not needed (implementation was wrong for VXL_BIG_ENDIAN machines)
+// Peter Vanroose, July 2000: corrected serious bug:
+//      VXL_LITTLE_ENDIAN not needed (implementation was wrong for VXL_BIG_ENDIAN machines)
 
 class vil_stream;
 

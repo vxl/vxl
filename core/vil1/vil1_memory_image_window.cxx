@@ -12,7 +12,9 @@
 #include "vil_memory_image_window.h"
 #include <vcl_cmath.h>
 
-vil_memory_image_window::vil_memory_image_window(const vil_memory_image_of<vil_byte>& image, int centre_x, int centre_y, int mask_size):
+vil_memory_image_window::vil_memory_image_window(
+                                  const vil_memory_image_of<vil_byte>& image,
+                                  int centre_x, int centre_y, int mask_size):
   image1_(image)
 {
   init(centre_x, centre_y, mask_size);
@@ -32,7 +34,7 @@ float vil_memory_image_window::mean_intensity()
   int tot = 0;
   for (int row_index = 0; row_index < mask_size_; row_index++)
     for (int col_index = 0; col_index < mask_size_; col_index++)
-      tot += image1_(mask1_col_index_ + col_index, mask1_row_index_ + row_index);
+      tot += image1_(mask1_col_index_ +col_index, mask1_row_index_ +row_index);
   return (float)tot / (float)(mask_size_ * mask_size_);
 }
 
@@ -43,13 +45,13 @@ inline int labs(int x) { return (x > 0) ? x : -x; }
 // accumulator overflow which can easily happen on certain medical and range
 // images.
 int vil_memory_image_window::sum_squared_differences(const vil_memory_image_of<vil_byte>& image2,
-					    int centre2_x, int centre2_y,
-					    int early_exit_level)
+                                                     int centre2_x, int centre2_y,
+                                                     int early_exit_level)
 {
   int mask2_col_index = centre2_x - mask_size_ / 2;
   int mask2_row_index = centre2_y - mask_size_ / 2;
 
-  // make sure that we don't ask for pixels outside the image: - PVr, 1 dec. 1997
+  // make sure that we don't ask for pixels outside the image - PVr, 1 dec. 1997
   int row_start = 0;
   if (row_start < -mask1_row_index_) row_start = -mask1_row_index_;
   if (row_start < -mask2_row_index) row_start = -mask2_row_index;
@@ -70,13 +72,13 @@ int vil_memory_image_window::sum_squared_differences(const vil_memory_image_of<v
       int p2 =  image2( mask2_col_index + col_index,  mask2_row_index + row_index);
       //      cout << "  int = " << mask1_col_index_ + col_index << " " << mask1_row_index_ + row_index << endl;
       // cout << "  int = " << p1 << " " << p2 << endl;
-      
+
       difference_total += p1>p2 ? p1-p2 : p2-p1; // avoid vnl dependency - PVr
 
       // Check to see if we can return early -- this is also useful as it implicitly
       // avoids accumulator overflow.
       if (difference_total > early_exit_level)
-	return difference_total;
+        return difference_total;
     }
   }
   return difference_total;
@@ -85,9 +87,9 @@ int vil_memory_image_window::sum_squared_differences(const vil_memory_image_of<v
 
 // --
 int vil_memory_image_window::ncc(const vil_memory_image_of<vil_byte>& image2,
-			int centre2_x, int centre2_y,
-			double normalise_ratio,
-			int early_exit_level)
+                                 int centre2_x, int centre2_y,
+                                 double normalise_ratio,
+                                 int early_exit_level)
 {
   int mask2_col_index = centre2_x - mask_size_ / 2;
   int mask2_row_index = centre2_y - mask_size_ / 2;
@@ -100,7 +102,7 @@ int vil_memory_image_window::ncc(const vil_memory_image_of<vil_byte>& image2,
       difference_total += labs (p1 - (int) (normalise_ratio * (float) p2));
 
       if (difference_total > early_exit_level)
-	return difference_total;
+        return difference_total;
     }
 
   return difference_total;
@@ -108,32 +110,32 @@ int vil_memory_image_window::ncc(const vil_memory_image_of<vil_byte>& image2,
 
 
 double vil_memory_image_window::normalised_cross_correlation(const vil_memory_image_of<vil_byte>& image2,
-						    int centre2_x, int centre2_y)
+                                                             int centre2_x, int centre2_y)
 {
-  
+
   // set mask size
   int n = (int)mask_size_/2;
   int m = (int)mask_size_/2;
 
- 
+
   //////////////////////////////////////////////
-  // setup the integer locations of the 
-  // points 
-  // 
+  // setup the integer locations of the
+  // points
+  //
   int u1 = centre1_x_;
   int v1 = centre1_y_;
   int u2 = centre2_x;
   int v2 = centre2_y;
 
-  // indices 
+  // indices
   int i,j;
-  
+
   double average_I1_uv;
   double average_I2_uv;
-  
+
   double std_dev_I1_uv;
   double std_dev_I2_uv;
-  
+
 
   //////////////////////////////////////////////
   // calculate the average intensities
@@ -162,30 +164,30 @@ double vil_memory_image_window::normalised_cross_correlation(const vil_memory_im
 
   double result_I1 = 0;
   double result_I2 = 0;
- 
+
 
   for (i = -n; i < n+1; i++) {
     for (j = -m; j < m+1; j++) {
       double I1_uv;
       I1_uv = image1_(u1+i,v1+j);
-      result_I1 += (I1_uv - average_I1_uv ) * 
-	(I1_uv - average_I1_uv);
+      result_I1 += (I1_uv - average_I1_uv ) *
+        (I1_uv - average_I1_uv);
 
       double I2_uv;
       I2_uv = image2(u2+i,v2+j);
-      result_I2 += (I2_uv - average_I2_uv ) * 
-	(I2_uv - average_I2_uv);
+      result_I2 += (I2_uv - average_I2_uv ) *
+        (I2_uv - average_I2_uv);
     }
   }
-  
-   
+
+
   std_dev_I1_uv = vcl_sqrt(result_I1);
   std_dev_I2_uv = vcl_sqrt(result_I2);
 
 
    ///////////////////////////////////////
    // calculate the correlation score
-   // again using result as a temporary 
+   // again using result as a temporary
    //  variable
 
    double result = 0;
@@ -202,9 +204,8 @@ double vil_memory_image_window::normalised_cross_correlation(const vil_memory_im
        result += (I1_uv - average_I1_uv)*(I2_uv - average_I2_uv);
      }
    }
-   
-   result /=  vcl_sqrt(std_dev_I1_uv * std_dev_I1_uv
-		   * std_dev_I2_uv * std_dev_I2_uv);	   
-   
+
+   result /= vcl_sqrt(std_dev_I1_uv*std_dev_I1_uv*std_dev_I2_uv*std_dev_I2_uv);
+
    return result;
 }

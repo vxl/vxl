@@ -35,14 +35,9 @@ namespace {
 std::ostream &operator<<(std::ostream &s, short x)
 { return s << int(x); }
 
-
-
-
 # include <string>
 //void blah(std::istream &s1, std::string &s2) { s1 >> s2; }
 //
-//__type_0&__rwstd::rw_extract_string<std::basic_istream<char,std::char_traits<char> >,std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::char_traits<char> >(__type_0&,__type_1&,__type_2)
-
 #define type0 std::basic_istream<char,std::char_traits<char> >
 #define type1 std::basic_string<char,std::char_traits<char>,std::allocator<char> >
 #define type2 std::char_traits<char>

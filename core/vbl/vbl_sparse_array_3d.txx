@@ -46,7 +46,7 @@ vbl_sparse_array_3d<T>::~vbl_sparse_array_3d()
 // locals
 static inline unsigned encode(unsigned i, unsigned j, unsigned k)
 {
-  // A bit of an arbitrary restriction, for efficiency 
+  // A bit of an arbitrary restriction, for efficiency
   // 2048 is 1 << 11, could be 1 << 21 for 64bit machines.
   // Use a map of tuples if you need bigger sparse arrays
   assert( (i < 1024) && (j < 2048) && (k < 2048) );
@@ -64,8 +64,10 @@ static inline void decode(unsigned v, unsigned& i, unsigned& j, unsigned& k)
 template <class T>
 T& vbl_sparse_array_3d<T>::operator () (unsigned i, unsigned j, unsigned k)
 {
-  //   cout << "{vbl_sparse_array_3d(" << i << "," << j << "," << k << ") - " << "storage[" << encode(i,j,k) << "] - " << storage_[encode(i,j,k)] << "}";
-  
+  // cout << "{vbl_sparse_array_3d(" << i << "," << j << "," << k << ") - "
+  //      << "storage[" << encode(i,j,k) << "] - "
+  //      << storage_[encode(i,j,k)] << "}";
+
   return storage_[encode(i,j,k)];
 }
 
@@ -73,7 +75,9 @@ template <class T>
 const T& vbl_sparse_array_3d<T>::operator () (unsigned i, unsigned j, unsigned k) const
 {
   Map::const_iterator p = storage_.find(encode(i,j,k));
-  //cout << "{vbl_sparse_array_3d(" << i << "," << j << "," << k << ") - " << "storage[" << encode(i,j,k) << "] - " << storage_[encode(i,j,k)] << "}";
+  // cout << "{vbl_sparse_array_3d(" << i << "," << j << "," << k << ") - "
+  //      << "storage[" << encode(i,j,k) << "] - "
+  //      << storage_[encode(i,j,k)] << "}";
 
   assert(p != storage_.end());
 
@@ -83,7 +87,8 @@ const T& vbl_sparse_array_3d<T>::operator () (unsigned i, unsigned j, unsigned k
 template <class T>
 bool vbl_sparse_array_3d<T>::fullp(unsigned i, unsigned j, unsigned k) const
 {
-  // cout << "{vbl_sparse_array_3d::fullp(" << i << "," << j << "," << k << ") - " << (storage_.find(encode(i,j,k)) != storage_.end()) << "}";
+  // cout << "{vbl_sparse_array_3d::fullp(" << i << "," << j << "," << k
+  //      << ") - " << (storage_.find(encode(i,j,k)) != storage_.end()) << "}";
 
   return (storage_.find(encode(i,j,k)) != storage_.end());
 }
@@ -96,7 +101,7 @@ bool vbl_sparse_array_3d<T>::put(unsigned i, unsigned j, unsigned k, const T& t)
   //  cout << "{vbl_sparse_array_3d::put(" << i << "," << j << "," << k << ") - " << res.second << "}";
 
   return res.second;
-} 
+}
 
 template <class T>
 vcl_ostream& vbl_sparse_array_3d<T>::print(vcl_ostream& out) const
@@ -113,7 +118,7 @@ vcl_ostream& vbl_sparse_array_3d<T>::print(vcl_ostream& out) const
 #define VBL_SPARSE_ARRAY_3D_INSTANTIATE_base(T)\
 template class vbl_sparse_array_3d<T>
 
-#undef VBL_SPARSE_ARRAY_3D_INSTANTIATE 
+#undef VBL_SPARSE_ARRAY_3D_INSTANTIATE
 #define VBL_SPARSE_ARRAY_3D_INSTANTIATE(T) \
 VBL_SPARSE_ARRAY_3D_INSTANTIATE_base(T); \
 VCL_INSTANTIATE_INLINE(vcl_ostream& operator << (vcl_ostream&, const vbl_sparse_array_3d<T> &))
@@ -130,7 +135,7 @@ int main()
   vcl_cout << "222 = " << x(2,2,2) << vcl_endl;
 
   vcl_cout << "333 is full? " << x.fullp(3,3,3) << vcl_endl;
-  
+
   vcl_cout << x;
 }
 #endif

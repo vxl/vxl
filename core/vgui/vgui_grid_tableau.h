@@ -1,20 +1,20 @@
 #ifndef vgui_grid_tableau_h_
 #define vgui_grid_tableau_h_
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // .NAME	vgui_grid_tableau
 // .INCLUDE	vgui/vgui_grid_tableau.h
 // .FILE	vgui_grid_tableau.cxx
 // .SECTION Description
-//   Derived class from vgui_polytab. Tableaux are laid out in a rectagular grid.
-//   Can use (CTRL) + and - to add and remove (rows and) columns.  Can use
-//   PageUp and PageDown to flip through the loaded tableaux.
+//  Derived class from vgui_polytab. Tableaux are laid out in a rectagular grid.
+//  Can use (CTRL) + and - to add and remove (rows and) columns.  Can use
+//  PageUp and PageDown to flip through the loaded tableaux.
 // .SECTION Author
 //   K.Y.McGaul
 // .SECTION Modifications
-//   K.Y.McGaul     20-JAN-2000    Initial version.
-//   K.Y.McGaul     11-FEB-2000    Added a clear_tableau to the empty grid positions.
-//--------------------------------------------------------------------------------
+//   K.Y.McGaul 20-JAN-2000 Initial version.
+//   K.Y.McGaul 11-FEB-2000 Added a clear_tableau to the empty grid positions.
+//------------------------------------------------------------------------------
 
 #include <vcl_vector.h>
 #include <vbl/vbl_array_2d.h>
@@ -29,10 +29,10 @@ public:
 
   struct grid_data
   {
-    int handle;        // Handle returned by polytab
-    int tab_pos;       // Position in tableaux vcl_list (tabs)
-    bool is_default;   // True if this is a default tableau (not set by the user)
-    int time_selected; // Time last left clicked on (-1 if not selected)
+    int handle;       // Handle returned by polytab
+    int tab_pos;      // Position in tableaux vcl_list (tabs)
+    bool is_default;  // True if this is a default tableau (not set by the user)
+    int time_selected;// Time last left clicked on (-1 if not selected)
   };
 
   vcl_string type_name() const;
@@ -113,16 +113,16 @@ private:
   vgui_event_condition cond_select;      // left mouse button
   vgui_event_condition cond_deselect;    // middle mouse button
 
-  int INCREMENT_COLS;          // Amount to increase the number of columns
-  int INCREMENT_ROWS;          // Amount to increase the number of rows.
+  int INCREMENT_COLS;        // Amount to increase the number of columns
+  int INCREMENT_ROWS;        // Amount to increase the number of rows.
 
-  bool grid_size_changeable;  // Whether the grid size is allowed to change.
+  bool grid_size_changeable; // Whether the grid size is allowed to change.
 
   unsigned nb_cols;
   unsigned max_cols;
   unsigned nb_rows;
   unsigned max_rows;
-  unsigned last_selected[2];  // stores col_pos, row_pos of last selected tableau
+  unsigned last_selected[2]; // stores col_pos, row_pos of last selected tableau
 
   vgui_tableau_sptr default_tab;
 
@@ -138,9 +138,12 @@ private:
 
 struct vgui_grid_tableau_new : public vgui_grid_tableau_sptr {
   typedef vgui_grid_tableau_sptr base;
-  vgui_grid_tableau_new(unsigned initial_columns = 1, unsigned initial_rows = 1) : base(new vgui_grid_tableau(1, 1)) { }
-  vgui_grid_tableau_new(vgui_tableau_sptr const& l, vgui_tableau_sptr const& r) : base(new vgui_grid_tableau(l, r)) { }
-  vgui_grid_tableau_new(vgui_tableau_sptr const& l, vgui_tableau_sptr const& m, vgui_tableau_sptr const& r) : base(new vgui_grid_tableau(l, m, r)) { }
+  vgui_grid_tableau_new(unsigned initial_columns = 1, unsigned initial_rows = 1)
+    : base(new vgui_grid_tableau(1, 1)) { }
+  vgui_grid_tableau_new(vgui_tableau_sptr const& l, vgui_tableau_sptr const& r)
+    : base(new vgui_grid_tableau(l, r)) { }
+  vgui_grid_tableau_new(vgui_tableau_sptr const& l, vgui_tableau_sptr const& m, vgui_tableau_sptr const& r)
+    : base(new vgui_grid_tableau(l, m, r)) { }
 };
 
 #endif // vgui_grid_tableau_h_

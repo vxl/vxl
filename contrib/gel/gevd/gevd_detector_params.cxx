@@ -10,40 +10,40 @@
 gevd_detector_params::gevd_detector_params(const gevd_detector_params& dp)
 {
   InitParams(dp.smooth, dp.noise_weight, dp.noise_multiplier,
-	     dp.automatic_threshold, dp.aggressive_junction_closure,
-	     dp.minLength, dp.maxGap, dp.minJump, dp.contourFactor,
-	     dp.junctionFactor, dp.junctionp, dp.spacingp, dp.borderp,
-	     dp.depth, dp.corner_angle, dp.separation, dp.min_corner_length,
-	     dp.cycle, dp.ndimension);
+             dp.automatic_threshold, dp.aggressive_junction_closure,
+             dp.minLength, dp.maxGap, dp.minJump, dp.contourFactor,
+             dp.junctionFactor, dp.junctionp, dp.spacingp, dp.borderp,
+             dp.depth, dp.corner_angle, dp.separation, dp.min_corner_length,
+             dp.cycle, dp.ndimension);
 }
 
 gevd_detector_params::gevd_detector_params(float smooth_sigma, float noise_w,
-			       float noise_m, bool automatic_t,
-			       int aggressive_jc, int minl,  
-			       float maxgp, float minjmp,
-			       float contour_f, float junction_f,
-			       bool recover_j, bool equal_spacing, 
-			       bool follow_b,  float default_d,
-			       float ang, float sep, int min_corner_len,
-			       int cyc, int ndim)
+                                           float noise_m, bool automatic_t,
+                                           int aggressive_jc, int minl,
+                                           float maxgp, float minjmp,
+                                           float contour_f, float junction_f,
+                                           bool recover_j, bool equal_spacing,
+                                           bool follow_b,  float default_d,
+                                           float ang, float sep, int min_corner_len,
+                                           int cyc, int ndim)
 {
   InitParams(smooth_sigma, noise_w, noise_m, automatic_t,
-	     aggressive_jc, minl, maxgp, minjmp,
-	     contour_f, junction_f, recover_j, equal_spacing, 
-	     follow_b, default_d, ang, sep, min_corner_len,
-	     cyc, ndim);
+             aggressive_jc, minl, maxgp, minjmp,
+             contour_f, junction_f, recover_j, equal_spacing,
+             follow_b, default_d, ang, sep, min_corner_len,
+             cyc, ndim);
 }
 
 void gevd_detector_params::InitParams(float smooth_sigma, float noise_w,
-				float noise_m, bool automatic_t,
-				int aggressive_jc, int minl,  
-				float maxgp, float minjmp,
-				float contour_f, float junction_f,
-				bool recover_j, bool equal_spacing, 
-				bool follow_b,  float default_d,
-				float ang, float sep, int min_corner_len,
-				int cyc, int ndim)
-{			       
+                                      float noise_m, bool automatic_t,
+                                      int aggressive_jc, int minl,
+                                      float maxgp, float minjmp,
+                                      float contour_f, float junction_f,
+                                      bool recover_j, bool equal_spacing,
+                                      bool follow_b,  float default_d,
+                                      float ang, float sep, int min_corner_len,
+                                      int cyc, int ndim)
+{			
   //Step contour parameters
   smooth = smooth_sigma;
   noise_weight = noise_w;
@@ -81,8 +81,9 @@ void gevd_detector_params::InitParams(float smooth_sigma, float noise_w,
 
 //-----------------------------------------------------------------------------
 //
-// -- Checks that parameters are within acceptable bounds.  This method is always called after a parameter modifier has changed the params.
-// 
+// -- Checks that parameters are within acceptable bounds.
+// This method is always called after a parameter modifier has changed the prms.
+//
 bool gevd_detector_params::SanityCheck()
 {
   if (aggressive_junction_closure >0 )
@@ -106,7 +107,7 @@ bool gevd_detector_params::SanityCheck()
   bool valid = true;
   if (smooth <= 0)  	// Standard deviation of the smoothing kernel
   {
-    msg << "ERROR: Value of gaussian smoothing sigma is too low <=0" << vcl_ends;
+    msg<< "ERROR: Value of gaussian smoothing sigma is too low <=0" << vcl_ends;
     smooth = 1.0;
     valid = false;
   }
@@ -175,13 +176,13 @@ bool gevd_detector_params::SanityCheck()
   if(cycle > 10)
     {
       msg << "ERROR: Value of number of corners in a 1-cycle is too "
-	   << "high > 10" << vcl_ends;
+          << "high > 10" << vcl_ends;
     }
 
   if(ndimension > 3)
     {
-      msg << "ERROR: Value of corner spatial dimension is too large >3" 
-	   << vcl_ends;
+      msg << "ERROR: Value of corner spatial dimension is too large > 3"
+          << vcl_ends;
     }
   msg << vcl_ends;
   SetErrorMsg(msg.str());
@@ -206,7 +207,7 @@ void gevd_detector_params::Describe(ParamModifier& mod)
 //   mod.AddParam("Sigma", smooth);
 //   mod.AddParam("Noise Weight", noise_weight);
 //   mod.AddParam("Noise Multiplier", noise_multiplier);
-//   mod.AddParam("Automatic Threshold", automatic_threshold, 
+//   mod.AddParam("Automatic Threshold", automatic_threshold,
 // 	       ParamModifier::OnOff);
 //   mod.AddParam("Junction Closure", aggressive_junction_closure,
 // 	       JunctionClosure);

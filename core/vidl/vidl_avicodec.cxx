@@ -14,7 +14,7 @@
 
 
 
-// To improve performance, we could use a Look Up Table 
+// To improve performance, we could use a Look Up Table
 // instead of computing  255/32
 #define RGB16R(rgb)     ((((UINT)(rgb) >> 10) & 0x1F) * 255u / 31u)
 #define RGB16G(rgb)     ((((UINT)(rgb) >> 5)  & 0x1F) * 255u / 31u)
@@ -28,7 +28,7 @@ vidl_avicodec::vidl_avicodec()
   avi_file_ = NULL;
 }
 
-	
+
 //-----------------------------------------------------------------------------
 vidl_avicodec::~vidl_avicodec()
 {
@@ -54,9 +54,9 @@ bool vidl_avicodec::read_header()
   if (avi_stream_info_.rcFrame.right-avi_stream_info_.rcFrame.left
       != avi_file_info_.dwWidth)
     {
-      vcl_cerr << "vidl_avicodec::read_header width size screwed up" << vcl_endl;
+      vcl_cerr << "vidl_avicodec::read_header width size screwed up\n";
       vcl_cerr << "          size of avi file : " << avi_file_info_.dwWidth << vcl_endl;
-      vcl_cerr << "          size of the stream : " <<  
+      vcl_cerr << "          size of the stream : " <<
         avi_stream_info_.rcFrame.right-avi_stream_info_.rcFrame.left<< vcl_endl;
     }
 
@@ -65,9 +65,9 @@ bool vidl_avicodec::read_header()
   if (avi_stream_info_.rcFrame.bottom-avi_stream_info_.rcFrame.top
       != avi_file_info_.dwHeight)
     {
-      vcl_cerr << "vidl_avicodec::read_header Height size screwed up" << vcl_endl;
+      vcl_cerr << "vidl_avicodec::read_header Height size screwed up\n";
       vcl_cerr << "          size of avi file : " << avi_file_info_.dwHeight << vcl_endl;
-      vcl_cerr << "          size of the stream : " <<  
+      vcl_cerr << "          size of the stream : " <<
         avi_stream_info_.rcFrame.bottom-avi_stream_info_.rcFrame.top<< vcl_endl;
     }
 
@@ -103,12 +103,12 @@ bool vidl_avicodec::get_section(
   byte* DIB;
   byte* StartDIB;
   byte* db; // current output datas
-  
+
   DIB = (byte*) AVIStreamGetFrame(avi_get_frame_, position);
-  
-  WORD BitsPerPixel = ((LPBITMAPINFOHEADER)DIB)->biBitCount; 
+
+  WORD BitsPerPixel = ((LPBITMAPINFOHEADER)DIB)->biBitCount;
   //cout << "Number of bits : " << BitsPerPixel << "  Number of bytes : " << get_bytes_pixel() << endl;
-  
+
   WORD ColorsUsed = ((LPBITMAPINFOHEADER)DIB)->biClrUsed;
   //cout << "Number of colors used : " << ColorsUsed << endl;
   // Not sure we can handle the stream if ColorsUsed!=0
@@ -117,26 +117,26 @@ bool vidl_avicodec::get_section(
   if ((BitsPerPixel!=16) && (BitsPerPixel!=24))
     {
       vcl_cerr << "vidl_avicodec : Don't know how to process a "
-           << BitsPerPixel<< " bits per pixel AVI File."<<vcl_endl;
+           << BitsPerPixel<< " bits per pixel AVI File.\n";
       return false;
     }
-  
+
   DIB += *(LPDWORD)DIB;
   StartDIB = (byte*)DIB;
   // Size of a row in number of bytes in the DIB structure
   // (a row contains a multiple of 4 bytes)
   int line_length = (width()*BitsPerPixel+31)/32*4;
-  
+
   if(!ib) {
     ib = new byte[xs*ys*get_bytes_pixel()];
-    if (!ib) { 
-      //SetStatusBad(); 
-      return false; 
+    if (!ib) {
+      //SetStatusBad();
+      return false;
     }
   }
-  
+
   db = (byte*)ib;
-  
+
   // Store the DIB datas into ib (db).
   // Note : DIB is a flipped upside down
   switch (BitsPerPixel)
@@ -145,7 +145,7 @@ bool vidl_avicodec::get_section(
       for (j=height()-y0-1; j>=height()-y0-ys; j--)
         {
           DIB = StartDIB+ (j*line_length)+x0*(BitsPerPixel/8);
-          for(i=0; i<xs; i++) 
+          for(i=0; i<xs; i++)
             {
               *db = *(DIB+2);
               *(db+1) = *(DIB+1);
@@ -159,7 +159,7 @@ bool vidl_avicodec::get_section(
        for (j=height()-y0-1; j>=height()-y0-ys; j--)
         {
           DIB = StartDIB + (j*line_length) + x0*(BitsPerPixel/8);
-          for(i=0; i<xs; i++) 
+          for(i=0; i<xs; i++)
             {
               WORD* Pixel16 = (WORD*) DIB; // the current 16 bits pixel
               *db     = (BYTE) RGB16R(*Pixel16);
@@ -172,25 +172,24 @@ bool vidl_avicodec::get_section(
       break;
     default:
       vcl_cerr << "vidl_avicodec : Don't know how to process a "
-           << BitsPerPixel << " bits per pixel AVI File."<<vcl_endl;
+           << BitsPerPixel << " bits per pixel AVI File.\n";
     } // end switch Bits per pixel
-  
+
   db = NULL;
   return true;
 }
 
 
 //-- put_section not implemented yet
-// we may need to change make_dib to 
+// we may need to change make_dib to
 // be able to put a section different
 // of the entire frame.
-int vidl_avicodec::put_section(
-                                int position,                        
-                                void* ib,
-				int x0, int y0,
-				int xs, int ys)
+int vidl_avicodec::put_section(int position,
+                               void* ib,
+                               int x0, int y0,
+                               int xs, int ys)
 {
-  vcl_cerr << "vidl_avicodec::put_section not implemented" << vcl_endl;
+  vcl_cerr << "vidl_avicodec::put_section not implemented\n";
   return -1;
 }
 
@@ -214,11 +213,11 @@ bool vidl_avicodec::probe(const char* fname)
   return false;
 }
 
-vidl_codec_sptr vidl_avicodec::load(const char* fname, char mode) 
+vidl_codec_sptr vidl_avicodec::load(const char* fname, char mode)
 {
   int modenum;
   DWORD videostreamcode = 0x73646976; // corresponds to char string "vids"
-  
+
   switch(mode) {
   case 'r':
     modenum = OF_READ | OF_SHARE_DENY_WRITE;
@@ -227,25 +226,25 @@ vidl_codec_sptr vidl_avicodec::load(const char* fname, char mode)
     modenum = OF_READWRITE;
     break;
   }
-  
+
   AVIFileInit();
   AVIFileOpen(&avi_file_, fname, modenum, 0L);
-  
+
   // only support first video stream
   AVIFileGetStream(avi_file_, &avi_stream_, videostreamcode, 0);
-  
-  if(!avi_file_ || !avi_stream_) 
+
+  if(!avi_file_ || !avi_stream_)
     {
       return NULL;
     }
-  
+
   avi_get_frame_ = AVIStreamGetFrameOpen(avi_stream_, NULL);
-  
+
   if(!read_header()) {
     fprintf(stderr, "vidl_avicodec: error reading header\n");
     return NULL;
   }
-  
+
   set_format('L');		
   set_image_class('C');
   set_name(vbl_file::basename(fname).c_str());
@@ -254,23 +253,23 @@ vidl_codec_sptr vidl_avicodec::load(const char* fname, char mode)
   // Open the first frame to get the number of bits per pixel
   // and check the validity of width and height
   byte* DIB = (byte*) AVIStreamGetFrame(avi_get_frame_, 0);
-  WORD BitsPerPixel = ((LPBITMAPINFOHEADER)DIB)->biBitCount; 
+  WORD BitsPerPixel = ((LPBITMAPINFOHEADER)DIB)->biBitCount;
   LONG iwidth = ((LPBITMAPINFOHEADER)DIB)->biWidth;
   LONG iheight = ((LPBITMAPINFOHEADER)DIB)->biHeight;
 
   if (width() != iwidth)
-    {
-      vcl_cerr << "vidl_avicodec::Load ohoh, width of the first frame is different from the one specified for the avifile" << vcl_endl;
-      vcl_cerr << "          Movie width set with the first frame" << vcl_endl;
-      set_width(iwidth);
-    }
- 
+  {
+    vcl_cerr << "vidl_avicodec::Load ohoh, width of the first frame is different from the one specified for the avifile\n"
+             << "          Movie width set with the first frame\n";
+    set_width(iwidth);
+  }
+
   if (height() != iheight)
-    {
-      vcl_cerr << "vidl_avicodec::Load ohoh, height of the first frame is different from the one specified for the avifile" << vcl_endl;
-      vcl_cerr << "          Movie height set with the first frame" << vcl_endl;
-      set_height(iheight);
-    }
+  {
+    vcl_cerr << "vidl_avicodec::Load ohoh, height of the first frame is different from the one specified for the avifile\n"
+             << "          Movie height set with the first frame\n";
+    set_height(iheight);
+  }
 
   // The movie will have 24 bits per pixel no matter of what
   // We can read 16 bits per pixel avi, but this will be
@@ -281,23 +280,23 @@ vidl_codec_sptr vidl_avicodec::load(const char* fname, char mode)
   if ((BitsPerPixel!=16) && (BitsPerPixel!=24))
     {
       vcl_cerr << "vidl_avicodec : Don't know how to process a "
-           << BitsPerPixel << " bits per pixel AVI File."<<vcl_endl;
+               << BitsPerPixel << " bits per pixel AVI File.\n";
       return NULL;
     }
-  
+
   return this;
 }
 
 
-bool vidl_avicodec::save(vidl_movie* movie, const char* fname) 
+bool vidl_avicodec::save(vidl_movie* movie, const char* fname)
 {	
-    
+
   PAVIFILE avi_file;
   AVISTREAMINFO avi_stream_info;
   PAVISTREAM avi_stream = NULL;
-  
+
   HRESULT hr;
-  
+
   AVIFileInit();
 
   //
@@ -309,102 +308,103 @@ bool vidl_avicodec::save(vidl_movie* movie, const char* fname)
                    NULL);		    // use handler determined
   // from file extension....
   if (hr != AVIERR_OK) {
-    vcl_cerr << "vidl_avicodec : Could not open the file " << fname << " for writing." << vcl_endl;
+    vcl_cerr << "vidl_avicodec : Could not open the file " << fname << " for writing.\n";
     if (hr == AVIERR_BADFORMAT)
-      vcl_cerr << "vidl_avicodec : The file couldn't be read, indicating a corrupt file or an unrecognized format." << vcl_endl;
+      vcl_cerr << "vidl_avicodec : The file couldn't be read, indicating a corrupt file or an unrecognized format.\n";
     if (hr== AVIERR_MEMORY)
-      vcl_cerr << "vidl_avicodec : The file could not be opened because of insufficient memory." << vcl_endl;
+      vcl_cerr << "vidl_avicodec : The file could not be opened because of insufficient memory.\n";
     if (hr== AVIERR_FILEREAD)
-      vcl_cerr << "vidl_avicodec : A disk error occurred while reading the file." << vcl_endl;
+      vcl_cerr << "vidl_avicodec : A disk error occurred while reading the file.\n";
     if (hr== AVIERR_FILEOPEN)
-      vcl_cerr << "vidl_avicodec : A disk error occurred while opening the file." << vcl_endl;
+      vcl_cerr << "vidl_avicodec : A disk error occurred while opening the file.\n";
     if (hr== REGDB_E_CLASSNOTREG)
-      {
-        vcl_cerr << "vidl_avicodec : According to the registry, the type of file specified in AVIFileOpen does not have a handler to process it. " << vcl_endl;
-        vcl_cerr << "vidl_avicodec : This is usually the case when the file name given does not have the .avi extension" << vcl_endl;
-      }
-    
-    return false; 
+    {
+      vcl_cerr << "vidl_avicodec : According to the registry, the type of file"
+               << " specified in AVIFileOpen does not have a handler to process it.\n"
+               << "vidl_avicodec : This is usually the case when the file name given does not have the .avi extension\n";
+    }
+
+    return false;
   }
-  
-  
-	// Fill in the header for the video stream....
 
-	// The video stream will run in 30ths of a second....
 
-	_fmemset(&avi_stream_info, 0, sizeof(avi_stream_info));
-	avi_stream_info.fccType                = streamtypeVIDEO;// stream type
-	avi_stream_info.fccHandler             = 0;
-	avi_stream_info.dwScale                = 1;
-	avi_stream_info.dwRate                 = 30;		    // 30 fps
+        // Fill in the header for the video stream....
+
+        // The video stream will run in 30ths of a second....
+
+        _fmemset(&avi_stream_info, 0, sizeof(avi_stream_info));
+        avi_stream_info.fccType                = streamtypeVIDEO;// stream type
+        avi_stream_info.fccHandler             = 0;
+        avi_stream_info.dwScale                = 1;
+        avi_stream_info.dwRate                 = 30;		    // 30 fps
         avi_stream_info.dwLength               = movie->length();
-	avi_stream_info.dwSuggestedBufferSize  = movie->width()*movie->height()*3;//codec->get_bytes_pixel();
-	SetRect(&avi_stream_info.rcFrame, 0, 0,		    // rectangle for stream
-	    (int) movie->width(),
-	    (int) movie->height());
+        avi_stream_info.dwSuggestedBufferSize  = movie->width()*movie->height()*3;//codec->get_bytes_pixel();
+        SetRect(&avi_stream_info.rcFrame, 0, 0,		    // rectangle for stream
+                (int) movie->width(),
+                (int) movie->height());
 
   // And create the stream;
   hr = AVIFileCreateStream(avi_file,		    // file pointer
                            &avi_stream,	  // returned stream pointer
                            &avi_stream_info);	    // stream header
   if (hr != AVIERR_OK) {
-    vcl_cerr << "vidl_avicodec : Could not create the avi stream." << vcl_endl;
+    vcl_cerr << "vidl_avicodec : Could not create the avi stream.\n";
     return false;
   }
 
 
   // Compression mode
-  AVICOMPRESSOPTIONS opts; 
-  AVICOMPRESSOPTIONS FAR * aopts[1] = {&opts}; 
+  AVICOMPRESSOPTIONS opts;
+  AVICOMPRESSOPTIONS FAR * aopts[1] = {&opts};
   if (!AVISaveOptions(NULL, 0, 1, &avi_stream, (LPAVICOMPRESSOPTIONS FAR *) &aopts))
     {
-      vcl_cerr << "vidl_avicodec : AVI Saving Cancelled." << vcl_endl;
+      vcl_cerr << "vidl_avicodec : AVI Saving Cancelled.\n";
       return false;
     }
   PAVISTREAM avi_stream_compressed = NULL;
   hr = AVIMakeCompressedStream(&avi_stream_compressed, avi_stream, &opts, NULL);
-  if (hr != AVIERR_OK) 
+  if (hr != AVIERR_OK)
     return false;
-  
+
   // Set the stream format
   {
-    LPBITMAPINFOHEADER lpbi = 
+    LPBITMAPINFOHEADER lpbi =
       (LPBITMAPINFOHEADER)GlobalLock(make_dib(movie->get_frame(0), 24));
-    if (!lpbi) 
+    if (!lpbi)
       {
-        vcl_cerr << "vidl_avicodec : DIB (Device Independent Bitmap) creation failed." << vcl_endl;
+        vcl_cerr << "vidl_avicodec : DIB (Device Independent Bitmap) creation failed.\n";
         return false;
       }
     hr = AVIStreamSetFormat(avi_stream_compressed, 0,
                             lpbi,	    // stream format
                             lpbi->biSize +   // format size
                             lpbi->biClrUsed * sizeof(RGBQUAD));
-    if (hr != AVIERR_OK) 
+    if (hr != AVIERR_OK)
       {
-        vcl_cerr << "vidl_avicodec : Could not set the AVI stream format." << vcl_endl;
-        vcl_cerr << "           The chosen compression mode may not be installed well." << vcl_endl;
+        vcl_cerr << "vidl_avicodec : Could not set the AVI stream format.\n";
+        vcl_cerr << "           The chosen compression mode may not be installed well.\n";
         return false;
       }
   }
 
-  // Write every frame 
+  // Write every frame
   int i = 0;
   for (vidl_movie::frame_iterator pframe = movie->begin();
        pframe <= movie->last();
        ++pframe, ++i)
     {
-      LPBITMAPINFOHEADER lpbi = 
+      LPBITMAPINFOHEADER lpbi =
         (LPBITMAPINFOHEADER)GlobalLock(make_dib(pframe, 24));
-      if (!lpbi) 
+      if (!lpbi)
         {
-          vcl_cerr << "vidl_avicodec : DIB (Device Independent Bitmap) creation failed." << vcl_endl;
-          vcl_cerr << "vidl_avicodec : Frame number " << i << vcl_endl;  
+          vcl_cerr << "vidl_avicodec : DIB (Device Independent Bitmap) creation failed.\n";
+          vcl_cerr << "vidl_avicodec : Frame number " << i << vcl_endl;
           return false;
         }
 
       int time = i; // codec->GetT ...
       hr = AVIStreamWrite(avi_stream_compressed,
-                          time, 
+                          time,
                           1, // Number of samples to write
                           (LPBYTE) lpbi +		// pointer to data
                           lpbi->biSize +
@@ -415,7 +415,7 @@ bool vidl_avicodec::save(vidl_movie* movie, const char* fname)
                           NULL);
       if (hr != AVIERR_OK)
         {
-          vcl_cerr << "vidl_avicodec : Could not write to the AVI stream." << vcl_endl;
+          vcl_cerr << "vidl_avicodec : Could not write to the AVI stream.\n";
           return false;
         }
     }
@@ -440,7 +440,7 @@ HANDLE  vidl_avicodec::make_dib(vidl_frame_sptr frame, UINT bits)
   // 1st, Get the datas from the video frame
   byte* TjSection = (byte*) frame->get_section(NULL, 0, 0, frame->width(), frame->height());
 
-  // 2nd, Copy the array of bytes (and transform it), 
+  // 2nd, Copy the array of bytes (and transform it),
   // so it is usable by a 'windows' BitMap
 
   // The lenght of a row must be a multiple of 4 bytes
@@ -452,7 +452,7 @@ HANDLE  vidl_avicodec::make_dib(vidl_frame_sptr frame, UINT bits)
   byte* newbits = new byte[data_size];
   byte* db = (byte*) newbits;
   int i,j;
-  for(i=0; i<data_size; i++) 
+  for(i=0; i<data_size; i++)
     {
       *db = 0;
       ++db;
@@ -489,9 +489,9 @@ HANDLE  vidl_avicodec::make_dib(vidl_frame_sptr frame, UINT bits)
       }
       break;
     default:
-      vcl_cerr << "vidl_avicodec : Don't know how to deal with " 
-           << frame->get_bytes_pixel() << " bytes per pixel." << vcl_endl;
-      
+      vcl_cerr << "vidl_avicodec : Don't know how to deal with "
+           << frame->get_bytes_pixel() << " bytes per pixel.\n";
+
     } // end switch byte per pixel
 
   // Get rid of the original datas
@@ -502,7 +502,7 @@ HANDLE  vidl_avicodec::make_dib(vidl_frame_sptr frame, UINT bits)
   HBITMAP hbitmap;
   if (!(hbitmap = CreateCompatibleBitmap(hdc,frame->width(),frame->height())))
     {
-      vcl_cerr << "vidl_avicodec : Could not create a compatible bitmap for frame." << vcl_endl;
+      vcl_cerr << "vidl_avicodec : Could not create a compatible bitmap for frame.\n";
       return NULL;
     }
   BITMAP bitmap ;
@@ -517,9 +517,9 @@ HANDLE  vidl_avicodec::make_dib(vidl_frame_sptr frame, UINT bits)
   HANDLE hdib = GlobalAlloc(GHND,dwSize);
   if (!hdib)
     return hdib ;
-  
+
   LPBITMAPINFOHEADER lpbi = (LPBITMAPINFOHEADER)GlobalLock(hdib) ;
-   
+
   lpbi->biSize = sizeof(BITMAPINFOHEADER) ;
   lpbi->biWidth = bitmap.bmWidth ;
   lpbi->biHeight = bitmap.bmHeight ;
@@ -538,10 +538,10 @@ HANDLE  vidl_avicodec::make_dib(vidl_frame_sptr frame, UINT bits)
   int error_code = SetDIBits(hdc,hbitmap,0,bitmap.bmHeight,newbits,(LPBITMAPINFO)lpbi, DIB_RGB_COLORS);
   if (!error_code)
     {
-      vcl_cerr << "vidl_avicodec : Could set the bits in the BitMap." << vcl_endl;
+      vcl_cerr << "vidl_avicodec : Could set the bits in the BitMap.\n";
       return NULL;
     }
-   
+
   //
   // Get the bits from the bitmap and stuff them after the LPBI
   //
@@ -551,18 +551,18 @@ HANDLE  vidl_avicodec::make_dib(vidl_frame_sptr frame, UINT bits)
   error_code = GetDIBits(hdc,hbitmap,0,bitmap.bmHeight,lpBits,(LPBITMAPINFO)lpbi, DIB_RGB_COLORS);
   if (!error_code)
     {
-      vcl_cerr << "vidl_avicodec : Could set the bits in the DIB (Device Independent Bitmap)." << vcl_endl;
+      vcl_cerr << "vidl_avicodec : Could set the bits in the DIB (Device Independent Bitmap).\n";
       return NULL;
     }
-   
+
   // Fix this if GetDIBits messed it up....
   lpbi->biClrUsed = (bits <= 8) ? 1<<bits : 0;
-   
+
   // Delete ressources
   DeleteBitmap(hbitmap);
   delete [] newbits;
   ReleaseDC(NULL,hdc);
   GlobalUnlock(hdib);
-   
+
   return hdib ;
 }

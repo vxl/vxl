@@ -129,7 +129,7 @@ public:
   virtual vbl_br_iter_impl<T1,T2,T3,T4,T5>* end(const vbl_basic_relation_where<T1,T2,T3,T4,T5>&) { return NULL; }
 
   // Size methods.
-  virtual int size(const vbl_basic_relation_where<T1,T2,T3,T4,T5>&) { return 0; }
+  virtual int size(const vbl_basic_relation_where<T1,T2,T3,T4,T5>&) {return 0;}
   virtual bool empty(const vbl_basic_relation_where<T1,T2,T3,T4,T5>&) { return true; }
 
   // Get name.
@@ -144,8 +144,9 @@ protected:
 
 };
 
-template <class T1, class T2, class T3, class T4, class T5> // defaults for T3 T4 T5 already declared on line 71 -- PLEASE don't put them back here!! - PVr
+template <class T1, class T2, class T3, class T4, class T5>
 class vbl_basic_relation_factory
+// defaults for T3 T4 T5 already declared around line 80 -- PLEASE don't put them back here!! - PVr
 {
 public:
   typedef vbl_br_impl<T1,T2,T3,T4,T5> implementation;

@@ -37,8 +37,11 @@ public:
 
   //   nodes with a particular connection list
   vcl_vector<gmvl_node_sptr> get_connected_nodes( const gmvl_node_sptr node) const;
-  vcl_vector<gmvl_node_sptr> get_connected_nodes( const gmvl_node_sptr node1, const gmvl_node_sptr node2) const;
-  vcl_vector<gmvl_node_sptr> get_connected_nodes( const gmvl_node_sptr node1, const gmvl_node_sptr node2, const gmvl_node_sptr node3) const;
+  vcl_vector<gmvl_node_sptr> get_connected_nodes( const gmvl_node_sptr node1,
+                                                  const gmvl_node_sptr node2) const;
+  vcl_vector<gmvl_node_sptr> get_connected_nodes( const gmvl_node_sptr node1,
+                                                  const gmvl_node_sptr node2,
+                                                  const gmvl_node_sptr node3) const;
   vcl_vector<gmvl_node_sptr> get_connected_nodes( const vcl_vector<gmvl_node_sptr> nodes) const;
 
   //   nodes with a particular connection list and a particular type
@@ -58,6 +61,5 @@ protected:
 };
 
 vcl_ostream &operator<<( vcl_ostream &os, const gmvl_database &db);
-
 
 #endif

@@ -84,7 +84,7 @@ SGIMovieFilePrivates::SGIMovieFilePrivates(char const* fn):
   //   short width;
   //   short height;
   //   short pad;
-  //   
+  //
   //   V3:
   //   byte MOVI[4];
   //   word version;
@@ -101,7 +101,7 @@ SGIMovieFilePrivates::SGIMovieFilePrivates(char const* fn):
 
   // Read version
   version = get_u16(f);
-  
+
   if (version == 2) {
     // Old format
     if (MovieFileInterface::verbose) vbl_printf(vcl_cerr, "SGIMovieFile: Old format, version = %d\n", version);
@@ -119,15 +119,16 @@ SGIMovieFilePrivates::SGIMovieFilePrivates(char const* fn):
 //   SGIMV_Variables glob;
 //   SGIMV_Variables audio[glob.__NUM_A_TRACKS];
 //   SGIMV_Variables video[glob.__NUM_I_TRACKS];
-//   
+//
 
   glob = new SGIMV_Variables(f);
   if (MovieFileInterface::verbose) glob->print(vcl_cerr);
-  
+
   int NUM_I_TRACKS = glob->get_int("__NUM_I_TRACKS");
   int NUM_A_TRACKS = glob->get_int("__NUM_A_TRACKS");
-  if (MovieFileInterface::verbose) vbl_printf(vcl_cerr, "SGIMovieFile: Number of audio/video tracks: %d/%d\n", NUM_A_TRACKS, NUM_I_TRACKS);
-  
+  if (MovieFileInterface::verbose)
+    vbl_printf(vcl_cerr, "SGIMovieFile: Number of audio/video tracks: %d/%d\n", NUM_A_TRACKS, NUM_I_TRACKS);
+
   // Load Audio and video info
   for(int i = 0; i < NUM_A_TRACKS; ++i)
     audio.push_back(SGIMV_Variables(f));
@@ -158,11 +159,11 @@ SGIMovieFilePrivates::SGIMovieFilePrivates(char const* fn):
   // 	    Q_TEMPORAL = 0.750000
   // 		 WIDTH = 768
   // 	   __DIR_COUNT = 750
-  // 
+  //
     for(int i = 0; i < NUM_I_TRACKS; ++i)
       video[i].print(vcl_cerr);
   }
-  
+
   // Load indices
   for(int i = 0; i < NUM_A_TRACKS; ++i)
     audio_indices.push_back(SGIMV_FrameIndexArray(f, audio[i].get_int("__DIR_COUNT")));
@@ -181,15 +182,15 @@ SGIMovieFilePrivates::SGIMovieFilePrivates(char const* fn):
   if (MovieFileInterface::verbose) {
     for(unsigned i = 0; i < video_index.size(); ++i) {
       if (i > 10 && i < 740)
-	continue;
+        continue;
       vbl_printf(vcl_cerr, "SGIMovieFile: Frame %3d", i);
-      if (NUM_A_TRACKS > 0) 
-	vbl_printf(vcl_cerr, ",  Audio at 0x%08x [%1$9d], size %5d", audio_indices[0][i].offset, audio_indices[0][i].size);
+      if (NUM_A_TRACKS > 0)
+        vbl_printf(vcl_cerr, ",  Audio at 0x%08x [%1$9d], size %5d", audio_indices[0][i].offset, audio_indices[0][i].size);
       if (NUM_I_TRACKS > 0)
-	vbl_printf(vcl_cerr, ",  Video at 0x%08x [%1$9d], size %6d", video_indices[0][i].offset, video_indices[0][i].size);
+        vbl_printf(vcl_cerr, ",  Video at 0x%08x [%1$9d], size %6d", video_indices[0][i].offset, video_indices[0][i].size);
       vbl_printf(vcl_cerr, "\n");
     }
-    
+
 #ifdef GNU_LIBSTDCXX_V3
     vbl_printf(vcl_cerr, "SGIMovieFile: Final position, after reading header, is %d\n", std::streamoff(f.tellg()));
 #else
@@ -214,14 +215,14 @@ bool SGIMovieFile::GetFrame(int frame_index, void* buffer)
     vcl_cerr << "SGIMovieFile: File has disappeared\n";
     return false;
   }
-  
+
   // Seek to image
   fseek(fp, s, SEEK_SET);
-  
+
   int in_bytes_per_pixel = 4;  // RGB32
   int bytes_per_pixel = 3;
   int interlace_factor = p->interlaced ? 2 : 1;
-  
+
   if (p->compression == "2") {
     // RGB32 extract to RGB byte-triplet buffer
     if (MovieFileInterface::verbose) vbl_printf(vcl_cerr, "[RGB32 %d @ %d ", frame_index, s);
@@ -236,18 +237,18 @@ bool SGIMovieFile::GetFrame(int frame_index, void* buffer)
     for (int i=0; i < interlace_factor; ++i) {
       if (MovieFileInterface::verbose) vbl_printf(vcl_cerr, "fld %d ", i);
       for (int y=h-1; y >= 0; --y) {
-	fread(row_buf, 1, inrowsize, fp);
-	char* buf_ptr = (char*)buffer + (interlace_factor * y + i) * outrowsize;
-	char* row_ptr = row_buf;
-	for (int x=0; x < w; ++x) {
-	  row_ptr++;   // Skip alpha byte
-	  b = *(row_ptr++);
-	  g = *(row_ptr++);
-	  r = *(row_ptr++);
-	  *(buf_ptr++) = r;  // R
-	  *(buf_ptr++) = g;  // G
-	  *(buf_ptr++) = b;  // B
-	}
+        fread(row_buf, 1, inrowsize, fp);
+        char* buf_ptr = (char*)buffer + (interlace_factor * y + i) * outrowsize;
+        char* row_ptr = row_buf;
+        for (int x=0; x < w; ++x) {
+          row_ptr++;   // Skip alpha byte
+          b = *(row_ptr++);
+          g = *(row_ptr++);
+          r = *(row_ptr++);
+          *(buf_ptr++) = r;  // R
+          *(buf_ptr++) = g;  // G
+          *(buf_ptr++) = b;  // B
+        }
       }
     }
 
@@ -266,37 +267,37 @@ bool SGIMovieFile::GetFrame(int frame_index, void* buffer)
 
       int w = jpeg.width();
       int h = jpeg.height();
-	
+
       if (w != p->width) {
-	vbl_printf(vcl_cerr, "SGIMovieFile: Discrepancy between jpeg size and movie size."
-	       "  jpeg x = %d, movie x = %d\n", h, p->height);
+        vbl_printf(vcl_cerr, "SGIMovieFile: Discrepancy between jpeg size and movie size."
+                   "  jpeg x = %d, movie x = %d\n", h, p->height);
       }
       if (h*interlace_factor != p->height) {
-	vbl_printf(vcl_cerr, "SGIMovieFile: Discrepancy between jpeg size and movie size."
-	       "  jpeg y = %d, movie y = %d, interlacing = %d\n", h, p->height, p->interlaced);
+        vbl_printf(vcl_cerr, "SGIMovieFile: Discrepancy between jpeg size and movie size."
+                   "  jpeg y = %d, movie y = %d, interlacing = %d\n", h, p->height, p->interlaced);
       }
-	
+
       int outrowsize = w * bytes_per_pixel;
       for(int y = 0; y < jpeg.height(); ++y) {
-	char *jbuf = (char*)jpeg.GetNextScanLine();
-	if (!jbuf) {
-	  vbl_printf(vcl_cerr, "SGIMovieFile: JPEG_Decompressor failed to load scanline %d, field %d, frame %d\n",
-		 y, i, frame_index);
-	  return false;
-	}
-	char* bufptr = (char*)buffer + (interlace_factor * y + i) * outrowsize;
-	memcpy(bufptr, jbuf, jpeg.width() * bytes_per_pixel);
+        char *jbuf = (char*)jpeg.GetNextScanLine();
+        if (!jbuf) {
+          vbl_printf(vcl_cerr, "SGIMovieFile: JPEG_Decompressor failed to load scanline %d, field %d, frame %d\n",
+                     y, i, frame_index);
+          return false;
+        }
+        char* bufptr = (char*)buffer + (interlace_factor * y + i) * outrowsize;
+        memcpy(bufptr, jbuf, jpeg.width() * bytes_per_pixel);
       }
       if (MovieFileInterface::verbose) vbl_printf(vcl_cerr, "eof %d ", jpeg.GetFilePosition());
 
       // Now file position is at second field if interlaced, remember it in case anyone wants this field again.
       if (p->interlaced && i == 0)
-	p->field_indices[0][frame_index * 2 + 1] = jpeg.GetFilePosition();
+        p->field_indices[0][frame_index * 2 + 1] = jpeg.GetFilePosition();
     }
     if (MovieFileInterface::verbose) vbl_printf(vcl_cerr, "] ");
     fclose(fp);
   }
-  
+
   return true;
 }
 
@@ -306,12 +307,12 @@ bool SGIMovieFile::GetField(int field_index, void* buffer)
 #if 0
   if (!p->interlaced)
     return GetFrame(field_index, buffer);
-  
+
   // Load a jpeg from fd...
-  if (p->compression != "10") 
+  if (p->compression != "10")
     vbl_printf(vcl_cerr, "SGIMovieFile: Can't decompress ``%s'' format images\n", p->compression.c_str());
   else {
-    
+
     int field_start = p->field_indices[0][field_index];
     JPEG_Decompressor *jpeg;
     if (field_start == 0) {
@@ -322,39 +323,39 @@ bool SGIMovieFile::GetField(int field_index, void* buffer)
 
       jpeg = new JPEG_Decompressor(p->fp->rdbuf()->fd());
       for(int y = 0; y < jpeg->height(); ++y)
-	jpeg->GetNextScanLine();
+        jpeg->GetNextScanLine();
 
       // Now file position is at second field, remember it in case anyone wants this field again.
       p->field_indices[0][frame_index * 2 + 1] = jpeg->GetFilePosition();
-      
+
       jpeg->StartNextJPEG();
     } else {
       p->fp->seekg(field_start);
 
       jpeg = new JPEG_Decompressor(p->fp->rdbuf()->fd());
     }
-    
+
     // Read the image
     int w = jpeg->width();
     int h = jpeg->height();
-    
+
     if (w != p->width) {
       vbl_printf(vcl_cerr, "SGIMovieFile: Discrepancy between jpeg size and movie size."
-	     "  jpeg x = %d, movie x = %d\n", h, p->height);
+                 "  jpeg x = %d, movie x = %d\n", h, p->height);
     }
     if (h*2 != p->height) {
       vbl_printf(vcl_cerr, "SGIMovieFile: Discrepancy between jpeg size and movie size."
-	     "  jpeg y = %d, movie y = %d, interlacing = %d\n", h, p->height, p->interlaced);
+                 "  jpeg y = %d, movie y = %d, interlacing = %d\n", h, p->height, p->interlaced);
     }
-    
+
     int bytes_per_pixel = GetBitsPixel() / 8;
     int outrowsize = w * bytes_per_pixel;
     for(int y = 0; y < jpeg->height(); ++y) {
       char *jbuf = (char*)jpeg->GetNextScanLine();
       if (!jbuf) {
-	vbl_printf(vcl_cerr, "SGIMovieFile: JPEG_Decompressor failed to load scanline %d, field %d\n",
-	       y, field_index);
-	return false;
+        vbl_printf(vcl_cerr, "SGIMovieFile: JPEG_Decompressor failed to load scanline %d, field %d\n",
+                   y, field_index);
+        return false;
       }
       char* bufptr = (char*)buffer + y * outrowsize;
       memcpy(bufptr, jbuf, jpeg->width() * bytes_per_pixel);
@@ -388,20 +389,20 @@ void SGIMV_Variables::read(vcl_istream& f) {
   }
   for(int i = 0; i < n; ++i) {
     VarData v;
-	
+
     char var_buf[17];
     f.read(var_buf, 16);
     var_buf[16] = 0;
-      
+
     u32 var_size = get_u32(f);
     vcl_vector<char> val_buf(var_size+1,0);
     f.read(&val_buf[0], var_size);
-      
+
     data[vcl_string(var_buf)] = vcl_string(&val_buf[0]);
   }
 }
 
-int SGIMV_Variables::get_int(vcl_string const& s) 
+int SGIMV_Variables::get_int(vcl_string const& s)
 {
   const vcl_string& v = data[s];
   if (v.size() == 0)
@@ -411,7 +412,7 @@ int SGIMV_Variables::get_int(vcl_string const& s)
   vs >> x;
   return x;
 }
-  
+
 double SGIMV_Variables::get_double(vcl_string const& s)
 {
   const vcl_string& v = data[s];
@@ -423,10 +424,10 @@ double SGIMV_Variables::get_double(vcl_string const& s)
   return x;
 }
 
-vcl_ostream& SGIMV_Variables::print(vcl_ostream& s) const 
+vcl_ostream& SGIMV_Variables::print(vcl_ostream& s) const
 {
   vbl_printf(s, "SGIMV_Variables:\n", data.size());
-  for(VarData::const_iterator i = data.begin(); i != data.end(); ++i) 
+  for(VarData::const_iterator i = data.begin(); i != data.end(); ++i)
     vbl_printf(s, "   %16s = %s\n", (*i).first.c_str(), (*i).second.c_str());
   return s;
 }
@@ -466,7 +467,7 @@ static void hexdump(vcl_ifstream& f, int nframes)
       vbl_printf(vcl_cerr, "%02x", buf[i]);
     }
     vbl_printf(vcl_cerr, "\n");
-  }  
+  }
 }
 #endif
 
@@ -482,7 +483,7 @@ static int get_u32(vcl_istream& f)
   u8 buf[4];
   f.read((char*)buf, 4);
   return (((unsigned long)buf[0] << 24) |
-	  ((unsigned long)buf[1] << 16) |
-	  ((unsigned long)buf[2] << 8) |
-	  buf[3]);
+          ((unsigned long)buf[1] << 16) |
+          ((unsigned long)buf[2] << 8) |
+          buf[3]);
 }

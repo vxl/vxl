@@ -22,37 +22,37 @@ public:
   front_back_wibbler();
 
   bool handle(vgui_event const &);
-  vcl_string type_name() const { 
-    return "front_back_wibbler"; 
+  vcl_string type_name() const {
+    return "front_back_wibbler";
   }
-  void print_help_message() const; 
+  void print_help_message() const;
   };
 
-front_back_wibbler::front_back_wibbler() { 
+front_back_wibbler::front_back_wibbler() {
 }
 
 void front_back_wibbler::print_help_message() const {
-  vcl_cerr << __FILE__ " : the amazing front-back wibbler" << vcl_endl
-       << "'f' : draw into front buffer" << vcl_endl
-       << "'b' : draw into back buffer" << vcl_endl
-       << "'/' : glFlush(); glFinish();" << vcl_endl
-       << "'c' : clear buffer" << vcl_endl
-       << "'l' : draw a line" << vcl_endl
-       << "'p' : draw a point" << vcl_endl
-       << "'<' : copy front buffer into back buffer" << vcl_endl
-       << "'>' : copy back buffer into front buffer" << vcl_endl
-       << "'s' : swap front and back buffers" << vcl_endl
-       << "' ' : print some stuff" << vcl_endl
-       << vcl_endl;
-  vcl_cerr << "NB. Mesa SwapBuffers will simply blit the last back buffer into" << vcl_endl
-       << "the current front buffer, rather than actually perform a swap." << vcl_endl
-       << vcl_endl;
+  vcl_cerr<< __FILE__ " : the amazing front-back wibbler\n"
+          << "'f' : draw into front buffer\n"
+          << "'b' : draw into back buffer\n"
+          << "'/' : glFlush(); glFinish();\n"
+          << "'c' : clear buffer\n"
+          << "'l' : draw a line\n"
+          << "'p' : draw a point\n"
+          << "'<' : copy front buffer into back buffer\n"
+          << "'>' : copy back buffer into front buffer\n"
+          << "'s' : swap front and back buffers\n"
+          << "' ' : print some stuff\n"
+          << vcl_endl;
+  vcl_cerr<< "NB. Mesa SwapBuffers will simply blit the last back buffer into\n"
+          << "the current front buffer, rather than actually perform a swap.\n"
+          << vcl_endl;
 }
 
 bool front_back_wibbler::handle(const vgui_event &e)  {
   vgui_adaptor *ct = e.origin;
   if (!ct) {
-    vcl_cerr << "null adaptor" << vcl_endl;
+    vcl_cerr << "null adaptor\n";
     return false;
   }
 
@@ -66,32 +66,32 @@ bool front_back_wibbler::handle(const vgui_event &e)  {
     break;
 
   case 'f':
-    vcl_cerr << "front buffer" << vcl_endl;
+    vcl_cerr << "front buffer\n";
     glDrawBuffer(GL_FRONT);
     break;
 
   case 'b':
-    vcl_cerr << "back buffer" << vcl_endl;
+    vcl_cerr << "back buffer\n";
     glDrawBuffer(GL_BACK);
     break;
 
   case '/':
-    vcl_cerr << "flush" << vcl_endl;
+    vcl_cerr << "flush\n";
     glFlush();
     glFinish();
     break;
 
   case 'c':
-    vcl_cerr << "clear" << vcl_endl;
+    vcl_cerr << "clear\n";
     glClearColor(0,0,0,0);
     glClear(GL_COLOR_BUFFER_BIT);
     break;
-      
+
   case 'l':
-    vcl_cerr << "line" << vcl_endl;
-    glMatrixMode(GL_PROJECTION); 
+    vcl_cerr << "line\n";
+    glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glMatrixMode(GL_MODELVIEW); 
+    glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     glColor3f(1,1,1);
     glBegin(GL_LINES);
@@ -101,10 +101,10 @@ bool front_back_wibbler::handle(const vgui_event &e)  {
     break;
 
   case 'p':
-    vcl_cerr << "point" << vcl_endl;
-    glMatrixMode(GL_PROJECTION); 
+    vcl_cerr << "point\n";
+    glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glMatrixMode(GL_MODELVIEW); 
+    glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     glColor3f(1,1,1);
     glPointSize(4.0);
@@ -114,37 +114,36 @@ bool front_back_wibbler::handle(const vgui_event &e)  {
     break;
 
   case '>':
-    vcl_cerr << "copy back -> front" << vcl_endl;
+    vcl_cerr << "copy back -> front\n";
     vgui_utils::copy_back_to_front();
     break;
 
   case '<':
-    vcl_cerr << "copy front -> back" << vcl_endl;
+    vcl_cerr << "copy front -> back\n";
     vgui_utils::copy_front_to_back();
     break;
 
   case 's':
-    vcl_cerr << "swap" << vcl_endl;
+    vcl_cerr << "swap\n";
     ct->swap_buffers();
     break;
 
   case ' ':
     {
-      vcl_cerr << "some stuff :" << vcl_endl;
-
+      vcl_cerr << "some stuff :\n";
       vcl_cerr << "   vendor : " << glGetString(GL_VENDOR) << vcl_endl
-	   << "   renderer : " << glGetString(GL_RENDERER) << vcl_endl
-	   << "   version : " << glGetString(GL_VERSION) << vcl_endl
-	   << "   extensions : " << glGetString(GL_EXTENSIONS) << vcl_endl;
-      
+               << "   renderer : " << glGetString(GL_RENDERER) << vcl_endl
+               << "   version : " << glGetString(GL_VERSION) << vcl_endl
+               << "   extensions : " << glGetString(GL_EXTENSIONS) << vcl_endl;
+
       GLboolean bool_v;
       GLint int_v;
 
       glGetIntegerv(GL_AUX_BUFFERS, &int_v);
-      vcl_cerr << "   " << int_v << " aux buffers" << vcl_endl;
+      vcl_cerr << "   " << int_v << " aux buffers\n";
 
       glGetBooleanv(GL_DOUBLEBUFFER, &bool_v);
-      vcl_cerr << "   " << (bool_v ? "double" : "single") << " buffered" << vcl_endl;
+      vcl_cerr << "   " << (bool_v ? "double" : "single") << " buffered\n";
 
       glGetIntegerv(GL_MAX_MODELVIEW_STACK_DEPTH, &int_v);
       vcl_cerr << "   " << "size of modelview matrix stack is " << int_v << vcl_endl;
@@ -152,12 +151,12 @@ bool front_back_wibbler::handle(const vgui_event &e)  {
       glGetIntegerv(GL_MAX_PROJECTION_STACK_DEPTH, &int_v);
       vcl_cerr << "   " << "size of projection matrix stack is " << int_v << vcl_endl;
 
-      vcl_cerr << "   " << "frame buffer depths:" << vcl_endl;
-#define macro(buf) { GLint v; glGetIntegerv(GL_ ## buf ## _BITS, &v); vcl_cerr << "   " << vcl_setw(3) << v << " " #buf << vcl_endl; }
+      vcl_cerr << "   " << "frame buffer depths:\n";
+#define macro(buf) { GLint v;glGetIntegerv(GL_ ## buf ## _BITS,&v); vcl_cerr<<"   "<<vcl_setw(3)<<v<<" " #buf <<vcl_endl; }
       // Number of bits per R, G, B, or A component in  the color buffers
       macro(RED);
       macro(GREEN);
-      macro(BLUE); 
+      macro(BLUE);
       macro(ALPHA);
       macro(INDEX);
       // Number of bits per pixel in the depth buffer
@@ -179,7 +178,7 @@ bool front_back_wibbler::handle(const vgui_event &e)  {
   return true;
 }
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 int main(int argc,char **argv) {
   vgui::init(argc, argv);

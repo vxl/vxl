@@ -88,8 +88,10 @@ protected:
 struct vgui_composite_new : public vgui_composite_sptr {
   typedef vgui_composite_sptr base;
   vgui_composite_new() : base(new vgui_composite()) { }
-  vgui_composite_new(vgui_tableau_sptr const& child0, vgui_tableau_sptr const& child1) : base(new vgui_composite(child0, child1)) { }
-  vgui_composite_new(vgui_tableau_sptr const& child0, vgui_tableau_sptr const& child1, vgui_tableau_sptr const& child2) : base(new vgui_composite(child0, child1, child2)) { }
+  vgui_composite_new(vgui_tableau_sptr const& child0, vgui_tableau_sptr const& child1)
+    : base(new vgui_composite(child0, child1)) { }
+  vgui_composite_new(vgui_tableau_sptr const& child0, vgui_tableau_sptr const& child1, vgui_tableau_sptr const& child2)
+    : base(new vgui_composite(child0, child1, child2)) { }
   vgui_composite_new(vcl_vector<vgui_tableau_sptr> const& children): base(new vgui_composite(children)) {}
 };
 

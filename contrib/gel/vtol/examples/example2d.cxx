@@ -30,7 +30,7 @@ static void test_topology_2d(void);
 static void test_topology_2d(void)
 {
 
-  vcl_cout << "Creating vertices" << vcl_endl;
+  vcl_cout << "Creating vertices\n";
 
   vtol_vertex_sptr v1=new vtol_vertex_2d(0.0,0.0);
 
@@ -42,7 +42,7 @@ static void test_topology_2d(void)
 
   v1->describe(vcl_cout, 8);
 
-  vcl_cout << "Creating faces" << vcl_endl;
+  vcl_cout << "Creating faces\n";
 
   vcl_vector<vtol_vertex_sptr> verts;
   // or equivalently:
@@ -51,11 +51,11 @@ static void test_topology_2d(void)
   verts.push_back(v2);
   verts.push_back(v3);
 
-  vcl_cout<<"verts filled"<<vcl_endl;
+  vcl_cout<<"verts filled\n";
 
   vtol_face_sptr f1=new vtol_face_2d(verts);
 
-  vcl_cout<<"Face f1 created"<<vcl_endl;
+  vcl_cout<<"Face f1 created\n";
 
   f1->describe(vcl_cout, 8);
 
@@ -73,14 +73,14 @@ static void test_topology_2d(void)
 
   vtol_face_sptr f2=new vtol_face_2d(verts);
 
-  vcl_cout<<"Face f2 created"<<vcl_endl;
+  vcl_cout<<"Face f2 created\n";
 
   f2->describe(vcl_cout, 8);
 
 
 
 
-  vcl_cout << "Creating a block" << vcl_endl;
+  vcl_cout << "Creating a block\n";
 
   vcl_vector<vtol_face_sptr> faces;
   // Or equivalently:
@@ -88,17 +88,17 @@ static void test_topology_2d(void)
 
   faces.push_back(f1);
   faces.push_back(f2);
-  vcl_cout<<"faces filled"<<vcl_endl;
+  vcl_cout<<"faces filled\n";
 
   vtol_block_sptr b1=new vtol_block(faces);
-  vcl_cout<<"Block b1 created"<<vcl_endl;
+  vcl_cout<<"Block b1 created\n";
   b1->describe(vcl_cout, 8);
 
 
 
   /////////////// begin to test the vertex
 
-  vcl_cout << "************** test vertex *************" << vcl_endl;
+  vcl_cout << "************** test vertex *************\n";
   vcl_cout << "topology_type: ";
 
 
@@ -106,8 +106,9 @@ static void test_topology_2d(void)
   ASSERT(v1->topology_type() == 1);
 
   vcl_cout << "x() y(): ";
-  vcl_cout << '(' << v1->cast_to_vertex_2d()->x() << ',' << v1->cast_to_vertex_2d()->y() << ')';
-  ASSERT(v1->cast_to_vertex_2d()->x() == 0 && v1->cast_to_vertex_2d()->y() == 0);
+  vcl_cout << '(' << v1->cast_to_vertex_2d()->x()
+           << ',' << v1->cast_to_vertex_2d()->y() << ')';
+  ASSERT(v1->cast_to_vertex_2d()->x()==0 && v1->cast_to_vertex_2d()->y()==0);
 
   vcl_cout << "v1 == v1 ";
   ASSERT(((*v1) == (*v1)));
@@ -133,7 +134,7 @@ static void test_topology_2d(void)
 
    /////////////// begin to test the zero_chain
 
-  vcl_cout << "************** test zero_chain  *************" << vcl_endl;
+  vcl_cout << "************** test zero_chain  *************\n";
 
   vtol_zero_chain_sptr zc=ed->zero_chain();
 
@@ -147,14 +148,14 @@ static void test_topology_2d(void)
   vcl_cout << "*zc == *zc";
   ASSERT(*zc == *zc);
 
-  vcl_cout << "describe zero_chain" << vcl_endl;
+  vcl_cout << "describe zero_chain\n";
   zc->describe(vcl_cout, 8);
 
 
 
   /////////////// begin to test the edge
 
-  vcl_cout << "************** test edge  *************" << vcl_endl;
+  vcl_cout << "************** test edge  *************\n";
   vcl_cout << "get_v1 == v1 && get_v2 == v2";
   ASSERT((ed->v1() == v1) && (ed->v2() == v2));
 
@@ -181,13 +182,13 @@ static void test_topology_2d(void)
   vcl_cout << "other_endpoint(v1) == v2";
   ASSERT(ed->other_endpoint(*v1)==v2);
 
-  vcl_cout << "describe edge" << vcl_endl;
+  vcl_cout << "describe edge\n";
   ed->describe(vcl_cout, 8);
 
 
   /////////////// begin to test the one_chain
 
-  vcl_cout << "************** test one_chain  *************" << vcl_endl;
+  vcl_cout << "************** test one_chain  *************\n";
   vtol_one_chain_sptr oc1=f1->get_one_chain(0);
   vtol_one_chain_sptr oc2=f2->get_one_chain(0);
 
@@ -204,7 +205,7 @@ static void test_topology_2d(void)
 
   /////////////// begin to test the face
 
-  vcl_cout << "************** test face  *************" << vcl_endl;
+  vcl_cout << "************** test face  *************\n";
 
   vcl_cout << "Test the number of edges: ";
   vcl_cout << f1->get_num_edges();
@@ -217,7 +218,7 @@ static void test_topology_2d(void)
 
   /////////////// begin to test the two_chain
 
-  vcl_cout << "************** test two_chain  *************" << vcl_endl;
+  vcl_cout << "************** test two_chain  *************\n";
 
   vtol_two_chain_sptr tc=b1->get_boundary_cycle();
 
@@ -228,12 +229,12 @@ static void test_topology_2d(void)
 
   ///////////////// begin to test the block
 
-  vcl_cout << "************** test block  *************" << vcl_endl;
+  vcl_cout << "************** test block  *************\n";
   b1->describe(vcl_cout, 8);
 
   //////////////////////// Test accessors
 
-  vcl_cout <<"Accessors: vertices, zero_chains ... blocks " << vcl_endl << vcl_endl;
+  vcl_cout <<"Accessors: vertices, zero_chains ... blocks \n" << vcl_endl;
 
   vcl_cout <<"Vertex expects: ";
   vcl_cout << "1 3 3 2 2 1 1 - gets:  ";
@@ -251,7 +252,9 @@ static void test_topology_2d(void)
   vcl_cout << tcl->size() << ' ';
   block_list *bl=v1->blocks();
   vcl_cout << bl->size() << ' ';
-  ASSERT(vl->size() == 1 && zcl->size() == 3 && el->size() == 3 && ocl->size() == 2 && fl->size() == 2 && tcl->size() == 1 && bl->size() == 1);
+  ASSERT(vl->size() == 1 && zcl->size() == 3 && el->size() == 3 &&
+         ocl->size() == 2 && fl->size() == 2 && tcl->size() == 1 &&
+         bl->size() == 1);
   delete vl; delete zcl; delete el; delete ocl; delete fl; delete tcl; delete bl;
 
   vcl_cout <<"zero_chain expects: ";
@@ -263,7 +266,9 @@ static void test_topology_2d(void)
   fl=zc->faces(); vcl_cout << fl->size() << ' ';
   tcl=zc->two_chains(); vcl_cout << tcl->size() << ' ';
   bl=zc->blocks(); vcl_cout << bl->size() << ' ';
-  ASSERT(vl->size() == 2 && zcl->size() == 1 && el->size() == 1 && ocl->size() == 1 && fl->size() == 1 && tcl->size() == 1 && bl->size() == 1);
+  ASSERT(vl->size() == 2 && zcl->size() == 1 && el->size() == 1 &&
+         ocl->size() == 1 && fl->size() == 1 && tcl->size() == 1 &&
+         bl->size() == 1);
   delete vl; delete zcl; delete el; delete ocl; delete fl; delete tcl; delete bl;
 
   vtol_edge_sptr ed13= v1->new_edge(*v3);
@@ -277,7 +282,9 @@ static void test_topology_2d(void)
   fl=ed13->faces(); vcl_cout << fl->size() << ' ';
   tcl=ed13->two_chains(); vcl_cout << tcl->size() << ' ';
   bl=ed13->blocks(); vcl_cout << bl->size() << ' ';
-  ASSERT(vl->size() == 2 && zcl->size() == 1 && el->size() == 1 && ocl->size() == 2 && fl->size() == 2 && tcl->size() == 1 && bl->size() == 1);
+  ASSERT(vl->size() == 2 && zcl->size() == 1 && el->size() == 1 &&
+         ocl->size() == 2 && fl->size() == 2 && tcl->size() == 1 &&
+         bl->size() == 1);
   delete vl; delete zcl; delete el; delete ocl; delete fl; delete tcl; delete bl;
 
 
@@ -290,7 +297,9 @@ static void test_topology_2d(void)
   fl=oc1->faces(); vcl_cout << fl->size() << ' ';
   tcl=oc1->two_chains(); vcl_cout << tcl->size() << ' ';
   bl=oc1->blocks(); vcl_cout << bl->size() << ' ';
-  ASSERT(vl->size() == 3 && zcl->size() == 3 && el->size() == 3 && ocl->size() == 1 && fl->size() == 1 && tcl->size() == 1 && bl->size() == 1);
+  ASSERT(vl->size() == 3 && zcl->size() == 3 && el->size() == 3 &&
+         ocl->size() == 1 && fl->size() == 1 && tcl->size() == 1 &&
+         bl->size() == 1);
   delete vl; delete zcl; delete el; delete ocl; delete fl; delete tcl; delete bl;
 
 
@@ -303,7 +312,9 @@ static void test_topology_2d(void)
   fl=f1->faces(); vcl_cout << fl->size() << ' ';
   tcl=f1->two_chains(); vcl_cout << tcl->size() << ' ';
   bl=f1->blocks(); vcl_cout << bl->size() << ' ';
-  ASSERT(vl->size() == 3 && zcl->size() == 3 && el->size() == 3 && ocl->size() == 1 && fl->size() == 1 && tcl->size() == 1 && bl->size() == 1);
+  ASSERT(vl->size() == 3 && zcl->size() == 3 && el->size() == 3 &&
+         ocl->size() == 1 && fl->size() == 1 && tcl->size() == 1 &&
+         bl->size() == 1);
   delete vl; delete zcl; delete el; delete ocl; delete fl; delete tcl; delete bl;
 
   vcl_cout <<"two_chain expects: ";
@@ -315,7 +326,9 @@ static void test_topology_2d(void)
   fl=tc->faces(); vcl_cout << fl->size() << ' ';
   tcl=tc->two_chains(); vcl_cout << tcl->size() << ' ';
   bl=tc->blocks(); vcl_cout << bl->size() << ' ';
-  ASSERT(vl->size() == 4 && zcl->size() == 5 && el->size() == 5 && ocl->size() == 2 && fl->size() == 2 && tcl->size() == 1 && bl->size() == 1);
+  ASSERT(vl->size() == 4 && zcl->size() == 5 && el->size() == 5 &&
+         ocl->size() == 2 && fl->size() == 2 && tcl->size() == 1 &&
+         bl->size() == 1);
   delete vl; delete zcl; delete el; delete ocl; delete fl; delete tcl; delete bl;
 
   vcl_cout <<"block expects: ";
@@ -328,11 +341,13 @@ static void test_topology_2d(void)
   fl=b1->faces(); vcl_cout << fl->size() << ' ';
   tcl=b1->two_chains(); vcl_cout << tcl->size() << ' ';
   bl=b1->blocks(); vcl_cout << bl->size() << ' ';
-  ASSERT(vl->size() == 4 && zcl->size() == 5 && el->size() == 5 && ocl->size() == 2 && fl->size() == 2 && tcl->size() == 1 && bl->size() == 1);
+  ASSERT(vl->size() == 4 && zcl->size() == 5 && el->size() == 5 &&
+         ocl->size() == 2 && fl->size() == 2 && tcl->size() == 1 &&
+         bl->size() == 1);
   delete vl; delete zcl; delete el; delete ocl; delete fl; delete tcl; delete bl;
 
 
-  vcl_cout << "Testing Topology io" << vcl_endl;
+  vcl_cout << "Testing Topology io\n";
 
   vtol_topology_io io_writer;
 
@@ -341,20 +356,16 @@ static void test_topology_2d(void)
 
   io_writer.write(topo_list);
 
-
-  vcl_cout << "Done" << vcl_endl;
-
-
+  vcl_cout << "Done\n";
 }
 
 int main(int argc,
          char *argv[])
 {
-  vcl_cout<<"***************************************************"<<vcl_endl;
-  vcl_cout<<"******************* test 2D topology **************"<<vcl_endl;
-  vcl_cout<<"***************************************************"<<vcl_endl;
+  vcl_cout<<"***************************************************\n";
+  vcl_cout<<"******************* test 2D topology **************\n";
+  vcl_cout<<"***************************************************\n";
   test_topology_2d();
-
 
   return 0;
 }

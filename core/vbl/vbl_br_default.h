@@ -130,10 +130,10 @@ protected:
 // which is used unless the factory has been set otherwise.  The
 // relation is implemented using one hash table for each attribute
 // as indices, with values being lists of tuple references.
-//
-template
-<class T1, class T2, class T3, class T4, class T5> // defaults for T3 T4 T5 already declared on line 76 -- PLEASE don't put them back here!! - PVr
+
+template <class T1, class T2, class T3, class T4, class T5>
 class vbl_br_default : public vbl_br_impl<T1,T2,T3,T4,T5>
+// defaults for T3 T4 T5 already declared around line 92 -- PLEASE don't put them back here!! - PVr
 {
 
   friend class vbl_br_default_iter<T1,T2,T3,T4,T5>;

@@ -45,7 +45,8 @@ vbl_basic_relation_iterator<T1,T2,T3,T4,T5>::~vbl_basic_relation_iterator()
 //------------------------------------------------------------
 // -- Assignment operator.
 template <class T1, class T2, class T3, class T4, class T5>
-vbl_basic_relation_iterator<T1,T2,T3,T4,T5>& vbl_basic_relation_iterator<T1,T2,T3,T4,T5>::operator=(vbl_basic_relation_iterator<T1,T2,T3,T4,T5> const& it)
+vbl_basic_relation_iterator<T1,T2,T3,T4,T5>&
+vbl_basic_relation_iterator<T1,T2,T3,T4,T5>::operator=(vbl_basic_relation_iterator<T1,T2,T3,T4,T5> const& it)
 {
   if (&it == this) return *this;
   if (impl) delete impl;
@@ -76,7 +77,7 @@ vbl_basic_relation<T1,T2,T3,T4,T5>::vbl_basic_relation(vbl_basic_relation<T1,T2,
 {
   if (!impl)
     {
-      vcl_cerr << "Copy constructor called with invalid easy relation" << vcl_endl;
+      vcl_cerr << "Copy constructor called with invalid easy relation\n";
       abort();
     }
   impl->ref();
@@ -100,7 +101,7 @@ vbl_basic_relation<T1,T2,T3,T4,T5>::~vbl_basic_relation()
   // the factory to check whether the given implementation is empty,
   // and if it is also only referenced by the factory (ie. protected
   // only once) to unprotect it.
-  implementation::GetFactory()->CheckEmpty(impl);  
+  implementation::GetFactory()->CheckEmpty(impl);
 }
 
 //------------------------------------------------------------
@@ -232,7 +233,7 @@ vbl_basic_relation<T1,T2,T3,T4,T5> vbl_basic_relation<T1,T2,T3,T4,T5>::where_fif
 //------------------------------------------------------------
 // -- Returns an vbl_basic_relation with a where clause given by the user.
 template <class T1, class T2, class T3, class T4, class T5>
-vbl_basic_relation<T1,T2,T3,T4,T5> 
+vbl_basic_relation<T1,T2,T3,T4,T5>
 vbl_basic_relation<T1,T2,T3,T4,T5>::where_is(const vbl_basic_relation_where<T1,T2,T3,T4,T5>& where)
 {
   vbl_basic_relation<T1,T2,T3,T4,T5> new_rel(*this);
@@ -245,7 +246,7 @@ vbl_basic_relation<T1,T2,T3,T4,T5>::where_is(const vbl_basic_relation_where<T1,T
 template <class T1, class T2, class T3, class T4, class T5>
 void vbl_basic_relation<T1,T2,T3,T4,T5>::dump_relation(vcl_ostream& str)
 {
-  str << "Relation " << get_name() << ":" << vcl_endl;
+  str << "Relation " << get_name() << ":\n";
   where->Dump(str);
   for (iterator i = begin(); i != end(); i++)
     str << "\t" << *i << vcl_endl;
@@ -281,7 +282,7 @@ void* vbl_basic_relation<T1,T2,T3,T4,T5>::get_static_type()
 // -- Method to actually do a downcast.  Return NULL if r is not this
 // type.  This is a static.
 template <class T1, class T2, class T3, class T4, class T5>
-vbl_basic_relation<T1,T2,T3,T4,T5>* 
+vbl_basic_relation<T1,T2,T3,T4,T5>*
 vbl_basic_relation<T1,T2,T3,T4,T5>::cast(vbl_basic_relation_type* r)
 {
   if (!r) return NULL;

@@ -21,10 +21,12 @@ VCL_LIST_INSTANTIATE(vnl_scalar_join_iterator_indexed_pair<T>)
 // Helper class to hold the sorted arrays of indices.
 
 template <class T>
-bool vnl_scalar_join_iterator_indexed_pair<T>::operator == (const vnl_scalar_join_iterator_indexed_pair<T>& that) const { return (*that.object) == (*object); }
+bool vnl_scalar_join_iterator_indexed_pair<T>::operator == (const vnl_scalar_join_iterator_indexed_pair<T>& that) const
+{ return (*that.object) == (*object); }
 
 template <class T>
-bool vnl_scalar_join_iterator_indexed_pair<T>::operator <  (const vnl_scalar_join_iterator_indexed_pair<T>& that) const { return (*object) < (*that.object); }
+bool vnl_scalar_join_iterator_indexed_pair<T>::operator <  (const vnl_scalar_join_iterator_indexed_pair<T>& that) const
+{ return (*object) < (*that.object); }
 
 template <class T>
 vcl_ostream& operator<<(vcl_ostream& s, const vnl_scalar_join_iterator_indexed_pair<T>& p)
@@ -33,7 +35,8 @@ vcl_ostream& operator<<(vcl_ostream& s, const vnl_scalar_join_iterator_indexed_p
 }
 
 template <class T>
-vnl_scalar_join_iterator<T>::vnl_scalar_join_iterator(const vnl_matrix<T>& relation1, unsigned column1, const vnl_matrix<T>& relation2, unsigned column2):
+vnl_scalar_join_iterator<T>::vnl_scalar_join_iterator(const vnl_matrix<T>& relation1, unsigned column1,
+                                                      const vnl_matrix<T>& relation2, unsigned column2):
   n1(relation1.rows()),
   n2(relation2.rows()),
   pI1(new vcl_list<vnl_scalar_join_iterator_indexed_pair<T > >(n1)),
@@ -78,7 +81,7 @@ vnl_scalar_join_iterator<T>::~vnl_scalar_join_iterator()
   delete pI1;
   delete pI2;
 }
-  
+
 template <class T>
 bool vnl_scalar_join_iterator<T>::done()
 {
@@ -92,7 +95,7 @@ void vnl_scalar_join_iterator<T>::next()
   T obj1 = *(*index1).object;
   // increment i2, check if still valid/same
   if (++index2 == I2.end()) return;
-    
+
   T nextobj2 = *(*index2).object;
   if (obj1 == nextobj2)
     return; // Found another match
@@ -115,7 +118,7 @@ void vnl_scalar_join_iterator<T>::next()
       // No that's going to be a hack.  Will be fixed RSN.
       return;
     }
-      
+
     if (obj1 > obj2)
       ++index2;
     else

@@ -32,9 +32,15 @@ class vgui_shell_tableau : public vgui_composite {
 public:
   vgui_shell_tableau();
   vgui_shell_tableau(vgui_tableau_sptr const &);
-  vgui_shell_tableau(vgui_tableau_sptr const &, vgui_tableau_sptr const &);
-  vgui_shell_tableau(vgui_tableau_sptr const &, vgui_tableau_sptr const &,vgui_tableau_sptr const &);
-  vgui_shell_tableau(vgui_tableau_sptr const &, vgui_tableau_sptr const &,vgui_tableau_sptr const &,vgui_tableau_sptr const &);
+  vgui_shell_tableau(vgui_tableau_sptr const &,
+                     vgui_tableau_sptr const &);
+  vgui_shell_tableau(vgui_tableau_sptr const &,
+                     vgui_tableau_sptr const &,
+                     vgui_tableau_sptr const &);
+  vgui_shell_tableau(vgui_tableau_sptr const &,
+                     vgui_tableau_sptr const &,
+                     vgui_tableau_sptr const &,
+                     vgui_tableau_sptr const &);
 
   bool handle(vgui_event const &);
   vcl_string type_name() const;
@@ -60,11 +66,16 @@ private:
 
 struct vgui_shell_tableau_new : public vgui_shell_tableau_sptr {
   typedef vgui_shell_tableau_sptr base;
-  vgui_shell_tableau_new() : base(new vgui_shell_tableau()) { }
-  vgui_shell_tableau_new(vgui_tableau_sptr const &a) : base(new vgui_shell_tableau(a)) { }
-  vgui_shell_tableau_new(vgui_tableau_sptr const &a, vgui_tableau_sptr const &b) : base(new vgui_shell_tableau(a, b)) { }
-  vgui_shell_tableau_new(vgui_tableau_sptr const &a, vgui_tableau_sptr const &b,vgui_tableau_sptr const &c) : base(new vgui_shell_tableau(a, b, c)) { }
-  vgui_shell_tableau_new(vgui_tableau_sptr const &a, vgui_tableau_sptr const &b,vgui_tableau_sptr const &c,vgui_tableau_sptr const &d) : base(new vgui_shell_tableau(a, b, c, d)) { }
+  vgui_shell_tableau_new()
+    : base(new vgui_shell_tableau()) { }
+  vgui_shell_tableau_new(vgui_tableau_sptr const &a)
+    : base(new vgui_shell_tableau(a)) { }
+  vgui_shell_tableau_new(vgui_tableau_sptr const &a,vgui_tableau_sptr const &b)
+    : base(new vgui_shell_tableau(a, b)) { }
+  vgui_shell_tableau_new(vgui_tableau_sptr const &a,vgui_tableau_sptr const &b,vgui_tableau_sptr const &c)
+    : base(new vgui_shell_tableau(a, b, c)) { }
+  vgui_shell_tableau_new(vgui_tableau_sptr const &a,vgui_tableau_sptr const &b,vgui_tableau_sptr const &c,vgui_tableau_sptr const&d)
+    : base(new vgui_shell_tableau(a, b, c, d)) { }
 };
 
 #endif // vgui_shell_tableau_h_

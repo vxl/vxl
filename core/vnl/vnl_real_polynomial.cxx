@@ -12,30 +12,30 @@
 #include <vcl_complex.h>
 
 // This is replacing a member template...
-template <class T> 
+template <class T>
 T vnl_real_polynomial_evaluate(const double *a, int n, const T& x)
 {
   --n;
   T acc = a[n];
   T xn = x;
-  
+
   do {
     acc += a[--n] * xn;
     xn *= x;
   } while (n);
-  
-  return acc;  
+
+  return acc;
 }
 
 #ifdef WIN32
 #define SELECT(T) <T >
 #else
-#define SELECT(T) 
+#define SELECT(T)
 #endif
 
 // Instantiate templates before use
-template double         vnl_real_polynomial_evaluate SELECT(double        )(const double*, int, const double        &);
-template vcl_complex<double> vnl_real_polynomial_evaluate SELECT(vcl_complex<double>)(const double*, int, const vcl_complex<double>&);
+template double              vnl_real_polynomial_evaluate SELECT(double             )(const double*,int,const double             &);
+template vcl_complex<double> vnl_real_polynomial_evaluate SELECT(vcl_complex<double>)(const double*,int,const vcl_complex<double>&);
 
 // -- Evaluate polynomial at value x
 double vnl_real_polynomial::evaluate(double x) const

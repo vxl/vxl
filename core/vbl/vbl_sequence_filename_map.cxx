@@ -29,14 +29,14 @@ struct {
   char const * image_dir;
   char const * extension;
 } dir_ext_pairs[] = { {"pgm/",".pgm"},
-		      {"ppm/",".ppm"},
-		      {"jpg/",".jpg"},
-		      {"jpg/",".jpeg"},
-		      {"jpeg/",".jpg"},
-		      {"jpeg/",".jpeg"},
-		      {"tiff/",".tiff"},
-		      {"mit/",".mit"},
-		      {"viff/",".viff"},
+                      {"ppm/",".ppm"},
+                      {"jpg/",".jpg"},
+                      {"jpg/",".jpeg"},
+                      {"jpeg/",".jpg"},
+                      {"jpeg/",".jpeg"},
+                      {"tiff/",".tiff"},
+                      {"mit/",".mit"},
+                      {"viff/",".viff"},
                       {"rgb/",".rgb"} };
 
 const int num_dir_ext_pairs = sizeof(dir_ext_pairs) / sizeof(dir_ext_pairs[0]);
@@ -82,18 +82,19 @@ vbl_sequence_filename_map::~vbl_sequence_filename_map()
 
 vcl_string vbl_sequence_filename_map::name (int frame)
 {
-  vcl_string index_str = vbl_sprintf(index_format_.c_str(), indices_[frame]); 
+  vcl_string index_str = vbl_sprintf(index_format_.c_str(), indices_[frame]);
   return basename_ + index_str;
 }
 
 vcl_string vbl_sequence_filename_map::pair_name (int i, int j)
 {
-  vcl_string index_str = vbl_sprintf((index_format_ + "." + index_format_).c_str(), indices_[i], indices_[j]); 
+  vcl_string index_str = vbl_sprintf((index_format_ + "." + index_format_).c_str(), indices_[i], indices_[j]);
   return basename_ + index_str;
 }
 vcl_string vbl_sequence_filename_map::triplet_name (int i, int j, int k)
 {
-  vcl_string index_str = vbl_sprintf((index_format_ + "." + index_format_ + "." + index_format_).c_str(), indices_[i], indices_[j], indices_[k]); 
+  vcl_string index_str =
+    vbl_sprintf((index_format_ + "." + index_format_ + "." + index_format_).c_str(), indices_[i], indices_[j], indices_[k]);
   return basename_ + index_str;
 }
 
@@ -108,17 +109,17 @@ void vbl_sequence_filename_map::parse()
       vcl_string match_start = re.match(1);
       vcl_string match_step = re.match(2);
       vcl_string match_end = re.match(3);
-      
+
       temp.erase(re.start(0));
-      
+
       if (match_start.length() > 0)
-	start_ = atoi(match_start.c_str());
-      
+        start_ = atoi(match_start.c_str());
+
       if (match_step.length() > 0)
-	step_ = atoi(match_step.c_str()+1);
-      
+        step_ = atoi(match_step.c_str()+1);
+
       if (match_end.length() > 0)
-	end_ = atoi(match_end.c_str());
+        end_ = atoi(match_end.c_str());
     }
   }
   // Search for image extension
@@ -143,13 +144,13 @@ void vbl_sequence_filename_map::parse()
       index_format_ = bt.substr(pos);
     else if ( (pos = bt.find('#')) != vcl_string::npos) {
       size_t last_pos = bt.rfind('#');
-      index_format_ = vbl_sprintf("0%id",last_pos - pos + 1);      
+      index_format_ = vbl_sprintf("0%id",last_pos - pos + 1);
       index_format_ = "%" + index_format_;
     } else
       index_format_ = "%03d";
     basename_ = bt.substr(0,pos);
   }
-  // What remains must be the directory 
+  // What remains must be the directory
   image_dir_ = temp;
 
   // Now to fill in any blanks
@@ -159,33 +160,34 @@ void vbl_sequence_filename_map::parse()
   //  2 - Look for basename-compatible files in common image dirs with corresponding image extensions
   if (image_dir_ == "" && image_extension_ == "") {
     bool found_match = false;
-    {    
+    {
       vbl_file_iterator fn("./*");
       for(;!found_match && fn; ++fn)
-	for (int i=0; i < num_dir_ext_pairs && !found_match; ++i) 
-	  if (filter_dirent(fn(), dir_ext_pairs[i].extension)) {
-	    image_dir_ = "./";
-	    image_extension_ = dir_ext_pairs[i].extension;
-	    found_match = true;
-	  }
+        for (int i=0; i < num_dir_ext_pairs && !found_match; ++i)
+          if (filter_dirent(fn(), dir_ext_pairs[i].extension)) {
+            image_dir_ = "./";
+            image_extension_ = dir_ext_pairs[i].extension;
+            found_match = true;
+          }
     }
     if (!found_match)
       for (int i=0; i < num_dir_ext_pairs && !found_match; ++i) {
-	vcl_string glob(dir_ext_pairs[i].image_dir);
-	glob += "/*";
+        vcl_string glob(dir_ext_pairs[i].image_dir);
+        glob += "/*";
         vbl_file_iterator fn(glob);
-	for(;!found_match && fn;++fn)
-	    if (filter_dirent(fn(), dir_ext_pairs[i].extension)) {
-	      image_dir_ = dir_ext_pairs[i].image_dir;
-	      image_extension_ = dir_ext_pairs[i].extension;
-	      found_match = true;
-	    } 
+        for(;!found_match && fn;++fn)
+            if (filter_dirent(fn(), dir_ext_pairs[i].extension)) {
+              image_dir_ = dir_ext_pairs[i].image_dir;
+              image_extension_ = dir_ext_pairs[i].extension;
+              found_match = true;
+            }
       }
     if (!found_match) {
-      vcl_cerr << __FILE__ << " : Can't find files matching " << basename_ << index_format_ << " in common locations with common format!" << vcl_endl;
+      vcl_cerr << __FILE__ << " : Can't find files matching " << basename_
+               << index_format_ << " in common locations with common format!\n";
       vcl_abort();
     }
-  } 
+  }
 
   // Only image dir is blank :
   //  1 - Look for basename-compatible files in cwd
@@ -195,37 +197,38 @@ void vbl_sequence_filename_map::parse()
     bool found_match = false;
     {
       for(vbl_file_iterator fn("./*"); !found_match && fn; ++fn)
-      	if (filter_dirent(fn.filename(), image_extension_)) {
-	  image_dir_ = "./";
-	  found_match = true;
-	} 
+        if (filter_dirent(fn.filename(), image_extension_)) {
+          image_dir_ = "./";
+          found_match = true;
+        }
     }
 
     if (!found_match) {
       for (int i=0; i < num_dir_ext_pairs && !found_match; ++i)
-	if (vcl_string(dir_ext_pairs[i].extension) == image_extension_) {
-	  vcl_string glob(dir_ext_pairs[i].image_dir); glob += "*";
+        if (vcl_string(dir_ext_pairs[i].extension) == image_extension_) {
+          vcl_string glob(dir_ext_pairs[i].image_dir); glob += "*";
           for(vbl_file_iterator fn(glob); !found_match && fn; ++fn)
-	      if (filter_dirent(fn.filename(), image_extension_)) {
-		image_dir_ = dir_ext_pairs[i].image_dir;
-		found_match = true;
-	      } 
-	  }
+            if (filter_dirent(fn.filename(), image_extension_)) {
+              image_dir_ = dir_ext_pairs[i].image_dir;
+              found_match = true;
+            }
+        }
     }
 
     if (!found_match) {
       for (int i=0; i < num_dir_ext_pairs && !found_match; ++i) {
-	vcl_string glob(dir_ext_pairs[i].image_dir); glob += "*";
+        vcl_string glob(dir_ext_pairs[i].image_dir); glob += "*";
         for(vbl_file_iterator fn(glob); !found_match && fn; ++fn)
-	  if (filter_dirent(fn.filename(), image_extension_)) {
-	    image_dir_ = dir_ext_pairs[i].image_dir;
-	    found_match = true;
-	  }
+          if (filter_dirent(fn.filename(), image_extension_)) {
+            image_dir_ = dir_ext_pairs[i].image_dir;
+            found_match = true;
+          }
       }
     }
 
     if (!found_match) {
-      vcl_cerr << __FILE__ << " : Can't find files matching " << basename_ << index_format_ << image_extension_ << " in common locations!" << vcl_endl;
+      vcl_cerr << __FILE__ << " : Can't find files matching " << basename_
+               << index_format_<<image_extension_ << " in common locations!\n";
       vcl_abort();
     }
   }
@@ -239,32 +242,33 @@ void vbl_sequence_filename_map::parse()
       vcl_string glob(image_dir_ + "*");
       vbl_file_iterator fn(glob);
       if (fn) {
-	for (int i=0; i < num_dir_ext_pairs && !found_match; ++i)
-	  if (vcl_string(dir_ext_pairs[i].image_dir) == image_dir_) {
-	    for(;!found_match && fn;++fn)
-	      if (filter_dirent(fn.filename(), dir_ext_pairs[i].extension)) {
-		image_extension_ = dir_ext_pairs[i].extension;
-		found_match = true;
-	      }
-	  }      
+        for (int i=0; i < num_dir_ext_pairs && !found_match; ++i)
+          if (vcl_string(dir_ext_pairs[i].image_dir) == image_dir_) {
+            for(;!found_match && fn;++fn)
+              if (filter_dirent(fn.filename(), dir_ext_pairs[i].extension)) {
+                image_extension_ = dir_ext_pairs[i].extension;
+                found_match = true;
+              }
+          }
       }
     }
 
     if (!found_match) {
       vbl_file_iterator fn(image_dir_);
       if (fn) {
-	for (int i=0; i < num_dir_ext_pairs && !found_match; ++i) {
-	  for(;!found_match && fn; ++fn)
-	    if (filter_dirent(fn.filename(), dir_ext_pairs[i].extension)) {
-	      image_extension_ = dir_ext_pairs[i].extension;
-	      found_match = true;
-	    } 
-	}      	  
+        for (int i=0; i < num_dir_ext_pairs && !found_match; ++i) {
+          for(;!found_match && fn; ++fn)
+            if (filter_dirent(fn.filename(), dir_ext_pairs[i].extension)) {
+              image_extension_ = dir_ext_pairs[i].extension;
+              found_match = true;
+            }
+        }      	
       }
     }
 
     if (!found_match) {
-      vcl_cerr << __FILE__ << " : Can't find files matching " << image_dir_ << basename_ << index_format_ << " with common extension!" << vcl_endl;
+      vcl_cerr << __FILE__ << " : Can't find files matching " << image_dir_
+               << basename_ << index_format_ << " with common extension!\n";
       vcl_abort();
     }
   }
@@ -277,11 +281,11 @@ void vbl_sequence_filename_map::parse()
       int max = -1000000;
       int min = 1000000;
       for(vbl_file_iterator fn(image_dir_ + "*");fn;++fn)
-	if (filter_dirent(fn.filename(), image_extension_)) {
-	  int index = extract_index(fn.filename());
-	  max = (index > max) ? index : max;
-	  min = (index < min) ? index : min;
-	}
+        if (filter_dirent(fn.filename(), image_extension_)) {
+          int index = extract_index(fn.filename());
+          max = (index > max) ? index : max;
+          min = (index < min) ? index : min;
+        }
       if (max < min) {
         vcl_cerr << "vbl_sequence_filename_map: WARNING: no files in " << image_dir_ << vcl_endl;
       }
@@ -307,8 +311,8 @@ void vbl_sequence_filename_map::parse()
 vcl_ostream& vbl_sequence_filename_map::print (vcl_ostream& s) const
 {
   s << vbl_sprintf("vbl_sequence_filename_map : %s%s%s [%i:%i:%i]",
-		   image_dir_.c_str(), basename_.c_str(), index_format_.c_str(), image_extension_.c_str(),
-		   indices_[0], indices_[1] - indices_[0], indices_.back());
+                   image_dir_.c_str(), basename_.c_str(), index_format_.c_str(), image_extension_.c_str(),
+                   indices_[0], indices_[1] - indices_[0], indices_.back());
   return s;
 }
 
@@ -316,7 +320,7 @@ bool vbl_sequence_filename_map::filter_dirent(char const* name, vcl_string const
 {
   static unsigned int expected_length = 0;
   if (expected_length == 0)
-    expected_length = basename_.size() + 
+    expected_length = basename_.size() +
     (vcl_string(vbl_sprintf(index_format_.c_str(),0)) + extension).size();
 
   vcl_string name_str(name);

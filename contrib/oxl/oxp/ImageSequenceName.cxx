@@ -10,13 +10,17 @@
 #include <vbl/vbl_sprintf.h>
 #include <vbl/vbl_printf.h>
 
-ImageSequenceName::ImageSequenceName(char const* s, char const* read_or_write, char const* default_extension):
+ImageSequenceName::ImageSequenceName(char const* s,
+                                     char const* read_or_write,
+                                     char const* default_extension):
   SequenceFileName(s, read_or_write)
 {
   init(read_or_write, default_extension);
 }
 
-ImageSequenceName::ImageSequenceName(char const* s, int start_frame, int step, char const* read_or_write, char const* default_extension):
+ImageSequenceName::ImageSequenceName(char const* s, int start_frame, int step,
+                                     char const* read_or_write,
+                                     char const* default_extension):
   SequenceFileName(s, start_frame, step, read_or_write)
 {
   init(read_or_write, default_extension);
@@ -29,27 +33,27 @@ void ImageSequenceName::init(char const* read_or_write, char const* default_exte
     if (!ext_.length()) {
       vcl_cerr << "ImageSequenceName: Searching for extension\n";
       static char const * extensions[] = {
-	"",
-	"", // Space for default
-	".png",  // Color first
-	".ppm",  // Color first
-	".tif",
-	".jpg",
-	".rgb",
-	// Then mono
-	".pgm",
-	".mit",
-	0
+        "",
+        "", // Space for default
+        ".png",  // Color first
+        ".ppm",  // Color first
+        ".tif",
+        ".jpg",
+        ".rgb",
+        // Then mono
+        ".pgm",
+        ".mit",
+        0
       };
       ok_ = false;
       if (default_extension)
-	extensions[0] = default_extension;
+        extensions[0] = default_extension;
       for(char const* const* p = extensions; *p; ++p)
-	if (exists(fmt_, *p, get_start_frame())) {
-	  ok_ = true;
-	  ext_ = *p;
-	  break;
-	}
+        if (exists(fmt_, *p, get_start_frame())) {
+          ok_ = true;
+          ext_ = *p;
+          break;
+        }
     }
   }
 }

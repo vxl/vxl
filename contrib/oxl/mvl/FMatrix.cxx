@@ -42,7 +42,7 @@ FMatrix::FMatrix(vcl_istream& f)
   _rank2_flag = false;
   read_ascii(f);
 }
-  
+
 //--------------------------------------------------------------
 //
 // -- Constructor.
@@ -97,11 +97,11 @@ bool FMatrix::read_ascii(vcl_istream& s) {
   s >> _f_matrix;
   if (!(s.good() || s.eof()))
     return false;
-  
+
   _ft_matrix = _f_matrix.transpose();
   _rank2_flag = false;
   set_rank2_using_svd();
-  
+
   return true;
 }
 
@@ -154,7 +154,7 @@ HomgLine2D FMatrix::image2_epipolar_line(const HomgPoint2D& x1) const
 
 double
 FMatrix::image1_epipolar_distance_squared(HomgPoint2D *point1_ptr,
-					  HomgPoint2D *point2_ptr) const
+                                          HomgPoint2D *point2_ptr) const
 {
   HomgLine2D epipolar_line = image1_epipolar_line (*point2_ptr);
   return HomgOperator2D::perp_distance_squared (epipolar_line, *point1_ptr);
@@ -167,7 +167,7 @@ FMatrix::image1_epipolar_distance_squared(HomgPoint2D *point1_ptr,
 
 double
 FMatrix::image2_epipolar_distance_squared(HomgPoint2D *point1_ptr,
-					  HomgPoint2D *point2_ptr) const
+                                          HomgPoint2D *point2_ptr) const
 {
   HomgLine2D epipolar_line = image2_epipolar_line (*point1_ptr);
   return HomgOperator2D::perp_distance_squared (epipolar_line, *point2_ptr);
@@ -177,10 +177,10 @@ FMatrix::image2_epipolar_distance_squared(HomgPoint2D *point1_ptr,
 // -- Print to ostream
 vcl_ostream& operator<<(vcl_ostream& os, const FMatrix& F) {
   const vnl_matrix<double>& m = F.get_matrix();
-  for (unsigned long i = 0; i < m.rows(); i++) {		// For each row in matrix
-    for (unsigned long j = 0; j < m.columns(); j++)		// For each column in matrix
-      vbl_printf(os, "%24.16e ", m(i,j));				// Output data element
-    os << "\n";							// Output newline
+  for (unsigned long i = 0; i < m.rows(); i++) {	// For each row in matrix
+    for (unsigned long j = 0; j < m.columns(); j++)	// For each column in matrix
+      vbl_printf(os, "%24.16e ", m(i,j));		// Output data element
+    os << "\n";						// Output newline
   }
   return os;
 }
@@ -195,13 +195,13 @@ FMatrix FMatrix::transpose() const
 }
 
 //
-// -- Compute the epipoles (left and right nullspaces of F) using vnl_svd<double>.
+//: Compute the epipoles (left and right nullspaces of F) using vnl_svd<double>.
 // Return false if the rank of F is not 2, and set approximate epipoles,
 // (the left and right singular vectors corresponding to the smallest
 // singular value of F).
 
 bool
-FMatrix::get_epipoles(HomgPoint2D *epipole1_ptr, HomgPoint2D *epipole2_ptr) const
+FMatrix::get_epipoles(HomgPoint2D*epipole1_ptr, HomgPoint2D*epipole2_ptr) const
 {
   // fm_compute_epipoles
   vnl_svd<double> svd(_f_matrix);
@@ -222,9 +222,9 @@ FMatrix::get_epipoles(HomgPoint2D *epipole1_ptr, HomgPoint2D *epipole2_ptr) cons
 
 void
 FMatrix::find_nearest_perfect_match(const HomgPoint2D& point1,
-				    const HomgPoint2D& point2,
-				    HomgPoint2D *perfect_point1_ptr,
-				    HomgPoint2D *perfect_point2_ptr) const
+                                    const HomgPoint2D& point2,
+                                    HomgPoint2D *perfect_point1_ptr,
+                                    HomgPoint2D *perfect_point2_ptr) const
 {
   HomgPoint2D epipole1, epipole2;
   get_epipoles(&epipole1, &epipole2);
@@ -235,11 +235,11 @@ FMatrix::find_nearest_perfect_match(const HomgPoint2D& point1,
 // -- Faster Hartley-Sturm using precomputed epipoles
 void
 FMatrix::find_nearest_perfect_match(const HomgPoint2D& point1,
-				    const HomgPoint2D& point2,
-				    const HomgPoint2D& epipole1,
-				    const HomgPoint2D& epipole2,
-				    HomgPoint2D *perfect_point1_ptr,
-				    HomgPoint2D *perfect_point2_ptr) const
+                                    const HomgPoint2D& point2,
+                                    const HomgPoint2D& epipole1,
+                                    const HomgPoint2D& epipole2,
+                                    HomgPoint2D *perfect_point1_ptr,
+                                    HomgPoint2D *perfect_point2_ptr) const
 {
   HomgLine2D line_horiz(0,1,0);
 
@@ -250,14 +250,14 @@ FMatrix::find_nearest_perfect_match(const HomgPoint2D& point1,
   double angle2 = HomgOperator2D::angle_between_oriented_lines (line2, line_horiz);
 
   // If the transformation from the transformed frame to the raw image frame is Pi, i=1,2, then
-  // the transformed F matrix is P2^T F P1. 
+  // the transformed F matrix is P2^T F P1.
 
   double x1, y1;
   point1.get_nonhomogeneous(x1, y1);
 
   double x2, y2;
   point2.get_nonhomogeneous(x2, y2);
-  
+
   // c s x
   //-s c y
   // 0 0 1
@@ -283,7 +283,7 @@ FMatrix::find_nearest_perfect_match(const HomgPoint2D& point1,
   p2_matrix(2, 1) = 0;
   p2_matrix(2, 2) = 1;
 
-  vnl_double_3x3 special_f_matrix = p2_matrix.transpose() * _f_matrix * p1_matrix;
+  vnl_double_3x3 special_f_matrix= p2_matrix.transpose() *_f_matrix *p1_matrix;
 
   double f = -special_f_matrix(1, 0) / special_f_matrix(1, 2);
   double f2 = -special_f_matrix(2, 0) / special_f_matrix(2, 2);
@@ -292,20 +292,23 @@ FMatrix::find_nearest_perfect_match(const HomgPoint2D& point1,
   if (fabs ((f-f2) / f) > 0.05 || fabs ((g-g2) / g) > 0.05)
     vcl_cerr << "F matrix isn't rank 2.\n";
 
-  /* section 4.2 of the paper. */
-  
+  // section 4.2 of the paper.
+
   double a = special_f_matrix(1, 1);
   double b = special_f_matrix(1, 2);
   double c = special_f_matrix(2, 1);
   double d = special_f_matrix(2, 2);
 
-  /* generated from equation (6) in the paper, using mathematica. */
+  // generated from equation (6) in the paper, using mathematica.
   vnl_vector<double> coeffs(7);
   coeffs[0] = b*b*c*d - a*b*d*d;
   coeffs[1] = b*b*b*b + b*b*c*c - a*a*d*d + 2.0*b*b*d*d*g*g + d*d*d*d*g*g*g*g;
-  coeffs[2] = 4.0*a*b*b*b + a*b*c*c - a*a*c*d + 2.0*b*b*c*d*f*f - 2.0*a*b*d*d*f*f + 4.0*b*b*c*d*g*g + 4.0*a*b*d*d*g*g + 4.0*c*d*d*d*g*g*g*g;
-  coeffs[3] = 6.0*a*a*b*b + 2.0*b*b*c*c*f*f - 2.0*a*a*d*d*f*f + 2.0*b*b*c*c*g*g + 8*a*b*c*d*g*g + 2.0*a*a*d*d*g*g + 6.0*c*c*d*d*g*g*g*g;
-  coeffs[4] = 4.0*a*a*a*b + 2.0*a*b*c*c*f*f - 2.0*a*a*c*d*f*f + b*b*c*d*f*f*f*f - a*b*d*d*f*f*f*f + 4.0*a*b*c*c*g*g + 4.0*a*a*c*d*g*g + 4.0*c*c*c*d*g*g*g*g;
+  coeffs[2] = 4.0*a*b*b*b + a*b*c*c - a*a*c*d + 2.0*b*b*c*d*f*f - 2.0*a*b*d*d*f*f
+              + 4.0*b*b*c*d*g*g + 4.0*a*b*d*d*g*g + 4.0*c*d*d*d*g*g*g*g;
+  coeffs[3] = 6.0*a*a*b*b + 2.0*b*b*c*c*f*f - 2.0*a*a*d*d*f*f + 2.0*b*b*c*c*g*g
+              + 8*a*b*c*d*g*g + 2.0*a*a*d*d*g*g + 6.0*c*c*d*d*g*g*g*g;
+  coeffs[4] = 4.0*a*a*a*b + 2.0*a*b*c*c*f*f - 2.0*a*a*c*d*f*f + b*b*c*d*f*f*f*f
+              - a*b*d*d*f*f*f*f + 4.0*a*b*c*c*g*g + 4.0*a*a*c*d*g*g + 4.0*c*c*c*d*g*g*g*g;
   coeffs[5] = a*a*a*a + b*b*c*c*f*f*f*f - a*a*d*d*f*f*f*f + 2.0*a*a*c*c*g*g + c*c*c*c*g*g*g*g;
   coeffs[6] = a*b*c*c*f*f*f*f - a*a*c*d*f*f*f*f;
 
@@ -319,18 +322,18 @@ FMatrix::find_nearest_perfect_match(const HomgPoint2D& point1,
   double t_min = 0;
   for (int root_index = 0; root_index < 6; root_index++)
     if (roots.imag(root_index) == 0) {
-      /* equation (4) in the paper. */
+      // equation (4) in the paper.
       double t = roots.real(root_index);
       double s = t * t / vnl_math_sqr(1.0 + f * f * t * t) +
-	vnl_math_sqr(c * t + d) /
-	(vnl_math_sqr(a * t + b) + g * g * vnl_math_sqr(c * t + d));
+        vnl_math_sqr(c * t + d) /
+        (vnl_math_sqr(a * t + b) + g * g * vnl_math_sqr(c * t + d));
       if (s < s_min) {
-	real_root_flag = true;
-	t_min = t;
-	s_min = s;
+        real_root_flag = true;
+        t_min = t;
+        s_min = s;
       }
     }
-  
+
   if (!real_root_flag) {
     vcl_cerr << "FMatrix::find_nearest_perfect_match -- no real root\n";
     return;
@@ -339,9 +342,9 @@ FMatrix::find_nearest_perfect_match(const HomgPoint2D& point1,
   // if (residual_sum_squared_ptr) *residual_sum_squared_ptr = s_min;
 
   if (perfect_point1_ptr) {
-    /* the epipolar lines in the two images. */
+    // the epipolar lines in the two images.
     HomgLine2D epipolar_line1(t_min * f, 1, -t_min);
-    HomgLine2D epipolar_line2(-g * (c * t_min + d), a * t_min + b, c * t_min + d);
+    HomgLine2D epipolar_line2(-g * (c*t_min + d), a*t_min + b, c*t_min + d);
     HomgPoint2D origin(0,0,1);
 
     *perfect_point1_ptr = p1_matrix * HomgOperator2D::perp_projection(epipolar_line1, origin).get_vector();
@@ -370,7 +373,7 @@ void FMatrix::set_rank2_using_svd (void)
 // -- Decompose F to the product of a skew-symmetric matrix and a rank 3 matrix.
 
 void
-FMatrix::decompose_to_skew_rank3(vnl_matrix<double> *, vnl_matrix<double> *) const
+FMatrix::decompose_to_skew_rank3(vnl_matrix<double>*, vnl_matrix<double>*) const
 {
   assert(!"Not implemented\n");
 }
@@ -388,7 +391,7 @@ double FMatrix::get (unsigned int row_index, unsigned int col_index) const
 
 //----------------------------------------------------------------
 //
-// -- Copy the fundamental matrix into a 2D array of doubles for `C' compatibilty.
+//: Copy the fundamental matrix into a 2D array of doubles for `C' compatibilty.
 void FMatrix::get (double *c) const
 {
   for (int row_index = 0; row_index < 3; row_index++)
@@ -467,7 +470,7 @@ bool FMatrix::set (const vnl_matrix<double>& f_matrix)
 void FMatrix::set (const PMatrix& P1, const PMatrix& P2)
 {
   vnl_svd<double>* svd = P1.svd();
-  
+
   vnl_cross_product_matrix e2x(P2.get_matrix() * svd->nullvector());
 
   set(e2x * P2.get_matrix() * svd->inverse());
@@ -479,9 +482,9 @@ void FMatrix::set (const PMatrix& P2)
   vnl_double_3x3 A;
   vnl_double_3 a;
   P2.get(&A, &a);
-  
+
   vnl_cross_product_matrix e2x(a);
-  
+
   set(e2x * A);
 }
 
