@@ -55,16 +55,13 @@ vsol_spatial_object_2d_sptr vsol_group_2d::clone(void) const
 //: Return the object `i'
 // Require: i>=0 and i<size()
 //---------------------------------------------------------------------------
-vsol_spatial_object_2d_sptr vsol_group_2d::object(int i) const
+vsol_spatial_object_2d_sptr vsol_group_2d::object(unsigned int i) const
 {
   // require
-  assert((i>=0)&&(i<size()));
+  assert(i<size());
 
-  vcl_list<vsol_spatial_object_2d_sptr>::iterator j;
-  int k;
-
-  j=storage_->begin();
-  for (k=0;k<i;++k)
+  vcl_list<vsol_spatial_object_2d_sptr>::iterator j = storage_->begin();
+  for (unsigned int k=0;k<i;++k)
     ++j;
   return *j;
 }
@@ -143,16 +140,13 @@ void vsol_group_2d::add_object(const vsol_spatial_object_2d_sptr &new_object)
 //: Remove object `i' of `this' (not delete it)
 // Require: i>=0 and i<size()
 //---------------------------------------------------------------------------
-void vsol_group_2d::remove_object(const int i)
+void vsol_group_2d::remove_object(unsigned int i)
 {
   // require
-  assert((i>=0)&&(i<size()));
+  assert(i<size());
 
-  vcl_list<vsol_spatial_object_2d_sptr>::iterator j;
-  int k;
-
-  j=storage_->begin();
-  for (k=0;k<i;++k)
+  vcl_list<vsol_spatial_object_2d_sptr>::iterator j = storage_->begin();
+  for (unsigned int k=0;k<i;++k)
     ++j;
   storage_->erase(j);
 }

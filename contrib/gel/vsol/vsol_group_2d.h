@@ -69,7 +69,7 @@ class vsol_group_2d : public vsol_spatial_object_2d
   //: Return the object `i'
   //  REQUIRE: i>=0 and i<size()
   //---------------------------------------------------------------------------
-  vsol_spatial_object_2d_sptr object(int i) const;
+  vsol_spatial_object_2d_sptr object(unsigned int i) const;
 
   //***************************************************************************
   // Status report
@@ -118,7 +118,7 @@ class vsol_group_2d : public vsol_spatial_object_2d
   //: Remove object `i' of `this' (not delete it)
   //  REQUIRE: i>=0 and i<size()
   //---------------------------------------------------------------------------
-  void remove_object(const int i);
+  void remove_object(unsigned int i);
 
   //---------------------------------------------------------------------------
   //: The same behavior than dynamic_cast<>.
