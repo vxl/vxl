@@ -1,5 +1,4 @@
-#include <f2c.h>
-#include <netlib.h>
+#include "f2c.h"
 #include <math.h>
 
 /* extern "C" */
