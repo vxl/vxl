@@ -156,6 +156,9 @@ SOURCE=.\test_warp.cxx
 # Begin Source File
 SOURCE=.\test_stream.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_image_loader_robustness.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
