@@ -8,7 +8,7 @@
 //
 // \verbatim
 //  Modifications:
-//    K.Y.McGaul  27-JAN-2000    Initial version.
+//   K.Y.McGaul  27-JAN-2000    Initial version.
 // \endverbatim
 //
 
@@ -182,7 +182,6 @@ void xcv_display::make_roi()
   rubber->rubberband_box();
   while (!roi_tableau_client_.is_done())
     es->next();
-  es = 0;
   rubber->set_client(old_client);
   //roi_tableau_client_ = 0;
 }
