@@ -41,7 +41,7 @@ void vsrl_3d_output::set_matcher(vsrl_dense_matcher *matcher)
 }
 
 
-// set the projective tranform
+// set the projective transform
 
 void vsrl_3d_output::set_projective_transform(vnl_matrix<double> &H)
 {
@@ -58,40 +58,35 @@ void vsrl_3d_output::write_output(char *filename)
   // implies an interpretation of (x,y,d,1)
   // is a valid reconstruction which should look pretty decent
 
-  if (!matcher_){
+  if (!matcher_)
     return;
-  }
 
   // make a step_diffusion object to make better disparities
 
   vsrl_step_diffusion step_diffusion(matcher_);
   step_diffusion.execute();
-
-  // this->write_disparity_image("test0_disp.ppm",&step_diffusion);
+#if 0
+  this->write_disparity_image("test0_disp.ppm",&step_diffusion);
 
   // determine the saliency of each point in the image
+  vcl_cout << "Perform the image correlation routines\n";
+  image_correlation_.initial_calculations();
 
-  // vcl_cout << "Perform the image correlation routines" << endl;
-  // image_correlation_.initial_calculations();
+  vsrl_token_saliency ts(&image_correlation_);
+  ts.create_saliency_image("test_sal.ppm");
 
-  // vsrl_token_saliency ts(&image_correlation_);
-  // ts.create_saliency_image("test_sal.ppm");
+  // use the token saliency to initialize a vsrl_saliency_diffusion object
+  vsrl_saliency_diffusion sal_diffusion(matcher_);
 
-  // use the token saliency to initiliaze a vsrl_saliency_diffusion object
+  sal_diffusion.set_initial_disparity(&step_diffusion);
 
-  // vsrl_saliency_diffusion sal_diffusion(matcher_);
+  sal_diffusion.set_saliency(&ts);
 
-
-  // sal_diffusion.set_initial_disparity(&step_diffusion);
-
-  // sal_diffusion.set_saliency(&ts);
-
-  // sal_diffusion.execute(200);
+  sal_diffusion.execute(200);
 
   // write the output
-
-  // this->write_disparity_image("test1_disp.ppm",&sal_diffusion);
-
+  this->write_disparity_image("test1_disp.ppm",&sal_diffusion);
+#endif // 0
 
   // these are the outputs of the data
 
@@ -119,35 +114,34 @@ void vsrl_3d_output::write_output(char *filename)
   point_index.fill(-1);
   int index=0;
 
-  for (int x=0;x<width;x++) {
-    for (int y=0;y<height;y++) {
+  for (int x=0;x<width;x++)
+  {
+    for (int y=0;y<height;y++)
+    {
       // get the disparity
 
-      double difuse_d = step_diffusion.get_disparity(x,y);
-      // difuse_d = sal_diffusion.get_disparity(x,y);
+      double diffuse_d = step_diffusion.get_disparity(x,y);
+      // diffuse_d = sal_diffusion.get_disparity(x,y);
 
-      if (non_valid_point(x,y)) {
-        difuse_d=0.0;
-      }
+      if (non_valid_point(x,y))
+        diffuse_d=0.0;
 
       // d = matcher_->get_disparity(x,y);
-      if (difuse_d > 0-999){
-
+      if (diffuse_d > 0-999)
+      {
         input(0,0)=x;
         input(1,0)=y;
-        input(2,0)=difuse_d;
+        input(2,0)=diffuse_d;
         input(3,0)=1.0; // change me based on image scale
 
-
         // comput the output = H_ * input
-
         output = H_ * input;
 
         // normalize to X,Y,Z,1
-
         double W=output(3,0);
 
-        if (W) {
+        if (W)
+        {
           // the normalized coordinates
 
           double X=output(0,0)/W;
@@ -206,7 +200,7 @@ void vsrl_3d_output::write_output(char *filename)
 
   for (; iX!=X_out.end(); ++iX, ++iY, ++iZ, ++itx, ++ity)
     {
-      file << (*iX) << " " << (*iY) << " " << (*iZ) << " " << *itx << " " << *ity << vcl_endl;
+      file << (*iX) << ' ' << (*iY) << ' ' << (*iZ) << ' ' << *itx << ' ' << *ity << vcl_endl;
       // populate the range image
       int ix = int(*iX+0.5), iy = int(*iY+0.5); // round to nearest integer
       range_image_(ix,height-iy) = *iZ;
@@ -224,9 +218,11 @@ void vsrl_3d_output::write_output(char *filename)
 
   // make all possible triangles
 
-  for (int y=0;y<height-1;y++) {
+  for (int y=0;y<height-1;y++)
+  {
     int y2=y+1;
-    for (int x=0;x<width-1;x++) {
+    for (int x=0;x<width-1;x++)
+    {
       int x2=x+1;
 
       int in1=point_index(x,y);
@@ -236,7 +232,7 @@ void vsrl_3d_output::write_output(char *filename)
 
       // the first triangle
 
-      if (in1>=0 && in2 >=0 && in3>=0){
+      if (in1>=0 && in2 >=0 && in3>=0) {
         vert1.push_back(in1);
         vert2.push_back(in2);
         vert3.push_back(in3);
@@ -244,7 +240,7 @@ void vsrl_3d_output::write_output(char *filename)
 
       // the second triangle
 
-      if (in1>=0 && in3 >=0 && in4>=0){
+      if (in1>=0 && in3 >=0 && in4>=0) {
         vert1.push_back(in1);
         vert2.push_back(in3);
         vert3.push_back(in4);
@@ -261,10 +257,8 @@ void vsrl_3d_output::write_output(char *filename)
   vcl_vector<int>::iterator v1,v2,v3;
 
   for (v1=vert1.begin(), v2=vert2.begin(), v3=vert3.begin(); v1<vert1.end();
-      v1++,v2++,v3++){
-
-    file << *v1 << " " << *v2 << " " << *v3 << vcl_endl;
-  }
+       v1++,v2++,v3++)
+    file << *v1 << ' ' << *v2 << ' ' << *v3 << vcl_endl;
 }
 
 
@@ -296,22 +290,14 @@ void vsrl_3d_output::read_projective_transform(char *filename)
     for (int col=0;col<4;col++){
       double value;
       file >> value;
-      vcl_cout << "Point r c " << value << " " << row << " " << col << vcl_endl;
+      vcl_cout << "Point r c " << value << ' ' << row << ' ' << col << vcl_endl;
 
-      if (col==2 || col==3){
-        H(row,col)=value;
-      }
-
-      if (col==1){
-        H(row,0)=value;
-      }
-      if (col==0){
-        H(row,1)=value;
-      }
+      if (col>1) H(row,col)=value;
+      else       H(row,1-col)=value;
     }
   }
 
-  vcl_cout << "Seting transform to\n" << H << vcl_endl;
+  vcl_cout << "Setting transform to\n" << H << vcl_endl;
   this->set_projective_transform(H);
 }
 
@@ -353,7 +339,8 @@ void vsrl_3d_output::write_disparity_image(char *filename,vsrl_diffusion *diff)
   int correlation_range = vsrl_parameters::instance()->correlation_range;
 
   for (int y=0;y<buffer.height();y++)
-    for (int x=0;x<buffer.width();x++){
+    for (int x=0;x<buffer.width();x++)
+    {
       int disparity = (int)(diff->get_disparity(x,y));
       int value = disparity + correlation_range+1;
       if (value < 0)
