@@ -19,8 +19,11 @@
 // \endverbatim
 
 
-template class vnl_matrix<double>;
-template class vnl_vector<double>;
+// Some of the code in this file has been converted to use VXL, 
+// the rest has been #if-ed out. Only convert the other functions
+// as they are needed, and after chacking that a suitable function doesn't
+// already exist in VXL.
+#include <vnl/vnl_fwd.h>
 
 
 #if 0 // commented out
@@ -28,43 +31,51 @@ template class vnl_vector<double>;
   //: Compute R = V*M
   //  R is resized to the number of rows of V * cols of M
 void NC_VecXMat(const vnl_vector<double>& V,const vnl_matrix<double>& M,
-                vnl_matrix<double>& R);
+	     		vnl_matrix<double>& R);
+#endif // commented out
 
-  //: Compute R = M*V
-  //  Only use first V.size() columns of M
-  //  R is resized to the number of rows of M
+	//: Compute R = M*V
+	//  Only use first V.size() columns of M
+	//  R is resized to the number of rows of M
+void mbl_matxvec_prod_mv(const vnl_matrix<double>& M,
+	     		const vnl_vector<double>& V,
+	     		vnl_vector<double>& R);
+
+	     		
+	//: Compute R = M*V
+	//  Only use first V.size() columns of M
+	//  Only use first R.size() rows of M
+	//  R is not resized - its size determines how many rows to use
+void mbl_matxvec_prod_mv_2(const vnl_matrix<double>& M,
+	     		                 const vnl_vector<double>& V,
+	     		                 vnl_vector<double>& R);
+	     		
+#if 0
 void TC_MatXVec(const vnl_matrix<double>& M,
-                const vnl_vector<double>& V,
-                vnl_vector<double>& R);
+	    		const vnl_vector<double>& V,
+	     		vnl_vector<double>& R,
+				const vcl_vector<int>& index);
+#endif // commented out
 
-  //: Compute R = M*V
-  //  Only use first V.size() columns of M
-  //  Only use first R.size() rows of M
-  //  R is not resized - its size determines how many rows to use
-void TC_MatXVec2(const vnl_matrix<double>& M,
-                 const vnl_vector<double>& V,
-                 vnl_vector<double>& R);
 
-void TC_MatXVec(const vnl_matrix<double>& M,
-                const vnl_vector<double>& V,
-                vnl_vector<double>& R,
-                const vcl_vector<int>& index);
 
-  //: Fast Compute R = V' * M = ( M.transpose() * V ).transpose()
-  // Only use the first R.size() columns of M
-  // R is not resized - its size determines how many columns to use
-  // Ensure that V.elems() == M.rows().
-void TC_VecXMat(const vnl_vector<double>& V,
-                const vnl_matrix<double>& M,
-                vnl_vector<double>& R);
+	//: Fast Compute R = V' * M = ( M.transpose() * V ).transpose()
+	// Only use the first R.size() columns of M
+	// R is not resized - its size determines how many columns to use
+	// Ensure that V.elems() == M.rows().
+void mbl_matxvec_prod_vm(const vnl_vector<double>& V,
+	     		const vnl_matrix<double>& M,
+	     		vnl_vector<double>& R);
 
-  //: Fast Compute R += V' * M = ( M.transpose() * V ).transpose()
-  // Only use the first R.size() columns of M
-  // R is not resized - its size determines how many columns to use
-  // Ensure that V.elems() == M.rows().
-void TC_AddVecXMat(const vnl_vector<double>& V,
-                   const vnl_matrix<double>& M,
-                   vnl_vector<double>& R);
+	//: Fast Compute R += V' * M = ( M.transpose() * V ).transpose()
+	// Only use the first R.size() columns of M
+	// R is not resized - its size determines how many columns to use
+	// Ensure that V.elems() == M.rows().
+void mbl_matxvec_add_prod_vm(const vnl_vector<double>& V,
+	     		                   const vnl_matrix<double>& M,
+	     		                   vnl_vector<double>& R);
+
+#if 0 // commented out
 
 void TC_ProductABt(vnl_matrix<double>& ABt, const vnl_matrix<double>& A,
                    const vnl_matrix<double>& B);
@@ -75,7 +86,10 @@ void TC_Product(vnl_matrix<double>& AB, const vnl_matrix<double>& A,
 #endif // commented out
 
 //: ADB = A * D * B where D is diagonal with elements d
-void mbl_matxvec_product_adb(vnl_matrix<double>& ADB,
+// A, d, and B should be compatible sizes, ADB will
+// be resized to fit.
+
+void mbl_matxvec_prod_adb(vnl_matrix<double>& ADB,
                              const vnl_matrix<double>& A,
                              const vnl_vector<double>& d,
                              const vnl_matrix<double>& B);
