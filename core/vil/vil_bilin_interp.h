@@ -9,6 +9,25 @@
 #include <vcl_cassert.h>
 #include <vcl_cstddef.h>
 
+//: Compute bilinear interpolation at (x,y), no bound checks. Requires 0<x<ni-2, 0<y<nj-2
+//  Image is nx * ny array of Ts. x,y element is data[xstep*x+ystep*y]
+//  No bound checks are done.
+template<class T>
+inline double vil2_bilin_interp_quick(double x, double y, const T* data,
+                                    vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
+{
+    int p1x=int(x);
+    double normx = x-p1x;
+    int p1y=int(y);
+    double normy = y-p1y;
+
+    const T* pix1 = data + p1y*ystep + p1x*xstep;
+
+    double i1 = pix1[0    ]+(pix1[      ystep]-pix1[0    ])*normy;
+    double i2 = pix1[xstep]+(pix1[xstep+ystep]-pix1[xstep])*normy;
+
+    return i1+(i2-i1)*normx;
+}
 //: Compute bilinear interpolation at (x,y), no bound checks
 //  Image is nx * ny array of Ts. x,y element is data[xstep*x+ystep*y]
 //  No bound checks are done.
