@@ -1,3 +1,6 @@
+#ifndef mpeg2_win32_inttypes_h_
+#define mpeg2_win32_inttypes_h_
+
 typedef signed char int8_t;
 typedef signed short int16_t;
 typedef signed int int32_t;
@@ -11,3 +14,5 @@ typedef unsigned int uint32_t;
 #ifdef ARCH_X86
 typedef unsigned long long uint64_t;
 #endif
+
+#endif /* mpeg2_win32_inttypes_h_ */
