@@ -153,6 +153,9 @@ SOURCE=.\Templates/vbl_bounding_box+float.2-.cxx
 SOURCE=.\Templates/vbl_bounding_box+int.2-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vbl_bounding_box+double.3-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_quadruple+int.int.int.int-.cxx
 # End Source File
 # Begin Source File
