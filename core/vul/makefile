@@ -40,6 +40,11 @@ SUBDIRS += tests
 SUBDIRS += examples
 endif
 
+ifeq "$(TJ_GCC30)$(optimize)" "1-O2"
+# gcc 3.0 needs too much virtual memory with -O2 or -O1
+FLAGS_vul_sequence_filename_map.cxx += -O0
+endif
+
 ######################################
 include ${IUEROOT}/config/top-rules.mk
 ######################################
