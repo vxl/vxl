@@ -48,6 +48,13 @@ class brip_float_ops
   static vil_memory_image_of<float>  
     sqrt_grad_singular_values(vil_memory_image_of<float> & input, int n);
   
+  //:computes Lucas-Kanade optical flow on a 2n+1 neighborhood 
+static void Lucas_KanadeMotion(vil_memory_image_of<float> & current_frame,
+                               vil_memory_image_of<float> & previous_frame,
+                               int n, double thresh,
+                               vil_memory_image_of<float>& vx,
+                               vil_memory_image_of<float>& vy);
+
   //:fills a border of width w on left and right of image with value
   static void fill_x_border(vil_memory_image_of<float> & image,
                           int w, float value);

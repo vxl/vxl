@@ -1,10 +1,9 @@
-#include "brip_float_ops.h"
 #include <vcl_fstream.h>
 #include <vul/vul_timer.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_math.h>
 #include <vil/vil_smooth.h>
-
+#include "brip_float_ops.h"
 //------------------------------------------------------------
 //  Convolve with a kernel
 //   It's assumed that the kernel is square with odd dimensions
@@ -99,15 +98,14 @@ void brip_float_ops::gradient_3x3(vil_memory_image_of<float> const & input,
 // Compute the sqrt of the product of the eigenvalues of the
 // gradient matrix over a 2n+1 x 2n+1 neigborhood
 // That is,
-// \verbatim
 //                        _                           _
 //                       | (dI/dx)^2    (dI/dx)(dI/dy) |
 //                       |                             |
 //  A = Sum(neighborhood)|                             |
 //                       |(dI/dx)(dI/dy)   (dI/dx)^2   |
 //                       |_                           _|
-// \endverbatim
-//  The output image is $\sqrt{\lamba_1*\lambda_2}$ where $\lambda_i$ are the
+//
+//  The output image is sqrt(lamba_1*lambda_2) where lambda_i are the
 //  eigenvalues
 //
 vil_memory_image_of<float>
@@ -141,6 +139,68 @@ brip_float_ops::sqrt_grad_singular_values(vil_memory_image_of<float> & input,
   brip_float_ops::fill_y_border(output, n, 0.0);
   vcl_cout << "\nCompute sqrt(sigma0*sigma1) in" << t.real() << " msecs.\n";
  return output;
+}
+//---------------------------------------------------------------------
+// Lucas-Kanade motion vectors:  Solve for the motion vectors over a
+// (2n+1)x(2n+1) neighborhood. The time derivative of intensity is computed
+// from the previous_frame. The threshold eliminates small values of
+// the product of the time derivative and the motion matrix eigenvalues,
+// i.e, |lambda_1*lambda_2*dI/dt|<thresh.  Thus motion is only reported when
+// the solution is well-conditioned.
+//
+void 
+brip_float_ops::Lucas_KanadeMotion(vil_memory_image_of<float> & current_frame,
+                                   vil_memory_image_of<float> & previous_frame,
+                                   int n, double thresh,
+                                   vil_memory_image_of<float>& vx,
+                                   vil_memory_image_of<float>& vy)
+{
+  int N = (2*n+1)*(2*n+1);
+  int w = current_frame.width(), h = current_frame.height();
+  vil_memory_image_of<float> grad_x, grad_y, diff;
+  grad_x.resize(w,h);
+  grad_y.resize(w,h);
+  //compute the gradient vector and the time derivative
+  brip_float_ops::gradient_3x3(current_frame, grad_x, grad_y);
+  diff = brip_float_ops::difference(previous_frame, current_frame);
+  vul_timer t;
+  //sum the motion terms over the (2n+1)x(2n+1) neighborhood.
+  for (int y = n; y<h-n;y++)
+    for (int x = n; x<w-n;x++)
+      {
+        double IxIx=0, IxIy=0, IyIy=0, IxIt=0, IyIt=0;
+        for (int i = -n; i<=n; i++)
+          for (int j = -n; j<=n; j++)
+            {
+              double gx = grad_x(x+i, y+j), gy = grad_y(x+i, y+j);
+              double dt = diff(x+i, y+j);
+              IxIx += gx*gx;
+              IxIy += gx*gy;
+              IyIy += gy*gy;
+              IxIt += gx*dt;
+              IyIt += gy*dt;
+            }
+        //Divide by the number of pixels in the neighborhood
+        IxIx/=N;  IxIy/=N; IyIy/=N; IxIt/=N; IyIt/=N;
+        double det = (IxIx*IyIy-IxIy*IxIy);
+        //Eliminate small motion factors
+        double dif = diff(x,y);
+        double motion_factor = fabs(det*dif);
+        if(motion_factor<thresh)
+          {
+            vx(x,y) = 0.0;
+            vy(x,y) = 0.0;
+            continue;
+          }
+        //solve for the motion vector
+        vx(x,y) = (IyIy*IxIt-IxIy*IyIt)/det;
+        vy(x,y) = (-IxIy*IxIt + IxIx*IyIt)/det;
+      }
+  brip_float_ops::fill_x_border(vx, n, 0.0);
+  brip_float_ops::fill_y_border(vx, n, 0.0);
+  brip_float_ops::fill_x_border(vy, n, 0.0);
+  brip_float_ops::fill_y_border(vy, n, 0.0);
+  vcl_cout << "\nCompute Lucas-Kanade in" << t.real() << " msecs.\n";
 }
 
 void brip_float_ops::fill_x_border(vil_memory_image_of<float> & image,
@@ -261,34 +321,34 @@ brip_float_ops::convert_to_float(vil_memory_image_of<unsigned char> const & imag
 //
 vbl_array_2d<float> brip_float_ops::load_kernel(vcl_string const & file)
 {
-  vcl_ifstream instr(file.c_str(), vcl_ios::in);
-  if (!instr)
-    {
-      vcl_cout << "In brip_float_ops::load_kernel - failed to load kernel\n";
-      return vbl_array_2d<float>(0,0);
-    }
-  int n;
-  float scale;
-  float v =0;
-  instr >> n;
-  instr >> scale;
-  int N = 2*n+1;
-  vbl_array_2d<float> output(N, N);
-  for (int y = 0; y<N; y++)
-    for (int x = 0; x<N; x++)
-      {
-        instr >> v;
-        output.put(x, y, v/scale);
-      }
-  vcl_cout << "The Kernel\n";
-  for (int y = 0; y<N; y++)
-    {
-      for (int x = 0; x<N; x++)
-        {
-          float t = output[x][y];
-          vcl_cout << t << " ";
-        }
-      vcl_cout << "\n";
-    }
+   vcl_ifstream instr(file.c_str(), vcl_ios::in);
+   if (!instr)
+     {
+       vcl_cout << "In brip_float_ops::load_kernel - failed to load kernel\n";
+       return vbl_array_2d<float>(0,0);
+     }
+    int n;
+    float scale;
+    float v =0;
+    instr >> n;
+    instr >> scale;
+    int N = 2*n+1;
+    vbl_array_2d<float> output(N, N);
+   for (int y = 0; y<N; y++)
+     for (int x = 0; x<N; x++)
+       {
+         instr >> v;
+         output.put(x, y, v/scale);
+       }
+   vcl_cout << "The Kernel\n";
+   for (int y = 0; y<N; y++)
+     {
+       for (int x = 0; x<N; x++)
+         {
+           float t = output[x][y];
+           vcl_cout << t << " ";
+         }
+       vcl_cout << "\n";
+     }
   return output;
 }
