@@ -1,0 +1,1249 @@
+\input texinfo   @c -*-texinfo-*-
+@c %**start of header
+@setfilename vxl.info
+@settitle VXL
+@setchapternewpage odd
+@paragraphindent 0
+
+@iftex
+@afourlatex
+@end iftex
+
+@macro vxl
+v@emph{x}l
+@end macro
+
+@iftex
+@macro LaTeX
+LaTeX
+@end macro
+@end iftex
+
+@ifinfo
+@macro LaTeX
+LaTeX
+@end macro
+@end ifinfo
+@c %**end of header
+
+@ifinfo
+This file documents the VXL collection of C++ libraries.
+
+Copyright 2000 Andrew Fitzgibbon
+
+Permission is granted to copy and distribute, retaining this
+original copyright notice.
+@end ifinfo
+
+@c  This title page illustrates only one of the
+@c  two methods of forming a title page.
+
+@titlepage
+@title V@emph{X}L
+@subtitle A collection of C++ libraries for computer vision.
+@author Andrew Fitzgibbon
+@author Visual Geometry Group
+@author University of Oxford
+
+@c  The following two commands start the copyright page.
+@page
+@vskip 0pt plus 1filll
+Copyright @copyright{} 2000 Andrew Fitzgibbon
+
+Published by ...
+
+Permission is granted to ...
+@end titlepage
+@shortcontents
+@contents
+
+@node Top, Introduction, , (dir)
+
+@ifinfo
+This document describes ...
+
+This document applies to version ...
+of the program named ...
+@end ifinfo
+
+@comment ------------------------------------------------------------------
+@node    Introduction, vbl, top,      top
+@comment node-name, next,           previous, up
+@chapter Introduction
+@cindex Introduction
+@cindex IUE
+@cindex TargetJr
+
+This document describes @vxl, a collection of C++ libraries designed for
+computer vision research.  It is characterized by its portability and
+efficiency, traits which are due in large part to its parentage.  The
+package was built by extracting the core functionalities of two large
+systems: the Image Understanding Environment (IUE) and Target Jr.
+Although these environments contained a wealth of useful code, and have
+facilitated much research, they are widely known for their bulk, and the
+difficulty of learning to use them.  Common complaints have been
+@itemize
+@item 
+``Too heavy'': To use even one small routine, a large portion of the
+environment must be included in the user's program, increasing program
+size, compile time, and startup time.  Sometimes the increase is such that
+debuggers and other tools fail to work.
+@item
+``Too slow'': In some cases, the design of the earlier systems restricted
+the efficiency of code that could be written when using them.  This was in
+some part due to deficiencies of the C++ compilers in use, but also due to
+the use of since-superseded programming paradigms.
+@item
+``Too weird'': Because the IUE is a large system, intended to be used as a
+programming environment, it imposes stylistic quirks on programmers who use
+it.  The most apparent of these was the use of @LaTeX to generate code,
+which offered many benefits, but was ultimately rejected by users.
+@end itemize
+Despite these complaints, the quality of the software available in the
+environments, and the promise of a sustained, concerted software
+development effort has meant that the IUE/TargetJr has many users
+worldwide.  The job of @vxl{} is to make that many happy users.
+
+Design goals:
+
+@itemize @bullet
+@item Cross platform
+
+@item Loosely coupled
+
+@item light weight --- simple interfaces
+
+@item high-powered --- allow infinitely large images.
+
+@item uniform naming -- of course.
+@end itemize
+
+@section Motivation
+In OpenGL, you guess the name of something, and you're generally
+right.  This is what we would like to achieve with @vxl.  
+
+Simple and, we hope, free of programming dogma.  For some tasks, C-like
+functions are more appropriate than a forced object-orientation, for others
+objects are clearly the more intuitive and compact representation.  This is
+clearly seen in the imaging library, where the @code{vil_image} object is 
+passed to and returned from C-like functions, for example
+@example
+  vil_image i = vil_load(filename);
+  i = vil_smooth_gaussian(i, 0.6);
+  vil_save(i, out_filename, "pnm");
+@end example
+In this case, object orientation ensures that memory is managed
+efficiently, without unnecessary copying of data, while the functional
+syntax aids readability.
+
+When building a large system, it is crucial to maintain consistent
+conventions for file-system structure, and identifier naming.  However, a
+crucial philosophy in the design of @vxl{} is that system conventions must
+be pragmatic.  If programmers are ultimately constrained rather than helped
+by their environment, they will break the rules, and when they do so, they
+will break them in inconsistent ways.  Therefore it is crucial that
+consistency within the environment is achieved by conventions that are easy
+to live with.  One example, discussed below, is in the rule governing the
+relationship between header file names and the objects defined within that
+header.  The general principle, then, is "as close to consistent as
+comfortable, but no more".
+
+@subsection Names
+
+Names are always the biggest issue in programming environments.  Uniform
+naming is one of the most important aspects of a library, and part of the
+design effort in @vxl{} lay in choosing a good, workable scheme for the
+naming of classes, functions and files.  On the other hand, few issues
+cause as much debate as the choice of naming conventionts.  However, we are
+lucky for two reasons: first, because we wish to run cross-platform, many
+options are restricted; second, as we can never please everybody, we can
+just choose a convention and pretend we all hate it.
+
+First things first.  The name @vxl{} itself refers to a collection of
+libraries where the @emph{x} is replaced by a one or two-letter code
+describing the contents.
+
+Second, do we use @code{MixedCaseIdentifiers} or
+@code{lowercase_with_underscores}?   Well, a certain operating system
+@#defines 1300 of the @code{MixedCaseIdentifiers} in a header file.
+Therefore, programs which use names like @code{LoadImage} may or may not
+link.  For this reason, we chose the other ugly solution.  
+
+@cindex file extensions
+@cindex cxx
+@cindex txx
+For related reasons, source files in @vxl{} all end in @code{.cxx}.
+Template definitions, which are essentially header files (as they are not
+separately compiled) but look like source files, are suffixed @code{.txx}.
+
+Each class or function in a @vxl{} library begins with the name of that
+library, for example @code{vnl_matrix}.  This makes it easy to locate the
+source code for any class, and easy to see the list of libraries on which
+one's program depends.
+
+@cindex namespaces, why not
+This scheme was chosen over namespaces because few compilers support
+namespaces well, and their implications in large-scale development are as
+yet poorly understood.
+
+An obvious extension of this convention would be to insist that every class
+or function (in fact, every globally visible symbol exported by a library),
+should be defined in its own include file, yielding an easy relationship
+between symbols and include statements.  However, such a scheme
+imposes great demands on programmers, who must generate long lists of
+includes, and on library writers who must create many files with very
+little in each.  Pragmatism must rule if we are to avoid programmer
+discomfort, thus chaos.  A rule that is still useful, and easier to adhere
+to is used:
+@quotation
+The file @code{vxl/vxl_stuff.h} exports only identifiers which
+begin @code{vxl_stuff}.
+@end quotation
+An example of a header file which obeys
+this rule might be.
+@example
+@#ifndef vxl_stuff_h_
+@#define vxl_stuff_h_
+
+enum vxl_stuff_things @{
+  vxl_stuff_bare,
+  vxl_stuff_spartan,
+@};
+
+class vxl_stuff @{
+@};
+
+bool vxl_stuff_grok(vxl_stuff);
+extern int vxl_stuffing;
+
+@#endif
+@end example
+Of course, this rule is less helpful to clients of the library, who might
+remember that there is a class called @code{vtl_thing_doer}, but not know
+which header file to include.  However, the disadvantage is not great, as
+the likely options are just @code{vtl/vtl_thing.h} and
+@code{vtl/vtl_thing_doer.h}.  What is ultimately helpful to clients is a
+uniform naming scheme, kept so by pragmatic constraints on the library
+developers.
+
+FAQ: What about @code{operator+(vcl_stuff, vcl_stuff)}?  Frequently given
+half-answer: Koening lookup means it's OK.
+
+
+@section Documentation
+
+Generated from code.
+
+This book should remanin the primary source.
+
+@section Contents
+
+The core libraries, as defined in Feburary 2000, are
+
+@subsection vcl: The C++ compatibility layer.
+
+The job of vcl is to turn your compiler into a standard C++ compiler.  In
+particular, it ensures that your standard library behaves at least
+something like that defined in the ANSI/ISO standard.  In an ideal world,
+vcl would not be necessary, as all compiler vendors would ship perfectly
+compliant systems.  But then, in a perfect world, C++ wouldn't be the only
+choice for high efficiency high-level programming.  To give an example of
+the type of problems that vcl fixes, here are a few interpretations from
+the standard which have been observed in some well known vendors'
+libraries.  Many are entirely within the letter of the law, but remain
+prone to introduce confusion.
+
+On one compiler, @code{<iostream>} and @code{<iostream.h>} refer to
+entirely different stream libraries, which may not be linked together.
+Therefore every file in the program must use the same header.  For us, the
+@code{<iostream>} version is appropriate, but of course, not all of the
+unix compilers support its use.  The solution is for every @vxl{} program
+to include @code{<vcl/vcl_iostream.h>}.  In this way, we can maintain
+consistency between the many compilers, and if we ever do need to use
+another stream library, we can make the switch in one place.
+Thus rule one is
+@quotation
+Wherever you wish to include standard header @code{<foo>}, you should
+include @code{<vcl/vcl_foo.h>} instead.
+@end quotation
+
+Some compilers place STL classes such as @code{vector} and @code{vcl_string} in
+namespace @code{std}, some don't.  Yet others place them there, but do not
+implement namespaces properly.  Therefore, it is very difficult to write
+portable code because sometimes one must say @code{std::vector}, sometimes
+one must use @code{vector}.  Again, we need a way which works on all
+systems.  We could try to insert @code{using namespace std;} or @code{using
+std::vector} commands throughout the program, but (a) this is not
+considered good C++, and (b) it doesn't work anyway
+
+The low-tech solution is simply to prefix each standard identifier with
+@code{vcl_}, so that @code{vcl_vector} works everywhere.  And this is what
+@vxl{} does, when you include @code{<vcl/vcl_vector.h>}.  Thus, safe
+programmers prefix @emph{everything} in the standard library with
+@code{vcl_}.  This program is exemplary:
+@example
+@#include <vcl/vcl_string.h>
+@#include <vcl/vcl_iostream.h>
+@#include <vcl/vcl_vector.h>
+@#include <vcl/vcl_algorithm.h>
+
+int main()
+@{
+  vcl_vector<vcl_string> strings;
+  strings.push_back("Hello, ");
+  strings.push_back("World.");
+  vcl_copy(strings.begin(), strings.end(), 
+           vcl_ostream_iterator<vcl_string>(vcl_cout));
+  return 0;
+@}
+@end example
+This document has little more to say about the contents of vcl---a book on
+C++ should describe it better than we can.  However, it is important to
+note that nothing more can go in there.  If it's not in the standard, it's
+not in VCL.
+
+Remember, vcl is full, nothing else can go in there.  It cannot be
+``helpfully'' modified, Microsoft-style, to send standard error to a
+window (but @pxref{vbl_redirector}).
+
+@subsection Layering
+Which brings us on to layering: core @vxl{} libraries may not depend on
+each other.  The numerics library cannot use the handy string manipulation
+in vbl, the imaging library cannot use matrices, or smart pointers.  This
+restriction is central to the design of @vxl{}, because it intrinsically
+limits the size of the core libraries.
+It appears to contradict traditional software development practice because
+it implies that code will be duplicated rather than reused.  However,
+the amount of code duplicated is small, and the benefit of lego libraries
+is enormous.   The current status is encapsulated in this figure
+@example
+Level:   0         1         2          3
+         vcl       vbl       vnl_algo   v**l
+                   vnl       vil_algo
+                   vil       vgl_algo
+                   vgl       
+@end example
+@quotation
+Library layers: libraries in one layer may not call their
+siblings, even if this means code copying.
+@end quotation
+
+However, other alternatives have been considered, and may yet be
+considered.  For example, what about putting vbl at level 0.5, so that
+common utilities can be available to level 1?  The problem of course is
+that everything will end up in the level 0.5 library.  We could impose the
+rule that nothing goes in vbl unless it is used in at least two level 1
+libraries.  I don't know whether that would help or not...
+
+@subsection vbl: Basics.
+The basics library contains a small set of generally useful C++ classes and
+functions, notably smart pointers, file and directory handling,
+command-line argument parser, vcl_string utilities, a timer, etc.
+
+@subsection vnl: Numerical algorithms.
+The main classes in vnl are the matrix and vector classes, which are very
+simple c-like objects.  There is no reference counting, objects are
+returned by value, or passed into routines.  The use of objects to hold the
+output of matrix decompositions also reduces the amount of copying that
+needs to be done.  The numerical algorithms are wrappers around
+public-domain, high quality Fortran code from the TargetJr @code{netlib}
+library.
+
+@subsection vil: Imaging.
+The imaging library is designed to work well with very large images, but
+its primary design objective is to be fast and convenient for the typical
+in-core images that are encountered in video and digital image processing.
+A panoply of file formats is handled, and it is easy to add support for a
+new format.
+
+@subsection vgl: Geometry.
+It is in geometry that the spartan aesthetic of the core of @vxl{} becomes
+most apparent.  The library deals with the geometry of points, curves, and
+other objects in 2 or more dimensions, but may not call on the numerics
+library.  Therefore, it is  restricted to operations which it is reaonable
+to express in standard C++, which places a useful limit on what may be
+placed there.  For example, surface fitting cannot be in geometry as it
+would require the singular value decomposition.  However, there is much
+here that is useful, and the library is quite large enough already.  The
+@code{vgl_algo} library contains the higher-level code.
+
+@comment @comment ------------------------------------------------------------------
+@comment @node    vcl, vbl, Introduction,      top
+@comment @comment node-name, next,           previous, up
+@comment @chapter vcl: Compatibility
+@comment @cindex vcl
+@comment @cindex ANSI/ISO C++
+@comment @cindex SCL
+@comment @cindex Standard C++ library
+
+@comment ------------------------------------------------------------------
+@node    vbl, vnl, Introduction,      top
+@comment node-name, next,           previous, up
+@chapter vbl: Basics
+@cindex vbl
+@cindex basics
+@cindex general utilities
+
+All C++ programs need a few basic utilities, and all C++ programmers write
+their own at some point.  The things included in vbl are not considered any
+better or worse than the several other libraries available, but they are
+consistently named and lightweight.  The key elements of this library
+are
+
+@deffn {class template} @code{vbl_smart_ptr}
+Reference counted smart pointers for any class that defines @code{ref} and
+@code{unref}.
+@end deffn
+
+@deffn class @code{vbl_file}
+@deffnx class @code{vbl_directory}
+File handling utilities, directory reading
+@end deffn
+
+@deffn {class template} @code{vbl_arg}
+Parse command-line arguments conveniently.
+@end deffn
+
+@deffn class @code{vbl_redirector}
+Simplify redirection of cout/cerr
+@end deffn
+
+@deffn class @code{vbl_awk}
+Read text files, breaking each line into fields.
+@end deffn
+
+@deffn class @code{vbl_reg_exp}
+Regular expression matching.
+@end deffn
+
+@section Redirecting standard output: @code{vbl_redirector}
+@cindex cerr
+@cindex cout
+@cindex redirecting ostreams
+@cindex vbl_redirector
+@anchor{vbl_redirector}
+
+The class @code{vbl_redirector} is provided to simplify the task of
+filtering the output of @code{cerr} and @code{cout}, a common requirement
+in graphical applications.  This encapsulates some of the subtleties of
+subclassing from @code{streambuf}, providing a simpler interface.
+
+The basic usage is to subclass from @code{vbl_redirector}, implementing the
+@code{putchunk} method, which is then called whenever characters are ready
+for output.  The @code{vbl_redirector} constructor takes care of attaching
+the new buffer to the stream, and of restoring the original behaviour on
+destruction.  Here is a simple example, which switches output on or off
+depending on the value of a global flag;
+@example
+
+@#include <vbl/vbl_redirector.h>
+
+bool on = true;
+
+struct my_redirector : public vbl_redirector @{
+  my_redirector(vcl_ostream& s): vbl_redirector(s) @{@}
+  int putchunk(char const* buf, int n) @{
+    if (on)
+      return vbl_redirector::put_passthru(buf, n);
+    else
+      return n;
+  @}
+@};
+@end example
+and here is a calling program which exercises the example.
+@example
+int main(int argc, char* argv[])
+@{
+  cerr << "hi\n";
+  @{
+    my_redirector redir(cerr);
+    on = false;
+    cerr << "magic\n";
+  @}
+  cerr << "what did I miss?\n";
+  return 0;
+@}
+@end example
+
+When this program is run, the word @code{magic} is not displayed, because
+@code{my_redirector::putchunk} finds that @code{on == false}.  Question,
+what to you think @code{put_passthru} does?  What happens if you set
+@code{on = true} on line 6?
+
+
+
+@section Complex output formatting: @code{vbl_printf}
+@cindex printf
+@cindex vbl_printf
+
+While it is possible to achieve all of the functionality
+of the C @code{printf} function in C++, it is very very difficult.
+There are many times when programs can be made clearer by the use
+of printf formatting, rather than the standard iostream operators.
+On the other hand, one needs iostreams for type-safe (and convenient)
+output of user-defined objects.  Thus vbl provides a stream-aware
+version, @code{vbl_printf}:
+@smallexample
+vcl_ostream& vbl_printf(vcl_ostream&, char const* format, ...);
+@end smallexample
+so that one can say, for example,
+@smallexample
+vbl_printf(vcl_cerr, "Line %05d, Code %-30s\n", __LINE__, code);
+@end smallexample
+
+
+
+
+@section Reading command-line arguments: @code{vbl_arg}
+@cindex argc, argv
+@cindex vbl_arg
+@cindex command-line arguments, reading
+@cindex ArgParse, new name vbl_arg
+@cindex Arg, new name vbl_arg
+
+My favourite bit of vbl is the @code{vbl_arg} header which provides the
+easiest way to parse command-line arguments that I've seen.  The basic idea
+is that a minimal specification for a command-line argument includes: the
+argumentnt's type, a variable to hold it, its flag, and possibly some
+descriptive text and a default value.
+
+In the default, easy to use (and a bit naught) form, each argument is
+declared anywhere in the program, like so:
+@smallexample
+   vbl_arg<double> my_threshold("-fudge", "Twiddle fudge", 1.7);
+   //     Type     Variable     Flag      Help text        Default
+@end smallexample
+and when @code{vbl_arg_parse} is called, all the arguments are gathered,
+and extracted from the command line.  To use an argument anywhere in the
+program, use its @code{()} operator:
+@example
+   vcl_cerr << "The threshold = " << my_threshold() << vcl_endl;
+@end example
+To check if an argument was changed from its default value, one can check
+@code{bool my_naughty_threshold.set()}.
+
+Here is a complete example which uses @code{vbl_arg}.  I tend to give these
+argument variables names beginning with @code{a_}, but don't let that put
+you off.
+@example
+@#include <vcl/vcl_iostream.h>
+@#include <vbl/vbl_arg.h>
+
+vbl_arg<double> a_naughty_global_arg("-hack", "Fudge", 1.2);
+
+void main(int argc, char* argv[])
+{
+  vbl_arg<char const*>     a_filename(0, "Input filename");
+  vbl_arg<bool>            a_fast("-fast", "Go fast", false);
+  vbl_arg_parse(argc, argv);
+
+  vcl_cerr << "Filename [" << a_filename() << "]\n";
+}
+@end example
+Passing a @code{0} as the flag string means that the argument is
+obligatory, and will be taken as the first unparsed word on the command
+line.
+
+@subsection{Help text}
+The help text supplied with each argument is used to provide a summary of
+options when the special argument @code{-?} is seen.  Running this example
+with the @code{-?} flag produces the output.
+@smallexample
+Usage: ./example_vbl_arg.exe [-hack float] string [-fast bool]
+
+REQUIRED:
+         string       Input filename  ['-']
+
+Optional:
+  Switch Type         Help [value]
+
+   -hack float        Quick hack factor  [1.2]
+   -fast bool         Go fast  [not set]
+@end smallexample
+
+@subsection{Lists of numbers}
+A very useful specialization also exists to read ranges of numbers.
+Imagine a progam called makemovie which operates on a list of frames,
+specified on the command line:
+@example
+makemovie -frames 1:10,9:-1:1,0,0,0,0
+@end example
+These can be easily read into a @code{vcl_list<int>}:
+@example
+@#include <vcl/vcl_list.h>
+vbl_arg<vcl_list<int> >  a_frame_list("-frames", "List of indices");
+@end example
+The list will preserve the order specified on the command line, so in the
+above example, the result of printing the list would be
+@smallexample
+1 2 3 4 5 6 7 8 9 10 9 8 7 6 5 4 3 2 1 0 0 0 0 
+@end smallexample
+As a gratuitous STL example, here is the code that printed that list
+@cindex STL: copy example
+@smallexample
+vcl_copy(a_frame_list().begin(), a_frame_list().end(),
+         vcl_ostream_iterator<int>(vcl_cout, " "));
+@end smallexample
+
+
+@subsection{More structured argument handling}
+Of course, it's disgraceful programming practice to throw args around ones
+program higgledy piggledy, so one can collect arguments in objects of type
+@code{vbl_arg_list}.
+
+
+
+
+
+@section Reading ASCII files: @code{vbl_awk}
+@cindex awk
+@cindex perl-like operations: vbl_awk
+@cindex file handling: vbl_awk 
+
+
+
+
+
+@section Regular expression parsing: @code{vbl_reg_exp}
+@cindex regular expressions
+@cindex vbl_reg_exp
+
+
+
+
+
+@section{Chapter summary}
+Some bumph about how easy that all was.
+
+@comment ------------------------------------------------------------------
+@node    vnl,       vil,  vbl,      top
+@comment node-name, next, previous, up
+@chapter vnl: Numerics
+@cindex vnl
+@cindex Numerics
+
+The numerics library, @code{vnl} is intended to provide an environment for
+numerical programming which combines the ease of use of packages like
+Mathematica and MatLab with the speed of C and the elegance of C++.
+It provides a C++ interface to the high-quality Fortran routines
+made available in the public domain by numerical analysis researchers.
+
+This release includes classes for 
+@itemize
+@item Matrices and Vectors.  
+The library is based on the old TargetJr/IUE
+classes, which provide the standard operations without excessive overhead.
+
+@item 
+Specialized classes for matrices and vectors with particular properties.  
+Class @code{vnl_diagonal_matrix} provides a fast and convenient diagonal
+matrix, while fixed size matrices and vectors allow ``fast-as-C''
+computations (see @code{vnl_matrix_fixed<T,n,m>} and example subclasses 
+@code{vnl_double_3x3} and @code{vnl_double_3}).
+
+@item Matrix decompositions.
+Classes @code{vnl_svd<T>}, @code{vnl_symmetric_eigensystem<T> },
+@code{vnl_generalized_eigensystem}.
+
+@item Real polynomials.
+Class @code{vnl_real_polynomial} stores the coefficients
+of a real polynomial, and provides methods of evaluation of the polynomial
+at any @emph{x}, while class @code{vnl_rpoly_roots} provides a root finder.
+
+@item Optimization.
+Class @code{vnl_levenberg_marquardt} allows optimization of
+user-supplied functions either with @emph{or without} user-supplied
+derivatives.
+
+@item Standardized homes for commonly used functions and constants.
+Class @code{vnl_math} defines constants (@code{pi}, @code{e}, @code{eps}...) and
+simple functions (@code{sqr}, @code{abs}, @code{rnd}...).
+To quote the header ``That's right, @code{M_PI} is nonstandard!''
+Class @code{numeric_limits} is from the May 1996 ANSI standard document,
+and provides a way to access basic limits of a type.  E.g. 
+@code{numeric_limits<short>::max()} returns the maximum value of a short.
+@end itemize
+
+Most routines are implemented as wrappers around the high-quality Fortran
+routines which have been developed by the numerical analysis community over
+the last forty years and placed in the public domain.  The central
+repository for these programs is the AT@&T Bell Labs ``netlib'' server 
+@url{http://www.netlib.org/}.  The National Institute
+of Standards and Technology (NIST) provides an excellent search interface
+to this repository in its Guide to Available Mathematical Software (GAMS)
+at @url{http://gams.nist.gov}, both as a decision tree and a text search.
+
+@subsubheading{Compliance with the ANSI standard C++ library}
+@cindex valarray
+The current draft of the ANSI standard (as at May 1996) includes classes
+for 1-dimensional vectors (@code{valarray<T>}) and complex numbers (@code{
+complex<T>}).  There is no standard for matrices.  The current vnl classes
+are not implemented in terms of @code{valarray}, as there is a potential
+perfomance hit, but in the future they might be.
+
+@section{Example usage} 
+
+This section provides a brief tutorial in using the main components of vnl.
+An interesting feature is that many of the classes perform the actual
+computation in the constructors.  This is a natural extension of the
+``compute object'' pattern common in TargetJr, and allows for compact and
+efficient code, as argued more fully in @xref{sec:computors}.
+
+@subsection{Linear Algebra}
+The basic linear algebra operations on matrices and vectors are fully
+supported.  Some very brief examples follow, but for the most part the
+usage of the Vector and Matrix classes is obvious and intuitive.  
+@example
+vnl_matrix<double> P(n,4);      // Declare a nx4 matrix, uninitialized
+vnl_matrix<double> R(3,3, 0.0); // Declare a 3x3 matrix of zeros
+vnl_double_3 x(1.0,2.0,3.0);    // Declare a 3-vector using local storage
+vnl_double_3 rx = R * x;        // Multiply R by x and place the result in rx
+@end example
+
+This snippet also hints at another feature of the package.  The class 
+@code{vnl_double_3} is a vector whose size is known at compile time, and
+there is a corresponding 3x3 matrix: @code{vnl_double_3x3}.
+Code using these fixed-size arrays is many times more efficient than the
+corresponding generic code.  For example, the fragment
+@example
+vnl_double_3 f(const vnl_double_3x3& R, const vnl_double_3& x) @{
+ return R * x;
+@}
+@end example
+is expanded by many compilers into an open-coded sequence of 9 multiplies
+and 6 adds.  However, as the fixed-size objects are subclasses of the
+generic objects, all the same operations apply to them.  Only those which
+have been specifically coded to do so enjoy the increase in speed.
+
+The following fragment demonstrates use of the @code{vnl_svd<double>} class
+to find the approximation of a 3x3 matrix @code{F} by the nearest matrix of
+rank 2
+@example
+vnl_double_3x3 rank2_approximate(const vnl_double_3x3& F)
+@{
+  // Compute singular value decomposition of F
+  vnl_svd<double> svd (F);
+  // Set smallest singular value to 0
+  svd.W(2,2) = 0;
+  // Recompose vnl_svd<double> into UWV^T
+  return vnl_double_3x3(svd.recompose());
+@}
+@end example
+
+A more extensive example of the use of linear algebra is provided in
+Figure~@ref{fig:planefit} which contains a program to fit a hyperplane to
+points read from standard input.
+
+@need 20
+
+@example
+@#include <vnl/vnl_matops.h>
+@#include <vnl/algo/vnl_svd.h>
+@#include <vnl/algo/vnl_symmetric_eigensystem.h>
+
+main() @{
+  // Read points from stdin
+  vnl_matrix<double> pts;
+  cin >> pts;
+
+  // Build design matrix D
+  int npts = pts.rows();
+  int dim = pts.columns();
+  vnl_matrix<double> D(npts, dim+1);
+  for(int i = 0; i < npts; ++i) @{
+    for(int j = 0; j < dim; ++j) 
+      D(i,j) = pts(i,j);
+    D(i,dim) = 1;
+  @}
+
+  // 1. Compute using vnl_svd<double>
+  @{
+    vnl_svd<double> svd(D);
+    vnl_vector<double> a = svd.nullvector();
+    cout << "vnl_svd<double> residual = " << (D * a).magnitude() << endl;
+  @}
+
+  // 2. Compute using eigensystem of D'*D
+  @{
+    vnl_symmetric_eigensystem<double>  eig(D.transpose() * D);
+    vnl_vector<double> a = eig.get_eigenvector(0);
+    cout << "Eig residual = " << (D * a).magnitude() << endl;
+  @}
+@}
+@end example
+@quotation
+Example of linear algebra operations. Points are read from stdin
+into matrix @code{pts}, and a hyperplane fitted using two different methods.
+@anchor{fig:planefit}
+@end quotation
+
+@subsection{Optimization}
+The package currently provides only for nonlinear least squares, rather
+than general function minimization.  This means that the function to be
+minimized must be the norm of a multivariate function.  However, this often
+the case in vision problems, and allows us to use the powerful
+Levenberg-Marquardt algorithm.  As an example of function minimization we
+shall consider the ``notorious'' Rosenbrock function:
+@example
+f(x, y) = [ 10(y - x^2) ]
+          [    1-x      ]
+@end example
+The graph of @math{f^2} is plotted below.
+
+@image{rosenbrock,,1in}
+@quotation
+@anchor{fig:banana}
+The Rosenbrock ``banana'' function, used as an optimization test
+case.  Optimization starts on one side of the valley, and must find the
+minimum around the corner.
+@end quotation
+
+
+We first derive a function object from @code{vnl_least_squares_function}.
+The function object must initialize the base class with the number of
+variables, and the number of residuals or unknowns.  In this case, both
+domain and range are two dimensional.  The constructor must also supply a
+@code{no_gradient} flag if the function @code{gradf} has not been
+implemented.
+@example
+struct Rosenbrock : public vnl_least_squares_function @{
+  Rosenbrock(): vnl_least_squares_function(2, 2, no_gradient) @{@}
+@};
+@end example
+
+Then the abstract method @code{f} is implemented, which evaluates the
+function.  Any data required for the evaluation can be stored in the class
+and will be available whenever @code{f} is called.
+@example
+  double f(const vnl_vector<double>& x, vnl_vector<double>& fx) @{
+    fx[0] = 10 * (x[1] - vnl_math_sqr(x[0]));
+    fx[1] = 1 - x[0];
+  @}
+@end example
+In order to perform the minimization, a @code{vnl_levenberg_marquardt} compute
+object is constructed, passing the @code{vnl_least_squares_function}.
+@example
+Rosenbrock f;
+vnl_levenberg_marquardt lm(f);
+@end example
+Having provided an initial estimate of the solution in vector @code{x}, the
+minimization is performed:
+@example
+lm.minimize(x);
+@end example
+after which the vector @code{x} contains the minimizing parameters.
+
+@section{Design issues}
+This section documents some design decisions with which people might
+disagree.  Please let me know how you feel on these issues.  It's also a
+malleable to-do list.  The most important consideration has been to
+provide simple lightweight interfaces that nevertheless allow for maximum
+efficiency and flexibility.
+
+@subsection{Computation in constructors}
+@anchor{sec:computors}
+As noted above, a common model in this package is that the compute objects
+perform computation within the constructors.  While this is slightly
+distasteful from a traditional C++ viewpoint, it offers a number of
+advantages in both efficiency and ease of use.
+
+The philosophical argument, say in the case of vnl_svd<double>, is that vnl_svd<double> is a noun.
+The natural description is "The vnl_svd<double> of a matrix M" which is expressed in
+C++ as @code{vnl_svd<double> svd(M) }.
+
+Storage for the results of a computation is provided by the compute object
+which is convenient, allowing client code to access only those results in
+which it is interested.  Local storage is also more efficient, as objects
+are constructed at the correct size, and initialized immediately.  In
+contrast, passing empty objects to a function will generally involve a
+resize operation, while returning a structure will incur a speed penalty
+due to the necessary copy operations.
+
+Namespace clutter is avoided in the Matrix class.  While svd() is a
+perfectly reasonable method for a Matrix, there are many other
+decompositions that might be of interest, and adding them all would make
+for a very large Matrix class, even though many methods might not be of
+general interest.
+
+The model extends readily to @math{n}-ary operations such as generalized
+eigensystems, which combine two objects to produce others.  Such operations
+cannot be methods on just one matrix.
+
+@subsection{Fixed-size classes}
+The classes which provide for fast fixed-size matrices and vectors are
+essential in a system which wants to make claims for efficiency.  In
+addition, a great many uses of these objects @emph{do} know the size in
+advance.  In this case code using say @code{vnl_double_3} is more efficient (as
+well as more self-documenting) than the equivalent referring to a
+@code{vnl_vector} of unknown size.
+
+@subsection{Transposing for Fortran}
+In calling Fortran code, the first difficulty that becomes apparent is that
+Fortran arrays are stored column-wise, while traditional `C' arrays are
+stored rowwise -- a trend that is followed by the @code{vnl_matrix} class.
+One solution is simply to store C++ arrays columnwise, and this was an
+early plan for the IUE.
+
+I have not done anything to alleviate this for two reasons -- most routines
+we call are expensive enough (i.e. @math{O(n^3)}) that the @math{O(n^2)} copy
+operation is only a small performance hit.  Secondly, many decompositions
+satisfy a transpose-equivalence relationship.  For example suppose we wish
+to use a Fortran matrix multiply which has been hand-optimized for some
+particular machine.  Such a routine may be declared
+@example
+mmul(A, B, C) // Computes C = A B, fortran storage
+@end example
+To use this with row-stored arrays, we recall the simple identity 
+@example
+C = (C')' = (B' A')' = AB
+@end example
+and therefore call @code{mmul(B, A, C)}, reversing the order of parameters
+@math{A} and @math{B}.  The fortran code will lay down the result of
+@math{B' A'} into the columns of @math{C}, thereby computing @math{C' =
+B' A'} from the point of view of the caller.
+
+This however, doesn't apply to the vnl_svd<double>, as algorithms generally require only the
+``economy-size'' version where size(U) = size(M) in @math{U S V' = M}.  This
+is @math{O(mn^2)} flops rather than @math{O(m^2n)} for the fullsize one.  Using the
+transpose-equivalence would mean a doubling of the computation time, as the
+``economy-size'' decomposition is only implemented for @math{m > n}.  If someone
+does need the full size decomposition, a flag could be added or a new @code{vnl_svd}
+class written.
+
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+@macro inputclass{name}
+inputclass \name\ @par
+@end macro
+
+@section{Basics}
+@inputclass{math}
+@c @page
+
+@inputclass{matrix}
+@inputclass{vnl_matrix_ref}
+@c @page
+
+@inputclass{vector}
+@inputclass{vnl_vector_ref}
+@c @page
+
+@inputclass{numeric_limits}
+@inputclass{vnl_linear_operators_3}
+@c @page
+
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+@section{Specialized Matrices}
+@inputclass{vnl_diag_matrix}
+@c @page
+
+@inputclass{vnl_matrix_fixed_ref}
+@c @page
+@inputclass{vnl_matrix_fixed}
+@inputclass{vnl_double_3x3}
+@c @page
+@inputclass{vnl_vector_fixed}
+@inputclass{vnl_vector_ref}
+@inputclass{vnl_double_2}
+@inputclass{vnl_double_3}
+@inputclass{vnl_double_4}
+@c @page
+
+
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+@section{Matrix decompositions}
+@inputclass{vnl_svd<double>}
+@inputclass{vnl_svd}
+@c @page
+
+@inputclass{vnl_symmetric_eigensystem<double> }
+@inputclass{vnl_generalized_eigensystem}
+@c @page
+
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+@section{Function minimization}
+@inputclass{vnl_least_squares_function}
+@c @page
+
+@inputclass{vnl_levenberg_marquardt}
+@c @page
+
+
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+@section{Real polynomials}
+@inputclass{vnl_real_polynomial}
+@inputclass{vnl_rpoly_roots}
+@c @page
+
+
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+@section{Future work}
+Many of the existing methods are unimplemented, or could benefit from
+optimization.  Users can contribute code to address these deficiencies
+based on the existing examples, and using the conversion hints in
+Appendix~A.  In addition there are many algorithms that ought to be
+included, listed roughly in order of priority:
+@itemize
+
+@item
+Additional matrix decompositions in the same vein, including an updateable
+QR, a basic LU, etc.
+
+@item Choice of backend functions---for optimization one might prefer Powell,
+or even simulated annealing.  For matrix decompositions, particular users
+might prefer to interface to NAG or IMSL routines.  These choices must be
+allowed to be made easily, thereby encouraging the comparison of algorithms
+and of alternative implementations.
+
+@item Many classes are defined as double-only rather than templated.
+I will use default template arguments when the compilers support them.
+@end itemize
+
+@comment ------------------------------------------------------------------
+@node    vil,       vgl,     top,      top
+@comment node-name, next,    previous, up
+@chapter vil: Imaging
+@cindex vil
+@cindex Images
+
+The vil image library is an evolutionary rewrite of the TargetJr Image
+library.  As with its predecessor, its primary goal is to provide flexible
+and powerful access to all 2D images, including those too large to fit in
+the address space of a single program or process.  This goal must be
+achieved, however, without adversely affecting the speed or complexity of
+the much more common case of programs which can read all their images into
+main memory and process them in-core.  In fact, both cases need similar
+treatment: even in-core images are assumed to be sufficiently large (say a
+megabyte) that special care must be taken to avoid unnecessary copying of
+their data.  In both cases, the normal requirements of efficiency and
+ease-of-use apply.  The system must allow:
+@itemize
+@item Fast access to images on disk, at no more than a 10% speed penalty
+for operations on images in memory.
+
+@item Fast loading of subsets of the image data.  To look at a 
+small portion of a 10000 by 10000 pixel satellite image, one should
+not have to load the entire 300 megabytes into memory.
+
+@item Efficient memory management, both automatic and programmer-mediated.
+Automatic management is vital during program development, when the code
+is changing quickly.  On the other hand, release builds need the kind
+of optimizations that only a human can apply.
+@end itemize
+
+@section The image class: @code{vil_image}
+@cindex image layout
+@cindex planes
+@cindex components
+@cindex image, width and height
+
+The heart of the imaging library is the class @code{vil_image}, which
+contains a handle to an image, which may be in memory, or on disk.  Most
+image-handling code in @vxl{} operates on blocks of the image, so that
+large images can be processed efficiently.  As in TargetJr, the key
+operations on a @code{vil_image} are the block read and write operations:
+@begin example
+   i.get_section(buffer, rect_x0, rect_y0, rect_width, rect_height);
+   i.put_section(buffer, rect_x0, rect_y0, rect_width, rect_height);
+@end example
+The @code{get_section} method copies pixels from the image to the
+user-supplied memory in @code{buffer}, which must be pre-initialized to
+the appropriate size.
+
+@subsection Example: Printing a pixel from a greylevel image
+Without much more explanation, here is the vil code to print the value at
+pixel location (100,200).  It assumes blithely that the file "theimage.pgm"
+exists, is readable, and contains a grey image whose size is at least 100
+by 200 pixels:
+@smallexample
+main()
+@{
+   vil_image img = vil_load("theimage.pgm");
+   vil_byte value; // buffer into which value will be read
+   img.get_section(&value, 100, 200, 1, 1);
+   cerr << "val(100,200) = " << int(value) << endl;
+@}
+@end smallexample
+
+@subsection Image layout
+The vil image is a 2D array of pixels.  Pixels come in many guises and
+sizes: integers, floating point numbers, tuples of numbers such as RGB.
+It is important in VIL to know about layout, meaning the order in which the
+numbers are laid out in memory or on the disk.  The obvious order for an
+image which corresponds to a video signal is left-to-right, top-to-bottom.
+
+
+
+@comment ------------------------------------------------------------------
+@node    First Chapter, Second Chapter, top,      top
+@comment node-name, next,           previous, up
+@chapter vgl: Geometry
+@cindex vgl
+@cindex Geometry
+
+
+
+@appendix  Filenames and structure
+The directory structure of VXL is below
+@example
+  $VXLROOT/vxl/vcl
+              /vnl
+              /vbl
+              /vil
+              /config.$BUILD
+          /config
+@end example
+
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+@appendix Adding to vnl_algo
+The strategy adopted for converting and wrapping the fortran files is a
+little involved.  Some routines are simple to do, others very tricky.  The
+general procedure is as follows.  These steps are elaborated upon in the
+example below.
+@section{Overview}
+@enumerate
+@item Use GAMS to find the module name, in SLATEC if possible, although
+CMLIB and TOMS routines are also public domain and good.
+
+@item Convert the fortran to C using f2c
+
+@item Add the routine to the Imakefile in the netlib library.
+
+@item Encapsulate the routine in a class in Numerics, after determining a
+suitable interface.
+
+@item Read the module documentation and determine the calling sequence.
+
+@item In the calling method, create all necessary workspace arrays and
+temporary variables that the call requires, call the external routine, and
+convert the results into the classes that the IUE expects.
+
+@item After the call, interpret the error code, and handle accordingly.
+@end enumerate
+
+@section{Problems}
+There are a few potential sources of difficulty, mostly in item 5, but in
+general I find that gritting ones teeth and guessing is a surprisingly good
+strategy.  The main points to remember are:
+@itemize
+@item All scalar variables are passed by reference.  This means that you
+need to store all constants in variables and pass their addresses or
+declare the routines as accepting references.  I do the latter for input
+variables, and the former for outputs.
+
+@item Fortran arrays start from 1 rather than 0.  This is actually a
+non-problem, as f2c generates code which interfaces zero-based to one-based
+arrays using the Numerical Recipes trick of decrementing the pointer, but
+is mentioned here for the benefit of fortran programmers.
+
+@item Fortran arrays stored column-wise rather than rowwise.  Class 
+@code{vnl_fortran_copy} provides an easy and efficient way to transpose
+matrices before calling.
+@end itemize
+
+In addition to these fortran specifics, it is important to be aware of the
+sorts of design patterns seen in numerical code.  Many routines are coded
+for maximum generality and efficiency, which can make reading the
+descriptions heavy going.  Common conventions are:
+@itemize
+@item An array is passed with three dimensions: number of rows in the physical
+array, number of rows to use for computation and number of columns.  This
+allows the routines to be used on any submatrix of a larger matrix.
+
+@item Output results overwrite the input matrix.
+
+@item Output results are stored in some compact form, which must be decoded
+before use.  Note however that in many cases routines are supplied to
+perform further computations using the encoded representation for time and
+space efficiency.  The new QR class will demonstrate how to take advantage
+of this.
+
+@item The results of pivoting are generally returned in vectors of
+integers (say @code{ipvt}), where @code{ipvt[i]} is the position to which
+row/column @code{i} has been moved. These permutations which must be
+applied to the results in order to complete the process.
+@end itemize
+
+@section{Example conversion -- QR decomposition}
+Given the need for an algorithm that is not yet included in the Numerics
+package, say a routine to compute the QR decomposition, your first stop is
+the GAMS decision tree.  Class ``D'' is Linear Algebra, and class ``D5'' is
+QR decomposition.  The SLATEC implementation is called DQRDC (Double
+precision QR DeComposition).  Download the source, or obtain it from a
+local SLATEC distribution.  Convert it to a C source file and a prototype
+file using
+@example
+   f2c -P dqrdc.f
+@end example
+and from the prototype file @code{dqrdc.P} we find that the function
+prototype is
+@example
+   int dqrdc_(doublereal *x, integer *ldx, integer *n, integer *p, 
+              doublereal *qraux, integer *jpvt, doublereal *work,
+              integer *job);
+@end example
+
+At this point, the header of the fortran file @code{dqrdc.f} is examined in
+order to determine the meaning of the parameters.  Considering parameter
+@code{X}, we find
+@example
+   X     DOUBLE PRECISION(LDX,P), where LDX .GE. N.
+         X contains the matrix whose decomposition is to be computed.
+@end example
+This means that X is a LDX row by P column matrix, and that we require a
+decomposition of the first N rows.  This is a common convention in fortran
+programs which allows computation on subblocks of matrices.  In general, we
+will assume that we wish to work on the full matrix, and therefore that LDX
+= N.  To create the required transformed copy of the matrix, use class
+@code{vnl_fortran_copy}:
+@example
+   vnl_fortran_copy Xtranspose(X);
+@end example
+Now, the function may be called as
+@example
+   int n = X.rows();
+   int p = X.columns();
+   vnl_vector<int> jpvt(p); 
+   jpvt.fill(0); // Mark all columns as pivotable
+   vnl_vector<double> work(p);
+   int do_pivoting = 1;
+   vnl_vector<double> qraux(p);
+   dqrdc_(Xtranspose, &n, &n, &p, 
+          qraux.data_block(), jpvt.data_block(), w.data_block(),
+          &do_pivoting);
+@end example
+
+
+@comment ------------------------------------------------------------------
+@node    Concept Index,     , Variables Index, Top
+@c        node-name,    next, previous,        up
+@unnumbered Concept Index
+
+@printindex cp
+
+@bye
+
+@iffalse
+-----------------------------------------------------------------------------
+@begin{document}
+
+% toc
+@tableofcontents
+
+@pagenumber
+@chapter{Introduction}
+
+@chapter{vbl: Basics}
+
+@chapter{vnl: Numerics}
+
+@chapter{vil: Imaging}
+
+@chapter{vgl: Geometry}
+
+@chapter{Conclusion}
+
+@appendix
+@chapter{Installation}
+
+@end{document}
+@fi
