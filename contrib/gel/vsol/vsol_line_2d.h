@@ -101,11 +101,11 @@ class vsol_line_2d : public vsol_curve_2d
   virtual vsol_line_2d const*cast_to_line()const{return this;}
   virtual vsol_line_2d *cast_to_line() {return this;}
 
-  //---------------------------------------------------------------------------
+ private: // has been superceeded by is_a()
   //: Return the curve type
-  //---------------------------------------------------------------------------
   virtual vsol_curve_2d_type curve_type() const { return vsol_curve_2d::LINE; }
 
+ public:
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
@@ -231,10 +231,10 @@ class vsol_line_2d : public vsol_curve_2d
   void print_summary(vcl_ostream &os) const;
 
   //: Return a platform independent string identifying the class
-  vcl_string is_a() const { return vcl_string("vsol_line_2d"); }
+  virtual vcl_string is_a() const { return vcl_string("vsol_line_2d"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  bool is_class(vcl_string const& cls) const { return cls==is_a(); }
+  virtual bool is_class(vcl_string const& cls) const { return cls==is_a(); }
 
   //---------------------------------------------------------------------------
   //: output description to stream

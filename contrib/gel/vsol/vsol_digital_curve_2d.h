@@ -16,9 +16,6 @@
 // \endverbatim
 //*****************************************************************************
 
-//*****************************************************************************
-// External declarations for values
-//*****************************************************************************
 #include <vgl/vgl_fwd.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsol/vsol_curve_2d.h>
@@ -72,7 +69,7 @@ class vsol_digital_curve_2d : public vsol_curve_2d
   //: Clone `this': creation of a new object and initialization
   // See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d* clone(void) const;
+  virtual vsol_spatial_object_2d* clone() const;
 
   //***************************************************************************
   // Access
@@ -146,16 +143,16 @@ class vsol_digital_curve_2d : public vsol_curve_2d
   //***************************************************************************
 
   //---------------------------------------------------------------------------
-  //: Return the curve type
-  //---------------------------------------------------------------------------
-  virtual vsol_curve_2d_type curve_type() const { return vsol_curve_2d::DIGITAL_CURVE; }
-
-  //---------------------------------------------------------------------------
   //: Return `this' if `this' is an digital_curve, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vsol_digital_curve_2d const*cast_to_digital_curve(void)const{return this;}
-  virtual vsol_digital_curve_2d *cast_to_digital_curve(void) {return this;}
+  virtual vsol_digital_curve_2d const*cast_to_digital_curve()const{return this;}
+  virtual vsol_digital_curve_2d *cast_to_digital_curve() {return this;}
 
+ private: // has been superceeded by is_a()
+  //: Return the curve type
+  virtual vsol_curve_2d_type curve_type() const { return vsol_curve_2d::DIGITAL_CURVE; }
+
+ public:
   //---------------------------------------------------------------------------
   //: Return the length of `this'
   //---------------------------------------------------------------------------
@@ -164,12 +161,12 @@ class vsol_digital_curve_2d : public vsol_curve_2d
   //---------------------------------------------------------------------------
   //: Compute the bounding box of `this'
   //---------------------------------------------------------------------------
-  virtual void compute_bounding_box(void) const;
+  virtual void compute_bounding_box() const;
 
   //---------------------------------------------------------------------------
   //: Return the number of vertices
   //---------------------------------------------------------------------------
-  unsigned int size(void) const { return samples_.size(); }
+  unsigned int size() const { return samples_.size(); }
 
   //---------------------------------------------------------------------------
   //: Is `i' a valid index for the list of vertices ?
@@ -200,10 +197,10 @@ class vsol_digital_curve_2d : public vsol_curve_2d
   void print_summary(vcl_ostream &os) const;
 
   //: Return a platform independent string identifying the class
-  vcl_string is_a() const { return vcl_string("vsol_digital_curve_2d"); }
+  virtual vcl_string is_a() const { return vcl_string("vsol_digital_curve_2d"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  bool is_class(const vcl_string& cls) const { return cls==is_a(); }
+  virtual bool is_class(vcl_string const& cls) const { return cls==is_a(); }
 };
 
 //: Binary save vsol_digital_curve_2d* to stream.

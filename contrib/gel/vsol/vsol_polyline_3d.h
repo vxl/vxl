@@ -141,16 +141,16 @@ class vsol_polyline_3d : public vsol_curve_3d
   //***************************************************************************
 
   //---------------------------------------------------------------------------
-  //: Return the curve type
-  //---------------------------------------------------------------------------
-  virtual vsol_curve_3d_type curve_type() const { return vsol_curve_3d::POLYLINE; }
-
-  //---------------------------------------------------------------------------
   //: Return `this' if `this' is an polyline, 0 otherwise
   //---------------------------------------------------------------------------
   virtual vsol_polyline_3d const*cast_to_polyline()const{return this;}
   virtual vsol_polyline_3d *cast_to_polyline() {return this;}
 
+ private: // has been superceeded by is_a()
+  //: Return the curve type
+  virtual vsol_curve_3d_type curve_type() const { return vsol_curve_3d::POLYLINE; }
+
+ public:
   //---------------------------------------------------------------------------
   //: Return the length of `this'
   //---------------------------------------------------------------------------
@@ -195,10 +195,10 @@ class vsol_polyline_3d : public vsol_curve_3d
   void print_summary(vcl_ostream &os) const;
 
   //: Return a platform independent string identifying the class
-  vcl_string is_a() const { return vcl_string("vsol_polyline_3d"); }
+  virtual vcl_string is_a() const { return vcl_string("vsol_polyline_3d"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  bool is_class(vcl_string const& cls) const { return cls==is_a(); }
+  virtual bool is_class(vcl_string const& cls) const { return cls==is_a(); }
 };
 
 //: Binary save vsol_polyline_3d* to stream.

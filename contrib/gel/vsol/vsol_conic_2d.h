@@ -82,11 +82,11 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
     coincident_lines
   };
 
-  //---------------------------------------------------------------------------
+ private: // has been superceeded by is_a()
   //: Return the curve type
-  //---------------------------------------------------------------------------
   virtual vsol_curve_2d_type curve_type() const { return vsol_curve_2d::CONIC; }
 
+ public:
   //***************************************************************************
   // Initialization
   //***************************************************************************
@@ -379,14 +379,14 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   //: Return IO version number;
   short version() const;
 
-  //: Return a platform independent string identifying the class
-  virtual vcl_string is_a() const { return "vsol_conic_2d"; }
-
   //: Print an ascii summary to the stream
   void print_summary(vcl_ostream &os) const;
 
+  //: Return a platform independent string identifying the class
+  virtual vcl_string is_a() const { return "vsol_conic_2d"; }
+
   //: Return true if the argument matches the string identifying the class or any parent class
-  bool is_class(vcl_string const& cls) const { return cls==is_a(); }
+  virtual bool is_class(vcl_string const& cls) const { return cls==is_a(); }
 };
 
 //: Binary save vsol_conic_2d* to stream.
