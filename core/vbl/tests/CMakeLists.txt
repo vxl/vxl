@@ -1,4 +1,4 @@
-# vxl/vbl/tests/CMakeLists.txt
+# This is core/vbl/tests/CMakeLists.txt
 
 LINK_LIBRARIES( vbl testlib )
 
@@ -20,3 +20,6 @@ ADD_TEST( vbl_test_array           vbl_test_all vbl_test_array )
 ADD_TEST( vbl_test_sparse_array_2d vbl_test_all vbl_test_sparse_array_2d )
 ADD_TEST( vbl_test_sparse_array_3d vbl_test_all vbl_test_sparse_array_3d )
 ADD_TEST( vbl_test_smart_ptr       vbl_test_all vbl_test_smart_ptr )
+
+ADD_EXECUTABLE( vbl_test_include test_include.cxx )
+TARGET_LINK_LIBRARIES( vbl_test_include vbl )

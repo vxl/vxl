@@ -36,3 +36,6 @@ ADD_EXECUTABLE(bxml_test_map
                bxml_test_map.cxx)
 ADD_TEST(bxml_test_map
          bxml_test_map ${BRL_INCLUDE_DIR}/bbas/bxml/tests/)
+
+ADD_EXECUTABLE( bxml_test_include test_include.cxx )
+TARGET_LINK_LIBRARIES( bxml_test_include bxml )

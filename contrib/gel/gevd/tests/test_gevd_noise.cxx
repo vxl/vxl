@@ -26,4 +26,4 @@ test_gevd_noise()
                      texture_noise <= 2 && texture_noise >= 0, true);
 }
 
-TESTLIB_DEFINE_MAIN(test_gevd_noise);
+TESTMAIN(test_gevd_noise);

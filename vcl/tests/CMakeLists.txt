@@ -5,7 +5,7 @@
 # Try to follow one of the other tests, like test_algorithm.cxx,
 # and add the test into test_driver.cxx.
 
-ADD_EXECUTABLE( vcl_test_driver
+ADD_EXECUTABLE( vcl_test_all
  # Driver
      test_driver.cxx
  # The actual tests
@@ -17,7 +17,6 @@ ADD_EXECUTABLE( vcl_test_driver
      test_deque.cxx
      test_exception.cxx
      test_fstream.cxx
-     test_headers.cxx
      test_iostream.cxx
      test_iterator.cxx
      test_list.cxx
@@ -30,28 +29,28 @@ ADD_EXECUTABLE( vcl_test_driver
      test_vector.cxx
      test_cstdio.cxx
 )
-TARGET_LINK_LIBRARIES( vcl_test_driver vcl )
+TARGET_LINK_LIBRARIES( vcl_test_all vcl )
 
-ADD_TEST( vcl_test_algorithm   vcl_test_driver test_algorithm )
-ADD_TEST( vcl_test_cctype      vcl_test_driver test_cctype )
-ADD_TEST( vcl_test_cmath       vcl_test_driver test_cmath )
-ADD_TEST( vcl_test_compiler    vcl_test_driver test_compiler )
-ADD_TEST( vcl_test_complex     vcl_test_driver test_complex )
-ADD_TEST( vcl_test_deque       vcl_test_driver test_deque )
-ADD_TEST( vcl_test_exception   vcl_test_driver test_exception )
-ADD_TEST( vcl_test_fstream     vcl_test_driver test_fstream )
-ADD_TEST( vcl_test_iostream    vcl_test_driver test_iostream )
-ADD_TEST( vcl_test_iterator    vcl_test_driver test_iterator )
-ADD_TEST( vcl_test_list        vcl_test_driver test_list )
-ADD_TEST( vcl_test_map         vcl_test_driver test_map )
-ADD_TEST( vcl_test_multimap    vcl_test_driver test_multimap )
-ADD_TEST( vcl_test_new         vcl_test_driver test_new )
-ADD_TEST( vcl_test_set         vcl_test_driver test_set )
-ADD_TEST( vcl_test_string      vcl_test_driver test_string )
-ADD_TEST( vcl_test_vector      vcl_test_driver test_vector )
-ADD_TEST( vcl_test_cstdio      vcl_test_driver test_cstdio ${vxl_SOURCE_DIR}/vcl/tests/test_cstdio.txt )
+ADD_TEST( vcl_test_algorithm   vcl_test_all test_algorithm )
+ADD_TEST( vcl_test_cctype      vcl_test_all test_cctype )
+ADD_TEST( vcl_test_cmath       vcl_test_all test_cmath )
+ADD_TEST( vcl_test_compiler    vcl_test_all test_compiler )
+ADD_TEST( vcl_test_complex     vcl_test_all test_complex )
+ADD_TEST( vcl_test_deque       vcl_test_all test_deque )
+ADD_TEST( vcl_test_exception   vcl_test_all test_exception )
+ADD_TEST( vcl_test_fstream     vcl_test_all test_fstream )
+ADD_TEST( vcl_test_iostream    vcl_test_all test_iostream )
+ADD_TEST( vcl_test_iterator    vcl_test_all test_iterator )
+ADD_TEST( vcl_test_list        vcl_test_all test_list )
+ADD_TEST( vcl_test_map         vcl_test_all test_map )
+ADD_TEST( vcl_test_multimap    vcl_test_all test_multimap )
+ADD_TEST( vcl_test_new         vcl_test_all test_new )
+ADD_TEST( vcl_test_set         vcl_test_all test_set )
+ADD_TEST( vcl_test_string      vcl_test_all test_string )
+ADD_TEST( vcl_test_vector      vcl_test_all test_vector )
+ADD_TEST( vcl_test_cstdio      vcl_test_all test_cstdio ${vxl_SOURCE_DIR}/vcl/tests/test_cstdio.txt )
 # Only a compiler test:
-#ADD_TEST( vcl_test_headers     vcl_test_driver test_headers )
-#ADD_TEST( vcl_test_stlfwd      vcl_test_driver test_stlfwd )
-# Deprecated:
-#ADD_TEST( vcl_test_rel_ops     vcl_test_driver test_rel_ops )
+#ADD_TEST( vcl_test_stlfwd      vcl_test_all test_stlfwd )
+
+ADD_EXECUTABLE( vcl_test_include test_include.cxx )
+TARGET_LINK_LIBRARIES( vcl_test_include vcl )

@@ -1,4 +1,4 @@
-# ./oxl/vgui/test/CMakeLists.txt
+# This is core/vgui/test/CMakeLists.txt
 
 INCLUDE( ${VXLCORE_INCLUDE_DIR}/vgui/UseVGUI.cmake )
 
@@ -23,5 +23,8 @@ IF(X11_FOUND)
  ADD_EXECUTABLE( vgui_test_acceleration test_acceleration.cxx )
 #ADD_TEST( vgui_test_acceleration vgui_test_acceleration )
 ENDIF(X11_FOUND)
+
+ADD_EXECUTABLE( vgui_test_include test_include.cxx )
+TARGET_LINK_LIBRARIES( vgui_test_include vgui )
 
 ENDIF( HAS_VGUI )

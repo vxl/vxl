@@ -18,9 +18,6 @@
 #include <rrel/rrel_tukey_obj.h>
 #include <rrel/rrel_util.h>
 #include <rrel/rrel_wls_obj.h>
+#include <rrel/rrel_kernel_density_obj.h>
 
-int
-test_include_main( int, char*[] )
-{
-  return 0;
-}
+int main() { return 0; }

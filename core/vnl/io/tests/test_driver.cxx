@@ -1,6 +1,5 @@
 #include <testlib/testlib_register.h>
 
-DECLARE( test_include );
 DECLARE( test_bignum_io );
 DECLARE( test_diag_matrix_io );
 DECLARE( test_matrix_fixed_io );
@@ -18,7 +17,6 @@ DECLARE( golden_test_vnl_io );
 void
 register_tests()
 {
-  REGISTER( test_include );
   REGISTER( test_bignum_io );
   REGISTER( test_diag_matrix_io );
   REGISTER( test_matrix_fixed_io );

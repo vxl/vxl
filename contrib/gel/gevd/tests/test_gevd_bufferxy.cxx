@@ -77,4 +77,4 @@ test_gevd_bufferxy()
   delete gbxy3;
 }
 
-TESTLIB_DEFINE_MAIN(test_gevd_bufferxy);
+TESTMAIN(test_gevd_bufferxy);

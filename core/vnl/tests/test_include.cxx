@@ -1,6 +1,8 @@
 #include <vnl/vnl_fwd.h>
 #include <vnl/algo/vnl_algo_fwd.h>
 #include <vnl/vnl_config.h>
+#include <vnl/dll.h>
+#include <vnl/algo/dll.h>
 
 #include <vnl/vnl_T_n.h>
 #include <vnl/vnl_alloc.h>
@@ -63,7 +65,6 @@
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_matrix_exp.h>
 #include <vnl/vnl_matrix_fixed.h>
-#include <vnl/vnl_matrix_fixed_ref.h>
 #include <vnl/vnl_matrix_ref.h>
 #include <vnl/vnl_nonlinear_minimizer.h>
 #include <vnl/vnl_numeric_limits.h>
@@ -87,7 +88,6 @@
 #include <vnl/vnl_unary_function.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vnl/vnl_vector_fixed_ref.h>
 #include <vnl/vnl_vector_ref.h>
 
 #include <vnl/algo/vnl_adjugate.h>
@@ -123,4 +123,7 @@
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 
-int test_include_main(int, char*[]) { return 0; }
+#include <vnl/algo/vnl_fft_base.h>
+#include <vnl/algo/vnl_fft_prime_factors.h>
+
+int main() { return 0; }

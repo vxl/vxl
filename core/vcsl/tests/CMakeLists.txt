@@ -1,10 +1,9 @@
-# vxl/vcsl/tests/CMakeLists.txt
+# This is core/vcsl/tests/CMakeLists.txt
 
 LINK_LIBRARIES( vcsl vnl testlib )
 
-ADD_EXECUTABLE(vcsl_test_all
+ADD_EXECUTABLE( vcsl_test_all
   test_driver.cxx
-  vcsl_test_all.cxx
   test_meter.cxx
   test_radian.cxx
   test_degree.cxx
@@ -34,3 +33,6 @@ ADD_TEST(vcsl_test_scale                vcsl_test_all test_scale)
 ADD_TEST(vcsl_test_translation          vcsl_test_all test_translation)
 ADD_TEST(vcsl_test_rotation             vcsl_test_all test_rotation)
 ADD_TEST(vcsl_test_displacement         vcsl_test_all test_displacement)
+
+ADD_EXECUTABLE( vcsl_test_include test_include.cxx )
+TARGET_LINK_LIBRARIES( vcsl_test_include vcsl )

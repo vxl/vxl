@@ -66,4 +66,4 @@ test_gevd_memory_mixin()
   delete ib2;
 }
 
-TESTLIB_DEFINE_MAIN(test_gevd_memory_mixin);
+TESTMAIN(test_gevd_memory_mixin);

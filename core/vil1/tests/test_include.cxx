@@ -59,4 +59,15 @@
 #include <vil/vil_stream_url.h>
 #include <vil/vil_warp.h>
 
-int test_include_main(int, char*[]) { return 0; }
+#include <vil/vil_block_cache_image_impl.h>
+#include <vil/vil_clamp_image_impl.h>
+#include <vil/vil_crop_image_impl.h>
+#include <vil/vil_flip_components_impl.h>
+#include <vil/vil_flipud_impl.h>
+#include <vil/vil_image_impl.h>
+#include <vil/vil_memory_image_impl.h>
+#include <vil/vil_resample_image_impl.h>
+#include <vil/vil_scale_intensities_image_impl.h>
+#include <vil/vil_skip_image_impl.h>
+
+int main() { return 0; }

@@ -1,4 +1,3 @@
-#include <testlib/testlib_test.h>
 #include <vgl/vgl_fwd.h>
 
 #include <vgl/vgl_1d_basis.h>
@@ -38,7 +37,4 @@
 #include <vgl/algo/vgl_homg_operators_3d.h>
 #include <vgl/algo/vgl_rtree.h>
 
-MAIN( test_includes )
-{
-  return 0;
-}
+int main() { return 0; }

@@ -15,3 +15,5 @@
 #include <vsl/vsl_stack_io.h>
 #include <vsl/vsl_string_io.h>
 #include <vsl/vsl_vector_io.h>
+
+int main() { return 0; }

@@ -48,4 +48,4 @@ test_gevd_float_operators()
   }
 }
 
-TESTLIB_DEFINE_MAIN(test_gevd_float_operators);
+TESTMAIN(test_gevd_float_operators);

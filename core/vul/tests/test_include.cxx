@@ -21,8 +21,5 @@
 #include <vul/vul_url.h>
 #include <vul/vul_user_info.h>
 #include <vul/vul_whereami.h>
-#include <testlib/testlib_root_dir.h>
 
-
-int test_include_main(int, char*[]) { return 0; }
-
+int main() { return 0; }

@@ -24,4 +24,4 @@ test_gevd_param_mixin()
   delete pgm;
 }
 
-TESTLIB_DEFINE_MAIN(test_gevd_param_mixin);
+TESTMAIN(test_gevd_param_mixin);

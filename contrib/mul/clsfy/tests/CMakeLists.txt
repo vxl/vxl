@@ -21,3 +21,6 @@ ADD_TEST (clsfy_test_adaboost              clsfy_test_adaboost)
 ADD_TEST (clsfy_test_direct_boost          clsfy_test_direct_boost)
 ADD_TEST (clsfy_test_binary_threshold_1d   clsfy_test_binary_threshold_1d)
 ADD_TEST (clsfy_test_mean_square_1d        clsfy_test_mean_square_1d)
+
+ADD_EXECUTABLE( clsfy_test_include test_include.cxx )
+TARGET_LINK_LIBRARIES( clsfy_test_include clsfy )

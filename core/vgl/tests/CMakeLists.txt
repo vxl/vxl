@@ -1,9 +1,8 @@
-# ./vxl/vgl/tests/CMakeLists.txt
+# This is core/vgl/tests/CMakeLists.txt
 
-ADD_EXECUTABLE( vgl_test_driver
+ADD_EXECUTABLE( vgl_test_all
   test_driver.cxx    test_driver.h
 
-  test_includes.cxx
   test_cartesian.cxx
   test_distance.cxx
   test_conic.cxx
@@ -15,16 +14,18 @@ ADD_EXECUTABLE( vgl_test_driver
   test_area.cxx
   test_clip.cxx
 )
-TARGET_LINK_LIBRARIES( vgl_test_driver vgl_algo vgl testlib )
+TARGET_LINK_LIBRARIES( vgl_test_all vgl_algo vgl testlib )
 
-ADD_TEST( vgl_test_includes                     vgl_test_driver test_includes )
-ADD_TEST( vgl_test_cartesian                    vgl_test_driver test_cartesian )
-ADD_TEST( vgl_test_distance                     vgl_test_driver test_distance )
-ADD_TEST( vgl_test_conic                        vgl_test_driver test_conic )
-ADD_TEST( vgl_test_homg                         vgl_test_driver test_homg )
-ADD_TEST( vgl_test_polygon                      vgl_test_driver test_polygon )
-ADD_TEST( vgl_test_polygon_scan_iterator        vgl_test_driver test_polygon_scan_iterator )
-ADD_TEST( vgl_test_triangle_scan_iterator       vgl_test_driver test_triangle_scan_iterator )
-ADD_TEST( vgl_test_ellipse_scan_iterator        vgl_test_driver test_ellipse_scan_iterator )
-ADD_TEST( vgl_test_area                         vgl_test_driver test_area )
-ADD_TEST( vgl_test_clip                         vgl_test_driver test_clip )
+ADD_TEST( vgl_test_cartesian                    vgl_test_all test_cartesian )
+ADD_TEST( vgl_test_distance                     vgl_test_all test_distance )
+ADD_TEST( vgl_test_conic                        vgl_test_all test_conic )
+ADD_TEST( vgl_test_homg                         vgl_test_all test_homg )
+ADD_TEST( vgl_test_polygon                      vgl_test_all test_polygon )
+ADD_TEST( vgl_test_polygon_scan_iterator        vgl_test_all test_polygon_scan_iterator )
+ADD_TEST( vgl_test_triangle_scan_iterator       vgl_test_all test_triangle_scan_iterator )
+ADD_TEST( vgl_test_ellipse_scan_iterator        vgl_test_all test_ellipse_scan_iterator )
+ADD_TEST( vgl_test_area                         vgl_test_all test_area )
+ADD_TEST( vgl_test_clip                         vgl_test_all test_clip )
+
+ADD_EXECUTABLE( vgl_test_include test_include.cxx )
+TARGET_LINK_LIBRARIES( vgl_test_include vgl_algo vgl )

@@ -2,7 +2,7 @@
 
 LINK_LIBRARIES( vsol vgl testlib )
 
-ADD_EXECUTABLE(vsol_test_all
+ADD_EXECUTABLE( vsol_test_all
   test_driver.cxx
   test_vsol_point_2d.cxx
   test_vsol_group_2d.cxx
@@ -34,3 +34,6 @@ ADD_TEST(test_vsol_triangle_3d  vsol_test_all test_vsol_triangle_3d)
 ADD_TEST(test_vsol_rectangle_3d vsol_test_all test_vsol_rectangle_3d)
 ADD_TEST(test_vsol_polygon_3d   vsol_test_all test_vsol_polygon_3d)
 ADD_TEST(test_vsol_tetrahedron  vsol_test_all test_vsol_tetrahedron)
+
+ADD_EXECUTABLE( vsol_test_include test_include.cxx )
+TARGET_LINK_LIBRARIES( vsol_test_include vsol )

@@ -7,7 +7,4 @@
 #include <vil/io/vil_io_rgb.h>
 #include <vil/io/vil_io_rgba.h>
 
-int test_include_main( int, char*[] )
-{
-  return 0;
-}
+int main() { return 0; }

@@ -1,0 +1,4 @@
+#include <bbas/bdgl/bdgl_curve_algs.h>
+#include <bbas/bdgl/dll.h>
+
+int main() { return 0; }

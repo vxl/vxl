@@ -68,3 +68,5 @@
 #include <vcsl/vcsl_unit_sptr.h>
 #include <vcsl/vcsl_utm.h>
 #include <vcsl/vcsl_utm_sptr.h>
+
+int main() { return 0; }

@@ -8,3 +8,6 @@ ADD_TEST(       test_mil test_mil     )
 IF(CMAKE_COMPILER_IS_GNUCXX)
   SET_SOURCE_FILES_PROPERTIES(test_mil.cxx COMPILE_FLAGS -O0)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+
+ADD_EXECUTABLE( mil_test_include test_include.cxx )
+TARGET_LINK_LIBRARIES( mil_test_include mil_algo mil )

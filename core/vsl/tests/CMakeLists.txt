@@ -1,10 +1,9 @@
-# vxl/vsl/tests/CMakeLists.txt
+# This is core/vsl/tests/CMakeLists.txt
 
 LINK_LIBRARIES( vsl testlib vpl )
 
-ADD_EXECUTABLE(vsl_test_all
+ADD_EXECUTABLE( vsl_test_all
   test_driver.cxx
-  vsl_test_all.cxx
   test_indent.cxx
   test_binary_io.cxx
   test_arbitrary_length_int_conversion.cxx
@@ -39,3 +38,6 @@ ADD_TEST(vsl_test_set_io                vsl_test_all test_set_io)
 ADD_TEST(vsl_test_stack_io              vsl_test_all test_stack_io)
 ADD_TEST(vsl_test_string_io             vsl_test_all test_string_io)
 ADD_TEST(vsl_test_vector_io             vsl_test_all test_vector_io)
+
+ADD_EXECUTABLE( vsl_test_include test_include.cxx )
+TARGET_LINK_LIBRARIES( vsl_test_include vsl )

@@ -61,7 +61,6 @@ SET( vcl_sources
   vcl_numeric.h
   vcl_ostream.h
   vcl_queue.txx vcl_queue.h
-  vcl_rel_ops.h
   vcl_set.txx vcl_set.h
   vcl_sstream.h
   vcl_stack.txx vcl_stack.h
@@ -69,7 +68,6 @@ SET( vcl_sources
   vcl_stlfwd.h
   vcl_streambuf.h
   vcl_string.txx vcl_string.h
-  vcl_strstream.h
   vcl_typeinfo.h
   vcl_utility.txx vcl_utility.h
   vcl_valarray.h
@@ -123,7 +121,6 @@ SET( vcl_sources
   generic/vcl_stdexcept.h
   generic/vcl_streambuf.h
   generic/vcl_string.h
-  generic/vcl_strstream.h
   generic/vcl_typeinfo.h
   generic/vcl_utility.h
   generic/vcl_valarray.h
@@ -177,7 +174,6 @@ SET( vcl_sources
   iso/vcl_sstream.h
   iso/vcl_stdexcept.h
   iso/vcl_streambuf.h
-  iso/vcl_strstream.h
   iso/vcl_typeinfo.h
   iso/vcl_valarray.h
 

@@ -1,5 +1,3 @@
-#include <testlib/testlib_test.h>
-
 #include <vgl/io/vgl_io_box_2d.h>
 #include <vgl/io/vgl_io_box_3d.h>
 #include <vgl/io/vgl_io_conic.h>
@@ -16,8 +14,7 @@
 #include <vgl/io/vgl_io_polygon.h>
 #include <vgl/io/vgl_io_vector_2d.h>
 #include <vgl/io/vgl_io_vector_3d.h>
+#include <vgl/io/vgl_io_homg_point_1d.h>
+#include <vgl/io/vgl_io_line_3d_2_points.h>
 
-MAIN( test_includes )
-{
-  return 0;
-}
+int main() { return 0; }

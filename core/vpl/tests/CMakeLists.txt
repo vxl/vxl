@@ -1,12 +1,13 @@
-# ./vxl/vpl/tests/CMakeLists.txt
+# This is core/vpl/tests/CMakeLists.txt
 
-ADD_EXECUTABLE( vpl_test_driver
+ADD_EXECUTABLE( vpl_test_all
   test_driver.cxx
 
-  test_include.cxx
   test_unistd.cxx
 )
-TARGET_LINK_LIBRARIES( vpl_test_driver vpl testlib vcl )
+TARGET_LINK_LIBRARIES( vpl_test_all vpl testlib vcl )
 
-ADD_TEST( vpl_test_include  vpl_test_driver test_include )
-ADD_TEST( vpl_test_unistd   vpl_test_driver test_unistd )
+ADD_TEST( vpl_test_unistd   vpl_test_all test_unistd )
+
+ADD_EXECUTABLE( vpl_test_include test_include.cxx )
+TARGET_LINK_LIBRARIES( vpl_test_include vpl )

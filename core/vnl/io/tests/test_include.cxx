@@ -7,5 +7,8 @@
 #include <vnl/io/vnl_io_sparse_matrix.h>
 #include <vnl/io/vnl_io_sym_matrix.h>
 #include <vnl/io/vnl_io_vector.h>
+#include <vnl/io/vnl_io_bignum.h>
+#include <vnl/io/vnl_io_matrix_fixed.h>
+#include <vnl/io/vnl_io_vector_fixed.h>
 
-int test_include_main(int, char*[]) { return 0; }
+int main() { return 0; }

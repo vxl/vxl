@@ -2,7 +2,7 @@
 
 LINK_LIBRARIES( vtol vsol vnl testlib )
 
-ADD_EXECUTABLE(vtol_test_all
+ADD_EXECUTABLE( vtol_test_all
   test_driver.cxx
   test_vertex_2d.cxx
   test_zero_chain.cxx
@@ -29,3 +29,6 @@ ADD_TEST(vtol_test_block           vtol_test_all test_block)
 ADD_TEST(vtol_test_cycle_processor vtol_test_all test_cycle_processor)
 ADD_TEST(vtol_test_refcounting     vtol_test_all vtol_test_refcounting)
 ADD_TEST(vtol_test_timing          vtol_test_all vtol_test_timing)
+
+ADD_EXECUTABLE( vtol_test_include test_include.cxx )
+TARGET_LINK_LIBRARIES( vtol_test_include vtol )
