@@ -206,9 +206,6 @@ template bool vil2_deep_equality(const vil2_image_view<T > &lhs, const vil2_imag
 template vil2_image_view<T > vil2_window(const vil2_image_view<T > &im, \
   unsigned i0, unsigned ni, unsigned j0, unsigned nj); \
 template vil2_image_view<T > vil2_plane(const vil2_image_view<T > &im, unsigned p); \
-template vil2_image_view<T > vil2_transpose(const vil2_image_view<T >& v); \
-template vil2_image_view<T > vil2_flip_lr(const vil2_image_view<T >& view); \
-template vil2_image_view<T > vil2_flip_ud(const vil2_image_view<T >& view); \
 template void vil2_print_all(vcl_ostream& os,const vil2_image_view<T >& view); \
 template void vil2_fill(vil2_image_view<T >& view, T value); \
 template void vil2_fill_line(T * data, unsigned n, int step, T value); \
