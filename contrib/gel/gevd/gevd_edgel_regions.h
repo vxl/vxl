@@ -46,13 +46,11 @@
 #include <vcl_list.h>
 #include <vcl_map.h>
 
-#include <vtol/vtol_vertex.h>
+#include <vtol/vtol_vertex_sptr.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <vsol/vsol_spatial_object_2d.h>
 #include <gevd/gevd_region_edge.h>
 #include <gevd/gevd_bufferxy.h>
-#include <gevd/gevd_detector.h>
-#include <vdgl/vdgl_intensity_face.h>
 #include <vdgl/vdgl_intensity_face_sptr.h>
 #include <vil/vil_image.h>
 
@@ -81,9 +79,10 @@ public:
   unsigned int BaseLabel(unsigned int label);
   unsigned int GetMaxRegionLabel(){return _max_region_label;}
   void SetMaxRegionLabel(unsigned int label){_max_region_label = label;}
+  void set_magnification(int m) { magnification_ = m; }
   unsigned int** GetRegionArray(){return _region_label_array;}
-  int GetXSize(){return (_xend - _xo + 1);}
-  int GetYSize(){return (_yend - _yo + 1);}
+  int GetXSize(){return _xend - _xo + 1;}
+  int GetYSize(){return _yend - _yo + 1;}
   vil_image* GetEdgeImage(vcl_vector<vtol_edge_2d_sptr>& edgels);
 #if 0
   topo_debug_data_ref get_topo_debug_data(){return _debug_data;};
