@@ -1,4 +1,4 @@
-// This example displays an image with a menu bar.
+// This example creates a line or a circle with a rubberbanding event loop
 
 #include <vcl_iostream.h>
 #include <vgui/vgui.h> 

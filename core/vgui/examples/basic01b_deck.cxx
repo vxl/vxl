@@ -1,5 +1,6 @@
-// This example displays an image in a window.  The image is loaded from
-// the filename given as the first command line parameter.
+// This example displays two images in a deck.  
+// Images are loaded from the two filenames 
+// on the command line.
 
 #include <vcl_iostream.h>
 #include <vnl/vnl_math.h>

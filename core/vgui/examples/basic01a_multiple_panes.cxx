@@ -1,6 +1,6 @@
-// This example displays an image in a window.  The image is loaded from
-// the filename given as the first command line parameter.
-
+// This example displays two images in a grid tableau. 
+// The images are loaded from the filenames given on
+// the command line
 #include <vcl_iostream.h>
 #include <vgui/vgui.h> 
 #include <vgui/vgui_image_tableau.h> 
