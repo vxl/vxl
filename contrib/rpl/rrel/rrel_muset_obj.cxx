@@ -116,7 +116,7 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
            table_->standard_dev_kth(k, num_residuals) < min_exp_kth_to_stddev_ratio )
         {
           if ( notwarned ) {
-            vcl_cerr << "WARNING:  rrel_muset_obj::internal_fcn attempted evaluation at\n"
+            vcl_cerr << "WARNING:  rrel_muset_obj::internal_fcn attempted evaluation at "
                      << "value of k that lead to unstable estimates\n";
             notwarned = false;
           }
@@ -192,7 +192,7 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
            table_->standard_dev_kth(k, num_residuals) < min_exp_kth_to_stddev_ratio )
         {
           if ( notwarned ) {
-            vcl_cerr << "WARNING:  rrel_muset_obj::internal_fcn attempted evaluation at\n"
+            vcl_cerr << "WARNING:  rrel_muset_obj::internal_fcn attempted evaluation at "
                      << "value of k that lead to unstable estimates\n";
             notwarned = false;
           }
@@ -265,7 +265,7 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
            table_->standard_dev_kth(k, num_residuals) < min_exp_kth_to_stddev_ratio )
         {
           if ( notwarned ) {
-            vcl_cerr << "WARNING:  rrel_muset_obj::internal_fcn attempted evaluation at\n"
+            vcl_cerr << "WARNING:  rrel_muset_obj::internal_fcn attempted evaluation at "
                      << "value of k that lead to unstable estimates\n";
             notwarned = false;
           }
