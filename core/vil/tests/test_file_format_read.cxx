@@ -269,6 +269,11 @@ test_file_format_read_main( int argc, char* argv[] )
   testlib_test_begin( "  8-bit RGB (xv created)" );
   testlib_test_perform( test( "ff_planar8bit_true.txt", CheckColourPlanes<vxl_byte>( "ff_rgb8bit_xv.bmp" ) ) );
 
+  vcl_cout << "Portable Network Graphics [png]\n";
+  testlib_test_begin( "  8-bit RGB uncompressed" );
+  testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_byte>( "ff_rgb8bit_uncompressed.png" ) ) );
+  testlib_test_begin( "  8-bit RGB compressed" );
+  testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_byte>( "ff_rgb8bit_compressed.png" ) ) );
 
 #if 0
   testlib_test_begin( "  8-bit indexed RGB" );

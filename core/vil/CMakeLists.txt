@@ -1,6 +1,15 @@
 # mul/vil2/CMakeLists.txt
-INCLUDE(${MODULE_PATH}/FindJPEG.cmake)
 
+INCLUDE(${MODULE_PATH}/FindPNG.cmake)
+IF(PNG_FOUND)
+  INCLUDE_DIRECTORIES( ${PNG_INCLUDE_DIR})
+  ADD_DEFINITIONS( ${PNG_DEFINITIONS}  -DHAS_PNG )
+  SET( vil2_sources ${vil2_sources}
+    file_formats/vil2_png.cxx file_formats/vil2_png.h
+  )
+ENDIF(PNG_FOUND)
+
+INCLUDE(${MODULE_PATH}/FindJPEG.cmake)
 IF(JPEG_FOUND)
   INCLUDE_DIRECTORIES( ${JPEG_INCLUDE_DIR} )
   ADD_DEFINITIONS( ${JPEG_DEFINITIONS} -DHAS_JPEG )

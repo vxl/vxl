@@ -363,6 +363,12 @@ MAIN( test_save_load_image )
 
 
 
+  // PNG
+#if 1
+  vil2_test_image_type("png", image8);
+  vil2_test_image_type("png", image16);
+  vil2_test_image_type("png", image3p);
+#endif
 
   // JPEG
 #if HAS_JPEG
@@ -433,13 +439,6 @@ MAIN( test_save_load_image )
   // lossy format ==> not guaranteed to be identical (hence arg. 3 set to false)
   vil2_test_image_type("gif", image8, false);
   vil2_test_image_type("gif", image3p, false);
-#endif
-
-  // PNG
-#if 0
-  vil2_test_image_type("png", image8);
-  vil2_test_image_type("png", image16);
-  vil2_test_image_type("png", image3p);
 #endif
 
   // SGI "iris" rgb
