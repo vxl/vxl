@@ -199,9 +199,6 @@ rrel_util_median_abs_dev_scale( const RAN_ITER&,  const RAN_ITER&, int dof ); \
 template VALUE_T \
 rrel_util_weighted_scale( const RAN_ITER& residuals_first, const RAN_ITER& residuals_end, \
                           const RAN_ITER& weights_first, int dof, VALUE_T* ); \
-template double \
-rrel_util_weighted_scale( const RAN_ITER& residuals_first, const RAN_ITER& residuals_end, \
-                          const RAN_ITER& weights_first, int dof ); \
 template \
 void rrel_util_median_and_scale( RAN_ITER first, RAN_ITER last, \
                                  VALUE_T& median, VALUE_T& scale, \

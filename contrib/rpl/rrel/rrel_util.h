@@ -62,7 +62,7 @@ rrel_util_weighted_scale( const InpIter& residuals_first, const InpIter& residua
 // double.
 //
 template <class InpIter>
-double
+inline double
 rrel_util_weighted_scale( const InpIter& residuals_first, const InpIter& residuals_end,
                           const InpIter& weights_first, int dof=1 )
 {
