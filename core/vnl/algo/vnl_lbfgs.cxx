@@ -50,7 +50,9 @@ typedef int logical; // not bool
 
 /* Common Block Declarations */
 
-struct {
+// Declare this as "static" (=local) to avoid multiple definition, because
+// this struct is also defined in v3p/netlib/lbfgs.c
+static struct {
 // C    GTOL is a DOUBLE PRECISION variable with default value 0.9, which
 // C        controls the accuracy of the line search routine MCSRCH. If the
 // C        function and gradient evaluations are inexpensive with respect
