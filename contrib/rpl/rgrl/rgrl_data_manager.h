@@ -1,6 +1,5 @@
 #ifndef rgrl_data_manager_h
 #define rgrl_data_manager_h
-
 //:
 // \file
 // \brief Class to represent the collection of feature sets available for use by the registration engine.

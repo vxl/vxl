@@ -1,6 +1,5 @@
 #ifndef rgrl_est_spline_h_
 #define rgrl_est_spline_h_
-
 //:
 // \file
 // \author Lee, Ying-Lin (Bess)
@@ -10,17 +9,25 @@
 #include "rgrl_estimator_sptr.h"
 #include "rgrl_mask.h"
 
-enum rgrl_optimize_method { RGRL_LEVENBERG_MARQUARDT=0, RGRL_CONJUGATE_GRADIENT=1, RGRL_AMOEBA=2, RGRL_LBFGS=3, RGRL_NONE=4, RGRL_POWELL=5 };
+enum rgrl_optimize_method
+{
+  RGRL_LEVENBERG_MARQUARDT=0,
+  RGRL_CONJUGATE_GRADIENT=1,
+  RGRL_AMOEBA=2,
+  RGRL_LBFGS=3,
+  RGRL_NONE=4,
+  RGRL_POWELL=5
+};
 
 class rgrl_est_spline
   : public rgrl_estimator
 {
-public:
+ public:
   //: Constructor
   //
   // Only B-spline estimation is performed. Neither is the global
   // estimation performed and nor is the global xformation used.
-  rgrl_est_spline( unsigned dof, rgrl_mask_box const& roi, vnl_vector<double> const& delta, 
+  rgrl_est_spline( unsigned dof, rgrl_mask_box const& roi, vnl_vector<double> const& delta,
                    vnl_vector< unsigned > const& m,
                    bool use_thin_plate = false, double lambda = 0.001 );
 
@@ -29,7 +36,7 @@ public:
   // global_xform is used as the global xformation. No global
   // estimation will be performed.
   rgrl_est_spline( unsigned dof, rgrl_transformation_sptr global_xform,
-                   rgrl_mask_box const& roi, vnl_vector<double> const& delta, 
+                   rgrl_mask_box const& roi, vnl_vector<double> const& delta,
                    vnl_vector< unsigned > const& m,
                    bool use_thin_plate = false, double lambda = 0.001 );
 
@@ -44,13 +51,13 @@ public:
   //: Type of transformation estimated by this estimator.
   const vcl_type_info& transformation_type() const;
 
-  void set_optimize_method( int optimize_method ) 
+  void set_optimize_method( int optimize_method )
     { optimize_method_ = optimize_method; }
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_est_spline, rgrl_estimator );
 
-private:
+ private:
   void point_in_knots( vnl_vector< double > const& point, vnl_vector< double > & spline_pt ) const;
 
   rgrl_mask_box roi_;

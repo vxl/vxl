@@ -54,7 +54,7 @@ class rgrl_initializer
                      unsigned                 & current_resolution,
                      rgrl_scale_sptr          & prior_scale);
 
-  //: Get next set of initial information, assuming \a current_region is the region of interest for registration, and single-resolution.
+  //: Get next set of initial information, assuming \a current_region is the region of interest for registration, and single-resol.
   //
   bool next_initial( rgrl_mask_box            & current_region,
                      rgrl_estimator_sptr      & xform_estimator,
