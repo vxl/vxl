@@ -178,4 +178,8 @@ void vsl_b_write(vsl_b_ostream& bfs, const mil_transform_2d& b);
 //: Binary file stream input operator for class reference
 void vsl_b_read(vsl_b_istream& bfs, mil_transform_2d& b);
 
+//: Stream output operator for class reference
+void vsl_print_summary(vcl_ostream& os,const mil_transform_2d& t);
+
+
 #endif // mil_transform_2d_h_

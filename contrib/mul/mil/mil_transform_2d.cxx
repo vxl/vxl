@@ -718,3 +718,12 @@ void vsl_b_write(vsl_b_ostream& bfs,const mil_transform_2d& t)
     t.b_write(bfs);
 }
 
+ 
+
+void vsl_print_summary(vcl_ostream& os,const mil_transform_2d& t)
+{
+  //os << t.is_a() << ": ";
+  vsl_indent_inc(os);
+  t.print_summary(os);
+  vsl_indent_dec(os);
+}
