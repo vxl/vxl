@@ -118,6 +118,7 @@ public:
   vnl_vector<T>& post_multiply (vnl_matrix<T> const&);         // v = v * M
   vnl_vector<T>& operator*= (vnl_matrix<T> const&);            // v = v * M
 
+  vnl_vector<T> operator+ () const { return *this; }
   vnl_vector<T> operator- () const;
   vnl_vector<T> operator+ (T v) const { return vnl_vector<T>(*this, v, vnl_tag_add()); }
   vnl_vector<T> operator- (T v) const { return vnl_vector<T>(*this, v, vnl_tag_sub()); }
