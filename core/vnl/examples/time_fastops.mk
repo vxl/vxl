@@ -1,5 +1,5 @@
 #! /bin/sh
-make -n
+make -n > /dev/null 2>&1
 DSTDIR=`make echovar-RELOBJDIR`
 rm -f $DSTDIR/time_fastops.o
 make DEFINES="-DMETHOD=1" $DSTDIR/time_fastops
@@ -13,6 +13,7 @@ $DSTDIR/time_fastops > $DSTDIR/time_fastops.30 2>&1
 rm -f $DSTDIR/time_fastops.o
 make DEFINES="-DMETHOD=4" $DSTDIR/time_fastops
 $DSTDIR/time_fastops > $DSTDIR/time_fastops.40 2>&1
+rm -f $DSTDIR/time_fastops.o
 DSTDIR=$DSTDIR.noshared
 rm -f $DSTDIR/time_fastops.o
 make BUILD=noshared DEFINES="-DOPTIMIZED -DMETHOD=1" $DSTDIR/time_fastops
@@ -26,3 +27,4 @@ $DSTDIR/time_fastops > $DSTDIR/time_fastops.30 2>&1
 rm -f $DSTDIR/time_fastops.o
 make BUILD=noshared DEFINES="-DOPTIMIZED -DMETHOD=4" $DSTDIR/time_fastops
 $DSTDIR/time_fastops > $DSTDIR/time_fastops.40 2>&1
+rm -f $DSTDIR/time_fastops.o
