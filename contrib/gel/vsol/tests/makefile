@@ -25,6 +25,7 @@ TESTS += test_vsol_line_3d.cxx
 TESTS += test_vsol_triangle_3d.cxx
 TESTS += test_vsol_rectangle_3d.cxx
 TESTS += test_vsol_polygon_3d.cxx
+TESTS += test_vsol_tetrahedron.cxx
 
 ###############################################################################
 include ${IUEROOT}/config/static-tests.mk
