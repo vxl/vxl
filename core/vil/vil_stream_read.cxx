@@ -12,10 +12,12 @@
 // \author  fsm
 //
 // \verbatim
-// Modifications
-// Peter Vanroose, July 2000: corrected serious bug: VXL_LITTLE_ENDIAN not needed
-//                    (implementation was wrong for VXL_BIG_ENDIAN machines)
-// Ian Scott, May 2003: rearrange explicit io, to allow for easier expansion.
+//  Modifications
+//   Peter Vanroose, July 2000: corrected serious bug: VXL_LITTLE_ENDIAN not needed
+//                       (implementation was wrong for VXL_BIG_ENDIAN machines)
+//   Ian Scott, May 2003: rearrange explicit io, to allow for easier expansion.
+//   Peter Vanroose - 23 Oct.2003 - Added support for 64-bit int pixels
+// \endvarbatim
 // \endverbatim
 
 #include "vil_stream_read.h"
@@ -38,6 +40,25 @@ vxl_uint_16 vil_stream_read_little_endian_uint_16(vil_stream *s)
   return vxl_uint_16(bytes[0]) + (vxl_uint_16(bytes[1])<<8);
 }
 
+#if VXL_HAS_INT_64
+
+vxl_uint_64 vil_stream_read_big_endian_uint_64(vil_stream *s)
+{
+  vxl_byte bytes[8];
+  s->read(bytes, sizeof bytes);
+  return (vxl_uint_64(bytes[0])<<56) + (vxl_uint_64(bytes[1])<<48) + (vxl_uint_64(bytes[2])<<40) + (vxl_uint_64(bytes[3])<<32)
+       + (vxl_uint_64(bytes[0])<<24) + (vxl_uint_64(bytes[1])<<16) + (vxl_uint_64(bytes[2])<< 8) +  vxl_uint_64(bytes[3]);
+}
+
+vxl_uint_64 vil_stream_read_little_endian_uint_64(vil_stream *s)
+{
+  vxl_byte bytes[4];
+  s->read(bytes, sizeof bytes);
+  return (vxl_uint_64(bytes[3])<<56) + (vxl_uint_64(bytes[2])<<48) + (vxl_uint_64(bytes[1])<<40) + (vxl_uint_64(bytes[0])<<32)
+       + (vxl_uint_64(bytes[3])<<24) + (vxl_uint_64(bytes[2])<<16) + (vxl_uint_64(bytes[1])<< 8) +  vxl_uint_64(bytes[0]);
+}
+
+#endif // VXL_HAS_INT_64
 
 vxl_uint_32 vil_stream_read_big_endian_uint_32(vil_stream *s)
 {
@@ -67,9 +88,9 @@ static void swap16(char *a, unsigned n)
 }
 #endif
 
+#if VXL_LITTLE_ENDIAN
 // The following function should be moved to relevant places in vil soon
 // This static function is only needed if it will be used below
-#if VXL_LITTLE_ENDIAN
 static void swap32(char *a, unsigned n)
 {
   char c;

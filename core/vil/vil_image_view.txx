@@ -397,6 +397,58 @@ inline bool convert_planes_from_components(vil_image_view<vxl_int_32> &lhs,
     return false;
 }
 
+#if VXL_HAS_INT_64
+
+VCL_DEFINE_SPECIALIZATION
+inline bool convert_planes_from_components(vil_image_view<vxl_uint_64> &lhs,
+                                           const vil_image_view_base &rhs_base)
+{
+  const unsigned ncomp =
+    vil_pixel_format_num_components(rhs_base.pixel_format());
+
+  if (// rhs has just 1 plane
+      rhs_base.nplanes() == 1 &&
+      // both sides have equal component types
+       vil_pixel_format_component_format(rhs_base.pixel_format()) == VIL_PIXEL_FORMAT_UINT_64)
+  {
+    // cheat by casting to component type, not pixel type (because we don't know full pixel type at compile time.)
+    const vil_image_view<vxl_uint_64> &rhs = static_cast<const vil_image_view<vxl_uint_64>&>(rhs_base);
+
+    lhs = vil_image_view<vxl_uint_64>(rhs.memory_chunk(), rhs.top_left_ptr(),
+                                      rhs.ni(),rhs.nj(),ncomp,
+                                      rhs.istep()*ncomp,rhs.jstep()*ncomp,1);
+    return true;
+  }
+  else
+    return false;
+}
+
+VCL_DEFINE_SPECIALIZATION
+inline bool convert_planes_from_components(vil_image_view<vxl_int_64> &lhs,
+                                           const vil_image_view_base &rhs_base)
+{
+  const unsigned ncomp =
+    vil_pixel_format_num_components(rhs_base.pixel_format());
+
+  if (// rhs has just 1 plane
+      rhs_base.nplanes() == 1 &&
+      // both sides have equal component types
+      vil_pixel_format_component_format(rhs_base.pixel_format()) == VIL_PIXEL_FORMAT_INT_64)
+  {
+    // cheat by casting to component type, not pixel type (because we don't know full pixel type at compile time.)
+    const vil_image_view<vxl_int_64> &rhs = static_cast<const vil_image_view<vxl_int_64>&>(rhs_base);
+
+    lhs = vil_image_view<vxl_int_64>(rhs.memory_chunk(), rhs.top_left_ptr(),
+                                     rhs.ni(),rhs.nj(),ncomp,
+                                     rhs.istep()*ncomp,rhs.jstep()*ncomp,1);
+    return true;
+  }
+  else
+    return false;
+}
+
+#endif // VXL_HAS_INT_64
+
 VCL_DEFINE_SPECIALIZATION
 inline bool convert_planes_from_components(vil_image_view<float> &lhs,
                                            const vil_image_view_base &rhs_base)

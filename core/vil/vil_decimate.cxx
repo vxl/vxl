@@ -6,6 +6,11 @@
 // \file
 // \author Ian Scott.
 //
+// \verbatim
+//  Modifications
+//   23 Oct.2003 - Peter Vanroose - Added support for 64-bit int pixels
+// \endvarbatim
+//
 //-----------------------------------------------------------------------------
 
 #include "vil_decimate.h"
@@ -37,10 +42,10 @@ vil_image_view_base_sptr vil_decimate_image_resource::get_copy_view(unsigned i0,
                                                                     unsigned j0, unsigned nj) const
 {
   if ((unsigned long)i_factor_ * (unsigned long)ni *
-    (unsigned long)j_factor_ * (unsigned long)nj < large_image_limit)
+      (unsigned long)j_factor_ * (unsigned long)nj < large_image_limit)
   {
-   vil_image_view_base_sptr vs = src_->get_copy_view(i0*i_factor_, ni*i_factor_,
-                                                     j0*j_factor_, nj*j_factor_);
+    vil_image_view_base_sptr vs = src_->get_copy_view(i0*i_factor_, ni*i_factor_,
+                                                      j0*j_factor_, nj*j_factor_);
     if (!vs) return 0;
 
     switch (vs->pixel_format())
@@ -50,17 +55,21 @@ vil_image_view_base_sptr vil_decimate_image_resource::get_copy_view(unsigned i0,
       return new vil_image_view<T >(vil_decimate(static_cast<vil_image_view<T >&>(*vs), \
                                                  i_factor_, j_factor_));
 
-        macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )
-        macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
-        macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
-        macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
-        macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
-        macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
-        macro(VIL_PIXEL_FORMAT_BOOL , bool )
-        macro(VIL_PIXEL_FORMAT_FLOAT , float )
-        macro(VIL_PIXEL_FORMAT_DOUBLE , double )
-        macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  vcl_complex<float>)
-        macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
+      macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )
+      macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
+#if VXL_HAS_INT_64
+      macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
+      macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
+#endif
+      macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
+      macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
+      macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
+      macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
+      macro(VIL_PIXEL_FORMAT_BOOL , bool )
+      macro(VIL_PIXEL_FORMAT_FLOAT , float )
+      macro(VIL_PIXEL_FORMAT_DOUBLE , double )
+      macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  vcl_complex<float>)
+      macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
   #undef macro
     default:
       return 0;
@@ -75,28 +84,32 @@ vil_image_view_base_sptr vil_decimate_image_resource::get_copy_view(unsigned i0,
     {
 #define macro( F , T ) \
     case F : { \
-        vil_image_view<T > view(ni,nj,src_->nplanes()); \
-        for (unsigned j = 0; j < nj; ++j) \
-          for (unsigned i = 0; i < ni; ++i) { \
-            vil_image_view<T > pixel=src_->get_view((i+i0)*i_factor_,1,(j+j0)*j_factor_,1); \
-            assert ((bool)pixel); \
-            vil_copy_to_window(pixel, view, i, j); } \
-        return new vil_image_view<T >(view); }
+      vil_image_view<T > view(ni,nj,src_->nplanes()); \
+      for (unsigned j = 0; j < nj; ++j) \
+        for (unsigned i = 0; i < ni; ++i) { \
+          vil_image_view<T > pixel=src_->get_view((i+i0)*i_factor_,1,(j+j0)*j_factor_,1); \
+          assert ((bool)pixel); \
+          vil_copy_to_window(pixel, view, i, j); } \
+      return new vil_image_view<T >(view); }
 
-    macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )
-    macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
-    macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
-    macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
-    macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
-    macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
-    macro(VIL_PIXEL_FORMAT_BOOL , bool )
-    macro(VIL_PIXEL_FORMAT_FLOAT , float )
-    macro(VIL_PIXEL_FORMAT_DOUBLE , double )
-    macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  vcl_complex<float>)
-    macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
+      macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )
+      macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
+#if VXL_HAS_INT_64
+      macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
+      macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
+#endif
+      macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
+      macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
+      macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
+      macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
+      macro(VIL_PIXEL_FORMAT_BOOL , bool )
+      macro(VIL_PIXEL_FORMAT_FLOAT , float )
+      macro(VIL_PIXEL_FORMAT_DOUBLE , double )
+      macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  vcl_complex<float>)
+      macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
 #undef macro
-
-    default: return 0;
+    default:
+      return 0;
     }
   }
 }
@@ -105,7 +118,7 @@ vil_image_view_base_sptr vil_decimate_image_resource::get_view(unsigned i0, unsi
                                                                unsigned j0, unsigned nj) const
 {
   if ((unsigned long)i_factor_ * (unsigned long)ni *
-    (unsigned long)j_factor_ * (unsigned long)nj < large_image_limit)
+      (unsigned long)j_factor_ * (unsigned long)nj < large_image_limit)
   {
     vil_image_view_base_sptr vs = src_->get_view(i0*i_factor_, ni*i_factor_,
                                                  j0*j_factor_, nj*j_factor_);
@@ -118,17 +131,21 @@ vil_image_view_base_sptr vil_decimate_image_resource::get_view(unsigned i0, unsi
       return new vil_image_view<T >(vil_decimate(static_cast<vil_image_view<T >&>(*vs), \
                                     i_factor_, j_factor_));
 
-        macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )
-        macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
-        macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
-        macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
-        macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
-        macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
-        macro(VIL_PIXEL_FORMAT_BOOL , bool )
-        macro(VIL_PIXEL_FORMAT_FLOAT , float )
-        macro(VIL_PIXEL_FORMAT_DOUBLE , double )
-        macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  vcl_complex<float>)
-        macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
+      macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )
+      macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
+#if VXL_HAS_INT_64
+      macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
+      macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
+#endif
+      macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
+      macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
+      macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
+      macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
+      macro(VIL_PIXEL_FORMAT_BOOL , bool )
+      macro(VIL_PIXEL_FORMAT_FLOAT , float )
+      macro(VIL_PIXEL_FORMAT_DOUBLE , double )
+      macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  vcl_complex<float>)
+      macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
 #undef macro
     default:
       return 0;
@@ -139,32 +156,23 @@ vil_image_view_base_sptr vil_decimate_image_resource::get_view(unsigned i0, unsi
 }
 
 
-
-
 //: Put the data in this view back into the image source.
 bool vil_decimate_image_resource::put_view(const vil_image_view_base& im, unsigned i0,
                                            unsigned j0)
-#if 1 // disable put_view, because current implementation
+#if 0 // disable put_view, because current implementation
       // does something really stupid.
       // This put_view, should not just modify the pixels
       // selected by the decimation, but all the unselected
       // pixels around it as well.
 {
-  vcl_cerr << "ERROR: vil_decimate_image_resource::put_view not implemented" <<
-    vcl_cout;
-  return false;
-}
-#else
-{
   if ((unsigned long)i_factor_ * (unsigned long)im.ni() *
-    (unsigned long)j_factor_ * (unsigned long)im.nj() < large_image_limit)
+      (unsigned long)j_factor_ * (unsigned long)im.nj() < large_image_limit)
   {
     vil_image_view_base_sptr vs = src_->get_view(i0*i_factor_, im.ni()*i_factor_,
                                                  j0*j_factor_, im.nj()*j_factor_);
     if (!vs || im.pixel_format() != vs->pixel_format() ||
         im.nplanes() != vs->nplanes())
       return false;
-
 
     switch (vs->pixel_format())
     {
@@ -178,16 +186,20 @@ bool vil_decimate_image_resource::put_view(const vil_image_view_base& im, unsign
       vil_copy_reformat(view, decimated); \
       return src_->put_view(*vs, i0, j0); }
 
-        macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )
-        macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
-        macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
-        macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
-        macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
-        macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
-        macro(VIL_PIXEL_FORMAT_FLOAT , float )
-        macro(VIL_PIXEL_FORMAT_DOUBLE , double )
-        macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  vcl_complex<float>)
-        macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
+      macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )
+      macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
+#if VXL_HAS_INT_64
+      macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
+      macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
+#endif
+      macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
+      macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
+      macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
+      macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
+      macro(VIL_PIXEL_FORMAT_FLOAT , float )
+      macro(VIL_PIXEL_FORMAT_DOUBLE , double )
+      macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  vcl_complex<float>)
+      macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
 #undef macro
     default:
       return false;
@@ -202,28 +214,38 @@ bool vil_decimate_image_resource::put_view(const vil_image_view_base& im, unsign
     {
 #define macro( F , T )  \
     case F : { \
-        const vil_image_view<T > &view = static_cast<const vil_image_view<T > &>(im); \
-        for (unsigned j = 0; j < im.nj(); ++j) \
-          for (unsigned i = 0; i < im.ni(); ++i) { \
-            vil_image_view<T > pixel=vil_crop(view,i,1,j,1); \
-            assert ((bool)pixel); \
-            if (!src_->put_view(pixel, (i0+i)*i_factor_, (j0+j)*j_factor_)) \
-              return false; } \
-        return true; }
+      const vil_image_view<T > &view = static_cast<const vil_image_view<T > &>(im); \
+      for (unsigned j = 0; j < im.nj(); ++j) \
+        for (unsigned i = 0; i < im.ni(); ++i) { \
+          vil_image_view<T > pixel=vil_crop(view,i,1,j,1); \
+          assert ((bool)pixel); \
+          if (!src_->put_view(pixel, (i0+i)*i_factor_, (j0+j)*j_factor_)) \
+            return false; } \
+      return true; }
 
-        macro(VIL_PIXEL_FORMAT_BYTE ,   vxl_byte )
-        macro(VIL_PIXEL_FORMAT_SBYTE ,  vxl_sbyte )
-        macro(VIL_PIXEL_FORMAT_UINT_32 ,vxl_uint_32 )
-        macro(VIL_PIXEL_FORMAT_UINT_16 ,vxl_uint_16 )
-        macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
-        macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
-        macro(VIL_PIXEL_FORMAT_FLOAT ,  float )
-        macro(VIL_PIXEL_FORMAT_DOUBLE , double )
-        macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  vcl_complex<float>)
-        macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
+      macro(VIL_PIXEL_FORMAT_BYTE ,   vxl_byte )
+      macro(VIL_PIXEL_FORMAT_SBYTE ,  vxl_sbyte )
+#if VXL_HAS_INT_64
+      macro(VIL_PIXEL_FORMAT_UINT_64 ,vxl_uint_64 )
+      macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
+#endif
+      macro(VIL_PIXEL_FORMAT_UINT_32 ,vxl_uint_32 )
+      macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
+      macro(VIL_PIXEL_FORMAT_UINT_16 ,vxl_uint_16 )
+      macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
+      macro(VIL_PIXEL_FORMAT_FLOAT ,  float )
+      macro(VIL_PIXEL_FORMAT_DOUBLE , double )
+      macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  vcl_complex<float>)
+      macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
 #undef macro
-    default: return false;
+    default:
+      return false;
     }
   }
 }
-#endif 
+#else // 0
+{
+  vcl_cerr << "ERROR: vil_decimate_image_resource::put_view not implemented\n";
+  return false;
+}
+#endif // 0

@@ -13,16 +13,24 @@
 // native format of the compiler or execution environment.
 //
 // \author    fsm
+//
+// \verbatim
+//  Modifications
+//   23 Oct.2003 - Peter Vanroose - Added support for 64-bit int pixels
+// \endvarbatim
 
 #include <vxl_config.h>
-
 class vil_stream;
-
 
 void vil_stream_write_big_endian_uint_16(vil_stream *, vxl_uint_16);
 void vil_stream_write_little_endian_uint_16(vil_stream *, vxl_uint_16);
 
 void vil_stream_write_big_endian_uint_32(vil_stream *, vxl_uint_32);
 void vil_stream_write_little_endian_uint_32(vil_stream *, vxl_uint_32);
+
+#if VXL_HAS_INT_64
+void vil_stream_write_big_endian_uint_64(vil_stream *, vxl_uint_64);
+void vil_stream_write_little_endian_uint_64(vil_stream *, vxl_uint_64);
+#endif
 
 #endif // vil_stream_write_h_
