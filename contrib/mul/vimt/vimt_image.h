@@ -34,6 +34,9 @@ class vimt_image
     //: Return dimensionality of image
   virtual unsigned n_dims() const = 0;
 
+    //: Return number of planes in images.
+  virtual unsigned n_planes() const = 0;
+
     //: Return vector indicating size of image in pixels
     //  2D image is v[0] x v[1],  3D image is v[0] x v[1] x v[2]
     //  Somewhat inefficient: Only use when you absolutely have to.

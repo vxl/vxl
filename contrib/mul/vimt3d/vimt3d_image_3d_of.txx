@@ -27,11 +27,6 @@ void vimt3d_image_3d_of<T>::deep_copy(const vimt3d_image_3d_of& src)
 }
 
 
-//=======================================================================
-template<class T> vimt3d_image_3d_of<T>::~vimt3d_image_3d_of()
-{
-}
-
 
 //=======================================================================
 //: Shallow equality tester.
@@ -73,13 +68,6 @@ short vimt3d_image_3d_of<T>::version_no() const
   return 1;
 }
 
-
-//=======================================================================
-template<class T>
-vimt_image* vimt3d_image_3d_of<T>::clone() const
-{
-  return new vimt3d_image_3d_of(*this);
-}
 
 //=======================================================================
 template<class T>

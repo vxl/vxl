@@ -41,7 +41,7 @@ public:
 
   
   //: Destructor
-  virtual ~vimt_image_2d_of();
+  virtual ~vimt_image_2d_of() {}
 
   //: Baseclass view of image
   virtual const vil_image_view_base& image_base() const { return image_; }
@@ -65,6 +65,9 @@ public:
   //  world2im() translates by (-x0,-y0)
   void set_valid_region(int x0, unsigned nx, int y0, unsigned ny);
 
+  //: Get the number of planes in the image.
+  unsigned n_planes() const {return image_.nplanes();}
+
   //: Take a deep copy of image (copy data, not just pointers)
   void deep_copy(const vimt_image_2d_of& image);
 
@@ -79,7 +82,7 @@ public:
 
     //: Create a copy on the heap and return base class pointer
     //  Note that this will make a shallow copy of any contained images
-  virtual vimt_image* clone() const;
+  virtual vimt_image* clone() const { return new vimt_image_2d_of(*this); }
 
     //: Create a deep copy on the heap and return base class pointer
     //  This will make a deep copy of any contained images

@@ -48,7 +48,7 @@ public:
  
   
   //: Destructor
-  virtual ~vimt3d_image_3d_of();
+  virtual ~vimt3d_image_3d_of() {}
 
   //: Base class view of image
   virtual const vil3d_image_view_base& image_base() const { return image_; }
@@ -58,6 +58,10 @@ public:
 
   //: Image view
   const vil3d_image_view<T>& image() const { return image_; }
+
+   //: Get the number of planes in the image.
+   unsigned n_planes() const {return image_.nplanes();}
+
 
   //: True if transforms are equal, and they share same image data.
   //  This does not do a deep equality on image data. If the images point
@@ -87,7 +91,7 @@ public:
 
     //: Create a copy on the heap and return base class pointer
     //  Note that this will make a shallow copy of any contained images
-  virtual vimt_image* clone() const;
+  virtual vimt_image* clone() const { return new vimt3d_image_3d_of(*this); }
 
     //: Create a deep copy on the heap and return base class pointer
     //  This will make a deep copy of any contained images

@@ -23,10 +23,6 @@ void vimt_image_2d_of<T>::deep_copy(const vimt_image_2d_of& src)
   image_.deep_copy(src.image_);
 }
 
-template<class T> vimt_image_2d_of<T>::~vimt_image_2d_of()
-{
-}
-
 //: Shallow equality tester.
 //  The parameter must be identical type to this.
 template<class T>
@@ -58,13 +54,6 @@ template<class T>
 short vimt_image_2d_of<T>::version_no() const
 {
   return 1;
-}
-
-//=======================================================================
-template<class T>
-vimt_image* vimt_image_2d_of<T>::clone() const
-{
-  return new vimt_image_2d_of(*this);
 }
 
 //=======================================================================
