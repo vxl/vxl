@@ -293,7 +293,7 @@ $strip = cwd(); chomp $strip;
 $strip = $strip . "/";
 $header = "$script_dir/doxy_header.html";
 $stylesheet = "$script_dir/ourdoxygen.css";
-$infilter = $vxlsrc . "/vxl/doc/vxl_doxy.pl";
+$infilter = $vxlsrc . "/core/doc/vxl_doxy.pl";
 $havedot = check_havedot($doxyoutputdir);
 
 #print "$strip\n";
