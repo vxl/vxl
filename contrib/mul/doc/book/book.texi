@@ -283,7 +283,6 @@ conversion and the design of the rest.
 @include chapter_clsfy.texi
 
 
-
 @comment ------------------------------------------------------------------
 @appendix  Filenames and structure
 The directory structure of mul is below
