@@ -1,4 +1,6 @@
 # vxl/vidl/examples/CMakeLists.txt
+INCLUDE( ${MODULE_PATH}/UseVGUI.cmake )
+
 
 ADD_EXECUTABLE( vidl_mpegcodec_example vidl_mpegcodec_example.cxx )
 TARGET_LINK_LIBRARIES( vidl_mpegcodec_example vidl vbl )
@@ -6,6 +8,10 @@ TARGET_LINK_LIBRARIES( vidl_mpegcodec_example vidl vbl )
 ADD_EXECUTABLE( vidl_video2images vidl_video2images.cxx )
 TARGET_LINK_LIBRARIES( vidl_video2images vidl vil vul vcl )
 
+
+IF( HAS_VGUI )
+ 
+INCLUDE_DIRECTORIES( ${VXLCORE_INCLUDE_DIR} )
 
 SET(vidl_player_sources 
     vidl_player_main.cxx 
@@ -15,3 +21,5 @@ SET(vidl_player_sources
 
 ADD_EXECUTABLE (vidl_player ${vidl_player_sources})
 TARGET_LINK_LIBRARIES(vidl_player vidl vgui)
+ 
+ENDIF( HAS_VGUI )
