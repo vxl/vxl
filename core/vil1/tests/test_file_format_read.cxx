@@ -52,6 +52,27 @@ private:
 };
 
 template<class T>
+class CheckColourPlanes : public CheckPixel
+{
+public:
+  CheckColourPlanes( const char* file )
+  {
+    vil_image i = vil_load( (image_base + file).c_str() );
+    if( !i )
+      vcl_cout << "[ couldn't load " << file << "]\n";
+    else
+      img_ = i;
+  };
+
+  bool operator() ( int p, int x, int y, const vcl_vector<TruePixelType>& pixel ) const
+  {
+    return img_ && pixel.size() == 1 && pixel[0] == img_(15*y+3*x+p,0);
+  } 
+private:
+  vil_memory_image_of< T > img_;
+};
+
+template<class T>
 class CheckGrey : public CheckPixel
 {
 public:
@@ -74,6 +95,7 @@ private:
 };
 
 template class CheckRGB< vxl_uint_8 >;
+template class CheckColourPlanes< vxl_uint_8 >;
 template class CheckGrey< vxl_uint_8 >;
 
 
@@ -153,9 +175,9 @@ test_file_format_read_main( int argc, char* argv[] )
   testlib_test_begin( "  8-bit indexed RGB" );
   testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_indexed.ras" ) ) );
 
-//    vcl_cout << "Windows bitmap [bmp]\n";
-//    testlib_test_begin( "  8-bit RGB (xv created)" );
-//    testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_xv.bmp" ) ) );
+   vcl_cout << "Windows bitmap [bmp]\n";
+   testlib_test_begin( "  8-bit RGB (xv created)" );
+   testlib_test_perform( test( "ff_bgr8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_xv.bmp" ) ) );
 
   vcl_cout << "TIFF [tiff]\n";
   testlib_test_begin( "  8-bit RGB uncompressed" );
@@ -163,9 +185,9 @@ test_file_format_read_main( int argc, char* argv[] )
   testlib_test_begin( "  8-bit RGB packbits" );
   testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_packbits.tif" ) ) );
 
-//    vcl_cout << "SGI IRIS [iris]\n";
-//    testlib_test_begin( "  8-bit RGB rle" );
-//    testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit.iris" ) ) );
+   vcl_cout << "SGI IRIS [iris]\n";
+   testlib_test_begin( "  8-bit RGB rle" );
+   testlib_test_perform( test( "ff_planar8bit_true.txt", CheckColourPlanes<vxl_uint_8>( "ff_rgb8bit.iris" ) ) );
 
   vcl_cout << "Portable Network Graphics [png]\n";
   testlib_test_begin( "  8-bit RGB uncompressed" );
