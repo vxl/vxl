@@ -7,6 +7,7 @@
 
 #include <osl/osl_roi_window.h>
 #include <vil/vil_memory_image_of.h>
+#include <vil/vil_byte.h>
 
 /*namespace*/class droid  {
 public:

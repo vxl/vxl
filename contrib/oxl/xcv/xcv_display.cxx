@@ -20,6 +20,7 @@
 
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_image_as.h>
+#include <vil/vil_byte.h>
 #include <vnl/vnl_math.h>
 
 #include <vgui/vgui.h>
@@ -121,7 +122,7 @@ void xcv_display::toggle_enhance()
   }
   else
   {
-    if(debug) vcl_cout << "removing enhance lens" << vcl_endl;
+    if (debug) vcl_cout << "removing enhance lens" << vcl_endl;
 
     vgui_slot::replace_child_everywhere(enhance, img);
     is_enhancing = false;
@@ -154,7 +155,7 @@ void xcv_display::toggle_magnify()
   }
   else
   {
-    if(debug) vcl_cout << "removing magnify lens" << vcl_endl;
+    if (debug) vcl_cout << "removing magnify lens" << vcl_endl;
 
     enhance->set_child(0);
     vgui_slot::replace_child_everywhere(enhance, comp);
@@ -172,7 +173,7 @@ void xcv_display::make_roi()
   get_current(&col, &row);
   xcv_image_tableau_sptr imt = get_image_tableau_at(col,row);
   vgui_rubberbander_sptr rubber = get_rubberbander_at(col, row);
-  if(!rubber)
+  if (!rubber)
     return;
 
   //roi_tableau_client_ = new vgui_roi_tableau_make_roi(imt);
@@ -182,7 +183,7 @@ void xcv_display::make_roi()
   vgui_rubberbander_client* old_client = rubber->get_client();  // save to put back in later
   rubber->set_client(&roi_tableau_client_);
   rubber->rubberband_box();
-  while(!roi_tableau_client_.is_done())
+  while (!roi_tableau_client_.is_done())
     es->next();
   es = 0;
   rubber->set_client(old_client);
@@ -198,7 +199,7 @@ void xcv_display::remove_roi()
   get_current(&col,&row);
   vgui_rubberbander_sptr rubber = get_rubberbander_at(col, row);
 
-  //if(rubber)
+  //if (rubber)
   //{
     //rubber->set_client(0);
     //delete roi_tableau_client_;
@@ -235,7 +236,7 @@ void xcv_display::line_profile(const vil_image& src, float x0, float y0, float x
   memimg.resize(src.width(), src.height());
   vil_image_as_byte(src).get_section(memimg.get_buffer(), 0, 0, src.width(), src.height());
 
-  for(int i = num_points-1; i>=0; i--)
+  for (int i = num_points-1; i>=0; i--)
   {
     xvals[i] = x0 + x_step*i;
     yvals[i] = y0 + y_step*i;
@@ -274,7 +275,7 @@ void xcv_display::show_line_slice()
     = (int)(vnl_math_rnd(vcl_sqrt((double)((fx1-fx0)*(fx1-fx0)+ (fy1-fy0)*(fy1-fy0)))));
 
   // Avoid divide by zero
-  if(!num_points) num_points = 10;
+  if (!num_points) num_points = 10;
 
   float* x = new float[num_points+1];
   float* y = new float[num_points+1];

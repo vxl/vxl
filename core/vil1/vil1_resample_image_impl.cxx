@@ -12,6 +12,7 @@
 #include "vil_resample_image_impl.h"
 #include "vil_resample_image.h"
 #include <vil/vil_byte.h>
+#include <vil/vil_rgb.h>
 #include <vil/vil_pixel.h>
 #include <vcl_climits.h> // CHAR_BIT
 #include <vcl_iostream.h>
@@ -50,9 +51,6 @@ bool vil_resample_image_impl::get_property(char const *, void *) const
 }
 
 //--------------------------------------------------------------------------------
-
-#include <vil/vil_rgb.h>
-#include <vil/vil_byte.h>
 
 bool vil_resample_image_impl::get_section(void *buf, int x0, int y0, int w, int h) const
 {

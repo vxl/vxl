@@ -11,7 +11,8 @@
 
 #include "vgui_vrml_texture_map.h"
 #include <vul/vul_file.h>
-#include <vil/vil_image.h>
+#include <vil/vil_rgb.h>
+#include <vil/vil_byte.h>
 #include <vil/vil_file_image.h>
 #include <vil/vil_memory_image_of.h>
 #include <vul/vul_printf.h>
@@ -25,13 +26,11 @@ vcl_string vgui_vrml_texture_map::vrml_dirname("");
 static inline int texmap_dimension(int in)
 {
   int MAX_SIZE = VrmlDraw_TEX_MAX;
-  for(int w = 1; w < MAX_SIZE; w *= 2)
+  for (int w = 1; w < MAX_SIZE; w *= 2)
     if (w >= in)
       return w;
   return MAX_SIZE;
 }
-
-
 
 
 vgui_vrml_texture_map* vgui_vrml_texture_map::create(char const* filename)
@@ -77,9 +76,9 @@ vgui_vrml_texture_map* vgui_vrml_texture_map::create(char const* filename)
     vgui_vrml_texture_map* newmap = new vgui_vrml_texture_map(filename, tex_w, tex_h);
     vil_memory_image_of<vil_rgb<unsigned char> > rgb(fileimage.width(), fileimage.height());
     fileimage.get_section(rgb.get_buffer(), 0,0, fileimage.width(), fileimage.height());
-    for(int y = 0; y < tex_h; ++y) {
+    for (int y = 0; y < tex_h; ++y) {
       int orig_y = y * h / tex_h;
-      for(int x = 0; x < tex_w; ++x)
+      for (int x = 0; x < tex_w; ++x)
         newmap->rgb(x,tex_h - y - 1) = rgb(x * w / tex_w, orig_y);
     }
     vcl_cerr << "Done.\n";
@@ -89,9 +88,9 @@ vgui_vrml_texture_map* vgui_vrml_texture_map::create(char const* filename)
     //vil_memory_image_of<byte> gray( fileimage.get_image_ptr() ); //im8);
     vil_memory_image_of<vil_byte> gray(fileimage.width(), fileimage.height());
     fileimage.get_section(gray.get_buffer(), 0,0, fileimage.width(), fileimage.height());
-    for(int y = 0; y < tex_h; ++y) {
+    for (int y = 0; y < tex_h; ++y) {
       int orig_y = y * h / tex_h;
-      for(int x = 0; x < tex_w; ++x) {
+      for (int x = 0; x < tex_w; ++x) {
         int v = gray(x * w / tex_w, orig_y);
         newmap->rgb(x,tex_h - y - 1).r = v;
         newmap->rgb(x,tex_h - y - 1).g = v;

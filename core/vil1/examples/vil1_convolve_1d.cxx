@@ -5,6 +5,7 @@
 
 #include <vul/vul_sprintf.h>
 
+#include <vil/vil_byte.h>
 #include <vil/vil_image.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>

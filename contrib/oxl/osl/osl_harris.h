@@ -29,6 +29,7 @@
 #include <vcl_vector.h>
 #include <vcl_utility.h>
 #include <vil/vil_memory_image_of.h>
+#include <vil/vil_byte.h>
 #include <osl/osl_harris_params.h>
 #include <osl/osl_roi_window.h>
 

@@ -14,6 +14,7 @@
 #include <vcl_vector.h>
 
 #include <vil/vil_rgb.h>
+#include <vil/vil_byte.h>
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_convolve.h>
 #include <vil/vil_convolve.txx>
@@ -52,9 +53,9 @@ vil_image vil_smooth_gaussian(vil_image const & in, double sigma)
 #define inst(pixel_type, float_type) \
 template \
 void vil_convolve_separable(float const kernel[], unsigned N, \
-                                 vil_memory_image_of<pixel_type> & buf, \
-                                 vil_memory_image_of<float_type>& tmp, \
-                                 vil_memory_image_of<float_type>& out); \
+                            vil_memory_image_of<pixel_type> & buf, \
+                            vil_memory_image_of<float_type>& tmp, \
+                            vil_memory_image_of<float_type>& out); \
 template \
 vil_image vil_convolve_separable(vil_image const &, float const*, int, pixel_type*, float_type* )
 
