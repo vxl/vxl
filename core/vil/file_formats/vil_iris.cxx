@@ -24,14 +24,16 @@
 #include <vil/vil_stream.h>
 #include <vil/vil_image_view.h>
 
-static short get_short(vil_stream* file, int location = -1); // default -1 means: read at current position
-static unsigned short get_ushort(vil_stream* file, int location = -1);
+#include <vxl_config.h> // for vxl_byte, vxl_uint_32, ...
+
+static vxl_sint_16 get_short(vil_stream* file, int location = -1); // default -1 means: read at current position
+static vxl_uint_16 get_ushort(vil_stream* file, int location = -1);
 static char get_char(vil_stream* file, int location = -1);
-static long get_long(vil_stream* file, int location = -1);
-static void send_char(vil_stream* data, int s);
-static void send_short(vil_stream* data, int s);
-static void send_ushort(vil_stream* data, unsigned int s);
-static void send_long(vil_stream* data, long s);
+static vxl_sint_32 get_long(vil_stream* file, int location = -1);
+static void send_char(vil_stream* data, char s);
+static void send_short(vil_stream* data, vxl_sint_16 s);
+static void send_ushort(vil_stream* data, vxl_uint_16 s);
+static void send_long(vil_stream* data, vxl_sint_32 s);
 static void expandrow(unsigned char *optr, unsigned char *iptr, int z);
 
 
@@ -43,10 +45,10 @@ vil_image_resource_sptr vil_iris_file_format::make_input_image(vil_stream* is)
 
   int colormap_;
 
-  int magic_     = get_short(is);
-  int storage_   = get_char(is);
+  vxl_sint_16 magic_      = get_short(is);
+  int storage_            = get_char(is);
   int bytes_per_component = get_char(is);
-  int dimension_ = get_ushort(is);
+  int dimension_          = get_ushort(is);
   /*int ni_     =*/ get_ushort(is);
   /*int nj_     =*/ get_ushort(is);
   /*int nplanes_=*/ get_ushort(is);
@@ -438,13 +440,20 @@ bool vil_iris_generic_image::read_offset_tables()
 }
 
 
-short get_short(vil_stream* file, int location)
+vxl_sint_16 get_short(vil_stream* file, int location)
 {
   if (location >= 0) file->seek(location);
 
-  unsigned char buff[2];
+  vxl_byte buff[2];
   file->read(buff, 2L);
-  return (((buff[0]&0x7f)<<8)+buff[1])*((buff[0]&0x80)?-1:1);
+
+  // Decode from two's complement to machine format
+  vxl_uint_16 bits = ( buff[0] << 8 ) + buff[1];
+
+  if( ( bits & 0x8000 ) != 0 )
+    return -vxl_sint_16( ~bits + 1 );
+  else
+    return vxl_sint_16( bits );
 }
 
 
@@ -457,7 +466,7 @@ char get_char(vil_stream* file, int location)
   return buff[0];
 }
 
-unsigned short get_ushort(vil_stream* file, int location)
+vxl_uint_16 get_ushort(vil_stream* file, int location)
 {
   if (location >= 0) file->seek(location);
 
@@ -466,31 +475,48 @@ unsigned short get_ushort(vil_stream* file, int location)
   return (buff[0]<<8)+(buff[1]<<0);
 }
 
-long get_long(vil_stream* file, int location)
+vxl_sint_32 get_long(vil_stream* file, int location)
 {
   if (location >= 0) file->seek(location);
 
-  unsigned char buff[4];
+  vxl_byte buff[4];
   file->read((void*)buff, 4L);
-  return (((buff[0]&0x7f)<<24)+(buff[1]<<16)+(buff[2]<<8)+buff[3])*((buff[0]&0x80)?-1:1);
+
+  // Decode from two's complement to machine format
+  vxl_uint_32 bits = ( vxl_uint_32(buff[0]) << 24 ) +
+                     ( vxl_uint_32(buff[1]) << 16 ) +
+                     ( vxl_uint_32(buff[2]) <<  8 ) +
+                                   buff[3];
+
+  if( ( bits & 0x80000000L ) != 0 )
+    return -vxl_sint_32( ~bits + 1 );
+  else
+    return vxl_sint_32( bits );
 }
 
 
-void send_char(vil_stream* data, int s)
+void send_char(vil_stream* data, char s)
 {
-  char c = s;
-  data->write(&c ,1L);
+  data->write(&s ,1L);
 }
 
-void send_short(vil_stream* data, int s)
+void send_short(vil_stream* data, vxl_sint_16 s)
 {
-  unsigned char buff[2];
-  if (s>=0) { buff[0] = (s >> 8) & 0x7f; buff[1] = s & 0xff; }
-  else      { s=-s; buff[0] = 0x80 | ((s >> 8) & 0x7f); buff[1] = s & 0xff; }
+  vxl_uint_16 bits;
+  if( s < 0 ) {
+    bits = -s;
+    bits = ~bits + 1;
+  } else {
+    bits = s;
+  }
+
+  vxl_byte buff[2];
+  buff[0] = (bits >>  8) & 0xff;
+  buff[1] =  bits        & 0xff;
   data->write(buff, 2L);
 }
 
-void send_ushort(vil_stream* data, unsigned int s)
+void send_ushort(vil_stream* data, vxl_uint_16 s)
 {
   unsigned char buff[2];
   buff[0] = (s >> 8) & 0xff;
@@ -498,11 +524,23 @@ void send_ushort(vil_stream* data, unsigned int s)
   data->write(buff, 2L);
 }
 
-void send_long(vil_stream* data, long s)
+void send_long(vil_stream* data, vxl_sint_32 s)
 {
-  unsigned char buff[4];
-  if (s>=0) { buff[0] = (s >> 24) & 0x7f; buff[1] = (s >> 16) & 0xff; buff[2]=(s>>8)&0xff; buff[3]=s&0xff; }
-  else      { s=-s;buff[0]=0x80|((s>>24)&0x7f); buff[1]=(s>>16)&0xff; buff[2]=(s>>8)&0xff; buff[3]=s&0xff; }
+  // The write out the value as a two's complement number in MSB order
+
+  vxl_uint_32 bits;
+  if( s < 0 ) {
+    bits = -s;
+    bits = ~bits + 1;
+  } else {
+    bits = s;
+  }
+
+  vxl_byte buff[4];
+  buff[0] = static_cast<unsigned char>( (bits >> 24) & 0xff );
+  buff[1] = static_cast<unsigned char>( (bits >> 16) & 0xff );
+  buff[2] = static_cast<unsigned char>( (bits >>  8) & 0xff );
+  buff[3] = static_cast<unsigned char>(  bits        & 0xff );
   data->write(buff, 4L);
 }
 
