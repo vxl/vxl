@@ -1,7 +1,12 @@
-LINK_LIBRARIES( pdf1d )
-LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/isbe_pdf/pdf1d )
+# ./mul/pdf1d/CMakeListsLink.txt
 
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vbl/io/CMakeListsLink.txt )
+LINK_LIBRARIES( pdf1d )
+
+IF (LIBRARY_OUTPUT_PATH MATCHES '^$')
+  LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/mul/pdf1d )
+ENDIF (LIBRARY_OUTPUT_PATH MATCHES '^$')
+
+# Immediate dependencies
 INCLUDE( ${allvxl_SOURCE_DIR}/mul/mbl/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vgl/io/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vnl/algo/CMakeListsLink.txt ) 
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vnl/io/CMakeListsLink.txt ) 
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vbl/io/CMakeListsLink.txt )
