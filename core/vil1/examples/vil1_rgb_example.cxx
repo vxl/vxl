@@ -45,10 +45,10 @@ int main(int /*argc*/, char** /*argv*/)
 // This function writes, e.g., vil_rgb_cell(177,49,97) as "#b13161":
 
 char* as_hex(vil_rgb_cell const& rgb) {
-  // The data members R_, G_ and B_ of an vil_rgb_cell are public:
-  unsigned char r = rgb.R_;
-  unsigned char g = rgb.G_;
-  unsigned char b = rgb.B_;
+  // The data members r, g and b of an vil_rgb_cell are public:
+  unsigned char r = rgb.r;
+  unsigned char g = rgb.g;
+  unsigned char b = rgb.b;
 
   // And now some magic char manipulations, to obtain hex values:
   static char s[] = "#000000";
