@@ -1,5 +1,4 @@
 SOURCE_FILES( vnl_algo_sources
-  dll.h
   vnl_adjugate.h
   vnl_algo_fwd.h
   vnl_amoeba.h
@@ -39,8 +38,6 @@ SOURCE_FILES( vnl_algo_sources
   vnl_adjugate.txx
   vnl_convolve.txx
   vnl_determinant.txx
-  vnl_fft1d.txx
-  vnl_fft2d.txx
   vnl_fft_1d.txx
   vnl_fft_2d.txx
   vnl_fft_base.txx
