@@ -5,7 +5,6 @@
 #include "brct_windows_frame.h"
 #include <vcl_cstdlib.h> // for vcl_exit()
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
 #include <vcl_cassert.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_dialog.h>
@@ -356,14 +355,13 @@ void brct_windows_frame::init_epipole()
   assert(lines_.size() >= 2);
   vgl_homg_point_2d<double> epipole = vgl_homg_operators_2d<double>::lines_to_point(lines_);
 
-  vcl_cout<<"epipole = ("<<epipole.x()<<" " << epipole.y() << " "<< epipole.w()<<")\n";
+  vcl_cout<<"epipole = ("<<epipole.x()<<' ' << epipole.y() << ' '<< epipole.w()<<")\n";
 
   vgl_point_2d<double> pt(epipole);
   e_ -> set(pt.x(), pt.y());
-  
+
 
   kalman_->init_epipole(pt.x(), pt.y());
-  
 }
 
 void brct_windows_frame::creat_line()
