@@ -1,6 +1,8 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
+//:
+// \file
 
 #include "pdf1d_kernel_pdf_builder.h"
 #include <vcl_cassert.h>
@@ -8,7 +10,6 @@
 #include <vcl_cstdlib.h> // vcl_abort()
 #include <vcl_cmath.h>
 
-#include <vsl/vsl_indent.h>
 #include <vnl/vnl_vector_ref.h>
 #include <mbl/mbl_data_wrapper.h>
 #include <mbl/mbl_data_array_wrapper.h>
@@ -99,33 +100,33 @@ void pdf1d_kernel_pdf_builder::build_from_array(pdf1d_pdf& model,
   }
 
   // Initially just use Silverman's estimate
-	// Later allow switching of alternative algorithms
-	// eg width proportional to dist. to nearest point,
-	//    adaptive kernel estimates etc.
+  // Later allow switching of alternative algorithms
+  // eg width proportional to dist. to nearest point,
+  //    adaptive kernel estimates etc.
 
   switch (build_type_)
   {
     case fixed_width:
-	  build_fixed_width(kpdf,data,n,fixed_width_);
-	  break;
+    build_fixed_width(kpdf,data,n,fixed_width_);
+    break;
     case select_equal:
-	  build_select_equal_width(kpdf,data,n);
-	  break;
+    build_select_equal_width(kpdf,data,n);
+    break;
     case width_from_sep:
-	  build_width_from_separation(kpdf,data,n);
-	  break;
+    build_width_from_separation(kpdf,data,n);
+    break;
     case adaptive:
-	  build_adaptive(kpdf,data,n);
-	  break;
+    build_adaptive(kpdf,data,n);
+    break;
     default:
-	  vcl_cerr<<"pdf1d_kernel_pdf_builder::build() Unknown build type."<<vcl_endl;
-	  vcl_abort();
+    vcl_cerr<<"pdf1d_kernel_pdf_builder::build() Unknown build type."<<vcl_endl;
+    vcl_abort();
   }
 }
 
 void pdf1d_kernel_pdf_builder::build(pdf1d_pdf& model, mbl_data_wrapper<double>& data) const
 {
-  pdf1d_kernel_pdf& kpdf = kernel_pdf(model);
+  // pdf1d_kernel_pdf& kpdf = kernel_pdf(model); // unused
 
   int n = data.size();
 
@@ -135,29 +136,29 @@ void pdf1d_kernel_pdf_builder::build(pdf1d_pdf& model, mbl_data_wrapper<double>&
     vcl_abort();
   }
 
-	if (data.is_a()=="mbl_data_array_wrapper<T>")
-	{
+  if (data.is_a()=="mbl_data_array_wrapper<T>")
+  {
     mbl_data_array_wrapper<double>& data_array =
-		               (mbl_data_array_wrapper<double>&) data;
-		build_from_array(model,data_array.data(),n);
-		return;
-	}
-
-	// Fill array with data
-	vnl_vector<double> x(n);
-	data.reset();
-	for (int i=0;i<n;++i)
-	{
-	  x[i]=data.current();
-		data.next();
+                   (mbl_data_array_wrapper<double>&) data;
+    build_from_array(model,data_array.data(),n);
+    return;
   }
 
-	build_from_array(model,x.data_block(),n);
+  // Fill array with data
+  vnl_vector<double> x(n);
+  data.reset();
+  for (int i=0;i<n;++i)
+  {
+    x[i]=data.current();
+    data.next();
+  }
+
+  build_from_array(model,x.data_block(),n);
 }
 
 void pdf1d_kernel_pdf_builder::weighted_build(pdf1d_pdf& model,
-                                            mbl_data_wrapper<double>& data,
-                                            const vcl_vector<double>& wts) const
+                                              mbl_data_wrapper<double>& data,
+                                              const vcl_vector<double>& wts) const
 {
   vcl_cerr<<"pdf1d_kernel_pdf_builder::weighted_build() Ignoring weights."<<vcl_endl;
   build(model,data);
@@ -165,7 +166,7 @@ void pdf1d_kernel_pdf_builder::weighted_build(pdf1d_pdf& model,
 
 //: Build from n elements in data[i]
 void pdf1d_kernel_pdf_builder::build_fixed_width(pdf1d_kernel_pdf& kpdf,
-                             const double* data, int n, double width) const
+                                                 const double* data, int n, double width) const
 {
   vnl_vector_ref<double> v_data(n,(double*) data);
   kpdf.set_centres(v_data,width);
@@ -175,13 +176,13 @@ void pdf1d_kernel_pdf_builder::build_fixed_width(pdf1d_kernel_pdf& kpdf,
 //  Same width selected for all points, using
 //  $w=(3n/4)^{-0.2}\sigma$, as suggested by Silverman
 void pdf1d_kernel_pdf_builder::build_select_equal_width(pdf1d_kernel_pdf& kpdf,
-                              const double* data, int n) const
+                                                        const double* data, int n) const
 {
   double m,var;
   pdf1d_calc_mean_var(m,var,data,n);
   if (var<min_var_) var=min_var_;
 
-  double k_var = var*pow(4.0/(3*n),0.4);
+  double k_var = var*vcl_pow(4.0/(3*n),0.4);
   double w = vcl_sqrt(k_var);
 
   build_fixed_width(kpdf,data,n,w);
@@ -191,15 +192,15 @@ void pdf1d_kernel_pdf_builder::build_select_equal_width(pdf1d_kernel_pdf& kpdf,
 //  Assumes index is sorted: data[index[i]] <= *data[index[i+1]]
 static double dist_to_neighbour(int i0, const double* data, const int *index, int n)
 {
-  double di0 = data[index[i0]];
-
   int k = 3;
-	int ilo = i0-k; if (ilo<0) ilo=0;
-	int ihi = i0+k; if (ihi>=n) ihi=n-1;
+  int ilo = i0-k; if (ilo<0) ilo=0;
+  int ihi = i0+k; if (ihi>=n) ihi=n-1;
 
-	return vcl_fabs(data[index[ihi]]-data[index[ilo]]);
+  return vcl_fabs(data[index[ihi]]-data[index[ilo]]);
 
 #if 0
+  double di0 = data[index[i0]];
+
   const double min_diff = 1.0e-6;
   // Look below i0
   int i=i0-1;
@@ -218,16 +219,16 @@ static double dist_to_neighbour(int i0, const double* data, const int *index, in
 
 //: Kernel width proportional to distance to nearby samples.
 void pdf1d_kernel_pdf_builder::build_width_from_separation(pdf1d_kernel_pdf& kpdf,
-	                             const double* data, int n) const
+                                                           const double* data, int n) const
 {
   // Sort the data
   vcl_vector<int> index;
   mbl_index_sort(data, n, index);
-  
+
   vnl_vector<double> width(n);
   double* w=width.data_block();
-  
-  double min_w = sqrt(min_var_)/n;
+
+  double min_w = vcl_sqrt(min_var_)/n;
 
   for (int i=0;i<n;++i)
   {
@@ -242,7 +243,7 @@ void pdf1d_kernel_pdf_builder::build_width_from_separation(pdf1d_kernel_pdf& kpd
 //  Use equal widths to create a pilot estimate, then use the prob at each
 //  data point to modify the widths
 void pdf1d_kernel_pdf_builder::build_adaptive(pdf1d_kernel_pdf& kpdf,
-	                             const double* data, int n) const
+                                              const double* data, int n) const
 {
   // First build the pilot estimate
   build_select_equal_width(kpdf,data,n);
@@ -261,7 +262,7 @@ void pdf1d_kernel_pdf_builder::build_adaptive(pdf1d_kernel_pdf& kpdf,
   for (int i=0;i<n;++i)
   {
     // Scale each inversely by sqrt(prob)
-    new_width[i] *= exp(-0.5*(log_p[i]-log_mean));
+    new_width[i] *= vcl_exp(-0.5*(log_p[i]-log_mean));
   }
 
   kpdf.set_centres(kpdf.centre(),new_width);
