@@ -62,7 +62,7 @@ void test_normalise_image_2d()
   // create correct variance norm image
   for (int y=0;y<ny;++y)
     for (int x=0;x<nx;++x)
-      correct_var_norm_image(x,y)=(x-2)/ vcl_sqrt(2);
+      correct_var_norm_image(x,y)=(x-2)/ vcl_sqrt(2.0);
   
   double diff2=0;
   for (int y=0;y<ny;++y)
