@@ -1,6 +1,7 @@
 #include <rgrl/rgrl_trans_couple.h>
 #include <rgrl/rgrl_util.h>
 #include <vnl/vnl_math.h>
+#include <vcl_cassert.h>
 //:
 // \file
 // \brief a class that encapsulates a pair of transformations: forward & backward
