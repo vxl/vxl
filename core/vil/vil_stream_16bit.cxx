@@ -6,6 +6,8 @@
 // \file
 // \author fsm
 
+// ****** This is platform specific!!! Need to swap byte order for some platforms!!! ***
+
 #include "vil2_stream_16bit.h"
 #include <vil2/vil2_stream.h>
 #include <vxl_config.h>
