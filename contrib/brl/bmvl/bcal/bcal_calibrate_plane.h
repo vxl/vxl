@@ -1,5 +1,5 @@
 //------------------------------------------------------------------------------
-// FileName   : calibrate_plane.h
+// FileName   : bcal_calibrate_plane.h
 // Author     : Kongbin Kang (kk@lems.brown.edu)
 // Company    : Brown University
 // Purpose    : Planar Calibration Object
@@ -18,16 +18,16 @@
 #include <vcl_vector.h>
 #include <vgl/vgl_homg_point_2d.h>
 
-#include "calibrate_object.h"
+#include "bcal_calibrate_object.h"
 
-class calibrate_plane : public calibrate_object
+class bcal_calibrate_plane : public bcal_calibrate_object
 {
   vcl_vector<vgl_homg_point_2d<double> > pts_;
  public:
   vcl_vector<vgl_homg_point_2d<double> >& get_points() { return pts_;}
   int readData(const char* fname);
-  calibrate_plane();
-  virtual ~calibrate_plane();
+  bcal_calibrate_plane();
+  virtual ~bcal_calibrate_plane();
 };
 
 #endif // AFX_CALIBRATEPLANE_H__22DD25A2_6BFF_46DE_83C2_0285C7008E46__INCLUDED_
