@@ -8,7 +8,6 @@
 // \author Tim Cootes - Manchester
 
 #include "vil3d_gipl_format.h"
-#include <vcl_cassert.h>
 #include <vcl_cstdlib.h>
 #include <vil2/vil2_stream_read.h>
 #include <vil2/vil2_stream_fstream.h>
@@ -122,11 +121,6 @@ vil3d_image_resource_sptr vil3d_gipl_format::make_output_image
 }
 
 
-
-
-
-
-
 vil3d_gipl_image::vil3d_gipl_image(vil2_stream *is): is_(is)
 {
   read_header(is);
@@ -164,7 +158,6 @@ enum vil2_pixel_format vil3d_gipl_image::pixel_format() const
 {
   return pixel_format_;
 }
-
 
 
 //: Read header from given stream if possible
@@ -293,7 +286,7 @@ vil3d_image_view_base_sptr vil3d_gipl_image::get_copy_view(
     }
     case VIL2_PIXEL_FORMAT_BOOL:
       vcl_cout<<"ERROR: vil3d_gipl_format::get_image_data()"
-              <<pixel_format() << " pixel type not yet implemented" << vcl_endl;
+              <<pixel_format() << " pixel type not yet implemented\n";
       return false;
     default:
       vcl_cout<<"ERROR: vil3d_gipl_format::get_image_data()\n"
@@ -313,6 +306,6 @@ bool vil3d_gipl_image::get_property(char const *key, void * value) const
 bool vil3d_gipl_image::put_view(const vil3d_image_view_base& vv,
   unsigned i0, unsigned j0, unsigned k0)
 {
-  vcl_cerr << "ERROR: vil3d_gipl_image::put_view NYI\n" << vcl_endl;
+  vcl_cerr << "ERROR: vil3d_gipl_image::put_view NYI\n\n";
   return false;
 }
