@@ -6,6 +6,7 @@
 #include <vpl/vpl.h>
 
 #include <bgrl/bgrl_vertex.h>
+#include <bgrl/bgrl_edge.h>
 #include <bgrl/bgrl_graph.h>
 
 //: Test the graph class
@@ -88,6 +89,9 @@ void test_graph()
 // I/O Tests
 //----------------------------------------------------------------------------------------
 
+  vsl_add_to_binary_loader(bgrl_vertex());
+  vsl_add_to_binary_loader(bgrl_edge());
+  
   // binary test output file stream
   vsl_b_ofstream bfs_out("test_graph_io.tmp");
   TEST("Created test_graph_io.tmp for writing",(!bfs_out), false);

@@ -98,7 +98,8 @@ bgrl_vertex::purge()
 
 //: Add an edge to \p vertex
 bgrl_edge_sptr
-bgrl_vertex::add_edge_to( const bgrl_vertex_sptr& vertex )
+bgrl_vertex::add_edge_to( const bgrl_vertex_sptr& vertex,
+                          const bgrl_edge_sptr& model_edge )
 {
   if (!vertex || vertex.ptr() == this)
     return bgrl_edge_sptr(NULL);
@@ -106,13 +107,23 @@ bgrl_vertex::add_edge_to( const bgrl_vertex_sptr& vertex )
   // verify that this edge is not already present
   for ( edge_iterator itr = out_edges_.begin();
         itr != out_edges_.end(); ++itr )
-    if ((*itr)->to() == vertex)
+    if ((*itr)->to_ == vertex)
       return bgrl_edge_sptr(NULL);
 
   // add the edge
-  bgrl_edge_sptr new_edge = new bgrl_edge(this, vertex);
-  out_edges_.insert(new_edge);
+  bgrl_edge_sptr new_edge;
+  if(model_edge)
+    new_edge = model_edge->clone();
+  else
+    new_edge = new bgrl_edge;
+  
+  new_edge->from_ = this;
+  new_edge->to_ = vertex;
+  this->out_edges_.insert(new_edge);
   vertex->in_edges_.insert(new_edge);
+
+  // initialize the edge
+  new_edge->init();
 
   return new_edge;
 }
@@ -128,7 +139,7 @@ bgrl_vertex::remove_edge_to( const bgrl_vertex_sptr& vertex )
   for ( edge_iterator itr = out_edges_.begin();
         itr != out_edges_.end(); ++itr )
   {
-    if ((*itr)->to() == vertex) {
+    if ((*itr)->to_ == vertex) {
       if ( vertex->in_edges_.erase(*itr) > 0 ) {
         (*itr)->to_ = NULL;
         (*itr)->from_ = NULL;
@@ -245,36 +256,6 @@ bgrl_vertex::print_summary( vcl_ostream& os ) const
 //-----------------------------------------------------------------------------------------
 
 
-//: Binary save bgrl_vertex to stream.
-void
-vsl_b_write(vsl_b_ostream &os, const bgrl_vertex* v)
-{
-  if (!v) {
-    vsl_b_write(os, false); // Indicate null pointer stored
-  }
-  else {
-    vsl_b_write(os,true); // Indicate non-null pointer stored
-    v->b_write(os);
-  }
-}
-
-
-//: Binary load bgrl_vertex from stream.
-void
-vsl_b_read(vsl_b_istream &is, bgrl_vertex* &v)
-{
-  delete v;
-  bool not_null_ptr;
-  vsl_b_read(is, not_null_ptr);
-  if (not_null_ptr) {
-    v = new bgrl_vertex();
-    v->b_read(is);
-  }
-  else
-    v = 0;
-}
-
-
 //: Allows derived class to be loaded by base-class pointer.
 //  A loader object exists which is invoked by calls
 //  of the form "vsl_b_read(os,base_ptr);".  This loads derived class
@@ -288,14 +269,3 @@ void vsl_add_to_binary_loader(const bgrl_vertex& v)
 {
   vsl_binary_loader<bgrl_vertex>::instance().add(v);
 }
-
-
-//: Print an ASCII summary to the stream
-void
-vsl_print_summary(vcl_ostream &os, const bgrl_vertex* v)
-{
-  os << "bgrl_vertex{ ";
-  v->print_summary(os);
-  os << " }";
-}
-

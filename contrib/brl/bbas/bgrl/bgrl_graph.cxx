@@ -6,7 +6,6 @@
 #include "bgrl_edge.h"
 #include <vbl/io/vbl_io_smart_ptr.h>
 #include <vsl/vsl_set_io.h>
-#include <vsl/vsl_binary_loader.h>
 #include <vcl_iostream.h>
 
 //: Constructor
@@ -36,7 +35,7 @@ bgrl_graph::bgrl_graph(const bgrl_graph& graph)
     for ( vcl_set<bgrl_edge_sptr>::const_iterator e_itr = (*v_itr)->out_edges_.begin();
           e_itr != (*v_itr)->out_edges_.end();  ++e_itr )
     {
-      vcl_map<bgrl_vertex_sptr, bgrl_vertex_sptr>::iterator find_new = old_to_new.find((*e_itr)->to());
+      vcl_map<bgrl_vertex_sptr, bgrl_vertex_sptr>::iterator find_new = old_to_new.find((*e_itr)->to_);
       if ( find_new != old_to_new.end() ){
         (*e_itr)->to_ = find_new->second.ptr();
         find_new->second->in_edges_.insert(*e_itr);
@@ -74,7 +73,9 @@ bgrl_graph::remove_vertex(const bgrl_vertex_sptr& vertex)
 
 //: Add an edge between \p v1 and \p v2
 bgrl_edge_sptr
-bgrl_graph::add_edge( const bgrl_vertex_sptr& v1, const bgrl_vertex_sptr& v2 )
+bgrl_graph::add_edge( const bgrl_vertex_sptr& v1,
+                      const bgrl_vertex_sptr& v2,
+                      const bgrl_edge_sptr& model_edge )
 {
   if (!v1 || !v2)
     return 0;
@@ -83,7 +84,7 @@ bgrl_graph::add_edge( const bgrl_vertex_sptr& v1, const bgrl_vertex_sptr& v2 )
   if ( vertices_.count(v2) == 0 && !this->add_vertex(v2) )
     return 0;
 
-  return v1->add_edge_to(v2);
+  return v1->add_edge_to(v2, model_edge);
 }
 
 
@@ -112,8 +113,8 @@ bgrl_graph::purge()
     for ( edge_iterator e_itr = curr_vertex->out_edges_.begin();
           e_itr != curr_vertex->out_edges_.end(); ++e_itr )
     {
-      if (vertices_.find((*e_itr)->to()) == vertices_.end()) {
-        curr_vertex->remove_edge_to((*e_itr)->to());
+      if (vertices_.find((*e_itr)->to_) == vertices_.end()) {
+        curr_vertex->remove_edge_to((*e_itr)->to_);
         retval = true;
       }
     }
@@ -121,8 +122,8 @@ bgrl_graph::purge()
     for ( edge_iterator e_itr = curr_vertex->in_edges_.begin();
           e_itr != curr_vertex->in_edges_.end(); ++e_itr )
     {
-      if (vertices_.find((*e_itr)->from()) == vertices_.end()) {
-        (*e_itr)->from()->remove_edge_to(curr_vertex);
+      if (vertices_.find((*e_itr)->from_) == vertices_.end()) {
+        (*e_itr)->from_->remove_edge_to(curr_vertex);
         retval = true;
       }
     }
@@ -316,21 +317,6 @@ vsl_b_read(vsl_b_istream &is, bgrl_graph* &g)
   }
   else
     g = 0;
-}
-
-
-//: Allows derived class to be loaded by base-class pointer.
-//  A loader object exists which is invoked by calls
-//  of the form "vsl_b_read(os,base_ptr);".  This loads derived class
-//  objects from the stream, places them on the heap and
-//  returns a base class pointer.
-//  In order to work the loader object requires
-//  an instance of each derived class that might be
-//  found.  This function gives the model class to
-//  the appropriate loader.
-void vsl_add_to_binary_loader(const bgrl_graph& g)
-{
-  vsl_binary_loader<bgrl_graph>::instance().add(g);
 }
 
 

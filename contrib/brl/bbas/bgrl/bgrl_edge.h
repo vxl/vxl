@@ -28,10 +28,8 @@ class bgrl_edge : public vbl_ref_count
 
   //: Constructor
   bgrl_edge() : from_(NULL), to_(NULL) {}
-  //: Constructor
-  bgrl_edge( bgrl_vertex_sptr f, bgrl_vertex_sptr t) : from_(f), to_(t) {}
   //: Destructor
-  ~bgrl_edge() {}
+  virtual ~bgrl_edge() {}
 
   //: Smart pointer to the vertex where this edge originates
   bgrl_vertex_sptr from() const { return from_; }
@@ -55,21 +53,16 @@ class bgrl_edge : public vbl_ref_count
   //: Print an ascii summary to the stream
   void print_summary(vcl_ostream &os) const;
 
- private:
+ protected:
+  //: initialize the edge
+  virtual void init() {}
+  
   //: The starting vertex
   bgrl_vertex_sptr from_;
   //: The ending vertex
   bgrl_vertex_sptr to_;
 };
 
-
-//: Binary save bgrl_edge to stream.
-//  \relates bgrl_edge
-void vsl_b_write(vsl_b_ostream &os, const bgrl_edge* e);
-
-//: Binary load bgrl_edge from stream.
-//  \relates bgrl_edge
-void vsl_b_read(vsl_b_istream &is, bgrl_edge* &e);
 
 //: Allows derived class to be loaded by base-class pointer
 //  A loader object exists which is invoked by calls
@@ -81,10 +74,6 @@ void vsl_b_read(vsl_b_istream &is, bgrl_edge* &e);
 //  found.  This function gives the model class to
 //  the appropriate loader.
 void vsl_add_to_binary_loader(const bgrl_edge& e);
-
-//: Print an ASCII summary to the stream
-//  \relates bgrl_edge
-void vsl_print_summary(vcl_ostream &os, const bgrl_edge* e);
 
 
 #endif // bgrl_edge_h_

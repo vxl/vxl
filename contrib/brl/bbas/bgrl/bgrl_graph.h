@@ -43,7 +43,7 @@ class bgrl_graph : public vbl_ref_count
   bgrl_graph(const bgrl_graph& graph);
 
   //: Destructor
-  ~bgrl_graph(){}
+  virtual ~bgrl_graph(){}
 
   //: Adds a new vertex to the graph
   // \retval true if the vertex was added
@@ -56,7 +56,9 @@ class bgrl_graph : public vbl_ref_count
   bool remove_vertex(const bgrl_vertex_sptr& vertex);
 
   //: Add an edge between \p v1 and \p v2
-  bgrl_edge_sptr add_edge( const bgrl_vertex_sptr& v1, const bgrl_vertex_sptr& v2 );
+  bgrl_edge_sptr add_edge( const bgrl_vertex_sptr& v1,
+                           const bgrl_vertex_sptr& v2,
+                           const bgrl_edge_sptr& model_edge = NULL);
 
   //: Add an edge between \p v1 and \p v2
   bool remove_edge( const bgrl_vertex_sptr& v1, const bgrl_vertex_sptr& v2 );
@@ -143,17 +145,6 @@ void vsl_b_write(vsl_b_ostream &os, const bgrl_graph* g);
 
 //: Binary load bgrl_graph from stream.
 void vsl_b_read(vsl_b_istream &is, bgrl_graph* &g);
-
-//: Allows derived class to be loaded by base-class pointer
-//  A loader object exists which is invoked by calls
-//  of the form "vsl_b_read(os,base_ptr)".  This loads derived class
-//  objects from the disk, places them on the heap and
-//  returns a base class pointer.
-//  In order to work the loader object requires
-//  an instance of each derived class that might be
-//  found.  This function gives the model class to
-//  the appropriate loader.
-void vsl_add_to_binary_loader(const bgrl_graph& g);
 
 //: Print an ASCII summary to the stream
 void vsl_print_summary(vcl_ostream &os, const bgrl_graph* g);
