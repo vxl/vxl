@@ -53,8 +53,6 @@ FMPlanarNonLinFun::FMPlanarNonLinFun(const ImageMetric* image_metric1,
   _denorm_matrix_inv = _normalized.get_C_inverse();
 }
 
-#include <vcl_iomanip.h>
-
 //-----------------------------------------------------------------------------
 //: Compute the planar F matrix and returns true if succesful.
 //

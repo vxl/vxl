@@ -10,7 +10,6 @@
 
 #include <vcl_cstdlib.h>
 #include <vcl_iostream.h>
-#include <vcl_iomanip.h>
 #include <vcl_new.h>
 
 #include <osl/osl_hacks.h>
