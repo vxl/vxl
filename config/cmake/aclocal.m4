@@ -2,7 +2,7 @@
 # from vcl/aclocal.m4
 
 ### find path to C++ headers, if possible
-AC_DEFUN(AC_CXX_HEADERS,[
+AC_DEFUN(VCL_CXX_HEADERS,[
 AC_CACHE_CHECK(path to C++ headers,[
 #AC_PROG_CXXCPP
 AC_MSG_CHECKING( standard C++ headers )
@@ -20,14 +20,14 @@ for i in $CXX_HDRDIR; do
 done
 rm -f conftest.cc
 AC_MSG_RESULT( $CXX_HDRDIR )
-],,ac_cxx_headers=$CXX_HDRDIR,[])
+],,vcl_cv_cxx_headers=$CXX_HDRDIR,[])
 ])
 dnl
 
 
 ### Check whether the compiler understands `bool'
-AC_DEFUN(AC_CXX_HAS_BOOL,[
-AC_CACHE_CHECK([whether the C++ compiler supports the keyword 'bool'],ac_cxx_has_bool,
+AC_DEFUN(VCL_CXX_HAS_BOOL,[
+AC_CACHE_CHECK([whether the C++ compiler supports the keyword 'bool'],vcl_cv_cxx_has_bool,
 [AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 
@@ -35,22 +35,21 @@ VCL_COMPILE_CXX
 
 AC_TRY_COMPILE([
 void function(int i, void *ptr, bool v) { }
-],,ac_cxx_has_bool=yes,ac_cxx_has_bool=no)
+],,vcl_cv_cxx_has_bool=yes,vcl_cv_cxx_has_bool=no)
 AC_LANG_RESTORE
 ])
-if test "$ac_cxx_has_bool" = "yes" ; then
+if test "$vcl_cv_cxx_has_bool" = "yes" ; then
   VCL_HAS_BOOL=1;
 else
   VCL_HAS_BOOL=0;
 fi
-export VCL_STD_BOOL
 ])
 dnl
 
 
 ### Check whether the compiler supports dynamic_cast
-AC_DEFUN(AC_CXX_HAS_DYNAMIC_CAST,[
-AC_CACHE_CHECK([whether the C++ compiler supports the keyword 'dynamic_cast'],ac_cxx_has_dynamic_cast,[
+AC_DEFUN(VCL_CXX_HAS_DYNAMIC_CAST,[
+AC_CACHE_CHECK([whether the C++ compiler supports the keyword 'dynamic_cast'],vcl_cv_cxx_has_dynamic_cast,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 
@@ -61,21 +60,20 @@ AC_TRY_COMPILE(
 struct foo { foo(); virtual ~foo(); virtual void f() =0; };
 struct boo : public foo { void f() { *(int*)0 = 1; } };
 boo *try_dynamic_cast() { boo *b = 0; foo *f = b; return dynamic_cast<boo*>(f); }
-],,ac_cxx_has_dynamic_cast=yes,ac_cxx_has_dynamic_cast=no)
+],,vcl_cv_cxx_has_dynamic_cast=yes,vcl_cv_cxx_has_dynamic_cast=no)
 AC_LANG_RESTORE
  ])
-if test "$ac_cxx_has_dynamic_cast" = "yes" ; then
+if test "$vcl_cv_cxx_has_dynamic_cast" = "yes" ; then
   VCL_HAS_DYNAMIC_CAST=1;
 else
   VCL_HAS_DYNAMIC_CAST=0;
 fi;
-export VCL_HAS_DYNAMIC_CAST
 ])
 
 
 ### Check whether the compiler supports "typename"
-AC_DEFUN(AC_CXX_HAS_TYPENAME,[
-AC_CACHE_CHECK([whether the C++ compiler supports the keyword 'typename'],ac_cxx_has_typename,[
+AC_DEFUN(VCL_CXX_HAS_TYPENAME,[
+AC_CACHE_CHECK([whether the C++ compiler supports the keyword 'typename'],vcl_cv_cxx_has_typename,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 
@@ -88,23 +86,22 @@ class bingo {
 public:
   void bongo(T **);
 };
-],,ac_cxx_has_typename=yes,ac_cxx_has_typename=no)
+],,vcl_cv_cxx_has_typename=yes,vcl_cv_cxx_has_typename=no)
 AC_LANG_RESTORE
  ])
-if test "$ac_cxx_has_typename" = "yes" ; then
+if test "$vcl_cv_cxx_has_typename" = "yes" ; then
   VCL_HAS_TYPENAME=1;
 else
   VCL_HAS_TYPENAME=0;
 fi;
-export VCL_HAS_TYPENAME
 ])
 
 
 
 
 ### Check whether the compiler supports "export"
-AC_DEFUN(AC_CXX_HAS_EXPORT,[
-AC_CACHE_CHECK([whether the C++ compiler accepts the keyword 'export'],ac_cxx_has_export,[
+AC_DEFUN(VCL_CXX_HAS_EXPORT,[
+AC_CACHE_CHECK([whether the C++ compiler accepts the keyword 'export'],vcl_cv_cxx_has_export,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 
@@ -128,23 +125,22 @@ void g()
   plither<double, 3> obj;
   obj.f(&x, y);
 }
-],,ac_cxx_has_export=yes,ac_cxx_has_export=no)
+],,vcl_cv_cxx_has_export=yes,vcl_cv_cxx_has_export=no)
 AC_LANG_RESTORE
  ])
-if test "$ac_cxx_has_export" = "yes" ; then
+if test "$vcl_cv_cxx_has_export" = "yes" ; then
   VCL_HAS_EXPORT=1;
 else
   VCL_HAS_EXPORT=0;
 fi;
-export VCL_HAS_EXPORT
 ])
 
 
 
 
 ### Check whether the compiler supports "mutable"
-AC_DEFUN(AC_CXX_HAS_MUTABLE,[
-AC_CACHE_CHECK([whether the C++ compiler supports the keyword 'mutable'],ac_cxx_has_mutable,[
+AC_DEFUN(VCL_CXX_HAS_MUTABLE,[
+AC_CACHE_CHECK([whether the C++ compiler supports the keyword 'mutable'],vcl_cv_cxx_has_mutable,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 
@@ -156,23 +152,22 @@ class X {
 public:
   mutable int const *p;
 };
-],,ac_cxx_has_mutable=yes,ac_cxx_has_mutable=no)
+],,vcl_cv_cxx_has_mutable=yes,vcl_cv_cxx_has_mutable=no)
 AC_LANG_RESTORE
  ])
-if test "$ac_cxx_has_mutable" = "yes" ; then
+if test "$vcl_cv_cxx_has_mutable" = "yes" ; then
   VCL_HAS_MUTABLE=1;
 else
   VCL_HAS_MUTABLE=0;
 fi;
-export VCL_HAS_MUTABLE
 ])
 
 
 
 
 ### Check whether the compiler supports "explicit"
-AC_DEFUN(AC_CXX_HAS_EXPLICIT,[
-AC_CACHE_CHECK([whether the C++ compiler supports the keyword 'explicit'],ac_cxx_has_explicit,[
+AC_DEFUN(VCL_CXX_HAS_EXPLICIT,[
+AC_CACHE_CHECK([whether the C++ compiler supports the keyword 'explicit'],vcl_cv_cxx_has_explicit,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 
@@ -184,23 +179,22 @@ class X {
 public:
   explicit X(int ) { }
 };
-],,ac_cxx_has_explicit=yes,ac_cxx_has_explicit=no)
+],,vcl_cv_cxx_has_explicit=yes,vcl_cv_cxx_has_explicit=no)
 AC_LANG_RESTORE
  ])
-if test "$ac_cxx_has_explicit" = "yes" ; then
+if test "$vcl_cv_cxx_has_explicit" = "yes" ; then
   VCL_HAS_EXPLICIT=1;
 else
   VCL_HAS_EXPLICIT=0;
 fi;
-export VCL_HAS_EXPLICIT
 ])
 
 
 
 
 ### Check whether the compiler supports exceptions
-AC_DEFUN(AC_CXX_HAS_EXCEPTIONS,[
-AC_CACHE_CHECK(whether the C++ compiler has working exceptions,ac_cxx_has_exceptions,[
+AC_DEFUN(VCL_CXX_HAS_EXCEPTIONS,[
+AC_CACHE_CHECK(whether the C++ compiler has working exceptions,vcl_cv_cxx_has_exceptions,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 
@@ -240,22 +234,21 @@ void monkeylette()
     // phew
   }
 }
-],,ac_cxx_has_exceptions=yes,ac_cxx_has_exceptions=no)
+],,vcl_cv_cxx_has_exceptions=yes,vcl_cv_cxx_has_exceptions=no)
 AC_LANG_RESTORE
 ])
-if test "$ac_cxx_has_exceptions" = "yes" ; then
+if test "$vcl_cv_cxx_has_exceptions" = "yes" ; then
   VCL_HAS_EXCEPTIONS=1;
 else
   VCL_HAS_EXCEPTIONS=0;
 fi;
-export VCL_HAS_EXCEPTIONS
 ])
 dnl
 
 
 ### Check whether the compiler supports namespaces
-AC_DEFUN(AC_CXX_HAS_NAMESPACES,[
-AC_CACHE_CHECK(whether the C++ compiler has working namespaces,ac_cxx_has_namespaces,[
+AC_DEFUN(VCL_CXX_HAS_NAMESPACES,[
+AC_CACHE_CHECK(whether the C++ compiler has working namespaces,vcl_cv_cxx_has_namespaces,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 
@@ -333,22 +326,21 @@ void flegg() {
   printf("%lf\n", diced::abs(d)); // 4
   printf("%lf\n", diced::abs(e)); // 5
 }
-],,ac_cxx_has_namespaces=yes,ac_cxx_has_namespaces=no)
+],,vcl_cv_cxx_has_namespaces=yes,vcl_cv_cxx_has_namespaces=no)
 AC_LANG_RESTORE
 ])
-if test "$ac_cxx_has_namespaces" = "yes" ; then
+if test "$vcl_cv_cxx_has_namespaces" = "yes" ; then
   VCL_HAS_NAMESPACES=1;
 else
   VCL_HAS_NAMESPACES=0;
 fi;
-export VCL_HAS_NAMESPACES
 ])
 dnl
 
 
 ### Check whether the compiler allows std:: for the standard library
-AC_DEFUN(AC_CXX_ALLOWS_NAMESPACE_STD,[
-AC_CACHE_CHECK(whether the C++ compiler allows std:: for the standard library,ac_cxx_allows_namespace_std,[
+AC_DEFUN(VCL_CXX_ALLOWS_NAMESPACE_STD,[
+AC_CACHE_CHECK(whether the C++ compiler allows std:: for the standard library,vcl_cv_cxx_allows_namespace_std,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 
@@ -364,22 +356,21 @@ void function() {
   flaz.push_back(std::fabs(1.0f));
   std::cerr << "hello, std::world" << std::endl;
 }
-],,ac_cxx_allows_namespace_std=yes,ac_cxx_allows_namespace_std=no)
+],,vcl_cv_cxx_allows_namespace_std=yes,vcl_cv_cxx_allows_namespace_std=no)
 AC_LANG_RESTORE
 ])
-if test "$ac_cxx_allows_namespace_std" = "yes" ; then
+if test "$vcl_cv_cxx_allows_namespace_std" = "yes" ; then
   VCL_ALLOWS_NAMESPACE_STD=1;
 else
   VCL_ALLOWS_NAMESPACE_STD=0;
 fi;
-export VCL_ALLOWS_NAMESPACE_STD
 ])
 dnl
 
 
 ### Check whether the compiler needs std:: for the standard library
-AC_DEFUN(AC_CXX_NEEDS_NAMESPACE_STD,[
-AC_CACHE_CHECK(whether the C++ compiler needs std:: for the standard library,ac_cxx_needs_namespace_std,[
+AC_DEFUN(VCL_CXX_NEEDS_NAMESPACE_STD,[
+AC_CACHE_CHECK(whether the C++ compiler needs std:: for the standard library,vcl_cv_cxx_needs_namespace_std,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 
@@ -395,22 +386,21 @@ void function() {
   flaz.push_back(fabs(1.0f));
   //cerr << "hello, world" << endl;
 }
-],,ac_cxx_needs_namespace_std=no,ac_cxx_needs_namespace_std=yes)
+],,vcl_cv_cxx_needs_namespace_std=no,vcl_cv_cxx_needs_namespace_std=yes)
 AC_LANG_RESTORE
 ])
-if test "$ac_cxx_needs_namespace_std" = "yes" ; then
+if test "$vcl_cv_cxx_needs_namespace_std" = "yes" ; then
   VCL_NEEDS_NAMESPACE_STD=1;
 else
   VCL_NEEDS_NAMESPACE_STD=0;
 fi;
-export VCL_NEEDS_NAMESPACE_STD
 ])
 dnl
 
 
 ###
-AC_DEFUN(AC_CXX_CHECK_FOR_SCOPE,[
-AC_CACHE_CHECK(whether the C++ compiler supports ISO for scope,ac_cxx_check_for_scope,[
+AC_DEFUN(VCL_CXX_CHECK_FOR_SCOPE,[
+AC_CACHE_CHECK(whether the C++ compiler supports ISO for scope,vcl_cv_cxx_check_for_scope,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 
@@ -422,22 +412,21 @@ void fn() {
   for (long i=0; i<1000; ++i) { }
   double i = 3.141;
 }
-],,ac_cxx_check_for_scope=yes,ac_cxx_check_for_scope=no)
+],,vcl_cv_cxx_check_for_scope=yes,vcl_cv_cxx_check_for_scope=no)
 AC_LANG_RESTORE
 ])
-if test "$ac_cxx_check_for_scope" = "yes" ; then
+if test "$vcl_cv_cxx_check_for_scope" = "yes" ; then
   VCL_FOR_SCOPE_HACK=0;
 else
   VCL_FOR_SCOPE_HACK=1;
 fi;
-export VCL_FOR_SCOPE_HACK
 ])
 dnl
 
 
 ### Check whether the compiler supports member templates
-AC_DEFUN(AC_CXX_HAS_MEMBER_TEMPLATES,[
-AC_CACHE_CHECK(whether the C++ compiler supports member templates,ac_cxx_has_member_templates,[
+AC_DEFUN(VCL_CXX_HAS_MEMBER_TEMPLATES,[
+AC_CACHE_CHECK(whether the C++ compiler supports member templates,vcl_cv_cxx_has_member_templates,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 
@@ -457,23 +446,22 @@ void function()
   int s;
   b.klor(&s);
 }
-],,ac_cxx_has_member_templates=yes,ac_cxx_has_member_templates=no)
+],,vcl_cv_cxx_has_member_templates=yes,vcl_cv_cxx_has_member_templates=no)
 AC_LANG_RESTORE
 ])
-if test "$ac_cxx_has_member_templates" = "yes" ; then
+if test "$vcl_cv_cxx_has_member_templates" = "yes" ; then
   VCL_HAS_MEMBER_TEMPLATES=1;
 else
   VCL_HAS_MEMBER_TEMPLATES=0;
 fi;
-export VCL_HAS_MEMBER_TEMPLATES
 ])
 dnl
 
 
 
 ### Check whether the compiler supports partial specialization
-AC_DEFUN(AC_CXX_CAN_DO_PARTIAL_SPECIALIZATION,[
-AC_MSG_CHECKING(whether the C++ compiler supports partial specialization)
+AC_DEFUN(VCL_CXX_CAN_DO_PARTIAL_SPECIALIZATION,[
+AC_CACHE_CHECK(whether the C++ compiler supports partial specialization,vcl_cv_cxx_can_do_partial_specialization,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 
@@ -513,23 +501,21 @@ template <class T>
 struct foo<int *, T> {
   void baz() { }
 };
-],[
-],[
-VCL_CAN_DO_PARTIAL_SPECIALIZATION="1";
-AC_MSG_RESULT("yes")
-],[
-VCL_CAN_DO_PARTIAL_SPECIALIZATION="0";
-AC_MSG_RESULT("no")
-])
-export VCL_CAN_DO_PARTIAL_SPECIALIZATION
+],,vcl_cv_cxx_can_do_partial_specialization=yes,vcl_cv_cxx_can_do_partial_specialization=no)
 AC_LANG_RESTORE
+])
+if test "$vcl_cv_cxx_can_do_partial_specialization" = "yes" ; then
+  VCL_CAN_DO_PARTIAL_SPECIALIZATION=1
+else
+  VCL_CAN_DO_PARTIAL_SPECIALIZATION=0
+fi
 ])
 dnl
 
 
 ### Check whether the compiler has a header <blah>.
-# AC_CXX_HAS_HEADER(blah, VCL_CXX_HAS_HEADER_BLAH)
-AC_DEFUN(AC_CXX_HAS_HEADER,[
+# VCL_CXX_HAS_HEADER(blah, VCL_CXX_HAS_HEADER_BLAH)
+AC_DEFUN(VCL_CXX_HAS_HEADER,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 AC_CHECK_HEADER($1,[$2=1],[$2=0])
@@ -541,10 +527,10 @@ dnl
 
 ### Check whether the compiler needs values in definitions
 # of functions taking default values.
-AC_DEFUN(AC_CXX_DEFAULT_VALUE,[
+AC_DEFUN(VCL_CXX_DEFAULT_VALUE,[
+AC_CACHE_CHECK(whether the C++ compiler needs default values in second definition,vcl_cv_cxx_default_value,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
-AC_MSG_CHECKING(whether the C++ compiler needs default values in second definition)
 
 VCL_COMPILE_CXX
 
@@ -554,25 +540,24 @@ void function(int x, char *ptr = "foo");
 
 // definition
 void function(int x, char *ptr) { ++ ptr[x]; }
-],,[
-VCL_DEFAULT_VALUE="/* no need */";
-AC_MSG_RESULT(no)
-],[
-VCL_DEFAULT_VALUE=" = x";
-AC_MSG_RESULT(yes)
+],,vcl_cv_cxx_default_value=no,vcl_cv_cxx_default_value=yes)
 ])
+if test "$vcl_cv_cxx_default_value" = "yes" ; then
+  VCL_DEFAULT_VALUE="/* no need */"
+else
+  VCL_DEFAULT_VALUE=" = x"
+fi
 AC_LANG_RESTORE
-export VCL_DEFAULT_VALUE
 ])
 dnl
 
 
 
 ###
-AC_DEFUN(AC_CXX_DEFINE_SPECIALIZATION,[
+AC_DEFUN(VCL_CXX_DEFINE_SPECIALIZATION,[
+AC_CACHE_CHECK([whether the C++ compiler understands the 'template <>' specialization syntax],vcl_cv_cxx_define_specialization,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
-AC_MSG_CHECKING([whether the C++ compiler understands the 'template <>' specialization syntax])
 
 VCL_COMPILE_CXX
 
@@ -590,24 +575,24 @@ public:
   typedef double abs_t;
   typedef double float_t;
 };
-],,[
-VCL_DEFINE_SPECIALIZATION="template <>";
-AC_MSG_RESULT(yes)
-],[
-VCL_DEFINE_SPECIALIZATION="/* template <> */";
-AC_MSG_RESULT(no)
-])
+],,vcl_cv_cxx_define_specialization=yes,vcl_cv_cxx_define_specialization=no)
 AC_LANG_RESTORE
-export VCL_DEFINE_SPECIALIZATION
+])
+if test "$vcl_cv_cxx_define_specialization" = "yes" ; then
+  VCL_DEFINE_SPECIALIZATION="template <>"
+else
+  VCL_DEFINE_SPECIALIZATION="/* template <> */"
+fi
 ])
 dnl
 
 
 ###
-AC_DEFUN(AC_CXX_STATIC_CONST_INIT_INT,[
+AC_DEFUN(VCL_CXX_STATIC_CONST_INIT_INT,[
+AC_CACHE_CHECK(whether the C++ compiler allows initialization of static const int,
+               vcl_cv_cxx_static_const_init_int,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
-AC_MSG_CHECKING(whether the C++ compiler allows initialization of static const int)
 
 VCL_COMPILE_CXX
 
@@ -620,21 +605,20 @@ public:
 //{
 //  return A::x;
 //}
-],,[
-VCL_STATIC_CONST_INIT_INT="1";
-AC_MSG_RESULT(yes)
-],[
-VCL_STATIC_CONST_INIT_INT="0";
-AC_MSG_RESULT(no)
-])
+],,vcl_cv_cxx_static_const_init_int=yes,vcl_cv_cxx_static_const_init_int=no)
 AC_LANG_RESTORE
-export VCL_STATIC_CONST_INIT_INT
+])
+if test "$vcl_cv_cxx_static_const_init_int" = "yes" ; then
+  VCL_STATIC_CONST_INIT_INT=1
+else
+  VCL_STATIC_CONST_INIT_INT=0
+fi
 ])
 dnl
 
 
 ###
-AC_DEFUN(AC_CXX_STATIC_CONST_INIT_FLOAT,[
+AC_DEFUN(VCL_CXX_STATIC_CONST_INIT_FLOAT,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 AC_MSG_CHECKING(whether the C++ compiler allows initialization of static const floats)
@@ -661,7 +645,7 @@ dnl
 
 
 ###
-AC_DEFUN(AC_CXX_IMPLEMENT_STATIC_CONSTS,[
+AC_DEFUN(VCL_CXX_IMPLEMENT_STATIC_CONSTS,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 AC_MSG_CHECKING(whether the C++ compiler requires implementation of static consts)
@@ -702,7 +686,7 @@ dnl
 
 
 ###
-AC_DEFUN(AC_CXX_OVERLOAD_CAST,[
+AC_DEFUN(VCL_CXX_OVERLOAD_CAST,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 AC_MSG_CHECKING(whether the C++ compiler requires explicit casts where it should not)
@@ -772,7 +756,7 @@ dnl
 
 
 ###
-AC_DEFUN(AC_CXX_NULL_TMPL_ARGS,[
+AC_DEFUN(VCL_CXX_NULL_TMPL_ARGS,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 AC_MSG_CHECKING(whether the C++ compiler requires <> in templated forward/friend declarations)
@@ -830,7 +814,7 @@ dnl
 
 
 ###
-AC_DEFUN(AC_CXX_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD,[
+AC_DEFUN(VCL_CXX_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 AC_MSG_CHECKING(whether the C++ compiler needs friend declarations for proper template function overloading)
@@ -886,7 +870,7 @@ dnl
 
 ### Check whether the compiler mangles function templates differently
 # from function non-templates.
-AC_DEFUN(AC_CXX_HAS_TEMPLATE_SYMBOLS,[
+AC_DEFUN(VCL_CXX_HAS_TEMPLATE_SYMBOLS,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 AC_MSG_CHECKING(whether the C++ compiler distinguishes templated and non-templated functions)
@@ -935,7 +919,7 @@ export CXXFLAGS
 
 
 ### Check whether the compiler allows explicit instantiation of inline templates.
-AC_DEFUN(AC_CXX_ALLOWS_INLINE_INSTANTIATION,[
+AC_DEFUN(VCL_CXX_ALLOWS_INLINE_INSTANTIATION,[
 AC_MSG_CHECKING(whether the C++ compiler allows explicit instantiation of inline templates)
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
@@ -967,7 +951,7 @@ dnl
 
 
 ### Check whether the compiler allows static data members
-AC_DEFUN(AC_CXX_NO_STATIC_DATA_MEMBERS,[
+AC_DEFUN(VCL_CXX_NO_STATIC_DATA_MEMBERS,[
 AC_MSG_CHECKING(whether the C++ compiler allows static data members)
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
@@ -997,7 +981,7 @@ dnl
 
 
 ### Check whether the compiler needs explicit instantiation of inline function templates.
-AC_DEFUN(AC_CXX_NEEDS_INLINE_INSTANTIATION,[
+AC_DEFUN(VCL_CXX_NEEDS_INLINE_INSTANTIATION,[
 AC_MSG_CHECKING(whether the C++ compiler needs explicit instantiation of inline function templates)
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
@@ -1047,7 +1031,7 @@ dnl
 
 
 ### Check whether the compiler needs the SunPro class scope hack.
-AC_DEFUN(AC_CXX_SUNPRO_CLASS_SCOPE_HACK,[
+AC_DEFUN(VCL_CXX_SUNPRO_CLASS_SCOPE_HACK,[
 AC_MSG_CHECKING(whether the C++ compiler needs the SunPro class scope hack)
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
@@ -1099,7 +1083,7 @@ dnl
 
 
 ### Check whether the compiler needs default template arguments repeated.
-AC_DEFUN(AC_CXX_DEFAULT_TMPL_ARG,[
+AC_DEFUN(VCL_CXX_DEFAULT_TMPL_ARG,[
 AC_MSG_CHECKING(whether the C++ compiler needs default template arguments repeated)
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
@@ -1153,7 +1137,7 @@ dnl
 
 
 ### Check whether the compiler accepts (complete) default template type parameters.
-AC_DEFUN(AC_CXX_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER,[
+AC_DEFUN(VCL_CXX_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER,[
 AC_MSG_CHECKING([whether the C++ compiler accepts complete types as default template parameters])
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
@@ -1195,7 +1179,7 @@ export VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER
 
 
 ### Check whether the default template type parameters can be templated over earlier parameters.
-AC_DEFUN(AC_CXX_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER,[
+AC_DEFUN(VCL_CXX_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER,[
 AC_MSG_CHECKING(whether the C++ compiler accepts default template type parameters templated over earlier parameters)
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
@@ -1226,7 +1210,7 @@ export VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER
 
 
 ###
-AC_DEFUN(AC_CXX_CAN_DO_STATIC_TEMPLATE_MEMBER,[
+AC_DEFUN(VCL_CXX_CAN_DO_STATIC_TEMPLATE_MEMBER,[
 AC_MSG_CHECKING(whether the C++ compiler accepts templated definitions of static class template members)
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
@@ -1256,7 +1240,7 @@ export VCL_CAN_DO_STATIC_TEMPLATE_MEMBER
 
 
 ###
-AC_DEFUN(AC_CXX_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER,[
+AC_DEFUN(VCL_CXX_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER,[
 AC_MSG_CHECKING(whether the C++ compiler accepts non-type template parameters to function templates)
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
@@ -1297,7 +1281,7 @@ export VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER
 
 
 ### 
-AC_DEFUN(AC_CXX_CAN_DO_IMPLICIT_TEMPLATES,[
+AC_DEFUN(VCL_CXX_CAN_DO_IMPLICIT_TEMPLATES,[
 AC_MSG_CHECKING(whether the C++ compiler instantiates templates implicitly)
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
@@ -1364,10 +1348,10 @@ export VCL_CAN_DO_IMPLICIT_TEMPLATES
 
 
 dnl ----------------------------------------------------------------------------
-dnl  AC_VXL_UNISTD
+dnl  VXL_CXX_UNISTD
 dnl ---------------------------------------------------------------------------
 
-AC_DEFUN(AC_VXL_UNISTD,[
+AC_DEFUN(VXL_CXX_UNISTD,[
 echo "checking <unistd.h>..."
 
 # first get preprocessed unistd.h :
@@ -1411,9 +1395,9 @@ AC_CHECK_FUNC([tell],[VXL_UNISTD_HAS_TELL=1],[VXL_UNISTD_HAS_TELL=0])
 ])
 
 dnl ----------------------------------------------------------------------------
-dnl  Usage: AC_VXL_WORDS
+dnl  Usage: VXL_CXX_WORDS
 
-AC_DEFUN(AC_VXL_WORDS,[
+AC_DEFUN(VXL_CXX_WORDS,[
 AC_MSG_CHECKING( [for machine word sizes] )
 cat > check_vxl_words.cc <<EOF
 #include <stdio.h>
@@ -1462,11 +1446,11 @@ rm -f ./check_vxl_words.*
 ])
 
 dnl ----------------------------------------------------------------------------
-dnl  Usage: AC_VXL_HAS_QSORT : do we have a qsort() function?
+dnl  Usage: VXL_CXX_HAS_QSORT : do we have a qsort() function?
 dnl
 dnl ---------------------------------------------------------------------------
 
-AC_DEFUN(AC_VXL_HAS_QSORT,[
+AC_DEFUN(VXL_CXX_HAS_QSORT,[
 AC_CACHE_CHECK(whether we have a working qsort,ac_vxl_has_qsort,[
 AC_LANG_SAVE
 AC_LANG_C #PLUSPLUS
@@ -1535,8 +1519,9 @@ AC_LANG_RESTORE])
 
 
 dnl ------------------------------------------------------------
-AC_DEFUN(AC_VXL_MATH_HAS_FINITE,[
+AC_DEFUN(VXL_CXX_MATH_HAS_FINITE,[
 AC_MSG_CHECKING([whether <math.h> provides finite()])
+AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 AC_TRY_COMPILE([
 #include <math.h>
@@ -1555,8 +1540,9 @@ export VXL_MATH_HAS_FINITE
 
 
 dnl ------------------------------------------------------------
-AC_DEFUN(AC_VXL_IEEEFP_HAS_FINITE,[
+AC_DEFUN(VXL_CXX_IEEEFP_HAS_FINITE,[
 AC_MSG_CHECKING([whether <ieeefp.h> provides finite()])
+AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 AC_TRY_COMPILE([
 #include <ieeefp.h>
@@ -1575,7 +1561,8 @@ export VXL_IEEEFP_HAS_FINITE
 
 
 dnl ------------------------------------------------------------
-AC_DEFUN(AC_VXL_STDLIB_RAND48,[
+AC_DEFUN(VXL_CXX_STDLIB_RAND48,[
+AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 
 AC_MSG_CHECKING([whether <stdlib.h> provides lrand48()])
