@@ -321,22 +321,7 @@ SOURCE=.\Templates/vil_rgb+double-.cxx
 SOURCE=.\Templates/vil_rgb+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil_rgb+long-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_rgb+uint-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_rgb+unsignedchar-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_rgb+vxl_uint_16-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vil_rgba+float-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_rgba+unsignedchar-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vil_resample_bilin+byte.byte-.cxx
@@ -436,6 +421,63 @@ SOURCE=.\Templates/vil_rotate+byte.byte-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vil_rotate+float.float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_image_view+vil_rgba+double--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_image_view+vil_rgba+int_16--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_image_view+vil_rgba+int_32--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_image_view+vil_rgba+sbyte--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_image_view+vil_rgba+uint_16--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_image_view+vil_rgba+uint_32--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_rgb+byte-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_rgb+int_16-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_rgb+int_32-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_rgb+uint_16-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_rgb+uint_32-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_rgb+sbyte-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_rgba+byte-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_rgba+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_rgba+int_16-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_rgba+int_32-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_rgba+sbyte-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_rgba+uint_16-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_rgba+uint_32-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
