@@ -1,10 +1,10 @@
-// This is mul/mil/vimt_scale_pyramid_builder_2d.txx
-#ifndef mil_scale_pyramid_builder_2d_txx_
-#define mil_scale_pyramid_builder_2d_txx_
+// This is mul/vimt/vimt_scale_pyramid_builder_2d.txx
+#ifndef vimt_scale_pyramid_builder_2d_txx_
+#define vimt_scale_pyramid_builder_2d_txx_
 //:
-//  \file
-//  \brief Build Gaussian image pyramids at anj scale separation
-//  \author Ian Scott
+// \file
+// \brief Build Gaussian image pyramids at anj scale separation
+// \author Ian Scott
 
 #include "vimt_scale_pyramid_builder_2d.h"
 #include <vcl_cstdlib.h>
@@ -121,7 +121,7 @@ template <class T>
 void vimt_scale_pyramid_builder_2d<T>::scale_reduce(
            T* dest_im, int dest_jstep,
            const T* src_im,
-           int src_ni, int src_nj, int dest_ni, int dest_nj, 
+           int src_ni, int src_nj, int dest_ni, int dest_nj,
            vcl_ptrdiff_t src_istep, vcl_ptrdiff_t src_jstep) const
 {
   T* dest_row = dest_im;
@@ -404,6 +404,4 @@ VCL_DEFINE_SPECIALIZATION vcl_string vimt_scale_pyramid_builder_2d<T >::is_a() c
 {  return vcl_string("vimt_scale_pyramid_builder_2d<" #T ">"); }\
 template class vimt_scale_pyramid_builder_2d<T >
 
-
-#endif
-
+#endif // vimt_scale_pyramid_builder_2d_txx_
