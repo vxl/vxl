@@ -1,14 +1,14 @@
 // This is rpl/rrel/rrel_muset_obj.cxx
 #include "rrel_muset_obj.h"
 
-#include <rrel/rrel_muse_table.h>
-
-#include <vnl/vnl_math.h>
 #include <vcl_limits.h>
-
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
+#include <vnl/vnl_math.h>
+#include <rrel/rrel_muse_table.h>
+
+
 
 rrel_muset_obj::rrel_muset_obj( int max_n,
                                 bool use_sk_refine )
