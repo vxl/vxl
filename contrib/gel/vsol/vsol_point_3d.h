@@ -112,7 +112,7 @@ class vsol_point_3d : public vsol_spatial_object_3d
   //: Safe downcasting methods
   //---------------------------------------------------------------------------
   virtual vsol_point_3d* cast_to_point(void) { return this;}
-  virtual const vsol_point_3d * cast_to_line() const { return this;}
+  virtual const vsol_point_3d* cast_to_point() const { return this;}
 
   //***************************************************************************
   // Status report
