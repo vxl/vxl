@@ -59,6 +59,7 @@ CONFIGURE_FILE( ${vxl_SOURCE_DIR}/core/vil/vil_config.h.in
 SET( vil_sources ${vil_sources}
 
   # basic things
+  vil_config.h.in
   vil_memory_chunk.cxx                  vil_memory_chunk.h
   vil_image_view_base.cxx               vil_image_view_base.h
   vil_image_view.h                      vil_image_view.txx
