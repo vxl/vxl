@@ -65,7 +65,6 @@ n_regions_closest_to_pick(vcl_vector<sdet_region_sptr> const& regions,
   {
     float dmin = vnl_numeric_traits<float>::maxval;
     sdet_region_sptr reg;
-    float dia = dmin;
     for (vcl_vector<sdet_region_sptr>::const_iterator rit = regions.begin();
          rit != regions.end(); rit++)
     {
@@ -81,8 +80,10 @@ n_regions_closest_to_pick(vcl_vector<sdet_region_sptr> const& regions,
       float d = vcl_sqrt((x0-xp)*(x0-xp) + (y0-yp)*(y0-yp));
       float area = (*rit)->area();
       max_d = distance_scale_*vcl_sqrt(area);
-//       vcl_cout << "d " << d << '\n';
-//       vcl_cout << "max_d " << max_d << '\n';
+#ifdef DEBUG
+      vcl_cout << "d " << d << '\n'
+               << "max_d " << max_d << '\n';
+#endif
       if (d>max_d)
         continue;
       if (d<dmin)
