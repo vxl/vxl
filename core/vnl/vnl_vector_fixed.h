@@ -32,8 +32,8 @@
 // forward-declare friends
 // sunpro 5.0 can't go here.
 template <class T, int n> class vnl_vector_fixed;
-template <class T, int n> vnl_vector_fixed<T,n> element_product (vnl_vector_fixed_ref<T,n> const&, vnl_vector_fixed_ref<T,n> const&);
-template <class T, int n> vnl_vector_fixed<T,n> element_quotient (vnl_vector_fixed_ref<T,n> const&, vnl_vector_fixed_ref<T,n> const&);
+template <class T, int n> vnl_vector_fixed<T,n> element_product(vnl_vector_fixed_ref<T,n> const&, vnl_vector_fixed_ref<T,n> const&);
+template <class T, int n> vnl_vector_fixed<T,n> element_quotient(vnl_vector_fixed_ref<T,n>const&, vnl_vector_fixed_ref<T,n> const&);
 #endif
 
 //: fixed length  stack-stored vnl_vector.
