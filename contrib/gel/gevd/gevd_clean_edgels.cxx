@@ -26,7 +26,7 @@ static bool verbose = false;
 
 static bool near_equal(vdgl_digital_curve_sptr dc1, vdgl_digital_curve_sptr dc2, float tolerance)
 {
-  return false;
+  return false; // TODO
 #if 0
   if (!(dc1&&dc2))
     return false;
@@ -177,7 +177,8 @@ bool gevd_clean_edgels::edge_exists(vtol_vertex_2d_sptr v1, vtol_vertex_2d_sptr 
 
   for (vcl_vector<vtol_edge*>::iterator eit = edges->begin(); eit != edges->end(); eit++)
     {
-      vtol_edge_2d_sptr e = (*eit)->cast_to_edge_2d();
+      vtol_edge_2d* e = (*eit)->cast_to_edge_2d();
+      if (!e) continue;
       if ( ( e->v1() == v1 && e->v2() == v2 ) || ( e->v1() == v2 && e->v2() == v1 ) )
         {
           intersection.push_back(e);
