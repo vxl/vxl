@@ -19,6 +19,7 @@ IF(NETLIB_FOUND)
     test_convolve.cxx
     test_cpoly_roots.cxx
     test_determinant.cxx
+    test_diag_matrix.cxx
     test_fft.cxx
     test_fft1d.cxx
     test_fft2d.cxx
@@ -62,6 +63,7 @@ IF(NETLIB_FOUND)
   ADD_TEST( vnl_test_convolve                 vnl_test_driver test_convolve                )
   ADD_TEST( vnl_test_cpoly_roots              vnl_test_driver test_cpoly_roots             )
   ADD_TEST( vnl_test_determinant              vnl_test_driver test_determinant             )
+  ADD_TEST( vnl_test_diag_matrix              vnl_test_driver test_diag_matrix             )
   ADD_TEST( vnl_test_fft                      vnl_test_driver test_fft                     )
   ADD_TEST( vnl_test_fft1d                    vnl_test_driver test_fft1d                   )
   ADD_TEST( vnl_test_fft2d                    vnl_test_driver test_fft2d                   )
