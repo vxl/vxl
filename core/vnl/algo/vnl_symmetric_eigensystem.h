@@ -53,6 +53,9 @@
 #include <vnl/vnl_diag_matrix.h>
 
 template <class T>
+bool vnl_symmetric_eigensystem_compute(vnl_matrix<T> const & A, vnl_matrix<T> & V, vnl_vector<T> & D);
+
+template <class T>
 class vnl_symmetric_eigensystem {
 public:
   //: @{ Solve real symmetric eigensystem $A x = \lambda x$ @}
@@ -108,8 +111,6 @@ public:
 
   //: Solve LS problem M x = b
   void solve(vnl_vector<T> const & b, vnl_vector<T> * x);
-
-  static bool compute(vnl_matrix<T> const & in, vnl_matrix<T> & V, vnl_vector<T> & D);
 };
 
 #endif // vnl_symmetric_eigensystem_h_
