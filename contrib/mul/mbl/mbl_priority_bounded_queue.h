@@ -7,8 +7,8 @@
 //:
 // \file
 // \brief Describes a bounded priority queue
-// \author 	Ian Scott	
-// \date 	Fri Oct  5  2001
+// \author Ian Scott
+// \date   Fri Oct  5  2001
 
 #include <vcl_vector.h>
 #include <vcl_functional.h>
@@ -25,36 +25,30 @@
 //
 // top() returns the value that is closest to being thrown out,
 // which is the largest value in the case of the default predicate.
-template <class T, class C= vcl_vector<T>, class O= vcl_less<C::value_type> >
+template <class T, class C= vcl_vector<T>, class O= vcl_less<typename C::value_type> >
 class mbl_priority_bounded_queue
 {
 public:
-	typedef C::value_type value_type;
-	typedef C::size_type size_type;
+  typedef typename C::value_type value_type;
+  typedef typename C::size_type size_type;
+  typedef typename C::allocator_type allocator_type;
 
-  explicit mbl_priority_bounded_queue(unsigned bound_size = 10,
-    const O& comp = O()):
-    comp_(comp), b_size_(bound_size)
-    {  }
+  explicit
+  mbl_priority_bounded_queue(unsigned bound_size = 10, const O& comp = O()):
+    b_size_(bound_size), comp_(comp) {  }
 
-#if VCL_HAS_MEMBER_TEMPLATES
+#if 0 // #if VCL_HAS_MEMBER_TEMPLATES
  template <class ITER>
-  //: Construct a bounded priority queue from a controlled sequence.
-  // The bounded size will be the length of the sequence.
-  mbl_priority_bounded_queue(
-    C::size_type bound_size, ITER first, ITER last, const O& comp = O()):
-  comp_(comp), b_size_(0)
-  {for (; first != first; ++first) ++b_size_; push(*first);}
 #else
-	typedef const value_type *ITER;
+  typedef const value_type *ITER;
+#endif
   //: Construct a bounded priority queue from a controlled sequence.
   // The bounded size will be the length of the sequence.
   mbl_priority_bounded_queue(
-    C::size_type bound_size, ITER first, ITER last, const O& comp = O(),
+    size_type bound_size, ITER first, ITER last, const O& comp = O(),
     const allocator_type& alloc = allocator_type()):
-  c_(alloc), comp_(comp), b_size_(0)
-  {for (; first != first; ++first) ++b_size_; push(*first);}
-#endif
+      b_size_(0), c_(alloc), comp_(comp)
+  {for (; first != last; ++first) ++b_size_; push(*first);}
 
   //: The largest size the queue can be before it starts throwing out data.
   size_type bound_size() const {return b_size_;}
@@ -69,11 +63,11 @@ public:
 
   size_type size() const {return (c_.size()); }
 
-  value_type& top()	{return (c_.front()); }
+  value_type& top() {return (c_.front()); }
 
-  const value_type& top() const	{return (c_.front()); }
+  const value_type& top() const {return (c_.front()); }
 
-  void push(const value_type & x)	{
+  void push(const value_type & x) {
     if (size() >= b_size_)
     {
       if ( comp_(x, top()) )
@@ -83,9 +77,7 @@ public:
     c_.push_back(x);
     vcl_push_heap(c_.begin(), c_.end(), comp_); }
 
-	void pop()
-		{vcl_pop_heap(c_.begin(), c_.end(), comp_);
-		c_.pop_back(); }
+  void pop() {vcl_pop_heap(c_.begin(), c_.end(), comp_); c_.pop_back(); }
 
 protected:
   size_type b_size_;
