@@ -157,6 +157,17 @@ void test_symmetric_eigensystem()
     vcl_cout << "max_dsq: " <<max_dsq<<"  mean_dsq: "<<sum_dsq/static_cast<double>(n)<<vcl_endl;
     TEST("Specialised version gives similar results", max_dsq < 1e-8, true);
   }
+
+    {
+      double v1, v2, v3;
+      vnl_symmetric_eigensystem_compute_eigenvals(
+        4199.0, 0.0, 0.0, 4199.0, 0.0, 4801.0, v1, v2, v3);
+      vcl_cout << v1 << " " << v2 << " " << v3 << vcl_endl;
+      TEST_NEAR("Numerically diificult values are ok 1a", v1, 4199, 1e-7);
+      TEST_NEAR("Numerically diificult values are ok 1b", v2, 4199, 1e-7);
+      TEST_NEAR("Numerically diificult values are ok 1c", v3, 4801, 1e-7);
+    }
+
 }
 
 TESTMAIN(test_symmetric_eigensystem);
