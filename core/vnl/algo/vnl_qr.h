@@ -1,4 +1,4 @@
-// This is vxl/vnl/algo/vnl_qr.h
+// This is core/vnl/algo/vnl_qr.h
 #ifndef vnl_qr_h_
 #define vnl_qr_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -19,6 +19,8 @@
 //  Christian Stoecklin, ETH Zurich, added QtB(v)
 //  31-mar-2000 fsm: templated
 //  dac (Manchester) 28/03/2001: tidied up documentation
+//  13 Jan.2003 - Peter Vanroose - added missing implementation for inverse(),
+//                                 tinverse(), solve(matrix), extract_q_and_r().
 // \endverbatim
 
 #include <vnl/vnl_vector.h>
@@ -36,19 +38,32 @@ class vnl_qr
   vnl_qr(vnl_matrix<T> const & M);
  ~vnl_qr();
 
-  vnl_matrix<T> inverse () const;   // inverse
-  vnl_matrix<T> tinverse () const;  // transpose-inverse
+  //: return the inverse matrix of M
+  vnl_matrix<T> inverse () const;
+  //: return the transpose of the inverse matrix of M
+  vnl_matrix<T> tinverse () const;
+  //: return the original matrix M
   vnl_matrix<T> recompose () const;
 
+  //: Solve equation M x = rhs for x using the computed decomposition.
   vnl_matrix<T> solve (const vnl_matrix<T>& rhs) const;
+  //: Solve equation M x = rhs for x using the computed decomposition.
   vnl_vector<T> solve (const vnl_vector<T>& rhs) const;
 
+  //: Return the determinant of M.  This is computed from M = Q R as follows:
+  // |M| = |Q| |R|.
+  // |R| is the product of the diagonal elements.
+  // |Q| is (-1)^n as it is a product of Householder reflections.
+  // So det = -prod(-r_ii).
   T determinant() const;
+  //: Unpack and return unitary part Q.
   vnl_matrix<T> const& Q() const;
+  //: Unpack and return R.
   vnl_matrix<T> const& R() const;
+  //: Return residual vector d of M x = b -> d = Q'b
   vnl_vector<T> QtB(const vnl_vector<T>& b) const;
 
-  void extract_q_and_r(vnl_matrix<T>* Q, vnl_matrix<T>* R);
+  void extract_q_and_r(vnl_matrix<T>* q, vnl_matrix<T>* r) const { *q = Q(); *r = R(); }
 
  private:
   vnl_matrix<T> qrdc_out_;

@@ -247,6 +247,61 @@ vnl_vector<T> vnl_qr<T>::QtB(const vnl_vector<T>& b) const
   return QtB;
 }
 
+template <class T>
+vnl_matrix<T> vnl_qr<T>::inverse () const
+{
+  int r = qrdc_out_.columns(), c = qrdc_out_.rows();
+  assert(r == c && r > 0);
+  vnl_matrix<T> inv(r,r);
+
+  // Use solve() to compute the inverse matrix, using (00..010..00) as rhs
+  vnl_vector<T> rhs(r,T(0));
+  for (int i=0; i<r; ++i)
+  {
+    rhs(i) = T(1);
+    vnl_vector<T> col = this->solve(rhs); // returns i-th column of inverse
+    inv.set_column(i,col);
+    rhs(i) = T(0);
+  }
+  return inv;
+}
+
+template <class T>
+vnl_matrix<T> vnl_qr<T>::tinverse () const
+{
+  int r = qrdc_out_.columns(), c = qrdc_out_.rows();
+  assert(r == c && r > 0);
+  vnl_matrix<T> tinv(r,r);
+
+  // Use solve() to compute the inverse matrix, using (00..010..00) as rhs
+  vnl_vector<T> rhs(r,T(0));
+  for (int i=0; i<r; ++i)
+  {
+    rhs(i) = T(1);
+    vnl_vector<T> col = this->solve(rhs); // returns i-th column of inverse
+    tinv.set_row(i,col);
+    rhs(i) = T(0);
+  }
+  return tinv;
+}
+
+template <class T>
+vnl_matrix<T> vnl_qr<T>::solve(vnl_matrix<T> const& rhs) const
+{
+  int r = qrdc_out_.columns(), c = qrdc_out_.rows(); // column-major storage
+  int m = rhs.rows(), n = rhs.columns();
+  assert(m==r);
+  vnl_matrix<T> result(c,n);
+
+  for (int i=0; i<n; ++i)
+  {
+    vnl_vector<T> b = rhs.get_column(i);
+    vnl_vector<T> col = this->solve(b); // returns i-th column of result
+    result.set_column(i,col);
+  }
+  return result;
+}
+
 //--------------------------------------------------------------------------------
 
 #define VNL_QR_INSTANTIATE(T) \
