@@ -36,6 +36,7 @@
 #include <vil/algo/vil_structuring_element.h>
 #include <vil/algo/vil_suppress_non_max.h>
 #include <vil/algo/vil_threshold.h>
+#include <vil/algo/vil_tile_images.h>
 #include <vil/algo/vil_trace_4con_boundary.h>
 #include <vil/algo/vil_trace_8con_boundary.h>
 #include <vil/vil_bicub_interp.h>
