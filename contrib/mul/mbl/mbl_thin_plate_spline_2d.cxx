@@ -9,12 +9,12 @@
 #include <vcl_cstdlib.h> // for vcl_abort()
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_vector_io.h>
-#include <mbl/mbl_matxvec.h>
 #include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/io/vnl_io_matrix.h>
 #include <vgl/io/vgl_io_point_2d.h>
+#include <mbl/mbl_matxvec.h>
 
 //=======================================================================
 
