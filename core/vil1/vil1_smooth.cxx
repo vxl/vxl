@@ -40,7 +40,7 @@ vil_image vil_smooth_gaussian(vil_image const & in, double sigma)
     mask[x] *= mass_scale;
   
   // Call convolver
-  if (vil_pixel_type(in) == VIL_BYTE)
+  if (vil_pixel_format(in) == VIL_BYTE)
     return vil_convolve_separable(in, /* xxx */&mask[0], size-1, (vil_byte*)0, (float*)0);
 
 // if (vil_pixel_type(in) == VIL_RGB_BYTE)

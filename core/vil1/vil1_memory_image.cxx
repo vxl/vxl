@@ -44,7 +44,7 @@ vil_memory_image::vil_memory_image(int planes, int w, int h, int components, int
   cache_from_impl;
 }
 
-vil_memory_image::vil_memory_image(int planes, int w, int h, vil_pixel_format pixel_format)
+vil_memory_image::vil_memory_image(int planes, int w, int h, vil_pixel_format_t pixel_format)
   : vil_image(new vil_memory_image_impl(planes, w, h, pixel_format))
 {
   cache_from_impl;
@@ -56,7 +56,7 @@ vil_memory_image::vil_memory_image(int w, int h, int components, int bits_per_co
   cache_from_impl;
 }
 
-vil_memory_image::vil_memory_image(int w, int h, vil_pixel_format pixel_format)
+vil_memory_image::vil_memory_image(int w, int h, vil_pixel_format_t pixel_format)
   : vil_image(new vil_memory_image_impl(1, w, h, pixel_format))
 {
   cache_from_impl;
@@ -140,7 +140,7 @@ vil_memory_image::vil_memory_image(void *buf, int planes, int w, int h, int comp
   cache_from_impl;
 }
 
-vil_memory_image::vil_memory_image(void *buf, int planes, int w, int h, vil_pixel_format pixel_format)
+vil_memory_image::vil_memory_image(void *buf, int planes, int w, int h, vil_pixel_format_t pixel_format)
   : vil_image(new vil_memory_image_impl(buf, planes, w, h, pixel_format))
 {
   cache_from_impl;
@@ -152,7 +152,7 @@ vil_memory_image::vil_memory_image(void *buf, int w, int h, int components, int 
   cache_from_impl;
 }
 
-vil_memory_image::vil_memory_image(void *buf, int w, int h, vil_pixel_format pixel_format)
+vil_memory_image::vil_memory_image(void *buf, int w, int h, vil_pixel_format_t pixel_format)
   : vil_image(new vil_memory_image_impl(buf, 1, w, h, pixel_format))
 {
   cache_from_impl;
