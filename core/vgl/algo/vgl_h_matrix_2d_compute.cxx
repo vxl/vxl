@@ -22,6 +22,15 @@ compute_l(vcl_vector<vgl_homg_line_2d<double> > const&l1,
 }
 
 bool vgl_h_matrix_2d_compute::
+compute_l(vcl_vector<vgl_homg_line_2d<double> > const&l1,
+          vcl_vector<vgl_homg_line_2d<double> > const&l2,
+          vcl_vector<double> const& weights,
+          vgl_h_matrix_2d<double>& H)
+{
+  return compute_l(l1, l2, weights, H);
+}
+
+bool vgl_h_matrix_2d_compute::
 compute_pl(vcl_vector<vgl_homg_point_2d<double> > const& /*points1*/,
            vcl_vector<vgl_homg_point_2d<double> > const& /*points2*/, 
            vcl_vector<vgl_homg_line_2d<double> > const& /*lines1*/,
@@ -77,6 +86,25 @@ compute(vcl_vector<vgl_homg_line_2d<double> > const&l1,
 {
   vgl_h_matrix_2d<double>  H;
   compute_l(l1, l2, H);
+  return H;
+}
+
+bool vgl_h_matrix_2d_compute::
+compute(vcl_vector<vgl_homg_line_2d<double> > const&l1,
+        vcl_vector<vgl_homg_line_2d<double> > const&l2,
+        vcl_vector<double> const& weights,
+        vgl_h_matrix_2d<double>& H)
+{
+  return compute_l(l1, l2, weights, H);
+}
+
+vgl_h_matrix_2d<double> vgl_h_matrix_2d_compute::
+compute(vcl_vector<vgl_homg_line_2d<double> > const&l1,
+        vcl_vector<vgl_homg_line_2d<double> > const&l2,
+        vcl_vector<double> const& weights)
+{
+  vgl_h_matrix_2d<double>  H;
+  compute_l(l1, l2, weights, H);
   return H;
 }
 

@@ -16,7 +16,9 @@
 //      3. made arguments to compute method 'const ... &',
 //         thereby potentially breaking the code of certain other people.
 //
-//  Mar 24, 2003 Modifications to move to vgl algo
+//  Mar 24, 2003 JLM Modifications to move to vgl algo
+//  May 15, 2003 JLM Added a weighted least squares interface for computing
+//               a homography from line correspondences.
 // \endverbatim
 #include <vcl_vector.h>
 #include <vgl/vgl_homg_point_2d.h>
@@ -49,6 +51,12 @@ public:
                vcl_vector<vgl_homg_line_2d<double> > const& lines2, 
                vgl_h_matrix_2d<double>& h);
 
+ //: homography from matched lines with a weight vector
+  bool compute(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
+               vcl_vector<vgl_homg_line_2d<double> > const& lines2, 
+               vcl_vector<double> const & weights,
+               vgl_h_matrix_2d<double>& h);
+
   //: homography from matched points and lines
   bool compute(vcl_vector<vgl_homg_point_2d<double> > const& points1,
                vcl_vector<vgl_homg_point_2d<double> > const& points2,
@@ -66,6 +74,12 @@ public:
   compute(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
           vcl_vector<vgl_homg_line_2d<double> > const& lines2);
 
+  //: homography from matched lines with weight vector - return h_matrix
+  vgl_h_matrix_2d<double>  
+  compute(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
+          vcl_vector<vgl_homg_line_2d<double> > const& lines2,
+          vcl_vector<double> const& weights);
+
   //: homography from matched points and lines - return h_matrix
   vgl_h_matrix_2d<double>
   compute(vcl_vector<vgl_homg_point_2d<double> > const& points1,
@@ -82,6 +96,12 @@ protected:
   virtual bool compute_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
                          vcl_vector<vgl_homg_line_2d<double> > const& lines2,
                          vgl_h_matrix_2d<double>& H);
+
+  virtual bool compute_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
+                         vcl_vector<vgl_homg_line_2d<double> > const& lines2,
+                         vcl_vector<double> const & weights,
+                         vgl_h_matrix_2d<double>& H);
+
   virtual 
   bool compute_pl(vcl_vector<vgl_homg_point_2d<double> > const& points1,
                   vcl_vector<vgl_homg_point_2d<double> > const& points2,
