@@ -538,7 +538,7 @@ strk_info_tracker::extract_histograms(strk_tracking_face_2d_sptr const& tf,
   unsigned int cbins = color_hist_bins_;
   unsigned int nbins = ibins + gbins + cbins;
   vcl_vector<float> out(nbins, 0.0);
-  bsta_histogram<float> int_hist; 
+  bsta_histogram<float> int_hist(0, 0); 
   if(first_frame)
     int_hist= tf->intensity_histogram(image_0_);
   else
@@ -548,7 +548,7 @@ strk_info_tracker::extract_histograms(strk_tracking_face_2d_sptr const& tf,
 
   if(gradient_info_)
     { 
-      bsta_histogram<float> grad_hist;
+      bsta_histogram<float> grad_hist(0, 0);
       if(first_frame)
         grad_hist = tf->gradient_histogram(Ix_0_, Iy_0_);
       else
@@ -558,7 +558,7 @@ strk_info_tracker::extract_histograms(strk_tracking_face_2d_sptr const& tf,
     }
   if(color_info_)
     {
-      bsta_histogram<float> color_hist;
+      bsta_histogram<float> color_hist(0,0);
       if(first_frame)
        color_hist = tf->color_histogram(hue_0_, sat_0_);
       else
