@@ -365,8 +365,8 @@ bool vil2_bmp_image::put_view(const vil2_image_view_base& view,
   assert (view.pixel_format() == VIL2_PIXEL_FORMAT_BYTE); // FIXME
   const vil2_image_view<vxl_byte> & view2 = static_cast<const vil2_image_view<vxl_byte> &>(view);
 
-  int bypp = nplanes();
-  int rowlen = ni() * bypp;
+  unsigned bypp = nplanes();
+  unsigned rowlen = ni() * bypp;
   rowlen += (3-(rowlen+3)%4); // round up to a multiple of 4
 
   if ((view2.planestep() == -1||nplanes()==1)&&

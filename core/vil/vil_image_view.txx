@@ -16,6 +16,7 @@
 #include "vil2_image_view.h"
 #include <vcl_string.h>
 #include <vcl_cassert.h>
+#include <vcl_cstdlib.h>
 #include <vcl_ostream.h>
 #include <vil2/vil2_smart_ptr.h>
 #include <vil2/vil2_pixel_format.h>
@@ -141,7 +142,7 @@ inline bool convert_components_from_planes(vil2_image_view<T> &lhs,
 {
   typedef typename T::value_type comp_type;
 
-  const unsigned ncomp =
+  const int ncomp =
     vil2_pixel_format_num_components(vil2_pixel_format_of(T()));
 
   if (// both sides have equal component types and rhs has scalar pixels and
@@ -151,7 +152,7 @@ inline bool convert_components_from_planes(vil2_image_view<T> &lhs,
   {
     const vil2_image_view<comp_type> &rhs = static_cast<const vil2_image_view<comp_type>&>(rhs_base);
     // Check that the steps are suitable for viewing as components
-    if (rhs.planestep() != 1 || rhs.istep()<ncomp || rhs.jstep()<ncomp ) return false;
+    if (rhs.planestep() != 1 || vcl_abs(rhs.istep())<ncomp || vcl_abs(rhs.jstep())<ncomp ) return false;
     lhs = vil2_image_view<T >(rhs.memory_chunk(),
                               (T const*) rhs.top_left_ptr(),
                               rhs.ni(),rhs.nj(),1,
@@ -541,7 +542,7 @@ void vil2_image_view<T>::set_to_memory(const T* top_left,
                                        int i_step, int j_step, int plane_step)
 {
   release_memory();
-  top_left_ = (T*) top_left;  // Remove const, as view may end up manipulating data
+  top_left_ = const_cast<T*>(top_left);  // Remove const, as view may end up manipulating data
 
   ni_ = n_i;
   nj_ = n_j;
