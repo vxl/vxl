@@ -1,4 +1,4 @@
-// This is ./vxl/vul/vul_reg_exp.h
+// This is vxl/vul/vul_reg_exp.h
 #ifndef vul_reg_exph
 #define vul_reg_exph
 //:
@@ -109,10 +109,10 @@ public:
 
   //: Return start index of nth submatch.
   // start(0) is the start of the full match.
-  int start(int n) const { return this->startp[n] - searchstring; }
+  inline long start(long n) const { return this->startp[n] - searchstring; }
   //: Return end index of nth submatch.
   // end(0) is the end of the full match.
-  int end(int n)   const { return this->endp[n] - searchstring; }
+  inline long end(long n)   const { return this->endp[n] - searchstring; }
   //: Return nth submatch as a string.
   vcl_string match(int n) const {
     return this->endp[n] == this->startp[n] ? vcl_string("") :

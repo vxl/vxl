@@ -2,7 +2,6 @@
 
 //:
 // \file
-
 //
 // Copyright (C) 1991 Texas Instruments Incorporated.
 //
@@ -129,7 +128,7 @@ vul_reg_exp::vul_reg_exp (vul_reg_exp const& rxp) {
   int ind;
   this->progsize = rxp.progsize;            // Copy regular expression size
   this->program = new char[this->progsize]; // Allocate storage
-  for(ind=this->progsize; ind-- != 0;)      // Copy regular expresion
+  for (ind=this->progsize; ind-- != 0;)     // Copy regular expresion
     this->program[ind] = rxp.program[ind];
   this->startp[0] = rxp.startp[0];          // Copy pointers into last
   this->endp[0] = rxp.endp[0];              // Successful "find" operation
@@ -156,8 +155,8 @@ bool vul_reg_exp::operator== (vul_reg_exp const& rxp) const {
     int ind = this->progsize;                   // Get regular expression size
     if (ind != rxp.progsize)                    // If different size regexp
       return false;                             // Return failure
-    while(ind-- != 0)                           // Else while still characters
-      if(this->program[ind] != rxp.program[ind])// If regexp are different
+    while (ind-- != 0)                          // Else while still characters
+      if (this->program[ind] != rxp.program[ind])// If regexp are different
         return false;                           // Return failure
   }
   return true;                                  // Else same, return success
@@ -170,8 +169,8 @@ bool vul_reg_exp::deep_equal (vul_reg_exp const& rxp) const {
   int ind = this->progsize;                     // Get regular expression size
   if (ind != rxp.progsize)                      // If different size regexp
     return false;                               // Return failure
-  while(ind-- != 0)                             // Else while still characters
-    if(this->program[ind] != rxp.program[ind])  // If regexp are different
+  while (ind-- != 0)                            // Else while still characters
+    if (this->program[ind] != rxp.program[ind]) // If regexp are different
       return false;                             // Return failure
   return this->startp[0] == rxp.startp[0] &&    // Else if same start/end ptrs,
            this->endp[0] == rxp.endp[0];        // Return true
@@ -383,7 +382,7 @@ void vul_reg_exp::compile (char const* exp) {
     regsize = 0L;
     regcode = &regdummy;
     regc(MAGIC);
-    if(!reg(0, &flags))
+    if (!reg(0, &flags))
       {
         vcl_cout << "vul_reg_exp::compile(): Error in compile.\n";
         return;
@@ -832,7 +831,7 @@ static void reginsert (char op, char* opnd) {
 static void regtail (char* p, const char* val) {
     register char* scan;
     register char* temp;
-    register int   offset;
+    register long  offset;
 
     if (p == &regdummy)
         return;

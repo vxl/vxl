@@ -7,9 +7,10 @@
 
 #include <vcl_compiler.h>
 #if defined(VCL_SGI_CC)
-// urgh! there is no rdbuf() method for *setting* thestream buffer.
+// urgh! there is no rdbuf() method for *setting* the stream buffer.
 // These headers are in the old style intentionally. We *want* to
-// include the old SGI headers as they are without going through vcl.
+// include the old SGI headers as they are, without going through vcl.
+// These includes must come *before* vul_redirector.h !
 # include <memory.h>         // dont_vxl_filter
 # include <stddef.h>         // dont_vxl_filter
 # define private public
@@ -19,7 +20,7 @@
 # undef protected
 #endif
 
-#include <vul/vul_redirector.h>
+#include "vul_redirector.h"
 
 //----------------------------------------------------------------------
 // This class is used as a stream buffer that can 
@@ -59,13 +60,13 @@ struct vul_redirector_data {
 // streambuf stuff
 
 int vul_redirector_streambuf::sync ()
-{ int n = pptr () - pbase ();
+{ long n = pptr () - pbase ();
   return (n && p->owner->putchunk ( pbase (), n) != n) ? EOF : 0;
 }
  
 int vul_redirector_streambuf::overflow (int ch)
 { 
-  int n = pptr () - pbase ();
+  long n = pptr () - pbase ();
   if (n && sync ())
     return EOF;
   if (ch != EOF)
