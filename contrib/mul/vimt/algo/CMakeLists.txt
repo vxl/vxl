@@ -1,0 +1,20 @@
+# mul/vimt/algo/CMakeLists.txt
+
+SET( vimt_algo_sources
+                        vimt_vimt_find_peaks.h
+                        vimt_vimt_find_troughs.h
+)
+
+
+AUX_SOURCE_DIRECTORY(Templates vimt_algo_sources)
+
+ADD_LIBRARY(vimt_algo ${vimt_algo_sources})
+
+TARGET_LINK_LIBRARIES( vimt_algo vimt vcl )
+
+#IF( BUILD_EXAMPLES )
+#  SUBDIRS( examples )
+#ENDIF( BUILD_EXAMPLES )
+#IF( BUILD_TESTING )
+#  SUBDIRS(tests)
+#ENDIF( BUILD_TESTING )
