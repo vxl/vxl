@@ -6,7 +6,7 @@
 #include <vcl_cmath.h>
 
 // FORTRAN routine
-extern "C" int chscdf_(float* x, int* nu, float* cdf);
+extern "C" void dchscdf_(double* x, int* nu, double* cdf);
 
 //: This subroutine computes the cumulative distribution function
 // value for the chi-squared distribution with integer degrees of
@@ -14,9 +14,9 @@ extern "C" int chscdf_(float* x, int* nu, float* cdf);
 // non-negative chisq.  Thus if a random variable x is drawn from a
 // chi-squared distribution with d degrees of freedom, then P(x < X) =
 // vnl_chi_squared::vnl_chi_squaredCumulative(X,d).
-float vnl_chi_squared_cumulative(float chisq, int dof) {
-  float cdf;
-  chscdf_(&chisq,&dof,&cdf);
+double vnl_chi_squared_cumulative(double chisq, int dof) {
+  double cdf;
+  dchscdf_(&chisq,&dof,&cdf);
   return cdf;
 }
 

@@ -167,7 +167,7 @@ extern "C" {
               doublereal *zeroi, int *fail);
 
   //
-  int chscdf_();
+  void dchscdf_();
   int lbfgs_();
   int dnlaso_();
   int cg_();
