@@ -7,15 +7,15 @@
 
 void test_bilin_interp_byte()
 {
-  vcl_cout << "**************************\n";
+  vcl_cout << "***************************\n";
   vcl_cout << " Testing vil2_bilin_interp\n";
-  vcl_cout << "**************************\n";
+  vcl_cout << "***************************\n";
 
   vil2_image_view<vil2_byte> image0;
   image0.resize(5,5);
 
-  for (int y=0;y<image0.nj();++y)
-     for (int x=0;x<image0.ni();++x)
+  for (unsigned int y=0;y<image0.nj();++y)
+     for (unsigned int x=0;x<image0.ni();++x)
        image0(x,y) = x+y*10;
 
    {

@@ -9,17 +9,17 @@
 
 void test_sample_grid_bilin_byte()
 {
-  vcl_cout << "*******************************\n"
+  vcl_cout << "********************************\n"
            << " Testing vil2_sample_grid_bilin\n"
-           << "*******************************\n";
+           << "********************************\n";
 
   vil2_image_view<vil2_byte> image0;
   image0.resize(10,10);
 
   vcl_cout<<"Testing one plane image"<<vcl_endl;
 
-  for (int y=0;y<image0.nj();++y)
-     for (int x=0;x<image0.ni();++x)
+  for (unsigned int y=0;y<image0.nj();++y)
+     for (unsigned int x=0;x<image0.ni();++x)
        image0(x,y) = x+y*10;
 
   double x0 = 5.0, y0= 5.0;
@@ -47,9 +47,9 @@ void test_sample_grid_bilin_byte()
   vcl_cout<<"Testing three plane image"<<vcl_endl;
 
   image0.resize(10,10,2);
-  for (int y=0;y<image0.nj();++y)
-    for (int x=0;x<image0.ni();++x)
-      for (int p=0;p<2;++p)
+  for (unsigned int y=0;y<image0.nj();++y)
+    for (unsigned int x=0;x<image0.ni();++x)
+      for (unsigned int p=0;p<2;++p)
        image0(x,y,p) = x+y*10+p*100;
 
   vcl_vector<double> vec2(24);

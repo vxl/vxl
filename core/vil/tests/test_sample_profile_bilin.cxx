@@ -8,16 +8,16 @@
 
 void test_sample_profile_bilin_byte()
 {
-  vcl_cout << "*******************************\n";
+  vcl_cout << "***********************************\n";
   vcl_cout << " Testing vil2_sample_profile_bilin\n";
-  vcl_cout << "*******************************\n";
+  vcl_cout << "***********************************\n";
 
   vcl_cout<< "One plane image"<<vcl_endl;
   vil2_image_view<vil2_byte> image1;
   image1.resize(10,10);
 
-  for (int y=0;y<image1.nj();++y)
-     for (int x=0;x<image1.ni();++x)
+  for (unsigned int y=0;y<image1.nj();++y)
+     for (unsigned int x=0;x<image1.ni();++x)
        image1(x,y) = x+y*10;
 
   double x0 = 5.0, y0 = 5.0;
@@ -37,9 +37,9 @@ void test_sample_profile_bilin_byte()
   vil2_image_view<float> image3;
   image3.resize(10,10,3);
 
-  for (int y=0;y<image3.nj();++y)
-     for (int x=0;x<image3.ni();++x)
-       for (int k=0;k<3;++k)
+  for (unsigned int y=0;y<image3.nj();++y)
+     for (unsigned int x=0;x<image3.ni();++x)
+       for (unsigned int k=0;k<3;++k)
          image3(x,y,k) = 0.1f*x+y+10*k;
 
   vcl_vector<double> vec3(9);

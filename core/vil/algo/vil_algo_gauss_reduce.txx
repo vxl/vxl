@@ -14,13 +14,13 @@ void vil2_algo_gauss_reduce(const vil2_image_view<T>& src_im,
                             vil2_image_view<T>& dest_im,
                             vil2_image_view<T>& work_im)
 {
-  int ni = src_im.ni();
-  int nj = src_im.nj();
-  int n_planes = src_im.nplanes();
+  unsigned int ni = src_im.ni();
+  unsigned int nj = src_im.nj();
+  unsigned int n_planes = src_im.nplanes();
 
   // Output image size
-  int ni2 = (ni+1)/2;
-  int nj2 = (nj+1)/2;
+  unsigned int ni2 = (ni+1)/2;
+  unsigned int nj2 = (nj+1)/2;
 
   dest_im.resize(ni2,nj2,n_planes);
 
@@ -33,13 +33,13 @@ void vil2_algo_gauss_reduce(const vil2_image_view<T>& src_im,
     // Smooth and subsample in x, result in work_im
     vil2_algo_gauss_reduce(src_im.top_left_ptr()+i*src_im.planestep(),ni,nj,
                            src_im.istep(),src_im.jstep(),
-													 work_im.top_left_ptr(),
+                           work_im.top_left_ptr(),
                            work_im.istep(),work_im.jstep());
 
     // Smooth and subsample in y (by implicitly transposing work_im)
     vil2_algo_gauss_reduce(work_im.top_left_ptr(),nj,ni2,
                            work_im.jstep(),work_im.istep(),
-													 dest_im.top_left_ptr()+i*dest_im.planestep(),
+                           dest_im.top_left_ptr()+i*dest_im.planestep(),
                            dest_im.jstep(),dest_im.istep());
   }
 }
@@ -51,13 +51,13 @@ void vil2_algo_gauss_reduce_121(const vil2_image_view<T>& src_im,
                                 vil2_image_view<T>& dest_im,
                                 vil2_image_view<T>& work_im)
 {
-  int ni = src_im.ni();
-  int nj = src_im.nj();
-  int n_planes = src_im.nplanes();
+  unsigned int ni = src_im.ni();
+  unsigned int nj = src_im.nj();
+  unsigned int n_planes = src_im.nplanes();
 
   // Output image size
-  int ni2 = (ni+1)/2;
-  int nj2 = (nj+1)/2;
+  unsigned int ni2 = (ni+1)/2;
+  unsigned int nj2 = (nj+1)/2;
 
   dest_im.resize(ni2,nj2,n_planes);
 
@@ -65,18 +65,18 @@ void vil2_algo_gauss_reduce_121(const vil2_image_view<T>& src_im,
     work_im.resize(ni2,nj);
 
   // Reduce plane-by-plane
-  for (int i=0;i<n_planes;++i)
+  for (unsigned int i=0;i<n_planes;++i)
   {
     // Smooth and subsample in x, result in work_im
     vil2_algo_gauss_reduce_121(src_im.top_left_ptr()+i*src_im.planestep(),ni,nj,
                                src_im.istep(),src_im.jstep(),
-															 work_im.top_left_ptr(),
+                               work_im.top_left_ptr(),
                                work_im.istep(),work_im.jstep());
 
     // Smooth and subsample in y (by implicitly transposing work_im)
     vil2_algo_gauss_reduce_121(work_im.top_left_ptr(),nj,ni2,
                                work_im.jstep(),work_im.istep(),
-															 dest_im.top_left_ptr()+i*dest_im.planestep(),
+                               dest_im.top_left_ptr()+i*dest_im.planestep(),
                                dest_im.jstep(),dest_im.istep());
   }
 }

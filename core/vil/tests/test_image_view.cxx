@@ -18,9 +18,9 @@ bool Equal(const vil2_image_view<vil2_byte>& im0,
 
 void test_image_view_byte()
 {
-  vcl_cout << "*******************************\n";
-  vcl_cout << " Testing vil2_image_view<byte>\n";
-  vcl_cout << "*******************************\n";
+  vcl_cout << "*******************************\n"
+           << " Testing vil2_image_view<byte>\n"
+           << "*******************************\n";
 
   vil2_image_view<vil2_byte> image0;
   image0.resize(10,8);
@@ -30,11 +30,9 @@ void test_image_view_byte()
   TEST("resize x",image0.ni(),10);
   TEST("resize y",image0.nj(),8);
 
-  for (int y=0;y<image0.nj();++y)
-     for (int x=0;x<image0.ni();++x)
-     {
+  for (unsigned int y=0;y<image0.nj();++y)
+     for (unsigned int x=0;x<image0.ni();++x)
        image0(x,y) = x+y;
-     }
 
   image0.print_all(vcl_cout);
 
@@ -133,7 +131,6 @@ void test_image_view_byte()
   TEST("!vil2_deep_equality", vil2_deep_equality(test_image,image2), false);
   test_image.resize(5,4,4);
   TEST("!vil2_deep_equality", vil2_deep_equality(test_image,image2), false);
-
 }
 
 #if 0 // commented out
