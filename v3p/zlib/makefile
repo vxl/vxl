@@ -27,4 +27,3 @@ include ${IUEROOT}/config/top.mk
 ################################
 
 DEFINES += -DHAVE_UNISTD_H
-#nonportable DEFINES += -ansi
