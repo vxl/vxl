@@ -13,7 +13,7 @@
 #define in_range(a) (a < (1 << 8))
 #define Bit4ToChar(a) ((char)((a<=9) ? (a+'0'): (a - 10 + 'a')))
 
-static const double PIX2INCH = 72.0;
+static const float PIX2INCH = 72.0f;
 static bool debug = true;
 
 // sizes of pages in inches
@@ -464,8 +464,8 @@ void vul_psfile::object_translate_and_scale()
   int scale_min_x  = int(min_x * scale_x);
   int scale_min_y  = int(min_y * scale_y);
   // round to integer .01ths
-  scale_x = vcl_floor(scale_x * 100.0 + 0.5) * .01;
-  scale_y = vcl_floor(scale_y * 100.0 + 0.5) * .01;
+  scale_x = vcl_floor(scale_x * 100.0f + 0.5f) * .01f;
+  scale_y = vcl_floor(scale_y * 100.0f + 0.5f) * .01f;
 
   // move origin
   output_filestream << vcl_setw(6) << ox - scale_min_x << ' '
