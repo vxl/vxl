@@ -38,7 +38,7 @@ main(int argc, char** argv) {
 #endif
 
   // The noise `width':
-  double sigma = (argc < 4) ? 1 : vcl_atof(argv[3]);
+  double sigma = (argc < 4) ? 5 : vcl_atof(argv[3]);
 
   // The filter:
   vil_image out = vepl_add_random_noise(src,sigma);

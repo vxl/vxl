@@ -48,7 +48,7 @@ main(int argc, char** argv) {
   vil_image* dst = &out;
 
   // The noise `width':
-  double sigma = (argc < 4) ? 1 : atof(argv[3]);
+  double sigma = (argc < 4) ? 5.0 : atof(argv[3]);
   ubyte s = (ubyte)(sigma+0.5); // round to integer
 
   // The filter:
