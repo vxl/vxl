@@ -38,6 +38,9 @@ SUBDIRS += vtol
 # segmentation
 SUBDIRS += vsl
 
+# coordinate systems
+SUBDIRS += vcsl
+
 ifeq (1,$(strip $(HAS_OPENGL)))
 # OpenGL ui library
 SUBDIRS += vgui
