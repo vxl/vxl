@@ -1,8 +1,8 @@
 /*
   fsm@robots.ox.ac.uk
 */
-#include "f2c.h"
 #include <math.h>
+#include "f2c.h"
 
 /* This is here until I find the fortran code for z_sqrt(). */
 
