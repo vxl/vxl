@@ -133,7 +133,7 @@ struct vgui_satellite_t_new : vgui_tableau_sptr_t<vgui_satellite_t<object, data>
 // no vgui_make_sptr: this file must be maintained manually.
   typedef vgui_satellite_t<object, data> impl;
   typedef vgui_tableau_sptr_t<impl quirk(vgui_tableau_sptr)> base;
-  typedef impl::method method;
+  typedef typename impl::method method;
   vgui_satellite_t_new(object *p, method m, data const &d, vcl_string const &n = "") : base(new impl(p, m, d, n)) { }
 };
 
@@ -143,7 +143,7 @@ struct vgui_satellite_new : vgui_tableau_sptr_t<vgui_satellite<object> quirk(vgu
 // no vgui_make_sptr: this file must be maintained manually.
   typedef vgui_satellite<object> impl;
   typedef vgui_tableau_sptr_t<impl quirk(vgui_tableau_sptr)> base;
-  typedef impl::method method;
+  typedef typename impl::method method;
   vgui_satellite_new(object *p, method m, vcl_string const &n = "") : base(new impl(p, m, n)) { }
 };
 #undef quirk
