@@ -189,7 +189,7 @@ class bgui_vsol_soview2D_digital_curve : public vgui_soview2D
  public:
   //: Constructor - creates a view of a vdgl_digital_curve
   bgui_vsol_soview2D_digital_curve(vdgl_digital_curve_sptr const& e, bool dotted = false)
-  : draw_dotted_(dotted),  dc(e) {}
+  : dc_(e), draw_dotted_(dotted) {}
 
   //: Destructor - does nothing, smart pointers pass out of scope automatically
   ~bgui_vsol_soview2D_digital_curve() {}
@@ -213,12 +213,14 @@ class bgui_vsol_soview2D_digital_curve : public vgui_soview2D
   //: Translate this 2D digital_curve by the given x and y distances.
   void translate(float x, float y);
 
+  //: Smart pointer to vdgl_digital_curve member
+  vdgl_digital_curve_sptr digital_curve() const { return dc_; }
+
  protected:
   //: Smart pointer to vdgl_digital_curve
-  vdgl_digital_curve_sptr dc;
+  vdgl_digital_curve_sptr dc_;
 
   bool draw_dotted_;
 };
-
 
 #endif // bgui_vsol_soview2D_h_
