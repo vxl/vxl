@@ -43,8 +43,10 @@ public:
   void set_paper_layout(vul_psfile::paper_layout layout) {printer_paper_layout = layout;}
   void set_paper_orientation(vul_psfile::paper_orientation o) {printer_paper_orientation = o;}
   void set_reduction_factor(int rf) {reduction_factor = rf;}
-  void set_scale_x(int sx) {scale_x = sx;}
-  void set_scale_y(int sy) {scale_y = sy;}
+  //: set the horizontal scaling (in percent); no scaling is 100.
+  void set_scale_x(float sx) {scale_x = sx * .01f;}
+  //: set the vertical scaling (in percent); no scaling is 100.
+  void set_scale_y(float sy) {scale_y = sy * .01f;}
   void set_fg_color(float r, float g, float b) {fg_r = r; fg_g = g; fg_b = b;}
   void set_bg_color(float r, float g, float b) {bg_r = r; bg_g = g; bg_b = b;}
   void set_line_width(float f_width) {line_width_ = f_width;}
@@ -92,7 +94,7 @@ private:
   float fg_r, fg_g, fg_b;
   float bg_r, bg_g, bg_b;
   float line_width_;
-  int scale_x, scale_y;
+  float scale_x, scale_y;
   int ox, oy, iw, ih;
   double iwf, ihf;
   double psizex, psizey;   /* current paper size, in inches */
