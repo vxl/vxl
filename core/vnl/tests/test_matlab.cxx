@@ -2,9 +2,11 @@
   fsm@robots.ox.ac.uk
 */
 #include <vcl/vcl_fstream.h>
+#include <vcl/vcl_cmath.h>
+
 #include <vpl/vpl_unistd.h>
+
 #include <vnl/vnl_test.h>
-#include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_matlab_print.h>
