@@ -21,6 +21,15 @@ vbl_array_2d<T>::vbl_array_2d(int num_rows, int num_cols)
   create(num_rows, num_cols);
 }
 
+// Construct and fill
+template <class T>
+vbl_array_2d<T>::vbl_array_2d(int n1, int n2, T const& fill_value)
+{
+  create(n1, n2); fill(fill_value);
+}
+
+
+
 //: Copy that
 template <class T>
 vbl_array_2d<T>::vbl_array_2d(vbl_array_2d<T> const& that)

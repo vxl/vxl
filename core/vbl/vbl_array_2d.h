@@ -33,8 +33,12 @@ public:
   //: Construct from two integers
   vbl_array_2d(int m, int n);
 
+  // Construct and fill
+  vbl_array_2d(int n1, int n2, T const& fill_value);
+
   //: Construct from a 2d array
   vbl_array_2d(vbl_array_2d<T> const &);
+
 
   //: Destructor
  ~vbl_array_2d();

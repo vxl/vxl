@@ -21,6 +21,7 @@ vbl_sprintf
 vbl_file_iterator
 vbl_string
 vbl_get_timestamp
+vbl_test
 vbl_timer
 vbl_printf
 vbl_timestamp
