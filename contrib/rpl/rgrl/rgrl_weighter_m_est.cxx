@@ -161,6 +161,10 @@ aux_sum_weighted_residuals( rgrl_scale const&  scale,
   return weighted_sum;
 }
 
+// It is unclear how to handle multiple matches. 
+// The current method is to pick the one with minimum distance
+// and evaluate the likelihood based on that. 
+//
 double
 rgrl_weighter_m_est::
 aux_sum_rho_values( rgrl_scale const&  scale,
