@@ -2,6 +2,7 @@
 // \file
 
 #include "vidl_io.h"
+#include "vidl_codec_callbacks.h"
 #include <vidl/vidl_movie.h>
 #include <vidl/vidl_clip.h>
 #include <vidl/vidl_image_list_codec.h>
@@ -171,22 +172,11 @@ vidl_clip_sptr  vidl_io::load_clip(
           return 0;
 
 #ifdef HAS_MPEG
-	
-	/////////////////////////////////////////////////////
-	//this is just hard coded for now to test.
-	//please FIX ME!!!!
-	vidl_mpegcodec * mpegcodec = (*i)->castto_vidl_mpegcodec();
-
-	mpegcodec->set_grey_scale(false);
-	mpegcodec->set_demux_video();
-	mpegcodec->set_pid("0x1023");
-	
-	mpegcodec->init();
-	vcl_cout << "vidl_io::load_movie. number of frames is: " << mpegcodec->length() << vcl_endl;
-	vcl_cout << "vidl_io::load_movie. just did init." << vcl_endl;
-
-	///////////////////////////////////////////////////////////
-
+	//this calls the dialog box necessary for initialization
+	//of the mpeg codec.
+	vidl_mpegcodec * vmp = (*i)->castto_vidl_mpegcodec();
+	if (vmp)
+	  load_mpegcodec_callback(vmp);
 #endif
 
         vidl_clip_sptr clip = new vidl_clip(codec, start, end, increment);

@@ -158,6 +158,7 @@ vidl_mpegcodec::vidl_mpegcodec()
   decoder_ = 0;
   buffers_ = new frame_buffer;
   inited = false;
+  set_number_frames(-1);
 }
 
 vidl_mpegcodec::~vidl_mpegcodec()
@@ -357,8 +358,16 @@ vidl_mpegcodec::init()
 
   decoder_->init();
 
-  while (decoder_->execute(&req) != -1);
-  this->set_number_frames(decoder_->get_last_frame());
+  //if the total number of frames is not manually
+  //entered by this point, then decode the whole
+  //bloody thing till the end. else, just decode
+  //once to get the true width and height.
+  if(this->length() == -1)
+    {
+      while (decoder_->execute(&req) != -1);
+      this->set_number_frames(decoder_->get_last_frame());
+    }
+  else decoder_->execute(&req);
 
   req.rt = decode_request::REWIND;
   decoder_->execute(&req);
@@ -397,4 +406,5 @@ vidl_mpegcodec::init()
   inited = true;
   return true;
 }
+
 
