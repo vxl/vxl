@@ -51,11 +51,18 @@ ifeq (1,$(strip $(HAS_OPENGL)))
 # OpenGL ui library
 SUBDIRS += vgui
 
-# new xcv
-# (must be compiled *after* mvl)
-ifeq (,$(strip $(wildcard $(IUELOCALROOT)/oxl/mvl)))
-SUBDIRS += xcv
-endif
+# New xcv. This must be compiled *after* mvl because
+# it depends on mvl. The alternative is that when
+# building from scratch (e.g. releases) the build
+# of xcv fails due to missing libraries.
+#
+# Ultimately, xcv should be moved to oxl.
+#
+# -- fsm@robots.ox.ac.uk
+#
+#ifeq (,$(strip $(wildcard $(IUELOCALROOT)/oxl/mvl)))
+#SUBDIRS += xcv
+#endif
 endif
 
 # examples
