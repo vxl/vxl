@@ -1,12 +1,10 @@
-//this-sets-emacs-to-*-c++-*-mode
+// This is brl/vvid/vvid_live_video_tableau.h
 #ifndef vvid_live_video_tableau_h_
 #define vvid_live_video_tableau_h_
 //--------------------------------------------------------------------------------
 //:
 // \file
-// \brief live vvid_live_video_tableau
-//   A special image tableau that has a live camera as an image generator. 
-// \endbrief
+// \brief A special image tableau that has a live camera as an image generator.
 // \author
 //   J.L. Mundy
 //
@@ -15,7 +13,6 @@
 //   J.L. Mundy January 09, 2002    Initial version.
 // \endverbatim
 //--------------------------------------------------------------------------------
-#include <vbl/vbl_ref_count.h>
 #include <vgui/vgui_image_tableau_sptr.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vvid/vvid_live_video_tableau.h>
@@ -24,7 +21,7 @@
 
 class vvid_live_video_tableau : public vgui_image_tableau
 {
-public:
+ public:
   typedef vgui_image_tableau base;
   vvid_live_video_tableau();
 
@@ -65,7 +62,7 @@ public:
   bool get_current_mono_image(int pix_sample_interval,
                               vil_memory_image_of<unsigned char>& im);
 
-  
+
  protected:
   //: Handle all events for this tableau.
   bool handle(vgui_event const &e);
@@ -83,11 +80,11 @@ public:
 
 struct vvid_live_video_tableau_new : public vvid_live_video_tableau_sptr
 {
-public:
-  
-  vvid_live_video_tableau_new() :  
+ public:
+
+  vvid_live_video_tableau_new() :
     vvid_live_video_tableau_sptr(new vvid_live_video_tableau()){}
-  
+
   vvid_live_video_tableau_new(int node, int pixel_sample_interval,
                               const cmu_1394_camera_params& cp) :
     vvid_live_video_tableau_sptr(new vvid_live_video_tableau(node,
@@ -95,8 +92,7 @@ public:
                                                              cp))
   {}
 
-
-  operator vgui_image_tableau_sptr () const 
+  operator vgui_image_tableau_sptr () const
   { vgui_image_tableau_sptr tt; tt.vertical_cast(*this); return tt; }
 };
 
