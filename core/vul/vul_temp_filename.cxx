@@ -63,7 +63,7 @@ vul_temp_filename( )
   char path[ _MAX_PATH ];
   char* file;
   if( GetTempPath( _MAX_PATH, path ) == 0 )
-	return "";
+    return "";
   // Can't use GetTempFileName, because the function actually creates the
   // temporary file! This would mean that every call to this function creates
   // yet another file that will lie around if the caller doesn't use the generated
@@ -71,7 +71,7 @@ vul_temp_filename( )
   // before returning.
   file = _tempnam( path, "" );
   if( file == 0 )
-	return "";
+    return "";
   return file;
 #else
   // Don't use tmpnam, since it causes linker warnings (and sometimes
