@@ -58,7 +58,7 @@
 // Used to provide default values for function args in definition
 // Some compilers (GCC272) require defaults in template function definitions
 // Other compilers (VC50) disallow defaults in both decls and defs
-//
+
 //#define VCL_DEFAULT_VALUE(x) /* no need */
 //#define VCL_DEFAULT_VALUE(x) = x
 #define VCL_DEFAULT_VALUE(x) /* no need */
@@ -70,13 +70,17 @@
 //: VCL_STATIC_CONST_INIT_INT(x)
 //
 // ANSI allows
+// \verbatim
 //     class A {
 //       static const int x = 27;
 //     };
+// \endverbatim
 // And there is a speed advantage, so we want to use it where supported.
 // The macro is used like this:
+// \verbatim
 //       static const int x VCL_STATIC_CONST_INIT_INT(27);
-//
+// \endverbatim
+
 //#define VCL_STATIC_CONST_INIT_INT(x) /* not allowed */
 //#define VCL_STATIC_CONST_INIT_INT(x) = x
 #define VCL_STATIC_CONST_INIT_INT(x) /* = x */
@@ -86,13 +90,13 @@
 //
 // GCC allows the above, but with floating point types, ANSI doesn't.
 // Again, we'll use it if we've got it.
-//
+
 //#define VCL_STATIC_CONST_INIT_FLOAT(x) /* not allowed */
 //#define VCL_STATIC_CONST_INIT_FLOAT(x) = x
 #define VCL_STATIC_CONST_INIT_FLOAT(x) /* = x */
 
 
-//: VCL_IMPLEMENT_STATIC_CONSTS
+// VCL_IMPLEMENT_STATIC_CONSTS
 //
 // True if static consts must be defined in some source file.  I don't know
 // what ANSI has to say about this, but anyway, the above example needs this
@@ -109,17 +113,21 @@
 //: VCL_HAS_MEMBER_TEMPLATES
 //
 // True if the compiler supports template members of template classes.  e.g.
+// \verbatim
 //     template <class U> class A {
 //       template <class V> void f(V);
 //     }
+// \endverbatim
 #define VCL_HAS_MEMBER_TEMPLATES 1
 
 
 //: VCL_CAN_DO_PARTIAL_SPECIALIZATION
 //
 // True if the compiler supports partial specializations of templates. e.g.
+// \verbatim
 // template <class T>
 // class vector<T*> : public vector<void *> { .. inline methods .. };
+// \endverbatim
 //
 #define VCL_CAN_DO_PARTIAL_SPECIALIZATION 0
 
@@ -136,7 +144,7 @@
 // foo.h says "template <class T> void foo(T *);" and foo.cxx specializes
 // void foo<int>(int *), the client doesn't need to know that the template
 // symbol he links against is a specialization.
-//
+
 //#define VCL_DEFINE_SPECIALIZATION /* template <> */
 //#define VCL_DEFINE_SPECIALIZATION template <>
 #define VCL_DEFINE_SPECIALIZATION template <>
@@ -146,7 +154,7 @@
 //
 // Define to <> for compilers that require them in friend template function
 // declarations (i.e., EGCS).
-//
+
 //#define VCL_NULL_TMPL_ARGS /* <> */
 //#define VCL_NULL_TMPL_ARGS <>
 #define VCL_NULL_TMPL_ARGS /* <> */
@@ -174,12 +182,14 @@
 // If a method is defined on some template, but makes no sense for some
 // instances of that template, the compiler should not complain unless the
 // method is actually used.  For example
+// \verbatim
 //     template <class T>
 //     class T {
 //       int bad_method() {
 //         return T::f();  // Requires T to have static method f
 //       }
 //     };
+// \endverbatim
 //
 // The language allows you to use a T<int> even though int::f() is garbage,
 // *providing* you never call T.bad_method().
@@ -187,9 +197,11 @@
 // Most compilers don't implement that yet, so the solution is to provide a
 // dummy specialization of T::bad_method that returns something mundane and
 // stops the standard bad_method from being generated.  For this, use:
+// \verbatim
 //     VCL_DO_NOT_INSTANTIATE(int T::bad_method(), some_return_value)
+// \endverbatim
 // if the function is void, use VCL_VOID_RETURN as the return value
-//
+
 //#define VCL_DO_NOT_INSTANTIATE(text, ret) text { return ret; }
 //#define VCL_DO_NOT_INSTANTIATE(text, ret) template <> text { return ret; }
 //#define VCL_DO_NOT_INSTANTIATE(text, ret) /* no need -- magic compiler */
@@ -204,9 +216,11 @@ text { return ret; }
 // OK, various compilers do various silly things about instantiation of
 // functions/methods that have been specialized.  Use this macro to tell
 // the compiler not to generate code for methods which have been specialized
+// \verbatim
 //      VCL_UNINSTANTIATE_SPECIALIZATION(int T::specialized_method())
+// \endverbatim
 // It should be placed after the "template class A<T>;"
-//
+
 //#define VCL_UNINSTANTIATE_SPECIALIZATION(symbol)  @pragma do_not_instantiate text@
 //#define VCL_UNINSTANTIATE_SPECIALIZATION(symbol) /* no need - sensible compiler */
 //FIXME #define VCL_UNINSTANTIATE_SPECIALIZATION(symbol) @VCL_UNINSTANTIATE_SPECIALIZATION@
@@ -217,9 +231,11 @@ text { return ret; }
 //
 // gcc is sensible about specializations if it has seen the definition,
 // but if it's in another file, need to use extern to tell it.
+// \verbatim
 //      VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION(int T::specialized_method())
+// \endverbatim
 // It should be placed before the "template class A<T>;"
-//
+
 //#define VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION(symbol) extern symbol;
 //#define VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION(symbol) /* no need */
 //FIXME #define VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION(symbol) @VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION@
@@ -231,6 +247,7 @@ text { return ret; }
 // Some compilers (e.g. gcc 2.7.2) do not accept a templated definition
 // of static members, as in
 //
+// \verbatim
 //   template <class T>
 //   struct A {
 //     A() { }
@@ -241,23 +258,31 @@ text { return ret; }
 //   char *A<T>::fmt = 0;
 //
 //   template struct A<int>;
+// \endverbatim
 //
 // The way round this is to supply an explicit definition for every
 // instance of the class needed.
 //
 // Put the templated definition like this
+// \verbatim
 //      #if VCL_CAN_DO_STATIC_TEMPLATE_MEMBER
 //      template <class T>
 //      char *A<T>::fmt = 0;
 //      #endif
+// \endverbatim
 // and place
+// \verbatim
 //      VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(int A<int>::fmt = 0)
+// \endverbatim
 // before the
+// \verbatim
 //      template class A<int>;
+// \endverbatim
 // with
+// \verbatim
 //      VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(A<int>::var)
+// \endverbatim
 // afterwards.
-//
 //#define VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(symbol) /* no need */
 //#define VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(symbol) symbol;
 //
@@ -275,12 +300,12 @@ text { return ret; }
 //
 // Some compilers (e.g. SunPro 5.0) do not accept non-type template
 // parameters in function templates. E.g.
-//
+// \verbatim
 // template <class T, int n> struct vicky { T data[n]; } // can do
 //
 // template <class T, int n>
 // void a_function_template(vicky<T, n> const &) { ... } // cannot
-//
+// \endverbatim
 #define VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER 1
 
 
@@ -296,7 +321,7 @@ text { return ret; }
 // the problem go away.
 //
 // True if the compiler needs this hack.
-//
+
 //#define VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD 0
 //#define VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD 1
 #define VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD 0
@@ -312,7 +337,7 @@ text { return ret; }
 //   To fix the code, it is tempting to add an explicit cast and get on
 // with things, but that would throw away the checking performed by more
 // helpful compilers. Use VCL_OVERLOAD_CAST instead.
-//
+
 //#define VCL_OVERLOAD_CAST(T, x) ((T)(x))
 //#define VCL_OVERLOAD_CAST(T, x) (x)
 #define VCL_OVERLOAD_CAST(T, x) (x)
@@ -347,18 +372,22 @@ text { return ret; }
 //
 // It is wrong to provide a default for a template parameter in two
 // declarations in the same scope (14.1.12), e.g.
+// \verbatim
 //   template <class S, class T = int> class X;
 //   template <class S, class T = int> class X { /* ... */ };
+// \endverbatim
 // is wrong.
 // However, some older compilers insist on seeing the default argument
 // again when defining a class body or instantiating.
 // To satisfy them, use this macro as follows :
+// \verbatim
 //   template <class S, class T VCL_DEFAULT_TMPL_ARG(= int)> X { /* ... */ };
 //   template X<double VCL_DEFAULT_TMPL_ARG(, int)>;
+// \endverbatim
 //
 // It's possible we need two macros, one for redeclaration and
 // one for instantiation.
-//
+
 //#define VCL_DEFAULT_TMPL_ARG(arg) /* no need */
 //#define VCL_DEFAULT_TMPL_ARG(arg) arg
 #define VCL_DEFAULT_TMPL_ARG(arg) @VCL_DEFAULT_TMPL_ARG@
@@ -367,14 +396,13 @@ text { return ret; }
 #define VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER 1
 #define VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER 1
 
-//: VCL_DFL_TYPE_PARAM_STLDECL(A, a)
-//: VCL_DFL_TMPL_PARAM_STLDECL(A, a)
+// VCL_DFL_TYPE_PARAM_STLDECL(A, a) and VCL_DFL_TMPL_PARAM_STLDECL(A, a)
 // EGCS doesn't like definition of default types, viz:
 //   template <class A = default> class vector;
 //   template <class A = default> class vector { ... };
 // This macro is used to say "define if not previously defined, like
 //   template <VCL_DFL_TYPE_PARAM_STLDECL(A,a)> class vector { ... };
-//
+
 //#define VCL_DFL_TYPE_PARAM_STLDECL(A,a) A = a
 //#define VCL_DFL_TYPE_PARAM_STLDECL(A,a) A /* = a */
 //#define VCL_DFL_TYPE_PARAM_STLDECL(A,a) __DFL_TYPE_PARAM(A,a)
@@ -386,14 +414,14 @@ text { return ret; }
 //FIXME #define VCL_DFL_TMPL_PARAM_STLDECL(A,a) @VCL_DFL_TMPL_PARAM_STLDECL@
 
 
-//: VCL_DFL_TMPL_ARG(class)
+// VCL_DFL_TMPL_ARG(class)
 // Similarly, when instantiating a templated class with a default
 // template argument, some compilers don't like the redeclaration of
 // that argument, while others insist on it.
 // In such cases, specify the default argument as follows:
 //   template class vector <int VCL_DFL_TMPL_ARG(default_iterator) >;
 // (Note the missing comma after int: it is inside the macro.)
-//
+
 //#define VCL_DFL_TMPL_ARG(classname) , classname
 //#define VCL_DFL_TMPL_ARG(classname) /* , classname */
 //#define VCL_DFL_TMPL_ARG(classname) __DFL_TMPL_ARG(classname)
@@ -409,8 +437,10 @@ text { return ret; }
 // VCL_CLASS_SCOPE_HACK, but to be honest, it's a sunpro problem,
 // they deserve the blame.
 // Usage (the comma is inside the macro) :
+// \verbatim
 //    vector<T VCL_SUNPRO_CLASS_SCOPE_HACK(std::allocator<T >)>
-//
+// \endverbatim
+
 //#define VCL_SUNPRO_CLASS_SCOPE_HACK(A) /* , A */
 //#define VCL_SUNPRO_CLASS_SCOPE_HACK(A) , A
 #define VCL_SUNPRO_CLASS_SCOPE_HACK(A) /* , A */
