@@ -7,6 +7,7 @@
 
 #include <testlib/testlib_test.h>
 
+#include <vil/vil_file_format.h>
 #include <vil/vil_rgb.h>
 #include <vil/vil_load.h>
 #include <vil/vil_image_view.h>
@@ -28,8 +29,7 @@ vcl_string image_base;
 
 
 // A comparator interface to check if the pixels match. It will be
-// called with all the components at a single location (given by i, j
-// and p).
+// called with all the components at a single location (given by i, j and p).
 //
 template<class TruePixelType, class ImgPixelType>
 struct Compare
@@ -295,8 +295,7 @@ CheckPixels( Compare<TruePixelType,ImgPixelType> const& check,
               vcl_cout << "\nSubimage " << views.size() << " at ("<<dl<<','<<dt<<"):\n";
               vil_print_all(vcl_cout, img); vcl_cout.flush();
             } else {
-              vcl_cout << "Subimage size = " << img.size() << ".  Too large to display all pixels."
-                       << vcl_endl;
+              vcl_cout << "Subimage size = " << img.size() << ".  Too large to display all pixels." << vcl_endl;
             }
 #endif
 
