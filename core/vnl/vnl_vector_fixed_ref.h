@@ -11,8 +11,8 @@
 // \brief Fixed size vnl_vector using user-supplied storage
 //
 // See also vnl_vector_ref, vnl_vector_fixed
-// 
-// \author Paul P. Smyth, Vicon Motion Systems Ltd. 
+//
+// \author Paul P. Smyth, Vicon Motion Systems Ltd.
 // \date 02 May 2001
 
 #include <vcl_cassert.h>
@@ -27,8 +27,8 @@ public:
   {
     assert(& rhs != this);
     assert(rhs.size() >= offset + n);
-  };
-  
+  }
+
   vnl_vector_fixed_ref(T *space) : vnl_vector_ref<T>(n, space)
   {
   }
@@ -59,7 +59,7 @@ public:
   vnl_vector_fixed_ref<T,n>& update (vnl_vector<T> const& v, unsigned int start=0)
     { return (vnl_vector_fixed_ref<T,n>&) vnl_vector<T>::update (v, start); }
 
-  vnl_vector_fixed_ref<T,n>& normalize()	 // v /= sqrt(dot(v,v))
+  vnl_vector_fixed_ref<T,n>& normalize()  // v /= sqrt(dot(v,v))
     { return (vnl_vector_fixed_ref<T,n>&) vnl_vector<T>::normalize(); }
 
 
@@ -69,10 +69,7 @@ public:
   vnl_vector<T>& pre_multiply (vnl_matrix<T> const&); // v = m * v
   vnl_vector<T>& post_multiply (vnl_matrix<T> const&); // v = v * m
   vnl_vector<T>& operator*= (vnl_matrix<T> const&);
-
-
 };
-
 
 
 #endif // vnl_vector_fixed_ref_h_

@@ -36,14 +36,8 @@ vnl_vector<T>& vnl_vector_fixed_ref<T,n>::operator*= (vnl_matrix<T> const& ) {
 
 // instantiation macros for vnl_vector_fixed_ref<T,int> :
 
-#ifndef VCL_GCC_27
 #define VNL_VECTOR_FIXED_REF_INSTANTIATE(T,n) \
-template class vnl_vector_fixed_ref<T, n>; \
-VCL_INSTANTIATE_INLINE(vcl_ostream &operator<<(vcl_ostream & VCL_COMMA vnl_vector_fixed_ref<T VCL_COMMA n> const &))
-#else
-#define VNL_VECTOR_FIXED_REF_INSTANTIATE(T,n) \
-template class vnl_vector_fixed_ref<T, n>; \
-VCL_INSTANTIATE_INLINE(vcl_ostream &operator<<(vcl_ostream & VCL_COMMA vnl_vector_fixed_ref<T VCL_COMMA n> const &))
-#endif
+template class vnl_vector_fixed_ref<T, n >; \
+VCL_INSTANTIATE_INLINE(vcl_ostream &operator<<(vcl_ostream & VCL_COMMA vnl_vector_fixed_ref<T VCL_COMMA n > const &))
 
 #endif // vnl_vector_fixed_ref_txx_
