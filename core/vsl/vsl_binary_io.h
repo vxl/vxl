@@ -363,8 +363,8 @@ void vsl_b_read(vsl_b_istream& is,vxl_int_64& n );
 //: Print to a stream
 inline void vsl_print_summary(vcl_ostream& os, vxl_int_64 n )
 {
-#if VCL_VC60
-  os << "****";
+#if VCL_VC60    // IMS. This Hack could be replaced by code which
+  os << "****"; // splits the 64bit int and doesn the right thing.
 #else
   os << n;
 #endif
@@ -377,8 +377,8 @@ void vsl_b_read(vsl_b_istream& is,vxl_uint_64& n );
 //: Print to a stream
 inline void vsl_print_summary(vcl_ostream& os, vxl_uint_64 n )
 {
-#if VCL_VC60
-  os << "****";
+#if VCL_VC60    // IMS. This Hack could be replaced by code which
+  os << "****"; // splits the 64bit int and doesn the right thing.
 #else
   os << n;
 #endif
